@@ -7,7 +7,7 @@
  * 
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
  * Copyright      2006 by Tom Albers
- * Copyright      2006 by Gilles Caulier
+ * Copyright 2006-2007    void slotDonateMoney(); by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -751,6 +751,14 @@ void DigikamApp::setupActions()
                                    SLOT(slotShowTip()),
                                    actionCollection(),
                                    "help_tipofday");
+
+    mKipiHelpAction = new KAction(i18n("Donate Money"),
+                                   0,
+                                   0,
+                                   this,
+                                   SLOT(slotDonateMoney()),
+                                   actionCollection(),
+                                   "help_donatemoney");
 
     mGammaAdjustmentAction = new KAction(i18n("Display Adjustment..."),
                                    "kgamma",
@@ -1656,6 +1664,11 @@ void DigikamApp::slotRebuildAllThumbs()
 void DigikamApp::slotRebuildAllThumbsDone()
 {
     mView->applySettings(mAlbumSettings);
+}
+
+void DigikamApp::slotDonateMoney()
+{
+    KApplication::kApplication()->invokeBrowser("http://www.digikam.org/?q=donation");
 }
 
 }  // namespace Digikam
