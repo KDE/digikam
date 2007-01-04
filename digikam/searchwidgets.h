@@ -24,7 +24,6 @@
 #ifndef SEARCHWIDGETS_H
 #define SEARCHWIDGETS_H
 
-
 class QHBox;
 class QVBox;
 class QCheckBox;
@@ -377,9 +376,9 @@ public:
 
 private:
 
-    QHBox*            m_box;
-    QVGroupBox*       m_groupbox;
-    QCheckBox*        m_check;
+    QHBox*                          m_box;
+    QVGroupBox*                     m_groupbox;
+    QCheckBox*                      m_check;
     QValueList<SearchAdvancedRule*> m_childRules;
 
 };

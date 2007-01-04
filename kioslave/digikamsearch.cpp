@@ -1,7 +1,6 @@
 /* ============================================================
- * File  : digikamsearch.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-21
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date   : 2005-04-21
  * Description :
  *
  * Copyright 2005 by Renchi Raju
@@ -19,7 +18,36 @@
  *
  * ============================================================ */
 
-#include <digikam_export.h>
+// C Ansi includes.
+
+extern "C"
+{
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/time.h>
+#include <utime.h>
+}
+
+// C++ includes.
+
+#include <cerrno>
+#include <cstdlib>
+#include <cstdio>
+#include <ctime>
+
+// Qt includes.
+
+#include <qfile.h>
+#include <qdatastream.h>
+#include <qtextstream.h>
+#include <qregexp.h>
+#include <qdir.h>
+#include <qvariant.h>
+#include <qmap.h>
+
+// KDE includes.
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -32,33 +60,14 @@
 #include <kio/ioslave_defaults.h>
 #include <klargefile.h>
 
-#include <qfile.h>
-#include <qdatastream.h>
-#include <qtextstream.h>
-#include <qregexp.h>
-#include <qdir.h>
-#include <qvariant.h>
-#include <qmap.h>
+// Local includes.
 
-extern "C"
-{
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/time.h>
-#include <time.h>
-#include <utime.h>
-}
-
+#include "digikam_export.h"
 #include "digikamsearch.h"
 
 kio_digikamsearch::kio_digikamsearch(const QCString &pool_socket,
                                      const QCString &app_socket)
-    : SlaveBase("kio_digikamsearch", pool_socket, app_socket)
+                 : SlaveBase("kio_digikamsearch", pool_socket, app_socket)
 {
     // build a lookup table for month names
     const KCalendarSystem* cal = KGlobal::locale()->calendar();
@@ -67,7 +76,6 @@ kio_digikamsearch::kio_digikamsearch(const QCString &pool_socket,
         m_shortMonths[i-1] = cal->monthName(i, 2000, true).lower();
         m_longMonths[i-1]  = cal->monthName(i, 2000, false).lower();
     }
-
 }
 
 kio_digikamsearch::~kio_digikamsearch()
@@ -87,7 +95,8 @@ static QValueList<QRegExp> makeFilterList( const QString &filter )
 
     QStringList list = QStringList::split( sep, filter );
     QStringList::Iterator it = list.begin();
-    while ( it != list.end() ) {
+    while ( it != list.end() ) 
+    {
         regExps << QRegExp( (*it).stripWhiteSpace(), false, true );
         ++it;
     }
@@ -98,7 +107,8 @@ static bool matchFilterList( const QValueList<QRegExp>& filters,
                              const QString &fileName )
 {
     QValueList<QRegExp>::ConstIterator rit = filters.begin();
-    while ( rit != filters.end() ) {
+    while ( rit != filters.end() ) 
+    {
         if ( (*rit).exactMatch(fileName) )
             return true;
         ++rit;
@@ -273,7 +283,6 @@ void kio_digikamsearch::special(const QByteArray& data)
 
     SlaveBase::data(ba);
 
-
     finished();
 }
 
@@ -349,8 +358,12 @@ QString kio_digikamsearch::buildQuery(const KURL& url) const
             rule.op = NE;
         else if (op == "lt")
             rule.op = LT;
+        else if (op == "lte")
+            rule.op = LTE;
         else if (op == "gt")
             rule.op = GT;
+        else if (op == "gte")
+            rule.op = GTE;
         else if (op == "like")
             rule.op = LIKE;
         else if (op == "nlike")
@@ -442,138 +455,153 @@ QString kio_digikamsearch::subQuery(enum kio_digikamsearch::SKey key,
 
     switch (key)
     {
-    case(ALBUM):
-    {
-        query = " (Images.dirid $$##$$ $$@@$$) ";
-        break;
-    }
-    case(ALBUMNAME):
-    {
-        query = " (Images.dirid IN "
-                "  (SELECT id FROM Albums WHERE url $$##$$ $$@@$$)) ";
-        break;
-    }
-    case(ALBUMCAPTION):
-    {
-        query = " (Images.dirid IN "
-                "  (SELECT id FROM Albums WHERE caption $$##$$ $$@@$$)) ";
-        break;
-    }
-    case(ALBUMCOLLECTION):
-    {
-        query = " (Images.dirid IN "
-                "  (SELECT id FROM Albums WHERE collection $$##$$ $$@@$$)) ";
-        break;
-    }
-    case(TAG):
-    {
-        if (op == EQ)
+        case(ALBUM):
+        {
+            query = " (Images.dirid $$##$$ $$@@$$) ";
+            break;
+        }
+        case(ALBUMNAME):
+        {
+            query = " (Images.dirid IN "
+                    "  (SELECT id FROM Albums WHERE url $$##$$ $$@@$$)) ";
+            break;
+        }
+        case(ALBUMCAPTION):
+        {
+            query = " (Images.dirid IN "
+                    "  (SELECT id FROM Albums WHERE caption $$##$$ $$@@$$)) ";
+            break;
+        }
+        case(ALBUMCOLLECTION):
+        {
+            query = " (Images.dirid IN "
+                    "  (SELECT id FROM Albums WHERE collection $$##$$ $$@@$$)) ";
+            break;
+        }
+        case(TAG):
+        {
+            if (op == EQ)
+                query = " (Images.id IN "
+                        "   (SELECT imageid FROM ImageTags "
+                        "    WHERE tagid = $$@@$$)) ";
+            else if (op == NE)
+                query = " (Images.id NOT IN "
+                        "   (SELECT imageid FROM ImageTags "
+                        "    WHERE tagid = $$@@$$)) ";
+            else if (op == LIKE) 
+                query = " (Images.id IN "
+                        "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
+                        "    WHERE TagsTree.pid = $$@@$$ or ImageTags.tagid = $$@@$$ )) ";
+            else // op == NLIKE
+                query = " (Images.id NOT IN "
+                        "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
+                        "    WHERE TagsTree.pid = $$@@$$ or ImageTags.tagid = $$@@$$ )) ";
+    
+    //         query = " (Images.id IN "
+    //                 "   (SELECT imageid FROM ImageTags "
+    //                 "    WHERE tagid $$##$$ $$@@$$)) ";
+    
+            query.replace("$$@@$$", QString::fromLatin1("'") + escapeString(val)
+                        + QString::fromLatin1("'"));
+    
+            break;
+        }
+        case(TAGNAME):
+        {
             query = " (Images.id IN "
-                    "   (SELECT imageid FROM ImageTags "
-                    "    WHERE tagid = $$@@$$)) ";
-        else if (op == NE)
-            query = " (Images.id NOT IN "
-                    "   (SELECT imageid FROM ImageTags "
-                    "    WHERE tagid = $$@@$$)) ";
-        else if (op == LIKE) 
-            query = " (Images.id IN "
-                    "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
-                    "    WHERE TagsTree.pid = $$@@$$ or ImageTags.tagid = $$@@$$ )) ";
-        else // op == NLIKE
-            query = " (Images.id NOT IN "
-                    "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
-                    "    WHERE TagsTree.pid = $$@@$$ or ImageTags.tagid = $$@@$$ )) ";
-
-//         query = " (Images.id IN "
-//                 "   (SELECT imageid FROM ImageTags "
-//                 "    WHERE tagid $$##$$ $$@@$$)) ";
-
-        query.replace("$$@@$$", QString::fromLatin1("'") + escapeString(val)
-                      + QString::fromLatin1("'"));
-
-        break;
+                    "  (SELECT imageid FROM ImageTags "
+                    "   WHERE tagid IN "
+                    "   (SELECT id FROM Tags WHERE name $$##$$ $$@@$$))) ";
+            break;
+        }
+        case(IMAGENAME):
+        {
+            query = " (Images.name $$##$$ $$@@$$) ";
+            break;
+        }
+        case(IMAGECAPTION):
+        {
+            query = " (Images.caption $$##$$ $$@@$$) ";
+            break;
+        }
+        case(IMAGEDATE):
+        {
+            query = " (Images.datetime $$##$$ $$@@$$) ";
+            break;
+        }
+        case (KEYWORD):
+        {
+            kdWarning() << "KEYWORD Detected which is not possible" << endl;
+            break;
+        }
+        case(RATING):
+        {
+            query = " (ImageProperties.value $$##$$ $$@@$$ and ImageProperties.property='Rating') ";
+            break;
+        }
     }
-    case(TAGNAME):
+    
+    if (key != TAG) 
     {
-        query = " (Images.id IN "
-                "  (SELECT imageid FROM ImageTags "
-                "   WHERE tagid IN "
-                "   (SELECT id FROM Tags WHERE name $$##$$ $$@@$$))) ";
-        break;
-    }
-    case(IMAGENAME):
-    {
-        query = " (Images.name $$##$$ $$@@$$) ";
-        break;
-    }
-    case(IMAGECAPTION):
-    {
-        query = " (Images.caption $$##$$ $$@@$$) ";
-        break;
-    }
-    case(IMAGEDATE):
-    {
-        query = " (Images.datetime $$##$$ $$@@$$) ";
-        break;
-    }
-    case (KEYWORD):
-    {
-        kdWarning() << "KEYWORD Detected which is not possible" << endl;
-        break;
-    }
-    case(RATING):
-    {
-        query = " (ImageProperties.value $$##$$ $$@@$$ and ImageProperties.property='Rating') ";
-        break;
-    }
-    }
-
-    if (key != TAG) {
-    switch (op)
-    {
-    case(EQ):
-    {
-        query.replace("$$##$$", "=");
-        query.replace("$$@@$$", QString::fromLatin1("'") + escapeString(val)
-                      + QString::fromLatin1("'"));
-        break;
-    }
-    case(NE):
-    {
-        query.replace("$$##$$", "<>");
-        query.replace("$$@@$$", QString::fromLatin1("'") + escapeString(val)
-                      + QString::fromLatin1("'"));
-        break;
-    }
-    case(LT):
-    {
-        query.replace("$$##$$", "<");
-        query.replace("$$@@$$", QString::fromLatin1("'") + escapeString(val)
-                      + QString::fromLatin1("'"));
-        break;
-    }
-    case(GT):
-    {
-        query.replace("$$##$$", ">");
-        query.replace("$$@@$$", QString::fromLatin1("'") + escapeString(val)
-                      + QString::fromLatin1("'"));
-        break;
-    }
-    case(LIKE):
-    {
-        query.replace("$$##$$", "LIKE");
-        query.replace("$$@@$$", QString::fromLatin1("'%") + escapeString(val)
-                      + QString::fromLatin1("%'"));
-        break;
-    }
-    case(NLIKE):
-    {
-        query.replace("$$##$$", "NOT LIKE");
-        query.replace("$$@@$$", QString::fromLatin1("'%") + escapeString(val)
-                      + QString::fromLatin1("%'"));
-        break;
-    }
-    }
+        switch (op)
+        {
+            case(EQ):
+            {
+                query.replace("$$##$$", "=");
+                query.replace("$$@@$$", QString::fromLatin1("'") + escapeString(val)
+                            + QString::fromLatin1("'"));
+                break;
+            }
+            case(NE):
+            {
+                query.replace("$$##$$", "<>");
+                query.replace("$$@@$$", QString::fromLatin1("'") + escapeString(val)
+                            + QString::fromLatin1("'"));
+                break;
+            }
+            case(LT):
+            {
+                query.replace("$$##$$", "<");
+                query.replace("$$@@$$", QString::fromLatin1("'") + escapeString(val)
+                            + QString::fromLatin1("'"));
+                break;
+            }
+            case(GT):
+            {
+                query.replace("$$##$$", ">");
+                query.replace("$$@@$$", QString::fromLatin1("'") + escapeString(val)
+                            + QString::fromLatin1("'"));
+                break;
+            }
+            case(LTE):
+            {
+                query.replace("$$##$$", "<=");
+                query.replace("$$@@$$", QString::fromLatin1("'") + escapeString(val)
+                            + QString::fromLatin1("'"));
+                break;
+            }
+            case(GTE):
+            {
+                query.replace("$$##$$", ">=");
+                query.replace("$$@@$$", QString::fromLatin1("'") + escapeString(val)
+                            + QString::fromLatin1("'"));
+                break;
+            }
+            case(LIKE):
+            {
+                query.replace("$$##$$", "LIKE");
+                query.replace("$$@@$$", QString::fromLatin1("'%") + escapeString(val)
+                            + QString::fromLatin1("%'"));
+                break;
+            }
+            case(NLIKE):
+            {
+                query.replace("$$##$$", "NOT LIKE");
+                query.replace("$$@@$$", QString::fromLatin1("'%") + escapeString(val)
+                            + QString::fromLatin1("%'"));
+                break;
+            }
+        }
     }
 
     // special case for imagedate. If the key is imagedate and the operator is EQ,
@@ -602,7 +630,8 @@ extern "C"
         KInstance instance( "kio_digikamsearch" );
         KGlobal::locale();
 
-        if (argc != 4) {
+        if (argc != 4) 
+        {
             kdDebug() << "Usage: kio_digikamsearch  protocol domain-socket1 domain-socket2"
                       << endl;
             exit(-1);

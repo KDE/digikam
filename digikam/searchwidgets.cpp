@@ -101,18 +101,16 @@ RuleOpTable[] =
     { I18N_NOOP("After"),              "GT",           SearchAdvancedRule::DATE },
     { I18N_NOOP("Before"),             "LT",           SearchAdvancedRule::DATE },
     { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::DATE },
-    { I18N_NOOP("Higher Than"),        "GT",           SearchAdvancedRule::RATING },
-    { I18N_NOOP("Lower Than"),         "LT",           SearchAdvancedRule::RATING },
+    { I18N_NOOP("At least"),           "GTE",           SearchAdvancedRule::RATING },
+    { I18N_NOOP("At most"),            "LTE",           SearchAdvancedRule::RATING },
     { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::RATING },
 };
 
-static const int RuleOpTableCount = 14;
+static const int RuleOpTableCount = 16;
 
-SearchRuleLabel::SearchRuleLabel( const QString & text,
-                      QWidget * parent,
-                      const char * name,
-                      WFlags f )
-               : QLabel(  text, parent, name, f )
+SearchRuleLabel::SearchRuleLabel(const QString& text, QWidget *parent,
+                                 const char *name, WFlags f )
+               : QLabel(text, parent, name, f)
 {
 }
 
@@ -121,8 +119,7 @@ void SearchRuleLabel::mouseDoubleClickEvent( QMouseEvent * e )
    emit signalDoubleClick( e );
 }
 
-SearchAdvancedRule::SearchAdvancedRule(QWidget* parent,
-                                       SearchAdvancedRule::Option option)
+SearchAdvancedRule::SearchAdvancedRule(QWidget* parent, SearchAdvancedRule::Option option)
                   : SearchAdvancedBase(SearchAdvancedBase::RULE)
 {
     m_box = new QVBox(parent);
@@ -232,8 +229,6 @@ void SearchAdvancedRule::setValues(const KURL& url)
                     m_valueCombo->setCurrentItem( it.key() );
         }
     }
-
-
 }
 
 SearchAdvancedRule::~SearchAdvancedRule()
@@ -276,9 +271,7 @@ void SearchAdvancedRule::slotKeyChanged(int id)
     setValueWidget( currentType, m_widgetType );
 }
 
-void SearchAdvancedRule::setValueWidget(
-        valueWidgetTypes oldType,
-        valueWidgetTypes newType)
+void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTypes newType)
 {
     if (oldType == newType)
         return;
@@ -376,7 +369,6 @@ void SearchAdvancedRule::setValueWidget(
         connect( m_ratingWidget, SIGNAL( signalRatingChanged(int) ),
                  this, SIGNAL( signalPropertyChanged() ));
     }
-
 }
 
 QString SearchAdvancedRule::urlKey() const
@@ -440,8 +432,7 @@ void SearchAdvancedRule::addOption(Option option)
     m_box->layout()->remove(m_hbox);
 
     m_optionsBox = new QHBox(m_box);
-    new QLabel( option == AND ? i18n("As well as") : i18n("Or") ,
-                m_optionsBox);
+    new QLabel(option == AND ? i18n("As well as") : i18n("Or"), m_optionsBox);
     QFrame* hline = new QFrame(m_optionsBox);
     hline->setFrameStyle(QFrame::HLine|QFrame::Sunken);
     hline->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -476,7 +467,7 @@ void SearchAdvancedRule::removeCheck()
 }
 
 SearchAdvancedGroup::SearchAdvancedGroup(QWidget* parent)
-    : SearchAdvancedBase(SearchAdvancedBase::GROUP)
+                   : SearchAdvancedBase(SearchAdvancedBase::GROUP)
 {
     m_box      = new QHBox(parent);
     m_box->layout()->setSpacing(KDialog::spacingHint());
@@ -506,8 +497,7 @@ bool SearchAdvancedGroup::isChecked() const
 
 void SearchAdvancedGroup::addRule(SearchAdvancedRule* rule)
 {
-    if (m_childRules.isEmpty() &&
-        rule->option() != SearchAdvancedRule::NONE)
+    if (m_childRules.isEmpty() && rule->option() != SearchAdvancedRule::NONE)
     {
         // this is the first rule being inserted in this group.
         // get its option and remove its option
@@ -552,8 +542,7 @@ QValueList<SearchAdvancedRule*> SearchAdvancedGroup::childRules() const
 void SearchAdvancedGroup::addOption(Option option)
 {
     m_option = option;
-    m_groupbox->setTitle(
-            m_option == SearchAdvancedRule::AND ? i18n("As well as") : i18n("Or"));
+    m_groupbox->setTitle(m_option == SearchAdvancedRule::AND ? i18n("As well as") : i18n("Or"));
 }
 
 void SearchAdvancedGroup::removeOption()

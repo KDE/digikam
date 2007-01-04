@@ -1,7 +1,6 @@
 /* ============================================================
- * File  : digikamsearch.h
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-21
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date   : 2005-04-21
  * Description :
  *
  * Copyright 2005 by Renchi Raju
@@ -21,7 +20,11 @@
 #ifndef DIGIKAMSEARCH_H
 #define DIGIKAMSEARCH_H
 
+// KDE includes.
+
 #include <kio/slavebase.h>
+
+// Local includes.
 
 #include "sqlitedb.h"
 
@@ -29,6 +32,7 @@ class QStringList;
 
 class kio_digikamsearch : public KIO::SlaveBase
 {
+
 public:
 
     enum SKey
@@ -53,12 +57,14 @@ public:
         LT,
         GT,
         LIKE,
-        NLIKE
+        NLIKE,
+        LTE,
+        GTE
     };
 
+public:
 
-    kio_digikamsearch(const QCString &pool_socket,
-                      const QCString &app_socket);
+    kio_digikamsearch(const QCString &pool_socket, const QCString &app_socket);
     ~kio_digikamsearch();
 
     void special(const QByteArray& data);
@@ -82,11 +88,10 @@ private:
         QString   val;
     };
 
-    SqliteDB              m_db;
-    QString               m_libraryPath;
-    QString               m_longMonths[12];
-    QString               m_shortMonths[12];
+    SqliteDB m_db;
+    QString  m_libraryPath;
+    QString  m_longMonths[12];
+    QString  m_shortMonths[12];
 };
-
 
 #endif /* DIGIKAMSEARCH_H */
