@@ -1,11 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net> 
- * Date  : 2004-02-14
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2004-02-14
  * Description : image data interface for image plugins
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -346,13 +346,14 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h)
             p.end();
         }
         
-        QPixmap      pixImage;
-        IccTransform monitorICCtrans;
-        ICCSettingsContainer* iccSettings = DImgInterface::instance()->getICCSettings();
-        monitorICCtrans.setProfiles(iccSettings->workspaceSetting, iccSettings->monitorSetting);
+        QPixmap pixImage;
+        ICCSettingsContainer *iccSettings = DImgInterface::instance()->getICCSettings();
 
         if (iccSettings)
         {
+            IccTransform monitorICCtrans;
+            monitorICCtrans.setProfiles(iccSettings->workspaceSetting, iccSettings->monitorSetting);
+
             if (iccSettings->enableCMSetting && iccSettings->managedViewSetting)
             {
                 pixImage = d->targetPreviewImage.convertToPixmap(&monitorICCtrans);
