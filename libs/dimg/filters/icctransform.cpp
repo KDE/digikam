@@ -253,12 +253,12 @@ bool IccTransform::apply(DImg& image)
             break;
     }
 
-    DDebug() << "intent: " << getRenderingIntent() << endl;
+    //DDebug() << "Intent is: " << intent << endl;
 
     if (d->has_embedded_profile)
     {
         inprofile = cmsOpenProfileFromMem(d->embedded_profile.data(),
-                                           (DWORD)d->embedded_profile.size());
+                                          (DWORD)d->embedded_profile.size());
     }
     else
     {
@@ -387,19 +387,16 @@ bool IccTransform::apply(DImg& image)
                          break;
                      case icSigCmykData:
                          inputFormat = TYPE_CMYK_8;
-                         DDebug() << "input profile: cmyk no alpha" << endl;
+                         //DDebug() << "input profile: cmyk no alpha" << endl;
                          break;
                      default:
                          inputFormat = TYPE_BGR_8;
-                         DDebug() << "input profile: default no alpha" << endl;
+                         //DDebug() << "input profile: default no alpha" << endl;
                 }
 
-                transform = cmsCreateTransform( inprofile,
-                                                inputFormat,
-                                                outprofile,
-                                                TYPE_BGR_8,
-                                                intent,
-                                                cmsFLAGS_WHITEBLACKCOMPENSATION);
+                transform = cmsCreateTransform(inprofile, inputFormat, outprofile,
+                                               TYPE_BGR_8, intent,
+                                               cmsFLAGS_WHITEBLACKCOMPENSATION);
 
                 if (!transform)
                 {
@@ -510,7 +507,7 @@ bool IccTransform::apply(DImg& image)
         // Apply ICC transformations.
         cmsDoTransform( transform, &data[i], &transdata[0], 1);
 
-        // Copy buufer to source to update original image with ICC corrections.
+        // Copy buffer to source to update original image with ICC corrections.
         // Alpha channel is restored in all cases.
         memcpy (&data[i], &transdata[0], (image.bytesDepth() == 8) ? 6 : 3);
     }
@@ -548,7 +545,7 @@ bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
             break;
     }
 
-    DDebug() << k_funcinfo << "Intent is: " << intent << endl;
+    //DDebug() << "Intent is: " << intent << endl;
 
     if (!profile.isNull())
     {
@@ -799,7 +796,7 @@ bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
         }
     }
 
-    DDebug() << k_funcinfo << "Transform flags are: " << transformFlags << endl;
+    //DDebug() << "Transform flags are: " << transformFlags << endl;
 
      // We need to work using temp pixel buffer to apply ICC transformations.
     uchar  transdata[image.bytesDepth()];
@@ -813,7 +810,7 @@ bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
         // Apply ICC transformations.
         cmsDoTransform( transform, &data[i], &transdata[0], 1);
 
-        // Copy buufer to source to update original image with ICC corrections.
+        // Copy buffer to source to update original image with ICC corrections.
         // Alpha channel is restored in all cases.
         memcpy (&data[i], &transdata[0], (image.bytesDepth() == 8) ? 6 : 3);
     }
