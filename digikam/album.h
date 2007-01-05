@@ -330,7 +330,11 @@ public:
     TAlbum(const QString& title, int id, bool root=false);
     ~TAlbum();
 
-    QString url() const;
+    /**
+     * @return The tag path, e.g. "People/Friend/John".
+     *         The root TAlbum returns "/".
+     */
+    QString tagPath() const;
     KURL    kurl() const;
     QString prettyURL() const;
     QString icon() const;

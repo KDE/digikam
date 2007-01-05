@@ -383,7 +383,7 @@ void TagFilterView::slotTagAdded(Album* album)
         if (!parent)
         {
             DWarning() << k_funcinfo << " Failed to find parent for Tag "
-                        << tag->url() << endl;
+                        << tag->tagPath() << endl;
             return;
         }
 

@@ -227,7 +227,7 @@ QStringList ImageInfo::tagPaths() const
         TAlbum* ta = m_man->findTAlbum(*it);
         if (ta)
         {
-            tagPaths.append(ta->url());
+            tagPaths.append(ta->tagPath());
         }
     }
 

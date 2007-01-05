@@ -1171,15 +1171,15 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                 itemDropped = true;
 
             popMenu.insertItem(SmallIcon("tag"), 
-                               i18n("Assign '%1' to &All Items").arg(talbum->url().mid(1)),          11);
+                               i18n("Assign '%1' to &All Items").arg(talbum->tagPath().mid(1)),          11);
 
             if (itemsSelected)
                 popMenu.insertItem(SmallIcon("tag"), 
-                                   i18n("Assign '%1' to &Selected Items").arg(talbum->url().mid(1)), 10);
+                                   i18n("Assign '%1' to &Selected Items").arg(talbum->tagPath().mid(1)), 10);
             
             if (itemDropped)
                 popMenu.insertItem(SmallIcon("tag"),
-                                   i18n("Assign '%1' to &Dropped Item").arg(talbum->url().mid(1)),   12);
+                                   i18n("Assign '%1' to &Dropped Item").arg(talbum->tagPath().mid(1)),   12);
 
             popMenu.insertSeparator(-1);
             popMenu.insertItem(SmallIcon("cancel"), i18n("&Cancel"));

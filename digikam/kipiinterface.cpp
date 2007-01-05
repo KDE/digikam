@@ -312,7 +312,7 @@ QString DigikamImageCollection::category()
     else if ( album_->type() == Album::TAG )
     {
         TAlbum *p = dynamic_cast<TAlbum*>(album_);
-        return i18n("Tag: %1").arg(p->url());
+        return i18n("Tag: %1").arg(p->tagPath());
     }
     else
         return QString::null;
