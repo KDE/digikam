@@ -128,7 +128,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     uint16    bits_per_sample;
     uint16    samples_per_pixel;
     uint16    photometric;
-    uint16    rows_per_strip;
+    uint32    rows_per_strip;
     tsize_t   strip_size;
     tstrip_t  num_of_strips;
 
@@ -137,9 +137,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bits_per_sample);
     TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samples_per_pixel);
-    TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip);
 
-    if (TIFFGetField(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0 || rows_per_strip == 0)
+    if (TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0 || rows_per_strip == 0)
     {
         DWarning()  << "TIFF loader: Cannot handle non-stripped images. Loading file " << filePath << endl;
         TIFFClose(tif);
@@ -464,7 +463,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 3);
     }
 
-    TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, imageBitsDepth());
+    TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, (uint16)imageBitsDepth());
     TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,  TIFFDefaultStripSize(tif, 0));
 
     // -------------------------------------------------------------------
@@ -823,8 +822,8 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     QImage thumb = m_image->smoothScale(160, 120, QSize::ScaleMin).copyQImage();
 
-    TIFFSetField(tif, TIFFTAG_IMAGEWIDTH,      thumb.width());
-    TIFFSetField(tif, TIFFTAG_IMAGELENGTH,     thumb.height());
+    TIFFSetField(tif, TIFFTAG_IMAGEWIDTH,      (uint32)thumb.width());
+    TIFFSetField(tif, TIFFTAG_IMAGELENGTH,     (uint32)thumb.height());
     TIFFSetField(tif, TIFFTAG_PHOTOMETRIC,     PHOTOMETRIC_RGB);
     TIFFSetField(tif, TIFFTAG_PLANARCONFIG,    PLANARCONFIG_CONTIG);
     TIFFSetField(tif, TIFFTAG_ORIENTATION,     ORIENTATION_TOPLEFT);
@@ -911,7 +910,7 @@ void TIFFLoader::tiffSetExifDataTag(TIFF* tif, ttag_t tiffTag,
     QByteArray tag = metaData->getExifTagData(exifTagName);
     if (!tag.isEmpty()) 
     {
-        TIFFSetField (tif, tiffTag, (uint16)tag.size(), (char *)tag.data());
+        TIFFSetField (tif, tiffTag, (uint32)tag.size(), (char *)tag.data());
     }
 }
 
