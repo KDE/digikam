@@ -614,18 +614,23 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
 
     QPopupMenu selectTagsMenu;
     selectTagsMenu.insertItem(i18n("All Tags"),   14);
-    selectTagsMenu.insertSeparator(-1);
-    selectTagsMenu.insertItem(i18n("Childs"),     17);
-    selectTagsMenu.insertItem(i18n("Parents"),    19);
+    if (!album->isRoot())
+    {
+        selectTagsMenu.insertSeparator(-1);
+        selectTagsMenu.insertItem(i18n("Childs"),     17);
+        selectTagsMenu.insertItem(i18n("Parents"),    19);
+    }
     popmenu.insertItem(i18n("Select"), &selectTagsMenu);
 
     QPopupMenu deselectTagsMenu;
     deselectTagsMenu.insertItem(i18n("All Tags"), 15);
-    deselectTagsMenu.insertSeparator(-1);
-    deselectTagsMenu.insertItem(i18n("Childs"),   18);
-    deselectTagsMenu.insertItem(i18n("Parents"),  20);
+    if (!album->isRoot())
+    {
+        deselectTagsMenu.insertSeparator(-1);
+        deselectTagsMenu.insertItem(i18n("Childs"),   18);
+        deselectTagsMenu.insertItem(i18n("Parents"),  20);
+    }
     popmenu.insertItem(i18n("Deselect"), &deselectTagsMenu);
-
 
     popmenu.insertItem(i18n("Invert Selection"),  16);
 
