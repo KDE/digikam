@@ -5,7 +5,7 @@
  * Description : tags filter view
  *
  * Copyright 2005 by Renchi Raju
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -253,9 +253,10 @@ QDragObject* TagFilterView::dragObject()
     while (it.current())
     {
         TagFilterViewItem* item = (TagFilterViewItem*)it.current();
-        if (item->m_tag)
+        if (item)
         {
-            dragTagIDs.append(item->m_tag->id());
+            if (item->m_tag)
+                dragTagIDs.append(item->m_tag->id());
         }
         ++it;
     }
