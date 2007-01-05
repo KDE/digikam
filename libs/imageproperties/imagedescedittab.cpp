@@ -27,7 +27,6 @@
 #include <qvbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qheader.h>
 #include <qtoolbutton.h>
 #include <qpushbutton.h>
 #include <qiconset.h>
@@ -191,10 +190,6 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->recentTagsBtn->setPopupDelay(1);
 
     d->tagsView = new TAlbumListView(settingsArea);
-    d->tagsView->addColumn(i18n("Tags"));
-    d->tagsView->header()->hide();
-    d->tagsView->setSelectionMode(QListView::Single);
-    d->tagsView->setResizeMode(QListView::LastColumn);
 
     // Buttons -----------------------------------------
 

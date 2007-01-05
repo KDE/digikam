@@ -3,7 +3,7 @@
  * Date  : 2006-18-12
  * Description : A list view to display digiKam Tags.
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -17,6 +17,10 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+// Qt includes.
+
+#include <qheader.h>
 
 // KDE includes.
 
@@ -83,6 +87,10 @@ TAlbumListView::TAlbumListView(QWidget* parent)
               : QListView(parent)
 {
     m_dragItem = 0;
+    addColumn(i18n("Tags"));
+    header()->hide();
+    setResizeMode(QListView::LastColumn);
+    setSelectionMode(QListView::Extended);
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
 }
@@ -94,17 +102,23 @@ void TAlbumListView::emitSignalItemStateChanged(TAlbumCheckListItem *item)
 
 QDragObject* TAlbumListView::dragObject()
 {
-    TAlbumCheckListItem *item = dynamic_cast<TAlbumCheckListItem*>(dragItem());
-    if(!item)
-        return 0;
+    QValueList<int> dragTagIDs;
 
-    if(!item->m_album->parent())
-        return 0;
+    QListViewItemIterator it(this, QListViewItemIterator::Selected);
+    while (it.current())
+    {
+        TAlbumCheckListItem* item = (TAlbumCheckListItem*)it.current();
+        if (item)
+        {
+            if (item->m_album->parent())
+                dragTagIDs.append(item->m_album->id());
+        }
+        ++it;
+    }
 
-    TagDrag *t = new TagDrag(item->m_album->id(), this);
-    t->setPixmap(*item->pixmap(0));
-
-    return t;
+    TagListDrag *drag = new TagListDrag(dragTagIDs, this);
+    drag->setPixmap(AlbumThumbnailLoader::instance()->getStandardTagIcon());
+    return drag;
 }
 
 void TAlbumListView::startDrag()
