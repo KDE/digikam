@@ -62,11 +62,11 @@ public:
 
     TAlbumListView(QWidget* parent);
 
-    void emitSignalItemStateChanged();
+    void emitSignalItemStateChanged(TAlbumCheckListItem *item);
 
 signals:
 
-    void signalItemStateChanged();
+    void signalItemStateChanged(TAlbumCheckListItem *item);
 
 protected:
 

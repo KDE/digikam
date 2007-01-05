@@ -74,7 +74,7 @@ void TAlbumCheckListItem::stateChange(bool val)
 {
     QCheckListItem::stateChange(val);
     TAlbumListView* view = dynamic_cast<TAlbumListView*>(listView());
-    view->emitSignalItemStateChanged();
+    view->emitSignalItemStateChanged(this);
 }
 
 // ------------------------------------------------------------------------
@@ -87,9 +87,9 @@ TAlbumListView::TAlbumListView(QWidget* parent)
     viewport()->setAcceptDrops(true);
 }
 
-void TAlbumListView::emitSignalItemStateChanged()
+void TAlbumListView::emitSignalItemStateChanged(TAlbumCheckListItem *item)
 {
-    emit signalItemStateChanged();
+    emit signalItemStateChanged(item);
 }
 
 QDragObject* TAlbumListView::dragObject()

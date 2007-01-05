@@ -41,9 +41,9 @@ namespace Digikam
 class AlbumIconItem;
 class Album;
 class TAlbum;
+class TAlbumCheckListItem;
 class ImageInfo;
 class ImageDescEditTabPriv;
-
 
 class DIGIKAM_EXPORT ImageDescEditTab : public NavigateBarTab
 {
@@ -73,8 +73,7 @@ private:
     void updateDate();
     void updateRecentTags();
 
-    void tagNew(TAlbum* parAlbum, const QString& _title=QString(),
-                const QString& _icon=QString());
+    void tagNew(TAlbum* parAlbum, const QString& _title=QString(), const QString& _icon=QString());
     void tagEdit(TAlbum* album);
     void tagDelete(TAlbum *album);
 
@@ -87,6 +86,7 @@ private slots:
 
     void slotApplyAllChanges();
     void slotRevertAllChanges();
+    void slotItemStateChanged(TAlbumCheckListItem *);
     void slotModified();
     void slotRightButtonClicked(QListViewItem *, const QPoint &, int);
     void slotTagsSearchChanged();

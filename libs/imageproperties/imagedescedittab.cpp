@@ -76,6 +76,14 @@ class ImageDescEditTabPriv
 {
 public:
 
+    enum ToggleAuto
+    {
+        None = 0,
+        Childs,
+        Parents,
+        Both
+    };
+
     ImageDescEditTabPriv()
     {
         modified                   = false;
@@ -92,6 +100,7 @@ public:
         assignedTagsBtn            = 0;
         applyBtn                   = 0;
         revertBtn                  = 0;
+        toggleAuto                 = None;
     }
 
     bool               modified;
@@ -117,6 +126,8 @@ public:
     TAlbumListView    *tagsView;
 
     RatingWidget      *ratingWidget;
+
+    ToggleAuto         toggleAuto;
 };
 
 ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
@@ -215,8 +226,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     connect(popupMenu, SIGNAL(activated(int)),
             this, SLOT(slotRecentTagsMenuActivated(int)));
 
-    connect(d->tagsView, SIGNAL(signalItemStateChanged()),
-            this, SLOT(slotModified()));
+    connect(d->tagsView, SIGNAL(signalItemStateChanged(TAlbumCheckListItem *)),
+            this, SLOT(slotItemStateChanged(TAlbumCheckListItem *)));
     
     connect(d->commentsEdit, SIGNAL(textChanged()),
             this, SLOT(slotModified()));
@@ -300,6 +311,13 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     connect(watch, SIGNAL(signalImageCaptionChanged(Q_LLONG)),
             this, SLOT(slotImageCaptionChanged(Q_LLONG)));
+
+    // -- read config ---------------------------------------------------------
+
+    KConfig* config = kapp->config();
+    config->setGroup("Tag List View");
+    d->toggleAuto = (ImageDescEditTabPriv::ToggleAuto)(config->readNumEntry("Toggle Auto", 
+                                                       ImageDescEditTabPriv::None));
 }
 
 ImageDescEditTab::~ImageDescEditTab()
@@ -313,6 +331,11 @@ ImageDescEditTab::~ImageDescEditTab()
         (*it)->removeExtraData(this);
     }
     */
+
+    KConfig* config = kapp->config();
+    config->setGroup("Tag List View");
+    config->writeEntry("Toggle Auto", (int)(d->toggleAuto));
+    config->sync();
 
     delete d;
 }
@@ -507,6 +530,27 @@ void ImageDescEditTab::populateTags()
     }
 }
 
+void ImageDescEditTab::slotItemStateChanged(TAlbumCheckListItem *item)
+{
+    switch(d->toggleAuto)
+    {
+        case ImageDescEditTabPriv::Childs:
+            toggleChildTags(item->m_album, item->isOn());
+            break;
+        case ImageDescEditTabPriv::Parents:
+            toggleParentTags(item->m_album, item->isOn());
+            break;
+        case ImageDescEditTabPriv::Both:
+            toggleChildTags(item->m_album, item->isOn());
+            toggleParentTags(item->m_album, item->isOn());
+            break;
+        default:
+            break;
+    }
+
+    slotModified();
+}
+
 void ImageDescEditTab::slotModified()
 {
     d->modified = true;
@@ -633,6 +677,16 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
     popmenu.insertItem(i18n("Deselect"), &deselectTagsMenu);
 
     popmenu.insertItem(i18n("Invert Selection"),  16);
+    popmenu.insertSeparator(-1);
+
+    QPopupMenu toggleAutoMenu;
+    toggleAutoMenu.setCheckable(true);
+    toggleAutoMenu.insertItem(i18n("Childs"),  21);
+    toggleAutoMenu.insertItem(i18n("Parents"), 22);
+    toggleAutoMenu.insertItem(i18n("Both"),    23);
+    if (d->toggleAuto != ImageDescEditTabPriv::None)
+        toggleAutoMenu.setItemChecked(20 + d->toggleAuto, true);
+    popmenu.insertItem(i18n("Toogle Auto"), &toggleAutoMenu);
 
     int choice = popmenu.exec((QCursor::pos()));
     switch( choice )
@@ -727,6 +781,21 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
             toggleParentTags(album, false);
             TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(this);
             item->setOn(false);            
+            break;
+        }
+        case 21:   // Toggle auto Childs tags.
+        {
+            d->toggleAuto = ImageDescEditTabPriv::Childs;
+            break;
+        }
+        case 22:   // Toggle auto Parents tags.
+        {
+            d->toggleAuto = ImageDescEditTabPriv::Parents;
+            break;
+        }
+        case 23:   // Toggle auto Childs and Parents tags.
+        {
+            d->toggleAuto = ImageDescEditTabPriv::Both;
             break;
         }
         default:
