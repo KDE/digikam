@@ -73,6 +73,7 @@ namespace Digikam
 
 class ImageDescEditTabPriv
 {
+
 public:
 
     enum ToggleAuto
@@ -82,6 +83,8 @@ public:
         Parents,
         Both
     };
+
+public:
 
     ImageDescEditTabPriv()
     {
