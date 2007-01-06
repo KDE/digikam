@@ -128,6 +128,8 @@ General       : New native JPEG2000 image loader using Jasper library witch can 
 General       : New optimized layout to show Comments & Tags side bar contents.
 General       : Tags View from Comments & Tags side bar support drag & drop.
 
+AlbumGUI      : Improvement of popupmenu of Tags Filter View and Comment and Tags about
+                auto selection/deselection of parents/childs tags in Tags treeview.
 AlbumGUI      : Root album show a Welcome page for new users (like Kmail or Konqueror).
 AlbumGUI      : Video files can be previewed using an embedded instance of default KDE media player.
 AlbumGUI      : Preview picture mode use a memory cache to speed-up loading.
@@ -420,6 +422,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 250 ==> 139313 : UTF-8 image comments are mangled when input from image editor.
 251 ==> 136903 : If partition gets full during camera/card copy there is no warning and empty files are created.
 252 ==> 133955 : Rating search: less, equal, and larger comparison.
-253 ==> 
+253 ==> 139547 : Tag hierarchy automatic fill.
+254 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
