@@ -40,28 +40,28 @@
 #include <kcursor.h>
 #include <kmessagebox.h>
 
+// Local includes.
+
+#include "ddebug.h"
+#include "albummanager.h"
+#include "albumdb.h"
+#include "album.h"
+#include "albumlister.h"
+#include "albumthumbnailloader.h"
+#include "syncjob.h"
+#include "dragobjects.h"
+#include "folderitem.h"
+#include "imageattributeswatch.h"
+#include "tagcreatedlg.h"
+#include "tagfilterview.h"
+#include "tagfilterview.moc"
+
 // X11 includes.
 
 extern "C"
 {
 #include <X11/Xlib.h>
 }
-
-// Local includes.
-
-#include "ddebug.h"
-#include "albummanager.h"
-#include "albumlister.h"
-#include "albumdb.h"
-#include "album.h"
-#include "syncjob.h"
-#include "dragobjects.h"
-#include "folderitem.h"
-#include "imageattributeswatch.h"
-#include "albumthumbnailloader.h"
-#include "tagcreatedlg.h"
-#include "tagfilterview.h"
-#include "tagfilterview.moc"
 
 namespace Digikam
 {
@@ -108,7 +108,7 @@ public:
             setState(On);
         }
 
-        ((TagFilterView*)listView())->triggerChange();
+        ((TagFilterView*)listView())->stateChanged(this);
     }
 
     int compare(QListViewItem* i, int column, bool ascending) const
@@ -151,29 +151,33 @@ public:
 
 // ---------------------------------------------------------------------
 
-class TagFilterViewPriv
+class TagFilterViewPrivate
 {
 
 public:
 
-    TagFilterViewPriv()
+    TagFilterViewPrivate()
     {
-        ABCMenu      = 0;
-        timer        = 0;
-        matchingCond = AlbumLister::OrCondition;
+        ABCMenu        = 0;
+        timer          = 0;
+        toggleAutoTags = TagFilterView::NoToggleAuto;
+        matchingCond   = AlbumLister::OrCondition;
     }
 
     QTimer                         *timer;
 
     QPopupMenu                     *ABCMenu;
 
+    TagFilterView::ToggleAutoTags   toggleAutoTags;
+
     AlbumLister::MatchingCondition  matchingCond;
 };
+
 
 TagFilterView::TagFilterView(QWidget* parent)
              : FolderView(parent)
 {
-    d = new TagFilterViewPriv;
+    d = new TagFilterViewPrivate;
     d->timer = new QTimer(this);
 
     addColumn(i18n("Tag Filters"));
@@ -227,6 +231,8 @@ TagFilterView::TagFilterView(QWidget* parent)
     config->setGroup("Tag Filters View");
     d->matchingCond = (AlbumLister::MatchingCondition)(config->readNumEntry("Matching Condition", 
                                                        AlbumLister::OrCondition));
+
+    d->toggleAutoTags = (ToggleAutoTags)(config->readNumEntry("Toggle Auto Tags", NoToggleAuto));
 }
 
 TagFilterView::~TagFilterView()
@@ -234,10 +240,32 @@ TagFilterView::~TagFilterView()
     KConfig* config = kapp->config();
     config->setGroup("Tag Filters View");
     config->writeEntry("Matching Condition", (int)(d->matchingCond));
+    config->writeEntry("Toggle Auto Tags", (int)(d->toggleAutoTags));
     config->sync();
 
     delete d->timer;
     delete d;
+}
+
+void TagFilterView::stateChanged(TagFilterViewItem* item)
+{
+    switch(d->toggleAutoTags)
+    {
+        case Childs:
+            toggleChildTags(item, item->isOn());
+            break;
+        case Parents:
+            toggleParentTags(item, item->isOn());
+            break;
+        case ChildsAndParents:
+            toggleChildTags(item, item->isOn());
+            toggleParentTags(item, item->isOn());
+            break;
+        default:
+            break;
+    }
+
+    triggerChange();
 }
 
 void TagFilterView::triggerChange()
@@ -384,7 +412,7 @@ void TagFilterView::slotTagAdded(Album* album)
         if (!parent)
         {
             DWarning() << k_funcinfo << " Failed to find parent for Tag "
-                        << tag->tagPath() << endl;
+                       << tag->tagPath() << endl;
             return;
         }
 
@@ -572,43 +600,71 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
     }
  
     popmenu.insertSeparator(-1);
-    popmenu.insertItem(i18n("Select All"),       14);
-    popmenu.insertItem(i18n("Deselect"),         15);
-    popmenu.insertItem(i18n("Invert Selection"), 16);
+
+    QPopupMenu selectTagsMenu;
+    selectTagsMenu.insertItem(i18n("All Tags"),   14);
+    if (item)
+    {
+        selectTagsMenu.insertSeparator(-1);
+        selectTagsMenu.insertItem(i18n("Childs"),     17);
+        selectTagsMenu.insertItem(i18n("Parents"),    19);
+    }
+    popmenu.insertItem(i18n("Select"), &selectTagsMenu);
+
+    QPopupMenu deselectTagsMenu;
+    deselectTagsMenu.insertItem(i18n("All Tags"), 15);
+    if (item)
+    {
+        deselectTagsMenu.insertSeparator(-1);
+        deselectTagsMenu.insertItem(i18n("Childs"),   18);
+        deselectTagsMenu.insertItem(i18n("Parents"),  20);
+    }
+    popmenu.insertItem(i18n("Deselect"), &deselectTagsMenu);
+
+    popmenu.insertItem(i18n("Invert Selection"),  16);
     popmenu.insertSeparator(-1);
+
+    QPopupMenu toggleAutoMenu;
+    toggleAutoMenu.setCheckable(true);
+    toggleAutoMenu.insertItem(i18n("Childs"),  21);
+    toggleAutoMenu.insertItem(i18n("Parents"), 22);
+    toggleAutoMenu.insertItem(i18n("Both"),    23);
+    if (d->toggleAutoTags != None)
+        toggleAutoMenu.setItemChecked(20 + d->toggleAutoTags, true);
+    popmenu.insertItem(i18n("Toogle Auto"), &toggleAutoMenu);
 
     QPopupMenu matchingCongMenu;
     matchingCongMenu.setCheckable(true);
-    matchingCongMenu.insertItem(i18n("Or Between Tags"),  17);
-    matchingCongMenu.insertItem(i18n("And Between Tags"), 18);
-    matchingCongMenu.setItemChecked((d->matchingCond == AlbumLister::OrCondition) ? 17 : 18, true);
+    matchingCongMenu.insertItem(i18n("Or Between Tags"),  24);
+    matchingCongMenu.insertItem(i18n("And Between Tags"), 25);
+    matchingCongMenu.setItemChecked((d->matchingCond == AlbumLister::OrCondition) ? 24 : 25, true);
     popmenu.insertItem(i18n("Matching Condition"), &matchingCongMenu);
 
     int choice = popmenu.exec((QCursor::pos()));
     switch( choice )
     {
-        case 10:
+        case 10:    // New Tag.
         {
             tagNew(item);
             break;
         }
-        case 11:
+        case 11:    // Edit Tag Properties.
         {
             tagEdit(item);
             break;
         }
-        case 12:
+        case 12:    // Delete Tag.
         {
             tagDelete(item);
             break;
         }
-        case 13:
+        case 13:    // Reset Tag Icon.
         {
             QString errMsg;
             AlbumManager::instance()->updateTAlbumIcon(item->m_tag, QString("tag"), 0, errMsg);
             break;
         }        
-        case 14:
+        case 14:    // Select All Tags.
         {
             QListViewItemIterator it(this, QListViewItemIterator::NotChecked);
             while (it.current())
@@ -620,7 +676,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
             triggerChange();
             break;
         }
-        case 15:
+        case 15:    // Deselect All Tags.
         {
             QListViewItemIterator it(this, QListViewItemIterator::Checked);
             while (it.current())
@@ -632,7 +688,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
             triggerChange();
             break;
         }
-        case 16:
+        case 16:       // Invert All Tags Selection.
         {
             QListViewItemIterator it(this);
             while (it.current())
@@ -654,13 +710,56 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
             triggerChange();
             break;
         }
-        case 17:
+        case 17:   // Select Child Tags.
+        {
+            toggleChildTags(item, true);
+            TagFilterViewItem *tItem = (TagFilterViewItem*)item->m_tag->extraData(this);
+            tItem->setOn(true);            
+            break;
+        }
+        case 18:   // Deselect Child Tags.
+        {
+            toggleChildTags(item, false);
+            TagFilterViewItem *tItem = (TagFilterViewItem*)item->m_tag->extraData(this);
+            tItem->setOn(false);            
+            break;
+        }
+        case 19:   // Select Parent Tags.
+        {
+            toggleParentTags(item, true);
+            TagFilterViewItem *tItem = (TagFilterViewItem*)item->m_tag->extraData(this);
+            tItem->setOn(true);            
+            break;
+        }
+        case 20:   // Deselect Parent Tags.
+        {
+            toggleParentTags(item, false);
+            TagFilterViewItem *tItem = (TagFilterViewItem*)item->m_tag->extraData(this);
+            tItem->setOn(false);            
+            break;
+        }
+        case 21:   // Toggle auto Childs tags.
+        {
+            d->toggleAutoTags = Childs;
+            break;
+        }
+        case 22:   // Toggle auto Parents tags.
+        {
+            d->toggleAutoTags = Parents;
+            break;
+        }
+        case 23:   // Toggle auto Childs and Parents tags.
+        {
+            d->toggleAutoTags = ChildsAndParents;
+            break;
+        }
+        case 24:    // Or Between Tags.
         {
             d->matchingCond = AlbumLister::OrCondition;
             triggerChange();
             break;
         }
-        case 18:
+        case 25:    // And Between Tags.
         {
             d->matchingCond = AlbumLister::AndCondition;
             triggerChange();
@@ -835,6 +934,56 @@ void TagFilterView::tagDelete(TagFilterViewItem* item)
             if (!man->deleteTAlbum(tag, errMsg))
                 KMessageBox::error(0, errMsg);
         }
+    }
+}
+
+void TagFilterView::toggleChildTags(TagFilterViewItem* tItem, bool b)
+{
+    if (!tItem)
+        return;
+
+    TAlbum *album = tItem->m_tag; 
+    if (!album)
+        return;
+
+    AlbumIterator it(album);
+    while ( it.current() )
+    {
+        TAlbum *ta              = (TAlbum*)it.current();
+        TagFilterViewItem *item = (TagFilterViewItem*)ta->extraData(this);
+        if (item)
+            if (item->isVisible())
+                item->setOn(b);
+        ++it;
+    }
+}
+
+void TagFilterView::toggleParentTags(TagFilterViewItem* tItem, bool b)
+{
+    if (!tItem)
+        return;
+
+    TAlbum *album = tItem->m_tag; 
+    if (!album)
+        return;
+
+    QListViewItemIterator it(this);
+    while (it.current())
+    {
+        TagFilterViewItem* item = dynamic_cast<TagFilterViewItem*>(it.current());
+        if (item->isVisible())
+        {
+            Album *a = dynamic_cast<Album*>(item->m_tag);
+            if (a)
+            {
+                if (a == album->parent())
+                {
+                    item->setOn(b);
+                    toggleParentTags(item, b);
+                }
+            }
+        }
+        ++it;
     }
 }
 

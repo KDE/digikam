@@ -32,7 +32,7 @@ namespace Digikam
 
 class Album;
 class TagFilterViewItem;
-class TagFilterViewPriv;
+class TagFilterViewPrivate;
 
 class TagFilterView : public FolderView
 {
@@ -40,10 +40,20 @@ class TagFilterView : public FolderView
 
 public:
 
+    enum ToggleAutoTags
+    {
+        NoToggleAuto = 0,
+        Childs,
+        Parents,
+        ChildsAndParents
+    };
+
+public:
+
     TagFilterView(QWidget* parent);
     ~TagFilterView();
 
-    void triggerChange();
+    void stateChanged(TagFilterViewItem*);
 
 protected:
 
@@ -67,15 +77,18 @@ private slots:
 
 private:
 
+    void triggerChange();
     void tagNew(TagFilterViewItem* item, const QString& _title=QString(),
                 const QString& _icon=QString());
     void tagEdit(TagFilterViewItem* item);
     void tagDelete(TagFilterViewItem* item);
     void setTagThumbnail(TAlbum *album);
-
+    void toggleChildTags(TagFilterViewItem* tItem, bool b);
+    void toggleParentTags(TagFilterViewItem* tItem, bool b);
+    
 private:
     
-    TagFilterViewPriv *d;
+    TagFilterViewPrivate *d;
 };
 
 }  // namespace Digikam

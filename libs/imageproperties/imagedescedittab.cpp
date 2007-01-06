@@ -63,6 +63,7 @@
 #include "navigatebarwidget.h"
 #include "ratingwidget.h"
 #include "talbumlistview.h"
+#include "tagfilterview.h"
 #include "imageinfo.h"
 #include "imageattributeswatch.h"
 #include "imagedescedittab.h"
@@ -73,16 +74,6 @@ namespace Digikam
 
 class ImageDescEditTabPriv
 {
-
-public:
-
-    enum ToggleAuto
-    {
-        None = 0,
-        Childs,
-        Parents,
-        Both
-    };
 
 public:
 
@@ -102,34 +93,34 @@ public:
         assignedTagsBtn            = 0;
         applyBtn                   = 0;
         revertBtn                  = 0;
-        toggleAuto                 = None;
+        toggleAutoTags             = TagFilterView::NoToggleAuto;
     }
 
-    bool               modified;
-    bool               ignoreImageAttributesWatch;
+    bool                           modified;
+    bool                           ignoreImageAttributesWatch;
 
-    QToolButton       *recentTagsBtn;
-    QToolButton       *tagsSearchClearBtn;
-    QToolButton       *assignedTagsBtn;
-    QToolButton       *revertBtn;
+    QToolButton                   *recentTagsBtn;
+    QToolButton                   *tagsSearchClearBtn;
+    QToolButton                   *assignedTagsBtn;
+    QToolButton                   *revertBtn;
 
-    QPopupMenu        *ABCMenu;
+    QPopupMenu                    *ABCMenu;
 
-    QPushButton       *applyBtn;
+    QPushButton                   *applyBtn;
 
-    KTextEdit         *commentsEdit;
+    KTextEdit                     *commentsEdit;
 
-    KLineEdit         *tagsSearchEdit;
+    KLineEdit                     *tagsSearchEdit;
 
-    KDateTimeEdit     *dateTimeEdit;
+    KDateTimeEdit                 *dateTimeEdit;
 
-    ImageInfo         *currInfo;
+    ImageInfo                     *currInfo;
 
-    TAlbumListView    *tagsView;
+    TAlbumListView                *tagsView;
 
-    RatingWidget      *ratingWidget;
+    RatingWidget                  *ratingWidget;
 
-    ToggleAuto         toggleAuto;
+    TagFilterView::ToggleAutoTags  toggleAutoTags;
 };
 
 ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
@@ -314,8 +305,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     KConfig* config = kapp->config();
     config->setGroup("Tag List View");
-    d->toggleAuto = (ImageDescEditTabPriv::ToggleAuto)(config->readNumEntry("Toggle Auto", 
-                                                       ImageDescEditTabPriv::None));
+    d->toggleAutoTags = (TagFilterView::ToggleAutoTags)(config->readNumEntry("Toggle Auto Tags", 
+                                                       TagFilterView::NoToggleAuto));
 }
 
 ImageDescEditTab::~ImageDescEditTab()
@@ -332,7 +323,7 @@ ImageDescEditTab::~ImageDescEditTab()
 
     KConfig* config = kapp->config();
     config->setGroup("Tag List View");
-    config->writeEntry("Toggle Auto", (int)(d->toggleAuto));
+    config->writeEntry("Toggle Auto Tags", (int)(d->toggleAutoTags));
     config->sync();
 
     delete d;
@@ -530,15 +521,15 @@ void ImageDescEditTab::populateTags()
 
 void ImageDescEditTab::slotItemStateChanged(TAlbumCheckListItem *item)
 {
-    switch(d->toggleAuto)
+    switch(d->toggleAutoTags)
     {
-        case ImageDescEditTabPriv::Childs:
+        case TagFilterView::Childs:
             toggleChildTags(item->m_album, item->isOn());
             break;
-        case ImageDescEditTabPriv::Parents:
+        case TagFilterView::Parents:
             toggleParentTags(item->m_album, item->isOn());
             break;
-        case ImageDescEditTabPriv::Both:
+        case TagFilterView::ChildsAndParents:
             toggleChildTags(item->m_album, item->isOn());
             toggleParentTags(item->m_album, item->isOn());
             break;
@@ -682,8 +673,8 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
     toggleAutoMenu.insertItem(i18n("Childs"),  21);
     toggleAutoMenu.insertItem(i18n("Parents"), 22);
     toggleAutoMenu.insertItem(i18n("Both"),    23);
-    if (d->toggleAuto != ImageDescEditTabPriv::None)
-        toggleAutoMenu.setItemChecked(20 + d->toggleAuto, true);
+    if (d->toggleAutoTags != TagFilterView::NoToggleAuto)
+        toggleAutoMenu.setItemChecked(20 + d->toggleAutoTags, true);
     popmenu.insertItem(i18n("Toogle Auto"), &toggleAutoMenu);
 
     int choice = popmenu.exec((QCursor::pos()));
@@ -783,17 +774,17 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
         }
         case 21:   // Toggle auto Childs tags.
         {
-            d->toggleAuto = ImageDescEditTabPriv::Childs;
+            d->toggleAutoTags = TagFilterView::Childs;
             break;
         }
         case 22:   // Toggle auto Parents tags.
         {
-            d->toggleAuto = ImageDescEditTabPriv::Parents;
+            d->toggleAutoTags = TagFilterView::Parents;
             break;
         }
         case 23:   // Toggle auto Childs and Parents tags.
         {
-            d->toggleAuto = ImageDescEditTabPriv::Both;
+            d->toggleAutoTags = TagFilterView::ChildsAndParents;
             break;
         }
         default:
