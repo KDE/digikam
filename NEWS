@@ -423,6 +423,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 251 ==> 136903 : If partition gets full during camera/card copy there is no warning and empty files are created.
 252 ==> 133955 : Rating search: less, equal, and larger comparison.
 253 ==> 139547 : Tag hierarchy automatic fill.
-254 ==> 
+254 ==> 138816 : gpcamera.cpp compile failure CameraList camList.
+255 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
