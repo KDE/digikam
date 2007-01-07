@@ -78,37 +78,6 @@
 namespace Digikam
 {
 
-
-  static inline double unitToMM(Unit unit) {
-    if (unit == DK_MILLIMETERS) {
-      return 1.;
-    } else if (unit == DK_CENTIMETERS) {
-      return 10.;
-    } else { //DK_INCHES
-      return 25.4;
-    }
-  }
-
-  static inline Unit stringToUnit(const QString& unit) {
-    if (unit == i18n("Millimeters")) {
-      return DK_MILLIMETERS;
-    } else if (unit == i18n("Centimeters")) {
-      return DK_CENTIMETERS;
-    } else {//Inches
-      return DK_INCHES;
-    }
-  }
-  
-  static inline QString unitToString(Unit unit) {
-    if (unit == DK_MILLIMETERS) {
-      return i18n("Millimeters");
-    } else if (unit == DK_CENTIMETERS) {
-      return i18n("Centimeters");
-    } else { //DK_INCHES
-      return i18n("Inches");
-    }
-  }
-
 class ImagePrintPrivate
 {
 
@@ -208,38 +177,47 @@ bool ImagePrint::printImageWithQt()
     }
     else
     {
-      int unit = (m_printer.option("app-imageeditor-scale-unit").isEmpty() ?
-          DK_INCHES : m_printer.option("app-imageeditor-scale-unit").toInt());
-      double inches = 1;
-      if (unit == DK_MILLIMETERS) {
-        inches = 1/25.4;
-      } else if (unit == DK_CENTIMETERS) {
-        inches = 1/2.54;
-      }
-      double wImg = (m_printer.option("app-imageeditor-scale-width").isEmpty() ?
-            1 : m_printer.option("app-imageeditor-scale-width").toDouble()) * inches;
-      double hImg = (m_printer.option("app-imageeditor-scale-height").isEmpty() ?
-            1 : m_printer.option("app-imageeditor-scale-height").toDouble()) * inches;
-      size.setWidth( int(wImg * m_printer.resolution()) );
-      size.setHeight( int(hImg * m_printer.resolution()) );
-
-      if ( m_printer.option( "app-imageeditor-auto-rotate" ) == t )
-        m_printer.setOrientation( wImg <= hImg ? KPrinter::Portrait : KPrinter::Landscape );
-
-      if (size.width() > w || size.height() > h) {
-        int resp = KMessageBox::warningYesNoCancel(KApplication::kApplication()->mainWidget(),
-            i18n("The image will not fit on the page, what do you want to do?"),
-            QString::null,KStdGuiItem::cont(),
-            i18n("Shrink") );
-
-        if (resp==KMessageBox::Cancel) {
-          m_printer.abort();
-          // no need to return false, user decided to abort
-          return true;
-        } else if (resp == KMessageBox::No) { // Shrink
-          size.scale(w, h, QSize::ScaleMin);
+        int unit = (m_printer.option("app-imageeditor-scale-unit").isEmpty() ?
+            ImageEditorPrintDialogPage::DK_INCHES : m_printer.option("app-imageeditor-scale-unit").toInt());
+        double inches = 1;
+    
+        if (unit == ImageEditorPrintDialogPage::DK_MILLIMETERS) 
+        {
+            inches = 1/25.4;
+        } 
+        else if (unit == ImageEditorPrintDialogPage::DK_CENTIMETERS) 
+        {
+            inches = 1/2.54;
         }
-      }
+    
+        double wImg = (m_printer.option("app-imageeditor-scale-width").isEmpty() ?
+                1 : m_printer.option("app-imageeditor-scale-width").toDouble()) * inches;
+        double hImg = (m_printer.option("app-imageeditor-scale-height").isEmpty() ?
+                1 : m_printer.option("app-imageeditor-scale-height").toDouble()) * inches;
+        size.setWidth( int(wImg * m_printer.resolution()) );
+        size.setHeight( int(hImg * m_printer.resolution()) );
+    
+        if ( m_printer.option( "app-imageeditor-auto-rotate" ) == t )
+            m_printer.setOrientation( wImg <= hImg ? KPrinter::Portrait : KPrinter::Landscape );
+    
+        if (size.width() > w || size.height() > h) 
+        {
+            int resp = KMessageBox::warningYesNoCancel(KApplication::kApplication()->mainWidget(),
+                i18n("The image will not fit on the page, what do you want to do?"),
+                QString::null,KStdGuiItem::cont(),
+                i18n("Shrink") );
+    
+            if (resp==KMessageBox::Cancel) 
+            {
+                m_printer.abort();
+                // no need to return false, user decided to abort
+                return true;
+            } 
+            else if (resp == KMessageBox::No) 
+            { // Shrink
+                size.scale(w, h, QSize::ScaleMin);
+            }
+        }
     }
 
     // Align image.
@@ -438,13 +416,7 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
     cmbox->setSpacing(KDialog::spacingHint());
 
     layout->addWidget(cmbox);
-
-    connect( d->colorManaged, SIGNAL(toggled(bool)),
-             this, SLOT(slotAlertSettings( bool )) );
-
-    connect( d->cmPreferences, SIGNAL(clicked()),
-             this, SLOT(slotSetupDlg()) );
-    
+   
     // ------------------------------------------------------------------------
 
     QVButtonGroup *group = new QVButtonGroup( i18n("Scaling"), this );
@@ -456,11 +428,7 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
 
     d->scale = new QRadioButton( i18n("Print e&xact size: "), group );
 
-    connect( d->scale, SIGNAL( toggled( bool )),
-             this, SLOT( toggleScaling( bool )));
-
     QHBox *hb = new QHBox( group );
-    layout->addWidget( hb );
     hb->setSpacing( KDialog::spacingHint() );
     QWidget *w = new QWidget(hb);
     w->setFixedWidth(d->scale->style().subRect( QStyle::SR_RadioButtonIndicator, d->scale ).width());
@@ -482,6 +450,18 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
 
     w = new QWidget(hb);
     hb->setStretchFactor( w, 1 );
+    mPreviousUnit = DK_MILLIMETERS;
+
+    // ------------------------------------------------------------------------
+
+    connect( d->colorManaged, SIGNAL(toggled(bool)),
+             this, SLOT(slotAlertSettings( bool )) );
+
+    connect( d->cmPreferences, SIGNAL(clicked()),
+             this, SLOT(slotSetupDlg()) );
+
+    connect( d->scale, SIGNAL( toggled( bool )),
+             this, SLOT( toggleScaling( bool )));
 
     connect(d->width, SIGNAL( valueChanged( double )), 
             this, SLOT( slotWidthChanged( double )));
@@ -494,8 +474,6 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
 
     connect(d->units, SIGNAL(activated(const QString &)), 
             this, SLOT(slotUnitChanged(const QString& )));
-
-    mPreviousUnit = DK_MILLIMETERS;
 }
 
 ImageEditorPrintDialogPage::~ImageEditorPrintDialogPage()
@@ -526,14 +504,15 @@ void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
     QString t = "true";
     QString f = "false";
     QString stVal;
-    bool   ok;
-    double dVal;
-    int iVal;
+    bool    ok;
+    double  dVal;
+    int     iVal;
 
     iVal = opts["app-imageeditor-alignment"].toInt( &ok );
-    if (ok) {
-      stVal = setPosition(iVal);
-      d->mPosition->setCurrentItem(stVal);
+    if (ok) 
+    {
+        stVal = setPosition(iVal);
+        d->mPosition->setCurrentItem(stVal);
     }
 
     d->addFileName->setChecked( opts["app-imageeditor-printFilename"] != f );
@@ -548,15 +527,16 @@ void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
     d->colorManaged->setChecked( false );
 
     Unit unit = static_cast<Unit>( opts["app-imageeditor-scale-unit"].toInt( &ok ) );
-    if (ok) {
-      stVal = unitToString(unit);
-      d->units->setCurrentItem(stVal);
-      mPreviousUnit = unit;
+    if (ok) 
+    {
+        stVal = unitToString(unit);
+        d->units->setCurrentItem(stVal);
+        mPreviousUnit = unit;
     }
     else
     {
-      //for back compatibility
-      d->units->setCurrentItem(i18n("Millimeters"));
+        //for back compatibility
+        d->units->setCurrentItem(i18n("Millimeters"));
     }
 
     dVal = opts["app-imageeditor-scale-width"].toDouble( &ok );
@@ -575,58 +555,94 @@ void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
     d->mKeepRatio->setChecked( opts["app-imageeditor-scale-KeepRatio"] == t );
 
 }
-int ImageEditorPrintDialogPage::getPosition(const QString& align) {
-  int alignment;
-
-  if (align == i18n("Central-Left")) {
-    alignment = Qt::AlignLeft | Qt::AlignVCenter;
-  } else if (align == i18n("Central-Right")) {
-    alignment = Qt::AlignRight | Qt::AlignVCenter;
-  } else if (align == i18n("Top-Left")) {
-    alignment = Qt::AlignTop | Qt::AlignLeft;
-  } else if (align == i18n("Top-Right")) {
-    alignment = Qt::AlignTop | Qt::AlignRight;
-  } else if (align == i18n("Bottom-Left")) {
-    alignment = Qt::AlignBottom | Qt::AlignLeft;
-  } else if (align == i18n("Bottom-Right")) {
-    alignment = Qt::AlignBottom | Qt::AlignRight;
-  } else if (align == i18n("Top-Central")) {
-    alignment = Qt::AlignTop | Qt::AlignHCenter;
-  } else if (align == i18n("Bottom-Central")) {
-    alignment = Qt::AlignBottom | Qt::AlignHCenter;
-  } else  {
-    // Central
-    alignment = Qt::AlignCenter; // Qt::AlignHCenter || Qt::AlignVCenter
-  }
-
-  return alignment;
+int ImageEditorPrintDialogPage::getPosition(const QString& align) 
+{
+    int alignment;
+    
+    if (align == i18n("Central-Left")) 
+    {
+        alignment = Qt::AlignLeft | Qt::AlignVCenter;
+    } 
+    else if (align == i18n("Central-Right")) 
+    {
+        alignment = Qt::AlignRight | Qt::AlignVCenter;
+    } 
+    else if (align == i18n("Top-Left")) 
+    {
+        alignment = Qt::AlignTop | Qt::AlignLeft;
+    } 
+    else if (align == i18n("Top-Right")) 
+    {
+        alignment = Qt::AlignTop | Qt::AlignRight;
+    } 
+    else if (align == i18n("Bottom-Left")) 
+    {
+        alignment = Qt::AlignBottom | Qt::AlignLeft;
+    }  
+    else if (align == i18n("Bottom-Right")) 
+    {
+        alignment = Qt::AlignBottom | Qt::AlignRight;
+    } 
+    else if (align == i18n("Top-Central")) 
+    {
+        alignment = Qt::AlignTop | Qt::AlignHCenter;
+    } 
+    else if (align == i18n("Bottom-Central")) 
+    {
+        alignment = Qt::AlignBottom | Qt::AlignHCenter;
+    }  
+    else  
+    {
+        // Central
+        alignment = Qt::AlignCenter; // Qt::AlignHCenter || Qt::AlignVCenter
+    }
+    
+    return alignment;
 }
 
-QString ImageEditorPrintDialogPage::setPosition(int align) {
-  QString alignment;
-
-  if (align == (Qt::AlignLeft | Qt::AlignVCenter)) {
-    alignment = i18n("Central-Left");
-  } else if (align == (Qt::AlignRight | Qt::AlignVCenter)) {
-    alignment = i18n("Central-Right");
-  } else if (align == (Qt::AlignTop | Qt::AlignLeft)) {
-    alignment = i18n("Top-Left");
-  } else if (align == (Qt::AlignTop | Qt::AlignRight)) {
-    alignment = i18n("Top-Right");
-  } else if (align == (Qt::AlignBottom | Qt::AlignLeft)) {
-    alignment = i18n("Bottom-Left");
-  } else if (align == (Qt::AlignBottom | Qt::AlignRight)) {
-    alignment = i18n("Bottom-Right");
-  } else if (align == (Qt::AlignTop | Qt::AlignHCenter)) {
-    alignment = i18n("Top-Central");
-  } else if (align == (Qt::AlignBottom | Qt::AlignHCenter)) {
-    alignment = i18n("Bottom-Central");
-  } else  {
-    // Central: Qt::AlignCenter or (Qt::AlignHCenter || Qt::AlignVCenter)
-    alignment = i18n("Central");
-  }
-
-  return alignment;
+QString ImageEditorPrintDialogPage::setPosition(int align) 
+{
+    QString alignment;
+    
+    if (align == (Qt::AlignLeft | Qt::AlignVCenter)) 
+    {
+        alignment = i18n("Central-Left");
+    } 
+    else if (align == (Qt::AlignRight | Qt::AlignVCenter)) 
+    {
+        alignment = i18n("Central-Right");
+    } 
+    else if (align == (Qt::AlignTop | Qt::AlignLeft)) 
+    {
+        alignment = i18n("Top-Left");
+    } 
+    else if (align == (Qt::AlignTop | Qt::AlignRight)) 
+    {
+        alignment = i18n("Top-Right");
+    } 
+    else if (align == (Qt::AlignBottom | Qt::AlignLeft)) 
+    {
+        alignment = i18n("Bottom-Left");
+    } 
+    else if (align == (Qt::AlignBottom | Qt::AlignRight)) 
+    {
+        alignment = i18n("Bottom-Right");
+    } 
+    else if (align == (Qt::AlignTop | Qt::AlignHCenter)) 
+    {
+        alignment = i18n("Top-Central");
+    } 
+    else if (align == (Qt::AlignBottom | Qt::AlignHCenter)) 
+    {
+        alignment = i18n("Bottom-Central");
+    } 
+    else  
+    {
+        // Central: Qt::AlignCenter or (Qt::AlignHCenter || Qt::AlignVCenter)
+        alignment = i18n("Central");
+    }
+    
+    return alignment;
 }
 
 void ImageEditorPrintDialogPage::toggleScaling( bool enable )
@@ -637,79 +653,83 @@ void ImageEditorPrintDialogPage::toggleScaling( bool enable )
     d->mKeepRatio->setEnabled( enable );
 }
 
-void ImageEditorPrintDialogPage::slotHeightChanged (double value) {
-  d->width->blockSignals(true);
-  d->height->blockSignals(true);
-
-  if (d->mKeepRatio->isChecked()) {
-    double width = (mImage.width() * value) / mImage.height();
-    d->width->setValue( width ? width : 1.);
-  }
-  d->height->setValue(value);
-
-  d->width->blockSignals(false);
-  d->height->blockSignals(false);
-
+void ImageEditorPrintDialogPage::slotHeightChanged (double value) 
+{
+    d->width->blockSignals(true);
+    d->height->blockSignals(true);
+    
+    if (d->mKeepRatio->isChecked()) 
+    {
+        double width = (mImage.width() * value) / mImage.height();
+        d->width->setValue( width ? width : 1.);
+    }
+    d->height->setValue(value);
+    
+    d->width->blockSignals(false);
+    d->height->blockSignals(false);
 }
 
-void ImageEditorPrintDialogPage::slotWidthChanged (double value) {
-  d->width->blockSignals(true);
-  d->height->blockSignals(true);
-
-  if (d->mKeepRatio->isChecked()) {
-    double height = (mImage.height() * value) / mImage.width();
-    d->height->setValue( height ? height : 1);
-  }
-  d->width->setValue(value);
-
-  d->width->blockSignals(false);
-  d->height->blockSignals(false);
-
+void ImageEditorPrintDialogPage::slotWidthChanged (double value) 
+{
+    d->width->blockSignals(true);
+    d->height->blockSignals(true);
+    
+    if (d->mKeepRatio->isChecked()) 
+    {
+        double height = (mImage.height() * value) / mImage.width();
+        d->height->setValue( height ? height : 1);
+    }
+    d->width->setValue(value);
+    
+    d->width->blockSignals(false);
+    d->height->blockSignals(false);
 }
 
 void ImageEditorPrintDialogPage::toggleRatio( bool enable )
 {
-  if (!enable) return;
-  // choosing a startup value of 15x10 cm (common photo dimention)
-  // mContent->mHeight->value() or mContent->mWidth->value()
-  // are usually empty at startup and hxw (0x0) isn't good IMO keeping ratio
-  double hValue, wValue;
-  if (mImage.height() > mImage.width()) {
-    hValue = d->height->value();
-    if (!hValue) hValue = 150*unitToMM(mPreviousUnit);
-    wValue = (mImage.width() * hValue)/ mImage.height();
-  } else {
-    wValue = d->width->value();
-    if (!wValue) wValue = 150*unitToMM(mPreviousUnit);
-    hValue = (mImage.height() * wValue)/ mImage.width();
-  }
-
-  d->width->blockSignals(true);
-  d->height->blockSignals(true);
-
-  d->width->setValue(wValue);
-  d->height->setValue(hValue);
-
-  d->width->blockSignals(false);
-  d->height->blockSignals(false);
-
+    if (!enable) return;
+    // choosing a startup value of 15x10 cm (common photo dimention)
+    // mContent->mHeight->value() or mContent->mWidth->value()
+    // are usually empty at startup and hxw (0x0) isn't good IMO keeping ratio
+    double hValue, wValue;
+    if (mImage.height() > mImage.width()) 
+    {
+        hValue = d->height->value();
+        if (!hValue) hValue = 150*unitToMM(mPreviousUnit);
+        wValue = (mImage.width() * hValue)/ mImage.height();
+    } 
+    else 
+    {
+        wValue = d->width->value();
+        if (!wValue) wValue = 150*unitToMM(mPreviousUnit);
+        hValue = (mImage.height() * wValue)/ mImage.width();
+    }
+    
+    d->width->blockSignals(true);
+    d->height->blockSignals(true);
+    
+    d->width->setValue(wValue);
+    d->height->setValue(hValue);
+    
+    d->width->blockSignals(false);
+    d->height->blockSignals(false);
 }
 
-void ImageEditorPrintDialogPage::slotUnitChanged(const QString& string) {
-  Unit newUnit = stringToUnit(string);
-  double ratio = unitToMM(mPreviousUnit) / unitToMM(newUnit);
-
-  d->width->blockSignals(true);
-  d->height->blockSignals(true);
-
-  d->width->setValue( d->width->value() * ratio);
-  d->height->setValue( d->height->value() * ratio);
-
-  d->width->blockSignals(false);
-  d->height->blockSignals(false);
-
-  mPreviousUnit = newUnit;
-
+void ImageEditorPrintDialogPage::slotUnitChanged(const QString& string) 
+{
+    Unit newUnit = stringToUnit(string);
+    double ratio = unitToMM(mPreviousUnit) / unitToMM(newUnit);
+    
+    d->width->blockSignals(true);
+    d->height->blockSignals(true);
+    
+    d->width->setValue( d->width->value() * ratio);
+    d->height->setValue( d->height->value() * ratio);
+    
+    d->width->blockSignals(false);
+    d->height->blockSignals(false);
+    
+    mPreviousUnit = newUnit;
 }
 
 void ImageEditorPrintDialogPage::readSettings()
@@ -733,6 +753,54 @@ void ImageEditorPrintDialogPage::slotAlertSettings( bool t)
                                 <p>You can enable it now by clicking on the \"Settings\" button.</p>");
         KMessageBox::information(this, message);
         d->colorManaged->setChecked(!t);
+    }
+}
+
+double ImageEditorPrintDialogPage::unitToMM(Unit unit) 
+{
+    if (unit == DK_MILLIMETERS) 
+    {
+      return 1.;
+    } 
+    else if (unit == DK_CENTIMETERS) 
+    {
+      return 10.;
+    } 
+    else 
+    { //DK_INCHES
+      return 25.4;
+    }
+}
+
+ImageEditorPrintDialogPage::Unit ImageEditorPrintDialogPage::stringToUnit(const QString& unit) 
+{
+    if (unit == i18n("Millimeters")) 
+    {
+      return DK_MILLIMETERS;
+    }
+    else if (unit == i18n("Centimeters")) 
+    {
+      return DK_CENTIMETERS;
+    }
+    else 
+    {//Inches
+      return DK_INCHES;
+    }
+}
+  
+QString ImageEditorPrintDialogPage::unitToString(Unit unit) 
+{
+    if (unit == DK_MILLIMETERS) 
+    {
+      return i18n("Millimeters");
+    }
+    else if (unit == DK_CENTIMETERS) 
+    {
+      return i18n("Centimeters");
+    } 
+    else 
+    { //DK_INCHES
+      return i18n("Inches");
     }
 }
 

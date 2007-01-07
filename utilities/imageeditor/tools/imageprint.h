@@ -64,19 +64,26 @@ private:
 
 class ImageEditorPrintDialogPagePrivate;
 
-enum Unit {
-  DK_MILLIMETERS = 1,
-  DK_CENTIMETERS,
-  DK_INCHES
-};
-
 class ImageEditorPrintDialogPage : public KPrintDialogPage
 {
     Q_OBJECT
 
 public:
 
-  ImageEditorPrintDialogPage(DImg& image, QWidget *parent = 0L, const char *name = 0 );
+    enum Unit 
+    {
+        DK_MILLIMETERS = 1,
+        DK_CENTIMETERS,
+        DK_INCHES
+    };
+
+    static inline double unitToMM(Unit unit);
+    static inline Unit stringToUnit(const QString& unit);  
+    static inline QString unitToString(Unit unit); 
+
+public:
+
+    ImageEditorPrintDialogPage(DImg& image, QWidget *parent=0L, const char *name=0);
     ~ImageEditorPrintDialogPage();
 
     virtual void getOptions(QMap<QString,QString>& opts, bool incldef = false);
