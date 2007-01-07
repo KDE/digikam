@@ -4,9 +4,12 @@
  * Date   : 2004-07-13
  * Description : image editor printing interface.
  *
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  * Copyright 2006 by F.J. Cruz
  *
+ * KeepRatio and Alignment options imported from Gwenview program.
+ * Copyright (c) 2003 Angelo Naselli
+ * 
  * Original printing code from Kuickshow program.
  * Copyright (C) 2002 Carsten Pfeiffer <pfeiffer at kde.org>
  *
@@ -75,6 +78,37 @@
 namespace Digikam
 {
 
+
+  static inline double unitToMM(Unit unit) {
+    if (unit == DK_MILLIMETERS) {
+      return 1.;
+    } else if (unit == DK_CENTIMETERS) {
+      return 10.;
+    } else { //DK_INCHES
+      return 25.4;
+    }
+  }
+
+  static inline Unit stringToUnit(const QString& unit) {
+    if (unit == i18n("Millimeters")) {
+      return DK_MILLIMETERS;
+    } else if (unit == i18n("Centimeters")) {
+      return DK_CENTIMETERS;
+    } else {//Inches
+      return DK_INCHES;
+    }
+  }
+  
+  static inline QString unitToString(Unit unit) {
+    if (unit == DK_MILLIMETERS) {
+      return i18n("Millimeters");
+    } else if (unit == DK_CENTIMETERS) {
+      return i18n("Centimeters");
+    } else { //DK_INCHES
+      return i18n("Inches");
+    }
+  }
+
 class ImagePrintPrivate
 {
 
@@ -129,7 +163,7 @@ bool ImagePrint::printImageWithQt()
         
         transform->apply( d->image );
     }
-    
+
     QImage image2Print = d->image.copyQImage();
 
     // Black & white print ?
@@ -149,6 +183,8 @@ bool ImagePrint::printImageWithQt()
 
     int w, h; // will be set to the width and height of the printer
               // when the orientation is decided.
+    w = metrics.width();
+    h = metrics.height();
     int filenameOffset = 0;
 
     QSize size = image2Print.size();
@@ -168,54 +204,50 @@ bool ImagePrint::printImageWithQt()
                                        : KPrinter::Landscape );
 
         // Scale image to fit pagesize
-        w = metrics.width();
-        h = metrics.height();
         size.scale( w, h, QSize::ScaleMin );
     }
     else
     {
-        // scale image to exact dimensions
-        QString unit  = m_printer.option("app-imageeditor-scale-unit");
-        double  wunit = m_printer.option("app-imageeditor-scale-width").toDouble();
-        double  hunit = m_printer.option("app-imageeditor-scale-height").toDouble();
+      int unit = (m_printer.option("app-imageeditor-scale-unit").isEmpty() ?
+          DK_INCHES : m_printer.option("app-imageeditor-scale-unit").toInt());
+      double inches = 1;
+      if (unit == DK_MILLIMETERS) {
+        inches = 1/25.4;
+      } else if (unit == DK_CENTIMETERS) {
+        inches = 1/2.54;
+      }
+      double wImg = (m_printer.option("app-imageeditor-scale-width").isEmpty() ?
+            1 : m_printer.option("app-imageeditor-scale-width").toDouble()) * inches;
+      double hImg = (m_printer.option("app-imageeditor-scale-height").isEmpty() ?
+            1 : m_printer.option("app-imageeditor-scale-height").toDouble()) * inches;
+      size.setWidth( int(wImg * m_printer.resolution()) );
+      size.setHeight( int(hImg * m_printer.resolution()) );
 
-        if ( m_printer.option( "app-imageeditor-auto-rotate" ) == t )
-            m_printer.setOrientation( wunit <= hunit ? KPrinter::Portrait : KPrinter::Landscape );
+      if ( m_printer.option( "app-imageeditor-auto-rotate" ) == t )
+        m_printer.setOrientation( wImg <= hImg ? KPrinter::Portrait : KPrinter::Landscape );
 
-        w = metrics.width();
-        h = metrics.height();
+      if (size.width() > w || size.height() > h) {
+        int resp = KMessageBox::warningYesNoCancel(KApplication::kApplication()->mainWidget(),
+            i18n("The image will not fit on the page, what do you want to do?"),
+            QString::null,KStdGuiItem::cont(),
+            i18n("Shrink") );
 
-        int     wresize, hresize;
-        if (unit == i18n("Centimeters"))
-        {
-            // centimeters
-            wresize = (int)(metrics.logicalDpiX() * wunit / 2.54);
-            hresize = (int)(metrics.logicalDpiY() * hunit / 2.54);
+        if (resp==KMessageBox::Cancel) {
+          m_printer.abort();
+          // no need to return false, user decided to abort
+          return true;
+        } else if (resp == KMessageBox::No) { // Shrink
+          size.scale(w, h, QSize::ScaleMin);
         }
-        else
-        {
-            // inches
-            wresize  = (int)(metrics.logicalDpiX() * wunit);
-            hresize  = (int)(metrics.logicalDpiY() * hunit);
-        }
-
-        size.scale( wresize, hresize, QSize::ScaleMin );
+      }
     }
 
     // Align image.
-    bool ok = false;
-    int alignment = m_printer.option("app-imageeditor-alignment").toInt( &ok );
-
-    if ( !ok )
-    {
-        // default
-        alignment = Qt::AlignCenter;
-    }
+    int alignment = (m_printer.option("app-imageeditor-alignment").isEmpty() ?
+        Qt::AlignCenter : m_printer.option("app-imageeditor-alignment").toInt());
 
     int x = 0;
     int y = 0;
-
-    // TODO: a GUI for this in ImagePrintDialogPage!
 
     // x - alignment
     if ( alignment & Qt::AlignHCenter )
@@ -306,6 +338,8 @@ public:
     ImageEditorPrintDialogPagePrivate()
     {
         cmEnabled     = false;
+        mPosition     = 0;
+        mKeepRatio    = 0;
         scaleToFit    = 0;
         scale         = 0;
         addFileName   = 0;
@@ -321,9 +355,10 @@ public:
 
     bool             cmEnabled;
 
+    KComboBox       *mPosition;
     QRadioButton    *scaleToFit;
     QRadioButton    *scale;
-
+    QCheckBox       *mKeepRatio;
     QCheckBox       *addFileName;
     QCheckBox       *blackwhite;
     QCheckBox       *autoRotate;
@@ -339,9 +374,11 @@ public:
     KComboBox       *units;
 };
 
-ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const char *name )
+ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *parent, const char *name )
                           : KPrintDialogPage( parent, name )
 {
+    mImage = image;
+
     d = new ImageEditorPrintDialogPagePrivate;
     d->parent = parent;
     setTitle( i18n("Image Settings") );
@@ -351,6 +388,29 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
     QVBoxLayout *layout = new QVBoxLayout( this );
     layout->setMargin( KDialog::marginHint() );
     layout->setSpacing( KDialog::spacingHint() );
+
+    // ------------------------------------------------------------------------
+
+    QHBoxLayout *layout2 = new QHBoxLayout( layout ); 
+    layout2->setSpacing(3);
+
+    QLabel* textLabel = new QLabel( this, "Image position:" );
+    textLabel->setText( i18n( "Image position:" ) );
+    layout2->addWidget( textLabel );
+    d->mPosition = new KComboBox( false, this, "Print position" );
+    d->mPosition->clear();
+    d->mPosition->insertItem( i18n( "Top-Left" ) );
+    d->mPosition->insertItem( i18n( "Top-Central" ) );
+    d->mPosition->insertItem( i18n( "Top-Right" ) );
+    d->mPosition->insertItem( i18n( "Central-Left" ) );
+    d->mPosition->insertItem( i18n( "Central" ) );
+    d->mPosition->insertItem( i18n( "Central-Right" ) );
+    d->mPosition->insertItem( i18n( "Bottom-Left" ) );
+    d->mPosition->insertItem( i18n( "Bottom-Central" ) );
+    d->mPosition->insertItem( i18n( "Bottom-Right" ) );
+    layout2->addWidget( d->mPosition );
+    QSpacerItem *spacer1 = new QSpacerItem( 101, 21, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    layout2->addItem( spacer1 );
 
     d->addFileName = new QCheckBox( i18n("Print fi&lename below image"), this);
     d->addFileName->setChecked( false );
@@ -364,23 +424,20 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
     d->autoRotate->setChecked( false );
     layout->addWidget( d->autoRotate );
 
-    QVButtonGroup *cmgroup = new QVButtonGroup(i18n("Color Management Settings"), this);
-    layout->addWidget(cmgroup);
+    // ------------------------------------------------------------------------
 
-    QHBox *cmbox = new QHBox(cmgroup);
-    layout->addWidget(cmbox);
-    cmbox->setSpacing(KDialog::spacingHint());
-    QWidget *wth = new QWidget(cmbox);
+    QHBox *cmbox = new QHBox(this);
 
-    d->colorManaged = new QCheckBox(i18n("Color Management"), cmbox);
+    d->colorManaged = new QCheckBox(i18n("Use Color Management for Printing"), cmbox);
     d->colorManaged->setChecked( false );
 
-    d->cmPreferences = new QPushButton(i18n("Settings"), cmbox);
+    d->cmPreferences = new QPushButton(i18n("Settings..."), cmbox);
 
-    wth->setFixedWidth(d->colorManaged->style().subRect( QStyle::SR_CheckBoxIndicator, 
-                                                         d->colorManaged ).width());
-    wth = new QWidget(cmbox);
-    cmbox->setStretchFactor(wth, 1);
+    QWidget *space = new QWidget(cmbox);
+    cmbox->setStretchFactor(space, 10);
+    cmbox->setSpacing(KDialog::spacingHint());
+
+    layout->addWidget(cmbox);
 
     connect( d->colorManaged, SIGNAL(toggled(bool)),
              this, SLOT(slotAlertSettings( bool )) );
@@ -388,6 +445,7 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
     connect( d->cmPreferences, SIGNAL(clicked()),
              this, SLOT(slotSetupDlg()) );
     
+    // ------------------------------------------------------------------------
 
     QVButtonGroup *group = new QVButtonGroup( i18n("Scaling"), this );
     group->setRadioButtonExclusive( true );
@@ -416,11 +474,28 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
     d->height->setMinValue( 1 );
 
     d->units = new KComboBox( false, hb, "unit combobox" );
+    d->units->insertItem( i18n("Millimeters") );
     d->units->insertItem( i18n("Centimeters") );
     d->units->insertItem( i18n("Inches") );
 
+    d->mKeepRatio = new QCheckBox( i18n("Keep ratio"), hb);
+
     w = new QWidget(hb);
     hb->setStretchFactor( w, 1 );
+
+    connect(d->width, SIGNAL( valueChanged( double )), 
+            this, SLOT( slotWidthChanged( double )));
+
+    connect(d->height, SIGNAL( valueChanged( double )), 
+            this, SLOT( slotHeightChanged( double )));
+
+    connect(d->mKeepRatio, SIGNAL( toggled( bool )), 
+            this, SLOT( toggleRatio( bool )));
+
+    connect(d->units, SIGNAL(activated(const QString &)), 
+            this, SLOT(slotUnitChanged(const QString& )));
+
+    mPreviousUnit = DK_MILLIMETERS;
 }
 
 ImageEditorPrintDialogPage::~ImageEditorPrintDialogPage()
@@ -428,27 +503,38 @@ ImageEditorPrintDialogPage::~ImageEditorPrintDialogPage()
     delete d;
 }
 
-void ImageEditorPrintDialogPage::getOptions( QMap<QString,QString>& opts,
-                                             bool /*incldef*/ )
+void ImageEditorPrintDialogPage::getOptions( QMap<QString,QString>& opts, bool /*incldef*/ )
 {
     QString t = "true";
     QString f = "false";
 
-    opts["app-imageeditor-printFilename"] = d->addFileName->isChecked() ? t : f;
-    opts["app-imageeditor-blackwhite"] = d->blackwhite->isChecked() ? t : f;
-    opts["app-imageeditor-scaleToFit"] = d->scaleToFit->isChecked() ? t : f;
-    opts["app-imageeditor-scale"] = d->scale->isChecked() ? t : f;
-    opts["app-imageeditor-scale-unit"] = d->units->currentText();
-    opts["app-imageeditor-scale-width"] = QString::number( d->width->value() );
-    opts["app-imageeditor-scale-height"] = QString::number( d->height->value() );
-    opts["app-imageeditor-auto-rotate"] = d->autoRotate->isChecked() ? t : f;
-    opts["app-imageeditor-color-managed"] = d->colorManaged->isChecked() ? t : f;
+    opts["app-imageeditor-alignment"]       = QString::number(getPosition(d->mPosition->currentText()));
+    opts["app-imageeditor-printFilename"]   = d->addFileName->isChecked() ? t : f;
+    opts["app-imageeditor-blackwhite"]      = d->blackwhite->isChecked() ? t : f;
+    opts["app-imageeditor-scaleToFit"]      = d->scaleToFit->isChecked() ? t : f;
+    opts["app-imageeditor-scale"]           = d->scale->isChecked() ? t : f;
+    opts["app-imageeditor-scale-unit"]      = QString::number(stringToUnit(d->units->currentText()));
+    opts["app-imageeditor-scale-width"]     = QString::number( d->width->value() );
+    opts["app-imageeditor-scale-height"]    = QString::number( d->height->value() );
+    opts["app-imageeditor-scale-KeepRatio"] = d->mKeepRatio->isChecked() ? t : f;
+    opts["app-imageeditor-auto-rotate"]     = d->autoRotate->isChecked() ? t : f;
+    opts["app-imageeditor-color-managed"]   = d->colorManaged->isChecked() ? t : f;
 }
 
 void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
 {
     QString t = "true";
     QString f = "false";
+    QString stVal;
+    bool   ok;
+    double dVal;
+    int iVal;
+
+    iVal = opts["app-imageeditor-alignment"].toInt( &ok );
+    if (ok) {
+      stVal = setPosition(iVal);
+      d->mPosition->setCurrentItem(stVal);
+    }
 
     d->addFileName->setChecked( opts["app-imageeditor-printFilename"] != f );
     // This sound strange, but if I copy the code on the line above, the checkbox
@@ -461,25 +547,86 @@ void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
 
     d->colorManaged->setChecked( false );
 
-    d->units->setCurrentItem( opts["app-imageeditor-scale-unit"] );
+    Unit unit = static_cast<Unit>( opts["app-imageeditor-scale-unit"].toInt( &ok ) );
+    if (ok) {
+      stVal = unitToString(unit);
+      d->units->setCurrentItem(stVal);
+      mPreviousUnit = unit;
+    }
+    else
+    {
+      //for back compatibility
+      d->units->setCurrentItem(i18n("Millimeters"));
+    }
 
-    bool   ok;
-    double val;
-
-    val = opts["app-imageeditor-scale-width"].toDouble( &ok );
+    dVal = opts["app-imageeditor-scale-width"].toDouble( &ok );
 
     if ( ok )
-        d->width->setValue( val );
+      d->width->setValue( dVal );
 
-    val = opts["app-imageeditor-scale-height"].toDouble( &ok );
+    dVal = opts["app-imageeditor-scale-height"].toDouble( &ok );
 
     if ( ok )
-        d->height->setValue( val );
+      d->height->setValue( dVal );
 
     if ( d->scale->isChecked() == d->scaleToFit->isChecked() )
         d->scaleToFit->setChecked( !d->scale->isChecked() );
 
-    toggleScaling( d->scale->isChecked() );
+    d->mKeepRatio->setChecked( opts["app-imageeditor-scale-KeepRatio"] == t );
+
+}
+int ImageEditorPrintDialogPage::getPosition(const QString& align) {
+  int alignment;
+
+  if (align == i18n("Central-Left")) {
+    alignment = Qt::AlignLeft | Qt::AlignVCenter;
+  } else if (align == i18n("Central-Right")) {
+    alignment = Qt::AlignRight | Qt::AlignVCenter;
+  } else if (align == i18n("Top-Left")) {
+    alignment = Qt::AlignTop | Qt::AlignLeft;
+  } else if (align == i18n("Top-Right")) {
+    alignment = Qt::AlignTop | Qt::AlignRight;
+  } else if (align == i18n("Bottom-Left")) {
+    alignment = Qt::AlignBottom | Qt::AlignLeft;
+  } else if (align == i18n("Bottom-Right")) {
+    alignment = Qt::AlignBottom | Qt::AlignRight;
+  } else if (align == i18n("Top-Central")) {
+    alignment = Qt::AlignTop | Qt::AlignHCenter;
+  } else if (align == i18n("Bottom-Central")) {
+    alignment = Qt::AlignBottom | Qt::AlignHCenter;
+  } else  {
+    // Central
+    alignment = Qt::AlignCenter; // Qt::AlignHCenter || Qt::AlignVCenter
+  }
+
+  return alignment;
+}
+
+QString ImageEditorPrintDialogPage::setPosition(int align) {
+  QString alignment;
+
+  if (align == (Qt::AlignLeft | Qt::AlignVCenter)) {
+    alignment = i18n("Central-Left");
+  } else if (align == (Qt::AlignRight | Qt::AlignVCenter)) {
+    alignment = i18n("Central-Right");
+  } else if (align == (Qt::AlignTop | Qt::AlignLeft)) {
+    alignment = i18n("Top-Left");
+  } else if (align == (Qt::AlignTop | Qt::AlignRight)) {
+    alignment = i18n("Top-Right");
+  } else if (align == (Qt::AlignBottom | Qt::AlignLeft)) {
+    alignment = i18n("Bottom-Left");
+  } else if (align == (Qt::AlignBottom | Qt::AlignRight)) {
+    alignment = i18n("Bottom-Right");
+  } else if (align == (Qt::AlignTop | Qt::AlignHCenter)) {
+    alignment = i18n("Top-Central");
+  } else if (align == (Qt::AlignBottom | Qt::AlignHCenter)) {
+    alignment = i18n("Bottom-Central");
+  } else  {
+    // Central: Qt::AlignCenter or (Qt::AlignHCenter || Qt::AlignVCenter)
+    alignment = i18n("Central");
+  }
+
+  return alignment;
 }
 
 void ImageEditorPrintDialogPage::toggleScaling( bool enable )
@@ -487,6 +634,82 @@ void ImageEditorPrintDialogPage::toggleScaling( bool enable )
     d->width->setEnabled( enable );
     d->height->setEnabled( enable );
     d->units->setEnabled( enable );
+    d->mKeepRatio->setEnabled( enable );
+}
+
+void ImageEditorPrintDialogPage::slotHeightChanged (double value) {
+  d->width->blockSignals(true);
+  d->height->blockSignals(true);
+
+  if (d->mKeepRatio->isChecked()) {
+    double width = (mImage.width() * value) / mImage.height();
+    d->width->setValue( width ? width : 1.);
+  }
+  d->height->setValue(value);
+
+  d->width->blockSignals(false);
+  d->height->blockSignals(false);
+
+}
+
+void ImageEditorPrintDialogPage::slotWidthChanged (double value) {
+  d->width->blockSignals(true);
+  d->height->blockSignals(true);
+
+  if (d->mKeepRatio->isChecked()) {
+    double height = (mImage.height() * value) / mImage.width();
+    d->height->setValue( height ? height : 1);
+  }
+  d->width->setValue(value);
+
+  d->width->blockSignals(false);
+  d->height->blockSignals(false);
+
+}
+
+void ImageEditorPrintDialogPage::toggleRatio( bool enable )
+{
+  if (!enable) return;
+  // choosing a startup value of 15x10 cm (common photo dimention)
+  // mContent->mHeight->value() or mContent->mWidth->value()
+  // are usually empty at startup and hxw (0x0) isn't good IMO keeping ratio
+  double hValue, wValue;
+  if (mImage.height() > mImage.width()) {
+    hValue = d->height->value();
+    if (!hValue) hValue = 150*unitToMM(mPreviousUnit);
+    wValue = (mImage.width() * hValue)/ mImage.height();
+  } else {
+    wValue = d->width->value();
+    if (!wValue) wValue = 150*unitToMM(mPreviousUnit);
+    hValue = (mImage.height() * wValue)/ mImage.width();
+  }
+
+  d->width->blockSignals(true);
+  d->height->blockSignals(true);
+
+  d->width->setValue(wValue);
+  d->height->setValue(hValue);
+
+  d->width->blockSignals(false);
+  d->height->blockSignals(false);
+
+}
+
+void ImageEditorPrintDialogPage::slotUnitChanged(const QString& string) {
+  Unit newUnit = stringToUnit(string);
+  double ratio = unitToMM(mPreviousUnit) / unitToMM(newUnit);
+
+  d->width->blockSignals(true);
+  d->height->blockSignals(true);
+
+  d->width->setValue( d->width->value() * ratio);
+  d->height->setValue( d->height->value() * ratio);
+
+  d->width->blockSignals(false);
+  d->height->blockSignals(false);
+
+  mPreviousUnit = newUnit;
+
 }
 
 void ImageEditorPrintDialogPage::readSettings()

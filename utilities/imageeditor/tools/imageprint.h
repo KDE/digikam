@@ -4,7 +4,7 @@
  * Date   : 2004-07-13
  * Description : image editor printing interface.
  *
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  * Copyright 2006 by F.J. Cruz
  *
  * This program is free software; you can redistribute it
@@ -60,9 +60,15 @@ private:
     ImagePrintPrivate *d;
 };
 
-///////////////////////////////////////////////////////////////////////////////////
+//-----------------------------------------------------------------------------
 
 class ImageEditorPrintDialogPagePrivate;
+
+enum Unit {
+  DK_MILLIMETERS = 1,
+  DK_CENTIMETERS,
+  DK_INCHES
+};
 
 class ImageEditorPrintDialogPage : public KPrintDialogPage
 {
@@ -70,7 +76,7 @@ class ImageEditorPrintDialogPage : public KPrintDialogPage
 
 public:
 
-    ImageEditorPrintDialogPage( QWidget *parent = 0L, const char *name = 0 );
+  ImageEditorPrintDialogPage(DImg& image, QWidget *parent = 0L, const char *name = 0 );
     ~ImageEditorPrintDialogPage();
 
     virtual void getOptions(QMap<QString,QString>& opts, bool incldef = false);
@@ -79,16 +85,24 @@ public:
 private slots:
 
     void toggleScaling( bool enable );
+    void toggleRatio( bool enable );
+    void slotUnitChanged(const QString& string);
+    void slotHeightChanged(double value);
+    void slotWidthChanged(double value);
     void slotSetupDlg();
     void slotAlertSettings(bool t);
 
 private:
 
     void readSettings();
+    int getPosition(const QString& align);
+    QString setPosition(int align);
 
 private:
 
     ImageEditorPrintDialogPagePrivate *d;
+    DImg mImage;
+    Unit mPreviousUnit;
 };
 
 }  // namespace Digikam

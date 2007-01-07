@@ -493,7 +493,7 @@ void EditorWindow::printImage(KURL url)
     printer.setUsePrinterResolution(true);
 #endif
 
-    KPrinter::addDialogPage( new ImageEditorPrintDialogPage( this, (appName.append(" page")).ascii() ));
+    KPrinter::addDialogPage( new ImageEditorPrintDialogPage(image, this, (appName.append(" page")).ascii() ));
 
     if ( printer.setup( this, i18n("Print %1").arg(printer.docName().section('/', -1)) ) )
     {
