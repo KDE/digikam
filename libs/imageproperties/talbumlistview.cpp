@@ -166,15 +166,25 @@ void TAlbumListView::contentsMouseMoveEvent(QMouseEvent *e)
 
 void TAlbumListView::contentsMousePressEvent(QMouseEvent *e)
 {
-    QListView::contentsMousePressEvent(e);
     QPoint vp = contentsToViewport(e->pos());
     TAlbumCheckListItem *item = dynamic_cast<TAlbumCheckListItem*>(itemAt(vp));
+
+    if(item && e->button() == RightButton) 
+    {
+        bool isOn = item->isOn();
+        QListView::contentsMousePressEvent(e);
+        // Restore the status of checkbox. 
+        item->setOn(isOn);
+        return;
+    }
+
     if(item && e->button() == LeftButton) 
     {
         m_dragStartPos = e->pos();
         m_dragItem     = item;
-        return;
     }
+
+    QListView::contentsMousePressEvent(e);
 }
 
 void TAlbumListView::contentsMouseReleaseEvent(QMouseEvent *e)
