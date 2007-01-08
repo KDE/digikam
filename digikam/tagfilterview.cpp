@@ -73,7 +73,7 @@ public:
 
     TagFilterViewItem(QListView* parent, TAlbum* tag, bool untagged=false)
         : FolderCheckListItem(parent, tag ? tag->title() : i18n("Not Tagged"),
-                              QCheckListItem::CheckBoxController)
+                              QCheckListItem::CheckBox/*Controller*/)
     {
         m_tag      = tag;
         m_untagged = untagged;
@@ -84,7 +84,8 @@ public:
     }
 
     TagFilterViewItem(QListViewItem* parent, TAlbum* tag)
-        : FolderCheckListItem(parent, tag->title(), QCheckListItem::CheckBoxController)
+        : FolderCheckListItem(parent, tag->title(), 
+                              QCheckListItem::CheckBox/*Controller*/)
     {
         m_tag      = tag;
         m_untagged = false;
@@ -98,6 +99,10 @@ public:
     {
         QCheckListItem::stateChange(val);
 
+/* NOTE G.Caulier 2007/01/08: this code is now disable because TagFilterViewItem 
+                              have been changed from QCheckListItem::CheckBoxController 
+                              to QCheckListItem::CheckBox.
+ 
         // All TagFilterViewItems are CheckBoxControllers. If they have no children,
         // they should be of type CheckBox, but that is not possible with our way of adding items.
         // When clicked, children-less items first change to the NoChange state, and a second
@@ -107,6 +112,7 @@ public:
         {
             setState(On);
         }
+*/
 
         ((TagFilterView*)listView())->stateChanged(this);
     }
@@ -249,17 +255,25 @@ TagFilterView::~TagFilterView()
 
 void TagFilterView::stateChanged(TagFilterViewItem* item)
 {
+    ToggleAutoTags oldAutoTags = d->toggleAutoTags;            
+
     switch(d->toggleAutoTags)
     {
         case Childs:
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleChildTags(item, item->isOn());
+            d->toggleAutoTags = oldAutoTags;
             break;
         case Parents:
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleParentTags(item, item->isOn());
+            d->toggleAutoTags = oldAutoTags;
             break;
         case ChildsAndParents:
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleChildTags(item, item->isOn());
             toggleParentTags(item, item->isOn());
+            d->toggleAutoTags = oldAutoTags;
             break;
         default:
             break;
@@ -626,19 +640,22 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
 
     QPopupMenu toggleAutoMenu;
     toggleAutoMenu.setCheckable(true);
-    toggleAutoMenu.insertItem(i18n("Childs"),  21);
-    toggleAutoMenu.insertItem(i18n("Parents"), 22);
-    toggleAutoMenu.insertItem(i18n("Both"),    23);
-    if (d->toggleAutoTags != None)
-        toggleAutoMenu.setItemChecked(20 + d->toggleAutoTags, true);
+    toggleAutoMenu.insertItem(i18n("None"),    21);
+    toggleAutoMenu.insertSeparator(-1);
+    toggleAutoMenu.insertItem(i18n("Childs"),  22);
+    toggleAutoMenu.insertItem(i18n("Parents"), 23);
+    toggleAutoMenu.insertItem(i18n("Both"),    24);
+    toggleAutoMenu.setItemChecked(21 + d->toggleAutoTags, true);
     popmenu.insertItem(i18n("Toogle Auto"), &toggleAutoMenu);
 
     QPopupMenu matchingCongMenu;
     matchingCongMenu.setCheckable(true);
-    matchingCongMenu.insertItem(i18n("Or Between Tags"),  24);
-    matchingCongMenu.insertItem(i18n("And Between Tags"), 25);
-    matchingCongMenu.setItemChecked((d->matchingCond == AlbumLister::OrCondition) ? 24 : 25, true);
+    matchingCongMenu.insertItem(i18n("Or Between Tags"),  25);
+    matchingCongMenu.insertItem(i18n("And Between Tags"), 26);
+    matchingCongMenu.setItemChecked((d->matchingCond == AlbumLister::OrCondition) ? 25 : 26, true);
     popmenu.insertItem(i18n("Matching Condition"), &matchingCongMenu);
+
+    ToggleAutoTags oldAutoTags = d->toggleAutoTags;            
 
     int choice = popmenu.exec((QCursor::pos()));
     switch( choice )
@@ -690,6 +707,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
         }
         case 16:       // Invert All Tags Selection.
         {
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             QListViewItemIterator it(this);
             while (it.current())
             {
@@ -708,58 +726,72 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
                 ++it;
             }
             triggerChange();
+            d->toggleAutoTags = oldAutoTags;
             break;
         }
         case 17:   // Select Child Tags.
         {
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleChildTags(item, true);
             TagFilterViewItem *tItem = (TagFilterViewItem*)item->m_tag->extraData(this);
             tItem->setOn(true);            
+            d->toggleAutoTags = oldAutoTags;
             break;
         }
         case 18:   // Deselect Child Tags.
         {
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleChildTags(item, false);
             TagFilterViewItem *tItem = (TagFilterViewItem*)item->m_tag->extraData(this);
             tItem->setOn(false);            
+            d->toggleAutoTags = oldAutoTags;
             break;
         }
         case 19:   // Select Parent Tags.
         {
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleParentTags(item, true);
             TagFilterViewItem *tItem = (TagFilterViewItem*)item->m_tag->extraData(this);
             tItem->setOn(true);            
+            d->toggleAutoTags = oldAutoTags;
             break;
         }
         case 20:   // Deselect Parent Tags.
         {
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleParentTags(item, false);
             TagFilterViewItem *tItem = (TagFilterViewItem*)item->m_tag->extraData(this);
             tItem->setOn(false);            
+            d->toggleAutoTags = oldAutoTags;
             break;
         }
-        case 21:   // Toggle auto Childs tags.
+        case 21:   // No toggle auto tags.
+        {
+            d->toggleAutoTags = NoToggleAuto;
+            break;
+        }
+        case 22:   // Toggle auto Childs tags.
         {
             d->toggleAutoTags = Childs;
             break;
         }
-        case 22:   // Toggle auto Parents tags.
+        case 23:   // Toggle auto Parents tags.
         {
             d->toggleAutoTags = Parents;
             break;
         }
-        case 23:   // Toggle auto Childs and Parents tags.
+        case 24:   // Toggle auto Childs and Parents tags.
         {
             d->toggleAutoTags = ChildsAndParents;
             break;
         }
-        case 24:    // Or Between Tags.
+        case 25:    // Or Between Tags.
         {
             d->matchingCond = AlbumLister::OrCondition;
             triggerChange();
             break;
         }
-        case 25:    // And Between Tags.
+        case 26:    // And Between Tags.
         {
             d->matchingCond = AlbumLister::AndCondition;
             triggerChange();
