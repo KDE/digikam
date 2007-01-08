@@ -287,6 +287,23 @@ void TagFilterView::triggerChange()
     d->timer->start(50, true);
 }
 
+void TagFilterView::contentsMousePressEvent(QMouseEvent *e)
+{
+    QPoint vp = contentsToViewport(e->pos());
+    TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(itemAt(vp));
+
+    if(item && e->button() == RightButton) 
+    {
+        bool isOn = item->isOn();
+        QListView::contentsMousePressEvent(e);
+        // Restore the status of checkbox. 
+        item->setOn(isOn);
+        return;
+    }
+
+    QListView::contentsMousePressEvent(e);
+}
+
 QDragObject* TagFilterView::dragObject()
 {
     QValueList<int> dragTagIDs;

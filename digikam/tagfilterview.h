@@ -60,6 +60,7 @@ protected:
     QDragObject* dragObject();
     bool acceptDrop(const QDropEvent *e) const;
     void contentsDropEvent(QDropEvent *e);
+    void contentsMousePressEvent(QMouseEvent *e);
 
 private slots:
 
