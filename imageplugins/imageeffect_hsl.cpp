@@ -1,10 +1,10 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-07-16
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-07-16
  * Description : digiKam image editor Hue/Saturation/Lightness 
  *               correction tool
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,6 +57,7 @@
 
 // Local includes.
 
+#include "hspreviewwidget.h"
 #include "imageeffect_hsl.h"
 #include "imageeffect_hsl.moc"
 
@@ -79,7 +80,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     // -------------------------------------------------------------
     
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 10, 4, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 12, 4, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -143,8 +144,15 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     // -------------------------------------------------------------
 
     m_HSSelector = new KHSSelector(gboxSettings);
+    QWhatsThis::add( m_HSSelector, i18n("<p>Select here the hue and saturation adjustments of the image."));
     m_HSSelector->setMinimumSize(256, 142);
     gridSettings->addMultiCellWidget(m_HSSelector, 3, 3, 0, 4);
+
+    m_HSPreview = new HSPreviewWidget(gboxSettings, spacingHint());
+    QWhatsThis::add( m_HSPreview, i18n("<p>You can see here the color preview of hue and "
+                                       "saturation adjustments."));
+    m_HSPreview->setMinimumSize(256, 15);
+    gridSettings->addMultiCellWidget(m_HSPreview, 4, 4, 0, 4);
 
     QLabel *label2 = new QLabel(i18n("Hue:"), gboxSettings);
     m_hInput       = new KDoubleNumInput(gboxSettings);
@@ -152,8 +160,8 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     m_hInput->setRange(-180.0, 180.0, 1.0, true);
     m_hInput->setValue(0.0);
     QWhatsThis::add( m_hInput, i18n("<p>Set here the hue adjustment of the image."));
-    gridSettings->addMultiCellWidget(label2, 4, 4, 0, 4);
-    gridSettings->addMultiCellWidget(m_hInput, 5, 5, 0, 4);
+    gridSettings->addMultiCellWidget(label2, 5, 5, 0, 4);
+    gridSettings->addMultiCellWidget(m_hInput, 6, 6, 0, 4);
 
     QLabel *label3 = new QLabel(i18n("Saturation:"), gboxSettings);
     m_sInput       = new KDoubleNumInput(gboxSettings);
@@ -161,8 +169,8 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     m_sInput->setRange(-100.0, 100.0, 0.01, true);
     m_sInput->setValue(0.0);
     QWhatsThis::add( m_sInput, i18n("<p>Set here the saturation adjustment of the image."));
-    gridSettings->addMultiCellWidget(label3, 6, 6, 0, 4);
-    gridSettings->addMultiCellWidget(m_sInput, 7, 7, 0, 4);
+    gridSettings->addMultiCellWidget(label3, 7, 7, 0, 4);
+    gridSettings->addMultiCellWidget(m_sInput, 8, 8, 0, 4);
 
     QLabel *label4 = new QLabel(i18n("Lightness:"), gboxSettings);
     m_lInput       = new KDoubleNumInput(gboxSettings);
@@ -170,16 +178,16 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     m_lInput->setRange(-100.0, 100.0, 0.01, true);
     m_lInput->setValue(0.0);
     QWhatsThis::add( m_lInput, i18n("<p>Set here the lightness adjustment of the image."));    
-    gridSettings->addMultiCellWidget(label4, 8, 8, 0, 4);
-    gridSettings->addMultiCellWidget(m_lInput, 9, 9, 0, 4);
+    gridSettings->addMultiCellWidget(label4, 9, 9, 0, 4);
+    gridSettings->addMultiCellWidget(m_lInput, 10, 10, 0, 4);
 
     m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gboxSettings);
     QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
                     "from the target image preview will be over-colored. "
                     "This will not have an effect on the final rendering."));
-    gridSettings->addMultiCellWidget(m_overExposureIndicatorBox, 10, 10, 0, 4);
+    gridSettings->addMultiCellWidget(m_overExposureIndicatorBox, 11, 11, 0, 4);
 
-    gridSettings->setRowStretch(11, 10);
+    gridSettings->setRowStretch(12, 10);
     setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
@@ -337,6 +345,7 @@ void ImageEffect_HSL::slotEffect()
     
     enableButtonOK( hu != 0.0 || sa != 0.0 || lu != 0.0);
     
+    m_HSPreview->setHS(hu, sa);
     m_histogramWidget->stopHistogramComputation();
 
     if (m_destinationPreviewData) 

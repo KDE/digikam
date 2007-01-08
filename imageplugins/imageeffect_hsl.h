@@ -1,10 +1,10 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-07-16
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-07-16
  * Description : digiKam image editor Hue/Saturation/Lightness 
  *               correction tool
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,6 +43,7 @@ class DColor;
 
 namespace DigikamImagesPluginCore
 {
+class HSPreviewWidget;
 
 class ImageEffect_HSL : public Digikam::ImageDlgBase
 {
@@ -52,6 +53,21 @@ public:
 
     ImageEffect_HSL(QWidget *parent);
     ~ImageEffect_HSL();
+
+private slots:
+
+    void slotDefault();
+    void slotEffect();
+    void slotChannelChanged(int channel);
+    void slotScaleChanged(int scale);
+    void slotColorSelectedFromTarget( const Digikam::DColor &color );
+    void slotHSChanged(int h, int s);
+    void slotHChanged(double h);
+    void slotSChanged(double s);
+
+protected:
+
+    void finalRendering();
 
 private:
 
@@ -82,27 +98,14 @@ private:
     KDoubleNumInput              *m_lInput;
 
     KHSSelector                  *m_HSSelector;
-    
+
+    HSPreviewWidget              *m_HSPreview;    
+
     Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
     
     Digikam::HistogramWidget     *m_histogramWidget;
-    
-private slots:
-
-    void slotDefault();
-    void slotEffect();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
-    void slotColorSelectedFromTarget( const Digikam::DColor &color );
-    void slotHSChanged(int h, int s);
-    void slotHChanged(double h);
-    void slotSChanged(double s);
-
-protected:
-
-    void finalRendering();
 };
 
 }  // NameSpace DigikamImagesPluginCore
