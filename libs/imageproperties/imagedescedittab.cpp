@@ -714,6 +714,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
         }
         case 14:   // Select All Tags.
         {
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             QListViewItemIterator it(d->tagsView, QListViewItemIterator::NotChecked);
             while (it.current())
             {
@@ -722,10 +723,12 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
                     item->setOn(true);
                 ++it;
             }
+            d->toggleAutoTags = oldAutoTags;
             break;
         }
         case 15:   // Deselect All Tags.
         {
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             QListViewItemIterator it(d->tagsView, QListViewItemIterator::Checked);
             while (it.current())
             {
@@ -734,6 +737,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
                     item->setOn(false);
                 ++it;
             }
+            d->toggleAutoTags = oldAutoTags;
             break;
         }
         case 16:   // Invert All Tags Selection.
