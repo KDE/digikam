@@ -175,7 +175,7 @@ void ImagePropertiesSideBarDB::setPreviousNextState(bool hasPrevious, bool hasNe
     d->hasPrevious = hasPrevious;
     d->hasNext     = hasNext;
 
-    NavigateBarTab *navtab = static_cast<NavigateBarTab *>(getActiveTab());
+    NavigateBarTab *navtab = dynamic_cast<NavigateBarTab *>(getActiveTab());
     if (navtab)
     {
         navtab->setNavigateBarState(d->hasPrevious, d->hasNext);
