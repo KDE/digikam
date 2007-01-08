@@ -135,6 +135,8 @@ AlbumGUI      : Video files can be previewed using an embedded instance of defau
 AlbumGUI      : Preview picture mode use a memory cache to speed-up loading.
 
 Image Plugins : All tools use the same keyboard shortcuts than PhotoShop.
+
+Image Editor  : Add new advanced options to keep ratio and alignment about print pictures.
  
 ...
 
@@ -424,6 +426,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 252 ==> 133955 : Rating search: less, equal, and larger comparison.
 253 ==> 139547 : Tag hierarchy automatic fill.
 254 ==> 138816 : gpcamera.cpp compile failure CameraList camList.
-255 ==> 
+255 ==> 93542  : Improvements to digiKam print interface.
+256 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
