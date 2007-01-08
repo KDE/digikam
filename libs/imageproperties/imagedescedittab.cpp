@@ -120,7 +120,7 @@ public:
 
     RatingWidget                  *ratingWidget;
 
-    TagFilterView::ToggleAutoTags  toggleAutoTags;
+    TagFilterView::ToggleAutoTags  toggleAutoTags;  
 };
 
 ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
@@ -678,6 +678,8 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
     toggleAutoMenu.setItemChecked(21 + d->toggleAutoTags, true);
     popmenu.insertItem(i18n("Toogle Auto"), &toggleAutoMenu);
 
+    TagFilterView::ToggleAutoTags oldAutoTags = d->toggleAutoTags;            
+
     int choice = popmenu.exec((QCursor::pos()));
     switch( choice )
     {
@@ -730,6 +732,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
         }
         case 16:   // Invert All Tags Selection.
         {
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             QListViewItemIterator it(d->tagsView);
             while (it.current())
             {
@@ -743,34 +746,43 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
                 }
                 ++it;
             }
+            d->toggleAutoTags = oldAutoTags;
             break;
         }
         case 17:   // Select Child Tags.
         {
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleChildTags(album, true);
             TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(this);
             item->setOn(true);            
+            d->toggleAutoTags = oldAutoTags;
             break;
         }
         case 18:   // Deselect Child Tags.
         {
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleChildTags(album, false);
             TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(this);
             item->setOn(false);            
+            d->toggleAutoTags = oldAutoTags;
             break;
         }
         case 19:   // Select Parent Tags.
         {
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleParentTags(album, true);
             TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(this);
             item->setOn(true);            
+            d->toggleAutoTags = oldAutoTags;
             break;
         }
         case 20:   // Deselect Parent Tags.
         {
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleParentTags(album, false);
             TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(this);
             item->setOn(false);            
+            d->toggleAutoTags = oldAutoTags;
             break;
         }
         case 21:   // No toggle auto tags.
