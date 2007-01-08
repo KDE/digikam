@@ -98,10 +98,10 @@ Class, file and Variable names:
   other letters logically to improve readability
 
 -------------------------------------------------------------------------
-* Member variables
+* Protected Member variables
 -------------------------------------------------------------------------
 
-- member variable names should always be of the form m_varName. 
+- protected member variable names should always be of the form m_varName. 
 - Captilize logically so that it becomes easy to read it. Do not capitalize
   the first letter after _ (Use m_varName not m_VarName)
 - variable names should be indicative of their functionality and also of 
@@ -113,6 +113,16 @@ Class, file and Variable names:
 -------------------------------------------------------------------------
 - non-member variables should follow the same naming convention as the member 
   variables, except for the leading m_
+
+-------------------------------------------------------------------------
+* Private Member variables
+-------------------------------------------------------------------------
+
+- private member variables must be stored in a d private container to reduce
+  compilation time and improve binary compatibilty between digiKam components.
+  See more informations how to use a 'd' private class at this url: 
+
+  http://developer.kde.org/policies/librarypolicy.html
 
 ========================================================================
 Comments and Whitespace
