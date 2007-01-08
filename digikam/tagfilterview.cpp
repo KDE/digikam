@@ -683,26 +683,38 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
         }        
         case 14:    // Select All Tags.
         {
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             QListViewItemIterator it(this, QListViewItemIterator::NotChecked);
             while (it.current())
             {
                 TagFilterViewItem* item = (TagFilterViewItem*)it.current();
-                item->setOn(true);
+
+                // Ignore "Not Tagged" tag filter.
+                if (!item->m_untagged)
+                    item->setOn(true);
+
                 ++it;
             }
             triggerChange();
+            d->toggleAutoTags = oldAutoTags;
             break;
         }
         case 15:    // Deselect All Tags.
         {
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             QListViewItemIterator it(this, QListViewItemIterator::Checked);
             while (it.current())
             {
                 TagFilterViewItem* item = (TagFilterViewItem*)it.current();
-                item->setOn(false);
+
+                // Ignore "Not Tagged" tag filter.
+                if (!item->m_untagged)
+                    item->setOn(false);
+
                 ++it;
             }
             triggerChange();
+            d->toggleAutoTags = oldAutoTags;
             break;
         }
         case 16:       // Invert All Tags Selection.
@@ -713,14 +725,8 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
             {
                 TagFilterViewItem* item = (TagFilterViewItem*)it.current();
 
-                // Toggle all root tags filter.
-                TAlbum *tag = item->m_tag;
-                if (tag)
-                    if (tag->parent()->isRoot())
-                        item->setOn(!item->isOn());
-
-                // Toggle "Not Tagged" item tag filter.
-                if (item->m_untagged)
+                // Ignore "Not Tagged" tag filter.
+                if (!item->m_untagged)
                     item->setOn(!item->isOn());
 
                 ++it;
