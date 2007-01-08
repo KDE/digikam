@@ -748,12 +748,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
             {
                 TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
                 if (item->isVisible())
-                {
-                    TAlbum *tag = item->m_album;
-                    if (tag)
-                        if (!tag->isRoot())
-                            item->setOn(!item->isOn());
-                }
+                    item->setOn(!item->isOn());
                 ++it;
             }
             d->toggleAutoTags = oldAutoTags;
