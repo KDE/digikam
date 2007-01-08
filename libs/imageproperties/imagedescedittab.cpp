@@ -521,17 +521,23 @@ void ImageDescEditTab::populateTags()
 
 void ImageDescEditTab::slotItemStateChanged(TAlbumCheckListItem *item)
 {
+    TagFilterView::ToggleAutoTags oldAutoTags = d->toggleAutoTags;     
+
     switch(d->toggleAutoTags)
     {
         case TagFilterView::Childs:
-            toggleChildTags(item->m_album, item->isOn());
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;            toggleChildTags(item->m_album, item->isOn());
+            d->toggleAutoTags = oldAutoTags;
             break;
         case TagFilterView::Parents:
-            toggleParentTags(item->m_album, item->isOn());
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;                        toggleParentTags(item->m_album, item->isOn());
+            d->toggleAutoTags = oldAutoTags;
             break;
         case TagFilterView::ChildsAndParents:
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;            
             toggleChildTags(item->m_album, item->isOn());
             toggleParentTags(item->m_album, item->isOn());
+            d->toggleAutoTags = oldAutoTags;
             break;
         default:
             break;
