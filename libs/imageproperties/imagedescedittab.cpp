@@ -670,11 +670,12 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
 
     QPopupMenu toggleAutoMenu;
     toggleAutoMenu.setCheckable(true);
-    toggleAutoMenu.insertItem(i18n("Childs"),  21);
-    toggleAutoMenu.insertItem(i18n("Parents"), 22);
-    toggleAutoMenu.insertItem(i18n("Both"),    23);
-    if (d->toggleAutoTags != TagFilterView::NoToggleAuto)
-        toggleAutoMenu.setItemChecked(20 + d->toggleAutoTags, true);
+    toggleAutoMenu.insertItem(i18n("None"),    21);
+    toggleAutoMenu.insertSeparator(-1);
+    toggleAutoMenu.insertItem(i18n("Childs"),  22);
+    toggleAutoMenu.insertItem(i18n("Parents"), 23);
+    toggleAutoMenu.insertItem(i18n("Both"),    24);
+    toggleAutoMenu.setItemChecked(21 + d->toggleAutoTags, true);
     popmenu.insertItem(i18n("Toogle Auto"), &toggleAutoMenu);
 
     int choice = popmenu.exec((QCursor::pos()));
@@ -772,17 +773,22 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
             item->setOn(false);            
             break;
         }
-        case 21:   // Toggle auto Childs tags.
+        case 21:   // No toggle auto tags.
+        {
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
+            break;
+        }
+        case 22:   // Toggle auto Childs tags.
         {
             d->toggleAutoTags = TagFilterView::Childs;
             break;
         }
-        case 22:   // Toggle auto Parents tags.
+        case 23:   // Toggle auto Parents tags.
         {
             d->toggleAutoTags = TagFilterView::Parents;
             break;
         }
-        case 23:   // Toggle auto Childs and Parents tags.
+        case 24:   // Toggle auto Childs and Parents tags.
         {
             d->toggleAutoTags = TagFilterView::ChildsAndParents;
             break;
