@@ -108,8 +108,6 @@ private:
 private:
 
     ImageEditorPrintDialogPagePrivate *d;
-    DImg mImage;
-    Unit mPreviousUnit;
 };
 
 }  // namespace Digikam

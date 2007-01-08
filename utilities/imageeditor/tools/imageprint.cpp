@@ -316,8 +316,8 @@ public:
     ImageEditorPrintDialogPagePrivate()
     {
         cmEnabled     = false;
-        mPosition     = 0;
-        mKeepRatio    = 0;
+        position      = 0;
+        keepRatio     = 0;
         scaleToFit    = 0;
         scale         = 0;
         addFileName   = 0;
@@ -331,33 +331,37 @@ public:
         units         = 0;
     }
 
-    bool             cmEnabled;
+    bool                               cmEnabled;
 
-    KComboBox       *mPosition;
-    QRadioButton    *scaleToFit;
-    QRadioButton    *scale;
-    QCheckBox       *mKeepRatio;
-    QCheckBox       *addFileName;
-    QCheckBox       *blackwhite;
-    QCheckBox       *autoRotate;
-    QCheckBox       *colorManaged;
+    QRadioButton                      *scaleToFit;
+    QRadioButton                      *scale;
 
-    QPushButton     *cmPreferences;
+    QCheckBox                         *keepRatio;
+    QCheckBox                         *addFileName;
+    QCheckBox                         *blackwhite;
+    QCheckBox                         *autoRotate;
+    QCheckBox                         *colorManaged;
 
-    QWidget         *parent;
+    QPushButton                       *cmPreferences;
 
-    KDoubleNumInput *width;
-    KDoubleNumInput *height;
+    QWidget                           *parent;
 
-    KComboBox       *units;
+    KDoubleNumInput                   *width;
+    KDoubleNumInput                   *height;
+
+    KComboBox                         *position;
+    KComboBox                         *units;
+
+    DImg                               image;
+
+    ImageEditorPrintDialogPage::Unit  previousUnit;
 };
 
 ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *parent, const char *name )
                           : KPrintDialogPage( parent, name )
 {
-    mImage = image;
-
     d = new ImageEditorPrintDialogPagePrivate;
+    d->image  = image;
     d->parent = parent;
     setTitle( i18n("Image Settings") );
 
@@ -375,18 +379,18 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
     QLabel* textLabel = new QLabel( this, "Image position:" );
     textLabel->setText( i18n( "Image position:" ) );
     layout2->addWidget( textLabel );
-    d->mPosition = new KComboBox( false, this, "Print position" );
-    d->mPosition->clear();
-    d->mPosition->insertItem( i18n( "Top-Left" ) );
-    d->mPosition->insertItem( i18n( "Top-Central" ) );
-    d->mPosition->insertItem( i18n( "Top-Right" ) );
-    d->mPosition->insertItem( i18n( "Central-Left" ) );
-    d->mPosition->insertItem( i18n( "Central" ) );
-    d->mPosition->insertItem( i18n( "Central-Right" ) );
-    d->mPosition->insertItem( i18n( "Bottom-Left" ) );
-    d->mPosition->insertItem( i18n( "Bottom-Central" ) );
-    d->mPosition->insertItem( i18n( "Bottom-Right" ) );
-    layout2->addWidget( d->mPosition );
+    d->position = new KComboBox( false, this, "Print position" );
+    d->position->clear();
+    d->position->insertItem( i18n( "Top-Left" ) );
+    d->position->insertItem( i18n( "Top-Central" ) );
+    d->position->insertItem( i18n( "Top-Right" ) );
+    d->position->insertItem( i18n( "Central-Left" ) );
+    d->position->insertItem( i18n( "Central" ) );
+    d->position->insertItem( i18n( "Central-Right" ) );
+    d->position->insertItem( i18n( "Bottom-Left" ) );
+    d->position->insertItem( i18n( "Bottom-Central" ) );
+    d->position->insertItem( i18n( "Bottom-Right" ) );
+    layout2->addWidget( d->position );
     QSpacerItem *spacer1 = new QSpacerItem( 101, 21, QSizePolicy::Expanding, QSizePolicy::Minimum );
     layout2->addItem( spacer1 );
 
@@ -446,11 +450,11 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
     d->units->insertItem( i18n("Centimeters") );
     d->units->insertItem( i18n("Inches") );
 
-    d->mKeepRatio = new QCheckBox( i18n("Keep ratio"), hb);
+    d->keepRatio = new QCheckBox( i18n("Keep ratio"), hb);
 
     w = new QWidget(hb);
     hb->setStretchFactor( w, 1 );
-    mPreviousUnit = DK_MILLIMETERS;
+    d->previousUnit = DK_MILLIMETERS;
 
     // ------------------------------------------------------------------------
 
@@ -469,7 +473,7 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
     connect(d->height, SIGNAL( valueChanged( double )), 
             this, SLOT( slotHeightChanged( double )));
 
-    connect(d->mKeepRatio, SIGNAL( toggled( bool )), 
+    connect(d->keepRatio, SIGNAL( toggled( bool )), 
             this, SLOT( toggleRatio( bool )));
 
     connect(d->units, SIGNAL(activated(const QString &)), 
@@ -486,7 +490,7 @@ void ImageEditorPrintDialogPage::getOptions( QMap<QString,QString>& opts, bool /
     QString t = "true";
     QString f = "false";
 
-    opts["app-imageeditor-alignment"]       = QString::number(getPosition(d->mPosition->currentText()));
+    opts["app-imageeditor-alignment"]       = QString::number(getPosition(d->position->currentText()));
     opts["app-imageeditor-printFilename"]   = d->addFileName->isChecked() ? t : f;
     opts["app-imageeditor-blackwhite"]      = d->blackwhite->isChecked() ? t : f;
     opts["app-imageeditor-scaleToFit"]      = d->scaleToFit->isChecked() ? t : f;
@@ -494,7 +498,7 @@ void ImageEditorPrintDialogPage::getOptions( QMap<QString,QString>& opts, bool /
     opts["app-imageeditor-scale-unit"]      = QString::number(stringToUnit(d->units->currentText()));
     opts["app-imageeditor-scale-width"]     = QString::number( d->width->value() );
     opts["app-imageeditor-scale-height"]    = QString::number( d->height->value() );
-    opts["app-imageeditor-scale-KeepRatio"] = d->mKeepRatio->isChecked() ? t : f;
+    opts["app-imageeditor-scale-KeepRatio"] = d->keepRatio->isChecked() ? t : f;
     opts["app-imageeditor-auto-rotate"]     = d->autoRotate->isChecked() ? t : f;
     opts["app-imageeditor-color-managed"]   = d->colorManaged->isChecked() ? t : f;
 }
@@ -512,7 +516,7 @@ void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
     if (ok) 
     {
         stVal = setPosition(iVal);
-        d->mPosition->setCurrentItem(stVal);
+        d->position->setCurrentItem(stVal);
     }
 
     d->addFileName->setChecked( opts["app-imageeditor-printFilename"] != f );
@@ -531,7 +535,7 @@ void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
     {
         stVal = unitToString(unit);
         d->units->setCurrentItem(stVal);
-        mPreviousUnit = unit;
+        d->previousUnit = unit;
     }
     else
     {
@@ -552,7 +556,7 @@ void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
     if ( d->scale->isChecked() == d->scaleToFit->isChecked() )
         d->scaleToFit->setChecked( !d->scale->isChecked() );
 
-    d->mKeepRatio->setChecked( opts["app-imageeditor-scale-KeepRatio"] == t );
+    d->keepRatio->setChecked( opts["app-imageeditor-scale-KeepRatio"] == t );
 
 }
 int ImageEditorPrintDialogPage::getPosition(const QString& align) 
@@ -650,7 +654,7 @@ void ImageEditorPrintDialogPage::toggleScaling( bool enable )
     d->width->setEnabled( enable );
     d->height->setEnabled( enable );
     d->units->setEnabled( enable );
-    d->mKeepRatio->setEnabled( enable );
+    d->keepRatio->setEnabled( enable );
 }
 
 void ImageEditorPrintDialogPage::slotHeightChanged (double value) 
@@ -658,9 +662,9 @@ void ImageEditorPrintDialogPage::slotHeightChanged (double value)
     d->width->blockSignals(true);
     d->height->blockSignals(true);
     
-    if (d->mKeepRatio->isChecked()) 
+    if (d->keepRatio->isChecked()) 
     {
-        double width = (mImage.width() * value) / mImage.height();
+        double width = (d->image.width() * value) / d->image.height();
         d->width->setValue( width ? width : 1.);
     }
     d->height->setValue(value);
@@ -674,9 +678,9 @@ void ImageEditorPrintDialogPage::slotWidthChanged (double value)
     d->width->blockSignals(true);
     d->height->blockSignals(true);
     
-    if (d->mKeepRatio->isChecked()) 
+    if (d->keepRatio->isChecked()) 
     {
-        double height = (mImage.height() * value) / mImage.width();
+        double height = (d->image.height() * value) / d->image.width();
         d->height->setValue( height ? height : 1);
     }
     d->width->setValue(value);
@@ -692,17 +696,17 @@ void ImageEditorPrintDialogPage::toggleRatio( bool enable )
     // mContent->mHeight->value() or mContent->mWidth->value()
     // are usually empty at startup and hxw (0x0) isn't good IMO keeping ratio
     double hValue, wValue;
-    if (mImage.height() > mImage.width()) 
+    if (d->image.height() > d->image.width()) 
     {
         hValue = d->height->value();
-        if (!hValue) hValue = 150*unitToMM(mPreviousUnit);
-        wValue = (mImage.width() * hValue)/ mImage.height();
+        if (!hValue) hValue = 150*unitToMM(d->previousUnit);
+        wValue = (d->image.width() * hValue)/ d->image.height();
     } 
     else 
     {
         wValue = d->width->value();
-        if (!wValue) wValue = 150*unitToMM(mPreviousUnit);
-        hValue = (mImage.height() * wValue)/ mImage.width();
+        if (!wValue) wValue = 150*unitToMM(d->previousUnit);
+        hValue = (d->image.height() * wValue)/ d->image.width();
     }
     
     d->width->blockSignals(true);
@@ -718,7 +722,7 @@ void ImageEditorPrintDialogPage::toggleRatio( bool enable )
 void ImageEditorPrintDialogPage::slotUnitChanged(const QString& string) 
 {
     Unit newUnit = stringToUnit(string);
-    double ratio = unitToMM(mPreviousUnit) / unitToMM(newUnit);
+    double ratio = unitToMM(d->previousUnit) / unitToMM(newUnit);
     
     d->width->blockSignals(true);
     d->height->blockSignals(true);
@@ -729,7 +733,7 @@ void ImageEditorPrintDialogPage::slotUnitChanged(const QString& string)
     d->width->blockSignals(false);
     d->height->blockSignals(false);
     
-    mPreviousUnit = newUnit;
+    d->previousUnit = newUnit;
 }
 
 void ImageEditorPrintDialogPage::readSettings()
