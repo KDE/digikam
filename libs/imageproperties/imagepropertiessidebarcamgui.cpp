@@ -199,7 +199,7 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
 
     // setting of NavigateBar, common for all tabs
     NavigateBarTab *navtab = dynamic_cast<NavigateBarTab *>(tab);
-    if (tab)
+    if (navtab)
     {
         int currentItemType = NavigateBarWidget::ItemCurrent;
         if (d->cameraView->firstItem() == d->cameraItem)
