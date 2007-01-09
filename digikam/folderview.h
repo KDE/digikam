@@ -84,6 +84,7 @@ protected:
      */
     virtual void saveViewState();
     
+    bool mouseInItemRect(QListViewItem* item, int x) const;
     
 protected slots:
     
@@ -94,10 +95,6 @@ private slots:
 
     void slotThemeChanged();
     
-private:
-
-    bool mouseInItemRect(QListViewItem* item, int x) const;
-
 private:
 
     FolderViewPriv      *d;
