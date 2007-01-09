@@ -2,10 +2,10 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date   : 2002-16-10
- * Description : album view interface implementation
+ * Description : implementation of album view interface. 
  *
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
- * Copyright      2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -101,6 +101,8 @@ public:
 
     QSplitter                *splitter;
 
+    QTimer                   *selectionTimer;
+
     DigikamApp               *parent;
 
     AlbumIconView            *iconView;
@@ -117,7 +119,6 @@ public:
     SearchFolderView         *searchFolderView;
     TagFilterView            *tagFilterView;
 
-    QTimer                   *selectionTimer;
     AlbumIconItem            *dispatchSelectedItem;
 };
 
@@ -156,7 +157,7 @@ DigikamView::DigikamView(QWidget *parent)
 
     // To the right.
     d->tagFilterView = new TagFilterView(this);
-    d->rightSideBar->appendTab(d->tagFilterView, SmallIcon("tag"), i18n("Tag Filters"));
+    d->rightSideBar->appendTab(d->tagFilterView, SmallIcon("tag-assigned"), i18n("Tag Filters"));
 
     d->selectionTimer = new QTimer(this);
 
