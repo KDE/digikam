@@ -182,10 +182,10 @@ public:
 
     /**
      * @return a list of complete path of all tags assigned to this item. The
-     * complete path for a tag is '/' separated string of its hierarchy
+     * complete path for a tag is a '/' separated string of its hierarchy
      * @see tagPaths
      */
-    QStringList tagPaths() const;
+    QStringList tagPaths(bool leadingSlash = true) const;
 
     
     /**

@@ -215,6 +215,12 @@ public:
      * @param gid the global id for the album
      */
     Album*    findAlbum(int gid) const;
+
+    /**
+     * @return a TAlbum with given tag path, or 0 if not found
+     * @param tagPath the tag path ("People/Friend/John")
+     */
+    TAlbum*   findTAlbum(const QString &tagPath) const;
     //@}
 
     /** @name Operations on PAlbum

@@ -91,6 +91,8 @@ public:
     bool load(const QString& filePath, DImg::FORMAT ff=DImg::NONE);
     bool save(const QString& filePath, DImg::FORMAT ff);
 
+    QString getFilePath() const;
+
     /** Metadata manipulation methods */
     QByteArray getComments() const;
     QByteArray getExif() const;

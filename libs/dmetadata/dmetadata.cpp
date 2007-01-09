@@ -343,6 +343,11 @@ bool DMetadata::load(const QString& filePath, DImg::FORMAT ff)
     return false;
 }
 
+QString DMetadata::getFilePath() const
+{
+    return d->filePath;
+}
+
 bool DMetadata::save(const QString& filePath, DImg::FORMAT ff)
 {
     // NOTE: see B.K.O #137770 & #138540 : never touch the file if is read only.

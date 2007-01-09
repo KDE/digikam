@@ -331,10 +331,11 @@ public:
     ~TAlbum();
 
     /**
-     * @return The tag path, e.g. "People/Friend/John".
-     *         The root TAlbum returns "/".
+     * @return The tag path, e.g. "/People/Friend/John" if leadingSlash is true,
+               "People/Friend/John" if leadingSlash if false.
+     *         The root TAlbum returns "/" resp. "".
      */
-    QString tagPath() const;
+    QString tagPath(bool leadingSlash = true) const;
     KURL    kurl() const;
     QString prettyURL() const;
     QString icon() const;

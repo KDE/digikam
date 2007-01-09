@@ -358,26 +358,24 @@ TAlbum::~TAlbum()
 {
 }
 
-QString TAlbum::tagPath() const
+QString TAlbum::tagPath(bool leadingSlash) const
 {
-    if (isRoot())
+    QString u = leadingSlash ? "/" : "";
+
+    if (parent())
     {
-        return "/";
+        u = ((TAlbum*)parent())->tagPath(false);
     }
 
-    QString u;
-    if (parent() && !parent()->isRoot())
-    {
-        u = ((TAlbum*)parent())->tagPath();
-        u += '/';
-    }
-    u += title();
+    if (!isRoot())
+        u += "/" + title();
+
     return u;
 }
 
 QString TAlbum::prettyURL() const
 {
-    QString u = i18n("My Tags") + tagPath();
+    QString u = i18n("My Tags") + tagPath(true);
     return u;
 }
 

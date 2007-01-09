@@ -216,7 +216,7 @@ QStringList ImageInfo::tagNames() const
     return db->getItemTagNames(m_ID);
 }
 
-QStringList ImageInfo::tagPaths() const
+QStringList ImageInfo::tagPaths(bool leadingSlash) const
 {
     QStringList tagPaths;
     
@@ -227,7 +227,7 @@ QStringList ImageInfo::tagPaths() const
         TAlbum* ta = m_man->findTAlbum(*it);
         if (ta)
         {
-            tagPaths.append(ta->tagPath());
+            tagPaths.append(ta->tagPath(leadingSlash));
         }
     }
 

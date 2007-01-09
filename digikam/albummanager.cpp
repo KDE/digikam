@@ -747,6 +747,21 @@ Album* AlbumManager::findAlbum(int gid) const
     return d->albumIntDict.find(gid);
 }
 
+TAlbum* AlbumManager::findTAlbum(const QString &tagPath) const
+{
+    // handle gracefully with or without leading slash
+    bool withLeadingSlash = tagPath.startsWith("/");
+    AlbumIterator it(d->rootTAlbum);
+    while (it.current())
+    {
+        TAlbum *talbum = static_cast<TAlbum *>(*it);
+        if (talbum->tagPath(withLeadingSlash) == tagPath)
+            return talbum;
+    }
+    return 0;
+
+}
+
 
 PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
                                    const QString& name,

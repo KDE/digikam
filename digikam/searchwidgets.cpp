@@ -350,7 +350,7 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
             TAlbum *album = (TAlbum*)(*it);
             if ( !album->isRoot() )
             {
-                m_valueCombo->insertSqueezedItem( album->tagPath().remove(0,1), index );
+                m_valueCombo->insertSqueezedItem( album->tagPath(false), index );
                 m_itemsIndexIDMap.insert( index, album->id() );
                 ++index;
             }
