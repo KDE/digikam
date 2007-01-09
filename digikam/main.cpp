@@ -47,6 +47,17 @@
 
 #include <libkipi/version.h>
 
+// Exiv2 includes.
+
+#include <exiv2/exiv2_version.h>
+
+// Gphoto2 includes.
+
+extern "C"
+{
+#include <gphoto2-version.h>
+}
+
 // Local includes.
 
 #include "version.h"
@@ -64,10 +75,19 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
-    QString description = QString(I18N_NOOP("A Photo-Management Application for KDE")) +
+    QString Exiv2Ver    = QString("%1.%2.%3").arg(EXIV2_MAJOR_VERSION)
+                                             .arg(EXIV2_MINOR_VERSION)
+                                             .arg(EXIV2_PATCH_VERSION);
+
+    QString Gphoto2Ver  = QString(gp_library_version(GP_VERSION_SHORT)[0]);
+
+    QString libInfo     = QString(I18N_NOOP("Using Kipi library version %1")).arg(kipi_version) +
                           QString("\n") + 
-                          QString(I18N_NOOP("Using Kipi library version %1"))
-                          .arg(kipi_version);
+                          QString(I18N_NOOP("Using Exiv2 library version %1")).arg(Exiv2Ver) +
+                          QString("\n") + 
+                          QString(I18N_NOOP("Using Gphoto2 library version %1")).arg(Gphoto2Ver);
+
+    QString description = QString(I18N_NOOP("A Photo-Management Application for KDE"));
     
     KAboutData aboutData( "digikam", 
                           I18N_NOOP("digiKam"),
@@ -77,6 +97,8 @@ int main(int argc, char *argv[])
                           I18N_NOOP("(c) 2002-2007, digiKam developers team"),
                           0,
                           "http://www.digikam.org");
+
+    aboutData.setOtherText(libInfo.latin1());
 
     aboutData.addAuthor ( "Caulier Gilles",
                           I18N_NOOP("Main developer and coordinator"),
