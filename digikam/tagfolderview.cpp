@@ -137,6 +137,8 @@ TagFolderView::TagFolderView(QWidget *parent)
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
 
+    // -- setup slots ---------------------------------------------------------
+
     connect(d->albumMan, SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
 
@@ -201,7 +203,7 @@ void TagFolderView::slotAlbumAdded(Album *album)
         if (!parent)
         {
             DWarning() << k_funcinfo << " Failed to find parent for Tag "
-                        << tag->title() << endl;
+                       << tag->title() << endl;
             return;
         }
 
