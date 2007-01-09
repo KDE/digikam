@@ -164,6 +164,7 @@ public:
 
     TagFilterViewPrivate()
     {
+        dragItem       = 0;
         ABCMenu        = 0;
         timer          = 0;
         toggleAutoTags = TagFilterView::NoToggleAuto;
@@ -172,11 +173,15 @@ public:
 
     QTimer                         *timer;
 
+    QPoint                          dragStartPos;    
+
     QPopupMenu                     *ABCMenu;
 
     TagFilterView::ToggleAutoTags   toggleAutoTags;
 
     AlbumLister::MatchingCondition  matchingCond;
+    
+    TagFilterViewItem              *dragItem;
 };
 
 
@@ -189,7 +194,6 @@ TagFilterView::TagFilterView(QWidget* parent)
     addColumn(i18n("Tag Filters"));
     setResizeMode(QListView::LastColumn);
     setRootIsDecorated(true);
-    setSelectionMode(QListView::Extended);
 
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
@@ -287,6 +291,37 @@ void TagFilterView::triggerChange()
     d->timer->start(50, true);
 }
 
+void TagFilterView::contentsMouseMoveEvent(QMouseEvent *e)
+{
+    QListView::contentsMouseMoveEvent(e);
+
+    if(e->state() == NoButton)
+    {
+        if(KGlobalSettings::changeCursorOverIcon())
+        {
+            QPoint vp = contentsToViewport(e->pos());
+            QListViewItem *item = itemAt(vp);
+            if (mouseInItemRect(item, vp.x()))
+                setCursor(KCursor::handCursor());
+            else
+                unsetCursor();
+        }
+        return;
+    }
+    
+    if(d->dragItem && 
+       (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
+    {
+        QPoint vp = contentsToViewport(e->pos());
+        TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(itemAt(vp));
+        if(!item)
+        {
+            d->dragItem = 0;
+            return;
+        }
+    }    
+}
+
 void TagFilterView::contentsMousePressEvent(QMouseEvent *e)
 {
     QPoint vp = contentsToViewport(e->pos());
@@ -302,41 +337,71 @@ void TagFilterView::contentsMousePressEvent(QMouseEvent *e)
     }
 
     QListView::contentsMousePressEvent(e);
+
+    if(item && e->button() == LeftButton) 
+    {
+        d->dragStartPos = e->pos();
+        d->dragItem     = item;
+    }
+}
+
+void TagFilterView::contentsMouseReleaseEvent(QMouseEvent *e)
+{
+    QListView::contentsMouseReleaseEvent(e);
+
+    d->dragItem = 0;
 }
 
 QDragObject* TagFilterView::dragObject()
 {
-    QValueList<int> dragTagIDs;
+    TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(dragItem());
+    if(!item)
+        return 0;
 
-    QListViewItemIterator it(this, QListViewItemIterator::Selected);
-    while (it.current())
-    {
-        TagFilterViewItem* item = (TagFilterViewItem*)it.current();
-        if (item)
-        {
-            if (item->m_tag)
-                dragTagIDs.append(item->m_tag->id());
-        }
-        ++it;
-    }
+    TagDrag *t = new TagDrag(item->m_tag->id(), this);
+    t->setPixmap(*item->pixmap(0));
 
-    TagListDrag *drag = new TagListDrag(dragTagIDs, this);
-    drag->setPixmap(AlbumThumbnailLoader::instance()->getStandardTagIcon());
-    return drag;
+    return t;
+}
+
+TagFilterViewItem* TagFilterView::dragItem() const
+{
+    return d->dragItem;
 }
 
 bool TagFilterView::acceptDrop(const QDropEvent *e) const
 {
     QPoint vp = contentsToViewport(e->pos());
     TagFilterViewItem *itemDrop = dynamic_cast<TagFilterViewItem*>(itemAt(vp));
+    TagFilterViewItem *itemDrag = dynamic_cast<TagFilterViewItem*>(dragItem());
 
-    if (!itemDrop || itemDrop->m_untagged)
+    if(TagDrag::canDecode(e) || TagListDrag::canDecode(e))
     {
-        return false;
+        // Allow dragging at the root, to move the tag to the root
+        if(!itemDrop)
+            return true;
+
+        // Do not allow dragging at the "Not Tagged" item.
+        if (itemDrop->m_untagged)
+            return false;
+
+        // Dragging an item on itself makes no sense
+        if(itemDrag == itemDrop)
+            return false;
+
+        // Dragging a parent on its child makes no sense
+        if(itemDrag && itemDrag->m_tag->isAncestorOf(itemDrop->m_tag))
+            return false;
+
+        return true;
     }
 
-    if (ItemDrag::canDecode(e))
+    if (ItemDrag::canDecode(e) && itemDrop && 
+        itemDrop->m_tag->parent() && !itemDrop->m_untagged)
     {
+        // Only other possibility is image items being dropped
+        // And allow this only if there is a Tag to be dropped
+        // on and also the Tag is not root or "Not Tagged" item.
         return true;
     }
 
@@ -354,7 +419,57 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
     TagFilterViewItem *itemDrop = dynamic_cast<TagFilterViewItem*>(itemAt(vp));
 
     if (!itemDrop || itemDrop->m_untagged)
+        return;
+
+    if(TagDrag::canDecode(e))
     {
+        QByteArray ba = e->encodedData("digikam/tag-id");
+        QDataStream ds(ba, IO_ReadOnly);
+        int tagID;
+        ds >> tagID;
+
+        AlbumManager* man = AlbumManager::instance();
+        TAlbum* talbum    = man->findTAlbum(tagID);
+
+        if(!talbum)
+            return;
+        
+        if (talbum == itemDrop->m_tag)
+            return;
+
+        KPopupMenu popMenu(this);
+        popMenu.insertTitle(SmallIcon("digikam"), i18n("Tag Filters"));
+        popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
+        popMenu.insertSeparator(-1);
+        popMenu.insertItem(SmallIcon("cancel"), i18n("C&ancel"), 20);
+        popMenu.setMouseTracking(true);
+        int id = popMenu.exec(QCursor::pos());
+
+        if(id == 10)
+        {
+            TAlbum *newParentTag = 0;
+
+            if (!itemDrop)
+            {
+                // move dragItem to the root
+                newParentTag = AlbumManager::instance()->findTAlbum(0);
+            }
+            else
+            {
+                // move dragItem as child of dropItem
+                newParentTag = itemDrop->m_tag;
+            }
+
+            QString errMsg;
+            if (!AlbumManager::instance()->moveTAlbum(talbum, newParentTag, errMsg))
+            {
+                KMessageBox::error(this, errMsg);
+            }
+
+            if(itemDrop && !itemDrop->isOpen())
+                itemDrop->setOpen(true);
+        }
+
         return;
     }
 
