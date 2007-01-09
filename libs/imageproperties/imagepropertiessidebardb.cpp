@@ -255,9 +255,12 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         navtab->setNavigateBarFileName(m_currentURL.filename());
     }
 
-    // See B.K.O #131632 and #131743 : always give focus to Comments widget 
-    // when we toogle between tab and when we change current item.
-    d->desceditTab->setFocusToComments();
+    if (tab == d->desceditTab)
+    {
+        // See B.K.O #131632 and #131743 : always give focus to Comments widget 
+        // when we toogle between tab and when we change current item.
+        d->desceditTab->setFocusToComments();
+    }
 
     unsetCursor();
 }
