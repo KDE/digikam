@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : folderview.cpp
  * Author: Joern Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2005-05-06
  * Copyright 2005-2006 by Joern Ahrens
@@ -34,9 +33,10 @@
 #include "ddebug.h"
 #include "albummanager.h"
 #include "themeengine.h"
-#include "folderview.h"
-#include "folderitem.h"
 #include "dragobjects.h"
+#include "folderitem.h"
+#include "folderview.h"
+#include "folderview.moc"
 
 namespace Digikam
 {
@@ -49,15 +49,16 @@ class FolderViewPriv
 {
 public:
 
-    bool        active;
+    bool         active;
     
-    QPixmap     itemRegPix;
-    QPixmap     itemSelPix;
-    int         itemHeight;
+    int          itemHeight;
+
+    QPixmap      itemRegPix;
+    QPixmap      itemSelPix;
     
-    QPoint      dragStartPos;    
+    QPoint       dragStartPos;    
+
     FolderItem  *dragItem;
-    
     FolderItem  *oldHighlightItem;
 };
 
@@ -66,12 +67,12 @@ public:
 //-----------------------------------------------------------------------------
 
 FolderView::FolderView(QWidget *parent, const char *name)
-    : QListView(parent, name)
+          : QListView(parent, name)
 {
     d = new FolderViewPriv;
     
     d->active = false;
-    d->dragItem = 0;
+    d->dragItem         = 0;
     d->oldHighlightItem = 0;
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
@@ -183,11 +184,12 @@ void FolderView::contentsMousePressEvent(QMouseEvent *e)
 {
     QListView::contentsMousePressEvent(e);
 
-    QPoint vp = contentsToViewport(e->pos());
+    QPoint vp        = contentsToViewport(e->pos());
     FolderItem *item = dynamic_cast<FolderItem*>(itemAt(vp));
-    if(item && e->button() == LeftButton) {
+    if(item && e->button() == LeftButton) 
+    {
         d->dragStartPos = e->pos();
-        d->dragItem = item;
+        d->dragItem     = item;
         return;
     }
 }
@@ -234,7 +236,7 @@ void FolderView::contentsDragMoveEvent(QDragMoveEvent *e)
 {
     QListView::contentsDragMoveEvent(e);
     
-    QPoint vp = contentsToViewport(e->pos());
+    QPoint vp        = contentsToViewport(e->pos());
     FolderItem *item = dynamic_cast<FolderItem*>(itemAt(vp));
     if(item)
     {
@@ -276,7 +278,7 @@ bool FolderView::mouseInItemRect(QListViewItem* item, int x) const
 
     int offset = treeStepSize()*(item->depth() + (rootIsDecorated() ? 1 : 0));
     offset    += itemMargin();
-    int width = item->width(fontMetrics(), this, 0);
+    int width  = item->width(fontMetrics(), this, 0);
     
     return (x > offset && x < (offset + width));
 }
@@ -376,4 +378,3 @@ void FolderView::selectItem(int)
 
 }  // namespace Digikam
     
-#include "folderview.moc"
