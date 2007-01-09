@@ -661,6 +661,9 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
     QPoint vp = contentsToViewport(e->pos());
     TagFolderViewItem *itemDrop = dynamic_cast<TagFolderViewItem*>(itemAt(vp));
 
+    if (!itemDrop)
+        return;
+
     if(TagDrag::canDecode(e))
     {
         QByteArray ba = e->encodedData("digikam/tag-id");
