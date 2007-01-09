@@ -1,6 +1,6 @@
 /* ============================================================
- * Author: Joern Ahrens <joern.ahrens@kdemail.net>
- * Date  : 2005-05-06
+ * Authors: Joern Ahrens <joern.ahrens@kdemail.net>
+ * Date   : 2005-05-06
  * Copyright 2005-2006 by Joern Ahrens
  *
  * This program is free software; you can redistribute it
@@ -76,10 +76,10 @@ FolderView::FolderView(QWidget *parent, const char *name)
     d->oldHighlightItem = 0;
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            SLOT(slotThemeChanged()));
+            this, SLOT(slotThemeChanged()));
 
     connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
-            SLOT(slotAllAlbumsLoaded()));
+            this, SLOT(slotAllAlbumsLoaded()));
     
     setColumnAlignment(0, Qt::AlignLeft|Qt::AlignVCenter);
     fontChange(font());

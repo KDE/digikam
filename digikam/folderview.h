@@ -1,7 +1,6 @@
 /* ============================================================
- * File  : folderview.h
- * Author: Joern Ahrens <joern.ahrens@kdemail.net>
- * Date  : 2005-05-28
+ * Authors: Joern Ahrens <joern.ahrens@kdemail.net>
+ * Date   : 2005-05-28
  * Copyright 2005-2006 by Joern Ahrens
  *
  * This program is free software; you can redistribute it
@@ -98,6 +97,8 @@ private slots:
 private:
 
     bool mouseInItemRect(QListViewItem* item, int x) const;
+
+private:
 
     FolderViewPriv      *d;
 };
