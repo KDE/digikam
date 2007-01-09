@@ -369,7 +369,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         {
             KPopupMenu popMenu(this);
             popMenu.insertTitle(SmallIcon("digikam"), i18n("Tags"));
-            popMenu.insertItem( SmallIcon("tag"), i18n("Assign Tag '%1' to Dropped Items")
+            popMenu.insertItem( SmallIcon("tag"), i18n("Assign Tag '%1' to Items")
                                 .arg(destAlbum->prettyURL()), 10) ;
             popMenu.insertSeparator(-1);
             popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
