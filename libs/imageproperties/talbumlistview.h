@@ -36,6 +36,7 @@ class QMouseEvent;
 namespace Digikam
 {
 class TAlbum;
+class TAlbumListViewPriv;
 
 class DIGIKAM_EXPORT TAlbumCheckListItem : public QCheckListItem
 {
@@ -61,6 +62,7 @@ class DIGIKAM_EXPORT TAlbumListView : public QListView
 public:
 
     TAlbumListView(QWidget* parent);
+    ~TAlbumListView();
 
     void emitSignalItemStateChanged(TAlbumCheckListItem *item);
 
@@ -87,9 +89,7 @@ private:
 
 private:
 
-    QPoint               m_dragStartPos;    
-
-    TAlbumCheckListItem *m_dragItem;
+    TAlbumListViewPriv *d;
 };
 
 }  // NameSpace Digikam

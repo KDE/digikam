@@ -83,15 +83,35 @@ void TAlbumCheckListItem::stateChange(bool val)
 
 // ------------------------------------------------------------------------
 
+class TAlbumListViewPriv
+{
+
+public:
+
+    TAlbumListViewPriv()
+    {
+        dragItem = 0;
+    }
+
+    QPoint               dragStartPos;    
+
+    TAlbumCheckListItem *dragItem;
+};
+
 TAlbumListView::TAlbumListView(QWidget* parent)
               : QListView(parent)
 {
-    m_dragItem = 0;
+    d = new TAlbumListViewPriv;
     addColumn(i18n("Tags"));
     header()->hide();
     setResizeMode(QListView::LastColumn);
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
+}
+
+TAlbumListView::~TAlbumListView()
+{
+    delete d;
 }
 
 void TAlbumListView::emitSignalItemStateChanged(TAlbumCheckListItem *item)
@@ -117,14 +137,14 @@ void TAlbumListView::contentsMouseMoveEvent(QMouseEvent *e)
         return;
     }
     
-    if(m_dragItem && 
-       (m_dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
+    if(d->dragItem && 
+       (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
     {
         QPoint vp = contentsToViewport(e->pos());
         TAlbumCheckListItem *item = dynamic_cast<TAlbumCheckListItem*>(itemAt(vp));
         if(!item)
         {
-            m_dragItem = 0;
+            d->dragItem = 0;
             return;
         }
     }    
@@ -146,8 +166,8 @@ void TAlbumListView::contentsMousePressEvent(QMouseEvent *e)
 
     if(item && e->button() == LeftButton) 
     {
-        m_dragStartPos = e->pos();
-        m_dragItem     = item;
+        d->dragStartPos = e->pos();
+        d->dragItem     = item;
     }
 
     QListView::contentsMousePressEvent(e);
@@ -156,7 +176,7 @@ void TAlbumListView::contentsMousePressEvent(QMouseEvent *e)
 void TAlbumListView::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     QListView::contentsMouseReleaseEvent(e);
-    m_dragItem = 0;
+    d->dragItem = 0;
 }
 
 bool TAlbumListView::mouseInItemRect(QListViewItem* item, int x) const
@@ -197,7 +217,7 @@ void TAlbumListView::startDrag()
 
 TAlbumCheckListItem* TAlbumListView::dragItem() const
 {
-    return m_dragItem;
+    return d->dragItem;
 }
 
 bool TAlbumListView::acceptDrop(const QDropEvent *e) const
