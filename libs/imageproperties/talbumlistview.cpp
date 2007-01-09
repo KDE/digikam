@@ -90,7 +90,6 @@ TAlbumListView::TAlbumListView(QWidget* parent)
     addColumn(i18n("Tags"));
     header()->hide();
     setResizeMode(QListView::LastColumn);
-    setSelectionMode(QListView::Extended);
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
 }
@@ -98,39 +97,6 @@ TAlbumListView::TAlbumListView(QWidget* parent)
 void TAlbumListView::emitSignalItemStateChanged(TAlbumCheckListItem *item)
 {
     emit signalItemStateChanged(item);
-}
-
-QDragObject* TAlbumListView::dragObject()
-{
-    QValueList<int> dragTagIDs;
-
-    QListViewItemIterator it(this, QListViewItemIterator::Selected);
-    while (it.current())
-    {
-        TAlbumCheckListItem* item = (TAlbumCheckListItem*)it.current();
-        if (item)
-        {
-            if (item->m_album->parent())
-                dragTagIDs.append(item->m_album->id());
-        }
-        ++it;
-    }
-
-    TagListDrag *drag = new TagListDrag(dragTagIDs, this);
-    drag->setPixmap(AlbumThumbnailLoader::instance()->getStandardTagIcon());
-    return drag;
-}
-
-void TAlbumListView::startDrag()
-{
-    QDragObject *o = dragObject();
-    if(o)
-        o->drag();        
-}
-
-TAlbumCheckListItem* TAlbumListView::dragItem() const
-{
-    return m_dragItem;
 }
 
 void TAlbumListView::contentsMouseMoveEvent(QMouseEvent *e)
@@ -207,6 +173,33 @@ bool TAlbumListView::mouseInItemRect(QListViewItem* item, int x) const
     return (x > offset && x < (offset + width));
 }
 
+QDragObject* TAlbumListView::dragObject()
+{
+    TAlbumCheckListItem *item = dynamic_cast<TAlbumCheckListItem*>(dragItem());
+    if(!item)
+        return 0;
+
+    if(!item->parent())
+        return 0;
+
+    TagDrag *t = new TagDrag(item->m_album->id(), this);
+    t->setPixmap(*item->pixmap(0));
+
+    return t;
+}
+
+void TAlbumListView::startDrag()
+{
+    QDragObject *o = dragObject();
+    if(o)
+        o->drag();        
+}
+
+TAlbumCheckListItem* TAlbumListView::dragItem() const
+{
+    return m_dragItem;
+}
+
 bool TAlbumListView::acceptDrop(const QDropEvent *e) const
 {
     QPoint vp = contentsToViewport(e->pos());
@@ -253,8 +246,18 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
 
     if(TagDrag::canDecode(e))
     {
-        TAlbumCheckListItem *itemDrag = dynamic_cast<TAlbumCheckListItem*>(dragItem());
-        if(!itemDrag)
+        QByteArray ba = e->encodedData("digikam/tag-id");
+        QDataStream ds(ba, IO_ReadOnly);
+        int tagID;
+        ds >> tagID;
+
+        AlbumManager* man = AlbumManager::instance();
+        TAlbum* talbum    = man->findTAlbum(tagID);
+
+        if(!talbum)
+            return;
+
+        if (talbum == itemDrop->m_album)
             return;
 
         KPopupMenu popMenu(this);
@@ -267,7 +270,6 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
 
         if(id == 10)
         {
-            TAlbum *tag          = itemDrag->m_album;
             TAlbum *newParentTag = 0;
 
             if (!itemDrop)
@@ -282,7 +284,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             }
 
             QString errMsg;
-            if (!AlbumManager::instance()->moveTAlbum(tag, newParentTag, errMsg))
+            if (!AlbumManager::instance()->moveTAlbum(talbum, newParentTag, errMsg))
             {
                 KMessageBox::error(this, errMsg);
             }

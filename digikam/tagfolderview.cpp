@@ -608,7 +608,7 @@ QDragObject* TagFolderView::dragObject()
     if(!item->parent())
         return 0;
 
-    TagDrag *t = new TagDrag(item->getTag()->globalID(), this);
+    TagDrag *t = new TagDrag(item->getTag()->id(), this);
     t->setPixmap(*item->pixmap(0));
 
     return t;
@@ -660,8 +660,18 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
 
     if(TagDrag::canDecode(e))
     {
-        TagFolderViewItem *itemDrag = dynamic_cast<TagFolderViewItem*>(dragItem());
-        if(!itemDrag)
+        QByteArray ba = e->encodedData("digikam/tag-id");
+        QDataStream ds(ba, IO_ReadOnly);
+        int tagID;
+        ds >> tagID;
+
+        AlbumManager* man = AlbumManager::instance();
+        TAlbum* talbum    = man->findTAlbum(tagID);
+
+        if(!talbum)
+            return;
+        
+        if (talbum == itemDrop->getTag())
             return;
 
         KPopupMenu popMenu(this);
@@ -674,7 +684,6 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
 
         if(id == 10)
         {
-            TAlbum *tag = itemDrag->getTag();
             TAlbum *newParentTag = 0;
 
             if (!itemDrop)
@@ -689,7 +698,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             }
 
             QString errMsg;
-            if (!d->albumMan->moveTAlbum(tag, newParentTag, errMsg))
+            if (!d->albumMan->moveTAlbum(talbum, newParentTag, errMsg))
             {
                 KMessageBox::error(this, errMsg);
             }
