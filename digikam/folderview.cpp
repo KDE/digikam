@@ -1,7 +1,9 @@
 /* ============================================================
  * Authors: Joern Ahrens <joern.ahrens@kdemail.net>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date   : 2005-05-06
  * Copyright 2005-2006 by Joern Ahrens
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
