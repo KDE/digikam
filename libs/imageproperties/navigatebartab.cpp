@@ -1,11 +1,11 @@
 /* ============================================================
- * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2007-01-04
+ * Authors: Caulier Gilles <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2007-01-04
  * Description : A parent tab class with a navigation bar
  *
  * Copyright 2006 by Gilles Caulier
- *           2007 by Gilles Caulier, Marcel Wiesweg
+ * Copyright 2007 by Gilles Caulier, Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,16 +28,16 @@
 
 #include "navigatebarwidget.h"
 #include "navigatebartab.h"
+#include "navigatebartab.moc"
 
 namespace Digikam
 {
 
-
 NavigateBarTab::NavigateBarTab(QWidget* parent)
-                       : QWidget(parent, 0, Qt::WDestructiveClose)
+              : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_navigateBarLayout = 0;
-    m_navigateBar = 0;
+    m_navigateBar       = 0;
 }
 
 NavigateBarTab::~NavigateBarTab()
@@ -46,11 +46,11 @@ NavigateBarTab::~NavigateBarTab()
 
 void NavigateBarTab::setupNavigateBar(bool navBar)
 {
-    m_navigateBarLayout        = new QVBoxLayout(this);
+    m_navigateBarLayout = new QVBoxLayout(this);
 
     if (navBar)
     {
-        m_navigateBar              = new NavigateBarWidget(this, navBar);
+        m_navigateBar = new NavigateBarWidget(this, navBar);
 
         m_navigateBarLayout->addWidget(m_navigateBar);
 
@@ -97,7 +97,5 @@ void NavigateBarTab::setNavigateBarFileName(const QString &name)
     m_navigateBar->setFileName(name);
 }
 
-
 }  // NameSpace Digikam
 
-#include "navigatebartab.moc"

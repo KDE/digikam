@@ -1,11 +1,11 @@
 /* ============================================================
- * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2007-01-04
+ * Authors: Caulier Gilles <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2007-01-04
  * Description : A parent tab class with a navigation bar
  *
  * Copyright 2006 by Gilles Caulier
- *           2007 by Gilles Caulier, Marcel Wiesweg
+ * Copyright 2007 by Gilles Caulier, Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,6 +67,8 @@ signals:
 protected:
 
     void setupNavigateBar(bool navBar);
+
+protected:
 
     QVBoxLayout       *m_navigateBarLayout;
     NavigateBarWidget *m_navigateBar;
