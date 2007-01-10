@@ -225,7 +225,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
 
     KSeparator *line = new KSeparator (Horizontal, gboxSettings);
             
-    m_temperatureLabel = new QLabel(i18n("Temperature (°K):"), gboxSettings);
+    m_temperatureLabel = new QLabel(i18n("Temperature (K):"), gboxSettings);
     m_temperatureInput = new KDoubleNumInput(gboxSettings);
     m_temperatureInput->setPrecision(1);
     m_temperatureInput->setRange(2200.0, 7000.0, 10.0, true);
