@@ -5,7 +5,7 @@
  * Description : a widget to manage sidebar in gui.
  *
  * Copyright 2005-2006 by Joern Ahrens
- * Copyright 2006 by Gilles Caulier  
+ * Copyright 2006-2007 by Gilles Caulier  
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -129,6 +129,11 @@ public:
      */ 
     void restore();
 
+    /**
+     * return the visible status of current sidebar tab.
+     */ 
+    bool isExpanded();
+
 private:
     
     
@@ -151,10 +156,14 @@ signals:
      */
     void signalChangedTab(QWidget *w);
 
+    /**
+     * is emitted, when tab is shrink or expanded
+     */
+    void signalViewChanged();
+
 private:
     
     SidebarPriv* d;
-
 };
 
 }  // namespace Digikam

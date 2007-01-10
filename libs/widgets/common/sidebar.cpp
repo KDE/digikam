@@ -5,7 +5,7 @@
  * Description : a widget to manage sidebar in gui.
  *
  * Copyright 2005-2006 by Joern Ahrens
- * Copyright 2006 by Gilles Caulier  
+ * Copyright 2006-2007 by Gilles Caulier  
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,6 +39,7 @@
 // Local includes.
 
 #include "sidebar.h"
+#include "sidebar.moc"
 
 namespace Digikam
 {
@@ -56,20 +57,20 @@ public:
         minimized = false;
     }
 
-    bool          minimizedDefault;
-    bool          minimized;
-    bool          isMinimized;         
+    bool           minimizedDefault;
+    bool           minimized;
+    bool           isMinimized;      // Backup of minimized status (used with Fullscreen)
 
-    int           tabs;
-    int           activeTab;
-    int           minSize;
-    int           maxSize;
+    int            tabs;
+    int            activeTab;
+    int            minSize;
+    int            maxSize;
         
-    QWidgetStack *stack;
-    QSplitter    *splitter;
-    QSize         bigSize;
+    QWidgetStack  *stack;
+    QSplitter     *splitter;
+    QSize          bigSize;
 
-    Sidebar::Side side;
+    Sidebar::Side  side;
 };
 
 Sidebar::Sidebar(QWidget *parent, const char *name, Side side, bool minimizedDefault)
@@ -77,7 +78,7 @@ Sidebar::Sidebar(QWidget *parent, const char *name, Side side, bool minimizedDef
 {
     d = new SidebarPriv;
     d->minimizedDefault = minimizedDefault;
-    d->side = side;
+    d->side             = side;
 }
 
 Sidebar::~Sidebar()
@@ -131,7 +132,6 @@ void Sidebar::saveViewState()
 {
     KConfig *config = kapp->config();
     config->setGroup(QString("%1").arg(name()));
-    
     config->writeEntry("ActiveTab", d->activeTab);
     config->writeEntry("Minimized", d->minimized);
     config->sync();
@@ -232,21 +232,19 @@ QWidget* Sidebar::getActiveTab()
 void Sidebar::shrink()
 {
     d->minimized = true;
-    d->bigSize = size();
-    d->minSize = minimumWidth();
-    d->maxSize = maximumWidth();
+    d->bigSize   = size();
+    d->minSize   = minimumWidth();
+    d->maxSize   = maximumWidth();
             
     d->stack->hide();
 
     KMultiTabBarTab* tab = tabs()->first();
     if (tab)
-    {
         setFixedWidth(tab->width());
-    }
     else
-    {
         setFixedWidth(width());
-    }
+
+    emit signalViewChanged();
 }
 
 void Sidebar::expand()
@@ -256,8 +254,12 @@ void Sidebar::expand()
     resize(d->bigSize);
     setMinimumWidth(d->minSize);
     setMaximumWidth(d->maxSize);
+    emit signalViewChanged();
+}
+
+bool Sidebar::isExpanded()
+{
+    return !d->minimized; 
 }
 
 }  // namespace Digikam
-
-#include "sidebar.moc"

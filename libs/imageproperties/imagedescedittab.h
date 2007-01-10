@@ -57,7 +57,7 @@ public:
     void assignRating(int rating);
     void setItem(ImageInfo *info=0);
     void populateTags();
-    void setFocusToComments();
+    void setFocusToComments(bool f);
 
 protected:
 

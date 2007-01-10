@@ -1,10 +1,12 @@
 /* ============================================================
- * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
- * Date  : 2004-11-17
+ * Authors: Caulier Gilles <caulier dot gilles at kdemail dot net>
+ *         Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2004-11-17
  * Description : image properties side bar using data from 
  *               digiKam database.
  *
  * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -94,6 +96,9 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *
     connectTab(m_colorTab);
     connectTab(d->desceditTab);
 
+    connect(this, SIGNAL(signalViewChanged()),
+            this, SLOT(slotSetFocus()));
+
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
 
@@ -177,9 +182,7 @@ void ImagePropertiesSideBarDB::setPreviousNextState(bool hasPrevious, bool hasNe
 
     NavigateBarTab *navtab = dynamic_cast<NavigateBarTab *>(getActiveTab());
     if (navtab)
-    {
         navtab->setNavigateBarState(d->hasPrevious, d->hasNext);
-    }
 }
 
 void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
@@ -255,14 +258,20 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         navtab->setNavigateBarFileName(m_currentURL.filename());
     }
 
-    if (tab == d->desceditTab)
-    {
-        // See B.K.O #131632 and #131743 : always give focus to Comments widget 
-        // when we toogle between tab and when we change current item.
-        d->desceditTab->setFocusToComments();
-    }
+    slotSetFocus();
 
     unsetCursor();
+}
+
+void ImagePropertiesSideBarDB::slotSetFocus()
+{
+    // See B.K.O #131632 and #131743 : always give focus to Comments widget 
+    // when we toogle between tab and when we change current item.
+
+    if (getActiveTab() == d->desceditTab && isExpanded())
+        d->desceditTab->setFocusToComments(true);
+    else
+        d->desceditTab->setFocusToComments(false);
 }
 
 void ImagePropertiesSideBarDB::slotFileMetadataChanged(const KURL &url)
@@ -321,4 +330,3 @@ void ImagePropertiesSideBarDB::slotThemeChanged()
 }
 
 }  // NameSpace Digikam
-

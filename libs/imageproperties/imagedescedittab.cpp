@@ -251,7 +251,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->dateTimeEdit->installEventFilter(this);
     d->ratingWidget->installEventFilter(this);
     d->tagsView->installEventFilter(this);
-    setFocusToComments();
+    setFocusToComments(true);
     updateRecentTags();
 
     // Connect to album manager -----------------------------
@@ -553,9 +553,14 @@ void ImageDescEditTab::slotModified()
     d->revertBtn->setEnabled(true);
 }
 
-void ImageDescEditTab::setFocusToComments()
+void ImageDescEditTab::setFocusToComments(bool f)
 {
-    d->commentsEdit->setFocus();
+    DDebug() << "Comments focus = " << f << endl;
+
+    if (f)
+        d->commentsEdit->setFocus();
+    else
+        d->commentsEdit->clearFocus();
 }
 
 void ImageDescEditTab::assignRating(int rating)
