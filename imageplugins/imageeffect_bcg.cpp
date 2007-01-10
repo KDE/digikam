@@ -1,12 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-06-05
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-06-05
  * Description : digiKam image editor Brightness/Contrast/Gamma 
  *               correction tool
  * 
  * Copyright 2004 by Renchi Raju
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,6 +58,7 @@
 // Local includes.
 
 #include "imageeffect_bcg.h"
+#include "imageeffect_bcg.moc"
 
 namespace DigikamImagesPluginCore
 {
@@ -142,19 +143,17 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     // -------------------------------------------------------------
 
     QLabel *label2 = new QLabel(i18n("Brightness:"), gboxSettings);
-    m_bInput       = new KDoubleNumInput(gboxSettings);
-    m_bInput->setPrecision(2);
-    m_bInput->setRange(-1.0, 1.0, 0.01, true);
-    m_bInput->setValue(0.0);
+    m_bInput       = new KIntNumInput(gboxSettings);
+    m_bInput->setRange(-100, 100, 1, true);
+    m_bInput->setValue(0);
     QWhatsThis::add( m_bInput, i18n("<p>Set here the brightness adjustment of the image."));
     gridSettings->addMultiCellWidget(label2, 3, 3, 0, 4);
     gridSettings->addMultiCellWidget(m_bInput, 4, 4, 0, 4);
 
     QLabel *label3 = new QLabel(i18n("Contrast:"), gboxSettings);
-    m_cInput       = new KDoubleNumInput(gboxSettings);
-    m_cInput->setPrecision(2);
-    m_cInput->setRange(-1.0, 1.0, 0.01, true);
-    m_cInput->setValue(0.0);
+    m_cInput       = new KIntNumInput(gboxSettings);
+    m_cInput->setRange(-100, 100, 1, true);
+    m_cInput->setValue(0);
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
     gridSettings->addMultiCellWidget(label3, 5, 5, 0, 4);
     gridSettings->addMultiCellWidget(m_cInput, 6, 6, 0, 4);
@@ -162,19 +161,25 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     QLabel *label4 = new QLabel(i18n("Gamma:"), gboxSettings);
     m_gInput = new KDoubleNumInput(gboxSettings);
     m_gInput->setPrecision(2);
-    m_gInput->setRange(-1.0, 1.0, 0.01, true);
-    m_gInput->setValue(0.0);
+    m_gInput->setRange(0.1, 3.0, 0.01, true);
+    m_gInput->setValue(1.0);
     QWhatsThis::add( m_gInput, i18n("<p>Set here the gamma adjustment of the image."));
     gridSettings->addMultiCellWidget(label4, 7, 7, 0, 4);
     gridSettings->addMultiCellWidget(m_gInput, 8, 8, 0, 4);
 
     m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gboxSettings);
     QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
-                                                      "from the target image preview will be over-colored. "
+                                                      "from the target image preview will be colored to black. "
                                                       "This will not have an effect on the final rendering."));
     gridSettings->addMultiCellWidget(m_overExposureIndicatorBox, 9, 9, 0, 4);
 
-    gridSettings->setRowStretch(10, 10);    
+    m_underExposureIndicatorBox = new QCheckBox(i18n("Under exposure indicator"), gboxSettings);
+    QWhatsThis::add( m_underExposureIndicatorBox, i18n("<p>If you enable this option, under-exposed pixels "
+                                                      "from the target image preview will be colored to white. "
+                                                      "This will not have an effect on the final rendering."));
+    gridSettings->addMultiCellWidget(m_underExposureIndicatorBox, 10, 10, 0, 4);
+
+    gridSettings->setRowStretch(11, 10);    
     setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------
@@ -188,16 +193,19 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
-    connect(m_bInput, SIGNAL(valueChanged (double)),
+    connect(m_bInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));                        
             
-    connect(m_cInput, SIGNAL(valueChanged (double)),
+    connect(m_cInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));                        
             
     connect(m_gInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));                        
 
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
+            this, SLOT(slotEffect()));
+
+    connect(m_underExposureIndicatorBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));
                         
     connect(m_previewWidget, SIGNAL(signalResized()),
@@ -263,9 +271,9 @@ void ImageEffect_BCG::slotDefault()
     m_bInput->blockSignals(true);	
     m_cInput->blockSignals(true);	
     m_gInput->blockSignals(true);	
-    m_bInput->setValue(0.0);
-    m_cInput->setValue(0.0);
-    m_gInput->setValue(0.0);
+    m_bInput->setValue(0);
+    m_cInput->setValue(0);
+    m_gInput->setValue(1.0);
     m_bInput->blockSignals(false);	
     m_cInput->blockSignals(false);	
     m_gInput->blockSignals(false);	
@@ -276,10 +284,11 @@ void ImageEffect_BCG::slotEffect()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
-    double b = m_bInput->value();
-    double c = m_cInput->value() + (double)(1.00);    
-    double g = m_gInput->value() + (double)(1.00);
+    double b = (double)m_bInput->value()/250.0;
+    double c = (double)(m_cInput->value()/100.0) + 1.00;    
+    double g = m_gInput->value();
     bool   o = m_overExposureIndicatorBox->isChecked();
+    bool   u = m_underExposureIndicatorBox->isChecked();
 
     enableButtonOK( b != 0.0 || c != 1.0 || g != 1.0 );
     
@@ -298,6 +307,7 @@ void ImageEffect_BCG::slotEffect()
     Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
     Digikam::BCGModifier cmod;
     cmod.setOverIndicator(o);
+    cmod.setUnderIndicator(u);
     cmod.setGamma(g);
     cmod.setBrightness(b);
     cmod.setContrast(c);
@@ -319,9 +329,9 @@ void ImageEffect_BCG::finalRendering()
     kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
-    double b = m_bInput->value();
-    double c = m_cInput->value() + (double)(1.00);    
-    double g = m_gInput->value() + (double)(1.00);
+    double b = (double)m_bInput->value()/250.0;
+    double c = (double)(m_cInput->value()/100.0) + 1.00;    
+    double g = m_gInput->value() + 1.00;
 
     iface->setOriginalBCG(b, c, g);
     kapp->restoreOverrideCursor();
@@ -330,4 +340,3 @@ void ImageEffect_BCG::finalRendering()
 
 }  // NameSpace DigikamImagesPluginCore
 
-#include "imageeffect_bcg.moc"

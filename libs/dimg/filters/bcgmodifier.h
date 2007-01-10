@@ -1,13 +1,11 @@
 /* ============================================================
- * File  : bcgmodifier.h
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net> 
- * Date  : 2005-03-06
- * Description : Brightness/Contrast/Gamma modifier methods
- *               for DImg framework
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2005-03-06
+ * Description : a Brightness/Contrast/Gamma image filter.
  * 
  * Copyright 2005 by Renchi Raju, Gilles Caulier
- * Copyright 2006 Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,6 +44,7 @@ public:
     bool modified() const;
 
     void setOverIndicator(bool overIndicator);
+    void setUnderIndicator(bool underIndicator);
     void setGamma(double val);
     void setBrightness(double val);
     void setContrast(double val);
@@ -53,8 +52,7 @@ public:
     
 private:
 
-    BCGModifierPriv* d;
-    
+    BCGModifierPriv* d;    
 };
 
 }  // NameSpace Digikam

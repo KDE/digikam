@@ -1,12 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-06-05
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-06-05
  * Description : digiKam image editor Brightness/Contrast/Gamma 
  *               correction tool
  * 
  * Copyright 2004 by Renchi Raju
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +32,7 @@ class QCheckBox;
 class QComboBox;
 class QHButtonGroup;
 
+class KIntNumInput;
 class KDoubleNumInput;
 
 namespace Digikam
@@ -53,6 +54,18 @@ public:
 
     ImageEffect_BCG(QWidget *parent);
     ~ImageEffect_BCG();
+
+private slots:
+
+    void slotDefault();
+    void slotEffect();
+    void slotChannelChanged(int channel);
+    void slotScaleChanged(int scale);
+    void slotColorSelectedFromTarget( const Digikam::DColor &color );
+
+protected:
+
+    void finalRendering();
 
 private:
 
@@ -77,9 +90,10 @@ private:
     QHButtonGroup                *m_scaleBG;  
 
     QCheckBox                    *m_overExposureIndicatorBox;
+    QCheckBox                    *m_underExposureIndicatorBox;
     
-    KDoubleNumInput              *m_bInput;
-    KDoubleNumInput              *m_cInput;
+    KIntNumInput                 *m_bInput;
+    KIntNumInput                 *m_cInput;
     KDoubleNumInput              *m_gInput;
     
     Digikam::ImageWidget         *m_previewWidget;
@@ -87,18 +101,6 @@ private:
     Digikam::ColorGradientWidget *m_hGradient;
     
     Digikam::HistogramWidget     *m_histogramWidget;
-
-private slots:
-
-    void slotDefault();
-    void slotEffect();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
-    void slotColorSelectedFromTarget( const Digikam::DColor &color );
-
-protected:
-
-    void finalRendering();
 };
 
 }  // NameSpace DigikamImagesPluginCore
