@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_whitebalance.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-03-11
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-03-11
  * Description : a digiKam image editor plugin to correct 
  *               image white balance 
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,6 +50,32 @@ public:
 
     ImageEffect_WhiteBalance(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_WhiteBalance();
+
+protected:
+
+    void finalRendering();    
+
+private:
+        
+    void setRGBmult(void);
+    void setLUTv(void);
+    void whiteBalance(uchar *data, int width, int height, bool sixteenBit);
+    inline unsigned short pixelColor(int colorMult, int index, int value);
+    
+private slots:
+
+    void slotDefault();
+    void slotUser2();
+    void slotUser3();
+    void slotEffect();
+    void slotColorSelectedFromOriginal(const Digikam::DColor &color);
+    void slotColorSelectedFromTarget(const Digikam::DColor &color);
+    void slotScaleChanged(int scale);
+    void slotChannelChanged(int channel);
+    void slotTemperatureChanged(double temperature);
+    void slotTemperaturePresetChanged(int tempPreset);
+    void slotAutoAdjustExposure(void);
+    void slotPickerColorButtonActived();    
 
 private:    
     
@@ -136,32 +161,6 @@ private:
     Digikam::ColorGradientWidget *m_hGradient;
     
     Digikam::ImageWidget         *m_previewWidget;
-
-protected:
-
-    void finalRendering();    
-
-private:
-        
-    void setRGBmult(void);
-    void setLUTv(void);
-    void whiteBalance(uchar *data, int width, int height, bool sixteenBit);
-    inline unsigned short pixelColor(int colorMult, int index, int value);
-    
-private slots:
-
-    void slotDefault();
-    void slotUser2();
-    void slotUser3();
-    void slotEffect();
-    void slotColorSelectedFromOriginal(const Digikam::DColor &color);
-    void slotColorSelectedFromTarget(const Digikam::DColor &color);
-    void slotScaleChanged(int scale);
-    void slotChannelChanged(int channel);
-    void slotTemperatureChanged(double temperature);
-    void slotTemperaturePresetChanged(int tempPreset);
-    void slotAutoAdjustExposure(void);
-    void slotPickerColorButtonActived();    
 };
 
 }  // NameSpace DigikamWhiteBalanceImagesPlugin

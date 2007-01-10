@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_whitebalance.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-03-11
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-03-11
  * Description : a digiKam image editor plugin to correct 
  *               image white balance 
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * Some parts are inspired from RawPhoto implementation copyrighted 
  * 2004-2005 by Pawel T. Jochym <jochym at ifj edu pl>
@@ -67,8 +66,9 @@
 // Local includes.
 
 #include "version.h"
-#include "imageeffect_whitebalance.h"
 #include "blackbody.h"
+#include "imageeffect_whitebalance.h"
+#include "imageeffect_whitebalance.moc"
 
 namespace DigikamWhiteBalanceImagesPlugin
 {
@@ -98,7 +98,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to correct white color balance."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005-2006, Gilles Caulier", 
+                                       "(c) 2005-2007, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -188,7 +188,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
     QGridLayout *grid2 = new QGridLayout( layout2, 10, 5, spacingHint());
     KIconLoader icon;
     
-    m_exposureLabel = new QLabel(i18n("Exposure:"), gboxSettings);
+    m_exposureLabel = new QLabel(i18n("Exposure (EV):"), gboxSettings);
     m_autoAdjustExposure = new QPushButton(gboxSettings);
     m_autoAdjustExposure->setPixmap( icon.loadIcon( "run", (KIcon::Group)KIcon::Toolbar ) );
     QToolTip::add( m_autoAdjustExposure, i18n( "Auto exposure adjustments" ) );
@@ -220,12 +220,12 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
     m_gammaLabel = new QLabel(i18n("Gamma:"), gboxSettings);
     m_gammaInput = new KDoubleNumInput(gboxSettings);
     m_gammaInput->setPrecision(2);
-    m_gammaInput->setRange(0.01, 1.5, 0.01, true);
+    m_gammaInput->setRange(0.1, 3.0, 0.01, true);
     QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma correction value."));
 
     KSeparator *line = new KSeparator (Horizontal, gboxSettings);
             
-    m_temperatureLabel = new QLabel(i18n("Temperature:"), gboxSettings);
+    m_temperatureLabel = new QLabel(i18n("Temperature (°K):"), gboxSettings);
     m_temperatureInput = new KDoubleNumInput(gboxSettings);
     m_temperatureInput->setPrecision(1);
     m_temperatureInput->setRange(2200.0, 7000.0, 10.0, true);
@@ -947,4 +947,3 @@ void ImageEffect_WhiteBalance::slotUser2()
 
 }  // NameSpace DigikamWhiteBalanceImagesPlugin
 
-#include "imageeffect_whitebalance.moc"
