@@ -120,15 +120,15 @@ void BCGModifier::applyBCG(DImg& image)
 
         for (uint i=0; i<size; i++)
         {
-            if (d->overIndicator && (d->map[data[0]] > 255 || 
-                d->map[data[1]] > 255 || d->map[data[2]] > 255))
+            if (d->overIndicator && (d->map[data[0]] > 255 && 
+                d->map[data[1]] > 255 && d->map[data[2]] > 255))
             {
                 data[0] = 0;
                 data[1] = 0;
                 data[2] = 0;
             }
-            else if (d->underIndicator && (d->map[data[0]] < 0 || 
-                d->map[data[1]] < 0 || d->map[data[2]] < 0))
+            else if (d->underIndicator && (d->map[data[0]] < 0 && 
+                d->map[data[1]] < 0 && d->map[data[2]] < 0))
             {
                 data[0] = 255;
                 data[1] = 255;
@@ -150,15 +150,15 @@ void BCGModifier::applyBCG(DImg& image)
 
         for (uint i=0; i<size; i++)
         {
-            if (d->overIndicator && (d->map16[data[0]] > 65535 || 
-                d->map16[data[1]] > 65535 || d->map16[data[2]] > 65535))
+            if (d->overIndicator && (d->map16[data[0]] > 65535 && 
+                d->map16[data[1]] > 65535 && d->map16[data[2]] > 65535))
             {
                 data[0] = 0;
                 data[1] = 0;
                 data[2] = 0;
             }
-            else if (d->underIndicator && (d->map16[data[0]] < 0 || 
-                d->map16[data[1]] < 0 || d->map16[data[2]] < 0))
+            else if (d->underIndicator && (d->map16[data[0]] < 0 && 
+                d->map16[data[1]] < 0 && d->map16[data[2]] < 0))
             {
                 data[0] = 65535;
                 data[1] = 65535;
