@@ -27,10 +27,11 @@ INCLUDES = -I$(top_srcdir)/digikam/sqlite \
        
 lib_LTLIBRARIES = libdigikam.la
 
-# NOTE from Gilles (30-11-06): kdateedit.cpp must be placed on the top of source file list 
-# to unbreak compilation with './configure -enable-final' option. I suspect a problem with 
-# X11 header included into albumfolderview.cpp.
+# NOTE from Gilles (30-11-06): kdateedit.cpp and metadatahub.cpp must be placed on the top 
+# of source file list to unbreak compilation with './configure -enable-final' option. 
+# I suspect a problem with X11 header included into albumfolderview.cpp witch redefine 'enum' type.
 libdigikam_la_SOURCES = kdateedit.cpp \
+	                metadatahub.cpp \
 	                album.cpp \
 	                albumdb.cpp \
 	                albumdb_sqlite2.cpp \
@@ -73,7 +74,6 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                kdatepickerpopup.cpp \
 	                kipiinterface.cpp \
 	                mediaplayerview.cpp \
-	                metadatahub.cpp \
 	                monthwidget.cpp \
 	                pixmapmanager.cpp \
 	                ratingwidget.cpp \
