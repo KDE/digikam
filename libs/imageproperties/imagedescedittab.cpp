@@ -555,8 +555,6 @@ void ImageDescEditTab::slotModified()
 
 void ImageDescEditTab::setFocusToComments(bool f)
 {
-    DDebug() << "Comments focus = " << f << endl;
-
     if (f)
         d->commentsEdit->setFocus();
     else
