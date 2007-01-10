@@ -135,6 +135,8 @@ AlbumGUI      : Video files can be previewed using an embedded instance of defau
 AlbumGUI      : Preview picture mode use a memory cache to speed-up loading.
 
 Image Plugins : All tools use the same keyboard shortcuts than PhotoShop.
+Image Plugins : New option in BCG Tool to show under-exposed area.
+Image Plugins : BCG Tool : settings value excursion are the same than Photoshop.
 
 Image Editor  : Add new advanced options to keep ratio and alignment about print pictures.
  
