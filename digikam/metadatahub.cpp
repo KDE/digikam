@@ -249,20 +249,22 @@ void MetadataHub::loadTags(const QValueList<TAlbum *> &loadedTags)
     // first go through all tags contained in this set
     for (QValueList<TAlbum *>::const_iterator it = loadedTags.begin(); it != loadedTags.end(); ++it)
     {
-        QMap<TAlbum *, TagStatus>::iterator mapIt = d->tags.find(*it);
-        if (mapIt == d->tags.end() || mapIt.data() == MetadataInvalid)
+        // that is a reference
+        TagStatus &status = d->tags[*it];
+        // if it was not contained in the list, the default constructor will mark it as invalid
+        if (status == MetadataInvalid)
         {
             if (d->count == 1)
                 // there were no previous sets that could have contained the set
-                mapIt.data() = TagStatus(MetadataAvailable, true);
+                status = TagStatus(MetadataAvailable, true);
             else
                 // previous sets did not contain the tag, we do => disjoint
-                mapIt.data() = TagStatus(MetadataDisjoint, true);
+                status = TagStatus(MetadataDisjoint, true);
         }
-        else if (mapIt.data() == TagStatus(MetadataAvailable, false))
+        else if (status == TagStatus(MetadataAvailable, false))
         {
             // set to explicitly not contained, but we contain it => disjoint
-            mapIt.data() = TagStatus(MetadataDisjoint, true);
+            status = TagStatus(MetadataDisjoint, true);
         }
         // else if mapIt.data() ==  MetadataAvailable, true: all right, we contain it too
         // else if mapIt.data() ==  MetadataDisjoint: it's already disjoint
@@ -277,7 +279,9 @@ void MetadataHub::loadTags(const QValueList<TAlbum *> &loadedTags)
     {
         QMap<TAlbum *, TagStatus>::iterator mapIt = d->tags.find(*it);
         if (mapIt != d->tags.end() && mapIt.data() == TagStatus(MetadataAvailable, true))
+        {
             mapIt.data() = TagStatus(MetadataDisjoint, true);
+        }
     }
 }
 

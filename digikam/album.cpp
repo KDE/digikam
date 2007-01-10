@@ -360,15 +360,18 @@ TAlbum::~TAlbum()
 
 QString TAlbum::tagPath(bool leadingSlash) const
 {
-    QString u = leadingSlash ? "/" : "";
+    if (isRoot())
+        return leadingSlash ? "/" : "";
 
-    if (parent())
+    QString u;
+
+    if (parent() && !parent()->isRoot())
     {
-        u = ((TAlbum*)parent())->tagPath(false);
+        u = ((TAlbum*)parent())->tagPath(leadingSlash);
+        u += "/";
     }
 
-    if (!isRoot())
-        u += "/" + title();
+    u += title();
 
     return u;
 }

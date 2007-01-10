@@ -66,6 +66,7 @@
 #include "tagfilterview.h"
 #include "imageinfo.h"
 #include "imageattributeswatch.h"
+#include "metadatahub.h"
 #include "imagedescedittab.h"
 #include "imagedescedittab.moc"
 
@@ -120,7 +121,9 @@ public:
 
     RatingWidget                  *ratingWidget;
 
-    TagFilterView::ToggleAutoTags  toggleAutoTags;  
+    TagFilterView::ToggleAutoTags  toggleAutoTags;
+
+    MetadataHub                    hub;
 };
 
 ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
@@ -219,13 +222,13 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
             this, SLOT(slotItemStateChanged(TAlbumCheckListItem *)));
     
     connect(d->commentsEdit, SIGNAL(textChanged()),
-            this, SLOT(slotModified()));
+            this, SLOT(slotCommentChanged()));
     
     connect(d->dateTimeEdit, SIGNAL(dateTimeChanged(const QDateTime& )),
-            this, SLOT(slotModified()));
+            this, SLOT(slotDateTimeChanged(const QDateTime&)));
 
     connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
-            this, SLOT(slotModified()));
+            this, SLOT(slotRatingChanged(int)));
      
     connect(d->tagsView, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint &, int)),
             this, SLOT(slotRightButtonClicked(QListViewItem*, const QPoint&, int)));
@@ -337,93 +340,14 @@ void ImageDescEditTab::slotApplyAllChanges()
     if (!d->currInfo)
         return;
 
-    QStringList oldKeywords = d->currInfo->tagPaths();
-    for (QStringList::iterator it = oldKeywords.begin(); it != oldKeywords.end(); ++it)
-        (*it).remove(0, 1);
-
     // we are now changing attributes ourselves
     d->ignoreImageAttributesWatch = true;
 
-    d->currInfo->setCaption(d->commentsEdit->text());
-    d->currInfo->setDateTime(d->dateTimeEdit->dateTime());
-    d->currInfo->setRating(d->ratingWidget->rating());
-    d->currInfo->removeAllTags();
-
-    QListViewItemIterator it(d->tagsView);
-    while (it.current())
-    {
-        TAlbumCheckListItem* tItem = dynamic_cast<TAlbumCheckListItem*>(it.current());
-        if (tItem && tItem->isOn())
-        {
-            d->currInfo->setTag(tItem->m_album->id());
-        }
-        ++it;
-    }
+    d->hub.write(d->currInfo);
+    MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
+    d->hub.write(d->currInfo->filePath(), writeSettings);
 
     d->ignoreImageAttributesWatch = false;
-
-    // Store data in image metadata.
-
-    if (AlbumSettings::instance())
-    {
-        bool dirty = false;
-        DMetadata metadata(d->currInfo->filePath());
-
-        if (AlbumSettings::instance()->getSaveComments())
-        {
-            // Store comments in image as JFIF comments, Exif comments, and Iptc Comments.
-            metadata.setImageComment(d->commentsEdit->text());
-            dirty = true;
-        }
-
-        if (AlbumSettings::instance()->getSaveDateTime())
-        {
-            // Store Image Date & Time as Exif and Iptc tags.
-            metadata.setImageDateTime(d->dateTimeEdit->dateTime(), false);
-            dirty = true;
-        }
-
-        if (AlbumSettings::instance()->getSaveIptcRating())
-        {
-            // Store Image rating as Iptc tag.
-            metadata.setImageRating(d->ratingWidget->rating());
-            dirty = true;
-        }
-
-        if (AlbumSettings::instance()->getSaveIptcTags())
-        {
-            // Store Image Tag paths like Iptc keywords tag.
-            QStringList tagPaths = d->currInfo->tagPaths();
-            for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
-                (*it).remove(0, 1);
-    
-            metadata.setImageKeywords(oldKeywords, tagPaths);
-            dirty = true;
-        }
-
-        if (AlbumSettings::instance()->getSaveIptcPhotographerId())
-        {
-            // Store Photograph indentity into Iptc tags.
-            metadata.setImagePhotographerId(AlbumSettings::instance()->getIptcAuthor(),
-                                            AlbumSettings::instance()->getIptcAuthorTitle());
-            dirty = true;
-        }
-
-        if (AlbumSettings::instance()->getSaveIptcCredits())
-        {
-            // Store Photograph indentity into Iptc tags.
-            metadata.setImageCredits(AlbumSettings::instance()->getIptcCredit(),
-                                     AlbumSettings::instance()->getIptcSource(),
-                                     AlbumSettings::instance()->getIptcCopyright());
-            dirty = true;
-        }
-
-        if (dirty)
-        {
-            metadata.applyChanges();
-            ImageAttributesWatch::instance()->fileMetadataChanged(d->currInfo->kurl());
-        }
-    }
 
     d->modified = false;
     d->applyBtn->setEnabled(false);
@@ -455,6 +379,7 @@ void ImageDescEditTab::setInfo(ImageInfo *info)
     {
        d->commentsEdit->clear();
        d->currInfo = 0;
+       d->hub = MetadataHub();
        setEnabled(false);
        return;
     }
@@ -465,17 +390,15 @@ void ImageDescEditTab::setInfo(ImageInfo *info)
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
 
-    KURL fileURL;
-    fileURL.setPath(d->currInfo->filePath());
-
-    PAlbum *album = d->currInfo->album();
-    if (!album)
+    if (!d->currInfo->album())
     {
-        DWarning() << k_funcinfo << "Failed to find parent album for"
-                   << fileURL << endl;
+        DWarning() << k_funcinfo << "No album specified for"
+                   << d->currInfo->filePath() << endl;
         return;
     }
 
+    d->hub = MetadataHub();
+    d->hub.load(d->currInfo);
     updateComments();
     updateRating();
     updateDate();
@@ -521,20 +444,22 @@ void ImageDescEditTab::populateTags()
 
 void ImageDescEditTab::slotItemStateChanged(TAlbumCheckListItem *item)
 {
-    TagFilterView::ToggleAutoTags oldAutoTags = d->toggleAutoTags;     
+    TagFilterView::ToggleAutoTags oldAutoTags = d->toggleAutoTags;
 
     switch(d->toggleAutoTags)
     {
-        case TagFilterView::Childs:
-            d->toggleAutoTags = TagFilterView::NoToggleAuto;            toggleChildTags(item->m_album, item->isOn());
+        case TagFilterView::Children:
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
+            toggleChildTags(item->m_album, item->isOn());
             d->toggleAutoTags = oldAutoTags;
             break;
         case TagFilterView::Parents:
-            d->toggleAutoTags = TagFilterView::NoToggleAuto;                        toggleParentTags(item->m_album, item->isOn());
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
+            toggleParentTags(item->m_album, item->isOn());
             d->toggleAutoTags = oldAutoTags;
             break;
-        case TagFilterView::ChildsAndParents:
-            d->toggleAutoTags = TagFilterView::NoToggleAuto;            
+        case TagFilterView::ChildrenAndParents:
+            d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleChildTags(item->m_album, item->isOn());
             toggleParentTags(item->m_album, item->isOn());
             d->toggleAutoTags = oldAutoTags;
@@ -543,6 +468,25 @@ void ImageDescEditTab::slotItemStateChanged(TAlbumCheckListItem *item)
             break;
     }
 
+    d->hub.setTag(item->m_album, item->isOn());
+    slotModified();
+}
+
+void ImageDescEditTab::slotCommentChanged()
+{
+    d->hub.setComment(d->commentsEdit->text());
+    slotModified();
+}
+
+void ImageDescEditTab::slotDateTimeChanged(const QDateTime& dateTime)
+{
+    d->hub.setDateTime(dateTime);
+    slotModified();
+}
+
+void ImageDescEditTab::slotRatingChanged(int rating)
+{
+    d->hub.setRating(rating);
     slotModified();
 }
 
@@ -570,8 +514,6 @@ void ImageDescEditTab::updateTagsView()
 {
     d->tagsView->blockSignals(true);
 
-    QValueList<int> tagIDs = d->currInfo->tagIDs();
-
     QListViewItemIterator it( d->tagsView);
     while (it.current())
     {
@@ -579,10 +521,9 @@ void ImageDescEditTab::updateTagsView()
 
         if (tItem)
         {
-            if (tagIDs.contains(tItem->m_album->id()))
-                tItem->setOn(true);
-            else
-                tItem->setOn(false);
+            MetadataHub::TagStatus status = d->hub.tagStatus(tItem->m_album);
+            //DDebug() << "ImageDescEditTab::updateTagsView " << tItem->m_album->tagPath() << " set to " << status.status << " " << status.hasTag << endl;
+            tItem->setOn(status.hasTag);
         }
         ++it;
     }
@@ -595,21 +536,21 @@ void ImageDescEditTab::updateTagsView()
 void ImageDescEditTab::updateComments()
 {
     d->commentsEdit->blockSignals(true);
-    d->commentsEdit->setText(d->currInfo->caption());
+    d->commentsEdit->setText(d->hub.comment());
     d->commentsEdit->blockSignals(false);
 }
 
 void ImageDescEditTab::updateRating()
 {
     d->ratingWidget->blockSignals(true);
-    d->ratingWidget->setRating(d->currInfo->rating());
+    d->ratingWidget->setRating(d->hub.rating());
     d->ratingWidget->blockSignals(false);
 }
 
 void ImageDescEditTab::updateDate()
 {
     d->dateTimeEdit->blockSignals(true);
-    d->dateTimeEdit->setDateTime(d->currInfo->dateTime());
+    d->dateTimeEdit->setDateTime(d->hub.dateTime());
     d->dateTimeEdit->blockSignals(false);
 }
 
@@ -800,7 +741,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
         }
         case 22:   // Toggle auto Childs tags.
         {
-            d->toggleAutoTags = TagFilterView::Childs;
+            d->toggleAutoTags = TagFilterView::Children;
             break;
         }
         case 23:   // Toggle auto Parents tags.
@@ -810,7 +751,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
         }
         case 24:   // Toggle auto Childs and Parents tags.
         {
-            d->toggleAutoTags = TagFilterView::ChildsAndParents;
+            d->toggleAutoTags = TagFilterView::ChildrenAndParents;
             break;
         }
         default:
@@ -1082,14 +1023,12 @@ void ImageDescEditTab::toggleParentTags(TAlbum *album, bool b)
         TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
         if (item->isVisible())
         {
-            Album *a = dynamic_cast<Album*>(item->m_album);
-            if (a)
+            if (!item->m_album)
+                continue;
+            if (item->m_album == album->parent())
             {
-                if (a == album->parent())
-                {
-                    item->setOn(b);
-                    toggleParentTags(item->m_album , b);
-                }
+                item->setOn(b);
+                toggleParentTags(item->m_album , b);
             }
         }
         ++it;
@@ -1149,12 +1088,14 @@ void ImageDescEditTab::slotThumbnailLost(Album *)
 
 void ImageDescEditTab::slotImageTagsChanged(Q_LLONG imageId)
 {
+    //TODO
     if (!d->ignoreImageAttributesWatch && d->currInfo && d->currInfo->id() == imageId)
         updateTagsView();
 }
 
 void ImageDescEditTab::slotImagesChanged(int albumId)
 {
+    //TODO
     Album *a = AlbumManager::instance()->findAlbum(albumId);
     if (!d->ignoreImageAttributesWatch && 
         !d->currInfo || !a || a->isRoot() || a->type() != Album::TAG)
@@ -1165,6 +1106,7 @@ void ImageDescEditTab::slotImagesChanged(int albumId)
 
 void ImageDescEditTab::slotImageRatingChanged(Q_LLONG imageId)
 {
+    //TODO
     if (!d->ignoreImageAttributesWatch && 
         d->currInfo && d->currInfo->id() == imageId)
         updateRating();
@@ -1172,6 +1114,7 @@ void ImageDescEditTab::slotImageRatingChanged(Q_LLONG imageId)
 
 void ImageDescEditTab::slotImageCaptionChanged(Q_LLONG imageId)
 {
+    //TODO
     if (!d->ignoreImageAttributesWatch && 
         d->currInfo && d->currInfo->id() == imageId)
         updateComments();
@@ -1179,6 +1122,7 @@ void ImageDescEditTab::slotImageCaptionChanged(Q_LLONG imageId)
 
 void ImageDescEditTab::slotImageDateChanged(Q_LLONG imageId)
 {
+    //TODO
     if (!d->ignoreImageAttributesWatch && 
         d->currInfo && d->currInfo->id() == imageId)
         updateDate();

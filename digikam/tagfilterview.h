@@ -43,9 +43,9 @@ public:
     enum ToggleAutoTags
     {
         NoToggleAuto = 0,
-        Childs,
+        Children,
         Parents,
-        ChildsAndParents
+        ChildrenAndParents
     };
 
 public:

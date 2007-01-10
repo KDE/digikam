@@ -263,7 +263,7 @@ void TagFilterView::stateChanged(TagFilterViewItem* item)
 
     switch(d->toggleAutoTags)
     {
-        case Childs:
+        case Children:
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleChildTags(item, item->isOn());
             d->toggleAutoTags = oldAutoTags;
@@ -273,7 +273,7 @@ void TagFilterView::stateChanged(TagFilterViewItem* item)
             toggleParentTags(item, item->isOn());
             d->toggleAutoTags = oldAutoTags;
             break;
-        case ChildsAndParents:
+        case ChildrenAndParents:
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleChildTags(item, item->isOn());
             toggleParentTags(item, item->isOn());
@@ -910,7 +910,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
         }
         case 22:   // Toggle auto Childs tags.
         {
-            d->toggleAutoTags = Childs;
+            d->toggleAutoTags = Children;
             break;
         }
         case 23:   // Toggle auto Parents tags.
@@ -920,7 +920,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
         }
         case 24:   // Toggle auto Childs and Parents tags.
         {
-            d->toggleAutoTags = ChildsAndParents;
+            d->toggleAutoTags = ChildrenAndParents;
             break;
         }
         case 25:    // Or Between Tags.
