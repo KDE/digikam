@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : adjustlevels.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-07-20
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-07-20
  * Description : image histogram adjust levels.
  *
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,6 +63,7 @@
 
 #include "version.h"
 #include "adjustlevels.h"
+#include "adjustlevels.moc"
 
 namespace DigikamAdjustLevelsImagesPlugin
 {
@@ -92,7 +92,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* ban
                                        digikamimageplugins_version,
                                        I18N_NOOP("An image-histogram-levels adjustment plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2006, Gilles Caulier",
+                                       "(c) 2004-2007, Gilles Caulier",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -207,7 +207,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* ban
     QToolTip::add( m_minInput, i18n( "Minimal intensity input." ) );
     m_gammaInput = new KDoubleNumInput(gboxSettings);
     m_gammaInput->setPrecision(2);
-    m_gammaInput->setRange(0.1, 10.0, 0.1);
+    m_gammaInput->setRange(0.1, 3.0, 0.01);
     m_gammaInput->setValue(1.0);
     QToolTip::add( m_gammaInput, i18n( "Gamma input value." ) );
     QWhatsThis::add( m_gammaInput, i18n("<p>Select here the gamma input value."));
@@ -730,5 +730,4 @@ void AdjustLevelDialog::slotUser2()
 
 }  // NameSpace DigikamAdjustLevelsImagesPlugin
 
-#include "adjustlevels.moc"
 

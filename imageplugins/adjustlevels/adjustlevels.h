@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : adjustlevels.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-07-20
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-07-20
  * Description : image histogram adjust levels. 
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,6 +46,34 @@ public:
 
     AdjustLevelDialog(QWidget *parent, QString title, QFrame* banner);
     ~AdjustLevelDialog();
+
+protected:
+
+    void finalRendering();    
+
+private:
+
+    void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
+    
+private slots:
+
+    void slotDefault();
+    void slotUser2();
+    void slotUser3();
+    void slotEffect();
+    void slotResetCurrentChannel();
+    void slotAutoLevels();
+    void slotChannelChanged(int channel);
+    void slotScaleChanged(int scale);
+    void slotAdjustSliders();
+    void slotGammaInputchanged(double val);
+    void slotAdjustMinInputSpinBox(int val);
+    void slotAdjustMaxInputSpinBox(int val);
+    void slotAdjustMinOutputSpinBox(int val);
+    void slotAdjustMaxOutputSpinBox(int val);
+    void slotSpotColorChanged(const Digikam::DColor &color);
+    void slotColorSelectedFromTarget(const Digikam::DColor &color);
+    void slotPickerColorButtonActived();    
 
 private:
     
@@ -109,35 +136,6 @@ private:
     
     Digikam::ImageLevels      *m_levels;
     Digikam::DImg              m_originalImage;
-
-protected:
-
-    void finalRendering();    
-
-private:
-
-    void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
-    
-private slots:
-
-    void slotDefault();
-    void slotUser2();
-    void slotUser3();
-    void slotEffect();
-    void slotResetCurrentChannel();
-    void slotAutoLevels();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
-    void slotAdjustSliders();
-    void slotGammaInputchanged(double val);
-    void slotAdjustMinInputSpinBox(int val);
-    void slotAdjustMaxInputSpinBox(int val);
-    void slotAdjustMinOutputSpinBox(int val);
-    void slotAdjustMaxOutputSpinBox(int val);
-    void slotSpotColorChanged(const Digikam::DColor &color);
-    void slotColorSelectedFromTarget(const Digikam::DColor &color);
-    void slotPickerColorButtonActived();    
-
 };
 
 }  // NameSpace DigikamAdjustLevelsImagesPlugin
