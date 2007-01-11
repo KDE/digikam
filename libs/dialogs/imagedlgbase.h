@@ -1,13 +1,12 @@
 /* ============================================================
- * File  : imagedlgbase.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-07-23
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-07-23
  * Description : simple plugins dialog without threadable 
  *               filter interface. The dialog layout is 
  *               designed to accept custom widgets in 
  *               preview and settings area.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,12 +61,16 @@ public:
 
 protected slots:
 
+    virtual void slotDefault();
     virtual void slotTimer();       
     
 protected:
     
     void closeEvent(QCloseEvent *e);
     virtual void finalRendering(){};
+    virtual void writeUserSettings(void){};
+    virtual void readUserSettings(void){ slotDefault(); };
+    virtual void resetValues(void){};
 
 private slots:
     
@@ -78,12 +81,12 @@ private slots:
 
 private:
 
-    void writeConfig();
+    void readSettings(void);
+    void writeSettings(void);
  
 private:
 
     ImageDlgBasePriv* d;
-    
 };
 
 }  // NameSpace Digikam

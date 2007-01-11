@@ -3,7 +3,7 @@
  *          Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date   : 2005-12-21
  * Copyright 2005-2006 by F.J. Cruz
- *           2006 by Gilles Caulier
+ *           2006-2007 by Gilles Caulier
  *
  * Description : digiKam image editor tool to correct picture 
  *               colors using an ICC color profile
@@ -63,6 +63,51 @@ public:
     
     ImageEffect_ICCProof(QWidget* parent);
     ~ImageEffect_ICCProof();
+
+protected:
+
+    void finalRendering();
+
+private:
+
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues();
+
+    void getICCInfo(const QString&);
+    void getICCInfo(const QByteArray&);
+
+    bool useBPC();
+    bool doProof();
+    bool checkGamut();
+    bool embedProfile();
+
+    bool useEmbeddedProfile();
+    bool useBuiltinProfile();
+    bool useDefaultInProfile();
+    bool useSelectedInProfile();
+
+    bool useDefaultSpaceProfile();
+    bool useSelectedSpaceProfile();
+
+    bool useDefaultProofProfile();
+    bool useSelectedProofProfile();
+
+private slots:
+
+    void slotUser2();
+    void slotUser3();
+    void slotEffect();
+    void slotChannelChanged(int);
+    void slotScaleChanged(int);
+    void slotSpotColorChanged(const Digikam::DColor &);    
+    void slotColorSelectedFromTarget(const Digikam::DColor &);
+    void slotToggledWidgets(bool);
+    void slotInICCInfo();
+    void slotProofICCInfo();
+    void slotSpaceICCInfo();
+    void slotCMDisabledWarning();
+    void processLCMSURL(const QString&);
 
 private:
 
@@ -150,51 +195,6 @@ private:
     Digikam::ICCPreviewWidget      *m_iccInPreviewWidget;
     Digikam::ICCPreviewWidget      *m_iccSpacePreviewWidget;
     Digikam::ICCPreviewWidget      *m_iccProofPreviewWidget;
-
-private:
-
-    void readSettings();
-    void writeSettings();
-
-    void getICCInfo(const QString&);
-    void getICCInfo(const QByteArray&);
-
-    bool useBPC();
-    bool doProof();
-    bool checkGamut();
-    bool embedProfile();
-
-    bool useEmbeddedProfile();
-    bool useBuiltinProfile();
-    bool useDefaultInProfile();
-    bool useSelectedInProfile();
-
-    bool useDefaultSpaceProfile();
-    bool useSelectedSpaceProfile();
-
-    bool useDefaultProofProfile();
-    bool useSelectedProofProfile();
-
-private slots:
-
-    void slotUser2();
-    void slotUser3();
-    void slotDefault();
-    void slotEffect();
-    void slotChannelChanged(int);
-    void slotScaleChanged(int);
-    void slotSpotColorChanged(const Digikam::DColor &);    
-    void slotColorSelectedFromTarget(const Digikam::DColor &);
-    void slotToggledWidgets(bool);
-    void slotInICCInfo();
-    void slotProofICCInfo();
-    void slotSpaceICCInfo();
-    void slotCMDisabledWarning();
-    void processLCMSURL(const QString&);
-
-protected:
-
-    void finalRendering();
 };
 
 }  // NameSpace DigikamImagesPluginCore

@@ -58,14 +58,16 @@ public:
 
 private slots:
 
-    void slotDefault();
     void slotEffect();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
 
-protected:
+private:
 
+    void writeUserSettings();
+    void readUserSettings();
+    void resetValues();
     void finalRendering();
 
 private:

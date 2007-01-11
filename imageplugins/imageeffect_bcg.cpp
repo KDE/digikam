@@ -43,6 +43,7 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <kapplication.h>
+#include <kconfig.h>
 #include <kcursor.h>
 #include <kstandarddirs.h>
 
@@ -264,7 +265,26 @@ void ImageEffect_BCG::slotColorSelectedFromTarget( const Digikam::DColor &color 
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-void ImageEffect_BCG::slotDefault()
+void ImageEffect_BCG::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("bcgadjust Tool Dialog");
+    m_bInput->setValue(config->readNumEntry("BrightnessAjustment", 0));
+    m_cInput->setValue(config->readNumEntry("ContrastAjustment", 0));
+    m_gInput->setValue(config->readDoubleNumEntry("GammaAjustment", 1.0));
+}
+
+void ImageEffect_BCG::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("bcgadjust Tool Dialog");
+    config->writeEntry("BrightnessAjustment", m_bInput->value());
+    config->writeEntry("ContrastAjustment", m_cInput->value());
+    config->writeEntry("GammaAjustment", m_gInput->value());
+    config->sync();
+}
+
+void ImageEffect_BCG::resetValues()
 {
     m_bInput->blockSignals(true);	
     m_cInput->blockSignals(true);	
@@ -275,7 +295,6 @@ void ImageEffect_BCG::slotDefault()
     m_bInput->blockSignals(false);	
     m_cInput->blockSignals(false);	
     m_gInput->blockSignals(false);	
-    slotEffect();
 } 
 
 void ImageEffect_BCG::slotEffect()

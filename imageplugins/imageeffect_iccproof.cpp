@@ -3,7 +3,7 @@
  *          Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date   : 2005-12-21
  * Copyright 2005-2006 by F.J. Cruz
- *           2006 by Gilles Caulier
+ *           2006-2007 by Gilles Caulier
  *
  * Description : digiKam image editor tool to correct picture 
  *               colors using an ICC color profile
@@ -433,11 +433,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     gridSettings->addMultiCellWidget(m_toolBoxWidgets, 3, 3, 0, 2);
     setUserAreaWidget(gboxSettings);
-
-    // -------------------------------------------------------------
-
-    enableButtonOK( false );
-    readSettings();
+    enableButtonOK(false);
 
     // -------------------------------------------------------------
 
@@ -520,7 +516,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
 ImageEffect_ICCProof::~ImageEffect_ICCProof()
 {
-    writeSettings();
     m_histogramWidget->stopHistogramComputation();
 
     delete [] m_destinationPreviewData;
@@ -530,7 +525,7 @@ ImageEffect_ICCProof::~ImageEffect_ICCProof()
     delete m_curves;
 }
 
-void ImageEffect_ICCProof::readSettings()
+void ImageEffect_ICCProof::readUserSettings()
 {
     QString defaultICCPath = KGlobalSettings::documentPath();
     KConfig* config        = kapp->config();
@@ -563,7 +558,7 @@ void ImageEffect_ICCProof::readSettings()
     }
     
     // Plugin settings.
-    config->setGroup("Color Management Tool");
+    config->setGroup("colormanagement Tool Dialog");
     m_toolBoxWidgets->setCurrentIndex(config->readNumEntry("Settings Tab", GENERALPAGE));        
     m_inProfilesPath->setURL(config->readPathEntry("InputProfilePath", defaultICCPath)); 
     m_proofProfilePath->setURL(config->readPathEntry("ProofProfilePath", defaultICCPath)); 
@@ -606,10 +601,10 @@ void ImageEffect_ICCProof::readSettings()
     m_curvesWidget->curveTypeChanged();
 }
 
-void ImageEffect_ICCProof::writeSettings()
+void ImageEffect_ICCProof::writeUserSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("Color Management Tool");
+    config->setGroup("colormanagement Tool Dialog");
     config->writeEntry("Settings Tab", m_toolBoxWidgets->currentIndex());
     config->writePathEntry("InputProfilePath", m_inProfilesPath->url());
     config->writePathEntry("ProofProfilePath", m_proofProfilePath->url());
@@ -690,7 +685,7 @@ void ImageEffect_ICCProof::slotScaleChanged( int scale )
     m_histogramWidget->repaint(false);
 }
 
-void ImageEffect_ICCProof::slotDefault()
+void ImageEffect_ICCProof::resetValues()
 {
     m_cInput->blockSignals(true);
     m_cInput->setValue(0.0);
@@ -700,7 +695,6 @@ void ImageEffect_ICCProof::slotDefault()
 
     m_curvesWidget->reset();
     m_cInput->blockSignals(false);
-    slotEffect();
 }
 
 void ImageEffect_ICCProof::slotEffect()

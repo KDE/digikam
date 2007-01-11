@@ -1,13 +1,12 @@
 /* ============================================================
- * File  : imagedlgbase.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-07-23
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-07-23
  * Description : simple plugins dialog without threadable
  *               filter interface. The dialog layout is
  *               designed to accept custom widgets in
  *               preview and settings area.
  *
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,6 +53,7 @@
 #include "sidebar.h"
 #include "dimginterface.h"
 #include "imagedlgbase.h"
+#include "imagedlgbase.moc"
 
 namespace Digikam
 {
@@ -155,7 +155,17 @@ ImageDlgBase::~ImageDlgBase()
     delete d;
 }
 
-void ImageDlgBase::writeConfig()
+void ImageDlgBase::readSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup(d->name + QString(" Tool Dialog"));
+    if(config->hasKey("SplitterSizes"))
+        d->splitter->setSizes(config->readIntListEntry("SplitterSizes"));
+
+    readUserSettings();
+}
+
+void ImageDlgBase::writeSettings()
 {
     KConfig *config = kapp->config();
     config->setGroup(d->name + QString(" Tool Dialog"));
@@ -166,20 +176,27 @@ void ImageDlgBase::writeConfig()
 
 void ImageDlgBase::closeEvent(QCloseEvent *e)
 {
-    writeConfig();
+    writeSettings();
     e->accept();
 }
 
 void ImageDlgBase::slotCancel()
 {
-    writeConfig();
+    writeSettings();
     done(Cancel);
 }
 
 void ImageDlgBase::slotOk()
 {
-    writeConfig();
+    writeSettings();
+    writeUserSettings();
     finalRendering();
+}
+
+void ImageDlgBase::slotDefault()
+{
+    resetValues();
+    slotEffect();
 }
 
 void ImageDlgBase::slotHelp()
@@ -219,11 +236,8 @@ void ImageDlgBase::setUserAreaWidget(QWidget *w)
     d->settingsSideBar->setSplitter(d->splitter);
     d->settingsSideBar->appendTab(w, SmallIcon("configure"), i18n("Settings"));    
     d->settingsSideBar->loadViewState();
-    
-    KConfig *config = kapp->config();
-    config->setGroup(d->name + QString(" Tool Dialog"));
-    if(config->hasKey("SplitterSizes"))
-        d->splitter->setSizes(config->readIntListEntry("SplitterSizes"));
+
+    readSettings();   
 }
 
 void ImageDlgBase::slotTimer()
@@ -242,4 +256,3 @@ void ImageDlgBase::slotTimer()
 
 }  // NameSpace Digikam
 
-#include "imagedlgbase.moc"
