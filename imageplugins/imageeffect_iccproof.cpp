@@ -72,6 +72,7 @@
 #include "curveswidget.h"
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
+#include "coloralertwidget.h"
 #include "dimg.h"
 #include "dimgimagefilters.h"
 #include "iccpreviewwidget.h"
@@ -410,23 +411,19 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                                   10, lightnessadjust );
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
-    m_cInput = new KDoubleNumInput(lightnessadjust);
+    m_cInput = new KIntNumInput(lightnessadjust);
     m_cInput->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
-    m_cInput->setPrecision(2);
-    m_cInput->setRange(-1.0, 1.0, 0.01, true);
-    m_cInput->setValue(0.0);
+    m_cInput->setRange(-100, 100, 1, true);
+    m_cInput->setValue(0);
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
 
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), lightnessadjust);
-    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
-                                                      "from the target image preview will be over-colored. "
-                                                      "This will not have an effect on the final rendering."));
+    m_colorAlertWidget = new Digikam::ColorAlertWidget("bcgadjust Tool Dialog", lightnessadjust),
 
     fourPageLayout->addMultiCellWidget(vGradient, 0, 0, 0, 0);
     fourPageLayout->addMultiCellWidget(m_curvesWidget, 0, 0, 1, 1);
     fourPageLayout->addMultiCellWidget(hGradient, 1, 1, 1, 1);
     fourPageLayout->addMultiCellWidget(m_cInput, 2, 2, 0, 1);
-    fourPageLayout->addMultiCellWidget(m_overExposureIndicatorBox, 3, 3, 0, 1);
+    fourPageLayout->addMultiCellWidget(m_colorAlertWidget, 3, 3, 0, 1);
     fourPageLayout->setRowStretch(4, 10);
 
     // -------------------------------------------------------------
@@ -449,7 +446,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
             this, SLOT(slotTimer()));
 
-    connect(m_cInput, SIGNAL(valueChanged (double)),
+    connect(m_cInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));
 
     connect(m_renderingIntentsCB, SIGNAL(activated(int)),
@@ -466,8 +463,17 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     connect(m_BPCBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));      
 
-    connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));      
+    connect(m_colorAlertWidget, SIGNAL(signalWhiteAlertToggled(bool)),
+            this, SLOT(slotEffect()));
+
+    connect(m_colorAlertWidget, SIGNAL(signalBlackAlertToggled(bool)),
+            this, SLOT(slotEffect()));
+
+    connect(m_colorAlertWidget, SIGNAL(signalWhiteAlertColorChanged(const QColor&)),
+            this, SLOT(slotEffect()));
+
+    connect(m_colorAlertWidget, SIGNAL(signalBlackAlertColorChanged(const QColor&)),
+            this, SLOT(slotEffect()));
 
     //-- Button Group ICC profile options connections ----------------------------
 
@@ -571,8 +577,7 @@ void ImageEffect_ICCProof::readUserSettings()
     m_inProfileBG->setButton(config->readNumEntry("InputProfileMethod", 0));
     m_spaceProfileBG->setButton(config->readNumEntry("SpaceProfileMethod", 0));
     m_proofProfileBG->setButton(config->readNumEntry("ProofProfileMethod", 0));
-    m_cInput->setValue(config->readDoubleNumEntry("ContrastAjustment", 0.0));
-    m_overExposureIndicatorBox->setChecked(config->readBoolEntry("OverExpoIndicator", false));
+    m_cInput->setValue(config->readNumEntry("ContrastAjustment", 0));
 
     for (int i = 0 ; i < 5 ; i++)
         m_curves->curvesChannelReset(i);
@@ -618,7 +623,6 @@ void ImageEffect_ICCProof::writeUserSettings()
     config->writeEntry("SpaceProfileMethod", m_spaceProfileBG->selectedId());
     config->writeEntry("ProofProfileMethod", m_proofProfileBG->selectedId());
     config->writeEntry("ContrastAjustment", m_cInput->value());
-    config->writeEntry("OverExpoIndicator", m_overExposureIndicatorBox->isChecked());
 
     for (int j = 0 ; j < 17 ; j++)
     {
@@ -688,7 +692,7 @@ void ImageEffect_ICCProof::slotScaleChanged( int scale )
 void ImageEffect_ICCProof::resetValues()
 {
     m_cInput->blockSignals(true);
-    m_cInput->setValue(0.0);
+    m_cInput->setValue(0);
 
     for (int i = 0 ; i < 5 ; i++)
        m_curves->curvesChannelReset(i);
@@ -838,15 +842,23 @@ void ImageEffect_ICCProof::slotEffect()
         
         //-- Calculate and apply the curve on image after transformation -------------
         
+        bool    o = m_colorAlertWidget->whiteAlertIsChecked();
+        bool    u = m_colorAlertWidget->blackAlertIsChecked();
+        QColor wh = m_colorAlertWidget->whiteAlertColor();
+        QColor bl = m_colorAlertWidget->blackAlertColor();
+
         Digikam::DImg preview2(w, h, sb, a, 0, false);
-        m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel,
-                                 m_overExposureIndicatorBox->isChecked());
+        m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel, o);
         m_curves->curvesLutProcess(preview.bits(), preview2.bits(), w, h);
     
         //-- Adjust contrast ---------------------------------------------------------
         
         Digikam::BCGModifier cmod;
-        cmod.setContrast(m_cInput->value() + (double)(1.00));
+        cmod.setOverIndicator(o);
+        cmod.setOverIndicatorColor(wh);
+        cmod.setUnderIndicator(u);
+        cmod.setUnderIndicatorColor(bl);
+        cmod.setContrast((double)(m_cInput->value()/100.0) + 1.00);
         cmod.applyBCG(preview2);
 
         iface->putPreviewImage(preview2.bits());
@@ -997,7 +1009,7 @@ void ImageEffect_ICCProof::finalRendering()
             //-- Adjust contrast ---------------------------------------------------------
             
             Digikam::BCGModifier cmod;
-            cmod.setContrast(m_cInput->value() + (double)(1.00));
+            cmod.setContrast((double)(m_cInput->value()/100.0) + 1.00);
             cmod.applyBCG(img2);
     
             iface->putOriginalImage("Color Management", img2.bits());
@@ -1195,7 +1207,7 @@ void ImageEffect_ICCProof::slotUser3()
         m_inProfilesPath->setURL( stream.readLine() );
         m_proofProfilePath->setURL( stream.readLine() );
         m_spaceProfilePath->setURL( stream.readLine() );
-        m_cInput->setValue( stream.readLine().toDouble() );
+        m_cInput->setValue( stream.readLine().toInt() );
 
         for (int i = 0 ; i < 5 ; i++)
             m_curves->curvesChannelReset(i);

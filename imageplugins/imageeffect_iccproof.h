@@ -38,7 +38,7 @@ class QPushButton;
 class QToolBox;
 
 class KURLRequester;
-class KDoubleNumInput;
+class KIntNumInput;
 
 namespace Digikam
 {
@@ -146,7 +146,6 @@ private:
     QCheckBox                      *m_checkGamutBox;
     QCheckBox                      *m_embeddProfileBox;
     QCheckBox                      *m_BPCBox;
-    QCheckBox                      *m_overExposureIndicatorBox;
 
     QRadioButton                   *m_useEmbeddedProfile;
     QRadioButton                   *m_useInDefaultProfile;
@@ -174,7 +173,7 @@ private:
 
     QToolBox                       *m_toolBoxWidgets;
 
-    KDoubleNumInput                *m_cInput;
+    KIntNumInput                   *m_cInput;
 
     KURLRequester                  *m_inProfilesPath;
     KURLRequester                  *m_spaceProfilePath;
@@ -189,6 +188,8 @@ private:
     Digikam::ImageWidget           *m_previewWidget;
 
     Digikam::ColorGradientWidget   *m_hGradient;
+
+    Digikam::ColorAlertWidget      *m_colorAlertWidget;
 
     Digikam::HistogramWidget       *m_histogramWidget;
 
