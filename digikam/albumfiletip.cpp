@@ -511,10 +511,7 @@ void AlbumFileTip::updateText()
 
         if (settings->getToolTipsShowTags())
         {
-            QStringList tagPaths = info->tagPaths();
-
-            for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
-                (*it).remove(0, 1);
+            QStringList tagPaths = info->tagPaths(false);
 
             str = tagPaths.join(", ");
             if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";

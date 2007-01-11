@@ -365,10 +365,11 @@ QString TAlbum::tagPath(bool leadingSlash) const
 
     QString u;
 
-    if (parent() && !parent()->isRoot())
+    if (parent())
     {
         u = ((TAlbum*)parent())->tagPath(leadingSlash);
-        u += "/";
+        if (!parent()->isRoot())
+            u += "/";
     }
 
     u += title();
