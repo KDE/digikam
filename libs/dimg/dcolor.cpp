@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-12-02
- * Description : 16 bits color management class
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-12-02
+ * Description : 8-16 bits color container.
  *
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * RGB<->HLS transformation algorithms are inspired from methods
  * describe at this url :
