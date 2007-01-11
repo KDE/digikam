@@ -28,9 +28,14 @@
 #include <cstdio>
 #include <cmath>
 
+// Qt includes.
+
+#include <qcolor.h>
+
 // Local includes.
 
 #include "dimg.h"
+#include "dcolor.h"
 #include "bcgmodifier.h"
 
 namespace Digikam
@@ -42,17 +47,22 @@ public:
 
     BCGModifierPriv()
     {
-        modified       = false;
-        overIndicator  = false;
-        underIndicator = false;
+        modified            = false;
+        overIndicator       = false;
+        underIndicator      = false;
+        overIndicatorColor  = Qt::black;
+        underIndicatorColor = Qt::white;
     }
 
-    bool overIndicator;
-    bool underIndicator;
-    bool modified;
+    bool   overIndicator;
+    bool   underIndicator;
+    bool   modified;
     
-    int  map16[65536];
-    int  map[256];
+    int    map16[65536];
+    int    map[256];
+
+    QColor overIndicatorColor;
+    QColor underIndicatorColor;
 };
 
 BCGModifier::BCGModifier()
@@ -81,6 +91,16 @@ void BCGModifier::setUnderIndicator(bool underIndicator)
     d->underIndicator = underIndicator;
 }
     
+void BCGModifier::setOverIndicatorColor(const QColor& oc)
+{
+    d->overIndicatorColor = oc;
+}
+
+void BCGModifier::setUnderIndicatorColor(const QColor& uc)
+{
+    d->underIndicatorColor = uc;
+}
+
 void BCGModifier::reset()
 {
     // initialize to linear mapping
@@ -91,26 +111,20 @@ void BCGModifier::reset()
     for (int i=0; i<256; i++)
         d->map[i] = i;
 
-    d->modified       = false;
-    d->overIndicator  = false;
-    d->underIndicator = false;
+    d->modified            = false;
+    d->overIndicator       = false;
+    d->underIndicator      = false;
+    d->overIndicatorColor  = Qt::black;
+    d->underIndicatorColor = Qt::white;
 }
 
 void BCGModifier::applyBCG(DImg& image)
 {
-    /*
-       What is the idea with setting the values when overIndicator is true?
-       When the correct value is beyond the upper limit,
-       we set the value to be negative.
-       When the next function is called (setGamma, setBrightness, setContrast),
-       it has the opportunity to correct the excess, or the value
-       will again be set to its negative.
-       When the correction arrays are applied, all colors with 
-       negative values in the arrays will be to black.
-     */
-
     if (!d->modified || image.isNull())
         return;
+
+    DColor overColor(d->overIndicatorColor, image.sixteenBit());
+    DColor underColor(d->underIndicatorColor, image.sixteenBit());
 
     uint size = image.width()*image.height();
 
@@ -123,16 +137,16 @@ void BCGModifier::applyBCG(DImg& image)
             if (d->overIndicator && (d->map[data[0]] > 255 && 
                 d->map[data[1]] > 255 && d->map[data[2]] > 255))
             {
-                data[0] = 0;
-                data[1] = 0;
-                data[2] = 0;
+                data[0] = (uchar)overColor.blue();
+                data[1] = (uchar)overColor.green();
+                data[2] = (uchar)overColor.red();
             }
             else if (d->underIndicator && (d->map[data[0]] < 0 && 
                 d->map[data[1]] < 0 && d->map[data[2]] < 0))
             {
-                data[0] = 255;
-                data[1] = 255;
-                data[2] = 255;
+                data[0] = (uchar)underColor.blue();
+                data[1] = (uchar)underColor.green();
+                data[2] = (uchar)underColor.red();
             }
             else
             {
@@ -153,16 +167,16 @@ void BCGModifier::applyBCG(DImg& image)
             if (d->overIndicator && (d->map16[data[0]] > 65535 && 
                 d->map16[data[1]] > 65535 && d->map16[data[2]] > 65535))
             {
-                data[0] = 0;
-                data[1] = 0;
-                data[2] = 0;
+                data[0] = (ushort)overColor.blue();
+                data[1] = (ushort)overColor.green();
+                data[2] = (ushort)overColor.red();
             }
             else if (d->underIndicator && (d->map16[data[0]] < 0 && 
                 d->map16[data[1]] < 0 && d->map16[data[2]] < 0))
             {
-                data[0] = 65535;
-                data[1] = 65535;
-                data[2] = 65535;
+                data[0] = (ushort)underColor.blue();
+                data[1] = (ushort)underColor.green();
+                data[2] = (ushort)underColor.red();
             }
             else
             {            

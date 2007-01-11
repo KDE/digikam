@@ -39,6 +39,7 @@ namespace Digikam
 {
 class HistogramWidget;
 class ColorGradientWidget;
+class ColorAlertWidget;
 class ImageWidget;
 class DColor;
 }
@@ -89,13 +90,12 @@ private:
     
     QHButtonGroup                *m_scaleBG;  
 
-    QCheckBox                    *m_overExposureIndicatorBox;
-    QCheckBox                    *m_underExposureIndicatorBox;
-    
     KIntNumInput                 *m_bInput;
     KIntNumInput                 *m_cInput;
     KDoubleNumInput              *m_gInput;
     
+    Digikam::ColorAlertWidget    *m_colorAlertWidget;
+
     Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;

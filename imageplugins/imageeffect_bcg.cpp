@@ -52,6 +52,7 @@
 #include "imagewidget.h"
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
+#include "coloralertwidget.h"
 #include "bcgmodifier.h"
 #include "dimg.h"
 
@@ -167,19 +168,10 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     gridSettings->addMultiCellWidget(label4, 7, 7, 0, 4);
     gridSettings->addMultiCellWidget(m_gInput, 8, 8, 0, 4);
 
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gboxSettings);
-    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
-                                                      "from the target image preview will be colored to black. "
-                                                      "This will not have an effect on the final rendering."));
-    gridSettings->addMultiCellWidget(m_overExposureIndicatorBox, 9, 9, 0, 4);
+    m_colorAlertWidget = new Digikam::ColorAlertWidget("bcgadjust Tool Dialog", gboxSettings),
+    gridSettings->addMultiCellWidget(m_colorAlertWidget, 9, 9, 0, 4);
 
-    m_underExposureIndicatorBox = new QCheckBox(i18n("Under exposure indicator"), gboxSettings);
-    QWhatsThis::add( m_underExposureIndicatorBox, i18n("<p>If you enable this option, under-exposed pixels "
-                                                      "from the target image preview will be colored to white. "
-                                                      "This will not have an effect on the final rendering."));
-    gridSettings->addMultiCellWidget(m_underExposureIndicatorBox, 10, 10, 0, 4);
-
-    gridSettings->setRowStretch(11, 10);    
+    gridSettings->setRowStretch(10, 10);    
     setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------
@@ -193,19 +185,25 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
-    connect(m_bInput, SIGNAL(valueChanged (int)),
+    connect(m_bInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));                        
             
-    connect(m_cInput, SIGNAL(valueChanged (int)),
+    connect(m_cInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));                        
             
-    connect(m_gInput, SIGNAL(valueChanged (double)),
+    connect(m_gInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));                        
 
-    connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
+    connect(m_colorAlertWidget, SIGNAL(signalWhiteAlertToggled(bool)),
             this, SLOT(slotEffect()));
 
-    connect(m_underExposureIndicatorBox, SIGNAL(toggled (bool)),
+    connect(m_colorAlertWidget, SIGNAL(signalBlackAlertToggled(bool)),
+            this, SLOT(slotEffect()));
+
+    connect(m_colorAlertWidget, SIGNAL(signalWhiteAlertColorChanged(const QColor&)),
+            this, SLOT(slotEffect()));
+
+    connect(m_colorAlertWidget, SIGNAL(signalBlackAlertColorChanged(const QColor&)),
             this, SLOT(slotEffect()));
                         
     connect(m_previewWidget, SIGNAL(signalResized()),
@@ -284,11 +282,13 @@ void ImageEffect_BCG::slotEffect()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
-    double b = (double)m_bInput->value()/250.0;
-    double c = (double)(m_cInput->value()/100.0) + 1.00;    
-    double g = m_gInput->value();
-    bool   o = m_overExposureIndicatorBox->isChecked();
-    bool   u = m_underExposureIndicatorBox->isChecked();
+    double  b = (double)m_bInput->value()/250.0;
+    double  c = (double)(m_cInput->value()/100.0) + 1.00;    
+    double  g = m_gInput->value();
+    bool    o = m_colorAlertWidget->whiteAlertIsChecked();
+    bool    u = m_colorAlertWidget->blackAlertIsChecked();
+    QColor wh = m_colorAlertWidget->whiteAlertColor();
+    QColor bl = m_colorAlertWidget->blackAlertColor();
 
     enableButtonOK( b != 0.0 || c != 1.0 || g != 1.0 );
     
@@ -307,7 +307,9 @@ void ImageEffect_BCG::slotEffect()
     Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
     Digikam::BCGModifier cmod;
     cmod.setOverIndicator(o);
+    cmod.setOverIndicatorColor(wh);
     cmod.setUnderIndicator(u);
+    cmod.setUnderIndicatorColor(bl);
     cmod.setGamma(g);
     cmod.setBrightness(b);
     cmod.setContrast(c);
@@ -331,7 +333,7 @@ void ImageEffect_BCG::finalRendering()
 
     double b = (double)m_bInput->value()/250.0;
     double c = (double)(m_cInput->value()/100.0) + 1.00;    
-    double g = m_gInput->value() + 1.00;
+    double g = m_gInput->value();
 
     iface->setOriginalBCG(b, c, g);
     kapp->restoreOverrideCursor();
