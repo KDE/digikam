@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-12-01
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-12-01
  * Description : image curves manipulation methods.
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -94,10 +94,8 @@ private:
 private:
 
     ImageCurvesPriv* d;
-
 };
 
 }  // NameSpace Digikam
-
 
 #endif /* IMAGECURVES_H */
