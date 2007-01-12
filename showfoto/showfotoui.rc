@@ -13,13 +13,13 @@
         <Action name="editorwindow_first" /> 
         <Action name="editorwindow_last" /> 
         <Separator/>
+        <Action name="editorwindow_print" />
+        <Separator/>
         <Action name="editorwindow_save" />
         <Action name="editorwindow_saveas" />
         <Action name="editorwindow_revert" /> 
         <Separator/>
         <Action name="editorwindow_delete" />
-        <Separator/>
-        <Action name="editorwindow_print" />
         <Separator/>
         <Action name="editorwindow_exit" />     
     </Menu>
