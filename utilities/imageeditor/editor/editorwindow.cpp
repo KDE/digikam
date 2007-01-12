@@ -734,6 +734,7 @@ void EditorWindow::applyStandardSettings()
     d->ICCSettings->proofSetting            = config->readPathEntry("ProofProfileFile", QString::null);
     d->ICCSettings->CMInRawLoadingSetting   = config->readBoolEntry("CMInRawLoading", false);
 
+    d->cmViewIndicator->setEnabled(d->ICCSettings->managedViewSetting);
     m_canvas->setICCSettings(d->ICCSettings);
 
     // -- JPEG, PNG, TIFF files format settings ----------------------------------------------
