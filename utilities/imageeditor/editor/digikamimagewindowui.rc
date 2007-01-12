@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="5" name="digikamimagewindow" >
+<gui version="6" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -48,7 +48,9 @@
         <Separator/>        
         <Action name="editorwindow_histogram" />
         <Separator/>
-        <Action name="editorwindow_slideshow" />        
+        <Action name="editorwindow_slideshow" />
+        <Separator/>
+        <Action name="editorwindow_cmview" />        
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>

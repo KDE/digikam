@@ -55,6 +55,8 @@
         <Action name="editorwindow_histogram" /> 
         <Separator/>
         <Action name="editorwindow_slideshow" />
+        <Separator/>
+        <Action name="editorwindow_cmview" />        
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>

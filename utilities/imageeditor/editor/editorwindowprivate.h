@@ -22,6 +22,8 @@
 #ifndef EDITORWINDOWPRIVATE_H
 #define EDITORWINDOWPRIVATE_H
 
+class QLabel;
+
 class KAction;
 class KToggleAction;
 class KSelectAction;
@@ -48,6 +50,7 @@ public:
         donateMoneyAction      = 0;
         accelerators           = 0;
         viewHistogramAction    = 0;
+        viewCMViewAction       = 0;
         filePrintAction        = 0;
         copyAction             = 0;
         resizeAction           = 0;
@@ -63,6 +66,7 @@ public:
         flipAction             = 0;
         rotateAction           = 0;
         ICCSettings            = 0;
+        cmViewIndicator        = 0;
     }
 
     ~EditorWindowPriv()
@@ -72,6 +76,8 @@ public:
     bool                  removeFullScreenButton;
     bool                  fullScreenHideToolBar;
     bool                  slideShowInFullScreen;
+
+    QLabel               *cmViewIndicator; 
 
     KAction              *imagePluginsHelpAction;
     KAction              *donateMoneyAction;
@@ -91,6 +97,7 @@ public:
     KActionMenu          *rotateAction;
 
     KToggleAction        *zoomFitAction;
+    KToggleAction        *viewCMViewAction;
 
     KSelectAction        *viewHistogramAction;
 

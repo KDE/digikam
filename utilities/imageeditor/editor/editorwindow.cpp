@@ -31,6 +31,7 @@ extern "C"
 #include <qlabel.h>
 #include <qdockarea.h>
 #include <qlayout.h>
+#include <qtooltip.h>
 #include <qsplitter.h>
 #include <qdir.h>
 #include <qfileinfo.h>
@@ -334,6 +335,11 @@ void EditorWindow::setupStandardActions()
                                           this, SLOT(slotToggleSlideShow()),
                                           actionCollection(),"editorwindow_slideshow");
 
+    d->viewCMViewAction = new KToggleAction(i18n("Color Managed View"), "tv", 
+                                            Key_F12, this, 
+                                            SLOT(slotToggleColorManagedView()),
+                                            actionCollection(),"editorwindow_cmview");
+
     // -- Standard 'Transform' menu actions ---------------------------------------------
 
     d->resizeAction = new KAction(i18n("&Resize..."), "resize_image", 0,
@@ -452,24 +458,23 @@ void EditorWindow::setupStandardAccelerators()
                     i18n("Zoom out of Image"),
                     Key_Minus, m_canvas, SLOT(slotDecreaseZoom()),
                     false, true);
-
-    d->accelerators->insert("Toggle Color Managed View", i18n("Toggle CM View"),
-                    i18n("Toggle On/Off Monitor Color Correction"),
-                    Key_F12, this, SLOT(slotToggleColorManagedView()),
-                    false, true);
 }
 
 void EditorWindow::setupStatusBar()
 {
     m_nameLabel = new IOFileProgressBar(statusBar());
     m_nameLabel->setAlignment(Qt::AlignCenter);
-    statusBar()->addWidget(m_nameLabel,1);
+    statusBar()->addWidget(m_nameLabel, 100);
     m_zoomLabel = new QLabel(statusBar());
     m_zoomLabel->setAlignment(Qt::AlignCenter);
-    statusBar()->addWidget(m_zoomLabel,1);
+    statusBar()->addWidget(m_zoomLabel, 100);
     m_resLabel  = new QLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
-    statusBar()->addWidget(m_resLabel,1);
+    statusBar()->addWidget(m_resLabel, 100);
+    d->cmViewIndicator = new QLabel(statusBar());
+    d->cmViewIndicator->setPixmap(SmallIcon("tv"));
+    d->cmViewIndicator->setAlignment(Qt::AlignCenter);
+    statusBar()->addWidget(d->cmViewIndicator, 1);
 }
 
 void EditorWindow::printImage(KURL url)
@@ -1540,6 +1545,9 @@ bool EditorWindow::moveFile()
 void EditorWindow::slotToggleColorManagedView()
 {
     bool cmv = !d->ICCSettings->managedViewSetting;
+    d->cmViewIndicator->setEnabled(cmv);
+    QToolTip::add(d->cmViewIndicator, 
+                  cmv ? i18n("Color Managed View is enable") : i18n("Color Managed View is disable"));
     d->ICCSettings->managedViewSetting = cmv;
     m_canvas->setICCSettings(d->ICCSettings);
 
