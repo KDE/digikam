@@ -249,6 +249,7 @@ static int write_all(int fd, const char *buf, size_t len)
 
 void kio_digikamalbums::get( const KURL& url )
 {
+// Code duplication from file:// ioslave
     kdDebug() << k_funcinfo << " : " << url << endl;    
 
     // get the libraryPath
@@ -334,6 +335,7 @@ void kio_digikamalbums::get( const KURL& url )
 
 void kio_digikamalbums::put(const KURL& url, int permissions, bool overwrite, bool /*resume*/)
 {
+// Code duplication from file:// ioslave
     kdDebug() << k_funcinfo << " : " << url.url() << endl;
 
     // get the libraryPath
@@ -487,6 +489,7 @@ void kio_digikamalbums::put(const KURL& url, int permissions, bool overwrite, bo
 
 void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool overwrite )
 {
+// Code duplication from file:// ioslave?
     kdDebug() << k_funcinfo << "Src: " << src.path() << ", Dst: " << dst.path()   << endl;        
 
     // get the album library path
@@ -541,6 +544,7 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool o
     // metadata of the src album to the dst album
     if (src.fileName() == ".digikam_properties")
     {
+        // no duplication in AlbumDB?
         // copy metadata of album to destination album
         m_sqlDB.execSql( QString("UPDATE Albums SET date='%1', caption='%2', "
                                  "collection='%3', icon=%4 ")
@@ -730,6 +734,7 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool o
 
 void kio_digikamalbums::rename( const KURL& src, const KURL& dst, bool overwrite )
 {
+// Code duplication from file:// ioslave?
     kdDebug() << k_funcinfo << "Src: " << src << ", Dst: " << dst   << endl;        
 
     // if the filename is .digikam_properties fake that we renamed it
@@ -900,6 +905,7 @@ void kio_digikamalbums::stat( const KURL& url )
 
 void kio_digikamalbums::listDir( const KURL& url )
 {
+// Code duplication from file:// ioslave?
     kdDebug() << k_funcinfo << " : " << url.path() << endl;            
 
     QString libraryPath = url.user();
@@ -949,6 +955,7 @@ void kio_digikamalbums::listDir( const KURL& url )
 
 void kio_digikamalbums::mkdir( const KURL& url, int permissions )
 {
+// Code duplication from file:// ioslave?
     kdDebug() << k_funcinfo << " : " << url.url() << endl;
 
     QString libraryPath = url.user();
@@ -991,6 +998,7 @@ void kio_digikamalbums::mkdir( const KURL& url, int permissions )
         }
         else
         {
+            // code similar to AlbumDB::addAlbum
             m_sqlDB.execSql( QString("REPLACE INTO Albums (url, date) "
                                      "VALUES('%1','%2')")
                              .arg(escapeString(url.path()),
@@ -1020,7 +1028,8 @@ void kio_digikamalbums::mkdir( const KURL& url, int permissions )
 
 void kio_digikamalbums::chmod( const KURL& url, int permissions )
 {
-    kdDebug() << k_funcinfo << " : " << url.url() << endl;            
+// Code duplication from file:// ioslave?
+    kdDebug() << k_funcinfo << " : " << url.url() << endl;
 
     // get the album library path
     QString libraryPath = url.user();
@@ -1039,6 +1048,7 @@ void kio_digikamalbums::chmod( const KURL& url, int permissions )
 
 void kio_digikamalbums::del( const KURL& url, bool isfile)
 {
+// Code duplication from file:// ioslave?
     kdDebug() << k_funcinfo << " : " << url.url() << endl;            
 
     // get the album library path
@@ -1218,6 +1228,7 @@ void kio_digikamalbums::createDigikamPropsUDSEntry(KIO::UDSEntry& entry)
 
 void kio_digikamalbums::buildAlbumList()
 {
+// simplified from AlbumDB::scanAlbums()
     m_albumList.clear();
     
     QStringList values;
@@ -1247,6 +1258,7 @@ void kio_digikamalbums::buildAlbumList()
 
 AlbumInfo kio_digikamalbums::findAlbum(const QString& url, bool addIfNotExists)
 {
+// similar to AlbumDB::getOrCreateAlbumId
     AlbumInfo album;
     for (QValueList<AlbumInfo>::const_iterator it = m_albumList.begin();
          it != m_albumList.end(); ++it)
@@ -1284,12 +1296,14 @@ AlbumInfo kio_digikamalbums::findAlbum(const QString& url, bool addIfNotExists)
 
 void kio_digikamalbums::delAlbum(int albumID)
 {
+// code duplication from AlbumDB::deleteAlbum
     m_sqlDB.execSql(QString("DELETE FROM Albums WHERE id='%1'")
                     .arg(albumID));    
 }
 
 void kio_digikamalbums::renameAlbum(const QString& oldURL, const QString& newURL)
 {
+// similar to AlbumDB::setAlbumURL, but why more extended?
     // first update the url of the album which was renamed
 
     m_sqlDB.execSql( QString("UPDATE Albums SET url='%1' WHERE url='%2'")
@@ -1315,6 +1329,7 @@ void kio_digikamalbums::renameAlbum(const QString& oldURL, const QString& newURL
 
 bool kio_digikamalbums::findImage(int albumID, const QString& name) const
 {
+// no similar method in AlbumDB?
     QStringList values;
     
     m_sqlDB.execSql( QString("SELECT name FROM Images "
@@ -1326,8 +1341,25 @@ bool kio_digikamalbums::findImage(int albumID, const QString& name) const
     return !(values.isEmpty());
 }
 
+// from albuminfo.h
+class TagInfo
+{
+public:
+
+    typedef QValueList<TagInfo> List;
+
+    int      id;
+    int      pid;
+    QString  name;
+    QString  icon;
+};
+
 void kio_digikamalbums::addImage(int albumID, const QString& filePath)
 {
+// Code duplication: ScanLib::storeItemInDatabase, AlbumDB::addItem,
+//                   AlbumDB::setItemRating, AlbumDB::addItemTag, AlbumDB::addTag
+
+    // from ScanLib::storeItemInDatabase
     QString   comment;
     QDateTime datetime;
     int       rating = 0;
@@ -1356,6 +1388,10 @@ void kio_digikamalbums::addImage(int albumID, const QString& filePath)
         datetime = info.lastModified();
     }
 
+    // Try to get image tags from IPTC keywords tags.
+    QStringList keywordsList = metadata.getImageKeywords();
+
+    // from AlbumDB::addItem
     m_sqlDB.execSql(QString("REPLACE INTO Images "
                             "(dirid, name, datetime, caption) "
                             "VALUES(%1, '%2', '%3', '%4')")
@@ -1366,6 +1402,7 @@ void kio_digikamalbums::addImage(int albumID, const QString& filePath)
 
     Q_LLONG imageID = m_sqlDB.lastInsertedRow();
 
+    // from AlbumDB::setItemRating
     if (imageID != -1 && rating != -1)
     {
         m_sqlDB.execSql(QString("REPLACE INTO ImageProperties "
@@ -1373,12 +1410,189 @@ void kio_digikamalbums::addImage(int albumID, const QString& filePath)
                                 "VALUES(%1, '%2', '%3');")
                         .arg(imageID)
                         .arg("Rating")
-                        .arg(rating) );                        
-    } 
+                        .arg(rating) );
+    }
+
+    // Set existing tags in database or create new tags if not exist.
+
+    if ( imageID != -1 && !keywordsList.isEmpty() )
+    {
+        QStringList keywordsList2Create;
+
+        // Create a list of the tags currently in database
+
+        TagInfo::List tagsList;
+
+        QStringList values;
+        m_sqlDB.execSql( "SELECT id, pid, name FROM Tags;", &values );
+
+        for (QStringList::iterator it = values.begin(); it != values.end();)
+        {
+            TagInfo info;
+
+            info.id   = (*it).toInt();
+            ++it;
+            info.pid  = (*it).toInt();
+            ++it;
+            info.name = *it;
+            ++it;
+            tagsList.append(info);
+        }
+
+        // For every tag in keywordsList, scan taglist to check if tag already exists.
+
+        for (QStringList::iterator kwd = keywordsList.begin();
+            kwd != keywordsList.end(); ++kwd )
+        {
+            // split full tag "url" into list of single tag names 
+            QStringList tagHierarchy = QStringList::split('/', *kwd);
+            if (tagHierarchy.isEmpty())
+                continue;
+
+            // last entry in list is the actual tag name
+            bool foundTag   = false;
+            QString tagName = tagHierarchy.back();
+            tagHierarchy.pop_back();
+
+            for (TagInfo::List::iterator tag = tagsList.begin();
+                tag != tagsList.end(); ++tag )
+            {
+                // There might be multiple tags with the same name, but in different
+                // hierarchies. We must check them all until we find the correct hierarchy
+                if ((*tag).name == tagName)
+                {
+                    int parentID = (*tag).pid;
+
+                    // Check hierarchy, from bottom to top
+                    bool foundParentTag                 = true;
+                    QStringList::iterator parentTagName = tagHierarchy.end();
+
+                    while (foundParentTag && parentTagName != tagHierarchy.begin())
+                    {
+                        --parentTagName;
+
+                        foundParentTag = false;
+
+                        for (TagInfo::List::iterator parentTag = tagsList.begin();
+                            parentTag != tagsList.end(); ++parentTag )
+                        {
+                            // check if name is the same, and if ID is identical
+                            // to the parent ID we got from the child tag
+                            if ( (*parentTag).id == parentID &&
+                                (*parentTag).name == (*parentTagName) )
+                            {
+                                parentID       = (*parentTag).pid;
+                                foundParentTag = true;
+                                break;
+                            }
+                        }
+
+                        // If we traversed the list without a match,
+                        // foundParentTag will be false, the while loop breaks.
+                    }
+
+                    // If we managed to traverse the full hierarchy,
+                    // we have our tag.
+                    if (foundParentTag)
+                    {
+                        // from AlbumDB::addItemTag
+                        m_sqlDB.execSql( QString("REPLACE INTO ImageTags (imageid, tagid) "
+                                                 "VALUES(%1, %2);")
+                                         .arg(imageID)
+                                         .arg((*tag).id) );
+                        foundTag = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!foundTag)
+                keywordsList2Create.append(*kwd);
+        }
+
+        // If tags do not exist in database, create them.
+
+        if (!keywordsList2Create.isEmpty())
+        {
+            for (QStringList::iterator kwd = keywordsList2Create.begin(); 
+                kwd != keywordsList2Create.end(); ++kwd )
+            {
+                // split full tag "url" into list of single tag names 
+                QStringList tagHierarchy = QStringList::split('/', *kwd);
+
+                if (tagHierarchy.isEmpty())
+                    continue;
+
+                int  parentTagID      = 0;
+                int  tagID            = 0;
+                bool parentTagExisted = true;
+
+                // Traverse hierarchy from top to bottom
+                for (QStringList::iterator tagName = tagHierarchy.begin();
+                    tagName != tagHierarchy.end(); ++tagName)
+                {
+                    tagID = 0;
+
+                    // if the parent tag did not exist, we need not check if the child exists
+                    if (parentTagExisted)
+                    {
+                        for (TagInfo::List::iterator tag = tagsList.begin();
+                            tag != tagsList.end(); ++tag )
+                        {
+                            // find the tag with tag name according to tagHierarchy,
+                            // and parent ID identical to the ID of the tag we found in
+                            // the previous run.
+                            if ((*tag).name == (*tagName) && (*tag).pid == parentTagID)
+                            {
+                                tagID = (*tag).id;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (tagID != 0)
+                    {
+                        // tag already found in DB
+                        parentTagID = tagID;
+                        continue;
+                    }
+
+                    // Tag does not yet exist in DB, add it
+                    // from AlbumDB::addTag
+                    m_sqlDB.execSql( QString("INSERT INTO Tags (pid, name, icon) "
+                                             "VALUES( %1, '%2', 0)")
+                                     .arg(parentTagID)
+                                     .arg(escapeString(*tagName)));
+                    if (tagID == -1)
+                    {
+                        // Something is wrong in database. Abort.
+                        break;
+                    }
+
+                    // append to our list of existing tags (for following keywords)
+                    TagInfo info;
+                    info.id   = tagID;
+                    info.pid  = parentTagID;
+                    info.name = (*tagName);
+                    tagsList.append(info);
+
+                    parentTagID      = tagID;
+                    parentTagExisted = false;
+                }
+
+                // from AlbumDB::addItemTag
+                m_sqlDB.execSql( QString("REPLACE INTO ImageTags (imageid, tagid) "
+                                         "VALUES(%1, %2);")
+                                 .arg(imageID)
+                                 .arg(tagID) );
+            }
+        }
+    }
 }
 
 void kio_digikamalbums::delImage(int albumID, const QString& name)
 {
+// code duplication from AlbumDB::deleteItem
     m_sqlDB.execSql( QString("DELETE FROM Images "
                              "WHERE dirid=%1 AND name='%2';")
                      .arg(albumID)
@@ -1388,6 +1602,7 @@ void kio_digikamalbums::delImage(int albumID, const QString& name)
 void kio_digikamalbums::renameImage(int oldAlbumID, const QString& oldName,
                                     int newAlbumID, const QString& newName)
 {
+// code duplication from AlbumDB::deleteItem, AlbumDB::moveItem
     // first delete any stale entries for the destination file
     m_sqlDB.execSql( QString("DELETE FROM Images "
                              "WHERE dirid=%1 AND name='%2';")
@@ -1406,6 +1621,7 @@ void kio_digikamalbums::renameImage(int oldAlbumID, const QString& oldName,
 void kio_digikamalbums::copyImage(int srcAlbumID, const QString& srcName,
                                   int dstAlbumID, const QString& dstName)
 {
+// code duplication from AlbumDB::copyItem
     // check for src == dest
     if (srcAlbumID == dstAlbumID && srcName == dstName)
     {
