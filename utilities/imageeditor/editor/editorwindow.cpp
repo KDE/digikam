@@ -723,21 +723,20 @@ void EditorWindow::applyStandardSettings()
 
     config->setGroup("Color Management");
 
-    d->ICCSettings->enableCMSetting         = config->readBoolEntry("EnableCM", false);
-    d->ICCSettings->askOrApplySetting       = config->readBoolEntry("BehaviourICC", false);
-    d->ICCSettings->BPCSetting              = config->readBoolEntry("BPCAlgorithm",false);
-    d->ICCSettings->managedViewSetting      = config->readBoolEntry("ManagedView", false);
-    d->ICCSettings->renderingSetting        = config->readNumEntry("RenderingIntent");
-    d->ICCSettings->inputSetting            = config->readPathEntry("InProfileFile", QString::null);
-    d->ICCSettings->workspaceSetting        = config->readPathEntry("WorkProfileFile", QString::null);
-    d->ICCSettings->monitorSetting          = config->readPathEntry("MonitorProfileFile", QString::null);
-    d->ICCSettings->proofSetting            = config->readPathEntry("ProofProfileFile", QString::null);
-    d->ICCSettings->CMInRawLoadingSetting   = config->readBoolEntry("CMInRawLoading", false);
+    d->ICCSettings->enableCMSetting       = config->readBoolEntry("EnableCM", false);
+    d->ICCSettings->askOrApplySetting     = config->readBoolEntry("BehaviourICC", false);
+    d->ICCSettings->BPCSetting            = config->readBoolEntry("BPCAlgorithm",false);
+    d->ICCSettings->managedViewSetting    = config->readBoolEntry("ManagedView", false);
+    d->ICCSettings->renderingSetting      = config->readNumEntry("RenderingIntent");
+    d->ICCSettings->inputSetting          = config->readPathEntry("InProfileFile", QString::null);
+    d->ICCSettings->workspaceSetting      = config->readPathEntry("WorkProfileFile", QString::null);
+    d->ICCSettings->monitorSetting        = config->readPathEntry("MonitorProfileFile", QString::null);
+    d->ICCSettings->proofSetting          = config->readPathEntry("ProofProfileFile", QString::null);
+    d->ICCSettings->CMInRawLoadingSetting = config->readBoolEntry("CMInRawLoading", false);
 
-    d->cmViewIndicator->setEnabled(d->ICCSettings->enableCMSetting && d->ICCSettings->managedViewSetting);
-    d->viewCMViewAction->setChecked(d->ICCSettings->managedViewSetting);
     d->viewCMViewAction->setEnabled(d->ICCSettings->enableCMSetting);
-
+    d->viewCMViewAction->setChecked(d->ICCSettings->managedViewSetting);
+    d->cmViewIndicator->setEnabled(d->ICCSettings->managedViewSetting && d->ICCSettings->enableCMSetting);
     m_canvas->setICCSettings(d->ICCSettings);
 
     // -- JPEG, PNG, TIFF files format settings ----------------------------------------------
