@@ -434,6 +434,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
                  or kills digiKam when regenerating the database.
 257 ==> 102032 : Wish: rating system for photos, show/hide/sort by rating.
 258 ==> 111446 : Bad behaviour when out of disk space.
-259 ==> 
+259 ==> 133516 : Tags set in Comments/Tags end up on the wrong picture.
+260 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
