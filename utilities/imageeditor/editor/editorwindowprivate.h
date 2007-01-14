@@ -34,6 +34,7 @@ namespace Digikam
 {
 
 class ICCSettingsContainer;
+class ExposureContainer;
 
 class EditorWindowPriv
 {
@@ -66,44 +67,56 @@ public:
         flipAction             = 0;
         rotateAction           = 0;
         ICCSettings            = 0;
+        exposureSettings       = 0;
+        underExposureIndicator = 0;
+        overExposureIndicator  = 0;
         cmViewIndicator        = 0;
+        viewUnderExpoAction    = 0;
+        viewOverExpoAction     = 0;
     }
 
     ~EditorWindowPriv()
     {
     }
 
-    bool                  removeFullScreenButton;
-    bool                  fullScreenHideToolBar;
-    bool                  slideShowInFullScreen;
+    bool                       removeFullScreenButton;
+    bool                       fullScreenHideToolBar;
+    bool                       slideShowInFullScreen;
 
-    QLabel               *cmViewIndicator; 
+    QLabel                    *cmViewIndicator;
+ 
+    QLabel                    *underExposureIndicator; 
+    QLabel                    *overExposureIndicator; 
 
-    KAction              *imagePluginsHelpAction;
-    KAction              *donateMoneyAction;
-    KAction              *filePrintAction;
-    KAction              *copyAction;
-    KAction              *resizeAction;
-    KAction              *cropAction;
-    KAction              *zoomPlusAction;
-    KAction              *zoomMinusAction;
-    KAction              *rotate90Action;
-    KAction              *rotate180Action;
-    KAction              *rotate270Action;
-    KAction              *flipHorzAction;
-    KAction              *flipVertAction;
+    KAction                   *imagePluginsHelpAction;
+    KAction                   *donateMoneyAction;
+    KAction                   *filePrintAction;
+    KAction                   *copyAction;
+    KAction                   *resizeAction;
+    KAction                   *cropAction;
+    KAction                   *zoomPlusAction;
+    KAction                   *zoomMinusAction;
+    KAction                   *rotate90Action;
+    KAction                   *rotate180Action;
+    KAction                   *rotate270Action;
+    KAction                   *flipHorzAction;
+    KAction                   *flipVertAction;
 
-    KActionMenu          *flipAction;
-    KActionMenu          *rotateAction;
+    KActionMenu               *flipAction;
+    KActionMenu               *rotateAction;
 
-    KToggleAction        *zoomFitAction;
-    KToggleAction        *viewCMViewAction;
+    KToggleAction             *zoomFitAction;
+    KToggleAction             *viewCMViewAction;
+    KToggleAction             *viewUnderExpoAction;
+    KToggleAction             *viewOverExpoAction;
 
-    KSelectAction        *viewHistogramAction;
+    KSelectAction             *viewHistogramAction;
 
-    KAccel               *accelerators;
+    KAccel                    *accelerators;
 
-    ICCSettingsContainer *ICCSettings;
+    ICCSettingsContainer      *ICCSettings;
+
+    ExposureSettingsContainer *exposureSettings;
 };
 
 }  // NameSpace Digikam

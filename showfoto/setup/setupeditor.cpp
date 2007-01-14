@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-04-02
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-04-02
  * Description : setup showfoto tab.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,6 +42,7 @@
 // Local includes.
 
 #include "setupeditor.h"
+#include "setupeditor.moc"
 
 namespace ShowFoto
 {
@@ -60,6 +61,8 @@ public:
         useTrash              = 0;
         exifRotateBox         = 0;
         exifSetOrientationBox = 0;
+        overExposureColor     = 0;
+        underExposureColor    = 0;
     }
 
     QCheckBox    *hideToolBar;
@@ -71,27 +74,26 @@ public:
     QCheckBox    *exifSetOrientationBox;
     
     KColorButton *backgroundColor;
+    KColorButton *underExposureColor;
+    KColorButton *overExposureColor;
 };
 
 SetupEditor::SetupEditor(QWidget* parent )
            : QWidget(parent)
 {
     d = new SetupEditorPriv;
-    QVBoxLayout *layout = new QVBoxLayout( parent );
+    QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
     
     // --------------------------------------------------------
     
     QVGroupBox *interfaceOptionsGroup = new QVGroupBox(i18n("Interface Options"), parent);
     
-    QHBox* colorBox = new QHBox(interfaceOptionsGroup);
-    
+    QHBox* colorBox              = new QHBox(interfaceOptionsGroup);    
     QLabel *backgroundColorlabel = new QLabel( i18n("&Background color:"), colorBox );
-    
-    d->backgroundColor = new KColorButton(colorBox);
+    d->backgroundColor           = new KColorButton(colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
     QWhatsThis::add( d->backgroundColor, i18n("<p>Select the background color to use "
                                               "for the image editor area.") );
-    backgroundColorlabel->setBuddy( d->backgroundColor );
     
     d->hideToolBar        = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
     d->hideThumbBar       = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
@@ -101,8 +103,24 @@ SetupEditor::SetupEditor(QWidget* parent )
     d->useTrash   = new QCheckBox(i18n("&Deleting items should move them to trash"), interfaceOptionsGroup);
     d->showSplash = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
     
-    layout->addWidget(interfaceOptionsGroup);
-        
+    // --------------------------------------------------------
+
+    QVGroupBox *exposureOptionsGroup = new QVGroupBox(i18n("Exposure Indicators"), parent);
+
+    QHBox *underExpoBox         = new QHBox(exposureOptionsGroup);
+    QLabel *underExpoColorlabel = new QLabel( i18n("&Under-exposure color:"), underExpoBox);
+    d->underExposureColor       = new KColorButton(underExpoBox);
+    underExpoColorlabel->setBuddy(d->underExposureColor);
+    QWhatsThis::add( d->underExposureColor, i18n("<p>Customize the color used in image editor to identify "
+                                                 "the under-exposed pixels.") );
+
+    QHBox *overExpoBox         = new QHBox(exposureOptionsGroup);
+    QLabel *overExpoColorlabel = new QLabel( i18n("&Over-exposure color:"), overExpoBox);
+    d->overExposureColor       = new KColorButton(overExpoBox);
+    overExpoColorlabel->setBuddy(d->overExposureColor);
+    QWhatsThis::add( d->overExposureColor, i18n("<p>Customize the color used in image editor to identify "
+                                                "the over-exposed pixels.") );
+
     // --------------------------------------------------------
     
     QVGroupBox *ExifGroupOptions = new QVGroupBox(i18n("EXIF Actions"), parent);
@@ -113,11 +131,13 @@ SetupEditor::SetupEditor(QWidget* parent )
     d->exifSetOrientationBox = new QCheckBox(ExifGroupOptions);
     d->exifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip"));
         
+    layout->addWidget(interfaceOptionsGroup);
+    layout->addWidget(exposureOptionsGroup);
     layout->addWidget(ExifGroupOptions);
+    layout->addStretch();    
     
     // --------------------------------------------------------
     
-    layout->addStretch();    
     readSettings();
 }
 
@@ -126,10 +146,27 @@ SetupEditor::~SetupEditor()
     delete d;
 }
 
+void SetupEditor::readSettings()
+{
+    KConfig* config = kapp->config();
+    QColor Black(Qt::black);
+    QColor White(Qt::white);
+    config->setGroup("ImageViewer Settings");
+    d->backgroundColor->setColor( config->readColorEntry("BackgroundColor", &Black ) );
+    d->hideToolBar->setChecked(config->readBoolEntry("FullScreen Hide ToolBar", false));
+    d->hideThumbBar->setChecked(config->readBoolEntry("FullScreenHideThumbBar", true));
+    d->horizontalThumbBar->setChecked(config->readBoolEntry("HorizontalThumbbar", false));
+    d->useTrash->setChecked(config->readBoolEntry("DeleteItem2Trash", false));
+    d->showSplash->setChecked(config->readBoolEntry("ShowSplash", true));
+    d->exifRotateBox->setChecked(config->readBoolEntry("EXIF Rotate", true));
+    d->exifSetOrientationBox->setChecked(config->readBoolEntry("EXIF Set Orientation", true));
+    d->underExposureColor->setColor(config->readColorEntry("UnderExposureColor", &White));
+    d->overExposureColor->setColor(config->readColorEntry("OverExposureColor", &Black));
+}
+
 void SetupEditor::applySettings()
 {
     KConfig* config = kapp->config();
-
     config->setGroup("ImageViewer Settings");
     config->writeEntry("BackgroundColor", d->backgroundColor->color());
     config->writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
@@ -139,27 +176,10 @@ void SetupEditor::applySettings()
     config->writeEntry("ShowSplash", d->showSplash->isChecked());
     config->writeEntry("EXIF Rotate", d->exifRotateBox->isChecked());
     config->writeEntry("EXIF Set Orientation", d->exifSetOrientationBox->isChecked());
+    config->writeEntry("UnderExposureColor", d->underExposureColor->color());
+    config->writeEntry("OverExposureColor", d->overExposureColor->color());
     config->sync();
-}
-
-void SetupEditor::readSettings()
-{
-    KConfig* config = kapp->config();
-    QColor *Black = new QColor(Qt::black);
-
-    config->setGroup("ImageViewer Settings");
-    d->backgroundColor->setColor( config->readColorEntry("BackgroundColor", Black ) );
-    d->hideToolBar->setChecked(config->readBoolEntry("FullScreen Hide ToolBar", false));
-    d->hideThumbBar->setChecked(config->readBoolEntry("FullScreenHideThumbBar", true));
-    d->horizontalThumbBar->setChecked(config->readBoolEntry("HorizontalThumbbar", false));
-    d->useTrash->setChecked(config->readBoolEntry("DeleteItem2Trash", false));
-    d->showSplash->setChecked(config->readBoolEntry("ShowSplash", true));
-    d->exifRotateBox->setChecked(config->readBoolEntry("EXIF Rotate", true));
-    d->exifSetOrientationBox->setChecked(config->readBoolEntry("EXIF Set Orientation", true));
-    
-    delete Black;
 }
 
 }   // namespace ShowFoto
 
-#include "setupeditor.moc"

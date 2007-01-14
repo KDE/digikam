@@ -5,7 +5,7 @@
  * Description : DImg interface for image editor
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,6 +40,7 @@ namespace Digikam
 {
 
 class ICCSettingsContainer;
+class ExposureSettingsContainer;
 class IOFileSettingsContainer;
 class LoadingDescription;
 class DImgInterfacePrivate;
@@ -57,6 +58,7 @@ public:
     void   load(const QString& filename, IOFileSettingsContainer *iofileSettings, QWidget *parent=0);
 
     void   setICCSettings(ICCSettingsContainer *cmSettings);
+    void   setExposureSettings(ExposureSettingsContainer *expoSettings);
     void   setExifOrient(bool exifOrient);
     void   undo();
     void   redo();

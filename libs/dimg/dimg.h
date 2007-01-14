@@ -1,11 +1,12 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Date   : 2005-06-14
  * Description : digiKam 8/16 bits image management API
  *
  * Copyright 2005 by Renchi Raju, Gilles Caulier
- * Copyright 2006 by Gilles Caulier 
+ * Copyright 2006-2007 by Gilles Caulier, Marcel Wiesweg 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,6 +45,7 @@ class QVariant;
 namespace Digikam
 {
 
+class ExposureSettingsContainer;
 class DImgPrivate;
 class IccTransform;
 class DImgLoaderObserver;
@@ -235,9 +237,6 @@ public:
     DImg       copy(QRect rect);
     DImg       copy(int x, int y, int w, int h);
 
-
-
-
     /** Copy a region of pixels from a source image to this image.
         Parameters:
         sx|sy  Coordinates in the source image of the rectangle to be copied
@@ -292,6 +291,11 @@ public:
 
     QPixmap    convertToPixmap();
     QPixmap    convertToPixmap(IccTransform* monitorICCtrans);
+
+    /** Return a mask image where pure white and pure black pixels are over-colored.
+        This way is used to identify over and under exposed pixels.
+    */
+    QImage     pureColorMask(ExposureSettingsContainer *expoSettings);
 
     /** Convert depth of image. Depth is bytesDepth * bitsDepth.
         If depth is 32, converts to 8 bits,

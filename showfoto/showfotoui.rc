@@ -56,6 +56,8 @@
         <Separator/>
         <Action name="editorwindow_slideshow" />
         <Separator/>
+        <Action name="editorwindow_underexposure" />        
+        <Action name="editorwindow_overexposure" />            
         <Action name="editorwindow_cmview" />        
     </Menu>
 

@@ -70,6 +70,7 @@ extern "C"
 #include <kstatusbar.h>
 #include <kprogress.h>
 #include <kwin.h>
+#include <kled.h>
 
 // Local includes.
 
@@ -83,6 +84,7 @@ extern "C"
 #include "slideshow.h"
 #include "iofileprogressbar.h"
 #include "iccsettingscontainer.h"
+#include "exposurecontainer.h"
 #include "iofilesettingscontainer.h"
 #include "savingcontextcontainer.h"
 #include "loadingcacheinterface.h"
@@ -124,9 +126,10 @@ EditorWindow::EditorWindow(const char *name)
     
     // Settings containers instance.
 
-    d->ICCSettings   = new ICCSettingsContainer();
-    m_IOFileSettings = new IOFileSettingsContainer();
-    m_savingContext  = new SavingContextContainer();
+    d->ICCSettings      = new ICCSettingsContainer();
+    d->exposureSettings = new ExposureSettingsContainer();
+    m_IOFileSettings    = new IOFileSettingsContainer();
+    m_savingContext     = new SavingContextContainer();
 }
 
 EditorWindow::~EditorWindow()
@@ -136,6 +139,7 @@ EditorWindow::~EditorWindow()
     delete m_savingContext;
     delete m_slideShow;
     delete d->ICCSettings;
+    delete d->exposureSettings;
     delete d;
 }
 
@@ -335,6 +339,16 @@ void EditorWindow::setupStandardActions()
                                           this, SLOT(slotToggleSlideShow()),
                                           actionCollection(),"editorwindow_slideshow");
 
+    d->viewUnderExpoAction = new KToggleAction(i18n("Under Exposure Indicator"), "underexposure", 
+                                            Key_F10, this, 
+                                            SLOT(slotToggleUnderExposureIndicator()),
+                                            actionCollection(),"editorwindow_underexposure");
+
+    d->viewOverExpoAction = new KToggleAction(i18n("Over Exposure Indicator"), "overexposure", 
+                                            Key_F11, this, 
+                                            SLOT(slotToggleOverExposureIndicator()),
+                                            actionCollection(),"editorwindow_overexposure");
+
     d->viewCMViewAction = new KToggleAction(i18n("Color Managed View"), "tv", 
                                             Key_F12, this, 
                                             SLOT(slotToggleColorManagedView()),
@@ -465,12 +479,25 @@ void EditorWindow::setupStatusBar()
     m_nameLabel = new IOFileProgressBar(statusBar());
     m_nameLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_nameLabel, 100);
+
     m_zoomLabel = new QLabel(statusBar());
     m_zoomLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_zoomLabel, 100);
+
     m_resLabel  = new QLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_resLabel, 100);
+
+    d->underExposureIndicator = new QLabel(statusBar());
+    d->underExposureIndicator->setPixmap(SmallIcon("underexposure"));
+    d->underExposureIndicator->setAlignment(Qt::AlignCenter);
+    statusBar()->addWidget(d->underExposureIndicator, 1);
+
+    d->overExposureIndicator = new QLabel(statusBar());
+    d->overExposureIndicator->setPixmap(SmallIcon("overexposure"));
+    d->overExposureIndicator->setAlignment(Qt::AlignCenter);
+    statusBar()->addWidget(d->overExposureIndicator, 1);
+
     d->cmViewIndicator = new QLabel(statusBar());
     d->cmViewIndicator->setPixmap(SmallIcon("tv"));
     d->cmViewIndicator->setAlignment(Qt::AlignCenter);
@@ -770,12 +797,13 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.SuperCCDsecondarySensor = config->readBoolEntry("SuperCCDsecondarySensor", false);
     m_IOFileSettings->rawDecodingSettings.enableNoiseReduction    = config->readBoolEntry("EnableNoiseReduction", false);
     m_IOFileSettings->rawDecodingSettings.unclipColors            = config->readNumEntry("UnclipColors", 0);
-    m_IOFileSettings->rawDecodingSettings.RAWQuality              = (RawDecodingSettings::DecodingQuality)config->readNumEntry("RAWQuality", RawDecodingSettings::BILINEAR);
+    m_IOFileSettings->rawDecodingSettings.RAWQuality              = (RawDecodingSettings::DecodingQuality)config->readNumEntry("RAWQuality",
+                                                                    RawDecodingSettings::BILINEAR);
     m_IOFileSettings->rawDecodingSettings.NRSigmaDomain           = config->readDoubleNumEntry("NRSigmaDomain", 2.0);
     m_IOFileSettings->rawDecodingSettings.NRSigmaRange            = config->readDoubleNumEntry("NRSigmaRange", 4.0);
     m_IOFileSettings->rawDecodingSettings.brightness              = config->readDoubleNumEntry("RAWBrightness", 1.0);
 
-    // -- GUI Settings -----------------------------------------------------------------------
+    // -- GUI Settings -------------------------------------------------------
     
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     if(config->hasKey("Splitter Sizes"))
@@ -791,6 +819,21 @@ void EditorWindow::applyStandardSettings()
     m_slideShow->setStartWithCurrent(config->readBoolEntry("SlideShowStartCurrent", false));
     m_slideShow->setLoop(config->readBoolEntry("SlideShowLoop", false));
     m_slideShow->setDelay(config->readNumEntry("SlideShowDelay", 5));
+
+    // -- Exposure Indicators Settings --------------------------------------- 
+
+    QColor black(Qt::black);
+    QColor white(Qt::white);
+    d->exposureSettings->underExposureIndicator = config->readBoolEntry("UnderExposureIndicator", false);
+    d->exposureSettings->overExposureIndicator  = config->readBoolEntry("OverExposureIndicator", false);
+    d->exposureSettings->underExposureColor     = config->readColorEntry("UnderExposureColor", &white);
+    d->exposureSettings->overExposureColor      = config->readColorEntry("OverExposureColor", &black);
+
+    d->viewUnderExpoAction->setChecked(d->exposureSettings->underExposureIndicator);
+    d->viewOverExpoAction->setChecked(d->exposureSettings->underExposureIndicator);
+    d->underExposureIndicator->setEnabled(d->exposureSettings->underExposureIndicator);
+    d->overExposureIndicator->setEnabled(d->exposureSettings->overExposureIndicator);
+    m_canvas->setExposureSettings(d->exposureSettings);
 }
 
 void EditorWindow::saveStandardSettings()
@@ -812,6 +855,9 @@ void EditorWindow::saveStandardSettings()
     config->writeEntry("Histogram Rectangle", rc);
 
     config->writeEntry("FullScreen", m_fullScreenAction->isChecked());
+    config->writeEntry("UnderExposureIndicator", d->exposureSettings->underExposureIndicator);
+    config->writeEntry("OverExposureIndicator", d->exposureSettings->overExposureIndicator);
+
     config->sync();
 }
 
@@ -1550,16 +1596,39 @@ void EditorWindow::slotToggleColorManagedView()
     bool cmv = !d->ICCSettings->managedViewSetting;
     d->cmViewIndicator->setEnabled(cmv);
     QToolTip::add(d->cmViewIndicator, 
-                  cmv ? i18n("Color Managed View is enable") : i18n("Color Managed View is disable"));
+                  cmv ? i18n("Color Managed View is enable") 
+                      : i18n("Color Managed View is disable"));
     d->ICCSettings->managedViewSetting = cmv;
     m_canvas->setICCSettings(d->ICCSettings);
 
     // Save Color Managed View setting in config file. For performance 
-    // reason, no need to flush file, it cached in memory and wil be flushed 
+    // reason, no need to flush file, it cached in memory and will be flushed 
     // to disk at end of session.  
     KConfig* config = kapp->config();
     config->setGroup("Color Management");
     config->writeEntry("ManagedView", cmv);
+}    
+
+void EditorWindow::slotToggleUnderExposureIndicator()
+{
+    bool uei = !d->exposureSettings->underExposureIndicator;
+    d->underExposureIndicator->setEnabled(uei);
+    QToolTip::add(d->underExposureIndicator, 
+                  uei ? i18n("Under Exposure indicator is enable") 
+                      : i18n("Under Exposure indicator is disable"));
+    d->exposureSettings->underExposureIndicator = uei;
+    m_canvas->setExposureSettings(d->exposureSettings);
+}    
+
+void EditorWindow::slotToggleOverExposureIndicator()
+{
+    bool oei = !d->exposureSettings->overExposureIndicator;
+    d->overExposureIndicator->setEnabled(oei);
+    QToolTip::add(d->overExposureIndicator, 
+                  oei ? i18n("Over Exposure indicator is enable") 
+                      : i18n("Over Exposure indicator is disable"));
+    d->exposureSettings->overExposureIndicator = oei;
+    m_canvas->setExposureSettings(d->exposureSettings);
 }    
 
 void EditorWindow::slotDonateMoney()

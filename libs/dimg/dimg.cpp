@@ -1,11 +1,12 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Date   : 2005-06-14
  * Description : digiKam 8/16 bits image management API
- * 
+ *
  * Copyright 2005 by Renchi Raju, Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier, Marcel Wiesweg 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,10 +49,11 @@ extern "C"
 #include "rawloader.h"
 #include "jp2kloader.h"
 #include "qimageloader.h"
+#include "icctransform.h"
+#include "exposurecontainer.h"
+#include "ddebug.h"
 #include "dimgprivate.h"
 #include "dimgloaderobserver.h"
-#include "icctransform.h"
-#include "ddebug.h"
 #include "dimg.h"
 
 typedef uint64_t ullong;
@@ -1246,6 +1248,50 @@ QPixmap DImg::convertToPixmap(IccTransform *monitorICCtrans)
     }
 
     return (img.convertToPixmap());
+}
+
+QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
+{
+    if (isNull() || (!expoSettings->underExposureIndicator && !expoSettings->overExposureIndicator))
+        return QImage();
+
+    QImage img(size(), 32);
+    img.fill(0x00000000);      // Full transparent.
+    img.setAlphaBuffer(true);
+
+    uchar *bits = img.bits();
+    int    max  = sixteenBit() ? 65535 : 255;
+    int    index;
+    DColor pix;
+
+    for (uint x=0 ; x < width() ; x++)
+    {
+        for (uint y=0 ; y<height() ; y++)
+        {
+            pix   = getPixelColor(x, y);
+            index = y*img.bytesPerLine() + x*4;
+    
+            if (expoSettings->underExposureIndicator && 
+                pix.red() == 0 && pix.green() == 0 && pix.blue() == 0)
+            {
+                bits[index    ] = expoSettings->underExposureColor.blue();
+                bits[index + 1] = expoSettings->underExposureColor.green();
+                bits[index + 2] = expoSettings->underExposureColor.red();
+                bits[index + 3] = 0xFF;
+            }
+
+            if (expoSettings->overExposureIndicator && 
+                pix.red() == max && pix.green() == max && pix.blue() == max)
+            {
+                bits[index    ] = expoSettings->overExposureColor.blue();
+                bits[index + 1] = expoSettings->overExposureColor.green();
+                bits[index + 2] = expoSettings->overExposureColor.red();
+                bits[index + 3] = 0xFF;
+            }
+        }
+    }
+
+    return img;
 }
 
 

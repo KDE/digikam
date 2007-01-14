@@ -5,7 +5,7 @@
  * Description : DImg interface for image editor
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,6 +51,7 @@
 #include "undomanager.h"
 #include "undoaction.h"
 #include "iccsettingscontainer.h"
+#include "exposurecontainer.h"
 #include "iofilesettingscontainer.h"
 #include "sharedloadsavethread.h"
 #include "dmetadata.h"
@@ -72,6 +73,7 @@ public:
         parent           = 0;
         undoMan          = 0;
         cmSettings       = 0;
+        expoSettings     = 0;
         iofileSettings   = 0;
         thread           = 0;
         width            = 0;
@@ -121,6 +123,8 @@ public:
     BCGModifier              cmod;
 
     ICCSettingsContainer    *cmSettings;
+
+    ExposureSettingsContainer       *expoSettings;
 
     IOFileSettingsContainer *iofileSettings;
 
@@ -222,6 +226,11 @@ void DImgInterface::setICCSettings(ICCSettingsContainer *cmSettings)
 {
     d->cmSettings = cmSettings;
     d->monitorICCtrans.setProfiles(d->cmSettings->workspaceSetting, d->cmSettings->monitorSetting);
+}
+
+void DImgInterface::setExposureSettings(ExposureSettingsContainer *expoSettings)
+{
+    d->expoSettings = expoSettings;
 }
 
 void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription, const DImg& img)
@@ -734,7 +743,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     DImg img = d->image.smoothScaleSection(sx, sy, sw, sh, dw, dh);
     d->cmod.applyBCG(img);
     img.convertDepth(32);
-
+    
     if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
     {
         QPixmap pix(img.convertToPixmap(&d->monitorICCtrans));
@@ -744,6 +753,15 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     {
         QPixmap pix(img.convertToPixmap());
         bitBlt(p, dx, dy, &pix, 0, 0);
+    }
+
+    // Show the Over/Under exposure pixels indicators 
+
+    if (d->expoSettings->underExposureIndicator || d->expoSettings->overExposureIndicator)
+    {
+        QImage pureColorMask = d->image.copy(sx, sy, sw, sh).pureColorMask(d->expoSettings);
+        QPixmap pixMask(pureColorMask.scale(dw, dh)); 
+        bitBlt(p, dx, dy, &pixMask, 0, 0);
     }
 }
 
@@ -797,6 +815,15 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     {
         QPixmap pix(img.convertToPixmap());
         bitBlt(p, dx, dy, &pix, 0, 0);
+    }
+
+    // Show the Over/Under exposure pixels indicators 
+
+    if (d->expoSettings->underExposureIndicator || d->expoSettings->overExposureIndicator)
+    {
+        QImage pureColorMask = d->image.copy(sx, sy, sw, sh).pureColorMask(d->expoSettings);
+        QPixmap pixMask(pureColorMask.scale(dw, dh)); 
+        bitBlt(p, dx, dy, &pixMask, 0, 0);
     }
 }
 

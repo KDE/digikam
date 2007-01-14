@@ -5,7 +5,7 @@
  * Description : image editor canvas management class
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,6 +45,7 @@ namespace Digikam
 {
 
 class CanvasPrivate;
+class ExposureSettingsContainer;
 class ICCSettingsContainer;
 class IOFileSettingsContainer;
 
@@ -87,6 +88,7 @@ public:
 
     void  setBackgroundColor(const QColor& color);
     void  setICCSettings(ICCSettingsContainer *cmSettings);
+    void  setExposureSettings(ExposureSettingsContainer *expoSettings);
 
     void  setExifOrient(bool exifOrient);
 
