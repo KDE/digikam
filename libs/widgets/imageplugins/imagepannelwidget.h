@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-07-01
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-07-01
  * Description : a widget to draw a control pannel image tool.
  * 
- * Copyright 2005-2006 Gilles Caulier
+ * Copyright 2005-2007 Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -112,7 +112,6 @@ private:
 private:
 
     ImagePannelWidgetPriv* d;
-        
 };
 
 }  // NameSpace Digikam

@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageguidewidget.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-11-16
- * Description : a widget to display an image with a guide
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-11-16
+ * Description : a widget to display an image with guides
  *
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,6 +43,7 @@
 #include "dimg.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
+#include "imageguidewidget.moc"
 
 namespace Digikam
 {
@@ -217,7 +217,7 @@ void ImageGuideWidget::updatePixmap( void )
     if (d->renderingPreviewMode == PreviewOriginalImage ||
         (d->renderingPreviewMode == PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled == false ))
     {
-        p.drawPixmap(d->rect, d->preview.convertToPixmap());
+        p.drawPixmap(d->rect, d->iface->convertToPixmap(d->preview));
 
         text = i18n("Original");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
@@ -251,7 +251,7 @@ void ImageGuideWidget::updatePixmap( void )
         if (d->renderingPreviewMode == PreviewBothImagesVert)
         {
             // Drawing the original image.
-            p.drawPixmap(d->rect, d->preview.convertToPixmap());
+            p.drawPixmap(d->rect, d->iface->convertToPixmap(d->preview));
 
             // Drawing the target image under the original.
             d->iface->paint(d->pixmap,
@@ -270,7 +270,7 @@ void ImageGuideWidget::updatePixmap( void )
                             d->rect.height());
 
             // Drawing the original image under the target.
-            p.drawPixmap(d->rect.x(), d->rect.y(), d->preview.convertToPixmap(),
+            p.drawPixmap(d->rect.x(), d->rect.y(), d->iface->convertToPixmap(d->preview),
                          0, 0, d->rect.width()/2, d->rect.height());
         }
 
@@ -313,7 +313,7 @@ void ImageGuideWidget::updatePixmap( void )
         if (d->renderingPreviewMode == PreviewBothImagesHorz)
         {
             // Drawing the original image.
-            p.drawPixmap(d->rect, d->preview.convertToPixmap());
+            p.drawPixmap(d->rect, d->iface->convertToPixmap(d->preview));
 
             // Drawing the target image under the original.
             d->iface->paint(d->pixmap,
@@ -332,7 +332,7 @@ void ImageGuideWidget::updatePixmap( void )
                             d->rect.height());
 
             // Drawing the original image under the target.
-            p.drawPixmap(d->rect.x(), d->rect.y(), d->preview.convertToPixmap(),
+            p.drawPixmap(d->rect.x(), d->rect.y(), d->iface->convertToPixmap(d->preview),
                          0, 0, d->rect.width(), d->rect.height()/2);
         }
 
@@ -590,4 +590,3 @@ void ImageGuideWidget::leaveEvent( QEvent * )
 
 }  // NameSpace Digikam
 
-#include "imageguidewidget.moc"

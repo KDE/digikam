@@ -1,10 +1,10 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-08-22
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-08-22
  * Description : a widget to display a panel to choose
  *               a rectangular image area.
  *
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,8 +37,9 @@
 
 #include "ddebug.h"
 #include "imageiface.h"
-#include "imagepaniconwidget.h"
 #include "imageregionwidget.h"
+#include "imagepaniconwidget.h"
+#include "imagepaniconwidget.moc"
 
 namespace Digikam
 {
@@ -336,4 +337,3 @@ void ImagePanIconWidget::slotSeparateViewToggled(int t)
 
 }  // NameSpace Digikam
 
-#include "imagepaniconwidget.moc"

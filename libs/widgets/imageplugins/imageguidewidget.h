@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageguidewidget.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-08-20
- * Description : a widget to display an image with a guide
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-08-20
+ * Description : a widget to display an image with guides
  * 
- * Copyright 2004-2006 Gilles Caulier
+ * Copyright 2004-2007 Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -97,20 +96,20 @@ public slots:
     
 signals:
 
-    void spotPositionChangedFromOriginal( const Digikam::DColor &color, const QPoint &position );
-    void spotPositionChangedFromTarget( const Digikam::DColor &color, const QPoint &position );
+    void spotPositionChangedFromOriginal(const Digikam::DColor &color, const QPoint &position);
+    void spotPositionChangedFromTarget(const Digikam::DColor &color, const QPoint &position);
     void signalResized(void);
 
 protected:
     
-    void paintEvent( QPaintEvent *e );
-    void resizeEvent( QResizeEvent * e );
-    void timerEvent(QTimerEvent * e);
-    void mousePressEvent( QMouseEvent * e );
-    void mouseReleaseEvent( QMouseEvent * e );
-    void mouseMoveEvent( QMouseEvent * e );
-    void enterEvent ( QEvent * e );
-    void leaveEvent ( QEvent * e );
+    void paintEvent(QPaintEvent*);
+    void resizeEvent(QResizeEvent*);
+    void timerEvent(QTimerEvent*);
+    void mousePressEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
+    void enterEvent(QEvent*);
+    void leaveEvent(QEvent*);
     
 private:
 
@@ -118,8 +117,7 @@ private:
 
 private:
 
-    ImageGuideWidgetPriv* d;
-    
+    ImageGuideWidgetPriv* d;    
 };
 
 }  // NameSpace Digikam
