@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : adjustcurves.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-12-01
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-12-01
  * Description : image histogram adjust curves. 
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,7 +34,6 @@
 class QComboBox;
 class QPushButton;
 class QHButtonGroup;
-class QCheckBox;
 
 namespace DigikamAdjustCurvesImagesPlugin
 {
@@ -48,6 +46,24 @@ public:
 
     AdjustCurveDialog(QWidget *parent, QString title, QFrame* banner);
     ~AdjustCurveDialog();
+
+protected:
+
+    void finalRendering();
+    
+private slots:
+
+    void slotDefault();
+    void slotUser2();
+    void slotUser3();
+    void slotEffect();
+    void slotResetCurrentChannel();
+    void slotChannelChanged(int channel);
+    void slotScaleChanged(int scale);
+    void slotCurveTypeChanged(int type);
+    void slotSpotColorChanged(const Digikam::DColor &color);
+    void slotColorSelectedFromTarget(const Digikam::DColor &color);
+    void slotPickerColorButtonActived();
 
 private:
     
@@ -93,8 +109,6 @@ private:
     QPushButton                  *m_curveFree;
     QPushButton                  *m_curveSmooth;
     
-    QCheckBox                    *m_overExposureIndicatorBox;
-
     QHButtonGroup                *m_pickerColorButtonGroup;
     QHButtonGroup                *m_scaleBG;  
     QHButtonGroup                *m_curveType;
@@ -110,25 +124,6 @@ private:
 
     Digikam::ImageCurves         *m_curves;
     Digikam::DImg                 m_originalImage;
-
-protected:
-
-    void finalRendering();
-    
-private slots:
-
-    void slotDefault();
-    void slotUser2();
-    void slotUser3();
-    void slotEffect();
-    void slotResetCurrentChannel();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
-    void slotCurveTypeChanged(int type);
-    void slotSpotColorChanged(const Digikam::DColor &color);
-    void slotColorSelectedFromTarget(const Digikam::DColor &color);
-    void slotPickerColorButtonActived();
-
 };
 
 }  // NameSpace DigikamAdjustCurvesImagesPlugin

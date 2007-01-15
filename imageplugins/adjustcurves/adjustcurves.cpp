@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : adjustcurves.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-12-01
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-12-01
  * Description : image histogram adjust curves.
  *
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +41,6 @@
 #include <qtimer.h>
 #include <qhbuttongroup.h> 
 #include <qpixmap.h>
-#include <qcheckbox.h>
 
 // KDE includes.
 
@@ -64,6 +62,7 @@
 
 #include "version.h"
 #include "adjustcurves.h"
+#include "adjustcurves.moc"
 
 namespace DigikamAdjustCurvesImagesPlugin
 {
@@ -92,7 +91,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
                                        digikamimageplugins_version,
                                        I18N_NOOP("An image-histogram-curves adjustment plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2006, Gilles Caulier",
+                                       "(c) 2004-2007, Gilles Caulier",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -112,7 +111,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gboxSettings, 6, 5, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( gboxSettings, 5, 5, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -272,15 +271,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
     
     // -------------------------------------------------------------
             
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gboxSettings);
-    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
-                                                      "from the target image preview will be over-colored. "
-                                                      "This will not have an effect on the final rendering."));
-    grid->addMultiCellWidget(m_overExposureIndicatorBox, 5, 5, 1, 5);
 
-    // -------------------------------------------------------------
-
-    grid->setRowStretch(6, 10);
+    grid->setRowStretch(5, 10);
     setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
@@ -299,9 +291,6 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
             
-    connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));              
-
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));                                                            
             
@@ -431,7 +420,7 @@ void AdjustCurveDialog::slotEffect()
     m_destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
 
     // Calculate the LUT to apply on the image.
-    m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel, m_overExposureIndicatorBox->isChecked());
+    m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
 
     // Apply the lut to the image.
     m_curves->curvesLutProcess(orgData, m_destinationPreviewData, w, h);
@@ -602,4 +591,3 @@ void AdjustCurveDialog::slotUser2()
 
 }  // NameSpace DigikamAdjustCurvesImagesPlugin
 
-#include "adjustcurves.moc"
