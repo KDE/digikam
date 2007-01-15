@@ -173,7 +173,8 @@ public:
         if putPreviewImage has not been called) on the given paint device.
         at x|y, with given maximum width and height.
     */
-    void paint(QPaintDevice* device, int x, int y, int w, int h);
+    void paint(QPaintDevice* device, int x, int y, int w, int h,
+               bool underExposure=false, bool overExposure=false);
 
 private:
 

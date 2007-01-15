@@ -47,6 +47,14 @@ Q_OBJECT
 
 public:
 
+    enum ExposureIndicator 
+    {
+        UnderExposure=0,
+        OverExposure
+    };
+
+public:
+
     ImageWidget(const QString& settingsSection, QWidget *parent=0, 
                 const QString& previewWhatsThis=QString::null, bool prevModeOptions=true, 
                 int guideMode=ImageGuideWidget::PickColorMode, bool guideVisible=true);

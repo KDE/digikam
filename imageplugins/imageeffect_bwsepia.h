@@ -5,7 +5,7 @@
  * Description : Black and White conversion tool.
  * 
  * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,7 +34,6 @@
 class QHButtonGroup;
 class QComboBox;
 class QButtonGroup;
-class QCheckBox;
 
 class KDoubleNumInput;
 class KTabWidget;
@@ -115,8 +114,6 @@ private:
     QListBox                     *m_bwFilters;
     QListBox                     *m_bwTone;
 
-    QCheckBox                    *m_overExposureIndicatorBox;
-    
     KDoubleNumInput              *m_cInput;
     
     KTabWidget                   *m_tab;

@@ -53,7 +53,6 @@
 #include "imagewidget.h"
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
-#include "coloralertwidget.h"
 #include "bcgmodifier.h"
 #include "dimg.h"
 
@@ -66,7 +65,8 @@ namespace DigikamImagesPluginCore
 {
 
 ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
-               : Digikam::ImageDlgBase(parent, i18n("Brightness Contrast Gamma Adjustments"), "bcgadjust", false)
+               : Digikam::ImageDlgBase(parent, i18n("Brightness Contrast Gamma Adjustments"), 
+                                       "bcgadjust", false)
 {
     m_destinationPreviewData = 0L;
     setHelp("bcgadjusttool.anchor", "digikam");
@@ -81,7 +81,7 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     // -------------------------------------------------------------
                 
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 10, 4, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 9, 4, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -169,10 +169,7 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     gridSettings->addMultiCellWidget(label4, 7, 7, 0, 4);
     gridSettings->addMultiCellWidget(m_gInput, 8, 8, 0, 4);
 
-    m_colorAlertWidget = new Digikam::ColorAlertWidget("bcgadjust Tool Dialog", gboxSettings),
-    gridSettings->addMultiCellWidget(m_colorAlertWidget, 9, 9, 0, 4);
-
-    gridSettings->setRowStretch(10, 10);    
+    gridSettings->setRowStretch(9, 10);    
     setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------
@@ -195,18 +192,6 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     connect(m_gInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));                        
 
-    connect(m_colorAlertWidget, SIGNAL(signalWhiteAlertToggled(bool)),
-            this, SLOT(slotEffect()));
-
-    connect(m_colorAlertWidget, SIGNAL(signalBlackAlertToggled(bool)),
-            this, SLOT(slotEffect()));
-
-    connect(m_colorAlertWidget, SIGNAL(signalWhiteAlertColorChanged(const QColor&)),
-            this, SLOT(slotEffect()));
-
-    connect(m_colorAlertWidget, SIGNAL(signalBlackAlertColorChanged(const QColor&)),
-            this, SLOT(slotEffect()));
-                        
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));    
             
@@ -304,10 +289,6 @@ void ImageEffect_BCG::slotEffect()
     double  b = (double)m_bInput->value()/250.0;
     double  c = (double)(m_cInput->value()/100.0) + 1.00;    
     double  g = m_gInput->value();
-    bool    o = m_colorAlertWidget->whiteAlertIsChecked();
-    bool    u = m_colorAlertWidget->blackAlertIsChecked();
-    QColor wh = m_colorAlertWidget->whiteAlertColor();
-    QColor bl = m_colorAlertWidget->blackAlertColor();
 
     enableButtonOK( b != 0.0 || c != 1.0 || g != 1.0 );
     
@@ -325,10 +306,6 @@ void ImageEffect_BCG::slotEffect()
 
     Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
     Digikam::BCGModifier cmod;
-    cmod.setOverIndicator(o);
-    cmod.setOverIndicatorColor(wh);
-    cmod.setUnderIndicator(u);
-    cmod.setUnderIndicatorColor(bl);
     cmod.setGamma(g);
     cmod.setBrightness(b);
     cmod.setContrast(c);

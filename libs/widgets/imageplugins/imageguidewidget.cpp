@@ -61,12 +61,16 @@ public:
         focus                     = false;
         onMouseMovePreviewToggled = false;
         renderingPreviewMode      = ImageGuideWidget::NoPreviewMode;
+        underExposureIndicator    = false;
+        overExposureIndicator     = false;
     }
 
     bool        sixteenBit;
     bool        focus;
     bool        spotVisible;
     bool        onMouseMovePreviewToggled;
+    bool        underExposureIndicator;
+    bool        overExposureIndicator;
     
     int         width;
     int         height;
@@ -138,6 +142,18 @@ ImageIface* ImageGuideWidget::imageIface()
 {
     return d->iface;
 }
+
+void ImageGuideWidget::slotToggleUnderExposure(bool u)
+{
+    d->underExposureIndicator = u;
+    updatePreview();
+}
+    
+void ImageGuideWidget::slotToggleOverExposure(bool o)
+{
+    d->overExposureIndicator = o;
+    updatePreview();
+}    
 
 void ImageGuideWidget::resetSpotPosition(void)
 {
@@ -231,7 +247,8 @@ void ImageGuideWidget::updatePixmap( void )
             (d->renderingPreviewMode == PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled == true ))
     {
         d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(),
-                        d->rect.width(), d->rect.height());
+                        d->rect.width(), d->rect.height(), 
+                        d->underExposureIndicator, d->overExposureIndicator);
 
         if (d->renderingPreviewMode == PreviewTargetImage ||
             d->renderingPreviewMode == PreviewToggleOnMouseOver)
@@ -258,7 +275,9 @@ void ImageGuideWidget::updatePixmap( void )
                             d->rect.x()+d->rect.width()/2,
                             d->rect.y(),
                             d->rect.width()/2,
-                            d->rect.height());
+                            d->rect.height(), 
+                            d->underExposureIndicator, 
+                            d->overExposureIndicator);
         }
         else
         {
@@ -267,7 +286,9 @@ void ImageGuideWidget::updatePixmap( void )
                             d->rect.x(),
                             d->rect.y(),
                             d->rect.width(),
-                            d->rect.height());
+                            d->rect.height(), 
+                            d->underExposureIndicator, 
+                            d->overExposureIndicator);
 
             // Drawing the original image under the target.
             p.drawPixmap(d->rect.x(), d->rect.y(), d->iface->convertToPixmap(d->preview),
@@ -320,7 +341,9 @@ void ImageGuideWidget::updatePixmap( void )
                             d->rect.x(),
                             d->rect.y()+d->rect.height()/2,
                             d->rect.width(),
-                            d->rect.height()/2);
+                            d->rect.height()/2, 
+                            d->underExposureIndicator, 
+                            d->overExposureIndicator);
         }
         else
         {
@@ -329,7 +352,9 @@ void ImageGuideWidget::updatePixmap( void )
                             d->rect.x(),
                             d->rect.y(),
                             d->rect.width(),
-                            d->rect.height());
+                            d->rect.height(), 
+                            d->underExposureIndicator, 
+                            d->overExposureIndicator);
 
             // Drawing the original image under the target.
             p.drawPixmap(d->rect.x(), d->rect.y(), d->iface->convertToPixmap(d->preview),

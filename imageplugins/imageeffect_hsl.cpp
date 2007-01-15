@@ -31,7 +31,6 @@
 #include <qframe.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
@@ -80,7 +79,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     // -------------------------------------------------------------
     
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 12, 4, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 11, 4, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -181,13 +180,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     gridSettings->addMultiCellWidget(label4, 9, 9, 0, 4);
     gridSettings->addMultiCellWidget(m_lInput, 10, 10, 0, 4);
 
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gboxSettings);
-    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
-                    "from the target image preview will be over-colored. "
-                    "This will not have an effect on the final rendering."));
-    gridSettings->addMultiCellWidget(m_overExposureIndicatorBox, 11, 11, 0, 4);
-
-    gridSettings->setRowStretch(12, 10);
+    gridSettings->setRowStretch(11, 10);
     setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
@@ -219,9 +212,6 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     connect(m_lInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
     
-    connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));
-
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));              
             
@@ -341,7 +331,6 @@ void ImageEffect_HSL::slotEffect()
     double hu  = m_hInput->value();
     double sa  = m_sInput->value();    
     double lu  = m_lInput->value();
-    bool   o = m_overExposureIndicatorBox->isChecked();
     
     enableButtonOK( hu != 0.0 || sa != 0.0 || lu != 0.0);
     
@@ -360,7 +349,6 @@ void ImageEffect_HSL::slotEffect()
 
     Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
     Digikam::HSLModifier cmod;
-    cmod.setOverIndicator(o);
     cmod.setHue(hu);
     cmod.setSaturation(sa);
     cmod.setLightness(lu);

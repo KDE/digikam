@@ -5,7 +5,7 @@
  * Description : Black and White conversion tool.
  * 
  * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,7 +34,6 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
-#include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
@@ -56,8 +55,8 @@
 #include "imagehistogram.h"
 #include "dimgimagefilters.h"
 #include "imagewidget.h"
-#include "histogramwidget.h"
 #include "imagecurves.h"
+#include "histogramwidget.h"
 #include "curveswidget.h"
 #include "colorgradientwidget.h"
 #include "dimg.h"
@@ -67,6 +66,7 @@
 // Local includes.
 
 #include "imageeffect_bwsepia.h"
+#include "imageeffect_bwsepia.moc"
 
 namespace DigikamImagesPluginCore
 {
@@ -152,7 +152,6 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                      m_scaleBG(0),
                      m_bwFilters(0),
                      m_bwTone(0),
-                     m_overExposureIndicatorBox(0),
                      m_cInput(0),
                      m_tab(0),
                      m_previewWidget(0),
@@ -342,8 +341,8 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    QWidget* tab2 = new QWidget( m_tab );
-    QGridLayout* gridTab2 = new QGridLayout( tab2, 4, 1, marginHint(), spacingHint());
+    QWidget* tab2         = new QWidget( m_tab );
+    QGridLayout* gridTab2 = new QGridLayout(tab2, 3, 1, marginHint(), spacingHint());
 
     Digikam::ColorGradientWidget* vGradient = new Digikam::ColorGradientWidget(
                                                   Digikam::ColorGradientWidget::Vertical,
@@ -363,7 +362,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     gridTab2->addMultiCellWidget(hGradient, 1, 1, 1, 1);
     
-    m_cInput       = new KDoubleNumInput(tab2);
+    m_cInput = new KDoubleNumInput(tab2);
     m_cInput->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
     m_cInput->setPrecision(2);
     m_cInput->setRange(-1.0, 1.0, 0.01, true);
@@ -371,13 +370,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
     gridTab2->addMultiCellWidget(m_cInput, 2, 2, 0, 1);
 
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), tab2);
-    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
-                                                      "from the target image preview will be over-colored. "
-                                                      "This will not have an effect on the final rendering."));
-    gridTab2->addMultiCellWidget(m_overExposureIndicatorBox, 3, 3, 0, 1);
-
-    gridTab2->setRowStretch(4, 10);
+    gridTab2->setRowStretch(3, 10);
     
     m_tab->insertTab(tab2, i18n("Lightness"), LuminosityTab);
 
@@ -425,9 +418,6 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     connect(m_cInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
                      
-    connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));                       
-    
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
 }
@@ -461,9 +451,10 @@ QPixmap ImageEffect_BWSepia::getThumbnailForEffect(int type)
 
     blackAndWhiteConversion(thumb.bits(), w, h, sb, type);
 
-    if (m_curves && m_overExposureIndicatorBox) { // in case we're called before the ctor is done
+    if (m_curves)   // in case we're called before the creator is done 
+    {
         uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
-        m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel, m_overExposureIndicatorBox->isChecked());
+        m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
         m_curves->curvesLutProcess(thumb.bits(), targetData, w, h);
 
         Digikam::DImg preview(w, h, sb, a, targetData);
@@ -586,7 +577,7 @@ void ImageEffect_BWSepia::slotEffect()
     // Calculate and apply the curve on image.
     
     uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
-    m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel, m_overExposureIndicatorBox->isChecked());
+    m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
     m_curves->curvesLutProcess(m_destinationPreviewData, targetData, w, h);
 
     // Adjust contrast.
@@ -611,7 +602,8 @@ void ImageEffect_BWSepia::slotEffect()
 void ImageEffect_BWSepia::slotTimer()
 {
     Digikam::ImageDlgBase::slotTimer();
-    if (m_previewPixmapFactory && m_bwFilters && m_bwTone) {
+    if (m_previewPixmapFactory && m_bwFilters && m_bwTone) 
+    {
         m_previewPixmapFactory->invalidate();
         m_bwFilters->triggerUpdate(false);
         m_bwTone->triggerUpdate(false);
@@ -747,5 +739,4 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
 
 }  // NameSpace DigikamImagesPluginCore
 
-#include "imageeffect_bwsepia.moc"
 

@@ -1189,5 +1189,15 @@ QPixmap DImgInterface::convertToPixmap(DImg& img)
     return img.convertToPixmap();
 }
 
+QColor DImgInterface::underExposureColor()
+{
+    return d->expoSettings->underExposureColor;
+}
+
+QColor DImgInterface::overExposureColor()
+{
+    return d->expoSettings->overExposureColor;
+}
+
 }  // namespace Digikam
 

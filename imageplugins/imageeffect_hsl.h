@@ -26,7 +26,6 @@
 
 #include "imagedlgbase.h"
 
-class QCheckBox;
 class QComboBox;
 class QHButtonGroup;
 
@@ -91,8 +90,6 @@ private:
     
     QHButtonGroup                *m_scaleBG;  
     
-    QCheckBox                    *m_overExposureIndicatorBox;
-
     KDoubleNumInput              *m_hInput;
     KDoubleNumInput              *m_sInput;
     KDoubleNumInput              *m_lInput;

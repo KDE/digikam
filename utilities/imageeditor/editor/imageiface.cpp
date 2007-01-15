@@ -31,6 +31,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "exposurecontainer.h"
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
 #include "dimginterface.h"
@@ -314,7 +315,7 @@ void ImageIface::convertOriginalColorDepth(int depth)
 
 QPixmap ImageIface::convertToPixmap(DImg& img)
 {
-    return (DImgInterface::instance()->convertToPixmap(img));
+    return DImgInterface::instance()->convertToPixmap(img);
 }
 
 QByteArray ImageIface::getEmbeddedICCFromOriginalImage()
@@ -340,7 +341,8 @@ PhotoInfoContainer ImageIface::getPhotographInformations() const
     return meta.getPhotographInformations();
 }
 
-void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h)
+void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
+                       bool underExposure, bool overExposure)
 {
     if ( !d->targetPreviewImage.isNull() )
     {
@@ -373,7 +375,22 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h)
             pixImage = d->targetPreviewImage.convertToPixmap();
         }
         
-        bitBlt ( &d->qpix, 0, 0, &pixImage, 0, 0, w, h, Qt::CopyROP, false );
+        bitBlt(&d->qpix, 0, 0, &pixImage, 0, 0, w, h, Qt::CopyROP, false);
+
+        // Show the Over/Under exposure pixels indicators 
+    
+        if (underExposure || overExposure)
+        {
+            ExposureSettingsContainer expoSettings;
+            expoSettings.underExposureIndicator = underExposure;
+            expoSettings.overExposureIndicator  = overExposure;
+            expoSettings.underExposureColor     = DImgInterface::instance()->underExposureColor();
+            expoSettings.overExposureColor      = DImgInterface::instance()->overExposureColor();
+
+            QImage pureColorMask = d->targetPreviewImage.pureColorMask(&expoSettings);
+            QPixmap pixMask(pureColorMask); 
+            bitBlt(&d->qpix, 0, 0, &pixMask, 0, 0, w, h, Qt::CopyROP, false);
+        }
     }
 
     bitBlt(device, x, y, &d->qpix, 0, 0, -1, -1, Qt::CopyROP, false);

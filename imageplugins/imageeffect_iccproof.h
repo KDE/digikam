@@ -189,8 +189,6 @@ private:
 
     Digikam::ColorGradientWidget   *m_hGradient;
 
-    Digikam::ColorAlertWidget      *m_colorAlertWidget;
-
     Digikam::HistogramWidget       *m_histogramWidget;
 
     Digikam::ICCPreviewWidget      *m_iccInPreviewWidget;

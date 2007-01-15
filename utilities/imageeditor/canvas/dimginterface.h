@@ -151,6 +151,9 @@ public:
     QString               getImageFileName();
     QString               getImageFormat();
 
+    QColor                underExposureColor();
+    QColor                overExposureColor();
+
 protected slots:
 
     void   slotImageLoaded(const LoadingDescription &loadingDescription, const DImg& img);

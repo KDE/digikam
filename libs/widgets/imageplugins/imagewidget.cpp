@@ -33,6 +33,7 @@
 #include <kdialog.h>
 #include <kapplication.h>
 #include <klocale.h>
+#include <kiconloader.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
 
@@ -51,14 +52,19 @@ public:
 
     ImageWidgetPriv()
     {
-        spotInfoLabel  = 0;
-        previewButtons = 0;
-        previewWidget  = 0;
+        spotInfoLabel       = 0;
+        previewButtons      = 0;
+        underExposureButton = 0;
+        overExposureButton  = 0;
+        previewWidget       = 0;
     }
 
     QString             settingsSection;
 
     QHButtonGroup      *previewButtons;
+
+    QPushButton        *underExposureButton;
+    QPushButton        *overExposureButton;
 
     KSqueezedTextLabel *spotInfoLabel;
 
@@ -75,7 +81,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
 
     // -------------------------------------------------------------
     
-    QGridLayout* grid = new QGridLayout(this, 1, 3);
+    QGridLayout* grid = new QGridLayout(this, 2, 3);
 
     d->spotInfoLabel = new KSqueezedTextLabel(this);
     d->spotInfoLabel->setAlignment(Qt::AlignRight);
@@ -84,7 +90,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     
     d->previewButtons = new QHButtonGroup(this);
     d->previewButtons->setExclusive(true);
-    d->previewButtons->setInsideMargin( 0 );
+    d->previewButtons->setInsideMargin(0);
     d->previewButtons->setFrameShape(QFrame::NoFrame);
 
     QPushButton *previewOriginalButton = new QPushButton( d->previewButtons );
@@ -163,6 +169,28 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
 
     // -------------------------------------------------------------
     
+    QHButtonGroup *exposureButtons = new QHButtonGroup(this);
+    exposureButtons->setInsideMargin(0);
+    exposureButtons->setFrameShape(QFrame::NoFrame);
+
+    d->underExposureButton = new QPushButton(exposureButtons);
+    exposureButtons->insert(d->underExposureButton, UnderExposure);
+    d->underExposureButton->setPixmap(SmallIcon("underexposure"));
+    d->underExposureButton->setToggleButton(true);
+    QWhatsThis::add(d->underExposureButton, i18n("<p>Set on this option to display pure black "
+                                                 "over-colored on preview. This will help you to avoid "
+                                                 "under-exposing the image." ) );
+
+    d->overExposureButton = new QPushButton(exposureButtons);
+    exposureButtons->insert(d->overExposureButton, OverExposure);
+    d->overExposureButton->setPixmap(SmallIcon("overexposure"));
+    d->overExposureButton->setToggleButton(true);
+    QWhatsThis::add(d->overExposureButton, i18n("<p>Set on this option to display pure white "
+                                                "over-colored on preview. This will help you to avoid "
+                                                "over-exposing the image." ) );
+
+    // -------------------------------------------------------------
+    
     QFrame *frame    = new QFrame(this);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l   = new QVBoxLayout(frame, 5, 0);
@@ -173,11 +201,13 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
 
     // -------------------------------------------------------------
     
-    grid->setRowSpacing(0, KDialog::spacingHint());
     grid->addMultiCellWidget(d->previewButtons, 1, 1, 0, 0);
     grid->addMultiCellWidget(d->spotInfoLabel, 1, 1, 1, 1);
+    grid->addMultiCellWidget(exposureButtons, 1, 1, 2, 2);
+    grid->addMultiCellWidget(frame, 3, 3, 0, 2);
+    grid->setColSpacing(1, KDialog::spacingHint());
+    grid->setRowSpacing(0, KDialog::spacingHint());
     grid->setRowSpacing(2, KDialog::spacingHint());
-    grid->addMultiCellWidget(frame, 3, 3, 0, 1);
     grid->setRowStretch(3, 10);
     grid->setColStretch(1, 10);
 
@@ -201,6 +231,12 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     connect(d->previewButtons, SIGNAL(released(int)),
             d->previewWidget, SLOT(slotChangeRenderingPreviewMode(int)));
 
+    connect(d->underExposureButton, SIGNAL(toggled(bool)),
+            d->previewWidget, SLOT(slotToggleUnderExposure(bool)));
+
+    connect(d->overExposureButton, SIGNAL(toggled(bool)),
+            d->previewWidget, SLOT(slotToggleOverExposure(bool)));
+
     // -------------------------------------------------------------
     
     if (prevModeOptions)
@@ -210,6 +246,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
         setRenderingPreviewMode(ImageGuideWidget::NoPreviewMode);
         d->spotInfoLabel->hide();
         d->previewButtons->hide();    
+        exposureButtons->hide();
     }     
 }
 
@@ -283,6 +320,10 @@ void ImageWidget::readSettings(void)
 {
     KConfig *config = kapp->config();
     config->setGroup(d->settingsSection);
+
+    d->underExposureButton->setOn(config->readBoolEntry("Under Exposure Indicator", false));
+    d->overExposureButton->setOn(config->readBoolEntry("Over Exposure Indicator", false));
+
     int mode = config->readNumEntry("Separate View", ImageGuideWidget::PreviewBothImagesVertCont);
     mode = QMAX(ImageGuideWidget::PreviewOriginalImage, mode);
     mode = QMIN(ImageGuideWidget::NoPreviewMode, mode);
@@ -293,7 +334,9 @@ void ImageWidget::writeSettings(void)
 {
     KConfig *config = kapp->config();
     config->setGroup(d->settingsSection);
-    config->writeEntry( "Separate View", getRenderingPreviewMode() );
+    config->writeEntry("Separate View", getRenderingPreviewMode());
+    config->writeEntry("Under Exposure Indicator", d->underExposureButton->isOn());
+    config->writeEntry("Over Exposure Indicator", d->overExposureButton->isOn());
     config->sync();
 }
 
