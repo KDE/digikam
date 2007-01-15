@@ -25,15 +25,14 @@
 
 // Qt includes.
 
-#include <qimage.h>
 #include <qobject.h>
+#include <qstring.h>
 
 // Locale includes.
 
 #include "dimg.h"
 
 class QWidget;
-class QString;
 class QPixmap;
 
 namespace Digikam
@@ -60,6 +59,7 @@ public:
     void   setICCSettings(ICCSettingsContainer *cmSettings);
     void   setExposureSettings(ExposureSettingsContainer *expoSettings);
     void   setExifOrient(bool exifOrient);
+
     void   undo();
     void   redo();
     void   restore();
@@ -137,6 +137,10 @@ public:
     void   putImageSelection(const QString &caller, uchar* data);
 
     void   setEmbeddedICCToOriginalImage( QString profilePath);
+
+    /** Convert a DImg image to a pixmap for screen using color 
+        managemed view if necessary */
+    QPixmap               convertToPixmap(DImg& img);
 
     QByteArray            getEmbeddedICC();
     QByteArray            getExif();

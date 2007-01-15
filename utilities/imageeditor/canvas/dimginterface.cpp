@@ -30,7 +30,7 @@
 // Qt includes.
 
 #include <qwidget.h>
-#include <qstring.h>
+#include <qimage.h>
 #include <qpixmap.h>
 #include <qbitmap.h>
 #include <qcolor.h>
@@ -46,11 +46,11 @@
 
 #include "ddebug.h"
 #include "bcgmodifier.h"
-#include "icctransform.h"
 #include "colorcorrectiondlg.h"
 #include "undomanager.h"
 #include "undoaction.h"
 #include "iccsettingscontainer.h"
+#include "icctransform.h"
 #include "exposurecontainer.h"
 #include "iofilesettingscontainer.h"
 #include "sharedloadsavethread.h"
@@ -90,47 +90,47 @@ public:
         rotatedOrFlipped = false;
     }
 
-    bool                     valid;
-    bool                     rotatedOrFlipped;
-    bool                     exifOrient;
-    bool                     changedBCG;
+    bool                       valid;
+    bool                       rotatedOrFlipped;
+    bool                       exifOrient;
+    bool                       changedBCG;
     
-    int                      width;
-    int                      height;
-    int                      origWidth;
-    int                      origHeight;
-    int                      selX;
-    int                      selY;
-    int                      selW;
-    int                      selH;
+    int                        width;
+    int                        height;
+    int                        origWidth;
+    int                        origHeight;
+    int                        selX;
+    int                        selY;
+    int                        selW;
+    int                        selH;
     
-    float                    gamma;
-    float                    brightness;
-    float                    contrast;
+    float                      gamma;
+    float                      brightness;
+    float                      contrast;
 
-    double                   zoom;
+    double                     zoom;
     
     // Used by ICC color profile dialog.
-    QWidget                 *parent;
+    QWidget                   *parent;
 
-    QString                  filename;
-    QString                  savingFilename;
+    QString                    filename;
+    QString                    savingFilename;
 
-    DImg                     image;
+    DImg                       image;
 
-    UndoManager             *undoMan;
+    UndoManager               *undoMan;
     
-    BCGModifier              cmod;
+    BCGModifier                cmod;
 
-    ICCSettingsContainer    *cmSettings;
+    ICCSettingsContainer      *cmSettings;
 
-    ExposureSettingsContainer       *expoSettings;
+    ExposureSettingsContainer *expoSettings;
 
-    IOFileSettingsContainer *iofileSettings;
+    IOFileSettingsContainer   *iofileSettings;
 
-    SharedLoadSaveThread    *thread;
+    SharedLoadSaveThread      *thread;
 
-    IccTransform             monitorICCtrans;
+    IccTransform               monitorICCtrans;
 };
 
 DImgInterface* DImgInterface::instance()
@@ -1179,6 +1179,14 @@ QString DImgInterface::getImageFormat()
 ICCSettingsContainer* DImgInterface::getICCSettings()
 {
     return d->cmSettings;
+}
+
+QPixmap DImgInterface::convertToPixmap(DImg& img)
+{    
+    if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
+        return img.convertToPixmap(&d->monitorICCtrans);
+
+    return img.convertToPixmap();
 }
 
 }  // namespace Digikam
