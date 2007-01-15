@@ -276,7 +276,7 @@ public:
                     const QDateTime& datetime,
                     const QString& comment,
                     int rating,
-                    QStringList& keywordsList);
+                    const QStringList& keywordsList);
 
     /**
      * Update the date of a item to supplied date
@@ -327,6 +327,13 @@ public:
      * @param tagID   the tagID for the tag
      */
     void addItemTag(int albumID, const QString& name, int tagID);
+
+    /**
+     * Add tags for the item, create tags with the given paths if they do not yet exist
+     * @param albumID the albumID of the item
+     * @param keywords a list of tagPath
+     */
+    void addOrCreateItemTags(Q_LLONG imageID, const QStringList &keywords);
 
     /**
      * Get a list of recently assigned tags (only last 6 tags are listed)

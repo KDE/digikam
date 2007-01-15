@@ -1024,7 +1024,7 @@ Q_LLONG AlbumDB::addItem(int albumID,
                          const QDateTime& datetime,
                          const QString& comment,
                          int rating,
-                         QStringList& keywordsList)
+                         const QStringList &keywordsList)
 {
     execSql ( QString ("REPLACE INTO Images "
                        "( caption , datetime, name, dirid ) "
@@ -1044,169 +1044,177 @@ Q_LLONG AlbumDB::addItem(int albumID,
     // Set existing tags in database or create new tags if not exist.
 
     if ( item != -1 && !keywordsList.isEmpty() )
+        addOrCreateItemTags(albumID, keywordsList);
+
+    return item;
+}
+
+void AlbumDB::addOrCreateItemTags(Q_LLONG imageID, const QStringList &keywordsList)
+{
+    if (keywordsList.isEmpty())
+        return;
+
+    QStringList keywordsList2Create;
+
+    // Create a list of the tags currently in database
+
+    TagInfo::List tagsList;
+
+    QStringList values;
+    execSql( "SELECT id, pid, name FROM Tags;", &values );
+
+    for (QStringList::iterator it = values.begin(); it != values.end();)
     {
-        QStringList keywordsList2Create;
+        TagInfo info;
 
-        // Create a list of the tags currently in database
+        info.id   = (*it).toInt();
+        ++it;
+        info.pid  = (*it).toInt();
+        ++it;
+        info.name = *it;
+        ++it;
+        tagsList.append(info);
+    }
 
-        TagInfo::List tagsList;
+    // For every tag in keywordsList, scan taglist to check if tag already exists.
 
-        QStringList values;
-        execSql( "SELECT id, pid, name FROM Tags;", &values );
+    for (QStringList::const_iterator kwd = keywordsList.begin();
+        kwd != keywordsList.end(); ++kwd )
+    {
+        // split full tag "url" into list of single tag names
+        QStringList tagHierarchy = QStringList::split('/', *kwd);
+        if (tagHierarchy.isEmpty())
+            continue;
 
-        for (QStringList::iterator it = values.begin(); it != values.end();)
+        // last entry in list is the actual tag name
+        bool foundTag   = false;
+        QString tagName = tagHierarchy.back();
+        tagHierarchy.pop_back();
+
+        for (TagInfo::List::iterator tag = tagsList.begin();
+            tag != tagsList.end(); ++tag )
         {
-            TagInfo info;
+            // There might be multiple tags with the same name, but in different
+            // hierarchies. We must check them all until we find the correct hierarchy
+            if ((*tag).name == tagName)
+            {
+                int parentID = (*tag).pid;
 
-            info.id   = (*it).toInt();
-            ++it;
-            info.pid  = (*it).toInt();
-            ++it;
-            info.name = *it;
-            ++it;
-            tagsList.append(info);
+                // Check hierarchy, from bottom to top
+                bool foundParentTag                 = true;
+                QStringList::iterator parentTagName = tagHierarchy.end();
+
+                while (foundParentTag && parentTagName != tagHierarchy.begin())
+                {
+                    --parentTagName;
+
+                    foundParentTag = false;
+
+                    for (TagInfo::List::iterator parentTag = tagsList.begin();
+                        parentTag != tagsList.end(); ++parentTag )
+                    {
+                        // check if name is the same, and if ID is identical
+                        // to the parent ID we got from the child tag
+                        if ( (*parentTag).id == parentID &&
+                            (*parentTag).name == (*parentTagName) )
+                        {
+                            parentID       = (*parentTag).pid;
+                            foundParentTag = true;
+                            break;
+                        }
+                    }
+
+                    // If we traversed the list without a match,
+                    // foundParentTag will be false, the while loop breaks.
+                }
+
+                // If we managed to traverse the full hierarchy,
+                // we have our tag.
+                if (foundParentTag)
+                {
+                    addItemTag(imageID, (*tag).id);
+                    foundTag = true;
+                    break;
+                }
+            }
         }
 
-        // For every tag in keywordsList, scan taglist to check if tag already exists.
+        if (!foundTag)
+            keywordsList2Create.append(*kwd);
+    }
 
-        for (QStringList::iterator kwd = keywordsList.begin();
-            kwd != keywordsList.end(); ++kwd )
+    // If tags do not exist in database, create them.
+
+    if (!keywordsList2Create.isEmpty())
+    {
+        for (QStringList::iterator kwd = keywordsList2Create.begin();
+            kwd != keywordsList2Create.end(); ++kwd )
         {
-            // split full tag "url" into list of single tag names 
+            // split full tag "url" into list of single tag names
             QStringList tagHierarchy = QStringList::split('/', *kwd);
+
             if (tagHierarchy.isEmpty())
                 continue;
 
-            // last entry in list is the actual tag name
-            bool foundTag   = false;
-            QString tagName = tagHierarchy.back();
-            tagHierarchy.pop_back();
+            int  parentTagID      = 0;
+            int  tagID            = 0;
+            bool parentTagExisted = true;
 
-            for (TagInfo::List::iterator tag = tagsList.begin();
-                tag != tagsList.end(); ++tag )
+            // Traverse hierarchy from top to bottom
+            for (QStringList::iterator tagName = tagHierarchy.begin();
+                tagName != tagHierarchy.end(); ++tagName)
             {
-                // There might be multiple tags with the same name, but in different
-                // hierarchies. We must check them all until we find the correct hierarchy
-                if ((*tag).name == tagName)
+                tagID = 0;
+
+                // if the parent tag did not exist, we need not check if the child exists
+                if (parentTagExisted)
                 {
-                    int parentID = (*tag).pid;
-
-                    // Check hierarchy, from bottom to top
-                    bool foundParentTag                 = true;
-                    QStringList::iterator parentTagName = tagHierarchy.end();
-
-                    while (foundParentTag && parentTagName != tagHierarchy.begin())
+                    for (TagInfo::List::iterator tag = tagsList.begin();
+                        tag != tagsList.end(); ++tag )
                     {
-                        --parentTagName;
-
-                        foundParentTag = false;
-
-                        for (TagInfo::List::iterator parentTag = tagsList.begin();
-                            parentTag != tagsList.end(); ++parentTag )
+                        // find the tag with tag name according to tagHierarchy,
+                        // and parent ID identical to the ID of the tag we found in
+                        // the previous run.
+                        if ((*tag).name == (*tagName) && (*tag).pid == parentTagID)
                         {
-                            // check if name is the same, and if ID is identical
-                            // to the parent ID we got from the child tag
-                            if ( (*parentTag).id == parentID &&
-                                (*parentTag).name == (*parentTagName) )
-                            {
-                                parentID       = (*parentTag).pid;
-                                foundParentTag = true;
-                                break;
-                            }
+                            tagID = (*tag).id;
+                            break;
                         }
-
-                        // If we traversed the list without a match,
-                        // foundParentTag will be false, the while loop breaks.
-                    }
-
-                    // If we managed to traverse the full hierarchy,
-                    // we have our tag.
-                    if (foundParentTag)
-                    {
-                        addItemTag(item, (*tag).id);
-                        foundTag = true;
-                        break;
                     }
                 }
-            }
 
-            if (!foundTag)
-                keywordsList2Create.append(*kwd);
-        }
-
-        // If tags do not exist in database, create them.
-
-        if (!keywordsList2Create.isEmpty())
-        {
-            for (QStringList::iterator kwd = keywordsList2Create.begin(); 
-                kwd != keywordsList2Create.end(); ++kwd )
-            {
-                // split full tag "url" into list of single tag names 
-                QStringList tagHierarchy = QStringList::split('/', *kwd);
-
-                if (tagHierarchy.isEmpty())
+                if (tagID != 0)
+                {
+                    // tag already found in DB
+                    parentTagID = tagID;
                     continue;
-
-                int  parentTagID      = 0;
-                int  tagID            = 0;
-                bool parentTagExisted = true;
-
-                // Traverse hierarchy from top to bottom
-                for (QStringList::iterator tagName = tagHierarchy.begin();
-                    tagName != tagHierarchy.end(); ++tagName)
-                {
-                    tagID = 0;
-
-                    // if the parent tag did not exist, we need not check if the child exists
-                    if (parentTagExisted)
-                    {
-                        for (TagInfo::List::iterator tag = tagsList.begin();
-                            tag != tagsList.end(); ++tag )
-                        {
-                            // find the tag with tag name according to tagHierarchy,
-                            // and parent ID identical to the ID of the tag we found in
-                            // the previous run.
-                            if ((*tag).name == (*tagName) && (*tag).pid == parentTagID)
-                            {
-                                tagID = (*tag).id;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (tagID != 0)
-                    {
-                        // tag already found in DB
-                        parentTagID = tagID;
-                        continue;
-                    }
-
-                    // Tag does not yet exist in DB, add it
-                    tagID = addTag(parentTagID, (*tagName), QString::null, 0);
-
-                    if (tagID == -1)
-                    {
-                        // Something is wrong in database. Abort.
-                        break;
-                    }
-
-                    // append to our list of existing tags (for following keywords)
-                    TagInfo info;
-                    info.id   = tagID;
-                    info.pid  = parentTagID;
-                    info.name = (*tagName);
-                    tagsList.append(info);
-
-                    parentTagID      = tagID;
-                    parentTagExisted = false;
                 }
 
-                addItemTag(item, tagID);
+                // Tag does not yet exist in DB, add it
+                tagID = addTag(parentTagID, (*tagName), QString::null, 0);
+
+                if (tagID == -1)
+                {
+                    // Something is wrong in database. Abort.
+                    break;
+                }
+
+                // append to our list of existing tags (for following keywords)
+                TagInfo info;
+                info.id   = tagID;
+                info.pid  = parentTagID;
+                info.name = (*tagName);
+                tagsList.append(info);
+
+                parentTagID      = tagID;
+                parentTagExisted = false;
             }
+
+            addItemTag(imageID, tagID);
         }
     }
 
-    return item;
+    return;
 }
 
 bool AlbumDB::setItemDate(Q_LLONG imageID,

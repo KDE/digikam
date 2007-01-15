@@ -757,6 +757,7 @@ TAlbum* AlbumManager::findTAlbum(const QString &tagPath) const
         TAlbum *talbum = static_cast<TAlbum *>(*it);
         if (talbum->tagPath(withLeadingSlash) == tagPath)
             return talbum;
+        ++it;
     }
     return 0;
 
