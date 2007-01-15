@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-12-09
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-12-09
  * Description : image selection widget used by ratio crop tool.
  *
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,6 +60,7 @@
 #include "imageiface.h"
 #include "dimg.h"
 #include "imageselectionwidget.h"
+#include "imageselectionwidget.moc"
 
 namespace Digikam
 {
@@ -84,6 +85,11 @@ public:
         timerW          = 0;
         iface           = 0;
         pixmap          = 0;
+        timerW          = 0;
+        timerH          = 0;
+        iface           = 0;
+        pixmap          = 0;
+        guideSize       = 1;
     }
 
     // Golden guide types.
@@ -140,11 +146,6 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent,
     d->currentAspectRatioValue = aspectRatioValue;
     d->currentOrientation      = orient;
     d->guideLinesType          = guideLinesType;
-    d->timerW                  = 0L;
-    d->timerH                  = 0L;
-    d->iface                   = 0L;
-    d->pixmap                  = 0L;
-    d->guideSize               = 1;
 
     setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
@@ -1126,5 +1127,4 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
 
 }  // NameSpace Digikam
 
-#include "imageselectionwidget.moc"
 
