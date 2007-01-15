@@ -1,10 +1,10 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2006-02-01
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2006-02-01
  * Description : a widget to display an image preview with some 
  *               modes to compare effect results.
  * 
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
