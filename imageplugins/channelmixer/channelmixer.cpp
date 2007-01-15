@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : channelmixer.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-02-26
  * Description : 
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  * Load and save mixer gains methods inspired from 
  * Gimp 2.2.3 and copyrighted 2002 by Martin Guldahl 
  * <mguldahl at xmission dot com>.
@@ -69,6 +68,7 @@
 
 #include "version.h"
 #include "channelmixer.h"
+#include "channelmixer.moc"
 
 namespace DigikamChannelMixerImagesPlugin
 {
@@ -105,7 +105,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gboxSettings, 10, 4, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( gboxSettings, 9, 4, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -203,15 +203,9 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
     m_preserveLuminosity = new QCheckBox( i18n("Preserve luminosity"), gboxSettings);
     QWhatsThis::add( m_preserveLuminosity, i18n("<p>Enable this option is you want preserve the image luminosity."));
     
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gboxSettings);
-    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
-                                                      "from the target image preview will be over-colored. "
-                                                      "This will not have an effect on the final rendering."));
-    
     grid->addMultiCellWidget(m_monochrome, 7, 7, 0, 4);
     grid->addMultiCellWidget(m_preserveLuminosity, 8, 8, 0, 4);
-    grid->addMultiCellWidget(m_overExposureIndicatorBox, 9, 9, 0, 4);
-    grid->setRowStretch(10, 10);
+    grid->setRowStretch(9, 10);
     
     setUserAreaWidget(gboxSettings);
     
@@ -232,9 +226,6 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
                         
-    connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));
-    
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));                             
     
@@ -422,8 +413,7 @@ void ChannelMixerDialog::slotEffect()
                 m_monochrome->isChecked(),                                      // Monochrome.
                 m_blackRedGain, m_blackGreenGain, m_blackBlueGain,              // Red channel gains.
                 0.0,            1.0,              0.0,                          // Green channel gains (not used).
-                0.0,            0.0,              1.0,                          // Blue channel gains (not used).
-                m_overExposureIndicatorBox->isChecked());
+                0.0,            0.0,              1.0);                         // Blue channel gains (not used).
     }
     else
     {
@@ -432,8 +422,7 @@ void ChannelMixerDialog::slotEffect()
                 m_monochrome->isChecked(),                                      // Monochrome.
                 m_redRedGain,   m_redGreenGain,   m_redBlueGain,                // Red channel gains.
                 m_greenRedGain, m_greenGreenGain, m_greenBlueGain,              // Green channel gains.
-                m_blueRedGain,  m_blueGreenGain,  m_blueBlueGain,               // Blue channel gains.
-                m_overExposureIndicatorBox->isChecked());
+                m_blueRedGain,  m_blueGreenGain,  m_blueBlueGain);              // Blue channel gains.
     }
     
     iface->putPreviewImage(data);
@@ -718,4 +707,3 @@ void ChannelMixerDialog::slotUser2()
 
 }  // NameSpace DigikamChannelMixerImagesPlugin
 
-#include "channelmixer.moc"

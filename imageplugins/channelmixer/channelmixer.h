@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : channelmixer.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-02-26
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-02-26
  * Description : 
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,9 +25,9 @@
 
 #include <digikamheaders.h>
 
+class QCheckBox;
 class QComboBox;
 class QPushButton;
-class QCheckBox;
 class QHButtonGroup;
 
 class KDoubleNumInput;
@@ -44,6 +43,27 @@ public:
 
     ChannelMixerDialog(QWidget *parent, QString title, QFrame* banner);
     ~ChannelMixerDialog();
+
+protected:
+
+    void finalRendering();    
+    
+private:
+
+    void adjustSliders(void);
+    
+private slots:
+
+    void slotDefault();
+    void slotUser2();
+    void slotUser3();
+    void slotResetCurrentChannel();
+    void slotEffect();
+    void slotChannelChanged(int channel);
+    void slotScaleChanged(int scale);
+    void slotGainsChanged();
+    void slotMonochromeActived(bool mono);
+    void slotColorSelectedFromTarget(const Digikam::DColor &color);    
 
 private:
 
@@ -89,35 +109,12 @@ private:
     
     QCheckBox                    *m_preserveLuminosity;
     QCheckBox                    *m_monochrome;
-    QCheckBox                    *m_overExposureIndicatorBox;
     
     Digikam::ColorGradientWidget *m_hGradient;
     
     Digikam::HistogramWidget     *m_histogramWidget;
     
     Digikam::ImageWidget         *m_previewWidget;
-    
-private:
-
-    void adjustSliders(void);
-    
-private slots:
-
-    void slotDefault();
-    void slotUser2();
-    void slotUser3();
-    void slotResetCurrentChannel();
-    void slotEffect();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
-    void slotGainsChanged();
-    void slotMonochromeActived(bool mono);
-    void slotColorSelectedFromTarget(const Digikam::DColor &color);    
-
-protected:
-
-    void finalRendering();    
-
 };
 
 }  // NameSpace DigikamChannelMixerImagesPlugin
