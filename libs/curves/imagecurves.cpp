@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  :  2004-12-01
+ * Date   :  2004-12-01
  * Description : image curves manipulation methods.
  * 
  * Copyright 2004-2007 by Gilles Caulier
@@ -386,7 +386,7 @@ void ImageCurves::curvesCRCompose(CRMatrix a, CRMatrix b, CRMatrix ab)
     }
 }
 
-void ImageCurves::curvesLutSetup(int nchannels, bool overIndicator)
+void ImageCurves::curvesLutSetup(int nchannels)
 {
     int    i; 
     uint   v;
@@ -413,9 +413,6 @@ void ImageCurves::curvesLutSetup(int nchannels, bool overIndicator)
           
           val = (float)(d->segmentMax) * curvesLutFunc( d->lut->nchannels, i, v / (float)(d->segmentMax)) + 0.5;
                         
-          if (overIndicator && val > d->segmentMax)
-              val = 0;
-              
           d->lut->luts[i][v] = (unsigned short)CLAMP (val, 0, d->segmentMax);
        }
     }
