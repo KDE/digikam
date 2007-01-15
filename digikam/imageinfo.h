@@ -203,6 +203,12 @@ public:
     void        setTag(int tagID);
 
     /**
+     * Adds tags in the list to the item.
+     * Tags are created if they do not yet exist
+     */
+    void        addTagPaths(const QStringList &tagPaths);
+
+    /**
      * Remove a tag from the item (removes it from database)
      * @param tagID the ID of the tag to remove
      */

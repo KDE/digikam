@@ -365,15 +365,22 @@ void MetadataHub::write(ImageInfo *info)
     if (d->ratingStatus == MetadataAvailable)
         info->setRating(d->rating);
 
-    for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
+    if (d->dbmode == WithDatabase)
     {
-        if (it.data() == MetadataAvailable)
+        for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
         {
-            if (it.data().hasTag)
-                info->setTag(it.key()->id());
-            else
-                info->removeTag(it.key()->id());
+            if (it.data() == MetadataAvailable)
+            {
+                if (it.data().hasTag)
+                    info->setTag(it.key()->id());
+                else
+                    info->removeTag(it.key()->id());
+            }
         }
+    }
+    else
+    {
+        info->addTagPaths(d->tagList);
     }
 }
 

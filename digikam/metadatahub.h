@@ -118,7 +118,7 @@ public:
     {
         NoDatabase,        /** Only keywords() returns tag information, the AlbumManager is not accessed.
                                The methods tags() and tagIDs() do not return valid data.
-                               The methods load(ImageInfo*), setTags(), write() shall not be used. */
+                               The methods load(ImageInfo*), setTags() shall not be used. */
         WithDatabase       /// The AlbumManager is accessed. The methods tags() and tagIDs() return valid data.
     };
 
