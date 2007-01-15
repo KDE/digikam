@@ -1,6 +1,6 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-07-29
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-07-29
  * Description : image levels manipulation methods.
  * 
  * Copyright 2004-2006 by Gilles Caulier
@@ -374,7 +374,7 @@ float ImageLevels::levelsLutFunc(int n_channels, int channel, float value)
     return inten;
 }
 
-void ImageLevels::levelsLutSetup(int nchannels, bool overIndicator)
+void ImageLevels::levelsLutSetup(int nchannels)
 {
     int    i; 
     uint   v;
@@ -401,7 +401,7 @@ void ImageLevels::levelsLutSetup(int nchannels, bool overIndicator)
 
           val = (float)(d->sixteenBit ? 65535 : 255) *
                 levelsLutFunc( d->lut->nchannels, i, v/(float)(d->sixteenBit ? 65535 : 255)) + 0.5;
-          if (overIndicator && val > (d->sixteenBit ? 65535 : 255)) val = 0;
+
           d->lut->luts[i][v] = (unsigned short)CLAMP (val, 0, (d->sixteenBit ? 65535 : 255));
        }
     }

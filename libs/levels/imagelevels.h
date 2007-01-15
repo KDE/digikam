@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-07-29
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-07-29
  * Description : image levels manipulation methods.
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,7 +67,7 @@ public:
     void   levelsWhiteToneAdjustByColors(int channel, DColor color);
     void   levelsCalculateTransfers();
     float  levelsLutFunc(int n_channels, int channel, float value);
-    void   levelsLutSetup(int nchannels, bool overIndicator=false);
+    void   levelsLutSetup(int nchannels);
     void   levelsLutProcess(uchar *srcPR, uchar *destPR, int w, int h);
 
     // Methods for to set manually the levels values.
