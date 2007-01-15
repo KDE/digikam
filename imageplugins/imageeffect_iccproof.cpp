@@ -978,7 +978,7 @@ void ImageEffect_ICCProof::finalRendering()
             //-- Calculate and apply the curve on image after transformation -------------
         
             Digikam::DImg img2(w, h, sb, a, 0, false);
-            m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel, false);
+            m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
             m_curves->curvesLutProcess(img.bits(), img2.bits(), w, h);
         
             //-- Adjust contrast ---------------------------------------------------------
