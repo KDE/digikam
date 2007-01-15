@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-24-01
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-24-01
  * Description : image filters methods. 
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -84,14 +84,13 @@ private:    // Private methods used internally.
     };
 
     inline unsigned short MixPixel(float RedGain, float GreenGain, float BlueGain,
-                                          unsigned short R, unsigned short G, unsigned short B, bool sixteenBit,
-                                          double Norm, bool overIndicator=false)
+                                   unsigned short R, unsigned short G, unsigned short B, bool sixteenBit,
+                                   double Norm)
     {
        double lfMix = RedGain * (double)R + GreenGain * (double)G + BlueGain * (double)B;
        lfMix *= Norm;
        int segment = sixteenBit ? 65535 : 255;
        
-       if (overIndicator && lfMix > segment) lfMix = 0;
        return( (unsigned short)CLAMP (lfMix, 0, segment) );
     };
        
@@ -110,13 +109,12 @@ public:   // Public methods.
     void autoLevelsCorrectionImage(uchar *data, int w, int h, bool sixteenBit);
     void invertImage(uchar *data, int w, int h, bool sixteenBit);
     void channelMixerImage(uchar *data, int Width, int Height, bool sixteenBit,
-                                  bool bPreserveLum, bool bMonochrome,
-                                  float rrGain, float rgGain, float rbGain,
-                                  float grGain, float ggGain, float gbGain,
-                                  float brGain, float bgGain, float bbGain,
-                                  bool overIndicator=false);
+                           bool bPreserveLum, bool bMonochrome,
+                           float rrGain, float rgGain, float rbGain,
+                           float grGain, float ggGain, float gbGain,
+                           float brGain, float bgGain, float bbGain);
     void changeTonality(uchar *data, int width, int height, bool sixteenBit,
-                               int redMask, int greenMask, int blueMask);
+                        int redMask, int greenMask, int blueMask);
     void gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, int radius);
     void sharpenImage(uchar *data, int width, int height, bool sixteenBit, int radius);
     

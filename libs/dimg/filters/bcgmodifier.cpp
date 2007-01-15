@@ -28,14 +28,9 @@
 #include <cstdio>
 #include <cmath>
 
-// Qt includes.
-
-#include <qcolor.h>
-
 // Local includes.
 
 #include "dimg.h"
-#include "dcolor.h"
 #include "bcgmodifier.h"
 
 namespace Digikam
@@ -47,22 +42,13 @@ public:
 
     BCGModifierPriv()
     {
-        modified            = false;
-        overIndicator       = false;
-        underIndicator      = false;
-        overIndicatorColor  = Qt::black;
-        underIndicatorColor = Qt::white;
+        modified = false;
     }
 
-    bool   overIndicator;
-    bool   underIndicator;
     bool   modified;
     
     int    map16[65536];
     int    map[256];
-
-    QColor overIndicatorColor;
-    QColor underIndicatorColor;
 };
 
 BCGModifier::BCGModifier()
@@ -81,26 +67,6 @@ bool BCGModifier::modified() const
     return d->modified;
 }
 
-void BCGModifier::setOverIndicator(bool overIndicator)
-{
-    d->overIndicator = overIndicator;
-}
-
-void BCGModifier::setUnderIndicator(bool underIndicator)
-{
-    d->underIndicator = underIndicator;
-}
-    
-void BCGModifier::setOverIndicatorColor(const QColor& oc)
-{
-    d->overIndicatorColor = oc;
-}
-
-void BCGModifier::setUnderIndicatorColor(const QColor& uc)
-{
-    d->underIndicatorColor = uc;
-}
-
 void BCGModifier::reset()
 {
     // initialize to linear mapping
@@ -112,10 +78,6 @@ void BCGModifier::reset()
         d->map[i] = i;
 
     d->modified            = false;
-    d->overIndicator       = false;
-    d->underIndicator      = false;
-    d->overIndicatorColor  = Qt::black;
-    d->underIndicatorColor = Qt::white;
 }
 
 void BCGModifier::applyBCG(DImg& image)
@@ -123,10 +85,7 @@ void BCGModifier::applyBCG(DImg& image)
     if (!d->modified || image.isNull())
         return;
 
-    DColor overColor(d->overIndicatorColor, image.sixteenBit());
-    DColor underColor(d->underIndicatorColor, image.sixteenBit());
-
-    uint size = image.width()*image.height();
+    uint size = image.numPixels();
 
     if (!image.sixteenBit())                    // 8 bits image.
     {
@@ -134,26 +93,9 @@ void BCGModifier::applyBCG(DImg& image)
 
         for (uint i=0; i<size; i++)
         {
-            if (d->overIndicator && (d->map[data[0]] > 255 && 
-                d->map[data[1]] > 255 && d->map[data[2]] > 255))
-            {
-                data[0] = (uchar)overColor.blue();
-                data[1] = (uchar)overColor.green();
-                data[2] = (uchar)overColor.red();
-            }
-            else if (d->underIndicator && (d->map[data[0]] < 0 && 
-                d->map[data[1]] < 0 && d->map[data[2]] < 0))
-            {
-                data[0] = (uchar)underColor.blue();
-                data[1] = (uchar)underColor.green();
-                data[2] = (uchar)underColor.red();
-            }
-            else
-            {
-                data[0] = CLAMP_0_255(d->map[data[0]]);
-                data[1] = CLAMP_0_255(d->map[data[1]]);
-                data[2] = CLAMP_0_255(d->map[data[2]]);
-            }
+            data[0] = CLAMP_0_255(d->map[data[0]]);
+            data[1] = CLAMP_0_255(d->map[data[1]]);
+            data[2] = CLAMP_0_255(d->map[data[2]]);
 
             data += 4;
         }
@@ -164,26 +106,9 @@ void BCGModifier::applyBCG(DImg& image)
 
         for (uint i=0; i<size; i++)
         {
-            if (d->overIndicator && (d->map16[data[0]] > 65535 && 
-                d->map16[data[1]] > 65535 && d->map16[data[2]] > 65535))
-            {
-                data[0] = (ushort)overColor.blue();
-                data[1] = (ushort)overColor.green();
-                data[2] = (ushort)overColor.red();
-            }
-            else if (d->underIndicator && (d->map16[data[0]] < 0 && 
-                d->map16[data[1]] < 0 && d->map16[data[2]] < 0))
-            {
-                data[0] = (ushort)underColor.blue();
-                data[1] = (ushort)underColor.green();
-                data[2] = (ushort)underColor.red();
-            }
-            else
-            {            
-                data[0] = CLAMP_0_65535(d->map16[data[0]]);
-                data[1] = CLAMP_0_65535(d->map16[data[1]]);
-                data[2] = CLAMP_0_65535(d->map16[data[2]]);
-            }
+            data[0] = CLAMP_0_65535(d->map16[data[0]]);
+            data[1] = CLAMP_0_65535(d->map16[data[1]]);
+            data[2] = CLAMP_0_65535(d->map16[data[2]]);
 
             data += 4;
         }

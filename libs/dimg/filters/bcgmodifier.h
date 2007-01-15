@@ -27,8 +27,6 @@
 
 #include "digikam_export.h"
 
-class QColor;
-
 namespace Digikam
 {
 
@@ -44,12 +42,6 @@ public:
 
     void reset();
     bool modified() const;
-
-    void setOverIndicator(bool overIndicator);
-    void setUnderIndicator(bool underIndicator);
-
-    void setOverIndicatorColor(const QColor& oc);
-    void setUnderIndicatorColor(const QColor& uc);
 
     void setGamma(double val);
     void setBrightness(double val);

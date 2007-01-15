@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-24-01
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-24-01
  * Description : image filters. 
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * Original Equalise and StretchContrast Algorithms copyright 2002
  * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.
@@ -702,16 +702,15 @@ void DImgImageFilters::invertImage(uchar *data, int w, int h, bool sixteenBit)
 
 /** Mix RGB channel color from image*/
 void DImgImageFilters::channelMixerImage(uchar *data, int Width, int Height, bool sixteenBit,
-                                     bool bPreserveLum, bool bMonochrome,
-                                     float rrGain, float rgGain, float rbGain,
-                                     float grGain, float ggGain, float gbGain,
-                                     float brGain, float bgGain, float bbGain, 
-                                     bool overIndicator)
+                                         bool bPreserveLum, bool bMonochrome,
+                                         float rrGain, float rgGain, float rbGain,
+                                         float grGain, float ggGain, float gbGain,
+                                         float brGain, float bgGain, float bbGain)
 {
     if (!data || !Width || !Height)
     {
        DWarning() << ("DImgImageFilters::channelMixerImage: no image data available!")
-                   << endl;
+                  << endl;
        return;
     }
         
@@ -734,18 +733,22 @@ void DImgImageFilters::channelMixerImage(uchar *data, int Width, int Height, boo
         
             if (bMonochrome)
             {
-                nGray = MixPixel (rrGain, rgGain, rbGain, (unsigned short)red, (unsigned short)green, (unsigned short)blue,
-                                  sixteenBit, rnorm, overIndicator);
+                nGray = MixPixel (rrGain, rgGain, rbGain, 
+                                  (unsigned short)red, (unsigned short)green, (unsigned short)blue,
+                                  sixteenBit, rnorm);
                 ptr[0] = ptr[1] = ptr[2] = nGray;
             }
             else
             {
-                ptr[0] = (uchar)MixPixel (brGain, bgGain, bbGain, (unsigned short)red, (unsigned short)green, (unsigned short)blue,
-                                          sixteenBit, bnorm, overIndicator);
-                ptr[1] = (uchar)MixPixel (grGain, ggGain, gbGain, (unsigned short)red, (unsigned short)green, (unsigned short)blue,
-                                          sixteenBit, gnorm, overIndicator);
-                ptr[2] = (uchar)MixPixel (rrGain, rgGain, rbGain, (unsigned short)red, (unsigned short)green, (unsigned short)blue,
-                                          sixteenBit, rnorm, overIndicator);
+                ptr[0] = (uchar)MixPixel (brGain, bgGain, bbGain, 
+                                          (unsigned short)red, (unsigned short)green, (unsigned short)blue,
+                                          sixteenBit, bnorm);
+                ptr[1] = (uchar)MixPixel (grGain, ggGain, gbGain, 
+                                          (unsigned short)red, (unsigned short)green, (unsigned short)blue,
+                                          sixteenBit, gnorm);
+                ptr[2] = (uchar)MixPixel (rrGain, rgGain, rbGain, 
+                                          (unsigned short)red, (unsigned short)green, (unsigned short)blue,
+                                          sixteenBit, rnorm);
             }
                                 
             ptr += 4;
@@ -764,14 +767,14 @@ void DImgImageFilters::channelMixerImage(uchar *data, int Width, int Height, boo
         
             if (bMonochrome)
             {
-                nGray = MixPixel (rrGain, rgGain, rbGain, red, green, blue, sixteenBit, rnorm, overIndicator);
+                nGray = MixPixel (rrGain, rgGain, rbGain, red, green, blue, sixteenBit, rnorm);
                 ptr[0] = ptr[1] = ptr[2] = nGray;
             }
             else
             {
-                ptr[0] = MixPixel (brGain, bgGain, bbGain, red, green, blue, sixteenBit, bnorm, overIndicator);
-                ptr[1] = MixPixel (grGain, ggGain, gbGain, red, green, blue, sixteenBit, gnorm, overIndicator);
-                ptr[2] = MixPixel (rrGain, rgGain, rbGain, red, green, blue, sixteenBit, rnorm, overIndicator);
+                ptr[0] = MixPixel (brGain, bgGain, bbGain, red, green, blue, sixteenBit, bnorm);
+                ptr[1] = MixPixel (grGain, ggGain, gbGain, red, green, blue, sixteenBit, gnorm);
+                ptr[2] = MixPixel (rrGain, rgGain, rbGain, red, green, blue, sixteenBit, rnorm);
             }
                             
             ptr += 4;
