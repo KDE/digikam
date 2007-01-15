@@ -312,6 +312,11 @@ void ImageIface::convertOriginalColorDepth(int depth)
     DImgInterface::instance()->convertDepth(depth);
 }
 
+QPixmap ImageIface::convertToPixmap(DImg& img)
+{
+    return (DImgInterface::instance()->convertToPixmap(img));
+}
+
 QByteArray ImageIface::getEmbeddedICCFromOriginalImage()
 {
     return DImgInterface::instance()->getEmbeddedICC();

@@ -165,6 +165,10 @@ public:
     /** Convert depth of original image */
     void convertOriginalColorDepth(int depth);
 
+    /** Convert a DImg image to a pixmap for screen using color 
+        managemed view if necessary */
+    QPixmap convertToPixmap(DImg& img);
+
     /** Paint the current target preview image (or the preview image,
         if putPreviewImage has not been called) on the given paint device.
         at x|y, with given maximum width and height.
