@@ -131,7 +131,7 @@ public:
 
     QColor      guideColor;
 
-    QImage      preview;
+    DImg        preview;
     
     ImageIface *iface;
 };
@@ -157,8 +157,9 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent,
     int height      = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data).copyQImage();
+    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data);
     delete [] data;
+    d->preview.convertDepth(8);
     
     d->pixmap  = new QPixmap(w, h);
 
@@ -198,9 +199,10 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent *e)
     int height      = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data).copyQImage();
+    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data);
     delete [] data;
-    
+    d->preview.convertDepth(8);
+
     d->pixmap = new QPixmap(w, h);
 
     d->rect = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2, d->preview.width(), d->preview.height());
@@ -243,9 +245,8 @@ void ImageSelectionWidget::resetSelection(void)
     realToLocalRegion();
     applyAspectRatio(false, false);
 
-    d->localRegionSelection.moveBy(
-      d->rect.width()/2 - d->localRegionSelection.width()/2,
-      d->rect.height()/2 - d->localRegionSelection.height()/2);
+    d->localRegionSelection.moveBy(d->rect.width()/2 - d->localRegionSelection.width()/2,
+                                   d->rect.height()/2 - d->localRegionSelection.height()/2);
 
     applyAspectRatio(false, true, false);
     regionSelectionChanged(true);
@@ -657,13 +658,13 @@ void ImageSelectionWidget::updatePixmap(void)
     // Updated draging corners region.
 
     d->localTopLeftCorner.setRect(d->localRegionSelection.left(),
-                                 d->localRegionSelection.top(), 8, 8);
-    d->localBottomLeftCorner.setRect(d->localRegionSelection.left(),
-                                    d->localRegionSelection.bottom() - 7, 8, 8);
-    d->localTopRightCorner.setRect(d->localRegionSelection.right() - 7,
                                   d->localRegionSelection.top(), 8, 8);
-    d->localBottomRightCorner.setRect(d->localRegionSelection.right() - 7,
+    d->localBottomLeftCorner.setRect(d->localRegionSelection.left(),
                                      d->localRegionSelection.bottom() - 7, 8, 8);
+    d->localTopRightCorner.setRect(d->localRegionSelection.right() - 7,
+                                   d->localRegionSelection.top(), 8, 8);
+    d->localBottomRightCorner.setRect(d->localRegionSelection.right() - 7,
+                                      d->localRegionSelection.bottom() - 7, 8, 8);
 
     // Drawing background and image.
 
@@ -679,7 +680,7 @@ void ImageSelectionWidget::updatePixmap(void)
     int ty = d->localRegionSelection.top()    - d->rect.top();
     int by = d->localRegionSelection.bottom() - d->rect.top();
 
-    QImage image = d->preview.copy();
+    DImg image = d->preview.copy();
 
     uchar* ptr = image.bits();
     uchar  r, g, b;
@@ -707,7 +708,7 @@ void ImageSelectionWidget::updatePixmap(void)
         }
     }
 
-    QPixmap pix(image);
+    QPixmap pix = d->iface->convertToPixmap(image);
     bitBlt(d->pixmap, d->rect.x(), d->rect.y(), &pix);
     QPainter p(d->pixmap);
 
