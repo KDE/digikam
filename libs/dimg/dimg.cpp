@@ -689,6 +689,11 @@ uint DImg::numBytes() const
     return (width() * height() * bytesDepth());
 }
 
+uint DImg::numPixels() const
+{
+    return (width() * height());
+}
+
 int DImg::bytesDepth() const
 {
     if (sixteenBit())

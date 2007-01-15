@@ -175,6 +175,7 @@ public:
     bool        hasAlpha()       const;
     bool        sixteenBit()     const;
     uint        numBytes()       const;
+    uint        numPixels()      const;
 
     /** Return the number of bytes depth of one pixel : 4 (non sixteenBit) or 8 (sixteen) */
     int         bytesDepth() const;
