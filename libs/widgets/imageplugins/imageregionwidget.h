@@ -25,7 +25,6 @@
 
 #include <qscrollview.h>
 #include <qrect.h>
-#include <qimage.h>
 
 // Local includes
 
@@ -83,16 +82,16 @@ signals:
     
 protected:
     
-    void viewportResizeEvent( QResizeEvent *e );
-    void contentsMousePressEvent ( QMouseEvent * e );
-    void contentsMouseReleaseEvent ( QMouseEvent * e );
-    void contentsMouseMoveEvent( QMouseEvent * e );
-    void contentsWheelEvent( QWheelEvent * e ){ e->accept(); };
+    void viewportResizeEvent(QResizeEvent*);
+    void contentsMousePressEvent(QMouseEvent*);
+    void contentsMouseReleaseEvent(QMouseEvent*);
+    void contentsMouseMoveEvent(QMouseEvent*);
+    void contentsWheelEvent(QWheelEvent *e){ e->accept(); };
 
 private:
     
     void  drawContents(QPainter *p, int x, int y, int w, int h);
-    void  updatePixmap(const QImage& img);
+    void  updatePixmap(DImg& img);
     QRect getLocalTargetImageRegion(void);
     QRect getLocalImageRegionToRender(void);
 

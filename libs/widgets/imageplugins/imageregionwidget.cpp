@@ -55,7 +55,6 @@ public:
     {
         iface            = 0;
         movingInProgress = false;
-        pixmap           = 0;
         pixmapRegion     = 0;
         zoomFactor       = 1.0;
         separateView     = ImageRegionWidget::SeparateViewVertical;
@@ -69,12 +68,12 @@ public:
 
     double       zoomFactor;
 
-    QPixmap     *pixmap;                // Entire content widget pixmap.
+    QPixmap      pixmap;                // Entire content widget pixmap.
     QPixmap     *pixmapRegion;          // Pixmap of current region to render.
     
     QPointArray  hightlightPoints;
     
-    QImage       image;                // Entire content image to render pixmap.
+    DImg         image;                 // Entire content image to render pixmap.
     
     ImageIface  *iface;
 };
@@ -100,7 +99,6 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
 ImageRegionWidget::~ImageRegionWidget()
 {
     if (d->iface)        delete d->iface;
-    if (d->pixmap)       delete d->pixmap;
     if (d->pixmapRegion) delete d->pixmapRegion;
     delete d;
 }
@@ -110,14 +108,14 @@ void ImageRegionWidget::slotZoomFactorChanged(double factor)
     QPoint currentPos((int)(contentsX() / d->zoomFactor), (int)(contentsY() / d->zoomFactor));
     kapp->setOverrideCursor( KCursor::waitCursor() );
     
-    d->image = d->iface->getOriginalImg()->copyQImage(); 
+    d->image = d->iface->getOriginalImg()->copy(); 
 
     d->zoomFactor = factor;
 
     if(d->zoomFactor != 1.0)
     {
-        QImage img = d->image.scale((uint)(d->image.width()  * d->zoomFactor), 
-                                    (uint)(d->image.height() * d->zoomFactor));
+        DImg img = d->image.smoothScale((uint)(d->image.width()  * d->zoomFactor), 
+                                        (uint)(d->image.height() * d->zoomFactor));
         d->image = img;
     }
     
@@ -160,7 +158,7 @@ void ImageRegionWidget::updateOriginalImage()
     updatePixmap(d->image);
 }
 
-void ImageRegionWidget::updatePixmap(const QImage& img)
+void ImageRegionWidget::updatePixmap(DImg& img)
 {
     horizontalScrollBar()->setLineStep( 1 );
     horizontalScrollBar()->setPageStep( 1 );
@@ -170,38 +168,31 @@ void ImageRegionWidget::updatePixmap(const QImage& img)
     int w = img.width();
     int h = img.height();
     
-    if (d->pixmap)
-    {
-        delete d->pixmap;
-        d->pixmap = 0;
-    }
-    
     switch (d->separateView)
     {
         case SeparateViewVertical:
         case SeparateViewHorizontal:
         case SeparateViewNone:
         {
-            d->pixmap = new QPixmap(w, h);
-            d->pixmap->convertFromImage(img);
+            d->pixmap = d->iface->convertToPixmap(img);
             resizeContents(w, h);
             break;
         }
         case SeparateViewDuplicateVert:
         {
-            QPixmap pix(img);
-            d->pixmap = new QPixmap(w+visibleWidth()/2, h);
-            d->pixmap->fill(paletteBackgroundColor().rgb());
-            copyBlt( d->pixmap, 0, 0, &pix, 0, 0, w, h );
+            QPixmap pix = d->iface->convertToPixmap(img);
+            d->pixmap   = QPixmap(w+visibleWidth()/2, h);
+            d->pixmap.fill(paletteBackgroundColor().rgb());
+            copyBlt( &d->pixmap, 0, 0, &pix, 0, 0, w, h );
             resizeContents(w+visibleWidth()/2, h);
             break;
         }
         case SeparateViewDuplicateHorz:
         {
-            QPixmap pix(img);
-            d->pixmap = new QPixmap(w, h+visibleHeight()/2);
-            d->pixmap->fill(paletteBackgroundColor().rgb());
-            copyBlt( d->pixmap, 0, 0, &pix, 0, 0, w, h );
+            QPixmap pix = d->iface->convertToPixmap(img);
+            d->pixmap   = QPixmap(w, h+visibleHeight()/2);
+            d->pixmap.fill(paletteBackgroundColor().rgb());
+            copyBlt( &d->pixmap, 0, 0, &pix, 0, 0, w, h );
             resizeContents(w, h+visibleHeight()/2);
             break;
         }
@@ -214,8 +205,7 @@ void ImageRegionWidget::updatePixmap(const QImage& img)
 
 void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
 {
-    if(!d->pixmap) return;
-    else p->drawPixmap(x, y, *d->pixmap, x, y, w, h);
+    p->drawPixmap(x, y, d->pixmap, x, y, w, h);
     
     if (!d->movingInProgress)
     {
@@ -354,25 +344,32 @@ void ImageRegionWidget::setContentsPosition(int x, int y, bool targetDone)
 void ImageRegionWidget::backupPixmapRegion(void)
 {
     if (d->pixmapRegion) delete d->pixmapRegion;
-    QRect area = getLocalTargetImageRegion();
+    QRect area      = getLocalTargetImageRegion();
     d->pixmapRegion = new QPixmap(area.size());
-    copyBlt( d->pixmapRegion, 0, 0, d->pixmap, area.x(), area.y(), area.width(), area.height() );
+    copyBlt( d->pixmapRegion, 0, 0, &d->pixmap, area.x(), area.y(), area.width(), area.height() );
 }
 
 void ImageRegionWidget::restorePixmapRegion(void)
 {
     if (!d->pixmapRegion) return;
     QRect area = getLocalTargetImageRegion();
-    copyBlt( d->pixmap, area.x(), area.y(), d->pixmapRegion, 0, 0, area.width(), area.height() );
+    copyBlt( &d->pixmap, area.x(), area.y(), d->pixmapRegion, 0, 0, area.width(), area.height() );
 }
 
 void ImageRegionWidget::updatePreviewImage(DImg *img)
 {
-    QImage image = img->copyQImage();
-    QPixmap pix( image.scale((uint)(image.width()  * d->zoomFactor), 
-                             (uint)(image.height() * d->zoomFactor)));
+    DImg image = img->copy();
+
+    // Because image plugins are tool witch only work on image data, the DImg container
+    // do not contain metadata from original image. About Color Managed View, we need to 
+    // restore the embedded ICC color profile. 
+    image.setICCProfil(d->image.getICCProfil());
+
+    image.resize((uint)(image.width()  * d->zoomFactor), 
+                 (uint)(image.height() * d->zoomFactor));
+    QPixmap pix = d->iface->convertToPixmap(image);
     QRect area  = getLocalTargetImageRegion();
-    copyBlt( d->pixmap, area.x(), area.y(), &pix, 0, 0, area.width(), area.height() );
+    copyBlt( &d->pixmap, area.x(), area.y(), &pix, 0, 0, area.width(), area.height() );
 }
 
 DImg ImageRegionWidget::getImageRegionImage(void)
