@@ -1,7 +1,6 @@
 /* ============================================================
- * File  : imageplugin_whitebalance.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-03-11
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-03-11
  * Description : 
  * 
  * Copyright 2005 by Gilles Caulier

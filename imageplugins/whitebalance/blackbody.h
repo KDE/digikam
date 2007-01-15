@@ -1,11 +1,12 @@
 /* ============================================================
- * File  : blackbody.h
- * Author: Pawel T. <Jochym jochym at ifj edu pl>
- * Date  : 2005-03-11
+ * Authors: Pawel T. <Jochym jochym at ifj edu pl>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-03-11
  * Description : White Balance Black Body array calibrate 
  *               in Kelvin.
  * 
  * Copyright 2004-2005 by Pawel T. Jochym
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

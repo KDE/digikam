@@ -34,7 +34,6 @@ class QPushButton;
 class QLabel;
 class QComboBox;
 class QPushButton;
-class QCheckBox;
 class QHButtonGroup;
 
 class KDoubleNumInput;
@@ -137,8 +136,6 @@ private:
     
     QHButtonGroup                *m_scaleBG;  
         
-    QCheckBox                    *m_overExposureIndicatorBox;
-    
     QLabel                       *m_temperatureLabel;
     QLabel                       *m_temperaturePresetLabel;
     QLabel                       *m_darkLabel;

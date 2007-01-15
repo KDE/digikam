@@ -42,7 +42,6 @@
 #include <qtimer.h>
 #include <qtooltip.h>
 #include <qpixmap.h>
-#include <qcheckbox.h>
 #include <qfile.h>
 #include <qtextstream.h>
 
@@ -79,6 +78,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
     QString whatsThis;
 
     m_clipSat = true;
+    m_overExp = false;         // Obsolete in algoritm since over/under exposure indicators
+    m_WBind   = false;         // are implemented directly with preview widget.
     m_mr      = 1.0;
     m_mg      = 1.0;
     m_mb      = 1.0;
@@ -185,7 +186,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
     
     // -------------------------------------------------------------
 
-    QGridLayout *grid2 = new QGridLayout( layout2, 10, 5, spacingHint());
+    QGridLayout *grid2 = new QGridLayout( layout2, 9, 5, spacingHint());
     KIconLoader icon;
     
     m_exposureLabel = new QLabel(i18n("Exposure (EV):"), gboxSettings);
@@ -271,11 +272,6 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
     m_greenInput->setRange(1.0, 2.5, 0.01, true);
     QWhatsThis::add( m_greenInput, i18n("<p>Set here the green component to set magenta color cast removal level."));
 
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gboxSettings);
-    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
-                                                      "from the target image preview will be over-colored. "
-                                                      "This will not have an effect on the final rendering."));
-                                                                  
     grid2->addMultiCellWidget(m_temperatureLabel, 0, 0, 0, 0);
     grid2->addMultiCellWidget(m_pickTemperature, 0, 0, 1, 1);
     grid2->addMultiCellWidget(m_temperatureInput, 0, 0, 2, 5);
@@ -297,9 +293,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
     grid2->addMultiCellWidget(m_exposureLabel, 8, 8, 0, 0);
     grid2->addMultiCellWidget(m_autoAdjustExposure, 8, 8, 1, 1);
     grid2->addMultiCellWidget(m_exposureInput, 8, 8, 2, 5);
-    grid2->addMultiCellWidget(m_overExposureIndicatorBox, 9, 9, 0, 5);
 
-    grid2->setRowStretch(10, 10);
+    grid2->setRowStretch(9, 10);
             
     setUserAreaWidget(gboxSettings);
             
@@ -322,9 +317,6 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
                                     
-    connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));         
-
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));                                        
 
@@ -565,8 +557,8 @@ void ImageEffect_WhiteBalance::slotColorSelectedFromOriginal( const Digikam::DCo
               r = m;
     
           DDebug() << "L,M,R:  " << l << " " << m << " " << r 
-                    << " bbWB[m]=:"    << bbWB[m][0]/bbWB[m][2]
-                    << endl;
+                   << " bbWB[m]=:"    << bbWB[m][0]/bbWB[m][2]
+                   << endl;
        }
        
        DDebug() << "Temperature (K):" << m*10.0+2000.0 << endl;
@@ -651,8 +643,6 @@ void ImageEffect_WhiteBalance::slotEffect()
     m_gamma       = 2.0-m_gammaInput->value();
     m_saturation  = m_saturationInput->value();
     m_green       = m_greenInput->value();
-    m_overExp     = m_overExposureIndicatorBox->isChecked();
-    m_WBind       = m_overExp;
     
     // Set preview lut.
     setRGBmult();
@@ -689,8 +679,6 @@ void ImageEffect_WhiteBalance::finalRendering()
     m_gamma       = 2.0-m_gammaInput->value();
     m_saturation  = m_saturationInput->value();
     m_green       = m_greenInput->value();
-    m_overExp     = false;
-    m_WBind       = false;
        
     // Set final lut.
     setRGBmult();
