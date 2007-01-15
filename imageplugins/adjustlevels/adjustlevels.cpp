@@ -41,7 +41,6 @@
 #include <qtimer.h>
 #include <qhbuttongroup.h> 
 #include <qpixmap.h>
-#include <qcheckbox.h>
 
 // KDE includes.
 
@@ -112,7 +111,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* ban
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gboxSettings, 10, 5, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( gboxSettings, 9, 5, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -304,15 +303,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* ban
     l3->addStretch(10);
     
     grid->addMultiCellLayout(l3, 8, 8, 0, 4);
-
-    // -------------------------------------------------------------
-    
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gboxSettings);
-    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
-                                                      "from the target image preview will be over-colored. "
-                                                      "This will not have an effect on the final rendering."));
-    grid->addMultiCellWidget(m_overExposureIndicatorBox, 9, 9, 0, 5);
-    grid->setRowStretch(10, 10);
+    grid->setRowStretch(9, 10);
     
     setUserAreaWidget(gboxSettings);    
     
@@ -335,9 +326,6 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* ban
 
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
-
-    connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));      
             
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));                                                            
@@ -565,7 +553,7 @@ void AdjustLevelDialog::slotEffect()
     m_destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
 
     // Calculate the LUT to apply on the image.
-    m_levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel, m_overExposureIndicatorBox->isChecked());
+    m_levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
 
     // Apply the lut to the image.
     m_levels->levelsLutProcess(orgData, m_destinationPreviewData, w, h);
@@ -729,5 +717,3 @@ void AdjustLevelDialog::slotUser2()
 }
 
 }  // NameSpace DigikamAdjustLevelsImagesPlugin
-
-
