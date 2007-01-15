@@ -291,11 +291,10 @@ int ImageIface::selectedYOrg()
     return y;
 }
 
-void ImageIface::setPreviewBCG(double brightness, double contrast, double gamma, bool overIndicator)
+void ImageIface::setPreviewBCG(double brightness, double contrast, double gamma)
 {
     DImg preview = d->targetPreviewImage.copyImageData();
     BCGModifier cmod;
-    cmod.setOverIndicator(overIndicator);
     cmod.setGamma(gamma);
     cmod.setBrightness(brightness);
     cmod.setContrast(contrast);

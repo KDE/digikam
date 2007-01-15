@@ -159,7 +159,7 @@ public:
     int  selectedYOrg();
 
     /** Set BCG correction for preview and original image */
-    void setPreviewBCG(double brightness, double contrast, double gamma, bool overIndicator=false);
+    void setPreviewBCG(double brightness, double contrast, double gamma);
     void setOriginalBCG(double brightness, double contrast, double gamma);
 
     /** Convert depth of original image */
