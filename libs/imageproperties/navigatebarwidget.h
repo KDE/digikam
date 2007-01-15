@@ -45,7 +45,8 @@ public:
     {
         ItemCurrent=0,
         ItemFirst,
-        ItemLast
+        ItemLast,
+        NoNavigation
     };
 
 public:

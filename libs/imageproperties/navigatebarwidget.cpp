@@ -146,12 +146,19 @@ void NavigateBarWidget::setButtonsState(int itemType)
        d->nextButton->setEnabled(false);
        d->lastButton->setEnabled(false);
     }
-    else 
+    else if (d->itemType == ItemCurrent)
     {
        d->firstButton->setEnabled(true);
        d->prevButton->setEnabled(true);
        d->nextButton->setEnabled(true);
        d->lastButton->setEnabled(true);
+    }
+    else if (d->itemType == NoNavigation)
+    {
+       d->firstButton->setEnabled(false);
+       d->prevButton->setEnabled(false);
+       d->nextButton->setEnabled(false);
+       d->lastButton->setEnabled(false);
     }
 }
 
