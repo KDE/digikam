@@ -28,6 +28,7 @@
 // Local includes.
 
 #include "digikam_export.h"
+#include "metadatahub.h"
 
 class QListViewItem;
 class QDropEvent;
@@ -45,6 +46,8 @@ public:
     TAlbumCheckListItem(QListView* parent, TAlbum* album);
 
     TAlbumCheckListItem(QCheckListItem* parent, TAlbum* album);
+
+    void setStatus(MetadataHub::TagStatus status);
 
     TAlbum *m_album;
 

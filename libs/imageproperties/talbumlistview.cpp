@@ -74,6 +74,18 @@ TAlbumCheckListItem::TAlbumCheckListItem(QCheckListItem* parent, TAlbum* album)
     setDragEnabled(true);
 }
 
+void TAlbumCheckListItem::setStatus(MetadataHub::TagStatus status)
+{
+    if (status == MetadataHub::MetadataDisjoint)
+    {
+        setState(QCheckListItem::NoChange);
+    }
+    else
+    {
+        setOn(status.hasTag);
+    }
+}
+
 void TAlbumCheckListItem::stateChange(bool val)
 {
     QCheckListItem::stateChange(val);
