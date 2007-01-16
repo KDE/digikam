@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-07-09
- * Description : Sharpen image filter for ImageEditor
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-07-09
+ * Description : a tool to sharp an image
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,6 +35,8 @@
 #include <kcursor.h>
 #include <klocale.h>
 #include <kapplication.h>
+#include <kconfig.h>
+
 
 // Digikam includes.
 
@@ -45,6 +47,7 @@
 // Local includes.
 
 #include "imageeffect_sharpen.h"
+#include "imageeffect_sharpen.moc"
 
 namespace DigikamImagesPluginCore
 {
@@ -81,9 +84,19 @@ ImageEffect_Sharpen::~ImageEffect_Sharpen()
 {
 }
 
-void ImageEffect_Sharpen::renderingFinished(void)
+void ImageEffect_Sharpen::readUserSettings()
 {
-    m_radiusInput->setEnabled(true);
+    KConfig* config = kapp->config();
+    config->setGroup("sharpen Tool Dialog");
+    m_radiusInput->setValue(config->readNumEntry("RadiusAjustment", 0));
+}
+
+void ImageEffect_Sharpen::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("sharpen Tool Dialog");
+    config->writeEntry("RadiusAjustment", m_radiusInput->value());
+    config->sync();
 }
 
 void ImageEffect_Sharpen::resetValues(void)
@@ -144,6 +157,10 @@ void ImageEffect_Sharpen::putFinalData(void)
     iface.putOriginalImage(i18n("Sharpen"), imDest.bits());
 }
 
+void ImageEffect_Sharpen::renderingFinished(void)
+{
+    m_radiusInput->setEnabled(true);
+}
+
 }  // NameSpace DigikamImagesPluginCore
 
-#include "imageeffect_sharpen.moc"

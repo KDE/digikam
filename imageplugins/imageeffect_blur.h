@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-07-09
- * Description : Blur image filter for ImageEditor
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-07-09
+ * Description : a tool to blur an image
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,17 +41,19 @@ public:
 
 private:
 
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues(); 
+    void prepareEffect();
+    void prepareFinal();
+    void abortPreview();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
+
+private:
+
     KIntNumInput *m_radiusInput;
-    
-protected:
-    
-    void prepareEffect(void);
-    void prepareFinal(void);
-    void abortPreview(void);
-    void putPreviewData(void);
-    void putFinalData(void);
-    void resetValues(void);   
-    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamImagesPluginCore

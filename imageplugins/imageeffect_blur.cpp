@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-07-09
- * Description : Blur image filter for ImageEditor
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-07-09
+ * Description : a tool to blur an image
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +28,7 @@
 
 #include <kaboutdata.h>
 #include <knuminput.h>
+#include <kconfig.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <kapplication.h>
@@ -41,6 +42,7 @@
 // Local includes.
 
 #include "imageeffect_blur.h"
+#include "imageeffect_blur.moc"
 
 namespace DigikamImagesPluginCore
 {
@@ -77,9 +79,19 @@ ImageEffect_Blur::~ImageEffect_Blur()
 {
 }
 
-void ImageEffect_Blur::renderingFinished(void)
+void ImageEffect_Blur::readUserSettings()
 {
-    m_radiusInput->setEnabled(true);
+    KConfig* config = kapp->config();
+    config->setGroup("gaussianblur Tool Dialog");
+    m_radiusInput->setValue(config->readNumEntry("RadiusAjustment", 0));
+}
+
+void ImageEffect_Blur::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("gaussianblur Tool Dialog");
+    config->writeEntry("RadiusAjustment", m_radiusInput->value());
+    config->sync();
 }
 
 void ImageEffect_Blur::resetValues(void)
@@ -128,6 +140,10 @@ void ImageEffect_Blur::putFinalData(void)
     iface.putOriginalImage(i18n("Gaussian Blur"), imDest.bits());
 }
 
+void ImageEffect_Blur::renderingFinished(void)
+{
+    m_radiusInput->setEnabled(true);
+}
+
 }  // NameSpace DigikamImagesPluginCore
 
-#include "imageeffect_blur.moc"
