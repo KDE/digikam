@@ -571,7 +571,7 @@ void ImageEffect_ICCProof::readUserSettings()
 
     for (int j = 0 ; j < 17 ; j++)
     {
-        QPoint disable(-1, 0);
+        QPoint disable(-1, -1);
         QPoint p = config->readPointEntry(QString("CurveAjustmentPoint%1").arg(j), &disable);
 
         if (m_originalImage->sixteenBit() && p.x() != -1)
@@ -585,9 +585,6 @@ void ImageEffect_ICCProof::readUserSettings()
 
     for (int i = 0 ; i < 5 ; i++)
         m_curves->curvesCalculateCurve(i);
-
-    m_curvesWidget->m_channelType = Digikam::CurvesWidget::ValueHistogram;
-    m_curvesWidget->curveTypeChanged();
 }
 
 void ImageEffect_ICCProof::writeUserSettings()
@@ -1210,9 +1207,6 @@ void ImageEffect_ICCProof::slotUser3()
 
         for (int i = 0 ; i < 5 ; i++)
            m_curves->curvesCalculateCurve(i);
-
-        m_curvesWidget->m_channelType = Digikam::CurvesWidget::ValueHistogram;
-        m_curvesWidget->curveTypeChanged();
 
         m_histogramWidget->reset();
         slotEffect();  
