@@ -198,7 +198,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
                                "everything in between.</p>"));
     m_correctionTools->insertItem(item, StretchContrastCorrection);
 
-    pix = getThumbnailForEffect(StretchContrastCorrection);
+    pix = getThumbnailForEffect(AutoExposureCorrection);
     item = new Digikam::ListBoxPreviewItem(pix, i18n("Auto Exposure"));
     whatsThis->add( item, i18n("<b>Auto Exposure</b>:"
                                "<p>This option enhances the contrast and brightness "
