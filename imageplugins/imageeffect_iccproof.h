@@ -2,11 +2,12 @@
  * Authors: F.J. Cruz <fj.cruz@supercable.es>
  *          Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date   : 2005-12-21
- * Copyright 2005-2006 by F.J. Cruz
- *           2006-2007 by Gilles Caulier
  *
  * Description : digiKam image editor tool to correct picture 
  *               colors using an ICC color profile
+ *
+ * Copyright 2005-2006 by F.J. Cruz
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
