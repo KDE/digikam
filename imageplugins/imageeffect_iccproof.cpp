@@ -550,6 +550,8 @@ void ImageEffect_ICCProof::readUserSettings()
     
     // Plugin settings.
     config->setGroup("colormanagement Tool Dialog");
+    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
     m_toolBoxWidgets->setCurrentIndex(config->readNumEntry("Settings Tab", GENERALPAGE));        
     m_inProfilesPath->setURL(config->readPathEntry("InputProfilePath", defaultICCPath)); 
     m_proofProfilePath->setURL(config->readPathEntry("ProofProfilePath", defaultICCPath)); 
@@ -593,6 +595,8 @@ void ImageEffect_ICCProof::writeUserSettings()
     KConfig* config = kapp->config();
     config->setGroup("colormanagement Tool Dialog");
     config->writeEntry("Settings Tab", m_toolBoxWidgets->currentIndex());
+    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
+    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
     config->writePathEntry("InputProfilePath", m_inProfilesPath->url());
     config->writePathEntry("ProofProfilePath", m_proofProfilePath->url());
     config->writePathEntry("SpaceProfilePath", m_spaceProfilePath->url());

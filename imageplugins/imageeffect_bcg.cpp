@@ -254,6 +254,8 @@ void ImageEffect_BCG::readUserSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("bcgadjust Tool Dialog");
+    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
     m_bInput->setValue(config->readNumEntry("BrightnessAjustment", 0));
     m_cInput->setValue(config->readNumEntry("ContrastAjustment", 0));
     m_gInput->setValue(config->readDoubleNumEntry("GammaAjustment", 1.0));
@@ -263,6 +265,8 @@ void ImageEffect_BCG::writeUserSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("bcgadjust Tool Dialog");
+    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
+    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
     config->writeEntry("BrightnessAjustment", m_bInput->value());
     config->writeEntry("ContrastAjustment", m_cInput->value());
     config->writeEntry("GammaAjustment", m_gInput->value());
