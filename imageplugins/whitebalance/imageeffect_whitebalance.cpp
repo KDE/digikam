@@ -769,8 +769,8 @@ void ImageEffect_WhiteBalance::slotAutoAdjustExposure(void)
     int stop, i, scale, w, h;
     double black, expo, sum;
     
-    w = width  / 400;
-    h = height / 400;
+    w     = width  / 400;
+    h     = height / 400;
     scale = QMAX(w, h);
     scale = QMAX(1, scale);
     
@@ -850,7 +850,7 @@ void ImageEffect_WhiteBalance::setLUTv(void)
     
     for (int i = 1; i < (int)m_rgbMax; i++)
     {
-        float x = (float)(i - m_BP)/(m_WP - m_BP);
+        float x     = (float)(i - m_BP)/(m_WP - m_BP);
         m_curve[i]  = (i < m_BP) ? 0 : (m_rgbMax-1) * pow(x, g);
         m_curve[i] *= (1 - m_dark * exp(-x * x / 0.002));
         m_curve[i] /= (float)i;
@@ -905,8 +905,8 @@ void ImageEffect_WhiteBalance::whiteBalance(uchar *data, int width, int height, 
             rv[0] = (int)(blue  * m_mb);
             rv[1] = (int)(green * m_mg);
             rv[2] = (int)(red   * m_mr);
-            v = QMAX(rv[0], rv[1]);
-            v = QMAX(v, rv[2]);
+            v     = QMAX(rv[0], rv[1]);
+            v     = QMAX(v, rv[2]);
 
             if (m_clipSat) v = QMIN(v, (int)m_rgbMax-1);
             i = v;
