@@ -78,7 +78,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
     QString whatsThis;
 
     m_clipSat = true;
-    m_overExp = false;         // Obsolete in algoritm since over/under exposure indicators
+    m_overExp = false;         // Obsolete in algorithm since over/under exposure indicators
     m_WBind   = false;         // are implemented directly with preview widget.
     m_mr      = 1.0;
     m_mg      = 1.0;
@@ -367,62 +367,6 @@ ImageEffect_WhiteBalance::~ImageEffect_WhiteBalance()
     delete m_histogramWidget;
 }
 
-void ImageEffect_WhiteBalance::slotAutoAdjustExposure(void)
-{
-    parentWidget()->setCursor( KCursor::waitCursor() );
-
-    // Create an histogram of original image.     
-
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-    uchar *data                = iface->getOriginalImage();
-    int width                  = iface->originalWidth();
-    int height                 = iface->originalHeight();
-    bool sb                    = iface->originalSixteenBit();
-    
-    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, width, height, sb);
-       
-    // Calculate optimal exposition and black level 
-    
-    int stop, i, scale, w, h;
-    double black, expo, sum;
-    
-    w = width  / 400;
-    h = height / 400;
-    scale = QMAX(w, h);
-    scale = QMAX(1, scale);
-    
-    // Cutoff at 0.5% of the histogram.
-    
-    stop = ((uint)(width / scale)*(uint)(height / scale)) / 200;
-    
-    for (i = m_rgbMax, sum = 0; (i >= 0) && (sum < stop); i--)
-        sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
-    
-    expo = -log((float)(i+1) / m_rgbMax) / log(2);
-    DDebug() << "White level at:" << i << endl;
-    
-    // Cutoff at 0.5% of the histogram. 
-    
-    stop = ((uint)(width / scale)*(uint)(height / scale)) / 200;
-    
-    for (i = 1, sum = 0; (i < (int)m_rgbMax) && (sum < stop); i++)
-        sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
-    
-    black = (double)i / m_rgbMax;
-    black /= 2;
-    
-    DDebug() << "Black:" << black << "  Exposition:" << expo << endl;
-
-    m_blackInput->setValue(black);
-    m_exposureInput->setValue(expo);        
-
-    delete histogram;
-    delete [] data;
-    
-    parentWidget()->unsetCursor();
-    slotEffect();  
-}
-
 void ImageEffect_WhiteBalance::slotTemperatureChanged(double temperature)
 {
    switch((uint)temperature)
@@ -557,7 +501,7 @@ void ImageEffect_WhiteBalance::slotColorSelectedFromOriginal( const Digikam::DCo
               r = m;
     
           DDebug() << "L,M,R:  " << l << " " << m << " " << r 
-                   << " bbWB[m]=:"    << bbWB[m][0]/bbWB[m][2]
+                   << " bbWB[m]=:" << bbWB[m][0]/bbWB[m][2]
                    << endl;
        }
        
@@ -696,6 +640,172 @@ void ImageEffect_WhiteBalance::finalRendering()
     accept();       
 }
 
+// Reset all settings.
+void ImageEffect_WhiteBalance::slotDefault()
+{
+    m_darkInput->blockSignals(true);
+    m_blackInput->blockSignals(true);
+    m_exposureInput->blockSignals(true);
+    m_gammaInput->blockSignals(true);
+    m_saturationInput->blockSignals(true);  
+    m_greenInput->blockSignals(true);
+    m_temperaturePresetCB->blockSignals(true);
+    
+    // Neutral color temperature settings.
+    m_darkInput->setValue(0.5);
+    m_blackInput->setValue(0.0);
+    m_exposureInput->setValue(0.0);
+    m_gammaInput->setValue(1.0);  
+    m_saturationInput->setValue(1.0);  
+    m_greenInput->setValue(1.2);  
+    m_temperaturePresetCB->setCurrentItem(Neutral);
+    slotTemperaturePresetChanged(Neutral);
+    
+    m_previewWidget->resetSpotPosition();    
+    m_channelCB->setCurrentItem(LuminosityChannel);
+    slotChannelChanged(LuminosityChannel);
+    
+    m_histogramWidget->reset();
+    
+    m_darkInput->blockSignals(false);
+    m_blackInput->blockSignals(false);
+    m_exposureInput->blockSignals(false);
+    m_gammaInput->blockSignals(false);
+    m_saturationInput->blockSignals(false);  
+    m_greenInput->blockSignals(false);
+    m_temperaturePresetCB->blockSignals(false);
+    slotEffect();  
+} 
+
+// Load all settings.
+void ImageEffect_WhiteBalance::slotUser3()
+{
+    KURL loadWhiteBalanceFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+                                             QString( "*" ), this,
+                                             QString( i18n("White Color Balance Settings File to Load")) );
+    if( loadWhiteBalanceFile.isEmpty() )
+       return;
+
+    QFile file(loadWhiteBalanceFile.path());
+    
+    if ( file.open(IO_ReadOnly) )   
+    {
+        QTextStream stream( &file );
+
+        if ( stream.readLine() != "# White Color Balance Configuration File" )
+        {
+           KMessageBox::error(this, 
+                        i18n("\"%1\" is not a White Color Balance settings text file.")
+                        .arg(loadWhiteBalanceFile.fileName()));
+           file.close();            
+           return;
+        }
+        
+        blockSignals(true);
+        m_temperatureInput->setValue( stream.readLine().toDouble() );
+        m_darkInput->setValue( stream.readLine().toDouble() );
+        m_blackInput->setValue( stream.readLine().toDouble() );
+        m_exposureInput->setValue( stream.readLine().toDouble() );
+        m_gammaInput->setValue( stream.readLine().toDouble() );
+        m_saturationInput->setValue( stream.readLine().toDouble() );
+        m_greenInput->setValue( stream.readLine().toDouble() );
+        m_histogramWidget->reset();
+        blockSignals(false);
+        slotEffect();  
+    }
+    else
+        KMessageBox::error(this, i18n("Cannot load settings from the White Color Balance text file."));
+
+    file.close();            
+}
+
+// Save all settings.
+void ImageEffect_WhiteBalance::slotUser2()
+{
+    KURL saveWhiteBalanceFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+                                             QString( "*" ), this,
+                                             QString( i18n("White Color Balance Settings File to Save")) );
+    if( saveWhiteBalanceFile.isEmpty() )
+       return;
+
+    QFile file(saveWhiteBalanceFile.path());
+    
+    if ( file.open(IO_WriteOnly) )   
+    {
+        QTextStream stream( &file );        
+        stream << "# White Color Balance Configuration File\n";    
+        stream << m_temperatureInput->value() << "\n";    
+        stream << m_darkInput->value() << "\n";    
+        stream << m_blackInput->value() << "\n";    
+        stream << m_exposureInput->value() << "\n";    
+        stream << m_gammaInput->value() << "\n";    
+        stream << m_saturationInput->value() << "\n";    
+        stream << m_greenInput->value() << "\n";    
+    }
+    else
+        KMessageBox::error(this, i18n("Cannot save settings to the White Color Balance text file."));
+    
+    file.close();        
+}
+
+// -- White Balance algorithm -------------------------------------------
+
+void ImageEffect_WhiteBalance::slotAutoAdjustExposure(void)
+{
+    parentWidget()->setCursor( KCursor::waitCursor() );
+
+    // Create an histogram of original image.     
+
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    uchar *data                = iface->getOriginalImage();
+    int width                  = iface->originalWidth();
+    int height                 = iface->originalHeight();
+    bool sb                    = iface->originalSixteenBit();
+    
+    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, width, height, sb);
+       
+    // Calculate optimal exposition and black level 
+    
+    int stop, i, scale, w, h;
+    double black, expo, sum;
+    
+    w = width  / 400;
+    h = height / 400;
+    scale = QMAX(w, h);
+    scale = QMAX(1, scale);
+    
+    // Cutoff at 0.5% of the histogram.
+    
+    stop = ((uint)(width / scale)*(uint)(height / scale)) / 200;
+    
+    for (i = m_rgbMax, sum = 0; (i >= 0) && (sum < stop); i--)
+        sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
+    
+    expo = -log((float)(i+1) / m_rgbMax) / log(2);
+    DDebug() << "White level at:" << i << endl;
+    
+    // Cutoff at 0.5% of the histogram. 
+    
+    stop = ((uint)(width / scale)*(uint)(height / scale)) / 200;
+    
+    for (i = 1, sum = 0; (i < (int)m_rgbMax) && (sum < stop); i++)
+        sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
+    
+    black = (double)i / m_rgbMax;
+    black /= 2;
+    
+    DDebug() << "Black:" << black << "  Exposition:" << expo << endl;
+
+    m_blackInput->setValue(black);
+    m_exposureInput->setValue(expo);        
+
+    delete histogram;
+    delete [] data;
+    
+    parentWidget()->unsetCursor();
+    slotEffect();  
+}
+
 void ImageEffect_WhiteBalance::setRGBmult(void)
 {
     int   t;
@@ -824,114 +934,6 @@ unsigned short ImageEffect_WhiteBalance::pixelColor(int colorMult, int index, in
     return( (unsigned short)CLAMP((int)((index - m_saturation*(index - r)) * m_curve[index]), 
                                   0, (int)(m_rgbMax-1)) );
 }               
-
-// Reset all settings.
-void ImageEffect_WhiteBalance::slotDefault()
-{
-    m_darkInput->blockSignals(true);
-    m_blackInput->blockSignals(true);
-    m_exposureInput->blockSignals(true);
-    m_gammaInput->blockSignals(true);
-    m_saturationInput->blockSignals(true);  
-    m_greenInput->blockSignals(true);
-    m_temperaturePresetCB->blockSignals(true);
-    
-    // Neutral color temperature settings.
-    m_darkInput->setValue(0.5);
-    m_blackInput->setValue(0.0);
-    m_exposureInput->setValue(0.0);
-    m_gammaInput->setValue(1.0);  
-    m_saturationInput->setValue(1.0);  
-    m_greenInput->setValue(1.2);  
-    m_temperaturePresetCB->setCurrentItem(Neutral);
-    slotTemperaturePresetChanged(Neutral);
-    
-    m_previewWidget->resetSpotPosition();    
-    m_channelCB->setCurrentItem(LuminosityChannel);
-    slotChannelChanged(LuminosityChannel);
-    
-    m_histogramWidget->reset();
-    
-    m_darkInput->blockSignals(false);
-    m_blackInput->blockSignals(false);
-    m_exposureInput->blockSignals(false);
-    m_gammaInput->blockSignals(false);
-    m_saturationInput->blockSignals(false);  
-    m_greenInput->blockSignals(false);
-    m_temperaturePresetCB->blockSignals(false);
-    slotEffect();  
-} 
-
-// Load all settings.
-void ImageEffect_WhiteBalance::slotUser3()
-{
-    KURL loadWhiteBalanceFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                                             QString( "*" ), this,
-                                             QString( i18n("White Color Balance Settings File to Load")) );
-    if( loadWhiteBalanceFile.isEmpty() )
-       return;
-
-    QFile file(loadWhiteBalanceFile.path());
-    
-    if ( file.open(IO_ReadOnly) )   
-    {
-        QTextStream stream( &file );
-
-        if ( stream.readLine() != "# White Color Balance Configuration File" )
-        {
-           KMessageBox::error(this, 
-                        i18n("\"%1\" is not a White Color Balance settings text file.")
-                        .arg(loadWhiteBalanceFile.fileName()));
-           file.close();            
-           return;
-        }
-        
-        blockSignals(true);
-        m_temperatureInput->setValue( stream.readLine().toDouble() );
-        m_darkInput->setValue( stream.readLine().toDouble() );
-        m_blackInput->setValue( stream.readLine().toDouble() );
-        m_exposureInput->setValue( stream.readLine().toDouble() );
-        m_gammaInput->setValue( stream.readLine().toDouble() );
-        m_saturationInput->setValue( stream.readLine().toDouble() );
-        m_greenInput->setValue( stream.readLine().toDouble() );
-        m_histogramWidget->reset();
-        blockSignals(false);
-        slotEffect();  
-    }
-    else
-        KMessageBox::error(this, i18n("Cannot load settings from the White Color Balance text file."));
-
-    file.close();            
-}
-
-// Save all settings.
-void ImageEffect_WhiteBalance::slotUser2()
-{
-    KURL saveWhiteBalanceFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
-                                             QString( "*" ), this,
-                                             QString( i18n("White Color Balance Settings File to Save")) );
-    if( saveWhiteBalanceFile.isEmpty() )
-       return;
-
-    QFile file(saveWhiteBalanceFile.path());
-    
-    if ( file.open(IO_WriteOnly) )   
-    {
-        QTextStream stream( &file );        
-        stream << "# White Color Balance Configuration File\n";    
-        stream << m_temperatureInput->value() << "\n";    
-        stream << m_darkInput->value() << "\n";    
-        stream << m_blackInput->value() << "\n";    
-        stream << m_exposureInput->value() << "\n";    
-        stream << m_gammaInput->value() << "\n";    
-        stream << m_saturationInput->value() << "\n";    
-        stream << m_greenInput->value() << "\n";    
-    }
-    else
-        KMessageBox::error(this, i18n("Cannot save settings to the White Color Balance text file."));
-    
-    file.close();        
-}
 
 }  // NameSpace DigikamWhiteBalanceImagesPlugin
 
