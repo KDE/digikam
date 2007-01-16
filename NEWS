@@ -142,6 +142,7 @@ Image Plugins : New option in all Color corrections Tools to show under-exposed 
 Image Plugins : Brightness/Contrast/Gamma : settings value excursion are the same 
                 than Photoshop.
 Image Plugins : Ratio-crop Tool : usability improvements from Jaromir Malenko.
+Image Plugins : Auto Color Correction Tool : add new filter to perform auto-exposure corrections.
 Image Plugins : Black & Whithe converter : Capabilty to remember settings between plugin
                 session and to store configuration in a settings file.
 
