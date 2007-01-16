@@ -35,7 +35,7 @@ class QHButtonGroup;
 class QComboBox;
 class QButtonGroup;
 
-class KDoubleNumInput;
+class KIntNumInput;
 class KTabWidget;
 
 namespace Digikam
@@ -64,6 +64,34 @@ public:
     ~ImageEffect_BWSepia();
 
     friend class PreviewPixmapFactory;
+    
+protected:
+
+    QPixmap getThumbnailForEffect(int type);
+    void finalRendering();
+
+protected slots:
+
+    virtual void slotTimer();
+
+private:
+
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues();
+
+    void blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type);
+    QString previewEffectPic(QString name);
+    
+private slots:
+
+    void slotUser2();
+    void slotUser3();
+    void slotEffect();
+    void slotChannelChanged(int channel);
+    void slotScaleChanged(int scale);
+    void slotSpotColorChanged(const Digikam::DColor &color);    
+    void slotColorSelectedFromTarget( const Digikam::DColor &color );
 
 private:
 
@@ -114,7 +142,7 @@ private:
     QListBox                     *m_bwFilters;
     QListBox                     *m_bwTone;
 
-    KDoubleNumInput              *m_cInput;
+    KIntNumInput                 *m_cInput;
     
     KTabWidget                   *m_tab;
     
@@ -132,32 +160,6 @@ private:
     Digikam::DImg                 m_thumbnailImage;
 
     PreviewPixmapFactory         *m_previewPixmapFactory;
-    
-private:
-
-    void blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type);
-    QString previewEffectPic(QString name);
-    
-private slots:
-
-    void slotDefault();    
-    void slotEffect();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
-    void slotSpotColorChanged(const Digikam::DColor &color);    
-    void slotColorSelectedFromTarget( const Digikam::DColor &color );
-
-protected:
-
-    QPixmap getThumbnailForEffect(int type);
-
-protected slots:
-
-    virtual void slotTimer();
-
-protected:
-
-    void finalRendering();
 };
 
 }  // NameSpace DigikamImagesPluginCore

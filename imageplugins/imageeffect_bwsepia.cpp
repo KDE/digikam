@@ -38,9 +38,14 @@
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 #include <qintdict.h>
+#include <qtextstream.h>
+#include <qfile.h>
 
 // KDE includes.
 
+#include <kfiledialog.h>
+#include <kglobalsettings.h>
+#include <kmessagebox.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -113,6 +118,7 @@ QPixmap PreviewPixmapFactory::makePixmap(int id)
     return m_bwSepia->getThumbnailForEffect(id);
 }
 
+// -----------------------------------------------------------------------------------
 
 class ListBoxBWPreviewItem : public Digikam::ListBoxPreviewItem
 {
@@ -140,13 +146,11 @@ const QPixmap* ListBoxBWPreviewItem::pixmap() const
     return m_previewPixmapFactory->pixmap(m_id);
 }
 
-
 // -----------------------------------------------------------------------------------
-
 
 ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                    : Digikam::ImageDlgBase(parent, i18n("Convert to Black & White"), 
-                                           "convertbw", false),
+                                           "convertbw", true, false),
                      m_destinationPreviewData(0L),
                      m_channelCB(0),
                      m_scaleBG(0),
@@ -249,33 +253,34 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_bwFilters->setVariableWidth(false);
     m_bwFilters->setVariableHeight(false);
     Digikam::ListBoxWhatsThis* whatsThis = new Digikam::ListBoxWhatsThis(m_bwFilters);
-    m_previewPixmapFactory = new PreviewPixmapFactory(this);
+    m_previewPixmapFactory               = new PreviewPixmapFactory(this);
 
     int type = BWNoFilter;
 
-    QListBoxItem *item = new ListBoxBWPreviewItem(m_bwFilters, i18n("No Black & White Filter"), m_previewPixmapFactory, type);
+    ListBoxBWPreviewItem *item = new ListBoxBWPreviewItem(m_bwFilters, 
+                                     i18n("No Black & White Filter"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<b>No Black & White Filter</b>:"
                                "<p>Do not apply a black and white filter to the image.</p>"));
     
     ++type;
     item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Neutral"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Neutral Black & White</b>:"
-                                   "<p>Simulate black and white neutral film exposure.</p>")
-                                   .arg(previewEffectPic("neutralbw")));
+                               "<p>Simulate black and white neutral film exposure.</p>")
+                               .arg(previewEffectPic("neutralbw")));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Green Filter"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Green Filter</b>:"
-                                 "<p>Simulate black and white film exposure using green filter. "
-                                 "This provides an universal asset for all scenics, especially suited for portraits "
-                                 "photographed against sky.</p>").arg(previewEffectPic("bwgreen")));
+                               "<p>Simulate black and white film exposure using green filter. "
+                               "This provides an universal asset for all scenics, especially suited "
+                               "for portraits photographed against sky.</p>").arg(previewEffectPic("bwgreen")));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Orange Filter"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Orange Filter</b>:"
-                                  "<p>Simulate black and white film exposure using orange filter. "
-                                  "This will enhances landscapes, marine scenes and aerial "
-                                  "photography.</p>").arg(previewEffectPic("bworange")));
+                               "<p>Simulate black and white film exposure using orange filter. "
+                               "This will enhances landscapes, marine scenes and aerial "
+                               "photography.</p>").arg(previewEffectPic("bworange")));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Red Filter"), m_previewPixmapFactory, type);
@@ -287,9 +292,9 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     ++type;
     item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Yellow Filter"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Yellow Filter</b>:"
-                                  "<p>Simulate black and white film exposure using yellow filter. "
-                                  "Most natural tonal correction and improves contrast. Ideal for "
-                                  "landscapes.</p>").arg(previewEffectPic("bwyellow")));
+                               "<p>Simulate black and white film exposure using yellow filter. "
+                               "Most natural tonal correction and improves contrast. Ideal for "
+                               "landscapes.</p>").arg(previewEffectPic("bwyellow")));
 
     m_tab->insertTab(m_bwFilters, i18n("Filters"), BWFiltersTab);
 
@@ -310,32 +315,34 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     ++type;
     item = new ListBoxBWPreviewItem(m_bwTone, i18n("Sepia Tone"), m_previewPixmapFactory, type);
     whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Sepia Tone</b>:"
-                                 "<p>Gives a warm highlight and mid-tone while adding a bit of coolness to "
-                                 "the shadows-very similar to the process of bleaching a print and re-developing in a sepia "
-                                 "toner.</p>").arg(previewEffectPic("sepia")));
+                                "<p>Gives a warm highlight and mid-tone while adding a bit of coolness to "
+                                "the shadows-very similar to the process of bleaching a print and "
+                                "re-developing in a sepia toner.</p>").arg(previewEffectPic("sepia")));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwTone, i18n("Brown Tone"), m_previewPixmapFactory, type);
     whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Brown Tone</b>:"
-                                 "<p>This filter is more neutral than Sepia Tone filter.</p>").arg(previewEffectPic("browntone")));
+                                "<p>This filter is more neutral than Sepia Tone "
+                                "filter.</p>").arg(previewEffectPic("browntone")));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwTone, i18n("Cold Tone"), m_previewPixmapFactory, type);
     whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Cold Tone</b>:"
                                 "<p>Start subtle and replicate printing on a cold tone black and white "
-                                "paper such as a bromide enlarging paper.</p>").arg(previewEffectPic("coldtone")));
+                                "paper such as a bromide enlarging "
+                                "paper.</p>").arg(previewEffectPic("coldtone")));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwTone, i18n("Selenium Tone"), m_previewPixmapFactory, type);
     whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Selenium Tone</b>:"
-                                    "<p>This effect replicate traditional selenium chemical toning done "
-                                    "in the darkroom.</p>").arg(previewEffectPic("selenium")));
+                                "<p>This effect replicate traditional selenium chemical toning done "
+                                "in the darkroom.</p>").arg(previewEffectPic("selenium")));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwTone, i18n("Platinum Tone"), m_previewPixmapFactory, type);
     whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Platinum Tone</b>:"
-                                     "<p>This effect replicate traditional platinum chemical toning done "
-                                     "in the darkroom.</p>").arg(previewEffectPic("platinum")));
+                                "<p>This effect replicate traditional platinum chemical toning done "
+                                "in the darkroom.</p>").arg(previewEffectPic("platinum")));
     
     m_tab->insertTab(m_bwTone, i18n("Tone"), ToneTab);
 
@@ -362,11 +369,10 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     gridTab2->addMultiCellWidget(hGradient, 1, 1, 1, 1);
     
-    m_cInput = new KDoubleNumInput(tab2);
+    m_cInput = new KIntNumInput(tab2);
     m_cInput->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
-    m_cInput->setPrecision(2);
-    m_cInput->setRange(-1.0, 1.0, 0.01, true);
-    m_cInput->setValue(0.0);
+    m_cInput->setRange(-100, 100, 1, true);
+    m_cInput->setValue(0);
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
     gridTab2->addMultiCellWidget(m_cInput, 2, 2, 0, 1);
 
@@ -376,21 +382,9 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_bwFilters->setFocus();
     gridSettings->addMultiCellWidget(m_tab, 3, 3, 0, 4);
     gridSettings->setRowStretch(3, 10);
     setUserAreaWidget(gboxSettings);
-    
-    // -------------------------------------------------------------
-
-    KConfig* config = kapp->config();
-    config->setGroup("Black and White Convertion Tool");
-    m_tab->setCurrentPage(config->readNumEntry("Settings Tab", BWFiltersTab));
-    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
-
-    // Reset all parameters to the default values.
-    QTimer::singleShot(0, this, SLOT(slotDefault()));
     
     // -------------------------------------------------------------
 
@@ -415,7 +409,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
             this, SLOT(slotTimer()));
     
-    connect(m_cInput, SIGNAL(valueChanged (double)),
+    connect(m_cInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
                      
     connect(m_previewWidget, SIGNAL(signalResized()),
@@ -425,13 +419,6 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 ImageEffect_BWSepia::~ImageEffect_BWSepia()
 {
     m_histogramWidget->stopHistogramComputation();
-
-    KConfig* config = kapp->config();
-    config->setGroup("Black and White Convertion Tool");
-    config->writeEntry("Settings Tab", m_tab->currentPageIndex());
-    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
-    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
-    config->sync();
 
     delete [] m_destinationPreviewData;
        
@@ -459,7 +446,7 @@ QPixmap ImageEffect_BWSepia::getThumbnailForEffect(int type)
 
         Digikam::DImg preview(w, h, sb, a, targetData);
         Digikam::BCGModifier cmod;
-        cmod.setContrast(m_cInput->value() + (double)(1.00));
+        cmod.setContrast((double)(m_cInput->value()/100.0) + 1.00);
         cmod.applyBCG(preview);
 
         thumb.putImageData(preview.bits());
@@ -521,7 +508,70 @@ QString ImageEffect_BWSepia::previewEffectPic(QString name)
     return ( KGlobal::dirs()->findResourceDir(name.ascii(), name + ".png") + name + ".png" );
 }
 
-void ImageEffect_BWSepia::slotDefault()
+void ImageEffect_BWSepia::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("convertbw Tool Dialog");
+
+    m_tab->setCurrentPage(config->readNumEntry("Settings Tab", BWFiltersTab));
+    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_bwFilters->setCurrentItem(config->readNumEntry("BW Filter", 0));
+    m_bwTone->setCurrentItem(config->readNumEntry("BW Tone", 0));
+    m_cInput->setValue(config->readNumEntry("ContrastAjustment", 0));
+
+    for (int i = 0 ; i < 5 ; i++)
+        m_curves->curvesChannelReset(i);
+
+    m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
+    m_curvesWidget->reset();
+
+    for (int j = 0 ; j < 17 ; j++)
+    {
+        QPoint disable(-1, -1);
+        QPoint p = config->readPointEntry(QString("CurveAjustmentPoint%1").arg(j), &disable);
+
+        if (m_originalImage->sixteenBit() && p.x() != -1)
+        {
+            p.setX(p.x()*255);
+            p.setY(p.y()*255);
+        }
+
+        m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
+    }
+
+    for (int i = 0 ; i < 5 ; i++)
+        m_curves->curvesCalculateCurve(i);
+}
+
+void ImageEffect_BWSepia::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("convertbw Tool Dialog");
+    config->writeEntry("Settings Tab", m_tab->currentPageIndex());
+    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
+    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    config->writeEntry("BW Filter", m_bwFilters->currentItem());
+    config->writeEntry("BW Tone", m_bwTone->currentItem());
+    config->writeEntry("ContrastAjustment", m_cInput->value());
+
+    for (int j = 0 ; j < 17 ; j++)
+    {
+        QPoint p = m_curves->getCurvePoint(Digikam::ImageHistogram::ValueChannel, j);
+
+        if (m_originalImage->sixteenBit() && p.x() != -1)
+        {
+            p.setX(p.x()/255);
+            p.setY(p.y()/255);
+        }
+
+        config->writeEntry(QString("CurveAjustmentPoint%1").arg(j), p);
+    }
+
+    config->sync();
+}
+
+void ImageEffect_BWSepia::resetValues()
 {
     m_bwFilters->blockSignals(true);
     m_bwTone->blockSignals(true);
@@ -533,7 +583,7 @@ void ImageEffect_BWSepia::slotDefault()
     m_bwTone->setCurrentItem(0);
     m_bwTone->setSelected(0, true);
 
-    m_cInput->setValue(0.0);
+    m_cInput->setValue(0);
     
     for (int channel = 0 ; channel < 5 ; channel++)
        m_curves->curvesChannelReset(channel);
@@ -544,6 +594,7 @@ void ImageEffect_BWSepia::slotDefault()
     m_bwTone->blockSignals(false);
     m_bwFilters->blockSignals(false);
 
+    m_histogramWidget->reset();
     m_previewPixmapFactory->invalidate();
     m_bwFilters->triggerUpdate(false);
     m_bwTone->triggerUpdate(false);
@@ -584,7 +635,7 @@ void ImageEffect_BWSepia::slotEffect()
     
     Digikam::DImg preview(w, h, sb, a, targetData);
     Digikam::BCGModifier cmod;
-    cmod.setContrast(m_cInput->value() + (double)(1.00));
+    cmod.setContrast((double)(m_cInput->value()/100.0) + 1.00);
     cmod.applyBCG(preview);
     iface->putPreviewImage(preview.bits());
 
@@ -640,7 +691,7 @@ void ImageEffect_BWSepia::finalRendering()
             
         Digikam::DImg img(w, h, sb, a, targetData);
         Digikam::BCGModifier cmod;
-        cmod.setContrast(m_cInput->value() + (double)(1.00));
+        cmod.setContrast((double)(m_cInput->value()/100.0) + 1.00);
         cmod.applyBCG(img);
 
         iface->putOriginalImage(i18n("Convert to Black && White"), img.bits());
@@ -735,6 +786,119 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
           filter.changeTonality(data, w, h, sb, 115*mul, 110*mul, 106*mul);
           break;
     }
+}
+
+//-- Load all settings from file --------------------------------------
+
+void ImageEffect_BWSepia::slotUser3()
+{
+    KURL loadFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+                                            QString( "*" ), this,
+                                            QString( i18n("Black & White Settings File to Load")) );
+    if( loadFile.isEmpty() )
+       return;
+
+    QFile file(loadFile.path());
+    
+    if ( file.open(IO_ReadOnly) )   
+    {
+        QTextStream stream( &file );
+
+        if ( stream.readLine() != "# Black & White Configuration File" )
+        {
+           KMessageBox::error(this, 
+                        i18n("\"%1\" is not a Black & White settings text file.")
+                        .arg(loadFile.fileName()));
+           file.close();            
+           return;
+        }
+        
+        m_bwFilters->blockSignals(true);
+        m_bwTone->blockSignals(true);
+        m_cInput->blockSignals(true);
+
+        m_bwFilters->setCurrentItem(stream.readLine().toInt());
+        m_bwTone->setCurrentItem(stream.readLine().toInt());
+        m_cInput->setValue(stream.readLine().toInt());
+
+        for (int i = 0 ; i < 5 ; i++)
+            m_curves->curvesChannelReset(i);
+
+        m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
+        m_curvesWidget->reset();
+
+        for (int j = 0 ; j < 17 ; j++)
+        {
+            QPoint disable(-1, -1);
+            QPoint p;
+            p.setX( stream.readLine().toInt() );
+            p.setY( stream.readLine().toInt() );
+    
+            if (m_originalImage->sixteenBit() && p != disable)
+            {
+                p.setX(p.x()*255);
+                p.setY(p.y()*255);
+            }
+    
+            m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
+        }
+
+        for (int i = 0 ; i < 5 ; i++)
+           m_curves->curvesCalculateCurve(i);
+
+        m_bwFilters->blockSignals(false);
+        m_bwTone->blockSignals(false);
+        m_cInput->blockSignals(false);
+
+        m_histogramWidget->reset();
+        m_previewPixmapFactory->invalidate();
+        m_bwFilters->triggerUpdate(false);
+        m_bwTone->triggerUpdate(false);     
+
+        slotEffect();  
+    }
+    else
+        KMessageBox::error(this, i18n("Cannot load settings from the Black & White text file."));
+
+    file.close();
+}
+
+//-- Save all settings to file ---------------------------------------
+
+void ImageEffect_BWSepia::slotUser2()
+{
+    KURL saveFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+                                            QString( "*" ), this,
+                                            QString( i18n("Black & White Settings File to Save")) );
+    if( saveFile.isEmpty() )
+       return;
+
+    QFile file(saveFile.path());
+    
+    if ( file.open(IO_WriteOnly) )   
+    {
+        QTextStream stream( &file );        
+        stream << "# Black & White Configuration File\n";
+        stream << m_bwFilters->currentItem() << "\n";    
+        stream << m_bwTone->currentItem() << "\n";    
+        stream << m_cInput->value() << "\n";    
+
+        for (int j = 0 ; j < 17 ; j++)
+        {
+            QPoint p = m_curves->getCurvePoint(Digikam::ImageHistogram::ValueChannel, j);
+            if (m_originalImage->sixteenBit())
+            {
+                p.setX(p.x()/255);
+                p.setY(p.y()/255);
+            }
+            stream << p.x() << "\n";
+            stream << p.y() << "\n";
+        }
+    }
+    else
+        KMessageBox::error(this, i18n("Cannot save settings to the Black & White text file."));
+    
+    file.close();        
 }
 
 }  // NameSpace DigikamImagesPluginCore
