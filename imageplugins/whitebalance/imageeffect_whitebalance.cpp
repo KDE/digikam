@@ -648,6 +648,8 @@ void ImageEffect_WhiteBalance::readUserSettings()
     m_greenInput->setValue(config->readDoubleNumEntry("Green", 1.2));  
     m_temperatureInput->setValue(config->readDoubleNumEntry("Temperature", 4750.0));
     slotTemperatureChanged(m_temperatureInput->value());
+    slotChannelChanged(m_channelCB->currentItem());
+    slotScaleChanged(m_scaleBG->selectedId());
 }
 
 void ImageEffect_WhiteBalance::writeUserSettings()
