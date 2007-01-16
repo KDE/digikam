@@ -24,10 +24,10 @@
 #ifndef BLACKBODY_H
 #define BLACKBODY_H
 
-namespace DigikamWhiteBalanceImagesPlugin
+namespace Digikam
 {
 
-static const float bbWB[][3] = 
+static const float blackBodyWhiteBalance[][3] = 
 {
     /*    2000 */ { 1.0000, 0.5977, 0.0120 }, 
     /*    2010 */ { 1.0000, 0.6021, 0.0140 }, 
@@ -532,6 +532,6 @@ static const float bbWB[][3] =
     /*    7000 */ { 0.5677, 0.9766, 1.0000 }, 
 };
 
-}  // NameSpace DigikamWhiteBalanceImagesPlugin
+}  // NameSpace Digikam
 
 #endif /* BLACKBODY_H */

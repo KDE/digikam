@@ -21,12 +21,18 @@
 #ifndef WHITEBALANCE_H
 #define WHITEBALANCE_H
 
-namespace DigikamWhiteBalanceImagesPlugin
+// Digikam includes.
+
+#include "digikam_export.h"
+
+class QColor;
+
+namespace Digikam
 {
 
 class WhiteBalancePriv;
 
-class WhiteBalance
+class DIGIKAM_EXPORT WhiteBalance
 {
 
 public:
@@ -35,7 +41,7 @@ public:
     ~WhiteBalance();
 
     void whiteBalance(uchar *data, int width, int height, bool sixteenBit, 
-                      double temperature, double dark, double black, double exposure,
+                      double temperature, double dark, double black, double exposition,
                       double gamma, double saturation, double green);
 
     static void autoExposureAdjustement(uchar* data, int width, int height, bool sb,
@@ -55,6 +61,6 @@ private:
     WhiteBalancePriv* d;
 };
 
-}  // NameSpace DigikamWhiteBalanceImagesPlugin
+}  // NameSpace Digikam
 
 #endif /* WHITEBALANCE_H */

@@ -4,7 +4,7 @@
  * Date   : 2004-12-22
  *
  * Copyright 2004 by Renchi Raju
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,6 +39,7 @@
 #include <imagelevels.h>
 #include <imageplugin.h>
 #include <imagecurves.h>
+#include <whitebalance.h>
 #include <thumbbar.h>
 #include <colorgradientwidget.h>
 #include <histogramwidget.h>
@@ -69,6 +70,7 @@
 #include <digikam/imagelevels.h>
 #include <digikam/imageplugin.h>
 #include <digikam/imagecurves.h>
+#include <digikam/whitebalance.h>
 #include <digikam/thumbbar.h>
 #include <digikam/colorgradientwidget.h>
 #include <digikam/histogramwidget.h>

@@ -19,12 +19,6 @@
  * 
  * ============================================================ */
 
-// C++ includes.
-
-#include <cstdio>
-#include <cmath>
-#include <cstring>
- 
 // Qt includes. 
  
 #include <qhgroupbox.h>
@@ -58,6 +52,7 @@
 #include <kglobalsettings.h>
 #include <kfiledialog.h>
 #include <kseparator.h>
+#include <kconfig.h>
 
 // Local includes.
 
@@ -279,16 +274,10 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
     grid2->addMultiCellWidget(m_exposureLabel, 8, 8, 0, 0);
     grid2->addMultiCellWidget(m_autoAdjustExposure, 8, 8, 1, 1);
     grid2->addMultiCellWidget(m_exposureInput, 8, 8, 2, 5);
-
     grid2->setRowStretch(9, 10);
             
     setUserAreaWidget(gboxSettings);
             
-    // -------------------------------------------------------------
-    
-    // Reset all parameters to the default values.
-    QTimer::singleShot(0, this, SLOT(slotDefault()));
-
     // -------------------------------------------------------------
  
     connect(m_channelCB, SIGNAL(activated(int)),
@@ -463,7 +452,7 @@ void ImageEffect_WhiteBalance::slotColorSelectedFromOriginal(const Digikam::DCol
         QColor tc = dc.getQColor();
         double temperatureLevel, greenLevel;
     
-        WhiteBalance::autoWBAdjustementFromColor(tc, temperatureLevel, greenLevel);
+        Digikam::WhiteBalance::autoWBAdjustementFromColor(tc, temperatureLevel, greenLevel);
             
         m_temperatureInput->setValue(temperatureLevel);
         m_greenInput->setValue(greenLevel);
@@ -530,7 +519,7 @@ void ImageEffect_WhiteBalance::slotAutoAdjustExposure()
     double blackLevel;
     double exposureLevel;
 
-    WhiteBalance::autoExposureAdjustement(data, width, height, sb, blackLevel, exposureLevel);
+    Digikam::WhiteBalance::autoExposureAdjustement(data, width, height, sb, blackLevel, exposureLevel);
     delete [] data;        
 
     m_blackInput->setValue(blackLevel);
@@ -559,23 +548,15 @@ void ImageEffect_WhiteBalance::slotEffect()
     double temperature = m_temperatureInput->value()/1000.0;
     double dark        = m_darkInput->value();
     double black       = m_blackInput->value();
-    double exposure    = m_exposureInput->value();
+    double exposition  = m_exposureInput->value();
     double gamma       = 2.0-m_gammaInput->value();
     double saturation  = m_saturationInput->value();
     double green       = m_greenInput->value();
             
-    WhiteBalance wbFilter(sb);
+    Digikam::WhiteBalance wbFilter(sb);
     wbFilter.whiteBalance(data, w, h, sb, 
-                          temperature, dark, black, exposure,
+                          temperature, dark, black, exposition,
                           gamma, saturation, green);
-
-/*    
-    // Set preview lut.
-    setRGBmult();
-    m_mg = 1.0;
-    setLUTv();
-    setRGBmult();
-  */
      
     iface->putPreviewImage(data);
     m_previewWidget->updatePreview();
@@ -598,24 +579,15 @@ void ImageEffect_WhiteBalance::finalRendering()
     double temperature = m_temperatureInput->value()/1000.0;
     double dark        = m_darkInput->value();
     double black       = m_blackInput->value();
-    double exposure    = m_exposureInput->value();
+    double exposition  = m_exposureInput->value();
     double gamma       = 2.0-m_gammaInput->value();
     double saturation  = m_saturationInput->value();
     double green       = m_greenInput->value();
             
-    WhiteBalance wbFilter(sb);
+    Digikam::WhiteBalance wbFilter(sb);
     wbFilter.whiteBalance(data, w, h, sb, 
-                          temperature, dark, black, exposure,
+                          temperature, dark, black, exposition,
                           gamma, saturation, green);
-
-/*
-    // Set final lut.
-    setRGBmult();
-    m_mr = m_mb = 1.0;
-    if (m_clipSat) m_mg = 1.0; 
-    setLUTv();
-    setRGBmult();
-  */     
 
     iface->putOriginalImage(i18n("White Balance"), data);
     delete [] data;
@@ -623,8 +595,7 @@ void ImageEffect_WhiteBalance::finalRendering()
     accept();       
 }
 
-// Reset all settings.
-void ImageEffect_WhiteBalance::slotDefault()
+void ImageEffect_WhiteBalance::resetValues()
 {
     m_darkInput->blockSignals(true);
     m_blackInput->blockSignals(true);
@@ -659,6 +630,40 @@ void ImageEffect_WhiteBalance::slotDefault()
     m_temperaturePresetCB->blockSignals(false);
     slotEffect();  
 } 
+
+void ImageEffect_WhiteBalance::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("whitebalance Tool Dialog");
+    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+
+    m_darkInput->setValue(config->readDoubleNumEntry("Dark", 0.5));
+    m_blackInput->setValue(config->readDoubleNumEntry("Black", 0.0));
+    m_exposureInput->setValue(config->readDoubleNumEntry("Exposure", 0.0));
+    m_gammaInput->setValue(config->readDoubleNumEntry("Gamma", 1.0));  
+    m_saturationInput->setValue(config->readDoubleNumEntry("Saturation", 1.0));  
+    m_greenInput->setValue(config->readDoubleNumEntry("Green", 1.2));  
+    m_temperatureInput->setValue(config->readDoubleNumEntry("Temperature", 4750.0));
+    slotTemperatureChanged(m_temperatureInput->value());
+}
+
+void ImageEffect_WhiteBalance::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("whitebalance Tool Dialog");
+    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
+    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
+
+    config->writeEntry("Dark", m_darkInput->value());
+    config->writeEntry("Black", m_blackInput->value());
+    config->writeEntry("Exposure", m_exposureInput->value());
+    config->writeEntry("Gamma", m_gammaInput->value());
+    config->writeEntry("Saturation", m_saturationInput->value());
+    config->writeEntry("Green", m_greenInput->value());
+    config->writeEntry("Temperature", m_temperatureInput->value()); 
+    config->sync();
+}
 
 // Load all settings.
 void ImageEffect_WhiteBalance::slotUser3()

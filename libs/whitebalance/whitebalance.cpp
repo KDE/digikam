@@ -25,22 +25,21 @@
 
 // C++ includes.
  
-#include <cstdio>
 #include <cmath>
-#include <cstring>
-#include <cstdlib>
-#include <cerrno>
 
-// Digikam includes.
+// Qt includes.
 
-#include <digikamheaders.h>
+#include <qcolor.h>
+
 
 // Local includes.
 
+#include "ddebug.h"
+#include "imagehistogram.h"
 #include "blackbody.h"
 #include "whitebalance.h"
 
-namespace DigikamWhiteBalanceImagesPlugin
+namespace Digikam
 {
 
 class WhiteBalancePriv
@@ -50,13 +49,25 @@ public:
 
     WhiteBalancePriv()
     {
-        clipSat = true;
-        overExp = false;         // Obsolete in algorithm since over/under exposure indicators
-        WBind   = false;         // are implemented directly with preview widget.
-        mr      = 1.0;
-        mg      = 1.0;
-        mb      = 1.0;
-        BP      = 0;
+        // Obsolete in algorithm since over/under exposure indicators
+        // are implemented directly with preview widget.
+        WBind       = false;
+        overExp     = false;         
+
+        clipSat     = true;
+        mr          = 1.0;
+        mg          = 1.0;
+        mb          = 1.0;
+        BP          = 0;
+
+        // Neutral color temperature settings.
+        dark        = 0.5;
+        black       = 0.0;
+        exposition  = 0.0;
+        gamma       = 1.0;  
+        saturation  = 1.0;  
+        green       = 1.2;  
+        temperature = 4.750;
     }
 
     bool   clipSat;
@@ -95,13 +106,13 @@ WhiteBalance::~WhiteBalance()
 }
 
 void WhiteBalance::whiteBalance(uchar *data, int width, int height, bool sixteenBit, 
-                                double temperature, double dark, double black, double exposure,
+                                double temperature, double dark, double black, double exposition,
                                 double gamma, double saturation, double green)
 { 
     d->temperature = temperature;
     d->dark        = dark;
     d->black       = black;
-    d->exposition  = exposure;
+    d->exposition  = exposition;
     d->gamma       = gamma;
     d->saturation  = saturation;
     d->green       = green;
@@ -133,24 +144,24 @@ void WhiteBalance::autoWBAdjustementFromColor(const QColor &tc, double &temperat
     DDebug() << "Sums:  R:" << sR << " G:" << sG  << " B:" << sB << endl;
 
     l = 0;
-    r = sizeof(bbWB)/(sizeof(float)*3);
+    r = sizeof(blackBodyWhiteBalance)/(sizeof(float)*3);
     m = (r + l) / 2;
 
-    for (l = 0, r = sizeof(bbWB)/(sizeof(float)*3), m = (l+r)/2 ; r-l > 1 ; m = (l+r)/2) 
+    for (l = 0, r = sizeof(blackBodyWhiteBalance)/(sizeof(float)*3), m = (l+r)/2 ; r-l > 1 ; m = (l+r)/2) 
     {
-        if (bbWB[m][0]/bbWB[m][2] > mRB) 
+        if (blackBodyWhiteBalance[m][0]/blackBodyWhiteBalance[m][2] > mRB) 
             l = m;
         else
             r = m;
 
         DDebug() << "L,M,R:  " << l << " " << m << " " << r 
-                 << " bbWB[m]=:" << bbWB[m][0]/bbWB[m][2]
+                 << " blackBodyWhiteBalance[m]=:" << blackBodyWhiteBalance[m][0]/blackBodyWhiteBalance[m][2]
                  << endl;
     }
     
     DDebug() << "Temperature (K):" << m*10.0+2000.0 << endl;
 
-    t = (bbWB[m][1]/bbWB[m][0]) / (sG/sR);
+    t = (blackBodyWhiteBalance[m][1]/blackBodyWhiteBalance[m][0]) / (sG/sR);
 
     DDebug() << "Green component:" << t << endl;
 
@@ -163,7 +174,7 @@ void WhiteBalance::autoExposureAdjustement(uchar* data, int width, int height, b
 {
     // Create an histogram of original image.     
 
-    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, width, height, sb);
+    ImageHistogram *histogram = new ImageHistogram(data, width, height, sb);
        
     // Calculate optimal exposition and black level 
     
@@ -209,9 +220,9 @@ void WhiteBalance::setRGBmult()
     if ( d->temperature > 7.0 ) d->temperature = 7.0;
     
     t     = (int)(d->temperature * 100.0 - 200.0);
-    d->mr  = 1.0 / bbWB[t][0];
-    d->mg  = 1.0 / bbWB[t][1];
-    d->mb  = 1.0 / bbWB[t][2];
+    d->mr  = 1.0 / blackBodyWhiteBalance[t][0];
+    d->mg  = 1.0 / blackBodyWhiteBalance[t][1];
+    d->mb  = 1.0 / blackBodyWhiteBalance[t][2];
     d->mg *= d->green;
     
     // Normalize to at least 1.0, so we are not dimming colors only bumping.
@@ -330,4 +341,4 @@ unsigned short WhiteBalance::pixelColor(int colorMult, int index, int value)
                                   0, (int)(d->rgbMax-1)) );
 }               
 
-}  // NameSpace DigikamWhiteBalanceImagesPlugin
+}  // NameSpace Digikam

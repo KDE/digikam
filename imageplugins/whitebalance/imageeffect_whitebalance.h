@@ -56,7 +56,6 @@ protected:
 
 private slots:
 
-    void slotDefault();
     void slotUser2();
     void slotUser3();
     void slotEffect();
@@ -68,6 +67,12 @@ private slots:
     void slotTemperaturePresetChanged(int tempPreset);
     void slotAutoAdjustExposure(void);
     void slotPickerColorButtonActived();    
+
+private:
+
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues();
 
 private:    
 
