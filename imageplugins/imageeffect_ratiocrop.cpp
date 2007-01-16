@@ -60,8 +60,7 @@ namespace DigikamImagesPluginCore
 
 ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
                      : Digikam::ImageDlgBase(parent, i18n("Aspect Ratio Crop & Composition Guide"),
-                                             "aspectratiocrop", false),
-                       m_parent(parent)
+                                             "aspectratiocrop", false)
 {
     setHelp("ratiocroptool.anchor", "digikam");
     setButtonWhatsThis ( User1, i18n("<p>Set selection area to the maximum size according "
@@ -344,9 +343,9 @@ void ImageEffect_RatioCrop::readSettings(void)
     int w = iface.originalWidth();
     int h = iface.originalHeight();
 
-    QColor *defaultGuideColor = new QColor( 250, 250, 255 );
+    QColor defaultGuideColor(250, 250, 255);
     KConfig *config = kapp->config();
-    config->setGroup("Aspect Ratio Crop Tool Settings");
+    config->setGroup("aspectratiocrop Tool Dialog");
 
     // No guide lines per default.
     m_guideLinesCB->setCurrentItem( config->readNumEntry("Guide Lines Type",
@@ -357,7 +356,7 @@ void ImageEffect_RatioCrop::readSettings(void)
     m_goldenTriangleBox->setChecked( config->readBoolEntry("Golden Triangle", false) );
     m_flipHorBox->setChecked( config->readBoolEntry("Golden Flip Horizontal", false) );
     m_flipVerBox->setChecked( config->readBoolEntry("Golden Flip Vertical", false) );
-    m_guideColorBt->setColor(config->readColorEntry("Guide Color", defaultGuideColor));
+    m_guideColorBt->setColor(config->readColorEntry("Guide Color", &defaultGuideColor));
     m_guideSize->setValue(config->readNumEntry("Guide Width", 1));
     m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentItem());
     m_imageSelectionWidget->slotChangeGuideColor(m_guideColorBt->color());
@@ -421,8 +420,6 @@ void ImageEffect_RatioCrop::readSettings(void)
 
     m_autoOrientation->setChecked( config->readBoolEntry("Auto Orientation", false) );
     slotAutoOrientChanged( m_autoOrientation->isChecked() );
-
-    delete defaultGuideColor;
 }
 
 void ImageEffect_RatioCrop::writeSettings(void)
@@ -432,7 +429,7 @@ void ImageEffect_RatioCrop::writeSettings(void)
     int h = iface.originalHeight();
 
     KConfig *config = kapp->config();
-    config->setGroup("Aspect Ratio Crop Tool Settings");
+    config->setGroup("aspectratiocrop Tool Dialog");
 
     if (w > h)
     {

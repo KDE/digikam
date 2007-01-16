@@ -292,9 +292,9 @@ void ImageEffect_BCG::slotEffect()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
-    double  b = (double)m_bInput->value()/250.0;
-    double  c = (double)(m_cInput->value()/100.0) + 1.00;    
-    double  g = m_gInput->value();
+    double b = (double)m_bInput->value()/250.0;
+    double c = (double)(m_cInput->value()/100.0) + 1.00;    
+    double g = m_gInput->value();
 
     enableButtonOK( b != 0.0 || c != 1.0 || g != 1.0 );
     

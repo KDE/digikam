@@ -85,40 +85,38 @@ private slots:
     void slotGoldenGuideTypeChanged(void);
 
 private:
-
-    QWidget      *m_parent;
     
-    QLabel       *m_customLabel1;
-    QLabel       *m_customLabel2;
-    QLabel       *m_orientLabel;
-    QLabel       *m_colorGuideLabel;
+    QLabel                        *m_customLabel1;
+    QLabel                        *m_customLabel2;
+    QLabel                        *m_orientLabel;
+    QLabel                        *m_colorGuideLabel;
     
-    QComboBox    *m_ratioCB;
-    QComboBox    *m_orientCB;
-    QComboBox    *m_guideLinesCB;
+    QComboBox                     *m_ratioCB;
+    QComboBox                     *m_orientCB;
+    QComboBox                     *m_guideLinesCB;
     
-    QPushButton  *m_centerWidth;
-    QPushButton  *m_centerHeight;
+    QPushButton                   *m_centerWidth;
+    QPushButton                   *m_centerHeight;
     
-    QCheckBox    *m_goldenSectionBox;
-    QCheckBox    *m_goldenSpiralSectionBox;
-    QCheckBox    *m_goldenSpiralBox;
-    QCheckBox    *m_goldenTriangleBox;
-    QCheckBox    *m_flipHorBox;
-    QCheckBox    *m_flipVerBox;
-    QCheckBox    *m_autoOrientation;
+    QCheckBox                     *m_goldenSectionBox;
+    QCheckBox                     *m_goldenSpiralSectionBox;
+    QCheckBox                     *m_goldenSpiralBox;
+    QCheckBox                     *m_goldenTriangleBox;
+    QCheckBox                     *m_flipHorBox;
+    QCheckBox                     *m_flipVerBox;
+    QCheckBox                     *m_autoOrientation;
     
-    QSpinBox     *m_guideSize;
+    QSpinBox                      *m_guideSize;
     
-    KIntNumInput *m_widthInput;
-    KIntNumInput *m_heightInput;
-    KIntNumInput *m_xInput;    
-    KIntNumInput *m_yInput;    
+    KIntNumInput                  *m_widthInput;
+    KIntNumInput                  *m_heightInput;
+    KIntNumInput                  *m_xInput;    
+    KIntNumInput                  *m_yInput;    
      
-    KIntSpinBox  *m_customRatioNInput;
-    KIntSpinBox  *m_customRatioDInput;
+    KIntSpinBox                   *m_customRatioNInput;
+    KIntSpinBox                   *m_customRatioDInput;
     
-    KColorButton *m_guideColorBt;
+    KColorButton                  *m_guideColorBt;
     
     Digikam::ImageSelectionWidget *m_imageSelectionWidget;
 };

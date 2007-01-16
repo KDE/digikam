@@ -64,8 +64,8 @@ private slots:
 
 private:
 
-    void writeUserSettings();
     void readUserSettings();
+    void writeUserSettings();
     void resetValues();
     void finalRendering();
 
