@@ -259,6 +259,8 @@ void ImageEffect_BCG::readUserSettings()
     m_bInput->setValue(config->readNumEntry("BrightnessAjustment", 0));
     m_cInput->setValue(config->readNumEntry("ContrastAjustment", 0));
     m_gInput->setValue(config->readDoubleNumEntry("GammaAjustment", 1.0));
+    slotChannelChanged(m_channelCB->currentItem());
+    slotScaleChanged(m_scaleBG->selectedId());
 }
 
 void ImageEffect_BCG::writeUserSettings()

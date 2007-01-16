@@ -588,6 +588,9 @@ void ImageEffect_ICCProof::readUserSettings()
 
     for (int i = 0 ; i < 5 ; i++)
         m_curves->curvesCalculateCurve(i);
+
+    slotChannelChanged(m_channelCB->currentItem());
+    slotScaleChanged(m_scaleBG->selectedId());
 }
 
 void ImageEffect_ICCProof::writeUserSettings()

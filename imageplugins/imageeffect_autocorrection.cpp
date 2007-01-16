@@ -289,6 +289,8 @@ void ImageEffect_AutoCorrection::readUserSettings()
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
     m_correctionTools->setCurrentItem(config->readNumEntry("Auto Correction Filter", AutoLevelsCorrection));
+    slotChannelChanged(m_channelCB->currentItem());
+    slotScaleChanged(m_scaleBG->selectedId());
 }
 
 void ImageEffect_AutoCorrection::writeUserSettings()
