@@ -311,7 +311,7 @@ void ImageEffect_HSL::slotSChanged(double s)
 void ImageEffect_HSL::readUserSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("bcgadjust Tool Dialog");
+    config->setGroup("hsladjust Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
     m_hInput->setValue(config->readDoubleNumEntry("HueAjustment", 0.0));
@@ -326,7 +326,7 @@ void ImageEffect_HSL::readUserSettings()
 void ImageEffect_HSL::writeUserSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("bcgadjust Tool Dialog");
+    config->setGroup("hsladjust Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
     config->writeEntry("HueAjustment", m_hInput->value());
