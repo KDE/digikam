@@ -106,16 +106,17 @@ WhiteBalance::~WhiteBalance()
 }
 
 void WhiteBalance::whiteBalance(uchar *data, int width, int height, bool sixteenBit, 
-                                double temperature, double dark, double black, double exposition,
-                                double gamma, double saturation, double green)
+                                double black, double exposition,
+                                double temperature, double green, double dark, 
+                                double gamma, double saturation)
 { 
     d->temperature = temperature;
+    d->green       = green;
     d->dark        = dark;
     d->black       = black;
     d->exposition  = exposition;
     d->gamma       = gamma;
     d->saturation  = saturation;
-    d->green       = green;
 
     // Set final lut.
     setRGBmult();

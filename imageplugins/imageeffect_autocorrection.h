@@ -73,7 +73,8 @@ private:
         AutoLevelsCorrection=0,
         NormalizeCorrection,
         EqualizeCorrection,
-        StretchContrastCorrection
+        StretchContrastCorrection,
+        AutoExposureCorrection
     };
 
     enum HistogramScale
@@ -113,7 +114,6 @@ private:
     void resetValues();
 
     void autoCorrection(uchar *data, int w, int h, bool sb, int type);
-    QString previewEffectPic(QString name);
     QPixmap getThumbnailForEffect(AutoCorrectionType type);
 };
 

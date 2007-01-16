@@ -555,8 +555,9 @@ void ImageEffect_WhiteBalance::slotEffect()
             
     Digikam::WhiteBalance wbFilter(sb);
     wbFilter.whiteBalance(data, w, h, sb, 
-                          temperature, dark, black, exposition,
-                          gamma, saturation, green);
+                          black, exposition,
+                          temperature, green, dark, 
+                          gamma, saturation);
      
     iface->putPreviewImage(data);
     m_previewWidget->updatePreview();
@@ -586,8 +587,9 @@ void ImageEffect_WhiteBalance::finalRendering()
             
     Digikam::WhiteBalance wbFilter(sb);
     wbFilter.whiteBalance(data, w, h, sb, 
-                          temperature, dark, black, exposition,
-                          gamma, saturation, green);
+                          black, exposition,
+                          temperature, green, dark, 
+                          gamma, saturation);
 
     iface->putOriginalImage(i18n("White Balance"), data);
     delete [] data;

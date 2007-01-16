@@ -43,9 +43,9 @@
 // KDE includes.
 
 #include <kcursor.h>
+#include <kstandarddirs.h>
 #include <kconfig.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
 #include <kapplication.h>
 
 // Digikam includes.
@@ -55,6 +55,7 @@
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
 #include "dimgimagefilters.h"
+#include "whitebalance.h"
 #include "dimg.h"
 #include "listboxpreviewitem.h"
 
@@ -157,29 +158,27 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     Digikam::ListBoxWhatsThis* whatsThis = new Digikam::ListBoxWhatsThis(m_correctionTools);
 
     QPixmap pix = getThumbnailForEffect(AutoLevelsCorrection);
-    
     Digikam::ListBoxPreviewItem *item = new Digikam::ListBoxPreviewItem(pix, i18n("Auto Levels"));
-    
-    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Auto Levels</b>:"
+    whatsThis->add( item, i18n("<b>Auto Levels</b>:"
                                "<p>This option maximizes the tonal range in the Red, "
                                "Green, and Blue channels. It searches the image shadow and highlight "
                                "limit values and adjusts the Red, Green, and Blue channels "
-                               "to a full histogram range.</p>").arg(previewEffectPic("autolevels")));
+                               "to a full histogram range.</p>"));
     m_correctionTools->insertItem(item, AutoLevelsCorrection);
 
     pix = getThumbnailForEffect(NormalizeCorrection);
     item = new Digikam::ListBoxPreviewItem(pix, i18n("Normalize"));
-    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Normalize</b>:"
+    whatsThis->add( item, i18n("<b>Normalize</b>:"
                                "<p>This option scales brightness values across the active "
                                "image so that the darkest point becomes black, and the "
                                "brightest point becomes as bright as possible without "
                                "altering its hue. This is often a \"magic fix\" for "
-                               "images that are dim or washed out.</p>").arg(previewEffectPic("normalize")));
+                               "images that are dim or washed out.</p>"));
     m_correctionTools->insertItem(item, NormalizeCorrection);
 
     pix = getThumbnailForEffect(EqualizeCorrection);
     item = new Digikam::ListBoxPreviewItem(pix, i18n("Equalize"));
-    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Equalize</b>:"
+    whatsThis->add( item, i18n("<b>Equalize</b>:"
                                "<p>This option adjusts the brightness of colors across the "
                                "active image so that the histogram for the value channel "
                                "is as nearly as possible flat, that is, so that each possible "
@@ -187,17 +186,26 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
                                "as each other value. Sometimes Equalize works wonderfully at "
                                "enhancing the contrasts in an image. Other times it gives "
                                "garbage. It is a very powerful operation, which can either work "
-                               "miracles on an image or destroy it.</p>").arg(previewEffectPic("equalize")));
+                               "miracles on an image or destroy it.</p>"));
     m_correctionTools->insertItem(item, EqualizeCorrection);
 
     pix = getThumbnailForEffect(StretchContrastCorrection);
     item = new Digikam::ListBoxPreviewItem(pix, i18n("Stretch Contrast"));
-    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Stretch Contrast</b>:"
+    whatsThis->add( item, i18n("<b>Stretch Contrast</b>:"
                                "<p>This option enhances the contrast and brightness "
                                "of the RGB values of an image by stretching the lowest "
                                "and highest values to their fullest range, adjusting "
-                               "everything in between.</p>").arg(previewEffectPic("stretchcontrast")));
+                               "everything in between.</p>"));
     m_correctionTools->insertItem(item, StretchContrastCorrection);
+
+    pix = getThumbnailForEffect(StretchContrastCorrection);
+    item = new Digikam::ListBoxPreviewItem(pix, i18n("Auto Exposure"));
+    whatsThis->add( item, i18n("<b>Auto Exposure</b>:"
+                               "<p>This option enhances the contrast and brightness "
+                               "of the RGB values of an image to calculate optimal "
+                               "exposition and black level using image histogram "
+                               "properties.</p>"));
+    m_correctionTools->insertItem(item, AutoExposureCorrection);
 
     // -------------------------------------------------------------
     
@@ -272,12 +280,6 @@ void ImageEffect_AutoCorrection::slotScaleChanged(int scale)
 void ImageEffect_AutoCorrection::slotColorSelectedFromTarget( const Digikam::DColor &color )
 {
     m_histogramWidget->setHistogramGuideByColor(color);
-}
-
-QString ImageEffect_AutoCorrection::previewEffectPic(QString name)
-{
-    KGlobal::dirs()->addResourceType(name.ascii(), KGlobal::dirs()->kde_default("data") + "digikam/data");
-    return ( KGlobal::dirs()->findResourceDir(name.ascii(), name + ".png") + name + ".png" );
 }
 
 void ImageEffect_AutoCorrection::readUserSettings()
@@ -373,6 +375,10 @@ void ImageEffect_AutoCorrection::finalRendering()
           case StretchContrastCorrection:
              name = i18n("Stretch Contrast");
           break;
+
+          case AutoExposureCorrection:
+             name = i18n("Auto Exposure");
+          break;
        }
                                                   
        iface->putOriginalImage(name, data);
@@ -389,21 +395,29 @@ void ImageEffect_AutoCorrection::autoCorrection(uchar *data, int w, int h, bool 
 
     switch (type)
     {
-       case AutoLevelsCorrection:
-          filter.autoLevelsCorrectionImage(data, w, h, sb);
-          break;
-       
-       case NormalizeCorrection:
-          filter.normalizeImage(data, w, h, sb);
-          break;
-       
-       case EqualizeCorrection:
-          filter.equalizeImage(data, w, h, sb);
-          break;
-       
-       case StretchContrastCorrection:
-          filter.stretchContrastImage(data, w, h, sb);
-          break;
+        case AutoLevelsCorrection:
+            filter.autoLevelsCorrectionImage(data, w, h, sb);
+            break;
+        
+        case NormalizeCorrection:
+            filter.normalizeImage(data, w, h, sb);
+            break;
+        
+        case EqualizeCorrection:
+            filter.equalizeImage(data, w, h, sb);
+            break;
+        
+        case StretchContrastCorrection:
+            filter.stretchContrastImage(data, w, h, sb);
+            break;
+
+        case AutoExposureCorrection:
+            Digikam::WhiteBalance wbFilter(sb);
+            double blackLevel;
+            double exposureLevel;
+            wbFilter.autoExposureAdjustement(data, w, h, sb, blackLevel, exposureLevel);
+            wbFilter.whiteBalance(data, w, h, sb, blackLevel, exposureLevel);            
+        break;
     }
 }
 

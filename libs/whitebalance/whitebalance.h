@@ -41,8 +41,9 @@ public:
     ~WhiteBalance();
 
     void whiteBalance(uchar *data, int width, int height, bool sixteenBit, 
-                      double temperature, double dark, double black, double exposition,
-                      double gamma, double saturation, double green);
+                      double black=0.0, double exposition=0.0,
+                      double temperature=4.750, double green=1.2, double dark=0.5, 
+                      double gamma=1.0, double saturation=1.0);
 
     static void autoExposureAdjustement(uchar* data, int width, int height, bool sb,
                                         double &black, double &expo); 
