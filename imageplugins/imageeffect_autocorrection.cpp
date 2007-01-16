@@ -1,9 +1,9 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-05-31
+ * Date   : 2005-05-31
  * Description : Auto-Color correction tool.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,6 +43,7 @@
 // KDE includes.
 
 #include <kcursor.h>
+#include <kconfig.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
@@ -60,21 +61,22 @@
 // Local includes.
 
 #include "imageeffect_autocorrection.h"
+#include "imageeffect_autocorrection.moc"
 
 namespace DigikamImagesPluginCore
 {
 
 ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
-                          : Digikam::ImageDlgBase(parent, i18n("Auto Color Correction"), "autocorrection", false)
-                          ,m_destinationPreviewData(0L)
+                          : Digikam::ImageDlgBase(parent, i18n("Auto Color Correction"), 
+                            "autocorrection", false), m_destinationPreviewData(0L)
 {
     setHelp("autocolorcorrectiontool.anchor", "digikam");
     
     // -------------------------------------------------------------
 
     m_previewWidget = new Digikam::ImageWidget("autocorrection Tool Dialog", plainPage(),
-                                               i18n("<p>Here you can see the auto-color correction tool preview. "
-                                                    "You can pick color on image "
+                                               i18n("<p>Here you can see the auto-color correction tool "
+                                                    "preview. You can pick color on image "
                                                     "to see the color level corresponding on histogram."));
     setPreviewAreaWidget(m_previewWidget);
     
@@ -136,8 +138,8 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     // -------------------------------------------------------------
 
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, gboxSettings, false, true, true);
-    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
-                                             "selected image channel. This one is re-computed at any "
+    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
+                                             "of the selected image channel. This one is re-computed at any "
                                              "settings changes."));
     
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, gboxSettings );
@@ -156,7 +158,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
 
     QPixmap pix = getThumbnailForEffect(AutoLevelsCorrection);
     
-    QListBoxItem *item = new Digikam::ListBoxPreviewItem(pix, i18n("Auto Levels"));
+    Digikam::ListBoxPreviewItem *item = new Digikam::ListBoxPreviewItem(pix, i18n("Auto Levels"));
     
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Auto Levels</b>:"
                                "<p>This option maximizes the tonal range in the Red, "
@@ -178,14 +180,14 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     pix = getThumbnailForEffect(EqualizeCorrection);
     item = new Digikam::ListBoxPreviewItem(pix, i18n("Equalize"));
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Equalize</b>:"
-                                    "<p>This option adjusts the brightness of colors across the "
-                                    "active image so that the histogram for the value channel "
-                                    "is as nearly as possible flat, that is, so that each possible "
-                                    "brightness value appears at about the same number of pixels "
-                                    "as each other value. Sometimes Equalize works wonderfully at "
-                                    "enhancing the contrasts in an image. Other times it gives "
-                                    "garbage. It is a very powerful operation, which can either work "
-                                    "miracles on an image or destroy it.</p>").arg(previewEffectPic("equalize")));
+                               "<p>This option adjusts the brightness of colors across the "
+                               "active image so that the histogram for the value channel "
+                               "is as nearly as possible flat, that is, so that each possible "
+                               "brightness value appears at about the same number of pixels "
+                               "as each other value. Sometimes Equalize works wonderfully at "
+                               "enhancing the contrasts in an image. Other times it gives "
+                               "garbage. It is a very powerful operation, which can either work "
+                               "miracles on an image or destroy it.</p>").arg(previewEffectPic("equalize")));
     m_correctionTools->insertItem(item, EqualizeCorrection);
 
     pix = getThumbnailForEffect(StretchContrastCorrection);
@@ -204,9 +206,6 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     gridSettings->setRowStretch(3, 10);
     setUserAreaWidget(gboxSettings);
    
-    // Reset all parameters to the default values.
-    QTimer::singleShot(0, this, SLOT(slotDefault()));
-    
     // -------------------------------------------------------------
     
     connect(m_channelCB, SIGNAL(activated(int)),
@@ -281,12 +280,30 @@ QString ImageEffect_AutoCorrection::previewEffectPic(QString name)
     return ( KGlobal::dirs()->findResourceDir(name.ascii(), name + ".png") + name + ".png" );
 }
 
-void ImageEffect_AutoCorrection::slotDefault()
+void ImageEffect_AutoCorrection::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("autocorrection Tool Dialog");
+    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_correctionTools->setCurrentItem(config->readNumEntry("Auto Correction Filter", AutoLevelsCorrection));
+}
+
+void ImageEffect_AutoCorrection::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("autocorrection Tool Dialog");
+    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
+    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    config->writeEntry("Auto Correction Filter", m_correctionTools->currentItem());
+    config->sync();
+}
+
+void ImageEffect_AutoCorrection::resetValues()
 {
     m_correctionTools->blockSignals(true);
-    m_correctionTools->setCurrentItem( AutoLevelsCorrection );
+    m_correctionTools->setCurrentItem(AutoLevelsCorrection);
     m_correctionTools->blockSignals(false);
-    slotEffect();
 }
 
 void ImageEffect_AutoCorrection::slotEffect()
@@ -392,4 +409,3 @@ void ImageEffect_AutoCorrection::autoCorrection(uchar *data, int w, int h, bool 
 
 }  // NameSpace DigikamImagesPluginCore
 
-#include "imageeffect_autocorrection.moc"

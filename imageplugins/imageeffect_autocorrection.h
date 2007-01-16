@@ -1,9 +1,9 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-05-31
+ * Date   : 2005-05-31
  * Description : Auto-Color correction tool.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,6 +55,17 @@ public:
     ImageEffect_AutoCorrection(QWidget *parent);
     ~ImageEffect_AutoCorrection();
 
+protected:
+
+    void finalRendering();
+   
+private slots:
+
+    void slotEffect();
+    void slotChannelChanged(int channel);
+    void slotScaleChanged(int scale);
+    void slotColorSelectedFromTarget(const Digikam::DColor &color);
+
 private:
 
     enum AutoCorrectionType
@@ -94,24 +105,16 @@ private:
     Digikam::HistogramWidget     *m_histogramWidget;    
 
     Digikam::DImg                 m_thumbnailImage;
-        
+
 private:
+
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues();
 
     void autoCorrection(uchar *data, int w, int h, bool sb, int type);
     QString previewEffectPic(QString name);
     QPixmap getThumbnailForEffect(AutoCorrectionType type);
-    
-private slots:
-
-    void slotDefault();    
-    void slotEffect();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
-    void slotColorSelectedFromTarget( const Digikam::DColor &color );
-
-protected:
-
-    void finalRendering();
 };
 
 }  // NameSpace DigikamImagesPluginCore
