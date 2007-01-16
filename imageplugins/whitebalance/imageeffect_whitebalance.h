@@ -54,13 +54,6 @@ protected:
 
     void finalRendering();    
 
-private:
-        
-    void setRGBmult(void);
-    void setLUTv(void);
-    void whiteBalance(uchar *data, int width, int height, bool sixteenBit);
-    inline unsigned short pixelColor(int colorMult, int index, int value);
-    
 private slots:
 
     void slotDefault();
@@ -78,29 +71,6 @@ private slots:
 
 private:    
 
-    // -- White Balance algorithm -------------------------------------------
-
-    bool                          m_clipSat;
-    bool                          m_overExp;
-    bool                          m_WBind;
-
-    double                        m_saturation;
-    double                        m_temperature;    
-    double                        m_gamma;
-    double                        m_black;
-    double                        m_exposition;
-    double                        m_dark;
-    double                        m_green;
-
-    int                           m_BP, m_WP;
-    
-    uint                          m_rgbMax;
-    
-    float                         m_curve[65536];
-    float                         m_mr, m_mg, m_mb;
-
-    // -- Dialog ------------------------------------------------------------
-    
     enum HistogramScale
     {
         Linear=0,

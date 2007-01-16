@@ -6,9 +6,6 @@
  * 
  * Copyright 2005-2007 by Gilles Caulier
  *
- * Some parts are inspired from RawPhoto implementation copyrighted 
- * 2004-2005 by Pawel T. Jochym <jochym at ifj edu pl>
- *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -65,7 +62,7 @@
 // Local includes.
 
 #include "version.h"
-#include "blackbody.h"
+#include "whitebalance.h"
 #include "imageeffect_whitebalance.h"
 #include "imageeffect_whitebalance.moc"
 
@@ -77,18 +74,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
 {
     QString whatsThis;
 
-    m_clipSat = true;
-    m_overExp = false;         // Obsolete in algorithm since over/under exposure indicators
-    m_WBind   = false;         // are implemented directly with preview widget.
-    m_mr      = 1.0;
-    m_mg      = 1.0;
-    m_mb      = 1.0;
-    m_BP      = 0;
-
     Digikam::ImageIface iface(0, 0);
-
-    m_WP     = iface.originalSixteenBit() ? 65536 : 256;
-    m_rgbMax = iface.originalSixteenBit() ? 65536 : 256;
 
     m_destinationPreviewData = 0L;
 
@@ -469,54 +455,22 @@ void ImageEffect_WhiteBalance::slotPickerColorButtonActived()
     m_previewWidget->setRenderingPreviewMode(Digikam::ImageGuideWidget::PreviewOriginalImage);
 }
 
-void ImageEffect_WhiteBalance::slotColorSelectedFromOriginal( const Digikam::DColor &color )
+void ImageEffect_WhiteBalance::slotColorSelectedFromOriginal(const Digikam::DColor &color)
 {
     if ( m_pickTemperature->isOn() )
     {
-       Digikam::DColor dc = color;
-       QColor tc = dc.getQColor();
-       
-       // Calculate Temperature and Green component from color picked.
-              
-       register int l, r, m;
-       double sR, sG, sB, mRB, t;
+        Digikam::DColor dc = color;
+        QColor tc = dc.getQColor();
+        double temperatureLevel, greenLevel;
     
-       t   = QMAX( QMAX(tc.red(), tc.green()), tc.blue());
-       sR  = tc.red()   / t;
-       sG  = tc.green() / t;
-       sB  = tc.blue()  / t;
-       mRB = sR / sB;
-
-       DDebug() << "Sums:  R:" << sR << " G:" << sG  << " B:" << sB << endl;
-    
-       l = 0;
-       r = sizeof(bbWB)/(sizeof(float)*3);
-       m = (r + l) / 2;
-    
-       for (l = 0, r = sizeof(bbWB)/(sizeof(float)*3), m = (l+r)/2 ; r-l > 1 ; m = (l+r)/2) 
-       {
-          if (bbWB[m][0]/bbWB[m][2] > mRB) 
-              l = m;
-          else
-              r = m;
-    
-          DDebug() << "L,M,R:  " << l << " " << m << " " << r 
-                   << " bbWB[m]=:" << bbWB[m][0]/bbWB[m][2]
-                   << endl;
-       }
-       
-       DDebug() << "Temperature (K):" << m*10.0+2000.0 << endl;
-
-       t = (bbWB[m][1]/bbWB[m][0]) / (sG/sR);
-    
-       DDebug() << "Green component:" << t << endl;
-    
-       m_temperatureInput->setValue(m*10.0+2000.0);
-       m_greenInput->setValue(t);
-       m_pickTemperature->setOn(false);
+        WhiteBalance::autoWBAdjustementFromColor(tc, temperatureLevel, greenLevel);
+            
+        m_temperatureInput->setValue(temperatureLevel);
+        m_greenInput->setValue(greenLevel);
+        m_pickTemperature->setOn(false);
     }
     else
-       return;
+        return;
        
     // restore previous rendering mode.
     m_previewWidget->setRenderingPreviewMode(m_currentPreviewMode);
@@ -563,6 +517,29 @@ void ImageEffect_WhiteBalance::slotChannelChanged(int channel)
     m_histogramWidget->repaint(false);
 }
 
+void ImageEffect_WhiteBalance::slotAutoAdjustExposure()
+{
+    parentWidget()->setCursor( KCursor::waitCursor() );
+
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    uchar *data                = iface->getOriginalImage();
+    int width                  = iface->originalWidth();
+    int height                 = iface->originalHeight();
+    bool sb                    = iface->originalSixteenBit();
+    
+    double blackLevel;
+    double exposureLevel;
+
+    WhiteBalance::autoExposureAdjustement(data, width, height, sb, blackLevel, exposureLevel);
+    delete [] data;        
+
+    m_blackInput->setValue(blackLevel);
+    m_exposureInput->setValue(exposureLevel);
+    
+    parentWidget()->unsetCursor();
+    slotEffect();  
+}
+
 void ImageEffect_WhiteBalance::slotEffect()
 {
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
@@ -579,24 +556,27 @@ void ImageEffect_WhiteBalance::slotEffect()
 
     m_destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
 
-    // Update settings
-    m_temperature = m_temperatureInput->value()/1000.0;
-    m_dark        = m_darkInput->value();
-    m_black       = m_blackInput->value();
-    m_exposition  = m_exposureInput->value();
-    m_gamma       = 2.0-m_gammaInput->value();
-    m_saturation  = m_saturationInput->value();
-    m_green       = m_greenInput->value();
-    
+    double temperature = m_temperatureInput->value()/1000.0;
+    double dark        = m_darkInput->value();
+    double black       = m_blackInput->value();
+    double exposure    = m_exposureInput->value();
+    double gamma       = 2.0-m_gammaInput->value();
+    double saturation  = m_saturationInput->value();
+    double green       = m_greenInput->value();
+            
+    WhiteBalance wbFilter(sb);
+    wbFilter.whiteBalance(data, w, h, sb, 
+                          temperature, dark, black, exposure,
+                          gamma, saturation, green);
+
+/*    
     // Set preview lut.
     setRGBmult();
     m_mg = 1.0;
     setLUTv();
     setRGBmult();
-       
-    // Apply White balance adjustments.
-    whiteBalance(data, w, h, sb);
-           
+  */
+     
     iface->putPreviewImage(data);
     m_previewWidget->updatePreview();
     
@@ -614,25 +594,28 @@ void ImageEffect_WhiteBalance::finalRendering()
     int w                      = iface->originalWidth();
     int h                      = iface->originalHeight();
     bool sb                    = iface->originalSixteenBit();
+
+    double temperature = m_temperatureInput->value()/1000.0;
+    double dark        = m_darkInput->value();
+    double black       = m_blackInput->value();
+    double exposure    = m_exposureInput->value();
+    double gamma       = 2.0-m_gammaInput->value();
+    double saturation  = m_saturationInput->value();
+    double green       = m_greenInput->value();
             
-    // Update settings
-    m_temperature = m_temperatureInput->value()/1000.0;
-    m_dark        = m_darkInput->value();
-    m_black       = m_blackInput->value();
-    m_exposition  = m_exposureInput->value();
-    m_gamma       = 2.0-m_gammaInput->value();
-    m_saturation  = m_saturationInput->value();
-    m_green       = m_greenInput->value();
-       
+    WhiteBalance wbFilter(sb);
+    wbFilter.whiteBalance(data, w, h, sb, 
+                          temperature, dark, black, exposure,
+                          gamma, saturation, green);
+
+/*
     // Set final lut.
     setRGBmult();
     m_mr = m_mb = 1.0;
     if (m_clipSat) m_mg = 1.0; 
     setLUTv();
     setRGBmult();
-       
-    // Apply White balance adjustments.
-    whiteBalance(data, w, h, sb);
+  */     
 
     iface->putOriginalImage(i18n("White Balance"), data);
     delete [] data;
@@ -747,193 +730,6 @@ void ImageEffect_WhiteBalance::slotUser2()
     
     file.close();        
 }
-
-// -- White Balance algorithm -------------------------------------------
-
-void ImageEffect_WhiteBalance::slotAutoAdjustExposure(void)
-{
-    parentWidget()->setCursor( KCursor::waitCursor() );
-
-    // Create an histogram of original image.     
-
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-    uchar *data                = iface->getOriginalImage();
-    int width                  = iface->originalWidth();
-    int height                 = iface->originalHeight();
-    bool sb                    = iface->originalSixteenBit();
-    
-    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, width, height, sb);
-       
-    // Calculate optimal exposition and black level 
-    
-    int stop, i, scale, w, h;
-    double black, expo, sum;
-    
-    w     = width  / 400;
-    h     = height / 400;
-    scale = QMAX(w, h);
-    scale = QMAX(1, scale);
-    
-    // Cutoff at 0.5% of the histogram.
-    
-    stop = ((uint)(width / scale)*(uint)(height / scale)) / 200;
-    
-    for (i = m_rgbMax, sum = 0; (i >= 0) && (sum < stop); i--)
-        sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
-    
-    expo = -log((float)(i+1) / m_rgbMax) / log(2);
-    DDebug() << "White level at:" << i << endl;
-    
-    // Cutoff at 0.5% of the histogram. 
-    
-    stop = ((uint)(width / scale)*(uint)(height / scale)) / 200;
-    
-    for (i = 1, sum = 0; (i < (int)m_rgbMax) && (sum < stop); i++)
-        sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
-    
-    black = (double)i / m_rgbMax;
-    black /= 2;
-    
-    DDebug() << "Black:" << black << "  Exposition:" << expo << endl;
-
-    m_blackInput->setValue(black);
-    m_exposureInput->setValue(expo);        
-
-    delete histogram;
-    delete [] data;
-    
-    parentWidget()->unsetCursor();
-    slotEffect();  
-}
-
-void ImageEffect_WhiteBalance::setRGBmult(void)
-{
-    int   t;
-    float mi;
-
-    if ( m_temperature > 7.0 ) m_temperature = 7.0;
-    
-    t     = (int)(m_temperature * 100.0 - 200.0);
-    m_mr  = 1.0 / bbWB[t][0];
-    m_mg  = 1.0 / bbWB[t][1];
-    m_mb  = 1.0 / bbWB[t][2];
-    m_mg *= m_green;
-    
-    // Normalize to at least 1.0, so we are not dimming colors only bumping.
-    mi    = QMIN(m_mr, m_mg);
-    mi    = QMIN(mi, m_mb);
-    m_mr /= mi;
-    m_mg /= mi;
-    m_mb /= mi;
-}
-
-void ImageEffect_WhiteBalance::setLUTv(void)
-{
-    double b, g;
-
-    b    = m_mg * pow(2, m_exposition);
-    g    = m_gamma;
-    m_BP = (uint)(m_rgbMax * m_black);
-    m_WP = (uint)(m_rgbMax / b);
-    
-    if (m_WP - m_BP < 1) m_WP = m_BP + 1;
-
-    DDebug() << "T(K): " << m_temperature
-              << " => R:" << m_mr
-              << " G:"    << m_mg
-              << " B:"    << m_mb
-              << " BP:"   << m_BP
-              << " WP:"   << m_WP
-              << endl;
-    
-    m_curve[0] = 0;
-    
-    for (int i = 1; i < (int)m_rgbMax; i++)
-    {
-        float x     = (float)(i - m_BP)/(m_WP - m_BP);
-        m_curve[i]  = (i < m_BP) ? 0 : (m_rgbMax-1) * pow(x, g);
-        m_curve[i] *= (1 - m_dark * exp(-x * x / 0.002));
-        m_curve[i] /= (float)i;
-    }
-}
-
-void ImageEffect_WhiteBalance::whiteBalance(uchar *data, int width, int height, bool sixteenBit)
-{  
-    uint i, j;
-         
-    if (!sixteenBit)        // 8 bits image.
-    {
-        uchar red, green, blue;
-        uchar *ptr = data;
-        
-        for (j = 0 ; j < (uint)(width*height) ; j++)
-        {
-            int v, rv[3];
-
-            blue  = ptr[0];
-            green = ptr[1];
-            red   = ptr[2];
-
-            rv[0] = (int)(blue  * m_mb);
-            rv[1] = (int)(green * m_mg);
-            rv[2] = (int)(red   * m_mr);
-            v = QMAX(rv[0], rv[1]);
-            v = QMAX(v, rv[2]);
-
-            if (m_clipSat) v = QMIN(v, (int)m_rgbMax-1);
-            i = v;
-
-            ptr[0] = (uchar)pixelColor(rv[0], i, v);
-            ptr[1] = (uchar)pixelColor(rv[1], i, v);
-            ptr[2] = (uchar)pixelColor(rv[2], i, v);
-            ptr += 4;
-        }
-    }
-    else               // 16 bits image.
-    {
-        unsigned short red, green, blue;
-        unsigned short *ptr = (unsigned short *)data;
-        
-        for (j = 0 ; j < (uint)(width*height) ; j++)
-        {
-            int v, rv[3];
-
-            blue  = ptr[0];
-            green = ptr[1];
-            red   = ptr[2];
-
-            rv[0] = (int)(blue  * m_mb);
-            rv[1] = (int)(green * m_mg);
-            rv[2] = (int)(red   * m_mr);
-            v     = QMAX(rv[0], rv[1]);
-            v     = QMAX(v, rv[2]);
-
-            if (m_clipSat) v = QMIN(v, (int)m_rgbMax-1);
-            i = v;
-
-            ptr[0] = pixelColor(rv[0], i, v);
-            ptr[1] = pixelColor(rv[1], i, v);
-            ptr[2] = pixelColor(rv[2], i, v);
-            ptr += 4;
-        }
-    }
-}
-
-unsigned short ImageEffect_WhiteBalance::pixelColor(int colorMult, int index, int value)
-{
-    int r = (m_clipSat && colorMult > (int)m_rgbMax) ? m_rgbMax : colorMult;
-
-    if (value > m_BP && m_overExp && value > m_WP) 
-    {
-        if (m_WBind) 
-           r = (colorMult > m_WP) ? 0 : r;
-        else 
-           r = 0;
-    }
-    
-    return( (unsigned short)CLAMP((int)((index - m_saturation*(index - r)) * m_curve[index]), 
-                                  0, (int)(m_rgbMax-1)) );
-}               
 
 }  // NameSpace DigikamWhiteBalanceImagesPlugin
 

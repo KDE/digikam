@@ -8,7 +8,7 @@ INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 kde_module_LTLIBRARIES = digikamimageplugin_whitebalance.la
 
 digikamimageplugin_whitebalance_la_SOURCES = imageplugin_whitebalance.cpp \
-	                                     imageeffect_whitebalance.cpp 
+	                                     imageeffect_whitebalance.cpp whitebalance.cpp 
 
 digikamimageplugin_whitebalance_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)\
 	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la 
