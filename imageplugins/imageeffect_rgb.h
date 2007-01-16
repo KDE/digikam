@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-07-11
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-07-11
  * Description : digiKam image editor Color Balance tool.
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,6 +51,23 @@ public:
     ImageEffect_RGB(QWidget *parent);
     ~ImageEffect_RGB();
 
+private:
+    
+    void writeUserSettings();
+    void readUserSettings();
+    void resetValues();
+    void adjustSliders(int r, int g, int b);
+    void finalRendering();
+    
+private slots:
+
+    void slotEffect();
+    void slotChannelChanged(int channel);
+    void slotScaleChanged(int scale);
+    void slotColorSelectedFromTarget( const Digikam::DColor &color );
+
+private:
+
     enum HistogramScale
     {
         Linear=0,
@@ -84,22 +101,7 @@ public:
     Digikam::ColorGradientWidget *m_hGradient;
     
     Digikam::HistogramWidget     *m_histogramWidget;
-        
-private:
-
-    void adjustSliders(int r, int g, int b);
     
-private slots:
-
-    void slotDefault();
-    void slotEffect();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
-    void slotColorSelectedFromTarget( const Digikam::DColor &color );
-
-protected:
-
-    void finalRendering();    
 };
 
 }  // NameSpace DigikamImagesPluginCore

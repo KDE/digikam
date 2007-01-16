@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-07-11
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-07-11
  * Description : digiKam image editor Color Balance tool.
  *
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,6 +39,7 @@
 
 // KDE includes.
 
+#include <kconfig.h>
 #include <klocale.h>
 #include <kapplication.h>
 #include <kcursor.h>
@@ -56,6 +57,7 @@
 // Local includes.
 
 #include "imageeffect_rgb.h"
+#include "imageeffect_rgb.moc"
 
 namespace DigikamImagesPluginCore
 {
@@ -285,19 +287,61 @@ void ImageEffect_RGB::slotColorSelectedFromTarget( const Digikam::DColor &color 
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-void ImageEffect_RGB::slotDefault()
+void ImageEffect_RGB::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("colorbalance Tool Dialog");
+    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    int r = config->readNumEntry("RedAjustment", 0);
+    int g = config->readNumEntry("GreenAjustment", 0);
+    int b = config->readNumEntry("BlueAjustment", 0);
+    adjustSliders(r, g, b);
+    slotChannelChanged(m_channelCB->currentItem());
+    slotScaleChanged(m_scaleBG->selectedId());
+}
+
+void ImageEffect_RGB::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("colorbalance Tool Dialog");
+    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
+    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    config->writeEntry("RedAjustment", m_rSlider->value());
+    config->writeEntry("GreenAjustment", m_gInput->value());
+    config->writeEntry("BlueAjustment", m_bInput->value());
+    config->sync();
+}
+
+void ImageEffect_RGB::resetValues()
 {
     adjustSliders(0, 0, 0);
-    slotEffect();
 }
 
 void ImageEffect_RGB::adjustSliders(int r, int g, int b)
 {
-    blockSignals(true);
+    m_rSlider->blockSignals(true);
+    m_gSlider->blockSignals(true);
+    m_bSlider->blockSignals(true);
+    m_rInput->blockSignals(true);
+    m_gInput->blockSignals(true);
+    m_bInput->blockSignals(true);
+
     m_rSlider->setValue(r);
     m_gSlider->setValue(g);
     m_bSlider->setValue(b);
-    blockSignals(false);
+    m_rInput->setValue(r);
+    m_gInput->setValue(g);
+    m_bInput->setValue(b);
+
+    m_rSlider->blockSignals(false);
+    m_gSlider->blockSignals(false);
+    m_bSlider->blockSignals(false);
+    m_rInput->blockSignals(false);
+    m_gInput->blockSignals(false);
+    m_bInput->blockSignals(false);
+
+    slotEffect();
 }
 
 void ImageEffect_RGB::slotEffect()
@@ -368,4 +412,3 @@ void ImageEffect_RGB::finalRendering()
 
 }  // NameSpace DigikamImagesPluginCore
 
-#include "imageeffect_rgb.moc"
