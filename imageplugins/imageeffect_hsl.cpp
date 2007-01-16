@@ -41,6 +41,7 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <kapplication.h>
+#include <kconfig.h>
 #include <kcursor.h>
 #include <kstandarddirs.h>
 #include <kcolordialog.h>
@@ -217,7 +218,6 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
             
     // -------------------------------------------------------------            
 
-    QTimer::singleShot(0, this, SLOT(slotDefault()));
     enableButtonOK( false );
 }
 
@@ -308,7 +308,34 @@ void ImageEffect_HSL::slotSChanged(double s)
     m_HSSelector->blockSignals(false);       
 }
 
-void ImageEffect_HSL::slotDefault()
+void ImageEffect_HSL::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("bcgadjust Tool Dialog");
+    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_hInput->setValue(config->readDoubleNumEntry("HueAjustment", 0.0));
+    m_sInput->setValue(config->readDoubleNumEntry("SaturationAjustment", 0.0));
+    m_lInput->setValue(config->readDoubleNumEntry("LighnessAjustment", 0.0));
+    slotHChanged(m_hInput->value());
+    slotSChanged(m_sInput->value());
+    slotChannelChanged(m_channelCB->currentItem());
+    slotScaleChanged(m_scaleBG->selectedId());
+}
+
+void ImageEffect_HSL::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("bcgadjust Tool Dialog");
+    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
+    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    config->writeEntry("HueAjustment", m_hInput->value());
+    config->writeEntry("SaturationAjustment", m_sInput->value());
+    config->writeEntry("LighnessAjustment", m_lInput->value());
+    config->sync();
+}
+
+void ImageEffect_HSL::resetValues()
 {
     m_hInput->blockSignals(true);	
     m_sInput->blockSignals(true);	
@@ -321,7 +348,6 @@ void ImageEffect_HSL::slotDefault()
     m_hInput->blockSignals(false);	
     m_sInput->blockSignals(false);	
     m_lInput->blockSignals(false);	
-    slotEffect();
 } 
 
 void ImageEffect_HSL::slotEffect()

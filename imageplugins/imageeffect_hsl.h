@@ -55,7 +55,6 @@ public:
 
 private slots:
 
-    void slotDefault();
     void slotEffect();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
@@ -64,8 +63,11 @@ private slots:
     void slotHChanged(double h);
     void slotSChanged(double s);
 
-protected:
+private:
 
+    void writeUserSettings();
+    void readUserSettings();
+    void resetValues();
     void finalRendering();
 
 private:
