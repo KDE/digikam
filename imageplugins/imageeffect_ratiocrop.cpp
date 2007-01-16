@@ -1,9 +1,11 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-12-06
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Jaromir Malenko <malenko at email.cz>
+ * Date   : 2004-12-06
  * Description : digiKam image editor Ratio Crop tool
  *
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
+ * Copyright 2007 by Jaromir Malenko
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,6 +53,7 @@
 // Local includes.
 
 #include "imageeffect_ratiocrop.h"
+#include "imageeffect_ratiocrop.moc"
 
 namespace DigikamImagesPluginCore
 {
@@ -75,7 +78,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     l->addWidget(m_imageSelectionWidget);
     QWhatsThis::add( m_imageSelectionWidget, i18n("<p>Here you can see the aspect ratio selection preview "
                                                   "used for cropping. You can use the mouse for moving and "
-                                                  "resizing the crop area."));
+                                                  "resizing the crop area. "
+                                                  "Hold CTRL to move the opposite corner too. "
+                                                  "Hold SHIFT to move the closest corner to the mouse pointer."));
     setPreviewAreaWidget(frame);  
 
     // -------------------------------------------------------------
@@ -122,10 +127,14 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_orientCB->insertItem( i18n("Portrait") );
     QWhatsThis::add( m_orientCB, i18n("<p>Select here constrained aspect ratio orientation."));
 
+    m_autoOrientation = new QCheckBox(i18n("Auto"), cropSelection);
+    QWhatsThis::add( m_autoOrientation, i18n("<p>Enable this option to automatic setting of orientation."));
+
     grid->addMultiCellWidget(label, 0, 0, 0, 0);
     grid->addMultiCellWidget(m_ratioCB, 0, 0, 1, 3);
     grid->addMultiCellWidget(m_orientLabel, 2, 2, 0, 0);
     grid->addMultiCellWidget(m_orientCB, 2, 2, 1, 3);
+    grid->addMultiCellWidget(m_autoOrientation, 2, 2, 4, 4);
 
     // -------------------------------------------------------------
 
@@ -250,6 +259,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     connect(m_orientCB, SIGNAL(activated(int)),
             this, SLOT(slotOrientChanged(int)));
 
+    connect(m_autoOrientation, SIGNAL(toggled(bool)),
+            this, SLOT(slotAutoOrientChanged(bool)));
+
     connect(m_xInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotXChanged(int)));
 
@@ -306,6 +318,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     connect(m_imageSelectionWidget, SIGNAL(signalSelectionMoved(QRect)),
             this, SLOT(slotSelectionChanged(QRect)));
+
+    connect(m_imageSelectionWidget, SIGNAL(signalSelectionOrientationChanged(int)),
+            this, SLOT(slotSelectionOrientationChanged(int)));
 
     connect(m_centerWidth, SIGNAL(clicked()),
             this, SLOT(slotCenterWidth()));
@@ -404,6 +419,9 @@ void ImageEffect_RatioCrop::readSettings(void)
         m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentItem());
     }
 
+    m_autoOrientation->setChecked( config->readBoolEntry("Auto Orientation", false) );
+    slotAutoOrientChanged( m_autoOrientation->isChecked() );
+
     delete defaultGuideColor;
 }
 
@@ -441,6 +459,7 @@ void ImageEffect_RatioCrop::writeSettings(void)
        config->writeEntry( "Ver.Oriented Custom Aspect Ratio Height", m_heightInput->value() );
     }
 
+    config->writeEntry( "Auto Orientation", m_autoOrientation->isChecked() );
     config->writeEntry( "Guide Lines Type", m_guideLinesCB->currentItem() );
     config->writeEntry( "Golden Section", m_goldenSectionBox->isChecked() );
     config->writeEntry( "Golden Spiral Section", m_goldenSpiralSectionBox->isChecked() );
@@ -518,6 +537,11 @@ void ImageEffect_RatioCrop::slotSelectionHeightChanged(int newHeight)
     m_heightInput->blockSignals(false);
 }
 
+void ImageEffect_RatioCrop::slotSelectionOrientationChanged(int newOrientation)
+{
+    m_orientCB->setCurrentItem(newOrientation);
+}
+
 void ImageEffect_RatioCrop::slotXChanged(int x)
 {
     m_imageSelectionWidget->setSelectionX(x);
@@ -546,6 +570,12 @@ void ImageEffect_RatioCrop::slotOrientChanged(int o)
     slotDefault();
 }
 
+void ImageEffect_RatioCrop::slotAutoOrientChanged(bool a)
+{
+    m_orientCB->setEnabled(!a /*|| m_ratioCB->currentItem() == Digikam::ImageSelectionWidget::RATIONONE*/);
+    m_imageSelectionWidget->setAutoOrientation(a);
+}
+
 void ImageEffect_RatioCrop::slotRatioChanged(int a)
 {
     applyRatioChanges(a);
@@ -565,13 +595,15 @@ void ImageEffect_RatioCrop::applyRatioChanges(int a)
        m_customRatioNInput->setEnabled(true);
        m_customRatioDInput->setEnabled(true);
        m_orientLabel->setEnabled(true);
-       m_orientCB->setEnabled(true);
+       m_orientCB->setEnabled(! m_autoOrientation->isChecked());
+       m_autoOrientation->setEnabled(true);
        slotCustomRatioChanged();
     }
     else if ( a == Digikam::ImageSelectionWidget::RATIONONE )
     {
        m_orientLabel->setEnabled(false);
        m_orientCB->setEnabled(false);
+       m_autoOrientation->setEnabled(false);
        m_customLabel1->setEnabled(false);
        m_customLabel2->setEnabled(false);
        m_customRatioNInput->setEnabled(false);
@@ -580,7 +612,8 @@ void ImageEffect_RatioCrop::applyRatioChanges(int a)
     else        // Pre-config ratio selected.
     {
        m_orientLabel->setEnabled(true);
-       m_orientCB->setEnabled(true);
+       m_orientCB->setEnabled(! m_autoOrientation->isChecked());
+       m_autoOrientation->setEnabled(true);
        m_customLabel1->setEnabled(false);
        m_customLabel2->setEnabled(false);
        m_customRatioNInput->setEnabled(false);
@@ -690,4 +723,3 @@ void ImageEffect_RatioCrop::slotOk()
 
 }  // NameSpace DigikamImagesPluginCore
 
-#include "imageeffect_ratiocrop.moc"

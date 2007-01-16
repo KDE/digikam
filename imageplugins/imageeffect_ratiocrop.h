@@ -1,9 +1,11 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-12-06
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Jaromir Malenko <malenko at email.cz>
+ * Date   : 2004-12-06
  * Description : digiKam image editor Ratio Crop tool
- * 
- * Copyright 2004-2006 by Gilles Caulier
+ *
+ * Copyright 2004-2007 by Gilles Caulier
+ * Copyright 2007 by Jaromir Malenko
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,6 +55,36 @@ public:
     ~ImageEffect_RatioCrop();
 
 private:
+    
+    void readSettings(void);
+    void writeSettings(void);
+    
+    void applyRatioChanges(int a);
+    
+private slots:
+
+    void slotUser1();
+    void slotDefault();
+    void slotOk();
+
+    void slotCenterWidth(void);
+    void slotCenterHeight(void);
+    void slotXChanged(int x);
+    void slotYChanged(int y);
+    void slotWidthChanged(int w);
+    void slotHeightChanged(int h);
+    void slotCustomRatioChanged(void);
+    void slotOrientChanged(int o);
+    void slotAutoOrientChanged(bool a);
+    void slotRatioChanged(int a);
+    void slotSelectionChanged(QRect rect );
+    void slotSelectionWidthChanged(int newWidth);
+    void slotSelectionHeightChanged(int newHeight);
+    void slotSelectionOrientationChanged(int);
+    void slotGuideTypeChanged(int t);
+    void slotGoldenGuideTypeChanged(void);
+
+private:
 
     QWidget      *m_parent;
     
@@ -74,6 +106,7 @@ private:
     QCheckBox    *m_goldenTriangleBox;
     QCheckBox    *m_flipHorBox;
     QCheckBox    *m_flipVerBox;
+    QCheckBox    *m_autoOrientation;
     
     QSpinBox     *m_guideSize;
     
@@ -88,34 +121,6 @@ private:
     KColorButton *m_guideColorBt;
     
     Digikam::ImageSelectionWidget *m_imageSelectionWidget;
-
-private:
-    
-    void readSettings(void);
-    void writeSettings(void);
-    
-    void applyRatioChanges(int a);
-    
-private slots:
-
-    void slotUser1();
-    void slotDefault();
-    void slotOk();
-
-    void slotCenterWidth(void);
-    void slotCenterHeight(void);
-    void slotXChanged(int x);
-    void slotYChanged(int y);
-    void slotWidthChanged(int w);
-    void slotHeightChanged(int h);
-    void slotCustomRatioChanged(void);
-    void slotOrientChanged(int o);
-    void slotRatioChanged(int a);
-    void slotSelectionChanged(QRect rect );
-    void slotSelectionWidthChanged(int newWidth);
-    void slotSelectionHeightChanged(int newHeight);
-    void slotGuideTypeChanged(int t);
-    void slotGoldenGuideTypeChanged(void);
 };
 
 }  // NameSpace DigikamImagesPluginCore

@@ -1,9 +1,11 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Jaromir Malenko <malenko at email.cz>
  * Date   : 2004-12-09
  * Description : image selection widget used by ratio crop tool.
  * 
  * Copyright 2004-2007 by Gilles Caulier
+ * Copyright 2007 by Jaromir Malenko
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -92,6 +94,7 @@ public:
     void  setSelectionWidth(int w);
     void  setSelectionHeight(int h);
     void  setSelectionOrientation(int orient);
+    void  setAutoOrientation(bool orientation);
     void  setSelectionAspectRatioType(int aspectRatioType);
     void  setSelectionAspectRatioValue(float aspectRatioValue);
     void  setGoldenGuideTypes(bool drawGoldenSection,  bool drawGoldenSpiralSection,
@@ -122,6 +125,7 @@ signals:
     void signalSelectionChanged( QRect rect );
     void signalSelectionWidthChanged( int newWidth );
     void signalSelectionHeightChanged( int newHeight );
+    void signalSelectionOrientationChanged( int newOrientation );
 
 protected:
 
@@ -143,8 +147,14 @@ private:
     void regionSelectionChanged(bool targetDone);
     void realToLocalRegion(bool updateSizeOnly=false);
     void localToRealRegion(void);
+    void normalizeRegion(void);
     void applyAspectRatio(bool WOrH, bool repaintWidget=true, bool updateChange=true);
     void updatePixmap(void);
+    QPoint computeAspectRatio(QPoint pm, int coef=1);
+    QPoint opposite(void);
+    float distance(QPoint a, QPoint b);
+    void placeSelection(QPoint pm, bool symetric, QPoint center);
+    void setCursorResizing(void);
 
 private:
 
