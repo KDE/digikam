@@ -228,10 +228,10 @@ void EditorWindow::setupStandardActions()
     // -- Standard 'File' menu actions ---------------------------------------------
 
     m_backwardAction = KStdAction::back(this, SLOT(slotBackward()),
-                                    actionCollection(), "editorwindow_backward");
+                                   actionCollection(), "editorwindow_backward");
 
     m_forwardAction = KStdAction::forward(this, SLOT(slotForward()),
-                                          actionCollection(), "editorwindow_forward");
+                                  actionCollection(), "editorwindow_forward");
 
     m_firstAction = new KAction(i18n("&First"), "start",
                                 KStdAccel::shortcut( KStdAccel::Home),
@@ -257,9 +257,9 @@ void EditorWindow::setupStandardActions()
     m_revertAction->setEnabled(false);
 
     d->filePrintAction = new KAction(i18n("Print Image..."), "fileprint",
-                                    CTRL+Key_P,
-                                    this, SLOT(slotFilePrint()),
-                                    actionCollection(), "editorwindow_print");
+                                     CTRL+Key_P,
+                                     this, SLOT(slotFilePrint()),
+                                     actionCollection(), "editorwindow_print");
 
     m_fileDeleteAction = new KAction(i18n("Move to Trash"), "edittrash",
                                      Key_Delete,
@@ -271,7 +271,7 @@ void EditorWindow::setupStandardActions()
     // -- Standard 'Edit' menu actions ---------------------------------------------
 
     d->copyAction = KStdAction::copy(m_canvas, SLOT(slotCopy()),
-                                    actionCollection(), "editorwindow_copy");
+                                     actionCollection(), "editorwindow_copy");
     
     d->copyAction->setEnabled(false);
 
@@ -306,10 +306,10 @@ void EditorWindow::setupStandardActions()
     d->zoomPlusAction = KStdAction::zoomIn(m_canvas, SLOT(slotIncreaseZoom()),
                                           actionCollection(), "editorwindow_zoomplus");
     d->zoomMinusAction = KStdAction::zoomOut(m_canvas, SLOT(slotDecreaseZoom()),
-                                            actionCollection(), "editorwindow_zoomminus");
+                                             actionCollection(), "editorwindow_zoomminus");
     d->zoomFitAction = new KToggleAction(i18n("Zoom &AutoFit"), "viewmagfit",
-                                        CTRL+SHIFT+Key_A, this, SLOT(slotToggleAutoZoom()),
-                                        actionCollection(), "editorwindow_zoomfit");
+                                         CTRL+SHIFT+Key_A, this, SLOT(slotToggleAutoZoom()),
+                                         actionCollection(), "editorwindow_zoomfit");
 
 #if KDE_IS_VERSION(3,2,0)
     m_fullScreenAction = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
@@ -322,8 +322,8 @@ void EditorWindow::setupStandardActions()
 #endif
 
     d->viewHistogramAction = new KSelectAction(i18n("&Histogram"), "histogram", Key_H,
-                                              this, SLOT(slotViewHistogram()),
-                                              actionCollection(), "editorwindow_histogram");
+                                               this, SLOT(slotViewHistogram()),
+                                               actionCollection(), "editorwindow_histogram");
     d->viewHistogramAction->setEditable(false);
 
     QStringList selectItems;
@@ -339,12 +339,12 @@ void EditorWindow::setupStandardActions()
                                           this, SLOT(slotToggleSlideShow()),
                                           actionCollection(),"editorwindow_slideshow");
 
-    d->viewUnderExpoAction = new KToggleAction(i18n("Under Exposure Indicator"), "underexposure", 
+    d->viewUnderExpoAction = new KToggleAction(i18n("Under-Exposure Indicator"), "underexposure", 
                                             Key_F10, this, 
                                             SLOT(slotToggleUnderExposureIndicator()),
                                             actionCollection(),"editorwindow_underexposure");
 
-    d->viewOverExpoAction = new KToggleAction(i18n("Over Exposure Indicator"), "overexposure", 
+    d->viewOverExpoAction = new KToggleAction(i18n("Over-Exposure Indicator"), "overexposure", 
                                             Key_F11, this, 
                                             SLOT(slotToggleOverExposureIndicator()),
                                             actionCollection(),"editorwindow_overexposure");
@@ -357,17 +357,17 @@ void EditorWindow::setupStandardActions()
     // -- Standard 'Transform' menu actions ---------------------------------------------
 
     d->resizeAction = new KAction(i18n("&Resize..."), "resize_image", 0,
-                                 this, SLOT(slotResize()),
-                                 actionCollection(), "editorwindow_resize");
+                                  this, SLOT(slotResize()),
+                                  actionCollection(), "editorwindow_resize");
 
     d->cropAction = new KAction(i18n("Crop"), "crop",
-                               CTRL+Key_X,
-                               m_canvas, SLOT(slotCrop()),
-                               actionCollection(), "editorwindow_crop");
+                                CTRL+Key_X,
+                                m_canvas, SLOT(slotCrop()),
+                                actionCollection(), "editorwindow_crop");
     
     d->cropAction->setEnabled(false);
-    d->cropAction->setWhatsThis( i18n("This option can be used to crop the image. "
-                                     "Select a region of the image to enable this action.") );
+    d->cropAction->setWhatsThis(i18n("This option can be used to crop the image. "
+                                     "Select a region of the image to enable this action."));
 
     // -- Standard 'Flip' menu actions ---------------------------------------------
     
@@ -388,22 +388,22 @@ void EditorWindow::setupStandardActions()
     // -- Standard 'Rotate' menu actions ----------------------------------------
 
     d->rotateAction = new KActionMenu(i18n("&Rotate"), "rotate_cw",
-                                     actionCollection(),
-                                     "editorwindow_rotate");
+                                      actionCollection(),
+                                      "editorwindow_rotate");
     d->rotateAction->setDelayed(false);
 
     d->rotate90Action  = new KAction(i18n("90 Degrees"),
-                                    0, CTRL+Key_9, m_canvas, SLOT(slotRotate90()),
-                                    actionCollection(),
-                                    "rotate_90");
+                                     0, CTRL+Key_9, m_canvas, SLOT(slotRotate90()),
+                                     actionCollection(),
+                                     "rotate_90");
     d->rotate180Action = new KAction(i18n("180 Degrees"),
-                                    0, CTRL+Key_8, m_canvas, SLOT(slotRotate180()),
-                                    actionCollection(),
-                                    "rotate_180");
+                                     0, CTRL+Key_8, m_canvas, SLOT(slotRotate180()),
+                                     actionCollection(),
+                                     "rotate_180");
     d->rotate270Action = new KAction(i18n("270 Degrees"),
-                                    0, CTRL+Key_7, m_canvas, SLOT(slotRotate270()),
-                                    actionCollection(),
-                                    "rotate_270");
+                                     0, CTRL+Key_7, m_canvas, SLOT(slotRotate270()),
+                                     actionCollection(),
+                                     "rotate_270");
 
     d->rotateAction->insert(d->rotate90Action);
     d->rotateAction->insert(d->rotate180Action);
@@ -764,6 +764,7 @@ void EditorWindow::applyStandardSettings()
     d->viewCMViewAction->setEnabled(d->ICCSettings->enableCMSetting);
     d->viewCMViewAction->setChecked(d->ICCSettings->managedViewSetting);
     d->cmViewIndicator->setEnabled(d->ICCSettings->managedViewSetting && d->ICCSettings->enableCMSetting);
+    setColorManagedViewIndicatorToolTip(d->ICCSettings->managedViewSetting && d->ICCSettings->enableCMSetting);
     m_canvas->setICCSettings(d->ICCSettings);
 
     // -- JPEG, PNG, TIFF files format settings ----------------------------------------------
@@ -830,9 +831,11 @@ void EditorWindow::applyStandardSettings()
     d->exposureSettings->overExposureColor      = config->readColorEntry("OverExposureColor", &black);
 
     d->viewUnderExpoAction->setChecked(d->exposureSettings->underExposureIndicator);
-    d->viewOverExpoAction->setChecked(d->exposureSettings->underExposureIndicator);
+    d->viewOverExpoAction->setChecked(d->exposureSettings->overExposureIndicator);
     d->underExposureIndicator->setEnabled(d->exposureSettings->underExposureIndicator);
     d->overExposureIndicator->setEnabled(d->exposureSettings->overExposureIndicator);
+    setUnderExposureToolTip(d->exposureSettings->underExposureIndicator);
+    setOverExposureToolTip(d->exposureSettings->overExposureIndicator);
     m_canvas->setExposureSettings(d->exposureSettings);
 }
 
@@ -1593,43 +1596,66 @@ bool EditorWindow::moveFile()
 
 void EditorWindow::slotToggleColorManagedView()
 {
-    bool cmv = !d->ICCSettings->managedViewSetting;
-    d->cmViewIndicator->setEnabled(cmv);
-    QToolTip::add(d->cmViewIndicator, 
-                  cmv ? i18n("Color Managed View is enable") 
-                      : i18n("Color Managed View is disable"));
-    d->ICCSettings->managedViewSetting = cmv;
-    m_canvas->setICCSettings(d->ICCSettings);
+    bool cmv = false;
+    if (d->ICCSettings->enableCMSetting)
+    {    
+        cmv = !d->ICCSettings->managedViewSetting;
+        d->ICCSettings->managedViewSetting = cmv;
+        m_canvas->setICCSettings(d->ICCSettings);
+    
+        // Save Color Managed View setting in config file. For performance 
+        // reason, no need to flush file, it cached in memory and will be flushed 
+        // to disk at end of session.  
+        KConfig* config = kapp->config();
+        config->setGroup("Color Management");
+        config->writeEntry("ManagedView", cmv);
+    }
 
-    // Save Color Managed View setting in config file. For performance 
-    // reason, no need to flush file, it cached in memory and will be flushed 
-    // to disk at end of session.  
-    KConfig* config = kapp->config();
-    config->setGroup("Color Management");
-    config->writeEntry("ManagedView", cmv);
+    d->cmViewIndicator->setEnabled(cmv);
+    setColorManagedViewIndicatorToolTip(cmv);
 }    
+
+void EditorWindow::setColorManagedViewIndicatorToolTip(bool cmv)
+{
+    QToolTip::remove(d->cmViewIndicator); 
+    QToolTip::add(d->cmViewIndicator, 
+                cmv ? i18n("Color Managed View is enabled") 
+                    : i18n("Color Managed View is disabled"));
+}
 
 void EditorWindow::slotToggleUnderExposureIndicator()
 {
     bool uei = !d->exposureSettings->underExposureIndicator;
     d->underExposureIndicator->setEnabled(uei);
-    QToolTip::add(d->underExposureIndicator, 
-                  uei ? i18n("Under Exposure indicator is enable") 
-                      : i18n("Under Exposure indicator is disable"));
     d->exposureSettings->underExposureIndicator = uei;
     m_canvas->setExposureSettings(d->exposureSettings);
+    setUnderExposureToolTip(uei);
 }    
+
+void EditorWindow::setUnderExposureToolTip(bool uei)
+{
+    QToolTip::remove(d->underExposureIndicator); 
+    QToolTip::add(d->underExposureIndicator, 
+                  uei ? i18n("Under-Exposure indicator is enabled") 
+                      : i18n("Under-Exposure indicator is disabled"));
+}
 
 void EditorWindow::slotToggleOverExposureIndicator()
 {
     bool oei = !d->exposureSettings->overExposureIndicator;
     d->overExposureIndicator->setEnabled(oei);
-    QToolTip::add(d->overExposureIndicator, 
-                  oei ? i18n("Over Exposure indicator is enable") 
-                      : i18n("Over Exposure indicator is disable"));
     d->exposureSettings->overExposureIndicator = oei;
     m_canvas->setExposureSettings(d->exposureSettings);
+    setOverExposureToolTip(oei);
 }    
+
+void EditorWindow::setOverExposureToolTip(bool oei)
+{
+    QToolTip::remove(d->overExposureIndicator); 
+    QToolTip::add(d->overExposureIndicator, 
+                  oei ? i18n("Over-Exposure indicator is enabled") 
+                      : i18n("Over-Exposure indicator is disabled"));
+}
 
 void EditorWindow::slotDonateMoney()
 {

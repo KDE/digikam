@@ -207,6 +207,9 @@ private:
     void enter_loop();
     void hideToolBars();
     void showToolBars();
+    void setColorManagedViewIndicatorToolTip(bool cmv);
+    void setUnderExposureToolTip(bool uei);
+    void setOverExposureToolTip(bool oei);
 
 private:
 
