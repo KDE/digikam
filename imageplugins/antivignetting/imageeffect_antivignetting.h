@@ -43,11 +43,14 @@ public:
     ImageEffect_AntiVignetting(QWidget *parent, QString title, QFrame* banner);
     ~ImageEffect_AntiVignetting();
 
-private:
+private slots:
 
     void readUserSettings();
-    void writeUserSettings();    
-    void resetValues();   
+
+private:
+
+    void writeUserSettings();
+    void resetValues();     
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();

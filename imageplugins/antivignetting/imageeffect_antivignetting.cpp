@@ -204,12 +204,29 @@ void ImageEffect_AntiVignetting::readUserSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("antivignettings Tool Dialog");
+
+    m_densityInput->blockSignals(true);
+    m_powerInput->blockSignals(true);
+    m_radiusInput->blockSignals(true);
+    m_brightnessInput->blockSignals(true);
+    m_contrastInput->blockSignals(true);
+    m_gammaInput->blockSignals(true);
+
     m_densityInput->setValue(config->readDoubleNumEntry("DensityAjustment", 2.0));
     m_powerInput->setValue(config->readDoubleNumEntry("PowerAjustment", 1.0));
     m_radiusInput->setValue(config->readDoubleNumEntry("RadiusAjustment", 1.0));
     m_brightnessInput->setValue(config->readNumEntry("BrightnessAjustment", 0));
     m_contrastInput->setValue(config->readNumEntry("ContrastAjustment", 0));
     m_gammaInput->setValue(config->readDoubleNumEntry("GammaAjustment", 1.0));
+
+    m_densityInput->blockSignals(false);
+    m_powerInput->blockSignals(false);
+    m_radiusInput->blockSignals(false);
+    m_brightnessInput->blockSignals(false);
+    m_contrastInput->blockSignals(false);
+    m_gammaInput->blockSignals(false);
+
+    slotEffect();
 }
 
 void ImageEffect_AntiVignetting::writeUserSettings()
