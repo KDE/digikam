@@ -1,13 +1,12 @@
 /* ============================================================
- * File  : imageeffect_lensdistortion.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2004-12-27
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+            Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2004-12-27
  * Description : a digiKam image plugin for to reduce spherical
  *               aberration provide by lens on an image.
  * 
  * Copyright 2004-2006 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * Original Distortion Correction algorithm copyrighted 
  * 2001-2003 David Hodson <hodsond@acm.org>
@@ -56,6 +55,7 @@
 #include "version.h"
 #include "lensdistortion.h"
 #include "imageeffect_lensdistortion.h"
+#include "imageeffect_lensdistortion.moc"
 
 namespace DigikamLensDistortionImagesPlugin
 {
@@ -73,18 +73,18 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent, QString 
                                                  "by a lens to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2004-2006, Gilles Caulier\n"
-                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg", 
+                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
 
-    about->addAuthor("David Hodson", I18N_NOOP("Lens distortion correction algorithm."),
-                     "hodsond at acm dot org");
-
     about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
                      "marcel dot wiesweg at gmx dot de");
+
+    about->addAuthor("David Hodson", I18N_NOOP("Lens distortion correction algorithm."),
+                     "hodsond at acm dot org");
 
     setAboutData(about);
 
@@ -165,6 +165,8 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent, QString 
     connect(m_brightenInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));           
 
+    // -------------------------------------------------------------
+
     /* Calc transform preview.
        We would like a checkered area to demonstrate the effect.
        We do not have any drawing support in DImg, so we let Qt draw.
@@ -193,42 +195,36 @@ ImageEffect_LensDistortion::~ImageEffect_LensDistortion()
 
 void ImageEffect_LensDistortion::readUserSettings(void)
 {
+    KConfig *config = kapp->config();
+    config->setGroup("lensdistortion Tool Dialog");
+
     m_mainInput->blockSignals(true);
     m_edgeInput->blockSignals(true);
     m_rescaleInput->blockSignals(true);
+    m_brightenInput->blockSignals(true);
     
-    KConfig *config = kapp->config();
-    config->setGroup("Lens Distortion Tool Settings");
-
-    m_mainInput->setValue( config->readDoubleNumEntry( "2nd order distortion", 0.0 ) );
-    m_edgeInput->setValue( config->readDoubleNumEntry("4th order distortion",0.0) );
-    m_rescaleInput->setValue( config->readDoubleNumEntry( "Zoom factor", 0.0 ) );
-    DDebug() << "Reading LensDistortion settings" << endl;
+    m_mainInput->setValue(config->readDoubleNumEntry("2nd Order Distortion", 0.0));
+    m_edgeInput->setValue(config->readDoubleNumEntry("4th Order Distortion",0.0));
+    m_rescaleInput->setValue(config->readDoubleNumEntry("Zoom Factor", 0.0));
+    m_brightenInput->setValue(config->readDoubleNumEntry("Brighten", 0.0));
     
     m_mainInput->blockSignals(false);
     m_edgeInput->blockSignals(false);
     m_rescaleInput->blockSignals(false);
-    
+    m_brightenInput->blockSignals(false);
+
     slotEffect();
 }
 
 void ImageEffect_LensDistortion::writeUserSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("Lens Distortion Tool Settings");
-    config->writeEntry( "2nd order distortion", m_mainInput->value() );
-    config->writeEntry( "4th order distortion", m_edgeInput->value() );
-    config->writeEntry( "Zoom factor", m_rescaleInput->value() );
+    config->setGroup("lensdistortion Tool Dialog");
+    config->writeEntry("2nd Order Distortion", m_mainInput->value());
+    config->writeEntry("4th Order Distortion", m_edgeInput->value());
+    config->writeEntry("Zoom Factor", m_rescaleInput->value());
+    config->writeEntry("Brighten", m_brightenInput->value());
     config->sync();
-    DDebug() << "Writing LensDistortion settings" << endl;
-}
-
-void ImageEffect_LensDistortion::renderingFinished()
-{
-    m_mainInput->setEnabled(true);
-    m_edgeInput->setEnabled(true);
-    m_rescaleInput->setEnabled(true);
-    m_brightenInput->setEnabled(true);
 }
 
 void ImageEffect_LensDistortion::resetValues()
@@ -307,6 +303,13 @@ void ImageEffect_LensDistortion::putFinalData(void)
                            m_threadedFilter->getTargetImage().bits());
 }
 
+void ImageEffect_LensDistortion::renderingFinished()
+{
+    m_mainInput->setEnabled(true);
+    m_edgeInput->setEnabled(true);
+    m_rescaleInput->setEnabled(true);
+    m_brightenInput->setEnabled(true);
+}
+
 }  // NameSpace DigikamLensDistortionImagesPlugin
 
-#include "imageeffect_lensdistortion.moc"
