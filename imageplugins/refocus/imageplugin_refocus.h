@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_refocus.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-04-29
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-04-29
  * Description : 
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,14 +40,13 @@ public:
 
     void setEnabledActions(bool enable);
 
-private:
-
-    KAction *m_refocusAction;
-   
 private slots:
 
     void slotRefocus();
 
+private:
+
+    KAction *m_refocusAction;
 };
     
 #endif /* IMAGEPLUGIN_REFOCUS_H */

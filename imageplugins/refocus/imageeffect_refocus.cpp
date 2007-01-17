@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_refocus.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-04-29
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-04-29
  * Description : a digiKam image editor plugin to refocus 
  *               an image.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,6 +30,7 @@
 
 // KDE includes.
 
+#include <kconfig.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -45,6 +45,7 @@
 #include "refocus.h"
 #include "version.h"
 #include "imageeffect_refocus.h"
+#include "imageeffect_refocus.moc"
 
 #define MAX_MATRIX_SIZE 25
 
@@ -65,7 +66,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent, QString title, QFrame*
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to refocus a photograph."),
                                        KAboutData::License_GPL,
-                                       "(c) 2006, Gilles Caulier",
+                                       "(c) 2006-2007, Gilles Caulier",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -248,6 +249,39 @@ void ImageEffect_Refocus::renderingFinished(void)
     m_noise->setEnabled(true);
 }
 
+void ImageEffect_Refocus::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("refocus Tool Dialog");
+    m_matrixSize->blockSignals(true);
+    m_radius->blockSignals(true);
+    m_gauss->blockSignals(true);
+    m_correlation->blockSignals(true);
+    m_noise->blockSignals(true);
+    m_matrixSize->setValue(config->readNumEntry("MatrixSize", 5));
+    m_radius->setValue(config->readDoubleNumEntry("RadiusAjustment", 1.0));
+    m_gauss->setValue(config->readDoubleNumEntry("GaussAjustment", 0.0));
+    m_correlation->setValue(config->readDoubleNumEntry("CorrelationAjustment", 0.5));
+    m_noise->setValue(config->readDoubleNumEntry("NoiseAjustment", 0.03));
+    m_matrixSize->blockSignals(false);
+    m_radius->blockSignals(false);
+    m_gauss->blockSignals(false);
+    m_correlation->blockSignals(false);
+    m_noise->blockSignals(false);
+}
+
+void ImageEffect_Refocus::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("refocus Tool Dialog");
+    config->writeEntry("MatrixSize", m_matrixSize->value());
+    config->writeEntry("RadiusAjustment", m_radius->value());
+    config->writeEntry("GaussAjustment", m_gauss->value());
+    config->writeEntry("CorrelationAjustment", m_correlation->value());
+    config->writeEntry("NoiseAjustment", m_noise->value());
+    config->sync();
+}
+
 void ImageEffect_Refocus::resetValues(void)
 {
     m_matrixSize->blockSignals(true);
@@ -399,4 +433,3 @@ void ImageEffect_Refocus::slotUser2()
 
 }  // NameSpace DigikamRefocusImagesPlugin
 
-#include "imageeffect_refocus.moc"

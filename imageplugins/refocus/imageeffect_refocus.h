@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_refocus.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-04-29
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-04-29
  * Description : a digiKam image editor plugin to refocus 
  *               an image.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,6 +41,23 @@ public:
     ImageEffect_Refocus(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_Refocus();
 
+private slots:
+
+    void slotUser2();
+    void slotUser3();
+
+private:
+    
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues();     
+    void prepareEffect();
+    void prepareFinal();
+    void abortPreview();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
+
 private:
     
     Digikam::DImg    m_img;
@@ -52,21 +68,6 @@ private:
     KDoubleNumInput *m_gauss;
     KDoubleNumInput *m_correlation;
     KDoubleNumInput *m_noise;
-    
-private slots:
-
-    void slotUser2();
-    void slotUser3();
-
-protected:
-    
-    void prepareEffect(void);
-    void prepareFinal(void);
-    void abortPreview(void);
-    void putPreviewData(void);
-    void putFinalData(void);
-    void resetValues(void);   
-    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamRefocusImagesPlugin
