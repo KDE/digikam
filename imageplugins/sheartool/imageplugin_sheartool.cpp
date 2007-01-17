@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_sheartool.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-11-23
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-11-23
  * Description : 
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 #include "bannerwidget.h"
 #include "imageeffect_sheartool.h"
 #include "imageplugin_sheartool.h"
+#include "imageplugin_sheartool.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_sheartool,
                             KGenericFactory<ImagePlugin_ShearTool>("digikamimageplugin_sheartool"));
@@ -66,6 +66,3 @@ void ImagePlugin_ShearTool::slotShearTool()
     dlg.exec();
     delete headerFrame;    
 }
-
-
-#include "imageplugin_sheartool.moc"

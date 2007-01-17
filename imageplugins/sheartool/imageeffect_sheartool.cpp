@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_sheartool.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-12-23
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-12-23
  * Description : a digiKam image editor plugin to process 
  *               shearing image.
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,6 +44,7 @@
 #include "version.h"
 #include "sheartool.h"
 #include "imageeffect_sheartool.h"
+#include "imageeffect_sheartool.moc"
 
 namespace DigikamShearToolImagesPlugin
 {
@@ -65,7 +65,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent, QString title, QFr
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to shear an image."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2006, Gilles Caulier",
+                                       "(c) 2004-2007, Gilles Caulier",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -175,30 +175,25 @@ ImageEffect_ShearTool::~ImageEffect_ShearTool()
 void ImageEffect_ShearTool::readUserSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("ShearTool Settings");
-
-    m_antialiasInput->setChecked( config->readBoolEntry("Anti Aliasing", true) );
-    DDebug() << "Reading ShearTool settings" << endl;
+    config->setGroup("sheartool Tool Dialog");
+    m_mainHAngleInput->setValue(config->readNumEntry("Main HAngle", 0));
+    m_mainVAngleInput->setValue(config->readNumEntry("Main VAngle", 0));
+    m_fineHAngleInput->setValue(config->readDoubleNumEntry("Fine HAngle", 0.0));
+    m_fineVAngleInput->setValue(config->readDoubleNumEntry("Fine VAngle", 0.0));
+    m_antialiasInput->setChecked(config->readBoolEntry("Anti Aliasing", true));
+    slotEffect();
 }
 
 void ImageEffect_ShearTool::writeUserSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("ShearTool Settings");
-
-    config->writeEntry( "Anti Aliasing", m_antialiasInput->isChecked() );
+    config->setGroup("sheartool Tool Dialog");
+    config->writeEntry("Main HAngle", m_mainHAngleInput->value());
+    config->writeEntry("Main VAngle", m_mainVAngleInput->value());
+    config->writeEntry("Fine HAngle", m_fineHAngleInput->value());
+    config->writeEntry("Fine VAngle", m_fineVAngleInput->value());
+    config->writeEntry("Anti Aliasing", m_antialiasInput->isChecked());
     config->sync();
-    DDebug() << "Writing ShearTool settings" << endl;
-}
-
-void ImageEffect_ShearTool::renderingFinished()
-{
-    m_mainHAngleInput->setEnabled(true);
-    m_mainVAngleInput->setEnabled(true);
-    m_fineHAngleInput->setEnabled(true);
-    m_fineVAngleInput->setEnabled(true);
-    m_antialiasInput->setEnabled(true);
-    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_ShearTool::resetValues()
@@ -306,6 +301,15 @@ void ImageEffect_ShearTool::putFinalData(void)
                            targetImage.width(), targetImage.height());
 }
 
+void ImageEffect_ShearTool::renderingFinished()
+{
+    m_mainHAngleInput->setEnabled(true);
+    m_mainVAngleInput->setEnabled(true);
+    m_fineHAngleInput->setEnabled(true);
+    m_fineVAngleInput->setEnabled(true);
+    m_antialiasInput->setEnabled(true);
+    kapp->restoreOverrideCursor();
+}
+
 }  // NameSpace DigikamShearToolImagesPlugin
 
-#include "imageeffect_sheartool.moc"

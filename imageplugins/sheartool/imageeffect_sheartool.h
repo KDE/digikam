@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_sheartool.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-  * Date  : 2004-12-23
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-12-23
  * Description : a digiKam image editor plugin to process 
  *               shearing image.
-* 
- * Copyright 2004-2006 by Gilles Caulier
+ * 
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,19 +45,6 @@ public:
 
     ImageEffect_ShearTool(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_ShearTool();
-
-private:
-
-    QLabel          *m_newWidthLabel;
-    QLabel          *m_newHeightLabel;
-   
-    QCheckBox       *m_antialiasInput;
-    
-    KIntNumInput    *m_mainHAngleInput;
-    KIntNumInput    *m_mainVAngleInput;
-
-    KDoubleNumInput *m_fineHAngleInput;
-    KDoubleNumInput *m_fineVAngleInput;
     
 private slots:
     
@@ -72,8 +58,20 @@ protected:
     void putPreviewData(void);
     void putFinalData(void);
     void resetValues(void);   
-    void renderingFinished(void);
+    void renderingFinished(void);   
+
+private:
+
+    QLabel          *m_newWidthLabel;
+    QLabel          *m_newHeightLabel;
    
+    QCheckBox       *m_antialiasInput;
+    
+    KIntNumInput    *m_mainHAngleInput;
+    KIntNumInput    *m_mainVAngleInput;
+
+    KDoubleNumInput *m_fineHAngleInput;
+    KDoubleNumInput *m_fineVAngleInput;
 };
 
 }  // NameSpace DigikamShearToolImagesPlugin
