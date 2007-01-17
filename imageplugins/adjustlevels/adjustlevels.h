@@ -52,9 +52,6 @@ private:
     void writeUserSettings();
     void resetValues();
     void finalRendering(); 
-
-private:
-
     void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
     
 private slots:
