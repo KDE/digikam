@@ -39,17 +39,20 @@ public:
     ImageEffect_Sharpen(QWidget *parent);
     ~ImageEffect_Sharpen();
 
-private:
+private slots:
 
     void readUserSettings();
+
+private:
+
     void writeUserSettings();
-    void resetValues(void);   
-    void prepareEffect(void);
-    void prepareFinal(void);
-    void abortPreview(void);
-    void putPreviewData(void);
-    void putFinalData(void);
-    void renderingFinished(void);
+    void resetValues();  
+    void prepareEffect();
+    void prepareFinal();
+    void abortPreview();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
 
 private:
     

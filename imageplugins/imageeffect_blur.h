@@ -39,11 +39,14 @@ public:
     ImageEffect_Blur(QWidget *parent);
     ~ImageEffect_Blur();
 
-private:
+private slots:
 
     void readUserSettings();
+
+private:
+
     void writeUserSettings();
-    void resetValues(); 
+    void resetValues();  
     void prepareEffect();
     void prepareFinal();
     void abortPreview();
