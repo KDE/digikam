@@ -44,6 +44,7 @@
 
 // KDE includes.
 
+#include <kconfig.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <knuminput.h>
