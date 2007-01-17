@@ -45,12 +45,12 @@ private slots:
 
     void slotUser2();
     void slotUser3();
+    void readUserSettings();
 
 private:
-    
-    void readUserSettings();
+
     void writeUserSettings();
-    void resetValues();     
+    void resetValues();        
     void prepareEffect();
     void prepareFinal();
     void abortPreview();

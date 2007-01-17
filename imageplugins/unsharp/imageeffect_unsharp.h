@@ -40,11 +40,14 @@ public:
     ImageEffect_Unsharp(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_Unsharp();
 
-private:
+private slots:
 
     void readUserSettings();
+
+private:
+
     void writeUserSettings();
-    void resetValues();     
+    void resetValues();    
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
