@@ -39,6 +39,7 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
+#include <kseparator.h>
 
 // Local includes.
 
@@ -75,8 +76,8 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent, QString 
     
     // -------------------------------------------------------------
     
-    QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 12, 2, marginHint(), spacingHint());
+    QWidget *gboxSettings     = new QWidget(plainPage());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 13, 2, marginHint(), spacingHint());
 
     m_maskPreviewLabel = new QLabel( gboxSettings );
     m_maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
@@ -124,6 +125,9 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent, QString 
     gridSettings->addMultiCellWidget(label3, 5, 5, 0, 2);
     gridSettings->addMultiCellWidget(m_radiusInput, 6, 6, 0, 2);
     
+    KSeparator *line = new KSeparator (Horizontal, gboxSettings);
+    gridSettings->addMultiCellWidget(line, 7, 7, 0, 2);
+
     // -------------------------------------------------------------
 
     QLabel *label4 = new QLabel(i18n("Brightness:"), gboxSettings);
@@ -132,8 +136,8 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent, QString 
     m_brightnessInput->setRange(0, 100, 1, true);  
     QWhatsThis::add( m_brightnessInput, i18n("<p>Set here the brightness re-adjustment of the target image."));
 
-    gridSettings->addMultiCellWidget(label4, 7, 7, 0, 2);
-    gridSettings->addMultiCellWidget(m_brightnessInput, 8, 8, 0, 2);
+    gridSettings->addMultiCellWidget(label4, 8, 8, 0, 2);
+    gridSettings->addMultiCellWidget(m_brightnessInput, 9, 9, 0, 2);
         
     // -------------------------------------------------------------
     
@@ -143,8 +147,8 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent, QString 
     m_contrastInput->setRange(0, 100, 1, true);  
     QWhatsThis::add( m_contrastInput, i18n("<p>Set here the contrast re-adjustment of the target image."));
 
-    gridSettings->addMultiCellWidget(label5, 9, 9, 0, 2);
-    gridSettings->addMultiCellWidget(m_contrastInput, 10, 10, 0, 2);
+    gridSettings->addMultiCellWidget(label5, 10, 10, 0, 2);
+    gridSettings->addMultiCellWidget(m_contrastInput, 11, 11, 0, 2);
     
     // -------------------------------------------------------------
 
@@ -156,8 +160,8 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent, QString 
     m_gammaInput->setValue(1.0);
     QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma re-adjustment of the target image."));
 
-    gridSettings->addMultiCellWidget(label6, 11, 11, 0, 2);
-    gridSettings->addMultiCellWidget(m_gammaInput, 12, 12, 0, 2);
+    gridSettings->addMultiCellWidget(label6, 12, 12, 0, 2);
+    gridSettings->addMultiCellWidget(m_gammaInput, 13, 13, 0, 2);
 
     setUserAreaWidget(gboxSettings);
     
@@ -194,6 +198,31 @@ void ImageEffect_AntiVignetting::renderingFinished()
     m_brightnessInput->setEnabled(true);
     m_contrastInput->setEnabled(true);
     m_gammaInput->setEnabled(true);
+}
+
+void ImageEffect_AntiVignetting::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("antivignettings Tool Dialog");
+    m_densityInput->setValue(config->readDoubleNumEntry("DensityAjustment", 2.0));
+    m_powerInput->setValue(config->readDoubleNumEntry("PowerAjustment", 1.0));
+    m_radiusInput->setValue(config->readDoubleNumEntry("RadiusAjustment", 1.0));
+    m_brightnessInput->setValue(config->readNumEntry("BrightnessAjustment", 0));
+    m_contrastInput->setValue(config->readNumEntry("ContrastAjustment", 0));
+    m_gammaInput->setValue(config->readDoubleNumEntry("GammaAjustment", 1.0));
+}
+
+void ImageEffect_AntiVignetting::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("antivignettings Tool Dialog");
+    config->writeEntry("DensityAjustment", m_densityInput->value());
+    config->writeEntry("PowerAjustment", m_powerInput->value());
+    config->writeEntry("RadiusAjustment", m_radiusInput->value());
+    config->writeEntry("BrightnessAjustment", m_brightnessInput->value());
+    config->writeEntry("ContrastAjustment", m_contrastInput->value());
+    config->writeEntry("GammaAjustment", m_gammaInput->value());
+    config->sync();
 }
 
 void ImageEffect_AntiVignetting::resetValues()

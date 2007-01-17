@@ -44,13 +44,15 @@ public:
     ~ImageEffect_AntiVignetting();
 
 private:
-    
-    void prepareEffect(void);
-    void prepareFinal(void);
-    void putPreviewData(void);
-    void putFinalData(void);
-    void resetValues(void);   
-    void renderingFinished(void);
+
+    void readUserSettings();
+    void writeUserSettings();    
+    void resetValues();   
+    void prepareEffect();
+    void prepareFinal();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
 
 private:
 
