@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_antivignetting.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-12-25
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-12-25
  * Description : a digiKam image plugin to reduce 
  *               vignetting on an image.
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,6 +32,7 @@
 
 // KDE includes.
 
+#include <kconfig.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kiconloader.h>
@@ -45,6 +45,7 @@
 #include "version.h"
 #include "antivignetting.h"
 #include "imageeffect_antivignetting.h"
+#include "imageeffect_antivignetting.moc"
 
 namespace DigikamAntiVignettingImagesPlugin
 {
@@ -60,7 +61,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent, QString 
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to reduce image vignetting."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2006, Gilles Caulier",
+                                       "(c) 2004-2007, Gilles Caulier",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
@@ -149,8 +150,10 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent, QString 
 
     QLabel *label6 = new QLabel(i18n("Gamma:"), gboxSettings);
     
-    m_gammaInput = new KIntNumInput(gboxSettings);
-    m_gammaInput->setRange(0, 100, 1, true);  
+    m_gammaInput = new KDoubleNumInput(gboxSettings);
+    m_gammaInput->setPrecision(2);
+    m_gammaInput->setRange(0.1, 3.0, 0.01, true);
+    m_gammaInput->setValue(1.0);
     QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma re-adjustment of the target image."));
 
     gridSettings->addMultiCellWidget(label6, 11, 11, 0, 2);
@@ -175,7 +178,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent, QString 
     connect(m_contrastInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));            
 
-    connect(m_gammaInput, SIGNAL(valueChanged (int)),
+    connect(m_gammaInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));      
 }
 
@@ -207,7 +210,7 @@ void ImageEffect_AntiVignetting::resetValues()
     m_radiusInput->setValue(1.0);
     m_brightnessInput->setValue(0);
     m_contrastInput->setValue(0);
-    m_gammaInput->setValue(0);
+    m_gammaInput->setValue(1.0);
 
     m_densityInput->blockSignals(false);
     m_powerInput->blockSignals(false);
@@ -290,7 +293,7 @@ void ImageEffect_AntiVignetting::putPreviewData(void)
 
     double b = (double)(m_brightnessInput->value() / 100.0);
     double c = (double)(m_contrastInput->value()   / 100.0) + (double)(1.00);
-    double g = (double)(m_gammaInput->value()      / 100.0) + (double)(1.00);
+    double g = m_gammaInput->value();
 
     Digikam::BCGModifier cmod;
     cmod.setGamma(g);
@@ -312,7 +315,7 @@ void ImageEffect_AntiVignetting::putFinalData(void)
     
     double b = (double)(m_brightnessInput->value() / 100.0);
     double c = (double)(m_contrastInput->value()   / 100.0) + (double)(1.00);
-    double g = (double)(m_gammaInput->value()      / 100.0) + (double)(1.00);
+    double g = m_gammaInput->value();
 
     // Adjust Image BCG.
     iface.setOriginalBCG(b, c, g);
@@ -320,4 +323,3 @@ void ImageEffect_AntiVignetting::putFinalData(void)
 
 }  // NameSpace DigikamAntiVignettingImagesPlugin
 
-#include "imageeffect_antivignetting.moc"

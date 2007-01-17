@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_antivignetting.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-12-25
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-12-25
  * Description : a digiKam image plugin to reduce 
  *               vignetting on an image.
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,7 +27,6 @@
 #include <digikamheaders.h>
 
 class QLabel;
-class QTabWidget;
 
 class KIntNumInput;
 class KDoubleNumInput;
@@ -46,18 +44,6 @@ public:
     ~ImageEffect_AntiVignetting();
 
 private:
-
-    QLabel               *m_maskPreviewLabel;
-    
-    KIntNumInput         *m_brightnessInput;
-    KIntNumInput         *m_contrastInput;
-    KIntNumInput         *m_gammaInput;
-    
-    KDoubleNumInput      *m_densityInput;
-    KDoubleNumInput      *m_powerInput;
-    KDoubleNumInput      *m_radiusInput;
-    
-protected:
     
     void prepareEffect(void);
     void prepareFinal(void);
@@ -65,6 +51,18 @@ protected:
     void putFinalData(void);
     void resetValues(void);   
     void renderingFinished(void);
+
+private:
+
+    QLabel          *m_maskPreviewLabel;
+    
+    KIntNumInput    *m_brightnessInput;
+    KIntNumInput    *m_contrastInput;
+    
+    KDoubleNumInput *m_gammaInput;
+    KDoubleNumInput *m_densityInput;
+    KDoubleNumInput *m_powerInput;
+    KDoubleNumInput *m_radiusInput;
 };
 
 }  // NameSpace DigikamAntiVignettingImagesPlugin
