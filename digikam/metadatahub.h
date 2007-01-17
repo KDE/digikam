@@ -116,17 +116,29 @@ public:
 
     enum DatabaseMode
     {
-        NoDatabase,        /** Only keywords() returns tag information, the AlbumManager is not accessed.
-                               The methods tags() and tagIDs() do not return valid data.
-                               The methods load(ImageInfo*), setTags() shall not be used. */
-        WithDatabase       /// The AlbumManager is accessed. The methods tags() and tagIDs() return valid data.
+        /**
+            Use this mode if
+                - the album manager is not available and/or
+                - metadata sets may contain tags that are not available from the AlbumManager
+            This situation occurs if new tags are imported from IPTC keywords.
+            This means that the album manager is not accessed, all methods depending on TAlbum*
+            (tags(), tagIDs(), setTag()) shall not be used.
+            The method write(ImageInfo*) will create not yet existing tags in the database.
+        */
+        NewTagsImport,
+        /**
+            Use this mode if all tags are available from the AlbumManager.
+            This situation occurs if you load from ImageInfo objects.
+            All methods can be used.
+        */
+        ManagedTags
     };
 
     /**
         Constructs a MetadataHub.
         @param dbmode Determines if the database may be accessed or not. See the enum description above.
     */
-    MetadataHub(DatabaseMode dbmode = WithDatabase);
+    MetadataHub(DatabaseMode dbmode = ManagedTags);
     ~MetadataHub();
     MetadataHub &operator=(const MetadataHub &);
     MetadataHub(const MetadataHub &);
@@ -280,6 +292,7 @@ private:
 
     void load(const QDateTime &dateTime, const QString &comment, int rating);
     void loadTags(const QValueList<TAlbum *> &loadedTags);
+    void loadTags(const QStringList &loadedTagPaths);
 
     MetadataHubPriv     *d;
 };

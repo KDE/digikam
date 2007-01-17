@@ -52,7 +52,7 @@ public:
 
         count          = 0;
 
-        dbmode         = MetadataHub::WithDatabase;
+        dbmode         = MetadataHub::ManagedTags;
     }
 
     MetadataHub::Status dateTimeStatus;
@@ -133,7 +133,6 @@ void MetadataHub::reset()
 
 void MetadataHub::load(ImageInfo *info)
 {
-    // DatabaseMode == WithDatabase is assumed
     d->count++;
 
     load(info->dateTime(), info->caption(), info->rating());
@@ -142,18 +141,26 @@ void MetadataHub::load(ImageInfo *info)
     QValueList<int> tagIDs = info->tagIDs();
     QValueList<TAlbum *> loadedTags;
 
-    for (QValueList<int>::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
+    if (d->dbmode == ManagedTags)
     {
-        TAlbum *album = man->findTAlbum(*it);
-        if (!album)
+        QValueList<TAlbum *> loadedTags;
+        for (QValueList<int>::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
         {
-            DWarning() << k_funcinfo << "Tag id " << *it << " not found in database." << endl;
-            continue;
+            TAlbum *album = man->findTAlbum(*it);
+            if (!album)
+            {
+                DWarning() << k_funcinfo << "Tag id " << *it << " not found in database." << endl;
+                continue;
+            }
+            loadedTags.append(album);
         }
-        loadedTags.append(album);
-    }
 
-    loadTags(loadedTags);
+        loadTags(loadedTags);
+    }
+    else
+    {
+        loadTags(info->tagPaths(false));
+    }
 }
 
 void MetadataHub::load(const DMetadata &metadata)
@@ -192,7 +199,7 @@ void MetadataHub::load(const DMetadata &metadata)
 
     // Try to get image tags from IPTC keywords tags.
 
-    if (d->dbmode == WithDatabase)
+    if (d->dbmode == ManagedTags)
     {
         AlbumManager *man = AlbumManager::instance();
         QStringList tagPaths = metadata.getImageKeywords();
@@ -203,7 +210,7 @@ void MetadataHub::load(const DMetadata &metadata)
             TAlbum *album = man->findTAlbum(*it);
             if (!album)
             {
-                DWarning() << k_funcinfo << "Tag id " << *it << " not found in database." << endl;
+                DWarning() << k_funcinfo << "Tag id " << *it << " not found in database. Use NewTagsImport mode?" << endl;
                 continue;
             }
             loadedTags.append(album);
@@ -213,24 +220,7 @@ void MetadataHub::load(const DMetadata &metadata)
     }
     else
     {
-        QStringList newTagPaths = metadata.getImageKeywords();
-        if (d->count == 1)
-        {
-            d->tagList = newTagPaths;
-        }
-        else
-        {
-            // a simple intersection
-            for (QStringList::iterator it = d->tagList.begin(); it != d->tagList.end(); ++it)
-            {
-                QStringList::iterator newTagListIt = newTagPaths.find(*it);
-                if (it == newTagPaths.end())
-                {
-                    // it's not in the newTagPaths list. Remove it from intersection list.
-                    it = d->tagList.remove(it);
-                }
-            }
-        }
+        loadTags(metadata.getImageKeywords());
     }
 }
 
@@ -281,6 +271,30 @@ void MetadataHub::loadTags(const QValueList<TAlbum *> &loadedTags)
         if (mapIt != d->tags.end() && mapIt.data() == TagStatus(MetadataAvailable, true))
         {
             mapIt.data() = TagStatus(MetadataDisjoint, true);
+        }
+    }
+}
+
+// private code to merge tags with d->tagList
+void MetadataHub::loadTags(const QStringList &loadedTagPaths)
+{
+    if (d->count == 1)
+    {
+        d->tagList = loadedTagPaths;
+    }
+    else
+    {
+        // a simple intersection
+        QStringList toBeAdded;
+        for (QStringList::iterator it = d->tagList.begin(); it != d->tagList.end(); ++it)
+        {
+            QStringList::const_iterator newTagListIt = loadedTagPaths.find(*it);
+            if (newTagListIt == loadedTagPaths.end())
+            {
+                // it's not in the loadedTagPaths list. Remove it from intersection list.
+                it = d->tagList.remove(it);
+            }
+            // else, it is in both lists, so no need to change d->tagList, it's already added.
         }
     }
 }
@@ -365,7 +379,7 @@ void MetadataHub::write(ImageInfo *info)
     if (d->ratingStatus == MetadataAvailable)
         info->setRating(d->rating);
 
-    if (d->dbmode == WithDatabase)
+    if (d->dbmode == ManagedTags)
     {
         for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
         {
@@ -380,6 +394,7 @@ void MetadataHub::write(ImageInfo *info)
     }
     else
     {
+        // tags not yet contained in database will be created
         info->addTagPaths(d->tagList);
     }
 }
@@ -413,7 +428,7 @@ bool MetadataHub::write(DMetadata &metadata, const MetadataWriteSettings &settin
     {
         // Store tag paths as Iptc keywords tags.
 
-        // DatabaseMode == WithDatabase is assumed.
+        // DatabaseMode == ManagedTags is assumed.
         // To fix this constraint (not needed currently), an oldKeywords parameter is needed
 
         // create list of keywords to be added and to be removed
@@ -494,14 +509,14 @@ MetadataHub::Status MetadataHub::ratingStatus() const
 
 MetadataHub::TagStatus MetadataHub::tagStatus(int albumId) const
 {
-    if (d->dbmode == NoDatabase)
+    if (d->dbmode == NewTagsImport)
         return TagStatus(MetadataInvalid);
     return tagStatus(AlbumManager::instance()->findTAlbum(albumId));
 }
 
 MetadataHub::TagStatus MetadataHub::tagStatus(const QString &tagPath) const
 {
-    if (d->dbmode == NoDatabase)
+    if (d->dbmode == NewTagsImport)
         return TagStatus(MetadataInvalid);
     return tagStatus(AlbumManager::instance()->findTAlbum(tagPath));
 }
@@ -568,7 +583,7 @@ void MetadataHub::ratingInterval(int &lowest, int &highest) const
 
 QStringList MetadataHub::keywords() const
 {
-    if (d->dbmode == NoDatabase)
+    if (d->dbmode == NewTagsImport)
         return d->tagList;
     else
     {
@@ -584,13 +599,13 @@ QStringList MetadataHub::keywords() const
 
 QMap<TAlbum *, MetadataHub::TagStatus> MetadataHub::tags() const
 {
-    // DatabaseMode == WithDatabase is assumed
+    // DatabaseMode == ManagedTags is assumed
     return d->tags;
 }
 
 QMap<int, MetadataHub::TagStatus> MetadataHub::tagIDs() const
 {
-    // DatabaseMode == WithDatabase is assumed
+    // DatabaseMode == ManagedTags is assumed
     QMap<int, TagStatus> intmap;
     for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
     {
@@ -622,13 +637,13 @@ void MetadataHub::setRating(int rating, Status status)
 
 void MetadataHub::setTag(TAlbum *tag, bool hasTag, Status status)
 {
-    // DatabaseMode == WithDatabase is assumed
+    // DatabaseMode == ManagedTags is assumed
     d->tags[tag] = TagStatus(status, hasTag);
 }
 
 void MetadataHub::setTag(int albumID, bool hasTag, Status status)
 {
-    // DatabaseMode == WithDatabase is assumed
+    // DatabaseMode == ManagedTags is assumed
     TAlbum *album = AlbumManager::instance()->findTAlbum(albumID);
     if (!album)
     {
