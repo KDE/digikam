@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageeffect_unsharp.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-08-27
  * Description : Unsharp mask image filter for digiKam Image Editor
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,20 +41,22 @@ public:
     ~ImageEffect_Unsharp();
 
 private:
+
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues();     
+    void prepareEffect();
+    void prepareFinal();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
+
+private:
     
     KIntNumInput    *m_radiusInput;
 
     KDoubleNumInput *m_amountInput;
     KDoubleNumInput *m_thresholdInput;
-    
-protected:
-    
-    void prepareEffect(void);
-    void prepareFinal(void);
-    void putPreviewData(void);
-    void putFinalData(void);
-    void resetValues(void);   
-    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamUnsharpMaskImagesPlugin

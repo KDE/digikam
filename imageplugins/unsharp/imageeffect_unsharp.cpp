@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageeffect_unsharp.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-08-27
  * Description : Unsharp mask image filter for digiKam Image Editor
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,6 +29,7 @@
 
 // KDE includes.
 
+#include <kconfig.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <knuminput.h>
@@ -42,6 +42,7 @@
 #include "version.h"
 #include "unsharp.h"
 #include "imageeffect_unsharp.h"
+#include "imageeffect_unsharp.moc"
 
 namespace DigikamUnsharpMaskImagesPlugin
 {
@@ -58,7 +59,7 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent, QString title, QFrame*
                                        digikamimageplugins_version,
                                        I18N_NOOP("An unsharp mask image filter plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2006, Gilles Caulier", 
+                                       "(c) 2004-2007, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -133,6 +134,31 @@ void ImageEffect_Unsharp::renderingFinished()
     m_thresholdInput->setEnabled(true);
 }
 
+void ImageEffect_Unsharp::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("unsharp Tool Dialog");
+    m_radiusInput->blockSignals(true);
+    m_amountInput->blockSignals(true);
+    m_thresholdInput->blockSignals(true);
+    m_radiusInput->setValue(config->readNumEntry("RadiusAjustment", 1));
+    m_amountInput->setValue(config->readDoubleNumEntry("AmountAjustment", 1.0));
+    m_thresholdInput->setValue(config->readDoubleNumEntry("ThresholdAjustment", 0.05));
+    m_radiusInput->blockSignals(false);
+    m_amountInput->blockSignals(false);
+    m_thresholdInput->blockSignals(false);
+}
+
+void ImageEffect_Unsharp::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("unsharp Tool Dialog");
+    config->writeEntry("RadiusAjustment", m_radiusInput->value());
+    config->writeEntry("AmountAjustment", m_amountInput->value());
+    config->writeEntry("ThresholdAjustment", m_thresholdInput->value());
+    config->sync();
+}
+
 void ImageEffect_Unsharp::resetValues()
 {
     m_radiusInput->blockSignals(true);
@@ -199,4 +225,3 @@ void ImageEffect_Unsharp::putFinalData(void)
 
 }  // NameSpace DigikamUnsharpMaskImagesPlugin
 
-#include "imageeffect_unsharp.moc"
