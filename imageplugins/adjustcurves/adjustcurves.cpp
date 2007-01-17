@@ -277,11 +277,6 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
 
     // -------------------------------------------------------------
     
-    // Reset all parameters to the default values.
-    QTimer::singleShot(0, this, SLOT(slotDefault()));
-
-    // -------------------------------------------------------------
-    
     connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
             this, SLOT(slotTimer()));
     
@@ -535,15 +530,78 @@ void AdjustCurveDialog::slotCurveTypeChanged(int type)
     m_curvesWidget->curveTypeChanged();
 }
 
-// Reset all settings.
-void AdjustCurveDialog::slotDefault()
+void AdjustCurveDialog::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("adjustcurves Tool Dialog");
+
+    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+
+    m_curvesWidget->reset();
+
+    for (int i = 0 ; i < 5 ; i++)
+    {
+        m_curves->curvesChannelReset(i);
+        m_curves->setCurveType(i, (Digikam::ImageCurves::CurveType)config->readNumEntry(QString("CurveTypeChannel%1").arg(i),
+                                                                                        Digikam::ImageCurves::CURVE_SMOOTH));
+
+        for (int j = 0 ; j < 17 ; j++)
+        {
+            QPoint disable(-1, -1);
+            QPoint p = config->readPointEntry(QString("CurveAjustmentChannel%1Point%2").arg(i).arg(j), &disable);
+    
+            if (m_originalImage.sixteenBit() && p.x() != -1)
+            {
+                p.setX(p.x()*255);
+                p.setY(p.y()*255);
+            }
+    
+            m_curves->setCurvePoint(i, j, p);
+        }
+ 
+        m_curves->curvesCalculateCurve(i);
+    }
+
+    slotChannelChanged(m_channelCB->currentItem());
+    slotScaleChanged(m_scaleBG->selectedId());
+}
+
+void AdjustCurveDialog::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("adjustcurves Tool Dialog");
+    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
+    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
+
+    for (int i = 0 ; i < 5 ; i++)
+    {
+        config->writeEntry(QString("CurveTypeChannel%1").arg(i), m_curves->getCurveType(i));
+        
+        for (int j = 0 ; j < 17 ; j++)
+        {
+            QPoint p = m_curves->getCurvePoint(i, j);
+    
+            if (m_originalImage.sixteenBit() && p.x() != -1)
+            {
+                p.setX(p.x()/255);
+                p.setY(p.y()/255);
+            }
+    
+            config->writeEntry(QString("CurveAjustmentChannel%1Point%2").arg(i).arg(j), p);
+        }
+    }
+
+    config->sync();
+}
+
+void AdjustCurveDialog::resetValues()
 {
     for (int channel = 0 ; channel < 5 ; channel++)
        m_curves->curvesChannelReset(channel);
 
     m_curvesWidget->reset();
     m_histogramWidget->reset();
-    slotEffect();
 }
 
 // Load all settings.

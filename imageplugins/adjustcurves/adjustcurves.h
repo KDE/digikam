@@ -47,13 +47,15 @@ public:
     AdjustCurveDialog(QWidget *parent, QString title, QFrame* banner);
     ~AdjustCurveDialog();
 
-protected:
+private:
 
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues();
     void finalRendering();
     
 private slots:
 
-    void slotDefault();
     void slotUser2();
     void slotUser3();
     void slotEffect();
