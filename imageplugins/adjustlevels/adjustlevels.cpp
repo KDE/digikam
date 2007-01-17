@@ -44,6 +44,7 @@
 
 // KDE includes.
 
+#include <kconfig.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <knuminput.h>
@@ -306,11 +307,6 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* ban
     grid->setRowStretch(9, 10);
     
     setUserAreaWidget(gboxSettings);    
-    
-    // -------------------------------------------------------------
-    
-    // Reset all parameters to the default values.
-    QTimer::singleShot(0, this, SLOT(slotDefault()));
                     
     // -------------------------------------------------------------
     // Channels and scale selection slots.
@@ -656,13 +652,76 @@ void AdjustLevelDialog::slotChannelChanged(int channel)
 void AdjustLevelDialog::slotScaleChanged(int scale)
 {
     m_levelsHistogramWidget->m_scaleType = scale;
-    m_histogramWidget->m_scaleType = scale;
+    m_histogramWidget->m_scaleType       = scale;
     m_histogramWidget->repaint(false);
     m_levelsHistogramWidget->repaint(false);
 }
 
-// Reset all settings.
-void AdjustLevelDialog::slotDefault()
+void AdjustLevelDialog::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("adjustlevels Tool Dialog");
+
+    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+
+    for (int i = 0 ; i < 5 ; i++)
+    {
+        bool sb        = m_originalImage.sixteenBit();
+        int max        = sb ? 65535 : 255;
+        double gamma   = config->readDoubleNumEntry(QString("GammaChannel%1").arg(i), 1.0);
+        int lowInput   = config->readNumEntry(QString("LowInputChannel%1").arg(i), 0);
+        int lowOutput  = config->readNumEntry(QString("LowOutputChannel%1").arg(i), 0);
+        int highInput  = config->readNumEntry(QString("HighInputChannel%1").arg(i), max);
+        int highOutput = config->readNumEntry(QString("HighOutputChannel%1").arg(i), max);
+    
+        m_levels->setLevelGammaValue(i, gamma);
+        m_levels->setLevelLowInputValue(i, sb ? lowInput*255 : lowInput);
+        m_levels->setLevelHighInputValue(i, sb ? highInput*255 : highInput);
+        m_levels->setLevelLowOutputValue(i, sb ? lowOutput*255 : lowOutput);
+        m_levels->setLevelHighOutputValue(i, sb ? highOutput*255 : highOutput);
+    }
+
+    m_levelsHistogramWidget->reset();
+    m_histogramWidget->reset();
+    slotChannelChanged(m_channelCB->currentItem());
+    slotScaleChanged(m_scaleBG->selectedId());
+
+    // This is mandatory here to set spinbox values because slot connections 
+    // can be not set completly at plugin startup.
+    m_minInput->setValue(m_levels->getLevelLowInputValue(m_channelCB->currentItem()));
+    m_minOutput->setValue(m_levels->getLevelLowOutputValue(m_channelCB->currentItem()));
+    m_maxInput->setValue(m_levels->getLevelHighInputValue(m_channelCB->currentItem()));
+    m_maxOutput->setValue(m_levels->getLevelHighOutputValue(m_channelCB->currentItem()));
+}
+
+void AdjustLevelDialog::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("adjustlevels Tool Dialog");
+    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
+    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
+
+    for (int i = 0 ; i < 5 ; i++)
+    {
+        bool sb        = m_originalImage.sixteenBit();
+        double gamma   = m_levels->getLevelGammaValue(i);
+        int lowInput   = m_levels->getLevelLowInputValue(i);
+        int lowOutput  = m_levels->getLevelLowOutputValue(i);
+        int highInput  = m_levels->getLevelHighInputValue(i);
+        int highOutput = m_levels->getLevelHighOutputValue(i);
+
+        config->writeEntry(QString("GammaChannel%1").arg(i), gamma);
+        config->writeEntry(QString("LowInputChannel%1").arg(i), sb ? lowInput/255 : lowInput);
+        config->writeEntry(QString("LowOutputChannel%1").arg(i), sb ? lowOutput/255 : lowOutput);
+        config->writeEntry(QString("HighInputChannel%1").arg(i), sb ? highInput/255 : highInput);
+        config->writeEntry(QString("HighOutputChannel%1").arg(i), sb ? highOutput/255 : highOutput);
+    }
+
+    config->sync();
+}
+
+void AdjustLevelDialog::resetValues()
 {
     for (int channel = 0 ; channel < 5 ; ++channel)
        m_levels->levelsChannelReset(channel);
@@ -671,7 +730,6 @@ void AdjustLevelDialog::slotDefault()
     slotChannelChanged(m_channelCB->currentItem());
     m_levelsHistogramWidget->reset();
     m_histogramWidget->reset();
-    slotEffect();
 }
 
 // Load all settings.

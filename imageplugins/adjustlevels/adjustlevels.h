@@ -46,9 +46,12 @@ public:
     AdjustLevelDialog(QWidget *parent, QString title, QFrame* banner);
     ~AdjustLevelDialog();
 
-protected:
+private:
 
-    void finalRendering();    
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues();
+    void finalRendering(); 
 
 private:
 
@@ -56,7 +59,6 @@ private:
     
 private slots:
 
-    void slotDefault();
     void slotUser2();
     void slotUser3();
     void slotEffect();
