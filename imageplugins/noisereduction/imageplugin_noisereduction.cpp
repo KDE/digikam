@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_noisereduction.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-08-24
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-08-24
  * Description : 
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 #include "bannerwidget.h"
 #include "imageeffect_noisereduction.h"
 #include "imageplugin_noisereduction.h"
+#include "imageplugin_noisereduction.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_despeckle,
                             KGenericFactory<ImagePlugin_NoiseReduction>("digikamimageplugin_despeckle"));
@@ -67,4 +67,4 @@ void ImagePlugin_NoiseReduction::slotNoiseReduction()
     delete headerFrame;
 }
 
-#include "imageplugin_noisereduction.moc"
+

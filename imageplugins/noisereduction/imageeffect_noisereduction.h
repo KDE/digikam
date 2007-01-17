@@ -1,12 +1,11 @@
 /* ============================================================
- * File   : imageeffect_noisereduction.h
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
  *          Peter Heckert <peter dot heckert at arcor dot de>
  * Date   : 2004-08-24
  * Description : noise reduction image filter for digiKam 
  *               image editor.
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +40,23 @@ public:
 
     ImageEffect_NoiseReduction(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_NoiseReduction();
+
+private:
+
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues();     
+    void prepareEffect();
+    void prepareFinal();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();        
        
+private slots:
+
+    void slotUser2();
+    void slotUser3();
+
 private:
 
     KDoubleNumInput *m_radiusInput;
@@ -55,20 +70,6 @@ private:
     KDoubleNumInput *m_gammaInput;
     KDoubleNumInput *m_dampingInput;
     KDoubleNumInput *m_phaseInput;
-
-private slots:
-
-    void slotUser2();
-    void slotUser3();
-
-protected:
-    
-    void prepareEffect(void);
-    void prepareFinal(void);
-    void putPreviewData(void);
-    void putFinalData(void);
-    void resetValues(void);   
-    void renderingFinished(void);        
 };
 
 }  // NameSpace DigikamNoiseReductionImagesPlugin

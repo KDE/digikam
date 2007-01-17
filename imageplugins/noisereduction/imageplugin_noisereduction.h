@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_noisereduction.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-08-24
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-08-24
  * Description : 
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,7 +17,6 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
 
 #ifndef IMAGEPLUGIN_NOISEREDUCTION_H
 #define IMAGEPLUGIN_NOISEREDUCTION_H
@@ -41,14 +39,13 @@ public:
 
     void setEnabledActions(bool enable);
 
-private:
-
-    KAction *m_noiseReductionAction;
-    
 private slots:
 
     void slotNoiseReduction();
 
+private:
+
+    KAction *m_noiseReductionAction;
 };
     
 #endif /* IMAGEPLUGIN_NOISEREDUCTION_H */

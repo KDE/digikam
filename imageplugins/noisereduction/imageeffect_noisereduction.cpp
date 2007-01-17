@@ -1,12 +1,11 @@
 /* ============================================================
- * File   : imageeffect_noisereduction.cpp
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
  *          Peter Heckert <peter dot heckert at arcor dot de>
  * Date   : 2004-08-24
  * Description : noise reduction image filter for digiKam 
  *               image editor.
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,12 +44,14 @@
 #include <kfiledialog.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
+#include <kconfig.h>
 
 // Local includes.
 
 #include "version.h"
 #include "noisereduction.h"
 #include "imageeffect_noisereduction.h"
+#include "imageeffect_noisereduction.moc"
 
 namespace DigikamNoiseReductionImagesPlugin
 {
@@ -66,7 +67,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
                                        digikamimageplugins_version,
                                        I18N_NOOP("A noise reduction image filter plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2006, Gilles Caulier", 
+                                       "(c) 2004-2007, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -304,6 +305,61 @@ void ImageEffect_NoiseReduction::renderingFinished()
     m_phaseInput->setEnabled(true);
 }
 
+void ImageEffect_NoiseReduction::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("noisereduction Tool Dialog");
+    m_radiusInput->setEnabled(true);
+    m_lumToleranceInput->setEnabled(true);
+    m_thresholdInput->setEnabled(true);
+    m_textureInput->setEnabled(true);
+    m_sharpnessInput->setEnabled(true);
+    m_csmoothInput->setEnabled(true);
+    m_lookaheadInput->setEnabled(true);
+    m_gammaInput->setEnabled(true);
+    m_dampingInput->setEnabled(true);
+    m_phaseInput->setEnabled(true);
+
+    m_radiusInput->setValue(config->readDoubleNumEntry("RadiusAjustment", 1.0));
+    m_lumToleranceInput->setValue(config->readDoubleNumEntry("LumToleranceAjustment", 1.0));
+    m_thresholdInput->setValue(config->readDoubleNumEntry("ThresholdAjustment", 0.08));
+    m_textureInput->setValue(config->readDoubleNumEntry("TextureAjustment", 0.0));
+    m_sharpnessInput->setValue(config->readDoubleNumEntry("SharpnessAjustment", 0.25));
+    m_csmoothInput->setValue(config->readDoubleNumEntry("CsmoothAjustment", 1.0));
+    m_lookaheadInput->setValue(config->readDoubleNumEntry("LookAheadAjustment", 2.0));
+    m_gammaInput->setValue(config->readDoubleNumEntry("GammaAjustment", 1.4));
+    m_dampingInput->setValue(config->readDoubleNumEntry("DampingAjustment", 5.0));
+    m_phaseInput->setValue(config->readDoubleNumEntry("PhaseAjustment", 1.0));
+
+    m_radiusInput->setEnabled(false);
+    m_lumToleranceInput->setEnabled(false);
+    m_thresholdInput->setEnabled(false);
+    m_textureInput->setEnabled(false);
+    m_sharpnessInput->setEnabled(false);
+    m_csmoothInput->setEnabled(false);
+    m_lookaheadInput->setEnabled(false);
+    m_gammaInput->setEnabled(false);
+    m_dampingInput->setEnabled(false);
+    m_phaseInput->setEnabled(false);
+}
+
+void ImageEffect_NoiseReduction::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("noisereduction Tool Dialog");
+    config->writeEntry("RadiusAjustment", m_radiusInput->value());
+    config->writeEntry("LumToleranceAjustment", m_lumToleranceInput->value());
+    config->writeEntry("ThresholdAjustment", m_thresholdInput->value());
+    config->writeEntry("TextureAjustment", m_textureInput->value());
+    config->writeEntry("SharpnessAjustment", m_sharpnessInput->value());
+    config->writeEntry("CsmoothAjustment", m_csmoothInput->value());
+    config->writeEntry("LookAheadAjustment", m_lookaheadInput->value());
+    config->writeEntry("GammaAjustment", m_gammaInput->value());
+    config->writeEntry("DampingAjustment", m_dampingInput->value());
+    config->writeEntry("PhaseAjustment", m_phaseInput->value());
+    config->sync();
+}
+
 void ImageEffect_NoiseReduction::resetValues()
 {
     m_radiusInput->setEnabled(true);
@@ -486,4 +542,3 @@ void ImageEffect_NoiseReduction::slotUser2()
 
 }  // NameSpace DigikamNoiseReductionImagesPlugin
 
-#include "imageeffect_noisereduction.moc"
