@@ -61,7 +61,6 @@ public:
 
     ImagePropertiesSideBarDBPriv()
     {
-        currentInfo         = 0;
         desceditTab         = 0;
         dirtyDesceditTab    = false;
         hasPrevious         = false;
@@ -70,7 +69,7 @@ public:
 
     bool              dirtyDesceditTab;
 
-    ImageInfo        *currentInfo;
+    QPtrList<ImageInfo> currentInfos;
 
     ImageDescEditTab *desceditTab;
 
@@ -151,7 +150,11 @@ void ImagePropertiesSideBarDB::itemChanged(const KURL& url, ImageInfo *info,
     m_currentURL         = url;
     m_currentRect        = rect;
     m_image              = img;
-    d->currentInfo       = info;
+
+    QPtrList<ImageInfo> list;
+    if (info)
+        list.append(info);
+    d->currentInfos      = list;
 
     m_dirtyPropertiesTab = false;
     m_dirtyMetadataTab   = false;
@@ -161,10 +164,29 @@ void ImagePropertiesSideBarDB::itemChanged(const KURL& url, ImageInfo *info,
     slotChangedTab( getActiveTab() );
 }
 
+void ImagePropertiesSideBarDB::itemChanged(QPtrList<ImageInfo> infos)
+{
+    if (infos.isEmpty())
+        return;
+
+    m_currentURL         = infos.first()->kurl();
+    m_currentRect        = QRect();
+    m_image              = 0;
+    d->currentInfos      = infos;
+
+    m_dirtyPropertiesTab = false;
+    m_dirtyMetadataTab   = false;
+    m_dirtyColorTab      = false;
+    d->dirtyDesceditTab  = false;
+
+    slotChangedTab( getActiveTab() );
+}
+
+
 void ImagePropertiesSideBarDB::slotNoCurrentItem(void)
 {
     ImagePropertiesSideBar::slotNoCurrentItem();
-    d->currentInfo = 0;
+    d->currentInfos.clear();
     d->desceditTab->setItem();
     d->desceditTab->setNavigateBarFileName();
     d->dirtyDesceditTab = false;
@@ -191,7 +213,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
 
     // No database data available, for example in the case of image editor is 
     // started from camera GUI.
-    if (!d->currentInfo)
+    if (d->currentInfos.isEmpty())
     {
         if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
         {
@@ -220,7 +242,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             d->dirtyDesceditTab = true;
         }
     }
-    else    // Data from database available...
+    else if (d->currentInfos.count() == 1)   // Data from database available...
     {
         if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
         {
@@ -244,7 +266,33 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
         else if (tab == d->desceditTab && !d->dirtyDesceditTab)
         {
-            d->desceditTab->setItem(d->currentInfo);
+            d->desceditTab->setItem(d->currentInfos.first());
+            d->dirtyDesceditTab = true;
+        }
+    }
+    else  // Data from database available, multiple selection
+    {
+        if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
+        {
+            //TODO
+            m_propertiesTab->setCurrentURL(m_currentURL);
+            m_dirtyPropertiesTab = true;
+        }
+        else if (tab == m_metadataTab && !m_dirtyMetadataTab)
+        {
+            // any ideas?
+            m_metadataTab->setCurrentURL();
+            m_dirtyMetadataTab = true;
+        }
+        else if (tab == m_colorTab && !m_dirtyColorTab)
+        {
+            // any ideas?
+            m_colorTab->setData();
+            m_dirtyColorTab = true;
+        }
+        else if (tab == d->desceditTab && !d->dirtyDesceditTab)
+        {
+            d->desceditTab->setItems(d->currentInfos);
             d->dirtyDesceditTab = true;
         }
     }
@@ -254,8 +302,19 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     NavigateBarTab *navtab = dynamic_cast<NavigateBarTab *>(tab);
     if (navtab)
     {
-        navtab->setNavigateBarState(d->hasPrevious, d->hasNext);
-        navtab->setNavigateBarFileName(m_currentURL.filename());
+        if (d->currentInfos.count() == 1)
+        {
+            navtab->setNavigateBarState(d->hasPrevious, d->hasNext);
+            navtab->setNavigateBarFileName(m_currentURL.filename());
+        }
+        else
+        {
+            navtab->setNavigateBarState(false, false);
+            if (tab == d->desceditTab)
+                navtab->setNavigateBarFileName(i18n("Editing %1 pictures").arg(d->currentInfos.count()));
+            else
+                navtab->setNavigateBarFileName(i18n("%1 pictures selected").arg(d->currentInfos.count()));
+        }
     }
 
     slotSetFocus();

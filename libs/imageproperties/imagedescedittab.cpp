@@ -87,7 +87,6 @@ public:
         commentsEdit               = 0;
         tagsSearchEdit             = 0;
         dateTimeEdit               = 0;
-        currInfo                   = 0;
         tagsView                   = 0;
         ratingWidget               = 0;
         ABCMenu                    = 0;
@@ -109,13 +108,16 @@ public:
 
     QPushButton                   *applyBtn;
 
+    QPushButton                   *moreButton;
+    QPopupMenu                    *moreMenu;
+
     KTextEdit                     *commentsEdit;
 
     KLineEdit                     *tagsSearchEdit;
 
     KDateTimeEdit                 *dateTimeEdit;
 
-    ImageInfo                     *currInfo;
+    QPtrList<ImageInfo>            currInfos;
 
     TAlbumListView                *tagsView;
 
@@ -201,7 +203,11 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->applyBtn = new QPushButton(i18n("Apply Changes"), buttonsBox);
     d->applyBtn->setIconSet(SmallIcon("apply"));
     d->applyBtn->setEnabled(false);
-    buttonsBox->setStretchFactor(d->applyBtn, 10); 
+    buttonsBox->setStretchFactor(d->applyBtn, 10);
+
+    d->moreButton = new QPushButton(i18n("More"), buttonsBox);
+    d->moreMenu = new QPopupMenu(this);
+    d->moreButton->setPopup(d->moreMenu);
 
     // --------------------------------------------------
 
@@ -247,7 +253,10 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     connect(d->revertBtn, SIGNAL(clicked()),
             this, SLOT(slotRevertAllChanges()));
-           
+
+    connect(d->moreMenu, SIGNAL(aboutToShow()),
+            this, SLOT(slotMoreMenu()));
+
     // Initalize ---------------------------------------------
 
     d->commentsEdit->installEventFilter(this);
@@ -332,20 +341,31 @@ ImageDescEditTab::~ImageDescEditTab()
     delete d;
 }
 
+bool ImageDescEditTab::singleSelection() const
+{
+    return (d->currInfos.count() == 1);
+}
+
 void ImageDescEditTab::slotApplyAllChanges()
 {
     if (!d->modified)
         return;
 
-    if (!d->currInfo)
+    if (d->currInfos.isEmpty())
         return;
 
     // we are now changing attributes ourselves
     d->ignoreImageAttributesWatch = true;
 
-    d->hub.write(d->currInfo);
     MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
-    d->hub.write(d->currInfo->filePath(), writeSettings);
+
+    for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
+    {
+        // apply to database
+        d->hub.write(info);
+        // apply to file metadata
+        d->hub.write(info->filePath(), writeSettings);
+    }
 
     d->ignoreImageAttributesWatch = false;
 
@@ -361,49 +381,84 @@ void ImageDescEditTab::slotRevertAllChanges()
     if (!d->modified)
         return;
 
-    if (!d->currInfo)
+    if (d->currInfos.isEmpty())
         return;
 
-    setInfo(d->currInfo);
+    setInfos(d->currInfos);
 }
 
 void ImageDescEditTab::setItem(ImageInfo *info)
 {
     slotApplyAllChanges();
-    setInfo(info);
+    QPtrList<ImageInfo> list;
+    if (info)
+        list.append(info);
+    setInfos(list);
 }
 
-void ImageDescEditTab::setInfo(ImageInfo *info)
+void ImageDescEditTab::setItems(QPtrList<ImageInfo> infos)
 {
-    if (!info)
+    slotApplyAllChanges();
+    setInfos(infos);
+}
+
+void ImageDescEditTab::setInfos(QPtrList<ImageInfo> infos)
+{
+    if (infos.isEmpty())
     {
        d->commentsEdit->clear();
-       d->currInfo = 0;
+       d->currInfos.clear();
        d->hub = MetadataHub();
        setEnabled(false);
        return;
     }
 
     setEnabled(true);
-    d->currInfo = info;
-    d->modified = false;
+    d->currInfos = infos;
+    d->modified  = false;
+    d->hub = MetadataHub();
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
 
-    if (!d->currInfo->album())
+    for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
     {
-        DWarning() << k_funcinfo << "No album specified for"
-                   << d->currInfo->filePath() << endl;
-        return;
+        d->hub.load(info);
     }
 
-    d->hub = MetadataHub();
-    d->hub.load(d->currInfo);
     updateComments();
     updateRating();
     updateDate();
     updateTagsView();
-    update();
+}
+
+void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
+{
+    d->ignoreImageAttributesWatch = true;
+    for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
+    {
+        // A batch operation: a hub for each single file, not the common hub
+        MetadataHub fileHub(MetadataHub::NewTagsImport);
+        // read in from DMetadata
+        fileHub.load(info->filePath());
+        // write out to database
+        fileHub.write(info);
+    }
+    d->ignoreImageAttributesWatch = false;
+
+    // reload everything
+    setInfos(d->currInfos);
+}
+
+void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
+{
+    for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
+    {
+        MetadataHub fileHub;
+        // read in from database
+        fileHub.load(info);
+        // write out to file DMetadata
+        fileHub.write(info->filePath());
+    }
 }
 
 bool ImageDescEditTab::eventFilter(QObject *, QEvent *e)
@@ -469,24 +524,33 @@ void ImageDescEditTab::slotItemStateChanged(TAlbumCheckListItem *item)
     }
 
     d->hub.setTag(item->m_album, item->isOn());
+
+    d->tagsView->blockSignals(true);
+    item->setStatus(d->hub.tagStatus(item->m_album));
+    d->tagsView->blockSignals(false);
+
     slotModified();
 }
 
 void ImageDescEditTab::slotCommentChanged()
 {
     d->hub.setComment(d->commentsEdit->text());
+    setMetadataWidgetStatus(d->hub.commentStatus(), d->commentsEdit);
     slotModified();
 }
 
 void ImageDescEditTab::slotDateTimeChanged(const QDateTime& dateTime)
 {
     d->hub.setDateTime(dateTime);
+    setMetadataWidgetStatus(d->hub.dateTimeStatus(), d->dateTimeEdit);
     slotModified();
 }
 
 void ImageDescEditTab::slotRatingChanged(int rating)
 {
     d->hub.setRating(rating);
+    // no handling for MetadataDisjoint needed for rating,
+    // we set it to 0 when disjoint, see below
     slotModified();
 }
 
@@ -518,13 +582,8 @@ void ImageDescEditTab::updateTagsView()
     while (it.current())
     {
         TAlbumCheckListItem* tItem = dynamic_cast<TAlbumCheckListItem*>(it.current());
-
         if (tItem)
-        {
-            MetadataHub::TagStatus status = d->hub.tagStatus(tItem->m_album);
-            //DDebug() << "ImageDescEditTab::updateTagsView " << tItem->m_album->tagPath() << " set to " << status.status << " " << status.hasTag << endl;
-            tItem->setOn(status.hasTag);
-        }
+            tItem->setStatus(d->hub.tagStatus(tItem->m_album));
         ++it;
     }
 
@@ -537,13 +596,17 @@ void ImageDescEditTab::updateComments()
 {
     d->commentsEdit->blockSignals(true);
     d->commentsEdit->setText(d->hub.comment());
+    setMetadataWidgetStatus(d->hub.commentStatus(), d->commentsEdit);
     d->commentsEdit->blockSignals(false);
 }
 
 void ImageDescEditTab::updateRating()
 {
     d->ratingWidget->blockSignals(true);
-    d->ratingWidget->setRating(d->hub.rating());
+    if (d->hub.ratingStatus() == MetadataHub::MetadataDisjoint)
+        d->ratingWidget->setRating(0);
+    else
+        d->ratingWidget->setRating(d->hub.rating());
     d->ratingWidget->blockSignals(false);
 }
 
@@ -551,7 +614,23 @@ void ImageDescEditTab::updateDate()
 {
     d->dateTimeEdit->blockSignals(true);
     d->dateTimeEdit->setDateTime(d->hub.dateTime());
+    setMetadataWidgetStatus(d->hub.dateTimeStatus(), d->dateTimeEdit);
     d->dateTimeEdit->blockSignals(false);
+}
+
+void ImageDescEditTab::setMetadataWidgetStatus(int status, QWidget *widget)
+{
+    if (status == MetadataHub::MetadataDisjoint)
+    {
+        // For text widgets: Set text color to color of disabled text
+        QPalette palette = widget->palette();
+        palette.setColor(QColorGroup::Text, palette.color(QPalette::Disabled, QColorGroup::Text));
+        widget->setPalette(palette);
+    }
+    else
+    {
+        widget->unsetPalette();
+    }
 }
 
 void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint &, int )
@@ -795,6 +874,25 @@ void ImageDescEditTab::slotABCContextMenu()
     }
 }
 
+void ImageDescEditTab::slotMoreMenu()
+{
+    d->moreMenu->clear();
+
+    if (singleSelection())
+    {
+        d->moreMenu->insertItem(i18n("Read metadata from file to database"), this, SLOT(slotReadFromFileMetadataToDatabase()));
+        // we dont need a "Write to file" action here because the apply button will do just that
+        // if selection is a single file. Or will this confuse users?
+    }
+    else
+    {
+        // We need to make clear that this action is different from the Apply button,
+        // which saves the same changes to all files. These batch operations operate on each single file.
+        d->moreMenu->insertItem(i18n("Read metadata from each file to database"), this, SLOT(slotReadFromFileMetadataToDatabase()));
+        d->moreMenu->insertItem(i18n("Write metadata to each file"), this, SLOT(slotWriteToFileMetadataFromDatabase()));
+    }
+}
+
 void ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const QString& _icon)
 {
     if (!parAlbum)
@@ -936,6 +1034,7 @@ void ImageDescEditTab::slotAlbumDeleted(Album* a)
     QCheckListItem* viewItem = (QCheckListItem*)(album->extraData(this));
     delete viewItem;
     album->removeExtraData(this);
+    d->hub.setTag(album, false, MetadataHub::MetadataDisjoint);
 }
 
 void ImageDescEditTab::slotAlbumsCleared()
@@ -1088,44 +1187,72 @@ void ImageDescEditTab::slotThumbnailLost(Album *)
 
 void ImageDescEditTab::slotImageTagsChanged(Q_LLONG imageId)
 {
-    //TODO
-    if (!d->ignoreImageAttributesWatch && d->currInfo && d->currInfo->id() == imageId)
-        updateTagsView();
+    // don't lose modifications
+    if (d->ignoreImageAttributesWatch || d->modified)
+        return;
+
+    reloadForMetadataChange(imageId);
 }
 
 void ImageDescEditTab::slotImagesChanged(int albumId)
 {
-    //TODO
-    Album *a = AlbumManager::instance()->findAlbum(albumId);
-    if (!d->ignoreImageAttributesWatch && 
-        !d->currInfo || !a || a->isRoot() || a->type() != Album::TAG)
+    if (d->ignoreImageAttributesWatch || d->modified)
         return;
 
-    updateTagsView();
+    Album *a = AlbumManager::instance()->findAlbum(albumId);
+    if (d->currInfos.isEmpty() || !a || a->isRoot() || a->type() != Album::TAG)
+        return;
+
+    setInfos(d->currInfos);
 }
 
 void ImageDescEditTab::slotImageRatingChanged(Q_LLONG imageId)
 {
-    //TODO
-    if (!d->ignoreImageAttributesWatch && 
-        d->currInfo && d->currInfo->id() == imageId)
-        updateRating();
+    if (d->ignoreImageAttributesWatch || d->modified)
+        return;
+
+    reloadForMetadataChange(imageId);
 }
 
 void ImageDescEditTab::slotImageCaptionChanged(Q_LLONG imageId)
 {
-    //TODO
-    if (!d->ignoreImageAttributesWatch && 
-        d->currInfo && d->currInfo->id() == imageId)
-        updateComments();
+    if (d->ignoreImageAttributesWatch || d->modified)
+        return;
+
+    reloadForMetadataChange(imageId);
 }
 
 void ImageDescEditTab::slotImageDateChanged(Q_LLONG imageId)
 {
-    //TODO
-    if (!d->ignoreImageAttributesWatch && 
-        d->currInfo && d->currInfo->id() == imageId)
-        updateDate();
+    if (d->ignoreImageAttributesWatch || d->modified)
+        return;
+
+    reloadForMetadataChange(imageId);
+}
+
+// private common code for above methods
+void ImageDescEditTab::reloadForMetadataChange(Q_LLONG imageId)
+{
+    if (d->currInfos.isEmpty())
+        return;
+
+    if (singleSelection())
+    {
+        if (d->currInfos.first()->id() == imageId)
+            setInfos(d->currInfos);
+    }
+    else
+    {
+        // if image id is in our list, update
+        for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
+        {
+            if (info->id() == imageId)
+            {
+                setInfos(d->currInfos);
+                return;
+            }
+        }
+    }
 }
 
 void ImageDescEditTab::updateRecentTags()

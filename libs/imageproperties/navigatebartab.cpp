@@ -73,12 +73,14 @@ void NavigateBarTab::setNavigateBarState(bool hasPrevious, bool hasNext)
     if (!m_navigateBar)
         return;
 
-    if (!hasPrevious)
+    if (hasPrevious && hasNext)
+        m_navigateBar->setButtonsState(NavigateBarWidget::ItemCurrent);
+    else if (!hasPrevious && hasNext)
         m_navigateBar->setButtonsState(NavigateBarWidget::ItemFirst);
-    else if (!hasNext)
+    else if (hasPrevious && !hasNext)
         m_navigateBar->setButtonsState(NavigateBarWidget::ItemLast);
     else
-        m_navigateBar->setButtonsState(NavigateBarWidget::ItemCurrent);
+        m_navigateBar->setButtonsState(NavigateBarWidget::NoNavigation);
 }
 
 void NavigateBarTab::setNavigateBarState(int itemType)

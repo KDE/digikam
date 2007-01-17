@@ -24,6 +24,10 @@
 #ifndef IMAGEPROPERTIESSIDEBARDB_H
 #define IMAGEPROPERTIESSIDEBARDB_H
 
+// Qt includes.
+
+#include <qptrlist.h>
+
 // KDE includes.
 
 #include <kurl.h>
@@ -61,6 +65,7 @@ public:
     virtual void itemChanged(const KURL& url, const QRect &rect = QRect(), DImg *img = 0);
 
     virtual void itemChanged(ImageInfo *info, const QRect &rect = QRect(), DImg *img = 0);
+    virtual void itemChanged(QPtrList<ImageInfo> infos);
 
     void setPreviousNextState(bool hasPrevious, bool hasNext);
 

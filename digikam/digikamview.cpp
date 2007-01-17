@@ -94,7 +94,7 @@ public:
         tagFilterView        = 0;
         albumWidgetStack     = 0;
         selectionTimer       = 0;
-        dispatchSelectedItem = 0;
+        needDispatchSelection= false;
     }
 
     int                       initialAlbumID;
@@ -119,7 +119,7 @@ public:
     SearchFolderView         *searchFolderView;
     TagFilterView            *tagFilterView;
 
-    AlbumIconItem            *dispatchSelectedItem;
+    bool                     needDispatchSelection;
 };
 
 DigikamView::DigikamView(QWidget *parent)
@@ -616,30 +616,42 @@ void DigikamView::slot_albumRefresh()
 
 void DigikamView::slotImageSelected()
 {
-    d->dispatchSelectedItem = d->iconView->firstSelectedItem();
     // delay to slotDispatchImageSelected
+    d->needDispatchSelection = true;
     d->selectionTimer->start(75, true);
 }
 
 void DigikamView::slotDispatchImageSelected()
 {
-    if (d->dispatchSelectedItem)
+    if (d->needDispatchSelection)
     {
-        d->rightSideBar->itemChanged(d->dispatchSelectedItem->imageInfo());
-        d->rightSideBar->setPreviousNextState(d->iconView->firstItem() != d->dispatchSelectedItem,
-                                              d->iconView->lastItem() != d->dispatchSelectedItem);
+        // the list of ImageInfos of currently selected items, currentItem first
+        QPtrList<ImageInfo> list = d->iconView->selectedImageInfos();
 
-        if (!d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
-            d->albumWidgetStack->setPreviewItem(d->dispatchSelectedItem->imageInfo()->kurl());
+        if (list.isEmpty())
+        {
+            d->albumWidgetStack->setPreviewItem();
+            emit signal_imageSelected(false);
+            emit signal_noCurrentItem();
+        }
+        else
+        {
+            d->rightSideBar->itemChanged(list);
 
-        emit signal_imageSelected(true);
-        d->dispatchSelectedItem = 0;
-    }
-    else
-    {
-        d->albumWidgetStack->setPreviewItem();
-        emit signal_imageSelected(false);
-        emit signal_noCurrentItem();
+            if (list.count() == 1)
+            {
+                AlbumIconItem *selectedItem = d->iconView->firstSelectedItem();
+                d->rightSideBar->setPreviousNextState(d->iconView->firstItem() != selectedItem,
+                                                      d->iconView->lastItem() != selectedItem);
+
+                if (!d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+                    d->albumWidgetStack->setPreviewItem(selectedItem->imageInfo()->kurl());
+            }
+
+            emit signal_imageSelected(true);
+        }
+
+        d->needDispatchSelection = false;
     }
 }
 

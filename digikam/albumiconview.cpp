@@ -1387,6 +1387,25 @@ KURL::List AlbumIconView::selectedItems()
     return itemList;
 }
 
+QPtrList<ImageInfo> AlbumIconView::selectedImageInfos() const
+{
+    // Returns the list of ImageInfos of currently selected items,
+    // with the extra feature that the currentItem is the first in the list.
+    QPtrList<ImageInfo> list;
+    for (IconItem *it = firstItem(); it; it = it->nextItem())
+    {
+        AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
+        if (it->isSelected())
+        {
+            if (iconItem == currentItem())
+                list.prepend(iconItem->imageInfo());
+            else
+                list.append(iconItem->imageInfo());
+        }
+    }
+    return list;
+}
+
 void AlbumIconView::refresh()
 {
     d->imageLister->stop();

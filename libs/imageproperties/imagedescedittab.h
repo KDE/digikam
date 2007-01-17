@@ -28,6 +28,7 @@
 
 #include <qwidget.h>
 #include <qpixmap.h>
+#include <qptrlist.h>
 
 // Local includes.
 
@@ -56,6 +57,7 @@ public:
 
     void assignRating(int rating);
     void setItem(ImageInfo *info=0);
+    void setItems(QPtrList<ImageInfo> infos);
     void populateTags();
     void setFocusToComments(bool f);
 
@@ -65,7 +67,7 @@ protected:
 
 private:
 
-    void setInfo(ImageInfo *info);
+    void setInfos(QPtrList<ImageInfo> infos);
 
     void updateTagsView();
     void updateComments();
@@ -81,6 +83,10 @@ private:
     void toggleParentTags(TAlbum *album, bool b);
 
     void setTagThumbnail(TAlbum *album);
+
+    bool singleSelection() const;
+    void setMetadataWidgetStatus(int status, QWidget *widget);
+    void reloadForMetadataChange(Q_LLONG imageId);
 
 private slots:
 
@@ -113,6 +119,10 @@ private slots:
 
     void slotRecentTagsMenuActivated(int);
     void slotAssignedTagsToggled(bool);
+
+    void slotMoreMenu();
+    void slotReadFromFileMetadataToDatabase();
+    void slotWriteToFileMetadataFromDatabase();
 
 private:
 
