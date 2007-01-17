@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_freerotation.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-11-28
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-11-28
  * Description : a digiKam image editor plugin to process image
  *               free rotation.
  *
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,6 +45,7 @@
 #include "version.h"
 #include "freerotation.h"
 #include "imageeffect_freerotation.h"
+#include "imageeffect_freerotation.moc"
 
 namespace DigikamFreeRotationImagesPlugin
 {
@@ -65,7 +65,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent, QString titl
                                        I18N_NOOP("A digiKam image plugin to process free image "
                                        "rotation."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2006, Gilles Caulier",
+                                       "(c) 2004-2007, Gilles Caulier",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -169,31 +169,23 @@ ImageEffect_FreeRotation::~ImageEffect_FreeRotation()
 void ImageEffect_FreeRotation::readUserSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("Free Rotation Tool Settings");
-
-    m_autoCropCB->setCurrentItem( config->readNumEntry("Auto Crop Type", FreeRotation::NoAutoCrop) );
-    m_antialiasInput->setChecked( config->readBoolEntry("Anti Aliasing", true) );
-    DDebug() << "Reading FreeRotation settings" << endl;
+    config->setGroup("freerotation Tool Dialog");
+    m_angleInput->setValue(config->readNumEntry("Main Angle", 0));
+    m_fineAngleInput->setValue(config->readDoubleNumEntry("Fine Angle", 0.0));
+    m_autoCropCB->setCurrentItem(config->readNumEntry("Auto Crop Type", FreeRotation::NoAutoCrop));
+    m_antialiasInput->setChecked(config->readBoolEntry("Anti Aliasing", true));
+    slotEffect();
 }
 
 void ImageEffect_FreeRotation::writeUserSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("Free Rotation Tool Settings");
-
+    config->setGroup("freerotation Tool Dialog");
+    config->writeEntry("Main Angle", m_angleInput->value());
+    config->writeEntry("Fine Angle", m_fineAngleInput->value());
     config->writeEntry( "Auto Crop Type", m_autoCropCB->currentItem() );
     config->writeEntry( "Anti Aliasing", m_antialiasInput->isChecked() );
     config->sync();
-    DDebug() << "Writing FreeRotation settings" << endl;
-}
-
-void ImageEffect_FreeRotation::renderingFinished()
-{
-    m_angleInput->setEnabled(true);
-    m_fineAngleInput->setEnabled(true);
-    m_antialiasInput->setEnabled(true);
-    m_autoCropCB->setEnabled(true);
-    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_FreeRotation::resetValues()
@@ -296,6 +288,14 @@ void ImageEffect_FreeRotation::putFinalData(void)
                            targetImage.width(), targetImage.height());
 }
 
+void ImageEffect_FreeRotation::renderingFinished()
+{
+    m_angleInput->setEnabled(true);
+    m_fineAngleInput->setEnabled(true);
+    m_antialiasInput->setEnabled(true);
+    m_autoCropCB->setEnabled(true);
+    kapp->restoreOverrideCursor();
+}
+
 }  // NameSpace DigikamFreeRotationImagesPlugin
 
-#include "imageeffect_freerotation.moc"

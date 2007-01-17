@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_freerotation.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-11-28
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-11-28
  * Description : 
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 #include "bannerwidget.h"
 #include "imageeffect_freerotation.h"
 #include "imageplugin_freerotation.h"
+#include "imageplugin_freerotation.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_freerotation,
                             KGenericFactory<ImagePlugin_FreeRotation>("digikamimageplugin_freerotation"));
@@ -66,6 +66,3 @@ void ImagePlugin_FreeRotation::slotFreeRotation()
     dlg.exec();
     delete headerFrame;
 }
-
-
-#include "imageplugin_freerotation.moc"
