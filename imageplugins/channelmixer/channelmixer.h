@@ -44,17 +44,16 @@ public:
     ChannelMixerDialog(QWidget *parent, QString title, QFrame* banner);
     ~ChannelMixerDialog();
 
-protected:
-
-    void finalRendering();    
-    
 private:
 
-    void adjustSliders(void);
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues();
+    void finalRendering();
+    void adjustSliders();
     
 private slots:
 
-    void slotDefault();
     void slotUser2();
     void slotUser3();
     void slotResetCurrentChannel();

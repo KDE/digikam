@@ -1,9 +1,10 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-02-26
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-02-26
  * Description : 
  * 
  * Copyright 2005-2007 by Gilles Caulier
+ *
  * Load and save mixer gains methods inspired from 
  * Gimp 2.2.3 and copyrighted 2002 by Martin Guldahl 
  * <mguldahl at xmission dot com>.
@@ -50,6 +51,7 @@
 
 // KDE includes.
 
+#include <kconfig.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <knuminput.h>
@@ -85,7 +87,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
                                        digikamimageplugins_version,
                                        I18N_NOOP("An image color channel mixer plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005-2006, Gilles Caulier",
+                                       "(c) 2005-2007, Gilles Caulier",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -209,11 +211,6 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
     
     setUserAreaWidget(gboxSettings);
     
-    // -------------------------------------------------------------
-
-    // Reset all parameters to the default values.
-    QTimer::singleShot(0, this, SLOT(slotDefault()));
-                    
     // -------------------------------------------------------------
     // Channels and scale selection slots.
 
@@ -509,23 +506,85 @@ void ChannelMixerDialog::slotScaleChanged(int scale)
     m_histogramWidget->repaint(false);
 }
 
-// Reset all gains.
-void ChannelMixerDialog::slotDefault()
+void ChannelMixerDialog::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("channelmixer Tool Dialog");
+
+    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+
+    m_monochrome->setChecked(config->readBoolEntry("Monochrome", false));
+    m_preserveLuminosity->setChecked(config->readNumEntry("PreserveLuminosity", false));
+
+    m_redRedGain     = config->readDoubleNumEntry("RedRedGain", 1.0); 
+    m_redGreenGain   = config->readDoubleNumEntry("RedGreenGain", 0.0); 
+    m_redBlueGain    = config->readDoubleNumEntry("RedBlueGain", 0.0); 
+    
+    m_greenRedGain   = config->readDoubleNumEntry("GreenRedGain", 0.0);
+    m_greenGreenGain = config->readDoubleNumEntry("GreenGreenGain", 1.0); 
+    m_greenBlueGain  = config->readDoubleNumEntry("GreenBlueGain", 0.0);
+    
+    m_blueRedGain    = config->readDoubleNumEntry("BlueRedGain", 0.0);
+    m_blueGreenGain  = config->readDoubleNumEntry("BlueGreenGain", 0.0);
+    m_blueBlueGain   = config->readDoubleNumEntry("BlueBlueGain", 1.0);
+
+    m_blackRedGain   = config->readDoubleNumEntry("BlackRedGain", 1.0); 
+    m_blackGreenGain = config->readDoubleNumEntry("BlackGreenGain", 0.0); 
+    m_blackBlueGain  = config->readDoubleNumEntry("BlackBlueGain", 0.0); 
+
+    adjustSliders();
+    m_histogramWidget->reset();
+
+    slotChannelChanged(m_channelCB->currentItem());
+    slotScaleChanged(m_scaleBG->selectedId());
+}
+
+void ChannelMixerDialog::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("channelmixer Tool Dialog");
+    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
+    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
+
+    config->writeEntry("Monochrome", m_monochrome->isChecked());
+    config->writeEntry("PreserveLuminosity", m_preserveLuminosity->isChecked());
+
+    config->writeEntry("RedRedGain", m_redRedGain);
+    config->writeEntry("RedGreenGain", m_redGreenGain);
+    config->writeEntry("RedBlueGain", m_redBlueGain);
+
+    config->writeEntry("GreenRedGain", m_greenRedGain);
+    config->writeEntry("GreenGreenGain", m_greenGreenGain);
+    config->writeEntry("GreenBlueGain", m_greenBlueGain);
+
+    config->writeEntry("BlueRedGain", m_blueRedGain);
+    config->writeEntry("BlueGreenGain", m_blueGreenGain);
+    config->writeEntry("BlueBlueGain", m_blueBlueGain);
+
+    config->writeEntry("BlackRedGain", m_blackRedGain);
+    config->writeEntry("BlackGreenGain", m_blackGreenGain);
+    config->writeEntry("BlackBlueGain", m_blackBlueGain);
+
+    config->sync();
+}
+
+void ChannelMixerDialog::resetValues()
 {
     m_monochrome->blockSignals(true);
     m_preserveLuminosity->blockSignals(true);
     
-    m_redRedGain   = 1.0; 
-    m_redGreenGain = 0.0; 
-    m_redBlueGain  = 0.0; 
+    m_redRedGain     = 1.0; 
+    m_redGreenGain   = 0.0; 
+    m_redBlueGain    = 0.0; 
     
     m_greenRedGain   = 0.0;
     m_greenGreenGain = 1.0; 
     m_greenBlueGain  = 0.0;
     
-    m_blueRedGain   = 0.0;
-    m_blueGreenGain = 0.0;
-    m_blueBlueGain  = 1.0;
+    m_blueRedGain    = 0.0;
+    m_blueGreenGain  = 0.0;
+    m_blueBlueGain   = 1.0;
 
     m_blackRedGain   = 1.0; 
     m_blackGreenGain = 0.0; 
@@ -540,7 +599,6 @@ void ChannelMixerDialog::slotDefault()
     m_histogramWidget->reset();
 
     slotChannelChanged(RedChannelGains);
-    slotEffect();
 }
 
 // Load all gains.
