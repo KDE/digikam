@@ -79,9 +79,7 @@ private:
     void readUserSettings();
     void writeUserSettings();
     void resetValues();
-
     void blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type);
-    QString previewEffectPic(QString name);
     
 private slots:
 

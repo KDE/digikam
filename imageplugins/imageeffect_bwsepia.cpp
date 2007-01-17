@@ -264,37 +264,36 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     
     ++type;
     item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Neutral"), m_previewPixmapFactory, type);
-    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Neutral Black & White</b>:"
-                               "<p>Simulate black and white neutral film exposure.</p>")
-                               .arg(previewEffectPic("neutralbw")));
+    whatsThis->add( item, i18n("<b>Neutral Black & White</b>:"
+                               "<p>Simulate black and white neutral film exposure.</p>"));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Green Filter"), m_previewPixmapFactory, type);
-    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Green Filter</b>:"
+    whatsThis->add( item, i18n("<b>Black & White with Green Filter</b>:"
                                "<p>Simulate black and white film exposure using green filter. "
                                "This provides an universal asset for all scenics, especially suited "
-                               "for portraits photographed against sky.</p>").arg(previewEffectPic("bwgreen")));
+                               "for portraits photographed against sky.</p>"));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Orange Filter"), m_previewPixmapFactory, type);
-    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Orange Filter</b>:"
+    whatsThis->add( item, i18n("<b>Black & White with Orange Filter</b>:"
                                "<p>Simulate black and white film exposure using orange filter. "
                                "This will enhances landscapes, marine scenes and aerial "
-                               "photography.</p>").arg(previewEffectPic("bworange")));
+                               "photography.</p>"));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Red Filter"), m_previewPixmapFactory, type);
-    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Red Filter</b>:"
+    whatsThis->add( item, i18n("<b>Black & White with Red Filter</b>:"
                                "<p>Simulate black and white film exposure using red filter. "
                                "Using this one creates dramatic sky effects and simulates moonlight scenes "
-                               "in daytime.</p>").arg(previewEffectPic("bwred")));
+                               "in daytime.</p>"));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Yellow Filter"), m_previewPixmapFactory, type);
-    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Yellow Filter</b>:"
+    whatsThis->add( item, i18n("<b>Black & White with Yellow Filter</b>:"
                                "<p>Simulate black and white film exposure using yellow filter. "
                                "Most natural tonal correction and improves contrast. Ideal for "
-                               "landscapes.</p>").arg(previewEffectPic("bwyellow")));
+                               "landscapes.</p>"));
 
     m_tab->insertTab(m_bwFilters, i18n("Filters"), BWFiltersTab);
 
@@ -314,35 +313,35 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwTone, i18n("Sepia Tone"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Sepia Tone</b>:"
+    whatsThis2->add( item, i18n("<b>Black & White with Sepia Tone</b>:"
                                 "<p>Gives a warm highlight and mid-tone while adding a bit of coolness to "
                                 "the shadows-very similar to the process of bleaching a print and "
-                                "re-developing in a sepia toner.</p>").arg(previewEffectPic("sepia")));
+                                "re-developing in a sepia toner.</p>"));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwTone, i18n("Brown Tone"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Brown Tone</b>:"
+    whatsThis2->add( item, i18n("<b>Black & White with Brown Tone</b>:"
                                 "<p>This filter is more neutral than Sepia Tone "
-                                "filter.</p>").arg(previewEffectPic("browntone")));
+                                "filter.</p>"));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwTone, i18n("Cold Tone"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Cold Tone</b>:"
+    whatsThis2->add( item, i18n("<b>Black & White with Cold Tone</b>:"
                                 "<p>Start subtle and replicate printing on a cold tone black and white "
                                 "paper such as a bromide enlarging "
-                                "paper.</p>").arg(previewEffectPic("coldtone")));
+                                "paper.</p>"));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwTone, i18n("Selenium Tone"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Selenium Tone</b>:"
+    whatsThis2->add( item, i18n("<b>Black & White with Selenium Tone</b>:"
                                 "<p>This effect replicate traditional selenium chemical toning done "
-                                "in the darkroom.</p>").arg(previewEffectPic("selenium")));
+                                "in the darkroom.</p>"));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwTone, i18n("Platinum Tone"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Platinum Tone</b>:"
+    whatsThis2->add( item, i18n("<b>Black & White with Platinum Tone</b>:"
                                 "<p>This effect replicate traditional platinum chemical toning done "
-                                "in the darkroom.</p>").arg(previewEffectPic("platinum")));
+                                "in the darkroom.</p>"));
     
     m_tab->insertTab(m_bwTone, i18n("Tone"), ToneTab);
 
@@ -500,12 +499,6 @@ void ImageEffect_BWSepia::slotSpotColorChanged(const Digikam::DColor &color)
 void ImageEffect_BWSepia::slotColorSelectedFromTarget( const Digikam::DColor &color )
 {
     m_histogramWidget->setHistogramGuideByColor(color);
-}
-
-QString ImageEffect_BWSepia::previewEffectPic(QString name)
-{
-    KGlobal::dirs()->addResourceType(name.ascii(), KGlobal::dirs()->kde_default("data") + "digikam/data");
-    return ( KGlobal::dirs()->findResourceDir(name.ascii(), name + ".png") + name + ".png" );
 }
 
 void ImageEffect_BWSepia::readUserSettings()
