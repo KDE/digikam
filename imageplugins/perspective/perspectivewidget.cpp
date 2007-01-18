@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2005-01-18
  * Description : a widget class to edit perspective.
  * 
@@ -62,6 +62,7 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget *parent)
     setMinimumSize(w, h);
     setMouseTracking(true);
 
+    m_drawGrid        = false;
     m_drawWhileMoving = true;
     m_currentResizing = ResizingNone;
 
@@ -76,6 +77,7 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget *parent)
     m_pixmap = new QPixmap(w, h);
 
     m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
+    m_grid = QPointArray(60);
 
     reset();
 }
@@ -206,6 +208,13 @@ void PerspectiveWidget::toggleDrawWhileMoving(bool draw)
     m_drawWhileMoving = draw;
 }
 
+void PerspectiveWidget::toggleDrawGrid(bool grid)
+{
+    m_drawGrid = grid;
+    updatePixmap();
+    repaint(false);
+}
+
 void PerspectiveWidget::updatePixmap(void)
 {
     m_topLeftCorner.setRect(m_topLeftPoint.x() + m_rect.topLeft().x(),
@@ -216,6 +225,24 @@ void PerspectiveWidget::updatePixmap(void)
                                m_bottomLeftPoint.y() - 7 + m_rect.topLeft().y(), 8, 8);
     m_bottomRightCorner.setRect(m_bottomRightPoint.x() - 7 + m_rect.topLeft().x(),
                                 m_bottomRightPoint.y() - 7 + m_rect.topLeft().y(), 8, 8);
+
+    // Compute the grid array
+
+    int gXS = m_w / 15;
+    int gYS = m_h / 15;
+
+    for (int i = 0 ; i < 15 ; i++)
+    {
+        int j = i*4;
+
+        // Horizontal line.
+        m_grid.setPoint(j  , 0,   i*gYS);
+        m_grid.setPoint(j+1, m_w, i*gYS);
+
+        // Vertical line.
+        m_grid.setPoint(j+2, i*gXS, 0);
+        m_grid.setPoint(j+3, i*gXS, m_h);
+    }
 
     // Draw background
 
@@ -267,6 +294,20 @@ void PerspectiveWidget::updatePixmap(void)
     p.fillRect(m_bottomLeftCorner,  brush);
     p.fillRect(m_bottomRightCorner, brush);
 
+    // Drawing the grid.
+
+    if (m_drawGrid)
+    {
+        for (uint i = 0 ; i < m_grid.size() ; i += 4)
+        {
+            // Horizontal line.
+            p.drawLine(m_grid.point(i)+m_rect.topLeft(), m_grid.point(i+1)+m_rect.topLeft());
+            
+            // Vertical line.
+            p.drawLine(m_grid.point(i+2)+m_rect.topLeft(), m_grid.point(i+3)+m_rect.topLeft());
+        }
+    }
+
     // Drawing transformed center.
 
     p.setPen(QPen(QColor(255, 64, 64), 3, Qt::SolidLine));
@@ -275,8 +316,284 @@ void PerspectiveWidget::updatePixmap(void)
 
     p.end();
 
-    emit signalPerspectiveChanged( getTargetSize(), getAngleTopLeft(), getAngleTopRight(),
-                                   getAngleBottomLeft(), getAngleBottomRight() );
+    emit signalPerspectiveChanged(getTargetSize(), getAngleTopLeft(), getAngleTopRight(),
+                                  getAngleBottomLeft(), getAngleBottomRight());
+}
+
+QPoint PerspectiveWidget::buildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
+                                           QPoint transTopLeft, QPoint transTopRight,
+                                           QPoint transBottomLeft, QPoint transBottomRight,
+                                           Digikam::DImg *orgImage, Digikam::DImg *destImage,
+                                           Digikam::DColor background)
+{
+    Matrix matrix, transform;
+    double  scalex;
+    double  scaley;
+
+    double x1 = (double)orignTopLeft.x();
+    double y1 = (double)orignTopLeft.y();
+
+    double x2 = (double)orignBottomRight.x();
+    double y2 = (double)orignBottomRight.y();
+
+    double tx1 = (double)transTopLeft.x();
+    double ty1 = (double)transTopLeft.y();
+
+    double tx2 = (double)transTopRight.x();
+    double ty2 = (double)transTopRight.y();
+
+    double tx3 = (double)transBottomLeft.x();
+    double ty3 = (double)transBottomLeft.y();
+
+    double tx4 = (double)transBottomRight.x();
+    double ty4 = (double)transBottomRight.y();
+
+    scalex = scaley = 1.0;
+
+    if ((x2 - x1) > 0)
+      scalex = 1.0 / (double) (x2 - x1);
+
+    if ((y2 - y1) > 0)
+      scaley = 1.0 / (double) (y2 - y1);
+
+    // Determine the perspective transform that maps from
+    // the unit cube to the transformed coordinates
+
+    double dx1, dx2, dx3, dy1, dy2, dy3;
+
+    dx1 = tx2 - tx4;
+    dx2 = tx3 - tx4;
+    dx3 = tx1 - tx2 + tx4 - tx3;
+
+    dy1 = ty2 - ty4;
+    dy2 = ty3 - ty4;
+    dy3 = ty1 - ty2 + ty4 - ty3;
+
+    //  Is the mapping affine?  
+
+    if ((dx3 == 0.0) && (dy3 == 0.0))
+    {
+        matrix.coeff[0][0] = tx2 - tx1;
+        matrix.coeff[0][1] = tx4 - tx2;
+        matrix.coeff[0][2] = tx1;
+        matrix.coeff[1][0] = ty2 - ty1;
+        matrix.coeff[1][1] = ty4 - ty2;
+        matrix.coeff[1][2] = ty1;
+        matrix.coeff[2][0] = 0.0;
+        matrix.coeff[2][1] = 0.0;
+    }
+    else
+    {
+        double det1, det2;
+
+        det1 = dx3 * dy2 - dy3 * dx2;
+        det2 = dx1 * dy2 - dy1 * dx2;
+
+        if (det1 == 0.0 && det2 == 0.0)
+            matrix.coeff[2][0] = 1.0;
+        else
+            matrix.coeff[2][0] = det1 / det2;
+
+        det1 = dx1 * dy3 - dy1 * dx3;
+
+        if (det1 == 0.0 && det2 == 0.0)
+            matrix.coeff[2][1] = 1.0;
+        else
+            matrix.coeff[2][1] = det1 / det2;
+
+        matrix.coeff[0][0] = tx2 - tx1 + matrix.coeff[2][0] * tx2;
+        matrix.coeff[0][1] = tx3 - tx1 + matrix.coeff[2][1] * tx3;
+        matrix.coeff[0][2] = tx1;
+
+        matrix.coeff[1][0] = ty2 - ty1 + matrix.coeff[2][0] * ty2;
+        matrix.coeff[1][1] = ty3 - ty1 + matrix.coeff[2][1] * ty3;
+        matrix.coeff[1][2] = ty1;
+    }
+
+    matrix.coeff[2][2] = 1.0;
+
+    // transform is initialized to the identity matrix
+    transform.translate(-x1, -y1);
+    transform.scale    (scalex, scaley);
+    transform.multiply (matrix);
+
+    // Compute perspective transformation to image if image data containers exist.
+    if (orgImage && destImage)
+        transformAffine(orgImage, destImage, transform, background);
+
+    // Calculate the grid array points.
+    double newX, newY;
+    for (uint i = 0 ; i < m_grid.size() ; i++)
+    {
+        transform.transformPoint(m_grid.point(i).x(), m_grid.point(i).y(), &newX, &newY);
+        m_grid.setPoint(i, lround(newX), lround(newY));
+    }   
+
+    // Calculate and return new image center.
+    double newCenterX, newCenterY;
+    transform.transformPoint(x2/2.0, y2/2.0, &newCenterX, &newCenterY);
+
+    return QPoint(lround(newCenterX), lround(newCenterY));
+}
+
+void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *destImage,
+                                        const Matrix &matrix, Digikam::DColor background)
+{
+    Matrix      m(matrix), inv(matrix);
+
+    int         x1, y1, x2, y2;        // target bounding box 
+    int         x, y;                  // target coordinates 
+    int         u1, v1, u2, v2;        // source bounding box 
+    double      uinc, vinc, winc;      // increments in source coordinates
+                                       // pr horizontal target coordinate 
+
+    double      u[5],v[5];             // source coordinates,
+                                       //   2
+                                       //  / \    0 is sample in the centre of pixel
+                                       // 1 0 3   1..4 is offset 1 pixel in each
+                                       //  \ /    direction (in target space)
+                                       //   4
+
+    double      tu[5],tv[5],tw[5];     // undivided source coordinates and divisor 
+
+    uchar      *data, *newData;
+    bool        sixteenBit;
+    int         coords;
+    int         width, height;
+    int         bytesDepth;
+    int         offset;
+    uchar      *dest, *d;
+    Digikam::DColor color;
+
+    bytesDepth  = orgImage->bytesDepth();
+    data        = orgImage->bits();
+    sixteenBit  = orgImage->sixteenBit();
+    width       = orgImage->width();
+    height      = orgImage->height();
+    newData     = destImage->bits();
+
+    if (sixteenBit)
+        background.convertToSixteenBit();
+
+    //destImage->fill(background);
+
+    Digikam::DImgImageFilters filters;
+
+    // Find the inverse of the transformation matrix
+    m.invert();
+
+    u1 = 0;
+    v1 = 0;
+    u2 = u1 + width;
+    v2 = v1 + height;
+
+    x1 = u1;
+    y1 = v1;
+    x2 = u2;
+    y2 = v2;
+
+    dest = new uchar[width * bytesDepth];
+
+    uinc = m.coeff[0][0];
+    vinc = m.coeff[1][0];
+    winc = m.coeff[2][0];
+
+    coords = 1;
+
+    // these loops could be rearranged, depending on which bit of code
+    // you'd most like to write more than once.
+
+    for (y = y1; y < y2; y++)
+    {
+       // set up inverse transform steps 
+
+        tu[0] = uinc * (x1 + 0.5) + m.coeff[0][1] * (y + 0.5) + m.coeff[0][2] - 0.5;
+        tv[0] = vinc * (x1 + 0.5) + m.coeff[1][1] * (y + 0.5) + m.coeff[1][2] - 0.5;
+        tw[0] = winc * (x1 + 0.5) + m.coeff[2][1] * (y + 0.5) + m.coeff[2][2];
+
+        d = dest;
+
+        for (x = x1; x < x2; x++)
+        {
+            int i;     //  normalize homogeneous coords
+
+            for (i = 0; i < coords; i++)
+            {
+                if (tw[i] == 1.0)
+                {
+                    u[i] = tu[i];
+                    v[i] = tv[i];
+                }
+                else if (tw[i] != 0.0)
+                {
+                    u[i] = tu[i] / tw[i];
+                    v[i] = tv[i] / tw[i];
+                }
+                else
+                {
+                    DDebug() << "homogeneous coordinate = 0...\n" << endl;
+                }
+            }
+
+            //  Set the destination pixels  
+
+            int   iu = lround( u [0] );
+            int   iv = lround( v [0] );
+
+            if (iu >= u1 && iu < u2 && iv >= v1 && iv < v2)
+            {
+                // u, v coordinates into source  
+
+                int u = iu - u1;
+                int v = iv - v1;
+
+                //TODO: Check why antialiasing shows no effect
+                /*if (m_antiAlias)
+                {
+                    if (sixteenBit)
+                    {
+                        unsigned short *d16 = (unsigned short *)d;
+                        filters.pixelAntiAliasing16((unsigned short *)data,
+                                                  width, height, u, v, d16+3, d16+2, d16+1, d16);
+                    }
+                    else
+                    {
+                        filters.pixelAntiAliasing(data, width, height, u, v,
+                                                                  d+3, d+2, d+1, d);
+                    }
+                }
+                else
+                {*/
+                offset = (v * width * bytesDepth) + (u * bytesDepth);
+                color.setColor(data + offset, sixteenBit);
+                color.setPixel(d);
+                //}
+
+                d += bytesDepth;
+            }
+            else // not in source range
+            {
+                // set to background color
+
+                background.setPixel(d);
+                d += bytesDepth;
+            }
+
+            for (i = 0; i < coords; i++)
+            {
+                tu[i] += uinc;
+                tv[i] += vinc;
+                tw[i] += winc;
+            }
+        }
+
+        //  set the pixel region row
+
+        offset = (y - y1) * width * bytesDepth;
+        memcpy(newData + offset, dest, width * bytesDepth);
+    }
+
+    delete [] dest;
 }
 
 void PerspectiveWidget::paintEvent( QPaintEvent * )
@@ -458,275 +775,6 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
             unsetCursor();
     }
 }
-
-QPoint PerspectiveWidget::buildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
-                                           QPoint transTopLeft, QPoint transTopRight,
-                                           QPoint transBottomLeft, QPoint transBottomRight,
-                                           Digikam::DImg *orgImage, Digikam::DImg *destImage,
-                                           Digikam::DColor background)
-{
-    Matrix matrix, transform;
-    double  scalex;
-    double  scaley;
-
-    double x1 = (double)orignTopLeft.x();
-    double y1 = (double)orignTopLeft.y();
-
-    double x2 = (double)orignBottomRight.x();
-    double y2 = (double)orignBottomRight.y();
-
-    double tx1 = (double)transTopLeft.x();
-    double ty1 = (double)transTopLeft.y();
-
-    double tx2 = (double)transTopRight.x();
-    double ty2 = (double)transTopRight.y();
-
-    double tx3 = (double)transBottomLeft.x();
-    double ty3 = (double)transBottomLeft.y();
-
-    double tx4 = (double)transBottomRight.x();
-    double ty4 = (double)transBottomRight.y();
-
-    scalex = scaley = 1.0;
-
-    if ((x2 - x1) > 0)
-      scalex = 1.0 / (double) (x2 - x1);
-
-    if ((y2 - y1) > 0)
-      scaley = 1.0 / (double) (y2 - y1);
-
-    // Determine the perspective transform that maps from
-    // the unit cube to the transformed coordinates
-
-    double dx1, dx2, dx3, dy1, dy2, dy3;
-
-    dx1 = tx2 - tx4;
-    dx2 = tx3 - tx4;
-    dx3 = tx1 - tx2 + tx4 - tx3;
-
-    dy1 = ty2 - ty4;
-    dy2 = ty3 - ty4;
-    dy3 = ty1 - ty2 + ty4 - ty3;
-
-    //  Is the mapping affine?  
-
-    if ((dx3 == 0.0) && (dy3 == 0.0))
-    {
-        matrix.coeff[0][0] = tx2 - tx1;
-        matrix.coeff[0][1] = tx4 - tx2;
-        matrix.coeff[0][2] = tx1;
-        matrix.coeff[1][0] = ty2 - ty1;
-        matrix.coeff[1][1] = ty4 - ty2;
-        matrix.coeff[1][2] = ty1;
-        matrix.coeff[2][0] = 0.0;
-        matrix.coeff[2][1] = 0.0;
-    }
-    else
-    {
-        double det1, det2;
-
-        det1 = dx3 * dy2 - dy3 * dx2;
-        det2 = dx1 * dy2 - dy1 * dx2;
-
-        if (det1 == 0.0 && det2 == 0.0)
-            matrix.coeff[2][0] = 1.0;
-        else
-            matrix.coeff[2][0] = det1 / det2;
-
-        det1 = dx1 * dy3 - dy1 * dx3;
-
-        if (det1 == 0.0 && det2 == 0.0)
-            matrix.coeff[2][1] = 1.0;
-        else
-            matrix.coeff[2][1] = det1 / det2;
-
-        matrix.coeff[0][0] = tx2 - tx1 + matrix.coeff[2][0] * tx2;
-        matrix.coeff[0][1] = tx3 - tx1 + matrix.coeff[2][1] * tx3;
-        matrix.coeff[0][2] = tx1;
-
-        matrix.coeff[1][0] = ty2 - ty1 + matrix.coeff[2][0] * ty2;
-        matrix.coeff[1][1] = ty3 - ty1 + matrix.coeff[2][1] * ty3;
-        matrix.coeff[1][2] = ty1;
-    }
-
-    matrix.coeff[2][2] = 1.0;
-
-    // transform is initialized to the identity matrix
-    transform.translate(-x1, -y1);
-    transform.scale    (scalex, scaley);
-    transform.multiply (matrix);
-
-    // Compute perspective transformation to image if image data containers exist.
-    if (orgImage && destImage)
-        transformAffine(orgImage, destImage, transform, background);
-
-    // Calculate and return new image center in all case.
-    double newCenterX, newCenterY;
-    transform.transformPoint(x2/2.0, y2/2.0, &newCenterX, &newCenterY);
-
-    return QPoint(lround(newCenterX), lround(newCenterY));
-}
-
-void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *destImage,
-                                        const Matrix &matrix, Digikam::DColor background)
-{
-    Matrix      m(matrix), inv(matrix);
-
-    int         x1, y1, x2, y2;        // target bounding box 
-    int         x, y;                  // target coordinates 
-    int         u1, v1, u2, v2;        // source bounding box 
-    double      uinc, vinc, winc;      // increments in source coordinates
-                                       // pr horizontal target coordinate 
-
-    double      u[5],v[5];             // source coordinates,
-                                       //   2
-                                       //  / \    0 is sample in the centre of pixel
-                                       // 1 0 3   1..4 is offset 1 pixel in each
-                                       //  \ /    direction (in target space)
-                                       //   4
-
-    double      tu[5],tv[5],tw[5];     // undivided source coordinates and divisor 
-
-    uchar      *data, *newData;
-    bool        sixteenBit;
-    int         coords;
-    int         width, height;
-    int         bytesDepth;
-    int         offset;
-    uchar      *dest, *d;
-    Digikam::DColor color;
-
-    bytesDepth  = orgImage->bytesDepth();
-    data        = orgImage->bits();
-    sixteenBit  = orgImage->sixteenBit();
-    width       = orgImage->width();
-    height      = orgImage->height();
-    newData     = destImage->bits();
-
-    if (sixteenBit)
-        background.convertToSixteenBit();
-
-    //destImage->fill(background);
-
-    Digikam::DImgImageFilters filters;
-
-    // Find the inverse of the transformation matrix
-    m.invert();
-
-    u1 = 0;
-    v1 = 0;
-    u2 = u1 + width;
-    v2 = v1 + height;
-
-    x1 = u1;
-    y1 = v1;
-    x2 = u2;
-    y2 = v2;
-
-    dest = new uchar[width * bytesDepth];
-
-    uinc = m.coeff[0][0];
-    vinc = m.coeff[1][0];
-    winc = m.coeff[2][0];
-
-    coords = 1;
-
-    // these loops could be rearranged, depending on which bit of code
-    // you'd most like to write more than once.
-
-    for (y = y1; y < y2; y++)
-    {
-       // set up inverse transform steps 
-
-        tu[0] = uinc * (x1 + 0.5) + m.coeff[0][1] * (y + 0.5) + m.coeff[0][2] - 0.5;
-        tv[0] = vinc * (x1 + 0.5) + m.coeff[1][1] * (y + 0.5) + m.coeff[1][2] - 0.5;
-        tw[0] = winc * (x1 + 0.5) + m.coeff[2][1] * (y + 0.5) + m.coeff[2][2];
-
-        d = dest;
-
-        for (x = x1; x < x2; x++)
-        {
-            int i;     //  normalize homogeneous coords
-
-            for (i = 0; i < coords; i++)
-            {
-                if (tw[i] == 1.0)
-                {
-                    u[i] = tu[i];
-                    v[i] = tv[i];
-                }
-                else if (tw[i] != 0.0)
-                {
-                    u[i] = tu[i] / tw[i];
-                    v[i] = tv[i] / tw[i];
-                }
-                else
-                {
-                    DDebug() << "homogeneous coordinate = 0...\n" << endl;
-                }
-            }
-
-            //  Set the destination pixels  
-
-            int   iu = lround( u [0] );
-            int   iv = lround( v [0] );
-
-            if (iu >= u1 && iu < u2 && iv >= v1 && iv < v2)
-            {
-                // u, v coordinates into source  
-
-                int u = iu - u1;
-                int v = iv - v1;
-
-                //TODO: Check why antialiasing shows no effect
-                /*if (m_antiAlias)
-                {
-                    if (sixteenBit)
-                    {
-                        unsigned short *d16 = (unsigned short *)d;
-                        filters.pixelAntiAliasing16((unsigned short *)data,
-                                                  width, height, u, v, d16+3, d16+2, d16+1, d16);
-                    }
-                    else
-                    {
-                        filters.pixelAntiAliasing(data, width, height, u, v,
-                                                                  d+3, d+2, d+1, d);
-                    }
-                }
-                else
-                {*/
-                offset = (v * width * bytesDepth) + (u * bytesDepth);
-                color.setColor(data + offset, sixteenBit);
-                color.setPixel(d);
-                //}
-
-                d += bytesDepth;
-            }
-            else // not in source range
-            {
-                // set to background color
-
-                background.setPixel(d);
-                d += bytesDepth;
-            }
-
-            for (i = 0; i < coords; i++)
-            {
-                tu[i] += uinc;
-                tv[i] += vinc;
-                tw[i] += winc;
-            }
-        }
-
-        //  set the pixel region row
-
-        offset = (y - y1) * width * bytesDepth;
-        memcpy(newData + offset, dest, width * bytesDepth);
-    }
-
-    delete [] dest;
-}
-
 
 }  // NameSpace DigikamPerspectiveImagesPlugin
 

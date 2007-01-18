@@ -79,6 +79,7 @@ public slots:
 
     void toggleAntiAliasing(bool a);
     void toggleDrawWhileMoving(bool draw);
+    void toggleDrawGrid(bool grid);
 
 signals:
 
@@ -96,8 +97,10 @@ protected:
 private:  // Widget methods.
 
     void   updatePixmap(void);
+
     void   transformAffine(Digikam::DImg *orgImage, Digikam::DImg *destImage,
                            const Matrix &matrix, Digikam::DColor background);
+
     QPoint buildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
                             QPoint transTopLeft, QPoint transTopRight,
                             QPoint transBottomLeft, QPoint transBottomRight,
@@ -117,6 +120,7 @@ private:
 
     bool                 m_antiAlias;
     bool                 m_drawWhileMoving;
+    bool                 m_drawGrid;
 
     uint                *m_data;
     int                  m_w;
@@ -143,6 +147,9 @@ private:
     QPoint               m_topRightPoint;
     QPoint               m_bottomLeftPoint;
     QPoint               m_bottomRightPoint;
+
+    // 60 points will be stored to compute a grid of 15x15 lines.
+    QPointArray          m_grid;
 
     QPixmap             *m_pixmap;
 

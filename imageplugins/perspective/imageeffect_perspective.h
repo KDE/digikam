@@ -49,14 +49,14 @@ public:
 
 private slots:
 
-    void slotDefault();
     void slotUpdateInfo(QRect newSize, float topLeftAngle, float topRightAngle,
                         float bottomLeftAngle, float bottomRightAngle);
-    void readSettings(void);
 
 private:
 
-    void writeSettings(void);
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues();
     void finalRendering();
 
 private:
@@ -69,6 +69,7 @@ private:
     QLabel            *m_bottomRightAngleLabel;
 
     QCheckBox         *m_drawWhileMovingCheckBox;
+    QCheckBox         *m_drawGridCheckBox;
 
     PerspectiveWidget *m_previewWidget;
 };

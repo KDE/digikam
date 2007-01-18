@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2005-02-17
  * Description : a digiKam image editor plugin for process image 
  *               perspective adjustment.
@@ -97,7 +97,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title,
     Digikam::ImageIface iface(0, 0);
 
     QWidget *gbox2          = new QWidget(plainPage());
-    QGridLayout *gridLayout = new QGridLayout( gbox2, 10, 2, marginHint(), spacingHint());
+    QGridLayout *gridLayout = new QGridLayout( gbox2, 11, 2, marginHint(), spacingHint());
 
     QLabel *label1  = new QLabel(i18n("New width:"), gbox2);
     m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), gbox2);
@@ -144,11 +144,13 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title,
     m_drawWhileMovingCheckBox = new QCheckBox(i18n("Draw preview while moving"), gbox2);
     gridLayout->addMultiCellWidget(line2, 8, 8, 0, 2);
     gridLayout->addMultiCellWidget(m_drawWhileMovingCheckBox, 9, 9, 0, 2);
-    gridLayout->setRowStretch(10, 10);
+
+    m_drawGridCheckBox = new QCheckBox(i18n("Draw grid"), gbox2);
+    gridLayout->addMultiCellWidget(m_drawGridCheckBox, 10, 10, 0, 2);
+
+    gridLayout->setRowStretch(11, 10);
 
     setUserAreaWidget(gbox2);
-
-    readSettings();
 
     // -------------------------------------------------------------
 
@@ -157,33 +159,35 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title,
 
     connect(m_drawWhileMovingCheckBox, SIGNAL(toggled(bool)),
             m_previewWidget, SLOT(toggleDrawWhileMoving(bool)));
+
+    connect(m_drawGridCheckBox, SIGNAL(toggled(bool)),
+            m_previewWidget, SLOT(toggleDrawGrid(bool)));
 }
 
 ImageEffect_Perspective::~ImageEffect_Perspective()
 {
-    writeSettings();
 }
 
-void ImageEffect_Perspective::readSettings(void)
+void ImageEffect_Perspective::readUserSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("Perspective Adjustment Tool Settings");
-
-    m_drawWhileMovingCheckBox->setChecked( config->readBoolEntry("Draw while moving", true) );
-
+    config->setGroup("perspective Tool Dialog");
+    m_drawWhileMovingCheckBox->setChecked(config->readBoolEntry("Draw While Moving", true));
+    m_drawGridCheckBox->setChecked(config->readBoolEntry("Draw Grid", false));
     m_previewWidget->toggleDrawWhileMoving(m_drawWhileMovingCheckBox->isChecked());
+    m_previewWidget->toggleDrawGrid(m_drawGridCheckBox->isChecked());
 }
 
-void ImageEffect_Perspective::writeSettings(void)
+void ImageEffect_Perspective::writeUserSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("Perspective Adjustment Tool Settings");
-
-    config->writeEntry( "Draw while moving", m_drawWhileMovingCheckBox->isChecked() );
+    config->setGroup("perspective Tool Dialog");
+    config->writeEntry("Draw While Moving", m_drawWhileMovingCheckBox->isChecked());
+    config->writeEntry("Draw Grid", m_drawGridCheckBox->isChecked());
     config->sync();
 }
 
-void ImageEffect_Perspective::slotDefault()
+void ImageEffect_Perspective::resetValues()
 {
     m_previewWidget->reset();
 }
