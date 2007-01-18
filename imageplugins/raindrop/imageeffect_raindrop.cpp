@@ -1,13 +1,12 @@
 /* ============================================================
- * File  : imageeffect_raindrop.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2004-09-30
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2004-09-30
  * Description : a digiKam image plugin to add
  *               raindrops on an image.
  * 
  * Copyright 2004-2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 
 // KDE includes.
 
+#include <kconfig.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kiconloader.h>
@@ -44,7 +44,7 @@
 #include "version.h"
 #include "raindrop.h"
 #include "imageeffect_raindrop.h"
-
+#include "imageeffect_raindrop.moc"
 
 namespace DigikamRainDropImagesPlugin
 {
@@ -61,7 +61,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent, QString title, QFram
                                        I18N_NOOP("A digiKam image plugin to add raindrops to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2004-2005, Gilles Caulier\n"
-                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg",
+                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -146,6 +146,36 @@ void ImageEffect_RainDrop::renderingFinished()
     m_coeffInput->setEnabled(true);
 }
 
+void ImageEffect_RainDrop::readUserSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("raindrops Tool Dialog");
+
+    m_dropInput->blockSignals(true);
+    m_amountInput->blockSignals(true);
+    m_coeffInput->blockSignals(true);
+    
+    m_dropInput->setValue(config->readNumEntry("DropAdjustment", 80));
+    m_amountInput->setValue(config->readNumEntry("AmountAdjustment", 150));
+    m_coeffInput->setValue(config->readNumEntry("CoeffAdjustment", 30));
+    
+    m_dropInput->blockSignals(false);
+    m_amountInput->blockSignals(false);
+    m_coeffInput->blockSignals(false);
+    
+    slotEffect();
+}
+
+void ImageEffect_RainDrop::writeUserSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("raindrops Tool Dialog");
+    config->writeEntry("DropAdjustment", m_dropInput->value());
+    config->writeEntry("AmountAdjustment", m_amountInput->value());
+    config->writeEntry("CoeffAdjustment", m_coeffInput->value());
+    config->sync();
+}
+
 void ImageEffect_RainDrop::resetValues()
 {
     m_dropInput->blockSignals(true);
@@ -222,4 +252,3 @@ void ImageEffect_RainDrop::putFinalData(void)
 
 }  // NameSpace DigikamRainDropImagesPlugin
 
-#include "imageeffect_raindrop.moc"
