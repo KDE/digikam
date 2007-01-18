@@ -32,6 +32,9 @@
 
 class QLabel;
 class QCheckBox;
+class QSpinBox;
+
+class KColorButton;
 
 namespace DigikamPerspectiveImagesPlugin
 {
@@ -70,6 +73,10 @@ private:
 
     QCheckBox         *m_drawWhileMovingCheckBox;
     QCheckBox         *m_drawGridCheckBox;
+
+    QSpinBox          *m_guideSize;
+
+    KColorButton      *m_guideColorBt;
 
     PerspectiveWidget *m_previewWidget;
 };

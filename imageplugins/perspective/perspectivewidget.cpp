@@ -65,6 +65,8 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget *parent)
     m_drawGrid        = false;
     m_drawWhileMoving = true;
     m_currentResizing = ResizingNone;
+    m_guideColor      = Qt::red;
+    m_guideSize       = 1;
 
     m_iface        = new Digikam::ImageIface(w, h);
     uchar *data    = m_iface->setPreviewImageSize(w, h);
@@ -168,6 +170,9 @@ void PerspectiveWidget::reset(void)
     m_bottomRightPoint.setX(m_w-1);
     m_bottomRightPoint.setY(m_h-1);
 
+    m_spot.setX(m_w / 2);
+    m_spot.setY(m_h / 2);
+
     m_antiAlias = true;
     updatePixmap();
     repaint(false);
@@ -196,21 +201,35 @@ void PerspectiveWidget::applyPerspectiveAdjustment(void)
                               targetImg.bits(), targetImg.width(), targetImg.height());
 }
 
-void PerspectiveWidget::toggleAntiAliasing(bool a)
+void PerspectiveWidget::slotToggleAntiAliasing(bool a)
 {
     m_antiAlias = a; 
     updatePixmap();
     repaint(false);
 }
 
-void PerspectiveWidget::toggleDrawWhileMoving(bool draw)
+void PerspectiveWidget::slotToggleDrawWhileMoving(bool draw)
 {
     m_drawWhileMoving = draw;
 }
 
-void PerspectiveWidget::toggleDrawGrid(bool grid)
+void PerspectiveWidget::slotToggleDrawGrid(bool grid)
 {
     m_drawGrid = grid;
+    updatePixmap();
+    repaint(false);
+}
+
+void PerspectiveWidget::slotChangeGuideColor(const QColor &color)
+{
+    m_guideColor = color;
+    updatePixmap();
+    repaint(false);
+}
+
+void PerspectiveWidget::slotChangeGuideSize(int size)
+{
+    m_guideSize = size;
     updatePixmap();
     repaint(false);
 }
@@ -313,6 +332,17 @@ void PerspectiveWidget::updatePixmap(void)
     p.setPen(QPen(QColor(255, 64, 64), 3, Qt::SolidLine));
     p.drawEllipse( m_transformedCenter.x()+m_rect.topLeft().x(), 
                    m_transformedCenter.y()+m_rect.topLeft().y(), 4, 4 ); 
+
+    // Drawing vertical and horizontal guide lines.
+
+    int xspot = m_spot.x() + m_rect.x();
+    int yspot = m_spot.y() + m_rect.y();
+    p.setPen(QPen(Qt::white, m_guideSize, Qt::SolidLine));
+    p.drawLine(xspot, m_rect.top(), xspot, m_rect.bottom());
+    p.drawLine(m_rect.left(), yspot, m_rect.right(), yspot);
+    p.setPen(QPen(m_guideColor, m_guideSize, Qt::DotLine));
+    p.drawLine(xspot, m_rect.top(), xspot, m_rect.bottom());
+    p.drawLine(m_rect.left(), yspot, m_rect.right(), yspot);
 
     p.end();
 
@@ -603,6 +633,9 @@ void PerspectiveWidget::paintEvent( QPaintEvent * )
 
 void PerspectiveWidget::resizeEvent(QResizeEvent * e)
 {
+    int old_w = m_w;
+    int old_h = m_h;
+
     delete m_pixmap;
     int w          = e->size().width();
     int h          = e->size().height();
@@ -629,6 +662,9 @@ void PerspectiveWidget::resizeEvent(QResizeEvent * e)
     m_transformedCenter = QPoint(lroundf(m_transformedCenter.x()*xFactor),
                                  lroundf(m_transformedCenter.y()*yFactor));
 
+    m_spot.setX((int)((float)m_spot.x() * ( (float)m_w / (float)old_w)));
+    m_spot.setY((int)((float)m_spot.y() * ( (float)m_h / (float)old_h)));
+
     updatePixmap();
 }
 
@@ -645,10 +681,15 @@ void PerspectiveWidget::mousePressEvent ( QMouseEvent * e )
             m_currentResizing = ResizingTopRight;
         else if ( m_bottomLeftCorner.contains( e->x(), e->y() ) )
             m_currentResizing = ResizingBottomLeft;
+        else
+        {
+            m_spot.setX(e->x()-m_rect.x());
+            m_spot.setY(e->y()-m_rect.y());
+        }
     }
 }
 
-void PerspectiveWidget::mouseReleaseEvent ( QMouseEvent * )
+void PerspectiveWidget::mouseReleaseEvent ( QMouseEvent * e )
 {
     if ( m_currentResizing != ResizingNone )
     {
@@ -661,6 +702,13 @@ void PerspectiveWidget::mouseReleaseEvent ( QMouseEvent * )
             updatePixmap();
             repaint(false);
         }
+    }
+    else
+    {
+        m_spot.setX(e->x()-m_rect.x());
+        m_spot.setY(e->y()-m_rect.y());
+        updatePixmap();
+        repaint(false);
     }
 }
 
@@ -756,6 +804,12 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
 
                 m_bottomRightPoint = pm - m_rect.topLeft();
                 setCursor( KCursor::sizeFDiagCursor() );
+            }
+
+            else 
+            {
+                m_spot.setX(e->x()-m_rect.x());
+                m_spot.setY(e->y()-m_rect.y());
             }
 
             updatePixmap();

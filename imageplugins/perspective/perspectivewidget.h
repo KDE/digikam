@@ -30,6 +30,7 @@
 
 #include <qwidget.h>
 #include <qpoint.h>
+#include <qcolor.h>
 #include <qrect.h>
 
 // Digikam includes.
@@ -77,9 +78,12 @@ public:
 
 public slots:
 
-    void toggleAntiAliasing(bool a);
-    void toggleDrawWhileMoving(bool draw);
-    void toggleDrawGrid(bool grid);
+    void slotToggleAntiAliasing(bool a);
+    void slotToggleDrawWhileMoving(bool draw);
+    void slotToggleDrawGrid(bool grid);
+
+    void slotChangeGuideColor(const QColor &color);
+    void slotChangeGuideSize(int size);    
 
 signals:
 
@@ -130,6 +134,8 @@ private:
 
     int                  m_currentResizing;
 
+    int                  m_guideSize;
+
     QRect                m_rect;
 
     // Tranformed center area for mouse position control.
@@ -147,6 +153,9 @@ private:
     QPoint               m_topRightPoint;
     QPoint               m_bottomLeftPoint;
     QPoint               m_bottomRightPoint;
+    QPoint               m_spot;
+
+    QColor               m_guideColor;
 
     // 60 points will be stored to compute a grid of 15x15 lines.
     QPointArray          m_grid;

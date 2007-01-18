@@ -25,6 +25,7 @@
  
 #include <qvgroupbox.h>
 #include <qlabel.h>
+#include <qspinbox.h>
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>
@@ -33,6 +34,7 @@
 
 // KDE includes.
 
+#include <kcolorbutton.h>
 #include <kcursor.h>
 #include <kconfig.h>
 #include <klocale.h>
@@ -83,7 +85,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title,
     
     QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
+    QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new PerspectiveWidget(525, 350, frame);
     l->addWidget(m_previewWidget);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the perspective transformation operation preview. "
@@ -97,7 +99,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title,
     Digikam::ImageIface iface(0, 0);
 
     QWidget *gbox2          = new QWidget(plainPage());
-    QGridLayout *gridLayout = new QGridLayout( gbox2, 11, 2, marginHint(), spacingHint());
+    QGridLayout *gridLayout = new QGridLayout( gbox2, 13, 2, marginHint(), spacingHint());
 
     QLabel *label1  = new QLabel(i18n("New width:"), gbox2);
     m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), gbox2);
@@ -148,7 +150,22 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title,
     m_drawGridCheckBox = new QCheckBox(i18n("Draw grid"), gbox2);
     gridLayout->addMultiCellWidget(m_drawGridCheckBox, 10, 10, 0, 2);
 
-    gridLayout->setRowStretch(11, 10);
+    // -------------------------------------------------------------
+
+    QLabel *label7 = new QLabel(i18n("Guide color:"), gbox2);
+    m_guideColorBt = new KColorButton( QColor( Qt::red ), gbox2 );
+    QWhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw guides dashed-lines."));
+    gridLayout->addMultiCellWidget(label7, 11, 11, 0, 0);
+    gridLayout->addMultiCellWidget(m_guideColorBt, 11, 11, 2, 2);
+
+    QLabel *label8 = new QLabel(i18n("Guide width:"), gbox2);
+    m_guideSize    = new QSpinBox( 1, 5, 1, gbox2);
+    QWhatsThis::add( m_guideSize, i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
+    gridLayout->addMultiCellWidget(label8, 12, 12, 0, 0);
+    gridLayout->addMultiCellWidget(m_guideSize, 12, 12, 2, 2);
+
+    gridLayout->setColStretch(1, 10);
+    gridLayout->setRowStretch(13, 10);
 
     setUserAreaWidget(gbox2);
 
@@ -158,10 +175,16 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title,
             this, SLOT(slotUpdateInfo(QRect, float, float, float, float)));  
 
     connect(m_drawWhileMovingCheckBox, SIGNAL(toggled(bool)),
-            m_previewWidget, SLOT(toggleDrawWhileMoving(bool)));
+            m_previewWidget, SLOT(slotToggleDrawWhileMoving(bool)));
 
     connect(m_drawGridCheckBox, SIGNAL(toggled(bool)),
-            m_previewWidget, SLOT(toggleDrawGrid(bool)));
+            m_previewWidget, SLOT(slotToggleDrawGrid(bool)));
+
+    connect(m_guideColorBt, SIGNAL(changed(const QColor &)),
+            m_previewWidget, SLOT(slotChangeGuideColor(const QColor &)));
+
+    connect(m_guideSize, SIGNAL(valueChanged(int)),
+            m_previewWidget, SLOT(slotChangeGuideSize(int)));
 }
 
 ImageEffect_Perspective::~ImageEffect_Perspective()
@@ -170,12 +193,17 @@ ImageEffect_Perspective::~ImageEffect_Perspective()
 
 void ImageEffect_Perspective::readUserSettings(void)
 {
+    QColor defaultGuideColor(Qt::red);
     KConfig *config = kapp->config();
     config->setGroup("perspective Tool Dialog");
     m_drawWhileMovingCheckBox->setChecked(config->readBoolEntry("Draw While Moving", true));
     m_drawGridCheckBox->setChecked(config->readBoolEntry("Draw Grid", false));
-    m_previewWidget->toggleDrawWhileMoving(m_drawWhileMovingCheckBox->isChecked());
-    m_previewWidget->toggleDrawGrid(m_drawGridCheckBox->isChecked());
+    m_guideColorBt->setColor(config->readColorEntry("Guide Color", &defaultGuideColor));
+    m_guideSize->setValue(config->readNumEntry("Guide Width", 1));
+    m_previewWidget->slotToggleDrawWhileMoving(m_drawWhileMovingCheckBox->isChecked());
+    m_previewWidget->slotToggleDrawGrid(m_drawGridCheckBox->isChecked());
+    m_previewWidget->slotChangeGuideColor(m_guideColorBt->color());
+    m_previewWidget->slotChangeGuideSize(m_guideSize->value());
 }
 
 void ImageEffect_Perspective::writeUserSettings(void)
@@ -184,6 +212,8 @@ void ImageEffect_Perspective::writeUserSettings(void)
     config->setGroup("perspective Tool Dialog");
     config->writeEntry("Draw While Moving", m_drawWhileMovingCheckBox->isChecked());
     config->writeEntry("Draw Grid", m_drawGridCheckBox->isChecked());
+    config->writeEntry("Guide Color", m_guideColorBt->color());
+    config->writeEntry("Guide Width", m_guideSize->value());
     config->sync();
 }
 
