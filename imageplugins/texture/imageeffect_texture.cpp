@@ -1,5 +1,4 @@
 /* ============================================================
- * File   : imageeffect_texture.cpp
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
  *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2005-03-10
@@ -7,7 +6,7 @@
  *               texture on image.
  * 
  * Copyright 2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 
 // KDE includes.
 
+#include <kconfig.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kiconloader.h>
@@ -44,6 +44,7 @@
 #include "version.h"
 #include "texture.h"
 #include "imageeffect_texture.h"
+#include "imageeffect_texture.moc"
 
 namespace DigikamTextureImagesPlugin
 {
@@ -61,7 +62,7 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent, QString title, QFrame*
                                        "texture to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2005, Gilles Caulier\n"
-                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg",
+                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -134,12 +135,35 @@ void ImageEffect_Texture::renderingFinished()
     m_blendGain->setEnabled(true);
 }
 
+void ImageEffect_Texture::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("texture Tool Dialog");
+    m_textureType->blockSignals(true);
+    m_blendGain->blockSignals(true);
+    m_textureType->setCurrentItem(config->readNumEntry("TextureType", PaperTexture));
+    m_blendGain->setValue(config->readNumEntry("BlendGain", 200));
+    m_textureType->blockSignals(false);
+    m_blendGain->blockSignals(false);
+}
+
+void ImageEffect_Texture::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("texture Tool Dialog");
+    config->writeEntry("TextureType", m_textureType->currentItem());
+    config->writeEntry("BlendGain", m_blendGain->value());
+    config->sync();
+}
+
 void ImageEffect_Texture::resetValues()
 {
-    blockSignals(true);
+    m_textureType->blockSignals(true);
+    m_blendGain->blockSignals(true);
     m_textureType->setCurrentItem(PaperTexture);    
     m_blendGain->setValue(200);
-    blockSignals(false);
+    m_textureType->blockSignals(false);
+    m_blendGain->blockSignals(false);
 } 
 
 void ImageEffect_Texture::prepareEffect()
@@ -259,4 +283,3 @@ QString ImageEffect_Texture::getTexturePath(int texture)
     
 }  // NameSpace DigikamTextureImagesPlugin
 
-#include "imageeffect_texture.moc"

@@ -1,13 +1,12 @@
 /* ============================================================
- * File  : imageeffect_texture.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2005-03-10
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2005-03-10
  * Description : a digiKam image editor plugin to apply 
  *               texture on image.
  * 
  * Copyright 2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,42 +50,47 @@ public:
 
 private:
 
+    QString getTexturePath(int texture);
+
+private slots:
+
+    void readUserSettings();
+
+private:
+
+    void writeUserSettings();
+    void resetValues();    
+    void prepareEffect();
+    void prepareFinal();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
+
+private:
+
     enum TextureTypes 
     {
-    PaperTexture=0,
-    Paper2Texture,
-    FabricTexture,
-    BurlapTexture,
-    BricksTexture,
-    Bricks2Texture,
-    CanvasTexture,
-    MarbleTexture,
-    Marble2Texture,
-    BlueJeanTexture,
-    CellWoodTexture,
-    MetalWireTexture,
-    ModernTexture,
-    WallTexture,
-    MossTexture,
-    StoneTexture
+        PaperTexture=0,
+        Paper2Texture,
+        FabricTexture,
+        BurlapTexture,
+        BricksTexture,
+        Bricks2Texture,
+        CanvasTexture,
+        MarbleTexture,
+        Marble2Texture,
+        BlueJeanTexture,
+        CellWoodTexture,
+        MetalWireTexture,
+        ModernTexture,
+        WallTexture,
+        MossTexture,
+        StoneTexture
     };
 
     QComboBox    *m_textureType;
 
     KIntNumInput *m_blendGain;
-
-private:
-
-    QString getTexturePath(int texture);
-
-protected:
-
-    void prepareEffect(void);
-    void prepareFinal(void);
-    void putPreviewData(void);
-    void putFinalData(void);
-    void resetValues(void);   
-    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamTextureImagesPlugin

@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_texture.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-03-10
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-03-10
  * Description : 
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 #include "bannerwidget.h"
 #include "imageeffect_texture.h"
 #include "imageplugin_texture.h"
+#include "imageplugin_texture.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_texture,
                             KGenericFactory<ImagePlugin_Texture>("digikamimageplugin_texture"));
@@ -67,4 +67,3 @@ void ImagePlugin_Texture::slotTexture()
     delete headerFrame;
 }
 
-#include "imageplugin_texture.moc"
