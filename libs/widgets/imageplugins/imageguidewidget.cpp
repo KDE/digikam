@@ -492,7 +492,7 @@ void ImageGuideWidget::mousePressEvent ( QMouseEvent * e )
     {
        d->focus = true;
        d->spot.setX(e->x()-d->rect.x());
-       d->spot.setY(e->y()-d->rect.y());;
+       d->spot.setY(e->y()-d->rect.y());
        updatePreview();
     }
 }
