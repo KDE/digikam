@@ -330,8 +330,8 @@ void PerspectiveWidget::updatePixmap(void)
     // Drawing transformed center.
 
     p.setPen(QPen(QColor(255, 64, 64), 3, Qt::SolidLine));
-    p.drawEllipse( m_transformedCenter.x()+m_rect.topLeft().x(), 
-                   m_transformedCenter.y()+m_rect.topLeft().y(), 4, 4 ); 
+    p.drawEllipse( m_transformedCenter.x()+m_rect.topLeft().x()-2, 
+                   m_transformedCenter.y()+m_rect.topLeft().y()-2, 4, 4 ); 
 
     // Drawing vertical and horizontal guide lines.
 
