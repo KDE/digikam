@@ -129,6 +129,7 @@ void ImageEffect_FilmGrain::readUserSettings()
     m_sensibilitySlider->blockSignals(true);
     m_sensibilitySlider->setValue(config->readNumEntry("SensitivityAjustment", 12));
     m_sensibilitySlider->blockSignals(false);
+    slotSliderMoved(m_sensibilitySlider->value());
 }
 
 void ImageEffect_FilmGrain::writeUserSettings()
