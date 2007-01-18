@@ -1,13 +1,12 @@
 /* ============================================================
- * File  : imageeffect_emboss.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2004-08-26
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2004-08-26
  * Description : a digiKam image editor plugin to emboss 
  *               an image.
  * 
  * Copyright 2004-2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,18 +42,23 @@ public:
     ImageEffect_Emboss(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_Emboss();
 
+private slots:
+
+    void readUserSettings();
+
+private:
+
+    void writeUserSettings();
+    void resetValues();    
+    void prepareEffect();
+    void prepareFinal();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
+
 private:
 
     KIntNumInput *m_depthInput;
-
-protected:
-
-    void prepareEffect(void);
-    void prepareFinal(void);
-    void putPreviewData(void);
-    void putFinalData(void);
-    void resetValues(void);   
-    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamEmbossImagesPlugin

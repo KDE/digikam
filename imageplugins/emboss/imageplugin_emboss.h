@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_emboss.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-08-26
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-08-26
  * Description : 
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,7 +17,6 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
 
 #ifndef IMAGEPLUGIN_EMBOSS_H
 #define IMAGEPLUGIN_EMBOSS_H
@@ -41,14 +39,13 @@ public:
 
     void setEnabledActions(bool enable);
 
-private:
-
-    KAction *m_embossAction;
-    
 private slots:
 
     void slotEmboss();
 
+private:
+
+    KAction *m_embossAction;
 };
     
 #endif /* IMAGEPLUGIN_EMBOSS_H */

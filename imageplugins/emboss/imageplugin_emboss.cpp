@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_emboss.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-08-26
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-08-26
  * Description : 
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 #include "bannerwidget.h"
 #include "imageeffect_emboss.h"
 #include "imageplugin_emboss.h"
+#include "imageplugin_emboss.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_emboss,
                             KGenericFactory<ImagePlugin_Emboss>("digikamimageplugin_emboss"));
@@ -67,6 +67,3 @@ void ImagePlugin_Emboss::slotEmboss()
     dlg.exec();
     delete headerFrame;
 }
-
-
-#include "imageplugin_emboss.moc"

@@ -1,13 +1,12 @@
 /* ============================================================
- * File  : imageeffect_emboss.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2004-08-26
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2004-08-26
  * Description : a digiKam image editor plugin to emboss 
  *               an image.
  * 
  * Copyright 2004-2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,12 +35,14 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
+#include <kconfig.h>
 
 // Local includes.
 
 #include "version.h"
 #include "emboss.h"
 #include "imageeffect_emboss.h"
+#include "imageeffect_emboss.moc"
 
 namespace DigikamEmbossImagesPlugin
 {
@@ -55,10 +56,10 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent, QString title, QFrame* b
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Emboss Image"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("An embossed image effect plugin for digiKam."),
+                                       I18N_NOOP("Emboss image effect plugin for digiKam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004-2006, Gilles Caulier\n"
-                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg",
+                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -101,6 +102,23 @@ ImageEffect_Emboss::~ImageEffect_Emboss()
 void ImageEffect_Emboss::renderingFinished()
 {
     m_depthInput->setEnabled(true);
+}
+
+void ImageEffect_Emboss::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("emboss Tool Dialog");
+    m_depthInput->blockSignals(true);
+    m_depthInput->setValue(config->readNumEntry("DepthAjustment", 30));
+    m_depthInput->blockSignals(false);
+}
+
+void ImageEffect_Emboss::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("emboss Tool Dialog");
+    config->writeEntry("DepthAjustment", m_depthInput->value());
+    config->sync();
 }
 
 void ImageEffect_Emboss::resetValues()
@@ -146,4 +164,3 @@ void ImageEffect_Emboss::putFinalData(void)
 
 }  // NameSpace DigikamEmbossImagesPlugin
 
-#include "imageeffect_emboss.moc"
