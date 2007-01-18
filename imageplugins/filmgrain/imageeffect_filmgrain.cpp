@@ -1,13 +1,12 @@
 /* ============================================================
- * File  : imageeffect_filmgrain.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2004-08-26
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2004-08-26
  * Description : a digiKam image editor plugin for add film 
  *               grain on an image.
  * 
  * Copyright 2004-2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,12 +37,14 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
+#include <kconfig.h>
 
 // Local includes.
 
 #include "version.h"
 #include "filmgrain.h"
 #include "imageeffect_filmgrain.h"
+#include "imageeffect_filmgrain.moc"
 
 namespace DigikamFilmGrainImagesPlugin
 {
@@ -61,7 +62,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent, QString title, QFr
                                                  "effect to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2004-2005, Gilles Caulier\n"
-                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg",
+                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -121,6 +122,23 @@ void ImageEffect_FilmGrain::renderingFinished()
     m_sensibilitySlider->setEnabled(true);
 }
  
+void ImageEffect_FilmGrain::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("filmgrain Tool Dialog");
+    m_sensibilitySlider->blockSignals(true);
+    m_sensibilitySlider->setValue(config->readNumEntry("SensitivityAjustment", 12));
+    m_sensibilitySlider->blockSignals(false);
+}
+
+void ImageEffect_FilmGrain::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("filmgrain Tool Dialog");
+    config->writeEntry("SensitivityAjustment", m_sensibilitySlider->value());
+    config->sync();
+}
+
 void ImageEffect_FilmGrain::resetValues()
 {
     m_sensibilitySlider->blockSignals(true);
@@ -167,4 +185,3 @@ void ImageEffect_FilmGrain::putFinalData(void)
 
 }  // NameSpace DigikamFilmGrainImagesPlugin
 
-#include "imageeffect_filmgrain.moc"
