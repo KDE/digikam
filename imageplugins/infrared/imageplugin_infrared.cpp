@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_infrared.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-02-22
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-02-22
  * Description : 
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 #include "bannerwidget.h"
 #include "imageeffect_infrared.h"
 #include "imageplugin_infrared.h"
+#include "imageplugin_infrared.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_infrared,
                             KGenericFactory<ImagePlugin_Infrared>("digikamimageplugin_infrared"));
@@ -66,5 +66,3 @@ void ImagePlugin_Infrared::slotInfrared()
     dlg.exec();
     delete headerFrame;
 }
-
-#include "imageplugin_infrared.moc"

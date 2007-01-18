@@ -1,13 +1,12 @@
 /* ============================================================
- * File  : imageeffect_infrared.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2005-02-22
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2005-02-22
  * Description : a digiKam image editor plugin for simulate 
  *               infrared film.
  * 
  * Copyright 2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,12 +39,14 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
+#include <kconfig.h>
 
 // Local includes.
 
 #include "version.h"
 #include "infrared.h"
 #include "imageeffect_infrared.h"
+#include "imageeffect_infrared.moc"
 
 namespace DigikamInfraredImagesPlugin
 {
@@ -62,7 +63,7 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent, QString title, QFram
                                        I18N_NOOP("A digiKam image plugin to simulate infrared film."),
                                        KAboutData::License_GPL,
                                        "(c) 2005, Gilles Caulier\n"
-                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg",
+                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -92,7 +93,9 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent, QString title, QFram
                      "Increasing this value will increase the portion of green color in the mix. " 
                      "It will also increase the halo effect on the hightlights, and the film "
                      "graininess (if the box is checked).</p>"
-                     "<p>Note: to simulate an <b>Ilford SFX200</b> infrared film, use a sensibility excursion of 200 to 800. A sensibility over 800 simulate <b>Kodak HIE</b> hight speed infrared film. This last one give more dramastic photograph style.</p>");
+                     "<p>Note: to simulate an <b>Ilford SFX200</b> infrared film, use a sensibility excursion of 200 to 800. "
+                     "A sensibility over 800 simulate <b>Kodak HIE</b> hight speed infrared film. This last one give more "
+                     "dramastic photograph style.</p>");
 
     QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
     QWhatsThis::add( m_sensibilitySlider, whatsThis);
@@ -138,11 +141,36 @@ void ImageEffect_Infrared::renderingFinished()
     m_addFilmGrain->setEnabled(true);
 }
 
+void ImageEffect_Infrared::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("infrared Tool Dialog");
+    m_sensibilitySlider->blockSignals(true);
+    m_addFilmGrain->blockSignals(true);
+    m_sensibilitySlider->setValue(config->readNumEntry("SensitivityAjustment", 1));
+    m_addFilmGrain->setChecked(config->readBoolEntry("AddFilmGrain", false));
+    m_sensibilitySlider->blockSignals(false);
+    m_addFilmGrain->blockSignals(false);
+    slotSliderMoved(m_sensibilitySlider->value());
+}
+
+void ImageEffect_Infrared::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("infrared Tool Dialog");
+    config->writeEntry("SensitivityAjustment", m_sensibilitySlider->value());
+    config->writeEntry("AddFilmGrain", m_addFilmGrain->isChecked());
+    config->sync();
+}
+
 void ImageEffect_Infrared::resetValues()
 {
     m_sensibilitySlider->blockSignals(true);
+    m_addFilmGrain->blockSignals(true);
     m_sensibilitySlider->setValue(1);
+    m_addFilmGrain->setChecked(false);
     m_sensibilitySlider->blockSignals(false);
+    m_addFilmGrain->blockSignals(false);
 } 
 
 void ImageEffect_Infrared::slotSliderMoved(int v)
@@ -190,4 +218,3 @@ void ImageEffect_Infrared::putFinalData(void)
 
 }  // NameSpace DigikamInfraredImagesPlugin
 
-#include "imageeffect_infrared.moc"
