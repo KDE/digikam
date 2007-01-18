@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-02-14
+ * Date   : 2004-02-14
  * Description : a digiKam image plugin for to solarize
  *               an image.
  *
@@ -54,17 +54,14 @@ private:
     void readUserSettings();
     void writeUserSettings();
     void resetValues();
-
     void solarize(double factor, uchar *data, int w, int h, bool sb);
+    void finalRendering();
 
 private slots:
 
     void slotEffect();
-    void slotOk();
 
 private:
-
-    QPushButton          *m_helpButton;
 
     KDoubleNumInput      *m_numInput;
     

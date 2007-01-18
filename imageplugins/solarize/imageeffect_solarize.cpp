@@ -85,10 +85,10 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent, QString title, QFram
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gboxSettings, 2, 1, marginHint(), spacingHint());
+    QGridLayout* grid     = new QGridLayout(gboxSettings, 2, 1, marginHint(), spacingHint());
 
     QLabel *label = new QLabel(i18n("Intensity:"), gboxSettings);
-    m_numInput = new KDoubleNumInput(gboxSettings);
+    m_numInput    = new KDoubleNumInput(gboxSettings);
     m_numInput->setPrecision(1);
     m_numInput->setRange(0.0, 100.0, 0.1, true);
     grid->addMultiCellWidget(label, 0, 0, 0, 0);
@@ -127,7 +127,7 @@ void ImageEffect_Solarize::slotEffect()
     m_previewWidget->updatePreview();
 }
 
-void ImageEffect_Solarize::slotOk()
+void ImageEffect_Solarize::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
@@ -233,7 +233,7 @@ void ImageEffect_Solarize::readUserSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("solarizeimage Tool Dialog");
-    config->readDoubleNumEntry("Intensity", 0.0);
+    m_numInput->setValue(config->readDoubleNumEntry("Intensity", 0.0));
 }
 
 void ImageEffect_Solarize::writeUserSettings()
