@@ -1,6 +1,6 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-08-27
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-08-27
  * Description : Unsharp mask image filter for digiKam Image Editor
  * 
  * Copyright 2004-2007 by Gilles Caulier
