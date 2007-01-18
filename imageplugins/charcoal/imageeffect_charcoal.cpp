@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_charcoal.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-08-26
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-08-26
  * Description : a digikam image editor plugin for 
  *               simulate charcoal drawing.
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +27,7 @@
 
 // KDE includes.
 
+#include <kconfig.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kiconloader.h>
@@ -40,6 +40,7 @@
 #include "version.h"
 #include "charcoal.h"
 #include "imageeffect_charcoal.h"
+#include "imageeffect_charcoal.moc"
 
 namespace DigikamCharcoalImagesPlugin
 {
@@ -56,7 +57,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent, QString title, QFram
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam charcoal drawing image effect plugin."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2006, Gilles Caulier", 
+                                       "(c) 2004-2007, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -113,6 +114,27 @@ void ImageEffect_Charcoal::renderingFinished()
     m_smoothInput->setEnabled(true);
 }
 
+void ImageEffect_Charcoal::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("charcoal Tool Dialog");
+    m_pencilInput->blockSignals(true);
+    m_smoothInput->blockSignals(true);
+    m_pencilInput->setValue(config->readNumEntry("PencilAjustment", 5));
+    m_smoothInput->setValue(config->readNumEntry("SmoothAjustment", 10));
+    m_pencilInput->blockSignals(false);
+    m_smoothInput->blockSignals(false);
+}
+
+void ImageEffect_Charcoal::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("charcoal Tool Dialog");
+    config->writeEntry("PencilAjustment", m_pencilInput->value());
+    config->writeEntry("SmoothAjustment", m_smoothInput->value());
+    config->sync();
+}
+
 void ImageEffect_Charcoal::resetValues()
 {
     m_pencilInput->blockSignals(true);
@@ -162,4 +184,3 @@ void ImageEffect_Charcoal::putFinalData(void)
 
 }  // NameSpace DigikamCharcoalImagesPlugin
 
-#include "imageeffect_charcoal.moc"

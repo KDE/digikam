@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_charcoal.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-08-26
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-08-26
  * Description : 
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 #include "bannerwidget.h"
 #include "imageeffect_charcoal.h"
 #include "imageplugin_charcoal.h"
+#include "imageplugin_charcoal.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_charcoal,
                             KGenericFactory<ImagePlugin_Charcoal>("digikamimageplugin_charcoal"));
@@ -67,6 +67,3 @@ void ImagePlugin_Charcoal::slotCharcoal()
     dlg.exec();
     delete headerFrame;
 }
-
-
-#include "imageplugin_charcoal.moc"

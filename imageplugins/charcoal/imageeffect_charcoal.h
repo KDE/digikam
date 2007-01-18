@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_charcoal.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-08-26
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-08-26
  * Description : a digiKam image editor plugin for 
  *               simulate charcoal drawing.
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,19 +40,24 @@ public:
     ImageEffect_Charcoal(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_Charcoal();
 
+private slots:
+
+    void readUserSettings();
+
+private:
+
+    void writeUserSettings();
+    void resetValues();    
+    void prepareEffect();
+    void prepareFinal();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
+
 private:
 
     KIntNumInput *m_pencilInput;
     KIntNumInput *m_smoothInput;
-
-protected:
-    
-    void prepareEffect(void);
-    void prepareFinal(void);
-    void putPreviewData(void);
-    void putFinalData(void);
-    void resetValues(void);   
-    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamCharcoalImagesPlugin
