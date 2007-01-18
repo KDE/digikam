@@ -1,12 +1,11 @@
 /* ============================================================
- * File  : perspectivewidget.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
            Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2005-01-18
- * Description : 
+ * Date   : 2005-01-18
+ * Description : a widget class to edit perspective.
  * 
  * Copyright 2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * Matrix3 implementation inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
@@ -51,12 +50,10 @@
 
 #include "triangle.h"
 #include "perspectivewidget.h"
+#include "perspectivewidget.moc"
 
 namespace DigikamPerspectiveImagesPlugin
 {
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Widget class to edit perspective.
 
 PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget *parent)
                  : QWidget(parent, 0, Qt::WDestructiveClose)
@@ -245,6 +242,12 @@ void PerspectiveWidget::updatePixmap(void)
 
         m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(),
                        m_rect.width(), m_rect.height());
+    }
+    else
+    {
+        m_transformedCenter = buildPerspective(QPoint(0, 0), QPoint(m_w, m_h),
+                                               m_topLeftPoint, m_topRightPoint,
+                                               m_bottomLeftPoint, m_bottomRightPoint);
     }
 
     // Drawing selection borders.
@@ -553,10 +556,11 @@ QPoint PerspectiveWidget::buildPerspective(QPoint orignTopLeft, QPoint orignBott
     transform.scale    (scalex, scaley);
     transform.multiply (matrix);
 
-    // perspective transformation
-    transformAffine(orgImage, destImage, transform, background);
+    // Compute perspective transformation to image if image data containers exist.
+    if (orgImage && destImage)
+        transformAffine(orgImage, destImage, transform, background);
 
-    // Calculate and return new image center
+    // Calculate and return new image center in all case.
     double newCenterX, newCenterY;
     transform.transformPoint(x2/2.0, y2/2.0, &newCenterX, &newCenterY);
 
@@ -726,5 +730,3 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
 
 }  // NameSpace DigikamPerspectiveImagesPlugin
 
-
-#include "perspectivewidget.moc"

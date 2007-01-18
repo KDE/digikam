@@ -1,13 +1,12 @@
 /* ============================================================
- * File  : imageeffect_perspective.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2005-02-17
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2005-02-17
  * Description : a matrix implementation for image
  *               perspective adjustment.
  * 
  * Copyright 2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * Matrix3 implementation inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
@@ -103,6 +102,6 @@ public:
     double coeff[3][3];
 };
 
-}
+}  // namespace DigikamPerspectiveImagesPlugin
 
-#endif
+#endif // IMAGEEFFECT_PERSPECTIVE_MATRIX_H

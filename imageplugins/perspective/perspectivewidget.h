@@ -1,12 +1,11 @@
 /* ============================================================
- * File  : perspectivewidget.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-01-18
- * Description : 
+ * Description : a widget class to edit perspective.
  * 
  * Copyright 2005 Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * Matrix3 implementation inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
@@ -94,6 +93,17 @@ protected:
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );
 
+private:  // Widget methods.
+
+    void   updatePixmap(void);
+    void   transformAffine(Digikam::DImg *orgImage, Digikam::DImg *destImage,
+                           const Matrix &matrix, Digikam::DColor background);
+    QPoint buildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
+                            QPoint transTopLeft, QPoint transTopRight,
+                            QPoint transBottomLeft, QPoint transBottomRight,
+                            Digikam::DImg *orgImage=0, Digikam::DImg *destImage=0,
+                            Digikam::DColor background=Digikam::DColor());
+
 private:
 
     enum ResizingMode
@@ -105,50 +115,39 @@ private:
         ResizingBottomRight
     };
 
-    Digikam::ImageIface *m_iface;
+    bool                 m_antiAlias;
+    bool                 m_drawWhileMoving;
 
-    bool        m_antiAlias;
-    bool        m_drawWhileMoving;
+    uint                *m_data;
+    int                  m_w;
+    int                  m_h;
+    int                  m_origW;
+    int                  m_origH;
 
-    uint       *m_data;
-    int         m_w;
-    int         m_h;
-    int         m_origW;
-    int         m_origH;
+    int                  m_currentResizing;
 
-    int         m_currentResizing;
-
-    QRect       m_rect;
+    QRect                m_rect;
 
     // Tranformed center area for mouse position control.
 
-    QPoint      m_transformedCenter;
+    QPoint               m_transformedCenter;
 
     // Draggable local region selection corners.
 
-    QRect       m_topLeftCorner;
-    QRect       m_topRightCorner;
-    QRect       m_bottomLeftCorner;
-    QRect       m_bottomRightCorner;
+    QRect                m_topLeftCorner;
+    QRect                m_topRightCorner;
+    QRect                m_bottomLeftCorner;
+    QRect                m_bottomRightCorner;
 
-    QPoint      m_topLeftPoint;
-    QPoint      m_topRightPoint;
-    QPoint      m_bottomLeftPoint;
-    QPoint      m_bottomRightPoint;
+    QPoint               m_topLeftPoint;
+    QPoint               m_topRightPoint;
+    QPoint               m_bottomLeftPoint;
+    QPoint               m_bottomRightPoint;
 
-    QPixmap*    m_pixmap;
-    Digikam::DImg m_previewImage;
+    QPixmap             *m_pixmap;
 
-private:  // Widget methods.
-
-    void   updatePixmap(void);
-    void   transformAffine(Digikam::DImg *orgImage, Digikam::DImg *destImage,
-                           const Matrix &matrix, Digikam::DColor background);
-    QPoint buildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
-                            QPoint transTopLeft, QPoint transTopRight,
-                            QPoint transBottomLeft, QPoint transBottomRight,
-                            Digikam::DImg *orgImage, Digikam::DImg *destImage,
-                            Digikam::DColor background);
+    Digikam::ImageIface *m_iface;
+    Digikam::DImg        m_previewImage;
 };
 
 }  // NameSpace DigikamPerspectiveImagesPlugin

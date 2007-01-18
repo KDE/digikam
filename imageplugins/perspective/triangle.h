@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : triangle.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-01-18
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-01-18
  * Description : triangle geometry calculation class.
  * 
- * Copyright 2005 Gilles Caulier
+ * Copyright 2005-2007 Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_perspective.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-02-17
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-02-17
  * Description : 
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 #include "bannerwidget.h"
 #include "imageeffect_perspective.h"
 #include "imageplugin_perspective.h"
+#include "imageplugin_perspective.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_perspective,
                             KGenericFactory<ImagePlugin_Perspective>("digikamimageplugin_perspective"));
@@ -67,4 +67,3 @@ void ImagePlugin_Perspective::slotPerspective()
     delete headerFrame;
 }
 
-#include "imageplugin_perspective.moc"

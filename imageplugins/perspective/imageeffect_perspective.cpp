@@ -1,13 +1,12 @@
 /* ============================================================
- * File  : imageeffect_perspective.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
            Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2005-02-17
+ * Date   : 2005-02-17
  * Description : a digiKam image editor plugin for process image 
  *               perspective adjustment.
  * 
  * Copyright 2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,6 +49,7 @@
 #include "version.h"
 #include "perspectivewidget.h"
 #include "imageeffect_perspective.h"
+#include "imageeffect_perspective.moc"
 
 namespace DigikamPerspectiveImagesPlugin
 {
@@ -67,7 +67,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title,
                                        I18N_NOOP("A digiKam image plugin to process image perspective adjustment."),
                                        KAboutData::License_GPL,
                                        "(c) 2005-2006, Gilles Caulier\n"
-                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg",
+                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -211,4 +211,3 @@ void ImageEffect_Perspective::slotUpdateInfo(QRect newSize, float topLeftAngle, 
 
 }  // NameSpace DigikamPerspectiveImagesPlugin
 
-#include "imageeffect_perspective.moc"

@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_perspective.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-02-17
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-02-17
  * Description : a digiKam image editor plugin for process image 
  *               perspective adjustment.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,7 +30,6 @@
 
 #include <digikamheaders.h>
 
-class QPushButton;
 class QLabel;
 class QCheckBox;
 
@@ -49,6 +47,18 @@ public:
     ImageEffect_Perspective(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_Perspective();
 
+private slots:
+
+    void slotDefault();
+    void slotUpdateInfo(QRect newSize, float topLeftAngle, float topRightAngle,
+                        float bottomLeftAngle, float bottomRightAngle);
+    void readSettings(void);
+
+private:
+
+    void writeSettings(void);
+    void finalRendering();
+
 private:
 
     QLabel            *m_newWidthLabel;
@@ -57,22 +67,10 @@ private:
     QLabel            *m_topRightAngleLabel;
     QLabel            *m_bottomLeftAngleLabel;
     QLabel            *m_bottomRightAngleLabel;
+
     QCheckBox         *m_drawWhileMovingCheckBox;
 
     PerspectiveWidget *m_previewWidget;
-
-    void writeSettings(void);
-private slots:
-
-    void slotDefault();
-    void slotUpdateInfo(QRect newSize, float topLeftAngle, float topRightAngle,
-                        float bottomLeftAngle, float bottomRightAngle);
-    void readSettings(void);
-
-protected:
-
-    void finalRendering();
-
 };
 
 }  // NameSpace DigikamPerspectiveImagesPlugin
