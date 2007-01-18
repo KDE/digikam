@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_oilpaint.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-08-25
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-08-25
  * Description : 
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 #include "bannerwidget.h"
 #include "imageeffect_oilpaint.h"
 #include "imageplugin_oilpaint.h"
+#include "imageplugin_oilpaint.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_oilpaint,
                             KGenericFactory<ImagePlugin_OilPaint>("digikamimageplugin_oilpaint"));
@@ -68,5 +68,3 @@ void ImagePlugin_OilPaint::slotOilPaint()
     delete headerFrame;
 }
 
-
-#include "imageplugin_oilpaint.moc"

@@ -1,13 +1,12 @@
 /* ============================================================
- * File  : imageeffect_oilpaint.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2004-08-25
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2004-08-25
  * Description : a digiKam image editor plugin to simulate 
  *               an oil painting.
  * 
  * Copyright 2004-2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,19 +42,24 @@ public:
     ImageEffect_OilPaint(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_OilPaint();
 
+private slots:
+
+    void readUserSettings();
+
+private:
+
+    void writeUserSettings();
+    void resetValues();    
+    void prepareEffect();
+    void prepareFinal();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
+
 private:
 
     KIntNumInput *m_brushSizeInput;
     KIntNumInput *m_smoothInput;
-
-protected:
-
-    void prepareEffect(void);
-    void prepareFinal(void);
-    void putPreviewData(void);
-    void putFinalData(void);
-    void resetValues(void);
-    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamOilPaintImagesPlugin

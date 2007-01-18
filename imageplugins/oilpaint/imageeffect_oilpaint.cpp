@@ -1,13 +1,12 @@
 /* ============================================================
- * File  : imageeffect_oilpaint.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2004-08-25
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2004-08-25
  * Description : a digiKam image editor plugin to simulate 
  *               an oil painting.
  * 
  * Copyright 2004-2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,12 +37,14 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
+#include <kconfig.h>
 
 // Local includes.
 
 #include "version.h"
 #include "oilpaint.h"
 #include "imageeffect_oilpaint.h"
+#include "imageeffect_oilpaint.moc"
 
 namespace DigikamOilPaintImagesPlugin
 {
@@ -60,7 +61,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent, QString title, QFram
                                        I18N_NOOP("An oil painting image effect plugin for digiKam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004-2005, Gilles Caulier\n"
-                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg", 
+                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -122,6 +123,27 @@ void ImageEffect_OilPaint::renderingFinished()
     m_smoothInput->setEnabled(true);
 }
 
+void ImageEffect_OilPaint::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("oilpaint Tool Dialog");
+    m_brushSizeInput->blockSignals(true);
+    m_smoothInput->blockSignals(true);
+    m_brushSizeInput->setValue(config->readNumEntry("BrushSize", 1));
+    m_smoothInput->setValue(config->readNumEntry("SmoothAjustment", 30));
+    m_brushSizeInput->blockSignals(false);
+    m_smoothInput->blockSignals(false);
+}
+
+void ImageEffect_OilPaint::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("oilpaint Tool Dialog");
+    config->writeEntry("BrushSize", m_brushSizeInput->value());
+    config->writeEntry("SmoothAjustment", m_smoothInput->value());
+    config->sync();
+}
+
 void ImageEffect_OilPaint::resetValues()
 {
     m_brushSizeInput->blockSignals(true);
@@ -139,8 +161,8 @@ void ImageEffect_OilPaint::prepareEffect()
 
     Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
 
-    int b        = m_brushSizeInput->value();
-    int s        = m_smoothInput->value();
+    int b = m_brushSizeInput->value();
+    int s = m_smoothInput->value();
 
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new OilPaint(&image, this, b, s));
 }
@@ -172,4 +194,3 @@ void ImageEffect_OilPaint::putFinalData(void)
 
 }  // NameSpace DigikamOilPaintImagesPlugin
 
-#include "imageeffect_oilpaint.moc"
