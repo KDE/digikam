@@ -142,6 +142,7 @@ Image Plugins : New option in all Color corrections Tools to show under-exposed 
                 over-exposed areas of corrected picture before to apply corrections.
 Image Plugins : Brightness/Contrast/Gamma : settings value excursion are the same 
                 than Photoshop.
+Image Plugins : Perspective Tool : add a grid guide.
 Image Plugins : Ratio-crop Tool : usability improvements from Jaromir Malenko.
 Image Plugins : Auto Color Correction Tool : add new filter to perform auto-exposure corrections.
 Image Plugins : Black & Whithe converter : Capabilty to remember settings between plugin
@@ -447,6 +448,8 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 259 ==> 133516 : Tags set in Comments/Tags end up on the wrong picture.
 260 ==> 140136 : Aspect ratio crop and selection widget improvements.
 261 ==> 131600 : Set tag for multiple selection of images.
-262 ==> 
+262 ==> 137545 : Helper lines / cross wanted.
+263 ==> 131170 : Add grid/auxiliary lines for perspective correction tool.
+264 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
