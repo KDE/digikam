@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imageeffect_solarize.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-02-14
@@ -7,7 +6,7 @@
  *               an image.
  *
  * Copyright 2004-2005 by Renchi Raju
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,24 +49,26 @@ public:
     ImageEffect_Solarize(QWidget *parent, QString title, QFrame* banner);
     ~ImageEffect_Solarize();
 
-protected:
+private:
+
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues();
 
     void solarize(double factor, uchar *data, int w, int h, bool sb);
 
-private:
+private slots:
 
-    QWidget              *m_parent;
+    void slotEffect();
+    void slotOk();
+
+private:
 
     QPushButton          *m_helpButton;
 
     KDoubleNumInput      *m_numInput;
     
     Digikam::ImageWidget *m_previewWidget;
-    
-private slots:
-
-    void slotEffect();
-    void slotOk();
 };
 
 }  // NameSpace DigikamSolarizeImagesPlugin

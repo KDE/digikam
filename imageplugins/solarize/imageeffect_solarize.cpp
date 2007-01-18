@@ -1,13 +1,12 @@
 /* ============================================================
- * File  : imageeffect_solarize.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-02-14
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-02-14
  * Description : a digiKam image plugin for to solarize
  *               an image.
  *
  * Copyright 2004-2005 by Renchi Raju
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,6 +32,7 @@
 
 // KDE includes.
 
+#include <kconfig.h>
 #include <knuminput.h>
 #include <klocale.h>
 #include <kcursor.h>
@@ -48,6 +48,7 @@
 #include "version.h"
 #include "bannerwidget.h"
 #include "imageeffect_solarize.h"
+#include "imageeffect_solarize.moc"
 
 namespace DigikamSolarizeImagesPlugin
 {
@@ -60,9 +61,9 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent, QString title, QFram
     KAboutData *about = new KAboutData("digikamimageplugins",
                             I18N_NOOP("Solarize a Photograph"),
                             digikamimageplugins_version,
-                            I18N_NOOP("A solarize image plugin for digiKam."),
+                            I18N_NOOP("A digiKam plugin to solarize a picture."),
                             KAboutData::License_GPL,
-                            "(c) 2004-2005, Renchi Raju\n(c) 2006, Gilles Caulier",
+                            "(c) 2004-2005, Renchi Raju\n(c) 2006-2007, Gilles Caulier",
                             0,
                             "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -228,6 +229,25 @@ void ImageEffect_Solarize::solarize(double factor, uchar *data, int w, int h, bo
     }
 }
 
+void ImageEffect_Solarize::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("solarizeimage Tool Dialog");
+    config->readDoubleNumEntry("Intensity", 0.0);
+}
+
+void ImageEffect_Solarize::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("solarizeimage Tool Dialog");
+    config->writeEntry("Intensity", m_numInput->value());
+    config->sync();
+}
+
+void ImageEffect_Solarize::resetValues()
+{
+    m_numInput->setValue(0.0);
+}
+
 }  // NameSpace DigikamSolarizeImagesPlugin
 
-#include "imageeffect_solarize.moc"
