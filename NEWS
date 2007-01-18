@@ -142,7 +142,7 @@ Image Plugins : New option in all Color corrections Tools to show under-exposed 
                 over-exposed areas of corrected picture before to apply corrections.
 Image Plugins : Brightness/Contrast/Gamma : settings value excursion are the same 
                 than Photoshop.
-Image Plugins : Perspective Tool : add a grid guide.
+Image Plugins : Perspective Tool : add a grid and vertical/horizontal guide lines.
 Image Plugins : Ratio-crop Tool : usability improvements from Jaromir Malenko.
 Image Plugins : Auto Color Correction Tool : add new filter to perform auto-exposure corrections.
 Image Plugins : Black & Whithe converter : Capabilty to remember settings between plugin
