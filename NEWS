@@ -128,12 +128,13 @@ General       : New native JPEG2000 image loader using Jasper library witch can 
 General       : New optimized layout to show Comments & Tags side bar contents.
 General       : Tags View from Comments & Tags side bar support drag & drop.
 
-AlbumGUI      : Improvement of popupmenu of Tags Filter View and Comment and Tags about
+AlbumGUI      : Improvement of popupmenu of Tags Filter View and Comment & Tags about
                 auto selection/deselection of parents/childs tags in Tags treeview.
 AlbumGUI      : Root album show a Welcome page for new users (like Kmail or Konqueror).
 AlbumGUI      : Video files can be previewed using an embedded instance of default KDE
                 media player.
 AlbumGUI      : Preview picture mode use a memory cache to speed-up loading.
+AlbumGUI      : Comments & Tags now support multiple selection of items to apply properties.
 
 Image Plugins : All tools render properly preview of image using Color Managed View.
 Image Plugins : All tools use the same keyboard shortcuts than PhotoShop.
@@ -445,6 +446,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 258 ==> 111446 : Bad behaviour when out of disk space.
 259 ==> 133516 : Tags set in Comments/Tags end up on the wrong picture.
 260 ==> 140136 : Aspect ratio crop and selection widget improvements.
-261 ==>  
+261 ==> 131600 : Set tag for multiple selection of images.
+262 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
