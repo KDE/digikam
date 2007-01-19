@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_distortionfx.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-02-11
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-02-11
  * Description : 
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 #include "bannerwidget.h"
 #include "imageeffect_distortionfx.h"
 #include "imageplugin_distortionfx.h"
+#include "imageplugin_distortionfx.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_distortionfx,
                             KGenericFactory<ImagePlugin_DistortionFX>("digikamimageplugin_distortionfx"));
@@ -67,5 +67,3 @@ void ImagePlugin_DistortionFX::slotDistortionFX()
     delete headerFrame;
 }
 
-
-#include "imageplugin_distortionfx.moc"

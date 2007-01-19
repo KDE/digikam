@@ -1,12 +1,11 @@
 /* ============================================================
- * File  : imageeffect_distortionfx.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2005-02-11
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2005-02-11
  * Description : 
  * 
  * Copyright 2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,6 +32,7 @@
 
 // KDE includes.
 
+#include <kconfig.h>
 #include <klocale.h>
 #include <kcursor.h>
 #include <kaboutdata.h>
@@ -47,6 +47,7 @@
 #include "version.h"
 #include "distortionfx.h"
 #include "imageeffect_distortionfx.h"
+#include "imageeffect_distortionfx.moc"
 
 namespace DigikamDistortionFXImagesPlugin
 {
@@ -65,7 +66,7 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent, QString titl
                                        I18N_NOOP("A digiKam image plugin to apply distortion effect to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2005, Gilles Caulier\n"
-                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg", 
+                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
@@ -216,11 +217,41 @@ void ImageEffect_DistortionFX::renderingFinished()
        }
 }
 
+void ImageEffect_DistortionFX::readUserSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("distortionfx Tool Dialog");
+
+    m_effectType->blockSignals(true);
+    m_iterationInput->blockSignals(true);
+    m_levelInput->blockSignals(true);
+
+    m_effectType->setCurrentItem(config->readNumEntry("EffectType", DistortionFX::FishEye));
+    m_iterationInput->setValue(config->readNumEntry("IterationAjustment", 10));
+    m_levelInput->setValue(config->readNumEntry("LevelAjustment", 50));
+
+    m_effectType->blockSignals(false);
+    m_iterationInput->blockSignals(false);
+    m_levelInput->blockSignals(false);
+
+    slotEffect();
+}
+
+void ImageEffect_DistortionFX::writeUserSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("distortionfx Tool Dialog");
+    config->writeEntry("EffectType", m_effectType->currentItem());
+    config->writeEntry("IterationAjustment", m_iterationInput->value());
+    config->writeEntry("LevelAjustment", m_levelInput->value());
+    config->sync();
+}
+
 void ImageEffect_DistortionFX::resetValues()
 {
     m_effectType->blockSignals(true);
-    m_effectType->setCurrentItem(0);
-    slotEffectTypeChanged(0);
+    m_effectType->setCurrentItem(DistortionFX::FishEye);
+    slotEffectTypeChanged(DistortionFX::FishEye);
     m_effectType->blockSignals(false);
 } 
 
@@ -355,4 +386,3 @@ void ImageEffect_DistortionFX::putFinalData(void)
 
 }  // NameSpace DigikamDistortionFXImagesPlugin
 
-#include "imageeffect_distortionfx.moc"
