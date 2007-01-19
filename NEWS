@@ -450,6 +450,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 261 ==> 131600 : Set tag for multiple selection of images.
 262 ==> 137545 : Helper lines / cross wanted.
 263 ==> 131170 : Add grid/auxiliary lines for perspective correction tool.
-264 ==> 
+264 ==> 138158 : Allow to edit multiple image tags/comments at same time.
+265 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
