@@ -144,6 +144,8 @@ Image Plugins : New option in all Color corrections Tools to show under-exposed 
                 over-exposed areas of corrected picture before to apply corrections.
 Image Plugins : Brightness/Contrast/Gamma : settings value excursion are the same 
                 than Photoshop.
+Image Plugins : Add Border Tool : add new option to preserve aspect ratio. Border Width can be set
+                in pixels or in percents accordinly with this setting.
 Image Plugins : Perspective Tool : add a grid and vertical/horizontal guide lines.
 Image Plugins : Ratio-crop Tool : usability improvements from Jaromir Malenko.
 Image Plugins : Auto Color Correction Tool : add new filter to perform auto-exposure corrections.
@@ -454,6 +456,8 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 263 ==> 131170 : Add grid/auxiliary lines for perspective correction tool.
 264 ==> 138158 : Allow to edit multiple image tags/comments at same time.
 265 ==> 140234 : Thumbnail click default action.
-266 ==>  
+266 ==> 135141 : Border size in pixel.
+267 ==> 137696 : Border extent should not follow image aspect ratio.
+268 ==>  
 
 ---------------------------------------------------------------------------------------------------- 
