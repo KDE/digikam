@@ -1,11 +1,11 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2005-05-25
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2005-05-25
  * Description : border threaded image filter.
  * 
  * Copyright 2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,25 +43,25 @@ public:
 
     enum BorderTypes 
     {
-    SolidBorder=0,
-    NiepceBorder,
-    BeveledBorder,
-    PineBorder,
-    WoodBorder,
-    PaperBorder,
-    ParqueBorder,
-    IceBorder,
-    LeafBorder,
-    MarbleBorder,
-    RainBorder,
-    CratersBorder,
-    DriedBorder,
-    PinkBorder,
-    StoneBorder,
-    ChalkBorder,
-    GraniteBorder,
-    RockBorder,
-    WallBorder
+        SolidBorder=0,
+        NiepceBorder,
+        BeveledBorder,
+        PineBorder,
+        WoodBorder,
+        PaperBorder,
+        ParqueBorder,
+        IceBorder,
+        LeafBorder,
+        MarbleBorder,
+        RainBorder,
+        CratersBorder,
+        DriedBorder,
+        PinkBorder,
+        StoneBorder,
+        ChalkBorder,
+        GraniteBorder,
+        RockBorder,
+        WallBorder
     };
 
 public:

@@ -1,12 +1,12 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2005-01-20
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2005-01-20
  * Description : a digiKam image plugin to add a border
  *               around an image.
  * 
  * Copyright 2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,26 +52,6 @@ public:
 
 private:
 
-    QLabel               *m_labelForeground;
-    QLabel               *m_labelBackground;
-
-    QComboBox            *m_borderType;
-    
-    QColor                m_solidColor;
-    QColor                m_niepceBorderColor;
-    QColor                m_niepceLineColor;
-    QColor                m_bevelUpperLeftColor; 
-    QColor                m_bevelLowerRightColor;
-    QColor                m_decorativeFirstColor; 
-    QColor                m_decorativeSecondColor;
-    
-    KIntNumInput         *m_borderRatio;
-    
-    KColorButton         *m_firstColorButton;
-    KColorButton         *m_secondColorButton;
-    
-private:
-
     QString getBorderPath(int border);
     
 private slots:
@@ -80,16 +60,36 @@ private slots:
     void slotColorForegroundChanged(const QColor &color);
     void slotColorBackgroundChanged(const QColor &color);
     void readUserSettings(void);
+
+private:
+
+    void writeUserSettings();
+    void resetValues();  
+    void prepareEffect();
+    void prepareFinal();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
+
+private:
+
+    QLabel       *m_labelForeground;
+    QLabel       *m_labelBackground;
+
+    QComboBox    *m_borderType;
     
-protected:
+    QColor        m_solidColor;
+    QColor        m_niepceBorderColor;
+    QColor        m_niepceLineColor;
+    QColor        m_bevelUpperLeftColor; 
+    QColor        m_bevelLowerRightColor;
+    QColor        m_decorativeFirstColor; 
+    QColor        m_decorativeSecondColor;
     
-    void writeUserSettings(void);
-    void prepareEffect(void);
-    void prepareFinal(void);
-    void putPreviewData(void);
-    void putFinalData(void);
-    void resetValues(void);   
-    void renderingFinished(void);    
+    KIntNumInput *m_borderPercent;
+    
+    KColorButton *m_firstColorButton;
+    KColorButton *m_secondColorButton;    
 };
 
 }  // NameSpace DigikamBorderImagesPlugin
