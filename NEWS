@@ -135,6 +135,8 @@ AlbumGUI      : Video files can be previewed using an embedded instance of defau
                 media player.
 AlbumGUI      : Preview picture mode use a memory cache to speed-up loading.
 AlbumGUI      : Comments & Tags now support multiple selection of items to apply properties.
+AlbumGUI      : New option to set the action to do when user right click on picture thumb: 
+                Load on Image Editor or Show an embeded preview.
 
 Image Plugins : All tools render properly preview of image using Color Managed View.
 Image Plugins : All tools use the same keyboard shortcuts than PhotoShop.
@@ -451,6 +453,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 262 ==> 137545 : Helper lines / cross wanted.
 263 ==> 131170 : Add grid/auxiliary lines for perspective correction tool.
 264 ==> 138158 : Allow to edit multiple image tags/comments at same time.
-265 ==> 
+265 ==> 140234 : Thumbnail click default action.
+266 ==>  
 
 ---------------------------------------------------------------------------------------------------- 
