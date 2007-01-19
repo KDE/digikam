@@ -1,12 +1,11 @@
 /* ============================================================
- * File  : imageeffect_blurfx.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2005-02-09
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2005-02-09
  * Description : 
  * 
  * Copyright 2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,6 +32,7 @@
 
 // KDE includes.
 
+#include <kconfig.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -43,7 +43,7 @@
 #include "version.h"
 #include "blurfx.h"
 #include "imageeffect_blurfx.h"
-
+#include "imageeffect_blurfx.moc"
 
 namespace DigikamBlurFXImagesPlugin
 {
@@ -62,7 +62,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent, QString title, QFrame* b
                                        "to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2005, Gilles Caulier\n"
-                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg",
+                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -185,6 +185,31 @@ void ImageEffect_BlurFX::renderingFinished(void)
           m_distanceLabel->setEnabled(false);
           break;
        }
+}
+
+void ImageEffect_BlurFX::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("blurfx Tool Dialog");
+    m_effectType->blockSignals(true);
+    m_distanceInput->blockSignals(true);
+    m_levelInput->blockSignals(true);
+    m_effectType->setCurrentItem(config->readNumEntry("EffectType", BlurFX::ZoomBlur));
+    m_distanceInput->setValue(config->readNumEntry("DistanceAjustment", 3));
+    m_levelInput->setValue(config->readNumEntry("LevelAjustment", 128));
+    m_effectType->blockSignals(false);
+    m_distanceInput->blockSignals(false);
+    m_levelInput->blockSignals(false);
+}
+
+void ImageEffect_BlurFX::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("blurfx Tool Dialog");
+    config->writeEntry("EffectType", m_effectType->currentItem());
+    config->writeEntry("DistanceAjustment", m_distanceInput->value());
+    config->writeEntry("LevelAjustment", m_levelInput->value());
+    config->sync();
 }
 
 void ImageEffect_BlurFX::resetValues()
@@ -356,4 +381,3 @@ void ImageEffect_BlurFX::putFinalData(void)
 
 }  // NameSpace DigikamBlurFXImagesPlugin
 
-#include "imageeffect_blurfx.moc"
