@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2006-06-13
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2006-06-13
  * Description : a widget to display an image preview
  *
- * Copyright 2006 Gilles Caulier
+ * Copyright 2006-2007 Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,16 +52,16 @@ public:
 
     ImagePreviewWidgetPriv()
     {
-        previewThread      = 0;
+        previewThread = 0;
     }
 
-    QString                       path;
+    QString            path;
 
-    QPixmap                       pixmap;
+    QPixmap            pixmap;
 
-    QImage                        preview;
+    QImage             preview;
 
-    PreviewLoadThread            *previewThread;
+    PreviewLoadThread *previewThread;
 };
 
 ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
@@ -84,14 +84,11 @@ ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
 ImagePreviewWidget::~ImagePreviewWidget()
 {
     delete d->previewThread;
-
     delete d;
 }
 
 void ImagePreviewWidget::setImagePath( const QString& path )
 {
-    if (path == d->path) return;
-
     setCursor( KCursor::waitCursor() );
     d->path = path;
 

@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2006-06-13
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2006-06-13
  * Description : a widget to display an image preview
  *
- * Copyright 2006 Gilles Caulier
+ * Copyright 2006-2007 Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,7 +59,7 @@ signals:
     void previewStarted();
     void previewComplete();
     void previewFailed();
-
+    
 public slots:
 
     void slotThemeChanged();
@@ -81,7 +81,6 @@ private:
 private:
 
     ImagePreviewWidgetPriv* d;
-
 };
 
 }  // NameSpace Digikam

@@ -126,12 +126,14 @@ void ImagePreviewView::slotPreviewComplete()
 {
     d->backButton->setEnabled(true);
     d->editButton->setEnabled(true);
+    emit previewLoadedSignal();
 }
 
 void ImagePreviewView::slotPreviewFailed()
 {
     d->backButton->setEnabled(true);
     d->editButton->setEnabled(false);
+    emit previewLoadedSignal();
 }
 
 }  // NameSpace Digikam

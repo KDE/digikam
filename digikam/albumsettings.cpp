@@ -5,7 +5,7 @@
  * Description : albums settings interface
  *
  * Copyright 2003-2004 by Renchi Raju and Gilles Caulier
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,8 +33,8 @@
 // Local includes.
 
 #include "thumbnailsize.h"
-#include "albumsettings.h"
 #include "rawfiles.h"
+#include "albumsettings.h"
 
 namespace Digikam
 {
@@ -106,8 +106,9 @@ public:
 
     KConfig     *config;
 
-    AlbumSettings::AlbumSortOrder albumSortOrder;
-    AlbumSettings::ImageSortOrder imageSortOrder;
+    AlbumSettings::AlbumSortOrder       albumSortOrder;
+    AlbumSettings::ImageSortOrder       imageSortOrder;
+    AlbumSettings::ItemRightClickAction itemRightClickAction;
 };
 
 
@@ -145,8 +146,9 @@ void AlbumSettings::init()
     d->albumCollectionNames.append(i18n("Miscellaneous"));
     d->albumCollectionNames.sort();
 
-    d->albumSortOrder  = AlbumSettings::ByFolder;
-    d->imageSortOrder  = AlbumSettings::ByIName;
+    d->albumSortOrder       = AlbumSettings::ByFolder;
+    d->imageSortOrder       = AlbumSettings::ByIName;
+    d->itemRightClickAction = AlbumSettings::ShowPreview;
 
     d->imageFilefilter = "*.png *.jpg *.jpeg *.jpe *.tif *.tiff *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
     d->movieFilefilter = "*.mpeg *.mpg *.mpo *.mpe *.avi *.mov *.wmf *.asf";
@@ -223,6 +225,10 @@ void AlbumSettings::readSettings()
 
     d->imageSortOrder = AlbumSettings::ImageSortOrder(config->readNumEntry("Image Sort Order",
                                                       (int)AlbumSettings::ByIName));
+
+    d->itemRightClickAction = AlbumSettings::ItemRightClickAction(config->readNumEntry(
+                                                                  "Item Right Click Action",
+                                                                  (int)AlbumSettings::ShowPreview));
 
     d->imageFilefilter = config->readEntry("File Filter", d->imageFilefilter);
     d->movieFilefilter = config->readEntry("Movie File Filter", d->movieFilefilter);
@@ -305,6 +311,7 @@ void AlbumSettings::saveSettings()
     config->writeEntry("Album Collections", d->albumCollectionNames);
     config->writeEntry("Album Sort Order", (int)d->albumSortOrder);
     config->writeEntry("Image Sort Order", (int)d->imageSortOrder);
+    config->writeEntry("Item Right Click Action", (int)d->itemRightClickAction);
     config->writeEntry("File Filter", d->imageFilefilter);
     config->writeEntry("Movie File Filter", d->movieFilefilter);
     config->writeEntry("Audio File Filter", d->audioFilefilter);
@@ -449,6 +456,16 @@ void AlbumSettings::setImageSortOrder(const ImageSortOrder order)
 AlbumSettings::ImageSortOrder AlbumSettings::getImageSortOrder() const
 {
     return d->imageSortOrder;
+}
+
+void AlbumSettings::setItemRightClickAction(const ItemRightClickAction action)
+{
+    d->itemRightClickAction = action;
+}
+
+AlbumSettings::ItemRightClickAction AlbumSettings::getItemRightClickAction() const
+{
+    return d->itemRightClickAction;
 }
 
 void AlbumSettings::setImageFileFilter(const QString& filter)

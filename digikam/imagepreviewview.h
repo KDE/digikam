@@ -50,6 +50,7 @@ signals:
 
     void backToAlbumSignal();
     void editImageSignal();   
+    void previewLoadedSignal();   
 
 public slots:
 

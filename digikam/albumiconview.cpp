@@ -449,7 +449,10 @@ void AlbumIconView::slotDoubleClicked(IconItem *item)
 {
     if (!item) return;
 
-    slotDisplayItem(static_cast<AlbumIconItem *>(item));
+    if (d->albumSettings->getItemRightClickAction() == AlbumSettings::ShowPreview)
+        signalPreviewItem(static_cast<AlbumIconItem *>(item));
+    else 
+        slotDisplayItem(static_cast<AlbumIconItem *>(item));
 }
 
 void AlbumIconView::slotRightButtonClicked(const QPoint& pos)
@@ -599,7 +602,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
         
     // Merge in the KIPI plugins actions ----------------------------
 
-    KIPI::PluginLoader* kipiPluginLoader = KIPI::PluginLoader::instance();
+    KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
     KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
     
     for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.begin();
@@ -845,7 +848,8 @@ void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
     if (!dialog.confirmDeleteList(urlList,
                                   DeleteDialogMode::Files,
                                   deletePermanently ?
-                                  DeleteDialogMode::NoChoiceDeletePermanently : DeleteDialogMode::NoChoiceTrash))
+                                  DeleteDialogMode::NoChoiceDeletePermanently :
+                                  DeleteDialogMode::NoChoiceTrash))
         return;
 
     bool useTrash = !dialog.shouldDelete();

@@ -5,7 +5,7 @@
  * Description : albums settings interface
  *
  * Copyright 2003-2004 by Renchi Raju and Gilles Caulier
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,6 +53,12 @@ public:
         ByIRating
     };
 
+    enum ItemRightClickAction
+    {
+        ShowPreview = 0,
+        StartEditor
+    };
+
     AlbumSettings();
     ~AlbumSettings();
 
@@ -81,6 +87,9 @@ public:
 
     void setImageSortOrder(const ImageSortOrder order);
     ImageSortOrder getImageSortOrder() const;
+
+    void setItemRightClickAction(const ItemRightClickAction action);
+    ItemRightClickAction getItemRightClickAction() const;
 
     void setImageFileFilter(const QString& filter);
     QString getImageFileFilter() const;

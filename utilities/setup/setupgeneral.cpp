@@ -1,11 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2003-02-01
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2003-02-01
  * Description : general configuration setup tab
  *
  * Copyright 2003-2004 by Renchi Raju
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,6 +50,7 @@
 
 #include "albumsettings.h"
 #include "setupgeneral.h"
+#include "setupgeneral.moc"
 
 namespace Digikam
 {
@@ -60,15 +61,16 @@ public:
 
     SetupGeneralPriv()
     {
-        albumPathEdit         = 0;
-        iconShowNameBox       = 0;
-        iconShowSizeBox       = 0;
-        iconShowDateBox       = 0;
-        iconShowModDateBox    = 0;
-        iconShowResolutionBox = 0;
-        iconShowCommentsBox   = 0;
-        iconShowTagsBox       = 0;
-        iconShowRatingBox     = 0;
+        albumPathEdit            = 0;
+        iconShowNameBox          = 0;
+        iconShowSizeBox          = 0;
+        iconShowDateBox          = 0;
+        iconShowModDateBox       = 0;
+        iconShowResolutionBox    = 0;
+        iconShowCommentsBox      = 0;
+        iconShowTagsBox          = 0;
+        iconShowRatingBox        = 0;
+        rightClickActionComboBox = 0;
     }
 
     QCheckBox     *iconShowNameBox;
@@ -79,6 +81,8 @@ public:
     QCheckBox     *iconShowCommentsBox;
     QCheckBox     *iconShowTagsBox;
     QCheckBox     *iconShowRatingBox;
+
+    QComboBox     *rightClickActionComboBox;
 
     KURLRequester *albumPathEdit;
 
@@ -152,7 +156,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     d->iconShowTagsBox = new QCheckBox(iconTextGroup);
     d->iconShowTagsBox->setText(i18n("Show digiKam &tags"));
     QWhatsThis::add( d->iconShowTagsBox, i18n("<p>Set this option to show digiKam tags "
-                                                  "below image thumbnail."));
+                                              "below image thumbnail."));
     tagSettingsLayout->addWidget(d->iconShowTagsBox, 5, 0);
 
     d->iconShowRatingBox = new QCheckBox(iconTextGroup);
@@ -166,6 +170,13 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     QWhatsThis::add( d->iconShowResolutionBox, i18n("<p>Set this option to show picture size in pixels "
                                                     "below image thumbnail."));
     tagSettingsLayout->addWidget(d->iconShowResolutionBox, 7, 0);
+
+    QLabel *rightClickLabel     = new QLabel(i18n("Right Click Action:"), iconTextGroup);
+    d->rightClickActionComboBox = new QComboBox(false, iconTextGroup);
+    d->rightClickActionComboBox->insertItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
+    d->rightClickActionComboBox->insertItem(i18n("Start image editor"), AlbumSettings::StartEditor);
+    tagSettingsLayout->addMultiCellWidget(rightClickLabel, 8 ,8, 0, 0);
+    tagSettingsLayout->addMultiCellWidget(d->rightClickActionComboBox, 8, 8, 1, 3);
 
     layout->addWidget(iconTextGroup);
 
@@ -198,6 +209,9 @@ void SetupGeneral::applySettings()
     settings->setIconShowComments(d->iconShowCommentsBox->isChecked());
     settings->setIconShowRating(d->iconShowRatingBox->isChecked());
 
+    settings->setItemRightClickAction((AlbumSettings::ItemRightClickAction)
+                                      d->rightClickActionComboBox->currentItem());
+
     settings->saveSettings();
 }
 
@@ -217,6 +231,8 @@ void SetupGeneral::readSettings()
     d->iconShowResolutionBox->setChecked(settings->getIconShowResolution());
     d->iconShowCommentsBox->setChecked(settings->getIconShowComments());
     d->iconShowRatingBox->setChecked(settings->getIconShowRating());
+
+    d->rightClickActionComboBox->setCurrentItem((int)settings->getItemRightClickAction());
 }
 
 void SetupGeneral::slotChangeAlbumPath(const QString &result)
@@ -256,4 +272,3 @@ void SetupGeneral::slotPathEdited(const QString& newPath)
 
 }  // namespace Digikam
 
-#include "setupgeneral.moc"

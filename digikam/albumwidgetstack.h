@@ -4,7 +4,7 @@
  * Description : A widget stack to embedded album content view
  *               or the current image preview.
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -73,6 +73,10 @@ signals:
 public slots:
 
     void slotEscapePreview();
+
+private slots:
+
+    void slotPreviewLoaded();
 
 private:
 

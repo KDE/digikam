@@ -4,7 +4,7 @@
  * Description : A widget stack to embedded album content view
  *               or the current image preview.
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -89,6 +89,9 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
 
     connect(d->imagePreviewView, SIGNAL( editImageSignal() ),
             this, SIGNAL( editImageSignal() ) );
+
+    connect(d->imagePreviewView, SIGNAL( previewLoadedSignal() ),
+            this, SLOT( slotPreviewLoaded() ) );
 }
 
 AlbumWidgetStack::~AlbumWidgetStack()
@@ -140,8 +143,11 @@ void AlbumWidgetStack::setPreviewItem(const KURL& url)
             if (previewMode() == MediaPlayerMode)
                 setPreviewItem();
 
-            setPreviewMode(AlbumWidgetStack::PreviewImageMode);
             imagePreviewWidget()->setImagePath(url.path());
+
+            // NOTE: No need to toggle imediatly in PreviewImageMode here, 
+            // because we will recieve a signal for that when the image preview will be loaded.
+            // This will prevent a flicker effect with the old image preview loaded in stack.
         }
     }
 }
@@ -161,6 +167,11 @@ void AlbumWidgetStack::setPreviewMode(int mode)
         setPreviewItem();
 
     raiseWidget(mode);
+}
+
+void AlbumWidgetStack::slotPreviewLoaded()
+{
+    setPreviewMode(AlbumWidgetStack::PreviewImageMode);
 }
 
 }  // namespace Digikam
