@@ -170,7 +170,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
                                                     "below image thumbnail."));
     tagSettingsLayout->addMultiCellWidget(d->iconShowResolutionBox, 7, 7, 0, 1);
 
-    QLabel *rightClickLabel     = new QLabel(i18n("Right click action:"), iconTextGroup);
+    QLabel *rightClickLabel     = new QLabel(i18n("Click action:"), iconTextGroup);
     d->rightClickActionComboBox = new QComboBox(false, iconTextGroup);
     d->rightClickActionComboBox->insertItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
     d->rightClickActionComboBox->insertItem(i18n("Start image editor"), AlbumSettings::StartEditor);
