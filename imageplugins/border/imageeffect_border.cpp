@@ -27,9 +27,11 @@
 #include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qcombobox.h>
+#include <qcheckbox.h>
 
 // KDE includes.
 
+#include <kseparator.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kiconloader.h>
@@ -79,8 +81,8 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent, QString title, QFrame* b
     
     // -------------------------------------------------------------
     
-    QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 2, marginHint(), spacingHint());
+    QWidget *gboxSettings     = new QWidget(plainPage());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 10, 2, marginHint(), spacingHint());
                                                   
     QLabel *label1 = new QLabel(i18n("Type:"), gboxSettings);
     
@@ -106,35 +108,76 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent, QString title, QFrame* b
     m_borderType->insertItem( i18n("Decorative Rock") );
     m_borderType->insertItem( i18n("Decorative Wall") );
     QWhatsThis::add( m_borderType, i18n("<p>Select here the border type to add around the image."));
+
+    KSeparator *line1 = new KSeparator(Horizontal, gboxSettings);
+
+    // -------------------------------------------------------------------
     
-    QLabel *label2 = new QLabel(i18n("Width (%):"), gboxSettings);
-    m_borderPercent  = new KIntNumInput(gboxSettings);
+    m_preserveAspectRatio = new QCheckBox(gboxSettings);
+    m_preserveAspectRatio->setText(i18n("Preserve Aspect Ratio"));
+    QWhatsThis::add(m_preserveAspectRatio, i18n("Enable this option if you want to preserve aspect "
+                                                "ratio of image. If enabled, the border width will be "
+                                                "in percent of image size, else the border width will "
+                                                "in pixels."));
+
+    m_labelBorderPercent  = new QLabel(i18n("Width (%):"), gboxSettings);
+    m_borderPercent       = new KIntNumInput(gboxSettings);
     m_borderPercent->setRange(1, 50, 1, true); 
-    QWhatsThis::add( m_borderPercent, i18n("<p>Set here the border width in percents of image size."));
+    QWhatsThis::add(m_borderPercent, i18n("<p>Set here the border width in percents of image size."));
             
+    m_labelBorderWidth = new QLabel(i18n("Width (pixels):"), gboxSettings);
+    m_borderWidth      = new KIntNumInput(gboxSettings);
+    QWhatsThis::add(m_borderWidth, i18n("<p>Set here the border width in pixels to add around the image."));
+
+    Digikam::ImageIface iface(0, 0);
+    int w = iface.originalWidth();
+    int h = iface.originalHeight();
+    
+    if (w > h) 
+       m_borderWidth->setRange(1, h/2, 1, true);       
+    else 
+       m_borderWidth->setRange(1, w/2, 1, true);
+
+    KSeparator *line2 = new KSeparator(Horizontal, gboxSettings);
+
+    // -------------------------------------------------------------------
+
     m_labelForeground   = new QLabel(gboxSettings);
     m_firstColorButton  = new KColorButton( QColor::QColor( 192, 192, 192 ), gboxSettings );
     m_labelBackground   = new QLabel(gboxSettings);
     m_secondColorButton = new KColorButton( QColor::QColor( 128, 128, 128 ), gboxSettings );
 
+    // -------------------------------------------------------------------
+
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 2);
     gridSettings->addMultiCellWidget(m_borderType, 1, 1, 0, 2);
-    gridSettings->addMultiCellWidget(label2, 2, 2, 0, 2);
-    gridSettings->addMultiCellWidget(m_borderPercent, 3, 3, 0, 2);
-    gridSettings->addMultiCellWidget(m_labelForeground, 4, 4, 0, 0);
-    gridSettings->addMultiCellWidget(m_firstColorButton, 4, 4, 1, 2);
-    gridSettings->addMultiCellWidget(m_labelBackground, 5, 5, 0, 0);
-    gridSettings->addMultiCellWidget(m_secondColorButton, 5, 5, 1, 2);    
+    gridSettings->addMultiCellWidget(line1, 2, 2, 0, 2);
+    gridSettings->addMultiCellWidget(m_preserveAspectRatio, 3, 3, 0, 2);
+    gridSettings->addMultiCellWidget(m_labelBorderPercent, 4, 4, 0, 2);
+    gridSettings->addMultiCellWidget(m_borderPercent, 5, 5, 0, 2);
+    gridSettings->addMultiCellWidget(m_labelBorderWidth, 6, 6, 0, 2);
+    gridSettings->addMultiCellWidget(m_borderWidth, 7, 7, 0, 2);
+    gridSettings->addMultiCellWidget(line2, 8, 8, 0, 2);
+    gridSettings->addMultiCellWidget(m_labelForeground, 9, 9, 0, 0);
+    gridSettings->addMultiCellWidget(m_firstColorButton, 9, 9, 1, 2);
+    gridSettings->addMultiCellWidget(m_labelBackground, 10, 10, 0, 0);
+    gridSettings->addMultiCellWidget(m_secondColorButton, 10, 10, 1, 2);    
 
     setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------
+
+    connect(m_preserveAspectRatio, SIGNAL(toggled(bool)),
+            this, SLOT(slotPreserveAspectRatioToggled(bool)));
     
     connect(m_borderType, SIGNAL(activated(int)),
             this, SLOT(slotBorderTypeChanged(int)));
             
     connect(m_borderPercent, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));            
+
+    connect(m_borderWidth, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimer()));  
 
     connect(m_firstColorButton, SIGNAL(changed(const QColor &)),
             this, SLOT(slotColorForegroundChanged(const QColor &)));            
@@ -151,19 +194,23 @@ void ImageEffect_Border::readUserSettings(void)
 {
     m_borderType->blockSignals(true);
     m_borderPercent->blockSignals(true);
+    m_borderWidth->blockSignals(true);
     m_firstColorButton->blockSignals(true);
     m_secondColorButton->blockSignals(true);
-    
+    m_preserveAspectRatio->blockSignals(true);
+
     KConfig *config = kapp->config();
     config->setGroup("border Tool Dialog");
     
-    m_borderType->setCurrentItem( config->readNumEntry("Border Type", Border::SolidBorder) );
-    m_borderPercent->setValue( config->readNumEntry("Border Width", 10) );
+    m_borderType->setCurrentItem(config->readNumEntry("Border Type", Border::SolidBorder));
+    m_borderPercent->setValue(config->readNumEntry("Border Percent", 10) );
+    m_borderWidth->setValue(config->readNumEntry("Border Width", 100) );
+    m_preserveAspectRatio->setChecked(config->readBoolEntry("Preserve Aspect Ratio", true) );
     
-    QColor black( 0, 0, 0 );
-    QColor white( 255, 255, 255 );
-    QColor gray1( 192, 192, 192 );
-    QColor gray2( 128, 128, 128 );
+    QColor black(0, 0, 0);
+    QColor white(255, 255, 255);
+    QColor gray1(192, 192, 192);
+    QColor gray2(128, 128, 128);
     
     m_solidColor = config->readColorEntry("Solid Color", &black);
     m_niepceBorderColor = config->readColorEntry("Niepce Border Color", &white);
@@ -175,8 +222,10 @@ void ImageEffect_Border::readUserSettings(void)
     
     m_borderType->blockSignals(false);
     m_borderPercent->blockSignals(false);
+    m_borderWidth->blockSignals(false);
     m_firstColorButton->blockSignals(false);
     m_secondColorButton->blockSignals(false);
+    m_preserveAspectRatio->blockSignals(false);
               
     slotBorderTypeChanged(m_borderType->currentItem());
 }
@@ -186,45 +235,64 @@ void ImageEffect_Border::writeUserSettings(void)
     KConfig *config = kapp->config();
     config->setGroup("border Tool Dialog");
 
-    config->writeEntry( "Border Type", m_borderType->currentItem() );
-    config->writeEntry( "Border Width", m_borderPercent->value() );
+    config->writeEntry("Border Type", m_borderType->currentItem());
+    config->writeEntry("Border Percent", m_borderPercent->value());
+    config->writeEntry("Border Width", m_borderWidth->value());
+    config->writeEntry("Preserve Aspect Ratio", m_preserveAspectRatio->isChecked());
     
-    config->writeEntry( "Solid Color", m_solidColor );
-    config->writeEntry( "Niepce Border Color", m_niepceBorderColor );
-    config->writeEntry( "Niepce Line Color", m_niepceLineColor );
-    config->writeEntry( "Bevel Upper Left Color", m_bevelUpperLeftColor );
-    config->writeEntry( "Bevel Lower Right Color", m_bevelLowerRightColor );
-    config->writeEntry( "Decorative First Color", m_decorativeFirstColor );
-    config->writeEntry( "Decorative Second Color", m_decorativeSecondColor );
+    config->writeEntry("Solid Color", m_solidColor);
+    config->writeEntry("Niepce Border Color", m_niepceBorderColor);
+    config->writeEntry("Niepce Line Color", m_niepceLineColor);
+    config->writeEntry("Bevel Upper Left Color", m_bevelUpperLeftColor);
+    config->writeEntry("Bevel Lower Right Color", m_bevelLowerRightColor);
+    config->writeEntry("Decorative First Color", m_decorativeFirstColor);
+    config->writeEntry("Decorative Second Color", m_decorativeSecondColor);
     
     config->sync();
-}
-
-void ImageEffect_Border::renderingFinished()
-{
-    m_borderType->setEnabled(true);
-    m_borderPercent->setEnabled(true);
-    m_firstColorButton->setEnabled(true);
-    m_secondColorButton->setEnabled(true);
 }
 
 void ImageEffect_Border::resetValues()
 {
     m_borderType->blockSignals(true);
     m_borderPercent->blockSignals(true);
+    m_borderWidth->blockSignals(true);
     m_firstColorButton->blockSignals(true);
     m_secondColorButton->blockSignals(true);
+    m_preserveAspectRatio->blockSignals(true);
         
     m_borderType->setCurrentItem(Border::SolidBorder); 
     m_borderPercent->setValue(10);
-    m_solidColor = QColor( 0, 0, 0 );
+    m_borderWidth->setValue(100);
+    m_preserveAspectRatio->setChecked(true);
+
+    m_solidColor            = QColor(0, 0, 0);
+    m_niepceBorderColor     = QColor(255, 255, 255);
+    m_niepceLineColor       = QColor(0, 0, 0);
+    m_bevelUpperLeftColor   = QColor(192, 192, 192);
+    m_bevelLowerRightColor  = QColor(128, 128, 128); 
+    m_decorativeFirstColor  = QColor(0, 0, 0);
+    m_decorativeSecondColor = QColor(0, 0, 0);
 
     m_borderType->blockSignals(false);
     m_borderPercent->blockSignals(false);
+    m_borderWidth->blockSignals(false);
     m_firstColorButton->blockSignals(false);
     m_secondColorButton->blockSignals(false);
+    m_preserveAspectRatio->blockSignals(false);
+
     slotBorderTypeChanged(Border::SolidBorder);
 } 
+
+void ImageEffect_Border::renderingFinished()
+{
+    m_preserveAspectRatio->setEnabled(true);
+    m_borderType->setEnabled(true);
+    m_borderPercent->setEnabled(true);
+    m_borderWidth->setEnabled(true);
+    m_firstColorButton->setEnabled(true);
+    m_secondColorButton->setEnabled(true);
+    toggleBorderSlider(m_preserveAspectRatio->isChecked());
+}
 
 void ImageEffect_Border::slotColorForegroundChanged(const QColor &color)
 {
@@ -368,44 +436,66 @@ void ImageEffect_Border::prepareEffect()
 {
     m_borderType->setEnabled(false);
     m_borderPercent->setEnabled(false);
+    m_borderWidth->setEnabled(false);
     m_firstColorButton->setEnabled(false);
     m_secondColorButton->setEnabled(false);
+    m_preserveAspectRatio->setEnabled(false);
 
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
-    int orgWidth  = iface->originalWidth();
-    int orgHeight = iface->originalHeight();
-
-    int w           = iface->previewWidth();
-    int h           = iface->previewHeight();
-    bool sixteenBit = iface->previewSixteenBit();
-    uchar *data     = iface->getPreviewImage();
+    int orgWidth               = iface->originalWidth();
+    int orgHeight              = iface->originalHeight();
+    int w                      = iface->previewWidth();
+    int h                      = iface->previewHeight();
+    bool sixteenBit            = iface->previewSixteenBit();
+    uchar *data                = iface->getPreviewImage();
     Digikam::DImg previewImage(w, h, sixteenBit,
                                iface->previewHasAlpha(), data);
     delete [] data;
 
     int borderType  = m_borderType->currentItem();
+    float ratio     = (float)w/(float)orgWidth;
+    int borderWidth = (int)((float)m_borderWidth->value()*ratio);
     QString border  = getBorderPath( m_borderType->currentItem() );
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new Border(&previewImage, this, orgWidth, orgHeight,
-                                  border, borderType, m_borderPercent->value()/100.0, 
-                                  Digikam::DColor(m_solidColor, sixteenBit),
-                                  Digikam::DColor(m_niepceBorderColor, sixteenBit),
-                                  Digikam::DColor(m_niepceLineColor, sixteenBit),
-                                  Digikam::DColor(m_bevelUpperLeftColor, sixteenBit),
-                                  Digikam::DColor(m_bevelLowerRightColor, sixteenBit),
-                                  Digikam::DColor(m_decorativeFirstColor, sixteenBit),
-                                  Digikam::DColor(m_decorativeSecondColor, sixteenBit)) );
+    if (m_preserveAspectRatio->isChecked())
+    {
+        m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
+                           new Border(&previewImage, this, orgWidth, orgHeight,
+                                      border, borderType, m_borderPercent->value()/100.0, 
+                                      Digikam::DColor(m_solidColor, sixteenBit),
+                                      Digikam::DColor(m_niepceBorderColor, sixteenBit),
+                                      Digikam::DColor(m_niepceLineColor, sixteenBit),
+                                      Digikam::DColor(m_bevelUpperLeftColor, sixteenBit),
+                                      Digikam::DColor(m_bevelLowerRightColor, sixteenBit),
+                                      Digikam::DColor(m_decorativeFirstColor, sixteenBit),
+                                      Digikam::DColor(m_decorativeSecondColor, sixteenBit)) );
+    }
+    else
+    {
+        m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
+                           new Border(&previewImage, this, orgWidth, orgHeight,
+                                      border, borderType, borderWidth, 
+                                      (int)(20.0*ratio), (int)(20.0*ratio), 3,
+                                      Digikam::DColor(m_solidColor, sixteenBit),
+                                      Digikam::DColor(m_niepceBorderColor, sixteenBit),
+                                      Digikam::DColor(m_niepceLineColor, sixteenBit),
+                                      Digikam::DColor(m_bevelUpperLeftColor, sixteenBit),
+                                      Digikam::DColor(m_bevelLowerRightColor, sixteenBit),
+                                      Digikam::DColor(m_decorativeFirstColor, sixteenBit),
+                                      Digikam::DColor(m_decorativeSecondColor, sixteenBit)) );
+    }
 }
 
 void ImageEffect_Border::prepareFinal()
 {
     m_borderType->setEnabled(false);
     m_borderPercent->setEnabled(false);
+    m_borderWidth->setEnabled(false);
     m_firstColorButton->setEnabled(false);
     m_secondColorButton->setEnabled(false);
 
     int borderType    = m_borderType->currentItem();
+    int borderWidth   = m_borderWidth->value();  
     float borderRatio = m_borderPercent->value()/100.0;  
     QString border    = getBorderPath( m_borderType->currentItem() );
 
@@ -413,22 +503,37 @@ void ImageEffect_Border::prepareFinal()
     int orgWidth    = iface.originalWidth();
     int orgHeight   = iface.originalHeight();
     bool sixteenBit = iface.previewSixteenBit();
-
-    uchar *data = iface.getOriginalImage();
+    uchar *data     = iface.getOriginalImage();
     Digikam::DImg orgImage(orgWidth, orgHeight, sixteenBit,
                            iface.originalHasAlpha(), data);
     delete [] data;
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new Border(&orgImage, this, orgWidth, orgHeight,
-                                  border, borderType, borderRatio,
-                                  Digikam::DColor(m_solidColor, sixteenBit),
-                                  Digikam::DColor(m_niepceBorderColor, sixteenBit),
-                                  Digikam::DColor(m_niepceLineColor, sixteenBit),
-                                  Digikam::DColor(m_bevelUpperLeftColor, sixteenBit),
-                                  Digikam::DColor(m_bevelLowerRightColor, sixteenBit),
-                                  Digikam::DColor(m_decorativeFirstColor, sixteenBit),
-                                  Digikam::DColor(m_decorativeSecondColor, sixteenBit)) );
+    if (m_preserveAspectRatio->isChecked())
+    {
+        m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
+                           new Border(&orgImage, this, orgWidth, orgHeight,
+                                    border, borderType, borderRatio,
+                                    Digikam::DColor(m_solidColor, sixteenBit),
+                                    Digikam::DColor(m_niepceBorderColor, sixteenBit),
+                                    Digikam::DColor(m_niepceLineColor, sixteenBit),
+                                    Digikam::DColor(m_bevelUpperLeftColor, sixteenBit),
+                                    Digikam::DColor(m_bevelLowerRightColor, sixteenBit),
+                                    Digikam::DColor(m_decorativeFirstColor, sixteenBit),
+                                    Digikam::DColor(m_decorativeSecondColor, sixteenBit)) );
+    }
+    else
+    {
+        m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
+                           new Border(&orgImage, this, orgWidth, orgHeight,
+                                    border, borderType, borderWidth, 15, 15, 10,
+                                    Digikam::DColor(m_solidColor, sixteenBit),
+                                    Digikam::DColor(m_niepceBorderColor, sixteenBit),
+                                    Digikam::DColor(m_niepceLineColor, sixteenBit),
+                                    Digikam::DColor(m_bevelUpperLeftColor, sixteenBit),
+                                    Digikam::DColor(m_bevelLowerRightColor, sixteenBit),
+                                    Digikam::DColor(m_decorativeFirstColor, sixteenBit),
+                                    Digikam::DColor(m_decorativeSecondColor, sixteenBit)) );
+    }
 }
 
 void ImageEffect_Border::putPreviewData(void)
@@ -537,6 +642,20 @@ QString ImageEffect_Border::getBorderPath(int border)
     KGlobal::dirs()->addResourceType(pattern.ascii(), KGlobal::dirs()->kde_default("data") +
                                      "digikamimageplugins/data");
     return (KGlobal::dirs()->findResourceDir(pattern.ascii(), pattern + ".png") + pattern + ".png" );
+}
+
+void ImageEffect_Border::slotPreserveAspectRatioToggled(bool b)
+{
+    toggleBorderSlider(b);
+    slotTimer();
+}
+
+void ImageEffect_Border::toggleBorderSlider(bool b)
+{
+    m_borderPercent->setEnabled(b);
+    m_borderWidth->setEnabled(!b);
+    m_labelBorderPercent->setEnabled(b);
+    m_labelBorderWidth->setEnabled(!b);
 }
 
 }  // NameSpace DigikamBorderImagesPlugin

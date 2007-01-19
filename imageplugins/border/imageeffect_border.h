@@ -34,6 +34,7 @@
 
 class QComboBox;
 class QLabel;
+class QCheckBox;
 
 class KIntNumInput;
 class KColorButton;
@@ -56,10 +57,11 @@ private:
     
 private slots:
 
+    void slotPreserveAspectRatioToggled(bool);
     void slotBorderTypeChanged(int borderType);
     void slotColorForegroundChanged(const QColor &color);
     void slotColorBackgroundChanged(const QColor &color);
-    void readUserSettings(void);
+    void readUserSettings();
 
 private:
 
@@ -70,13 +72,18 @@ private:
     void putPreviewData();
     void putFinalData();
     void renderingFinished();
+    void toggleBorderSlider(bool b);
 
 private:
 
+    QLabel       *m_labelBorderPercent;
+    QLabel       *m_labelBorderWidth;
     QLabel       *m_labelForeground;
     QLabel       *m_labelBackground;
 
     QComboBox    *m_borderType;
+
+    QCheckBox    *m_preserveAspectRatio;
     
     QColor        m_solidColor;
     QColor        m_niepceBorderColor;
@@ -87,6 +94,7 @@ private:
     QColor        m_decorativeSecondColor;
     
     KIntNumInput *m_borderPercent;
+    KIntNumInput *m_borderWidth;
     
     KColorButton *m_firstColorButton;
     KColorButton *m_secondColorButton;    

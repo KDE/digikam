@@ -66,8 +66,21 @@ public:
 
 public:
 
+    /** Constructor using settings to preserve aspect ratio of image. */
     Border(Digikam::DImg *orgImage, QObject *parent=0, int orgWidth=0, int orgHeight=0,
-           QString borderPath=QString::null, int borderType=SolidBorder, float borderRatio=0.1,
+           QString borderPath=QString::null, int borderType=SolidBorder, float borderPercent=0.1,
+           Digikam::DColor solidColor = Digikam::DColor(),
+           Digikam::DColor niepceBorderColor = Digikam::DColor(),
+           Digikam::DColor niepceLineColor = Digikam::DColor(),
+           Digikam::DColor bevelUpperLeftColor = Digikam::DColor(),
+           Digikam::DColor bevelLowerRightColor = Digikam::DColor(),
+           Digikam::DColor decorativeFirstColor = Digikam::DColor(),
+           Digikam::DColor decorativeSecondColor = Digikam::DColor());
+
+    /** Constructor using settings to not-preserve aspect ratio of image. */
+    Border(Digikam::DImg *orgImage, QObject *parent=0, int orgWidth=0, int orgHeight=0,
+           QString borderPath=QString::null, int borderType=SolidBorder,
+           int borderWidth1=100, int borderWidth2=20, int borderWidth3=20, int borderWidth4=10,
            Digikam::DColor solidColor = Digikam::DColor(),
            Digikam::DColor niepceBorderColor = Digikam::DColor(),
            Digikam::DColor niepceLineColor = Digikam::DColor(),
@@ -80,16 +93,47 @@ public:
 
 private:  
 
-    int     m_orgWidth;
-    int     m_orgHeight;
+    virtual void filterImage(void);
     
-    int     m_borderType;
-    int     m_borderMainWidth;
-    int     m_border2ndWidth;
+    
+    /** Methods to preserve aspect ratio of image. */
+    void solid(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth);
+    void niepce(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth, 
+                const Digikam::DColor &bg, int lineWidth);
+    void bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor, 
+               const Digikam::DColor &btmColor, int borderWidth);
+    void pattern(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth, const Digikam::DColor &firstColor, 
+                 const Digikam::DColor &secondColor, int firstWidth, int secondWidth);
 
-    float   m_orgRatio;
+    /** Methods to not-preserve aspect ratio of image. */
+    void solid2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth);
+    void niepce2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth, 
+                 const Digikam::DColor &bg, int lineWidth);
+    void bevel2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor, 
+                const Digikam::DColor &btmColor, int borderWidth);
+    void pattern2(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth, const Digikam::DColor &firstColor, 
+                  const Digikam::DColor &secondColor, int firstWidth, int secondWidth);
 
-    QString m_borderPath;
+private:  
+
+    bool            m_preserveAspectRatio;
+
+    int             m_orgWidth;
+    int             m_orgHeight;
+
+    int             m_borderType;
+    
+    int             m_borderWidth1;
+    int             m_borderWidth2;
+    int             m_borderWidth3;
+    int             m_borderWidth4;
+
+    int             m_borderMainWidth;
+    int             m_border2ndWidth;
+
+    float           m_orgRatio;
+
+    QString         m_borderPath;
     
     Digikam::DColor m_solidColor;
     Digikam::DColor m_niepceBorderColor;
@@ -98,18 +142,6 @@ private:
     Digikam::DColor m_bevelLowerRightColor;
     Digikam::DColor m_decorativeFirstColor; 
     Digikam::DColor m_decorativeSecondColor;
-    
-private:  
-
-    virtual void filterImage(void);
-    
-    void solid(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth);
-    void niepce(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth, 
-                const Digikam::DColor &bg, int lineWidth);
-    void bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor, 
-               const Digikam::DColor &btmColor, int borderWidth);
-    void pattern(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth, const Digikam::DColor &firstColor, 
-                 const Digikam::DColor &secondColor, int firstWidth, int secondWidth);
 };    
 
 }  // NameSpace DigikamBorderImagesPlugin
