@@ -204,7 +204,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_embeddProfileBox = new QCheckBox(generalOptions);
     m_embeddProfileBox->setChecked(true);
-    m_embeddProfileBox->setText(i18n("Embed profile"));
+    m_embeddProfileBox->setText(i18n("Assign profile"));
     QWhatsThis::add(m_embeddProfileBox, i18n("<p>You can use this option to embed "
                                              "the selected work-space color profile into the image.</p>"));
 
