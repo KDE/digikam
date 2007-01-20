@@ -44,7 +44,7 @@ class IOFileSettingsContainer;
 class LoadingDescription;
 class DImgInterfacePrivate;
 
-class DImgInterface : public QObject
+class DIGIKAM_EXPORT DImgInterface : public QObject
 {
     Q_OBJECT
 
