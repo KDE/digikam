@@ -138,6 +138,7 @@ AlbumGUI      : Comments & Tags now support multiple selection of items to apply
 AlbumGUI      : New option to set the action to do when user right click on picture thumb: 
                 Load on Image Editor or Show an embeded preview.
 
+Image Plugins : All tools remember settings between sessions.
 Image Plugins : All tools render properly preview of image using Color Managed View.
 Image Plugins : All tools use the same keyboard shortcuts than PhotoShop.
 Image Plugins : New option in all Color corrections Tools to show under-exposed and
