@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_superimpose.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-01-04
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-01-04
  * Description : 
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,7 +17,6 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
 
 #ifndef IMAGEPLUGIN_SUPERIMPOSE_H
 #define IMAGEPLUGIN_SUPERIMPOSE_H
@@ -41,14 +39,13 @@ public:
 
     void setEnabledActions(bool enable);
 
-private:
-
-    KAction *m_superimposeAction;
-   
 private slots:
 
     void slotSuperImpose();
 
+private:
+
+    KAction *m_superimposeAction;
 };
     
 #endif /* IMAGEPLUGIN_SUPERIMPOSE_H */

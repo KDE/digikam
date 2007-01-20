@@ -1,12 +1,11 @@
 /* ============================================================
- * File  : superimposewidget.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-01-04
  * Description : 
  * 
  * Copyright 2005 Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -77,25 +76,6 @@ public slots:
     void slotEditModeChanged(int mode);
     void slotSetCurrentTemplate(const KURL& url);
 
-private:
-
-    int            m_w;
-    int            m_h;
-
-    int            m_xpos;
-    int            m_ypos;
-    int            m_editMode;
-    float          m_zoomFactor;
-
-    QPixmap       *m_pixmap;            // For image region selection manipulations.
-
-    Digikam::DImg  m_template;          // Full template data.
-    Digikam::DImg  m_templateScaled;    // Template scaled to preview widget
-
-
-    QRect          m_rect;              // For mouse drag position.
-    QRect          m_currentSelection;  // Region selection in image displayed in the widget.
-
 protected:
 
     void paintEvent( QPaintEvent *e );
@@ -108,6 +88,24 @@ protected:
     void moveSelection(int x, int y);
     void makePixmap(void);
     void setEditModeCursor();
+
+private:
+
+    int            m_w;
+    int            m_h;
+
+    int            m_xpos;
+    int            m_ypos;
+    int            m_editMode;
+    float          m_zoomFactor;
+
+    QPixmap       *m_pixmap;            // For image region selection manipulations.
+
+    QRect          m_rect;              // For mouse drag position.
+    QRect          m_currentSelection;  // Region selection in image displayed in the widget.
+ 
+    Digikam::DImg  m_template;          // Full template data.
+    Digikam::DImg  m_templateScaled;    // Template scaled to preview widget
 };
 
 }  // NameSpace DigikamSuperImposeImagesPlugin
