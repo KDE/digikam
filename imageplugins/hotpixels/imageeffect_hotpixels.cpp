@@ -1,25 +1,24 @@
 /* ============================================================
-* File  : imageeffect_hotpixels.cpp
-* Author: Unai Garro <ugarro at users dot sourceforge dot net>
-*         Gilles Caulier <caulier dot gilles at free dot fr>
-* Date  : 2005-03-27
-* Description : a digiKam image plugin for fixing dots produced by
-*               hot/stuck/dead pixels from a CCD.
-*
-* Copyright 2005-2006 by Unai Garro and Gilles Caulier
-*
-* This program is free software; you can redistribute it
-* and/or modify it under the terms of the GNU General
-* Public License as published by the Free Software Foundation;
-* either version 2, or (at your option)
-* any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-* 
-* ============================================================ */
+ * Authors: Unai Garro <ugarro at users dot sourceforge dot net>
+ *          Gilles Caulier <caulier dot gilles at free dot fr>
+ * Date   : 2005-03-27
+ * Description : a digiKam image plugin for fixing dots produced by
+ *               hot/stuck/dead pixels from a CCD.
+ *
+ * Copyright 2005-2006 by Unai Garro and Gilles Caulier
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
 
 // Qt includes. 
 
@@ -43,16 +42,16 @@
 // Local includes.
 
 #include "version.h"
-#include "imageeffect_hotpixels.h"
 #include "blackframelistview.h"
+#include "imageeffect_hotpixels.h"
+#include "imageeffect_hotpixels.moc"
 
 namespace DigikamHotPixelsImagesPlugin
 {
 
 ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent,QString title, QFrame* banner)
-                     : CtrlPanelDlg(parent, title, "hotpixels",false, false, false, 
-                                       Digikam::ImagePannelWidget::SeparateViewDuplicate,banner)
-
+                     : CtrlPanelDlg(parent, title, "hotpixels", false, false, false, 
+                                    Digikam::ImagePannelWidget::SeparateViewDuplicate,banner)
 {
     // No need Abort button action.
     showButton(User1, false); 
@@ -65,7 +64,7 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent,QString title, QFra
                                        I18N_NOOP("A digiKam image plugin for fixing dots produced by "
                                                  "hot/stuck/dead pixels from a CCD."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005-2006, Unai Garro", 
+                                       "(c) 2005-2007, Unai Garro and Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                 
@@ -102,8 +101,6 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent,QString title, QFra
     
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
 
-    readSettings();
-            
     // -------------------------------------------------------------
     
     connect(m_filterMethodCombo, SIGNAL(activated(int)),
@@ -118,29 +115,35 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent,QString title, QFra
 
 ImageEffect_HotPixels::~ImageEffect_HotPixels()
 {
-    writeSettings();
 }
 
-void ImageEffect_HotPixels::readSettings(void)
+void ImageEffect_HotPixels::readUserSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("Hot Pixels Tool Settings");
-    m_blackFrameURL = KURL( config->readEntry("Last Black Frame File", QString::null) );
-    m_filterMethodCombo->setCurrentItem( config->readNumEntry("Filter Method",
-                                         HotPixelFixer::QUADRATIC_INTERPOLATION) );
+    config->setGroup("hotpixels Tool Dialog");
+    m_blackFrameURL = KURL(config->readEntry("Last Black Frame File", QString::null));
+    m_filterMethodCombo->setCurrentItem(config->readNumEntry("Filter Method",
+                                        HotPixelFixer::QUADRATIC_INTERPOLATION));
     
     if (m_blackFrameURL.isValid())
         new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
 }
 
-void ImageEffect_HotPixels::writeSettings(void)
+void ImageEffect_HotPixels::writeUserSettings(void)
 {
     KConfig *config = kapp->config();
-    config->setGroup("Hot Pixels Tool Settings");
-    config->writeEntry( "Last Black Frame File", m_blackFrameURL.url() );
-    config->writeEntry( "Filter Method", m_filterMethodCombo->currentItem() );
+    config->setGroup("hotpixels Tool Dialog");
+    config->writeEntry("Last Black Frame File", m_blackFrameURL.url());
+    config->writeEntry("Filter Method", m_filterMethodCombo->currentItem());
     config->sync();
 }
+
+void ImageEffect_HotPixels::resetValues(void)
+{
+    m_filterMethodCombo->blockSignals(true);
+    m_filterMethodCombo->setCurrentItem(HotPixelFixer::QUADRATIC_INTERPOLATION);
+    m_filterMethodCombo->blockSignals(false);
+} 
 
 void ImageEffect_HotPixels::slotAddBlackFrame()
 {
@@ -169,13 +172,6 @@ void ImageEffect_HotPixels::renderingFinished(void)
     m_blackFrameListView->setEnabled(true);
     enableButton(Apply, true);     
 }
-
-void ImageEffect_HotPixels::resetValues(void)
-{
-    m_filterMethodCombo->blockSignals(true);
-    m_filterMethodCombo->setCurrentItem(HotPixelFixer::QUADRATIC_INTERPOLATION);
-    m_filterMethodCombo->blockSignals(false);
-}  
 
 void ImageEffect_HotPixels::prepareEffect()
 {
@@ -250,4 +246,3 @@ void ImageEffect_HotPixels::slotBlackFrame(QValueList<HotPixel> hpList, const KU
 
 }  // NameSpace DigikamHotPixelsImagesPlugin
 
-#include "imageeffect_hotpixels.moc"
