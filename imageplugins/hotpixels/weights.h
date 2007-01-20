@@ -1,10 +1,13 @@
 /* ============================================================
- * File  : weights.h
- * Author: Unai Garro <ugarro at users dot sourceforge dot net>
- * Date  : 2005-03-27
+ * Authors: Unai Garro <ugarro at users dot sourceforge dot net>
+ * Date   : 2005-03-27
  * Description : a class to calculate filter weights
  * 
- * Copyright 2005 by Unai Garro
+ * Copyright 2005-2006 by Unai Garro
+ *
+ * The algorithm for calculating the weights was based on
+ * the code of jpegpixi, which was released under the GPL license,
+ * and is Copyright (C) 2003, 2004 Martin Dickopp
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -17,10 +20,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  * 
- * ============================================================
- * The algorithm for calculating the weights was based on
- * the code of jpegpixi, which was released under the GPL license,
- * and is Copyright (C) 2003, 2004 Martin Dickopp
  * ============================================================*/
 
 #ifndef WEIGHTS_H
@@ -53,7 +52,7 @@ public:
     
     unsigned int      height(void)        const   { return mHeight; }
     unsigned int      polynomeOrder(void) const   { return mPolynomeOrder; }
-    bool     twoDim(void)        const   { return mTwoDim; }
+    bool              twoDim(void)        const   { return mTwoDim; }
     unsigned int      width(void)         const   { return mWidth; }
     
     void     setHeight(int h)            { mHeight=h; };
@@ -71,20 +70,20 @@ protected:
     int       coefficientNumber() const { return mCoefficientNumber; }
     
     double*** weightMatrices() const    { return mWeightMatrices; }
-    
-private:
 
-    unsigned int                 mHeight,mWidth;
-    QValueList <QPoint> mPositions;
-    unsigned int                 mCoefficientNumber;
-    bool                mTwoDim;
-    unsigned int                 mPolynomeOrder;
-    double ***          mWeightMatrices; //Stores a list of weight matrices
-    
 private:
     
     double polyTerm (const size_t i_coeff, const int x, const int y, const int poly_order);
     void   matrixInv (double *const a, const size_t size);
+    
+private:
+
+    unsigned int        mHeight,mWidth;
+    unsigned int        mCoefficientNumber;
+    bool                mTwoDim;
+    unsigned int        mPolynomeOrder;
+    double ***          mWeightMatrices; //Stores a list of weight matrices
+    QValueList <QPoint> mPositions;
 };
 
 }  // NameSpace DigikamHotPixelsImagesPlugin
