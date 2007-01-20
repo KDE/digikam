@@ -1,24 +1,23 @@
 /* ============================================================
-* File  : imageeffect_hotpixels.cpp
-* Author: Unai Garro <ugarro at users dot sourceforge dot net>
-*         Gilles Caulier <caulier dot gilles at free dot fr>
-* Date  : 2005-07-05
-* Description : a ListView to display black frames
-*
-* Copyright 2005 by Unai Garro and Gilles Caulier
-*
-* This program is free software; you can redistribute it
-* and/or modify it under the terms of the GNU General
-* Public License as published by the Free Software Foundation;
-* either version 2, or (at your option)
-* any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-* 
-* ============================================================ */
+ * Authors: Unai Garro <ugarro at users dot sourceforge dot net>
+ *          Gilles Caulier <caulier dot gilles at free dot fr>
+ * Date   : 2005-07-05
+ * Description : a ListView to display black frames
+ *
+ * Copyright 2005-2007 by Unai Garro and Gilles Caulier
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
 
 #define THUMB_WIDTH 150
 
@@ -30,6 +29,7 @@
 // Local includes.
 
 #include "blackframelistview.h"
+#include "blackframelistview.moc"
 
 namespace DigikamHotPixelsImagesPlugin
 {
@@ -71,26 +71,26 @@ void BlackFrameListViewItem::activate()
 QString BlackFrameListViewItem::text(int column)const
 {
     switch (column)
-        {
+    {
         case 0:
-            {
+        {
             // First column includes the pixmap
             break;
-            }
+        }
         case 1:
-            {
+        {
             // The image size.
             if (!m_imageSize.isEmpty())
                 return (QString("%1x%2").arg(m_imageSize.width()).arg(m_imageSize.height())); 
             break;
-            }
+        }
         case 2:
-            {
+        {
             // The amount of hot pixels found in the black frame.
             return (QString::number(m_hotPixels.count())); 
             break;
-            }
         }
+    }
     
     return(QString::null);
 }
@@ -139,7 +139,7 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
     QValueList <HotPixel>::Iterator it;    
     QValueList <HotPixel>::Iterator end(m_hotPixels.end()); 
     for (it=m_hotPixels.begin() ; it!=end ; ++it)
-        {
+    {
         hpRect   = (*it).rect;
         hpThumbX = (hpRect.x()+hpRect.width()/2)*xRatio;
         hpThumbY = (hpRect.y()+hpRect.height()/2)*yRatio;
@@ -152,7 +152,7 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
         p.drawPoint((int)hpThumbX+1, (int)hpThumbY+1);
         p.drawPoint((int)hpThumbX-1, (int)hpThumbY+1);
         p.drawPoint((int)hpThumbX+1, (int)hpThumbY-1);
-        }
+    }
         
     return thumb;
 }
@@ -165,4 +165,3 @@ int BlackFrameListViewItem::width(const QFontMetrics& fm,const QListView* lv,int
 
 }  // NameSpace DigikamHotPixelsImagesPlugin
 
-#include "blackframelistview.moc"
