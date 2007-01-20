@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : fontchooserwidget.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-02-14
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-02-14
  * Description : a simple widget to choose a font based on 
  *               FontChooserWidget implementation.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * Original FontChooserWidget implementation is copyrighted by :
  * (C) 1997 Bernd Johannes Wuebben <wuebben@kde.org>
@@ -56,6 +55,7 @@
 // Local includes.
 
 #include "fontchooserwidget.h"
+#include "fontchooserwidget.moc"
 
 namespace DigikamInsertTextImagesPlugin
 {
@@ -65,10 +65,10 @@ class FontChooserWidget::FontChooserWidgetPrivate
 public:
 
     FontChooserWidgetPrivate()
-        { 
+    { 
         m_palette.setColor(QPalette::Active, QColorGroup::Text, Qt::black);
         m_palette.setColor(QPalette::Active, QColorGroup::Base, Qt::white); 
-        }
+    }
     
     QPalette m_palette;
 };
@@ -93,18 +93,17 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
     topLayout->addWidget(page);
     QGridLayout *gridLayout = new QGridLayout( page, 4, 3, 0, KDialog::spacingHint() );
     
-    //
-    // first, create the labels across the top
-    //
+    // First, create the labels across the top
+
     QHBoxLayout *familyLayout = new QHBoxLayout();
     familyLayout->addSpacing( checkBoxGap );
     
     if (diff) 
-        {
+    {
         familyCheckbox = new QCheckBox(i18n("Font"), page);
         
         connect(familyCheckbox, SIGNAL(toggled(bool)), 
-                SLOT(toggled_checkbox()));
+                this, SLOT(toggled_checkbox()));
         
         familyLayout->addWidget(familyCheckbox, 0, Qt::AlignLeft);
         QString familyCBToolTipText =
@@ -114,24 +113,24 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
         QWhatsThis::add( familyCheckbox, familyCBWhatsThisText );
         QToolTip::add(   familyCheckbox, familyCBToolTipText );
         familyLabel = 0;
-        } 
+    } 
     else 
-        {
+    {
         familyCheckbox = 0;
         familyLabel = new QLabel( i18n("Font:"), page, "familyLabel" );
         familyLayout->addWidget(familyLabel, 1, Qt::AlignLeft);
-        }
+    }
         
     gridLayout->addLayout(familyLayout, row, 0 );
     
     QHBoxLayout *styleLayout = new QHBoxLayout();
     
     if (diff) 
-        {
+    {
         styleCheckbox = new QCheckBox(i18n("Style:"), page);
         
         connect(styleCheckbox, SIGNAL(toggled(bool)), 
-                SLOT(toggled_checkbox()));
+                this, SLOT(toggled_checkbox()));
         
         styleLayout->addWidget(styleCheckbox, 0, Qt::AlignLeft);
         QString styleCBToolTipText =
@@ -141,13 +140,13 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
         QWhatsThis::add( styleCheckbox, styleCBWhatsThisText );
         QToolTip::add(   styleCheckbox, styleCBToolTipText );
         styleLabel = 0;
-        }
+    }
     else 
-        {
+    {
         styleCheckbox = 0;
         styleLabel = new QLabel( i18n("Style:"), page, "styleLabel");
         styleLayout->addWidget(styleLabel, 1, Qt::AlignLeft);
-        }
+    }
         
     styleLayout->addSpacing( checkBoxGap );
     gridLayout->addLayout(styleLayout, row, 1 );
@@ -155,11 +154,11 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
     QHBoxLayout *sizeLayout = new QHBoxLayout();
     
     if (diff) 
-        {
+    {
         sizeCheckbox = new QCheckBox(i18n("Size"),page);
         
         connect(sizeCheckbox, SIGNAL(toggled(bool)), 
-                SLOT(toggled_checkbox()));
+                this, SLOT(toggled_checkbox()));
                 
         sizeLayout->addWidget(sizeCheckbox, 0, Qt::AlignLeft);
         QString sizeCBToolTipText =
@@ -169,13 +168,13 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
         QWhatsThis::add( sizeCheckbox, sizeCBWhatsThisText );
         QToolTip::add(   sizeCheckbox, sizeCBToolTipText );
         sizeLabel = 0;
-        } 
+    } 
     else 
-        {
+    {
         sizeCheckbox = 0;
         sizeLabel = new QLabel( i18n("Size:"), page, "sizeLabel");
         sizeLayout->addWidget(sizeLabel, 1, Qt::AlignLeft);
-        }
+    }
         
     sizeLayout->addSpacing( checkBoxGap );
     sizeLayout->addSpacing( checkBoxGap ); // prevent label from eating border
@@ -183,9 +182,8 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
     
     row ++;
     
-    //
-    // now create the actual boxes that hold the info
-    //
+    // Now create the actual boxes that hold the info 
+
     familyListBox = new KListBox( page, "familyListBox");
     familyListBox->setEnabled( !diff );
     gridLayout->addWidget( familyListBox, row, 0 );
@@ -194,18 +192,17 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
     QWhatsThis::add(diff?(QWidget *) familyCheckbox:(QWidget *) familyLabel, fontFamilyWhatsThisText );
     
     connect(familyListBox, SIGNAL(highlighted(const QString &)),
-            SLOT(family_chosen_slot(const QString &)));
+            this, SLOT(family_chosen_slot(const QString &)));
             
     if(!fontList.isEmpty())
-        {
+    {
         familyListBox->insertStringList(fontList);
-        }
+    }
     else
-        {
+    {
         fillFamilyListBox(onlyFixed);
-        }
+    }
     
-    familyListBox->setMinimumWidth( minimumListWidth( familyListBox ) );
     familyListBox->setMinimumHeight( minimumListHeight( familyListBox, visibleListSize  ) );
     
     styleListBox = new KListBox( page, "styleListBox");
@@ -222,7 +219,7 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
     styleListBox->setMinimumHeight( minimumListHeight( styleListBox, visibleListSize  ) );
     
     connect(styleListBox, SIGNAL(highlighted(const QString &)),
-            SLOT(style_chosen_slot(const QString &)));
+            this, SLOT(style_chosen_slot(const QString &)));
         
     sizeListBox = new KListBox( page, "sizeListBox");
     sizeOfFont = new KIntNumInput( page, "sizeOfFont");
@@ -232,18 +229,18 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
     sizeOfFont->setEnabled( !diff );
     
     if( sizeIsRelativeState ) 
-        {
+    {
         QString sizeIsRelativeCBText =
         i18n("Relative");
         QString sizeIsRelativeCBToolTipText =
         i18n("Font size<br><i>fixed</i> or <i>relative</i><br>to environment");
         QString sizeIsRelativeCBWhatsThisText =
         i18n("Here you can switch between fixed font size and font size "
-            "to be calculated dynamically and adjusted to changing "
-            "environment (e.g. widget dimensions, paper size)." );
+             "to be calculated dynamically and adjusted to changing "
+             "environment (e.g. widget dimensions, paper size)." );
         sizeIsRelativeCheckBox = new QCheckBox( sizeIsRelativeCBText,
                                                 page,
-                                            "sizeIsRelativeCheckBox" );
+                                               "sizeIsRelativeCheckBox" );
         sizeIsRelativeCheckBox->setTristate( diff );
         QGridLayout *sizeLayout2 = new QGridLayout( 3,2, KDialog::spacingHint()/2, "sizeLayout2" );
         gridLayout->addLayout(sizeLayout2, row, 2);
@@ -253,15 +250,15 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
         sizeLayout2->addWidget(sizeIsRelativeCheckBox, 2, 0, Qt::AlignLeft);
         QWhatsThis::add( sizeIsRelativeCheckBox, sizeIsRelativeCBWhatsThisText );
         QToolTip::add(   sizeIsRelativeCheckBox, sizeIsRelativeCBToolTipText );
-        }
+    }
     else 
-        {
+    {
         sizeIsRelativeCheckBox = 0L;
         QGridLayout *sizeLayout2 = new QGridLayout( 2,1, KDialog::spacingHint()/2, "sizeLayout2" );
         gridLayout->addLayout(sizeLayout2, row, 2);
         sizeLayout2->addWidget( sizeOfFont, 0, 0);
         sizeLayout2->addMultiCellWidget(sizeListBox, 1,1, 0,0);
-        }
+    }
         
     QString fontSizeWhatsThisText = i18n("Here you can choose the font size to be used." );
     QWhatsThis::add( sizeListBox, fontSizeWhatsThisText );
@@ -273,10 +270,10 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
     sizeListBox->setMinimumHeight( minimumListHeight( sizeListBox, visibleListSize  ) );
     
     connect( sizeOfFont, SIGNAL( valueChanged(int) ),
-             SLOT(size_value_slot(int)));
+             this, SLOT(size_value_slot(int)));
     
     connect( sizeListBox, SIGNAL(highlighted(const QString&)),
-             SLOT(size_chosen_slot(const QString&)) );
+             this, SLOT(size_chosen_slot(const QString&)) );
              
     sizeListBox->setSelected(sizeListBox->findItem(QString::number(10)), true); // default to 10pt.
     
@@ -316,15 +313,15 @@ int FontChooserWidget::minimumListWidth( const QListBox *list )
     int w=0;
     
     for( uint i=0; i<list->count(); i++ )
-        {
+    {
         int itemWidth = list->item(i)->width(list);
         w = QMAX(w,itemWidth);
-        }
+    }
         
     if( w == 0 ) 
-        {
+    {
         w = 40; 
-        }
+    }
         
     w += list->frameWidth() * 2;
     w += list->verticalScrollBar()->sizeHint().width();
@@ -362,9 +359,9 @@ void FontChooserWidget::fillSizeList()
     };
     
     for(int i = 0; c[i]; ++i)
-        {
+    {
         sizeListBox->insertItem(QString::number(c[i]));
-        }
+    }
 }
 
 void FontChooserWidget::setColor( const QColor & col )
@@ -391,12 +388,12 @@ void FontChooserWidget::setSizeIsRelative( QButton::ToggleState relative )
 {
     // check or uncheck or gray out the "relative" checkbox
     if( sizeIsRelativeCheckBox ) 
-        {
+    {
         if( QButton::NoChange == relative )
            sizeIsRelativeCheckBox->setNoChange();
         else
            sizeIsRelativeCheckBox->setChecked(  QButton::On == relative );
-        }
+    }
 }
 
 QButton::ToggleState FontChooserWidget::sizeIsRelative() const
@@ -445,7 +442,8 @@ void FontChooserWidget::setFont( const QFont& aFont, bool onlyFixed )
 
 int FontChooserWidget::fontDiffFlags() {
     int diffFlags = 0;
-    if (familyCheckbox && styleCheckbox && sizeCheckbox) {
+    if (familyCheckbox && styleCheckbox && sizeCheckbox) 
+    {
         diffFlags = (int)(familyCheckbox->isChecked() ? FontDiffFamily : 0)
                     | (int)( styleCheckbox->isChecked() ? FontDiffStyle  : 0)
                     | (int)(  sizeCheckbox->isChecked() ? FontDiffSize   : 0);
@@ -468,7 +466,8 @@ void FontChooserWidget::family_chosen_slot(const QString& family)
     styleListBox->clear();
     currentStyles.clear();
     QStringList::Iterator end(styles.end());
-    for ( QStringList::Iterator it = styles.begin(); it != end; ++it ) {
+    for ( QStringList::Iterator it = styles.begin(); it != end; ++it ) 
+    {
         QString style = *it;
         int pos = style.find("Plain");
         if(pos >=0) style = style.replace(pos,5,i18n("Regular"));
@@ -476,12 +475,14 @@ void FontChooserWidget::family_chosen_slot(const QString& family)
         if(pos >=0) style = style.replace(pos,6,i18n("Regular"));
         pos = style.find("Oblique");
         if(pos >=0) style = style.replace(pos,7,i18n("Italic"));
-        if(!styleListBox->findItem(style)) {
+        if(!styleListBox->findItem(style)) 
+        {
             styleListBox->insertItem(i18n(style.utf8()));
             currentStyles.insert(i18n(style.utf8()), *it);
         }
     }
-    if(styleListBox->count()==0) {
+    if(styleListBox->count()==0) 
+    {
         styleListBox->insertItem(i18n("Regular"));
         currentStyles.insert(i18n("Regular"), "Normal");
     }
@@ -489,9 +490,9 @@ void FontChooserWidget::family_chosen_slot(const QString& family)
     styleListBox->blockSignals(true);
     QListBoxItem *item = styleListBox->findItem(selectedStyle);
     if (item)
-    styleListBox->setSelected(styleListBox->findItem(selectedStyle), true);
+        styleListBox->setSelected(styleListBox->findItem(selectedStyle), true);
     else
-    styleListBox->setSelected(0, true);
+        styleListBox->setSelected(0, true);
     styleListBox->blockSignals(false);
 
     style_chosen_slot(QString::null);
@@ -523,21 +524,27 @@ void FontChooserWidget::style_chosen_slot(const QString& style)
 
     sizeListBox->clear();
     QFontDatabase dbase;
-    if(dbase.isSmoothlyScalable(familyListBox->currentText(), currentStyles[currentStyle])) {  // is vector font
+    if(dbase.isSmoothlyScalable(familyListBox->currentText(), currentStyles[currentStyle])) 
+    {  // is vector font
         //sampleEdit->setPaletteBackgroundPixmap( VectorPixmap ); // TODO
         fillSizeList();
-    } else {                                // is bitmap font.
+    } 
+    else 
+    {                                // is bitmap font.
         //sampleEdit->setPaletteBackgroundPixmap( BitmapPixmap ); // TODO
         QValueList<int> sizes = dbase.smoothSizes(familyListBox->currentText(), currentStyles[currentStyle]);
-        if(sizes.count() > 0) {
+        if(sizes.count() > 0) 
+        {
             QValueList<int>::iterator it;
             diff=1000;
 	    QValueList<int>::iterator end(sizes.end());
-            for ( it = sizes.begin(); it != end; ++it ) {
+            for ( it = sizes.begin(); it != end; ++it ) 
+            {
                 if(*it <= selectedSize || diff > *it - selectedSize) diff = selectedSize - *it;
                 sizeListBox->insertItem(QString::number(*it));
             }
-        } else // there are times QT does not provide the list..
+        } 
+        else // there are times QT does not provide the list..
             fillSizeList();
     }
     sizeListBox->blockSignals(true);
@@ -571,10 +578,12 @@ void FontChooserWidget::setupDisplay()
     int numEntries, i;
     
     numEntries = familyListBox->count();
-    for (i = 0; i < numEntries; i++) {
-        if (family == familyListBox->text(i).lower()) {
-        familyListBox->setCurrentItem(i);
-        break;
+    for (i = 0; i < numEntries; i++) 
+    {
+        if (family == familyListBox->text(i).lower()) 
+        {
+            familyListBox->setCurrentItem(i);
+            break;
         }
     }
     
@@ -583,13 +592,15 @@ void FontChooserWidget::setupDisplay()
     {
         if (family.contains('['))
         {
-        family = family.left(family.find('[')).stripWhiteSpace();
-        for (i = 0; i < numEntries; i++) {
-            if (family == familyListBox->text(i).lower()) {
-            familyListBox->setCurrentItem(i);
-            break;
+            family = family.left(family.find('[')).stripWhiteSpace();
+            for (i = 0; i < numEntries; i++) 
+            {
+                if (family == familyListBox->text(i).lower()) 
+                {
+                    familyListBox->setCurrentItem(i);
+                    break;
+                }
             }
-        }
         }
     }
     
@@ -597,22 +608,26 @@ void FontChooserWidget::setupDisplay()
     if ( (i == numEntries) )
     {
         QString fallback = family+" [";
-        for (i = 0; i < numEntries; i++) {
-        if (familyListBox->text(i).lower().startsWith(fallback)) {
-            familyListBox->setCurrentItem(i);
-            break;
-        }
+        for (i = 0; i < numEntries; i++) 
+        {
+            if (familyListBox->text(i).lower().startsWith(fallback)) 
+            {
+                familyListBox->setCurrentItem(i);
+                break;
+            }
         }
     }
     
     // 3rd Fallback
     if ( (i == numEntries) )
     {
-        for (i = 0; i < numEntries; i++) {
-        if (familyListBox->text(i).lower().startsWith(family)) {
-            familyListBox->setCurrentItem(i);
-            break;
-        }
+        for (i = 0; i < numEntries; i++) 
+        {
+            if (familyListBox->text(i).lower().startsWith(family)) 
+            {
+                familyListBox->setCurrentItem(i);
+                break;
+            }
         }
     }
     
@@ -623,10 +638,12 @@ void FontChooserWidget::setupDisplay()
     styleListBox->setCurrentItem(style);
     
     numEntries = sizeListBox->count();
-    for (i = 0; i < numEntries; i++){
-        if (sizeStr == sizeListBox->text(i)) {
-        sizeListBox->setCurrentItem(i);
-        break;
+    for (i = 0; i < numEntries; i++)
+    {
+        if (sizeStr == sizeListBox->text(i)) 
+        {
+            sizeListBox->setCurrentItem(i);
+            break;
         }
     }
     
@@ -684,13 +701,13 @@ void FontChooserWidget::addFont( QStringList &list, const char *xfont )
         font.truncate( pos );
     
         if ( font.find( QString::fromLatin1("open look"), 0, false ) >= 0 )
-        return;
+            return;
     
         QStringList::Iterator it = list.begin();
    	QStringList::Iterator end(list.end()); 
         for ( ; it != end; ++it )
-        if ( *it == font )
-        return;
+            if ( *it == font )
+                return;
         list.append( font );
     }
 }
@@ -717,4 +734,3 @@ void FontChooserWidget::showXLFDArea(bool show)
 
 }  // NameSpace DigikamInsertTextImagesPlugin
 
-#include "fontchooserwidget.moc"

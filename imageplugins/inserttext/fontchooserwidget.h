@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : fontchooserwidget.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-02-14
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-02-14
  * Description : a simple widget to choose a font based on 
  *               FontChooserWidget implementation.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * Original FontChooserWidget implementation is copyrighted by :
  * (C) 1997 Bernd Johannes Wuebben <wuebben@kde.org>
@@ -51,25 +50,25 @@ class FontChooserWidget : public QWidget
 public:
   
     enum FontColumn 
-       { 
+    { 
        FamilyList=0x01, 
        StyleList=0x02, 
        SizeList=0x04
-       };
+    };
 
     enum FontDiff 
-       { 
+    { 
        FontDiffFamily=0x01, 
        FontDiffStyle=0x02, 
        FontDiffSize=0x04 
-       };
+    };
   
     enum FontListCriteria 
-       {
+    {
        FixedWidthFonts=0x01, 
        ScalableFonts=0x02, 
        SmoothScalableFonts=0x04 
-       };
+    };
 
 public:
   
