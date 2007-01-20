@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_hotpixels.h
- * Author: Unai Garro <ugarro at users dot sourceforge dot net>
- * Date  : 2005-03-27
+ * Authors: Unai Garro <ugarro at users dot sourceforge dot net>
+ * Date   : 2005-03-27
  * Description : 
  * 
- * Copyright 2005 by Unai Garro
+ * Copyright 2005-2006 by Unai Garro
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,7 +17,6 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
 
 #ifndef IMAGEPLUGIN_HOTPIXELS_H
 #define IMAGEPLUGIN_HOTPIXELS_H
@@ -39,14 +37,13 @@ public:
 
     void setEnabledActions(bool enable);
         
-private:
-
-    KAction *m_hotpixelsAction;
-        
 private slots:
 
     void slotHotPixels();
 
+private:
+
+    KAction *m_hotpixelsAction;
 };
     
 #endif /* IMAGEPLUGIN_HOTPIXELS_H */

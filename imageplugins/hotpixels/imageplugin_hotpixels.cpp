@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_hotpixels.cpp
- * Author: Unai Garro <ugarro at users dot sourceforge dot net>
- * Date  : 2005-03-27
+ * Authors: Unai Garro <ugarro at users dot sourceforge dot net>
+ * Date   : 2005-03-27
  * Description : 
  * 
- * Copyright 2005 by Unai Garro
+ * Copyright 2005-2006 by Unai Garro
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 #include "bannerwidget.h"
 #include "imageeffect_hotpixels.h"
 #include "imageplugin_hotpixels.h"
+#include "imageplugin_hotpixels.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_hotpixels,
                             KGenericFactory<ImagePlugin_HotPixels>("digikamimageplugin_hotpixels"));
@@ -65,6 +65,3 @@ void ImagePlugin_HotPixels::slotHotPixels()
 
     dlg.exec();
 }
-
-
-#include "imageplugin_hotpixels.moc"
