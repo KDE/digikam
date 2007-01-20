@@ -1,13 +1,12 @@
 /* ============================================================
- * File  : imageeffect_inserttext.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2005-02-14
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2005-02-14
  * Description : a digiKam image plugin for insert text  
  *               to an image.
  * 
  * Copyright 2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,6 +60,7 @@
 #include "inserttextwidget.h"
 #include "fontchooserwidget.h"
 #include "imageeffect_inserttext.h"
+#include "imageeffect_inserttext.moc"
 
 namespace DigikamInsertTextImagesPlugin
 {
@@ -78,7 +78,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent, QString title, Q
                                        I18N_NOOP("A digiKam image plugin for inserting text on a photograph."),
                                        KAboutData::License_GPL,
                                        "(c) 2005-2006, Gilles Caulier\n"
-                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg",
+                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
@@ -185,8 +185,6 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent, QString title, Q
     
     setUserAreaWidget(gbox2);
 
-    readSettings();
-    
     // -------------------------------------------------------------
     
     connect(m_fontChooserWidget, SIGNAL(fontSelected (const QFont &)),
@@ -218,15 +216,14 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent, QString title, Q
 
 ImageEffect_InsertText::~ImageEffect_InsertText()
 {
-    writeSettings();
 }
 
-void ImageEffect_InsertText::readSettings(void)
+void ImageEffect_InsertText::readUserSettings()
 {
     KConfig *config = kapp->config();
-    config->setGroup("Insert Text Tool Settings");
-    QColor *black = new QColor( 0, 0, 0 );
-    QFont *defaultFont = new QFont();
+    config->setGroup("inserttext Tool Dialog");
+    QColor black(0, 0, 0);
+    QFont  defaultFont;
 
     int orgW = m_previewWidget->imageIface()->originalWidth();
     int orgH = m_previewWidget->imageIface()->originalHeight();
@@ -234,28 +231,25 @@ void ImageEffect_InsertText::readSettings(void)
     if ( orgW > orgH ) m_defaultSizeFont = (int)(orgH / 8.0);
     else m_defaultSizeFont = (int)(orgW / 8.0);
 
-    defaultFont->setPointSize( m_defaultSizeFont );
+    defaultFont.setPointSize(m_defaultSizeFont);
     m_textRotation->setCurrentItem( config->readNumEntry("Text Rotation", 0) );
-    m_fontColorButton->setColor(config->readColorEntry("Font Color", black));
+    m_fontColorButton->setColor(config->readColorEntry("Font Color", &black));
     m_textEdit->setText(config->readEntry("Text String", i18n("Enter your text here!")));
-    m_textFont = config->readFontEntry("Font Properties", defaultFont);
+    m_textFont = config->readFontEntry("Font Properties", &defaultFont);
     m_fontChooserWidget->setFont(m_textFont);
     m_alignTextMode = config->readNumEntry("Text Alignment", ALIGN_LEFT);
     m_borderText->setChecked( config->readBoolEntry("Border Text", false) );
     m_transparentText->setChecked( config->readBoolEntry("Transparent Text", false) );
     m_previewWidget->setPositionHint( config->readRectEntry("Position Hint") );
 
-    delete black;
-    delete defaultFont;
-
     static_cast<QPushButton*>(m_alignButtonGroup->find(m_alignTextMode))->setOn(true);
     slotAlignModeChanged(m_alignTextMode);
 }
 
-void ImageEffect_InsertText::writeSettings(void)
+void ImageEffect_InsertText::writeUserSettings()
 {
     KConfig *config = kapp->config();
-    config->setGroup("Insert Text Tool Settings");
+    config->setGroup("inserttext Tool Dialog");
 
     config->writeEntry( "Text Rotation", m_textRotation->currentItem() );
     config->writeEntry( "Font Color", m_fontColorButton->color() );
@@ -269,7 +263,7 @@ void ImageEffect_InsertText::writeSettings(void)
     config->sync();
 }
 
-void ImageEffect_InsertText::slotDefault()
+void ImageEffect_InsertText::resetValues()
 {
     m_fontColorButton->blockSignals(true);
     m_alignButtonGroup->blockSignals(true);
@@ -347,4 +341,3 @@ void ImageEffect_InsertText::finalRendering()
 
 }  // NameSpace DigikamInsertTextImagesPlugin
 
-#include "imageeffect_inserttext.moc"

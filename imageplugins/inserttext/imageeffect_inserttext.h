@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_inserttext.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-02-14
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-02-14
  * Description : a digiKam image plugin for insert text  
  *               to an image.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,6 +55,23 @@ public:
     ImageEffect_InsertText(QWidget *parent, QString title, QFrame* banner);
     ~ImageEffect_InsertText();
 
+signals:
+
+    void signalUpdatePreview();
+
+private slots:
+
+    void slotFontPropertiesChanged(const QFont &font);
+    void slotUpdatePreview();
+    void slotAlignModeChanged(int mode);
+
+private:
+
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues();
+    void finalRendering();    
+
 private:
     
     int                m_alignTextMode;
@@ -77,28 +93,6 @@ private:
     KTextEdit         *m_textEdit;
     
     InsertTextWidget  *m_previewWidget;
-
-private:
-        
-    void writeSettings(void);
-    
-private slots:
-
-    void readSettings(void);
-    
-    void slotDefault();
-    void slotFontPropertiesChanged(const QFont &font);
-    void slotUpdatePreview();
-    void slotAlignModeChanged(int mode);
-
-signals:
-
-    void signalUpdatePreview();
-
-protected:
-
-    void finalRendering();    
-
 };
 
 }  // NameSpace DigikamInsertTextImagesPlugin
