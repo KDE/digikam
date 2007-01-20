@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_freerotation.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-01-04
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-01-04
  * Description : a Digikam image editor plugin for superimpose a 
  *               template to an image.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,6 +53,19 @@ public:
     ImageEffect_SuperImpose(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_SuperImpose();
 
+private slots:
+
+    void slotTemplateDirChanged(const KURL& url);
+    void slotRootTemplateDirChanged(void);
+
+private:
+
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues();
+    void populateTemplates(void);
+    void finalRendering();    
+    
 private:
     
     KURL                   m_templatesUrl;
@@ -64,21 +76,6 @@ private:
     Digikam::ThumbBarView *m_thumbnailsBar;
 
     DirSelectWidget       *m_dirSelect;
-    
-private:
-    
-    void populateTemplates(void);
-    
-private slots:
-
-    void slotDefault();
-    void slotTemplateDirChanged(const KURL& url);
-    void slotRootTemplateDirChanged(void);
-
-protected:
-
-    void finalRendering();    
-
 };
 
 }  // NameSpace DigikamSuperImposeImagesPlugin

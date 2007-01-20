@@ -40,8 +40,11 @@ Q_OBJECT
 
 public:
      
-    DirSelectWidget( KURL rootUrl=KURL("/"), KURL currentUrl=KURL(), 
-                 QWidget* parent=0, const char* name=0, QString headerLabel=QString::null);
+    DirSelectWidget(QWidget* parent, const char* name=0, QString headerLabel=QString::null);
+
+    DirSelectWidget(KURL rootUrl=KURL("/"), KURL currentUrl=KURL(), 
+                    QWidget* parent=0, const char* name=0, QString headerLabel=QString::null);
+
     ~DirSelectWidget();
      
     KURL path() const;

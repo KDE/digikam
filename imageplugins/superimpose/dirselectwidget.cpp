@@ -49,8 +49,21 @@ struct DirSelectWidget::Private
     KURL             m_rootUrl;
 };
 
-DirSelectWidget::DirSelectWidget( KURL rootUrl, KURL currentUrl, 
-                                  QWidget* parent, const char* name, QString headerLabel)
+DirSelectWidget::DirSelectWidget(QWidget* parent, const char* name, QString headerLabel)
+               : KFileTreeView( parent, name)
+{
+    d = new Private;
+    
+    addColumn( headerLabel );
+    
+    if ( headerLabel.isNull() )
+        header()->hide();
+        
+    setAlternateBackground(QColor::QColor());
+}
+
+DirSelectWidget::DirSelectWidget(KURL rootUrl, KURL currentUrl, 
+                                 QWidget* parent, const char* name, QString headerLabel)
                : KFileTreeView( parent, name)
 {
     d = new Private;

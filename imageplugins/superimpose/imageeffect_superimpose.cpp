@@ -1,13 +1,12 @@
 /* ============================================================
- * File  : imageeffect_superimpose.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-01-04
  * Description : a Digikam image editor plugin for superimpose a 
  *               template to an image.
  * 
  * Copyright 2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -72,15 +71,6 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent,
 {
     QString whatsThis;
            
-    // Read settings.
-    
-    KConfig *config = kapp->config();
-    config->setGroup("Album Settings");
-    KURL albumDBUrl( config->readPathEntry("Album Path", KGlobalSettings::documentPath()) );
-    config->setGroup("Template Superimpose Tool Settings");
-    m_templatesRootUrl.setPath( config->readEntry("Templates Root URL", albumDBUrl.path()) );
-    m_templatesUrl.setPath( config->readEntry("Templates URL", albumDBUrl.path()) );
-    
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -89,7 +79,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent,
                                        I18N_NOOP("A digiKam image plugin to superimpose a template onto a photograph."),
                                        KAboutData::License_GPL,
                                        "(c) 2005-2006, Gilles Caulier\n"
-                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg", 
+                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -151,7 +141,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent,
     QGridLayout* grid = new QGridLayout( gbox2, 1, 1, marginHint(), spacingHint());
     
     m_thumbnailsBar = new Digikam::ThumbBarView(gbox2);
-    m_dirSelect     = new DirSelectWidget(m_templatesRootUrl, m_templatesUrl, gbox2);
+    m_dirSelect     = new DirSelectWidget(gbox2);
     QPushButton *templateDirButton = new QPushButton( i18n("Root Directory..."), gbox2 );
     QWhatsThis::add( templateDirButton, i18n("<p>Set here the current templates' root directory.") );
 
@@ -183,11 +173,6 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent,
 
 ImageEffect_SuperImpose::~ImageEffect_SuperImpose()
 {
-    KConfig *config = kapp->config();
-    config->setGroup("Template Superimpose Tool Settings");
-    config->writeEntry( "Templates Root URL", m_dirSelect->rootPath().path() );
-    config->writeEntry( "Templates URL", m_templatesUrl.path() );
-    config->sync();
 }
 
 void ImageEffect_SuperImpose::populateTemplates(void)
@@ -218,7 +203,27 @@ void ImageEffect_SuperImpose::populateTemplates(void)
     }
 }
 
-void ImageEffect_SuperImpose::slotDefault()
+void ImageEffect_SuperImpose::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("Album Settings");
+    KURL albumDBUrl( config->readPathEntry("Album Path", KGlobalSettings::documentPath()) );
+    config->setGroup("superimpose Tool Dialog");
+    config->setGroup("Template Superimpose Tool Settings");
+    m_templatesRootUrl.setPath( config->readEntry("Templates Root URL", albumDBUrl.path()) );
+    m_templatesUrl.setPath( config->readEntry("Templates URL", albumDBUrl.path()) );
+    m_dirSelect->setRootPath(m_templatesRootUrl, m_templatesUrl);
+}
+
+void ImageEffect_SuperImpose::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("superimpose Tool Dialog");
+    config->writeEntry( "Templates Root URL", m_dirSelect->rootPath().path() );
+    config->writeEntry( "Templates URL", m_templatesUrl.path() );
+    config->sync();}
+
+void ImageEffect_SuperImpose::resetValues()
 {
     m_previewWidget->resetEdit();
 } 
