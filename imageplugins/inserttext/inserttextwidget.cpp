@@ -1,12 +1,11 @@
 /* ============================================================
- * File  : inserttextwidget.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2005-02-14
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2005-02-14
  * Description : 
  * 
  * Copyright 2005 Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,6 +43,7 @@
 // Local includes.
 
 #include "inserttextwidget.h"
+#include "inserttextwidget.moc"
 
 namespace DigikamInsertTextImagesPlugin
 {
@@ -617,6 +617,3 @@ void InsertTextWidget::mouseMoveEvent ( QMouseEvent * e )
 }
 
 }  // NameSpace DigikamInsertTextImagesPlugin
-
-
-#include "inserttextwidget.moc"

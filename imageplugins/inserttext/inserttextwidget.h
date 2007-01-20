@@ -1,12 +1,11 @@
 /* ============================================================
- * File  : inserttextwidget.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-02-14
  * Description : 
  * 
  * Copyright 2005 Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +41,6 @@
 // Digikam includes.
 
 #include <digikamheaders.h>
-
 
 class QPixmap;
 
@@ -93,47 +91,13 @@ public:
     void  setPositionHint(QRect hint);
     QRect getPositionHint();
 
-private:
-
-    Digikam::ImageIface *m_iface;
-
-    bool        m_currentMoving;
-    bool        m_textBorder;
-    bool        m_textTransparent;
-
-    int         m_alignMode;
-    int         m_textRotation;
-
-    uchar      *m_data;
-    int         m_w;
-    int         m_h;
-
-    int         m_xpos;
-    int         m_ypos;
-    
-    int         m_transparency;
-
-    QPixmap    *m_pixmap;
-
-    QRect       m_rect;
-    QRect       m_textRect;
-
-    QString     m_textString;
-
-    QFont       m_textFont;
-
-    QColor      m_textColor;
-
-    QColor      m_backgroundColor;
-
-    QRect       m_positionHint;
 protected:
 
-    void paintEvent( QPaintEvent *e );
-    void resizeEvent( QResizeEvent * e );
-    void mousePressEvent ( QMouseEvent * e );
-    void mouseReleaseEvent ( QMouseEvent * e );
-    void mouseMoveEvent ( QMouseEvent * e );
+    void paintEvent(QPaintEvent *e);
+    void resizeEvent(QResizeEvent * e);
+    void mousePressEvent(QMouseEvent * e);
+    void mouseReleaseEvent(QMouseEvent * e);
+    void mouseMoveEvent(QMouseEvent * e);
 
     void makePixmap(void);
     QRect composeImage(Digikam::DImg *image, QPainter *destPainter,
@@ -142,6 +106,41 @@ protected:
                        int alignMode, const QString &textString,
                        bool transparentBackground, QColor backgroundColor,
                        BorderMode borderMode, int borderWidth, int spacing);
+
+private:
+
+    bool                 m_currentMoving;
+    bool                 m_textBorder;
+    bool                 m_textTransparent;
+
+    int                  m_alignMode;
+    int                  m_textRotation;
+
+    uchar               *m_data;
+    int                  m_w;
+    int                  m_h;
+
+    int                  m_xpos;
+    int                  m_ypos;
+    
+    int                  m_transparency;
+
+    QPixmap             *m_pixmap;
+
+    QRect                m_rect;
+    QRect                m_textRect;
+
+    QString              m_textString;
+
+    QFont                m_textFont;
+
+    QColor               m_textColor;
+
+    QColor               m_backgroundColor;
+
+    QRect                m_positionHint;
+
+    Digikam::ImageIface *m_iface;
 };
 
 }  // NameSpace DigikamInsertTextImagesPlugin
