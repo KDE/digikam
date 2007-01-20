@@ -311,9 +311,9 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         {
             navtab->setNavigateBarState(false, false);
             if (tab == d->desceditTab)
-                navtab->setNavigateBarFileName(i18n("Editing %1 pictures").arg(d->currentInfos.count()));
+                navtab->setLabelText(i18n("<qt>Editing <b>%1</b> pictures</qt>").arg(d->currentInfos.count()));
             else
-                navtab->setNavigateBarFileName(i18n("%1 pictures selected").arg(d->currentInfos.count()));
+                navtab->setLabelText(i18n("<qt><b>%1</b> pictures selected</qt>").arg(d->currentInfos.count()));
         }
     }
 

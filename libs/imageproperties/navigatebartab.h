@@ -43,6 +43,7 @@ namespace Digikam
 {
 
 class NavigateBarWidget;
+class NavigateBarTabPriv;
 
 class DIGIKAM_EXPORT NavigateBarTab : public QWidget
 {
@@ -56,6 +57,7 @@ public:
     void setNavigateBarState(bool hasPrevious, bool hasNext);
     void setNavigateBarState(int itemType);
     void setNavigateBarFileName(const QString &name = QString());
+    void setLabelText(const QString &text);
 
 signals:
 
@@ -70,8 +72,8 @@ protected:
 
 protected:
 
-    QVBoxLayout       *m_navigateBarLayout;
-    NavigateBarWidget *m_navigateBar;
+    QVBoxLayout        *m_navigateBarLayout;
+    NavigateBarTabPriv *d;
 
 };
 

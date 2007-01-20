@@ -23,6 +23,8 @@
 // Qt includes.
 
 #include <qlayout.h>
+#include <qwidgetstack.h>
+#include <qlabel.h>
 
 // Local includes.
 
@@ -33,15 +35,32 @@
 namespace Digikam
 {
 
+class NavigateBarTabPriv
+{
+public:
+
+    NavigateBarTabPriv()
+    {
+        stack = 0;
+        navigateBar = 0;
+        label       = 0;
+    }
+
+    QWidgetStack          *stack;
+    NavigateBarWidget     *navigateBar;
+    QLabel                *label;
+};
+
 NavigateBarTab::NavigateBarTab(QWidget* parent)
               : QWidget(parent, 0, Qt::WDestructiveClose)
 {
+    d = new NavigateBarTabPriv;
     m_navigateBarLayout = 0;
-    m_navigateBar       = 0;
 }
 
 NavigateBarTab::~NavigateBarTab()
 {
+    delete d;
 }
 
 void NavigateBarTab::setupNavigateBar(bool navBar)
@@ -50,53 +69,69 @@ void NavigateBarTab::setupNavigateBar(bool navBar)
 
     if (navBar)
     {
-        m_navigateBar = new NavigateBarWidget(this, navBar);
+        d->stack = new QWidgetStack(this);
+        m_navigateBarLayout->addWidget(d->stack);
 
-        m_navigateBarLayout->addWidget(m_navigateBar);
+        d->navigateBar  = new NavigateBarWidget(d->stack, navBar);
+        d->stack->addWidget(d->navigateBar);
 
-        connect(m_navigateBar, SIGNAL(signalFirstItem()),
+        connect(d->navigateBar, SIGNAL(signalFirstItem()),
                 this, SIGNAL(signalFirstItem()));
 
-        connect(m_navigateBar, SIGNAL(signalPrevItem()),
+        connect(d->navigateBar, SIGNAL(signalPrevItem()),
                 this, SIGNAL(signalPrevItem()));
 
-        connect(m_navigateBar, SIGNAL(signalNextItem()),
+        connect(d->navigateBar, SIGNAL(signalNextItem()),
                 this, SIGNAL(signalNextItem()));
 
-        connect(m_navigateBar, SIGNAL(signalLastItem()),
+        connect(d->navigateBar, SIGNAL(signalLastItem()),
                 this, SIGNAL(signalLastItem()));
+
+        d->label = new QLabel(d->stack);
+        d->label->setAlignment(Qt::AlignCenter);
+        d->stack->addWidget(d->label);
     }
 }
 
 void NavigateBarTab::setNavigateBarState(bool hasPrevious, bool hasNext)
 {
-    if (!m_navigateBar)
+    if (!d->navigateBar)
         return;
 
+    d->stack->raiseWidget(d->navigateBar);
+
     if (hasPrevious && hasNext)
-        m_navigateBar->setButtonsState(NavigateBarWidget::ItemCurrent);
+        d->navigateBar->setButtonsState(NavigateBarWidget::ItemCurrent);
     else if (!hasPrevious && hasNext)
-        m_navigateBar->setButtonsState(NavigateBarWidget::ItemFirst);
+        d->navigateBar->setButtonsState(NavigateBarWidget::ItemFirst);
     else if (hasPrevious && !hasNext)
-        m_navigateBar->setButtonsState(NavigateBarWidget::ItemLast);
+        d->navigateBar->setButtonsState(NavigateBarWidget::ItemLast);
     else
-        m_navigateBar->setButtonsState(NavigateBarWidget::NoNavigation);
+        d->navigateBar->setButtonsState(NavigateBarWidget::NoNavigation);
 }
 
 void NavigateBarTab::setNavigateBarState(int itemType)
 {
-    if (!m_navigateBar)
+    if (!d->navigateBar)
         return;
 
-    m_navigateBar->setButtonsState(itemType);
+    d->stack->raiseWidget(d->navigateBar);
+    d->navigateBar->setButtonsState(itemType);
 }
 
 void NavigateBarTab::setNavigateBarFileName(const QString &name)
 {
-    if (!m_navigateBar)
+    if (!d->navigateBar)
         return;
 
-    m_navigateBar->setFileName(name);
+    d->stack->raiseWidget(d->navigateBar);
+    d->navigateBar->setFileName(name);
+}
+
+void NavigateBarTab::setLabelText(const QString &text)
+{
+    d->stack->raiseWidget(d->label);
+    d->label->setText(text);
 }
 
 }  // NameSpace Digikam
