@@ -1,10 +1,13 @@
 /* ============================================================
- * File  : blackframeparser.h
- * Author: Unai Garro <ugarro at users dot sourceforge dot net>
- * Date  : 2005-03-27
+ * Authors: Unai Garro <ugarro at users dot sourceforge dot net>
+ * Date   : 2005-03-27
  * Description : 
  * 
- * Copyright 2005 by Unai Garro
+ * Copyright 2005-2006 by Unai Garro
+ *
+ * Part of the algorithm for finding the hot pixels was based on
+ * the code of jpegpixi, which was released under the GPL license,
+ * and is Copyright (C) 2003, 2004 Martin Dickopp
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -17,12 +20,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  * 
- * ============================================================ 
- * Part of the algorithm for finding the hot pixels was based on
- * the code of jpegpixi, which was released under the GPL license,
- * and is Copyright (C) 2003, 2004 Martin Dickopp
  * ============================================================*/
-
 
 #ifndef BLACKFRAMEPARSER_H
 #define BLACKFRAMEPARSER_H
@@ -64,7 +62,16 @@ public:
     void parseBlackFrame(KURL url);
     void parseBlackFrame(QImage& img);
     QImage image(){return mImage;}
+
+signals:
+
+    void parsed(QValueList<HotPixel>);
     
+private slots:
+        
+    void blackFrameDataArrived(KIO::Job*, const QByteArray& data);
+    void slotResult(KIO::Job*);
+
 private:
 
     QString mOutputString;
@@ -76,14 +83,6 @@ private:
     
     QByteArray mData;
     QImage     mImage;
-        
-private slots:
-        
-    void blackFrameDataArrived(KIO::Job*, const QByteArray& data);
-    void slotResult(KIO::Job*);
-
-signals:
-    void parsed(QValueList<HotPixel>);
 };
 
 }  // NameSpace DigikamHotPixelsImagesPlugin

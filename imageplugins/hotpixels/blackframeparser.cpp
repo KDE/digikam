@@ -1,10 +1,13 @@
 /* ============================================================
- * File  : blackframeparser.cpp
- * Author: Unai Garro <ugarro at users dot sourceforge dot net>
- * Date  : 2005-03-27
+ * Authors: Unai Garro <ugarro at users dot sourceforge dot net>
+ * Date   : 2005-03-27
  * Description : 
  * 
- * Copyright 2005 by Unai Garro
+ * Copyright 2005-2006 by Unai Garro
+ *
+ * Part of the algorithm for finding the hot pixels was based on
+ * the code of jpegpixi, which was released under the GPL license,
+ * and is Copyright (C) 2003, 2004 Martin Dickopp
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -17,10 +20,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  * 
- * ============================================================ 
- * Part of the algorithm for finding the hot pixels was based on
- * the code of jpegpixi, which was released under the GPL license,
- * and is Copyright (C) 2003, 2004 Martin Dickopp
  * ============================================================*/
 
 // Denominator for relative quantities. 
@@ -41,6 +40,7 @@
 // Local includes.
 
 #include "blackframeparser.h"
+#include "blackframeparser.moc"
 
 namespace DigikamHotPixelsImagesPlugin
 {
@@ -81,10 +81,10 @@ void BlackFrameParser::parseBlackFrame(KURL url)
     
     KIO::TransferJob *job = KIO::get(url, false, false);
     connect(job, SIGNAL(data( KIO::Job*, const QByteArray&)),
-            SLOT( blackFrameDataArrived( KIO::Job *, const QByteArray& )));
+            this, SLOT( blackFrameDataArrived( KIO::Job *, const QByteArray& )));
     
     connect(job, SIGNAL(result(KIO::Job* )), 
-            SLOT(slotResult(KIO::Job*)));
+            this, SLOT(slotResult(KIO::Job*)));
 }
 
 void BlackFrameParser::parseBlackFrame(QImage& img)
@@ -110,7 +110,6 @@ void BlackFrameParser::slotResult(KIO::Job*)
 
 void BlackFrameParser::blackFrameParsing(bool useData)
 {
-
     //First we create a QImage out of the file data if we are using it
     if (useData) 
     {
@@ -119,9 +118,9 @@ void BlackFrameParser::blackFrameParsing(bool useData)
     // Now find the hot pixels and store them in a list
     QValueList<HotPixel> hpList;
     
-    for (int y=0; y <mImage.height(); ++y)
+    for (int y=0 ; y < mImage.height() ; ++y)
     {
-        for (int x=0;x<mImage.width(); ++x)
+        for (int x=0 ; x < mImage.width() ; ++x)
         {
             //Get each point in the image
             QRgb pixrgb=mImage.pixel(x,y);
@@ -158,48 +157,46 @@ void BlackFrameParser::blackFrameParsing(bool useData)
 
 void BlackFrameParser::consolidatePixels (QValueList<HotPixel>& list)
 {
+    if (list.isEmpty()) 
+        return;
 
+    /* Consolidate horizontally.  */
+    
+    QValueList<HotPixel>::iterator it, prevPointIt;
 
-    if (list.isEmpty()) return;
-
-        /* Consolidate horizontally.  */
-        
-        QValueList<HotPixel>::iterator it, prevPointIt;
-
-        prevPointIt=list.begin();
-        it=list.begin();
-        ++it;
-        
-        HotPixel tmp;
-        HotPixel point;
-        HotPixel point_below;
-        QValueList<HotPixel>::iterator end(list.end()); 
-        for (; it != end; ++it )
+    prevPointIt=list.begin();
+    it=list.begin();
+    ++it;
+    
+    HotPixel tmp;
+    HotPixel point;
+    HotPixel point_below;
+    QValueList<HotPixel>::iterator end(list.end()); 
+    for (; it != end; ++it )
+    {
+        while (1)
         {
-
-               while (1)
-        {
-            point=(*it);
-            tmp=point;
-
+            point = (*it);
+            tmp   = point;
+    
             QValueList<HotPixel>::Iterator point_below_it;
             point_below_it = list.find (tmp); //find any intersecting hotp below tmp
             if (point_below_it != list.end())
             {
-                point_below=*point_below_it;
+                point_below =* point_below_it;
                 validateAndConsolidate (&point, &point_below);
                 
-                point.rect.setX(MIN (point.x(), point_below.x()));
-                point.rect.setWidth(MAX (point.x() + point.width(),
-                                        point_below.x() + point_below.width()) - point.x());
-                point.rect.setHeight(MAX (point.y() + point.height(),
-                        point_below.y() + point_below.height()) - point.y());
+                point.rect.setX(MIN(point.x(), point_below.x()));
+                point.rect.setWidth(MAX(point.x() + point.width(),
+                                    point_below.x() + point_below.width()) - point.x());
+                point.rect.setHeight(MAX(point.y() + point.height(),
+                                     point_below.y() + point_below.height()) - point.y());
                 *it=point;
                 list.remove (point_below_it); //TODO: Check! this could remove it++?
             }
-            else    break;
+            else    
+                break;
         }
-
     }
 }
 
@@ -209,5 +206,3 @@ void BlackFrameParser::validateAndConsolidate (HotPixel *a, HotPixel *b)
 }
 
 }  // NameSpace DigikamHotPixelsImagesPlugin
-
-#include "blackframeparser.moc"
