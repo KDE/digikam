@@ -1,11 +1,14 @@
 /* ============================================================
- * File  : hotpixelfixer.h
- * Author: Unai Garro <ugarro at users dot sourceforge dot net>
- *         Gilles Caulier <caulier dot gilles at free dot fr>
- * Date  : 2005-03-27
+ * Authors: Unai Garro <ugarro at users dot sourceforge dot net>
+ *          Gilles Caulier <caulier dot gilles at free dot fr>
+ * Date   : 2005-03-27
  * Description : Threaded image filter to fix hot pixels
  * 
- * Copyright 2005 by Unai Garro and Gilles Caulier
+ * Copyright 2005-2007 by Unai Garro and Gilles Caulier
+ *
+ * The algorithm for fixing the hot pixels was based on
+ * the code of jpegpixi, which was released under the GPL license,
+ * and is Copyright (C) 2003, 2004 Martin Dickopp
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,10 +21,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  * 
- * ============================================================ 
- * The algorithm for fixing the hot pixels was based on
- * the code of jpegpixi, which was released under the GPL license,
- * and is Copyright (C) 2003, 2004 Martin Dickopp
  * ============================================================*/
 
 #ifndef HOTPIXELFIXER_H
@@ -73,13 +72,7 @@ public:
                   const QValueList<HotPixel>& hpList, int interpolationMethod);
     ~HotPixelFixer();
 
-private: // Hot Pixels Removal filter data.
-
-    int                  m_interpolationMethod;
-       
-    QValueList<HotPixel> m_hpList;
-         
-private: // Hot Pixels Removal filter methods.
+private: 
 
     virtual void filterImage(void);
     
@@ -87,12 +80,17 @@ private: // Hot Pixels Removal filter methods.
     void weightPixels (Digikam::DImg &img, HotPixel &px, int method, Direction dir, int maxComponent);
     
     inline bool validPoint(Digikam::DImg &img, QPoint p)
-        {
+    {
         return (p.x()>=0 && p.y()>=0 && p.x()<(long) img.width() && p.y()<(long) img.height());
-        };
+    };
     
     QValueList <Weights> mWeightList;
+
+private: 
+
+    int                  m_interpolationMethod;
        
+    QValueList<HotPixel> m_hpList;
 };
 
 }  // NameSpace DigikamHotPixelsImagesPlugin
