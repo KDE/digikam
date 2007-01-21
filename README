@@ -79,7 +79,7 @@ http://dev.robotbattle.com/bugs/main_page.php
 
 AutoConf   >= 2.5.x                        http://www.gnu.org/software/autoconf
 AutoMake   >= 1.7.x                        http://www.gnu.org/software/automake
-libkde     >= 3.x   (>=3.5.x recommended)  http://www.kde.org
+libkde     >= 3.4.x (>=3.5.x recommended)  http://www.kde.org
 libsqlite  >= 3.x                          http://www.sqlite.org
 libexiv2   >= 0.12                         http://www.exiv2.org
 libgphoto2 >= 2.x   (>=2.2.x recommended)  http://www.gphoto.org
