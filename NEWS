@@ -460,6 +460,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 266 ==> 135141 : Border size in pixel.
 267 ==> 137696 : Border extent should not follow image aspect ratio.
 268 ==> 138444 : More clear/consistent color management terminology.
-269 ==> 
+269 ==> 140176 : Showfoto crashes when selecting a filter.
+270 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
