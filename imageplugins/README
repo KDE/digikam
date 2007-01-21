@@ -1,12 +1,13 @@
 DIGIKAMIMAGEPLUGINS
 
-Visit the web project page available at these url:
 
-DIGIKAM             : http://www.digikam.org
-DIGIKAMIMAGEPLUGINS : http://extragear.kde.org/apps/digikamimageplugins
+-- AUTHORS -----------------------------------------------------------
 
-Resume :
-----------------------------------------------------------------------
+See AUTHORS file for details.
+
+
+-- ABOUT -------------------------------------------------------------
+
 digiKam uses a plugin framework for additional functionalities in ImageEditor and Showfoto.
 Currently implemented plugins are:
 
@@ -40,12 +41,24 @@ Currently implemented plugins are:
 28) Refocus          : An advanced sharpness editor based on deconvolution filter to refocus a photograph.
 29) HotPixels        : A plugin to remove Stuff/Hot Pixels from pictures taken with deficient camera CCD.
 
-Contact :
------------------------------------------------------------------------
+Visit the web project pages available at these url:
+
+DIGIKAM             : http://www.digikam.org
+DIGIKAMIMAGEPLUGINS : http://extragear.kde.org/apps/digikamimageplugins
+
+
+-- CONTACT ------------------------------------------------------------
+
 If you have questions, comments, suggestions to make do email at :
 
 digikam-users@kde.org
 
+If you want contribute to digiKam developments do email at :
+
+digikam-devel@kde.org
+
+
+-- BUG REPORTS --------------------------------------------------------
 
 IMPORTANT : the bugreports and wishlist are hosted by the KDE bugs report 
 system who can be contacted by the Kde help menu of all image plugins dialog (not 
@@ -59,16 +72,17 @@ at this url :
 
 http://bugs.kde.org/buglist.cgi?product=digikamimageplugins&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
 
-Depencies :
------------------------------------------------------------------------
-AutoConf >= 2.5
-AutoMake >= 1.7.0
-KDE 3.x
-digiKam >= 0.9.0
+
+-- DEPENDENCIES -------------------------------------------------------
+
+AutoConf   >= 2.5.x                        http://www.gnu.org/software/autoconf
+AutoMake   >= 1.7.x                        http://www.gnu.org/software/automake
+libkde     >= 3.4.x (>=3.5.x recommended)  http://www.kde.org
+digiKam    >= 0.9.0                        http://www.digikam.org
 
 
-Installation :
-------------------------------------------------------------------------
+-- INSTALLATION --------------------------------------------------------
+
 In the source directory do :
 
 1) export WANT_AUTOCONF_2_5=1
@@ -79,10 +93,6 @@ In the source directory do :
 6) su
 7) make install
 
-
-Notes :
-------------------------------------------------------------------------
-
 - More specifics compilation and installation options can be used with '.configure' script.
 Checked this with './configure --help' command line.
 
@@ -91,3 +101,8 @@ and restart 'make -f Makefile.cvs; ./configure; ...' commands.
 
 Nota : use the '--enable-debug=full' option with the configure script for to provide
 a full information bug report.
+
+
+-- DONATE MONEY --------------------------------------------------------
+
+Look at this url : http://www.digikam.org/?q=donation
