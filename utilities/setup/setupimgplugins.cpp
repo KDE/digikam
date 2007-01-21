@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2006-01-02
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2006-01-02
  * Description : setup Image Editor plugins tab.
  * 
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,6 +42,7 @@
 // Local includes.
 
 #include "setupimgplugins.h"
+#include "setupimgplugins.moc"
 
 namespace Digikam
 {
@@ -70,29 +71,28 @@ SetupImgPlugins::SetupImgPlugins(QWidget* parent )
     d = new SetupImgPluginsPriv;
 
     QVBoxLayout *mainLayout = new QVBoxLayout(parent);
+    QVBoxLayout *layout     = new QVBoxLayout(this, 0, KDialog::spacingHint());
 
-    QVBoxLayout *layout = new QVBoxLayout( this, 0, KDialog::spacingHint());
-
-    d->pluginsNumber = new QLabel(this);
-
-    QCheckBox* toggleallcheckbox = new QCheckBox( i18n("Toggle All"), this );
-    toggleallcheckbox->setChecked(true);
-    connect(toggleallcheckbox,SIGNAL(toggled(bool)), this,SLOT(toggleAll(bool)));
+    QHBox *hBox                  = new QHBox(this);
+    d->pluginsNumber             = new QLabel(hBox);
+    QLabel *space                = new QLabel(hBox);
+    QCheckBox *toggleAllCheckbox = new QCheckBox(i18n("Toggle All"), hBox);
+    hBox->setStretchFactor(space, 10);
     
-    d->pluginList = new KListView( this, "pluginList" );
-    d->pluginList->addColumn( i18n( "Name" ) );
-    d->pluginList->addColumn( "Library Name", 0 );   // No i18n here. Hidden column with the internal plugin library name.
-    d->pluginList->addColumn( i18n( "Description" ) );
+    d->pluginList = new KListView(this, "pluginList");
+    d->pluginList->addColumn(i18n("Name"));
+    d->pluginList->addColumn("Library Name", 0);   // No i18n here. Hidden column with the 
+                                                   // internal plugin library name.
+    d->pluginList->addColumn(i18n("Description"));
     d->pluginList->setResizeMode( QListView::LastColumn );
     d->pluginList->setAllColumnsShowFocus( true );
-    QWhatsThis::add( d->pluginList, i18n("<p>You can set here the list of plugins "
-                                         "which must be enabled/disabled for the future "
-                                         "digiKam image editor instances."
-                                         "<p>Note: the core image plugin cannot be disabled."));
+    QWhatsThis::add(d->pluginList, i18n("<p>You can set here the list of plugins "
+                                        "which must be enabled/disabled for the future "
+                                        "digiKam image editor sessions."
+                                        "<p>Note: the core image plugin cannot be disabled."));
     
-    layout->addWidget( d->pluginsNumber );
-    layout->addWidget( toggleallcheckbox );
-    layout->addWidget( d->pluginList );
+    layout->addWidget(hBox);
+    layout->addWidget(d->pluginList);
 
     mainLayout->addWidget(this);
     
@@ -101,6 +101,11 @@ SetupImgPlugins::SetupImgPlugins(QWidget* parent )
     readSettings();
     initImagePluginsList();
     updateImagePluginsList(d->availableImagePluginList, d->enableImagePluginList);
+
+    // --------------------------------------------------------
+
+    connect(toggleAllCheckbox, SIGNAL(toggled(bool)),
+            this, SLOT(toggleAll(bool)));
 }
 
 SetupImgPlugins::~SetupImgPlugins()
@@ -125,8 +130,7 @@ void SetupImgPlugins::initImagePluginsList()
 void SetupImgPlugins::updateImagePluginsList(QStringList lista, QStringList listl)
 {
     QStringList::Iterator it = lista.begin();
-    d->pluginsNumber->setText(i18n("Plugins found: %1")
-                             .arg(lista.count()/3));
+    d->pluginsNumber->setText(i18n("Plugins found: %1").arg(lista.count()/3));
 
     while( it != lista.end() )
     {
@@ -174,7 +178,9 @@ void SetupImgPlugins::toggleAll(bool on)
 
     while( item )
     {
-        item->setOn( on );
+        if (item->isEnabled())   // Do not touch the core plugin.
+            item->setOn( on );
+
         item = (QCheckListItem*)item->nextSibling();
     }
 }
@@ -198,4 +204,3 @@ void SetupImgPlugins::readSettings()
 
 }  // namespace Digikam
 
-#include "setupimgplugins.moc"

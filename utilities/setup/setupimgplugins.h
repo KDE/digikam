@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2006-01-02
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2006-01-02
  * Description : setup Image Editor plugins tab.
  * 
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,9 @@ public:
 
     void applySettings();
     QStringList getImagePluginsListEnable();
-public slots:
+
+private slots:
+
     void toggleAll(bool on);
     
 private:
@@ -54,7 +56,6 @@ private:
 private:
 
     SetupImgPluginsPriv* d;
-
 };
 
 }  // namespace Digikam
