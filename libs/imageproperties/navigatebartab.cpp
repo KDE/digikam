@@ -41,14 +41,14 @@ public:
 
     NavigateBarTabPriv()
     {
-        stack = 0;
+        stack       = 0;
         navigateBar = 0;
         label       = 0;
     }
 
-    QWidgetStack          *stack;
-    NavigateBarWidget     *navigateBar;
-    QLabel                *label;
+    QWidgetStack      *stack;
+    NavigateBarWidget *navigateBar;
+    QLabel            *label;
 };
 
 NavigateBarTab::NavigateBarTab(QWidget* parent)
@@ -66,10 +66,10 @@ NavigateBarTab::~NavigateBarTab()
 void NavigateBarTab::setupNavigateBar(bool navBar)
 {
     m_navigateBarLayout = new QVBoxLayout(this);
+    d->stack            = new QWidgetStack(this);
 
     if (navBar)
     {
-        d->stack = new QWidgetStack(this);
         m_navigateBarLayout->addWidget(d->stack);
 
         d->navigateBar  = new NavigateBarWidget(d->stack, navBar);
@@ -86,11 +86,11 @@ void NavigateBarTab::setupNavigateBar(bool navBar)
 
         connect(d->navigateBar, SIGNAL(signalLastItem()),
                 this, SIGNAL(signalLastItem()));
-
-        d->label = new QLabel(d->stack);
-        d->label->setAlignment(Qt::AlignCenter);
-        d->stack->addWidget(d->label);
     }
+
+    d->label = new QLabel(d->stack);
+    d->label->setAlignment(Qt::AlignCenter);
+    d->stack->addWidget(d->label);
 }
 
 void NavigateBarTab::setNavigateBarState(bool hasPrevious, bool hasNext)
