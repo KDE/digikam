@@ -155,7 +155,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent, QString title,
     m_blurInput->setPrecision(2);
     m_blurInput->setRange(0.0, 10.0, 0.1, true);
     QWhatsThis::add( m_blurInput, i18n("<p>This value controls the smoothing regularity of the target image. "
-                                       "Do not use an high value here, or the "
+                                       "Do not use a high value here, or the "
                                        "target image will be completely blurred."));
     grid2->addMultiCellWidget(m_blurLabel, 3, 3, 0, 0);
     grid2->addMultiCellWidget(m_blurInput, 3, 3, 1, 1);

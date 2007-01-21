@@ -87,7 +87,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent, QString title, QFrame*
     m_radius = new KDoubleNumInput(gboxSettings);
     m_radius->setPrecision(2);
     m_radius->setRange(0.0, 5.0, 0.01, true);
-    QWhatsThis::add( m_radius, i18n("<p>This is the Radius of the Circular convolution. It is the most important "
+    QWhatsThis::add( m_radius, i18n("<p>This is the radius of the circular convolution. It is the most important "
                                     "parameter for using the plugin. For most images the default value of 1.0 "
                                     "should give good results. Select a higher value when your image is very blurred."));
     
@@ -100,9 +100,9 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent, QString title, QFrame*
     m_correlation = new KDoubleNumInput(gboxSettings);
     m_correlation->setPrecision(2);
     m_correlation->setRange(0.0, 1.0, 0.01, true);
-    QWhatsThis::add( m_correlation, i18n("<p>Increasing the Correlation may help to reduce artifacts. The correlation can "
+    QWhatsThis::add( m_correlation, i18n("<p>Increasing the correlation may help to reduce artifacts. The correlation can "
                                          "range from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. "
-                                         "Using a high value for the Correlation will reduce the sharpening effect of the "
+                                         "Using a high value for the correlation will reduce the sharpening effect of the "
                                          "plugin."));
 
     gridSettings->addMultiCellWidget(label4, 2, 2, 0, 1);
@@ -114,10 +114,10 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent, QString title, QFrame*
     m_noise = new KDoubleNumInput(gboxSettings);
     m_noise->setPrecision(3);
     m_noise->setRange(0.0, 1.0, 0.001, true);
-    QWhatsThis::add( m_noise, i18n("<p>Increasing the Noise Filter parameter may help to reduce artifacts. The Noise Filter "
-                                   "can range from 0-1 but values higher than 0.1 are rarely helpful. When the Noise Filter "
+    QWhatsThis::add( m_noise, i18n("<p>Increasing the noise filter parameter may help to reduce artifacts. The noise filter "
+                                   "can range from 0-1 but values higher than 0.1 are rarely helpful. When the noise filter "
                                    "value is too low, e.g. 0.0 the image quality will be very poor. A useful value is 0.01. "
-                                   "Using a high value for the Noise Filter will reduce the sharpening "
+                                   "Using a high value for the noise filter will reduce the sharpening "
                                    "effect of the plugin."));
 
     gridSettings->addMultiCellWidget(label5, 4, 4, 0, 1);
@@ -129,10 +129,10 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent, QString title, QFrame*
     m_gauss = new KDoubleNumInput(gboxSettings);
     m_gauss->setPrecision(2);
     m_gauss->setRange(0.0, 1.0, 0.01, true);
-    QWhatsThis::add( m_gauss, i18n("<p>This is the Sharpness for the Gaussian convolution. Use this parameter when your "
-                                   "blurring is of Gaussian type. In most cases you should set this parameter to 0, because "
+    QWhatsThis::add( m_gauss, i18n("<p>This is the sharpness for the gaussian convolution. Use this parameter when your "
+                                   "blurring is of gaussian type. In most cases you should set this parameter to 0, because "
                                    "it causes nasty artifacts. When you use non-zero values you will probably have to "
-                                   "increase the Correlation and/or Noise Filter parameters too."));
+                                   "increase the correlation and/or noise filter parameters too."));
 
     gridSettings->addMultiCellWidget(label3, 6, 6, 0, 1);
     gridSettings->addMultiCellWidget(m_gauss, 7, 7, 0, 1);
@@ -143,8 +143,8 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent, QString title, QFrame*
     m_matrixSize = new KIntNumInput(gboxSettings);
     m_matrixSize->setRange(0, MAX_MATRIX_SIZE, 1, true);  
     QWhatsThis::add( m_matrixSize, i18n("<p>This parameter determines the size of the transformation matrix. "
-                                        "Increasing the Matrix Width may give better results, especially when you have "
-                                        "chosen large values for Circular or Gaussian Sharpness."));
+                                        "Increasing the matrix width may give better results, especially when you have "
+                                        "chosen large values for circular or gaussian sharpness."));
 
     gridSettings->addMultiCellWidget(label1, 8, 8, 0, 1);
     gridSettings->addMultiCellWidget(m_matrixSize, 9, 9, 0, 1);

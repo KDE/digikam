@@ -144,7 +144,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent, QString 
     m_brightenInput = new KDoubleNumInput(gboxSettings);
     m_brightenInput->setPrecision(1);
     m_brightenInput->setRange(-100.0, 100.0, 0.1, true);
-    QWhatsThis::add( m_brightenInput, i18n("<p>This value adjust the brightness in image corners."));
+    QWhatsThis::add( m_brightenInput, i18n("<p>This value adjusts the brightness in image corners."));
 
     gridSettings->addMultiCellWidget(label4, 7, 7, 0, 1);
     gridSettings->addMultiCellWidget(m_brightenInput, 8, 8, 0, 1);

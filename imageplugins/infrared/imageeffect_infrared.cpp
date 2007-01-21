@@ -92,10 +92,10 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent, QString title, QFram
     whatsThis = i18n("<p>Set here the ISO-sensitivity of the simulated infrared film. "
                      "Increasing this value will increase the portion of green color in the mix. " 
                      "It will also increase the halo effect on the hightlights, and the film "
-                     "graininess (if the box is checked).</p>"
-                     "<p>Note: to simulate an <b>Ilford SFX200</b> infrared film, use a sensibility excursion of 200 to 800. "
-                     "A sensibility over 800 simulate <b>Kodak HIE</b> hight speed infrared film. This last one give more "
-                     "dramastic photograph style.</p>");
+                     "graininess (if that box is checked).</p>"
+                     "<p>Note: to simulate an <b>Ilford SFX200</b> infrared film, use a sensitivity excursion of 200 to 800. "
+                     "A sensitivity over 800 simulates <b>Kodak HIE</b> high-speed infrared film. This last one creates a more "
+                     "dramatic photographic style.</p>");
 
     QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
     QWhatsThis::add( m_sensibilitySlider, whatsThis);
@@ -108,7 +108,7 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent, QString title, QFram
 
     m_addFilmGrain = new QCheckBox( i18n("Add film grain"), gboxSettings);
     m_addFilmGrain->setChecked( true );
-    QWhatsThis::add( m_addFilmGrain, i18n("<p>This option is adding infrared film grain to "
+    QWhatsThis::add( m_addFilmGrain, i18n("<p>This option adds infrared film grain to "
                                           "the image depending on ISO-sensitivity."));
     gridSettings->addMultiCellWidget(m_addFilmGrain, 2, 2, 0, 1);
 

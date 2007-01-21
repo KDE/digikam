@@ -98,7 +98,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent, QString title, Q
     m_previewWidget = new InsertTextWidget(480, 320, frame);
     l->addWidget(m_previewWidget);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the text inserted to the image. "
-                                           "You can use the mouse for moving the text at the right location."));
+                                           "You can use the mouse to move the text to the right location."));
     setPreviewAreaWidget(frame);                                           
     
     // -------------------------------------------------------------
@@ -109,7 +109,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent, QString title, Q
     m_textEdit = new KTextEdit(gbox2);
     m_textEdit->setCheckSpellingEnabled(true);
     m_textEdit->setWordWrap(QTextEdit::NoWrap);
-    QWhatsThis::add( m_textEdit, i18n("<p>Enter here your text to insert on your image."));
+    QWhatsThis::add( m_textEdit, i18n("<p>Here, enter the text you want to insert in your image."));
     gridBox2->addMultiCellWidget(m_textEdit, 0, 2, 0, 1);
     
     // -------------------------------------------------------------

@@ -199,8 +199,8 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
     // -------------------------------------------------------------
     
     m_monochrome = new QCheckBox( i18n("Monochrome"), gboxSettings);
-    QWhatsThis::add( m_monochrome, i18n("<p>Enable this option if you want rendering of the image in monochrome mode. "
-                                        "In this mode, histogram will display only luminosity values."));
+    QWhatsThis::add( m_monochrome, i18n("<p>Enable this option if you want the image rendered in monochrome mode. "
+                                        "In this mode, the histogram will display only luminosity values."));
     
     m_preserveLuminosity = new QCheckBox( i18n("Preserve luminosity"), gboxSettings);
     QWhatsThis::add( m_preserveLuminosity, i18n("<p>Enable this option is you want preserve the image luminosity."));

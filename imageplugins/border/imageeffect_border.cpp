@@ -94,7 +94,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent, QString title, QFrame* b
     m_borderType->insertItem( i18n("Decorative Pine") );
     m_borderType->insertItem( i18n("Decorative Wood") );
     m_borderType->insertItem( i18n("Decorative Paper") );
-    m_borderType->insertItem( i18n("Decorative Parque") );
+    m_borderType->insertItem( i18n("Decorative Parquet") );
     m_borderType->insertItem( i18n("Decorative Ice") );
     m_borderType->insertItem( i18n("Decorative Leaf") );
     m_borderType->insertItem( i18n("Decorative Marble") );

@@ -148,7 +148,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
             "This value improves the frequency response for the filter. "
             "When it is too strong then not all noise can be removed, or spike noise may appear. "
             "Set it near to maximum, if you want to remove very weak noise or JPEG-artifacts, "
-            "without loosing detail."));
+            "without losing detail."));
        
     gridSettings->addMultiCellWidget(label7, 3, 3, 0, 0);
     gridSettings->addMultiCellWidget(m_sharpnessInput, 3, 3, 1, 1);
@@ -163,8 +163,8 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     QWhatsThis::add( m_lookaheadInput, i18n("<p><b>Edge</b>: "
            "This value defines the pixel distance in which the filter looks ahead for Edges. "
            "When this value is increased, then spikenoise is erased. "
-           "You can eventually readjust filter <b>Edge</b>, when you changed this setting. "
-           "When this value is to high, then the adaptive filter cannot longer accurately track "
+           "You can eventually readjust the <b>Edge</b> filter, when you have changed this setting. "
+           "When this value is too high, the adaptive filter can no longer accurately track "
            "image details, and noise can reappear or blur can occur."));
 
     gridSettings->addMultiCellWidget(label5, 4, 4, 0, 0);
@@ -178,8 +178,8 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     m_phaseInput->setPrecision(1);
     m_phaseInput->setRange(0.5, 20.0, 0.5, true);
     QWhatsThis::add( m_phaseInput, i18n("<p><b>Erosion</b>: "
-                "Use this to increase edge noise erosion and spike noise erosion. "
-                "(noise is removed by erosion)"));
+                "Use this to increase edge noise erosion and spike noise erosion "
+                "(noise is removed by erosion)."));
     
     gridSettings->addMultiCellWidget(label10, 5, 5, 0, 0);
     gridSettings->addMultiCellWidget(m_phaseInput, 5, 5, 1, 1);
@@ -197,10 +197,11 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     m_lumToleranceInput = new KDoubleNumInput(secondPage);
     m_lumToleranceInput->setPrecision(1);
     m_lumToleranceInput->setRange(0.0, 1.0, 0.1, true);
-    QWhatsThis::add( m_lumToleranceInput, i18n("<p><b>Luminance</b>: this control set the luminance tolerance "
-                "of image. It's recommended to use only <b>Color</b> or <b>Luminance</b> tolerance "
-                "settings to make an image correction, not the both at the same time. This settings "
-                "don't influence the main smoothing process controled by <b>Details</b> settings."));
+    QWhatsThis::add( m_lumToleranceInput, i18n("<p><b>Luminance</b>: this control sets the luminance tolerance of the image. It's "
+                "recommended to use only the <b>Color</b> or <b>Luminance</b> tolerance settings "
+                "to make an image correction, not both at the same time. These settings "
+                "don't influence the main smoothing process controlled by the <b>Details</b> "
+                "settings."));
 
     gridSettings2->addMultiCellWidget(label2, 0, 0, 0, 0);
     gridSettings2->addMultiCellWidget(m_lumToleranceInput, 0, 0, 1, 1);                         
@@ -212,10 +213,11 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     m_csmoothInput = new KDoubleNumInput(secondPage);
     m_csmoothInput->setPrecision(1);
     m_csmoothInput->setRange(0.0, 1.0, 0.1, true);
-    QWhatsThis::add( m_csmoothInput, i18n("<p><b>Color</b>: this control set the color tolerance of image. "
-                "It's recommended to use only <b>Color</b> or <b>Luminance</b> tolerance settings to "
-                "make an image correction, not the both at the same time. This settings don't influence "
-                "the main smoothing process controled by <b>Details</b> settings."));
+    QWhatsThis::add( m_csmoothInput, i18n("<p><b>Color</b>: this control sets the color tolerance of the image. It's "
+                "recommended to use only the <b>Color</b> or <b>Luminance</b> tolerance settings "
+                "to make an image correction, not both at the same time. These settings "
+                "don't influence the main smoothing process controlled by the <b>Details</b> "
+                "settings."));
 
     gridSettings2->addMultiCellWidget(label6, 1, 1, 0, 0);
     gridSettings2->addMultiCellWidget(m_csmoothInput, 1, 1, 1, 1);
@@ -227,7 +229,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     m_gammaInput = new KDoubleNumInput(secondPage);
     m_gammaInput->setPrecision(1);
     m_gammaInput->setRange(0.3, 3.0, 0.1, true);
-    QWhatsThis::add( m_gammaInput, i18n("<p><b>Gamma</b>: this control set the gamma tolerance of image. This value "
+    QWhatsThis::add( m_gammaInput, i18n("<p><b>Gamma</b>: this control sets the gamma tolerance of the image. This value "
                 "can be used to increase the tolerance values for darker areas (which commonly "
                 "are more noisy). This results in more blur for shadow areas."));
     
@@ -241,11 +243,12 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     m_dampingInput = new KDoubleNumInput(secondPage);
     m_dampingInput->setPrecision(1);
     m_dampingInput->setRange(0.5, 20.0, 0.5, true);
-    QWhatsThis::add( m_dampingInput, i18n("<p><b>Damping</b>: this control set the phase jitter damping adjustement. "
-                "This value defines how fast the adaptive filter-radius reacts to luminance variations. "
-                "If increased, then edges appear smoother, if too high, then blur may occur. If at "
-                "minimum then noise and phase jitter at edges can occur. It can supress spike noise when " 
-                "increased and this is the preferred method to remove it."));
+    QWhatsThis::add( m_dampingInput, i18n("<p><b>Damping</b>: this control sets the phase-jitter damping adjustment. "
+                "This value defines how fast the adaptive filter-radius reacts to luminance "
+                "variations. If increased, then edges appear smoother; if too high, then blur "
+                "may occur. If at minimum, then noise and phase jitter at the edges can occur. It "
+                "can suppress spike noise when increased, and this is the preferred method to "
+                "remove it."));
     
     gridSettings2->addMultiCellWidget(label9, 3, 3, 0, 0);
     gridSettings2->addMultiCellWidget(m_dampingInput, 3, 3, 1, 1);

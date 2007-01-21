@@ -63,7 +63,7 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent, QString titl
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Distortion Effects"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin to apply distortion effect to an image."),
+                                       I18N_NOOP("A digiKam image plugin to apply distortion effects to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2005, Gilles Caulier\n"
                                        "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg", 
@@ -94,9 +94,9 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent, QString titl
     m_effectType = new QComboBox( false, gboxSettings );
     m_effectType->insertItem( i18n("Fish Eyes") );
     m_effectType->insertItem( i18n("Twirl") );
-    m_effectType->insertItem( i18n("Cilindrical Hor.") );
-    m_effectType->insertItem( i18n("Cilindrical Vert.") );
-    m_effectType->insertItem( i18n("Cilindrical H/V.") );
+    m_effectType->insertItem( i18n("Cylindrical Hor.") );
+    m_effectType->insertItem( i18n("Cylindrical Vert.") );
+    m_effectType->insertItem( i18n("Cylindrical H/V.") );
     m_effectType->insertItem( i18n("Caricature") );
     m_effectType->insertItem( i18n("Multiple Corners") );
     m_effectType->insertItem( i18n("Waves Hor.") );
@@ -116,25 +116,25 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent, QString titl
                                         "<b>Twirl</b>: spins the photograph to produce a Twirl pattern.<p>"
                                         "<b>Cylinder Hor.</b>: warps the photograph around a horizontal cylinder.<p>"
                                         "<b>Cylinder Vert.</b>: warps the photograph around a vertical cylinder.<p>"
-                                        "<b>Cylinder H/V.</b>: warps the photograph around a 2 cylinders, vertical "
+                                        "<b>Cylinder H/V.</b>: warps the photograph around 2 cylinders, vertical "
                                         "and horizontal.<p>"
-                                        "<b>Caricature</b>: distorts photograph with 'Fish Eyes' effect inverted.<p>"
+                                        "<b>Caricature</b>: distorts the photograph with the 'Fish Eyes' effect inverted.<p>"
                                         "<b>Multiple Corners</b>: splits the photograph like a multiple corners pattern.<p>"
                                         "<b>Waves Horizontal</b>: distorts the photograph with horizontal waves.<p>"
                                         "<b>Waves Vertical</b>: distorts the photograph with verticals waves.<p>"
                                         "<b>Block Waves 1</b>: divides the image into cells and makes it look as "
                                         "if it is being viewed through glass blocks.<p>"
                                         "<b>Block Waves 2</b>: like Block Waves 1 but with another version "
-                                        "of glass blocks distorsion.<p>"
+                                        "of glass blocks distortion.<p>"
                                         "<b>Circular Waves 1</b>: distorts the photograph with circular waves.<p>"
-                                        "<b>Circular Waves 2</b>: other variation of Circular Waves effect.<p>"
+                                        "<b>Circular Waves 2</b>: another variation of Circular Waves effect.<p>"
                                         "<b>Polar Coordinates</b>: converts the photograph from rectangular "
                                         "to polar coordinates.<p>"
                                         "<b>Unpolar Coordinates</b>: Polar Coordinate effect inverted.<p>"
                                         "<b>Tile</b>: splits the photograph into square blocks and move "
                                         "them randomly inside the image.<p>"
                                         "<b>Neon</b>: sub-coloring the edges in a photograph to reproduce a "
-                                        "neon highlightment.<p>"
+                                        "neon highlight.<p>"
                                         "<b>Find Edges</b>: detects the edges in a photograph and their strength."
                                         ));
     gridSettings->addMultiCellWidget(m_effectTypeLabel, 0, 0, 0, 2);
