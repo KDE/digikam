@@ -42,6 +42,8 @@ public:
 
     void applySettings();
     QStringList getImagePluginsListEnable();
+public slots:
+    void toggleAll(bool on);
     
 private:
 

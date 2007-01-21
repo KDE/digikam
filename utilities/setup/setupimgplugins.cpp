@@ -74,6 +74,10 @@ SetupImgPlugins::SetupImgPlugins(QWidget* parent )
     QVBoxLayout *layout = new QVBoxLayout( this, 0, KDialog::spacingHint());
 
     d->pluginsNumber = new QLabel(this);
+
+    QCheckBox* toggleallcheckbox = new QCheckBox( i18n("Toggle All"), this );
+    toggleallcheckbox->setChecked(true);
+    connect(toggleallcheckbox,SIGNAL(toggled(bool)), this,SLOT(toggleAll(bool)));
     
     d->pluginList = new KListView( this, "pluginList" );
     d->pluginList->addColumn( i18n( "Name" ) );
@@ -87,6 +91,7 @@ SetupImgPlugins::SetupImgPlugins(QWidget* parent )
                                          "<p>Note: the core image plugin cannot be disabled."));
     
     layout->addWidget( d->pluginsNumber );
+    layout->addWidget( toggleallcheckbox );
     layout->addWidget( d->pluginList );
 
     mainLayout->addWidget(this);
@@ -161,6 +166,17 @@ QStringList SetupImgPlugins::getImagePluginsListEnable()
     }
 
     return imagePluginList;
+}
+
+void SetupImgPlugins::toggleAll(bool on)
+{
+    QCheckListItem *item = (QCheckListItem*)d->pluginList->firstChild();
+
+    while( item )
+    {
+        item->setOn( on );
+        item = (QCheckListItem*)item->nextSibling();
+    }
 }
 
 void SetupImgPlugins::applySettings()
