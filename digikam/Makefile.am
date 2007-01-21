@@ -20,6 +20,7 @@ INCLUDES = -I$(top_srcdir)/digikam/sqlite \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
 	   -I$(top_srcdir)/digikam/utilities/splashscreen \
 	   -I$(top_srcdir)/digikam/utilities/setup \
+	   -I$(top_srcdir)/digikam/utilities/batch \
 	   $(LIBKIPI_CFLAGS) $(GPHOTO_CFLAGS) $(all_includes) 
 
 
@@ -48,7 +49,6 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                albumsettings.cpp \
 	                albumthumbnailloader.cpp \
 	                albumwidgetstack.cpp \
-	                batchthumbsgenerator.cpp \
 	                cameradragobject.cpp \
 	                cameralist.cpp \
 	                cameratype.cpp \
@@ -102,6 +102,7 @@ libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) $(LIB_KHTML) \
 	               $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
 	               $(top_builddir)/digikam/libs/imageproperties/libimagepropertiesdigikam.la \
 	               $(top_builddir)/digikam/libs/threadimageio/libthreadimageio.la \
+	               $(top_builddir)/digikam/utilities/batch/libbatch.la \
 	               $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
 	               $(top_builddir)/digikam/utilities/imageeditor/canvas/libdimgcanvas.la \
 	               $(top_builddir)/digikam/utilities/imageeditor/editor/libdimgeditor.la \
