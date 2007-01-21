@@ -760,14 +760,6 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "help_donatemoney");
 
-    mGammaAdjustmentAction = new KAction(i18n("Display Adjustment..."),
-                                   "kgamma",
-                                   0,
-                                   this,
-                                   SLOT(slotDisplayAdjustment()),
-                                   actionCollection(),
-                                   "display_adjustment");
-
     // -- Rating actions ---------------------------------------------------------------
 
     m_0Star = new KAction(i18n("Assign Rating \"No Star\""), CTRL+Key_0,
@@ -1061,20 +1053,6 @@ void DigikamApp::slot_imageSelected(bool val)
     mImageRenameAction->setEnabled(val);
     mImageDeleteAction->setEnabled(val);
     mImageExifOrientationActionMenu->setEnabled(val);
-}
-
-void DigikamApp::slotDisplayAdjustment()
-{
-   QStringList args;
-   QString *perror = 0;
-   int *ppid = 0;
-
-   args << "display";
-   int ValRet = KApplication::kdeinitExec(QString::fromLatin1("kcmshell"), args, perror, ppid);
-
-   if ( ValRet != 0 )
-      KMessageBox::error(this, i18n("Cannot start \"Display\" configuration panel from KDE control center;\n"
-                                    "please check your installation."));
 }
 
 void DigikamApp::slot_exit()

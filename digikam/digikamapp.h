@@ -136,7 +136,6 @@ private slots:
     void slotShowTip();
     void slotShowKipiHelp();
     void slotDonateMoney();
-    void slotDisplayAdjustment();
 
     void slotAboutToShowForwardMenu();
     void slotAboutToShowBackwardMenu();
@@ -255,7 +254,6 @@ private:
     KAction               *mTipAction;
     KAction               *mKipiHelpAction;
     KAction               *mDonateMoneyAction;
-    KAction               *mGammaAdjustmentAction;
     
     AlbumSettings         *mAlbumSettings;
     SplashScreen          *mSplash;
