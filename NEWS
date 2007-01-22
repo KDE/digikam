@@ -127,6 +127,7 @@ General       : New native JPEG2000 image loader using Jasper library witch can 
                 16 bits color depth pictures.
 General       : New optimized layout to show Comments & Tags side bar contents.
 General       : Tags View from Comments & Tags side bar support drag & drop.
+General       : New Batch tool to sync all pictures metadata (EXIF/IPTC) with digiKam database content.
 
 AlbumGUI      : Improvement of popupmenu of Tags Filter View and Comment & Tags about
                 auto selection/deselection of parents/childs tags in Tags treeview.
@@ -465,6 +466,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 271 ==> 138925 : External modules config dialog lacks a select all button.
 272 ==> 140038 : digiKam Image Editor crash on right click after changing toolbar.
 273 ==> 139766 : Crash when displaying EXIF metadata with Unicode comment
-274 ==> 
+274 ==> 130017 : Wish: batch operation to save existing comments in the files.
+275 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
