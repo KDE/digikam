@@ -40,6 +40,8 @@
 namespace Digikam
 {
 
+class DMetadata;
+class AlbumSettings;
 class ImageInfo;
 class TAlbum;
 class MetadataHubPriv;
