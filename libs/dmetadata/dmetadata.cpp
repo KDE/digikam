@@ -1146,8 +1146,8 @@ QString DMetadata::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
         if (charset == "\"Unicode\"")
         {
             // QString expects a null-terminated UCS-2 string.
-            // Is it already null terminated? In any case, add termination for safety.
-            comment += "\0\0";
+            // Is it already null terminated? In any case, add termination "\0\0" for safety.
+            comment.resize(comment.length() + 2, '\0');
             return QString::fromUcs2((unsigned short *)comment.data());
         }
         else if (charset == "\"Jis\"")
