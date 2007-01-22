@@ -200,9 +200,10 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     QToolTip::add(d->revertBtn, i18n("Revert all changes"));
     d->revertBtn->setEnabled(false);
     
-    d->applyBtn = new QPushButton(i18n("Apply Changes"), buttonsBox);
+    d->applyBtn = new QPushButton(i18n("Apply"), buttonsBox);
     d->applyBtn->setIconSet(SmallIcon("apply"));
     d->applyBtn->setEnabled(false);
+    QToolTip::add(d->applyBtn, i18n("Apply all changes to pictures"));
     buttonsBox->setStretchFactor(d->applyBtn, 10);
 
     d->moreButton = new QPushButton(i18n("More"), buttonsBox);
