@@ -71,6 +71,7 @@
       <Separator/>
         <Action name="database_rescan" />
         <Action name="thumbs_rebuild" />
+        <Action name="sync_metadata" />
       <Separator/>
         <ActionList name="album_actions"/>
       <Separator/>

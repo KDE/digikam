@@ -160,9 +160,12 @@ private slots:
     void slotEditKeys();
     void slotConfToolbars();
     void slotToggleFullScreen();
+
     void slotDatabaseRescan();
     void slotRebuildAllThumbs();
     void slotRebuildAllThumbsDone();
+    void slotSyncPicturesMetadata();
+    void slotSyncPicturesMetadataDone();
     
     void slotChangeTheme(const QString& theme);
 
