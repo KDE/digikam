@@ -68,6 +68,7 @@ public:
     virtual void itemChanged(QPtrList<ImageInfo> infos);
 
     void setPreviousNextState(bool hasPrevious, bool hasNext);
+    void takeImageInfoOwnership(bool takeOwnership);
 
     void populateTags(void);
 

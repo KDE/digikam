@@ -621,12 +621,13 @@ void DigikamView::slotImageSelected()
     d->selectionTimer->start(75, true);
 }
 
+
 void DigikamView::slotDispatchImageSelected()
 {
     if (d->needDispatchSelection)
     {
-        // the list of ImageInfos of currently selected items, currentItem first
-        QPtrList<ImageInfo> list = d->iconView->selectedImageInfos();
+        // the list of copies of ImageInfos of currently selected items, currentItem first
+        QPtrList<ImageInfo> list = d->iconView->selectedImageInfos(true );
 
         if (list.isEmpty())
         {
@@ -643,6 +644,8 @@ void DigikamView::slotDispatchImageSelected()
                 AlbumIconItem *selectedItem = d->iconView->firstSelectedItem();
                 d->rightSideBar->setPreviousNextState(d->iconView->firstItem() != selectedItem,
                                                       d->iconView->lastItem() != selectedItem);
+                // we fed a list of copies
+                d->rightSideBar->takeImageInfoOwnership(true);
 
                 if (!d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
                     d->albumWidgetStack->setPreviewItem(selectedItem->imageInfo()->kurl());

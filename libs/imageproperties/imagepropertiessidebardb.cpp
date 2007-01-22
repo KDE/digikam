@@ -182,6 +182,11 @@ void ImagePropertiesSideBarDB::itemChanged(QPtrList<ImageInfo> infos)
     slotChangedTab( getActiveTab() );
 }
 
+void ImagePropertiesSideBarDB::takeImageInfoOwnership(bool takeOwnership)
+{
+    d->currentInfos.setAutoDelete(takeOwnership);
+}
+
 
 void ImagePropertiesSideBarDB::slotNoCurrentItem(void)
 {

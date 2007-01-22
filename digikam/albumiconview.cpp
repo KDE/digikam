@@ -857,6 +857,9 @@ void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
     KIO::Job* job = DIO::del(urlList, useTrash);
     connect(job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotDIOResult(KIO::Job*)));
+
+    // The AlbumManager KDirWatch will trigger a DIO::scan.
+    // When this is completed, DIO will call AlbumLister::instance()->refresh().
 }
 
 void AlbumIconView::slotDeleteSelectedItemsDirectly(bool useTrash)
@@ -1391,7 +1394,7 @@ KURL::List AlbumIconView::selectedItems()
     return itemList;
 }
 
-QPtrList<ImageInfo> AlbumIconView::selectedImageInfos() const
+QPtrList<ImageInfo> AlbumIconView::selectedImageInfos(bool copy) const
 {
     // Returns the list of ImageInfos of currently selected items,
     // with the extra feature that the currentItem is the first in the list.
@@ -1401,10 +1404,14 @@ QPtrList<ImageInfo> AlbumIconView::selectedImageInfos() const
         AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
         if (it->isSelected())
         {
+            ImageInfo *info = iconItem->imageInfo();
+            if (copy)
+                info = new ImageInfo(*info);
+
             if (iconItem == currentItem())
-                list.prepend(iconItem->imageInfo());
+                list.prepend(info);
             else
-                list.append(iconItem->imageInfo());
+                list.append(info);
         }
     }
     return list;

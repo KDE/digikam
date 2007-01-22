@@ -464,6 +464,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 270 ==> 130237 : Typos in digiKam plugin files.
 271 ==> 138925 : External modules config dialog lacks a select all button.
 272 ==> 140038 : digiKam Image Editor crash on right click after changing toolbar.
-273 ==> 
+273 ==> 139766 : Crash when displaying EXIF metadata with Unicode comment
+274 ==> 
 
 ---------------------------------------------------------------------------------------------------- 

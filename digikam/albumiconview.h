@@ -81,7 +81,7 @@ public:
     KURL::List allItems();
     KURL::List selectedItems();
 
-    QPtrList<ImageInfo> selectedImageInfos() const;
+    QPtrList<ImageInfo> selectedImageInfos(bool copy) const;
 
     void refresh();
     void refreshItems(const KURL::List& itemList);
