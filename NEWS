@@ -463,6 +463,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 269 ==> 140176 : Showfoto crashes when selecting a filter.
 270 ==> 130237 : Typos in digiKam plugin files.
 271 ==> 138925 : External modules config dialog lacks a select all button.
-272 ==> 
+272 ==> 140038 : digiKam Image Editor crash on right click after changing toolbar.
+273 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
