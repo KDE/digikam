@@ -56,7 +56,7 @@ public:
     
 signals:
 
-    void signalAllItemsFromAlbum(const ImageInfoList& items);
+    void signalItemsInfo(const ImageInfoList& items);
     void signalCompleted();
 
 private slots:

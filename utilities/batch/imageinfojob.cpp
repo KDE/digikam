@@ -152,7 +152,7 @@ void ImageInfoJob::slotData(KIO::Job*, const QByteArray& data)
         itemsList.append(info);
     }
 
-    emit signalAllItemsFromAlbum(itemsList);
+    emit signalItemsInfo(itemsList);
 }
 
 }  // namespace Digikam
