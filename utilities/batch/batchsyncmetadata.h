@@ -1,7 +1,8 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date   : 2006-22-01
- * Description : batch sync picture metadata with digiKam database
+ * Date   : 2007-22-01
+ * Description : batch sync pictures metadata from all Albums 
+ *               with digiKam database
  *
  * Copyright 2007 by Gilles Caulier
  *

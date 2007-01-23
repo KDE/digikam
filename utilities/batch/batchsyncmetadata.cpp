@@ -1,7 +1,8 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date   : 2006-22-01
- * Description : batch sync picture metadata with digiKam database
+ * Date   : 2007-22-01
+ * Description : batch sync pictures metadata from all Albums 
+ *               with digiKam database
  *
  * Copyright 2007 by Gilles Caulier
  *
@@ -18,19 +19,10 @@
  * 
  * ============================================================ */
 
-// C Ansi includes.
-
-extern "C"
-{
-#include <unistd.h>
-}
-
 // QT includes.
 
 #include <qstring.h>
 #include <qtimer.h>
-#include <qdir.h>
-#include <qfileinfo.h>
 #include <qdatetime.h>
 
 // KDE includes.
@@ -43,7 +35,6 @@ extern "C"
 
 #include "ddebug.h"
 #include "album.h"
-#include "albumdb.h"
 #include "albummanager.h"
 #include "imageinfojob.h"
 #include "metadatahub.h"
@@ -81,8 +72,8 @@ BatchSyncMetadata::BatchSyncMetadata(QWidget* parent)
     d = new BatchSyncMetadataPriv;
     d->imageInfoJob = new ImageInfoJob();
     setValue(0);
-    setCaption(i18n("Sync Pictures Metadata"));
-    setLabel(i18n("<b>Sync pictures metadata with digiKam database. Please wait...</b>"));
+    setCaption(i18n("Sync All Pictures Metadata"));
+    setLabel(i18n("<b>Sync all pictures metadata with digiKam database. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
     QTimer::singleShot(500, this, SLOT(slotStart()));
     resize(600, 300);
