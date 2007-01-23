@@ -517,7 +517,8 @@ void DigikamApp::setupActions()
                                     SLOT(slotAlbumSyncPicturesMetadata()),
                                     actionCollection(),
                                     "album_syncmetadata");
-    mSyncAlbumMetadataAction->setWhatsThis(i18n("This option sync all album pictures metadata with digiKam database contents."));
+    mSyncAlbumMetadataAction->setWhatsThis(i18n("This option sync pictures metadata from current "
+                                                "album with digiKam database contents."));
 
     mOpenInKonquiAction = new KAction( i18n("Open in Konqueror"),
                                     "konqueror",
