@@ -269,7 +269,7 @@ void SetupGeneral::slotPathEdited(const QString& newPath)
 
     QFileInfo targetPath(newPath);
     QDir dir(newPath);
-    d->mainDialog->enableButtonOK(dir.exists() && dir != QDir(QDir::homeDirPath ()));
+    d->mainDialog->enableButtonOK(dir.exists() && dir.path() != QDir::homeDirPath());
 }
 
 }  // namespace Digikam
