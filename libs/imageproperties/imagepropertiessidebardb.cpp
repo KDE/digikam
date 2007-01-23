@@ -65,6 +65,7 @@ public:
         dirtyDesceditTab    = false;
         hasPrevious         = false;
         hasNext             = false;
+        hasImageInfoOwnership = false;
     }
 
     bool              dirtyDesceditTab;
@@ -75,6 +76,8 @@ public:
 
     bool              hasPrevious;
     bool              hasNext;
+
+    bool              hasImageInfoOwnership;
 };
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *name, QSplitter *splitter, 
@@ -151,6 +154,16 @@ void ImagePropertiesSideBarDB::itemChanged(const KURL& url, ImageInfo *info,
     m_currentRect        = rect;
     m_image              = img;
 
+    // The list _may_ have autoDelete set to true.
+    // Keep old ImageInfo objects from being deleted
+    // until the tab has had the chance to save changes and clear lists.
+    QPtrList<ImageInfo> temporaryList;
+    if (d->hasImageInfoOwnership)
+    {
+        temporaryList = d->currentInfos;
+        d->hasImageInfoOwnership = false;
+    }
+
     QPtrList<ImageInfo> list;
     if (info)
         list.append(info);
@@ -162,6 +175,12 @@ void ImagePropertiesSideBarDB::itemChanged(const KURL& url, ImageInfo *info,
     d->dirtyDesceditTab  = false;
 
     slotChangedTab( getActiveTab() );
+
+    // now delete old objects, after slotChangedTab
+    for (ImageInfo *info = temporaryList.first(); info; info = temporaryList.next())
+    {
+        delete info;
+    }
 }
 
 void ImagePropertiesSideBarDB::itemChanged(QPtrList<ImageInfo> infos)
@@ -172,6 +191,14 @@ void ImagePropertiesSideBarDB::itemChanged(QPtrList<ImageInfo> infos)
     m_currentURL         = infos.first()->kurl();
     m_currentRect        = QRect();
     m_image              = 0;
+
+    QPtrList<ImageInfo> temporaryList;
+    if (d->hasImageInfoOwnership)
+    {
+        temporaryList = d->currentInfos;
+        d->hasImageInfoOwnership = false;
+    }
+
     d->currentInfos      = infos;
 
     m_dirtyPropertiesTab = false;
@@ -180,11 +207,16 @@ void ImagePropertiesSideBarDB::itemChanged(QPtrList<ImageInfo> infos)
     d->dirtyDesceditTab  = false;
 
     slotChangedTab( getActiveTab() );
+
+    for (ImageInfo *info = temporaryList.first(); info; info = temporaryList.next())
+    {
+        delete info;
+    }
 }
 
 void ImagePropertiesSideBarDB::takeImageInfoOwnership(bool takeOwnership)
 {
-    d->currentInfos.setAutoDelete(takeOwnership);
+    d->hasImageInfoOwnership = takeOwnership;
 }
 
 
