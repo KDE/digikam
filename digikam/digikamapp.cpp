@@ -2,7 +2,7 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Tom Albers <tomalbers@kde.nl>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
- * Date  : 2002-16-10
+ * Date   : 2002-16-10
  * Description : main interface implementation
  * 
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
@@ -802,7 +802,7 @@ void DigikamApp::setupActions()
                 this, SLOT(slotRebuildAllThumbs()), actionCollection(),
                 "thumbs_rebuild");
 
-    new KAction(i18n("Sync Pictures metadata..."), "reload_page", 0,
+    new KAction(i18n("Sync all Pictures Metadata..."), "reload_page", 0,
                 this, SLOT(slotSyncPicturesMetadata()), actionCollection(),
                 "sync_metadata");
 
