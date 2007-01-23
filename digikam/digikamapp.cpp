@@ -478,7 +478,7 @@ void DigikamApp::setupActions()
                                     "albumfolder-importimages",
                                     CTRL+Key_I,
                                     mView,
-                                    SLOT(slot_albumAddImages()),
+                                    SLOT(slotAlbumAddImages()),
                                     actionCollection(),
                                     "album_addImages");
     mAddImagesAction->setWhatsThis(i18n("This option adds new images to the current Album."));
@@ -495,7 +495,7 @@ void DigikamApp::setupActions()
                                     "albumfolder-properties",
                                     0,
                                     mView,
-                                    SLOT(slot_albumPropsEdit()),
+                                    SLOT(slotAlbumPropsEdit()),
                                     actionCollection(),
                                     "album_propsEdit");
     mPropsEditAction->setWhatsThis(i18n("This option allows you to set the Album Properties information "
@@ -505,7 +505,7 @@ void DigikamApp::setupActions()
                                     "rebuild",
                                     Key_F5,
                                     mView,
-                                    SLOT(slot_albumRefresh()),
+                                    SLOT(slotAlbumRefresh()),
                                     actionCollection(),
                                     "album_refresh");
     mRefreshAlbumAction->setWhatsThis(i18n("This option refresh all album content."));
@@ -524,7 +524,7 @@ void DigikamApp::setupActions()
                                     "konqueror",
                                     0,
                                     mView,
-                                    SLOT(slot_albumOpenInKonqui()),
+                                    SLOT(slotAlbumOpenInKonqui()),
                                     actionCollection(),
                                     "album_openinkonqui");
 

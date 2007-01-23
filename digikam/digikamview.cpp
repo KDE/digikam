@@ -599,7 +599,7 @@ void DigikamView::slot_albumSelected(Album* album)
         d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::PreviewAlbumMode);
 }
 
-void DigikamView::slot_albumOpenInKonqui()
+void DigikamView::slotAlbumOpenInKonqui()
 {
     Album *album = d->albumManager->currentAlbum();
     if (!album || album->type() != Album::PHYSICAL)
@@ -610,7 +610,7 @@ void DigikamView::slot_albumOpenInKonqui()
     new KRun(palbum->folderPath()); // KRun will delete itself.
 }
 
-void DigikamView::slot_albumRefresh()
+void DigikamView::slotAlbumRefresh()
 {
     d->iconView->refreshItems(d->iconView->allItems());
 }
@@ -759,7 +759,7 @@ void DigikamView::slot_thumbSizeMinus()
     settings->setDefaultIconSize( (int)thumbSize.size() );
 }
 
-void DigikamView::slot_albumPropsEdit()
+void DigikamView::slotAlbumPropsEdit()
 {
     d->folderView->albumEdit();
 }
@@ -783,7 +783,7 @@ void DigikamView::slotAlbumSyncPicturesMetadataDone()
     applySettings(AlbumSettings::instance());
 }
 
-void DigikamView::slot_albumAddImages()
+void DigikamView::slotAlbumAddImages()
 {
     Album *album = d->albumManager->currentAlbum();
     if (!album || album->type() != Album::PHYSICAL)
