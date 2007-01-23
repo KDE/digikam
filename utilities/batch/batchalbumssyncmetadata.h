@@ -19,8 +19,8 @@
  * 
  * ============================================================ */
 
-#ifndef BATCHSYNCMETADATA_H
-#define BATCHSYNCMETADATA_H
+#ifndef BATCHALBUMSSYNCMETADATA_H
+#define BATCHALBUMSSYNCMETADATA_H
 
 // Local includes.
 
@@ -34,16 +34,16 @@ class KURL;
 namespace Digikam
 {
 
-class BatchSyncMetadataPriv;
+class BatchAlbumsSyncMetadataPriv;
 
-class BatchSyncMetadata : public DProgressDlg
+class BatchAlbumsSyncMetadata : public DProgressDlg
 {
     Q_OBJECT
 
 public:
 
-    BatchSyncMetadata(QWidget* parent);
-    ~BatchSyncMetadata();
+    BatchAlbumsSyncMetadata(QWidget* parent);
+    ~BatchAlbumsSyncMetadata();
 
 signals:
 
@@ -70,9 +70,9 @@ private slots:
 
 private:
 
-    BatchSyncMetadataPriv *d;
+    BatchAlbumsSyncMetadataPriv *d;
 };
 
 }  // namespace Digikam
 
-#endif /* BATCHSYNCMETADATA_H */
+#endif /* BATCHALBUMSSYNCMETADATA_H */

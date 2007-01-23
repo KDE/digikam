@@ -38,17 +38,17 @@
 #include "albummanager.h"
 #include "imageinfojob.h"
 #include "metadatahub.h"
-#include "batchsyncmetadata.h"
-#include "batchsyncmetadata.moc"
+#include "batchalbumssyncmetadata.h"
+#include "batchalbumssyncmetadata.moc"
 
 namespace Digikam
 {
 
-class BatchSyncMetadataPriv
+class BatchAlbumsSyncMetadataPriv
 {
 public:
 
-    BatchSyncMetadataPriv()
+    BatchAlbumsSyncMetadataPriv()
     {
         cancel       = false;
         imageInfoJob = 0;
@@ -66,10 +66,10 @@ public:
     AlbumList::Iterator  albumsIt;
 };
 
-BatchSyncMetadata::BatchSyncMetadata(QWidget* parent)
+BatchAlbumsSyncMetadata::BatchAlbumsSyncMetadata(QWidget* parent)
                  : DProgressDlg(parent)
 {
-    d = new BatchSyncMetadataPriv;
+    d = new BatchAlbumsSyncMetadataPriv;
     d->imageInfoJob = new ImageInfoJob();
     setValue(0);
     setCaption(i18n("Sync All Pictures Metadata"));
@@ -79,12 +79,12 @@ BatchSyncMetadata::BatchSyncMetadata(QWidget* parent)
     resize(600, 300);
 }
 
-BatchSyncMetadata::~BatchSyncMetadata()
+BatchAlbumsSyncMetadata::~BatchAlbumsSyncMetadata()
 {
     delete d;
 }
 
-void BatchSyncMetadata::slotStart()
+void BatchAlbumsSyncMetadata::slotStart()
 {
     setTitle(i18n("Parsing all albums"));
     setTotalSteps(d->palbumList.count());
@@ -101,7 +101,7 @@ void BatchSyncMetadata::slotStart()
     parseAlbum();
 }
 
-void BatchSyncMetadata::parseAlbum()
+void BatchAlbumsSyncMetadata::parseAlbum()
 {
     if (d->albumsIt == d->palbumList.end())     // All is done.
     {
@@ -125,7 +125,7 @@ void BatchSyncMetadata::parseAlbum()
     }
 }
 
-void BatchSyncMetadata::slotAlbumParsed(const ImageInfoList& list)
+void BatchAlbumsSyncMetadata::slotAlbumParsed(const ImageInfoList& list)
 {
     QPixmap pix = KApplication::kApplication()->iconLoader()->loadIcon(
                   "folder_image", KIcon::NoGroup, 32);
@@ -148,26 +148,26 @@ void BatchSyncMetadata::slotAlbumParsed(const ImageInfoList& list)
     parseAlbum();
 }
 
-void BatchSyncMetadata::slotComplete()
+void BatchAlbumsSyncMetadata::slotComplete()
 {
     advance(1);
     d->albumsIt++;
     parseAlbum();
 }
 
-void BatchSyncMetadata::slotCancel()
+void BatchAlbumsSyncMetadata::slotCancel()
 {
     abort();
     done(Cancel);
 }
 
-void BatchSyncMetadata::closeEvent(QCloseEvent *e)
+void BatchAlbumsSyncMetadata::closeEvent(QCloseEvent *e)
 {
     abort();
     e->accept();
 }
 
-void BatchSyncMetadata::abort()
+void BatchAlbumsSyncMetadata::abort()
 {
     d->cancel = true;
     d->imageInfoJob->stop();

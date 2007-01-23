@@ -88,7 +88,7 @@
 #include "imageattributeswatch.h"
 #include "dcrawbinary.h"
 #include "batchthumbsgenerator.h"
-#include "batchsyncmetadata.h"
+#include "batchalbumssyncmetadata.h"
 #include "digikamview.h"
 #include "digikamapp.h"
 #include "digikamapp.moc"
@@ -1651,13 +1651,13 @@ void DigikamApp::slotRebuildAllThumbsDone()
 
 void DigikamApp::slotSyncPicturesMetadata()
 {
-    QString msg = i18n("Sync pictures metadata with digiKam database can take a while.\n"
-                       "Do you want to continue?");
+    QString msg = i18n("Sync all pictures metadata from all albums with digiKam database "
+                       "can take a while.\nDo you want to continue?");
     int result = KMessageBox::warningContinueCancel(this, msg);
     if (result != KMessageBox::Continue)
         return;
 
-    BatchSyncMetadata *syncMetadata = new BatchSyncMetadata(this);
+    BatchAlbumsSyncMetadata *syncMetadata = new BatchAlbumsSyncMetadata(this);
     
     connect(syncMetadata, SIGNAL(signalComplete()),
             this, SLOT(slotSyncPicturesMetadataDone()));
