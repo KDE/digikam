@@ -58,6 +58,7 @@
 #include "albumiconitem.h"
 #include "albumsettings.h"
 #include "albumhistory.h"
+#include "batchsyncmetadata.h"
 #include "sidebar.h"
 #include "imagepropertiessidebardb.h"
 #include "imagepreviewwidget.h"
@@ -761,6 +762,25 @@ void DigikamView::slot_thumbSizeMinus()
 void DigikamView::slot_albumPropsEdit()
 {
     d->folderView->albumEdit();
+}
+
+void DigikamView::slotAlbumSyncPicturesMetadata()
+{
+    Album *album = d->albumManager->currentAlbum();
+    if (!album || album->type() != Album::PHYSICAL)
+        return;
+
+    BatchSyncMetadata *syncMetadata = new BatchSyncMetadata(this, album);
+    
+    connect(syncMetadata, SIGNAL(signalComplete()),
+            this, SLOT(slotAlbumSyncPicturesMetadataDone()));
+
+    syncMetadata->exec();
+}
+
+void DigikamView::slotAlbumSyncPicturesMetadataDone()
+{
+    applySettings(AlbumSettings::instance());
 }
 
 void DigikamView::slot_albumAddImages()

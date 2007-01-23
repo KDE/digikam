@@ -67,7 +67,7 @@ public:
 };
 
 BatchAlbumsSyncMetadata::BatchAlbumsSyncMetadata(QWidget* parent)
-                 : DProgressDlg(parent)
+                       : DProgressDlg(parent)
 {
     d = new BatchAlbumsSyncMetadataPriv;
     d->imageInfoJob = new ImageInfoJob();
@@ -75,8 +75,8 @@ BatchAlbumsSyncMetadata::BatchAlbumsSyncMetadata(QWidget* parent)
     setCaption(i18n("Sync All Pictures Metadata"));
     setLabel(i18n("<b>Sync all pictures metadata with digiKam database. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
-    QTimer::singleShot(500, this, SLOT(slotStart()));
     resize(600, 300);
+    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 BatchAlbumsSyncMetadata::~BatchAlbumsSyncMetadata()
@@ -94,8 +94,6 @@ void BatchAlbumsSyncMetadata::slotStart()
 
     connect(d->imageInfoJob, SIGNAL(signalCompleted()),
             this, SLOT(slotComplete()));
-
-    // Get all digiKam albums collection pictures path.
     
     d->albumsIt = d->palbumList.begin();
     parseAlbum();
@@ -107,7 +105,7 @@ void BatchAlbumsSyncMetadata::parseAlbum()
     {
         QTime t;
         t = t.addMSecs(d->duration.elapsed());
-        setLabel(i18n("<b>Sync pictures metadata with digiKam database done</b>"));
+        setLabel(i18n("<b>Sync all pictures metadata with digiKam database done</b>"));
         setTitle(i18n("Duration: %1").arg(t.toString()));
         setButtonText(i18n("&Close"));
         advance(1);
@@ -132,15 +130,18 @@ void BatchAlbumsSyncMetadata::slotAlbumParsed(const ImageInfoList& list)
 
     ImageInfoList imageInfoList = list;
 
-    addedAction(pix, imageInfoList.first()->kurl().directory());
-
-    for (ImageInfo *info = imageInfoList.first(); info; info = imageInfoList.next())
+    if (!imageInfoList.isEmpty())
     {
-        MetadataHub fileHub;
-        // read in from database
-        fileHub.load(info);
-        // write out to file DMetadata
-        fileHub.write(info->filePath());
+        addedAction(pix, imageInfoList.first()->kurl().directory());
+    
+        for (ImageInfo *info = imageInfoList.first(); info; info = imageInfoList.next())
+        {
+            MetadataHub fileHub;
+            // read in from database
+            fileHub.load(info);
+            // write out to file DMetadata
+            fileHub.write(info->filePath());
+        }
     }
 
     advance(1);

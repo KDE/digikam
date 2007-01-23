@@ -164,8 +164,8 @@ private slots:
     void slotDatabaseRescan();
     void slotRebuildAllThumbs();
     void slotRebuildAllThumbsDone();
-    void slotSyncPicturesMetadata();
-    void slotSyncPicturesMetadataDone();
+    void slotSyncAllPicturesMetadata();
+    void slotSyncAllPicturesMetadataDone();
     
     void slotChangeTheme(const QString& theme);
 
@@ -213,6 +213,7 @@ private:
     KAction               *mAlbumImportAction;
     KAction               *mOpenInKonquiAction;
     KAction               *mRefreshAlbumAction;
+    KAction               *mSyncAlbumMetadataAction;
     
     // Tag Actions
     KAction               *mNewTagAction;

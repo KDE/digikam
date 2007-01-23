@@ -82,6 +82,8 @@ public slots:
     void slotAlbumHistoryForward(int steps=1);
     void slotAlbumDeleted(Album *album);
     void slotAlbumRenamed(Album *album);
+    void slotAlbumSyncPicturesMetadata();
+    void slotAlbumSyncPicturesMetadataDone();
     void slotSelectAlbum(const KURL &url);
 
     // Tag action slots

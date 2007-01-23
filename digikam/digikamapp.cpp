@@ -510,6 +510,15 @@ void DigikamApp::setupActions()
                                     "album_refresh");
     mRefreshAlbumAction->setWhatsThis(i18n("This option refresh all album content."));
 
+    mSyncAlbumMetadataAction = new KAction( i18n("Sync Pictures Metadata"),
+                                    "rebuild",
+                                    0,
+                                    mView,
+                                    SLOT(slotAlbumSyncPicturesMetadata()),
+                                    actionCollection(),
+                                    "album_syncmetadata");
+    mSyncAlbumMetadataAction->setWhatsThis(i18n("This option sync all album pictures metadata with digiKam database contents."));
+
     mOpenInKonquiAction = new KAction( i18n("Open in Konqueror"),
                                     "konqueror",
                                     0,
@@ -803,7 +812,7 @@ void DigikamApp::setupActions()
                 "thumbs_rebuild");
 
     new KAction(i18n("Sync all Pictures Metadata..."), "reload_page", 0,
-                this, SLOT(slotSyncPicturesMetadata()), actionCollection(),
+                this, SLOT(slotSyncAllPicturesMetadata()), actionCollection(),
                 "sync_metadata");
 
     // -----------------------------------------------------------
@@ -1649,7 +1658,7 @@ void DigikamApp::slotRebuildAllThumbsDone()
     mView->applySettings(mAlbumSettings);
 }
 
-void DigikamApp::slotSyncPicturesMetadata()
+void DigikamApp::slotSyncAllPicturesMetadata()
 {
     QString msg = i18n("Sync all pictures metadata from all albums with digiKam database "
                        "can take a while.\nDo you want to continue?");
@@ -1660,12 +1669,12 @@ void DigikamApp::slotSyncPicturesMetadata()
     BatchAlbumsSyncMetadata *syncMetadata = new BatchAlbumsSyncMetadata(this);
     
     connect(syncMetadata, SIGNAL(signalComplete()),
-            this, SLOT(slotSyncPicturesMetadataDone()));
+            this, SLOT(slotSyncAllPicturesMetadataDone()));
 
     syncMetadata->exec();
 }
 
-void DigikamApp::slotSyncPicturesMetadataDone()
+void DigikamApp::slotSyncAllPicturesMetadataDone()
 {
     mView->applySettings(mAlbumSettings);
 }
