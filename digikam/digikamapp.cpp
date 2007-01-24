@@ -736,7 +736,11 @@ void DigikamApp::setupActions()
                                    "album_thumbSizeDecrease");
     mThumbSizeMinusAction->setWhatsThis(i18n("This option allows you to decrease the Album thumbnails size."));
 
-    mFullScreenAction = new KAction(i18n("Toggle Full Screen"),
+#if KDE_IS_VERSION(3,2,0)
+    mFullScreenAction = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
+                                               actionCollection(), this, "full_screen");
+#else
+    mFullScreenAction = new KToggleAction(i18n("Full Screen Mode"),
                                    "window_fullscreen",
                                    CTRL+SHIFT+Key_F,
                                    this,
@@ -744,6 +748,7 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "full_screen");
     mFullScreenAction->setWhatsThis(i18n("This option allows you to toggle the main windows in full screen mode."));
+#endif
 
     mQuitAction = KStdAction::quit(this,
                                    SLOT(slot_exit()),

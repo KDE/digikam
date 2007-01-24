@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="16" name="digikam" >
+<kpartgui version="17" name="digikam" >
 
  <MenuBar>
 
@@ -59,6 +59,8 @@
 
   <Menu name="View" >
    <text>&amp;View</text>
+     <Action name="full_screen" />
+     <Separator/>
      <Action name="album_thumbSizeIncrease" />
      <Action name="album_thumbSizeDecrease" />
      <Separator />
@@ -87,8 +89,6 @@
   <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
      <Action name="options_show_toolbar"/>
      <Merge name="StandardToolBarMenuHandler" />
-     <Separator/>
-     <Action name="full_screen" />
      <Separator/>
      <Action name="theme_menu" />
      <Action name="options_configure_keybinding"/>
