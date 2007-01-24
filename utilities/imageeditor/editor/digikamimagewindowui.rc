@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="7" name="digikamimagewindow" >
+<gui version="8" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -28,20 +28,9 @@
         <Action name="editorwindow_redo" />
     </Menu>
   
-    <Menu name="Image" ><text>&amp;Image</text>
-    </Menu>
-
-    <Menu name="Fix" ><text>Fi&amp;x</text>
-    </Menu>
-
-    <Menu name="Transform" ><text>&amp;Transform</text>
-        <Action name="editorwindow_rotate" /> 
-        <Action name="editorwindow_flip" /> 
-        <Action name="editorwindow_crop" /> 
-        <Action name="editorwindow_resize" /> 
-    </Menu>
-
     <Menu name="View" ><text>&amp;View</text>
+        <Action name="editorwindow_fullscreen" />
+        <Separator/>
         <Action name="editorwindow_zoomplus" /> 
         <Action name="editorwindow_zoomminus" /> 
         <Action name="editorwindow_zoomfit" />
@@ -55,6 +44,19 @@
         <Action name="editorwindow_cmview" />        
     </Menu>
 
+    <Menu name="Image" ><text>&amp;Image</text>
+    </Menu>
+
+    <Menu name="Fix" ><text>Fi&amp;x</text>
+    </Menu>
+
+    <Menu name="Transform" ><text>&amp;Transform</text>
+        <Action name="editorwindow_rotate" /> 
+        <Action name="editorwindow_flip" /> 
+        <Action name="editorwindow_crop" /> 
+        <Action name="editorwindow_resize" /> 
+    </Menu>
+
     <Menu name="help" ><text>&amp;Help</text>
         <Action name="editorwindow_imagepluginshelp" />
         <Separator/>
@@ -66,8 +68,6 @@
     <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
         <Action name="options_show_toolbar"/>
         <Merge name="StandardToolBarMenuHandler" />
-        <Separator/>
-        <Action name="editorwindow_fullscreen" />
         <Separator/>
         <Action name="options_configure_keybinding"/>
         <Action name="options_configure_toolbars"/>

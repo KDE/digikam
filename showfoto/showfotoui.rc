@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="9" name="showfoto" >
+<gui version="10" name="showfoto" >
 
 <MenuBar>
 
@@ -31,6 +31,23 @@
         <Action name="editorwindow_redo" />      
     </Menu>
 
+    <Menu name="View" ><text>&amp;View</text>
+        <Action name="editorwindow_fullscreen" /> 
+        <Separator/>
+        <Action name="editorwindow_zoomplus" />
+        <Action name="editorwindow_zoomminus" />
+        <Action name="editorwindow_zoomfit" /> 
+        <Separator/>
+        <Action name="shofoto_showthumbs" /> 
+        <Action name="editorwindow_histogram" /> 
+        <Separator/>
+        <Action name="editorwindow_slideshow" />
+        <Separator/>
+        <Action name="editorwindow_underexposure" />        
+        <Action name="editorwindow_overexposure" />            
+        <Action name="editorwindow_cmview" />        
+    </Menu>
+
     <Menu name="Image" ><text>&amp;Image</text>
         <Separator/>
     </Menu>
@@ -46,21 +63,6 @@
         <Action name="editorwindow_resize" /> 
     </Menu>
 
-    <Menu name="View" ><text>&amp;View</text>
-        <Action name="editorwindow_zoomplus" />
-        <Action name="editorwindow_zoomminus" />
-        <Action name="editorwindow_zoomfit" /> 
-        <Separator/>
-        <Action name="shofoto_showthumbs" /> 
-        <Action name="editorwindow_histogram" /> 
-        <Separator/>
-        <Action name="editorwindow_slideshow" />
-        <Separator/>
-        <Action name="editorwindow_underexposure" />        
-        <Action name="editorwindow_overexposure" />            
-        <Action name="editorwindow_cmview" />        
-    </Menu>
-
     <Menu name="help" ><text>&amp;Help</text>
         <Action name="editorwindow_imagepluginshelp" />
         <Separator/>
@@ -72,8 +74,6 @@
     <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
         <Action name="options_show_toolbar" />
         <Merge name="StandardToolBarMenuHandler" />
-        <Separator/>
-        <Action name="editorwindow_fullscreen" /> 
         <Separator/>
         <Action name="options_configure_keybinding" />
         <Action name="options_configure_toolbars" />
