@@ -12,6 +12,7 @@
  * Others Linux JPEG2000 Loader implementation using Jasper:
  * http://cvs.graphicsmagick.org/cgi-bin/cvsweb.cgi/GraphicsMagick/coders/jp2.c  
  * https://subversion.imagemagick.org/subversion/ImageMagick/trunk/coders/jp2.c
+ * http://svn.ghostscript.com:8080/jasper/trunk/src/appl/jasper.c
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
