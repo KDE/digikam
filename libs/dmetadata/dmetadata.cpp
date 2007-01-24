@@ -1390,8 +1390,11 @@ bool DMetadata::setImageKeywords(const QStringList& oldKeywords, const QStringLi
         {
             QString key = QString::fromLocal8Bit(it->key().c_str());
             QString val(it->toString().c_str());
-            
-            if (key == QString("Iptc.Application2.Keywords") && oldKeywords.contains(val))
+
+            // Also remove new keywords to avoid duplicates. They will be added again below.
+            if ( key == QString("Iptc.Application2.Keywords") &&
+                 (oldKeywords.contains(val) || newKeywords.contains(val))
+               )
                 it = iptcData.erase(it);
             else 
                 ++it;
