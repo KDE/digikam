@@ -467,6 +467,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 272 ==> 140038 : digiKam Image Editor crash on right click after changing toolbar.
 273 ==> 139766 : Crash when displaying EXIF metadata with Unicode comment
 274 ==> 130017 : Wish: batch operation to save existing comments in the files.
-275 ==> 
+275 ==> 140320 : View menu should better fit after Edit.
+276 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
