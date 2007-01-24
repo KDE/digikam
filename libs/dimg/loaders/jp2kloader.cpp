@@ -1,13 +1,17 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net> 
- * Date   : 2005-06-14
+ * Date   : 2006-06-14
  * Description : A JPEG2000 IO file for DImg framework
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  * 
  * This implementation use Jasper API 
- * libary : http://www.ece.uvic.ca/~mdadams/jasper
+ * library : http://www.ece.uvic.ca/~mdadams/jasper
  * Other JPEG2000 decoder : http://www.openjpeg.org
+ *
+ * Others Linux JPEG2000 Loader implementation using Jasper:
+ * http://cvs.graphicsmagick.org/cgi-bin/cvsweb.cgi/GraphicsMagick/coders/jp2.c  
+ * https://subversion.imagemagick.org/subversion/ImageMagick/trunk/coders/jp2.c
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
