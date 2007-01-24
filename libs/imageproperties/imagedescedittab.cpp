@@ -59,6 +59,7 @@
 #include "album.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
+#include "batchsyncmetadata.h"
 #include "tagcreatedlg.h"
 #include "navigatebarwidget.h"
 #include "ratingwidget.h"
@@ -452,13 +453,20 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 
 void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
 {
-    for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
+    if (singleSelection())
     {
+        ImageInfo *info = d->currInfos.first();
         MetadataHub fileHub;
         // read in from database
         fileHub.load(info);
         // write out to file DMetadata
         fileHub.write(info->filePath());
+    }
+    else
+    {
+        // Provide progress feedback
+        BatchSyncMetadata syncDialog(this, d->currInfos);
+        syncDialog.exec();
     }
 }
 
@@ -882,8 +890,13 @@ void ImageDescEditTab::slotMoreMenu()
     if (singleSelection())
     {
         d->moreMenu->insertItem(i18n("Read metadata from file to database"), this, SLOT(slotReadFromFileMetadataToDatabase()));
+        int writeActionId = d->moreMenu->insertItem(i18n("Write metadata to each file"), this, SLOT(slotWriteToFileMetadataFromDatabase()));
         // we dont need a "Write to file" action here because the apply button will do just that
-        // if selection is a single file. Or will this confuse users?
+        // if selection is a single file.
+        // Adding the option will confuse users: Does the apply button not write to file?
+        // Removing the option will confuse users: There is not option to write to file! (not visible in single selection)
+        // Disabling will confuse users: Why is it disabled?
+        d->moreMenu->setItemEnabled(writeActionId, false);
     }
     else
     {
