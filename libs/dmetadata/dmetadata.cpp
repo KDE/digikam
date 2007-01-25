@@ -812,25 +812,9 @@ QDateTime DMetadata::getImageDateTime() const
         
         if (!d->exifMetadata.empty())
         {        
-            // Try standard Exif date time entry.
+            // Try Exif date time original.
     
-            Exiv2::ExifKey key("Exif.Image.DateTime");
             Exiv2::ExifData exifData(d->exifMetadata);
-            Exiv2::ExifData::iterator it = exifData.findKey(key);
-            
-            if (it != exifData.end())
-            {
-                QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
-    
-                if (dateTime.isValid())
-                {
-                    // DDebug() << "DateTime (Exif standard): " << dateTime << endl;
-                    return dateTime;
-                }
-            }
-    
-            // Bogus standard Exif date time entry. Try Exif date time original.
-    
             Exiv2::ExifKey key2("Exif.Photo.DateTimeOriginal");
             Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
             
@@ -860,6 +844,23 @@ QDateTime DMetadata::getImageDateTime() const
                     return dateTime;
                 }
             }
+
+            // Bogus Exif date time digitalized entry. Try standard Exif date time entry.
+    
+            Exiv2::ExifKey key("Exif.Image.DateTime");
+            Exiv2::ExifData::iterator it = exifData.findKey(key);
+            
+            if (it != exifData.end())
+            {
+                QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+    
+                if (dateTime.isValid())
+                {
+                    // DDebug() << "DateTime (Exif standard): " << dateTime << endl;
+                    return dateTime;
+                }
+            }
+    
         }
         
         // In second, trying to get Date & time from Iptc tags.
