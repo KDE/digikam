@@ -468,6 +468,8 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 273 ==> 139766 : Crash when displaying EXIF metadata with Unicode comment
 274 ==> 130017 : Wish: batch operation to save existing comments in the files.
 275 ==> 140320 : View menu should better fit after Edit.
-276 ==> 
+276 ==> 127617 : "Toggle Fullscreen" should be located in "View" menu instead 
+                 of "Settings" menu.
+277 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
