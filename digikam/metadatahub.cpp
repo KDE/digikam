@@ -653,6 +653,5 @@ void MetadataHub::setTag(int albumID, bool hasTag, Status status)
     setTag(album, hasTag, status);
 }
 
-
 }
 

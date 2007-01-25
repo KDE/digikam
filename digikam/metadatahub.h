@@ -18,7 +18,6 @@
  * 
  * ============================================================ */
 
-
 #ifndef METADATAHUB_H
 #define METADATAHUB_H
 
@@ -289,11 +288,14 @@ public:
     void setRating(int rating, Status status = MetadataAvailable);
     void setTag(TAlbum *tag, bool hasTag, Status status = MetadataAvailable);
     void setTag(int albumID, bool hasTag, Status status = MetadataAvailable);
+
 private:
 
     void load(const QDateTime &dateTime, const QString &comment, int rating);
     void loadTags(const QValueList<TAlbum *> &loadedTags);
     void loadTags(const QStringList &loadedTagPaths);
+
+private:
 
     MetadataHubPriv     *d;
 };
