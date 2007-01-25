@@ -224,10 +224,12 @@ void MetadataHub::load(const DMetadata &metadata)
     }
 }
 
-void MetadataHub::load(const QString &filePath)
+bool MetadataHub::load(const QString &filePath)
 {
-    DMetadata metadata(filePath);
+    DMetadata metadata;
+    bool success = metadata.load(filePath);
     load(metadata); // increments count
+    return success;
 }
 
 // private common code to merge tags
@@ -370,14 +372,24 @@ template <class T> void MetadataHubPriv::loadSingleValue(const T &data, T &stora
 
 // --------------------------------------------------
 
-void MetadataHub::write(ImageInfo *info)
+bool MetadataHub::write(ImageInfo *info)
 {
+    bool changed = false;
     if (d->commentStatus == MetadataAvailable)
+    {
         info->setCaption(d->comment);
+        changed = true;
+    }
     if (d->dateTimeStatus == MetadataAvailable)
+    {
         info->setDateTime(d->dateTime);
+        changed = true;
+    }
     if (d->ratingStatus == MetadataAvailable)
+    {
         info->setRating(d->rating);
+        changed = true;
+    }
 
     if (d->dbmode == ManagedTags)
     {
@@ -389,6 +401,7 @@ void MetadataHub::write(ImageInfo *info)
                     info->setTag(it.key()->id());
                 else
                     info->removeTag(it.key()->id());
+                changed = true;
             }
         }
     }
@@ -396,7 +409,9 @@ void MetadataHub::write(ImageInfo *info)
     {
         // tags not yet contained in database will be created
         info->addTagPaths(d->tagList);
+        changed = changed || !d->tagList.isEmpty();
     }
+    return changed;
 }
 
 bool MetadataHub::write(DMetadata &metadata, const MetadataWriteSettings &settings)
@@ -471,14 +486,16 @@ bool MetadataHub::write(DMetadata &metadata, const MetadataWriteSettings &settin
     return dirty;
 }
 
-void MetadataHub::write(const QString &filePath, const MetadataWriteSettings &settings)
+bool MetadataHub::write(const QString &filePath, const MetadataWriteSettings &settings)
 {
     DMetadata metadata(filePath);
     if (write(metadata, settings))
     {
-        metadata.applyChanges();
+        bool success = metadata.applyChanges();
         ImageAttributesWatch::instance()->fileMetadataChanged(filePath);
+        return success;
     }
+    return false;
 }
 
 MetadataWriteSettings MetadataHub::defaultWriteSettings()

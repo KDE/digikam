@@ -163,16 +163,18 @@ public:
     /**
         Load metadata information from the given file.
         (Uses DMetadata, QFileInfo)
+        @returns True if the metadata could be loaded
     */
-    void load(const QString &filePath);
+    bool load(const QString &filePath);
 
     // --------------------------------------------------
 
     /**
         Applies the set of metadata contained in this MetadataHub
         to the given ImageInfo object.
+        @return Returns true if the info object has been changed
     */
-    void write(ImageInfo *info);
+    bool write(ImageInfo *info);
 
     /**
         Applies the set of metadata contained in this MetadataHub
@@ -200,8 +202,9 @@ public:
         Constructs a DMetadata object for given filePath,
         calls the above method, writes the changes out to the file,
         and notifies the ImageAttributesWatch.
+        @return Returns if the file has been touched
     */
-    void write(const QString &filePath,
+    bool write(const QString &filePath,
                const MetadataWriteSettings &settings = defaultWriteSettings());
 
     /**
