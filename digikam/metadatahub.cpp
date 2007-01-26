@@ -421,22 +421,19 @@ bool MetadataHub::write(DMetadata &metadata, const MetadataWriteSettings &settin
     if (settings.saveComments && d->commentStatus == MetadataAvailable)
     {
         // Store comments in image as JFIF comments, Exif comments, and Iptc Comments.
-        metadata.setImageComment(d->comment);
-        dirty = true;
+        dirty |= metadata.setImageComment(d->comment);
     }
 
     if (settings.saveDateTime && d->dateTimeStatus == MetadataAvailable)
     {
         // Store Image Date & Time as Exif and Iptc tags.
-        metadata.setImageDateTime(d->dateTime, false);
-        dirty = true;
+        dirty |= metadata.setImageDateTime(d->dateTime, false);
     }
 
     if (settings.saveIptcRating && d->ratingStatus == MetadataAvailable)
     {
         // Store Image rating as Iptc tag.
-        metadata.setImageRating(d->rating);
-        dirty = true;
+        dirty |= metadata.setImageRating(d->rating);
     }
 
     if (settings.saveIptcTags)
@@ -462,25 +459,22 @@ bool MetadataHub::write(DMetadata &metadata, const MetadataWriteSettings &settin
                     oldKeywords.append(it.key()->tagPath(false));
             }
         }
-        metadata.setImageKeywords(oldKeywords, newKeywords);
-        dirty = true;
+        dirty |= metadata.setImageKeywords(oldKeywords, newKeywords);
     }
 
     if (settings.saveIptcPhotographerId)
     {
         // Store Photograph identity into the Iptc tags.
-        metadata.setImagePhotographerId(settings.iptcAuthor,
+        dirty |= metadata.setImagePhotographerId(settings.iptcAuthor,
                                         settings.iptcAuthorTitle);
-        dirty = true;
     }
 
     if (settings.saveIptcCredits)
     {
         // Store Photograph identity into the Iptc tags.
-        metadata.setImageCredits(settings.iptcCredit,
+        dirty |= metadata.setImageCredits(settings.iptcCredit,
                                  settings.iptcSource,
                                  settings.iptcCopyright);
-        dirty = true;
     }
 
     return dirty;
