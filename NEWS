@@ -471,6 +471,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 276 ==> 127617 : "Toggle Fullscreen" should be located in "View" menu instead 
                  of "Settings" menu.
 277 ==> 139264 : Prefer Exif DateTimeOriginal for sorting images (DateTimeDigitized and DateTime only used as fallback)
-278 ==>
+278 ==> 140417 : Crash digiKam when delete image.
+279 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
