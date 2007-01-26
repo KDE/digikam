@@ -54,11 +54,20 @@ public:
         album        = 0;
         imageInfo    = 0; 
         duration.start();
+
+        okPix        = KApplication::kApplication()->iconLoader()->loadIcon(
+                       "button_ok", KIcon::NoGroup, 32);
+
+        warnPix      = KApplication::kApplication()->iconLoader()->loadIcon(
+                       "messagebox_info", KIcon::NoGroup, 16);
     }
 
     bool                   cancel;
 
     QTime                  duration;
+
+    QPixmap                okPix;
+    QPixmap                warnPix;
 
     Album                 *album;
     
@@ -138,19 +147,16 @@ void BatchSyncMetadata::parsePicture()
     }
     else 
     {
-        QPixmap pix = KApplication::kApplication()->iconLoader()->loadIcon(
-                      "image", KIcon::NoGroup, 32);
-    
-        addedAction(pix, d->imageInfo->kurl().filename());
-
         MetadataHub fileHub;
         // read in from database
         fileHub.load(d->imageInfo);
         // write out to file DMetadata
-        fileHub.write(d->imageInfo->filePath());
-
+        bool result = fileHub.write(d->imageInfo->filePath());
+   
+        addedAction(result ? d->okPix : d->warnPix, d->imageInfo->kurl().filename());
         advance(1);
         d->imageInfo = d->imageInfoList.next();
+
         kapp->processEvents();
         parsePicture();
     }
