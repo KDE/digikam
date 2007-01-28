@@ -156,6 +156,7 @@ Image Plugins : Black & Whithe converter : Capabilty to remember settings betwee
 
 Image Editor  : Add new advanced options to keep ratio and alignment about print pictures.
 Image Editor  : Add 2 new advanced options to show under-exposed or over-exposed pixels.
+Image Editor  : Remove View->Histogram menu option. We have a better histogram available in sidebar.
  
 ...
 
@@ -472,7 +473,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
                  of "Settings" menu.
 277 ==> 139264 : Prefer Exif DateTimeOriginal for sorting images (DateTimeDigitized and DateTime only used as fallback)
 278 ==> 140417 : Crash digiKam when delete image.
-279 ==> 110514 : Remove View->Histogram (better histogram available in sidebar) in digiKam Editor/ShowImage
+279 ==> 110514 : Enhanced selection, refactored histogram. 
 280 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
