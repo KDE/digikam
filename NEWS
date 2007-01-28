@@ -472,6 +472,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
                  of "Settings" menu.
 277 ==> 139264 : Prefer Exif DateTimeOriginal for sorting images (DateTimeDigitized and DateTime only used as fallback)
 278 ==> 140417 : Crash digiKam when delete image.
-279 ==> 
+279 ==> 110514 : Remove View->Histogram (better histogram available in sidebar) in digiKam Editor/ShowImage
+280 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
