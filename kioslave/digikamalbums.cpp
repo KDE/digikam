@@ -1563,6 +1563,8 @@ void kio_digikamalbums::addImage(int albumID, const QString& filePath)
                                              "VALUES( %1, '%2', 0)")
                                      .arg(parentTagID)
                                      .arg(escapeString(*tagName)));
+                    tagID = m_sqlDB.lastInsertedRow();
+
                     if (tagID == -1)
                     {
                         // Something is wrong in database. Abort.
