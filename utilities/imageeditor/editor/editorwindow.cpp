@@ -321,20 +321,6 @@ void EditorWindow::setupStandardActions()
                                            actionCollection(), "editorwindow_fullscreen");
 #endif
 
-    d->viewHistogramAction = new KSelectAction(i18n("&Histogram"), "histogram", Key_H,
-                                               this, SLOT(slotViewHistogram()),
-                                               actionCollection(), "editorwindow_histogram");
-    d->viewHistogramAction->setEditable(false);
-
-    QStringList selectItems;
-    selectItems << i18n("Hide");
-    selectItems << i18n("Luminosity");
-    selectItems << i18n("Red");
-    selectItems << i18n("Green");
-    selectItems << i18n("Blue");
-    selectItems << i18n("Alpha");
-    d->viewHistogramAction->setItems(selectItems);
-
     m_slideShowAction = new KToggleAction(i18n("Slide Show"), "slideshow", 0,
                                           this, SLOT(slotToggleSlideShow()),
                                           actionCollection(),"editorwindow_slideshow");
@@ -713,16 +699,6 @@ void EditorWindow::readStandardSettings()
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
 
-    // Blended Histogram settings.
-    QRect histogramRect = config->readRectEntry("Histogram Rectangle");
-    if (!histogramRect.isNull())
-        m_canvas->setHistogramPosition(histogramRect.topLeft());
-
-    int histogramType = config->readNumEntry("HistogramType", 0);
-    histogramType = (histogramType < 0 || histogramType > 5) ? 0 : histogramType;
-    d->viewHistogramAction->setCurrentItem(histogramType);
-    slotViewHistogram(); // update
-
     // Restore full screen Mode ?
 
     if (config->readBoolEntry("FullScreen", false))
@@ -847,16 +823,6 @@ void EditorWindow::saveStandardSettings()
     config->writeEntry("AutoZoom", d->zoomFitAction->isChecked());
     config->writeEntry("Splitter Sizes", m_splitter->sizes());
 
-    int histogramType = d->viewHistogramAction->currentItem();
-    histogramType = (histogramType < 0 || histogramType > 5) ? 0 : histogramType;
-    config->writeEntry("HistogramType", histogramType);
-
-    QPoint pt;
-    QRect rc(0, 0, 0, 0);
-    if (m_canvas->getHistogramPosition(pt)) 
-        rc = QRect(pt.x(), pt.y(), 1, 1);
-    config->writeEntry("Histogram Rectangle", rc);
-
     config->writeEntry("FullScreen", m_fullScreenAction->isChecked());
     config->writeEntry("UnderExposureIndicator", d->exposureSettings->underExposureIndicator);
     config->writeEntry("OverExposureIndicator", d->exposureSettings->overExposureIndicator);
@@ -864,17 +830,10 @@ void EditorWindow::saveStandardSettings()
     config->sync();
 }
 
-void EditorWindow::slotViewHistogram()
-{
-    int curItem = d->viewHistogramAction->currentItem();
-    m_canvas->setHistogramType(curItem);
-}
-
 void EditorWindow::toggleStandardActions(bool val)
 {
     d->zoomFitAction->setEnabled(val);
     m_saveAsAction->setEnabled(val);
-    d->viewHistogramAction->setEnabled(val);
     d->rotateAction->setEnabled(val);
     d->flipAction->setEnabled(val);
     d->filePrintAction->setEnabled(val);

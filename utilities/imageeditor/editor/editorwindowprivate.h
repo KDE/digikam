@@ -50,7 +50,6 @@ public:
         imagePluginsHelpAction = 0;
         donateMoneyAction      = 0;
         accelerators           = 0;
-        viewHistogramAction    = 0;
         viewCMViewAction       = 0;
         filePrintAction        = 0;
         copyAction             = 0;
@@ -109,8 +108,6 @@ public:
     KToggleAction             *viewCMViewAction;
     KToggleAction             *viewUnderExpoAction;
     KToggleAction             *viewOverExpoAction;
-
-    KSelectAction             *viewHistogramAction;
 
     KAccel                    *accelerators;
 
