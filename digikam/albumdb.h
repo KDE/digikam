@@ -330,10 +330,11 @@ public:
 
     /**
      * Add tags for the item, create tags with the given paths if they do not yet exist
-     * @param albumID the albumID of the item
-     * @param keywords a list of tagPath
+     * @param tagPaths a list of tag paths
+     * @param create create new tags if necessary
+     * @returns a list of albumIDs of the tags in tagPaths
      */
-    void addOrCreateItemTags(Q_LLONG imageID, const QStringList &keywords);
+    IntList getTagsFromTagPaths(const QStringList &tagPaths, bool create = true);
 
     /**
      * Get a list of recently assigned tags (only last 6 tags are listed)

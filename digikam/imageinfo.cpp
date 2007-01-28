@@ -264,7 +264,9 @@ void ImageInfo::removeAllTags()
 void ImageInfo::addTagPaths(const QStringList &tagPaths)
 {
     AlbumDB *db = m_man->albumDB();
-    db->addOrCreateItemTags(m_ID, tagPaths);
+    AlbumList list = m_man->findOrCreateTAlbums(tagPaths);
+    for (AlbumList::iterator it = list.begin(); it != list.end(); ++it)
+        db->addItemTag(m_ID, (*it)->id());
     ImageAttributesWatch::instance()->imageTagsChanged(m_ID);
 }
 

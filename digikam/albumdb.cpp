@@ -1044,21 +1044,29 @@ Q_LLONG AlbumDB::addItem(int albumID,
     // Set existing tags in database or create new tags if not exist.
 
     if ( item != -1 && !keywordsList.isEmpty() )
-        addOrCreateItemTags(albumID, keywordsList);
+    {
+        IntList tagIDs = getTagsFromTagPaths(keywordsList);
+        for (IntList::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
+        {
+            addItemTag(item, *it);
+        }
+    }
 
     return item;
 }
 
-void AlbumDB::addOrCreateItemTags(Q_LLONG imageID, const QStringList &keywordsList)
+IntList AlbumDB::getTagsFromTagPaths(const QStringList &keywordsList, bool create)
 {
     if (keywordsList.isEmpty())
-        return;
+        return IntList();
+
+    IntList tagIDs;
 
     QStringList keywordsList2Create;
 
     // Create a list of the tags currently in database
 
-    TagInfo::List tagsList;
+    TagInfo::List currentTagsList;
 
     QStringList values;
     execSql( "SELECT id, pid, name FROM Tags;", &values );
@@ -1073,7 +1081,7 @@ void AlbumDB::addOrCreateItemTags(Q_LLONG imageID, const QStringList &keywordsLi
         ++it;
         info.name = *it;
         ++it;
-        tagsList.append(info);
+        currentTagsList.append(info);
     }
 
     // For every tag in keywordsList, scan taglist to check if tag already exists.
@@ -1091,8 +1099,8 @@ void AlbumDB::addOrCreateItemTags(Q_LLONG imageID, const QStringList &keywordsLi
         QString tagName = tagHierarchy.back();
         tagHierarchy.pop_back();
 
-        for (TagInfo::List::iterator tag = tagsList.begin();
-            tag != tagsList.end(); ++tag )
+        for (TagInfo::List::iterator tag = currentTagsList.begin();
+            tag != currentTagsList.end(); ++tag )
         {
             // There might be multiple tags with the same name, but in different
             // hierarchies. We must check them all until we find the correct hierarchy
@@ -1110,8 +1118,8 @@ void AlbumDB::addOrCreateItemTags(Q_LLONG imageID, const QStringList &keywordsLi
 
                     foundParentTag = false;
 
-                    for (TagInfo::List::iterator parentTag = tagsList.begin();
-                        parentTag != tagsList.end(); ++parentTag )
+                    for (TagInfo::List::iterator parentTag = currentTagsList.begin();
+                        parentTag != currentTagsList.end(); ++parentTag )
                     {
                         // check if name is the same, and if ID is identical
                         // to the parent ID we got from the child tag
@@ -1132,7 +1140,8 @@ void AlbumDB::addOrCreateItemTags(Q_LLONG imageID, const QStringList &keywordsLi
                 // we have our tag.
                 if (foundParentTag)
                 {
-                    addItemTag(imageID, (*tag).id);
+                    // add to result list
+                    tagIDs.append((*tag).id);
                     foundTag = true;
                     break;
                 }
@@ -1145,7 +1154,7 @@ void AlbumDB::addOrCreateItemTags(Q_LLONG imageID, const QStringList &keywordsLi
 
     // If tags do not exist in database, create them.
 
-    if (!keywordsList2Create.isEmpty())
+    if (create && !keywordsList2Create.isEmpty())
     {
         for (QStringList::iterator kwd = keywordsList2Create.begin();
             kwd != keywordsList2Create.end(); ++kwd )
@@ -1169,8 +1178,8 @@ void AlbumDB::addOrCreateItemTags(Q_LLONG imageID, const QStringList &keywordsLi
                 // if the parent tag did not exist, we need not check if the child exists
                 if (parentTagExisted)
                 {
-                    for (TagInfo::List::iterator tag = tagsList.begin();
-                        tag != tagsList.end(); ++tag )
+                    for (TagInfo::List::iterator tag = currentTagsList.begin();
+                        tag != currentTagsList.end(); ++tag )
                     {
                         // find the tag with tag name according to tagHierarchy,
                         // and parent ID identical to the ID of the tag we found in
@@ -1192,6 +1201,7 @@ void AlbumDB::addOrCreateItemTags(Q_LLONG imageID, const QStringList &keywordsLi
 
                 // Tag does not yet exist in DB, add it
                 tagID = addTag(parentTagID, (*tagName), QString::null, 0);
+                DDebug() << "Adding tag " << parentTagID << " " << (*tagName) << " resulting id " << tagID << endl;
 
                 if (tagID == -1)
                 {
@@ -1204,17 +1214,18 @@ void AlbumDB::addOrCreateItemTags(Q_LLONG imageID, const QStringList &keywordsLi
                 info.id   = tagID;
                 info.pid  = parentTagID;
                 info.name = (*tagName);
-                tagsList.append(info);
+                currentTagsList.append(info);
 
                 parentTagID      = tagID;
                 parentTagExisted = false;
             }
 
-            addItemTag(imageID, tagID);
+            // add to result list
+            tagIDs.append(tagID);
         }
     }
 
-    return;
+    return tagIDs;
 }
 
 bool AlbumDB::setItemDate(Q_LLONG imageID,

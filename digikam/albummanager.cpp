@@ -1002,6 +1002,26 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
     return album;
 }
 
+AlbumList AlbumManager::findOrCreateTAlbums(const QStringList &tagPaths)
+{
+    IntList tagIDs;
+
+    // find tag ids for tag paths in list, create if they don't exist
+    tagIDs = d->db->getTagsFromTagPaths(tagPaths);
+
+    // create TAlbum objects for the newly created tags
+    scanTAlbums();
+
+    AlbumList resultList;
+
+    for (IntList::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
+    {
+        resultList.append(findTAlbum(*it));
+    }
+
+    return resultList;
+}
+
 bool AlbumManager::deleteTAlbum(TAlbum* album, QString& errMsg)
 {
     if (!album)

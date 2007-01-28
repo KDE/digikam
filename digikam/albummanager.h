@@ -290,7 +290,14 @@ public:
     TAlbum* createTAlbum(TAlbum* parent, const QString& name, 
                          const QString& iconkde, QString& errMsg);
 
-    
+    /**
+     * A list of tag paths is supplied.
+     * If no corresponding TAlbum exists, a new one will be created.
+     * @param tagPath A list of tag paths
+     * @returns A list of all TAlbums for the list (already existing or newly created)
+    */
+    AlbumList findOrCreateTAlbums(const QStringList &tagPaths);
+
     /**
      * Delete a TAlbum.
      * The tag is removed from the database
