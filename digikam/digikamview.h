@@ -125,6 +125,7 @@ private:
     void setupConnections();
     void loadViewState();
     void saveViewState();
+    void changeAlbumFromHistory(Album *album, QWidget *widget);
 
 private slots:
 

@@ -430,32 +430,18 @@ void DigikamView::slotAlbumDeleted(Album *delalbum)
 {
     d->albumHistory->deleteAlbum(delalbum);
 
+    // display changed tags
+    if (delalbum->type() == Album::TAG)
+        d->iconView->updateContents();
+
+    /*
+    // For what is this needed?
     Album *album;
     QWidget *widget;
     d->albumHistory->getCurrentAlbum(&album, &widget);
 
-    if (album && widget)
-    {
-        QListViewItem *item;
-        item = (QListViewItem*)album->extraData(widget);
-        if(!item)
-            return;
-
-        if (FolderView *v = dynamic_cast<FolderView*>(widget))
-        {
-            v->setSelected(item, true);
-            v->ensureItemVisible(item);
-        } 
-        else if (DateFolderView *v = dynamic_cast<DateFolderView*>(widget))
-        {
-            v->setSelected(item);
-        }
-
-        d->leftSideBar->setActiveTab(widget);
-
-        d->parent->enableAlbumBackwardHistory(!d->albumHistory->isBackwardEmpty());
-        d->parent->enableAlbumForwardHistory(!d->albumHistory->isForwardEmpty());
-    }
+    changeAlbumFromHistory(album, widget);
+    */
 }
 
 void DigikamView::slotAlbumRenamed(Album *album)
@@ -473,28 +459,7 @@ void DigikamView::slotAlbumHistoryBack(int steps)
 
     d->albumHistory->back(&album, &widget, steps);
 
-    if (album && widget)
-    {
-        QListViewItem *item;
-        item = (QListViewItem*)album->extraData(widget);
-        if(!item)
-            return;
- 
-        if (FolderView *v = dynamic_cast<FolderView*>(widget))
-        {
-            v->setSelected(item, true);
-            v->ensureItemVisible(item);
-        } 
-        else if (DateFolderView *v = dynamic_cast<DateFolderView*>(widget))
-        {
-            v->setSelected(item);
-        }
-
-        d->leftSideBar->setActiveTab(widget);
-
-        d->parent->enableAlbumBackwardHistory(!d->albumHistory->isBackwardEmpty());
-        d->parent->enableAlbumForwardHistory(!d->albumHistory->isForwardEmpty());
-     }
+    changeAlbumFromHistory(album, widget);
 }
 
 void DigikamView::slotAlbumHistoryForward(int steps)
@@ -504,6 +469,11 @@ void DigikamView::slotAlbumHistoryForward(int steps)
 
     d->albumHistory->forward(&album, &widget, steps);
 
+    changeAlbumFromHistory(album, widget);
+}
+
+void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
+{
     if (album && widget)
     {
         QListViewItem *item;
@@ -511,6 +481,7 @@ void DigikamView::slotAlbumHistoryForward(int steps)
         if(!item)
             return;
 
+        // AlbumFolderview, TagFolderView, SearchFolderView inherit from FolderView
         if (FolderView *v = dynamic_cast<FolderView*>(widget))
         {
             v->setSelected(item, true);
@@ -567,7 +538,7 @@ void DigikamView::slotSelectAlbum(const KURL &)
 
 void DigikamView::slot_albumSelected(Album* album)
 {
-    emit signal_noCurrentItem();
+    //emit signal_noCurrentItem();
 
     if (!album)
     {
@@ -628,7 +599,7 @@ void DigikamView::slotDispatchImageSelected()
     if (d->needDispatchSelection)
     {
         // the list of copies of ImageInfos of currently selected items, currentItem first
-        QPtrList<ImageInfo> list = d->iconView->selectedImageInfos(true );
+        QPtrList<ImageInfo> list = d->iconView->selectedImageInfos(true);
 
         if (list.isEmpty())
         {
@@ -983,6 +954,10 @@ void DigikamView::slotSortImages(int order)
 
 void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
 {
+    // setActive means that selection changes are propagated, nothing more.
+    // Additionally, when it is set to true, the selectionChanged signal will be emitted.
+    // So this is the place which causes the behavior that when the left sidebar
+    // tab is changed, the current album is changed as well.
     d->dateFolderView->setActive(w == d->dateFolderView);
     d->folderView->setActive(w == d->folderView);
     d->tagFolderView->setActive(w == d->tagFolderView);
