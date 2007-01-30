@@ -78,6 +78,7 @@ http://bugs.kde.org/buglist.cgi?product=digikamimageplugins&bug_status=UNCONFIRM
 AutoConf   >= 2.5.x                        http://www.gnu.org/software/autoconf
 AutoMake   >= 1.7.x                        http://www.gnu.org/software/automake
 libkde     >= 3.4.x (>=3.5.x recommended)  http://www.kde.org
+libqt      >= 3.3.x                        http://www.trolltech.com
 digiKam    >= 0.9.0                        http://www.digikam.org
 
 
