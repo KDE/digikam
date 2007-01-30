@@ -34,7 +34,6 @@
  
 // Local includes
 
-#include "imagepropertiessidebardb.h"
 #include "navigatebarwidget.h"
 #include "navigatebarwidget.moc"
 
