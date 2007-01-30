@@ -3,8 +3,10 @@
 AM_INIT_AUTOMAKE(digikam,0.9.1)
 
 # -----------------------------------------------------------------
+#
 # enable hidden visibility only if kde >= 3.3.2 and kdelibs has
 # been compiled with visibility enabled
+#
 # -----------------------------------------------------------------
 
 AC_LANG_PUSH(C++)
@@ -40,27 +42,37 @@ if test "x$digikam_enable_hidden_visibility" = "xyes"; then
 fi
 
 # -----------------------------------------------------------------
+#
 # pkg config check
+#
 # -----------------------------------------------------------------
 
 AC_ARG_VAR(PKGCONFIGFOUND, [Path to pkg-config])
 AC_CHECK_PROG(PKGCONFIGFOUND, pkg-config,[yes])
 
 # -----------------------------------------------------------------
+#
 # sqlite2 type check
+#
 # -----------------------------------------------------------------
+
 KDE_CHECK_TYPES
 
 # -------------------------------------------------------
+#
 # Check endianness
+#
 # -------------------------------------------------------
+
 AC_LANG_SAVE
 AC_LANG_C
 AC_C_BIGENDIAN
 AC_LANG_RESTORE
 
 # -----------------------------------------------------------------
+#
 # sqlite3 check
+#
 # -----------------------------------------------------------------
 
 LIB_SQLITE3=""
@@ -78,7 +90,9 @@ fi
 AC_SUBST(LIB_SQLITE3)
 
 # -----------------------------------------------------------------
+#
 # lcms check
+#
 # -----------------------------------------------------------------
 
 have_lcms_header='no'
@@ -121,7 +135,9 @@ fi
 AC_SUBST(LCMS_LIBS)
 
 #------------------------------------------------------------------
+#
 # gphoto2 detection
+#
 #------------------------------------------------------------------
 
 dnl Check for gPhoto2 configuration
@@ -141,7 +157,9 @@ fi
 CXXFLAGS="$CXXFLAGS -DQT_CLEAN_NAMESPACE"
 
 #------------------------------------------------------------------
+#
 # KIPI support (KDE Image Plugin Interface) 
+#
 #------------------------------------------------------------------
 
 if test "$PKGCONFIGFOUND" = "yes" ; then
@@ -171,7 +189,59 @@ if test "x$have_libkipi" != "xyes"; then
 fi
 
 #------------------------------------------------------------------
+#
+# Check for Exiv2 library
+#
+#------------------------------------------------------------------
+
+have_exiv2='no'
+if test "$PKGCONFIGFOUND" = "yes" ; then
+ KDE_PKG_CHECK_MODULES(EXIV2, exiv2 >= 0.12, have_exiv2=yes,have_exiv2=no)
+else
+ AC_MSG_WARN([pkg-config not found. You have to install pkg-config first. digiKam depends on it.])
+fi
+
+if test "x$have_exiv2" != "xyes"; then
+  AC_MSG_WARN([Exiv2 library not found, digiKam will not be compiled.])
+  DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
+fi
+
+# --------------------------------------------------------------------
+#
+# Check for libkexiv2
+#
+# --------------------------------------------------------------------
+
+if test "$PKGCONFIGFOUND" = "yes" ; then
+   # check for libkexiv2
+   have_libkexiv2=no
+
+   KDE_PKG_CHECK_MODULES(LIBKEXIV2, libkexiv2 >= 0.1,
+                         have_libkexiv2=yes, have_libkexiv2=no)
+
+   if test "x$have_libkexiv2" = "xno"; then
+       LIBKEXIV2_CFLAGS=""
+       LIBKEXIV2_LIBS=""
+       AC_MSG_RESULT([not found])
+   else
+       AC_MSG_RESULT([found])
+   fi
+else
+   LIBKEXIV2_CFLAGS=""
+   LIBKEXIV2_LIBS=""
+   AC_MSG_RESULT([not found])
+fi 
+AC_SUBST(LIBKEXIV2_CFLAGS)
+AC_SUBST(LIBKEXIV2_LIBS)
+
+if test "x$have_libkexiv2" != "xyes"; then
+   DO_NOT_COMPILE="$DO_NOT_COMPILE digikam digikamimageplugins"
+fi
+
+#------------------------------------------------------------------
+#
 # Check for libtiff
+#
 #------------------------------------------------------------------
 
 have_tiff=no
@@ -193,7 +263,9 @@ else
 fi
 
 #------------------------------------------------------------------
+#
 # Check for libpng with png_set_add_alpha() function
+#
 #------------------------------------------------------------------
 
 have_png=no
@@ -211,7 +283,9 @@ else
 fi
 
 #------------------------------------------------------------------
+#
 # Check for libjasper (JPEG2000)
+#
 #------------------------------------------------------------------
 
 have_jasper=no
@@ -229,25 +303,13 @@ else
 fi
 
 #------------------------------------------------------------------
-# Check for Exiv2 library
-#------------------------------------------------------------------
-
-have_exiv2='no'
-if test "$PKGCONFIGFOUND" = "yes" ; then
- KDE_PKG_CHECK_MODULES(EXIV2, exiv2 >= 0.12, have_exiv2=yes,have_exiv2=no)
-fi
-
-if test "x$have_exiv2" != "xyes"; then
-  AC_MSG_WARN([Exiv2 library not found, digiKam will not be compiled.])
-  DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
-fi
-
-#------------------------------------------------------------------
+#
 # NFS is Evil (sqlite makes use of file locking for allowing 
 # multiple processes to access the database. but on many 
 # nfs implementations, this file locking is horribly broken and
 # can end up locking the app or not allowing access to the app. 
 # since we use kioslaves which access the db too)
+#
 #------------------------------------------------------------------
 
 AC_ARG_ENABLE(nfs-hack,
