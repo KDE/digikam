@@ -59,7 +59,6 @@ public:
     void setItem(ImageInfo *info=0);
     void setItems(QPtrList<ImageInfo> infos);
     void populateTags();
-    void setFocusToComments(bool f);
 
 signals:
 

@@ -98,9 +98,6 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *
     connectTab(m_colorTab);
     connectTab(d->desceditTab);
 
-    connect(this, SIGNAL(signalViewChanged()),
-            this, SLOT(slotSetFocus()));
-
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
 
@@ -360,20 +357,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
     }
 
-    slotSetFocus();
-
     unsetCursor();
-}
-
-void ImagePropertiesSideBarDB::slotSetFocus()
-{
-    // See B.K.O #131632 and #131743 : always give focus to Comments widget 
-    // when we toogle between tab and when we change current item.
-
-    if (getActiveTab() == d->desceditTab && isExpanded())
-        d->desceditTab->setFocusToComments(true);
-    else
-        d->desceditTab->setFocusToComments(false);
 }
 
 void ImagePropertiesSideBarDB::slotFileMetadataChanged(const KURL &url)
