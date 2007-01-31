@@ -474,6 +474,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 277 ==> 139264 : Prefer Exif DateTimeOriginal for sorting images (DateTimeDigitized and DateTime only used as fallback)
 278 ==> 140417 : Crash digiKam when delete image.
 279 ==> 110514 : Enhanced selection, refactored histogram. 
-280 ==> 
+280 ==> 140933 : Typo: Album Library Path.
+281 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
