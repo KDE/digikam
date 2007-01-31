@@ -21,13 +21,13 @@
 
 // Qt includes.
 
-#include <qlabel.h>
 #include <qlayout.h>
 #include <qwidget.h>
 #include <qpushbutton.h>
 
 // KDE includes.
 
+#include <ksqueezedtextlabel.h>
 #include <kprogress.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -60,13 +60,14 @@ public:
         cancelButton   = 0;
     }
 
-    QLabel      *textLabel;
 
-    QWidget     *progressWidget;
+    QWidget            *progressWidget;
 
-    QPushButton *cancelButton;
+    QPushButton        *cancelButton;
 
-    KProgress   *progressBar;
+    KSqueezedTextLabel *textLabel;
+
+    KProgress          *progressBar;
 };
 
 StatusProgressBar::StatusProgressBar(QWidget *parent)
@@ -74,7 +75,7 @@ StatusProgressBar::StatusProgressBar(QWidget *parent)
 {
     d = new StatusProgressBarPriv;
 
-    d->textLabel      = new QLabel(this);
+    d->textLabel      = new KSqueezedTextLabel(this);
     d->progressWidget = new QWidget(this);
     QHBoxLayout *hBox = new QHBoxLayout(d->progressWidget);
     d->progressBar    = new KProgress(d->progressWidget);
