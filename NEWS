@@ -128,8 +128,9 @@ General       : New native JPEG2000 image loader using Jasper library witch can 
 General       : New optimized layout to show Comments & Tags side bar contents.
 General       : Tags View from Comments & Tags side bar support drag & drop.
 General       : New Batch tool to sync all pictures metadata (EXIF/IPTC) with digiKam database content.
+General       : Add a status bar to Album Gui with a progress bar, text bar, and navigate bar .
 
-AlbumGUI      : Improvement of popupmenu of Tags Filter View and Comment & Tags about
+AlbumGUI      : Improvement of pop-up menu of Tags Filter View and Comment & Tags about
                 auto selection/deselection of parents/childs tags in Tags treeview.
 AlbumGUI      : Root album show a Welcome page for new users (like Kmail or Konqueror).
 AlbumGUI      : Video files can be previewed using an embedded instance of default KDE
@@ -437,7 +438,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 243 ==> 132309 : Wish: enhance video support in digiKam.
 244 ==> 115153 : Assigns tags not only to selected images with drag and drop.
 245 ==> 131743 : Comments and tag edit widgets should retain focus when changing image.
-246 ==> 131632 : Shortcuts for better captioning workflow.
+246 ==> 140412 : Comments/Tags sidebar steels focus.
 247 ==> 137491 : Editor image cache not flush when an image is modified outside digiKam.
 248 ==> 138949 : Save/overwrite fails: wrong dialog.
 249 ==> 139197 : Crash during import of raw imagefiles (DNG).
