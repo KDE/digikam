@@ -144,7 +144,7 @@ DigikamView::DigikamView(QWidget *parent)
     d->iconView = d->albumWidgetStack->albumIconView();
 
     d->rightSideBar = new ImagePropertiesSideBarDB(this, "Digikam Right Sidebar", d->splitter, 
-                                                   Sidebar::Right, true, true);
+                                                   Sidebar::Right, true, false);
 
     // To the left.
     d->folderView       = new AlbumFolderView(this);
