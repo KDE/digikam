@@ -59,7 +59,6 @@
 #include "album.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
-#include "batchsyncmetadata.h"
 #include "tagcreatedlg.h"
 #include "navigatebarwidget.h"
 #include "ratingwidget.h"
@@ -68,6 +67,7 @@
 #include "imageinfo.h"
 #include "imageattributeswatch.h"
 #include "metadatahub.h"
+#include "statusprogressbar.h"
 #include "imagedescedittab.h"
 #include "imagedescedittab.moc"
 
@@ -356,20 +356,26 @@ void ImageDescEditTab::slotApplyAllChanges()
     if (d->currInfos.isEmpty())
         return;
 
-    // we are now changing attributes ourselves
-    d->ignoreImageAttributesWatch = true;
-
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+                               i18n("Applying changes to pictures. Please wait..."));
     MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
 
+    // we are now changing attributes ourselves
+    d->ignoreImageAttributesWatch = true;
+    int i=0;
     for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
     {
         // apply to database
         d->hub.write(info);
         // apply to file metadata
         d->hub.write(info->filePath(), writeSettings);
-    }
 
+        emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
+        kapp->processEvents();
+    }
     d->ignoreImageAttributesWatch = false;
+
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
 
     d->modified = false;
     d->applyBtn->setEnabled(false);
@@ -435,7 +441,11 @@ void ImageDescEditTab::setInfos(QPtrList<ImageInfo> infos)
 
 void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 {
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+                               i18n("Reading metadata from files. Please wait..."));
+
     d->ignoreImageAttributesWatch = true;
+    int i=0;
     for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
     {
         // A batch operation: a hub for each single file, not the common hub
@@ -444,8 +454,13 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
         fileHub.load(info->filePath());
         // write out to database
         fileHub.write(info);
+
+        emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
+        kapp->processEvents();
     }
     d->ignoreImageAttributesWatch = false;
+
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
 
     // reload everything
     setInfos(d->currInfos);
@@ -453,21 +468,24 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 
 void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
 {
-    if (singleSelection())
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+                               i18n("Writing metadata to files. Please wait..."));
+    MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
+
+    int i=0;
+    for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
     {
-        ImageInfo *info = d->currInfos.first();
         MetadataHub fileHub;
         // read in from database
         fileHub.load(info);
         // write out to file DMetadata
         fileHub.write(info->filePath());
+
+        emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
+        kapp->processEvents();
     }
-    else
-    {
-        // Provide progress feedback
-        BatchSyncMetadata syncDialog(this, d->currInfos);
-        syncDialog.exec();
-    }
+
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
 }
 
 bool ImageDescEditTab::eventFilter(QObject *, QEvent *e)

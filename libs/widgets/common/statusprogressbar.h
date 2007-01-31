@@ -1,10 +1,10 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2006-01-24
- * Description : a progress bar used to display io file access
- *               progress or the current file name.
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2006-01-24
+ * Description : a progress bar used to display file access
+ *               progress or a text in status bar.
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,8 +19,8 @@
  *
  * ============================================================ */
 
-#ifndef IOFILEPROGRESSBAR_H
-#define IOFILEPROGRESSBAR_H
+#ifndef STATUSPROGRESSBAR_H
+#define STATUSPROGRESSBAR_H
 
 // KDE includes.
 
@@ -34,32 +34,32 @@
 namespace Digikam
 {
 
-class IOFileProgressBarPriv;
+class StatusProgressBarPriv;
 
-class DIGIKAM_EXPORT IOFileProgressBar : public QWidgetStack
+class DIGIKAM_EXPORT StatusProgressBar : public QWidgetStack
 {
 Q_OBJECT
 
 public:
 
-    IOFileProgressBar( QWidget *parent=0 );
-    ~IOFileProgressBar();
-
-    void setText( const QString& text );
-    void setAlignment( int a );
-
-    void progressBarMode( int mode, const QString& text=QString::null );
-    void setProgressValue( int v );
-    void setProgressText( const QString& text );
-
-public:
-
-    enum IOFileProgressBarMode
+    enum StatusProgressBarMode
     {
-        FileNameMode=0,
+        TextMode=0,
         ProgressBarMode,
         CancelProgressBarMode
     };
+
+public:
+
+    StatusProgressBar( QWidget *parent=0 );
+    ~StatusProgressBar();
+
+    void setText(const QString& text);
+    void setAlignment(int a);
+
+    void progressBarMode(int mode, const QString& text=QString::null);
+    void setProgressValue(int v);
+    void setProgressText(const QString& text);
 
 signals:
 
@@ -67,7 +67,7 @@ signals:
 
 private:
 
-    IOFileProgressBarPriv* d;
+    StatusProgressBarPriv* d;
 };
 
 }  // namespace Digikam

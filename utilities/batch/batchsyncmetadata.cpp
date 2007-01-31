@@ -82,7 +82,7 @@ BatchSyncMetadata::BatchSyncMetadata(QWidget* parent, Album *album)
                  : DProgressDlg(parent)
 {
     d = new BatchSyncMetadataPriv;
-    d->album        = album;
+    d->album = album;
     setValue(0);
     setCaption(i18n("Sync Pictures Metadata"));
     setTitle(i18n("Parsing pictures"));

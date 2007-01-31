@@ -61,6 +61,11 @@ public:
     void populateTags();
     void setFocusToComments(bool f);
 
+signals:
+
+    void signalProgressBarMode(int, const QString&);
+    void signalProgressValue(int);
+
 protected:
 
     bool eventFilter(QObject *o, QEvent *e);

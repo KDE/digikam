@@ -78,6 +78,8 @@ signals:
     void signalPrevItem(void);
     void signalNextItem(void);
     void signalLastItem(void);
+    void signalProgressBarMode(int, const QString&);
+    void signalProgressValue(int);
 
 public slots:
 

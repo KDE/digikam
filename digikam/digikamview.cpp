@@ -267,6 +267,12 @@ void DigikamView::setupConnections()
     connect(this, SIGNAL(signal_noCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
 
+    connect(d->rightSideBar, SIGNAL(signalProgressBarMode(int, const QString&)),
+            d->parent, SLOT(slotProgressBarMode(int, const QString&)));
+
+    connect(d->rightSideBar, SIGNAL(signalProgressValue(int)),
+            d->parent, SLOT(slotProgressValue(int)));
+
     // -- Preview image widget Connections ------------------------
 
     connect(d->albumWidgetStack->imagePreviewWidget(), SIGNAL(signalNextItem()),
@@ -604,18 +610,18 @@ void DigikamView::slotDispatchImageSelected()
         if (list.isEmpty())
         {
             d->albumWidgetStack->setPreviewItem();
-            emit signal_imageSelected(false);
+            emit signal_imageSelected(list, false, false);
             emit signal_noCurrentItem();
         }
         else
         {
             d->rightSideBar->itemChanged(list);
-
+            AlbumIconItem *selectedItem = d->iconView->firstSelectedItem();
+            bool hasPrev = d->iconView->firstItem() != selectedItem;
+            bool hasNext = d->iconView->lastItem() != selectedItem;
             if (list.count() == 1)
             {
-                AlbumIconItem *selectedItem = d->iconView->firstSelectedItem();
-                d->rightSideBar->setPreviousNextState(d->iconView->firstItem() != selectedItem,
-                                                      d->iconView->lastItem() != selectedItem);
+                d->rightSideBar->setPreviousNextState(hasPrev, hasNext);
                 // we fed a list of copies
                 d->rightSideBar->takeImageInfoOwnership(true);
 
@@ -623,7 +629,7 @@ void DigikamView::slotDispatchImageSelected()
                     d->albumWidgetStack->setPreviewItem(selectedItem->imageInfo()->kurl());
             }
 
-            emit signal_imageSelected(true);
+            emit signal_imageSelected(list, hasPrev, hasNext);
         }
 
         d->needDispatchSelection = false;

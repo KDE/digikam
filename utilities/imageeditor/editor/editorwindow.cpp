@@ -82,7 +82,7 @@ extern "C"
 #include "imageresizedlg.h"
 #include "imageprint.h"
 #include "slideshow.h"
-#include "iofileprogressbar.h"
+#include "statusprogressbar.h"
 #include "iccsettingscontainer.h"
 #include "exposurecontainer.h"
 #include "iofilesettingscontainer.h"
@@ -462,31 +462,36 @@ void EditorWindow::setupStandardAccelerators()
 
 void EditorWindow::setupStatusBar()
 {
-    m_nameLabel = new IOFileProgressBar(statusBar());
+    m_nameLabel = new StatusProgressBar(statusBar());
     m_nameLabel->setAlignment(Qt::AlignCenter);
-    statusBar()->addWidget(m_nameLabel, 100);
+    m_nameLabel->setMaximumHeight(fontMetrics().height()+2);    statusBar()->addWidget(m_nameLabel, 100);
 
     m_zoomLabel = new QLabel(statusBar());
     m_zoomLabel->setAlignment(Qt::AlignCenter);
+    m_zoomLabel->setMaximumHeight(fontMetrics().height()+2);   
     statusBar()->addWidget(m_zoomLabel, 100);
 
     m_resLabel  = new QLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
+    m_resLabel->setMaximumHeight(fontMetrics().height()+2);   
     statusBar()->addWidget(m_resLabel, 100);
 
     d->underExposureIndicator = new QLabel(statusBar());
     d->underExposureIndicator->setPixmap(SmallIcon("underexposure"));
     d->underExposureIndicator->setAlignment(Qt::AlignCenter);
+    d->underExposureIndicator->setMaximumHeight(fontMetrics().height()+2);   
     statusBar()->addWidget(d->underExposureIndicator, 1);
 
     d->overExposureIndicator = new QLabel(statusBar());
     d->overExposureIndicator->setPixmap(SmallIcon("overexposure"));
     d->overExposureIndicator->setAlignment(Qt::AlignCenter);
+    d->overExposureIndicator->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->overExposureIndicator, 1);
 
     d->cmViewIndicator = new QLabel(statusBar());
     d->cmViewIndicator->setPixmap(SmallIcon("tv"));
     d->cmViewIndicator->setAlignment(Qt::AlignCenter);
+    d->cmViewIndicator->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->cmViewIndicator, 1);
 }
 
@@ -1166,12 +1171,12 @@ void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
     emit signalNoCurrentItem();
     toggleActions(false);
 
-    m_nameLabel->progressBarMode(IOFileProgressBar::ProgressBarMode, i18n("Loading: "));
+    m_nameLabel->progressBarMode(StatusProgressBar::ProgressBarMode, i18n("Loading: "));
 }
 
 void EditorWindow::slotLoadingFinished(const QString& filename, bool success)
 {
-    m_nameLabel->progressBarMode(IOFileProgressBar::FileNameMode);
+    m_nameLabel->progressBarMode(StatusProgressBar::TextMode);
     slotUpdateItemInfo();
 
     // Enable actions as appropriate after loading
@@ -1215,7 +1220,7 @@ void EditorWindow::slotSavingStarted(const QString& /*filename*/)
     emit signalNoCurrentItem();
     toggleActions(false);
 
-    m_nameLabel->progressBarMode(IOFileProgressBar::CancelProgressBarMode, i18n("Saving: "));
+    m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode, i18n("Saving: "));
 }
 
 void EditorWindow::slotSavingFinished(const QString& filename, bool success)
@@ -1319,7 +1324,7 @@ void EditorWindow::finishSaving(bool success)
     toggleActions(true);
     unsetCursor();
 
-    m_nameLabel->progressBarMode(IOFileProgressBar::FileNameMode);
+    m_nameLabel->progressBarMode(StatusProgressBar::TextMode);
 
     // On error, continue using current image
     if (!success)

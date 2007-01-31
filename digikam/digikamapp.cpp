@@ -54,6 +54,7 @@
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <kwin.h>
+#include <kstatusbar.h>
 #include <dcopref.h>
 
 // libKipi includes.
@@ -79,6 +80,7 @@
 #include "setupimgplugins.h"
 #include "imagepluginloader.h"
 #include "imagewindow.h"
+#include "imageinfo.h"
 #include "splashscreen.h"
 #include "thumbnailsize.h"
 #include "themeengine.h"
@@ -89,6 +91,8 @@
 #include "dcrawbinary.h"
 #include "batchthumbsgenerator.h"
 #include "batchalbumssyncmetadata.h"
+#include "statusprogressbar.h"
+#include "statusnavigatebar.h"
 #include "digikamview.h"
 #include "digikamapp.h"
 #include "digikamapp.moc"
@@ -139,6 +143,7 @@ DigikamApp::DigikamApp()
             this, SLOT(slotCameraRemoved(CameraType *)));
 
     setupView();
+    setupStatusBar();
     setupAccelerators();
     setupActions();
 
@@ -339,8 +344,32 @@ void DigikamApp::setupView()
     connect(mView, SIGNAL(signal_tagSelected(bool)),
             this, SLOT(slot_tagSelected(bool)));
 
-    connect(mView, SIGNAL(signal_imageSelected(bool)),
-            this, SLOT(slot_imageSelected(bool)));
+    connect(mView, SIGNAL(signal_imageSelected(const QPtrList<ImageInfo>&, bool, bool)),
+            this, SLOT(slot_imageSelected(const QPtrList<ImageInfo>&, bool, bool)));
+}
+
+void DigikamApp::setupStatusBar()
+{
+    mStatusProgressBar = new StatusProgressBar(statusBar());
+    mStatusProgressBar->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+    mStatusProgressBar->setMaximumHeight(fontMetrics().height()+2);
+    statusBar()->addWidget(mStatusProgressBar, 100, true);
+
+    mStatusNavigateBar = new StatusNavigateBar(statusBar());
+    mStatusNavigateBar->setMaximumHeight(fontMetrics().height()+2);
+    statusBar()->addWidget(mStatusNavigateBar, 1, true);
+
+    connect(mStatusNavigateBar, SIGNAL(signalFirstItem()),
+            mView, SLOT(slotFirstItem()));
+
+    connect(mStatusNavigateBar, SIGNAL(signalNextItem()),
+            mView, SLOT(slotNextItem()));
+
+    connect(mStatusNavigateBar, SIGNAL(signalPrevItem()),
+            mView, SLOT(slotPrevItem()));
+
+    connect(mStatusNavigateBar, SIGNAL(signalLastItem()),
+            mView, SLOT(slotLastItem()));
 }
 
 void DigikamApp::setupAccelerators()
@@ -1066,13 +1095,40 @@ void DigikamApp::slot_tagSelected(bool val)
     }
 }
 
-void DigikamApp::slot_imageSelected(bool val)
+void DigikamApp::slot_imageSelected(const QPtrList<ImageInfo>& list, bool hasPrev, bool hasNext)
 {
+    QPtrList<ImageInfo> selection = list;
+    bool val = selection.isEmpty() ? false : true;
     mImageViewAction->setEnabled(val);
     mImagePreviewAction->setEnabled(val);
     mImageRenameAction->setEnabled(val);
     mImageDeleteAction->setEnabled(val);
     mImageExifOrientationActionMenu->setEnabled(val);
+
+    switch (selection.count())
+    {
+        case 0:
+            mStatusProgressBar->setText(i18n("No item selected"));
+        break;
+        case 1:
+            mStatusProgressBar->setText(selection.first()->kurl().fileName());
+        break;
+        default:
+            mStatusProgressBar->setText(i18n("%1 items selected").arg(selection.count()));
+        break;
+    }
+
+    mStatusNavigateBar->setNavigateBarState(hasPrev, hasNext);
+}
+
+void DigikamApp::slotProgressBarMode(int mode, const QString& text)
+{
+    mStatusProgressBar->progressBarMode(mode, text);
+}
+
+void DigikamApp::slotProgressValue(int count)
+{
+    mStatusProgressBar->setProgressValue(count);
 }
 
 void DigikamApp::slot_exit()

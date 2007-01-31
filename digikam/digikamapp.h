@@ -61,6 +61,7 @@ class PluginLoader;
 namespace Digikam
 {
 
+class ImageInfo;
 class ImagePluginLoader;
 class AlbumManager;
 class PluginLoader;               //   For KIPI pluggins support.
@@ -70,6 +71,8 @@ class CameraType;
 class DigikamView;
 class AlbumSettings;
 class SplashScreen;
+class StatusProgressBar;
+class StatusNavigateBar;
 
 class DIGIKAM_EXPORT DigikamApp : public KMainWindow
 {
@@ -121,6 +124,7 @@ private:
 
     bool setup(bool iccSetupPage=false);
     void setupView();
+    void setupStatusBar();
     void setupActions();
     void setupAccelerators();
     void loadPlugins();
@@ -131,7 +135,7 @@ private slots:
 
     void slot_albumSelected(bool val);
     void slot_tagSelected(bool val);
-    void slot_imageSelected(bool val);
+    void slot_imageSelected(const QPtrList<ImageInfo>&, bool, bool);
     void slot_exit();
     void slotShowTip();
     void slotShowKipiHelp();
@@ -168,6 +172,9 @@ private slots:
     void slotSyncAllPicturesMetadataDone();
     
     void slotChangeTheme(const QString& theme);
+
+    void slotProgressBarMode(int, const QString&);
+    void slotProgressValue(int);
 
 private:
 
@@ -267,7 +274,9 @@ private:
     DigikamKipiInterface  *KipiInterface_;
     DigikamView           *mView;
     CameraList            *mCameraList;
-    
+    StatusProgressBar     *mStatusProgressBar;
+    StatusNavigateBar     *mStatusNavigateBar;    
+
     static DigikamApp     *m_instance;
 
     KIPI::PluginLoader    *KipiPluginLoader_;

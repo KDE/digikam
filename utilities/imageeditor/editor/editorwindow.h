@@ -47,7 +47,7 @@ class Canvas;
 class ImagePluginLoader;
 class IOFileSettingsContainer;
 class SavingContextContainer;
-class IOFileProgressBar;
+class StatusProgressBar;
 class EditorWindowPriv;
 class SlideShow;
 
@@ -98,7 +98,7 @@ protected:
 
     Canvas                  *m_canvas;
     ImagePluginLoader       *m_imagePluginLoader;
-    IOFileProgressBar       *m_nameLabel;
+    StatusProgressBar       *m_nameLabel;
     IOFileSettingsContainer *m_IOFileSettings;
     SavingContextContainer  *m_savingContext;
     SlideShow               *m_slideShow;

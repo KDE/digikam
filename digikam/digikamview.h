@@ -42,6 +42,7 @@ class AlbumIconItem;
 class AlbumSettings;
 class Album;
 class DigikamViewPriv;
+class ImageInfo;
 
 class DigikamView : public QHBox
 {
@@ -61,8 +62,10 @@ signals:
 
     void signal_albumSelected(bool val);
     void signal_tagSelected(bool val);
-    void signal_imageSelected(bool val);
+    void signal_imageSelected(const QPtrList<ImageInfo>& list, bool hasPrevious, bool hasNext);
     void signal_noCurrentItem();
+    void signalProgressBarMode(int, const QString&);
+    void signalProgressValue(int);
 
 public slots:
 

@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Caulier Gilles <caulier dot gilles at kdemail dot net>
- *         Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2004-11-17
  * Description : image properties side bar using data from 
  *               digiKam database.
@@ -61,23 +61,23 @@ public:
 
     ImagePropertiesSideBarDBPriv()
     {
-        desceditTab         = 0;
-        dirtyDesceditTab    = false;
-        hasPrevious         = false;
-        hasNext             = false;
+        desceditTab           = 0;
+        dirtyDesceditTab      = false;
+        hasPrevious           = false;
+        hasNext               = false;
         hasImageInfoOwnership = false;
     }
 
-    bool              dirtyDesceditTab;
+    bool                 dirtyDesceditTab;
 
-    QPtrList<ImageInfo> currentInfos;
+    QPtrList<ImageInfo>  currentInfos;
 
-    ImageDescEditTab *desceditTab;
+    ImageDescEditTab    *desceditTab;
 
-    bool              hasPrevious;
-    bool              hasNext;
+    bool                 hasPrevious;
+    bool                 hasNext;
 
-    bool              hasImageInfoOwnership;
+    bool                 hasImageInfoOwnership;
 };
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *name, QSplitter *splitter, 
@@ -106,6 +106,12 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
+
+    connect(d->desceditTab, SIGNAL(signalProgressBarMode(int, const QString&)),
+            this, SIGNAL(signalProgressBarMode(int, const QString&)));
+
+    connect(d->desceditTab, SIGNAL(signalProgressValue(int)),
+            this, SIGNAL(signalProgressValue(int)));
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
