@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
- * Date  : 2004-11-17
- * Description : A tab to display Colors image informations
+ * Authors: Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-11-17
+ * Description : a tab to display colors informations of images
  *
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,6 +56,7 @@
 #include "iccprofilewidget.h"
 #include "cietonguewidget.h"
 #include "imagepropertiescolorstab.h"
+#include "imagepropertiescolorstab.moc"
 
 namespace Digikam
 {
@@ -141,8 +142,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     d = new ImagePropertiesColorsTabPriv;
 
     setupNavigateBar(navBar);
-    d->tab               = new KTabWidget(this);
-    m_navigateBarLayout->addSpacing(KDialog::spacingHint());
+    d->tab = new KTabWidget(this);
     m_navigateBarLayout->addWidget(d->tab);
 
     // Histogram tab area -----------------------------------------------------
@@ -781,4 +781,3 @@ void ImagePropertiesColorsTab::getICCData()
 
 }  // NameSpace Digikam
 
-#include "imagepropertiescolorstab.moc"

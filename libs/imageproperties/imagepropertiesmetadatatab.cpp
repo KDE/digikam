@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
- * Date  : 2004-11-17
- * Description : a tab to display metadata image informations
+ * Authors: Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-11-17
+ * Description : a tab to display metadata informations of images
  *
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,6 +46,7 @@
 #include "gpswidget.h"
 #include "navigatebarwidget.h"
 #include "imagepropertiesmetadatatab.h"
+#include "imagepropertiesmetadatatab.moc"
 
 namespace Digikam
 {
@@ -88,8 +89,7 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool nav
     d = new ImagePropertiesMetadataTabPriv;
 
     setupNavigateBar(navBar);
-    d->tab               = new KTabWidget(this);
-    m_navigateBarLayout->addSpacing(KDialog::spacingHint());
+    d->tab = new KTabWidget(this);
     m_navigateBarLayout->addWidget(d->tab);
 
     // Exif tab area -----------------------------------------------------
@@ -198,4 +198,3 @@ void ImagePropertiesMetaDataTab::setCurrentData(const QByteArray& exifData,
 
 }  // NameSpace Digikam
 
-#include "imagepropertiesmetadatatab.moc"
