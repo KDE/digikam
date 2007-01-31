@@ -22,7 +22,7 @@
 // Qt includes.
  
 #include <qlayout.h>
-#include <qpushbutton.h>
+#include <qtoolbutton.h>
 #include <qtooltip.h>
 
 // KDE includes.
@@ -53,10 +53,10 @@ public:
 
     int          itemType;
 
-    QPushButton *firstButton;
-    QPushButton *prevButton;
-    QPushButton *nextButton;
-    QPushButton *lastButton;
+    QToolButton *firstButton;
+    QToolButton *prevButton;
+    QToolButton *nextButton;
+    QToolButton *lastButton;
 };
 
 StatusNavigateBar::StatusNavigateBar(QWidget *parent)
@@ -66,21 +66,25 @@ StatusNavigateBar::StatusNavigateBar(QWidget *parent)
     
     QHBoxLayout *lay = new QHBoxLayout(this);
     
-    d->firstButton = new QPushButton( this );
+    d->firstButton = new QToolButton(this);
+    d->firstButton->setAutoRaise(true); 
     d->firstButton->setPixmap(SmallIcon("start"));
-    QToolTip::add( d->firstButton, i18n( "Go to the first item" ) );
+    QToolTip::add(d->firstButton, i18n("Go to the first item"));
     
-    d->prevButton = new QPushButton( this );
+    d->prevButton = new QToolButton(this);
+    d->prevButton->setAutoRaise(true); 
     d->prevButton->setPixmap(SmallIcon("back"));
-    QToolTip::add( d->prevButton, i18n( "Go to the previous item" ) );
+    QToolTip::add(d->prevButton, i18n("Go to the previous item"));
  
-    d->nextButton = new QPushButton( this );
+    d->nextButton = new QToolButton(this);
+    d->nextButton->setAutoRaise(true); 
     d->nextButton->setPixmap(SmallIcon("forward"));
-    QToolTip::add( d->nextButton, i18n( "Go to the next item" ) );
+    QToolTip::add(d->nextButton, i18n("Go to the next item"));
 
-    d->lastButton = new QPushButton( this );
+    d->lastButton = new QToolButton(this);
+    d->lastButton->setAutoRaise(true); 
     d->lastButton->setPixmap(SmallIcon("finish"));
-    QToolTip::add( d->lastButton, i18n( "Go to the last item" ) );
+    QToolTip::add(d->lastButton, i18n("Go to the last item"));
     
     lay->addWidget(d->firstButton);
     lay->addWidget(d->prevButton);
