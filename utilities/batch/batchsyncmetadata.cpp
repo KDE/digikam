@@ -22,14 +22,11 @@
 // QT includes.
 
 #include <qstring.h>
-#include <qtimer.h>
-#include <qdatetime.h>
 
 // KDE includes.
 
 #include <klocale.h>
 #include <kapplication.h>
-#include <kiconloader.h>
 
 // Local includes.
 
@@ -37,6 +34,7 @@
 #include "album.h"
 #include "imageinfojob.h"
 #include "metadatahub.h"
+#include "statusprogressbar.h"
 #include "batchsyncmetadata.h"
 #include "batchsyncmetadata.moc"
 
@@ -52,22 +50,13 @@ public:
         cancel       = false;
         imageInfoJob = new ImageInfoJob();
         album        = 0;
+        count        = 0;
         imageInfo    = 0; 
-        duration.start();
-
-        okPix        = KApplication::kApplication()->iconLoader()->loadIcon(
-                       "button_ok", KIcon::NoGroup, 32);
-
-        warnPix      = KApplication::kApplication()->iconLoader()->loadIcon(
-                       "messagebox_info", KIcon::NoGroup, 16);
     }
 
     bool                   cancel;
 
-    QTime                  duration;
-
-    QPixmap                okPix;
-    QPixmap                warnPix;
+    int                    count;
 
     Album                 *album;
     
@@ -78,32 +67,18 @@ public:
     ImageInfo             *imageInfo;
 };
 
-BatchSyncMetadata::BatchSyncMetadata(QWidget* parent, Album *album)
-                 : DProgressDlg(parent)
+BatchSyncMetadata::BatchSyncMetadata(QObject* parent, Album *album)
+                 : QObject(parent)
 {
     d = new BatchSyncMetadataPriv;
     d->album = album;
-    setValue(0);
-    setCaption(i18n("Sync Pictures Metadata"));
-    setTitle(i18n("Parsing pictures"));
-    setLabel(i18n("<b>Sync pictures metadata with digiKam database. Please wait...</b>"));
-    setButtonText(i18n("&Abort"));
-    resize(600, 300);
-    QTimer::singleShot(500, this, SLOT(slotParseAlbum()));
 }
 
-BatchSyncMetadata::BatchSyncMetadata(QWidget* parent, const ImageInfoList& list)
-                 : DProgressDlg(parent)
+BatchSyncMetadata::BatchSyncMetadata(QObject* parent, const ImageInfoList& list)
+                 : QObject(parent)
 {
     d = new BatchSyncMetadataPriv;
     d->imageInfoList = list;
-    setValue(0);
-    setCaption(i18n("Sync Pictures Metadata"));
-    setTitle(i18n("Parsing pictures"));
-    setLabel(i18n("<b>Sync pictures metadata with digiKam database. Please wait...</b>"));
-    setButtonText(i18n("&Abort"));
-    resize(600, 300);
-    QTimer::singleShot(500, this, SLOT(slotParseList()));
 }
 
 BatchSyncMetadata::~BatchSyncMetadata()
@@ -111,7 +86,7 @@ BatchSyncMetadata::~BatchSyncMetadata()
     delete d;
 }
 
-void BatchSyncMetadata::slotParseAlbum()
+void BatchSyncMetadata::parseAlbum()
 {
     d->imageInfoJob->allItemsFromAlbum(d->album);
 
@@ -122,15 +97,23 @@ void BatchSyncMetadata::slotParseAlbum()
             this, SLOT(slotComplete()));
 }
 
+void BatchSyncMetadata::slotComplete()
+{
+    if (d->imageInfoList.isEmpty()) 
+        complete(); 
+}
+
 void BatchSyncMetadata::slotAlbumParsed(const ImageInfoList& list)
 {
     d->imageInfoList = list;
-    slotParseList();
+    parseList();
 }
 
-void BatchSyncMetadata::slotParseList()
+void BatchSyncMetadata::parseList()
 {
-    setTotalSteps(d->imageInfoList.count());
+    emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode, 
+                               i18n("Sync pictures Metadata with database. Please wait..."));
+
     d->imageInfo = d->imageInfoList.first();
     parsePicture();
 }
@@ -140,10 +123,11 @@ void BatchSyncMetadata::parsePicture()
     if (!d->imageInfo)     // All is done.
     {
         complete();
+        slotAbort();
     }
     else if (d->cancel)
     {
-        abort();
+        complete();
     }
     else 
     {
@@ -151,10 +135,10 @@ void BatchSyncMetadata::parsePicture()
         // read in from database
         fileHub.load(d->imageInfo);
         // write out to file DMetadata
-        bool result = fileHub.write(d->imageInfo->filePath());
+        fileHub.write(d->imageInfo->filePath());
    
-        addedAction(result ? d->okPix : d->warnPix, d->imageInfo->kurl().filename());
-        advance(1);
+        emit signalProgressValue((int)((d->count++/(float)d->imageInfoList.count())*100.0));
+
         d->imageInfo = d->imageInfoList.next();
 
         kapp->processEvents();
@@ -162,39 +146,15 @@ void BatchSyncMetadata::parsePicture()
     }
 }
 
-void BatchSyncMetadata::slotComplete()
+void BatchSyncMetadata::slotAbort()
 {
-    if (d->imageInfoList.isEmpty())
-        complete();
-}
-
-void BatchSyncMetadata::slotCancel()
-{
-    abort();
-    done(Cancel);
-}
-
-void BatchSyncMetadata::closeEvent(QCloseEvent *e)
-{
-    abort();
-    e->accept();
+    d->cancel = true;
+    d->imageInfoJob->stop();    
 }
 
 void BatchSyncMetadata::complete()
 {
-    QTime t;
-    t = t.addMSecs(d->duration.elapsed());
-    setLabel(i18n("<b>Sync pictures metadata with digiKam database done</b>"));
-    setTitle(i18n("Duration: %1").arg(t.toString()));
-    setButtonText(i18n("&Close"));
-    setValue(100);
-    abort();
-}
-
-void BatchSyncMetadata::abort()
-{
-    d->cancel = true;
-    d->imageInfoJob->stop();
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
     emit signalComplete();
 }
 

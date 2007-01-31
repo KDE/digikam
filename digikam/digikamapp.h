@@ -3,7 +3,7 @@
  *          Tom Albers <tomalbers@kde.nl>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date  : 2002-16-10
- * Description : main interface implementation
+ * Description : main digiKam interface implementation
  * 
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
  * Copyright      2006 by Tom Albers
@@ -111,6 +111,7 @@ signals:
     void signalLastItem();
     void signalCopyAlbumItemsSelection();
     void signalPasteAlbumItemsSelection();
+    void signalCancelButtonPressed();
 
 protected:
 
@@ -133,10 +134,10 @@ private:
 
 private slots:
 
-    void slot_albumSelected(bool val);
-    void slot_tagSelected(bool val);
-    void slot_imageSelected(const QPtrList<ImageInfo>&, bool, bool);
-    void slot_exit();
+    void slotAlbumSelected(bool val);
+    void slotTagSelected(bool val);
+    void slotImageSelected(const QPtrList<ImageInfo>&, bool, bool);
+    void slotExit();
     void slotShowTip();
     void slotShowKipiHelp();
     void slotDonateMoney();

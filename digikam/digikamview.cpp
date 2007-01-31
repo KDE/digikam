@@ -749,10 +749,19 @@ void DigikamView::slotAlbumSyncPicturesMetadata()
 
     BatchSyncMetadata *syncMetadata = new BatchSyncMetadata(this, album);
     
+    connect(syncMetadata, SIGNAL(signalProgressBarMode(int, const QString&)),
+            d->parent, SLOT(slotProgressBarMode(int, const QString&)));
+
+    connect(syncMetadata, SIGNAL(signalProgressValue(int)),
+            d->parent, SLOT(slotProgressValue(int)));
+
     connect(syncMetadata, SIGNAL(signalComplete()),
             this, SLOT(slotAlbumSyncPicturesMetadataDone()));
 
-    syncMetadata->exec();
+    connect(d->parent, SIGNAL(signalCancelButtonPressed()),
+            syncMetadata, SLOT(slotAbort()));
+
+    syncMetadata->parseAlbum();
 }
 
 void DigikamView::slotAlbumSyncPicturesMetadataDone()

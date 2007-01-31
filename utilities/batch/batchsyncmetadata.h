@@ -22,12 +22,13 @@
 #ifndef BATCHSYNCMETADATA_H
 #define BATCHSYNCMETADATA_H
 
+// Qt includes.
+
+#include <qobject.h>
+
 // Local includes.
 
 #include "imageinfo.h"
-#include "dprogressdlg.h"
-
-class QWidget;
 
 class KURL;
 
@@ -37,42 +38,40 @@ namespace Digikam
 class Album;
 class BatchSyncMetadataPriv;
 
-class BatchSyncMetadata : public DProgressDlg
+class BatchSyncMetadata : public QObject
 {
     Q_OBJECT
 
 public:
 
     /** Constructor witch sync all metatada pictures from an Album */ 
-    BatchSyncMetadata(QWidget* parent, Album *album);
+    BatchSyncMetadata(QObject* parent, Album *album);
 
     /** Constructor witch sync all metatada from a pictures list */ 
-    BatchSyncMetadata(QWidget* parent, const ImageInfoList& list);
+    BatchSyncMetadata(QObject* parent, const ImageInfoList& list);
 
     ~BatchSyncMetadata();
+
+    void parseList();
+    void parseAlbum();
 
 signals:
 
     void signalComplete();
+    void signalProgressValue(int);
+    void signalProgressBarMode(int, const QString&);
+
+public slots:
+
+    void slotAbort();
 
 private:
 
-    void complete();
-    void abort();
     void parsePicture();
-
-protected:
-
-    void closeEvent(QCloseEvent *e);
-
-protected slots:
-
-    void slotCancel();
+    void complete();
 
 private slots:
 
-    void slotParseList();
-    void slotParseAlbum();
     void slotAlbumParsed(const ImageInfoList&);
     void slotComplete();
 

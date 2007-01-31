@@ -3,7 +3,7 @@
  *          Tom Albers <tomalbers@kde.nl>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date   : 2002-16-10
- * Description : main interface implementation
+ * Description : main digiKam interface implementation
  * 
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
  * Copyright      2006 by Tom Albers
@@ -339,13 +339,13 @@ void DigikamApp::setupView()
     mView->applySettings(mAlbumSettings);
 
     connect(mView, SIGNAL(signal_albumSelected(bool)),
-            this, SLOT(slot_albumSelected(bool)));
+            this, SLOT(slotAlbumSelected(bool)));
             
     connect(mView, SIGNAL(signal_tagSelected(bool)),
-            this, SLOT(slot_tagSelected(bool)));
+            this, SLOT(slotTagSelected(bool)));
 
     connect(mView, SIGNAL(signal_imageSelected(const QPtrList<ImageInfo>&, bool, bool)),
-            this, SLOT(slot_imageSelected(const QPtrList<ImageInfo>&, bool, bool)));
+            this, SLOT(slotImageSelected(const QPtrList<ImageInfo>&, bool, bool)));
 }
 
 void DigikamApp::setupStatusBar()
@@ -370,6 +370,9 @@ void DigikamApp::setupStatusBar()
 
     connect(mStatusNavigateBar, SIGNAL(signalLastItem()),
             mView, SLOT(slotLastItem()));
+
+    connect(mStatusProgressBar, SIGNAL(signalCancelButtonPressed()),
+            this, SIGNAL(signalCancelButtonPressed()));
 }
 
 void DigikamApp::setupAccelerators()
@@ -510,7 +513,7 @@ void DigikamApp::setupActions()
                                     SLOT(slotAlbumAddImages()),
                                     actionCollection(),
                                     "album_addImages");
-    mAddImagesAction->setWhatsThis(i18n("This option adds new images to the current Album."));
+    mAddImagesAction->setWhatsThis(i18n("This option adds new items to the current Album."));
 
     mAlbumImportAction = new KAction( i18n("Import Folders..."),
                                     "albumfolder-importdir",
@@ -588,8 +591,8 @@ void DigikamApp::setupActions()
                                    SLOT(slot_imageEdit()),
                                    actionCollection(),
                                    "image_edit");
-    mImageViewAction->setWhatsThis(i18n("This option allows you to open the Image Editor with the "
-                                        "currently selected image."));
+    mImageViewAction->setWhatsThis(i18n("This option allows you to open the editor with the "
+                                        "current selected item."));
 
     mImageRenameAction = new KAction(i18n("Rename..."),
                                     "pencil",
@@ -598,8 +601,8 @@ void DigikamApp::setupActions()
                                     SLOT(slot_imageRename()),
                                     actionCollection(),
                                     "image_rename");
-    mImageRenameAction->setWhatsThis(i18n("This option allows you to rename the filename of the currently selected "
-                                          "image."));
+    mImageRenameAction->setWhatsThis(i18n("This option allows you to rename the filename "
+                                          "of the current selected item"));
 
     // Pop up dialog to ask user whether to move to trash
     mImageDeleteAction            = new KAction(i18n("Delete"),
@@ -754,7 +757,8 @@ void DigikamApp::setupActions()
                                    SLOT(slot_thumbSizePlus()),
                                    actionCollection(),
                                    "album_thumbSizeIncrease");
-    mThumbSizePlusAction->setWhatsThis(i18n("This option allows you to increase the Album thumbnails size."));
+    mThumbSizePlusAction->setWhatsThis(i18n("This option allows you to increase "
+                                            "the Album thumbnails size."));
 
     mThumbSizeMinusAction = new KAction(i18n("Decrease Thumbnail Size"),
                                    "viewmag-",
@@ -763,7 +767,8 @@ void DigikamApp::setupActions()
                                    SLOT(slot_thumbSizeMinus()),
                                    actionCollection(),
                                    "album_thumbSizeDecrease");
-    mThumbSizeMinusAction->setWhatsThis(i18n("This option allows you to decrease the Album thumbnails size."));
+    mThumbSizeMinusAction->setWhatsThis(i18n("This option allows you to decrease "
+                                             "the Album thumbnails size."));
 
 #if KDE_IS_VERSION(3,2,0)
     mFullScreenAction = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
@@ -776,11 +781,12 @@ void DigikamApp::setupActions()
                                    SLOT(slotToggleFullScreen()),
                                    actionCollection(),
                                    "full_screen");
-    mFullScreenAction->setWhatsThis(i18n("This option allows you to toggle the main windows in full screen mode."));
+    mFullScreenAction->setWhatsThis(i18n("This option allows you to toggle the main window "
+                                         "in full screen mode."));
 #endif
 
     mQuitAction = KStdAction::quit(this,
-                                   SLOT(slot_exit()),
+                                   SLOT(slotExit()),
                                    actionCollection(),
                                    "app_exit");
 
@@ -951,7 +957,7 @@ void DigikamApp::slotAboutToShowForwardMenu()
     }
 }
 
-void DigikamApp::slot_albumSelected(bool val)
+void DigikamApp::slotAlbumSelected(bool val)
 {
     Album *album = mAlbumManager->currentAlbum();
     
@@ -1048,7 +1054,7 @@ void DigikamApp::slot_albumSelected(bool val)
     }
 }
 
-void DigikamApp::slot_tagSelected(bool val)
+void DigikamApp::slotTagSelected(bool val)
 {
     Album *album = mAlbumManager->currentAlbum();
     
@@ -1095,7 +1101,7 @@ void DigikamApp::slot_tagSelected(bool val)
     }
 }
 
-void DigikamApp::slot_imageSelected(const QPtrList<ImageInfo>& list, bool hasPrev, bool hasNext)
+void DigikamApp::slotImageSelected(const QPtrList<ImageInfo>& list, bool hasPrev, bool hasNext)
 {
     QPtrList<ImageInfo> selection = list;
     bool val = selection.isEmpty() ? false : true;
@@ -1131,7 +1137,7 @@ void DigikamApp::slotProgressValue(int count)
     mStatusProgressBar->setProgressValue(count);
 }
 
-void DigikamApp::slot_exit()
+void DigikamApp::slotExit()
 {
     close();
 }
@@ -1279,7 +1285,6 @@ void DigikamApp::slotDownloadImages()
 
     connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
             this, SLOT(slotSetupChanged()));
-
 }
 
 void DigikamApp::slotCameraConnect()
@@ -1479,12 +1484,12 @@ void DigikamApp::slotEditKeys()
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
 
     for( KIPI::PluginLoader::PluginList::Iterator it = list.begin() ; it != list.end() ; ++it )
-        {
+    {
         KIPI::Plugin* plugin = (*it)->plugin();
 
         if ( plugin )
            dialog->insert( plugin->actionCollection(), (*it)->comment() );
-        }
+    }
 
     dialog->configure();
     delete dialog;
