@@ -1,9 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-24
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-04-24
  * Description : 
- * 
+ *
  * Copyright 2005 by Renchi Raju
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -230,6 +232,20 @@ int IconView::count() const
     for (IconGroupItem* group = d->firstGroup; group; group = group->nextGroup())
     {
         c += group->count();
+    }
+
+    return c;
+}
+
+
+int IconView::countSelected() const
+{
+    int c = 0;
+    for (IconGroupItem* group = d->firstGroup; group; group = group->nextGroup())
+    {
+        for (IconItem *it = group->firstItem(); it; it = it->nextItem())
+            if (it->isSelected())
+                c++;
     }
 
     return c;

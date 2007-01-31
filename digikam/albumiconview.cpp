@@ -6,7 +6,7 @@
  * Description : album icon view 
  * 
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
- * Copyright      2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -116,6 +116,7 @@ extern "C"
 #include "albumiconitem.h"
 #include "albumicongroupitem.h"
 #include "loadingcacheinterface.h"
+#include "statusprogressbar.h"
 #include "albumiconview.h"
 #include "albumiconview.moc"
 
@@ -1157,6 +1158,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
     {
         QByteArray ba = event->encodedData("digikam/tag-id");
         QDataStream ds(ba, IO_ReadOnly);
+        int i = 0;
         int tagID;
         ds >> tagID;
 
@@ -1197,40 +1199,62 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             {
                 case 10:    // Selected and Dropped Items
                 {
+                    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+                                               i18n("Assign tag to pictures. Please wait..."));
+                    
+                    float cnt = (float)countSelected();
                     for (IconItem *it = firstItem(); it; it = it->nextItem())
                     {
                         if (it->isSelected())
                         {
                             AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
                             albumItem->imageInfo()->setTag(tagID);
+                            // TODO: add MetadataHub call here.
+                            emit signalProgressValue((int)((i++/cnt)*100.0));
+                            kapp->processEvents();
                         }
                     }
 
                     AlbumIconItem *albumItem = findItem(event->pos());
                     if (albumItem)
-                        albumItem->imageInfo()->setTag(tagID);
-    
-                    d->imageLister->refresh();
-                    updateContents();
-                    break;
-                }
-                case 11:    // All Items
-                {
-                    for (IconItem *it = firstItem(); it; it = it->nextItem())
                     {
-                        AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
                         albumItem->imageInfo()->setTag(tagID);
+                        // TODO: add MetadataHub call here.
                     }
     
                     d->imageLister->refresh();
                     updateContents();
+                    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
+                    break;
+                }
+                case 11:    // All Items
+                {
+                    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+                                               i18n("Assign tag to pictures. Please wait..."));
+
+                    float cnt = (float)count();
+                    for (IconItem *it = firstItem(); it; it = it->nextItem())
+                    {
+                        AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
+                        albumItem->imageInfo()->setTag(tagID);
+                        // TODO: add MetadataHub call here.
+                        emit signalProgressValue((int)((i++/cnt)*100.0));
+                        kapp->processEvents();
+                    }
+    
+                    d->imageLister->refresh();
+                    updateContents();
+                    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
                     break;
                 }
                 case 12:    // Dropped Item only.
                 {
                     AlbumIconItem *albumItem = findItem(event->pos());
                     if (albumItem)
+                    {
                         albumItem->imageInfo()->setTag(tagID);
+                        // TODO: add MetadataHub call here.
+                    }
 
                     d->imageLister->refresh();
                     updateContents();
@@ -1245,6 +1269,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
     {
         QByteArray ba = event->encodedData("digikam/taglist");
         QDataStream ds(ba, IO_ReadOnly);
+        int i = 0;
         QValueList<int> tagIDs;
         ds >> tagIDs;
 
@@ -1277,6 +1302,10 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         {
             case 10:    // Selected and Dropped Items
             {
+                emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+                                            i18n("Assign tags to pictures. Please wait..."));
+
+                float cnt = (float)countSelected();
                 for (IconItem *it = firstItem(); it; it = it->nextItem())
                 {
                     if (it->isSelected())
@@ -1286,7 +1315,11 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                             it != tagIDs.end(); ++it)
                         {
                             albumItem->imageInfo()->setTag(*it);
+                            // TODO: add MetadataHub call here.
                         }
+
+                        emit signalProgressValue((int)((i++/cnt)*100.0));
+                        kapp->processEvents();
                     }
                 }
 
@@ -1297,15 +1330,21 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                         it != tagIDs.end(); ++it)
                     {
                         albumItem->imageInfo()->setTag(*it);
+                        // TODO: add MetadataHub call here.
                     }
                 }
-    
+
+                emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);    
                 d->imageLister->refresh();
                 updateContents();
                 break;
             }
             case 11:    // All Items
             {
+                emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+                                            i18n("Assign tags to pictures. Please wait..."));
+                
+                float cnt = (float)count();
                 for (IconItem *it = firstItem(); it; it = it->nextItem())
                 {
                     AlbumIconItem *albumItem = static_cast<AlbumIconItem*>(it);
@@ -1313,9 +1352,14 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                         it != tagIDs.end(); ++it)
                     {
                         albumItem->imageInfo()->setTag(*it);
+                        // TODO: add MetadataHub call here.
                     }
+
+                    emit signalProgressValue((int)((i++/cnt)*100.0));
+                    kapp->processEvents();
                 }
-    
+
+                emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);    
                 d->imageLister->refresh();
                 updateContents();
                 break;
@@ -1329,6 +1373,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                         it != tagIDs.end(); ++it)
                     {
                         albumItem->imageInfo()->setTag(*it);
+                        // TODO: add MetadataHub call here.
                     }
                 }
 
@@ -1471,6 +1516,7 @@ void AlbumIconView::slotSelectionChanged()
 void AlbumIconView::slotSetExifOrientation( int orientation )
 {
     KURL::List urlList;
+    int i = 0;
 
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
@@ -1484,6 +1530,9 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
     if (urlList.count() <= 0) return;
 
     KURL::List::Iterator it;
+    float cnt = (float)urlList.count();
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+                                i18n("Fix Exif Orientation tag on pictures. Please wait..."));
 
     for( it = urlList.begin(); it != urlList.end(); ++it )
     {
@@ -1503,8 +1552,12 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
         {
             ImageAttributesWatch::instance()->fileMetadataChanged((*it));
         }
+
+        emit signalProgressValue((int)((i++/cnt)*100.0));
+        kapp->processEvents();
     }
 
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);    
     refreshItems(urlList);
 }
 
@@ -1827,6 +1880,12 @@ void AlbumIconView::slotAlbumModified()
 
 void AlbumIconView::slotAssignTag(int tagID)
 {
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+                                i18n("Assign tag to pictures. Please wait..."));
+
+    int   i   = 0;
+    float cnt = (float)countSelected();
+
     for (IconItem *it = firstItem(); it; it = it->nextItem())
     {
         if (it->isSelected())
@@ -1838,6 +1897,8 @@ void AlbumIconView::slotAssignTag(int tagID)
                 (*it).remove(0, 1);
 
             info->setTag(tagID);
+
+            // TODO: fix this part to use MetadataHub instead.
 
             // Store Image Tags like Iptc keywords tag.
         
@@ -1855,14 +1916,24 @@ void AlbumIconView::slotAssignTag(int tagID)
                     ImageAttributesWatch::instance()->fileMetadataChanged(info->kurl());
                 }
             }
+
+            emit signalProgressValue((int)((i++/cnt)*100.0));
+            kapp->processEvents();
         }
     }
 
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
     updateContents();
 }
 
 void AlbumIconView::slotRemoveTag(int tagID)
 {
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+                                i18n("Remove tag from pictures. Please wait..."));
+
+    int   i   = 0;
+    float cnt = (float)countSelected();
+
     for (IconItem *it = firstItem(); it; it = it->nextItem())
     {
         if (it->isSelected())
@@ -1874,6 +1945,8 @@ void AlbumIconView::slotRemoveTag(int tagID)
                 (*it).remove(0, 1);
 
             info->removeTag(tagID);
+
+            // TODO: fix this part to use MetadataHub instead.
 
             // Update Image Tags like Iptc keywords tags.
 
@@ -1891,8 +1964,13 @@ void AlbumIconView::slotRemoveTag(int tagID)
                     ImageAttributesWatch::instance()->fileMetadataChanged(info->kurl());
                 }
             }
+
+            emit signalProgressValue((int)((i++/cnt)*100.0));
+            kapp->processEvents();
         }
     }
+
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
 
     if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
     {
@@ -1903,16 +1981,23 @@ void AlbumIconView::slotRemoveTag(int tagID)
 
 void AlbumIconView::slotAssignRating(int rating)
 {
-    rating = QMIN(5, QMAX(0, rating));
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+                                i18n("Assign rating to pictures. Please wait..."));
+
+    int   i   = 0;
+    float cnt = (float)countSelected();
+    rating    = QMIN(5, QMAX(0, rating));
     
     for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
         if (it->isSelected())
         {
             AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
-            ImageInfo* info = albumItem->imageInfo();
+            ImageInfo* info          = albumItem->imageInfo();
             info->setRating(rating);
 
+            // TODO: fix this part to use MetadataHub instead.
+            
             // Store Image rating as Iptc tag.
         
             if (AlbumSettings::instance())
@@ -1925,9 +2010,13 @@ void AlbumIconView::slotAssignRating(int rating)
                     ImageAttributesWatch::instance()->fileMetadataChanged(info->kurl());
                 }
             }
+
+            emit signalProgressValue((int)((i++/cnt)*100.0));
+            kapp->processEvents();
         }
     }
 
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
     triggerUpdate();
 }
 

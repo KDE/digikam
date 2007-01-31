@@ -6,7 +6,7 @@
  * Description : album icon view 
  * 
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
- * Copyright      2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -120,6 +120,8 @@ signals:
     void signalItemsAdded();
     void signalItemDeleted(AlbumIconItem*);
     void signalCleared();
+    void signalProgressBarMode(int, const QString&);
+    void signalProgressValue(int);
 
 public slots:
 

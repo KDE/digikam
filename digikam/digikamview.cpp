@@ -247,6 +247,12 @@ void DigikamView::setupConnections()
     connect(d->folderView, SIGNAL(signalAlbumModified()),
             d->iconView, SLOT(slotAlbumModified()));
 
+    connect(d->iconView, SIGNAL(signalProgressBarMode(int, const QString&)),
+            d->parent, SLOT(slotProgressBarMode(int, const QString&)));
+
+    connect(d->iconView, SIGNAL(signalProgressValue(int)),
+            d->parent, SLOT(slotProgressValue(int)));
+
     // -- Sidebar Connections -------------------------------------
 
     connect(d->leftSideBar, SIGNAL(signalChangedTab(QWidget*)),

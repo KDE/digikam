@@ -1,9 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-24
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-04-24
  * Description : 
  *
  * Copyright 2005 by Renchi Raju
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,6 +60,7 @@ public:
     void setCurrentItem(IconItem* item);
 
     int  count() const;
+    int  countSelected() const;
     int  groupCount() const;
 
     virtual void clear(bool update=true);
