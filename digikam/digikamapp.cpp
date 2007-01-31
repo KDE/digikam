@@ -861,6 +861,9 @@ void DigikamApp::setupActions()
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 
+    // Provides a menu entry that allows showing/hiding the statusbar
+    createStandardStatusBarAction();
+
     // Load Cameras -- do this before the createGUI so that the cameras
     // are plugged into the toolbar at startup
     if (mSplash)
