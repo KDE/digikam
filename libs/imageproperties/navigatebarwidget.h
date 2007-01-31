@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date   : 2005-07-07
- * Description : A button bar to navigate between album items
+ * Description : a navigate bar with text 
  *
  * Copyright 2005-2007 by Gilles Caulier
  *
@@ -38,16 +38,6 @@ class NavigateBarWidgetPriv;
 class DIGIKAM_EXPORT NavigateBarWidget : public QWidget
 {
 Q_OBJECT
-
-public:
-
-    enum CurrentItemPosition
-    {
-        ItemCurrent=0,
-        ItemFirst,
-        ItemLast,
-        NoNavigation
-    };
 
 public:
 

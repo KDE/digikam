@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date   : 2005-07-07
- * Description : A button bar to navigate between album items
+ * Description : a navigate bar with text 
  * 
  * Copyright 2005-2007 by Gilles Caulier
  *
@@ -21,19 +21,16 @@
 // Qt includes.
  
 #include <qlayout.h>
-#include <qpushbutton.h>
-#include <qtooltip.h>
 
 // KDE includes.
 
 #include <ksqueezedtextlabel.h>
-#include <kiconloader.h>
 #include <kdialogbase.h>
 #include <klocale.h>
-#include <kapplication.h>
  
 // Local includes
 
+#include "statusnavigatebar.h"
 #include "navigatebarwidget.h"
 #include "navigatebarwidget.moc"
 
@@ -46,22 +43,13 @@ public:
 
     NavigateBarWidgetPriv()
     {
-        filename    = 0;
-        firstButton = 0;
-        prevButton  = 0;
-        nextButton  = 0;
-        lastButton  = 0;
-        itemType    = NavigateBarWidget::ItemCurrent;
+        filename = 0;
+        navBar   = 0;
     }
-
-    int                 itemType;
-
-    QPushButton        *firstButton;
-    QPushButton        *prevButton;
-    QPushButton        *nextButton;
-    QPushButton        *lastButton;
     
     KSqueezedTextLabel *filename;
+
+    StatusNavigateBar  *navBar;
 };
 
 NavigateBarWidget::NavigateBarWidget(QWidget *parent, bool show)
@@ -70,45 +58,25 @@ NavigateBarWidget::NavigateBarWidget(QWidget *parent, bool show)
     d = new NavigateBarWidgetPriv;
     
     QHBoxLayout *lay = new QHBoxLayout(this);
-    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+    d->navBar   = new StatusNavigateBar(this);    
+    d->filename = new KSqueezedTextLabel(this);
     
-    d->firstButton = new QPushButton( this );
-    d->firstButton->setPixmap( iconLoader->loadIcon( "start", (KIcon::Group)KIcon::Toolbar ) );
-    QToolTip::add( d->firstButton, i18n( "Go to the first item" ) );
-    
-    d->prevButton = new QPushButton( this );
-    d->prevButton->setPixmap( iconLoader->loadIcon( "back", (KIcon::Group)KIcon::Toolbar ) );
-    QToolTip::add( d->prevButton, i18n( "Go to the previous item" ) );
- 
-    d->nextButton = new QPushButton( this );
-    d->nextButton->setPixmap( iconLoader->loadIcon( "forward", (KIcon::Group)KIcon::Toolbar ) );
-    QToolTip::add( d->nextButton, i18n( "Go to the next item" ) );
-
-    d->lastButton = new QPushButton( this );
-    d->lastButton->setPixmap( iconLoader->loadIcon( "finish", (KIcon::Group)KIcon::Toolbar ) );
-    QToolTip::add( d->lastButton, i18n( "Go to the last item" ) );
-    
-    d->filename = new KSqueezedTextLabel( this );
-    
-    lay->addWidget(d->firstButton);
-    lay->addWidget(d->prevButton);
-    lay->addWidget(d->nextButton);
-    lay->addWidget(d->lastButton);
+    lay->addWidget(d->navBar);
     lay->addSpacing( KDialog::spacingHint() );
     lay->addWidget(d->filename);
 
     if (!show) hide();
     
-    connect(d->firstButton, SIGNAL(clicked()),
+    connect(d->navBar, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
     
-    connect(d->prevButton, SIGNAL(clicked()),
+    connect(d->navBar, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
     
-    connect(d->nextButton, SIGNAL(clicked()),
+    connect(d->navBar, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
     
-    connect(d->lastButton, SIGNAL(clicked()),
+    connect(d->navBar, SIGNAL(signalLastItem()),
             this, SIGNAL(signalLastItem()));
 }      
 
@@ -129,41 +97,12 @@ QString NavigateBarWidget::getFileName()
 
 void NavigateBarWidget::setButtonsState(int itemType)
 {
-    d->itemType = itemType;
-
-    if (d->itemType == ItemFirst)
-    {
-       d->firstButton->setEnabled(false);
-       d->prevButton->setEnabled(false);
-       d->nextButton->setEnabled(true);
-       d->lastButton->setEnabled(true);
-    }
-    else if (d->itemType == ItemLast)
-    {
-       d->firstButton->setEnabled(true);
-       d->prevButton->setEnabled(true);
-       d->nextButton->setEnabled(false);
-       d->lastButton->setEnabled(false);
-    }
-    else if (d->itemType == ItemCurrent)
-    {
-       d->firstButton->setEnabled(true);
-       d->prevButton->setEnabled(true);
-       d->nextButton->setEnabled(true);
-       d->lastButton->setEnabled(true);
-    }
-    else if (d->itemType == NoNavigation)
-    {
-       d->firstButton->setEnabled(false);
-       d->prevButton->setEnabled(false);
-       d->nextButton->setEnabled(false);
-       d->lastButton->setEnabled(false);
-    }
+    d->navBar->setButtonsState(itemType);
 }
 
 int NavigateBarWidget::getButtonsState()
 {
-    return (d->itemType);
+    return (d->navBar->getButtonsState());
 }
 
 }  // namespace Digikam

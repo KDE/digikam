@@ -28,6 +28,7 @@
 
 // Local includes.
 
+#include "statusnavigatebar.h"
 #include "navigatebarwidget.h"
 #include "navigatebartab.h"
 #include "navigatebartab.moc"
@@ -47,8 +48,10 @@ public:
     }
 
     QWidgetStack      *stack;
-    NavigateBarWidget *navigateBar;
+
     QLabel            *label;
+
+    NavigateBarWidget *navigateBar;
 };
 
 NavigateBarTab::NavigateBarTab(QWidget* parent)
@@ -101,13 +104,13 @@ void NavigateBarTab::setNavigateBarState(bool hasPrevious, bool hasNext)
     d->stack->raiseWidget(d->navigateBar);
 
     if (hasPrevious && hasNext)
-        d->navigateBar->setButtonsState(NavigateBarWidget::ItemCurrent);
+        d->navigateBar->setButtonsState(StatusNavigateBar::ItemCurrent);
     else if (!hasPrevious && hasNext)
-        d->navigateBar->setButtonsState(NavigateBarWidget::ItemFirst);
+        d->navigateBar->setButtonsState(StatusNavigateBar::ItemFirst);
     else if (hasPrevious && !hasNext)
-        d->navigateBar->setButtonsState(NavigateBarWidget::ItemLast);
+        d->navigateBar->setButtonsState(StatusNavigateBar::ItemLast);
     else
-        d->navigateBar->setButtonsState(NavigateBarWidget::NoNavigation);
+        d->navigateBar->setButtonsState(StatusNavigateBar::NoNavigation);
 }
 
 void NavigateBarTab::setNavigateBarState(int itemType)

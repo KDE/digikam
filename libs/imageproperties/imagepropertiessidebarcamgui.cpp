@@ -1,10 +1,10 @@
 /* ============================================================
- * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
- * Date  : 2006-02-08
+ * Authors: Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2006-02-08
  * Description : simple image properties side bar used by 
  *               camera gui.
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,8 +42,10 @@
 #include "cameraiconitem.h"
 #include "cameraitempropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
+#include "statusnavigatebar.h"
 #include "navigatebarwidget.h"
 #include "imagepropertiessidebarcamgui.h"
+#include "imagepropertiessidebarcamgui.moc"
 
 namespace Digikam
 {
@@ -201,11 +203,11 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
     NavigateBarTab *navtab = dynamic_cast<NavigateBarTab *>(tab);
     if (navtab)
     {
-        int currentItemType = NavigateBarWidget::ItemCurrent;
+        int currentItemType = StatusNavigateBar::ItemCurrent;
         if (d->cameraView->firstItem() == d->cameraItem)
-            currentItemType = NavigateBarWidget::ItemFirst;
+            currentItemType = StatusNavigateBar::ItemFirst;
         else if (d->cameraView->lastItem() == d->cameraItem)
-            currentItemType = NavigateBarWidget::ItemLast;
+            currentItemType = StatusNavigateBar::ItemLast;
 
         navtab->setNavigateBarState(currentItemType);
         navtab->setNavigateBarFileName(d->itemInfo->name);
@@ -222,5 +224,4 @@ void ImagePropertiesSideBarCamGui::slotThemeChanged()
 
 }  // NameSpace Digikam
 
-#include "imagepropertiessidebarcamgui.moc"
 
