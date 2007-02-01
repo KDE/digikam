@@ -865,6 +865,8 @@ void DigikamView::slotEscapePreview()
         slot_imagePreview(currItem);
     else
         slot_imagePreview(0);
+    
+    d->parent->escapePreview();
 }
 
 void DigikamView::slotEditImage()

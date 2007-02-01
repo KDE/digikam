@@ -1735,5 +1735,10 @@ void DigikamApp::slotDonateMoney()
     KApplication::kApplication()->invokeBrowser("http://www.digikam.org/?q=donation");
 }
 
+void DigikamApp::escapePreview()
+{
+    d->imagePreviewAction->setChecked(false);
+}
+
 }  // namespace Digikam
 

@@ -81,12 +81,6 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
 
     // -----------------------------------------------------------------
 
-    connect(d->mediaPlayerView, SIGNAL( backToAlbumSignal() ),
-            this, SIGNAL( backToAlbumSignal() ) );
-
-    connect(d->imagePreviewView, SIGNAL( backToAlbumSignal() ),
-            this, SIGNAL( backToAlbumSignal() ) );
-
     connect(d->imagePreviewView, SIGNAL( editImageSignal() ),
             this, SIGNAL( editImageSignal() ) );
 
@@ -102,7 +96,7 @@ AlbumWidgetStack::~AlbumWidgetStack()
 void AlbumWidgetStack::slotEscapePreview()
 {
     if (previewMode() == MediaPlayerMode)
-        d->mediaPlayerView->slotBackButtonClicked();
+        d->mediaPlayerView->escapePreview();
 }
 
 AlbumIconView* AlbumWidgetStack::albumIconView()
@@ -122,7 +116,7 @@ void AlbumWidgetStack::setPreviewItem(const KURL& url)
         if (previewMode() == MediaPlayerMode)
             d->mediaPlayerView->setMediaPlayerFromUrl(KURL());
         else if (previewMode() == PreviewImageMode)
-            d->imagePreviewView->slotPreviewFailed();
+            slotPreviewLoaded();
     }    
     else
     {

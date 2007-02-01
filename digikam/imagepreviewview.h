@@ -1,9 +1,9 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date   : 2006-21-12
- * Description : a view to embed the image preview widget.
+ * Description : a embeded view to show the image preview widget.
  * 
- * Copyright 2006 Gilles Caulier
+ * Copyright 2006-2007 Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,19 +48,15 @@ public:
 
 signals:
 
-    void backToAlbumSignal();
-    void editImageSignal();   
     void previewLoadedSignal();   
 
 public slots:
 
-    void slotPreviewFailed();
+//    void slotPreviewFailed();
    
 private slots:
 
     void slotThemeChanged();
-    void slotPreviewStarted();
-    void slotPreviewComplete();
 
 private:
 

@@ -3,7 +3,7 @@
  * Date   : 2006-20-12
  * Description : a view to embed a KPart media player.
  * 
- * Copyright 2006 Gilles Caulier
+ * Copyright 2006-2007 Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
 
 #include <qlabel.h>
 #include <qstring.h>
-#include <qpushbutton.h>
 #include <qlayout.h>
 #include <qframe.h>
 
@@ -83,35 +82,32 @@ MediaPlayerView::MediaPlayerView(QWidget *parent)
 
     d->errorView          = new QFrame(this);
     QLabel *errorMsg      = new QLabel(i18n("No media player available..."), d->errorView);
-    QGridLayout *grid     = new QGridLayout(d->errorView, 1, 2, 
+    QGridLayout *grid     = new QGridLayout(d->errorView, 2, 2, 
                                             KDialogBase::marginHint(), KDialogBase::spacingHint());
-    QPushButton *backBtn1 = new QPushButton(i18n("Back to Album"), d->errorView);
 
     errorMsg->setAlignment(Qt::AlignCenter);
     d->errorView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
     d->errorView->setMargin(0);
     d->errorView->setLineWidth(1);
 
-    grid->addMultiCellWidget(errorMsg, 0, 0, 0, 2);
-    grid->addMultiCellWidget(backBtn1, 1, 1, 1, 1);
+    grid->addMultiCellWidget(errorMsg, 1, 1, 0, 2);
     grid->setColStretch(0, 10),
     grid->setColStretch(2, 10),
     grid->setRowStretch(0, 10),
+    grid->setRowStretch(2, 10),
 
     addWidget(d->errorView, MediaPlayerViewPriv::ErrorView);
 
     // --------------------------------------------------------------------------
 
     d->mediaPlayerView    = new QFrame(this);
-    d->grid               = new QGridLayout(d->mediaPlayerView, 1, 2, 
+    d->grid               = new QGridLayout(d->mediaPlayerView, 2, 2, 
                                             KDialogBase::marginHint(), KDialogBase::spacingHint());
-    QPushButton *backBtn2 = new QPushButton(i18n("Back to Album"), d->mediaPlayerView);
 
     d->mediaPlayerView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
     d->mediaPlayerView->setMargin(0);
     d->mediaPlayerView->setLineWidth(1);
 
-    d->grid->addMultiCellWidget(backBtn2, 1, 1, 1, 1);
     d->grid->setColStretch(0, 10),
     d->grid->setColStretch(2, 10),
     d->grid->setRowStretch(0, 10),
@@ -120,12 +116,6 @@ MediaPlayerView::MediaPlayerView(QWidget *parent)
     setPreviewMode(MediaPlayerViewPriv::PlayerView);
 
     // --------------------------------------------------------------------------
-
-    connect(backBtn1, SIGNAL(clicked()),
-            this, SLOT(slotBackButtonClicked()) );
-
-    connect(backBtn2, SIGNAL(clicked()),
-            this, SLOT(slotBackButtonClicked()) );
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));  
@@ -219,7 +209,7 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KURL& url)
     setPreviewMode(MediaPlayerViewPriv::PlayerView);
 }
 
-void MediaPlayerView::slotBackButtonClicked()
+void MediaPlayerView::escapePreview()
 {
     if (d->mediaPlayerPart)
     {
@@ -227,8 +217,6 @@ void MediaPlayerView::slotBackButtonClicked()
         delete d->mediaPlayerPart;
         d->mediaPlayerPart = 0;
     }
-
-    emit backToAlbumSignal();
 }
 
 void MediaPlayerView::slotThemeChanged()

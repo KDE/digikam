@@ -76,6 +76,7 @@ public:
     void enableThumbSizeMinusAction(bool val);
     void enableAlbumBackwardHistory(bool enable);
     void enableAlbumForwardHistory(bool enable);
+    void escapePreview();
     
 signals:
 

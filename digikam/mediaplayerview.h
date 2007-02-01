@@ -3,7 +3,7 @@
  * Date   : 2006-20-12
  * Description : a view to embed a KPart media player.
  * 
- * Copyright 2006 Gilles Caulier
+ * Copyright 2006-2007 Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,15 +48,8 @@ public:
     ~MediaPlayerView();    
 
     void setMediaPlayerFromUrl(const KURL& url);
+    void escapePreview();
            
-signals:
-
-    void backToAlbumSignal();  
-
-public slots:
-
-    void slotBackButtonClicked();
-   
 private slots:
 
     void slotThemeChanged();
