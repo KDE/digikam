@@ -1209,7 +1209,9 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                         {
                             AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
                             albumItem->imageInfo()->setTag(tagID);
-                            // TODO: add MetadataHub call here.
+
+                            // TODO MetadataHub: add call here.
+
                             emit signalProgressValue((int)((i++/cnt)*100.0));
                             kapp->processEvents();
                         }
@@ -1219,7 +1221,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     if (albumItem)
                     {
                         albumItem->imageInfo()->setTag(tagID);
-                        // TODO: add MetadataHub call here.
+
+                        // TODO MetadataHub: add call here.
                     }
     
                     d->imageLister->refresh();
@@ -1237,7 +1240,9 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     {
                         AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
                         albumItem->imageInfo()->setTag(tagID);
-                        // TODO: add MetadataHub call here.
+
+                        // TODO MetadataHub: add call here.
+
                         emit signalProgressValue((int)((i++/cnt)*100.0));
                         kapp->processEvents();
                     }
@@ -1253,7 +1258,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     if (albumItem)
                     {
                         albumItem->imageInfo()->setTag(tagID);
-                        // TODO: add MetadataHub call here.
+
+                        // TODO MetadataHub: add call here.
                     }
 
                     d->imageLister->refresh();
@@ -1315,7 +1321,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                             it != tagIDs.end(); ++it)
                         {
                             albumItem->imageInfo()->setTag(*it);
-                            // TODO: add MetadataHub call here.
+
+                            // TODO MetadataHub: add call here.
                         }
 
                         emit signalProgressValue((int)((i++/cnt)*100.0));
@@ -1330,7 +1337,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                         it != tagIDs.end(); ++it)
                     {
                         albumItem->imageInfo()->setTag(*it);
-                        // TODO: add MetadataHub call here.
+
+                        // TODO MetadataHub: add call here.
                     }
                 }
 
@@ -1352,7 +1360,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                         it != tagIDs.end(); ++it)
                     {
                         albumItem->imageInfo()->setTag(*it);
-                        // TODO: add MetadataHub call here.
+
+                        // TODO MetadataHub: add call here.
                     }
 
                     emit signalProgressValue((int)((i++/cnt)*100.0));
@@ -1373,7 +1382,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                         it != tagIDs.end(); ++it)
                     {
                         albumItem->imageInfo()->setTag(*it);
-                        // TODO: add MetadataHub call here.
+
+                        // TODO MetadataHub: add call here.
                     }
                 }
 
@@ -1898,7 +1908,7 @@ void AlbumIconView::slotAssignTag(int tagID)
 
             info->setTag(tagID);
 
-            // TODO: fix this part to use MetadataHub instead.
+            // TODO MetadataHub: fix this part to use it instead.
 
             // Store Image Tags like Iptc keywords tag.
         
@@ -1946,7 +1956,7 @@ void AlbumIconView::slotRemoveTag(int tagID)
 
             info->removeTag(tagID);
 
-            // TODO: fix this part to use MetadataHub instead.
+            // TODO MetadataHub: fix this part to use it instead.
 
             // Update Image Tags like Iptc keywords tags.
 
@@ -1996,7 +2006,7 @@ void AlbumIconView::slotAssignRating(int rating)
             ImageInfo* info          = albumItem->imageInfo();
             info->setRating(rating);
 
-            // TODO: fix this part to use MetadataHub instead.
+            // TODO MetadataHub: fix this part to use it instead.
             
             // Store Image rating as Iptc tag.
         
