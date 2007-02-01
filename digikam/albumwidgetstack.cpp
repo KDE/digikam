@@ -81,9 +81,6 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
 
     // -----------------------------------------------------------------
 
-    connect(d->imagePreviewView, SIGNAL( editImageSignal() ),
-            this, SIGNAL( editImageSignal() ) );
-
     connect(d->imagePreviewView, SIGNAL( previewLoadedSignal() ),
             this, SLOT( slotPreviewLoaded() ) );
 }
