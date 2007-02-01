@@ -50,6 +50,11 @@ public:
     void tagEdit();    
     void tagDelete();
 
+signals:
+
+    void signalProgressBarMode(int, const QString&);
+    void signalProgressValue(int);
+
 protected:
 
     void contentsDropEvent(QDropEvent *e);
