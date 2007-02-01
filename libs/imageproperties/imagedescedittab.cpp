@@ -223,6 +223,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     // --------------------------------------------------
 
+    connect(d->tagsView, SIGNAL(signalProgressBarMode(int, const QString&)),
+            this, SIGNAL(signalProgressBarMode(int, const QString&)));
+
+    connect(d->tagsView, SIGNAL(signalProgressValue(int)),
+            this, SIGNAL(signalProgressValue(int)));
+
     connect(popupMenu, SIGNAL(activated(int)),
             this, SLOT(slotRecentTagsMenuActivated(int)));
 

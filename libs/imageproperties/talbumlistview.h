@@ -71,6 +71,8 @@ public:
 
 signals:
 
+    void signalProgressBarMode(int, const QString&);
+    void signalProgressValue(int);
     void signalItemStateChanged(TAlbumCheckListItem *item);
 
 protected:
