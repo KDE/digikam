@@ -34,6 +34,7 @@
 // KDE includes
  
 #include <kcmdlineargs.h>
+#include <kapplication.h>
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kconfig.h>

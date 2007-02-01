@@ -6,7 +6,7 @@
  * Description : main digiKam interface implementation
  * 
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
- * Copyright      2006 by Tom Albers
+ * Copyright      2006 by Tom Albers 
  * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -32,47 +32,22 @@
 // Qt includes.
 
 #include <qstring.h>
-#include <qmap.h>
 
 // KDE includes.
 
-#include <kapplication.h>
 #include <kmainwindow.h>
 #include <kio/global.h>
 
 // Local includes.
 
 #include "digikam_export.h"
-#include "dcopiface.h"
-
-class KAction;
-class KAccel;
-class KActionMenu;
-class KToolBarPopupAction;
-class KSelectAction;
-class KConfig;
-class KPopupMenu;
-
-namespace KIPI
-{
-class PluginLoader;
-}
 
 namespace Digikam
 {
 
 class ImageInfo;
-class ImagePluginLoader;
-class AlbumManager;
-class PluginLoader;               //   For KIPI pluggins support.
-class DigikamKipiInterface;
-class CameraList;
 class CameraType;
-class DigikamView;
-class AlbumSettings;
-class SplashScreen;
-class StatusProgressBar;
-class StatusNavigateBar;
+class DigikamAppPriv;
 
 class DIGIKAM_EXPORT DigikamApp : public KMainWindow
 {
@@ -160,7 +135,7 @@ private slots:
     void slotCameraAdded(CameraType *ctype);
     void slotCameraRemoved(CameraType *ctype);
     void slotCameraAutoDetect();
-    void slotDcopDownloadImages( const QString& folder );
+    void slotDcopDownloadImages(const QString& folder);
     void slotDcopCameraAutoDetect();
     void slotEditKeys();
     void slotConfToolbars();
@@ -179,108 +154,9 @@ private slots:
 
 private:
 
-    bool                   mFullScreen;
-    bool                   mValidIccPath;
-    
-    // KIPI plugins support
-    QPtrList<KAction>      m_kipiFileActionsExport;
-    QPtrList<KAction>      m_kipiFileActionsImport;
-    QPtrList<KAction>      m_kipiImageActions;
-    QPtrList<KAction>      m_kipiToolsActions;
-    QPtrList<KAction>      m_kipiBatchActions;
-    QPtrList<KAction>      m_kipiAlbumActions;
+    DigikamAppPriv    *d;
 
-    QMap<int, QString>     mMediaItems;
-
-    QString                mCameraGuiPath;
-
-    KPopupMenu            *mCameraMediaList;
-
-    KAccel                *m_accelerators;
-
-    KConfig               *m_config;    
-    
-    // Camera Actions
-    KActionMenu           *mCameraMenuAction;
-
-    // Theme Actions
-    KSelectAction         *mThemeMenuAction;
-
-    // Album Actions
-    KAction               *mNewAction;
-    KAction               *mDeleteAction;
-    KAction               *mImageDeletePermanentlyAction;
-    KAction               *mImageDeletePermanentlyDirectlyAction;
-    KAction               *mImageTrashDirectlyAction;
-    KSelectAction         *mAlbumSortAction;
-    KToolBarPopupAction   *mBackwardActionMenu;
-    KToolBarPopupAction   *mForwardActionMenu;
-
-    KAction               *mAddImagesAction;
-    KAction               *mPropsEditAction;
-    KAction               *mAlbumImportAction;
-    KAction               *mOpenInKonquiAction;
-    KAction               *mRefreshAlbumAction;
-    KAction               *mSyncAlbumMetadataAction;
-    
-    // Tag Actions
-    KAction               *mNewTagAction;
-    KAction               *mDeleteTagAction;
-    KAction               *mEditTagAction;
-    
-    // Image Actions
-    KAction               *mImagePreviewAction;
-    KAction               *mImageViewAction;
-    KAction               *mImageSetExifOrientation1Action;
-    KAction               *mImageSetExifOrientation2Action;
-    KAction               *mImageSetExifOrientation3Action;
-    KAction               *mImageSetExifOrientation4Action;
-    KAction               *mImageSetExifOrientation5Action;
-    KAction               *mImageSetExifOrientation6Action;
-    KAction               *mImageSetExifOrientation7Action;
-    KAction               *mImageSetExifOrientation8Action;
-    KAction               *mImageRenameAction;
-    KAction               *mImageDeleteAction;
-    KSelectAction         *mImageSortAction;
-    KActionMenu           *mImageExifOrientationActionMenu;
-
-    // Selection Actions
-    KAction               *mSelectAllAction;
-    KAction               *mSelectNoneAction;
-    KAction               *mSelectInvertAction;
-
-    // View Actions
-    KAction               *mThumbSizePlusAction;
-    KAction               *mThumbSizeMinusAction;
-    KAction               *mFullScreenAction;
-
-    KAction               *m_0Star;
-    KAction               *m_1Star;
-    KAction               *m_2Star;
-    KAction               *m_3Star;
-    KAction               *m_4Star;
-    KAction               *m_5Star;
-
-    // Application Actions
-    KAction               *mQuitAction;
-    KAction               *mTipAction;
-    KAction               *mKipiHelpAction;
-    KAction               *mDonateMoneyAction;
-    
-    AlbumSettings         *mAlbumSettings;
-    SplashScreen          *mSplash;
-    DCOPIface             *mDcopIface;
-    AlbumManager          *mAlbumManager;
-    ImagePluginLoader     *m_ImagePluginsLoader;
-    DigikamKipiInterface  *KipiInterface_;
-    DigikamView           *mView;
-    CameraList            *mCameraList;
-    StatusProgressBar     *mStatusProgressBar;
-    StatusNavigateBar     *mStatusNavigateBar;    
-
-    static DigikamApp     *m_instance;
-
-    KIPI::PluginLoader    *KipiPluginLoader_;
+    static DigikamApp *m_instance;
 };
 
 }  // namespace Digikam
