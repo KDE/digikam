@@ -242,7 +242,7 @@ void DigikamView::setupConnections()
             this, SLOT(slot_imagePreview(AlbumIconItem*)));
 
     //connect(d->iconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
-      //      this, SIGNAL(signal_noCurrentItem()));
+      //      this, SIGNAL(signalNoCurrentItem()));
 
     connect(d->folderView, SIGNAL(signalAlbumModified()),
             d->iconView, SLOT(slotAlbumModified()));
@@ -270,7 +270,7 @@ void DigikamView::setupConnections()
     connect(d->rightSideBar, SIGNAL(signalLastItem()),
             this, SLOT(slotLastItem()));
 
-    connect(this, SIGNAL(signal_noCurrentItem()),
+    connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
 
     connect(d->rightSideBar, SIGNAL(signalProgressBarMode(int, const QString&)),
@@ -562,25 +562,25 @@ void DigikamView::slotSelectAlbum(const KURL &)
 
 void DigikamView::slot_albumSelected(Album* album)
 {
-    //emit signal_noCurrentItem();
+    //emit signalNoCurrentItem();
 
     if (!album)
     {
         d->iconView->setAlbum(0);
-        emit signal_albumSelected(false);
-        emit signal_tagSelected(false);
+        emit signalAlbumSelected(false);
+        emit signalTagSelected(false);
         return;
     }
 
     if (album->type() == Album::PHYSICAL)
     {
-        emit signal_albumSelected(true);
-        emit signal_tagSelected(false);
+        emit signalAlbumSelected(true);
+        emit signalTagSelected(false);
     }
     else if (album->type() == Album::TAG)
     {
-        emit signal_albumSelected(false);
-        emit signal_tagSelected(true);
+        emit signalAlbumSelected(false);
+        emit signalTagSelected(true);
     }
 
     d->albumHistory->addAlbum(album, d->leftSideBar->getActiveTab());
@@ -628,8 +628,8 @@ void DigikamView::slotDispatchImageSelected()
         if (list.isEmpty())
         {
             d->albumWidgetStack->setPreviewItem();
-            emit signal_imageSelected(list, false, false);
-            emit signal_noCurrentItem();
+            emit signalImageSelected(list, false, false);
+            emit signalNoCurrentItem();
         }
         else
         {
@@ -647,7 +647,7 @@ void DigikamView::slotDispatchImageSelected()
                     d->albumWidgetStack->setPreviewItem(selectedItem->imageInfo()->kurl());
             }
 
-            emit signal_imageSelected(list, hasPrev, hasNext);
+            emit signalImageSelected(list, hasPrev, hasNext);
         }
 
         d->needDispatchSelection = false;
@@ -657,14 +657,14 @@ void DigikamView::slotDispatchImageSelected()
 void DigikamView::slotAlbumsCleared()
 {
     d->iconView->clear();
-    emit signal_albumSelected(false);
+    emit signalAlbumSelected(false);
 }
 
 // ----------------------------------------------------------------
 
 void DigikamView::slot_thumbSizePlus()
 {
-    emit signal_noCurrentItem();
+    emit signalNoCurrentItem();
 
     ThumbnailSize thumbSize;
 
@@ -710,7 +710,7 @@ void DigikamView::slot_thumbSizePlus()
 
 void DigikamView::slot_thumbSizeMinus()
 {
-    emit signal_noCurrentItem();
+    emit signalNoCurrentItem();
 
     ThumbnailSize thumbSize;
 

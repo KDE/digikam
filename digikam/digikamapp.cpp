@@ -319,13 +319,13 @@ void DigikamApp::setupView()
     setCentralWidget(d->view);
     d->view->applySettings(d->albumSettings);
 
-    connect(d->view, SIGNAL(signal_albumSelected(bool)),
+    connect(d->view, SIGNAL(signalAlbumSelected(bool)),
             this, SLOT(slotAlbumSelected(bool)));
             
-    connect(d->view, SIGNAL(signal_tagSelected(bool)),
+    connect(d->view, SIGNAL(signalTagSelected(bool)),
             this, SLOT(slotTagSelected(bool)));
 
-    connect(d->view, SIGNAL(signal_imageSelected(const QPtrList<ImageInfo>&, bool, bool)),
+    connect(d->view, SIGNAL(signalImageSelected(const QPtrList<ImageInfo>&, bool, bool)),
             this, SLOT(slotImageSelected(const QPtrList<ImageInfo>&, bool, bool)));
 }
 

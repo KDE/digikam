@@ -60,10 +60,10 @@ public:
 
 signals:
 
-    void signal_albumSelected(bool val);
-    void signal_tagSelected(bool val);
-    void signal_imageSelected(const QPtrList<ImageInfo>& list, bool hasPrevious, bool hasNext);
-    void signal_noCurrentItem();
+    void signalAlbumSelected(bool val);
+    void signalTagSelected(bool val);
+    void signalImageSelected(const QPtrList<ImageInfo>& list, bool hasPrevious, bool hasNext);
+    void signalNoCurrentItem();
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
 
