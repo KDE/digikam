@@ -55,6 +55,11 @@ public:
 
     void stateChanged(TagFilterViewItem*);
 
+signals:
+
+    void signalProgressBarMode(int, const QString&);
+    void signalProgressValue(int);
+
 protected:
 
     QDragObject* dragObject();

@@ -279,6 +279,12 @@ void DigikamView::setupConnections()
     connect(d->rightSideBar, SIGNAL(signalProgressValue(int)),
             d->parent, SLOT(slotProgressValue(int)));
 
+    connect(d->tagFilterView, SIGNAL(signalProgressBarMode(int, const QString&)),
+            d->parent, SLOT(slotProgressBarMode(int, const QString&)));
+
+    connect(d->tagFilterView, SIGNAL(signalProgressValue(int)),
+            d->parent, SLOT(slotProgressValue(int)));
+
     // -- Preview image widget Connections ------------------------
 
     connect(d->albumWidgetStack->imagePreviewWidget(), SIGNAL(signalNextItem()),
