@@ -1,11 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-02-12
+ * Date   : 2004-02-12
  * Description : digiKam image editor GUI
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,12 +75,6 @@ signals:
 
 private:
 
-    ImageWindowPriv    *d;
-
-    static ImageWindow *m_instance;
-
-private:
-
     void loadCurrentList(const QString& caption, bool allowSaving);
     void closeEvent(QCloseEvent* e);
 
@@ -122,10 +116,17 @@ private slots:
 
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
+    void slotAssignRating(int rating);
 
     void slotFileMetadataChanged(const KURL &url);
 
     void slotThemeChanged();
+
+private:
+
+    ImageWindowPriv    *d;
+
+    static ImageWindow *m_instance;
 };
 
 }  // namespace Digikam

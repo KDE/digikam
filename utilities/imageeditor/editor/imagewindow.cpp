@@ -1,11 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-02-12
+ * Date   : 2004-02-12
  * Description : digiKam image editor GUI
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,6 +31,8 @@
 #include <qlabel.h>
 #include <qimage.h>
 #include <qsplitter.h>
+#include <qpainter.h>
+#include <qpixmap.h>
 
 // KDE includes.
 
@@ -119,6 +121,8 @@ public:
     // image cannot be saved.
     bool                      allowSaving;
 
+    QPixmap                   ratingPixmap;
+
     KURL::List                urlList;
     KURL                      urlCurrent;
 
@@ -163,6 +167,21 @@ ImageWindow::ImageWindow()
 {
     d = new ImageWindowPriv;
     m_instance = this;
+
+    // -- Load rating Pixmap ------------------------------------------
+
+    KGlobal::dirs()->addResourceType("digikam_rating",
+                                     KGlobal::dirs()->kde_default("data")
+                                     + "digikam/data");
+    QString ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating",
+                                                             "rating.png");
+    ratingPixPath += "/rating.png";
+    d->ratingPixmap = QPixmap(ratingPixPath);
+
+    QPainter painter(&d->ratingPixmap);
+    painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
+                     ThemeEngine::instance()->textSpecialRegColor());
+    painter.end();
 
     // -- Build the GUI -------------------------------
 
@@ -535,12 +554,16 @@ void ImageWindow::slotContextMenu()
 {
     if (d->contextMenu)
     {
-        TagsPopupMenu* assignTagsMenu = 0;
-        TagsPopupMenu* removeTagsMenu = 0;
-        int separatorID = -1;
+        QPopupMenu    *ratingMenu     = 0;
+        TagsPopupMenu *assignTagsMenu = 0;
+        TagsPopupMenu *removeTagsMenu = 0;
+        int separatorID1 = -1;
+        int separatorID2 = -1;
 
         if (d->imageInfoCurrent)
         {
+            // Bulk assignment/removal of tags --------------------------
+
             Q_LLONG id = d->imageInfoCurrent->id();
             QValueList<Q_LLONG> idList;
             idList.append(id);
@@ -548,7 +571,7 @@ void ImageWindow::slotContextMenu()
             assignTagsMenu = new TagsPopupMenu(idList, 1000, TagsPopupMenu::ASSIGN);
             removeTagsMenu = new TagsPopupMenu(idList, 2000, TagsPopupMenu::REMOVE);
 
-            separatorID = d->contextMenu->insertSeparator();
+            separatorID1 = d->contextMenu->insertSeparator();
 
             d->contextMenu->insertItem(i18n("Assign Tag"), assignTagsMenu);
             int i = d->contextMenu->insertItem(i18n("Remove Tag"), removeTagsMenu);
@@ -561,18 +584,46 @@ void ImageWindow::slotContextMenu()
 
             AlbumDB* db = AlbumManager::instance()->albumDB();
             if (!db->hasTags( idList ))
-                d->contextMenu->setItemEnabled(i,false);
+                d->contextMenu->setItemEnabled(i, false);
+
+            separatorID2 = d->contextMenu->insertSeparator();
+
+            // Assign Star Rating -------------------------------------------
+        
+            ratingMenu = new QPopupMenu();
+            
+            connect(ratingMenu, SIGNAL(activated(int)),
+                    this, SLOT(slotAssignRating(int)));
+        
+            ratingMenu->insertItem(i18n("None"), 0);
+
+            for (int i = 1 ; i <= 5 ; i++)
+            {
+                QPixmap pix(d->ratingPixmap.width() * 5, d->ratingPixmap.height());
+                pix.fill(ratingMenu->colorGroup().background());
+        
+                QPainter painter(&pix);
+                painter.drawTiledPixmap(0, 0,
+                                        i*d->ratingPixmap.width(),
+                                        pix.height(),
+                                        d->ratingPixmap);
+                painter.end();
+                ratingMenu->insertItem(pix, i);
+            }
+        
+            d->contextMenu->insertItem(i18n("Assign Rating"), ratingMenu);
         }
 
         d->contextMenu->exec(QCursor::pos());
 
-        if (separatorID != -1)
-        {
-            d->contextMenu->removeItem(separatorID);
-        }
+        if (separatorID1 != -1)
+            d->contextMenu->removeItem(separatorID1);
+        if (separatorID2 != -1)
+            d->contextMenu->removeItem(separatorID2);
 
         delete assignTagsMenu;
         delete removeTagsMenu;
+        delete ratingMenu;
     }
 }
 
@@ -630,6 +681,8 @@ void ImageWindow::slotAssignTag(int tagID)
 
         d->imageInfoCurrent->setTag(tagID);
 
+        // TODO MetadataHub: fix this part to use it instead.
+
         // Update Image Tags like Iptc keywords tags.
 
         if (AlbumSettings::instance())
@@ -652,6 +705,8 @@ void ImageWindow::slotRemoveTag(int tagID)
 
         d->imageInfoCurrent->removeTag(tagID);
 
+        // TODO MetadataHub: fix this part to use it instead.
+
         // Update Image Tags like Iptc keywords tags.
 
         if (AlbumSettings::instance())
@@ -660,6 +715,30 @@ void ImageWindow::slotRemoveTag(int tagID)
             {
                 DMetadata metadata(d->imageInfoCurrent->filePath());
                 metadata.setImageKeywords(oldKeywords, d->imageInfoCurrent->tagNames());
+                metadata.applyChanges();
+            }
+        }
+    }
+}
+
+void ImageWindow::slotAssignRating(int rating)
+{
+    rating = QMIN(5, QMAX(0, rating));
+    
+    if (d->imageInfoCurrent)
+    {
+        d->imageInfoCurrent->setRating(rating);
+
+        // TODO MetadataHub: fix this part to use it instead.
+        
+        // Store Image rating as Iptc tag.
+    
+        if (AlbumSettings::instance())
+        {
+            if (AlbumSettings::instance()->getSaveIptcRating())
+            {
+                DMetadata metadata(d->imageInfoCurrent->filePath());
+                metadata.setImageRating(rating);
                 metadata.applyChanges();
             }
         }
