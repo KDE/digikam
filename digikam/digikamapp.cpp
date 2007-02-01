@@ -94,8 +94,8 @@ DigikamApp::DigikamApp()
           : KMainWindow( 0, "Digikam" )
 {
     d = new DigikamAppPriv;
-    m_instance      = this;
-    d->config       = kapp->config();
+    m_instance = this;
+    d->config  = kapp->config();
 
     if(d->config->readBoolEntry("Show Splash", true) &&
        !kapp->isRestored())
@@ -557,7 +557,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->imagePreviewAction = new KAction(i18n("View..."),
+    d->imagePreviewAction = new KToggleAction(i18n("View..."),
                                       "viewimage",
                                       Key_F3,
                                       d->view,

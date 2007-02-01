@@ -168,7 +168,7 @@ public:
     KAction               *editTagAction;
     
     // Image Actions
-    KAction               *imagePreviewAction;
+    KToggleAction         *imagePreviewAction;
     KAction               *imageViewAction;
     KAction               *imageSetExifOrientation1Action;
     KAction               *imageSetExifOrientation2Action;
