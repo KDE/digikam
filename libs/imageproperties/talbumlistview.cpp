@@ -426,7 +426,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             {
                 db->addItemTag(*it, destAlbum->id());
 
-                // TODO: add MetadataHub call here.
+                // TODO MetadataHub: add call here.
 
                 emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));
                 kapp->processEvents();
