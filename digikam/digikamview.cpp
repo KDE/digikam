@@ -647,7 +647,7 @@ void DigikamView::slotDispatchImageSelected()
                 d->rightSideBar->takeImageInfoOwnership(true);
 
                 if (!d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
-                    d->albumWidgetStack->setPreviewItem(selectedItem->imageInfo());
+                    d->albumWidgetStack->setPreviewItem(selectedItem->imageInfo(), hasPrev, hasNext);
             }
 
             emit signalImageSelected(list, hasPrev, hasNext);
@@ -899,7 +899,9 @@ void DigikamView::slot_imagePreview(AlbumIconItem *iconItem)
             item = iconItem;
         }
 
-        d->albumWidgetStack->setPreviewItem(item->imageInfo());
+        bool hasPrev = d->iconView->firstItem() != item;
+        bool hasNext = d->iconView->lastItem() != item;
+        d->albumWidgetStack->setPreviewItem(item->imageInfo(), hasPrev, hasNext);
     }
     else
     {

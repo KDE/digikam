@@ -44,7 +44,7 @@ public:
     ImagePreviewView(QWidget *parent=0);
     ~ImagePreviewView();    
            
-    void setImageInfo(ImageInfo* info=0);
+    void setImageInfo(ImageInfo* info=0, bool hasPrev=false, bool hasNext=false);
 
 signals:
 

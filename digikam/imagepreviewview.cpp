@@ -59,9 +59,14 @@ public:
 
     ImagePreviewViewPriv()
     {
+        hasPrev            = false;
+        hasNext            = false;
         imagePreviewWidget = 0;
         imageInfo          = 0;
     }
+
+    bool                hasPrev;
+    bool                hasNext;
 
     ImageInfo          *imageInfo;
 
@@ -106,9 +111,12 @@ void ImagePreviewView::slotThemeChanged()
     setPaletteBackgroundColor(ThemeEngine::instance()->baseColor());
 }
 
-void ImagePreviewView::setImageInfo(ImageInfo* info)
+void ImagePreviewView::setImageInfo(ImageInfo* info, bool hasPrev, bool hasNext)
 {
     d->imageInfo = info;
+    d->hasPrev   = hasPrev;
+    d->hasNext   = hasNext;
+
     if (d->imageInfo)
         d->imagePreviewWidget->setImagePath(info->kurl().path()); 
     else 
@@ -151,7 +159,11 @@ void ImagePreviewView::mousePressEvent(QMouseEvent* e)
 
         DPopupMenu popmenu(this);
         popmenu.insertItem(SmallIcon("back"), i18n("Back"), 10);
+        if (!d->hasPrev) popmenu.setItemEnabled(10, false);
+
         popmenu.insertItem(SmallIcon("forward"), i18n("Forward"), 11);
+        if (!d->hasNext) popmenu.setItemEnabled(11, false);
+ 
         popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 12);
         popmenu.insertItem(i18n("Open With"), &openWithMenu, 13);
 
