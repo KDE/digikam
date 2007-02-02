@@ -136,6 +136,7 @@ AlbumGUI      : Root album show a Welcome page for new users (like Kmail or Konq
 AlbumGUI      : Video files can be previewed using an embedded instance of default KDE
                 media player.
 AlbumGUI      : Preview picture mode use a memory cache to speed-up loading.
+AlbumGUI      : Preview picture mode pride a context pop-up menu.
 AlbumGUI      : Comments & Tags now support multiple selection of items to apply properties.
 AlbumGUI      : New option to set the action to do when user right click on picture thumb: 
                 Load on Image Editor or Show an embeded preview.
