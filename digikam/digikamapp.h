@@ -37,6 +37,7 @@
 
 #include <kmainwindow.h>
 #include <kio/global.h>
+#include <kio/netaccess.h>
 
 // Local includes.
 

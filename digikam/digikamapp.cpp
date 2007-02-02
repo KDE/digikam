@@ -45,7 +45,6 @@
 #include <kdeversion.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
-#include <kio/netaccess.h>
 #include <kwin.h>
 #include <dcopref.h>
 
