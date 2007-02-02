@@ -239,7 +239,7 @@ void DigikamView::setupConnections()
             this, SLOT(slotAlbumHighlight()));
 
     connect(d->iconView, SIGNAL(signalPreviewItem(AlbumIconItem*)),
-            this, SLOT(slot_imagePreview(AlbumIconItem*)));
+            this, SLOT(slotImagePreview(AlbumIconItem*)));
 
     //connect(d->iconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
       //      this, SIGNAL(signalNoCurrentItem()));
@@ -306,7 +306,7 @@ void DigikamView::setupConnections()
             this, SLOT(slotEditImage()));
 
     connect(d->albumWidgetStack, SIGNAL(signalDeleteItem()),
-            this, SLOT(slot_imageDelete()));
+            this, SLOT(slotImageDelete()));
 
     // -- Selection timer ---------------
 
@@ -865,9 +865,9 @@ void DigikamView::slotEscapePreview()
 
     AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
     if (currItem)
-        slot_imagePreview(currItem);
+        slotImagePreview(currItem);
     else
-        slot_imagePreview(0);
+        slotImagePreview();
     
     d->parent->escapePreview();
 }
@@ -876,10 +876,10 @@ void DigikamView::slotEditImage()
 {
     AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
     if (currItem)
-        slot_imageEdit(currItem);
+        slotImageEdit(currItem);
 }
 
-void DigikamView::slot_imagePreview(AlbumIconItem *iconItem)
+void DigikamView::slotImagePreview(AlbumIconItem *iconItem)
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
@@ -909,7 +909,7 @@ void DigikamView::slot_imagePreview(AlbumIconItem *iconItem)
     }
 }
 
-void DigikamView::slot_imageEdit(AlbumIconItem *iconItem)
+void DigikamView::slotImageEdit(AlbumIconItem *iconItem)
 {
     AlbumIconItem *item;
 
@@ -926,12 +926,12 @@ void DigikamView::slot_imageEdit(AlbumIconItem *iconItem)
     d->iconView->slotDisplayItem(item);
 }
 
-void DigikamView::slot_imageExifOrientation(int orientation)
+void DigikamView::slotImageExifOrientation(int orientation)
 {
     d->iconView->slotSetExifOrientation(orientation);
 }
 
-void DigikamView::slot_imageRename(AlbumIconItem *iconItem)
+void DigikamView::slotImageRename(AlbumIconItem *iconItem)
 {
     AlbumIconItem *item;
 
@@ -948,22 +948,22 @@ void DigikamView::slot_imageRename(AlbumIconItem *iconItem)
     d->iconView->slotRename(item);
 }
 
-void DigikamView::slot_imageDelete()
+void DigikamView::slotImageDelete()
 {
     d->iconView->slotDeleteSelectedItems(false);
 }
 
-void DigikamView::slot_imageDeletePermanently()
+void DigikamView::slotImageDeletePermanently()
 {
     d->iconView->slotDeleteSelectedItems(true);
 }
 
-void DigikamView::slot_imageDeletePermanentlyDirectly()
+void DigikamView::slotImageDeletePermanentlyDirectly()
 {
     d->iconView->slotDeleteSelectedItemsDirectly(false);
 }
 
-void DigikamView::slot_imageTrashDirectly()
+void DigikamView::slotImageTrashDirectly()
 {
     d->iconView->slotDeleteSelectedItemsDirectly(true);
 }

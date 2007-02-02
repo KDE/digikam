@@ -101,14 +101,14 @@ public slots:
     void slotNewAdvancedSearch();
 
     // Image action slots
-    void slot_imagePreview(AlbumIconItem* iconItem=0);
-    void slot_imageEdit(AlbumIconItem* iconItem=0);
-    void slot_imageExifOrientation(int orientation);
-    void slot_imageRename(AlbumIconItem* iconItem=0);
-    void slot_imageDelete();
-    void slot_imageDeletePermanently();
-    void slot_imageDeletePermanentlyDirectly();
-    void slot_imageTrashDirectly();
+    void slotImagePreview(AlbumIconItem* iconItem=0);
+    void slotImageEdit(AlbumIconItem* iconItem=0);
+    void slotImageExifOrientation(int orientation);
+    void slotImageRename(AlbumIconItem* iconItem=0);
+    void slotImageDelete();
+    void slotImageDeletePermanently();
+    void slotImageDeletePermanentlyDirectly();
+    void slotImageTrashDirectly();
     void slotSelectAll();
     void slotSelectNone();
     void slotSelectInvert();

@@ -561,7 +561,7 @@ void DigikamApp::setupActions()
                                       "viewimage",
                                       Key_F3,
                                       d->view,
-                                      SLOT(slot_imagePreview()),
+                                      SLOT(slotImagePreview()),
                                       actionCollection(),
                                       "image_view");
 
@@ -569,7 +569,7 @@ void DigikamApp::setupActions()
                                    "editimage",
                                    Key_F4,
                                    d->view,
-                                   SLOT(slot_imageEdit()),
+                                   SLOT(slotImageEdit()),
                                    actionCollection(),
                                    "image_edit");
     d->imageViewAction->setWhatsThis(i18n("This option allows you to open the editor with the "
@@ -579,7 +579,7 @@ void DigikamApp::setupActions()
                                     "pencil",
                                     Key_F2,
                                     d->view,
-                                    SLOT(slot_imageRename()),
+                                    SLOT(slotImageRename()),
                                     actionCollection(),
                                     "image_rename");
     d->imageRenameAction->setWhatsThis(i18n("This option allows you to rename the filename "
@@ -590,7 +590,7 @@ void DigikamApp::setupActions()
                                                 "edittrash",
                                                 Key_Delete,
                                                 d->view,
-                                                SLOT(slot_imageDelete()),
+                                                SLOT(slotImageDelete()),
                                                 actionCollection(),
                                                 "image_delete");
 
@@ -599,7 +599,7 @@ void DigikamApp::setupActions()
                                                 "editdelete",
                                                 SHIFT+Key_Delete,
                                                 d->view,
-                                                SLOT(slot_imageDeletePermanently()),
+                                                SLOT(slotImageDeletePermanently()),
                                                 actionCollection(),
                                                 "image_delete_permanently");
 
@@ -609,7 +609,7 @@ void DigikamApp::setupActions()
                                                         "editdelete",
                                                         0,
                                                         d->view,
-                                                        SLOT(slot_imageDeletePermanentlyDirectly()),
+                                                        SLOT(slotImageDeletePermanentlyDirectly()),
                                                         actionCollection(),
                                                         "image_delete_permanently_directly");
 
@@ -617,7 +617,7 @@ void DigikamApp::setupActions()
                                                         "edittrash",
                                                         0,
                                                         d->view,
-                                                        SLOT(slot_imageTrashDirectly()),
+                                                        SLOT(slotImageTrashDirectly()),
                                                         actionCollection(),
                                                         "image_trash_directly");
 
@@ -644,7 +644,7 @@ void DigikamApp::setupActions()
     QSignalMapper *exifOrientationMapper = new QSignalMapper( d->view );
     
     connect( exifOrientationMapper, SIGNAL( mapped( int ) ),
-             d->view, SLOT( slot_imageExifOrientation( int ) ) );
+             d->view, SLOT( slotImageExifOrientation( int ) ) );
 
     d->imageExifOrientationActionMenu = new KActionMenu(i18n("Correct Exif Orientation Tag"),
                                                       actionCollection(),
