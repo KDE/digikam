@@ -99,12 +99,13 @@ extern "C"
 #include "dio.h"
 #include "albumlister.h"
 #include "albumfiletip.h"
-#include "tagspopupmenu.h"
 #include "albumsettings.h"
 #include "imagewindow.h"
 #include "thumbnailsize.h"
 #include "themeengine.h"
 #include "dpopupmenu.h"
+#include "tagspopupmenu.h"
+#include "ratingpopupmenu.h"
 #include "pixmapmanager.h"
 #include "cameradragobject.h"
 #include "dragobjects.h"
@@ -188,11 +189,9 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     // -- Load rating Pixmap ------------------------------------------
 
-    KGlobal::dirs()->addResourceType("digikam_rating",
-                                     KGlobal::dirs()->kde_default("data")
+    KGlobal::dirs()->addResourceType("digikam_rating", KGlobal::dirs()->kde_default("data")
                                      + "digikam/data");
-    QString ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating",
-                                                             "rating.png");
+    QString ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating", "rating.png");
     ratingPixPath += "/rating.png";
     d->ratingPixmap = QPixmap(ratingPixPath);
 
@@ -576,27 +575,10 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // Assign Star Rating -------------------------------------------
 
-    QPopupMenu ratingMenu;
+    RatingPopupMenu ratingMenu;
     
     connect(&ratingMenu, SIGNAL(activated(int)),
             this, SLOT(slotAssignRating(int)));
-
-    ratingMenu.insertItem(i18n("None"), 0);
-    
-    for (int i = 1 ; i <= 5 ; i++)
-    {
-        QPixmap pix(d->ratingPixmap.width() * 5,
-                    d->ratingPixmap.height());
-        pix.fill(ratingMenu.colorGroup().background());
-
-        QPainter painter(&pix);
-        painter.drawTiledPixmap(0, 0,
-                                i*d->ratingPixmap.width(),
-                                pix.height(),
-                                d->ratingPixmap);
-        painter.end();
-        ratingMenu.insertItem(pix, i);
-    }
 
     popmenu.insertItem(i18n("Assign Rating"), &ratingMenu);
     popmenu.insertSeparator();

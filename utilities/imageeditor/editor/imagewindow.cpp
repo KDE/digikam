@@ -60,7 +60,6 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "dpopupmenu.h"
 #include "canvas.h"
 #include "dimginterface.h"
 #include "themeengine.h"
@@ -79,7 +78,9 @@
 #include "albumiconitem.h"
 #include "imageinfo.h"
 #include "imagepropertiessidebardb.h"
+#include "dpopupmenu.h"
 #include "tagspopupmenu.h"
+#include "ratingpopupmenu.h"
 #include "setup.h"
 #include "setupimgplugins.h"
 #include "iccsettingscontainer.h"
@@ -120,8 +121,6 @@ public:
     // If image editor is launched by camera interface, current
     // image cannot be saved.
     bool                      allowSaving;
-
-    QPixmap                   ratingPixmap;
 
     KURL::List                urlList;
     KURL                      urlCurrent;
@@ -167,21 +166,6 @@ ImageWindow::ImageWindow()
 {
     d = new ImageWindowPriv;
     m_instance = this;
-
-    // -- Load rating Pixmap ------------------------------------------
-
-    KGlobal::dirs()->addResourceType("digikam_rating",
-                                     KGlobal::dirs()->kde_default("data")
-                                     + "digikam/data");
-    QString ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating",
-                                                             "rating.png");
-    ratingPixPath += "/rating.png";
-    d->ratingPixmap = QPixmap(ratingPixPath);
-
-    QPainter painter(&d->ratingPixmap);
-    painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
-                     ThemeEngine::instance()->textSpecialRegColor());
-    painter.end();
 
     // -- Build the GUI -------------------------------
 
@@ -554,9 +538,9 @@ void ImageWindow::slotContextMenu()
 {
     if (d->contextMenu)
     {
-        QPopupMenu    *ratingMenu     = 0;
-        TagsPopupMenu *assignTagsMenu = 0;
-        TagsPopupMenu *removeTagsMenu = 0;
+        RatingPopupMenu *ratingMenu     = 0;
+        TagsPopupMenu   *assignTagsMenu = 0;
+        TagsPopupMenu   *removeTagsMenu = 0;
         int separatorID1 = -1;
         int separatorID2 = -1;
 
@@ -590,26 +574,10 @@ void ImageWindow::slotContextMenu()
 
             // Assign Star Rating -------------------------------------------
         
-            ratingMenu = new QPopupMenu();
+            ratingMenu = new RatingPopupMenu();
             
             connect(ratingMenu, SIGNAL(activated(int)),
                     this, SLOT(slotAssignRating(int)));
-        
-            ratingMenu->insertItem(i18n("None"), 0);
-
-            for (int i = 1 ; i <= 5 ; i++)
-            {
-                QPixmap pix(d->ratingPixmap.width() * 5, d->ratingPixmap.height());
-                pix.fill(ratingMenu->colorGroup().background());
-        
-                QPainter painter(&pix);
-                painter.drawTiledPixmap(0, 0,
-                                        i*d->ratingPixmap.width(),
-                                        pix.height(),
-                                        d->ratingPixmap);
-                painter.end();
-                ratingMenu->insertItem(pix, i);
-            }
         
             d->contextMenu->insertItem(i18n("Assign Rating"), ratingMenu);
         }

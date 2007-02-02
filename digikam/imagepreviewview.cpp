@@ -32,9 +32,8 @@
 #include <kservice.h>
 #include <krun.h>
 #include <ktrader.h>
-#include <kstandarddirs.h>
-#include <kiconloader.h>
 #include <kmimetype.h>
+#include <kiconloader.h>
 
 // Local includes.
 
@@ -43,9 +42,10 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "imageinfo.h"
-#include "dpopupmenu.h"
 #include "dmetadata.h"
+#include "dpopupmenu.h"
 #include "tagspopupmenu.h"
+#include "ratingpopupmenu.h"
 #include "themeengine.h"
 #include "imagepreviewview.h"
 #include "imagepreviewview.moc"
@@ -63,8 +63,6 @@ public:
         imageInfo          = 0;
     }
 
-    QPixmap             ratingPixmap;
-
     ImageInfo          *imageInfo;
 
     ImagePreviewWidget *imagePreviewWidget;
@@ -79,21 +77,6 @@ ImagePreviewView::ImagePreviewView(QWidget *parent)
     setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain); 
     setMargin(0); 
     setLineWidth(1); 
-
-    // -- Load rating Pixmap ------------------------------------------
-
-    KGlobal::dirs()->addResourceType("digikam_rating",
-                                     KGlobal::dirs()->kde_default("data")
-                                     + "digikam/data");
-    QString ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating",
-                                                             "rating.png");
-    ratingPixPath += "/rating.png";
-    d->ratingPixmap = QPixmap(ratingPixPath);
-
-    QPainter painter(&d->ratingPixmap);
-    painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
-                     ThemeEngine::instance()->textSpecialRegColor());
-    painter.end();
 
     // ----------------------------------------------------------------
 
@@ -136,9 +119,9 @@ void ImagePreviewView::mousePressEvent(QMouseEvent* e)
 {
     if (e->button() == Qt::RightButton)
     {
-        QPopupMenu    *ratingMenu     = 0;
-        TagsPopupMenu *assignTagsMenu = 0;
-        TagsPopupMenu *removeTagsMenu = 0;
+        RatingPopupMenu *ratingMenu     = 0;
+        TagsPopupMenu   *assignTagsMenu = 0;
+        TagsPopupMenu   *removeTagsMenu = 0;
 
         if (!d->imageInfo)
             return;
@@ -205,26 +188,10 @@ void ImagePreviewView::mousePressEvent(QMouseEvent* e)
 
         // Assign Star Rating -------------------------------------------
     
-        ratingMenu = new QPopupMenu();
+        ratingMenu = new RatingPopupMenu();
         
         connect(ratingMenu, SIGNAL(activated(int)),
                 this, SLOT(slotAssignRating(int)));
-    
-        ratingMenu->insertItem(i18n("None"), 0);
-
-        for (int i = 1 ; i <= 5 ; i++)
-        {
-            QPixmap pix(d->ratingPixmap.width() * 5, d->ratingPixmap.height());
-            pix.fill(ratingMenu->colorGroup().background());
-    
-            QPainter painter(&pix);
-            painter.drawTiledPixmap(0, 0,
-                                    i*d->ratingPixmap.width(),
-                                    pix.height(),
-                                    d->ratingPixmap);
-            painter.end();
-            ratingMenu->insertItem(pix, i);
-        }
     
         popmenu.insertItem(i18n("Assign Rating"), ratingMenu);
 
