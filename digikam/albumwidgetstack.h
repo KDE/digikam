@@ -32,12 +32,14 @@
 
 #include "digikam_export.h"
 
+class KURL::List;
+
 namespace Digikam
 {
 
 class ImageInfo;
 class AlbumIconView;
-class ImagePreviewWidget;
+class ImagePreviewView;
 class AlbumWidgetStackPriv;
 
 class DIGIKAM_EXPORT AlbumWidgetStack : public QWidgetStack
@@ -59,7 +61,8 @@ public:
     AlbumWidgetStack(QWidget *parent=0);
     ~AlbumWidgetStack();
 
-    AlbumIconView *albumIconView();
+    AlbumIconView    *albumIconView();
+    ImagePreviewView *imagePreviewView();
 
     void setPreviewItem(ImageInfo* info=0, bool hasPrev=false, bool hasNext=false);
     int  previewMode(void);
@@ -76,6 +79,7 @@ signals:
 public slots:
 
     void slotEscapePreview();
+    void slotItemsUpdated(const KURL::List&);
 
 private slots:
 

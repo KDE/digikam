@@ -87,7 +87,13 @@ ImagePreviewWidget::~ImagePreviewWidget()
     delete d;
 }
 
-void ImagePreviewWidget::setImagePath( const QString& path )
+void ImagePreviewWidget::reload()
+{
+    // TODO: remove the current preview image from cache before to reload it.
+    setImagePath(d->path);
+}
+
+void ImagePreviewWidget::setImagePath(const QString& path)
 {
     setCursor( KCursor::waitCursor() );
     d->path = path;

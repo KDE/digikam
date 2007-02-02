@@ -25,6 +25,7 @@
 
 // KDE includes.
 
+#include <kurl.h>
 #include <khtmlview.h>
 
 // Local includes.
@@ -113,6 +114,11 @@ AlbumIconView* AlbumWidgetStack::albumIconView()
     return d->albumIconView;
 }
 
+ImagePreviewView* AlbumWidgetStack::imagePreviewView()
+{
+    return d->imagePreviewView;
+}
+
 void AlbumWidgetStack::setPreviewItem(ImageInfo* info, bool hasPrev, bool hasNext)
 {
     if (!info)
@@ -121,9 +127,7 @@ void AlbumWidgetStack::setPreviewItem(ImageInfo* info, bool hasPrev, bool hasNex
             d->mediaPlayerView->setMediaPlayerFromUrl(KURL());
         else if (previewMode() == PreviewImageMode)
         {
-            //FIXME
             d->imagePreviewView->setImageInfo();
-            //slotPreviewLoaded();
         }
     }    
     else
@@ -174,6 +178,20 @@ void AlbumWidgetStack::setPreviewMode(int mode)
 void AlbumWidgetStack::slotPreviewLoaded()
 {
     setPreviewMode(PreviewImageMode);
+}
+
+void AlbumWidgetStack::slotItemsUpdated(const KURL::List& list)
+{
+    // If item are updated from Icon View, and if we are in Preview Mode,
+    // We will check if the current item preview need to be reloaded.
+
+    if (previewMode() == AlbumWidgetStack::PreviewAlbumMode ||
+        previewMode() == AlbumWidgetStack::WelcomePageMode  ||
+        previewMode() == AlbumWidgetStack::MediaPlayerMode)    // What we can do with media player ?
+        return;
+
+    if (list.contains(imagePreviewView()->getImageInfo()->kurl()))
+        d->imagePreviewView->reload();
 }
 
 }  // namespace Digikam

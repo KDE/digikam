@@ -122,6 +122,7 @@ signals:
     void signalCleared();
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
+    void signalItemsUpdated(const KURL::List&);
 
 public slots:
 

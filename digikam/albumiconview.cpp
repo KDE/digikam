@@ -1484,6 +1484,8 @@ void AlbumIconView::refreshItems(const KURL::List& urlList)
         LoadingCacheInterface::cleanFromCache((*it).path());
     }
 
+    emit signalItemsUpdated(urlList);
+
     // trigger a delayed update, in case we need to resort items
     triggerUpdate();
 }

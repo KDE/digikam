@@ -45,6 +45,9 @@ public:
     ~ImagePreviewView();    
            
     void setImageInfo(ImageInfo* info=0, bool hasPrev=false, bool hasNext=false);
+    ImageInfo* getImageInfo();
+
+    void reload();
 
 signals:
 

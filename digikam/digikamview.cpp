@@ -61,7 +61,6 @@
 #include "batchsyncmetadata.h"
 #include "sidebar.h"
 #include "imagepropertiessidebardb.h"
-#include "imagepreviewwidget.h"
 #include "datefolderview.h"
 #include "tagfolderview.h"
 #include "searchfolderview.h"
@@ -231,6 +230,9 @@ void DigikamView::setupConnections()
             this, SLOT(slotAlbumRenamed(Album*)));
 
     // -- IconView Connections -------------------------------------
+
+    connect(d->iconView, SIGNAL(signalItemsUpdated(const KURL::List&)),
+            d->albumWidgetStack, SLOT(slotItemsUpdated(const KURL::List&)));
 
     connect(d->iconView, SIGNAL(signalItemsAdded()),
             this, SLOT(slotImageSelected()));
@@ -860,7 +862,8 @@ void DigikamView::slotAlbumHighlight()
 
 void DigikamView::slotEscapePreview()
 {
-    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode ||
+        d->albumWidgetStack->previewMode() == AlbumWidgetStack::WelcomePageMode)
         return;
 
     AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());

@@ -123,6 +123,16 @@ void ImagePreviewView::setImageInfo(ImageInfo* info, bool hasPrev, bool hasNext)
         d->imagePreviewWidget->setImagePath(); 
 }
 
+ImageInfo* ImagePreviewView::getImageInfo()
+{
+    return d->imageInfo;
+}
+
+void ImagePreviewView::reload()
+{
+    d->imagePreviewWidget->reload();
+}
+
 void ImagePreviewView::mousePressEvent(QMouseEvent* e)
 {
     if (e->button() == Qt::RightButton)

@@ -50,6 +50,7 @@ public:
     ~ImagePreviewWidget();
 
     void setImagePath(const QString& path=QString::null);
+    void reload();
 
 signals:
 
