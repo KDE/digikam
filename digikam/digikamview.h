@@ -62,20 +62,22 @@ signals:
 
     void signalAlbumSelected(bool val);
     void signalTagSelected(bool val);
-    void signalImageSelected(const QPtrList<ImageInfo>& list, bool hasPrevious, bool hasNext);
+    void signalImageSelected(const QPtrList<ImageInfo>& list, bool, bool);
     void signalNoCurrentItem();
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
 
 public slots:
 
-    void slot_newAlbum();
-    void slot_sortAlbums(int order);
-    void slot_deleteAlbum();
-    void slot_thumbSizePlus();
-    void slot_thumbSizeMinus();
+    // View Action slots
+    void slotThumbSizePlus();
+    void slotThumbSizeMinus();
 
     // Album action slots
+    void slotNewAlbum();
+    void slotSortAlbums(int order);
+    void slotDeleteAlbum();
+    void slotSelectAlbum(const KURL &url);
     void slotAlbumPropsEdit();
     void slotAlbumAddImages();
     void slotAlbumOpenInKonqui();
@@ -87,7 +89,7 @@ public slots:
     void slotAlbumRenamed(Album *album);
     void slotAlbumSyncPicturesMetadata();
     void slotAlbumSyncPicturesMetadataDone();
-    void slotSelectAlbum(const KURL &url);
+    void slotAlbumSelected(Album* album);
 
     // Tag action slots
     void slotNewTag();
@@ -111,8 +113,6 @@ public slots:
     void slotSelectNone();
     void slotSelectInvert();
     void slotSortImages(int order);
-
-    void slot_albumSelected(Album* album);
 
     // Image Rating slots
     void slotAssignRating(int rating);

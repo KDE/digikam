@@ -458,7 +458,7 @@ void DigikamApp::setupActions()
                                    "albumfolder-new",
                                    KStdAccel::shortcut(KStdAccel::New),
                                    d->view,
-                                   SLOT(slot_newAlbum()),
+                                   SLOT(slotNewAlbum()),
                                    actionCollection(),
                                    "album_new");
     d->newAction->setWhatsThis(i18n("This option creates a new empty Album in the database."));
@@ -470,7 +470,7 @@ void DigikamApp::setupActions()
                                     "album_sort");
 
     connect(d->albumSortAction, SIGNAL(activated(int)),
-            d->view, SLOT(slot_sortAlbums(int)));
+            d->view, SLOT(slotSortAlbums(int)));
 
     // Use same list order as in albumsettings enum
     QStringList sortActionList;
@@ -483,7 +483,7 @@ void DigikamApp::setupActions()
                                     "editdelete",
                                     0,
                                     d->view,
-                                    SLOT(slot_deleteAlbum()),
+                                    SLOT(slotDeleteAlbum()),
                                     actionCollection(),
                                     "album_delete");
 
@@ -735,7 +735,7 @@ void DigikamApp::setupActions()
                                    "viewmag+",
                                    CTRL+Key_Plus,
                                    d->view,
-                                   SLOT(slot_thumbSizePlus()),
+                                   SLOT(slotThumbSizePlus()),
                                    actionCollection(),
                                    "album_thumbSizeIncrease");
     d->thumbSizePlusAction->setWhatsThis(i18n("This option allows you to increase "
@@ -745,7 +745,7 @@ void DigikamApp::setupActions()
                                    "viewmag-",
                                    CTRL+Key_Minus,
                                    d->view,
-                                   SLOT(slot_thumbSizeMinus()),
+                                   SLOT(slotThumbSizeMinus()),
                                    actionCollection(),
                                    "album_thumbSizeDecrease");
     d->thumbSizeMinusAction->setWhatsThis(i18n("This option allows you to decrease "
@@ -1554,7 +1554,7 @@ void DigikamApp::loadPlugins()
     d->kipiInterface->slotCurrentAlbumChanged(d->albumManager->currentAlbum());
 
     // Setting the initial menu options after all plugins have been loaded
-    d->view->slot_albumSelected(d->albumManager->currentAlbum());
+    d->view->slotAlbumSelected(d->albumManager->currentAlbum());
 
     d->imagePluginsLoader = new ImagePluginLoader(this, d->splashScreen);
 }

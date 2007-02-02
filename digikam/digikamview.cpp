@@ -213,7 +213,7 @@ void DigikamView::setupConnections()
     // -- AlbumManager connections --------------------------------
 
     connect(d->albumManager, SIGNAL(signalAlbumCurrentChanged(Album*)),
-            this, SLOT(slot_albumSelected(Album*)));
+            this, SLOT(slotAlbumSelected(Album*)));
 
     connect(d->albumManager, SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotAlbumsCleared()));
@@ -401,10 +401,10 @@ void DigikamView::slotAllAlbumsLoaded()
     d->rightSideBar->loadViewState();
     d->rightSideBar->populateTags();
 
-    slot_albumSelected(album);
+    slotAlbumSelected(album);
 }
 
-void DigikamView::slot_sortAlbums(int order)
+void DigikamView::slotSortAlbums(int order)
 {
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
@@ -412,12 +412,12 @@ void DigikamView::slot_sortAlbums(int order)
     d->folderView->resort();
 }
 
-void DigikamView::slot_newAlbum()
+void DigikamView::slotNewAlbum()
 {
     d->folderView->albumNew();
 }
 
-void DigikamView::slot_deleteAlbum()
+void DigikamView::slotDeleteAlbum()
 {
     d->folderView->albumDelete();
 }
@@ -563,7 +563,7 @@ void DigikamView::slotSelectAlbum(const KURL &)
 
 // ----------------------------------------------------------------
 
-void DigikamView::slot_albumSelected(Album* album)
+void DigikamView::slotAlbumSelected(Album* album)
 {
     //emit signalNoCurrentItem();
 
@@ -665,7 +665,7 @@ void DigikamView::slotAlbumsCleared()
 
 // ----------------------------------------------------------------
 
-void DigikamView::slot_thumbSizePlus()
+void DigikamView::slotThumbSizePlus()
 {
     emit signalNoCurrentItem();
 
@@ -711,7 +711,7 @@ void DigikamView::slot_thumbSizePlus()
     settings->setDefaultIconSize( (int)thumbSize.size() );
 }
 
-void DigikamView::slot_thumbSizeMinus()
+void DigikamView::slotThumbSizeMinus()
 {
     emit signalNoCurrentItem();
 
