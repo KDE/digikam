@@ -81,6 +81,18 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
 
     // -----------------------------------------------------------------
 
+    connect(d->imagePreviewView, SIGNAL(signalNextItem()),
+            this, SIGNAL(signalNextItem()));
+
+    connect(d->imagePreviewView, SIGNAL(signalPrevItem()),
+            this, SIGNAL(signalPrevItem()));
+
+    connect(d->imagePreviewView, SIGNAL( editImageSignal() ),
+            this, SIGNAL( editImageSignal() ) );
+
+    connect(d->imagePreviewView, SIGNAL( signalDeleteItem() ),
+            this, SIGNAL( signalDeleteItem() ) );
+
     connect(d->imagePreviewView, SIGNAL( previewLoadedSignal() ),
             this, SLOT( slotPreviewLoaded() ) );
 }
@@ -101,24 +113,24 @@ AlbumIconView* AlbumWidgetStack::albumIconView()
     return d->albumIconView;
 }
 
-ImagePreviewWidget* AlbumWidgetStack::imagePreviewWidget()
+void AlbumWidgetStack::setPreviewItem(ImageInfo* info)
 {
-    return d->imagePreviewView->imagePreviewWidget();
-}
-
-void AlbumWidgetStack::setPreviewItem(const KURL& url)
-{
-    if (url.isEmpty())
+    if (!info)
     {
         if (previewMode() == MediaPlayerMode)
             d->mediaPlayerView->setMediaPlayerFromUrl(KURL());
         else if (previewMode() == PreviewImageMode)
+        {
+            //FIXME
+            //d->imagePreviewView->setImageInfo();
             slotPreviewLoaded();
+            //setPreviewMode(AlbumWidgetStack::PreviewAlbumMode);
+        }
     }    
     else
     {
         AlbumSettings *settings      = AlbumSettings::instance();
-        QString currentFileExtension = QFileInfo(url.path()).extension(false);
+        QString currentFileExtension = QFileInfo(info->kurl().path()).extension(false);
         QString mediaplayerfilter    = settings->getMovieFileFilter().lower() +
                                        settings->getMovieFileFilter().upper() +
                                        settings->getAudioFileFilter().lower() +
@@ -126,7 +138,7 @@ void AlbumWidgetStack::setPreviewItem(const KURL& url)
         if (mediaplayerfilter.contains(currentFileExtension) )
         {
             setPreviewMode(AlbumWidgetStack::MediaPlayerMode);
-            d->mediaPlayerView->setMediaPlayerFromUrl(url);
+            d->mediaPlayerView->setMediaPlayerFromUrl(info->kurl());
         }
         else
         {
@@ -134,7 +146,7 @@ void AlbumWidgetStack::setPreviewItem(const KURL& url)
             if (previewMode() == MediaPlayerMode)
                 setPreviewItem();
 
-            imagePreviewWidget()->setImagePath(url.path());
+            d->imagePreviewView->setImageInfo(info);
 
             // NOTE: No need to toggle imediatly in PreviewImageMode here, 
             // because we will recieve a signal for that when the image preview will be loaded.

@@ -35,6 +35,7 @@
 namespace Digikam
 {
 
+class ImageInfo;
 class AlbumIconView;
 class ImagePreviewWidget;
 class AlbumWidgetStackPriv;
@@ -55,20 +56,22 @@ public:
 
 public:
 
-    AlbumWidgetStack( QWidget *parent=0 );
+    AlbumWidgetStack(QWidget *parent=0);
     ~AlbumWidgetStack();
 
-    AlbumIconView      *albumIconView();
-    ImagePreviewWidget *imagePreviewWidget();
+    AlbumIconView *albumIconView();
 
-    void setPreviewItem(const KURL& url=QString::null);
+    void setPreviewItem(ImageInfo* info=0);
     int  previewMode(void);
     void setPreviewMode(int mode);
 
 signals:
 
+    void signalNextItem();
+    void signalPrevItem();
     void backToAlbumSignal();    
     void editImageSignal();
+    void signalDeleteItem();
 
 public slots:
 

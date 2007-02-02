@@ -44,19 +44,26 @@ public:
     ImagePreviewView(QWidget *parent=0);
     ~ImagePreviewView();    
            
-    ImagePreviewWidget* imagePreviewWidget();
+    void setImageInfo(ImageInfo* info=0);
 
 signals:
 
+    void signalNextItem();
+    void signalPrevItem();
+    void signalDeleteItem();
+    void editImageSignal();
     void previewLoadedSignal();   
 
-public slots:
-
-//    void slotPreviewFailed();
-   
 private slots:
 
     void slotThemeChanged();
+    void slotAssignTag(int tagID);
+    void slotRemoveTag(int tagID);
+    void slotAssignRating(int rating);
+
+private:
+
+    void mousePressEvent(QMouseEvent* e);
 
 private:
 

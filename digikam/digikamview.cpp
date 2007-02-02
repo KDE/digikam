@@ -293,10 +293,10 @@ void DigikamView::setupConnections()
 
     // -- Preview image widget Connections ------------------------
 
-    connect(d->albumWidgetStack->imagePreviewWidget(), SIGNAL(signalNextItem()),
+    connect(d->albumWidgetStack, SIGNAL(signalNextItem()),
             this, SLOT(slotNextItem()));
 
-    connect(d->albumWidgetStack->imagePreviewWidget(), SIGNAL(signalPrevItem()),
+    connect(d->albumWidgetStack, SIGNAL(signalPrevItem()),
             this, SLOT(slotPrevItem()));
     
     connect(d->albumWidgetStack, SIGNAL(backToAlbumSignal()),
@@ -304,6 +304,9 @@ void DigikamView::setupConnections()
     
     connect(d->albumWidgetStack, SIGNAL(editImageSignal()),
             this, SLOT(slotEditImage()));
+
+    connect(d->albumWidgetStack, SIGNAL(signalDeleteItem()),
+            this, SLOT(slot_imageDelete()));
 
     // -- Selection timer ---------------
 
@@ -644,7 +647,7 @@ void DigikamView::slotDispatchImageSelected()
                 d->rightSideBar->takeImageInfoOwnership(true);
 
                 if (!d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
-                    d->albumWidgetStack->setPreviewItem(selectedItem->imageInfo()->kurl());
+                    d->albumWidgetStack->setPreviewItem(selectedItem->imageInfo());
             }
 
             emit signalImageSelected(list, hasPrev, hasNext);
@@ -896,7 +899,7 @@ void DigikamView::slot_imagePreview(AlbumIconItem *iconItem)
             item = iconItem;
         }
 
-        d->albumWidgetStack->setPreviewItem( item->imageInfo()->kurl() );
+        d->albumWidgetStack->setPreviewItem(item->imageInfo());
     }
     else
     {

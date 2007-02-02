@@ -76,7 +76,7 @@ ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
     setLineWidth(0);
     
     // ---------------------------------------------------------------
-            
+
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 }
