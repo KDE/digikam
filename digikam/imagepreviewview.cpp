@@ -167,10 +167,8 @@ void ImagePreviewView::mousePressEvent(QMouseEvent* e)
         popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 12);
         popmenu.insertItem(i18n("Open With"), &openWithMenu, 13);
 
-        /* FIXME
         popmenu.insertSeparator();
         popmenu.insertItem(SmallIcon("edittrash"), i18n("Move to Trash"), 14);
-        */
 
         // Bulk assignment/removal of tags --------------------------
 

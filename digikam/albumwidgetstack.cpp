@@ -122,9 +122,8 @@ void AlbumWidgetStack::setPreviewItem(ImageInfo* info, bool hasPrev, bool hasNex
         else if (previewMode() == PreviewImageMode)
         {
             //FIXME
-            //d->imagePreviewView->setImageInfo();
-            slotPreviewLoaded();
-            //setPreviewMode(AlbumWidgetStack::PreviewAlbumMode);
+            d->imagePreviewView->setImageInfo();
+            //slotPreviewLoaded();
         }
     }    
     else
@@ -174,7 +173,7 @@ void AlbumWidgetStack::setPreviewMode(int mode)
 
 void AlbumWidgetStack::slotPreviewLoaded()
 {
-    setPreviewMode(AlbumWidgetStack::PreviewImageMode);
+    setPreviewMode(PreviewImageMode);
 }
 
 }  // namespace Digikam

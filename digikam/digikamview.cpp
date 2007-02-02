@@ -883,6 +883,7 @@ void DigikamView::slotImagePreview(AlbumIconItem *iconItem)
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
+        // We will toggle to Preview Item Mode.
         AlbumIconItem *item=0;
 
         if (!iconItem)
@@ -900,11 +901,12 @@ void DigikamView::slotImagePreview(AlbumIconItem *iconItem)
         }
 
         bool hasPrev = d->iconView->firstItem() != item;
-        bool hasNext = d->iconView->lastItem() != item;
+        bool hasNext = d->iconView->lastItem()  != item;
         d->albumWidgetStack->setPreviewItem(item->imageInfo(), hasPrev, hasNext);
     }
     else
     {
+        // We go back to Album Mode.
         d->albumWidgetStack->setPreviewMode( AlbumWidgetStack::PreviewAlbumMode );
     }
 }

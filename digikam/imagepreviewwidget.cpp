@@ -94,12 +94,12 @@ void ImagePreviewWidget::setImagePath( const QString& path )
 
     if (d->path.isEmpty())
     {
-        d->pixmap  = QPixmap(contentsRect().size());
+        d->pixmap = QPixmap(contentsRect().size());
 
         updatePixmap();
         update();
         unsetCursor();
-        emit previewFailed();
+        return;
     }
 
     if (!d->previewThread)
