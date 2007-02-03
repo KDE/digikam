@@ -35,6 +35,11 @@
 #include <kmimetype.h>
 #include <kiconloader.h>
 
+// LibKipi includes.
+
+#include <libkipi/pluginloader.h>
+#include <libkipi/plugin.h>
+
 // Local includes.
 
 #include "ddebug.h"
@@ -144,7 +149,7 @@ void ImagePreviewView::mousePressEvent(QMouseEvent* e)
         if (!d->imageInfo)
             return;
 
-        // --------------------------------------------------------
+        //-- Open With Actions ------------------------------------
     
         KURL url(d->imageInfo->kurl().path());
         KMimeType::Ptr mimePtr = KMimeType::findByURL(url, 0, true, true);
@@ -165,7 +170,7 @@ void ImagePreviewView::mousePressEvent(QMouseEvent* e)
             serviceVector.push_back(ptr);
         }
 
-        // --------------------------------------------------------
+        //-- Navigate actions -------------------------------------------
 
         DPopupMenu popmenu(this);
         popmenu.insertItem(SmallIcon("back"), i18n("Back"), 10);
@@ -173,9 +178,44 @@ void ImagePreviewView::mousePressEvent(QMouseEvent* e)
 
         popmenu.insertItem(SmallIcon("forward"), i18n("Forward"), 11);
         if (!d->hasNext) popmenu.setItemEnabled(11, false);
- 
+
+        //-- Edit actions -----------------------------------------------
+
+        popmenu.insertSeparator();
         popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 12);
         popmenu.insertItem(i18n("Open With"), &openWithMenu, 13);
+
+        // Merge in the KIPI plugins actions ----------------------------
+
+        KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
+        KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
+        
+        for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.begin();
+            it != pluginList.end(); ++it)
+        {
+            KIPI::Plugin* plugin = (*it)->plugin();
+    
+            if (plugin && (*it)->name() == "JPEGLossless")
+            {
+                DDebug() << "Found JPEGLossless plugin" << endl;
+    
+                KActionPtrList actionList = plugin->actions();
+                
+                for (KActionPtrList::const_iterator iter = actionList.begin();
+                    iter != actionList.end(); ++iter)
+                {
+                    KAction* action = *iter;
+                    
+                    if (QString::fromLatin1(action->name())
+                        == QString::fromLatin1("jpeglossless_rotate"))
+                    {
+                        action->plug(&popmenu);
+                    }
+                }
+            }
+        }
+
+        //-- Trash action -------------------------------------------
 
         popmenu.insertSeparator();
         popmenu.insertItem(SmallIcon("edittrash"), i18n("Move to Trash"), 14);
