@@ -89,7 +89,7 @@ ImagePreviewWidget::~ImagePreviewWidget()
 
 void ImagePreviewWidget::reload()
 {
-    // TODO: remove the current preview image from cache before to reload it.
+    // cache is cleaned from AlbumIconView::refreshItems
     setImagePath(d->path);
 }
 

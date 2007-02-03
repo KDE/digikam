@@ -34,7 +34,11 @@ void LoadingCacheInterface::cleanFromCache(const QString &filePath)
 {
     LoadingCache *cache = LoadingCache::cache();
     LoadingCache::CacheLock lock(cache);
-    cache->removeImage(filePath);
+    QStringList possibleCacheKeys = LoadingDescription::possibleCacheKeys(filePath);
+    for (QStringList::iterator it = possibleCacheKeys.begin(); it != possibleCacheKeys.end(); ++it)
+    {
+        cache->removeImage(*it);
+    }
 }
 
 void LoadingCacheInterface::cleanCache()

@@ -6,6 +6,7 @@ libthreadimageio_la_SOURCES = loadsavethread.cpp \
                               managedloadsavethread.cpp \
                               sharedloadsavethread.cpp \
                               previewloadthread.cpp \
+                              loadingdescription.cpp \
                               loadsavetask.cpp \
                               previewtask.cpp \
                               loadingcache.cpp \

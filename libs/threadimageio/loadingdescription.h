@@ -118,6 +118,12 @@ public:
         or is superior to it, if the other one is a reduced version
     */
     bool equalsOrBetterThan(const LoadingDescription &other) const;
+
+    /*
+        Returns all possible cacheKeys for the given file path
+        (all cache keys under which the given file could be stored in the cache).
+    */
+    static QStringList possibleCacheKeys(const QString &filePath);
 };
 
 }   // namespace Digikam
