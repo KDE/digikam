@@ -68,7 +68,7 @@ signals:
 
 protected:
 
-    void setupNavigateBar(bool navBar);
+    void setupNavigateBar(bool withBar);
 
 protected:
 

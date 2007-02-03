@@ -143,7 +143,7 @@ DigikamView::DigikamView(QWidget *parent)
     d->iconView = d->albumWidgetStack->albumIconView();
 
     d->rightSideBar = new ImagePropertiesSideBarDB(this, "Digikam Right Sidebar", d->splitter, 
-                                                   Sidebar::Right, true, false);
+                                                   Sidebar::Right, true);
 
     // To the left.
     d->folderView       = new AlbumFolderView(this);
@@ -645,13 +645,8 @@ void DigikamView::slotDispatchImageSelected()
             // we fed a list of copies
             d->rightSideBar->takeImageInfoOwnership(true);
 
-            if (list.count() == 1)
-            {
-                d->rightSideBar->setPreviousNextState(hasPrev, hasNext);
-
-                if (!d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
-                    d->albumWidgetStack->setPreviewItem(selectedItem->imageInfo(), hasPrev, hasNext);
-            }
+            if (!d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+                d->albumWidgetStack->setPreviewItem(selectedItem->imageInfo(), hasPrev, hasNext);
 
             emit signalImageSelected(list, hasPrev, hasNext);
         }

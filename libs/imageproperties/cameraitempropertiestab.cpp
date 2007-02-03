@@ -281,8 +281,6 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
 {
     if (!itemInfo)
     {
-        setNavigateBarFileName();
-
         d->labelFolder->setText(QString::null);
         d->labelFileIsReadable->setText(QString::null);
         d->labelFileIsWritable->setText(QString::null);

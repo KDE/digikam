@@ -43,7 +43,6 @@
 #include "themeengine.h"
 #include "albumiconitem.h"
 #include "albumiconview.h"
-#include "navigatebarwidget.h"
 #include "imagedescedittab.h"
 #include "imageattributeswatch.h"
 #include "imagepropertiestab.h"
@@ -81,22 +80,19 @@ public:
 };
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *name, QSplitter *splitter, 
-                                                   Side side, bool mimimizedDefault, bool navBar)
-                        : ImagePropertiesSideBar(parent, name, splitter, side, mimimizedDefault, navBar)
+                                                   Side side, bool mimimizedDefault)
+                        : ImagePropertiesSideBar(parent, name, splitter, side, mimimizedDefault, false)
 {
+    // Navigate bar is disabled by passing false to parent class constructor, and tab constructors
+
     d = new ImagePropertiesSideBarDBPriv;
-    d->desceditTab = new ImageDescEditTab(parent, navBar);
+    d->desceditTab = new ImageDescEditTab(parent, false);
 
     appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Comments/Tags"));
 
     slotThemeChanged();
 
     // ----------------------------------------------------------
-
-    connectTab(m_propertiesTab);
-    connectTab(m_metadataTab);
-    connectTab(m_colorTab);
-    connectTab(d->desceditTab);
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
@@ -119,21 +115,6 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *
 ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
 {
     delete d;
-}
-
-void ImagePropertiesSideBarDB::connectTab(NavigateBarTab *tab)
-{
-    connect(tab, SIGNAL(signalFirstItem()),
-            this, SIGNAL(signalFirstItem()));
-
-    connect(tab, SIGNAL(signalPrevItem()),
-            this, SIGNAL(signalPrevItem()));
-
-    connect(tab, SIGNAL(signalNextItem()),
-            this, SIGNAL(signalNextItem()));
-
-    connect(tab, SIGNAL(signalLastItem()),
-            this, SIGNAL(signalLastItem()));
 }
 
 void ImagePropertiesSideBarDB::itemChanged(ImageInfo *info,
@@ -228,23 +209,12 @@ void ImagePropertiesSideBarDB::slotNoCurrentItem(void)
     ImagePropertiesSideBar::slotNoCurrentItem();
     d->currentInfos.clear();
     d->desceditTab->setItem();
-    d->desceditTab->setNavigateBarFileName();
     d->dirtyDesceditTab = false;
 }
 
 void ImagePropertiesSideBarDB::populateTags(void)
 {
     d->desceditTab->populateTags();
-}
-
-void ImagePropertiesSideBarDB::setPreviousNextState(bool hasPrevious, bool hasNext)
-{
-    d->hasPrevious = hasPrevious;
-    d->hasNext     = hasNext;
-
-    NavigateBarTab *navtab = dynamic_cast<NavigateBarTab *>(getActiveTab());
-    if (navtab)
-        navtab->setNavigateBarState(d->hasPrevious, d->hasNext);
 }
 
 void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
@@ -334,26 +304,6 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         {
             d->desceditTab->setItems(d->currentInfos);
             d->dirtyDesceditTab = true;
-        }
-    }
-
-    // setting of NavigateBar, common for all tabs
-    // there may be tabs added that we don't know of
-    NavigateBarTab *navtab = dynamic_cast<NavigateBarTab *>(tab);
-    if (navtab)
-    {
-        if (d->currentInfos.count() == 1)
-        {
-            navtab->setNavigateBarState(d->hasPrevious, d->hasNext);
-            navtab->setNavigateBarFileName(m_currentURL.filename());
-        }
-        else
-        {
-            navtab->setNavigateBarState(false, false);
-            if (tab == d->desceditTab)
-                navtab->setLabelText(i18n("<qt>Editing <b>%1</b> pictures</qt>").arg(d->currentInfos.count()));
-            else
-                navtab->setLabelText(i18n("<qt><b>%1</b> pictures selected</qt>").arg(d->currentInfos.count()));
         }
     }
 

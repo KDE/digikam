@@ -102,31 +102,10 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent, cons
     slotThemeChanged();
 
     // ----------------------------------------------------------
-    
-    connect(d->cameraItemTab, SIGNAL(signalFirstItem()),
-            this, SIGNAL(signalFirstItem()));
-                    
-    connect(d->cameraItemTab, SIGNAL(signalPrevItem()),
-            this, SIGNAL(signalPrevItem()));
-    
-    connect(d->cameraItemTab, SIGNAL(signalNextItem()),
-            this, SIGNAL(signalNextItem()));
 
-    connect(d->cameraItemTab, SIGNAL(signalLastItem()),
-            this, SIGNAL(signalLastItem()));
+    connectNavigateSignals(d->cameraItemTab);
+    connectNavigateSignals(d->metadataTab);
 
-    connect(d->metadataTab, SIGNAL(signalFirstItem()),
-            this, SIGNAL(signalFirstItem()));
-                    
-    connect(d->metadataTab, SIGNAL(signalPrevItem()),
-            this, SIGNAL(signalPrevItem()));
-    
-    connect(d->metadataTab, SIGNAL(signalNextItem()),
-            this, SIGNAL(signalNextItem()));
-
-    connect(d->metadataTab, SIGNAL(signalLastItem()),
-            this, SIGNAL(signalLastItem()));
-                            
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
 
@@ -137,6 +116,21 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent, cons
 ImagePropertiesSideBarCamGui::~ImagePropertiesSideBarCamGui()
 {
     delete d;
+}
+
+void ImagePropertiesSideBarCamGui::connectNavigateSignals(NavigateBarTab *tab)
+{
+    connect(tab, SIGNAL(signalFirstItem()),
+            this, SIGNAL(signalFirstItem()));
+
+    connect(tab, SIGNAL(signalPrevItem()),
+            this, SIGNAL(signalPrevItem()));
+
+    connect(tab, SIGNAL(signalNextItem()),
+            this, SIGNAL(signalNextItem()));
+
+    connect(tab, SIGNAL(signalLastItem()),
+            this, SIGNAL(signalLastItem()));
 }
 
 void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KURL& url,

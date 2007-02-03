@@ -58,7 +58,7 @@ class DIGIKAM_EXPORT ImagePropertiesSideBarDB : public ImagePropertiesSideBar
 public:
 
     ImagePropertiesSideBarDB(QWidget* parent, const char *name, QSplitter *splitter, Side side=Left,
-                             bool mimimizedDefault=false, bool navBar=true);
+                             bool mimimizedDefault=false);
 
     ~ImagePropertiesSideBarDB();
 
@@ -67,7 +67,6 @@ public:
     virtual void itemChanged(ImageInfo *info, const QRect &rect = QRect(), DImg *img = 0);
     virtual void itemChanged(QPtrList<ImageInfo> infos);
 
-    void setPreviousNextState(bool hasPrevious, bool hasNext);
     void takeImageInfoOwnership(bool takeOwnership);
 
     void populateTags(void);
@@ -103,7 +102,6 @@ private:
 
     void itemChanged(const KURL& url, ImageInfo *info,
                      const QRect &rect, DImg *img);
-    void connectTab(NavigateBarTab *tab);
 
 private:
 

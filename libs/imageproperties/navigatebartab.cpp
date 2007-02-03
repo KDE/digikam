@@ -66,16 +66,16 @@ NavigateBarTab::~NavigateBarTab()
     delete d;
 }
 
-void NavigateBarTab::setupNavigateBar(bool navBar)
+void NavigateBarTab::setupNavigateBar(bool withBar)
 {
     m_navigateBarLayout = new QVBoxLayout(this);
-    d->stack            = new QWidgetStack(this);
 
-    if (navBar)
+    if (withBar)
     {
+        d->stack = new QWidgetStack(this);
         m_navigateBarLayout->addWidget(d->stack);
 
-        d->navigateBar  = new NavigateBarWidget(d->stack, navBar);
+        d->navigateBar  = new NavigateBarWidget(d->stack, withBar);
         d->stack->addWidget(d->navigateBar);
 
         connect(d->navigateBar, SIGNAL(signalFirstItem()),
@@ -89,11 +89,11 @@ void NavigateBarTab::setupNavigateBar(bool navBar)
 
         connect(d->navigateBar, SIGNAL(signalLastItem()),
                 this, SIGNAL(signalLastItem()));
-    }
 
-    d->label = new QLabel(d->stack);
-    d->label->setAlignment(Qt::AlignCenter);
-    d->stack->addWidget(d->label);
+        d->label = new QLabel(d->stack);
+        d->label->setAlignment(Qt::AlignCenter);
+        d->stack->addWidget(d->label);
+    }
 }
 
 void NavigateBarTab::setNavigateBarState(bool hasPrevious, bool hasNext)
@@ -133,6 +133,9 @@ void NavigateBarTab::setNavigateBarFileName(const QString &name)
 
 void NavigateBarTab::setLabelText(const QString &text)
 {
+    if (!d->label)
+        return;
+
     d->stack->raiseWidget(d->label);
     d->label->setText(text);
 }

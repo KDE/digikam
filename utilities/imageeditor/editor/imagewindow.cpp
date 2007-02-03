@@ -287,7 +287,7 @@ void ImageWindow::setupUserArea()
     m_canvas->setSizePolicy(rightSzPolicy);
 
     d->rightSidebar  = new ImagePropertiesSideBarDB(widget, "ImageEditor Right Sidebar", m_splitter,
-                                                    Sidebar::Right, true, false);
+                                                    Sidebar::Right, true);
     lay->addWidget(m_splitter);
     lay->addWidget(d->rightSidebar);
 
@@ -612,18 +612,12 @@ void ImageWindow::slotChanged()
 
         if (d->imageInfoCurrent)
         {
-            KURL::List::iterator it = d->urlList.find(d->urlCurrent);
-            bool hasPrevious = it != d->urlList.end();
-            bool hasNext     = it != d->urlList.begin();
-
             d->rightSidebar->itemChanged(d->imageInfoCurrent,
                                          m_canvas->getSelectedArea(), img);
-            d->rightSidebar->setPreviousNextState(hasPrevious, hasNext);
         }
         else
         {
             d->rightSidebar->itemChanged(d->urlCurrent, m_canvas->getSelectedArea(), img);
-            d->rightSidebar->setPreviousNextState(false, false);
         }
     }
 }

@@ -156,7 +156,6 @@ void ImagePropertiesMetaDataTab::setCurrentURL(const KURL& url)
         d->makernoteWidget->loadFromURL(url);
         d->iptcWidget->loadFromURL(url);
         d->gpsWidget->loadFromURL(url);
-        setNavigateBarFileName();
         setEnabled(false);
         return;
     }
@@ -183,7 +182,6 @@ void ImagePropertiesMetaDataTab::setCurrentData(const QByteArray& exifData,
         d->makernoteWidget->loadFromData(filename, exifData);
         d->iptcWidget->loadFromData(filename, iptcData);
         d->gpsWidget->loadFromData(filename, exifData);
-        setNavigateBarFileName();
         setEnabled(false);
         return;
     }
