@@ -23,6 +23,7 @@
 #include <qstring.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qbitmap.h>
 
 // KDE includes.
 
@@ -42,33 +43,29 @@ namespace Digikam
 RatingPopupMenu::RatingPopupMenu(QWidget* parent)
                : QPopupMenu(parent)
 {
-    // -- Load rating Pixmap ------------------------------------------
-
-    KGlobal::dirs()->addResourceType("digikam_rating",
-                                     KGlobal::dirs()->kde_default("data")
-                                     + "digikam/data");
+    KGlobal::dirs()->addResourceType("digikam_rating", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating", "rating.png");
     ratingPixPath += "/rating.png";
-    QPixmap ratingPixmap(ratingPixPath);
-
-    QPainter painter(&ratingPixmap);
-    painter.fillRect(0, 0, ratingPixmap.width(), ratingPixmap.height(),
-                     ThemeEngine::instance()->textSpecialRegColor());
-    painter.end();
-
-    // ----------------------------------------------------------------
 
     insertItem(i18n("None"), 0);
 
+    QBitmap starbm(ratingPixPath);
+    QBitmap clearbm(starbm.width(), starbm.height(), true);    
+
     for (int i = 1 ; i <= 5 ; i++)
     {
-        QPixmap pix(ratingPixmap.width() * 5, ratingPixmap.height());
-        pix.fill(colorGroup().background());
-
-        QPainter painter(&pix);
-        painter.drawTiledPixmap(0, 0, i*ratingPixmap.width(), 
-                                pix.height(), ratingPixmap);
+        QPixmap pix(starbm.width() * 5, starbm.height());
+        pix.fill(ThemeEngine::instance()->textSpecialRegColor());
+        QBitmap mask(starbm.width() * 5, starbm.height());
+        QPainter painter(&mask);
+        painter.drawTiledPixmap(0, 0, 
+                                i*starbm.width(), pix.height(), 
+                                starbm);
+        painter.drawTiledPixmap(i*starbm.width(), 0, 
+                                5*starbm.width()-i*starbm.width(), pix.height(), 
+                                clearbm);
         painter.end();
+        pix.setMask(mask);
         insertItem(pix, i);
     }
 }
