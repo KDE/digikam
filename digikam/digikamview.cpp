@@ -642,11 +642,12 @@ void DigikamView::slotDispatchImageSelected()
             AlbumIconItem *selectedItem = d->iconView->firstSelectedItem();
             bool hasPrev = d->iconView->firstItem() != selectedItem;
             bool hasNext = d->iconView->lastItem() != selectedItem;
+            // we fed a list of copies
+            d->rightSideBar->takeImageInfoOwnership(true);
+
             if (list.count() == 1)
             {
                 d->rightSideBar->setPreviousNextState(hasPrev, hasNext);
-                // we fed a list of copies
-                d->rightSideBar->takeImageInfoOwnership(true);
 
                 if (!d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
                     d->albumWidgetStack->setPreviewItem(selectedItem->imageInfo(), hasPrev, hasNext);
