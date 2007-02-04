@@ -514,75 +514,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     popmenu.insertItem(SmallIcon("viewimage"), i18n("View..."), 18);
     popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 10);
     popmenu.insertItem(i18n("Open With"), &openWithMenu, 11);
-    popmenu.insertSeparator();
 
-    if (d->currentAlbum)
-    {
-        if (d->currentAlbum->type() == Album::PHYSICAL )
-            popmenu.insertItem(i18n("Set as Album Thumbnail"), 17);
-        else if (d->currentAlbum->type() == Album::TAG )
-            popmenu.insertItem(i18n("Set as Tag Thumbnail"), 17);
-    }
-
-    popmenu.insertSeparator();
-    
-    KAction *copy     = KStdAction::copy(this, SLOT(slotCopy()), 0);
-    KAction *paste    = KStdAction::paste(this, SLOT(slotPaste()), 0);
-    QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
-    if(!data || !QUriDrag::canDecode(data))
-    {
-        paste->setEnabled(false);
-    }    
-    copy->plug(&popmenu);
-    paste->plug(&popmenu);
-    
-    popmenu.insertSeparator();
-
-    // Bulk assignment/removal of tags --------------------------
-
-    QValueList<Q_LLONG> selectedImageIDs;
-    
-    for (IconItem *it = firstItem(); it; it=it->nextItem())
-    {
-        if (it->isSelected())
-        {
-            AlbumIconItem *selItem = static_cast<AlbumIconItem *>(it);
-            selectedImageIDs.append(selItem->imageInfo()->id());
-        }
-    }
-
-    TagsPopupMenu* assignTagsPopup = new TagsPopupMenu(selectedImageIDs, 1000, TagsPopupMenu::ASSIGN);
-    TagsPopupMenu* removeTagsPopup = new TagsPopupMenu(selectedImageIDs, 1000, TagsPopupMenu::REMOVE);
-    
-    connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
-            this, SLOT(slotAssignTag(int)));
-            
-    connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
-            this, SLOT(slotRemoveTag(int)));
-
-    popmenu.insertItem(i18n("Assign Tag"), assignTagsPopup);
-
-    int removeTagId = popmenu.insertItem(i18n("Remove Tag"), removeTagsPopup);
-
-    AlbumManager* man = AlbumManager::instance();
-
-    // Performance: Only check for tags if there are <250 images selected
-    if (selectedImageIDs.count() > 250 ||
-        !man->albumDB()->hasTags(selectedImageIDs))
-            popmenu.setItemEnabled(removeTagId, false);
-
-    popmenu.insertSeparator();
-
-    // Assign Star Rating -------------------------------------------
-
-    RatingPopupMenu ratingMenu;
-    
-    connect(&ratingMenu, SIGNAL(activated(int)),
-            this, SLOT(slotAssignRating(int)));
-
-    popmenu.insertItem(i18n("Assign Rating"), &ratingMenu);
-    popmenu.insertSeparator();
-        
     // Merge in the KIPI plugins actions ----------------------------
 
     KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
@@ -616,10 +548,87 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     // --------------------------------------------------------
 
     popmenu.insertItem(SmallIcon("pencil"), i18n("Rename..."), 15);
+    popmenu.insertSeparator();
+
+    // --------------------------------------------------------
+
+    if (d->currentAlbum)
+    {
+        if (d->currentAlbum->type() == Album::PHYSICAL )
+            popmenu.insertItem(i18n("Set as Album Thumbnail"), 17);
+        else if (d->currentAlbum->type() == Album::TAG )
+            popmenu.insertItem(i18n("Set as Tag Thumbnail"), 17);
+    }
+
+    popmenu.insertSeparator();
+
+    // --------------------------------------------------------
+    
+    KAction *copy     = KStdAction::copy(this, SLOT(slotCopy()), 0);
+    KAction *paste    = KStdAction::paste(this, SLOT(slotPaste()), 0);
+    QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
+    if(!data || !QUriDrag::canDecode(data))
+    {
+        paste->setEnabled(false);
+    }    
+    copy->plug(&popmenu);
+    paste->plug(&popmenu);
+    
+    popmenu.insertSeparator();
+
+    // --------------------------------------------------------
+
+    QValueList<Q_LLONG> selectedImageIDs;
+    
+    for (IconItem *it = firstItem(); it; it=it->nextItem())
+    {
+        if (it->isSelected())
+        {
+            AlbumIconItem *selItem = static_cast<AlbumIconItem *>(it);
+            selectedImageIDs.append(selItem->imageInfo()->id());
+        }
+    }
 
     popmenu.insertItem(SmallIcon("edittrash"),
                        i18n("Move to Trash", "Move %n Files to Trash" , selectedImageIDs.count() ), 16);
 
+    popmenu.insertSeparator();
+
+    // Bulk assignment/removal of tags --------------------------
+
+    TagsPopupMenu* assignTagsPopup = new TagsPopupMenu(selectedImageIDs, 1000, TagsPopupMenu::ASSIGN);
+    TagsPopupMenu* removeTagsPopup = new TagsPopupMenu(selectedImageIDs, 1000, TagsPopupMenu::REMOVE);
+    
+    connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
+            this, SLOT(slotAssignTag(int)));
+            
+    connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
+            this, SLOT(slotRemoveTag(int)));
+
+    popmenu.insertItem(i18n("Assign Tag"), assignTagsPopup);
+
+    int removeTagId = popmenu.insertItem(i18n("Remove Tag"), removeTagsPopup);
+
+    AlbumManager* man = AlbumManager::instance();
+
+    // Performance: Only check for tags if there are <250 images selected
+    if (selectedImageIDs.count() > 250 ||
+        !man->albumDB()->hasTags(selectedImageIDs))
+            popmenu.setItemEnabled(removeTagId, false);
+
+    popmenu.insertSeparator();
+
+    // Assign Star Rating -------------------------------------------
+
+    RatingPopupMenu ratingMenu;
+    
+    connect(&ratingMenu, SIGNAL(activated(int)),
+            this, SLOT(slotAssignRating(int)));
+
+    popmenu.insertItem(i18n("Assign Rating"), &ratingMenu);
+
+    // --------------------------------------------------------
+        
     int id = popmenu.exec(pos);
 
     switch(id) 
