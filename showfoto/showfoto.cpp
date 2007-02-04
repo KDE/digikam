@@ -408,6 +408,12 @@ void ShowFoto::setupActions()
 {
     setupStandardActions();
 
+    // Provides a menu entry that allows showing/hiding the toolbar(s)
+    setStandardToolBarMenuEnabled(true);
+
+    // Provides a menu entry that allows showing/hiding the statusbar
+    createStandardStatusBarAction();
+
     // Extra 'File' menu actions ---------------------------------------------
 
     d->fileOpenAction = KStdAction::open(this, SLOT(slotOpenFile()),

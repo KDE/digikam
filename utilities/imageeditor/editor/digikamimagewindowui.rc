@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="9" name="digikamimagewindow" >
+<gui version="10" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -65,6 +65,7 @@
     <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
         <Action name="options_show_toolbar"/>
         <Merge name="StandardToolBarMenuHandler" />
+        <Action name="options_show_statusbar"/>
         <Separator/>
         <Action name="options_configure_keybinding"/>
         <Action name="options_configure_toolbars"/>

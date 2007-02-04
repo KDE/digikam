@@ -302,6 +302,12 @@ void ImageWindow::setupActions()
 {
     setupStandardActions();
 
+    // Provides a menu entry that allows showing/hiding the toolbar(s)
+    setStandardToolBarMenuEnabled(true);
+
+    // Provides a menu entry that allows showing/hiding the statusbar
+    createStandardStatusBarAction();
+
     // -- Rating actions ---------------------------------------------------------------
 
     d->star0 = new KAction(i18n("Assign Rating \"No Star\""), CTRL+Key_0,
