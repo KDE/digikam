@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
- * Date  : 2006-04-19
+ * Authors: Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2006-04-19
  * Description : A tab to display general image informations
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
