@@ -81,6 +81,7 @@ public:
     KURL::List allItems();
     KURL::List selectedItems();
 
+    QPtrList<ImageInfo> allImageInfos(bool copy) const;
     QPtrList<ImageInfo> selectedImageInfos(bool copy) const;
 
     void refresh();
@@ -188,6 +189,7 @@ private:
 
     void updateBannerRectPixmap();
     void updateItemRectsPixmap();
+    void changeTagOnImageInfos(const QPtrList<ImageInfo> &list, const QValueList<int> &tagIDs, bool addOrRemove, bool progress);
 
 private:
 
