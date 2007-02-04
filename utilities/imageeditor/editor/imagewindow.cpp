@@ -74,8 +74,6 @@
 #include "albumdb.h"
 #include "albumsettings.h"
 #include "syncjob.h"
-#include "albumiconview.h"
-#include "albumiconitem.h"
 #include "imageinfo.h"
 #include "imagepropertiessidebardb.h"
 #include "dpopupmenu.h"
