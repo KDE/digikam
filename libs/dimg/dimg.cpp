@@ -1402,8 +1402,12 @@ void DImg::rotate(ANGLE angle)
     }
     case(ROT180):
     {
-        uint w  = height();
-        uint h  = width();
+        uint w  = width();
+        uint h  = height();
+
+        uint middle_line = -1;
+        if (h % 2)
+           middle_line = h / 2;
 
         if (sixteenBit())
         {
@@ -1414,7 +1418,7 @@ void DImg::rotate(ANGLE angle)
             ullong  tmp;
         
             // can be done inplace
-            for (uint y = 0; y < h/2; y++)
+            for (uint y = 0; y < (h+1)/2; y++)
             {
                 line1 = data + y * w;
                 line2 = data + (h-y) * w;
@@ -1426,6 +1430,8 @@ void DImg::rotate(ANGLE angle)
 
                     line1++;
                     line2--;
+                    if (y == middle_line && x * 2 >= w)
+                        break;
                 }
             }
         }
@@ -1438,7 +1444,7 @@ void DImg::rotate(ANGLE angle)
             uint  tmp;
         
             // can be done inplace
-            for (uint y = 0; y < h/2; y++)
+            for (uint y = 0; y < (h+1)/2; y++)
             {
                 line1 = data + y * w;
                 line2 = data + (h-y) * w;
@@ -1451,6 +1457,8 @@ void DImg::rotate(ANGLE angle)
 
                     line1++;
                     line2--;
+                    if (y == middle_line && x * 2 >= w)
+			break;
                 }
             }
         }
