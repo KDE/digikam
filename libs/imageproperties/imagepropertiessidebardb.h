@@ -102,6 +102,7 @@ private:
 
     void itemChanged(const KURL& url, ImageInfo *info,
                      const QRect &rect, DImg *img);
+    void itemChanged(QPtrList<ImageInfo> infos, const QRect &rect, DImg *img);
 
 private:
 

@@ -135,36 +135,12 @@ void ImagePropertiesSideBarDB::itemChanged(const KURL& url, ImageInfo *info,
         return;
 
     m_currentURL         = url;
-    m_currentRect        = rect;
-    m_image              = img;
-
-    // The list _may_ have autoDelete set to true.
-    // Keep old ImageInfo objects from being deleted
-    // until the tab has had the chance to save changes and clear lists.
-    QPtrList<ImageInfo> temporaryList;
-    if (d->hasImageInfoOwnership)
-    {
-        temporaryList = d->currentInfos;
-        d->hasImageInfoOwnership = false;
-    }
 
     QPtrList<ImageInfo> list;
     if (info)
         list.append(info);
-    d->currentInfos      = list;
 
-    m_dirtyPropertiesTab = false;
-    m_dirtyMetadataTab   = false;
-    m_dirtyColorTab      = false;
-    d->dirtyDesceditTab  = false;
-
-    slotChangedTab( getActiveTab() );
-
-    // now delete old objects, after slotChangedTab
-    for (ImageInfo *info = temporaryList.first(); info; info = temporaryList.next())
-    {
-        delete info;
-    }
+    itemChanged(list, rect, img);
 }
 
 void ImagePropertiesSideBarDB::itemChanged(QPtrList<ImageInfo> infos)
@@ -173,9 +149,19 @@ void ImagePropertiesSideBarDB::itemChanged(QPtrList<ImageInfo> infos)
         return;
 
     m_currentURL         = infos.first()->kurl();
-    m_currentRect        = QRect();
-    m_image              = 0;
 
+    itemChanged(infos, QRect(), 0);
+}
+
+void ImagePropertiesSideBarDB::itemChanged(QPtrList<ImageInfo> infos,
+                                           const QRect &rect, DImg *img)
+{
+    m_currentRect        = rect;
+    m_image              = img;
+
+    // The list _may_ have autoDelete set to true.
+    // Keep old ImageInfo objects from being deleted
+    // until the tab has had the chance to save changes and clear lists.
     QPtrList<ImageInfo> temporaryList;
     if (d->hasImageInfoOwnership)
     {
@@ -190,8 +176,13 @@ void ImagePropertiesSideBarDB::itemChanged(QPtrList<ImageInfo> infos)
     m_dirtyColorTab      = false;
     d->dirtyDesceditTab  = false;
 
+    // All tabs that store the ImageInfo list and access it after selection change
+    // must release the image info here. slotChangedTab only handles the active tab!
+    d->desceditTab->setItem();
+
     slotChangedTab( getActiveTab() );
 
+    // now delete old objects, after slotChangedTab
     for (ImageInfo *info = temporaryList.first(); info; info = temporaryList.next())
     {
         delete info;
@@ -207,7 +198,17 @@ void ImagePropertiesSideBarDB::takeImageInfoOwnership(bool takeOwnership)
 void ImagePropertiesSideBarDB::slotNoCurrentItem(void)
 {
     ImagePropertiesSideBar::slotNoCurrentItem();
+
+    if (d->hasImageInfoOwnership)
+    {
+        for (ImageInfo *info = d->currentInfos.first(); info; info = d->currentInfos.next())
+        {
+            delete info;
+        }
+        d->hasImageInfoOwnership = false;
+    }
     d->currentInfos.clear();
+
     d->desceditTab->setItem();
     d->dirtyDesceditTab = false;
 }
