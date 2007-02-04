@@ -204,7 +204,7 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
             currentItemType = StatusNavigateBar::ItemLast;
 
         navtab->setNavigateBarState(currentItemType);
-        navtab->setNavigateBarFileName(d->itemInfo->name);
+        navtab->setNavigateBarFileName();
     }
     unsetCursor();
 }
