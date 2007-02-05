@@ -479,6 +479,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 278 ==> 140417 : Crash digiKam when delete image.
 279 ==> 110514 : Enhanced selection, refactored histogram. 
 280 ==> 140933 : Typo: Album Library Path.
-281 ==> 
+281 ==> 141190 : Color profiles are tested now to avoid invalid files.
+282 ==>  
 
 ---------------------------------------------------------------------------------------------------- 
