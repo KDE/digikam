@@ -48,7 +48,7 @@ public:
     DMetadata(const QString& filePath);
     ~DMetadata();
 
-    /** Re-implemented from libKexiv2 to use dcraw identify method if Exiv2 way failed. */
+    /** Re-implemented from libKexiv2 to use dcraw identify method if Exiv2 failed. */
     bool load(const QString& filePath);
 
     /** Try to extract metadata using dcraw identify method */
@@ -69,7 +69,7 @@ public:
 
 private:
 
-    bool setProgramId();
+    bool setProgramId(bool on=true);
 };
 
 }  // NameSpace Digikam

@@ -72,7 +72,7 @@ bool DMetadata::loadUsingDcraw(const QString& filePath)
             setExifTagLong("Exif.Photo.ISOSpeedRatings", identify.sensitivity, false);
 
         if (identify.dateTime.isValid())
-            setImageDateTime(identify.dateTime, false);
+            setImageDateTime(identify.dateTime, false, false);
 
         if (identify.exposureTime != -1.0)
         {
@@ -221,6 +221,7 @@ bool DMetadata::setImageRating(int rating)
     }
 
     DDebug() << getFilePath() << " ==> Rating: " << rating << endl;
+
     if (!setProgramId())
         return false;
 
@@ -305,11 +306,16 @@ bool DMetadata::setImageCredits(const QString& credit, const QString& source, co
     return true;
 }
 
-bool DMetadata::setProgramId()
+bool DMetadata::setProgramId(bool on)
 {
-    QString version(digikam_version);
-    QString software("digiKam");
-    return setImageProgramId(software, version);
+    if (on)
+    {
+        QString version(digikam_version);
+        QString software("digiKam");
+        return setImageProgramId(software, version);
+    }
+    
+    return true;
 }
 
 PhotoInfoContainer DMetadata::getPhotographInformations() const
