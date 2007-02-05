@@ -1318,28 +1318,21 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 
 void AlbumIconView::changeTagOnImageInfos(const QPtrList<ImageInfo> &list, const QValueList<int> &tagIDs, bool addOrRemove, bool progress)
 {
-    // If this field is written to the file is taken care for by the MetadataHub.
-    // But: if saveIPTCTags is false, the user will not expect that _anything_ is written
-    // when he only changes the tag. The MetadataHub will write any other fields.
-    bool writeToFile = AlbumSettings::instance() && AlbumSettings::instance()->getSaveIptcTags();
-
     float cnt = list.count();
     int i = 0;
     for (QPtrList<ImageInfo>::const_iterator it = list.begin(); it != list.end(); ++it)
     {
         MetadataHub hub;
 
-        if (writeToFile)
-            hub.load(*it);
+        hub.load(*it);
 
         for (QValueList<int>::const_iterator tagIt = tagIDs.begin(); tagIt != tagIDs.end(); ++tagIt)
         {
             hub.setTag(*tagIt, addOrRemove);
         }
 
-        hub.write(*it);
-        if (writeToFile)
-            hub.write((*it)->filePath());
+        hub.write(*it, MetadataHub::PartialWrite);
+        hub.write((*it)->filePath(), MetadataHub::FullWriteIfChanged);
 
         if (progress)
         {
@@ -1889,8 +1882,6 @@ void AlbumIconView::slotAssignRating(int rating)
     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                 i18n("Assign rating to pictures. Please wait..."));
 
-    bool writeToFile = AlbumSettings::instance() && AlbumSettings::instance()->getSaveIptcRating();
-
     int   i   = 0;
     float cnt = (float)countSelected();
     rating    = QMIN(5, QMAX(0, rating));
@@ -1903,12 +1894,10 @@ void AlbumIconView::slotAssignRating(int rating)
             ImageInfo* info          = albumItem->imageInfo();
 
             MetadataHub hub;
-            if (writeToFile)
-                hub.load(info);
+            hub.load(info);
             hub.setRating(rating);
-            hub.write(info);
-            if (writeToFile)
-                hub.write(info->filePath());
+            hub.write(info, MetadataHub::PartialWrite);
+            hub.write(info->filePath(), MetadataHub::FullWriteIfChanged);
 
             emit signalProgressValue((int)((i++/cnt)*100.0));
             kapp->processEvents();
