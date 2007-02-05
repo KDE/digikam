@@ -41,7 +41,7 @@ extern "C"
 // Local includes.
 
 #include "rawfiles.h"
-#include "dcraw_parse.h"
+#include "dcrawiface.h"
 #include "pngloader.h"
 #include "jpegloader.h"
 #include "tiffloader.h"
@@ -444,7 +444,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         return NONE;
 
     // In first we trying to check the file extension. This is mandatory because
-    // some tiff files are detected like RAW files by dcraw::parse method.
+    // some tiff files are detected like RAW files by dcraw::identify method.
 
     QFileInfo fileInfo(filePath);
     if (!fileInfo.exists())
@@ -494,7 +494,8 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     fclose(f);
 
-    DcrawParse rawFileParser;
+    DcrawInfoContainer dcrawIdentify;
+    DcrawIface::rawFileIdentify(dcrawIdentify, filePath);
     uchar jpegID[2]    = { 0xFF, 0xD8 };
     uchar tiffBigID[2] = { 0x4D, 0x4D };
     uchar tiffLilID[2] = { 0x49, 0x49 };
@@ -528,9 +529,9 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
         pclose (file);
     }
-    else if (rawFileParser.getCameraModel( QFile::encodeName(filePath), NULL, NULL) == 0)
+    else if (dcrawIdentify.isDecodable)
     {
-        // RAW File test using dcraw.  
+        // RAW File test using dcraw::identify method.  
         // Need to test it before TIFF because any RAW file 
         // formats using TIFF header.
         return RAW;
