@@ -5,7 +5,7 @@
  * Description : USB Mass Storage camera interface
  *
  * Copyright 2004-2005 by Renchi Raju
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,7 +48,7 @@ extern "C"
 
 #include "ddebug.h"
 #include "dimg.h"
-#include "dcrawpreview.h"
+#include "dcrawiface.h"
 #include "dmetadata.h"
 #include "umscamera.h"
 
@@ -163,7 +163,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     // RAW files : try to extract embedded thumbnail using dcraw
 
-    DcrawPreview::loadDcrawPreview(thumbnail, QString(folder + QString("/") + itemName));
+    DcrawIface::loadDcrawPreview(thumbnail, QString(folder + QString("/") + itemName));
     if (!thumbnail.isNull())
         return true;
 

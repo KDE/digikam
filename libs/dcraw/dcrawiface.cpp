@@ -1,9 +1,9 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net> 
  * Date   : 2006-06-29
- * Description : RAW file preview extraction using dcraw
+ * Description : dcraw interface
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,12 +46,12 @@ extern "C"
 #include "ddebug.h"
 #include "rawfiles.h"
 #include "dcrawbinary.h"
-#include "dcrawpreview.h"
+#include "dcrawiface.h"
 
 namespace Digikam
 {
 
-bool DcrawPreview::loadDcrawPreview(QImage& image, const QString& path)
+bool DcrawIface::loadDcrawPreview(QImage& image, const QString& path)
 {
     FILE       *f=NULL;
     QByteArray  imgData;

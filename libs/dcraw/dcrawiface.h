@@ -1,9 +1,9 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net> 
  * Date   : 2006-06-29
- * Description : RAW file preview extraction using dcraw
+ * Description : dcraw interface
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,7 +30,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DcrawPreview
+class DIGIKAM_EXPORT DcrawIface
 {
 public:
 

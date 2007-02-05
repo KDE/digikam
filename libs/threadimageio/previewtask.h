@@ -1,10 +1,10 @@
 /* ============================================================
- * Author: Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Authors: Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *         Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2006-12-26
+ * Date   : 2006-12-26
  * Description : Multithreaded loader for previews
  *
- * Copyright 2006 by Marcel Wiesweg, Gilles Caulier
+ * Copyright 2006-2007 by Marcel Wiesweg, Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,6 +25,8 @@
 // Qt includes
 
 #include <qimage.h>
+
+// Local includes.
 
 #include "loadsavetask.h"
 
@@ -68,7 +70,7 @@ private:
 
 } // namespace Digikam
 
-#endif
+#endif // PREVIEW_TASK_H
 
 
 

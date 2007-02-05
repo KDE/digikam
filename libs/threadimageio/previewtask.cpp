@@ -1,10 +1,10 @@
 /* ============================================================
- * Author: Marcel Wiesweg <marcel.wiesweg@gmx.de>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2006-12-26
+ * Authors: Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2006-12-26
  * Description : Multithreaded loader for previews
  *
- * Copyright 2006 by Marcel Wiesweg, Gilles Caulier
+ * Copyright 2006-2007 by Marcel Wiesweg, Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,7 +30,7 @@
 
 #include "ddebug.h"
 #include "dmetadata.h"
-#include "dcrawpreview.h"
+#include "dcrawiface.h"
 #include "previewloadthread.h"
 #include "previewtask.h"
 
@@ -133,7 +133,7 @@ void PreviewLoadingTask::execute()
 
     // -- Get the image preview --------------------------------
     // In first, we trying to load with dcraw : RAW files.
-    if ( !DcrawPreview::loadDcrawPreview(qimage, m_loadingDescription.filePath) )
+    if ( !DcrawIface::loadDcrawPreview(qimage, m_loadingDescription.filePath) )
     {
         // Try to extract Exif/Iptc preview.
         if ( !loadImagePreview(qimage, m_loadingDescription.filePath) )
@@ -265,7 +265,6 @@ void PreviewLoadingTask::exifRotate(const QString& filePath, QImage& thumb)
     // transform accordingly
     thumb = thumb.xForm( matrix );
 }
-
 
 } // namespace Digikam
 

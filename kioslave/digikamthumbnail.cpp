@@ -5,7 +5,7 @@
  * Description : digiKam KIO slave to get image thumbnails.
  *
  * Copyright 2003-2005 by Renchi Raju, Gilles Caulier
- * Copyright 2006      by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,7 +66,7 @@
 
 #include "dimg.h"
 #include "rawfiles.h"
-#include "dcrawpreview.h"
+#include "dcrawiface.h"
 #include "dmetadata.h"
 #include "digikamthumbnail.h"
 #include "digikam_export.h"
@@ -153,7 +153,7 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
             if ( !loadJPEG(img, url.path()) )
             {
                 // Try to load with dcraw : RAW files.
-                if (!DcrawPreview::loadDcrawPreview(img, url.path()) )
+                if (!DcrawIface::loadDcrawPreview(img, url.path()) )
                 {
                     // Try to load with DImg : TIFF, PNG, etc.
                     if (!loadDImg(img, url.path()) )
@@ -268,7 +268,7 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
         else if (ext == QString("TIFF") || ext == QString("TIF"))
             return (loadDImg(image, path));
         else if (rawFilesExt.upper().contains(ext))
-            return (DcrawPreview::loadDcrawPreview(image, path));
+            return (DcrawIface::loadDcrawPreview(image, path));
     }
 
     return false;
