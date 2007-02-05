@@ -328,6 +328,30 @@ bool DcrawIface::rawFileIdentify(DcrawInfoContainer& identify, const QString& pa
             identify.isDecodable = false;
     }
 
+    // Extract "Has Secondary Pixel" flag.
+
+    QString hasSecondaryPixelHeader("Secondary pixels: ");
+    pos = dcrawInfo.find(hasSecondaryPixelHeader);
+    if (pos != -1)
+    {
+        QString hasSecondaryPixel = dcrawInfo.mid(pos).section('\n', 0, 0);
+        hasSecondaryPixel.remove(0, hasSecondaryPixelHeader.length());
+        if (hasSecondaryPixel.contains("yes"))
+            identify.hasSecondaryPixel = true;
+        else
+            identify.hasSecondaryPixel = false;
+    }
+
+    // Extract Raw Colors.
+    QString rawColorsHeader("Raw colors: ");
+    pos = dcrawInfo.find(rawColorsHeader);
+    if (pos != -1)
+    {
+        QString rawColors = dcrawInfo.mid(pos).section('\n', 0, 0);
+        rawColors.remove(0, rawColorsHeader.length());
+        identify.rawColors = rawColors.toInt();
+    }
+
     return true;
 }
 

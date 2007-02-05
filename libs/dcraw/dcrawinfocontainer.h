@@ -36,12 +36,21 @@ public:
 
     DcrawInfoContainer()
     {
-        sensitivity   = -1;
-        exposureTime  = -1.0;
-        aperture      = -1.0;
-        focalLength   = -1.0;
-        hasIccProfile = false;
-        isDecodable   = false;
+        sensitivity       = -1;
+        exposureTime      = -1.0;
+        aperture          = -1.0;
+        focalLength       = -1.0;
+        rawColors         = -1;
+        hasIccProfile     = false;
+        isDecodable       = false;
+        hasSecondaryPixel = false;
+        daylightMult[0]   = 0.0;
+        daylightMult[1]   = 0.0;
+        daylightMult[2]   = 0.0;
+        cameraMult[0]     = 0.0;
+        cameraMult[1]     = 0.0;
+        cameraMult[2]     = 0.0;
+        cameraMult[3]     = 0.0;
     };
     
     bool isEmpty()
@@ -51,6 +60,7 @@ public:
              aperture     == -1.0 && 
              focalLength  == -1.0 && 
              sensitivity  == -1   && 
+             rawColors    == -1   &&
              !dateTime.isValid()  && 
              !imageSize.isValid() )
             return true;
@@ -58,20 +68,26 @@ public:
             return false;
     };
     
-    bool      hasIccProfile;
-    bool      isDecodable;
+    bool      hasSecondaryPixel;  // True if camera sensor use a secondary pixel.
+    bool      hasIccProfile;      // True if RAW file include an ICC color profile.
+    bool      isDecodable;        // True is RAW file is decodable by dcraw.
 
-    long      sensitivity;
+    int       rawColors;          // The number of RAW colors.
 
-    float     exposureTime;   // ==> 1/exposureTime = exposure time in seconds.
-    float     aperture;       // ==> Aperture value in APEX.
-    float     focalLength;    // ==> Focal Length value in mm.
+    long      sensitivity;        // The sensitivity in ISO used by camera to take the picture.
 
-    QString   model;
+    float     exposureTime;       // ==> 1/exposureTime = exposure time in seconds.
+    float     aperture;           // ==> Aperture value in APEX.
+    float     focalLength;        // ==> Focal Length value in mm.
 
-    QDateTime dateTime;
+    double    daylightMult[3];    // White color balance settings.
+    double    cameraMult[4];
 
-    QSize     imageSize;
+    QString   model;              // The camera maker and model.
+
+    QDateTime dateTime;           // Date & time when have been taken the picture.
+
+    QSize     imageSize;          // The image dimensions in pixels.
 };
 
 } // namespace Digikam
