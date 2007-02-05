@@ -373,7 +373,7 @@ void ImageDescEditTab::slotApplyAllChanges()
         // apply to database
         d->hub.write(info);
         // apply to file metadata
-        d->hub.write(info->filePath(), writeSettings);
+        d->hub.write(info->filePath(), MetadataHub::FullWrite, writeSettings);
 
         emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
         kapp->processEvents();
