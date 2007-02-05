@@ -277,8 +277,8 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
         photoInfo.exposureMode    = getExifTagString("Exif.Photo.ExposureMode");
         photoInfo.exposureProgram = getExifTagString("Exif.Photo.ExposureProgram");
 
-        photoInfo.focalLenght     = getExifTagString("Exif.Photo.FocalLength");
-        photoInfo.focalLenght35mm = getExifTagString("Exif.Photo.FocalLengthIn35mmFilm");
+        photoInfo.focalLength     = getExifTagString("Exif.Photo.FocalLength");
+        photoInfo.focalLength35mm = getExifTagString("Exif.Photo.FocalLengthIn35mmFilm");
 
         photoInfo.sensitivity = getExifTagString("Exif.Photo.ISOSpeedRatings");
         if (photoInfo.sensitivity.isEmpty())

@@ -41,6 +41,7 @@ extern "C"
 // Local includes.
 
 #include "rawfiles.h"
+#include "dcrawiface.h"
 #include "dcraw_parse.h"
 #include "pngloader.h"
 #include "jpegloader.h"
@@ -455,6 +456,9 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     QString rawFilesExt(raw_file_extentions);
     QString ext = fileInfo.extension(false).upper();
+
+    DcrawInfoContainer identify;
+    DcrawIface::rawFileIdentify(identify, filePath);
     
     if (!ext.isEmpty())
     {

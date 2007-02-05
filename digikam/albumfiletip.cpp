@@ -439,10 +439,10 @@ void AlbumFileTip::updateText()
             {
                 str = photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture;
 
-                if (photoInfo.focalLenght35mm.isEmpty())
-                    str += QString(" / %1").arg(photoInfo.focalLenght.isEmpty() ? unavailable : photoInfo.focalLenght);
+                if (photoInfo.focalLength35mm.isEmpty())
+                    str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
                 else 
-                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)").arg(photoInfo.focalLenght).arg(photoInfo.focalLenght35mm));
+                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm));
 
                 if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
                 metaStr += cellBeg + i18n("Aperture/Focal:") + cellMid + QStyleSheet::escape( str ) + cellEnd;

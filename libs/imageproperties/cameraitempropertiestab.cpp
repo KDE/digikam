@@ -74,7 +74,7 @@ public:
         model                  = 0;
         photoDate              = 0;
         aperture               = 0;
-        focalLenght            = 0;
+        focalLength            = 0;
         exposureTime           = 0;
         sensitivity            = 0;
         exposureMode           = 0;
@@ -119,7 +119,7 @@ public:
     QLabel             *model;
     QLabel             *photoDate;
     QLabel             *aperture;
-    QLabel             *focalLenght;
+    QLabel             *focalLength;
     QLabel             *exposureTime;
     QLabel             *sensitivity;
     QLabel             *exposureMode;
@@ -183,7 +183,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     d->model                  = new QLabel(i18n("<b>Model</b>:"), d->settingsArea);
     d->photoDate              = new QLabel(i18n("<b>Created</b>:"), d->settingsArea);
     d->aperture               = new QLabel(i18n("<b>Aperture</b>:"), d->settingsArea);
-    d->focalLenght            = new QLabel(i18n("<b>Focal</b>:"), d->settingsArea);
+    d->focalLength            = new QLabel(i18n("<b>Focal</b>:"), d->settingsArea);
     d->exposureTime           = new QLabel(i18n("<b>Exposure</b>:"), d->settingsArea);
     d->sensitivity            = new QLabel(i18n("<b>Sensitivity</b>:"), d->settingsArea);
     d->exposureMode           = new QLabel(i18n("<nobr><b>Mode/Program</b></nobr>:"), d->settingsArea);
@@ -258,7 +258,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     settingsLayout->addMultiCellWidget(d->labelPhotoDateTime, 19, 19, 1, 1);
     settingsLayout->addMultiCellWidget(d->aperture, 20, 20, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelPhotoAperture, 20, 20, 1, 1);
-    settingsLayout->addMultiCellWidget(d->focalLenght, 21, 21, 0, 0);
+    settingsLayout->addMultiCellWidget(d->focalLength, 21, 21, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelPhotoFocalLenght, 21, 21, 1, 1);
     settingsLayout->addMultiCellWidget(d->exposureTime, 22, 22, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelPhotoExposureTime, 22, 22, 1, 1);
@@ -418,7 +418,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
         d->model->hide();
         d->photoDate->hide();
         d->aperture->hide();
-        d->focalLenght->hide();
+        d->focalLength->hide();
         d->exposureTime->hide();
         d->sensitivity->hide();
         d->exposureMode->hide();
@@ -442,7 +442,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
         d->model->show();
         d->photoDate->show();
         d->aperture->show();
-        d->focalLenght->show();
+        d->focalLength->show();
         d->exposureTime->show();
         d->sensitivity->show();
         d->exposureMode->show();
@@ -473,11 +473,11 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
 
     d->labelPhotoAperture->setText(photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture);
 
-    if (photoInfo.focalLenght35mm.isEmpty())
-        d->labelPhotoFocalLenght->setText(photoInfo.focalLenght.isEmpty() ? unavailable : photoInfo.focalLenght);
+    if (photoInfo.focalLength35mm.isEmpty())
+        d->labelPhotoFocalLenght->setText(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
     else 
     {
-        str = i18n("%1 (35mm: %2)").arg(photoInfo.focalLenght).arg(photoInfo.focalLenght35mm);
+        str = i18n("%1 (35mm: %2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm);
         d->labelPhotoFocalLenght->setText(str);
     }
 
@@ -521,7 +521,7 @@ void CameraItemPropertiesTab::colorChanged(const QColor& back, const QColor& for
     d->model->setPaletteBackgroundColor(back);
     d->photoDate->setPaletteBackgroundColor(back);
     d->aperture->setPaletteBackgroundColor(back);
-    d->focalLenght->setPaletteBackgroundColor(back);
+    d->focalLength->setPaletteBackgroundColor(back);
     d->exposureTime->setPaletteBackgroundColor(back);
     d->sensitivity->setPaletteBackgroundColor(back);
     d->exposureMode->setPaletteBackgroundColor(back);
@@ -567,7 +567,7 @@ void CameraItemPropertiesTab::colorChanged(const QColor& back, const QColor& for
     d->model->setPaletteForegroundColor(fore);
     d->photoDate->setPaletteForegroundColor(fore);
     d->aperture->setPaletteForegroundColor(fore);
-    d->focalLenght->setPaletteForegroundColor(fore);
+    d->focalLength->setPaletteForegroundColor(fore);
     d->exposureTime->setPaletteForegroundColor(fore);
     d->sensitivity->setPaletteForegroundColor(fore);
     d->exposureMode->setPaletteForegroundColor(fore);

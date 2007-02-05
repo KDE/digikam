@@ -44,8 +44,8 @@ public:
              exposureMode.isEmpty()    && 
              exposureProgram.isEmpty() && 
              aperture.isEmpty()        && 
-             focalLenght.isEmpty()     && 
-             focalLenght35mm.isEmpty() && 
+             focalLength.isEmpty()     && 
+             focalLength35mm.isEmpty() && 
              sensitivity.isEmpty()     && 
              flash.isEmpty()           && 
              whiteBalance.isEmpty()    && 
@@ -61,8 +61,8 @@ public:
     QString   exposureMode;
     QString   exposureProgram;
     QString   aperture;
-    QString   focalLenght;
-    QString   focalLenght35mm;
+    QString   focalLength;
+    QString   focalLength35mm;
     QString   sensitivity;
     QString   flash;
     QString   whiteBalance;
