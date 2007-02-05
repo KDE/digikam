@@ -556,6 +556,31 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
             { 
                 QString fileName = fileInfo->filePath();
                 tmpProfile       = cmsOpenProfileFromFile(QFile::encodeName(fileName), "r");
+
+                if (tmpProfile == NULL)
+                {
+                    DDebug() << "Error: Parsed profile  is NULL (invalid profile); " << QFile::encodeName(fileName) << endl;
+                    cmsCloseProfile(tmpProfile);
+                    it+=1;
+                    QString message = i18n("<p>The following profile is invalid:</p><p><b>");
+                    message.append(QFile::encodeName(fileName));
+                    message.append("</b></p><p>To avoid this message remove it from color profiles repository</p>");
+                    message.append("<p>Do you want digiKam do it for you?</p>");
+                    if (KMessageBox::warningYesNo(this, message, i18n("Invalid Profile")) == 3)
+                    {
+                        if (QFile::remove(QFile::encodeName(fileName)))
+                        {
+                            KMessageBox::information(this,  i18n("Invalid color profile has been removed"));
+                        }
+                        else
+                        {
+                            KMessageBox::information(this, i18n("<p>digiKam has failed to remove the invalid color profile</p><p>You have to do it manually</p>"));
+                        }
+                    }
+                    
+                    continue;
+                }
+                
                 QString profileDescription = QString((cmsTakeProductDesc(tmpProfile)));
     
                 switch ((int)cmsGetDeviceClass(tmpProfile))
