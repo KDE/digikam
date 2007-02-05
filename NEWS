@@ -132,7 +132,7 @@ General       : Add a status bar to Album Gui with a progress bar, text bar, and
 
 AlbumGUI      : Improvement of pop-up menu of Tags Filter View and Comment & Tags about
                 auto selection/deselection of parents/childs tags in Tags treeview.
-AlbumGUI      : Root album show a Welcome page for new users (like Kmail or Konqueror).
+AlbumGUI      : Main Root album show a Welcome page for new users (like Kmail or Konqueror).
 AlbumGUI      : Video files can be previewed using an embedded instance of default KDE
                 media player.
 AlbumGUI      : Preview picture mode use a memory cache to speed-up loading.
@@ -140,6 +140,8 @@ AlbumGUI      : Preview picture mode pride a context pop-up menu.
 AlbumGUI      : Comments & Tags now support multiple selection of items to apply properties.
 AlbumGUI      : New option to set the action to do when user right click on picture thumb: 
                 Load on Image Editor or Show an embeded preview.
+AlbumGUI      : Prefer Exif DateTimeOriginal for sorting images (DateTimeDigitized 
+                and DateTime only used as fallback)
 
 Image Plugins : All tools remember settings between sessions.
 Image Plugins : All tools render properly preview of image using Color Managed View.
@@ -473,7 +475,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 275 ==> 140320 : View menu should better fit after Edit.
 276 ==> 127617 : "Toggle Fullscreen" should be located in "View" menu instead 
                  of "Settings" menu.
-277 ==> 139264 : Prefer Exif DateTimeOriginal for sorting images (DateTimeDigitized and DateTime only used as fallback)
+277 ==> 139264 : digiKam sorts pictures with wrong exif tag.
 278 ==> 140417 : Crash digiKam when delete image.
 279 ==> 110514 : Enhanced selection, refactored histogram. 
 280 ==> 140933 : Typo: Album Library Path.
