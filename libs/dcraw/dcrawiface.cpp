@@ -352,6 +352,31 @@ bool DcrawIface::rawFileIdentify(DcrawInfoContainer& identify, const QString& pa
         identify.rawColors = rawColors.toInt();
     }
 
+    // Extract Daylight Multipliers.
+    QString daylightMultHeader("Daylight multipliers: ");
+    pos = dcrawInfo.find(daylightMultHeader);
+    if (pos != -1)
+    {
+        QString daylightMult = dcrawInfo.mid(pos).section('\n', 0, 0);
+        daylightMult.remove(0, daylightMultHeader.length());
+        identify.daylightMult[0] = daylightMult.section(" ", 0, 0).toDouble();
+        identify.daylightMult[1] = daylightMult.section(" ", 1, 1).toDouble();
+        identify.daylightMult[2] = daylightMult.section(" ", 2, 2).toDouble();
+    }
+
+    // Extract Camera Multipliers.
+    QString cameraMultHeader("Camera multipliers: ");
+    pos = dcrawInfo.find(cameraMultHeader);
+    if (pos != -1)
+    {
+        QString cameraMult = dcrawInfo.mid(pos).section('\n', 0, 0);
+        cameraMult.remove(0, cameraMultHeader.length());
+        identify.cameraMult[0] = cameraMult.section(" ", 0, 0).toDouble();
+        identify.cameraMult[1] = cameraMult.section(" ", 1, 1).toDouble();
+        identify.cameraMult[2] = cameraMult.section(" ", 2, 2).toDouble();
+        identify.cameraMult[3] = cameraMult.section(" ", 3, 3).toDouble();
+    }
+
     return true;
 }
 
