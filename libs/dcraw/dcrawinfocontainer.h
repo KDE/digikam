@@ -44,11 +44,11 @@ public:
     
     bool isEmpty()
     {
-        if ( model.isEmpty()       && 
-             exposureTime == -1.0  && 
-             aperture == -1.0      && 
-             focalLength == -1.0   && 
-             sensitivity == -1     && 
+        if ( model.isEmpty()      && 
+             exposureTime == -1.0 && 
+             aperture     == -1.0 && 
+             focalLength  == -1.0 && 
+             sensitivity  == -1   && 
              !dateTime.isValid() )
             return true;
         else
