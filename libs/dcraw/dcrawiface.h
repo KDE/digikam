@@ -25,6 +25,7 @@
 
 // Local Includes.
 
+#include "dcrawinfocontainer.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -32,10 +33,12 @@ namespace Digikam
 
 class DIGIKAM_EXPORT DcrawIface
 {
+
 public:
 
     static bool loadDcrawPreview(QImage& image, const QString& path);
 
+    static bool rawFileIdentify(DcrawInfoContainer& identify, const QString& path);
 };
 
 }  // namespace Digikam

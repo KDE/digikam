@@ -47,6 +47,12 @@ public:
     DMetadata();
     DMetadata(const QString& filePath);
     ~DMetadata();
+
+    /** Re-implemented from libKexiv2 to use dcraw identify method if Exiv2 way failed. */
+    bool load(const QString& filePath);
+
+    /** Try to extract metadata using dcraw identify method */
+    bool loadUsingDcraw(const QString& filePath);
     
     /** Metadata manipulation methods */
 

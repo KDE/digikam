@@ -1,11 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-06-14
+ * Date   : 2005-06-14
  * Description : DImg image loader interface
  *
  * Copyright 2005 by Renchi Raju, Gilles Caulier
- * Copyright 2006 by Gilles Caulier 
+ * Copyright 2006-2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,8 +75,8 @@ protected:
     QString                 imageGetEmbbededText(const QString& key);
     void                    imageSetEmbbededText(const QString& key, const QString& text);
 
-    virtual void            readMetadata(const QString& filePath, DImg::FORMAT ff);
-    virtual void            saveMetadata(const QString& filePath);
+    virtual bool            readMetadata(const QString& filePath, DImg::FORMAT ff);
+    virtual bool            saveMetadata(const QString& filePath);
     virtual int             granularity(DImgLoaderObserver *observer, int total, float progressSlice = 1.0);
 
     bool                    checkExifWorkingColorSpace();

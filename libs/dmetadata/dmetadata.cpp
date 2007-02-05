@@ -23,6 +23,7 @@
 
 #include "version.h"
 #include "ddebug.h"
+#include "dcrawiface.h"
 #include "dmetadata.h"
 
 namespace Digikam
@@ -34,12 +35,67 @@ DMetadata::DMetadata()
 }
 
 DMetadata::DMetadata(const QString& filePath)
-         : KExiv2Iface::KExiv2(filePath)
+         : KExiv2Iface::KExiv2()
 {
+    load(filePath);
 }
 
 DMetadata::~DMetadata()
 {
+}
+
+bool DMetadata::load(const QString& filePath)
+{
+    // In first, we trying to get metadata using Exiv2,
+    // else we will use dcraw to extract minimal informations.
+
+    if (!KExiv2::load(filePath))
+    {
+        if (!loadUsingDcraw(filePath))
+            return false;
+    }
+
+    return true;
+}
+
+bool DMetadata::loadUsingDcraw(const QString& filePath)
+{
+    DcrawInfoContainer identify;
+    if (DcrawIface::rawFileIdentify(identify, filePath))
+    {
+        long int num=1, den=1;
+
+        if (!identify.model.isNull())
+            setExifTagString("Exif.Image.Model", identify.model.latin1(), false);
+
+        if (identify.sensitivity != -1)
+            setExifTagLong("Exif.Photo.ISOSpeedRatings", identify.sensitivity, false);
+
+        if (identify.dateTime.isValid())
+            setImageDateTime(identify.dateTime, false);
+
+        if (identify.exposureTime != -1.0)
+        {
+            convertToRational(1/identify.exposureTime, &num, &den, 8);
+            setExifTagRational("Exif.Photo.ExposureTime", num, den, false);
+        }
+
+        if (identify.aperture != -1.0)
+        {
+            convertToRational(identify.aperture, &num, &den, 8);
+            setExifTagRational("Exif.Photo.ApertureValue", num, den, false);
+        }
+
+        if (identify.focalLength != -1.0)
+        {
+            convertToRational(identify.focalLength, &num, &den, 8);
+            setExifTagRational("Exif.Photo.FocalLength", num, den, false);
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 QString DMetadata::getImageComment() const

@@ -1,10 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-06-14
- * Description : DImg image loader interface 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-06-14
+ * Description : DImg image loader interface
  *
  * Copyright 2005 by Renchi Raju, Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -119,12 +120,15 @@ void DImgLoader::imageSetEmbbededText(const QString& key, const QString& text)
     m_image->setEmbeddedText(key, text);
 }
 
-void DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
+bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
 {
     QMap<int, QByteArray>& imageMetadata = imageMetaData();
     imageMetadata.clear();
 
     DMetadata metaDataFromFile(filePath);
+    if (!metaDataFromFile.load(filePath))
+        return false;
+
     // Do not insert null data into metaData map:
     // Even if byte array is null, if there is a key in the map, it will
     // be interpreted as "There was data, so write it again to the file".
@@ -134,15 +138,17 @@ void DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
         imageMetadata.insert(DImg::EXIF, metaDataFromFile.getExif());
     if (!metaDataFromFile.getIptc().isNull())
         imageMetadata.insert(DImg::IPTC, metaDataFromFile.getIptc());
+
+    return true;
 }
 
-void DImgLoader::saveMetadata(const QString& filePath)
+bool DImgLoader::saveMetadata(const QString& filePath)
 {
     DMetadata metaDataToFile(filePath);
     metaDataToFile.setComments(m_image->getComments());
     metaDataToFile.setExif(m_image->getExif());
     metaDataToFile.setIptc(m_image->getIptc());
-    metaDataToFile.applyChanges();
+    return metaDataToFile.applyChanges();
 }
 
 bool DImgLoader::checkExifWorkingColorSpace()
