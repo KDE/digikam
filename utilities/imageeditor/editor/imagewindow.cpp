@@ -88,6 +88,7 @@
 #include "statusprogressbar.h"
 #include "imageattributeswatch.h"
 #include "deletedialog.h"
+#include "metadatahub.h"
 #include "imagewindow.h"
 #include "imagewindow.moc"
 
@@ -643,23 +644,11 @@ void ImageWindow::slotAssignTag(int tagID)
 {
     if (d->imageInfoCurrent)
     {
-        QStringList oldKeywords = d->imageInfoCurrent->tagNames();
-
-        d->imageInfoCurrent->setTag(tagID);
-
-        // TODO MetadataHub: fix this part to use it instead.
-
-        // Update Image Tags like Iptc keywords tags.
-
-        if (AlbumSettings::instance())
-        {
-            if (AlbumSettings::instance()->getSaveIptcRating())
-            {
-                DMetadata metadata(d->imageInfoCurrent->filePath());
-                metadata.setImageKeywords(oldKeywords, d->imageInfoCurrent->tagNames());
-                metadata.applyChanges();
-            }
-        }
+        MetadataHub hub;
+        hub.load(d->imageInfoCurrent);
+        hub.setTag(tagID, true);
+        hub.write(d->imageInfoCurrent, MetadataHub::PartialWrite);
+        hub.write(d->imageInfoCurrent->filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
@@ -667,47 +656,24 @@ void ImageWindow::slotRemoveTag(int tagID)
 {
     if (d->imageInfoCurrent)
     {
-        QStringList oldKeywords = d->imageInfoCurrent->tagNames();
-
-        d->imageInfoCurrent->removeTag(tagID);
-
-        // TODO MetadataHub: fix this part to use it instead.
-
-        // Update Image Tags like Iptc keywords tags.
-
-        if (AlbumSettings::instance())
-        {
-            if (AlbumSettings::instance()->getSaveIptcRating())
-            {
-                DMetadata metadata(d->imageInfoCurrent->filePath());
-                metadata.setImageKeywords(oldKeywords, d->imageInfoCurrent->tagNames());
-                metadata.applyChanges();
-            }
-        }
+        MetadataHub hub;
+        hub.load(d->imageInfoCurrent);
+        hub.setTag(tagID, false);
+        hub.write(d->imageInfoCurrent, MetadataHub::PartialWrite);
+        hub.write(d->imageInfoCurrent->filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
 void ImageWindow::slotAssignRating(int rating)
 {
     rating = QMIN(5, QMAX(0, rating));
-    
     if (d->imageInfoCurrent)
     {
-        d->imageInfoCurrent->setRating(rating);
-
-        // TODO MetadataHub: fix this part to use it instead.
-        
-        // Store Image rating as Iptc tag.
-    
-        if (AlbumSettings::instance())
-        {
-            if (AlbumSettings::instance()->getSaveIptcRating())
-            {
-                DMetadata metadata(d->imageInfoCurrent->filePath());
-                metadata.setImageRating(rating);
-                metadata.applyChanges();
-            }
-        }
+        MetadataHub hub;
+        hub.load(d->imageInfoCurrent);
+        hub.setRating(rating);
+        hub.write(d->imageInfoCurrent, MetadataHub::PartialWrite);
+        hub.write(d->imageInfoCurrent->filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
