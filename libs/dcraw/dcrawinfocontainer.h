@@ -36,10 +36,12 @@ public:
 
     DcrawInfoContainer()
     {
-        sensitivity  = -1;
-        exposureTime = -1.0;
-        aperture     = -1.0;
-        focalLength  = -1.0;
+        sensitivity   = -1;
+        exposureTime  = -1.0;
+        aperture      = -1.0;
+        focalLength   = -1.0;
+        hasIccProfile = false;
+        isDecodable   = false;
     };
     
     bool isEmpty()
@@ -49,12 +51,16 @@ public:
              aperture     == -1.0 && 
              focalLength  == -1.0 && 
              sensitivity  == -1   && 
-             !dateTime.isValid() )
+             !dateTime.isValid()  && 
+             !imageSize.isValid() )
             return true;
         else
             return false;
     };
     
+    bool      hasIccProfile;
+    bool      isDecodable;
+
     long      sensitivity;
 
     float     exposureTime;   // ==> 1/exposureTime = exposure time in seconds.
@@ -64,6 +70,8 @@ public:
     QString   model;
 
     QDateTime dateTime;
+
+    QSize     imageSize;
 };
 
 } // namespace Digikam

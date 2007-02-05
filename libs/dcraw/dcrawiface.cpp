@@ -223,43 +223,110 @@ bool DcrawIface::rawFileIdentify(DcrawInfoContainer& identify, const QString& pa
         return false;
     }
 
+    int pos;
+
     // Extract Time Stamp.
     QString timeStampHeader("Timestamp: ");
-    QString timeStamp = dcrawInfo.section('\n', 2, 2);
-    timeStamp.remove(0, timeStampHeader.length());
-    identify.dateTime = QDateTime::fromString(timeStamp);
+    pos = dcrawInfo.find(timeStampHeader);
+    if (pos != -1)
+    {
+        QString timeStamp = dcrawInfo.mid(pos).section('\n', 0, 0);
+        timeStamp.remove(0, timeStampHeader.length());
+        identify.dateTime = QDateTime::fromString(timeStamp);
+    }
 
     // Extract Camera Model.
     QString cameraHeader("Camera: ");
-    QString camera = dcrawInfo.section('\n', 3, 3);
-    camera.remove(0, cameraHeader.length());
-    identify.model = camera;
+    pos = dcrawInfo.find(cameraHeader);
+    if (pos != -1)
+    {
+        QString camera = dcrawInfo.mid(pos).section('\n', 0, 0);
+        camera.remove(0, cameraHeader.length());
+        identify.model = camera;
+    }
 
     // Extract ISO Speed.
     QString isoSpeedHeader("ISO speed: ");
-    QString isoSpeed = dcrawInfo.section('\n', 4, 4);
-    isoSpeed.remove(0, isoSpeedHeader.length());
-    identify.sensitivity = isoSpeed.toLong();
+    pos = dcrawInfo.find(isoSpeedHeader);
+    if (pos != -1)
+    {
+        QString isoSpeed = dcrawInfo.mid(pos).section('\n', 0, 0);
+        isoSpeed.remove(0, isoSpeedHeader.length());
+        identify.sensitivity = isoSpeed.toLong();
+    }
 
     // Extract Shutter Speed.
     QString shutterSpeedHeader("Shutter: 1/");
-    QString shutterSpeed = dcrawInfo.section('\n', 5, 5);
-    shutterSpeed.remove(0, shutterSpeedHeader.length());
-    shutterSpeed.remove(shutterSpeed.length()-4, 4);    // remove " sec" at end of string.
-    identify.exposureTime = shutterSpeed.toFloat();
+    pos = dcrawInfo.find(shutterSpeedHeader);
+    if (pos != -1)
+    {
+        QString shutterSpeed = dcrawInfo.mid(pos).section('\n', 0, 0);
+        shutterSpeed.remove(0, shutterSpeedHeader.length());
+        shutterSpeed.remove(shutterSpeed.length()-4, 4);    // remove " sec" at end of string.
+        identify.exposureTime = shutterSpeed.toFloat();
+    }
 
     // Extract Aperture.
     QString apertureHeader("Aperture: f/");
-    QString aperture = dcrawInfo.section('\n', 6, 6);
-    aperture.remove(0, apertureHeader.length());
-    identify.aperture = aperture.toFloat();
+    pos = dcrawInfo.find(apertureHeader);
+    if (pos != -1)
+    {
+        QString aperture = dcrawInfo.mid(pos).section('\n', 0, 0);
+        aperture.remove(0, apertureHeader.length());
+        identify.aperture = aperture.toFloat();
+    }
 
     // Extract Focal Length.
     QString focalLengthHeader("Focal Length: ");
-    QString focalLength = dcrawInfo.section('\n', 7, 7);
-    focalLength.remove(0, focalLengthHeader.length());
-    focalLength.remove(focalLength.length()-3, 3);    // remove " mm" at end of string.
-    identify.focalLength = focalLength.toFloat();
+    pos = dcrawInfo.find(focalLengthHeader);
+    if (pos != -1)
+    {
+        QString focalLength = dcrawInfo.mid(pos).section('\n', 0, 0);
+        focalLength.remove(0, focalLengthHeader.length());
+        focalLength.remove(focalLength.length()-3, 3);    // remove " mm" at end of string.
+        identify.focalLength = focalLength.toFloat();
+    }
+
+    // Extract Image Size.
+
+    QString imageSizeHeader("Image size:  ");
+    pos = dcrawInfo.find(imageSizeHeader);
+    if (pos != -1)
+    {
+        QString imageSize = dcrawInfo.mid(pos).section('\n', 0, 0);
+        imageSize.remove(0, imageSizeHeader.length());
+        int width  = imageSize.section(" x ", 0, 0).toInt();
+        int height = imageSize.section(" x ", 1, 1).toInt();
+        identify.imageSize = QSize(width, height);
+    }
+
+    // Extract "Has an embedded ICC profile" flag.
+
+    QString hasIccProfileHeader("Embedded ICC profile: ");
+    pos = dcrawInfo.find(hasIccProfileHeader);
+    if (pos != -1)
+    {
+        QString hasIccProfile = dcrawInfo.mid(pos).section('\n', 0, 0);
+        hasIccProfile.remove(0, hasIccProfileHeader.length());
+        if (hasIccProfile.contains("yes"))
+            identify.hasIccProfile = true;
+        else
+            identify.hasIccProfile = false;
+    }
+
+    // Extract "Is Decodable" flag.
+
+    QString isDecodableHeader("Decodable with dcraw: ");
+    pos = dcrawInfo.find(isDecodableHeader);
+    if (pos != -1)
+    {
+        QString isDecodable = dcrawInfo.mid(pos).section('\n', 0, 0);
+        isDecodable.remove(0, isDecodableHeader.length());
+        if (isDecodable.contains("yes"))
+            identify.isDecodable = true;
+        else
+            identify.isDecodable = false;
+    }
 
     return true;
 }

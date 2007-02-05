@@ -92,6 +92,9 @@ bool DMetadata::loadUsingDcraw(const QString& filePath)
             setExifTagRational("Exif.Photo.FocalLength", num, den, false);
         }
 
+        if (identify.imageSize.isValid())
+            setImageDimensions(identify.imageSize, false);
+
         return true;
     }
 
