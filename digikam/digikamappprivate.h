@@ -151,7 +151,6 @@ public:
     KAction               *imageDeletePermanentlyAction;
     KAction               *imageDeletePermanentlyDirectlyAction;
     KAction               *imageTrashDirectlyAction;
-    KSelectAction         *albumSortAction;
     KToolBarPopupAction   *backwardActionMenu;
     KToolBarPopupAction   *forwardActionMenu;
 
@@ -180,7 +179,6 @@ public:
     KAction               *imageSetExifOrientation8Action;
     KAction               *imageRenameAction;
     KAction               *imageDeleteAction;
-    KSelectAction         *imageSortAction;
     KActionMenu           *imageExifOrientationActionMenu;
 
     // Selection Actions
@@ -189,9 +187,11 @@ public:
     KAction               *selectInvertAction;
 
     // View Actions
+    KAction               *fullScreenAction;
     KAction               *thumbSizePlusAction;
     KAction               *thumbSizeMinusAction;
-    KAction               *fullScreenAction;
+    KSelectAction         *imageSortAction;
+    KSelectAction         *albumSortAction;
 
     KAction               *rating0Star;
     KAction               *rating1Star;

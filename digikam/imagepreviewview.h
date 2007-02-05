@@ -54,8 +54,8 @@ signals:
     void signalNextItem();
     void signalPrevItem();
     void signalDeleteItem();
-    void editImageSignal();
-    void previewLoadedSignal();   
+    void signalEditItem();
+    void signalPreviewLoaded();   
 
 private slots:
 

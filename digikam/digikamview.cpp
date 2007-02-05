@@ -241,7 +241,7 @@ void DigikamView::setupConnections()
             this, SLOT(slotAlbumHighlight()));
 
     connect(d->iconView, SIGNAL(signalPreviewItem(AlbumIconItem*)),
-            this, SLOT(slotImagePreview(AlbumIconItem*)));
+            this, SLOT(slotTogglePreviewMode(AlbumIconItem*)));
 
     //connect(d->iconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
       //      this, SIGNAL(signalNoCurrentItem()));
@@ -301,14 +301,14 @@ void DigikamView::setupConnections()
     connect(d->albumWidgetStack, SIGNAL(signalPrevItem()),
             this, SLOT(slotPrevItem()));
     
-    connect(d->albumWidgetStack, SIGNAL(backToAlbumSignal()),
-            this, SLOT(slotEscapePreview()));
-    
-    connect(d->albumWidgetStack, SIGNAL(editImageSignal()),
-            this, SLOT(slotEditImage()));
+    connect(d->albumWidgetStack, SIGNAL(signalEditItem()),
+            this, SLOT(slotImageEdit()));
 
     connect(d->albumWidgetStack, SIGNAL(signalDeleteItem()),
             this, SLOT(slotImageDelete()));
+
+    connect(d->albumWidgetStack, SIGNAL(signalToggledToPreviewMode(bool)),
+            this, SLOT(slotToggledToPreviewMode(bool)));
 
     // -- Selection timer ---------------
 
@@ -863,54 +863,46 @@ void DigikamView::slotEscapePreview()
         return;
 
     AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
-    if (currItem)
-        slotImagePreview(currItem);
-    else
-        slotImagePreview();
-    
-    d->parent->escapePreview();
+    slotTogglePreviewMode(currItem);
 }
 
-void DigikamView::slotEditImage()
+void DigikamView::slotImagePreview()
 {
     AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
     if (currItem)
-        slotImageEdit(currItem);
+        slotTogglePreviewMode(currItem);
 }
 
-void DigikamView::slotImagePreview(AlbumIconItem *iconItem)
+// This method toogle between AlbumView and ImagePreview Modes, depending of context.
+void DigikamView::slotTogglePreviewMode(AlbumIconItem *iconItem)
 {
-    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode && iconItem)
     {
-        // We will toggle to Preview Item Mode.
-        AlbumIconItem *item=0;
-
-        if (!iconItem)
-        {
-            item = d->iconView->firstSelectedItem();
-            if (!item) 
-            {
-                d->albumWidgetStack->setPreviewItem();
-                return;
-            }
-        }
-        else
-        {
-            item = iconItem;
-        }
-
-        bool hasPrev = d->iconView->firstItem() != item;
-        bool hasNext = d->iconView->lastItem()  != item;
-        d->albumWidgetStack->setPreviewItem(item->imageInfo(), hasPrev, hasNext);
+        // We will go to ImagePreview Mode.
+        bool hasPrev = d->iconView->firstItem() != iconItem;
+        bool hasNext = d->iconView->lastItem()  != iconItem;
+        d->albumWidgetStack->setPreviewItem(iconItem->imageInfo(), hasPrev, hasNext);
     }
     else
     {
-        // We go back to Album Mode.
+        // We go back to AlbumView Mode.
         d->albumWidgetStack->setPreviewMode( AlbumWidgetStack::PreviewAlbumMode );
     }
 }
 
-void DigikamView::slotImageEdit(AlbumIconItem *iconItem)
+void DigikamView::slotToggledToPreviewMode(bool t)
+{
+    d->parent->toggledToPreviewMode(t);
+}
+
+void DigikamView::slotImageEdit()
+{
+    AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
+    if (currItem)
+        imageEdit(currItem);
+}
+
+void DigikamView::imageEdit(AlbumIconItem *iconItem)
 {
     AlbumIconItem *item;
 

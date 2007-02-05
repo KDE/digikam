@@ -93,11 +93,11 @@ ImagePreviewView::ImagePreviewView(QWidget *parent)
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));  
 
-    connect(d->imagePreviewWidget, SIGNAL( previewComplete() ),
-            this, SIGNAL( previewLoadedSignal() ) );          
+    connect(d->imagePreviewWidget, SIGNAL( signalPreviewComplete() ),
+            this, SIGNAL( signalPreviewLoaded() ) );          
     
-    connect(d->imagePreviewWidget, SIGNAL( previewFailed() ),
-            this, SIGNAL( previewLoadedSignal() ) );    
+    connect(d->imagePreviewWidget, SIGNAL( signalPreviewFailed() ),
+            this, SIGNAL( signalPreviewLoaded() ) );    
 
     connect(d->imagePreviewWidget, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
@@ -275,7 +275,7 @@ void ImagePreviewView::mousePressEvent(QMouseEvent* e)
 
             case 12:     // Edit...
             {
-                emit editImageSignal();
+                emit signalEditItem();
                 break;
             }
   

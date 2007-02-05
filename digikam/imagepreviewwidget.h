@@ -57,9 +57,9 @@ signals:
     void signalNextItem();
     void signalPrevItem();
     
-    void previewStarted();
-    void previewComplete();
-    void previewFailed();
+    void signalPreviewStarted();
+    void signalPreviewComplete();
+    void signalPreviewFailed();
     
 public slots:
 

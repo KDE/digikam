@@ -101,8 +101,8 @@ public slots:
     void slotNewAdvancedSearch();
 
     // Image action slots
-    void slotImagePreview(AlbumIconItem* iconItem=0);
-    void slotImageEdit(AlbumIconItem* iconItem=0);
+    void slotImagePreview();
+    void slotImageEdit();
     void slotImageExifOrientation(int orientation);
     void slotImageRename(AlbumIconItem* iconItem=0);
     void slotImageDelete();
@@ -129,6 +129,7 @@ private:
     void loadViewState();
     void saveViewState();
     void changeAlbumFromHistory(Album *album, QWidget *widget);
+    void imageEdit(AlbumIconItem* iconItem=0);
 
 private slots:
 
@@ -138,6 +139,8 @@ private slots:
     void slotAlbumHighlight();
 
     void slotImageSelected();
+    void slotTogglePreviewMode(AlbumIconItem *iconItem=0);
+    void slotToggledToPreviewMode(bool);
     void slotDispatchImageSelected();
     void slotImageCopyResult(KIO::Job* job);
 
@@ -149,7 +152,6 @@ private slots:
     void slotLastItem(void);
 
     void slotEscapePreview();
-    void slotEditImage();
 
 private:
 

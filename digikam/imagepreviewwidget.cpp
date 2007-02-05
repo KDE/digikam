@@ -117,7 +117,7 @@ void ImagePreviewWidget::setImagePath(const QString& path)
 
     d->previewThread->load(LoadingDescription(path, 1024, AlbumSettings::instance()->getExifRotate()));
 
-    emit previewStarted();
+    emit signalPreviewStarted();
 }
 
 void ImagePreviewWidget::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
@@ -133,9 +133,9 @@ void ImagePreviewWidget::slotGotImagePreview(const LoadingDescription &descripti
     unsetCursor();
 
     if (preview.isNull())
-        emit previewFailed();
+        emit signalPreviewFailed();
     else
-        emit previewComplete();
+        emit signalPreviewComplete();
 }
 
 void ImagePreviewWidget::updatePixmap( void )

@@ -72,9 +72,9 @@ signals:
 
     void signalNextItem();
     void signalPrevItem();
-    void backToAlbumSignal();    
-    void editImageSignal();
+    void signalEditItem();
     void signalDeleteItem();
+    void signalToggledToPreviewMode(bool);
 
 public slots:
 

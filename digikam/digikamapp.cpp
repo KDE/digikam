@@ -557,20 +557,20 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->imagePreviewAction = new KToggleAction(i18n("View..."),
-                                      "viewimage",
-                                      Key_F3,
-                                      d->view,
-                                      SLOT(slotImagePreview()),
-                                      actionCollection(),
-                                      "image_view");
+                                    "viewimage",
+                                    Key_F3,
+                                    d->view,
+                                    SLOT(slotImagePreview()),
+                                    actionCollection(),
+                                    "image_view");
 
     d->imageViewAction = new KAction(i18n("Edit..."),
-                                   "editimage",
-                                   Key_F4,
-                                   d->view,
-                                   SLOT(slotImageEdit()),
-                                   actionCollection(),
-                                   "image_edit");
+                                    "editimage",
+                                    Key_F4,
+                                    d->view,
+                                    SLOT(slotImageEdit()),
+                                    actionCollection(),
+                                    "image_edit");
     d->imageViewAction->setWhatsThis(i18n("This option allows you to open the editor with the "
                                         "current selected item."));
 
@@ -1734,9 +1734,26 @@ void DigikamApp::slotDonateMoney()
     KApplication::kApplication()->invokeBrowser("http://www.digikam.org/?q=donation");
 }
 
-void DigikamApp::escapePreview()
+void DigikamApp::toggledToPreviewMode(bool t)
 {
-    d->imagePreviewAction->setChecked(false);
+    // NOTE: if 't' is true, we are in Preview Mode, else we are in AlbumView Mode
+
+    // This is require if ESC is pressed to go out of Preview Mode. 
+    // imagePreviewAction is handled by F3 key only. 
+    d->imagePreviewAction->setChecked(t);
+
+    // Here, we will toggle some menu actions depending of current Mode.
+    
+    // Select menu.
+    d->selectAllAction->setEnabled(!t);
+    d->selectNoneAction->setEnabled(!t);
+    d->selectInvertAction->setEnabled(!t);
+
+    // View menu     
+    d->thumbSizePlusAction->setEnabled(!t);
+    d->thumbSizeMinusAction->setEnabled(!t);
+    d->albumSortAction->setEnabled(!t);
+    d->imageSortAction->setEnabled(!t);
 }
 
 }  // namespace Digikam

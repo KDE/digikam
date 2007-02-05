@@ -88,14 +88,14 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     connect(d->imagePreviewView, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
 
-    connect(d->imagePreviewView, SIGNAL( editImageSignal() ),
-            this, SIGNAL( editImageSignal() ) );
+    connect(d->imagePreviewView, SIGNAL(signalEditItem()),
+            this, SIGNAL(signalEditItem()));
 
-    connect(d->imagePreviewView, SIGNAL( signalDeleteItem() ),
-            this, SIGNAL( signalDeleteItem() ) );
+    connect(d->imagePreviewView, SIGNAL(signalDeleteItem()),
+            this, SIGNAL(signalDeleteItem()));
 
-    connect(d->imagePreviewView, SIGNAL( previewLoadedSignal() ),
-            this, SLOT( slotPreviewLoaded() ) );
+    connect(d->imagePreviewView, SIGNAL(signalPreviewLoaded()),
+            this, SLOT(slotPreviewLoaded()));
 }
 
 AlbumWidgetStack::~AlbumWidgetStack()
@@ -170,7 +170,12 @@ void AlbumWidgetStack::setPreviewMode(int mode)
         return;
 
     if (mode == PreviewAlbumMode || mode == WelcomePageMode)
+    {
         setPreviewItem();
+        emit signalToggledToPreviewMode(false);
+    }
+    else 
+        emit signalToggledToPreviewMode(true);
 
     raiseWidget(mode);
 }
