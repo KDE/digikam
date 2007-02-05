@@ -25,7 +25,7 @@
 
 extern "C" 
 {
-#include "jasper/jasper.h"
+#include <jasper/jasper.h>
 }
 
 // Qt includes.
