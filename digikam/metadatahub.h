@@ -134,6 +134,30 @@ public:
         ManagedTags
     };
 
+    enum WriteMode
+    {
+        /**
+            Write all available information
+        */
+        FullWrite,
+        /**
+            Do a full write if and only if
+                - metadata fields changed
+                - the changed fields shall be written according to write settings
+            "Changed" in this context means changed by one of the set... methods,
+            the load() methods are ignored for this attribute.
+            This mode allows to avoid write operations when e.g. the user does not want
+            keywords to be written and only changes keywords.
+        */
+        FullWriteIfChanged,
+        /**
+            Write only the changed parts.
+            Metadata fields which cannot be changed from MetadataHub (photographer ID etc.)
+            will never be written
+        */
+        PartialWrite
+    };
+
     /**
         Constructs a MetadataHub.
         @param dbmode Determines if the database may be accessed or not. See the enum description above.
@@ -174,7 +198,7 @@ public:
         to the given ImageInfo object.
         @return Returns true if the info object has been changed
     */
-    bool write(ImageInfo *info);
+    bool write(ImageInfo *info, WriteMode writeMode = FullWrite);
 
     /**
         Applies the set of metadata contained in this MetadataHub
@@ -195,7 +219,7 @@ public:
         metadata field is not touched.
         @return Returns true if the metadata object has been touched
     */
-    bool write(DMetadata &metadata,
+    bool write(DMetadata &metadata, WriteMode writeMode = FullWrite,
                const MetadataWriteSettings &settings = defaultWriteSettings());
 
     /**
@@ -204,7 +228,7 @@ public:
         and notifies the ImageAttributesWatch.
         @return Returns if the file has been touched
     */
-    bool write(const QString &filePath,
+    bool write(const QString &filePath, WriteMode writeMode = FullWrite,
                const MetadataWriteSettings &settings = defaultWriteSettings());
 
     /**

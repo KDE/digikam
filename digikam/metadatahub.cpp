@@ -53,6 +53,11 @@ public:
         count          = 0;
 
         dbmode         = MetadataHub::ManagedTags;
+
+        dateTimeChanged = false;
+        commentChanged  = false;
+        ratingChanged   = false;
+        tagsChanged     = false;
     }
 
     MetadataHub::Status dateTimeStatus;
@@ -69,7 +74,13 @@ public:
 
     QMap<TAlbum *, MetadataHub::TagStatus> tags;
     QStringList            tagList;
+
     MetadataHub::DatabaseMode dbmode;
+
+    bool                dateTimeChanged;
+    bool                commentChanged;
+    bool                ratingChanged;
+    bool                tagsChanged;
 
     template <class T> void loadWithInterval(const T &data, T &storage, T &highestStorage, MetadataHub::Status &status);
     template <class T> void loadSingleValue(const T &data, T &storage, MetadataHub::Status &status);
@@ -372,71 +383,134 @@ template <class T> void MetadataHubPriv::loadSingleValue(const T &data, T &stora
 
 // --------------------------------------------------
 
-bool MetadataHub::write(ImageInfo *info)
+bool MetadataHub::write(ImageInfo *info, WriteMode writeMode)
 {
     bool changed = false;
-    if (d->commentStatus == MetadataAvailable)
+
+    // find out in advance if we have something to write - needed for FullWriteIfChanged mode
+    bool saveComment  = d->commentStatus == MetadataAvailable;
+    bool saveDateTime = d->dateTimeStatus == MetadataAvailable;
+    bool saveRating   = d->ratingStatus == MetadataAvailable;
+    bool saveTags     = false;
+    for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
+    {
+        if (it.data() == MetadataAvailable)
+        {
+            saveTags = true;
+            break;
+        }
+    }
+
+    bool writeAllFields;
+    if (writeMode == FullWrite)
+        writeAllFields = true;
+    else if (writeMode == FullWriteIfChanged)
+        writeAllFields = (
+                           (saveComment  && d->commentChanged)  ||
+                           (saveDateTime && d->dateTimeChanged) ||
+                           (saveRating   && d->ratingChanged)   ||
+                           (saveTags     && d->tagsChanged)
+                         );
+    else // PartialWrite
+        writeAllFields = false;
+
+    if (saveComment && (writeAllFields || d->commentChanged))
     {
         info->setCaption(d->comment);
         changed = true;
     }
-    if (d->dateTimeStatus == MetadataAvailable)
+    if (saveDateTime && (writeAllFields || d->dateTimeChanged))
     {
         info->setDateTime(d->dateTime);
         changed = true;
     }
-    if (d->ratingStatus == MetadataAvailable)
+    if (saveRating && (writeAllFields || d->ratingChanged))
     {
         info->setRating(d->rating);
         changed = true;
     }
 
-    if (d->dbmode == ManagedTags)
+    if (writeAllFields || d->tagsChanged)
     {
-        for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
+        if (d->dbmode == ManagedTags)
         {
-            if (it.data() == MetadataAvailable)
+            for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
             {
-                if (it.data().hasTag)
-                    info->setTag(it.key()->id());
-                else
-                    info->removeTag(it.key()->id());
-                changed = true;
+                if (it.data() == MetadataAvailable)
+                {
+                    if (it.data().hasTag)
+                        info->setTag(it.key()->id());
+                    else
+                        info->removeTag(it.key()->id());
+                    changed = true;
+                }
             }
         }
-    }
-    else
-    {
+        else
+        {
         // tags not yet contained in database will be created
-        info->addTagPaths(d->tagList);
-        changed = changed || !d->tagList.isEmpty();
+            info->addTagPaths(d->tagList);
+            changed = changed || !d->tagList.isEmpty();
+        }
     }
     return changed;
 }
 
-bool MetadataHub::write(DMetadata &metadata, const MetadataWriteSettings &settings)
+bool MetadataHub::write(DMetadata &metadata, WriteMode writeMode, const MetadataWriteSettings &settings)
 {
     bool dirty = false;
 
-    if (settings.saveComments && d->commentStatus == MetadataAvailable)
+    // find out in advance if we have something to write - needed for FullWriteIfChanged mode
+    bool saveComment  = (settings.saveComments && d->commentStatus == MetadataAvailable);
+    bool saveDateTime = (settings.saveDateTime && d->dateTimeStatus == MetadataAvailable);
+    bool saveRating   = (settings.saveIptcRating && d->ratingStatus == MetadataAvailable);
+    bool saveTags     = false;
+    if (settings.saveIptcTags)
+    {
+        saveTags = false;
+        // find at least one tag to write
+        for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
+        {
+            if (it.data() == MetadataAvailable)
+            {
+                saveTags = true;
+                break;
+            }
+        }
+    }
+
+    bool writeAllFields;
+    if (writeMode == FullWrite)
+        writeAllFields = true;
+    else if (writeMode == FullWriteIfChanged)
+        writeAllFields = (
+                           (saveComment  && d->commentChanged)  ||
+                           (saveDateTime && d->dateTimeChanged) ||
+                           (saveRating   && d->ratingChanged)   ||
+                           (saveTags     && d->tagsChanged)
+                         );
+    else // PartialWrite
+        writeAllFields = false;
+
+    if (saveComment && (writeAllFields || d->commentChanged))
     {
         // Store comments in image as JFIF comments, Exif comments, and Iptc Comments.
         dirty |= metadata.setImageComment(d->comment);
     }
 
-    if (settings.saveDateTime && d->dateTimeStatus == MetadataAvailable)
+    if (saveDateTime && (writeAllFields || d->dateTimeChanged))
     {
         // Store Image Date & Time as Exif and Iptc tags.
         dirty |= metadata.setImageDateTime(d->dateTime, false);
     }
 
-    if (settings.saveIptcRating && d->ratingStatus == MetadataAvailable)
+    if (saveRating && (writeAllFields || d->ratingChanged))
     {
         // Store Image rating as Iptc tag.
         dirty |= metadata.setImageRating(d->rating);
     }
 
-    if (settings.saveIptcTags)
+    if (saveTags && (writeAllFields || d->tagsChanged))
     {
         // Store tag paths as Iptc keywords tags.
 
@@ -462,14 +536,14 @@ bool MetadataHub::write(DMetadata &metadata, const MetadataWriteSettings &settin
         dirty |= metadata.setImageKeywords(oldKeywords, newKeywords);
     }
 
-    if (settings.saveIptcPhotographerId)
+    if (settings.saveIptcPhotographerId && writeAllFields)
     {
         // Store Photograph identity into the Iptc tags.
         dirty |= metadata.setImagePhotographerId(settings.iptcAuthor,
                                         settings.iptcAuthorTitle);
     }
 
-    if (settings.saveIptcCredits)
+    if (settings.saveIptcCredits && writeAllFields)
     {
         // Store Photograph identity into the Iptc tags.
         dirty |= metadata.setImageCredits(settings.iptcCredit,
@@ -480,10 +554,10 @@ bool MetadataHub::write(DMetadata &metadata, const MetadataWriteSettings &settin
     return dirty;
 }
 
-bool MetadataHub::write(const QString &filePath, const MetadataWriteSettings &settings)
+bool MetadataHub::write(const QString &filePath, WriteMode writeMode, const MetadataWriteSettings &settings)
 {
     DMetadata metadata(filePath);
-    if (write(metadata, settings))
+    if (write(metadata, writeMode, settings))
     {
         bool success = metadata.applyChanges();
         ImageAttributesWatch::instance()->fileMetadataChanged(filePath);
@@ -630,26 +704,30 @@ QMap<int, MetadataHub::TagStatus> MetadataHub::tagIDs() const
 
 void MetadataHub::setDateTime(const QDateTime &dateTime, Status status)
 {
-    d->dateTimeStatus = status;
-    d->dateTime       = dateTime;
+    d->dateTimeStatus  = status;
+    d->dateTime        = dateTime;
+    d->dateTimeChanged = true;
 }
 
 void MetadataHub::setComment(const QString &comment, Status status)
 {
     d->commentStatus  = status;
     d->comment        = comment;
+    d->commentChanged = true;
 }
 
 void MetadataHub::setRating(int rating, Status status)
 {
     d->ratingStatus   = status;
     d->rating         = rating;
+    d->ratingChanged  = true;
 }
 
 void MetadataHub::setTag(TAlbum *tag, bool hasTag, Status status)
 {
     // DatabaseMode == ManagedTags is assumed
-    d->tags[tag] = TagStatus(status, hasTag);
+    d->tags[tag]   = TagStatus(status, hasTag);
+    d->tagsChanged = true;
 }
 
 void MetadataHub::setTag(int albumID, bool hasTag, Status status)
