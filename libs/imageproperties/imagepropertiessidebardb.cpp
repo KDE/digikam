@@ -198,6 +198,10 @@ void ImagePropertiesSideBarDB::slotNoCurrentItem(void)
 {
     ImagePropertiesSideBar::slotNoCurrentItem();
 
+    // All tabs that store the ImageInfo list and access it after selection change
+    // must release the image info here. slotChangedTab only handles the active tab!
+    d->desceditTab->setItem();
+
     if (d->hasImageInfoOwnership)
     {
         for (ImageInfo *info = d->currentInfos.first(); info; info = d->currentInfos.next())
