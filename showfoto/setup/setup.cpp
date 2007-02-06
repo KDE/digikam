@@ -96,6 +96,10 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                               BarIcon("dcraw", KIcon::SizeMedium));
     d->dcrawPage = new Digikam::SetupDcraw(d->page_dcraw);
 
+    d->page_icc = addPage(i18n("ICC Profiles"), i18n("Color Management Profiles"),
+                          BarIcon("colorize", KIcon::SizeMedium));
+    d->iccPage = new Digikam::SetupICC(d->page_icc, this);
+
     d->page_iofiles = addPage(i18n("Save Images"), i18n("Image Editor Save Images Files Settings"),
                               BarIcon("pipe", KIcon::SizeMedium));
     d->iofilesPage = new Digikam::SetupIOFiles(d->page_iofiles);
@@ -107,10 +111,6 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_slideshow = addPage(i18n("Slide Show"), i18n("Slide Show Settings"),
                                 BarIcon("slideshow", KIcon::SizeMedium));
     d->slideshowPage = new Digikam::SetupSlideShow(d->page_slideshow);
-
-    d->page_icc = addPage(i18n("ICC Profiles"), i18n("Color Management Profiles"),
-                          BarIcon("colorize", KIcon::SizeMedium));
-    d->iccPage = new Digikam::SetupICC(d->page_icc, this);
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
