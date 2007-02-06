@@ -6976,7 +6976,12 @@ int CLASS main (int argc, char **argv)
     if (identify_only && verbose && make[0]) {
       printf ("\nFilename: %s\n", ifname);
       printf ("Timestamp: %s", ctime(&timestamp));
-      printf ("Camera: %s %s\n", make, model);
+
+      /* NOTE: Digikam Fix : separate output of "make" and "model" informations.
+      printf ("Camera: %s %s\n", make, model); */
+      printf ("Make: %s\n", make);
+      printf ("Model: %s\n", model);
+
       printf ("ISO speed: %d\n", (int) iso_speed);
       printf ("Shutter: ");
       if (shutter > 0 && shutter < 1)

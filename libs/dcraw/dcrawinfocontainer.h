@@ -83,7 +83,8 @@ public:
     double    daylightMult[3];    // White color balance settings.
     double    cameraMult[4];
 
-    QString   model;              // The camera maker and model.
+    QString   make;               // The camera maker.
+    QString   model;              // The camera model.
 
     QDateTime dateTime;           // Date & time when have been taken the picture.
 

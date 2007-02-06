@@ -235,14 +235,25 @@ bool DcrawIface::rawFileIdentify(DcrawInfoContainer& identify, const QString& pa
         identify.dateTime = QDateTime::fromString(timeStamp);
     }
 
-    // Extract Camera Model.
-    QString cameraHeader("Camera: ");
-    pos = dcrawInfo.find(cameraHeader);
+    // Extract Camera Maker.
+    QString makeHeader("Make: ");
+    pos = dcrawInfo.find(makeHeader);
     if (pos != -1)
     {
-        QString camera = dcrawInfo.mid(pos).section('\n', 0, 0);
-        camera.remove(0, cameraHeader.length());
-        identify.model = camera;
+        QString make = dcrawInfo.mid(pos).section('\n', 0, 0);
+        make.remove(0, makeHeader.length());
+        identify.make = make;
+    }
+
+
+    // Extract Camera Model.
+    QString modelHeader("Model: ");
+    pos = dcrawInfo.find(modelHeader);
+    if (pos != -1)
+    {
+        QString model = dcrawInfo.mid(pos).section('\n', 0, 0);
+        model.remove(0, modelHeader.length());
+        identify.model = model;
     }
 
     // Extract ISO Speed.
