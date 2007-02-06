@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-01-02
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-01-02
  * Description : setup Kipi plugins tab.
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,6 +42,7 @@
 // Local includes.
 
 #include "setupplugins.h"
+#include "setupplugins.moc"
 
 namespace Digikam
 {
@@ -70,7 +71,7 @@ SetupPlugins::SetupPlugins(QWidget* parent )
     QHBoxLayout *hlay = new QHBoxLayout(layout);
     d->pluginsNumber = new QLabel(parent);
     
-    QLabel *KipiVersion = new QLabel(i18n("Kipi version: %1").arg(kipi_version), parent);
+    QLabel *KipiVersion = new QLabel(i18n("Kipi library version: %1").arg(kipi_version), parent);
     KipiVersion->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     
     hlay->addWidget(d->pluginsNumber, 1);
@@ -103,4 +104,3 @@ void SetupPlugins::applyPlugins()
 
 }  // namespace Digikam
 
-#include "setupplugins.moc"
