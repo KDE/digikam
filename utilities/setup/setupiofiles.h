@@ -45,6 +45,10 @@ private:
 
     void readSettings();
 
+private slots:
+
+    void slotToggleJPEG2000LossLess(bool);
+
 private:
 
     SetupIOFilesPriv* d;    

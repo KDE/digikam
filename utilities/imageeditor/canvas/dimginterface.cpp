@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net> 
- * Date  : 2003-01-15
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2003-01-15
  * Description : DImg interface for image editor
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
@@ -539,17 +539,30 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
         mimeType = getImageFormat();
 
     DDebug() << "Saving to :" << QFile::encodeName(fileName).data() << " (" 
-              << mimeType << ")" << endl;
+             << mimeType << ")" << endl;
 
+    // JPEG file format.
     if ( mimeType.upper() == QString("JPG") || mimeType.upper() == QString("JPEG") || 
          mimeType.upper() == QString("JPE")) 
        d->image.setAttribute("quality", iofileSettings->JPEGCompression);
 
+    // PNG file format.
     if ( mimeType.upper() == QString("PNG") ) 
        d->image.setAttribute("quality", iofileSettings->PNGCompression);
 
+    // TIFF file format.
     if ( mimeType.upper() == QString("TIFF") || mimeType.upper() == QString("TIF") ) 
        d->image.setAttribute("compress", iofileSettings->TIFFCompression);
+
+    // JPEG 2000 file format.
+    if ( mimeType.upper() == QString("JP2") || mimeType.upper() == QString("JPX") || 
+         mimeType.upper() == QString("JPC") || mimeType.upper() == QString("PGX"))
+    { 
+        if (iofileSettings->JPEG2000LossLess)
+            d->image.setAttribute("quality", 100);    // LossLess compression
+        else
+            d->image.setAttribute("quality", iofileSettings->JPEG2000Compression);
+    }
 
     d->savingFilename = fileName;
 

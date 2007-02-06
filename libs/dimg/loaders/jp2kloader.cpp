@@ -519,6 +519,8 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // Set ICC color profile.
 
+    // FIXME : doesn't work yet!
+
     jas_cmprof_t  *cm_profile  = 0;
     jas_iccprof_t *icc_profile = 0;
 
@@ -631,13 +633,19 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     if (quality > 100)
         quality = 100;
 
+    QString     rate;
+    QTextStream ts( &rate, IO_WriteOnly );
+        
+    // NOTE: to have a lossless compression use quality=100.
     // jp2_encode()::optstr:
     // - rate=#B => the resulting file size is about # bytes
     // - rate=0.0 .. 1.0 => the resulting file size is about the factor times
     //                      the uncompressed size
-    QString rate;
-    QTextStream ts( &rate, IO_WriteOnly );
     ts << "rate=" << ( quality / 100.0F );
+    
+    DDebug() << "JPEG2000 quality: " << quality << endl;
+    DDebug() << "JPEG2000 " << rate << endl;
+
     int ret = jp2_encode(jp2_image, jp2_stream, rate.utf8().data());
     if (ret != 0)
     {

@@ -748,19 +748,30 @@ void EditorWindow::applyStandardSettings()
     setColorManagedViewIndicatorToolTip(d->ICCSettings->managedViewSetting && d->ICCSettings->enableCMSetting);
     m_canvas->setICCSettings(d->ICCSettings);
 
-    // -- JPEG, PNG, TIFF files format settings ----------------------------------------------
+    // -- JPEG, PNG, TIFF JPEG2000 files format settings --------------------------------------
 
     config->setGroup("ImageViewer Settings");
 
     // JPEG quality slider settings : 0 - 100 ==> libjpeg settings : 25 - 100.
-    m_IOFileSettings->JPEGCompression  = (int)((75.0/100.0)*(float)config->readNumEntry("JPEGCompression", 75)
-                                               + 26.0 - (75.0/100.0));
+    m_IOFileSettings->JPEGCompression     = (int)((75.0/100.0)*
+                                                 (float)config->readNumEntry("JPEGCompression", 75)
+                                                 + 26.0 - (75.0/100.0));
 
     // PNG compression slider settings : 1 - 9 ==> libpng settings : 100 - 1.
-    m_IOFileSettings->PNGCompression   = (int)(((1.0-100.0)/8.0)*(float)config->readNumEntry("PNGCompression", 1)
-                                               + 100.0 - ((1.0-100.0)/8.0));
+    m_IOFileSettings->PNGCompression      = (int)(((1.0-100.0)/8.0)*
+                                                 (float)config->readNumEntry("PNGCompression", 1)
+                                                 + 100.0 - ((1.0-100.0)/8.0));
 
-    m_IOFileSettings->TIFFCompression  = config->readBoolEntry("TIFFCompression", false);
+    // TIFF compression setting.
+    m_IOFileSettings->TIFFCompression     = config->readBoolEntry("TIFFCompression", false);
+
+    // JPEG2000 quality slider settings : 0 - 100 ==> lib jasper settings : 25 - 100.
+    m_IOFileSettings->JPEG2000Compression = (int)((75.0/100.0)*
+                                                  (float)config->readNumEntry("JPEG2000Compression", 75)
+                                                  + 26.0 - (75.0/100.0));
+
+    // JPEG2000 LossLess setting.
+    m_IOFileSettings->JPEG2000LossLess    = config->readBoolEntry("JPEG2000LossLess", true);
 
     // -- RAW pictures decoding settings ------------------------------------------------------
 

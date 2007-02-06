@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2006-01-03
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2006-01-03
  * Description : IO file Settings Container.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,10 +35,13 @@ public:
     
     IOFileSettingsContainer()
     {
-        JPEGCompression = 75;
-        PNGCompression  = 9;
-        TIFFCompression = false;
+        JPEGCompression     = 75;
+        PNGCompression      = 9;
+        TIFFCompression     = false;
+        JPEG2000Compression = 75;
+        JPEG2000LossLess    = true;
     };
+
     ~IOFileSettingsContainer(){};
 
 public:
@@ -52,11 +55,16 @@ public:
     // TIFF deflat compression.
     bool TIFFCompression;
 
+    // JPEG2000 quality value.
+    int  JPEG2000Compression;
+
+    // JPEG2000 lossless compression.
+    bool JPEG2000LossLess;
+
     // ------------------------------------------------------
     // RAW File decoding options :
 
-    RawDecodingSettings rawDecodingSettings;
-    
+    RawDecodingSettings rawDecodingSettings;    
 };
 
 }  // namespace Digikam
