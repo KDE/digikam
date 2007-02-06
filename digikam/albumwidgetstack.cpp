@@ -171,6 +171,7 @@ void AlbumWidgetStack::setPreviewMode(int mode)
 
     if (mode == PreviewAlbumMode || mode == WelcomePageMode)
     {
+        d->albumIconView->setFocus();   
         setPreviewItem();
         emit signalToggledToPreviewMode(false);
     }

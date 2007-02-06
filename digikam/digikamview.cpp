@@ -119,7 +119,7 @@ public:
     SearchFolderView         *searchFolderView;
     TagFilterView            *tagFilterView;
 
-    bool                     needDispatchSelection;
+    bool                      needDispatchSelection;
 };
 
 DigikamView::DigikamView(QWidget *parent)
