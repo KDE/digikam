@@ -7,12 +7,13 @@
  * 
  * This implementation use Jasper API 
  * library : http://www.ece.uvic.ca/~mdadams/jasper
- * Other JPEG2000 decoder : http://www.openjpeg.org
+ * Other JPEG2000 encoder-decoder : http://www.openjpeg.org
  *
  * Others Linux JPEG2000 Loader implementation using Jasper:
  * http://cvs.graphicsmagick.org/cgi-bin/cvsweb.cgi/GraphicsMagick/coders/jp2.c  
  * https://subversion.imagemagick.org/subversion/ImageMagick/trunk/coders/jp2.c
  * http://svn.ghostscript.com:8080/jasper/trunk/src/appl/jasper.c
+ * http://websvn.kde.org/trunk/KDE/kdelibs/kimgio/jp2.cpp
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

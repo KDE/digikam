@@ -752,7 +752,7 @@ void EditorWindow::applyStandardSettings()
 
     config->setGroup("ImageViewer Settings");
 
-    // JPEG quality slider settings : 0 - 100 ==> libjpeg settings : 25 - 100.
+    // JPEG quality slider settings : 1 - 100 ==> libjpeg settings : 25 - 100.
     m_IOFileSettings->JPEGCompression     = (int)((75.0/100.0)*
                                                  (float)config->readNumEntry("JPEGCompression", 75)
                                                  + 26.0 - (75.0/100.0));
@@ -765,10 +765,8 @@ void EditorWindow::applyStandardSettings()
     // TIFF compression setting.
     m_IOFileSettings->TIFFCompression     = config->readBoolEntry("TIFFCompression", false);
 
-    // JPEG2000 quality slider settings : 0 - 100 ==> lib jasper settings : 25 - 100.
-    m_IOFileSettings->JPEG2000Compression = (int)((75.0/100.0)*
-                                                  (float)config->readNumEntry("JPEG2000Compression", 75)
-                                                  + 26.0 - (75.0/100.0));
+    // JPEG2000 quality slider settings : 1 - 100
+    m_IOFileSettings->JPEG2000Compression = config->readNumEntry("JPEG2000Compression", 100);
 
     // JPEG2000 LossLess setting.
     m_IOFileSettings->JPEG2000LossLess    = config->readBoolEntry("JPEG2000LossLess", true);
