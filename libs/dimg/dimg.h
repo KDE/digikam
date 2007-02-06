@@ -31,6 +31,7 @@
 #include <qrect.h>
 #include <qimage.h>
 #include <qpixmap.h>
+#include <qvariant.h>
 
 // Local includes.
 
