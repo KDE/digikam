@@ -1,0 +1,26 @@
+DCRAW BACKPORT.
+-----------------------------
+
+The dcraw.c file must be updated periodicly to support new RAW files format.
+The current implementation can be found at this url:
+
+http://cybercom.net/~dcoffin/dcraw/dcraw.c
+
+Following lines need to be changed in dcraw.c :
+
+==> With "-i -v" options to report Make and Model indentification properlly using separate lines 
+    on the console a printf need to be added like this:
+
+int CLASS main (int argc, char **argv)
+{
+...
+      /* NOTE: Digikam Fix : separate output of "make" and "model" informations.
+      printf ("Camera: %s %s\n", make, model); */
+      printf ("Make: %s\n", make);
+      printf ("Model: %s\n", model);
+...
+}
+
+These informations are used by DcrawIface class to give some metadata with Exiv2 unsupported 
+RAW file format.
+
