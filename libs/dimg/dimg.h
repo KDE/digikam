@@ -41,7 +41,6 @@
 #include "dcolorcomposer.h"
 
 class QString;
-class QVariant;
 
 namespace Digikam
 {
