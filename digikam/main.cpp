@@ -2,7 +2,7 @@
  * Authors: Renchi Raju <renchi at pooh.tam.uiuc.edu>
  *          Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date   : 2002-07-28
- * Description : 
+ * Description : main program from digiKam
  * 
  * Copyright 2002-2006 by Renchi Raju and Gilles Caulier
  * Copyright 2007 by Gilles Caulier
@@ -52,6 +52,10 @@
 
 #include <exiv2/exiv2_version.h>
 
+// libkexiv2 includes.
+
+#include <libkexiv2/version.h>
+
 // Gphoto2 includes.
 
 extern "C"
@@ -84,6 +88,8 @@ int main(int argc, char *argv[])
 
     QString libInfo     = QString(I18N_NOOP("Using Kipi library version %1")).arg(kipi_version) +
                           QString("\n") + 
+                          QString(I18N_NOOP("Using KExiv2 library version %1")).arg(kexiv2_version) +
+                          QString("\n") +                           
                           QString(I18N_NOOP("Using Exiv2 library version %1")).arg(Exiv2Ver) +
                           QString("\n") + 
                           QString(I18N_NOOP("Using Gphoto2 library version %1")).arg(Gphoto2Ver);
