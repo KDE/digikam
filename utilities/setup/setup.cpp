@@ -169,6 +169,10 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                               BarIcon("dcraw", KIcon::SizeMedium));
     d->dcrawPage = new SetupDcraw(d->page_dcraw);
 
+    d->page_icc = addPage(i18n("Color Management"), i18n("Image Editor Color Management"),
+                          BarIcon("colorize", KIcon::SizeMedium));
+    d->iccPage = new SetupICC(d->page_icc, this);
+
     d->page_iofiles = addPage(i18n("Save Images"), i18n("Image Editor Save Images Files Settings"),
                               BarIcon("pipe", KIcon::SizeMedium));
     d->iofilesPage = new SetupIOFiles(d->page_iofiles);
@@ -180,10 +184,6 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_slideshow = addPage(i18n("Slide Show"), i18n("Image Editor Slide Show Settings"),
                                 BarIcon("slideshow", KIcon::SizeMedium));
     d->slideshowPage = new SetupSlideShow(d->page_slideshow);
-
-    d->page_icc = addPage(i18n("Color Management"), i18n("Image Editor Color Management"),
-                          BarIcon("colorize", KIcon::SizeMedium));
-    d->iccPage = new SetupICC(d->page_icc, this);
 
     d->page_plugins = addPage(i18n("Kipi Plugins"), i18n("Main Interface Plug-in Settings"),
                               BarIcon("kipi", KIcon::SizeMedium));
