@@ -41,7 +41,6 @@
 
 // Local includes.
 
-#include "dcrawbinary.h"
 #include "dcrawsettingswidget.h"
 #include "setupdcraw.h"
 #include "setupdcraw.moc"
@@ -67,7 +66,7 @@ SetupDcraw::SetupDcraw(QWidget* parent )
 {
     d = new SetupDcrawPriv;
     QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
-    d->dcrawSettings    = new DcrawSettingsWidget(parent, Digikam::DcrawBinary::instance()->version());
+    d->dcrawSettings    = new DcrawSettingsWidget(parent);
     layout->addWidget(d->dcrawSettings);
     layout->addStretch();
 

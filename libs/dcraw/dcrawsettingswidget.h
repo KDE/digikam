@@ -3,7 +3,7 @@
  * Date   : 2006-09-13
  * Description : dcraw settings widgets
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,7 +23,7 @@
 
 // Qt includes.
 
-#include <qgroupbox.h>
+#include <qwidget.h>
 
 // Local includes.
 
@@ -31,16 +31,15 @@
 
 namespace Digikam
 {
-
 class DcrawSettingsWidgetPriv;
 
-class DcrawSettingsWidget : public QGroupBox
+class DcrawSettingsWidget : public QWidget
 {
     Q_OBJECT
     
 public:
 
-    DcrawSettingsWidget(QWidget *parent, const QString& dcrawVersion);
+    DcrawSettingsWidget(QWidget *parent);
     ~DcrawSettingsWidget();
 
     bool   sixteenBits();
@@ -75,6 +74,7 @@ private slots:
 
     void slotUnclipColorActivated(int);
     void slotNoiseReductionToggled(bool);
+    void processDcrawURL(const QString&);
 
 private:
 

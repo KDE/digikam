@@ -3,7 +3,7 @@
  * Date   : 2006-09-13
  * Description : dcraw settings widgets
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,15 +26,19 @@
 #include <qlayout.h>
 #include <qwhatsthis.h>
 #include <qstring.h>
+#include <qtooltip.h>
 
 // KDE includes.
 
+#include <kapplication.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <knuminput.h>
+#include <kurllabel.h>
 
 // Local includes.
 
+#include "dcrawbinary.h"
 #include "dcrawsettingswidget.h"
 #include "dcrawsettingswidget.moc"
 
@@ -95,13 +99,11 @@ public:
     KDoubleNumInput *NRSigmaRange;
 };
 
-DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, const QString& dcrawVersion)
-                   : QGroupBox(0, Qt::Vertical, 
-                               i18n("RAW Decoding Settings (dcraw %1)").arg(dcrawVersion), 
-                               parent)
+DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent)
+                   : QWidget(parent)
 {
     d = new DcrawSettingsWidgetPriv;
-    QGridLayout* settingsBoxLayout = new QGridLayout(layout(), 12, 1, KDialog::spacingHint());
+    QGridLayout* settingsBoxLayout = new QGridLayout(this, 12, 1, KDialog::spacingHint());
 
     // ---------------------------------------------------------------
 
@@ -113,7 +115,13 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, const QString& dcrawVe
                                                "If disabled, all RAW files will be decoded to 8-bit "
                                                "color depth with a BT.709 gamma curve and a 99th-percentile "
                                                "white point. This mode is faster than 16-bit decoding."));
-    settingsBoxLayout->addMultiCellWidget(d->sixteenBitsImage, 0, 0, 0, 1);
+    settingsBoxLayout->addMultiCellWidget(d->sixteenBitsImage, 0, 0, 0, 0);
+
+    KURLLabel *dcrawVersion = new KURLLabel("http://cybercom.net/~dcoffin/dcraw", i18n("dcraw version %1")
+                                  .arg(Digikam::DcrawBinary::instance()->version()), this);
+    dcrawVersion->setAlignment(Qt::AlignRight);
+    QToolTip::add(dcrawVersion, i18n("Visit dcraw project website"));
+    settingsBoxLayout->addMultiCellWidget(dcrawVersion, 0, 0, 1, 1);
 
     d->fourColorCheckBox = new QCheckBox(i18n("Interpolate RGB as four colors"), this);
     QWhatsThis::add(d->fourColorCheckBox, i18n("<p><b>Interpolate RGB as four colors</b><p>"
@@ -292,11 +300,19 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, const QString& dcrawVe
 
     connect(d->enableNoiseReduction, SIGNAL(toggled(bool)),
             this, SLOT(slotNoiseReductionToggled(bool)));
+
+    connect(dcrawVersion, SIGNAL(leftClickedURL(const QString&)),
+            this, SLOT(processDcrawURL(const QString&)));
 }
 
 DcrawSettingsWidget::~DcrawSettingsWidget()
 {
     delete d;
+}
+
+void DcrawSettingsWidget::processDcrawURL(const QString& url)
+{
+    KApplication::kApplication()->invokeBrowser(url);
 }
 
 void DcrawSettingsWidget::setDefaultSettings()
