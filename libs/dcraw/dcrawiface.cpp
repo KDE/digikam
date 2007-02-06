@@ -256,13 +256,17 @@ bool DcrawIface::rawFileIdentify(DcrawInfoContainer& identify, const QString& pa
     }
 
     // Extract Shutter Speed.
-    QString shutterSpeedHeader("Shutter: 1/");
+    QString shutterSpeedHeader("Shutter: ");
     pos = dcrawInfo.find(shutterSpeedHeader);
     if (pos != -1)
     {
         QString shutterSpeed = dcrawInfo.mid(pos).section('\n', 0, 0);
         shutterSpeed.remove(0, shutterSpeedHeader.length());
-        shutterSpeed.remove(shutterSpeed.length()-4, 4);    // remove " sec" at end of string.
+
+        if (shutterSpeed.startsWith("1/"))
+            shutterSpeed.remove(0, 2);                   // remove "1/" at start of string.
+
+        shutterSpeed.remove(shutterSpeed.length()-4, 4); // remove " sec" at end of string.
         identify.exposureTime = shutterSpeed.toFloat();
     }
 
