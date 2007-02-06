@@ -9,7 +9,7 @@ INCLUDES = -I$(top_srcdir)/digikam/digikam \
 
 noinst_LTLIBRARIES = libdcraw.la
 
-libdcraw_la_SOURCES = dcrawbinary.cpp dcrawiface.cpp
+libdcraw_la_SOURCES = dcrawbinary.cpp dcrawiface.cpp dcrawsettingswidget.cpp 
 
 libdcraw_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 

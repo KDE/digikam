@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2006-01-23
- * Description : setup image editor Input Output files.
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2006-01-23
+ * Description : setup image editor output files settings.
  * 
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,8 +47,7 @@ private:
 
 private:
 
-    SetupIOFilesPriv* d;
-    
+    SetupIOFilesPriv* d;    
 };
 
 }  // namespace Digikam

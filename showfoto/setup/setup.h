@@ -3,7 +3,7 @@
  * Date   : 2005-04-02
  * Description : showfoto setup dialog.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,6 +51,7 @@ public:
     {
         LastPageUsed = -1,
         EditorPage=0,
+        DcrawPage,
         IOFilesPage,
         PluginsPage,
         SlideshowPage,
@@ -68,8 +69,7 @@ private slots:
         
 private:
 
-    SetupPrivate* d;
-        
+    SetupPrivate* d;        
 };
 
 }   // namespace ShowFoto

@@ -5,7 +5,7 @@
  * Description : digiKam setup dialog.
  * 
  * Copyright 2003-2005 by Renchi Raju and Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,6 +44,7 @@
 #include "setupcollections.h"
 #include "setupmime.h"
 #include "setupeditor.h"
+#include "setupdcraw.h"
 #include "setupiofiles.h"
 #include "setupimgplugins.h"
 #include "setupslideshow.h"
@@ -52,6 +53,7 @@
 #include "setupcamera.h"
 #include "setupmisc.h"
 #include "setup.h"
+#include "setup.moc"
 
 namespace Digikam
 {
@@ -69,6 +71,7 @@ public:
         page_collections = 0;
         page_mime        = 0;
         page_editor      = 0;
+        page_dcraw       = 0;
         page_iofiles     = 0;
         page_imgplugins  = 0;
         page_slideshow   = 0;
@@ -84,6 +87,7 @@ public:
         collectionsPage  = 0;
         mimePage         = 0;
         editorPage       = 0;
+        dcrawPage        = 0;
         iofilesPage      = 0;
         slideshowPage    = 0;
         iccPage          = 0;
@@ -100,6 +104,7 @@ public:
     QFrame           *page_collections;
     QFrame           *page_mime;
     QFrame           *page_editor;
+    QFrame           *page_dcraw;
     QFrame           *page_iofiles;
     QFrame           *page_imgplugins;
     QFrame           *page_slideshow;
@@ -115,6 +120,7 @@ public:
     SetupCollections *collectionsPage;
     SetupMime        *mimePage;
     SetupEditor      *editorPage;
+    SetupDcraw       *dcrawPage;
     SetupIOFiles     *iofilesPage;
     SetupSlideShow   *slideshowPage;
     SetupICC         *iccPage;
@@ -159,7 +165,11 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                              BarIcon("image", KIcon::SizeMedium));
     d->editorPage = new SetupEditor(d->page_editor);
 
-    d->page_iofiles = addPage(i18n("IO files"), i18n("Image Editor IO Images Files Settings"),
+    d->page_dcraw = addPage(i18n("RAW decoding"), i18n("RAW Files Decoding Settings"),
+                              BarIcon("dcraw", KIcon::SizeMedium));
+    d->dcrawPage = new SetupDcraw(d->page_dcraw);
+
+    d->page_iofiles = addPage(i18n("Save Images"), i18n("Image Editor Save Images Files Settings"),
                               BarIcon("pipe", KIcon::SizeMedium));
     d->iofilesPage = new SetupIOFiles(d->page_iofiles);
 
@@ -221,6 +231,7 @@ void Setup::slotOkClicked()
     d->mimePage->applySettings();
     d->cameraPage->applySettings();
     d->editorPage->applySettings();
+    d->dcrawPage->applySettings();
     d->iofilesPage->applySettings();
     d->imgpluginsPage->applySettings();
     d->slideshowPage->applySettings();
@@ -256,4 +267,3 @@ SetupImgPlugins* Setup::imagePluginsPage()
 
 }  // namespace Digikam
 
-#include "setup.moc"

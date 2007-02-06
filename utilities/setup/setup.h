@@ -5,7 +5,7 @@
  * Description : digiKam setup dialog.
  * 
  * Copyright 2003-2005 by Renchi Raju and Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,6 +50,7 @@ public:
         Collections,
         Mime,
         Editor,
+	Dcraw,
         IOFiles,
         ImagePlugins,
         Slideshow,
@@ -72,7 +73,6 @@ private slots:
 private:
 
     SetupPrivate* d;
-
 };
 
 }  // namespace Digikam

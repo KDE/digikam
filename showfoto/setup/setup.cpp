@@ -3,7 +3,7 @@
  * Date   : 2005-04-02
  * Description : showfoto setup dialog.
  *
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,11 +34,13 @@
 // Local includes.
 
 #include "setupeditor.h"
+#include "setupdcraw.h"
 #include "setupiofiles.h"
 #include "setupimgplugins.h"
 #include "setupslideshow.h"
 #include "setupicc.h"
 #include "setup.h"
+#include "setup.moc"
 
 namespace ShowFoto
 {
@@ -49,19 +51,22 @@ public:
 
     SetupPrivate()
     {
-        slideshowPage   = 0;
-        imgpluginsPage  = 0;
-        iofilesPage     = 0;
-        iccPage         = 0;
         editorPage      = 0;
-        page_icc        = 0;
-        page_slideshow  = 0;
-        page_imgplugins = 0;
-        page_iofiles    = 0;
+        dcrawPage       = 0;
+        iofilesPage     = 0;
+        imgpluginsPage  = 0;
+        slideshowPage   = 0;
+        iccPage         = 0;
         page_editor     = 0;
+        page_dcraw      = 0;
+        page_iofiles    = 0;
+        page_imgplugins = 0;
+        page_slideshow  = 0;
+        page_icc        = 0;
     }
 
     QFrame                   *page_editor;
+    QFrame                   *page_dcraw;
     QFrame                   *page_iofiles;
     QFrame                   *page_imgplugins;
     QFrame                   *page_slideshow;
@@ -69,10 +74,11 @@ public:
     
     SetupEditor              *editorPage;
 
-    Digikam::SetupICC        *iccPage;
+    Digikam::SetupDcraw      *dcrawPage;
     Digikam::SetupIOFiles    *iofilesPage;
     Digikam::SetupImgPlugins *imgpluginsPage;
     Digikam::SetupSlideShow  *slideshowPage;
+    Digikam::SetupICC        *iccPage;
 };
 
 Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
@@ -86,7 +92,11 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                              BarIcon("showfoto", KIcon::SizeMedium));
     d->editorPage = new SetupEditor(d->page_editor);
 
-    d->page_iofiles = addPage(i18n("IO files"), i18n("IO Image Files Settings"),
+    d->page_dcraw = addPage(i18n("RAW decoding"), i18n("RAW Files Decoding Settings"),
+                              BarIcon("dcraw", KIcon::SizeMedium));
+    d->dcrawPage = new Digikam::SetupDcraw(d->page_dcraw);
+
+    d->page_iofiles = addPage(i18n("Save Images"), i18n("Image Editor Save Images Files Settings"),
                               BarIcon("pipe", KIcon::SizeMedium));
     d->iofilesPage = new Digikam::SetupIOFiles(d->page_iofiles);
     
@@ -129,6 +139,7 @@ Setup::~Setup()
 void Setup::slotOkClicked()
 {
     d->editorPage->applySettings();
+    d->dcrawPage->applySettings();
     d->iofilesPage->applySettings();
     d->imgpluginsPage->applySettings();
     d->slideshowPage->applySettings();
@@ -142,5 +153,3 @@ Digikam::SetupImgPlugins* Setup::imagePluginsPage()
 }
 
 }   // namespace ShowFoto
-
-#include "setup.moc"

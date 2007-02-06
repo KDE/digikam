@@ -18,13 +18,13 @@ libsetup_la_SOURCES = gpiface.cpp cameraselection.cpp setupcamera.cpp \
 	              setupgeneral.cpp setup.cpp setupimgplugins.cpp \
 	              setupcollections.cpp setupmetadata.cpp \
 	              setupeditor.cpp setupmisc.cpp setupicc.cpp \
-	              setupiofiles.cpp setupslideshow.cpp \
-	              setuptooltip.cpp dcrawsettingswidget.cpp 
+	              setupiofiles.cpp setupdcraw.cpp setupslideshow.cpp \
+	              setuptooltip.cpp  
 
 libsetup_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_GPHOTO)
 
-libshowfotosetup_la_SOURCES = setupimgplugins.cpp setupiofiles.cpp \
-	                      setupicc.cpp setupslideshow.cpp dcrawsettingswidget.cpp 
+libshowfotosetup_la_SOURCES = setupimgplugins.cpp setupiofiles.cpp setupdcraw.cpp \
+	                      setupicc.cpp setupslideshow.cpp 
 
 libshowfotosetup_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 
