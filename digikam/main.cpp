@@ -56,11 +56,12 @@
 
 #include <libkexiv2/version.h>
 
-// Gphoto2 includes.
+// C Ansi includes.
 
 extern "C"
 {
 #include <gphoto2-version.h>
+#include <png.h>
 }
 
 // Local includes.
@@ -91,6 +92,8 @@ int main(int argc, char *argv[])
                           QString(I18N_NOOP("Using KExiv2 library version %1")).arg(kexiv2_version) +
                           QString("\n") +                           
                           QString(I18N_NOOP("Using Exiv2 library version %1")).arg(Exiv2Ver) +
+                          QString("\n") +                           
+                          QString(I18N_NOOP("Using PNG library version %1")).arg(PNG_LIBPNG_VER_STRING) +
                           QString("\n") + 
                           QString(I18N_NOOP("Using Gphoto2 library version %1")).arg(Gphoto2Ver);
 
