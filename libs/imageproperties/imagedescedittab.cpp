@@ -2,7 +2,7 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
  *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Date  : 2003-03-09
+ * Date   : 2003-03-09
  * Description : Comments, Tags, and Rating properties editor
  *
  * Copyright 2003-2005 by Renchi Raju & Gilles Caulier
@@ -1464,6 +1464,48 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
             }
         }
         ++it;
+    }
+
+    // correct visibilities afterwards:
+    // As QListViewItem::setVisible works recursively on all it's children
+    // we have to correct this
+    if (t)
+    {
+        it = d->tagsView;
+        while (it.current())
+        {
+            TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
+            TAlbum *tag               = item->m_album;
+            if (tag)
+            {
+                if (!tag->isRoot())
+                {
+                    // only if the current item is not marked as tagged, check all children 
+                    if (!item->isOn())
+                    {
+                        bool somethingIsSet         = false;
+                        QListViewItem* nextSibling  = (*it)->nextSibling();
+                        QListViewItemIterator tmpIt = it;
+                        ++tmpIt;
+                        while (*tmpIt != nextSibling )
+                        {
+                            TAlbumCheckListItem* tmpItem = dynamic_cast<TAlbumCheckListItem*>(tmpIt.current());
+                            TAlbum *tmpTag = tmpItem->m_album;
+                            if(tmpItem->isOn())
+                            {
+                                somethingIsSet = true;
+                            }
+                            ++tmpIt;
+                        }
+                        if (!somethingIsSet) 
+                        {
+                            item->setVisible(false);
+                        }
+                    }
+                }
+            }
+            ++it;
+        }
     }
 
     TAlbum *root                  = AlbumManager::instance()->findTAlbum(0);
