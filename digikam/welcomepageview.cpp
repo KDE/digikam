@@ -4,7 +4,7 @@
  * Description : a widget to display a welcome page 
  *               on root album.
  * 
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -87,22 +87,26 @@ void WelcomePageView::slotUrlOpen(const KURL &url)
 QString WelcomePageView::infoPage()
 {
     QString info =
-        i18n("%1: digiKam version; %2: help:// URL; %3: homepage URL; "
-        "%4: prior KMail version; %5: prior KDE version; "
+        i18n(
+        "%1: digiKam version; " 
+        "%2: help:// URL; "
+        "%3: homepage URL; "
+        "%4: prior digiKam version; " 
+        "%5: prior KDE version; "
         "%6: generated list of new features; "
         "%7: First-time user text (only shown on first start); "
         "%8: generated list of important changes; "
         "--- end of comment ---",
-        "<h2 style='margin-top: 0px;'>Welcome to digiKam %1</h2><p>digiKam is a "
-        "photo-management program for the K Desktop Environment. "
-        "It is designed to organize your digital photograhs on your computer."
-        "</p>\n"
-        "<ul><li>digiKam has many powerful features which are described in the "
+        "<h2 style='margin-top: 0px;'>Welcome to digiKam %1</h2><p>"
+        "digiKam is a photo-management program for the K Desktop Environment. "
+        "It is designed to import and organize your digital photograhs on your computer."
+        "</p>\n<ul><li>"
+        "digiKam has many powerful features which are described in the "
         "<a href=\"%2\">documentation</a></li>\n"
         "<li>The <a href=\"%3\">digiKam homepage</A> offers information about "
         "new versions of digiKam</li></ul>\n"
-        "%8\n" // important changes
-        "<p>Some of the new features in this release of digiKam include "
+        "%8\n<p>" // important changes
+        "Some of the new features in this release of digiKam include "
         "(compared to digiKam %4):</p>\n"
         "<ul>\n%5</ul>\n"
         "%6\n"
@@ -111,11 +115,12 @@ QString WelcomePageView::infoPage()
         "<p style='margin-bottom: 0px'>&nbsp; &nbsp; The digiKam Team</p>")
         .arg(digikam_version)            // current digiKam version
         .arg("help:/digikam/index.html") // digiKam help:// URL
-        .arg("http://www.digikam.org/")  // digiKam homepage URL
+        .arg("http://www.digikam.org")   // digiKam homepage URL
         .arg("0.8.2");                   // previous digiKam release.
     
     QStringList newFeatures;
     newFeatures << i18n("16 bits/color/pixels image support");
+    newFeatures << i18n("Native JPEG-2000 support");
     newFeatures << i18n("Full color management support");
     newFeatures << i18n("Makernote and IPTC metadata support");
     newFeatures << i18n("Geolocalization of photograph");
@@ -124,6 +129,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("Fast preview of RAW pictures");
     newFeatures << i18n("Metadata support for RAW pictures");
     newFeatures << i18n("New advanced options to download pictures from camera");
+    newFeatures << i18n("New advanced options to manage picture Tags");
 
     QString featureItems;
     for ( uint i = 0 ; i < newFeatures.count() ; i++ )
