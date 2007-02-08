@@ -79,8 +79,7 @@ JPEGSettings::JPEGSettings(QWidget *parent)
                                              "<b>75</b>: good quality (default)<p>"
                                              "<b>100</b>: high quality (no compression and "
                                              "large file size)<p>"
-                                             "<b>Note: JPEG is not a lossless image "
-                                             "compression format.</b>"));
+                                             "<b>Note: JPEG use a lossy compression image algorithm.</b>"));
 
     d->labelWarning = new KActiveLabel(i18n("<qt><font size=-1 color=\"red\"><i>"
                           "Warning: <a href='http://en.wikipedia.org/wiki/JPEG'>JPEG</a> is a<br>"
@@ -96,6 +95,7 @@ JPEGSettings::JPEGSettings(QWidget *parent)
     d->JPEGGrid->addMultiCellWidget(d->JPEGcompression, 0, 0, 1, 1);
     d->JPEGGrid->addMultiCellWidget(d->labelWarning, 0, 0, 2, 2);    
     d->JPEGGrid->setColStretch(1, 10);
+    d->JPEGGrid->setRowStretch(1, 10);
 }
 
 JPEGSettings::~JPEGSettings()
