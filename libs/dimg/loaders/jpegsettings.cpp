@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include <kdialog.h>
 #include <knuminput.h>
+#include <kactivelabel.h>
 
 // Local includes.
 
@@ -49,11 +50,14 @@ public:
         JPEGGrid             = 0;
         labelJPEGcompression = 0;
         JPEGcompression      = 0;
+        labelWarning         = 0;
     }
 
     QGridLayout  *JPEGGrid;
 
     QLabel       *labelJPEGcompression;
+
+    KActiveLabel *labelWarning;
 
     KIntNumInput *JPEGcompression;
 };
@@ -63,7 +67,7 @@ JPEGSettings::JPEGSettings(QWidget *parent)
 {
     d = new JPEGSettingsPriv;
 
-    d->JPEGGrid        = new QGridLayout(this, 1, 1, KDialog::spacingHint());
+    d->JPEGGrid        = new QGridLayout(this, 1, 2, KDialog::spacingHint());
     d->JPEGcompression = new KIntNumInput(75, this);
     d->JPEGcompression->setRange(1, 100, 1, true );
     d->labelJPEGcompression = new QLabel(i18n("JPEG quality:"), this);
@@ -77,8 +81,20 @@ JPEGSettings::JPEGSettings(QWidget *parent)
                                              "large file size)<p>"
                                              "<b>Note: JPEG is not a lossless image "
                                              "compression format.</b>"));
+
+    d->labelWarning = new KActiveLabel(i18n("<qt><font size=-1 color=\"red\"><i>"
+                          "Warning: <a href='http://en.wikipedia.org/wiki/JPEG'>JPEG</a> is a<br>"
+                          "lossy compression<br>"
+                          "image format!</p>"
+                          "</i></qt>"), this);
+
+    d->labelWarning->setFrameStyle(QFrame::Box | QFrame::Plain);
+    d->labelWarning->setLineWidth(1);
+    d->labelWarning->setFrameShape(QFrame::Box);
+
     d->JPEGGrid->addMultiCellWidget(d->labelJPEGcompression, 0, 0, 0, 0);
     d->JPEGGrid->addMultiCellWidget(d->JPEGcompression, 0, 0, 1, 1);
+    d->JPEGGrid->addMultiCellWidget(d->labelWarning, 0, 0, 2, 2);    
     d->JPEGGrid->setColStretch(1, 10);
 }
 
