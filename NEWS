@@ -163,6 +163,8 @@ Image Editor  : Add 2 new advanced options to show under-exposed or over-exposed
 Image Editor  : Remove View->Histogram menu option. We have a better histogram available in sidebar.
 Image Editor  : Color profiles are tested now to avoid invalid files.
 Image Editor  : JPEG/PNG/TIFF/JPEG2000 file save settings are now available in File Save dialog.
+Image Editor  : JPEG file save settings include a red warning about this lossy compression image 
+                format with a link to wikipedia to aware users.
  
 ...
 
