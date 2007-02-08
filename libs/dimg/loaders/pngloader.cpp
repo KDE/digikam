@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net> 
- * Date  : 2005-11-01
- * Description : A PNG files loader for DImg framework.
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2005-11-01
+ * Description : a PNG image loader for DImg framework.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -605,7 +605,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     
     for (EmbeddedTextMap::iterator it = map.begin(); it != map.end(); ++it)
     {
-        if (it.key() != QString("Software"))
+        if (it.key() != QString("Software") && it.key() != QString("Comment"))
         {
             png_text text;
             text.key  = (char*)it.key().ascii();
@@ -632,8 +632,10 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 #endif
     text.compression = PNG_TEXT_COMPRESSION_zTXt;
     png_set_text(png_ptr, info_ptr, &(text), 1);
-    
-    // Write embeded Raw profiles metadata in text tag using ImageMagick technic.
+
+    // Write embeded Raw profiles metadata (Exif/Iptc) in text tag using ImageMagick technic.
+    // Write digiKam comment like an iTXt chunk using UTF8 encoding.
+    // NOTE: iTXt will be enable by default with libpng >= 1.3.0.(dcraw_0)
     
     typedef QMap<int, QByteArray> MetaDataMap;
     MetaDataMap metaDataMap = imageMetaData();
@@ -644,11 +646,25 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         
         switch (it.key())
         {
+
+#ifdef PNG_iTXt_SUPPORTED
+
+            // TODO : this code is not yet tested. It require libpng 1.3.0.
+
             case(DImg::COM):
             {
-                writeRawProfile(png_ptr, info_ptr, "jcom", ba.data(), (png_uint_32) ba.size());
+                png_text comment;
+                comment.key         = "Comment";
+                comment.text        = ba.data();
+                comment.itxt_lenght = ba.size();
+                comment.compression = PNG_ITXT_COMPRESSION_zTXt;
+                png_set_text(png_ptr, info_ptr, &(comment), 1);
+            
+                DDebug() << "Writing digiKam comment into iTXt PNG chunk : " << ba << endl;
                 break;
             }
+#endif
+
             case(DImg::EXIF):
             {
                 const uchar ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};

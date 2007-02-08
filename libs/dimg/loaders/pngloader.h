@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net> 
- * Date  : 2005-11-01
- * Description : A PNG files loader for DImg framework.
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2005-11-01
+ * Description : a PNG image loader for DImg framework.
  * 
  * Copyright 2005-2006 by Gilles Caulier
  *
