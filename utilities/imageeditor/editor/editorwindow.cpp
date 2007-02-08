@@ -81,6 +81,7 @@ extern "C"
 #include "imagepluginloader.h"
 #include "imageresizedlg.h"
 #include "imageprint.h"
+#include "filesaveoptionsbox.h"
 #include "slideshow.h"
 #include "statusprogressbar.h"
 #include "iccsettingscontainer.h"
@@ -1378,24 +1379,32 @@ bool EditorWindow::startingSaveAs(const KURL& url)
 
     m_savingContext->srcURL = url;
 
+    FileSaveOptionsBox *options = new FileSaveOptionsBox();
     KFileDialog imageFileSaveDialog(m_savingContext->srcURL.isLocalFile() ? 
                                     m_savingContext->srcURL.directory() : QDir::homeDirPath(),
                                     QString::null,
                                     this,
                                     "imageFileSaveDialog",
-                                    false);
+                                    false,
+                                    options);
 
-    imageFileSaveDialog.setOperationMode( KFileDialog::Saving );
-    imageFileSaveDialog.setMode( KFile::File );
+    imageFileSaveDialog.setOperationMode(KFileDialog::Saving);
+    imageFileSaveDialog.setMode(KFile::File);
     imageFileSaveDialog.setSelection(m_savingContext->srcURL.fileName());
-    imageFileSaveDialog.setCaption( i18n("New Image File Name") );
+    imageFileSaveDialog.setCaption(i18n("New Image File Name"));
     imageFileSaveDialog.setFilter(mimetypes);
+
+    connect(&imageFileSaveDialog, SIGNAL(filterChanged(const QString &)),
+            options, SLOT(slotImageFileFormatChanged(const QString &)));
+
+    connect(&imageFileSaveDialog, SIGNAL(fileSelected(const QString &)),
+            options, SLOT(slotImageFileSelected(const QString &)));
+
+    options->slotImageFileSelected(m_savingContext->srcURL.fileName());
 
     // Check for cancel.
     if ( imageFileSaveDialog.exec() != KFileDialog::Accepted )
-    {
        return false;
-    }
 
     KURL newURL = imageFileSaveDialog.selectedURL();
 

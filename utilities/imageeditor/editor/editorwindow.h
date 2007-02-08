@@ -32,6 +32,10 @@
 #include <kmainwindow.h>
 #include <kurl.h>
 
+// Local includes.
+
+#include "digikam_export.h"
+
 class QSplitter;
 class QPopupMenu;
 class QLabel;
@@ -51,7 +55,7 @@ class StatusProgressBar;
 class EditorWindowPriv;
 class SlideShow;
 
-class EditorWindow : public KMainWindow
+class DIGIKAM_EXPORT EditorWindow : public KMainWindow
 {
     Q_OBJECT
 
