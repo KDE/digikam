@@ -23,7 +23,6 @@ INCLUDES = -I$(top_srcdir)/digikam/showfoto/setup \
 showfoto_SOURCES = main.cpp showfoto.cpp 
 
 showfoto_LDADD   = $(top_builddir)/digikam/showfoto/setup/libsetup.la \
-	           $(top_builddir)/digikam/libs/widgets/libwidgets.la \
 	           $(top_builddir)/digikam/libs/dialogs/libdialogshowfoto.la \
 	           $(top_builddir)/digikam/libs/imageproperties/libimagepropertiesshowfoto.la \
 	           $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \

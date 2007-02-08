@@ -1,55 +1,56 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date   : 2006-01-23
- * Description : setup image editor output files settings.
- * 
- * Copyright 2006-2007 by Gilles Caulier
+ * Date   : 2007-08-02
+ * Description : save JPEG image options.
+ *
+ * Copyright 2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
-#ifndef SETUPIOFILES_H
-#define SETUPIOFILES_H
+#ifndef JPEGSETTINGS_H
+#define JPEGSETTINGS_H
 
-// Qt includes.
+// KDE includes.
 
 #include <qwidget.h>
+
+// Local includes
+
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class SetupIOFilesPriv;
+class JPEGSettingsPriv;
 
-class SetupIOFiles : public QWidget
+class DIGIKAM_EXPORT JPEGSettings : public QWidget
 {
-    Q_OBJECT
-    
+Q_OBJECT
+
 public:
 
-    SetupIOFiles(QWidget* parent = 0);
-    ~SetupIOFiles();
+    JPEGSettings(QWidget *parent=0);
+    ~JPEGSettings();
 
-    void applySettings();
-
-private:
-
-    void readSettings();
+    void setCompressionValue(int val);
+    int  getCompressionValue();
 
 private:
 
-    SetupIOFilesPriv* d;    
+    JPEGSettingsPriv* d;
 };
 
 }  // namespace Digikam
 
-#endif // SETUPIOFILES_H 
+#endif /* JPEGSETTINGS_H */

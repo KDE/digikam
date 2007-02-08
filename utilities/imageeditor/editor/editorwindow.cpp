@@ -1400,11 +1400,15 @@ bool EditorWindow::startingSaveAs(const KURL& url)
     connect(&imageFileSaveDialog, SIGNAL(fileSelected(const QString &)),
             options, SLOT(slotImageFileSelected(const QString &)));
 
-    options->slotImageFileSelected(m_savingContext->srcURL.fileName());
+    options->slotImageFileSelected(m_savingContext->srcURL.path());
 
-    // Check for cancel.
+    // Start dialog and check if canceled.
     if ( imageFileSaveDialog.exec() != KFileDialog::Accepted )
        return false;
+
+    // Update file save settings in editor instance.
+    options->applySettings();
+    applyStandardSettings();
 
     KURL newURL = imageFileSaveDialog.selectedURL();
 

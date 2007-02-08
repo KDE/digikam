@@ -21,26 +21,21 @@
 // QT includes.
 
 #include <qlayout.h>
-#include <qlabel.h>
-#include <qcolor.h>
-#include <qhbox.h>
-#include <qvgroupbox.h>
-#include <qlabel.h>
-#include <qwhatsthis.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
 
 // KDE includes.
 
 #include <klocale.h>
 #include <kdialog.h>
-#include <knuminput.h>
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kseparator.h>
 
 // Local includes.
 
+#include "jpegsettings.h"
+#include "pngsettings.h"
+#include "tiffsettings.h"
+#include "jp2ksettings.h"
 #include "setupiofiles.h"
 #include "setupiofiles.moc"
 
@@ -54,29 +49,19 @@ public:
 
     SetupIOFilesPriv()
     {
-        labelJPEGcompression     = 0;
-        JPEGcompression          = 0;
-
-        labelPNGcompression      = 0;
-        PNGcompression           = 0;
-
-        TIFFcompression          = 0;
-
-        labelJPEG2000compression = 0;
-        JPEG2000compression      = 0;
-        JPEG2000LossLess         = 0;
+        JPEGOptions     = 0;
+        PNGOptions      = 0;
+        TIFFOptions     = 0;
+        JPEG2000Options = 0;
     }
 
-    QLabel       *labelPNGcompression;
-    QLabel       *labelJPEGcompression;
-    QLabel       *labelJPEG2000compression;
+    JPEGSettings *JPEGOptions;
 
-    QCheckBox    *JPEG2000LossLess;
-    QCheckBox    *TIFFcompression;
+    PNGSettings  *PNGOptions;
 
-    KIntNumInput *PNGcompression;
-    KIntNumInput *JPEGcompression;
-    KIntNumInput *JPEG2000compression;
+    TIFFSettings *TIFFOptions;
+
+    JP2KSettings *JPEG2000Options;
 };
 
 SetupIOFiles::SetupIOFiles(QWidget* parent )
@@ -84,97 +69,35 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
 {
     d = new SetupIOFilesPriv;
 
-    QGridLayout* grid = new QGridLayout(parent, 8, 1, KDialog::spacingHint());
+    QVBoxLayout* vbox = new QVBoxLayout(parent, KDialog::marginHint(), KDialog::spacingHint());
 
     //-- JPEG Settings ------------------------------------------------------
 
-    d->JPEGcompression = new KIntNumInput(75, parent);
-    d->JPEGcompression->setRange(1, 100, 1, true );
-    d->labelJPEGcompression = new QLabel(i18n("JPEG quality:"), parent);
-
-    QWhatsThis::add( d->JPEGcompression, i18n("<p>The quality value for JPEG images:<p>"
-                                                "<b>1</b>: low quality (high compression and small "
-                                                "file size)<p>"
-                                                "<b>50</b>: medium quality<p>"
-                                                "<b>75</b>: good quality (default)<p>"
-                                                "<b>100</b>: high quality (no compression and "
-                                                "large file size)<p>"
-                                                "<b>Note: JPEG is not a lossless image "
-                                                "compression format.</b>"));
-    grid->addMultiCellWidget(d->labelJPEGcompression, 0, 0, 0, 0);
-    grid->addMultiCellWidget(d->JPEGcompression, 0, 0, 1, 1);
-
+    d->JPEGOptions    = new JPEGSettings(parent);
     KSeparator *line1 = new KSeparator(Horizontal, parent);
-    grid->addMultiCellWidget(line1, 1, 1, 0, 1);
+    vbox->addWidget(d->JPEGOptions);
+    vbox->addWidget(line1);
 
     //-- PNG Settings -------------------------------------------------------
 
-    d->PNGcompression = new KIntNumInput(1, parent);
-    d->PNGcompression->setRange(1, 9, 1, true );
-    d->labelPNGcompression = new QLabel(i18n("PNG compression:"), parent);
-
-    QWhatsThis::add( d->PNGcompression, i18n("<p>The compression value for PNG images:<p>"
-                                             "<b>1</b>: low compression (large file size but "
-                                             "short compression duration - default)<p>"
-                                             "<b>5</b>: medium compression<p>"
-                                             "<b>9</b>: high compression (small file size but "
-                                             "long compression duration)<p>"
-                                             "<b>Note: PNG is always a lossless image "
-                                             "compression format.</b>"));
-    grid->addMultiCellWidget(d->labelPNGcompression, 2, 2, 0, 0);
-    grid->addMultiCellWidget(d->PNGcompression, 2, 2, 1, 1);
-
+    d->PNGOptions     = new PNGSettings(parent);
     KSeparator *line2 = new KSeparator(Horizontal, parent);
-    grid->addMultiCellWidget(line2, 3, 3, 0, 1);
+    vbox->addWidget(d->PNGOptions);
+    vbox->addWidget(line2);
 
     //-- TIFF Settings ------------------------------------------------------
 
-    d->TIFFcompression = new QCheckBox(i18n("Compress TIFF files"), parent);
-
-    QWhatsThis::add( d->TIFFcompression, i18n("<p>Toggle compression for TIFF images.<p>"
-                                              "If you enable this option, you can reduce "
-                                              "the final file size of the TIFF image.</p>"
-                                              "<p>A lossless compression format (Deflate) "
-                                              "is used to save the file.<p>"));
-    grid->addMultiCellWidget(d->TIFFcompression, 4, 4, 0, 1);
-
+    d->TIFFOptions    = new TIFFSettings(parent);
     KSeparator *line3 = new KSeparator(Horizontal, parent);
-    grid->addMultiCellWidget(line3, 5, 5, 0, 1);
+    vbox->addWidget(d->TIFFOptions);
+    vbox->addWidget(line3);
 
     //-- JPEG 2000 Settings -------------------------------------------------
 
-    d->JPEG2000LossLess = new QCheckBox(i18n("LossLess JPEG 2000 files"), parent);
+    d->JPEG2000Options = new JP2KSettings(parent);
+    vbox->addWidget(d->JPEG2000Options);
 
-    QWhatsThis::add( d->JPEG2000LossLess, i18n("<p>Toggle lossless compression for JPEG 2000 images.<p>"
-                                               "If you enable this option, you will use a lossless method "
-                                               "to compress JPEG 2000 pictures.<p>"));
-    grid->addMultiCellWidget(d->JPEG2000LossLess, 6, 6, 0, 1);
-
-    d->JPEG2000compression = new KIntNumInput(75, parent);
-    d->JPEG2000compression->setRange(1, 100, 1, true );
-    d->labelJPEG2000compression = new QLabel(i18n("JPEG 2000 quality:"), parent);
-
-    QWhatsThis::add( d->JPEGcompression, i18n("<p>The quality value for JPEG 2000 images:<p>"
-                                              "<b>1</b>: low quality (high compression and small "
-                                              "file size)<p>"
-                                              "<b>50</b>: medium quality<p>"
-                                              "<b>75</b>: good quality (default)<p>"
-                                              "<b>100</b>: high quality (no compression and "
-                                              "large file size)<p>"
-                                              "<b>Note: JPEG 2000 is not a lossless image "
-                                              "compression format when you use this setting.</b>"));
-    grid->addMultiCellWidget(d->labelJPEG2000compression, 7, 7, 0, 0);
-    grid->addMultiCellWidget(d->JPEG2000compression, 7, 7, 1, 1);
-
-    grid->setColStretch(1, 10);
-    grid->setRowStretch(8, 10);
-
-    connect(d->JPEG2000LossLess, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggleJPEG2000LossLess(bool)));
-
-    connect(d->JPEG2000LossLess, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggleJPEG2000LossLess(bool)));
-
+    vbox->addStretch(10);
     readSettings();
 }
 
@@ -187,11 +110,11 @@ void SetupIOFiles::applySettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
-    config->writeEntry("JPEGCompression", d->JPEGcompression->value());
-    config->writeEntry("PNGCompression", d->PNGcompression->value());
-    config->writeEntry("TIFFCompression", d->TIFFcompression->isChecked());
-    config->writeEntry("JPEG2000Compression", d->JPEG2000compression->value());
-    config->writeEntry("JPEG2000LossLess", d->JPEG2000LossLess->isChecked());
+    config->writeEntry("JPEGCompression", d->JPEGOptions->getCompressionValue());
+    config->writeEntry("PNGCompression", d->PNGOptions->getCompressionValue());
+    config->writeEntry("TIFFCompression", d->TIFFOptions->getCompression());
+    config->writeEntry("JPEG2000Compression", d->JPEG2000Options->getCompressionValue());
+    config->writeEntry("JPEG2000LossLess", d->JPEG2000Options->getLossLessCompression());
     config->sync();
 }
 
@@ -199,18 +122,11 @@ void SetupIOFiles::readSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
-    d->JPEGcompression->setValue( config->readNumEntry("JPEGCompression", 75) );
-    d->PNGcompression->setValue( config->readNumEntry("PNGCompression", 9) );
-    d->TIFFcompression->setChecked(config->readBoolEntry("TIFFCompression", false));
-    d->JPEG2000compression->setValue( config->readNumEntry("JPEG2000Compression", 75) );
-    d->JPEG2000LossLess->setChecked( config->readBoolEntry("JPEG2000LossLess", true) );
-    slotToggleJPEG2000LossLess(d->JPEG2000LossLess->isChecked());
-}
-
-void SetupIOFiles::slotToggleJPEG2000LossLess(bool b)
-{
-    d->JPEG2000compression->setEnabled(!b);
-    d->labelJPEG2000compression->setEnabled(!b);
+    d->JPEGOptions->setCompressionValue(config->readNumEntry("JPEGCompression", 75) );
+    d->PNGOptions->setCompressionValue(config->readNumEntry("PNGCompression", 9) );
+    d->TIFFOptions->setCompression(config->readBoolEntry("TIFFCompression", false));
+    d->JPEG2000Options->setCompressionValue( config->readNumEntry("JPEG2000Compression", 75) );
+    d->JPEG2000Options->setLossLessCompression( config->readBoolEntry("JPEG2000LossLess", true) );
 }
 
 }  // namespace Digikam
