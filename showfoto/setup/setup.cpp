@@ -101,7 +101,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->iccPage = new Digikam::SetupICC(d->page_icc, this);
 
     d->page_iofiles = addPage(i18n("Save Images"), i18n("Image Editor Save Images Files Settings"),
-                              BarIcon("pipe", KIcon::SizeMedium));
+                              BarIcon("filesave", KIcon::SizeMedium));
     d->iofilesPage = new Digikam::SetupIOFiles(d->page_iofiles);
     
     d->page_imgplugins = addPage(i18n("Image Plugins"), i18n("Image Plugins Settings"),
