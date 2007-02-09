@@ -69,7 +69,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
 {
     d = new SetupIOFilesPriv;
 
-    QVBoxLayout* vbox = new QVBoxLayout(parent, KDialog::marginHint(), KDialog::spacingHint());
+    QVBoxLayout* vbox = new QVBoxLayout(parent);
 
     //-- JPEG Settings ------------------------------------------------------
 
