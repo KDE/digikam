@@ -83,6 +83,7 @@ extern "C"
 #include "imagepluginloader.h"
 #include "dimginterface.h"
 #include "splashscreen.h"
+#include "slideshow.h"
 #include "setup.h"
 #include "setupicc.h"
 #include "setupimgplugins.h"
@@ -679,19 +680,6 @@ void ShowFoto::toggleActions(bool val)
     // if BCG actions exists then toggle it.
     if (d->BCGAction)
         d->BCGAction->setEnabled(val);
-
-    // if no active slideshow then toggle it.
-    if (!m_slideShowAction->isChecked())
-        m_slideShowAction->setEnabled(val);
-}
-
-void ShowFoto::toggleActions2SlideShow(bool val)
-{
-    toggleActions(val);
-    
-    // if slideshow mode then toggle file open actions.
-    d->fileOpenAction->setEnabled(val);
-    d->openFilesInFolderAction->setEnabled(val);
 }
 
 void ShowFoto::slotFilePrint()
@@ -1100,6 +1088,25 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
 void ShowFoto::slotContextMenu()
 {
     d->contextMenu->exec(QCursor::pos());
+}
+
+void ShowFoto::slideShow(bool startWithCurrent, bool loop, int delay, bool printName)
+{
+    KConfig* config = kapp->config();
+    bool exifRotate = config->readBoolEntry("EXIF Rotate", true);
+    KURL::List urlList;
+
+    if (startWithCurrent)
+    {
+        for (KURL::List::const_iterator it = d->thumbBar->itemsURLs().find(d->currentItem->url());
+             it != d->thumbBar->itemsURLs().end(); ++it)
+            urlList.append(*it);
+    }
+    else 
+        urlList = d->thumbBar->itemsURLs();
+
+    Digikam::SlideShow *slide = new Digikam::SlideShow(urlList, exifRotate, delay, printName, loop);
+    slide->show();
 }
 
 }   // namespace ShowFoto

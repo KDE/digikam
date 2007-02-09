@@ -70,7 +70,6 @@ private:
     void applySettings();
 
     void toggleActions(bool val);
-    void toggleActions2SlideShow(bool val);
     
     void toggleGUI2FullScreen();
    
@@ -82,6 +81,8 @@ private:
 
     void saveIsComplete();
     void saveAsIsComplete(); 
+
+    void slideShow(bool startWithCurrent, bool loop, int delay, bool printName);
 
 private slots:
 

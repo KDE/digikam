@@ -104,6 +104,7 @@ libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) $(LIB_KHTML) \
 	               $(top_builddir)/digikam/libs/imageproperties/libimagepropertiesdigikam.la \
 	               $(top_builddir)/digikam/libs/threadimageio/libthreadimageio.la \
 	               $(top_builddir)/digikam/utilities/batch/libbatch.la \
+	               $(top_builddir)/digikam/utilities/slideshow/libslideshow.la \
 	               $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
 	               $(top_builddir)/digikam/utilities/imageeditor/canvas/libdimgcanvas.la \
 	               $(top_builddir)/digikam/utilities/imageeditor/editor/libdimgeditor.la \

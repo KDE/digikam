@@ -79,6 +79,7 @@
 #include "dpopupmenu.h"
 #include "tagspopupmenu.h"
 #include "ratingpopupmenu.h"
+#include "slideshow.h"
 #include "setup.h"
 #include "setupimgplugins.h"
 #include "iccsettingscontainer.h"
@@ -756,11 +757,6 @@ void ImageWindow::toggleGUI2FullScreen()
         d->rightSidebar->backup();
 }
 
-void ImageWindow::toggleActions2SlideShow(bool val)
-{
-    toggleActions(val);
-}
-
 void ImageWindow::saveIsComplete()
 {
     // With save(), we do not reload the image but just continue using the data.
@@ -994,6 +990,24 @@ void ImageWindow::slotFilePrint()
 {
     printImage(d->urlCurrent); 
 };
+
+void ImageWindow::slideShow(bool startWithCurrent, bool loop, int delay, bool printName)
+{
+    bool exifRotate = AlbumSettings::instance()->getExifRotate();
+    KURL::List urlList;
+
+    if (startWithCurrent)
+    {
+        for (KURL::List::const_iterator it = d->urlList.find(d->urlCurrent);
+             it != d->urlList.end(); ++it)
+            urlList.append(*it);
+    }
+    else 
+        urlList = d->urlList;
+
+    SlideShow *slide = new SlideShow(urlList, exifRotate, delay, printName, loop);
+    slide->show();
+}
 
 }  // namespace Digikam
 

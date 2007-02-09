@@ -82,7 +82,6 @@ private:
     void setupConnections();
     void setupUserArea();
     void toggleGUI2FullScreen();
-    void toggleActions2SlideShow(bool val);
 
     bool save();
     bool saveAs();
@@ -91,6 +90,8 @@ private:
     void saveAsIsComplete(); 
     void setViewToURL(const KURL &url);
     void deleteCurrentItem(bool ask, bool permanently);
+
+    void slideShow(bool startWithCurrent, bool loop, int delay, bool printName);
 
     ImageWindow();
 

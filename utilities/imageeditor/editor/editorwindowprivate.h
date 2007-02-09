@@ -72,6 +72,7 @@ public:
         cmViewIndicator        = 0;
         viewUnderExpoAction    = 0;
         viewOverExpoAction     = 0;
+        slideShowAction        = 0;
     }
 
     ~EditorWindowPriv()
@@ -100,6 +101,7 @@ public:
     KAction                   *rotate270Action;
     KAction                   *flipHorzAction;
     KAction                   *flipVertAction;
+    KAction                   *slideShowAction;
 
     KActionMenu               *flipAction;
     KActionMenu               *rotateAction;

@@ -82,7 +82,6 @@ extern "C"
 #include "imageresizedlg.h"
 #include "imageprint.h"
 #include "filesaveoptionsbox.h"
-#include "slideshow.h"
 #include "statusprogressbar.h"
 #include "iccsettingscontainer.h"
 #include "exposurecontainer.h"
@@ -105,7 +104,6 @@ EditorWindow::EditorWindow(const char *name)
     d = new EditorWindowPriv;
 
     m_canvas                 = 0;
-    m_slideShow              = 0;
     m_imagePluginLoader      = 0;
     m_undoAction             = 0;
     m_redoAction             = 0;
@@ -120,7 +118,6 @@ EditorWindow::EditorWindow(const char *name)
     m_lastAction             = 0;
     m_undoAction             = 0;
     m_redoAction             = 0;
-    m_slideShowAction        = 0;
     m_fullScreen             = false;
     m_rotatedOrFlipped       = false;
     m_setExifOrientationTag  = true;
@@ -138,7 +135,6 @@ EditorWindow::~EditorWindow()
     delete m_canvas;
     delete m_IOFileSettings;
     delete m_savingContext;
-    delete m_slideShow;
     delete d->ICCSettings;
     delete d->exposureSettings;
     delete d;
@@ -186,11 +182,6 @@ void EditorWindow::setupStandardConnections()
 
     connect(m_canvas, SIGNAL(signalSavingProgress(const QString&, float)),
             this, SLOT(slotSavingProgress(const QString&, float)));
-
-    // -- Slideshow tool connections -----------------------------------------
-
-    connect(m_slideShow, SIGNAL(finished()),
-            m_slideShowAction, SLOT(activate()) );
 
     // -- if rotating/flipping set the rotatedflipped flag to true -----------
 
@@ -322,9 +313,9 @@ void EditorWindow::setupStandardActions()
                                            actionCollection(), "editorwindow_fullscreen");
 #endif
 
-    m_slideShowAction = new KToggleAction(i18n("Slide Show"), "slideshow", 0,
-                                          this, SLOT(slotToggleSlideShow()),
-                                          actionCollection(),"editorwindow_slideshow");
+    d->slideShowAction = new KAction(i18n("Slide Show"), "slideshow", 0,
+                                     this, SLOT(slotToggleSlideShow()),
+                                     actionCollection(),"editorwindow_slideshow");
 
     d->viewUnderExpoAction = new KToggleAction(i18n("Under-Exposure Indicator"), "underexposure", 
                                             Key_F10, this, 
@@ -415,10 +406,6 @@ void EditorWindow::setupStandardActions()
                                        this, SLOT(slotDonateMoney()),
                                        actionCollection(),
                                        "editorwindow_donatemoney");
-
-    // -- Init SlideShow instance -------------------------------------------------
-
-    m_slideShow = new SlideShow(m_firstAction, m_forwardAction);
 }
 
 void EditorWindow::setupStandardAccelerators()
@@ -643,9 +630,6 @@ void EditorWindow::slotEscapePressed()
 {
     if (m_fullScreen)
         m_fullScreenAction->activate();
-    
-    if (m_slideShowAction->isChecked())
-        m_slideShowAction->activate();
 }
 
 void EditorWindow::plugActionAccel(KAction* action)
@@ -805,13 +789,6 @@ void EditorWindow::applyStandardSettings()
     
     d->fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
 
-    // -- Slideshow Settings -------------------------------------------------
-    
-    d->slideShowInFullScreen = config->readBoolEntry("SlideShowFullScreen", true);
-    m_slideShow->setStartWithCurrent(config->readBoolEntry("SlideShowStartCurrent", false));
-    m_slideShow->setLoop(config->readBoolEntry("SlideShowLoop", false));
-    m_slideShow->setDelay(config->readNumEntry("SlideShowDelay", 5));
-
     // -- Exposure Indicators Settings --------------------------------------- 
 
     QColor black(Qt::black);
@@ -863,7 +840,6 @@ void EditorWindow::toggleStandardActions(bool val)
         // Trigger sending of signalUndoStateChanged
         // Note that for saving and loading, this is not necessary
         // because the signal will be sent later anyway.
-        // This is necessary when called from toggleActions2Slideshow
         m_canvas->updateUndoState();
     }
     else
@@ -997,30 +973,12 @@ void EditorWindow::slotToggleFullScreen()
 
 void EditorWindow::slotToggleSlideShow()
 {
-    if (m_slideShowAction->isChecked())
-    {
-        toggleGUI2SlideShow();
-        
-        if (!m_fullScreenAction->isChecked() && d->slideShowInFullScreen)
-        {
-            m_fullScreenAction->activate();
-        }
-
-        toggleActions2SlideShow(false);
-        m_slideShow->start();
-    }
-    else
-    {
-        m_slideShow->stop();
-        toggleActions2SlideShow(true);
-
-        if (m_fullScreenAction->isChecked() && d->slideShowInFullScreen)
-        {
-            m_fullScreenAction->activate();
-        }
-        
-        toggleGUI2SlideShow();
-    }
+    KConfig* config = kapp->config();
+    bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
+    bool loop             = config->readBoolEntry("SlideShowLoop", false);
+    bool printName        = config->readBoolEntry("SlideShowPrintName", true);
+    int  delay            = config->readNumEntry("SlideShowDelay", 5);
+    slideShow(startWithCurrent, loop, delay*1000, printName);
 }
 
 void EditorWindow::slotRotatedOrFlipped()

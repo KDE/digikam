@@ -53,7 +53,6 @@ class IOFileSettingsContainer;
 class SavingContextContainer;
 class StatusProgressBar;
 class EditorWindowPriv;
-class SlideShow;
 
 class DIGIKAM_EXPORT EditorWindow : public KMainWindow
 {
@@ -94,7 +93,6 @@ protected:
     KAction                 *m_firstAction;
     KAction                 *m_lastAction;
 
-    KToggleAction           *m_slideShowAction;
     KToggleAction           *m_fullScreenAction;
 
     KToolBarPopupAction     *m_undoAction;
@@ -105,7 +103,6 @@ protected:
     StatusProgressBar       *m_nameLabel;
     IOFileSettingsContainer *m_IOFileSettings;
     SavingContextContainer  *m_savingContext;
-    SlideShow               *m_slideShow;
 
 protected:
 
@@ -136,12 +133,12 @@ protected:
 
     virtual void finishSaving(bool success);
 
-    virtual void readSettings()               { readStandardSettings(); };
-    virtual void saveSettings()               { saveStandardSettings(); };
+    virtual void readSettings()               { readStandardSettings();     };
+    virtual void saveSettings()               { saveStandardSettings();     };
     virtual void toggleActions(bool val)      { toggleStandardActions(val); };
-    virtual void toggleActions2SlideShow(bool){};
-    virtual void toggleGUI2SlideShow()        {};
     virtual void toggleGUI2FullScreen()       {};
+
+    virtual void slideShow(bool startWithCurrent, bool loop, int delay, bool printName)=0;
 
     virtual void setupConnections()=0;
     virtual void setupActions()=0;
@@ -167,7 +164,6 @@ protected slots:
     void slotConfToolbars();
     void slotNewToolbarConfig();
 
-    void slotToggleSlideShow();
     void slotToggleFullScreen();
     void slotEscapePressed();
 
@@ -184,7 +180,7 @@ protected slots:
     virtual void slotLoadingFinished(const QString &filename, bool success);
     virtual void slotSavingStarted(const QString &filename);
 
-    virtual void slotSetup() { setup(); };
+    virtual void slotSetup(){ setup(); };
 
     virtual void slotFilePrint()=0;
     virtual void slotDeleteCurrentItem()=0;
@@ -204,6 +200,7 @@ private slots:
     void slotRotatedOrFlipped();
     void slotSavingFinished(const QString &filename, bool success);
     void slotDonateMoney();
+    void slotToggleSlideShow();
 
 private:
 

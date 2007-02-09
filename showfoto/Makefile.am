@@ -14,6 +14,7 @@ INCLUDES = -I$(top_srcdir)/digikam/showfoto/setup \
 	   -I$(top_srcdir)/digikam/libs/dimg \
 	   -I$(top_srcdir)/digikam/libs/threadimageio \
 	   -I$(top_srcdir)/digikam/digikam \
+	   -I$(top_srcdir)/digikam/utilities/slideshow \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/tools \
@@ -29,6 +30,7 @@ showfoto_LDADD   = $(top_builddir)/digikam/showfoto/setup/libsetup.la \
 	           $(top_builddir)/digikam/utilities/imageeditor/canvas/libdimgcanvas.la \
 	           $(top_builddir)/digikam/utilities/imageeditor/editor/libshowfoto.la \
 	           $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \
+	           $(top_builddir)/digikam/utilities/slideshow/libslideshow.la \
 	           $(top_builddir)/digikam/libs/threadimageio/libthreadimageio.la \
 	           $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KUTILS) \
 	           $(LIB_KFILE) $(LIB_KPARTS) $(LIBJPEG) $(EXIV2_LIBS) 
