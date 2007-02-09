@@ -279,6 +279,20 @@ public:
                     const QStringList& keywordsList);
 
     /**
+     * Find the album of an item
+     * @param imageID The ID of the item
+     * @return The ID of the PAlbum of the item, or -1 if not found
+    */
+    int getItemAlbum(Q_LLONG imageID);
+
+    /**
+     * Retrieve the name of the item
+     * @param imageID The ID of the item
+     * @return The name of the item, or a null string if not found
+     */
+    QString getItemName(Q_LLONG imageID);
+
+    /**
      * Update the date of a item to supplied date
      * @param imageID The ID of the item
      * @param datetime The datetime to be stored. Should try to let that be

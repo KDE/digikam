@@ -58,6 +58,20 @@ ImageInfo::ImageInfo(Q_LLONG ID, int albumID, const QString& name,
     }
 }
 
+ImageInfo::ImageInfo(Q_LLONG ID)
+    : m_ID(ID), m_size(0), m_viewitem(0)
+{
+    if (!m_man)
+    {
+        m_man = AlbumManager::instance();
+    }
+    AlbumDB* db = m_man->albumDB();
+
+    // retrieve these now, the rest on demand
+    m_albumID = db->getItemAlbum(m_ID);
+    m_name    = db->getItemName(m_ID);
+}
+
 ImageInfo::~ImageInfo()
 {
 }
@@ -94,11 +108,21 @@ bool ImageInfo::setName(const QString& newName)
 
 size_t ImageInfo::fileSize() const
 {
-    return m_size;    
+    if (m_size == 0)
+    {
+        QFileInfo info(filePath());
+        m_size = info.size();
+    }
+    return m_size;
 }
 
 QDateTime ImageInfo::dateTime() const
 {
+    if (!m_datetime.isValid())
+    {
+        AlbumDB* db = m_man->albumDB();
+        m_datetime = db->getItemDate(m_ID);
+    }
     return m_datetime;
 }
 
@@ -109,7 +133,7 @@ QDateTime ImageInfo::modDateTime() const
         QFileInfo fileInfo(filePath());
         m_modDatetime = fileInfo.lastModified();
     }
-    
+
     return m_modDatetime;
 }
 
@@ -120,7 +144,7 @@ QSize ImageInfo::dimensions() const
 
 Q_LLONG ImageInfo::id() const
 {
-    return m_ID;    
+    return m_ID;
 }
 
 int ImageInfo::albumID() const

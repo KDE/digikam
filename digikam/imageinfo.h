@@ -75,6 +75,12 @@ public:
               const QDateTime& datetime, size_t size,
               const QSize& dims=QSize());
 
+    /**
+     * Constructor
+     * @param    ID       unique ID for this image
+     */
+    ImageInfo(Q_LLONG ID);
+
     /** 
      * Destructor
      */
@@ -257,9 +263,9 @@ private:
     Q_LLONG               m_ID;
     int                   m_albumID;
     QString               m_name;
-    QDateTime             m_datetime;
+    mutable QDateTime     m_datetime;
     mutable QDateTime     m_modDatetime;
-    size_t                m_size;
+    mutable size_t        m_size;
     QSize                 m_dims;
     void*                 m_viewitem;
     static  AlbumManager* m_man;

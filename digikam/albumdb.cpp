@@ -1201,7 +1201,6 @@ IntList AlbumDB::getTagsFromTagPaths(const QStringList &keywordsList, bool creat
 
                 // Tag does not yet exist in DB, add it
                 tagID = addTag(parentTagID, (*tagName), QString::null, 0);
-                DDebug() << "Adding tag " << parentTagID << " " << (*tagName) << " resulting id " << tagID << endl;
 
                 if (tagID == -1)
                 {
@@ -1226,6 +1225,36 @@ IntList AlbumDB::getTagsFromTagPaths(const QStringList &keywordsList, bool creat
     }
 
     return tagIDs;
+}
+
+int AlbumDB::getItemAlbum(Q_LLONG imageID)
+{
+    QStringList values;
+
+    execSql ( QString ("SELECT dirid FROM Images "
+                       "WHERE id=%1;")
+              .arg(imageID),
+              &values);
+
+    if (!values.isEmpty())
+        return values.first().toInt();
+    else
+        return 1;
+}
+
+QString AlbumDB::getItemName(Q_LLONG imageID)
+{
+    QStringList values;
+
+    execSql ( QString ("SELECT name FROM Images "
+                       "WHERE id=%1;")
+              .arg(imageID),
+              &values);
+
+    if (!values.isEmpty())
+        return values.first();
+    else
+        return QString();
 }
 
 bool AlbumDB::setItemDate(Q_LLONG imageID,
