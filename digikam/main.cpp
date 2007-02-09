@@ -51,6 +51,7 @@
 // libkexiv2 includes.
 
 #include <libkexiv2/version.h>
+#include <libkexiv2/kexiv2.h>
 
 // C Ansi includes.
 
@@ -77,7 +78,7 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
-    QString Exiv2Ver    = KExiv2::Exiv2Version();
+    QString Exiv2Ver    = KExiv2Iface::KExiv2::Exiv2Version();
 
     QString Gphoto2Ver  = QString(gp_library_version(GP_VERSION_SHORT)[0]);
 
