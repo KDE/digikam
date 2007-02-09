@@ -48,10 +48,6 @@
 
 #include <libkipi/version.h>
 
-// Exiv2 includes.
-
-#include <exiv2/exiv2_version.h>
-
 // libkexiv2 includes.
 
 #include <libkexiv2/version.h>
@@ -81,9 +77,7 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
-    QString Exiv2Ver    = QString("%1.%2.%3").arg(EXIV2_MAJOR_VERSION)
-                                             .arg(EXIV2_MINOR_VERSION)
-                                             .arg(EXIV2_PATCH_VERSION);
+    QString Exiv2Ver    = KExiv2::Exiv2Version();
 
     QString Gphoto2Ver  = QString(gp_library_version(GP_VERSION_SHORT)[0]);
 
