@@ -2,7 +2,7 @@
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date   : 2006-22-01
  * Description : digikamalbum KIO slave interface to get image 
- *               info fro database.
+ *               info from database.
  *
  * Copyright 2007 by Gilles Caulier
  *
