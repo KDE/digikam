@@ -45,6 +45,8 @@
 #include "folderitem.h"
 #include "dio.h"
 #include "imageattributeswatch.h"
+#include "imageinfo.h"
+#include "metadatahub.h"
 #include "albumthumbnailloader.h"
 #include "statusprogressbar.h"
 #include "tagfolderview.h"
@@ -806,20 +808,22 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                        i18n("Assign tag to pictures. Please wait..."));
 
-            AlbumDB* db = AlbumManager::instance()->albumDB();
             int i=0;
-            db->beginTransaction();
             for (QValueList<int>::const_iterator it = imageIDs.begin();
                  it != imageIDs.end(); ++it)
             {
-                db->addItemTag(*it, destAlbum->id());
+                // create temporary ImageInfo object
+                ImageInfo info(*it);
 
-                // TODO MetadataHub: add call here.
+                MetadataHub hub;
+                hub.load(&info);
+                hub.setTag(destAlbum, true);
+                hub.write(&info, MetadataHub::PartialWrite);
+                hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
 
                 emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));
                 kapp->processEvents();
             }
-            db->commitTransaction();
 
             ImageAttributesWatch::instance()->imagesChanged(destAlbum->id());
 
