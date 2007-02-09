@@ -489,6 +489,8 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
                  and you enter into PREFERENCES->COLOR SPACE PROFILES.
 282 ==> 123649 : JPEG/PNG quality settings at the "save" dialog.
 283 ==> 116518 : Use KIPI plugin for displaying slideshows.
-284 ==>  
+284 ==> 140304 : Start slideshow from the current image.
+285 ==> 140303 : slideshow must be relocated to View menu from tools menu.
+286 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
