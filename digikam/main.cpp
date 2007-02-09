@@ -140,6 +140,16 @@ int main(int argc, char *argv[])
                           "tomalbers at kde.nl",
                           "http://www.omat.nl/drupal/?q=blog/1");
     
+    aboutData.addCredit ( "Luka Renko",
+                          I18N_NOOP("Developer"),
+                          "lure@kubuntu.org",
+                          0);
+
+    aboutData.addCredit ( "Fabien Salvi",
+                          I18N_NOOP("Webmaster"),
+                          "fabien dot ubuntu at gmail dot com",
+                          0);
+
     aboutData.addCredit ( "Todd Shoemaker",
                           I18N_NOOP("Developer"),
                           "todd at theshoemakers.net",
