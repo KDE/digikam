@@ -74,12 +74,12 @@ int main(int argc, char *argv[])
 
     aboutData.addAuthor ( "Renchi Raju",
                           I18N_NOOP("Developer"),
-                          "renchi at pooh.tam.uiuc.edu",
+                          "renchi at pooh dot tam dot uiuc dot edu",
                           0);
     
     aboutData.addAuthor ( "Ralf Holzer",
                           I18N_NOOP("Developer"),
-                          "kde at ralfhoelzer.com",
+                          "kde at ralfhoelzer dot com",
                           0);
 
     aboutData.addAuthor ( "Joern Ahrens",
@@ -89,9 +89,24 @@ int main(int argc, char *argv[])
     
     aboutData.addAuthor ( "Tom Albers",
                           I18N_NOOP("Developer"),
-                          "tomalbers at kde.nl",
+                          "tomalbers at kde dot nl",
                           "http://www.omat.nl/drupal/?q=blog/1");
-                          
+
+    aboutData.addCredit ( "Achim Bohnet",
+                          I18N_NOOP("Bug reports and patches"),
+                          "ach at mpe dot mpg dot de",
+                          0);
+
+    aboutData.addCredit ( "Luka Renko",
+                          I18N_NOOP("Developer"),
+                          "lure at kubuntu dot org",
+                          0);
+
+    aboutData.addCredit ( "Fabien Salvi",
+                          I18N_NOOP("Webmaster"),
+                          "fabien dot ubuntu at gmail dot com",
+                          0);
+
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options );
 
