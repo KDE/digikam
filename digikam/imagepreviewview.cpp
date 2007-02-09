@@ -49,6 +49,7 @@
 #include "imageinfo.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
+#include "metadatahub.h"
 #include "tagspopupmenu.h"
 #include "ratingpopupmenu.h"
 #include "themeengine.h"
@@ -307,23 +308,11 @@ void ImagePreviewView::slotAssignTag(int tagID)
 {
     if (d->imageInfo)
     {
-        QStringList oldKeywords = d->imageInfo->tagNames();
-
-        d->imageInfo->setTag(tagID);
-
-        // TODO MetadataHub: fix this part to use it instead.
-
-        // Update Image Tags like Iptc keywords tags.
-
-        if (AlbumSettings::instance())
-        {
-            if (AlbumSettings::instance()->getSaveIptcRating())
-            {
-                DMetadata metadata(d->imageInfo->filePath());
-                metadata.setImageKeywords(oldKeywords, d->imageInfo->tagNames());
-                metadata.applyChanges();
-            }
-        }
+        MetadataHub hub;
+        hub.load(d->imageInfo);
+        hub.setTag(tagID, true);
+        hub.write(d->imageInfo, MetadataHub::PartialWrite);
+        hub.write(d->imageInfo->filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
@@ -331,47 +320,24 @@ void ImagePreviewView::slotRemoveTag(int tagID)
 {
     if (d->imageInfo)
     {
-        QStringList oldKeywords = d->imageInfo->tagNames();
-
-        d->imageInfo->removeTag(tagID);
-
-        // TODO MetadataHub: fix this part to use it instead.
-
-        // Update Image Tags like Iptc keywords tags.
-
-        if (AlbumSettings::instance())
-        {
-            if (AlbumSettings::instance()->getSaveIptcRating())
-            {
-                DMetadata metadata(d->imageInfo->filePath());
-                metadata.setImageKeywords(oldKeywords, d->imageInfo->tagNames());
-                metadata.applyChanges();
-            }
-        }
+        MetadataHub hub;
+        hub.load(d->imageInfo);
+        hub.setTag(tagID, false);
+        hub.write(d->imageInfo, MetadataHub::PartialWrite);
+        hub.write(d->imageInfo->filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
 void ImagePreviewView::slotAssignRating(int rating)
 {
     rating = QMIN(5, QMAX(0, rating));
-    
     if (d->imageInfo)
     {
-        d->imageInfo->setRating(rating);
-
-        // TODO MetadataHub: fix this part to use it instead.
-        
-        // Store Image rating as Iptc tag.
-    
-        if (AlbumSettings::instance())
-        {
-            if (AlbumSettings::instance()->getSaveIptcRating())
-            {
-                DMetadata metadata(d->imageInfo->filePath());
-                metadata.setImageRating(rating);
-                metadata.applyChanges();
-            }
-        }
+        MetadataHub hub;
+        hub.load(d->imageInfo);
+        hub.setRating(rating);
+        hub.write(d->imageInfo, MetadataHub::PartialWrite);
+        hub.write(d->imageInfo->filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
