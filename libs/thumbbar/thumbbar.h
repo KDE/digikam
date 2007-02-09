@@ -5,7 +5,7 @@
  * Description : a bar widget to display image thumbnails
  *
  * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,6 +63,7 @@ public:
     ~ThumbBarView();
 
     int  countItems();
+    KURL::List itemsURLs();
     
     void clear(bool updateView=true);
     void triggerUpdate();
