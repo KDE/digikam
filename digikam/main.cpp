@@ -127,22 +127,27 @@ int main(int argc, char *argv[])
 
     aboutData.addAuthor ( "Ralf Holzer",
                           I18N_NOOP("Developer"),
-                          "kde at ralfhoelzer.com",
+                          "kde at ralfhoelzer dot com",
                           0);
 
     aboutData.addAuthor ( "Joern Ahrens",
                           I18N_NOOP("Developer"),
-                          "kde at jokele.de",
+                          "kde at jokele dot de",
                           "http://www.digikam.org/?q=blog/1");
 
     aboutData.addAuthor ( "Tom Albers",
                           I18N_NOOP("Developer"),
-                          "tomalbers at kde.nl",
+                          "tomalbers at kde dot nl",
                           "http://www.omat.nl/drupal/?q=blog/1");
-    
+
+    aboutData.addCredit ( "Achim Bohnet",
+                          I18N_NOOP("Bug reports and patches"),
+                          "ach at mpe dot mpg dot de",
+                          0);
+
     aboutData.addCredit ( "Luka Renko",
                           I18N_NOOP("Developer"),
-                          "lure@kubuntu.org",
+                          "lure at kubuntu dot org",
                           0);
 
     aboutData.addCredit ( "Fabien Salvi",
@@ -152,7 +157,7 @@ int main(int argc, char *argv[])
 
     aboutData.addCredit ( "Todd Shoemaker",
                           I18N_NOOP("Developer"),
-                          "todd at theshoemakers.net",
+                          "todd at theshoemakers dot net",
                           0);
 
     aboutData.addCredit ( "Gregory Kokanosky",
@@ -162,62 +167,57 @@ int main(int argc, char *argv[])
 
     aboutData.addCredit ( "Rune Laursen",
                           I18N_NOOP("Danish translations"),
-                          "runerl at skjoldhoej.dk",
+                          "runerl at skjoldhoej dot dk",
                           0);
 
     aboutData.addCredit ( "Stefano Rivoir",
                           I18N_NOOP("Italian translations"),
-                          "s dot rivoir at gts.it",
+                          "s dot rivoir at gts dot it",
                           0);
 
     aboutData.addCredit ( "Jan Toenjes",
                           I18N_NOOP("German translations"),
-                          "jan dot toenjes at web.de",
+                          "jan dot toenjes at web dot de",
                           0);
 
     aboutData.addCredit ( "Oliver Doerr",
                           I18N_NOOP("German translations and beta tester"),
-                          "oliver at doerr-privat.de",
+                          "oliver at doerr-privat dot de",
                           0);
 
     aboutData.addCredit ( "Quique",
                           I18N_NOOP("Spanish translations"),
-                          "quique at sindominio.net",
+                          "quique at sindominio dot net",
                           0);
 
     aboutData.addCredit ( "Marcus Meissner",
                           I18N_NOOP("Czech translations"),
-                          "marcus at jet.franken.de",
+                          "marcus at jet dot franken dot de",
                           0);
 
     aboutData.addCredit ( "Janos Tamasi",
                           I18N_NOOP("Hungarian translations"),
-                          "janusz at vnet.hu",
+                          "janusz at vnet dot hu",
                           0);
 
     aboutData.addCredit ( "Jasper van der Marel",
                           I18N_NOOP("Dutch translations"),
-                          "jasper dot van dot der dot marel at wanadoo.nl",
+                          "jasper dot van dot der dot marel at wanadoo dot nl",
                           0);
 
     aboutData.addCredit ( "Anna Sawicka",
                           I18N_NOOP("Polish translations"),
-                          "ania at kajak.org.pl",
-                          0);
-
-    aboutData.addCredit ( "Achim Bohnet",
-                          I18N_NOOP("Bug reports and patches"),
-                          "ach at mpe.mpg.de",
+                          "ania at kajak dot org dot pl",
                           0);
 
     aboutData.addCredit ( "Charles Bouveyron",
                           I18N_NOOP("Beta tester"),
-                          "c dot bouveyron at tuxfamily.org",
+                          "c dot bouveyron at tuxfamily dot org",
                           0);
 
     aboutData.addCredit ( "Richard Groult",
                           I18N_NOOP("Plugin contributor and beta tester"),
-                          "Richard dot Groult at jalix.org",
+                          "Richard dot Groult at jalix dot org",
                           0);
                                                     
     aboutData.addCredit ( "Richard Taylor",
@@ -237,14 +237,13 @@ int main(int argc, char *argv[])
 
     aboutData.addCredit ( "Yves Chaufour",
                           I18N_NOOP("digiKam website, Feedback"),
-                          "yves dot chaufour at wanadoo.fr",
+                          "yves dot chaufour at wanadoo dot fr",
                           0);
 
     aboutData.addCredit ( "Tung Nguyen",
                           I18N_NOOP("Bug reports, feedback and icons"),
-                          "ntung at free.fr",
+                          "ntung at free dot fr",
                           0);
-
 
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); 
