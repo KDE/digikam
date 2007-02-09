@@ -628,9 +628,12 @@ QImage kio_digikamthumbnailProtocol::loadPNG(const QString& path)
 
 bool kio_digikamthumbnailProtocol::loadDImg(QImage& image, const QString& path)
 {
-    Digikam::DImg dimg_im(path);
+    Digikam::DImg dimg_im;
 
-    if (dimg_im.isNull()) 
+    // to disable raw loader - does not work from ioslave
+    dimg_im.setAttribute("noeventloop", true);
+
+    if (!dimg_im.load(path))
     {
         return false;
     }
