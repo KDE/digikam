@@ -155,8 +155,8 @@ Image Plugins : Add Border Tool : add new option to preserve aspect ratio. Borde
 Image Plugins : Perspective Tool : add a grid and vertical/horizontal guide lines.
 Image Plugins : Ratio-crop Tool : usability improvements from Jaromir Malenko.
 Image Plugins : Auto Color Correction Tool : add new filter to perform auto-exposure corrections.
-Image Plugins : Black & Whithe converter : Capabilty to remember settings between plugin
-                session and to store configuration in a settings file.
+Image Plugins : all plugins : capabilty to remember settings between plugin
+                sessions to store configuration in a settings file.
 
 Image Editor  : Add new advanced options to keep ratio and alignment about print pictures.
 Image Editor  : Add 2 new advanced options to show under-exposed or over-exposed pixels.
