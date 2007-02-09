@@ -101,6 +101,7 @@ public slots:
     void slotNewAdvancedSearch();
 
     // Image action slots
+    void slotSlideShow();
     void slotImagePreview();
     void slotImageEdit();
     void slotImageExifOrientation(int orientation);

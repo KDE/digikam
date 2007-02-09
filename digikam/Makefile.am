@@ -20,6 +20,7 @@ INCLUDES = -I$(top_srcdir)/digikam/sqlite \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
 	   -I$(top_srcdir)/digikam/utilities/splashscreen \
 	   -I$(top_srcdir)/digikam/utilities/setup \
+	   -I$(top_srcdir)/digikam/utilities/slideshow \
 	   -I$(top_srcdir)/digikam/utilities/batch \
 	   $(LIBKIPI_CFLAGS) $(GPHOTO_CFLAGS) $(all_includes) 
 

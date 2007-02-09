@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="18" name="digikam" >
+<kpartgui version="19" name="digikam" >
 
  <MenuBar>
 
@@ -60,6 +60,7 @@
   <Menu name="View" >
    <text>&amp;View</text>
      <Action name="full_screen" />
+     <Action name="slideshow" />
      <Separator/>
      <Action name="album_thumbSizeIncrease" />
      <Action name="album_thumbSizeDecrease" />
@@ -124,7 +125,9 @@
   <Separator/>
   <Action name="album_thumbSizeIncrease" />
   <Action name="album_thumbSizeDecrease" />
+  <Separator/>
   <Action name="full_screen" />
+  <Action name="slideshow" />
  </ToolBar>
  <ActionProperties/>
 

@@ -59,6 +59,7 @@
 #include "albumsettings.h"
 #include "albumhistory.h"
 #include "batchsyncmetadata.h"
+#include "slideshow.h"
 #include "sidebar.h"
 #include "imagepropertiessidebardb.h"
 #include "datefolderview.h"
@@ -893,6 +894,35 @@ void DigikamView::slotTogglePreviewMode(AlbumIconItem *iconItem)
 void DigikamView::slotToggledToPreviewMode(bool t)
 {
     d->parent->toggledToPreviewMode(t);
+}
+
+void DigikamView::slotSlideShow()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("ImageViewer Settings");
+    bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
+    bool loop             = config->readBoolEntry("SlideShowLoop", false);
+    bool printName        = config->readBoolEntry("SlideShowPrintName", true);
+    int  delay            = config->readNumEntry("SlideShowDelay", 5);
+
+    bool exifRotate = AlbumSettings::instance()->getExifRotate();
+    KURL::List urlList;
+
+    AlbumIconItem* item = 0;
+    if (startWithCurrent)
+        item = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
+    else
+        item = dynamic_cast<AlbumIconItem*>(d->iconView->firstItem());
+
+    while (item) 
+    {
+        urlList.append(item->imageInfo()->kurl());
+
+        item = dynamic_cast<AlbumIconItem*>(item->nextItem());
+    }
+
+    SlideShow *slide = new SlideShow(urlList, exifRotate, delay*1000, printName, loop);
+    slide->show();
 }
 
 void DigikamView::slotImageEdit()

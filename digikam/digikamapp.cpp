@@ -765,6 +765,10 @@ void DigikamApp::setupActions()
                                          "in full screen mode."));
 #endif
 
+    d->slideShowAction = new KAction(i18n("Slide Show"), "slideshow", 0,
+                                     d->view, SLOT(slotSlideShow()),
+                                     actionCollection(), "slideshow");
+
     d->quitAction = KStdAction::quit(this,
                                    SLOT(slotExit()),
                                    actionCollection(),
