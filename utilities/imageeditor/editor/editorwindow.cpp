@@ -974,6 +974,7 @@ void EditorWindow::slotToggleFullScreen()
 void EditorWindow::slotToggleSlideShow()
 {
     KConfig* config = kapp->config();
+    config->setGroup("ImageViewer Settings");
     bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
     bool loop             = config->readBoolEntry("SlideShowLoop", false);
     bool printName        = config->readBoolEntry("SlideShowPrintName", true);
