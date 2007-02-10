@@ -1,9 +1,11 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date   : 2004-10-05
- * Description : 
+ * Description : a tool bar for slideshow 
  * 
  * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,6 +29,8 @@ class QToolButton;
 
 namespace Digikam
 {
+
+class ToolBarPriv;
 
 class ToolBar : public QWidget
 {
@@ -64,12 +68,7 @@ private slots:
 
 private:
 
-    bool         m_canHide;
-
-    QToolButton* m_playBtn;
-    QToolButton* m_stopBtn;
-    QToolButton* m_nextBtn;
-    QToolButton* m_prevBtn;
+    ToolBarPriv *d;
 
     friend class SlideShow;
 };

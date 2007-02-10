@@ -1,9 +1,11 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date   : 2004-10-05
- * Description : 
+ * Description : a tool bar for slideshow 
  * 
  * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,63 +40,86 @@
 namespace Digikam
 {
 
+class ToolBarPriv
+{
+public:
+
+    ToolBarPriv()
+    {
+        playBtn = 0;
+        stopBtn = 0;
+        nextBtn = 0;
+        prevBtn = 0;
+        canHide = true;
+    }
+
+    bool         canHide;
+
+    QToolButton *playBtn;
+    QToolButton *stopBtn;
+    QToolButton *nextBtn;
+    QToolButton *prevBtn;
+};  
+
 ToolBar::ToolBar(QWidget* parent)
        : QWidget(parent)
 {
+    d = new ToolBarPriv;
+
     QHBoxLayout* lay = new QHBoxLayout(this);
-    m_playBtn = new QToolButton(this);
-    m_prevBtn = new QToolButton(this);
-    m_nextBtn = new QToolButton(this);
-    m_stopBtn = new QToolButton(this);
-    m_playBtn->setToggleButton(true);
+    d->playBtn = new QToolButton(this);
+    d->prevBtn = new QToolButton(this);
+    d->nextBtn = new QToolButton(this);
+    d->stopBtn = new QToolButton(this);
+    d->playBtn->setToggleButton(true);
 
     KIconLoader* loader = kapp->iconLoader();
-    m_playBtn->setIconSet(loader->loadIcon("player_pause", KIcon::NoGroup, 22));
-    m_prevBtn->setIconSet(loader->loadIcon("back", KIcon::NoGroup, 22));
-    m_nextBtn->setIconSet(loader->loadIcon("forward", KIcon::NoGroup, 22));
-    m_stopBtn->setIconSet(loader->loadIcon("stop", KIcon::NoGroup, 22));
+    d->playBtn->setIconSet(loader->loadIcon("player_pause", KIcon::NoGroup, 22));
+    d->prevBtn->setIconSet(loader->loadIcon("back", KIcon::NoGroup, 22));
+    d->nextBtn->setIconSet(loader->loadIcon("forward", KIcon::NoGroup, 22));
+    d->stopBtn->setIconSet(loader->loadIcon("stop", KIcon::NoGroup, 22));
 
-    lay->addWidget(m_playBtn);
-    lay->addWidget(m_prevBtn);
-    lay->addWidget(m_nextBtn);
-    lay->addWidget(m_stopBtn);
+    lay->addWidget(d->playBtn);
+    lay->addWidget(d->prevBtn);
+    lay->addWidget(d->nextBtn);
+    lay->addWidget(d->stopBtn);
 
+    setBackgroundMode(Qt::NoBackground);
     adjustSize();
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-
-    m_canHide = true;
     
-    connect(m_playBtn, SIGNAL(toggled(bool)),
+    connect(d->playBtn, SIGNAL(toggled(bool)),
             this, SLOT(slotPlayBtnToggled()));
 
-    connect(m_nextBtn, SIGNAL(clicked()),
+    connect(d->nextBtn, SIGNAL(clicked()),
             this, SLOT(slotNexPrevClicked()));
 
-    connect(m_prevBtn, SIGNAL(clicked()),
+    connect(d->prevBtn, SIGNAL(clicked()),
             this, SLOT(slotNexPrevClicked()));
 
-    connect(m_nextBtn, SIGNAL(clicked()),
+    connect(d->nextBtn, SIGNAL(clicked()),
             this, SIGNAL(signalNext()));
 
-    connect(m_prevBtn, SIGNAL(clicked()),
+    connect(d->prevBtn, SIGNAL(clicked()),
             this, SIGNAL(signalPrev()));
 
-    connect(m_stopBtn, SIGNAL(clicked()),
+    connect(d->stopBtn, SIGNAL(clicked()),
             this, SIGNAL(signalClose()));
 }
 
 ToolBar::~ToolBar()
-{    
+{
+    delete d;    
 }
 
 bool ToolBar::canHide() const
 {
-    return m_canHide;    
+    return d->canHide;    
 }
 
 bool ToolBar::isPaused() const
 {
-    return m_playBtn->isOn();
+    return d->playBtn->isOn();
 }
 
 void ToolBar::setPaused(bool val)
@@ -102,51 +127,51 @@ void ToolBar::setPaused(bool val)
     if (val == isPaused())
         return;
 
-    m_playBtn->setOn(val);
+    d->playBtn->setOn(val);
     slotPlayBtnToggled();
 }
 
 void ToolBar::setEnabledPlay(bool val)
 {
-    m_playBtn->setEnabled(val);    
+    d->playBtn->setEnabled(val);    
 }
 
 void ToolBar::setEnabledNext(bool val)
 {
-    m_nextBtn->setEnabled(val);    
+    d->nextBtn->setEnabled(val);    
 }
 
 void ToolBar::setEnabledPrev(bool val)
 {
-    m_prevBtn->setEnabled(val);    
+    d->prevBtn->setEnabled(val);    
 }
 
 void ToolBar::slotPlayBtnToggled()
 {
-    if (m_playBtn->isOn())
+    if (d->playBtn->isOn())
     {
-        m_canHide = false;
+        d->canHide = false;
         KIconLoader* loader = kapp->iconLoader();
-        m_playBtn->setIconSet(loader->loadIcon("player_play", KIcon::NoGroup, 22));
+        d->playBtn->setIconSet(loader->loadIcon("player_play", KIcon::NoGroup, 22));
         emit signalPause();
     }
     else
     {
-        m_canHide = true;
+        d->canHide = true;
         KIconLoader* loader = kapp->iconLoader();
-        m_playBtn->setIconSet(loader->loadIcon("player_pause", KIcon::NoGroup, 22));
+        d->playBtn->setIconSet(loader->loadIcon("player_pause", KIcon::NoGroup, 22));
         emit signalPlay();
     }
 }
 
 void ToolBar::slotNexPrevClicked()
 {
-    if (!m_playBtn->isOn())
+    if (!d->playBtn->isOn())
     {
-        m_playBtn->setOn(true);
-        m_canHide = false;
+        d->playBtn->setOn(true);
+        d->canHide = false;
         KIconLoader* loader = kapp->iconLoader();
-        m_playBtn->setIconSet(loader->loadIcon("player_play", KIcon::NoGroup, 22));
+        d->playBtn->setIconSet(loader->loadIcon("player_play", KIcon::NoGroup, 22));
         emit signalPause();
     }
 }
@@ -157,26 +182,26 @@ void ToolBar::keyPressEvent(QKeyEvent *event)
     {
         case(Qt::Key_Space):
         {
-            if (m_playBtn->isEnabled())
-                m_playBtn->animateClick();
+            if (d->playBtn->isEnabled())
+                d->playBtn->animateClick();
             break;
         }
         case(Qt::Key_Prior):
         {
-            if (m_prevBtn->isEnabled())
-                m_prevBtn->animateClick();
+            if (d->prevBtn->isEnabled())
+                d->prevBtn->animateClick();
             break;
         }
         case(Qt::Key_Next):
         {
-            if (m_nextBtn->isEnabled())
-                m_nextBtn->animateClick();
+            if (d->nextBtn->isEnabled())
+                d->nextBtn->animateClick();
             break;
         }
         case(Qt::Key_Escape):
         {
-            if (m_stopBtn->isEnabled())
-                m_stopBtn->animateClick();
+            if (d->stopBtn->isEnabled())
+                d->stopBtn->animateClick();
             break;
         }
         default:
