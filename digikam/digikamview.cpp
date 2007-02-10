@@ -311,6 +311,9 @@ void DigikamView::setupConnections()
     connect(d->albumWidgetStack, SIGNAL(signalToggledToPreviewMode(bool)),
             this, SLOT(slotToggledToPreviewMode(bool)));
 
+    connect(d->albumWidgetStack, SIGNAL(signalBack2Album()),
+            this, SLOT(slotEscapePreview()));
+
     // -- Selection timer ---------------
 
     connect(d->selectionTimer, SIGNAL(timeout()),

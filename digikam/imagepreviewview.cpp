@@ -180,6 +180,8 @@ void ImagePreviewView::mousePressEvent(QMouseEvent* e)
         popmenu.insertItem(SmallIcon("forward"), i18n("Forward"), 11);
         if (!d->hasNext) popmenu.setItemEnabled(11, false);
 
+        popmenu.insertItem(SmallIcon("folder"), i18n("back to album"), 15);
+        
         //-- Edit actions -----------------------------------------------
 
         popmenu.insertSeparator();
@@ -283,6 +285,12 @@ void ImagePreviewView::mousePressEvent(QMouseEvent* e)
             case 14:     // Move to trash
             {
                 emit signalDeleteItem();
+                break;
+            }
+
+            case 15:     // Back to album
+            {
+                emit signalBack2Album();
                 break;
             }
 

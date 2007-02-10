@@ -75,6 +75,7 @@ signals:
     void signalEditItem();
     void signalDeleteItem();
     void signalToggledToPreviewMode(bool);
+    void signalBack2Album();   
 
 public slots:
 
