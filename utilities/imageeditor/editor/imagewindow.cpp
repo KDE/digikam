@@ -766,6 +766,11 @@ void ImageWindow::saveIsComplete()
     // put image in cache, the LoadingCacheInterface cares for the details
     LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
 
+    // Write metadata from database to file
+    MetadataHub hub;
+    hub.load(d->imageInfoCurrent);
+    hub.write(d->imageInfoCurrent->filePath(), MetadataHub::FullWrite);
+
     // notify main app that file changed
     emit signalFileModified(m_savingContext->destinationURL);
 
@@ -824,7 +829,14 @@ void ImageWindow::saveAsIsComplete()
 
         d->urlCurrent = m_savingContext->destinationURL;
         m_canvas->switchToLastSaved(m_savingContext->destinationURL.path());
+
         slotUpdateItemInfo();
+
+        // Write metadata from database to file
+        MetadataHub hub;
+        hub.load(d->imageInfoCurrent);
+        hub.write(d->imageInfoCurrent->filePath(), MetadataHub::FullWrite);
+
         // If the DImg is put in the cache under the new name, this means the new file will not be reloaded.
         // This may irritate users who want to check for quality loss in lossy formats.
         // In any case, only do that if the format did not change - too many assumptions otherwise (see bug #138949).
