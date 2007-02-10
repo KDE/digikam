@@ -313,7 +313,7 @@ void EditorWindow::setupStandardActions()
                                            actionCollection(), "editorwindow_fullscreen");
 #endif
 
-    d->slideShowAction = new KAction(i18n("Slide Show"), "slideshow", 0,
+    d->slideShowAction = new KAction(i18n("Slide Show"), "slideshow", Key_F9,
                                      this, SLOT(slotToggleSlideShow()),
                                      actionCollection(),"editorwindow_slideshow");
 
