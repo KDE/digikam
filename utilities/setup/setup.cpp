@@ -181,7 +181,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                                  BarIcon("digikamimageplugins", KIcon::SizeMedium));
     d->imgpluginsPage = new SetupImgPlugins(d->page_imgplugins);
 
-    d->page_slideshow = addPage(i18n("Slide Show"), i18n("Image Editor Slide Show Settings"),
+    d->page_slideshow = addPage(i18n("Slide Show"), i18n("Slide Show Settings"),
                                 BarIcon("slideshow", KIcon::SizeMedium));
     d->slideshowPage = new SetupSlideShow(d->page_slideshow);
 
