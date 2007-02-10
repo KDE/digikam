@@ -103,7 +103,8 @@ public slots:
     void slotNewAdvancedSearch();
 
     // Image action slots
-    void slotSlideShow();
+    void slotSlideShowAll();
+    void slotSlideShowSelection();
     void slotImagePreview();
     void slotImageEdit();
     void slotImageExifOrientation(int orientation);
@@ -133,6 +134,7 @@ private:
     void saveViewState();
     void changeAlbumFromHistory(Album *album, QWidget *widget);
     void imageEdit(AlbumIconItem* iconItem=0);
+    void slideShow(const KURL::List &urlList);
 
 private slots:
 

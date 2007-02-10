@@ -768,9 +768,22 @@ void DigikamApp::setupActions()
                                          "in full screen mode."));
 #endif
 
-    d->slideShowAction = new KAction(i18n("Slide Show"), "slideshow", Key_F9,
-                                     d->view, SLOT(slotSlideShow()),
-                                     actionCollection(), "slideshow");
+    d->slideShowAction = new KActionMenu(i18n("Slide Show"), "slideshow",
+                                    actionCollection(), "slideshow");
+
+    d->slideShowAction->setDelayed(false);
+
+    KAction *ssAction = new KAction(i18n("All"), 0, Key_F9,
+                                    d->view, SLOT(slotSlideShowAll()),
+                                    actionCollection(), "slideshow_all");
+    d->slideShowAction->insert(ssAction);
+    d->slideShowSelectionAction = new KAction(i18n("Selection"), 0, ALT+Key_F9,
+                                              d->view, 
+                                              SLOT(slotSlideShowSelection()),
+                                              actionCollection(), 
+                                              "slideshow_selected");
+    d->slideShowAction->insert(d->slideShowSelectionAction);
+
 
     d->quitAction = KStdAction::quit(this,
                                    SLOT(slotExit()),
@@ -872,6 +885,7 @@ void DigikamApp::setupActions()
     d->imageRenameAction->setEnabled(false);
     d->imageDeleteAction->setEnabled(false);
     d->imageExifOrientationActionMenu->setEnabled(false);
+    d->slideShowSelectionAction->setEnabled(false);
 
     d->albumSortAction->setCurrentItem((int)d->albumSettings->getAlbumSortOrder());
     d->imageSortAction->setCurrentItem((int)d->albumSettings->getImageSortOrder());
@@ -1100,6 +1114,7 @@ void DigikamApp::slotImageSelected(const QPtrList<ImageInfo>& list, bool hasPrev
     d->imageRenameAction->setEnabled(val);
     d->imageDeleteAction->setEnabled(val);
     d->imageExifOrientationActionMenu->setEnabled(val);
+    d->slideShowSelectionAction->setEnabled(selection.count() != 0);
 
     switch (selection.count())
     {

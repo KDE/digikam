@@ -189,7 +189,8 @@ public:
 
     // View Actions
     KAction               *fullScreenAction;
-    KAction               *slideShowAction;
+    KActionMenu           *slideShowAction;
+    KAction               *slideShowSelectionAction;
     KAction               *thumbSizePlusAction;
     KAction               *thumbSizeMinusAction;
     KSelectAction         *imageSortAction;
