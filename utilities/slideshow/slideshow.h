@@ -41,7 +41,7 @@ class SlideShowPriv;
 class SlideShow : public QWidget
 {
     Q_OBJECT
-    
+
 public:
 
     SlideShow(const KURL::List& fileList, bool exifRotate,
@@ -54,15 +54,16 @@ private:
 
     void loadNextImage();
     void loadPrevImage();
+    void preloadNextImage();
     void updatePixmap();
-    
+
 protected:
 
     void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
     void keyPressEvent(QKeyEvent *);
-    
+
 private slots:
 
     void slotTimeOut();

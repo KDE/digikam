@@ -86,6 +86,7 @@ public:
     KURL::List         fileList;
 
     PreviewLoadThread *previewThread;
+    PreviewLoadThread *previewPreloadThread;
 
     ToolBar           *toolBar;
 };  
@@ -146,9 +147,10 @@ SlideShow::SlideShow(const KURL::List& fileList, bool exifRotate,
 
     // ---------------------------------------------------------------
     
-    d->previewThread  = new PreviewLoadThread();
-    d->timer          = new QTimer();
-    d->mouseMoveTimer = new QTimer();
+    d->previewThread         = new PreviewLoadThread();
+    d->previewPreloadThread  = new PreviewLoadThread();
+    d->timer                 = new QTimer();
+    d->mouseMoveTimer        = new QTimer();
 
     connect(d->previewThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
             this, SLOT(slotGotImagePreview(const LoadingDescription &, const QImage&)));
@@ -175,6 +177,7 @@ SlideShow::~SlideShow()
     delete d->timer;
     delete d->mouseMoveTimer;
     delete d->previewThread;
+    delete d->previewPreloadThread;
     delete d;
 }
 
@@ -212,9 +215,20 @@ void SlideShow::loadNextImage()
         d->toolBar->setEnabledNext(d->fileIndex < num-1);
     }
 
-    d->currentImage = d->fileList[d->fileIndex];
-    d->previewThread->load(LoadingDescription(d->currentImage.path(), 
-                           QMAX(d->deskWidth, d->deskHeight), d->exifRotate));
+    if (d->fileIndex < num)
+    {
+        d->currentImage = d->fileList[d->fileIndex];
+        d->previewThread->load(LoadingDescription(d->currentImage.path(),
+                               QMAX(d->deskWidth, d->deskHeight), d->exifRotate));
+    }
+    else
+    {
+        d->currentImage = KURL();
+        d->preview = QImage();
+        updatePixmap();
+        update();
+    }
+
 }
 
 void SlideShow::loadPrevImage()
@@ -235,26 +249,60 @@ void SlideShow::loadPrevImage()
         d->toolBar->setEnabledPrev(d->fileIndex > 0);
         d->toolBar->setEnabledNext(d->fileIndex < num-1);
     }
-    
-    d->currentImage = d->fileList[d->fileIndex];
-    d->previewThread->load(LoadingDescription(d->currentImage.path(), 
-                           QMAX(d->deskWidth, d->deskHeight), d->exifRotate));
+
+    if (d->fileIndex >= 0)
+    {
+        d->currentImage = d->fileList[d->fileIndex];
+        d->previewThread->load(LoadingDescription(d->currentImage.path(),
+                               QMAX(d->deskWidth, d->deskHeight), d->exifRotate));
+    }
+    else
+    {
+        d->currentImage = KURL();
+        d->preview = QImage();
+        updatePixmap();
+        update();
+    }
+
 }
 
 void SlideShow::slotGotImagePreview(const LoadingDescription&, const QImage& preview)
 {
     d->preview = preview;
-    d->pixmap  = QPixmap(size());
 
     updatePixmap();
     update();
-    
+
     if (!d->endOfShow)
+    {
         d->timer->start(d->delay, true);
+        preloadNextImage();
+    }
+}
+
+void SlideShow::preloadNextImage()
+{
+    int index = d->fileIndex + 1;
+    int num = d->fileList.count();
+
+    if (index >= num)
+    {
+        if (d->loop)
+        {
+            index = 0;
+        }
+    }
+
+    if (index < num)
+    {
+        d->previewPreloadThread->load(LoadingDescription(d->fileList[index].path(),
+                                      QMAX(d->deskWidth, d->deskHeight), d->exifRotate));
+    }
 }
 
 void SlideShow::updatePixmap()
 {
+    d->pixmap = QPixmap(size());
     d->pixmap.fill(Qt::black);
     QPainter p(&(d->pixmap));
 
