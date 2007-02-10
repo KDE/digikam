@@ -95,11 +95,19 @@ Branching is done, so translators can work in two seperate areas and we can deve
 To set it up, you need to do following. Remember it will take you two evenings to succeed, but you need to finish the first part completely, because automated kde scripts will ruin your work!
 
 - go to /branches/stable/extragear/graphics. 
-- svn rm digikam and digikamimageplugins. 
-- svn cp http://anonsvn.kde.org/home/kde/extragear/graphics/digikam digikam  and the same for the plugins.
+- svn delete digikam and digikamimageplugins. 
+- svn cp http://anonsvn.kde.org/home/kde/extragear/graphics/digikam digikam  
+and the same for the plugins.
+more elegant: a direct copy on the server:
+$ svn delete http://anonsvn.kde.org/home/kde/branches/stable/extragear/graphics/digikam
+
+$ svn copy -r{last-used-rev_number} \
+    http://anonsvn.kde.org/home/kde/trunk/extragear/graphics/digikam \
+    http://anonsvn.kde.org/home/kde/branches/stable/extragear/graphics/digikam
+same with plugins
 
 - go to /branches/stable/extragear/graphics/doc
-- svn rm digikam and digikamimageplugins and showfoto
+- svn delete digikam and digikamimageplugins and showfoto
 - svn cp http://anonsvn.kde.org/home/kde/extragear/graphics/doc/digikam digikam  and the same for the plugins and showfoto
 
 - go to /branches/stable/l10n/templates/docmessages/extragear/graphics
