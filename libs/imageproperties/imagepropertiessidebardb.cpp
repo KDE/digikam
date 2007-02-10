@@ -318,10 +318,12 @@ void ImagePropertiesSideBarDB::slotFileMetadataChanged(const KURL &url)
 {
     if (url == m_currentURL)
     {
+        // trigger an update
+        m_dirtyMetadataTab = false;
+
         if (getActiveTab() == m_metadataTab)
         {
-            // reuse code form slotChangedTab
-            m_dirtyMetadataTab = false;
+            // update now - reuse code form slotChangedTab
             slotChangedTab( getActiveTab() );
         }
     }
