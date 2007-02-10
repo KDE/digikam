@@ -247,6 +247,15 @@ public:
     TagStatus tagStatus(const QString &tagPath) const;
 
     /**
+        Returns if the metadata field has been changed
+        with the corresponding set... method
+    */
+    bool dateTimeChanged() const;
+    bool commentChanged() const;
+    bool ratingChanged() const;
+    bool tagsChanged() const;
+
+    /**
         Returns the dateTime.
         If status is MetadataDisjoint, the earliest date is returned.
                                        (see dateTimeInterval())

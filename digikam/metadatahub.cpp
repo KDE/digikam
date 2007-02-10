@@ -617,6 +617,26 @@ MetadataHub::TagStatus MetadataHub::tagStatus(TAlbum *album) const
 }
 
 
+bool MetadataHub::dateTimeChanged() const
+{
+    return d->dateTimeChanged;
+}
+
+bool MetadataHub::commentChanged() const
+{
+    return d->commentChanged;
+}
+
+bool MetadataHub::ratingChanged() const
+{
+    return d->ratingChanged;
+}
+
+bool MetadataHub::tagsChanged() const
+{
+    return d->tagsChanged;
+}
+
 QDateTime MetadataHub::dateTime() const
 {
     return d->dateTime;
