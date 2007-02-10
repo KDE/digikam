@@ -180,7 +180,7 @@ void ImagePreviewView::mousePressEvent(QMouseEvent* e)
         popmenu.insertItem(SmallIcon("forward"), i18n("Forward"), 11);
         if (!d->hasNext) popmenu.setItemEnabled(11, false);
 
-        popmenu.insertItem(SmallIcon("folder"), i18n("back to album"), 15);
+        popmenu.insertItem(SmallIcon("folder_image"), i18n("back to album"), 15);
         
         //-- Edit actions -----------------------------------------------
 
