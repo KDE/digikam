@@ -96,6 +96,7 @@ private slots:
 
     void slotApplyAllChanges();
     void slotRevertAllChanges();
+    void slotChangingItems();
     void slotItemStateChanged(TAlbumCheckListItem *);
     void slotCommentChanged();
     void slotDateTimeChanged(const QDateTime& dateTime);

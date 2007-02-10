@@ -330,8 +330,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
 ImageDescEditTab::~ImageDescEditTab()
 {
-    slotApplyAllChanges();
-   
+    slotChangingItems();
+
     /*
     AlbumList tList = AlbumManager::instance()->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
@@ -353,6 +353,93 @@ bool ImageDescEditTab::singleSelection() const
     return (d->currInfos.count() == 1);
 }
 
+void ImageDescEditTab::slotChangingItems()
+{
+    if (!d->modified)
+        return;
+
+    if (d->currInfos.isEmpty())
+        return;
+
+    if (!AlbumSettings::instance()->getApplySidebarChangesDirectly())
+    {
+        KDialogBase *dialog = new KDialogBase(i18n("Apply changes?"),
+                                              KDialogBase::Yes | KDialogBase::No,
+                                              KDialogBase::Yes, KDialogBase::No,
+                                              this, "applyChanges",
+                                              true, true,
+                                              KStdGuiItem::yes(), KStdGuiItem::discard());
+
+        int changedFields = 0;
+        if (d->hub.commentChanged())
+            changedFields++;
+        if (d->hub.dateTimeChanged())
+            changedFields++;
+        if (d->hub.ratingChanged())
+            changedFields++;
+        if (d->hub.tagsChanged())
+            changedFields++;
+
+        QString text;
+        if (changedFields == 1)
+        {
+            if (d->hub.commentChanged())
+                text = i18n("<qt><p>You have edited the comment of the picture. ",
+                            "<qt><p>You have edited the comment of %n pictures. ",
+                            d->currInfos.count());
+            else if (d->hub.dateTimeChanged())
+                text = i18n("<qt><p>You have edited the date of the picture. ",
+                            "<qt><p>You have edited the date of %n pictures. ",
+                            d->currInfos.count());
+            else if (d->hub.ratingChanged())
+                text = i18n("<qt><p>You have edited the rating of the picture. ",
+                            "<qt><p>You have edited the rating of %n pictures. ",
+                            d->currInfos.count());
+            else if (d->hub.tagsChanged())
+                text = i18n("<qt><p>You have edited the tags of the picture. ",
+                            "<qt><p>You have edited the tags of %n pictures. ",
+                            d->currInfos.count());
+
+            text += i18n("Do you want to apply your changes?</p></qt>");
+        }
+        else
+        {
+            text = i18n("<qt><p>You have edited the metadata of the picture: </p><ul>",
+                        "<qt><p>You have edited the metadata of %n pictures: </p><ul>",
+                        d->currInfos.count());
+
+            if (d->hub.commentChanged())
+                text += i18n("<li>the comment</i>");
+            if (d->hub.dateTimeChanged())
+                text += i18n("<li>the date</li>");
+            if (d->hub.ratingChanged())
+                text += i18n("<li>the rating</li>");
+            if (d->hub.tagsChanged())
+                text += i18n("<li>the tags</li>");
+
+            text += "</ul><p>";
+
+            text += i18n("Do you want to apply your changes?</p></qt>");
+        }
+
+        bool alwaysApply = false;
+        int returnCode = KMessageBox::createKMessageBox
+                         (dialog, QMessageBox::Information,
+                          text, QStringList(),
+                          i18n("Always apply changes without confirmation"),
+                          &alwaysApply, KMessageBox::Notify);
+
+        if (alwaysApply)
+            AlbumSettings::instance()->setApplySidebarChangesDirectly(true);
+
+        if (returnCode == KDialogBase::User1)
+            return;
+        // otherwise apply
+    }
+
+    slotApplyAllChanges();
+}
+
 void ImageDescEditTab::slotApplyAllChanges()
 {
     if (!d->modified)
@@ -361,7 +448,7 @@ void ImageDescEditTab::slotApplyAllChanges()
     if (d->currInfos.isEmpty())
         return;
 
-    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                i18n("Applying changes to pictures. Please wait..."));
     MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
 
@@ -402,7 +489,7 @@ void ImageDescEditTab::slotRevertAllChanges()
 
 void ImageDescEditTab::setItem(ImageInfo *info)
 {
-    slotApplyAllChanges();
+    slotChangingItems();
     QPtrList<ImageInfo> list;
     if (info)
         list.append(info);
@@ -411,7 +498,7 @@ void ImageDescEditTab::setItem(ImageInfo *info)
 
 void ImageDescEditTab::setItems(QPtrList<ImageInfo> infos)
 {
-    slotApplyAllChanges();
+    slotChangingItems();
     setInfos(infos);
 }
 
