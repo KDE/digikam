@@ -8,11 +8,11 @@ Francisco J. Cruz <fj dot cruz at supercable dot es>                      : Deve
 CURRENT CONTRIBUTORS :
 --------------------
 
-Achim Bohnet <ach at mpe dot mpg dot de>                                  : Bugs reports and patchs.
-Gerhard Kulzer <gerhard at kulzer dot net>                                : Feedback, patchs, and handbook writter.
+Achim Bohnet <ach at mpe dot mpg dot de>                                  : Bug reports and patches.
+Gerhard Kulzer <gerhard at kulzer dot net>                                : Feedback, patches, and handbook writer.
 Oliver Doerr <oliver at doerr-privat dot de>                              : Beta tester, German translations.
 Fabien Salvi <fabien dot ubuntu at gmail dot com>                         : Webmaster.
-Luka Renko <lure at kubuntu dot org>                                      : Developper.
+Luka Renko <lure at kubuntu dot org>                                      : Developer.
 
 OLD CONTRIBUTORS :
 ----------------
@@ -22,12 +22,12 @@ Ralf Holzer <kde at ralfhoelzer dot com>                                  : Deve
 Joern Ahrens <kde at jokele dot de>                                       : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
 Tom Albers <tomalbers at kde dot nl>                                      : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
 Todd Shoemaker <todd at theshoemakers dot net>                            : Developer (0.6.x).
-Gregory Kokanosky <gregory dot kokanosky at free dot fr>                  : Feedback and patchs (0.6.x).
-Richard Taylor <r dot taylor at bcs dot org dot uk>                       : Feedback, patchs, and handbook writter (0.7.x).
+Gregory Kokanosky <gregory dot kokanosky at free dot fr>                  : Feedback and patches (0.6.x).
+Richard Taylor <r dot taylor at bcs dot org dot uk>                       : Feedback, patches, and handbook writter (0.7.x).
 Yves Chaufour <yves dot chaufour at wanadoo dot fr>                       : digiKam webpage maintainer (0.7.x).
 Charles Bouveyron <c dot bouveyron at tuxfamily dot org>                  : Beta tester (0.6.x).
 Sebastian Rooder <seppelrockt at web dot de>                              : Crystal icons style (0.6.2).
-Tung NGUYEN <ntung at free dot fr>                                        : Bugs reports, French translations
+Tung NGUYEN <ntung at free dot fr>                                        : Bug reports, French translations
 
 OLD TRANSLATORS (before 0.7.0 release) :
 --------------------------------------
