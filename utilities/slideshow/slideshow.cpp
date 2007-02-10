@@ -30,6 +30,8 @@
 
 // KDE includes.
 
+#include <kapplication.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kdeversion.h>
 #include <kglobalsettings.h>
@@ -297,14 +299,18 @@ void SlideShow::updatePixmap()
     {
         // End of Slide Show.
 
+        QPixmap logo = kapp->iconLoader()->loadIcon("digikam", KIcon::NoGroup, 128,
+                                                    KIcon::DefaultState, 0, true);
+
         QFont fn(font());
         fn.setPointSize(fn.pointSize()+10);
         fn.setBold(true);
     
         p.setFont(fn);
         p.setPen(Qt::white);
-        p.drawText(100, 100, i18n("SlideShow Completed."));
-        p.drawText(100, 150, i18n("Click To Exit..."));
+        p.drawPixmap(50, 100, logo);
+        p.drawText(60 + logo.width(), 100 + logo.height()/3,   i18n("SlideShow Completed."));
+        p.drawText(60 + logo.width(), 100 + 2*logo.height()/3, i18n("Click To Exit..."));
         p.end();
 
         d->endOfShow = true;
