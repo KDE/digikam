@@ -47,6 +47,7 @@ public:
     bool showSplash;
     bool useTrash;
     bool showTrashDeleteDialog;
+    bool sidebarApplyDirectly;
     bool scanAtStart;
 
     bool iconShowName;
@@ -164,6 +165,7 @@ void AlbumSettings::init()
     d->showSplash             = true;
     d->useTrash               = true;
     d->showTrashDeleteDialog  = true;
+    d->sidebarApplyDirectly   = false;
 
     d->iconShowName           = false;
     d->iconShowSize           = false;
@@ -296,6 +298,7 @@ void AlbumSettings::readSettings()
     d->showSplash            = config->readBoolEntry("Show Splash", true);
     d->useTrash              = config->readBoolEntry("Use Trash", true);
     d->showTrashDeleteDialog = config->readBoolEntry("Show Trash Delete Dialog", true);
+    d->sidebarApplyDirectly  = config->readBoolEntry("Apply Sidebar Changes Directly", false);
     d->scanAtStart           = config->readBoolEntry("Scan At Start", true);
 }
 
@@ -378,6 +381,7 @@ void AlbumSettings::saveSettings()
     config->writeEntry("Show Splash", d->showSplash);
     config->writeEntry("Use Trash", d->useTrash);
     config->writeEntry("Show Trash Delete Dialog", d->showTrashDeleteDialog);
+    config->writeEntry("Apply Sidebar Changes Directly", d->sidebarApplyDirectly);
     config->writeEntry("Scan At Start", d->scanAtStart);
 
     config->sync();
@@ -946,6 +950,16 @@ void AlbumSettings::setShowTrashDeleteDialog(bool val)
 bool AlbumSettings::getShowTrashDeleteDialog() const
 {
     return d->showTrashDeleteDialog;
+}
+
+void AlbumSettings::setApplySidebarChangesDirectly(bool val)
+{
+    d->sidebarApplyDirectly= val;
+}
+
+bool AlbumSettings::getApplySidebarChangesDirectly() const
+{
+    return d->sidebarApplyDirectly;
 }
 
 bool AlbumSettings::showToolTipsIsValid() const

@@ -45,13 +45,15 @@ public:
 
     SetupMiscPriv()
     {
-        showSplashCheck = 0;
-        showTrashDeleteDialogCheck   = 0;
-        scanAtStart     = 0;
+        showSplashCheck            = 0;
+        showTrashDeleteDialogCheck = 0;
+        sidebarApplyDirectlyCheck  = 0;
+        scanAtStart                = 0;
     }
 
     QCheckBox* showSplashCheck;
     QCheckBox* showTrashDeleteDialogCheck;
+    QCheckBox* sidebarApplyDirectlyCheck;
     QCheckBox* scanAtStart;
 };
 
@@ -67,6 +69,11 @@ SetupMisc::SetupMisc(QWidget* parent)
 
    d->showTrashDeleteDialogCheck = new QCheckBox(i18n("Show confirmation dialog when moving items to the &trash"), this);
    layout->addWidget(d->showTrashDeleteDialogCheck);
+
+   // --------------------------------------------------------
+
+   d->sidebarApplyDirectlyCheck = new QCheckBox(i18n("Apply changes in the &right sidebar without confirmation"), this);
+   layout->addWidget(d->sidebarApplyDirectlyCheck);
 
    // --------------------------------------------------------
 
@@ -97,6 +104,7 @@ void SetupMisc::applySettings()
 
     settings->setShowSplashScreen(d->showSplashCheck->isChecked());
     settings->setShowTrashDeleteDialog(d->showTrashDeleteDialogCheck->isChecked());
+    settings->setApplySidebarChangesDirectly(d->sidebarApplyDirectlyCheck->isChecked());
     settings->setScanAtStart(d->scanAtStart->isChecked());
     settings->saveSettings();
 }
@@ -107,6 +115,7 @@ void SetupMisc::readSettings()
 
     d->showSplashCheck->setChecked(settings->getShowSplashScreen());
     d->showTrashDeleteDialogCheck->setChecked(settings->getShowTrashDeleteDialog());
+    d->sidebarApplyDirectlyCheck->setChecked(settings->getApplySidebarChangesDirectly());
     d->scanAtStart->setChecked(settings->getScanAtStart());
 }
 
