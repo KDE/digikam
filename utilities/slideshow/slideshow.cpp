@@ -176,6 +176,16 @@ SlideShow::~SlideShow()
     delete d;
 }
 
+void SlideShow::setCurrent(const KURL& url)
+{
+    int index = d->fileList.findIndex(url);
+    if (index != -1)
+    {
+        d->currentImage = url;
+        d->fileIndex    = index-1;
+    }        
+}
+
 void SlideShow::slotTimeOut()
 {
     loadNextImage();

@@ -1093,19 +1093,14 @@ void ShowFoto::slotContextMenu()
 void ShowFoto::slideShow(bool startWithCurrent, bool loop, int delay, bool printName)
 {
     KConfig* config = kapp->config();
+    config->setGroup("ImageViewer Settings");
     bool exifRotate = config->readBoolEntry("EXIF Rotate", true);
-    KURL::List urlList;
 
+    Digikam::SlideShow *slide = new Digikam::SlideShow(d->thumbBar->itemsURLs(), exifRotate, delay, 
+                                                       printName, loop);
     if (startWithCurrent)
-    {
-        for (KURL::List::const_iterator it = d->thumbBar->itemsURLs().find(d->currentItem->url());
-             it != d->thumbBar->itemsURLs().end(); ++it)
-            urlList.append(*it);
-    }
-    else 
-        urlList = d->thumbBar->itemsURLs();
+        slide->setCurrent(d->currentItem->url());
 
-    Digikam::SlideShow *slide = new Digikam::SlideShow(urlList, exifRotate, delay, printName, loop);
     slide->show();
 }
 

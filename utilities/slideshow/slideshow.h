@@ -48,6 +48,8 @@ public:
               int delay, bool printName, bool loop);
     ~SlideShow();
 
+    void setCurrent(const KURL& url);
+
 private:
 
     void loadNextImage();

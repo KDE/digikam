@@ -994,18 +994,11 @@ void ImageWindow::slotFilePrint()
 void ImageWindow::slideShow(bool startWithCurrent, bool loop, int delay, bool printName)
 {
     bool exifRotate = AlbumSettings::instance()->getExifRotate();
-    KURL::List urlList;
 
+    SlideShow *slide = new SlideShow(d->urlList, exifRotate, delay, printName, loop);
     if (startWithCurrent)
-    {
-        for (KURL::List::const_iterator it = d->urlList.find(d->urlCurrent);
-             it != d->urlList.end(); ++it)
-            urlList.append(*it);
-    }
-    else 
-        urlList = d->urlList;
+        slide->setCurrent(d->urlCurrent);
 
-    SlideShow *slide = new SlideShow(urlList, exifRotate, delay, printName, loop);
     slide->show();
 }
 
