@@ -905,23 +905,20 @@ void DigikamView::slotSlideShow()
     bool printName        = config->readBoolEntry("SlideShowPrintName", true);
     int  delay            = config->readNumEntry("SlideShowDelay", 5);
 
-    bool exifRotate = AlbumSettings::instance()->getExifRotate();
     KURL::List urlList;
-
-    AlbumIconItem* item = 0;
-    if (startWithCurrent)
-        item = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
-    else
-        item = dynamic_cast<AlbumIconItem*>(d->iconView->firstItem());
+    bool exifRotate     = AlbumSettings::instance()->getExifRotate();
+    AlbumIconItem* item = dynamic_cast<AlbumIconItem*>(d->iconView->firstItem());
 
     while (item) 
     {
         urlList.append(item->imageInfo()->kurl());
-
         item = dynamic_cast<AlbumIconItem*>(item->nextItem());
     }
 
     SlideShow *slide = new SlideShow(urlList, exifRotate, delay*1000, printName, loop);
+    if (startWithCurrent)
+        slide->setCurrent(dynamic_cast<AlbumIconItem*>(d->iconView->currentItem())->imageInfo()->kurl());
+
     slide->show();
 }
 
