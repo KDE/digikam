@@ -492,6 +492,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 284 ==> 140304 : Start slideshow from the current image.
 285 ==> 140303 : slideshow must be relocated to View menu from tools menu.
 286 ==> 137503 : Tags are not written to image file automatically.
-287 ==> 
+287 ==> 136254 : Editing tags does not change IPTC-keywords.
+288 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
