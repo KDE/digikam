@@ -29,6 +29,8 @@
 #include <qstringlist.h>
 #include <qtimer.h>
 #include <qsignalmapper.h>
+#include <qdockarea.h>
+
 
 // KDE includes.
 
@@ -44,6 +46,7 @@
 #include <ktip.h>
 #include <kdeversion.h>
 #include <kapplication.h>
+#include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kwin.h>
 #include <dcopref.h>
@@ -1511,11 +1514,33 @@ void DigikamApp::slotToggleFullScreen()
 #else
         showNormal();
 #endif
+        menuBar()->show();
+        statusBar()->show();
+        topDock()->show();
+        bottomDock()->show();
+        leftDock()->show();
+        rightDock()->show();
+        d->view->showSideBars();
+
         d->fullScreen = false;
     }
     else
     {
+        KConfig* config = kapp->config();
+        config->setGroup("ImageViewer Settings");
+        bool fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
+
+        menuBar()->hide();
+        statusBar()->hide();
+        if (fullScreenHideToolBar)
+            topDock()->hide();
+        bottomDock()->hide();
+        leftDock()->hide();
+        rightDock()->hide();
+        d->view->hideSideBars();
+
         showFullScreen();
+
         d->fullScreen = true;
     }
 }

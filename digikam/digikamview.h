@@ -57,6 +57,8 @@ public:
     void clearHistory();
     void getForwardHistory(QStringList &titles);
     void getBackwardHistory(QStringList &titles);
+    void showSideBars();
+    void hideSideBars();
 
 signals:
 

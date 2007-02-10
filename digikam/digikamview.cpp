@@ -348,6 +348,18 @@ void DigikamView::saveViewState()
     }
 }
 
+void DigikamView::showSideBars()
+{
+    d->leftSideBar->restore();
+    d->rightSideBar->restore();
+}
+
+void DigikamView::hideSideBars()
+{
+    d->leftSideBar->backup();
+    d->rightSideBar->backup();
+}
+
 void DigikamView::slotFirstItem(void)
 {
     AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->firstItem());
