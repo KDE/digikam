@@ -211,7 +211,8 @@ void SlideShow::loadNextImage()
     }
 
     d->currentImage = d->fileList[d->fileIndex];
-    d->previewThread->load(LoadingDescription(d->currentImage.path(), 1024, d->exifRotate));
+    d->previewThread->load(LoadingDescription(d->currentImage.path(), 
+                           QMAX(d->deskWidth, d->deskHeight), d->exifRotate));
 }
 
 void SlideShow::loadPrevImage()
@@ -234,7 +235,8 @@ void SlideShow::loadPrevImage()
     }
     
     d->currentImage = d->fileList[d->fileIndex];
-    d->previewThread->load(LoadingDescription(d->currentImage.path(), 1024, d->exifRotate));
+    d->previewThread->load(LoadingDescription(d->currentImage.path(), 
+                           QMAX(d->deskWidth, d->deskHeight), d->exifRotate));
 }
 
 void SlideShow::slotGotImagePreview(const LoadingDescription&, const QImage& preview)
