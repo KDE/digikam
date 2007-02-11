@@ -57,7 +57,6 @@
 // Local includes.
 
 #include "version.h"
-#include "whitebalance.h"
 #include "imageeffect_whitebalance.h"
 #include "imageeffect_whitebalance.moc"
 
