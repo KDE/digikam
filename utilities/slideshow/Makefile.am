@@ -1,6 +1,7 @@
 METASOURCES = AUTO
 
-INCLUDES = -I$(top_srcdir)/digikam/libs/dimg \
+INCLUDES = -I$(top_srcdir)/digikam/digikam \
+	   -I$(top_srcdir)/digikam/libs/dimg \
 	   -I$(top_srcdir)/digikam/libs/themeengine \
 	   -I$(top_srcdir)/digikam/libs/threadimageio \
 	   $(all_includes)
