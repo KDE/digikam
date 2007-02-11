@@ -9,10 +9,11 @@
 
 name       = "digikam"
 egmodule   = "graphics"
-version    = "doc-0.9.0-rc?"
+version    = "doc-0.9.0"
 docs       = "yes"
 
 svnbase    = "svn+ssh://toma@svn.kde.org/home/kde"
+svnbase    = "svn+ssh://gkulzer@svn.kde.org/home/kde"
 svnbase    = "https://mwiesweg@svn.kde.org/home/kde"
 svnbase    = "https://fjcruz@svn.kde.org/home/kde"
 svnbase    = "https://ach@svn.kde.org/home/kde"
