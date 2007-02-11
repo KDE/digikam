@@ -1,3 +1,740 @@
+v0.9.1-beta1  -  11-Feb-2007
+----------------------------------------------------------------------------
+
+2007-01-30 12:15  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/README: update
+
+2007-01-21 08:24  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/README: update
+
+2007-01-21 08:12  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/border/imageeffect_border.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/distortionfx/imageeffect_distortionfx.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/imageeffect_freerotation.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/infrared/imageeffect_infrared.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/inserttext/imageeffect_inserttext.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/imageeffect_lensdistortion.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/imageeffect_noisereduction.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/imageeffect_refocus.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/restoration/imageeffect_restoration.cpp:
+	  digikam from trunk: patch from Frank Siegert to fix typo on
+	  DigikamImagePlugins.
+	  
+	  Franck : your patch is very appreciate ! Thanks for your help...
+	  
+	  BUG : 130237
+
+2007-01-20 15:50  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/superimpose/dirselectwidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/dirselectwidget.h,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/imageeffect_superimpose.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/imageeffect_superimpose.h:
+	  fix Restore/save settings methods
+
+2007-01-20 15:33  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/superimpose/dirselectwidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/dirselectwidget.h,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/imageplugin_superimpose.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/imageplugin_superimpose.h,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/superimpose.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/superimpose.h,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/superimposewidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/superimposewidget.h:
+	  polish
+
+2007-01-20 15:20  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/hotpixels/imageeffect_hotpixels.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/imageeffect_hotpixels.h:
+	  fix restore/save settings methods
+
+2007-01-20 15:12  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/hotpixels/imageplugin_hotpixels.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/imageplugin_hotpixels.h:
+	  polish
+
+2007-01-20 15:08  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/hotpixels/weights.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/weights.h:
+	  polish
+
+2007-01-20 15:02  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/hotpixels/hotpixel.h:
+	  polish
+
+2007-01-20 15:01  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/hotpixels/hotpixelfixer.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/hotpixelfixer.h:
+	  fix coding style
+
+2007-01-20 14:47  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/hotpixels/blackframeparser.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/blackframeparser.h:
+	  fix coding style
+
+2007-01-20 14:42  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/hotpixels/blackframelistview.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/blackframelistview.h:
+	  fix coding style
+
+2007-01-20 14:38  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/inserttext/imageeffect_inserttext.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/inserttext/imageeffect_inserttext.h:
+	  digikam from trunk : fix Restore/save settings methods
+
+2007-01-20 14:08  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/inserttext/imageplugin_inserttext.h,
+	  trunk/extragear/graphics/digikamimageplugins/inserttext/inserttextwidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/inserttext/inserttextwidget.h:
+	  polish
+
+2007-01-20 14:03  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/inserttext/fontchooserwidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/inserttext/fontchooserwidget.h:
+	  fix layout
+
+2007-01-19 14:57  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/distortionfx/imageeffect_distortionfx.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/distortionfx/imageeffect_distortionfx.h,
+	  trunk/extragear/graphics/digikamimageplugins/distortionfx/imageplugin_distortionfx.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/distortionfx/imageplugin_distortionfx.h:
+	  digiKam from trunk : Distorsion FX Tool : remember the settings
+	  between plugin sessions.
+
+2007-01-19 13:55  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/blurfx/imageeffect_blurfx.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/blurfx/imageeffect_blurfx.h,
+	  trunk/extragear/graphics/digikamimageplugins/blurfx/imageplugin_blurfx.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/blurfx/imageplugin_blurfx.h:
+	  digiKam from trunk : Blur FX Tool : remember the settings between
+	  plugin sessions.
+
+2007-01-19 13:05  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/border/border.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/border/border.h,
+	  trunk/extragear/graphics/digikamimageplugins/border/imageeffect_border.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/border/imageeffect_border.h:
+	  digiKam from trunk : Border Tool : add new option to handle
+	  perserve aspect ratio or not. The border with will be set in
+	  percents or in pixels accordinly with this setting.
+	  
+	  CCMAIL: digikam-devel@kde.org
+	  
+	  BUG: 135141
+	  BUG: 137696
+
+2007-01-19 11:22  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/border/border.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/border/border.h,
+	  trunk/extragear/graphics/digikamimageplugins/border/imageeffect_border.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/border/imageeffect_border.h,
+	  trunk/extragear/graphics/digikamimageplugins/border/imageplugin_border.h:
+	  digiKam from trunk : Border Tool : fix settings saved and
+	  restored methods
+
+2007-01-18 19:51  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/raindrop/imageeffect_raindrop.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/raindrop/imageeffect_raindrop.h,
+	  trunk/extragear/graphics/digikamimageplugins/raindrop/imageplugin_raindrop.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/raindrop/imageplugin_raindrop.h:
+	  digikam from trunk : Rain Drops Tool : remember the settings
+	  between plugin sessions.
+
+2007-01-18 19:37  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/infrared/imageeffect_infrared.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/infrared/imageeffect_infrared.h,
+	  trunk/extragear/graphics/digikamimageplugins/infrared/imageplugin_infrared.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/infrared/imageplugin_infrared.h:
+	  digikam from trunk: Infrared Tool : remember the settings between
+	  plugin sessions
+
+2007-01-18 19:36  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/filmgrain/imageeffect_filmgrain.cpp:
+	  polish
+
+2007-01-18 19:24  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/filmgrain/imageeffect_filmgrain.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/filmgrain/imageeffect_filmgrain.h,
+	  trunk/extragear/graphics/digikamimageplugins/filmgrain/imageplugin_filmgrain.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/filmgrain/imageplugin_filmgrain.h:
+	  digikam from trunk : Film Grain Tool : remember the settings
+	  between plugin sessions.
+
+2007-01-18 19:14  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/TODO: update
+
+2007-01-18 19:13  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/perspective/perspectivewidget.cpp:
+	  fix center of perspective
+
+2007-01-18 19:08  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/perspective/imageeffect_perspective.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/imageeffect_perspective.h,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/perspectivewidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/perspectivewidget.h:
+	  digikam from trunk : Perspective Tool : add Horizontal/Vertical
+	  guide lines like with Free Rotation tool
+	  
+	  CCMAIL: digikam-devel@kde.org
+	  
+	  CCBUGS: 137545, 131170
+
+2007-01-18 16:21  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/texture/imageeffect_texture.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/texture/imageeffect_texture.h,
+	  trunk/extragear/graphics/digikamimageplugins/texture/imageplugin_texture.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/texture/imageplugin_texture.h:
+	  digikam from trunk : Texture Tool : remember settings between
+	  plugin sessions
+
+2007-01-18 16:13  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/oilpaint/imageeffect_oilpaint.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/oilpaint/imageeffect_oilpaint.h,
+	  trunk/extragear/graphics/digikamimageplugins/oilpaint/imageplugin_oilpaint.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/oilpaint/imageplugin_oilpaint.h:
+	  digikam from trunk: Oil Paint Tool : remember settings between
+	  plugin sessions
+
+2007-01-18 16:04  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/emboss/imageeffect_emboss.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/emboss/imageeffect_emboss.h,
+	  trunk/extragear/graphics/digikamimageplugins/emboss/imageplugin_emboss.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/emboss/imageplugin_emboss.h:
+	  digikam from trunk : Emboss Tool : remember settings between
+	  plugin sessions.
+
+2007-01-18 15:55  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/charcoal/imageeffect_charcoal.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/charcoal/imageeffect_charcoal.h,
+	  trunk/extragear/graphics/digikamimageplugins/charcoal/imageplugin_charcoal.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/charcoal/imageplugin_charcoal.h:
+	  digiKam from trunk : Charcoal Tool : remember settings between
+	  plugin sessions.
+
+2007-01-18 15:43  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/unsharp/imageeffect_unsharp.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/unsharp/imageeffect_unsharp.h:
+	  fix header
+
+2007-01-18 14:49  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/perspective/imageeffect_perspective.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/imageeffect_perspective.h,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/perspectivewidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/perspectivewidget.h:
+	  digikam from trunk : Perspective tool :
+	  
+	  - Add new option to draw a guide grid (15x15).
+	  - Fix Restore/Save settings between plugin sessions.
+	  
+	  CCMAIL: digikam-devel@kde.org
+	  BUG: 131170
+	  BUG: 137545
+
+2007-01-18 12:14  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/perspective/imageeffect_perspective.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/imageeffect_perspective.h,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/imageplugin_perspective.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/imageplugin_perspective.h,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/matrix.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/matrix.h,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/perspectivewidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/perspectivewidget.h,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/triangle.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/triangle.h:
+	  digiKam from trunk : if "Draw Preview While Moving" option is
+	  enable, always redraw the perspective center point at the right
+	  place.
+
+2007-01-18 11:28  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/README: typo
+
+2007-01-18 11:21  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/solarize/imageeffect_solarize.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/solarize/imageeffect_solarize.h:
+	  fix restore settings
+
+2007-01-18 11:06  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/solarize/imageeffect_solarize.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/solarize/imageeffect_solarize.h,
+	  trunk/extragear/graphics/digikamimageplugins/solarize/imageplugin_solarize.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/solarize/imageplugin_solarize.h:
+	  digikam from trunk: Solarize tool : fix Restore/Save settings
+	  between plugin sessions
+
+2007-01-17 20:43  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/sheartool/imageeffect_sheartool.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/sheartool/imageeffect_sheartool.h,
+	  trunk/extragear/graphics/digikamimageplugins/sheartool/imageplugin_sheartool.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/sheartool/imageplugin_sheartool.h:
+	  digikam from trunk : Shear Tool : fix Restore/save settings
+	  between plugin session
+	  CCMAIL: digikam-devel@kde.org
+
+2007-01-17 17:59  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/freerotation/imageeffect_freerotation.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/imageeffect_freerotation.h,
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/imageplugin_freerotation.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/imageplugin_freerotation.h:
+	  digiKam from trunk : fix Save/restore settings of Free-Rotation
+	  tool between plugin sessions
+
+2007-01-17 15:04  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/noisereduction/imageeffect_noisereduction.h,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/imageeffect_refocus.h,
+	  trunk/extragear/graphics/digikamimageplugins/unsharp/imageeffect_unsharp.h:
+	  fix method to slot
+
+2007-01-17 14:57  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/antivignetting/imageeffect_antivignetting.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/antivignetting/imageeffect_antivignetting.h:
+	  fix method to slot
+
+2007-01-17 14:56  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/lensdistortion/imageeffect_lensdistortion.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/imageeffect_lensdistortion.h,
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/imageplugin_lensdistortion.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/imageplugin_lensdistortion.h:
+	  digiKam from trunk : Lens Distorsion Tool : fix settings saved
+	  and restored methods
+
+2007-01-17 13:38  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/noisereduction/imageeffect_noisereduction.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/imageeffect_noisereduction.h,
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/imageplugin_noisereduction.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/imageplugin_noisereduction.h:
+	  digiKam from trunk : Noise Reduction Tool : remember the settings
+	  between plugin sessions
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-01-17 13:21  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/refocus/imageeffect_refocus.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/imageeffect_refocus.h,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/imageplugin_refocus.h:
+	  digiKam from trunk : Refocus Tool : remember the settings between
+	  plugin sessions
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-01-17 12:42  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/unsharp/imageeffect_unsharp.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/unsharp/imageeffect_unsharp.h,
+	  trunk/extragear/graphics/digikamimageplugins/unsharp/imageplugin_unsharp.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/unsharp/imageplugin_unsharp.h:
+	  digiKam from trunk : Unsharp Mask Tool : remember the settings
+	  between plugin sessions
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-01-17 10:41  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/antivignetting/imageeffect_antivignetting.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/antivignetting/imageeffect_antivignetting.h:
+	  digiKam from trunk : Anti-Vignetting Tool : remember the settings
+	  between plugin sessions
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-01-17 10:20  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/antivignetting/imageeffect_antivignetting.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/antivignetting/imageeffect_antivignetting.h:
+	  digiKam from trunk : Anti-Vignetting Tool : Gamma settings will
+	  use the same values excursion than BCG tool
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-01-17 09:34  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.h:
+	  digiKam from trunk : Channel Mixer Tool : remember the settings
+	  between plugin sessions
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-01-17 09:15  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.h:
+	  polish
+
+2007-01-17 08:59  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.h:
+	  digiKam from trunk : Levels Adjust Tool : remember the settings
+	  between plugin sessions
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-01-17 08:05  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.cpp:
+	  compile
+
+2007-01-17 07:56  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.h:
+	  digiKam from trunk : Curves Adjust Tool : remember the settings
+	  between plugin sessions
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-01-16 15:22  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	  forget to restore histogram settings
+
+2007-01-16 14:40  cgilles
+
+	* trunk/extragear/graphics/digikam/data/pics/Makefile.am,
+	  trunk/extragear/graphics/digikam/data/pics/autolevels.png,
+	  trunk/extragear/graphics/digikam/data/pics/equalize.png,
+	  trunk/extragear/graphics/digikam/data/pics/normalize.png,
+	  trunk/extragear/graphics/digikam/data/pics/stretchcontrast.png,
+	  trunk/extragear/graphics/digikam/imageplugins/Makefile.am,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_autocorrection.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_autocorrection.h,
+	  trunk/extragear/graphics/digikam/libs/whitebalance/whitebalance.cpp,
+	  trunk/extragear/graphics/digikam/libs/whitebalance/whitebalance.h,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	  digiKam from trunk : Color Auto-Correction tool : add new filter
+	  to perform auto-exposure correction
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-01-16 13:56  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/dimg/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/whitebalance,
+	  trunk/extragear/graphics/digikam/libs/whitebalance/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/whitebalance/blackbody.h,
+	  trunk/extragear/graphics/digikam/libs/whitebalance/whitebalance.cpp,
+	  trunk/extragear/graphics/digikam/libs/whitebalance/whitebalance.h,
+	  trunk/extragear/graphics/digikamimageplugins/common/include/digikamheaders.h,
+	  trunk/extragear/graphics/digikamimageplugins/configure.in.in,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/blackbody.h,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.h,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/whitebalance.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/whitebalance.h:
+	  digiKam from trunk : White Balance stuff :
+	  
+	  * Move White Balance filter algorithm from DigiKamImagePlugins to
+	  digiKam core.
+	  * Export a new class Digikam::WhiteBalance.
+	  * Fix White Balance Image Plugin to use the new class from
+	  digiKam core.
+	  * White Balance Image plugin will remember the settings between
+	  plugin session.
+	  
+	  Nota : advantages to include white balance algoritm into digiKam
+	  core :
+	  
+	  - We will create a new Auto-Exposure filter in Auto-Color
+	  Correction tool.
+	  - We will use later the white balance algoritm to fix RAW files
+	  color temperature when we import pictures to editor !
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-01-16 12:52  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/whitebalance/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.h,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/whitebalance.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/whitebalance.h:
+	  digiKam from trunk : White Balance image plugin :
+	  
+	  * Prepare source code to give an image auto-exposure filter.
+	  * Separate algorithm from gui.
+	  * Code polishing and optimizations.
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-01-16 11:29  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	  polish
+
+2007-01-16 11:25  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.h:
+	  polish
+
+2007-01-15 15:26  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/whitebalance/blackbody.h,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.h,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageplugin_whitebalance.h:
+	  digiKam from trunk : White Balance tool : remove old
+	  over-exposure indicator
+
+2007-01-15 15:14  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.h,
+	  trunk/extragear/graphics/digikamimageplugins/channelmixer/imageplugin_channelmixer.h:
+	  digiKam from trunk : Channels Mixer tool : remove old
+	  over-exposure indicator
+
+2007-01-15 15:08  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.h,
+	  trunk/extragear/graphics/digikamimageplugins/adjustlevels/imageplugin_adjustlevels.h:
+	  digiKam from trunk : Adjust Levels tool : remove old
+	  over-exposure indicator
+
+2007-01-15 15:04  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.h,
+	  trunk/extragear/graphics/digikamimageplugins/adjustcurves/imageplugin_adjustcurves.h:
+	  digiKam from trunk : Adjust Curves tool : remove old
+	  over-exposure indicator
+
+2007-01-10 15:40  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	  fix i18n
+
+2007-01-10 15:38  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.h:
+	  digikam from trunk : White Balance image editor tool :
+	  
+	  - Fix Gamma excursion values to be homogenous with BCG image
+	  editor tool.
+	  - Annotate than Exposure settings is in E.V
+	  - Annotate than Temperature settings is in °K
+	  
+	  CCBUGS: 128135
+
+2007-01-10 15:31  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.h:
+	  digikam from trunk : Adjust Levels image editor tool : Fix Gamma
+	  excursion values to be homogenous with BCG image editor tool.
+	  CCBUGS: 128135
+
+2007-01-03 13:12  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/border/imageplugin_border.cpp:
+	  digikam from trunk : remove default Image editor Border Tool
+	  shortcut witch is in conflict with Refocus tool
+
+2007-01-03 12:46  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/border/imageplugin_border.cpp:
+	  digikam from trunk : fix Image editor AddBorder Tool default
+	  shortcut from CTRL+B to CTRL+F (like Frame). Note "CTRL+B" will
+	  be use to "Color Balance" Tool like with Photoshop.
+	  
+	  CCBUGS: 131743
+
+2007-01-03 12:15  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/lensdistortion/digikamimageplugin_lensdistortion_ui.rc,
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/imageplugin_lensdistortion.cpp:
+	  digikam from trunk : Image editor LensDistorsion Tool shortcut :
+	  "SHIFT+D" and "CTRL+D" cannot be used here to prevent conflict
+	  with new rule from Comments Text edit widget focus from right
+	  side bar. I remove the default keyboard shorcut for this tool.
+	  
+	  CCBUGS: 131743
+
+2007-01-03 12:12  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/inpainting/digikamimageplugin_inpainting_ui.rc,
+	  trunk/extragear/graphics/digikamimageplugins/inpainting/imageplugin_inpainting.cpp:
+	  digikam from trunk : Image editor Inpainting Tool shortcut : use
+	  "CTRL+E" instead "SHIFT+I" to prevent conflict with new rule from
+	  Comments Text edit widget focus from right side bar.
+	  
+	  CCBUGS: 131743
+
+2007-01-03 12:04  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus_ui.rc,
+	  trunk/extragear/graphics/digikamimageplugins/refocus/imageplugin_refocus.cpp:
+	  digikam from trunk : Image editor Refocus Tool shortcut : use
+	  "CTRL+F" instead "SHIFT+F" to prevent conflict with new rule from
+	  Comments Text edit widget focus from right side bar.
+	  
+	  CCBUGS: 131743
+
+2007-01-03 11:48  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border_ui.rc,
+	  trunk/extragear/graphics/digikamimageplugins/border/imageplugin_border.cpp:
+	  digikam from trunk : Image editor AddBorder Tool shortcut : use
+	  "CTRL+B" instead "SHIFT+B" to prevent conflict with new rule from
+	  Comments Text edit widget focus from right side bar.
+	  
+	  CCBUGS: 131743
+
+2007-01-03 11:47  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/inserttext/digikamimageplugin_inserttext_ui.rc,
+	  trunk/extragear/graphics/digikamimageplugins/inserttext/imageplugin_inserttext.cpp:
+	  digikam from trunk : Image editor InsertText Tool shortcut : use
+	  "CTRL+T" instead "SHIFT+T" to prevent conflict with new rule from
+	  Comments Text edit widget focus from right side bar.
+	  
+	  CCBUGS: 131743
+
+2007-01-03 10:42  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/channelmixer/imageplugin_channelmixer.cpp:
+	  fix header
+
+2007-01-03 10:41  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer_ui.rc,
+	  trunk/extragear/graphics/digikamimageplugins/channelmixer/imageplugin_channelmixer.cpp:
+	  digikam from trunk : Image editor Channel Mixer Tool shortcut :
+	  use "CTRL+H" instead "SHIFT+M" to prevent conflict with new rule
+	  from Comments Text edit widget focus from right side bar.
+	  
+	  CCBUGS: 131743
+
+2007-01-03 10:34  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/whitebalance/digikamimageplugin_whitebalance_ui.rc,
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageplugin_whitebalance.cpp:
+	  digikam from trunk : Image editor White Balance Tool shortcut :
+	  use "CTRL+W" instead "SHIFT+W" to prevent conflict with new rule
+	  from Comments Text edit widget focus from right side bar.
+	  
+	  CCBUGS: 131743
+
+2007-01-03 10:28  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting_ui.rc:
+	  digikam from trunk : Image editor AntiVignetting Tool shortcut :
+	  "SHIFT+V" and "CTRL+V" cannot be use here to prevent conflict
+	  with new rule from Comments Text edit widget focus from right
+	  side bar. I remove the default keyboard shorcut for this tool.
+	  
+	  CCBUGS: 131743
+
+2007-01-03 10:17  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustlevels/digikamimageplugin_adjustlevels_ui.rc,
+	  trunk/extragear/graphics/digikamimageplugins/adjustlevels/imageplugin_adjustlevels.cpp:
+	  digikam from trunk : Image editor Level Tool shortcut : use
+	  "CTRL+L" instead "SHIFT+L" to prevent conflict with new rule from
+	  Comments Text edit widget focus from right side bar and to be
+	  homogenous with Photoshop shortcuts.
+	  
+	  CCBUGS: 131743
+
+2007-01-03 10:13  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustcurves/imageplugin_adjustcurves.cpp:
+	  digikam from trunk : Image editor Curve Tool shortcut : use
+	  "CTRL+M" instead "CTRL+U" to be homgenous with Photoshop
+	  shortcuts.
+	  
+	  CCBUGS: 131743
+
+2007-01-03 10:10  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves_ui.rc,
+	  trunk/extragear/graphics/digikamimageplugins/adjustcurves/imageplugin_adjustcurves.cpp:
+	  digikam from trunk : Image editor Curve Tool shortcut : use
+	  "CTRL+U" instead "SHIFT+C" to prevent conflict with new rule from
+	  Comments Text edit widget focus from right side bar.
+	  
+	  CCBUGS: 131743
+
+2007-01-01 17:25  gkulzer
+
+	* trunk/extragear/graphics/digikamimageplugins/refocus/imageeffect_refocus.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/restoration/imageeffect_restoration.cpp:
+	  spelling correction artifacts
+
+2006-12-21 12:22  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/common/widgets/bannerwidget.cpp:
+	  digikam from trunk : fix logo icon
+
+2006-12-18 19:25  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/digikamimageplugins.lsm:
+	  update
+
+2006-12-18 19:24  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/common/include/version.h:
+	  update
+
+2006-12-17 13:55  gkulzer
+
+	* trunk/extragear/graphics/digikamimageplugins/ChangeLog: 0.9.0
+	  release
+
+2006-12-17 13:49  gkulzer
+
+	* trunk/extragear/graphics/digikamimageplugins/common/include/version.h,
+	  trunk/extragear/graphics/digikamimageplugins/digikamimageplugins.lsm,
+	  trunk/extragear/graphics/digikamimageplugins/release_digikamimageplugins.rb,
+	  trunk/extragear/graphics/digikamimageplugins/release_digikamimageplugins_docs.rb:
+	  0.9.0 release
+
 v0.9.0  -  17-Dec-2006
 ----------------------------------------------------------------------------
 
@@ -278,122 +1015,6 @@ v0.9.0-beta3 - 15-Oct.-2006
       
       CCMAIL: digikam-devel@kde.org
 
-2006-09-20 11:43  scripty
-
-    * trunk/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting.desktop:
-      SVN_SILENT made messages (.desktop file)
-
-2006-09-19 11:46  scripty
-
-    * trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
-      
-      trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikampreview.protocol,
-      
-      trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
-      
-      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop:
-      SVN_SILENT made messages (.desktop file)
-
-2006-09-18 11:40  scripty
-
-    * trunk/extragear/graphics/digikam/digikam/digikam.desktop,
-      trunk/extragear/graphics/digikam/imageplugins/digikamimageplugin_core.desktop,
-      trunk/extragear/graphics/digikam/showfoto/showfoto.desktop,
-      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/digikamimageplugin.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/blowup/digikamimageplugin_blowup.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/infrared/digikamimageplugin_infrared.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/inpainting/digikamimageplugin_inpainting.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/inserttext/digikamimageplugin_inserttext.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/lensdistortion/digikamimageplugin_lensdistortion.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/perspective/digikamimageplugin_perspective.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/raindrop/digikamimageplugin_raindrop.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/restoration/digikamimageplugin_restoration.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/sheartool/digikamimageplugin_sheartool.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/solarize/digikamimageplugin_solarize.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/superimpose/digikamimageplugin_superimpose.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/texture/digikamimageplugin_texture.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/unsharp/digikamimageplugin_unsharp.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/whitebalance/digikamimageplugin_whitebalance.desktop:
-      SVN_SILENT made messages (.desktop file)
-
-2006-09-13 11:40  scripty
-
-    * trunk/extragear/graphics/digikam/digikam/digikam.desktop,
-      trunk/extragear/graphics/digikam/imageplugins/digikamimageplugin_core.desktop,
-      trunk/extragear/graphics/digikam/showfoto/showfoto.desktop,
-      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/digikamimageplugin.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/blowup/digikamimageplugin_blowup.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation.desktop,
-      trunk/extragear/graphics/showimg/showimgapp/showimg.desktop:
-      SVN_SILENT made messages (.desktop file)
-
 2006-09-12 13:05  binner
 
     * trunk/extragear/graphics/digikamimageplugins/blurfx/blurfx.cpp:
@@ -405,28 +1026,6 @@ v0.9.0-beta3 - 15-Oct.-2006
       
       trunk/extragear/graphics/digikamimageplugins/release_digikamimageplugins_docs.rb:
       Update for 0.9.0-beta2 release
-
-2006-09-11 11:49  scripty
-
-    * trunk/extragear/graphics/digikamimageplugins/blowup/digikamimageplugin_blowup.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
-      
-      trunk/extragear/graphics/gwenview/desktopfiles/gwenview.desktop,
-      trunk/extragear/graphics/gwenview/gvdirpart/gvdirpart.desktop,
-      trunk/extragear/graphics/gwenview/gvimagepart/gvimagepart.desktop,
-      trunk/extragear/graphics/gwenview/tools/gimp.desktop,
-      trunk/extragear/graphics/gwenview/tools/tiledwallpaper.desktop,
-      trunk/extragear/graphics/gwenview/tools/wallpaper.desktop:
-      SVN_SILENT made messages (.desktop file)
 
 2006-09-03 17:04  cgilles
 
@@ -499,368 +1098,6 @@ v0.9.0-beta3 - 15-Oct.-2006
       BUG: 118535
       CCBUGS:122693
       
-
-2006-08-15 15:43  scripty
-
-    * trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
-      
-      trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikampreview.protocol,
-      
-      trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
-      
-      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop:
-      SVN_SILENT made messages (.desktop file)
-
-2006-08-13 15:37  scripty
-
-    * trunk/extragear/graphics/digikam/digikam/digikam.desktop,
-      trunk/extragear/graphics/digikam/imageplugins/digikamimageplugin_core.desktop,
-      trunk/extragear/graphics/digikam/showfoto/showfoto.desktop,
-      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/digikamimageplugin.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/blowup/digikamimageplugin_blowup.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/infrared/digikamimageplugin_infrared.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/inserttext/digikamimageplugin_inserttext.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/lensdistortion/digikamimageplugin_lensdistortion.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/perspective/digikamimageplugin_perspective.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/raindrop/digikamimageplugin_raindrop.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/restoration/digikamimageplugin_restoration.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/sheartool/digikamimageplugin_sheartool.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/superimpose/digikamimageplugin_superimpose.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/texture/digikamimageplugin_texture.desktop,
-      trunk/extragear/graphics/fraqtive/src/fraqtive.desktop:
-      SVN_SILENT made messages (.desktop file)
-
-2006-08-11 15:39  scripty
-
-    * trunk/extragear/graphics/digikam/imageplugins/digikamimageplugin_core.desktop,
-      
-      trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
-      
-      trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikampreview.protocol,
-      
-      trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
-      trunk/extragear/graphics/digikam/showfoto/showfoto.desktop,
-      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/digikamimageplugin.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/ascii/kstdata_ascii.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/healpix/kstdata_healpix.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/nad/kstdata_nad.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/nad/nadslave/x-piolib.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/naddirect/kstdata_naddirect.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/naddirect/nadslave/x-piolib.desktop:
-      SVN_SILENT made messages (.desktop file)
-
-2006-08-05 19:08  scripty
-
-    * trunk/extragear/graphics/digikamimageplugins/filmgrain/Makefile.am:
-      Fix the Makefile.am
-      (It should fix Scripty's processing of this Makefile.am)
-      (goutte)
-
-2006-08-02 15:58  scripty
-
-    * trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
-      
-      trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikampreview.protocol,
-      
-      trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
-      
-      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/inpainting/digikamimageplugin_inpainting.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle.desktop:
-      SVN_SILENT made messages (.desktop file)
-
-2006-08-01 14:49  scripty
-
-    * trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
-      
-      trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikampreview.protocol,
-      
-      trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
-      
-      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
-      
-      trunk/extragear/graphics/kphotoalbum/kphotoalbum-import.desktop,
-      trunk/extragear/graphics/kphotoalbum/kphotoalbum.desktop,
-      trunk/extragear/graphics/kphotoalbum/x-vnd.kde.kphotoalbum-import.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/cdf/kstdata_cdf.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/nad/kstdata_nad.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/nad/nadslave/x-piolib.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/naddirect/nadslave/x-piolib.desktop,
-      trunk/extragear/graphics/kst/src/kst/x-kst.desktop: SVN_SILENT
-      made messages (.desktop file)
-
-2006-07-27 15:00  scripty
-
-    * trunk/extragear/graphics/digikam/digikam/digikam.desktop,
-      trunk/extragear/graphics/digikam/imageplugins/digikamimageplugin_core.desktop,
-      
-      trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
-      
-      trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikampreview.protocol,
-      
-      trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
-      trunk/extragear/graphics/digikam/showfoto/showfoto.desktop,
-      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/digikamimageplugin.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/blowup/digikamimageplugin_blowup.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/infrared/digikamimageplugin_infrared.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/inpainting/digikamimageplugin_inpainting.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/inserttext/digikamimageplugin_inserttext.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/lensdistortion/digikamimageplugin_lensdistortion.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/perspective/digikamimageplugin_perspective.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/raindrop/digikamimageplugin_raindrop.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/restoration/digikamimageplugin_restoration.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/sheartool/digikamimageplugin_sheartool.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/solarize/digikamimageplugin_solarize.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/superimpose/digikamimageplugin_superimpose.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/texture/digikamimageplugin_texture.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/unsharp/digikamimageplugin_unsharp.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/whitebalance/digikamimageplugin_whitebalance.desktop:
-      SVN_SILENT made messages (.desktop file)
-
-2006-07-25 16:10  scripty
-
-    * trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
-      
-      trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikampreview.protocol,
-      
-      trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
-      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
-      
-      trunk/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/blowup/digikamimageplugin_blowup.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/infrared/digikamimageplugin_infrared.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/inpainting/digikamimageplugin_inpainting.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/inserttext/digikamimageplugin_inserttext.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/lensdistortion/digikamimageplugin_lensdistortion.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/perspective/digikamimageplugin_perspective.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/raindrop/digikamimageplugin_raindrop.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/restoration/digikamimageplugin_restoration.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/sheartool/digikamimageplugin_sheartool.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/solarize/digikamimageplugin_solarize.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/superimpose/digikamimageplugin_superimpose.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/texture/digikamimageplugin_texture.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/unsharp/digikamimageplugin_unsharp.desktop,
-      
-      trunk/extragear/graphics/digikamimageplugins/whitebalance/digikamimageplugin_whitebalance.desktop,
-      
-      trunk/extragear/graphics/gwenview/desktopfiles/konqgwenview.desktop,
-      
-      trunk/extragear/graphics/kphotoalbum/x-vnd.kde.kphotoalbum-import.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/ascii/kstdata_ascii.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/cdf/kstdata_cdf.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/dirfile/kstdata_dirfile.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/frame/kstdata_frame.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/healpix/kstdata_healpix.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/indirect/kstdata_indirect.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/lfiio/kstdata_lfiio.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/nad/kstdata_nad.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/nad/nadslave/x-piolib.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/naddirect/kstdata_naddirect.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/naddirect/nadslave/x-piolib.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/netcdf/kstdata_netcdf.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/planck/kstdata_planck.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/qimagesource/kstdata_qimagesource.desktop,
-      
-      trunk/extragear/graphics/kst/src/datasources/template/kstdata_template.desktop,
-      
-      trunk/extragear/graphics/kst/src/extensions/js/kjsembed/kjscmd.desktop,
-      
-      trunk/extragear/graphics/kst/src/extensions/js/kstextension_js.desktop,
-      
-      trunk/extragear/graphics/kst/src/extensions/pulse/kstextension_pulse.desktop,
-      
-      trunk/extragear/graphics/kst/src/extensions/rana/kstextension_rana.desktop,
-      trunk/extragear/graphics/kst/src/kst/x-kst.desktop,
-      trunk/extragear/graphics/showimg/kexi/kexidb/drivers/mySQL/showimg_kexidb_mysqldriver.desktop,
-      
-      trunk/extragear/graphics/showimg/kexi/kexidb/drivers/odbc/showimg_kexidb_odbcdriver.desktop,
-      
-      trunk/extragear/graphics/showimg/kexi/kexidb/drivers/pqxx/showimg_kexidb_pqxxsqldriver.desktop,
-      
-      trunk/extragear/graphics/showimg/kexi/kexidb/drivers/sqlite/showimg_kexidb_sqlite3driver.desktop,
-      
-      trunk/extragear/graphics/showimg/kexi/kexidb/drivers/sqlite2/showimg_kexidb_sqlite2driver.desktop,
-      
-      trunk/extragear/graphics/showimg/kexi/kexidb/showimg_kexidb_driver.desktop,
-      
-      trunk/extragear/graphics/showimg/showimg/mimetypes/x-psd.desktop,
-      
-      trunk/extragear/graphics/showimg/showimg/mimetypes/x-sia.desktop,
-      
-      trunk/extragear/graphics/showimg/showimgapp/konqshowimg.desktop,
-      trunk/extragear/graphics/showimg/showimgapp/showimg.desktop,
-      trunk/extragear/graphics/showimg/showimgpart/showimgpart.desktop:
-      SVN_SILENT made messages (.desktop file)
 
 2006-07-25 14:06  cgilles
 
@@ -5110,118 +5347,10 @@ v0.8.1 - 11/02/06
 	   backport: (SVN commit 485874 by mhunter: Typographical 
 	  corrections and changes)
 
-2005-12-06 05:52  scripty
-
-	* branches/stable/extragear/graphics/digikam/imageplugins/digikamimageplugin_core.desktop,
-	   
-	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/digikamimageplugin.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/raindrop/digikamimageplugin_raindrop.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/sheartool/digikamimageplugin_sheartool.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/solarize/digikamimageplugin_solarize.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/superimpose/digikamimageplugin_superimpose.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/texture/digikamimageplugin_texture.desktop:
-	   SVN_SILENT made messages (.desktop file)
-
 2005-12-04 17:38  cgilles
 
 	* branches/stable/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
 	   Fix wrong memory acess (out of range of m_curves array)
-
-2005-12-01 06:17  scripty
-
-	* branches/stable/extragear/graphics/digikam/digikam/digikam.desktop,
-	   
-	  branches/stable/extragear/graphics/digikam/imageplugins/digikamimageplugin_core.desktop,
-	   
-	  branches/stable/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
-	   
-	  branches/stable/extragear/graphics/digikam/kioslave/digikamdates.protocol,
-	   
-	  branches/stable/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
-	   
-	  branches/stable/extragear/graphics/digikam/kioslave/digikamtags.protocol,
-	   
-	  branches/stable/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
-	   
-	  branches/stable/extragear/graphics/digikam/showfoto/showfoto.desktop,
-	   
-	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/digikamimageplugin.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/blowup/digikamimageplugin_blowup.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/infrared/digikamimageplugin_infrared.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/inpainting/digikamimageplugin_inpainting.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/inserttext/digikamimageplugin_inserttext.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/lensdistortion/digikamimageplugin_lensdistortion.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/perspective/digikamimageplugin_perspective.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/raindrop/digikamimageplugin_raindrop.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/restoration/digikamimageplugin_restoration.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/sheartool/digikamimageplugin_sheartool.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/solarize/digikamimageplugin_solarize.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/superimpose/digikamimageplugin_superimpose.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/texture/digikamimageplugin_texture.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/unsharp/digikamimageplugin_unsharp.desktop,
-	   
-	  branches/stable/extragear/graphics/digikamimageplugins/whitebalance/digikamimageplugin_whitebalance.desktop,
-	   
-	  branches/stable/extragear/graphics/gwenview/gvdirpart/gvdirpart.desktop:
-	   SVN_SILENT made messages (.desktop file)
 
 2005-11-26 16:09  toma
 
