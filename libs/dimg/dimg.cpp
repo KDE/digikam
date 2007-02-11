@@ -1678,6 +1678,12 @@ void DImg::convertDepth(int depth)
     if (isNull())
         return;
 
+    if (depth != 32 && depth != 64)
+    {
+        DDebug() << k_funcinfo << " : wrong color depth!" << endl;
+        return;
+    }
+
     if (((depth == 32) && !sixteenBit()) ||
         ((depth == 64) && sixteenBit()))
         return;
