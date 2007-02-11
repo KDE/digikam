@@ -166,7 +166,7 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent,
     bool hasAlpha   = d->iface->previewHasAlpha();
     d->preview      = DImg(width, height, sixteenBit, hasAlpha, data);
     delete [] data;
-    d->preview.convertDepth(8);
+    d->preview.convertToEightBit();
     d->pixmap  = new QPixmap(w, h);
 
     d->rect = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2, d->preview.width(), d->preview.height());
@@ -207,7 +207,7 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent *e)
     bool hasAlpha   = d->iface->previewHasAlpha();
     d->preview      = DImg(width, height, sixteenBit, hasAlpha, data);
     delete [] data;
-    d->preview.convertDepth(8);
+    d->preview.convertToEightBit();
 
     d->pixmap = new QPixmap(w, h);
 
