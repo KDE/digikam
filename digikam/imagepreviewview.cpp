@@ -117,16 +117,19 @@ void ImagePreviewView::slotThemeChanged()
     setPaletteBackgroundColor(ThemeEngine::instance()->baseColor());
 }
 
-void ImagePreviewView::setImageInfo(ImageInfo* info, bool hasPrev, bool hasNext)
+void ImagePreviewView::setImageInfo(ImageInfo* info, ImageInfo *previous, ImageInfo *next)
 {
     d->imageInfo = info;
-    d->hasPrev   = hasPrev;
-    d->hasNext   = hasNext;
+    d->hasPrev   = previous;
+    d->hasNext   = next;
 
     if (d->imageInfo)
-        d->imagePreviewWidget->setImagePath(info->kurl().path()); 
-    else 
-        d->imagePreviewWidget->setImagePath(); 
+        d->imagePreviewWidget->setImagePath(info->filePath());
+    else
+        d->imagePreviewWidget->setImagePath();
+
+    d->imagePreviewWidget->setPreviousNextPaths(previous ? previous->filePath() : QString(),
+                                                next     ? next->filePath()     : QString());
 }
 
 ImageInfo* ImagePreviewView::getImageInfo()

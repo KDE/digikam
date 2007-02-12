@@ -42,9 +42,9 @@ Q_OBJECT
 public:
 
     ImagePreviewView(QWidget *parent=0);
-    ~ImagePreviewView();    
-           
-    void setImageInfo(ImageInfo* info=0, bool hasPrev=false, bool hasNext=false);
+    ~ImagePreviewView();
+
+    void setImageInfo(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
     ImageInfo* getImageInfo();
 
     void reload();
@@ -55,8 +55,8 @@ signals:
     void signalPrevItem();
     void signalDeleteItem();
     void signalEditItem();
-    void signalPreviewLoaded();   
-    void signalBack2Album();   
+    void signalPreviewLoaded();
+    void signalBack2Album();
 
 private slots:
 
@@ -71,7 +71,7 @@ private:
 
 private:
 
-    ImagePreviewViewPriv* d;        
+    ImagePreviewViewPriv* d;
 };
 
 }  // NameSpace Digikam

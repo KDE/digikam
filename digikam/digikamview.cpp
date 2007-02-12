@@ -655,16 +655,21 @@ void DigikamView::slotDispatchImageSelected()
         else
         {
             d->rightSideBar->itemChanged(list);
+
             AlbumIconItem *selectedItem = d->iconView->firstSelectedItem();
-            bool hasPrev = d->iconView->firstItem() != selectedItem;
-            bool hasNext = d->iconView->lastItem() != selectedItem;
+            ImageInfo *previousInfo=0, *nextInfo=0;
+            if (selectedItem->prevItem())
+                previousInfo = static_cast<AlbumIconItem*>(selectedItem->prevItem())->imageInfo();
+            if (selectedItem->nextItem())
+                nextInfo = static_cast<AlbumIconItem*>(selectedItem->nextItem())->imageInfo();
+
             // we fed a list of copies
             d->rightSideBar->takeImageInfoOwnership(true);
 
             if (!d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
-                d->albumWidgetStack->setPreviewItem(selectedItem->imageInfo(), hasPrev, hasNext);
+                d->albumWidgetStack->setPreviewItem(list.first(), previousInfo, nextInfo);
 
-            emit signalImageSelected(list, hasPrev, hasNext);
+            emit signalImageSelected(list, previousInfo, nextInfo);
         }
 
         d->needDispatchSelection = false;
@@ -895,9 +900,12 @@ void DigikamView::slotTogglePreviewMode(AlbumIconItem *iconItem)
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode && iconItem)
     {
         // We will go to ImagePreview Mode.
-        bool hasPrev = d->iconView->firstItem() != iconItem;
-        bool hasNext = d->iconView->lastItem()  != iconItem;
-        d->albumWidgetStack->setPreviewItem(iconItem->imageInfo(), hasPrev, hasNext);
+        ImageInfo *previousInfo=0, *nextInfo=0;
+        if (iconItem->prevItem())
+            previousInfo = static_cast<AlbumIconItem*>(iconItem->prevItem())->imageInfo();
+        if (iconItem->nextItem())
+            nextInfo = static_cast<AlbumIconItem*>(iconItem->nextItem())->imageInfo();
+        d->albumWidgetStack->setPreviewItem(iconItem->imageInfo(), previousInfo, nextInfo);
     }
     else
     {

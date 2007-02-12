@@ -122,7 +122,7 @@ ImagePreviewView* AlbumWidgetStack::imagePreviewView()
     return d->imagePreviewView;
 }
 
-void AlbumWidgetStack::setPreviewItem(ImageInfo* info, bool hasPrev, bool hasNext)
+void AlbumWidgetStack::setPreviewItem(ImageInfo* info, ImageInfo *previous, ImageInfo *next)
 {
     if (!info)
     {
@@ -152,7 +152,7 @@ void AlbumWidgetStack::setPreviewItem(ImageInfo* info, bool hasPrev, bool hasNex
             if (previewMode() == MediaPlayerMode)
                 setPreviewItem();
 
-            d->imagePreviewView->setImageInfo(info, hasPrev, hasNext);
+            d->imagePreviewView->setImageInfo(info, previous, next);
 
             // NOTE: No need to toggle imediatly in PreviewImageMode here, 
             // because we will recieve a signal for that when the image preview will be loaded.

@@ -52,16 +52,20 @@ public:
 
     ImagePreviewWidgetPriv()
     {
-        previewThread = 0;
+        previewThread        = 0;
+        previewPreloadThread = 0;
     }
 
     QString            path;
+    QString            nextPath;
+    QString            previousPath;
 
     QPixmap            pixmap;
 
     QImage             preview;
 
     PreviewLoadThread *previewThread;
+    PreviewLoadThread *previewPreloadThread;
 };
 
 ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
@@ -74,7 +78,7 @@ ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
     setFrameStyle(QFrame::NoFrame);
     setMargin(0);
     setLineWidth(0);
-    
+
     // ---------------------------------------------------------------
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
@@ -84,6 +88,7 @@ ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
 ImagePreviewWidget::~ImagePreviewWidget()
 {
     delete d->previewThread;
+    delete d->previewPreloadThread;
     delete d;
 }
 
@@ -97,6 +102,9 @@ void ImagePreviewWidget::setImagePath(const QString& path)
 {
     setCursor( KCursor::waitCursor() );
     d->path = path;
+
+    d->nextPath     = QString();
+    d->previousPath = QString();
 
     if (d->path.isEmpty())
     {
@@ -114,10 +122,22 @@ void ImagePreviewWidget::setImagePath(const QString& path)
         connect(d->previewThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
                 this, SLOT(slotGotImagePreview(const LoadingDescription &, const QImage&)));
     }
+    if (!d->previewPreloadThread)
+    {
+        d->previewPreloadThread = new PreviewLoadThread();
+        connect(d->previewPreloadThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
+                this, SLOT(slotNextPreload()));
+    }
 
     d->previewThread->load(LoadingDescription(path, 1024, AlbumSettings::instance()->getExifRotate()));
 
     emit signalPreviewStarted();
+}
+
+void ImagePreviewWidget::setPreviousNextPaths(const QString& previous, const QString &next)
+{
+    d->nextPath     = next;
+    d->previousPath = previous;
 }
 
 void ImagePreviewWidget::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
@@ -136,6 +156,27 @@ void ImagePreviewWidget::slotGotImagePreview(const LoadingDescription &descripti
         emit signalPreviewFailed();
     else
         emit signalPreviewComplete();
+
+    slotNextPreload();
+}
+
+void ImagePreviewWidget::slotNextPreload()
+{
+    QString loadPath;
+    if (!d->nextPath.isNull())
+    {
+        loadPath = d->nextPath;
+        d->nextPath = QString();
+    }
+    else if (!d->previousPath.isNull())
+    {
+        loadPath = d->previousPath;
+        d->previousPath = QString();
+    }
+    else
+        return;
+
+    d->previewPreloadThread->load(LoadingDescription(loadPath, 1024, AlbumSettings::instance()->getExifRotate()));
 }
 
 void ImagePreviewWidget::updatePixmap( void )

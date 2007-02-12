@@ -50,6 +50,7 @@ public:
     ~ImagePreviewWidget();
 
     void setImagePath(const QString& path=QString::null);
+    void setPreviousNextPaths(const QString& previous, const QString &next);
     void reload();
 
 signals:
@@ -74,6 +75,7 @@ protected:
 private slots:
 
     void slotGotImagePreview(const LoadingDescription &loadingDescription, const QImage &image);
+    void slotNextPreload();
 
 private:
 

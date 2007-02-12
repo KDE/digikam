@@ -64,7 +64,7 @@ public:
     AlbumIconView    *albumIconView();
     ImagePreviewView *imagePreviewView();
 
-    void setPreviewItem(ImageInfo* info=0, bool hasPrev=false, bool hasNext=false);
+    void setPreviewItem(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
     int  previewMode(void);
     void setPreviewMode(int mode);
 
