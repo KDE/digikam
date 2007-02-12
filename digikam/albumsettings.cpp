@@ -151,8 +151,14 @@ void AlbumSettings::init()
     d->imageSortOrder       = AlbumSettings::ByIName;
     d->itemRightClickAction = AlbumSettings::ShowPreview;
 
-    d->imageFilefilter = "*.png *.jpg *.jpeg *.jpe *.tif *.tiff *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
-    d->movieFilefilter = "*.mpeg *.mpg *.mpo *.mpe *.avi *.mov *.wmf *.asf";
+    d->imageFilefilter = "*.jpg *.jpeg *.jpe "               // JPEG
+                         "*.jp2 *.jpx *.jpc *.pgx "          // JPEG-2000
+                         "*.tif *.tiff "                     // TIFF
+			 "*.png *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
+			 
+    d->movieFilefilter = "*.mpeg *.mpg *.mpo *.mpe "         // MPEG
+                         "*.avi *.mov *.wmf *.asf";
+			 
     d->audioFilefilter = "*.ogg *.mp3 *.wma *.wav";
 
     // RAW files estentions supported by dcraw program and 
