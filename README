@@ -14,13 +14,13 @@ See AUTHORS file for details.
  to connect to your digital camera, preview the images and download
  and/or delete them.
 
- digiKam buildin image editor makes the common photo correction
+ digiKam builtin image editor makes the common photo correction
  a simple task.  The image editor is extensible via plugins.
  The digikamimageplugins package contains many useful image editor
  plugins.
 
  digiKam can also make use of the KIPI image handling plugins to
- extend it's capabilities even further for photo manipulations,
+ extend its capabilities even further for photo manipulations,
  import and export, etc.  The kipi-plugins package contains many
  very useful extentions.
 
@@ -43,13 +43,13 @@ digikam-devel@kde.org
 
 -- BUG REPORTS --------------------------------------------------------
 
-IMPORTANT : the bugreports and wishlist are hosted by the KDE bugs report 
-system who can be contacted by the standard Kde help menu of digiKam. 
-A mail will be automaticly sent to the digikam development mailing list.
+IMPORTANT : the bug reports and wishlist entries are hosted by the KDE bug report
+system which can be reached from the standard KDE help menu of digiKam.
+A mail will automaticly be sent to the digikam development mailing list.
 There is no need to contact directly the digikam mailing list for a bug report 
 or a devel wish.
 
-The current bugs and devel wish reported to the bugilla servers can be see 
+The current bugs and devel wishes reported to the bugilla servers can be seen
 at these urls :
 
 * digiKam (KDE bugzilla):
@@ -91,7 +91,7 @@ libtiff    >= 3.6.x (>=3.8.2 recommended)  http://www.remotesensing.org/libtiff
 libpng     >= 1.2.x                        http://www.libpng.org/pub/png/libpng.html
 libjasper  >= 1.7.x                        http://www.ece.uvic.ca/~mdadams/jasper
 
-Note : all libraries depencies requires developement and binary packages installed on your 
+Note : all library dependencies require development and binary packages installed on your
 computer to compile digiKam.
 
 
@@ -110,11 +110,11 @@ In the source directory do :
 7) su
 8) make install
 
-More specifics compilations and installations options can be used with '.configure' script.
-Check it with './configure --help' command line.
+More specific compilation and installation options can be used with the 'configure' script.
+Get more information with the './configure --help' command line.
 
-Nota : use the '--enable-debug=full' option with the configure script for to provide
-a full informations bug report.
+Note : use the '--enable-debug=full' option with the configure script to provide
+all needed information in a bug report.
 
 
 -- DONATE MONEY --------------------------------------------------------
