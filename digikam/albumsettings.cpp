@@ -96,6 +96,10 @@ public:
     QString      movieFilefilter;
     QString      audioFilefilter;
     QString      rawFilefilter;
+    QString      defaultImageFilefilter;
+    QString      defaultMovieFilefilter;
+    QString      defaultAudioFilefilter;
+    QString      defaultRawFilefilter;
 
     QString      author;
     QString      authorTitle;
@@ -151,19 +155,24 @@ void AlbumSettings::init()
     d->imageSortOrder       = AlbumSettings::ByIName;
     d->itemRightClickAction = AlbumSettings::ShowPreview;
 
-    d->imageFilefilter = "*.jpg *.jpeg *.jpe "               // JPEG
-                         "*.jp2 *.jpx *.jpc *.pgx "          // JPEG-2000
-                         "*.tif *.tiff "                     // TIFF
-			 "*.png *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
+    d->defaultImageFilefilter = "*.jpg *.jpeg *.jpe "               // JPEG
+                                "*.jp2 *.jpx *.jpc *.pgx "          // JPEG-2000
+                                "*.tif *.tiff "                     // TIFF
+                                "*.png *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
 			 
-    d->movieFilefilter = "*.mpeg *.mpg *.mpo *.mpe "         // MPEG
-                         "*.avi *.mov *.wmf *.asf";
+    d->defaultMovieFilefilter = "*.mpeg *.mpg *.mpo *.mpe "         // MPEG
+                                "*.avi *.mov *.wmf *.asf";
 			 
-    d->audioFilefilter = "*.ogg *.mp3 *.wma *.wav";
+    d->defaultAudioFilefilter = "*.ogg *.mp3 *.wma *.wav";
 
     // RAW files estentions supported by dcraw program and 
     // defines to digikam/libs/dcraw/rawfiles.h
-    d->rawFilefilter      = QString(raw_file_extentions);
+    d->defaultRawFilefilter   = QString(raw_file_extentions);
+
+    d->imageFilefilter = d->defaultImageFilefilter;
+    d->movieFilefilter = d->defaultMovieFilefilter;
+    d->audioFilefilter = d->defaultAudioFilefilter;
+    d->rawFilefilter   = d->defaultRawFilefilter;
 
     d->thumbnailSize      = ThumbnailSize::Medium;
 
@@ -992,6 +1001,26 @@ bool AlbumSettings::showToolTipsIsValid() const
     }
 
     return false;
+}
+
+QString AlbumSettings::getDefaultImageFileFilter() const
+{
+    return d->defaultImageFilefilter;
+}
+
+QString AlbumSettings::getDefaultMovieFileFilter() const
+{
+    return d->defaultMovieFilefilter;
+}
+
+QString AlbumSettings::getDefaultAudioFileFilter() const
+{
+    return d->defaultAudioFilefilter;
+}
+
+QString AlbumSettings::getDefaultRawFileFilter() const
+{
+    return d->defaultRawFilefilter;
 }
 
 }  // namespace Digikam

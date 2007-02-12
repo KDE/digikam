@@ -235,6 +235,11 @@ public:
     void    setApplySidebarChangesDirectly(bool val);
     bool    getApplySidebarChangesDirectly() const;
 
+    QString getDefaultImageFileFilter() const;
+    QString getDefaultMovieFileFilter() const;
+    QString getDefaultAudioFileFilter() const;
+    QString getDefaultRawFileFilter() const;
+
     static AlbumSettings *instance();
 
 private:

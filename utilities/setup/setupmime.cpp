@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2003-05-03
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2003-05-03
  * Description : mime types setup tab
  *
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,22 +21,27 @@
 // QT includes.
 
 #include <qlayout.h>
+#include <qhbox.h>
 #include <qhgroupbox.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qwhatsthis.h>
+#include <qtoolbutton.h>
+#include <qtooltip.h>
 
 // KDE includes.
 
 #include <klocale.h>
 #include <kdialog.h>
 #include <klineeditdlg.h>
+#include <kiconloader.h>
 
 // Local includes.
 
 #include "albumsettings.h"
 #include "setupmime.h"
+#include "setupmime.moc"
 
 namespace Digikam
 {
@@ -47,16 +52,25 @@ public:
 
     SetupMimePriv()
     {
-        imageFileFilterEdit = 0;
-        movieFileFilterEdit = 0;
-        audioFileFilterEdit = 0;
-        rawFileFilterEdit   = 0;
+        imageFileFilterEdit      = 0;
+        movieFileFilterEdit      = 0;
+        audioFileFilterEdit      = 0;
+        rawFileFilterEdit        = 0;
+        revertImageFileFilterBtn = 0;
+        revertMovieFileFilterBtn = 0;
+        revertAudioFileFilterBtn = 0;
+        revertRawFileFilterBtn   = 0;
     }
 
-    QLineEdit *imageFileFilterEdit;
-    QLineEdit *movieFileFilterEdit;
-    QLineEdit *audioFileFilterEdit;
-    QLineEdit *rawFileFilterEdit;
+    QToolButton *revertImageFileFilterBtn;
+    QToolButton *revertMovieFileFilterBtn;
+    QToolButton *revertAudioFileFilterBtn;
+    QToolButton *revertRawFileFilterBtn;
+
+    QLineEdit   *imageFileFilterEdit;
+    QLineEdit   *movieFileFilterEdit;
+    QLineEdit   *audioFileFilterEdit;
+    QLineEdit   *rawFileFilterEdit;
 };
 
 SetupMime::SetupMime(QWidget* parent )
@@ -72,12 +86,19 @@ SetupMime::SetupMime(QWidget* parent )
     QLabel *imageFileFilterLabel = new QLabel(imageFileFilterBox);
     imageFileFilterLabel->setText(i18n("Show only &image files with extensions:"));
     
-    d->imageFileFilterEdit = new QLineEdit(imageFileFilterBox);
+    QHBox *hbox1 = new QHBox(imageFileFilterBox);    
+    d->imageFileFilterEdit = new QLineEdit(hbox1);
     QWhatsThis::add( d->imageFileFilterEdit, i18n("<p>Here you can set the extensions of image files "
-                                                    "to be displayed in Albums (such as JPEG or TIFF); "
-                                                    "when these files are clicked on "
-                                                    "they will be opened with the digiKam Image Editor."));
+                                                  "to be displayed in Albums (such as JPEG or TIFF); "
+                                                  "when these files are clicked on "
+                                                  "they will be opened with the digiKam Image Editor."));
     imageFileFilterLabel->setBuddy(d->imageFileFilterEdit);
+    hbox1->setStretchFactor(d->imageFileFilterEdit, 10);
+
+    d->revertImageFileFilterBtn = new QToolButton(hbox1);
+    d->revertImageFileFilterBtn->setIconSet(SmallIcon("reload_page"));
+    QToolTip::add(d->revertImageFileFilterBtn, i18n("Revert to default settings"));
+ 
     layout->addWidget(imageFileFilterBox);
     
     // --------------------------------------------------------
@@ -87,12 +108,19 @@ SetupMime::SetupMime(QWidget* parent )
     QLabel *movieFileFilterLabel = new QLabel(movieFileFilterBox);
     movieFileFilterLabel->setText(i18n("Show only &movie files with extensions:"));
     
-    d->movieFileFilterEdit = new QLineEdit(movieFileFilterBox);
+    QHBox *hbox2 = new QHBox(movieFileFilterBox);    
+    d->movieFileFilterEdit = new QLineEdit(hbox2);
     QWhatsThis::add( d->movieFileFilterEdit, i18n("<p>Here you can set the extensions of movie files "
-                                                    "to be displayed in Albums (such as MPEG or AVI); "
-                                                    "when these files are clicked on they will "
-                                                    "be opened with the default KDE movie player."));
+                                                  "to be displayed in Albums (such as MPEG or AVI); "
+                                                  "when these files are clicked on they will "
+                                                  "be opened with the default KDE movie player."));
     movieFileFilterLabel->setBuddy(d->movieFileFilterEdit);
+    hbox2->setStretchFactor(d->movieFileFilterEdit, 10);
+
+    d->revertMovieFileFilterBtn = new QToolButton(hbox2);
+    d->revertMovieFileFilterBtn->setIconSet(SmallIcon("reload_page"));
+    QToolTip::add(d->revertMovieFileFilterBtn, i18n("Revert to default settings"));
+
     layout->addWidget(movieFileFilterBox);
     
     // --------------------------------------------------------
@@ -102,14 +130,19 @@ SetupMime::SetupMime(QWidget* parent )
     QLabel *audioFileFilterLabel = new QLabel(audioFileFilterBox);
     audioFileFilterLabel->setText(i18n("Show only &audio files with extensions:"));
     
-    d->audioFileFilterEdit = new QLineEdit(audioFileFilterBox);
+    QHBox *hbox3 = new QHBox(audioFileFilterBox);  
+    d->audioFileFilterEdit = new QLineEdit(hbox3);
     QWhatsThis::add( d->audioFileFilterEdit, i18n("<p>Here you can set the extensions of audio files "
-                                                    "to be displayed in Albums (such as MP3 or OGG); "
-                                                    "when these files are clicked on they will "
-                                                    "be opened with the default KDE audio player."));
-    
+                                                  "to be displayed in Albums (such as MP3 or OGG); "
+                                                  "when these files are clicked on they will "
+                                                  "be opened with the default KDE audio player."));
     audioFileFilterLabel->setBuddy(d->audioFileFilterEdit);
-    
+    hbox3->setStretchFactor(d->audioFileFilterEdit, 10);
+
+    d->revertAudioFileFilterBtn = new QToolButton(hbox3);
+    d->revertAudioFileFilterBtn->setIconSet(SmallIcon("reload_page"));
+    QToolTip::add(d->revertAudioFileFilterBtn, i18n("Revert to default settings"));
+
     layout->addWidget(audioFileFilterBox);
     
     // --------------------------------------------------------
@@ -119,16 +152,36 @@ SetupMime::SetupMime(QWidget* parent )
     QLabel *rawFileFilterLabel = new QLabel(rawFileFilterBox);
     rawFileFilterLabel->setText(i18n("Show only &raw files with extensions:"));
     
-    d->rawFileFilterEdit = new QLineEdit(rawFileFilterBox);
+    QHBox *hbox4 = new QHBox(rawFileFilterBox);  
+    d->rawFileFilterEdit = new QLineEdit(hbox4);
     QWhatsThis::add( d->rawFileFilterEdit, i18n("<p>Here you can set the extensions of RAW image files "
                                                 "to be displayed in Albums (such as CRW, for Canon cameras, "
                                                 "or NEF, for Nikon cameras)."));
     rawFileFilterLabel->setBuddy(d->rawFileFilterEdit);
+    hbox4->setStretchFactor(d->rawFileFilterEdit, 10);
+
+    d->revertRawFileFilterBtn = new QToolButton(hbox4);
+    d->revertRawFileFilterBtn->setIconSet(SmallIcon("reload_page"));
+    QToolTip::add(d->revertRawFileFilterBtn, i18n("Revert to default settings"));
+
     layout->addWidget(rawFileFilterBox);
+    layout->addStretch();
     
     // --------------------------------------------------------
     
-    layout->addStretch();
+    connect(d->revertImageFileFilterBtn, SIGNAL(clicked()),
+            this, SLOT(slotRevertImageFileFilter()));
+
+    connect(d->revertMovieFileFilterBtn, SIGNAL(clicked()),
+            this, SLOT(slotRevertMovieFileFilter()));
+
+    connect(d->revertAudioFileFilterBtn, SIGNAL(clicked()),
+            this, SLOT(slotRevertAudioFileFilter()));
+
+    connect(d->revertRawFileFilterBtn, SIGNAL(clicked()),
+            this, SLOT(slotRevertRawFileFilter()));
+
+    // --------------------------------------------------------
     
     readSettings();
 }
@@ -164,6 +217,25 @@ void SetupMime::readSettings()
     d->rawFileFilterEdit->setText(settings->getRawFileFilter());
 }
 
+void SetupMime::slotRevertImageFileFilter()
+{
+    d->imageFileFilterEdit->setText(AlbumSettings::instance()->getDefaultImageFileFilter());
+}
+
+void SetupMime::slotRevertMovieFileFilter()
+{
+    d->movieFileFilterEdit->setText(AlbumSettings::instance()->getDefaultMovieFileFilter());
+}
+
+void SetupMime::slotRevertAudioFileFilter()
+{
+    d->audioFileFilterEdit->setText(AlbumSettings::instance()->getDefaultAudioFileFilter());
+}
+
+void SetupMime::slotRevertRawFileFilter()
+{
+    d->rawFileFilterEdit->setText(AlbumSettings::instance()->getDefaultRawFileFilter());
+}
+
 }  // namespace Digikam
 
-#include "setupmime.moc"

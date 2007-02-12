@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2003-05-03
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2003-05-03
  * Description : mime types setup tab.
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,10 +45,16 @@ private:
 
     void readSettings();
 
+private slots:
+
+    void slotRevertImageFileFilter();
+    void slotRevertMovieFileFilter();
+    void slotRevertAudioFileFilter();
+    void slotRevertRawFileFilter();
+
 private:
 
     SetupMimePriv* d;
-
 };
 
 }  // namespace Digikam
