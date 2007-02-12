@@ -81,8 +81,12 @@ SetupMime::SetupMime(QWidget* parent )
     
     // --------------------------------------------------------
     
-    QGroupBox *imageFileFilterBox = new QGroupBox(1, Qt::Horizontal, i18n("Image Files"), parent);
-    
+    QGroupBox *imageFileFilterBox = new QGroupBox(0, Qt::Horizontal, i18n("Image Files"), parent);
+    QGridLayout* grid1            = new QGridLayout(imageFileFilterBox->layout(), 1, 1, KDialog::spacingHint());
+
+    QLabel *logoLabel1 = new QLabel(imageFileFilterBox);
+    logoLabel1->setPixmap(DesktopIcon("image"));
+
     QLabel *imageFileFilterLabel = new QLabel(imageFileFilterBox);
     imageFileFilterLabel->setText(i18n("Show only &image files with extensions:"));
     
@@ -99,12 +103,21 @@ SetupMime::SetupMime(QWidget* parent )
     d->revertImageFileFilterBtn->setIconSet(SmallIcon("reload_page"));
     QToolTip::add(d->revertImageFileFilterBtn, i18n("Revert to default settings"));
  
+    grid1->addMultiCellWidget(logoLabel1, 0, 1, 0, 0);
+    grid1->addMultiCellWidget(imageFileFilterLabel, 0, 0, 1, 1);
+    grid1->addMultiCellWidget(hbox1, 1, 1, 1, 1);
+    grid1->setColStretch(1, 10);
+
     layout->addWidget(imageFileFilterBox);
     
     // --------------------------------------------------------
     
-    QGroupBox *movieFileFilterBox = new QGroupBox(1, Qt::Horizontal, i18n("Movie Files"), parent);
-    
+    QGroupBox *movieFileFilterBox = new QGroupBox(0, Qt::Horizontal, i18n("Movie Files"), parent);
+    QGridLayout* grid2            = new QGridLayout(movieFileFilterBox->layout(), 1, 1, KDialog::spacingHint());
+
+    QLabel *logoLabel2 = new QLabel(movieFileFilterBox);
+    logoLabel2->setPixmap(DesktopIcon("video"));
+
     QLabel *movieFileFilterLabel = new QLabel(movieFileFilterBox);
     movieFileFilterLabel->setText(i18n("Show only &movie files with extensions:"));
     
@@ -121,12 +134,21 @@ SetupMime::SetupMime(QWidget* parent )
     d->revertMovieFileFilterBtn->setIconSet(SmallIcon("reload_page"));
     QToolTip::add(d->revertMovieFileFilterBtn, i18n("Revert to default settings"));
 
+    grid2->addMultiCellWidget(logoLabel2, 0, 1, 0, 0);
+    grid2->addMultiCellWidget(movieFileFilterLabel, 0, 0, 1, 1);
+    grid2->addMultiCellWidget(hbox2, 1, 1, 1, 1);
+    grid2->setColStretch(1, 10);
+
     layout->addWidget(movieFileFilterBox);
     
     // --------------------------------------------------------
     
-    QGroupBox *audioFileFilterBox = new QGroupBox(1, Qt::Horizontal, i18n("Audio Files"), parent);
-    
+    QGroupBox *audioFileFilterBox = new QGroupBox(0, Qt::Horizontal, i18n("Audio Files"), parent);
+    QGridLayout* grid3            = new QGridLayout(audioFileFilterBox->layout(), 1, 1, KDialog::spacingHint());
+
+    QLabel *logoLabel3 = new QLabel(audioFileFilterBox);
+    logoLabel3->setPixmap(DesktopIcon("sound"));
+
     QLabel *audioFileFilterLabel = new QLabel(audioFileFilterBox);
     audioFileFilterLabel->setText(i18n("Show only &audio files with extensions:"));
     
@@ -143,14 +165,23 @@ SetupMime::SetupMime(QWidget* parent )
     d->revertAudioFileFilterBtn->setIconSet(SmallIcon("reload_page"));
     QToolTip::add(d->revertAudioFileFilterBtn, i18n("Revert to default settings"));
 
+    grid3->addMultiCellWidget(logoLabel3, 0, 1, 0, 0);
+    grid3->addMultiCellWidget(audioFileFilterLabel, 0, 0, 1, 1);
+    grid3->addMultiCellWidget(hbox3, 1, 1, 1, 1);
+    grid3->setColStretch(1, 10);
+
     layout->addWidget(audioFileFilterBox);
     
     // --------------------------------------------------------
     
-    QGroupBox *rawFileFilterBox = new QGroupBox(1, Qt::Horizontal, i18n("Raw Files"), parent);
-    
+    QGroupBox *rawFileFilterBox = new QGroupBox(0, Qt::Horizontal, i18n("RAW Files"), parent);
+    QGridLayout* grid4          = new QGridLayout(rawFileFilterBox->layout(), 1, 1, KDialog::spacingHint());
+
+    QLabel *logoLabel4 = new QLabel(rawFileFilterBox);
+    logoLabel4->setPixmap(DesktopIcon("dcraw"));
+
     QLabel *rawFileFilterLabel = new QLabel(rawFileFilterBox);
-    rawFileFilterLabel->setText(i18n("Show only &raw files with extensions:"));
+    rawFileFilterLabel->setText(i18n("Show only &RAW files with extensions:"));
     
     QHBox *hbox4 = new QHBox(rawFileFilterBox);  
     d->rawFileFilterEdit = new QLineEdit(hbox4);
@@ -163,6 +194,11 @@ SetupMime::SetupMime(QWidget* parent )
     d->revertRawFileFilterBtn = new QToolButton(hbox4);
     d->revertRawFileFilterBtn->setIconSet(SmallIcon("reload_page"));
     QToolTip::add(d->revertRawFileFilterBtn, i18n("Revert to default settings"));
+
+    grid4->addMultiCellWidget(logoLabel4, 0, 1, 0, 0);
+    grid4->addMultiCellWidget(rawFileFilterLabel, 0, 0, 1, 1);
+    grid4->addMultiCellWidget(hbox4, 1, 1, 1, 1);
+    grid4->setColStretch(1, 10);
 
     layout->addWidget(rawFileFilterBox);
     layout->addStretch();
