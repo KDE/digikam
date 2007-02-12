@@ -698,7 +698,10 @@ void ImageDescEditTab::updateTagsView()
         ++it;
     }
 
-    slotAssignedTagsToggled(d->assignedTagsBtn->isOn());
+    // The condition is a temporary fix not to destroy name filtering on image change.
+    // See comments in these methods.
+    if (d->assignedTagsBtn->isOn())
+        slotAssignedTagsToggled(d->assignedTagsBtn->isOn());
 
     d->tagsView->blockSignals(false);
 }
@@ -1430,6 +1433,7 @@ void ImageDescEditTab::slotRecentTagsMenuActivated(int id)
 
 void ImageDescEditTab::slotTagsSearchChanged()
 {
+    //TODO: this will destroy assigned-tags filtering. Unify in one method.
     QString search(d->tagsSearchEdit->text());
     search = search.lower();
 
@@ -1519,6 +1523,7 @@ void ImageDescEditTab::slotTagsSearchChanged()
 
 void ImageDescEditTab::slotAssignedTagsToggled(bool t)
 {
+    //TODO: this will destroy name filtering. Unify in one method.
     QListViewItemIterator it(d->tagsView);
     while (it.current())
     {
@@ -1577,7 +1582,6 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
                         while (*tmpIt != nextSibling )
                         {
                             TAlbumCheckListItem* tmpItem = dynamic_cast<TAlbumCheckListItem*>(tmpIt.current());
-                            TAlbum *tmpTag = tmpItem->m_album;
                             if(tmpItem->isOn())
                             {
                                 somethingIsSet = true;
