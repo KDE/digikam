@@ -1,9 +1,10 @@
 /* ============================================================
- * Author: Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Date  : 2006-04-13
- * Description : Autodetect dcraw binary program and version
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2006-04-13
+ * Description : detection of dcraw binary program
  *
- * Copyright 2006 by Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +21,6 @@
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kprocess.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
