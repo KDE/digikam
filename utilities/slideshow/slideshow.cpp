@@ -59,19 +59,22 @@ public:
         toolBar        = 0;
         fileIndex      = -1;
         endOfShow      = false;
-        exifRotate     = true;
     }
 
     bool               endOfShow;
+
+/*
     bool               printName;
     bool               loop;
     bool               exifRotate;
+    int                delay;
+    KURL::List         fileList;
+*/
     
     int                deskX;
     int                deskY;
     int                deskWidth;
     int                deskHeight;
-    int                delay;
     int                fileIndex;
 
     QTimer            *mouseMoveTimer;  // To hide cursor when not moved.
@@ -83,26 +86,26 @@ public:
 
     KURL               currentImage;
 
-    KURL::List         fileList;
-
     PreviewLoadThread *previewThread;
     PreviewLoadThread *previewPreloadThread;
 
     ToolBar           *toolBar;
+
+    SlideShowSettings  settings;
 };  
 
-SlideShow::SlideShow(const KURL::List& fileList, bool exifRotate,
-                     int delay, bool printName, bool loop)
+SlideShow::SlideShow(const SlideShowSettings& settings)
          : QWidget(0, 0, WStyle_StaysOnTop | WType_Popup | WX11BypassWM | WDestructiveClose)
 {
     d = new SlideShowPriv;
 
-    d->fileList   = fileList;
+    d->settings   = settings;
+/*    d->fileList   = fileList;
     d->delay      = QMAX(delay, 300); // at least have 0.3 second delay
     d->loop       = loop;
     d->printName  = printName;
     d->exifRotate = exifRotate;
-
+*/
     // ---------------------------------------------------------------
 
 #if KDE_IS_VERSION(3,2,0)
@@ -127,7 +130,7 @@ SlideShow::SlideShow(const KURL::List& fileList, bool exifRotate,
 
     d->toolBar = new ToolBar(this);
     d->toolBar->hide();
-    if (!d->loop)
+    if (!d->settings.loop)
         d->toolBar->setEnabledPrev(false);
 
     connect(d->toolBar, SIGNAL(signalPause()),
@@ -183,7 +186,7 @@ SlideShow::~SlideShow()
 
 void SlideShow::setCurrent(const KURL& url)
 {
-    int index = d->fileList.findIndex(url);
+    int index = d->settings.fileList.findIndex(url);
     if (index != -1)
     {
         d->currentImage = url;
@@ -199,17 +202,17 @@ void SlideShow::slotTimeOut()
 void SlideShow::loadNextImage()
 {
     d->fileIndex++;
-    int num = d->fileList.count();
+    int num = d->settings.fileList.count();
 
     if (d->fileIndex >= num)
     {
-        if (d->loop)
+        if (d->settings.loop)
         {
             d->fileIndex = 0;
         }
     }
 
-    if (!d->loop)
+    if (!d->settings.loop)
     {
         d->toolBar->setEnabledPrev(d->fileIndex > 0);
         d->toolBar->setEnabledNext(d->fileIndex < num-1);
@@ -217,9 +220,9 @@ void SlideShow::loadNextImage()
 
     if (d->fileIndex < num)
     {
-        d->currentImage = d->fileList[d->fileIndex];
+        d->currentImage = d->settings.fileList[d->fileIndex];
         d->previewThread->load(LoadingDescription(d->currentImage.path(),
-                               QMAX(d->deskWidth, d->deskHeight), d->exifRotate));
+                               QMAX(d->deskWidth, d->deskHeight), d->settings.exifRotate));
     }
     else
     {
@@ -234,17 +237,17 @@ void SlideShow::loadNextImage()
 void SlideShow::loadPrevImage()
 {
     d->fileIndex--;
-    int num = d->fileList.count();
+    int num = d->settings.fileList.count();
 
     if (d->fileIndex < 0)
     {
-        if (d->loop)
+        if (d->settings.loop)
         {
             d->fileIndex = num-1;
         }
     }
 
-    if (!d->loop)
+    if (!d->settings.loop)
     {
         d->toolBar->setEnabledPrev(d->fileIndex > 0);
         d->toolBar->setEnabledNext(d->fileIndex < num-1);
@@ -252,9 +255,9 @@ void SlideShow::loadPrevImage()
 
     if (d->fileIndex >= 0)
     {
-        d->currentImage = d->fileList[d->fileIndex];
+        d->currentImage = d->settings.fileList[d->fileIndex];
         d->previewThread->load(LoadingDescription(d->currentImage.path(),
-                               QMAX(d->deskWidth, d->deskHeight), d->exifRotate));
+                               QMAX(d->deskWidth, d->deskHeight), d->settings.exifRotate));
     }
     else
     {
@@ -275,7 +278,7 @@ void SlideShow::slotGotImagePreview(const LoadingDescription&, const QImage& pre
 
     if (!d->endOfShow)
     {
-        d->timer->start(d->delay, true);
+        d->timer->start(d->settings.delay, true);
         preloadNextImage();
     }
 }
@@ -283,11 +286,11 @@ void SlideShow::slotGotImagePreview(const LoadingDescription&, const QImage& pre
 void SlideShow::preloadNextImage()
 {
     int index = d->fileIndex + 1;
-    int num = d->fileList.count();
+    int num = d->settings.fileList.count();
 
     if (index >= num)
     {
-        if (d->loop)
+        if (d->settings.loop)
         {
             index = 0;
         }
@@ -295,8 +298,8 @@ void SlideShow::preloadNextImage()
 
     if (index < num)
     {
-        d->previewPreloadThread->load(LoadingDescription(d->fileList[index].path(),
-                                      QMAX(d->deskWidth, d->deskHeight), d->exifRotate));
+        d->previewPreloadThread->load(LoadingDescription(d->settings.fileList[index].path(),
+                                      QMAX(d->deskWidth, d->deskHeight), d->settings.exifRotate));
     }
 }
 
@@ -317,11 +320,11 @@ void SlideShow::updatePixmap()
                          (height()-pix.height())/2, pix,
                          0, 0, pix.width(), pix.height());
 
-            if (d->printName)
+            if (d->settings.printName)
             {
                 QString filename = QString("%1 (%2/%3)").arg(d->currentImage.filename())
                                                         .arg(QString::number(d->fileIndex + 1))
-                                                        .arg(QString::number(d->fileList.count()));
+                                                        .arg(QString::number(d->settings.fileList.count()));
             
                 p.setPen(Qt::black);
                 for (int x=9; x<=11; x++)

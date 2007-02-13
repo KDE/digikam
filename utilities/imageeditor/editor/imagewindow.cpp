@@ -1003,11 +1003,12 @@ void ImageWindow::slotFilePrint()
     printImage(d->urlCurrent); 
 };
 
-void ImageWindow::slideShow(bool startWithCurrent, bool loop, int delay, bool printName)
+void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 {
-    bool exifRotate = AlbumSettings::instance()->getExifRotate();
+    settings.exifRotate = AlbumSettings::instance()->getExifRotate();
+    settings.fileList   = d->urlList;
 
-    SlideShow *slide = new SlideShow(d->urlList, exifRotate, delay, printName, loop);
+    SlideShow *slide = new SlideShow(settings);
     if (startWithCurrent)
         slide->setCurrent(d->urlCurrent);
 

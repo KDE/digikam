@@ -1090,14 +1090,15 @@ void ShowFoto::slotContextMenu()
     d->contextMenu->exec(QCursor::pos());
 }
 
-void ShowFoto::slideShow(bool startWithCurrent, bool loop, int delay, bool printName)
+void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& settings)
 {
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
-    bool exifRotate = config->readBoolEntry("EXIF Rotate", true);
 
-    Digikam::SlideShow *slide = new Digikam::SlideShow(d->thumbBar->itemsURLs(), exifRotate, delay, 
-                                                       printName, loop);
+    settings.exifRotate = config->readBoolEntry("EXIF Rotate", true);
+    settings.fileList   = d->thumbBar->itemsURLs();
+
+    Digikam::SlideShow *slide = new Digikam::SlideShow(settings);
     if (startWithCurrent)
         slide->setCurrent(d->currentItem->url());
 

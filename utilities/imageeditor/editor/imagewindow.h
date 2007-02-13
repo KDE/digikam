@@ -41,6 +41,7 @@ namespace Digikam
 
 class AlbumIconView;
 class ImageWindowPriv;
+class SlideShowSettings;
 
 class ImageWindow : public EditorWindow
 {
@@ -91,7 +92,7 @@ private:
     void setViewToURL(const KURL &url);
     void deleteCurrentItem(bool ask, bool permanently);
 
-    void slideShow(bool startWithCurrent, bool loop, int delay, bool printName);
+    void slideShow(bool startWithCurrent, SlideShowSettings& settings);
 
     ImageWindow();
 

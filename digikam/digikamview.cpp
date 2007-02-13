@@ -924,13 +924,15 @@ void DigikamView::slideShow(const KURL::List &urlList)
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
     bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
-    bool loop             = config->readBoolEntry("SlideShowLoop", false);
-    bool printName        = config->readBoolEntry("SlideShowPrintName", true);
-    int  delay            = config->readNumEntry("SlideShowDelay", 5);
 
-    bool exifRotate     = AlbumSettings::instance()->getExifRotate();
+    SlideShowSettings settings;
+    settings.exifRotate = AlbumSettings::instance()->getExifRotate();
+    settings.fileList   = urlList;
+    settings.delay      = config->readNumEntry("SlideShowDelay", 5) * 1000;
+    settings.printName  = config->readBoolEntry("SlideShowPrintName", true);
+    settings.loop       = config->readBoolEntry("SlideShowLoop", false);
 
-    SlideShow *slide = new SlideShow(urlList, exifRotate, delay*1000, printName, loop);
+    SlideShow *slide = new SlideShow(settings);
     if (startWithCurrent)
         slide->setCurrent(dynamic_cast<AlbumIconItem*>(d->iconView->currentItem())->imageInfo()->kurl());
 

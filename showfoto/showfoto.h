@@ -39,6 +39,11 @@ namespace KIO
 class Job;
 }
 
+namespace Digikam
+{
+class SlideshowSettings;
+}
+
 namespace ShowFoto
 {
 
@@ -82,7 +87,7 @@ private:
     void saveIsComplete();
     void saveAsIsComplete(); 
 
-    void slideShow(bool startWithCurrent, bool loop, int delay, bool printName);
+    void slideShow(bool startWithCurrent, Digikam::SlideShowSettings& settings);
 
 private slots:
 

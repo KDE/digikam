@@ -88,6 +88,7 @@ extern "C"
 #include "iofilesettingscontainer.h"
 #include "savingcontextcontainer.h"
 #include "loadingcacheinterface.h"
+#include "slideshowsettings.h"
 #include "editorwindowprivate.h"
 #include "editorwindow.h"
 #include "editorwindow.moc"
@@ -976,10 +977,12 @@ void EditorWindow::slotToggleSlideShow()
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
     bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
-    bool loop             = config->readBoolEntry("SlideShowLoop", false);
-    bool printName        = config->readBoolEntry("SlideShowPrintName", true);
-    int  delay            = config->readNumEntry("SlideShowDelay", 5);
-    slideShow(startWithCurrent, loop, delay*1000, printName);
+
+    SlideShowSettings settings;
+    settings.delay      = config->readNumEntry("SlideShowDelay", 5) * 1000;
+    settings.printName  = config->readBoolEntry("SlideShowPrintName", true);
+    settings.loop       = config->readBoolEntry("SlideShowLoop", false);
+    slideShow(startWithCurrent, settings);
 }
 
 void EditorWindow::slotRotatedOrFlipped()

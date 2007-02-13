@@ -25,13 +25,10 @@
 
 #include <qwidget.h>
 
-// KDE includes.
-
-#include <kurl.h>
-
 // Local includes.
 
 #include "loadingdescription.h"
+#include "slideshowsettings.h"
 
 namespace Digikam
 {
@@ -44,8 +41,7 @@ class SlideShow : public QWidget
 
 public:
 
-    SlideShow(const KURL::List& fileList, bool exifRotate,
-              int delay, bool printName, bool loop);
+    SlideShow(const SlideShowSettings& settings);
     ~SlideShow();
 
     void setCurrent(const KURL& url);

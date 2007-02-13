@@ -52,6 +52,7 @@ class ImagePluginLoader;
 class IOFileSettingsContainer;
 class SavingContextContainer;
 class StatusProgressBar;
+class SlideShowSettings;
 class EditorWindowPriv;
 
 class DIGIKAM_EXPORT EditorWindow : public KMainWindow
@@ -138,7 +139,7 @@ protected:
     virtual void toggleActions(bool val)      { toggleStandardActions(val); };
     virtual void toggleGUI2FullScreen()       {};
 
-    virtual void slideShow(bool startWithCurrent, bool loop, int delay, bool printName)=0;
+    virtual void slideShow(bool startWithCurrent, SlideShowSettings& settings)=0;
 
     virtual void setupConnections()=0;
     virtual void setupActions()=0;
