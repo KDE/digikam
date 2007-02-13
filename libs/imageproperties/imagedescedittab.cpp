@@ -454,6 +454,7 @@ void ImageDescEditTab::slotApplyAllChanges()
 
     // we are now changing attributes ourselves
     d->ignoreImageAttributesWatch = true;
+    AlbumManager::instance()->albumDB()->beginTransaction();
     int i=0;
     for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
     {
@@ -465,6 +466,7 @@ void ImageDescEditTab::slotApplyAllChanges()
         emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
         kapp->processEvents();
     }
+    AlbumManager::instance()->albumDB()->commitTransaction();
     d->ignoreImageAttributesWatch = false;
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
@@ -537,6 +539,7 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
                                i18n("Reading metadata from files. Please wait..."));
 
     d->ignoreImageAttributesWatch = true;
+    AlbumManager::instance()->albumDB()->beginTransaction();
     int i=0;
     for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
     {
@@ -550,6 +553,7 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
         emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
         kapp->processEvents();
     }
+    AlbumManager::instance()->albumDB()->commitTransaction();
     d->ignoreImageAttributesWatch = false;
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);

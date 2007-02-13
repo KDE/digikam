@@ -330,6 +330,7 @@ private:
     void load(const QDateTime &dateTime, const QString &comment, int rating);
     void loadTags(const QValueList<TAlbum *> &loadedTags);
     void loadTags(const QStringList &loadedTagPaths);
+    bool needWriteMetadata(WriteMode writeMode, const MetadataWriteSettings &settings) const;
 
 private:
 

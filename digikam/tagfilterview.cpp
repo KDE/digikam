@@ -524,6 +524,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
             emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                        i18n("Assign tag to pictures. Please wait..."));
 
+            AlbumManager::instance()->albumDB()->beginTransaction();
             int i=0;
             for (QValueList<int>::const_iterator it = imageIDs.begin();
                  it != imageIDs.end(); ++it)
@@ -540,6 +541,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
                 emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));
                 kapp->processEvents();
             }
+            AlbumManager::instance()->albumDB()->commitTransaction();
 
             ImageAttributesWatch::instance()->imagesChanged(destAlbum->id());
 

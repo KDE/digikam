@@ -1320,6 +1320,8 @@ void AlbumIconView::changeTagOnImageInfos(const QPtrList<ImageInfo> &list, const
 {
     float cnt = list.count();
     int i = 0;
+
+    AlbumManager::instance()->albumDB()->beginTransaction();
     for (QPtrList<ImageInfo>::const_iterator it = list.begin(); it != list.end(); ++it)
     {
         MetadataHub hub;
@@ -1340,6 +1342,7 @@ void AlbumIconView::changeTagOnImageInfos(const QPtrList<ImageInfo> &list, const
             kapp->processEvents();
         }
     }
+    AlbumManager::instance()->albumDB()->commitTransaction();
 
     if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
     {
@@ -1886,6 +1889,7 @@ void AlbumIconView::slotAssignRating(int rating)
     float cnt = (float)countSelected();
     rating    = QMIN(5, QMAX(0, rating));
 
+    AlbumManager::instance()->albumDB()->beginTransaction();
     for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
         if (it->isSelected())
@@ -1903,6 +1907,7 @@ void AlbumIconView::slotAssignRating(int rating)
             kapp->processEvents();
         }
     }
+    AlbumManager::instance()->albumDB()->commitTransaction();
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
     updateContents();
@@ -1944,18 +1949,23 @@ void AlbumIconView::slotDIOResult(KIO::Job* job)
         job->showErrorDialog(this);
 }
 
-void AlbumIconView::slotImageAttributesChanged(Q_LLONG /*imageId*/)
+void AlbumIconView::slotImageAttributesChanged(Q_LLONG imageId)
 {
-    // we might check if the item with imageId is currently visible,
-    // but I think it is ok to simply repaint in any case.
-    // We also do not need to check whether the change originates
-    // from our own actions above, the additional update should be killed by Qt.
-    updateContents();
+    AlbumIconItem *firstItem = static_cast<AlbumIconItem *>(findFirstVisibleItem());
+    AlbumIconItem *lastItem = static_cast<AlbumIconItem *>(findLastVisibleItem());
+    for (AlbumIconItem *item = firstItem; item && item != lastItem;
+         item = static_cast<AlbumIconItem *>(item->nextItem()))
+    {
+        if (item->imageInfo()->id() == imageId)
+        {
+            updateContents();
+            return;
+        }
+    }
 }
 
 void AlbumIconView::slotAlbumImagesChanged(int /*albumId*/)
 {
-    // Same considerations as above
     updateContents();
 }
 

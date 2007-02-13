@@ -556,6 +556,11 @@ bool MetadataHub::write(DMetadata &metadata, WriteMode writeMode, const Metadata
 
 bool MetadataHub::write(const QString &filePath, WriteMode writeMode, const MetadataWriteSettings &settings)
 {
+    // if no DMetadata object is needed at all, don't construct one -
+    // important optimization if writing to file is turned off in setup!
+    if (!needWriteMetadata(writeMode, settings))
+        return false;
+
     DMetadata metadata(filePath);
     if (write(metadata, writeMode, settings))
     {
@@ -564,6 +569,52 @@ bool MetadataHub::write(const QString &filePath, WriteMode writeMode, const Meta
         return success;
     }
     return false;
+}
+
+bool MetadataHub::needWriteMetadata(WriteMode writeMode, const MetadataWriteSettings &settings) const
+{
+    // This is the same logic as in write(DMetadata) but without actually writing.
+    // Adapt if the method above changes
+
+    bool saveComment  = (settings.saveComments && d->commentStatus == MetadataAvailable);
+    bool saveDateTime = (settings.saveDateTime && d->dateTimeStatus == MetadataAvailable);
+    bool saveRating   = (settings.saveIptcRating && d->ratingStatus == MetadataAvailable);
+    bool saveTags     = false;
+    if (settings.saveIptcTags)
+    {
+        saveTags = false;
+        // find at least one tag to write
+        for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
+        {
+            if (it.data() == MetadataAvailable)
+            {
+                saveTags = true;
+                break;
+            }
+        }
+    }
+
+    bool writeAllFields;
+    if (writeMode == FullWrite)
+        writeAllFields = true;
+    else if (writeMode == FullWriteIfChanged)
+        writeAllFields = (
+                           (saveComment  && d->commentChanged)  ||
+                           (saveDateTime && d->dateTimeChanged) ||
+                           (saveRating   && d->ratingChanged)   ||
+                           (saveTags     && d->tagsChanged)
+                         );
+    else // PartialWrite
+        writeAllFields = false;
+
+    return (
+            (saveComment && (writeAllFields || d->commentChanged))   ||
+            (saveDateTime && (writeAllFields || d->dateTimeChanged)) ||
+            (saveRating && (writeAllFields || d->ratingChanged))     ||
+            (saveTags && (writeAllFields || d->tagsChanged))         ||
+            (settings.saveIptcPhotographerId && writeAllFields)      ||
+            (settings.saveIptcCredits && writeAllFields)
+           );
 }
 
 MetadataWriteSettings MetadataHub::defaultWriteSettings()
