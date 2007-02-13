@@ -27,6 +27,7 @@
 
 // Local includes.
 
+#include "digikam_export.h"
 #include "loadingdescription.h"
 #include "slideshowsettings.h"
 
@@ -35,7 +36,7 @@ namespace Digikam
 
 class SlideShowPriv;
 
-class SlideShow : public QWidget
+class DIGIKAM_EXPORT SlideShow : public QWidget
 {
     Q_OBJECT
 

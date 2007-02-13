@@ -25,6 +25,10 @@
 
 #include <qwidget.h>
 
+// Local includes.
+
+#include "digikam_export.h"
+
 class QToolButton;
 
 namespace Digikam
@@ -32,7 +36,7 @@ namespace Digikam
 
 class ToolBarPriv;
 
-class ToolBar : public QWidget
+class DIGIKAM_EXPORT ToolBar : public QWidget
 {
     Q_OBJECT
     

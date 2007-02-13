@@ -21,14 +21,53 @@
 #ifndef SLIDESHOWSETTINGSCONTAINER_H
 #define SLIDESHOWSETTINGSCONTAINER_H
 
+// Qt includes.
+
+#include <qptrlist.h>
+
 // KDE includes.
 
 #include <kurl.h>
 
+// Local includes.
+
+#include "photoinfocontainer.h"
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class SlideShowSettings
+/** This class contain the informations of one picture to slide */
+class DIGIKAM_EXPORT SlidePictureInfo
+{
+
+public:
+    
+    SlidePictureInfo()
+    {
+    };
+    
+    ~SlidePictureInfo(){};
+
+public:
+
+    /** Picture Comment */
+    QString            Comment; 
+
+    /** Picture file url */
+    KURL               fileUrl;
+
+    /** Exif photo info of picture */
+    PhotoInfoContainer photoInfo;
+};
+
+typedef QPtrList<SlidePictureInfo>         SlidePictureInfoList;
+typedef QPtrListIterator<SlidePictureInfo> SlidePictureInfoListIterator;
+
+// --------------------------------------------------------------------------------
+
+/** This class contain all settings to perform a slide show of a group of pictures */
+class DIGIKAM_EXPORT SlideShowSettings
 {
 
 public:
@@ -44,6 +83,8 @@ public:
     ~SlideShowSettings(){};
 
 public:
+
+    // Global Slide Show Settings
 
     /** Auto-rotate image accordinly with Exif Rotation tag */
     bool exifRotate;
