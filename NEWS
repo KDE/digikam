@@ -168,6 +168,9 @@ Image Editor  : JPEG/PNG/TIFF/JPEG2000 file save settings are now available in F
 Image Editor  : JPEG file save settings include a red warning about this lossy compression image 
                 format with a link to wikipedia to aware users.
  
+
+*** 0.9.1-Beta2 *********************************************************
+
 ...
 
 ----------------------------------------------------------------------------------------------------
@@ -493,7 +496,11 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 285 ==> 140303 : slideshow must be relocated to View menu from tools menu.
 286 ==> 137503 : Tags are not written to image file automatically.
 287 ==> 136254 : Editing tags does not change IPTC-keywords.
-288 ==> 135655 : Proper full screen mode (no menu, toolbar, statusbar, sidebars)
-289 ==> 
+288 ==> 135655 : Proper full screen mode (no menu, toolbar, statusbar, sidebars).
+
+*** 0.9.1-Beta2 *********************************************************
+
+289 ==> 141035 : Advanced Search gives error when trying to search by rating.
+290 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
