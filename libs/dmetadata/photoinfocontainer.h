@@ -26,10 +26,14 @@
 #include <qstring.h>
 #include <qdatetime.h>
 
+// Local includes.
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class PhotoInfoContainer
+class DIGIKAM_EXPORT PhotoInfoContainer
 {
 
 public:
