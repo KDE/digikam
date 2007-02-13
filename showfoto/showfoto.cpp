@@ -74,6 +74,7 @@ extern "C"
 // Local includes.
 
 #include "ddebug.h"
+#include "dmetadata.h"
 #include "rawfiles.h"
 #include "canvas.h"
 #include "thumbbar.h"
@@ -1097,6 +1098,16 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
 
     settings.exifRotate = config->readBoolEntry("EXIF Rotate", true);
     settings.fileList   = d->thumbBar->itemsURLs();
+
+    Digikam::DMetadata meta;
+
+    for (KURL::List::Iterator it = settings.fileList.begin() ; it != settings.fileList.end() ; ++it)
+    {
+        Digikam::SlidePictureInfo pictInfo;
+        meta.load((*it).path());
+        pictInfo.comment = meta.getImageComment();
+        settings.pictInfoMap.insert(*it, pictInfo);
+    }
 
     Digikam::SlideShow *slide = new Digikam::SlideShow(settings);
     if (startWithCurrent)

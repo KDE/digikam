@@ -919,7 +919,7 @@ void DigikamView::slotToggledToPreviewMode(bool t)
     d->parent->toggledToPreviewMode(t);
 }
 
-void DigikamView::slideShow(const KURL::List &urlList)
+void DigikamView::slideShow(ImageInfoList &infoList)
 {
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
@@ -927,10 +927,19 @@ void DigikamView::slideShow(const KURL::List &urlList)
 
     SlideShowSettings settings;
     settings.exifRotate = AlbumSettings::instance()->getExifRotate();
-    settings.fileList   = urlList;
-    settings.delay      = config->readNumEntry("SlideShowDelay", 5) * 1000;
-    settings.printName  = config->readBoolEntry("SlideShowPrintName", true);
-    settings.loop       = config->readBoolEntry("SlideShowLoop", false);
+
+    for (ImageInfo *info = infoList.first(); info; info = infoList.next())
+    {
+        settings.fileList.append(info->kurl());
+        SlidePictureInfo pictInfo;
+        pictInfo.comment = info->caption();
+        settings.pictInfoMap.insert(info->kurl(), pictInfo);
+    }
+
+    settings.delay        = config->readNumEntry("SlideShowDelay", 5) * 1000;
+    settings.printName    = config->readBoolEntry("SlideShowPrintName", true);
+    settings.printComment = config->readBoolEntry("SlideShowPrintComment", false);
+    settings.loop         = config->readBoolEntry("SlideShowLoop", false);
 
     SlideShow *slide = new SlideShow(settings);
     if (startWithCurrent)
@@ -941,29 +950,29 @@ void DigikamView::slideShow(const KURL::List &urlList)
 
 void DigikamView::slotSlideShowAll()
 {
-    KURL::List urlList;
+    ImageInfoList infoList;
     AlbumIconItem* item = dynamic_cast<AlbumIconItem*>(d->iconView->firstItem());
     while (item) 
     {
-        urlList.append(item->imageInfo()->kurl());
+        infoList.append(item->imageInfo());
         item = dynamic_cast<AlbumIconItem*>(item->nextItem());
     }
 
-    slideShow(urlList);
+    slideShow(infoList);
 }
 
 void DigikamView::slotSlideShowSelection()
 {
-    KURL::List urlList;
+    ImageInfoList infoList;
     AlbumIconItem* item = dynamic_cast<AlbumIconItem*>(d->iconView->firstItem());
     while (item) 
     {
         if (item->isSelected())
-            urlList.append(item->imageInfo()->kurl());
+            infoList.append(item->imageInfo());
         item = dynamic_cast<AlbumIconItem*>(item->nextItem());
     }
 
-    slideShow(urlList);
+    slideShow(infoList);
 }
 
 void DigikamView::slotImageEdit()

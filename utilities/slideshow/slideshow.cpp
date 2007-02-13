@@ -312,14 +312,28 @@ void SlideShow::updatePixmap()
                                                         .arg(QString::number(d->fileIndex + 1))
                                                         .arg(QString::number(d->settings.fileList.count()));
             
+                int offset = (d->settings.printComment ? 40 : 20);
                 p.setPen(Qt::black);
                 for (int x=9; x<=11; x++)
-                    for (int y=21; y>=19; y--)
+                    for (int y=offset+1; y>=offset-1; y--)
                         p.drawText(x, height()-y, filename);
             
                 p.setPen(Qt::white);
-                p.drawText(10, height()-20, filename);
+                p.drawText(10, height()-offset, filename);
+            }
+
+            if (d->settings.printComment)
+            {
+                int offset = 20;
+                p.setPen(Qt::black);
+                for (int x=9; x<=11; x++)
+                    for (int y=offset+1; y>=offset-1; y--)
+                        p.drawText(x, height()-y, d->settings.pictInfoMap[d->currentImage].comment);
+            
+                p.setPen(Qt::white);
+                p.drawText(10, height()-offset, d->settings.pictInfoMap[d->currentImage].comment);
             }   
+   
         }
         else
         {
@@ -328,7 +342,7 @@ void SlideShow::updatePixmap()
             p.setPen(Qt::white);
             p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
                        Qt::AlignCenter|Qt::WordBreak, 
-                       i18n("Cannot display preview for\n\"%1\"")
+                       i18n("Cannot display picture\n\"%1\"")
                        .arg(d->currentImage.fileName()));
         }
     }

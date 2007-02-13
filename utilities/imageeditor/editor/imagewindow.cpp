@@ -1005,6 +1005,30 @@ void ImageWindow::slotFilePrint()
 
 void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 {
+    if (!d->imageInfoList.isEmpty())
+    {
+        // We have started image editor from Album GUI. we get picture comments from database.
+        for (ImageInfo *info = d->imageInfoList.first(); info; info = d->imageInfoList.next())
+        {
+            SlidePictureInfo pictInfo;
+            pictInfo.comment = info->caption();
+            settings.pictInfoMap.insert(info->kurl(), pictInfo);
+        }
+    }
+    else
+    {
+        // We have started image editor from Camera GUI. we get picture comments from metadata.
+        DMetadata meta;
+
+        for (KURL::List::Iterator it = d->urlList.begin() ; it != d->urlList.end() ; ++it)
+        {
+            SlidePictureInfo pictInfo;
+            meta.load((*it).path());
+            pictInfo.comment = meta.getImageComment();
+            settings.pictInfoMap.insert(*it, pictInfo);
+        }
+    }
+
     settings.exifRotate = AlbumSettings::instance()->getExifRotate();
     settings.fileList   = d->urlList;
 

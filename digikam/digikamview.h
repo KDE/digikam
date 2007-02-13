@@ -29,6 +29,10 @@
 #include <qstringlist.h>
 #include <qmap.h>
 
+// Local includes.
+
+#include "imageinfo.h"
+
 class KURL;
 
 namespace KIO
@@ -42,7 +46,6 @@ class AlbumIconItem;
 class AlbumSettings;
 class Album;
 class DigikamViewPriv;
-class ImageInfo;
 
 class DigikamView : public QHBox
 {
@@ -134,7 +137,7 @@ private:
     void saveViewState();
     void changeAlbumFromHistory(Album *album, QWidget *widget);
     void imageEdit(AlbumIconItem* iconItem=0);
-    void slideShow(const KURL::List &urlList);
+    void slideShow(ImageInfoList &infoList);
 
 private slots:
 

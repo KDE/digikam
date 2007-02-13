@@ -23,7 +23,7 @@
 
 // Qt includes.
 
-#include <qptrlist.h>
+#include <qmap.h>
 
 // KDE includes.
 
@@ -43,26 +43,18 @@ class DIGIKAM_EXPORT SlidePictureInfo
 
 public:
     
-    SlidePictureInfo()
-    {
-    };
+    SlidePictureInfo(){};
     
     ~SlidePictureInfo(){};
 
 public:
 
     /** Picture Comment */
-    QString            Comment; 
-
-    /** Picture file url */
-    KURL               fileUrl;
+    QString            comment; 
 
     /** Exif photo info of picture */
     PhotoInfoContainer photoInfo;
 };
-
-typedef QPtrList<SlidePictureInfo>         SlidePictureInfoList;
-typedef QPtrListIterator<SlidePictureInfo> SlidePictureInfoListIterator;
 
 // --------------------------------------------------------------------------------
 
@@ -74,10 +66,11 @@ public:
     
     SlideShowSettings()
     {
-        exifRotate = true;
-        printName  = true;
-        loop       = false;
-        delay      = 5;
+        exifRotate   = true;
+        printName    = true;
+        printComment = false;
+        loop         = false;
+        delay        = 5;
     };
     
     ~SlideShowSettings(){};
@@ -89,8 +82,11 @@ public:
     /** Auto-rotate image accordinly with Exif Rotation tag */
     bool exifRotate;
 
-    /** Print file name during slide */
+    /** Print picture file name during slide */
     bool printName;
+
+    /** Print picture comment during slide */
+    bool printComment;
 
     /** Slide pictures in loop */
     bool loop;
@@ -98,8 +94,11 @@ public:
     /** Delay in seconds */
     int delay;
 
-    /** List of files to slide */ 
-    KURL::List fileList; 
+    /** List of pictures URL to slide */ 
+    KURL::List fileList;
+
+    /** Map of pictures informations to slide */ 
+    QMap<KURL, SlidePictureInfo> pictInfoMap;
 };
 
 }  // namespace Digikam

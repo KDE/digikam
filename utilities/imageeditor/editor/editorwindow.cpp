@@ -979,9 +979,10 @@ void EditorWindow::slotToggleSlideShow()
     bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
 
     SlideShowSettings settings;
-    settings.delay      = config->readNumEntry("SlideShowDelay", 5) * 1000;
-    settings.printName  = config->readBoolEntry("SlideShowPrintName", true);
-    settings.loop       = config->readBoolEntry("SlideShowLoop", false);
+    settings.delay        = config->readNumEntry("SlideShowDelay", 5) * 1000;
+    settings.printName    = config->readBoolEntry("SlideShowPrintName", true);
+    settings.printComment = config->readBoolEntry("SlideShowPrintComment", false);
+    settings.loop         = config->readBoolEntry("SlideShowLoop", false);
     slideShow(startWithCurrent, settings);
 }
 
