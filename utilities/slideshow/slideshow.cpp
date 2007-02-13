@@ -63,14 +63,6 @@ public:
 
     bool               endOfShow;
 
-/*
-    bool               printName;
-    bool               loop;
-    bool               exifRotate;
-    int                delay;
-    KURL::List         fileList;
-*/
-    
     int                deskX;
     int                deskY;
     int                deskWidth;
@@ -98,14 +90,8 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
          : QWidget(0, 0, WStyle_StaysOnTop | WType_Popup | WX11BypassWM | WDestructiveClose)
 {
     d = new SlideShowPriv;
+    d->settings = settings;
 
-    d->settings   = settings;
-/*    d->fileList   = fileList;
-    d->delay      = QMAX(delay, 300); // at least have 0.3 second delay
-    d->loop       = loop;
-    d->printName  = printName;
-    d->exifRotate = exifRotate;
-*/
     // ---------------------------------------------------------------
 
 #if KDE_IS_VERSION(3,2,0)
