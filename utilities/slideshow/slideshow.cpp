@@ -319,25 +319,54 @@ void SlideShow::updatePixmap()
                 printInfoText(p, offset, str);
             }   
 
+            // Display the Exposure and Sensitivity.
+
+            if (d->settings.printExpoSensitivity)
+            {
+                str = QString::null;
+
+                if (!photoInfo.exposureTime.isEmpty())
+                    str = photoInfo.exposureTime;
+
+                if (!photoInfo.sensitivity.isEmpty())
+                {
+                    if (!photoInfo.exposureTime.isEmpty())
+                        str += QString(" / ");
+
+                    str += i18n("%1 ISO").arg(photoInfo.sensitivity);
+                }
+
+                printInfoText(p, offset, str);
+            }
+
             // Display the Aperture and Focal.
 
             if (d->settings.printApertureFocal)
             {
                 str = QString::null;
+
                 if (!photoInfo.aperture.isEmpty())
                     str = photoInfo.aperture;
 
                 if (photoInfo.focalLength35mm.isEmpty())
                 {
                     if (!photoInfo.focalLength.isEmpty())
-                        str += QString(" / %1").arg(photoInfo.focalLength);
+                    {
+                        if (!photoInfo.aperture.isEmpty())
+                            str += QString(" / ");
+
+                        str += photoInfo.focalLength;
+                    }
                 }
                 else
-                { 
+                {
+                    if (!photoInfo.aperture.isEmpty())
+                            str += QString(" / ");
+ 
                     if (!photoInfo.focalLength.isEmpty())
-                        str += QString(" / %1 (35mm: %2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm);
+                        str += QString("%1 (35mm: %2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm);
                     else
-                        str += QString(" / 35mm: %1)").arg(photoInfo.focalLength35mm);
+                        str += QString("35mm: %1)").arg(photoInfo.focalLength35mm);
                 }
 
                 printInfoText(p, offset, str);

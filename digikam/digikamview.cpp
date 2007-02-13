@@ -49,6 +49,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "dmetadata.h"
 #include "rawfiles.h"
 #include "albummanager.h"
 #include "album.h"
@@ -925,6 +926,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
     config->setGroup("ImageViewer Settings");
     bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
 
+    DMetadata         meta;
     SlideShowSettings settings;
     settings.exifRotate = AlbumSettings::instance()->getExifRotate();
 
@@ -932,16 +934,21 @@ void DigikamView::slideShow(ImageInfoList &infoList)
     {
         settings.fileList.append(info->kurl());
         SlidePictureInfo pictInfo;
-        pictInfo.comment = info->caption();
+        meta.load(info->kurl().path());
+        pictInfo.comment            = info->caption();
+        pictInfo.photoInfo          = meta.getPhotographInformations();
+        // In case of dateTime extraction from metadata failed 
         pictInfo.photoInfo.dateTime = info->dateTime(); 
         settings.pictInfoMap.insert(info->kurl(), pictInfo);
     }
 
-    settings.delay        = config->readNumEntry("SlideShowDelay", 5) * 1000;
-    settings.printName    = config->readBoolEntry("SlideShowPrintName", true);
-    settings.printDate    = config->readBoolEntry("SlideShowPrintDate", false);
-    settings.printComment = config->readBoolEntry("SlideShowPrintComment", false);
-    settings.loop         = config->readBoolEntry("SlideShowLoop", false);
+    settings.delay                = config->readNumEntry("SlideShowDelay", 5) * 1000;
+    settings.printName            = config->readBoolEntry("SlideShowPrintName", true);
+    settings.printDate            = config->readBoolEntry("SlideShowPrintDate", false);
+    settings.printApertureFocal   = config->readBoolEntry("SlideShowPrintApertureFocal", false);
+    settings.printExpoSensitivity = config->readBoolEntry("SlideShowPrintExpoSensitivity", false);
+    settings.printComment         = config->readBoolEntry("SlideShowPrintComment", false);
+    settings.loop                 = config->readBoolEntry("SlideShowLoop", false);
 
     SlideShow *slide = new SlideShow(settings);
     if (startWithCurrent)
