@@ -933,11 +933,13 @@ void DigikamView::slideShow(ImageInfoList &infoList)
         settings.fileList.append(info->kurl());
         SlidePictureInfo pictInfo;
         pictInfo.comment = info->caption();
+        pictInfo.photoInfo.dateTime = info->dateTime(); 
         settings.pictInfoMap.insert(info->kurl(), pictInfo);
     }
 
     settings.delay        = config->readNumEntry("SlideShowDelay", 5) * 1000;
     settings.printName    = config->readBoolEntry("SlideShowPrintName", true);
+    settings.printDate    = config->readBoolEntry("SlideShowPrintDate", false);
     settings.printComment = config->readBoolEntry("SlideShowPrintComment", false);
     settings.loop         = config->readBoolEntry("SlideShowLoop", false);
 

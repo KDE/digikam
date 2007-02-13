@@ -1012,7 +1012,9 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
         {
             SlidePictureInfo pictInfo;
             pictInfo.comment = info->caption();
+            pictInfo.photoInfo.dateTime = info->dateTime(); 
             settings.pictInfoMap.insert(info->kurl(), pictInfo);
+            pictInfo.photoInfo.dateTime = info->dateTime(); 
         }
     }
     else
@@ -1024,7 +1026,8 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
         {
             SlidePictureInfo pictInfo;
             meta.load((*it).path());
-            pictInfo.comment = meta.getImageComment();
+            pictInfo.comment   = meta.getImageComment();
+            pictInfo.photoInfo = meta.getPhotographInformations(); 
             settings.pictInfoMap.insert(*it, pictInfo);
         }
     }

@@ -68,6 +68,7 @@ public:
     {
         exifRotate   = true;
         printName    = true;
+        printDate    = false;
         printComment = false;
         loop         = false;
         delay        = 5;
@@ -84,6 +85,9 @@ public:
 
     /** Print picture file name during slide */
     bool printName;
+
+    /** Print picture creation date during slide */
+    bool printDate;
 
     /** Print picture comment during slide */
     bool printComment;

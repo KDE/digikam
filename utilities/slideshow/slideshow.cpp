@@ -299,32 +299,19 @@ void SlideShow::updatePixmap()
     {
         if (!d->preview.isNull())
         {
-            // Preview extraction is complete...
+            // Preview extraction is complete... Draw the image.
 
             QPixmap pix(d->preview.smoothScale(size(), QImage::ScaleMin));
             p.drawPixmap((width()-pix.width())/2,
                          (height()-pix.height())/2, pix,
                          0, 0, pix.width(), pix.height());
 
-            if (d->settings.printName)
-            {
-                QString filename = QString("%1 (%2/%3)").arg(d->currentImage.filename())
-                                                        .arg(QString::number(d->fileIndex + 1))
-                                                        .arg(QString::number(d->settings.fileList.count()));
-            
-                int offset = (d->settings.printComment ? 40 : 20);
-                p.setPen(Qt::black);
-                for (int x=9; x<=11; x++)
-                    for (int y=offset+1; y>=offset-1; y--)
-                        p.drawText(x, height()-y, filename);
-            
-                p.setPen(Qt::white);
-                p.drawText(10, height()-offset, filename);
-            }
+            int offset = 20;
+
+            // Write the Comments.
 
             if (d->settings.printComment)
             {
-                int offset = 20;
                 p.setPen(Qt::black);
                 for (int x=9; x<=11; x++)
                     for (int y=offset+1; y>=offset-1; y--)
@@ -333,7 +320,38 @@ void SlideShow::updatePixmap()
                 p.setPen(Qt::white);
                 p.drawText(10, height()-offset, d->settings.pictInfoMap[d->currentImage].comment);
             }   
-   
+
+            // Write the creation date.
+
+            if (d->settings.printDate)
+            {
+                offset += 20;
+                p.setPen(Qt::black);
+                for (int x=9; x<=11; x++)
+                    for (int y=offset+1; y>=offset-1; y--)
+                        p.drawText(x, height()-y, d->settings.pictInfoMap[d->currentImage].photoInfo.dateTime.toString(Qt::LocalDate));
+            
+                p.setPen(Qt::white);
+                p.drawText(10, height()-offset, d->settings.pictInfoMap[d->currentImage].photoInfo.dateTime.toString(Qt::LocalDate));
+            }
+
+            // Write the image file name.
+
+            if (d->settings.printName)
+            {
+                offset += 20;
+                QString filename = QString("%1 (%2/%3)").arg(d->currentImage.filename())
+                                                        .arg(QString::number(d->fileIndex + 1))
+                                                        .arg(QString::number(d->settings.fileList.count()));
+            
+                p.setPen(Qt::black);
+                for (int x=9; x<=11; x++)
+                    for (int y=offset+1; y>=offset-1; y--)
+                        p.drawText(x, height()-y, filename);
+            
+                p.setPen(Qt::white);
+                p.drawText(10, height()-offset, filename);
+            }
         }
         else
         {

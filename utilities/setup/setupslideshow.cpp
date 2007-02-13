@@ -52,12 +52,14 @@ public:
         loopMode         = 0;
         printName        = 0;
         printComment     = 0;
+        printDate        = 0;
     }
 
     QCheckBox    *startWithCurrent;
     QCheckBox    *loopMode;
     QCheckBox    *printName;
     QCheckBox    *printComment;
+    QCheckBox    *printDate;
     
     KIntNumInput *delayInput;
 };    
@@ -83,13 +85,17 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     d->printName = new QCheckBox(i18n("Print image file name"), parent);
     QWhatsThis::add( d->printName, i18n("<p>Print image file name on bottom of screen."));
 
+    d->printDate = new QCheckBox(i18n("Print image creation date"), parent);
+    QWhatsThis::add( d->printDate, i18n("<p>Print image creation on bottom of screen."));
+
     d->printComment = new QCheckBox(i18n("Print image comment"), parent);
-    QWhatsThis::add( d->printName, i18n("<p>Print image comment on bottom of screen."));
+    QWhatsThis::add( d->printComment, i18n("<p>Print image comment on bottom of screen."));
     
     layout->addWidget(d->delayInput);
     layout->addWidget(d->startWithCurrent);
     layout->addWidget(d->loopMode);
     layout->addWidget(d->printName);
+    layout->addWidget(d->printDate);
     layout->addWidget(d->printComment);
     layout->addStretch();
     
@@ -110,6 +116,7 @@ void SetupSlideShow::applySettings()
     config->writeEntry("SlideShowStartCurrent", d->startWithCurrent->isChecked());
     config->writeEntry("SlideShowLoop", d->loopMode->isChecked());
     config->writeEntry("SlideShowPrintName", d->printName->isChecked());
+    config->writeEntry("SlideShowPrintDate", d->printDate->isChecked());
     config->writeEntry("SlideShowPrintComment", d->printComment->isChecked());
     config->sync();
 }
@@ -123,6 +130,7 @@ void SetupSlideShow::readSettings()
     d->startWithCurrent->setChecked(config->readBoolEntry("SlideShowStartCurrent", false));
     d->loopMode->setChecked(config->readBoolEntry("SlideShowLoop", false));
     d->printName->setChecked(config->readBoolEntry("SlideShowPrintName", true));
+    d->printDate->setChecked(config->readBoolEntry("SlideShowPrintDate", false));
     d->printComment->setChecked(config->readBoolEntry("SlideShowPrintComment", false));
 }
 
