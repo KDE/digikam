@@ -308,7 +308,7 @@ void SlideShow::updatePixmap()
 
             int offset = 20;
 
-            // Write the Comments.
+            // Display the Comments.
 
             if (d->settings.printComment)
             {
@@ -321,7 +321,7 @@ void SlideShow::updatePixmap()
                 p.drawText(10, height()-offset, d->settings.pictInfoMap[d->currentImage].comment);
             }   
 
-            // Write the creation date.
+            // Display the creation date.
 
             if (d->settings.printDate)
             {
@@ -329,13 +329,16 @@ void SlideShow::updatePixmap()
                 p.setPen(Qt::black);
                 for (int x=9; x<=11; x++)
                     for (int y=offset+1; y>=offset-1; y--)
-                        p.drawText(x, height()-y, d->settings.pictInfoMap[d->currentImage].photoInfo.dateTime.toString(Qt::LocalDate));
+                        p.drawText(x, height()-y, KGlobal::locale()->formatDateTime(d->settings.pictInfoMap[d->currentImage]
+                                                                                    .photoInfo.dateTime, true, true));
+
             
                 p.setPen(Qt::white);
-                p.drawText(10, height()-offset, d->settings.pictInfoMap[d->currentImage].photoInfo.dateTime.toString(Qt::LocalDate));
+                p.drawText(10, height()-offset, KGlobal::locale()->formatDateTime(d->settings.pictInfoMap[d->currentImage]
+                                                                                  .photoInfo.dateTime, true, true));
             }
 
-            // Write the image file name.
+            // Display the image file name.
 
             if (d->settings.printName)
             {
