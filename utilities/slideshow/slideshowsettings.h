@@ -66,12 +66,13 @@ public:
     
     SlideShowSettings()
     {
-        exifRotate   = true;
-        printName    = true;
-        printDate    = false;
-        printComment = false;
-        loop         = false;
-        delay        = 5;
+        exifRotate         = true;
+        printName          = true;
+        printDate          = false;
+        printComment       = false;
+        printApertureFocal = false;
+        loop               = false;
+        delay              = 5;
     };
     
     ~SlideShowSettings(){};
@@ -88,6 +89,9 @@ public:
 
     /** Print picture creation date during slide */
     bool printDate;
+
+    /** Print picture Aperture and Focal during slide */
+    bool printApertureFocal;
 
     /** Print picture comment during slide */
     bool printComment;

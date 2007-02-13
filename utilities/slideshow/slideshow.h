@@ -53,6 +53,7 @@ private:
     void loadPrevImage();
     void preloadNextImage();
     void updatePixmap();
+    void printInfoText(QPainter &p, int &offset, const QString& str);
 
 protected:
 

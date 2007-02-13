@@ -1005,23 +1005,25 @@ void ImageWindow::slotFilePrint()
 
 void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 {
+    DMetadata meta;
+
     if (!d->imageInfoList.isEmpty())
     {
         // We have started image editor from Album GUI. we get picture comments from database.
         for (ImageInfo *info = d->imageInfoList.first(); info; info = d->imageInfoList.next())
         {
             SlidePictureInfo pictInfo;
-            pictInfo.comment = info->caption();
+            meta.load(info->kurl().path());
+            pictInfo.comment            = info->caption();
+            pictInfo.photoInfo          = meta.getPhotographInformations();
+            // In case of dateTime extraction from metadata failed 
             pictInfo.photoInfo.dateTime = info->dateTime(); 
             settings.pictInfoMap.insert(info->kurl(), pictInfo);
-            pictInfo.photoInfo.dateTime = info->dateTime(); 
         }
     }
     else
     {
         // We have started image editor from Camera GUI. we get picture comments from metadata.
-        DMetadata meta;
-
         for (KURL::List::Iterator it = d->urlList.begin() ; it != d->urlList.end() ; ++it)
         {
             SlidePictureInfo pictInfo;

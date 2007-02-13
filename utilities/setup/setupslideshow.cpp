@@ -47,19 +47,21 @@ public:
 
     SetupSlideShowPriv()
     {
-        delayInput       = 0;
-        startWithCurrent = 0;
-        loopMode         = 0;
-        printName        = 0;
-        printComment     = 0;
-        printDate        = 0;
+        delayInput         = 0;
+        startWithCurrent   = 0;
+        loopMode           = 0;
+        printName          = 0;
+        printDate          = 0;
+        printApertureFocal = 0;
+        printComment       = 0;
     }
 
     QCheckBox    *startWithCurrent;
     QCheckBox    *loopMode;
     QCheckBox    *printName;
-    QCheckBox    *printComment;
     QCheckBox    *printDate;
+    QCheckBox    *printApertureFocal;
+    QCheckBox    *printComment;
     
     KIntNumInput *delayInput;
 };    
@@ -88,6 +90,9 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     d->printDate = new QCheckBox(i18n("Print image creation date"), parent);
     QWhatsThis::add( d->printDate, i18n("<p>Print image creation on bottom of screen."));
 
+    d->printApertureFocal = new QCheckBox(i18n("Print camera aperture and focal"), parent);
+    QWhatsThis::add( d->printApertureFocal, i18n("<p>Print camera aperture and focal on bottom of screen."));
+
     d->printComment = new QCheckBox(i18n("Print image comment"), parent);
     QWhatsThis::add( d->printComment, i18n("<p>Print image comment on bottom of screen."));
     
@@ -96,6 +101,7 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     layout->addWidget(d->loopMode);
     layout->addWidget(d->printName);
     layout->addWidget(d->printDate);
+    layout->addWidget(d->printApertureFocal);
     layout->addWidget(d->printComment);
     layout->addStretch();
     
@@ -117,6 +123,7 @@ void SetupSlideShow::applySettings()
     config->writeEntry("SlideShowLoop", d->loopMode->isChecked());
     config->writeEntry("SlideShowPrintName", d->printName->isChecked());
     config->writeEntry("SlideShowPrintDate", d->printDate->isChecked());
+    config->writeEntry("SlideShowPrintApertureFocal", d->printApertureFocal->isChecked());
     config->writeEntry("SlideShowPrintComment", d->printComment->isChecked());
     config->sync();
 }
@@ -131,6 +138,7 @@ void SetupSlideShow::readSettings()
     d->loopMode->setChecked(config->readBoolEntry("SlideShowLoop", false));
     d->printName->setChecked(config->readBoolEntry("SlideShowPrintName", true));
     d->printDate->setChecked(config->readBoolEntry("SlideShowPrintDate", false));
+    d->printApertureFocal->setChecked(config->readBoolEntry("SlideShowPrintApertureFocal", false));
     d->printComment->setChecked(config->readBoolEntry("SlideShowPrintComment", false));
 }
 

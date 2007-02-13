@@ -306,54 +306,60 @@ void SlideShow::updatePixmap()
                          (height()-pix.height())/2, pix,
                          0, 0, pix.width(), pix.height());
 
-            int offset = 20;
+            QString str;
+            PhotoInfoContainer photoInfo = d->settings.pictInfoMap[d->currentImage].photoInfo;
+            int offset = 0;
 
             // Display the Comments.
 
             if (d->settings.printComment)
             {
-                p.setPen(Qt::black);
-                for (int x=9; x<=11; x++)
-                    for (int y=offset+1; y>=offset-1; y--)
-                        p.drawText(x, height()-y, d->settings.pictInfoMap[d->currentImage].comment);
-            
-                p.setPen(Qt::white);
-                p.drawText(10, height()-offset, d->settings.pictInfoMap[d->currentImage].comment);
+                str = d->settings.pictInfoMap[d->currentImage].comment;
+
+                printInfoText(p, offset, str);
             }   
 
-            // Display the creation date.
+            // Display the Aperture and Focal.
+
+            if (d->settings.printApertureFocal)
+            {
+                str = QString::null;
+                if (!photoInfo.aperture.isEmpty())
+                    str = photoInfo.aperture;
+
+                if (photoInfo.focalLength35mm.isEmpty())
+                {
+                    if (!photoInfo.focalLength.isEmpty())
+                        str += QString(" / %1").arg(photoInfo.focalLength);
+                }
+                else
+                { 
+                    if (!photoInfo.focalLength.isEmpty())
+                        str += QString(" / %1 (35mm: %2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm);
+                    else
+                        str += QString(" / 35mm: %1)").arg(photoInfo.focalLength35mm);
+                }
+
+                printInfoText(p, offset, str);
+            }
+
+            // Display the Creation Date.
 
             if (d->settings.printDate)
             {
-                offset += 20;
-                p.setPen(Qt::black);
-                for (int x=9; x<=11; x++)
-                    for (int y=offset+1; y>=offset-1; y--)
-                        p.drawText(x, height()-y, KGlobal::locale()->formatDateTime(d->settings.pictInfoMap[d->currentImage]
-                                                                                    .photoInfo.dateTime, true, true));
-
-            
-                p.setPen(Qt::white);
-                p.drawText(10, height()-offset, KGlobal::locale()->formatDateTime(d->settings.pictInfoMap[d->currentImage]
-                                                                                  .photoInfo.dateTime, true, true));
+                str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
+                printInfoText(p, offset, str);
             }
 
-            // Display the image file name.
+            // Display the image File Name.
 
             if (d->settings.printName)
             {
-                offset += 20;
-                QString filename = QString("%1 (%2/%3)").arg(d->currentImage.filename())
-                                                        .arg(QString::number(d->fileIndex + 1))
-                                                        .arg(QString::number(d->settings.fileList.count()));
+                str = QString("%1 (%2/%3)").arg(d->currentImage.filename())
+                                           .arg(QString::number(d->fileIndex + 1))
+                                           .arg(QString::number(d->settings.fileList.count()));
             
-                p.setPen(Qt::black);
-                for (int x=9; x<=11; x++)
-                    for (int y=offset+1; y>=offset-1; y--)
-                        p.drawText(x, height()-y, filename);
-            
-                p.setPen(Qt::white);
-                p.drawText(10, height()-offset, filename);
+                printInfoText(p, offset, str);
             }
         }
         else
@@ -392,6 +398,21 @@ void SlideShow::updatePixmap()
     }
 
     p.end();
+}
+
+void SlideShow::printInfoText(QPainter &p, int &offset, const QString& str)
+{
+    if (!str.isEmpty())
+    {
+        offset += 20;
+        p.setPen(Qt::black);
+        for (int x=9; x<=11; x++)
+            for (int y=offset+1; y>=offset-1; y--)
+                p.drawText(x, height()-y, str);
+    
+        p.setPen(Qt::white);
+        p.drawText(10, height()-offset, str);
+    }
 }
 
 void SlideShow::paintEvent(QPaintEvent *)
