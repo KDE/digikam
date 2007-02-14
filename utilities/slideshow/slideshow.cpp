@@ -451,6 +451,59 @@ void SlideShow::paintEvent(QPaintEvent *)
            d->pixmap.height(), Qt::CopyROP, true);
 }
 
+void SlideShow::slotPause()
+{
+    d->timer->stop();
+
+    if (d->toolBar->isHidden())
+    {
+        int w = d->toolBar->width();
+        d->toolBar->move(d->deskWidth-w-1,0);
+        d->toolBar->show();
+    }
+}
+
+void SlideShow::slotPlay()
+{
+    d->toolBar->hide();
+    slotTimeOut();
+}
+
+void SlideShow::slotPrev()
+{
+    loadPrevImage();
+}
+
+void SlideShow::slotNext()
+{
+    loadNextImage();
+}
+
+void SlideShow::slotClose()
+{
+    close();    
+}
+
+void SlideShow::wheelEvent(QWheelEvent * e)
+{
+    // performance note: don't remove the clipping
+    int div = e->delta() / 120;
+    if ( div > 0 )
+    {
+        if ( div > 3 )
+            div = 3;
+        while ( div-- )
+            slotPrev();
+    }
+    else if ( div < 0 )
+    {
+        if ( div < -3 )
+            div = -3;
+        while ( div++ )
+            slotNext();
+    }
+}
+
 void SlideShow::keyPressEvent(QKeyEvent *event)
 {
     if (!event)
@@ -517,39 +570,6 @@ void SlideShow::slotMouseMoveTimeOut()
         return;
     
     setCursor(QCursor(Qt::BlankCursor));
-}
-
-void SlideShow::slotPause()
-{
-    d->timer->stop();
-
-    if (d->toolBar->isHidden())
-    {
-        int w = d->toolBar->width();
-        d->toolBar->move(d->deskWidth-w-1,0);
-        d->toolBar->show();
-    }
-}
-
-void SlideShow::slotPlay()
-{
-    d->toolBar->hide();
-    slotTimeOut();
-}
-
-void SlideShow::slotPrev()
-{
-    loadPrevImage();
-}
-
-void SlideShow::slotNext()
-{
-    loadNextImage();
-}
-
-void SlideShow::slotClose()
-{
-    close();    
 }
 
 }  // NameSpace Digikam

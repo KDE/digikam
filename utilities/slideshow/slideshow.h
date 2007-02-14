@@ -61,6 +61,7 @@ protected:
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
     void keyPressEvent(QKeyEvent *);
+    void wheelEvent(QWheelEvent *);
 
 private slots:
 
