@@ -68,6 +68,7 @@
 #include "rawfiles.h"
 #include "dcrawiface.h"
 #include "dmetadata.h"
+#include "jpegutils.h"
 #include "digikamthumbnail.h"
 #include "digikam_export.h"
 
@@ -76,7 +77,6 @@
 extern "C"
 {
 #include <unistd.h>
-#include <jpeglib.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
@@ -274,156 +274,9 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
     return false;
 }
 
-// -- JPEG Extraction ---------------------------------------------------------------------
-
-struct myjpeg_error_mgr : public jpeg_error_mgr
-{
-    jmp_buf setjmp_buffer;
-};
-
-extern "C"
-{
-    static void myjpeg_error_exit(j_common_ptr cinfo)
-    {
-        myjpeg_error_mgr* myerr = (myjpeg_error_mgr*) cinfo->err;
-
-        char buffer[JMSG_LENGTH_MAX];
-        (*cinfo->err->format_message)(cinfo, buffer);
-        kdWarning() << buffer << endl;
-        longjmp(myerr->setjmp_buffer, 1);
-    }
-}
-
 bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
 {
-    QString format = QImageIO::imageFormat(path);
-    if (format !="JPEG") return false;
-
-    FILE* inputFile=fopen(QFile::encodeName(path), "rb");
-    if(!inputFile)
-        return false;
-
-    struct jpeg_decompress_struct cinfo;
-    struct myjpeg_error_mgr       jerr;
-
-    // JPEG error handling - thanks to Marcus Meissner
-    cinfo.err             = jpeg_std_error(&jerr);
-    cinfo.err->error_exit = myjpeg_error_exit;
-
-    if (setjmp(jerr.setjmp_buffer)) 
-    {
-        jpeg_destroy_decompress(&cinfo);
-        fclose(inputFile);
-        return false;
-    }
-
-    jpeg_create_decompress(&cinfo);
-    jpeg_stdio_src(&cinfo, inputFile);
-    jpeg_read_header(&cinfo, true);
-
-    int imgSize = QMAX(cinfo.image_width, cinfo.image_height);
-
-    int scale=1;
-    while(cachedSize_*scale*2<=imgSize) 
-    {
-        scale*=2;
-    }
-    if(scale>8) scale=8;
-
-    cinfo.scale_num=1;
-    cinfo.scale_denom=scale;
-
-    switch (cinfo.jpeg_color_space)
-    {
-        case JCS_UNKNOWN:
-            break;
-        case JCS_GRAYSCALE:
-        case JCS_RGB:
-        case JCS_YCbCr:
-            cinfo.out_color_space = JCS_RGB;
-            break;
-        case JCS_CMYK:
-        case JCS_YCCK:
-            cinfo.out_color_space = JCS_CMYK;
-            break;
-    }
-
-    jpeg_start_decompress(&cinfo);
-
-    QImage img;
-
-    // We only take RGB with 1 or 3 components, or CMYK with 4 components
-    if (!(
-           (cinfo.out_color_space == JCS_RGB  && (cinfo.output_components == 3 || cinfo.output_components == 1))
-        || (cinfo.out_color_space == JCS_CMYK &&  cinfo.output_components == 4)
-        ))
-    {
-        jpeg_destroy_decompress(&cinfo);
-        fclose(inputFile);
-        return false;
-    }
-
-    switch(cinfo.output_components) 
-    {
-        case 3:
-        case 4:
-            img.create( cinfo.output_width, cinfo.output_height, 32 );
-            break;
-        case 1: // B&W image
-            img.create( cinfo.output_width, cinfo.output_height, 8, 256 );
-            for (int i = 0 ; i < 256 ; i++)
-                img.setColor(i, qRgb(i, i, i));
-            break;
-    }
-
-    uchar** lines = img.jumpTable();
-    while (cinfo.output_scanline < cinfo.output_height)
-        jpeg_read_scanlines(&cinfo, lines + cinfo.output_scanline, cinfo.output_height);
-
-    jpeg_finish_decompress(&cinfo);
-
-    // Expand 24->32 bpp
-    if ( cinfo.output_components == 3 )
-    {
-        for (uint j=0; j<cinfo.output_height; j++) 
-        {
-            uchar *in = img.scanLine(j) + cinfo.output_width*3;
-            QRgb *out = (QRgb*)( img.scanLine(j) );
-
-            for (uint i=cinfo.output_width; i--; ) 
-            {
-                in -= 3;
-                out[i] = qRgb(in[0], in[1], in[2]);
-            }
-        }
-    }
-    else if ( cinfo.output_components == 4 )
-    {
-        // CMYK conversion
-        for (uint j=0; j<cinfo.output_height; j++)
-        {
-            uchar *in = img.scanLine(j) + cinfo.output_width*4;
-            QRgb *out = (QRgb*)( img.scanLine(j) );
-
-            for (uint i=cinfo.output_width; i--; )
-            {
-                in -= 4;
-                int k = in[3];
-                out[i] = qRgb(k * in[0] / 255, k * in[1] / 255, k * in[2] / 255);
-            }
-        }
-    }
-
-    int newMax = QMAX(cinfo.output_width, cinfo.output_height);
-    int newx = cachedSize_*cinfo.output_width / newMax;
-    int newy = cachedSize_*cinfo.output_height / newMax;
-
-    jpeg_destroy_decompress(&cinfo);
-    fclose(inputFile);
-
-    image = img.smoothScale(newx,newy);
-
-    return true;
+    return Digikam::loadJPEGScaled(image, path, cachedSize_);
 }
 
 void kio_digikamthumbnailProtocol::exifRotate(const QString& filePath, QImage& thumb)

@@ -108,6 +108,141 @@ static void jpegutils_jpeg_output_message(j_common_ptr cinfo)
 #endif
 }
 
+bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
+{
+    QString format = QImageIO::imageFormat(path);
+    if (format !="JPEG") return false;
+
+    FILE* inputFile=fopen(QFile::encodeName(path), "rb");
+    if(!inputFile)
+        return false;
+
+    struct jpeg_decompress_struct cinfo;
+    struct jpegutils_jpeg_error_mgr       jerr;
+
+    // JPEG error handling - thanks to Marcus Meissner
+    cinfo.err                 = jpeg_std_error(&jerr);
+    cinfo.err->error_exit     = jpegutils_jpeg_error_exit;
+    cinfo.err->emit_message   = jpegutils_jpeg_emit_message;
+    cinfo.err->output_message = jpegutils_jpeg_output_message;
+
+    if (setjmp(jerr.setjmp_buffer)) 
+    {
+        jpeg_destroy_decompress(&cinfo);
+        fclose(inputFile);
+        return false;
+    }
+
+    jpeg_create_decompress(&cinfo);
+    jpeg_stdio_src(&cinfo, inputFile);
+    jpeg_read_header(&cinfo, true);
+
+    int imgSize = QMAX(cinfo.image_width, cinfo.image_height);
+
+    // libjpeg supports 1/1, 1/2, 1/4, 1/8
+    int scale=1;
+    while(maximumSize*scale*2<=imgSize)
+    {
+        scale*=2;
+    }
+    if(scale>8) scale=8;
+
+    cinfo.scale_num=1;
+    cinfo.scale_denom=scale;
+
+    switch (cinfo.jpeg_color_space)
+    {
+        case JCS_UNKNOWN:
+            break;
+        case JCS_GRAYSCALE:
+        case JCS_RGB:
+        case JCS_YCbCr:
+            cinfo.out_color_space = JCS_RGB;
+            break;
+        case JCS_CMYK:
+        case JCS_YCCK:
+            cinfo.out_color_space = JCS_CMYK;
+            break;
+    }
+
+    jpeg_start_decompress(&cinfo);
+
+    QImage img;
+
+    // We only take RGB with 1 or 3 components, or CMYK with 4 components
+    if (!(
+           (cinfo.out_color_space == JCS_RGB  && (cinfo.output_components == 3 || cinfo.output_components == 1))
+        || (cinfo.out_color_space == JCS_CMYK &&  cinfo.output_components == 4)
+        ))
+    {
+        jpeg_destroy_decompress(&cinfo);
+        fclose(inputFile);
+        return false;
+    }
+
+    switch(cinfo.output_components) 
+    {
+        case 3:
+        case 4:
+            img.create( cinfo.output_width, cinfo.output_height, 32 );
+            break;
+        case 1: // B&W image
+            img.create( cinfo.output_width, cinfo.output_height, 8, 256 );
+            for (int i = 0 ; i < 256 ; i++)
+                img.setColor(i, qRgb(i, i, i));
+            break;
+    }
+
+    uchar** lines = img.jumpTable();
+    while (cinfo.output_scanline < cinfo.output_height)
+        jpeg_read_scanlines(&cinfo, lines + cinfo.output_scanline, cinfo.output_height);
+
+    jpeg_finish_decompress(&cinfo);
+
+    // Expand 24->32 bpp
+    if ( cinfo.output_components == 3 )
+    {
+        for (uint j=0; j<cinfo.output_height; j++) 
+        {
+            uchar *in = img.scanLine(j) + cinfo.output_width*3;
+            QRgb *out = (QRgb*)( img.scanLine(j) );
+
+            for (uint i=cinfo.output_width; i--; ) 
+            {
+                in -= 3;
+                out[i] = qRgb(in[0], in[1], in[2]);
+            }
+        }
+    }
+    else if ( cinfo.output_components == 4 )
+    {
+        // CMYK conversion
+        for (uint j=0; j<cinfo.output_height; j++)
+        {
+            uchar *in = img.scanLine(j) + cinfo.output_width*4;
+            QRgb *out = (QRgb*)( img.scanLine(j) );
+
+            for (uint i=cinfo.output_width; i--; )
+            {
+                in -= 4;
+                int k = in[3];
+                out[i] = qRgb(k * in[0] / 255, k * in[1] / 255, k * in[2] / 255);
+            }
+        }
+    }
+
+    int newMax = QMAX(cinfo.output_width, cinfo.output_height);
+    int newx = maximumSize*cinfo.output_width / newMax;
+    int newy = maximumSize*cinfo.output_height / newMax;
+
+    jpeg_destroy_decompress(&cinfo);
+    fclose(inputFile);
+
+    image = img.smoothScale(newx,newy);
+
+    return true;
+}
+
 bool exifRotate(const QString& file, const QString& documentName)
 {
     QFileInfo fi(file);

@@ -26,10 +26,12 @@
 // Qt includes.
 
 #include <qstring.h>
+#include <qimage.h>
 
 namespace Digikam
 {
 
+bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize);
 bool exifRotate(const QString& file, const QString& documentName);
 bool jpegConvert(const QString& src, const QString& dest, const QString& documentName, 
                  const QString& format=QString("PNG"));

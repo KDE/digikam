@@ -31,6 +31,7 @@
 #include "ddebug.h"
 #include "dmetadata.h"
 #include "dcrawiface.h"
+#include "jpegutils.h"
 #include "previewloadthread.h"
 #include "previewtask.h"
 
@@ -137,8 +138,14 @@ void PreviewLoadingTask::execute()
     {
         // Try to extract Exif/Iptc preview.
         if ( !loadImagePreview(qimage, m_loadingDescription.filePath) )
-            // Try to load with Qt/KDE.
-            qimage.load(m_loadingDescription.filePath);
+        {
+            // Try to load a JPEG with the fast scale-before-decoding method
+            if (!loadJPEGScaled(qimage, m_loadingDescription.filePath, size))
+            {
+                // Try to load with Qt/KDE.
+                qimage.load(m_loadingDescription.filePath);
+            }
+        }
     }
 
     if (qimage.isNull())
