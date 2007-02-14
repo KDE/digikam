@@ -1013,9 +1013,15 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
         for (ImageInfo *info = d->imageInfoList.first(); info; info = d->imageInfoList.next())
         {
             SlidePictureInfo pictInfo;
-            meta.load(info->kurl().path());
-            pictInfo.comment            = info->caption();
-            pictInfo.photoInfo          = meta.getPhotographInformations();
+            pictInfo.comment = info->caption();
+
+            // Perform optimizations: only read pictures metadata if necessary.
+            if (settings.printApertureFocal || settings.printExpoSensitivity)
+            {
+                meta.load(info->kurl().path());
+                pictInfo.photoInfo = meta.getPhotographInformations();
+            }
+
             // In case of dateTime extraction from metadata failed 
             pictInfo.photoInfo.dateTime = info->dateTime(); 
             settings.pictInfoMap.insert(info->kurl(), pictInfo);
