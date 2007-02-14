@@ -769,14 +769,15 @@ void DigikamApp::setupActions()
 #endif
 
     d->slideShowAction = new KActionMenu(i18n("Slide Show"), "slideshow",
-                                    actionCollection(), "slideshow");
+                                         actionCollection(), "slideshow");
 
     d->slideShowAction->setDelayed(false);
 
-    KAction *ssAction = new KAction(i18n("All"), 0, Key_F9,
-                                    d->view, SLOT(slotSlideShowAll()),
-                                    actionCollection(), "slideshow_all");
-    d->slideShowAction->insert(ssAction);
+    d->slideShowAllAction = new KAction(i18n("All"), 0, Key_F9,
+                                d->view, SLOT(slotSlideShowAll()),
+                                actionCollection(), "slideshow_all");
+    d->slideShowAction->insert(d->slideShowAllAction);
+
     d->slideShowSelectionAction = new KAction(i18n("Selection"), 0, ALT+Key_F9,
                                               d->view, 
                                               SLOT(slotSlideShowSelection()),
@@ -784,6 +785,12 @@ void DigikamApp::setupActions()
                                               "slideshow_selected");
     d->slideShowAction->insert(d->slideShowSelectionAction);
 
+    d->slideShowRecursiveAction = new KAction(i18n("Recursive"), 0, SHIFT+Key_F9,
+                                              d->view, 
+                                              SLOT(slotSlideShowRecursive()),
+                                              actionCollection(), 
+                                              "slideshow_recursive");
+    d->slideShowAction->insert(d->slideShowRecursiveAction);
 
     d->quitAction = KStdAction::quit(this,
                                    SLOT(slotExit()),

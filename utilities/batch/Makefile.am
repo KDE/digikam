@@ -11,7 +11,7 @@ INCLUDES = -I$(top_srcdir)/digikam/digikam \
 noinst_LTLIBRARIES = libbatch.la 
 
 libbatch_la_SOURCES = batchthumbsgenerator.cpp batchalbumssyncmetadata.cpp \
-	              imageinfojob.cpp batchsyncmetadata.cpp 
+	              imageinfojob.cpp imageinfoalbumsjob.cpp batchsyncmetadata.cpp 
 
 libbatch_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 

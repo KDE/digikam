@@ -100,6 +100,9 @@ public:
         thumbSizeMinusAction                 = 0;
         fullScreenAction                     = 0;
         slideShowAction                      = 0;
+        slideShowAllAction                   = 0;
+        slideShowSelectionAction             = 0;
+        slideShowRecursiveAction             = 0;
         rating0Star                          = 0;
         rating1Star                          = 0;
         rating2Star                          = 0;
@@ -190,7 +193,9 @@ public:
     // View Actions
     KAction               *fullScreenAction;
     KActionMenu           *slideShowAction;
+    KAction               *slideShowAllAction;
     KAction               *slideShowSelectionAction;
+    KAction               *slideShowRecursiveAction;
     KAction               *thumbSizePlusAction;
     KAction               *thumbSizeMinusAction;
     KSelectAction         *imageSortAction;

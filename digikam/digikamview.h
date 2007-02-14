@@ -77,6 +77,9 @@ public slots:
     // View Action slots
     void slotThumbSizePlus();
     void slotThumbSizeMinus();
+    void slotSlideShowAll();
+    void slotSlideShowSelection();
+    void slotSlideShowRecursive();
 
     // Album action slots
     void slotNewAlbum();
@@ -106,8 +109,6 @@ public slots:
     void slotNewAdvancedSearch();
 
     // Image action slots
-    void slotSlideShowAll();
-    void slotSlideShowSelection();
     void slotImagePreview();
     void slotImageEdit();
     void slotImageExifOrientation(int orientation);
@@ -151,6 +152,7 @@ private slots:
     void slotToggledToPreviewMode(bool);
     void slotDispatchImageSelected();
     void slotImageCopyResult(KIO::Job* job);
+    void slotItemsInfoFromAlbums(const ImageInfoList&);
 
     void slotLeftSidebarChangedTab(QWidget* w);
 

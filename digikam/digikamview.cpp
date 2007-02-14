@@ -63,6 +63,7 @@
 #include "slideshow.h"
 #include "sidebar.h"
 #include "imagepropertiessidebardb.h"
+#include "imageinfoalbumsjob.h"
 #include "datefolderview.h"
 #include "tagfolderview.h"
 #include "searchfolderview.h"
@@ -211,6 +212,12 @@ void DigikamView::setupConnections()
 
     connect(d->parent, SIGNAL(signalPasteAlbumItemsSelection()),
             d->iconView, SLOT(slotPaste()));
+
+    connect(this, SIGNAL(signalProgressBarMode(int, const QString&)),
+            d->parent, SLOT(slotProgressBarMode(int, const QString&)));
+
+    connect(this, SIGNAL(signalProgressValue(int)),
+            d->parent, SLOT(slotProgressValue(int)));
                         
     // -- AlbumManager connections --------------------------------
 
@@ -1085,6 +1092,33 @@ void DigikamView::slotSlideShowSelection()
     slideShow(infoList);
 }
 
+void DigikamView::slotSlideShowRecursive()
+{
+    Album *album = AlbumManager::instance()->currentAlbum();
+    if(album)
+    {
+        AlbumList albumList;
+        albumList.append(album);
+        AlbumIterator it(album);
+        while (it.current())
+        {
+            albumList.append(*it);
+            ++it;
+        }
+
+        ImageInfoAlbumsJob *job = new ImageInfoAlbumsJob;
+        connect(job, SIGNAL(signalCompleted(const ImageInfoList&)),
+                this, SLOT(slotItemsInfoFromAlbums(const ImageInfoList&)));
+        job->allItemsFromAlbums(albumList);       
+    }
+}
+
+void DigikamView::slotItemsInfoFromAlbums(const ImageInfoList& infoList)
+{
+    ImageInfoList list = infoList; 
+    slideShow(list);
+}
+
 void DigikamView::slideShow(ImageInfoList &infoList)
 {
     KConfig* config = kapp->config();
@@ -1100,8 +1134,9 @@ void DigikamView::slideShow(ImageInfoList &infoList)
     SlideShowSettings settings;
     settings.exifRotate = AlbumSettings::instance()->getExifRotate();
 
-    for (ImageInfo *info = infoList.first(); info; info = infoList.next())
+    for (ImageInfoList::iterator it = infoList.begin(); it != infoList.end(); ++it)
     {
+        ImageInfo *info = *it;
         settings.fileList.append(info->kurl());
         SlidePictureInfo pictInfo;
         meta.load(info->kurl().path());
@@ -1127,7 +1162,11 @@ void DigikamView::slideShow(ImageInfoList &infoList)
 
     SlideShow *slide = new SlideShow(settings);
     if (startWithCurrent)
-        slide->setCurrent(dynamic_cast<AlbumIconItem*>(d->iconView->currentItem())->imageInfo()->kurl());
+    {
+        AlbumIconItem* current = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
+        if (current) 
+            slide->setCurrent(current->imageInfo()->kurl());
+    }
 
     slide->show();
 }
