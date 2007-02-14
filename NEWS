@@ -499,6 +499,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 *** 0.9.1-Beta2 *********************************************************
 
 289 ==> 141035 : Advanced Search gives error when trying to search by rating.
-290 ==> 
+290 ==> 116609 : Allow slideshow to be recursive.
+291 ==>  
 
 ---------------------------------------------------------------------------------------------------- 
