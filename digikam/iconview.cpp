@@ -1267,7 +1267,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
     if (!firstItem())
         return;
 
-    switch ( e->key() ) 
+    switch ( e->key() )
     {
         case Key_Home: 
         {
@@ -1307,7 +1307,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
             }
             break;
         }
-    
+
         case Key_Right: 
         {
             IconItem *item = 0;
@@ -1669,7 +1669,46 @@ void IconView::keyPressEvent(QKeyEvent* e)
             handled = true;
             break;
         }
-        
+
+        // Key_Space is used as a global shortcut in DigikamApp.
+        // Ctrl+Space comes through, Shift+Space is filtered out.
+        case Key_Space:
+        {
+            if (d->currItem)
+            {
+                if ( (e->state() & Qt::ControlButton) || (e->state() & Qt::ShiftButton) )
+                {
+                    d->currItem->setSelected(!d->currItem->isSelected(), false);
+                }
+                else
+                {
+                    if (!d->currItem->isSelected())
+                        d->currItem->setSelected(true, true);
+                }
+                handled = true;
+            }
+            break;
+        }
+
+        case Key_Menu:
+        {
+            if (d->currItem)
+            {
+                if (!d->currItem->isSelected())
+                    d->currItem->setSelected(true, false);
+
+                ensureItemVisible(d->currItem);
+
+                QRect r(itemRect());
+                int w = r.width();
+                int h = r.height();
+                QPoint p(d->currItem->x() + w / 2, d->currItem->y() + h / 2);
+
+                emit signalRightButtonClicked(d->currItem, mapToGlobal(contentsToViewport(p)));
+            }
+            break;
+        }
+
         default:
             break;
     }
