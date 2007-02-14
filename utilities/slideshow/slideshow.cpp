@@ -486,22 +486,22 @@ void SlideShow::slotClose()
 
 void SlideShow::wheelEvent(QWheelEvent * e)
 {
-    // performance note: don't remove the clipping
-    int div = e->delta() / 120;
-    if ( div > 0 )
-    {
-        if ( div > 3 )
-            div = 3;
-        while ( div-- )
-            slotPrev();
-    }
-    else if ( div < 0 )
-    {
-        if ( div < -3 )
-            div = -3;
-        while ( div++ )
-            slotNext();
-    }
+    if (e->delta() < 0)
+        slotNext();
+
+    if (e->delta() > 0 && d->fileIndex-1 >= 0)
+        slotPrev();
+}
+
+void SlideShow::mousePressEvent(QMouseEvent *e)
+{
+    if (d->endOfShow)
+        close();
+
+    if (e->button() == Qt::LeftButton)
+        slotNext();
+    else if (e->button() == Qt::RightButton && d->fileIndex-1 >= 0)
+        slotPrev();
 }
 
 void SlideShow::keyPressEvent(QKeyEvent *event)
@@ -510,12 +510,6 @@ void SlideShow::keyPressEvent(QKeyEvent *event)
         return;
 
     d->toolBar->keyPressEvent(event);
-}
-
-void SlideShow::mousePressEvent(QMouseEvent *)
-{
-    if (d->endOfShow)
-        close();
 }
 
 void SlideShow::mouseMoveEvent(QMouseEvent *e)
