@@ -66,6 +66,7 @@
 #include "datefolderview.h"
 #include "tagfolderview.h"
 #include "searchfolderview.h"
+#include "statusprogressbar.h"
 #include "tagfilterview.h"
 #include "thumbnailsize.h"
 #include "dio.h"
@@ -920,70 +921,6 @@ void DigikamView::slotToggledToPreviewMode(bool t)
     d->parent->toggledToPreviewMode(t);
 }
 
-void DigikamView::slideShow(ImageInfoList &infoList)
-{
-    KConfig* config = kapp->config();
-    config->setGroup("ImageViewer Settings");
-    bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
-
-    DMetadata         meta;
-    SlideShowSettings settings;
-    settings.exifRotate = AlbumSettings::instance()->getExifRotate();
-
-    for (ImageInfo *info = infoList.first(); info; info = infoList.next())
-    {
-        settings.fileList.append(info->kurl());
-        SlidePictureInfo pictInfo;
-        meta.load(info->kurl().path());
-        pictInfo.comment            = info->caption();
-        pictInfo.photoInfo          = meta.getPhotographInformations();
-        // In case of dateTime extraction from metadata failed 
-        pictInfo.photoInfo.dateTime = info->dateTime(); 
-        settings.pictInfoMap.insert(info->kurl(), pictInfo);
-    }
-
-    settings.delay                = config->readNumEntry("SlideShowDelay", 5) * 1000;
-    settings.printName            = config->readBoolEntry("SlideShowPrintName", true);
-    settings.printDate            = config->readBoolEntry("SlideShowPrintDate", false);
-    settings.printApertureFocal   = config->readBoolEntry("SlideShowPrintApertureFocal", false);
-    settings.printExpoSensitivity = config->readBoolEntry("SlideShowPrintExpoSensitivity", false);
-    settings.printComment         = config->readBoolEntry("SlideShowPrintComment", false);
-    settings.loop                 = config->readBoolEntry("SlideShowLoop", false);
-
-    SlideShow *slide = new SlideShow(settings);
-    if (startWithCurrent)
-        slide->setCurrent(dynamic_cast<AlbumIconItem*>(d->iconView->currentItem())->imageInfo()->kurl());
-
-    slide->show();
-}
-
-void DigikamView::slotSlideShowAll()
-{
-    ImageInfoList infoList;
-    AlbumIconItem* item = dynamic_cast<AlbumIconItem*>(d->iconView->firstItem());
-    while (item) 
-    {
-        infoList.append(item->imageInfo());
-        item = dynamic_cast<AlbumIconItem*>(item->nextItem());
-    }
-
-    slideShow(infoList);
-}
-
-void DigikamView::slotSlideShowSelection()
-{
-    ImageInfoList infoList;
-    AlbumIconItem* item = dynamic_cast<AlbumIconItem*>(d->iconView->firstItem());
-    while (item) 
-    {
-        if (item->isSelected())
-            infoList.append(item->imageInfo());
-        item = dynamic_cast<AlbumIconItem*>(item->nextItem());
-    }
-
-    slideShow(infoList);
-}
-
 void DigikamView::slotImageEdit()
 {
     AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
@@ -1119,6 +1056,80 @@ void DigikamView::slotAssignRatingFourStar()
 void DigikamView::slotAssignRatingFiveStar()
 {
     d->iconView->slotAssignRating(5);
+}
+
+void DigikamView::slotSlideShowAll()
+{
+    ImageInfoList infoList;
+    AlbumIconItem* item = dynamic_cast<AlbumIconItem*>(d->iconView->firstItem());
+    while (item) 
+    {
+        infoList.append(item->imageInfo());
+        item = dynamic_cast<AlbumIconItem*>(item->nextItem());
+    }
+
+    slideShow(infoList);
+}
+
+void DigikamView::slotSlideShowSelection()
+{
+    ImageInfoList infoList;
+    AlbumIconItem* item = dynamic_cast<AlbumIconItem*>(d->iconView->firstItem());
+    while (item) 
+    {
+        if (item->isSelected())
+            infoList.append(item->imageInfo());
+        item = dynamic_cast<AlbumIconItem*>(item->nextItem());
+    }
+
+    slideShow(infoList);
+}
+
+void DigikamView::slideShow(ImageInfoList &infoList)
+{
+    KConfig* config = kapp->config();
+    config->setGroup("ImageViewer Settings");
+    bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
+
+    int     i = 0;
+    float cnt = (float)infoList.count();
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+                               i18n("Prepare image data for slideshow. Please wait..."));
+
+    DMetadata         meta;
+    SlideShowSettings settings;
+    settings.exifRotate = AlbumSettings::instance()->getExifRotate();
+
+    for (ImageInfo *info = infoList.first(); info; info = infoList.next())
+    {
+        settings.fileList.append(info->kurl());
+        SlidePictureInfo pictInfo;
+        meta.load(info->kurl().path());
+        pictInfo.comment            = info->caption();
+        pictInfo.photoInfo          = meta.getPhotographInformations();
+        // In case of dateTime extraction from metadata failed 
+        pictInfo.photoInfo.dateTime = info->dateTime(); 
+        settings.pictInfoMap.insert(info->kurl(), pictInfo);
+
+        emit signalProgressValue((int)((i++/cnt)*100.0));
+        kapp->processEvents();
+    }
+
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);   
+
+    settings.delay                = config->readNumEntry("SlideShowDelay", 5) * 1000;
+    settings.printName            = config->readBoolEntry("SlideShowPrintName", true);
+    settings.printDate            = config->readBoolEntry("SlideShowPrintDate", false);
+    settings.printApertureFocal   = config->readBoolEntry("SlideShowPrintApertureFocal", false);
+    settings.printExpoSensitivity = config->readBoolEntry("SlideShowPrintExpoSensitivity", false);
+    settings.printComment         = config->readBoolEntry("SlideShowPrintComment", false);
+    settings.loop                 = config->readBoolEntry("SlideShowLoop", false);
+
+    SlideShow *slide = new SlideShow(settings);
+    if (startWithCurrent)
+        slide->setCurrent(dynamic_cast<AlbumIconItem*>(d->iconView->currentItem())->imageInfo()->kurl());
+
+    slide->show();
 }
 
 }  // namespace Digikam
