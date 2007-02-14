@@ -407,7 +407,7 @@ private:
  *  AlbumIterator it(album);
  *  while ( it.current() )
  *  {
- *     kdDebug() << "Album: " << it.current() ->getTitle() << endl;
+ *     DDebug() << "Album: " << it.current() ->getTitle() << endl;
  *     ++it;
  *  }
  * \endcode
