@@ -22,7 +22,8 @@ protocoldir = $(kde_servicesdir)
 kio_digikamthumbnail_la_SOURCES = digikamthumbnail.cpp 
 
 kio_digikamthumbnail_la_LIBADD  = $(LIB_KIO) $(LIBJPEG) $(LIBPNG) $(EXIV2_LIBS) \
-	                          $(top_builddir)/digikam/libs/dimg/libdimg.la 
+	                          $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
+	                          $(top_builddir)/digikam/libs/dimg/libdimg.la
 
 kio_digikamthumbnail_la_LDFLAGS = -module -avoid-version $(KDE_PLUGIN) $(all_libraries)	                          
 
