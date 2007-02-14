@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-06-15
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date   : 2004-06-15
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
+ * Copyright 2004-2005 by Renchi Raju
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -407,7 +407,7 @@ private:
  *  AlbumIterator it(album);
  *  while ( it.current() )
  *  {
- *     DDebug() << "Album: " << it.current() ->getTitle() << endl;
+ *     DDebug() << "Album: " << it.current()->title() << endl;
  *     ++it;
  *  }
  * \endcode

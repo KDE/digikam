@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-06-15
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date   : 2004-06-15
  * Description :
  *
- * Copyright 2004 by Renchi Raju
+ * Copyright 2004-2005 by Renchi Raju
 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,16 +34,15 @@ namespace Digikam
 
 Album::Album(Album::Type type, int id, bool root)
 {
-    m_parent = 0;
-    m_next   = 0;
-    m_prev   = 0;
+    m_parent     = 0;
+    m_next       = 0;
+    m_prev       = 0;
     m_firstChild = 0;
     m_lastChild  = 0;
     m_clearing   = false;
-
-    m_type  = type;
-    m_id    = id;
-    m_root  = root;
+    m_type       = type;
+    m_id         = id;
+    m_root       = root;
 }
 
 Album::~Album()
@@ -94,17 +93,17 @@ void Album::insertChild(Album* child)
 
     if (!m_firstChild)
     {
-        m_firstChild = child;
-        m_lastChild  = child;
+        m_firstChild  = child;
+        m_lastChild   = child;
         child->m_next = 0;
         child->m_prev = 0;
     }
     else
     {
         m_lastChild->m_next = child;
-        child->m_prev  = m_lastChild;
-        child->m_next  = 0;
-        m_lastChild    = child;
+        child->m_prev       = m_lastChild;
+        child->m_next       = 0;
+        m_lastChild         = child;
     }
 }
 
@@ -154,25 +153,24 @@ void Album::clear()
 
     m_firstChild = 0;
     m_lastChild  = 0;
-
-    m_clearing = false;
+    m_clearing   = false;
 }
 
 int Album::globalID() const
 {
     switch (m_type)
     {
-    case (PHYSICAL):
-        return 10000 + m_id;
-    case(TAG):
-        return 20000 + m_id;
-    case(DATE):
-        return 30000 + m_id;
-    case(SEARCH):
-        return 40000 + m_id;
-    default:
-        DError() << "Unknown album type" << endl;
-        return -1;
+        case (PHYSICAL):
+            return 10000 + m_id;
+        case(TAG):
+            return 20000 + m_id;
+        case(DATE):
+            return 30000 + m_id;
+        case(SEARCH):
+            return 40000 + m_id;
+        default:
+            DError() << "Unknown album type" << endl;
+            return -1;
     }
 }
 
@@ -240,17 +238,16 @@ bool Album::isAncestorOf(Album* album) const
 // ------------------------------------------------------------------------------
 
 PAlbum::PAlbum(const QString& title, int id,  bool root)
-    : Album(Album::PHYSICAL, id, root)
+      : Album(Album::PHYSICAL, id, root)
 {
     setTitle(title);
     m_caption    = "";
     m_collection = "";
-    m_date = QDate::currentDate();
+    m_date       = QDate::currentDate();
 }
 
 PAlbum::~PAlbum()
 {
-
 }
 
 void PAlbum::setCaption(const QString& caption)
@@ -349,7 +346,7 @@ QString PAlbum::folderPath() const
 // --------------------------------------------------------------------------
 
 TAlbum::TAlbum(const QString& title, int id, bool root)
-    : Album(Album::TAG, id, root)
+      : Album(Album::TAG, id, root)
 {
     setTitle(title);
 }
@@ -416,8 +413,8 @@ QString TAlbum::icon() const
 int DAlbum::m_uniqueID = 0;
 
 DAlbum::DAlbum(const QDate& date, bool root)
-    : Album(Album::DATE, root ? 0 : ++m_uniqueID, root),
-      m_date(date)
+      : Album(Album::DATE, root ? 0 : ++m_uniqueID, root),
+              m_date(date)
 {
 }
 
@@ -444,15 +441,14 @@ KURL DAlbum::kurl() const
 // --------------------------------------------------------------------------
 
 SAlbum::SAlbum(int id, const KURL& url, bool simple, bool root)
-    : Album(Album::SEARCH, id, root),
-      m_kurl(url), m_simple(simple)
+      : Album(Album::SEARCH, id, root),
+              m_kurl(url), m_simple(simple)
 {
     setTitle(url.queryItem("name"));
 }
 
 SAlbum::~SAlbum()
 {
-
 }
 
 KURL SAlbum::kurl() const
@@ -517,4 +513,3 @@ Album* AlbumIterator::current() const
 }
 
 }  // namespace Digikam
-
