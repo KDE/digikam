@@ -59,9 +59,11 @@ public:
         toolBar        = 0;
         fileIndex      = -1;
         endOfShow      = false;
+        pause          = false;
     }
 
     bool               endOfShow;
+    bool               pause;
 
     int                deskX;
     int                deskY;
@@ -262,7 +264,7 @@ void SlideShow::slotGotImagePreview(const LoadingDescription&, const QImage& pre
     updatePixmap();
     update();
 
-    if (!d->endOfShow)
+    if (!d->endOfShow && !d->pause)
     {
         d->timer->start(d->settings.delay, true);
         preloadNextImage();
@@ -454,6 +456,7 @@ void SlideShow::paintEvent(QPaintEvent *)
 void SlideShow::slotPause()
 {
     d->timer->stop();
+    d->pause = true;
 
     if (d->toolBar->isHidden())
     {
@@ -466,6 +469,7 @@ void SlideShow::slotPause()
 void SlideShow::slotPlay()
 {
     d->toolBar->hide();
+    d->pause = false;
     slotTimeOut();
 }
 
@@ -487,10 +491,18 @@ void SlideShow::slotClose()
 void SlideShow::wheelEvent(QWheelEvent * e)
 {
     if (e->delta() < 0)
+    {
+        d->timer->stop();
+        d->pause = true;
         slotNext();
+    }
 
     if (e->delta() > 0 && d->fileIndex-1 >= 0)
+    {
+        d->timer->stop();
+        d->pause = true;
         slotPrev();
+    }
 }
 
 void SlideShow::mousePressEvent(QMouseEvent *e)
@@ -499,9 +511,17 @@ void SlideShow::mousePressEvent(QMouseEvent *e)
         close();
 
     if (e->button() == Qt::LeftButton)
+    {
+        d->timer->stop();
+        d->pause = true;
         slotNext();
+    }
     else if (e->button() == Qt::RightButton && d->fileIndex-1 >= 0)
+    {
+        d->timer->stop();
+        d->pause = true;
         slotPrev();
+    }
 }
 
 void SlideShow::keyPressEvent(QKeyEvent *event)
