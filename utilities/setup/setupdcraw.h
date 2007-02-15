@@ -25,12 +25,16 @@
 
 #include <qwidget.h>
 
+// Local Includes.
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class SetupDcrawPriv;
 
-class SetupDcraw : public QWidget
+class DIGIKAM_EXPORT SetupDcraw : public QWidget
 {
     Q_OBJECT
     

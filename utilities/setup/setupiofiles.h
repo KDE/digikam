@@ -25,12 +25,16 @@
 
 #include <qwidget.h>
 
+// Local Includes.
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class SetupIOFilesPriv;
 
-class SetupIOFiles : public QWidget
+class DIGIKAM_EXPORT SetupIOFiles : public QWidget
 {
     Q_OBJECT
     

@@ -25,12 +25,16 @@
 
 #include <qwidget.h>
 
+// Local Includes.
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class SetupSlideShowPriv;
 
-class SetupSlideShow : public QWidget
+class DIGIKAM_EXPORT SetupSlideShow : public QWidget
 {
     Q_OBJECT
     

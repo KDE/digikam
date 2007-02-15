@@ -26,12 +26,16 @@
 #include <qwidget.h>
 #include <qstring.h>
 
+// Local Includes.
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class SetupImgPluginsPriv;
 
-class SetupImgPlugins : public QWidget
+class DIGIKAM_EXPORT SetupImgPlugins : public QWidget
 {
     Q_OBJECT
     

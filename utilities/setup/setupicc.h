@@ -1,10 +1,10 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net> 
  *          F.J. Cruz <fj.cruz@supercable.es>
- * Date  : 2005-11-24
+ * Date   : 2005-11-24
  * Description : ICC profils setup tab.
  * 
- * Copyright 2005-2006 by Gilles Caulier and F.J. Cruz
+ * Copyright 2005-2007 by Gilles Caulier and F.J. Cruz
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +28,10 @@
 #include <qmap.h>
 #include <qdir.h>
 
+// Local Includes.
+
+#include "digikam_export.h"
+
 class KDialogBase;
 
 namespace Digikam
@@ -35,7 +39,7 @@ namespace Digikam
 
 class SetupICCPriv;
 
-class SetupICC : public QWidget
+class DIGIKAM_EXPORT SetupICC : public QWidget
 {
     Q_OBJECT
 
