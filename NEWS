@@ -169,6 +169,9 @@ Image Editor  : JPEG file save settings include a red warning about this lossy c
 
 *** 0.9.1-Beta2 *********************************************************
 
+General       : Native slideshow tool : new option to slide an album tree in recursive mode.
+General       : Native slideshow tool : add capability to print photograph informations during slide.
+
 ...
 
 ----------------------------------------------------------------------------------------------------
