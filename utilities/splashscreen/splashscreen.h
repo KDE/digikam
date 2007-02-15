@@ -5,7 +5,7 @@
  * Description : a widget to display spash with progress bar
  *
  * Copyright 2003-2005 by Renchi Raju
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,12 +28,16 @@
 #include <qwidget.h>
 #include <qstring.h>
 
+// Local Includes.
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class SplashScreenPriv;
 
-class SplashScreen : public QWidget
+class DIGIKAM_EXPORT SplashScreen : public QWidget
 {
     Q_OBJECT
 
@@ -61,7 +65,6 @@ private slots:
 private:
 
     SplashScreenPriv* d;
-
 };
 
 }   // namespace Digikam
