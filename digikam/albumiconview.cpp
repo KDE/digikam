@@ -1194,7 +1194,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                                                i18n("Assign tag to pictures. Please wait..."));
 
                     // get selected image infos
-                    QPtrList<ImageInfo> infos = selectedImageInfos(false);
+                    QPtrList<ImageInfo> infos = selectedImageInfos(true);
                     // add droppted item
                     AlbumIconItem *dropItem = findItem(event->pos());
                     if (dropItem)
@@ -1209,7 +1209,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                                i18n("Assign tag to pictures. Please wait..."));
 
-                    changeTagOnImageInfos(allImageInfos(false), QValueList<int>() << tagID, true, true);
+                    changeTagOnImageInfos(allImageInfos(true), QValueList<int>() << tagID, true, true);
 
                     emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
                     break;
@@ -1275,7 +1275,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                                             i18n("Assign tags to pictures. Please wait..."));
 
                 // get selected image infos
-                QPtrList<ImageInfo> infos = selectedImageInfos(false);
+                QPtrList<ImageInfo> infos = selectedImageInfos(true);
                 // add droppted item
                 AlbumIconItem *dropItem = findItem(event->pos());
                 if (dropItem)
@@ -1290,7 +1290,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                 emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                             i18n("Assign tags to pictures. Please wait..."));
 
-                changeTagOnImageInfos(allImageInfos(false), tagIDs, true, true);
+                changeTagOnImageInfos(allImageInfos(true), tagIDs, true, true);
 
                 emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
                 break;
@@ -1865,7 +1865,7 @@ void AlbumIconView::slotAssignTag(int tagID)
     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                 i18n("Assign tag to pictures. Please wait..."));
 
-    changeTagOnImageInfos(selectedImageInfos(false), QValueList<int>() << tagID, true, true);
+    changeTagOnImageInfos(selectedImageInfos(true), QValueList<int>() << tagID, true, true);
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
 }
@@ -1875,7 +1875,7 @@ void AlbumIconView::slotRemoveTag(int tagID)
     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                 i18n("Remove tag from pictures. Please wait..."));
 
-    changeTagOnImageInfos(selectedImageInfos(false), QValueList<int>() << tagID, false, true);
+    changeTagOnImageInfos(selectedImageInfos(true), QValueList<int>() << tagID, false, true);
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
 }
