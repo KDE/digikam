@@ -122,6 +122,7 @@ EditorWindow::EditorWindow(const char *name)
     m_fullScreen             = false;
     m_rotatedOrFlipped       = false;
     m_setExifOrientationTag  = true;
+    m_cancelSlideShow        = false;
     
     // Settings containers instance.
 
@@ -1152,16 +1153,19 @@ void EditorWindow::slotLoadingFinished(const QString& filename, bool success)
         KMessageBox::error(this, message);
         DWarning() << "Failed to load image " << fi.fileName() << endl;
     }
-
 }
 
 void EditorWindow::slotNameLabelCancelButtonPressed()
 {
+    // If we saving a picture...
     if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
     {
         m_savingContext->abortingSaving = true;
         m_canvas->abortSaving();
     }
+
+    // If we preparing SlideShow...
+    m_cancelSlideShow = true;
 }
 
 void EditorWindow::slotSave()

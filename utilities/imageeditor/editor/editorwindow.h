@@ -74,6 +74,7 @@ signals:
 
 protected:
 
+    bool                     m_cancelSlideShow;
     bool                     m_fullScreen;
     bool                     m_rotatedOrFlipped;
     bool                     m_setExifOrientationTag;

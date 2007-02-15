@@ -1005,12 +1005,23 @@ void ImageWindow::slotFilePrint()
 
 void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 {
+    int       i = 0;
+    float     cnt;
     DMetadata meta;
+    m_cancelSlideShow = false;
 
     if (!d->imageInfoList.isEmpty())
     {
         // We have started image editor from Album GUI. we get picture comments from database.
-        for (ImageInfo *info = d->imageInfoList.first(); info; info = d->imageInfoList.next())
+
+        m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode, 
+                                    i18n("Prepare slideshow. Please wait...")
+                                    .arg(d->imageInfoList.count()));
+
+        cnt = (float)d->imageInfoList.count();
+
+        for (ImageInfo *info = d->imageInfoList.first() ; 
+             !m_cancelSlideShow && info ; info = d->imageInfoList.next())
         {
             SlidePictureInfo pictInfo;
             pictInfo.comment = info->caption();
@@ -1025,29 +1036,48 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
             // In case of dateTime extraction from metadata failed 
             pictInfo.photoInfo.dateTime = info->dateTime(); 
             settings.pictInfoMap.insert(info->kurl(), pictInfo);
+
+            m_nameLabel->setProgressValue((int)((i++/cnt)*100.0));
+            kapp->processEvents();
         }
     }
     else
     {
         // We have started image editor from Camera GUI. we get picture comments from metadata.
-        for (KURL::List::Iterator it = d->urlList.begin() ; it != d->urlList.end() ; ++it)
+
+        m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode, 
+                                    i18n("Prepare slideshow. Please wait...")
+                                    .arg(d->urlList.count()));
+
+        cnt = (float)d->urlList.count();
+
+        for (KURL::List::Iterator it = d->urlList.begin() ; 
+             !m_cancelSlideShow && (it != d->urlList.end()) ; ++it)
         {
             SlidePictureInfo pictInfo;
             meta.load((*it).path());
             pictInfo.comment   = meta.getImageComment();
             pictInfo.photoInfo = meta.getPhotographInformations(); 
             settings.pictInfoMap.insert(*it, pictInfo);
+
+            m_nameLabel->setProgressValue((int)((i++/cnt)*100.0));
+            kapp->processEvents();
         }
     }
 
-    settings.exifRotate = AlbumSettings::instance()->getExifRotate();
-    settings.fileList   = d->urlList;
+    m_nameLabel->progressBarMode(StatusProgressBar::TextMode, QString::null);   
 
-    SlideShow *slide = new SlideShow(settings);
-    if (startWithCurrent)
-        slide->setCurrent(d->urlCurrent);
-
-    slide->show();
+    if (!m_cancelSlideShow)
+    {
+        settings.exifRotate = AlbumSettings::instance()->getExifRotate();
+        settings.fileList   = d->urlList;
+    
+        SlideShow *slide = new SlideShow(settings);
+        if (startWithCurrent)
+            slide->setCurrent(d->urlCurrent);
+    
+        slide->show();
+    }
 }
 
 }  // namespace Digikam
