@@ -5,10 +5,10 @@
  * Description : Album item file tip adapted from kfiletip 
  *               (konqueror - konq_iconviewwidget.cc)
  *
- * Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- * Copyright (C) 2000, 2001, 2002 David Faure <david@mandrakesoft.com>
+ * Copyright (C) 1998-1999 by Torben Weis <weis@kde.org>
+ * Copyright (C) 2000-2002 by David Faure <david@mandrakesoft.com>
  * Copyright (C) 2004-2005 by Renchi Raju 
- * Copyright (C) 2006 by Gilles Caulier 
+ * Copyright (C) 2006-2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,6 +24,7 @@
  * ============================================================ */
 
 #define MAXSTRINGLEN 30 
+#define TIPBORDER    5 
  
 // Qt includes.
  
@@ -50,6 +51,7 @@
 // Local includes.
 
 #include "rawfiles.h"
+#include "ddebug.h"
 #include "dmetadata.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
@@ -91,15 +93,16 @@ AlbumFileTip::AlbumFileTip(AlbumIconView* view)
     d->view = view;
     hide();
 
-    setPalette( QToolTip::palette() );
-    setFrameStyle( QFrame::Plain | QFrame::Box );
-    setLineWidth( 1 );
+    setPalette(QToolTip::palette());
+    setFrameStyle(QFrame::Plain | QFrame::Box);
+    setLineWidth(1);
+
+    QVBoxLayout *layout = new QVBoxLayout(this, TIPBORDER, 0);
 
     d->label = new QLabel(this);
     d->label->setMargin(0);
     d->label->setAlignment(Qt::AlignAuto | Qt::AlignVCenter);
 
-    QVBoxLayout *layout = new QVBoxLayout(this, 10, 0);
     layout->addWidget(d->label);
     layout->setResizeMode(QLayout::Fixed);
 
@@ -187,7 +190,7 @@ void AlbumFileTip::reposition()
 
 void AlbumFileTip::renderArrows()
 {
-    int w = 10;
+    int w = TIPBORDER;
 
     // -- left top arrow -------------------------------------
 
@@ -304,21 +307,21 @@ void AlbumFileTip::updateText()
     QString tip, str;
     QString unavailable(i18n("unavailable"));
 
-    QString headBeg("<tr bgcolor=\"orange\"><td colspan=2>"
-                    "<nobr><font size=-1 color=\"black\"><i>");
-    QString headEnd("</i></font></nobr></td></tr>");
+    QString headBeg("<tr bgcolor=\"orange\"><td colspan=\"2\">"
+                    "<nobr><font size=\"-1\" color=\"black\"><b>");
+    QString headEnd("</b></font></nobr></td></tr>");
 
-    QString cellBeg("<tr><td><nobr><font size=-1 color=\"black\">");
+    QString cellBeg("<tr><td><nobr><font size=\"-1\" color=\"black\">");
     QString cellMid("</font></nobr></td>"
-                    "<td><nobr><font size=-1 color=\"black\">");
+                    "<td><nobr><font size=\"-1\" color=\"black\">");
     QString cellEnd("</font></nobr></td></tr>");
 
-    QString cellSpecBeg("<tr><td><nobr><font size=-1 color=\"black\">");
+    QString cellSpecBeg("<tr><td><nobr><font size=\"-1\" color=\"black\">");
     QString cellSpecMid("</font></nobr></td>"
-                        "<td><nobr><font size=-1 color=\"steelblue\"><i>");
+                        "<td><nobr><font size=\"-1\" color=\"steelblue\"><i>");
     QString cellSpecEnd("</i></font></nobr></td></tr>");
 
-    tip = "<table cellspacing=0 cellpadding=0>";
+    tip = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">";
 
     AlbumSettings* settings = AlbumSettings::instance();
     const ImageInfo* info   = d->iconItem->imageInfo();
