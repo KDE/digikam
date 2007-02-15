@@ -162,6 +162,7 @@ private slots:
     void slotLastItem(void);
 
     void slotEscapePreview();
+    void slotCancelSlideShow();
 
 private:
 

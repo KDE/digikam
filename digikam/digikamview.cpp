@@ -84,22 +84,26 @@ public:
 
     DigikamViewPriv()
     {
-        splitter             = 0;
-        parent               = 0;
-        iconView             = 0;
-        folderView           = 0;
-        albumManager         = 0;
-        albumHistory         = 0;
-        leftSideBar          = 0;
-        rightSideBar         = 0;
-        dateFolderView       = 0;
-        tagFolderView        = 0;
-        searchFolderView     = 0;
-        tagFilterView        = 0;
-        albumWidgetStack     = 0;
-        selectionTimer       = 0;
-        needDispatchSelection= false;
+        splitter              = 0;
+        parent                = 0;
+        iconView              = 0;
+        folderView            = 0;
+        albumManager          = 0;
+        albumHistory          = 0;
+        leftSideBar           = 0;
+        rightSideBar          = 0;
+        dateFolderView        = 0;
+        tagFolderView         = 0;
+        searchFolderView      = 0;
+        tagFilterView         = 0;
+        albumWidgetStack      = 0;
+        selectionTimer        = 0;
+        needDispatchSelection = false;
+        cancelSlideShow       = false;
     }
+
+    bool                      needDispatchSelection;
+    bool                      cancelSlideShow;
 
     int                       initialAlbumID;
 
@@ -122,8 +126,6 @@ public:
     TagFolderView            *tagFolderView;
     SearchFolderView         *searchFolderView;
     TagFilterView            *tagFilterView;
-
-    bool                      needDispatchSelection;
 };
 
 DigikamView::DigikamView(QWidget *parent)
@@ -218,7 +220,10 @@ void DigikamView::setupConnections()
 
     connect(this, SIGNAL(signalProgressValue(int)),
             d->parent, SLOT(slotProgressValue(int)));
-                        
+
+    connect(d->parent, SIGNAL(signalCancelButtonPressed()),
+            this, SLOT(slotCancelSlideShow()));
+
     // -- AlbumManager connections --------------------------------
 
     connect(d->albumManager, SIGNAL(signalAlbumCurrentChanged(Album*)),
@@ -1127,7 +1132,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
 
     int     i = 0;
     float cnt = (float)infoList.count();
-    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+    emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode, 
                                i18n("Prepare data for slideshow from %1 pictures. Please wait...")
 			       .arg(infoList.count()));
 
@@ -1143,7 +1148,9 @@ void DigikamView::slideShow(ImageInfoList &infoList)
     settings.printComment         = config->readBoolEntry("SlideShowPrintComment", false);
     settings.loop                 = config->readBoolEntry("SlideShowLoop", false);
 
-    for (ImageInfoList::iterator it = infoList.begin(); it != infoList.end(); ++it)
+    d->cancelSlideShow = false;
+    for (ImageInfoList::iterator it = infoList.begin() ; 
+         !d->cancelSlideShow && (it != infoList.end()) ; ++it)
     {
         ImageInfo *info = *it;
         settings.fileList.append(info->kurl());
@@ -1167,15 +1174,23 @@ void DigikamView::slideShow(ImageInfoList &infoList)
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);   
 
-    SlideShow *slide = new SlideShow(settings);
-    if (startWithCurrent)
+    if (!d->cancelSlideShow)
     {
-        AlbumIconItem* current = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
-        if (current) 
-            slide->setCurrent(current->imageInfo()->kurl());
+        SlideShow *slide = new SlideShow(settings);
+        if (startWithCurrent)
+        {
+            AlbumIconItem* current = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
+            if (current) 
+                slide->setCurrent(current->imageInfo()->kurl());
+        }
+    
+        slide->show();
     }
+}
 
-    slide->show();
+void DigikamView::slotCancelSlideShow()
+{
+    d->cancelSlideShow = true;
 }
 
 }  // namespace Digikam
