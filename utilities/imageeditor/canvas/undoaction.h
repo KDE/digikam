@@ -26,13 +26,18 @@
 
 #include <klocale.h>
 
+// Local includes.
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class DImgInterface;
 
-class UndoAction
+class DIGIKAM_EXPORT UndoAction
 {
+
 public:
 
     UndoAction(DImgInterface* iface);
@@ -49,8 +54,9 @@ protected:
     QString        m_title;
 };
 
-class UndoActionRotate : public UndoAction
+class DIGIKAM_EXPORT UndoActionRotate : public UndoAction
 {
+
 public:
 
     enum Angle
@@ -71,8 +77,9 @@ private:
     int m_angle;
 };
 
-class UndoActionFlip : public UndoAction
+class DIGIKAM_EXPORT UndoActionFlip : public UndoAction
 {
+
 public:
 
     enum Direction
@@ -92,8 +99,9 @@ private:
     int m_dir;
 };
 
-class UndoActionBCG : public UndoAction
+class DIGIKAM_EXPORT UndoActionBCG : public UndoAction
 {
+
 public:
 
     UndoActionBCG(DImgInterface* iface,
@@ -115,8 +123,9 @@ private:
     double m_newContrast;
 };
 
-class UndoActionIrreversible : public UndoAction
+class DIGIKAM_EXPORT UndoActionIrreversible : public UndoAction
 {
+
 public:
 
     UndoActionIrreversible(DImgInterface* iface,
@@ -125,7 +134,6 @@ public:
 
     void rollBack();
     void execute();
-
 };
 
 }  // namespace Digikam

@@ -3,7 +3,7 @@
  * Date   : 2006-01-03
  * Description : IO file Settings Container.
  * 
- * Copyright 2005-2007 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,12 +23,13 @@
 
 // Local includes.
 
+#include "digikam_export.h"
 #include "rawdecodingsettings.h"
 
 namespace Digikam
 {
 
-class IOFileSettingsContainer
+class DIGIKAM_EXPORT IOFileSettingsContainer
 {
 
 public:

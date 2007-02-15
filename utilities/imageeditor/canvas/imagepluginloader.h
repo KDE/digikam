@@ -1,11 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Caulier Gilles <caulier dot gilles at kdemail dot net>
- * Date  : 2004-06-04
+ * Date   : 2004-06-04
  * Description : image plugins loader for  digiKam image editor
  *
  * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,6 +33,7 @@
 
 // Local includes.
 
+#include "digikam_export.h"
 #include "imageplugin.h"
 
 namespace Digikam
@@ -41,7 +42,7 @@ namespace Digikam
 class SplashScreen;
 class ImagePluginLoaderPrivate;
 
-class ImagePluginLoader : public QObject
+class DIGIKAM_EXPORT ImagePluginLoader : public QObject
 {
     
 public:

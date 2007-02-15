@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: F.J. Cruz <fj.cruz@supercable.es>
- * Date  : 2005-12-08
+ * Authors: F.J. Cruz <fj.cruz@supercable.es>
+ * Date   : 2005-12-08
  * Description : ICC Settings Container.
  * 
- * Copyright 2005-2006 by  F.J. Cruz
+ * Copyright 2005-2007 by  F.J. Cruz
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,32 +25,33 @@
 
 #include <qstring.h>
 
-/**
-	@author digiKam team <digikam-devel@kde.org>
-*/
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class ICCSettingsContainer
+class DIGIKAM_EXPORT ICCSettingsContainer
 {
 
 public:
     
     ICCSettingsContainer()
     {
-        enableCMSetting    = false;  // IMPORTANT: by default, ICC color management must be disable.
+        enableCMSetting         = false;  // NOTE: by default, ICC color management is disable.
 
         askOrApplySetting       = false;
         BPCSetting              = false;
         managedViewSetting      = false;
         CMInRawLoadingSetting   = false;
 
-        renderingSetting   = 0;
+        renderingSetting        = 0;
 
-        workspaceSetting   = QString::null;
-        monitorSetting     = QString::null;
-        inputSetting       = QString::null;
-        proofSetting       = QString::null;
+        workspaceSetting        = QString::null;
+        monitorSetting          = QString::null;
+        inputSetting            = QString::null;
+        proofSetting            = QString::null;
     };
     
     ~ICCSettingsContainer(){};

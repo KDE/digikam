@@ -47,7 +47,7 @@ public:
     {
         dimgiface = 0;
         undoCache = 0;
-        origin = 0;
+        origin    = 0;
     }
 
     QValueList<UndoAction*>  undoActions;

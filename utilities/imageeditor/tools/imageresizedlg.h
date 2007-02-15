@@ -1,6 +1,6 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-06-05
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date   : 2004-06-05
  * Description : 
  * 
  * Copyright 2004-2005 by Renchi Raju
@@ -25,11 +25,15 @@
 
 #include <kdialogbase.h>
 
+// Local includes.
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 class ImageResizeDlgPriv;
 
-class ImageResizeDlg : public KDialogBase
+class DIGIKAM_EXPORT ImageResizeDlg : public KDialogBase
 {
     Q_OBJECT
 

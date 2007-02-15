@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2003-01-09
+ * Date   : 2003-01-09
  * Description : image editor canvas management class
  * 
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier

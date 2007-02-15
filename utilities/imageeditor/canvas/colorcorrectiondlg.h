@@ -1,10 +1,10 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2006-05-15
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2006-05-15
  * Description : a dialog to see preview ICC color correction 
  *               before to apply color profile.
  * 
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,13 +30,17 @@
 
 #include <kdialogbase.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class IccTransform;
 class DImg;
 
-class ColorCorrectionDlg : public KDialogBase
+class DIGIKAM_EXPORT ColorCorrectionDlg : public KDialogBase
 {
     Q_OBJECT
 
@@ -57,7 +61,6 @@ private:
     QWidget      *m_parent;
 
     IccTransform *m_iccTrans;
-
 };
 
 }  // Namespace Digikam

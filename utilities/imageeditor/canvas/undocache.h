@@ -26,13 +26,18 @@
 
 #include <qglobal.h>
 
+// Local includes.
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class UndoCachePriv;
 
-class UndoCache
+class DIGIKAM_EXPORT UndoCache
 {
+
 public:
 
     UndoCache();
@@ -40,13 +45,13 @@ public:
 
     void   clear();
     bool   putData(int level, int w, int h, int bytesDepth, uchar* data);
-    uchar* getData(int level, int& w, int& h, int& bytesDepth, bool del=true);
+    uchar *getData(int level, int& w, int& h, int& bytesDepth, bool del=true);
 
-    void erase(int level);
+    void   erase(int level);
 
 private:
 
-    UndoCachePriv* d;
+    UndoCachePriv *d;
 };
 
 }  // namespace Digikam

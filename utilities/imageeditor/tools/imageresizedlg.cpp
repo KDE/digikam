@@ -1,6 +1,6 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-06-05
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date   : 2004-06-05
  * Description : 
  * 
  * Copyright 2004-2005 by Renchi Raju
@@ -33,6 +33,7 @@
 // Local includes.
 
 #include "imageresizedlg.h"
+#include "imageresizedlg.moc"
 
 namespace Digikam
 {
@@ -224,4 +225,3 @@ void ImageResizeDlg::slotChanged()
 
 }  // namespace Digikam
 
-#include "imageresizedlg.moc"

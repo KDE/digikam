@@ -26,6 +26,10 @@
 
 #include <qvaluelist.h>
 
+// Local includes.
+
+#include "digikam_export.h"
+
 class QStringList;
 
 namespace Digikam
@@ -35,8 +39,9 @@ class DImgInterface;
 class UndoManagerPriv;
 class UndoAction;
 
-class UndoManager
+class DIGIKAM_EXPORT UndoManager
 {
+
 public:
 
     UndoManager(DImgInterface* iface);
@@ -62,7 +67,7 @@ private:
 
 private:
 
-    UndoManagerPriv* d;
+    UndoManagerPriv *d;
 };
 
 }  // namespace Digikam

@@ -331,28 +331,28 @@ public:
         units         = 0;
     }
 
-    bool                               cmEnabled;
+    bool                              cmEnabled;
 
-    QRadioButton                      *scaleToFit;
-    QRadioButton                      *scale;
+    QRadioButton                     *scaleToFit;
+    QRadioButton                     *scale;
 
-    QCheckBox                         *keepRatio;
-    QCheckBox                         *addFileName;
-    QCheckBox                         *blackwhite;
-    QCheckBox                         *autoRotate;
-    QCheckBox                         *colorManaged;
+    QCheckBox                        *keepRatio;
+    QCheckBox                        *addFileName;
+    QCheckBox                        *blackwhite;
+    QCheckBox                        *autoRotate;
+    QCheckBox                        *colorManaged;
 
-    QPushButton                       *cmPreferences;
+    QPushButton                      *cmPreferences;
 
-    QWidget                           *parent;
+    QWidget                          *parent;
 
-    KDoubleNumInput                   *width;
-    KDoubleNumInput                   *height;
+    KDoubleNumInput                  *width;
+    KDoubleNumInput                  *height;
 
-    KComboBox                         *position;
-    KComboBox                         *units;
+    KComboBox                        *position;
+    KComboBox                        *units;
 
-    DImg                               image;
+    DImg                              image;
 
     ImageEditorPrintDialogPage::Unit  previousUnit;
 };

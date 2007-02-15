@@ -4,7 +4,7 @@
  * Date   : 2006-01-20
  * Description : image editor GUI saving context container
  *
- * Copyright 2006 by Gilles Caulier, Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier, Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,10 +31,14 @@
 #include <kurl.h>
 #include <ktempfile.h>
 
+// Local includes.
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class SavingContextContainer
+class DIGIKAM_EXPORT SavingContextContainer
 {
 
 public:
@@ -62,19 +66,19 @@ public:
         SynchronousSaving
     };
 
-    SavingState              savingState;
-    SynchronizingState       synchronizingState;
-    bool                     synchronousSavingResult;
-    bool                     destinationExisted;
-    bool                     abortingSaving;
+    SavingState         savingState;
+    SynchronizingState  synchronizingState;
+    bool                synchronousSavingResult;
+    bool                destinationExisted;
+    bool                abortingSaving;
 
-    QString                  originalFormat;
-    QString                  format;
+    QString             originalFormat;
+    QString             format;
 
-    KURL                     srcURL;
-    KURL                     destinationURL;
+    KURL                srcURL;
+    KURL                destinationURL;
 
-    KTempFile               *saveTempFile;
+    KTempFile          *saveTempFile;
 };
 
 } // namespace Digikam

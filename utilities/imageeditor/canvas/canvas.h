@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2003-01-09
+ * Date   : 2003-01-09
  * Description : image editor canvas management class
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
@@ -30,6 +30,7 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dimg.h"
 
 class QString;
@@ -49,7 +50,7 @@ class ExposureSettingsContainer;
 class ICCSettingsContainer;
 class IOFileSettingsContainer;
 
-class Canvas : public QScrollView
+class DIGIKAM_EXPORT Canvas : public QScrollView
 {
     Q_OBJECT
 
@@ -174,7 +175,6 @@ signals:
 private:
     
     CanvasPrivate *d;
-    
 };
     
 }  // namespace Digikam

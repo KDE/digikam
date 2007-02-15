@@ -45,19 +45,19 @@ QString UndoAction::getTitle() const
 
 UndoActionRotate::UndoActionRotate(DImgInterface* iface,
                                    UndoActionRotate::Angle angle)
-    : UndoAction(iface), m_angle(angle)
+                : UndoAction(iface), m_angle(angle)
 {
     switch(m_angle)
     {
-    case(R90):
-        m_title = i18n("Rotate 90 Degrees");
-        break;
-    case(R180):
-        m_title = i18n("Rotate 180 Degrees");
-        break;
-    case(R270):
-        m_title = i18n("Rotate 270 Degrees");
-        break;
+        case(R90):
+            m_title = i18n("Rotate 90 Degrees");
+            break;
+        case(R180):
+            m_title = i18n("Rotate 180 Degrees");
+            break;
+        case(R270):
+            m_title = i18n("Rotate 270 Degrees");
+            break;
     }
 }
 
@@ -69,17 +69,17 @@ void UndoActionRotate::rollBack()
 {
     switch(m_angle)
     {
-    case(R90):
-        m_iface->rotate270(false);
-        return;
-    case(R180):
-        m_iface->rotate180(false);
-        return;
-    case(R270):
-        m_iface->rotate90(false);
-        return;
-    default:
-        DWarning() << "Unknown rotate angle specified" << endl;
+        case(R90):
+            m_iface->rotate270(false);
+            return;
+        case(R180):
+            m_iface->rotate180(false);
+            return;
+        case(R270):
+            m_iface->rotate90(false);
+            return;
+        default:
+            DWarning() << "Unknown rotate angle specified" << endl;
     }
 }
 
@@ -87,23 +87,23 @@ void UndoActionRotate::execute()
 {
     switch(m_angle)
     {
-    case R90:
-        m_iface->rotate90(false);
-        return;
-    case R180:
-        m_iface->rotate180(false);
-        return;
-    case R270:
-        m_iface->rotate270(false);
-        return;
-    default:
-        DWarning() << "Unknown rotate angle specified" << endl;
+        case R90:
+            m_iface->rotate90(false);
+            return;
+        case R180:
+            m_iface->rotate180(false);
+            return;
+        case R270:
+            m_iface->rotate270(false);
+            return;
+        default:
+            DWarning() << "Unknown rotate angle specified" << endl;
     }
 }
 
 UndoActionFlip::UndoActionFlip(DImgInterface* iface,
                                UndoActionFlip::Direction dir)
-    : UndoAction(iface), m_dir(dir)
+              : UndoAction(iface), m_dir(dir)
 {
     if(m_dir == Horizontal)
         m_title = i18n("Flip Horizontal");
@@ -119,14 +119,14 @@ void UndoActionFlip::rollBack()
 {
     switch(m_dir)
     {
-    case(Horizontal):
-        m_iface->flipHoriz(false);
-        return;
-    case(Vertical):
-        m_iface->flipVert(false);
-        return;
-    default:
-        DWarning() << "Unknown flip direction specified" << endl;
+        case(Horizontal):
+            m_iface->flipHoriz(false);
+            return;
+        case(Vertical):
+            m_iface->flipVert(false);
+            return;
+        default:
+            DWarning() << "Unknown flip direction specified" << endl;
     }
 }
 
@@ -139,9 +139,9 @@ UndoActionBCG::UndoActionBCG(DImgInterface* iface,
                              double oldGamma, double oldBrightness,
                              double oldContrast, double newGamma,
                              double newBrightness, double newContrast)
-    : UndoAction(iface), m_oldGamma(oldGamma), m_oldBrightness(oldBrightness),
-      m_oldContrast(oldContrast), m_newGamma(newGamma), m_newBrightness(newBrightness),
-      m_newContrast(newContrast)
+             : UndoAction(iface), m_oldGamma(oldGamma), m_oldBrightness(oldBrightness),
+               m_oldContrast(oldContrast), m_newGamma(newGamma), m_newBrightness(newBrightness),
+               m_newContrast(newContrast)
 {
     m_title = i18n("Brightness,Contrast,Gamma");    
 }

@@ -34,12 +34,16 @@
 #include <kprinter.h>
 #include <kdeprint/kprintdialogpage.h>
 
+// Local includes.
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class ImagePrintPrivate;
 
-class ImagePrint
+class DIGIKAM_EXPORT ImagePrint
 {
 public:
 
@@ -64,7 +68,7 @@ private:
 
 class ImageEditorPrintDialogPagePrivate;
 
-class ImageEditorPrintDialogPage : public KPrintDialogPage
+class DIGIKAM_EXPORT ImageEditorPrintDialogPage : public KPrintDialogPage
 {
     Q_OBJECT
 
