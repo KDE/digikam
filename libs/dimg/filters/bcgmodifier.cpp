@@ -42,13 +42,15 @@ public:
 
     BCGModifierPriv()
     {
+        channel  = BCGModifier::CHANNEL_ALL;
         modified = false;
     }
 
-    bool   modified;
-    
-    int    map16[65536];
-    int    map[256];
+    bool modified;
+
+    int  channel;      
+    int  map16[65536];
+    int  map[256];
 };
 
 BCGModifier::BCGModifier()
@@ -77,7 +79,7 @@ void BCGModifier::reset()
     for (int i=0; i<256; i++)
         d->map[i] = i;
 
-    d->modified            = false;
+    d->modified = false;
 }
 
 void BCGModifier::applyBCG(DImg& image)
@@ -93,9 +95,26 @@ void BCGModifier::applyBCG(DImg& image)
 
         for (uint i=0; i<size; i++)
         {
-            data[0] = CLAMP_0_255(d->map[data[0]]);
-            data[1] = CLAMP_0_255(d->map[data[1]]);
-            data[2] = CLAMP_0_255(d->map[data[2]]);
+            switch (d->channel)
+            {
+                case CHANNEL_BLUE:
+                    data[0] = CLAMP_0_255(d->map[data[0]]);
+                    break;
+
+                case CHANNEL_GREEN:
+                    data[1] = CLAMP_0_255(d->map[data[1]]);
+                    break;
+
+                case CHANNEL_RED:
+                    data[2] = CLAMP_0_255(d->map[data[2]]);
+                    break;
+
+                default:      // CHANNEL_ALL
+                    data[0] = CLAMP_0_255(d->map[data[0]]);
+                    data[1] = CLAMP_0_255(d->map[data[1]]);
+                    data[2] = CLAMP_0_255(d->map[data[2]]);
+                    break;
+            }
 
             data += 4;
         }
@@ -106,13 +125,35 @@ void BCGModifier::applyBCG(DImg& image)
 
         for (uint i=0; i<size; i++)
         {
-            data[0] = CLAMP_0_65535(d->map16[data[0]]);
-            data[1] = CLAMP_0_65535(d->map16[data[1]]);
-            data[2] = CLAMP_0_65535(d->map16[data[2]]);
+            switch (d->channel)
+            {
+                case CHANNEL_BLUE:
+                    data[0] = CLAMP_0_65535(d->map16[data[0]]);
+                    break;
+
+                case CHANNEL_GREEN:
+                    data[1] = CLAMP_0_65535(d->map16[data[1]]);
+                    break;
+
+                case CHANNEL_RED:
+                    data[2] = CLAMP_0_65535(d->map16[data[2]]);
+                    break;
+
+                default:      // CHANNEL_ALL
+                    data[0] = CLAMP_0_65535(d->map16[data[0]]);
+                    data[1] = CLAMP_0_65535(d->map16[data[1]]);
+                    data[2] = CLAMP_0_65535(d->map16[data[2]]);
+                    break;
+            }
 
             data += 4;
         }
     }
+}
+
+void BCGModifier::setChannel(int channel)
+{
+    d->channel = channel;
 }
 
 void BCGModifier::setGamma(double val)

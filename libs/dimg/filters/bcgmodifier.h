@@ -35,6 +35,17 @@ class BCGModifierPriv;
 
 class DIGIKAM_EXPORT BCGModifier
 {
+
+public:
+
+    enum CHANNEL
+    {
+        CHANNEL_ALL=0,
+        CHANNEL_RED,
+        CHANNEL_GREEN,
+        CHANNEL_BLUE
+    };
+
 public:
 
     BCGModifier();
@@ -43,6 +54,7 @@ public:
     void reset();
     bool modified() const;
 
+    void setChannel(int channel);
     void setGamma(double val);
     void setBrightness(double val);
     void setContrast(double val);
