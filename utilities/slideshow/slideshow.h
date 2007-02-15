@@ -47,14 +47,6 @@ public:
 
     void setCurrent(const KURL& url);
 
-private:
-
-    void loadNextImage();
-    void loadPrevImage();
-    void preloadNextImage();
-    void updatePixmap();
-    void printInfoText(QPainter &p, int &offset, const QString& str);
-
 protected:
 
     void paintEvent(QPaintEvent *);
@@ -74,6 +66,14 @@ private slots:
     void slotPrev();
     void slotNext();
     void slotClose();
+
+private:
+
+    void loadNextImage();
+    void loadPrevImage();
+    void preloadNextImage();
+    void updatePixmap();
+    void printInfoText(QPainter &p, int &offset, const QString& str);
 
 private:
 

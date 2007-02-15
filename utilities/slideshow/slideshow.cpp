@@ -18,6 +18,8 @@
  * 
  * ============================================================ */
 
+#define MAXSTRINGLEN 60 
+
 // Qt includes.
 
 #include <qtimer.h>
@@ -139,10 +141,10 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
     
-    d->previewThread         = new PreviewLoadThread();
-    d->previewPreloadThread  = new PreviewLoadThread();
-    d->timer                 = new QTimer();
-    d->mouseMoveTimer        = new QTimer();
+    d->previewThread        = new PreviewLoadThread();
+    d->previewPreloadThread = new PreviewLoadThread();
+    d->timer                = new QTimer();
+    d->mouseMoveTimer       = new QTimer();
 
     connect(d->previewThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
             this, SLOT(slotGotImagePreview(const LoadingDescription &, const QImage&)));
@@ -275,7 +277,7 @@ void SlideShow::slotGotImagePreview(const LoadingDescription&, const QImage& pre
 void SlideShow::preloadNextImage()
 {
     int index = d->fileIndex + 1;
-    int num = d->settings.fileList.count();
+    int num   = d->settings.fileList.count();
 
     if (index >= num)
     {
@@ -318,7 +320,7 @@ void SlideShow::updatePixmap()
             if (d->settings.printComment)
             {
                 str = d->settings.pictInfoMap[d->currentImage].comment;
-
+                if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
                 printInfoText(p, offset, str);
             }   
 
@@ -515,6 +517,7 @@ void SlideShow::wheelEvent(QWheelEvent * e)
     {
         d->timer->stop();
         d->pause = true;
+        d->toolBar->setPaused(true);
         slotNext();
     }
 
@@ -522,6 +525,7 @@ void SlideShow::wheelEvent(QWheelEvent * e)
     {
         d->timer->stop();
         d->pause = true;
+        d->toolBar->setPaused(true);
         slotPrev();
     }
 }
@@ -535,12 +539,14 @@ void SlideShow::mousePressEvent(QMouseEvent *e)
     {
         d->timer->stop();
         d->pause = true;
+        d->toolBar->setPaused(true);
         slotNext();
     }
     else if (e->button() == Qt::RightButton && d->fileIndex-1 >= 0)
     {
         d->timer->stop();
         d->pause = true;
+        d->toolBar->setPaused(true);
         slotPrev();
     }
 }
