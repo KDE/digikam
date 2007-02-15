@@ -1099,22 +1099,38 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
     settings.exifRotate = config->readBoolEntry("EXIF Rotate", true);
     settings.fileList   = d->thumbBar->itemsURLs();
 
+    int       i   = 0;
+    float     cnt = settings.fileList.count();
     Digikam::DMetadata meta;
+    m_cancelSlideShow = false;
 
-    for (KURL::List::Iterator it = settings.fileList.begin() ; it != settings.fileList.end() ; ++it)
+    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode, 
+                                 i18n("Prepare slideshow. Please wait...")
+                                 .arg(settings.fileList.count()));
+
+    for (KURL::List::Iterator it = settings.fileList.begin() ; 
+         !m_cancelSlideShow && (it != settings.fileList.end()) ; ++it)
     {
         Digikam::SlidePictureInfo pictInfo;
         meta.load((*it).path());
-        pictInfo.comment = meta.getImageComment();
+        pictInfo.comment   = meta.getImageComment();
         pictInfo.photoInfo = meta.getPhotographInformations();
         settings.pictInfoMap.insert(*it, pictInfo);
+
+        m_nameLabel->setProgressValue((int)((i++/cnt)*100.0));
+        kapp->processEvents();
     }
 
-    Digikam::SlideShow *slide = new Digikam::SlideShow(settings);
-    if (startWithCurrent)
-        slide->setCurrent(d->currentItem->url());
+    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::TextMode, QString::null);   
 
-    slide->show();
+    if (!m_cancelSlideShow)
+    {
+        Digikam::SlideShow *slide = new Digikam::SlideShow(settings);
+        if (startWithCurrent)
+            slide->setCurrent(d->currentItem->url());
+    
+        slide->show();
+    }
 }
 
 }   // namespace ShowFoto
