@@ -409,7 +409,7 @@ void ImageDescEditTab::slotChangingItems()
                         d->currInfos.count());
 
             if (d->hub.commentChanged())
-                text += i18n("<li>the comment</i>");
+                text += i18n("<li>the comment</li>");
             if (d->hub.dateTimeChanged())
                 text += i18n("<li>the date</li>");
             if (d->hub.ratingChanged())

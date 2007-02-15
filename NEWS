@@ -480,7 +480,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 270 ==> 130237 : Typos in digiKam plugin files.
 271 ==> 138925 : External modules config dialog lacks a select all button.
 272 ==> 140038 : digiKam Image Editor crash on right click after changing toolbar.
-273 ==> 139766 : Crash when displaying EXIF metadata with Unicode comment
+273 ==> 139766 : Crash when displaying EXIF metadata with Unicode comment.
 274 ==> 130017 : Wish: batch operation to save existing comments in the files.
 275 ==> 140320 : View menu should better fit after Edit.
 276 ==> 127617 : "Toggle Fullscreen" should be located in "View" menu instead 
@@ -489,7 +489,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 278 ==> 140417 : Crash digiKam when delete image.
 279 ==> 110514 : Enhanced selection, refactored histogram. 
 280 ==> 140933 : Typo: Album Library Path.
-281 ==> 141190 : digikam crash when invalid ICM file at color profile directory 
+281 ==> 141190 : digiKam crash when invalid ICM file at color profile directory 
                  and you enter into PREFERENCES->COLOR SPACE PROFILES.
 282 ==> 123649 : JPEG/PNG quality settings at the "save" dialog.
 283 ==> 116518 : Use KIPI plugin for displaying slideshows.
@@ -503,6 +503,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 
 289 ==> 141035 : Advanced Search gives error when trying to search by rating.
 290 ==> 116609 : Allow slideshow to be recursive.
-291 ==>  
+291 ==> 141635 : Unclear text in digiKam.
+292 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
