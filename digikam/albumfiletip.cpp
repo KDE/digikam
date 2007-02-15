@@ -299,7 +299,7 @@ void AlbumFileTip::drawContents(QPainter *p)
             break;
     }
 
-    QFrame::drawContents( p );
+    QFrame::drawContents(p);
 }
 
 void AlbumFileTip::updateText()
@@ -401,7 +401,7 @@ void AlbumFileTip::updateText()
     }
 
     // -- Photograph Info ----------------------------------------------------
-    // NOTA: If something is changed here, please updated imageproperties section too.
+    // NOTE: If something is changed here, please updated imageproperties section too.
 
     if (settings->getToolTipsShowPhotoMake()  ||
         settings->getToolTipsShowPhotoDate()  ||
@@ -493,6 +493,7 @@ void AlbumFileTip::updateText()
     }
 
     // -- digiKam properties  ------------------------------------------
+    
     if (settings->getToolTipsShowAlbumName() ||
         settings->getToolTipsShowComments()  ||
         settings->getToolTipsShowTags()      ||
