@@ -27,7 +27,7 @@
 #include <qstring.h>
 #include <qobject.h>
 
-// Digikam Includes.
+// Local Includes.
 
 #include "digikam_export.h"
 

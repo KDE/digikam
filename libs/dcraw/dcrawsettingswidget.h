@@ -28,12 +28,13 @@
 // Local includes.
 
 #include "rawdecodingsettings.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 class DcrawSettingsWidgetPriv;
 
-class DcrawSettingsWidget : public QWidget
+class DIGIKAM_EXPORT DcrawSettingsWidget : public QWidget
 {
     Q_OBJECT
     
