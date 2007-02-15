@@ -1138,6 +1138,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
     settings.printDate            = config->readBoolEntry("SlideShowPrintDate", false);
     settings.printApertureFocal   = config->readBoolEntry("SlideShowPrintApertureFocal", false);
     settings.printExpoSensitivity = config->readBoolEntry("SlideShowPrintExpoSensitivity", false);
+    settings.printMakeModel       = config->readBoolEntry("SlideShowPrintMakeModel", false);
     settings.printComment         = config->readBoolEntry("SlideShowPrintComment", false);
     settings.loop                 = config->readBoolEntry("SlideShowLoop", false);
 
@@ -1149,7 +1150,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
         pictInfo.comment = info->caption();
 
         // Perform optimizations: only read pictures metadata if necessary.
-        if (settings.printApertureFocal || settings.printExpoSensitivity)
+        if (settings.printApertureFocal || settings.printExpoSensitivity || settings.printMakeModel)
         {
             meta.load(info->kurl().path());
             pictInfo.photoInfo = meta.getPhotographInformations();

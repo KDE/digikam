@@ -972,23 +972,6 @@ void EditorWindow::slotToggleFullScreen()
     }
 }
 
-void EditorWindow::slotToggleSlideShow()
-{
-    KConfig* config = kapp->config();
-    config->setGroup("ImageViewer Settings");
-    bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
-
-    SlideShowSettings settings;
-    settings.delay                = config->readNumEntry("SlideShowDelay", 5) * 1000;
-    settings.printName            = config->readBoolEntry("SlideShowPrintName", true);
-    settings.printDate            = config->readBoolEntry("SlideShowPrintDate", false);
-    settings.printApertureFocal   = config->readBoolEntry("SlideShowPrintApertureFocal", false);
-    settings.printExpoSensitivity = config->readBoolEntry("SlideShowPrintExpoSensitivity", false);
-    settings.printComment         = config->readBoolEntry("SlideShowPrintComment", false);
-    settings.loop                 = config->readBoolEntry("SlideShowLoop", false);
-    slideShow(startWithCurrent, settings);
-}
-
 void EditorWindow::slotRotatedOrFlipped()
 {
     m_rotatedOrFlipped = true;
@@ -1612,6 +1595,24 @@ void EditorWindow::setOverExposureToolTip(bool oei)
 void EditorWindow::slotDonateMoney()
 {
     KApplication::kApplication()->invokeBrowser("http://www.digikam.org/?q=donation");
+}
+
+void EditorWindow::slotToggleSlideShow()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("ImageViewer Settings");
+    bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
+
+    SlideShowSettings settings;
+    settings.delay                = config->readNumEntry("SlideShowDelay", 5) * 1000;
+    settings.printName            = config->readBoolEntry("SlideShowPrintName", true);
+    settings.printDate            = config->readBoolEntry("SlideShowPrintDate", false);
+    settings.printApertureFocal   = config->readBoolEntry("SlideShowPrintApertureFocal", false);
+    settings.printExpoSensitivity = config->readBoolEntry("SlideShowPrintExpoSensitivity", false);
+    settings.printMakeModel       = config->readBoolEntry("SlideShowPrintMakeModel", false);
+    settings.printComment         = config->readBoolEntry("SlideShowPrintComment", false);
+    settings.loop                 = config->readBoolEntry("SlideShowLoop", false);
+    slideShow(startWithCurrent, settings);
 }
 
 }  // namespace Digikam

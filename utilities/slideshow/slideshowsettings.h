@@ -71,6 +71,7 @@ public:
         printDate            = false;
         printComment         = false;
         printApertureFocal   = false;
+        printMakeModel       = false;
         printExpoSensitivity = false;
         loop                 = false;
         delay                = 5;
@@ -93,6 +94,9 @@ public:
 
     /** Print camera Aperture and Focal during slide */
     bool printApertureFocal;
+
+    /** Print camera Make and Model during slide */
+    bool printMakeModel;
 
     /** Print camera Exposure and Sensitivity during slide */
     bool printExpoSensitivity;

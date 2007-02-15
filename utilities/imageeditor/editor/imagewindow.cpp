@@ -1016,7 +1016,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
             pictInfo.comment = info->caption();
 
             // Perform optimizations: only read pictures metadata if necessary.
-            if (settings.printApertureFocal || settings.printExpoSensitivity)
+            if (settings.printApertureFocal || settings.printExpoSensitivity || settings.printMakeModel)
             {
                 meta.load(info->kurl().path());
                 pictInfo.photoInfo = meta.getPhotographInformations();

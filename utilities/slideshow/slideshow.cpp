@@ -89,7 +89,8 @@ public:
 };  
 
 SlideShow::SlideShow(const SlideShowSettings& settings)
-         : QWidget(0, 0, WStyle_StaysOnTop | WType_Popup | WX11BypassWM | WDestructiveClose)
+         : QWidget(0, 0, WStyle_StaysOnTop | WType_Popup | 
+                         WX11BypassWM | WDestructiveClose)
 {
     d = new SlideShowPriv;
     d->settings = settings;
@@ -321,6 +322,26 @@ void SlideShow::updatePixmap()
                 printInfoText(p, offset, str);
             }   
 
+            // Display the Make and Model.
+
+            if (d->settings.printMakeModel)
+            {
+                str = QString::null;
+
+                if (!photoInfo.make.isEmpty())
+                    str = photoInfo.make;
+
+                if (!photoInfo.model.isEmpty())
+                {
+                    if (!photoInfo.make.isEmpty())
+                        str += QString(" / ");
+
+                    str += photoInfo.model;
+                }
+
+                printInfoText(p, offset, str);
+            }
+
             // Display the Exposure and Sensitivity.
 
             if (d->settings.printExpoSensitivity)
@@ -395,7 +416,7 @@ void SlideShow::updatePixmap()
         }
         else
         {
-            // ...or preview is failed.
+            // ...or preview extraction is failed.
 
             p.setPen(Qt::white);
             p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),

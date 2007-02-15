@@ -54,6 +54,7 @@ public:
         printDate            = 0;
         printApertureFocal   = 0;
         printExpoSensitivity = 0;
+        printMakeModel       = 0;
         printComment         = 0;
     }
 
@@ -63,6 +64,7 @@ public:
     QCheckBox    *printDate;
     QCheckBox    *printApertureFocal;
     QCheckBox    *printExpoSensitivity;
+    QCheckBox    *printMakeModel;
     QCheckBox    *printComment;
     
     KIntNumInput *delayInput;
@@ -98,6 +100,9 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     d->printExpoSensitivity = new QCheckBox(i18n("Print camera exposure and sensitivity"), parent);
     QWhatsThis::add( d->printExpoSensitivity, i18n("<p>Print camera exposure and sensitivity on bottom of screen."));
 
+    d->printMakeModel = new QCheckBox(i18n("Print camera make and model"), parent);
+    QWhatsThis::add( d->printMakeModel, i18n("<p>Print camera make and model on bottom of screen."));
+
     d->printComment = new QCheckBox(i18n("Print image comment"), parent);
     QWhatsThis::add( d->printComment, i18n("<p>Print image comment on bottom of screen."));
     
@@ -108,6 +113,7 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     layout->addWidget(d->printDate);
     layout->addWidget(d->printApertureFocal);
     layout->addWidget(d->printExpoSensitivity);
+    layout->addWidget(d->printMakeModel);
     layout->addWidget(d->printComment);
     layout->addStretch();
     
@@ -131,6 +137,7 @@ void SetupSlideShow::applySettings()
     config->writeEntry("SlideShowPrintDate", d->printDate->isChecked());
     config->writeEntry("SlideShowPrintApertureFocal", d->printApertureFocal->isChecked());
     config->writeEntry("SlideShowPrintExpoSensitivity", d->printExpoSensitivity->isChecked());
+    config->writeEntry("SlideShowPrintMakeModel", d->printMakeModel->isChecked());
     config->writeEntry("SlideShowPrintComment", d->printComment->isChecked());
     config->sync();
 }
@@ -147,6 +154,7 @@ void SetupSlideShow::readSettings()
     d->printDate->setChecked(config->readBoolEntry("SlideShowPrintDate", false));
     d->printApertureFocal->setChecked(config->readBoolEntry("SlideShowPrintApertureFocal", false));
     d->printExpoSensitivity->setChecked(config->readBoolEntry("SlideShowPrintExpoSensitivity", false));
+    d->printMakeModel->setChecked(config->readBoolEntry("SlideShowPrintMakeModel", false));
     d->printComment->setChecked(config->readBoolEntry("SlideShowPrintComment", false));
 }
 
