@@ -21,11 +21,13 @@
 #ifndef RAWDECODINGSETTINGS_H
 #define RAWDECODINGSETTINGS_H
 
-#include "digikam_export.h"
-
 // Qt includes.
 
 #include <qstring.h>
+
+// Local includes.
+
+#include "digikam_export.h"
 
 namespace Digikam
 {

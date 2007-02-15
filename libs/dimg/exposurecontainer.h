@@ -25,10 +25,14 @@
 
 #include <qcolor.h>
 
+// Local Includes.
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class ExposureSettingsContainer
+class DIGIKAM_EXPORT ExposureSettingsContainer
 {
 
 public:
