@@ -16,7 +16,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	   -I$(top_srcdir)/digikam/digikam \
 	   $(all_includes) 
 
-digikamimageplugin_core_la_SOURCES = hspreviewwidget.cpp imageplugin_core.cpp  imageeffect_sharpen.cpp \
+digikamimageplugin_core_la_SOURCES = hspreviewwidget.cpp imageplugin_core.cpp imageeffect_sharpen.cpp \
 	                             imageeffect_autocorrection.cpp imageeffect_bwsepia.cpp \
 	                             imageeffect_ratiocrop.cpp imageeffect_rgb.cpp \
 	                             imageeffect_redeye.cpp imageeffect_blur.cpp \
@@ -24,7 +24,8 @@ digikamimageplugin_core_la_SOURCES = hspreviewwidget.cpp imageplugin_core.cpp  i
 
 noinst_HEADERS = imageeffect_autocorrection.h imageeffect_blur.h imageeffect_hsl.h \
                  imageeffect_ratiocrop.h imageeffect_rgb.h imageplugin_core.h imageeffect_bcg.h \
-                 imageeffect_bwsepia.h imageeffect_iccproof.h imageeffect_redeye.h imageeffect_sharpen.h 
+                 imageeffect_bwsepia.h imageeffect_iccproof.h imageeffect_redeye.h \
+		 imageeffect_sharpen.h hspreviewwidget.h imageplugin_core.h 
 
 digikamimageplugin_core_la_LIBADD = $(LIB_KPARTS) \
 	                            $(top_builddir)/digikam/digikam/libdigikam.la
@@ -37,4 +38,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_core.la
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_core_ui.rc
-
