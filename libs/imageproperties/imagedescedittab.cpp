@@ -140,13 +140,13 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     m_navigateBarLayout->addWidget(settingsArea);
 
     QGridLayout *settingsLayout = new QGridLayout(settingsArea, 5, 1, 
-                                      KDialog::marginHint(), KDialog::spacingHint());
+                                      KDialog::spacingHint(), KDialog::spacingHint());
 
     // Comments/Date/Rating view -----------------------------------
     
     QVBox *commentsBox = new QVBox(settingsArea);
     new QLabel(i18n("Comments:"), commentsBox);
-    d->commentsEdit    = new KTextEdit(commentsBox);
+    d->commentsEdit = new KTextEdit(commentsBox);
     d->commentsEdit->setTextFormat(QTextEdit::PlainText);
     d->commentsEdit->setCheckSpellingEnabled(true);
 

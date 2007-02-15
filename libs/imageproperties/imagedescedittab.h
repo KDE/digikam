@@ -2,7 +2,7 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
  *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Date  : 2003-03-09
+ * Date   : 2003-03-09
  * Description : Comments, Tags, and Rating properties editor
  *
  * Copyright 2003-2005 by Renchi Raju & Gilles Caulier
@@ -132,7 +132,6 @@ private slots:
 private:
 
     ImageDescEditTabPriv* d;
-
 };
 
 }  // NameSpace Digikam
