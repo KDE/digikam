@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2006-22-01
  * Description : digikamalbum KIO slave interface to get image 
  *               info from database.

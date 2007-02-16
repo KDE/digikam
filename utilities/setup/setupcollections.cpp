@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date  : 2004-01-02
  * Description : collection setup tab.
  * 

@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Authors: Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date  : 2006-18-12
  * Description : A list view to display digiKam Tags.
  *

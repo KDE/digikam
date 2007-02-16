@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com> 
  * Date   : 2006-06-14
  * Description : A JPEG2000 IO file for DImg framework
  *

@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ *          Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2003-01-29
  * Description : Camera settings container.
  * 

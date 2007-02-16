@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Author: Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date  : 2004-11-17
  * Description : simple image properties side bar (without support 
  *               of digiKam database).

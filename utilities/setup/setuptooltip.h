@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date  : 2006-07-09
  * Description : album item tool tip configuration setup tab
  *

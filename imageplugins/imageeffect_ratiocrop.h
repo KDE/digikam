@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  *          Jaromir Malenko <malenko at email.cz>
  * Date   : 2004-12-06
  * Description : digiKam image editor Ratio Crop tool

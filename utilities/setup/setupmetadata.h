@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  *          Ralf Holzer <ralf at well.com>
  * Date   : 2003-08-03
  * Description : setup Metadata tab.

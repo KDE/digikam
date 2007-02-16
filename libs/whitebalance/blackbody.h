@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Pawel T. <Jochym jochym at ifj edu pl>
- *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2005-03-11
  * Description : White Balance Black Body array calibrate 
  *               in Kelvin.

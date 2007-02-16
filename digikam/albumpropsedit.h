@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Tom Albers <tomalbers@kde.nl>
- *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2003-03-09
  * Description : Album properties dialog.
  *

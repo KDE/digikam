@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Tom Albers <tomalbers@kde.nl>
- *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ *          Gilles Caulier <caulier dot gilles at gmail dot com> 
  * Date   : 2005-01-01
  * Description : a combo box with a width not depending of text 
  *               content size

@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ *          Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2004-09-19
  * Description : a options group to set renaming files
  *               operations during camera downloading

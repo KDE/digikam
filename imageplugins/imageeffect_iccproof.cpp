@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: F.J. Cruz <fj.cruz@supercable.es>
- *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2005-12-21
  *
  * Description : digiKam image editor tool to correct picture 

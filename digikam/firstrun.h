@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Author: Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date  : 2006-04-25
  * Description : a widget to use in first run dialog
  *

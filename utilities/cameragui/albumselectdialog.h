@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ *          Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2005-06-16
  * Description : a dialog to select a target album to downoad
  *               pictures from camera

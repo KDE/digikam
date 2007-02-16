@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : ctrlpaneldlg.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date  : 2005-05-07
  * Description : A threaded filter control panel dialog for
  *               image editor plugins using DImg

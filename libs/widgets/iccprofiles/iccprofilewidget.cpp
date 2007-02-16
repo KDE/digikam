@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date  : 2006-06-23
  * Description : a tab widget to display ICC profile infos
  * 

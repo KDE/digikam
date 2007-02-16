@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Authors: Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2007-31-01
  * Description : main digiKam interface implementation
  * 

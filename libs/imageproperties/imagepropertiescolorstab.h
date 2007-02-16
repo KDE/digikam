@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Authors: Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2004-11-17
  * Description : a tab to display colors informations of images
  *

@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Tom Albers <tomalbers@kde.nl>
- *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ *          Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2002-16-10
  * Description : main digiKam interface implementation
  * 

@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : dimggaussianblur.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date  : 2005-17-07
  * Description : A Gaussian Blur threaded image filter.
  * 

@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ *          Gilles Caulier <caulier dot gilles at gmail dot com> 
  *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Date   : 2005-06-14
  * Description : digiKam 8/16 bits image management API

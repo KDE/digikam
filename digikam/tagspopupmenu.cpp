@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ *          Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2004-09-07
  * Description : a pop-up menu implementation to display a 
  *               hierarchical view of digiKam tags.

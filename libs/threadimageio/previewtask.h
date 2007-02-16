@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Marcel Wiesweg <marcel.wiesweg@gmx.de>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *         Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2006-12-26
  * Description : Multithreaded loader for previews
  *

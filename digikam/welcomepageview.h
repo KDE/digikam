@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Authors: Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2006-12-20
  * Description : a view to display a welcome page 
  *               on root album.

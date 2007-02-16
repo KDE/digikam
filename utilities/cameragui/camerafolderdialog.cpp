@@ -1,5 +1,5 @@
 /* ============================================================
- * Author:  Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Author:  Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2006-07-24
  * Description : a dialog to select a camera folders.
  * 

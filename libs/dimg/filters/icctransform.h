@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: F.J. Cruz <fj.cruz@supercable.es>
- *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ *          Gilles Caulier <caulier dot gilles at gmail dot com> 
  * Date   : 2005-11-18
  * Description : a class to apply ICC color correction to image.
  *

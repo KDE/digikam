@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Authors: Caulier Gilles <caulier dot gilles at gmail dot com>
  *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2007-01-04
  * Description : A parent tab class with a navigation bar

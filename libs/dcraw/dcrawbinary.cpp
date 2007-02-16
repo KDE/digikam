@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2006-04-13
  * Description : detection of dcraw binary program

@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: F.J. Cruz <fj.cruz@supercable.es>
- *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ *          Gilles Caulier <caulier dot gilles at gmail dot com> 
  * Date   : 2004-07-13
  * Description : image editor printing interface.
  *

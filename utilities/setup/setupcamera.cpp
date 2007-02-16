@@ -1,6 +1,6 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *         Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date  : 2003-02-10
  * Description : camera setup tab.
  * 

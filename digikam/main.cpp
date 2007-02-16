@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi at pooh.tam.uiuc.edu>
- *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2002-07-28
  * Description : main program from digiKam
  * 

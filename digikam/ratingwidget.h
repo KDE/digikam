@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Owen Hirst <n8rider@sbcglobal.net>
- *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ *          Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2005-08-15
  * Description : a widget to draw stars rating
  * 

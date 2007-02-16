@@ -1,6 +1,6 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *         Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date  : 2004-06-04
  * Description : digiKam image editor plugin core
  * 

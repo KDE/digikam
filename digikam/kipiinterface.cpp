@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  *          Ralf Holzer <ralf at well.com>
  *          Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date   : 2004-08-02

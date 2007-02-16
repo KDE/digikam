@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors: Tom Albers <tomalbers@kde.nl>
  *          Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2005-01-01
  * Description : a dialog to perform advanced search in albums
  * 

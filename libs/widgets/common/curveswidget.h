@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : curveswidget.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date  : 2004-12-01
  * Description : 
  * 

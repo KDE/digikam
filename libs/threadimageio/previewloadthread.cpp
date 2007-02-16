@@ -1,6 +1,6 @@
 /* ============================================================
  * Author: Marcel Wiesweg <marcel.wiesweg@gmx.de>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *         Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date  : 2006-01-20
  * Description : image file IO threaded interface.
  *

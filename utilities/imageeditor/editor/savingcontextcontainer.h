@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Date   : 2006-01-20
  * Description : image editor GUI saving context container

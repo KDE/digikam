@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Joern Ahrens <joern.ahrens@kdemail.net>
- *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ *          Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2005-03-22
  * Description : a widget to manage sidebar in gui.
  *
