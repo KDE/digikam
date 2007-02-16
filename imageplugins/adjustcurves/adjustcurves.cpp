@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2004-12-01
  * Description : image histogram adjust curves.
  *
@@ -97,7 +97,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at kdemail dot net");
+                     "caulier dot gilles at gmail dot com");
 
     setAboutData(about);
     

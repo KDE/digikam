@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : distortion.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
            Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-07-18
  * Description : Distortion FX threaded image filter.

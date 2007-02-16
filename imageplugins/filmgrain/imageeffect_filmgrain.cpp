@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2004-08-26
  * Description : a digiKam image editor plugin for add film 
@@ -67,7 +67,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent, QString title, QFr
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at kdemail dot net");
+                     "caulier dot gilles at gmail dot com");
 
     about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
                      "marcel dot wiesweg at gmx dot de");

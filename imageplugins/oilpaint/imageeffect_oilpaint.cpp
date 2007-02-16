@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2004-08-25
  * Description : a digiKam image editor plugin to simulate 
@@ -66,7 +66,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent, QString title, QFram
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at kdemail dot net");
+                     "caulier dot gilles at gmail dot com");
 
     about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Oil paint algorithm"), 
                      "pieter dot voloshyn at gmail dot com");

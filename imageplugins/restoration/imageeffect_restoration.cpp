@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_restoration.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date  : 2005-03-26
  * Description : a digiKam image editor plugin to restore 
  *               a photograph
@@ -73,7 +73,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent, QString title,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at kdemail dot net");
+                     "caulier dot gilles at gmail dot com");
                      
     about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
                      "http://cimg.sourceforge.net");

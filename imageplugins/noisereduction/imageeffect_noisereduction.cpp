@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  *          Peter Heckert <peter dot heckert at arcor dot de>
  * Date   : 2004-08-24
  * Description : noise reduction image filter for digiKam 
@@ -72,7 +72,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at kdemail dot net");
+                     "caulier dot gilles at gmail dot com");
 
     about->addAuthor("Peter Heckert", I18N_NOOP("Noise Reduction algorithm. Developer"),
                      "peter dot heckert at arcor dot de");

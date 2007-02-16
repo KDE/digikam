@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : unsharp.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date  : 2005-05-25
  * Description : Unsharp Mask threaded image filter.
  * 

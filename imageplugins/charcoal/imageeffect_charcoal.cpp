@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2004-08-26
  * Description : a digikam image editor plugin for 
  *               simulate charcoal drawing.
@@ -62,7 +62,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent, QString title, QFram
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at kdemail dot net");
+                     "caulier dot gilles at gmail dot com");
     
     setAboutData(about);
         

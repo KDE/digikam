@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2004-12-23
  * Description : a digiKam image editor plugin to process 
  *               shearing image.
@@ -70,7 +70,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent, QString title, QFr
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at kdemail dot net");
+                     "caulier dot gilles at gmail dot com");
     
     about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Shear algorithm"), 
                      "pieter dot voloshyn at gmail dot com"); 

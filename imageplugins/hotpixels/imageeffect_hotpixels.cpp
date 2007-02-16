@@ -72,7 +72,7 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent,QString title, QFra
                      "ugarro at sourceforge dot net");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Developer"),
-                     "caulier dot gilles at kdemail dot net");
+                     "caulier dot gilles at gmail dot com");
         
     setAboutData(about);
     

@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2004-08-27
  * Description : Unsharp mask image filter for digiKam Image Editor
  * 
@@ -64,7 +64,7 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent, QString title, QFrame*
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at kdemail dot net");
+                     "caulier dot gilles at gmail dot com");
 
     setAboutData(about);
     

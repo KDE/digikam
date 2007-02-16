@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  *          Peter Heckert <peter dot heckert at arcor dot de>
  * Date   : 2004-08-24
  * Description : noise reduction image filter for digiKam 

@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
             Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2005-01-20
  * Description : a digiKam image plugin to add a border
@@ -72,7 +72,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent, QString title, QFrame* b
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at kdemail dot net");
+                     "caulier dot gilles at gmail dot com");
 
     about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
                      "marcel dot wiesweg at gmx dot de");
