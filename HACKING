@@ -219,3 +219,23 @@ To check any memory leak problem in digiKam, valgrind is your friend (http://val
 Try this command line to use with valgrind :
 
 valgrind --tool=memcheck --leak-check=full --error-limit=no digikam
+
+========================================================================
+Profiling with cachegrind
+========================================================================
+
+Valgrind also includes a tool to find out in which parts of your code time is spent.
+
+valgrind --tool=callgrind digikam
+
+Profiling can be disabled at startup to limit the output to the code you are interested in.
+Start with
+
+valgrind --tool=callgrind --instr-atstart=no digikam
+
+and prepare the situation you want to profile. Then, in another console, start profiling with
+"callgrind_control -i on" and, after the situation has passed, request a profile dump with
+"callgrind_control -d".
+The resulting callgrind.out files need to be viewed with the kcachegrind program, e.g.:
+
+kcachegrind callgrind.out.16693.1
