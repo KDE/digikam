@@ -448,9 +448,17 @@ void ImageDescEditTab::slotApplyAllChanges()
     if (d->currInfos.isEmpty())
         return;
 
+    bool progressInfo = (d->currInfos.count() > 1);
     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                i18n("Applying changes to pictures. Please wait..."));
     MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
+
+    // debugging - use this to indicate reentry from event loop (kapp->processEvents)
+    // remove before final release
+    if (d->ignoreImageAttributesWatch)
+    {
+        kdWarning() << "ImageDescEditTab::slotApplyAllChanges(): re-entering from event loop!" << endl;
+    }
 
     // we are now changing attributes ourselves
     d->ignoreImageAttributesWatch = true;
@@ -464,7 +472,8 @@ void ImageDescEditTab::slotApplyAllChanges()
         d->hub.write(info->filePath(), MetadataHub::FullWrite, writeSettings);
 
         emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
-        kapp->processEvents();
+        if (progressInfo)
+            kapp->processEvents();
     }
     AlbumManager::instance()->albumDB()->commitTransaction();
     d->ignoreImageAttributesWatch = false;
@@ -508,11 +517,13 @@ void ImageDescEditTab::setInfos(QPtrList<ImageInfo> infos)
 {
     if (infos.isEmpty())
     {
-       d->commentsEdit->clear();
-       d->currInfos.clear();
-       d->hub = MetadataHub();
-       setEnabled(false);
-       return;
+        d->hub = MetadataHub();
+        d->commentsEdit->blockSignals(true);
+        d->commentsEdit->clear();
+        d->commentsEdit->blockSignals(false);
+        d->currInfos.clear();
+        setEnabled(false);
+        return;
     }
 
     setEnabled(true);
