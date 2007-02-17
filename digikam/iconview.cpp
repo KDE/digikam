@@ -754,10 +754,7 @@ QRect IconView::contentsRectToViewport(const QRect& r) const
 void IconView::resizeEvent(QResizeEvent* e)
 {
     QScrollView::resizeEvent(e);
-    rearrangeItems();
-
-    if (d->currItem)
-        ensureItemVisible(d->currItem);
+    triggerUpdate();
 }
 
 void IconView::rebuildContainers()
