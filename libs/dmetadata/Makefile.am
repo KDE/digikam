@@ -11,7 +11,7 @@ libdmetadata_la_LIBADD  = $(LIBKEXIV2_LIBS)
 INCLUDES = -I$(top_srcdir)/digikam/libs/dimg \
 	   -I$(top_srcdir)/digikam/libs/dcraw \
 	   -I$(top_srcdir)/digikam/digikam \
-	   $(all_includes)
+	   $(LIBKEXIV2_CFLAGS) $(all_includes)
 
 digikaminclude_HEADERS = dmetadata.h photoinfocontainer.h 
 digikamincludedir = $(includedir)/digikam
