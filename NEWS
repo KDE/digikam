@@ -641,6 +641,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 289 ==> 141035 : Advanced Search gives error when trying to search by rating.
 290 ==> 116609 : Allow slideshow to be recursive.
 291 ==> 141635 : Unclear text in digiKam.
-292 ==> 
+292 ==> 141624 : Digikam crash when assigning a new tag to a large number of photos
+293 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
