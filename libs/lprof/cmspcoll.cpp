@@ -1,6 +1,6 @@
 /* */
 /*  Little cms - profiler construction set */
-/*  Copyright (C) 1998-2001 Marti Maria */
+/*  Copyright (C) 1998-2001 Marti Maria <marti@littlecms.com> */
 /* */
 /* THIS SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, */
 /* EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY */
@@ -25,7 +25,7 @@
 /* */
 /* You should have received a copy of the GNU General Public License */
 /* along with this program; if not, write to the Free Software */
-/* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02111-1307, USA. */
 /* */
 /* As a special exception to the GNU General Public License, if you */
 /* distribute this file as part of a program that contains a */
@@ -229,7 +229,7 @@ BOOL cmsxPCollLoadFromSheet(LPMEASUREMENT m, LCMSHANDLE hSheet)
 
             if (m -> Patches == NULL) {
                 cmsxIT8Free(hSheet);
-                return FALSE;
+                return false;
             }
 
             for (i=0; i < m -> nPatches; i++) {
@@ -294,7 +294,7 @@ BOOL cmsxPCollLoadFromSheet(LPMEASUREMENT m, LCMSHANDLE hSheet)
     }
 
 	NormalizeColorant(m);
-    return TRUE;
+    return true;
 }
 
 
@@ -386,7 +386,7 @@ BOOL cmsxPCollSaveToSheet(LPMEASUREMENT m, LCMSHANDLE it8)
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 static
@@ -443,7 +443,7 @@ BOOL cmsxPCollBuildMeasurement(LPMEASUREMENT m,
                                DWORD dwNeededSamplesType)
 {
     LCMSHANDLE hSheet;
-	BOOL rc = TRUE;
+	BOOL rc = true;
 
     ZeroMemory(m, sizeof(MEASUREMENT));
 
@@ -451,24 +451,24 @@ BOOL cmsxPCollBuildMeasurement(LPMEASUREMENT m,
     if (ReferenceSheet != NULL && *ReferenceSheet) {
 
                 hSheet = cmsxIT8LoadFromFile(ReferenceSheet);       
-                if (hSheet == NULL) return FALSE;               
+                if (hSheet == NULL) return false;               
                 
 				rc = cmsxPCollLoadFromSheet(m,  hSheet);
                 cmsxIT8Free(hSheet);
     }
 
-    if (!rc) return FALSE;
+    if (!rc) return false;
 
     if (MeasurementSheet != NULL && *MeasurementSheet) {
 
                 hSheet = cmsxIT8LoadFromFile(MeasurementSheet);
-                if (hSheet == NULL) return FALSE;
+                if (hSheet == NULL) return false;
 
                 rc = cmsxPCollLoadFromSheet(m,  hSheet);
                 cmsxIT8Free(hSheet);
     }
 
-    if (!rc) return FALSE;
+    if (!rc) return false;
 
 
 	/* Fix up -- If only Lab is present, then compute  */
@@ -477,7 +477,7 @@ BOOL cmsxPCollBuildMeasurement(LPMEASUREMENT m,
 	FixLabOnly(m);
 
     cmsxPCollValidatePatches(m, dwNeededSamplesType);
-    return TRUE;
+    return true;
 }
 
 
@@ -555,7 +555,7 @@ BOOL cmsxPCollValidatePatches(LPMEASUREMENT m, DWORD dwFlags)
 		if (m->Allowed) 
 				free(m->Allowed);
 
-        m -> Allowed = cmsxPCollBuildSet(m, TRUE);
+        m -> Allowed = cmsxPCollBuildSet(m, true);
         
         /* Check for flags */
         for (i=n=0; i < m -> nPatches; i++) {
@@ -565,7 +565,7 @@ BOOL cmsxPCollValidatePatches(LPMEASUREMENT m, DWORD dwFlags)
                 
         }
 
-        return TRUE;
+        return true;
 }
 
 
@@ -598,9 +598,9 @@ void PatchesByRGB(LPMEASUREMENT m, SETOFPATCHES Valids,
         ra = sqrt(dR*dR + dG*dG + dB*dB);
 
         if (ra <= rmax) 
-            Result[i] = TRUE;       
+            Result[i] = true;       
         else 
-            Result[i] = FALSE;
+            Result[i] = false;
 
        }
     }
@@ -635,9 +635,9 @@ void PatchesByLab(LPMEASUREMENT m, SETOFPATCHES Valids,
         dE = sqrt(dL*dL + da*da + db*db);
        
         if (dE <= dEMaxSQR) 
-            Result[i] = TRUE; 
+            Result[i] = true; 
         else 
-            Result[i] = FALSE;
+            Result[i] = false;
        }
     }
 }
@@ -663,9 +663,9 @@ void  PatchesInLabCube(LPMEASUREMENT m, SETOFPATCHES Valids,
                             (fabs(p -> Lab.a) < da) &&
                             (fabs(p -> Lab.b) < db)) 
 
-                             Result[i] = TRUE;
+                             Result[i] = true;
                          else   
-                             Result[i] = FALSE;
+                             Result[i] = false;
                 }
         }
 
@@ -691,9 +691,9 @@ void PatchesOfLowC(LPMEASUREMENT m, SETOFPATCHES Valids,
 
 
                         if (LCh.C < Cmax)
-                             Result[i] = TRUE;
+                             Result[i] = true;
                          else   
-                             Result[i] = FALSE;
+                             Result[i] = false;
                 }
         }
 
@@ -748,9 +748,9 @@ void PatchesPrimary(LPMEASUREMENT m, SETOFPATCHES Valids,
 
 
                         if (sqrt(dE) < dEMax) 
-                             Result[i] = TRUE;
+                             Result[i] = true;
                          else   
-                             Result[i] = FALSE;
+                             Result[i] = false;
                 }
         }
 
@@ -865,7 +865,7 @@ void AddOneGray(LPMEASUREMENT m, int n, SETOFPATCHES Grays)
     p = cmsxPCollGetPatchByName(m, Buffer, &pos);
 
     if (p) 
-        Grays[pos] = TRUE;
+        Grays[pos] = true;
 }
 
 
@@ -916,7 +916,7 @@ int cmsxPCollPatchesInGamutLUT(LPMEASUREMENT m, SETOFPATCHES Valids,
 
 		cmsFloat2LabEncoded(EncodedLab, &p->Lab);
 		cmsEvalLUT(Gamut, EncodedLab, &dE);
-		Result[i] = (dE < 2) ? TRUE : FALSE;			        
+		Result[i] = (dE < 2) ? true : false;			        
 		if (Result[i]) nCollected++;
         }
     }

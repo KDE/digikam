@@ -1,6 +1,6 @@
 /* */
 /*  Little cms - profiler construction set */
-/*  Copyright (C) 1998-2001 Marti Maria */
+/*  Copyright (C) 1998-2001 Marti Maria <marti@littlecms.com> */
 /* */
 /* THIS SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, */
 /* EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY */
@@ -25,7 +25,7 @@
 /* */
 /* You should have received a copy of the GNU General Public License */
 /* along with this program; if not, write to the Free Software */
-/* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02111-1307, USA. */
 /* */
 /* As a special exception to the GNU General Public License, if you */
 /* distribute this file as part of a program that contains a */
@@ -69,7 +69,7 @@ BOOL ComputeWhiteAndBlackPoints(LPMEASUREMENT Linearized,
 
     double Zeroes[3], Ones[3], lmin[3], lmax[3];    
 
-    SETOFPATCHES Neutrals = cmsxPCollBuildSet(Linearized, FALSE);
+    SETOFPATCHES Neutrals = cmsxPCollBuildSet(Linearized, false);
     
     cmsxPCollPatchesNearNeutral(Linearized, Linearized->Allowed,
                                                     15, Neutrals); 
@@ -85,22 +85,22 @@ BOOL ComputeWhiteAndBlackPoints(LPMEASUREMENT Linearized,
     /* Global regression to find White & Black points */
     if (!cmsxRegressionInterpolatorRGB(Linearized, PT_XYZ,                                       
                                        4,
-                                       TRUE,
+                                       true,
                                        12,
                                        lmin[0], lmin[1], lmin[2],
-                                       Black)) return FALSE;
+                                       Black)) return false;
 
     if (!cmsxRegressionInterpolatorRGB(Linearized, PT_XYZ,                                       
                                        4,
-                                       TRUE,
+                                       true,
                                        12,
                                        lmax[0], lmax[1], lmax[2],
-                                       White)) return FALSE;
+                                       White)) return false;
 
     _cmsxClampXYZ100(White);
     _cmsxClampXYZ100(Black);
     
-    return TRUE;
+    return true;
     
 }
 
@@ -122,7 +122,7 @@ BOOL ComputePrimary(LPMEASUREMENT Linearized,
 
     /* At first, try to see if primaries are already in measurement */
 
-    SetPrimary = cmsxPCollBuildSet(Linearized, FALSE);
+    SetPrimary = cmsxPCollBuildSet(Linearized, false);
     nR = cmsxPCollPatchesNearPrimary(Linearized, Linearized->Allowed,
                                            n, 32, SetPrimary);
 
@@ -134,14 +134,14 @@ BOOL ComputePrimary(LPMEASUREMENT Linearized,
     /* Do incremental regression to find primaries */
     if (!cmsxRegressionInterpolatorRGB(Linearized, PT_XYZ,                                       
                                        4,
-                                       FALSE, 
+                                       false, 
                                        12,
                                        lmax[0], lmax[1], lmax[2],                                   
-                                       &PrimXYZ)) return FALSE;
+                                       &PrimXYZ)) return false;
 
     _cmsxClampXYZ100(&PrimXYZ);
     cmsXYZ2xyY(Primary, &PrimXYZ);
-    return TRUE;
+    return true;
     
 
 }
@@ -178,12 +178,12 @@ BOOL cmsxComputeMatrixShaper(const char* ReferenceSheet,
     if (!cmsxPCollBuildMeasurement(&Linearized, 
                              ReferenceSheet,
                              MeasurementSheet,
-                             PATCH_HAS_XYZ|PATCH_HAS_RGB)) return FALSE;
+                             PATCH_HAS_XYZ|PATCH_HAS_RGB)) return false;
 
 
 
     /* Any patch to deal of? */
-    if (cmsxPCollCountSet(&Linearized, Linearized.Allowed) <= 0) return FALSE;
+    if (cmsxPCollCountSet(&Linearized, Linearized.Allowed) <= 0) return false;
 
 
     /* Try to see if proper primaries, white and black already present */
@@ -300,7 +300,7 @@ BOOL cmsxComputeMatrixShaper(const char* ReferenceSheet,
 
         cmsxPCollFreeMeasurements(&Linearized); 
 
-        return TRUE;
+        return true;
     }
 
 
@@ -339,7 +339,7 @@ BOOL cmsxComputeMatrixShaper(const char* ReferenceSheet,
     
     cmsxPCollFreeMeasurements(&Linearized); 
     
-    return TRUE;
+    return true;
 }
 
 

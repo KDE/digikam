@@ -1,6 +1,6 @@
 /* */
 /*  Little cms - profiler construction set */
-/*  Copyright (C) 1998-2001 Marti Maria */
+/*  Copyright (C) 1998-2001 Marti Maria <marti@littlecms.com> */
 /* */
 /* THIS SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, */
 /* EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY */
@@ -121,18 +121,18 @@ BOOL cmsxEmbedCharTarget(LPPROFILERCOMMONDATA hdr)
 		LPBYTE mem;
 		size_t size, readed;
 		FILE* f;
-		BOOL lFreeOnExit = FALSE;
+		BOOL lFreeOnExit = false;
 
 
 		if (!hdr->m.Patches) {
 
-			if (!hdr ->ReferenceSheet[0] && !hdr->MeasurementSheet[0]) return FALSE;
+			if (!hdr ->ReferenceSheet[0] && !hdr->MeasurementSheet[0]) return false;
 
 			if (cmsxPCollBuildMeasurement(&hdr ->m, 
                                     hdr->ReferenceSheet, 
                                     hdr->MeasurementSheet,
-                                    PATCH_HAS_RGB|PATCH_HAS_XYZ) == FALSE) return FALSE;
-			lFreeOnExit = TRUE;
+                                    PATCH_HAS_RGB|PATCH_HAS_XYZ) == false) return false;
+			lFreeOnExit = true;
 			
 		}
 
@@ -162,7 +162,7 @@ BOOL cmsxEmbedCharTarget(LPPROFILERCOMMONDATA hdr)
 			cmsxPCollFreeMeasurements(&hdr->m);
 		}
 
-		return TRUE;
+		return true;
 }
 
 
@@ -175,7 +175,7 @@ BOOL ComputeColorantMatrix(LPcmsCIEXYZTRIPLE Colorants,
        
 	   if (!cmsBuildRGB2XYZtransferMatrix(&MColorants, WhitePoint, Primaries))
        {       
-              return FALSE;
+              return false;
        }  
 
 	  
@@ -193,7 +193,7 @@ BOOL ComputeColorantMatrix(LPcmsCIEXYZTRIPLE Colorants,
        Colorants->Blue.Y = MColorants.v[1].n[2];
        Colorants->Blue.Z = MColorants.v[2].n[2];
 
-	   return TRUE;
+	   return true;
 
 }
 
@@ -216,7 +216,7 @@ BOOL cmsxEmbedMatrixShaper(LPPROFILERCOMMONDATA hdr)
 		cmsAddTag(hdr ->hProfile, icSigGreenTRCTag, hdr ->Gamma[1]);
 		cmsAddTag(hdr ->hProfile, icSigBlueTRCTag, hdr ->Gamma[2]);
 
-		return TRUE;
+		return true;
 }
 
 
@@ -234,7 +234,7 @@ BOOL cmsxEmbedTextualInfo(LPPROFILERCOMMONDATA hdr)
         if (*hdr ->Model)
            cmsAddTag(hdr ->hProfile, icSigDeviceModelDescTag,    hdr ->Model);
 
-		return TRUE;
+		return true;
 }
 
 
@@ -382,7 +382,7 @@ BOOL cmsxChoosePCS(LPPROFILERCOMMONDATA hdr)
                                      hdr ->Gamma,
                                      &hdr ->WhitePoint,
                                      &hdr ->BlackPoint,
-                                     &hdr ->Primaries)) return FALSE;
+                                     &hdr ->Primaries)) return false;
 
         		
 
@@ -400,7 +400,7 @@ BOOL cmsxChoosePCS(LPPROFILERCOMMONDATA hdr)
                 hdr ->PCSType = PT_Lab;
 
                 if (hdr ->printf)
-                       hdr ->printf("I have choosen Lab as PCS");                        
+                       hdr ->printf("I have chosen Lab as PCS");                        
 
         }
         else {
@@ -408,7 +408,7 @@ BOOL cmsxChoosePCS(LPPROFILERCOMMONDATA hdr)
                 hdr ->PCSType = PT_XYZ;
 
                 if (hdr ->printf)
-                       hdr ->printf("I have choosen XYZ as PCS");                        
+                       hdr ->printf("I have chosen XYZ as PCS");                        
      }
 
                 
@@ -435,5 +435,5 @@ BOOL cmsxChoosePCS(LPPROFILERCOMMONDATA hdr)
 
 
 		
-        return TRUE;
+        return true;
 }

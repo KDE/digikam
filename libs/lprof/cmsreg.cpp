@@ -1,6 +1,6 @@
 /* */
 /*  Little cms - profiler construction set */
-/*  Copyright (C) 1998-2001 Marti Maria */
+/*  Copyright (C) 1998-2001 Marti Maria <marti@littlecms.com> */
 /* */
 /* THIS SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, */
 /* EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY */
@@ -25,7 +25,7 @@
 /* */
 /* You should have received a copy of the GNU General Public License */
 /* along with this program; if not, write to the Free Software */
-/* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02111-1307, USA. */
 /* */
 /* As a special exception to the GNU General Public License, if you */
 /* distribute this file as part of a program that contains a */
@@ -92,7 +92,7 @@ BOOL cdecl cmsxRegressionRGB2XYZ(double r, double g, double b,
 
 
 /* Multiple linear regression. Also keep track of error. */
-/* Returns FALSE if something goes wrong, or TRUE if all Ok. */
+/* Returns false if something goes wrong, or true if all Ok. */
 
 static
 BOOL MultipleLinearRegression(const LPMATN xi,                /* Dependent variable */
@@ -112,25 +112,25 @@ BOOL MultipleLinearRegression(const LPMATN xi,                /* Dependent varia
 
     /* |xt| = |xi| T */
     xt = MATNtranspose(xi);
-    if (xt == NULL) return FALSE;
+    if (xt == NULL) return false;
 
 
     /* |a| = |xt|* |xi| */
     a = MATNmult(xt, xi);
-    if (a == NULL) return FALSE;
+    if (a == NULL) return false;
 
 
     /* |xy| = |xy| * |y| */
     xy = MATNmult (xt, y);
-    if (xy == NULL) return FALSE;
+    if (xy == NULL) return false;
 
 
     /* solve system |a|*|xy| = 0 */
-    if (!MATNsolve(a, xy)) return FALSE;
+    if (!MATNsolve(a, xy)) return false;
 
     /* b will hold coefficients */
     b = MATNalloc (xy->Rows, 1);
-    if (b == NULL) return FALSE;
+    if (b == NULL) return false;
 
     for (i = 0; i < npar; i++)
         b->Values[i][0] = xy->Values[i][0];
@@ -143,20 +143,20 @@ BOOL MultipleLinearRegression(const LPMATN xi,                /* Dependent varia
 
     /* SSE and MSE. */
     temp1 = MATNalloc (1,1);
-    if ((temp1->Values[0][0] = MATNcross(y)) == 0) return FALSE;
+    if ((temp1->Values[0][0] = MATNcross(y)) == 0) return false;
 
     /* |bt| = |b| T */
     bt = MATNtranspose (b);
-    if (bt == FALSE) return FALSE;
+    if (bt == false) return false;
 
     /*  |yt| = |bt| * |xt| */
     yt = MATNmult (bt, xt);
-    if (yt == NULL) return FALSE;
+    if (yt == NULL) return false;
 
 
     /* |temp2| = |yt|* |y| */
     temp2 = MATNmult (yt, y);
-    if (temp2 == NULL) return FALSE;
+    if (temp2 == NULL) return false;
 
     /* SSE, MSE */
     ans->SSE = temp1 -> Values[0][0] - temp2 -> Values[0][0];
@@ -208,7 +208,7 @@ BOOL MultipleLinearRegression(const LPMATN xi,                /* Dependent varia
     MATNfree(temp1); MATNfree(temp2); MATNfree(bt); MATNfree(xt);
 
 
-    return TRUE;
+    return true;
 }
 
 
@@ -234,16 +234,16 @@ BOOL CreateRegressionMatrix(const LPMATN Input, const LPMATN Output,
         if (Output -> Rows != NumOfPatches) {
 
                 cmsSignalError(LCMS_ERRC_ABORTED, "(internal) Regression matrix mismatch");
-                return FALSE;
+                return false;
         }
 
     coef = (double*) malloc(nIn * sizeof(double));
-    if (coef == NULL) return FALSE;
+    if (coef == NULL) return false;
 
     tval = (double*) malloc(nIn * sizeof(double));
     if (tval == NULL) {
         free(coef);
-        return FALSE;
+        return false;
     }
 
     ivar = MATNalloc(NumOfPatches, nIn);
@@ -280,7 +280,7 @@ BOOL CreateRegressionMatrix(const LPMATN Input, const LPMATN Output,
                     if (coef) free(coef);
                     if (tval) free(tval);
                     MATNfree(*ptrMatrix); *ptrMatrix = NULL;
-                    return FALSE;
+                    return false;
         }
 
         /* Did this colorant got higer error? If so, this is  */
@@ -304,7 +304,7 @@ BOOL CreateRegressionMatrix(const LPMATN Input, const LPMATN Output,
     if (coef) free(coef);
     if (tval) free(tval);
 
-    return TRUE;
+    return true;
 }
 
 
@@ -453,7 +453,7 @@ int cmsxRegressionCreateMatrix(LPMEASUREMENT m, SETOFPATCHES Allowed, int nterms
 
 
 #ifdef DEBUG
-        if (rc == TRUE)
+        if (rc == true)
             MATNprintf("tfm", *lpMat);
 #endif
 
@@ -470,7 +470,7 @@ BOOL cmsxRegressionRGB2Lab(double r, double g, double b, LPMATN tfm, LPcmsCIELab
 
     inVec = MATNalloc(1, tfm->Rows);
     if (inVec == NULL)
-            return FALSE;
+            return false;
 
         /* Put terms */
         for (i=0; i < tfm->Rows; i++)
@@ -489,7 +489,7 @@ BOOL cmsxRegressionRGB2Lab(double r, double g, double b, LPMATN tfm, LPcmsCIELab
     }
 
     MATNfree(inVec);
-    return TRUE;
+    return true;
 }
 
 
@@ -502,7 +502,7 @@ BOOL cmsxRegressionRGB2XYZ(double r, double g, double b, LPMATN tfm, LPcmsCIEXYZ
 
     inVec = MATNalloc(1, tfm->Rows);
     if (inVec == NULL)
-            return FALSE;
+            return false;
 
         /* Put terms */
         for (i=0; i < tfm->Rows; i++)
@@ -521,7 +521,7 @@ BOOL cmsxRegressionRGB2XYZ(double r, double g, double b, LPMATN tfm, LPcmsCIEXYZ
     }
 
     MATNfree(inVec);
-    return TRUE;
+    return true;
 }
 
 
@@ -534,7 +534,7 @@ BOOL cmsxRegressionXYZ2RGB(LPcmsCIEXYZ XYZ, LPMATN tfm, double RGB[3])
 
     inVec = MATNalloc(1, tfm->Rows);
     if (inVec == NULL)
-            return FALSE;
+            return false;
 
         /* Put terms */
         for (i=0; i < tfm->Rows; i++)
@@ -553,6 +553,6 @@ BOOL cmsxRegressionXYZ2RGB(LPcmsCIEXYZ XYZ, LPMATN tfm, double RGB[3])
     }
 
     MATNfree(inVec);
-    return TRUE;
+    return true;
 }
 

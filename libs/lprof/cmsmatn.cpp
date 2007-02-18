@@ -1,6 +1,6 @@
 /* */
 /*  Little cms - profiler construction set */
-/*  Copyright (C) 1998-2001 Marti Maria */
+/*  Copyright (C) 1998-2001 Marti Maria <marti@littlecms.com> */
 /* */
 /* THIS SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, */
 /* EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY */
@@ -25,7 +25,7 @@
 /* */
 /* You should have received a copy of the GNU General Public License */
 /* along with this program; if not, write to the Free Software */
-/* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02111-1307, USA. */
 /* */
 /* As a special exception to the GNU General Public License, if you */
 /* distribute this file as part of a program that contains a */
@@ -119,9 +119,9 @@ BOOL MATNsolve(LPMATN a, LPMATN b)
     int*      aiPivoted=0;
 
 
-    if (a->Rows != a->Cols) return FALSE;
+    if (a->Rows != a->Cols) return false;
 
-    status = FALSE;
+    status = false;
     if((aiColIndex = (int*) malloc(n * sizeof(int))) == NULL)
         goto GotError;
 
@@ -153,7 +153,7 @@ BOOL MATNsolve(LPMATN a, LPMATN b)
                     else
                     if (aiPivoted[k] > 1) {
 
-                        status = FALSE;
+                        status = false;
                         goto GotError;
                     }
                 }
@@ -177,7 +177,7 @@ BOOL MATNsolve(LPMATN a, LPMATN b)
 
         if (a->Values[iCol][iCol] == 0.0)
         {
-            status = FALSE;
+            status = false;
             goto GotError;
         }
 
@@ -215,7 +215,7 @@ BOOL MATNsolve(LPMATN a, LPMATN b)
                                 DO_SWAP(a->Values[j][aiRowIndex[i]], a->Values[j][aiColIndex[i]], temp)
         }
 
-        status = TRUE;
+        status = true;
 
 GotError:
         if(aiColIndex) free(aiColIndex);

@@ -1,6 +1,6 @@
 /*
    dcraw.c -- Dave Coffin's raw photo decoder
-   Copyright 1997-2006 by Dave Coffin, dcoffin a cybercom o net
+   Copyright 1997-2006 by Dave Coffin, <dcoffin@cybercom.net>
 
    This is a command-line ANSI C program to convert raw photos from
    any digital camera on any computer running any operating system.

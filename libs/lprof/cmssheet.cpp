@@ -1,6 +1,6 @@
 /* */
 /*  Little cms - profiler construction set */
-/*  Copyright (C) 1998-2001 Marti Maria */
+/*  Copyright (C) 1998-2001 Marti Maria <marti@littlecms.com> */
 /* */
 /* THIS SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, */
 /* EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY */
@@ -25,7 +25,7 @@
 /* */
 /* You should have received a copy of the GNU General Public License */
 /* along with this program; if not, write to the Free Software */
-/* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02111-1307, USA. */
 /* */
 /* As a special exception to the GNU General Public License, if you */
 /* distribute this file as part of a program that contains a */
@@ -87,8 +87,8 @@ int         cdecl cmsxIT8GenericPatchNum(const char *Name);
 /* ------------------------------------------------------------- Implementation */
 
 
-#define MAXID   128     /* Max lenght of identifier */
-#define MAXSTR  255     /* Max lenght of string */
+#define MAXID   128     /* Max length of identifier */
+#define MAXSTR  255     /* Max length of string */
 
 #ifndef NON_WINDOWS
 #include <io.h>
@@ -309,7 +309,7 @@ BOOL isseparator(int c)
         return (c == ' ' || c == '\t' || c == '\r');
 }
 
-/* a replacement for strupr(), just for compatiblity sake */
+/* a replacement for strupr(), just for compatibility sake */
 
 static
 void xstrupr(char *cp)
@@ -349,7 +349,7 @@ BOOL SynError(LPIT8 it8, const char *Txt, ...)
         sprintf(ErrMsg, "%s: Line %d, %s", it8->FileName, it8->lineno, Buffer);
         it8->sy = SSYNERROR;
         cmsSignalError(LCMS_ERRC_ABORTED, ErrMsg);
-        return FALSE;
+        return false;
 }
 
 static
@@ -357,7 +357,7 @@ BOOL Check(LPIT8 it8, SYMBOL sy, const char* Err)
 {
         if (it8 -> sy != sy)
                 return SynError(it8, Err);
-        return TRUE;
+        return true;
 }
 
 
@@ -628,10 +628,10 @@ void InSymbol(LPIT8 it8)
 static
 BOOL CheckEOLN(LPIT8 it8)
 {
-        if (!Check(it8, SEOLN, "Expected separator")) return FALSE;
+        if (!Check(it8, SEOLN, "Expected separator")) return false;
         while (it8 -> sy == SEOLN)
                         InSymbol(it8);
-        return TRUE;
+        return true;
 
 }
 
@@ -660,7 +660,7 @@ BOOL GetVal(LPIT8 it8, char* Buffer)
          return SynError(it8, "Sample data expected");
     }
 
-     return TRUE;
+     return true;
 }
 
 /* ---------------------------------------------------------- Memory management */
@@ -744,10 +744,10 @@ BOOL IsAvailableOnList(LPKEYVALUE p, const char* Key, LPKEYVALUE* LastPtr)
 
         if (LastPtr) *LastPtr = p;
         if (stricmp(Key, p->Keyword) == 0)
-                                    return TRUE;
+                                    return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -764,7 +764,7 @@ BOOL AddToList(LPIT8 it8, LPKEYVALUE* Head, const char *Key, const char* Value)
 
     if (IsAvailableOnList(*Head, Key, &last)) {
                     cmsSignalError(LCMS_ERRC_ABORTED, "duplicate key <%s>", Key);
-        return FALSE;
+        return false;
     }
 
         /* Allocate the container */
@@ -772,7 +772,7 @@ BOOL AddToList(LPIT8 it8, LPKEYVALUE* Head, const char *Key, const char* Value)
     if (p == NULL)
     {
         cmsSignalError(LCMS_ERRC_ABORTED, "AddToList: out of memory");
-        return FALSE;
+        return false;
     }
 
     /* Store name and value */
@@ -791,7 +791,7 @@ BOOL AddToList(LPIT8 it8, LPKEYVALUE* Head, const char *Key, const char* Value)
     else
         last->Next = p;
 
-    return TRUE;
+    return true;
 }
 
 static
@@ -864,7 +864,7 @@ BOOL  cmsxIT8SetSheetType(LCMSHANDLE hIT8, const char* Type)
 		LPIT8 it8 = (LPIT8) hIT8;
 
 		strncpy(it8 ->SheetType, Type, MAXSTR-1);
-		return TRUE;
+		return true;
 }
 
 
@@ -874,8 +874,8 @@ BOOL cmsxIT8SetProperty(LCMSHANDLE hIT8, const char* Key, const char *Val)
 {
     LPIT8 it8 = (LPIT8) hIT8;
 
-    if (!Val) return FALSE;
-    if (!*Val) return FALSE;
+    if (!Val) return false;
+    if (!*Val) return false;
 
     return AddToList(it8, &it8 -> HeaderList, Key, Val);
 }
@@ -946,7 +946,7 @@ const char *GetDataFormat(LPIT8 it8, int n)
 static
 BOOL SetDataFormat(LPIT8 it8, int n, const char *label)
 {
-    if (n > it8 -> nSamples) return FALSE;
+    if (n > it8 -> nSamples) return false;
 
     if (!it8->DataFormat)
         AllocateDataFormat(it8);
@@ -956,7 +956,7 @@ BOOL SetDataFormat(LPIT8 it8, int n, const char *label)
         it8->DataFormat[n] = AllocString(it8, label);
     }
 
-    return TRUE;
+    return true;
 }
 
 
@@ -1000,23 +1000,23 @@ BOOL SetData(LPIT8 it8, int nSet, int nField, char *Val)
     if (!it8->Data)
         AllocateDataSet(it8);
 
-    if (!it8->Data) return FALSE;
+    if (!it8->Data) return false;
 
 
     if (nSet > it8 -> nPatches) {
 
             SynError(it8, "Patch %d out of range, there are %d datasets", nSet, it8 -> nPatches);
-            return FALSE;
+            return false;
     }
 
     if (nField > it8 ->nSamples) {
             SynError(it8, "Sample %d out of range, there are %d datasets", nField, it8 ->nSamples);
-            return FALSE;
+            return false;
     }
 
             
     it8->Data [nSet * it8 -> nSamples + nField] = AllocString(it8, Val);
-    return TRUE;
+    return true;
 }
 
 
@@ -1120,13 +1120,13 @@ BOOL cmsxIT8SaveToFile(LCMSHANDLE hIT8, const char* cFileName)
     LPIT8 it8 = (LPIT8) hIT8;
 
     fp = fopen(cFileName, "wt");
-    if (!fp) return FALSE;
+    if (!fp) return false;
     WriteHeader(it8, fp);
     WriteDataFormat(fp, it8);
     WriteData(fp, it8);
     fclose(fp);
 
-    return TRUE;
+    return true;
 }
 
 
@@ -1139,12 +1139,12 @@ BOOL ReadFileInMemory(const char *cFileName, char **Buffer, size_t *Len)
        char *Ptr;
 
        fp = fopen(cFileName, "rt");
-       if (!fp) return FALSE;
+       if (!fp) return false;
 
        Size = xfilelength(fileno(fp));
        if (Size <= 0) {
            fclose(fp);
-           return FALSE;
+           return false;
        }
 
        Ptr  = (char*)malloc(Size+1);      // C->C++ : cast
@@ -1155,7 +1155,7 @@ BOOL ReadFileInMemory(const char *cFileName, char **Buffer, size_t *Len)
 
        *Buffer = Ptr;
        *Len    = Size;
-       return TRUE;
+       return true;
 }
 
 
@@ -1165,7 +1165,7 @@ static
 BOOL DataFormatSection(LPIT8 it8)
 {
     int iField = 0;
-    BOOL Ignoring = FALSE;
+    BOOL Ignoring = false;
 
     InSymbol(it8);   /* Eats "BEGIN_DATA_FORMAT" */
     CheckEOLN(it8);
@@ -1180,15 +1180,15 @@ BOOL DataFormatSection(LPIT8 it8)
 
                      cmsSignalError(LCMS_ERRC_ABORTED, "Sample type expected");
                      it8->sy = SSYNERROR;
-                     return FALSE;
+                     return false;
                      }
 
               if (!Ignoring && iField > it8->nSamples) {
                     cmsSignalError(LCMS_ERRC_WARNING, "More than NUMBER_OF_FIELDS fields. Extra is ignored\n");
-                    Ignoring = TRUE;
+                    Ignoring = true;
                     }
               else  {
-                     if (!SetDataFormat(it8, iField, it8->id)) return FALSE;
+                     if (!SetDataFormat(it8, iField, it8->id)) return false;
                      iField++;
             }
 
@@ -1199,7 +1199,7 @@ BOOL DataFormatSection(LPIT8 it8)
        Skip(it8, SEOLN);
        Skip(it8, SEND_DATA_FORMAT);
        Skip(it8, SEOLN);
-       return TRUE;
+       return true;
 }
 
 
@@ -1220,16 +1220,16 @@ BOOL DataSection (LPIT8 it8)
             iField = 0;
             iSet++;
             if (!CheckEOLN(it8))
-                return FALSE;
+                return false;
         }
 
         if (it8->sy != SEND_DATA && it8->sy != SEOF) {
 
             if (!GetVal(it8, Buffer))
-                return FALSE;
+                return false;
 
             if (!SetData(it8, iSet, iField, Buffer))
-                return FALSE;
+                return false;
 
             iField++;
 
@@ -1241,7 +1241,7 @@ BOOL DataSection (LPIT8 it8)
     Skip(it8, SEOLN);
     Skip(it8, SEND_DATA);
     Skip(it8, SEOLN);
-    return TRUE;
+    return true;
 }
 
 
@@ -1265,8 +1265,8 @@ BOOL HeaderSection (LPIT8 it8)
 
         case SKEYWORD:
                 InSymbol(it8);
-                if (!Check(it8, SSTRING, "Keyword expected")) return FALSE;
-                if (!AddAvailableProperty(it8, it8 -> str)) return FALSE;
+                if (!Check(it8, SSTRING, "Keyword expected")) return false;
+                if (!AddAvailableProperty(it8, it8 -> str)) return false;
                 InSymbol(it8);
                 break;
 
@@ -1292,7 +1292,7 @@ BOOL HeaderSection (LPIT8 it8)
     Skip(it8, SEOLN);
         }
 
-    return TRUE;
+    return true;
 
 }
 
@@ -1308,7 +1308,7 @@ BOOL ParseIT8(LPIT8 it8)
 			strncpy(it8->SheetType, it8->id, MAXSTR-1);
             InSymbol(it8);
 
-            /* if (!AddAvailableProperty(it8, it8 -> id)) return FALSE; */
+            /* if (!AddAvailableProperty(it8, it8 -> id)) return false; */
             /* cmsxIT8SetProperty((LCMSHANDLE) it8, it8->id, NULL); */
     }
 
@@ -1320,11 +1320,11 @@ BOOL ParseIT8(LPIT8 it8)
             switch (it8 -> sy) {
 
             case SBEGIN_DATA_FORMAT:
-                    if (!DataFormatSection(it8)) return FALSE;
+                    if (!DataFormatSection(it8)) return false;
                     break;
 
             case SBEGIN_DATA:
-                    if (!DataSection(it8)) return FALSE;
+                    if (!DataSection(it8)) return false;
                     break;
 
             case SEOLN:
@@ -1332,12 +1332,12 @@ BOOL ParseIT8(LPIT8 it8)
                     break;
 
             default:
-                    if (!HeaderSection(it8)) return FALSE;
+                    if (!HeaderSection(it8)) return false;
            }
 
     }
 
-    return TRUE;
+    return true;
 }
 
 
@@ -1360,12 +1360,12 @@ void CleanPatchName(char *cell)
 
 
        n = 0;
-       lOneNum = FALSE;
+       lOneNum = false;
        while (*cell && isdigit(*cell))
        {
               n = n * 10 + (*cell -'0');
               cell++;
-              lOneNum = TRUE;
+              lOneNum = true;
        }
 
        if (lOneNum) {
@@ -1384,7 +1384,7 @@ void CleanPatchName(char *cell)
 }
 
 
-/* Init usefull pointers */
+/* Init useful pointers */
 
 static
 void CookPointers(LPIT8 it8)
@@ -1575,11 +1575,11 @@ BOOL cmsxIT8GetDataSetByPos(LCMSHANDLE hIT8, int col, int row, char* Val, int Va
     if (!data) 
     {
         *Val = '\0';
-        return FALSE;
+        return false;
     }
 
     strncpy(Val, data, ValBufferLen-1);
-    return TRUE;
+    return true;
 }
 
 
@@ -1595,7 +1595,7 @@ BOOL  cmsxIT8GetDataSet(LCMSHANDLE hIT8, const char* cPatch,
     iField = LocateSample(it8, cSample);
     if (iField < 0) {
         /* cmsSignalError(LCMS_ERRC_ABORTED, "Couldn't find data field %s\n", cSample); */
-        return FALSE;
+        return false;
     }
 
 
@@ -1603,11 +1603,11 @@ BOOL  cmsxIT8GetDataSet(LCMSHANDLE hIT8, const char* cPatch,
     if (iSet < 0) {
 
             /* cmsSignalError(LCMS_ERRC_ABORTED, "Couldn't find patch '%s'\n", cPatch); */
-            return FALSE;
+            return false;
     }
 
     strncpy(Val, GetData(it8, iSet, iField), ValBuffLen-1);
-    return TRUE;
+    return true;
 }
 
 
@@ -1618,9 +1618,9 @@ BOOL cmsxIT8GetDataSetDbl(LCMSHANDLE it8, const char* cPatch, const char* cSampl
     if (cmsxIT8GetDataSet(it8, cPatch, cSample, Buffer, 20)) {
 
         *v = atof(Buffer);
-        return TRUE;
+        return true;
     } else
-        return FALSE;
+        return false;
 }
 
 
@@ -1638,7 +1638,7 @@ BOOL cmsxIT8SetDataSet(LCMSHANDLE hIT8, const char* cPatch,
     if (iField < 0) {
     
         cmsSignalError(LCMS_ERRC_ABORTED, "Couldn't find data field %s\n", cSample);
-        return FALSE;
+        return false;
         }
 
 
@@ -1656,7 +1656,7 @@ BOOL cmsxIT8SetDataSet(LCMSHANDLE hIT8, const char* cPatch,
                 iSet   = LocateEmptyPatch(it8, cPatch);
                 if (iSet < 0) {
                         cmsSignalError(LCMS_ERRC_ABORTED, "Couldn't add more patches '%s'\n", cPatch);
-                        return FALSE;
+                        return false;
                 }
                 iField = it8 -> SampleID;
         }
@@ -1665,7 +1665,7 @@ BOOL cmsxIT8SetDataSet(LCMSHANDLE hIT8, const char* cPatch,
                 if (iSet < 0) {
 
                     cmsSignalError(LCMS_ERRC_ABORTED, "Couldn't find patch '%s'\n", cPatch);
-                    return FALSE;
+                    return false;
             }
         }
 

@@ -1,6 +1,6 @@
 /* */
 /*  Little cms - profiler construction set */
-/*  Copyright (C) 1998-2001 Marti Maria */
+/*  Copyright (C) 1998-2001 Marti Maria <marti@littlecms.com> */
 /* */
 /* THIS SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, */
 /* EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY */
@@ -25,7 +25,7 @@
 /* */
 /* You should have received a copy of the GNU General Public License */
 /* along with this program; if not, write to the Free Software */
-/* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02111-1307, USA. */
 /* */
 /* As a special exception to the GNU General Public License, if you */
 /* distribute this file as part of a program that contains a */
@@ -66,10 +66,10 @@ void EstimateRegression(LPMEASUREMENT m, double r, double g, double b,
     int nCollected;
     MLRSTATISTICS maxAns;
     int ToCollect;
-    SETOFPATCHES collected = cmsxPCollBuildSet(m, FALSE);
-    SETOFPATCHES allowed   = cmsxPCollBuildSet(m, TRUE);
+    SETOFPATCHES collected = cmsxPCollBuildSet(m, false);
+    SETOFPATCHES allowed   = cmsxPCollBuildSet(m, true);
     BOOL rc;
-    BOOL lPatchesExhausted = FALSE;
+    BOOL lPatchesExhausted = false;
 
 
     CopyMemory(allowed, m -> Allowed, m->nPatches*sizeof(BOOL));
@@ -83,7 +83,7 @@ void EstimateRegression(LPMEASUREMENT m, double r, double g, double b,
                 if (lIncludeAllPatches) {
 
                         CopyMemory(collected, allowed, m->nPatches*sizeof(BOOL));
-                        lPatchesExhausted = TRUE;
+                        lPatchesExhausted = true;
                         ToCollect = nCollected = m->nPatches;
                 }
                 else
@@ -94,7 +94,7 @@ void EstimateRegression(LPMEASUREMENT m, double r, double g, double b,
                                                             ToCollect, collected);
 
                 if (nCollected < ToCollect) {           /* No more patches available */
-                        lPatchesExhausted = TRUE;
+                        lPatchesExhausted = true;
                 }
                 else    {
                         ToCollect = nCollected + 1;     /* Start from here in next iteration */
@@ -106,7 +106,7 @@ void EstimateRegression(LPMEASUREMENT m, double r, double g, double b,
 
 
         /* Does fit? */
-        if ((rc == FALSE) || maxAns.R2adj < 0.95 ||  maxAns.R2adj > 1.0) {
+        if ((rc == false) || maxAns.R2adj < 0.95 ||  maxAns.R2adj > 1.0) {
 
                 maxAns.R2adj = -100;  /* No, repeat               */
         }
@@ -138,21 +138,21 @@ BOOL cmsxRegressionInterpolatorRGB(LPMEASUREMENT m,
 	EstimateRegression(m, r, g, b, ColorSpace, &tfm, RegressionTerms, 
 									!lUseLocalPatches, MinPatchesToCollect);
 
-	if (tfm == NULL) return FALSE; 
+	if (tfm == NULL) return false; 
 
     switch (ColorSpace) {
 
         case PT_Lab:
 
-                if (!cmsxRegressionRGB2Lab(r, g, b, tfm, (LPcmsCIELab) Res)) return FALSE;
+                if (!cmsxRegressionRGB2Lab(r, g, b, tfm, (LPcmsCIELab) Res)) return false;
                 break;
 
         case PT_XYZ:
-                if (!cmsxRegressionRGB2XYZ(r, g, b, tfm, (LPcmsCIEXYZ) Res)) return FALSE;
+                if (!cmsxRegressionRGB2XYZ(r, g, b, tfm, (LPcmsCIEXYZ) Res)) return false;
                 break;
 
         default:
-                return FALSE;
+                return false;
         }
 
         MATNfree(tfm);
@@ -163,7 +163,7 @@ BOOL cmsxRegressionInterpolatorRGB(LPMEASUREMENT m,
             Lab->L, Lab->a, Lab->b);
 
 #endif
-    return TRUE;
+    return true;
 }
 
 
@@ -253,7 +253,7 @@ int cmsxFindOptimumNumOfTerms(LPPROFILERCOMMONDATA hdr, int nMaxTerms, BOOL* lAl
 
     BestTerms = 4;
     Best = 1000.;
-    lOneFound = FALSE;
+    lOneFound = false;
 
     for (i=4; i <= nMaxTerms; i++) {		/* 55 */
 
@@ -268,7 +268,7 @@ int cmsxFindOptimumNumOfTerms(LPPROFILERCOMMONDATA hdr, int nMaxTerms, BOOL* lAl
 
                         Best = dEStd;
                         BestTerms = i;
-                        lOneFound = TRUE;
+                        lOneFound = true;
                 }
 
             }

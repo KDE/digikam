@@ -1,6 +1,6 @@
 /* */
 /*  Little cms - profiler construction set */
-/*  Copyright (C) 1998-2001 Marti Maria */
+/*  Copyright (C) 1998-2001 Marti Maria <marti@littlecms.com> */
 /* */
 /* THIS SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, */
 /* EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY */
@@ -25,7 +25,7 @@
 /* */
 /* You should have received a copy of the GNU General Public License */
 /* along with this program; if not, write to the Free Software */
-/* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02111-1307, USA. */
 /* */
 /* As a special exception to the GNU General Public License, if you */
 /* distribute this file as part of a program that contains a */
@@ -129,10 +129,10 @@ struct _vertex_struct {
 
 /* Define flags */
 
-#define ONHULL   	TRUE
-#define REMOVED  	TRUE
-#define VISIBLE  	TRUE
-#define PROCESSED	TRUE
+#define ONHULL   	true
+#define REMOVED  	true
+#define VISIBLE  	true
+#define PROCESSED	true
 #define SAFE		1000000		/* Range of safe coord values. */
 
 #define DIM 3                  /* Dimension of points */
@@ -570,7 +570,7 @@ BOOL AddOne(LPHULL hull, LPVERTEX p)
    LPFACE  f; 
    LPEDGE  e, temp;
    int 	  vol;
-   BOOL	  vis = FALSE;
+   BOOL	  vis = false;
 
  
    /* Mark faces Visible from p. */
@@ -582,7 +582,7 @@ BOOL AddOne(LPHULL hull, LPVERTEX p)
       
       if ( vol < 0 ) {
 			f->Visible = VISIBLE;  
-			vis = TRUE;                      
+			vis = true;                      
       }
       
 	  f = f->Next;
@@ -594,7 +594,7 @@ BOOL AddOne(LPHULL hull, LPVERTEX p)
    if ( !vis ) {
 
 			p->onhull = !ONHULL;  
-			return FALSE; 
+			return false; 
    }
 
    /* Mark edges in interior of Visible region for deletion.
@@ -619,7 +619,7 @@ BOOL AddOne(LPHULL hull, LPVERTEX p)
 
    } while ( e != hull ->edges );
 
-   return TRUE;
+   return true;
 }
 
 
@@ -644,7 +644,7 @@ BOOL DoubleTriangle(LPHULL hull)
    v0 = hull ->vertices;
    while ( Collinear( v0, v0->Next, v0->Next->Next ) )
       if ( ( v0 = v0->Next ) == hull->vertices )
-				return FALSE; /* All points are Collinear! */
+				return false; /* All points are Collinear! */
 
    v1 = v0->Next;
    v2 = v1->Next;
@@ -673,14 +673,14 @@ BOOL DoubleTriangle(LPHULL hull)
    while ( !vol )   {
 
       if ( ( v3 = v3->Next ) == v0 ) 
-			return FALSE; /* All points are coplanar! */
+			return false; /* All points are coplanar! */
 
       vol = VolumeSign( f0, v3 );
    }
 	
    /* Insure that v3 will be the first added. */
    hull ->vertices = v3;
-   return TRUE;
+   return true;
 }
 
 
@@ -700,7 +700,7 @@ void ConstructHull(LPHULL hull)
  do {
 		vnext = v->Next;
 				
-        changed = FALSE;
+        changed = false;
 
 		if (!v->mark ) {
 
@@ -784,9 +784,9 @@ int InBox( VEC3I q, VEC3I bmin, VEC3I bmax )
   if( ( bmin[X] <= q[X] ) && ( q[X] <= bmax[X] ) &&
       ( bmin[Y] <= q[Y] ) && ( q[Y] <= bmax[Y] ) &&
       ( bmin[Z] <= q[Z] ) && ( q[Z] <= bmax[Z] ) )
-    return TRUE;
+    return true;
 
-  return FALSE;
+  return false;
 }
     
 
@@ -1320,7 +1320,7 @@ BOOL cmsxHullAddPoint(LCMSHANDLE hHull, int x, int y, int z)
       v->v[Z] = z;
       v->vnum = hull->vnumCounter++;
 
-	  return TRUE;
+	  return true;
 }
 
 BOOL cmsxHullComputeHull(LCMSHANDLE hHull)
@@ -1328,12 +1328,12 @@ BOOL cmsxHullComputeHull(LCMSHANDLE hHull)
 
   LPHULL hull = (LPHULL) (LPSTR) hHull;
 
-  if (!DoubleTriangle(hull)) return FALSE;
+  if (!DoubleTriangle(hull)) return false;
 
   ConstructHull(hull);
   StoreResults(hull);
 
-  return TRUE;
+  return true;
 }
 
 
@@ -1356,7 +1356,7 @@ BOOL cmsxHullDumpVRML(LCMSHANDLE hHull, const char* fname)
 	
 	fp = fopen (fname, "wt");
 	if (fp == NULL)
-		return FALSE;
+		return false;
 
 	fprintf (fp, "#VRML V2.0 utf8\n");
 
@@ -1422,7 +1422,7 @@ BOOL cmsxHullDumpVRML(LCMSHANDLE hHull, const char* fname)
 	fprintf (fp, "\t\t\t\t}\n");
 	fprintf (fp, "\t\t\t}\n");
 	fprintf (fp, "\t\t\tgeometry IndexedFaceSet {\n");
-	fprintf (fp, "\t\t\t\tsolid FALSE\n");
+	fprintf (fp, "\t\t\t\tsolid false\n");
 
 	/* fill in the points here */
 	fprintf (fp, "\t\t\t\tcoord Coordinate {\n");
@@ -1467,7 +1467,7 @@ BOOL cmsxHullDumpVRML(LCMSHANDLE hHull, const char* fname)
 	}
 	fprintf (fp, "\t\t\t}\n");
 	
-	fprintf (fp, "\t\t\tcolorPerVertex FALSE\n");
+	fprintf (fp, "\t\t\tcolorPerVertex false\n");
 
 	fprintf (fp, "\t\t\t}\n");
 	fprintf (fp, "\t\t}\n");
@@ -1476,5 +1476,5 @@ BOOL cmsxHullDumpVRML(LCMSHANDLE hHull, const char* fname)
 
 	fclose (fp);
 
-	return TRUE;
+	return true;
 }

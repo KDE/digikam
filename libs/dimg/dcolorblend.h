@@ -21,7 +21,7 @@
 // Inspired by DirectFB, src/gfx/generic/generic.c:
 
 /*
-   (c) Copyright 2000-2002  convergence integrated media GmbH.
+   (c) Copyright 2000-2002  convergence integrated media GmbH <curanz@convergence.de>
    (c) Copyright 2002-2005  convergence GmbH.
 
    All rights reserved.

@@ -3,12 +3,12 @@
  * Date  : 2004-07-26
  * Description : 
  *
- * Copyright 2004 by Renchi Raju
+ * Copyright 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * 
  * Adapted from fluxbox: Texture/TextureRender
  *
  * Texture.hh for Fluxbox Window Manager
- * Copyright (c) 2002-2003 Henrik Kinnunen (fluxbox<at>users.sourceforge.net)
+ * Copyright (c) 2002-2003 Henrik Kinnunen <fluxbox@users.sourceforge.net>
  *
  * from Image.hh for Blackbox - an X11 Window manager
  * Copyright (c) 1997 - 2000 Brad Hughes (bhughes@tcac.net)

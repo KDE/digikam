@@ -1,6 +1,6 @@
 /* */
 /*  Little cms - profiler construction set */
-/*  Copyright (C) 1998-2001 Marti Maria */
+/*  Copyright (C) 1998-2001 Marti Maria <marti@littlecms.com> */
 /* */
 /* THIS SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, */
 /* EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY */
@@ -25,7 +25,7 @@
 /* */
 /* You should have received a copy of the GNU General Public License */
 /* along with this program; if not, write to the Free Software */
-/* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02111-1307, USA. */
 /* */
 /* As a special exception to the GNU General Public License, if you */
 /* distribute this file as part of a program that contains a */
@@ -79,7 +79,7 @@ int RegressionSamplerA2B(register WORD In[], register WORD Out[], register LPVOI
         xyz.Y = vxyz.n[1];
         xyz.Z = vxyz.n[2];
 
-        cmsxChromaticAdaptationAndNormalization(&sys ->hdr, &xyz, FALSE);
+        cmsxChromaticAdaptationAndNormalization(&sys ->hdr, &xyz, false);
        
 	
        /* To PCS encoding */
@@ -88,7 +88,7 @@ int RegressionSamplerA2B(register WORD In[], register WORD Out[], register LPVOI
        cmsFloat2LabEncoded(Out, &Lab);
         
 
-    return TRUE; /* And done witch success */
+    return true; /* And done witch success */
 }
 
 
@@ -117,7 +117,7 @@ int RegressionSamplerB2A(register WORD In[], register WORD Out[], register LPVOI
       cmsLab2XYZ(NULL, &xyz, &Lab);
 
 	 
-	  cmsxChromaticAdaptationAndNormalization(&sys ->hdr, &xyz, TRUE);
+	  cmsxChromaticAdaptationAndNormalization(&sys ->hdr, &xyz, true);
 	  vxyz.n[0] = xyz.X;
 	  vxyz.n[1] = xyz.Y;
 	  vxyz.n[2] = xyz.Z;
@@ -136,7 +136,7 @@ int RegressionSamplerB2A(register WORD In[], register WORD Out[], register LPVOI
       cmsxApplyLinearizationGamma(Llab, sys ->PreLabRev, Out);
 
       
-    return TRUE; /* And done witch success */
+    return true; /* And done witch success */
 }
 
 
@@ -144,7 +144,7 @@ BOOL cmsxMonitorProfilerInit(LPMONITORPROFILERDATA sys)
 {                                
         
 
-        if (sys == NULL) return FALSE;
+        if (sys == NULL) return false;
         ZeroMemory(sys, sizeof(MONITORPROFILERDATA));
 
         sys->hdr.DeviceClass = icSigDisplayClass;
@@ -155,7 +155,7 @@ BOOL cmsxMonitorProfilerInit(LPMONITORPROFILERDATA sys)
 
         /* Default values for generation */
 
-        sys -> hdr.lUseCIECAM97s = FALSE;
+        sys -> hdr.lUseCIECAM97s = false;
         sys -> hdr.CLUTPoints = 16;
            
         /* Default viewing conditions  */
@@ -176,7 +176,7 @@ BOOL cmsxMonitorProfilerInit(LPMONITORPROFILERDATA sys)
 
 		sys -> hdr.ProfileVerbosityLevel = 0;
 
-    return TRUE;
+    return true;
 }
 
 
@@ -269,7 +269,7 @@ BOOL CreateLUTS(LPMONITORPROFILERDATA sys, LPLUT* A2B, LPLUT* B2A)
         cmsFreeGammaTriple(sys->ReverseTables);
         cmsFreeGammaTriple(sys->PreLab);
         cmsFreeGammaTriple(sys->PreLabRev);
-        return TRUE;
+        return true;
 }
 
 
@@ -283,7 +283,7 @@ BOOL cmsxMonitorProfilerDo(LPMONITORPROFILERDATA sys)
         AToB0 = BToA0 = NULL;
 
         if (!*sys -> hdr.OutputProfileFile)
-                return FALSE;
+                return false;
 
      
         if (sys->hdr.ReferenceSheet[0] || sys->hdr.MeasurementSheet[0]) {
@@ -305,7 +305,7 @@ BOOL cmsxMonitorProfilerDo(LPMONITORPROFILERDATA sys)
                                              sys -> Prelinearization,
                                              &sys -> hdr.WhitePoint,
                                              &sys -> hdr.BlackPoint,
-                                             &sys -> hdr.Primaries)) return FALSE;
+                                             &sys -> hdr.Primaries)) return false;
 
 				if (sys->hdr.printf) {
 
@@ -367,5 +367,5 @@ BOOL cmsxMonitorProfilerDo(LPMONITORPROFILERDATA sys)
         if (sys ->Prelinearization[0])
             cmsFreeGammaTriple(sys -> Prelinearization);          
                       
-    return TRUE;
+    return true;
 }

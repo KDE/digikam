@@ -1,6 +1,6 @@
 /* */
 /*  Little cms - profiler construction set */
-/*  Copyright (C) 1998-2001 Marti Maria */
+/*  Copyright (C) 1998-2001 Marti Maria <marti@littlecms.com> */
 /* */
 /* THIS SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, */
 /* EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY */
@@ -25,7 +25,7 @@
 /* */
 /* You should have received a copy of the GNU General Public License */
 /* along with this program; if not, write to the Free Software */
-/* Foundation, Inc., 59 Temple Place - Suite 330, Boston, ma 02111-1307, USA. */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, ma 02111-1307, USA. */
 /* */
 /* As a special exception to the GNU General Public License, if you */
 /* distribute this file as part of a program that contains a */
@@ -216,10 +216,10 @@ BOOL cmsxLevenbergMarquardtFree(LCMSHANDLE hMRQ)
 {
 	LPLMRQMIN pLM = (LPLMRQMIN)hMRQ;
 	if(!pLM)
-		return FALSE;
+		return false;
 
 	FreeStruct(pLM);	
-	return TRUE;
+	return true;
 }
 
 
@@ -229,7 +229,7 @@ BOOL cmsxLevenbergMarquardtIterate(LCMSHANDLE hMRQ)
 	BOOL sts;
 	LPLMRQMIN pLM = (LPLMRQMIN)hMRQ;
 	if(!pLM)
-		return FALSE;
+		return false;
 
 	for(j = 0; j < pLM->ma; j++) /* Alter linearized fitting matrix, by augmenting diagonal elements.  */
 	{
@@ -240,7 +240,7 @@ BOOL cmsxLevenbergMarquardtIterate(LCMSHANDLE hMRQ)
 		pLM->oneda->Values[j][0] = pLM->beta->Values[j][0];
 	}
 	
-	if((sts = MATNsolve (pLM->covar, pLM->oneda)) != TRUE)  /* Matrix solution. */
+	if((sts = MATNsolve (pLM->covar, pLM->oneda)) != true)  /* Matrix solution. */
 		return sts;
 
 	for(j = 0; j < pLM->ma; j++)							/* Did the trial succeed? */
@@ -269,7 +269,7 @@ BOOL cmsxLevenbergMarquardtIterate(LCMSHANDLE hMRQ)
 		pLM->chisq = pLM->ochisq;
 	}
 	
-	return TRUE;
+	return true;
 }
 
 

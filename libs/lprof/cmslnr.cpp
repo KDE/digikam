@@ -1,6 +1,6 @@
 /* */
 /*  Little cms - profiler construction set */
-/*  Copyright (C) 1998-2001 Marti Maria */
+/*  Copyright (C) 1998-2001 Marti Maria <marti@littlecms.com> */
 /* */
 /* THIS SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, */
 /* EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY */
@@ -25,7 +25,7 @@
 /* */
 /* You should have received a copy of the GNU General Public License */
 /* along with this program; if not, write to the Free Software */
-/* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02111-1307, USA. */
 /* */
 /* As a special exception to the GNU General Public License, if you */
 /* distribute this file as part of a program that contains a */
@@ -191,7 +191,7 @@ BOOL OneTry(LPSAMPLEDCURVE XNorm, LPSAMPLEDCURVE YNorm, double a[])
 	LCMSHANDLE h;
 	double ChiSq, OldChiSq;		
 	int i;
-	BOOL Status = TRUE;
+	BOOL Status = true;
 
 		/* initial guesses */
 
@@ -205,7 +205,7 @@ BOOL OneTry(LPSAMPLEDCURVE XNorm, LPSAMPLEDCURVE YNorm, double a[])
 		/* Significance = 0.02 gives good results */
 
 		h = cmsxLevenbergMarquardtInit(XNorm, YNorm,  0.02, a, 3, GammaGainOffsetFn);							
-		if (h == NULL) return FALSE;
+		if (h == NULL) return false;
 
 
 		OldChiSq = cmsxLevenbergMarquardtChiSq(h);
@@ -213,7 +213,7 @@ BOOL OneTry(LPSAMPLEDCURVE XNorm, LPSAMPLEDCURVE YNorm, double a[])
 		for(i = 0; i < LEVENBERG_MARQUARDT_ITERATE_MAX; i++) {
 
 			if (!cmsxLevenbergMarquardtIterate(h)) {
-				Status = FALSE;
+				Status = false;
 				break;
 			}
 
@@ -247,21 +247,21 @@ LPGAMMATABLE cmsxEstimateGamma(LPSAMPLEDCURVE X, LPSAMPLEDCURVE Y, int nResultin
 	    /* maximum will not fall on exactly 100. */
 
 		if (!OneTry(X, Y, a)) 
-			return FALSE;
+			return false;
 
 		/* Got parameters. Compute maximum. */
 		e = a[1]* 255.0 + a[2];
-		if (e < 0) return FALSE;
+		if (e < 0) return false;
 		Max = pow(e, a[0]);
 		
 
 		/* Normalize values to maximum */
-		XNorm = NormalizeTo(X, 255.0, FALSE);
-		YNorm = NormalizeTo(Y, Max, FALSE);
+		XNorm = NormalizeTo(X, 255.0, false);
+		YNorm = NormalizeTo(Y, Max, false);
 
 		/* Do the final fitting  */
 		if (!OneTry(XNorm, YNorm, a))
-				return FALSE;
+				return false;
 				
 		/* Type 3 = IEC 61966-2.1 (sRGB) */
         /* Y = (aX + b)^Gamma | X >= d */
@@ -286,7 +286,7 @@ void Bubble(LPSAMPLEDCURVE C, LPSAMPLEDCURVE L)
 
 		nItems = C -> nItems;
         do {
-                lSwapped = FALSE;
+                lSwapped = false;
 
                 for (i= 0; i <  nItems - 1; i++) {
 
@@ -294,7 +294,7 @@ void Bubble(LPSAMPLEDCURVE C, LPSAMPLEDCURVE L)
 
                                 SWAP(C->Values[i], C->Values[i+1]);
 								SWAP(L->Values[i], L->Values[i+1]);                            
-                                lSwapped = TRUE;
+                                lSwapped = true;
                         }
                 }
 
@@ -360,8 +360,8 @@ LPGAMMATABLE BuildGammaTable(LPSAMPLEDCURVE C, LPSAMPLEDCURVE L, int nResultingP
 	/* Linearly extrapolate */
 	Lend = (255 * Lmax) / Cmax;
 
-	Ln = NormalizeTo(Lw, Lend, TRUE);
-	Cn = NormalizeTo(Cw, 255.0, TRUE);
+	Ln = NormalizeTo(Lw, Lend, true);
+	Cn = NormalizeTo(Cw, 255.0, true);
 
 	cmsFreeSampledCurve(Cw);
 	cmsFreeSampledCurve(Lw);
@@ -448,7 +448,7 @@ void cmsxComputeLinearizationTables(LPMEASUREMENT m,
 	cmsxCompleteLabOfPatches(m, m->Allowed, Medium);
 
     /* Add neutrals, normalize to max */
-    Neutrals = cmsxPCollBuildSet(m, FALSE);
+    Neutrals = cmsxPCollBuildSet(m, false);
     cmsxPCollPatchesNearNeutral(m, m ->Allowed, 15, Neutrals);	
 
     nGrays = cmsxPCollCountSet(m, Neutrals);
