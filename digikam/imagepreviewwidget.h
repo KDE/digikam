@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Authors: Gilles Caulier 
  * Date   : 2006-06-13
  * Description : a widget to display an image preview
  *

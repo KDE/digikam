@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Caulier Gilles <caulier dot gilles at gmail dot com>
+ * Author: Caulier Gilles 
  * Date  : 2006-04-25
  * Description : a widget to use in first run dialog
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

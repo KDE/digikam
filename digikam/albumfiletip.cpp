@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Caulier Gilles <caulier dot gilles at gmail dot com>
+ *          Caulier Gilles 
  * Date   : 2004-08-19
  * Description : Album item file tip adapted from kfiletip 
  *               (konqueror - konq_iconviewwidget.cc)
@@ -8,7 +8,7 @@
  * Copyright (C) 1998-1999 by Torben Weis <weis@kde.org>
  * Copyright (C) 2000-2002 by David Faure <david@mandrakesoft.com>
  * Copyright (C) 2004-2005 by Renchi Raju 
- * Copyright (C) 2006-2007 by Gilles Caulier 
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

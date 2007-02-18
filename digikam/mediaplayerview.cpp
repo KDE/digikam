@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Authors: Gilles Caulier 
  * Date   : 2006-20-12
  * Description : a view to embed a KPart media player.
  * 
