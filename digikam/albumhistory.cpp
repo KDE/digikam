@@ -4,7 +4,7 @@
  * Date  : 2004-11-17
  * Description : 
  * 
- * Copyright 2004 by Joern Ahrens
+ * Copyright 2004 by Joern Ahrens <joern.ahrens@kdemail.net>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
