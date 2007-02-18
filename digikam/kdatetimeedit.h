@@ -62,7 +62,7 @@ public:
 
      /**
       * returns the date and time
-      * @return a QDateTime with the currently choosen date and time
+      * @return a QDateTime with the currently chosen date and time
       */
      QDateTime dateTime();
 
