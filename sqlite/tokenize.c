@@ -522,7 +522,7 @@ abort_parse:
 **                 a statement.
 **
 **   (2) CREATE    The keyword CREATE has been seen at the beginning of a
-**                 statement, possibly preceeded by EXPLAIN and/or followed by
+**                 statement, possibly preceded by EXPLAIN and/or followed by
 **                 TEMP or TEMPORARY
 **
 **   (3) NORMAL    We are in the middle of statement which ends with a single

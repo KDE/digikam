@@ -97,11 +97,11 @@ typedef struct OverflowPage OverflowPage;
 typedef struct FreelistInfo FreelistInfo;
 
 /*
-** All structures on a database page are aligned to 4-byte boundries.
+** All structures on a database page are aligned to 4-byte boundaries.
 ** This routine rounds up a number of bytes to the next multiple of 4.
 **
 ** This might need to change for computer architectures that require
-** and 8-byte alignment boundry for structures.
+** and 8-byte alignment boundary for structures.
 */
 #define ROUNDUP(X)  ((X+3) & ~3)
 

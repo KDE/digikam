@@ -90,9 +90,9 @@
 ** minimize the size of the output buffer.  This is accomplished by testing
 ** all offset values and picking the one that results in the fewest number
 ** of escapes.  To do that, we first scan the entire input and count the
-** number of occurances of each character value in the input.  Suppose
-** the number of 0x00 characters is N(0), the number of occurances of 0x01
-** is N(1), and so forth up to the number of occurances of 0xff is N(255).
+** number of occurrences of each character value in the input.  Suppose
+** the number of 0x00 characters is N(0), the number of occurrences of 0x01
+** is N(1), and so forth up to the number of occurrences of 0xff is N(255).
 ** An offset of 0 is not allowed so we don't have to test it.  The number
 ** of escapes required for an offset of 1 is N(1)+N(2)+N(40).  The number
 ** of escapes required for an offset of 2 is N(2)+N(3)+N(41).  And so forth.

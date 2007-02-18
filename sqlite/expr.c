@@ -1429,7 +1429,7 @@ void sqliteExprIfFalse(Parse *pParse, Expr *pExpr, int dest, int jumpIfNull){
     case TK_EQ: {
       if( pParse->db->file_format>=4 && sqliteExprType(pExpr)==SQLITE_SO_TEXT ){
         /* Convert numeric comparison opcodes into text comparison opcodes.
-        ** This step depends on the fact that the text comparision opcodes are
+        ** This step depends on the fact that the text comparison opcodes are
         ** always 6 greater than their corresponding numeric comparison
         ** opcodes.
         */
