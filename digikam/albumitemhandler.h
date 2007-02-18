@@ -3,7 +3,7 @@
  * Date  : 2003-09-26
  * Description : 
  * 
- * Copyright 2003 by Renchi Raju
+ * Copyright 2003 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
