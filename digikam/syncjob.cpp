@@ -3,7 +3,7 @@
  * Date  : 2004-10-04
  * Description :
  *
- * Copyright 2004 by Renchi Raju
+ * Copyright 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * Concept copied from kdelibs/kio/kio/netaccess.h/cpp
  *   This file is part of the KDE libraries
