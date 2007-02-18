@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2005-04-21
- * Copyright 2005 by Renchi Raju
+ * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * Lots of the file io code is copied from KDE file kioslave.
  * Copyright for the KDE file kioslave follows:

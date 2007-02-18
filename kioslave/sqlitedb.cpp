@@ -3,7 +3,7 @@
  * Date  : 2005-06-05
  * Description :
  *
- * Copyright 2005 by Renchi Raju
+ * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -165,7 +165,7 @@ QString SqliteDB::getSetting( const QString& keyword )
             &values );
 
     if (values.isEmpty())
-        return QString::null;
+        return QString();
     else
         return values[0];
 }
