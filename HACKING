@@ -239,3 +239,12 @@ and prepare the situation you want to profile. Then, in another console, start p
 The resulting callgrind.out files need to be viewed with the kcachegrind program, e.g.:
 
 kcachegrind callgrind.out.16693.1
+
+=================================================================================
+API Documentation Validation, User Documentation Validation, Source Code Checking
+=================================================================================
+The following site check on a dayly basis for the a.m. errors:
+www.englishbreakfastnetwork.org/krazy/
+
+It can be very useful, in particular before major releases.
+Don't trust it blindly! Sometimes they propose too advanced modifications that are no compatible with the prevailant include files.
