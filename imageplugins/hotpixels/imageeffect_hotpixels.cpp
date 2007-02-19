@@ -5,7 +5,7 @@
  * Description : a digiKam image plugin for fixing dots produced by
  *               hot/stuck/dead pixels from a CCD.
  *
- * Copyright 2005-2006 by Unai Garro and Gilles Caulier
+ * Copyright 2005-2006 by Unai Garro and Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,7 +64,7 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent,QString title, QFra
                                        I18N_NOOP("A digiKam image plugin for fixing dots produced by "
                                                  "hot/stuck/dead pixels from a CCD."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005-2007, Unai Garro and Gilles Caulier", 
+                                       "(c) 2005-2007, Unai Garro and Gilles Caulier <caulier dot gilles at gmail dot com>", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                 
@@ -121,7 +121,7 @@ void ImageEffect_HotPixels::readUserSettings(void)
 {
     KConfig *config = kapp->config();
     config->setGroup("hotpixels Tool Dialog");
-    m_blackFrameURL = KURL(config->readEntry("Last Black Frame File", QString::null));
+    m_blackFrameURL = KURL(config->readEntry("Last Black Frame File", QString()));
     m_filterMethodCombo->setCurrentItem(config->readNumEntry("Filter Method",
                                         HotPixelFixer::QUADRATIC_INTERPOLATION));
     
@@ -150,7 +150,7 @@ void ImageEffect_HotPixels::slotAddBlackFrame()
     //Does one need to do this if digikam did so already?
     KImageIO::registerFormats(); 
     
-    KFileDialog *fileSelectDialog = new KFileDialog(QString::null, KImageIO::pattern(), this, "", true);
+    KFileDialog *fileSelectDialog = new KFileDialog(QString(), KImageIO::pattern(), this, "", true);
     fileSelectDialog->setCaption(i18n("Select Black Frame Image"));
     fileSelectDialog->setURL(m_blackFrameURL.path());
     

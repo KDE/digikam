@@ -4,7 +4,7 @@
  * Date   : 2005-07-05
  * Description : a ListView to display black frames
  *
- * Copyright 2005-2007 by Unai Garro and Gilles Caulier
+ * Copyright 2005-2007 by Unai Garro and Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -92,7 +92,7 @@ QString BlackFrameListViewItem::text(int column)const
         }
     }
     
-    return(QString::null);
+    return(QString());
 }
 
 void BlackFrameListViewItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int align)

@@ -4,7 +4,7 @@
  * Date   : 2005-03-27
  * Description : Threaded image filter to fix hot pixels
  * 
- * Copyright 2005-2007 by Unai Garro and Gilles Caulier
+ * Copyright 2005-2007 by Unai Garro and Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * The algorithm for fixing the hot pixels was based on
  * the code of jpegpixi, which was released under the GPL license,
