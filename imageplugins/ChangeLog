@@ -1,5 +1,44 @@
+v0.9.1-rc1  -  19-Feb-2007
+----------------------------------------------------------------------------
+
+2007-02-16 15:47  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/digikamimageplugins.lsm:
+	  fix email
+
+2007-02-16 15:30  cgilles
+	*.cpp *.h
+	  fix email
+
+2007-02-13 06:27  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/common/include/version.h,
+	  trunk/extragear/graphics/digikamimageplugins/digikamimageplugins.lsm:
+	  0.9.1-beta2
+
+2007-02-11 20:33  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	  compile DigikamImagePlugins alone
+
+2007-02-11 20:09  gkulzer
+
+	* trunk/extragear/graphics/digikamimageplugins/common/include/version.h:
+	  quote missing
+
+2007-02-11 19:34  gkulzer
+
+	* trunk/extragear/graphics/digikamimageplugins/ChangeLog,
+	  trunk/extragear/graphics/digikamimageplugins/release_digikamimageplugins.rb:
+	  0.9.1-beta1 release w/o scripties
+
 v0.9.1-beta1  -  11-Feb-2007
 ----------------------------------------------------------------------------
+
+2007-02-11 18:33  gkulzer
+
+	* trunk/extragear/graphics/digikamimageplugins/common/include/version.h:
+	  0.9.1-beta1 release
 
 2007-01-30 12:15  cgilles
 
