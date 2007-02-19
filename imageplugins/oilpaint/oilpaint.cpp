@@ -5,8 +5,8 @@
  * Date  : 2005-05-25
  * Description : OilPainting threaded image filter.
  *
- * Copyright 2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2005 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006 by Gilles Caulier <caulier dot gilles at gmail dot com> and Marcel Wiesweg
  *
  * Original OilPaint algorithm copyrighted 2004 by 
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.

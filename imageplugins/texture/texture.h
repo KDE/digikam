@@ -1,12 +1,12 @@
 /* ============================================================
  * File  : texture.h
- * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Author: Gilles Caulier
+           Marcel Wiesweg
  * Date  : 2005-05-25
  * Description : Texture threaded image filter.
  * 
- * Copyright 2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2005 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,7 +37,7 @@ class Texture : public Digikam::DImgThreadedFilter
 public:
 
     Texture(Digikam::DImg *orgImage, QObject *parent=0, int blendGain=200,
-            QString texturePath=QString::null);
+            QString texturePath=QString());
 
     ~Texture(){};
 

@@ -5,8 +5,8 @@
  * Date  : 2004-12-27
  * Description : 
  *
- * Copyright 2004-2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2004-2005 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006 by Gilles Caulier <caulier dot gilles at gmail dot com> and Marcel Wiesweg
  *
  * Original Distortion Correction algorithm copyrighted 
  * 2001-2003 David Hodson <hodsond@acm.org>

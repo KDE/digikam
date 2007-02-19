@@ -1,12 +1,12 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Authors: Gilles Caulier
  *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2005-02-17
  * Description : a matrix implementation for image
  *               perspective adjustment.
  * 
- * Copyright 2005 by Gilles Caulier
- * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2005 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> and Marcel Wiesweg
  *
  * Matrix3 implementation inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis

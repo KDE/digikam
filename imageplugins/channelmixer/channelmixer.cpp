@@ -1,9 +1,9 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Authors: Gilles Caulier
  * Date   : 2005-02-26
  * Description : 
  * 
- * Copyright 2005-2007 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Load and save mixer gains methods inspired from 
  * Gimp 2.2.3 and copyrighted 2002 by Martin Guldahl 

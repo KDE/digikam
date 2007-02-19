@@ -1,10 +1,10 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Authors: Gilles Caulier
  * Date   : 2005-02-14
  * Description : a simple widget to choose a font based on 
  *               FontChooserWidget implementation.
  * 
- * Copyright 2005-2007 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original FontChooserWidget implementation is copyrighted by :
  * (C) 1997 Bernd Johannes Wuebben <wuebben@kde.org>
@@ -495,7 +495,7 @@ void FontChooserWidget::family_chosen_slot(const QString& family)
         styleListBox->setSelected(0, true);
     styleListBox->blockSignals(false);
 
-    style_chosen_slot(QString::null);
+    style_chosen_slot(QString());
 }
 
 void FontChooserWidget::size_chosen_slot(const QString& size)

@@ -1,11 +1,11 @@
 /* ============================================================
  * File   : noisereduction.cpp
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Authors: Gilles Caulier
  *          Peter Heckert <peter dot heckert at arcor dot de>
  * Date   : 2005-05-25
  * Description : Noise reduction threaded image filter.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * Original Noise Filter algorithm copyright (C) 2005 
  * Peter Heckert <peter dot heckert at arcor dot de>

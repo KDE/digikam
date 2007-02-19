@@ -1,12 +1,12 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Authors: Gilles Caulier
  *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2005-02-22
  * Description : a digiKam image editor plugin for simulate 
  *               infrared film.
  * 
- * Copyright 2005 by Gilles Caulier
- * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2005 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

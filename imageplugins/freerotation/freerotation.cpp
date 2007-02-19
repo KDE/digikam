@@ -4,7 +4,7 @@
  * Date  : 2005-07-18
  * Description : Free rotation threaded image filter.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original FreeRotation algorithms copyrighted 2004 by 
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.

@@ -5,8 +5,8 @@
  * Date  : 2005-05-25
  * Description : Texture threaded image filter.
  * 
- * Copyright 2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2005 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006 by Gilles Caulier <caulier dot gilles at gmail dot com> and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
