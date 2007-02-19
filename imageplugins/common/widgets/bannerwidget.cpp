@@ -3,7 +3,7 @@
  * Date  : 2005-07-07
  * Description : a nice banner widget.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,7 +51,7 @@ BannerWidget::BannerWidget(QWidget *parent, QString title)
     layout->setSpacing( 0 );
     
     KURLLabel *pixmapLabelLeft = new KURLLabel( this );
-    pixmapLabelLeft->setText(QString::null);
+    pixmapLabelLeft->setText(QString());
     pixmapLabelLeft->setURL("http://extragear.kde.org/apps/digikamimageplugins");
     pixmapLabelLeft->setScaledContents( false );
     pixmapLabelLeft->setPaletteBackgroundColor( QColor(201, 208, 255) );
@@ -71,7 +71,7 @@ BannerWidget::BannerWidget(QWidget *parent, QString title)
     layout->setStretchFactor( labelTitle, 1 );
     
     KURLLabel *pixmapLabelRight = new KURLLabel( this );
-    pixmapLabelRight->setText(QString::null);
+    pixmapLabelRight->setText(QString());
     pixmapLabelRight->setURL("http://www.digikam.org");
     pixmapLabelRight->setScaledContents( false );
     pixmapLabelRight->setPaletteBackgroundColor( QColor(201, 208, 255) );

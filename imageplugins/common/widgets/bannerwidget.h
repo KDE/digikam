@@ -35,7 +35,7 @@ Q_OBJECT
 
 public:
 
-    BannerWidget(QWidget *parent=0, QString title=QString::null);
+    BannerWidget(QWidget *parent=0, QString title=QString());
     ~BannerWidget();
 
 private slots:        

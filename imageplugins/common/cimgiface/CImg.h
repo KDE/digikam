@@ -1230,7 +1230,7 @@ namespace cimg_library {
       GetStartupInfo(&si);
       si.wShowWindow = SW_HIDE;
       si.dwFlags |= SW_HIDE;
-      BOOL res = CreateProcess(NULL,(LPTSTR)command,NULL,NULL,FALSE,0,NULL,NULL,&si,&pi);
+      BOOL res = CreateProcess(NULL,(LPTSTR)command,NULL,NULL,false,0,NULL,NULL,&si,&pi);
       if (res) {
         WaitForSingleObject(pi.hProcess, INFINITE);
         CloseHandle(pi.hThread);
@@ -2548,9 +2548,9 @@ namespace cimg_library {
       }
       else curr_mode.dmSize = 0;
       if (events) {
-        mutex     = CreateMutex(NULL,FALSE,NULL);
-        created   = CreateEvent(NULL,FALSE,FALSE,NULL);
-        wait_disp = CreateEvent(NULL,FALSE,FALSE,NULL);
+        mutex     = CreateMutex(NULL,false,NULL);
+        created   = CreateEvent(NULL,false,false,NULL);
+        wait_disp = CreateEvent(NULL,false,false,NULL);
         thread    = CreateThread(NULL,0,thread_lowlevel,arg,0,&ThreadID);
         WaitForSingleObject(created,INFINITE);
       } else thread_lowlevel(arg);

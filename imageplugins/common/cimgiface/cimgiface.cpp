@@ -3,7 +3,7 @@
  * Date  : 2005-03-28
  * Description : CImg threaded interface.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Some code come from the Fast Anisotropic Smoothing of 
  * Multi-valued Images, using Curvature-Preserving PDE's
@@ -90,7 +90,7 @@ CimgIface::CimgIface(Digikam::DImg *orgImage,
         m_destImage = Digikam::DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
     }
     
-    m_tmpMaskFile = QString::null;
+    m_tmpMaskFile = QString();
     
     if (m_inpaint && inPaintingMask)
     {
@@ -108,7 +108,7 @@ CimgIface::CimgIface(Digikam::DImg *orgImage,
 
 CimgIface::~CimgIface()
 { 
-    if (m_tmpMaskFile != QString::null)
+    if (m_tmpMaskFile != QString())
     {
        // Remove temporary inpainting mask.
        QFile maskFile(m_tmpMaskFile);
