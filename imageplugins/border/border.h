@@ -68,7 +68,7 @@ public:
 
     /** Constructor using settings to preserve aspect ratio of image. */
     Border(Digikam::DImg *orgImage, QObject *parent=0, int orgWidth=0, int orgHeight=0,
-           QString borderPath=QString::null, int borderType=SolidBorder, float borderPercent=0.1,
+           QString borderPath=QString(), int borderType=SolidBorder, float borderPercent=0.1,
            Digikam::DColor solidColor = Digikam::DColor(),
            Digikam::DColor niepceBorderColor = Digikam::DColor(),
            Digikam::DColor niepceLineColor = Digikam::DColor(),
@@ -79,7 +79,7 @@ public:
 
     /** Constructor using settings to not-preserve aspect ratio of image. */
     Border(Digikam::DImg *orgImage, QObject *parent=0, int orgWidth=0, int orgHeight=0,
-           QString borderPath=QString::null, int borderType=SolidBorder,
+           QString borderPath=QString(), int borderType=SolidBorder,
            int borderWidth1=100, int borderWidth2=20, int borderWidth3=20, int borderWidth4=10,
            Digikam::DColor solidColor = Digikam::DColor(),
            Digikam::DColor niepceBorderColor = Digikam::DColor(),

@@ -1,12 +1,12 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Authors: Gilles Caulier
             Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2005-01-20
  * Description : a digiKam image plugin to add a border
  *               around an image.
  * 
- * Copyright 2005 by Gilles Caulier
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2005 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006 by Gilles Caulier <caulier dot gilles at gmail dot com> and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -636,7 +636,7 @@ QString ImageEffect_Border::getBorderPath(int border)
           break;
        
        default:
-          return(QString::null);
+          return(QString());
        }
     
     KGlobal::dirs()->addResourceType(pattern.ascii(), KGlobal::dirs()->kde_default("data") +
