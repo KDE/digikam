@@ -1,11 +1,11 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Authors: Gilles Caulier
+ *          Marcel Wiesweg
  * Date  : 2005-01-04
  * Description : 
  * 
- * Copyright 2005 Gilles Caulier
- * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2005 Gilles Caulier  <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
