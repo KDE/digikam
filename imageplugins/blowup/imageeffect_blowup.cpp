@@ -5,7 +5,7 @@
  * Description : a digiKam image editor plugin to blowup
  *               a photograph
  *
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -82,7 +82,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
                   : KDialogBase(Plain, i18n("Blowup Photograph"),
                                 Help|Default|User2|User3|Ok|Cancel, Ok,
                                 parent, 0, true, true,
-                                QString::null,
+                                QString(),
                                 i18n("&Save As..."),
                                 i18n("&Load...")),
                     m_parent(parent)
@@ -138,7 +138,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     m_mainTab->addTab( firstPage, i18n("New Size") );
 
     KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
-    cimgLogoLabel->setText(QString::null);
+    cimgLogoLabel->setText(QString());
     cimgLogoLabel->setURL("http://cimg.sourceforge.net");
     KGlobal::dirs()->addResourceType("cimg-logo", KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
     QString directory = KGlobal::dirs()->findResourceDir("cimg-logo", "cimg-logo.png");
