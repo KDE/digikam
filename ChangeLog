@@ -1,3 +1,499 @@
+v0.9.1-rc1 - 19-Feb-2007
+----------------------------------------------------------------------------
+
+2007-02-18 19:49  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-02-17 22:13  mwiesweg
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-02-17 22:03  mwiesweg
+
+	* trunk/extragear/graphics/digikam/HACKING: Add callgrind Howto
+
+2007-02-17 22:02  mwiesweg
+
+	* trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+	  Change this and that, without knowing if it is related to the bug
+	  
+	  CCBUG: 141663
+
+2007-02-17 22:01  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/iconview.cpp: Remember
+	  scroll position when resizing
+	  
+	  CCBUG: 141708
+
+2007-02-17 14:18  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dmetadata/Makefile.am:
+	  compile
+
+2007-02-17 13:57  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/splashscreen/Makefile.am:
+	  compile
+
+2007-02-17 13:57  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/setup/Makefile.am:
+	  compile
+
+
+2007-02-16 11:47  gkulzer
+
+	* trunk/extragear/graphics/digikam/NEWS: 0.9.1-beta1
+
+2007-02-15 20:20  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: digikam
+	  from trunk : Showfoto : Native SlideShow : preparation of
+	  Slideshow is now cancelable.
+
+2007-02-15 20:17  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-02-15 20:10  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp:
+	  digikam from trunk : Image Editor : Native SlideShow :
+	  preparation of Slideshow is now cancelable.
+
+2007-02-15 19:49  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/colorcorrectiondlg.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/iccsettingscontainer.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/imageplugin.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/imageplugin.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/imagepluginloader.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/imagepluginloader.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/iofilesettingscontainer.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/undoaction.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/undoaction.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/undocache.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/undomanager.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/undomanager.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/savingcontextcontainer.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/tools/imageprint.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/tools/imageprint.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/tools/imageresizedlg.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/tools/imageresizedlg.h:
+	  using DIGIKAM_EXPORT
+
+2007-02-15 19:29  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.h: digikam
+	  from trunk : Native SlideShow : preparation of Slideshow is now
+	  cancelable.
+
+2007-02-15 18:16  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp: Pass
+	  a copy of current ImageInfo list to changeTagOnImageInfos
+	  
+	  CCBUG: 141624
+
+2007-02-15 17:39  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamview.cpp: i18n
+
+2007-02-15 14:25  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumfiletip.cpp: polish
+
+2007-02-15 14:13  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/setup/setupdcraw.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupicc.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupicc.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupimgplugins.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupiofiles.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupslideshow.h:
+	  use DIGIKAM_EXPORT
+
+2007-02-15 14:07  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/splashscreen/splashscreen.cpp,
+	  trunk/extragear/graphics/digikam/utilities/splashscreen/splashscreen.h:
+	  use DIGIKAM_EXPORT
+
+2007-02-15 14:03  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/exposurecontainer.h,
+	  trunk/extragear/graphics/digikam/libs/dimg/rawdecodingsettings.h:
+	  use DIGIKAM_EXPORT
+
+2007-02-15 14:01  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dcraw/dcrawbinary.h,
+	  trunk/extragear/graphics/digikam/libs/dcraw/dcrawinfocontainer.h,
+	  trunk/extragear/graphics/digikam/libs/dcraw/dcrawsettingswidget.h:
+	  use DIGIKAM_EXPORT
+
+2007-02-15 12:11  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/filters/bcgmodifier.cpp,
+	  trunk/extragear/graphics/digikam/libs/dimg/filters/bcgmodifier.h:
+	  Capability to set color channel to apply BCG. Not yet used.
+
+2007-02-15 11:45  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/Makefile.am: fix
+
+2007-02-15 11:35  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.h:
+	  optimize layout again
+
+2007-02-15 09:43  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imagewidget.cpp:
+	  digikam from trunk: fix i18n
+	  BUG: 141635
+
+2007-02-15 09:18  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.h:
+	  digikam from trunk: native Slideshow Tool : limit Comments string
+	  lenght to 60 char to print.
+
+2007-02-15 09:00  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumfiletip.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfiletip.h: fix XML
+	  StyleSheet implementation
+
+2007-02-15 07:04  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-02-15 06:59  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupslideshow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshowsettings.h:
+	  digikam from trunk: native Slideshow Tool : capability to print
+	  camera Make and Model during slide
+
+2007-02-15 06:18  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: typo
+
+2007-02-14 20:22  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp:
+	  digikam from trunk: Native SlideShow : perform optimization if
+	  photograph informations are not require to be displayed by user
+	  during slide. In this case, no need to use DMetadata to extract
+	  these info from images...
+	  
+	  Marcel: it will be time to update database content to perform
+	  optimizations everywhere. I think than all photograph
+	  informations available on right sidebar need to be stored at
+	  least in database (in a first time, more info later of course)
+	  and handle by ImageInfo class.
+	  
+	  CCMAIL: marcel.wiesweg@gmx.de
+
+2007-02-14 17:10  mwiesweg
+
+	* trunk/extragear/graphics/digikam/kioslave/Makefile.am: missing
+	  change in last commit
+
+2007-02-14 17:10  mwiesweg
+
+	* trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.cpp,
+	  trunk/extragear/graphics/digikam/libs/jpegutils/jpegutils.cpp,
+	  trunk/extragear/graphics/digikam/libs/jpegutils/jpegutils.h,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/previewtask.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/Makefile.am: Use faster
+	  JPEG loading method (scale before decoding) for JPEG previews
+	  
+	  - move code from thumbnail ioslave to libs/jpegutils
+	  - use code in PreviewTask
+	  
+	  CCBUG: 132047
+
+2007-02-14 16:15  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/iconview.cpp: Handle
+	  space and menu key in IconView
+	  - Ctrl+Space behaves like Ctrl+mouse button
+	  - Menu key behaves like right mouse button on the current item
+	  
+	  Note: DigikamApp installs a global shortcut on Space (->next
+	  item).
+	  Shift+Space is currently filtered and will not reach the IconView
+	  method.
+	  
+	  CCMAIL: hugelmopf@web.de
+
+2007-02-14 11:28  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp:
+	  digikam from trunk: native Slideshow Tool : if user press mouse
+	  right/left buttons or use mouse wheel, we pause the temporised
+	  slideshow. User can continue temporised slideshow to press space
+	  bar
+
+2007-02-14 11:07  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp:
+	  digikam from trunk: native Slideshow Tool : handle mouse right
+	  and left buttons during slide to navigate between pictures
+
+2007-02-14 10:36  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.h:
+	  digikam from trunk: native Slideshow Tool : handle mouse wheel
+	  during slide to navigate between pictures
+
+2007-02-14 10:03  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-02-14 10:02  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamappprivate.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.h,
+	  trunk/extragear/graphics/digikam/utilities/batch/Makefile.am,
+	  trunk/extragear/graphics/digikam/utilities/batch/imageinfoalbumsjob.cpp,
+	  trunk/extragear/graphics/digikam/utilities/batch/imageinfoalbumsjob.h:
+	  digikam from trunk: native Slideshow Tool : added Albums
+	  recurssion feature. You can use SHIFT+F9 to start it.
+	  
+	  BUG: 116609
+
+2007-02-14 06:52  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/album.cpp,
+	  trunk/extragear/graphics/digikam/digikam/album.h: polish
+
+2007-02-14 06:41  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/album.h: DDebug() in API
+	  doc
+
+2007-02-14 06:33  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamview.cpp: digikam
+	  from trunk: native Slideshow Tool : because parsing metadata from
+	  image can be long especially with huge albums (or in the future
+	  with the recursive-albums slideshow), we toggle on the progress
+	  bar on status bar when slideshow is preparing
+
+2007-02-13 21:27  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupslideshow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshowsettings.h:
+	  digikam from trunk : Native SlideShow : added camera Exposure
+	  Time and Sensitivity informations
+
+2007-02-13 21:05  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupslideshow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.h,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshowsettings.h:
+	  digikam from trunk : Native SlideShow : added camera Aperture and
+	  Focal informations
+
+2007-02-13 21:00  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/metadatahub.cpp,
+	  trunk/extragear/graphics/digikam/digikam/metadatahub.h,
+	  trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/talbumlistview.cpp:
+	  Adding tags to many images - if writing to file metadata is
+	  disabled - is now 10-20x faster
+	  
+	  Three optimizations (thanks to callgrind):
+	  - in MetadataHub::write(QString), if no file write will be
+	  needed,
+	  do not create a DMetadata object (requires disk access -> slow)
+	  - do not update AlbumIconView on every call to
+	  slotImageAttributesChanged
+	  - use begin and commitTransaction around loops where many tags
+	  are added.
+	  Here, the biggest speed gain comes from the fact that not after
+	  every assigned
+	  tag the database file is touched, and the AlbumManager KDirWatch
+	  triggers a rescan
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-02-13 19:43  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp:
+	  display date using locale
+
+2007-02-13 18:05  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupslideshow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshowsettings.h:
+	  digikam from trunk : Native SlideShow tool : print image creation
+	  date during slide.
+
+2007-02-13 17:14  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: fix duplicate entries
+
+2007-02-13 11:52  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.h,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupslideshow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshowsettings.h:
+	  digikam from trunk: native Slideshow Tool : add capability to
+	  print more informations on bottom of pictures.
+	  
+	  There is a new option to print image comment. Comments from
+	  database is displayed under digiKam. With Showfoto, Exif Comments
+	  is displayed.
+	  
+	  The implementation is ready to handle all photograph informations
+	  (Apperture, Focal, Exposure, Date, etc : the same info than
+	  photograph properties from right sidebar in fact...).
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-02-13 09:57  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/Makefile.am,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/Makefile.am,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.h,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshowsettings.h,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/toolbar.h:
+	  using DIGIKAM_EXPORT macro
+
+2007-02-13 09:47  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dmetadata/photoinfocontainer.h:
+	  using DIGIKAM_EXPORT macro
+
+2007-02-13 09:24  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp:
+	  polish
+
+2007-02-13 09:23  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.h,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.h,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshowsettings.h:
+	  digikam from trunk : using a settings container with native
+	  slideshow tool. Future new options will be added in this class
+
+2007-02-13 06:26  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam.lsm: fix
+
+2007-02-13 06:24  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam.lsm,
+	  trunk/extragear/graphics/digikam/digikam/version.h: 0.9.1-beta2
+
+2007-02-13 06:21  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-02-12 21:51  mwiesweg
+
+	* trunk/extragear/graphics/digikam/README: Some typos
+
+2007-02-12 20:39  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/albumwidgetstack.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumwidgetstack.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewview.h,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewwidget.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewwidget.h:
+	  Add preloading for preview view
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-02-12 18:05  mwiesweg
+
+	* trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+	  Preserve name filtering for tags when changing the selection.
+	  
+	  This is a workaround, the real solution is to fix the two
+	  filtering algorithms
+	  (unify in one method) so that they don't destroy one another.
+
+2007-02-12 13:18  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/setup/setupmime.cpp:
+	  digikam from trunk : add decorative icons
+
+2007-02-12 12:35  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dcraw/dcrawbinary.cpp,
+	  trunk/extragear/graphics/digikam/libs/dcraw/dcrawbinary.h: polish
+
+2007-02-12 10:41  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumsettings.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumsettings.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupmime.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupmime.h:
+	  digikam from trunk: setup MimeType : add 4 buttons to revert to
+	  default settings
+
+2007-02-12 10:03  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumsettings.cpp: added
+	  jpeg2000 mime type in default settings
+
 v0.9.1-beta1 - 11-Feb-2007
 ----------------------------------------------------------------------------
 
