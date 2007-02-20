@@ -267,7 +267,7 @@ void SlideShow::slotGotImagePreview(const LoadingDescription&, const QImage& pre
     updatePixmap();
     update();
 
-    if (!d->endOfShow && !d->pause)
+    if (!d->endOfShow)
     {
         d->timer->start(d->settings.delay, true);
         preloadNextImage();
