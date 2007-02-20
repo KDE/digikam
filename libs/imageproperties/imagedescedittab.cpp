@@ -1419,7 +1419,7 @@ void ImageDescEditTab::updateRecentTags()
                         icon = loader->getStandardTagIcon(album, 20);
                     }
                 }
-                QString text = album->title() + " (" + ((TAlbum*)album->parent())->prettyURL() + ")";
+                QString text = album->title() + ' (' + ((TAlbum*)album->parent())->prettyURL() + ')';
                 menu->insertItem(icon, text, album->id());
             }
         }
