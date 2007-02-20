@@ -1404,7 +1404,7 @@ void CameraUI::slotDeleteAll()
     if (!lockedList.isEmpty())
     {
         QString infoMsg(i18n("The items listed below are locked by camera (read-only). "
-                             "These items will not be deleted. If you want really to delete these items, "
+                             "These items will not be deleted. If you really want to delete these items, "
                              "please unlock them and try again."));        
         KMessageBox::informationList(this, infoMsg, lockedList, i18n("Information"));
     }    
