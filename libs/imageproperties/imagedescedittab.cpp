@@ -481,6 +481,7 @@ void ImageDescEditTab::slotApplyAllChanges()
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
 
     d->modified = false;
+    d->hub.resetChanged();
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
 

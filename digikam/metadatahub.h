@@ -325,6 +325,12 @@ public:
     void setTag(TAlbum *tag, bool hasTag, Status status = MetadataAvailable);
     void setTag(int albumID, bool hasTag, Status status = MetadataAvailable);
 
+    /**
+        Resets the information that metadata fields have been changed with one of the
+        set... methods (see commentChanged, dateTimeChanged etc.)
+    */
+    void resetChanged();
+
 private:
 
     void load(const QDateTime &dateTime, const QString &comment, int rating);

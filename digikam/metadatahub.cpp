@@ -813,5 +813,13 @@ void MetadataHub::setTag(int albumID, bool hasTag, Status status)
     setTag(album, hasTag, status);
 }
 
+void MetadataHub::resetChanged()
+{
+    d->dateTimeChanged = false;
+    d->commentChanged  = false;
+    d->ratingChanged   = false;
+    d->tagsChanged     = false;
+}
+
 }
 
