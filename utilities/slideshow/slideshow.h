@@ -74,6 +74,7 @@ private:
     void preloadNextImage();
     void updatePixmap();
     void printInfoText(QPainter &p, int &offset, const QString& str);
+    void printComments(QPainter &p, int &offset, const QString& comments);
 
 private:
 

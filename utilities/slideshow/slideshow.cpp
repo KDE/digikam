@@ -18,7 +18,7 @@
  * 
  * ============================================================ */
 
-#define MAXSTRINGLEN 60 
+#define MAXSTRINGLEN 80 
 
 // Qt includes.
 
@@ -320,8 +320,7 @@ void SlideShow::updatePixmap()
             if (d->settings.printComment)
             {
                 str = d->settings.pictInfoMap[d->currentImage].comment;
-                if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
-                printInfoText(p, offset, str);
+                printComments(p, offset, str);
             }   
 
             // Display the Make and Model.
@@ -466,6 +465,65 @@ void SlideShow::printInfoText(QPainter &p, int &offset, const QString& str)
     
         p.setPen(Qt::white);
         p.drawText(10, height()-offset, str);
+    }
+}
+
+void SlideShow::printComments(QPainter &p, int &offset, const QString& comments)
+{
+    QStringList commentsByLines;
+
+    uint commentsIndex = 0;     // Comments QString index
+
+    while (commentsIndex < comments.length())
+    {
+        QString newLine; 
+        bool breakLine = false; // End Of Line found
+        uint currIndex;         // Comments QString current index
+
+        // Check miminal lines dimension
+
+        uint commentsLinesLengthLocal = MAXSTRINGLEN;
+
+        for (currIndex = commentsIndex; currIndex < comments.length() && !breakLine; currIndex++ )
+        {
+            if( comments[currIndex] == QChar('\n') || comments[currIndex].isSpace() ) 
+                breakLine = true;
+        }
+
+        if (commentsLinesLengthLocal <= (currIndex - commentsIndex)) 
+            commentsLinesLengthLocal = (currIndex - commentsIndex);
+
+        breakLine = false;
+
+        for (currIndex = commentsIndex ; currIndex <= commentsIndex + commentsLinesLengthLocal && 
+                                         currIndex < comments.length() && !breakLine ; 
+             currIndex++ )
+            {
+                breakLine = (comments[currIndex] == QChar('\n')) ? true : false;
+
+                if (breakLine)
+                    newLine.append(QString(" "));
+                else
+                    newLine.append(comments[currIndex]);
+            }
+
+            commentsIndex = currIndex; // The line is ended
+
+        if (commentsIndex != comments.length())
+        {
+            while (!newLine.endsWith(" "))
+            {
+                newLine.truncate(newLine.length() - 1);
+                commentsIndex--;
+            }
+        }
+    
+        commentsByLines.prepend(newLine.stripWhiteSpace());
+    }
+
+    for (int i = 0 ; i < (int)commentsByLines.count() ; i++ ) 
+    {
+        printInfoText(p, offset, commentsByLines[i]);
     }
 }
 
