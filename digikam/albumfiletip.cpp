@@ -505,12 +505,14 @@ void AlbumFileTip::updateText()
         {
             PAlbum* album = info->album();
             if (album)
-                tip += cellBeg + i18n("Album:") + cellMid + album->url().remove(0, 1) + cellEnd;
+                tip += cellSpecBeg + i18n("Album:") + cellSpecMid + album->url().remove(0, 1) + cellSpecEnd;
         }
 
         if (settings->getToolTipsShowComments())
         {
-            tip += cellSpecBeg + i18n("Comments:") + cellSpecMid + breakString( info->caption() ) + cellSpecEnd;
+            str = info->caption();
+            if (str.isEmpty()) str = QString("---");
+            tip += cellSpecBeg + i18n("Comments:") + cellSpecMid + breakString(str) + cellSpecEnd;
         }
 
         if (settings->getToolTipsShowTags())
@@ -518,13 +520,15 @@ void AlbumFileTip::updateText()
             QStringList tagPaths = info->tagPaths(false);
 
             str = tagPaths.join(", ");
+            if (str.isEmpty()) str = QString("---");
             if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
-            tip += cellBeg + i18n("Tags:") + cellMid + str + cellEnd;
+            tip += cellSpecBeg + i18n("Tags:") + cellSpecMid + str + cellSpecEnd;
         }
 
         if (settings->getToolTipsShowRating())
         {
             str.fill( '*', info->rating() );
+            if (str.isEmpty()) str = QString("---");
             tip += cellSpecBeg + i18n("Rating:") + cellSpecMid + str + cellSpecEnd;
         }
     }
