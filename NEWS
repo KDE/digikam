@@ -650,6 +650,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 *** 0.9.1-RC2 *********************************************************
 
 294 ==> 141934 : Incorrect capitalized string: "back to album".
-295 ==> 
+295 ==> 141961 : Long comments truncated in slideshow.
+296 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
