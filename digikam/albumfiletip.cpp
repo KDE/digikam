@@ -37,7 +37,6 @@
 #include <qstylesheet.h>
 #include <qpainter.h>
 #include <qapplication.h>
-#include <qstylesheet.h>
 
 // KDE includes.
 
