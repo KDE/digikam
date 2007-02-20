@@ -1953,7 +1953,7 @@ void AlbumIconView::slotImageAttributesChanged(Q_LLONG imageId)
 {
     AlbumIconItem *firstItem = static_cast<AlbumIconItem *>(findFirstVisibleItem());
     AlbumIconItem *lastItem = static_cast<AlbumIconItem *>(findLastVisibleItem());
-    for (AlbumIconItem *item = firstItem; item && item != lastItem;
+    for (AlbumIconItem *item = firstItem; item;
          item = static_cast<AlbumIconItem *>(item->nextItem()))
     {
         if (item->imageInfo()->id() == imageId)
@@ -1961,6 +1961,8 @@ void AlbumIconView::slotImageAttributesChanged(Q_LLONG imageId)
             updateContents();
             return;
         }
+        if (item == lastItem)
+            break;
     }
 }
 
