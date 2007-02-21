@@ -320,7 +320,7 @@ void MetadataWidget::slotPrintMetadata(void)
         QFont font(KApplication::font());
         font.setPointSize( 10 ); // we define 10pt to be a nice base size for printing
         QSimpleRichText richText( textmetadata, font,
-                                  QString::null,
+                                  QString(),
                                   QStyleSheet::defaultSheet(),
                                   QMimeSourceFactory::defaultFactory(),
                                   view.height() );
@@ -349,7 +349,7 @@ void MetadataWidget::slotPrintMetadata(void)
 KURL MetadataWidget::saveMetadataToFile(const QString& caption, const QString& fileFilter)
 {
     KFileDialog fileSaveDialog(KGlobalSettings::documentPath(),
-                               QString::null,
+                               QString(),
                                this,
                                "MetadataFileSaveDialog",
                                false);
@@ -400,12 +400,12 @@ bool MetadataWidget::loadFromData(QString fileName, const QByteArray& data)
 
 QString MetadataWidget::getTagTitle(const QString&)
 {
-    return (QString::null);
+    return (QString());
 }
 
 QString MetadataWidget::getTagDescription(const QString&)
 {
-    return (QString::null);
+    return (QString());
 }
 
 void MetadataWidget::setFileName(QString fileName)

@@ -189,7 +189,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     AlbumSettings *settings = AlbumSettings::instance();
     if (settings)
     {
-        d->collectionCombo->insertItem( QString::null );
+        d->collectionCombo->insertItem( QString() );
         QStringList collections = settings->getAlbumCollectionNames();
         d->collectionCombo->insertStringList( collections );
         int collectionIndex = collections.findIndex( album->collection() );

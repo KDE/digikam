@@ -36,7 +36,7 @@ public:
 
 protected:
 
-    void calcRect(const QString& text = QString::null);
+    void calcRect(const QString& text = QString());
     void paintItem (QPainter * p, const QColorGroup & cg);
     void paintFocus (QPainter * p, const QColorGroup & cg);
 

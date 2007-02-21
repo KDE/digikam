@@ -154,7 +154,7 @@ void BatchSyncMetadata::slotAbort()
 
 void BatchSyncMetadata::complete()
 {
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
     emit signalComplete();
 }
 

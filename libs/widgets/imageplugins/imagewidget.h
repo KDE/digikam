@@ -56,7 +56,7 @@ public:
 public:
 
     ImageWidget(const QString& settingsSection, QWidget *parent=0, 
-                const QString& previewWhatsThis=QString::null, bool prevModeOptions=true, 
+                const QString& previewWhatsThis=QString(), bool prevModeOptions=true, 
                 int guideMode=ImageGuideWidget::PickColorMode, bool guideVisible=true);
     ~ImageWidget();
 

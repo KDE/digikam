@@ -272,7 +272,7 @@ void SyncJob::slotGotThumbnailFromIcon(const KURL&, const QPixmap& pix)
 
 QString SyncJob::lastErrorMsg()
 {
-    return (lastErrorMsg_ ? *lastErrorMsg_ : QString::null);
+    return (lastErrorMsg_ ? *lastErrorMsg_ : QString());
 }
 
 int SyncJob::lastErrorCode()

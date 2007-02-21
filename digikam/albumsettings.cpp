@@ -228,7 +228,7 @@ void AlbumSettings::readSettings()
 
     config->setGroup("Album Settings");
 
-    d->albumLibraryPath = config->readPathEntry("Album Path", QString::null);
+    d->albumLibraryPath = config->readPathEntry("Album Path", QString());
 
     QStringList collectionList = config->readListEntry("Album Collections");
     if (!collectionList.isEmpty())
@@ -300,11 +300,11 @@ void AlbumSettings::readSettings()
     d->saveComments           = config->readBoolEntry("Save EXIF Comments", false);
     d->saveDateTime           = config->readBoolEntry("Save Date Time", false);
 
-    d->author                 = config->readEntry("IPTC Author", QString::null);
-    d->authorTitle            = config->readEntry("IPTC Author Title", QString::null);
-    d->credit                 = config->readEntry("IPTC Credit", QString::null);
-    d->source                 = config->readEntry("IPTC Source", QString::null);
-    d->copyright              = config->readEntry("IPTC Copyright", QString::null);
+    d->author                 = config->readEntry("IPTC Author", QString());
+    d->authorTitle            = config->readEntry("IPTC Author Title", QString());
+    d->credit                 = config->readEntry("IPTC Credit", QString());
+    d->source                 = config->readEntry("IPTC Source", QString());
+    d->copyright              = config->readEntry("IPTC Copyright", QString());
 
     // ---------------------------------------------------------------------
 

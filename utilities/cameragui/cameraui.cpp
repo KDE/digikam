@@ -373,7 +373,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     layout->setMargin( 2 );  // To make sure the frame gets displayed
     layout->setSpacing( 0 );
 
-    KURLLabel *pixmapLogo = new KURLLabel( "http://www.digikam.org", QString::null, frame );
+    KURLLabel *pixmapLogo = new KURLLabel( "http://www.digikam.org", QString(), frame );
     pixmapLogo->setMargin(0);
     pixmapLogo->setScaledContents( false );
     pixmapLogo->setPaletteBackgroundColor( QColor(201, 208, 255) );

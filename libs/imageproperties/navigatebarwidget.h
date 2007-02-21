@@ -44,7 +44,7 @@ public:
     NavigateBarWidget(QWidget *parent=0, bool show=true);
     ~NavigateBarWidget();
     
-    void    setFileName(QString filename=QString::null);
+    void    setFileName(QString filename=QString());
     QString getFileName();
     void    setButtonsState(int itemType);
     int     getButtonsState();

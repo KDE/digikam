@@ -204,7 +204,7 @@ bool ImagePrint::printImageWithQt()
         {
             int resp = KMessageBox::warningYesNoCancel(KApplication::kApplication()->mainWidget(),
                 i18n("The image will not fit on the page, what do you want to do?"),
-                QString::null,KStdGuiItem::cont(),
+                QString(),KStdGuiItem::cont(),
                 i18n("Shrink") );
     
             if (resp==KMessageBox::Cancel) 

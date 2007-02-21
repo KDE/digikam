@@ -132,7 +132,7 @@ void DProgressDlg::addedAction(const QPixmap& pix, const QString &text)
 {
     QImage img;
     KListViewItem *item = new KListViewItem(d->actionsList,
-                          d->actionsList->lastItem(), QString::null, text);
+                          d->actionsList->lastItem(), QString(), text);
 
     if (pix.isNull())
     {

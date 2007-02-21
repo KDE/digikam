@@ -478,7 +478,7 @@ void ImageDescEditTab::slotApplyAllChanges()
     AlbumManager::instance()->albumDB()->commitTransaction();
     d->ignoreImageAttributesWatch = false;
 
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
 
     d->modified = false;
     d->hub.resetChanged();
@@ -568,7 +568,7 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
     AlbumManager::instance()->albumDB()->commitTransaction();
     d->ignoreImageAttributesWatch = false;
 
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
 
     // reload everything
     setInfos(d->currInfos);
@@ -593,7 +593,7 @@ void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
         kapp->processEvents();
     }
 
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
 }
 
 bool ImageDescEditTab::eventFilter(QObject *, QEvent *e)

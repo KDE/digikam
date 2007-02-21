@@ -755,7 +755,7 @@ void ShowFoto::slotOpenFolder(const KURL& url)
     if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return;
 
-    m_canvas->load(QString::null, m_IOFileSettings);
+    m_canvas->load(QString(), m_IOFileSettings);
     d->thumbBar->clear(true);
     emit signalNoCurrentItem();
     d->currentItem = 0;
@@ -1076,7 +1076,7 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
         emit signalNoCurrentItem();
         slotUpdateItemInfo();
         toggleActions(false);
-        m_canvas->load(QString::null, m_IOFileSettings);
+        m_canvas->load(QString(), m_IOFileSettings);
         d->currentItem = 0;
     }
     else
@@ -1121,7 +1121,7 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
         kapp->processEvents();
     }
 
-    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::TextMode, QString::null);   
+    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::TextMode, QString());   
 
     if (!m_cancelSlideShow)
     {

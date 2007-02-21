@@ -49,7 +49,7 @@ public:
     ImagePreviewWidget(QWidget *parent=0);
     ~ImagePreviewWidget();
 
-    void setImagePath(const QString& path=QString::null);
+    void setImagePath(const QString& path=QString());
     void setPreviousNextPaths(const QString& previous, const QString &next);
     void reload();
 

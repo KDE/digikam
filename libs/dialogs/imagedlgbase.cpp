@@ -96,7 +96,7 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
                            bool loadFileSettings, bool tryAction, QFrame* bannerFrame)
             : KDialogBase(Plain, 0, Help|Default|User1|User2|User3|Try|Ok|Cancel, Ok,
                           parent, 0, true, true,
-                          QString::null,
+                          QString(),
                           i18n("&Save As..."),
                           i18n("&Load..."))
 {

@@ -42,7 +42,7 @@ Q_OBJECT
 
  public:
 
-    DProgressDlg(QWidget *parent=0, const QString &caption=QString::null);
+    DProgressDlg(QWidget *parent=0, const QString &caption=QString());
     ~DProgressDlg();
 
     void setButtonText(const QString &text);

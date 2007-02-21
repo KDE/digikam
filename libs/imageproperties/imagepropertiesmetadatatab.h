@@ -52,7 +52,7 @@ public:
     void setCurrentURL(const KURL& url=KURL());
     void setCurrentData(const QByteArray& exifData=QByteArray(), 
                         const QByteArray& iptcData=QByteArray(), 
-                        const QString& filename=QString::null);
+                        const QString& filename=QString());
 
 private:
 

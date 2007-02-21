@@ -252,7 +252,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     KURLLabel *lcmsLogoLabel = new KURLLabel(generalOptions);
     lcmsLogoLabel->setAlignment( AlignTop | AlignRight );
-    lcmsLogoLabel->setText(QString::null);
+    lcmsLogoLabel->setText(QString());
     lcmsLogoLabel->setURL("http://www.littlecms.com");
     KGlobal::dirs()->addResourceType("logo-lcms", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("logo-lcms", "logo-lcms.png");
@@ -710,9 +710,9 @@ void ImageEffect_ICCProof::slotEffect()
 
     Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
 
-    QString tmpInPath    = QString::null;
-    QString tmpProofPath = QString::null;
-    QString tmpSpacePath = QString::null;
+    QString tmpInPath    = QString();
+    QString tmpProofPath = QString();
+    QString tmpSpacePath = QString();
 
     bool proofCondition = false;
     bool spaceCondition = false;
@@ -1076,7 +1076,7 @@ void ImageEffect_ICCProof::getICCInfo(const QByteArray& profile)
         return;
     }
 
-    Digikam::ICCProfileInfoDlg infoDlg(this, QString::null, profile);
+    Digikam::ICCProfileInfoDlg infoDlg(this, QString(), profile);
     infoDlg.exec();
 }
 

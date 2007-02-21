@@ -57,7 +57,7 @@ public:
     void setText(const QString& text);
     void setAlignment(int a);
 
-    void progressBarMode(int mode, const QString& text=QString::null);
+    void progressBarMode(int mode, const QString& text=QString());
     void setProgressValue(int v);
     void setProgressText(const QString& text);
 

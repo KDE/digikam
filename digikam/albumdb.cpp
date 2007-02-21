@@ -651,7 +651,7 @@ QString AlbumDB::getSetting(const QString& keyword)
              .arg(escapeString(keyword)), &values );
 
     if (values.isEmpty())
-        return QString::null;
+        return QString();
     else
         return values[0];
 }
@@ -733,7 +733,7 @@ QString AlbumDB::getItemCaption(Q_LLONG imageID)
     if (!values.isEmpty())
         return values[0];
     else
-        return QString::null;
+        return QString();
 }
 
 QString AlbumDB::getItemCaption(int albumID, const QString& name)
@@ -749,7 +749,7 @@ QString AlbumDB::getItemCaption(int albumID, const QString& name)
     if (!values.isEmpty())
         return values[0];
     else
-        return QString::null;
+        return QString();
 }
 
 QDateTime AlbumDB::getItemDate(Q_LLONG imageID)
@@ -1200,7 +1200,7 @@ IntList AlbumDB::getTagsFromTagPaths(const QStringList &keywordsList, bool creat
                 }
 
                 // Tag does not yet exist in DB, add it
-                tagID = addTag(parentTagID, (*tagName), QString::null, 0);
+                tagID = addTag(parentTagID, (*tagName), QString(), 0);
 
                 if (tagID == -1)
                 {

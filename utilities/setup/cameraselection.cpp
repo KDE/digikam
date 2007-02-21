@@ -425,7 +425,7 @@ QString CameraSelection::currentModel()
 {
     QListViewItem* item = d->listView->currentItem();
     if (!item)
-        return QString::null;
+        return QString();
 
     QString model(item->text(0));
     if (model == d->UMSCameraNameShown)

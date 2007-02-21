@@ -52,7 +52,7 @@ QString ListBoxWhatsThis::text(const QPoint &p)
     if (item != 0) 
         return m_itemWhatsThisMap[item];
 
-    return QString::null;
+    return QString();
 }
 
 void ListBoxWhatsThis::add(QListBoxItem* item, const QString& text)

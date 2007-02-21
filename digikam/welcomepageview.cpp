@@ -138,10 +138,10 @@ QString WelcomePageView::infoPage()
     info = info.arg( featureItems );
     
     // Add first-time user text (only shown on first start).
-    info = info.arg( QString::null ); 
+    info = info.arg( QString() ); 
 
     // Generated list of important changes    
-    info = info.arg( QString::null ); 
+    info = info.arg( QString() ); 
     
     return info;
 }

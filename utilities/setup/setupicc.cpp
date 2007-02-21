@@ -162,7 +162,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
                                                     "<li>Unchecked: Color Management is disabled</li></ul>"));
     
     KURLLabel *lcmsLogoLabel = new KURLLabel(colorPolicy);
-    lcmsLogoLabel->setText(QString::null);
+    lcmsLogoLabel->setText(QString());
     lcmsLogoLabel->setURL("http://www.littlecms.com");
     KGlobal::dirs()->addResourceType("logo-lcms", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("logo-lcms", "logo-lcms.png");
@@ -434,7 +434,7 @@ void SetupICC::readSettings(bool restore)
     if (!restore)
         d->enableColorManagement->setChecked(config->readBoolEntry("EnableCM", false));
 
-    d->defaultPathKU->setURL(config->readPathEntry("DefaultPath", QString::null));
+    d->defaultPathKU->setURL(config->readPathEntry("DefaultPath", QString()));
     d->bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
     d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
     d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
@@ -729,7 +729,7 @@ bool SetupICC::iccRepositoryIsValid()
 
     // To be valid, the ICC profiles repository must exist and be readable.
 
-    QDir tmpPath(config->readPathEntry("DefaultPath", QString::null));
+    QDir tmpPath(config->readPathEntry("DefaultPath", QString()));
     DDebug() << "ICC profiles repository is: " << tmpPath.dirName() << endl;
 
     if ( tmpPath.exists() && tmpPath.isReadable() )

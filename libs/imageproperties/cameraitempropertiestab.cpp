@@ -289,27 +289,27 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
 {
     if (!itemInfo)
     {
-        d->labelFile->setText(QString::null);
-        d->labelFolder->setText(QString::null);
-        d->labelFileIsReadable->setText(QString::null);
-        d->labelFileIsWritable->setText(QString::null);
-        d->labelFileDate->setText(QString::null);
-        d->labelFileSize->setText(QString::null);
-        d->labelImageMime->setText(QString::null);
-        d->labelImageDimensions->setText(QString::null);
-        d->labelNewFileName->setText(QString::null);
-        d->labelAlreadyDownloaded->setText(QString::null);
+        d->labelFile->setText(QString());
+        d->labelFolder->setText(QString());
+        d->labelFileIsReadable->setText(QString());
+        d->labelFileIsWritable->setText(QString());
+        d->labelFileDate->setText(QString());
+        d->labelFileSize->setText(QString());
+        d->labelImageMime->setText(QString());
+        d->labelImageDimensions->setText(QString());
+        d->labelNewFileName->setText(QString());
+        d->labelAlreadyDownloaded->setText(QString());
 
-        d->labelPhotoMake->setText(QString::null);
-        d->labelPhotoModel->setText(QString::null);
-        d->labelPhotoDateTime->setText(QString::null);
-        d->labelPhotoAperture->setText(QString::null);
-        d->labelPhotoFocalLenght->setText(QString::null);
-        d->labelPhotoExposureTime->setText(QString::null);
-        d->labelPhotoSensitivity->setText(QString::null);
-        d->labelPhotoExposureMode->setText(QString::null);
-        d->labelPhotoFlash->setText(QString::null);
-        d->labelPhotoWhiteBalance->setText(QString::null);
+        d->labelPhotoMake->setText(QString());
+        d->labelPhotoModel->setText(QString());
+        d->labelPhotoDateTime->setText(QString());
+        d->labelPhotoAperture->setText(QString());
+        d->labelPhotoFocalLenght->setText(QString());
+        d->labelPhotoExposureTime->setText(QString());
+        d->labelPhotoSensitivity->setText(QString());
+        d->labelPhotoExposureMode->setText(QString());
+        d->labelPhotoFlash->setText(QString());
+        d->labelPhotoWhiteBalance->setText(QString());
 
         setEnabled(false);
         return;

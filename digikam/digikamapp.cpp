@@ -1583,7 +1583,7 @@ void DigikamApp::slotShowTip()
 
 void DigikamApp::slotShowKipiHelp()
 {
-    KApplication::kApplication()->invokeHelp( QString::null, "kipi-plugins" );
+    KApplication::kApplication()->invokeHelp( QString(), "kipi-plugins" );
 }
 
 void DigikamApp::loadPlugins()

@@ -1201,7 +1201,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                         infos.append(dropItem->imageInfo());
                     changeTagOnImageInfos(infos, QValueList<int>() << tagID, true, true);
 
-                    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
+                    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
                     break;
                 }
                 case 11:    // All Items
@@ -1211,7 +1211,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 
                     changeTagOnImageInfos(allImageInfos(true), QValueList<int>() << tagID, true, true);
 
-                    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
+                    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
                     break;
                 }
                 case 12:    // Dropped Item only.
@@ -1282,7 +1282,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     infos.append(dropItem->imageInfo());
                 changeTagOnImageInfos(infos, tagIDs, true, true);
 
-                emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
+                emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
                 break;
             }
             case 11:    // All Items
@@ -1292,7 +1292,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 
                 changeTagOnImageInfos(allImageInfos(true), tagIDs, true, true);
 
-                emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
+                emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
                 break;
             }
             case 12:    // Dropped item only.
@@ -1539,7 +1539,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
         kapp->processEvents();
     }
 
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);    
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());    
     refreshItems(urlList);
 }
 
@@ -1867,7 +1867,7 @@ void AlbumIconView::slotAssignTag(int tagID)
 
     changeTagOnImageInfos(selectedImageInfos(true), QValueList<int>() << tagID, true, true);
 
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
 }
 
 void AlbumIconView::slotRemoveTag(int tagID)
@@ -1877,7 +1877,7 @@ void AlbumIconView::slotRemoveTag(int tagID)
 
     changeTagOnImageInfos(selectedImageInfos(true), QValueList<int>() << tagID, false, true);
 
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
 }
 
 void AlbumIconView::slotAssignRating(int rating)
@@ -1909,7 +1909,7 @@ void AlbumIconView::slotAssignRating(int rating)
     }
     AlbumManager::instance()->albumDB()->commitTransaction();
 
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
     updateContents();
 }
 

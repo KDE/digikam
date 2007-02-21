@@ -172,12 +172,12 @@ void SetupCollections::slotAddCollection()
     QString newCollection =
         KInputDialog::getText(i18n("New Collection Name"),
                               i18n("Enter new collection name:"),
-                              QString::null, &ok, this);
+                              QString(), &ok, this);
 #else
     QString newCollection =
         KLineEditDlg::getText(i18n("New Collection Name"),
                               i18n("Enter new collection name:"),
-                              QString::null, &ok, this);
+                              QString(), &ok, this);
 #endif
 
     if (!ok) return;

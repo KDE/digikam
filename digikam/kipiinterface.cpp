@@ -103,7 +103,7 @@ QString DigikamImageInfo::description()
         return db->getItemCaption(p->id(), _url.fileName());
     }
 
-    return QString::null;
+    return QString();
 }
 
 void DigikamImageInfo::setTitle( const QString& newName )
@@ -315,7 +315,7 @@ QString DigikamImageCollection::category()
         return i18n("Tag: %1").arg(p->tagPath());
     }
     else
-        return QString::null;
+        return QString();
 }
 
 QDate DigikamImageCollection::date()
@@ -337,7 +337,7 @@ QString DigikamImageCollection::comment()
         return p->caption();
     }
     else
-        return QString::null;
+        return QString();
 }
 
 static QValueList<QRegExp> makeFilterList( const QString &filter )

@@ -85,7 +85,7 @@ FirstRunWidget::~FirstRunWidget()
 void FirstRunWidget::languageChange()
 {
     m_textLabel2->setText( i18n( "<b>Albums Library Folder</b>" ) );
-    m_pixLabel->setText( QString::null );
+    m_pixLabel->setText( QString() );
     m_textLabel1->setText( i18n( "digiKam will store the photo albums which you create in a common <b>Albums Library folder</b>. "
                                  "Please select which folder you would like digiKam to use as the common Albums Library folder below." ) );
 }

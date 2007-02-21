@@ -150,7 +150,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     QHBox *hbox = new QHBox(parent);
 
     KURLLabel *exiv2LogoLabel = new KURLLabel(hbox);
-    exiv2LogoLabel->setText(QString::null);
+    exiv2LogoLabel->setText(QString());
     exiv2LogoLabel->setURL("http://www.exiv2.org");
     KGlobal::dirs()->addResourceType("logo-exiv2", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("logo-exiv2", "logo-exiv2.png");

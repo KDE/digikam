@@ -50,7 +50,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
     QFrame *p1 = addPage( i18n("Summary"), i18n("Camera Summary"), BarIcon("contents2", KIcon::SizeMedium) );
     QVBoxLayout *p1layout = new QVBoxLayout( p1, 0, 6 );
 
-    QTextEdit *summaryView = new QTextEdit(summary, QString::null, p1);
+    QTextEdit *summaryView = new QTextEdit(summary, QString(), p1);
     summaryView->setWordWrap(QTextEdit::WidgetWidth);
     summaryView->setReadOnly(true);
     p1layout->addWidget(summaryView);
@@ -60,7 +60,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
     QFrame *p2 = addPage( i18n("Manual"), i18n("Camera Manual"), BarIcon("contents", KIcon::SizeMedium) );
     QVBoxLayout *p2layout = new QVBoxLayout( p2, 0, 6 );
 
-    QTextEdit *manualView = new QTextEdit(manual, QString::null, p2);
+    QTextEdit *manualView = new QTextEdit(manual, QString(), p2);
     manualView->setWordWrap(QTextEdit::WidgetWidth);
     manualView->setReadOnly(true);
     p2layout->addWidget(manualView);
@@ -70,7 +70,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
     QFrame *p3 = addPage( i18n("About"), i18n("About Driver"), BarIcon("camera", KIcon::SizeMedium) );
     QVBoxLayout *p3layout = new QVBoxLayout( p3, 0, 6 );
     
-    QTextEdit *aboutView = new QTextEdit(about, QString::null, p3);
+    QTextEdit *aboutView = new QTextEdit(about, QString(), p3);
     aboutView->setWordWrap(QTextEdit::WidgetWidth);
     aboutView->setReadOnly(true);
     p3layout->addWidget(aboutView);

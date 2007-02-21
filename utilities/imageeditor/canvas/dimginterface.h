@@ -66,7 +66,7 @@ public:
     void   restore();
 
     void   saveAs(const QString& file, IOFileSettingsContainer *iofileSettings,
-                  bool setExifOrientationTag, const QString& mimeType=QString::null);
+                  bool setExifOrientationTag, const QString& mimeType=QString());
 
     void   switchToLastSaved(const QString& newFilename);
     void   abortSaving();

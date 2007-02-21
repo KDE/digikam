@@ -521,7 +521,7 @@ void EditorWindow::printImage(KURL url)
 
 void EditorWindow::slotImagePluginsHelp()
 {
-    KApplication::kApplication()->invokeHelp( QString::null, "digikamimageplugins" );
+    KApplication::kApplication()->invokeHelp( QString(), "digikamimageplugins" );
 }
 
 void EditorWindow::slotEditKeys()
@@ -723,10 +723,10 @@ void EditorWindow::applyStandardSettings()
     d->ICCSettings->BPCSetting            = config->readBoolEntry("BPCAlgorithm",false);
     d->ICCSettings->managedViewSetting    = config->readBoolEntry("ManagedView", false);
     d->ICCSettings->renderingSetting      = config->readNumEntry("RenderingIntent");
-    d->ICCSettings->inputSetting          = config->readPathEntry("InProfileFile", QString::null);
-    d->ICCSettings->workspaceSetting      = config->readPathEntry("WorkProfileFile", QString::null);
-    d->ICCSettings->monitorSetting        = config->readPathEntry("MonitorProfileFile", QString::null);
-    d->ICCSettings->proofSetting          = config->readPathEntry("ProofProfileFile", QString::null);
+    d->ICCSettings->inputSetting          = config->readPathEntry("InProfileFile", QString());
+    d->ICCSettings->workspaceSetting      = config->readPathEntry("WorkProfileFile", QString());
+    d->ICCSettings->monitorSetting        = config->readPathEntry("MonitorProfileFile", QString());
+    d->ICCSettings->proofSetting          = config->readPathEntry("ProofProfileFile", QString());
     d->ICCSettings->CMInRawLoadingSetting = config->readBoolEntry("CMInRawLoading", false);
 
     d->viewCMViewAction->setEnabled(d->ICCSettings->enableCMSetting);
@@ -1002,7 +1002,7 @@ bool EditorWindow::promptUserSave(const KURL& url)
                                   i18n("The image '%1' has been modified.\n"
                                        "Do you want to save it?")
                                        .arg(url.filename()),
-                                  QString::null,
+                                  QString(),
                                   KStdGuiItem::save(),
                                   KStdGuiItem::discard());
 
@@ -1146,7 +1146,7 @@ void EditorWindow::slotLoadingFinished(const QString& filename, bool success)
     unsetCursor();
 
     // Note: in showfoto, we using a null filename to clear canvas.
-    if (!success && filename != QString::null)
+    if (!success && filename != QString())
     {
         QFileInfo fi(filename);
         QString message = i18n("Failed to load image \"%1\"").arg(fi.fileName());
@@ -1335,7 +1335,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
     FileSaveOptionsBox *options = new FileSaveOptionsBox();
     KFileDialog imageFileSaveDialog(m_savingContext->srcURL.isLocalFile() ? 
                                     m_savingContext->srcURL.directory() : QDir::homeDirPath(),
-                                    QString::null,
+                                    QString(),
                                     this,
                                     "imageFileSaveDialog",
                                     false,

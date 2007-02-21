@@ -44,7 +44,7 @@ public:
     DcrawBinaryPriv()
     {
         available = false;
-        version   = QString::null;
+        version   = QString();
     }
 
     bool    available;
@@ -153,7 +153,7 @@ void DcrawBinary::checkReport()
                           .arg(appName)
                           .arg(appName)
                           .arg(appName),
-                     QString::null,
+                     QString(),
                      i18n("Do not show this message again"),
                      KMessageBox::Notify | KMessageBox::AllowLink);
         return;
@@ -178,7 +178,7 @@ void DcrawBinary::checkReport()
                           .arg(appName)
                           .arg(minimalVersion())
                           .arg(appName),
-                     QString::null,
+                     QString(),
                      i18n("Do not show this message again"),
                      KMessageBox::Notify | KMessageBox::AllowLink);
     }

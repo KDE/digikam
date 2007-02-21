@@ -52,7 +52,7 @@ public:
     ~ImageWindow();
 
     void loadURL(const KURL::List& urlList, const KURL& urlCurrent,
-                 const QString& caption=QString::null,
+                 const QString& caption=QString(),
                  bool allowSaving=true);
 
     void loadImageInfos(const ImageInfoList &imageInfoList,

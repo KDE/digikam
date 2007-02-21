@@ -115,7 +115,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     groupBoxLayout->addItem( spacer, 4, 1 );
 
     KURLLabel *gphotoLogoLabel = new KURLLabel(this);
-    gphotoLogoLabel->setText(QString::null);
+    gphotoLogoLabel->setText(QString());
     gphotoLogoLabel->setURL("http://www.gphoto.org");
     KGlobal::dirs()->addResourceType("logo-gphoto", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("logo-gphoto", "logo-gphoto.png");

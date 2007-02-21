@@ -1172,7 +1172,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
         kapp->processEvents();
     }
 
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString::null);   
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());   
 
     if (!d->cancelSlideShow)
     {

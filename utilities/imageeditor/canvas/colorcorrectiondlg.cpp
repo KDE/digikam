@@ -50,7 +50,7 @@ namespace Digikam
 
 ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview, 
                                        IccTransform *iccTrans, const QString& file)
-                  : KDialogBase(parent, "", true, QString::null,
+                  : KDialogBase(parent, "", true, QString(),
                                 Help|Ok|Apply|Cancel, Ok, true)
 {
     m_iccTrans = iccTrans;
@@ -160,7 +160,7 @@ void ColorCorrectionDlg::slotCurrentProfInfo()
     if (m_iccTrans->outputProfile().isEmpty())
         return;
 
-    ICCProfileInfoDlg infoDlg(m_parent, QString::null, m_iccTrans->outputProfile());
+    ICCProfileInfoDlg infoDlg(m_parent, QString(), m_iccTrans->outputProfile());
     infoDlg.exec();
 }
 
@@ -169,7 +169,7 @@ void ColorCorrectionDlg::slotEmbeddedProfInfo()
     if (m_iccTrans->embeddedProfile().isEmpty())
         return;
 
-    ICCProfileInfoDlg infoDlg(m_parent, QString::null, m_iccTrans->embeddedProfile());
+    ICCProfileInfoDlg infoDlg(m_parent, QString(), m_iccTrans->embeddedProfile());
     infoDlg.exec();
 }
 

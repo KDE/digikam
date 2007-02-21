@@ -48,10 +48,10 @@ public:
 
         renderingSetting        = 0;
 
-        workspaceSetting        = QString::null;
-        monitorSetting          = QString::null;
-        inputSetting            = QString::null;
-        proofSetting            = QString::null;
+        workspaceSetting        = QString();
+        monitorSetting          = QString();
+        inputSetting            = QString();
+        proofSetting            = QString();
     };
     
     ~ICCSettingsContainer(){};

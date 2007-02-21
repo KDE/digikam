@@ -48,16 +48,16 @@ class AlbumSelectDialog : public KDialogBase
 public:
 
     AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
-                      const QString& header=QString::null,
-                      const QString& newAlbumString=QString::null,
+                      const QString& header=QString(),
+                      const QString& newAlbumString=QString(),
                       bool allowRootSelection=false);
     ~AlbumSelectDialog();
 
 
     static PAlbum* selectAlbum(QWidget* parent,
                                PAlbum* albumToSelect,
-                               const QString& header=QString::null,
-                               const QString& newAlbumString=QString::null,
+                               const QString& header=QString(),
+                               const QString& newAlbumString=QString(),
                                bool allowRootSelection=false);
 
 private slots:

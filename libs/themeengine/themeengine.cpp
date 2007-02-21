@@ -93,7 +93,7 @@ ThemeEngine::ThemeEngine()
 
     d->themeList.setAutoDelete(false);
     d->themeDict.setAutoDelete(false);
-    d->defaultTheme = new Theme(i18n("Default"), QString::null);
+    d->defaultTheme = new Theme(i18n("Default"), QString());
     d->themeList.append(d->defaultTheme);
     d->themeDict.insert(i18n("Default"), d->defaultTheme);
     d->currTheme = d->defaultTheme;
@@ -123,7 +123,7 @@ void ThemeEngine::scanThemes()
     d->currTheme = 0;
 
     QStringList themes =
-        KGlobal::dirs()->findAllResources( "themes", QString::null,
+        KGlobal::dirs()->findAllResources( "themes", QString(),
                                            false, true );
 
     for (QStringList::iterator it=themes.begin(); it != themes.end();

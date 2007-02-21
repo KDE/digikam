@@ -44,7 +44,7 @@ class CameraIconViewItem : public IconItem
 public:
 
     CameraIconViewItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
-                       const QImage& thumbnail, const QString& downloadName=QString::null);
+                       const QImage& thumbnail, const QString& downloadName=QString());
     ~CameraIconViewItem();
 
     void    setThumbnail(const QImage& thumbnail);

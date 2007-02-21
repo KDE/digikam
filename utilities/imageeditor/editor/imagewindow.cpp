@@ -1065,7 +1065,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
         }
     }
 
-    m_nameLabel->progressBarMode(StatusProgressBar::TextMode, QString::null);   
+    m_nameLabel->progressBarMode(StatusProgressBar::TextMode, QString());   
 
     if (!m_cancelSlideShow)
     {

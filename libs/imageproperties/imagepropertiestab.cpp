@@ -315,29 +315,29 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url)
     {
         setNavigateBarFileName();
 
-        d->labelFile->setText(QString::null);
-        d->labelFolder->setText(QString::null);
-        d->labelFileModifiedDate->setText(QString::null);
-        d->labelFileSize->setText(QString::null);
-        d->labelFileOwner->setText(QString::null);
-        d->labelFilePermissions->setText(QString::null);
+        d->labelFile->setText(QString());
+        d->labelFolder->setText(QString());
+        d->labelFileModifiedDate->setText(QString());
+        d->labelFileSize->setText(QString());
+        d->labelFileOwner->setText(QString());
+        d->labelFilePermissions->setText(QString());
 
-        d->labelImageMime->setText(QString::null);
-        d->labelImageDimensions->setText(QString::null);
-        d->labelImageCompression->setText(QString::null);
-        d->labelImageBitDepth->setText(QString::null);
-        d->labelImageColorMode->setText(QString::null);
+        d->labelImageMime->setText(QString());
+        d->labelImageDimensions->setText(QString());
+        d->labelImageCompression->setText(QString());
+        d->labelImageBitDepth->setText(QString());
+        d->labelImageColorMode->setText(QString());
 
-        d->labelPhotoMake->setText(QString::null);
-        d->labelPhotoModel->setText(QString::null);
-        d->labelPhotoDateTime->setText(QString::null);
-        d->labelPhotoAperture->setText(QString::null);
-        d->labelPhotoFocalLenght->setText(QString::null);
-        d->labelPhotoExposureTime->setText(QString::null);
-        d->labelPhotoSensitivity->setText(QString::null);
-        d->labelPhotoExposureMode->setText(QString::null);
-        d->labelPhotoFlash->setText(QString::null);
-        d->labelPhotoWhiteBalance->setText(QString::null);
+        d->labelPhotoMake->setText(QString());
+        d->labelPhotoModel->setText(QString());
+        d->labelPhotoDateTime->setText(QString());
+        d->labelPhotoAperture->setText(QString());
+        d->labelPhotoFocalLenght->setText(QString());
+        d->labelPhotoExposureTime->setText(QString());
+        d->labelPhotoSensitivity->setText(QString());
+        d->labelPhotoExposureMode->setText(QString());
+        d->labelPhotoFlash->setText(QString());
+        d->labelPhotoWhiteBalance->setText(QString());
 
         setEnabled(false);
         return;

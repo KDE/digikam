@@ -64,7 +64,7 @@ class EventData
 public:
     
     DImgThreadedFilter(DImg *orgImage, QObject *parent=0, 
-                       const QString& name=QString::null);
+                       const QString& name=QString());
     
     ~DImgThreadedFilter();
     
@@ -125,7 +125,7 @@ protected:
       should implement an additional constructor using this constructor.
       */
     DImgThreadedFilter(DImgThreadedFilter *master, const DImg &orgImage, const DImg &destImage,
-                       int progressBegin=0, int progressEnd=100, const QString& name=QString::null);
+                       int progressBegin=0, int progressEnd=100, const QString& name=QString());
 
     /** Inform the master that there is currently a slave. At destruction of the slave, call with slave=0. */
     void setSlave(DImgThreadedFilter *slave);
