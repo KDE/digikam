@@ -652,6 +652,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 294 ==> 141934 : Incorrect capitalized string: "back to album".
 295 ==> 141961 : Long comments truncated in slideshow.
 296 ==> 141980 : digiKam crash when rescan certain files exiv2.
-297 ==> 
+297 ==> 141924 : Tags preview not updated in last image of album.
+298 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
