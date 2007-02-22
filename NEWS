@@ -653,6 +653,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 295 ==> 141961 : Long comments truncated in slideshow.
 296 ==> 141980 : digiKam crash when rescan certain files exiv2.
 297 ==> 141924 : Tags preview not updated in last image of album.
-298 ==> 
+298 ==> 139024 : Camera GUI new items selection doesn't work.
+299 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
