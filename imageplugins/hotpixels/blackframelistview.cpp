@@ -92,7 +92,7 @@ QString BlackFrameListViewItem::text(int column)const
         }
     }
     
-    return(QString());
+    return QString();
 }
 
 void BlackFrameListViewItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int align)

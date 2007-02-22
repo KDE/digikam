@@ -636,7 +636,7 @@ QString ImageEffect_Border::getBorderPath(int border)
           break;
        
        default:
-          return(QString());
+          return QString();
        }
     
     KGlobal::dirs()->addResourceType(pattern.ascii(), KGlobal::dirs()->kde_default("data") +
