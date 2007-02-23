@@ -442,7 +442,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     for (int i = 0; i < num_comments; i++)
     {
-        // Check if we have a Raw profile embeded using ImageMagick technic.
+        // Check if we have a Raw profile embedded using ImageMagick technic.
 
         if (memcmp(text_ptr[i].key, "Raw profile type exif", 21) != 0 ||
             memcmp(text_ptr[i].key, "Raw profile type APP1", 21) != 0 ||
@@ -633,7 +633,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     text.compression = PNG_TEXT_COMPRESSION_zTXt;
     png_set_text(png_ptr, info_ptr, &(text), 1);
 
-    // Write embeded Raw profiles metadata (Exif/Iptc) in text tag using ImageMagick technic.
+    // Write embedded Raw profiles metadata (Exif/Iptc) in text tag using ImageMagick technic.
     // Write digiKam comment like an iTXt chunk using UTF8 encoding.
     // NOTE: iTXt will be enable by default with libpng >= 1.3.0.(dcraw_0)
     

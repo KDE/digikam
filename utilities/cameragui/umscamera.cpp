@@ -204,7 +204,7 @@ bool UMSCamera::getExif(const QString&, const QString&, char **, int&)
 {
     // not necessary to implement this. read it directly from the file
     // (done in camera controller)
-    DWarning() << "exif implemented yet in camera controler" << endl;
+    DWarning() << "exif implemented yet in camera controller" << endl;
     return false;
 }
 

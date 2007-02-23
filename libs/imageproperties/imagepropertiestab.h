@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors: Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2006-04-19
- * Description : A tab to display general image informations
+ * Description : A tab to display general image information
  *
  * Copyright 2006-2007 by Gilles Caulier
  *

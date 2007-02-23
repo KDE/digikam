@@ -717,7 +717,7 @@ void ImageWindow::slotUpdateItemInfo()
     }
 
     // Disable some menu actions if the current root image URL
-    // isn't include in the digiKam Albums library database.
+    // is not include in the digiKam Albums library database.
     // This is necessary when ImageEditor is opened from cameraclient.
 
     KURL u(d->urlCurrent.directory());

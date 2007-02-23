@@ -62,7 +62,7 @@ void PreviewLoadingTask::execute()
 
         if (cachedImg)
         {
-            // image is found in image cache, loading is successfull
+            // image is found in image cache, loading is successful
 
             // In the cache, the QImage is wrapped in a DImg object.
             QImage qimage;
@@ -90,7 +90,7 @@ void PreviewLoadingTask::execute()
                     break;
                 }
             }
-            // dont wait on other loading processes?
+            // do not wait on other loading processes?
             //m_usedProcess = cache->retrieveLoadingProcess(m_loadingDescription.cacheKey());
 
             if (m_usedProcess)

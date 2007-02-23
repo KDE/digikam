@@ -122,7 +122,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 #endif
     
     // -------------------------------------------------------------------
-    // Get image informations.
+    // Get image information.
     
     uint32    w, h;
     uint16    bits_per_sample;
@@ -468,7 +468,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     // -------------------------------------------------------------------
     // Write meta-data Tags contents. 
-    // TODO : - this code will be removed when Exiv2 will support TIFF in writting mode
+    // TODO : - this code will be removed when Exiv2 will support TIFF in writing mode
         
     DMetadata metaData;
     metaData.setExif(m_image->getExif());
@@ -877,7 +877,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     imageSetAttribute("savedformat", "TIFF");
         
-    // TODO : enable this line when Exiv2 will support TIFF in writting mode.
+    // TODO : enable this line when Exiv2 will support TIFF in writing mode.
     //saveMetadata(filePath);
     
     return true;

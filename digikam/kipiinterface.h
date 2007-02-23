@@ -65,7 +65,7 @@ class TAlbum;
 class AlbumDB;
 class AlbumSettings;
 
-/** DigikamImageInfo: class to get/set image informations/properties in a digiKam album. */
+/** DigikamImageInfo: class to get/set image information/properties in a digiKam album. */
 
 class DigikamImageInfo : public KIPI::ImageInfoShared
 {
@@ -102,7 +102,7 @@ private:
 };
 
 
-/** DigikamImageCollection: class to get/set image collection informations/properties in a digiKam 
+/** DigikamImageCollection: class to get/set image collection information/properties in a digiKam 
     album database. */
 
 class DigikamImageCollection : public KIPI::ImageCollectionShared

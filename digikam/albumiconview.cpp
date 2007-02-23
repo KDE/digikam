@@ -918,7 +918,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
                        settings->getRawFileFilter().upper();
     }
 
-    // If the current item isn't an image file.
+    // If the current item is not an image file.
     if ( !imagefilter.contains(currentFileExtension) )
     {
         KMimeType::Ptr mimePtr = KMimeType::findByURL(item->imageInfo()->kurl(),

@@ -90,7 +90,7 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     
     readMetadata(filePath, DImg::RAW);
   
-    // NOTE: Here, we don't check a possible embeded work-space color profile using 
+    // NOTE: Here, we don't check a possible embedded work-space color profile using 
     // the method checkExifWorkingColorSpace() like with JPEG, PNG, and TIFF loaders, 
     // because RAW file are always in linear mode.
     
@@ -118,7 +118,7 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
     int fileSize         = QFileInfo(m_filePath).size();
     
     // This is the magic number that describes how fast the function grows
-    // It _should_ be dependent on how fast the computer is, but we dont have this piece of information
+    // It _should_ be dependent on how fast the computer is, but we do not have this piece of information
     // So this is a number that works well on my computer.
     double K50         = 3000.0*fileSize;
     int checkpointTime = 0;

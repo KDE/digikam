@@ -135,10 +135,10 @@ public:
     QByteArray getExifFromOriginalImage();
     QByteArray getIptcFromOriginalImage();
 
-    /** Get photograph informations from original image.*/ 
+    /** Get photograph information from original image.*/ 
     PhotoInfoContainer getPhotographInformations() const;
 
-    /** Standard methods to get/set preview informations.*/
+    /** Standard methods to get/set preview information.*/
     int  previewWidth();
     int  previewHeight();
     bool previewHasAlpha();
@@ -150,7 +150,7 @@ public:
     */
     uchar* setPreviewImageSize(int w, int h);
 
-    /** Standard methods to get image selection informations.*/
+    /** Standard methods to get image selection information.*/
     int  selectedWidth();
     int  selectedHeight();
 

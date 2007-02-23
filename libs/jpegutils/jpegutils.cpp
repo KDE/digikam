@@ -419,7 +419,7 @@ bool exifRotate(const QString& file, const QString& documentName)
         QImage img(temp);
         
         // Get the new image dimension of the temp image. Using a dummy QImage objet here 
-        // has a sense because the Exif dimension informations can be missing from original image.
+        // has a sense because the Exif dimension information can be missing from original image.
         // Get new dimensions with QImage will always work...
         metaData.setImageDimensions(img.size());
 

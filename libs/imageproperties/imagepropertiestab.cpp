@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors: Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2006-04-19
- * Description : A tab to display general image informations
+ * Description : A tab to display general image information
  *
  * Copyright 2006-2007 by Gilles Caulier
  *
@@ -352,7 +352,7 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url)
     QFileInfo fileInfo(url.path());
     DMetadata metaData(url.path());
 
-    // -- File system informations ------------------------------------------
+    // -- File system information ------------------------------------------
 
     d->labelFile->setText(url.fileName());
     d->labelFolder->setText(url.directory());
@@ -436,7 +436,7 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url)
     d->labelImageBitDepth->setText(bitDepth.isEmpty() ? unavailable : i18n("%1 bpp").arg(bitDepth));
     d->labelImageColorMode->setText(colorMode.isEmpty() ? unavailable : colorMode);
 
-    // -- Photograph informations ------------------------------------------
+    // -- Photograph information ------------------------------------------
     // NOTA: If something is changed here, please updated albumfiletip section too.
 
     PhotoInfoContainer photoInfo = metaData.getPhotographInformations();

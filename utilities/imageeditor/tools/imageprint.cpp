@@ -521,7 +521,7 @@ void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
 
     d->addFileName->setChecked( opts["app-imageeditor-printFilename"] != f );
     // This sound strange, but if I copy the code on the line above, the checkbox
-    // was always checked. And this isn't the wanted behavior. So, with this works.
+    // was always checked. And this is not the wanted behavior. So, with this works.
     // KPrint magic ;-)
     d->blackwhite->setChecked ( false );
     d->scaleToFit->setChecked( opts["app-imageeditor-scaleToFit"] != f );
@@ -694,7 +694,7 @@ void ImageEditorPrintDialogPage::toggleRatio( bool enable )
     if (!enable) return;
     // choosing a startup value of 15x10 cm (common photo dimention)
     // mContent->mHeight->value() or mContent->mWidth->value()
-    // are usually empty at startup and hxw (0x0) isn't good IMO keeping ratio
+    // are usually empty at startup and hxw (0x0) is not good IMO keeping ratio
     double hValue, wValue;
     if (d->image.height() > d->image.width()) 
     {

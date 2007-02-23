@@ -699,7 +699,7 @@ int sqlite_step(
 /*
 ** This routine is called to delete a virtual machine after it has finished
 ** executing.  The return value is the result code.  SQLITE_OK is returned
-** if the statement executed successfully and some other value is returned if
+** if the statement executed successfuly and some other value is returned if
 ** there was any kind of error.  If an error occurred and pzErrMsg is not
 ** NULL, then an error message is written into memory obtained from malloc()
 ** and *pzErrMsg is made to point to that error message.  The calling routine

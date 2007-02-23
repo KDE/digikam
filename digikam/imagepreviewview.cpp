@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors: Gilles Caulier 
  * Date   : 2006-21-12
- * Description : a embeded view to show the image preview widget.
+ * Description : a embedded view to show the image preview widget.
  * 
  * Copyright 2006-2007 Gilles Caulier
  *

@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2006-04-21
- * Description : main photograph informations container
+ * Description : main photograph information container
  *
  * Copyright 2006 by Gilles Caulier
  *

@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors: Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2004-11-17
- * Description : a tab to display colors informations of images
+ * Description : a tab to display colors information of images
  *
  * Copyright 2004-2007 by Gilles Caulier
  *
@@ -428,7 +428,7 @@ void ImagePropertiesColorsTab::setData(const KURL& url, const QRect &selectionAr
     d->currentLoadingDescription = LoadingDescription();
     d->iccProfileWidget->loadFromURL(KURL());
 
-    // Clear informations.
+    // Clear information.
     d->labelMeanValue->clear();
     d->labelPixelsValue->clear();
     d->labelStdDevValue->clear();

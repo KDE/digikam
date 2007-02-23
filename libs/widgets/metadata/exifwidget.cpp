@@ -78,7 +78,7 @@ static const char* ExifHumanList[] =
 };
 
 // Standard Exif Entry list from to less important to the most important for photograph.
-// This will not including GPS informations because they are displayed on another tab.
+// This will not including GPS information because they are displayed on another tab.
 static const char* StandardExifEntryList[] =
 {
      "Iop",

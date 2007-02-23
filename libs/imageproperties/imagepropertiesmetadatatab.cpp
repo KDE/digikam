@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors: Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2004-11-17
- * Description : a tab to display metadata informations of images
+ * Description : a tab to display metadata information of images
  *
  * Copyright 2004-2007 by Gilles Caulier
  *

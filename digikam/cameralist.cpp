@@ -243,7 +243,7 @@ CameraType* CameraList::autoDetect(bool& retry)
     
     // NOTE: libgphoto2 now (2.1.4+) expects port names to be
     // something like "usb:001,012". but on linux these port numbers
-    // will change everytime camera is reconnected. gphoto port funcs
+    // will change every time camera is reconnected. gphoto port funcs
     // also allow regexp match, so the safe bet is to just pass in
     // "usb:" and cross your fingers that user doesn't have multiple cameras
     // connected at the same time (whack them if they do).

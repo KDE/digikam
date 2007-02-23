@@ -699,7 +699,7 @@ void ImageSelectionWidget::regionSelectionChanged(bool targetDone)
 
 void ImageSelectionWidget::updatePixmap(void)
 {
-    // Updated draging corners region.
+    // Updated dragging corners region.
 
     d->localTopLeftCorner.setRect(d->localRegionSelection.left(),
                                   d->localRegionSelection.top(), 8, 8);

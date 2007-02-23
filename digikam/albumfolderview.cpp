@@ -775,7 +775,7 @@ void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)
         resort();
 
         // Do this last : so that if anything else changed we can
-        // successfully save to the db with the old name
+        // successfuly save to the db with the old name
 
         if(title != oldTitle)
         {

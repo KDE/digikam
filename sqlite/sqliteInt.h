@@ -116,7 +116,7 @@
 # else
 #   define INTPTR_TYPE long long
 #warning "WARNING: Compiling sqlite for a 64 bit Platform."
-#warning "WARNING: If you know this isn't true, please file a bugreport."
+#warning "WARNING: If you know this is not true, please file a bugreport."
 # endif
 #endif
 typedef UINT32_TYPE u32;           /* 4-byte unsigned integer */

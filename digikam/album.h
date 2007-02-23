@@ -41,7 +41,7 @@ namespace Digikam
  * \brief Abstract base class for all album types
  *
  * A class which provides an abstraction for a type Album. This class is meant to
- * be derived and everytime a new Album Type is defined add a enum corresponding
+ * be derived and every time a new Album Type is defined add a enum corresponding
  * to that to Album::Type
  *
  * This class provides a means of building a tree representation for

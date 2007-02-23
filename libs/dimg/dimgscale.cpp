@@ -194,11 +194,11 @@ DImg DImg::smoothScaleSection(int sx, int sy,
         dh = (dh * sh) / psh;
 
     // do a second check to see if we now have invalid coords 
-    // dont do anything if we have a 0 widht or height image to render 
+    // do not do anything if we have a 0 widht or height image to render 
     if ((dw <= 0) || (dh <= 0))
         return DImg();
 
-    // if the input rect size < 0 dont render either 
+    // if the input rect size < 0 do not render either 
     if ((sw <= 0) || (sh <= 0))
         return DImg();
 

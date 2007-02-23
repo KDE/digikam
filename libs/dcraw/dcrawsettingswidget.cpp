@@ -199,7 +199,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent)
     d->brightnessSpinBox->setPrecision(2);
     d->brightnessSpinBox->setRange(0.0, 10.0, 0.01, true);
     QWhatsThis::add(d->brightnessSpinBox, i18n("<p><b>Brightness</b><p>"
-                                               "Specify the brightness level of ouput image."
+                                               "Specify the brightness level of output image."
                                                "The default value is 1.0.<p>"));
     settingsBoxLayout->addMultiCellWidget(d->brightnessLabel, 7, 7, 0, 0);    
     settingsBoxLayout->addMultiCellWidget(d->brightnessSpinBox, 7, 7, 1, 1);    

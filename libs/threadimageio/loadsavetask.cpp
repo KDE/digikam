@@ -139,7 +139,7 @@ void SharedLoadingTask::execute()
 
         if (cachedImg)
         {
-            // image is found in image cache, loading is successfull
+            // image is found in image cache, loading is successful
             DImg img(*cachedImg);
             if (accessMode() == LoadSaveThread::AccessModeReadWrite)
                 img = img.copy();

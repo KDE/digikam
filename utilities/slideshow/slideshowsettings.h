@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-/** This class contain the informations of one picture to slide */
+/** This class contain the information of one picture to slide */
 class DIGIKAM_EXPORT SlidePictureInfo
 {
 
@@ -113,7 +113,7 @@ public:
     /** List of pictures URL to slide */ 
     KURL::List fileList;
 
-    /** Map of pictures informations to slide */ 
+    /** Map of pictures information to slide */ 
     QMap<KURL, SlidePictureInfo> pictInfoMap;
 };
 

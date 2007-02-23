@@ -43,7 +43,7 @@ namespace Digikam
 
    The available items are:
 
-   @li NoDate: A menu-item with "No Date". If choosen, the datepicker will emit a null QDate.
+   @li NoDate: A menu-item with "No Date". If chosen, the datepicker will emit a null QDate.
    @li DatePicker: Show a KDatePicker-widget.
    @li Words: Show items like "Today", "Yesterday" or "Previous Week".
 

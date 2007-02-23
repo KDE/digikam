@@ -80,7 +80,7 @@ public:
         inInitialRepaintWait = false;
     }
 
-    // Current selection informations.
+    // Current selection information.
     double  xmin;
     double  xminOrg;
     double  xmax;

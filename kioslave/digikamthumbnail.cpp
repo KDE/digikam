@@ -246,7 +246,7 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
     if (!fileInfo.exists())
         return false;
 
-    // Try to use embeded preview image from metadata.    
+    // Try to use embedded preview image from metadata.    
     DMetadata metadata(path);
     if (metadata.getImagePreview(image))
     {

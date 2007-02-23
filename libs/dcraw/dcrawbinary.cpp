@@ -92,7 +92,7 @@ void DcrawBinary::checkSystem()
 
 void DcrawBinary::slotReadStderrFromDcraw(KProcess*, char* buffer, int buflen)
 {
-    // The dcraw ouput look like this : Raw Photo Decoder "dcraw" v8.30...
+    // The dcraw output look like this : Raw Photo Decoder "dcraw" v8.30...
     QString dcrawHeader("Raw Photo Decoder \"dcraw\" v");
 
     QString stdErr    = QString::fromLocal8Bit(buffer, buflen);

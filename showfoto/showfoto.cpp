@@ -187,7 +187,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     m_imagePluginLoader = new Digikam::ImagePluginLoader(this, d->splash);
     loadImagePlugins();
 
-    // If plugin core isn't available, plug BCG actions to collection instead.
+    // If plugin core is not available, plug BCG actions to collection instead.
     
     if ( !m_imagePluginLoader->pluginLibraryIsLoaded("digikamimageplugin_core") )
     {
@@ -527,7 +527,7 @@ void ShowFoto::slotOpenFile()
     
     // Added RAW file formats supported by dcraw program like a type mime. 
     // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete 
-    // or unvailable(dcraw_0)(see file #121242 in B.K.O).
+    // or unavailable(dcraw_0)(see file #121242 in B.K.O).
     if (Digikam::DcrawBinary::instance()->versionIsRight())
     {
         patternList.append(i18n("\n%1|Camera RAW files").arg(QString(raw_file_extentions)));

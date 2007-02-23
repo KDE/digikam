@@ -162,7 +162,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
                               "technical information about the photograph as metadata in the image file. You can learn more "
                               "about EXIF at <a href='http://www.exif.org'>www.exif.org</a>.</p>"
                               "<p><b>IPTC</b> is another standard used in digital photography to store "
-                              "embeded information in pictures. You can learn more "
+                              "embedded information in pictures. You can learn more "
                               "about IPTC at <a href='http://www.iptc.org/IIM'>www.iptc.org</a>.</p>"));
     
     mainLayout->addWidget(hbox);

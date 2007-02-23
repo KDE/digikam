@@ -155,7 +155,7 @@ void AlbumWidgetStack::setPreviewItem(ImageInfo* info, ImageInfo *previous, Imag
             d->imagePreviewView->setImageInfo(info, previous, next);
 
             // NOTE: No need to toggle imediatly in PreviewImageMode here, 
-            // because we will recieve a signal for that when the image preview will be loaded.
+            // because we will receive a signal for that when the image preview will be loaded.
             // This will prevent a flicker effect with the old image preview loaded in stack.
         }
     }

@@ -67,7 +67,7 @@ static const char* ICCHumanList[] =
      "-1"
 };
 
-// This entry list is only require for compatibilty with MetadataWidget implementation.
+// This entry list is only require for compatibility with MetadataWidget implementation.
 static const char* ICCEntryList[] =
 {
      "Header",

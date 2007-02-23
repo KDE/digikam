@@ -87,7 +87,7 @@ DImg *LoadingCache::retrieveImage(const QString &cacheKey)
 
 bool LoadingCache::putImage(const QString &cacheKey, DImg *img, const QString &filePath)
 {
-    bool successfullyInserted;
+    bool successfulyInserted;
 
     // use size of image as cache cost, take care for wrapped preview QImages
     int cost = img->numBytes();
@@ -104,13 +104,13 @@ bool LoadingCache::putImage(const QString &cacheKey, DImg *img, const QString &f
             // store file path as attribute for our own use
             img->setAttribute("loadingCacheFilePath", QVariant(filePath));
         }
-        successfullyInserted = true;
+        successfulyInserted = true;
     }
     else
     {
-        // need to delete object if it was not successfully inserted (too large)
+        // need to delete object if it was not successfuly inserted (too large)
         delete img;
-        successfullyInserted = false;
+        successfulyInserted = false;
     }
 
     if (!filePath.isEmpty())
@@ -119,7 +119,7 @@ bool LoadingCache::putImage(const QString &cacheKey, DImg *img, const QString &f
         // KDirWatch can only be accessed from main thread!
         QApplication::postEvent(this, new QCustomEvent(QEvent::User));
     }
-    return successfullyInserted;
+    return successfulyInserted;
 }
 
 void LoadingCache::removeImage(const QString &cacheKey)

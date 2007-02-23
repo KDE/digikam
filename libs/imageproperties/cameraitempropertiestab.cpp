@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors: Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2006-02-08
- * Description : A tab to display camera item informations
+ * Description : A tab to display camera item information
  *
  * Copyright 2006-2007 by Gilles Caulier
  *
@@ -320,7 +320,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
     QString str;
     QString unknown(i18n("<i>unknown</i>"));
 
-    // -- Camera file system informations ------------------------------------------
+    // -- Camera file system information ------------------------------------------
 
     d->labelFile->setText(itemInfo->name);
     d->labelFolder->setText(itemInfo->folder);
@@ -390,7 +390,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
           .arg(dims.width()).arg(dims.height()).arg(mpixels);
     d->labelImageDimensions->setText(str);
 
-    // -- Download informations ------------------------------------------
+    // -- Download information ------------------------------------------
 
     d->labelNewFileName->setText(newFileName.isEmpty() ? i18n("<i>unchanged</i>") : newFileName);
 
@@ -403,7 +403,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
 
     d->labelAlreadyDownloaded->setText(str);
 
-    // -- Photograph informations ------------------------------------------
+    // -- Photograph information ------------------------------------------
     // NOTA: If something is changed here, please updated albumfiletip section too.
 
     QString unavailable(i18n("<i>unavailable</i>"));

@@ -75,7 +75,7 @@ public:
     /** The histogram data.*/
     struct double_packet *histogram;
  
-    /** Image informations.*/
+    /** Image information.*/
     uchar   *imageData;
     uint     imageWidth;
     uint     imageHeight;

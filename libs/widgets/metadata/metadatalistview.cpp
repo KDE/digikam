@@ -168,7 +168,7 @@ void MetadataListView::setIfdList(MetadataWidget::MetaDataMap ifds, const QStrin
             }
             else
             {
-                // We don't filter the ouput (Complete Mode)
+                // We don't filter the output (Complete Mode)
             
                 QString tagTitle = m_parent->getTagTitle(it.key());
                 new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.data());
@@ -222,7 +222,7 @@ void MetadataListView::setIfdList(MetadataWidget::MetaDataMap ifds, QStringList 
                     }
                     else
                     {
-                        // We don't filter the ouput (Complete Mode)
+                        // We don't filter the output (Complete Mode)
                     
                         QString tagTitle = m_parent->getTagTitle(it.key());
                         new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.data());

@@ -265,7 +265,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     connect(d->moreMenu, SIGNAL(aboutToShow()),
             this, SLOT(slotMoreMenu()));
 
-    // Initalize ---------------------------------------------
+    // Initialize ---------------------------------------------
 
     d->commentsEdit->installEventFilter(this);
     d->dateTimeEdit->installEventFilter(this);
@@ -1012,7 +1012,7 @@ void ImageDescEditTab::slotMoreMenu()
     {
         d->moreMenu->insertItem(i18n("Read metadata from file to database"), this, SLOT(slotReadFromFileMetadataToDatabase()));
         int writeActionId = d->moreMenu->insertItem(i18n("Write metadata to each file"), this, SLOT(slotWriteToFileMetadataFromDatabase()));
-        // we dont need a "Write to file" action here because the apply button will do just that
+        // we do not need a "Write to file" action here because the apply button will do just that
         // if selection is a single file.
         // Adding the option will confuse users: Does the apply button not write to file?
         // Removing the option will confuse users: There is not option to write to file! (not visible in single selection)

@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date  : 2006-02-16
- * Description : a dialog to display icc profile informations.
+ * Description : a dialog to display icc profile information.
  * 
  * Copyright 2006 by Gilles Caulier
  *

@@ -1226,7 +1226,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 
         saveIsComplete();
         
-        // Take all actions necessary to update informations and re-enable sidebar
+        // Take all actions necessary to update information and re-enable sidebar
         slotChanged();
     }
     else if (m_savingContext->savingState == SavingContextContainer::SavingStateSaveAs)
@@ -1264,7 +1264,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         finishSaving(true);
         saveAsIsComplete();
 
-        // Take all actions necessary to update informations and re-enable sidebar
+        // Take all actions necessary to update information and re-enable sidebar
         slotChanged();
     }
 }
@@ -1413,7 +1413,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to\n\"%2\".")
                            .arg(newURL.filename())
                            .arg(newURL.path().section('/', -2, -2)));
-        DWarning() << k_funcinfo << "target URL isn't valid !" << endl;
+        DWarning() << k_funcinfo << "target URL is not valid !" << endl;
         return false;
     }
 

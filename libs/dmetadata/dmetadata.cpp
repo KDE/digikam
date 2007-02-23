@@ -47,7 +47,7 @@ DMetadata::~DMetadata()
 bool DMetadata::load(const QString& filePath)
 {
     // In first, we trying to get metadata using Exiv2,
-    // else we will use dcraw to extract minimal informations.
+    // else we will use dcraw to extract minimal information.
 
     if (!KExiv2::load(filePath))
     {

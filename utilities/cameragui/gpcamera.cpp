@@ -858,7 +858,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
         return false;
     }
 
-    // Get new camera item informations.
+    // Get new camera item information.
 
     itemInfo.name   = itemName;
     itemInfo.folder = folder;
@@ -868,7 +868,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
                                         QFile::encodeName(itemName), &info, m_status->context);
     if (errorCode != GP_OK) 
     {
-        DDebug() << "Failed to get camera item informations!" << endl;
+        DDebug() << "Failed to get camera item information!" << endl;
         printGphotoErrorDescription(errorCode);
         gp_file_unref(cfile);
         delete m_status;
@@ -1024,7 +1024,7 @@ bool GPCamera::cameraAbout(QString& about)
     errorCode = gp_camera_get_about(d->camera, &abt, m_status->context);
     if (errorCode != GP_OK) 
     {
-        DDebug() << "Failed to get informations about camera!" << endl;
+        DDebug() << "Failed to get information about camera!" << endl;
         printGphotoErrorDescription(errorCode);
         delete m_status;
         m_status = 0;
