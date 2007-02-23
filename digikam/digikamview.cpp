@@ -597,7 +597,7 @@ void DigikamView::slotSelectAlbum(const KURL &)
 
 void DigikamView::slotAlbumSelected(Album* album)
 {
-    //emit signalNoCurrentItem();
+    emit signalNoCurrentItem();
 
     if (!album)
     {
