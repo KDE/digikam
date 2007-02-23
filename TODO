@@ -51,15 +51,19 @@ LATER 0.9.0 TODO LIST
 
 * Port project to CMake (see: http://dot.kde.org/1151688350 for notice)
   Port to QT4/KDE4.
+  Port of digikam core to likdcraw
+
+* Avoid all dependencies to KDE core (Qt = only dependency)
 
 * Improving metadata support:
-   - Writting Metadata into PNG file like JPEG (Exiv2).
-   - Writting Metadata into TIFF file like JPEG (Exiv2).
+   - Writing Metadata into PNG file like JPEG (Exiv2).
+   - Writing Metadata into TIFF file like JPEG (Exiv2).
+   - Writing Metadata to DNG format (=TIFF see above)
+   - Writing Metadata to JPEG 2k files like JPEG (Exiv2).
 
 * Database:
-
    - New database interface to suport remote repository and others DB backend than sqlite.
-   - Implement versionning of picture based on Image editor 'Action List' feature.
+   - Implement versioning of picture based on Image editor 'Action List' feature.
    - New option to set digiKam tags on the fly.
    - Storing new Pictures meta-information : all major photograph informations and GPS.
 
@@ -68,15 +72,14 @@ LATER 0.9.0 TODO LIST
    - Take a look of image database backup in showimg.
     
 * Showfoto improvements :
-
    - Add DCOP interface.
    - Add Support KURL for better konqueror interactions.
 
 * General:
-
    - Custom ordering of images
    - New TimeLine tool (take a look in kimdaba and f-spot)
    - Post conversion to qlistview: allow selection of multiple albums/tags/dates:
      1/ instead of a "current album" there will a list of "current urls"
      2/ will lead to widesweeping changes all over the core and the kioslaves
+   - Allow for multiple root directories
 
