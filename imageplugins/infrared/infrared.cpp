@@ -211,7 +211,7 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
         return;
     }
 
-    // Normally, film grain tends to be most noticable in the midtones, and much less 
+    // Normally, film grain tends to be most noticeable in the midtones, and much less 
     // so in the shadows and highlights. Adjust histogram curve to adjust grain like this. 
 
     if (Grain)

@@ -123,7 +123,7 @@ void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
     // Smooth grain mask using gaussian blur with radius 1.
     Digikam::DImgGaussianBlur(this, grain, grain, 25, 30, 1);
 
-    // Normally, film grain tends to be most noticable in the midtones, and much less 
+    // Normally, film grain tends to be most noticeable in the midtones, and much less 
     // so in the shadows and highlights. Adjust histogram curve to adjust grain like this.
 
     Digikam::ImageCurves *grainCurves = new Digikam::ImageCurves(sixteenBit);

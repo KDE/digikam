@@ -670,7 +670,7 @@ void FontChooserWidget::getFontList( QStringList &list, uint fontListCriteria)
         }
     
         if((fontListCriteria & FixedWidthFonts) > 0) {
-            // Fallback.. if there are no fixed fonts found, it's probably a
+            // Fallback.. if there are no fixed fonts found, it is probably a
             // bug in the font server or Qt.  In this case, just use 'fixed'
             if (lstFonts.count() == 0)
             lstFonts.append("fixed");

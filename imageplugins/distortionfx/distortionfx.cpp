@@ -275,7 +275,7 @@ void DistortionFX::fisheye(Digikam::DImg *orgImage, Digikam::DImg *destImage, do
  * Antialias        => Smart bluring result.    
  *                                                                                  
  * Theory           => Take spiral studies, you will understand better, I'm studying
- *                     hard on this effect, because it's not too fast.
+ *                     hard on this effect, because it is not too fast.
  */
 void DistortionFX::twirl(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Twirl, bool AntiAlias)
 {
@@ -373,7 +373,7 @@ void DistortionFX::twirl(Digikam::DImg *orgImage, Digikam::DImg *destImage, int 
  *                     If you understand FishEye, you will understand Cilindrical    
  *                     FishEye apply a logarithm function using a sphere radius,     
  *                     Spherize use the same function but in a rectangular        
- *                     enviroment.
+ *                     environment.
  */
 void DistortionFX::cilindrical(Digikam::DImg *orgImage, Digikam::DImg *destImage, double Coeff,
                                bool Horizontal, bool Vertical, bool AntiAlias)

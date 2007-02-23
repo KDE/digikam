@@ -263,7 +263,7 @@ void NoiseReduction::filterImage(void)
                 diff *= pow(mvalue/0.5, m_gamma-1.0);
     
                 // Calculate noise probability for pixel
-                // TODO : probably it's not probability but an arbitrary curve.
+                // TODO : probably it is not probability but an arbitrary curve.
                 // Probably we should provide a GUI-interface for this!!!
                 
                 if (t > 0.0)
@@ -340,7 +340,7 @@ void NoiseReduction::blur_line(float* const data, float* const data2, float* con
     
     for (row = 0, idx = 0 ; !m_cancel && (idx < len) ; row += 4, idx++)
     {
-        // Color weigths are choosen proportional to Bayer Sensor pixel count
+        // Color weigths are chosen proportional to Bayer Sensor pixel count
 
         if (m_orgImage.sixteenBit())       // 16 bits image
         {

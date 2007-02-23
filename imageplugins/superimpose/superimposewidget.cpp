@@ -223,7 +223,7 @@ bool SuperImposeWidget::zoomSelection(float deltaZoomFactor)
         if (selection.right() > m_w)
             selection.moveRight(m_w);
 
-        // was it successfull?
+        // was it successful?
         if (selection.contains(orgImageRect))
             return false;
 

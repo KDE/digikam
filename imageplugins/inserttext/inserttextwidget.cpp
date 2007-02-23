@@ -119,7 +119,7 @@ void InsertTextWidget::setText(QString text, QFont font, QColor color, int align
             break;
     }
 
-    // Center text if top left corner text area isn't visible.
+    // Center text if top left corner text area is not visible.
 
     /*
     if ( m_textFont.pointSize() != font.pointSize() && 

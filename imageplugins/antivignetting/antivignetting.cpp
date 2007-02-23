@@ -9,7 +9,7 @@
  * Original AntiVignetting algorithm copyrighted 2003 by 
  * John Walker from 'pnmctrfilt' implementation. See 
  * http://www.fourmilab.ch/netpbm/pnmctrfilt for more 
- * informations.
+ * information.
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -76,10 +76,10 @@ void AntiVignetting::filterImage(void)
     erad = (int)((sqrt((xsize * xsize) + (ysize * ysize)) + 0.5) * m_radius);    
         
     // Build the in-memory table which maps distance from the
-    // centre of the image (as adjusted by the X and Y offset,
+    // center of the image (as adjusted by the X and Y offset,
     // if any) to the density of the filter at this remove.  This
     // table needs to be as large as the diagonal from the
-    // (possibly offset) centre to the most distant corner
+    // (possibly offset) center to the most distant corner
     // of the image. 
 
     xsize    = ((Height + 1) / 2) + abs(m_xshift);

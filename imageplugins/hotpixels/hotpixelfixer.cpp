@@ -216,7 +216,7 @@ void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, 
         w.setTwoDim(dir == TWODIM_DIRECTION);
     
         //TODO: check this, it must not recalculate existing calculated weights
-        //for now I don't think it's finding the duplicates fine, so it uses
+        //for now I don't think it is finding the duplicates fine, so it uses
         //the previous one always...
         
         //if (mWeightList.find(w)==mWeightList.end())
@@ -247,7 +247,7 @@ void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, 
             
                         if (validPoint (img,QPoint(xx, yy)))
                         {
-                            //TODO: check this. I think it's broken
+                            //TODO: check this. I think it is broken
                             double weight;
                             if (dir==VERTICAL_DIRECTION)
                             {

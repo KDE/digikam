@@ -9,7 +9,7 @@
  * Original AntiVignetting algorithm copyrighted 2003 by 
  * John Walker from 'pnmctrfilt' implementation. See 
  * http://www.fourmilab.ch/netpbm/pnmctrfilt for more 
- * informations.
+ * information.
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,15 +39,15 @@ namespace DigikamLensDistortionImagesPlugin
 
 LensDistortion::LensDistortion(Digikam::DImg *orgImage, QObject *parent, double main, 
                                double edge, double rescale, double brighten,
-                               int centre_x, int centre_y)
+                               int center_x, int center_y)
               : Digikam::DImgThreadedFilter(orgImage, parent, "LensDistortion")
 { 
     m_main     = main;
     m_edge     = edge;
     m_rescale  = rescale;
     m_brighten = brighten;
-    m_centre_x = centre_x;
-    m_centre_y = centre_y;
+    m_centre_x = center_x;
+    m_centre_y = center_y;
     
     initFilter();
 }
@@ -67,8 +67,8 @@ void LensDistortion::filterImage(void)
     // initialize coefficients
 
     double normallise_radius_sq = 4.0 / (Width * Width + Height * Height);
-    double centre_x             = Width * (100.0 + m_centre_x) / 200.0;
-    double centre_y             = Height * (100.0 + m_centre_y) / 200.0;
+    double center_x             = Width * (100.0 + m_centre_x) / 200.0;
+    double center_y             = Height * (100.0 + m_centre_y) / 200.0;
     double mult_sq              = m_main / 200.0;
     double mult_qd              = m_edge / 200.0;
     double rescale              = pow(2.0, - m_rescale / 100.0);
@@ -104,8 +104,8 @@ void LensDistortion::filterImage(void)
             double off_y;
             double radius_mult;
 
-            off_x       = dstI - centre_x;
-            off_y       = dstJ - centre_y;
+            off_x       = dstI - center_x;
+            off_y       = dstJ - center_y;
             radius_sq   = (off_x * off_x) + (off_y * off_y);
 
             radius_sq  *= normallise_radius_sq;
@@ -114,8 +114,8 @@ void LensDistortion::filterImage(void)
             mag         = radius_mult;
             radius_mult = rescale * (1.0 + radius_mult);
 
-            srcX        = centre_x + radius_mult * off_x;
-            srcY        = centre_y + radius_mult * off_y;
+            srcX        = center_x + radius_mult * off_x;
+            srcY        = center_y + radius_mult * off_y;
 
             brighten = 1.0 + mag * brighten;
             pa->pixelAccessGetCubic(srcX, srcY, brighten, dst);

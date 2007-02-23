@@ -688,7 +688,7 @@ void AdjustLevelDialog::readUserSettings()
     slotScaleChanged(m_scaleBG->selectedId());
 
     // This is mandatory here to set spinbox values because slot connections 
-    // can be not set completly at plugin startup.
+    // can be not set completely at plugin startup.
     m_minInput->setValue(m_levels->getLevelLowInputValue(m_channelCB->currentItem()));
     m_minOutput->setValue(m_levels->getLevelLowOutputValue(m_channelCB->currentItem()));
     m_maxInput->setValue(m_levels->getLevelHighInputValue(m_channelCB->currentItem()));

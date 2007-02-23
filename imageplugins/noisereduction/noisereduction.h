@@ -82,7 +82,7 @@
  * I have preset a value, that should do in most cases.
  * If increased, then edges appear smoother, if too high, then blur may occur.
  * If at minimum then noise and phase jitter at edges can occur.
- * It can supress Spike noise when increased and this is the preferred method to remove spike noise.
+ * It can suppress Spike noise when increased and this is the preferred method to remove spike noise.
  *------------------------------------------------------------------------------------------------------------
  *
  * "Sharpness" does just what it says, it improves sharpness. It improves the frequency response for the filter.
@@ -127,12 +127,12 @@
  *
  * Adjust _Color tolerance or/and Luminance tolerance, (if necessary) so that you get the final image.
  * I recommend to use only one, either _Color  or _Luminance. 
- * These settings dont influence the main smoothing process. What they really do is this:
+ * These settings do not influence the main smoothing process. What they really do is this:
  *
  * The tolerance values are used as error-thresholds to compare the filtered template with the original
  * image. The plugin algorithm uses them to combine the filtered template with the original image
  * so that  noise and filter errors (blur) are thrown out.
- * A filtered pixel, that is too far away from the original pixel will be overriden by original image content. 
+ * A filtered pixel, that is too far away from the original pixel will be overridden by original image content. 
  *
  * Hint:
  * If you cange other sliders, like lookahead or Texture Detail, then you should set color tolerance and 
@@ -166,7 +166,7 @@
  * The radius modulation data is precalulated and buffered an is used to steer filter radius when
  * the actual filtering occurs.
  *
- * Noise and texture can be further supressed by nonlinear distortion before adaptive filtering.
+ * Noise and texture can be further suppressed by nonlinear distortion before adaptive filtering.
  * To make this possible I subtract low frequency from image data before denoising, so that I get a 
  * bipolar, zerosymmetric image signal.
  *
@@ -177,7 +177,7 @@
  * This is meant to limit and control filter errors,it can give "final touch" to the image, but it has 
  * nothing to do with the main filter process. 
  *
- * I dont know if something like this filter already exists.
+ * I do not know if something like this filter already exists.
  * It is all based on my own ideas and experiments.
  * Possibly a separable adaptive gauss-filter is a new thing.
  * Also it is an impossible thing, from a mathemathical point of view ;-)

@@ -109,7 +109,7 @@ private:  // CImg filter interface.
     // Average all the LIC's
     inline void compute_average_LIC();
 
-    // Prepare datas
+    // Prepare data
     bool prepare();
     bool prepare_restore();
     bool prepare_inpaint();
@@ -119,7 +119,7 @@ private:  // CImg filter interface.
     // Check arguments
     bool check_args();
 
-    // Clean up memory (CImg datas) to save memory
+    // Clean up memory (CImg data) to save memory
     void cleanup();
     
 };    

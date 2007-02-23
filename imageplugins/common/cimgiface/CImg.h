@@ -599,7 +599,7 @@ namespace cimg_library {
       <tt>cimg_debug</tt> to 0 before including the header file <tt>CImg.h</tt> (see \ref cimg_environment).
       
       The <tt>CImgException</tt> class owns a member variable <tt>char* message</tt> that contains the exception message
-      describing precisely the error that occured.
+      describing precisely the error that occurred.
 
       The example above shows how to manually handle CImg Library errors properly :
       \code
@@ -852,7 +852,7 @@ namespace cimg_library {
     //@{
     //!\name Keycodes.
     /** 
-	Keycodes are used to detect keyboard events occuring on display windows \c CImgDisplay.
+	Keycodes are used to detect keyboard events occurring on display windows \c CImgDisplay.
 	The field \c key of the \c CImgDisplay structure is updated at real-time with the corresponding keycode
 	of the pressed key (or 0 if no keys have been pressed). The keycodes values are given by the variables
 	whose names are of the form <tt>cimg::key*</tt>. Above is the keycode for the 'ESC' key, but
@@ -1470,7 +1470,7 @@ namespace cimg_library {
     //! Return \c false for little endian CPUs, \c true for big endian CPUs.
     inline const bool endian() { const int x=1; return ((unsigned char*)&x)[0]?false:true; }
 
-    //! Display informations about CImg compilation variables, on the standart error output \e stderr.
+    //! Display information about CImg compilation variables, on the standart error output \e stderr.
     inline void info() {
       std::fprintf(stderr,"\n %sCImg Library %g%s, compiled %s ( %s ) with the following flags :\n\n",
                    t_red,cimg_version,t_normal,__DATE__,__TIME__);
@@ -1512,7 +1512,7 @@ namespace cimg_library {
 
     //! Sleep for a certain numbers of milliseconds.
     /**
-       This function frees the CPU ressources during the sleeping time.
+       This function frees the CPU resources during the sleeping time.
        May be used to temporize your program properly.
        \see wait, time.
     **/
@@ -2806,7 +2806,7 @@ namespace cimg_library {
          - <tt>CImg<int> img(data_buffer,256,256);</tt> convert a \c int buffer \c data_buffer to a 256x256 greyscale image.     
 
      More constructors are available (copy constructor,...). Please look at the constructor list for more
-     informations.
+     information.
 
   
   A CImg image is defined as a template class CImg<T> containing a pixel data field with a maximum of 4 dimensions :
@@ -3354,7 +3354,7 @@ namespace cimg_library {
     //! Print image information on the standart error output
     /**
        \param title = name of your printed variable.
-       \param print_flag = - 0 : print only informations about image size and pixel buffer.
+       \param print_flag = - 0 : print only information about image size and pixel buffer.
                            - 1 : print also statistics on the image pixels.
 			   - 2 : print also the pixel buffer content, in a matlab-style.
     **/
@@ -3375,7 +3375,7 @@ namespace cimg_library {
     }
     //! Print image information on the standart error output
     /**
-      \param print_flag = - 0 : print only informations about image size and pixel buffer.
+      \param print_flag = - 0 : print only information about image size and pixel buffer.
                            - 1 : print also statistics on the image pixels.
 			   - 2 : print also the pixel buffer content, in a matlab-style.       
     **/
@@ -8613,7 +8613,7 @@ namespace cimg_library {
     //------------------------------------------
     //------------------------------------------
     
-    //! Print informations about the list on the standart error stream.
+    //! Print information about the list on the standart error stream.
     const CImgl& print(const char* title=NULL,const int print_flag=1) const { 
       char tmp[1024];
       std::fprintf(stderr,"%-8s(%p) : (%u,%p)\n",title?title:"CImgl",(void*)this,size,(void*)data);
@@ -8967,7 +8967,7 @@ namespace cimg_library {
 
   The CImg Library consists in a \b single \b header \b file \ref CImg.h providing a set of C++ classes that
   can be used in your own sources, to load/save, process and display images. Very portable 
-  (Unix/X11,Windows, MacOS X, FreeBSD,..), efficient, simple to use, it's a pleasant toolkit
+  (Unix/X11,Windows, MacOS X, FreeBSD,..), efficient, simple to use, it is a pleasant toolkit
   for coding image processing stuffs in C++.
 
   \section s1 Library structure
@@ -9053,7 +9053,7 @@ namespace cimg_library {
   The CImg library is a very light and user-friendly library : only standart system libraries are used.
   this avoid to handle complex dependancies and problems with library compatibility.
   The only thing you need is a (quite modern) C++ compiler. Before each release, the CImg library
-  is successfully compiled with the following compilers :
+  is successfuly compiled with the following compilers :
   
   - <b>Microsoft Visual C++ 6.0 and Visual Studio.NET</b> : Use project files and solution files provided in the 
   CImg Library package to see how it works.
@@ -9151,13 +9151,13 @@ namespace cimg_library {
   Setting this variable should not be necessary if ImageMagick is installed on a standart directory, or
   if \e convert is in your system PATH variable. This macro should be defined only if the ImageMagick's 
   \e convert tool is not found automatically, when trying to read compressed image format (GIF,PNG,...). 
-  See also cimg_library::CImg::load_convert() and cimg_library::CImg::save_convert() for more informations.
+  See also cimg_library::CImg::load_convert() and cimg_library::CImg::save_convert() for more information.
 
   - \b \c cimg_temporary_path : This variable tells the library where it can find a directory to store
   temporary files. Setting this variable should not be necessary if you are running on a standart system.
   This macro should be defined only when troubles are encountered when trying to read
   compressed image format (GIF,PNG,...).
-  See also cimg_library::CImg::load_convert() and cimg_library::CImg::save_convert() for more informations.
+  See also cimg_library::CImg::load_convert() and cimg_library::CImg::save_convert() for more information.
 
   - \b \c cimg_plugin : This variable tells the library to use a plugin file to add features to the CImg<T> class.
   Define it with the path of your plugin file, if you want to add member functions to the CImg<T> class,

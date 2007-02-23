@@ -68,7 +68,7 @@ void RainDrop::filterImage(void)
     int w = m_orgImage.width();
     int h = m_orgImage.height();
 
-    // If we have a region selection in image, use it to apply the filter modification arround,
+    // If we have a region selection in image, use it to apply the filter modification around,
     // else, applied the filter on the full image.
 
     if (m_selectedW && m_selectedH)

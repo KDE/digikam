@@ -924,7 +924,7 @@ void BlurFX::softenerBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage)
  *                                                                                  
  * Theory           => Similar to Fragment effect from Photoshop. We create 4 layers
  *                    each one has the same distance from the origin, but have       
- *                    different positions (top, botton, left and right), with these 4 
+ *                    different positions (top, button, left and right), with these 4 
  *                    layers, we join all the pixels.                 
  */
 void BlurFX::shakeBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Distance)
