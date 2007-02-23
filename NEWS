@@ -654,6 +654,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 296 ==> 141980 : digiKam crash when rescan certain files exiv2.
 297 ==> 141924 : Tags preview not updated in last image of album.
 298 ==> 139024 : Camera GUI new items selection doesn't work.
-299 ==> 
+299 ==> 142109 : Turn under/over exposure display on/off by click on corresponding icons.
+300 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
