@@ -457,7 +457,7 @@ void ImageDescEditTab::slotApplyAllChanges()
     // remove before final release
     if (d->ignoreImageAttributesWatch)
     {
-        kdWarning() << "ImageDescEditTab::slotApplyAllChanges(): re-entering from event loop!" << endl;
+        DWarning() << "ImageDescEditTab::slotApplyAllChanges(): re-entering from event loop!" << endl;
     }
 
     // we are now changing attributes ourselves
@@ -669,6 +669,12 @@ void ImageDescEditTab::slotItemStateChanged(TAlbumCheckListItem *item)
 
 void ImageDescEditTab::slotCommentChanged()
 {
+    // we cannot trust that the text actually changed
+    // (there are bogus signals caused by spell checking, see bug 141663)
+    // so we have to check before marking the metadata as modified
+    if (d->hub.comment() == d->commentsEdit->text())
+        return;
+
     d->hub.setComment(d->commentsEdit->text());
     setMetadataWidgetStatus(d->hub.commentStatus(), d->commentsEdit);
     slotModified();
