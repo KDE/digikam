@@ -32,6 +32,7 @@ extern "C"
 #include <qdockarea.h>
 #include <qlayout.h>
 #include <qtooltip.h>
+#include <qtoolbutton.h>
 #include <qsplitter.h>
 #include <qdir.h>
 #include <qfileinfo.h>
@@ -466,23 +467,29 @@ void EditorWindow::setupStatusBar()
     m_resLabel->setMaximumHeight(fontMetrics().height()+2);   
     statusBar()->addWidget(m_resLabel, 100);
 
-    d->underExposureIndicator = new QLabel(statusBar());
-    d->underExposureIndicator->setPixmap(SmallIcon("underexposure"));
-    d->underExposureIndicator->setAlignment(Qt::AlignCenter);
-    d->underExposureIndicator->setMaximumHeight(fontMetrics().height()+2);   
+    d->underExposureIndicator = new QToolButton(statusBar());
+    d->underExposureIndicator->setIconSet(SmallIcon("underexposure"));
+    d->underExposureIndicator->setToggleButton(true);
     statusBar()->addWidget(d->underExposureIndicator, 1);
 
-    d->overExposureIndicator = new QLabel(statusBar());
-    d->overExposureIndicator->setPixmap(SmallIcon("overexposure"));
-    d->overExposureIndicator->setAlignment(Qt::AlignCenter);
-    d->overExposureIndicator->setMaximumHeight(fontMetrics().height()+2);
+    d->overExposureIndicator = new QToolButton(statusBar());
+    d->overExposureIndicator->setIconSet(SmallIcon("overexposure"));
+    d->overExposureIndicator->setToggleButton(true);
     statusBar()->addWidget(d->overExposureIndicator, 1);
 
-    d->cmViewIndicator = new QLabel(statusBar());
-    d->cmViewIndicator->setPixmap(SmallIcon("tv"));
-    d->cmViewIndicator->setAlignment(Qt::AlignCenter);
-    d->cmViewIndicator->setMaximumHeight(fontMetrics().height()+2);
+    d->cmViewIndicator = new QToolButton(statusBar());
+    d->cmViewIndicator->setIconSet(SmallIcon("tv"));
+    d->cmViewIndicator->setToggleButton(true);
     statusBar()->addWidget(d->cmViewIndicator, 1);
+
+    connect(d->underExposureIndicator, SIGNAL(toggled(bool)),
+            this, SLOT(slotToggleUnderExposureIndicator()));
+
+    connect(d->overExposureIndicator, SIGNAL(toggled(bool)),
+            this, SLOT(slotToggleOverExposureIndicator()));
+
+    connect(d->cmViewIndicator, SIGNAL(toggled(bool)),
+            this, SLOT(slotToggleColorManagedView()));
 }
 
 void EditorWindow::printImage(KURL url)
@@ -731,7 +738,7 @@ void EditorWindow::applyStandardSettings()
 
     d->viewCMViewAction->setEnabled(d->ICCSettings->enableCMSetting);
     d->viewCMViewAction->setChecked(d->ICCSettings->managedViewSetting);
-    d->cmViewIndicator->setEnabled(d->ICCSettings->managedViewSetting && d->ICCSettings->enableCMSetting);
+    d->cmViewIndicator->setOn(d->ICCSettings->managedViewSetting && d->ICCSettings->enableCMSetting);
     setColorManagedViewIndicatorToolTip(d->ICCSettings->managedViewSetting && d->ICCSettings->enableCMSetting);
     m_canvas->setICCSettings(d->ICCSettings);
 
@@ -802,8 +809,8 @@ void EditorWindow::applyStandardSettings()
 
     d->viewUnderExpoAction->setChecked(d->exposureSettings->underExposureIndicator);
     d->viewOverExpoAction->setChecked(d->exposureSettings->overExposureIndicator);
-    d->underExposureIndicator->setEnabled(d->exposureSettings->underExposureIndicator);
-    d->overExposureIndicator->setEnabled(d->exposureSettings->overExposureIndicator);
+    d->underExposureIndicator->setOn(d->exposureSettings->underExposureIndicator);
+    d->overExposureIndicator->setOn(d->exposureSettings->overExposureIndicator);
     setUnderExposureToolTip(d->exposureSettings->underExposureIndicator);
     setOverExposureToolTip(d->exposureSettings->overExposureIndicator);
     m_canvas->setExposureSettings(d->exposureSettings);
@@ -1535,6 +1542,8 @@ bool EditorWindow::moveFile()
 
 void EditorWindow::slotToggleColorManagedView()
 {
+    d->cmViewIndicator->blockSignals(true);
+    d->viewCMViewAction->blockSignals(true);
     bool cmv = false;
     if (d->ICCSettings->enableCMSetting)
     {    
@@ -1550,8 +1559,11 @@ void EditorWindow::slotToggleColorManagedView()
         config->writeEntry("ManagedView", cmv);
     }
 
-    d->cmViewIndicator->setEnabled(cmv);
+    d->cmViewIndicator->setOn(cmv);
+    d->viewCMViewAction->setChecked(cmv);
     setColorManagedViewIndicatorToolTip(cmv);
+    d->cmViewIndicator->blockSignals(false);
+    d->viewCMViewAction->blockSignals(false);
 }    
 
 void EditorWindow::setColorManagedViewIndicatorToolTip(bool cmv)
@@ -1564,11 +1576,16 @@ void EditorWindow::setColorManagedViewIndicatorToolTip(bool cmv)
 
 void EditorWindow::slotToggleUnderExposureIndicator()
 {
+    d->underExposureIndicator->blockSignals(true);
+    d->viewUnderExpoAction->blockSignals(true);
     bool uei = !d->exposureSettings->underExposureIndicator;
-    d->underExposureIndicator->setEnabled(uei);
+    d->underExposureIndicator->setOn(uei);
+    d->viewUnderExpoAction->setChecked(uei);
     d->exposureSettings->underExposureIndicator = uei;
     m_canvas->setExposureSettings(d->exposureSettings);
     setUnderExposureToolTip(uei);
+    d->underExposureIndicator->blockSignals(false);
+    d->viewUnderExpoAction->blockSignals(false);
 }    
 
 void EditorWindow::setUnderExposureToolTip(bool uei)
@@ -1581,11 +1598,16 @@ void EditorWindow::setUnderExposureToolTip(bool uei)
 
 void EditorWindow::slotToggleOverExposureIndicator()
 {
+    d->overExposureIndicator->blockSignals(true);
+    d->viewOverExpoAction->blockSignals(true);
     bool oei = !d->exposureSettings->overExposureIndicator;
-    d->overExposureIndicator->setEnabled(oei);
+    d->overExposureIndicator->setOn(oei);
+    d->viewOverExpoAction->setChecked(oei);
     d->exposureSettings->overExposureIndicator = oei;
     m_canvas->setExposureSettings(d->exposureSettings);
     setOverExposureToolTip(oei);
+    d->overExposureIndicator->blockSignals(false);
+    d->viewOverExpoAction->blockSignals(false);
 }    
 
 void EditorWindow::setOverExposureToolTip(bool oei)
