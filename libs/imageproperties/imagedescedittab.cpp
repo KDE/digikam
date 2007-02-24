@@ -1557,10 +1557,12 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
             {
                 if (t)
                 {
-                    bool isOn = item->isOn();
-                    item->setVisible(isOn);
+                    MetadataHub::TagStatus status = d->hub.tagStatus(item->m_album);
+                    bool tagAssigned = (status == MetadataHub::MetadataAvailable && status.hasTag)
+                                        || status == MetadataHub::MetadataDisjoint;
+                    item->setVisible(tagAssigned);
 
-                    if (isOn)
+                    if (tagAssigned)
                     {
                         Album* parent = tag->parent();
                         while (parent && !parent->isRoot())
@@ -1595,7 +1597,10 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
                 if (!tag->isRoot())
                 {
                     // only if the current item is not marked as tagged, check all children 
-                    if (!item->isOn())
+                    MetadataHub::TagStatus status = d->hub.tagStatus(item->m_album);
+                    bool tagAssigned = (status == MetadataHub::MetadataAvailable && status.hasTag)
+                                        || status == MetadataHub::MetadataDisjoint;
+                    if (!tagAssigned)
                     {
                         bool somethingIsSet         = false;
                         QListViewItem* nextSibling  = (*it)->nextSibling();
@@ -1604,7 +1609,10 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
                         while (*tmpIt != nextSibling )
                         {
                             TAlbumCheckListItem* tmpItem = dynamic_cast<TAlbumCheckListItem*>(tmpIt.current());
-                            if(tmpItem->isOn())
+                            MetadataHub::TagStatus tmpStatus = d->hub.tagStatus(tmpItem->m_album);
+                            bool tmpTagAssigned = (tmpStatus == MetadataHub::MetadataAvailable && tmpStatus.hasTag)
+                                                || tmpStatus == MetadataHub::MetadataDisjoint;
+                            if(tmpTagAssigned)
                             {
                                 somethingIsSet = true;
                             }
