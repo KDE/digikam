@@ -99,11 +99,11 @@ QString WelcomePageView::infoPage()
         "--- end of comment ---",
         "<h2 style='margin-top: 0px;'>Welcome to digiKam %1</h2><p>"
         "digiKam is a photo-management program for the K Desktop Environment. "
-        "It is designed to import and organize your digital photograhs on your computer."
+        "It is designed to import, organize and export your digital photographs on your computer."
         "</p>\n<ul><li>"
         "digiKam has many powerful features which are described in the "
         "<a href=\"%2\">documentation</a></li>\n"
-        "<li>The <a href=\"%3\">digiKam homepage</A> offers information about "
+        "<li>The <a href=\"%3\">digiKam homepage</A> provides information about "
         "new versions of digiKam</li></ul>\n"
         "%8\n<p>" // important changes
         "Some of the new features in this release of digiKam include "
@@ -120,11 +120,11 @@ QString WelcomePageView::infoPage()
     
     QStringList newFeatures;
     newFeatures << i18n("16 bits/color/pixels image support");
-    newFeatures << i18n("Native JPEG-2000 support");
     newFeatures << i18n("Full color management support");
+    newFeatures << i18n("Native JPEG-2000 support");
     newFeatures << i18n("Makernote and IPTC metadata support");
     newFeatures << i18n("Geolocalization of photograph");
-    newFeatures << i18n("Sidebar used everywhere");
+    newFeatures << i18n("Sidebars used everywhere");
     newFeatures << i18n("Advanced RAW pictures decoding settings");
     newFeatures << i18n("Fast preview of RAW pictures");
     newFeatures << i18n("Metadata support for RAW pictures");
