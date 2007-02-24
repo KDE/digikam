@@ -24,6 +24,7 @@ INCLUDES = -I$(top_srcdir)/digikam/digikam \
 	   -I$(top_srcdir)/digikam/libs/dimg/filters \
 	   -I$(top_srcdir)/digikam/libs/imageproperties \
 	   -I$(top_srcdir)/digikam/libs/threadimageio \
+	   $(LIBKEXIV2_CFLAGS) \
 	   -I$(top_srcdir)/digikam/utilities/setup \
 	   -I$(top_srcdir)/digikam/utilities/slideshow \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \

@@ -23,6 +23,7 @@ INCLUDES = -I$(top_srcdir)/digikam/digikam \
 	   -I$(top_srcdir)/digikam/libs/jpegutils \
 	   -I$(top_srcdir)/digikam/libs/themeengine \
 	   -I$(top_srcdir)/digikam/libs/imageproperties \
+	   $(LIBKEXIV2_CFLAGS) \
 	   -I$(top_srcdir)/digikam/libs/widgets/common \
 	   -I$(top_srcdir)/digikam/libs/dimg \
 	   -I$(top_srcdir)/digikam/libs/dmetadata \

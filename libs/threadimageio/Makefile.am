@@ -18,6 +18,7 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/dimg \
 	       -I$(top_srcdir)/digikam/libs/dimg/loaders \
 	       -I$(top_srcdir)/digikam/libs/dmetadata \
 	       -I$(top_srcdir)/digikam/libs/dcraw \
+	       $(LIBKEXIV2_CFLAGS) \
 	       -I$(top_srcdir)/digikam/libs/jpegutils \
 	       -I$(top_srcdir)/digikam/digikam \
 	       $(all_includes)
