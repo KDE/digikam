@@ -141,21 +141,21 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                               BarIcon("folder_image", KIcon::SizeMedium));
     d->generalPage = new SetupGeneral(d->page_general, this);
 
-    d->page_tooltip = addPage(i18n("Tool Tip"), i18n("Album Items Tool Tip Settings"),
-                              BarIcon("filetypes", KIcon::SizeMedium));
-    d->tooltipPage = new SetupToolTip(d->page_tooltip);
-
-    d->page_metadata = addPage(i18n("Metadata"), i18n("Embedded Image Information Management"),
-                               BarIcon("exifinfo", KIcon::SizeMedium));
-    d->metadataPage = new SetupMetadata(d->page_metadata);
+    d->page_collections = addPage(i18n("Collections"), i18n("Album Collections"),
+                                  BarIcon("fileopen", KIcon::SizeMedium));
+    d->collectionsPage = new SetupCollections(d->page_collections);
 
     d->page_identity = addPage(i18n("Identity"), i18n("Default IPTC identity information"),
                                BarIcon("identity", KIcon::SizeMedium));
     d->identityPage = new SetupIdentity(d->page_identity);
 
-    d->page_collections = addPage(i18n("Collections"), i18n("Album Collections"),
-                                  BarIcon("fileopen", KIcon::SizeMedium));
-    d->collectionsPage = new SetupCollections(d->page_collections);
+    d->page_metadata = addPage(i18n("Metadata"), i18n("Embedded Image Information Management"),
+                               BarIcon("exifinfo", KIcon::SizeMedium));
+    d->metadataPage = new SetupMetadata(d->page_metadata);
+
+    d->page_tooltip = addPage(i18n("Tool Tip"), i18n("Album Items Tool Tip Settings"),
+                              BarIcon("filetypes", KIcon::SizeMedium));
+    d->tooltipPage = new SetupToolTip(d->page_tooltip);
 
     d->page_mime = addPage(i18n("Mime Types"), i18n("File (MIME) Types Settings"),
                            BarIcon("filetypes", KIcon::SizeMedium));
@@ -165,6 +165,10 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                              BarIcon("image", KIcon::SizeMedium));
     d->editorPage = new SetupEditor(d->page_editor);
 
+    d->page_iofiles = addPage(i18n("Save Images"), i18n("Image Editor Save Images Files Settings"),
+                              BarIcon("filesave", KIcon::SizeMedium));
+    d->iofilesPage = new SetupIOFiles(d->page_iofiles);
+
     d->page_dcraw = addPage(i18n("RAW decoding"), i18n("RAW Files Decoding Settings"),
                               BarIcon("dcraw", KIcon::SizeMedium));
     d->dcrawPage = new SetupDcraw(d->page_dcraw);
@@ -173,21 +177,17 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                           BarIcon("colorize", KIcon::SizeMedium));
     d->iccPage = new SetupICC(d->page_icc, this);
 
-    d->page_iofiles = addPage(i18n("Save Images"), i18n("Image Editor Save Images Files Settings"),
-                              BarIcon("filesave", KIcon::SizeMedium));
-    d->iofilesPage = new SetupIOFiles(d->page_iofiles);
-
     d->page_imgplugins = addPage(i18n("Image Plugins"), i18n("Image Editor Plug-in Settings"),
                                  BarIcon("digikamimageplugins", KIcon::SizeMedium));
     d->imgpluginsPage = new SetupImgPlugins(d->page_imgplugins);
 
-    d->page_slideshow = addPage(i18n("Slide Show"), i18n("Slide Show Settings"),
-                                BarIcon("slideshow", KIcon::SizeMedium));
-    d->slideshowPage = new SetupSlideShow(d->page_slideshow);
-
     d->page_plugins = addPage(i18n("Kipi Plugins"), i18n("Main Interface Plug-in Settings"),
                               BarIcon("kipi", KIcon::SizeMedium));
     d->pluginsPage = new SetupPlugins(d->page_plugins);
+
+    d->page_slideshow = addPage(i18n("Slide Show"), i18n("Slide Show Settings"),
+                                BarIcon("slideshow", KIcon::SizeMedium));
+    d->slideshowPage = new SetupSlideShow(d->page_slideshow);
 
     d->page_camera = addPage(i18n("Cameras"), i18n("Camera Settings"),
                              BarIcon("digitalcam", KIcon::SizeMedium));
