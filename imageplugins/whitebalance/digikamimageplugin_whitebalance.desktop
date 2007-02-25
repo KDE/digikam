@@ -2,7 +2,6 @@
 Name=ImagePlugin_WhiteBalance
 Name[bg]=Приставка за снимки - Баланс на бялото
 Name[el]=ΠρόσθετοΕικόνας_ΙσορροπίαΛευκού
-Name[hr]=Bijeli balans
 Name[it]=PluginImmagini_BilanciamentoDelBianco
 Name[nl]=Afbeeldingsplugin_Witbalans
 Name[pt_BR]=Plug-in de balanço do branco
@@ -26,7 +25,6 @@ Comment[et]=DigiKami valge tasakaalu korrigeerimise plugin
 Comment[fa]=وصلۀ اصلاح توازن سفید برای digiKam
 Comment[fr]=Module externe pour corriger l'équilibre des blancs d'une image
 Comment[gl]=Un plugin de digiKam para corrixir o balance do branco
-Comment[hr]=digiKam dodatak za ispravljanje bijelog balansa
 Comment[is]=Íforrit fyrir digiKam sem breytir hvítvægi mynda
 Comment[it]=Plugin di correzione del bilanciamento del bianco per digiKam
 Comment[ja]=digiKam ホワイトバランス補正プラグイン
