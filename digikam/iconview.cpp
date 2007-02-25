@@ -65,7 +65,7 @@ public:
         lastGroup           = 0;
         currItem            = 0;
         anchorItem          = 0;
-        firstVisibleItem    = 0;
+        storedVisibleItem   = 0;
         clearing            = false;
         spacing             = 10;
 
@@ -103,7 +103,7 @@ public:
     IconItem*          toolTipItem;
     IconItem*          currItem;
     IconItem*          anchorItem;
-    IconItem*          firstVisibleItem; // store position for slotUpdate
+    IconItem*          storedVisibleItem; // store position for slotUpdate
     
     IconGroupItem*     firstGroup;
     IconGroupItem*     lastGroup;
@@ -403,7 +403,7 @@ void IconView::insertGroup(IconGroupItem* group)
         d->lastGroup         = group;
     }
 
-    d->firstVisibleItem = findFirstVisibleItem();
+    d->storedVisibleItem = findFirstVisibleItem();
     startUpdateTimer();
 }
 
@@ -415,7 +415,7 @@ void IconView::takeGroup(IconGroupItem* group)
     // this is only to find an alternative visible item if all visible items
     // are removed
     IconGroupItem *alternativeVisibleGroup = 0;
-    d->firstVisibleItem = 0;
+    d->storedVisibleItem = 0;
 
     if (group == d->firstGroup)
     {
@@ -454,11 +454,11 @@ void IconView::takeGroup(IconGroupItem* group)
 
     if (!d->clearing)
     {
-        d->firstVisibleItem = findFirstVisibleItem();
-        if (!d->firstVisibleItem && alternativeVisibleGroup)
+        d->storedVisibleItem = findFirstVisibleItem();
+        if (!d->storedVisibleItem && alternativeVisibleGroup)
         {
             // find an alternative visible item
-            d->firstVisibleItem = alternativeVisibleGroup->lastItem();
+            d->storedVisibleItem = alternativeVisibleGroup->lastItem();
         }
         startUpdateTimer();
     }
@@ -469,7 +469,7 @@ void IconView::insertItem(IconItem* item)
     if (!item)
         return;
 
-    d->firstVisibleItem = findFirstVisibleItem();
+    d->storedVisibleItem = findFirstVisibleItem();
     startUpdateTimer();
 }
 
@@ -509,16 +509,16 @@ void IconView::takeItem(IconItem* item)
     
     if (!d->clearing)
     {
-        d->firstVisibleItem = findFirstVisibleItem();
-        if (d->firstVisibleItem == item)
-            d->firstVisibleItem = d->currItem;
+        d->storedVisibleItem = findFirstVisibleItem();
+        if (d->storedVisibleItem == item)
+            d->storedVisibleItem = d->currItem;
         startUpdateTimer();
     }
 }
 
 void IconView::triggerUpdate()
 {
-    d->firstVisibleItem = findFirstVisibleItem();
+    d->storedVisibleItem = findFirstVisibleItem();
     startUpdateTimer();
 }
 
@@ -603,22 +603,21 @@ void IconView::slotUpdate()
     }
     d->anchorItem = d->currItem;
 
-    if (d->currItem)
+    // ensure there is a selection
+    if (d->selectedItems.isEmpty())
     {
-        d->currItem->setSelected(true, true);
-    }
-    else
-    {
-        // no selection
-        emit signalSelectionChanged();
+        if (d->currItem)
+            d->currItem->setSelected(true, true);
+        else // no selection
+            emit signalSelectionChanged();
     }
 
     // set first visible item if they where stored before update was triggered
-    if (d->firstVisibleItem)
+    if (d->storedVisibleItem)
     {
-        ensureItemVisible(d->firstVisibleItem);
+        ensureItemVisible(d->storedVisibleItem);
         // reset to 0
-        d->firstVisibleItem = 0;
+        d->storedVisibleItem = 0;
     }
     else
     {
