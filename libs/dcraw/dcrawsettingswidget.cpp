@@ -301,6 +301,9 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent)
     connect(d->enableNoiseReduction, SIGNAL(toggled(bool)),
             this, SLOT(slotNoiseReductionToggled(bool)));
 
+    connect(d->sixteenBitsImage, SIGNAL(toggled(bool)),
+            this, SLOT(slotsixteenBitsImageToggled(bool)));
+
     connect(dcrawVersion, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processDcrawURL(const QString&)));
 }
@@ -343,6 +346,12 @@ void DcrawSettingsWidget::slotUnclipColorActivated(int v)
         d->reconstructLabel->setEnabled(false);
         d->reconstructSpinBox->setEnabled(false);
     }
+}
+
+void DcrawSettingsWidget::slotsixteenBitsImageToggled(bool b)
+{
+    d->brightnessLabel->setDisabled(b);
+    d->brightnessSpinBox->setDisabled(b);
 }
 
 void DcrawSettingsWidget::slotNoiseReductionToggled(bool b)

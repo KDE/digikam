@@ -75,6 +75,7 @@ private slots:
 
     void slotUnclipColorActivated(int);
     void slotNoiseReductionToggled(bool);
+    void slotsixteenBitsImageToggled(bool);
     void processDcrawURL(const QString&);
 
 private:
