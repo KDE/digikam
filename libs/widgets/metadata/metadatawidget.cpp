@@ -400,12 +400,12 @@ bool MetadataWidget::loadFromData(QString fileName, const QByteArray& data)
 
 QString MetadataWidget::getTagTitle(const QString&)
 {
-    return (QString());
+    return QString();
 }
 
 QString MetadataWidget::getTagDescription(const QString&)
 {
-    return (QString());
+    return QString();
 }
 
 void MetadataWidget::setFileName(QString fileName)
