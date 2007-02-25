@@ -804,16 +804,34 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     if (!ok)
         return;
 
-    QString oldURL = item->imageInfo()->kurl().url();
+    KURL oldURL = item->imageInfo()->kurlForKIO();
+    KURL newURL = oldURL;
+    newURL.setFileName(newName + ext);
 
-    if (!item->imageInfo()->setName(newName + ext))
-        return;
+    KIO::CopyJob* job = DIO::rename(oldURL, newURL);
+    connect(job, SIGNAL(result(KIO::Job*)),
+            this, SLOT(slotDIOResult(KIO::Job*)));
+    connect(job, SIGNAL(copyingDone(KIO::Job *, const KURL &, const KURL &, bool, bool)),
+            this, SLOT(slotRenamed(KIO::Job*, const KURL &, const KURL&)));
 
-    d->itemDict.remove(oldURL);
-    d->itemDict.insert(item->imageInfo()->kurl().url(), item);
+    // The AlbumManager KDirWatch will trigger a DIO::scan.
+    // When this is completed, DIO will call AlbumLister::instance()->refresh().
+    // Usually the AlbumLister will ignore changes to already listed items.
+    // So the renamed item need explicitly be invalidated.
+    d->imageLister->invalidateItem(item->imageInfo());
+}
 
-    item->repaint();
-    signalItemsAdded();
+void AlbumIconView::slotRenamed(KIO::Job*, const KURL &, const KURL&newURL)
+{
+    // reconstruct file path from digikamalbums:// URL
+    KURL fileURL;
+    fileURL.setPath(newURL.user());
+    fileURL.addPath(newURL.path());
+
+    // refresh thumbnail
+    d->pixMan->remove(fileURL);
+    // clean LoadingCache as well - be pragmatic, do it here.
+    LoadingCacheInterface::cleanFromCache(fileURL.path());
 }
 
 void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)

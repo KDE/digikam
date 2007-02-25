@@ -137,12 +137,18 @@ KIO::Job* del(const KURL::List& srcList, bool useTrash)
     return job;
 }
 
-bool renameFile(const KURL& src, const KURL& dest)
+KIO::CopyJob *rename(const KURL& src, const KURL& dest)
 {
+    KIO::CopyJob * job = KIO::move(src, dest, false);
+    new Watch(job);
+
+    return job;
+
+    /*
     KURL srcdir;
     srcdir.setDirectory(src.directory());
     KURL dstdir;
-    dstdir.setDirectory(src.directory());
+    dstdir.setDirectory(dest.directory());
     Digikam::PAlbum* srcAlbum = Digikam::AlbumManager::instance()->findPAlbum(srcdir);
     Digikam::PAlbum* dstAlbum = Digikam::AlbumManager::instance()->findPAlbum(dstdir);
     if (!srcAlbum || !dstAlbum)
@@ -161,7 +167,7 @@ bool renameFile(const KURL& src, const KURL& dest)
     while (::stat(QFile::encodeName(dstPath), &stbuf) == 0)
     {
         KIO::RenameDlg_Result result =
-            KIO::open_RenameDlg(i18n("Rename File"), srcPath, KURL(dstPath).fileName(),
+            KIO::open_RenameDlg(i18n("Rename File"), srcPath, dstPath,
                                 KIO::RenameDlg_Mode(KIO::M_SINGLE |
                                                     KIO::M_OVERWRITE),
                                 newDstPath);
@@ -197,7 +203,8 @@ bool renameFile(const KURL& src, const KURL& dest)
 
     KMessageBox::error(0, i18n("Failed to rename file\n%1")
                        .arg(src.fileName()), i18n("Rename Failed"));
-    return false;    
+    return false;
+    */
 }
 
 KIO::Job* scan(const KURL& albumURL)

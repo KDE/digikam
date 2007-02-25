@@ -78,6 +78,7 @@ public:
     QString                         filter;
 
     QMap<Q_LLONG, ImageInfo*>       itemMap;
+    QMap<int,int>                   invalidatedItems;
     QMap<int,bool>                  dayFilter;
 
     QValueList<int>                 tagFilter;
@@ -292,6 +293,11 @@ void AlbumLister::setNameFilter(const QString& nameFilter)
     d->filter = nameFilter;
 }
 
+void AlbumLister::invalidateItem(const ImageInfo *item)
+{
+    d->invalidatedItems.insert(item->id(), item->id());
+}
+
 void AlbumLister::slotClear()
 {
     emit signalClear();
@@ -351,6 +357,7 @@ void AlbumLister::slotResult(KIO::Job* job)
     {
         DWarning() << "Failed to list url: " << job->errorString() << endl;
         d->itemMap.clear();
+        d->invalidatedItems.clear();
         return;
     }
 
@@ -365,6 +372,7 @@ void AlbumLister::slotResult(KIO::Job* job)
     }
 
     d->itemMap.clear();
+    d->invalidatedItems.clear();
 
     emit signalCompleted();
 }
@@ -398,13 +406,22 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
         if (d->itemMap.contains(imageID))
         {
             ImageInfo* info = d->itemMap[imageID];
-            if (!matchesFilter(info))
-            {
-                emit signalDeleteFilteredItem(info);
-            }
-            
             d->itemMap.remove(imageID);
-            continue;
+
+            if (d->invalidatedItems.contains(imageID))
+            {
+                emit signalDeleteItem(info);
+                emit signalDeleteFilteredItem(info);
+                d->itemList.remove(info);
+            }
+            else
+            {
+                if (!matchesFilter(info))
+                {
+                    emit signalDeleteFilteredItem(info);
+                }
+                continue;
+            }
         }
 
         ImageInfo* info = new ImageInfo(imageID, albumID, name,

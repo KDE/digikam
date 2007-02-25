@@ -89,6 +89,12 @@ public:
     void setDayFilter(const QValueList<int>& days);
     void setTagFilter(const QValueList<int>& tags, const MatchingCondition& matchingCond, 
                       bool showUnTagged=false);
+
+    /**
+      * Trigger a recreation of the given ImageInfo object
+      * for the next refresh.
+      */
+    void invalidateItem(const ImageInfo *item);
     
 signals:
 

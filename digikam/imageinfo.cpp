@@ -86,8 +86,9 @@ QString ImageInfo::name() const
     return m_name;
 }
 
-bool ImageInfo::setName(const QString& newName)
+void ImageInfo::setName(const QString& newName)
 {
+    /*
     KURL src = kurlForKIO();
     KURL dst = src.upURL();
     dst.addPath(newName);
@@ -101,9 +102,9 @@ bool ImageInfo::setName(const QString& newName)
         DWarning() << "No album found for ID: " << m_albumID << endl;
         return false;
     }
-    
+    */
+
     m_name = newName;
-    return true;
 }
 
 size_t ImageInfo::fileSize() const

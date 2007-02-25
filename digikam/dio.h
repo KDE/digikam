@@ -38,7 +38,7 @@ namespace DIO
     
     KIO::Job* del(const KURL::List& srcList, bool useTrash = true);
     
-    bool      renameFile(const KURL& src, const KURL& dest);
+    KIO::CopyJob* rename(const KURL& src, const KURL& dest);
     
     KIO::Job* scan(const KURL& albumURL);
     

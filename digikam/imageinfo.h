@@ -97,13 +97,10 @@ public:
     QString   name() const;
 
     /**
-     * Set a new name for the image. This will rename the file on the
-     * disk to the new name. Only use if you are sure of what you are
-     * doing
+     * Set a new name for the image.
      * @param  newName new name for the image
-     * @return true if successful, false otherwise
      */
-    bool      setName(const QString& newName);
+    void setName(const QString& newName);
     
     /**
      * @return the datetime of the image

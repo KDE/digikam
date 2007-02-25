@@ -181,6 +181,7 @@ private slots:
     void slotRemoveTag(int tagID);
 
     void slotDIOResult(KIO::Job* job);
+    void slotRenamed(KIO::Job*, const KURL &, const KURL&);
 
     void slotImageAttributesChanged(Q_LLONG imageId);
     void slotAlbumImagesChanged(int albumId);
