@@ -490,6 +490,8 @@ void IconView::takeItem(IconItem* item)
 
     // Remove from selected item list
     d->selectedItems.remove(item);
+    if (item->isSelected())
+        d->needEmitSelectionChanged = true;
 
     if (d->toolTipItem == item)
     {
@@ -606,13 +608,15 @@ void IconView::slotRearrange()
     d->anchorItem = d->currItem;
 
     // ensure there is a selection
-    if (d->selectedItems.isEmpty())
+    if (d->selectedItems.isEmpty() && d->currItem)
     {
-        if (d->currItem)
-            d->currItem->setSelected(true, true);
-        else // no selection
-            emit signalSelectionChanged();
+        d->currItem->setSelected(true, true);
     }
+    else if (d->needEmitSelectionChanged)
+    {
+        emit signalSelectionChanged();
+    }
+    d->needEmitSelectionChanged = false;
 
     // set first visible item if they where stored before update was triggered
     if (d->storedVisibleItem)
