@@ -1492,8 +1492,8 @@ void AlbumIconView::refreshItems(const KURL::List& urlList)
 
     emit signalItemsUpdated(urlList);
 
-    // trigger a delayed update, in case we need to resort items
-    triggerUpdate();
+    // trigger a delayed rearrangement, in case we need to resort items
+    triggerRearrangement();
 }
 
 void AlbumIconView::slotGotThumbnail(const KURL& url)

@@ -72,8 +72,7 @@ public:
     
     void selectItem(IconItem* item, bool select);
 
-    void triggerUpdate();
-    void rearrangeItems(bool update=true);
+    void triggerRearrangement();
     
     void insertGroup(IconGroupItem* group);
     void takeGroup(IconGroupItem* group);
@@ -86,7 +85,7 @@ public:
     IconItem* findLastVisibleItem(const QRect& r, bool useThumbnailRect = true) const;
     IconItem* findFirstVisibleItem(bool useThumbnailRect = true) const;
     IconItem* findLastVisibleItem(bool useThumbnailRect = true) const;
-    
+
     virtual QRect itemRect() const;
     virtual QRect bannerRect() const;
 
@@ -94,8 +93,8 @@ public:
 
     void setEnableToolTips(bool val);
 
-    void setDelayedUpdate(bool delayed);
-    
+    void setDelayedRearrangement(bool delayed);
+
 protected:
 
     virtual void viewportPaintEvent(QPaintEvent* pe);
@@ -108,16 +107,17 @@ protected:
     virtual void leaveEvent(QEvent *e);
     virtual void focusOutEvent(QFocusEvent* e);
     virtual void keyPressEvent(QKeyEvent* e);
-    
+
     virtual void startDrag();
 
     void drawFrameRaised(QPainter* p);
     void drawFrameSunken(QPainter* p);
 
     virtual bool acceptToolTip(IconItem* , const QPoint&);
-    
+
 private:
 
+    bool arrangeItems();
     void rebuildContainers();
     void appendContainer();
     void deleteContainers();
@@ -128,7 +128,7 @@ private:
 
     bool anchorIsBehind() const;
 
-    void startUpdateTimer();
+    void startRearrangeTimer();
 
     static int cmpItems(const void *n1, const void *n2);
     
@@ -143,7 +143,7 @@ signals:
     
 public slots:
 
-    void slotUpdate();
+    void slotRearrange();
 
 private slots:
 

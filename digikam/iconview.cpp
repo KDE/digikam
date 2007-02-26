@@ -65,51 +65,53 @@ public:
         lastGroup           = 0;
         currItem            = 0;
         anchorItem          = 0;
-        storedVisibleItem   = 0;
         clearing            = false;
         spacing             = 10;
 
         rubber              = 0;
         dragging            = false;
         pressedMoved        = false;
-        
+
         firstContainer      = 0;
         lastContainer       = 0;
 
-        showTips            = false;
-        toolTipItem         = 0;
-        toolTipTimer        = 0;
-        updateTimer         = 0;
-        updateTimerInterval = 0;
+        showTips                 = false;
+        toolTipItem              = 0;
+        toolTipTimer             = 0;
+        rearrangeTimer           = 0;
+        rearrangeTimerInterval   = 0;
+        storedVisibleItem        = 0;
+        needEmitSelectionChanged = false;
     }
-    
+
     bool               clearing;
     bool               showTips;
     bool               pressedMoved;
     bool               dragging;
-    
+    bool               needEmitSelectionChanged; // store for slotRearrange
+
     int                spacing;
 
     QPtrDict<IconItem> selectedItems;
     QPtrDict<IconItem> prevSelectedItems;
 
     QRect*             rubber;
-    
+
     QPoint             dragStartPos;
-    
-    QTimer*            updateTimer;
+
+    QTimer*            rearrangeTimer;
     QTimer*            toolTipTimer;
 
     IconItem*          toolTipItem;
     IconItem*          currItem;
     IconItem*          anchorItem;
-    IconItem*          storedVisibleItem; // store position for slotUpdate
-    
+    IconItem*          storedVisibleItem; // store position for slotRearrange
+
     IconGroupItem*     firstGroup;
     IconGroupItem*     lastGroup;
 
-    int                updateTimerInterval;
-    
+    int                rearrangeTimerInterval;
+
     struct ItemContainer 
     {
         ItemContainer(ItemContainer *p, ItemContainer *n, const QRect &r) 
@@ -141,11 +143,11 @@ IconView::IconView(QWidget* parent, const char* name)
     viewport()->setMouseTracking(true);
 
     d = new IconViewPriv;
-    d->updateTimer  = new QTimer(this);
+    d->rearrangeTimer  = new QTimer(this);
     d->toolTipTimer = new QTimer(this);
     
-    connect(d->updateTimer, SIGNAL(timeout()),
-            this, SLOT(slotUpdate()));
+    connect(d->rearrangeTimer, SIGNAL(timeout()),
+            this, SLOT(slotRearrange()));
             
     connect(d->toolTipTimer, SIGNAL(timeout()),
             this, SLOT(slotToolTip()));
@@ -157,7 +159,7 @@ IconView::~IconView()
 {
     clear(false);
 
-    delete d->updateTimer;
+    delete d->rearrangeTimer;
     delete d->toolTipTimer;
     delete d->rubber;
     delete d;
@@ -404,7 +406,7 @@ void IconView::insertGroup(IconGroupItem* group)
     }
 
     d->storedVisibleItem = findFirstVisibleItem();
-    startUpdateTimer();
+    startRearrangeTimer();
 }
 
 void IconView::takeGroup(IconGroupItem* group)
@@ -460,7 +462,7 @@ void IconView::takeGroup(IconGroupItem* group)
             // find an alternative visible item
             d->storedVisibleItem = alternativeVisibleGroup->lastItem();
         }
-        startUpdateTimer();
+        startRearrangeTimer();
     }
 }
 
@@ -470,7 +472,7 @@ void IconView::insertItem(IconItem* item)
         return;
 
     d->storedVisibleItem = findFirstVisibleItem();
-    startUpdateTimer();
+    startRearrangeTimer();
 }
 
 void IconView::takeItem(IconItem* item)
@@ -502,7 +504,7 @@ void IconView::takeItem(IconItem* item)
         d->currItem = item->nextItem();
         if (!d->currItem)
             d->currItem = item->prevItem();
-        // defer calling d->currItem->setSelected (and emitting the signals) to slotUpdate
+        // defer calling d->currItem->setSelected (and emitting the signals) to slotRearrange
     }
 
     d->anchorItem = d->currItem;
@@ -512,32 +514,32 @@ void IconView::takeItem(IconItem* item)
         d->storedVisibleItem = findFirstVisibleItem();
         if (d->storedVisibleItem == item)
             d->storedVisibleItem = d->currItem;
-        startUpdateTimer();
+        startRearrangeTimer();
     }
 }
 
-void IconView::triggerUpdate()
+void IconView::triggerRearrangement()
 {
     d->storedVisibleItem = findFirstVisibleItem();
-    startUpdateTimer();
+    startRearrangeTimer();
 }
 
-void IconView::setDelayedUpdate(bool delayed)
+void IconView::setDelayedRearrangement(bool delayed)
 {
     // if it is known that e.g. several items will be added or deleted in the next time,
     // but not from the same event queue thread stack location, it may be desirable to delay
-    // the updateTimer a bit
+    // the rearrangeTimer a bit
     if (delayed)
-        d->updateTimerInterval = 50;
+        d->rearrangeTimerInterval = 50;
     else
-        d->updateTimerInterval = 0;
+        d->rearrangeTimerInterval = 0;
 }
 
-void IconView::startUpdateTimer()
+void IconView::startRearrangeTimer()
 {
     // We want to reduce the number of updates, but not remove all updates
-    if (!d->updateTimer->isActive())
-        d->updateTimer->start(d->updateTimerInterval, true);
+    if (!d->rearrangeTimer->isActive())
+        d->rearrangeTimer->start(d->rearrangeTimerInterval, true);
 }
 
 void IconView::sort()
@@ -589,10 +591,10 @@ void IconView::sort()
     delete [] groups;
 }
 
-void IconView::slotUpdate()
+void IconView::slotRearrange()
 {
     sort();
-    rearrangeItems();
+    arrangeItems();
 
     // ensure there is a current item
     if (!d->currItem)
@@ -627,7 +629,7 @@ void IconView::slotUpdate()
     viewport()->update();
 }
 
-void IconView::rearrangeItems(bool update)
+bool IconView::arrangeItems()
 {
     int  y   = 0;
     int  itemW = itemRect().width();
@@ -683,8 +685,7 @@ void IconView::rearrangeItems(bool update)
 
     rebuildContainers();
 
-    if (changed && update)
-        viewport()->update();
+    return changed;
 }
 
 QRect IconView::itemRect() const
@@ -753,7 +754,7 @@ QRect IconView::contentsRectToViewport(const QRect& r) const
 void IconView::resizeEvent(QResizeEvent* e)
 {
     QScrollView::resizeEvent(e);
-    triggerUpdate();
+    triggerRearrangement();
 }
 
 void IconView::rebuildContainers()

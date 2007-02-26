@@ -1020,7 +1020,7 @@ void DigikamView::slotSortImages(int order)
     if (!settings)
         return;
     settings->setImageSortOrder((AlbumSettings::ImageSortOrder) order);
-    d->iconView->slotUpdate();
+    d->iconView->slotRearrange();
 }
 
 void DigikamView::slotLeftSidebarChangedTab(QWidget* w)

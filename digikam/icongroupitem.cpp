@@ -226,7 +226,7 @@ void IconGroupItem::clear(bool update)
     d->count     = 0;
 
     if (update)
-        d->view->triggerUpdate();
+        d->view->triggerRearrangement();
 
     d->clearing = false;
 }
