@@ -187,9 +187,9 @@ void CameraIconView::removeItem(const QString& folder, const QString& file)
         return;
     d->itemDict.remove(folder+file);
 
-    setDelayedUpdate(true);
+    setDelayedRearrangement(true);
     delete item;
-    setDelayedUpdate(false);
+    setDelayedRearrangement(false);
 }
 
 CameraIconViewItem* CameraIconView::findItem(const QString& folder, const QString& file)
@@ -339,7 +339,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
         }
     }
 
-    rearrangeItems();
+    triggerRearrangement();
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
 }
@@ -580,9 +580,7 @@ void CameraIconView::setThumbnailSize(const ThumbnailSize& thumbSize)
     {
         d->thumbSize = thumbSize;
         updateItemRectsPixmap();
-        rearrangeItems(true);
-        if (IconView::currentItem())
-            IconView::ensureItemVisible(IconView::currentItem());
+        triggerRearrangement();
     }
 }
 
