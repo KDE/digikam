@@ -6,6 +6,7 @@ INCLUDES = -I$(top_srcdir)/digikam/digikam \
 	   -I$(top_srcdir)/digikam/libs/dmetadata \
 	   -I$(top_srcdir)/digikam/libs/thumbbar \
 	   -I$(top_srcdir)/digikam/libs/widgets/common \
+	   $(LIBKEXIV2_CFLAGS) \
 	   $(all_includes)
 
 noinst_LTLIBRARIES = libbatch.la 
