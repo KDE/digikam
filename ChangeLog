@@ -1,3 +1,428 @@
+v0.9.1-rc2 - 27-Feb-2007
+----------------------------------------------------------------------------
+2007-02-26 17:01  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/iconview.cpp: Emit
+	  signalSelectionChanged if a selected item has been removed
+	  
+	  CCBUG: 141940
+
+2007-02-26 16:55  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/icongroupitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/iconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/iconview.h: Change
+	  misleading names: slotUpdate -> slotRearrange
+
+2007-02-26 12:38  scripty
+
+	* trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
+	  trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
+	  trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
+	  trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
+	  trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2007-02-25 21:21  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumiconview.h,
+	  trunk/extragear/graphics/digikam/digikam/albumlister.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumlister.h,
+	  trunk/extragear/graphics/digikam/digikam/dio.cpp,
+	  trunk/extragear/graphics/digikam/digikam/dio.h,
+	  trunk/extragear/graphics/digikam/digikam/imageinfo.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imageinfo.h: Use
+	  KIO::rename to rename files
+	  - The AlbumLister would ignore changes to the already listed
+	  items.
+	  Force it to recreate the ImageInfo object by
+	  a list of invalidated items.
+	  - The thumbnail needs to be invalidated as well.
+	  This is done by listening to a signal from the KIO::CopyJob
+	  - Remove low-level code from DIO::rename
+	  - Remove actual renaming from ImageInfo::setName
+	  
+	  CCBUG: 141786
+
+2007-02-25 19:21  gkulzer
+
+	* trunk/extragear/graphics/digikam/utilities/setup/setup.cpp:
+	  Reordering in a logical fashion the setup pages
+
+2007-02-25 16:34  gkulzer
+
+	* trunk/extragear/graphics/digikam/libs/dcraw/dcrawsettingswidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/dcraw/dcrawsettingswidget.h:
+	  Setup: RAW decoding: disable Brightness when 16 bit mode is
+	  enabled. (dcraw doesn't support gamma for 16 bit)
+	  CCMAIL:caulier.gilles@gmail.com
+	  CCMAIL:marcel.wiesweg@gmx.de
+
+2007-02-25 14:01  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/iconview.cpp: - Do not
+	  reset selection in slotUpdate.
+	  This means that the selection is preserved
+	  - during any resize operations (hiding sidebar)
+	  - while filtering out items with the tag filter
+	  - when items have been changed from outside
+	  (AlbumIconView::refreshItems)
+	  - change the misleading name d->firstVisibleItem to
+	  d->storedVisibleItem
+	  (it does not always point to the current first visible item - it
+	  is usually 0)
+	  
+	  CCBUG:141940
+
+2007-02-25 12:47  gkulzer
+
+	* trunk/extragear/graphics/digikam/libs/widgets/metadata/metadatawidget.cpp:
+	  return (QString()) -> return QString()
+
+2007-02-25 04:34  gkulzer
+
+	* trunk/extragear/graphics/digikam/utilities/hotplug/digikam-download.desktop.in,
+	  trunk/extragear/graphics/digikam/utilities/hotplug/digikam-gphoto2-camera.desktop.in:
+	  add German and French translations
+	  Bug 141085
+
+2007-02-25 04:33  gkulzer
+
+	* trunk/extragear/graphics/digikam/utilities/hotplug/digikam-mount-and-download.desktop.in:
+	  add German and French translations
+	  Bug 141085
+
+2007-02-24 22:25  mwiesweg
+
+	* trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+	  In the tags view of the Comments&Tags tab, for multiple
+	  selection,
+	  when assigned tags filter is active, also display those tags
+	  which
+	  are set for only a part of the selected images.
+
+2007-02-24 11:41  cgilles
+
+	* trunk/extragear/graphics/digikam/kioslave/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/dimg/loaders/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/jpegutils/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/Makefile.am,
+	  trunk/extragear/graphics/digikam/showfoto/Makefile.am,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/Makefile.am,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/Makefile.am,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/Makefile.am:
+	  digikam from trunk: fix all Makefile.am witch require libkexiv2
+	  includes
+	  CCBUGS: 142088
+
+2007-02-24 09:03  gkulzer
+
+	* trunk/extragear/graphics/digikam/digikam/welcomepageview.cpp:
+	  correct and improve i18n strings (mail of
+	  "Ronald L.Humble")
+	  CCMAIL:caulier.gilles@gmail.com
+
+2007-02-23 20:39  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: digikam from trunk :
+	  Comments & Tags popup menu behaviours. Do not toogle the current
+	  Tags checkbox from treeview when user click with right mouse
+	  button to get popup menu.
+	  CCBUGS: 139547
+
+2007-02-23 20:38  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindowprivate.h:
+	  digikam from trunk : make over/under exposure and Color Managed
+	  view indicator on status bar of editor like action buttons to
+	  toogle on/off options.
+	  
+	  Nota : there are already keyboard shorcuts for these actions :
+	  F9/F10/F11
+	  BUG: 142109
+
+2007-02-23 16:30  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/digikamview.cpp:
+	  Reenable this signal, it is needed so that the apply? message box
+	  is displayed
+	  before the album changed (and not when the new album is already
+	  opened)
+
+2007-02-23 16:29  mwiesweg
+
+	* trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+	  Check that the text actually changed in slotCommentChanged
+	  
+	  CCBUG: 141663
+
+2007-02-23 14:13  gkulzer
+
+	* trunk/extragear/graphics/digikam/TODO: add improvements mentioned
+	  in ML and not yet in this list
+
+2007-02-23 08:09  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/Makefile.am: missing
+	  backslash
+
+2007-02-23 07:45  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/Makefile.am: missing
+	  libkexiv2 includes
+	  CCBUGS: 142088
+
+2007-02-23 02:43  gkulzer
+
+	* trunk/extragear/graphics/digikam/digikam/album.h,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumwidgetstack.cpp,
+	  trunk/extragear/graphics/digikam/digikam/cameralist.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewview.h,
+	  trunk/extragear/graphics/digikam/digikam/kdatepickerpopup.h,
+	  trunk/extragear/graphics/digikam/digikam/kipiinterface.cpp,
+	  trunk/extragear/graphics/digikam/digikam/kipiinterface.h,
+	  trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.cpp,
+	  trunk/extragear/graphics/digikam/libs/dcraw/dcrawbinary.cpp,
+	  trunk/extragear/graphics/digikam/libs/dcraw/dcrawsettingswidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/dialogs/iccprofileinfodlg.cpp,
+	  trunk/extragear/graphics/digikam/libs/dialogs/iccprofileinfodlg.h,
+	  trunk/extragear/graphics/digikam/libs/dimg/dimg.cpp,
+	  trunk/extragear/graphics/digikam/libs/dimg/dimgscale.cpp,
+	  trunk/extragear/graphics/digikam/libs/dimg/loaders/pngloader.cpp,
+	  trunk/extragear/graphics/digikam/libs/dimg/loaders/rawloader.cpp,
+	  trunk/extragear/graphics/digikam/libs/dimg/loaders/tiffloader.cpp,
+	  trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp,
+	  trunk/extragear/graphics/digikam/libs/dmetadata/photoinfocontainer.h,
+	  trunk/extragear/graphics/digikam/libs/histogram/imagehistogram.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/cameraitempropertiestab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/cameraitempropertiestab.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiescolorstab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiescolorstab.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiesmetadatatab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiesmetadatatab.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiestab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiestab.h,
+	  trunk/extragear/graphics/digikam/libs/jpegutils/jpegutils.cpp,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/loadingcache.cpp,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/loadsavetask.cpp,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/previewtask.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/histogramwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/iccprofiles/iccprofilewidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imageselectionwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/exifwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/metadatalistview.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  trunk/extragear/graphics/digikam/sqlite/hash.h,
+	  trunk/extragear/graphics/digikam/sqlite/sqlite.h,
+	  trunk/extragear/graphics/digikam/sqlite/sqliteInt.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/camerainfodialog.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/camerainfodialog.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imageiface.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/tools/imageprint.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupmetadata.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshowsettings.h:
+	  move email at Author to Copyright line
+	  http://www.englishbreakfastnetwork.org/krazy/reports/extragear/graphics/digikam/index.html
+
+2007-02-22 06:38  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-02-21 08:38  gkulzer
+
+	* trunk/extragear/graphics/digikam/digikam/albumdb.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumpropsedit.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumsettings.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/firstrun.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewwidget.h,
+	  trunk/extragear/graphics/digikam/digikam/kipiinterface.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchresultsitem.h,
+	  trunk/extragear/graphics/digikam/digikam/syncjob.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/welcomepageview.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp,
+	  trunk/extragear/graphics/digikam/libs/dcraw/dcrawbinary.cpp,
+	  trunk/extragear/graphics/digikam/libs/dialogs/dprogressdlg.cpp,
+	  trunk/extragear/graphics/digikam/libs/dialogs/dprogressdlg.h,
+	  trunk/extragear/graphics/digikam/libs/dialogs/imagedlgbase.cpp,
+	  trunk/extragear/graphics/digikam/libs/dimg/filters/dimgthreadedfilter.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/cameraitempropertiestab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/cameraitempropertiestab.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiesmetadatatab.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiestab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/navigatebarwidget.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/talbumlistview.cpp,
+	  trunk/extragear/graphics/digikam/libs/themeengine/themeengine.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/statusprogressbar.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imagewidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/listboxpreviewitem.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/metadatawidget.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  trunk/extragear/graphics/digikam/utilities/batch/batchsyncmetadata.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/albumselectdialog.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/camerainfodialog.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/iccsettingscontainer.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/tools/imageprint.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/cameraselection.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupcamera.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupcollections.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupicc.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupmetadata.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp:
+	  QString::null -> QString(), compiled and tested
+	  CCMAIL:caulier.gilles@gmail.com
+
+2007-02-21 06:25  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-02-20 21:31  mwiesweg
+
+	* trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+	  There is a blank before the " (", so it is not a single character
+	  (as opposed to the ")" which should be ')' according to Krazy
+	  tests)
+
+2007-02-20 21:26  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/metadatahub.cpp,
+	  trunk/extragear/graphics/digikam/digikam/metadatahub.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+	  Reset "changed" properties properly
+
+2007-02-20 20:54  mwiesweg
+
+	* trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp:
+	  Preload as well if slideshow is paused.
+	  Otherwise preloading is disabled when the slideshow
+	  is advanced by mouse clicks rather than using the timer.
+
+2007-02-20 20:51  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp: Also
+	  update the last visible item in AlbumIconView
+	  (Daniel, thanks for your very precise bug report)
+	  
+	  BUG: 141924
+
+2007-02-20 19:36  gkulzer
+
+	* trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+	  "(" -> '('
+
+2007-02-20 19:33  gkulzer
+
+	* trunk/extragear/graphics/digikam/libs/dcraw/dcrawbinary.cpp:
+	  isn't -> is not
+
+2007-02-20 18:39  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-02-20 17:24  fsalvi
+
+	* trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+	  Fixed typo
+
+2007-02-20 15:26  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-02-20 15:25  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.h:
+	  digikam from trunk : Native SlideShow tool : print long comment
+	  on the screen using multilines.
+	  BUG: 141961
+
+2007-02-20 11:46  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumfiletip.cpp:
+	  duplicate header
+
+2007-02-20 11:20  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumfiletip.cpp:
+	  optimize layout again
+
+2007-02-20 10:44  gkulzer
+
+	* trunk/extragear/graphics/digikam/libs/jpegutils/transupp.cpp:
+	  replace TRUE by true and FALSE by false
+
+2007-02-20 09:19  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.h:
+	  digiKam from trunk : Gphoto camera interface : fix condition to
+	  handle file already downloaded (is only used by Canon camera).
+	  
+	  Feedback is require. Thanks in advance
+	  
+	  CCBUGS: 139024
+
+2007-02-20 06:45  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-02-19 18:30  gkulzer
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp:
+	  typo 'back to album'
+
+2007-02-19 11:52  gkulzer
+
+	* trunk/extragear/graphics/digikam/ChangeLog: 0.9.1-rc1
+
+2007-02-19 11:09  gkulzer
+
+	* trunk/extragear/graphics/digikam/release_digikam.rb: 0.9.1-rc1
+
+2007-02-19 11:07  gkulzer
+
+	* trunk/extragear/graphics/digikam/PACKAGING,
+	  trunk/extragear/graphics/digikam/digikam.lsm: 0.9.1-rc1
+
+2007-02-19 11:04  gkulzer
+
+	* trunk/extragear/graphics/digikam/digikam/albumdb.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumdb.h: move email at
+	  Author to Copyright line
+	  http://www.englishbreakfastnetwork.org/krazy/reports/extragear/graphics/digikam/index.html
+
+
 v0.9.1-rc1 - 19-Feb-2007
 ----------------------------------------------------------------------------
 
