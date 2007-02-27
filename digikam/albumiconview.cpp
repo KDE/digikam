@@ -1178,26 +1178,32 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         {
             QPopupMenu popMenu(this);
 
-            bool itemsSelected = false;
-            for (IconItem *it = firstItem(); it; it = it->nextItem())
-                if (it->isSelected())
-                    itemsSelected = true;
-    
+            bool moreItemsSelected = false;
             bool itemDropped = false;
+
             AlbumIconItem *albumItem = findItem(event->pos());
-            if (albumItem) 
+            if (albumItem)
                 itemDropped = true;
 
-            popMenu.insertItem(SmallIcon("tag"), 
-                               i18n("Assign '%1' to &All Items").arg(talbum->tagPath().mid(1)),          11);
+            for (IconItem *it = firstItem(); it; it = it->nextItem())
+            {
+                if (it->isSelected() && it != albumItem)
+                {
+                    moreItemsSelected = true;
+                    break;
+                }
+            }
 
-            if (itemsSelected)
+            if (moreItemsSelected)
                 popMenu.insertItem(SmallIcon("tag"), 
                                    i18n("Assign '%1' to &Selected Items").arg(talbum->tagPath().mid(1)), 10);
-            
+
             if (itemDropped)
                 popMenu.insertItem(SmallIcon("tag"),
                                    i18n("Assign '%1' to &Dropped Item").arg(talbum->tagPath().mid(1)),   12);
+
+            popMenu.insertItem(SmallIcon("tag"), 
+                               i18n("Assign '%1' to &All Items").arg(talbum->tagPath().mid(1)),          11);
 
             popMenu.insertSeparator(-1);
             popMenu.insertItem(SmallIcon("cancel"), i18n("&Cancel"));
@@ -1257,29 +1263,30 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 
         QPopupMenu popMenu(this);
 
-        bool itemsSelected = false;
+        bool moreItemsSelected = false;
+        bool itemDropped = false;
+
+        AlbumIconItem *albumItem = findItem(event->pos());
+        if (albumItem)
+            itemDropped = true;
+
         for (IconItem *it = firstItem(); it; it = it->nextItem())
         {
-            if (it->isSelected())
+            if (it->isSelected() && it != albumItem)
             {
-                itemsSelected = true;
+                moreItemsSelected = true;
                 break;
             }
         }
 
-        bool itemDropped = false;
-        AlbumIconItem *albumItem = findItem(event->pos());
-        if (albumItem) 
-            itemDropped = true;
-
-        popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tags to &All Items"),          11);
-
-        if (itemsSelected)
+        if (moreItemsSelected)
             popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tags to &Selected Items"), 10);
 
         if (itemDropped)
             popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tags to &Dropped Item"),   12);
-    
+
+        popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tags to &All Items"),          11);
+
         popMenu.insertSeparator(-1);
         popMenu.insertItem(SmallIcon("cancel"), i18n("&Cancel"));
 
