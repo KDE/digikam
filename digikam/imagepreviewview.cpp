@@ -313,6 +313,10 @@ void ImagePreviewView::mousePressEvent(QMouseEvent* e)
         delete removeTagsMenu;
         delete ratingMenu;
     }
+    else if (e->button() == Qt::LeftButton)
+    {
+        emit signalBack2Album();
+    }
 }
 
 void ImagePreviewView::slotAssignTag(int tagID)
