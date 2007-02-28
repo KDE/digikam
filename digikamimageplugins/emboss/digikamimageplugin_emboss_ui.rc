@@ -1,0 +1,21 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui version="3" name="digikamimageplugin_emboss" >
+
+ <MenuBar>
+
+  <Menu name="Filters" >
+   <text>Filte&amp;rs</text>
+   <Action name="imageplugin_emboss" /> 
+  </Menu>
+
+ </MenuBar>
+ 
+ <ToolBar name="ToolBar" >
+  <text>Main Toolbar</text>
+ </ToolBar>
+ 
+ <ActionProperties>
+  <Action shortcut="" name="imageplugin_emboss" />
+ </ActionProperties>
+
+</kpartgui>

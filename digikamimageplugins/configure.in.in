@@ -1,0 +1,46 @@
+#MIN_CONFIG(3.1)
+CXXFLAGS="$CXXFLAGS $KDE_DEFAULT_CXXFLAGS"
+
+#------------------------------------------------------------------
+# Digikam headers detection
+#------------------------------------------------------------------
+
+# first test if we are in the toplevel directory has digikam
+
+AC_MSG_CHECKING([for digiKam in our sources])
+
+have_digikamheader=no
+if test -d $srcdir/digikam; then
+   AC_MSG_RESULT([found])
+   have_digikam_toplevel=yes
+   have_digikam=yes
+   have_digikamheader=yes
+   LIBDIGIKAM_CFLAGS='-I$(top_srcdir)/digikam/digikam -I$(top_srcdir)/digikam/utilities/imageeditor/editor -I$(top_srcdir)/digikam/utilities/imageeditor/canvas -I$(top_srcdir)/digikam/libs/guibuilder -I$(top_srcdir)/digikam/libs/curves -I$(top_srcdir)/digikam/libs/histogram -I$(top_srcdir)/digikam/libs/levels -I$(top_srcdir)/digikam/libs/whitebalance -I$(top_srcdir)/digikam/libs/filters -I$(top_srcdir)/digikam/libs/widgets/common -I$(top_srcdir)/digikam/libs/widgets/imageplugins -I$(top_srcdir)/digikam/libs/thumbbar -I$(top_srcdir)/digikam/libs/dimg -I$(top_srcdir)/digikam/libs/dimg/filters -I$(top_srcdir)/digikam/libs/dialogs -I$(top_srcdir)/digikam/libs/dmetadata'
+   LIBDIGIKAM_LIBS='$(top_builddir)/digikam/digikam/libdigikam.la'
+   LIBDIGIKAM_LIBS_DEP='$(LIBDIGIKAM_LIBS)'
+   AC_SUBST(LIBDIGIKAM_CFLAGS)
+   AC_SUBST(LIBDIGIKAM_LIBS)
+   AC_SUBST(LIBDIGIKAM_LIBS_DEP)
+else
+   AC_MSG_RESULT([not found])
+   have_digikam_toplevel=no
+   AC_MSG_CHECKING(if digiKam is installed)
+   KDE_CHECK_HEADER(digikam/dimg.h,  have_digikam=yes,  have_digikam=no)
+   if test "x$have_digikam" = "xno"; then
+      AC_MSG_WARN([Can't find digiKam 0.9.0 headers!]) 
+      DO_NOT_COMPILE="$DO_NOT_COMPILE digikamimageplugins"
+   else
+      have_digikamheader=yes
+      LIBDIGIKAM_CFLAGS=''
+      LIBDIGIKAM_LIBS='-ldigikam'
+      LIBDIGIKAM_LIBS_DEP='$(LIBDIGIKAM_LIBS)'
+      AC_SUBST(LIBDIGIKAM_CFLAGS)
+      AC_SUBST(LIBDIGIKAM_LIBS)
+      AC_SUBST(LIBDIGIKAM_LIBS_DEP)
+   fi
+fi   
+
+if test "x$have_digikam_toplevel" = "xyes"; then
+   AC_DEFINE(HAVE_DIGIKAM_TOPLEVEL, 1, [Using digiKam sources from toplevel])
+fi
+

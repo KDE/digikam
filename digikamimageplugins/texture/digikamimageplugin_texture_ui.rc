@@ -1,0 +1,21 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui version="2" name="digikamimageplugin_texture" >
+
+ <MenuBar>
+
+  <Menu name="Image" >
+   <text>&amp;Image</text>
+   <Action name="imageplugin_texture" />
+  </Menu>
+
+ </MenuBar>
+ 
+ <ToolBar name="ToolBar" >
+  <text>Main Toolbar</text>
+ </ToolBar>
+ 
+ <ActionProperties>
+  <Action shortcut="" name="imageplugin_texture" />
+ </ActionProperties>
+
+</kpartgui>

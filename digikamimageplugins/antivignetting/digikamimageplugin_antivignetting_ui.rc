@@ -1,0 +1,21 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui version="3" name="digikamimageplugin_antivignetting" >
+
+ <MenuBar>
+
+  <Menu name="Fix" >
+   <text>Fi&amp;x</text>
+   <Action name="imageplugin_antivignetting" /> 
+  </Menu>
+
+ </MenuBar>
+ 
+ <ToolBar name="ToolBar" >
+  <text>Main Toolbar</text>
+ </ToolBar>
+ 
+ <ActionProperties>
+  <Action name="imageplugin_antivignetting" />
+ </ActionProperties>
+
+</kpartgui>

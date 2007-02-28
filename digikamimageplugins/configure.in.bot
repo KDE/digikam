@@ -1,0 +1,16 @@
+echo ""
+echo "-- digiKamImagePlugins configure results --------"
+
+if test "x$have_digikamheader" != "xyes"; then
+  echo "-- digiKam found.................. NO"
+  echo ""
+  echo "digiKamImagePlugins needs digiKam."
+  echo "You need to install digiKam, e.g. from"
+  echo "http://www.digikam.org"
+  echo ""
+  all_tests=bad
+else
+  echo "-- digiKam found.................. YES"
+fi
+
+echo "-------------------------------------------------"

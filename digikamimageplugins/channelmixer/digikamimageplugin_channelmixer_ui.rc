@@ -1,0 +1,24 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui version="3" name="digikamimageplugin_channelmixer" >
+
+ <MenuBar>
+
+  <Menu name="Fix" >
+   <text>Fi&amp;x</text>
+   <Menu name="Colors">
+     <text>&amp;Colors</text>
+      <Action name="imageplugin_channelmixer" /> 
+   </Menu>
+  </Menu>
+
+ </MenuBar>
+ 
+ <ToolBar name="ToolBar" >
+  <text>Main Toolbar</text>
+ </ToolBar>
+ 
+ <ActionProperties>
+  <Action name="imageplugin_channelmixer" />
+ </ActionProperties>
+
+</kpartgui>
