@@ -1212,18 +1212,13 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             int id = popMenu.exec(QCursor::pos());
             switch(id) 
             {
-                case 10:    // Selected and Dropped Items
+                case 10:    // Selected Items
                 {
                     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                                i18n("Assign tag to pictures. Please wait..."));
 
-                    // get selected image infos
-                    QPtrList<ImageInfo> infos = selectedImageInfos(true);
-                    // add droppted item
-                    AlbumIconItem *dropItem = findItem(event->pos());
-                    if (dropItem)
-                        infos.append(dropItem->imageInfo());
-                    changeTagOnImageInfos(infos, QValueList<int>() << tagID, true, true);
+                    // always give a copy of the image infos (the "true"). Else there were crashes reported.
+                    changeTagOnImageInfos(selectedImageInfos(true), QValueList<int>() << tagID, true, true);
 
                     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
                     break;
@@ -1294,18 +1289,12 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         int id = popMenu.exec(QCursor::pos());
         switch(id) 
         {
-            case 10:    // Selected and Dropped Items
+            case 10:    // Selected Items
             {
                 emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                             i18n("Assign tags to pictures. Please wait..."));
 
-                // get selected image infos
-                QPtrList<ImageInfo> infos = selectedImageInfos(true);
-                // add droppted item
-                AlbumIconItem *dropItem = findItem(event->pos());
-                if (dropItem)
-                    infos.append(dropItem->imageInfo());
-                changeTagOnImageInfos(infos, tagIDs, true, true);
+                changeTagOnImageInfos(selectedImageInfos(true), tagIDs, true, true);
 
                 emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
                 break;
