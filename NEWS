@@ -1,5 +1,24 @@
 ----------------------------------------------------------------------------------------------------
-digiKam and DigikamImagePlugins 0.9.1-beta1 NEW FEATURES :
+digiKam and DigikamImagePlugins 0.9.1-rc2 2007-02-27
+
+NEW FEATURES :
+
+BUGS FIXES :
+
+142088: Build fails when libkexiv2 is in $PREFIX, but not in $KDEDIR or standard include directories
+142109: Turn under/over exposure display on/off by click on corresponding icons
+141663: Keep getting prompted to Apply Comments
+139024: camera GUI new items selection doesn't work
+139547: tag hierarchy automatic fill 
+141626:  Bugs in german translation 
+141786: confirmation dialog during rename to existing file does n... 
+141924: tags preview not updated in last image of album 
+141934: Incorrect capitalized string: "back to album" 
+141961: Long comments truncated in slideshow
+
+----------------------------------------------------------------------------------------------------
+digiKam and DigikamImagePlugins 0.9.1-beta1 2007-05-19
+NEW FEATURES :
 
 General       : New native JPEG2000 image loader using Jasper library witch 
 can support 
