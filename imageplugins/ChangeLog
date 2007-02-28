@@ -1,3 +1,43 @@
+v0.9.1-rc2  -  28-Feb-2007
+----------------------------------------------------------------------------
+
+2007-02-23 14:12  gkulzer
+
+	* trunk/extragear/graphics/digikamimageplugins/TODO: add
+	  improvements mentioned in ML and not yet in this list
+
+2007-02-23 03:04  gkulzer
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/antivignetting/antivignetting.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/blurfx/blurfx.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/common/cimgiface/CImg.h,
+	  trunk/extragear/graphics/digikamimageplugins/common/cimgiface/cimgiface.h,
+	  trunk/extragear/graphics/digikamimageplugins/distortionfx/distortionfx.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/filmgrain/filmgrain.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/hotpixelfixer.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/infrared/infrared.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/inserttext/fontchooserwidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/inserttext/inserttextwidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/lensdistortion.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/lensdistortion.h,
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/noisereduction.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/noisereduction.h,
+	  trunk/extragear/graphics/digikamimageplugins/perspective/perspectivewidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/raindrop/raindrop.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/superimposewidget.cpp:
+	  correct spelling errors according to
+	  http://www.englishbreakfastnetwork.org/krazy/reports/extragear/graphics/digikamimageplugins/index.html
+
+2007-02-22 09:44  ach
+
+	* trunk/extragear/graphics/digikamimageplugins/border/imageeffect_border.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/blackframelistview.cpp:
+	  digikamimageplugins: compile with gcc 3.3 return(QString()); ->
+	  return QString(); Thx, Dieter.
+	  
+	  CCMAIL: dieter.jurzitza@t-online.de
+
 v0.9.1-rc1  -  19-Feb-2007
 ----------------------------------------------------------------------------
 
