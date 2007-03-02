@@ -400,8 +400,11 @@ void SlideShow::updatePixmap()
 
             if (d->settings.printDate)
             {
-                str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
-                printInfoText(p, offset, str);
+                if (photoInfo.dateTime.isValid())
+                {
+                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
+                    printInfoText(p, offset, str);
+                }
             }
 
             // Display the image File Name.
