@@ -1,3 +1,96 @@
+v0.9.1 - 04-Mar-2007 Final
+----------------------------------------------------------------------------
+
+2007-03-02 09:08  gkulzer
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp:
+	  QString() -> QString:null because this one doesn't compile under
+	  gcc 3.3 and doesn't hurt more recent compilers
+
+2007-03-02 09:03  gkulzer
+
+	* trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp:
+	  Show dummy date if Create-date is invalid
+	  CCMAIL:caulier.gilles@gmail.com
+
+2007-03-02 02:43  gkulzer
+
+	* trunk/extragear/graphics/digikam/TODO: add QT4 migration web
+	  references
+
+2007-02-28 19:23  mwiesweg
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-02-28 15:53  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp: Do
+	  not include the "dropped-on" item in the list when "Selected
+	  items"
+	  is chosen and the dropped item is not selected
+	  
+	  CCBUG:140227
+
+2007-02-28 15:50  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp:
+	  Return back to album from image preview with a mouse click
+	  (patch from Gilles)
+
+2007-02-28 04:54  gkulzer
+
+	* trunk/extragear/graphics/digikam/NEWS,
+	  trunk/extragear/graphics/digikam/release_digikam_docs.rb:
+	  0.9.1-rc2
+
+2007-02-27 15:31  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp:
+	  AlbumIconView Tag-drop popup menu:
+	  Reorder menu entries
+	  1) Assign to selected
+	  2) Assign to item dropped on
+	  3) Assign to all
+	  Do not offer "Assign to selected" if the dropped-on item is the
+	  only selected item.
+	  
+	  CCBUG: 140227
+
+2007-02-27 15:14  mwiesweg
+
+	* trunk/extragear/graphics/digikam/utilities/batch/Makefile.am: Fix
+	  the last missing Makefile.am to contain exiv2 includes
+	  
+	  BUG: 142088
+
+2007-02-27 05:16  gkulzer
+
+	* trunk/extragear/graphics/digikam/ChangeLog: 0.9.1-rc2
+
+2007-02-27 05:04  gkulzer
+
+	* trunk/extragear/graphics/digikam/release_digikam.rb: 0.9.1-rc2
+
+2007-02-27 05:02  gkulzer
+
+	* trunk/extragear/graphics/digikam/digikam.lsm: 0.9.1-rc2
+
+2007-02-27 05:02  gkulzer
+
+	* trunk/extragear/graphics/digikam/digikam/version.h: 0.9.1-rc2
+
+2007-02-26 21:44  coolo
+
+	* trunk/extragear/graphics/digikam/showfoto/Makefile.am,
+	  trunk/extragear/graphics/digikam/showfoto/setup/Makefile.am:
+	  fixing some errors en passant
+
+2007-02-26 20:52  mwiesweg
+
+	* trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp:
+	  Missing changes for last commit:
+	  changed method names
+
 v0.9.1-rc2 - 27-Feb-2007
 ----------------------------------------------------------------------------
 2007-02-26 17:01  mwiesweg
