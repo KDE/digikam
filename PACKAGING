@@ -38,7 +38,10 @@ Note : svn2cl need xsltproc program. Please install it before. (check libxslt-pr
 
 6/ Copy last changes of fresh ChangeLog file to ChangeLog.old using a simple text editor. Place a release tag at the top of ChangeLog. Remove all 'scripty' entries in log.
 
-7/ Renamed ChangeLog.old to ChangeLog and commit it on svn.
+   Renamed ChangeLog.old to ChangeLog and commit it on svn.
+
+7/ Update NEWS file, summarize everything since last major release. Look into changelog and use BKO filter for bug summaries.
+   Commit to svn.
 
 8/ Run release_digikam.rb script and the release_digikam_docs.rb ($ ruby foo.rb)
 
