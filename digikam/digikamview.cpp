@@ -46,11 +46,14 @@
 #include <kstandarddirs.h>
 #include <kimageio.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rawfiles.h>
+
 // Local includes.
 
 #include "ddebug.h"
 #include "dmetadata.h"
-#include "rawfiles.h"
 #include "albummanager.h"
 #include "album.h"
 #include "albumwidgetstack.h"

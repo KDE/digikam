@@ -508,7 +508,7 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KURL& url)
     {
         // use raw settings optimized for speed
 
-        RawDecodingSettings rawDecodingSettings = RawDecodingSettings();
+        KDcrawIface::RawDecodingSettings rawDecodingSettings = KDcrawIface::RawDecodingSettings();
         rawDecodingSettings.optimizeTimeLoading();
         desc = LoadingDescription(desc.filePath, rawDecodingSettings);
     }

@@ -62,11 +62,14 @@
 #include <kio/thumbcreator.h>
 #include <kfilemetainfo.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rawfiles.h>
+#include <libkdcraw/kdcraw.h>
+
 // Local includes
 
 #include "dimg.h"
-#include "rawfiles.h"
-#include "dcrawiface.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
 #include "digikamthumbnail.h"
@@ -153,7 +156,7 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
             if ( !loadJPEG(img, url.path()) )
             {
                 // Try to load with dcraw : RAW files.
-                if (!DcrawIface::loadDcrawPreview(img, url.path()) )
+                if (!KDcrawIface::KDcraw::loadDcrawPreview(img, url.path()) )
                 {
                     // Try to load with DImg : TIFF, PNG, etc.
                     if (!loadDImg(img, url.path()) )
@@ -268,7 +271,7 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
         else if (ext == QString("TIFF") || ext == QString("TIF"))
             return (loadDImg(image, path));
         else if (rawFilesExt.upper().contains(ext))
-            return (DcrawIface::loadDcrawPreview(image, path));
+            return (KDcrawIface::KDcraw::loadDcrawPreview(image, path));
     }
 
     return false;

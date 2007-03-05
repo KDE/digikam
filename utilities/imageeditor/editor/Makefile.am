@@ -30,7 +30,7 @@ INCLUDES = -I$(top_srcdir)/digikam/digikam \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/tools \
 	   -I$(top_builddir)/digikam/libs/dialogs \
-	   $(all_includes) 
+	   $(LIBKDCRAW_CFLAGS) $(all_includes) 
 
 digikaminclude_HEADERS = imageiface.h 
 

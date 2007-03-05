@@ -3,9 +3,8 @@ METASOURCES = AUTO
 INCLUDES = -I$(top_srcdir)/digikam/libs/jpegutils \
 	   -I$(top_srcdir)/digikam/libs/dimg \
 	   -I$(top_srcdir)/digikam/libs/dmetadata \
-	   $(LIBKEXIV2_CFLAGS) \
-	   -I$(top_srcdir)/digikam/libs/dcraw \
 	   -I$(top_srcdir)/digikam/digikam \
+	   $(LIBKEXIV2_CFLAGS) $(LIBKDCRAW_CFLAGS) \
 	   $(all_includes)
 
 kde_module_LTLIBRARIES = kio_digikamthumbnail.la kio_digikamtags.la \

@@ -14,5 +14,5 @@ libdimgloaders_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) \
 INCLUDES = $(all_includes) -I$(top_srcdir)/digikam/libs/dimg \
 	                   -I$(top_srcdir)/digikam/libs/dmetadata \
 	                   -I$(top_srcdir)/digikam/libs/dcraw \
-	                   $(LIBKEXIV2_CFLAGS) \
+	                   $(LIBKEXIV2_CFLAGS) $(LIBKDCRAW_CFLAGS) \
 	                   -I$(top_srcdir)/digikam/digikam 

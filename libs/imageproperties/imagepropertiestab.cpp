@@ -36,11 +36,14 @@
 #include <ksqueezedtextlabel.h>
 #include <kseparator.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rawfiles.h>
+
 // Local includes.
 
 #include "ddebug.h"
 #include "dmetadata.h"
-#include "rawfiles.h"
 #include "navigatebarwidget.h"
 #include "imagepropertiestab.h"
 #include "imagepropertiestab.moc"

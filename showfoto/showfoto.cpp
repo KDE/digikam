@@ -71,14 +71,17 @@ extern "C"
 #include <kpopupmenu.h>
 #include <kprogress.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rawfiles.h>
+#include <libkdcraw/dcrawbinary.h>
+
 // Local includes.
 
 #include "ddebug.h"
 #include "dmetadata.h"
-#include "rawfiles.h"
 #include "canvas.h"
 #include "thumbbar.h"
-#include "dcrawbinary.h"
 #include "imagepropertiessidebar.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
@@ -174,7 +177,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     if(d->splash)
         d->splash->message(i18n("Checking dcraw version"), AlignLeft, white);
 
-    Digikam::DcrawBinary::instance()->checkSystem();
+    KDcrawIface::DcrawBinary::instance()->checkSystem();
 
     // -- Build the GUI -----------------------------------
 
@@ -334,7 +337,7 @@ void ShowFoto::show()
 
     // Report errors from dcraw detection.
 
-    Digikam::DcrawBinary::instance()->checkReport();  
+    KDcrawIface::DcrawBinary::instance()->checkReport();  
 }
 
 void ShowFoto::setupConnections()
@@ -518,7 +521,7 @@ void ShowFoto::slotOpenFile()
     QString allPictures = patternList[0];
     
     // Add RAW file format to All Pictures" type mime and remplace current.
-    if (Digikam::DcrawBinary::instance()->versionIsRight())
+    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
         allPictures.insert(allPictures.find("|"), QString(raw_file_extentions));
         patternList.remove(patternList[0]);
@@ -528,7 +531,7 @@ void ShowFoto::slotOpenFile()
     // Added RAW file formats supported by dcraw program like a type mime. 
     // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete 
     // or unavailable(dcraw_0)(see file #121242 in B.K.O).
-    if (Digikam::DcrawBinary::instance()->versionIsRight())
+    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
         patternList.append(i18n("\n%1|Camera RAW files").arg(QString(raw_file_extentions)));
     }

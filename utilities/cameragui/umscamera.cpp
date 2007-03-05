@@ -44,11 +44,14 @@ extern "C"
 #include <klocale.h>
 #include <kfilemetainfo.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/kdcraw.h>
+
 // Local includes.
 
 #include "ddebug.h"
 #include "dimg.h"
-#include "dcrawiface.h"
 #include "dmetadata.h"
 #include "umscamera.h"
 
@@ -163,7 +166,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     // RAW files : try to extract embedded thumbnail using dcraw
 
-    DcrawIface::loadDcrawPreview(thumbnail, QString(folder + QString("/") + itemName));
+    KDcrawIface::KDcraw::loadDcrawPreview(thumbnail, QString(folder + QString("/") + itemName));
     if (!thumbnail.isNull())
         return true;
 

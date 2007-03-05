@@ -25,7 +25,36 @@
  * 
  * ============================================================ */
 
-#include <digikam_export.h>
+#define MAX_IPC_SIZE (1024*32)
+
+// C Ansi includes.
+
+extern "C" 
+{
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/time.h>
+#include <utime.h>
+}
+
+// C++ includes.
+
+#include <cstdlib>
+#include <cstdio>
+#include <ctime>
+#include <cerrno>
+
+// Qt includes.
+
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qdatastream.h>
+#include <qregexp.h>
+#include <qdir.h>
+
+// KDE includes.
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -38,33 +67,16 @@
 #include <klargefile.h>
 #include <kdeversion.h>
 
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qdatastream.h>
-#include <qregexp.h>
-#include <qdir.h>
+// LibKDcraw includes.
 
-extern "C" 
-{
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/time.h>
-#include <time.h>
-#include <utime.h>
-}
+#include <libkdcraw/rawfiles.h>
 
-#include <dmetadata.h>
-#include <rawfiles.h>
+// Local includes.
 
+#include "dmetadata.h"
 #include "sqlitedb.h"
+#include "digikam_export.h"
 #include "digikamalbums.h"
-
-#define MAX_IPC_SIZE (1024*32)
 
 kio_digikamalbums::kio_digikamalbums(const QCString &pool_socket,
                                      const QCString &app_socket)

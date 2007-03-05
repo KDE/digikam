@@ -91,6 +91,10 @@ extern "C"
 #include <libkipi/pluginloader.h>
 #include <libkipi/plugin.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/dcrawbinary.h>
+
 // Local includes.
 
 #include "ddebug.h"
@@ -112,7 +116,6 @@ extern "C"
 #include "dmetadata.h"
 #include "albumdb.h"
 #include "imageattributeswatch.h"
-#include "dcrawbinary.h"
 #include "deletedialog.h"
 #include "albumiconitem.h"
 #include "albumicongroupitem.h"
@@ -929,7 +932,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     QString imagefilter = settings->getImageFileFilter().lower() +
                           settings->getImageFileFilter().upper();
 
-    if (DcrawBinary::instance()->versionIsRight())
+    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
         // add raw files only if dcraw is available
         imagefilter += settings->getRawFileFilter().lower() +

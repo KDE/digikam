@@ -45,7 +45,7 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/histogram \
 	       -I$(top_srcdir)/digikam/libs/threadimageio \
 	       -I$(top_srcdir)/digikam/utilities/cameragui \
 	       -I$(top_srcdir)/digikam/utilities/batch \
-	       $(LIBKEXIV2_CFLAGS) \
 	       -I$(top_srcdir)/digikam/digikam \
+	       $(LIBKEXIV2_CFLAGS) $(LIBKDCRAW_CFLAGS) \
 	       $(all_includes)
 

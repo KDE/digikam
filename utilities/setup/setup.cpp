@@ -170,7 +170,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->iofilesPage = new SetupIOFiles(d->page_iofiles);
 
     d->page_dcraw = addPage(i18n("RAW decoding"), i18n("RAW Files Decoding Settings"),
-                              BarIcon("dcraw", KIcon::SizeMedium));
+                              BarIcon("kdcraw", KIcon::SizeMedium));
     d->dcrawPage = new SetupDcraw(d->page_dcraw);
 
     d->page_icc = addPage(i18n("Color Management"), i18n("Image Editor Color Management"),

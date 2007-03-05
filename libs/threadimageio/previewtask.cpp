@@ -26,11 +26,14 @@
 #include <qvariant.h>
 #include <qwmatrix.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/kdcraw.h>
+
 // Local includes
 
 #include "ddebug.h"
 #include "dmetadata.h"
-#include "dcrawiface.h"
 #include "jpegutils.h"
 #include "previewloadthread.h"
 #include "previewtask.h"
@@ -134,7 +137,7 @@ void PreviewLoadingTask::execute()
 
     // -- Get the image preview --------------------------------
     // In first, we trying to load with dcraw : RAW files.
-    if ( !DcrawIface::loadDcrawPreview(qimage, m_loadingDescription.filePath) )
+    if ( !KDcrawIface::KDcraw::loadDcrawPreview(qimage, m_loadingDescription.filePath) )
     {
         // Try to extract Exif/Iptc preview.
         if ( !loadImagePreview(qimage, m_loadingDescription.filePath) )

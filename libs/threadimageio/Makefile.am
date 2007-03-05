@@ -17,8 +17,7 @@ libthreadimageio_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 INCLUDES = -I$(top_srcdir)/digikam/libs/dimg \
 	       -I$(top_srcdir)/digikam/libs/dimg/loaders \
 	       -I$(top_srcdir)/digikam/libs/dmetadata \
-	       -I$(top_srcdir)/digikam/libs/dcraw \
 	       $(LIBKEXIV2_CFLAGS) \
 	       -I$(top_srcdir)/digikam/libs/jpegutils \
 	       -I$(top_srcdir)/digikam/digikam \
-	       $(all_includes)
+	       $(LIBKDCRAW_CFLAGS) $(all_includes)

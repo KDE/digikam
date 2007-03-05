@@ -20,7 +20,7 @@ INCLUDES = -I$(top_srcdir)/digikam/digikam \
 	   -I$(top_srcdir)/digikam/libs/histogram \
 	   -I$(top_srcdir)/digikam/libs/threadimageio \
 	   -I$(top_srcdir)/digikam/utilities/splashscreen \
-	   $(all_includes) 
+	   $(LIBKDCRAW_CFLAGS) $(all_includes) 
 
 digikaminclude_HEADERS = imageplugin.h 
 

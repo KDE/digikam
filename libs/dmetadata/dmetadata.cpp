@@ -19,11 +19,15 @@
  * 
  * ============================================================ */
 
+// LibKDcraw includes.
+
+#include <libkdcraw/dcrawinfocontainer.h>
+#include <libkdcraw/kdcraw.h>
+
 // Local includes.
 
 #include "version.h"
 #include "ddebug.h"
-#include "dcrawiface.h"
 #include "dmetadata.h"
 
 namespace Digikam
@@ -60,8 +64,8 @@ bool DMetadata::load(const QString& filePath)
 
 bool DMetadata::loadUsingDcraw(const QString& filePath)
 {
-    DcrawInfoContainer identify;
-    if (DcrawIface::rawFileIdentify(identify, filePath))
+    KDcrawIface::DcrawInfoContainer identify;
+    if (KDcrawIface::KDcraw::rawFileIdentify(identify, filePath))
     {
         long int num=1, den=1;
 

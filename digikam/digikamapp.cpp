@@ -55,6 +55,10 @@
 
 #include <libkipi/plugin.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/dcrawbinary.h>
+
 // Local includes.
 
 #include "ddebug.h"
@@ -75,7 +79,6 @@
 #include "scanlib.h"
 #include "loadingcacheinterface.h"
 #include "imageattributeswatch.h"
-#include "dcrawbinary.h"
 #include "batchthumbsgenerator.h"
 #include "batchalbumssyncmetadata.h"
 #include "dcopiface.h"
@@ -143,7 +146,7 @@ DigikamApp::DigikamApp()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Checking dcraw version"), AlignLeft, white);
 
-    DcrawBinary::instance()->checkSystem();
+    KDcrawIface::DcrawBinary::instance()->checkSystem();
 
     // Actual file scanning is done in main() - is this necessary here?
     d->albumManager->setLibraryPath(d->albumSettings->getAlbumLibraryPath());
@@ -190,7 +193,7 @@ DigikamApp::~DigikamApp()
 
     ImageAttributesWatch::cleanUp();
     LoadingCacheInterface::cleanUp();
-    DcrawBinary::cleanUp();
+    KDcrawIface::DcrawBinary::cleanUp();
     AlbumThumbnailLoader::cleanUp();
 
     m_instance = 0;
@@ -245,7 +248,7 @@ void DigikamApp::show()
 
     // Report errors from dcraw detection.
 
-    DcrawBinary::instance()->checkReport();  
+    KDcrawIface::DcrawBinary::instance()->checkReport();  
 }
 
 const QPtrList<KAction>& DigikamApp::menuImageActions()

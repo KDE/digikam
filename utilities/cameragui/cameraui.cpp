@@ -81,10 +81,13 @@ extern "C"
 #include <klineeditdlg.h>
 #endif
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rawfiles.h>
+
 // Local includes.
 
 #include "ddebug.h"
-#include "rawfiles.h"
 #include "thumbnailsize.h"
 #include "kdatetimeedit.h"
 #include "sidebar.h"

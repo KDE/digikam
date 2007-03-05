@@ -238,6 +238,34 @@ if test "x$have_libkexiv2" != "xyes"; then
    DO_NOT_COMPILE="$DO_NOT_COMPILE digikam digikamimageplugins"
 fi
 
+# --------------------------------------------------------------------
+#
+# Check for libkdcraw
+#
+# --------------------------------------------------------------------
+
+if test "$PKGCONFIGFOUND" = "yes" ; then
+   # check for libkdcraw
+   have_libkdcraw=no
+
+   KDE_PKG_CHECK_MODULES(LIBKDCRAW, libkdcraw >= 0.1,
+                         have_libkdcraw=yes, have_libkdcraw=no)
+
+   if test "x$have_libkdcraw" = "xno"; then
+       LIBKDCRAW_CFLAGS=""
+       LIBKDCRAW_LIBS=""
+       AC_MSG_RESULT([not found])
+   else
+       AC_MSG_RESULT([found])
+   fi
+else
+   LIBKDCRAW_CFLAGS=""
+   LIBKDCRAW_LIBS=""
+   AC_MSG_RESULT([not found])
+fi 
+AC_SUBST(LIBKDCRAW_CFLAGS)
+AC_SUBST(LIBKDCRAW_LIBS)
+
 #------------------------------------------------------------------
 #
 # Check for libtiff

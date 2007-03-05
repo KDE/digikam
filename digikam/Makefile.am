@@ -23,7 +23,7 @@ INCLUDES = -I$(top_srcdir)/digikam/sqlite \
 	   -I$(top_srcdir)/digikam/utilities/slideshow \
 	   -I$(top_srcdir)/digikam/utilities/batch \
 	   $(LIBKEXIV2_CFLAGS) \
-	   $(LIBKIPI_CFLAGS) $(GPHOTO_CFLAGS) $(all_includes) 
+	   $(LIBKIPI_CFLAGS) $(LIBKDCRAW_CFLAGS) $(GPHOTO_CFLAGS) $(all_includes) 
 
 
 # -- shared digiKam library rules -----------------------------------------------

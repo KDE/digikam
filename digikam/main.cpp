@@ -48,10 +48,15 @@
 
 #include <libkipi/version.h>
 
-// libkexiv2 includes.
+// Libkexiv2 includes.
 
 #include <libkexiv2/version.h>
 #include <libkexiv2/kexiv2.h>
+
+// Libkdcraw includes.
+
+#include <libkdcraw/version.h>
+#include <libkdcraw/dcrawbinary.h>
 
 // C Ansi includes.
 
@@ -78,6 +83,8 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
+    QString DcrawVer    = KDcrawIface::DcrawBinary::internalVersion();
+
     QString Exiv2Ver    = KExiv2Iface::KExiv2::Exiv2Version();
 
     QString Gphoto2Ver  = QString(gp_library_version(GP_VERSION_SHORT)[0]);
@@ -87,6 +94,10 @@ int main(int argc, char *argv[])
                           QString(I18N_NOOP("Using KExiv2 library version %1")).arg(kexiv2_version) +
                           QString("\n") +                           
                           QString(I18N_NOOP("Using Exiv2 library version %1")).arg(Exiv2Ver) +
+                          QString("\n") +                           
+                          QString(I18N_NOOP("Using KDcraw library version %1")).arg(kdcraw_version) +
+                          QString("\n") +                           
+                          QString(I18N_NOOP("Using Dcraw program version %1")).arg(DcrawVer) +
                           QString("\n") +                           
                           QString(I18N_NOOP("Using PNG library version %1")).arg(PNG_LIBPNG_VER_STRING) +
                           QString("\n") + 

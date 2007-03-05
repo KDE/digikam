@@ -30,10 +30,13 @@
 #include <klocale.h>
 #include <kapplication.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rawfiles.h>
+
 // Local includes.
 
 #include "thumbnailsize.h"
-#include "rawfiles.h"
 #include "albumsettings.h"
 
 namespace Digikam

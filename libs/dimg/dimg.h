@@ -33,10 +33,13 @@
 #include <qpixmap.h>
 #include <qvariant.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rawdecodingsettings.h>
+
 // Local includes.
 
 #include "digikam_export.h"
-#include "rawdecodingsettings.h"
 #include "dcolor.h"
 #include "dcolorcomposer.h"
 
@@ -95,7 +98,7 @@ public:
 
     /** Load image */
     DImg(const QString& filePath, DImgLoaderObserver *observer = 0,
-         RawDecodingSettings rawDecodingSettings=RawDecodingSettings());
+         KDcrawIface::RawDecodingSettings rawDecodingSettings=KDcrawIface::RawDecodingSettings());
 
     /** Copy image: Creates a shallow copy that refers to the same shared data.
         The two images will be equal. Call detach() or copy() to create deep copies.
@@ -162,7 +165,7 @@ public:
 
 
     bool        load(const QString& filePath, DImgLoaderObserver *observer = 0,
-                     RawDecodingSettings rawDecodingSettings=RawDecodingSettings());
+                     KDcrawIface::RawDecodingSettings rawDecodingSettings=KDcrawIface::RawDecodingSettings());
 
     bool        save(const QString& filePath, const QString& format, DImgLoaderObserver *observer = 0);
 

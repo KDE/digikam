@@ -2,7 +2,7 @@ METASOURCES = AUTO
 
 INCLUDES = -I$(top_srcdir)/digikam/utilities/setup \
 	   -I$(top_srcdir)/digikam/digikam \
-	   $(all_includes)
+	   $(LIBKDCRAW_CFLAGS) $(all_includes)
 
 noinst_LTLIBRARIES = libsetup.la
 

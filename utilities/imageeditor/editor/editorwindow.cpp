@@ -771,21 +771,20 @@ void EditorWindow::applyStandardSettings()
     // else, sRGB color workspace will be used.
 
     if (d->ICCSettings->enableCMSetting) 
-        m_IOFileSettings->rawDecodingSettings.outputColorSpace = RawDecodingSettings::RAWCOLOR;
+        m_IOFileSettings->rawDecodingSettings.outputColorSpace = KDcrawIface::RawDecodingSettings::RAWCOLOR;
     else
-        m_IOFileSettings->rawDecodingSettings.outputColorSpace = RawDecodingSettings::SRGB;
+        m_IOFileSettings->rawDecodingSettings.outputColorSpace = KDcrawIface::RawDecodingSettings::SRGB;
 
     m_IOFileSettings->rawDecodingSettings.sixteenBitsImage        = config->readBoolEntry("SixteenBitsImage", false);
     m_IOFileSettings->rawDecodingSettings.automaticColorBalance   = config->readBoolEntry("AutomaticColorBalance", true);
     m_IOFileSettings->rawDecodingSettings.cameraColorBalance      = config->readBoolEntry("CameraColorBalance", true);
     m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors   = config->readBoolEntry("RGBInterpolate4Colors", false);
-    m_IOFileSettings->rawDecodingSettings.SuperCCDsecondarySensor = config->readBoolEntry("SuperCCDsecondarySensor", false);
+    m_IOFileSettings->rawDecodingSettings.DontStretchPixels = config->readBoolEntry("DontStretchPixels", false);
     m_IOFileSettings->rawDecodingSettings.enableNoiseReduction    = config->readBoolEntry("EnableNoiseReduction", false);
     m_IOFileSettings->rawDecodingSettings.unclipColors            = config->readNumEntry("UnclipColors", 0);
-    m_IOFileSettings->rawDecodingSettings.RAWQuality              = (RawDecodingSettings::DecodingQuality)config->readNumEntry("RAWQuality",
-                                                                    RawDecodingSettings::BILINEAR);
-    m_IOFileSettings->rawDecodingSettings.NRSigmaDomain           = config->readDoubleNumEntry("NRSigmaDomain", 2.0);
-    m_IOFileSettings->rawDecodingSettings.NRSigmaRange            = config->readDoubleNumEntry("NRSigmaRange", 4.0);
+    m_IOFileSettings->rawDecodingSettings.RAWQuality              = (KDcrawIface::RawDecodingSettings::DecodingQuality)config->readNumEntry("RAWQuality",
+                                                                    KDcrawIface::RawDecodingSettings::BILINEAR);
+    m_IOFileSettings->rawDecodingSettings.NRThreshold             = config->readNumEntry("NRThreshold", 100);
     m_IOFileSettings->rawDecodingSettings.brightness              = config->readDoubleNumEntry("RAWBrightness", 1.0);
 
     // -- GUI Settings -------------------------------------------------------

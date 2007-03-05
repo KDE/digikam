@@ -178,7 +178,7 @@ SetupMime::SetupMime(QWidget* parent )
     QGridLayout* grid4          = new QGridLayout(rawFileFilterBox->layout(), 1, 1, KDialog::spacingHint());
 
     QLabel *logoLabel4 = new QLabel(rawFileFilterBox);
-    logoLabel4->setPixmap(DesktopIcon("dcraw"));
+    logoLabel4->setPixmap(DesktopIcon("kdcraw"));
 
     QLabel *rawFileFilterLabel = new QLabel(rawFileFilterBox);
     rawFileFilterLabel->setText(i18n("Show only &RAW files with extensions:"));

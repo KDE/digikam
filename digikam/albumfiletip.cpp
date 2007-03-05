@@ -47,9 +47,12 @@
 #include <kglobal.h>
 #include <kdeversion.h>
 
+// LibKDcraw includes. 
+ 
+#include <libkdcraw/rawfiles.h> 
+ 
 // Local includes.
 
-#include "rawfiles.h"
 #include "ddebug.h"
 #include "dmetadata.h"
 #include "albumiconview.h"

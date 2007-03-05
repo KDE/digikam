@@ -38,10 +38,13 @@ extern "C"
 #include <qfileinfo.h>
 #include <qmap.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/rawfiles.h>
+#include <libkdcraw/kdcraw.h>
+
 // Local includes.
 
-#include "rawfiles.h"
-#include "dcrawiface.h"
 #include "pngloader.h"
 #include "jpegloader.h"
 #include "tiffloader.h"
@@ -68,7 +71,7 @@ DImg::DImg()
 }
 
 DImg::DImg(const QString& filePath, DImgLoaderObserver *observer,
-           RawDecodingSettings rawDecodingSettings)
+           KDcrawIface::RawDecodingSettings rawDecodingSettings)
     : m_priv(new DImgPrivate)
 {
     load(filePath, observer, rawDecodingSettings);
@@ -278,7 +281,7 @@ void DImg::setImageData(bool null, uint width, uint height, bool sixteenBit, boo
 
 
 bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
-                RawDecodingSettings rawDecodingSettings)
+                KDcrawIface::RawDecodingSettings rawDecodingSettings)
 {
     FORMAT format = fileFormat(filePath);
 
@@ -494,8 +497,8 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     fclose(f);
 
-    DcrawInfoContainer dcrawIdentify;
-    DcrawIface::rawFileIdentify(dcrawIdentify, filePath);
+    KDcrawIface::DcrawInfoContainer dcrawIdentify;
+    KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, filePath);
     uchar jpegID[2]    = { 0xFF, 0xD8 };
     uchar tiffBigID[2] = { 0x4D, 0x4D };
     uchar tiffLilID[2] = { 0x49, 0x49 };

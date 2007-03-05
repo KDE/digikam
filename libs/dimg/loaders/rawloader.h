@@ -5,7 +5,7 @@
  * Description : A digital camera RAW files loader for DImg 
  *               framework using an external dcraw instance.
  * 
- * Copyright 2005-2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2005-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,87 +23,53 @@
 #ifndef RAWLOADER_H
 #define RAWLOADER_H
 
-// Qt includes
+// LibKDcraw includes.
 
-#include <qmutex.h>
-#include <qobject.h>
-#include <qwaitcondition.h>
+#include <libkdcraw/kdcraw.h>
+#include <libkdcraw/rawdecodingsettings.h>
 
 // Local includes.
 
 #include "dimgloader.h"
-#include "rawdecodingsettings.h"
 #include "digikam_export.h"
-
-class QCustomEvent;
-class QTimer;
-
-class KProcess;
 
 namespace Digikam
 {
 class DImg;
 
-class DIGIKAM_EXPORT RAWLoader : public QObject, public DImgLoader
+class DIGIKAM_EXPORT RAWLoader : public KDcrawIface::KDcraw, public DImgLoader
 {
-
     Q_OBJECT
 
 public:
 
-    RAWLoader(DImg* image, RawDecodingSettings rawDecodingSettings=RawDecodingSettings());
+    RAWLoader(DImg* image, KDcrawIface::RawDecodingSettings rawDecodingSettings=KDcrawIface::RawDecodingSettings());
 
     bool load(const QString& filePath, DImgLoaderObserver *observer=0);
-    bool save(const QString& filePath, DImgLoaderObserver *observer=0);
 
-    virtual bool hasAlpha()   const { return false; };
-    virtual bool isReadOnly() const { return true;  };
-    virtual bool sixteenBit() const;
+    //RAW files are always Read only.
+    bool save(const QString& /*filePath*/, DImgLoaderObserver */*observer=0*/) { return false; };
+
+    bool hasAlpha()   const { return false;                                  };
+    bool isReadOnly() const { return true;                                   };
+    bool sixteenBit() const { return m_rawDecodingSettings.sixteenBitsImage; };
 
 private:
 
     // Methods to load RAW image using external dcraw instance.
 
-    bool loadFromDcraw(const QString& filePath, DImgLoaderObserver *observer=0);
+    bool loadedFromDcraw(QByteArray data, int width, int height, int rgbmax,
+                         DImgLoaderObserver *observer);
 
-    virtual void customEvent(QCustomEvent *);
-    void startProcess();
+    bool checkToCancelWaitingData();
+    bool checkToCancelRecievingData();
 
-private slots:
-
-    void slotProcessExited(KProcess *);
-    void slotReceivedStdout(KProcess *, char *buffer, int buflen);
-    void slotReceivedStderr(KProcess *, char *buffer, int buflen);
-    void slotContinueQuery();
+    void setWaitingDataProgress(double value);
+    void setRecievingDataProgress(double value);
 
 private:
 
-    bool                m_sixteenBit;
-    bool                m_hasAlpha;
-    bool                m_running;
-    bool                m_normalExit;
-
-    uchar              *m_data;
-    
-    int                 m_dataPos;
-    int                 m_width;
-    int                 m_height;
-    int                 m_rgbmax;
-
-    QString             m_filePath;
-
-    QMutex              m_mutex;
-    
-    QWaitCondition      m_condVar;
-    
-    QTimer             *m_queryTimer;
-
-    KProcess           *m_process;
-    
     DImgLoaderObserver *m_observer;
-
-    RawDecodingSettings m_rawDecodingSettings;
-
 };
 
 }  // NameSpace Digikam

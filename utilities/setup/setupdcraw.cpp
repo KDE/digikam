@@ -39,9 +39,12 @@
 #include <kconfig.h>
 #include <kapplication.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/dcrawsettingswidget.h>
+
 // Local includes.
 
-#include "dcrawsettingswidget.h"
 #include "setupdcraw.h"
 #include "setupdcraw.moc"
 
@@ -58,15 +61,15 @@ public:
         dcrawSettings = 0;
     }
 
-    DcrawSettingsWidget *dcrawSettings;
+    KDcrawIface::DcrawSettingsWidget *dcrawSettings;
 };
 
 SetupDcraw::SetupDcraw(QWidget* parent )
           : QWidget(parent)
 {
     d = new SetupDcrawPriv;
-    QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
-    d->dcrawSettings    = new DcrawSettingsWidget(parent);
+    QVBoxLayout *layout = new QVBoxLayout(parent, 0, KDialog::spacingHint());
+    d->dcrawSettings    = new KDcrawIface::DcrawSettingsWidget(parent, true, false);
     layout->addWidget(d->dcrawSettings);
     layout->addStretch();
 
@@ -86,10 +89,9 @@ void SetupDcraw::applySettings()
     config->writeEntry("CameraColorBalance", d->dcrawSettings->useCameraWB());
     config->writeEntry("AutomaticColorBalance", d->dcrawSettings->useAutoColorBalance());
     config->writeEntry("RGBInterpolate4Colors", d->dcrawSettings->useFourColor());
-    config->writeEntry("SuperCCDsecondarySensor", d->dcrawSettings->useSecondarySensor());
+    config->writeEntry("DontStretchPixels", d->dcrawSettings->useDontStretchPixels());
     config->writeEntry("EnableNoiseReduction", d->dcrawSettings->useNoiseReduction());
-    config->writeEntry("NRSigmaDomain", d->dcrawSettings->sigmaDomain());
-    config->writeEntry("NRSigmaRange", d->dcrawSettings->sigmaRange());
+    config->writeEntry("NRThreshold", d->dcrawSettings->NRThreshold());
     config->writeEntry("UnclipColors", d->dcrawSettings->unclipColor());
     config->writeEntry("RAWBrightness", d->dcrawSettings->brightness());
     config->writeEntry("RAWQuality", d->dcrawSettings->quality());
@@ -102,15 +104,15 @@ void SetupDcraw::readSettings()
     config->setGroup("ImageViewer Settings");
     d->dcrawSettings->setSixteenBits(config->readBoolEntry("SixteenBitsImage", false));
     d->dcrawSettings->setNoiseReduction(config->readBoolEntry("EnableNoiseReduction", false));
-    d->dcrawSettings->setSigmaDomain(config->readDoubleNumEntry("NRSigmaDomain", 2.0));
-    d->dcrawSettings->setSigmaRange(config->readDoubleNumEntry("NRSigmaRange", 4.0));
-    d->dcrawSettings->setSecondarySensor(config->readBoolEntry("SuperCCDsecondarySensor", false));
+    d->dcrawSettings->setNRThreshold(config->readNumEntry("NRThreshold", 100));
+    d->dcrawSettings->setDontStretchPixels(config->readBoolEntry("DontStretchPixels", false));
     d->dcrawSettings->setUnclipColor(config->readNumEntry("UnclipColors", 0));
     d->dcrawSettings->setCameraWB(config->readBoolEntry("CameraColorBalance", true));
     d->dcrawSettings->setAutoColorBalance(config->readBoolEntry("AutomaticColorBalance", true));
     d->dcrawSettings->setFourColor(config->readBoolEntry("RGBInterpolate4Colors", false));
-    d->dcrawSettings->setQuality((RawDecodingSettings::DecodingQuality)config->readNumEntry("RAWQuality",
-                                  RawDecodingSettings::BILINEAR));
+    d->dcrawSettings->setQuality((KDcrawIface::RawDecodingSettings::DecodingQuality)
+                                  config->readNumEntry("RAWQuality",
+                                  KDcrawIface::RawDecodingSettings::BILINEAR));
     d->dcrawSettings->setBrightness(config->readDoubleNumEntry("RAWBrightness", 1.0));
 }
 

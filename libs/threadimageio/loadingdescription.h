@@ -24,7 +24,6 @@
 // Digikam includes.
 
 #include "dimg.h"
-#include "rawdecodingsettings.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -60,14 +59,14 @@ public:
     LoadingDescription(const QString &filePath)
         : filePath(filePath)
         {
-            rawDecodingSettings = RawDecodingSettings();
+            rawDecodingSettings = KDcrawIface::RawDecodingSettings();
         };
 
     /*
         For raw files:
         Stores filePath and RawDecodingSettings
     */
-    LoadingDescription(const QString &filePath, RawDecodingSettings settings)
+    LoadingDescription(const QString &filePath, KDcrawIface::RawDecodingSettings settings)
         : filePath(filePath), rawDecodingSettings(settings)
         {};
 
@@ -82,9 +81,9 @@ public:
             previewParameters.exifRotate = exifRotate;
         };
 
-    QString             filePath;
-    RawDecodingSettings rawDecodingSettings;
-    PreviewParameters   previewParameters;
+    QString                          filePath;
+    KDcrawIface::RawDecodingSettings rawDecodingSettings;
+    PreviewParameters                previewParameters;
 
     /*
         Return the cache key this description shall be stored as
