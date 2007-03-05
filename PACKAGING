@@ -20,7 +20,8 @@ Note : docs must be set to 'no' because the documentation must be packaged in a 
 
 4/ Backup old ChangeLog file to ChangeLog.old.
 
-5a/ Create a fresh ChangeLog file using svn2cl script. Just run it from main digiKam root directory. Please check if ChangeLog file is updated properly.
+5a/ Create a fresh ChangeLog file using svn2cl script. Just run it from main digiKam root directory. 
+    Please check if ChangeLog file is updated properly.
 
 svn2cl can be dowloaded at this url: http://ch.tudelft.nl/~arthur/svn2cl/
 Just copying this tarball content on digikam root directory to use it.
@@ -36,29 +37,32 @@ Note : svn2cl need xsltproc program. Please install it before. (check libxslt-pr
 	* commit the new changelog
         * skip item 6 and 7 below
 
-6/ Copy last changes of fresh ChangeLog file to ChangeLog.old using a simple text editor. Place a release tag at the top of ChangeLog. Remove all 'scripty' entries in log.
+6/ Copy last changes of fresh ChangeLog file to ChangeLog.old using a simple text editor. 
+   Place a release tag at the top of ChangeLog. Remove all 'scripty' entries in log.
 
-   Renamed ChangeLog.old to ChangeLog and commit it on svn.
+   Rename ChangeLog.old to ChangeLog and commit it on svn.
 
-7/ Update NEWS file, summarize everything since last major release. Look into changelog and use BKO filter for bug summaries.
+7/ Update NEWS file. If Changelog is a dry historical record of development, 
+   NEWS should focus on the improvements and changes, summarize everything since 
+   last major release. Look into ML, changelog and use BKO filter for bug summaries.
    Commit to svn.
 
 8/ Run release_digikam.rb script and the release_digikam_docs.rb ($ ruby foo.rb)
 
 9/ When tarball is created, decompress it in a temp folder and try to compile it to prevent any problems.
 
-10/ Upload tarball to http://digikam3rdparty.free.fr (address to indicate in mail) area via ftp and post a message on digikam-devel@kde.org mailing list to have a feedback from packagers before posting an offical release annoucement.
+10/ Upload tarball to http://digikam3rdparty.free.fr (address to indicate in mail) 
+    area via ftp and post a message on digikam-devel@kde.org mailing list to have a 
+    feedback from packagers before posting an offical release annoucement.
 
-11/ When official tarball is ready to post, don't forget to copy current trunk svn branch to tags branch (http://websvn.kde.org/tags/digikam/). See TAGGING below.
-
+11/ When official tarball is ready to post, don't forget to copy current trunk svn branch to the tags branch
+    (http://websvn.kde.org/tags/digikam/). See TAGGING below.
 
 12/ Upload tarball to sourceforge.net area using this url (must be admin on SF-digikam):
 
-ftp://upload.sourceforge.net/incoming
-
-...and admin file releases on sourceforge.net project page using this url:
-
-https://sourceforge.net/project/admin/editpackages.php?group_id=42641
+	ftp://upload.sourceforge.net/incoming
+	...and admin file releases on sourceforge.net project page using this url:
+    	https://sourceforge.net/project/admin/editpackages.php?group_id=42641
 
 13/ Perform an official release announcement to these ML:
 
@@ -97,28 +101,30 @@ If anyone knows what the purpose of this tagging is, please put it here ;-)
 Branching is done, so translators can work in two seperate areas and we can develop unstable and a next stable release.
 To set it up, you need to do following. Remember it will take you two evenings to succeed, but you need to finish the first part completely, because automated kde scripts will ruin your work!
 
+14/
 - go to /branches/stable/extragear/graphics. 
 - svn delete digikam and digikamimageplugins. 
 - svn cp http://anonsvn.kde.org/home/kde/extragear/graphics/digikam digikam  
-and the same for the plugins.
-more elegant: a direct copy on the server:
-$ svn delete http://anonsvn.kde.org/home/kde/branches/stable/extragear/graphics/digikam
+  and the same for the plugins.
 
+more elegant: a direct copy on the server:
+$ svn delete svn+ssh://{svn-user}@svn.kde.org/home/kde/branches/stable/extragear/graphics/digikam
 $ svn copy -r{last-used-rev_number} \
     http://anonsvn.kde.org/home/kde/trunk/extragear/graphics/digikam \
     http://anonsvn.kde.org/home/kde/branches/stable/extragear/graphics/digikam
-same with plugins
+ same with plugins
 
 - go to /branches/stable/extragear/graphics/doc
 - svn delete digikam and digikamimageplugins and showfoto
-- svn cp http://anonsvn.kde.org/home/kde/extragear/graphics/doc/digikam digikam  and the same for the plugins and showfoto
+- svn cp http://anonsvn.kde.org/home/kde/extragear/graphics/doc/digikam and the same for the plugins and showfoto
 
+----- this need to be done as soon as docbooks are ready in EN ---------
 - go to /branches/stable/l10n/templates/docmessages/extragear/graphics
-- copy over all digikam, showfoto and plugin files (dont forget the desktop files) from /trunk/l10n/templates/docmessages/extragear/graphics
+- copy over all digikam, showfoto and plugin files (dont forget the desktop files) from
+  /trunk/l10n/templates/docmessages/extragear/graphics
 
 - repeat last to steps for "messages" instead of "docmessages". No showfoto files in this case.
-
-(go to bed now and do the following tomorrow!) 
+  (go to bed now and do the following tomorrow!) 
 
 - to branch all the language files, you can use the script located in extragear/scripts/
 - you need to do that for digikam, showfoto and digikamimageplugins. For digikamimageplugs you need to specify all plugins, so you get something like:
