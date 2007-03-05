@@ -5,7 +5,7 @@
  * Description : Red eyes correction tool for image editor
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,6 +25,8 @@
 #include <qvbuttongroup.h>
 #include <qradiobutton.h>
 #include <qlayout.h>
+#include <qhbox.h>
+#include <qlabel.h>
 
 // KDE includes.
 
@@ -34,6 +36,7 @@
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kpassivepopup.h>
+#include <kcolorbutton.h>
 
 // Digikam includes.
 
@@ -44,6 +47,7 @@
 // Local includes.
 
 #include "imageeffect_redeye.h"
+#include "imageeffect_redeye.moc"
 
 namespace DigikamImagesPluginCore
 {
@@ -53,7 +57,7 @@ class RedEyePassivePopup : public KPassivePopup
 public:
 
     RedEyePassivePopup(QWidget* parent)
-        : KPassivePopup(parent), m_parent(parent)          
+        : KPassivePopup(parent), m_parent(parent)
     {
     }
 
@@ -106,15 +110,18 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
     // -- save settings ----------------------------------------------
 
     bool aggressive = (dlg.result() == ImageEffect_RedEyeDlg::Aggressive);
+    QColor coloring = dlg.coloring();
+
     KConfig *config = kapp->config();
     config->setGroup("ImageViewer Settings");
     config->writeEntry("Red Eye Correction Plugin (Mild)", !aggressive);
+    config->writeEntry("Red Eye Correction Plugin (Coloring)", coloring);
     config->sync();
 
     // -- do the actual operations -----------------------------------
 
     parent->setCursor( KCursor::waitCursor() );
-    
+
     struct channel
     {
         float red_gain;
@@ -142,6 +149,10 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
     green_norm = 1.0 / (green_chan.red_gain + green_chan.green_gain + green_chan.blue_gain);
     blue_norm  = 1.0 / (blue_chan.red_gain  + blue_chan.green_gain  + blue_chan.blue_gain);
 
+    red_norm   *= coloring.red();
+    green_norm *= coloring.green();
+    blue_norm  *= coloring.blue();
+
     if (!selection.sixteenBit())         // 8 bits image.
     {
         uchar* ptr  = selection.bits();
@@ -161,11 +172,11 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
                                                  red_chan.green_gain * g +
                                                  red_chan.blue_gain  * b)));
 
-                b1 = QMIN(255, (int)(green_norm * (green_chan.red_gain   * r +
+                g1 = QMIN(255, (int)(green_norm * (green_chan.red_gain   * r +
                                                    green_chan.green_gain * g +
                                                    green_chan.blue_gain  * b)));
 
-                g1 = QMIN(255, (int)(blue_norm * (blue_chan.red_gain   * r +
+                b1 = QMIN(255, (int)(blue_norm * (blue_chan.red_gain   * r +
                                                   blue_chan.green_gain * g +
                                                   blue_chan.blue_gain  * b)));
 
@@ -194,17 +205,17 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
 
             if ( aggressive || r >= ( 2 * g) )
             {
-                r1 = QMIN(65535, (int)(red_norm * (red_chan.red_gain   * r +
-                                                   red_chan.green_gain * g +
-                                                   red_chan.blue_gain  * b)));
+                r1 = QMIN(65535, (int)(red_norm * 256 * (red_chan.red_gain   * r +
+                                                         red_chan.green_gain * g +
+                                                         red_chan.blue_gain  * b)));
 
-                b1 = QMIN(65535, (int)(green_norm * (green_chan.red_gain   * r +
-                                                     green_chan.green_gain * g +
-                                                     green_chan.blue_gain  * b)));
+                g1 = QMIN(65535, (int)(green_norm *  256 * (green_chan.red_gain   * r +
+                                                            green_chan.green_gain * g +
+                                                            green_chan.blue_gain  * b)));
 
-                g1 = QMIN(65535, (int)(blue_norm * (blue_chan.red_gain   * r +
-                                                    blue_chan.green_gain * g +
-                                                    blue_chan.blue_gain  * b)));
+                b1 = QMIN(65535, (int)(blue_norm * 256 * (blue_chan.red_gain   * r +
+                                                          blue_chan.green_gain * g +
+                                                          blue_chan.blue_gain  * b)));
 
                 nptr[0] = b1;
                 nptr[1] = g1;
@@ -232,24 +243,30 @@ ImageEffect_RedEyeDlg::ImageEffect_RedEyeDlg(QWidget* parent)
                                    Help|Ok|Cancel, Ok, parent, 0, true, true)
 {
     setHelp("redeyecorrectiontool.anchor", "digikam");
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
+    QVBoxLayout *topLayout = new QVBoxLayout(plainPage(), 0, spacingHint());
 
-    QVButtonGroup* buttonGroup = new QVButtonGroup( i18n("Level of Red-Eye Correction"),
-                                                    plainPage() );
-    buttonGroup->setRadioButtonExclusive( true );
+    QVButtonGroup* buttonGroup = new QVButtonGroup(i18n("Level of Red-Eye Correction"), plainPage());
+    buttonGroup->setRadioButtonExclusive(true);
 
-    QRadioButton* mildBtn = new QRadioButton( i18n("Mild (use if other parts of the face are also selected)"),
-                                              buttonGroup );
-    QRadioButton* aggrBtn = new QRadioButton( i18n("Aggressive (use if eye(s) have been selected exactly)" ),
-                                              buttonGroup );
+    QRadioButton* mildBtn = new QRadioButton(i18n("Mild (use if other parts of the face are also selected)"),
+                                             buttonGroup);
+    QRadioButton* aggrBtn = new QRadioButton(i18n("Aggressive (use if eye(s) have been selected exactly)" ),
+                                             buttonGroup);
 
-    topLayout->addWidget( buttonGroup );
-    
+    QHBox *hbox      = new QHBox(plainPage());
+    QLabel *label    = new QLabel(i18n("Eyes Coloring:"), hbox);
+    m_coloringButton = new KColorButton(Qt::black, hbox);
+
+    topLayout->addWidget(buttonGroup);
+    topLayout->addWidget(hbox);
+
     connect( buttonGroup, SIGNAL(clicked(int)),
              this, SLOT(slotClicked(int)) );
 
+    QColor black(Qt::black);
     KConfig *config = kapp->config();
     config->setGroup("ImageViewer Settings");
+    m_coloringButton->setColor(config->readColorEntry("Red Eye Correction Plugin (Coloring)", &black));
     bool mild = config->readBoolEntry("Red Eye Correction Plugin (Mild)", true);
 
     if (mild)
@@ -269,6 +286,11 @@ ImageEffect_RedEyeDlg::Result ImageEffect_RedEyeDlg::result() const
     return (Result)m_selectedId;
 }
 
+QColor ImageEffect_RedEyeDlg::coloring() const
+{
+    return m_coloringButton->color();
+}
+
 void ImageEffect_RedEyeDlg::slotClicked(int id)
 {
     m_selectedId = id;
@@ -276,4 +298,3 @@ void ImageEffect_RedEyeDlg::slotClicked(int id)
 
 }  // NameSpace DigikamImagesPluginCore
 
-#include "imageeffect_redeye.moc"

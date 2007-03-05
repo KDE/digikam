@@ -5,7 +5,7 @@
  * Description : Red eyes correction tool for image editor
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +28,8 @@
 #include <kdialogbase.h>
 
 class QRadioButton;
+
+class KColorButton;
 
 namespace DigikamImagesPluginCore
 {
@@ -53,6 +55,7 @@ public:
 
     ImageEffect_RedEyeDlg(QWidget* parent);
     Result result() const;
+    QColor coloring() const;
 
 private slots:
 
@@ -60,7 +63,9 @@ private slots:
 
 private:
 
-    int m_selectedId;
+    int           m_selectedId;
+
+    KColorButton *m_coloringButton;
 };
 
 }  // NameSpace DigikamImagesPluginCore
