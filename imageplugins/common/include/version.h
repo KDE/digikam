@@ -1,9 +1,10 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at free.fr>
+ * Authors: Gilles Caulier 
  * Date   : 2004-09-09
  * Description : DigikamImagePlugins release ID header.
  * 
  * Copyright 2004-2007 by Gilles Caulier
+ *                        <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +23,7 @@
 #ifndef DIGIKAMIMAGEPLUGINS_VERSION_H
 #define DIGIKAMIMAGEPLUGINS_VERSION_H
 
-static const char digikamimageplugins_version[] = "0.9.1";
+static const char digikamimageplugins_version[] = "0.9.2-svn";
 
 #endif // DIGIKAMIMAGEPLUGINS_VERSION_H
 
