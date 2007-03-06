@@ -25,47 +25,114 @@
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <kpassivepopup.h>
 
-class QRadioButton;
+// Digikam include.
+
+#include "imagedlgbase.h"
+
+class QComboBox;
+class QHButtonGroup;
 
 class KColorButton;
+
+namespace Digikam
+{
+class HistogramWidget;
+class ColorGradientWidget;
+class ImageWidget;
+class DColor;
+class DImg;
+}
 
 namespace DigikamImagesPluginCore
 {
 
-class ImageEffect_RedEye
+class RedEyePassivePopup : public KPassivePopup
 {
 public:
 
-    static void removeRedEye(QWidget *parent);
+    RedEyePassivePopup(QWidget* parent)
+        : KPassivePopup(parent), m_parent(parent)
+    {
+    }
+
+protected:
+
+    virtual void positionSelf()
+    {
+        move(m_parent->x() + 30, m_parent->y() + 30);
+    }
+
+private:
+
+    QWidget* m_parent;
 };
 
-class ImageEffect_RedEyeDlg : public KDialogBase
+class ImageEffect_RedEye : public Digikam::ImageDlgBase
 {
     Q_OBJECT
 
 public:
 
-    enum Result
-    {
-        Mild = 0,
-        Aggressive = 1
-    };
-
-    ImageEffect_RedEyeDlg(QWidget* parent);
-    Result result() const;
-    QColor coloring() const;
+    ImageEffect_RedEye(QWidget *parent);
+    ~ImageEffect_RedEye();
 
 private slots:
 
-    void slotClicked(int id);
+    void slotEffect();
+    void slotChannelChanged(int channel);
+    void slotScaleChanged(int scale);
+    void slotColorSelectedFromTarget( const Digikam::DColor &color );
 
 private:
 
-    int           m_selectedId;
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues();
+    void finalRendering();
+    void redEyeFilter(Digikam::DImg& selection);
 
-    KColorButton *m_coloringButton;
+private:
+
+    enum HistogramScale
+    {
+        Linear=0,
+        Logarithmic
+    };
+
+    enum ColorChannel
+    {
+        LuminosityChannel=0,
+        RedChannel,
+        GreenChannel,
+        BlueChannel
+    };
+
+    enum RedThresold
+    {
+        Mild=0,
+        Aggressive
+    };
+
+    uchar                        *m_destinationPreviewData;
+
+    QComboBox                    *m_channelCB;   
+    QComboBox                    *m_redThreshold; 
+    
+    QHButtonGroup                *m_scaleBG;  
+
+/*    KIntNumInput                 *m_bInput;
+    KIntNumInput                 *m_cInput;
+    KDoubleNumInput              *m_gInput;*/
+
+    KColorButton                 *m_coloringButton;
+    
+    Digikam::ImageWidget         *m_previewWidget;
+
+    Digikam::ColorGradientWidget *m_hGradient;
+    
+    Digikam::HistogramWidget     *m_histogramWidget;
 };
 
 }  // NameSpace DigikamImagesPluginCore

@@ -21,28 +21,39 @@
  * ============================================================ */
 
 // Qt includes.
-
-#include <qvbuttongroup.h>
-#include <qradiobutton.h>
-#include <qlayout.h>
+ 
+#include <qcolor.h>
 #include <qhbox.h>
+#include <qhgroupbox.h>
+#include <qvgroupbox.h>
+#include <qhbuttongroup.h> 
 #include <qlabel.h>
+#include <qlayout.h>
+#include <qframe.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
+#include <qcombobox.h>
+#include <qwhatsthis.h>
+#include <qtooltip.h>
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <knuminput.h>
 #include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <kpassivepopup.h>
+#include <kstandarddirs.h>
 #include <kcolorbutton.h>
 
 // Digikam includes.
 
-#include "ddebug.h"
-#include "dimg.h"
 #include "imageiface.h"
+#include "imagewidget.h"
+#include "histogramwidget.h"
+#include "colorgradientwidget.h"
+#include "bcgmodifier.h"
+#include "dimg.h"
 
 // Local includes.
 
@@ -52,75 +63,267 @@
 namespace DigikamImagesPluginCore
 {
 
-class RedEyePassivePopup : public KPassivePopup
+ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
+                  : Digikam::ImageDlgBase(parent, i18n("Red Eye Reduction"), 
+                                          "redeye", false)
 {
-public:
+    m_destinationPreviewData = 0L;
+    setHelp("redeyecorrectiontool.anchor", "digikam");
 
-    RedEyePassivePopup(QWidget* parent)
-        : KPassivePopup(parent), m_parent(parent)
+    m_previewWidget = new Digikam::ImageWidget("redeye Tool Dialog", plainPage(),
+                                               i18n("<p>Here you can see the image selection preview with "
+                                                    "red eye reduction applied."), 
+                                               true, Digikam::ImageGuideWidget::PickColorMode, true, true);
+    setPreviewAreaWidget(m_previewWidget); 
+
+    // -------------------------------------------------------------
+                
+    QWidget *gboxSettings     = new QWidget(plainPage());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 6, 4, marginHint(), spacingHint());
+
+    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
+    label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
+    m_channelCB = new QComboBox( false, gboxSettings );
+    m_channelCB->insertItem( i18n("Luminosity") );
+    m_channelCB->insertItem( i18n("Red") );
+    m_channelCB->insertItem( i18n("Green") );
+    m_channelCB->insertItem( i18n("Blue") );
+    QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+                                       "<b>Luminosity</b>: display the image's luminosity values.<p>"
+                                       "<b>Red</b>: display the red image-channel values.<p>"
+                                       "<b>Green</b>: display the green image-channel values.<p>"
+                                       "<b>Blue</b>: display the blue image-channel values.<p>"));
+
+    m_scaleBG = new QHButtonGroup(gboxSettings);
+    m_scaleBG->setExclusive(true);
+    m_scaleBG->setFrameShape(QFrame::NoFrame);
+    m_scaleBG->setInsideMargin( 0 );
+    QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
+                                     "If the image's maximal counts are small, you can use the linear scale.<p>"
+                                     "Logarithmic scale can be used when the maximal counts are big; "
+                                     "if it is used, all values (small and large) will be visible on the graph."));
+    
+    QPushButton *linHistoButton = new QPushButton( m_scaleBG );
+    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
+    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
+    linHistoButton->setToggleButton(true);
+    
+    QPushButton *logHistoButton = new QPushButton( m_scaleBG );
+    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
+    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
+    logHistoButton->setToggleButton(true);       
+
+    QHBoxLayout* l1 = new QHBoxLayout();
+    l1->addWidget(label1);
+    l1->addWidget(m_channelCB);
+    l1->addStretch(10);
+    l1->addWidget(m_scaleBG);
+    
+    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
+
+    // -------------------------------------------------------------
+
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, gboxSettings, false, true, true);
+    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram "
+                                             "drawing of the selected image channel. This one is "
+                                             "re-computed at any settings changes."));
+    
+    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, gboxSettings );
+    m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+    
+    gridSettings->addMultiCellWidget(m_histogramWidget, 1, 1, 0, 4);
+    gridSettings->addMultiCellWidget(m_hGradient, 2, 2, 0, 4);
+
+    // -------------------------------------------------------------
+
+    QLabel *label2 = new QLabel(i18n("Red Threshold:"), gboxSettings);
+    m_redThreshold = new QComboBox( false, gboxSettings );
+    m_redThreshold->insertItem( i18n("Mild"), Mild );
+    m_redThreshold->insertItem( i18n("Aggressive"), Aggressive );
+    QWhatsThis::add( m_redThreshold, i18n("<p>Set here red color threshold to use:</p>"
+                     "<b>Mild</b>: use this option if other parts of the face are also selected."
+                     "<b>Aggressive</b>: use this option only if eye(s) have been selected exactly."));
+    gridSettings->addMultiCellWidget(label2, 3, 3, 0, 4);
+    gridSettings->addMultiCellWidget(m_redThreshold, 4, 4, 0, 4);
+
+    QHBox *hbox      = new QHBox(gboxSettings);
+    QLabel *label3   = new QLabel(i18n("Coloring Taint:"), hbox);
+    m_coloringButton = new KColorButton(Qt::black, hbox);
+    gridSettings->addMultiCellWidget(hbox, 5, 5, 0, 4);
+
+    gridSettings->setRowStretch(6, 10);    
+    setUserAreaWidget(gboxSettings);
+    
+    // -------------------------------------------------------------
+
+    connect(m_channelCB, SIGNAL(activated(int)),
+            this, SLOT(slotChannelChanged(int)));
+
+    connect(m_scaleBG, SIGNAL(released(int)),
+            this, SLOT(slotScaleChanged(int)));
+
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
+            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+
+    connect(m_previewWidget, SIGNAL(signalResized()),
+            this, SLOT(slotEffect()));    
+            
+    connect(m_redThreshold, SIGNAL(activated(int)),
+            this, SLOT(slotEffect()));   
+
+    connect(m_coloringButton, SIGNAL(changed (const QColor&)),
+            this, SLOT(slotEffect())); 
+}
+
+ImageEffect_RedEye::~ImageEffect_RedEye()
+{
+    m_histogramWidget->stopHistogramComputation();
+
+    if (m_destinationPreviewData) 
+       delete [] m_destinationPreviewData;
+       
+    delete m_histogramWidget;
+    delete m_previewWidget;
+}
+
+void ImageEffect_RedEye::slotChannelChanged(int channel)
+{
+    switch(channel)
     {
+        case LuminosityChannel:
+            m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+            m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+            break;
+    
+        case RedChannel:
+            m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+            m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
+            break;
+    
+        case GreenChannel:         
+            m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+            m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
+            break;
+    
+        case BlueChannel:         
+            m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+            m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
+            break;
     }
 
-protected:
+    m_histogramWidget->repaint(false);
+}
 
-    virtual void positionSelf()
-    {
-        move(m_parent->x() + 30, m_parent->y() + 30);
-    }
-
-private:
-
-    QWidget* m_parent;
-};
-
-void ImageEffect_RedEye::removeRedEye(QWidget* parent)
+void ImageEffect_RedEye::slotScaleChanged(int scale)
 {
-    // -- check if we actually have a selection --------------------
+    m_histogramWidget->m_scaleType = scale;
+    m_histogramWidget->repaint(false);
+}
 
-    Digikam::ImageIface iface(0, 0);
-    uchar *data             = iface.getImageSelection();
-    int w                   = iface.selectedWidth();
-    int h                   = iface.selectedHeight();
-    bool sixteenBit         = iface.originalSixteenBit();
-    bool hasAlpha           = iface.originalHasAlpha();
-    Digikam::DImg selection = Digikam::DImg(w, h, sixteenBit, hasAlpha ,data);
+void ImageEffect_RedEye::slotColorSelectedFromTarget( const Digikam::DColor &color )
+{
+    m_histogramWidget->setHistogramGuideByColor(color);
+}
+
+void ImageEffect_RedEye::readUserSettings()
+{
+    QColor black(Qt::black);
+    KConfig* config = kapp->config();
+    config->setGroup("redeye Tool Dialog");
+    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_redThreshold->setCurrentItem(config->readNumEntry("RedThreshold", Mild));
+    m_coloringButton->setColor(config->readColorEntry("ColoringTaint", &black));
+    slotChannelChanged(m_channelCB->currentItem());
+    slotScaleChanged(m_scaleBG->selectedId());
+}
+
+void ImageEffect_RedEye::writeUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("redeye Tool Dialog");
+    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
+    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    config->writeEntry("RedThreshold", m_redThreshold->currentItem());
+    config->writeEntry("ColoringTaint", m_coloringButton->color());
+    config->sync();
+}
+
+void ImageEffect_RedEye::resetValues()
+{
+    QColor black(Qt::black);
+    m_redThreshold->blockSignals(true);	
+    m_coloringButton->blockSignals(true);	
+    m_redThreshold->setCurrentItem(Mild);
+    m_coloringButton->setColor(black);
+    m_redThreshold->blockSignals(false); 
+    m_coloringButton->blockSignals(false);       
+} 
+
+void ImageEffect_RedEye::slotEffect()
+{
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+
+    m_histogramWidget->stopHistogramComputation();
+
+    if (m_destinationPreviewData) 
+       delete [] m_destinationPreviewData;
+
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    m_destinationPreviewData   = iface->getPreviewImage();
+    int w                      = iface->previewWidth();
+    int h                      = iface->previewHeight();
+    bool a                     = iface->previewHasAlpha();
+    bool sb                    = iface->previewSixteenBit();
+
+    Digikam::DImg selection(w, h, sb, a, m_destinationPreviewData);
+
+    redEyeFilter(selection);
+
+    iface->putPreviewImage(selection.bits());
+    m_previewWidget->updatePreview();
+
+    // Update histogram.
+   
+    memcpy(m_destinationPreviewData, selection.bits(), selection.numBytes());
+    m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
+
+    kapp->restoreOverrideCursor();
+}
+
+void ImageEffect_RedEye::finalRendering()
+{
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    uchar *data                = iface->getImageSelection();
+    int w                      = iface->selectedWidth();
+    int h                      = iface->selectedHeight();
+    bool sixteenBit            = iface->originalSixteenBit();
+    bool hasAlpha              = iface->originalHasAlpha();
+    Digikam::DImg selection(w, h, sixteenBit, hasAlpha, data);
     delete [] data;
 
+    redEyeFilter(selection);
+
+    iface->putImageSelection(i18n("Red Eyes Correction"), selection.bits());
+
+    kapp->restoreOverrideCursor();
+    accept();
+}
+
+void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
+{
     Digikam::DImg newSelection = selection.copy();
 
-    if (selection.isNull() || !w || !h)
-    {
-        RedEyePassivePopup* popup = new RedEyePassivePopup(parent);
-        popup->setView(i18n("Red-Eye Correction Tool"),
-                       i18n("You need to select a region including the eyes to use "
-                            "the red-eye correction tool"));
-        popup->setAutoDelete(true);
-        popup->setTimeout(2500);
-        popup->show();
-        return;
-    }
-
-    // -- run the dlg ----------------------------------------------
-
-    ImageEffect_RedEyeDlg dlg(parent);
-
-    if (dlg.exec() != QDialog::Accepted)
-        return;
-
-    // -- save settings ----------------------------------------------
-
-    bool aggressive = (dlg.result() == ImageEffect_RedEyeDlg::Aggressive);
-    QColor coloring = dlg.coloring();
-
-    KConfig *config = kapp->config();
-    config->setGroup("ImageViewer Settings");
-    config->writeEntry("Red Eye Correction Plugin (Mild)", !aggressive);
-    config->writeEntry("Red Eye Correction Plugin (Coloring)", coloring);
-    config->sync();
-
-    // -- do the actual operations -----------------------------------
-
-    parent->setCursor( KCursor::waitCursor() );
+    bool aggressive = (m_redThreshold->currentItem() == Mild) ? false : true;
+    QColor coloring = m_coloringButton->color();
 
     struct channel
     {
@@ -160,7 +363,7 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
         uchar* nptr = newSelection.bits();
         uchar  r, g, b, a, r1, g1, b1;
 
-        for (int i = 0 ; i < w * h ; i++) 
+        for (uint i = 0 ; i < selection.width() * selection.height() ; i++) 
         {
             b = ptr[0];
             g = ptr[1];
@@ -197,7 +400,7 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
         unsigned short* nptr = (unsigned short*)newSelection.bits();
         unsigned short  r, g, b, a, r1, g1, b1;
 
-        for (int i = 0 ; i < w * h ; i++) 
+        for (uint i = 0 ; i < selection.width() * selection.height() ; i++) 
         {
             b = ptr[0];
             g = ptr[1];
@@ -231,70 +434,7 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
 
     // - Perform pixels blending using alpha channel to blur a little the result.
 
-    selection.bitBlend_RGBA2RGB(newSelection, 0, 0, w, h);
-
-    iface.putImageSelection(i18n("Red Eyes Correction"), selection.bits());
-    parent->unsetCursor();
-}
-
-// -------------------------------------------------------------
-
-ImageEffect_RedEyeDlg::ImageEffect_RedEyeDlg(QWidget* parent)
-                     : KDialogBase(Plain, i18n("Red Eye Correction"),
-                                   Help|Ok|Cancel, Ok, parent, 0, true, true)
-{
-    setHelp("redeyecorrectiontool.anchor", "digikam");
-    QVBoxLayout *topLayout = new QVBoxLayout(plainPage(), 0, spacingHint());
-
-    QVButtonGroup* buttonGroup = new QVButtonGroup(i18n("Level of Red-Eye Correction"), plainPage());
-    buttonGroup->setRadioButtonExclusive(true);
-
-    QRadioButton* mildBtn = new QRadioButton(i18n("Mild (use if other parts of the face are also selected)"),
-                                             buttonGroup);
-    QRadioButton* aggrBtn = new QRadioButton(i18n("Aggressive (use if eye(s) have been selected exactly)" ),
-                                             buttonGroup);
-
-    QHBox *hbox      = new QHBox(plainPage());
-    QLabel *label    = new QLabel(i18n("Eyes Coloring:"), hbox);
-    m_coloringButton = new KColorButton(Qt::black, hbox);
-
-    topLayout->addWidget(buttonGroup);
-    topLayout->addWidget(hbox);
-
-    connect( buttonGroup, SIGNAL(clicked(int)),
-             this, SLOT(slotClicked(int)) );
-
-    QColor black(Qt::black);
-    KConfig *config = kapp->config();
-    config->setGroup("ImageViewer Settings");
-    m_coloringButton->setColor(config->readColorEntry("Red Eye Correction Plugin (Coloring)", &black));
-    bool mild = config->readBoolEntry("Red Eye Correction Plugin (Mild)", true);
-
-    if (mild)
-    {
-        mildBtn->setChecked(true);
-        m_selectedId = 0;
-    }
-    else
-    {
-        aggrBtn->setChecked(true);
-        m_selectedId = 1;
-    }
-}
-
-ImageEffect_RedEyeDlg::Result ImageEffect_RedEyeDlg::result() const
-{
-    return (Result)m_selectedId;
-}
-
-QColor ImageEffect_RedEyeDlg::coloring() const
-{
-    return m_coloringButton->color();
-}
-
-void ImageEffect_RedEyeDlg::slotClicked(int id)
-{
-    m_selectedId = id;
+    selection.bitBlend_RGBA2RGB(newSelection, 0, 0, selection.width(), selection.height());
 }
 
 }  // NameSpace DigikamImagesPluginCore

@@ -96,7 +96,8 @@ public:
 
 ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
                                    bool spotVisible, int guideMode, 
-                                   QColor guideColor, int guideSize, bool blink)
+                                   QColor guideColor, int guideSize, 
+                                   bool blink, bool useImageSelection)
                 : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new ImageGuideWidgetPriv;
@@ -110,6 +111,7 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     setMouseTracking(true);
 
     d->iface        = new ImageIface(w, h);
+    d->iface->setPreviewType(useImageSelection);
     uchar *data     = d->iface->getPreviewImage();
     d->width        = d->iface->previewWidth();
     d->height       = d->iface->previewHeight();

@@ -76,7 +76,8 @@ public:
 
     ImageGuideWidget(int w, int h, QWidget *parent=0, 
                      bool spotVisible=true, int guideMode=HVGuideMode,
-                     QColor guideColor=Qt::red, int guideSize=1, bool blink=false);
+                     QColor guideColor=Qt::red, int guideSize=1, 
+                     bool blink=false, bool useImageSelection=false);
     ~ImageGuideWidget();
         
     ImageIface* imageIface();

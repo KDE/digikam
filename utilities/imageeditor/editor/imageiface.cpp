@@ -46,6 +46,15 @@ class ImageIfacePriv
 {
 public:
 
+    ImageIfacePriv()
+    {
+        usePreviewSelection = false;
+        previewWidth        = 0;
+        previewHeight       = 0;
+    }
+
+    bool    usePreviewSelection;
+
     int     originalWidth;
     int     originalHeight;
     int     originalBytesDepth;
@@ -70,8 +79,6 @@ ImageIface::ImageIface(int w, int h)
 
     d->constrainWidth  = w;
     d->constrainHeight = h;
-    d->previewWidth    = 0;
-    d->previewHeight   = 0;
 
     d->originalWidth      = DImgInterface::instance()->origWidth();
     d->originalHeight     = DImgInterface::instance()->origHeight();
@@ -92,6 +99,16 @@ ImageIface::ImageIface(int w, int h)
 ImageIface::~ImageIface()
 {
     delete d;
+}
+
+void ImageIface::setPreviewType(bool useSelect)
+{
+    d->usePreviewSelection = useSelect; 
+}
+
+bool ImageIface::previewType()
+{
+    return d->usePreviewSelection;
 }
 
 DColor ImageIface::getColorInfoFromOriginalImage(QPoint point)
@@ -142,7 +159,20 @@ uchar* ImageIface::getPreviewImage()
 {
     if (d->previewImage.isNull())
     {
-        DImg *im = DImgInterface::instance()->getImg();
+        DImg *im = 0;
+
+        if (!d->usePreviewSelection)
+            im = DImgInterface::instance()->getImg();
+        else 
+        {
+            int    x, y, w, h;
+            bool   s    = DImgInterface::instance()->sixteenBit();
+            bool   a    = DImgInterface::instance()->hasAlpha();
+            uchar *data = DImgInterface::instance()->getImageSelection();
+            DImgInterface::instance()->getSelectedArea(x, y, w, h);
+            im = new DImg(w, h, s, a, data, true); 
+            delete [] data;
+        }
 
         if (!im || im->isNull())
             return 0;

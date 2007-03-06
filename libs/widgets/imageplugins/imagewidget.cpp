@@ -73,7 +73,7 @@ public:
 
 ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent, 
                          const QString& previewWhatsThis, bool prevModeOptions, 
-                         int guideMode, bool guideVisible)
+                         int guideMode, bool guideVisible, bool useImageSelection)
            : QWidget(parent)
 {
     d = new ImageWidgetPriv;
@@ -195,7 +195,8 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l   = new QVBoxLayout(frame, 5, 0);
     d->previewWidget = new ImageGuideWidget(480, 320, frame, guideVisible, 
-                                            guideMode, Qt::red, 1, false);
+                                            guideMode, Qt::red, 1, false, 
+                                            useImageSelection);
     QWhatsThis::add( d->previewWidget, previewWhatsThis);
     l->addWidget(d->previewWidget, 0);
 

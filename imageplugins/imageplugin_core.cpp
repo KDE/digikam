@@ -219,7 +219,23 @@ void ImagePlugin_Core::slotBW()
 
 void ImagePlugin_Core::slotRedEye()
 {
-    DigikamImagesPluginCore::ImageEffect_RedEye::removeRedEye(parentWidget());
+    Digikam::ImageIface iface(0, 0);
+
+    if (!iface.selectedWidth() || !iface.selectedHeight())
+    {
+        DigikamImagesPluginCore::RedEyePassivePopup* popup = new
+                                 DigikamImagesPluginCore::RedEyePassivePopup(parentWidget());
+        popup->setView(i18n("Red-Eye Correction Tool"),
+                       i18n("You need to select a region including the eyes to use "
+                            "the red-eye correction tool"));
+        popup->setAutoDelete(true);
+        popup->setTimeout(2500);
+        popup->show();
+        return;
+    }
+
+    DigikamImagesPluginCore::ImageEffect_RedEye dlg(parentWidget());
+    dlg.exec();
 }
 
 void ImagePlugin_Core::slotRatioCrop()

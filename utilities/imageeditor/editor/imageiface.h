@@ -57,6 +57,16 @@ public:
     ImageIface(int w=0, int h=0);
     ~ImageIface();
 
+    /** Use this method to use the current selection in editor instead the full 
+        image to render the preview.
+    */    
+    void setPreviewType(bool useSelect=false);
+ 
+    /** Return 'true' if the preview is rendered using the current selection in editor.
+        Return 'false' if the preview is rendered using the full image in editor.
+    */
+    bool previewType();
+
     /** Return image data for the current, scaled preview image.
         The preview...() methods provide the characteristics of the data
         (width, heigh, sixteen bit, alpha).
