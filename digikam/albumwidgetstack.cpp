@@ -99,6 +99,9 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
 
     connect(d->imagePreviewView, SIGNAL(signalBack2Album()),
             this, SIGNAL(signalBack2Album()));
+
+    connect(d->imagePreviewView, SIGNAL(signalSlideShow()),
+            this, SIGNAL(signalSlideShow()));
 }
 
 AlbumWidgetStack::~AlbumWidgetStack()

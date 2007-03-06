@@ -60,6 +60,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "dpopupmenu.h"
 #include "canvas.h"
 #include "dimginterface.h"
 #include "themeengine.h"
@@ -76,7 +77,6 @@
 #include "syncjob.h"
 #include "imageinfo.h"
 #include "imagepropertiessidebardb.h"
-#include "dpopupmenu.h"
 #include "tagspopupmenu.h"
 #include "ratingpopupmenu.h"
 #include "slideshow.h"
@@ -115,7 +115,6 @@ public:
         fileTrashDirectlyAction             = 0;
         imageInfoCurrent                    = 0;
         rightSidebar                        = 0;
-        contextMenu                         = 0;
     }
 
     // If image editor is launched by camera interface, current
@@ -142,8 +141,6 @@ public:
     ImageInfo                *imageInfoCurrent;
 
     ImagePropertiesSideBarDB *rightSidebar;
-
-    DPopupMenu               *contextMenu;
 };
 
 ImageWindow* ImageWindow::m_instance = 0;
@@ -180,15 +177,7 @@ ImageWindow::ImageWindow()
 
     // Create context menu.
 
-    d->contextMenu = new DPopupMenu(this);
-    KActionCollection *ac = actionCollection();
-    if( ac->action("editorwindow_backward") ) ac->action("editorwindow_backward")->plug(d->contextMenu);
-    if( ac->action("editorwindow_forward") ) ac->action("editorwindow_forward")->plug(d->contextMenu);
-    d->contextMenu->insertSeparator();
-    if( ac->action("editorwindow_rotate") ) ac->action("editorwindow_rotate")->plug(d->contextMenu);
-    if( ac->action("editorwindow_crop") ) ac->action("editorwindow_crop")->plug(d->contextMenu);
-    d->contextMenu->insertSeparator();
-    if( ac->action("editorwindow_delete") ) ac->action("editorwindow_delete")->plug(d->contextMenu);
+    setupContextMenu();
 
     // Make signals/slots connections
 
@@ -542,7 +531,7 @@ void ImageWindow::slotLast()
 
 void ImageWindow::slotContextMenu()
 {
-    if (d->contextMenu)
+    if (m_contextMenu)
     {
         RatingPopupMenu *ratingMenu     = 0;
         TagsPopupMenu   *assignTagsMenu = 0;
@@ -561,10 +550,10 @@ void ImageWindow::slotContextMenu()
             assignTagsMenu = new TagsPopupMenu(idList, 1000, TagsPopupMenu::ASSIGN);
             removeTagsMenu = new TagsPopupMenu(idList, 2000, TagsPopupMenu::REMOVE);
 
-            separatorID1 = d->contextMenu->insertSeparator();
+            separatorID1 = m_contextMenu->insertSeparator();
 
-            d->contextMenu->insertItem(i18n("Assign Tag"), assignTagsMenu);
-            int i = d->contextMenu->insertItem(i18n("Remove Tag"), removeTagsMenu);
+            m_contextMenu->insertItem(i18n("Assign Tag"), assignTagsMenu);
+            int i = m_contextMenu->insertItem(i18n("Remove Tag"), removeTagsMenu);
 
             connect(assignTagsMenu, SIGNAL(signalTagActivated(int)),
                     this, SLOT(slotAssignTag(int)));
@@ -574,9 +563,9 @@ void ImageWindow::slotContextMenu()
 
             AlbumDB* db = AlbumManager::instance()->albumDB();
             if (!db->hasTags( idList ))
-                d->contextMenu->setItemEnabled(i, false);
+                m_contextMenu->setItemEnabled(i, false);
 
-            separatorID2 = d->contextMenu->insertSeparator();
+            separatorID2 = m_contextMenu->insertSeparator();
 
             // Assign Star Rating -------------------------------------------
         
@@ -585,15 +574,15 @@ void ImageWindow::slotContextMenu()
             connect(ratingMenu, SIGNAL(activated(int)),
                     this, SLOT(slotAssignRating(int)));
         
-            d->contextMenu->insertItem(i18n("Assign Rating"), ratingMenu);
+            m_contextMenu->insertItem(i18n("Assign Rating"), ratingMenu);
         }
 
-        d->contextMenu->exec(QCursor::pos());
+        m_contextMenu->exec(QCursor::pos());
 
         if (separatorID1 != -1)
-            d->contextMenu->removeItem(separatorID1);
+            m_contextMenu->removeItem(separatorID1);
         if (separatorID2 != -1)
-            d->contextMenu->removeItem(separatorID2);
+            m_contextMenu->removeItem(separatorID2);
 
         delete assignTagsMenu;
         delete removeTagsMenu;

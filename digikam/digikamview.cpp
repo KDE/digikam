@@ -331,6 +331,9 @@ void DigikamView::setupConnections()
     connect(d->albumWidgetStack, SIGNAL(signalBack2Album()),
             this, SLOT(slotEscapePreview()));
 
+    connect(d->albumWidgetStack, SIGNAL(signalSlideShow()),
+            this, SLOT(slotSlideShowAll()));
+
     // -- Selection timer ---------------
 
     connect(d->selectionTimer, SIGNAL(timeout()),

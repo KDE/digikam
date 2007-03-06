@@ -57,6 +57,7 @@ signals:
     void signalEditItem();
     void signalPreviewLoaded();
     void signalBack2Album();
+    void signalSlideShow();
 
 private slots:
 

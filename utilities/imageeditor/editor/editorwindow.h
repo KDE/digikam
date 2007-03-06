@@ -47,6 +47,7 @@ class KAction;
 namespace Digikam
 {
 
+class DPopupMenu;
 class Canvas;
 class ImagePluginLoader;
 class IOFileSettingsContainer;
@@ -100,6 +101,7 @@ protected:
     KToolBarPopupAction     *m_undoAction;
     KToolBarPopupAction     *m_redoAction;
 
+    DPopupMenu              *m_contextMenu;
     Canvas                  *m_canvas;
     ImagePluginLoader       *m_imagePluginLoader;
     StatusProgressBar       *m_nameLabel;
@@ -116,6 +118,7 @@ protected:
     void setupStandardActions();
     void setupStandardAccelerators();
     void setupStatusBar();
+    void setupContextMenu();
     void toggleStandardActions(bool val);
 
     void printImage(KURL url);

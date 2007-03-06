@@ -188,6 +188,7 @@ void ImagePreviewView::mousePressEvent(QMouseEvent* e)
         //-- Edit actions -----------------------------------------------
 
         popmenu.insertSeparator();
+        popmenu.insertItem(SmallIcon("slideshow"), i18n("SlideShow"), 16);
         popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 12);
         popmenu.insertItem(i18n("Open With"), &openWithMenu, 13);
 
@@ -294,6 +295,12 @@ void ImagePreviewView::mousePressEvent(QMouseEvent* e)
             case 15:     // Back to album
             {
                 emit signalBack2Album();
+                break;
+            }
+
+            case 16:     // SlideShow
+            {
+                emit signalSlideShow();
                 break;
             }
 

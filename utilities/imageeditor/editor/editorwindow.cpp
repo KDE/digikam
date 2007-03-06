@@ -60,7 +60,6 @@ extern "C"
 #include <kaccel.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
-#include <kpopupmenu.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kio/netaccess.h>
@@ -76,6 +75,7 @@ extern "C"
 // Local includes.
 
 #include "ddebug.h"
+#include "dpopupmenu.h"
 #include "canvas.h"
 #include "dimginterface.h"
 #include "imageplugin.h"
@@ -105,6 +105,7 @@ EditorWindow::EditorWindow(const char *name)
 {
     d = new EditorWindowPriv;
 
+    m_contextMenu            = 0;
     m_canvas                 = 0;
     m_imagePluginLoader      = 0;
     m_undoAction             = 0;
@@ -141,6 +142,20 @@ EditorWindow::~EditorWindow()
     delete d->ICCSettings;
     delete d->exposureSettings;
     delete d;
+}
+
+void EditorWindow::setupContextMenu()
+{
+    m_contextMenu         = new DPopupMenu(this);
+    KActionCollection *ac = actionCollection();
+    if( ac->action("editorwindow_backward") ) ac->action("editorwindow_backward")->plug(m_contextMenu);
+    if( ac->action("editorwindow_forward") ) ac->action("editorwindow_forward")->plug(m_contextMenu);
+    m_contextMenu->insertSeparator();
+    if( ac->action("editorwindow_slideshow") ) ac->action("editorwindow_slideshow")->plug(m_contextMenu);
+    if( ac->action("editorwindow_rotate") ) ac->action("editorwindow_rotate")->plug(m_contextMenu);
+    if( ac->action("editorwindow_crop") ) ac->action("editorwindow_crop")->plug(m_contextMenu);
+    m_contextMenu->insertSeparator();
+    if( ac->action("editorwindow_delete") ) ac->action("editorwindow_delete")->plug(m_contextMenu);
 }
 
 void EditorWindow::setupStandardConnections()

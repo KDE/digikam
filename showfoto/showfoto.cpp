@@ -68,7 +68,6 @@ extern "C"
 #include <kglobalsettings.h>
 #include <ktoolbar.h>
 #include <kstatusbar.h>
-#include <kpopupmenu.h>
 #include <kprogress.h>
 
 // LibKDcraw includes.
@@ -79,6 +78,7 @@ extern "C"
 // Local includes.
 
 #include "ddebug.h"
+#include "dpopupmenu.h"
 #include "dmetadata.h"
 #include "canvas.h"
 #include "thumbbar.h"
@@ -108,7 +108,6 @@ public:
 
     ShowFotoPriv()
     {
-        contextMenu             = 0;
         currentItem             = 0;
         itemsNb                 = 0;
         splash                  = 0;
@@ -140,8 +139,6 @@ public:
     
     KActionMenu                     *BCGAction;
 
-    QPopupMenu                      *contextMenu;
-    
     Digikam::ThumbBarView           *thumbBar;
     Digikam::ThumbBarItem           *currentItem;
     Digikam::ImagePropertiesSideBar *rightSidebar;
@@ -231,7 +228,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     // Create context menu.
     
-    d->contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this));
+    setupContextMenu();
 
     // Make signals/slots connections
     
@@ -1091,7 +1088,7 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
 
 void ShowFoto::slotContextMenu()
 {
-    d->contextMenu->exec(QCursor::pos());
+    m_contextMenu->exec(QCursor::pos());
 }
 
 void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& settings)

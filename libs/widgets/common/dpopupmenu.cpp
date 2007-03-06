@@ -32,7 +32,9 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kiconeffect.h>
+#include <kapplication.h>
 #include <kstandarddirs.h>
+#include <kaboutdata.h>
 
 // Local includes.
 
@@ -60,7 +62,12 @@ void DPopupMenu::generateSidePixmap()
     if ( newColor != _dpopupmenu_sidePixmapColor_ ) 
     {
         _dpopupmenu_sidePixmapColor_ = newColor;
-        _dpopupmenu_sidePixmap_.load( locate( "data","digikam/data/menusidepixmap.png" ) );
+
+        if (KApplication::kApplication()->aboutData()->appName() == QString("digikam"))
+            _dpopupmenu_sidePixmap_.load( locate( "data","digikam/data/menusidepixmap.png" ) );
+        else
+            _dpopupmenu_sidePixmap_.load( locate( "data","showfoto/menusidepixmap.png" ) );
+    
         KIconEffect::colorize( _dpopupmenu_sidePixmap_, newColor, 1.0 );
     }
 }
