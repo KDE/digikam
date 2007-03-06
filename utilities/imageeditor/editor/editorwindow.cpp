@@ -203,13 +203,10 @@ void EditorWindow::setupStandardConnections()
 
     // -- if rotating/flipping set the rotatedflipped flag to true -----------
 
-    connect(d->rotate90Action, SIGNAL(activated()),
+    connect(d->rotateLeftAction, SIGNAL(activated()),
             this, SLOT(slotRotatedOrFlipped()));
-            
-    connect(d->rotate180Action, SIGNAL(activated()),
-            this, SLOT(slotRotatedOrFlipped()));
-            
-    connect(d->rotate270Action, SIGNAL(activated()),
+
+    connect(d->rotateRightAction, SIGNAL(activated()),
             this, SLOT(slotRotatedOrFlipped()));
             
     connect(d->flipHorzAction, SIGNAL(activated()),
@@ -388,22 +385,18 @@ void EditorWindow::setupStandardActions()
                                       "editorwindow_rotate");
     d->rotateAction->setDelayed(false);
 
-    d->rotate90Action  = new KAction(i18n("90 Degrees"),
-                                     0, CTRL+Key_9, m_canvas, SLOT(slotRotate90()),
+    d->rotateLeftAction = new KAction(i18n("Left"),
+                                     "rotate_ccw", CTRL+Key_Left, 
+                                     m_canvas, SLOT(slotRotate270()),
                                      actionCollection(),
-                                     "rotate_90");
-    d->rotate180Action = new KAction(i18n("180 Degrees"),
-                                     0, CTRL+Key_8, m_canvas, SLOT(slotRotate180()),
+                                     "rotate_ccw");
+    d->rotateRightAction  = new KAction(i18n("Right"),
+                                     "rotate_cw", CTRL+Key_Right, 
+                                     m_canvas, SLOT(slotRotate90()),
                                      actionCollection(),
-                                     "rotate_180");
-    d->rotate270Action = new KAction(i18n("270 Degrees"),
-                                     0, CTRL+Key_7, m_canvas, SLOT(slotRotate270()),
-                                     actionCollection(),
-                                     "rotate_270");
-
-    d->rotateAction->insert(d->rotate90Action);
-    d->rotateAction->insert(d->rotate180Action);
-    d->rotateAction->insert(d->rotate270Action);
+                                     "rotate_cw");
+    d->rotateAction->insert(d->rotateLeftAction);
+    d->rotateAction->insert(d->rotateRightAction);
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 

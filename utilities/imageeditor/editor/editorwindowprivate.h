@@ -58,9 +58,8 @@ public:
         zoomPlusAction         = 0;
         zoomMinusAction        = 0;
         cropAction             = 0;
-        rotate90Action         = 0;
-        rotate180Action        = 0;
-        rotate270Action        = 0;
+        rotateLeftAction       = 0;
+        rotateRightAction      = 0;
         flipHorzAction         = 0;
         flipVertAction         = 0;
         flipAction             = 0;
@@ -95,9 +94,8 @@ public:
     KAction                   *cropAction;
     KAction                   *zoomPlusAction;
     KAction                   *zoomMinusAction;
-    KAction                   *rotate90Action;
-    KAction                   *rotate180Action;
-    KAction                   *rotate270Action;
+    KAction                   *rotateLeftAction;
+    KAction                   *rotateRightAction;
     KAction                   *flipHorzAction;
     KAction                   *flipVertAction;
     KAction                   *slideShowAction;
