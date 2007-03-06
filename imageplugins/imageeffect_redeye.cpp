@@ -144,14 +144,15 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
     blue_chan.blue_gain   = 1.0;
 
     float red_norm, green_norm, blue_norm;
+    int   level = 64;
 
     red_norm   = 1.0 / (red_chan.red_gain   + red_chan.green_gain   + red_chan.blue_gain);
     green_norm = 1.0 / (green_chan.red_gain + green_chan.green_gain + green_chan.blue_gain);
     blue_norm  = 1.0 / (blue_chan.red_gain  + blue_chan.green_gain  + blue_chan.blue_gain);
 
-    red_norm   *= coloring.red();
-    green_norm *= coloring.green();
-    blue_norm  *= coloring.blue();
+    red_norm   *= coloring.red()   / level;
+    green_norm *= coloring.green() / level;
+    blue_norm  *= coloring.blue()  / level;
 
     if (!selection.sixteenBit())         // 8 bits image.
     {
