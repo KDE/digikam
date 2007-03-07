@@ -453,12 +453,17 @@ void AlbumIconView::slotDoubleClicked(IconItem *item)
 {
     if (!item) return;
 
-    KIconEffect::visualActivate(viewport(), contentsRectToViewport(item->rect()));
-
     if (d->albumSettings->getItemRightClickAction() == AlbumSettings::ShowPreview)
+    {
+        // icon effect takes too much time
+        //KIconEffect::visualActivate(viewport(), contentsRectToViewport(item->rect()));
         signalPreviewItem(static_cast<AlbumIconItem *>(item));
-    else 
+    }
+    else
+    {
+        KIconEffect::visualActivate(viewport(), contentsRectToViewport(item->rect()));
         slotDisplayItem(static_cast<AlbumIconItem *>(item));
+    }
 }
 
 void AlbumIconView::slotRightButtonClicked(const QPoint& pos)
