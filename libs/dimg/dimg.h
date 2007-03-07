@@ -255,9 +255,6 @@ public:
     void       bitBltImage(const uchar* src, int sx, int sy, int w, int h, int dx, int dy,
                            uint swidth, uint sheight, int sdepth);
 
-    /** Merge a pixels region to an image using alpha channel */
-    void       bitBlend_RGBA2RGB(DImg& region, int x, int y, int w, int h);
-
     /** Blend src image on this image (this is dest) with the specified composer
         and multiplication flags. See documentation of DColorComposer for more info.
         For the other arguments, see documentation of bitBltImage above.
