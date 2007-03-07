@@ -1727,7 +1727,7 @@ void kio_digikamalbums::scanOneAlbum(const QString& url)
         {
             ++it;
             
-            if (fi->fileName() == "." || fi->fileName() == ".." || fi->extension(true) == "digikamtempfile.tmp")
+            if (fi->fileName() == "." || fi->fileName() == "..")
             {
                 continue;
             }
@@ -1785,6 +1785,12 @@ void kio_digikamalbums::scanOneAlbum(const QString& url)
         while ((fi = it.current()) != 0)
         {
             ++it;
+
+            // ignore temp files we created ourselves
+            if (fi->extension(true) == "digikamtempfile.tmp")
+            {
+                continue;
+            }
 
             if (currItemList.contains(fi->fileName()))
             {
