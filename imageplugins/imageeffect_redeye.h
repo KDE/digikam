@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2004-06-06
+ * Date   : 2004-06-06
  * Description : Red eyes correction tool for image editor
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
@@ -34,7 +34,9 @@
 class QComboBox;
 class QHButtonGroup;
 
-class KColorButton;
+class KHSSelector;
+class KValueSelector;
+class KIntNumInput;
 
 namespace Digikam
 {
@@ -83,7 +85,8 @@ private slots:
     void slotEffect();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
-    void slotColorSelectedFromTarget( const Digikam::DColor &color );
+    void slotColorSelectedFromTarget(const Digikam::DColor &color);
+    void slotHSChanged(int h, int s);
 
 private:
 
@@ -122,11 +125,10 @@ private:
     
     QHButtonGroup                *m_scaleBG;  
 
-/*    KIntNumInput                 *m_bInput;
-    KIntNumInput                 *m_cInput;
-    KDoubleNumInput              *m_gInput;*/
+    KIntNumInput                 *m_taintLevel;
 
-    KColorButton                 *m_coloringButton;
+    KHSSelector                  *m_HSSelector;
+    KValueSelector               *m_VSelector;
     
     Digikam::ImageWidget         *m_previewWidget;
 

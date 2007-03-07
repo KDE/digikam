@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2004-06-06
+ * Date   : 2004-06-06
  * Description : Red eyes correction tool for image editor
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
@@ -44,7 +44,7 @@
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kstandarddirs.h>
-#include <kcolorbutton.h>
+#include <kcolordialog.h>
 
 // Digikam includes.
 
@@ -79,7 +79,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     // -------------------------------------------------------------
                 
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 6, 4, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 9, 4, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -152,12 +152,25 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     gridSettings->addMultiCellWidget(label2, 3, 3, 0, 4);
     gridSettings->addMultiCellWidget(m_redThreshold, 4, 4, 0, 4);
 
-    QHBox *hbox      = new QHBox(gboxSettings);
-    QLabel *label3   = new QLabel(i18n("Coloring Taint:"), hbox);
-    m_coloringButton = new KColorButton(Qt::black, hbox);
-    gridSettings->addMultiCellWidget(hbox, 5, 5, 0, 4);
+    QLabel *label3 = new QLabel(i18n("Coloring Taint:"), gboxSettings);
+    m_HSSelector   = new KHSSelector(gboxSettings);
+    m_VSelector    = new KValueSelector(gboxSettings);
+    m_HSSelector->setMinimumSize(200, 142);
+    m_VSelector->setMinimumSize(26, 142);
+    gridSettings->addMultiCellWidget(label3, 5, 5, 0, 4);
+    gridSettings->addMultiCellWidget(m_HSSelector, 6, 6, 0, 3);
+    gridSettings->addMultiCellWidget(m_VSelector, 6, 6, 4, 4);
 
-    gridSettings->setRowStretch(6, 10);    
+    QLabel *label4 = new QLabel(i18n("Taint Level:"), gboxSettings);
+    m_taintLevel   = new KIntNumInput(gboxSettings);
+    m_taintLevel->setRange(1, 200, 1, true);
+    m_taintLevel->setValue(0);
+    QWhatsThis::add( m_taintLevel, i18n("<p>Set here the taint level used to coloring red eye."));
+    gridSettings->addMultiCellWidget(label4, 7, 7, 0, 4);
+    gridSettings->addMultiCellWidget(m_taintLevel, 8, 8, 0, 4);
+
+    gridSettings->setRowStretch(9, 10);    
+    gridSettings->setColStretch(3, 10);    
     setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------
@@ -177,8 +190,14 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     connect(m_redThreshold, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));   
 
-    connect(m_coloringButton, SIGNAL(changed (const QColor&)),
-            this, SLOT(slotEffect())); 
+    connect(m_HSSelector, SIGNAL(valueChanged(int, int)),
+            this, SLOT(slotHSChanged(int, int)));
+
+    connect(m_VSelector, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimer()));
+
+    connect(m_taintLevel, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimer()));  
 }
 
 ImageEffect_RedEye::~ImageEffect_RedEye()
@@ -190,6 +209,17 @@ ImageEffect_RedEye::~ImageEffect_RedEye()
        
     delete m_histogramWidget;
     delete m_previewWidget;
+}
+
+void ImageEffect_RedEye::slotHSChanged(int h, int s)
+{
+    m_VSelector->blockSignals(true);
+    m_VSelector->setHue(h);
+    m_VSelector->setSaturation(s);
+    m_VSelector->updateContents();
+    m_VSelector->repaint(false);
+    m_VSelector->blockSignals(false);  
+    slotTimer();
 }
 
 void ImageEffect_RedEye::slotChannelChanged(int channel)
@@ -233,13 +263,16 @@ void ImageEffect_RedEye::slotColorSelectedFromTarget( const Digikam::DColor &col
 
 void ImageEffect_RedEye::readUserSettings()
 {
-    QColor black(Qt::black);
     KConfig* config = kapp->config();
     config->setGroup("redeye Tool Dialog");
-    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
+    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0)); // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
     m_redThreshold->setCurrentItem(config->readNumEntry("RedThreshold", Mild));
-    m_coloringButton->setColor(config->readColorEntry("ColoringTaint", &black));
+    m_HSSelector->setXValue(config->readNumEntry("HueColoringTaint", 0));
+    m_HSSelector->setYValue(config->readNumEntry("SatColoringTaint", 0));
+    m_VSelector->setValue(config->readNumEntry("ValColoringTaint", 0));
+    m_taintLevel->setValue(config->readNumEntry("TaintLevel", 64));
+    slotHSChanged(m_HSSelector->xValue(), m_HSSelector->yValue());
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
 }
@@ -251,19 +284,33 @@ void ImageEffect_RedEye::writeUserSettings()
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
     config->writeEntry("RedThreshold", m_redThreshold->currentItem());
-    config->writeEntry("ColoringTaint", m_coloringButton->color());
+    config->writeEntry("HueColoringTaint", m_HSSelector->xValue());
+    config->writeEntry("SatColoringTaint", m_HSSelector->yValue());
+    config->writeEntry("ValColoringTaint", m_VSelector->value());
+    config->writeEntry("TaintLevel", m_taintLevel->value());
     config->sync();
 }
 
 void ImageEffect_RedEye::resetValues()
 {
-    QColor black(Qt::black);
     m_redThreshold->blockSignals(true);	
-    m_coloringButton->blockSignals(true);	
+    m_HSSelector->blockSignals(true);       
+    m_VSelector->blockSignals(true);   
+    m_taintLevel->blockSignals(true);   
+
     m_redThreshold->setCurrentItem(Mild);
-    m_coloringButton->setColor(black);
+
+    // Black color by default
+    m_HSSelector->setXValue(0);
+    m_HSSelector->setYValue(0);
+    m_VSelector->setValue(0);
+
+    m_taintLevel->setValue(64);
+
     m_redThreshold->blockSignals(false); 
-    m_coloringButton->blockSignals(false);       
+    m_HSSelector->blockSignals(false);       
+    m_VSelector->blockSignals(false);
+    m_taintLevel->blockSignals(false);        
 } 
 
 void ImageEffect_RedEye::slotEffect()
@@ -323,7 +370,11 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
     Digikam::DImg newSelection = selection.copy();
 
     bool aggressive = (m_redThreshold->currentItem() == Mild) ? false : true;
-    QColor coloring = m_coloringButton->color();
+
+    int hue = m_HSSelector->xValue();
+    int sat = m_HSSelector->yValue();
+    int val = m_VSelector->value();
+    QColor coloring(hue, sat, val, QColor::Hsv);
 
     struct channel
     {
@@ -347,7 +398,7 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
     blue_chan.blue_gain   = 1.0;
 
     float red_norm, green_norm, blue_norm;
-    int   level = 64;
+    int   level = m_taintLevel->value();
 
     red_norm   = 1.0 / (red_chan.red_gain   + red_chan.green_gain   + red_chan.blue_gain);
     green_norm = 1.0 / (green_chan.red_gain + green_chan.green_gain + green_chan.blue_gain);
