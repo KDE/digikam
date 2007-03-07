@@ -746,8 +746,9 @@ void EditorWindow::applyStandardSettings()
 
     d->viewCMViewAction->setEnabled(d->ICCSettings->enableCMSetting);
     d->viewCMViewAction->setChecked(d->ICCSettings->managedViewSetting);
-    d->cmViewIndicator->setOn(d->ICCSettings->managedViewSetting && d->ICCSettings->enableCMSetting);
-    setColorManagedViewIndicatorToolTip(d->ICCSettings->managedViewSetting && d->ICCSettings->enableCMSetting);
+    d->cmViewIndicator->setEnabled(d->ICCSettings->enableCMSetting);
+    d->cmViewIndicator->setOn(d->ICCSettings->managedViewSetting);
+    setColorManagedViewIndicatorToolTip(d->ICCSettings->enableCMSetting, d->ICCSettings->managedViewSetting);
     m_canvas->setICCSettings(d->ICCSettings);
 
     // -- JPEG, PNG, TIFF JPEG2000 files format settings --------------------------------------
@@ -1568,17 +1569,27 @@ void EditorWindow::slotToggleColorManagedView()
 
     d->cmViewIndicator->setOn(cmv);
     d->viewCMViewAction->setChecked(cmv);
-    setColorManagedViewIndicatorToolTip(cmv);
+    setColorManagedViewIndicatorToolTip(d->ICCSettings->enableCMSetting, cmv);
     d->cmViewIndicator->blockSignals(false);
     d->viewCMViewAction->blockSignals(false);
 }    
 
-void EditorWindow::setColorManagedViewIndicatorToolTip(bool cmv)
+void EditorWindow::setColorManagedViewIndicatorToolTip(bool available, bool cmv)
 {
-    QToolTip::remove(d->cmViewIndicator); 
-    QToolTip::add(d->cmViewIndicator, 
-                cmv ? i18n("Color Managed View is enabled") 
-                    : i18n("Color Managed View is disabled"));
+    QToolTip::remove(d->cmViewIndicator);
+    QString tooltip;
+    if (available)
+    {
+        if (cmv)
+            tooltip = i18n("Color Managed View is enabled");
+        else
+            tooltip = i18n("Color Managed View is disabled");
+    }
+    else
+    {
+        tooltip = i18n("Color Management is not configured, so the Color Managed View is not available");
+    }
+    QToolTip::add(d->cmViewIndicator, tooltip);
 }
 
 void EditorWindow::slotToggleUnderExposureIndicator()
