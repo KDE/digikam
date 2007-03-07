@@ -55,6 +55,7 @@
 #include "colorgradientwidget.h"
 #include "bcgmodifier.h"
 #include "dimg.h"
+#include "dimgimagefilters.h"
 
 // Local includes.
 
@@ -80,7 +81,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     // -------------------------------------------------------------
                 
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 10, 4, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 12, 4, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -146,40 +147,49 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_aggressiveBox = new QCheckBox(gboxSettings);
     m_aggressiveBox->setText(i18n("Aggressive"));
     QWhatsThis::add(m_aggressiveBox, i18n("<p>When this option is on, the filter will use an agressive "
-                                          "red color threshold method. To use only if eye have been "
+                                          "sensitivity. To use only if eye have been "
                                           "selected exactly.</p>"
-                                          "<p>When this option is off, the filter will use an mild red "
-                                          "color threshold method. A slider will be available in this "
-                                          "case to adjust the threshold value.</p>"));
+                                          "<p>When this option is off, the filter will use an mild " 
+                                          "sensitivity. Use the slider to adjust the threshold of "
+                                          "red color pixels selection.</p>"));
     gridSettings->addMultiCellWidget(m_aggressiveBox, 3, 3, 0, 4);
 
-    m_thresholdlabel = new QLabel(i18n("Red Threshold:"), gboxSettings);
+    m_thresholdLabel = new QLabel(i18n("Sensitivity:"), gboxSettings);
     m_redThreshold   = new KIntNumInput(gboxSettings);
     m_redThreshold->setRange(10, 90, 1, true);
     m_redThreshold->setValue(20);
-    QWhatsThis::add(m_redThreshold, i18n("<p>Set here the red color threshold value to use. "
+    QWhatsThis::add(m_redThreshold, i18n("<p>Set here the red color pixels selection threshold. "
                                          "Low values will select more red color pixels, high values less."));
-    gridSettings->addMultiCellWidget(m_thresholdlabel, 4, 4, 0, 4);
+    gridSettings->addMultiCellWidget(m_thresholdLabel, 4, 4, 0, 4);
     gridSettings->addMultiCellWidget(m_redThreshold, 5, 5, 0, 4);
+
+    m_smoothLabel  = new QLabel(i18n("Smooth:"), gboxSettings);
+    m_smoothLevel = new KIntNumInput(gboxSettings);
+    m_smoothLevel->setRange(0, 10, 1, true);
+    m_smoothLevel->setValue(3);
+    QWhatsThis::add(m_smoothLevel, i18n("<p>Set here the smootness value used to blur red color "
+                                        "pixels selection."));
+    gridSettings->addMultiCellWidget(m_smoothLabel, 6, 6, 0, 4);
+    gridSettings->addMultiCellWidget(m_smoothLevel, 7, 7, 0, 4);
 
     QLabel *label3 = new QLabel(i18n("Coloring Taint:"), gboxSettings);
     m_HSSelector   = new KHSSelector(gboxSettings);
     m_VSelector    = new KValueSelector(gboxSettings);
     m_HSSelector->setMinimumSize(200, 142);
     m_VSelector->setMinimumSize(26, 142);
-    gridSettings->addMultiCellWidget(label3, 6, 6, 0, 4);
-    gridSettings->addMultiCellWidget(m_HSSelector, 7, 7, 0, 3);
-    gridSettings->addMultiCellWidget(m_VSelector, 7, 7, 4, 4);
+    gridSettings->addMultiCellWidget(label3, 8, 8, 0, 4);
+    gridSettings->addMultiCellWidget(m_HSSelector, 9, 9, 0, 3);
+    gridSettings->addMultiCellWidget(m_VSelector, 9, 9, 4, 4);
 
     QLabel *label4 = new QLabel(i18n("Taint Level:"), gboxSettings);
     m_taintLevel   = new KIntNumInput(gboxSettings);
     m_taintLevel->setRange(1, 200, 1, true);
     m_taintLevel->setValue(128);
     QWhatsThis::add( m_taintLevel, i18n("<p>Set here the taint level used to coloring red eye."));
-    gridSettings->addMultiCellWidget(label4, 8, 8, 0, 4);
-    gridSettings->addMultiCellWidget(m_taintLevel, 9, 9, 0, 4);
+    gridSettings->addMultiCellWidget(label4, 10, 10, 0, 4);
+    gridSettings->addMultiCellWidget(m_taintLevel, 11, 11, 0, 4);
 
-    gridSettings->setRowStretch(10, 10);    
+    gridSettings->setRowStretch(12, 10);    
     gridSettings->setColStretch(3, 10);    
     setUserAreaWidget(gboxSettings);
     
@@ -198,6 +208,9 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
             this, SLOT(slotEffect()));    
             
     connect(m_redThreshold, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimer()));   
+
+    connect(m_smoothLevel, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));   
 
     connect(m_HSSelector, SIGNAL(valueChanged(int, int)),
@@ -237,8 +250,10 @@ void ImageEffect_RedEye::slotHSChanged(int h, int s)
 
 void ImageEffect_RedEye::slotAggressiveToggled(bool b)
 {
-    m_thresholdlabel->setEnabled(!b);
+    m_thresholdLabel->setEnabled(!b);
     m_redThreshold->setEnabled(!b);
+    m_smoothLabel->setEnabled(!b);
+    m_smoothLevel->setEnabled(!b);
     slotEffect();
 }
 
@@ -289,6 +304,7 @@ void ImageEffect_RedEye::readUserSettings()
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
     m_aggressiveBox->setChecked(config->readBoolEntry("Aggressive", false));
     m_redThreshold->setValue(config->readNumEntry("RedThreshold", 20));
+    m_smoothLevel->setValue(config->readNumEntry("SmoothLevel", 3));
     m_HSSelector->setXValue(config->readNumEntry("HueColoringTaint", 0));
     m_HSSelector->setYValue(config->readNumEntry("SatColoringTaint", 0));
     m_VSelector->setValue(config->readNumEntry("ValColoringTaint", 0));
@@ -308,6 +324,7 @@ void ImageEffect_RedEye::writeUserSettings()
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
     config->writeEntry("Aggressive", m_aggressiveBox->isChecked());
     config->writeEntry("RedThreshold", m_redThreshold->value());
+    config->writeEntry("SmoothLevel", m_smoothLevel->value());
     config->writeEntry("HueColoringTaint", m_HSSelector->xValue());
     config->writeEntry("SatColoringTaint", m_HSSelector->yValue());
     config->writeEntry("ValColoringTaint", m_VSelector->value());
@@ -325,6 +342,7 @@ void ImageEffect_RedEye::resetValues()
 
     m_aggressiveBox->setChecked(false);
     m_redThreshold->setValue(20);
+    m_smoothLevel->setValue(3);
 
     // Black color by default
     m_HSSelector->setXValue(0);
@@ -394,7 +412,10 @@ void ImageEffect_RedEye::finalRendering()
 
 void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
 {
-    Digikam::DImg newSelection = selection.copy();
+    Digikam::DImg mask(selection.width(), selection.height(), selection.sixteenBit(), true, 
+                       selection.bits(), true);
+
+    selection = mask.copy();
 
     bool  aggressive   = m_aggressiveBox->isChecked();
     float redThreshold = m_redThreshold->value()/10.0;
@@ -439,8 +460,8 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
     if (!selection.sixteenBit())         // 8 bits image.
     {
         uchar* ptr  = selection.bits();
-        uchar* nptr = newSelection.bits();
-        uchar  r, g, b, a, r1, g1, b1;
+        uchar* nptr = mask.bits();
+        uchar  r, g, b, a, r1, g1, b1, a1;
 
         for (uint i = 0 ; i < selection.width() * selection.height() ; i++) 
         {
@@ -463,11 +484,15 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
                                                   blue_chan.green_gain * g +
                                                   blue_chan.blue_gain  * b)));
 
+                a1 = QMIN( (int)((r-g) / 150.0 * 255.0), 255);
                 nptr[0] = b1;
                 nptr[1] = g1;
                 nptr[2] = r1;
-                nptr[3] = QMIN( (int)((r-g) / 150.0 * 255.0), 255);
+                nptr[3] = a1;
             }
+
+            ptr[3]  = nptr[3];
+            nptr[3] = 255-ptr[3];
 
             ptr += 4;
             nptr+= 4;
@@ -476,8 +501,8 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
     else                                 // 16 bits image.
     {
         unsigned short* ptr  = (unsigned short*)selection.bits();
-        unsigned short* nptr = (unsigned short*)newSelection.bits();
-        unsigned short  r, g, b, a, r1, g1, b1;
+        unsigned short* nptr = (unsigned short*)mask.bits();
+        unsigned short  r, g, b, a, r1, g1, b1, a1;
 
         for (uint i = 0 ; i < selection.width() * selection.height() ; i++) 
         {
@@ -500,21 +525,35 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
                                                           blue_chan.green_gain * g +
                                                           blue_chan.blue_gain  * b)));
 
+                a1 = QMIN( (int)((r-g) / 38400.0 * 65535.0), 65535);
+        
                 nptr[0] = b1;
                 nptr[1] = g1;
                 nptr[2] = r1;
-                nptr[3] = QMIN( (int)((r-g) / 38400.0 * 65535.0), 65535);
+                nptr[3] = a1;
             }
+
+            ptr[3]  = nptr[3];
+            nptr[3] = 65535-ptr[3];
 
             ptr += 4;
             nptr+= 4;
         }
     }
 
-    // - Perform pixels blending using alpha channel to blur a little the result.
+    if (!aggressive)
+    {
+        Digikam::DImgImageFilters filter;
+        filter.gaussianBlurImage(mask.bits(), mask.width(), mask.height(), 
+                                 mask.sixteenBit(), m_smoothLevel->value());
+    }
 
-    selection.bitBlend_RGBA2RGB(newSelection, 0, 0, selection.width(), selection.height());
+    // - Perform pixels blending using alpha channel.
+
+    Digikam::DColorComposer *composer = Digikam::DColorComposer::getComposer(Digikam::DColorComposer::PorterDuffNone);
+    selection.bitBlendImage(composer, &mask, 
+                            0, 0, mask.width(), mask.height(),
+                            0, 0);
 }
 
 }  // NameSpace DigikamImagesPluginCore
-

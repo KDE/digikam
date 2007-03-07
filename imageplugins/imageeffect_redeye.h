@@ -123,7 +123,8 @@ private:
 
     uchar                        *m_destinationPreviewData;
 
-    QLabel                       *m_thresholdlabel;
+    QLabel                       *m_thresholdLabel;
+    QLabel                       *m_smoothLabel;
 
     QComboBox                    *m_channelCB;   
 
@@ -133,6 +134,7 @@ private:
 
     KIntNumInput                 *m_taintLevel;
     KIntNumInput                 *m_redThreshold; 
+    KIntNumInput                 *m_smoothLevel;
 
     KHSSelector                  *m_HSSelector;
     KValueSelector               *m_VSelector;
