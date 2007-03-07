@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=showFoto
+Name[hr]=prikaži
 Name[pa]=ਫੋਟੋਵੇਖਾਓ
 Name[sv]=Showfoto
 Name[xx]=xxshowFotoxx
@@ -20,6 +21,7 @@ GenericName[fa]=مشاهده‌گر تصویر
 GenericName[fi]=Kuvankatseluohjelma
 GenericName[ga]=Amharcán Íomhánna
 GenericName[gl]=Visor de Imaxes
+GenericName[hr]=Preglednik slika
 GenericName[is]=Myndskoðari
 GenericName[it]=Visualizzatore di immagini
 GenericName[ja]=画像ビューア
@@ -52,6 +54,7 @@ Comment[et]=DigiKami fotode näitaja
 Comment[fa]=مشاهده‌گر عکس digiKam
 Comment[fi]=digiKamin katseluohjelma
 Comment[gl]=Visor de fotos digiKam
+Comment[hr]=digiKam preglednik fotografija
 Comment[is]=digiKam Myndaskoðari
 Comment[it]=Visualizzatore di foto digiKam
 Comment[ja]=digiKam フォトビューア
