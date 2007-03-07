@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at gmail dot com>
+ *          Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2004-06-06
  * Description : Red eyes correction tool for image editor
  *
@@ -31,7 +31,9 @@
 
 #include "imagedlgbase.h"
 
+class QLabel;
 class QComboBox;
+class QCheckBox;
 class QHButtonGroup;
 
 class KHSSelector;
@@ -87,6 +89,7 @@ private slots:
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
     void slotHSChanged(int h, int s);
+    void slotAggressiveToggled(bool b);
 
 private:
 
@@ -120,12 +123,16 @@ private:
 
     uchar                        *m_destinationPreviewData;
 
+    QLabel                       *m_thresholdlabel;
+
     QComboBox                    *m_channelCB;   
-    QComboBox                    *m_redThreshold; 
-    
+
+    QCheckBox                    *m_aggressiveBox;    
+
     QHButtonGroup                *m_scaleBG;  
 
     KIntNumInput                 *m_taintLevel;
+    KIntNumInput                 *m_redThreshold; 
 
     KHSSelector                  *m_HSSelector;
     KValueSelector               *m_VSelector;

@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at gmail dot com>
+ *          Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2004-06-06
  * Description : Red eyes correction tool for image editor
  *
@@ -33,6 +33,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
+#include <qcheckbox.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 
@@ -79,7 +80,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     // -------------------------------------------------------------
                 
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 9, 4, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 10, 4, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -142,34 +143,43 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Red Threshold:"), gboxSettings);
-    m_redThreshold = new QComboBox( false, gboxSettings );
-    m_redThreshold->insertItem( i18n("Mild"), Mild );
-    m_redThreshold->insertItem( i18n("Aggressive"), Aggressive );
-    QWhatsThis::add( m_redThreshold, i18n("<p>Set here red color threshold to use:</p>"
-                     "<b>Mild</b>: use this option if other parts of the face are also selected."
-                     "<b>Aggressive</b>: use this option only if eye(s) have been selected exactly."));
-    gridSettings->addMultiCellWidget(label2, 3, 3, 0, 4);
-    gridSettings->addMultiCellWidget(m_redThreshold, 4, 4, 0, 4);
+    m_aggressiveBox = new QCheckBox(gboxSettings);
+    m_aggressiveBox->setText(i18n("Aggressive"));
+    QWhatsThis::add(m_aggressiveBox, i18n("<p>When this option is on, the filter will use an agressive "
+                                          "red color threshold method. To use only if eye have been "
+                                          "selected exactly.</p>"
+                                          "<p>When this option is off, the filter will use an mild red "
+                                          "color threshold method. A slider will be available in this "
+                                          "case to adjust the threshold value.</p>"));
+    gridSettings->addMultiCellWidget(m_aggressiveBox, 3, 3, 0, 4);
+
+    m_thresholdlabel = new QLabel(i18n("Red Threshold:"), gboxSettings);
+    m_redThreshold   = new KIntNumInput(gboxSettings);
+    m_redThreshold->setRange(10, 90, 1, true);
+    m_redThreshold->setValue(20);
+    QWhatsThis::add(m_redThreshold, i18n("<p>Set here the red color threshold value to use. "
+                                         "Low values will select more red color pixels, high values less."));
+    gridSettings->addMultiCellWidget(m_thresholdlabel, 4, 4, 0, 4);
+    gridSettings->addMultiCellWidget(m_redThreshold, 5, 5, 0, 4);
 
     QLabel *label3 = new QLabel(i18n("Coloring Taint:"), gboxSettings);
     m_HSSelector   = new KHSSelector(gboxSettings);
     m_VSelector    = new KValueSelector(gboxSettings);
     m_HSSelector->setMinimumSize(200, 142);
     m_VSelector->setMinimumSize(26, 142);
-    gridSettings->addMultiCellWidget(label3, 5, 5, 0, 4);
-    gridSettings->addMultiCellWidget(m_HSSelector, 6, 6, 0, 3);
-    gridSettings->addMultiCellWidget(m_VSelector, 6, 6, 4, 4);
+    gridSettings->addMultiCellWidget(label3, 6, 6, 0, 4);
+    gridSettings->addMultiCellWidget(m_HSSelector, 7, 7, 0, 3);
+    gridSettings->addMultiCellWidget(m_VSelector, 7, 7, 4, 4);
 
     QLabel *label4 = new QLabel(i18n("Taint Level:"), gboxSettings);
     m_taintLevel   = new KIntNumInput(gboxSettings);
     m_taintLevel->setRange(1, 200, 1, true);
-    m_taintLevel->setValue(0);
+    m_taintLevel->setValue(128);
     QWhatsThis::add( m_taintLevel, i18n("<p>Set here the taint level used to coloring red eye."));
-    gridSettings->addMultiCellWidget(label4, 7, 7, 0, 4);
-    gridSettings->addMultiCellWidget(m_taintLevel, 8, 8, 0, 4);
+    gridSettings->addMultiCellWidget(label4, 8, 8, 0, 4);
+    gridSettings->addMultiCellWidget(m_taintLevel, 9, 9, 0, 4);
 
-    gridSettings->setRowStretch(9, 10);    
+    gridSettings->setRowStretch(10, 10);    
     gridSettings->setColStretch(3, 10);    
     setUserAreaWidget(gboxSettings);
     
@@ -187,8 +197,8 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));    
             
-    connect(m_redThreshold, SIGNAL(activated(int)),
-            this, SLOT(slotEffect()));   
+    connect(m_redThreshold, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimer()));   
 
     connect(m_HSSelector, SIGNAL(valueChanged(int, int)),
             this, SLOT(slotHSChanged(int, int)));
@@ -198,6 +208,9 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
 
     connect(m_taintLevel, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));  
+
+    connect(m_aggressiveBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotAggressiveToggled(bool)));      
 }
 
 ImageEffect_RedEye::~ImageEffect_RedEye()
@@ -220,6 +233,13 @@ void ImageEffect_RedEye::slotHSChanged(int h, int s)
     m_VSelector->repaint(false);
     m_VSelector->blockSignals(false);  
     slotTimer();
+}
+
+void ImageEffect_RedEye::slotAggressiveToggled(bool b)
+{
+    m_thresholdlabel->setEnabled(!b);
+    m_redThreshold->setEnabled(!b);
+    slotEffect();
 }
 
 void ImageEffect_RedEye::slotChannelChanged(int channel)
@@ -267,11 +287,14 @@ void ImageEffect_RedEye::readUserSettings()
     config->setGroup("redeye Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0)); // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
-    m_redThreshold->setCurrentItem(config->readNumEntry("RedThreshold", Mild));
+    m_aggressiveBox->setChecked(config->readBoolEntry("Aggressive", false));
+    m_redThreshold->setValue(config->readNumEntry("RedThreshold", 20));
     m_HSSelector->setXValue(config->readNumEntry("HueColoringTaint", 0));
     m_HSSelector->setYValue(config->readNumEntry("SatColoringTaint", 0));
     m_VSelector->setValue(config->readNumEntry("ValColoringTaint", 0));
-    m_taintLevel->setValue(config->readNumEntry("TaintLevel", 64));
+    m_taintLevel->setValue(config->readNumEntry("TaintLevel", 128));
+    
+    slotAggressiveToggled(m_aggressiveBox->isChecked());
     slotHSChanged(m_HSSelector->xValue(), m_HSSelector->yValue());
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
@@ -283,7 +306,8 @@ void ImageEffect_RedEye::writeUserSettings()
     config->setGroup("redeye Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
-    config->writeEntry("RedThreshold", m_redThreshold->currentItem());
+    config->writeEntry("Aggressive", m_aggressiveBox->isChecked());
+    config->writeEntry("RedThreshold", m_redThreshold->value());
     config->writeEntry("HueColoringTaint", m_HSSelector->xValue());
     config->writeEntry("SatColoringTaint", m_HSSelector->yValue());
     config->writeEntry("ValColoringTaint", m_VSelector->value());
@@ -293,20 +317,23 @@ void ImageEffect_RedEye::writeUserSettings()
 
 void ImageEffect_RedEye::resetValues()
 {
+    m_aggressiveBox->blockSignals(true);   
     m_redThreshold->blockSignals(true);	
     m_HSSelector->blockSignals(true);       
     m_VSelector->blockSignals(true);   
     m_taintLevel->blockSignals(true);   
 
-    m_redThreshold->setCurrentItem(Mild);
+    m_aggressiveBox->setChecked(false);
+    m_redThreshold->setValue(20);
 
     // Black color by default
     m_HSSelector->setXValue(0);
     m_HSSelector->setYValue(0);
     m_VSelector->setValue(0);
 
-    m_taintLevel->setValue(64);
+    m_taintLevel->setValue(128);
 
+    m_aggressiveBox->blockSignals(false);   
     m_redThreshold->blockSignals(false); 
     m_HSSelector->blockSignals(false);       
     m_VSelector->blockSignals(false);
@@ -369,7 +396,8 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
 {
     Digikam::DImg newSelection = selection.copy();
 
-    bool aggressive = (m_redThreshold->currentItem() == Mild) ? false : true;
+    bool  aggressive   = m_aggressiveBox->isChecked();
+    float redThreshold = m_redThreshold->value()/10.0;
 
     int hue = m_HSSelector->xValue();
     int sat = m_HSSelector->yValue();
@@ -398,7 +426,7 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
     blue_chan.blue_gain   = 1.0;
 
     float red_norm, green_norm, blue_norm;
-    int   level = m_taintLevel->value();
+    int   level = 201 - m_taintLevel->value();
 
     red_norm   = 1.0 / (red_chan.red_gain   + red_chan.green_gain   + red_chan.blue_gain);
     green_norm = 1.0 / (green_chan.red_gain + green_chan.green_gain + green_chan.blue_gain);
@@ -421,7 +449,7 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
             r = ptr[2];
             a = ptr[3];
 
-            if ( aggressive || r >= ( 2 * g) )
+            if ( aggressive || r >= ( redThreshold * g) )
             {
                 r1 = QMIN(255, (int)(red_norm * (red_chan.red_gain   * r +
                                                  red_chan.green_gain * g +
@@ -458,7 +486,7 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
             r = ptr[2];
             a = ptr[3];
 
-            if ( aggressive || r >= ( 2 * g) )
+            if ( aggressive || r >= ( redThreshold * g) )
             {
                 r1 = QMIN(65535, (int)(red_norm * 256 * (red_chan.red_gain   * r +
                                                          red_chan.green_gain * g +
