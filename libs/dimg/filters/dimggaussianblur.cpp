@@ -1,13 +1,12 @@
 /* ============================================================
- * File  : dimggaussianblur.cpp
- * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2005-17-07
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Date   : 2005-17-07
  * Description : A Gaussian Blur threaded image filter.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * Original Gaussian Blur algorithm copyrighted 2004 by 
- * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
+ * Pieter Z. Voloshyn <pieter_voloshyn at ame dot com dot br>.
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -84,14 +83,14 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
     double       x, sd, factor, lnsd, lnfactor;
     register int i, j, n, h, w;
 
-    nKSize = 2 * radius + 1;
-    nCenter = nKSize / 2;
+    nKSize      = 2 * radius + 1;
+    nCenter     = nKSize / 2;
     int *Kernel = new int[nKSize];
 
     lnfactor = (4.2485 - 2.7081) / 10 * nKSize + 2.7081;
-    lnsd = (0.5878 + 0.5447) / 10 * nKSize - 0.5447;
-    factor = exp (lnfactor);
-    sd = exp (lnsd);
+    lnsd     = (0.5878 + 0.5447) / 10 * nKSize - 0.5447;
+    factor   = exp (lnfactor);
+    sd       = exp (lnsd);
 
     for (i = 0; !m_cancel && (i < nKSize); i++)
     {
@@ -105,7 +104,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
     // this, but the trick here its to store the sum used by the       
     // previous pixel, so we sum with the other pixels that wasn't get.
     
-    int nSumR, nSumG, nSumB, nCount, progress;
+    int nSumA, nSumR, nSumG, nSumB, nCount, progress;
     int nKernelWidth = radius * 2 + 1;
     
     // We need to alloc a 2d array to help us to store the values
@@ -125,7 +124,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
 
     // We need to initialize all the loop and iterator variables
     
-    nSumR = nSumG = nSumB = nCount = i = j = 0;
+    nSumA = nSumR = nSumG = nSumB = nCount = i = j = 0;
     unsigned short* data16     = (unsigned short*)data;
     unsigned short* pBlur16    = (unsigned short*)pBlur;
     unsigned short* pOutBits16 = (unsigned short*)pOutBits;
@@ -153,6 +152,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
                         // finally, we sum the pixels using a method similar to assigntables
 
                         org = &data[j];
+                        nSumA += arrMult[n + radius][org[3]];
                         nSumR += arrMult[n + radius][org[2]];
                         nSumG += arrMult[n + radius][org[1]];
                         nSumB += arrMult[n + radius][org[0]];
@@ -166,12 +166,13 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
                     
                 // now, we return to blur bits the horizontal blur values
                 dst    = &pBlur[i];
+                dst[3] = (uchar)CLAMP (nSumA / nCount, 0, 255);
                 dst[2] = (uchar)CLAMP (nSumR / nCount, 0, 255);
                 dst[1] = (uchar)CLAMP (nSumG / nCount, 0, 255);
                 dst[0] = (uchar)CLAMP (nSumB / nCount, 0, 255);
                 
                 // ok, now we reinitialize the variables
-                nSumR = nSumG = nSumB = nCount = 0;
+                nSumA = nSumR = nSumG = nSumB = nCount = 0;
             }
             else                 // 16 bits image.
             {
@@ -190,6 +191,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
                         // finally, we sum the pixels using a method similar to assigntables
 
                         org = &data16[j];
+                        nSumA += arrMult[n + radius][org[3]];
                         nSumR += arrMult[n + radius][org[2]];
                         nSumG += arrMult[n + radius][org[1]];
                         nSumB += arrMult[n + radius][org[0]];
@@ -203,12 +205,13 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
                     
                 // now, we return to blur bits the horizontal blur values
                 dst    = &pBlur16[i];
+                dst[3] = (unsigned short)CLAMP (nSumA / nCount, 0, 65535);
                 dst[2] = (unsigned short)CLAMP (nSumR / nCount, 0, 65535);
                 dst[1] = (unsigned short)CLAMP (nSumG / nCount, 0, 65535);
                 dst[0] = (unsigned short)CLAMP (nSumB / nCount, 0, 65535);
                 
                 // ok, now we reinitialize the variables
-                nSumR = nSumG = nSumB = nCount = 0;
+                nSumA = nSumR = nSumG = nSumB = nCount = 0;
             }
         }
         
@@ -240,6 +243,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
                         
                         // finally, we sum the pixels using a method similar to assigntables
                         org = &pBlur[j];
+                        nSumA += arrMult[n + radius][org[3]];
                         nSumR += arrMult[n + radius][org[2]];
                         nSumG += arrMult[n + radius][org[1]];
                         nSumB += arrMult[n + radius][org[0]];
@@ -256,12 +260,13 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
                     
                 // now, we return to bits the vertical blur values
                 dst    = &pOutBits[i];
+                dst[3] = (uchar)CLAMP (nSumA / nCount, 0, 255);
                 dst[2] = (uchar)CLAMP (nSumR / nCount, 0, 255);
                 dst[1] = (uchar)CLAMP (nSumG / nCount, 0, 255);
                 dst[0] = (uchar)CLAMP (nSumB / nCount, 0, 255);
                     
                 // ok, now we reinitialize the variables
-                nSumR = nSumG = nSumB = nCount = 0;
+                nSumA = nSumR = nSumG = nSumB = nCount = 0;
             }
             else                 // 16 bits image.
             {
@@ -278,6 +283,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
                         
                         // finally, we sum the pixels using a method similar to assigntables
                         org = &pBlur16[j];
+                        nSumA += arrMult[n + radius][org[3]];
                         nSumR += arrMult[n + radius][org[2]];
                         nSumG += arrMult[n + radius][org[1]];
                         nSumB += arrMult[n + radius][org[0]];
@@ -294,12 +300,13 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
                     
                 // now, we return to bits the vertical blur values
                 dst    = &pOutBits16[i];
+                dst[3] = (unsigned short)CLAMP (nSumA / nCount, 0, 65535);
                 dst[2] = (unsigned short)CLAMP (nSumR / nCount, 0, 65535);
                 dst[1] = (unsigned short)CLAMP (nSumG / nCount, 0, 65535);
                 dst[0] = (unsigned short)CLAMP (nSumB / nCount, 0, 65535);
                     
                 // ok, now we reinitialize the variables
-                nSumR = nSumG = nSumB = nCount = 0;
+                nSumA = nSumR = nSumG = nSumB = nCount = 0;
             }
         }
         
