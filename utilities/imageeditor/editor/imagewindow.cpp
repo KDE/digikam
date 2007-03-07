@@ -894,6 +894,13 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
     u.setPath(d->urlCurrent.directory());
     PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
 
+    // if available, provide a digikamalbums:// URL to KIO
+    KURL kioURL;
+    if (d->imageInfoCurrent)
+        kioURL = d->imageInfoCurrent->kurlForKIO();
+    else
+        kioURL = d->urlCurrent;
+
     if (!palbum)
         return;
 
@@ -923,7 +930,7 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
     // bring all (sidebar) to a defined state without letting them sit on the deleted file
     emit signalNoCurrentItem();
 
-    if (!SyncJob::del(d->urlCurrent, useTrash))
+    if (!SyncJob::del(kioURL, useTrash))
     {
         QString errMsg(SyncJob::lastErrorMsg());
         KMessageBox::error(this, errMsg, errMsg);

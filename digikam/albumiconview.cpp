@@ -453,6 +453,8 @@ void AlbumIconView::slotDoubleClicked(IconItem *item)
 {
     if (!item) return;
 
+    KIconEffect::visualActivate(viewport(), contentsRectToViewport(item->rect()));
+
     if (d->albumSettings->getItemRightClickAction() == AlbumSettings::ShowPreview)
         signalPreviewItem(static_cast<AlbumIconItem *>(item));
     else 
@@ -840,17 +842,15 @@ void AlbumIconView::slotRenamed(KIO::Job*, const KURL &, const KURL&newURL)
 void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
 {
     KURL::List  urlList;
-    QStringList nameList;
-    KURL url;
+    KURL::List  kioUrlList;
 
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
         if (it->isSelected()) 
         {
             AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-            url = iconItem->imageInfo()->kurl();
-            urlList.append(url);
-            nameList.append(iconItem->imageInfo()->name());
+            urlList.append(iconItem->imageInfo()->kurl());
+            kioUrlList.append(iconItem->imageInfo()->kurlForKIO());
         }
     }
 
@@ -868,7 +868,7 @@ void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
 
     bool useTrash = !dialog.shouldDelete();
 
-    KIO::Job* job = DIO::del(urlList, useTrash);
+    KIO::Job* job = DIO::del(kioUrlList, useTrash);
     connect(job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotDIOResult(KIO::Job*)));
 
@@ -881,21 +881,21 @@ void AlbumIconView::slotDeleteSelectedItemsDirectly(bool useTrash)
     // This method deletes the selected items directly, without confirmation.
     // It is not used in the default setup.
 
-    KURL::List  urlList;
+    KURL::List  kioUrlList;
 
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
         if (it->isSelected())
         {
             AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-            urlList.append(iconItem->imageInfo()->kurl());
+            kioUrlList.append(iconItem->imageInfo()->kurlForKIO());
         }
     }
 
-    if (urlList.count() <= 0)
+    if (kioUrlList.count() <= 0)
         return;
 
-    KIO::Job* job = DIO::del(urlList, useTrash);
+    KIO::Job* job = DIO::del(kioUrlList, useTrash);
 
     connect(job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotDIOResult(KIO::Job*)));
@@ -925,8 +925,6 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     AlbumSettings *settings = AlbumSettings::instance();
 
     if (!settings) return;
-
-    KIconEffect::visualActivate(viewport(), contentsRectToViewport(item->rect()));
 
     QString currentFileExtension = item->imageInfo()->name().section( '.', -1 );
     QString imagefilter = settings->getImageFileFilter().lower() +
