@@ -23,3 +23,5 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 
 001 ==> 142443 : Red eye correction should change eye colour to an alternate colour.
 002 ==> 138744 : Wish: dcraw 8.45 supports Pentax K10D.
+003 ==> 142427 : Rotate image tool too complicated.
+  
