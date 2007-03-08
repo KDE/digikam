@@ -33,7 +33,6 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
-#include <qcheckbox.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 
@@ -81,7 +80,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     // -------------------------------------------------------------
                 
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 12, 4, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 11, 4, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -99,7 +98,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_scaleBG = new QHButtonGroup(gboxSettings);
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
-    m_scaleBG->setInsideMargin( 0 );
+    m_scaleBG->setInsideMargin(0);
     QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
@@ -144,52 +143,43 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_aggressiveBox = new QCheckBox(gboxSettings);
-    m_aggressiveBox->setText(i18n("Aggressive"));
-    QWhatsThis::add(m_aggressiveBox, i18n("<p>When this option is on, the filter will use an agressive "
-                                          "sensitivity. To use only if eye have been "
-                                          "selected exactly.</p>"
-                                          "<p>When this option is off, the filter will use an mild " 
-                                          "sensitivity. Use the slider to adjust the threshold of "
-                                          "red color pixels selection.</p>"));
-    gridSettings->addMultiCellWidget(m_aggressiveBox, 3, 3, 0, 4);
-
     m_thresholdLabel = new QLabel(i18n("Sensitivity:"), gboxSettings);
     m_redThreshold   = new KIntNumInput(gboxSettings);
     m_redThreshold->setRange(10, 90, 1, true);
     m_redThreshold->setValue(20);
     QWhatsThis::add(m_redThreshold, i18n("<p>Set here the red color pixels selection threshold. "
-                                         "Low values will select more red color pixels, high values less."));
-    gridSettings->addMultiCellWidget(m_thresholdLabel, 4, 4, 0, 4);
-    gridSettings->addMultiCellWidget(m_redThreshold, 5, 5, 0, 4);
+                                         "Low values will select more red color pixels, high "
+                                         "values less."));
+    gridSettings->addMultiCellWidget(m_thresholdLabel, 3, 3, 0, 4);
+    gridSettings->addMultiCellWidget(m_redThreshold, 4, 4, 0, 4);
 
     m_smoothLabel  = new QLabel(i18n("Smooth:"), gboxSettings);
     m_smoothLevel = new KIntNumInput(gboxSettings);
-    m_smoothLevel->setRange(0, 10, 1, true);
-    m_smoothLevel->setValue(3);
+    m_smoothLevel->setRange(0, 5, 1, true);
+    m_smoothLevel->setValue(1);
     QWhatsThis::add(m_smoothLevel, i18n("<p>Set here the smootness value used to blur red color "
                                         "pixels selection."));
-    gridSettings->addMultiCellWidget(m_smoothLabel, 6, 6, 0, 4);
-    gridSettings->addMultiCellWidget(m_smoothLevel, 7, 7, 0, 4);
+    gridSettings->addMultiCellWidget(m_smoothLabel, 5, 5, 0, 4);
+    gridSettings->addMultiCellWidget(m_smoothLevel, 6, 6, 0, 4);
 
     QLabel *label3 = new QLabel(i18n("Coloring Taint:"), gboxSettings);
     m_HSSelector   = new KHSSelector(gboxSettings);
     m_VSelector    = new KValueSelector(gboxSettings);
     m_HSSelector->setMinimumSize(200, 142);
     m_VSelector->setMinimumSize(26, 142);
-    gridSettings->addMultiCellWidget(label3, 8, 8, 0, 4);
-    gridSettings->addMultiCellWidget(m_HSSelector, 9, 9, 0, 3);
-    gridSettings->addMultiCellWidget(m_VSelector, 9, 9, 4, 4);
+    gridSettings->addMultiCellWidget(label3, 7, 7, 0, 4);
+    gridSettings->addMultiCellWidget(m_HSSelector, 8, 8, 0, 3);
+    gridSettings->addMultiCellWidget(m_VSelector, 8, 8, 4, 4);
 
     QLabel *label4 = new QLabel(i18n("Taint Level:"), gboxSettings);
     m_taintLevel   = new KIntNumInput(gboxSettings);
     m_taintLevel->setRange(1, 200, 1, true);
     m_taintLevel->setValue(128);
     QWhatsThis::add( m_taintLevel, i18n("<p>Set here the taint level used to coloring red eye."));
-    gridSettings->addMultiCellWidget(label4, 10, 10, 0, 4);
-    gridSettings->addMultiCellWidget(m_taintLevel, 11, 11, 0, 4);
+    gridSettings->addMultiCellWidget(label4, 9, 9, 0, 4);
+    gridSettings->addMultiCellWidget(m_taintLevel, 10, 10, 0, 4);
 
-    gridSettings->setRowStretch(12, 10);    
+    gridSettings->setRowStretch(11, 10);    
     gridSettings->setColStretch(3, 10);    
     setUserAreaWidget(gboxSettings);
     
@@ -221,9 +211,6 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
 
     connect(m_taintLevel, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));  
-
-    connect(m_aggressiveBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotAggressiveToggled(bool)));      
 }
 
 ImageEffect_RedEye::~ImageEffect_RedEye()
@@ -246,15 +233,6 @@ void ImageEffect_RedEye::slotHSChanged(int h, int s)
     m_VSelector->repaint(false);
     m_VSelector->blockSignals(false);  
     slotTimer();
-}
-
-void ImageEffect_RedEye::slotAggressiveToggled(bool b)
-{
-    m_thresholdLabel->setEnabled(!b);
-    m_redThreshold->setEnabled(!b);
-    m_smoothLabel->setEnabled(!b);
-    m_smoothLevel->setEnabled(!b);
-    slotEffect();
 }
 
 void ImageEffect_RedEye::slotChannelChanged(int channel)
@@ -302,15 +280,13 @@ void ImageEffect_RedEye::readUserSettings()
     config->setGroup("redeye Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0)); // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
-    m_aggressiveBox->setChecked(config->readBoolEntry("Aggressive", false));
     m_redThreshold->setValue(config->readNumEntry("RedThreshold", 20));
-    m_smoothLevel->setValue(config->readNumEntry("SmoothLevel", 3));
+    m_smoothLevel->setValue(config->readNumEntry("SmoothLevel", 1));
     m_HSSelector->setXValue(config->readNumEntry("HueColoringTaint", 0));
     m_HSSelector->setYValue(config->readNumEntry("SatColoringTaint", 0));
     m_VSelector->setValue(config->readNumEntry("ValColoringTaint", 0));
     m_taintLevel->setValue(config->readNumEntry("TaintLevel", 128));
     
-    slotAggressiveToggled(m_aggressiveBox->isChecked());
     slotHSChanged(m_HSSelector->xValue(), m_HSSelector->yValue());
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
@@ -322,7 +298,6 @@ void ImageEffect_RedEye::writeUserSettings()
     config->setGroup("redeye Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
-    config->writeEntry("Aggressive", m_aggressiveBox->isChecked());
     config->writeEntry("RedThreshold", m_redThreshold->value());
     config->writeEntry("SmoothLevel", m_smoothLevel->value());
     config->writeEntry("HueColoringTaint", m_HSSelector->xValue());
@@ -334,15 +309,13 @@ void ImageEffect_RedEye::writeUserSettings()
 
 void ImageEffect_RedEye::resetValues()
 {
-    m_aggressiveBox->blockSignals(true);   
     m_redThreshold->blockSignals(true);	
     m_HSSelector->blockSignals(true);       
     m_VSelector->blockSignals(true);   
     m_taintLevel->blockSignals(true);   
 
-    m_aggressiveBox->setChecked(false);
     m_redThreshold->setValue(20);
-    m_smoothLevel->setValue(3);
+    m_smoothLevel->setValue(1);
 
     // Black color by default
     m_HSSelector->setXValue(0);
@@ -351,7 +324,6 @@ void ImageEffect_RedEye::resetValues()
 
     m_taintLevel->setValue(128);
 
-    m_aggressiveBox->blockSignals(false);   
     m_redThreshold->blockSignals(false); 
     m_HSSelector->blockSignals(false);       
     m_VSelector->blockSignals(false);
@@ -367,18 +339,22 @@ void ImageEffect_RedEye::slotEffect()
     if (m_destinationPreviewData) 
        delete [] m_destinationPreviewData;
 
+    // Here, we need to use the real selection image data because we will apply 
+    // a Gaussian blur filter on pixels and we cannot use directly the preview scaled image 
+    // else the blur radius will not give the same result between preview and final rendering.  
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
-    m_destinationPreviewData   = iface->getPreviewImage();
-    int w                      = iface->previewWidth();
-    int h                      = iface->previewHeight();
-    bool a                     = iface->previewHasAlpha();
-    bool sb                    = iface->previewSixteenBit();
-
+    m_destinationPreviewData   = iface->getImageSelection();
+    int w                      = iface->selectedWidth();
+    int h                      = iface->selectedHeight();
+    bool sb                    = iface->originalSixteenBit();
+    bool a                     = iface->originalHasAlpha();
     Digikam::DImg selection(w, h, sb, a, m_destinationPreviewData);
 
     redEyeFilter(selection);
 
-    iface->putPreviewImage(selection.bits());
+    Digikam::DImg preview = selection.smoothScale(iface->previewWidth(), iface->previewHeight());
+
+    iface->putPreviewImage(preview.bits());
     m_previewWidget->updatePreview();
 
     // Update histogram.
@@ -415,14 +391,11 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
     Digikam::DImg mask(selection.width(), selection.height(), selection.sixteenBit(), true, 
                        selection.bits(), true);
 
-    selection = mask.copy();
-
-    bool  aggressive   = m_aggressiveBox->isChecked();
+    selection          = mask.copy();
     float redThreshold = m_redThreshold->value()/10.0;
-
-    int hue = m_HSSelector->xValue();
-    int sat = m_HSSelector->yValue();
-    int val = m_VSelector->value();
+    int hue            = m_HSSelector->xValue();
+    int sat            = m_HSSelector->yValue();
+    int val            = m_VSelector->value();
     QColor coloring(hue, sat, val, QColor::Hsv);
 
     struct channel
@@ -457,20 +430,22 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
     green_norm *= coloring.green() / level;
     blue_norm  *= coloring.blue()  / level;
 
+    // Perform a red color pixels detection in selection image and create a correction mask using an alpha channel. 
+
     if (!selection.sixteenBit())         // 8 bits image.
     {
         uchar* ptr  = selection.bits();
-        uchar* nptr = mask.bits();
-        uchar  r, g, b, a, r1, g1, b1, a1;
+        uchar* mptr = mask.bits();
+        uchar  r, g, b, r1, g1, b1;
 
         for (uint i = 0 ; i < selection.width() * selection.height() ; i++) 
         {
-            b = ptr[0];
-            g = ptr[1];
-            r = ptr[2];
-            a = ptr[3];
+            b       = ptr[0];
+            g       = ptr[1];
+            r       = ptr[2];
+            mptr[3] = 255;
 
-            if ( aggressive || r >= ( redThreshold * g) )
+            if (r >= ( redThreshold * g))
             {
                 r1 = QMIN(255, (int)(red_norm * (red_chan.red_gain   * r +
                                                  red_chan.green_gain * g +
@@ -484,74 +459,107 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
                                                   blue_chan.green_gain * g +
                                                   blue_chan.blue_gain  * b)));
 
-                a1 = QMIN( (int)((r-g) / 150.0 * 255.0), 255);
-                nptr[0] = b1;
-                nptr[1] = g1;
-                nptr[2] = r1;
-                nptr[3] = a1;
+                mptr[0] = b1;
+                mptr[1] = g1;
+                mptr[2] = r1;
+                mptr[3] = QMIN( (int)((r-g) / 150.0 * 255.0), 255);
             }
 
-            ptr[3]  = nptr[3];
-            nptr[3] = 255-ptr[3];
-
             ptr += 4;
-            nptr+= 4;
+            mptr+= 4;
         }
     }
     else                                 // 16 bits image.
     {
         unsigned short* ptr  = (unsigned short*)selection.bits();
-        unsigned short* nptr = (unsigned short*)mask.bits();
-        unsigned short  r, g, b, a, r1, g1, b1, a1;
+        unsigned short* mptr = (unsigned short*)mask.bits();
+        unsigned short  r, g, b, r1, g1, b1;
 
         for (uint i = 0 ; i < selection.width() * selection.height() ; i++) 
         {
-            b = ptr[0];
-            g = ptr[1];
-            r = ptr[2];
-            a = ptr[3];
+            b       = ptr[0];
+            g       = ptr[1];
+            r       = ptr[2];
+            mptr[3] = 65535;
 
-            if ( aggressive || r >= ( redThreshold * g) )
+            if (r >= ( redThreshold * g))
             {
-                r1 = QMIN(65535, (int)(red_norm * 256 * (red_chan.red_gain   * r +
+                r1 = QMIN(65535, (int)(red_norm * (red_chan.red_gain   * r +
                                                          red_chan.green_gain * g +
                                                          red_chan.blue_gain  * b)));
 
-                g1 = QMIN(65535, (int)(green_norm *  256 * (green_chan.red_gain   * r +
+                g1 = QMIN(65535, (int)(green_norm * (green_chan.red_gain   * r +
                                                             green_chan.green_gain * g +
                                                             green_chan.blue_gain  * b)));
 
-                b1 = QMIN(65535, (int)(blue_norm * 256 * (blue_chan.red_gain   * r +
+                b1 = QMIN(65535, (int)(blue_norm * (blue_chan.red_gain   * r +
                                                           blue_chan.green_gain * g +
                                                           blue_chan.blue_gain  * b)));
 
-                a1 = QMIN( (int)((r-g) / 38400.0 * 65535.0), 65535);
-        
-                nptr[0] = b1;
-                nptr[1] = g1;
-                nptr[2] = r1;
-                nptr[3] = a1;
+                mptr[0] = b1;
+                mptr[1] = g1;
+                mptr[2] = r1;
+                mptr[3] = QMIN( (int)((r-g) / 38400.0 * 65535.0), 65535);;
             }
 
-            ptr[3]  = nptr[3];
-            nptr[3] = 65535-ptr[3];
-
             ptr += 4;
-            nptr+= 4;
+            mptr+= 4;
         }
     }
 
-    if (!aggressive)
+    // Now, we will blur only the transparency pixels from the mask.
+
+    Digikam::DImg mask2 = mask.copy();
+    Digikam::DImgImageFilters filter;
+    filter.gaussianBlurImage(mask2.bits(), mask2.width(), mask2.height(), 
+                             mask2.sixteenBit(), m_smoothLevel->value());
+
+    if (!selection.sixteenBit())         // 8 bits image.
     {
-        Digikam::DImgImageFilters filter;
-        filter.gaussianBlurImage(mask.bits(), mask.width(), mask.height(), 
-                                 mask.sixteenBit(), m_smoothLevel->value());
+        uchar* mptr  = mask.bits();
+        uchar* mptr2 = mask2.bits();
+        
+        for (uint i = 0 ; i < mask2.width() * mask2.height() ; i++)
+        {
+            if (mptr2[3] < 255)
+            {
+                mptr[0] = mptr2[0];
+                mptr[1] = mptr2[1];
+                mptr[2] = mptr2[2];
+                mptr[3] = mptr2[3];
+            }
+
+            mptr += 4;
+            mptr2+= 4;
+        }
+    }
+    else                                // 16 bits image.
+    {
+        unsigned short* mptr  = (unsigned short*)mask.bits();
+        unsigned short* mptr2 = (unsigned short*)mask2.bits();
+        
+        for (uint i = 0 ; i < mask2.width() * mask2.height() ; i++)
+        {
+            if (mptr2[3] < 65535)
+            {
+                mptr[0] = mptr2[0];
+                mptr[1] = mptr2[1];
+                mptr[2] = mptr2[2];
+                mptr[3] = mptr2[3];
+            }
+
+            mptr += 4;
+            mptr2+= 4;
+        }
     }
 
-    // - Perform pixels blending using alpha channel.
+    // - Perform pixels blending using alpha channel between the mask and the selection.
 
-    Digikam::DColorComposer *composer = Digikam::DColorComposer::getComposer(Digikam::DColorComposer::PorterDuffNone);
-    selection.bitBlendImage(composer, &mask, 
+    Digikam::DColorComposer *composer = Digikam::DColorComposer::getComposer(Digikam::DColorComposer::PorterDuffSrcOver);
+
+    // NOTE: 'mask' is the Source image, 'selection' is the Destination image.
+ 
+    selection.bitBlendImage(composer, &mask,           
                             0, 0, mask.width(), mask.height(),
                             0, 0);
 }

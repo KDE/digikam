@@ -33,7 +33,6 @@
 
 class QLabel;
 class QComboBox;
-class QCheckBox;
 class QHButtonGroup;
 
 class KHSSelector;
@@ -89,7 +88,6 @@ private slots:
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
     void slotHSChanged(int h, int s);
-    void slotAggressiveToggled(bool b);
 
 private:
 
@@ -127,8 +125,6 @@ private:
     QLabel                       *m_smoothLabel;
 
     QComboBox                    *m_channelCB;   
-
-    QCheckBox                    *m_aggressiveBox;    
 
     QHButtonGroup                *m_scaleBG;  
 
