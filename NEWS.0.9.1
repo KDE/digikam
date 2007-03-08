@@ -1,0 +1,332 @@
+----------------------------------------------------------------------------------------------------
+digiKam and DigikamImagePlugins 0.9.1 - Release date: 2007-03-04
+
+NEW FEATURES :
+
+General       : New native JPEG2000 image loader using Jasper library witch 
+                can support 16 bits color depth pictures.
+General       : New optimized layout to show Comments & Tags side bar contents.
+General       : Tags View from Comments & Tags side bar support drag & drop.
+General       : New Batch tool to sync all pictures metadata (EXIF/IPTC) with 
+                digiKam database content.
+General       : Add a status bar to Album Gui with a progress bar, text bar, 
+                and navigate bar.
+General       : New native SlideShow tool witch use the Image Preview feature. 
+                RAW files can be slided very fast.
+General       : Sidebars are used at all to display metadata, comments & tags, and file properties.
+General       : Removed imlib2 and libkexif depencies. Add Exiv2 and LCMS depencies.
+General       : New API in digiKam core named DImg to manage image data in 8 and 16 bits colors depth.
+General       : New API in digiKam core named DMetadata to manage image metadata.
+General       : Ported all image filter algorithms to new DImg API. Support of 16 bits images.
+General       : New metadata viewers based on Exiv2 : Exif viewer, MakerNote viewer, IPTC viewer, 
+                and GPS locator.
+General       : New ICC profiles profile viewer based on LCMS.
+General       : New powerful widget to display CIE color space used by ICC profiles.
+General       : New implementation to load/save images file using a separate thread.
+General       : Tags/Rating/DateTime/Comments/PhotographersID/Copyrights are now stored in Exif 
+                and/or IPTC metadata tags.
+General       : digiKam comments are now store in JPEG file to JFIF section, Exif UserComments tags 
+                and Caption Iptc tags.
+General       : New fast preview pictures mode embedded into main interface.
+
+AlbumGUI      : Improvement of pop-up menu of Tags Filter View and Comment & Tags 
+                about auto selection/deselection of parents/childs tags in Tags treeview.
+AlbumGUI      : Main Root album show a Welcome page for new users (like Kmail 
+                or Konqueror).
+AlbumGUI      : Video files can be previewed using an embedded instance of 
+                default KDE media player.
+AlbumGUI      : Preview picture mode use a memory cache to speed-up loading.
+AlbumGUI      : Preview picture mode pride a context pop-up menu.
+AlbumGUI      : Comments & Tags now support multiple selection of items to 
+                apply properties.
+AlbumGUI      : New option to set the action to do when user right click on 
+                picture thumb: Load on Image Editor or Show an embeded preview.
+AlbumGUI      : Prefer Exif DateTimeOriginal for sorting images 
+                (DateTimeDigitized and DateTime only used as fallback)
+
+Image Plugins : All tools remember settings between sessions.
+Image Plugins : All tools render properly preview of image using Color Managed View.
+Image Plugins : All tools use the same keyboard shortcuts than PhotoShop.
+Image Plugins : New option in all Color corrections Tools to show under-exposed 
+                and over-exposed areas of corrected picture before to apply corrections.
+Image Plugins : Brightness/Contrast/Gamma : settings value excursion are the same 
+                than Photoshop.
+Image Plugins : Add Border Tool : add new option to preserve aspect ratio. Border Width 
+                can be set in pixels or in percents accordinly with this setting.
+Image Plugins : Perspective Tool : add a grid and vertical/horizontal guide lines.
+Image Plugins : Ratio-crop Tool : usability improvements from Jaromir Malenko.
+Image Plugins : Auto Color Correction Tool : add new filter to perform 
+                auto-exposure corrections.
+Image Plugins : all plugins : capabilty to remember settings between plugin
+                sessions to store configuration in a settings file.
+
+Image Editor  : Add new advanced options to keep ratio and alignment about print pictures.
+Image Editor  : Add 2 new advanced options to show under-exposed or over-exposed pixels.
+Image Editor  : Remove View->Histogram menu option. We have a better histogram 
+                available in sidebar.
+Image Editor  : Color profiles are tested now to avoid invalid files.
+Image Editor  : JPEG/PNG/TIFF/JPEG2000 file save settings are now available in 
+                File Save dialog.
+Image Editor  : JPEG file save settings include a red warning about this lossy 
+                compression image format with a link to wikipedia to aware users.
+Image Editor  : Image Editor support 16 bits color depth images (RAW, TIFF, PNG, PNM).
+Image Editor  : Complete rewrite of image editor/showfoto gui implementation. Implementation 
+                is now common and is more easy to maintain!
+Image Editor  : Add a progress bar to Image editor/showfoto about IO image files access.
+Image Editor  : Support of ICC color profiles management using LCMS into Image editor/showfoto.
+Image Editor  : digiKam setup is now available from Image Editor menu.
+Image Editor  : TIFF and JPEG Exif thumbnail are recomputed at saving pictures.
+Image Editor  : Iptc preview image are recomputed at saving pictures.
+
+Image Plugins : New powerfull Noise Reduction algorithm based on dcamnoise2 implementation.
+Image Plugins : New powerfull Black & White converter tool using curves adjustements.
+Image Plugins : New plugin to experiment ICC profiles to perform color corrections into images.
+Image Plugins : New preview rendering modes in all color correction image plugins dialogs.
+Image Plugins : Redesign/polishing of all image plugins dialogs. Histogram are available at all 
+                when it's necessary. All dialogs used in DigikamImagePlugins are common in digiKam 
+                core now.
+Image Plugins : New zooming capabilities in image plugins dialogs.
+Image Plugins : Ported all core image plugins to new DImg API. Support of 16 bits images.
+Image Plugins : Ported all DigikamImagePlugins tools to new DImg API. Support of 16 bits images.
+
+
+Setup         : Advanced settings to load RAW files in Image Editor using external dcraw instance.
+Setup         : Setup implementation are now common between Showfoto and digiKam.
+Setup         : New Identity setup page to set default strings informations about Photographer and 
+                copyright used when IPTC tags are updated.
+
+CameraGUI     : New option to set metadata DateTime/PhotographerId/Copyright Exif and/or IPTC tags 
+                on the fly.
+CameraGUI     : JPEG Exif thumbnail and Iptc image preview are recomputed during Exif Auto-rotation.
+CameraGUI     : digiKam theme support.
+
+Showfoto      : Image properties sidebar support
+Showfoto      : All images from a folder can be loaded at the same time.
+Showfoto      : Add 16 bits/color/pixel support (DImg API).
+Showfoto      : Thumbbar moved to the left by default in vertical mode. Image properties side bar to the 
+                right to make a consistant GUI with digiKam main interface.
+Showfoto      : Thumbbar can be used to the bottom in horizontal mode.
+Showfoto      : New Exif Auto-rotate option like in digiKam ImageEditor.
+Showfoto      : New Set Orientation Exif flag to normal after Rotate/Flip like in digiKam ImageEditor.
+
+AlbumGUI      : Improvement of pop-up menu of Tags Filter View and Comment & Tags about
+                auto selection/deselection of parents/childs tags in Tags treeview.
+AlbumGUI      : Main Root album show a Welcome page for new users (like Kmail or Konqueror).
+AlbumGUI      : Video files can be previewed using an embedded instance of default KDE
+                media player.
+AlbumGUI      : Preview picture mode use a memory cache to speed-up loading.
+AlbumGUI      : Preview picture mode pride a context pop-up menu.
+AlbumGUI      : Comments & Tags now support multiple selection of items to apply properties.
+AlbumGUI      : New option to set the action to do when user right click on picture thumb: 
+                Load on Image Editor or Show an embeded preview.
+AlbumGUI      : Prefer Exif DateTimeOriginal for sorting images (DateTimeDigitized 
+                and DateTime only used as fallback)
+
+Image Plugins : All tools remember settings between sessions.
+Image Plugins : All tools render properly preview of image using Color Managed View.
+Image Plugins : All tools use the same keyboard shortcuts than PhotoShop.
+Image Plugins : New option in all Color corrections Tools to show under-exposed and
+                over-exposed areas of corrected picture before to apply corrections.
+Image Plugins : Brightness/Contrast/Gamma : settings value excursion are the same 
+                than Photoshop.
+Image Plugins : Add Border Tool : add new option to preserve aspect ratio. Border Width can be set
+                in pixels or in percents accordinly with this setting.
+Image Plugins : Perspective Tool : add a grid and vertical/horizontal guide lines.
+Image Plugins : Ratio-crop Tool : usability improvements from Jaromir Malenko.
+Image Plugins : Auto Color Correction Tool : add new filter to perform auto-exposure corrections.
+
+Image Editor  : Add new advanced options to keep ratio and alignment about print pictures.
+Image Editor  : Add 2 new advanced options to show under-exposed or over-exposed pixels.
+Image Editor  : Remove View->Histogram menu option. We have a better histogram available in sidebar.
+Image Editor  : Color profiles are tested now to avoid invalid files.
+Image Editor  : JPEG/PNG/TIFF/JPEG2000 file save settings are now available in File Save dialog.
+Image Editor  : JPEG file save settings include a red warning about this lossy compression image 
+                format with a link to wikipedia to aware users.
+
+General       : Native slideshow tool : new option to slide an album tree in recursive mode.
+General       : Native slideshow tool : add capability to print photograph informations during slide.
+General       : Native slideshow tool : preaparing slideshow is now cancelable.
+
+
+----------------------------------------------------------------------------
+digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+242 ==> 115157 : Usability: Image comments/tags dialog: hard to find/see all
+                 already selected tags (and to 'de'select them).
+243 ==> 132309 : Wish: enhance video support in digiKam.
+244 ==> 115153 : Assigns tags not only to selected images with drag and drop.
+245 ==> 131743 : Comments and tag edit widgets should retain focus when changing image.
+246 ==> 140412 : Comments/Tags sidebar steels focus.
+247 ==> 137491 : Editor image cache not flush when an image is modified outside digiKam.
+248 ==> 138949 : Save/overwrite fails: wrong dialog.
+249 ==> 139197 : Crash during import of raw imagefiles (DNG).
+250 ==> 139313 : UTF-8 image comments are mangled when input from image editor.
+251 ==> 136903 : If partition gets full during camera/card copy there is no
+                 warning and empty files are created.
+252 ==> 133955 : Rating search: less, equal, and larger comparison.
+253 ==> 139547 : Tag hierarchy automatic fill.
+254 ==> 138816 : gpcamera.cpp compile failure CameraList camList.
+255 ==> 93542  : Improvements to digiKam print interface.
+256 ==> 139658 : Tiff generated by photoshop is either ignored by digiKam image browser, 
+                 or kills digiKam when regenerating the database.
+257 ==> 102032 : Wish: rating system for photos, show/hide/sort by rating.
+258 ==> 111446 : Bad behaviour when out of disk space.
+259 ==> 133516 : Tags set in Comments/Tags end up on the wrong picture.
+260 ==> 140136 : Aspect ratio crop and selection widget improvements.
+261 ==> 131600 : Set tag for multiple selection of images.
+262 ==> 137545 : Helper lines / cross wanted.
+263 ==> 131170 : Add grid/auxiliary lines for perspective correction tool.
+264 ==> 138158 : Allow to edit multiple image tags/comments at same time.
+265 ==> 140234 : Thumbnail click default action.
+266 ==> 135141 : Border size in pixel.
+267 ==> 137696 : Border extent should not follow image aspect ratio.
+268 ==> 138444 : More clear/consistent color management terminology.
+269 ==> 140176 : Showfoto crashes when selecting a filter.
+270 ==> 130237 : Typos in digiKam plugin files.
+271 ==> 138925 : External modules config dialog lacks a select all button.
+272 ==> 140038 : digiKam Image Editor crash on right click after changing toolbar.
+273 ==> 139766 : Crash when displaying EXIF metadata with Unicode comment
+274 ==> 130017 : Wish: batch operation to save existing comments in the files.
+275 ==> 140320 : View menu should better fit after Edit.
+276 ==> 127617 : "Toggle Fullscreen" should be located in "View" menu instead 
+                 of "Settings" menu.
+277 ==> 139264 : digiKam sorts pictures with wrong exif tag.
+278 ==> 140417 : Crash digiKam when delete image.
+279 ==> 110514 : Enhanced selection, refactored histogram. 
+280 ==> 140933 : Typo: Album Library Path.
+281 ==> 141190 : digikam crash when invalid ICM file at color profile directory 
+                 and you enter into PREFERENCES->COLOR SPACE PROFILES.
+282 ==> 123649 : JPEG/PNG quality settings at the "save" dialog.
+283 ==> 116518 : Use KIPI plugin for displaying slideshows.
+284 ==> 140304 : Start slideshow from the current image.
+285 ==> 140303 : slideshow must be relocated to View menu from tools menu.
+286 ==> 137503 : Tags are not written to image file automatically.
+287 ==> 136254 : Editing tags does not change IPTC-keywords.
+288 ==> 135655 : Proper full screen mode (no menu, toolbar, statusbar, sidebars)
+001 ==> 87823  : Displaying images with ICC color profile when possible.
+002 ==> 91811  : Find pictures by meta tag info, date.
+003 ==> 91812  : Viewer/editor for IPTC meta data.
+004 ==> 96459  : EXIF for RAW camera images.
+005 ==> 116248 : Ask user which plugins should be enabled on first startup.
+006 ==> 115441 : Resize EXIF-rotated images doesn't work.
+007 ==> 115460 : Opening and closing right pane with tag filter also changes width of left pane and vv.
+008 ==> 124688 : digiKam loading time is big because of : WARNING: Failed to find parent for Tag.
+009 ==> 109253 : digiKam does not store comments in image EXIF tags.
+010 ==> 115764 : Modify EXIF creation date.
+011 ==> 121487 : "Tip of the day" text gets cut off.
+012 ==> 120052 : Redraw problem with whatthis info of an image show and start scrolling with the mouse.
+013 ==> 120053 : Whatthis info not closed when albumview is scrolled up or down with cursor keys.
+014 ==> 123522 : Minolta's RAW files (mrw) aren't show in the view window.
+015 ==> 121905 : Albums not displayed correctly and digiKam crashes with St9bad_alloc.
+016 ==> 113997 : Option to store tags in image.
+017 ==> 123742 : Preview-pictures seem to be handled differently by digiKam and Konqueror.
+018 ==> 121308 : Mass storage and PTP usability.
+019 ==> 121306 : Add copyright/license during download.
+020 ==> 111560 : Be able to locate photos on a map.
+021 ==> 122747 : Will not build with GCC 4.1.
+022 ==> 103176 : 16bit/channel framework for digiKam.
+023 ==> 109096 : Provide quick access to image comment.
+024 ==> 109817 : Feature request for image properties dialog in image editor.
+025 ==> 109992 : Preview in comments editor resizeable.
+026 ==> 113103 : Show digiKam comments into digiKam image editor.
+027 ==> 124939 : Improve import picture nomenclature.
+028 ==> 113915 : Tags are lost after "Save As..."ing.
+029 ==> 103245 : Image Effects are inaccessible from image editor.
+030 ==> 125589 : Saving user preferences not possible.
+031 ==> 103201 : Easy transport of albums, including tags, comments, etc.
+032 ==> 119234 : Window views not updated when tag name changed in "Tag Filters".
+033 ==> 103255 : Wish: *add* (not edit) EXIF headers like date, comment etc.
+034 ==> 121800 : Can't setup camera correctly.
+035 ==> 121784 : Accessing the camera in mass storage mode just lists jpegs and no other filetypes.
+036 ==> 121371 : Missing display of EXIF infos in "Simple view".
+037 ==> 123646 : Rating image with a keyboard shortcut.
+038 ==> 119946 : Thumbnails not correctly rotated according to exif information.
+039 ==> 106103 : Should support adding GPS EXIF header to images.
+040 ==> 110598 : Synchronize digiKam comments to existing embedded comments.
+041 ==> 118501 : Exifs lost when modifying the images.
+042 ==> 122264 : Exif data fail to show up in recent SVN.
+043 ==> 103489 : Sort and re-order EXIF information dialogs.
+044 ==> 105670 : Option to print EXIF data with images.
+045 ==> 109319 : Full EXIF info - exiftags style.
+046 ==> 120963 : Optional album date change.
+047 ==> 121370 : Can't save images sometimes after some modifications.
+048 ==> 121646 : digiKam on PPC has problem identifying JPEG and tries to use dcraw with them.
+049 ==> 120479 : Search problem for not tagged or commented images.
+050 ==> 120775 : Search doesn't find pictures without rating.
+051 ==> 112063 : When viewing image in fullscreen there is an ugly frame at the border of the screen.
+052 ==> 120736 : Many imageplugins going busy for ever when not using rubber to change a value.
+053 ==> 116154 : Show progress bar while saving large files.
+054 ==> 120521 : Untranslatable message in tagfilterview.cpp.
+055 ==> 119742 : Wish list -include move to trash in right click menu.
+056 ==> 119201 : Sometimes digiKam fails to show newly downloaded photos.
+057 ==> 117401 : digiKam's 'my albums' and 'my tags' does no longer remember it's state when restarted.
+058 ==> 116520 : Slideshow should work for search results as well.
+059 ==> 119073 : Wish list rescan option.
+060 ==> 118543 : Enable-nfs-hack no longer works.
+061 ==> 113807 : Is it possible to have the tags of the contextual menus "Assign Tag" and 
+                 "Remove Tag" sorted ?
+062 ==> 116343 : "Not Tagged" has disappeared from the Tags Filter view when changing album library path.
+063 ==> 117225 : digiKam requires at least libpng >= 1.2.7.
+064 ==> 115423 : Thumbnails view jumps to top when new photos are added.
+065 ==> 125732 : ICC settings get reset when disabled and re-enabled.
+066 ==> 119741 : Restore image editor if already open.
+067 ==> 122374 : Ignores read-only permission during saving.
+068 ==> 121367 : Add properties tab to digiKam and (especially) Image Editor.
+069 ==> 125926 : Directories with a '#' in their name are not properly detected when created outside digiKam.
+070 ==> 125733 : Enabling 'Always apply ICM profiles' can lead to suprising results.
+071 ==> 126326 : Camera download: auto-rotated images loose EXIF info when 'No EXIF information found.' 
+                 is written to console.
+072 ==> 121242 : mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x.
+073 ==> 127374 : Unsharp mask: max. radius way too small.
+074 ==> 116485 : Mimimize button missing on "Compaq Flash Reader" camera window.
+075 ==> 127577 : Raw display too dark and not rotated.
+076 ==> 127634 : Communication between digiKam and its kioslaves broken if size_t != off_t.
+077 ==> 126335 : Autoration of photos may confuse user because of changes made he is not aware of.
+078 ==> 127759 : No scroll bar in color management/select profile.
+079 ==> 114211 : Main Interface: image comments encoding unreadable after moving an album.
+080 ==> 120241 : Main Interface: utf8 display and edit.
+081 ==> 127905 : Wish: make comment field resizable.
+082 ==> 127946 : Typo: the word Toogle should be Toggle.
+083 ==> 117115 : Automatically rotate/flip using camera-provided information (EXIF) modifies image contents
+084 ==> 128069 : Crash when moving an album to another album.
+085 ==> 125779 : Use deflate compression for tiffs.
+086 ==> 127972 : digiKam does not *add* EXIF:DateTimeOriginal when modifying date
+087 ==> 127697 : Camera gui always puts *.JPG and *.NEF in the configure - digiKam dialog/File 
+                 Mime Types/ Image Files.
+088 ==> 128373 : "Makernote - Simple" should show ISO.
+089 ==> 113915 : Tags are lost after "Save As..."ing.
+090 ==> 128283 : Thumbnail generation fails with raw images.
+091 ==> 126112 : Do not open new window when camera is connected.
+092 ==> 127846 : digiKam crash when 2nd gphoto camera dialog is closed.
+093 ==> 93569  : Easier connection to USB disc cameras.
+094 ==> 124952 : digiKam "Mount and Download" Problems.
+095 ==> 129134 : Typo in missing files warning dialog "loose" should be "lose".
+096 ==> 128914 : Differientiating view and edit / call for a integrated viewer.
+097 ==> 128669 : Use embedded thumbnail for viewing RAW files.
+098 ==> 127991 : digiKam image editor and raws (nef).
+099 ==> 129450 : Cannot exit preview mode within empty album.
+100 ==> 129610 : Unsupported initialization of CameraList object.
+101 ==> 127584 : Minimum width of sidebar too large.
+102 ==> 127763 : Color management, profile selection crashes.
+103 ==> 126199 : Nikon D70 comments in jpegs are all shown as "charset="Ascii".
+104 ==> 130381 : Automatic colorbalance and camera color balance checkboxes swapped.
+105 ==> 117248 : Opening default app when camera inserted return KIOExec error.
+106 ==> 130883 : Overexposure indicator in color management is saved as part of the picture.
+107 ==> 130798 : Editor saves some jpeg's 30% smaller than original,
+                 even with jpeg compression option set at 100.
+108 ==> 130525 : Saving large (>5M) jpg's result in corrupt file.
+109 ==> 130920 : ICC, profiles, metadata, abbreviations.
+110 ==> 124199 : digiKam crashed when I right-clicked in the (empty) "My Albums" view.
+111 ==> 127826 : Album comment with no wordwrap.
+112 ==> 142088 : Build fails when libkexiv2 is in $PREFIX, but not in $KDEDIR or standard include directories
+113 ==> 140227 : remove or modify D&D tags menu from icon view area (improvements, not finished)
+114 ==> 142088 : Build fails when libkexiv2 is in $PREFIX, but not in $KDEDIR or standard include directories
+115 ==> 142109 : Turn under/over exposure display on/off by click on corresponding icons
+116 ==> 141663 : Keep getting prompted to Apply Comments
+117 ==> 139024 : Camera GUI new items selection doesn't work
+118 ==> 139547 : Tag hierarchy automatic fill 
+119 ==> 141626 : Bugs in german translation 
+120 ==> 141786 : Confirmation dialog during rename to existing file does n... 
+121 ==> 141924 : Tags preview not updated in last image of album 
+122 ==> 141934 : Incorrect capitalized string: "back to album" 
+123 ==> 141961 : Long comments truncated in slideshow
