@@ -161,11 +161,12 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent, QString title, QFrame*
     m_effectType->insertItem( i18n("Neon") );    
     m_effectType->insertItem( i18n("Find Edges") );    
     QWhatsThis::add( m_effectType, i18n("<p>Select here the effect type to apply on image.<p>"
-                                        "<b>ColorFX</b>: simulate a solarisation of photograph.<p>"
-                                        "<b>Vivid</b>: simulate the Velvia film colors.<p>"
-                                        "<b>Neon</b>: sub-coloring the edges in a photograph to reproduce a "
-                                        "neon highlight.<p>"
-                                        "<b>Find Edges</b>: detects the edges in a photograph and their strength."
+                                        "<b>Solarize</b>: simulate a solarization of photograph.<p>"
+                                        "<b>Vivid</b>: simulate the Velvia negative film colors.<p>"
+                                        "<b>Neon</b>: sub-coloring the edges in a photograph to "
+                                        "reproduce a neon highlight.<p>"
+                                        "<b>Find Edges</b>: detects the edges in a photograph "
+                                        "and their strength."
                                         ));
     gridSettings->addMultiCellWidget(m_effectTypeLabel, 3, 3, 0, 4);
     gridSettings->addMultiCellWidget(m_effectType, 4, 4, 0, 4);
