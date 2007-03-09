@@ -5,7 +5,7 @@
  * Description : 
  * 
  * Copyright 2004-2005 by Renchi Raju
- * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,7 @@ ImagePlugin_Solarize::ImagePlugin_Solarize(QObject *parent, const char*,
                                                    const QStringList &)
                     : Digikam::ImagePlugin(parent, "ImagePlugin_Solarize")
 {
-    m_solarizeAction = new KAction(i18n("Solarize Image..."), "solarizetool", 0, 
+    m_solarizeAction = new KAction(i18n("Color Effects..."), "solarizetool", 0, 
                            this, SLOT(slotSolarize()),
                            actionCollection(), "imageplugin_solarize");
                 
@@ -62,7 +62,7 @@ void ImagePlugin_Solarize::setEnabledActions(bool enable)
 
 void ImagePlugin_Solarize::slotSolarize()
 {
-    QString title = i18n("Solarize Photograph");
+    QString title = i18n("Apply Color Special Effect to Photograph");
     QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
     DigikamSolarizeImagesPlugin::ImageEffect_Solarize dlg(parentWidget(),
                                  title, headerFrame);
