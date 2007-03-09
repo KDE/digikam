@@ -68,6 +68,15 @@ private slots:
 
 private:
 
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues();
+
+    void autoCorrection(uchar *data, int w, int h, bool sb, int type);
+    QPixmap getThumbnailForEffect(AutoCorrectionType type);
+
+private:
+
     enum AutoCorrectionType
     {
         AutoLevelsCorrection=0,
@@ -106,15 +115,6 @@ private:
     Digikam::HistogramWidget     *m_histogramWidget;    
 
     Digikam::DImg                 m_thumbnailImage;
-
-private:
-
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
-
-    void autoCorrection(uchar *data, int w, int h, bool sb, int type);
-    QPixmap getThumbnailForEffect(AutoCorrectionType type);
 };
 
 }  // NameSpace DigikamImagesPluginCore
