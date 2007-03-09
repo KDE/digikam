@@ -95,14 +95,29 @@ private:
 
     enum BlackWhiteConversionType
     {
-        BWNoFilter=0,       // B&W filter to the front of lens.
-        BWNeutral,
+        BWNoFilter=0,         // B&W filter to the front of lens.
         BWGreenFilter,
         BWOrangeFilter,
         BWRedFilter,
         BWYellowFilter,
 
-        BWNoTone,           // Chemical color tone filter.
+        BWGeneric,            // B&W film simulation.
+        BWAgfa200X,    
+        BWAgfapan25,
+        BWAgfapan100,
+        BWAgfapan400,
+        BWIlfordDelta100,
+        BWIlfordDelta400,
+        BWIlfordDelta400Pro3200,
+        BWIlfordFP4,
+        BWIlfordHP5,
+        BWIlfordPanF,
+        BWIlfordXP2Super,
+        BWKodakTmax100,
+        BWKodakTmax400,
+        BWKodakTriX,
+
+        BWNoTone,             // Chemical color tone filter.
         BWSepiaTone,        
         BWBrownTone,
         BWColdTone,
@@ -126,10 +141,17 @@ private:
 
     enum SettingsTab
     {
-        BWFiltersTab=0,
+        FilmTab=0,
+        BWFiltersTab,
         ToneTab,
         LuminosityTab
     };
+
+    // Color filter attenuation in percents. 
+    double m_redAttn, m_greenAttn, m_blueAttn;
+
+    // Channel mixer color multiplier. 
+    double m_redMult, m_greenMult, m_blueMult; 
 
     uchar                        *m_destinationPreviewData;
     
@@ -138,9 +160,11 @@ private:
     QHButtonGroup                *m_scaleBG;
     
     QListBox                     *m_bwFilters;
+    QListBox                     *m_bwFilm;
     QListBox                     *m_bwTone;
 
     KIntNumInput                 *m_cInput;
+    KIntNumInput                 *m_strengthInput;
     
     KTabWidget                   *m_tab;
     

@@ -40,6 +40,7 @@
 #include <qintdict.h>
 #include <qtextstream.h>
 #include <qfile.h>
+#include <qvbox.h>
 
 // KDE includes.
 
@@ -248,25 +249,107 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     m_tab = new KTabWidget(gboxSettings);
 
-    m_bwFilters = new QListBox(m_tab);
+    m_bwFilm = new QListBox(m_tab);
+    m_bwFilm->setColumnMode(1);
+    m_bwFilm->setVariableWidth(false);
+    m_bwFilm->setVariableHeight(false);
+    Digikam::ListBoxWhatsThis* whatsThis2 = new Digikam::ListBoxWhatsThis(m_bwFilm);
+    m_previewPixmapFactory                = new PreviewPixmapFactory(this);
+
+    int type = BWGeneric;
+
+    ListBoxBWPreviewItem *item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Generic"), m_previewPixmapFactory, type);
+    whatsThis2->add( item, i18n("<b>Generic</b>:"
+                                "<p>Simulate a generic black and white film</p>"));
+
+    ++type;
+    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Agfa 200X"), m_previewPixmapFactory, type);
+    whatsThis2->add( item, i18n("<b>Agfa 200X</b>:"
+                                "<p>Simulate the Agfa 200X black and white film at 200 ISO</p>"));
+
+    ++type;
+    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Agfa Pan 25"), m_previewPixmapFactory, type);
+    whatsThis2->add( item, i18n("<b>Agfa Pan 25</b>:"
+                                "<p>Simulate the Agfa Pan black and white film at 25 ISO</p>"));
+
+    ++type;
+    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Agfa Pan 100"), m_previewPixmapFactory, type);
+    whatsThis2->add( item, i18n("<b>Agfa Pan 100</b>:"
+                                "<p>Simulate the Agfa Pan black and white film at 100 ISO</p>"));
+
+    ++type;
+    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Agfa Pan 400"), m_previewPixmapFactory, type);
+    whatsThis2->add( item, i18n("<b>Agfa Pan 400</b>:"
+                                "<p>Simulate the Agfa Pan black and white film at 400 ISO</p>"));
+
+    ++type;
+    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Ilford Delta 100"), m_previewPixmapFactory, type);
+    whatsThis2->add( item, i18n("<b>Ilford Delta 100</b>:"
+                                "<p>Simulate the Ilford Delta black and white film at 100 ISO</p>"));
+
+    ++type;
+    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Ilford Delta 400"), m_previewPixmapFactory, type);
+    whatsThis2->add( item, i18n("<b>Ilford Delta 400</b>:"
+                                "<p>Simulate the Ilford Delta black and white film at 400 ISO</p>"));
+
+    ++type;
+    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Ilford Delta 400 Pro 3200"), m_previewPixmapFactory, type);
+    whatsThis2->add( item, i18n("<b>Ilford Delta 400 Pro 3200</b>:"
+                                "<p>Simulate the Ilford Delta 400 Pro black and white film at 3200 ISO</p>"));
+
+    ++type;
+    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Ilford FP4 Plus"), m_previewPixmapFactory, type);
+    whatsThis2->add( item, i18n("<b>Ilford FP4 Plus</b>:"
+                                "<p>Simulate the Ilford FP4 Plus black and white film at 125 ISO</p>"));
+
+    ++type;
+    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Ilford HP5 Plus"), m_previewPixmapFactory, type);
+    whatsThis2->add( item, i18n("<b>Ilford HP5 Plus</b>:"
+                                "<p>Simulate the Ilford HP5 Plus black and white film at 400 ISO</p>"));
+
+    ++type;
+    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Ilford PanF Plus"), m_previewPixmapFactory, type);
+    whatsThis2->add( item, i18n("<b>Ilford PanF Plus</b>:"
+                                "<p>Simulate the Ilford PanF Plus black and white film at 50 ISO</p>"));
+
+    ++type;
+    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Ilford XP2 Super"), m_previewPixmapFactory, type);
+    whatsThis2->add( item, i18n("<b>Ilford XP2 Super</b>:"
+                                "<p>Simulate the Ilford XP2 Super black and white film at 400 ISO</p>"));
+
+    ++type;
+    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Kodak Tmax 100"), m_previewPixmapFactory, type);
+    whatsThis2->add( item, i18n("<b>Kodak Tmax 100</b>:"
+                                "<p>Simulate the Kodak Tmax black and white film at 100 ISO</p>"));
+
+    ++type;
+    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Kodak Tmax 400"), m_previewPixmapFactory, type);
+    whatsThis2->add( item, i18n("<b>Kodak Tmax 400</b>:"
+                                "<p>Simulate the Kodak Tmax black and white film at 400 ISO</p>"));
+
+    ++type;
+    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Kodak TriX"), m_previewPixmapFactory, type);
+    whatsThis2->add( item, i18n("<b>Kodak TriX</b>:"
+                                "<p>Simulate the Kodak TriX black and white film at 400 ISO</p>"));
+
+    // -------------------------------------------------------------
+
+    QVBox *vbox = new QVBox(m_tab);
+    vbox->setSpacing(spacingHint());
+
+    m_bwFilters = new QListBox(vbox);
     m_bwFilters->setColumnMode(1);
     m_bwFilters->setVariableWidth(false);
     m_bwFilters->setVariableHeight(false);
     Digikam::ListBoxWhatsThis* whatsThis = new Digikam::ListBoxWhatsThis(m_bwFilters);
-    m_previewPixmapFactory               = new PreviewPixmapFactory(this);
 
-    int type = BWNoFilter;
+    type = BWNoFilter;
 
-    ListBoxBWPreviewItem *item = new ListBoxBWPreviewItem(m_bwFilters, 
-                                     i18n("No Black & White Filter"), m_previewPixmapFactory, type);
-    whatsThis->add( item, i18n("<b>No Black & White Filter</b>:"
-                               "<p>Do not apply a black and white filter to the image.</p>"));
+    item = new ListBoxBWPreviewItem(m_bwFilters, 
+                                     i18n("No Lens Filter"), m_previewPixmapFactory, type);
+    whatsThis->add( item, i18n("<b>No Lens Filter</b>:"
+                               "<p>Do not apply a lens filter to render the picture.</p>"));
     
-    ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Neutral"), m_previewPixmapFactory, type);
-    whatsThis->add( item, i18n("<b>Neutral Black & White</b>:"
-                               "<p>Simulate black and white neutral film exposure.</p>"));
-
     ++type;
     item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Green Filter"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<b>Black & White with Green Filter</b>:"
@@ -294,8 +377,12 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                                "<p>Simulate black and white film exposure using yellow filter. "
                                "Most natural tonal correction and improves contrast. Ideal for "
                                "landscapes.</p>"));
-
-    m_tab->insertTab(m_bwFilters, i18n("Filters"), BWFiltersTab);
+    
+    m_strengthInput = new KIntNumInput(vbox);
+    m_strengthInput->setLabel(i18n("Strength:"), AlignLeft | AlignVCenter);
+    m_strengthInput->setRange(1, 5, 1, true);
+    m_strengthInput->setValue(1);
+    QWhatsThis::add(m_strengthInput, i18n("<p>Set here the strength adjustment of lens filter."));
 
     // -------------------------------------------------------------
 
@@ -303,48 +390,46 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_bwTone->setColumnMode(1);
     m_bwTone->setVariableWidth(false);
     m_bwTone->setVariableHeight(false);
-    Digikam::ListBoxWhatsThis* whatsThis2 = new Digikam::ListBoxWhatsThis(m_bwTone);
+    Digikam::ListBoxWhatsThis* whatsThis3 = new Digikam::ListBoxWhatsThis(m_bwTone);
 
     type = BWNoTone;
 
     item = new ListBoxBWPreviewItem(m_bwTone, i18n("No Tone Filter"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>No Tone Filter</b>:"
+    whatsThis3->add( item, i18n("<b>No Tone Filter</b>:"
                                 "<p>Do not apply a tone filter to the image.</p>"));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwTone, i18n("Sepia Tone"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Black & White with Sepia Tone</b>:"
+    whatsThis3->add( item, i18n("<b>Black & White with Sepia Tone</b>:"
                                 "<p>Gives a warm highlight and mid-tone while adding a bit of coolness to "
                                 "the shadows-very similar to the process of bleaching a print and "
                                 "re-developing in a sepia toner.</p>"));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwTone, i18n("Brown Tone"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Black & White with Brown Tone</b>:"
+    whatsThis3->add( item, i18n("<b>Black & White with Brown Tone</b>:"
                                 "<p>This filter is more neutral than Sepia Tone "
                                 "filter.</p>"));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwTone, i18n("Cold Tone"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Black & White with Cold Tone</b>:"
+    whatsThis3->add( item, i18n("<b>Black & White with Cold Tone</b>:"
                                 "<p>Start subtle and replicate printing on a cold tone black and white "
                                 "paper such as a bromide enlarging "
                                 "paper.</p>"));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwTone, i18n("Selenium Tone"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Black & White with Selenium Tone</b>:"
+    whatsThis3->add( item, i18n("<b>Black & White with Selenium Tone</b>:"
                                 "<p>This effect replicate traditional selenium chemical toning done "
                                 "in the darkroom.</p>"));
 
     ++type;
     item = new ListBoxBWPreviewItem(m_bwTone, i18n("Platinum Tone"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Black & White with Platinum Tone</b>:"
+    whatsThis3->add( item, i18n("<b>Black & White with Platinum Tone</b>:"
                                 "<p>This effect replicate traditional platinum chemical toning done "
                                 "in the darkroom.</p>"));
     
-    m_tab->insertTab(m_bwTone, i18n("Tone"), ToneTab);
-
     // -------------------------------------------------------------
     
     QWidget* tab2         = new QWidget( m_tab );
@@ -377,9 +462,12 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     gridTab2->setRowStretch(3, 10);
     
-    m_tab->insertTab(tab2, i18n("Lightness"), LuminosityTab);
-
     // -------------------------------------------------------------
+
+    m_tab->insertTab(m_bwFilm, i18n("Film"), FilmTab);
+    m_tab->insertTab(vbox, i18n("Lens Filters"), BWFiltersTab);
+    m_tab->insertTab(m_bwTone, i18n("Tone"), ToneTab);
+    m_tab->insertTab(tab2, i18n("Lightness"), LuminosityTab);
 
     gridSettings->addMultiCellWidget(m_tab, 3, 3, 0, 4);
     gridSettings->setRowStretch(3, 10);
@@ -393,13 +481,19 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotSpotColorChanged( const Digikam::DColor & )));
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
     
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
     connect(m_bwFilters, SIGNAL(highlighted(int)),
+            this, SLOT(slotEffect()));
+
+    connect(m_strengthInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimer()));
+
+    connect(m_bwFilm, SIGNAL(highlighted(int)),
             this, SLOT(slotEffect()));
 
     connect(m_bwTone, SIGNAL(highlighted(int)),
@@ -435,7 +529,17 @@ QPixmap ImageEffect_BWSepia::getThumbnailForEffect(int type)
     bool sb = thumb.sixteenBit();
     bool a  = thumb.hasAlpha();
 
-    blackAndWhiteConversion(thumb.bits(), w, h, sb, type);
+    if (type < BWGeneric)
+    {
+        // In Filter view, we will render a preview of the B&W filter with the generic B&W film. 
+        blackAndWhiteConversion(thumb.bits(), w, h, sb, type);
+        blackAndWhiteConversion(thumb.bits(), w, h, sb, BWGeneric);
+    }
+    else
+    {
+        // In Film and Tone view, we will render the preview without to use the B&W Filter 
+        blackAndWhiteConversion(thumb.bits(), w, h, sb, type);
+    }
 
     if (m_curves)   // in case we're called before the creator is done 
     {
@@ -510,8 +614,10 @@ void ImageEffect_BWSepia::readUserSettings()
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
     m_bwFilters->setCurrentItem(config->readNumEntry("BW Filter", 0));
+    m_bwFilm->setCurrentItem(config->readNumEntry("BW Film", 0));
     m_bwTone->setCurrentItem(config->readNumEntry("BW Tone", 0));
     m_cInput->setValue(config->readNumEntry("ContrastAjustment", 0));
+    m_strengthInput->setValue(config->readNumEntry("StrengthAjustment", 1));
 
     for (int i = 0 ; i < 5 ; i++)
         m_curves->curvesChannelReset(i);
@@ -548,8 +654,10 @@ void ImageEffect_BWSepia::writeUserSettings()
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
     config->writeEntry("BW Filter", m_bwFilters->currentItem());
+    config->writeEntry("BW Film", m_bwFilm->currentItem());
     config->writeEntry("BW Tone", m_bwTone->currentItem());
     config->writeEntry("ContrastAjustment", m_cInput->value());
+    config->writeEntry("StrengthAjustment", m_strengthInput->value());
 
     for (int j = 0 ; j < 17 ; j++)
     {
@@ -572,6 +680,7 @@ void ImageEffect_BWSepia::resetValues()
     m_bwFilters->blockSignals(true);
     m_bwTone->blockSignals(true);
     m_cInput->blockSignals(true);
+    m_strengthInput->blockSignals(true);
 
     m_bwFilters->setCurrentItem(0);
     m_bwFilters->setSelected(0, true);
@@ -589,6 +698,7 @@ void ImageEffect_BWSepia::resetValues()
     m_cInput->blockSignals(false);
     m_bwTone->blockSignals(false);
     m_bwFilters->blockSignals(false);
+    m_strengthInput->blockSignals(false);
 
     m_histogramWidget->reset();
     m_previewPixmapFactory->invalidate();
@@ -604,16 +714,20 @@ void ImageEffect_BWSepia::slotEffect()
 
     delete [] m_destinationPreviewData;
 
-    Digikam::ImageIface* iface      = m_previewWidget->imageIface();
-    m_destinationPreviewData        = iface->getPreviewImage();
-    int w                           = iface->previewWidth();
-    int h                           = iface->previewHeight();
-    bool a                          = iface->previewHasAlpha();
-    bool sb                         = iface->previewSixteenBit();
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    m_destinationPreviewData   = iface->getPreviewImage();
+    int w                      = iface->previewWidth();
+    int h                      = iface->previewHeight();
+    bool a                     = iface->previewHasAlpha();
+    bool sb                    = iface->previewSixteenBit();
 
     // Apply black and white filter.
 
     blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_bwFilters->currentItem());
+
+    // Apply black and white film type.
+
+    blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_bwFilm->currentItem() + BWGeneric);
 
     // Apply color tone filter.
 
@@ -670,7 +784,11 @@ void ImageEffect_BWSepia::finalRendering()
         // Apply black and white filter.
     
         blackAndWhiteConversion(data, w, h, sb, m_bwFilters->currentItem());
+
+        // Apply black and white film type.
     
+        blackAndWhiteConversion(data, w, h, sb, m_bwFilm->currentItem() + BWGeneric);
+
         // Apply color tone filter.
     
         blackAndWhiteConversion(data, w, h, sb, m_bwTone->currentItem() + BWNoTone);
@@ -698,68 +816,200 @@ void ImageEffect_BWSepia::finalRendering()
     accept();
 }
 
-// This method is based on the Convert to Black & White tutorial (channel mixer method) 
-// from GimpGuru.org web site available at this url : http://www.gimpguru.org/Tutorials/Color2BW/
-
 void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type)
 {
     // Value to multiply RGB 8 bits component of mask used by changeTonality() method.
     int mul = sb ? 255 : 1;
     Digikam::DImgImageFilters filter;
-    
+    double strength = 1.0 + ((double)m_strengthInput->value() - 1.0) * (1.0 / 3.0);
+
     switch (type)
     {
        case BWNoFilter:
+          m_redAttn   = 0.0;
+          m_greenAttn = 0.0;
+          m_blueAttn  = 0.0; 
           break;
 
-       case BWNeutral:
-          filter.channelMixerImage(data, w, h, sb,  // Image data.
-                   true,                                            // Preserve luminosity.    
-                   true,                                            // Monochrome.
-                   0.3, 0.59 , 0.11,                                // Red channel gains.
-                   0.0, 1.0,   0.0,                                 // Green channel gains (not used).
-                   0.0, 0.0,   1.0);                                // Blue channel gains (not used).
-          break;
-       
        case BWGreenFilter:
-          filter.channelMixerImage(data, w, h, sb,  // Image data.
-                   true,                                            // Preserve luminosity.
-                   true,                                            // Monochrome.
-                   0.1, 0.7, 0.2,                                   // Red channel gains.
-                   0.0, 1.0, 0.0,                                   // Green channel gains (not used).
-                   0.0, 0.0, 1.0);                                  // Blue channel gains (not used).
+          m_redAttn   = -0.20 * strength;
+          m_greenAttn = +0.11 * strength;
+          m_blueAttn  = +0.09 * strength; 
           break;
        
        case BWOrangeFilter:
-          filter.channelMixerImage(data, w, h, sb,  // Image data.
-                   true,                                            // Preserve luminosity.
-                   true,                                            // Monochrome.
-                   0.78, 0.22, 0.0,                                 // Red channel gains.
-                   0.0,  1.0,  0.0,                                 // Green channel gains (not used).
-                   0.0,  0.0,  1.0);                                // Blue channel gains (not used).
+          m_redAttn   = +0.48 * strength;
+          m_greenAttn = -0.37 * strength;
+          m_blueAttn  = -0.11 * strength; 
           break;
        
        case BWRedFilter:
-          filter.channelMixerImage(data, w, h, sb,  // Image data.
-                   true,                                            // Preserve luminosity.
-                   true,                                            // Monochrome.
-                   0.9, 0.1, 0.0,                                   // Red channel gains.
-                   0.0, 1.0, 0.0,                                   // Green channel gains (not used).
-                   0.0, 0.0, 1.0);                                  // Blue channel gains (not used).
+          m_redAttn   = +0.60 * strength;
+          m_greenAttn = -0.49 * strength;
+          m_blueAttn  = -0.11 * strength; 
           break;
        
        case BWYellowFilter:
-          filter.channelMixerImage(data, w, h, sb,  // Image data.
-                   true,                                            // Preserve luminosity.
-                   true,                                            // Monochrome.
-                   0.6, 0.28, 0.12,                                 // Red channel gains.
-                   0.0, 1.0,  0.0,                                  // Green channel gains (not used).
-                   0.0, 0.0,  1.0);                                 // Blue channel gains (not used).
+          m_redAttn   = +0.30 * strength;
+          m_greenAttn = -0.31 * strength;
+          m_blueAttn  = +0.01 * strength; 
           break;
 
+       // --------------------------------------------------------------------------------
+
+       case BWGeneric:
        case BWNoTone:
+          m_redMult   = 0.24;
+          m_greenMult = 0.68;
+          m_blueMult  = 0.08; 
+          filter.channelMixerImage(data, w, h, sb, true, true, 
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
+                 0.0, 1.0, 0.0, 
+                 0.0, 0.0, 1.0);
           break;
-       
+
+       case BWAgfa200X:
+          m_redMult   = 0.18;
+          m_greenMult = 0.41;
+          m_blueMult  = 0.41; 
+          filter.channelMixerImage(data, w, h, sb, true, true, 
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
+                 0.0, 1.0, 0.0, 
+                 0.0, 0.0, 1.0);
+          break;
+
+       case BWAgfapan25:
+          m_redMult   = 0.25;
+          m_greenMult = 0.39;
+          m_blueMult  = 0.36; 
+          filter.channelMixerImage(data, w, h, sb, true, true, 
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
+                 0.0, 1.0, 0.0, 
+                 0.0, 0.0, 1.0);
+          break;
+
+       case BWAgfapan100:
+          m_redMult   = 0.21;
+          m_greenMult = 0.40;
+          m_blueMult  = 0.39; 
+          filter.channelMixerImage(data, w, h, sb, true, true, 
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
+                 0.0, 1.0, 0.0, 
+                 0.0, 0.0, 1.0);
+          break;
+
+       case BWAgfapan400:
+          m_redMult   = 0.20;
+          m_greenMult = 0.41;
+          m_blueMult  = 0.39; 
+          filter.channelMixerImage(data, w, h, sb, true, true, 
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
+                 0.0, 1.0, 0.0, 
+                 0.0, 0.0, 1.0);
+          break;
+
+       case BWIlfordDelta100:
+          m_redMult   = 0.21;
+          m_greenMult = 0.42;
+          m_blueMult  = 0.37; 
+          filter.channelMixerImage(data, w, h, sb, true, true, 
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
+                 0.0, 1.0, 0.0, 
+                 0.0, 0.0, 1.0);
+          break;
+
+       case BWIlfordDelta400:
+          m_redMult   = 0.22;
+          m_greenMult = 0.42;
+          m_blueMult  = 0.36; 
+          filter.channelMixerImage(data, w, h, sb, true, true, 
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
+                 0.0, 1.0, 0.0, 
+                 0.0, 0.0, 1.0);
+          break;
+
+       case BWIlfordDelta400Pro3200:
+          m_redMult   = 0.31;
+          m_greenMult = 0.36;
+          m_blueMult  = 0.33; 
+          filter.channelMixerImage(data, w, h, sb, true, true, 
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
+                 0.0, 1.0, 0.0, 
+                 0.0, 0.0, 1.0);
+          break;
+
+       case BWIlfordFP4:
+          m_redMult   = 0.28;
+          m_greenMult = 0.41;
+          m_blueMult  = 0.31; 
+          filter.channelMixerImage(data, w, h, sb, true, true, 
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
+                 0.0, 1.0, 0.0, 
+                 0.0, 0.0, 1.0);
+          break;
+
+       case BWIlfordHP5:
+          m_redMult   = 0.23;
+          m_greenMult = 0.37;
+          m_blueMult  = 0.40; 
+          filter.channelMixerImage(data, w, h, sb, true, true, 
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
+                 0.0, 1.0, 0.0, 
+                 0.0, 0.0, 1.0);
+          break;
+
+       case BWIlfordPanF:
+          m_redMult   = 0.33;
+          m_greenMult = 0.36;
+          m_blueMult  = 0.31; 
+          filter.channelMixerImage(data, w, h, sb, true, true, 
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
+                 0.0, 1.0, 0.0, 
+                 0.0, 0.0, 1.0);
+          break;
+
+       case BWIlfordXP2Super:
+          m_redMult   = 0.21;
+          m_greenMult = 0.42;
+          m_blueMult  = 0.37; 
+          filter.channelMixerImage(data, w, h, sb, true, true, 
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
+                 0.0, 1.0, 0.0, 
+                 0.0, 0.0, 1.0);
+          break;
+
+       case BWKodakTmax100:
+          m_redMult   = 0.24;
+          m_greenMult = 0.37;
+          m_blueMult  = 0.39; 
+          filter.channelMixerImage(data, w, h, sb, true, true, 
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
+                 0.0, 1.0, 0.0, 
+                 0.0, 0.0, 1.0);
+          break;
+
+       case BWKodakTmax400:
+          m_redMult   = 0.27;
+          m_greenMult = 0.36;
+          m_blueMult  = 0.37; 
+          filter.channelMixerImage(data, w, h, sb, true, true, 
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
+                 0.0, 1.0, 0.0, 
+                 0.0, 0.0, 1.0);
+          break;
+
+       case BWKodakTriX:
+          m_redMult   = 0.25;
+          m_greenMult = 0.35;
+          m_blueMult  = 0.40; 
+          filter.channelMixerImage(data, w, h, sb, true, true, 
+                 m_redMult + m_redMult*m_redAttn, m_greenMult + m_greenMult*m_greenAttn, m_blueMult + m_blueMult*m_blueAttn, 
+                 0.0, 1.0, 0.0, 
+                 0.0, 0.0, 1.0);
+          break;
+
+       // --------------------------------------------------------------------------------
+
        case BWSepiaTone:
           filter.changeTonality(data, w, h, sb, 162*mul, 132*mul, 101*mul);
           break;
