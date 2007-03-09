@@ -1206,7 +1206,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 
             if (itemDropped)
                 popMenu.insertItem(SmallIcon("tag"),
-                                   i18n("Assign '%1' to &Dropped Item").arg(talbum->tagPath().mid(1)),   12);
+                                   i18n("Assign '%1' to &This Item").arg(talbum->tagPath().mid(1)),   12);
 
             popMenu.insertItem(SmallIcon("tag"), 
                                i18n("Assign '%1' to &All Items").arg(talbum->tagPath().mid(1)),          11);
@@ -1284,7 +1284,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tags to &Selected Items"), 10);
 
         if (itemDropped)
-            popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tags to &Dropped Item"),   12);
+            popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tags to &This Item"),   12);
 
         popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tags to &All Items"),          11);
 
