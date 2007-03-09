@@ -56,8 +56,6 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent, QString titl
                         : Digikam::ImageGuideDlg(parent, title, "distortionfx", 
                                                  false, true, false, Digikam::ImageGuideWidget::HVGuideMode, banner)
 {
-    QString whatsThis;
-    
     // About data and help button.
     
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -151,7 +149,6 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent, QString titl
     m_iterationLabel = new QLabel(i18n("Iteration:"), gboxSettings);
     m_iterationInput = new KIntNumInput(gboxSettings);
     m_iterationInput->setRange(0, 100, 1, true);
-    whatsThis = i18n("<p>This value controls the iterations to use for Waves, Tile, and Neon effects.");
     QWhatsThis::add( m_iterationInput, i18n("<p>This value controls the iterations to use for Waves, "
                                             "Tile, and Neon effects."));
     
