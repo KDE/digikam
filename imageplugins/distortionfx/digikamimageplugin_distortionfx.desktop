@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=ImagePlugin_DistortionFX
+Name[el]=ΠρόσθετοΕικόνας_ΕφέΠαραμόρφωσης
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Distortion special effects plugin for digiKam
+Comment[el]=Πρόσθετο ειδικών εφέ παραμόρφωσης για το digiKam
 
 X-KDE-Library=digikamimageplugin_distortionfx
 author=Gilles Caulier, caulier dot gilles at free dot fr

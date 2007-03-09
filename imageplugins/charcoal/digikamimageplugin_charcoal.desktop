@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=ImagePlugin_Charcoal
+Name[el]=ΠρόσθετοΕικόνας_Κάρβουνο
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Charcoal drawing image effect plugin for digiKam
+Comment[el]=Πρόσθετο εφέ σχεδίασης με κάρβουνο για το digiKam
 
 X-KDE-Library=digikamimageplugin_charcoal
 author=Gilles Caulier, caulier dot gilles at free dot fr

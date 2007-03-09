@@ -1,10 +1,12 @@
 [Desktop Entry]
 Name=ImagePlugin_ShearTool
+Name[el]=ΠρόσθετοΕικόνας_ΕργαλείοΣτρέβλωσης
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Shear tool plugin for digiKam
+Comment[el]=Πρόσθετο εργαλείο στρέβλωσης για το digiKam
 
 X-KDE-Library=digikamimageplugin_sheartool
 author=Gilles Caulier, caulier dot gilles at free dot fr

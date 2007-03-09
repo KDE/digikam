@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=ImagePlugin_NoiseReduction
+Name[el]=ΠρόσθετοΕικόνας_ΜείωσηΘορύβου
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Noise Reduction plugin for digiKam
+Comment[el]=Πρόσθετο μείωσης θορύβου για το digiKam
 
 X-KDE-Library=digikamimageplugin_despeckle
 author=Caulier Gilles, caulier dot gilles at free dot fr

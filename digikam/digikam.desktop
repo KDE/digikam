@@ -8,5 +8,7 @@ Icon=digikam
 DocPath=digikam/index.html
 Name=digiKam
 Comment=KDE Photo Management
+Comment[el]=Διαχείριση φωτογραφιών KDE
 GenericName=Photo Management
+GenericName[el]=Διαχείριση φωτογραφιών
 Terminal=false

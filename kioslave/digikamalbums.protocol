@@ -12,4 +12,5 @@ deleting=true
 moving=true
 maxInstances=1
 Description=digiKam albums kioslave
+Description[el]=kioslave Άλμπουμ του digiKam
 Class=:local

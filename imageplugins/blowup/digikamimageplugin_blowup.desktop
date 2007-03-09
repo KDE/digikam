@@ -1,10 +1,12 @@
 [Desktop Entry]
 Name=ImagePlugin_BlowUp
+Name[el]=ΠρόσθετοΕικόνας_Αστάθεια
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to blowup a photograph
+Comment[el]=Πρόσθετο αστάθειας μιας φωτογραφίας για το digiKam
 
 X-KDE-Library=digikamimageplugin_blowup
 author=Gilles Caulier, caulier dot gilles at free dot fr

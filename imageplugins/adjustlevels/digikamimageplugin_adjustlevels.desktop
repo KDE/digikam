@@ -1,10 +1,12 @@
 [Desktop Entry]
 Name=ImagePlugin_AdjustLevels
+Name[el]=ΠρόσθετοΕικόνας_ΠροσαρμογήΕπιπέδων
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 
 Comment=Image histogram adjust levels plugin for digiKam
+Comment[el]=Πρόσθετο προσαρμογής των επιπέδων του ιστογράμματος εικόνας για το digiKam
 
 X-KDE-Library=digikamimageplugin_adjustlevels
 author=Caulier Gilles, caulier dot gilles at free dot fr

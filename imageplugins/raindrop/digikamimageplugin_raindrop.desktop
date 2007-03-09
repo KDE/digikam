@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=ImagePlugin_RainDrop
+Name[el]=ΠροσθετοΕικόνας_Βροχή
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Rain dropping image effect plugin for digiKam
+Comment[el]=Πρόσθετο εφέ πτώσης βροχής για το digiKam
 
 X-KDE-Library=digikamimageplugin_raindrop
 author=Gilles Caulier, caulier dot gilles at free dot fr

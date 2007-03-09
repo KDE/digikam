@@ -1,10 +1,12 @@
 [Desktop Entry]
 Name=ImagePlugin_ChannelMixer
+Name[el]=ΠρόσθετοΕικόνας_ΑνάμειξηΚαναλιών
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 
 Comment=Image color channels mixer plugin for digiKam
+Comment[el]=Μείκτης καναλιών χρώματος εικόνας για το digiKam
 
 X-KDE-Library=digikamimageplugin_channelmixer
 author=Caulier Gilles, caulier dot gilles at free dot fr

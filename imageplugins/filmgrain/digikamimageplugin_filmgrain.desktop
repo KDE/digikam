@@ -1,10 +1,12 @@
 [Desktop Entry]
 Name=ImagePlugin_FilmGrain
+Name[el]=ΠρόσθετοΕικόνας_ΚόκκοςΦιλμ
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Film grain image effect plugin for digiKam
+Comment[el]=Πρόσθετο εφέ κόκκου φιλμ για το digiKam
 
 X-KDE-Library=digikamimageplugin_filmgrain
 author=Gilles Caulier, caulier dot gilles at free dot fr

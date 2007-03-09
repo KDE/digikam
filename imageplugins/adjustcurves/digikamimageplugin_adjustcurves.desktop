@@ -1,10 +1,12 @@
 [Desktop Entry]
 Name=ImagePlugin_AdjustCurves
+Name[el]=ΠρόσθετοΕικόνας_ΠροσαρμογήΚαμπύλων
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 
 Comment=Image histogram adjust curves plugin for digiKam
+Comment[el]=Πρόσθετο προσαρμογής των καμπύλων του ιστογράμματος εικόνας για το digiKam
 
 X-KDE-Library=digikamimageplugin_adjustcurves
 author=Caulier Gilles, caulier dot gilles at free dot fr

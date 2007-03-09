@@ -5,4 +5,5 @@ input=none
 output=filesystem,stream
 maxInstances=1
 Description=digiKam search kioslave
+Description[el]=kioslave αναζήτησης του digiKam
 Class=:local

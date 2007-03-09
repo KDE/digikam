@@ -1,10 +1,12 @@
 [Desktop Entry]
 Name=ImagePlugin_SuperImpose
+Name[el]=ΠρόσθετοΕικόνας_Υπερέκθεση
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Template superimpose plugin for digiKam
+Comment[el]=Πρόσθετο πρότυπης υπερέκθεσης για το digiKam
 
 X-KDE-Library=digikamimageplugin_superimpose
 author=Gilles Caulier, caulier dot gilles at free dot fr

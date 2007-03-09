@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=ImagePlugin_BlurFX
+Name[el]=ΠρόσθετοΕικόνας_ΕφέΘολώματος
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Blur special effects plugin for digiKam
+Comment[el]=Πρόσθετο ειδικών εφέ θολώματος για το digiKam
 
 X-KDE-Library=digikamimageplugin_blurfx
 author=Gilles Caulier, caulier dot gilles at free dot fr

@@ -1,10 +1,12 @@
 [Desktop Entry]
 Name=ImagePlugin_Restoration
+Name[el]=ΠρόσθετοΕικόνας_Αποκατάσταση
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to restore a photograph
+Comment[el]=Πρόσθετο του digiKam για αποκατάσταση μιας φωτογραφίας
 
 X-KDE-Library=digikamimageplugin_restoration
 author=Gilles Caulier, caulier dot gilles at free dot fr

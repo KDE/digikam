@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=ImagePlugin_OilPaint
+Name[el]=ΠρόσθετοΕικόνας_Ελαιογραφίας
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Oil paint image effect plugin for digiKam
+Comment[el]=Πρόσθετο ελαιογραφίας για το digiKam
 
 X-KDE-Library=digikamimageplugin_oilpaint
 author=Gilles Caulier, caulier dot gilles at free dot fr

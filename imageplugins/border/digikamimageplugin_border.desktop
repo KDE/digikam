@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=ImagePlugin_Border
+Name[el]=ΠρόσθετοΕικόνας_Περίγραμμα
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Add border to image plugin for digiKam
+Comment[el]=Προσθήκη περιγράμματος σε πρόσθετο εικόνας για το digiKam
 
 X-KDE-Library=digikamimageplugin_border
 author=Gilles Caulier, caulier dot gilles at free dot fr

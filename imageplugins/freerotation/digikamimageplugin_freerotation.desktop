@@ -1,10 +1,12 @@
 [Desktop Entry]
 Name=ImagePlugin_FreeRotation
+Name[el]=ΠρόσθετοΕικόνας_ΕλεύθερηΠεριστροφή
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Free rotation plugin for digiKam
+Comment[el]=Πρόσθετο ειδικών εφέ ελεύθερης περιστροφής για το digiKam
 
 X-KDE-Library=digikamimageplugin_freerotation
 author=Gilles Caulier, caulier dot gilles at free dot fr

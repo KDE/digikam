@@ -6,3 +6,4 @@ output=stream
 reading=true
 source=false
 Description=digiKam thumbnail kioslave
+Description[el]=kioslave εικόνων επισκόπησης του digiKam

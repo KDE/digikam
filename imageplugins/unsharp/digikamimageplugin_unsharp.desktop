@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=ImagePlugin_Unsharp
+Name[el]=ΠρόσθετοΕικόνας_Εξομάλυνση
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Unsharp mask image filter plugin for digiKam
+Comment[el]=Πρόσθετο φίλτρο εξομάλυνσης εικόνας για το digiKam
 
 X-KDE-Library=digikamimageplugin_unsharp
 author=Caulier Gilles, caulier dot gilles at free dot fr

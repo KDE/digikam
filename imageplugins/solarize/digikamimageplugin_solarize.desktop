@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=ImagePlugin_Solarize
+Name[el]=ΠρόσθετοΕικόνας_ΗλιακήςΈκθεσης
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Image solarize effect plugin for digiKam
+Comment[el]=Πρόσθετο εφέ ηλιακής έκθεσης εικόνας για το digiKam
 
 X-KDE-Library=digikamimageplugin_solarize
 author=Renchi Raju, renchi@pooh.tam.uiuc.edu
