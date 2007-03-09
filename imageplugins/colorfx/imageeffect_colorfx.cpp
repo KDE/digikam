@@ -156,7 +156,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent, QString title, QFrame*
     m_effectTypeLabel = new QLabel(i18n("Type:"), gboxSettings);
     
     m_effectType = new QComboBox( false, gboxSettings );
-    m_effectType->insertItem( i18n("ColorFX") );
+    m_effectType->insertItem( i18n("Solarize") );
     m_effectType->insertItem( i18n("Vivid") );
     m_effectType->insertItem( i18n("Neon") );    
     m_effectType->insertItem( i18n("Find Edges") );    
