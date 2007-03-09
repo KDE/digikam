@@ -14,6 +14,8 @@ Image Plugins : Red Eyes Correction tool have been completly re-writen. There is
                 a preview of effect and the capability to taint the eye pupil with
                 a customized color. The new eye pupil can be blured to smooth the 
                 result. 
+Image Plugins : Solarize plugin is now a "Color Effects" pack including Solarize, Velvia, 
+                Neon, and Edge effects. 
 
 
 ----------------------------------------------------------------------------
@@ -24,4 +26,6 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 001 ==> 142443 : Red eye correction should change eye colour to an alternate colour.
 002 ==> 138744 : Wish: dcraw 8.45 supports Pentax K10D.
 003 ==> 142427 : Rotate image tool too complicated.
+004 ==> 141439 : A velvia similar plugin. AKA vivid saturation.
+005 ==> 
   
