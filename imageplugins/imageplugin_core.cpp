@@ -206,7 +206,7 @@ void ImagePlugin_Core::slotInvert()
     Digikam::DImgImageFilters filter;
     filter.invertImage(data, w, h, sixteenBit);
     iface.putOriginalImage(i18n("Invert"), data);
-    delete data;
+    delete [] data;
 
     parentWidget()->unsetCursor();
 }
