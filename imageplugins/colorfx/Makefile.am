@@ -7,8 +7,8 @@ INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = digikamimageplugin_solarize.la
 
-digikamimageplugin_solarize_la_SOURCES = imageplugin_solarize.cpp \
-	                                 imageeffect_solarize.cpp 
+digikamimageplugin_solarize_la_SOURCES = imageplugin_colorfx.cpp \
+	                                 imageeffect_colorfx.cpp 
 
 digikamimageplugin_solarize_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \
 	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la 

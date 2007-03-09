@@ -20,8 +20,8 @@
  * 
  * ============================================================ */
 
-#ifndef IMAGEPLUGIN_SOLARIZE_H
-#define IMAGEPLUGIN_SOLARIZE_H
+#ifndef IMAGEPLUGIN_COLORFX_H
+#define IMAGEPLUGIN_COLORFX_H
 
 // Digikam includes.
 
@@ -29,25 +29,25 @@
 
 class KAction;
 
-class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Solarize : public Digikam::ImagePlugin
+class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_ColorFX : public Digikam::ImagePlugin
 {
     Q_OBJECT
 
 public:
 
-    ImagePlugin_Solarize(QObject *parent, const char* name,
+    ImagePlugin_ColorFX(QObject *parent, const char* name,
                          const QStringList &args);
-    ~ImagePlugin_Solarize();
+    ~ImagePlugin_ColorFX();
 
     void setEnabledActions(bool enable);
 
 private slots:
 
-    void slotSolarize();
+    void slotColorFX();
 
 private:
 
     KAction *m_solarizeAction;
 };
 
-#endif /* IMAGEPLUGIN_SOLARIZE_H */
+#endif /* IMAGEPLUGIN_COLORFX_H */

@@ -21,8 +21,8 @@
  * 
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_SOLARIZE_H
-#define IMAGEEFFECT_SOLARIZE_H
+#ifndef IMAGEEFFECT_COLORFX_H
+#define IMAGEEFFECT_COLORFX_H
 
 // Digikam includes.
 
@@ -38,17 +38,17 @@ namespace Digikam
 class ImageWidget;
 }
 
-namespace DigikamSolarizeImagesPlugin
+namespace DigikamColorFXImagesPlugin
 {
 
-class ImageEffect_Solarize : public Digikam::ImageDlgBase
+class ImageEffect_ColorFX : public Digikam::ImageDlgBase
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Solarize(QWidget *parent, QString title, QFrame* banner);
-    ~ImageEffect_Solarize();
+    ImageEffect_ColorFX(QWidget *parent, QString title, QFrame* banner);
+    ~ImageEffect_ColorFX();
 
 private:
 
@@ -92,7 +92,7 @@ private:
 
     enum ColorFXTypes
     {
-        Solarize=0,
+        ColorFX=0,
         Vivid,
         Neon,
         FindEdges
@@ -119,6 +119,6 @@ private:
     Digikam::HistogramWidget     *m_histogramWidget;    
 };
 
-}  // NameSpace DigikamSolarizeImagesPlugin
+}  // NameSpace DigikamColorFXImagesPlugin
 
-#endif /* IMAGEEFFECT_SOLARIZE_H */
+#endif /* IMAGEEFFECT_COLORFX_H */

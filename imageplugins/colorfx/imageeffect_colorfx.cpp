@@ -50,13 +50,13 @@
 
 #include "version.h"
 #include "bannerwidget.h"
-#include "imageeffect_solarize.h"
-#include "imageeffect_solarize.moc"
+#include "imageeffect_colorfx.h"
+#include "imageeffect_colorfx.moc"
 
-namespace DigikamSolarizeImagesPlugin
+namespace DigikamColorFXImagesPlugin
 {
 
-ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent, QString title, QFrame* banner)
+ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent, QString title, QFrame* banner)
                     : Digikam::ImageDlgBase(parent, title, "coloreffect", false, false, banner)
 {
     m_destinationPreviewData = 0;
@@ -156,12 +156,12 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent, QString title, QFram
     m_effectTypeLabel = new QLabel(i18n("Type:"), gboxSettings);
     
     m_effectType = new QComboBox( false, gboxSettings );
-    m_effectType->insertItem( i18n("Solarize") );
+    m_effectType->insertItem( i18n("ColorFX") );
     m_effectType->insertItem( i18n("Vivid") );
     m_effectType->insertItem( i18n("Neon") );    
     m_effectType->insertItem( i18n("Find Edges") );    
     QWhatsThis::add( m_effectType, i18n("<p>Select here the effect type to apply on image.<p>"
-                                        "<b>Solarize</b>: simulate a solarisation of photograph.<p>"
+                                        "<b>ColorFX</b>: simulate a solarisation of photograph.<p>"
                                         "<b>Vivid</b>: simulate the Velvia film colors.<p>"
                                         "<b>Neon</b>: sub-coloring the edges in a photograph to reproduce a "
                                         "neon highlight.<p>"
@@ -214,7 +214,7 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent, QString title, QFram
             this, SLOT(slotEffectTypeChanged(int)));
 }
 
-ImageEffect_Solarize::~ImageEffect_Solarize()
+ImageEffect_ColorFX::~ImageEffect_ColorFX()
 {
     m_histogramWidget->stopHistogramComputation();
 
@@ -224,16 +224,16 @@ ImageEffect_Solarize::~ImageEffect_Solarize()
     delete m_previewWidget;
 }
 
-void ImageEffect_Solarize::readUserSettings()
+void ImageEffect_ColorFX::readUserSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("coloreffect Tool Dialog");
-    m_effectType->setCurrentItem(config->readNumEntry("EffectType", Solarize));
+    m_effectType->setCurrentItem(config->readNumEntry("EffectType", ColorFX));
     m_levelInput->setValue(config->readNumEntry("LevelAjustment", 0));
     m_iterationInput->setValue(config->readNumEntry("IterationAjustment", 3));
 }
 
-void ImageEffect_Solarize::writeUserSettings()
+void ImageEffect_ColorFX::writeUserSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("coloreffect Tool Dialog");
@@ -243,12 +243,12 @@ void ImageEffect_Solarize::writeUserSettings()
     config->sync();
 }
 
-void ImageEffect_Solarize::resetValues()
+void ImageEffect_ColorFX::resetValues()
 {
     m_levelInput->setValue(0);
 }
 
-void ImageEffect_Solarize::slotChannelChanged(int channel)
+void ImageEffect_ColorFX::slotChannelChanged(int channel)
 {
     switch(channel)
     {
@@ -276,18 +276,18 @@ void ImageEffect_Solarize::slotChannelChanged(int channel)
     m_histogramWidget->repaint(false);
 }
 
-void ImageEffect_Solarize::slotScaleChanged(int scale)
+void ImageEffect_ColorFX::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
     m_histogramWidget->repaint(false);
 }
 
-void ImageEffect_Solarize::slotColorSelectedFromTarget( const Digikam::DColor &color )
+void ImageEffect_ColorFX::slotColorSelectedFromTarget( const Digikam::DColor &color )
 {
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-void ImageEffect_Solarize::slotEffectTypeChanged(int type)
+void ImageEffect_ColorFX::slotEffectTypeChanged(int type)
 {
     m_levelInput->setEnabled(true);
     m_levelLabel->setEnabled(true);
@@ -299,7 +299,7 @@ void ImageEffect_Solarize::slotEffectTypeChanged(int type)
           
     switch (type)
        {
-       case Solarize: 
+       case ColorFX: 
           m_levelInput->setRange(0, 100, 1, true);
           m_levelInput->setValue(0);
           m_iterationInput->setEnabled(false);
@@ -330,7 +330,7 @@ void ImageEffect_Solarize::slotEffectTypeChanged(int type)
     slotEffect();
 }
 
-void ImageEffect_Solarize::slotEffect()
+void ImageEffect_ColorFX::slotEffect()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
@@ -357,7 +357,7 @@ void ImageEffect_Solarize::slotEffect()
     kapp->restoreOverrideCursor();
 }
 
-void ImageEffect_Solarize::finalRendering()
+void ImageEffect_ColorFX::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
@@ -373,8 +373,8 @@ void ImageEffect_Solarize::finalRendering()
 
         switch (m_effectType->currentItem())
         {
-            case Solarize:
-                name = i18n("Solarize");
+            case ColorFX:
+                name = i18n("ColorFX");
                 break;
     
             case Vivid:
@@ -398,11 +398,11 @@ void ImageEffect_Solarize::finalRendering()
     accept();
 }
 
-void ImageEffect_Solarize::colorEffect(uchar *data, int w, int h, bool sb)
+void ImageEffect_ColorFX::colorEffect(uchar *data, int w, int h, bool sb)
 {
     switch (m_effectType->currentItem())
     {
-        case Solarize:
+        case ColorFX:
             solarize(m_levelInput->value(), data, w, h, sb);
             break;
 
@@ -420,7 +420,7 @@ void ImageEffect_Solarize::colorEffect(uchar *data, int w, int h, bool sb)
     }
 }
 
-void ImageEffect_Solarize::solarize(int factor, uchar *data, int w, int h, bool sb)
+void ImageEffect_ColorFX::solarize(int factor, uchar *data, int w, int h, bool sb)
 {
     bool stretch = true;
 
@@ -502,7 +502,7 @@ void ImageEffect_Solarize::solarize(int factor, uchar *data, int w, int h, bool 
     }
 }
 
-void ImageEffect_Solarize::vivid(int factor, uchar *data, int w, int h, bool sb)
+void ImageEffect_ColorFX::vivid(int factor, uchar *data, int w, int h, bool sb)
 {   
     float amount = factor/100.0;  
 
@@ -562,7 +562,7 @@ void ImageEffect_Solarize::vivid(int factor, uchar *data, int w, int h, bool sb)
  *                     like this on PSC. Is very similar to Growing Edges (photoshop)  
  *                     Some pictures will be very interesting   
  */
-void ImageEffect_Solarize::neon(uchar *data, int w, int h, bool sb, int Intensity, int BW)
+void ImageEffect_ColorFX::neon(uchar *data, int w, int h, bool sb, int Intensity, int BW)
 {
     neonFindEdges(data, w, h, sb, true, Intensity, BW);
 }
@@ -579,13 +579,13 @@ void ImageEffect_Solarize::neon(uchar *data, int w, int h, bool sb, int Intensit
  *                     Neon effect ? This is the same engine, but is inversed with   
  *                     255 - color.  
  */
-void ImageEffect_Solarize::findEdges(uchar *data, int w, int h, bool sb, int Intensity, int BW)
+void ImageEffect_ColorFX::findEdges(uchar *data, int w, int h, bool sb, int Intensity, int BW)
 {
     neonFindEdges(data, w, h, sb, false, Intensity, BW);
 }
 
 // Implementation of neon and FindEdges. They share 99% of their code.
-void ImageEffect_Solarize::neonFindEdges(uchar *data, int w, int h, bool sb, bool neon, int Intensity, int BW)
+void ImageEffect_ColorFX::neonFindEdges(uchar *data, int w, int h, bool sb, bool neon, int Intensity, int BW)
 {
     int Width       = w;
     int Height      = h;
@@ -657,17 +657,17 @@ void ImageEffect_Solarize::neonFindEdges(uchar *data, int w, int h, bool sb, boo
     delete [] pResBits;
 }
 
-int ImageEffect_Solarize::getOffset(int Width, int X, int Y, int bytesDepth)
+int ImageEffect_ColorFX::getOffset(int Width, int X, int Y, int bytesDepth)
 {
     return (Y * Width * bytesDepth) + (X * bytesDepth);
 }
 
-inline int ImageEffect_Solarize::Lim_Max(int Now, int Up, int Max) 
+inline int ImageEffect_ColorFX::Lim_Max(int Now, int Up, int Max) 
 {
     --Max;
     while (Now > Max - Up) --Up;
     return (Up);
 }
 
-}  // NameSpace DigikamSolarizeImagesPlugin
+}  // NameSpace DigikamColorFXImagesPlugin
 

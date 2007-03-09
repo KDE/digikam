@@ -31,40 +31,40 @@
 // Local includes.
 
 #include "bannerwidget.h"
-#include "imageeffect_solarize.h"
-#include "imageplugin_solarize.h"
-#include "imageplugin_solarize.moc"
+#include "imageeffect_colorfx.h"
+#include "imageplugin_colorfx.h"
+#include "imageplugin_colorfx.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_solarize,
-                            KGenericFactory<ImagePlugin_Solarize>("digikamimageplugin_solarize"));
+                            KGenericFactory<ImagePlugin_ColorFX>("digikamimageplugin_solarize"));
 
-ImagePlugin_Solarize::ImagePlugin_Solarize(QObject *parent, const char*,
+ImagePlugin_ColorFX::ImagePlugin_ColorFX(QObject *parent, const char*,
                                                    const QStringList &)
-                    : Digikam::ImagePlugin(parent, "ImagePlugin_Solarize")
+                   : Digikam::ImagePlugin(parent, "ImagePlugin_ColorFX")
 {
     m_solarizeAction = new KAction(i18n("Color Effects..."), "solarizetool", 0, 
-                           this, SLOT(slotSolarize()),
+                           this, SLOT(slotColorFX()),
                            actionCollection(), "imageplugin_solarize");
                 
     setXMLFile( "digikamimageplugin_solarize_ui.rc" );    
         
-    DDebug() << "ImagePlugin_Solarize plugin loaded" << endl;
+    DDebug() << "ImagePlugin_ColorFX plugin loaded" << endl;
 }
 
-ImagePlugin_Solarize::~ImagePlugin_Solarize()
+ImagePlugin_ColorFX::~ImagePlugin_ColorFX()
 {
 }
 
-void ImagePlugin_Solarize::setEnabledActions(bool enable)
+void ImagePlugin_ColorFX::setEnabledActions(bool enable)
 {
     m_solarizeAction->setEnabled(enable);
 }
 
-void ImagePlugin_Solarize::slotSolarize()
+void ImagePlugin_ColorFX::slotColorFX()
 {
     QString title = i18n("Apply Color Special Effect to Photograph");
     QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
-    DigikamSolarizeImagesPlugin::ImageEffect_Solarize dlg(parentWidget(),
+    DigikamColorFXImagesPlugin::ImageEffect_ColorFX dlg(parentWidget(),
                                  title, headerFrame);
     dlg.exec();
     delete headerFrame;
