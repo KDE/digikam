@@ -67,9 +67,7 @@ public:
         CircularWaves2,
         PolarCoordinates,
         UnpolarCoordinates,
-        Tile,
-        Neon,
-        FindEdges
+        Tile
     };
 
 private:
@@ -99,14 +97,10 @@ private:
                bool FillSides, bool Direction);
     void blockWaves(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Amplitude, int Frequency, bool Mode);
     void tile(Digikam::DImg *orgImage, Digikam::DImg *destImage, int WSize, int HSize, int Random);
-    void neon(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Intensity, int BW);
-    void findEdges(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Intensity, int BW);
-    void neonFindEdges(Digikam::DImg *orgImage, Digikam::DImg *destImage, bool neon, int Intensity, int BW);
-
 
     void setPixelFromOther(int Width, int Height, bool sixteenBit, int bytesDepth,
-                                         uchar *data, uchar *pResBits,
-                                         int w, int h, double nw, double nh, bool AntiAlias);
+                           uchar *data, uchar *pResBits,
+                           int w, int h, double nw, double nh, bool AntiAlias);
     /*
     //UNUSED
 

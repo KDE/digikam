@@ -1,11 +1,11 @@
 /* ============================================================
- * Authors: Gilles Caulier
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2005-02-11
  * Description : 
  * 
- * Copyright 2005 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> and Marcel Wiesweg
+ * Copyright 2005 by Gilles Caulier 
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -106,8 +106,6 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent, QString titl
     m_effectType->insertItem( i18n("Polar Coordinates") );    
     m_effectType->insertItem( i18n("Unpolar Coordinates") );    
     m_effectType->insertItem( i18n("Tile") );    
-    m_effectType->insertItem( i18n("Neon") );    
-    m_effectType->insertItem( i18n("Find Edges") );    
     QWhatsThis::add( m_effectType, i18n("<p>Select here the effect type to apply on image.<p>"
                                         "<b>Fish Eyes</b>: warps the photograph around a 3D spherical shape to "
                                         "reproduce the common photograph 'Fish Eyes' effect.<p>"
@@ -131,9 +129,6 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent, QString titl
                                         "<b>Unpolar Coordinates</b>: Polar Coordinate effect inverted.<p>"
                                         "<b>Tile</b>: splits the photograph into square blocks and move "
                                         "them randomly inside the image.<p>"
-                                        "<b>Neon</b>: sub-coloring the edges in a photograph to reproduce a "
-                                        "neon highlight.<p>"
-                                        "<b>Find Edges</b>: detects the edges in a photograph and their strength."
                                         ));
     gridSettings->addMultiCellWidget(m_effectTypeLabel, 0, 0, 0, 2);
     gridSettings->addMultiCellWidget(m_effectType, 1, 1, 0, 2);
@@ -206,8 +201,6 @@ void ImageEffect_DistortionFX::renderingFinished()
        case DistortionFX::CircularWaves1: 
        case DistortionFX::CircularWaves2: 
        case DistortionFX::Tile: 
-       case DistortionFX::Neon: 
-       case DistortionFX::FindEdges: 
           m_iterationInput->setEnabled(true);
           m_iterationLabel->setEnabled(true);
           break;
@@ -301,16 +294,6 @@ void ImageEffect_DistortionFX::slotEffectTypeChanged(int type)
           m_levelInput->setEnabled(false);
           m_levelLabel->setEnabled(false);
           break;
-                 
-       case DistortionFX::Neon: 
-       case DistortionFX::FindEdges: 
-          m_levelInput->setRange(0, 5, 1, true);
-          m_levelInput->setValue(3);
-          m_iterationInput->setEnabled(true);
-          m_iterationLabel->setEnabled(true);
-          m_iterationInput->setRange(0, 5, 1, true);
-          m_iterationInput->setValue(2);
-          break;          
        }
 
     m_levelInput->blockSignals(false);

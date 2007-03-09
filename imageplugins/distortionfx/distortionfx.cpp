@@ -24,7 +24,7 @@
  * 
  * ============================================================ */
  
-// Represents 1º
+// Represents 1
 #define ANGLE_RATIO        0.017453292519943295769236907685
 
 // C++ includes. 
@@ -126,14 +126,6 @@ void DistortionFX::filterImage(void)
 
         case Tile:
             tile(&m_orgImage, &m_destImage, 200-f, 200-f, l);
-            break;
-
-        case Neon:
-            neon(&m_orgImage, &m_destImage, l, f);
-            break;
-
-        case FindEdges:
-            findEdges(&m_orgImage, &m_destImage, l, f);
             break;
     }
 }
@@ -837,117 +829,6 @@ void DistortionFX::tile(Digikam::DImg *orgImage, Digikam::DImg *destImage,
 
         // Update the progress bar in dialog.
         progress = (int)(((double)h * 100.0) / Height);
-
-        if (progress%5 == 0)
-            postProgress(progress);
-    }
-}
-
-/* Function to apply the Neon effect                                            
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.  
- * Intensity        => Intensity value                                                
- * BW               => Border Width                            
- *                                                                                  
- * Theory           => Wow, this is a great effect, you've never seen a Neon effect   
- *                     like this on PSC. Is very similar to Growing Edges (photoshop)  
- *                     Some pictures will be very interesting   
- */
-void DistortionFX::neon(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Intensity, int BW)
-{
-    neonFindEdges(orgImage, destImage, true, Intensity, BW);
-}
-
-/* Function to apply the Find Edges effect                                            
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.  
- * Intensity        => Intensity value                                                
- * BW               => Border Width                            
- *                                                                                  
- * Theory           => Wow, another Photoshop filter (FindEdges). Do you understand  
- *                     Neon effect ? This is the same engine, but is inversed with   
- *                     255 - color.  
- */
-void DistortionFX::findEdges(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Intensity, int BW)
-{
-    neonFindEdges(orgImage, destImage, false, Intensity, BW);
-}
-
-// Implementation of neon and FindEdges. They share 99% of their code.
-void DistortionFX::neonFindEdges(Digikam::DImg *orgImage, Digikam::DImg *destImage, bool neon, int Intensity, int BW)
-{
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
-    Intensity = (Intensity < 0) ? 0 : (Intensity > 5) ? 5 : Intensity;
-    BW = (BW < 1) ? 1 : (BW > 5) ? 5 : BW;
-
-    uchar *ptr, *ptr1, *ptr2;
-
-    // these must be uint, we need full 2^32 range for 16 bit
-    uint color_1, color_2, colorPoint, colorOther1, colorOther2, progress;
-
-    // initial copy
-    memcpy (pResBits, data, orgImage->numBytes());
-
-    double intensityFactor = sqrt( 1 << Intensity );
-
-    for (int h = 0; h < Height; h++)
-    {
-        for (int w = 0; w < Width; w++)
-        {
-            ptr  = pResBits + getOffset(Width, w, h, bytesDepth);
-            ptr1 = pResBits + getOffset(Width, w + Lim_Max (w, BW, Width), h, bytesDepth);
-            ptr2 = pResBits + getOffset(Width, w, h + Lim_Max (h, BW, Height), bytesDepth);
-
-            if (sixteenBit)
-            {
-                for (int k = 0; k <= 2; k++)
-                {
-                    colorPoint  = ((unsigned short *)ptr)[k];
-                    colorOther1 = ((unsigned short *)ptr1)[k];
-                    colorOther2 = ((unsigned short *)ptr2)[k];
-                    color_1 = (colorPoint - colorOther1) * (colorPoint - colorOther1);
-                    color_2 = (colorPoint - colorOther2) * (colorPoint - colorOther2);
-
-                    // old algorithm was
-                    // sqrt ((color_1 + color_2) << Intensity)
-                    // As (a << I) = a * (1 << I) = a * (2^I), and we can split the square root
-
-                    if (neon)
-                        ((unsigned short *)ptr)[k] = CLAMP065535 ((int)( sqrt(color_1 + color_2) * intensityFactor ));
-                    else
-                        ((unsigned short *)ptr)[k] = 65535 - CLAMP065535 ((int)( sqrt(color_1 + color_2) * intensityFactor ));
-                }
-            }
-            else
-            {
-                for (int k = 0; k <= 2; k++)
-                {
-                    colorPoint  = ptr[k];
-                    colorOther1 = ptr1[k];
-                    colorOther2 = ptr2[k];
-                    color_1 = (colorPoint - colorOther1) * (colorPoint - colorOther1);
-                    color_2 = (colorPoint - colorOther2) * (colorPoint - colorOther2);
-
-                    if (neon)
-                        ptr[k] = CLAMP0255 ((int)( sqrt(color_1 + color_2) * intensityFactor ));
-                    else
-                        ptr[k] = 255 - CLAMP0255 ((int)( sqrt(color_1 + color_2) * intensityFactor ));
-                }
-            }
-        }
-
-        // Update the progress bar in dialog.
-        progress = (int) (((double)h * 100.0) / Height);
 
         if (progress%5 == 0)
             postProgress(progress);
