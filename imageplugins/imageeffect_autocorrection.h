@@ -68,15 +68,6 @@ private slots:
 
 private:
 
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
-
-    void autoCorrection(uchar *data, int w, int h, bool sb, int type);
-    QPixmap getThumbnailForEffect(AutoCorrectionType type);
-
-private:
-
     enum AutoCorrectionType
     {
         AutoLevelsCorrection=0,
@@ -85,6 +76,17 @@ private:
         StretchContrastCorrection,
         AutoExposureCorrection
     };
+
+private:
+
+    void readUserSettings();
+    void writeUserSettings();
+    void resetValues();
+
+    void autoCorrection(uchar *data, int w, int h, bool sb, int type);
+    QPixmap getThumbnailForEffect(AutoCorrectionType type);
+
+private:
 
     enum HistogramScale
     {

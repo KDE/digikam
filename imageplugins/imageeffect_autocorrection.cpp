@@ -86,7 +86,6 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     Digikam::ImageIface iface(0, 0);
     m_thumbnailImage = iface.getOriginalImg()->smoothScale(128, 128, QSize::ScaleMin);
 
-    
     QWidget *gboxSettings     = new QWidget(plainPage());
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 4, 4, marginHint(), spacingHint());
 
