@@ -62,7 +62,7 @@ void ImagePlugin_ColorFX::setEnabledActions(bool enable)
 
 void ImagePlugin_ColorFX::slotColorFX()
 {
-    QString title = i18n("Apply Color Special Effect to Photograph");
+    QString title = i18n("Apply Color Special Effects to Photograph");
     QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
     DigikamColorFXImagesPlugin::ImageEffect_ColorFX dlg(parentWidget(),
                                  title, headerFrame);

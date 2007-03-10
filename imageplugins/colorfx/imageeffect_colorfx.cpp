@@ -66,7 +66,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent, QString title, QFrame*
     KAboutData *about = new KAboutData("digikamimageplugins",
                             I18N_NOOP("Color Effects"),
                             digikamimageplugins_version,
-                            I18N_NOOP("A digiKam plugin to apply special color effect on a picture."),
+                            I18N_NOOP("A digiKam plugin to apply special color effects on a picture."),
                             KAboutData::License_GPL,
                             "(c) 2004-2005, Renchi Raju\n(c) 2006-2007, Gilles Caulier",
                             0,
@@ -160,11 +160,11 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent, QString title, QFrame*
     m_effectType->insertItem( i18n("Vivid") );
     m_effectType->insertItem( i18n("Neon") );    
     m_effectType->insertItem( i18n("Find Edges") );    
-    QWhatsThis::add( m_effectType, i18n("<p>Select here the effect type to apply on image.<p>"
-                                        "<b>Solarize</b>: simulate a solarization of photograph.<p>"
-                                        "<b>Vivid</b>: simulate the Velvia negative film colors.<p>"
-                                        "<b>Neon</b>: sub-coloring the edges in a photograph to "
-                                        "reproduce a neon highlight.<p>"
+    QWhatsThis::add( m_effectType, i18n("<p>Select here the effect type to apply on the image.<p>"
+                                        "<b>Solarize</b>: simulates solarization of photograph.<p>"
+                                        "<b>Vivid</b>: simulates the Velvia negative film colors.<p>"
+                                        "<b>Neon</b>: coloring the edges in a photograph to "
+                                        "reproduce a fluorescent light effect.<p>"
                                         "<b>Find Edges</b>: detects the edges in a photograph "
                                         "and their strength."
                                         ));
@@ -182,8 +182,8 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent, QString title, QFrame*
     m_iterationLabel = new QLabel(i18n("Iteration:"), gboxSettings);
     m_iterationInput = new KIntNumInput(gboxSettings);
     m_iterationInput->setRange(0, 100, 1, true);
-    QWhatsThis::add( m_iterationInput, i18n("<p>This value controls the iterations to use with "
-                                            "Neon and Find Edges effects."));
+    QWhatsThis::add( m_iterationInput, i18n("<p>This value controls the number of iterations "
+                                            "to use with Neon and Find Edges effects."));
     
     gridSettings->addMultiCellWidget(m_iterationLabel, 7, 7, 0, 4);
     gridSettings->addMultiCellWidget(m_iterationInput, 8, 8, 0, 4);
@@ -232,6 +232,7 @@ void ImageEffect_ColorFX::readUserSettings()
     m_effectType->setCurrentItem(config->readNumEntry("EffectType", ColorFX));
     m_levelInput->setValue(config->readNumEntry("LevelAjustment", 0));
     m_iterationInput->setValue(config->readNumEntry("IterationAjustment", 3));
+    slotEffectTypeChanged(m_effectType->currentItem());  //check for enable/disable of iteration
 }
 
 void ImageEffect_ColorFX::writeUserSettings()
@@ -292,42 +293,42 @@ void ImageEffect_ColorFX::slotEffectTypeChanged(int type)
 {
     m_levelInput->setEnabled(true);
     m_levelLabel->setEnabled(true);
-    
+
     m_levelInput->blockSignals(true);
     m_iterationInput->blockSignals(true);
     m_levelInput->setRange(0, 100, 1, true);
     m_levelInput->setValue(25);
-          
+
     switch (type)
        {
-       case ColorFX: 
+       case ColorFX:
           m_levelInput->setRange(0, 100, 1, true);
           m_levelInput->setValue(0);
           m_iterationInput->setEnabled(false);
           m_iterationLabel->setEnabled(false);
           break;
 
-       case Vivid:  
+       case Vivid:
           m_levelInput->setRange(0, 50, 1, true);
           m_levelInput->setValue(10);
           m_iterationInput->setEnabled(false);
           m_iterationLabel->setEnabled(false);
           break;
-                 
-       case Neon: 
-       case FindEdges: 
+
+       case Neon:
+       case FindEdges:
           m_levelInput->setRange(0, 5, 1, true);
           m_levelInput->setValue(3);
           m_iterationInput->setEnabled(true);
           m_iterationLabel->setEnabled(true);
           m_iterationInput->setRange(0, 5, 1, true);
           m_iterationInput->setValue(2);
-          break;          
+          break;
        }
 
     m_levelInput->blockSignals(false);
     m_iterationInput->blockSignals(false);
-       
+
     slotEffect();
 }
 
