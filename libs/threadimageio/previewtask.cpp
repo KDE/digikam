@@ -58,6 +58,9 @@ void PreviewLoadingTask::execute()
         // find possible cached images
         DImg *cachedImg = 0;
         QStringList lookupKeys = m_loadingDescription.lookupCacheKeys();
+        // lookupCacheKeys returns "best first". Prepend the cache key to make the list "fastest first":
+        // Scaling a full version takes longer!
+        lookupKeys.push_front(m_loadingDescription.cacheKey());
         for ( QStringList::Iterator it = lookupKeys.begin(); it != lookupKeys.end(); ++it ) {
             if ( (cachedImg = cache->retrieveImage(*it)) )
                 break;
@@ -79,7 +82,13 @@ void PreviewLoadingTask::execute()
             {
                 // we are using a normal DImg object. Convert it to QImage.
                 qimage = cachedImg->copyQImage();
+
+                // rotate if needed - images are unrotated in the cache
+                if (m_loadingDescription.previewParameters.exifRotate)
+                    exifRotate(m_loadingDescription.filePath, qimage);
+
             }
+
             QApplication::postEvent(m_thread, new PreviewLoadedEvent(m_loadingDescription.filePath, qimage));
             return;
         }
@@ -159,10 +168,10 @@ void PreviewLoadingTask::execute()
     if (qimage.depth() != 32)
         qimage = qimage.convertDepth(32);
 
+    qimage = qimage.smoothScale(size, size, QImage::ScaleMin);
+
     if (m_loadingDescription.previewParameters.exifRotate)
         exifRotate(m_loadingDescription.filePath, qimage);
-
-    qimage = qimage.smoothScale(size, size, QImage::ScaleMin);
 
     {
         LoadingCache::CacheLock lock(cache);
