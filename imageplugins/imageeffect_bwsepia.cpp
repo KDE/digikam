@@ -488,7 +488,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
     connect(m_bwFilters, SIGNAL(highlighted(int)),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotFilterSelected(int)));
 
     connect(m_strengthInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
@@ -519,6 +519,16 @@ ImageEffect_BWSepia::~ImageEffect_BWSepia()
     delete m_previewWidget;
     delete m_curvesWidget;
     delete m_curves;
+}
+
+void ImageEffect_BWSepia::slotFilterSelected(int filter)
+{
+    if (filter == BWNoFilter)
+        m_strengthInput->setEnabled(false);
+    else
+        m_strengthInput->setEnabled(true);
+
+    slotEffect();
 }
 
 QPixmap ImageEffect_BWSepia::getThumbnailForEffect(int type) 
@@ -644,6 +654,7 @@ void ImageEffect_BWSepia::readUserSettings()
 
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
+    slotFilterSelected(m_bwFilters->currentItem());
 }
 
 void ImageEffect_BWSepia::writeUserSettings()

@@ -90,6 +90,7 @@ private slots:
     void slotScaleChanged(int scale);
     void slotSpotColorChanged(const Digikam::DColor &color);    
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
+    void slotFilterSelected(int filter);
 
 private:
 
