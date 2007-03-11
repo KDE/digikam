@@ -59,7 +59,7 @@ public:
         flicker                   = 0;
         timerID                   = 0;
         focus                     = false;
-        onMouseMovePreviewToggled = false;
+        onMouseMovePreviewToggled = true;
         renderingPreviewMode      = ImageGuideWidget::NoPreviewMode;
         underExposureIndicator    = false;
         overExposureIndicator     = false;
