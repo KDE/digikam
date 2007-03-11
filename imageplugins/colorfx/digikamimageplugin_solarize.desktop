@@ -19,6 +19,10 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Color special effects plugin for digiKam
+Comment[ja]=digiKam 色特殊効果プラグイン
+Comment[pt]=Um 'plugin' do digiKam para efeitos especiais de cores
+Comment[pt_BR]=Um 'plugin' do digiKam para efeitos especiais de cores
+Comment[sv]=Digikam insticksprogram med specialeffekter för färg
 
 X-KDE-Library=digikamimageplugin_solarize
 author=Renchi Raju, renchi@pooh.tam.uiuc.edu
