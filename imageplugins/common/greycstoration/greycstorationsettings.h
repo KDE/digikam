@@ -8,7 +8,7 @@
  * For a full settings description, look at this url :
  * http://www.greyc.ensicaen.fr/~dtschump/greycstoration/guide.html
  *
- * For demonstartion of settings, look at this url :
+ * For demonstration of settings, look at this url :
  *
  * http://www.greyc.ensicaen.fr/~dtschump/greycstoration/demonstration.html
  *
