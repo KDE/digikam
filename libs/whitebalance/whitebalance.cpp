@@ -179,28 +179,19 @@ void WhiteBalance::autoExposureAdjustement(uchar* data, int width, int height, b
        
     // Calculate optimal exposition and black level 
     
-    int    stop, i, scale, w, h;
-    double sum;
+    int    i;
+    double sum, stop;
     uint   rgbMax = sb ? 65536 : 256;
-    
-    w     = width  / 400;
-    h     = height / 400;
-    scale = QMAX(w, h);
-    scale = QMAX(1, scale);
-    
+        
     // Cutoff at 0.5% of the histogram.
     
-    stop = ((uint)(width / scale)*(uint)(height / scale)) / 200;
+    stop = width * height / 200;
     
     for (i = rgbMax, sum = 0; (i >= 0) && (sum < stop); i--)
         sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
     
     expo = -log((float)(i+1) / rgbMax) / log(2);
     DDebug() << "White level at:" << i << endl;
-    
-    // Cutoff at 0.5% of the histogram. 
-    
-    stop = ((uint)(width / scale)*(uint)(height / scale)) / 200;
     
     for (i = 1, sum = 0; (i < (int)rgbMax) && (sum < stop); i++)
         sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
