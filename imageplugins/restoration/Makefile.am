@@ -1,9 +1,7 @@
 METASOURCES = AUTO
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
-
 INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
-	      -I$(top_srcdir)/digikamimageplugins/common/cimgiface \
+	      -I$(top_srcdir)/digikamimageplugins/common/greycstoration \
 	      -I$(top_srcdir)/digikamimageplugins/common/widgets \
 	      $(all_includes) $(LIBDIGIKAM_CFLAGS)
 
@@ -14,7 +12,7 @@ digikamimageplugin_restoration_la_SOURCES = imageplugin_restoration.cpp \
 	                                    imageeffect_restoration.cpp 
 
 digikamimageplugin_restoration_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \
-	              $(top_builddir)/digikamimageplugins/common/cimgiface/libcimgiface.la \
+	              $(top_builddir)/digikamimageplugins/common/greycstoration/libgreycstoration.la \
 	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la
 
 digikamimageplugin_restoration_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) -no-undefined

@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_restoration.h
- * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2005-03-26
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Date   : 2005-03-26
  * Description : a digiKam image editor plugin to restore 
  *               a photograph
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,14 +30,13 @@
 
 #include <digikamheaders.h>
 
-class QLabel;
-class QCheckBox;
 class QComboBox;
 class QTabWidget;
-class QFrame;
 
-class KDoubleNumInput;
-class KIntNumInput;
+namespace DigikamImagePlugins
+{
+class GreycstorationWidget;
+}
 
 namespace DigikamRestorationImagesPlugin
 {
@@ -56,44 +54,20 @@ private:
 
     enum RestorationFilteringPreset
     {
-    NoPreset=0,
-    ReduceUniformNoise,
-    ReduceJPEGArtefacts,
-    ReduceTexturing,
+        NoPreset=0,
+        ReduceUniformNoise,
+        ReduceJPEGArtefacts,
+        ReduceTexturing,
     };
 
-    QLabel          *m_detailLabel;
-    QLabel          *m_gradientLabel;
-    QLabel          *m_timeStepLabel;
-    QLabel          *m_blurLabel;
-    QLabel          *m_blurItLabel;
-    QLabel          *m_angularStepLabel;
-    QLabel          *m_integralStepLabel;
-    QLabel          *m_gaussianLabel;
-
-    QTabWidget      *m_mainTab;        
+    QTabWidget                                *m_mainTab;        
             
-    // Preset Settings.
-    QComboBox       *m_restorationTypeCB;  
+    QComboBox                                 *m_restorationTypeCB;  
     
-    // Smoothing settings.
-    KDoubleNumInput *m_detailInput;
-    KDoubleNumInput *m_gradientInput;
-    KDoubleNumInput *m_timeStepInput;
-    KDoubleNumInput *m_blurInput;
-    KDoubleNumInput *m_blurItInput;
-    
-    // Advanced Settings.
-    KDoubleNumInput *m_angularStepInput;
-    KDoubleNumInput *m_integralStepInput;
-    KDoubleNumInput *m_gaussianInput;
-    
-    QCheckBox       *m_linearInterpolationBox;
-    QCheckBox       *m_normalizeBox;
+    DigikamImagePlugins::GreycstorationWidget *m_settingsWidget;
     
 private slots:
 
-    void slotCheckSettings(void);
     void slotUser2();
     void slotUser3();
     void processCImgURL(const QString&);
