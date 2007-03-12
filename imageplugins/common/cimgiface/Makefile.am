@@ -13,4 +13,4 @@ INCLUDES = -I$(top_srcdir)/digikamimageplugins/common/include \
 	   $(all_includes) $(LIBDIGIKAM_CFLAGS) 
 
 # Don't use CImg interface (keyboard/mouse interaction)
-AM_CPPFLAGS = -Dcimg_OS=1 -Dcimg_display_type=0 
+AM_CPPFLAGS = -Dcimg_OS=-1 -Dcimg_display_type=0 
