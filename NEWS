@@ -31,4 +31,5 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 003 ==> 142427 : Rotate image tool too complicated.
 004 ==> 141439 : A velvia similar plugin. AKA vivid saturation.
 005 ==> 127583 : keywords, copyright, photographer info not saved to IPTC tags.
-006 ==> 
+006 ==> 142571 : Auto-exposure result is different from the preview.
+007 ==> 
