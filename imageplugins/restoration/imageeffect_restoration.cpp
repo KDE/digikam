@@ -191,7 +191,8 @@ void ImageEffect_Restoration::prepareEffect()
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
                        new DigikamImagePlugins::GreycstorationIface(
                                     &previewImage, m_settingsWidget->getSettings(),
-                                    true, false, false, 0, 0, 0, this));
+                                    DigikamImagePlugins::GreycstorationIface::Restore, 
+                                    0, 0, 0, this));
 }
 
 void ImageEffect_Restoration::prepareFinal()
@@ -207,7 +208,8 @@ void ImageEffect_Restoration::prepareFinal()
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
                        new DigikamImagePlugins::GreycstorationIface(
                                     &originalImage, m_settingsWidget->getSettings(),
-                                    true, false, false, 0, 0, 0, this));
+                                    DigikamImagePlugins::GreycstorationIface::Restore, 
+                                    0, 0, 0, this));
 
     delete [] data;                                    
 }

@@ -24,7 +24,6 @@
 
 // Qt includes.
 
-#include <qimage.h>
 #include <qfile.h>
 
 // KDE includes.
@@ -53,61 +52,55 @@ public:
 
     GreycstorationIfacePriv()
     {
-        restore = true;
-        inpaint = false;
-        resize = false;
+        mode = GreycstorationIface::Restore;
     }
 
-    bool                   restore;
-    bool                   inpaint;
-    bool                   resize;
+    int                    mode;
 
     // Inpainting temp mask file path.
     QString                tmpMaskFile;
     
-    // Inpainting temp mask data.
-    QImage                 inPaintingMask;
-
     GreycstorationSettings settings;
 
     CImg<>                 img;
+    CImg<unsigned char>    mask;
 };
 
 GreycstorationIface::GreycstorationIface(Digikam::DImg *orgImage,
                                          GreycstorationSettings settings, 
-                                         bool restoreMode, bool inpaintMode, bool resizeMode, 
+                                         int mode, 
                                          int newWidth, int newHeight,
-                                         QImage *inPaintingMask, QObject *parent)
+                                         const QImage& inPaintingMask, 
+                                         QObject *parent)
                    : Digikam::DImgThreadedFilter(orgImage, parent)
 { 
     d = new GreycstorationIfacePriv;
     d->settings = settings;
-    d->restore  = restoreMode;
-    d->inpaint  = inpaintMode;
-    d->resize   = resizeMode;
+    d->mode     = mode;
     
-    if (d->resize)
+    if (d->mode == Resize)
     {
-        m_destImage = Digikam::DImg(newWidth, newHeight, m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
+        m_destImage = Digikam::DImg(newWidth, newHeight, 
+                                    m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
         DDebug() << "GreycstorationIface::m_resize is on, new size: (" 
                  << newWidth << ", " << newHeight << ")" << endl;
     }
     else 
     {
-        m_destImage = Digikam::DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
+        m_destImage = Digikam::DImg(m_orgImage.width(), m_orgImage.height(), 
+                                    m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
     }
     
     d->tmpMaskFile = QString();
     
-    if (d->inpaint && inPaintingMask)
+    if (d->mode == InPainting && !inPaintingMask.isNull())
     {
        KStandardDirs dir;
        d->tmpMaskFile = dir.saveLocation("tmp");
        d->tmpMaskFile.append(QString::number(getpid()));
        d->tmpMaskFile.append(".png");
-       d->inPaintingMask = inPaintingMask->copy();
-       d->inPaintingMask.save(d->tmpMaskFile, "PNG");
-       DDebug() << "GreycstorationIface::InPainting Mask : " << d->tmpMaskFile << endl;
+       inPaintingMask.save(d->tmpMaskFile, "PNG");
+       DDebug() << "GreycstorationIface::InPainting Mask: " << d->tmpMaskFile << endl;
     }
     
     initFilter();       
@@ -115,7 +108,7 @@ GreycstorationIface::GreycstorationIface(Digikam::DImg *orgImage,
 
 GreycstorationIface::~GreycstorationIface()
 { 
-    if (d->tmpMaskFile != QString())
+    if (!d->tmpMaskFile.isEmpty())
     {
        // Remove temporary inpainting mask.
        QFile maskFile(d->tmpMaskFile);
@@ -132,18 +125,18 @@ void GreycstorationIface::initFilter()
 {
     if (m_orgImage.width() && m_orgImage.height())
     {
-       if (m_parent)
-          start();             // m_parent is valide, start thread ==> run()
-       else
-          startComputation();  // no parent : no using thread.
+        if (m_parent)
+            start();             // m_parent is valide, start thread ==> run()
+        else
+            startComputation();  // no parent : no using thread.
     }
     else  // No image data 
     {
-       if (m_parent)           // If parent then send event about a problem.
-       {
-          postProgress(0, false, false);
-          DDebug() << m_name << "::No valid image data !!! ..." << endl;
-       }
+        if (m_parent)           // If parent then send event about a problem.
+        {
+            postProgress(0, false, false);
+            DDebug() << m_name << "::No valid image data !!! ..." << endl;
+        }
     }
 }
 
@@ -152,7 +145,8 @@ void GreycstorationIface::cleanupFilter()
     if (d->img.greycstoration_is_running())
         d->img.greycstoration_stop();
 
-    d->img = CImg<>();
+    d->img  = CImg<>();
+    d->mask = CImg<uchar>();
 }
 
 void GreycstorationIface::filterImage()
@@ -204,9 +198,18 @@ void GreycstorationIface::filterImage()
 
     try 
     {
-        //FIXME : add inpainting and resize mode.              
-    
-        restoration(); 
+        switch (d->mode)
+        {
+            case Restore:
+                restoration();
+                break;
+            case InPainting:
+                inpainting();
+                break;
+            case Resize:
+                resize();
+                break;
+        }
     }
     catch(...)         // Everything went wrong.
     {
@@ -265,7 +268,8 @@ void GreycstorationIface::restoration()
     for (unsigned int iter=0 ; iter < d->settings.nbIter ; iter++) 
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
-        // It returns immediately, so you can do what you want after (update a progress bar for instance).
+        // It returns immediately, so you can do what you want after (update a progress bar for
+        // instance).
         d->img.greycstoration_run(d->settings.amplitude, 
                                   d->settings.sharpness, 
                                   d->settings.anisotropy, 
@@ -289,9 +293,6 @@ void GreycstorationIface::restoration()
             const unsigned int pr_global = (unsigned int)((iter*100 + pr_iteration)/d->settings.nbIter);
         
             postProgress( pr_global );   
-      
-            // Wait a little bit
-//            cimg::wait(100);
         } 
         while (d->img.greycstoration_is_running());
     }
@@ -299,6 +300,40 @@ void GreycstorationIface::restoration()
 
 void GreycstorationIface::inpainting()
 {
+    d->mask = CImg<uchar>(QFile::encodeName(d->tmpMaskFile));
+
+    for (unsigned int iter=0 ; iter < d->settings.nbIter ; iter++) 
+    {
+        // This function will start a thread running one iteration of the GREYCstoration filter.
+        // It returns immediately, so you can do what you want after (update a progress bar for
+        // instance).
+        d->img.greycstoration_mask_run(d->mask,
+                                       d->settings.amplitude, 
+                                       d->settings.sharpness, 
+                                       d->settings.anisotropy, 
+                                       d->settings.alpha, 
+                                       d->settings.sigma, 
+                                       d->settings.dl, 
+                                       d->settings.da, 
+                                       d->settings.gaussPrec, 
+                                       d->settings.interp, 
+                                       d->settings.fastApprox, 
+                                       d->settings.tile, 
+                                       d->settings.btile);
+    
+        // Here, we print the overall progress percentage.
+        do 
+        {
+            // pr_iteration is the progress percentage for the current iteration
+            const float pr_iteration = d->img.greycstoration_progress();
+        
+            // This simply computes the global progression indice (including all iterations)
+            const unsigned int pr_global = (unsigned int)((iter*100 + pr_iteration)/d->settings.nbIter);
+        
+            postProgress( pr_global );   
+        } 
+        while (d->img.greycstoration_is_running());
+    }
 }
 
 void GreycstorationIface::resize()

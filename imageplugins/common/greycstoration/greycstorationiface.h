@@ -21,6 +21,10 @@
 #ifndef GREYCSTORATIONIFACE_H
 #define GREYCSTORATIONIFACE_H
 
+// Qt includes.
+
+#include <qimage.h>
+
 // Digikam includes.
 
 #include <digikamheaders.h>
@@ -30,7 +34,6 @@
 #include "greycstorationsettings.h"
 
 class QObject;
-class QImage;
 
 namespace DigikamImagePlugins
 {
@@ -42,11 +45,21 @@ class GreycstorationIface : public Digikam::DImgThreadedFilter
 
 public:
 
+    enum MODE
+    {
+        Restore = 0,
+        InPainting,
+        Resize
+    };
+
+public:
+
     GreycstorationIface(Digikam::DImg *orgImage,
                         GreycstorationSettings settings, 
-                        bool restoreMode=true, bool inpaintMode=false, bool resizeMode=false, 
+                        int mode=Restore, 
                         int newWidth=0, int newHeight=0,
-                        QImage *inPaintingMask=0, QObject *parent=0);
+                        const QImage& inPaintingMask=QImage(), 
+                        QObject *parent=0);
     
     ~GreycstorationIface();
 
