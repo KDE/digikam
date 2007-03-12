@@ -294,14 +294,32 @@ void GreycstorationIface::restoration()
         
             postProgress( pr_global );   
         } 
-        while (d->img.greycstoration_is_running());
+        while (d->img.greycstoration_is_running() && !m_cancel);
     }
 }
 
 void GreycstorationIface::inpainting()
 {
-    d->mask = CImg<uchar>(QFile::encodeName(d->tmpMaskFile));
+    const char *file_m = d->tmpMaskFile.latin1();  // Input inpainting mask.
+    
+    if (!file_m) 
+    {
+       DDebug() << "Unspecified inpainting mask !" << endl;
+       return;
+    }
 
+    if (cimg::strncasecmp("block", file_m, 5)) 
+        d->mask.load(file_m);
+    else 
+    {
+        int l=16; 
+        std::sscanf(file_m, "block%d", &l);
+        d->mask.assign(d->img.dimx()/l, d->img.dimy()/l);
+        cimg_forXY(d->mask, x, y) d->mask(x, y) = (x+y)%2;
+    }
+       
+    d->mask.resize(d->img.width, d->img.height, 1, 1);
+    
     for (unsigned int iter=0 ; iter < d->settings.nbIter ; iter++) 
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
@@ -332,7 +350,7 @@ void GreycstorationIface::inpainting()
         
             postProgress( pr_global );   
         } 
-        while (d->img.greycstoration_is_running());
+        while (d->img.greycstoration_is_running() && !m_cancel);
     }
 }
 
