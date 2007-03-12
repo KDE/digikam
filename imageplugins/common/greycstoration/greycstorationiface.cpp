@@ -151,6 +151,8 @@ void GreycstorationIface::cleanupFilter()
 {
     if (d->img.greycstoration_is_running())
         d->img.greycstoration_stop();
+
+    d->img = CImg<>();
 }
 
 void GreycstorationIface::filterImage()
