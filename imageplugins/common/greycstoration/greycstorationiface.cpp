@@ -18,18 +18,9 @@
  * 
  * ============================================================ */
 
- // C Ansi includes
-
-extern "C"
-{
-#include <unistd.h>
-}
-  
 // C++ includes. 
  
-#include <cstdio>
-#include <cmath>
-#include <cstring>
+#include <cassert>
 
 // Qt includes.
 
@@ -209,10 +200,22 @@ void GreycstorationIface::filterImage()
     
     DDebug() << "GreycstorationIface::Process Computation..." << endl;
 
-    //FIXME : add inpainting and resize mode.              
-
-    restoration(); 
+    try 
+    {
+        //FIXME : add inpainting and resize mode.              
     
+        restoration(); 
+    }
+    catch(...)         // Everything went wrong.
+    {
+       DDebug() << "GreycstorationIface::Error during Greycstoration filter computation!" << endl;
+       
+       if (m_parent)
+          postProgress( 0, false, false );   
+          
+       return;
+    }
+
     // Copy CImg onto destination.
     
     DDebug() << "GreycstorationIface::Finalization..." << endl;
