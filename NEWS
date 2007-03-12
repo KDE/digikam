@@ -19,6 +19,8 @@ Image Plugins : Solarize plugin is now a "Color Effects" pack including Solarize
 Image Plugins : Black & White converter now support a lots of B&W analog camera film 
                 types (Agfa, Ilford, Kodak). A new 'strength' setting can simulate the 
                 amount of Lens filters effect.  
+Image Plugins : Update internal CImg library to 1.1.9. The Greycstoration algorithm used 
+                by Restoration, Inpainting and Blowup plugins is more fast and more optimized.
 
 
 ----------------------------------------------------------------------------
@@ -32,4 +34,5 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 004 ==> 141439 : A velvia similar plugin. AKA vivid saturation.
 005 ==> 127583 : keywords, copyright, photographer info not saved to IPTC tags.
 006 ==> 142571 : Auto-exposure result is different from the preview.
-007 ==> 
+007 ==> 127377 : Restoration filter (CIMG) does not function properly.
+008 ==> 
