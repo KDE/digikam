@@ -313,7 +313,7 @@ void GreycstorationWidget::saveSettings(QFile& file, const QString& header)
 {
     GreycstorationSettings settings = getSettings();
     QTextStream stream( &file );        
-    stream << header;    
+    stream << header << "\n";    
     stream << settings.fastApprox << "\n";    
     stream << settings.interp << "\n";    
     stream << settings.amplitude << "\n";    
