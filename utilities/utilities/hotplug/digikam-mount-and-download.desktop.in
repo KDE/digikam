@@ -1,0 +1,11 @@
+[Desktop Action digiKam Mount and Download]
+Exec=@digikamhelper_dir@/digikam-camera storage %u
+Icon=digikam
+Name=Download Photos with digiKam
+Name[de]=Bilder mit digiKam herunterladen
+Name[fr]=télécharger photos avec digiKam
+Name[tr]=digikam ile resimleri indir
+
+[Desktop Entry]
+Actions=digiKam Mount and Download
+ServiceTypes=media/removable_unmounted,media/camera_unmounted

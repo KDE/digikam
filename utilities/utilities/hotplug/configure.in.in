@@ -1,0 +1,7 @@
+KDE_EXPAND_MAKEVAR(digikamhelper_dir, kde_datadir/digikam/utils)
+AC_SUBST(digikamhelper_dir)
+
+AC_OUTPUT(digikam/utilities/hotplug/digikam-download.desktop)
+AC_OUTPUT(digikam/utilities/hotplug/digikam-gphoto2-camera.desktop)
+AC_OUTPUT(digikam/utilities/hotplug/digikam-mount-and-download.desktop)
+

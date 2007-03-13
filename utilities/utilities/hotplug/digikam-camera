@@ -1,0 +1,40 @@
+#!/bin/sh
+
+action="$1"; shift;
+
+case "$action" in
+detect)
+	cmdoption=--detect-camera
+	dcopcall=detectCamera
+	;;
+storage)
+	cmdoption=--download-from
+	dcopcall=downloadFrom
+    args="$@"
+	;;
+*)
+	echo "${0##*/}: wrong action.  Usage"
+	echo "	${0##*/}  detect 	# for gphoto2 supported cameras"
+	echo "	${0##*/}  storage <url>	# for usbdisk or directries with images"
+	exit 1
+	;;
+esac
+
+for app in `dcop`; do
+	case "$app" in
+	    digikam-*)
+		echo "recycling running $app: $dcopcall $@"
+        if test -z "$args"; then
+		    exec dcop "$app" camera  "$dcopcall"
+        else
+            exec dcop "$app" camera  "$dcopcall" "$args"
+        fi
+	    ;;
+	esac
+done;
+echo "starting digikam with $cmdoption $args"
+if test -z "$args"; then
+    exec digikam  "$cmdoption"
+else
+    exec digikam  "$cmdoption" "$args"
+fi

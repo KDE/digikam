@@ -1,0 +1,57 @@
+/* ============================================================
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Date   : 2004-01-02
+ * Description : setup Kipi plugins tab.
+ * 
+ * Copyright 2004-2007 by Gilles Caulier
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
+
+#ifndef SETUPPLUGINS_H
+#define SETUPPLUGINS_H
+
+// Qt includes.
+
+#include <qwidget.h>
+
+// libkipi includes.
+
+#include <libkipi/pluginloader.h>
+
+namespace Digikam
+{
+
+class SetupPluginsPriv;
+
+class SetupPlugins : public QWidget
+{
+    Q_OBJECT
+    
+public:
+
+    SetupPlugins(QWidget* parent = 0);
+    ~SetupPlugins();
+
+    void initPlugins(int kipiPluginsNumber);
+    void applyPlugins();
+
+private:
+
+    SetupPluginsPriv* d;    
+};
+
+}  // namespace Digikam
+
+#endif // SETUPPLUGINS_H 
+
