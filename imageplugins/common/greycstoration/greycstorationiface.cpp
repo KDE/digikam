@@ -150,7 +150,8 @@ void GreycstorationIface::stopComputation()
         DDebug() << "Stop Greycstoration computation..." << endl; 
     
         d->img.greycstoration_stop();
-        cimg::wait(200);
+        // we wait than the Greycstoration thread is finished.
+        cimg::wait(1000);
     }
 
     Digikam::DImgThreadedFilter::stopComputation();
