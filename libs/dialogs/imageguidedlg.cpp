@@ -74,6 +74,7 @@ public:
     
     ImageGuideDlgPriv()
     {
+        tryAction            = false;
         progress             = true;
         currentRenderingMode = NoneRendering;
         parent               = 0;
@@ -90,6 +91,7 @@ public:
         splitter             = 0;
     }
 
+    bool          tryAction;
     bool          progress;
     
     int           currentRenderingMode;
@@ -138,6 +140,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     d->parent        = parent;
     d->name          = name;
     d->progress      = progress;
+    d->tryAction     = tryAction;
     m_threadedFilter = 0;
     QString whatsThis;
 
@@ -295,8 +298,11 @@ void ImageGuideDlg::slotInit()
     // Reset values to defaults.
     QTimer::singleShot(0, this, SLOT(readUserSettings()));
 
-    connect(m_imagePreviewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotResized()));
+    if (!d->tryAction)
+    {
+        connect(m_imagePreviewWidget, SIGNAL(signalResized()),
+                this, SLOT(slotResized()));
+    }
 
     connect(d->guideColorBt, SIGNAL(changed(const QColor &)),
             m_imagePreviewWidget, SLOT(slotChangeGuideColor(const QColor &)));
