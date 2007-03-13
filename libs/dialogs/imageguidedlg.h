@@ -57,7 +57,9 @@ public:
                   bool guideVisible=true,
                   int guideMode=ImageGuideWidget::HVGuideMode,
                   QFrame* bannerFrame=0,
-                  bool prevModeOptions=false);
+                  bool prevModeOptions=false,
+                  bool useImageSelection=false,
+                  bool tryAction=false);
     ~ImageGuideDlg();
 
     void setAboutData(KAboutData *about);

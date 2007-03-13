@@ -122,9 +122,10 @@ public:
 ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
                              bool loadFileSettings, bool progress,
                              bool guideVisible, int guideMode, QFrame* bannerFrame,
-                             bool prevModeOptions)
+                             bool prevModeOptions, bool useImageSelection,
+                             bool tryAction)
              : KDialogBase(Plain, 0,
-                           Help|Default|User1|User2|User3|Ok|Cancel, Ok,
+                           Help|Default|User1|User2|User3|Try|Ok|Cancel, Ok,
                            parent, 0, true, true,
                            i18n("&Abort"),
                            i18n("&Save As..."),
@@ -146,6 +147,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     setButtonWhatsThis ( User2, i18n("<p>Save all filter parameters to settings text file.") );
     showButton(User2, loadFileSettings);
     showButton(User3, loadFileSettings);
+    showButton(Try, tryAction);
 
     resize(configDialogSize(name + QString(" Tool Dialog")));
 
@@ -176,7 +178,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     d->hbox              = new QHBox(plainPage());
     d->splitter          = new QSplitter(d->hbox);
     m_imagePreviewWidget = new ImageWidget(d->name, d->splitter, desc, prevModeOptions, 
-                                           guideMode, guideVisible);
+                                           guideMode, guideVisible, useImageSelection);
     
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
