@@ -166,7 +166,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     grid1->addMultiCellWidget(d->iterationLabel, 4, 4, 0, 0);
     grid1->addMultiCellWidget(d->iterationInput, 4, 4, 1, 1);
 
-    d->alphaLabel = new QLabel(i18n("Alpha:"), generalPage);
+    d->alphaLabel = new QLabel(i18n("Noise:"), generalPage);
     d->alphaInput = new KDoubleNumInput(generalPage);
     d->alphaInput->setPrecision(2);
     d->alphaInput->setRange(0.01, 1.0, 0.1, true);
