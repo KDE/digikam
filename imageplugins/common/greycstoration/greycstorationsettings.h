@@ -79,7 +79,7 @@ public:
         tile       = 512;
         btile      = 4;
     
-        nbIter     = 1000;
+        nbIter     = 30;
         interp     = NearestNeighbor;
     
         amplitude  = 20.0;
