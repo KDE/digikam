@@ -20,6 +20,7 @@ ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Color special effects plugin for digiKam
 Comment[ca]=Connector pel digiKam d'efectes especials de color
+Comment[de]=digiKam-Modul für spezielle Farbeffekte
 Comment[ja]=digiKam 色特殊効果プラグイン
 Comment[nds]=digiKam-Moduul för Klöör-Effekten
 Comment[pt]=Um 'plugin' do digiKam para efeitos especiais de cores
