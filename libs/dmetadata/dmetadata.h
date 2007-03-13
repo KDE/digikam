@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2006-02-23
+ * Date   : 2006-02-23
  * Description : image metadata interface
  *
  * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
@@ -58,6 +58,9 @@ public:
 
     QString getImageComment() const;
     bool    setImageComment(const QString& comment);
+
+    QStringList getImageTagsPath() const;
+    bool        setImageTagsPath(const QStringList& tagsPath);
 
     int  getImageRating() const;
     bool setImageRating(int rating);

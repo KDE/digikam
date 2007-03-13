@@ -366,4 +366,22 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
     return photoInfo;
 }
 
+QStringList DMetadata::getImageTagsPath() const
+{
+    QByteArray data = getExifTagData("Exif.Image.0x9cff");
+    QString joinTagsPath;
+    QDataStream ds(data, IO_ReadOnly);
+    ds >> joinTagsPath;
+    return (QStringList::split("\r\n", joinTagsPath));
+}
+
+bool DMetadata::setImageTagsPath(const QStringList& tagsPath)
+{
+    QString     joinTagsPath = tagsPath.join("\r\n");
+    QByteArray  data;
+    QDataStream ds(data, IO_WriteOnly);
+    ds << joinTagsPath;
+    return (setExifTagData("Exif.Image.0x9cff", data));
+}
+
 }  // NameSpace Digikam
