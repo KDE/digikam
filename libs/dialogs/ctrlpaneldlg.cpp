@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : ctrlpaneldlg.cpp
  * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date  : 2005-05-07
  * Description : A threaded filter control panel dialog for
  *               image editor plugins using DImg
  *
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,6 +48,7 @@
 #include "dimgthreadedfilter.h"
 #include "dimginterface.h"
 #include "ctrlpaneldlg.h"
+#include "ctrlpaneldlg.moc"
 
 namespace Digikam
 {
@@ -437,4 +437,3 @@ void CtrlPanelDlg::keyPressEvent(QKeyEvent *e)
 
 }  // NameSpace Digikam
 
-#include "ctrlpaneldlg.moc"
