@@ -28,31 +28,15 @@
 #include <qrect.h>
 #include <qstring.h>
 
-// KDE include.
-
-#include <kdialogbase.h>
-
 // Digikam includes.
 
 #include <digikamheaders.h>
 
-class QPushButton;
-class QTimer;
-class QCustomEvent;
 class QTabWidget;
-class QFrame;
-
-class KProgress;
 
 namespace DigikamImagePlugins
 {
 class GreycstorationWidget;
-class GreycstorationIface;
-}
-
-namespace Digikam
-{
-class ImageIface;
 }
 
 namespace DigikamInPaintingImagesPlugin
@@ -67,19 +51,33 @@ public:
 
 //-----------------------------------------------------------
 
-class ImageEffect_InPainting_Dialog : public KDialogBase
+class ImageEffect_InPainting_Dialog : public Digikam::ImageGuideDlg
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_InPainting_Dialog(QWidget* parent);
+    ImageEffect_InPainting_Dialog(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_InPainting_Dialog();
        
-protected:
+private slots:
 
-    void closeEvent(QCloseEvent *e);
-    
+    void slotUser2();
+    void slotUser3();
+    void readUserSettings();
+    void processCImgURL(const QString&);
+    void slotResetValues();
+
+private:
+
+    void writeUserSettings();
+    void resetValues();     
+    void prepareEffect();
+    void prepareFinal();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
+
 private:
 
     enum InPaintingFilteringPreset
@@ -90,54 +88,21 @@ private:
         RemoveLargeArtefact
     };
     
-    enum RunningMode
-    {
-        NoneRendering=0,
-        FinalRendering
-    };
+    bool             m_isComputed;
 
-    int              m_currentRenderingMode;
-    
     QRect            m_maskRect;
     
     QImage           m_maskImage;
-        
-    QWidget         *m_parent;
-    
-    QPushButton     *m_helpButton;
     
     // Preset Settings.
     QComboBox       *m_inpaintingTypeCB;  
     
     QTabWidget      *m_mainTab;
     
-    KProgress       *m_progressBar;
+    Digikam::DImg    m_originalImage;
+    Digikam::DImg    m_cropImage;
 
-    KAboutData      *m_about;
-    
     DigikamImagePlugins::GreycstorationWidget *m_settingsWidget;
-
-    DigikamImagePlugins::GreycstorationIface  *m_greycstorationIface;
-    
-    Digikam::ImageIface                       *m_iface;    
-
-    Digikam::DImg                              m_originalImage;
-    Digikam::DImg                              m_cropImage;
-    Digikam::DImg                              m_previewImage;
-    
-private:
-        
-    void customEvent(QCustomEvent *event);
-    
-private slots:
-
-    void slotHelp();
-    void slotOk();
-    void slotCancel();
-    void slotDefault();
-    void slotUser2();
-    void slotUser3();
-    void processCImgURL(const QString&);
 };
     
 }  // NameSpace DigikamInPaintingImagesPlugin

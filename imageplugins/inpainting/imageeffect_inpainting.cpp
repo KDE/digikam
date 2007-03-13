@@ -65,10 +65,10 @@
 // Local includes.
 
 #include "version.h"
+#include "bannerwidget.h"
 #include "greycstorationsettings.h"
 #include "greycstorationwidget.h"
 #include "greycstorationiface.h"
-#include "bannerwidget.h"
 #include "imageeffect_inpainting.h"
 #include "imageeffect_inpainting.moc"
 
@@ -114,70 +114,51 @@ void ImageEffect_InPainting::inPainting(QWidget* parent)
     }
 
     // -- run the dlg ----------------------------------------------
-
-    ImageEffect_InPainting_Dialog dlg(parent);
+    
+    QString title = i18n("Photograph Inpainting");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    ImageEffect_InPainting_Dialog dlg(parent, title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
 
 //------------------------------------------------------------------------------------------
 
-ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
-                             : KDialogBase(Plain, i18n("Photograph Inpainting"),
-                                           Help|Default|User2|User3|Ok|Cancel, Ok,
-                                           parent, 0, true, true,
-                                           QString(),
-                                           i18n("&Save As..."),
-                                           i18n("&Load...")),
-                               m_parent(parent)
+ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent, QString title, QFrame* banner)
+                             : Digikam::ImageGuideDlg(parent, title, "inpainting",
+                                        true, true, false, Digikam::ImageGuideWidget::HVGuideMode, banner, true, true, true)
 {
+    m_isComputed = false;
     QString whatsThis;
-    setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
-    setButtonWhatsThis ( User3, i18n("<p>Load all filter parameters from settings text file.") );
-    setButtonWhatsThis ( User2, i18n("<p>Save all filter parameters to settings text file.") );
 
-    m_currentRenderingMode = NoneRendering;
-    m_greycstorationIface  = 0L;
+    KAboutData* about = new KAboutData("digikamimageplugins",
+                                       I18N_NOOP("Photograph Inpainting"),
+                                       digikamimageplugins_version,
+                                       I18N_NOOP("A digiKam image plugin to inpaint a photograph."),
+                                       KAboutData::License_GPL,
+                                       "(c) 2005-2007, Gilles Caulier",
+                                       0,
+                                       "http://extragear.kde.org/apps/digikamimageplugins");
 
-    // About data and help button.
+    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
+                     "caulier dot gilles at gmail dot com");
 
-    m_about = new KAboutData("digikamimageplugins",
-                             I18N_NOOP("Photograph Inpainting"),
-                             digikamimageplugins_version,
-                             I18N_NOOP("A digiKam image plugin to inpaint a photograph."),
-                             KAboutData::License_GPL,
-                             "(c) 2005-2007, Gilles Caulier",
-                             0,
-                             "http://extragear.kde.org/apps/digikamimageplugins");
+    about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
+                     "http://cimg.sourceforge.net");
 
-    m_about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                       "caulier dot gilles at gmail dot com");
+    about->addAuthor("Gerhard Kulzer", I18N_NOOP("Feedback and plugin polishing"),
+                     "gerhard at kulzer.net");
 
-    m_about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
-                       "http://cimg.sourceforge.net");
-
-    m_about->addAuthor("Gerhard Kulzer", I18N_NOOP("Feedback and plugin polishing"),
-                       "gerhard at kulzer.net");
-
-    m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, m_about, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpButton->setPopup( helpMenu->menu() );
+    setAboutData(about);
 
     // -------------------------------------------------------------
 
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
-
-    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), i18n("Photograph Inpainting"));
-    topLayout->addWidget(headerFrame);
-
-    // -------------------------------------------------------------
-
-    QVBoxLayout *vlay = new QVBoxLayout(topLayout);
-    m_mainTab = new QTabWidget( plainPage() );
+    QWidget *gboxSettings     = new QWidget(plainPage());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 2, 1, marginHint(), spacingHint());
+    m_mainTab = new QTabWidget( gboxSettings );
 
     QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid = new QGridLayout( firstPage, 2, 1, marginHint(), spacingHint());
+    QGridLayout* grid  = new QGridLayout( firstPage, 2, 2, marginHint(), spacingHint());
     m_mainTab->addTab( firstPage, i18n("Preset") );
 
     KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
@@ -201,26 +182,18 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
                                                "<b>Remove Medium Artefact</b>: inpaint medium image artefact.<p>"
                                                "<b>Remove Large Artefact</b>: inpaint image artefact like unwanted object.<p>"));
 
-    grid->addMultiCellWidget(cimgLogoLabel, 0, 0, 0, 0);
-    grid->addMultiCellWidget(typeLabel, 0, 0, 1, 1);
-    grid->addMultiCellWidget(m_inpaintingTypeCB, 0, 0, 2, 2);
-
-    m_progressBar = new KProgress(100, firstPage);
-    m_progressBar->setValue(0);
-    QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    grid->addMultiCellWidget(m_progressBar, 1, 1, 0, 2);
+    grid->addMultiCellWidget(cimgLogoLabel, 0, 0, 1, 1);
+    grid->addMultiCellWidget(typeLabel, 1, 1, 0, 0);
+    grid->addMultiCellWidget(m_inpaintingTypeCB, 1, 1, 1, 1);
+    grid->setRowStretch(1, 10);
 
     // -------------------------------------------------------------
 
-    m_settingsWidget = new DigikamImagePlugins::GreycstorationWidget( m_mainTab );
-    vlay->addWidget(m_mainTab);
+    m_settingsWidget = new DigikamImagePlugins::GreycstorationWidget(m_mainTab);
 
-    // -------------------------------------------------------------
-
-    adjustSize();
-    disableResize();
-    // Reset all parameters to the default values.
-    QTimer::singleShot(0, this, SLOT(slotDefault()));
+    gridSettings->addMultiCellWidget(m_mainTab, 0, 0, 1, 1);
+    gridSettings->addMultiCellWidget(new QLabel(gboxSettings), 1, 1, 1, 1);
+    setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
 
@@ -228,18 +201,68 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
             this, SLOT(processCImgURL(const QString&)));
 
     connect(m_inpaintingTypeCB, SIGNAL(activated(int)),
-            this, SLOT(slotDefault()));
+            this, SLOT(slotResetValues()));
 }
 
 ImageEffect_InPainting_Dialog::~ImageEffect_InPainting_Dialog()
 {
-    delete m_about;
-
-    if (m_greycstorationIface)
-       delete m_greycstorationIface;
 }
 
-void ImageEffect_InPainting_Dialog::slotDefault()
+void ImageEffect_InPainting_Dialog::renderingFinished()
+{
+    m_mainTab->setEnabled(true);
+}
+
+void ImageEffect_InPainting_Dialog::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("inpainting Tool Dialog");
+
+    DigikamImagePlugins::GreycstorationSettings settings;
+    settings.fastApprox = config->readBoolEntry("FastApprox", true);
+    settings.interp     = config->readNumEntry("Interpolation",
+                          DigikamImagePlugins::GreycstorationSettings::NearestNeighbor);
+    settings.amplitude  = config->readDoubleNumEntry("Amplitude", 20.0);
+    settings.sharpness  = config->readDoubleNumEntry("Sharpness", 0.3);
+    settings.anisotropy = config->readDoubleNumEntry("Anisotropy", 1.0);
+    settings.alpha      = config->readDoubleNumEntry("Alpha", 0.8);
+    settings.sigma      = config->readDoubleNumEntry("Sigma", 2.0);
+    settings.gaussPrec  = config->readDoubleNumEntry("GaussPrec", 2.0);
+    settings.dl         = config->readDoubleNumEntry("Dl", 0.8);
+    settings.da         = config->readDoubleNumEntry("Da", 30.0);
+    settings.nbIter     = config->readNumEntry("Iteration", 30);
+    settings.tile       = config->readNumEntry("Tile", 512);
+    settings.btile      = config->readNumEntry("BTile", 4);
+    m_settingsWidget->setSettings(settings);
+}
+
+void ImageEffect_InPainting_Dialog::writeUserSettings()
+{
+    DigikamImagePlugins::GreycstorationSettings settings = m_settingsWidget->getSettings();
+    KConfig* config = kapp->config();
+    config->setGroup("inpainting Tool Dialog");
+    config->writeEntry("FastApprox", settings.fastApprox);
+    config->writeEntry("Interpolation", settings.interp);
+    config->writeEntry("Amplitude", settings.amplitude);
+    config->writeEntry("Sharpness", settings.sharpness);
+    config->writeEntry("Anisotropy", settings.anisotropy);
+    config->writeEntry("Alpha", settings.alpha);
+    config->writeEntry("Sigma", settings.sigma);
+    config->writeEntry("GaussPrec", settings.gaussPrec);
+    config->writeEntry("Dl", settings.dl);
+    config->writeEntry("Da", settings.da);
+    config->writeEntry("Iteration", settings.nbIter);
+    config->writeEntry("Tile", settings.tile);
+    config->writeEntry("BTile", settings.btile);
+    config->sync();
+}
+
+void ImageEffect_InPainting_Dialog::slotResetValues()
+{
+    resetValues();
+}
+
+void ImageEffect_InPainting_Dialog::resetValues()
 {
     DigikamImagePlugins::GreycstorationSettings settings;
     settings.setInpaintingDefaultSettings();    
@@ -268,54 +291,17 @@ void ImageEffect_InPainting_Dialog::slotDefault()
     m_settingsWidget->setSettings(settings);
 }
 
-void ImageEffect_InPainting_Dialog::slotCancel()
-{
-    if (m_currentRenderingMode != NoneRendering)
-    {
-       m_greycstorationIface->stopComputation();
-       m_parent->unsetCursor();
-    }
-
-    done(Cancel);
-}
-
-void ImageEffect_InPainting_Dialog::slotHelp()
-{
-    KApplication::kApplication()->invokeHelp("inpainting", "digikamimageplugins");
-}
-
 void ImageEffect_InPainting_Dialog::processCImgURL(const QString& url)
 {
     KApplication::kApplication()->invokeBrowser(url);
 }
 
-void ImageEffect_InPainting_Dialog::closeEvent(QCloseEvent *e)
+void ImageEffect_InPainting_Dialog::prepareEffect()
 {
-    if (m_currentRenderingMode != NoneRendering)
-    {
-       m_greycstorationIface->stopComputation();
-       m_parent->unsetCursor();
-    }
-
-    e->accept();
-}
-
-void ImageEffect_InPainting_Dialog::slotOk()
-{
-    m_currentRenderingMode = FinalRendering;
-
-    enableButton(Ok, false);
-    enableButton(Default, false);
-    enableButton(User2, false);
-    enableButton(User3, false);
-    m_mainTab->setCurrentPage(0);
     m_mainTab->setEnabled(false);
 
-    m_parent->setCursor( KCursor::waitCursor() );
-    m_progressBar->setValue(0);
-
     Digikam::ImageIface iface(0, 0);
-    uchar *data = iface.getOriginalImage();
+    uchar *data     = iface.getOriginalImage();
     m_originalImage = Digikam::DImg(iface.originalWidth(), iface.originalHeight(),
                                     iface.originalSixteenBit(), iface.originalHasAlpha(), data);
     delete [] data;
@@ -359,61 +345,53 @@ void ImageEffect_InPainting_Dialog::slotOk()
     m_maskImage = inPaintingMask.convertToImage().copy(m_maskRect);
     m_cropImage = m_originalImage.copy(m_maskRect);
 
-    if (m_greycstorationIface)
-       delete m_greycstorationIface;
-
-    m_greycstorationIface = new DigikamImagePlugins::GreycstorationIface(
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
+                       new DigikamImagePlugins::GreycstorationIface(
                                     &m_cropImage,
                                     settings,
                                     DigikamImagePlugins::GreycstorationIface::InPainting, 
                                     0, 0,
-                                    m_maskImage, this);
+                                    m_maskImage, this));
 }
 
-void ImageEffect_InPainting_Dialog::customEvent(QCustomEvent *event)
+void ImageEffect_InPainting_Dialog::prepareFinal()
 {
-    if (!event) return;
-
-    DigikamImagePlugins::GreycstorationIface::EventData *d = (DigikamImagePlugins::GreycstorationIface::EventData*) event->data();
-
-    if (!d) return;
-
-    if (d->starting)           // Computation in progress !
-    {
-        m_progressBar->setValue(d->progress);
-    }
+    if (!m_isComputed)
+        prepareEffect();
     else
     {
-        if (d->success)        // Computation Completed !
-        {
-            switch (m_currentRenderingMode)
-            {
-                case FinalRendering:
-                {
-                    DDebug() << "Final InPainting completed..." << endl;
-                    Digikam::ImageIface iface(0, 0);
-                    Digikam::DImg target = m_greycstorationIface->getTargetImage();
-                    m_originalImage.bitBltImage(&target, m_maskRect.left(), m_maskRect.top());
-    
-                    iface.putOriginalImage(i18n("InPainting"), m_originalImage.bits());
-    
-                    m_parent->unsetCursor();
-                    accept();
-                    break;
-                }
-            }
-        }
-        else                   // Computation Failed !
-            {
-                switch (m_currentRenderingMode)
-                {
-                    case FinalRendering:
-                        break;
-                }
-            }
-        }
+        putFinalData();
+        kapp->restoreOverrideCursor();
+        accept();
+    }
+}
 
-    delete d;
+void ImageEffect_InPainting_Dialog::putPreviewData()
+{
+    Digikam::ImageIface* iface                           = m_imagePreviewWidget->imageIface();
+    DigikamImagePlugins::GreycstorationSettings settings = m_settingsWidget->getSettings();
+
+    m_cropImage = m_threadedFilter->getTargetImage();
+    QRect cropSel((int)(2*settings.amplitude), (int)(2*settings.amplitude), 
+                  iface->selectedWidth(), iface->selectedHeight());
+    Digikam::DImg imDest = m_cropImage.copy(cropSel);
+
+    iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(),
+                                               iface->previewHeight())).bits());
+    m_imagePreviewWidget->updatePreview();
+    m_isComputed = true;
+}
+
+void ImageEffect_InPainting_Dialog::putFinalData(void)
+{
+    Digikam::ImageIface iface(0, 0);
+    
+    if (!m_isComputed)
+        m_cropImage = m_threadedFilter->getTargetImage();
+
+    m_originalImage.bitBltImage(&m_cropImage, m_maskRect.left(), m_maskRect.top());
+
+    iface.putOriginalImage(i18n("InPainting"), m_originalImage.bits());
 }
 
 void ImageEffect_InPainting_Dialog::slotUser3()
