@@ -148,7 +148,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     grid1->addMultiCellWidget(d->amplitudeLabel, 2, 2, 0, 0);
     grid1->addMultiCellWidget(d->amplitudeInput, 2, 2, 1, 1);
 
-    d->sigmaLabel = new QLabel(i18n("Sigma:"), generalPage);
+    d->sigmaLabel = new QLabel(i18n("Regularity:"), generalPage);
     d->sigmaInput = new KDoubleNumInput(generalPage);
     d->sigmaInput->setPrecision(2);
     d->sigmaInput->setRange(0.0, 10.0, 0.1, true);
