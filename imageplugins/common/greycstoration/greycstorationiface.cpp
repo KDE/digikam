@@ -74,7 +74,7 @@ GreycstorationIface::GreycstorationIface(Digikam::DImg *orgImage,
     {
         m_destImage = Digikam::DImg(newWidth, newHeight, 
                                     m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
-        DDebug() << "GreycstorationIface::m_resize is on, new size: (" 
+        DDebug() << "GreycstorationIface::Resize: new size: (" 
                  << newWidth << ", " << newHeight << ")" << endl;
     }
     else 
