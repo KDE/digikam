@@ -1,0 +1,8 @@
+[Desktop Action digiKam Mount and Download]
+Exec=@digikamhelper_dir@/digikam-camera storage %u
+Icon=digikam
+Name=digiKam Mount and Download
+
+[Desktop Entry]
+Actions=digiKam Mount and Download
+ServiceTypes=media/removable_unmounted,media/camera_unmounted
