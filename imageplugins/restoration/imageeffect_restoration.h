@@ -71,9 +71,11 @@ private slots:
     void slotUser2();
     void slotUser3();
     void processCImgURL(const QString&);
+    void readUserSettings();
 
-protected:
+private:
     
+    void writeUserSettings();
     void prepareEffect(void);
     void prepareFinal(void);
     void putPreviewData(void);
