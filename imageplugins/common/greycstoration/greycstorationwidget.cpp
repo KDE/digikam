@@ -24,9 +24,9 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qwhatsthis.h>
-#include <qstring.h>
 #include <qtooltip.h>
 #include <qtabwidget.h>
+#include <qtextstream.h>
 
 // KDE includes.
 
@@ -278,6 +278,55 @@ GreycstorationSettings GreycstorationWidget::getSettings()
     settings.btile      = d->btileInput->value();   
 
     return settings; 
+}
+
+bool GreycstorationWidget::loadSettings(QFile& file, const QString& header)
+{
+    QTextStream stream( &file );
+    
+    if (stream.readLine() != header)
+        return false;
+    
+    blockSignals(true);
+
+    GreycstorationSettings settings;
+    settings.fastApprox = stream.readLine().toInt();
+    settings.interp     = stream.readLine().toInt();
+    settings.amplitude  = stream.readLine().toDouble();
+    settings.sharpness  = stream.readLine().toDouble();
+    settings.anisotropy = stream.readLine().toDouble();
+    settings.alpha      = stream.readLine().toDouble();
+    settings.sigma      = stream.readLine().toDouble();
+    settings.gaussPrec  = stream.readLine().toDouble();
+    settings.dl         = stream.readLine().toDouble();
+    settings.da         = stream.readLine().toDouble();
+    settings.nbIter     = stream.readLine().toInt();
+    settings.tile       = stream.readLine().toInt();
+    settings.btile      = stream.readLine().toInt();   
+    setSettings(settings);
+
+    blockSignals(false);
+    return true;
+}
+
+void GreycstorationWidget::saveSettings(QFile& file, const QString& header)
+{
+    GreycstorationSettings settings = getSettings();
+    QTextStream stream( &file );        
+    stream << "# Photograph Restoration Configuration File V2\n";    
+    stream << settings.fastApprox << "\n";    
+    stream << settings.interp << "\n";    
+    stream << settings.amplitude << "\n";    
+    stream << settings.sharpness << "\n";    
+    stream << settings.anisotropy << "\n";    
+    stream << settings.alpha << "\n";    
+    stream << settings.sigma << "\n";    
+    stream << settings.gaussPrec << "\n";    
+    stream << settings.dl << "\n";    
+    stream << settings.da << "\n";    
+    stream << settings.nbIter << "\n";    
+    stream << settings.tile << "\n";    
+    stream << settings.btile << "\n";    
 }
 
 } // NameSpace DigikamImagePlugins

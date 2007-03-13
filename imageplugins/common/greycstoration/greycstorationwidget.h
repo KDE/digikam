@@ -23,6 +23,8 @@
 // Qt includes.
 
 #include <qobject.h>
+#include <qfile.h>
+#include <qstring.h>
 
 // Local Includes.
 
@@ -46,6 +48,9 @@ public:
 
     void setSettings(GreycstorationSettings settings);
     GreycstorationSettings getSettings();
+
+    bool loadSettings(QFile& file, const QString& header);
+    void saveSettings(QFile& file, const QString& header);
 
 private:
 
