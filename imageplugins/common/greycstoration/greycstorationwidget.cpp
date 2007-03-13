@@ -313,7 +313,7 @@ void GreycstorationWidget::saveSettings(QFile& file, const QString& header)
 {
     GreycstorationSettings settings = getSettings();
     QTextStream stream( &file );        
-    stream << "# Photograph Restoration Configuration File V2\n";    
+    stream << header;    
     stream << settings.fastApprox << "\n";    
     stream << settings.interp << "\n";    
     stream << settings.amplitude << "\n";    
