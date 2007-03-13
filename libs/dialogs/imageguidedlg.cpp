@@ -456,7 +456,10 @@ void ImageGuideDlg::slotEffect()
     if (d->progress) setProgressVisible(true);
 
     if (m_threadedFilter)
-       delete m_threadedFilter;
+    {
+        delete m_threadedFilter;
+        m_threadedFilter = 0;
+    }
 
     prepareEffect();
 }
@@ -477,7 +480,10 @@ void ImageGuideDlg::slotOk()
     d->progressBar->setValue(0);
 
     if (m_threadedFilter)
-       delete m_threadedFilter;
+    {
+        delete m_threadedFilter;
+        m_threadedFilter = 0;
+    }
 
     prepareFinal();
 }
