@@ -76,6 +76,7 @@ public slots:
     void slotTimer();       
     void slotEffect();
     void slotOk();
+    void slotTry();
 
 protected slots:
     

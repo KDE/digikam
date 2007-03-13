@@ -346,8 +346,14 @@ void ImageGuideDlg::abortPreview()
     enableButton(User1, false);
     enableButton(User2, true);
     enableButton(User3, true);
+    enableButton(Try,   true);
     enableButton(Default, true);
     renderingFinished();
+}
+
+void ImageGuideDlg::slotTry()
+{
+    slotEffect();
 }
 
 void ImageGuideDlg::slotResized(void)
