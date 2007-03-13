@@ -28,7 +28,6 @@
 #include <qcombobox.h>
 #include <qtabwidget.h>
 #include <qfile.h>
-#include <qtextstream.h>
 #include <qimage.h>
 
 // KDE includes.
@@ -147,28 +146,25 @@ void ImageEffect_Restoration::resetValues()
     {
         case ReduceUniformNoise:
         {
-        // TODO
-        //    settings.m_timeStepInput->setValue(40.0);
+            settings.amplitude = 40.0;
             break;
         }
         
         case ReduceJPEGArtefacts:
         {
-        // TODO
-          /*  m_detailInput->setValue(0.3);
-            m_blurInput->setValue(1.0);
-            m_timeStepInput->setValue(100.0);
-            m_blurItInput->setValue(2.0);*/
+            settings.sharpness = 0.3;
+            settings.sigma     = 1.0;
+            settings.amplitude = 100.0;
+            settings.nbIter    = 2;
             break;
         }
         
         case ReduceTexturing:
         {
-        // TODO
-/*            m_detailInput->setValue(0.5);
-            m_blurInput->setValue(1.5);
-            m_timeStepInput->setValue(100.0);
-            m_blurItInput->setValue(2.0);*/
+            settings.sharpness = 0.5;
+            settings.sigma     = 1.5;
+            settings.amplitude = 100.0;
+            settings.nbIter    = 2;
             break;
         }
     }
@@ -240,9 +236,7 @@ void ImageEffect_Restoration::slotUser3()
     
     if ( file.open(IO_ReadOnly) )   
     {
-        QTextStream stream( &file );
-        
-        if ( stream.readLine() != "# Photograph Restoration Configuration File V2" )
+        if (!m_settingsWidget->loadSettings(file, QString("# Photograph Restoration Configuration File V2")))
         {
            KMessageBox::error(this, 
                         i18n("\"%1\" is not a Photograph Restoration settings text file.")
@@ -251,25 +245,6 @@ void ImageEffect_Restoration::slotUser3()
            return;
         }
         
-        blockSignals(true);
-
-        DigikamImagePlugins::GreycstorationSettings settings;
-        settings.fastApprox = stream.readLine().toInt();
-        settings.interp     = stream.readLine().toInt();
-        settings.amplitude  = stream.readLine().toDouble();
-        settings.sharpness  = stream.readLine().toDouble();
-        settings.anisotropy = stream.readLine().toDouble();
-        settings.alpha      = stream.readLine().toDouble();
-        settings.sigma      = stream.readLine().toDouble();
-        settings.gaussPrec  = stream.readLine().toDouble();
-        settings.dl         = stream.readLine().toDouble();
-        settings.da         = stream.readLine().toDouble();
-        settings.nbIter     = stream.readLine().toInt();
-        settings.tile       = stream.readLine().toInt();
-        settings.btile      = stream.readLine().toInt();   
-        m_settingsWidget->setSettings(settings);
-
-        blockSignals(false);
         slotEffect();  
     }
     else
@@ -289,24 +264,7 @@ void ImageEffect_Restoration::slotUser2()
     QFile file(saveRestorationFile.path());
     
     if ( file.open(IO_WriteOnly) )   
-    {
-        DigikamImagePlugins::GreycstorationSettings settings = m_settingsWidget->getSettings();
-        QTextStream stream( &file );        
-        stream << "# Photograph Restoration Configuration File V2\n";    
-        stream << settings.fastApprox << "\n";    
-        stream << settings.interp << "\n";    
-        stream << settings.amplitude << "\n";    
-        stream << settings.sharpness << "\n";    
-        stream << settings.anisotropy << "\n";    
-        stream << settings.alpha << "\n";    
-        stream << settings.sigma << "\n";    
-        stream << settings.gaussPrec << "\n";    
-        stream << settings.dl << "\n";    
-        stream << settings.da << "\n";    
-        stream << settings.nbIter << "\n";    
-        stream << settings.tile << "\n";    
-        stream << settings.btile << "\n";    
-    }
+        m_settingsWidget->saveSettings(file, QString("# Photograph Restoration Configuration File V2"));
     else
         KMessageBox::error(this, i18n("Cannot save settings to the Photograph Restoration text file."));
     
