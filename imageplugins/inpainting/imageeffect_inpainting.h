@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_inpainting.h
- * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2005-03-30
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Date   : 2005-03-30
  * Description : a digiKam image editor plugin to inpaint 
  *               a photograph
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,20 +37,17 @@
 #include <digikamheaders.h>
 
 class QPushButton;
-class QLabel;
-class QCheckBox;
 class QTimer;
 class QCustomEvent;
-class QComboBox;
 class QTabWidget;
 class QFrame;
 
-class KDoubleNumInput;
 class KProgress;
 
 namespace DigikamImagePlugins
 {
-class CimgIface;
+class GreycstorationWidget;
+class GreycstorationIface;
 }
 
 namespace Digikam
@@ -69,7 +65,7 @@ public:
     static void inPainting(QWidget *parent);
 };
 
-////////////////////////////////////////////////////////////
+//-----------------------------------------------------------
 
 class ImageEffect_InPainting_Dialog : public KDialogBase
 {
@@ -88,16 +84,16 @@ private:
 
     enum InPaintingFilteringPreset
     {
-    NoPreset=0,
-    RemoveSmallArtefact,
-    RemoveMediumArtefact,
-    RemoveLargeArtefact
+        NoPreset=0,
+        RemoveSmallArtefact,
+        RemoveMediumArtefact,
+        RemoveLargeArtefact
     };
     
     enum RunningMode
     {
-    NoneRendering=0,
-    FinalRendering
+        NoneRendering=0,
+        FinalRendering
     };
 
     int              m_currentRenderingMode;
@@ -110,29 +106,8 @@ private:
     
     QPushButton     *m_helpButton;
     
-    QLabel          *m_detailLabel;
-    QLabel          *m_gradientLabel;
-    QLabel          *m_timeStepLabel;
-    QLabel          *m_blurLabel;
-    QLabel          *m_blurItLabel;
-    QLabel          *m_angularStepLabel;
-    QLabel          *m_integralStepLabel;
-    QLabel          *m_gaussianLabel;
-    
     // Preset Settings.
     QComboBox       *m_inpaintingTypeCB;  
-    
-    KDoubleNumInput *m_detailInput;
-    KDoubleNumInput *m_gradientInput;
-    KDoubleNumInput *m_timeStepInput;
-    KDoubleNumInput *m_blurInput;
-    KDoubleNumInput *m_angularStepInput;
-    KDoubleNumInput *m_integralStepInput;
-    KDoubleNumInput *m_gaussianInput;
-    KDoubleNumInput *m_blurItInput;
-    
-    QCheckBox       *m_linearInterpolationBox;
-    QCheckBox       *m_normalizeBox;
     
     QTabWidget      *m_mainTab;
     
@@ -140,13 +115,15 @@ private:
 
     KAboutData      *m_about;
     
-    DigikamImagePlugins::CimgIface *m_cimgInterface;
-    
-    Digikam::ImageIface            *m_iface;    
+    DigikamImagePlugins::GreycstorationWidget *m_settingsWidget;
 
-    Digikam::DImg                   m_originalImage;
-    Digikam::DImg                   m_cropImage;
-    Digikam::DImg                   m_previewImage;
+    DigikamImagePlugins::GreycstorationIface  *m_greycstorationIface;
+    
+    Digikam::ImageIface                       *m_iface;    
+
+    Digikam::DImg                              m_originalImage;
+    Digikam::DImg                              m_cropImage;
+    Digikam::DImg                              m_previewImage;
     
 private:
         
@@ -154,7 +131,6 @@ private:
     
 private slots:
 
-    void slotCheckSettings(void);
     void slotHelp();
     void slotOk();
     void slotCancel();
