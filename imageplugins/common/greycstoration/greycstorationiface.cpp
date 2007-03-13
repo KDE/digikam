@@ -140,11 +140,24 @@ void GreycstorationIface::initFilter()
     }
 }
 
+void GreycstorationIface::stopComputation()
+{
+    // Because Greycstoration algorithm run in a child thread, we need
+    // to stop it before to stop this thread.
+    if (d->img.greycstoration_is_running()) 
+    {
+        // If the user abort, we stop the algorithm.
+        DDebug() << "Stop Greycstoration computation..." << endl; 
+    
+        d->img.greycstoration_stop();
+        cimg::wait(200);
+    }
+
+    Digikam::DImgThreadedFilter::stopComputation();
+}
+
 void GreycstorationIface::cleanupFilter()
 {
-    if (d->img.greycstoration_is_running())
-        d->img.greycstoration_stop();
-
     d->img  = CImg<>();
     d->mask = CImg<uchar>();
 }
@@ -221,6 +234,9 @@ void GreycstorationIface::filterImage()
        return;
     }
 
+    if (m_cancel)
+        return;
+
     // Copy CImg onto destination.
     
     DDebug() << "GreycstorationIface::Finalization..." << endl;
@@ -265,7 +281,7 @@ void GreycstorationIface::filterImage()
 
 void GreycstorationIface::restoration()
 {
-    for (unsigned int iter=0 ; iter < d->settings.nbIter ; iter++) 
+    for (uint iter=0 ; !m_cancel && (iter < d->settings.nbIter) ; iter++) 
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
@@ -283,18 +299,7 @@ void GreycstorationIface::restoration()
                                   d->settings.tile, 
                                   d->settings.btile);
     
-        // Here, we print the overall progress percentage.
-        do 
-        {
-            // pr_iteration is the progress percentage for the current iteration
-            const float pr_iteration = d->img.greycstoration_progress();
-        
-            // This simply computes the global progression indice (including all iterations)
-            const unsigned int pr_global = (unsigned int)((iter*100 + pr_iteration)/d->settings.nbIter);
-        
-            postProgress( pr_global );   
-        } 
-        while (d->img.greycstoration_is_running() && !m_cancel);
+        iterationLoop(iter);    
     }
 }
 
@@ -304,12 +309,15 @@ void GreycstorationIface::inpainting()
     
     if (!file_m) 
     {
-       DDebug() << "Unspecified inpainting mask !" << endl;
-       return;
+        DDebug() << "Unspecified inpainting mask !" << endl;
+        return;
     }
 
-    if (cimg::strncasecmp("block", file_m, 5)) 
+    if (cimg::strncasecmp("block", file_m, 5))
+    {
+        DDebug() << "Loading inpainting mask: " << d->tmpMaskFile << endl; 
         d->mask.load(file_m);
+    }
     else 
     {
         int l=16; 
@@ -319,8 +327,11 @@ void GreycstorationIface::inpainting()
     }
        
     d->mask.resize(d->img.width, d->img.height, 1, 1);
+
+    DDebug() << "Picture size to inpaint: " << d->img.width << "x" << d->img.height << endl; 
+    DDebug() << "Inpainting mask size: " << d->mask.width << "x" << d->mask.height << endl; 
     
-    for (unsigned int iter=0 ; iter < d->settings.nbIter ; iter++) 
+    for (uint iter=0 ; !m_cancel && (iter < d->settings.nbIter) ; iter++) 
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
@@ -338,24 +349,30 @@ void GreycstorationIface::inpainting()
                                        d->settings.fastApprox, 
                                        d->settings.tile, 
                                        d->settings.btile);
-    
-        // Here, we print the overall progress percentage.
-        do 
-        {
-            // pr_iteration is the progress percentage for the current iteration
-            const float pr_iteration = d->img.greycstoration_progress();
-        
-            // This simply computes the global progression indice (including all iterations)
-            const unsigned int pr_global = (unsigned int)((iter*100 + pr_iteration)/d->settings.nbIter);
-        
-            postProgress( pr_global );   
-        } 
-        while (d->img.greycstoration_is_running() && !m_cancel);
-    }
+        iterationLoop(iter);
+    }    
 }
 
 void GreycstorationIface::resize()
 {
+    // TODO
+}
+
+void GreycstorationIface::iterationLoop(uint iter)
+{
+    do 
+    {
+        if (m_parent && !m_cancel)
+        {
+            // Update the progress bar in dialog. We simply computes the global 
+            // progression indice (including all iterations).
+            postProgress((uint)((iter*100 + d->img.greycstoration_progress())/d->settings.nbIter));
+        }   
+
+        // Wait a little bit
+        cimg::wait(100);
+    } 
+    while (!m_cancel);
 }
 
 }  // NameSpace DigikamImagePlugins

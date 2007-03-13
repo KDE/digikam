@@ -63,6 +63,8 @@ public:
     
     ~GreycstorationIface();
 
+    void stopComputation();
+
 private:  
 
     void initFilter();
@@ -72,6 +74,7 @@ private:
     void restoration();
     void inpainting();
     void resize();
+    void iterationLoop(uint iter);
     
 private:
 
