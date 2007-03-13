@@ -179,7 +179,6 @@ void ImageEffect_Restoration::processCImgURL(const QString& url)
 
 void ImageEffect_Restoration::prepareEffect()
 {
-    m_restorationTypeCB->setEnabled(false);
     m_mainTab->setEnabled(false);
     
     Digikam::DImg previewImage = m_imagePreviewWidget->getOriginalRegionImage();
@@ -193,7 +192,6 @@ void ImageEffect_Restoration::prepareEffect()
 
 void ImageEffect_Restoration::prepareFinal()
 {
-    m_restorationTypeCB->setEnabled(false);
     m_mainTab->setEnabled(false);
     
     Digikam::ImageIface iface(0, 0);
