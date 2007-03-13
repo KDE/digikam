@@ -22,14 +22,6 @@
  
 #include <cassert>
 
-// Qt includes.
-
-#include <qfile.h>
-
-// KDE includes.
-
-#include <kstandarddirs.h>
-
 // Local includes.
  
 #define cimg_plugin "greycstoration.h"
@@ -57,13 +49,12 @@ public:
 
     int                    mode;
 
-    // Inpainting temp mask file path.
-    QString                tmpMaskFile;
+    QImage                 inPaintingMask;
     
     GreycstorationSettings settings;
 
     CImg<>                 img;
-    CImg<unsigned char>    mask;
+    CImg<uchar>            mask;
 };
 
 GreycstorationIface::GreycstorationIface(Digikam::DImg *orgImage,
@@ -75,8 +66,9 @@ GreycstorationIface::GreycstorationIface(Digikam::DImg *orgImage,
                    : Digikam::DImgThreadedFilter(orgImage, parent)
 { 
     d = new GreycstorationIfacePriv;
-    d->settings = settings;
-    d->mode     = mode;
+    d->settings       = settings;
+    d->mode           = mode;
+    d->inPaintingMask = inPaintingMask;
     
     if (d->mode == Resize)
     {
@@ -91,30 +83,11 @@ GreycstorationIface::GreycstorationIface(Digikam::DImg *orgImage,
                                     m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
     }
     
-    d->tmpMaskFile = QString();
-    
-    if (d->mode == InPainting && !inPaintingMask.isNull())
-    {
-       KStandardDirs dir;
-       d->tmpMaskFile = dir.saveLocation("tmp");
-       d->tmpMaskFile.append(QString::number(getpid()));
-       d->tmpMaskFile.append(".png");
-       inPaintingMask.save(d->tmpMaskFile, "PNG");
-       DDebug() << "GreycstorationIface::InPainting Mask: " << d->tmpMaskFile << endl;
-    }
-    
     initFilter();       
 }
 
 GreycstorationIface::~GreycstorationIface()
 { 
-    if (!d->tmpMaskFile.isEmpty())
-    {
-       // Remove temporary inpainting mask.
-       QFile maskFile(d->tmpMaskFile);
-       maskFile.remove();
-    }
-
     delete d;
 }
 
@@ -150,7 +123,7 @@ void GreycstorationIface::stopComputation()
         DDebug() << "Stop Greycstoration computation..." << endl; 
     
         d->img.greycstoration_stop();
-        // we wait than the Greycstoration thread is finished.
+        // FIXME: We need to wait properly than the Greycstoration thread is finished.
         cimg::wait(1000);
     }
 
@@ -165,17 +138,36 @@ void GreycstorationIface::cleanupFilter()
 
 void GreycstorationIface::filterImage()
 {
+    register int x, y;
+
     DDebug() << "GreycstorationIface::Initialization..." << endl;
+
+    if (d->mode == InPainting && !d->inPaintingMask.isNull())
+    {
+        // Copy the inpainting image data into a CImg type image with three channels and no alpha.
+
+        d->mask = CImg<uchar>(d->inPaintingMask.width(), d->inPaintingMask.height(), 1, 3);
+        uchar *ptr = d->inPaintingMask.bits();
+        
+        for (y = 0; y < d->inPaintingMask.height(); y++)
+        {
+            for (x = 0; x < d->inPaintingMask.width(); x++) 
+            {
+                d->mask(x, y, 0) = ptr[2];        // blue.
+                d->mask(x, y, 1) = ptr[1];        // green.
+                d->mask(x, y, 2) = ptr[0];        // red.
+                ptr += 4;
+            }
+        }
+    }
                    
-    // Copy the src data into a CImg type image with three channels and no alpha. 
-    // This means that a CImg is always RGBA.
+    // Copy the src image data into a CImg type image with three channels and no alpha.
 
     uchar* imageData = m_orgImage.bits();
     int imageWidth   = m_orgImage.width();
     int imageHeight  = m_orgImage.height();
     
     d->img = CImg<>(imageWidth, imageHeight, 1, 3);
-    register int x, y;
 
     if (!m_orgImage.sixteenBit())           // 8 bits image.
     {
@@ -306,32 +298,6 @@ void GreycstorationIface::restoration()
 
 void GreycstorationIface::inpainting()
 {
-    const char *file_m = d->tmpMaskFile.latin1();  // Input inpainting mask.
-    
-    if (!file_m) 
-    {
-        DDebug() << "Unspecified inpainting mask !" << endl;
-        return;
-    }
-
-    if (cimg::strncasecmp("block", file_m, 5))
-    {
-        DDebug() << "Loading inpainting mask: " << d->tmpMaskFile << endl; 
-        d->mask.load(file_m);
-    }
-    else 
-    {
-        int l=16; 
-        std::sscanf(file_m, "block%d", &l);
-        d->mask.assign(d->img.dimx()/l, d->img.dimy()/l);
-        cimg_forXY(d->mask, x, y) d->mask(x, y) = (x+y)%2;
-    }
-       
-    d->mask.resize(d->img.width, d->img.height, 1, 1);
-
-    DDebug() << "Picture size to inpaint: " << d->img.width << "x" << d->img.height << endl; 
-    DDebug() << "Inpainting mask size: " << d->mask.width << "x" << d->mask.height << endl; 
-    
     for (uint iter=0 ; !m_cancel && (iter < d->settings.nbIter) ; iter++) 
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
