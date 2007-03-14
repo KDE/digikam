@@ -161,7 +161,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     d->settingsArea->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
     d->settingsArea->setMargin(0);
     d->settingsArea->setLineWidth(1);
-    QGridLayout *settingsLayout = new QGridLayout(d->settingsArea, 27, 1, KDialog::marginHint(), 0);
+    QGridLayout *settingsLayout = new QGridLayout(d->settingsArea, 27, 1, KDialog::spacingHint(), 0);
 
     // --------------------------------------------------
 
