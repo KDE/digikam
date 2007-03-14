@@ -3,7 +3,7 @@
  * Date  : 2006-02-22
  * Description : a generic widget to display metadata
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

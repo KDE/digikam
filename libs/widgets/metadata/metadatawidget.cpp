@@ -3,7 +3,7 @@
  * Date  : 2006-02-22
  * Description : a generic widget to display metadata
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -91,7 +91,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
 {
     d = new MetadataWidgetPriv;
 
-    d->mainLayout = new QGridLayout(this, 2, 4, KDialog::marginHint(), KDialog::spacingHint());
+    d->mainLayout = new QGridLayout(this, 2, 4, KDialog::spacingHint(), KDialog::spacingHint());
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
 
     d->levelButtons = new QHButtonGroup(this);
