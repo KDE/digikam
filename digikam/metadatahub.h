@@ -35,6 +35,7 @@
 // Local includes
 
 #include "dmetadata.h"
+#include "dimg.h"
 
 namespace Digikam
 {
@@ -229,6 +230,14 @@ public:
         @return Returns if the file has been touched
     */
     bool write(const QString &filePath, WriteMode writeMode = FullWrite,
+               const MetadataWriteSettings &settings = defaultWriteSettings());
+
+    /**
+        Constructs a DMetadata object from the metadata stored in the given DImg object,
+        calls the above method, and changes the stored metadata in the DImg object.
+        @return Returns if the DImg object has been touched
+    */
+    bool write(DImg &image, WriteMode writeMode = FullWrite,
                const MetadataWriteSettings &settings = defaultWriteSettings());
 
     /**

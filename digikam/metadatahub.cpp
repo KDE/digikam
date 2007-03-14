@@ -571,6 +571,34 @@ bool MetadataHub::write(const QString &filePath, WriteMode writeMode, const Meta
     return false;
 }
 
+bool MetadataHub::write(DImg &image, WriteMode writeMode, const MetadataWriteSettings &settings)
+{
+    // if no DMetadata object is needed at all, don't construct one
+    if (!needWriteMetadata(writeMode, settings))
+        return false;
+
+    // See DImgLoader::readMetadata() and saveMetadata()
+    DMetadata metadata;
+    metadata.setComments(image.getComments());
+    metadata.setExif(image.getExif());
+    metadata.setIptc(image.getIptc());
+
+    if (write(metadata, writeMode, settings))
+    {
+        // Do not insert null data into metaData map:
+        // Even if byte array is null, if there is a key in the map, it will
+        // be interpreted as "There was data, so write it again to the file".
+        if (!metadata.getComments().isNull())
+            image.setComments(metadata.getComments());
+        if (!metadata.getExif().isNull())
+            image.setExif(metadata.getExif());
+        if (!metadata.getIptc().isNull())
+            image.setIptc(metadata.getIptc());
+        return true;
+    }
+    return false;
+}
+
 bool MetadataHub::needWriteMetadata(WriteMode writeMode, const MetadataWriteSettings &settings) const
 {
     // This is the same logic as in write(DMetadata) but without actually writing.
