@@ -59,9 +59,6 @@ public:
     QString getImageComment() const;
     bool    setImageComment(const QString& comment);
 
-    QStringList getImageTagsPath() const;
-    bool        setImageTagsPath(const QStringList& tagsPath);
-
     int  getImageRating() const;
     bool setImageRating(int rating);
 
@@ -69,6 +66,11 @@ public:
     bool setImageCredits(const QString& credit, const QString& source, const QString& copyright);
 
     PhotoInfoContainer getPhotographInformations() const;
+
+    bool getXMLImageProperties(QString& comments, QDateTime& date, 
+                               int& rating, QStringList& tagsPath);
+    bool setXMLImageProperties(const QString& comments, const QDateTime& date, 
+                               int rating, const QStringList& tagsPath);
 
 private:
 
