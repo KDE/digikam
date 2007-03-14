@@ -148,7 +148,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     // Histogram tab area -----------------------------------------------------
 
     QWidget* histogramPage = new QWidget( d->tab );
-    QGridLayout *topLayout = new QGridLayout(histogramPage, 8, 3, KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *topLayout = new QGridLayout(histogramPage, 8, 3, 
+                                 KDialog::spacingHint(), KDialog::spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), histogramPage);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -316,7 +317,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     QLabel *label11     = new QLabel(i18n("Color depth:"), gbox2);
     label11->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-    d->labelColorDepth   = new QLabel(gbox2);
+    d->labelColorDepth  = new QLabel(gbox2);
     d->labelColorDepth->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     QLabel *label12     = new QLabel(i18n("Alpha Channel:"), gbox2);
     label12->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
