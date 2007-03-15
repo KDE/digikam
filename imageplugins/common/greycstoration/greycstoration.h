@@ -44,15 +44,19 @@
 
 #ifndef cimg_plugin_greycstoration
 // This tells you about the version of the GREYCstoration algorithm implemented
-#define cimg_plugin_greycstoration 2.5
+#define cimg_plugin_greycstoration 2.5.1
 
 //------------------------------------------------------------------------------
-// This is internal structures and functions, not to be used by the plugin user
-// See functions below instead.
+// GREYCstoration structure, storing important informations about algorithm
+// parameters and computing threads
 //-------------------------------------------------------------------------------
 struct _greycstoration_params {
-  const CImg<unsigned char> *mask;
-  float amplitude,
+
+  // Parameters needed for the GREYCstoration regularization algorithm.
+  const CImg<unsigned char>
+    *mask;
+  float
+    amplitude,
     sharpness,
     anisotropy,
     alpha,
@@ -60,107 +64,124 @@ struct _greycstoration_params {
     dl,
     da,
     gauss_prec;
-  unsigned int interpolation,
+  unsigned int
+    interpolation;
+  bool
+    fast_approx;
+
+  // Parameters for the different threads.
+  CImg<T>
+    *source,
+    *temporary;
+  unsigned long
+    *counter;
+  unsigned int
     tile,
-    tile_border;
-  bool fast_approx;
-  unsigned long *counter;
+    tile_border,
+    thread,
+    threads;
+  bool
+    is_running,
+    *stop_request;
 
-  _greycstoration_params() {
-    counter = new unsigned long;
-    *counter = ~0UL;
-  }
-
-  _greycstoration_params& assign(const CImg<unsigned char> *const pmask=0,
-                                 const float pamplitude=60, const float psharpness=0.7f, const float panisotropy=0.3f,
-                                 const float palpha=0.6f,const float psigma=1.1f, const float pdl=0.8f, const float pda=30.0f,
-                                 const float pgauss_prec=2.0f, const unsigned int pinterpolation=0, const bool pfast_approx=true,
-                                 const unsigned int ptile=0, const unsigned int ptile_border=0) {
-    mask = pmask;
-    amplitude = pamplitude;
-    sharpness = psharpness;
-    anisotropy = panisotropy;
-    alpha = palpha;
-    sigma = psigma;
-    dl = pdl;
-    da = pda;
-    gauss_prec = pgauss_prec;
-    interpolation = pinterpolation;
-    tile = ptile;
-    tile_border = ptile_border;
-    fast_approx = pfast_approx;
-    *counter = 0UL;
-    return *this;
-  }
-
-  ~_greycstoration_params() {
-    if (counter) delete counter;
-  }
+  // Default constructor
+  _greycstoration_params():mask(0),amplitude(0),sharpness(0),anisotropy(0),alpha(0),sigma(0),
+                           dl(0),da(0),gauss_prec(0),interpolation(0),fast_approx(false),
+                           source(0),temporary(0),counter(0),tile(0),tile_border(0),thread(0),threads(0),
+                           is_running(false), stop_request(0) {}
 };
 
-_greycstoration_params greycstoration_params;
+_greycstoration_params greycstoration_params[16];
 
+//------------------------------------------------------------------------------
+// GREYCstoration threaded function
+//-------------------------------------------------------------------------------
 #if cimg_OS==1
 static void* greycstoration_thread(void *arg) {
 #elif cimg_OS==2
   static DWORD WINAPI greycstoration_thread(void *arg) {
 #endif
-    CImg<T>& img = *(CImg<T>*)arg;
-    _greycstoration_params &p = img.greycstoration_params;
-    const CImg<unsigned char>& mask = *(p.mask);
+    _greycstoration_params &p = *(_greycstoration_params*)arg;
+    const CImg<unsigned char> &mask = *(p.mask);
+    CImg<T> &source = *(p.source);
 
-    if (!p.tile) // Non-tiled version
-      img.blur_anisotropic(mask,p.amplitude,p.sharpness,p.anisotropy,p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx);
-    else { // Tiled version (much slower, but require less memory, may avoid memory swap and finally save time !)
-      const bool threed = (img.depth>1);
-      CImg<T> res(img.width,img.height,img.depth,img.dim,0);
+    if (!p.tile) {
+
+      // Non-tiled version
+      //------------------
+      source.blur_anisotropic(mask,p.amplitude,p.sharpness,p.anisotropy,p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,
+                              p.interpolation,p.fast_approx);
+
+    } else {
+
+      // Tiled version
+      //---------------
+      CImg<T> &temporary = *(p.temporary);
+      const bool threed = (source.depth>1);
       const unsigned int b = p.tile_border;
-      if (threed)
-        for (unsigned int z=0; z<img.depth; z+=p.tile)
-          for (unsigned int y=0; y<img.height; y+=p.tile)
-            for (unsigned int x=0; x<img.width; x+=p.tile) {
+      unsigned int ctile = 0;
+      if (threed) {
+        for (unsigned int z=0; z<source.depth && !*(p.stop_request); z+=p.tile)
+          for (unsigned int y=0; y<source.height && !*(p.stop_request); y+=p.tile)
+            for (unsigned int x=0; x<source.width && !*(p.stop_request); x+=p.tile)
+              if (((ctile++)%p.threads)==p.thread) {
+                const unsigned int
+                  x1 = x+p.tile-1,
+                  y1 = y+p.tile-1,
+                  z1 = z+p.tile-1,
+                  xe = x1<source.width?x1:source.width-1,
+                  ye = y1<source.height?y1:source.height-1,
+                  ze = z1<source.depth?z1:source.depth-1;
+                CImg<T> img = source.get_crop(x-b,y-b,z-b,xe+b,ye+b,ze+b,true);
+                CImg<unsigned char> mask_tile = mask.is_empty()?mask:mask.get_crop(x-b,y-b,z-b,xe+b,ye+b,ze+b,true);
+                img.greycstoration_params[0] = p;
+                img.blur_anisotropic(mask_tile,p.amplitude,p.sharpness,p.anisotropy,
+                                     p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx);
+                temporary.draw_image(img.crop(b,b,b,img.width-b,img.height-b,img.depth-b),x,y,z);
+              }
+      } else {
+        for (unsigned int y=0; y<source.height && !*(p.stop_request); y+=p.tile)
+          for (unsigned int x=0; x<source.width && !*(p.stop_request); x+=p.tile)
+            if (((ctile++)%p.threads)==p.thread) {
               const unsigned int
                 x1 = x+p.tile-1,
                 y1 = y+p.tile-1,
-                z1 = z+p.tile-1,
-                xe = x1<img.width?x1:img.width-1,
-                ye = y1<img.height?y1:img.height-1,
-                ze = z1<img.depth?z1:img.depth-1;
-              CImg<T> img_tile = img.get_crop(x-b,y-b,z-b,xe+b,ye+b,ze+b,true);
-              CImg<unsigned char> mask_tile = mask.is_empty()?mask:mask.get_crop(x-b,y-b,z-b,xe+b,ye+b,ze+b,true);
-              img_tile.greycstoration_params.assign(&mask_tile,p.amplitude,p.sharpness,p.anisotropy,
-                                                    p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx);
-              delete img_tile.greycstoration_params.counter;
-              img_tile.greycstoration_params.counter = img.greycstoration_params.counter;
-	      img_tile.blur_anisotropic(mask_tile,p.amplitude,p.sharpness,p.anisotropy,
-                                        p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx);
-              img_tile.crop(b,b,b,img_tile.width-b,img_tile.height-b,img_tile.depth-b);
-              img_tile.greycstoration_params.counter = 0;
-              res.draw_image(img_tile,x,y,z);
+                xe = x1<source.width?x1:source.width-1,
+                ye = y1<source.height?y1:source.height-1;
+              CImg<T> img = source.get_crop(x-b,y-b,xe+b,ye+b,true);
+              CImg<unsigned char> mask_tile = mask.is_empty()?mask:mask.get_crop(x-b,y-b,xe+b,ye+b,true);
+              img.greycstoration_params[0]=p;
+              img.blur_anisotropic(mask_tile,p.amplitude,p.sharpness,p.anisotropy,
+                                   p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx);
+              temporary.draw_image(img.crop(b,b,img.width-b,img.height-b),x,y);
             }
-      else
-        for (unsigned int y=0; y<img.height; y+=p.tile)
-          for (unsigned int x=0; x<img.width; x+=p.tile) {
-            const unsigned int
-              x1 = x+p.tile-1,
-              y1 = y+p.tile-1,
-              xe = x1<img.width?x1:img.width-1,
-              ye = y1<img.height?y1:img.height-1;
-            CImg<T> img_tile = img.get_crop(x-b,y-b,xe+b,ye+b,true);
-            CImg<unsigned char> mask_tile = mask.is_empty()?mask:mask.get_crop(x-b,y-b,xe+b,ye+b,true);
-            img_tile.greycstoration_params.assign(&mask_tile,p.amplitude,p.sharpness,p.anisotropy,
-                                                  p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx);
-            delete img_tile.greycstoration_params.counter;
-            img_tile.greycstoration_params.counter = img.greycstoration_params.counter;
-            img_tile.blur_anisotropic(mask_tile,p.amplitude,p.sharpness,p.anisotropy,
-                                      p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx);
-	    img_tile.crop(b,b,img_tile.width-b,img_tile.height-b);
-            img_tile.greycstoration_params.counter = 0;
-            res.draw_image(img_tile,x,y);
-          }
-      img = res;
+      }
     }
-    img.greycstoration_stop();
+
+    if (!p.thread) {
+      if (p.threads>1) {
+        bool stopflag = true;
+        do {
+          stopflag = true;
+          for (unsigned int k=1; k<p.threads; k++) if (source.greycstoration_params[k].is_running) stopflag = false;
+          if (!stopflag) cimg::wait(50);
+        } while (!stopflag);
+      }
+      p.is_running = false;
+      if (p.counter) delete p.counter;
+      if (p.temporary) { source = *(p.temporary); delete p.temporary; }
+      if (p.stop_request) delete p.stop_request;
+      p.mask = 0;
+      p.amplitude = p.sharpness = p.anisotropy = p.alpha = p.sigma = p.dl = p.da = p.gauss_prec = 0;
+      p.interpolation = 0;
+      p.fast_approx = false;
+      p.source = 0;
+      p.temporary = 0;
+      p.counter = 0;
+      p.tile = p.tile_border = p.thread = p.threads = 0;
+      p.stop_request = false;
+    } else p.is_running = false;
+
 #if cimg_OS==1
     pthread_exit(arg);
     return arg;
@@ -176,38 +197,97 @@ static void* greycstoration_thread(void *arg) {
   // in your own code.
   //----------------------------------------------------------
 
-  //! Stop the GREYCstoration thread
+  //! Test if GREYCstoration threads are currently running.
+  bool greycstoration_is_running() const {
+    return greycstoration_params->is_running;
+  }
+
+  //! Force GREYCstoration threads to stop.
   CImg& greycstoration_stop() {
-    *(greycstoration_params.counter) = ~0UL;
+    if (greycstoration_is_running()) {
+      *(greycstoration_params->stop_request) = true;
+      while (greycstoration_params->is_running) cimg::wait(50);
+    }
     return *this;
   }
 
+  //! Return the GREYCstoration progression indice.
+  float greycstoration_progress() const {
+    if (!greycstoration_is_running()) return 0.0f;
+    const unsigned long counter = greycstoration_params->counter?*(greycstoration_params->counter):0;
+    const float da = greycstoration_params->da;
+    float maxcounter = 0;
+    if (greycstoration_params->tile==0) maxcounter = width*height*(1 + 360/da);
+    else {
+      const unsigned int
+        t = greycstoration_params->tile,
+        b = greycstoration_params->tile_border,
+        n = (1+(width-1)/t)*(1+(height-1)/t)*(1+(depth-1)/t);
+      maxcounter = (width*height + n*4*b*(b + t))*(1 + 360/da);
+    }
+    return cimg::min(counter*99.9f/maxcounter,99.9f);
+  }
+
   //! Run the threaded GREYCstoration algorithm on the instance image, using a mask.
-  /**
-     This function creates a new thread and returns immediately.
-     One iteration of inpainting is done when the greycstoration_progress() functions returns 100.
-  **/
-  CImg& greycstoration_mask_run(const CImg<unsigned char>& mask,
-                                const float amplitude=60, const float sharpness=0.7f, const float anisotropy=0.3f,
-                                const float alpha=0.6f,const float sigma=1.1f, const float dl=0.8f,const float da=30.0f,
-                                const float gauss_prec=2.0f, const unsigned int interpolation=0, const bool fast_approx=true,
-                                const unsigned int tile=0, const unsigned int tile_border=0) {
+  CImg& greycstoration_run(const CImg<unsigned char>& mask,
+                           const float amplitude=60, const float sharpness=0.7f, const float anisotropy=0.3f,
+                           const float alpha=0.6f,const float sigma=1.1f, const float dl=0.8f,const float da=30.0f,
+                           const float gauss_prec=2.0f, const unsigned int interpolation=0, const bool fast_approx=true,
+                           const unsigned int tile=0, const unsigned int tile_border=0, const unsigned int threads=1) {
     if (greycstoration_is_running())
       throw CImgInstanceException("CImg<T>::greycstoration_run() : Another GREYCstoration thread is already running on"
-                                  " the instance image (%u,%u,%u,%u,%p).",width,height,depth,dim,data);
+                                  " instance image (%u,%u,%u,%u,%p).",width,height,depth,dim,data);
 
     else {
       if (!mask.is_empty() && !mask.is_sameXY(*this))
         throw CImgArgumentException("CImg<%s>::greycstoration_run() : Given mask (%u,%u,%u,%u,%p) and instance image "
                                     "(%u,%u,%u,%u,%p) have different dimensions.",
-                                    mask.width,mask.height,mask.depth,mask.dim,mask.data,width,height,depth,dim,data);
-      greycstoration_params.assign(&mask,amplitude,sharpness,anisotropy,alpha,sigma,dl,da,gauss_prec,interpolation,fast_approx,tile,tile_border);
+                                    pixel_type(),mask.width,mask.height,mask.depth,mask.dim,mask.data,width,height,depth,dim,data);
+      cimg::warn(!tile && threads!=1,"CImg<%s>::greycstoration_run() : Multi-threading cannot be done in non-tiled mode.",
+                 pixel_type());
+      cimg::warn(threads>16,"CImg<%s>::greycstoration_run() : Multi-threading mode limited to 16 threads max.");
+      const unsigned int
+        nthreads = tile?cimg::max(cimg::min(threads,16U),1U):1,
+        ntile = (tile && (tile>=width || tile>=height || tile>=depth))?tile:0;
+
+      CImg<T> *const temporary = ntile?new CImg<T>(*this):0;
+      unsigned long *const counter = new unsigned long;
+      *counter = 0;
+      bool *const stop_request = new bool;
+      *stop_request = false;
+
+      for (unsigned int k=0; k<nthreads; k++) {
+        greycstoration_params[k].mask = &mask;
+        greycstoration_params[k].amplitude = amplitude;
+        greycstoration_params[k].sharpness = sharpness;
+        greycstoration_params[k].anisotropy = anisotropy;
+        greycstoration_params[k].alpha = alpha;
+        greycstoration_params[k].sigma = sigma;
+        greycstoration_params[k].dl = dl;
+        greycstoration_params[k].da = da;
+        greycstoration_params[k].gauss_prec = gauss_prec;
+        greycstoration_params[k].interpolation = interpolation;
+        greycstoration_params[k].fast_approx = fast_approx;
+        greycstoration_params[k].source = this;
+        greycstoration_params[k].temporary = temporary;
+        greycstoration_params[k].counter = counter;
+        greycstoration_params[k].tile = ntile;
+        greycstoration_params[k].tile_border = tile_border;
+        greycstoration_params[k].thread = k;
+        greycstoration_params[k].threads = nthreads;
+        greycstoration_params[k].is_running = true;
+        greycstoration_params[k].stop_request = stop_request;
+      }
 #if cimg_OS==1
-      pthread_t thread;
-      pthread_create(&thread, 0, greycstoration_thread, (void*)this);
+      for (unsigned int k=0; k<greycstoration_params->threads; k++) {
+        pthread_t thread;
+        pthread_create(&thread, 0, greycstoration_thread, (void*)(greycstoration_params+k));
+      }
 #elif cimg_OS==2
-      unsigned long ThreadID = 0;
-      CreateThread(0,0,greycstoration_thread,(void*)this,0,&ThreadID);
+      for (unsigned int k=0; k<greycstoration_params->threads; k++) {
+        unsigned long ThreadID = 0;
+        CreateThread(0,0,greycstoration_thread,(void*)(greycstoration_params+k),0,&ThreadID);
+      }
 #else
       throw CImgInstanceException("CImg<T>::greycstoration_run() : Threads are not supported, please define cimg_OS first.");
 #endif
@@ -216,44 +296,13 @@ static void* greycstoration_thread(void *arg) {
   }
 
   //! Run the GREYCstoration algorithm on the instance image.
-  /**
-     This function creates a new thread and returns immediately.
-     The denoising is done when the greycstoration_progress() functions returns 100.
-  **/
   CImg& greycstoration_run(const float amplitude=50, const float sharpness=0.7f, const float anisotropy=0.3f,
                            const float alpha=0.6f,const float sigma=1.1f, const float dl=0.8f,const float da=30.0f,
                            const float gauss_prec=2.0f, const unsigned int interpolation=0, const bool fast_approx=true,
-                           const unsigned int tile=0, const unsigned int tile_border=0) {
+                           const unsigned int tile=0, const unsigned int tile_border=0, const unsigned int threads=1) {
     static const CImg<unsigned char> empty_mask;
-    return greycstoration_mask_run(empty_mask,amplitude,sharpness,anisotropy,alpha,sigma,dl,da,gauss_prec,
-                                   interpolation,fast_approx,tile,tile_border);
-  }
-
-  //! Return the progression indice of the GREYCstoration algorithm which is running.
-  /**
-     If it returns 100, then the algorithm has been completed successfully.
-  **/
-  float greycstoration_progress() const {
-    if (!greycstoration_is_running()) return 0;
-    const float
-      counter = (float)*(greycstoration_params.counter),
-      da = greycstoration_params.da;
-    float maxcounter = 0;
-    if (greycstoration_params.tile==0)
-      maxcounter = width*height*(1 + 360/da);
-    else {
-      const unsigned int
-        t = greycstoration_params.tile,
-        b = greycstoration_params.tile_border,
-        n = (1+(width-1)/t)*(1+(height-1)/t)*(1+(depth-1)/t);
-      maxcounter = (width*height + n*4*b*(b + t))*(1 + 360/da);
-    }
-    return cimg::min(counter*99.9f/maxcounter,99.9f);
-  }
-
-  //! Return the state of the GREYCstoration algorithm (running or not).
-  bool greycstoration_is_running() const {
-    return (*(greycstoration_params.counter)!=~0UL);
+    return greycstoration_run(empty_mask,amplitude,sharpness,anisotropy,alpha,sigma,dl,da,gauss_prec,
+                              interpolation,fast_approx,tile,tile_border,threads);
   }
 
 #endif

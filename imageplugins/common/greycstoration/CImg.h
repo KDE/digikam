@@ -35,9 +35,8 @@
  #  knowledge of the CeCILL-C license and that you accept its terms.
  #
  */
-
 #ifndef cimg_version
-#define cimg_version 1.19
+#define cimg_version 1.20
 
 // Detect Microsoft VC++ compilers to get some workarounds.
 #if defined(_MSC_VER) && _MSC_VER<1300
@@ -189,6 +188,9 @@
 #define CImg_4x4x1 CImg_4x4
 #define CImg_5x5x1 CImg_5x5
 #define scroll translate
+#define cimg_convert_path cimg_imagemagick_path
+#define load_convert load_imagemagick
+#define save_convert save_imagemagick
 #endif
 
 // Architecture-dependent includes.
@@ -224,7 +226,8 @@
 //
 // Define 'cimg_use_png', 'cimg_use_jpeg' or 'cimg_use_tiff' to enable native PNG, JPEG or TIFF files support.
 // This requires you link your code with the zlib/png, jpeg or tiff libraries.
-// Without these libraries, PNG,JPEG and TIFF support will be done by the Image Magick's 'convert' tool, if installed
+// Without these libraries, PNG,JPEG and TIFF support will be done by the Image Magick's 'convert' tool,
+// or byt the GraphicsMagick 'gm' tool if installed
 // (this is the case on most unix plateforms).
 #ifdef cimg_use_png
 extern "C" {
@@ -249,7 +252,6 @@ extern "C" {
 #include "fftw3.h"
 }
 #endif
-
 
 /*
  #
@@ -656,6 +658,8 @@ namespace cimg_library {
     // The bodies of the functions below are defined afterwards
     inline void info();
 
+    inline unsigned int& exception_mode();
+
     inline int dialog(const char *title,const char *msg,const char *button1_txt="OK",
                       const char *button2_txt=0,const char *button3_txt=0,
                       const char *button4_txt=0,const char *button5_txt=0,
@@ -689,17 +693,17 @@ namespace cimg_library {
 
   // Never use the following macro in your own code !
 #define cimg_exception_err(etype,disp_flag) \
-  if (cimg_debug>=1) { \
+  if (cimg::exception_mode()>=1) { \
     std::va_list ap; \
     va_start(ap,format); \
     std::vsprintf(message,format,ap); \
     va_end(ap); \
-    if (cimg_debug>=2 && disp_flag) { \
+    if (cimg::exception_mode()>=2 && disp_flag) { \
       try { cimg::dialog(etype,message,"Abort"); } \
       catch (CImgException&) { std::fprintf(stderr,"\n# %s :\n%s\n\n",etype,message); } \
     } else std::fprintf(stderr,"\n# %s :\n%s\n\n",etype,message); \
   } \
-  if (cimg_debug>=3) cimg_library::cimg::info(); \
+  if (cimg::exception_mode()>=3) cimg_library::cimg::info(); \
 
   //! Class which is thrown when an error occured during a %CImg library function call.
   /**
@@ -950,6 +954,8 @@ namespace cimg_library {
     inline Win32info& Win32attr() { static Win32info val; return val; }
 #endif
 #endif
+
+    inline unsigned int& exception_mode() { static unsigned int mode=cimg_debug; return mode; }
 
 #ifdef cimg_color_terminal
     const char t_normal[9]  = {0x1b,'[','0',';','0',';','0','m','\0'};
@@ -2966,9 +2972,8 @@ namespace cimg_library {
     inline const char* get_type(const double&        ) { return cimg::double_st; }
 
     // Display a warning message if parameter 'cond' is true.
-#if cimg_debug>=1
     inline void warn(const bool cond, const char *format,...) {
-      if (cond) {
+      if (cimg::exception_mode()>=1 && cond) {
         std::va_list ap;
         va_start(ap,format);
         std::fprintf(stderr,"\n<CImg Warning> ");
@@ -2977,9 +2982,6 @@ namespace cimg_library {
         va_end(ap);
       }
     }
-#else
-    inline void warn(const bool cond, const char *format,...) {}
-#endif
 
     inline int xln(const int x) {
       return x>0?(int)(1+std::log10((double)x)):1;
@@ -3058,10 +3060,10 @@ namespace cimg_library {
        in a standard directory, this function should return the correct path of the \c convert tool
        used by the %CImg Library to load and save compressed image formats.
        Conversely, if the \c convert executable is not auto-detected by the function,
-       you can define the macro \c cimg_convert_path with the correct path
+       you can define the macro \c cimg_imagemagick_path with the correct path
        of the \c convert executable, before including <tt>CImg.h</tt> in your program :
        \code
-       #define cimg_convert_path "/users/thatsme/local/bin/convert"
+       #define cimg_imagemagick_path "/users/thatsme/local/bin/convert"
        #include "CImg.h"
 
        int main() {
@@ -3072,97 +3074,210 @@ namespace cimg_library {
 
        Note that non compressed image formats can be read without installing ImageMagick.
 
-       \sa temporary_path(), get_load_convert(), load_convert(), save_convert().
+       \sa temporary_path(), get_load_imagemagick(), load_imagemagick(), save_imagemagick().
     **/
-    inline const char* convert_path() {
-      static char *st_convert_path = 0;
-      if (!st_convert_path) {
-        st_convert_path = new char[1024];
+    inline const char* imagemagick_path() {
+      static char *st_imagemagick_path = 0;
+      if (!st_imagemagick_path) {
+        st_imagemagick_path = new char[1024];
         bool path_found = false;
         std::FILE *file = 0;
-#ifdef cimg_convert_path
-        std::strcpy(st_convert_path,cimg_convert_path);
-        if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+#ifdef cimg_imagemagick_path
+        std::strcpy(st_imagemagick_path,cimg_imagemagick_path);
+        if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
 #endif
 #if cimg_OS==2
         if (!path_found) {
-          std::sprintf(st_convert_path,".\\convert.exe");
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,".\\convert.exe");
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }
         { for (unsigned int k=0; k<=9 && !path_found; k++) {
-          std::sprintf(st_convert_path,"C:\\IMAGEM~1.%u-Q\\convert.exe",k);
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,"C:\\IMAGEM~1.%u-Q\\convert.exe",k);
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }}
         { for (unsigned int k=0; k<=9 && !path_found; k++) {
-          std::sprintf(st_convert_path,"C:\\IMAGEM~1.%u\\convert.exe",k);
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,"C:\\IMAGEM~1.%u\\convert.exe",k);
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }}
         { for (unsigned int k=0; k<=9 && !path_found; k++) {
-          std::sprintf(st_convert_path,"C:\\IMAGEM~1.%u-Q\\VISUA~1\\BIN\\convert.exe",k);
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,"C:\\IMAGEM~1.%u-Q\\VISUA~1\\BIN\\convert.exe",k);
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }}
         { for (unsigned int k=0; k<=9 && !path_found; k++) {
-          std::sprintf(st_convert_path,"C:\\IMAGEM~1.%u\\VISUA~1\\BIN\\convert.exe",k);
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,"C:\\IMAGEM~1.%u\\VISUA~1\\BIN\\convert.exe",k);
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }}
         { for (unsigned int k=0; k<=9 && !path_found; k++) {
-          std::sprintf(st_convert_path,"C:\\PROGRA~1\\IMAGEM~1.%u-Q\\convert.exe",k);
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,"C:\\PROGRA~1\\IMAGEM~1.%u-Q\\convert.exe",k);
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }}
         { for (unsigned int k=0; k<=9 && !path_found; k++) {
-          std::sprintf(st_convert_path,"C:\\PROGRA~1\\IMAGEM~1.%u\\convert.exe",k);
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,"C:\\PROGRA~1\\IMAGEM~1.%u\\convert.exe",k);
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }}
         { for (unsigned int k=0; k<=9 && !path_found; k++) {
-          std::sprintf(st_convert_path,"C:\\PROGRA~1\\IMAGEM~1.%u-Q\\VISUA~1\\BIN\\convert.exe",k);
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,"C:\\PROGRA~1\\IMAGEM~1.%u-Q\\VISUA~1\\BIN\\convert.exe",k);
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }}
         { for (unsigned int k=0; k<=9 && !path_found; k++) {
-          std::sprintf(st_convert_path,"C:\\PROGRA~1\\IMAGEM~1.%u\\VISUA~1\\BIN\\convert.exe",k);
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,"C:\\PROGRA~1\\IMAGEM~1.%u\\VISUA~1\\BIN\\convert.exe",k);
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }}
         { for (unsigned int k=0; k<=9 && !path_found; k++) {
-          std::sprintf(st_convert_path,"D:\\IMAGEM~1.%u-Q\\convert.exe",k);
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,"D:\\IMAGEM~1.%u-Q\\convert.exe",k);
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }}
         { for (unsigned int k=0; k<=9 && !path_found; k++) {
-          std::sprintf(st_convert_path,"D:\\IMAGEM~1.%u\\convert.exe",k);
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,"D:\\IMAGEM~1.%u\\convert.exe",k);
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }}
         { for (unsigned int k=0; k<=9 && !path_found; k++) {
-          std::sprintf(st_convert_path,"D:\\IMAGEM~1.%u-Q\\VISUA~1\\BIN\\convert.exe",k);
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,"D:\\IMAGEM~1.%u-Q\\VISUA~1\\BIN\\convert.exe",k);
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }}
         { for (unsigned int k=0; k<=9 && !path_found; k++) {
-          std::sprintf(st_convert_path,"D:\\IMAGEM~1.%u\\VISUA~1\\BIN\\convert.exe",k);
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,"D:\\IMAGEM~1.%u\\VISUA~1\\BIN\\convert.exe",k);
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }}
         { for (unsigned int k=0; k<=9 && !path_found; k++) {
-          std::sprintf(st_convert_path,"D:\\PROGRA~1\\IMAGEM~1.%u-Q\\convert.exe",k);
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,"D:\\PROGRA~1\\IMAGEM~1.%u-Q\\convert.exe",k);
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }}
         { for (unsigned int k=0; k<=9 && !path_found; k++) {
-          std::sprintf(st_convert_path,"D:\\PROGRA~1\\IMAGEM~1.%u\\convert.exe",k);
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,"D:\\PROGRA~1\\IMAGEM~1.%u\\convert.exe",k);
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }}
         { for (unsigned int k=0; k<=9 && !path_found; k++) {
-          std::sprintf(st_convert_path,"D:\\PROGRA~1\\IMAGEM~1.%u-Q\\VISUA~1\\BIN\\convert.exe",k);
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,"D:\\PROGRA~1\\IMAGEM~1.%u-Q\\VISUA~1\\BIN\\convert.exe",k);
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }}
         { for (unsigned int k=0; k<=9 && !path_found; k++) {
-          std::sprintf(st_convert_path,"D:\\PROGRA~1\\IMAGEM~1.%u\\VISUA~1\\BIN\\convert.exe",k);
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,"D:\\PROGRA~1\\IMAGEM~1.%u\\VISUA~1\\BIN\\convert.exe",k);
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }}
-        if (!path_found) std::strcpy(st_convert_path,"convert.exe");
+        if (!path_found) std::strcpy(st_imagemagick_path,"convert.exe");
 #else
         if (!path_found) {
-          std::sprintf(st_convert_path,"./convert");
-          if ((file=std::fopen(st_convert_path,"r"))!=0) { std::fclose(file); path_found = true; }
+          std::sprintf(st_imagemagick_path,"./convert");
+          if ((file=std::fopen(st_imagemagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
         }
-        if (!path_found) std::strcpy(st_convert_path,"convert");
+        if (!path_found) std::strcpy(st_imagemagick_path,"convert");
 #endif
       }
-      return st_convert_path;
+      return st_imagemagick_path;
+    }
+
+    //! Return path of the GraphicsMagick's \c gm tool.
+    /**
+       If you have installed the <a href="http://www.graphicsmagick.org">GraphicsMagick package</a>
+       in a standard directory, this function should return the correct path of the \c gm tool
+       used by the %CImg Library to load and save compressed image formats.
+       Conversely, if the \c gm executable is not auto-detected by the function,
+       you can define the macro \c cimg_graphicsmagick_path with the correct path
+       of the \c gm executable, before including <tt>CImg.h</tt> in your program :
+       \code
+       #define cimg_graphicsmagick_path "/users/thatsme/local/bin/gm"
+       #include "CImg.h"
+
+       int main() {
+         CImg<> img("my_image.jpg");     // Read a JPEG image file.
+         return 0;
+       }
+       \endcode
+
+       Note that non compressed image formats can be read without installing ImageMagick.
+
+       \sa temporary_path(), get_load_imagemagick(), load_imagemagick(), save_imagemagick().
+    **/
+    inline const char* graphicsmagick_path() {
+      static char *st_graphicsmagick_path = 0;
+      if (!st_graphicsmagick_path) {
+        st_graphicsmagick_path = new char[1024];
+        bool path_found = false;
+        std::FILE *file = 0;
+#ifdef cimg_graphicsmagick_path
+        std::strcpy(st_graphicsmagick_path,cimg_graphicsmagick_path);
+        if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+#endif
+#if cimg_OS==2
+        if (!path_found) {
+          std::sprintf(st_graphicsmagick_path,".\\gm.exe");
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }
+        { for (unsigned int k=0; k<=9 && !path_found; k++) {
+          std::sprintf(st_graphicsmagick_path,"C:\\GRAPHI~1.%u-Q\\gm.exe",k);
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }}
+        { for (unsigned int k=0; k<=9 && !path_found; k++) {
+          std::sprintf(st_graphicsmagick_path,"C:\\GRAPHI~1.%u\\gm.exe",k);
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }}
+        { for (unsigned int k=0; k<=9 && !path_found; k++) {
+          std::sprintf(st_graphicsmagick_path,"C:\\GRAPHI~1.%u-Q\\VISUA~1\\BIN\\gm.exe",k);
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }}
+        { for (unsigned int k=0; k<=9 && !path_found; k++) {
+          std::sprintf(st_graphicsmagick_path,"C:\\GRAPHI~1.%u\\VISUA~1\\BIN\\gm.exe",k);
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }}
+        { for (unsigned int k=0; k<=9 && !path_found; k++) {
+          std::sprintf(st_graphicsmagick_path,"C:\\PROGRA~1\\GRAPHI~1.%u-Q\\gm.exe",k);
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }}
+        { for (unsigned int k=0; k<=9 && !path_found; k++) {
+          std::sprintf(st_graphicsmagick_path,"C:\\PROGRA~1\\GRAPHI~1.%u\\gm.exe",k);
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }}
+        { for (unsigned int k=0; k<=9 && !path_found; k++) {
+          std::sprintf(st_graphicsmagick_path,"C:\\PROGRA~1\\GRAPHI~1.%u-Q\\VISUA~1\\BIN\\gm.exe",k);
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }}
+        { for (unsigned int k=0; k<=9 && !path_found; k++) {
+          std::sprintf(st_graphicsmagick_path,"C:\\PROGRA~1\\GRAPHI~1.%u\\VISUA~1\\BIN\\gm.exe",k);
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }}
+        { for (unsigned int k=0; k<=9 && !path_found; k++) {
+          std::sprintf(st_graphicsmagick_path,"D:\\GRAPHI~1.%u-Q\\gm.exe",k);
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }}
+        { for (unsigned int k=0; k<=9 && !path_found; k++) {
+          std::sprintf(st_graphicsmagick_path,"D:\\GRAPHI~1.%u\\gm.exe",k);
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }}
+        { for (unsigned int k=0; k<=9 && !path_found; k++) {
+          std::sprintf(st_graphicsmagick_path,"D:\\GRAPHI~1.%u-Q\\VISUA~1\\BIN\\gm.exe",k);
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }}
+        { for (unsigned int k=0; k<=9 && !path_found; k++) {
+          std::sprintf(st_graphicsmagick_path,"D:\\GRAPHI~1.%u\\VISUA~1\\BIN\\gm.exe",k);
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }}
+        { for (unsigned int k=0; k<=9 && !path_found; k++) {
+          std::sprintf(st_graphicsmagick_path,"D:\\PROGRA~1\\GRAPHI~1.%u-Q\\gm.exe",k);
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }}
+        { for (unsigned int k=0; k<=9 && !path_found; k++) {
+          std::sprintf(st_graphicsmagick_path,"D:\\PROGRA~1\\GRAPHI~1.%u\\gm.exe",k);
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }}
+        { for (unsigned int k=0; k<=9 && !path_found; k++) {
+          std::sprintf(st_graphicsmagick_path,"D:\\PROGRA~1\\GRAPHI~1.%u-Q\\VISUA~1\\BIN\\gm.exe",k);
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }}
+        { for (unsigned int k=0; k<=9 && !path_found; k++) {
+          std::sprintf(st_graphicsmagick_path,"D:\\PROGRA~1\\GRAPHI~1.%u\\VISUA~1\\BIN\\gm.exe",k);
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }}
+        if (!path_found) std::strcpy(st_graphicsmagick_path,"gm.exe");
+#else
+        if (!path_found) {
+          std::sprintf(st_graphicsmagick_path,"./gm");
+          if ((file=std::fopen(st_graphicsmagick_path,"r"))!=0) { std::fclose(file); path_found = true; }
+        }
+        if (!path_found) std::strcpy(st_graphicsmagick_path,"gm");
+#endif
+      }
+      return st_graphicsmagick_path;
     }
 
     //! Return path of the \c XMedcon tool.
@@ -3241,7 +3356,7 @@ namespace cimg_library {
        A temporary path is necessary to load and save compressed image formats, using \c convert
        or \c medcon.
 
-       \sa convert_path(), get_load_convert(), load_convert(), save_convert(), get_load_dicom(), load_dicom().
+       \sa imagemagick_path(), get_load_imagemagick(), load_imagemagick(), save_imagemagick(), get_load_dicom(), load_dicom().
     **/
     inline const char* temporary_path() {
 
@@ -3307,14 +3422,15 @@ namespace cimg_library {
     }
 
     inline std::FILE *fopen(const char *const path,const char *const mode) {
-      if(!path || !mode) throw CImgArgumentException("cimg::fopen() : Can't open file '%s' with mode '%s'",path,mode);
+      if(!path || !mode)
+        throw CImgArgumentException("cimg::fopen() : File '%s' cannot be opened with mode '%s'.",
+                                    path?path:"(null)",mode?mode:"(null)");
       if (path[0]=='-') return (mode[0]=='r')?stdin:stdout;
-      else {
-        std::FILE *dest = std::fopen(path,mode);
-        if(!dest) throw CImgIOException("cimg::fopen() : File '%s' cannot be opened %s",
-                                        path,mode[0]=='r'?"for reading":(mode[0]=='w'?"for writing":""),path);
-        return dest;
-      }
+      std::FILE *dest = std::fopen(path,mode);
+      if (!dest)
+        throw CImgIOException("cimg::fopen() : File '%s' cannot be opened%s",
+                              path,mode[0]=='r'?" for reading.":(mode[0]=='w'?" for writing.":"."),path);
+      return dest;
     }
 
     inline int fclose(std::FILE *file) {
@@ -3589,13 +3705,25 @@ namespace cimg_library {
 #endif
                    cimg::t_normal);
 
-      std::sprintf(tmp,"\"%.1020s\"",cimg::convert_path());
-      std::fprintf(stderr,"  > Path of 'convert' :      %s%-13s%s %s('cimg_convert_path'%s)%s\n",
+      std::sprintf(tmp,"\"%.1020s\"",cimg::imagemagick_path());
+      std::fprintf(stderr,"  > Path of ImageMagick :    %s%-13s%s %s('cimg_imagemagick_path'%s)%s\n",
                    cimg::t_bold,
                    tmp,
                    cimg::t_normal,
-#ifdef cimg_convert_path
-                   cimg::t_purple,"=\""cimg_convert_path"\"",
+#ifdef cimg_imagemagick_path
+                   cimg::t_purple,"=\""cimg_imagemagick_path"\"",
+#else
+                   cimg::t_purple," undefined",
+#endif
+                   cimg::t_normal);
+
+      std::sprintf(tmp,"\"%.1020s\"",cimg::graphicsmagick_path());
+      std::fprintf(stderr,"  > Path of GraphicsMagick : %s%-13s%s %s('cimg_graphicsmagick_path'%s)%s\n",
+                   cimg::t_bold,
+                   tmp,
+                   cimg::t_normal,
+#ifdef cimg_graphicsmagick_path
+                   cimg::t_purple,"=\""cimg_graphicsmagick_path"\"",
 #else
                    cimg::t_purple," undefined",
 #endif
@@ -6636,7 +6764,7 @@ namespace cimg_library {
 
     //! Return \c true if pixel (x,y,z,v) is inside the image boundaries.
     bool contains(const int x, const int y=0, const int z=0, const int v=0) const {
-      return data && x>=0 && y<(int)width && y>=0 && y<(int)height && z>=0 && z<(int)depth && v>=0 && v<(int)dim;
+      return data && x>=0 && x<(int)width && y>=0 && y<(int)height && z>=0 && z<(int)depth && v>=0 && v<(int)dim;
     }
 
     //! Return \c true if current image is empty.
@@ -7676,6 +7804,18 @@ namespace cimg_library {
     CImg<typename cimg::largest<T,float>::type> get_sqrt() const {
       typedef typename cimg::largest<T,float>::type restype;
       return CImg<restype>(*this,false).sqrt();
+    }
+
+    //! Replace each image pixel by its exponential.
+    CImg& exp() {
+      cimg_for(*this,ptr,T) (*ptr)=(T)std::exp((double)(*ptr));
+      return *this;
+    }
+
+    //! Return the image of the exponential of the pixel values.
+    CImg<typename cimg::largest<T,float>::type> get_exp() const {
+      typedef typename cimg::largest<T,float>::type restype;
+      return CImg<restype>(*this,false).exp();
     }
 
     //! Replace each image pixel by its log.
@@ -9245,7 +9385,7 @@ namespace cimg_library {
     }
 
     //! Replace the instance image by a set of lines of the instance image.
-    CImg& lines(const unsigned int y0, const unsigned int y1) const {
+    CImg& lines(const unsigned int y0, const unsigned int y1) {
       return get_lines(y0,y1).swap(*this);
     }
 
@@ -9407,7 +9547,7 @@ namespace cimg_library {
 
     //! Return a shared version of the instance image.
     CImg get_shared() {
-      return (+*this);
+      return CImg<T>(data,width,height,depth,dim,true);
     }
 
     //! Return a shared version of the instance image (const version).
@@ -12235,8 +12375,8 @@ namespace cimg_library {
        \see draw_axis().
     **/
     template<typename t>
-    CImg& draw_graph(const CImg<t>& data,const T *const color,const unsigned int gtype=0,
-                     const double ymin=0,const double ymax=0,const float opacity=1) {
+    CImg& draw_graph(const CImg<t>& data, const T *const color, const unsigned int gtype=0,
+                     const double ymin=0, const double ymax=0, const float opacity=1) {
       if (!is_empty()) {
         if (!color) throw CImgArgumentException("CImg<%s>::draw_graph() : Specified color is (null)",pixel_type());
         T *color1 = new T[dim], *color2 = new T[dim];
@@ -12284,12 +12424,13 @@ namespace cimg_library {
        \param y = Y-coordinate of the horizontal axis in the instance image.
        \param color = an array of dimv() values of type \c T, defining the drawing color.
        \param precision = precision of the labels.
+       \param grid_pattern = pattern of the grid
        \param opacity = opacity of the drawing.
        \note if \c precision==0, precision of the labels is automatically computed.
        \see draw_graph().
     **/
     template<typename t> CImg& draw_axis(const CImg<t>& xvalues, const int y, const T *const color,
-                                        const int precision=-1, const float opacity=1.0f) {
+                                         const int precision=-1, const float opacity=1.0f) {
       if (!is_empty()) {
         int siz = (int)xvalues.size()-1;
         if (siz<=0) draw_line(0,y,width-1,y,color,~0L,opacity);
@@ -12310,8 +12451,9 @@ namespace cimg_library {
       return *this;
     }
 
+    //! Draw a labelled vertical axis on the instance image.
     template<typename t> CImg& draw_axis(const int x, const CImg<t>& yvalues, const T *const color,
-                                        const int precision=-1, const float opacity=1.0f) {
+                                         const int precision=-1, const float opacity=1.0f) {
       if (!is_empty()) {
         int siz = (int)yvalues.size()-1;
         if (siz<=0) draw_line(x,0,x,height-1,color,~0L,opacity);
@@ -12336,8 +12478,10 @@ namespace cimg_library {
       return *this;
     }
 
+    //! Draw a labelled horizontal+vertical axis on the instance image.
     template<typename tx, typename ty> CImg& draw_axis(const CImg<tx>& xvalues, const CImg<ty>& yvalues, const T *const color,
-                                                      const int precisionx=-1, const int precisiony=-1, const float opacity=1.0f) {
+                                                       const int precisionx=-1, const int precisiony=-1,
+                                                       const float opacity=1.0f) {
       if (!is_empty()) {
         const CImg<tx> nxvalues(xvalues.data,xvalues.size(),1,1,1,true);
         const int sizx = (int)xvalues.size()-1, wm1 = (int)(width)-1;
@@ -12363,16 +12507,63 @@ namespace cimg_library {
       return *this;
     }
 
+    //! Draw a labelled horizontal+vertical axis on the instance image.
     template<typename tx, typename ty> CImg& draw_axis(const tx& x0, const tx& x1, const ty& y0, const ty& y1,
                                                        const T *const color,
                                                        const int subdivisionx=-60, const int subdivisiony=-60,
                                                        const int precisionx=-1, const int precisiony=-1,
                                                        const float opacity=1.0f) {
-      return draw_axis(CImg<tx>::sequence(subdivisionx>0?subdivisionx:-(int)width/subdivisionx,x0,x1),
-                      CImg<ty>::sequence(subdivisiony>0?subdivisiony:-(int)height/subdivisiony,y0,y1),
-                      color,precisionx,precisiony,opacity);
+      return draw_axis(CImg<tx>::sequence(subdivisionx>0?subdivisionx:1-(int)width/subdivisionx,x0,x1),
+                       CImg<ty>::sequence(subdivisiony>0?subdivisiony:1-(int)height/subdivisiony,y0,y1),
+                       color,precisionx,precisiony,opacity);
     }
 
+    //! Draw grid on the instance image
+    template<typename tx, typename ty>
+      CImg& draw_grid(const CImg<tx>& xvalues, const CImg<ty>& yvalues, const T *const color,
+                      const unsigned int patternx=~0U, const unsigned int patterny=~0U,
+                      const float opacity=1.0f) {
+      if (!is_empty()) {
+        if (!xvalues.is_empty()) cimg_foroff(xvalues,x) {
+          const int xi = (int)xvalues[x];
+          if (xi>=0 && xi<(int)width) draw_line(xi,0,xi,height-1,color,patternx,opacity);
+        }
+        if (!yvalues.is_empty()) cimg_foroff(yvalues,y) {
+          const int yi = (int)yvalues[y];
+          if (yi>=0 && yi<(int)height) draw_line(0,yi,width-1,yi,color,patterny,opacity);
+        }
+      }
+      return *this;
+    }
+
+    //! Draw grid on the instance image
+    CImg& draw_grid(const float deltax,  const float deltay,
+                    const float offsetx, const float offsety,
+                    const T *const color,
+                    const unsigned int patternx=~0U, const unsigned int patterny=~0U,
+                    const bool invertx=false, const bool inverty=false,
+                    const float opacity=1.0f) {
+
+      CImg<unsigned int> seqx, seqy;
+
+      if (deltax!=0) {
+        const float dx = deltax>0?deltax:width*-deltax/100;
+        const unsigned int nx = (unsigned int)(width/dx);
+        seqx = CImg<unsigned int>::sequence(1+nx,0,(unsigned int)(dx*nx));
+        if (offsetx) cimg_foroff(seqx,x) seqx(x) = (unsigned int)cimg::mod(seqx(x)+offsetx,(float)width);
+        if (invertx) cimg_foroff(seqx,x) seqx(x) = width-1-seqx(x);
+      }
+
+      if (deltay!=0) {
+        const float dy = deltay>0?deltay:height*-deltay/100;
+        const unsigned int ny = (unsigned int)(height/dy);
+        seqy = CImg<unsigned int>::sequence(1+ny,0,(unsigned int)(dy*ny));
+        if (offsety) cimg_foroff(seqy,y) seqy(y) = (unsigned int)cimg::mod(seqy(y)+offsety,(float)height);
+        if (inverty) cimg_foroff(seqy,y) seqy(y) = height-1-seqy(y);
+     }
+
+      return draw_grid(seqx,seqy,color,patternx,patterny,opacity);
+    }
 
     // INNER CLASS used by function CImg<>::draw_fill()
     template<typename T1,typename T2> struct _draw_fill {
@@ -14097,7 +14288,7 @@ namespace cimg_library {
                 if (S>0) cimg_forV(dest,k) dest(x,y,z,k)+=tmp[k]/S;
                 else cimg_forV(dest,k) dest(x,y,z,k)+=(ftype)((*this)(x,y,z,k));
 #ifdef cimg_plugin_greycstoration
-                if (greycstoration_is_running()) (*(greycstoration_params.counter))++;
+                if (!*(greycstoration_params->stop_request)) (*greycstoration_params->counter)++;
                 else return *this;
 #endif
               }
@@ -14209,7 +14400,7 @@ namespace cimg_library {
                 if (S>0) cimg_forV(dest,k) dest(x,y,0,k)+=tmp[k]/S;
                 else cimg_forV(dest,k) dest(x,y,0,k)+=(ftype)((*this)(x,y,0,k));
 #ifdef cimg_plugin_greycstoration
-                if (greycstoration_is_running()) (*(greycstoration_params.counter))++;
+                if (!*(greycstoration_params->stop_request)) (*greycstoration_params->counter)++;
                 else return *this;
 #endif
               }
@@ -14272,7 +14463,7 @@ namespace cimg_library {
               G(x,y,z,5) = n1*(uz*uz + vz*vz) + n2*wz*wz;
             } else G(x,y,z,0) = G(x,y,z,1) = G(x,y,z,2) = G(x,y,z,3) = G(x,y,z,4) = G(x,y,z,5) = 0;
 #ifdef cimg_plugin_greycstoration
-            if (greycstoration_is_running()) (*(greycstoration_params.counter))++;
+            if (!*(greycstoration_params->stop_request)) (*greycstoration_params->counter)++;
             else return *this;
 #endif
           }
@@ -14293,7 +14484,7 @@ namespace cimg_library {
               G(x,y,0,2) = n1*uy*uy + n2*vy*vy;
             } else G(x,y,0,0) = G(x,y,0,1) = G(x,y,0,2) = 0;
 #ifdef cimg_plugin_greycstoration
-            if (greycstoration_is_running()) (*(greycstoration_params.counter))++;
+            if (!*(greycstoration_params->stop_request)) (*greycstoration_params->counter)++;
             else return *this;
 #endif
           }
@@ -14808,10 +14999,12 @@ namespace cimg_library {
 
     //! Return a N-numbered sequence vector from \p a0 to \p a1
     CImg& sequence(const T& a0, const T& a1) {
-      const unsigned int siz = size()-1;
-      const float delta = (float)((float)a1-a0);
-      T* ptr = data;
-      cimg_foroff(*this,l) *(ptr++) = (T)(a0 + delta*l/siz);
+      if (!is_empty()) {
+        const unsigned int siz = size()-1;
+        const float delta = (float)((float)a1-a0);
+        T* ptr = data;
+        cimg_foroff(*this,l) *(ptr++) = (T)(a0 + delta*l/siz);
+      }
       return *this;
     }
 
@@ -14819,8 +15012,9 @@ namespace cimg_library {
       return (+*this).sequence(a0,a1);
     }
 
-    static CImg sequence(const unsigned N, const T& a0, const T& a1) {
-      return CImg<T>(1,N).sequence(a0,a1);
+    static CImg sequence(const unsigned int N, const T& a0, const T& a1) {
+      if (N) return CImg<T>(1,N).sequence(a0,a1);
+      return CImg<T>();
     }
 
     //! Return a 3x3 rotation matrix along the (x,y,z)-axis with an angle w.
@@ -16178,30 +16372,27 @@ namespace cimg_library {
     **/
     static CImg get_load(const char *const filename) {
       const char *ext = cimg::filename_split(filename);
-      if (!cimg::strncasecmp(ext,"asc",3)) return get_load_ascii(filename);
-      if (!cimg::strncasecmp(ext,"dlm",3)) return get_load_dlm(filename);
-      if (!cimg::strncasecmp(ext,"inr",3)) return get_load_inr(filename);
-      if (!cimg::strncasecmp(ext,"hdr",3)) return get_load_analyze(filename);
+      if (!cimg::strncasecmp(ext,"asc",3))   return get_load_ascii(filename);
+      if (!cimg::strncasecmp(ext,"dlm",3) ||
+          !cimg::strncasecmp(ext,"txt",3))   return get_load_dlm(filename);
+      if (!cimg::strncasecmp(ext,"inr",3))   return get_load_inr(filename);
+      if (!cimg::strncasecmp(ext,"hdr",3))   return get_load_analyze(filename);
       if (!cimg::strncasecmp(ext,"par",3) ||
-          !cimg::strncasecmp(ext,"rec",3)) return get_load_parrec(filename);
-      if (!cimg::strncasecmp(ext,"pan",3)) return get_load_pandore(filename);
-      if (!cimg::strncasecmp(ext,"bmp",3)) return get_load_bmp(filename);
-      if (!cimg::strncasecmp(ext,"png",3)) return get_load_png(filename);
-      if (!cimg::strncasecmp(ext,"tif",3) ||
-          !cimg::strncasecmp(ext,"tiff",4)) return get_load_tiff(filename);
+          !cimg::strncasecmp(ext,"rec",3))   return get_load_parrec(filename);
+      if (!cimg::strncasecmp(ext,"pan",3))   return get_load_pandore(filename);
+      if (!cimg::strncasecmp(ext,"bmp",3))   return get_load_bmp(filename);
+      if (!cimg::strncasecmp(ext,"png",3))   return get_load_png(filename);
+      if (!cimg::strncasecmp(ext,"tif",3))   return get_load_tiff(filename);
       if (!cimg::strncasecmp(ext,"jpg",3) ||
-          !cimg::strncasecmp(ext,"jpeg",4)) return get_load_jpeg(filename);
+          !cimg::strncasecmp(ext,"jpeg",4))  return get_load_jpeg(filename);
       if (!cimg::strncasecmp(ext,"ppm",3) ||
           !cimg::strncasecmp(ext,"pgm",3) ||
-          !cimg::strncasecmp(ext,"pnm",3)) return get_load_pnm(filename);
-      if (!cimg::strncasecmp(ext,"cimg",4) || ext[0]=='\0') return get_load_cimg(filename);
+          !cimg::strncasecmp(ext,"pnm",3))   return get_load_pnm(filename);
+      if (!cimg::strncasecmp(ext,"cimg",4) ||
+          ext[0]=='\0')                      return get_load_cimg(filename);
       if (!cimg::strncasecmp(ext,"dcm",3) ||
           !cimg::strncasecmp(ext,"dicom",5)) return get_load_dicom(filename);
-#ifdef cimg_use_magick
-      return get_load_magick(filename);
-#else
-      return get_load_convert(filename);
-#endif
+      return get_load_other(filename);
     }
 
     //! Load an image from a file
@@ -16215,12 +16406,15 @@ namespace cimg_library {
       std::FILE *const nfile = file?file:cimg::fopen(filename,"rb");
       char line[256] = {0};
       std::fscanf(nfile,"%255[^\n]",line);
-      unsigned int off;
-      int err=1, dx=0, dy=1, dz=1, dv=1;
-      std::sscanf(line,"%d %d %d %d",&dx,&dy,&dz,&dv);
-      if (!dx || !dy || !dz || !dv)
-        throw CImgIOException("CImg<%s>::get_load_ascii() : File '%s' does not appear to be a valid ASC file.\n"
-                              "Specified image dimensions are (%d,%d,%d,%d)",pixel_type(),filename?filename:"(unknown)",dx,dy,dz,dv);
+      unsigned int off, dx = 0, dy = 1, dz = 1, dv = 1;
+      int err = 1;
+      std::sscanf(line,"%u %u %u %u",&dx,&dy,&dz,&dv);
+      if (!dx || !dy || !dz || !dv) {
+        if (!file) cimg::fclose(nfile);
+        throw CImgIOException("CImg<%s>::get_load_ascii() : File '%s' is not a valid .ASC file.\n"
+                              "Specified image dimensions are (%u,%u,%u,%u).",
+                              pixel_type(),filename?filename:"(FILE*)",dx,dy,dz,dv);
+      }
       CImg dest(dx,dy,dz,dv);
       double val;
       T *ptr = dest.data;
@@ -16228,8 +16422,8 @@ namespace cimg_library {
         err = std::fscanf(nfile,"%lf%*[^0-9.eE+-]",&val);
         *(ptr++)=(T)val;
       }
-      cimg::warn(off<dest.size(),"CImg<%s>::get_load_ascii() : File '%s', only %u values read, instead of %u",
-                 pixel_type(),filename?filename:"(unknown)",off,dest.size());
+      cimg::warn(off<dest.size(),"CImg<%s>::get_load_ascii() : File '%s', only %u/%u values read.",
+                 pixel_type(),filename?filename:"(FILE*)",off,dest.size());
       if (!file) cimg::fclose(nfile);
       return dest;
     }
@@ -16240,13 +16434,11 @@ namespace cimg_library {
     }
 
     //! Load an image from an ASCII file (in-place version).
-    /** This is the in-place version of get_load_ascii(). **/
     CImg& load_ascii(std::FILE *const file, const char *const filename=0) {
       return get_load_ascii(file,filename).swap(*this);
     }
 
     //! Load an image from an ASCII file (in-place version).
-    /** This is the in-place version of get_load_ascii(). **/
     CImg& load_ascii(const char *const filename) {
       return get_load_ascii(filename).swap(*this);
     }
@@ -16254,11 +16446,11 @@ namespace cimg_library {
     //! Load an image from a DLM file
     static CImg get_load_dlm(std::FILE *const file, const char *const filename=0) {
       std::FILE *const nfile = file?file:cimg::fopen(filename,"r");
-      CImg<T> dest(256,256);
-      unsigned int cdx=0,dx=0,dy=0;
-      double val;
+      CImg dest(256,256);
       char c, delimiter[256]={0}, tmp[256];
+      unsigned int cdx=0,dx=0,dy=0;
       int oerr=0, err;
+      double val;
       while ((err = std::fscanf(nfile,"%lf%255[^0-9.eE+-]",&val,delimiter))!=EOF) {
         oerr = err;
         if (err>0) dest(cdx++,dy) = (T)val;
@@ -16271,8 +16463,12 @@ namespace cimg_library {
         }
       }
       if (cdx && oerr==1) { dx=cdx; dy++; }
-      if (!dx || !dy) throw CImgIOException("CImg<%s>::get_load_dlm() : File '%s' does not appear to be a "
-                                            "valid DLM file (width = %d, height = %d)\n",pixel_type(),filename?filename:"(unknown)",dx,dy);
+      if (!dx || !dy) {
+        if (!file) cimg::fclose(nfile);
+        throw CImgIOException("CImg<%s>::get_load_dlm() : File '%s' is not a valid DLM file.\n"
+                              "Specified image dimensions are (%u,%u).",
+                              pixel_type(),filename?filename:"(FILE*)",dx,dy);
+      }
       dest.resize(dx,dy,1,1,0);
       if (!file) cimg::fclose(nfile);
       return dest;
@@ -16284,13 +16480,11 @@ namespace cimg_library {
     }
 
     //! Load an image from a DLM file (in-place version).
-    /** This is the in-place version of get_load_dlm(). **/
     CImg& load_dlm(std::FILE *const file, const char *const filename=0) {
       return get_load_dlm(file,filename).swap(*this);
     }
 
     //! Load an image from a DLM file (in-place version).
-    /** This is the in-place version of get_load_dlm(). **/
     CImg& load_dlm(const char *const filename) {
       return get_load_dlm(filename).swap(*this);
     }
@@ -16298,20 +16492,26 @@ namespace cimg_library {
     //! Load an image from a PNM file
     static CImg get_load_pnm(std::FILE *const file, const char *const filename=0) {
       std::FILE *const nfile=file?file:cimg::fopen(filename,"rb");
-      char item[1024]={0};
       unsigned int ppm_type,width,height,colormax=255;
+      char item[1024]={0};
       int err;
-
       while ((err=std::fscanf(nfile,"%1023[^\n]",item))!=EOF && (item[0]=='#' || !err)) std::fgetc(nfile);
-      if(std::sscanf(item," P%u",&ppm_type)!=1)
-        throw CImgIOException("CImg<%s>::get_load_pnm() : file '%s',PPM header 'P?' not found",pixel_type(),filename?filename:"(unknown)");
+      if(std::sscanf(item," P%u",&ppm_type)!=1) {
+        if (!file) cimg::fclose(nfile);
+        throw CImgIOException("CImg<%s>::get_load_pnm() : File '%s', PNM header 'P?' not found.",
+                              pixel_type(),filename?filename:"(FILE*)");
+      }
       while ((err=std::fscanf(nfile," %1023[^\n]",item))!=EOF && (item[0]=='#' || !err)) std::fgetc(nfile);
-      if ((err=std::sscanf(item," %u %u %u",&width,&height,&colormax))<2)
-        throw CImgIOException("CImg<%s>::get_load_pnm() : file '%s',WIDTH and HEIGHT not defined",pixel_type(),filename?filename:"(unknown)");
+      if ((err=std::sscanf(item," %u %u %u",&width,&height,&colormax))<2) {
+        if (!file) cimg::fclose(nfile);
+        throw CImgIOException("CImg<%s>::get_load_pnm() : File '%s', WIDTH and HEIGHT fields are not defined in PNM header.",
+                              pixel_type(),filename?filename:"(FILE*)");
+      }
       if (err==2) {
         while ((err=std::fscanf(nfile," %1023[^\n]",item))!=EOF && (item[0]=='#' || !err)) std::fgetc(nfile);
         cimg::warn(std::sscanf(item,"%u",&colormax)!=1,
-                   "CImg<%s>::get_load_pnm() : file '%s',COLORMAX not defined",pixel_type(),filename?filename:"(unknown)");
+                   "CImg<%s>::get_load_pnm() : File '%s', COLORMAX field is not defined in PNM header.",
+                   pixel_type(),filename?filename:"(FILE*)");
       }
       std::fgetc(nfile);
 
@@ -16373,8 +16573,8 @@ namespace cimg_library {
       } break;
       default:
         if (!file) cimg::fclose(nfile);
-        throw CImgIOException("CImg<%s>::get_load_pnm() : file '%s', PPM type 'P%d' not supported",
-                              pixel_type(),filename?filename:"(unknown)",ppm_type);
+        throw CImgIOException("CImg<%s>::get_load_pnm() : File '%s', PPM type 'P%d' not supported.",
+                              pixel_type(),filename?filename:"(FILE*)",ppm_type);
       }
       if (!file) cimg::fclose(nfile);
       return dest;
@@ -16432,9 +16632,11 @@ namespace cimg_library {
       std::FILE *const nfile = file?file:cimg::fopen(filename,"rb");
       unsigned char header[64];
       cimg::fread(header,54,nfile);
-      if (header[0]!='B' || header[1]!='M')
-        throw CImgIOException("CImg<%s>::get_load_bmp() : File '%s' does not appear to be a valid BMP file",
-                              pixel_type(),filename?filename:"(unknown)");
+      if (header[0]!='B' || header[1]!='M') {
+        if (!file) cimg::fclose(nfile);
+        throw CImgIOException("CImg<%s>::get_load_bmp() : File '%s' is not a valid BMP file.",
+                              pixel_type(),filename?filename:"(FILE*)");
+      }
 
       // Read header and pixel buffer
       int
@@ -16461,8 +16663,10 @@ namespace cimg_library {
 
       // Decompress buffer (if necessary)
       if (compression) {
-        if (!file) return get_load_convert(filename);
-        else throw CImgIOException("CImg<%s>::get_load_bmp() : Cannot read a compressed BMP image using a *FILE input",pixel_type());
+        delete[] buffer;
+        if (file) {
+          throw CImgIOException("CImg<%s>::get_load_bmp() : Not able to read a compressed BMP file using a *FILE input",pixel_type());
+        } else return get_load_other(filename);
       }
 
       // Read pixel data
@@ -16526,7 +16730,6 @@ namespace cimg_library {
         } ptrs+=align; }
       } break;
       }
-
       if (palette) delete[] palette;
       delete[] buffer;
       if (dy<0) res.mirror('y');
@@ -16552,21 +16755,18 @@ namespace cimg_library {
     // Note : Most of this function has been written by Eric Fausett
     static CImg get_load_png(std::FILE *const file, const char *const filename=0) {
 #ifndef cimg_use_png
-#ifndef cimg_use_magick
-      if (!file) return get_load_convert(filename);
-      else throw CImgIOException("CImg<%s>::get_load_png() : Cannot natively read a PNG image using a *FILE input. Use libpng instead.",pixel_type());
-#else
-      return get_load_magick(file,filename);
-#endif
+      if (file)
+        throw CImgIOException("CImg<%s>::get_load_png() : File '(FILE*)' cannot be read without using libpng.",pixel_type());
+      else return get_load_other(filename);
 #else
       // Open file and check for PNG validity
       std::FILE *const nfile = file?file:cimg::fopen(filename,"rb");
       unsigned char pngCheck[8];
       cimg::fread(pngCheck,8,nfile);
-      if(png_sig_cmp(pngCheck,0,8)){
+      if (png_sig_cmp(pngCheck,0,8)) {
         if (!file) cimg::fclose(nfile);
-        throw CImgIOException("CImg<%s>::get_load_png() : File '%s' does not appear to be a valid PNG file",
-                              pixel_type(),filename?filename:"(unknown)");
+        throw CImgIOException("CImg<%s>::get_load_png() : File '%s' is not a valid PNG file.",
+                              pixel_type(),filename?filename:"(FILE*)");
       }
 
       // Setup PNG structures for read
@@ -16576,30 +16776,30 @@ namespace cimg_library {
                                                    user_error_ptr, user_error_fn, user_warning_fn);
       if(!png_ptr){
         if (!file) cimg::fclose(nfile);
-        throw CImgIOException("CImg<%s>::get_load_png() : File '%s', trouble initializing 'png_ptr' data structure",
-                              pixel_type(),filename?filename:"(unknown)");
+        throw CImgIOException("CImg<%s>::get_load_png() : File '%s', trouble initializing 'png_ptr' data structure.",
+                              pixel_type(),filename?filename:"(FILE*)");
       }
       png_infop info_ptr = png_create_info_struct(png_ptr);
       if(!info_ptr){
         if (!file) cimg::fclose(nfile);
         png_destroy_read_struct(&png_ptr, (png_infopp)0, (png_infopp)0);
-        throw CImgIOException("CImg<%s>::get_load_png() : File '%s', trouble initializing 'info_ptr' data structure",
-                              pixel_type(),filename?filename:"(unknown)");
+        throw CImgIOException("CImg<%s>::get_load_png() : File '%s', trouble initializing 'info_ptr' data structure.",
+                              pixel_type(),filename?filename:"(FILE*)");
       }
       png_infop end_info = png_create_info_struct(png_ptr);
       if(!end_info){
         if (!file) cimg::fclose(nfile);
         png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)0);
-        throw CImgIOException("CImg<%s>::get_load_png() : File '%s', trouble initializing 'end_info' data structure",
-                              pixel_type(),filename?filename:"(unknown)");
+        throw CImgIOException("CImg<%s>::get_load_png() : File '%s', trouble initializing 'end_info' data structure.",
+                              pixel_type(),filename?filename:"(FILE*)");
       }
 
       // Error handling callback for png file reading
       if (setjmp(png_jmpbuf(png_ptr))){
-        png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         if (!file) cimg::fclose(nfile);
-        throw CImgIOException("CImg<%s>::get_load_png() : File '%s', unknown fatal error",
-                              pixel_type(),filename?filename:"(unknown)");
+        png_destroy_read_struct(&png_ptr, &end_info, (png_infopp)0);
+        throw CImgIOException("CImg<%s>::get_load_png() : File '%s', unknown fatal error.",
+                              pixel_type(),filename?filename:"(FILE*)");
       }
       png_init_io(png_ptr, nfile);
       png_set_sig_bytes(png_ptr, 8);
@@ -16631,8 +16831,12 @@ namespace cimg_library {
       }
       if (new_color_type == PNG_COLOR_TYPE_RGB) png_set_filler(png_ptr, 0xffffU, PNG_FILLER_AFTER);
       png_read_update_info(png_ptr, info_ptr);
-      if (!(new_bit_depth==8 || new_bit_depth==16))
-        throw CImgIOException("CImg<%s>::get_load_png() : Wrong bit coding 'bit_depth=%u'",pixel_type(),new_bit_depth);
+      if (!(new_bit_depth==8 || new_bit_depth==16)) {
+        if (!file) cimg::fclose(nfile);
+        png_destroy_read_struct(&png_ptr, &end_info, (png_infopp)0);
+        throw CImgIOException("CImg<%s>::get_load_png() : File '%s', wrong bit coding (bit_depth=%u)",
+                              pixel_type(),filename?filename:"(FILE*)",new_bit_depth);
+      }
       const int byte_depth = new_bit_depth>>3;
 
       // Allocate Memory for Image Read
@@ -16642,8 +16846,12 @@ namespace cimg_library {
       png_read_end(png_ptr, end_info);
 
       // Read pixel data
-      if (!(new_color_type==PNG_COLOR_TYPE_RGB || new_color_type==PNG_COLOR_TYPE_RGB_ALPHA))
-        throw CImgIOException("CImg<%s>::get_load_png() : Wrong color coding new_color_type=%u",pixel_type(),new_color_type);
+      if (!(new_color_type==PNG_COLOR_TYPE_RGB || new_color_type==PNG_COLOR_TYPE_RGB_ALPHA)) {
+        if (!file) cimg::fclose(nfile);
+        png_destroy_read_struct(&png_ptr, &end_info, (png_infopp)0);
+        throw CImgIOException("CImg<%s>::get_load_png() : File '%s', wrong color coding (new_color_type=%u)",
+                              pixel_type(),filename?filename:"(FILE*)",new_color_type);
+      }
       const bool no_alpha_channel = (new_color_type==PNG_COLOR_TYPE_RGB);
       CImg res(width,height,1,no_alpha_channel?3:4);
       const unsigned long off = width*height;
@@ -16701,11 +16909,7 @@ namespace cimg_library {
     // Original contribution by Jerome Boulanger.
     static CImg get_load_tiff(const char *const filename=0) {
 #ifndef cimg_use_tiff
-#ifndef cimg_use_magick
-      return get_load_convert(filename);
-#else
-      return get_load_magick(filename);
-#endif
+      return get_load_other(filename);
 #else
       CImg dest;
       TIFF *tif = TIFFOpen(filename,"r");
@@ -16718,7 +16922,8 @@ namespace cimg_library {
         TIFFGetField(tif,TIFFTAG_IMAGELENGTH,&ny);
         TIFFGetField(tif,TIFFTAG_SAMPLESPERPIXEL,&samplesperpixel);
         if (samplesperpixel!=1 && samplesperpixel!=3 && samplesperpixel!=4) {
-          cimg::warn(true,"CImg<T>::get_load_tiff() : unknow value for tag : TIFFTAG_SAMPLESPERPIXEL, will force it to 1");
+          cimg::warn(true,"CImg<%s>::get_load_tiff() : File '%s', unknow value for tag : TIFFTAG_SAMPLESPERPIXEL, will force it to 1.",
+                     pixel_type(),filename?filename:"(FILE*)");
           samplesperpixel=1;
         }
         TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bitspersample);
@@ -16727,7 +16932,12 @@ namespace cimg_library {
         dest.assign(nx,ny,number_of_directories,samplesperpixel);
         uint32* raster = (uint32*)_TIFFmalloc(nx * ny * sizeof (uint32));
         std::memset(raster,nx*ny*sizeof(uint32),0);
-        if (!raster) throw CImgException("CImg<%s>::get_load_tiff() : Not enough memory for buffer allocation.",pixel_type());
+        if (!raster) {
+          _TIFFfree(raster);
+          TIFFClose(tif);
+          throw CImgException("CImg<%s>::get_load_tiff() : File '%s', not enough memory for buffer allocation.",
+                              pixel_type(),filename?filename:"(FILE*)");
+        }
         unsigned  int dir=0;
         do {
           if (samplesperpixel==1) {
@@ -16750,8 +16960,13 @@ namespace cimg_library {
                     for (col = 0; col<w; col+=tw) {
                       if (TIFFReadTile(tif,buf,col,row,0,0)<0) {
                         if (stoponerr) break;
-                      } else if (showdata) CImgException("CImg<%s>::get_load_tiff() : Cannot read tiled TIFF images.",
-                                                         pixel_type());
+                      } else
+                        if (showdata) {
+                          _TIFFfree(raster);
+                          TIFFClose(tif);
+                          throw CImgException("CImg<%s>::get_load_tiff() : File '%s', cannot read tiled TIFF images.",
+                                              pixel_type(),filename?filename:"(FILE*)");
+                        }
                     }
                   }
                   _TIFFfree(buf);
@@ -16773,8 +16988,12 @@ namespace cimg_library {
                       for (s = 0; s<samplesperpixel; s++) {
                         if (TIFFReadTile(tif,buf,col,row,0,s)<0) {
                           if (stoponerr) break;
-                        } else if (showdata) CImgException("CImg<%s>::get_load_tiff() : Cannot read tiled TIFF images.",
-                                                           pixel_type());
+                        } else if (showdata) {
+                          _TIFFfree(raster);
+                          TIFFClose(tif);
+                          throw CImgException("CImg<%s>::get_load_tiff() : File '%s', cannot read tiled TIFF images.",
+                                              pixel_type(),filename?filename:"(FILE*)");
+                        }
                       }
                     }
                   }
@@ -16881,15 +17100,16 @@ namespace cimg_library {
               }
             }
           }
-          else{
+          else {
             TIFFReadRGBAImage(tif,nx,ny,raster,0);
             if (samplesperpixel==1)
-              cimg_forXY(dest,x,y) dest(x,y,dir)=(T)(float)((raster[nx*(ny-y)+x] + 128) / 257);
+              cimg_forXY(dest,x,y) dest(x,y,dir)=(T)(float)((raster[nx*(ny-1-y)+x]
++ 128) / 257);
             else {
               cimg_forXY(dest,x,y) {
-                dest(x,y,dir,0)=(T)(float)TIFFGetR(raster[nx*(ny-y)+x]);
-                dest(x,y,dir,1)=(T)(float)TIFFGetG(raster[nx*(ny-y)+x]);
-                dest(x,y,dir,2)=(T)(float)TIFFGetB(raster[nx*(ny-y)+x]);
+                dest(x,y,dir,0)=(T)(float)TIFFGetR(raster[nx*(ny-1-y)+x]);
+                dest(x,y,dir,1)=(T)(float)TIFFGetG(raster[nx*(ny-1-y)+x]);
+                dest(x,y,dir,2)=(T)(float)TIFFGetB(raster[nx*(ny-1-y)+x]);
               }
             }
           }
@@ -16897,7 +17117,9 @@ namespace cimg_library {
         } while (TIFFReadDirectory(tif));
         _TIFFfree(raster);
         TIFFClose(tif);
-      } else throw CImgException("CImg<%s>::get_load_tiff() : Error while loading the image.",pixel_type());
+      } else
+        throw CImgException("CImg<%s>::get_load_tiff() : File '%s', error while loading the image.",
+                            pixel_type(),filename?filename:"(FILE*)");
       return dest;
 #endif
     }
@@ -16910,17 +17132,15 @@ namespace cimg_library {
     //! Load a file in JPEG format.
     static CImg get_load_jpeg(std::FILE *const file, const char *const filename=0) {
 #ifndef cimg_use_jpeg
-#ifndef cimg_use_magick
-      if (!file) return get_load_convert(filename);
-      else
-        throw CImgIOException("CImg<%s>::get_load_jpeg() : Cannot natively read a JPEG image using a *FILE input. Use libjpeg instead.",pixel_type());
-#else
-      return get_load_magick(file,filename);
-#endif
+      if (file)
+        throw CImgIOException("CImg<%s>::get_load_jpeg() : File '(FILE*)' cannot be read without using libjpeg.",
+                              pixel_type());
+      else return get_load_other(filename);
 #else
       struct jpeg_decompress_struct cinfo;
       struct jpeg_error_mgr jerr;
       std::FILE *const nfile = file?file:cimg::fopen(filename,"rb");
+
       cinfo.err = jpeg_std_error(&jerr);
       jpeg_create_decompress(&cinfo);
       jpeg_stdio_src(&cinfo,nfile);
@@ -16930,9 +17150,12 @@ namespace cimg_library {
       if (cinfo.output_components!=1 && cinfo.output_components!=3 && cinfo.output_components!=4) {
         cimg::warn(true,"CImg<%s>::get_load_jpeg() : Don't know how to read image '%s' with libpeg, trying ImageMagick's convert",
                    pixel_type(),filename?filename:"(unknown)");
-        if (!file) return get_load_convert(filename);
-        else throw CImgIOException("CImg<%s>::get_load_jpeg() : Cannot read a the JPEG image '%s' using a *FILE input.",
-                                   pixel_type(),filename?filename:"(unknown)");
+        if (!file) return get_load_other(filename);
+        else {
+          if (!file) cimg::fclose(nfile);
+          throw CImgIOException("CImg<%s>::get_load_jpeg() : Cannot read JPEG image '%s' using a *FILE input.",
+                                pixel_type(),filename?filename:"(FILE*)");
+        }
       }
 
       const unsigned int row_stride = cinfo.output_width * cinfo.output_components;
@@ -16991,7 +17214,6 @@ namespace cimg_library {
       return get_load_jpeg(filename).swap(*this);
     }
 
-#ifdef cimg_use_magick
     //! Load an image using builtin ImageMagick++ Library
     /**
        Added April/may 2006 by Christoph Hormann <chris_hormann@gmx.de>
@@ -16999,6 +17221,7 @@ namespace cimg_library {
     **/
     static CImg get_load_magick(const char *const filename) {
       CImg dest;
+#ifdef cimg_use_magick
       Magick::Image image(filename);
       const unsigned int width = image.size().width(), height = image.size().height();
       switch (image.type()) {
@@ -17049,21 +17272,26 @@ namespace cimg_library {
       } break;
       }
       return dest;
+#else
+      throw CImgIOException("CImg<%s>::get_load_magick() : File '%s', Magick++ has not been linked during compilation.",
+                            pixel_type(),filename?filename:"(null)");
+      return dest;
+#endif
     }
 
     //! Load an image using builtin ImageMagick++ Library (in-place version).
     CImg& load_magick(const char *const filename) {
       return get_load_magick(filename).swap(*this);
     }
-#endif
 
     //! Load an image from a RAW file.
     static CImg get_load_raw(std::FILE *const file, const char *const filename,
                              const unsigned int sizex, const unsigned int sizey=1,
                              const unsigned int sizez=1, const unsigned int sizev=1,
-                             const bool multiplexed = false, const bool endian_swap = false) {
+                             const bool multiplexed=false, const bool endian_swap=false) {
       CImg<T> res(sizex,sizey,sizez,sizev,0);
       if (res.is_empty()) return res;
+
       std::FILE *const nfile = file?file:cimg::fopen(filename,"rb");
       if (!multiplexed) {
         cimg::fread(res.ptr(),res.size(),nfile);
@@ -17225,7 +17453,7 @@ namespace cimg_library {
     //! Load an image from an INRIMAGE-4 file.
     static CImg get_load_inr(std::FILE *const file, const char *const filename=0, float *voxsize=0) {
       std::FILE *const nfile = file?file:cimg::fopen(filename,"rb");
-          int fopt[8], endian=cimg::endian()?1:0;
+      int fopt[8], endian=cimg::endian()?1:0;
       bool loaded = false;
       if (voxsize) voxsize[0]=voxsize[1]=voxsize[2]=1;
       _load_inr(nfile,fopt,voxsize);
@@ -17240,8 +17468,11 @@ namespace cimg_library {
       cimg_load_inr_case(1,1,32,float);
       cimg_load_inr_case(1,0,64,double);
       cimg_load_inr_case(1,1,64,double);
-      if (!loaded) throw CImgIOException("CImg<%s>::get_load_inr() : File '%s', can't read images of the type specified in the file",
-                                         pixel_type(),filename?filename:"(unknown)");
+      if (!loaded) {
+        if (!file) cimg::fclose(nfile);
+        throw CImgIOException("CImg<%s>::get_load_inr() : File '%s', cannot read images of the type specified in the file",
+                              pixel_type(),filename?filename:"(FILE*)");
+      }
       if (!file) cimg::fclose(nfile);
       return dest;
     }
@@ -17286,9 +17517,11 @@ namespace cimg_library {
       CImg dest;
       char tmp[32];
       cimg::fread(tmp,12,nfile);
-      if (cimg::strncasecmp("PANDORE",tmp,7))
-        throw CImgIOException("CImg<%s>::get_load_pandore() : File '%s' does not appear to be a valid PANDORE file.\n"
-                              "(PANDORE identifier not found)",pixel_type(),filename?filename:"(unknown)");
+      if (cimg::strncasecmp("PANDORE",tmp,7)) {
+        if (!file) cimg::fclose(nfile);
+        throw CImgIOException("CImg<%s>::get_load_pandore() : File '%s' is not a valid PANDORE file.\n"
+                              "(PANDORE identifier not found).",pixel_type(),filename?filename:"(FILE*)");
+      }
       unsigned int imageid,dims[8];
       int ptbuf[4];
       cimg::fread(&imageid,1,nfile);
@@ -17438,8 +17671,8 @@ namespace cimg_library {
         break;
       default:
         if (!file) cimg::fclose(nfile);
-        throw CImgIOException("CImg<%s>::get_load_pandore() : File '%s', can't read images with ID_type=%u",
-                              pixel_type(),filename?filename:"(unknown)",imageid);
+        throw CImgIOException("CImg<%s>::get_load_pandore() : File '%s', cannot read images with ID_type=%u",
+                              pixel_type(),filename?filename:"(FILE*)",imageid);
       }
       if (!file) cimg::fclose(nfile);
       return dest;
@@ -17471,9 +17704,12 @@ namespace cimg_library {
           !cimg::strncasecmp(ext,"img",3)) {
         std::sprintf(body+cimg::strlen(body),".hdr");
         file_header = cimg::fopen(body,"rb");
+        if (!file_header) return CImg<T>();
         std::sprintf(body+cimg::strlen(body)-3,"img");
         file = cimg::fopen(body,"rb");
-      } else throw CImgIOException("CImg<%s>::get_load_analyze() : Cannot load filename '%s' as an analyze format",pixel_type(),filename);
+        if (!file) { cimg::fclose(file_header); return CImg<T>(); }
+      } else throw CImgIOException("CImg<%s>::get_load_analyze() : Filename '%s', not recognized as an Analyze 7.5 file.",
+                                   pixel_type(),filename);
 
       // Read header
       bool endian = false;
@@ -17541,7 +17777,10 @@ namespace cimg_library {
         cimg_foroff(dest,off) dest.data[off] = (T)(buffer[off]*scalefactor);
         delete[] buffer;
       } break;
-      default: throw CImgIOException("CImg<%s>::get_load_analyze() : Cannot read images width 'datatype = %d'",pixel_type(),datatype);
+      default:
+        cimg::fclose(file);
+        throw CImgIOException("CImg<%s>::get_load_analyze() : File '%s, cannot read images width 'datatype = %d'",
+                              pixel_type(),filename,datatype);
       }
       cimg::fclose(file);
       return dest;
@@ -17582,36 +17821,103 @@ namespace cimg_library {
       return get_load_cimg(filename,axis,align).swap(*this);
     }
 
-    //! Function that loads the image for other file formats that are not natively handled by CImg, using the tool 'convert' from the ImageMagick package.\n
-    //! This is the case for all compressed image formats (GIF,PNG,JPG,TIF,...). You need to install the ImageMagick package in order to get
-    //! this function working properly (see http://www.imagemagick.org ).
-    static CImg get_load_convert(const char *const filename) {
+    //! Function that loads the image for other file formats that are not natively handled by CImg.
+    //! This is the case for all compressed image formats (GIF,PNG,JPG,TIF,...).
+    static CImg get_load_imagemagick(const char *const filename) {
       static bool first_time = true;
       char command[1024], filetmp[512];
       if (first_time) { std::srand((unsigned int)::time(0)); first_time = false; }
-      std::FILE *file;
+      std::FILE *file = 0;
       do {
         std::sprintf(filetmp,"%s%sCImg%.4d.ppm",cimg::temporary_path(),cimg_OS==2?"\\":"/",std::rand()%10000);
         if ((file=std::fopen(filetmp,"rb"))!=0) std::fclose(file);
       } while (file);
-      std::sprintf(command,"%s \"%s\" %s",cimg::convert_path(),filename,filetmp);
-      cimg::system(command,cimg::convert_path());
-      file = std::fopen(filetmp,"rb");
-      if (!file) {
-        std::fclose(cimg::fopen(filename,"r"));
-        throw CImgIOException("CImg<%s>::get_load_convert() : Failed to open image '%s'.\n\n"
-                              "Path of 'convert' : \"%s\"\n"
+      std::sprintf(command,"%s \"%s\" %s",cimg::imagemagick_path(),filename,filetmp);
+      cimg::system(command,cimg::imagemagick_path());
+      if (!(file = std::fopen(filetmp,"rb"))) {
+        cimg::fclose(cimg::fopen(filename,"r"));
+        throw CImgIOException("CImg<%s>::get_load_imagemagick() : Failed to open image '%s'.\n\n"
+                              "Path of 'ImageMagick's convert' : \"%s\"\n"
                               "Path of temporary filename : \"%s\"",
-                              pixel_type(),filename,cimg::convert_path(),filetmp);
+                              pixel_type(),filename,cimg::imagemagick_path(),filetmp);
       } else cimg::fclose(file);
       const CImg dest = CImg<T>::get_load_pnm(filetmp);
       std::remove(filetmp);
       return dest;
     }
 
-    //! In-place version of get_load_convert()
-    CImg& load_convert(const char *const filename) {
-      return get_load_convert(filename).swap(*this);
+    //! In-place version of get_load_imagemagick()
+    CImg& load_imagemagick(const char *const filename) {
+      return get_load_imagemagick(filename).swap(*this);
+    }
+
+    //! Function that loads the image for other file formats that are not natively handled by CImg.
+    //! This is the case for all compressed image formats (GIF,PNG,JPG,TIF,...).
+    static CImg get_load_graphicsmagick(const char *const filename) {
+      static bool first_time = true;
+      char command[1024], filetmp[512];
+      if (first_time) { std::srand((unsigned int)::time(0)); first_time = false; }
+      std::FILE *file = 0;
+      do {
+        std::sprintf(filetmp,"%s%sCImg%.4d.ppm",cimg::temporary_path(),cimg_OS==2?"\\":"/",std::rand()%10000);
+        if ((file=std::fopen(filetmp,"rb"))!=0) std::fclose(file);
+      } while (file);
+      std::sprintf(command,"%s convert \"%s\" %s",cimg::graphicsmagick_path(),filename,filetmp);
+      cimg::system(command,cimg::graphicsmagick_path());
+      if (!(file = std::fopen(filetmp,"rb"))) {
+        cimg::fclose(cimg::fopen(filename,"r"));
+        throw CImgIOException("CImg<%s>::get_load_graphicsmagick() : Failed to open image '%s'.\n\n"
+                              "Path of 'GraphicsMagick's gm' : \"%s\"\n"
+                              "Path of temporary filename : \"%s\"",
+                              pixel_type(),filename,cimg::graphicsmagick_path(),filetmp);
+      } else cimg::fclose(file);
+      const CImg dest = CImg<T>::get_load_pnm(filetmp);
+      std::remove(filetmp);
+      return dest;
+    }
+
+    //! In-place version of get_load_graphicsmagick()
+    CImg& load_graphicsmagick(const char *const filename) {
+      return get_load_graphicsmagick(filename).swap(*this);
+    }
+
+    //! Function that loads the image for other file formats that are not natively handled by CImg.
+    //! This is the case for all compressed image formats (GIF,PNG,JPG,TIF,...).
+    static CImg get_load_other(const char *const filename) {
+      CImg<T> res;
+      const unsigned int odebug = cimg::exception_mode();
+      cimg::exception_mode() = 0;
+      try { res.load_magick(filename); }
+      catch (CImgException&) {
+        const char *ext = cimg::filename_split(filename);
+        if (!cimg::strncasecmp(ext,"tif",3))
+          try { res.load_imagemagick(filename); }
+          catch (CImgException&) {
+            try { res.load_graphicsmagick(filename); }
+            catch (CImgException&) {
+              res.assign();
+            }
+          }
+        else
+          try { res.load_graphicsmagick(filename); }
+          catch (CImgException&) {
+            try { res.load_imagemagick(filename); }
+            catch (CImgException&) {
+              res.assign();
+            }
+          }
+      }
+      cimg::exception_mode()=odebug;
+      if (res.is_empty())
+        throw CImgIOException("CImg<%s>::get_load_other() : Failed to open image '%s'.\n"
+                              "Check you have either the ImageMagick or GraphicsMagick package installed.",
+                              pixel_type(),filename);
+      return res;
+    }
+
+    //! In-place version of get_load_graphicsmagick()
+    CImg& load_other(const char *const filename) {
+      return get_load_other(filename).swap(*this);
     }
 
     //! Load an image from a Dicom file (need '(X)Medcon' : http://xmedcon.sourceforge.net )
@@ -17631,7 +17937,6 @@ namespace cimg_library {
       std::sprintf(command,"m000-%s.hdr",body);
       file = std::fopen(command,"rb");
       if (!file) {
-        std::fclose(cimg::fopen(filename,"r"));
         throw CImgIOException("CImg<%s>::get_load_dicom() : Failed to open image '%s'.\n\n"
                               "Path of 'medcon' : \"%s\"\n"
                               "Path of temporary filename : \"%s\"",
@@ -17651,21 +17956,24 @@ namespace cimg_library {
 
     //! Load OFF files (GeomView 3D object files)
     template<typename tf,typename tc>
-    static CImg<T> get_load_off(const char *const filename, CImgList<tf>& primitives, CImgList<tc>& colors, const bool invert_faces=false) {
+    static CImg<T> get_load_off(const char *const filename, CImgList<tf>& primitives, CImgList<tc>& colors,
+                                const bool invert_faces=false) {
       std::FILE *file=cimg::fopen(filename,"r");
       unsigned int nb_points=0, nb_triangles=0;
       int err;
-      if ((err = std::fscanf(file,"OFF%u%u%*[^\n]",&nb_points,&nb_triangles))!=2)
-        throw CImgIOException("CImg<%s>::get_load_off() : File '%s' does not appear to be a valid OFF file.\n",
-                              pixel_type(),filename);
+      if ((err = std::fscanf(file,"OFF%u%u%*[^\n]",&nb_points,&nb_triangles))!=2) {
+        cimg::fclose(file);
+        throw CImgIOException("CImg<%s>::get_load_off() : File '%s' is not a valid OFF file.",pixel_type(),filename);
+      }
 
       // Read points data
       CImg<T> points(nb_points,3);
       float X=0,Y=0,Z=0;
       cimg_forX(points,l) {
-        if ((err = std::fscanf(file,"%f%f%f%*[^\n]",&X,&Y,&Z))!=3)
-          throw CImgIOException("CImg<%s>::get_load_off() : File '%s', cannot read point %u.\n",
-                                pixel_type(),filename,l);
+        if ((err = std::fscanf(file,"%f%f%f%*[^\n]",&X,&Y,&Z))!=3) {
+          cimg::fclose(file);
+          throw CImgIOException("CImg<%s>::get_load_off() : File '%s', cannot read point %u.\n",pixel_type(),filename,l);
+        }
         points(l,0) = (T)X; points(l,1) = (T)Y; points(l,2) = (T)Z;
       }
 
@@ -17729,15 +18037,15 @@ namespace cimg_library {
       char nfilename[1024];
       const char *const fn = (number>=0)?cimg::filename_number(filename,number,6,nfilename):filename;
       if (!cimg::strncasecmp(ext,"asc",3)) return save_ascii(fn);
-      if (!cimg::strncasecmp(ext,"dlm",3)) return save_dlm(fn);
+      if (!cimg::strncasecmp(ext,"dlm",3) ||
+          !cimg::strncasecmp(ext,"txt",3)) return save_dlm(fn);
       if (!cimg::strncasecmp(ext,"inr",3)) return save_inr(fn);
       if (!cimg::strncasecmp(ext,"hdr",3)) return save_analyze(fn);
       if (!cimg::strncasecmp(ext,"dcm",3)) return save_dicom(fn);
       if (!cimg::strncasecmp(ext,"pan",3)) return save_pandore(fn);
       if (!cimg::strncasecmp(ext,"bmp",3)) return save_bmp(fn);
       if (!cimg::strncasecmp(ext,"png",3)) return save_png(fn);
-      if (!cimg::strncasecmp(ext,"tif",3) ||
-          !cimg::strncasecmp(ext,"tiff",4)) return save_tiff(fn);
+      if (!cimg::strncasecmp(ext,"tif",3)) return save_tiff(fn);
       if (!cimg::strncasecmp(ext,"jpg",3) ||
           !cimg::strncasecmp(ext,"jpeg",4)) return save_jpeg(fn);
       if (!cimg::strncasecmp(ext,"rgba",4)) return save_rgba(fn);
@@ -17748,11 +18056,7 @@ namespace cimg_library {
           !cimg::strncasecmp(ext,"ppm",3) ||
           !cimg::strncasecmp(ext,"pnm",3)) return save_pnm(fn);
       if (!cimg::strncasecmp(ext,"yuv",3)) return save_yuv(fn,true);
-#ifdef cimg_use_magick
-      return save_magick(fn);
-#else
-      return save_convert(fn);
-#endif
+      return save_other(fn);
     }
 
     //! Save the image as an ASCII file (ASCII Raw + simple header).
@@ -17818,7 +18122,8 @@ namespace cimg_library {
       cimg::warn(dim>3,
                  "CImg<%s>::save_pnm() : Instance image (%u,%u,%u,%u,%p) is multispectral. Only the three first channels will be saved (file '%s').",
                  pixel_type(),width,height,depth,dim,data,filename?filename:"(unknown)");
-      cimg::warn(st.min<0 || st.max>65535,"CImg<%s>::save_pnm() : Instance image (%u,%u,%u,%u,%p) has pixel values in [%g,%g]. Probable type overflow (file '%s').",pixel_type(),width,height,depth,dim,data,filename?filename:"(unknown)");
+      const double stmin = st.min, stmax = st.max;
+      cimg::warn(stmin<0 || stmax>65535,"CImg<%s>::save_pnm() : Instance image (%u,%u,%u,%u,%p) has pixel values in [%g,%g]. Probable type overflow (file '%s').",pixel_type(),width,height,depth,dim,data,filename?filename:"(unknown)");
       std::FILE *const nfile = file?file:cimg::fopen(filename,"wb");
       const T
         *ptrR = ptr(0,0,0,0),
@@ -17900,11 +18205,11 @@ namespace cimg_library {
       std::sprintf(command,"m000-%s",filename);
       file = std::fopen(command,"rb");
       if (!file) {
-        std::fclose(cimg::fopen(filename,"r"));
+        cimg::fclose(cimg::fopen(filename,"r"));
         throw CImgIOException("CImg<%s>::save_dicom() : Failed to save image '%s'.\n\n"
                               "Path of 'medcon' : \"%s\"\n"
                               "Path of temporary filename : \"%s\"",
-                              pixel_type(),filename,cimg::convert_path(),filetmp);
+                              pixel_type(),filename,cimg::medcon_path(),filetmp);
       } else cimg::fclose(file);
       std::rename(command,filename);
       return *this;
@@ -18025,10 +18330,10 @@ namespace cimg_library {
         the ImageMagick package in order to get
         this function working properly (see http://www.imagemagick.org ).
     **/
-    const CImg& save_convert(const char *const filename, const unsigned int quality=100) const {
-      if (is_empty()) throw CImgInstanceException("CImg<%s>::save_convert() : Instance image (%u,%u,%u,%u,%p) is empty (file '%s')",
+    const CImg& save_imagemagick(const char *const filename, const unsigned int quality=100) const {
+      if (is_empty()) throw CImgInstanceException("CImg<%s>::save_imagemagick() : Instance image (%u,%u,%u,%u,%p) is empty (file '%s')",
                                                   pixel_type(),width,height,depth,dim,data,filename);
-      if (!filename) throw CImgArgumentException("CImg<%s>::save_convert() : Instance image (%u,%u,%u,%u,%p), specified filename is (null).",
+      if (!filename) throw CImgArgumentException("CImg<%s>::save_imagemagick() : Instance image (%u,%u,%u,%u,%p), specified filename is (null).",
                                                  pixel_type(),width,height,depth,dim,data);
       static bool first_time = true;
       char command[512],filetmp[512];
@@ -18040,15 +18345,80 @@ namespace cimg_library {
         if ((file=std::fopen(filetmp,"rb"))!=0) std::fclose(file);
       } while (file);
       save_pnm(filetmp);
-      std::sprintf(command,"%s -quality %u%% %s \"%s\"",cimg::convert_path(),quality,filetmp,filename);
+      std::sprintf(command,"%s -quality %u%% %s \"%s\"",cimg::imagemagick_path(),quality,filetmp,filename);
       cimg::system(command);
       file = std::fopen(filename,"rb");
-      if (!file) throw CImgIOException("CImg<%s>::save_convert() : Failed to save image '%s'.\n\n"
+      if (!file) throw CImgIOException("CImg<%s>::save_imagemagick() : Failed to save image '%s'.\n\n"
                                        "Path of 'convert' : \"%s\"\n"
                                        "Path of temporary filename : \"%s\"\n",
-                                       pixel_type(),filename,cimg::convert_path(),filetmp);
+                                       pixel_type(),filename,cimg::imagemagick_path(),filetmp);
       if (file) cimg::fclose(file);
       std::remove(filetmp);
+      return *this;
+    }
+
+    //! Save the image using GraphicsMagick's gm.
+    /** Function that saves the image for other file formats that are not natively handled by CImg,
+        using the tool 'gm' from the GraphicsMagick package.\n
+        This is the case for all compressed image formats (GIF,PNG,JPG,TIF,...). You need to install
+        the GraphicsMagick package in order to get
+        this function working properly (see http://www.graphicsmagick.org ).
+    **/
+    const CImg& save_graphicsmagick(const char *const filename, const unsigned int quality=100) const {
+      if (is_empty()) throw CImgInstanceException("CImg<%s>::save_graphicsmagick() : Instance image (%u,%u,%u,%u,%p) is empty (file '%s')",
+                                                  pixel_type(),width,height,depth,dim,data,filename);
+      if (!filename) throw CImgArgumentException("CImg<%s>::save_graphicsmagick() : Instance image (%u,%u,%u,%u,%p), specified filename is (null).",
+                                                 pixel_type(),width,height,depth,dim,data);
+      static bool first_time = true;
+      char command[512],filetmp[512];
+      if (first_time) { std::srand((unsigned int)::time(0)); first_time = false; }
+      std::FILE *file;
+      do {
+        if (dim==1) std::sprintf(filetmp,"%s%sCImg%.4d.pgm",cimg::temporary_path(),cimg_OS==2?"\\":"/",std::rand()%10000);
+        else std::sprintf(filetmp,"%s%sCImg%.4d.ppm",cimg::temporary_path(),cimg_OS==2?"\\":"/",std::rand()%10000);
+        if ((file=std::fopen(filetmp,"rb"))!=0) std::fclose(file);
+      } while (file);
+      save_pnm(filetmp);
+      std::sprintf(command,"%s -quality %u%% %s \"%s\"",cimg::graphicsmagick_path(),quality,filetmp,filename);
+      cimg::system(command);
+      file = std::fopen(filename,"rb");
+      if (!file) throw CImgIOException("CImg<%s>::save_graphicsmagick() : Failed to save image '%s'.\n\n"
+                                       "Path of 'gm' : \"%s\"\n"
+                                       "Path of temporary filename : \"%s\"\n",
+                                       pixel_type(),filename,cimg::graphicsmagick_path(),filetmp);
+      if (file) cimg::fclose(file);
+      std::remove(filetmp);
+      return *this;
+    }
+
+    const CImg& save_other(const char *const filename, const unsigned int quality=100) const {
+      const unsigned int odebug = cimg::exception_mode();
+      bool is_saved = true;
+      cimg::exception_mode() = 0;
+      try { save_magick(filename); }
+      catch (CImgException&) {
+        const char *ext = cimg::filename_split(filename);
+        if (!cimg::strncasecmp(ext,"tif",3))
+          try { save_imagemagick(filename,quality); }
+          catch (CImgException&) {
+            try { save_graphicsmagick(filename,quality); }
+            catch (CImgException&) {
+              is_saved = false;
+            }
+          }
+        else
+          try { save_graphicsmagick(filename,quality); }
+          catch (CImgException&) {
+            try { save_imagemagick(filename,quality); }
+            catch (CImgException&) {
+              is_saved = false;
+            }
+          }
+      }
+      cimg::exception_mode() = odebug;
+      if (!is_saved) throw CImgIOException("CImg<%s>::save_other() : File '%s' cannot be saved.\n"
+                                           "Check you installed the ImageMagick or GraphicsMagick package.",
+                                           pixel_type(),filename);
       return *this;
     }
 
@@ -18316,7 +18686,7 @@ namespace cimg_library {
     //! Save an image to a PNG file.
     // Most of this function has been written by Eric Fausett
     /**
-       \param filename = name of the png image file to load
+       \param filename = name of the png image file to save
        \return *this
        \note The png format specifies a variety of possible data formats.  Grey scale, Grey
        scale with Alpha, RGB color, RGB color with Alpha, and Palletized color are supported.
@@ -18336,15 +18706,9 @@ namespace cimg_library {
                  "CImg<%s>::save_png() : Instance image (%u,%u,%u,%u,%p) is volumetric. Only the first slice will be saved (file '%s').",
                  pixel_type(),width,height,depth,dim,data,filename?filename:"(unknown)");
 #ifndef cimg_use_png
-#ifndef cimg_use_magick
-      if (!file) return save_convert(filename);
+      if (!file) return save_other(filename);
       else throw CImgIOException("CImg<%s>::save_png() : Cannot save a PNG image in a *FILE output. Use libpng instead.",
                                  pixel_type());
-#else
-      if (!file) return save_magick(filename);
-      else throw CImgIOException("CImg<%s>::save_png() : Cannot save a PNG image in a *FILE output. Use libpng instead.",
-                                 pixel_type());
-#endif
 #else
       std::FILE *const nfile = file?file:cimg::fopen(filename,"wb");
 
@@ -18513,22 +18877,13 @@ namespace cimg_library {
                                                   pixel_type(),width,height,depth,dim,data,filename);
       if (!filename) throw CImgArgumentException("CImg<%s>::save_tiff() : Instance image (%u,%u,%u,%u,%p), specified filename is (null).",
                                                  pixel_type(),width,height,depth,dim,data);
-#ifndef cimg_use_tiff
-#ifndef cimg_use_magick
-      return save_convert(filename);
-#else
-      return save_magick(filename);
-#endif
-#else
-      uint16 photometric = PHOTOMETRIC_MINISBLACK, compression = COMPRESSION_NONE;
+#ifdef cimg_use_tiff
       uint32 rowsperstrip = (uint32) -1;
       double resolution = -1;
       tsize_t linebytes = 0;
-      uint16 spp = 1, bpp = sizeof(T)!=1?16:8;
+      uint16 spp = dimv(), bpp = sizeof(T)!=1?16:8;
+      uint16 photometric = (spp==3?PHOTOMETRIC_RGB:PHOTOMETRIC_MINISBLACK), compression = COMPRESSION_NONE;
       TIFF *out;
-      spp = dimv();
-      if (spp==3) photometric = PHOTOMETRIC_RGB; // RBG color image
-      photometric = PHOTOMETRIC_MINISBLACK;
       out = TIFFOpen(filename,"w");
       if (out) {
         for (unsigned int dir=0; dir<depth; dir++) {
@@ -18589,11 +18944,15 @@ namespace cimg_library {
           }
           TIFFWriteDirectory(out);
         }
+        TIFFPrintDirectory(out,stdout);
         TIFFClose(out);
       }
-      else throw CImgException("Error while writing a tiff file.");
-      return (*this);
+      else throw CImgException("CImg<%s>::save_tiff() : File '%s', error while writing tiff file.",
+                               pixel_type(),filename);
+#else
+      return save_other(filename);
 #endif
+      return *this;
     }
 
     //! Save a file in JPEG format.
@@ -18606,15 +18965,9 @@ namespace cimg_library {
                  "CImg<%s>::save_jpeg() : Instance image (%u,%u,%u,%u,%p) is volumetric. Only the first slice will be saved (file '%s').",
                  pixel_type(),width,height,depth,dim,data,filename?filename:"(unknown)");
 #ifndef cimg_use_jpeg
-#ifndef cimg_use_magick
-      if (!file) return save_convert(filename,quality);
+      if (!file) return save_other(filename,quality);
       else throw CImgIOException("CImg<%s>::save_jpeg() : Cannot save a JPEG image in a *FILE output. Use libjpeg instead.",
                                  pixel_type());
-#else
-      if (!file) return save_magick(filename);
-      else throw CImgIOException("CImg<%s>::save_jpeg() : Cannot save a JPEG image in a *FILE output. Use libjpeg instead.",
-                                 pixel_type());
-#endif
 #else
 
       // Fill pixel buffer
@@ -18688,21 +19041,24 @@ namespace cimg_library {
     }
 
     //! Save the image using built-in ImageMagick++ library
-#ifdef cimg_use_magick
     const CImg& save_magick(const char *const filename) const {
       if (is_empty()) throw CImgInstanceException("CImg<%s>::save_magick() : Instance image (%u,%u,%u,%u,%p) is empty (file '%s').",
                                                   pixel_type(),width,height,depth,dim,data);
       if (!filename) throw CImgArgumentException("CImg<%s>::save_magick() : Instance image (%u,%u,%u,%u,%p), specified file is (null).",
                                                  pixel_type(),width,height,depth,dim,data);
+#ifdef cimg_use_magick
       Magick::Image image(Magick::Geometry(width,height),"black");
       image.type(Magick::TrueColorType);
       const T *rdata = ptr(0,0,0,0), *gdata = dim>1?ptr(0,0,0,1):rdata, *bdata = dim>2?ptr(0,0,0,2):gdata;
       cimg_forXY(*this,x,y) image.pixelColor(x,y,Magick::ColorRGB(*(rdata++)/255.0,*(gdata++)/255.0,*(bdata++)/255.0));
       image.syncPixels();
       image.write(filename);
+#else
+      throw CImgIOException("CImg<%s>::save_magick() : File '%s', Magick++ library has not been linked.",
+                            pixel_type(),filename);
+#endif
       return *this;
     }
-#endif
 
     //! Save the image as a RGBA file
     const CImg& save_rgba(std::FILE *const file, const char *const filename=0) const {
@@ -20022,12 +20378,12 @@ namespace cimg_library {
 
     //! Load an image list from a file.
     static CImgList get_load(const char *const filename) {
-      CImgList res;
       const char *ext = cimg::filename_split(filename);
       if (!cimg::strncasecmp(ext,"cimg",4) || !ext[0]) return get_load_cimg(filename);
       if (!cimg::strncasecmp(ext,"rec",3) ||
           !cimg::strncasecmp(ext,"par",3)) return get_load_parrec(filename);
-      res.assign(CImg<T>(filename));
+      CImgList res(1);
+      res[0].load(filename);
       return res;
     }
 
@@ -20039,13 +20395,13 @@ namespace cimg_library {
 #define cimg_load_cimg_case(Ts,Tss) \
   if (!loaded && !cimg::strcasecmp(Ts,tmp2)) for (unsigned int l=0; l<n; l++) { \
       const bool endian = cimg::endian(); \
-      j=0; while((i=std::fgetc(file))!='\n') tmp[j++]=(char)i; tmp[j]='\0'; \
+      j=0; while((i=std::fgetc(nfile))!='\n') tmp[j++]=(char)i; tmp[j]='\0'; \
       std::sscanf(tmp,"%u %u %u %u",&w,&h,&z,&k);\
       if (w*h*z*k>0) { \
-        Tss *buf = new Tss[w*h*z*k]; cimg::fread(buf,w*h*z*k,file); \
+        Tss *buf = new Tss[w*h*z*k]; cimg::fread(buf,w*h*z*k,nfile); \
         if (endian) cimg::endian_swap(buf,w*h*z*k); \
-        CImg<T> idest(w,h,z,k); cimg_foroff(idest,off) \
-                          idest[off] = (T)(buf[off]); idest.swap(res[l]); \
+        CImg<T> idest(w,h,z,k); \
+        cimg_foroff(idest,off) idest[off] = (T)(buf[off]); idest.swap(res[l]); \
         delete[] buf; \
        } \
       loaded = true; \
@@ -20064,8 +20420,11 @@ namespace cimg_library {
       unsigned int n,j,w,h,z,k,err;
       j=0; while((i=std::fgetc(nfile))!='\n' && i!=EOF && j<256) tmp[j++]=i; tmp[j]='\0';
       err=std::sscanf(tmp,"%u%*c%255[A-Za-z ]",&n,tmp2);
-      if (err!=2) throw CImgIOException("CImgList<%s>::get_load_cimg() : File '%s', Unknow CImg RAW header",
-                                        pixel_type(),filename?filename:"(unknown)");
+      if (err!=2) {
+        if (!file) cimg::fclose(nfile);
+        throw CImgIOException("CImgList<%s>::get_load_cimg() : File '%s', Unknow CImg RAW header.",
+                              pixel_type(),filename?filename:"(FILE*)");
+      }
       CImgList<T> res(n);
       cimg_load_cimg_case("bool",bool);
       cimg_load_cimg_case("unsigned char",uchar);
@@ -20082,8 +20441,11 @@ namespace cimg_library {
       cimg_load_cimg_case("long",long);
       cimg_load_cimg_case("float",float);
       cimg_load_cimg_case("double",double);
-      if (!loaded) throw CImgIOException("CImgList<%s>::get_load_cimg() : File '%s', can't read images of pixels coded as '%s'",
-                                         pixel_type(),filename?filename:"(unknown)",tmp2);
+      if (!loaded) {
+        if (!file) cimg::fclose(nfile);
+        throw CImgIOException("CImgList<%s>::get_load_cimg() : File '%s', cannot read images of pixels coded as '%s'.",
+                              pixel_type(),filename?filename:"(FILE*)",tmp2);
+      }
       if (!file) cimg::fclose(nfile);
       return res;
     }
@@ -20177,16 +20539,17 @@ namespace cimg_library {
           cimg_forXY(img,x,y) img(x,y,sn) = (T)(( buf(x,y)*rs + ri )/(rs*ss));
         } break;
         default:
-          throw CImgIOException("CImg<%s>::get_load_parrec() : Cannot handle image with pixsize = %d bits\n",
-                                pixel_type(),pixsize);
-
+          cimg::fclose(file);
+          cimg::fclose(file2);
+          throw CImgIOException("CImg<%s>::get_load_parrec() : File '%s', cannot handle image with pixsize = %d bits.",
+                                pixel_type(),filename,pixsize);
+          break;
         }
       }
-
       cimg::fclose(file);
       cimg::fclose(file2);
       if (!dest.size)
-        throw CImgIOException("CImg<%s>::get_load_parrec() : filename '%s' does not appear to be a valid PAR-REC file",
+        throw CImgIOException("CImg<%s>::get_load_parrec() : File '%s' does not appear to be a valid PAR-REC file.",
                               pixel_type(),filename);
       return dest;
     }
@@ -20220,8 +20583,11 @@ namespace cimg_library {
       int err;
       if (first_frame) {
         err = std::fseek(nfile,first_frame*(sizex*sizey + sizex*sizey/2),SEEK_CUR);
-        if (err) throw CImgIOException("CImgList<%s>::get_load_yuv() : File '%s' doesn't contain frame number %u "
-                                       "(out of range error).",pixel_type(),filename?filename:"(unknown)",first_frame);
+        if (err) {
+          if (!file) cimg::fclose(nfile);
+          throw CImgIOException("CImgList<%s>::get_load_yuv() : File '%s' doesn't contain frame number %u "
+                                "(out of range error).",pixel_type(),filename?filename:"(FILE*)",first_frame);
+        }
       }
       unsigned int frame;
       for (frame = first_frame; !stopflag && (last_frame<0 || frame<=(unsigned int)last_frame); frame++) {
@@ -20287,26 +20653,30 @@ namespace cimg_library {
     //! Load from OFF file format
     template<typename tf,typename tc>
     static CImgList<T> get_load_off(std::FILE *const file, const char *const filename,
-                                    CImgList<tf>& primitives, CImgList<tc>& colors, const bool invert_faces=false) {
+                                    CImgList<tf>& primitives, CImgList<tc>& colors,
+                                    const bool invert_faces=false) {
       return CImg<T>::get_load_off(file,filename,primitives,colors,invert_faces).get_split('x');
     }
 
     //! Load from OFF file format
     template<typename tf,typename tc>
       static CImgList<T> get_load_off(const char *const filename,
-                                    CImgList<tf>& primitives, CImgList<tc>& colors, const bool invert_faces=false) {
+                                    CImgList<tf>& primitives, CImgList<tc>& colors,
+                                      const bool invert_faces=false) {
       return get_load_off(0,filename,primitives,colors,invert_faces);
     }
 
     //! In-place version of get_load_off()
     template<typename tf,typename tc>
-    CImgList& load_off(std::FILE *const file, const char *const filename, CImgList<tf>& primitives, CImgList<tc>& colors, const bool invert_faces=false) {
+    CImgList& load_off(std::FILE *const file, const char *const filename, CImgList<tf>& primitives, CImgList<tc>& colors,
+                       const bool invert_faces=false) {
       return get_load_off(file,filename,primitives,colors,invert_faces).swap(*this);
     }
 
     //! In-place version of get_load_off()
     template<typename tf,typename tc>
-    CImgList& load_off(const char *const filename, CImgList<tf>& primitives, CImgList<tc>& colors, const bool invert_faces=false) {
+    CImgList& load_off(const char *const filename, CImgList<tf>& primitives, CImgList<tc>& colors,
+                       const bool invert_faces=false) {
       return get_load_off(filename,primitives,colors,invert_faces).swap(*this);
     }
 
@@ -21549,775 +21919,6 @@ namespace cimg {
 #ifdef CreateWindowA
 #undef CreateWindowA
 #endif
-
-/*
- #------------------------------------------------------------------------------------
- #
- #
- # Additional documentation for the generation of the reference page (using doxygen)
- #
- #
- #------------------------------------------------------------------------------------
- */
-
-/**
-   \mainpage
-
-   This is the reference documentation of <a href="http://cimg.sourceforge.net">the CImg Library</a>,
-   the C++ template image processing library.
-   This documentation have been generated using the tool <a href="http://www.doxygen.org">doxygen</a>.
-   It contains a detailed description of all classes and functions of the %CImg Library.
-   If you have downloaded the CImg package, you actually have a local copy of these pages in the
-   \c CImg/documentation/reference/ directory.
-
-   Use the menu above to navigate through the documentation pages.
-   As a first step, you may look at the list of <a href="modules.html">available modules</a>.
-
-   A complete PDF version of this reference documentation is
-   <a href="../CImg_reference.pdf">available here</a> for off-line reading.
-
-   You may be interested also in the
-   <a href="../CImg_slides.pdf">presentation slides</a> presenting an overview
-   of the %CImg Library capabilities.
-
-**/
-
-/** \addtogroup cimg_structure CImg Library Overview */
-/*@{*/
-/**
-  \page foo2
-
-  The <b>CImg Library</b> is an image processing library, designed for C++ programmers.
-  It provides useful classes and functions to load/save, display and process various types of images.
-
-  \section s1 Library structure
-
-  The %CImg Library consists in a <b>single header file</b> CImg.h providing a set of C++ template classes that
-  can be used in your own sources, to load/save, process and display images or list of images.
-  Very portable (Unix/X11,Windows, MacOS X, FreeBSD,..), efficient, simple to use, it's a pleasant toolkit
-  for coding image processing stuffs in C++.
-
-  The header file CImg.h contains all the classes and functions that compose the library itself.
-  This is one originality of the %CImg Library. This particularly means that :
-  - No pre-compilation of the library is needed, since the compilation of the CImg functions is done at the same time as
-  the compilation of your own C++ code.
-  - No complex dependencies have to be handled : Just include the CImg.h file, and you get a working C++ image processing toolkit.
-  - The compilation is done on the fly : only CImg functionalities really used by your program are compiled and appear in the
-  compiled executable program. This leads to very compact code, without any unused stuffs.
-  - Class members and functions are inlined, leading to better performance during the program execution.
-
-  The %CImg Library is structured as follows :
-
-  - All library classes and functions are defined in the namespace \ref cimg_library. This namespace
-  encapsulates the library functionalities and avoid any class name collision that could happen with
-  other includes. Generally, one uses this namespace as a default namespace :
-  \code
-  #include "CImg.h"
-  using namespace cimg_library;
-  ...
-  \endcode
-
-  - The namespace \ref cimg_library::cimg defines a set of \e low-level functions and variables used by the library.
-  Documented functions in this namespace can be safely used in your own program. But, \b never use the
-  \ref cimg_library::cimg namespace as a default namespace, since it contains functions whose names are already
-  defined in the standard C/C++ library.
-
-  - The class \ref cimg_library::CImg<T> represents images up to 4-dimensions wide, containing pixels of type \c T
-  (template parameter). This is actually the main class of the library.
-
-  - The class \ref cimg_library::CImgList<T> represents lists of cimg_library::CImg<T> images. It can be used for instance
-  to store different frames of an image sequence.
-
-  - The class \ref cimg_library::CImgDisplay is able to display images or image lists into graphical display windows.
-  As you may guess, the code of this class is highly system-dependent but this is transparent for the programmer,
-  as environment variables are automatically set by the CImg library (see also \ref cimg_environment).
-
-  - The class \ref cimg_library::CImgStats represents image statistics. Use it to compute the
-  minimum, maximum, mean and variance of pixel values of images, as well as the corresponding min/max pixel location.
-
-  - The class \ref cimg_library::CImgException (and its subclasses) are used by the library to throw exceptions
-  when errors occur. Those exceptions can be catched with a bloc <tt>try { ..} catch (CImgException) { .. }</tt>.
-  Subclasses define precisely the type of encountered errors.
-
-  Knowing these five classes is \b enough to get benefit of the %CImg Library functionalities.
-
-
-  \section s2 CImg version of "Hello world".
-
-  Below is a very simple code that creates a "Hello World" image. This shows you basically how a CImg program looks like.
-
-  \code
-  #include "CImg.h"
-  using namespace cimg_library;
-
-  int main() {
-    CImg<unsigned char> img(640,400,1,3);        // Define a 640x400 color image with 8 bits per color component.
-    img.fill(0);                                 // Set pixel values to 0 (color : black)
-    unsigned char purple[3]={255,0,255};         // Define a purple color
-    img.draw_text("Hello World",100,100,purple); // Draw a purple "Hello world" at coordinates (100,100).
-    img.display("My first CImg code");           // Display the image in a display window.
-    return 0;
-  }
-  \endcode
-
-  Which can be also written in a more compact way as :
-
-  \code
-  #include "CImg.h"
-  using namespace cimg_library;
-
-  int main() {
-    const unsigned char purple[3]={255,0,255};
-    CImg<unsigned char>(640,400,1,3,0).draw_text("Hello World",100,100,purple).display("My first CImg code");
-    return 0;
-  }
-  \endcode
-
-  Generally, you can write very small code that performs complex image processing tasks. The %CImg Library is very simple
-  to use and provide a lot of interesting algorithms for image manipulation.
-
-  \section s3 How to compile ?
-
-  The CImg library is a very light and user-friendly library : only standard system libraries are used.
-  It avoid to handle complex dependancies and problems with library compatibility.
-  The only thing you need is a (quite modern) C++ compiler :
-
-  - <b>Microsoft Visual C++ 6.0, Visual Studio.NET and Visual Express Edition</b> : Use project files and solution files provided in the
-  %CImg Library package (directory 'compilation/') to see how it works.
-  - <b>Intel ICL compiler</b> : Use the following command to compile a CImg-based program with ICL :
-  \code
-  icl /Ox hello_world.cpp user32.lib gdi32.lib
-  \endcode
-  - <b>g++ (MingW windows version)</b> : Use the following command to compile a CImg-based program with g++, on Windows :
-  \code
-  g++ -o hello_word.exe hello_word.cpp -O2 -lgdi32
-  \endcode
-  - <b>g++ (Linux version)</b> : Use the following command to compile a CImg-based program with g++, on Linux :
-  \code
-  g++ -o hello_word.exe hello_world.cpp -O2 -L/usr/X11R6/lib -lm -lpthread -lX11
-  \endcode
-  - <b>g++ (Solaris version)</b> : Use the following command to compile a CImg-based program with g++, on Solaris :
-  \code
-  g++ -o hello_word.exe hello_world.cpp -O2 -lm -lpthread -R/usr/X11R6/lib -lrt -lnsl -lsocket
-  \endcode
-  - <b>g++ (Mac OS X version)</b> : Use the following command to compile a CImg-based program with g++, on Mac OS X :
-  \code
-  g++ -o hello_word.exe hello_world.cpp -O2 -lm -lpthread -L/usr/X11R6/lib -lm -lpthread -lX11
-  \endcode
-  - <b>Dev-Cpp</b> : Use the project file provided in the CImg library package to see how it works.
-
-  If you are using another compilers and encounter problems, please
-  <a href="http://www.greyc.ensicaen.fr/~dtschump">write me</a> since maintaining compatibility is one
-  of the priority of the %CImg Library. Nevertheless, old compilers that does not respect the C++ norm will not
-  support the %CImg Library.
-
-  \section s4 What's next ?
-
-  If you are ready to get more, and to start writing more serious programs
-  with CImg, you are invited to go to the \ref cimg_tutorial section.
-
-**/
-/*@}*/
-
-/** \addtogroup cimg_faq FAQ : Frequently Asked Questions. */
-/*@{*/
-/**
-  \page foofaq
-
-  \section sfaq1 FAQ : Frequently Asked Questions.
-
-  TODO
-
-**/
-/*@}*/
-
-/** \addtogroup cimg_environment Setting Environment Variables */
-/*@{*/
-/**
-  \page foo1
-
-  The CImg library is a multiplatform library, working on a wide variety of systems.
-  This implies the existence of some \e environment \e variables that must be correctly defined
-  depending on your current system.
-  Most of the time, the %CImg Library defines these variables automatically
-  (for popular systems). Anyway, if your system is not recognized, you will have to set the environment
-  variables by hand. Here is a quick explanations of environment variables.\n
-
-  Setting the environment variables is done with the <tt>#define</tt> keyword.
-  This setting must be done <i>before including the file CImg.h</i> in your source code.
-  For instance,
-  defining the environment variable \c cimg_display_type would be done like this :
-  \code
-  #define cimg_display_type 0
-  #include "CImg.h"
-  ...
-  \endcode
-
-  Here are the different environment variables used by the %CImg Library :
-
-  - \b \c cimg_OS : This variable defines the type of your Operating System. It can be set to \b 1 (\e Unix),
-  \b 2 (\e Windows), or \b 0 (\e Other \e configuration).
-  It should be actually auto-detected by the CImg library. If this is not the case (<tt>cimg_OS=0</tt>), you
-  will probably have to tune the environment variables described below.
-
-  - \b \c cimg_display_type : This variable defines the type of graphical library used to
-  display images in windows. It can be set to 0 (no display library available), \b 1 (X11-based display) or
-  \b 2 (Windows-GDI display).
-  If you are running on a system without X11 or Windows-GDI ability, please set this variable to \c 0.
-  This will disable the display support, since the %CImg Library doesn't contain the necessary code to display
-  images on systems other than X11 or Windows GDI.
-
-  - \b \c cimg_color_terminal : This variable tells the library if the system terminal has VT100 color capabilities.
-  It can be \e defined or \e not \e defined. Define this variable to get colored output on your terminal,
-  when using the %CImg Library.
-
-  - \b \c cimg_debug : This variable defines the level of run-time debug messages that will be displayed by
-  the %CImg Library. It can be set to 0 (no debug messages), 1 (normal debug messages displayed on
-  standard error), 2 (normal debug messages displayed in modal windows, which is
-  the default value), or 3 (high debug messages). Note that setting this value to 3 may slow down your
-  program since more debug tests are made by the library (particularly to check if pixel access is made outside
-  image boundaries). See also CImgException to better understand how debug messages are working.
-
-  - \b \c cimg_convert_path : This variables tells the library where the ImageMagick's \e convert tool is located.
-  Setting this variable should not be necessary if ImageMagick is installed on a standard directory, or
-  if \e convert is in your system PATH variable. This macro should be defined only if the ImageMagick's
-  \e convert tool is not found automatically, when trying to read compressed image format (GIF,PNG,...).
-  See also cimg_library::CImg::get_load_convert() and cimg_library::CImg::save_convert() for more informations.
-
-  - \b \c cimg_temporary_path : This variable tells the library where it can find a directory to store
-  temporary files. Setting this variable should not be necessary if you are running on a standard system.
-  This macro should be defined only when troubles are encountered when trying to read
-  compressed image format (GIF,PNG,...).
-  See also cimg_library::CImg::get_load_convert() and cimg_library::CImg::save_convert() for more informations.
-
-  - \b \c cimg_plugin : This variable tells the library to use a plugin file to add features to the CImg<T> class.
-  Define it with the path of your plugin file, if you want to add member functions to the CImg<T> class,
-  without having to modify directly the \c "CImg.h" file. An include of the plugin file is performed in the CImg<T>
-  class. If \c cimg_plugin if not specified (default), no include is done.
-
-  - \b \c cimglist_plugin : Same as \c cimg_plugin, but to add features to the CImgList<T> class.
-
-  - \b \c cimgdisplay_plugin : Same as \c cimg_plugin, but to add features to the CImgDisplay<T> class.
-
-  - \b \c cimgstats_plugin : Same as \c cimg_plugin, but to add features to the CImgStats<T> class.
-
-  All these compilation variables can be checked, using the function cimg_library::cimg::info(), which
-  displays a list of the different configuration variables and their values on the standard error output.
-**/
-/*@}*/
-
-/** \addtogroup cimg_tutorial Tutorial : Getting Started. */
-/*@{*/
-/**
-  \page foo3
-
-  Let's start to write our first program to get the idea. This will demonstrate how to load and create images, as well as handle image
-  display and mouse events.
-  Assume we want to load a color image <tt>lena.jpg</tt>, smooth it, display it in a windows, and enter an event loop so that clicking a
-  point in the image with the mouse will draw the intensity profiles of (R,G,B) of the corresponding image line (in another window).
-  Yes, that sounds quite complex for a first code, but don't worry, it will be very simple using the CImg library ! Well, just look
-  at the code below, it does the task :
-
-  \code
-  #include "CImg.h"
-  using namespace cimg_library;
-
-  int main() {
-    CImg<unsigned char> image("lena.jpg"), visu(500,400,1,3,0);
-    const unsigned char red[3]={255,0,0}, green[3]={0,255,0}, blue[3]={0,0,255};
-    image.blur(2.5);
-    CImgDisplay main_disp(image,"Click a point"), draw_disp(visu,"Intensity profile");
-    while (!main_disp.is_closed && !draw_disp.is_closed) {
-      main_disp.wait();
-      if (main_disp.button && main_disp.mouse_y>=0) {
-        const int y = main_disp.mouse_y;
-        visu.fill(0).draw_graph(image.get_crop(0,y,0,0,image.dimx()-1,y,0,0),red,0,256,0);
-        visu.draw_graph(image.get_crop(0,y,0,1,image.dimx()-1,y,0,1),green,0,256,0);
-        visu.draw_graph(image.get_crop(0,y,0,2,image.dimx()-1,y,0,2),blue,0,256,0).display(draw_disp);
-        }
-      }
-    return 0;
-  }
-  \endcode
-
-  Here is a screenshot of the resulting program :
-
-  <img SRC="../img/tutorial.jpg">
-
-  And here is the detailled explanation of the source, line by line :
-
-  \code #include "CImg.h" \endcode
-  Include the main and only header file of the CImg library.
-  \code using namespace cimg_library; \endcode
-  Use the library namespace to ease the declarations afterward.
-  \code int main() { \endcode
-  Definition of the main function.
-  \code CImg<unsigned char> image("lena.jpg"), visu(500,400,1,3,0); \endcode
-  Creation of two instances of images of \c unsigned \c char pixels.
-  The first image \c image is initialized by reading an image file from the disk.
-  Here, <tt>lena.jpg</tt> must be in the same directory than the current program.
-  Note that you must also have installed the \e ImageMagick package in order to be able to read JPG images.
-  The second image \c visu is initialized as a black color image with dimension <tt>dx=500</tt>, <tt>dy=400</tt>,
-  <tt>dz=1</tt> (here, it is a 2D image, not a 3D one), and <tt>dv=3</tt> (each pixel has 3 'vector' channels R,G,B).
-  The last argument in the constructor defines the default value of the pixel values
-  (here \c 0, which means that \c visu will be initially black).
-  \code const unsigned char red[3]={255,0,0}, green[3]={0,255,0}, blue[3]={0,0,255}; \endcode
-  Definition of three different colors as array of unsigned char. This will be used to draw plots with different colors.
-  \code image.blur(2.5); \endcode
-  Blur the image, with a gaussian blur and a standard variation of 2.5. Note that most of the CImg functions have two versions :
-  one that acts in-place (which is the case of blur), and one that returns the result as a new image (the name of the function
-  begins then with <tt>get_</tt>&nbsp;). In this case, one could have also written <tt>image = image.get_blur(2.5);</tt>
-  (more expensive, since it needs an additional copy operation).
-  \code CImgDisplay main_disp(image,"Click a point"), draw_disp(visu,"Intensity profile"); \endcode
-  Creation of two display windows, one for the input image image, and one for the image visu which will be display intensity profiles.
-  By default, CImg displays handles events (mouse,keyboard,..). On Windows, there is a way to create fullscreen displays.
-  \code while (!main_disp.is_closed && !draw_disp.is_closed) { \endcode
-  Enter the event loop, the code will exit when one of the two display windows is closed.
-  \code main_disp.wait(); \endcode
-  Wait for an event (mouse, keyboard,..) in the display window \c main_disp.
-  \code if (main_disp.button && main_disp.mouse_y>=0) { \endcode
-  Test if the mouse button has been clicked on the image area.
-  One may distinguish between the 3 different mouse buttons,
-  but in this case it is not necessary
-  \code const int y = main_disp.mouse_y; \endcode
-  Get the image line y-coordinate that has been clicked.
-  \code visu.fill(0).draw_graph(image.get_crop(0,y,0,0,image.dimx()-1,y,0,0),red,0,256,0); \endcode
-  This line illustrates the pipeline property of most of the CImg class functions. The first function <tt>fill(0)</tt> simply sets
-  all pixel values with 0 (i.e. clear the image \c visu). The interesting thing is that it returns a reference to
-  \c visu and then, can be pipelined with the function \c draw_graph() which draws a plot in the image \c visu.
-  The plot data are given by another image (the first argument of \c draw_graph()). In this case, the given image is
-  the red-component of the line y of the original image, retrieved by the function \c get_crop() which returns a
-  sub-image of the image \c image. Remember that images coordinates are 4D (x,y,z,v) and for color images,
-  the R,G,B channels are respectively given by <tt>v=0, v=1</tt> and <tt>v=2</tt>.
-  \code visu.draw_graph(image.get_crop(0,y,0,1,image.dimx()-1,y,0,1),green,0,256,0); \endcode
-  Plot the intensity profile for the green channel of the clicked line.
-  \code visu.draw_graph(image.get_crop(0,y,0,2,image.dimx()-1,y,0,2),blue,0,256,0).display(draw_disp); \endcode
-  Same thing for the blue channel. Note how the function (which return a reference to \c visu) is pipelined with the function
-  \c display() that just paints the image visu in the corresponding display window.
-  \code ...till the end \endcode
-  I don't think you need more explanations !
-
-  As you have noticed, the CImg library allows to write very small and intuitive code. Note also that this source will perfectly
-  work on Unix and Windows systems. Take also a look to the examples provided in the CImg package (
-  directory \c examples/ ). It will show you how CImg-based code can be surprisingly small.
-  Moreover, there is surely one example close to what you want to do.
-  A good start will be to look at the file <tt>CImg_demo.cpp</tt> which contains small and various examples of what you can do
-  with the %CImg Library. All CImg classes are used in this source, and the code can be easily modified to see what happens.
-
-**/
-/*@}*/
-
-/** \addtogroup cimg_drawing Using Drawing Functions. */
-/*@{*/
-/**
-  \page foo5
-
-  \section s5 Using Drawing Functions.
-
-  This section tells more about drawing features in CImg images.
-  Drawing functions list can be found in <a href="structCImg.html">the CImg functions list</a>
-  (section \b Drawing Functions),
-  and are all defined on a common basis. Here are the important points to understand before using
-  drawing functions :
-
-  - Drawing is performed on the instance image. Drawing functions parameters
-  are defined as \e const variables and return a reference to the current instance <tt>(*this)</tt>,
-  so that drawing functions can be pipelined (see examples below).
-  Drawing is usually done in 2D color images but can be performed in 3D images with any vector-valued dimension,
-  and with any possible pixel type.
-
-  - A color parameter is always needed to draw features in an image. The color must be defined as a C-style array
-  whose dimension is at least
-
-**/
-/*@}*/
-
-/** \addtogroup cimg_loops Using Image Loops. */
-/*@{*/
-/**
-  \page foo_lo
-  The %CImg Library provides different macros that define useful iterative loops over an image.
-  Basically, it can be used to replace one or several <tt>for(..)</tt> instructions, but it also proposes
-  interesting extensions to classical loops.
-  Below is a list of all existing loop macros, classified in four different categories :
-  - \ref lo1
-  - \ref lo4
-  - \ref lo5
-  - \ref lo6
-
-  \section lo1 Loops over the pixel buffer
-
-  Loops over the pixel buffer are really basic loops that iterate a pointer on the pixel data buffer
-  of a \c cimg_library::CImg image. Two macros are defined for this purpose :
-
-  - \b cimg_for(img,ptr,T) :
-  This macro loops over the pixel data buffer of the image \c img, using a pointer <tt>T* ptr</tt>,
-  starting from the end of the buffer (last pixel) till the beginning of the buffer (first pixel).
-      - \c img must be a (non empty) \c cimg_library::CImg image of pixels \c T.
-      - \c ptr is a pointer of type \c T*.
-  This kind of loop should not appear a lot in your own source code, since this is a low-level loop
-  and many functions of the CImg class may be used instead. Here is an example of use :
-  \code
-  CImg<float> img(320,200);
-  cimg_for(img,ptr,float) { *ptr=0; }      // Equivalent to 'img.fill(0);'
-  \endcode
-
-  - \b cimg_foroff(img,off) :
-  This macro loops over the pixel data buffer of the image \c img, using an offset \c ,
-  starting from the beginning of the buffer (first pixel, \c off=0)
-  till the end of the buffer (last pixel value, <tt>off = img.size()-1</tt>).
-      - \c img must be a (non empty) cimg_library::CImg<T> image of pixels \c T.
-      - \c off is an inner-loop variable, only defined inside the scope of the loop.
-
-  Here is an example of use :
-  \code
-  CImg<float> img(320,200);
-  cimg_foroff(img,off) { img[off]=0; }  // Equivalent to 'img.fill(0);'
-  \endcode
-
-  \section lo4 Loops over image dimensions
-
-  The following loops are probably the most used loops in image processing programs.
-  They allow to loop over the image along one or several dimensions, along a raster scan course.
-  Here is the list of such loop macros for a single dimension :
-  - \b cimg_forX(img,x) : equivalent to : <tt>for (int x=0; x<img.dimx(); x++)</tt>.
-  - \b cimg_forY(img,y) : equivalent to : <tt>for (int y=0; y<img.dimy(); y++)</tt>.
-  - \b cimg_forZ(img,z) : equivalent to : <tt>for (int z=0; z<img.dimz(); z++)</tt>.
-  - \b cimg_forV(img,v) : equivalent to : <tt>for (int v=0; v<img.dimv(); v++)</tt>.
-
-  Combinations of these macros are also defined as other loop macros, allowing to loop directly over 2D, 3D or 4D images :
-  - \b cimg_forXY(img,x,y) : equivalent to : \c cimg_forY(img,y) \c cimg_forX(img,x).
-  - \b cimg_forXZ(img,x,z) : equivalent to : \c cimg_forZ(img,z) \c cimg_forX(img,x).
-  - \b cimg_forYZ(img,y,z) : equivalent to : \c cimg_forZ(img,z) \c cimg_forY(img,y).
-  - \b cimg_forXV(img,x,v) : equivalent to : \c cimg_forV(img,v) \c cimg_forX(img,x).
-  - \b cimg_forYV(img,y,v) : equivalent to : \c cimg_forV(img,v) \c cimg_forY(img,y).
-  - \b cimg_forZV(img,z,v) : equivalent to : \c cimg_forV(img,v) \c cimg_forZ(img,z).
-  - \b cimg_forXYZ(img,x,y,z) : equivalent to : \c cimg_forZ(img,z) \c cimg_forXY(img,x,y).
-  - \b cimg_forXYV(img,x,y,v) : equivalent to : \c cimg_forV(img,v) \c cimg_forXY(img,x,y).
-  - \b cimg_forXZV(img,x,z,v) : equivalent to : \c cimg_forV(img,v) \c cimg_forXZ(img,x,z).
-  - \b cimg_forYZV(img,y,z,v) : equivalent to : \c cimg_forV(img,v) \c cimg_forYZ(img,y,z).
-  - \b cimg_forXYZV(img,x,y,z,v) : equivalent to : \c cimg_forV(img,v) \c cimg_forXYZ(img,x,y,z).
-
-  - For all these loops, \c x,\c y,\c z and \c v are inner-defined variables only visible inside the scope of the loop.
-  They don't have to be defined before the call of the macro.
-  - \c img must be a (non empty) cimg_library::CImg image.
-
-  Here is an example of use that creates an image with a smooth color gradient :
-  \code
-  CImg<unsigned char> img(256,256,1,3);       // Define a 256x256 color image
-  cimg_forXYV(img,x,y,v) { img(x,y,v) = (x+y)*(v+1)/6; }
-  img.display("Color gradient");
-  \endcode
-
-  \section lo5 Loops over interior regions and borders.
-
-  Similar macros are also defined to loop only on the border of an image, or inside the image (excluding the border).
-  The border may be several pixel wide :
-
-  - \b cimg_for_insideX(img,x,n) : Loop along the x-axis, except for pixels inside a border of \p n pixels wide.
-  - \b cimg_for_insideY(img,y,n) : Loop along the y-axis, except for pixels inside a border of \p n pixels wide.
-  - \b cimg_for_insideZ(img,z,n) : Loop along the z-axis, except for pixels inside a border of \p n pixels wide.
-  - \b cimg_for_insideV(img,v,n) : Loop along the v-axis, except for pixels inside a border of \p n pixels wide.
-  - \b cimg_for_insideXY(img,x,y,n) : Loop along the (x,y)-axes, excepted for pixels inside a border of \p n pixels wide.
-  - \b cimg_for_insideXYZ(img,x,y,z,n) : Loop along the (x,y,z)-axes, excepted for pixels inside a border of \p n pixels wide.
-
-  And also :
-
-  - \b cimg_for_borderX(img,x,n) : Loop along the x-axis, only for pixels inside a border of \p n pixels wide.
-  - \b cimg_for_borderY(img,y,n) : Loop along the y-axis, only for pixels inside a border of \p n pixels wide.
-  - \b cimg_for_borderZ(img,z,n) : Loop along the z-axis, only for pixels inside a border of \p n pixels wide.
-  - \b cimg_for_borderV(img,v,n) : Loop along the z-axis, only for pixels inside a border of \p n pixels wide.
-  - \b cimg_for_borderXY(img,x,y,n) : Loop along the (x,y)-axes, only for pixels inside a border of \p n pixels wide.
-  - \b cimg_for_borderXYZ(img,x,y,z,n) : Loop along the (x,y,z)-axes, only for pixels inside a border of \p n pixels wide.
-
-  - For all these loops, \c x,\c y,\c z and \c v are inner-defined variables only visible inside the scope of the loop.
-  They don't have to be defined before the call of the macro.
-  - \c img must be a (non empty) cimg_library::CImg image.
-  - The constant \c n stands for the size of the border.
-
-  Here is an example of use, to create a 2d grayscale image with two different intensity gradients :
-  \code
-  CImg<> img(256,256);
-  cimg_for_insideXY(img,x,y,50) img(x,y) = x+y;
-  cimg_for_borderXY(img,x,y,50) img(x,y) = x-y;
-  img.display();
-  \endcode
-
-  \section lo6 Loops using neighborhoods.
-
-  Inside an image loop, it is often useful to get values of neighborhood pixels of the
-  current pixel at the loop location.
-  The %CImg Library provides a very smart and fast mechanism for this purpose, with the definition
-  of several loop macros that remember the neighborhood values of the pixels.
-  The use of these macros can highly optimize your code, and also simplify your program.
-
-  \subsection lo7 Neighborhood-based loops for 2D images
-
-  For 2D images, the neighborhood-based loop macros are :
-
-  - \b cimg_for2x2(img,x,y,z,v,I) : Loop along the (x,y)-axes using a centered 2x2 neighborhood.
-  - \b cimg_for3x3(img,x,y,z,v,I) : Loop along the (x,y)-axes using a centered 3x3 neighborhood.
-  - \b cimg_for4x4(img,x,y,z,v,I) : Loop along the (x,y)-axes using a centered 4x4 neighborhood.
-  - \b cimg_for5x5(img,x,y,z,v,I) : Loop along the (x,y)-axes using a centered 5x5 neighborhood.
-
-  For all these loops, \c x and \c y are inner-defined variables only visible inside the scope of the loop.
-  They don't have to be defined before the call of the macro.
-  \c img is a non empty CImg<T> image. \c z and \c v are constants that define on which image slice and
-  vector channel the loop must apply (usually both 0 for grayscale 2D images).
-  Finally, \c I is the 2x2, 3x3, 4x4 or 5x5 neighborhood that will be updated with the correct pixel values
-  during the loop (see \ref lo9).
-
-  \subsection lo8 Neighborhood-based loops for 3D images
-
-  For 3D images, the neighborhood-based loop macros are :
-
-  - \b cimg_for2x2x2(img,x,y,z,v,I) : Loop along the (x,y,z)-axes using a centered 2x2x2 neighborhood.
-  - \b cimg_for3x3x3(img,x,y,z,v,I) : Loop along the (x,y,z)-axes using a centered 3x3x3 neighborhood.
-
-  For all these loops, \c x, \c y and \c z are inner-defined variables only visible inside the scope of the loop.
-  They don't have to be defined before the call of the macro.
-  \c img is a non empty CImg<T> image. \c v is a constant that defines on which image channel
-  the loop must apply (usually 0 for grayscale 3D images).
-  Finally, \c I is the 2x2x2 or 3x3x3 neighborhood that will be updated with the correct pixel values
-  during the loop (see \ref lo9).
-
-  \subsection lo9 Defining neighborhoods
-
-  The CImg library defines a neighborhood as a set of named \e variables or \e references, declared
-  using specific CImg macros :
-
-  - \b CImg_2x2(I,type) : Define a 2x2 neighborhood named \c I, of type \c type.
-  - \b CImg_3x3(I,type) : Define a 3x3 neighborhood named \c I, of type \c type.
-  - \b CImg_4x4(I,type) : Define a 4x4 neighborhood named \c I, of type \c type.
-  - \b CImg_5x5(I,type) : Define a 5x5 neighborhood named \c I, of type \c type.
-  - \b CImg_2x2x2(I,type) : Define a 2x2x2 neighborhood named \c I, of type \c type.
-  - \b CImg_3x3x3(I,type) : Define a 3x3x3 neighborhood named \c I, of type \c type.
-
-  Actually, \c I is a \e generic \e name for the neighborhood. In fact, these macros declare
-  a \e set of new variables.
-  For instance, defining a 3x3 neighborhood \c CImg_3x3(I,float) declares 9 different float variables
-  \c Ipp,\c Icp,\c Inp,\c Ipc,\c Icc,\c Inc,\c Ipn,\c Icn,\c Inn which correspond to each pixel value of
-  a 3x3 neighborhood.
-  Variable indices are \c p,\c c or \c n, and stand respectively for \e 'previous', \e 'current' and \e 'next'.
-  First indice denotes the \c x-axis, second indice denotes the \c y-axis.
-  Then, the names of the variables are directly related to the position of the corresponding pixels
-  in the neighborhood. For 3D neighborhoods, a third indice denotes the \c z-axis.
-  Then, inside a neighborhood loop, you will have the following equivalence :
-  - <tt>Ipp = img(x-1,y-1)</tt>
-  - <tt>Icn = img(x,y+1)</tt>
-  - <tt>Inp = img(x+1,y-1)</tt>
-  - <tt>Inpc = img(x+1,y-1,z)</tt>
-  - <tt>Ippn = img(x-1,y-1,z+1)</tt>
-  - and so on...
-
-  For bigger neighborhoods, such as 4x4 or 5x5 neighborhoods, two additionnal indices are introduced :
-  \c a (stands for \e 'after') and \c b (stands for \e 'before'), so that :
-  - <tt>Ibb = img(x-2,y-2)</tt>
-  - <tt>Ina = img(x+1,y+2)</tt>
-  - and so on...
-
-  The value of a neighborhood pixel outside the image range (image border problem) is automatically set to the same
-  values than the nearest valid pixel in the image (this is also called the \e Neumann \e border \e condition).
-
-  \subsection lo10 Neighborhood as a reference
-  It is also possible to define neighborhood variables as references to classical C-arrays or CImg<T> images, instead of
-  allocating new variables. This is done by adding \c _ref to the macro names used for the neighborhood definition :
-
-  - \b CImg_2x2x1_ref(I,type,tab) : Define a 2x2 neighborhood named \c I, of type \c type, as a reference to \c tab.
-  - \b CImg_3x3x1_ref(I,type,tab) : Define a 3x3 neighborhood named \c I, of type \c type, as a reference to \c tab.
-  - \b CImg_4x4x1_ref(I,type,tab) : Define a 4x4 neighborhood named \c I, of type \c type, as a reference to \c tab.
-  - \b CImg_5x5x1_ref(I,type,tab) : Define a 5x5 neighborhood named \c I, of type \c type, as a reference to \c tab.
-  - \b CImg_2x2x2_ref(I,type,tab) : Define a 2x2x2 neighborhood named \c I, of type \c type, as a reference to \c tab.
-  - \b CImg_3x3x3_ref(I,type,tab) : Define a 3x3x3 neighborhood named \c I, of type \c type, as a reference to \c tab.
-
-  \c tab can be a one-dimensionnal C-style array, or a non empty \c CImg<T> image. Both objects must have
-  same sizes as the considered neighborhoods.
-
-  \subsection lo11 Example codes
-  More than a long discussion, the above example will demonstrate how to compute the gradient norm of a 3D volume
-  using the \c cimg_for3x3x3() loop macro :
-
-  \code
-  CImg<float> volume("IRM.hdr");        // Load an IRM volume from an Analyze7.5 file
-  CImg_3x3x3(I,float);                  // Define a 3x3x3 neighborhood
-  CImg<float> gradnorm(volume);         // Create an image with same size as 'volume'
-  cimg_for3x3x3(volume,x,y,z,0,I) {     // Loop over the volume, using the neighborhood I
-    const float ix = 0.5f*(Incc-Ipcc);  // Compute the derivative along the x-axis.
-    const float iy = 0.5f*(Icnc-Icpc);  // Compute the derivative along the y-axis.
-    const float iz = 0.5f*(Iccn-Iccp);  // Compute the derivative along the z-axis.
-    gradnorm(x,y,z) = std::sqrt(ix*ix+iy*iy+iz*iz);  // Set the gradient norm in the destination image
-  }
-  gradnorm.display("Gradient norm");
-  \endcode
-
-  And the following example shows how to deal with neighborhood references to blur a color image by averaging
-  pixel values on a 5x5 neighborhood.
-
-  \code
-  CImg<unsigned char> src("image_color.jpg"), dest(src,false), neighbor(5,5);  // Image definitions.
-  typedef unsigned char uchar;             // Avoid space in the second parameter of the macro CImg_5x5x1 below.
-  CImg_5x5x1_ref(N,uchar,neighbor);        // Define a 5x5 neighborhood as a reference to the 5x5 image neighbor.
-  cimg_forV(src,k)                         // Standard loop on color channels
-     cimg_for5x5(src,x,y,0,k,N)            // 5x5 neighborhood loop.
-       dest(x,y,k) = neighbor.sum()/(5*5); // Averaging pixels to filter the color image.
-  CImgList<unsigned char> visu(src,dest);
-  visu.display("Original + Filtered");     // Display both original and filtered image.
-  \endcode
-
-  Note that in this example, we didn't use directly the variables Nbb,Nbp,..,Ncc,... since
-  there are only references to the neighborhood image \c neighbor. We rather used a member function of \c neighbor.
-
-  As you can see, explaining the use of the CImg neighborhood macros is actually more difficult than using them !
-
-**/
-/*@}*/
-
-/** \addtogroup cimg_displays Using Display Windows. */
-/*@{*/
-/**
-  \page foo_di
-
-  When opening a display window, you can choose the way the pixel values will be normalized
-  before being displayed on the screen. Screen displays only support color values between [0,255],
-  and some
-
-  When displaying an image into the display window using CImgDisplay::display(), values of
-  the image pixels can be eventually linearly normalized between [0,255] for visualization purposes.
-  This may be useful for instance when displaying \p CImg<double> images with pixel values
-  between [0,1].
-  The normalization behavior depends on the value of \p normalize which can be either \p 0,\p 1 or \p 2 :
-  - \p 0 : No pixel normalization is performed when displaying an image. This is the fastest
-  process, but you must be sure your displayed image have pixel values inside the range [0,255].
-  - \p 1 : Pixel value normalization is done for each new image display. Image pixels are
-  not modified themselves, only displayed pixels are normalized.
-  - \p 2 : Pixel value normalization is done for the first image display, then the
-  normalization parameters are kept and used for all the next image displays.
-
-**/
-/*@}*/
-
-/** \addtogroup cimg_storage How pixel data are stored with CImg. */
-/*@{*/
-/**
-  \page foo_store
-
-  TODO
-**/
-/*@}*/
-
-/** \addtogroup cimg_files_io Files IO in CImg. */
-/*@{*/
-/**
-  \page foo_fi
-
-  The %CImg Library can NATIVELY handle the following file formats :
-  - RAW : consists in a very simple header (in ascii), then the image data.
-  - ASC (Ascii)
-  - HDR (Analyze 7.5)
-  - INR (Inrimage)
-  - PPM/PGM (Portable Pixmap)
-  - BMP (uncompressed)
-  - PAN (Pandore-5)
-  - DLM (Matlab ASCII)
-
-  If ImageMagick is installed, The %CImg Library can save image in formats handled by ImageMagick : JPG, GIF, PNG, TIF,...
-
-**/
-/*@}*/
-
-/** \addtogroup cimg_options Retrieving Command Line Arguments. */
-/*@{*/
-/**
-  \page foo_so
-
-   The CImg library offers facilities to retrieve command line arguments in a console-based
-   program, as it is a commonly needed operation.
-   Three macros \c cimg_usage(), \c cimg_help() and \c cimg_option() are defined for this purpose.
-   Using these macros allows to easily retrieve options values from the command line.
-   Invoking the compiled executable with the option \c -h or \c --help will
-   automatically display the program usage, followed by the list of requested options.
-
-   \section so1 The cimg_usage() macro
-
-   The macro \c cimg_usage(usage) may be used to describe the program goal and usage.
-   It is generally inserted one time after the <tt>int main(int argc,char **argv)</tt> definition.
-
-   \param usage : A string describing the program goal and usage.
-   \pre The function where \c cimg_usage() is used must have correctly defined \c argc and \c argv variables.
-
-   \section so1_5 The cimg_help() macro
-
-   The macro \c cimg_help(str) will display the string \c str only if the \c -help or \c --help option
-   are invoked when running the programm.
-
-   \section so2 The cimg_option() macro
-
-   The macro \c cimg_option(name,default,usage) may be used to retrieve an option value from the command line.
-
-   \param name    : The name of the option to be retrieved from the command line.
-   \param default : The default value returned by the macro if no options \p name has been specified when running the program.
-   \param usage   : A brief explanation of the option. If \c usage==0, the option won't appear on the option list
-                    when invoking the executable with options \c -h or \c --help (hidden option).
-
-   \return \c cimg_option() returns an object that has the \e same \e type than the default value \c default.
-   The return value is equal to the one specified on the command line. If no such option have been specified,
-   the return value is equal to the default value \c default.
-   Warning, this can be confusing in some situations (look at the end of the next section).
-   \pre The function where \c cimg_option() is used must have correctly defined \c argc and \c argv variables.
-
-   \section so3 Example of use
-
-   The code below uses the macros \c cimg_usage() and \c cimg_option().
-   It loads an image, smoothes it an quantifies it with a specified number of values.
-   \code
-   #include "CImg.h"
-   using namespace cimg_library;
-   int main(int argc,char **argv) {
-     cimg_usage("Retrieve command line arguments");
-     const char* filename = cimg_option("-i","image.gif","Input image file");
-     const char* output   = cimg_option("-o",(char*)0,"Output image file");
-     const double sigma   = cimg_option("-s",1.0,"Standard variation of the gaussian smoothing");
-     const  int nblevels  = cimg_option("-n",16,"Number of quantification levels");
-     const bool hidden    = cimg_option("-hidden",false,0);      // This is a hidden option
-
-     CImg<unsigned char> img(filename);
-     img.blur(sigma).quantize(nblevels);
-     if (output) img.save(output); else img.display("Output image");
-     if (hidden) std::fprintf(stderr,"You found me !\n");
-     return 0;
-   }
-   \endcode
-
-   Invoking the corresponding executable with <tt>test -h -hidden -n 20 -i foo.jpg</tt> will display :
-   \verbatim
-   ./test -h -hidden -n 20 -i foo.jpg
-
- test : Retrieve command line arguments (Oct 16 2004, 12:34:26)
-
-    -i       = foo.jpg      : Input image file
-    -o       = 0            : Output image file
-    -s       = 1            : Standard variation of the gaussian smoothing
-    -n       = 20           : Number of quantification levels
-
-   You found me !
-\endverbatim
-
-   \warning As the type of object returned by the macro \c cimg_option(option,default,usage)
-   is defined by the type of \c default, undesired casts may appear when writting code such as :
-   \code
-   const double sigma = cimg_option("-val",0,"A floating point value");
-   \endcode
-   In this case, \c sigma will always be equal to an integer (since the default value \c 0 is an integer).
-   When passing a float value on the command line, a \e float \e to \e integer cast is then done,
-   truncating the given parameter to an integer value (this is surely not a desired behavior).
-   You must specify <tt>0.0</tt> as the default value in this case.
-
-   \section so4 How to learn more about command line options ?
-   You should take a look at the examples <tt>examples/inrcast.cpp</tt> provided in the %CImg Library package.
-   This is a command line based image converter which intensively uses the \c cimg_option() and \c cimg_usage()
-   macros to retrieve command line parameters.
-**/
-/*@}*/
 
 #endif
 
