@@ -315,6 +315,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     QGroupBox *gbox2 = new QGroupBox(2, Qt::Horizontal, histogramPage);
     gbox2->setFrameStyle( QFrame::NoFrame );
+    gbox2->setInsideMargin(0);
 
     QLabel *label11     = new QLabel(i18n("Color depth:"), gbox2);
     label11->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
