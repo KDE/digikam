@@ -244,7 +244,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     // -------------------------------------------------------------
 
-    QVBox *histoBox = new QVBox(histogramPage);
+    QVBox *histoBox    = new QVBox(histogramPage);
     d->histogramWidget = new HistogramWidget(256, 140, histoBox);
     QWhatsThis::add( d->histogramWidget, i18n("<p>This is the histogram drawing of the "
                                               "selected image channel"));
