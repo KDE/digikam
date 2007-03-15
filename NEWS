@@ -35,4 +35,5 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 005 ==> 127583 : keywords, copyright, photographer info not saved to IPTC tags.
 006 ==> 142571 : Auto-exposure result is different from the preview.
 007 ==> 127377 : Restoration filter (CIMG) does not function properly.
-008 ==> 
+008 ==> 131446 : Using inpainting plugin crashes digiKam.
+009 ==> 
