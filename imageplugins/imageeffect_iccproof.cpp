@@ -110,8 +110,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     // -------------------------------------------------------------------
 
-    QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout *gridSettings = new QGridLayout( gboxSettings, 3, 2, marginHint(), spacingHint());
+    QWidget *gboxSettings     = new QWidget(plainPage());
+    QGridLayout *gridSettings = new QGridLayout( gboxSettings, 3, 2, spacingHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel: "), gboxSettings);
     label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -190,7 +190,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QWhatsThis::add(generalOptions, i18n("<p>Here you can set general parameters.</p>"));
 
     QGridLayout *zeroPageLayout = new QGridLayout(generalOptions, 5, 1, 
-                                  KDialog::marginHint(), KDialog::spacingHint());
+                                  spacingHint(), spacingHint());
 
     m_doSoftProofBox = new QCheckBox(generalOptions);
     m_doSoftProofBox->setText(i18n("Soft-proofing"));
@@ -276,7 +276,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                     "Profiles.</p>"));
 
     QGridLayout *firstPageLayout = new QGridLayout(inProfiles, 4, 2,
-                                   KDialog::marginHint(), KDialog::spacingHint());
+                                   spacingHint(), spacingHint());
 
     m_inProfileBG = new QButtonGroup(4, Qt::Vertical, inProfiles);
     m_inProfileBG->setFrameStyle(QFrame::NoFrame);
@@ -327,7 +327,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                     "Profiles.</p>"));
 
     QGridLayout *secondPageLayout = new QGridLayout(spaceProfiles, 3, 2, 
-                                    KDialog::marginHint(), KDialog::spacingHint());
+                                    spacingHint(), spacingHint());
 
     m_spaceProfileBG = new QButtonGroup(2, Qt::Vertical, spaceProfiles);
     m_spaceProfileBG->setFrameStyle(QFrame::NoFrame);
@@ -362,7 +362,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                     "Profiles.</p>"));
 
     QGridLayout *thirdPageLayout = new QGridLayout(proofProfiles, 3, 2, 
-                                   KDialog::marginHint(), KDialog::spacingHint());
+                                   spacingHint(), spacingHint());
 
     m_proofProfileBG = new QButtonGroup(2, Qt::Vertical, proofProfiles);
     m_proofProfileBG->setFrameStyle(QFrame::NoFrame);
@@ -395,14 +395,14 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                  SmallIconSet("blend"), i18n("Lightness Adjustments"));
     QWhatsThis::add(lightnessadjust, i18n("<p>Set here all lightness adjustments of target image.</p>"));
 
-    QGridLayout *fourPageLayout = new QGridLayout( lightnessadjust, 3, 1, marginHint(), spacingHint());
+    QGridLayout *fourPageLayout = new QGridLayout( lightnessadjust, 4, 1, spacingHint(), 0);
 
     Digikam::ColorGradientWidget* vGradient = new Digikam::ColorGradientWidget(
                                                   Digikam::ColorGradientWidget::Vertical,
                                                   10, lightnessadjust );
     vGradient->setColors( QColor( "white" ), QColor( "black" ) );
 
-    m_curvesWidget = new Digikam::CurvesWidget(256, 140, m_originalImage->bits(), m_originalImage->width(),
+    m_curvesWidget = new Digikam::CurvesWidget(256, 180, m_originalImage->bits(), m_originalImage->width(),
                                                m_originalImage->height(), m_originalImage->sixteenBit(),
                                                m_curves, lightnessadjust);
     QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve adjustment of the image luminosity"));
@@ -421,8 +421,9 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     fourPageLayout->addMultiCellWidget(vGradient, 0, 0, 0, 0);
     fourPageLayout->addMultiCellWidget(m_curvesWidget, 0, 0, 1, 1);
     fourPageLayout->addMultiCellWidget(hGradient, 1, 1, 1, 1);
-    fourPageLayout->addMultiCellWidget(m_cInput, 2, 2, 0, 1);
-    fourPageLayout->setRowStretch(3, 10);
+    fourPageLayout->addMultiCellWidget(m_cInput, 3, 3, 0, 1);
+    fourPageLayout->setRowSpacing(2, spacingHint());
+    fourPageLayout->setRowStretch(4, 10);
 
     // -------------------------------------------------------------
 
