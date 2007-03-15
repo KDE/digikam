@@ -1,10 +1,10 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2006-02-20
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Date   : 2006-02-20
  * Description : a widget to display non standard Exif metadata
  *               used by camera makers
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,6 +46,7 @@
 #include "ddebug.h"
 #include "dmetadata.h"
 #include "makernotewidget.h"
+#include "makernotewidget.moc"
 
 namespace Digikam
 {
@@ -197,11 +198,10 @@ bool MakerNoteWidget::decodeMetadata()
     }
     catch (Exiv2::Error& e)
     {
-        DDebug() << "Cannot parse MAKERNOTE metadata using Exiv2 ("
-                  << QString::fromAscii(e.what().c_str())
-                  << ")" << endl;
-        return false;
+        DMetadata::printExiv2ExceptionError("Cannot parse MAKERNOTE metadata using Exiv2 ", e);
     }
+
+    return false;
 }
 
 void MakerNoteWidget::buildView(void)
@@ -226,11 +226,10 @@ QString MakerNoteWidget::getTagTitle(const QString& key)
     }
     catch (Exiv2::Error& e) 
     {
-        DDebug() << "Cannot get metadata tag title using Exiv2 ("
-                  << QString::fromAscii(e.what().c_str())
-                  << ")" << endl;
-        return i18n("Unknown");
+        DMetadata::printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
     }
+
+    return i18n("Unknown");
 }
 
 QString MakerNoteWidget::getTagDescription(const QString& key)
@@ -243,11 +242,10 @@ QString MakerNoteWidget::getTagDescription(const QString& key)
     }
     catch (Exiv2::Error& e) 
     {
-        DDebug() << "Cannot get metadata tag description using Exiv2 ("
-                  << QString::fromAscii(e.what().c_str())
-                  << ")" << endl;
-        return i18n("No description available");
+        DMetadata::printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
     }
+
+    return i18n("No description available");
 }
 
 void MakerNoteWidget::slotSaveMetadataToFile(void)
@@ -259,4 +257,3 @@ void MakerNoteWidget::slotSaveMetadataToFile(void)
 
 }  // namespace Digikam
 
-#include "makernotewidget.moc"

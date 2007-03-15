@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2006-02-22
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Date   : 2006-02-22
  * Description : a tab widget to display GPS info
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,6 +62,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 namespace Digikam
 {
+
 static const char* ExifGPSHumanList[] =
 {
      "GPSLatitude",
@@ -304,11 +305,10 @@ bool GPSWidget::decodeMetadata()
     catch (Exiv2::Error& e)
     {
         setMetadataEmpty();
-        DDebug() << "Cannot parse EXIF metadata using Exiv2 ("
-                  << QString::fromAscii(e.what().c_str())
-                  << ")" << endl;
-        return false;
+        DMetadata::printExiv2ExceptionError("Cannot parse EXIF metadata using Exiv2 ", e);        
     }
+
+    return false;
 }
 
 void GPSWidget::setMetadataEmpty()
@@ -342,11 +342,10 @@ QString GPSWidget::getTagTitle(const QString& key)
     }
     catch (Exiv2::Error& e) 
     {
-        DDebug() << "Cannot get metadata tag title using Exiv2 ("
-                  << QString::fromAscii(e.what().c_str())
-                  << ")" << endl;
-        return i18n("Unknown");
+        DMetadata::printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
     }
+
+    return i18n("Unknown");
 }
 
 QString GPSWidget::getTagDescription(const QString& key)
@@ -359,11 +358,10 @@ QString GPSWidget::getTagDescription(const QString& key)
     }
     catch (Exiv2::Error& e) 
     {   
-        DDebug() << "Cannot get metadata tag description using Exiv2 ("
-                  << QString::fromAscii(e.what().c_str())
-                  << ")" << endl;
-        return i18n("No description available");
+        DMetadata::printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
     }
+
+    return i18n("No description available");
 }
 
 bool GPSWidget::decodeGPSPosition(void)
