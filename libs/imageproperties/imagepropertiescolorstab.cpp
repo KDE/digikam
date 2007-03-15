@@ -33,6 +33,7 @@
 #include <qhbuttongroup.h> 
 #include <qpushbutton.h>
 #include <qtooltip.h>
+#include <qvbox.h>
 
 // KDE includes.
 
