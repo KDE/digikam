@@ -1,11 +1,11 @@
 /* ============================================================
- * Authors: Gilles Caulier
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  *          Peter Heckert <peter dot heckert at arcor dot de>
  * Date   : 2004-08-24
  * Description : noise reduction image filter for digiKam 
  *               image editor.
  * 
- * Copyright 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2004-2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -84,7 +84,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     QTabWidget *mainTab = new QTabWidget(m_imagePreviewWidget);
     
     QWidget* firstPage = new QWidget( mainTab );
-    QGridLayout* gridSettings = new QGridLayout( firstPage, 6, 1, marginHint());    
+    QGridLayout* gridSettings = new QGridLayout( firstPage, 6, 1, spacingHint());    
     mainTab->addTab( firstPage, i18n("Details") );
     
     QLabel *label1 = new QLabel(i18n("Radius:"), firstPage);
@@ -189,7 +189,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     // -------------------------------------------------------------
 
     QWidget* secondPage = new QWidget( mainTab );
-    QGridLayout* gridSettings2 = new QGridLayout( secondPage, 4, 1, marginHint());    
+    QGridLayout* gridSettings2 = new QGridLayout( secondPage, 4, 1, spacingHint());    
     mainTab->addTab( secondPage, i18n("Advanced") );
     
     QLabel *label2 = new QLabel(i18n("Luminance:"), secondPage);

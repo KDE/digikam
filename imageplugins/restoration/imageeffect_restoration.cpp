@@ -87,7 +87,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent, QString title,
     m_mainTab = new QTabWidget( m_imagePreviewWidget );
     
     QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid = new QGridLayout( firstPage, 2, 2, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( firstPage, 2, 2, spacingHint());
     m_mainTab->addTab( firstPage, i18n("Preset") );
 
     KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);

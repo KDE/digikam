@@ -1,12 +1,12 @@
 /* ============================================================
- * Authors: Gilles Caulier
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2005-02-17
  * Description : a digiKam image editor plugin for process image 
  *               perspective adjustment.
  * 
- * Copyright 2005 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> and Marcel Wiesweg
+ * Copyright 2005 by Gilles Caulier 
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -99,7 +99,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title,
     Digikam::ImageIface iface(0, 0);
 
     QWidget *gbox2          = new QWidget(plainPage());
-    QGridLayout *gridLayout = new QGridLayout( gbox2, 13, 2, marginHint(), spacingHint());
+    QGridLayout *gridLayout = new QGridLayout( gbox2, 13, 2, spacingHint());
 
     QLabel *label1  = new QLabel(i18n("New width:"), gbox2);
     m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), gbox2);

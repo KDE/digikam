@@ -5,7 +5,7 @@
  * Description : a digiKam image plugin for fixing dots produced by
  *               hot/stuck/dead pixels from a CCD.
  *
- * Copyright 2005-2006 by Unai Garro and Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2007 by Unai Garro and Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -78,7 +78,7 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent,QString title, QFra
     
     // -------------------------------------------------------------
     
-    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
+    QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 2, 0, spacingHint());
     
     QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), gboxSettings);

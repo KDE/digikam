@@ -154,7 +154,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent, QS
     // -------------------------------------------------------------
 
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 2, 1, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 2, 1, spacingHint());
     m_mainTab = new QTabWidget( gboxSettings );
 
     QWidget* firstPage = new QWidget( m_mainTab );

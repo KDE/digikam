@@ -115,8 +115,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     // -------------------------------------------------------------
     
     QWidget* generalPage = new QWidget( parent );
-    QGridLayout* grid1   = new QGridLayout(generalPage, 5, 2, 
-                                           KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout* grid1   = new QGridLayout(generalPage, 5, 2, KDialog::spacingHint());
     parent->addTab( generalPage, i18n("General") );
     
     d->sharpnessLabel = new QLabel(i18n("Detail preservation:"), generalPage);
@@ -177,8 +176,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     // -------------------------------------------------------------
     
     QWidget* advancedPage = new QWidget( parent );
-    QGridLayout* grid2    = new QGridLayout(advancedPage, 6, 2, 
-                                            KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout* grid2    = new QGridLayout(advancedPage, 6, 2, KDialog::spacingHint());
     parent->addTab( advancedPage, i18n("Advanced Settings") );
     
     d->daLabel = new QLabel(i18n("Angular step:"), advancedPage);

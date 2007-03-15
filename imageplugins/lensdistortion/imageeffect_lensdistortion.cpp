@@ -1,12 +1,12 @@
 /* ============================================================
- * Authors: Gilles Caulier
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
             Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2004-12-27
  * Description : a digiKam image plugin for to reduce spherical
  *               aberration provide by lens on an image.
  * 
- * Copyright 2004-2006 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> and Marcel Wiesweg
+ * Copyright 2004-2006 by Gilles Caulier 
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * Original Distortion Correction algorithm copyrighted 
  * 2001-2003 David Hodson <hodsond@acm.org>
@@ -91,7 +91,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent, QString 
     // -------------------------------------------------------------
         
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 8, 1, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 8, 1, spacingHint());
     
     m_maskPreviewLabel = new QLabel( gboxSettings );
     m_maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
