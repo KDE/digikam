@@ -112,7 +112,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gboxSettings, 5, 5, marginHint(), spacingHint());
+    QGridLayout* grid     = new QGridLayout( gboxSettings, 5, 5, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
