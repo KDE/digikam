@@ -41,6 +41,7 @@
 #include <qpainter.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
+#include <qvbox.h>
 #include <qwhatsthis.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
@@ -154,16 +155,18 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
 
     grid->addMultiCellLayout(l1, 0, 0, 0, 4);
 
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, gboxSettings, false, true, true);
+    // -------------------------------------------------------------
+
+    QVBox *histoBox   = new QVBox(gboxSettings);
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
                                              "selected image channel. This one is re-computed at any mixer "
                                              "settings changes."));
     
-    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, gboxSettings );
+    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
     
-    grid->addMultiCellWidget(m_histogramWidget, 1, 1, 0, 4);
-    grid->addMultiCellWidget(m_hGradient, 2, 2, 0, 4);
+    grid->addMultiCellWidget(histoBox, 1, 2, 0, 4);
     
     // -------------------------------------------------------------
         
