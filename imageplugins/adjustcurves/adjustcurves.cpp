@@ -169,28 +169,34 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
     
     // -------------------------------------------------------------
 
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, gboxSettings, false, true, true);
-    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
-                                             "selected image channel. This one is re-computed at any curves "
-                                             "settings changes."));
+    QWidget *curveBox = new QWidget(gboxSettings);
+    QGridLayout* gl   = new QGridLayout(curveBox, 3, 1, 0);
+
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, curveBox, false, true, true);
+    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
+                                             "of the selected image channel. This one is re-computed at any "
+                                             "curves settings changes."));
     
-    grid->addMultiCellWidget(m_histogramWidget, 1, 1, 1, 5);
-
-    // -------------------------------------------------------------
-
-    m_vGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Vertical, 10, gboxSettings );
+    m_vGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Vertical, 10, curveBox );
     m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
-    grid->addMultiCellWidget(m_vGradient, 2, 2, 0, 0);
 
     m_curvesWidget = new Digikam::CurvesWidget(256, 256, m_originalImage.bits(), m_originalImage.width(),
                                                m_originalImage.height(), m_originalImage.sixteenBit(),
-                                               m_curves, gboxSettings);
-    QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected channel from original image"));
-    grid->addMultiCellWidget(m_curvesWidget, 2, 2, 1, 5);
+                                               m_curves, curveBox);
+    QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected channel from "
+                                          "original image"));
     
-    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, gboxSettings );
+    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, curveBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    grid->addMultiCellWidget(m_hGradient, 3, 3, 1, 5);
+
+    gl->addMultiCellWidget(m_histogramWidget, 0, 0, 1, 1);
+//    gl->addMultiCellWidget(new QLabel(curveBox), 1, 1, 0, 1);
+    gl->addMultiCellWidget(m_vGradient, 2, 2, 0, 0);
+    gl->addMultiCellWidget(m_curvesWidget, 2, 2, 1, 1);
+    gl->addMultiCellWidget(m_hGradient, 3, 3, 1, 1);
+    gl->setRowSpacing(1, spacingHint());
+
+    grid->addMultiCellWidget(curveBox, 2, 3, 0, 5);
     
     // -------------------------------------------------------------
     
