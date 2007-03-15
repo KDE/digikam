@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2004-07-28
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Date   : 2004-07-28
  * Description : a color gradient widget
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,6 +31,7 @@
 // Local includes.
 
 #include "colorgradientwidget.h"
+#include "colorgradientwidget.moc"
 
 namespace Digikam
 {
@@ -49,10 +50,13 @@ public:
 };
 
 ColorGradientWidget::ColorGradientWidget(int o, int size, QWidget *parent)
-                   : QWidget(parent, 0, Qt::WDestructiveClose)
+                   : QFrame(parent, 0, Qt::WDestructiveClose)
 {
     d = new ColorGradientWidgetPriv;
     d->orientation = o;
+
+    setFrameStyle(QFrame::Box|QFrame::Plain);
+    setLineWidth(1);
     
     if ( d->orientation == Horizontal )
         setFixedHeight( size );
@@ -75,9 +79,9 @@ void ColorGradientWidget::setColors( const QColor &col1, const QColor &col2 )
     update();
 }
 
-void ColorGradientWidget::paintEvent( QPaintEvent * )
+void ColorGradientWidget::drawContents(QPainter *p)
 {
-    QImage image( width(), height(), 32 );
+    QImage image(contentsRect().width(), contentsRect().height(), 32);
 
     QColor col, color1, color2;
     float scale;
@@ -143,13 +147,12 @@ void ColorGradientWidget::paintEvent( QPaintEvent * )
                                  color1.blue()  + blueDiff  * s / psize );
     }
 
-    KImageEffect::dither( image, ditherPalette, psize );
+    KImageEffect::dither(image, ditherPalette, psize);
 
     QPixmap pm;
-    pm.convertFromImage( image );
-    bitBlt(this, 0, 0, &pm);
+    pm.convertFromImage(image);
+    p->drawPixmap(contentsRect(), pm);
 }
 
 }  // namespace Digikam
 
-#include "colorgradientwidget.moc"
