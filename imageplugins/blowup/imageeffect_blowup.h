@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_blowup.h
- * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2005-04-07
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Date   : 2005-04-07
  * Description : a digiKam image editor plugin to blowup 
  *               a photograph
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -72,10 +71,27 @@ protected:
     
 private:
 
+    void customEvent(QCustomEvent *event);
+    
+private slots:
+
+    void slotCheckSettings(void);    
+    void slotHelp();
+    void slotOk();
+    void slotCancel();
+    void slotDefault();
+    void slotUser2();
+    void slotUser3();
+    void processCImgURL(const QString&);
+    void slotAdjustRatioFromWidth(int w);
+    void slotAdjustRatioFromHeight(int h);
+
+private:
+
     enum RunningMode
     {
-    NoneRendering=0,
-    FinalRendering
+        NoneRendering=0,
+        FinalRendering
     };
 
     int              m_currentRenderingMode;
@@ -120,21 +136,6 @@ private:
     DigikamImagePlugins::CimgIface *m_cimgInterface;
     
     Digikam::ImageIface            *m_iface;    
-    
-    void customEvent(QCustomEvent *event);
-    
-private slots:
-
-    void slotCheckSettings(void);    
-    void slotHelp();
-    void slotOk();
-    void slotCancel();
-    void slotDefault();
-    void slotUser2();
-    void slotUser3();
-    void processCImgURL(const QString&);
-    void slotAdjustRatioFromWidth(int w);
-    void slotAdjustRatioFromHeight(int h);
 };
     
 }  // NameSpace DigikamBlowUpImagesPlugin

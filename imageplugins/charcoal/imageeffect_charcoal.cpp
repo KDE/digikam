@@ -1,10 +1,10 @@
 /* ============================================================
- * Authors: Gilles Caulier
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2004-08-26
  * Description : a digikam image editor plugin for 
  *               simulate charcoal drawing.
  * 
- * Copyright 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2004-2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -68,7 +68,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent, QString title, QFram
         
     // -------------------------------------------------------------
     
-    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
+    QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 1, 0, spacingHint());
     QLabel *label1 = new QLabel(i18n("Pencil size:"), gboxSettings);
     

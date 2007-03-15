@@ -77,7 +77,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent, QString 
     // -------------------------------------------------------------
     
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 13, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 13, 2, spacingHint());
 
     m_maskPreviewLabel = new QLabel( gboxSettings );
     m_maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );

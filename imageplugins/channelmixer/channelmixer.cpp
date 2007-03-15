@@ -1,9 +1,9 @@
 /* ============================================================
- * Authors: Gilles Caulier
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2005-02-26
  * Description : 
  * 
- * Copyright 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2007 by Gilles Caulier 
  *
  * Load and save mixer gains methods inspired from 
  * Gimp 2.2.3 and copyrighted 2002 by Martin Guldahl 
@@ -108,7 +108,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gboxSettings, 9, 4, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( gboxSettings, 9, 4, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );

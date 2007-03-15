@@ -85,7 +85,7 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent, QString titl
     // -------------------------------------------------------------
     
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 2, spacingHint());
     
     m_effectTypeLabel = new QLabel(i18n("Type:"), gboxSettings);
     

@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : imageeffect_blowup.cpp
- * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2005-04-07
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Date   : 2005-04-07
  * Description : a digiKam image editor plugin to blowup
  *               a photograph
  *
- * Copyright 2005 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -74,6 +73,7 @@
 #include "cimgiface.h"
 #include "bannerwidget.h"
 #include "imageeffect_blowup.h"
+#include "imageeffect_blowup.moc"
 
 namespace DigikamBlowUpImagesPlugin
 {
@@ -102,7 +102,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
                              digikamimageplugins_version,
                              I18N_NOOP("A digiKam image plugin to blowup a photograph."),
                              KAboutData::License_GPL,
-                             "(c) 2005, Gilles Caulier",
+                             "(c) 2005-2007, Gilles Caulier",
                              0,
                              "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -134,7 +134,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     m_mainTab = new QTabWidget( plainPage() );
 
     QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid = new QGridLayout( firstPage, 3, 2, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( firstPage, 3, 2, spacingHint());
     m_mainTab->addTab( firstPage, i18n("New Size") );
 
     KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
@@ -175,7 +175,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget* secondPage = new QWidget( m_mainTab );
-    QGridLayout* grid2 = new QGridLayout( secondPage, 2, 4, marginHint(), spacingHint());
+    QGridLayout* grid2 = new QGridLayout( secondPage, 2, 4, spacingHint());
     m_mainTab->addTab( secondPage, i18n("Smoothing") );
 
     m_detailLabel = new QLabel(i18n("Detail preservation:"), secondPage);
@@ -231,7 +231,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget* thirdPage = new QWidget( m_mainTab );
-    QGridLayout* grid3 = new QGridLayout( thirdPage, 2, 3, marginHint(), spacingHint());
+    QGridLayout* grid3 = new QGridLayout( thirdPage, 2, 3, spacingHint());
     m_mainTab->addTab( thirdPage, i18n("Advanced Settings") );
 
     m_angularStepLabel = new QLabel(i18n("Angular step:"), thirdPage);
@@ -558,4 +558,3 @@ void ImageEffect_BlowUp::slotUser2()
 
 }  // NameSpace DigikamBlowUpImagesPlugin
 
-#include "imageeffect_blowup.moc"
