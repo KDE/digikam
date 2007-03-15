@@ -190,7 +190,6 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
     gl->addMultiCellWidget(m_histogramWidget, 0, 0, 1, 1);
-//    gl->addMultiCellWidget(new QLabel(curveBox), 1, 1, 0, 1);
     gl->addMultiCellWidget(m_vGradient, 2, 2, 0, 0);
     gl->addMultiCellWidget(m_curvesWidget, 2, 2, 1, 1);
     gl->addMultiCellWidget(m_hGradient, 3, 3, 1, 1);
