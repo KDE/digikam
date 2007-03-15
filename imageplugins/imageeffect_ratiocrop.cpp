@@ -89,7 +89,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     QFrame *cropSelection = new QFrame( gbox2 );
     cropSelection->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QGridLayout* grid = new QGridLayout( cropSelection, 6, 4, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( cropSelection, 6, 4, spacingHint());
 
     QLabel *label = new QLabel(i18n("Aspect ratio:"), cropSelection);
     m_ratioCB = new QComboBox( false, cropSelection );
@@ -196,7 +196,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     // -------------------------------------------------------------
 
     QFrame* compositionGuide = new QFrame( gbox2 );
-    QGridLayout* grid2 = new QGridLayout( compositionGuide, 7, 2, marginHint(), spacingHint());
+    QGridLayout* grid2 = new QGridLayout( compositionGuide, 7, 2, spacingHint());
     compositionGuide->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
     QLabel *labelGuideLines = new QLabel(i18n("Composition guide:"), compositionGuide);

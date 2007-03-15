@@ -81,7 +81,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     // -------------------------------------------------------------
     
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 11, 4, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 11, 4, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );

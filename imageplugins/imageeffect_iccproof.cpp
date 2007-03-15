@@ -111,7 +111,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     // -------------------------------------------------------------------
 
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout *gridSettings = new QGridLayout( gboxSettings, 3, 2, spacingHint(), spacingHint());
+    QGridLayout *gridSettings = new QGridLayout( gboxSettings, 3, 2, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel: "), gboxSettings);
     label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -189,8 +189,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                  SmallIconSet("misc"), i18n("General Settings"));
     QWhatsThis::add(generalOptions, i18n("<p>Here you can set general parameters.</p>"));
 
-    QGridLayout *zeroPageLayout = new QGridLayout(generalOptions, 5, 1, 
-                                  spacingHint(), spacingHint());
+    QGridLayout *zeroPageLayout = new QGridLayout(generalOptions, 5, 1, spacingHint());
 
     m_doSoftProofBox = new QCheckBox(generalOptions);
     m_doSoftProofBox->setText(i18n("Soft-proofing"));
@@ -275,8 +274,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QWhatsThis::add(inProfiles, i18n("<p>Set here all parameters relevant of Input Color "
                     "Profiles.</p>"));
 
-    QGridLayout *firstPageLayout = new QGridLayout(inProfiles, 4, 2,
-                                   spacingHint(), spacingHint());
+    QGridLayout *firstPageLayout = new QGridLayout(inProfiles, 4, 2, spacingHint());
 
     m_inProfileBG = new QButtonGroup(4, Qt::Vertical, inProfiles);
     m_inProfileBG->setFrameStyle(QFrame::NoFrame);
@@ -326,8 +324,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QWhatsThis::add(spaceProfiles, i18n("<p>Set here all parameters relevant of Color Work-space "
                     "Profiles.</p>"));
 
-    QGridLayout *secondPageLayout = new QGridLayout(spaceProfiles, 3, 2, 
-                                    spacingHint(), spacingHint());
+    QGridLayout *secondPageLayout = new QGridLayout(spaceProfiles, 3, 2, spacingHint());
 
     m_spaceProfileBG = new QButtonGroup(2, Qt::Vertical, spaceProfiles);
     m_spaceProfileBG->setFrameStyle(QFrame::NoFrame);
