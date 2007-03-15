@@ -142,25 +142,6 @@ void GreycstorationIface::filterImage()
 
     DDebug() << "GreycstorationIface::Initialization..." << endl;
 
-    if (d->mode == InPainting && !d->inPaintingMask.isNull())
-    {
-        // Copy the inpainting image data into a CImg type image with three channels and no alpha.
-
-        d->mask = CImg<uchar>(d->inPaintingMask.width(), d->inPaintingMask.height(), 1, 3);
-        uchar *ptr = d->inPaintingMask.bits();
-
-        for (y = 0; y < d->inPaintingMask.height(); y++)
-        {
-            for (x = 0; x < d->inPaintingMask.width(); x++)
-            {
-                d->mask(x, y, 0) = ptr[2];        // blue.
-                d->mask(x, y, 1) = ptr[1];        // green.
-                d->mask(x, y, 2) = ptr[0];        // red.
-                ptr += 4;
-            }
-        }
-    }
-
     // Copy the src image data into a CImg type image with three channels and no alpha.
 
     uchar* imageData = m_orgImage.bits();
@@ -252,7 +233,7 @@ void GreycstorationIface::filterImage()
                 ptr[2] = (uchar) d->img(x, y, 2);        // Red
                 ptr += 4;
             }
-       }
+        }
     }
     else                                     // 16 bits image.
     {
@@ -268,7 +249,7 @@ void GreycstorationIface::filterImage()
                 ptr[2] = (unsigned short) d->img(x, y, 2);        // Red
                 ptr += 4;
             }
-       }
+        }
     }
 }
 
@@ -299,32 +280,96 @@ void GreycstorationIface::restoration()
 
 void GreycstorationIface::inpainting()
 {
+    if (!d->inPaintingMask.isNull())
+    {
+        // Copy the inpainting image data into a CImg type image with three channels and no alpha.
+
+        register int x, y;
+
+        d->mask    = CImg<uchar>(d->inPaintingMask.width(), d->inPaintingMask.height(), 1, 3);
+        uchar *ptr = d->inPaintingMask.bits();
+
+        for (y = 0; y < d->inPaintingMask.height(); y++)
+        {
+            for (x = 0; x < d->inPaintingMask.width(); x++)
+            {
+                d->mask(x, y, 0) = ptr[2];        // blue.
+                d->mask(x, y, 1) = ptr[1];        // green.
+                d->mask(x, y, 2) = ptr[0];        // red.
+                ptr += 4;
+            }
+        }
+    }
+    else
+    {
+        DDebug() << "Inpainting image: mask is null!" << endl;
+        return;
+    }
+
     for (uint iter=0 ; !m_cancel && (iter < d->settings.nbIter) ; iter++)
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
         // instance).
-      d->img.greycstoration_run(d->mask,
-                                d->settings.amplitude,
-                                d->settings.sharpness,
-                                d->settings.anisotropy,
-                                d->settings.alpha,
-                                d->settings.sigma,
-                                d->settings.dl,
-                                d->settings.da,
-                                d->settings.gaussPrec,
-                                d->settings.interp,
-                                d->settings.fastApprox,
-                                d->settings.tile,
-                                d->settings.btile,
-                                2);
-      iterationLoop(iter);
+        d->img.greycstoration_run(d->mask,
+                                  d->settings.amplitude,
+                                  d->settings.sharpness,
+                                  d->settings.anisotropy,
+                                  d->settings.alpha,
+                                  d->settings.sigma,
+                                  d->settings.dl,
+                                  d->settings.da,
+                                  d->settings.gaussPrec,
+                                  d->settings.interp,
+                                  d->settings.fastApprox,
+                                  d->settings.tile,
+                                  d->settings.btile,
+                                  2);
+        iterationLoop(iter);
     }
 }
 
 void GreycstorationIface::resize()
 {
-    // TODO
+    const bool anchor       = true;   // Anchor original pixels.
+    const unsigned int init = 5;      // Initial estimate (1=block, 3=linear, 5=bicubic).
+
+    const CImgStats stats(d->img, false);
+    DDebug() << "Resizing image: size " << d->img.width << " x " << d->img.height 
+             << ", value range [" << stats.min << " , " << stats.max << "]" << endl;
+
+    int w = m_destImage.width();
+    int h = m_destImage.height();
+    d->mask.assign(d->img.dimx(), d->img.dimy(), 1, 1, 255);
+
+    if (!anchor) 
+        d->mask.resize(w, h, 1, 1, 1); 
+    else 
+        d->mask = !d->mask.resize(w, h, 1, 1, 4);
+
+    d->img.resize(w, h, 1, -100, init);
+
+    for (uint iter=0 ; !m_cancel && (iter < d->settings.nbIter) ; iter++)
+    {
+        // This function will start a thread running one iteration of the GREYCstoration filter.
+        // It returns immediately, so you can do what you want after (update a progress bar for
+        // instance).
+        d->img.greycstoration_run(d->mask,
+                                    d->settings.amplitude,
+                                    d->settings.sharpness,
+                                    d->settings.anisotropy,
+                                    d->settings.alpha,
+                                    d->settings.sigma,
+                                    d->settings.dl,
+                                    d->settings.da,
+                                    d->settings.gaussPrec,
+                                    d->settings.interp,
+                                    d->settings.fastApprox,
+                                    d->settings.tile,
+                                    d->settings.btile,
+                                    2);
+        iterationLoop(iter);
+    }
 }
 
 void GreycstorationIface::iterationLoop(uint iter)
