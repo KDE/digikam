@@ -433,43 +433,51 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QWidget* tab2         = new QWidget( m_tab );
-    QGridLayout* gridTab2 = new QGridLayout(tab2, 4, 1, spacingHint(), 0);
+    QWidget *curveBox     = new QWidget( m_tab );
+    QGridLayout *gridTab2 = new QGridLayout(curveBox, 5, 2, spacingHint(), 0);
 
     Digikam::ColorGradientWidget* vGradient = new Digikam::ColorGradientWidget(
                                                   Digikam::ColorGradientWidget::Vertical,
-                                                  10, tab2 );
+                                                  10, curveBox );
     vGradient->setColors( QColor( "white" ), QColor( "black" ) );
+
+    QLabel *spacev = new QLabel(curveBox);
+    spacev->setFixedWidth(1);
     
     m_curvesWidget = new Digikam::CurvesWidget(256, 256, m_originalImage->bits(), m_originalImage->width(),
                                                m_originalImage->height(), m_originalImage->sixteenBit(),
-                                               m_curves, tab2);
+                                               m_curves, curveBox);
     QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve adjustment of the image luminosity"));
+
+    QLabel *spaceh = new QLabel(curveBox);
+    spaceh->setFixedHeight(1);
 
     Digikam::ColorGradientWidget *hGradient = new Digikam::ColorGradientWidget(
                                                   Digikam::ColorGradientWidget::Horizontal,
-                                                  10, tab2 );
+                                                  10, curveBox );
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     
-    m_cInput = new KIntNumInput(tab2);
+    m_cInput = new KIntNumInput(curveBox);
     m_cInput->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
     m_cInput->setRange(-100, 100, 1, true);
     m_cInput->setValue(0);
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
 
     gridTab2->addMultiCellWidget(vGradient, 0, 0, 0, 0);
-    gridTab2->addMultiCellWidget(m_curvesWidget, 0, 0, 1, 1);
-    gridTab2->addMultiCellWidget(hGradient, 1, 1, 1, 1);
-    gridTab2->addMultiCellWidget(m_cInput, 3, 3, 0, 1);
-    gridTab2->setRowSpacing(2, spacingHint());
-    gridTab2->setRowStretch(4, 10);
+    gridTab2->addMultiCellWidget(spacev, 0, 0, 1, 1);
+    gridTab2->addMultiCellWidget(m_curvesWidget, 0, 0, 2, 2);
+    gridTab2->addMultiCellWidget(spaceh, 1, 1, 2, 2);
+    gridTab2->addMultiCellWidget(hGradient, 2, 2, 2, 2);
+    gridTab2->addMultiCellWidget(m_cInput, 4, 4, 0, 2);
+    gridTab2->setRowSpacing(3, spacingHint());
+    gridTab2->setRowStretch(5, 10);
     
     // -------------------------------------------------------------
 
     m_tab->insertTab(m_bwFilm, i18n("Film"),         FilmTab);
     m_tab->insertTab(vbox,     i18n("Lens Filters"), BWFiltersTab);
     m_tab->insertTab(m_bwTone, i18n("Tone"),         ToneTab);
-    m_tab->insertTab(tab2,     i18n("Lightness"),    LuminosityTab);
+    m_tab->insertTab(curveBox, i18n("Lightness"),    LuminosityTab);
 
     gridSettings->addMultiCellWidget(m_tab, 3, 3, 0, 4);
     gridSettings->setRowStretch(3, 10);
