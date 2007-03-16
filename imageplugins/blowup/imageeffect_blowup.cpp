@@ -130,7 +130,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     m_mainTab         = new QTabWidget( plainPage() );
 
     QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid = new QGridLayout( firstPage, 3, 2, spacingHint());
+    QGridLayout* grid = new QGridLayout( firstPage, 4, 2, spacingHint());
     m_mainTab->addTab( firstPage, i18n("New Size") );
 
     KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
@@ -165,6 +165,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     m_progressBar->setValue(0);
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
     grid->addMultiCellWidget(m_progressBar, 3, 3, 0, 2);
+    grid->setRowStretch(4, 10);
 
     // -------------------------------------------------------------
 
