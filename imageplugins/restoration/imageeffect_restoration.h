@@ -33,7 +33,7 @@
 class QComboBox;
 class QTabWidget;
 
-namespace DigikamImagePlugins
+namespace Digikam
 {
 class GreycstorationWidget;
 }
@@ -49,22 +49,6 @@ public:
 
     ImageEffect_Restoration(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_Restoration();
-    
-private:
-
-    enum RestorationFilteringPreset
-    {
-        NoPreset=0,
-        ReduceUniformNoise,
-        ReduceJPEGArtefacts,
-        ReduceTexturing,
-    };
-
-    QTabWidget                                *m_mainTab;        
-            
-    QComboBox                                 *m_restorationTypeCB;  
-    
-    DigikamImagePlugins::GreycstorationWidget *m_settingsWidget;
     
 private slots:
 
@@ -82,6 +66,22 @@ private:
     void putFinalData(void);
     void resetValues(void);   
     void renderingFinished(void);
+
+private:
+
+    enum RestorationFilteringPreset
+    {
+        NoPreset=0,
+        ReduceUniformNoise,
+        ReduceJPEGArtefacts,
+        ReduceTexturing,
+    };
+
+    QTabWidget                    *m_mainTab;        
+            
+    QComboBox                     *m_restorationTypeCB;  
+    
+    Digikam::GreycstorationWidget *m_settingsWidget;
 };
     
 }  // NameSpace DigikamRestorationImagesPlugin

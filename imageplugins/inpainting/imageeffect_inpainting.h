@@ -34,7 +34,7 @@
 
 class QTabWidget;
 
-namespace DigikamImagePlugins
+namespace Digikam
 {
 class GreycstorationWidget;
 }
@@ -102,7 +102,7 @@ private:
     Digikam::DImg    m_originalImage;
     Digikam::DImg    m_cropImage;
 
-    DigikamImagePlugins::GreycstorationWidget *m_settingsWidget;
+    Digikam::GreycstorationWidget *m_settingsWidget;
 };
     
 }  // NameSpace DigikamInPaintingImagesPlugin

@@ -66,9 +66,6 @@
 
 #include "version.h"
 #include "bannerwidget.h"
-#include "greycstorationsettings.h"
-#include "greycstorationwidget.h"
-#include "greycstorationiface.h"
 #include "imageeffect_inpainting.h"
 #include "imageeffect_inpainting.moc"
 
@@ -164,9 +161,9 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent, QS
     KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setURL("http://cimg.sourceforge.net");
-    KGlobal::dirs()->addResourceType("cimg-logo", KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
-    QString directory = KGlobal::dirs()->findResourceDir("cimg-logo", "cimg-logo.png");
-    cimgLogoLabel->setPixmap( QPixmap( directory + "cimg-logo.png" ) );
+    KGlobal::dirs()->addResourceType("logo-cimg", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("logo-cimg", "logo-cimg.png");
+    cimgLogoLabel->setPixmap( QPixmap( directory + "logo-cimg.png" ) );
     QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
 
     QLabel *typeLabel = new QLabel(i18n("Filtering type:"), firstPage);
@@ -189,7 +186,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent, QS
 
     // -------------------------------------------------------------
 
-    m_settingsWidget = new DigikamImagePlugins::GreycstorationWidget(m_mainTab);
+    m_settingsWidget = new Digikam::GreycstorationWidget(m_mainTab);
 
     gridSettings->addMultiCellWidget(m_mainTab, 0, 0, 1, 1);
     gridSettings->addMultiCellWidget(new QLabel(gboxSettings), 1, 1, 1, 1);
@@ -218,10 +215,10 @@ void ImageEffect_InPainting_Dialog::readUserSettings()
     KConfig* config = kapp->config();
     config->setGroup("inpainting Tool Dialog");
 
-    DigikamImagePlugins::GreycstorationSettings settings;
+    Digikam::GreycstorationSettings settings;
     settings.fastApprox = config->readBoolEntry("FastApprox", true);
     settings.interp     = config->readNumEntry("Interpolation",
-                          DigikamImagePlugins::GreycstorationSettings::NearestNeighbor);
+                          Digikam::GreycstorationSettings::NearestNeighbor);
     settings.amplitude  = config->readDoubleNumEntry("Amplitude", 20.0);
     settings.sharpness  = config->readDoubleNumEntry("Sharpness", 0.3);
     settings.anisotropy = config->readDoubleNumEntry("Anisotropy", 1.0);
@@ -238,7 +235,7 @@ void ImageEffect_InPainting_Dialog::readUserSettings()
 
 void ImageEffect_InPainting_Dialog::writeUserSettings()
 {
-    DigikamImagePlugins::GreycstorationSettings settings = m_settingsWidget->getSettings();
+    Digikam::GreycstorationSettings settings = m_settingsWidget->getSettings();
     KConfig* config = kapp->config();
     config->setGroup("inpainting Tool Dialog");
     config->writeEntry("FastApprox", settings.fastApprox);
@@ -264,7 +261,7 @@ void ImageEffect_InPainting_Dialog::slotResetValues()
 
 void ImageEffect_InPainting_Dialog::resetValues()
 {
-    DigikamImagePlugins::GreycstorationSettings settings;
+    Digikam::GreycstorationSettings settings;
     settings.setInpaintingDefaultSettings();    
 
     switch(m_inpaintingTypeCB->currentItem())
@@ -326,7 +323,7 @@ void ImageEffect_InPainting_Dialog::prepareEffect()
     p.fillRect( selectionRect, QBrush(Qt::white) );
     p.end();
 
-    DigikamImagePlugins::GreycstorationSettings settings = m_settingsWidget->getSettings();
+    Digikam::GreycstorationSettings settings = m_settingsWidget->getSettings();
 
     int x1 = (int)(selectionRect.left()   - 2*settings.amplitude);
     int y1 = (int)(selectionRect.top()    - 2*settings.amplitude);
@@ -346,10 +343,10 @@ void ImageEffect_InPainting_Dialog::prepareEffect()
     m_cropImage = m_originalImage.copy(m_maskRect);
 
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new DigikamImagePlugins::GreycstorationIface(
+                       new Digikam::GreycstorationIface(
                                     &m_cropImage,
                                     settings,
-                                    DigikamImagePlugins::GreycstorationIface::InPainting, 
+                                    Digikam::GreycstorationIface::InPainting, 
                                     0, 0,
                                     m_maskImage, this));
 }
@@ -369,7 +366,7 @@ void ImageEffect_InPainting_Dialog::prepareFinal()
 void ImageEffect_InPainting_Dialog::putPreviewData()
 {
     Digikam::ImageIface* iface                           = m_imagePreviewWidget->imageIface();
-    DigikamImagePlugins::GreycstorationSettings settings = m_settingsWidget->getSettings();
+    Digikam::GreycstorationSettings settings = m_settingsWidget->getSettings();
 
     m_cropImage = m_threadedFilter->getTargetImage();
     QRect cropSel((int)(2*settings.amplitude), (int)(2*settings.amplitude), 

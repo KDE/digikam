@@ -45,9 +45,6 @@
 // Local includes.
 
 #include "version.h"
-#include "greycstorationsettings.h"
-#include "greycstorationwidget.h"
-#include "greycstorationiface.h"
 #include "imageeffect_restoration.h"
 #include "imageeffect_restoration.moc"
 
@@ -93,9 +90,9 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent, QString title,
     KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setURL("http://cimg.sourceforge.net");
-    KGlobal::dirs()->addResourceType("cimg-logo", KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
-    QString directory = KGlobal::dirs()->findResourceDir("cimg-logo", "cimg-logo.png");
-    cimgLogoLabel->setPixmap( QPixmap( directory + "cimg-logo.png" ) );
+    KGlobal::dirs()->addResourceType("logo-cimg", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("logo-cimg", "logo-cimg.png");
+    cimgLogoLabel->setPixmap( QPixmap( directory + "logo-cimg.png" ) );
     QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
     
     QLabel *typeLabel = new QLabel(i18n("Filtering type:"), firstPage);
@@ -118,7 +115,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent, QString title,
     
     // -------------------------------------------------------------
     
-    m_settingsWidget = new DigikamImagePlugins::GreycstorationWidget( m_mainTab );
+    m_settingsWidget = new Digikam::GreycstorationWidget( m_mainTab );
     m_imagePreviewWidget->setUserAreaWidget(m_mainTab);
     
     // -------------------------------------------------------------
@@ -142,10 +139,10 @@ void ImageEffect_Restoration::readUserSettings()
     KConfig* config = kapp->config();
     config->setGroup("restoration Tool Dialog");
 
-    DigikamImagePlugins::GreycstorationSettings settings;
+    Digikam::GreycstorationSettings settings;
     settings.fastApprox = config->readBoolEntry("FastApprox", true);
     settings.interp     = config->readNumEntry("Interpolation",
-                          DigikamImagePlugins::GreycstorationSettings::NearestNeighbor);
+                          Digikam::GreycstorationSettings::NearestNeighbor);
     settings.amplitude  = config->readDoubleNumEntry("Amplitude", 60.0);
     settings.sharpness  = config->readDoubleNumEntry("Sharpness", 0.7);
     settings.anisotropy = config->readDoubleNumEntry("Anisotropy", 0.3);
@@ -162,7 +159,7 @@ void ImageEffect_Restoration::readUserSettings()
 
 void ImageEffect_Restoration::writeUserSettings()
 {
-    DigikamImagePlugins::GreycstorationSettings settings = m_settingsWidget->getSettings();
+    Digikam::GreycstorationSettings settings = m_settingsWidget->getSettings();
     KConfig* config = kapp->config();
     config->setGroup("restoration Tool Dialog");
     config->writeEntry("FastApprox", settings.fastApprox);
@@ -183,7 +180,7 @@ void ImageEffect_Restoration::writeUserSettings()
 
 void ImageEffect_Restoration::resetValues()
 {
-    DigikamImagePlugins::GreycstorationSettings settings;
+    Digikam::GreycstorationSettings settings;
     settings.setRestorationDefaultSettings();    
 
     switch(m_restorationTypeCB->currentItem())
@@ -228,9 +225,9 @@ void ImageEffect_Restoration::prepareEffect()
     Digikam::DImg previewImage = m_imagePreviewWidget->getOriginalRegionImage();
 
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new DigikamImagePlugins::GreycstorationIface(
+                       new Digikam::GreycstorationIface(
                                     &previewImage, m_settingsWidget->getSettings(),
-                                    DigikamImagePlugins::GreycstorationIface::Restore, 
+                                    Digikam::GreycstorationIface::Restore, 
                                     0, 0, 0, this));
 }
 
@@ -244,9 +241,9 @@ void ImageEffect_Restoration::prepareFinal()
                                 iface.originalSixteenBit(), iface.originalHasAlpha(), data);
    
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new DigikamImagePlugins::GreycstorationIface(
+                       new Digikam::GreycstorationIface(
                                     &originalImage, m_settingsWidget->getSettings(),
-                                    DigikamImagePlugins::GreycstorationIface::Restore, 
+                                    Digikam::GreycstorationIface::Restore, 
                                     0, 0, 0, this));
 
     delete [] data;                                    

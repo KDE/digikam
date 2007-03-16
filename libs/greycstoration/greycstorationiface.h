@@ -25,22 +25,21 @@
 
 #include <qimage.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
- 
+
+#include "dimg.h"
+#include "dimgthreadedfilter.h"
 #include "greycstorationsettings.h"
+#include "digikam_export.h"
 
 class QObject;
 
-namespace DigikamImagePlugins
+namespace Digikam
 {
 
 class GreycstorationIfacePriv;
 
-class GreycstorationIface : public Digikam::DImgThreadedFilter
+class DIGIKAM_EXPORT GreycstorationIface : public DImgThreadedFilter
 {
 
 public:
@@ -55,7 +54,7 @@ public:
 
 public:
 
-    GreycstorationIface(Digikam::DImg *orgImage,
+    GreycstorationIface(DImg *orgImage,
                         GreycstorationSettings settings, 
                         int mode=Restore, 
                         int newWidth=0, int newHeight=0,
@@ -83,6 +82,6 @@ private:
     GreycstorationIfacePriv *d;
 };    
 
-}  // NameSpace DigikamImagePlugins
+}  // NameSpace Digikam
 
 #endif /* GREYCSTORATIONIFACE_H */

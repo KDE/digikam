@@ -39,7 +39,7 @@
 #include "greycstorationwidget.h"
 #include "greycstorationwidget.moc"
 
-namespace DigikamImagePlugins
+namespace Digikam
 {
 
 class GreycstorationWidgetPriv
@@ -123,8 +123,8 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
 
     // -------------------------------------------------------------
     
-    d->generalPage = new QWidget( parent );
-    QGridLayout* grid1   = new QGridLayout(d->generalPage, 6, 2, KDialog::spacingHint());
+    d->generalPage     = new QWidget( parent );
+    QGridLayout* grid1 = new QGridLayout(d->generalPage, 6, 2, KDialog::spacingHint());
     parent->addTab( d->generalPage, i18n("General") );
     
     d->sharpnessLabel = new QLabel(i18n("Detail preservation:"), d->generalPage);
@@ -185,8 +185,8 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     
     // -------------------------------------------------------------
     
-    d->advancedPage = new QWidget( parent );
-    QGridLayout* grid2    = new QGridLayout(d->advancedPage, 6, 2, KDialog::spacingHint());
+    d->advancedPage    = new QWidget( parent );
+    QGridLayout* grid2 = new QGridLayout(d->advancedPage, 6, 2, KDialog::spacingHint());
     parent->addTab( d->advancedPage, i18n("Advanced Settings") );
     
     d->daLabel = new QLabel(i18n("Angular step:"), d->advancedPage);
@@ -345,4 +345,4 @@ void GreycstorationWidget::saveSettings(QFile& file, const QString& header)
     stream << settings.btile << "\n";    
 }
 
-} // NameSpace DigikamImagePlugins
+} // NameSpace Digikam

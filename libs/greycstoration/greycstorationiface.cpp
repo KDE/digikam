@@ -31,10 +31,13 @@
 #include "CImg.h"
 using namespace cimg_library;
 
+// Local includes.
+
+#include "ddebug.h"
 #include "greycstorationsettings.h"
 #include "greycstorationiface.h"
 
-namespace DigikamImagePlugins
+namespace Digikam
 {
 
 class GreycstorationIfacePriv
@@ -57,13 +60,13 @@ public:
     CImg<uchar>            mask;
 };
 
-GreycstorationIface::GreycstorationIface(Digikam::DImg *orgImage,
+GreycstorationIface::GreycstorationIface(DImg *orgImage,
                                          GreycstorationSettings settings,
                                          int mode,
                                          int newWidth, int newHeight,
                                          const QImage& inPaintingMask,
                                          QObject *parent)
-                   : Digikam::DImgThreadedFilter(orgImage, parent)
+                   : DImgThreadedFilter(orgImage, parent)
 {
     d = new GreycstorationIfacePriv;
     d->settings       = settings;
@@ -406,4 +409,4 @@ void GreycstorationIface::iterationLoop(uint iter)
     while (d->img.greycstoration_is_running() && !m_cancel);
 }
 
-}  // NameSpace DigikamImagePlugins
+}  // NameSpace Digikam

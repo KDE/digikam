@@ -67,9 +67,6 @@
 // Local includes.
 
 #include "version.h"
-#include "greycstorationsettings.h"
-#include "greycstorationwidget.h"
-#include "greycstorationiface.h"
 #include "bannerwidget.h"
 #include "imageeffect_blowup.h"
 #include "imageeffect_blowup.moc"
@@ -174,10 +171,10 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setURL("http://cimg.sourceforge.net");
-    KGlobal::dirs()->addResourceType("cimg-logo", KGlobal::dirs()->kde_default("data") +
-                                     "digikamimageplugins/data");
-    QString directory = KGlobal::dirs()->findResourceDir("cimg-logo", "cimg-logo.png");
-    cimgLogoLabel->setPixmap( QPixmap( directory + "cimg-logo.png" ) );
+    KGlobal::dirs()->addResourceType("logo-cimg", KGlobal::dirs()->kde_default("data") +
+                                     "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("logo-cimg", "logo-cimg.png");
+    cimgLogoLabel->setPixmap( QPixmap( directory + "logo-cimg.png" ) );
     QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
 
     m_useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
@@ -205,7 +202,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_settingsWidget = new DigikamImagePlugins::GreycstorationWidget(m_mainTab);
+    m_settingsWidget = new Digikam::GreycstorationWidget(m_mainTab);
     vlay->addWidget(m_mainTab);
 
     // -------------------------------------------------------------
@@ -256,10 +253,10 @@ void ImageEffect_BlowUp::readUserSettings()
     KConfig* config = kapp->config();
     config->setGroup("blowup Tool Dialog");
 
-    DigikamImagePlugins::GreycstorationSettings settings;
+    Digikam::GreycstorationSettings settings;
     settings.fastApprox = config->readBoolEntry("FastApprox", true);
     settings.interp     = config->readNumEntry("Interpolation",
-                          DigikamImagePlugins::GreycstorationSettings::NearestNeighbor);
+                          Digikam::GreycstorationSettings::NearestNeighbor);
     settings.amplitude  = config->readDoubleNumEntry("Amplitude", 20.0);
     settings.sharpness  = config->readDoubleNumEntry("Sharpness", 0.2);
     settings.anisotropy = config->readDoubleNumEntry("Anisotropy", 0.9);
@@ -294,7 +291,7 @@ void ImageEffect_BlowUp::readUserSettings()
 
 void ImageEffect_BlowUp::writeUserSettings()
 {
-    DigikamImagePlugins::GreycstorationSettings settings = m_settingsWidget->getSettings();
+    Digikam::GreycstorationSettings settings = m_settingsWidget->getSettings();
     KConfig* config = kapp->config();
     config->setGroup("blowup Tool Dialog");
     config->writeEntry("FastApprox", settings.fastApprox);
@@ -316,7 +313,7 @@ void ImageEffect_BlowUp::writeUserSettings()
 
 void ImageEffect_BlowUp::slotDefault()
 {
-    DigikamImagePlugins::GreycstorationSettings settings;
+    Digikam::GreycstorationSettings settings;
     settings.setResizeDefaultSettings();   
     m_settingsWidget->setSettings(settings);
     m_useGreycstorationBox->setChecked(false);
@@ -482,10 +479,10 @@ void ImageEffect_BlowUp::slotOk()
         m_cimgInterface = 0;
     }
 
-    int mode = m_useGreycstorationBox->isChecked() ? DigikamImagePlugins::GreycstorationIface::Resize
-                                                   : DigikamImagePlugins::GreycstorationIface::SimpleResize;
+    int mode = m_useGreycstorationBox->isChecked() ? Digikam::GreycstorationIface::Resize
+                                                   : Digikam::GreycstorationIface::SimpleResize;
 
-    m_cimgInterface = new DigikamImagePlugins::GreycstorationIface(
+    m_cimgInterface = new Digikam::GreycstorationIface(
                                     &originalImage, m_settingsWidget->getSettings(),
                                     mode, 
                                     m_wInput->value(),
@@ -497,8 +494,8 @@ void ImageEffect_BlowUp::customEvent(QCustomEvent *event)
 {
     if (!event) return;
 
-    DigikamImagePlugins::GreycstorationIface::EventData *d =
-                        (DigikamImagePlugins::GreycstorationIface::EventData*) event->data();
+    Digikam::GreycstorationIface::EventData *d =
+                        (Digikam::GreycstorationIface::EventData*) event->data();
 
     if (!d) return;
 

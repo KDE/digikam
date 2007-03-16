@@ -53,6 +53,9 @@
 #include <ctrlpaneldlg.h>
 #include <imagedlgbase.h>
 #include <imageguidedlg.h>
+#include <greycstorationiface.h>
+#include <greycstorationsettings.h>
+#include <greycstorationwidget.h>
 
 #else
 
@@ -84,6 +87,9 @@
 #include <digikam/ctrlpaneldlg.h>
 #include <digikam/imagedlgbase.h>
 #include <digikam/imageguidedlg.h>
+#include <digikam/greycstorationiface.h>
+#include <digikam/greycstorationsettings.h>
+#include <digikam/greycstorationwidget.h>
 
 #endif /* HAVE_DIGIKAM_TOPLEVEL */
 

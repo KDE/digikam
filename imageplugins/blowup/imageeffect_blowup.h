@@ -39,7 +39,7 @@ class KDoubleNumInput;
 class KProgress;
 class KAboutData;
 
-namespace DigikamImagePlugins
+namespace Digikam
 {
 class GreycstorationIface;
 class GreycstorationWidget;
@@ -118,10 +118,10 @@ private:
     
     KAboutData      *m_about;
     
-    Digikam::ImageIface                       *m_iface;
+    Digikam::ImageIface           *m_iface;
 
-    DigikamImagePlugins::GreycstorationIface  *m_cimgInterface;
-    DigikamImagePlugins::GreycstorationWidget *m_settingsWidget;
+    Digikam::GreycstorationIface  *m_cimgInterface;
+    Digikam::GreycstorationWidget *m_settingsWidget;
 };
     
 }  // NameSpace DigikamBlowUpImagesPlugin

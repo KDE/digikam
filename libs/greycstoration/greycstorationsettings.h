@@ -28,10 +28,14 @@
 #ifndef GREYCSTORATIONSETTINGS_H
 #define GREYCSTORATIONSETTINGS_H
 
-namespace DigikamImagePlugins
+// Local includes.
+
+#include "digikam_export.h"
+
+namespace Digikam
 {
 
-class GreycstorationSettings
+class DIGIKAM_EXPORT GreycstorationSettings
 {
 
 public:
@@ -132,6 +136,6 @@ public:
     float da;
 };
 
-}  // namespace DigikamImagePlugins
+}  // namespace Digikam
 
 #endif  // GREYCSTORATIONSETTINGS_H

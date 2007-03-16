@@ -28,16 +28,17 @@
 
 // Local Includes.
 
+#include "digikam_export.h"
 #include "greycstorationsettings.h"
 
 class QTabWidget;
 
-namespace DigikamImagePlugins
+namespace Digikam
 {
 
 class GreycstorationWidgetPriv;
 
-class GreycstorationWidget : public QObject
+class DIGIKAM_EXPORT GreycstorationWidget : public QObject
 {
     Q_OBJECT
 
@@ -59,6 +60,6 @@ private:
     GreycstorationWidgetPriv* d;
 };
 
-} // NameSpace DigikamImagePlugins
+} // NameSpace Digikam
 
 #endif /* GREYCSTORATION_WIDGET_H */

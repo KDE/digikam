@@ -1,2 +1,2 @@
-SUBDIRS = icons pics tips widgets greycstoration 
+SUBDIRS = icons pics tips widgets 
 
