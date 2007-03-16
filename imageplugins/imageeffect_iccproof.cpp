@@ -393,17 +393,23 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                  SmallIconSet("blend"), i18n("Lightness Adjustments"));
     QWhatsThis::add(lightnessadjust, i18n("<p>Set here all lightness adjustments of target image.</p>"));
 
-    QGridLayout *fourPageLayout = new QGridLayout( lightnessadjust, 4, 1, spacingHint(), 0);
+    QGridLayout *fourPageLayout = new QGridLayout( lightnessadjust, 5, 2, spacingHint(), 0);
 
     Digikam::ColorGradientWidget* vGradient = new Digikam::ColorGradientWidget(
                                                   Digikam::ColorGradientWidget::Vertical,
                                                   10, lightnessadjust );
     vGradient->setColors( QColor( "white" ), QColor( "black" ) );
 
-    m_curvesWidget = new Digikam::CurvesWidget(256, 180, m_originalImage->bits(), m_originalImage->width(),
+    QLabel *spacev = new QLabel(lightnessadjust);
+    spacev->setFixedWidth(1);
+
+    m_curvesWidget = new Digikam::CurvesWidget(256, 192, m_originalImage->bits(), m_originalImage->width(),
                                                m_originalImage->height(), m_originalImage->sixteenBit(),
                                                m_curves, lightnessadjust);
     QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve adjustment of the image luminosity"));
+
+    QLabel *spaceh = new QLabel(lightnessadjust);
+    spaceh->setFixedHeight(1);
 
     Digikam::ColorGradientWidget *hGradient = new Digikam::ColorGradientWidget(
                                                   Digikam::ColorGradientWidget::Horizontal,
@@ -417,11 +423,13 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
 
     fourPageLayout->addMultiCellWidget(vGradient, 0, 0, 0, 0);
-    fourPageLayout->addMultiCellWidget(m_curvesWidget, 0, 0, 1, 1);
-    fourPageLayout->addMultiCellWidget(hGradient, 1, 1, 1, 1);
-    fourPageLayout->addMultiCellWidget(m_cInput, 3, 3, 0, 1);
-    fourPageLayout->setRowSpacing(2, spacingHint());
-    fourPageLayout->setRowStretch(4, 10);
+    fourPageLayout->addMultiCellWidget(spacev, 0, 0, 1, 1);
+    fourPageLayout->addMultiCellWidget(m_curvesWidget, 0, 0, 2, 2);
+    fourPageLayout->addMultiCellWidget(spaceh, 1, 1, 2, 2);
+    fourPageLayout->addMultiCellWidget(hGradient, 2, 2, 2, 2);
+    fourPageLayout->addMultiCellWidget(m_cInput, 4, 4, 0, 2);
+    fourPageLayout->setRowSpacing(3, spacingHint());
+    fourPageLayout->setRowStretch(5, 10);
 
     // -------------------------------------------------------------
 
