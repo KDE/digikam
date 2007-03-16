@@ -249,7 +249,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     d->histogramWidget = new HistogramWidget(256, 140, histoBox);
     QWhatsThis::add( d->histogramWidget, i18n("<p>This is the histogram drawing of the "
                                               "selected image channel"));
-
+    QLabel *space = new QLabel(histoBox);
+    space->setFixedHeight(1);
     d->hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, histoBox);
     d->hGradient->setColors(QColor("black"), QColor("white"));
     topLayout->addMultiCellWidget(histoBox, 3, 4, 0, 3);
