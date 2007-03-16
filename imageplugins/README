@@ -12,7 +12,7 @@ digiKam uses a plugin framework for additional functionalities in ImageEditor an
 Currently implemented plugins are:
 
  1) AdjustLevels     : A plugin to adjust manually the histogram levels.
- 2) SolarizeImage    : A plugin to solarize a picture.
+ 2) ColorFx          : A plugin to apply color effect over a picture.
  3) NoiseReduction   : A noise reduction filter based on dcamnoise2 algorithm.
  4) OilPaint         : An oil painting effect filter.
  5) Emboss           : An embossed image effect filter.
@@ -79,7 +79,7 @@ AutoConf   >= 2.5.x                        http://www.gnu.org/software/autoconf
 AutoMake   >= 1.7.x                        http://www.gnu.org/software/automake
 libkde     >= 3.4.x (>=3.5.x recommended)  http://www.kde.org
 libqt      >= 3.3.x                        http://www.trolltech.com
-digiKam    >= 0.9.0                        http://www.digikam.org
+digiKam    >= 0.9.1                        http://www.digikam.org
 
 
 -- INSTALLATION --------------------------------------------------------
