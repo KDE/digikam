@@ -12,7 +12,10 @@ libshowfoto_la_SOURCES = editorwindow.cpp imageiface.cpp
 
 libshowfoto_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) 
 
-libshowfoto_la_LIBADD = $(top_builddir)/digikam/utilities/imageeditor/tools/libdimgeditortools.la \
+libshowfoto_la_LIBADD = $(top_builddir)/digikam/libs/dimg/libdimg.la \
+	                $(top_builddir)/digikam/utilities/imageeditor/canvas/libdimgcanvas.la \
+	                $(top_builddir)/digikam/libs/greycstoration/libgreycstoration.la \
+	                $(top_builddir)/digikam/utilities/imageeditor/tools/libdimgeditortools.la \
 	                $(top_builddir)/digikam/libs/widgets/libwidgets.la
 
 INCLUDES = -I$(top_srcdir)/digikam/digikam \
@@ -24,13 +27,12 @@ INCLUDES = -I$(top_srcdir)/digikam/digikam \
 	   -I$(top_srcdir)/digikam/libs/dimg/filters \
 	   -I$(top_srcdir)/digikam/libs/imageproperties \
 	   -I$(top_srcdir)/digikam/libs/threadimageio \
-	   $(LIBKEXIV2_CFLAGS) \
 	   -I$(top_srcdir)/digikam/utilities/setup \
 	   -I$(top_srcdir)/digikam/utilities/slideshow \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/tools \
 	   -I$(top_builddir)/digikam/libs/dialogs \
-	   $(LIBKDCRAW_CFLAGS) $(all_includes) 
+	   $(LIBKEXIV2_CFLAGS) $(LIBKDCRAW_CFLAGS) $(all_includes) 
 
 digikaminclude_HEADERS = imageiface.h 
 

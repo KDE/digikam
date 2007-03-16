@@ -70,7 +70,6 @@ extern "C"
 #include <kstatusbar.h>
 #include <kprogress.h>
 #include <kwin.h>
-#include <kled.h>
 
 // Local includes.
 
@@ -80,7 +79,7 @@ extern "C"
 #include "dimginterface.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
-#include "imageresizedlg.h"
+#include "imageresize.h"
 #include "imageprint.h"
 #include "filesaveoptionsbox.h"
 #include "statusprogressbar.h"
@@ -560,15 +559,8 @@ void EditorWindow::slotEditKeys()
 
 void EditorWindow::slotResize()
 {
-    int width  = m_canvas->imageWidth();
-    int height = m_canvas->imageHeight();
-
-    ImageResizeDlg dlg(this, &width, &height);
-
-    if (dlg.exec() == QDialog::Accepted &&
-        (width != m_canvas->imageWidth() ||
-         height != m_canvas->imageHeight()))
-        m_canvas->resizeImage(width, height);
+    ImageResize dlg(this);
+    dlg.exec();
 }
 
 void EditorWindow::slotAboutToShowUndoMenu()

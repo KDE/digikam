@@ -103,6 +103,7 @@ libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) $(LIB_KHTML) \
 	               $(top_builddir)/digikam/libs/widgets/libwidgets.la \
 	               $(top_builddir)/digikam/libs/dialogs/libdialog.la \
 	               $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
+	               $(top_builddir)/digikam/libs/dimg/libdimg.la \
 	               $(top_builddir)/digikam/libs/imageproperties/libimagepropertiesdigikam.la \
 	               $(top_builddir)/digikam/libs/threadimageio/libthreadimageio.la \
 	               $(top_builddir)/digikam/libs/greycstoration/libgreycstoration.la \

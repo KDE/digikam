@@ -2,7 +2,7 @@ SUBDIRS = common adjustlevels colorfx noisereduction oilpaint emboss charcoal un
 	      raindrop filmgrain freerotation adjustcurves sheartool antivignetting \
 	      lensdistortion perspective border blurfx distortionfx superimpose \
 	      inserttext infrared channelmixer texture whitebalance restoration \
-	      inpainting blowup refocus hotpixels 
+	      inpainting refocus hotpixels 
 
 AUTOMAKE_OPTIONS = foreign 
 

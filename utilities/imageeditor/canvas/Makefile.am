@@ -7,8 +7,6 @@ libdimgcanvas_la_SOURCES = dimginterface.cpp colorcorrectiondlg.cpp \
 	                   undoaction.cpp undomanager.cpp \
 	                   imagepluginloader.cpp imageplugin.cpp
 
-libdimgcanvas_la_LIBADD  = $(top_builddir)/digikam/libs/dimg/libdimg.la 
-
 libdimgcanvas_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_TIFF) 
 
 INCLUDES = -I$(top_srcdir)/digikam/digikam \
@@ -16,11 +14,10 @@ INCLUDES = -I$(top_srcdir)/digikam/digikam \
 	   -I$(top_srcdir)/digikam/libs/dimg/filters \
 	   -I$(top_srcdir)/digikam/libs/dmetadata \
 	   -I$(top_srcdir)/digikam/libs/dialogs \
-	   $(LIBKEXIV2_CFLAGS) \
 	   -I$(top_srcdir)/digikam/libs/histogram \
 	   -I$(top_srcdir)/digikam/libs/threadimageio \
 	   -I$(top_srcdir)/digikam/utilities/splashscreen \
-	   $(LIBKDCRAW_CFLAGS) $(all_includes) 
+	   $(LIBKEXIV2_CFLAGS) $(LIBKDCRAW_CFLAGS) $(all_includes) 
 
 digikaminclude_HEADERS = imageplugin.h 
 
