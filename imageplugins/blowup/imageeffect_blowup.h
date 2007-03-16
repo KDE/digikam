@@ -100,7 +100,6 @@ private:
 
     double           m_prevWP;    
     double           m_prevHP;    
-    double           m_aspectRatio;
 
     QWidget         *m_parent;
     

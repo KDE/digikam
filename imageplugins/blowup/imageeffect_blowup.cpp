@@ -90,6 +90,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
     setButtonWhatsThis ( User3, i18n("<p>Load all filter parameters from settings text file.") );
     setButtonWhatsThis ( User2, i18n("<p>Save all filter parameters to settings text file.") );
+    enableButton(Ok, false);
 
     m_currentRenderingMode = NoneRendering;
     m_cimgInterface        = 0L;
@@ -97,7 +98,6 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     Digikam::ImageIface iface(0, 0);
     m_orgWidth    = iface.originalWidth();
     m_orgHeight   = iface.originalHeight();
-    m_aspectRatio = (double)m_orgWidth / (double)m_orgHeight;
     m_prevW       = m_orgWidth;
     m_prevH       = m_orgHeight;
     m_prevWP      = 100.0;
@@ -180,7 +180,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     cimgLogoLabel->setPixmap( QPixmap( directory + "cimg-logo.png" ) );
     QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
 
-    m_useGreycstorationBox = new QCheckBox(i18n("Restore photograph"), firstPage);
+    m_useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
     QWhatsThis::add( m_useGreycstorationBox, i18n("<p>Enable this option to restore photograph content. "
                                                   "Warning: this process can take a while."));
 
@@ -341,6 +341,7 @@ void ImageEffect_BlowUp::slotDefault()
 
 void ImageEffect_BlowUp::slotValuesChanged()
 {
+    enableButton(Ok, true);
     m_wInput->blockSignals(true);
     m_hInput->blockSignals(true);
     m_wpInput->blockSignals(true);
