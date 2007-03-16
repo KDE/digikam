@@ -458,6 +458,8 @@ void ImageEffect_BlowUp::slotOk()
     m_useGreycstorationBox->setEnabled(false);
     m_wInput->setEnabled(false);
     m_hInput->setEnabled(false);
+    m_wpInput->setEnabled(false);
+    m_hpInput->setEnabled(false);
     enableButton(Ok, false);
     enableButton(Default, false);
     enableButton(User2, false);
