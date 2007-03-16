@@ -146,7 +146,8 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent, QString title, QFrame*
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
                                              "settings changes."));
-    
+    QLabel *space = new QLabel(histoBox);
+    space->setFixedHeight(1);    
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     
