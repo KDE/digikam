@@ -170,7 +170,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
     // -------------------------------------------------------------
 
     QWidget *curveBox = new QWidget(gboxSettings);
-    QGridLayout* gl   = new QGridLayout(curveBox, 3, 1, 0);
+    QGridLayout* gl   = new QGridLayout(curveBox, 4, 2, 0);
 
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, curveBox, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
@@ -180,19 +180,27 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
     m_vGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Vertical, 10, curveBox );
     m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
 
+    QLabel *spacev = new QLabel(curveBox);
+    spacev->setFixedWidth(1);
+
     m_curvesWidget = new Digikam::CurvesWidget(256, 256, m_originalImage.bits(), m_originalImage.width(),
                                                m_originalImage.height(), m_originalImage.sixteenBit(),
                                                m_curves, curveBox);
     QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected channel from "
                                           "original image"));
     
+    QLabel *spaceh = new QLabel(curveBox);
+    spaceh->setFixedHeight(1);
+
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, curveBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
-    gl->addMultiCellWidget(m_histogramWidget, 0, 0, 1, 1);
+    gl->addMultiCellWidget(m_histogramWidget, 0, 0, 2, 2);
     gl->addMultiCellWidget(m_vGradient, 2, 2, 0, 0);
-    gl->addMultiCellWidget(m_curvesWidget, 2, 2, 1, 1);
-    gl->addMultiCellWidget(m_hGradient, 3, 3, 1, 1);
+    gl->addMultiCellWidget(spacev, 2, 2, 1, 1);
+    gl->addMultiCellWidget(m_curvesWidget, 2, 2, 2, 2);
+    gl->addMultiCellWidget(spaceh, 3, 3, 2, 2);
+    gl->addMultiCellWidget(m_hGradient, 4, 4, 2, 2);
     gl->setRowSpacing(1, spacingHint());
 
     grid->addMultiCellWidget(curveBox, 2, 3, 0, 5);
