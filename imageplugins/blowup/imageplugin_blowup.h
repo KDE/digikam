@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_blowup.h
- * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2005-04-07
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Date   : 2005-04-07
  * Description : 
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,7 +17,6 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
 
 #ifndef IMAGEPLUGIN_BLOWUP_H
 #define IMAGEPLUGIN_BLOWUP_H
@@ -48,7 +46,6 @@ private:
 private slots:
 
     void slotBlowUp();
-
 };
     
 #endif /* IMAGEPLUGIN_BLOWUP_H */
