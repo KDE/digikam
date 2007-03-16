@@ -52,6 +52,8 @@ public:
     bool loadSettings(QFile& file, const QString& header);
     void saveSettings(QFile& file, const QString& header);
 
+    void setEnabled(bool);
+
 private:
 
     GreycstorationWidgetPriv* d;

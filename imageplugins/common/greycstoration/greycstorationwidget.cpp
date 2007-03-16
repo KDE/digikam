@@ -74,6 +74,8 @@ public:
         iterationInput     = 0;
         tileInput          = 0;
         btileInput         = 0;
+        advancedPage       = 0;
+        generalPage        = 0;
     }
 
     QLabel          *amplitudeLabel;
@@ -88,6 +90,9 @@ public:
     QLabel          *tileLabel;
     QLabel          *btileLabel;
     QLabel          *interpolationLabel;
+
+    QWidget         *advancedPage;
+    QWidget         *generalPage;
 
     QCheckBox       *fastApproxCBox;
 
@@ -114,12 +119,12 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
 
     // -------------------------------------------------------------
     
-    QWidget* generalPage = new QWidget( parent );
-    QGridLayout* grid1   = new QGridLayout(generalPage, 6, 2, KDialog::spacingHint());
-    parent->addTab( generalPage, i18n("General") );
+    d->generalPage = new QWidget( parent );
+    QGridLayout* grid1   = new QGridLayout(d->generalPage, 6, 2, KDialog::spacingHint());
+    parent->addTab( d->generalPage, i18n("General") );
     
-    d->sharpnessLabel = new QLabel(i18n("Detail preservation:"), generalPage);
-    d->sharpnessInput = new KDoubleNumInput(generalPage);
+    d->sharpnessLabel = new QLabel(i18n("Detail preservation:"), d->generalPage);
+    d->sharpnessInput = new KDoubleNumInput(d->generalPage);
     d->sharpnessInput->setPrecision(2);
     d->sharpnessInput->setRange(0.01, 1.0, 0.1, true);
     QWhatsThis::add( d->sharpnessInput, i18n("<p>Preservation of details to set the sharpening level "
@@ -128,8 +133,8 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     grid1->addMultiCellWidget(d->sharpnessLabel, 0, 0, 0, 0);
     grid1->addMultiCellWidget(d->sharpnessInput, 0, 0, 1, 1);
 
-    d->anisotropyLabel = new QLabel(i18n("Anisotropy:"), generalPage);
-    d->anisotropyInput = new KDoubleNumInput(generalPage);
+    d->anisotropyLabel = new QLabel(i18n("Anisotropy:"), d->generalPage);
+    d->anisotropyInput = new KDoubleNumInput(d->generalPage);
     d->anisotropyInput->setPrecision(2);
     d->anisotropyInput->setRange(0.0, 1.0, 0.1, true);
     QWhatsThis::add( d->anisotropyInput, i18n("<p>Anisotropic (directional) modifier of the details. "
@@ -137,8 +142,8 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     grid1->addMultiCellWidget(d->anisotropyLabel, 1, 1, 0, 0);
     grid1->addMultiCellWidget(d->anisotropyInput, 1, 1, 1, 1);
 
-    d->amplitudeLabel = new QLabel(i18n("Smoothing:"), generalPage);
-    d->amplitudeInput = new KDoubleNumInput(generalPage);
+    d->amplitudeLabel = new QLabel(i18n("Smoothing:"), d->generalPage);
+    d->amplitudeInput = new KDoubleNumInput(d->generalPage);
     d->amplitudeInput->setPrecision(2);
     d->amplitudeInput->setRange(0.01, 500.0, 0.1, true);
     QWhatsThis::add( d->amplitudeInput, i18n("<p>Total smoothing power: if Detail Factor sets the relative "
@@ -147,8 +152,8 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     grid1->addMultiCellWidget(d->amplitudeLabel, 2, 2, 0, 0);
     grid1->addMultiCellWidget(d->amplitudeInput, 2, 2, 1, 1);
 
-    d->sigmaLabel = new QLabel(i18n("Regularity:"), generalPage);
-    d->sigmaInput = new KDoubleNumInput(generalPage);
+    d->sigmaLabel = new QLabel(i18n("Regularity:"), d->generalPage);
+    d->sigmaInput = new KDoubleNumInput(d->generalPage);
     d->sigmaInput->setPrecision(2);
     d->sigmaInput->setRange(0.0, 10.0, 0.1, true);
     QWhatsThis::add( d->sigmaInput, i18n("<p>This value controls the smoothing regularity of the picture. "
@@ -157,16 +162,16 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     grid1->addMultiCellWidget(d->sigmaLabel, 3, 3, 0, 0);
     grid1->addMultiCellWidget(d->sigmaInput, 3, 3, 1, 1);
     
-    d->iterationLabel = new QLabel(i18n("Iterations:"), generalPage);
-    d->iterationInput = new KIntNumInput(generalPage);
+    d->iterationLabel = new QLabel(i18n("Iterations:"), d->generalPage);
+    d->iterationInput = new KIntNumInput(d->generalPage);
     d->iterationInput->setRange(1, 5000, 1, true);
     QWhatsThis::add( d->iterationInput, i18n("<p>Sets the number of times the filter is applied over "
                                              "the picture."));
     grid1->addMultiCellWidget(d->iterationLabel, 4, 4, 0, 0);
     grid1->addMultiCellWidget(d->iterationInput, 4, 4, 1, 1);
 
-    d->alphaLabel = new QLabel(i18n("Noise:"), generalPage);
-    d->alphaInput = new KDoubleNumInput(generalPage);
+    d->alphaLabel = new QLabel(i18n("Noise:"), d->generalPage);
+    d->alphaInput = new KDoubleNumInput(d->generalPage);
     d->alphaInput->setPrecision(2);
     d->alphaInput->setRange(0.01, 1.0, 0.1, true);
     QWhatsThis::add( d->alphaInput, i18n("<p>Sets the noise scale."));
@@ -176,12 +181,12 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     
     // -------------------------------------------------------------
     
-    QWidget* advancedPage = new QWidget( parent );
-    QGridLayout* grid2    = new QGridLayout(advancedPage, 6, 2, KDialog::spacingHint());
-    parent->addTab( advancedPage, i18n("Advanced Settings") );
+    d->advancedPage = new QWidget( parent );
+    QGridLayout* grid2    = new QGridLayout(d->advancedPage, 6, 2, KDialog::spacingHint());
+    parent->addTab( d->advancedPage, i18n("Advanced Settings") );
     
-    d->daLabel = new QLabel(i18n("Angular step:"), advancedPage);
-    d->daInput = new KDoubleNumInput(advancedPage);
+    d->daLabel = new QLabel(i18n("Angular step:"), d->advancedPage);
+    d->daInput = new KDoubleNumInput(d->advancedPage);
     d->daInput->setPrecision(2);
     d->daInput->setRange(0.0, 90.0, 1.0, true);
     QWhatsThis::add( d->daInput, i18n("<p>Set here the angular integration step in degrees "
@@ -189,38 +194,38 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     grid2->addMultiCellWidget(d->daLabel, 0, 0, 0, 0);
     grid2->addMultiCellWidget(d->daInput, 0, 0, 1, 1);
 
-    d->dlLabel = new QLabel(i18n("Integral step:"), advancedPage);
-    d->dlInput = new KDoubleNumInput(advancedPage);
+    d->dlLabel = new QLabel(i18n("Integral step:"), d->advancedPage);
+    d->dlInput = new KDoubleNumInput(d->advancedPage);
     d->dlInput->setPrecision(2);
     d->dlInput->setRange(0.0, 1.0, 0.1, true);
     QWhatsThis::add( d->dlInput, i18n("<p>Set here the spatial integral step."));
     grid2->addMultiCellWidget(d->dlLabel, 1, 1, 0, 0);
     grid2->addMultiCellWidget(d->dlInput, 1, 1, 1, 1);
 
-    d->gaussianPrecLabel = new QLabel(i18n("Gaussian:"), advancedPage);
-    d->gaussianPrecInput = new KDoubleNumInput(advancedPage);
+    d->gaussianPrecLabel = new QLabel(i18n("Gaussian:"), d->advancedPage);
+    d->gaussianPrecInput = new KDoubleNumInput(d->advancedPage);
     d->gaussianPrecInput->setPrecision(2);
     d->gaussianPrecInput->setRange(0.01, 20.0, 0.01, true);
     QWhatsThis::add( d->gaussianPrecInput, i18n("<p>Set here the precision of the Gaussian function."));
     grid2->addMultiCellWidget(d->gaussianPrecLabel, 2, 2, 0, 0);
     grid2->addMultiCellWidget(d->gaussianPrecInput, 2, 2, 1, 1);
 
-    d->tileLabel = new QLabel(i18n("Tile size:"), advancedPage);
-    d->tileInput = new KIntNumInput(advancedPage);
+    d->tileLabel = new QLabel(i18n("Tile size:"), d->advancedPage);
+    d->tileInput = new KIntNumInput(d->advancedPage);
     d->tileInput->setRange(0, 2000, 1, true);
     QWhatsThis::add( d->tileInput, i18n("<p>Sets the size of tile."));
     grid2->addMultiCellWidget(d->tileLabel, 3, 3, 0, 0);
     grid2->addMultiCellWidget(d->tileInput, 3, 3, 1, 1);
 
-    d->btileLabel = new QLabel(i18n("Tile border:"), advancedPage);
-    d->btileInput = new KIntNumInput(advancedPage);
+    d->btileLabel = new QLabel(i18n("Tile border:"), d->advancedPage);
+    d->btileInput = new KIntNumInput(d->advancedPage);
     d->btileInput->setRange(1, 20, 1, true);
     QWhatsThis::add( d->btileInput, i18n("<p>Sets the size of tile borders."));
     grid2->addMultiCellWidget(d->btileLabel, 4, 4, 0, 0);
     grid2->addMultiCellWidget(d->btileInput, 4, 4, 1, 1);
     
-    d->interpolationLabel = new QLabel(i18n("Interpolation:"), advancedPage);
-    d->interpolationBox   = new QComboBox(false, advancedPage);
+    d->interpolationLabel = new QLabel(i18n("Interpolation:"), d->advancedPage);
+    d->interpolationBox   = new QComboBox(false, d->advancedPage);
     d->interpolationBox->insertItem( i18n("Nearest Neighbor"), GreycstorationSettings::NearestNeighbor );
     d->interpolationBox->insertItem( i18n("Linear"),           GreycstorationSettings::Linear );
     d->interpolationBox->insertItem( i18n("Runge-Kutta"),      GreycstorationSettings::RungeKutta);
@@ -229,7 +234,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     grid2->addMultiCellWidget(d->interpolationLabel, 5, 5, 0, 0);
     grid2->addMultiCellWidget(d->interpolationBox, 5, 5, 1, 1);
     
-    d->fastApproxCBox = new QCheckBox(i18n("Fast approximation"), advancedPage);
+    d->fastApproxCBox = new QCheckBox(i18n("Fast approximation"), d->advancedPage);
     QWhatsThis::add( d->fastApproxCBox, i18n("<p>Enable fast approximation to render picture."));
     grid2->addMultiCellWidget(d->fastApproxCBox, 6, 6, 0, 1);
 }
@@ -237,6 +242,12 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
 GreycstorationWidget::~GreycstorationWidget()
 {
     delete d;
+}
+
+void GreycstorationWidget::setEnabled(bool b)
+{
+    d->generalPage->setEnabled(b);
+    d->advancedPage->setEnabled(b);
 }
 
 void GreycstorationWidget::setSettings(GreycstorationSettings settings)

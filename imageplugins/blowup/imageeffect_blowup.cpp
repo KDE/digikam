@@ -321,7 +321,10 @@ void ImageEffect_BlowUp::slotOk()
 {
     m_currentRenderingMode = FinalRendering;
     m_mainTab->setCurrentPage(0);
-    m_mainTab->setEnabled(false);
+    m_settingsWidget->setEnabled(false);
+    m_preserveRatioBox->setEnabled(false);
+    m_newWidth->setEnabled(false);
+    m_newHeight->setEnabled(false);
     enableButton(Ok, false);
     enableButton(Default, false);
     enableButton(User2, false);
