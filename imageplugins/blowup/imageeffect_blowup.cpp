@@ -79,7 +79,7 @@ namespace DigikamBlowUpImagesPlugin
 ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
                   : KDialogBase(Plain, i18n("Blowup Photograph"),
                                 Help|Default|User2|User3|Ok|Cancel, Ok,
-                                parent, 0, true, true,
+                                parent, 0, true, false,
                                 QString(),
                                 i18n("&Save As..."),
                                 i18n("&Load...")),
@@ -92,6 +92,15 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
 
     m_currentRenderingMode = NoneRendering;
     m_cimgInterface        = 0L;
+
+    Digikam::ImageIface iface(0, 0);
+    m_orgWidth    = iface.originalWidth();
+    m_orgHeight   = iface.originalHeight();
+    m_aspectRatio = (double)m_orgWidth / (double)m_orgHeight;
+    m_prevW       = m_orgWidth;
+    m_prevH       = m_orgHeight;
+    m_prevWP      = 100.0;
+    m_prevHP      = 100.0;
 
     // About data and help button.
 
@@ -126,11 +135,11 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QVBoxLayout *vlay = new QVBoxLayout(topLayout);
-    m_mainTab         = new QTabWidget( plainPage() );
+    QVBoxLayout *vlay  = new QVBoxLayout(topLayout);
+    m_mainTab          = new QTabWidget( plainPage() );
 
     QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid = new QGridLayout( firstPage, 4, 2, spacingHint());
+    QGridLayout* grid  = new QGridLayout( firstPage, 6, 2, spacingHint());
     m_mainTab->addTab( firstPage, i18n("New Size") );
 
     KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
@@ -143,29 +152,52 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
 
     QLabel *label1 = new QLabel(i18n("Width:"), firstPage);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_newWidth = new KIntNumInput(firstPage);
-    QWhatsThis::add( m_newWidth, i18n("<p>Set here the new imager width in pixels."));
+    m_wInput = new KIntNumInput(firstPage);
+    m_wInput->setRange(1, QMAX(m_orgWidth * 10, 9999), 1, true);
+    m_wInput->setName("m_wInput");
+    QWhatsThis::add( m_wInput, i18n("<p>Set here the new image width in pixels."));
 
     QLabel *label2 = new QLabel(i18n("Height:"), firstPage);
     label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_newHeight = new KIntNumInput(firstPage);
-    QWhatsThis::add( m_newHeight, i18n("<p>Set here the new image height in pixels."));
+    m_hInput = new KIntNumInput(firstPage);
+    m_hInput->setRange(1, QMAX(m_orgHeight * 10, 9999), 1, true);
+    m_hInput->setName("m_hInput");
+    QWhatsThis::add( m_hInput, i18n("<p>Set here the new image height in pixels."));
+
+    QLabel *label3 = new QLabel(i18n("Width (%):"), firstPage);
+    label3->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
+    m_wpInput = new KDoubleNumInput(firstPage);
+    m_wpInput->setRange(1.0, 999.0, 1.0, true);
+    m_wpInput->setName("m_wpInput");
+    QWhatsThis::add( m_wpInput, i18n("<p>Set here the new image width in percents."));
+
+    QLabel *label4 = new QLabel(i18n("Height (%):"), firstPage);
+    label4->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
+    m_hpInput = new KDoubleNumInput(firstPage);
+    m_hpInput->setRange(1.0, 999.0, 1.0, true);
+    m_hpInput->setName("m_hpInput");
+    QWhatsThis::add( m_hpInput, i18n("<p>Set here the new image height in percents."));
 
     m_preserveRatioBox = new QCheckBox(i18n("Maintain aspect ratio"), firstPage);
-    QWhatsThis::add( m_preserveRatioBox, i18n("<p>Enable this option to maintain aspect ratio with new image sizes."));
-
-    grid->addMultiCellWidget(cimgLogoLabel, 0, 2, 0, 0);
-    grid->addMultiCellWidget(m_preserveRatioBox, 0, 0, 2, 2);
-    grid->addMultiCellWidget(label1, 1, 1, 1, 1);
-    grid->addMultiCellWidget(m_newWidth, 1, 1, 2, 2);
-    grid->addMultiCellWidget(label2, 2, 2, 1, 1);
-    grid->addMultiCellWidget(m_newHeight, 2, 2, 2, 2);
+    QWhatsThis::add( m_preserveRatioBox, i18n("<p>Enable this option to maintain aspect "
+                                              "ratio with new image sizes."));
 
     m_progressBar = new KProgress(100, firstPage);
     m_progressBar->setValue(0);
     QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
-    grid->addMultiCellWidget(m_progressBar, 3, 3, 0, 2);
-    grid->setRowStretch(4, 10);
+
+    grid->addMultiCellWidget(cimgLogoLabel, 0, 2, 0, 0);
+    grid->addMultiCellWidget(m_preserveRatioBox, 0, 0, 2, 2);
+    grid->addMultiCellWidget(label1, 1, 1, 1, 1);
+    grid->addMultiCellWidget(m_wInput, 1, 1, 2, 2);
+    grid->addMultiCellWidget(label2, 2, 2, 1, 1);
+    grid->addMultiCellWidget(m_hInput, 2, 2, 2, 2);
+    grid->addMultiCellWidget(label3, 3, 3, 1, 1);
+    grid->addMultiCellWidget(m_wpInput, 3, 3, 2, 2);
+    grid->addMultiCellWidget(label4, 4, 4, 1, 1);
+    grid->addMultiCellWidget(m_hpInput, 4, 4, 2, 2);
+    grid->addMultiCellWidget(m_progressBar, 5, 5, 0, 2);
+    grid->setRowStretch(6, 10);
 
     // -------------------------------------------------------------
 
@@ -183,11 +215,17 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     connect(cimgLogoLabel, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processCImgURL(const QString&)));
 
-    connect(m_newWidth, SIGNAL(valueChanged (int)),
-            this, SLOT(slotAdjustRatioFromWidth(int)));
-
-    connect(m_newHeight, SIGNAL(valueChanged (int)),
-            this, SLOT(slotAdjustRatioFromHeight(int)));
+    connect(m_wInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotValuesChanged()));
+            
+    connect(m_hInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotValuesChanged()));
+            
+    connect(m_wpInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotValuesChanged()));
+            
+    connect(m_hpInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotValuesChanged()));
 }
 
 ImageEffect_BlowUp::~ImageEffect_BlowUp()
@@ -220,9 +258,21 @@ void ImageEffect_BlowUp::readUserSettings()
     settings.btile      = config->readNumEntry("BTile", 4);
     m_settingsWidget->setSettings(settings);
 
-    m_newWidth->setValue(config->readNumEntry("NewWidth", 1024));
-    m_newHeight->setValue(config->readNumEntry("NewHeight", 768));
-    m_preserveRatioBox->setChecked(config->readBoolEntry("AspectRatio", true));
+    m_preserveRatioBox->blockSignals(true);
+    m_wInput->blockSignals(true);
+    m_hInput->blockSignals(true);
+    m_wpInput->blockSignals(true);
+    m_hpInput->blockSignals(true);
+    m_preserveRatioBox->setChecked(true);
+    m_wInput->setValue(m_orgWidth);
+    m_hInput->setValue(m_orgHeight);
+    m_wpInput->setValue(100);
+    m_hpInput->setValue(100);
+    m_preserveRatioBox->blockSignals(false);
+    m_wInput->blockSignals(false);
+    m_hInput->blockSignals(false);
+    m_wpInput->blockSignals(false);
+    m_hpInput->blockSignals(false);
 }
 
 void ImageEffect_BlowUp::writeUserSettings()
@@ -243,9 +293,6 @@ void ImageEffect_BlowUp::writeUserSettings()
     config->writeEntry("Iteration", settings.nbIter);
     config->writeEntry("Tile", settings.tile);
     config->writeEntry("BTile", settings.btile);
-    config->writeEntry("NewWidth", m_newWidth->value());
-    config->writeEntry("NewHeight", m_newHeight->value());
-    config->writeEntry("AspectRatio", m_preserveRatioBox->isChecked());
     config->sync();
 }
 
@@ -255,35 +302,94 @@ void ImageEffect_BlowUp::slotDefault()
     settings.setResizeDefaultSettings();   
     m_settingsWidget->setSettings(settings);
 
-    Digikam::ImageIface iface(0, 0);
-    m_aspectRatio = (double)iface.originalWidth() / (double)iface.originalHeight();
+    m_preserveRatioBox->blockSignals(true);
+    m_wInput->blockSignals(true);
+    m_hInput->blockSignals(true);
+    m_wpInput->blockSignals(true);
+    m_hpInput->blockSignals(true);
     m_preserveRatioBox->setChecked(true);
-    m_newWidth->blockSignals(true);
-    m_newHeight->blockSignals(true);
-    m_newWidth->setValue(iface.originalWidth());
-    m_newHeight->setValue(iface.originalHeight());
-    m_newWidth->blockSignals(false);
-    m_newHeight->blockSignals(false);
+    m_wInput->setValue(m_orgWidth);
+    m_hInput->setValue(m_orgHeight);
+    m_wpInput->setValue(100.0);
+    m_hpInput->setValue(100.0);
+    m_preserveRatioBox->blockSignals(false);
+    m_wInput->blockSignals(false);
+    m_hInput->blockSignals(false);
+    m_wpInput->blockSignals(false);
+    m_hpInput->blockSignals(false);
 }
 
-void ImageEffect_BlowUp::slotAdjustRatioFromWidth(int w)
+void ImageEffect_BlowUp::slotValuesChanged()
 {
-    if ( m_preserveRatioBox->isChecked() )
+    m_wInput->blockSignals(true);
+    m_hInput->blockSignals(true);
+    m_wpInput->blockSignals(true);
+    m_hpInput->blockSignals(true);
+    
+    QString s(sender()->name());
+    
+    if (s == "m_wInput")
     {
-        m_newHeight->blockSignals(true);
-        m_newHeight->setValue( (int) (w / m_aspectRatio) );
-        m_newHeight->blockSignals(false);
-    }
-}
+        double val = m_wInput->value();
+        double wp  = val/(double)(m_orgWidth) * 100.0;
+        m_wpInput->setValue(wp);
 
-void ImageEffect_BlowUp::slotAdjustRatioFromHeight(int h)
-{
-    if ( m_preserveRatioBox->isChecked() )
-    {
-        m_newWidth->blockSignals(true);
-        m_newWidth->setValue( (int)(m_aspectRatio * h) );
-        m_newWidth->blockSignals(false);
+        if (m_preserveRatioBox->isChecked())
+        {
+            m_hpInput->setValue(wp);
+            int h = (int)(wp*m_orgHeight/100);
+            m_hInput->setValue(h);
+        }
     }
+    else if (s == "m_hInput")
+    {
+        double val = m_hInput->value();
+        double hp  = val/(double)(m_orgHeight) * 100.0;
+        m_hpInput->setValue(hp);
+
+        if (m_preserveRatioBox->isChecked())
+        {
+            m_wpInput->setValue(hp);
+            int w = (int)(hp*m_orgWidth/100);
+            m_wInput->setValue(w);
+        }
+    }
+    else if (s == "m_wpInput")
+    {
+        double val = m_wpInput->value();
+        int w      = (int)(val*m_orgWidth/100);
+        m_wInput->setValue(w);
+
+        if (m_preserveRatioBox->isChecked())
+        {
+            m_hpInput->setValue(val);
+            int h = (int)(val*m_orgHeight/100);
+            m_hInput->setValue(h);
+        }
+    }
+    else if (s == "m_hpInput")
+    {
+        double val = m_hpInput->value();
+        int h      = (int)(val*m_orgHeight/100);
+        m_hInput->setValue(h);
+
+        if (m_preserveRatioBox->isChecked())
+        {
+            m_wpInput->setValue(val);
+            int w = (int)(val*m_orgWidth/100);
+            m_wInput->setValue(w);
+        }
+    }
+
+    m_prevW  = m_wInput->value();
+    m_prevH  = m_hInput->value();
+    m_prevWP = m_wpInput->value();
+    m_prevHP = m_hpInput->value();
+    
+    m_wInput->blockSignals(false);
+    m_hInput->blockSignals(false);
+    m_wpInput->blockSignals(false);
+    m_hpInput->blockSignals(false);
 }
 
 void ImageEffect_BlowUp::slotCancel()
@@ -320,12 +426,16 @@ void ImageEffect_BlowUp::closeEvent(QCloseEvent *e)
 
 void ImageEffect_BlowUp::slotOk()
 {
+    if (m_prevW  != m_wInput->value()  || m_prevH  != m_hInput->value() ||
+        m_prevWP != m_wpInput->value() || m_prevHP != m_hpInput->value())
+        slotValuesChanged();
+
     m_currentRenderingMode = FinalRendering;
     m_mainTab->setCurrentPage(0);
     m_settingsWidget->setEnabled(false);
     m_preserveRatioBox->setEnabled(false);
-    m_newWidth->setEnabled(false);
-    m_newHeight->setEnabled(false);
+    m_wInput->setEnabled(false);
+    m_hInput->setEnabled(false);
     enableButton(Ok, false);
     enableButton(Default, false);
     enableButton(User2, false);
@@ -351,8 +461,8 @@ void ImageEffect_BlowUp::slotOk()
     m_cimgInterface = new DigikamImagePlugins::GreycstorationIface(
                                     &originalImage, m_settingsWidget->getSettings(),
                                     DigikamImagePlugins::GreycstorationIface::Resize, 
-                                    m_newWidth->value(),
-                                    m_newHeight->value(),
+                                    m_wInput->value(),
+                                    m_hInput->value(),
                                     0, this);
 }
 

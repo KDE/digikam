@@ -35,6 +35,7 @@ class QCustomEvent;
 class QTabWidget;
 
 class KIntNumInput;
+class KDoubleNumInput;
 class KProgress;
 class KAboutData;
 
@@ -79,8 +80,7 @@ private slots:
     void slotUser2();
     void slotUser3();
     void processCImgURL(const QString&);
-    void slotAdjustRatioFromWidth(int w);
-    void slotAdjustRatioFromHeight(int h);
+    void slotValuesChanged();
     void readUserSettings();            
 
 private:
@@ -92,7 +92,13 @@ private:
     };
 
     int              m_currentRenderingMode;
-    
+    int              m_orgWidth;    
+    int              m_orgHeight;   
+    int              m_prevW; 
+    int              m_prevH; 
+
+    double           m_prevWP;    
+    double           m_prevHP;    
     double           m_aspectRatio;
 
     QWidget         *m_parent;
@@ -101,8 +107,11 @@ private:
     
     QTabWidget      *m_mainTab;
 
-    KIntNumInput    *m_newWidth;
-    KIntNumInput    *m_newHeight;
+    KIntNumInput    *m_wInput;
+    KIntNumInput    *m_hInput;
+
+    KDoubleNumInput *m_wpInput;
+    KDoubleNumInput *m_hpInput;
     
     KProgress       *m_progressBar;
     
