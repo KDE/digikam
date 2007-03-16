@@ -76,6 +76,7 @@ public:
         btileInput         = 0;
         advancedPage       = 0;
         generalPage        = 0;
+        parent             = 0;
     }
 
     QLabel          *amplitudeLabel;
@@ -98,6 +99,8 @@ public:
 
     QComboBox       *interpolationBox;
 
+    QTabWidget      *parent;
+
     KDoubleNumInput *amplitudeInput;
     KDoubleNumInput *sharpnessInput;
     KDoubleNumInput *anisotropyInput;
@@ -116,6 +119,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
                     : QObject(static_cast<QObject*>(parent))
 {
     d = new GreycstorationWidgetPriv;
+    d->parent = parent;
 
     // -------------------------------------------------------------
     
@@ -248,6 +252,8 @@ void GreycstorationWidget::setEnabled(bool b)
 {
     d->generalPage->setEnabled(b);
     d->advancedPage->setEnabled(b);
+    d->parent->setTabEnabled(d->generalPage, b);
+    d->parent->setTabEnabled(d->advancedPage, b);
 }
 
 void GreycstorationWidget::setSettings(GreycstorationSettings settings)
