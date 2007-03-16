@@ -44,6 +44,7 @@
 
 // KDE includes.
 
+#include <kseparator.h>
 #include <kcursor.h>
 #include <kurllabel.h>
 #include <klocale.h>
@@ -139,40 +140,28 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     m_mainTab          = new QTabWidget( plainPage() );
 
     QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid  = new QGridLayout( firstPage, 6, 2, spacingHint());
+    QGridLayout* grid  = new QGridLayout( firstPage, 8, 2, spacingHint());
     m_mainTab->addTab( firstPage, i18n("New Size") );
 
-    KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
-    cimgLogoLabel->setText(QString());
-    cimgLogoLabel->setURL("http://cimg.sourceforge.net");
-    KGlobal::dirs()->addResourceType("cimg-logo", KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
-    QString directory = KGlobal::dirs()->findResourceDir("cimg-logo", "cimg-logo.png");
-    cimgLogoLabel->setPixmap( QPixmap( directory + "cimg-logo.png" ) );
-    QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
-
     QLabel *label1 = new QLabel(i18n("Width:"), firstPage);
-    label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_wInput = new KIntNumInput(firstPage);
     m_wInput->setRange(1, QMAX(m_orgWidth * 10, 9999), 1, true);
     m_wInput->setName("m_wInput");
     QWhatsThis::add( m_wInput, i18n("<p>Set here the new image width in pixels."));
 
     QLabel *label2 = new QLabel(i18n("Height:"), firstPage);
-    label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_hInput = new KIntNumInput(firstPage);
     m_hInput->setRange(1, QMAX(m_orgHeight * 10, 9999), 1, true);
     m_hInput->setName("m_hInput");
     QWhatsThis::add( m_hInput, i18n("<p>Set here the new image height in pixels."));
 
     QLabel *label3 = new QLabel(i18n("Width (%):"), firstPage);
-    label3->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_wpInput = new KDoubleNumInput(firstPage);
     m_wpInput->setRange(1.0, 999.0, 1.0, true);
     m_wpInput->setName("m_wpInput");
     QWhatsThis::add( m_wpInput, i18n("<p>Set here the new image width in percents."));
 
     QLabel *label4 = new QLabel(i18n("Height (%):"), firstPage);
-    label4->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_hpInput = new KDoubleNumInput(firstPage);
     m_hpInput->setRange(1.0, 999.0, 1.0, true);
     m_hpInput->setName("m_hpInput");
@@ -182,22 +171,37 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     QWhatsThis::add( m_preserveRatioBox, i18n("<p>Enable this option to maintain aspect "
                                               "ratio with new image sizes."));
 
+    KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
+    cimgLogoLabel->setText(QString());
+    cimgLogoLabel->setURL("http://cimg.sourceforge.net");
+    KGlobal::dirs()->addResourceType("cimg-logo", KGlobal::dirs()->kde_default("data") +
+                                     "digikamimageplugins/data");
+    QString directory = KGlobal::dirs()->findResourceDir("cimg-logo", "cimg-logo.png");
+    cimgLogoLabel->setPixmap( QPixmap( directory + "cimg-logo.png" ) );
+    QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
+
+    m_useGreycstorationBox = new QCheckBox(i18n("Restore photograph"), firstPage);
+    QWhatsThis::add( m_useGreycstorationBox, i18n("<p>Enable this option to restore photograph content. "
+                                                  "Warning: this process can take a while."));
+
     m_progressBar = new KProgress(100, firstPage);
     m_progressBar->setValue(0);
-    QWhatsThis::add( m_progressBar, i18n("<p>This is the current percentage of the task completed.") );
+    QWhatsThis::add(m_progressBar, i18n("<p>This is the current progress when you use Restoration mode."));
 
-    grid->addMultiCellWidget(cimgLogoLabel, 0, 2, 0, 0);
-    grid->addMultiCellWidget(m_preserveRatioBox, 0, 0, 2, 2);
-    grid->addMultiCellWidget(label1, 1, 1, 1, 1);
-    grid->addMultiCellWidget(m_wInput, 1, 1, 2, 2);
-    grid->addMultiCellWidget(label2, 2, 2, 1, 1);
-    grid->addMultiCellWidget(m_hInput, 2, 2, 2, 2);
-    grid->addMultiCellWidget(label3, 3, 3, 1, 1);
-    grid->addMultiCellWidget(m_wpInput, 3, 3, 2, 2);
-    grid->addMultiCellWidget(label4, 4, 4, 1, 1);
-    grid->addMultiCellWidget(m_hpInput, 4, 4, 2, 2);
-    grid->addMultiCellWidget(m_progressBar, 5, 5, 0, 2);
-    grid->setRowStretch(6, 10);
+    grid->addMultiCellWidget(m_preserveRatioBox, 0, 0, 0, 2);
+    grid->addMultiCellWidget(label1, 1, 1, 0, 0);
+    grid->addMultiCellWidget(m_wInput, 1, 1, 1, 2);
+    grid->addMultiCellWidget(label2, 2, 2, 0, 0);
+    grid->addMultiCellWidget(m_hInput, 2, 2, 1, 2);
+    grid->addMultiCellWidget(label3, 3, 3, 0, 0);
+    grid->addMultiCellWidget(m_wpInput, 3, 3, 1, 2);
+    grid->addMultiCellWidget(label4, 4, 4, 0, 0);
+    grid->addMultiCellWidget(m_hpInput, 4, 4, 1, 2);
+    grid->addMultiCellWidget(new KSeparator(firstPage), 5, 5, 0, 2);
+    grid->addMultiCellWidget(cimgLogoLabel, 6, 7, 0, 0);
+    grid->addMultiCellWidget(m_useGreycstorationBox, 6, 6, 1, 2);
+    grid->addMultiCellWidget(m_progressBar, 7, 7, 1, 2);
+    grid->setRowStretch(8, 10);
 
     // -------------------------------------------------------------
 
@@ -226,6 +230,9 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
             
     connect(m_hpInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotValuesChanged()));
+
+    connect(m_useGreycstorationBox, SIGNAL(toggled(bool)),
+             this, SLOT(slotRestorationToggled(bool)) );
 }
 
 ImageEffect_BlowUp::~ImageEffect_BlowUp()
@@ -235,6 +242,14 @@ ImageEffect_BlowUp::~ImageEffect_BlowUp()
     if (m_cimgInterface)
        delete m_cimgInterface;
 }
+
+void ImageEffect_BlowUp::slotRestorationToggled(bool b)
+{
+    m_settingsWidget->setEnabled(b);
+    m_progressBar->setEnabled(b);
+    enableButton(User2, b);
+    enableButton(User3, b);
+}    
 
 void ImageEffect_BlowUp::readUserSettings()
 {
@@ -257,6 +272,8 @@ void ImageEffect_BlowUp::readUserSettings()
     settings.tile       = config->readNumEntry("Tile", 512);
     settings.btile      = config->readNumEntry("BTile", 4);
     m_settingsWidget->setSettings(settings);
+    m_useGreycstorationBox->setChecked(config->readBoolEntry("RestorePhotograph", false));
+    slotRestorationToggled(m_useGreycstorationBox->isChecked());
 
     m_preserveRatioBox->blockSignals(true);
     m_wInput->blockSignals(true);
@@ -293,6 +310,7 @@ void ImageEffect_BlowUp::writeUserSettings()
     config->writeEntry("Iteration", settings.nbIter);
     config->writeEntry("Tile", settings.tile);
     config->writeEntry("BTile", settings.btile);
+    config->writeEntry("RestorePhotograph", m_useGreycstorationBox->isChecked());
     config->sync();
 }
 
@@ -301,6 +319,8 @@ void ImageEffect_BlowUp::slotDefault()
     DigikamImagePlugins::GreycstorationSettings settings;
     settings.setResizeDefaultSettings();   
     m_settingsWidget->setSettings(settings);
+    m_useGreycstorationBox->setChecked(false);
+    slotRestorationToggled(m_useGreycstorationBox->isChecked());
 
     m_preserveRatioBox->blockSignals(true);
     m_wInput->blockSignals(true);
@@ -434,6 +454,7 @@ void ImageEffect_BlowUp::slotOk()
     m_mainTab->setCurrentPage(0);
     m_settingsWidget->setEnabled(false);
     m_preserveRatioBox->setEnabled(false);
+    m_useGreycstorationBox->setEnabled(false);
     m_wInput->setEnabled(false);
     m_hInput->setEnabled(false);
     enableButton(Ok, false);
@@ -458,9 +479,12 @@ void ImageEffect_BlowUp::slotOk()
         m_cimgInterface = 0;
     }
 
+    int mode = m_useGreycstorationBox->isChecked() ? DigikamImagePlugins::GreycstorationIface::Resize
+                                                   : DigikamImagePlugins::GreycstorationIface::SimpleResize;
+
     m_cimgInterface = new DigikamImagePlugins::GreycstorationIface(
                                     &originalImage, m_settingsWidget->getSettings(),
-                                    DigikamImagePlugins::GreycstorationIface::Resize, 
+                                    mode, 
                                     m_wInput->value(),
                                     m_hInput->value(),
                                     0, this);

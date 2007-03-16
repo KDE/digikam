@@ -81,7 +81,8 @@ private slots:
     void slotUser3();
     void processCImgURL(const QString&);
     void slotValuesChanged();
-    void readUserSettings();            
+    void readUserSettings();        
+    void slotRestorationToggled(bool);    
 
 private:
 
@@ -104,6 +105,7 @@ private:
     QWidget         *m_parent;
     
     QCheckBox       *m_preserveRatioBox;
+    QCheckBox       *m_useGreycstorationBox;
     
     QTabWidget      *m_mainTab;
 
