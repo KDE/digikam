@@ -49,7 +49,8 @@ public:
     {
         Restore = 0,
         InPainting,
-        Resize
+        Resize,
+        SimpleResize    // Mode to resize image without to use Greycstoration algorithm.
     };
 
 public:
@@ -74,6 +75,7 @@ private:
     void restoration();
     void inpainting();
     void resize();
+    void simpleResize();
     void iterationLoop(uint iter);
     
 private:

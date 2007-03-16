@@ -70,7 +70,7 @@ GreycstorationIface::GreycstorationIface(Digikam::DImg *orgImage,
     d->mode           = mode;
     d->inPaintingMask = inPaintingMask;
 
-    if (d->mode == Resize)
+    if (d->mode == Resize || d->mode == SimpleResize)
     {
         m_destImage = Digikam::DImg(newWidth, newHeight,
                                     m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
@@ -190,11 +190,17 @@ void GreycstorationIface::filterImage()
             case Restore:
                 restoration();
                 break;
+
             case InPainting:
                 inpainting();
                 break;
+
             case Resize:
                 resize();
+                break;
+
+            case SimpleResize:
+                simpleResize();
                 break;
         }
     }
@@ -303,6 +309,7 @@ void GreycstorationIface::inpainting()
     else
     {
         DDebug() << "Inpainting image: mask is null!" << endl;
+        m_cancel = true;
         return;
     }
 
@@ -370,6 +377,16 @@ void GreycstorationIface::resize()
                                     2);
         iterationLoop(iter);
     }
+}
+
+void GreycstorationIface::simpleResize()
+{
+    const unsigned int init = 3;      // Initial estimate (1=block, 3=linear, 5=bicubic).
+
+    int w = m_destImage.width();
+    int h = m_destImage.height();
+
+    d->img.resize(w, h, 1, -100, init);
 }
 
 void GreycstorationIface::iterationLoop(uint iter)
