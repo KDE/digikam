@@ -31,9 +31,7 @@
 #include <kdialogbase.h>
 
 class QCheckBox;
-class QTimer;
 class QCustomEvent;
-class QComboBox;
 class QTabWidget;
 
 class KIntNumInput;
@@ -99,12 +97,12 @@ private:
 
     QWidget         *m_parent;
     
-    KIntNumInput    *m_newWidth;
-    KIntNumInput    *m_newHeight;
-    
     QCheckBox       *m_preserveRatioBox;
     
     QTabWidget      *m_mainTab;
+
+    KIntNumInput    *m_newWidth;
+    KIntNumInput    *m_newHeight;
     
     KProgress       *m_progressBar;
     
