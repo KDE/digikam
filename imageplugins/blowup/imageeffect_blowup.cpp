@@ -21,9 +21,7 @@
 
 // C++ include.
 
-#include <cstdio>
-#include <cmath>
-#include <cstring>
+//#include <cmath>
 
 // Qt includes.
 
@@ -40,7 +38,6 @@
 #include <qtimer.h>
 #include <qevent.h>
 #include <qpixmap.h>
-#include <qpainter.h>
 #include <qbrush.h>
 #include <qfile.h>
 #include <qimage.h>
