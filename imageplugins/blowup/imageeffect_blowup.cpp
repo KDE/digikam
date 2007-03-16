@@ -130,7 +130,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     // -------------------------------------------------------------
 
     QVBoxLayout *vlay = new QVBoxLayout(topLayout);
-    m_mainTab = new QTabWidget( plainPage() );
+    m_mainTab         = new QTabWidget( plainPage() );
 
     QWidget* firstPage = new QWidget( m_mainTab );
     QGridLayout* grid = new QGridLayout( firstPage, 3, 2, spacingHint());
@@ -147,13 +147,11 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
     QLabel *label1 = new QLabel(i18n("Width:"), firstPage);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_newWidth = new KIntNumInput(firstPage);
-    m_newWidth->setValue(1024);
     QWhatsThis::add( m_newWidth, i18n("<p>Set here the new imager width in pixels."));
 
     QLabel *label2 = new QLabel(i18n("Height:"), firstPage);
     label2->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_newHeight = new KIntNumInput(firstPage);
-    m_newHeight->setValue(768);
     QWhatsThis::add( m_newHeight, i18n("<p>Set here the new image height in pixels."));
 
     m_preserveRatioBox = new QCheckBox(i18n("Maintain aspect ratio"), firstPage);
@@ -180,7 +178,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
 
     adjustSize();
     disableResize();
-    QTimer::singleShot(0, this, SLOT(slotDefault())); // Reset all parameters to the default values.
+    QTimer::singleShot(0, this, SLOT(readUserSettings()));
 
     // -------------------------------------------------------------
 
@@ -200,6 +198,57 @@ ImageEffect_BlowUp::~ImageEffect_BlowUp()
     
     if (m_cimgInterface)
        delete m_cimgInterface;
+}
+
+void ImageEffect_BlowUp::readUserSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("blowup Tool Dialog");
+
+    DigikamImagePlugins::GreycstorationSettings settings;
+    settings.fastApprox = config->readBoolEntry("FastApprox", true);
+    settings.interp     = config->readNumEntry("Interpolation",
+                          DigikamImagePlugins::GreycstorationSettings::NearestNeighbor);
+    settings.amplitude  = config->readDoubleNumEntry("Amplitude", 20.0);
+    settings.sharpness  = config->readDoubleNumEntry("Sharpness", 0.2);
+    settings.anisotropy = config->readDoubleNumEntry("Anisotropy", 0.9);
+    settings.alpha      = config->readDoubleNumEntry("Alpha", 0.1);
+    settings.sigma      = config->readDoubleNumEntry("Sigma", 1.5);
+    settings.gaussPrec  = config->readDoubleNumEntry("GaussPrec", 2.0);
+    settings.dl         = config->readDoubleNumEntry("Dl", 0.8);
+    settings.da         = config->readDoubleNumEntry("Da", 30.0);
+    settings.nbIter     = config->readNumEntry("Iteration", 3);
+    settings.tile       = config->readNumEntry("Tile", 512);
+    settings.btile      = config->readNumEntry("BTile", 4);
+    m_settingsWidget->setSettings(settings);
+
+    m_newWidth->setValue(config->readNumEntry("NewWidth", 1024));
+    m_newHeight->setValue(config->readNumEntry("NewHeight", 768));
+    m_preserveRatioBox->setChecked(config->readBoolEntry("AspectRatio", true));
+}
+
+void ImageEffect_BlowUp::writeUserSettings()
+{
+    DigikamImagePlugins::GreycstorationSettings settings = m_settingsWidget->getSettings();
+    KConfig* config = kapp->config();
+    config->setGroup("blowup Tool Dialog");
+    config->writeEntry("FastApprox", settings.fastApprox);
+    config->writeEntry("Interpolation", settings.interp);
+    config->writeEntry("Amplitude", settings.amplitude);
+    config->writeEntry("Sharpness", settings.sharpness);
+    config->writeEntry("Anisotropy", settings.anisotropy);
+    config->writeEntry("Alpha", settings.alpha);
+    config->writeEntry("Sigma", settings.sigma);
+    config->writeEntry("GaussPrec", settings.gaussPrec);
+    config->writeEntry("Dl", settings.dl);
+    config->writeEntry("Da", settings.da);
+    config->writeEntry("Iteration", settings.nbIter);
+    config->writeEntry("Tile", settings.tile);
+    config->writeEntry("BTile", settings.btile);
+    config->writeEntry("NewWidth", m_newWidth->value());
+    config->writeEntry("NewHeight", m_newHeight->value());
+    config->writeEntry("AspectRatio", m_preserveRatioBox->isChecked());
+    config->sync();
 }
 
 void ImageEffect_BlowUp::slotDefault()
@@ -283,6 +332,8 @@ void ImageEffect_BlowUp::slotOk()
 
     m_parent->setCursor( KCursor::waitCursor() );
     m_progressBar->setValue(0);
+    m_progressBar->setEnabled(true);
+    writeUserSettings();
 
     Digikam::ImageIface iface(0, 0);
     uchar *data = iface.getOriginalImage();

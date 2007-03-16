@@ -70,7 +70,8 @@ protected:
 private:
 
     void customEvent(QCustomEvent *event);
-    
+    void writeUserSettings();
+
 private slots:
 
     void slotHelp();
@@ -82,6 +83,7 @@ private slots:
     void processCImgURL(const QString&);
     void slotAdjustRatioFromWidth(int w);
     void slotAdjustRatioFromHeight(int h);
+    void readUserSettings();            
 
 private:
 
