@@ -115,7 +115,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     // -------------------------------------------------------------
     
     QWidget* generalPage = new QWidget( parent );
-    QGridLayout* grid1   = new QGridLayout(generalPage, 5, 2, KDialog::spacingHint());
+    QGridLayout* grid1   = new QGridLayout(generalPage, 6, 2, KDialog::spacingHint());
     parent->addTab( generalPage, i18n("General") );
     
     d->sharpnessLabel = new QLabel(i18n("Detail preservation:"), generalPage);
@@ -172,6 +172,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     QWhatsThis::add( d->alphaInput, i18n("<p>Sets the noise scale."));
     grid1->addMultiCellWidget(d->alphaLabel, 5, 5, 0, 0);
     grid1->addMultiCellWidget(d->alphaInput, 5, 5, 1, 1);
+    grid1->setRowStretch(6, 10);
     
     // -------------------------------------------------------------
     
@@ -193,30 +194,30 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->dlInput->setPrecision(2);
     d->dlInput->setRange(0.0, 1.0, 0.1, true);
     QWhatsThis::add( d->dlInput, i18n("<p>Set here the spatial integral step."));
-    grid2->addMultiCellWidget(d->dlLabel, 2, 2, 0, 0);
-    grid2->addMultiCellWidget(d->dlInput, 2, 2, 1, 1);
+    grid2->addMultiCellWidget(d->dlLabel, 1, 1, 0, 0);
+    grid2->addMultiCellWidget(d->dlInput, 1, 1, 1, 1);
 
     d->gaussianPrecLabel = new QLabel(i18n("Gaussian:"), advancedPage);
     d->gaussianPrecInput = new KDoubleNumInput(advancedPage);
     d->gaussianPrecInput->setPrecision(2);
     d->gaussianPrecInput->setRange(0.01, 20.0, 0.01, true);
     QWhatsThis::add( d->gaussianPrecInput, i18n("<p>Set here the precision of the Gaussian function."));
-    grid2->addMultiCellWidget(d->gaussianPrecLabel, 3, 3, 0, 0);
-    grid2->addMultiCellWidget(d->gaussianPrecInput, 3, 3, 1, 1);
+    grid2->addMultiCellWidget(d->gaussianPrecLabel, 2, 2, 0, 0);
+    grid2->addMultiCellWidget(d->gaussianPrecInput, 2, 2, 1, 1);
 
     d->tileLabel = new QLabel(i18n("Tile size:"), advancedPage);
     d->tileInput = new KIntNumInput(advancedPage);
     d->tileInput->setRange(0, 2000, 1, true);
     QWhatsThis::add( d->tileInput, i18n("<p>Sets the size of tile."));
-    grid2->addMultiCellWidget(d->tileLabel, 4, 4, 0, 0);
-    grid2->addMultiCellWidget(d->tileInput, 4, 4, 1, 1);
+    grid2->addMultiCellWidget(d->tileLabel, 3, 3, 0, 0);
+    grid2->addMultiCellWidget(d->tileInput, 3, 3, 1, 1);
 
     d->btileLabel = new QLabel(i18n("Tile border:"), advancedPage);
     d->btileInput = new KIntNumInput(advancedPage);
     d->btileInput->setRange(1, 20, 1, true);
     QWhatsThis::add( d->btileInput, i18n("<p>Sets the size of tile borders."));
-    grid2->addMultiCellWidget(d->btileLabel, 3, 3, 0, 0);
-    grid2->addMultiCellWidget(d->btileInput, 3, 3, 1, 1);
+    grid2->addMultiCellWidget(d->btileLabel, 4, 4, 0, 0);
+    grid2->addMultiCellWidget(d->btileInput, 4, 4, 1, 1);
     
     d->interpolationLabel = new QLabel(i18n("Interpolation:"), advancedPage);
     d->interpolationBox   = new QComboBox(false, advancedPage);
