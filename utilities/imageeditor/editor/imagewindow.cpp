@@ -68,7 +68,6 @@
 #include "dmetadata.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
-#include "imageresizedlg.h"
 #include "imageprint.h"
 #include "albummanager.h"
 #include "album.h"
