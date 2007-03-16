@@ -30,8 +30,6 @@
 
 #include <kdialogbase.h>
 
-class QPushButton;
-class QLabel;
 class QCheckBox;
 class QTimer;
 class QCustomEvent;
@@ -39,13 +37,13 @@ class QComboBox;
 class QTabWidget;
 
 class KIntNumInput;
-class KDoubleNumInput;
 class KProgress;
 class KAboutData;
 
 namespace DigikamImagePlugins
 {
-class CimgIface;
+class GreycstorationIface;
+class GreycstorationWidget;
 }
 
 namespace Digikam
@@ -75,7 +73,6 @@ private:
     
 private slots:
 
-    void slotCheckSettings(void);    
     void slotHelp();
     void slotOk();
     void slotCancel();
@@ -100,31 +97,9 @@ private:
 
     QWidget         *m_parent;
     
-    QPushButton     *m_helpButton;
-    
-    QLabel          *m_detailLabel;
-    QLabel          *m_gradientLabel;
-    QLabel          *m_timeStepLabel;
-    QLabel          *m_blurLabel;
-    QLabel          *m_blurItLabel;
-    QLabel          *m_angularStepLabel;
-    QLabel          *m_integralStepLabel;
-    QLabel          *m_gaussianLabel;
-    
     KIntNumInput    *m_newWidth;
     KIntNumInput    *m_newHeight;
     
-    KDoubleNumInput *m_detailInput;
-    KDoubleNumInput *m_gradientInput;
-    KDoubleNumInput *m_timeStepInput;
-    KDoubleNumInput *m_blurInput;
-    KDoubleNumInput *m_angularStepInput;
-    KDoubleNumInput *m_integralStepInput;
-    KDoubleNumInput *m_gaussianInput;
-    KDoubleNumInput *m_blurItInput;
-    
-    QCheckBox       *m_linearInterpolationBox;
-    QCheckBox       *m_normalizeBox;
     QCheckBox       *m_preserveRatioBox;
     
     QTabWidget      *m_mainTab;
@@ -133,9 +108,10 @@ private:
     
     KAboutData      *m_about;
     
-    DigikamImagePlugins::CimgIface *m_cimgInterface;
-    
-    Digikam::ImageIface            *m_iface;    
+    Digikam::ImageIface                       *m_iface;
+
+    DigikamImagePlugins::GreycstorationIface  *m_cimgInterface;
+    DigikamImagePlugins::GreycstorationWidget *m_settingsWidget;
 };
     
 }  // NameSpace DigikamBlowUpImagesPlugin
