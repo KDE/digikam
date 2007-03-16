@@ -10,6 +10,8 @@ General       : New depency to libkdcraw shared library used to decode RAW file.
                 dcraw version used is 8.60. digiKam support now all recent digital 
                 camera RAW files released at PMA 2007.    
 
+Image Editor  : Usability issue : Blowup and Resize tools have been merged.
+
 Image Plugins : Red Eyes Correction tool have been completly re-writen. There is 
                 a preview of effect and the capability to taint the eye pupil with
                 a customized color. The new eye pupil can be blured to smooth the 
