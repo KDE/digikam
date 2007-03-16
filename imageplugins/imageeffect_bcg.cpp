@@ -134,10 +134,11 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
 
     QVBox *histoBox   = new QVBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
-    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
-                                             "selected image channel. This one is re-computed at any "
+    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
+                                             "of the selected image channel. This one is re-computed at any "
                                              "settings changes."));
-    
+    QLabel *space = new QLabel(histoBox);
+    space->setFixedHeight(1);
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     

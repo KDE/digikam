@@ -166,8 +166,9 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram "
                                              "of the selected image channel. " 
-                         "This one is updated after setting changes."));
-
+                                             "This one is updated after setting changes."));
+    QLabel *space = new QLabel(histoBox);
+    space->setFixedHeight(1);
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, 
                                                     histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
