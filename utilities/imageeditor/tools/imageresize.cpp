@@ -74,15 +74,70 @@
 namespace Digikam
 {
 
+class ImageResizePriv
+{
+public:
+
+    enum RunningMode
+    {
+        NoneRendering=0,
+        FinalRendering
+    };
+
+    ImageResizePriv()
+    {
+        currentRenderingMode = NoneRendering;
+        parent               = 0;
+        preserveRatioBox     = 0;
+        useGreycstorationBox = 0;
+        mainTab              = 0;
+        wInput               = 0;
+        hInput               = 0;
+        wpInput              = 0;
+        hpInput              = 0;    
+        progressBar          = 0;
+        greycstorationIface  = 0;
+        settingsWidget       = 0;
+    }
+
+    int                   currentRenderingMode;
+    int                   orgWidth;    
+    int                   orgHeight;   
+    int                   prevW; 
+    int                   prevH; 
+
+    double                prevWP;    
+    double                prevHP;    
+
+    QWidget              *parent;
+    
+    QCheckBox            *preserveRatioBox;
+    QCheckBox            *useGreycstorationBox;
+    
+    QTabWidget           *mainTab;
+
+    KIntNumInput         *wInput;
+    KIntNumInput         *hInput;
+
+    KDoubleNumInput      *wpInput;
+    KDoubleNumInput      *hpInput;
+    
+    KProgress            *progressBar;
+    
+    GreycstorationIface  *greycstorationIface;
+    GreycstorationWidget *settingsWidget;
+};
+
 ImageResize::ImageResize(QWidget* parent)
            : KDialogBase(Plain, i18n("Resize Image"),
                          Help|Default|User2|User3|Ok|Cancel, Ok,
                          parent, 0, true, false,
                          QString(),
                          i18n("&Save As..."),
-                         i18n("&Load...")),
-             m_parent(parent)
+                         i18n("&Load..."))             
 {
+    d = new ImageResizePriv;
+    d->parent = parent;
     setHelp("resizetool.anchor", "digikam");
     QString whatsThis;
     setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
@@ -90,52 +145,49 @@ ImageResize::ImageResize(QWidget* parent)
     setButtonWhatsThis ( User2, i18n("<p>Save all filter parameters to settings text file.") );
     enableButton(Ok, false);
 
-    m_currentRenderingMode = NoneRendering;
-    m_cimgInterface        = 0L;
-
     ImageIface iface(0, 0);
-    m_orgWidth    = iface.originalWidth();
-    m_orgHeight   = iface.originalHeight();
-    m_prevW       = m_orgWidth;
-    m_prevH       = m_orgHeight;
-    m_prevWP      = 100.0;
-    m_prevHP      = 100.0;
+    d->orgWidth    = iface.originalWidth();
+    d->orgHeight   = iface.originalHeight();
+    d->prevW       = d->orgWidth;
+    d->prevH       = d->orgHeight;
+    d->prevWP      = 100.0;
+    d->prevHP      = 100.0;
 
     // -------------------------------------------------------------
 
     QVBoxLayout *vlay  = new QVBoxLayout(plainPage(), 0, spacingHint());
-    m_mainTab          = new QTabWidget( plainPage() );
+    d->mainTab          = new QTabWidget( plainPage() );
 
-    QWidget* firstPage = new QWidget( m_mainTab );
+    QWidget* firstPage = new QWidget( d->mainTab );
     QGridLayout* grid  = new QGridLayout( firstPage, 8, 2, spacingHint());
-    m_mainTab->addTab( firstPage, i18n("New Size") );
+    d->mainTab->addTab( firstPage, i18n("New Size") );
 
     QLabel *label1 = new QLabel(i18n("Width:"), firstPage);
-    m_wInput = new KIntNumInput(firstPage);
-    m_wInput->setRange(1, QMAX(m_orgWidth * 10, 9999), 1, true);
-    m_wInput->setName("m_wInput");
-    QWhatsThis::add( m_wInput, i18n("<p>Set here the new image width in pixels."));
+    d->wInput = new KIntNumInput(firstPage);
+    d->wInput->setRange(1, QMAX(d->orgWidth * 10, 9999), 1, true);
+    d->wInput->setName("d->wInput");
+    QWhatsThis::add( d->wInput, i18n("<p>Set here the new image width in pixels."));
 
     QLabel *label2 = new QLabel(i18n("Height:"), firstPage);
-    m_hInput = new KIntNumInput(firstPage);
-    m_hInput->setRange(1, QMAX(m_orgHeight * 10, 9999), 1, true);
-    m_hInput->setName("m_hInput");
-    QWhatsThis::add( m_hInput, i18n("<p>Set here the new image height in pixels."));
+    d->hInput = new KIntNumInput(firstPage);
+    d->hInput->setRange(1, QMAX(d->orgHeight * 10, 9999), 1, true);
+    d->hInput->setName("d->hInput");
+    QWhatsThis::add( d->hInput, i18n("<p>Set here the new image height in pixels."));
 
     QLabel *label3 = new QLabel(i18n("Width (%):"), firstPage);
-    m_wpInput = new KDoubleNumInput(firstPage);
-    m_wpInput->setRange(1.0, 999.0, 1.0, true);
-    m_wpInput->setName("m_wpInput");
-    QWhatsThis::add( m_wpInput, i18n("<p>Set here the new image width in percents."));
+    d->wpInput = new KDoubleNumInput(firstPage);
+    d->wpInput->setRange(1.0, 999.0, 1.0, true);
+    d->wpInput->setName("d->wpInput");
+    QWhatsThis::add( d->wpInput, i18n("<p>Set here the new image width in percents."));
 
     QLabel *label4 = new QLabel(i18n("Height (%):"), firstPage);
-    m_hpInput = new KDoubleNumInput(firstPage);
-    m_hpInput->setRange(1.0, 999.0, 1.0, true);
-    m_hpInput->setName("m_hpInput");
-    QWhatsThis::add( m_hpInput, i18n("<p>Set here the new image height in percents."));
+    d->hpInput = new KDoubleNumInput(firstPage);
+    d->hpInput->setRange(1.0, 999.0, 1.0, true);
+    d->hpInput->setName("d->hpInput");
+    QWhatsThis::add( d->hpInput, i18n("<p>Set here the new image height in percents."));
 
-    m_preserveRatioBox = new QCheckBox(i18n("Maintain aspect ratio"), firstPage);
-    QWhatsThis::add( m_preserveRatioBox, i18n("<p>Enable this option to maintain aspect "
+    d->preserveRatioBox = new QCheckBox(i18n("Maintain aspect ratio"), firstPage);
+    QWhatsThis::add( d->preserveRatioBox, i18n("<p>Enable this option to maintain aspect "
                                               "ratio with new image sizes."));
 
     KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
@@ -147,33 +199,33 @@ ImageResize::ImageResize(QWidget* parent)
     cimgLogoLabel->setPixmap( QPixmap( directory + "logo-cimg.png" ) );
     QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
 
-    m_useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
-    QWhatsThis::add( m_useGreycstorationBox, i18n("<p>Enable this option to restore photograph content. "
+    d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
+    QWhatsThis::add( d->useGreycstorationBox, i18n("<p>Enable this option to restore photograph content. "
                                                   "Warning: this process can take a while."));
 
-    m_progressBar = new KProgress(100, firstPage);
-    m_progressBar->setValue(0);
-    QWhatsThis::add(m_progressBar, i18n("<p>This is the current progress when you use Restoration mode."));
+    d->progressBar = new KProgress(100, firstPage);
+    d->progressBar->setValue(0);
+    QWhatsThis::add(d->progressBar, i18n("<p>This is the current progress when you use Restoration mode."));
 
-    grid->addMultiCellWidget(m_preserveRatioBox, 0, 0, 0, 2);
+    grid->addMultiCellWidget(d->preserveRatioBox, 0, 0, 0, 2);
     grid->addMultiCellWidget(label1, 1, 1, 0, 0);
-    grid->addMultiCellWidget(m_wInput, 1, 1, 1, 2);
+    grid->addMultiCellWidget(d->wInput, 1, 1, 1, 2);
     grid->addMultiCellWidget(label2, 2, 2, 0, 0);
-    grid->addMultiCellWidget(m_hInput, 2, 2, 1, 2);
+    grid->addMultiCellWidget(d->hInput, 2, 2, 1, 2);
     grid->addMultiCellWidget(label3, 3, 3, 0, 0);
-    grid->addMultiCellWidget(m_wpInput, 3, 3, 1, 2);
+    grid->addMultiCellWidget(d->wpInput, 3, 3, 1, 2);
     grid->addMultiCellWidget(label4, 4, 4, 0, 0);
-    grid->addMultiCellWidget(m_hpInput, 4, 4, 1, 2);
+    grid->addMultiCellWidget(d->hpInput, 4, 4, 1, 2);
     grid->addMultiCellWidget(new KSeparator(firstPage), 5, 5, 0, 2);
     grid->addMultiCellWidget(cimgLogoLabel, 6, 7, 0, 0);
-    grid->addMultiCellWidget(m_useGreycstorationBox, 6, 6, 1, 2);
-    grid->addMultiCellWidget(m_progressBar, 7, 7, 1, 2);
+    grid->addMultiCellWidget(d->useGreycstorationBox, 6, 6, 1, 2);
+    grid->addMultiCellWidget(d->progressBar, 7, 7, 1, 2);
     grid->setRowStretch(8, 10);
 
     // -------------------------------------------------------------
 
-    m_settingsWidget = new GreycstorationWidget(m_mainTab);
-    vlay->addWidget(m_mainTab);
+    d->settingsWidget = new GreycstorationWidget(d->mainTab);
+    vlay->addWidget(d->mainTab);
 
     // -------------------------------------------------------------
 
@@ -186,32 +238,34 @@ ImageResize::ImageResize(QWidget* parent)
     connect(cimgLogoLabel, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processCImgURL(const QString&)));
 
-    connect(m_wInput, SIGNAL(valueChanged(int)),
+    connect(d->wInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotValuesChanged()));
             
-    connect(m_hInput, SIGNAL(valueChanged(int)),
+    connect(d->hInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotValuesChanged()));
             
-    connect(m_wpInput, SIGNAL(valueChanged(double)),
+    connect(d->wpInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotValuesChanged()));
             
-    connect(m_hpInput, SIGNAL(valueChanged(double)),
+    connect(d->hpInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotValuesChanged()));
 
-    connect(m_useGreycstorationBox, SIGNAL(toggled(bool)),
+    connect(d->useGreycstorationBox, SIGNAL(toggled(bool)),
              this, SLOT(slotRestorationToggled(bool)) );
 }
 
 ImageResize::~ImageResize()
 {
-    if (m_cimgInterface)
-       delete m_cimgInterface;
+    if (d->greycstorationIface)
+       delete d->greycstorationIface;
+
+    delete d;
 }
 
 void ImageResize::slotRestorationToggled(bool b)
 {
-    m_settingsWidget->setEnabled(b);
-    m_progressBar->setEnabled(b);
+    d->settingsWidget->setEnabled(b);
+    d->progressBar->setEnabled(b);
     enableButton(User2, b);
     enableButton(User3, b);
 }    
@@ -236,30 +290,30 @@ void ImageResize::readUserSettings()
     settings.nbIter     = config->readNumEntry("Iteration", 3);
     settings.tile       = config->readNumEntry("Tile", 512);
     settings.btile      = config->readNumEntry("BTile", 4);
-    m_settingsWidget->setSettings(settings);
-    m_useGreycstorationBox->setChecked(config->readBoolEntry("RestorePhotograph", false));
-    slotRestorationToggled(m_useGreycstorationBox->isChecked());
+    d->settingsWidget->setSettings(settings);
+    d->useGreycstorationBox->setChecked(config->readBoolEntry("RestorePhotograph", false));
+    slotRestorationToggled(d->useGreycstorationBox->isChecked());
 
-    m_preserveRatioBox->blockSignals(true);
-    m_wInput->blockSignals(true);
-    m_hInput->blockSignals(true);
-    m_wpInput->blockSignals(true);
-    m_hpInput->blockSignals(true);
-    m_preserveRatioBox->setChecked(true);
-    m_wInput->setValue(m_orgWidth);
-    m_hInput->setValue(m_orgHeight);
-    m_wpInput->setValue(100);
-    m_hpInput->setValue(100);
-    m_preserveRatioBox->blockSignals(false);
-    m_wInput->blockSignals(false);
-    m_hInput->blockSignals(false);
-    m_wpInput->blockSignals(false);
-    m_hpInput->blockSignals(false);
+    d->preserveRatioBox->blockSignals(true);
+    d->wInput->blockSignals(true);
+    d->hInput->blockSignals(true);
+    d->wpInput->blockSignals(true);
+    d->hpInput->blockSignals(true);
+    d->preserveRatioBox->setChecked(true);
+    d->wInput->setValue(d->orgWidth);
+    d->hInput->setValue(d->orgHeight);
+    d->wpInput->setValue(100);
+    d->hpInput->setValue(100);
+    d->preserveRatioBox->blockSignals(false);
+    d->wInput->blockSignals(false);
+    d->hInput->blockSignals(false);
+    d->wpInput->blockSignals(false);
+    d->hpInput->blockSignals(false);
 }
 
 void ImageResize::writeUserSettings()
 {
-    GreycstorationSettings settings = m_settingsWidget->getSettings();
+    GreycstorationSettings settings = d->settingsWidget->getSettings();
     KConfig* config = kapp->config();
     config->setGroup("resize Tool Dialog");
     config->writeEntry("FastApprox", settings.fastApprox);
@@ -275,7 +329,7 @@ void ImageResize::writeUserSettings()
     config->writeEntry("Iteration", settings.nbIter);
     config->writeEntry("Tile", settings.tile);
     config->writeEntry("BTile", settings.btile);
-    config->writeEntry("RestorePhotograph", m_useGreycstorationBox->isChecked());
+    config->writeEntry("RestorePhotograph", d->useGreycstorationBox->isChecked());
     config->sync();
 }
 
@@ -283,107 +337,107 @@ void ImageResize::slotDefault()
 {
     GreycstorationSettings settings;
     settings.setResizeDefaultSettings();   
-    m_settingsWidget->setSettings(settings);
-    m_useGreycstorationBox->setChecked(false);
-    slotRestorationToggled(m_useGreycstorationBox->isChecked());
+    d->settingsWidget->setSettings(settings);
+    d->useGreycstorationBox->setChecked(false);
+    slotRestorationToggled(d->useGreycstorationBox->isChecked());
 
-    m_preserveRatioBox->blockSignals(true);
-    m_wInput->blockSignals(true);
-    m_hInput->blockSignals(true);
-    m_wpInput->blockSignals(true);
-    m_hpInput->blockSignals(true);
-    m_preserveRatioBox->setChecked(true);
-    m_wInput->setValue(m_orgWidth);
-    m_hInput->setValue(m_orgHeight);
-    m_wpInput->setValue(100.0);
-    m_hpInput->setValue(100.0);
-    m_preserveRatioBox->blockSignals(false);
-    m_wInput->blockSignals(false);
-    m_hInput->blockSignals(false);
-    m_wpInput->blockSignals(false);
-    m_hpInput->blockSignals(false);
+    d->preserveRatioBox->blockSignals(true);
+    d->wInput->blockSignals(true);
+    d->hInput->blockSignals(true);
+    d->wpInput->blockSignals(true);
+    d->hpInput->blockSignals(true);
+    d->preserveRatioBox->setChecked(true);
+    d->wInput->setValue(d->orgWidth);
+    d->hInput->setValue(d->orgHeight);
+    d->wpInput->setValue(100.0);
+    d->hpInput->setValue(100.0);
+    d->preserveRatioBox->blockSignals(false);
+    d->wInput->blockSignals(false);
+    d->hInput->blockSignals(false);
+    d->wpInput->blockSignals(false);
+    d->hpInput->blockSignals(false);
 }
 
 void ImageResize::slotValuesChanged()
 {
     enableButton(Ok, true);
-    m_wInput->blockSignals(true);
-    m_hInput->blockSignals(true);
-    m_wpInput->blockSignals(true);
-    m_hpInput->blockSignals(true);
+    d->wInput->blockSignals(true);
+    d->hInput->blockSignals(true);
+    d->wpInput->blockSignals(true);
+    d->hpInput->blockSignals(true);
     
     QString s(sender()->name());
     
-    if (s == "m_wInput")
+    if (s == "d->wInput")
     {
-        double val = m_wInput->value();
-        double wp  = val/(double)(m_orgWidth) * 100.0;
-        m_wpInput->setValue(wp);
+        double val = d->wInput->value();
+        double wp  = val/(double)(d->orgWidth) * 100.0;
+        d->wpInput->setValue(wp);
 
-        if (m_preserveRatioBox->isChecked())
+        if (d->preserveRatioBox->isChecked())
         {
-            m_hpInput->setValue(wp);
-            int h = (int)(wp*m_orgHeight/100);
-            m_hInput->setValue(h);
+            d->hpInput->setValue(wp);
+            int h = (int)(wp*d->orgHeight/100);
+            d->hInput->setValue(h);
         }
     }
-    else if (s == "m_hInput")
+    else if (s == "d->hInput")
     {
-        double val = m_hInput->value();
-        double hp  = val/(double)(m_orgHeight) * 100.0;
-        m_hpInput->setValue(hp);
+        double val = d->hInput->value();
+        double hp  = val/(double)(d->orgHeight) * 100.0;
+        d->hpInput->setValue(hp);
 
-        if (m_preserveRatioBox->isChecked())
+        if (d->preserveRatioBox->isChecked())
         {
-            m_wpInput->setValue(hp);
-            int w = (int)(hp*m_orgWidth/100);
-            m_wInput->setValue(w);
+            d->wpInput->setValue(hp);
+            int w = (int)(hp*d->orgWidth/100);
+            d->wInput->setValue(w);
         }
     }
-    else if (s == "m_wpInput")
+    else if (s == "d->wpInput")
     {
-        double val = m_wpInput->value();
-        int w      = (int)(val*m_orgWidth/100);
-        m_wInput->setValue(w);
+        double val = d->wpInput->value();
+        int w      = (int)(val*d->orgWidth/100);
+        d->wInput->setValue(w);
 
-        if (m_preserveRatioBox->isChecked())
+        if (d->preserveRatioBox->isChecked())
         {
-            m_hpInput->setValue(val);
-            int h = (int)(val*m_orgHeight/100);
-            m_hInput->setValue(h);
+            d->hpInput->setValue(val);
+            int h = (int)(val*d->orgHeight/100);
+            d->hInput->setValue(h);
         }
     }
-    else if (s == "m_hpInput")
+    else if (s == "d->hpInput")
     {
-        double val = m_hpInput->value();
-        int h      = (int)(val*m_orgHeight/100);
-        m_hInput->setValue(h);
+        double val = d->hpInput->value();
+        int h      = (int)(val*d->orgHeight/100);
+        d->hInput->setValue(h);
 
-        if (m_preserveRatioBox->isChecked())
+        if (d->preserveRatioBox->isChecked())
         {
-            m_wpInput->setValue(val);
-            int w = (int)(val*m_orgWidth/100);
-            m_wInput->setValue(w);
+            d->wpInput->setValue(val);
+            int w = (int)(val*d->orgWidth/100);
+            d->wInput->setValue(w);
         }
     }
 
-    m_prevW  = m_wInput->value();
-    m_prevH  = m_hInput->value();
-    m_prevWP = m_wpInput->value();
-    m_prevHP = m_hpInput->value();
+    d->prevW  = d->wInput->value();
+    d->prevH  = d->hInput->value();
+    d->prevWP = d->wpInput->value();
+    d->prevHP = d->hpInput->value();
     
-    m_wInput->blockSignals(false);
-    m_hInput->blockSignals(false);
-    m_wpInput->blockSignals(false);
-    m_hpInput->blockSignals(false);
+    d->wInput->blockSignals(false);
+    d->hInput->blockSignals(false);
+    d->wpInput->blockSignals(false);
+    d->hpInput->blockSignals(false);
 }
 
 void ImageResize::slotCancel()
 {
-    if (m_currentRenderingMode != NoneRendering)
+    if (d->currentRenderingMode != ImageResizePriv::NoneRendering)
     {
-        m_cimgInterface->stopComputation();
-        m_parent->unsetCursor();
+        d->greycstorationIface->stopComputation();
+        d->parent->unsetCursor();
     }
 
     done(Cancel);
@@ -396,10 +450,10 @@ void ImageResize::processCImgURL(const QString& url)
 
 void ImageResize::closeEvent(QCloseEvent *e)
 {
-    if (m_currentRenderingMode != NoneRendering)
+    if (d->currentRenderingMode != ImageResizePriv::NoneRendering)
     {
-        m_cimgInterface->stopComputation();
-        m_parent->unsetCursor();
+        d->greycstorationIface->stopComputation();
+        d->parent->unsetCursor();
     }
 
     e->accept();
@@ -407,49 +461,49 @@ void ImageResize::closeEvent(QCloseEvent *e)
 
 void ImageResize::slotOk()
 {
-    if (m_prevW  != m_wInput->value()  || m_prevH  != m_hInput->value() ||
-        m_prevWP != m_wpInput->value() || m_prevHP != m_hpInput->value())
+    if (d->prevW  != d->wInput->value()  || d->prevH  != d->hInput->value() ||
+        d->prevWP != d->wpInput->value() || d->prevHP != d->hpInput->value())
         slotValuesChanged();
 
-    m_currentRenderingMode = FinalRendering;
-    m_mainTab->setCurrentPage(0);
-    m_settingsWidget->setEnabled(false);
-    m_preserveRatioBox->setEnabled(false);
-    m_useGreycstorationBox->setEnabled(false);
-    m_wInput->setEnabled(false);
-    m_hInput->setEnabled(false);
-    m_wpInput->setEnabled(false);
-    m_hpInput->setEnabled(false);
+    d->currentRenderingMode = ImageResizePriv::FinalRendering;
+    d->mainTab->setCurrentPage(0);
+    d->settingsWidget->setEnabled(false);
+    d->preserveRatioBox->setEnabled(false);
+    d->useGreycstorationBox->setEnabled(false);
+    d->wInput->setEnabled(false);
+    d->hInput->setEnabled(false);
+    d->wpInput->setEnabled(false);
+    d->hpInput->setEnabled(false);
     enableButton(Ok, false);
     enableButton(Default, false);
     enableButton(User2, false);
     enableButton(User3, false);
 
-    m_parent->setCursor( KCursor::waitCursor() );
-    m_progressBar->setValue(0);
-    m_progressBar->setEnabled(true);
+    d->parent->setCursor( KCursor::waitCursor() );
+    d->progressBar->setValue(0);
+    d->progressBar->setEnabled(true);
     writeUserSettings();
 
     ImageIface iface(0, 0);
     uchar *data = iface.getOriginalImage();
     DImg originalImage = DImg(iface.originalWidth(), iface.originalHeight(),
-                                  iface.originalSixteenBit(), iface.originalHasAlpha(), data);
+                              iface.originalSixteenBit(), iface.originalHasAlpha(), data);
     delete [] data;
 
-    if (m_cimgInterface)
+    if (d->greycstorationIface)
     {
-        delete m_cimgInterface;
-        m_cimgInterface = 0;
+        delete d->greycstorationIface;
+        d->greycstorationIface = 0;
     }
 
-    int mode = m_useGreycstorationBox->isChecked() ? GreycstorationIface::Resize
+    int mode = d->useGreycstorationBox->isChecked() ? GreycstorationIface::Resize
                                                    : GreycstorationIface::SimpleResize;
 
-    m_cimgInterface = new GreycstorationIface(
-                          &originalImage, m_settingsWidget->getSettings(),
+    d->greycstorationIface = new GreycstorationIface(
+                          &originalImage, d->settingsWidget->getSettings(),
                           mode, 
-                          m_wInput->value(),
-                          m_hInput->value(),
+                          d->wInput->value(),
+                          d->hInput->value(),
                           0, this);
 }
 
@@ -457,30 +511,30 @@ void ImageResize::customEvent(QCustomEvent *event)
 {
     if (!event) return;
 
-    GreycstorationIface::EventData *d = (GreycstorationIface::EventData*) event->data();
+    GreycstorationIface::EventData *data = (GreycstorationIface::EventData*) event->data();
 
-    if (!d) return;
+    if (!data) return;
 
-    if (d->starting)           // Computation in progress !
+    if (data->starting)           // Computation in progress !
     {
-        m_progressBar->setValue(d->progress);
+        d->progressBar->setValue(data->progress);
     }
     else
     {
-        if (d->success)        // Computation Completed !
+        if (data->success)        // Computation Completed !
         {
-            switch (m_currentRenderingMode)
+            switch (d->currentRenderingMode)
             {
-                case FinalRendering:
+                case ImageResizePriv::FinalRendering:
                 {
                     DDebug() << "Final resizing completed..." << endl;
                     
                     ImageIface iface(0, 0);
-                    DImg resizedImage = m_cimgInterface->getTargetImage();
+                    DImg resizedImage = d->greycstorationIface->getTargetImage();
 
                     iface.putOriginalImage(i18n("Resize"), resizedImage.bits(),
                                            resizedImage.width(), resizedImage.height());
-                    m_parent->unsetCursor();
+                    d->parent->unsetCursor();
                     accept();
                     break;
                 }
@@ -488,15 +542,15 @@ void ImageResize::customEvent(QCustomEvent *event)
         }
         else                   // Computation Failed !
         {
-            switch (m_currentRenderingMode)
+            switch (d->currentRenderingMode)
             {
-                case FinalRendering:
+                case ImageResizePriv::FinalRendering:
                     break;
             }
         }
     }
 
-    delete d;
+    delete data;
 }
 
 void ImageResize::slotUser3()
@@ -511,7 +565,7 @@ void ImageResize::slotUser3()
 
     if ( file.open(IO_ReadOnly) )   
     {
-        if (!m_settingsWidget->loadSettings(file, QString("# Photograph Resizing Configuration File")))
+        if (!d->settingsWidget->loadSettings(file, QString("# Photograph Resizing Configuration File")))
         {
            KMessageBox::error(this, 
                         i18n("\"%1\" is not a Photograph Resizing settings text file.")
@@ -537,7 +591,7 @@ void ImageResize::slotUser2()
     QFile file(saveBlowupFile.path());
 
     if ( file.open(IO_WriteOnly) )   
-        m_settingsWidget->saveSettings(file, QString("# Photograph Resizing Configuration File"));
+        d->settingsWidget->saveSettings(file, QString("# Photograph Resizing Configuration File"));
     else
         KMessageBox::error(this, i18n("Cannot save settings to the Photograph Resizing text file."));
 

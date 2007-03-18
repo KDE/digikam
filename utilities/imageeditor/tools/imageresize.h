@@ -33,20 +33,10 @@
 
 #include "digikam_export.h"
 
-class QCheckBox;
-class QCustomEvent;
-class QTabWidget;
-
-class KIntNumInput;
-class KDoubleNumInput;
-class KProgress;
-
 namespace Digikam
 {
 
-class GreycstorationIface;
-class GreycstorationWidget;
-class ImageIface;
+class ImageResizePriv;
 
 class DIGIKAM_EXPORT ImageResize : public KDialogBase
 {
@@ -80,40 +70,7 @@ private slots:
 
 private:
 
-    enum RunningMode
-    {
-        NoneRendering=0,
-        FinalRendering
-    };
-
-    int              m_currentRenderingMode;
-    int              m_orgWidth;    
-    int              m_orgHeight;   
-    int              m_prevW; 
-    int              m_prevH; 
-
-    double           m_prevWP;    
-    double           m_prevHP;    
-
-    QWidget         *m_parent;
-    
-    QCheckBox       *m_preserveRatioBox;
-    QCheckBox       *m_useGreycstorationBox;
-    
-    QTabWidget      *m_mainTab;
-
-    KIntNumInput    *m_wInput;
-    KIntNumInput    *m_hInput;
-
-    KDoubleNumInput *m_wpInput;
-    KDoubleNumInput *m_hpInput;
-    
-    KProgress       *m_progressBar;
-    
-    ImageIface      *m_iface;
-
-    GreycstorationIface  *m_cimgInterface;
-    GreycstorationWidget *m_settingsWidget;
+    ImageResizePriv *d;
 };
     
 }  // NameSpace Digikam
