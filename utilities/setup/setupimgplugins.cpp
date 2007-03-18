@@ -41,6 +41,7 @@
 
 // Local includes.
 
+#include "imagepluginloader.h"
 #include "setupimgplugins.h"
 #include "setupimgplugins.moc"
 
@@ -117,13 +118,18 @@ void SetupImgPlugins::initImagePluginsList()
 {
     KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
     KTrader::OfferList::ConstIterator iter;
+    QStringList oList = ImagePluginLoader::instance()->obsoleteImagePluginsList();
+
 
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {
         KService::Ptr service = *iter;
-        d->availableImagePluginList.append(service->name());      // Plugin name translated.
-        d->availableImagePluginList.append(service->library());   // Plugin system library name.
-        d->availableImagePluginList.append(service->comment());   // Plugin comments translated.
+        if (!oList.contains(service->library()))
+        {
+            d->availableImagePluginList.append(service->name());      // Plugin name translated.
+            d->availableImagePluginList.append(service->library());   // Plugin system library name.
+            d->availableImagePluginList.append(service->comment());   // Plugin comments translated.
+        }
     }
 }
 

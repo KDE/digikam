@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Caulier Gilles <caulier dot gilles at gmail dot com>
+ *          Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2004-06-04
  * Description : image plugins loader for  digiKam image editor
  * 
@@ -38,20 +38,33 @@
 namespace Digikam
 {
 
+// List of obsolete image plugins name. 
+
+static const char* ObsoleteImagePluginsList[] =
+{
+     "digikamimageplugin_blowup",        // This plugin have been merged with resize tool since 0.9.2.  
+     "-1"
+};
+
 class ImagePluginLoaderPrivate
 {
 
 public:
 
-    typedef QPair<QString, ImagePlugin*>  PluginType;
-    typedef QValueList< PluginType >      PluginList;
+    typedef QPair<QString, ImagePlugin*> PluginType;
+    typedef QValueList< PluginType >     PluginList;
 
 public:
 
     ImagePluginLoaderPrivate()
     {
         splash = 0;
+
+        for (int i=0 ; QString(ObsoleteImagePluginsList[i]) != QString("-1") ; i++)
+            obsoleteImagePluginsList << ObsoleteImagePluginsList[i];
     }
+    
+    QStringList   obsoleteImagePluginsList;
 
     SplashScreen *splash;
 
@@ -71,7 +84,7 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
     m_instance = this;
     d = new ImagePluginLoaderPrivate;
     d->splash = splash;
-    
+ 
     QStringList imagePluginsList2Load;
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");  
@@ -87,7 +100,8 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
         for (iter = offers.begin() ; iter != offers.end() ; ++iter) 
         {
             KService::Ptr service = *iter;
-            imagePluginsList2Load.append(service->library());
+            if (!d->obsoleteImagePluginsList.contains(service->library()))
+                imagePluginsList2Load.append(service->library());
         }
         
         // Create the plugins list to config file.
@@ -95,7 +109,17 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
         config->sync();
     }
     else
+    {
         imagePluginsList2Load = config->readListEntry("ImagePlugins List");
+
+        DDebug() << imagePluginsList2Load << endl;
+        for (QStringList::Iterator it = d->obsoleteImagePluginsList.begin(); 
+             it != d->obsoleteImagePluginsList.end(); ++it)
+        {
+            if (imagePluginsList2Load.contains(*it))
+                imagePluginsList2Load.remove(*it);
+        }            
+    }
 
     loadPluginsFromList(imagePluginsList2Load);
 }
@@ -152,7 +176,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 }
             }
             break;
-       }
+        }
     }
     
     // Load all other image plugins after (make a coherant menu construction in Image Editor).
@@ -266,6 +290,11 @@ QPtrList<ImagePlugin> ImagePluginLoader::pluginList()
     }
         
     return list;
+}
+
+QStringList ImagePluginLoader::obsoleteImagePluginsList()
+{
+    return d->obsoleteImagePluginsList;
 }
 
 }  // namespace Digikam

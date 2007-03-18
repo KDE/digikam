@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Caulier Gilles <caulier dot gilles at gmail dot com>
+ *          Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2004-06-04
  * Description : image plugins loader for  digiKam image editor
  *
@@ -60,6 +60,8 @@ public:
     bool pluginLibraryIsLoaded(const QString& libraryName);
     
     ImagePlugin* pluginInstance(const QString& libraryName);
+
+    QStringList obsoleteImagePluginsList();
 
 private:
     
