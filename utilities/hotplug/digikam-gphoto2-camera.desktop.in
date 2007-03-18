@@ -3,7 +3,8 @@ Exec=@digikamhelper_dir@/digikam-camera detect %u
 Icon=digikam
 Name=digiKam Detect and Download
 Name[de]=Bilder mit digiKam herunterladen
-Name[fr]=tÈlÈcharger photos avec digiKam
+Name[fr]=t√©l√©charger photos avec digiKam
+Name[tr]=digiKam ile resimler g√∂ster
 
 [Desktop Entry]
 Actions=digiKam Detect and Download
