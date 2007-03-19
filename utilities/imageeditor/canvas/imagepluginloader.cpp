@@ -44,7 +44,8 @@ static const char* ObsoleteImagePluginsList[] =
 {
      "digikamimageplugin_blowup",    // Merged with "Resize" tool since 0.9.2.  
      "digikamimageplugin_solarize",  // Renamed "ColorFx" since 0.9.2.  
-     "digikamimageplugin_unsharp",   // Merged with "Sharp" tool since 0.9.2.
+     "digikamimageplugin_unsharp",   // Merged with "Sharpen" tool since 0.9.2.
+     "digikamimageplugin_refocus",   // Merged with "Sharpen" tool since 0.9.2.
      "-1"
 };
 
