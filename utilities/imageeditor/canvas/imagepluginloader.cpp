@@ -42,7 +42,8 @@ namespace Digikam
 
 static const char* ObsoleteImagePluginsList[] =
 {
-     "digikamimageplugin_blowup",        // This plugin have been merged with resize tool since 0.9.2.  
+     "digikamimageplugin_blowup",    // Merged with resize tool since 0.9.2.  
+     "digikamimageplugin_solarize",  // Renamed "ColorFx" since 0.9.2.  
      "-1"
 };
 
