@@ -56,7 +56,8 @@ namespace DigikamImagesPluginCore
 {
 
 ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
-                   : Digikam::CtrlPanelDlg(parent, i18n("Sharpening Photograph"), "sharpen")
+                   : Digikam::CtrlPanelDlg(parent, i18n("Sharpening Photograph"), "sharpen",
+                                           true, false, true)
  {
     setHelp("blursharpentool.anchor", KApplication::kApplication()->aboutData()->appName());
 
@@ -349,6 +350,7 @@ void ImageEffect_Sharpen::readUserSettings()
     m_gauss->blockSignals(true);
     m_correlation->blockSignals(true);
     m_noise->blockSignals(true);
+    m_sharpMethod->blockSignals(true);
     m_radiusInput->setValue(config->readNumEntry("SimpleSharpRadiusAjustment", 0));
     m_radiusInput2->setValue(config->readNumEntry("UnsharpMaskRadiusAjustment", 1));
     m_amountInput->setValue(config->readDoubleNumEntry("UnsharpMaskAmountAjustment", 1.0));
@@ -358,6 +360,7 @@ void ImageEffect_Sharpen::readUserSettings()
     m_gauss->setValue(config->readDoubleNumEntry("RefocusGaussAjustment", 0.0));
     m_correlation->setValue(config->readDoubleNumEntry("RefocusCorrelationAjustment", 0.5));
     m_noise->setValue(config->readDoubleNumEntry("RefocusNoiseAjustment", 0.03));
+    m_sharpMethod->setCurrentItem(config->readNumEntry("SharpenMethod", SimpleSharp));
     m_radiusInput->blockSignals(false);
     m_radiusInput2->blockSignals(false);
     m_amountInput->blockSignals(false);
@@ -367,6 +370,8 @@ void ImageEffect_Sharpen::readUserSettings()
     m_gauss->blockSignals(false);
     m_correlation->blockSignals(false);
     m_noise->blockSignals(false);
+    m_sharpMethod->blockSignals(false);
+    slotSharpMethodActived(m_sharpMethod->currentItem());
 }
 
 void ImageEffect_Sharpen::writeUserSettings()
@@ -382,6 +387,7 @@ void ImageEffect_Sharpen::writeUserSettings()
     config->writeEntry("RefocusGaussAjustment", m_gauss->value());
     config->writeEntry("RefocusCorrelationAjustment", m_correlation->value());
     config->writeEntry("RefocusNoiseAjustment", m_noise->value());
+    config->writeEntry("SharpenMethod", m_sharpMethod->currentItem());
     config->sync();
 }
 
