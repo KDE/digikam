@@ -31,6 +31,11 @@ class QWidgetStack;
 class KIntNumInput;
 class KDoubleNumInput;
 
+namespace Digikam
+{
+    class DImg;
+}
+
 namespace DigikamImagesPluginCore
 {
 
@@ -64,18 +69,26 @@ private:
     enum SharpingMethods 
     {
         SimpleSharp=0,
-        UnsharpMask
+        UnsharpMask,
+        Refocus
     };
 
     QWidgetStack    *m_stack;
     
     QComboBox       *m_sharpMethod;
 
+    KIntNumInput    *m_matrixSize;
     KIntNumInput    *m_radiusInput;
     KIntNumInput    *m_radiusInput2;
 
+    KDoubleNumInput *m_radius;
+    KDoubleNumInput *m_gauss;
+    KDoubleNumInput *m_correlation;
+    KDoubleNumInput *m_noise;
     KDoubleNumInput *m_amountInput;
     KDoubleNumInput *m_thresholdInput;
+
+    Digikam::DImg    m_img;
 };
 
 }  // NameSpace DigikamImagesPluginCore

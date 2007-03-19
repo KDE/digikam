@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : matrix.cpp
  * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date  : 2005-04-29
  * Description : refocus deconvolution matrix implementation.
  *
- * Copyright 2005 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * Original implementation from Refocus Gimp plug-in
  * Copyright (C) 1999-2003 Ernst Lippe
@@ -43,15 +42,12 @@ extern "C"
 #include <qglobal.h>
 #include <qstring.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
+#include "ddebug.h"
 #include "matrix.h"
 
-namespace DigikamRefocusImagesPlugin
+namespace DigikamImagesPluginCore
 {
 
 Mat *RefocusMatrix::allocate_matrix (int nrows, int ncols)
@@ -548,7 +544,7 @@ void RefocusMatrix::make_gaussian_convolution (const double gradius, CMat * conv
     }
 }
 
-// Return the integral of sqrt(radius^2 - z^2) for z = 0 to x.
+/** Return the integral of sqrt(radius^2 - z^2) for z = 0 to x. */
 
 double RefocusMatrix::circle_integral (const double x, const double radius)
 {
@@ -653,7 +649,7 @@ int RefocusMatrix::dgesv (const int N, const int NRHS, double *A, const int lda,
     integer i_N = N, i_NHRS = NRHS, i_lda = lda, i_ldb = ldb, info;
     integer *ipiv = new integer[N];
 
-    // CLapack call.
+    // Clapack call.
     dgesv_ (&i_N, &i_NHRS, A, &i_lda, ipiv, B, &i_ldb, &info);
     
     delete [] ipiv;
@@ -661,4 +657,4 @@ int RefocusMatrix::dgesv (const int N, const int NRHS, double *A, const int lda,
     return (result);
 }   
 
-}  // NameSpace DigikamRefocusImagesPlugin        
+}  // NameSpace DigikamImagesPluginCore        

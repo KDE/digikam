@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : refocus.h
  * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date  : 2005-05-25
  * Description : Refocus threaded image filter.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,11 +21,11 @@
 #ifndef REFOCUS_H
 #define REFOCUS_H
 
-// Digikam includes.
+// Local includes.
 
-#include <digikamheaders.h>
+#include "dimgthreadedfilter.h"
 
-namespace DigikamRefocusImagesPlugin
+namespace DigikamImagesPluginCore
 {
 
 class Refocus : public Digikam::DImgThreadedFilter
@@ -38,15 +37,6 @@ public:
             double gauss=0.0, double correlation=0.5, double noise=0.01);
     
     ~Refocus(){};
-
-private:  // Refocus filter data.
-
-    int    m_matrixSize;
-    
-    double m_radius;
-    double m_gauss;
-    double m_correlation;
-    double m_noise;
     
 private:  // Refocus filter methods.
 
@@ -59,8 +49,16 @@ private:  // Refocus filter methods.
     void convolveImage(uchar *orgData, uchar *destData, int width, int height,
                        bool sixteenBit, const double *const mat, int mat_size);
     
+private:  // Refocus filter data.
+
+    int    m_matrixSize;
+    
+    double m_radius;
+    double m_gauss;
+    double m_correlation;
+    double m_noise;
 };    
 
-}  // NameSpace DigikamRefocusImagesPlugin
+}  // NameSpace DigikamImagesPluginCore
 
 #endif /* REFOCUS_H */

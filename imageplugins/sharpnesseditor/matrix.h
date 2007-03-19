@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : matrix.h
  * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date  : 2005-04-29
  * Description : refocus deconvolution matrix implementation.
  *
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * Original implementation from Refocus Gimp plug-in
  * Copyright (C) 1999-2003 Ernst Lippe
@@ -29,7 +28,7 @@
 
 #include <cstdio>
 
-namespace DigikamRefocusImagesPlugin
+namespace DigikamImagesPluginCore
 {
     
 /**
@@ -125,6 +124,6 @@ private:
 
 };
             
-}  // NameSpace DigikamRefocusImagesPlugin
+}  // NameSpace DigikamImagesPluginCore
 
 #endif /* MATRIX_H_INCLUDED */
