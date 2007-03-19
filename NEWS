@@ -40,5 +40,6 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 007 ==> 127377 : Restoration filter (CIMG) does not function properly.
 008 ==> 131446 : Using inpainting plugin crashes digiKam.
 009 ==> 103244 : Usability: Merge multiple similar menus into one.
-010 ==> 
+010 ==> 139790 : Image Editor: the center of the photo is moving when zooming in or out.
+011 ==> 
 
