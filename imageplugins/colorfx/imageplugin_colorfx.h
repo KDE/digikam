@@ -35,8 +35,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_ColorFX : public Digikam::ImagePlug
 
 public:
 
-    ImagePlugin_ColorFX(QObject *parent, const char* name,
-                         const QStringList &args);
+    ImagePlugin_ColorFX(QObject *parent, const char* name, const QStringList &args);
     ~ImagePlugin_ColorFX();
 
     void setEnabledActions(bool enable);

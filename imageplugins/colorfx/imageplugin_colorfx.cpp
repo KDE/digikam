@@ -35,18 +35,17 @@
 #include "imageplugin_colorfx.h"
 #include "imageplugin_colorfx.moc"
 
-K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_solarize,
-                            KGenericFactory<ImagePlugin_ColorFX>("digikamimageplugin_solarize"));
+K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_colorfx,
+                           KGenericFactory<ImagePlugin_ColorFX>("digikamimageplugin_colorfx"));
 
-ImagePlugin_ColorFX::ImagePlugin_ColorFX(QObject *parent, const char*,
-                                                   const QStringList &)
+ImagePlugin_ColorFX::ImagePlugin_ColorFX(QObject *parent, const char*, const QStringList &)
                    : Digikam::ImagePlugin(parent, "ImagePlugin_ColorFX")
 {
-    m_solarizeAction = new KAction(i18n("Color Effects..."), "solarizetool", 0, 
+    m_solarizeAction = new KAction(i18n("Color Effects..."), "colorfx", 0, 
                            this, SLOT(slotColorFX()),
-                           actionCollection(), "imageplugin_solarize");
+                           actionCollection(), "imageplugin_colorfx");
                 
-    setXMLFile( "digikamimageplugin_solarize_ui.rc" );    
+    setXMLFile( "digikamimageplugin_colorfx_ui.rc" );    
         
     DDebug() << "ImagePlugin_ColorFX plugin loaded" << endl;
 }
