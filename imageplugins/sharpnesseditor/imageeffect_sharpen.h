@@ -50,6 +50,8 @@ public:
 
 private slots:
 
+    void slotUser2();
+    void slotUser3();
     void readUserSettings();
     void slotSharpMethodActived(int);
 

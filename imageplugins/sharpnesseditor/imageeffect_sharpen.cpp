@@ -41,6 +41,10 @@
 #include <kapplication.h>
 #include <kseparator.h>
 #include <kconfig.h>
+#include <kurl.h>
+#include <kfiledialog.h>
+#include <kglobalsettings.h>
+#include <kmessagebox.h>
 
 // Local includes.
 
@@ -308,6 +312,8 @@ void ImageEffect_Sharpen::renderingFinished(void)
         case SimpleSharp:
         {
             m_radiusInput->setEnabled(true);
+            enableButton(User2, false);
+            enableButton(User3, false);
             break;
         }
 
@@ -316,6 +322,8 @@ void ImageEffect_Sharpen::renderingFinished(void)
             m_radiusInput2->setEnabled(true);
             m_amountInput->setEnabled(true);
             m_thresholdInput->setEnabled(true);
+            enableButton(User2, false);
+            enableButton(User3, false);
             break;
         }
 
@@ -334,6 +342,17 @@ void ImageEffect_Sharpen::renderingFinished(void)
 void ImageEffect_Sharpen::slotSharpMethodActived(int w)
 {
     m_stack->raiseWidget(w);
+    if (w == Refocus)
+    {
+        enableButton(User2, true);
+        enableButton(User3, true);
+    }
+    else
+    {
+        enableButton(User2, false);
+        enableButton(User3, false);
+    }
+
     slotEffect();
 }
 
@@ -636,6 +655,69 @@ void ImageEffect_Sharpen::putFinalData(void)
             break;
         }
     }
+}
+
+void ImageEffect_Sharpen::slotUser3()
+{
+    KURL loadRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+                                            QString( "*" ), this,
+                                            QString( i18n("Photograph Refocus Settings File to Load")) );
+    if( loadRestorationFile.isEmpty() )
+       return;
+
+    QFile file(loadRestorationFile.path());
+    
+    if ( file.open(IO_ReadOnly) )   
+    {
+        QTextStream stream( &file );
+        if ( stream.readLine() != "# Photograph Refocus Configuration File" )
+        {
+           KMessageBox::error(this, 
+                        i18n("\"%1\" is not a Photograph Refocus settings text file.")
+                        .arg(loadRestorationFile.fileName()));
+           file.close();            
+           return;
+        }
+        
+        blockSignals(true);
+        m_matrixSize->setValue( stream.readLine().toInt() );
+        m_radius->setValue( stream.readLine().toDouble() );
+        m_gauss->setValue( stream.readLine().toDouble() );
+        m_correlation->setValue( stream.readLine().toDouble() );
+        m_noise->setValue( stream.readLine().toDouble() );
+        blockSignals(false);
+        slotEffect();  
+    }
+    else
+        KMessageBox::error(this, i18n("Cannot load settings from the Photograph Refocus text file."));
+
+    file.close();             
+}
+
+void ImageEffect_Sharpen::slotUser2()
+{
+    KURL saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+                                            QString( "*" ), this,
+                                            QString( i18n("Photograph Refocus Settings File to Save")) );
+    if( saveRestorationFile.isEmpty() )
+       return;
+
+    QFile file(saveRestorationFile.path());
+    
+    if ( file.open(IO_WriteOnly) )   
+    {
+        QTextStream stream( &file );        
+        stream << "# Photograph Refocus Configuration File\n";    
+        stream << m_matrixSize->value() << "\n";    
+        stream << m_radius->value() << "\n";    
+        stream << m_gauss->value() << "\n";    
+        stream << m_correlation->value() << "\n";    
+        stream << m_noise->value() << "\n";    
+    }
+    else
+        KMessageBox::error(this, i18n("Cannot save settings to the Photograph Refocus text file."));
+    
+    file.close();        
 }
 
 }  // NameSpace DigikamImagesPluginCore
