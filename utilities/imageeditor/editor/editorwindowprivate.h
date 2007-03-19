@@ -24,8 +24,10 @@
 
 class QToolButton;
 
+class KComboBox;
 class KAction;
 class KToggleAction;
+class KWidgetAction;
 class KSelectAction;
 class KActionMenu;
 class KAccel;
@@ -72,6 +74,8 @@ public:
         viewUnderExpoAction    = 0;
         viewOverExpoAction     = 0;
         slideShowAction        = 0;
+        zoomCombo              = 0;
+        zoomComboAction        = 0;
     }
 
     ~EditorWindowPriv()
@@ -81,6 +85,8 @@ public:
     bool                       removeFullScreenButton;
     bool                       fullScreenHideToolBar;
     bool                       slideShowInFullScreen;
+
+    KComboBox                 *zoomCombo;
 
     QToolButton               *cmViewIndicator;
     QToolButton               *underExposureIndicator; 
@@ -107,6 +113,8 @@ public:
     KToggleAction             *viewCMViewAction;
     KToggleAction             *viewUnderExpoAction;
     KToggleAction             *viewOverExpoAction;
+
+    KWidgetAction             *zoomComboAction;
 
     KAccel                    *accelerators;
 

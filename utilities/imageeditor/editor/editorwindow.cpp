@@ -26,6 +26,10 @@ extern "C"
 #include <sys/stat.h>
 }
 
+// C++ includes.
+
+#include <cmath>
+
 // Qt includes.
 
 #include <qlabel.h>
@@ -70,6 +74,7 @@ extern "C"
 #include <kstatusbar.h>
 #include <kprogress.h>
 #include <kwin.h>
+#include <kcombobox.h>
 
 // Local includes.
 
@@ -311,11 +316,40 @@ void EditorWindow::setupStandardActions()
 
     d->zoomPlusAction = KStdAction::zoomIn(m_canvas, SLOT(slotIncreaseZoom()),
                                           actionCollection(), "editorwindow_zoomplus");
+
+
     d->zoomMinusAction = KStdAction::zoomOut(m_canvas, SLOT(slotDecreaseZoom()),
                                              actionCollection(), "editorwindow_zoomminus");
+
     d->zoomFitAction = new KToggleAction(i18n("Zoom &AutoFit"), "viewmagfit",
                                          CTRL+SHIFT+Key_A, this, SLOT(slotToggleAutoZoom()),
                                          actionCollection(), "editorwindow_zoomfit");
+
+    d->zoomCombo = new KComboBox(true);
+    d->zoomCombo->setDuplicatesEnabled(false);
+    d->zoomCombo->setFocusPolicy(ClickFocus);
+    d->zoomCombo->setInsertionPolicy(QComboBox::NoInsertion);
+    d->zoomComboAction = new KWidgetAction(d->zoomCombo, i18n("Zoom"), 0, 0, 0, 
+                                           actionCollection(), "editorwindow_zoomto");
+
+    d->zoomCombo->insertItem(QString("10%"));
+    d->zoomCombo->insertItem(QString("25%"));
+    d->zoomCombo->insertItem(QString("50%"));
+    d->zoomCombo->insertItem(QString("75%"));
+    d->zoomCombo->insertItem(QString("100%"));
+    d->zoomCombo->insertItem(QString("150%"));
+    d->zoomCombo->insertItem(QString("200%"));
+    d->zoomCombo->insertItem(QString("300%"));
+    d->zoomCombo->insertItem(QString("450%"));
+    d->zoomCombo->insertItem(QString("600%"));
+    d->zoomCombo->insertItem(QString("800%"));
+
+    connect(d->zoomCombo, SIGNAL(activated(int)),
+            this, SLOT(slotZoomSelected()) );
+
+    connect(d->zoomCombo, SIGNAL(returnPressed(const QString&)),
+            this, SLOT(slotZoomTextChanged(const QString &)) );
+
 
 #if KDE_IS_VERSION(3,2,0)
     m_fullScreenAction = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
@@ -618,21 +652,36 @@ void EditorWindow::slotToggleAutoZoom()
     bool checked = d->zoomFitAction->isChecked();
 
     d->zoomPlusAction->setEnabled(!checked);
+    d->zoomComboAction->setEnabled(!checked);
     d->zoomMinusAction->setEnabled(!checked);
 
     m_canvas->slotToggleAutoZoom();
 }
 
+void EditorWindow::slotZoomTextChanged(const QString &txt)
+{
+    double zoom = KGlobal::locale()->readNumber(txt) / 100.0;
+    if (zoom > 0.0)
+        m_canvas->setZoomFactor(zoom);
+}
+
+void EditorWindow::slotZoomSelected()
+{
+    QString txt = d->zoomCombo->currentText();
+    txt = txt.left(txt.find('%'));
+    slotZoomTextChanged(txt);
+}
+
 void EditorWindow::slotZoomChanged(float zoom)
 {
-    m_zoomLabel->setText(i18n("Zoom: ") +
-                         QString::number(zoom*100, 'f', 2) +
-                         QString("%"));
+    m_zoomLabel->setText(i18n("Zoom: %1%").arg(QString::number(lround(zoom*100.0))));
 
-    d->zoomPlusAction->setEnabled(!m_canvas->maxZoom() &&
-                                 !d->zoomFitAction->isChecked());
-    d->zoomMinusAction->setEnabled(!m_canvas->minZoom() &&
-                                  !d->zoomFitAction->isChecked());
+    d->zoomPlusAction->setEnabled(!m_canvas->maxZoom() && !d->zoomFitAction->isChecked());
+    d->zoomMinusAction->setEnabled(!m_canvas->minZoom() && !d->zoomFitAction->isChecked());
+
+    d->zoomCombo->blockSignals(true);
+    d->zoomCombo->setCurrentText(QString::number(lround(zoom*100.0)) + QString("%"));
+    d->zoomCombo->blockSignals(false);
 }
 
 void EditorWindow::slotEscapePressed()

@@ -173,7 +173,6 @@ protected slots:
     void slotEscapePressed();
 
     void slotToggleAutoZoom();
-    void slotZoomChanged(float zoom);
     void slotSelected(bool);
 
     void slotLoadingProgress(const QString& filePath, float progress);
@@ -206,6 +205,9 @@ private slots:
     void slotSavingFinished(const QString &filename, bool success);
     void slotDonateMoney();
     void slotToggleSlideShow();
+    void slotZoomSelected();
+    void slotZoomTextChanged(const QString &);
+    void slotZoomChanged(float zoom);
 
 private:
 

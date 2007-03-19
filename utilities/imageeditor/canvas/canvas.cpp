@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at gmail dot com>
+ *          Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2003-01-09
  * Description : image editor canvas management class
  * 
@@ -70,16 +70,15 @@ class CanvasPrivate
 
 public:
 
-    CanvasPrivate() :
-        tileSize(128), maxZoom(8.0)
+    CanvasPrivate() : 
+        tileSize(128), minZoom(0.1), maxZoom(10.0), zoomStep(0.1) 
     {
-        tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
-        tileCache.setAutoDelete(true);
-
         parent          = 0;
         im              = 0;
         rubber          = 0;
         paintTimer      = 0;
+        tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
+        tileCache.setAutoDelete(true);
     }
 
     bool               autoZoom;
@@ -97,7 +96,9 @@ public:
     int                midButtonY;
     
     double             zoom;
+    const double       minZoom;
     const double       maxZoom;
+    const double       zoomStep;
 
     QRect             *rubber;
     QRect              pixmapRect;
@@ -114,7 +115,6 @@ public:
     QWidget           *parent;
     
     DImgInterface     *im;
-
 };
 
 Canvas::Canvas(QWidget *parent)
@@ -817,12 +817,12 @@ void Canvas::contentsWheelEvent(QWheelEvent *e)
 
 bool Canvas::maxZoom()
 {
-    return ((d->zoom + 1.0/16.0) >= d->maxZoom);
+    return ((d->zoom + d->zoomStep) >= d->maxZoom);
 }
 
 bool Canvas::minZoom()
 {
-    return ((d->zoom - 1.0/16.0) <= 0.1);
+    return ((d->zoom - d->zoomStep) <= d->minZoom);
 }
 
 bool Canvas::exifRotated()
@@ -832,33 +832,29 @@ bool Canvas::exifRotated()
 
 void Canvas::slotIncreaseZoom()
 {
-    if (d->autoZoom || maxZoom())
+    if (maxZoom())
+        return;
+
+    setZoomFactor(d->zoom + d->zoomStep);
+}
+
+void Canvas::slotDecreaseZoom()
+{
+    if (minZoom())
+        return;
+
+    setZoomFactor(d->zoom - d->zoomStep);
+}
+
+void Canvas::setZoomFactor(float zoom)
+{
+    if (d->autoZoom)
         return;
 
     float cpx = (contentsX() + visibleWidth()  / 2.0) / d->zoom; 
     float cpy = (contentsY() + visibleHeight() / 2.0) / d->zoom; 
 
-    d->zoom = d->zoom + 1.0/16.0;
-    d->im->zoom(d->zoom);
-    updateContentsSize();
-
-    viewport()->setUpdatesEnabled(false);
-    center((int)(cpx * d->zoom), (int)(cpy * d->zoom));
-    viewport()->setUpdatesEnabled(true);
-    viewport()->update();
-
-    emit signalZoomChanged(d->zoom);
-}
-
-void Canvas::slotDecreaseZoom()
-{
-    if (d->autoZoom || minZoom())
-        return;
-
-    float cpx = (contentsX() + visibleWidth()  / 2.0) / d->zoom; 
-    float cpy = (contentsY() + visibleHeight() / 2.0) / d->zoom;
- 
-    d->zoom = d->zoom - 1.0/16.0;    
+    d->zoom = zoom;
     d->im->zoom(d->zoom);
     updateContentsSize();
 

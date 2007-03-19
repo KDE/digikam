@@ -75,6 +75,7 @@ public:
     DImg  currentImage();
     QString currentImageFileFormat();
 
+    void  setZoomFactor(float z);
     bool  maxZoom();
     bool  minZoom();
     bool  exifRotated();
