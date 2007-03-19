@@ -305,22 +305,28 @@ void ImageEffect_Sharpen::renderingFinished(void)
     switch (m_stack->id(m_stack->visibleWidget()))
     {
         case SimpleSharp:
+        {
             m_radiusInput->setEnabled(true);
             break;
+        }
 
         case UnsharpMask:
+        {
             m_radiusInput2->setEnabled(true);
             m_amountInput->setEnabled(true);
             m_thresholdInput->setEnabled(true);
             break;
+        }
 
         case Refocus:
+        {
             m_matrixSize->setEnabled(true);
             m_radius->setEnabled(true);
             m_gauss->setEnabled(true);
             m_correlation->setEnabled(true);
             m_noise->setEnabled(true);
             break;
+        }
     }
 }
 
@@ -343,15 +349,15 @@ void ImageEffect_Sharpen::readUserSettings()
     m_gauss->blockSignals(true);
     m_correlation->blockSignals(true);
     m_noise->blockSignals(true);
-    m_radiusInput->setValue(config->readNumEntry("RadiusAjustment", 0));
-    m_radiusInput2->setValue(config->readNumEntry("RadiusAjustment2", 1));
-    m_amountInput->setValue(config->readDoubleNumEntry("AmountAjustment", 1.0));
-    m_thresholdInput->setValue(config->readDoubleNumEntry("ThresholdAjustment", 0.05));
-    m_matrixSize->setValue(config->readNumEntry("MatrixSize", 5));
-    m_radius->setValue(config->readDoubleNumEntry("RadiusAjustment", 1.0));
-    m_gauss->setValue(config->readDoubleNumEntry("GaussAjustment", 0.0));
-    m_correlation->setValue(config->readDoubleNumEntry("CorrelationAjustment", 0.5));
-    m_noise->setValue(config->readDoubleNumEntry("NoiseAjustment", 0.03));
+    m_radiusInput->setValue(config->readNumEntry("SimpleSharpRadiusAjustment", 0));
+    m_radiusInput2->setValue(config->readNumEntry("UnsharpMaskRadiusAjustment", 1));
+    m_amountInput->setValue(config->readDoubleNumEntry("UnsharpMaskAmountAjustment", 1.0));
+    m_thresholdInput->setValue(config->readDoubleNumEntry("UnsharpMaskThresholdAjustment", 0.05));
+    m_matrixSize->setValue(config->readNumEntry("RefocusMatrixSize", 5));
+    m_radius->setValue(config->readDoubleNumEntry("RefocusRadiusAjustment", 1.0));
+    m_gauss->setValue(config->readDoubleNumEntry("RefocusGaussAjustment", 0.0));
+    m_correlation->setValue(config->readDoubleNumEntry("RefocusCorrelationAjustment", 0.5));
+    m_noise->setValue(config->readDoubleNumEntry("RefocusNoiseAjustment", 0.03));
     m_radiusInput->blockSignals(false);
     m_radiusInput2->blockSignals(false);
     m_amountInput->blockSignals(false);
@@ -367,15 +373,15 @@ void ImageEffect_Sharpen::writeUserSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("sharpen Tool Dialog");
-    config->writeEntry("RadiusAjustment", m_radiusInput->value());
-    config->writeEntry("RadiusAjustment2", m_radiusInput2->value());
-    config->writeEntry("AmountAjustment", m_amountInput->value());
-    config->writeEntry("ThresholdAjustment", m_thresholdInput->value());
-    config->writeEntry("MatrixSize", m_matrixSize->value());
-    config->writeEntry("RadiusAjustment", m_radius->value());
-    config->writeEntry("GaussAjustment", m_gauss->value());
-    config->writeEntry("CorrelationAjustment", m_correlation->value());
-    config->writeEntry("NoiseAjustment", m_noise->value());
+    config->writeEntry("SimpleSharpRadiusAjustment", m_radiusInput->value());
+    config->writeEntry("UnsharpMaskRadiusAjustment", m_radiusInput2->value());
+    config->writeEntry("UnsharpMaskAmountAjustment", m_amountInput->value());
+    config->writeEntry("UnsharpMaskThresholdAjustment", m_thresholdInput->value());
+    config->writeEntry("RefocusMatrixSize", m_matrixSize->value());
+    config->writeEntry("RefocusRadiusAjustment", m_radius->value());
+    config->writeEntry("RefocusGaussAjustment", m_gauss->value());
+    config->writeEntry("RefocusCorrelationAjustment", m_correlation->value());
+    config->writeEntry("RefocusNoiseAjustment", m_noise->value());
     config->sync();
 }
 
