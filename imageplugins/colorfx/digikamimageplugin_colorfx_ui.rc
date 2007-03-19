@@ -1,11 +1,11 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="3" name="digikamimageplugin_solarize" >
+<kpartgui version="4" name="digikamimageplugin_colorfx" >
 
  <MenuBar>
 
   <Menu name="Filters" >
    <text>Filte&amp;rs</text>
-   <Action name="imageplugin_solarize" /> 
+   <Action name="imageplugin_colorfx" /> 
   </Menu>
 
  </MenuBar>
@@ -15,7 +15,7 @@
  </ToolBar>
  
  <ActionProperties>
-  <Action shortcut="" name="imageplugin_solarize" />
+  <Action shortcut="" name="imageplugin_colorfx" />
  </ActionProperties>
 
 </kpartgui>
