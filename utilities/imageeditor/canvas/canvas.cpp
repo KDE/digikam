@@ -391,8 +391,8 @@ void Canvas::updateContentsSize()
             emit signalSelected(false);
     }
 
-    int wZ = int(d->im->width());
-    int hZ = int(d->im->height());
+    int wZ = d->im->width();
+    int hZ = d->im->height();
     
     if (visibleWidth() > wZ || visibleHeight() > hZ)
     {
@@ -835,11 +835,16 @@ void Canvas::slotIncreaseZoom()
     if (d->autoZoom || maxZoom())
         return;
 
-    d->zoom = d->zoom + 1.0/16.0;
+    float cpx = (contentsX() + visibleWidth()  / 2.0) / d->zoom; 
+    float cpy = (contentsY() + visibleHeight() / 2.0) / d->zoom; 
 
+    d->zoom = d->zoom + 1.0/16.0;
     d->im->zoom(d->zoom);
-    
     updateContentsSize();
+
+    viewport()->setUpdatesEnabled(false);
+    center((int)(cpx * d->zoom), (int)(cpy * d->zoom));
+    viewport()->setUpdatesEnabled(true);
     viewport()->update();
 
     emit signalZoomChanged(d->zoom);
@@ -850,11 +855,16 @@ void Canvas::slotDecreaseZoom()
     if (d->autoZoom || minZoom())
         return;
 
+    float cpx = (contentsX() + visibleWidth()  / 2.0) / d->zoom; 
+    float cpy = (contentsY() + visibleHeight() / 2.0) / d->zoom;
+ 
     d->zoom = d->zoom - 1.0/16.0;    
-
     d->im->zoom(d->zoom);
-
     updateContentsSize();
+
+    viewport()->setUpdatesEnabled(false);
+    center((int)(cpx * d->zoom), (int)(cpy * d->zoom));
+    viewport()->setUpdatesEnabled(true);
     viewport()->update();
 
     emit signalZoomChanged(d->zoom);
