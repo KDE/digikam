@@ -113,7 +113,6 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
     {
         imagePluginsList2Load = config->readListEntry("ImagePlugins List");
 
-        DDebug() << imagePluginsList2Load << endl;
         for (QStringList::Iterator it = d->obsoleteImagePluginsList.begin(); 
              it != d->obsoleteImagePluginsList.end(); ++it)
         {
