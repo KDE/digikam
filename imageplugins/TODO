@@ -18,7 +18,6 @@
 
 0.9.1+ TODO LIST
 ------------------------------------------------------------------------------------
+
    - Implement Haar algorithm for finding duplicate/similar pictures
-   - New velvia-like plugin
    - change noise plugin to wavelet denoiser if advantagous
-   - update Cimg code to the improved and more efficient algorithm of Greycstoration 
