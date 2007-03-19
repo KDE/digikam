@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : unsharp.cpp
- * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2005-05-25
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Date   : 2005-05-25
  * Description : Unsharp Mask threaded image filter.
  * 
- * Copyright 2005-2006 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,14 +25,19 @@
 
 // Local includes.
 
+#include "ddebug.h"
+#include "dimg.h"
+#include "dcolor.h"
+#include "dimgimagefilters.h"
+#include "dimggaussianblur.h"
 #include "unsharp.h"
 
-namespace DigikamUnsharpMaskImagesPlugin
+namespace DigikamImagesPluginCore
 {
 
 UnsharpMask::UnsharpMask(Digikam::DImg *orgImage, QObject *parent, int radius, 
                          double amount, double threshold)
-           : Digikam::DImgThreadedFilter(orgImage, parent, "UnsharpMask")
+           : DImgThreadedFilter(orgImage, parent, "UnsharpMask")
 { 
     m_radius    = radius;
     m_amount    = amount;
@@ -58,7 +62,7 @@ void UnsharpMask::filterImage(void)
 
     Digikam::DImgGaussianBlur(this, m_orgImage, m_destImage, 0, 10, (int)(m_radius));
 
-    quantum = m_destImage.sixteenBit() ? 65535 : 255;
+    quantum          = m_destImage.sixteenBit() ? 65535 : 255;
     quantumThreshold = quantum*m_threshold;
 
     for (uint y = 0 ; !m_cancel && (y < m_destImage.height()) ; y++)
@@ -117,4 +121,4 @@ void UnsharpMask::filterImage(void)
     }
 }
 
-}  // NameSpace DigikamUnsharpMaskImagesPlugin
+}  // NameSpace DigikamImagesPluginCore

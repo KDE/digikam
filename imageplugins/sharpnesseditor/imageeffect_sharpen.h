@@ -25,7 +25,11 @@
 
 #include "ctrlpaneldlg.h"
 
+class QComboBox;
+class QWidgetStack;
+
 class KIntNumInput;
+class KDoubleNumInput;
 
 namespace DigikamImagesPluginCore
 {
@@ -42,6 +46,7 @@ public:
 private slots:
 
     void readUserSettings();
+    void slotSharpMethodActived(int);
 
 private:
 
@@ -56,7 +61,21 @@ private:
 
 private:
     
-    KIntNumInput *m_radiusInput;
+    enum SharpingMethods 
+    {
+        SimpleSharp=0,
+        UnsharpMask
+    };
+
+    QWidgetStack    *m_stack;
+    
+    QComboBox       *m_sharpMethod;
+
+    KIntNumInput    *m_radiusInput;
+    KIntNumInput    *m_radiusInput2;
+
+    KDoubleNumInput *m_amountInput;
+    KDoubleNumInput *m_thresholdInput;
 };
 
 }  // NameSpace DigikamImagesPluginCore
