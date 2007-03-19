@@ -11,7 +11,7 @@ General       : New depency to libkdcraw shared library used to decode RAW file.
                 camera RAW files released at PMA 2007.    
 
 Image Editor  : Usability issue : Blowup and Resize tools have been merged.
-Image Editor  : Usability issue : Unsharp Mask and Sharp tools have been merged.
+Image Editor  : Usability issue : Unsharp Mask, Refocus, and Sharp tools have been merged to a new Sharpness Editor.
 
 Image Plugins : Red Eyes Correction tool have been completly re-writen. There is 
                 a preview of effect and the capability to taint the eye pupil with
