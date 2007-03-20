@@ -351,19 +351,12 @@ QRect Canvas::getSelectedArea()
 
 void Canvas::updateAutoZoom()
 {
-    double srcWidth, srcHeight, dstWidth, dstHeight;
+    double srcWidth  = d->im->origWidth();
+    double srcHeight = d->im->origHeight();
+    double dstWidth  = contentsRect().width();
+    double dstHeight = contentsRect().height();
 
-    srcWidth  = d->im->origWidth();
-    srcHeight = d->im->origHeight();
-    dstWidth  = contentsRect().width();
-    dstHeight = contentsRect().height();
-
-    if (dstWidth > srcWidth &&
-        dstHeight > srcHeight)
-        d->zoom = 1.0;
-    else
-        d->zoom = QMIN(dstWidth/srcWidth,
-                       dstHeight/srcHeight);
+    d->zoom = QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
 
     d->im->zoom(d->zoom);
     
@@ -401,8 +394,8 @@ void Canvas::updateContentsSize()
         int centery = contentsRect().height()/2;
         int xoffset = int(centerx - wZ/2);
         int yoffset = int(centery - hZ/2);
-        xoffset = QMAX(xoffset, 0);
-        yoffset = QMAX(yoffset, 0);
+        xoffset     = QMAX(xoffset, 0);
+        yoffset     = QMAX(yoffset, 0);
 
         d->pixmapRect = QRect(xoffset, yoffset, wZ, hZ);
     }
@@ -572,13 +565,12 @@ void Canvas::drawRubber()
     p.setBrush(NoBrush);
 
     QRect r(d->rubber->normalize());
-    r = QRect(contentsToViewport(QPoint(r.x(),r.y())), r.size());
+    r = QRect(contentsToViewport(QPoint(r.x(), r.y())), r.size());
 
     QPoint pnt(r.x(), r.y());
 
     style().drawPrimitive(QStyle::PE_FocusRect, &p,
-                          QRect( pnt.x(), pnt.y(),
-                                 r.width(), r.height() ),
+                          QRect(pnt.x(), pnt.y(), r.width(), r.height()),
                           colorGroup(), QStyle::Style_Default,
                           QStyleOption(colorGroup().base()));
     p.end();
