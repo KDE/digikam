@@ -779,6 +779,8 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
     }
 }
 
+// NOTE : e->state() always return Qt::NoButton. Why ?
+
 void Canvas::contentsWheelEvent(QWheelEvent *e)
 {
     e->accept();
