@@ -263,7 +263,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     settingsLayout->addMultiCellWidget(d->exposureTime, 22, 22, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelPhotoExposureTime, 22, 22, 1, 1);
     settingsLayout->addMultiCellWidget(d->sensitivity, 23, 23, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoSensitivity, 24, 24, 1, 1);
+    settingsLayout->addMultiCellWidget(d->labelPhotoSensitivity, 23, 23, 1, 1);
     settingsLayout->addMultiCellWidget(d->exposureMode, 24, 24, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelPhotoExposureMode, 24, 24, 1, 1);
     settingsLayout->addMultiCellWidget(d->flash, 25, 25, 0, 0);
