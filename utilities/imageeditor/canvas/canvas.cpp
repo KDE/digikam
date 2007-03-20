@@ -171,6 +171,7 @@ Canvas::Canvas(QWidget *parent)
 
     d->cornerButton = new QToolButton(this);
     d->cornerButton->setIconSet(SmallIcon("move"));
+    d->cornerButton->hide();
     setCornerWidget(d->cornerButton);
 
     // ------------------------------------------------------------
@@ -449,9 +450,7 @@ void Canvas::resizeEvent(QResizeEvent* e)
     }
     
     updateContentsSize();
-
-    // No need to repaint. its called
-    // automatically after resize
+    viewport()->update();
 }
 
 void Canvas::viewportPaintEvent(QPaintEvent *e)
