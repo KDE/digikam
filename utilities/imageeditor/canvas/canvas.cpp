@@ -441,15 +441,14 @@ void Canvas::viewportPaintEvent(QPaintEvent *e)
                QMIN(er.width()+2, contentsRect().width()),
                QMIN(er.height()+2,contentsRect().height()));
     
-    paintViewport(er, d->zoom <= 1.0);
+    paintViewport(er, (d->zoom <= 1.0) ? true : false);
     if (d->zoom > 1.0)
         d->paintTimer->start(100, true);
 }
 
 void Canvas::paintViewport(const QRect& er, bool antialias)
 {
-    QRect o_cr(viewportToContents(er.topLeft()),
-               viewportToContents(er.bottomRight()));
+    QRect o_cr(viewportToContents(er.topLeft()), viewportToContents(er.bottomRight()));
     QRect cr = o_cr;
 
     QRegion clipRegion(er);
@@ -471,13 +470,11 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
         QPixmap pix(d->tileSize, d->tileSize);
         int sx, sy, sw, sh;
 
-        for (int j=y1; j<y2; j+=d->tileSize)
+        for (int j = y1 ; j < y2 ; j += d->tileSize)
         {
-            for (int i=x1; i<x2; i+=d->tileSize)
+            for (int i = x1; i < x2; i += d->tileSize)
             {
-                QString key = QString("%1,%1")
-                              .arg(i)
-                              .arg(j);
+                QString key = QString("%1,%1").arg(i).arg(j);
 
                 QPixmap *pix = d->tileCache.find(key);
                 
@@ -523,8 +520,8 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                                              antialias);
 
                         rr = QRect(d->rubber->normalize());
-                        rr.moveBy(-i-d->pixmapRect.x(),
-                                  -j-d->pixmapRect.y()); 
+                        rr.moveBy(-i-d->pixmapRect.x(), -j-d->pixmapRect.y());
+ 
                         QPainter p(pix);
                         p.setPen(QPen(QColor(250,250,255),1));
                         p.drawRect(rr);
@@ -575,8 +572,7 @@ void Canvas::drawRubber()
     p.setBrush(NoBrush);
 
     QRect r(d->rubber->normalize());
-    r = QRect(contentsToViewport(QPoint(r.x(),r.y())),
-              r.size());
+    r = QRect(contentsToViewport(QPoint(r.x(),r.y())), r.size());
 
     QPoint pnt(r.x(), r.y());
 
