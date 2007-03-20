@@ -61,9 +61,9 @@ public:
 
     /**
       * Behaves similar to the above method.
-      * Tag thumbnails will be processed as appropriate (Size 20).
+      * Tag thumbnails will be processed as appropriate.
       * Tags may have associated an icon that is loaded
-      * synchronously by the system icon loader (size 20).
+      * synchronously by the system icon loader.
       * In this case, icon is set to this icon, and false is returned.
       * If no icon is associated with the tag, icon is set to null,
       * and false is returned.
@@ -72,26 +72,28 @@ public:
       * and true is returned.
       * @return Returns true if icon is loaded asynchronously.
       */
-    bool getTagThumbnail(TAlbum *album, QPixmap &icon);
+    bool getTagThumbnail(TAlbum *album, QPixmap &icon, int size = 0);
 
     /**
      * Return standard tag and album icons.
      * The third methods check if album is the root,
      * and returns the standard icon or the root standard icon.
      */
-    QPixmap getStandardTagIcon(int size = 32);
-    QPixmap getStandardTagRootIcon(int size = 32);
-    QPixmap getStandardTagIcon(TAlbum *album, int size = 32);
+    QPixmap getStandardTagIcon(int size = 0);
+    QPixmap getStandardTagRootIcon(int size = 0);
+    QPixmap getStandardTagIcon(TAlbum *album, int size = 0);
 
-    QPixmap getStandardAlbumIcon(int size = 32);
-    QPixmap getStandardAlbumRootIcon(int size = 32);
-    QPixmap getStandardAlbumIcon(PAlbum *album, int size = 32);
+    QPixmap getStandardAlbumIcon(int size);
+    QPixmap getStandardAlbumRootIcon(int size);
+    QPixmap getStandardAlbumIcon(PAlbum *album, int size = 0);
 
     /**
      * Blend tagIcon centered on dstIcon, where dstIcon is a standard
-     * icon of size 32 and tagIcon has size 20.
+     * icon of variable size and tagIcon is 12 pixels smaller.
+     * If height(dstIcon) < minBlendSize we return tagIcon verbatim.
      */
     QPixmap blendIcons(QPixmap dstIcon, const QPixmap &tagIcon);
+
 
 signals:
 
@@ -126,7 +128,7 @@ private:
     static AlbumThumbnailLoader *m_instance;
 
     void addURL(Album *album, const KURL &url);
-    QPixmap loadIcon(const QString &name, int size = 32);
+    QPixmap loadIcon(const QString &name, int size = 0);
     QPixmap createTagThumbnail(const QPixmap &albumThumbnail);
 
 };

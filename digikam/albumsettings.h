@@ -109,6 +109,9 @@ public:
     void setDefaultIconSize(int val);
     int  getDefaultIconSize() const;
 
+    void setDefaultTreeIconSize(int val);
+    int  getDefaultTreeIconSize() const;
+
     void setIconShowName(bool val);
     bool getIconShowName() const;
 

@@ -28,6 +28,7 @@
 
 #include <kapplication.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -50,13 +51,15 @@ class AlbumThumbnailLoaderPrivate
 public:
     AlbumThumbnailLoaderPrivate()
     {
-        tagIconSize        = 20;
+        iconSize           = AlbumSettings::instance()->getDefaultTreeIconSize();
+        minBlendSize       = 20;
         iconAlbumThumbJob  = 0;
         iconTagThumbJob    = 0;
         //cache        = new QCache<QPixmap>(101, 211);
     }
 
-    int                     tagIconSize;
+    int                     iconSize;
+    int                     minBlendSize;
 
     ThumbnailJob           *iconTagThumbJob;
 
@@ -106,6 +109,7 @@ AlbumThumbnailLoader::AlbumThumbnailLoader()
             this, SLOT(slotIconChanged(Album*)));
 }
 
+
 AlbumThumbnailLoader::~AlbumThumbnailLoader()
 {
     if (d->iconTagThumbJob)
@@ -122,34 +126,46 @@ AlbumThumbnailLoader::~AlbumThumbnailLoader()
 
 QPixmap AlbumThumbnailLoader::getStandardTagIcon(int size)
 {
+    if(size==0)
+        size = d->iconSize;
     return loadIcon("tag", size);
 }
 
 QPixmap AlbumThumbnailLoader::getStandardTagRootIcon(int size)
 {
+    if(size==0)
+        size = d->iconSize;
     return loadIcon("tag-folder", size);
 }
 
 QPixmap AlbumThumbnailLoader::getStandardTagIcon(TAlbum *album, int size)
 {
+    if(size==0)
+        size = d->iconSize;
     if (album->isRoot())
-        return getStandardTagRootIcon(size);
+        return getStandardTagRootIcon((size > d->minBlendSize) ? size-8 : size);
     else
-        return getStandardTagIcon(size);
+        return getStandardTagIcon((size > d->minBlendSize) ? size-8 : size);
 }
 
 QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(int size)
 {
+    if(size==0)
+        size = d->iconSize;
     return loadIcon("folder", size);
 }
 
 QPixmap AlbumThumbnailLoader::getStandardAlbumRootIcon(int size)
 {
+    if(size==0)
+        size = d->iconSize;
     return loadIcon("folder_image", size);
 }
 
 QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(PAlbum *album, int size)
 {
+    if(size==0)
+        size = d->iconSize;
     if (album->isRoot())
         return getStandardAlbumRootIcon(size);
     else
@@ -158,14 +174,18 @@ QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(PAlbum *album, int size)
 
 QPixmap AlbumThumbnailLoader::loadIcon(const QString &name, int size)
 {
+    if(size==0)
+        size = d->iconSize;
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
     return iconLoader->loadIcon(name, KIcon::NoGroup,
                                 size, KIcon::DefaultState,
                                 0, true);
 }
 
-bool AlbumThumbnailLoader::getTagThumbnail(TAlbum *album, QPixmap &icon)
+bool AlbumThumbnailLoader::getTagThumbnail(TAlbum *album, QPixmap &icon, int size)
 {
+    if(size==0)
+        size = d->iconSize;
     if(!album->icon().isEmpty())
     {
         if(album->icon().startsWith("/"))
@@ -178,7 +198,7 @@ bool AlbumThumbnailLoader::getTagThumbnail(TAlbum *album, QPixmap &icon)
         }
         else
         {
-            icon = loadIcon(album->icon(), d->tagIconSize);
+            icon = loadIcon(album->icon(), (size >= d->minBlendSize) ? size-12 : size);
             return false;
         }
     }
@@ -191,7 +211,7 @@ bool AlbumThumbnailLoader::getTagThumbnail(TAlbum *album, QPixmap &icon)
 
 bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum *album)
 {
-    if(!album->icon().isEmpty())
+    if(!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
     {
         addURL(album, album->iconKURL());
     }
@@ -236,7 +256,7 @@ void AlbumThumbnailLoader::addURL(Album *album, const KURL &url)
             if(!d->iconTagThumbJob)
             {
                 d->iconTagThumbJob = new ThumbnailJob(url,
-                        (int)ThumbnailSize::Tiny,
+                        d->iconSize,
                         true,
                         AlbumSettings::instance()->getExifRotate());
                 connect(d->iconTagThumbJob,
@@ -256,7 +276,7 @@ void AlbumThumbnailLoader::addURL(Album *album, const KURL &url)
             if(!d->iconAlbumThumbJob)
             {
                 d->iconAlbumThumbJob = new ThumbnailJob(url,
-                        (int)ThumbnailSize::Tiny,
+                        d->iconSize,
                         true,
                         AlbumSettings::instance()->getExifRotate());
                 connect(d->iconAlbumThumbJob,
@@ -372,12 +392,12 @@ QPixmap AlbumThumbnailLoader::createTagThumbnail(const QPixmap &albumThumbnail)
 
     QPixmap tagThumbnail;
 
-    if(!albumThumbnail.isNull() && (d->tagIconSize < ThumbnailSize::Tiny))
+    if(!albumThumbnail.isNull())
     {
         int w1 = albumThumbnail.width();
-        int w2 = d->tagIconSize;
+        int w2 = d->iconSize;
         int h1 = albumThumbnail.height();
-        int h2 = d->tagIconSize;
+        int h2 = d->iconSize;
         tagThumbnail.resize(w2,h2);
         bitBlt(&tagThumbnail, 0, 0, &albumThumbnail, (w1-w2)/2, (h1-h2)/2, w2, h2);
     }
@@ -411,6 +431,9 @@ void AlbumThumbnailLoader::slotThumbnailLost(const KURL &url)
 
 QPixmap AlbumThumbnailLoader::blendIcons(QPixmap dstIcon, const QPixmap &tagIcon)
 {
+    kdDebug() << "ATL::blendIcons: height(dstIcon)=" << dstIcon.height() << ", height(tagIcon)=" << tagIcon.height() << endl;
+    if(d->iconSize >= d->minBlendSize)
+    {
     if(!tagIcon.isNull())
     {
         QPainter p(&dstIcon);
@@ -418,6 +441,11 @@ QPixmap AlbumThumbnailLoader::blendIcons(QPixmap dstIcon, const QPixmap &tagIcon
         p.end();
     }
     return dstIcon;
+}
+    else
+    {
+        return tagIcon;
+    }
 }
 
 } // namespace Digikam

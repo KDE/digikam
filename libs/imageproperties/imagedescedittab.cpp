@@ -1291,7 +1291,7 @@ void ImageDescEditTab::setTagThumbnail(TAlbum *album)
     {
         if (icon.isNull())
         {
-            item->setPixmap(0, loader->getStandardTagIcon(album, 20));
+            item->setPixmap(0, loader->getStandardTagIcon(album));
         }
         else
         {

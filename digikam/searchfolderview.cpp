@@ -43,6 +43,7 @@
 
 #include "album.h"
 #include "albummanager.h"
+#include "albumsettings.h"
 #include "searchquickdialog.h"
 #include "searchadvanceddialog.h"
 #include "folderitem.h"
@@ -276,7 +277,7 @@ void SearchFolderView::slotAlbumAdded(Album* a)
     SAlbum* album = (SAlbum*)a;
 
     SearchFolderItem* item = new SearchFolderItem(this, album);
-    item->setPixmap(0, SmallIcon("find", 32));
+    item->setPixmap(0, SmallIcon("find", AlbumSettings::instance()->getDefaultTreeIconSize()));
     m_lastAddedItem = item;
 }
 

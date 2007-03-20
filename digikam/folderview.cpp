@@ -34,6 +34,7 @@
 
 #include "ddebug.h"
 #include "albummanager.h"
+#include "albumsettings.h"
 #include "themeengine.h"
 #include "dragobjects.h"
 #include "folderitem.h"
@@ -71,6 +72,7 @@ public:
 FolderView::FolderView(QWidget *parent, const char *name)
           : QListView(parent, name)
 {
+
     d = new FolderViewPriv;
     
     d->active = false;
@@ -146,7 +148,9 @@ void FolderView::resizeEvent(QResizeEvent* e)
 
 void FolderView::fontChange(const QFont& oldFont)
 {
-    d->itemHeight = QMAX(32 + 2*itemMargin(), fontMetrics().height());
+    // this is bad, since the settings value might not always be the _real_ height of the thumbnail.
+    // (e.g. when it is blended, as for the tags)
+    d->itemHeight = QMAX(AlbumSettings::instance()->getDefaultTreeIconSize() + 2*itemMargin(), fontMetrics().height());
     QListView::fontChange(oldFont);
     slotThemeChanged();
 }

@@ -29,6 +29,7 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // LibKDcraw includes.
 
@@ -92,6 +93,7 @@ public:
     bool saveDateTime;
 
     int  thumbnailSize;
+    int  treeThumbnailSize;
 
     QString      currentTheme;
     QString      albumLibraryPath;
@@ -178,6 +180,7 @@ void AlbumSettings::init()
     d->rawFilefilter   = d->defaultRawFilefilter;
 
     d->thumbnailSize      = ThumbnailSize::Medium;
+    d->treeThumbnailSize  = 32;
 
     d->showToolTips           = true;
     d->showSplash             = true;
@@ -255,6 +258,7 @@ void AlbumSettings::readSettings()
     d->audioFilefilter = config->readEntry("Audio File Filter", d->audioFilefilter);
     d->rawFilefilter   = config->readEntry("Raw File Filter", d->rawFilefilter);
     d->thumbnailSize   = config->readNumEntry("Default Icon Size", ThumbnailSize::Medium);
+    d->treeThumbnailSize = config->readNumEntry("Default Tree Icon Size", ThumbnailSize::Tiny);
     d->currentTheme    = config->readEntry("Theme", i18n("Default"));
 
     d->iconShowName       = config->readBoolEntry("Icon Show Name", false); 
@@ -338,6 +342,7 @@ void AlbumSettings::saveSettings()
     config->writeEntry("Audio File Filter", d->audioFilefilter);
     config->writeEntry("Raw File Filter", d->rawFilefilter);
     config->writeEntry("Default Icon Size", QString::number(d->thumbnailSize));
+    config->writeEntry("Default Tree Icon Size", QString::number(d->treeThumbnailSize));
     config->writeEntry("Theme", d->currentTheme);
 
     config->writeEntry("Icon Show Name", d->iconShowName);
@@ -558,6 +563,16 @@ void AlbumSettings::setDefaultIconSize(int val)
 int AlbumSettings::getDefaultIconSize() const
 {
     return d->thumbnailSize;
+}
+
+void AlbumSettings::setDefaultTreeIconSize(int val)
+{
+    d->treeThumbnailSize = val;
+}
+
+int AlbumSettings::getDefaultTreeIconSize() const
+{
+    return ((d->treeThumbnailSize < 8) || (d->treeThumbnailSize > 32)) ? 32 : d->treeThumbnailSize;
 }
 
 void AlbumSettings::setIconShowName(bool val)

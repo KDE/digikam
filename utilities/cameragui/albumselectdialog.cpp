@@ -46,6 +46,7 @@
 #include "folderitem.h"
 #include "album.h"
 #include "albummanager.h"
+#include "albumsettings.h"
 #include "albumselectdialog.h"
 #include "albumselectdialog.moc"
 
@@ -110,7 +111,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     grid->setRowStretch(2, 10);
 
     QPixmap icon = iconLoader->loadIcon("folder", KIcon::NoGroup,
-                                        32, KIcon::DefaultState, 0, true);
+                                        AlbumSettings::instance()->getDefaultTreeIconSize(), KIcon::DefaultState, 0, true);
 
     AlbumList aList = AlbumManager::instance()->allPAlbums();
 

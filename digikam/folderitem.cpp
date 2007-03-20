@@ -31,6 +31,7 @@
 #include "folderview.h"
 #include "folderitem.h"
 #include "thumbnailsize.h"
+#include "albumsettings.h"
 
 namespace Digikam
 {
@@ -64,7 +65,7 @@ bool FolderItem::focus() const
 }
 
 void FolderItem::paintCell(QPainter* p, const QColorGroup & cg, int column,
-                           int width, int )
+                           int width, int align)
 {
     FolderView *fv = dynamic_cast<FolderView*>(listView());
     if (!fv)
@@ -96,7 +97,7 @@ void FolderItem::paintCell(QPainter* p, const QColorGroup & cg, int column,
 
         p->drawPixmap( xo, yo, *icon );
 
-        r += ThumbnailSize::Tiny  + 5 + fv->itemMargin();
+        r += icon->width() + 5 + fv->itemMargin();
     }
 
     if (m_special)

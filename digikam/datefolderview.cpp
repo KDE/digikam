@@ -45,6 +45,7 @@
 #include "ddebug.h"
 #include "album.h"
 #include "albummanager.h"
+#include "albumsettings.h"
 #include "monthwidget.h"
 #include "folderitem.h"
 #include "folderview.h"
@@ -183,11 +184,11 @@ void DateFolderView::slotAlbumAdded(Album* a)
     if (!parent)
     {
         parent = new DateFolderItem(d->listview, yr);
-        parent->setPixmap(0, SmallIcon("date", 32));
+        parent->setPixmap(0, SmallIcon("date", AlbumSettings::instance()->getDefaultTreeIconSize()));
     }
 
     DateFolderItem* item = new DateFolderItem(parent, mo, album);
-    item->setPixmap(0, SmallIcon("date", 32));
+    item->setPixmap(0, SmallIcon("date", AlbumSettings::instance()->getDefaultTreeIconSize()));
 
     album->setExtraData(this, item);
 }
