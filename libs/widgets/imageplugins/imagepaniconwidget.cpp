@@ -83,8 +83,8 @@ public:
     ImageIface  *iface;
 };
 
-ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent)
-                  : QWidget(parent, 0, Qt::WDestructiveClose)
+ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent, WFlags f)
+                  : QWidget(parent, 0, f)
 {
     d = new ImagePanIconWidgetPriv;
 
