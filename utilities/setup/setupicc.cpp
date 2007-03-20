@@ -2,7 +2,7 @@
  * Authors: Gilles Caulier <caulier dot gilles at gmail dot com> 
  *          F.J. Cruz <fj.cruz@supercable.es>
  * Date   : 2005-11-24
- * Description : ICC profils setup tab.
+ * Description : ICC profiles setup tab.
  * 
  * Copyright 2005-2007 by Gilles Caulier and F.J. Cruz
  *
@@ -169,22 +169,22 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     lcmsLogoLabel->setPixmap( QPixmap( directory + "logo-lcms.png" ) );
     QToolTip::add(lcmsLogoLabel, i18n("Visit Little CMS project website"));
 
-    d->behaviourGB = new QVGroupBox(i18n("Behaviour"), colorPolicy);
+    d->behaviourGB = new QVGroupBox(i18n("Behavior"), colorPolicy);
     QButtonGroup *behaviourOptions = new QButtonGroup(2, Qt::Vertical, d->behaviourGB);
     behaviourOptions->setFrameStyle( QFrame::NoFrame );
     behaviourOptions->setInsideMargin(0); 
 
     d->defaultApplyICC = new QRadioButton(behaviourOptions);
-    d->defaultApplyICC->setText(i18n("Apply when open an image in Image Editor"));
+    d->defaultApplyICC->setText(i18n("Apply when opening an image in Image Editor"));
     QWhatsThis::add( d->defaultApplyICC, i18n("<p>If this option is selected, digiKam applies the "
                      "Workspace default color profile to an image without asking when this has no "
                      "embedded profile, or the embedded profile is not the same as the workspace profile.</p>"));
     
     d->defaultAskICC = new QRadioButton(behaviourOptions);
-    d->defaultAskICC->setText(i18n("Ask when open an image in Image Editor"));
+    d->defaultAskICC->setText(i18n("Ask when opening an image in Image Editor"));
     QWhatsThis::add( d->defaultAskICC, i18n("<p>If this option is selected, digiKam asks to the user "
                      "before it applies the Workspace default color profile to an image which has no "
-                     "embedded profile or, if the image has an embbeded profile, this is not the same "
+                     "embedded profile or, if the image has an embedded profile, this is not the same "
                      "as the workspace profile.</p>"));
 
     QHBox *hbox   = new QHBox(d->behaviourGB);
@@ -192,7 +192,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     space->setFixedWidth(15);
     d->cmToolInRawLoading = new QCheckBox(hbox);
     d->cmToolInRawLoading->setText(i18n("Launch Color Management plugin with RAW files"));
-    QWhatsThis::add( d->cmToolInRawLoading, i18n("Enable this option if you want to lauch the color "
+    QWhatsThis::add( d->cmToolInRawLoading, i18n("Enable this option if you want to launch the color "
                      "management image plugin when a RAW file is loaded in editor."));
 
     grid->addMultiCellWidget(d->enableColorManagement, 0, 0, 0, 0);
@@ -252,7 +252,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->workProfilesKC    = new SqueezedComboBox(d->profilesGB);
     workProfiles->setBuddy(d->workProfilesKC);
     QWhatsThis::add( d->workProfilesKC, i18n("<p>All the images will be converted to the color "
-                     "space of this profile, so you must select a profile appropriate for edition purpose.</p>"
+                     "space of this profile, so you must select a profile appropriate for editing.</p>"
                      "<p>These color profiles are device independent.</p>"));
     d->infoWorkProfiles = new QPushButton(i18n("Info..."), d->profilesGB);
     QWhatsThis::add( d->infoWorkProfiles, i18n("<p>You can use this button to get more detailed "
@@ -494,7 +494,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
     {
         if (report)
         {
-            QString message = i18n("<p>Sorry, there is no ICC profiles files in ");
+            QString message = i18n("<p>Sorry, there are no ICC profiles files in ");
             message.append(path);
             message.append(i18n("</p>"));
             KMessageBox::sorry(this, message);
@@ -510,7 +510,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
     QString digiKamProfilesPath = KGlobal::dirs()->findResourceDir("profiles", "srgb.icm");
     QDir digiKamProfilesDir(QFile::encodeName(digiKamProfilesPath), "*.icc;*.icm", QDir::Files);
     const QFileInfoList* digiKamFiles = digiKamProfilesDir.entryInfoList();
-    DDebug() << "Scanning ICC profiles include with digiKam: " << digiKamProfilesPath << endl;
+    DDebug() << "Scanning ICC profiles included with digiKam: " << digiKamProfilesPath << endl;
     parseProfilesfromDir(digiKamFiles);
 
 
