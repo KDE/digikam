@@ -44,5 +44,6 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 011 ==> 106508 : Please change scaling behavior.
 012 ==> 137236 : Disable autozoom when picture fits in window.
 013 ==> 103645 : Zoom in with rectangle tool selection.
-014 ==>   
+014 ==> 126127 : Enlarge small images when autozoom is activated.
+015 ==> 
 
