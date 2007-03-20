@@ -496,7 +496,8 @@ void EditorWindow::setupStatusBar()
 {
     m_nameLabel = new StatusProgressBar(statusBar());
     m_nameLabel->setAlignment(Qt::AlignCenter);
-    m_nameLabel->setMaximumHeight(fontMetrics().height()+2);    statusBar()->addWidget(m_nameLabel, 100);
+    m_nameLabel->setMaximumHeight(fontMetrics().height()+2);    
+    statusBar()->addWidget(m_nameLabel, 100);
 
     m_zoomLabel = new QLabel(statusBar());
     m_zoomLabel->setAlignment(Qt::AlignCenter);
