@@ -54,6 +54,7 @@ public:
         iface         = 0;
         data          = 0;
         moveSelection = false;
+        separateView  = ImageRegionWidget::SeparateViewNone;
     }
 
     bool         moveSelection;
@@ -86,8 +87,7 @@ ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent)
                   : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new ImagePanIconWidgetPriv;
-    
-    d->separateView    = ImageRegionWidget::SeparateViewVertical;
+
     d->iface           = new ImageIface(w, h);
     d->data            = d->iface->getPreviewImage();
     d->width           = d->iface->previewWidth();
