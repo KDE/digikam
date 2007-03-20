@@ -839,10 +839,33 @@ void Canvas::setZoomFactor(float zoom)
     if (d->autoZoom)
         return;
 
-    float cpx = (contentsX() + visibleWidth()  / 2.0) / d->zoom; 
-    float cpy = (contentsY() + visibleHeight() / 2.0) / d->zoom; 
+    float cpx, cpy;
+    int   xSel, ySel, wSel, hSel;
+    d->im->getSelectedArea(xSel, ySel, wSel, hSel);
+    
+    if (!wSel && !hSel )   
+    {   
+        // No current selection, zoom using center of canvas 
+        // and given zoom factor.
+        cpx = (contentsX() + visibleWidth()  / 2.0) / d->zoom; 
+        cpy = (contentsY() + visibleHeight() / 2.0) / d->zoom;
+        d->zoom = zoom;
+    }
+    else           
+    {
+        // If selected area, use center of selection
+        // and recompute zoom factor accordinly.
+        cpx = xSel + wSel / 2.0; 
+        cpy = ySel + hSel / 2.0;
 
-    d->zoom = zoom;
+        double srcWidth  = wSel;
+        double srcHeight = hSel;
+        double dstWidth  = contentsRect().width();
+        double dstHeight = contentsRect().height();
+    
+        d->zoom = QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
+    } 
+
     d->im->zoom(d->zoom);
     updateContentsSize();
 
