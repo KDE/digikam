@@ -44,16 +44,21 @@
 #include <qcolor.h>
 #include <qdragobject.h> 
 #include <qclipboard.h>
+#include <qtoolbutton.h>
 
 // KDE includes.
 
 #include <kcursor.h>
 #include <klocale.h>
+#include <kiconloader.h>
+#include <kdatetbl.h>
+#include <kglobalsettings.h>
 
 // Local includes.
 
 #include "ddebug.h"
 #include "imagehistogram.h"
+#include "imagepaniconwidget.h"
 #include "dimginterface.h"
 #include "iccsettingscontainer.h"
 #include "exposurecontainer.h"
@@ -73,6 +78,9 @@ public:
     CanvasPrivate() : 
         tileSize(128), minZoom(0.1), maxZoom(10.0), zoomStep(0.1) 
     {
+        panIconPopup    = 0;
+        panIconWidget   = 0;
+        cornerButton    = 0;
         parent          = 0;
         im              = 0;
         rubber          = 0;
@@ -81,40 +89,46 @@ public:
         tileCache.setAutoDelete(true);
     }
 
-    bool               autoZoom;
-    bool               fullScreen;
-    bool               pressedMoved;
-    bool               pressedMoving;
-    bool               ltActive;
-    bool               rtActive;
-    bool               lbActive;
-    bool               rbActive;
-    bool               midButtonPressed;
+    bool                 autoZoom;
+    bool                 fullScreen;
+    bool                 pressedMoved;
+    bool                 pressedMoving;
+    bool                 ltActive;
+    bool                 rtActive;
+    bool                 lbActive;
+    bool                 rbActive;
+    bool                 midButtonPressed;
 
-    const int          tileSize;
-    int                midButtonX;
-    int                midButtonY;
+    const int            tileSize;
+    int                  midButtonX;
+    int                  midButtonY;
     
-    double             zoom;
-    const double       minZoom;
-    const double       maxZoom;
-    const double       zoomStep;
+    double               zoom;
+    const double         minZoom;
+    const double         maxZoom;
+    const double         zoomStep;
 
-    QRect             *rubber;
-    QRect              pixmapRect;
+    QToolButton         *cornerButton;
+
+    QRect               *rubber;
+    QRect                pixmapRect;
     
-    QTimer            *paintTimer;
+    QTimer              *paintTimer;
 
-    QCache<QPixmap>    tileCache;
+    QCache<QPixmap>      tileCache;
 
-    QPixmap*           tileTmpPix;
-    QPixmap            qcheck;
+    QPixmap*             tileTmpPix;
+    QPixmap              qcheck;
 
-    QColor             bgColor;
+    QColor               bgColor;
 
-    QWidget           *parent;
+    QWidget             *parent;
+
+    KPopupFrame         *panIconPopup;
     
-    DImgInterface     *im;
+    DImgInterface       *im;
+
+    ImagePanIconWidget  *panIconWidget;
 };
 
 Canvas::Canvas(QWidget *parent)
@@ -132,7 +146,7 @@ Canvas::Canvas(QWidget *parent)
     d->autoZoom   = false;
     d->fullScreen = false;
     d->tileTmpPix = new QPixmap(d->tileSize, d->tileSize);
-    d->bgColor.setRgb( 0, 0, 0 );
+    d->bgColor.setRgb(0, 0, 0);
 
     d->rubber           = 0;
     d->pressedMoved     = false;
@@ -155,8 +169,18 @@ Canvas::Canvas(QWidget *parent)
     p.fillRect(8, 0, 8, 8, QColor(100,100,100));
     p.end();
 
+    d->cornerButton = new QToolButton(this);
+    d->cornerButton->setIconSet(SmallIcon("move"));
+    setCornerWidget(d->cornerButton);
+
     // ------------------------------------------------------------
-    
+
+    connect(this, SIGNAL(signalZoomChanged(float)),
+            this, SLOT(slotZoomChanged(float)));
+
+    connect(d->cornerButton, SIGNAL(clicked()),
+            this, SLOT(slotCornerButtonClicked()));
+
     connect(d->im, SIGNAL(signalColorManagementTool()),
             this, SIGNAL(signalColorManagementTool()));
             
@@ -349,15 +373,19 @@ QRect Canvas::getSelectedArea()
     return ( QRect(x, y, w, h) );
 }
 
-void Canvas::updateAutoZoom()
+float Canvas::calcAutoZoomFactor()
 {
     double srcWidth  = d->im->origWidth();
     double srcHeight = d->im->origHeight();
     double dstWidth  = contentsRect().width();
     double dstHeight = contentsRect().height();
 
-    d->zoom = QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
+    return QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
+}
 
+void Canvas::updateAutoZoom()
+{
+    d->zoom = calcAutoZoomFactor();
     d->im->zoom(d->zoom);
     
     emit signalZoomChanged(d->zoom);
@@ -1145,6 +1173,48 @@ void Canvas::slotPaintSmooth()
         return;
 
     paintViewport(contentsRect(), true);
+}
+
+void Canvas::slotCornerButtonClicked()
+{    
+    if (!d->panIconPopup)
+    {
+        d->panIconPopup = new KPopupFrame(this);
+    
+        ImagePanIconWidget *pan = new ImagePanIconWidget(90, 60, d->panIconPopup);
+        d->panIconPopup->setMainWidget(pan);
+
+        QRect r((int)(contentsX() / d->zoom), (int)(contentsY() / d->zoom),
+                (int)(visibleWidth() / d->zoom), (int)(visibleHeight() / d->zoom));
+        pan->setRegionSelection(r);
+
+        connect(pan, SIGNAL(signalSelectionMoved(QRect, bool)),
+                this, SLOT(slotPanIconSelectionMoved(QRect, bool)));
+    }
+
+    QPoint g = mapToGlobal(d->cornerButton->pos());
+    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(), g.y() - d->panIconPopup->height()));
+}
+
+void Canvas::slotPanIconSelectionMoved(QRect r, bool b)
+{
+    setContentsPos((int)(r.x()*d->zoom), (int)(r.y()*d->zoom));
+
+    if (b)
+    {
+        int r;
+        d->panIconPopup->close(r);
+        delete d->panIconPopup;
+        d->panIconPopup = 0;
+    }
+}
+
+void Canvas::slotZoomChanged(float zoom)
+{
+    if (zoom > calcAutoZoomFactor())
+        d->cornerButton->show();
+    else
+        d->cornerButton->hide();        
 }
 
 }  // namespace Digikam
