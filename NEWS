@@ -42,5 +42,6 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 009 ==> 103244 : Usability: Merge multiple similar menus into one.
 010 ==> 139790 : Image Editor: the center of the photo is moving when zooming in or out.
 011 ==> 106508 : Please change scaling behavior.
-012 ==> 
+012 ==> 137236 : Disable autozoom when picture fits in window.
+013 ==> 
 
