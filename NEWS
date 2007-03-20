@@ -9,6 +9,8 @@ General       : New depency to libkdcraw shared library used to decode RAW file.
                 This library is shared between digiKam and kipi-plugins. The internal 
                 dcraw version used is 8.60. digiKam support now all recent digital 
                 camera RAW files released at PMA 2007.    
+General       : Make size of icons used in sidebars configurable in order to allow more
+                entries to be presented. 
 
 Image Editor  : Usability improvement : a new pan tool is available on the right bottom 
                 corner of canvas to naviguate over large pictures.
@@ -50,5 +52,6 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 015 ==> 104439 : Use left mouse button to scroll image.
 016 ==> 137391 : Picture navigation in image editor using the mouse.
 017 ==> 102029 : Configurable size of icons in sidebars
-018 ==> 
+018 ==> 102029 : Wish: no/small icons in album tree.
+019 ==> 
 
