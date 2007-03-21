@@ -46,6 +46,7 @@ static const char* ObsoleteImagePluginsList[] =
      "digikamimageplugin_solarize",  // Renamed "ColorFx" since 0.9.2.  
      "digikamimageplugin_unsharp",   // Merged with "Sharpen" tool since 0.9.2.
      "digikamimageplugin_refocus",   // Merged with "Sharpen" tool since 0.9.2.
+     "digikamimageplugin_despeckle", // Renamed "Noise Reduction" since 0.9.2.
      "-1"
 };
 
