@@ -431,17 +431,16 @@ void AlbumThumbnailLoader::slotThumbnailLost(const KURL &url)
 
 QPixmap AlbumThumbnailLoader::blendIcons(QPixmap dstIcon, const QPixmap &tagIcon)
 {
-    kdDebug() << "ATL::blendIcons: height(dstIcon)=" << dstIcon.height() << ", height(tagIcon)=" << tagIcon.height() << endl;
     if(d->iconSize >= d->minBlendSize)
     {
-    if(!tagIcon.isNull())
-    {
-        QPainter p(&dstIcon);
-        p.drawPixmap(6, 9, tagIcon, 0, 0, -1, -1);
-        p.end();
+        if(!tagIcon.isNull())
+        {
+            QPainter p(&dstIcon);
+            p.drawPixmap(6, 9, tagIcon, 0, 0, -1, -1);
+            p.end();
+        }
+        return dstIcon;
     }
-    return dstIcon;
-}
     else
     {
         return tagIcon;
