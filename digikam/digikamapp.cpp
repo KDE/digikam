@@ -1575,7 +1575,10 @@ void DigikamApp::slotShowTip()
 #if KDE_IS_VERSION(3,2,0)
     QStringList tipsFiles;
     tipsFiles.append("digikam/tips");
+
+    // NOTE : to remove later when DigikamImagePlugins will be merged to digiKam core. 
     tipsFiles.append("digikamimageplugins/tips");
+
     tipsFiles.append("kipi/tips");
 
     KTipDialog::showMultiTip(this, tipsFiles, true);
