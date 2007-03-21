@@ -15,22 +15,21 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       -I$(top_srcdir)/digikam/libs/dimg/filters \
 	       -I$(top_srcdir)/digikam/digikam \
 	       $(all_includes) 
-        
-digikamimageplugin_hotpixels_la_SOURCES = blackframeparser.cpp weights.cpp \
-	                                      hotpixelfixer.cpp imageplugin_hotpixels.cpp \
-					                      blackframelistview.cpp imageeffect_hotpixels.cpp 
 
-digikamimageplugin_hotpixels_la_LIBADD = $(LIB_KPARTS) \
-	                                     $(top_builddir)/digikam/digikam/libdigikam.la 
+digikamimageplugin_infrared_la_SOURCES = imageplugin_infrared.cpp \
+	                                     imageeffect_infrared.cpp infrared.cpp 
 
-digikamimageplugin_hotpixels_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
+digikamimageplugin_infrared_la_LIBADD = $(LIB_KPARTS) \
+	                                    $(top_builddir)/digikam/digikam/libdigikam.la
 
-kde_services_DATA = digikamimageplugin_hotpixels.desktop
+digikamimageplugin_infrared_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 
-kde_module_LTLIBRARIES = digikamimageplugin_hotpixels.la 
+kde_services_DATA = digikamimageplugin_infrared.desktop
+
+kde_module_LTLIBRARIES = digikamimageplugin_infrared.la
 
 rcdir = $(kde_datadir)/digikam
-rc_DATA = digikamimageplugin_hotpixels_ui.rc
-       
-digikamimageplugin_hotpixelsicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_hotpixelsicon_ICON = AUTO
+rc_DATA = digikamimageplugin_infrared_ui.rc        
+
+digikamimageplugin_infraredicondir = $(kde_datadir)/digikam/icons
+digikamimageplugin_infraredicon_ICON = AUTO

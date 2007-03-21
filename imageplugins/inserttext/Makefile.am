@@ -14,23 +14,23 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       -I$(top_srcdir)/digikam/libs/dmetadata \
 	       -I$(top_srcdir)/digikam/libs/dimg/filters \
 	       -I$(top_srcdir)/digikam/digikam \
-	       $(all_includes) 
-        
-digikamimageplugin_hotpixels_la_SOURCES = blackframeparser.cpp weights.cpp \
-	                                      hotpixelfixer.cpp imageplugin_hotpixels.cpp \
-					                      blackframelistview.cpp imageeffect_hotpixels.cpp 
+	       $(all_includes)   
 
-digikamimageplugin_hotpixels_la_LIBADD = $(LIB_KPARTS) \
-	                                     $(top_builddir)/digikam/digikam/libdigikam.la 
+digikamimageplugin_inserttext_la_SOURCES = imageplugin_inserttext.cpp \
+	                                       imageeffect_inserttext.cpp \
+	                                       inserttextwidget.cpp fontchooserwidget.cpp 
 
-digikamimageplugin_hotpixels_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
+digikamimageplugin_inserttext_la_LIBADD = $(LIB_KPARTS) \
+	                                      $(top_builddir)/digikam/digikam/libdigikam.la 
 
-kde_services_DATA = digikamimageplugin_hotpixels.desktop
+digikamimageplugin_inserttext_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 
-kde_module_LTLIBRARIES = digikamimageplugin_hotpixels.la 
+kde_services_DATA = digikamimageplugin_inserttext.desktop
+
+kde_module_LTLIBRARIES = digikamimageplugin_inserttext.la 
 
 rcdir = $(kde_datadir)/digikam
-rc_DATA = digikamimageplugin_hotpixels_ui.rc
-       
-digikamimageplugin_hotpixelsicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_hotpixelsicon_ICON = AUTO
+rc_DATA = digikamimageplugin_inserttext_ui.rc
+
+digikamimageplugin_inserttexticondir = $(kde_datadir)/digikam/icons
+digikamimageplugin_inserttexticon_ICON = AUTO
