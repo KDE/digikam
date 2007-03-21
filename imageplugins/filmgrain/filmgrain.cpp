@@ -1,12 +1,11 @@
 /* ============================================================
- * File  : filmgrain.cpp
- * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2005-05-25
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+            Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2005-05-25
  * Description : FilmGrain threaded image filter.
  * 
- * Copyright 2005 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006 by Gilles Caulier <caulier dot gilles at gmail dot com> and Marcel Wiesweg
+ * Copyright 2005 by Gilles Caulier 
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
