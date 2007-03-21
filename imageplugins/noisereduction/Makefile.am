@@ -16,20 +16,20 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       -I$(top_srcdir)/digikam/digikam \
 	       $(all_includes) 
 
-digikamimageplugin_despeckle_la_SOURCES = imageplugin_noisereduction.cpp \
-	                                      imageeffect_noisereduction.cpp noisereduction.cpp
+digikamimageplugin_noisereduction_la_SOURCES = imageplugin_noisereduction.cpp \
+	                                           imageeffect_noisereduction.cpp noisereduction.cpp
 
-digikamimageplugin_despeckle_la_LIBADD = $(LIB_KPARTS) \
-	                                     $(top_builddir)/digikam/digikam/libdigikam.la 
+digikamimageplugin_noisereduction_la_LIBADD = $(LIB_KPARTS) \
+	                                          $(top_builddir)/digikam/digikam/libdigikam.la 
 
-digikamimageplugin_despeckle_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
+digikamimageplugin_noisereduction_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 
-kde_services_DATA = digikamimageplugin_despeckle.desktop
+kde_services_DATA = digikamimageplugin_noisereduction.desktop
 
-kde_module_LTLIBRARIES = digikamimageplugin_despeckle.la
+kde_module_LTLIBRARIES = digikamimageplugin_noisereduction.la
 
 rcdir = $(kde_datadir)/digikam
-rc_DATA = digikamimageplugin_despeckle_ui.rc
+rc_DATA = digikamimageplugin_noisereduction_ui.rc
        
-digikamimageplugin_despeckleicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_despeckleicon_ICON = AUTO
+digikamimageplugin_noisereductionicondir = $(kde_datadir)/digikam/icons
+digikamimageplugin_noisereductionicon_ICON = AUTO
