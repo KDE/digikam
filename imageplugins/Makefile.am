@@ -1,1 +1,1 @@
-SUBDIRS = coreplugin adjustcurves adjustlevels antivignetting 
+SUBDIRS = coreplugin adjustcurves adjustlevels antivignetting blurfx 
