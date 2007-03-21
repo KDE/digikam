@@ -33,8 +33,8 @@
 #include "imageplugin_noisereduction.h"
 #include "imageplugin_noisereduction.moc"
 
-K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_noisereduction,
-                            KGenericFactory<ImagePlugin_NoiseReduction>("digikamimageplugin_noisereduction"));
+K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_noisereduction,
+                           KGenericFactory<ImagePlugin_NoiseReduction>("digikamimageplugin_noisereduction"));
 
 ImagePlugin_NoiseReduction::ImagePlugin_NoiseReduction(QObject *parent, const char*, const QStringList &)
                           : Digikam::ImagePlugin(parent, "ImagePlugin_NoiseReduction")
@@ -59,7 +59,6 @@ void ImagePlugin_NoiseReduction::setEnabledActions(bool enable)
 
 void ImagePlugin_NoiseReduction::slotNoiseReduction()
 {
-    QString title = i18n("Noise Reduction");
     DigikamNoiseReductionImagesPlugin::ImageEffect_NoiseReduction dlg(parentWidget());
     dlg.exec();
 }
