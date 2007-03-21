@@ -1,9 +1,11 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2005-05-25
- * Description : Charcoal threaded image filter.
+ * Description : Filmgrain threaded image filter.
  * 
- * Copyright 2005-2007 by Gilles Caulier
+ * Copyright 2005 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,36 +20,36 @@
  * 
  * ============================================================ */
   
-#ifndef CHARCOAL_H
-#define CHARCOAL_H
+#ifndef FILMGRAIN_H
+#define FILMGRAIN_H
 
 // Digikam includes.
 
 #include "dimgthreadedfilter.h"
 
-namespace DigikamCharcoalImagesPlugin
+namespace DigikamFilmGrainImagesPlugin
 {
 
-class Charcoal : public Digikam::DImgThreadedFilter
+class FilmGrain : public Digikam::DImgThreadedFilter
 {
 
 public:
-    
-    Charcoal(Digikam::DImg *orgImage, QObject *parent=0, double pencil=5.0, double smooth=10.0);
-    ~Charcoal(){};
-            
-private:
 
-    void filterImage(void);
-    bool convolveImage(const unsigned int order, const double *kernel);
-    int  getOptimalKernelWidth(double radius, double sigma);
+    FilmGrain(Digikam::DImg *orgImage, QObject *parent=0, int sensibility=12);
+
+    ~FilmGrain(){};
 
 private:
 
-    double m_pencil;
-    double m_smooth;
-};    
+    virtual void filterImage(void);
 
-}  // NameSpace DigikamCharcoalImagesPlugin
+    void filmgrainImage(Digikam::DImg *orgImage, int Sensibility);
 
-#endif /* CHARCOAL_H */
+private:
+
+    int m_sensibility;
+};
+
+}  // NameSpace DigikamFilmGrainImagesPlugin
+
+#endif /* FILMGRAIN_H */

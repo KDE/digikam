@@ -39,6 +39,7 @@
 
 #include "version.h"
 #include "ddebug.h"
+#include "dimg.h"
 #include "imageiface.h"
 #include "imagewidget.h"
 #include "charcoal.h"

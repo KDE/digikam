@@ -1,9 +1,9 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2005-05-25
- * Description : Charcoal threaded image filter.
+ * Date   : 2004-10-01
+ * Description : 
  * 
- * Copyright 2005-2007 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -17,37 +17,36 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-  
-#ifndef CHARCOAL_H
-#define CHARCOAL_H
+
+#ifndef IMAGEPLUGIN_FILMGRAIN_H
+#define IMAGEPLUGIN_FILMGRAIN_H
 
 // Digikam includes.
 
-#include "dimgthreadedfilter.h"
+#include "imageplugin.h"
+#include "digikam_export.h"
 
-namespace DigikamCharcoalImagesPlugin
+class KAction;
+
+class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_FilmGrain : public Digikam::ImagePlugin
 {
-
-class Charcoal : public Digikam::DImgThreadedFilter
-{
-
-public:
+    Q_OBJECT
     
-    Charcoal(Digikam::DImg *orgImage, QObject *parent=0, double pencil=5.0, double smooth=10.0);
-    ~Charcoal(){};
-            
+public:
+
+    ImagePlugin_FilmGrain(QObject *parent, const char* name,
+                          const QStringList &args);
+    ~ImagePlugin_FilmGrain();
+
+    void setEnabledActions(bool enable);
+
+private slots:
+
+    void slotFilmGrain();
+
 private:
 
-    void filterImage(void);
-    bool convolveImage(const unsigned int order, const double *kernel);
-    int  getOptimalKernelWidth(double radius, double sigma);
-
-private:
-
-    double m_pencil;
-    double m_smooth;
-};    
-
-}  // NameSpace DigikamCharcoalImagesPlugin
-
-#endif /* CHARCOAL_H */
+    KAction *m_filmgrainAction;
+};
+    
+#endif /* IMAGEPLUGIN_FILMGRAIN_H */
