@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2005-05-25
+ * Date   : 2005-05-25
  * Description : Antivignetting threaded image filter.
  * 
  * Copyright 2005-2007 by Gilles Caulier
