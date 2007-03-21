@@ -1,1 +1,2 @@
-SUBDIRS = coreplugin adjustcurves adjustlevels antivignetting blurfx border 
+SUBDIRS = coreplugin adjustcurves adjustlevels antivignetting blurfx border \
+	      channelmixer  
