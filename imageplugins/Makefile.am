@@ -1,2 +1,2 @@
 SUBDIRS = coreplugin adjustcurves adjustlevels antivignetting blurfx border \
-	      channelmixer charcoal colorfx 
+	      channelmixer charcoal colorfx distortionfx 
