@@ -1,1 +1,1 @@
-SUBDIRS = coreplugin adjustcurves adjustlevels 
+SUBDIRS = coreplugin adjustcurves adjustlevels antivignetting 
