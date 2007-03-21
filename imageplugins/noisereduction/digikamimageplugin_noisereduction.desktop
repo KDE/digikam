@@ -43,5 +43,5 @@ Comment[uk]=Втулок зменшення шуму для digiKam
 Comment[vi]=Bổ sung giảm ồn cho digiKam
 Comment[xx]=xxNoise Reduction plugin for digiKamxx
 
-X-KDE-Library=digikamimageplugin_despeckle
-author=Caulier Gilles, caulier dot gilles at free dot fr
+X-KDE-Library=digikamimageplugin_noisereduction
+author=Caulier Gilles, caulier dot gilles at gmail dot com

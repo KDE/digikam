@@ -1,11 +1,11 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="2" name="digikamimageplugin_despeckle" >
+<kpartgui version="2" name="digikamimageplugin_noisereduction" >
 
  <MenuBar>
 
   <Menu name="Fix" >
    <text>Fi&amp;x</text>
-      <Action name="imageplugin_despeckle" /> 
+      <Action name="imageplugin_noisereduction" /> 
   </Menu>
 
  </MenuBar>
@@ -15,7 +15,7 @@
  </ToolBar>
  
  <ActionProperties>
-  <Action shortcut="" name="imageplugin_despeckle" />
+  <Action shortcut="" name="imageplugin_noisereduction" />
  </ActionProperties>
 
 </kpartgui>
