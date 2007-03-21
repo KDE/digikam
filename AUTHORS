@@ -4,6 +4,7 @@ DEVELOPERS :
 Gilles Caulier <caulier dot gilles at gmail dot com>                      : Coordinator, lead developer, French translations.
 Marcel Wiesweg <marcel dot wiesweg at gmx dot de>                         : Developer.
 Francisco J. Cruz <fj dot cruz at supercable dot es>                      : Developer.
+Luka Renko <lure at kubuntu dot org>                                      : Developer.
 
 CURRENT CONTRIBUTORS :
 --------------------
@@ -12,7 +13,6 @@ Achim Bohnet <ach at mpe dot mpg dot de>                                  : Bug 
 Gerhard Kulzer <gerhard at kulzer dot net>                                : Feedback, patches, and handbook writer.
 Oliver Doerr <oliver at doerr-privat dot de>                              : Beta tester, German translations.
 Fabien Salvi <fabien dot ubuntu at gmail dot com>                         : Webmaster, French translations.
-Luka Renko <lure at kubuntu dot org>                                      : Developer.
 
 OLD CONTRIBUTORS :
 ----------------
@@ -22,12 +22,15 @@ Ralf Holzer <kde at ralfhoelzer dot com>                                  : Deve
 Joern Ahrens <kde at jokele dot de>                                       : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
 Tom Albers <tomalbers at kde dot nl>                                      : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
 Todd Shoemaker <todd at theshoemakers dot net>                            : Developer (0.6.x).
+Unai Garro <ugarro at sourceforge dot net>                                : Developer (Hot Pixels Fixer tools).
 Gregory Kokanosky <gregory dot kokanosky at free dot fr>                  : Feedback and patches (0.6.x).
 Richard Taylor <r dot taylor at bcs dot org dot uk>                       : Feedback, patches, and handbook writter (0.7.x).
 Yves Chaufour <yves dot chaufour at wanadoo dot fr>                       : digiKam webpage maintainer (0.7.x).
 Charles Bouveyron <c dot bouveyron at tuxfamily dot org>                  : Beta tester (0.6.x).
 Sebastian Rooder <seppelrockt at web dot de>                              : Crystal icons style (0.6.2).
-Tung NGUYEN <ntung at free dot fr>                                        : Bug reports, French translations
+Tung NGUYEN <ntung at free dot fr>                                        : Bug reports, French translations, new image plugins icon set.
+Pieter Voloshyn <pieter dot voloshyn at gmail dot com>                    : Image filter algorithms.
+
 
 OLD TRANSLATORS (before 0.7.0 release) :
 --------------------------------------
