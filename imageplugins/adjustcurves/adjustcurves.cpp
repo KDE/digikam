@@ -1,9 +1,9 @@
 /* ============================================================
- * Authors: Gilles Caulier
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2004-12-01
  * Description : image histogram adjust curves.
  *
- * Copyright 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2004-2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,14 +62,23 @@
 // Local includes.
 
 #include "version.h"
+#include "ddebug.h"
+#include "imageiface.h"
+#include "imagewidget.h"
+#include "imagehistogram.h"
+#include "imagecurves.h"
+#include "histogramwidget.h"
+#include "curveswidget.h"
+#include "colorgradientwidget.h"
+#include "dimgimagefilters.h"
 #include "adjustcurves.h"
 #include "adjustcurves.moc"
 
 namespace DigikamAdjustCurvesImagesPlugin
 {
 
-AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* banner)
-                 : Digikam::ImageDlgBase(parent, title, "adjustcurves", true, false, banner)
+AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
+                 : Digikam::ImageDlgBase(parent, i18n("Adjust Color Curves"), "adjustcurves", true, false)
 {
     m_destinationPreviewData = 0L;
 
@@ -89,12 +98,12 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
 
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Adjust Color Curves"),
-                                       digikamimageplugins_version,
+                                       digikam_version,
                                        I18N_NOOP("An image-histogram-curves adjustment plugin for digiKam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004-2007, Gilles Caulier",
                                        0,
-                                       "http://extragear.kde.org/apps/digikamimageplugins");
+                                       "http://www.digikam.org");
 
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");

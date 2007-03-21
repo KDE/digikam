@@ -21,19 +21,26 @@
 #ifndef ADJUSTCURVES_H
 #define ADJUSTCURVES_H
 
-// Qt include.
-
-#include <qcolor.h>
-
 // Digikam includes.
 
-#include <digikamheaders.h>
+#include "imagedlgbase.h"
+#include "dimg.h"
 
 // Local includes.
 
 class QComboBox;
 class QPushButton;
 class QHButtonGroup;
+
+namespace Digikam
+{   
+class CurvesWidget;
+class HistogramWidget;
+class ColorGradientWidget;
+class ColorGradientWidget;
+class ImageWidget;
+class ImageCurves;
+}
 
 namespace DigikamAdjustCurvesImagesPlugin
 {
@@ -44,7 +51,7 @@ class AdjustCurveDialog : public Digikam::ImageDlgBase
 
 public:
 
-    AdjustCurveDialog(QWidget *parent, QString title, QFrame* banner);
+    AdjustCurveDialog(QWidget *parent);
     ~AdjustCurveDialog();
 
 private:

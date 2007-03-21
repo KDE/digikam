@@ -5,7 +5,7 @@
  * Description : digiKam image editor plugin core
  * 
  * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,7 +19,6 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
 
 #ifndef IMAGEPLUGIN_CORE_H
 #define IMAGEPLUGIN_CORE_H
@@ -47,22 +46,6 @@ public slots:
 
     void slotColorManagement();
    
-private:
-
-    KAction *m_redeyeAction;
-    KAction *m_BCGAction;
-    KAction *m_HSLAction;
-    KAction *m_RGBAction;
-    KAction *m_autoCorrectionAction;
-    KAction *m_invertAction;
-    KAction *m_BWAction;
-    KAction *m_aspectRatioCropAction;
-    KAction *m_sharpenAction;
-    KAction *m_blurAction;
-    KAction *m_colorManagementAction;
-    KAction *m_convertTo8Bits;
-    KAction *m_convertTo16Bits;
-        
 private slots:
 
     void slotBlur();
@@ -81,6 +64,21 @@ private slots:
     void slotConvertTo8Bits();
     void slotConvertTo16Bits();
 
+private:
+
+    KAction *m_redeyeAction;
+    KAction *m_BCGAction;
+    KAction *m_HSLAction;
+    KAction *m_RGBAction;
+    KAction *m_autoCorrectionAction;
+    KAction *m_invertAction;
+    KAction *m_BWAction;
+    KAction *m_aspectRatioCropAction;
+    KAction *m_sharpenAction;
+    KAction *m_blurAction;
+    KAction *m_colorManagementAction;
+    KAction *m_convertTo8Bits;
+    KAction *m_convertTo16Bits;
 };
     
 #endif /* IMAGEPLUGIN_CORE_H */

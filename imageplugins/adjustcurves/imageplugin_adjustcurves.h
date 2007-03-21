@@ -18,13 +18,13 @@
  * 
  * ============================================================ */
 
-
 #ifndef IMAGEPLUGIN_ADJUSTCURVES_H
 #define IMAGEPLUGIN_ADJUSTCURVES_H
 
 // Digikam includes.
 
-#include <digikamheaders.h>
+#include "imageplugin.h"
+#include "digikam_export.h"
 
 class KAction;
 
@@ -40,14 +40,13 @@ public:
     
     void setEnabledActions(bool enable);
 
-private:
-
-    KAction *m_curvesAction;
-    
 private slots:
 
     void slotCurvesAdjust();
 
+private:
+
+    KAction *m_curvesAction;
 };
     
 #endif /* IMAGEPLUGIN_ADJUSTCURVES_H */

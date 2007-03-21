@@ -1,9 +1,9 @@
 /* ============================================================
- * Authors: Gilles Caulier
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2004-12-01
  * Description : 
  * 
- * Copyright 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2004-2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,7 +28,7 @@
 
 // Local includes.
 
-#include "bannerwidget.h"
+#include "ddebug.h"
 #include "adjustcurves.h"
 #include "imageplugin_adjustcurves.h"
 #include "imageplugin_adjustcurves.moc"
@@ -41,9 +41,9 @@ ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent, const char*,
                         : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustCurves")
 {
     m_curvesAction = new KAction(i18n("Curves Adjust..."), "adjustcurves", 
-			 CTRL+Key_M,         // NOTE: Photoshop 7 use CTRL+M.
-                         this, SLOT(slotCurvesAdjust()),
-                         actionCollection(), "imageplugin_adjustcurves");
+			                     CTRL+Key_M,         // NOTE: Photoshop 7 use CTRL+M.
+                                 this, SLOT(slotCurvesAdjust()),
+                                 actionCollection(), "imageplugin_adjustcurves");
 
     setXMLFile("digikamimageplugin_adjustcurves_ui.rc");
 
@@ -61,10 +61,6 @@ void ImagePlugin_AdjustCurves::setEnabledActions(bool enable)
 
 void ImagePlugin_AdjustCurves::slotCurvesAdjust()
 {
-    QString title = i18n("Adjust Color Curves");
-    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
-    DigikamAdjustCurvesImagesPlugin::AdjustCurveDialog dlg(parentWidget(),
-                                title, headerFrame);
+    DigikamAdjustCurvesImagesPlugin::AdjustCurveDialog dlg(parentWidget());
     dlg.exec();
-    delete headerFrame;
 }

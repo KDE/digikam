@@ -1,1 +1,1 @@
-SUBDIRS = coreplugin 
+SUBDIRS = coreplugin adjustcurves 
