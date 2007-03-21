@@ -289,11 +289,14 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     QWhatsThis::add( m_resetButton, i18n("<p>If you press this button, all levels' values "
                                          "from the current selected channel "
                                          "will be reset to the default values."));
-    
+
+    QLabel *space = new QLabel(gboxSettings);
+    space->setFixedWidth(spacingHint());    
+
     QHBoxLayout* l3 = new QHBoxLayout();
     l3->addWidget(m_pickerColorButtonGroup);
     l3->addWidget(m_autoButton);
-    l3->addStretch();
+    l3->addWidget(space);
     l3->addWidget(m_resetButton);
     l3->addStretch(10);
 
@@ -305,18 +308,18 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     grid->setRowSpacing(3, spacingHint());
     grid->addMultiCellWidget(m_levelsHistogramWidget, 4, 4, 1, 5);
     grid->addMultiCellWidget(m_hGradientMinInput, 5, 5, 0, 6);
-    grid->addMultiCellWidget(m_minInput, 5, 5, 7, 8);
+    grid->addMultiCellWidget(m_minInput, 5, 5, 8, 8);
     grid->setRowSpacing(6, spacingHint());
     grid->addMultiCellWidget(m_hGradientMaxInput, 7, 7, 0, 6);
-    grid->addMultiCellWidget(m_maxInput, 7, 7, 7, 8);
+    grid->addMultiCellWidget(m_maxInput, 7, 7, 8, 8);
     grid->setRowSpacing(8, spacingHint());
     grid->addMultiCellWidget(m_gammaInput, 9, 9, 0, 8);
     grid->setRowSpacing(10, spacingHint());
     grid->addMultiCellWidget(m_hGradientMinOutput, 11, 11, 0, 6);
-    grid->addMultiCellWidget(m_minOutput, 11, 11, 7, 8);
+    grid->addMultiCellWidget(m_minOutput, 11, 11, 8, 8);
     grid->setRowSpacing(12, spacingHint());
     grid->addMultiCellWidget(m_hGradientMaxOutput, 13, 13, 0, 6);
-    grid->addMultiCellWidget(m_maxOutput, 13, 13, 7, 8);
+    grid->addMultiCellWidget(m_maxOutput, 13, 13, 8, 8);
     grid->setRowSpacing(14, spacingHint());
     grid->addMultiCellLayout(l3, 15, 15, 0, 8);
     grid->setRowStretch(16, 10);
