@@ -1,0 +1,4 @@
+- Store black frames. Include the fullsize image to be able to reedit it if necessary.
+- Add a hand hot-pixel editor for the hot pixels on the black frame
+- Use the same hot-pixel editor from the image view, to edit a new black frame with the added data
+
