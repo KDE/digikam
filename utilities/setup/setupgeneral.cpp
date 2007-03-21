@@ -135,7 +135,9 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     d->iconTreeThumbSize->insertItem("22");
     d->iconTreeThumbSize->insertItem("32");
     QWhatsThis::add( d->iconTreeThumbSize, i18n("<p>Set this option to configure the size "
-                                            "of the thumbnails in Digikam's sidebars."));
+                                                "in pixels of the thumbnails in digiKam's sidebars. "
+                                                "This option will take effect when you restart "
+                                                "digiKam."));
     tagSettingsLayout->addMultiCellWidget(d->iconTreeThumbLabel, 0, 0, 0, 0);
     tagSettingsLayout->addMultiCellWidget(d->iconTreeThumbSize, 0, 0, 1, 1);
 
