@@ -14,23 +14,22 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       -I$(top_srcdir)/digikam/libs/dmetadata \
 	       -I$(top_srcdir)/digikam/libs/dimg/filters \
 	       -I$(top_srcdir)/digikam/digikam \
-	       $(all_includes)  
+	       $(all_includes) 
 
-digikamimageplugin_perspective_la_SOURCES = imageplugin_perspective.cpp \
-	                                        imageeffect_perspective.cpp \
-					                        perspectivewidget.cpp triangle.cpp matrix.cpp
+digikamimageplugin_restoration_la_SOURCES = imageplugin_restoration.cpp \
+	                                        imageeffect_restoration.cpp 
 
-digikamimageplugin_perspective_la_LIBADD = $(LIB_KPARTS) \
+digikamimageplugin_restoration_la_LIBADD = $(LIB_KPARTS) \
 	                                       $(top_builddir)/digikam/digikam/libdigikam.la 
-	
-digikamimageplugin_perspective_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
 
-kde_services_DATA = digikamimageplugin_perspective.desktop
+digikamimageplugin_restoration_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) -no-undefined
 
-kde_module_LTLIBRARIES = digikamimageplugin_perspective.la
+kde_services_DATA = digikamimageplugin_restoration.desktop
+
+kde_module_LTLIBRARIES = digikamimageplugin_restoration.la
 
 rcdir = $(kde_datadir)/digikam
-rc_DATA = digikamimageplugin_perspective_ui.rc
+rc_DATA = digikamimageplugin_restoration_ui.rc
 
-digikamimageplugin_perspectiveicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_perspectiveicon_ICON = AUTO
+digikamimageplugin_restorationicondir = $(kde_datadir)/digikam/icons
+digikamimageplugin_restorationicon_ICON = AUTO
