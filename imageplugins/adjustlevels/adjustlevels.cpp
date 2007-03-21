@@ -120,7 +120,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gboxSettings, 9, 5, spacingHint());
+    QGridLayout* grid     = new QGridLayout(gboxSettings, 16, 8, spacingHint(), 0);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -171,8 +171,6 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     l1->addStretch(10);
     l1->addWidget(m_scaleBG);
 
-    grid->addMultiCellLayout(l1, 0, 0, 0, 4);
-
     // -------------------------------------------------------------
 
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, gboxSettings, false, true, true);
@@ -180,14 +178,10 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
                                              "selected image channel. This one is re-computed at any levels "
                                              "settings changes."));
     
-    grid->addMultiCellWidget(m_histogramWidget, 1, 1, 0, 4);
-    
-    // -------------------------------------------------------------
-
     m_levelsHistogramWidget = new Digikam::HistogramWidget(256, 140, m_originalImage.bits(), m_originalImage.width(),
                                                      m_originalImage.height(), m_originalImage.sixteenBit(), gboxSettings, false);
-    QWhatsThis::add( m_levelsHistogramWidget, i18n("<p>This is the histogram drawing of the selected channel from original image"));
-    grid->addMultiCellWidget(m_levelsHistogramWidget, 2, 2, 0, 4);
+    QWhatsThis::add( m_levelsHistogramWidget, i18n("<p>This is the histogram drawing of the selected channel "
+                                                   "from original image"));
 
     // -------------------------------------------------------------
     
@@ -198,7 +192,6 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     QWhatsThis::add( m_hGradientMinInput, i18n("<p>Select here the minimal intensity input value of the histogram."));
     QToolTip::add( m_hGradientMinInput, i18n( "Minimal intensity input." ) );
     m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
-    grid->addMultiCellWidget(m_hGradientMinInput, 3, 3, 0, 4);
 
     m_hGradientMaxInput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
     m_hGradientMaxInput->setFixedHeight( 20 );
@@ -207,7 +200,6 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     QWhatsThis::add( m_hGradientMaxInput, i18n("<p>Select here the maximal intensity input value of the histogram."));
     QToolTip::add( m_hGradientMaxInput, i18n( "Maximal intensity input." ) );
     m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
-    grid->addMultiCellWidget(m_hGradientMaxInput, 4, 4, 0, 4);
 
     m_minInput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
     m_minInput->setValue(0);
@@ -223,9 +215,6 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_maxInput->setValue(m_histoSegments);
     QToolTip::add( m_maxInput, i18n( "Maximal intensity input." ) );
     QWhatsThis::add( m_maxInput, i18n("<p>Select here the maximal intensity input value of the histogram."));
-    grid->addMultiCellWidget(m_minInput, 3, 3, 5, 5);
-    grid->addMultiCellWidget(m_maxInput, 4, 4, 5, 5);
-    grid->addMultiCellWidget(m_gammaInput, 5, 5, 0, 5);
 
     m_hGradientMinOutput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
     m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
@@ -234,7 +223,6 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMinOutput->setFixedHeight( 20 );
     m_hGradientMinOutput->setMinValue(0);
     m_hGradientMinOutput->setMaxValue(m_histoSegments);
-    grid->addMultiCellWidget(m_hGradientMinOutput, 6, 6, 0, 4);
 
     m_hGradientMaxOutput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
     m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "white" ) );
@@ -243,7 +231,6 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMaxOutput->setFixedHeight( 20 );
     m_hGradientMaxOutput->setMinValue(0);
     m_hGradientMaxOutput->setMaxValue(m_histoSegments);
-    grid->addMultiCellWidget(m_hGradientMaxOutput, 7, 7, 0, 4);
 
     m_minOutput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
     m_minOutput->setValue(0);
@@ -253,8 +240,6 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_maxOutput->setValue(m_histoSegments);
     QToolTip::add( m_maxOutput, i18n( "Maximal intensity output." ) );
     QWhatsThis::add( m_maxOutput, i18n("<p>Select here the maximal intensity output value of the histogram."));
-    grid->addMultiCellWidget(m_minOutput, 6, 6, 5, 5);
-    grid->addMultiCellWidget(m_maxOutput, 7, 7, 5, 5);
 
     // -------------------------------------------------------------
 
@@ -308,11 +293,37 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     QHBoxLayout* l3 = new QHBoxLayout();
     l3->addWidget(m_pickerColorButtonGroup);
     l3->addWidget(m_autoButton);
+    l3->addStretch();
     l3->addWidget(m_resetButton);
     l3->addStretch(10);
+
+    // -------------------------------------------------------------
     
-    grid->addMultiCellLayout(l3, 8, 8, 0, 4);
-    grid->setRowStretch(9, 10);
+    grid->addMultiCellLayout(l1, 0, 0, 0, 8);
+    grid->setRowSpacing(1, spacingHint());
+    grid->addMultiCellWidget(m_histogramWidget, 2, 2, 1, 5);
+    grid->setRowSpacing(3, spacingHint());
+    grid->addMultiCellWidget(m_levelsHistogramWidget, 4, 4, 1, 5);
+    grid->addMultiCellWidget(m_hGradientMinInput, 5, 5, 0, 6);
+    grid->addMultiCellWidget(m_minInput, 5, 5, 7, 8);
+    grid->setRowSpacing(6, spacingHint());
+    grid->addMultiCellWidget(m_hGradientMaxInput, 7, 7, 0, 6);
+    grid->addMultiCellWidget(m_maxInput, 7, 7, 7, 8);
+    grid->setRowSpacing(8, spacingHint());
+    grid->addMultiCellWidget(m_gammaInput, 9, 9, 0, 8);
+    grid->setRowSpacing(10, spacingHint());
+    grid->addMultiCellWidget(m_hGradientMinOutput, 11, 11, 0, 6);
+    grid->addMultiCellWidget(m_minOutput, 11, 11, 7, 8);
+    grid->setRowSpacing(12, spacingHint());
+    grid->addMultiCellWidget(m_hGradientMaxOutput, 13, 13, 0, 6);
+    grid->addMultiCellWidget(m_maxOutput, 13, 13, 7, 8);
+    grid->setRowSpacing(14, spacingHint());
+    grid->addMultiCellLayout(l3, 15, 15, 0, 8);
+    grid->setRowStretch(16, 10);
+    grid->setColStretch(2, 10);
+    grid->setColSpacing(0, 5);
+    grid->setColSpacing(6, 5);
+    grid->setColSpacing(7, spacingHint());
     
     setUserAreaWidget(gboxSettings);    
                     
