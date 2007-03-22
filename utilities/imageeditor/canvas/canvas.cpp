@@ -94,10 +94,11 @@ public:
         parent           = 0;
         im               = 0;
         rubber           = 0;
-        paintTimer       = 0;
         autoZoom         = false;
         fullScreen       = false;
         zoom             = 1.0;
+        paintTimer       = new QTimer;
+        tileTmpPix       = new QPixmap(tileSize, tileSize);
 
         tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
         tileCache.setAutoDelete(true);
@@ -148,29 +149,27 @@ public:
 Canvas::Canvas(QWidget *parent)
       : QScrollView(parent)
 {
-    viewport()->setBackgroundMode(Qt::NoBackground);
-    viewport()->setMouseTracking(false);
-    setFrameStyle( QFrame::NoFrame );
-
     d = new CanvasPrivate;
-    d->im         = DImgInterface::instance();
-    d->parent     = parent;
-    d->paintTimer = new QTimer;
-    d->tileTmpPix = new QPixmap(d->tileSize, d->tileSize);
+    d->im     = DImgInterface::instance();
+    d->parent = parent;
     d->bgColor.setRgb(0, 0, 0);
     
     d->qcheck.resize(16, 16);
     QPainter p(&d->qcheck);
-    p.fillRect(0, 0, 8, 8, QColor(144,144,144));
-    p.fillRect(8, 8, 8, 8, QColor(144,144,144));
-    p.fillRect(0, 8, 8, 8, QColor(100,100,100));
-    p.fillRect(8, 0, 8, 8, QColor(100,100,100));
+    p.fillRect(0, 0, 8, 8, QColor(144, 144, 144));
+    p.fillRect(8, 8, 8, 8, QColor(144, 144, 144));
+    p.fillRect(0, 8, 8, 8, QColor(100, 100, 100));
+    p.fillRect(8, 0, 8, 8, QColor(100, 100, 100));
     p.end();
 
     d->cornerButton = new QToolButton(this);
     d->cornerButton->setIconSet(SmallIcon("move"));
     d->cornerButton->hide();
     setCornerWidget(d->cornerButton);
+
+    viewport()->setBackgroundMode(Qt::NoBackground);
+    viewport()->setMouseTracking(false);
+    setFrameStyle( QFrame::NoFrame );
 
     // ------------------------------------------------------------
 
@@ -277,7 +276,7 @@ void Canvas::preload(const QString& /*filename*/)
 }
 
 /*
-These code paths are unused and untested
+These code part are unused and untested
 void Canvas::save(const QString& filename, IOFileSettingsContainer *IOFileSettings)
 {
     d->im->save(filename, IOFileSettings);
@@ -452,7 +451,6 @@ void Canvas::resizeEvent(QResizeEvent* e)
 
     // No need to repaint. its called   
     // automatically after resize
-
 
     // To be sure than corner widget used to pan image will be hide/show 
     // accordinly with resize event.
@@ -811,8 +809,6 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
         emit signalRightButtonClicked();
     }
 }
-
-// NOTE : e->state() always return Qt::NoButton. Why ?
 
 void Canvas::contentsWheelEvent(QWheelEvent *e)
 {
