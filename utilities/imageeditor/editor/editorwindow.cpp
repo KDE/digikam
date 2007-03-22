@@ -499,10 +499,10 @@ void EditorWindow::setupStatusBar()
     m_nameLabel->setMaximumHeight(fontMetrics().height()+2);    
     statusBar()->addWidget(m_nameLabel, 100);
 
-    m_zoomLabel = new QLabel(statusBar());
-    m_zoomLabel->setAlignment(Qt::AlignCenter);
-    m_zoomLabel->setMaximumHeight(fontMetrics().height()+2);   
-    statusBar()->addWidget(m_zoomLabel, 100);
+    m_selectLabel = new QLabel(statusBar());
+    m_selectLabel->setAlignment(Qt::AlignCenter);
+    m_selectLabel->setMaximumHeight(fontMetrics().height()+2);   
+    statusBar()->addWidget(m_selectLabel, 100);
 
     m_resLabel  = new QLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
@@ -675,8 +675,6 @@ void EditorWindow::slotZoomSelected()
 
 void EditorWindow::slotZoomChanged(float zoom)
 {
-    m_zoomLabel->setText(i18n("Zoom: %1%").arg(QString::number(lround(zoom*100.0))));
-
     d->zoomPlusAction->setEnabled(!m_canvas->maxZoom() && !d->zoomFitAction->isChecked());
     d->zoomMinusAction->setEnabled(!m_canvas->minZoom() && !d->zoomFitAction->isChecked());
 
@@ -1144,8 +1142,16 @@ void EditorWindow::slotSelected(bool val)
         }
     }
 
+    QRect sel = m_canvas->getSelectedArea();
     // Update histogram into sidebar.
-    emit signalSelectionChanged( m_canvas->getSelectedArea() );
+    emit signalSelectionChanged(sel);
+
+    // Update status bar
+    if (val)
+        m_selectLabel->setText(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y())
+                               .arg(sel.width()).arg(sel.height()));
+    else 
+        m_selectLabel->setText(i18n("No selection"));
 }
 
 void EditorWindow::hideToolBars()

@@ -80,7 +80,7 @@ protected:
     bool                     m_rotatedOrFlipped;
     bool                     m_setExifOrientationTag;
 
-    QLabel                  *m_zoomLabel;
+    QLabel                  *m_selectLabel;
     QLabel                  *m_resLabel;
 
     QColor                   m_bgColor;
