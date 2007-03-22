@@ -444,15 +444,19 @@ void Canvas::resizeEvent(QResizeEvent* e)
         return;
 
     QScrollView::resizeEvent(e);
+
     if (d->autoZoom)
-    {
         updateAutoZoom();
-    }
-    
+
     updateContentsSize();
 
     // No need to repaint. its called   
     // automatically after resize
+
+
+    // To be sure than corner widget use to pan image will be hide/show 
+    // accordinly with resize event.
+    slotZoomChanged(d->zoom);
 }
 
 void Canvas::viewportPaintEvent(QPaintEvent *e)
