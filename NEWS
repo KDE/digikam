@@ -56,5 +56,6 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 016 ==> 137391 : Picture navigation in image editor using the mouse.
 017 ==> 102029 : Configurable size of icons in sidebars
 018 ==> 102029 : Wish: no/small icons in album tree.
-019 ==> 
+019 ==> 131155 : Smooth increasing/decreasing size of thumbnails like in iPhoto.
+020 ==> 
 
