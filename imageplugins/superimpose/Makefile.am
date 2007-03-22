@@ -13,6 +13,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       -I$(top_srcdir)/digikam/libs/dimg \
 	       -I$(top_srcdir)/digikam/libs/dmetadata \
 	       -I$(top_srcdir)/digikam/libs/dimg/filters \
+	       -I$(top_srcdir)/digikam/libs/thumbbar \
 	       -I$(top_srcdir)/digikam/digikam \
 	       $(all_includes) 
 
