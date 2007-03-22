@@ -78,13 +78,27 @@ public:
     CanvasPrivate() : 
         tileSize(128), minZoom(0.1), maxZoom(10.0), zoomStep(0.1) 
     {
-        panIconPopup    = 0;
-        panIconWidget   = 0;
-        cornerButton    = 0;
-        parent          = 0;
-        im              = 0;
-        rubber          = 0;
-        paintTimer      = 0;
+        rubber           = 0;
+        pressedMoved     = false;
+        pressedMoving    = false;
+        ltActive         = false;
+        rtActive         = false;
+        lbActive         = false;
+        rbActive         = false;
+        midButtonPressed = false;
+        midButtonX       = 0;
+        midButtonY       = 0;
+        panIconPopup     = 0;
+        panIconWidget    = 0;
+        cornerButton     = 0;
+        parent           = 0;
+        im               = 0;
+        rubber           = 0;
+        paintTimer       = 0;
+        autoZoom         = false;
+        fullScreen       = false;
+        zoom             = 1.0;
+
         tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
         tileCache.setAutoDelete(true);
     }
@@ -139,26 +153,10 @@ Canvas::Canvas(QWidget *parent)
     setFrameStyle( QFrame::NoFrame );
 
     d = new CanvasPrivate;
-
     d->im         = DImgInterface::instance();
     d->parent     = parent;
-    d->zoom       = 1.0;
-    d->autoZoom   = false;
-    d->fullScreen = false;
     d->tileTmpPix = new QPixmap(d->tileSize, d->tileSize);
     d->bgColor.setRgb(0, 0, 0);
-
-    d->rubber           = 0;
-    d->pressedMoved     = false;
-    d->pressedMoving    = false;
-    d->ltActive         = false;
-    d->rtActive         = false;
-    d->lbActive         = false;
-    d->rbActive         = false;
-    d->midButtonPressed = false;
-    d->midButtonX       = 0;
-    d->midButtonY       = 0;
-
     d->paintTimer = new QTimer;
     
     d->qcheck.resize(16, 16);
