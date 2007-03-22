@@ -499,7 +499,7 @@ void EditorWindow::setupStatusBar()
     m_nameLabel->setMaximumHeight(fontMetrics().height()+2);    
     statusBar()->addWidget(m_nameLabel, 100);
 
-    m_selectLabel = new QLabel(statusBar());
+    m_selectLabel = new QLabel(i18n("No selection"), statusBar());
     m_selectLabel->setAlignment(Qt::AlignCenter);
     m_selectLabel->setMaximumHeight(fontMetrics().height()+2);   
     statusBar()->addWidget(m_selectLabel, 100);
