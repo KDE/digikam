@@ -454,7 +454,7 @@ void Canvas::resizeEvent(QResizeEvent* e)
     // automatically after resize
 
 
-    // To be sure than corner widget use to pan image will be hide/show 
+    // To be sure than corner widget used to pan image will be hide/show 
     // accordinly with resize event.
     slotZoomChanged(d->zoom);
 }
