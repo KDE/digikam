@@ -374,6 +374,8 @@ QRect Canvas::getSelectedArea()
 
 float Canvas::calcAutoZoomFactor()
 {
+    if (!d->im->imageValid()) return d->zoom;
+
     double srcWidth  = d->im->origWidth();
     double srcHeight = d->im->origHeight();
     double dstWidth  = contentsRect().width();
@@ -448,7 +450,9 @@ void Canvas::resizeEvent(QResizeEvent* e)
     }
     
     updateContentsSize();
-    viewport()->update();
+
+    // No need to repaint. its called   
+    // automatically after resize
 }
 
 void Canvas::viewportPaintEvent(QPaintEvent *e)
