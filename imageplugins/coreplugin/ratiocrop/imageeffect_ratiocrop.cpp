@@ -47,8 +47,8 @@
 
 // Digikam includes.
 
-#include <imageiface.h>
-#include <imageselectionwidget.h>
+#include "imageiface.h"
+#include "imageselectionwidget.h"
 
 // Local includes.
 
@@ -158,10 +158,12 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     QWhatsThis::add( m_xInput, i18n("<p>Set here the top left selection corner position for cropping."));
     m_xInput->setLabel(i18n("X:"), AlignLeft|AlignVCenter);
     m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
+
     m_widthInput = new KIntNumInput(cropSelection);
     m_widthInput->setLabel(i18n("Width:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_widthInput, i18n("<p>Set here the width selection for cropping."));
     m_widthInput->setRange(10, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
+
     m_centerWidth = new QPushButton(cropSelection);
     KGlobal::dirs()->addResourceType("centerwidth", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("centerwidth", "centerwidth.png");
@@ -178,10 +180,12 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_yInput->setLabel(i18n("Y:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_yInput, i18n("<p>Set here the top left selection corner position for cropping."));
     m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
+
     m_heightInput = new KIntNumInput(cropSelection);
     m_heightInput->setLabel(i18n("Height:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_heightInput, i18n("<p>Set here the height selection for cropping."));
     m_heightInput->setRange(10, m_imageSelectionWidget->getOriginalImageHeight(), 1, true);
+
     m_centerHeight = new QPushButton(cropSelection);
     KGlobal::dirs()->addResourceType("centerheight", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("centerheight", "centerheight.png");
