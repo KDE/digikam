@@ -29,17 +29,19 @@
 #include <qrect.h>
 #include <qcolor.h>
 
-// Local includes
-
-#include "digikam_export.h"
-
 namespace Digikam
+{
+class ImageIface;
+}
+
+namespace DigikamImagesPluginCore
 {
 
 class ImageSelectionWidgetPriv;
 
-class DIGIKAM_EXPORT ImageSelectionWidget : public QWidget
+class ImageSelectionWidget : public QWidget
 {
+
 Q_OBJECT
 
 public:
@@ -111,7 +113,7 @@ public:
     void  resetSelection(void);
     void  maxAspectSelection(void);
 
-    ImageIface* imageIface();
+    Digikam::ImageIface* imageIface();
 
 public slots:
 
@@ -161,6 +163,6 @@ private:
     ImageSelectionWidgetPriv* d;
 };
 
-}  // NameSpace Digikam
+}  // NameSpace DigikamImagesPluginCore
 
 #endif /* IMAGESELECTIONWIDGET_H */

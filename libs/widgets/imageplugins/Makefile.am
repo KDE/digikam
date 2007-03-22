@@ -2,7 +2,7 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libimagepluginswidgets.la
 
-libimagepluginswidgets_la_SOURCES = imageregionwidget.cpp imagepaniconwidget.cpp imageselectionwidget.cpp \
+libimagepluginswidgets_la_SOURCES = imageregionwidget.cpp imagepaniconwidget.cpp \
 	                            imageguidewidget.cpp imagepannelwidget.cpp imagewidget.cpp \
 		                    listboxpreviewitem.cpp 
 
@@ -16,7 +16,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	   $(all_includes)
 
 digikaminclude_HEADERS = imageregionwidget.h imagepaniconwidget.h imagewidget.h \
-	                 imageselectionwidget.h imagepannelwidget.h imageguidewidget.h \
+	                 imagepannelwidget.h imageguidewidget.h \
 	                 listboxpreviewitem.h 
 
 digikamincludedir = $(includedir)/digikam

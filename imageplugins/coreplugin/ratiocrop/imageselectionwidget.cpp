@@ -65,7 +65,7 @@
 #include "imageselectionwidget.h"
 #include "imageselectionwidget.moc"
 
-namespace Digikam
+namespace DigikamImagesPluginCore
 {
 
 class ImageSelectionWidgetPriv
@@ -96,49 +96,49 @@ public:
     }
 
     // Golden guide types.
-    bool        drawGoldenSection;
-    bool        drawGoldenSpiralSection;
-    bool        drawGoldenSpiral;
-    bool        drawGoldenTriangle;
+    bool                 drawGoldenSection;
+    bool                 drawGoldenSpiralSection;
+    bool                 drawGoldenSpiral;
+    bool                 drawGoldenTriangle;
 
     // Golden guide translations.
-    bool        flipHorGoldenGuide;
-    bool        flipVerGoldenGuide;
+    bool                 flipHorGoldenGuide;
+    bool                 flipVerGoldenGuide;
 
-    int         guideLinesType;
-    int         guideSize;
+    bool                 moving;
+    bool                 autoOrientation;
 
-    QPoint      lastPos;
+    int                  guideLinesType;
+    int                  guideSize;
 
-    int         currentAspectRatioType;
-    int         currentResizing;
-    int         currentOrientation;
-    bool        autoOrientation;
+    int                  currentAspectRatioType;
+    int                  currentResizing;
+    int                  currentOrientation;
 
-    float       currentAspectRatioValue;
+    float                currentAspectRatioValue;
 
-    QRect       rect;
-    QRect       regionSelection;         // Real size image selection.
-    QRect       localRegionSelection;    // Local size selection.
+    QPoint               lastPos;
+
+    QRect                rect;
+    QRect                regionSelection;         // Real size image selection.
+    QRect                localRegionSelection;    // Local size selection.
 
     // Draggable local region selection corners.
-    QRect       localTopLeftCorner;
-    QRect       localBottomLeftCorner;
-    QRect       localTopRightCorner;
-    QRect       localBottomRightCorner;
+    QRect                localTopLeftCorner;
+    QRect                localBottomLeftCorner;
+    QRect                localTopRightCorner;
+    QRect                localBottomRightCorner;
 
-    QPixmap    *pixmap;
+    QPixmap             *pixmap;
 
-    QTimer     *timerW;
-    QTimer     *timerH;
+    QTimer              *timerW;
+    QTimer              *timerH;
 
-    QColor      guideColor;
+    QColor               guideColor;
 
-    DImg        preview;
+    Digikam::DImg        preview;
 
-    ImageIface *iface;
-
-    bool        moving;
+    Digikam::ImageIface *iface;
 };
 
 ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent, 
@@ -158,13 +158,13 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent,
     setMinimumSize(w, h);
     setMouseTracking(true);
 
-    d->iface        = new ImageIface(w, h);
+    d->iface        = new Digikam::ImageIface(w, h);
     uchar *data     = d->iface->getPreviewImage();
     int width       = d->iface->previewWidth();
     int height      = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data);
+    d->preview      = Digikam::DImg(width, height, sixteenBit, hasAlpha, data);
     delete [] data;
     d->preview.convertToEightBit();
     d->pixmap  = new QPixmap(w, h);
@@ -188,7 +188,7 @@ ImageSelectionWidget::~ImageSelectionWidget()
     delete d;
 }
 
-ImageIface* ImageSelectionWidget::imageIface()
+Digikam::ImageIface* ImageSelectionWidget::imageIface()
 {
     return d->iface;
 }
@@ -205,7 +205,7 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent *e)
     int height      = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data);
+    d->preview      = Digikam::DImg(width, height, sixteenBit, hasAlpha, data);
     delete [] data;
     d->preview.convertToEightBit();
 
@@ -724,7 +724,7 @@ void ImageSelectionWidget::updatePixmap(void)
     int ty = d->localRegionSelection.top()    - d->rect.top();
     int by = d->localRegionSelection.bottom() - d->rect.top();
 
-    DImg image = d->preview.copy();
+    Digikam::DImg image = d->preview.copy();
 
     uchar* ptr = image.bits();
     uchar  r, g, b;
@@ -1387,4 +1387,4 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
     }
 }
 
-}  // NameSpace Digikam
+}  // NameSpace DigikamImagesPluginCore
