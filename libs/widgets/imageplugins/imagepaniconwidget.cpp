@@ -224,11 +224,11 @@ void ImagePanIconWidget::updatePixmap( void )
                d->localRegionSelection.y(),
                d->localRegionSelection.width(), 
                d->localRegionSelection.height());
-    p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
-    p.drawRect(d->localRegionSelection.x() + 1, 
-               d->localRegionSelection.y() + 1,
-               d->localRegionSelection.width() - 2, 
-               d->localRegionSelection.height() - 2);
+    p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+    p.drawRect(d->localRegionSelection.x(), 
+               d->localRegionSelection.y(),
+               d->localRegionSelection.width(), 
+               d->localRegionSelection.height());
     
     if (d->separateView == ImageRegionWidget::SeparateViewVertical)
     {
