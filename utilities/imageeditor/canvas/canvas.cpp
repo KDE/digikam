@@ -155,9 +155,9 @@ Canvas::Canvas(QWidget *parent)
     d = new CanvasPrivate;
     d->im         = DImgInterface::instance();
     d->parent     = parent;
+    d->paintTimer = new QTimer;
     d->tileTmpPix = new QPixmap(d->tileSize, d->tileSize);
     d->bgColor.setRgb(0, 0, 0);
-    d->paintTimer = new QTimer;
     
     d->qcheck.resize(16, 16);
     QPainter p(&d->qcheck);
