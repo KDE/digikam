@@ -302,7 +302,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    grid->addMultiCellLayout(l1, 0, 0, 0, 8);
+    grid->addMultiCellLayout(l1, 0, 0, 0, 6);
     grid->setRowSpacing(1, spacingHint());
     grid->addMultiCellWidget(m_histogramWidget, 2, 2, 1, 5);
     grid->setRowSpacing(3, spacingHint());
