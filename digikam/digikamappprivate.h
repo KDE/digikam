@@ -1,9 +1,9 @@
 /* ============================================================
- * Authors: Caulier Gilles 
+ * Authors: Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2007-31-01
  * Description : main digiKam interface implementation
  * 
- * Copyright 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,6 +23,8 @@
 #include <qcstring.h>
 #include <qstring.h>
 #include <qmap.h>
+#include <qslider.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -126,6 +128,8 @@ public:
         kipiPluginLoader                     = 0;
         view                                 = 0;
         splashScreen                         = 0;
+        thumbSizeSlider                      = 0;
+        thumbSizeTimer                       = 0;
     }
 
     bool                   fullScreen;
@@ -138,6 +142,10 @@ public:
     QPtrList<KAction>      kipiToolsActions;
     QPtrList<KAction>      kipiBatchActions;
     QPtrList<KAction>      kipiAlbumActions;
+
+    QTimer                *thumbSizeTimer;
+
+    QSlider               *thumbSizeSlider;
 
     QMap<int, QString>     mediaItems;
 

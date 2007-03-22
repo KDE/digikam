@@ -1,13 +1,13 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Tom Albers <tomalbers@kde.nl>
- *          Caulier Gilles 
+ *          Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2002-16-10
  * Description : main digiKam interface implementation
  * 
- * Copyright 2002-2005 by Renchi Raju by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2002-2005 by Renchi Raju by Gilles Caulier 
  * Copyright      2006 by Tom Albers
- * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,10 +27,9 @@
 #include <qdatastream.h>
 #include <qlabel.h>
 #include <qstringlist.h>
-#include <qtimer.h>
+#include <qtooltip.h>
 #include <qsignalmapper.h>
 #include <qdockarea.h>
-
 
 // KDE includes.
 
@@ -176,6 +175,9 @@ DigikamApp::DigikamApp()
 
 DigikamApp::~DigikamApp()
 {
+    if (d->thumbSizeTimer)
+        delete d->thumbSizeTimer;
+
     ImageAttributesWatch::shutDown();
 
     if (ImageWindow::imagewindowCreated())
@@ -341,9 +343,25 @@ void DigikamApp::setupStatusBar()
     d->statusProgressBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->statusProgressBar, 100, true);
 
+    d->thumbSizeSlider = new QSlider(ThumbnailSize::Small, ThumbnailSize::Huge,
+                                     ThumbnailSize::Step, ThumbnailSize::Medium, 
+                                     Qt::Horizontal, statusBar());
+    d->thumbSizeSlider->setMaximumHeight(fontMetrics().height()+2);    
+    d->thumbSizeSlider->setFixedWidth(120);
+    statusBar()->addWidget(d->thumbSizeSlider, 1, true);
+
     d->statusNavigateBar = new StatusNavigateBar(statusBar());
     d->statusNavigateBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->statusNavigateBar, 1, true);
+
+    connect(d->thumbSizeSlider, SIGNAL(valueChanged(int)),
+            this, SLOT(slotThumbSizeTimer()));
+
+    connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
+            this, SLOT(slotThumbSizeChanged(int)));
+    
+    connect(d->view, SIGNAL(signalTogglePreview(bool)),
+            this, SLOT(slotTooglePreview(bool)));
 
     connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
             d->view, SLOT(slotFirstItem()));
@@ -618,19 +636,19 @@ void DigikamApp::setupActions()
                                                         actionCollection(),
                                                         "image_delete_permanently_directly");
 
-    d->imageTrashDirectlyAction             = new KAction(i18n("Move to Trash without Confirmation"),
-                                                        "edittrash",
-                                                        0,
-                                                        d->view,
-                                                        SLOT(slotImageTrashDirectly()),
-                                                        actionCollection(),
-                                                        "image_trash_directly");
+    d->imageTrashDirectlyAction = new KAction(i18n("Move to Trash without Confirmation"),
+                                              "edittrash",
+                                               0,
+                                               d->view,
+                                               SLOT(slotImageTrashDirectly()),
+                                               actionCollection(),
+                                               "image_trash_directly");
 
     d->imageSortAction = new KSelectAction(i18n("&Sort Images"),
-                                    0,
-                                    0,
-                                    actionCollection(),
-                                    "image_sort");
+                                           0,
+                                           0,
+                                           actionCollection(),
+                                           "image_sort");
 
     connect(d->imageSortAction, SIGNAL(activated(int)),
             d->view, SLOT(slotSortImages(int)));
@@ -652,8 +670,8 @@ void DigikamApp::setupActions()
              d->view, SLOT( slotImageExifOrientation( int ) ) );
 
     d->imageExifOrientationActionMenu = new KActionMenu(i18n("Correct Exif Orientation Tag"),
-                                                      actionCollection(),
-                                                      "image_set_exif_orientation");
+                                                        actionCollection(),
+                                                        "image_set_exif_orientation");
     d->imageExifOrientationActionMenu->setDelayed(false);
 
     d->imageSetExifOrientation1Action =
@@ -705,28 +723,28 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------------
 
     d->selectAllAction = new KAction(i18n("Select All"),
-                                    0,
-                                    CTRL+Key_A,
-                                    d->view,
-                                    SLOT(slotSelectAll()),
-                                    actionCollection(),
-                                    "selectAll");
+                                     0,
+                                     CTRL+Key_A,
+                                     d->view,
+                                     SLOT(slotSelectAll()),
+                                     actionCollection(),
+                                     "selectAll");
 
     d->selectNoneAction = new KAction(i18n("Select None"),
-                                    0,
-                                    CTRL+Key_U,
-                                    d->view,
-                                    SLOT(slotSelectNone()),
-                                    actionCollection(),
-                                    "selectNone");
+                                     0,
+                                     CTRL+Key_U,
+                                     d->view,
+                                     SLOT(slotSelectNone()),
+                                     actionCollection(),
+                                     "selectNone");
 
     d->selectInvertAction = new KAction(i18n("Invert Selection"),
-                                    0,
-                                    CTRL+Key_Asterisk,
-                                    d->view,
-                                    SLOT(slotSelectInvert()),
-                                    actionCollection(),
-                                    "selectInvert");
+                                        0,
+                                        CTRL+Key_Asterisk,
+                                        d->view,
+                                        SLOT(slotSelectInvert()),
+                                        actionCollection(),
+                                        "selectInvert");
 
     // -----------------------------------------------------------
 
@@ -744,7 +762,7 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "album_thumbSizeIncrease");
     d->thumbSizePlusAction->setWhatsThis(i18n("This option allows you to increase "
-                                            "the Album thumbnails size."));
+                                              "the Album thumbnails size."));
 
     d->thumbSizeMinusAction = new KAction(i18n("Decrease Thumbnail Size"),
                                    "viewmag-",
@@ -754,11 +772,11 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "album_thumbSizeDecrease");
     d->thumbSizeMinusAction->setWhatsThis(i18n("This option allows you to decrease "
-                                             "the Album thumbnails size."));
+                                               "the Album thumbnails size."));
 
 #if KDE_IS_VERSION(3,2,0)
     d->fullScreenAction = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
-                                               actionCollection(), this, "full_screen");
+                                                 actionCollection(), this, "full_screen");
 #else
     d->fullScreenAction = new KToggleAction(i18n("Full Screen Mode"),
                                    "window_fullscreen",
@@ -900,22 +918,8 @@ void DigikamApp::setupActions()
     d->albumSortAction->setCurrentItem((int)d->albumSettings->getAlbumSortOrder());
     d->imageSortAction->setCurrentItem((int)d->albumSettings->getImageSortOrder());
 
-    int size = d->albumSettings->getDefaultIconSize();
-    if (size == ThumbnailSize::Huge)
-    {
-        enableThumbSizePlusAction(false);
-        enableThumbSizeMinusAction(true);
-    }
-    else if (size == ThumbnailSize::Small)
-    {
-        enableThumbSizePlusAction(true);
-        enableThumbSizeMinusAction(false);
-    }
-    else
-    {
-        enableThumbSizePlusAction(true);
-        enableThumbSizeMinusAction(true);
-    }
+    d->thumbSizeSlider->setValue(d->albumSettings->getDefaultIconSize());
+    slotThumbSizeEffect();
 }
 
 void DigikamApp::enableThumbSizePlusAction(bool val)
@@ -1811,6 +1815,39 @@ void DigikamApp::toggledToPreviewMode(bool t)
     d->thumbSizeMinusAction->setEnabled(!t);
     d->albumSortAction->setEnabled(!t);
     d->imageSortAction->setEnabled(!t);
+}
+
+void DigikamApp::slotThumbSizeTimer()
+{
+    if (d->thumbSizeTimer)
+    {
+       d->thumbSizeTimer->stop();
+       delete d->thumbSizeTimer;
+    }
+
+    d->thumbSizeTimer = new QTimer( this );
+    connect(d->thumbSizeTimer, SIGNAL(timeout()),
+            this, SLOT(slotThumbSizeEffect()) );
+    d->thumbSizeTimer->start(100, true);
+}
+
+void DigikamApp::slotThumbSizeEffect()
+{
+    int size = d->thumbSizeSlider->value();
+    d->view->setThumbSize(size);
+    QToolTip::add(d->thumbSizeSlider, i18n("Thumbnail size: %1").arg(size));
+}
+
+void DigikamApp::slotThumbSizeChanged(int val)
+{
+    d->thumbSizeSlider->blockSignals(true);
+    d->thumbSizeSlider->setValue(val);
+    d->thumbSizeSlider->blockSignals(false);
+}
+
+void DigikamApp::slotTooglePreview(bool b)
+{
+    d->thumbSizeSlider->setEnabled(!b);
 }
 
 }  // namespace Digikam

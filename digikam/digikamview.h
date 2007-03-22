@@ -1,11 +1,11 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Caulier Gilles 
+ *          Caulier Gilles <caulier dot gilles at gmail dot com>
  * Date   : 2002-16-10
  * Description : implementation of album view interface. 
  *
- * Copyright 2002-2005 by Renchi Raju by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2002-2005 by Renchi Raju by Gilles Caulier 
+ * Copyright 2006-2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,6 +62,7 @@ public:
     void getBackwardHistory(QStringList &titles);
     void showSideBars();
     void hideSideBars();
+    void setThumbSize(int size);
 
 signals:
 
@@ -71,6 +72,8 @@ signals:
     void signalNoCurrentItem();
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
+    void signalThumbSizeChanged(int);
+    void signalTogglePreview(bool);
 
 public slots:
 

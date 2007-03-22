@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-09-07
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date   : 2004-09-07
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright 2004 by Renchi Raju
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,47 +29,56 @@ class ThumbnailSize
 
 public:
 
-    enum Size {
+    enum Size 
+    {
+        Step   = 8,
         Tiny   = 32,
         Small  = 64,
-        Medium = 100,
+        Medium = 96,
         Large  = 160,
         Huge   = 256
     };
 
-    ThumbnailSize() {
-        mSize = Medium;
+    ThumbnailSize() 
+    {
+        m_Size = Medium;
     }
 
-    ThumbnailSize(Size size) {
-        mSize = size;
+    ThumbnailSize(int size) 
+    {
+        m_Size = size;
     }
 
-    ~ThumbnailSize() {
+    ~ThumbnailSize()
+    {
     }
 
-    ThumbnailSize(const ThumbnailSize& thumbsize) {
+    ThumbnailSize(const ThumbnailSize& thumbsize) 
+    {
         if (this != &thumbsize)
-            mSize = thumbsize.mSize;
+            m_Size = thumbsize.m_Size;
     }
 
-    ThumbnailSize& operator=(const ThumbnailSize& thumbsize) {
+    ThumbnailSize& operator=(const ThumbnailSize& thumbsize) 
+    {
         if (this != &thumbsize)
-            mSize = thumbsize.mSize;
+            m_Size = thumbsize.m_Size;
         return *this;
     }
 
-    bool operator!=(const ThumbnailSize& thumbsize) {
-        return mSize != thumbsize.mSize;
+    bool operator!=(const ThumbnailSize& thumbsize) 
+    {
+        return m_Size != thumbsize.m_Size;
     }
 
-    Size size() const {
-        return mSize;
+    int size() const 
+    {
+        return m_Size;
     }
 
 private:
 
-    Size mSize;
+    int m_Size;
 
 };
 
