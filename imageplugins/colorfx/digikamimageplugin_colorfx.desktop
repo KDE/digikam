@@ -1,0 +1,20 @@
+[Desktop Entry]
+Name=ImagePlugin_ColorFx
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=Color special effects plugin for digiKam
+Comment[ca]=Connector pel digiKam d'efectes especials de color
+Comment[de]=digiKam-Modul zum Erzeugen von speziellen Farbeffekten
+Comment[is]=Íforrit fyrir digiKam sem litmeðhöndlar sérstaklega myndir
+Comment[it]=Plugin degli effetti speciali dei colori per digiKam
+Comment[ja]=digiKam 色特殊効果プラグイン
+Comment[nds]=digiKam-Moduul för Klöör-Effekten
+Comment[nl]=Digikam-plugin voor kleureffecten
+Comment[pt]=Um 'plugin' do digiKam para efeitos especiais de cores
+Comment[sk]=digiKam plugin pre špeciálne farebné efekty
+Comment[sv]=Digikam insticksprogram med specialeffekter för färg
+Comment[uk]=Втулок спецефектів кольорів для digiKam
+
+X-KDE-Library=digikamimageplugin_colorfx
+author=Caulier Gilles, caulier dot gilles at gmail dot com
