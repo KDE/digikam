@@ -205,6 +205,9 @@ void EditorWindow::setupStandardConnections()
     connect(m_canvas, SIGNAL(signalSavingProgress(const QString&, float)),
             this, SLOT(slotSavingProgress(const QString&, float)));
 
+    connect(m_canvas, SIGNAL(signalMousePosition(int, int)),
+            this, SLOT(slotMousePosition(int, int)));
+
     // -- if rotating/flipping set the rotatedflipped flag to true -----------
 
     connect(d->rotateLeftAction, SIGNAL(activated()),
@@ -1705,6 +1708,11 @@ void EditorWindow::slotToggleSlideShow()
     settings.printComment         = config->readBoolEntry("SlideShowPrintComment", false);
     settings.loop                 = config->readBoolEntry("SlideShowLoop", false);
     slideShow(startWithCurrent, settings);
+}
+
+void EditorWindow::slotMousePosition(int x, int y)
+{
+    m_selectLabel->setText(QString("(%1, %2)").arg(x).arg(y));
 }
 
 }  // namespace Digikam

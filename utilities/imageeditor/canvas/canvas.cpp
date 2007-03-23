@@ -725,6 +725,9 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
         d->pressedMoving = true;
 
         drawRubber();
+
+        // To refresh editor status bar with current cursor position.
+        emit signalMousePosition(e->x(), e->y());
     }
     else
     {

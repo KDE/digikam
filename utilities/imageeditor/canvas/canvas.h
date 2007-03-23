@@ -176,6 +176,7 @@ signals:
     void signalSavingStarted(const QString &filename);
     void signalSavingFinished(const QString &filename, bool success);
     void signalSavingProgress(const QString& filePath, float progress);
+    void signalMousePosition(int x, int y);
 
 private:
     
