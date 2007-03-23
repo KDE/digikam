@@ -1853,6 +1853,7 @@ void DigikamApp::slotThumbSizeChanged(int size)
 void DigikamApp::slotTooglePreview(bool b)
 {
     d->thumbSizeSlider->setEnabled(!b);
+    // TODO : enable/disable the menu actions accordinly with the current mode. 
 }
 
 }  // namespace Digikam
