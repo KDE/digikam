@@ -1828,7 +1828,7 @@ void DigikamApp::slotThumbSizeTimer()
     d->thumbSizeTimer = new QTimer( this );
     connect(d->thumbSizeTimer, SIGNAL(timeout()),
             this, SLOT(slotThumbSizeEffect()) );
-    d->thumbSizeTimer->start(100, true);
+    d->thumbSizeTimer->start(300, true);
 }
 
 void DigikamApp::slotThumbSizeEffect()
