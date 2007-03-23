@@ -34,6 +34,7 @@
 #include <qdir.h>
 #include <qlistbox.h>
 #include <qwhatsthis.h>
+#include <qtooltip.h>
 #include <qfileinfo.h>
 
 // KDE includes.
@@ -108,10 +109,10 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
 
     d->albumPathEdit = new KURLRequester(albumPathBox);
     d->albumPathEdit->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);    
-    QWhatsThis::add( d->albumPathEdit, i18n("<p>Here you can set the main path to the digiKam album "
-                                            "library in your computer."
-                                            "<p>Write access is required for this path and do not use a "
-                                            "remote path here, like an NFS mounted file system."));
+    QToolTip::add( d->albumPathEdit, i18n("<p>Here you can set the main path to the digiKam album "
+                                          "library in your computer."
+                                          "<p>Write access is required for this path and do not use a "
+                                          "remote path here, like an NFS mounted file system."));
 
     connect(d->albumPathEdit, SIGNAL(urlSelected(const QString &)),
             this, SLOT(slotChangeAlbumPath(const QString &)));
@@ -134,10 +135,10 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     d->iconTreeThumbSize->insertItem("16");
     d->iconTreeThumbSize->insertItem("22");
     d->iconTreeThumbSize->insertItem("32");
-    QWhatsThis::add( d->iconTreeThumbSize, i18n("<p>Set this option to configure the size "
-                                                "in pixels of the thumbnails in digiKam's sidebars. "
-                                                "This option will take effect when you restart "
-                                                "digiKam."));
+    QToolTip::add( d->iconTreeThumbSize, i18n("<p>Set this option to configure the size "
+                                              "in pixels of the thumbnails in digiKam's sidebars. "
+                                              "This option will take effect when you restart "
+                                              "digiKam."));
     tagSettingsLayout->addMultiCellWidget(d->iconTreeThumbLabel, 0, 0, 0, 0);
     tagSettingsLayout->addMultiCellWidget(d->iconTreeThumbSize, 0, 0, 1, 1);
 
