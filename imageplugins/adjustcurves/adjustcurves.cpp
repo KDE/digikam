@@ -278,7 +278,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
-    m_resetButton->setPixmap( SmallIcon("reload_page") );
+    m_resetButton->setPixmap( SmallIcon("reload_page", 18) );
     QToolTip::add( m_resetButton, i18n( "Reset current channel curves' values." ) );
     QWhatsThis::add( m_resetButton, i18n("<p>If you press this button, all curves' values "
                                          "from the current selected channel "
