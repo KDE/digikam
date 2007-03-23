@@ -1,11 +1,11 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="4" name="digikamimageplugin_noisereduction" >
+<kpartgui version="3" name="digikamimageplugin_hotpixels" >
 
  <MenuBar>
 
   <Menu name="Correct" >
    <text>Co&amp;rrect</text>
-      <Action name="imageplugin_noisereduction" /> 
+   <Action name="imageplugin_hotpixels" /> 
   </Menu>
 
  </MenuBar>
@@ -13,9 +13,9 @@
  <ToolBar name="ToolBar" >
   <text>Main Toolbar</text>
  </ToolBar>
- 
- <ActionProperties>
-  <Action shortcut="" name="imageplugin_noisereduction" />
- </ActionProperties>
 
+ <ActionProperties>
+  <Action shortcut="" name="imageplugin_hotpixels" />
+ </ActionProperties>
+ 
 </kpartgui>

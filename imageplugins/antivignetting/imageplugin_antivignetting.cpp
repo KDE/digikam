@@ -39,7 +39,7 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_antivignetting,
 ImagePlugin_AntiVignetting::ImagePlugin_AntiVignetting(QObject *parent, const char*, const QStringList &)
                           : Digikam::ImagePlugin(parent, "ImagePlugin_AntiVignetting")
 {
-    m_antivignettingAction = new KAction(i18n("Anti Vignetting..."), "antivignetting", 0, 
+    m_antivignettingAction = new KAction(i18n("Vignetting..."), "antivignetting", 0, 
                                  this, SLOT(slotAntiVignetting()),
                                  actionCollection(), "imageplugin_antivignetting");
 

@@ -1,0 +1,50 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui version="5" name="digikamimageplugin_core" >
+
+ <MenuBar>
+
+   <Menu name="Color">
+     <text>&amp;Color</text>
+      <Action name="implugcore_bcg" /> 
+      <Action name="implugcore_hsl" /> 
+      <Action name="implugcore_rgb" /> 
+      <Separator />
+      <Action name="implugcore_autocorrection" /> 
+      <Action name="implugcore_invert" /> 
+      <Menu name="Depth">
+        <text>&amp;Depth</text>
+        <Action name="implugcore_convertto8bits" />
+        <Action name="implugcore_convertto16bits" />
+      </Menu>
+      <Separator />
+      <Action name="implugcore_colormanagement" />
+      <Separator />
+   </Menu>
+   <Menu name="Correct">
+     <text>Co&amp;rrect</text>
+    <Action name="implugcore_blur" /> 
+    <Action name="implugcore_sharpen" /> 
+    <Separator />
+    <Action name="implugcore_redeye" /> 
+  </Menu>
+
+  <Menu name="Transform" >
+   <text>Tra&amp;nsform</text>
+   <Action name="implugcore_ratiocrop" /> 
+  </Menu>
+
+  <Menu name="Effects">
+   <text>Effec&amp;ts</text>
+   <Action name="implugcore_blackwhite" /> 
+  </Menu>
+
+
+ </MenuBar>
+
+ <ToolBar name="ToolBar" >
+  <text>Main Toolbar</text>
+ </ToolBar>
+
+ <ActionProperties/>
+
+</kpartgui>

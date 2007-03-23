@@ -21,6 +21,7 @@ Image Editor  : Usability improvement : a new pan tool is available on the right
                 corner of canvas to naviguate over large pictures.
 Image Editor  : Usability issue : Blowup and Resize tools have been merged.
 Image Editor  : Usability issue : Unsharp Mask, Refocus, and Sharpen tools have been merged to a new Sharpness Editor.
+Image Editor  : Usability issue : Reorganize menu structure
 
 Image Plugins : Red Eyes Correction tool have been completly re-writen. There is 
                 a preview of effect and the capability to taint the eye pupil with
@@ -59,5 +60,6 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 017 ==> 102029 : Configurable size of icons in sidebars
 018 ==> 102029 : Wish: no/small icons in album tree.
 019 ==> 131155 : Smooth increasing/decreasing size of thumbnails like in iPhoto.
-020 ==> 
+020 ==> 89365  : Reorganize menu structure in Image Editor
+021 ==> 
 

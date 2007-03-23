@@ -57,14 +57,14 @@ namespace DigikamAntiVignettingImagesPlugin
 {
 
 ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
-                          : Digikam::ImageGuideDlg(parent, i18n("Anti-Vignetting"),
+                          : Digikam::ImageGuideDlg(parent, i18n("Vignetting Correction"),
                             "antivignettings", false, true, false,
                             Digikam::ImageGuideWidget::HVGuideMode, 0, true)
 {
     QString whatsThis;
     
     KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Anti-Vignetting"), 
+                                       I18N_NOOP("Vignetting Correction"), 
                                        digikam_version,
                                        I18N_NOOP("A digiKam image plugin to reduce image vignetting."),
                                        KAboutData::License_GPL,
@@ -362,7 +362,7 @@ void ImageEffect_AntiVignetting::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);    
 
-    iface.putOriginalImage(i18n("Anti-Vignetting"),
+    iface.putOriginalImage(i18n("Vignetting Correction"),
                            m_threadedFilter->getTargetImage().bits());
     
     double b = (double)(m_brightnessInput->value() / 100.0);

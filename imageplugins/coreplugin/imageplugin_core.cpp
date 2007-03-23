@@ -68,7 +68,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                           this, SLOT(slotSharpen()),
                           actionCollection(), "implugcore_sharpen");
 
-    m_redeyeAction = new KAction(i18n("Red Eye Reduction..."), "redeyes", 0,
+    m_redeyeAction = new KAction(i18n("Red Eye..."), "redeyes", 0,
                                  this, SLOT(slotRedEye()),
                                  actionCollection(), "implugcore_redeye");
     m_redeyeAction->setWhatsThis( i18n( "This filter can be used to correct red eyes in a photo. "

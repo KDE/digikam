@@ -156,7 +156,8 @@ void EditorWindow::setupContextMenu()
     if( ac->action("editorwindow_forward") ) ac->action("editorwindow_forward")->plug(m_contextMenu);
     m_contextMenu->insertSeparator();
     if( ac->action("editorwindow_slideshow") ) ac->action("editorwindow_slideshow")->plug(m_contextMenu);
-    if( ac->action("editorwindow_rotate") ) ac->action("editorwindow_rotate")->plug(m_contextMenu);
+    if( ac->action("editorwindow_rotate_left") ) ac->action("editorwindow_rotate_left")->plug(m_contextMenu);
+    if( ac->action("editorwindow_rotate_right") ) ac->action("editorwindow_rotate_right")->plug(m_contextMenu);
     if( ac->action("editorwindow_crop") ) ac->action("editorwindow_crop")->plug(m_contextMenu);
     m_contextMenu->insertSeparator();
     if( ac->action("editorwindow_delete") ) ac->action("editorwindow_delete")->plug(m_contextMenu);
@@ -216,7 +217,7 @@ void EditorWindow::setupStandardConnections()
     connect(d->rotateRightAction, SIGNAL(activated()),
             this, SLOT(slotRotatedOrFlipped()));
             
-    connect(d->flipHorzAction, SIGNAL(activated()),
+    connect(d->flipHorizAction, SIGNAL(activated()),
             this, SLOT(slotRotatedOrFlipped()));
             
     connect(d->flipVertAction, SIGNAL(activated()),
@@ -400,39 +401,30 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Flip' menu actions ---------------------------------------------
     
-    d->flipAction = new KActionMenu(i18n("Flip"), "flip", actionCollection(), "editorwindow_flip");
-    d->flipAction->setDelayed(false);
-
-    d->flipHorzAction = new KAction(i18n("Horizontally"), 0, CTRL+Key_Asterisk,
+    d->flipHorizAction = new KAction(i18n("Flip Horizontally"), 0, CTRL+Key_Asterisk,
                                    m_canvas, SLOT(slotFlipHoriz()),
-                                   actionCollection(), "editorwindow_fliphorizontal");
+                                   actionCollection(), "editorwindow_flip_horiz");
+    d->flipHorizAction->setEnabled(false);
 
-    d->flipVertAction = new KAction(i18n("Vertically"), 0, CTRL+Key_Slash,
+    d->flipVertAction = new KAction(i18n("Flip Vertically"), 0, CTRL+Key_Slash,
                                    m_canvas, SLOT(slotFlipVert()),
-                                   actionCollection(), "editorwindow_flipvertical");
+                                   actionCollection(), "editorwindow_flip_vert");
+    d->flipVertAction->setEnabled(false);
                                    
-    d->flipAction->insert(d->flipHorzAction);
-    d->flipAction->insert(d->flipVertAction);
-
     // -- Standard 'Rotate' menu actions ----------------------------------------
 
-    d->rotateAction = new KActionMenu(i18n("&Rotate"), "rotate_cw",
-                                      actionCollection(),
-                                      "editorwindow_rotate");
-    d->rotateAction->setDelayed(false);
-
-    d->rotateLeftAction = new KAction(i18n("Left"),
+    d->rotateLeftAction = new KAction(i18n("Rotate Left"),
                                      "rotate_ccw", CTRL+Key_Left, 
                                      m_canvas, SLOT(slotRotate270()),
                                      actionCollection(),
-                                     "rotate_ccw");
-    d->rotateRightAction  = new KAction(i18n("Right"),
+                                     "editorwindow_rotate_left");
+    d->rotateLeftAction->setEnabled(false);
+    d->rotateRightAction  = new KAction(i18n("Rotate Right"),
                                      "rotate_cw", CTRL+Key_Right, 
                                      m_canvas, SLOT(slotRotate90()),
                                      actionCollection(),
-                                     "rotate_cw");
-    d->rotateAction->insert(d->rotateLeftAction);
-    d->rotateAction->insert(d->rotateRightAction);
+                                     "editorwindow_rotate_right");
+    d->rotateRightAction->setEnabled(false);
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
@@ -886,8 +878,10 @@ void EditorWindow::toggleStandardActions(bool val)
 {
     d->zoomFitAction->setEnabled(val);
     m_saveAsAction->setEnabled(val);
-    d->rotateAction->setEnabled(val);
-    d->flipAction->setEnabled(val);
+    d->rotateLeftAction->setEnabled(val);
+    d->rotateRightAction->setEnabled(val);
+    d->flipHorizAction->setEnabled(val);
+    d->flipVertAction->setEnabled(val);
     d->filePrintAction->setEnabled(val);
     d->resizeAction->setEnabled(val);
     m_fileDeleteAction->setEnabled(val);

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="11" name="digikamimagewindow" >
+<gui version="12" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -41,17 +41,27 @@
         <Action name="editorwindow_cmview" />        
     </Menu>
 
-    <Menu name="Image" ><text>&amp;Image</text>
+    <Menu name="Color" ><text>&amp;Color</text>
     </Menu>
 
-    <Menu name="Fix" ><text>Fi&amp;x</text>
+    <Menu name="Correct" ><text>Co&amp;rrect</text>
     </Menu>
 
-    <Menu name="Transform" ><text>&amp;Transform</text>
-        <Action name="editorwindow_rotate" /> 
-        <Action name="editorwindow_flip" /> 
+    <Menu name="Transform" ><text>Tra&amp;nsform</text>
+        <Action name="editorwindow_rotate_left" /> 
+        <Action name="editorwindow_rotate_right" /> 
+        <Separator/>
+        <Action name="editorwindow_flip_horiz" /> 
+        <Action name="editorwindow_flip_vert" /> 
+        <Separator/>
         <Action name="editorwindow_crop" /> 
         <Action name="editorwindow_resize" /> 
+    </Menu>
+
+    <Menu name="Decoration" ><text>&amp;Decoration</text>
+    </Menu>
+
+    <Menu name="Effects" ><text>Effec&amp;ts</text>
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>
@@ -91,7 +101,8 @@
      <Action name="editorwindow_zoomminus" /> 
      <Action name="editorwindow_zoomfit" /> 
      <Separator/>     
-     <Action name="editorwindow_rotate" /> 
+     <Action name="editorwindow_rotate_left" /> 
+     <Action name="editorwindow_rotate_right" /> 
      <Action name="editorwindow_crop" /> 
      <Separator/>     
      <Action name="editorwindow_fullscreen" />

@@ -62,10 +62,8 @@ public:
         cropAction             = 0;
         rotateLeftAction       = 0;
         rotateRightAction      = 0;
-        flipHorzAction         = 0;
+        flipHorizAction        = 0;
         flipVertAction         = 0;
-        flipAction             = 0;
-        rotateAction           = 0;
         ICCSettings            = 0;
         exposureSettings       = 0;
         underExposureIndicator = 0;
@@ -102,12 +100,9 @@ public:
     KAction                   *zoomMinusAction;
     KAction                   *rotateLeftAction;
     KAction                   *rotateRightAction;
-    KAction                   *flipHorzAction;
+    KAction                   *flipHorizAction;
     KAction                   *flipVertAction;
     KAction                   *slideShowAction;
-
-    KActionMenu               *flipAction;
-    KActionMenu               *rotateAction;
 
     KToggleAction             *zoomFitAction;
     KToggleAction             *viewCMViewAction;

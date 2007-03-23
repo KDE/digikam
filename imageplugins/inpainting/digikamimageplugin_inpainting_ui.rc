@@ -1,11 +1,11 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="4" name="digikamimageplugin_noisereduction" >
+<kpartgui version="4" name="digikamimageplugin_inpainting" >
 
  <MenuBar>
 
   <Menu name="Correct" >
    <text>Co&amp;rrect</text>
-      <Action name="imageplugin_noisereduction" /> 
+      <Action name="imageplugin_inpainting" /> 
   </Menu>
 
  </MenuBar>
@@ -15,7 +15,7 @@
  </ToolBar>
  
  <ActionProperties>
-  <Action shortcut="" name="imageplugin_noisereduction" />
+  <Action name="imageplugin_inpainting" />
  </ActionProperties>
 
 </kpartgui>
