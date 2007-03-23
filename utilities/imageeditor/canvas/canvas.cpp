@@ -729,8 +729,8 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
         // To refresh editor status bar with current cursor position.
         double scale = 1.0/d->zoom;
 
-        int xp = (int)((double)e->x() * scale);
-        int yp = (int)((double)e->y() * scale);
+        int xp = (int)((double)(e->x() - d->pixmapRect.x()) * scale);
+        int yp = (int)((double)(e->y() - d->pixmapRect.y()) * scale);
 
         xp = QMAX(xp, 0);
         yp = QMAX(yp, 0);
