@@ -1842,10 +1842,11 @@ void DigikamApp::slotThumbSizeEffect()
     d->view->setThumbSize(d->thumbSizeSlider->value());
 }
 
-void DigikamApp::slotThumbSizeChanged(int val)
+void DigikamApp::slotThumbSizeChanged(int size)
 {
     d->thumbSizeSlider->blockSignals(true);
-    d->thumbSizeSlider->setValue(val);
+    d->thumbSizeSlider->setValue(size);
+    d->thumbSizeTracker->setText(i18n("Thumbnail size: %1").arg(size));
     d->thumbSizeSlider->blockSignals(false);
 }
 
