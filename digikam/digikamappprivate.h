@@ -40,6 +40,7 @@
 
 // Local includes.
 
+#include "dcursortracker.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "cameralist.h"
@@ -130,6 +131,7 @@ public:
         splashScreen                         = 0;
         thumbSizeSlider                      = 0;
         thumbSizeTimer                       = 0;
+        thumbSizeTracker                     = 0;
     }
 
     bool                   fullScreen;
@@ -224,6 +226,7 @@ public:
     KActionMenu           *cameraMenuAction;
     KSelectAction         *themeMenuAction;
     
+    DTipTracker           *thumbSizeTracker;
     AlbumSettings         *albumSettings;
     AlbumManager          *albumManager;
     SplashScreen          *splashScreen;

@@ -154,7 +154,7 @@ private slots:
     void slotProgressBarMode(int, const QString&);
     void slotProgressValue(int);
 
-    void slotThumbSizeTimer();
+    void slotThumbSizeTimer(int);
     void slotThumbSizeEffect();
     void slotThumbSizeChanged(int);
     void slotTooglePreview(bool);

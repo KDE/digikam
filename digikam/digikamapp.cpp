@@ -199,6 +199,8 @@ DigikamApp::~DigikamApp()
     AlbumThumbnailLoader::cleanUp();
 
     m_instance = 0;
+
+    delete d->thumbSizeTracker;
     delete d;
 }
 
@@ -348,6 +350,8 @@ void DigikamApp::setupStatusBar()
                                      Qt::Horizontal, statusBar());
     d->thumbSizeSlider->setMaximumHeight(fontMetrics().height()+2);    
     d->thumbSizeSlider->setFixedWidth(120);
+
+    d->thumbSizeTracker = new DTipTracker("", d->thumbSizeSlider);
     statusBar()->addWidget(d->thumbSizeSlider, 1, true);
 
     d->statusNavigateBar = new StatusNavigateBar(statusBar());
@@ -355,7 +359,7 @@ void DigikamApp::setupStatusBar()
     statusBar()->addWidget(d->statusNavigateBar, 1, true);
 
     connect(d->thumbSizeSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(slotThumbSizeTimer()));
+            this, SLOT(slotThumbSizeTimer(int)));
 
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
@@ -1817,8 +1821,10 @@ void DigikamApp::toggledToPreviewMode(bool t)
     d->imageSortAction->setEnabled(!t);
 }
 
-void DigikamApp::slotThumbSizeTimer()
+void DigikamApp::slotThumbSizeTimer(int size)
 {
+    d->thumbSizeTracker->setText(i18n("Thumbnail size: %1").arg(size));
+
     if (d->thumbSizeTimer)
     {
        d->thumbSizeTimer->stop();
@@ -1833,9 +1839,7 @@ void DigikamApp::slotThumbSizeTimer()
 
 void DigikamApp::slotThumbSizeEffect()
 {
-    int size = d->thumbSizeSlider->value();
-    d->view->setThumbSize(size);
-    QToolTip::add(d->thumbSizeSlider, i18n("Thumbnail size: %1").arg(size));
+    d->view->setThumbSize(d->thumbSizeSlider->value());
 }
 
 void DigikamApp::slotThumbSizeChanged(int val)
