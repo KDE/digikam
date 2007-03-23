@@ -54,6 +54,7 @@ extern "C"
 #include "albummanager.h"
 #include "album.h"
 #include "albumdb.h"
+#include "albumsettings.h"
 
 namespace Digikam
 {
@@ -1312,9 +1313,46 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID)
 
     QString basePath(AlbumManager::instance()->getLibraryPath());
 
-    execSql( QString("SELECT Albums.url||'/'||Images.name FROM Images, Albums "
-                     "WHERE Albums.id=%1 AND Albums.id=Images.dirid;")
-             .arg(albumID), &values );
+    AlbumSettings::ImageSortOrder order = AlbumSettings::instance()->getImageSortOrder();
+
+    QString sqlString;
+    switch(order)
+    {
+	case AlbumSettings::ByIName:
+	    sqlString = QString("SELECT Albums.url||'/'||Images.name FROM Images, Albums "
+				 "WHERE Albums.id=%1 AND Albums.id=Images.dirid "
+				 "ORDER BY Images.name COLLATE NOCASE;")
+			.arg(albumID);
+	    break;
+	case AlbumSettings::ByIPath:
+	    // Dont collate on the path - this is to maintain the same behaviour
+	    // that happens when sort order is "By Path"
+	    sqlString = QString("SELECT Albums.url||'/'||Images.name FROM Images, Albums "
+				 "WHERE Albums.id=%1 AND Albums.id=Images.dirid "
+				 "ORDER BY Albums.url,Images.name;")
+			.arg(albumID);
+	    break;
+	case AlbumSettings::ByIDate:
+	    sqlString = QString("SELECT Albums.url||'/'||Images.name FROM Images, Albums "
+				 "WHERE Albums.id=%1 AND Albums.id=Images.dirid "
+				 "ORDER BY Images.datetime;")
+			.arg(albumID);
+	    break;
+	case AlbumSettings::ByIRating:
+	    sqlString = QString("SELECT Albums.url||'/'||Images.name FROM Images, Albums, ImageProperties "
+				 "WHERE Albums.id=%1 AND Albums.id=Images.dirid "
+				 "AND Images.id = ImageProperties.imageid "
+				 "AND ImageProperties.property='Rating' "
+				 "ORDER BY ImageProperties.value DESC;")
+			.arg(albumID);
+	    break;
+	default:
+	    sqlString = QString("SELECT Albums.url||'/'||Images.name FROM Images, Albums "
+				 "WHERE Albums.id=%1 AND Albums.id=Images.dirid;")
+			.arg(albumID);
+	    break;
+    }
+    execSql( sqlString, &values );
 
     for (QStringList::iterator it = values.begin(); it != values.end(); ++it)
     {

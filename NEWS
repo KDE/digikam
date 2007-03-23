@@ -61,5 +61,6 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 018 ==> 102029 : Wish: no/small icons in album tree.
 019 ==> 131155 : Smooth increasing/decreasing size of thumbnails like in iPhoto.
 020 ==> 89365  : Reorganize menu structure in Image Editor
-021 ==> 
+021 ==> 134037 : Respect current sort order when passing list to KIPI plugin
+022 ==> 
 
