@@ -35,6 +35,7 @@ lib_LTLIBRARIES = libdigikam.la
 # I suspect a problem with X11 header included into albumfolderview.cpp witch redefine 'enum' type.
 libdigikam_la_SOURCES = kdateedit.cpp \
 	                metadatahub.cpp \
+	                digikamapp.cpp \
 	                album.cpp \
 	                albumdb.cpp \
 	                albumdb_sqlite2.cpp \
@@ -57,7 +58,6 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                datefolderview.cpp \
 	                dcopiface.cpp \
 	                dcopiface.skel \
-	                digikamapp.cpp \
 	                digikamfirstrun.cpp \
 	                digikamview.cpp \
 	                dio.cpp \
