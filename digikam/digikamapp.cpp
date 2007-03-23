@@ -1854,6 +1854,10 @@ void DigikamApp::slotTooglePreview(bool b)
 {
     d->thumbSizeSlider->setEnabled(!b);
     // TODO : enable/disable the menu actions accordinly with the current mode. 
+    // For ex., in Image Preview mode:
+    //  - disable Thumbs size +/-
+    //  - diable thumbs selection.
+    // etc. 
 }
 
 }  // namespace Digikam
