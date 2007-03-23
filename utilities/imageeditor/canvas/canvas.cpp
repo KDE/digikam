@@ -1141,7 +1141,17 @@ void Canvas::slotSelected()
         {
             r.moveBy(- d->pixmapRect.x(), - d->pixmapRect.y());
 
+            double scale = 1.0/d->zoom;   
 
+            x = (int)((double)r.x() * scale);   
+            y = (int)((double)r.y() * scale);   
+            w = (int)((double)r.width() * scale);   
+            h = (int)((double)r.height() * scale);   
+    
+            x = QMAX(x, 0);   
+            y = QMAX(y, 0);   
+            x = QMIN(imageWidth(),  x);   
+            y = QMIN(imageHeight(), y);
 
             w = QMAX(w, 0);
             h = QMAX(h, 0);
