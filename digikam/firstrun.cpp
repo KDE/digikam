@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Caulier Gilles 
- * Date  : 2006-04-25
+ * Authors: Caulier Gilles <caulier dot gilles at gmail dot com>
+ * Date   : 2006-04-25
  * Description : a widget to use in first run dialog
  *
- * Copyright 2006 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,6 +36,7 @@
 // Local includes.
 
 #include "firstrun.h"
+#include "firstrun.moc"
 
 namespace Digikam
 {
@@ -86,10 +87,13 @@ void FirstRunWidget::languageChange()
 {
     m_textLabel2->setText( i18n( "<b>Albums Library Folder</b>" ) );
     m_pixLabel->setText( QString() );
-    m_textLabel1->setText( i18n( "digiKam will store the photo albums which you create in a common <b>Albums Library folder</b>. "
-                                 "Please select which folder you would like digiKam to use as the common Albums Library folder below." ) );
+    m_textLabel1->setText( i18n( "<p>digiKam will store the photo albums which you create in a "
+                                 "common <b>Albums Library Folder</b>. "
+                                 "Please select which folder you would like digiKam "
+                                 "to use as the common Albums Library Folder below.</p>" 
+                                 "<p><b>Do not use a mount path hosted by a remote computer.</b></p>") );
 }
 
 }  // namespace Digikam
 
-#include "firstrun.moc"
+

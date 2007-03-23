@@ -1,11 +1,11 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier 
+ *          Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2003-02-01
  * Description : dialog displayed at the first digiKam run
  *
  * Copyright 2003-2005 by Renchi Raju
- * Copyright 2006 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,8 +45,8 @@ class DIGIKAM_EXPORT DigikamFirstRun : public KDialogBase
 
 public:
 
-    DigikamFirstRun( KConfig* config, QWidget* parent = 0, const char* name = 0,
-                     bool modal = true, WFlags fl = WDestructiveClose );
+    DigikamFirstRun(KConfig* config, QWidget* parent = 0, const char* name = 0,
+                     bool modal = true, WFlags fl = WDestructiveClose);
     ~DigikamFirstRun();
 
 protected slots:
@@ -57,7 +57,6 @@ private:
 
     KConfig        *m_config;
     FirstRunWidget *m_ui;
-    
 };
 
 }  // namespace Digikam

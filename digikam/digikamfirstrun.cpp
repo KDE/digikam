@@ -1,11 +1,11 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier 
+ *          Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2003-02-01
  * Description : dialog displayed at the first digiKam run
  *
  * Copyright 2003-2005 by Renchi Raju
- * Copyright 2006 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,18 +60,20 @@ extern "C"
 // Local includes.
 
 #include "ddebug.h"
-#include "digikamfirstrun.h"
 #include "version.h"
 #include "firstrun.h"
+#include "digikamfirstrun.h"
+#include "digikamfirstrun.moc"
 
 namespace Digikam
 {
 
 using namespace std;
 
-DigikamFirstRun::DigikamFirstRun( KConfig* config, QWidget* parent,
-                                  const char* name, bool modal, WFlags fl )
-               : KDialogBase( parent, name, modal, i18n( "Album Library Path" ), Help|Ok|Cancel, Ok, true )
+DigikamFirstRun::DigikamFirstRun(KConfig* config, QWidget* parent,
+                                 const char* name, bool modal, WFlags fl)
+               : KDialogBase(parent, name, modal, i18n( "Album Library Path" ),
+                             Help|Ok|Cancel, Ok, true )
 
 {
     setHelp("firstrundialog.anchor", "digikam");
@@ -80,12 +82,14 @@ DigikamFirstRun::DigikamFirstRun( KConfig* config, QWidget* parent,
     m_config = config;
     m_ui     = new FirstRunWidget(this);
     setMainWidget(m_ui);
-    m_ui->m_path->setURL(QDir::homeDirPath() + i18n("This is a path name so you should "
-                       "include the slash in the translation","/Pictures"));
+    m_ui->m_path->setURL(QDir::homeDirPath() + 
+                         i18n("This is a path name so you should "
+                              "include the slash in the translation","/Pictures"));
     m_ui->m_path->setMode(KFile::Directory | KFile::LocalOnly);
 
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
-    m_ui->m_pixLabel->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 128, KIcon::DefaultState, 0, true));
+    m_ui->m_pixLabel->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 
+                                128, KIcon::DefaultState, 0, true));
     m_ui->setMinimumSize(450, m_ui->sizeHint().height());
 }
 
@@ -111,7 +115,8 @@ void DigikamFirstRun::slotOk()
 
     if (KURL(albumLibraryFolder).equals(KURL(QDir::homeDirPath()), true))
     {
-        KMessageBox::sorry(this, i18n("digiKam cannot use your home folder as the Album Library folder."));
+        KMessageBox::sorry(this, i18n("digiKam cannot use your home folder as "
+                                      "the Album Library folder."));
         return;
     }
 
@@ -148,7 +153,8 @@ void DigikamFirstRun::slotOk()
     if (!path.isWritable()) 
     {
         KMessageBox::information(this, i18n("No write access for this path.\n"
-                                            "Warning: the comments and tag features will not work."));
+                                            "Warning: the comments and tag features "
+                                            "will not work."));
         return;
     }
 
@@ -173,4 +179,3 @@ void DigikamFirstRun::slotOk()
 
 }  // namespace Digikam
 
-#include "digikamfirstrun.moc"
