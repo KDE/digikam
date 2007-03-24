@@ -414,13 +414,13 @@ void EditorWindow::setupStandardActions()
     // -- Standard 'Rotate' menu actions ----------------------------------------
 
     d->rotateLeftAction = new KAction(i18n("Rotate Left"),
-                                     "rotate_ccw", CTRL+Key_Left, 
+                                     "rotate_ccw", SHIFT+CTRL+Key_Left, 
                                      m_canvas, SLOT(slotRotate270()),
                                      actionCollection(),
                                      "editorwindow_rotate_left");
     d->rotateLeftAction->setEnabled(false);
     d->rotateRightAction  = new KAction(i18n("Rotate Right"),
-                                     "rotate_cw", CTRL+Key_Right, 
+                                     "rotate_cw", SHIFT+CTRL+Key_Right, 
                                      m_canvas, SLOT(slotRotate90()),
                                      actionCollection(),
                                      "editorwindow_rotate_right");
