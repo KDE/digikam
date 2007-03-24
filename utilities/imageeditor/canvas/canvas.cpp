@@ -1206,7 +1206,9 @@ void Canvas::slotCornerButtonClicked()
                 this, SLOT(slotPanIconSelectionMoved(QRect, bool)));
     }
 
-    QPoint g = mapToGlobal(d->cornerButton->pos());
+    QPoint g = mapToGlobal(viewport()->pos());
+    g.setX(g.x()+ viewport()->size().width());
+    g.setY(g.y()+ viewport()->size().height());
     d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(), g.y() - d->panIconPopup->height()));
 }
 
