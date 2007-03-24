@@ -24,7 +24,6 @@
 
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
-#include <kconfig.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kxmlguiclient.h>
@@ -90,40 +89,17 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
     d->splash = splash;
  
     QStringList imagePluginsList2Load;
-    KConfig* config = kapp->config();
-    config->setGroup("ImageViewer Settings");  
     
-    // If digiKam have been started to the first time, there is no image plugins list 
-    // available ==> we load all by default.
+    KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
+    KTrader::OfferList::ConstIterator iter;
     
-    if ( config->readEntry("ImagePlugins List").isNull() )   
+    for (iter = offers.begin() ; iter != offers.end() ; ++iter) 
     {
-        KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
-        KTrader::OfferList::ConstIterator iter;
-    
-        for (iter = offers.begin() ; iter != offers.end() ; ++iter) 
-        {
-            KService::Ptr service = *iter;
-            if (!d->obsoleteImagePluginsList.contains(service->library()))
-                imagePluginsList2Load.append(service->library());
-        }
+        KService::Ptr service = *iter;
+        if (!d->obsoleteImagePluginsList.contains(service->library()))
+            imagePluginsList2Load.append(service->library());
+    }
         
-        // Create the plugins list to config file.
-        config->writeEntry("ImagePlugins List", imagePluginsList2Load);
-        config->sync();
-    }
-    else
-    {
-        imagePluginsList2Load = config->readListEntry("ImagePlugins List");
-
-        for (QStringList::Iterator it = d->obsoleteImagePluginsList.begin(); 
-             it != d->obsoleteImagePluginsList.end(); ++it)
-        {
-            if (imagePluginsList2Load.contains(*it))
-                imagePluginsList2Load.remove(*it);
-        }            
-    }
-
     loadPluginsFromList(imagePluginsList2Load);
 }
 
