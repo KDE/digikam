@@ -63,5 +63,6 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 020 ==> 89365  : Reorganize menu structure in Image Editor
 021 ==> 134037 : Respect current sort order when passing list to KIPI plugin
 022 ==> 139466 : Remove configuration of digikam image plugins
-023 ==> 
+023 ==> 119418 : "set as album thumbnail" should work for different albums too.
+024 ==>   
 
