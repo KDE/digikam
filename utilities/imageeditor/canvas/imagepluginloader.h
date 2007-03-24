@@ -61,8 +61,6 @@ public:
     
     ImagePlugin* pluginInstance(const QString& libraryName);
 
-    QStringList obsoleteImagePluginsList();
-
 private:
     
     ImagePlugin* pluginIsLoaded(const QString& name);

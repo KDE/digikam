@@ -295,9 +295,4 @@ QPtrList<ImagePlugin> ImagePluginLoader::pluginList()
     return list;
 }
 
-QStringList ImagePluginLoader::obsoleteImagePluginsList()
-{
-    return d->obsoleteImagePluginsList;
-}
-
 }  // namespace Digikam
