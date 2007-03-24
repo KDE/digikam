@@ -151,7 +151,7 @@ void GreycstorationIface::filterImage()
     int imageWidth   = m_orgImage.width();
     int imageHeight  = m_orgImage.height();
 
-    d->img = CImg<>(imageWidth, imageHeight, 1, 3);
+    d->img = CImg<>(imageWidth, imageHeight, 1, 4);
 
     if (!m_orgImage.sixteenBit())           // 8 bits image.
     {
@@ -164,6 +164,7 @@ void GreycstorationIface::filterImage()
                 d->img(x, y, 0) = ptr[0];        // blue.
                 d->img(x, y, 1) = ptr[1];        // green.
                 d->img(x, y, 2) = ptr[2];        // red.
+                d->img(x, y, 3) = ptr[3];        // alpha.
                 ptr += 4;
             }
         }
@@ -179,6 +180,7 @@ void GreycstorationIface::filterImage()
                 d->img(x, y, 0) = ptr[0];        // blue.
                 d->img(x, y, 1) = ptr[1];        // green.
                 d->img(x, y, 2) = ptr[2];        // red.
+                d->img(x, y, 3) = ptr[3];        // alpha.
                 ptr += 4;
             }
         }
@@ -240,6 +242,7 @@ void GreycstorationIface::filterImage()
                 ptr[0] = (uchar) d->img(x, y, 0);        // Blue
                 ptr[1] = (uchar) d->img(x, y, 1);        // Green
                 ptr[2] = (uchar) d->img(x, y, 2);        // Red
+                ptr[3] = (uchar) d->img(x, y, 3);        // Alpha
                 ptr += 4;
             }
         }
@@ -256,6 +259,7 @@ void GreycstorationIface::filterImage()
                 ptr[0] = (unsigned short) d->img(x, y, 0);        // Blue
                 ptr[1] = (unsigned short) d->img(x, y, 1);        // Green
                 ptr[2] = (unsigned short) d->img(x, y, 2);        // Red
+                ptr[3] = (unsigned short) d->img(x, y, 3);        // Alpha
                 ptr += 4;
             }
         }
