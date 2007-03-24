@@ -29,7 +29,6 @@ class QFrame;
 
 namespace Digikam
 {
-class SetupImgPlugins;
 class SetupIOFiles;
 class SetupSlideShow;
 class SetupICC;
@@ -53,7 +52,6 @@ public:
         EditorPage=0,
         DcrawPage,
         IOFilesPage,
-        PluginsPage,
         SlideshowPage,
         ICCPage
     };
@@ -61,8 +59,6 @@ public:
     Setup(QWidget* parent=0, const char* name=0, Page page=LastPageUsed);
     ~Setup();
 
-    Digikam::SetupImgPlugins *imagePluginsPage();
-    
 private slots:
 
     void slotOkClicked();

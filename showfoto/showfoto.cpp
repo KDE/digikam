@@ -90,7 +90,6 @@ extern "C"
 #include "slideshow.h"
 #include "setup.h"
 #include "setupicc.h"
-#include "setupimgplugins.h"
 #include "statusprogressbar.h"
 #include "iccsettingscontainer.h"
 #include "iofilesettingscontainer.h"
@@ -695,10 +694,7 @@ bool ShowFoto::setup(bool iccSetupPage)
     if (setup.exec() != QDialog::Accepted)
         return false;
 
-    unLoadImagePlugins();
-    m_imagePluginLoader->loadPluginsFromList(setup.imagePluginsPage()->getImagePluginsListEnable());
     kapp->config()->sync();
-    loadImagePlugins();
     
     applySettings();
 

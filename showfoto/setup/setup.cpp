@@ -36,7 +36,6 @@
 #include "setupeditor.h"
 #include "setupdcraw.h"
 #include "setupiofiles.h"
-#include "setupimgplugins.h"
 #include "setupslideshow.h"
 #include "setupicc.h"
 #include "setup.h"
@@ -54,13 +53,11 @@ public:
         editorPage      = 0;
         dcrawPage       = 0;
         iofilesPage     = 0;
-        imgpluginsPage  = 0;
         slideshowPage   = 0;
         iccPage         = 0;
         page_editor     = 0;
         page_dcraw      = 0;
         page_iofiles    = 0;
-        page_imgplugins = 0;
         page_slideshow  = 0;
         page_icc        = 0;
     }
@@ -68,7 +65,6 @@ public:
     QFrame                   *page_editor;
     QFrame                   *page_dcraw;
     QFrame                   *page_iofiles;
-    QFrame                   *page_imgplugins;
     QFrame                   *page_slideshow;
     QFrame                   *page_icc;
     
@@ -76,7 +72,6 @@ public:
 
     Digikam::SetupDcraw      *dcrawPage;
     Digikam::SetupIOFiles    *iofilesPage;
-    Digikam::SetupImgPlugins *imgpluginsPage;
     Digikam::SetupSlideShow  *slideshowPage;
     Digikam::SetupICC        *iccPage;
 };
@@ -104,10 +99,6 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                               BarIcon("filesave", KIcon::SizeMedium));
     d->iofilesPage = new Digikam::SetupIOFiles(d->page_iofiles);
     
-    d->page_imgplugins = addPage(i18n("Image Plugins"), i18n("Image Plugins Settings"),
-                                 BarIcon("digikamimageplugins", KIcon::SizeMedium));
-    d->imgpluginsPage = new Digikam::SetupImgPlugins(d->page_imgplugins);
-
     d->page_slideshow = addPage(i18n("Slide Show"), i18n("Slide Show Settings"),
                                 BarIcon("slideshow", KIcon::SizeMedium));
     d->slideshowPage = new Digikam::SetupSlideShow(d->page_slideshow);
@@ -141,15 +132,9 @@ void Setup::slotOkClicked()
     d->editorPage->applySettings();
     d->dcrawPage->applySettings();
     d->iofilesPage->applySettings();
-    d->imgpluginsPage->applySettings();
     d->slideshowPage->applySettings();
     d->iccPage->applySettings();
     close();
-}
-
-Digikam::SetupImgPlugins* Setup::imagePluginsPage()
-{
-    return d->imgpluginsPage;
 }
 
 }   // namespace ShowFoto

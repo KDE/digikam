@@ -30,7 +30,6 @@
 namespace Digikam
 {
 
-class SetupImgPlugins;
 class SetupPlugins;
 class SetupPrivate;
 
@@ -52,7 +51,6 @@ public:
         Editor,
 	Dcraw,
         IOFiles,
-        ImagePlugins,
         Slideshow,
         IccProfiles,
         KipiPlugins,
@@ -64,7 +62,6 @@ public:
     ~Setup();
 
     SetupPlugins    *kipiPluginsPage();
-    SetupImgPlugins *imagePluginsPage();
 
 private slots:
 

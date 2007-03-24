@@ -70,7 +70,6 @@
 #include "setupplugins.h"
 #include "setupeditor.h"
 #include "setupicc.h"
-#include "setupimgplugins.h"
 #include "imagewindow.h"
 #include "imageinfo.h"
 #include "thumbnailsize.h"
@@ -1455,7 +1454,6 @@ bool DigikamApp::setup(bool iccSetupPage)
         return false;
 
     setup.kipiPluginsPage()->applyPlugins();
-    d->imagePluginsLoader->loadPluginsFromList(setup.imagePluginsPage()->getImagePluginsListEnable());
 
     slotSetupChanged();
 
@@ -1475,7 +1473,6 @@ void DigikamApp::slotSetupCamera()
         return;
 
     setup.kipiPluginsPage()->applyPlugins();
-    d->imagePluginsLoader->loadPluginsFromList(setup.imagePluginsPage()->getImagePluginsListEnable());
 
     slotSetupChanged();
 }

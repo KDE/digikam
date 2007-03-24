@@ -16,7 +16,7 @@ noinst_LTLIBRARIES = libsetup.la libshowfotosetup.la
 # Gphoto2 C Ansi header.
 libsetup_la_SOURCES = gpiface.cpp cameraselection.cpp setupcamera.cpp \
 	              setupmime.cpp setupplugins.cpp setupidentity.cpp \
-	              setupgeneral.cpp setup.cpp setupimgplugins.cpp \
+	              setupgeneral.cpp setup.cpp \
 	              setupcollections.cpp setupmetadata.cpp \
 	              setupeditor.cpp setupmisc.cpp setupicc.cpp \
 	              setupiofiles.cpp setupdcraw.cpp setupslideshow.cpp \
@@ -24,7 +24,7 @@ libsetup_la_SOURCES = gpiface.cpp cameraselection.cpp setupcamera.cpp \
 
 libsetup_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_GPHOTO)
 
-libshowfotosetup_la_SOURCES = setupimgplugins.cpp setupiofiles.cpp setupdcraw.cpp \
+libshowfotosetup_la_SOURCES = setupiofiles.cpp setupdcraw.cpp \
 	                      setupicc.cpp setupslideshow.cpp 
 
 libshowfotosetup_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) 

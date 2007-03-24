@@ -46,7 +46,6 @@
 #include "setupeditor.h"
 #include "setupdcraw.h"
 #include "setupiofiles.h"
-#include "setupimgplugins.h"
 #include "setupslideshow.h"
 #include "setupicc.h"
 #include "setupplugins.h"
@@ -73,7 +72,6 @@ public:
         page_editor      = 0;
         page_dcraw       = 0;
         page_iofiles     = 0;
-        page_imgplugins  = 0;
         page_slideshow   = 0;
         page_icc         = 0;
         page_plugins     = 0;
@@ -93,7 +91,6 @@ public:
         iccPage          = 0;
         cameraPage       = 0;
         miscPage         = 0;
-        imgpluginsPage   = 0;
         pluginsPage      = 0;
     }
 
@@ -106,7 +103,6 @@ public:
     QFrame           *page_editor;
     QFrame           *page_dcraw;
     QFrame           *page_iofiles;
-    QFrame           *page_imgplugins;
     QFrame           *page_slideshow;
     QFrame           *page_icc;
     QFrame           *page_plugins;
@@ -127,7 +123,6 @@ public:
     SetupCamera      *cameraPage;
     SetupMisc        *miscPage;
     SetupPlugins     *pluginsPage;
-    SetupImgPlugins  *imgpluginsPage;
 };
 
 Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
@@ -176,10 +171,6 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_icc = addPage(i18n("Color Management"), i18n("Image Editor Color Management"),
                           BarIcon("colorize", KIcon::SizeMedium));
     d->iccPage = new SetupICC(d->page_icc, this);
-
-    d->page_imgplugins = addPage(i18n("Image Plugins"), i18n("Image Editor Plug-in Settings"),
-                                 BarIcon("digikamimageplugins", KIcon::SizeMedium));
-    d->imgpluginsPage = new SetupImgPlugins(d->page_imgplugins);
 
     d->page_plugins = addPage(i18n("Kipi Plugins"), i18n("Main Interface Plug-in Settings"),
                               BarIcon("kipi", KIcon::SizeMedium));
@@ -233,7 +224,6 @@ void Setup::slotOkClicked()
     d->editorPage->applySettings();
     d->dcrawPage->applySettings();
     d->iofilesPage->applySettings();
-    d->imgpluginsPage->applySettings();
     d->slideshowPage->applySettings();
     d->iccPage->applySettings();
     d->miscPage->applySettings();
@@ -258,11 +248,6 @@ void Setup::slotOkClicked()
 SetupPlugins* Setup::kipiPluginsPage()
 {
     return d->pluginsPage;
-}
-
-SetupImgPlugins* Setup::imagePluginsPage()
-{
-    return d->imgpluginsPage;
 }
 
 }  // namespace Digikam
