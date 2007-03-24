@@ -401,12 +401,12 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Flip' menu actions ---------------------------------------------
     
-    d->flipHorizAction = new KAction(i18n("Flip Horizontally"), 0, CTRL+Key_Asterisk,
+    d->flipHorizAction = new KAction(i18n("Flip Horizontally"), "mirror", CTRL+Key_Asterisk,
                                    m_canvas, SLOT(slotFlipHoriz()),
                                    actionCollection(), "editorwindow_flip_horiz");
     d->flipHorizAction->setEnabled(false);
 
-    d->flipVertAction = new KAction(i18n("Flip Vertically"), 0, CTRL+Key_Slash,
+    d->flipVertAction = new KAction(i18n("Flip Vertically"), "flip", CTRL+Key_Slash,
                                    m_canvas, SLOT(slotFlipVert()),
                                    actionCollection(), "editorwindow_flip_vert");
     d->flipVertAction->setEnabled(false);
