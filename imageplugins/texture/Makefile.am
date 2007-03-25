@@ -32,5 +32,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_texture.la
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_texture_ui.rc        
 
-digikamimageplugin_textureicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_textureicon_ICON = AUTO
