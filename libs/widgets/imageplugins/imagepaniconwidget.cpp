@@ -106,9 +106,8 @@ ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent, WFlags f)
 
 ImagePanIconWidget::~ImagePanIconWidget()
 {
-    delete [] d->data;
     delete d->iface;
-    delete d->pixmap;
+    delete [] d->data;
     delete d;
 }
 
@@ -282,9 +281,9 @@ void ImagePanIconWidget::mouseReleaseEvent ( QMouseEvent * )
 {
     if ( d->moveSelection )
     {    
+       d->moveSelection = false;
        setCursor( KCursor::arrowCursor() );           
        regionSelectionMoved(true);
-       d->moveSelection = false;
     }
 }
 
