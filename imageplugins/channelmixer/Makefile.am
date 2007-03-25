@@ -31,5 +31,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_channelmixer.la
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_channelmixer_ui.rc
 
-digikamimageplugin_channelmixericondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_channelmixericon_ICON = AUTO
