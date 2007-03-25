@@ -51,7 +51,6 @@ LATER 0.9.0 TODO LIST
 
 * Port project to CMake (see: http://dot.kde.org/1151688350 for notice)
   Port to QT4/KDE4.
-  Port of digikam core to likdcraw
   Overview documentation
     http://techbase.kde.org/Development/Tutorials/KDE4_Porting_Guide 
 
@@ -63,8 +62,6 @@ LATER 0.9.0 TODO LIST
     need to be consulted while porting:
     http://doc.trolltech.com/4.0/porting4.html
     http://websvn.kde.org/*checkout*/trunk/KDE/kdelibs/KDE4PORTING.html
-
-* Avoid all dependencies to KDE core (Qt = only dependency)
 
 * Improving metadata support:
    - Writing Metadata into PNG file like JPEG (Exiv2).
