@@ -33,5 +33,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_superimpose.la
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_superimpose_ui.rc
 
-digikamimageplugin_superimposeicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_superimposeicon_ICON = AUTO
