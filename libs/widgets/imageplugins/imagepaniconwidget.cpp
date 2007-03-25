@@ -106,6 +106,7 @@ ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent, WFlags f)
 
 ImagePanIconWidget::~ImagePanIconWidget()
 {
+    delete d->pixmap;
     delete d->iface;
     delete [] d->data;
     delete d;
