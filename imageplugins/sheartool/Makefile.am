@@ -31,5 +31,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_sheartool.la
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_sheartool_ui.rc
 
-digikamimageplugin_sheartoolicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_sheartoolicon_ICON = AUTO
