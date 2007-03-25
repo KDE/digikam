@@ -32,6 +32,4 @@ kde_module_LTLIBRARIES = digikamimageplugin_border.la
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_border_ui.rc
 
-digikamimageplugin_bordericondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_bordericon_ICON = AUTO
 
