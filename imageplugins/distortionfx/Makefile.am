@@ -31,5 +31,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_distortionfx.la
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_distortionfx_ui.rc     
        
-digikamimageplugin_distortionfxicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_distortionfxicon_ICON = AUTO
