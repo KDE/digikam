@@ -31,5 +31,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_noisereduction.la
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_noisereduction_ui.rc
        
-digikamimageplugin_noisereductionicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_noisereductionicon_ICON = AUTO
