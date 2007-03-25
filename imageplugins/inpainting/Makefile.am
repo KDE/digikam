@@ -32,5 +32,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_inpainting.la
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_inpainting_ui.rc        
 
-digikamimageplugin_inpaintingicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_inpaintingicon_ICON = AUTO
