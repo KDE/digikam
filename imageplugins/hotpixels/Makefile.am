@@ -32,5 +32,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_hotpixels.la
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_hotpixels_ui.rc
        
-digikamimageplugin_hotpixelsicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_hotpixelsicon_ICON = AUTO
