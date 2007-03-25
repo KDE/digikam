@@ -31,5 +31,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_raindrop.la
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_raindrop_ui.rc     
        
-digikamimageplugin_raindropicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_raindropicon_ICON = AUTO
