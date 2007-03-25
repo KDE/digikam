@@ -31,5 +31,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_colorfx.la
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_colorfx_ui.rc
        
-digikamimageplugin_solarizeicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_solarizeicon_ICON = AUTO
