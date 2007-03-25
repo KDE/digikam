@@ -31,5 +31,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_oilpaint.la
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_oilpaint_ui.rc        
        
-digikamimageplugin_oilpainticondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_oilpainticon_ICON = AUTO
