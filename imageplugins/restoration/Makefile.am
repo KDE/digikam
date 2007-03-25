@@ -32,5 +32,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_restoration.la
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_restoration_ui.rc
 
-digikamimageplugin_restorationicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_restorationicon_ICON = AUTO
