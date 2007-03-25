@@ -31,5 +31,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_whitebalance.la
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_whitebalance_ui.rc
 
-digikamimageplugin_whitebalanceicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_whitebalanceicon_ICON = AUTO
