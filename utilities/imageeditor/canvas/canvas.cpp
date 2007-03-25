@@ -76,7 +76,7 @@ class CanvasPrivate
 public:
 
     CanvasPrivate() : 
-        tileSize(128), minZoom(0.1), maxZoom(10.0), zoomStep(0.1) 
+        tileSize(128), minZoom(0.1), maxZoom(10.0), zoomMultiplier(1.2) 
     {
         rubber           = 0;
         pressedMoved     = false;
@@ -121,7 +121,7 @@ public:
     double               zoom;
     const double         minZoom;
     const double         maxZoom;
-    const double         zoomStep;
+    const double         zoomMultiplier;
 
     QToolButton         *cornerButton;
 
@@ -849,12 +849,12 @@ void Canvas::contentsWheelEvent(QWheelEvent *e)
 
 bool Canvas::maxZoom()
 {
-    return ((d->zoom + d->zoomStep) >= d->maxZoom);
+    return ((d->zoom * d->zoomMultiplier) >= d->maxZoom);
 }
 
 bool Canvas::minZoom()
 {
-    return ((d->zoom - d->zoomStep) <= d->minZoom);
+    return ((d->zoom / d->zoomMultiplier) <= d->minZoom);
 }
 
 bool Canvas::exifRotated()
@@ -867,7 +867,7 @@ void Canvas::slotIncreaseZoom()
     if (maxZoom())
         return;
 
-    setZoomFactor(d->zoom + d->zoomStep);
+    setZoomFactor(d->zoom * d->zoomMultiplier);
 }
 
 void Canvas::slotDecreaseZoom()
@@ -875,7 +875,7 @@ void Canvas::slotDecreaseZoom()
     if (minZoom())
         return;
 
-    setZoomFactor(d->zoom - d->zoomStep);
+    setZoomFactor(d->zoom / d->zoomMultiplier);
 }
 
 void Canvas::setZoomFactor(float zoom)
