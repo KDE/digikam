@@ -32,5 +32,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_inserttext.la
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_inserttext_ui.rc
 
-digikamimageplugin_inserttexticondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_inserttexticon_ICON = AUTO
