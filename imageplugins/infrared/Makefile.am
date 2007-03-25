@@ -31,5 +31,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_infrared.la
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_infrared_ui.rc        
 
-digikamimageplugin_infraredicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_infraredicon_ICON = AUTO
