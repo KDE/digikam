@@ -31,5 +31,3 @@ kde_module_LTLIBRARIES = digikamimageplugin_blurfx.la
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_blurfx_ui.rc     
        
-digikamimageplugin_blurfxicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_blurfxicon_ICON = AUTO
