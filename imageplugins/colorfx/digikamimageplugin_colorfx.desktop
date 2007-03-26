@@ -1,11 +1,14 @@
 [Desktop Entry]
 Name=ImagePlugin_ColorFx
+Name[sv]=Insticksprogram med färgeffekter
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Color special effects plugin for digiKam
 Comment[ca]=Connector pel digiKam d'efectes especials de color
 Comment[de]=digiKam-Modul zum Erzeugen von speziellen Farbeffekten
+Comment[el]=Πρόσθετο ειδικών εφέ χρώματος για το digiKam
+Comment[es]=Plugin para digiKam con efectos especiales de color
 Comment[is]=Íforrit fyrir digiKam sem litmeðhöndlar sérstaklega myndir
 Comment[it]=Plugin degli effetti speciali dei colori per digiKam
 Comment[ja]=digiKam 色特殊効果プラグイン
