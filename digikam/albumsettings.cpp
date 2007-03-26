@@ -84,13 +84,13 @@ public:
     bool exifRotate;
     bool exifSetOrientation;
 
-    bool saveIptcRating;
     bool saveIptcTags;
     bool saveIptcPhotographerId;
     bool saveIptcCredits;
 
     bool saveComments;
     bool saveDateTime;
+    bool saveRating;
 
     int  thumbnailSize;
     int  treeThumbnailSize;
@@ -218,12 +218,12 @@ void AlbumSettings::init()
     d->exifSetOrientation     = true;
 
     d->saveIptcTags           = false;
-    d->saveIptcRating         = false;
     d->saveIptcPhotographerId = false;
     d->saveIptcCredits        = false;
 
     d->saveComments           = false;
     d->saveDateTime           = false;
+    d->saveRating             = false;
 }
 
 void AlbumSettings::readSettings()
@@ -300,12 +300,12 @@ void AlbumSettings::readSettings()
     config->setGroup("Metadata Settings");
 
     d->saveIptcTags           = config->readBoolEntry("Save IPTC Tags", false);
-    d->saveIptcRating         = config->readBoolEntry("Save IPTC Rating", false);
     d->saveIptcPhotographerId = config->readBoolEntry("Save IPTC Photographer ID", false);
     d->saveIptcCredits        = config->readBoolEntry("Save IPTC Credits", false);
 
     d->saveComments           = config->readBoolEntry("Save EXIF Comments", false);
     d->saveDateTime           = config->readBoolEntry("Save Date Time", false);
+    d->saveRating             = config->readBoolEntry("Save Rating", false);
 
     d->author                 = config->readEntry("IPTC Author", QString());
     d->authorTitle            = config->readEntry("IPTC Author Title", QString());
@@ -384,12 +384,12 @@ void AlbumSettings::saveSettings()
     config->setGroup("Metadata Settings");
 
     config->writeEntry("Save IPTC Tags", d->saveIptcTags);
-    config->writeEntry("Save IPTC Rating", d->saveIptcRating);
     config->writeEntry("Save IPTC Photographer ID", d->saveIptcPhotographerId);
     config->writeEntry("Save IPTC Credits", d->saveIptcCredits);
 
     config->writeEntry("Save EXIF Comments", d->saveComments);
     config->writeEntry("Save Date Time", d->saveDateTime);
+    config->writeEntry("Save Rating", d->saveRating);
 
     config->writeEntry("IPTC Author", d->author);
     config->writeEntry("IPTC Author Title", d->authorTitle);
@@ -685,16 +685,6 @@ bool AlbumSettings::getSaveIptcTags() const
     return d->saveIptcTags;
 }
 
-void AlbumSettings::setSaveIptcRating(bool val)
-{
-    d->saveIptcRating = val;
-}
-
-bool AlbumSettings::getSaveIptcRating() const
-{
-    return d->saveIptcRating;
-}
-
 void AlbumSettings::setSaveIptcPhotographerId(bool val)
 {
     d->saveIptcPhotographerId = val;
@@ -783,6 +773,16 @@ void AlbumSettings::setSaveDateTime(bool val)
 bool AlbumSettings::getSaveDateTime() const
 {
     return d->saveDateTime;
+}
+
+bool AlbumSettings::getSaveRating() const
+{
+    return d->saveRating;
+}
+
+void AlbumSettings::setSaveRating(bool val)
+{
+    d->saveRating = val;
 }
 
 void AlbumSettings::setShowToolTips(bool val)

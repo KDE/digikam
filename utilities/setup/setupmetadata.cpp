@@ -5,7 +5,7 @@
  * Description : setup Metadata tab.
  * 
  * Copyright 2003-2004 by Ralf Holzer and Gilles Caulier
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,6 +48,7 @@
 
 #include "albumsettings.h"
 #include "setupmetadata.h"
+#include "setupmetadata.moc"
 
 namespace Digikam
 {
@@ -62,7 +63,7 @@ public:
         saveCommentsBox           = 0;
         ExifRotateBox             = 0;
         ExifSetOrientationBox     = 0;
-        saveRatingIptcBox         = 0;
+        saveRatingBox             = 0;
         saveTagsIptcBox           = 0;
         saveDateTimeBox           = 0;
         savePhotographerIdIptcBox = 0;
@@ -75,7 +76,7 @@ public:
     QCheckBox *saveCommentsBox;
     QCheckBox *ExifRotateBox;
     QCheckBox *ExifSetOrientationBox;
-    QCheckBox *saveRatingIptcBox;
+    QCheckBox *saveRatingBox;
     QCheckBox *saveTagsIptcBox;
     QCheckBox *saveDateTimeBox;
     QCheckBox *savePhotographerIdIptcBox;
@@ -109,11 +110,6 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     QWhatsThis::add( d->saveTagsIptcBox, i18n("<p>Turn this option on to store the image tags "
                                               "in the IPTC <i>Keywords</i> tag."));
   
-    d->saveRatingIptcBox = new QCheckBox(IptcGroup);
-    d->saveRatingIptcBox->setText(i18n("&Save image rating as \"Urgency\" tag"));
-    QWhatsThis::add( d->saveRatingIptcBox, i18n("<p>Turn this option on to store the image rating "
-                                                "in the IPTC <i>Urgency</i> tag."));
-
     d->savePhotographerIdIptcBox = new QCheckBox(IptcGroup);
     d->savePhotographerIdIptcBox->setText(i18n("&Save default photographer identity as tags"));
     QWhatsThis::add( d->savePhotographerIdIptcBox, i18n("<p>Turn this option on to store the default "
@@ -141,6 +137,11 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     d->saveDateTimeBox->setText(i18n("&Save image time stamp as tags"));
     QWhatsThis::add( d->saveDateTimeBox, i18n("<p>Turn this option on to store the image date and time "
                                               "into the EXIF and IPTC tags."));
+
+    d->saveRatingBox = new QCheckBox(commonGroup);
+    d->saveRatingBox->setText(i18n("&Save image rating as tags"));
+    QWhatsThis::add( d->saveRatingBox, i18n("<p>Turn this option on to store the image rating "
+                                            "into EXIF tag and IPTC <i>Urgency</i> tag."));
     
     mainLayout->addWidget(commonGroup);
     mainLayout->addSpacing(KDialog::spacingHint());
@@ -200,7 +201,7 @@ void SetupMetadata::applySettings()
     settings->setExifSetOrientation(d->ExifSetOrientationBox->isChecked());
     settings->setSaveComments(d->saveCommentsBox->isChecked());
     settings->setSaveDateTime(d->saveDateTimeBox->isChecked());
-    settings->setSaveIptcRating(d->saveRatingIptcBox->isChecked());
+    settings->setSaveRating(d->saveRatingBox->isChecked());
     settings->setSaveIptcTags(d->saveTagsIptcBox->isChecked());
     settings->setSaveIptcPhotographerId(d->savePhotographerIdIptcBox->isChecked());
     settings->setSaveIptcCredits(d->saveCreditsIptcBox->isChecked());
@@ -218,7 +219,7 @@ void SetupMetadata::readSettings()
     d->ExifSetOrientationBox->setChecked(settings->getExifSetOrientation());
     d->saveCommentsBox->setChecked(settings->getSaveComments());
     d->saveDateTimeBox->setChecked(settings->getSaveDateTime());
-    d->saveRatingIptcBox->setChecked(settings->getSaveIptcRating());
+    d->saveRatingBox->setChecked(settings->getSaveRating());
     d->saveTagsIptcBox->setChecked(settings->getSaveIptcTags());
     d->savePhotographerIdIptcBox->setChecked(settings->getSaveIptcPhotographerId());
     d->saveCreditsIptcBox->setChecked(settings->getSaveIptcCredits());
@@ -239,4 +240,3 @@ void SetupMetadata::slotExifAutoRotateToggled(bool b)
 
 }  // namespace Digikam
 
-#include "setupmetadata.moc"

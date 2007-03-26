@@ -67,7 +67,7 @@ public:
 
     bool     saveComments;
     bool     saveDateTime;
-    bool     saveIptcRating;
+    bool     saveRating;
     bool     saveIptcTags;
     bool     saveIptcPhotographerId;
     bool     saveIptcCredits;

@@ -5,7 +5,7 @@
  * Description : setup Metadata tab.
  * 
  * Copyright 2003-2004 by Ralf Holzer and Gilles Caulier
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,8 +56,7 @@ private slots:
 
 private:
 
-    SetupMetadataPriv* d;
-   
+    SetupMetadataPriv* d;   
 };
 
 }  // namespace Digikam

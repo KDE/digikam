@@ -202,6 +202,22 @@ int DMetadata::getImageRating() const
     if (getFilePath().isEmpty())
         return -1;
 
+    // Check Exif rating tag set by Windows Vista
+    // Note : no need to check rating in percent tags (Exif.image.0x4747) here because 
+    // its appear always with rating tag value (Exif.image.0x4749). 
+
+    if (!getExif().isEmpty())
+    {
+        long rating = -1;
+        if (getExifTagLong("Exif.Image.0x4746", rating))
+        {
+            if (rating >= 0 && rating <= 5)
+                return rating;            
+        }
+    }
+
+    // Check Iptc Urgency tag content
+
     if (!getIptc().isEmpty())
     {
         QString IptcUrgency(getIptcTagData("Iptc.Application2.Urgency"));
@@ -242,6 +258,40 @@ bool DMetadata::setImageRating(int rating)
 
     if (!setProgramId())
         return false;
+
+    // Set Exif rating tag used by Windows Vista.
+
+    if (!setExifTagLong("Exif.Image.0x4746", rating))
+        return false;
+
+    // Wrapper around rating percents managed by Windows Vista.
+    int ratePercents = 0;
+    switch(rating)
+    {
+        case 0:
+            ratePercents = 0;
+            break;
+        case 1:
+            ratePercents = 1;
+            break;
+        case 2:
+            ratePercents = 25;
+            break;
+        case 3:
+            ratePercents = 50;
+            break;
+        case 4:
+            ratePercents = 75;
+            break;
+        case 5:
+            ratePercents = 99;
+            break;
+    }
+
+    if (!setExifTagLong("Exif.Image.0x4749", ratePercents))
+        return false;
+
+    // Set Iptc Urgency tag value.
 
     QString urgencyTag;
     

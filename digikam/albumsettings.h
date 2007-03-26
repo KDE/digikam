@@ -145,9 +145,6 @@ public:
     void setSaveIptcTags(bool val);
     bool getSaveIptcTags() const;
 
-    void setSaveIptcRating(bool val);
-    bool getSaveIptcRating() const;
-
     void setSaveIptcPhotographerId(bool val);
     bool getSaveIptcPhotographerId() const;
 
@@ -174,6 +171,9 @@ public:
 
     void setSaveDateTime(bool val);
     bool getSaveDateTime() const;
+
+    void setSaveRating(bool val);
+    bool getSaveRating() const;
 
     void setShowToolTips(bool val);
     bool getShowToolTips() const;

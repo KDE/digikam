@@ -91,7 +91,7 @@ MetadataWriteSettings::MetadataWriteSettings()
 {
     saveComments           = false;
     saveDateTime           = false;
-    saveIptcRating         = false;
+    saveRating             = false;
     saveIptcTags           = false;
     saveIptcPhotographerId = false;
     saveIptcCredits        = false;
@@ -101,7 +101,7 @@ MetadataWriteSettings::MetadataWriteSettings(AlbumSettings *albumSettings)
 {
     saveComments           = albumSettings->getSaveComments();
     saveDateTime           = albumSettings->getSaveDateTime();
-    saveIptcRating         = albumSettings->getSaveIptcRating();
+    saveRating             = albumSettings->getSaveRating();
     saveIptcTags           = albumSettings->getSaveIptcTags();
     saveIptcPhotographerId = albumSettings->getSaveIptcPhotographerId();
     saveIptcCredits        = albumSettings->getSaveIptcCredits();
@@ -463,7 +463,7 @@ bool MetadataHub::write(DMetadata &metadata, WriteMode writeMode, const Metadata
     // find out in advance if we have something to write - needed for FullWriteIfChanged mode
     bool saveComment  = (settings.saveComments && d->commentStatus == MetadataAvailable);
     bool saveDateTime = (settings.saveDateTime && d->dateTimeStatus == MetadataAvailable);
-    bool saveRating   = (settings.saveIptcRating && d->ratingStatus == MetadataAvailable);
+    bool saveRating   = (settings.saveRating   && d->ratingStatus == MetadataAvailable);
     bool saveTags     = false;
     if (settings.saveIptcTags)
     {
@@ -606,7 +606,7 @@ bool MetadataHub::needWriteMetadata(WriteMode writeMode, const MetadataWriteSett
 
     bool saveComment  = (settings.saveComments && d->commentStatus == MetadataAvailable);
     bool saveDateTime = (settings.saveDateTime && d->dateTimeStatus == MetadataAvailable);
-    bool saveRating   = (settings.saveIptcRating && d->ratingStatus == MetadataAvailable);
+    bool saveRating   = (settings.saveRating   && d->ratingStatus == MetadataAvailable);
     bool saveTags     = false;
     if (settings.saveIptcTags)
     {
