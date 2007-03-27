@@ -497,8 +497,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
         {
             for (int i = x1 ; i < x2 ; i += d->tileSize)
             {
-                QString key = QString("%1,%1").arg(i).arg(j);
-
+                QString key  = QString("%1,%1").arg(i).arg(j);
                 QPixmap *pix = d->tileCache.find(key);
                 
                 if (!pix)
@@ -785,6 +784,19 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
 
     if (d->pressedMoved && d->rubber)
     {
+        // Normalize rubber rectangle to always have the selection into the image 
+        QRect rec = d->rubber->normalize();        
+
+        if (rec.left()   < d->pixmapRect.left())   rec.setLeft(d->pixmapRect.left()); 
+        if (rec.right()  > d->pixmapRect.right())  rec.setRight(d->pixmapRect.right()); 
+        if (rec.top()    < d->pixmapRect.top())    rec.setTop(d->pixmapRect.top()); 
+        if (rec.bottom() > d->pixmapRect.bottom()) rec.setBottom(d->pixmapRect.bottom()); 
+
+        d->rubber->setLeft(rec.left());
+        d->rubber->setRight(rec.right());
+        d->rubber->setTop(rec.top());
+        d->rubber->setBottom(rec.bottom());
+
         d->tileCache.clear();
         viewport()->setMouseTracking(true);
         if (d->im->imageValid())
@@ -972,9 +984,9 @@ void Canvas::slotCrop()
 
      double scale = 1.0/d->zoom;
 
-     int x = (int)((double)r.x() * scale);
-     int y = (int)((double)r.y() * scale);
-     int w = (int)((double)r.width() * scale);
+     int x = (int)((double)r.x()      * scale);
+     int y = (int)((double)r.y()      * scale);
+     int w = (int)((double)r.width()  * scale);
      int h = (int)((double)r.height() * scale);
 
      x = QMAX(x, 0);
