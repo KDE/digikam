@@ -713,9 +713,9 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
 
         int r, b;
         r = (e->x() > d->pixmapRect.left()) ? e->x() : d->pixmapRect.left();
-        r = (r < d->pixmapRect.right()) ? r : d->pixmapRect.right();
-        b = (e->y() > d->pixmapRect.top()) ? e->y() : d->pixmapRect.top();
-        b = (b < d->pixmapRect.bottom()) ? b : d->pixmapRect.bottom();
+        r = (r < d->pixmapRect.right())     ? r      : d->pixmapRect.right();
+        b = (e->y() > d->pixmapRect.top())  ? e->y() : d->pixmapRect.top();
+        b = (b < d->pixmapRect.bottom())    ? b      : d->pixmapRect.bottom();
 
         d->rubber->setRight(r);
         d->rubber->setBottom(b);
@@ -745,10 +745,10 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
         
         QRect r(d->rubber->normalize());
         
-        QRect lt(r.x()-5,r.y()-5,10,10);
-        QRect rt(r.x()+r.width()-5,r.y()-5,10,10);
-        QRect lb(r.x()-5,r.y()+r.height()-5,10,10);
-        QRect rb(r.x()+r.width()-5,r.y()+r.height()-5,10,10);
+        QRect lt(r.x()-5,           r.y()-5,            10, 10);
+        QRect rt(r.x()+r.width()-5, r.y()-5,            10, 10);
+        QRect lb(r.x()-5,           r.y()+r.height()-5, 10, 10);
+        QRect rb(r.x()+r.width()-5, r.y()+r.height()-5, 10, 10);
 
         d->ltActive = false;
         d->rtActive = false;
