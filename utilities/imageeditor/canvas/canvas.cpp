@@ -460,10 +460,10 @@ void Canvas::resizeEvent(QResizeEvent* e)
 void Canvas::viewportPaintEvent(QPaintEvent *e)
 {
     QRect er(e->rect());
-    er = QRect(QMAX(er.x()-1,0),
-               QMAX(er.y()-1,0),
-               QMIN(er.width()+2, contentsRect().width()),
-               QMIN(er.height()+2,contentsRect().height()));
+    er = QRect(QMAX(er.x() - 1, 0),
+               QMAX(er.y() - 1, 0),
+               QMIN(er.width()  + 2, contentsRect().width()),
+               QMIN(er.height() + 2, contentsRect().height()));
     
     paintViewport(er, (d->zoom <= 1.0) ? true : false);
     if (d->zoom > 1.0)
@@ -482,21 +482,20 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
     {
         clipRegion -= QRect(contentsToViewport(cr.topLeft()), cr.size());
 
-        QRect pr = QRect(cr.x()-d->pixmapRect.x(),
-                         cr.y()-d->pixmapRect.y(),
+        QRect pr = QRect(cr.x() - d->pixmapRect.x(), cr.y() - d->pixmapRect.y(),
                          cr.width(), cr.height());
 
-        int x1 = (int)floor((float)pr.x()/(float)d->tileSize)      * d->tileSize;
-        int y1 = (int)floor((float)pr.y()/(float)d->tileSize)      * d->tileSize;
-        int x2 = (int)ceilf((float)pr.right()/(float)d->tileSize)  * d->tileSize;
-        int y2 = (int)ceilf((float)pr.bottom()/(float)d->tileSize) * d->tileSize;
+        int x1 = (int)floor((float)pr.x()      / (float)d->tileSize) * d->tileSize;
+        int y1 = (int)floor((float)pr.y()      / (float)d->tileSize) * d->tileSize;
+        int x2 = (int)ceilf((float)pr.right()  / (float)d->tileSize) * d->tileSize;
+        int y2 = (int)ceilf((float)pr.bottom() / (float)d->tileSize) * d->tileSize;
 
         QPixmap pix(d->tileSize, d->tileSize);
         int sx, sy, sw, sh;
 
         for (int j = y1 ; j < y2 ; j += d->tileSize)
         {
-            for (int i = x1; i < x2; i += d->tileSize)
+            for (int i = x1 ; i < x2 ; i += d->tileSize)
             {
                 QString key = QString("%1,%1").arg(i).arg(j);
 
@@ -526,10 +525,10 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                         pix->fill(d->bgColor);
                     }
 
-                    sx = (int)floor(i/d->zoom);
-                    sy = (int)floor(j/d->zoom);
-                    sw = (int)floor(d->tileSize/d->zoom);
-                    sh = (int)floor(d->tileSize/d->zoom);
+                    sx = (int)floor(i           / d->zoom);
+                    sy = (int)floor(j           / d->zoom);
+                    sw = (int)floor(d->tileSize / d->zoom);
+                    sh = (int)floor(d->tileSize / d->zoom);
 
                     if (d->rubber && d->pressedMoved)
                     {
@@ -539,22 +538,22 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                         d->im->paintOnDevice(pix, sx, sy, sw, sh,
                                              0, 0, d->tileSize, d->tileSize,
                                              rr.x() - i - d->pixmapRect.x(),
-                                             rr.y() - j -d->pixmapRect.y(),
+                                             rr.y() - j - d->pixmapRect.y(),
                                              rr.width(), rr.height(),
                                              antialias);
 
                         rr = QRect(d->rubber->normalize());
-                        rr.moveBy(-i-d->pixmapRect.x(), -j-d->pixmapRect.y());
+                        rr.moveBy(-i -d->pixmapRect.x(), -j -d->pixmapRect.y());
  
                         QPainter p(pix);
-                        p.setPen(QPen(QColor(250,250,255),1));
+                        p.setPen(QPen(QColor(250, 250, 255), 1));
                         p.drawRect(rr);
                         if (rr.width() >= 10 && rr.height() >= 10)
                         {
-                            p.drawRect(rr.x(), rr.y(), 5, 5);
-                            p.drawRect(rr.x(), rr.y()+rr.height()-5, 5, 5);
+                            p.drawRect(rr.x(),              rr.y(),               5, 5);
+                            p.drawRect(rr.x(),              rr.y()+rr.height()-5, 5, 5);
                             p.drawRect(rr.x()+rr.width()-5, rr.y()+rr.height()-5, 5, 5);
-                            p.drawRect(rr.x()+rr.width()-5, rr.y(), 5, 5);
+                            p.drawRect(rr.x()+rr.width()-5, rr.y(),               5, 5);
                         }
                         p.end();
                     }
@@ -1178,6 +1177,11 @@ void Canvas::slotModified()
 
     updateContentsSize();
     viewport()->update();
+
+    // To be sure than corner widget used to pan image will be hide/show 
+    // accordinly with new image size (if changed).
+    slotZoomChanged(d->zoom);
+
     emit signalChanged();
 }
 
