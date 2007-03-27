@@ -725,18 +725,8 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
 
         drawRubber();
 
-        // To refresh editor status bar with current cursor position.
-        double scale = 1.0/d->zoom;
-
-        int xp = (int)((double)(e->x() - d->pixmapRect.x()) * scale);
-        int yp = (int)((double)(e->y() - d->pixmapRect.y()) * scale);
-
-        xp = QMAX(xp, 0);
-        yp = QMAX(yp, 0);
-        xp = QMIN(imageWidth(),  xp);
-        yp = QMIN(imageHeight(), yp);
-
-        emit signalMousePosition(xp, yp);
+        // To refresh editor status bar with current selection.
+        emit signalSelectionChanged(calcSeletedArea());
     }
     else
     {
@@ -1134,39 +1124,52 @@ void Canvas::slotSelected()
     
     if (d->rubber && d->pressedMoved) 
     {
-        QRect r(d->rubber->normalize());
-        
-        if (r.isValid()) 
-        {
-            r.moveBy(- d->pixmapRect.x(), - d->pixmapRect.y());
-
-            double scale = 1.0/d->zoom;   
-
-            x = (int)((double)r.x() * scale);   
-            y = (int)((double)r.y() * scale);   
-            w = (int)((double)r.width() * scale);   
-            h = (int)((double)r.height() * scale);   
-    
-            x = QMAX(x, 0);   
-            y = QMAX(y, 0);   
-            x = QMIN(imageWidth(),  x);   
-            y = QMIN(imageHeight(), y);
-
-            w = QMAX(w, 0);
-            h = QMAX(h, 0);
-            w = QMIN(imageWidth(),  w);
-            h = QMIN(imageHeight(), h);
-
-            // Avoid empty selection by rubberband - at least mark one pixel
-            // At high zoom factors, the rubberband may operate at subpixel level!
-            if (w == 0)
-                w = 1;
-            if (h == 0)
-                h = 1;
-        }
+        QRect sel = calcSeletedArea();
+        x = sel.x();
+        y = sel.y();
+        w = sel.width();
+        h = sel.height();
     }
 
     d->im->setSelectedArea(x, y, w, h);
+}
+
+QRect Canvas::calcSeletedArea()
+{
+    int x, y, w, h;
+    x = y = w = h = 0;
+    QRect r(d->rubber->normalize());
+    
+    if (r.isValid()) 
+    {
+        r.moveBy(- d->pixmapRect.x(), - d->pixmapRect.y());
+
+        double scale = 1.0/d->zoom;   
+
+        x = (int)((double)r.x() * scale);   
+        y = (int)((double)r.y() * scale);   
+        w = (int)((double)r.width() * scale);   
+        h = (int)((double)r.height() * scale);   
+
+        x = QMAX(x, 0);   
+        y = QMAX(y, 0);   
+        x = QMIN(imageWidth(),  x);   
+        y = QMIN(imageHeight(), y);
+
+        w = QMAX(w, 0);
+        h = QMAX(h, 0);
+        w = QMIN(imageWidth(),  w);
+        h = QMIN(imageHeight(), h);
+
+        // Avoid empty selection by rubberband - at least mark one pixel
+        // At high zoom factors, the rubberband may operate at subpixel level!
+        if (w == 0)
+            w = 1;
+        if (h == 0)
+            h = 1;
+    }
+    
+    return QRect(x, y, w, h); 
 }
 
 void Canvas::slotModified()

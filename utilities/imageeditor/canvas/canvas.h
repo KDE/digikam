@@ -115,6 +115,7 @@ protected:
     
 private:
 
+    QRect calcSeletedArea();
     float calcAutoZoomFactor();
     void updateAutoZoom();
     void updateContentsSize();
@@ -176,7 +177,7 @@ signals:
     void signalSavingStarted(const QString &filename);
     void signalSavingFinished(const QString &filename, bool success);
     void signalSavingProgress(const QString& filePath, float progress);
-    void signalMousePosition(int x, int y);
+    void signalSelectionChanged(const QRect&);
 
 private:
     

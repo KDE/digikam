@@ -197,17 +197,17 @@ void EditorWindow::setupStandardConnections()
     connect(m_canvas, SIGNAL(signalLoadingProgress(const QString &, float)),
             this, SLOT(slotLoadingProgress(const QString &, float)));
 
-    connect(m_canvas, SIGNAL(signalSavingStarted(const QString &)),
-            this, SLOT(slotSavingStarted(const QString &)));
+    connect(m_canvas, SIGNAL(signalSavingStarted(const QString&)),
+            this, SLOT(slotSavingStarted(const QString&)));
 
-    connect(m_canvas, SIGNAL(signalSavingFinished(const QString &, bool)),
-            this, SLOT(slotSavingFinished(const QString &, bool)));
+    connect(m_canvas, SIGNAL(signalSavingFinished(const QString&, bool)),
+            this, SLOT(slotSavingFinished(const QString&, bool)));
 
     connect(m_canvas, SIGNAL(signalSavingProgress(const QString&, float)),
             this, SLOT(slotSavingProgress(const QString&, float)));
 
-    connect(m_canvas, SIGNAL(signalMousePosition(int, int)),
-            this, SLOT(slotMousePosition(int, int)));
+    connect(m_canvas, SIGNAL(signalSelectionChanged(const QRect&)),
+            this, SLOT(slotSelectionChanged(const QRect&)));
 
     // -- if rotating/flipping set the rotatedflipped flag to true -----------
 
@@ -1704,9 +1704,10 @@ void EditorWindow::slotToggleSlideShow()
     slideShow(startWithCurrent, settings);
 }
 
-void EditorWindow::slotMousePosition(int x, int y)
+void EditorWindow::slotSelectionChanged(const QRect& sel)
 {
-    m_selectLabel->setText(QString("(%1, %2)").arg(x).arg(y));
+    m_selectLabel->setText(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y())
+                           .arg(sel.width()).arg(sel.height()));
 }
 
 }  // namespace Digikam

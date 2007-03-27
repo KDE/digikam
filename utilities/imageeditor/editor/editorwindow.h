@@ -208,7 +208,7 @@ private slots:
     void slotZoomSelected();
     void slotZoomTextChanged(const QString &);
     void slotZoomChanged(float zoom);
-    void slotMousePosition(int x, int y);
+    void slotSelectionChanged(const QRect& sel);
 
 private:
 
