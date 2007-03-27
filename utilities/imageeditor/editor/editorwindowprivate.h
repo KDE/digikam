@@ -23,6 +23,7 @@
 #define EDITORWINDOWPRIVATE_H
 
 class QToolButton;
+class QLabel;
 
 class KComboBox;
 class KAction;
@@ -49,6 +50,7 @@ public:
         fullScreenHideToolBar  = false;
         slideShowInFullScreen  = true;
 
+        selectLabel            = 0;
         imagePluginsHelpAction = 0;
         donateMoneyAction      = 0;
         accelerators           = 0;
@@ -85,6 +87,8 @@ public:
     bool                       slideShowInFullScreen;
 
     KComboBox                 *zoomCombo;
+
+    QLabel                    *selectLabel;
 
     QToolButton               *cmViewIndicator;
     QToolButton               *underExposureIndicator; 

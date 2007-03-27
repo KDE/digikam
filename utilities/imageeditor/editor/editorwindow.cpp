@@ -494,10 +494,10 @@ void EditorWindow::setupStatusBar()
     m_nameLabel->setMaximumHeight(fontMetrics().height()+2);    
     statusBar()->addWidget(m_nameLabel, 100);
 
-    m_selectLabel = new QLabel(i18n("No selection"), statusBar());
-    m_selectLabel->setAlignment(Qt::AlignCenter);
-    m_selectLabel->setMaximumHeight(fontMetrics().height()+2);   
-    statusBar()->addWidget(m_selectLabel, 100);
+    d->selectLabel = new QLabel(i18n("No selection"), statusBar());
+    d->selectLabel->setAlignment(Qt::AlignCenter);
+    d->selectLabel->setMaximumHeight(fontMetrics().height()+2);   
+    statusBar()->addWidget(d->selectLabel, 100);
 
     m_resLabel  = new QLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
@@ -1145,10 +1145,10 @@ void EditorWindow::slotSelected(bool val)
 
     // Update status bar
     if (val)
-        m_selectLabel->setText(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y())
+        d->selectLabel->setText(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y())
                                .arg(sel.width()).arg(sel.height()));
     else 
-        m_selectLabel->setText(i18n("No selection"));
+        d->selectLabel->setText(i18n("No selection"));
 }
 
 void EditorWindow::hideToolBars()
@@ -1706,7 +1706,7 @@ void EditorWindow::slotToggleSlideShow()
 
 void EditorWindow::slotSelectionChanged(const QRect& sel)
 {
-    m_selectLabel->setText(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y())
+    d->selectLabel->setText(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y())
                            .arg(sel.width()).arg(sel.height()));
 }
 
