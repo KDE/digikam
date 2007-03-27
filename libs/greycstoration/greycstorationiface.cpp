@@ -396,7 +396,7 @@ void GreycstorationIface::simpleResize()
 
 void GreycstorationIface::iterationLoop(uint iter)
 {
-    uint mp = iter*100;
+    uint mp = 0;
 
     do
     {
@@ -406,7 +406,7 @@ void GreycstorationIface::iterationLoop(uint iter)
             // progression indice (including all iterations).
 
             uint p = (uint)((iter*100 + d->img.greycstoration_progress())/d->settings.nbIter);
-            if (p == mp+1)
+            if (p > mp)
             {
                 postProgress(p);
                 mp = p;
