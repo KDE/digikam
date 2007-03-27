@@ -126,8 +126,6 @@ void GreycstorationIface::stopComputation()
         DDebug() << "Stop Greycstoration computation..." << endl;
 
         d->img.greycstoration_stop();
-        // to be sure than Greycstoration thread is finished, we wait a little.
-        cimg::wait(500);
     }
 
     Digikam::DImgThreadedFilter::stopComputation();
@@ -161,10 +159,10 @@ void GreycstorationIface::filterImage()
         {
             for (x = 0; x < imageWidth; x++)
             {
-                d->img(x, y, 0) = ptr[0];        // blue.
-                d->img(x, y, 1) = ptr[1];        // green.
-                d->img(x, y, 2) = ptr[2];        // red.
-                d->img(x, y, 3) = ptr[3];        // alpha.
+                d->img(x, y, 0) = ptr[0];        // Blue.
+                d->img(x, y, 1) = ptr[1];        // Green.
+                d->img(x, y, 2) = ptr[2];        // Red.
+                d->img(x, y, 3) = ptr[3];        // Alpha.
                 ptr += 4;
             }
         }
@@ -177,10 +175,10 @@ void GreycstorationIface::filterImage()
         {
             for (x = 0; x < imageWidth; x++)
             {
-                d->img(x, y, 0) = ptr[0];        // blue.
-                d->img(x, y, 1) = ptr[1];        // green.
-                d->img(x, y, 2) = ptr[2];        // red.
-                d->img(x, y, 3) = ptr[3];        // alpha.
+                d->img(x, y, 0) = ptr[0];        // Blue.
+                d->img(x, y, 1) = ptr[1];        // Green.
+                d->img(x, y, 2) = ptr[2];        // Red.
+                d->img(x, y, 3) = ptr[3];        // Alpha.
                 ptr += 4;
             }
         }
@@ -268,7 +266,7 @@ void GreycstorationIface::filterImage()
 
 void GreycstorationIface::restoration()
 {
-    for (uint iter=0 ; !m_cancel && (iter < d->settings.nbIter) ; iter++)
+    for (uint iter = 0 ; !m_cancel && (iter < d->settings.nbIter) ; iter++)
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
@@ -285,7 +283,7 @@ void GreycstorationIface::restoration()
                                   d->settings.fastApprox,
                                   d->settings.tile,
                                   d->settings.btile,
-                                  2);
+                                  2);                     // 2 separated threads to compute.
 
         iterationLoop(iter);
     }
@@ -338,7 +336,7 @@ void GreycstorationIface::inpainting()
                                   d->settings.fastApprox,
                                   d->settings.tile,
                                   d->settings.btile,
-                                  2);
+                                  2);                     // 2 separated threads to compute.
         iterationLoop(iter);
     }
 }
@@ -363,25 +361,25 @@ void GreycstorationIface::resize()
 
     d->img.resize(w, h, 1, -100, init);
 
-    for (uint iter=0 ; !m_cancel && (iter < d->settings.nbIter) ; iter++)
+    for (uint iter = 0 ; !m_cancel && (iter < d->settings.nbIter) ; iter++)
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
         // instance).
         d->img.greycstoration_run(d->mask,
-                                    d->settings.amplitude,
-                                    d->settings.sharpness,
-                                    d->settings.anisotropy,
-                                    d->settings.alpha,
-                                    d->settings.sigma,
-                                    d->settings.dl,
-                                    d->settings.da,
-                                    d->settings.gaussPrec,
-                                    d->settings.interp,
-                                    d->settings.fastApprox,
-                                    d->settings.tile,
-                                    d->settings.btile,
-                                    2);
+                                  d->settings.amplitude,
+                                  d->settings.sharpness,
+                                  d->settings.anisotropy,
+                                  d->settings.alpha,
+                                  d->settings.sigma,
+                                  d->settings.dl,
+                                  d->settings.da,
+                                  d->settings.gaussPrec,
+                                  d->settings.interp,
+                                  d->settings.fastApprox,
+                                  d->settings.tile,
+                                  d->settings.btile,
+                                  2);                     // 2 separated threads to compute.
         iterationLoop(iter);
     }
 }
@@ -398,17 +396,22 @@ void GreycstorationIface::simpleResize()
 
 void GreycstorationIface::iterationLoop(uint iter)
 {
+    uint mp = iter*100;
+
     do
     {
         if (m_parent && !m_cancel)
         {
             // Update the progress bar in dialog. We simply computes the global
             // progression indice (including all iterations).
-            postProgress((uint)((iter*100 + d->img.greycstoration_progress())/d->settings.nbIter));
-        }
 
-        // Wait a little bit
-        cimg::wait(100);
+            uint p = (uint)((iter*100 + d->img.greycstoration_progress())/d->settings.nbIter);
+            if (p == mp+1)
+            {
+                postProgress(p);
+                mp = p;
+            }
+        }
     }
     while (d->img.greycstoration_is_running() && !m_cancel);
 }
