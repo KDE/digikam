@@ -61,6 +61,7 @@ struct _greycstoration_params {
     anisotropy,
     alpha,
     sigma,
+    gfact,
     dl,
     da,
     gauss_prec;
@@ -85,7 +86,7 @@ struct _greycstoration_params {
     *stop_request;
 
   // Default constructor
-  _greycstoration_params():mask(0),amplitude(0),sharpness(0),anisotropy(0),alpha(0),sigma(0),
+  _greycstoration_params():mask(0),amplitude(0),sharpness(0),anisotropy(0),alpha(0),sigma(0),gfact(1),
                            dl(0),da(0),gauss_prec(0),interpolation(0),fast_approx(false),
                            source(0),temporary(0),counter(0),tile(0),tile_border(0),thread(0),threads(0),
                            is_running(false), stop_request(0) {}
@@ -110,7 +111,7 @@ static void* greycstoration_thread(void *arg) {
       // Non-tiled version
       //------------------
       source.blur_anisotropic(mask,p.amplitude,p.sharpness,p.anisotropy,p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,
-                              p.interpolation,p.fast_approx);
+                              p.interpolation,p.fast_approx,p.gfact);
 
     } else {
 
@@ -136,7 +137,7 @@ static void* greycstoration_thread(void *arg) {
                 CImg<unsigned char> mask_tile = mask.is_empty()?mask:mask.get_crop(x-b,y-b,z-b,xe+b,ye+b,ze+b,true);
                 img.greycstoration_params[0] = p;
                 img.blur_anisotropic(mask_tile,p.amplitude,p.sharpness,p.anisotropy,
-                                     p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx);
+                                     p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx,p.gfact);
                 temporary.draw_image(img.crop(b,b,b,img.width-b,img.height-b,img.depth-b),x,y,z);
               }
       } else {
@@ -152,7 +153,7 @@ static void* greycstoration_thread(void *arg) {
               CImg<unsigned char> mask_tile = mask.is_empty()?mask:mask.get_crop(x-b,y-b,xe+b,ye+b,true);
               img.greycstoration_params[0]=p;
               img.blur_anisotropic(mask_tile,p.amplitude,p.sharpness,p.anisotropy,
-                                   p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx);
+                                   p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx,p.gfact);
               temporary.draw_image(img.crop(b,b,img.width-b,img.height-b),x,y);
             }
       }
@@ -172,7 +173,7 @@ static void* greycstoration_thread(void *arg) {
       if (p.temporary) { source = *(p.temporary); delete p.temporary; }
       if (p.stop_request) delete p.stop_request;
       p.mask = 0;
-      p.amplitude = p.sharpness = p.anisotropy = p.alpha = p.sigma = p.dl = p.da = p.gauss_prec = 0;
+      p.amplitude = p.sharpness = p.anisotropy = p.alpha = p.sigma = p.gfact = p.dl = p.da = p.gauss_prec = 0;
       p.interpolation = 0;
       p.fast_approx = false;
       p.source = 0;
@@ -231,7 +232,8 @@ static void* greycstoration_thread(void *arg) {
   //! Run the threaded GREYCstoration algorithm on the instance image, using a mask.
   CImg& greycstoration_run(const CImg<unsigned char>& mask,
                            const float amplitude=60, const float sharpness=0.7f, const float anisotropy=0.3f,
-                           const float alpha=0.6f,const float sigma=1.1f, const float dl=0.8f,const float da=30.0f,
+                           const float alpha=0.6f,const float sigma=1.1f, const float gfact=1.0f,
+                           const float dl=0.8f,const float da=30.0f,
                            const float gauss_prec=2.0f, const unsigned int interpolation=0, const bool fast_approx=true,
                            const unsigned int tile=0, const unsigned int tile_border=0, const unsigned int threads=1) {
     if (greycstoration_is_running())
@@ -263,6 +265,7 @@ static void* greycstoration_thread(void *arg) {
         greycstoration_params[k].anisotropy = anisotropy;
         greycstoration_params[k].alpha = alpha;
         greycstoration_params[k].sigma = sigma;
+        greycstoration_params[k].gfact = gfact;
         greycstoration_params[k].dl = dl;
         greycstoration_params[k].da = da;
         greycstoration_params[k].gauss_prec = gauss_prec;
@@ -297,11 +300,12 @@ static void* greycstoration_thread(void *arg) {
 
   //! Run the GREYCstoration algorithm on the instance image.
   CImg& greycstoration_run(const float amplitude=50, const float sharpness=0.7f, const float anisotropy=0.3f,
-                           const float alpha=0.6f,const float sigma=1.1f, const float dl=0.8f,const float da=30.0f,
+                           const float alpha=0.6f,const float sigma=1.1f, const float gfact=1.0f,
+                           const float dl=0.8f,const float da=30.0f,
                            const float gauss_prec=2.0f, const unsigned int interpolation=0, const bool fast_approx=true,
                            const unsigned int tile=0, const unsigned int tile_border=0, const unsigned int threads=1) {
     static const CImg<unsigned char> empty_mask;
-    return greycstoration_run(empty_mask,amplitude,sharpness,anisotropy,alpha,sigma,dl,da,gauss_prec,
+    return greycstoration_run(empty_mask,amplitude,sharpness,anisotropy,alpha,sigma,gfact,dl,da,gauss_prec,
                               interpolation,fast_approx,tile,tile_border,threads);
   }
 
