@@ -201,11 +201,11 @@ void ImageDlgBase::slotDefault()
 
 void ImageDlgBase::slotHelp()
 {
-    // If setAboutData() is called by plugin, well DigikamImagePlugins help is lauch, 
+    // If setAboutData() is called by plugin, well DigikamImagePlugins help is launched, 
     // else digiKam help. In this case, setHelp() method must be used to set anchor and handbook name.
 
     if (d->aboutData)
-        KApplication::kApplication()->invokeHelp(d->name, "digikamimageplugins");
+        KApplication::kApplication()->invokeHelp(d->name, "digikam");
     else
         KDialogBase::slotHelp();
 }
@@ -216,7 +216,7 @@ void ImageDlgBase::setAboutData(KAboutData *about)
     QPushButton *helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, d->aboutData, false);
     helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
+    helpMenu->menu()->insertItem(i18n("digiKam Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     helpButton->setPopup( helpMenu->menu() );
 }
 
