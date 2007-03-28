@@ -342,11 +342,11 @@ void ImageGuideDlg::abortPreview()
     d->currentRenderingMode = ImageGuideDlgPriv::NoneRendering;
     d->progressBar->setValue(0);
     setProgressVisible(false);
-    enableButton(Ok, true);
-    enableButton(User1, false);
-    enableButton(User2, true);
-    enableButton(User3, true);
-    enableButton(Try,   true);
+    enableButton(Ok,      true);
+    enableButton(User1,   false);
+    enableButton(User2,   true);
+    enableButton(User3,   true);
+    enableButton(Try,     true);
     enableButton(Default, true);
     renderingFinished();
 }
@@ -452,6 +452,7 @@ void ImageGuideDlg::slotEffect()
     enableButton(User2,   false);
     enableButton(User3,   false);
     enableButton(Default, false);
+    enableButton(Try,     false);
     d->progressBar->setValue(0);
     if (d->progress) setProgressVisible(true);
 
@@ -476,6 +477,7 @@ void ImageGuideDlg::slotOk()
     enableButton(User2,   false);
     enableButton(User3,   false);
     enableButton(Default, false);
+    enableButton(Try,     false);
     kapp->setOverrideCursor( KCursor::waitCursor() );
     d->progressBar->setValue(0);
 
