@@ -37,6 +37,7 @@ class QPushButton;
 class QHButtonGroup;
 
 class KDoubleNumInput;
+class KActiveLabel;
 
 namespace Digikam
 {
@@ -128,15 +129,19 @@ private:
     QLabel                       *m_temperaturePresetLabel;
     QLabel                       *m_darkLabel;
     QLabel                       *m_blackLabel;
-    QLabel                       *m_exposureLabel;
+    QLabel                       *m_mainExposureLabel;
+    QLabel                       *m_fineExposureLabel;
     QLabel                       *m_gammaLabel;
     QLabel                       *m_saturationLabel;
     QLabel                       *m_greenLabel;
     
+    KActiveLabel                 *m_exposureLabel;
+
     KDoubleNumInput              *m_temperatureInput;
     KDoubleNumInput              *m_darkInput;
     KDoubleNumInput              *m_blackInput;
-    KDoubleNumInput              *m_exposureInput;
+    KDoubleNumInput              *m_mainExposureInput;
+    KDoubleNumInput              *m_fineExposureInput;
     KDoubleNumInput              *m_gammaInput;
     KDoubleNumInput              *m_saturationInput;
     KDoubleNumInput              *m_greenInput;

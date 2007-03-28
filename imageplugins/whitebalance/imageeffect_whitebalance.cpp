@@ -54,6 +54,7 @@
 #include <kfiledialog.h>
 #include <kseparator.h>
 #include <kconfig.h>
+#include <kactivelabel.h>
 
 // Local includes.
 
@@ -180,7 +181,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    QGridLayout *grid2 = new QGridLayout(layout2, 9, 5, spacingHint());
+    QGridLayout *grid2 = new QGridLayout(layout2, 12, 5, spacingHint());
 
     m_temperatureLabel = new QLabel(i18n("Temperature (K):"), gboxSettings);
     m_temperatureInput = new KDoubleNumInput(gboxSettings);
@@ -258,16 +259,29 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     QWhatsThis::add(m_greenInput, i18n("<p>Set here the green component to set magenta color "
                                        "cast removal level."));
 
-    m_exposureLabel      = new QLabel(i18n("Exposure (EV):"), gboxSettings);
+    KSeparator *line2 = new KSeparator (Horizontal, gboxSettings);
+
+    // -------------------------------------------------------------
+
+    m_exposureLabel      = new KActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Exposure_value'>Exposure Compensation</a> "
+                                                 " (E.V): </qt>"), gboxSettings);
+    m_mainExposureLabel  = new QLabel(i18n("Main:"), gboxSettings);
     m_autoAdjustExposure = new QPushButton(gboxSettings);
     m_autoAdjustExposure->setPixmap(kapp->iconLoader()->loadIcon("run", (KIcon::Group)KIcon::Toolbar));
     QToolTip::add( m_autoAdjustExposure, i18n( "Auto exposure adjustments" ) );
     QWhatsThis::add( m_autoAdjustExposure, i18n("<p>With this button, you can automatically adjust Exposure "
                                                 "and Black Point values."));
-    m_exposureInput = new KDoubleNumInput(gboxSettings);
-    m_exposureInput->setPrecision(2);
-    m_exposureInput->setRange(-6.0, 8.0, 0.01, true);
-    QWhatsThis::add( m_exposureInput, i18n("<p>Set here the Exposure Value (EV)."));
+    m_mainExposureInput = new KDoubleNumInput(gboxSettings);
+    m_mainExposureInput->setPrecision(2);
+    m_mainExposureInput->setRange(-6.0, 8.0, 0.1, true);
+    QWhatsThis::add( m_mainExposureInput, i18n("<p>Set here the main exposure compensation value in E.V."));
+
+    m_fineExposureLabel = new QLabel(i18n("Fine:"), gboxSettings);
+    m_fineExposureInput = new KDoubleNumInput(gboxSettings);
+    m_fineExposureInput->setPrecision(2);
+    m_fineExposureInput->setRange(-0.5, 0.5, 0.01, true);
+    QWhatsThis::add( m_fineExposureInput, i18n("<p>This value in E.V will be added to main exposure "
+                                               "compensation value to set fine exposure adjustment."));
 
     // -------------------------------------------------------------
 
@@ -289,10 +303,16 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     grid2->addMultiCellWidget(m_gammaInput, 6, 6, 1, 5);
     grid2->addMultiCellWidget(m_greenLabel, 7, 7, 0, 0);
     grid2->addMultiCellWidget(m_greenInput, 7, 7, 1, 5);
-    grid2->addMultiCellWidget(m_exposureLabel, 8, 8, 0, 0);
-    grid2->addMultiCellWidget(m_autoAdjustExposure, 8, 8, 1, 1);
-    grid2->addMultiCellWidget(m_exposureInput, 8, 8, 2, 5);
-    grid2->setRowStretch(9, 10);
+
+    grid2->addMultiCellWidget(line2, 8, 8, 0, 5);
+
+    grid2->addMultiCellWidget(m_exposureLabel, 9, 9, 0, 5);
+    grid2->addMultiCellWidget(m_mainExposureLabel, 10, 10, 0, 0);
+    grid2->addMultiCellWidget(m_autoAdjustExposure, 10, 10, 1, 1);
+    grid2->addMultiCellWidget(m_mainExposureInput, 10, 10, 2, 5);
+    grid2->addMultiCellWidget(m_fineExposureLabel, 11, 11, 0, 1);
+    grid2->addMultiCellWidget(m_fineExposureInput, 11, 11, 2, 5);
+    grid2->setRowStretch(12, 10);
             
     setUserAreaWidget(gboxSettings);
             
@@ -328,7 +348,10 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     connect(m_blackInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));                       
     
-    connect(m_exposureInput, SIGNAL(valueChanged (double)),
+    connect(m_mainExposureInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotTimer()));                       
+
+    connect(m_fineExposureInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));                       
     
     connect(m_gammaInput, SIGNAL(valueChanged (double)),
@@ -541,7 +564,8 @@ void ImageEffect_WhiteBalance::slotAutoAdjustExposure()
     delete [] data;        
 
     m_blackInput->setValue(blackLevel);
-    m_exposureInput->setValue(exposureLevel);
+    m_mainExposureInput->setValue(exposureLevel);
+    m_fineExposureInput->setValue(0.0);
     
     parentWidget()->unsetCursor();
     slotEffect();  
@@ -563,17 +587,18 @@ void ImageEffect_WhiteBalance::slotEffect()
 
     m_destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
 
-    double temperature = m_temperatureInput->value()/1000.0;
-    double dark        = m_darkInput->value();
-    double black       = m_blackInput->value();
-    double exposition  = m_exposureInput->value();
-    double gamma       = 2.0-m_gammaInput->value();
-    double saturation  = m_saturationInput->value();
-    double green       = m_greenInput->value();
+    double temperature  = m_temperatureInput->value()/1000.0;
+    double dark         = m_darkInput->value();
+    double black        = m_blackInput->value();
+    double mainExposure = m_mainExposureInput->value();
+    double fineExposure = m_fineExposureInput->value();
+    double gamma        = 2.0-m_gammaInput->value();
+    double saturation   = m_saturationInput->value();
+    double green        = m_greenInput->value();
             
     Digikam::WhiteBalance wbFilter(sb);
     wbFilter.whiteBalance(data, w, h, sb, 
-                          black, exposition,
+                          black, mainExposure + fineExposure,
                           temperature, green, dark, 
                           gamma, saturation);
      
@@ -595,17 +620,18 @@ void ImageEffect_WhiteBalance::finalRendering()
     int h                      = iface->originalHeight();
     bool sb                    = iface->originalSixteenBit();
 
-    double temperature = m_temperatureInput->value()/1000.0;
-    double dark        = m_darkInput->value();
-    double black       = m_blackInput->value();
-    double exposition  = m_exposureInput->value();
-    double gamma       = 2.0-m_gammaInput->value();
-    double saturation  = m_saturationInput->value();
-    double green       = m_greenInput->value();
+    double temperature  = m_temperatureInput->value()/1000.0;
+    double dark         = m_darkInput->value();
+    double black        = m_blackInput->value();
+    double mainExposure = m_mainExposureInput->value();
+    double fineExposure = m_fineExposureInput->value();
+    double gamma        = 2.0-m_gammaInput->value();
+    double saturation   = m_saturationInput->value();
+    double green        = m_greenInput->value();
             
     Digikam::WhiteBalance wbFilter(sb);
     wbFilter.whiteBalance(data, w, h, sb, 
-                          black, exposition,
+                          black, mainExposure + fineExposure,
                           temperature, green, dark, 
                           gamma, saturation);
 
@@ -619,7 +645,8 @@ void ImageEffect_WhiteBalance::resetValues()
 {
     m_darkInput->blockSignals(true);
     m_blackInput->blockSignals(true);
-    m_exposureInput->blockSignals(true);
+    m_mainExposureInput->blockSignals(true);
+    m_fineExposureInput->blockSignals(true);
     m_gammaInput->blockSignals(true);
     m_saturationInput->blockSignals(true);  
     m_greenInput->blockSignals(true);
@@ -628,7 +655,8 @@ void ImageEffect_WhiteBalance::resetValues()
     // Neutral color temperature settings.
     m_darkInput->setValue(0.5);
     m_blackInput->setValue(0.0);
-    m_exposureInput->setValue(0.0);
+    m_mainExposureInput->setValue(0.0);
+    m_fineExposureInput->setValue(0.0);
     m_gammaInput->setValue(1.0);  
     m_saturationInput->setValue(1.0);  
     m_greenInput->setValue(1.2);  
@@ -643,7 +671,8 @@ void ImageEffect_WhiteBalance::resetValues()
     
     m_darkInput->blockSignals(false);
     m_blackInput->blockSignals(false);
-    m_exposureInput->blockSignals(false);
+    m_mainExposureInput->blockSignals(false);
+    m_fineExposureInput->blockSignals(false);
     m_gammaInput->blockSignals(false);
     m_saturationInput->blockSignals(false);  
     m_greenInput->blockSignals(false);
@@ -660,7 +689,8 @@ void ImageEffect_WhiteBalance::readUserSettings()
 
     m_darkInput->setValue(config->readDoubleNumEntry("Dark", 0.5));
     m_blackInput->setValue(config->readDoubleNumEntry("Black", 0.0));
-    m_exposureInput->setValue(config->readDoubleNumEntry("Exposure", 0.0));
+    m_mainExposureInput->setValue(config->readDoubleNumEntry("MainExposure", 0.0));
+    m_fineExposureInput->setValue(config->readDoubleNumEntry("FineExposure", 0.0));
     m_gammaInput->setValue(config->readDoubleNumEntry("Gamma", 1.0));  
     m_saturationInput->setValue(config->readDoubleNumEntry("Saturation", 1.0));  
     m_greenInput->setValue(config->readDoubleNumEntry("Green", 1.2));  
@@ -679,7 +709,8 @@ void ImageEffect_WhiteBalance::writeUserSettings()
 
     config->writeEntry("Dark", m_darkInput->value());
     config->writeEntry("Black", m_blackInput->value());
-    config->writeEntry("Exposure", m_exposureInput->value());
+    config->writeEntry("MainExposure", m_mainExposureInput->value());
+    config->writeEntry("FineExposure", m_fineExposureInput->value());
     config->writeEntry("Gamma", m_gammaInput->value());
     config->writeEntry("Saturation", m_saturationInput->value());
     config->writeEntry("Green", m_greenInput->value());
@@ -702,7 +733,7 @@ void ImageEffect_WhiteBalance::slotUser3()
     {
         QTextStream stream( &file );
 
-        if ( stream.readLine() != "# White Color Balance Configuration File" )
+        if ( stream.readLine() != "# White Color Balance Configuration File V2" )
         {
            KMessageBox::error(this, 
                         i18n("\"%1\" is not a White Color Balance settings text file.")
@@ -715,7 +746,8 @@ void ImageEffect_WhiteBalance::slotUser3()
         m_temperatureInput->setValue( stream.readLine().toDouble() );
         m_darkInput->setValue( stream.readLine().toDouble() );
         m_blackInput->setValue( stream.readLine().toDouble() );
-        m_exposureInput->setValue( stream.readLine().toDouble() );
+        m_mainExposureInput->setValue( stream.readLine().toDouble() );
+        m_fineExposureInput->setValue( stream.readLine().toDouble() );
         m_gammaInput->setValue( stream.readLine().toDouble() );
         m_saturationInput->setValue( stream.readLine().toDouble() );
         m_greenInput->setValue( stream.readLine().toDouble() );
@@ -743,11 +775,12 @@ void ImageEffect_WhiteBalance::slotUser2()
     if ( file.open(IO_WriteOnly) )   
     {
         QTextStream stream( &file );        
-        stream << "# White Color Balance Configuration File\n";    
+        stream << "# White Color Balance Configuration File V2\n";    
         stream << m_temperatureInput->value() << "\n";    
         stream << m_darkInput->value() << "\n";    
         stream << m_blackInput->value() << "\n";    
-        stream << m_exposureInput->value() << "\n";    
+        stream << m_mainExposureInput->value() << "\n";    
+        stream << m_fineExposureInput->value() << "\n";    
         stream << m_gammaInput->value() << "\n";    
         stream << m_saturationInput->value() << "\n";    
         stream << m_greenInput->value() << "\n";    
