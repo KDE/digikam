@@ -331,7 +331,7 @@ void GreycstorationIface::inpainting()
 {
     if (!d->inPaintingMask.isNull())
     {
-        // Copy the inpainting image data into a CImg type image with three channels and no alpha.
+        // Copy the monochrome inpainting image data into a CImg type image.
 
         register int x, y;
 
