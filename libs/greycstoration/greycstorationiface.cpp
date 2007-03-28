@@ -31,6 +31,9 @@
 #include "CImg.h"
 using namespace cimg_library;
 
+/** Number of childs thread used to run Greystoration algorithm */ 
+#define COMPUTATION_THREAD 1
+
 // Local includes.
 
 #include "ddebug.h"
@@ -304,7 +307,7 @@ void GreycstorationIface::restoration()
                                            d->settings.fastApprox,
                                            d->settings.tile,
                                            d->settings.btile,
-                                           2);                     // 2 separated threads to compute.
+                                           COMPUTATION_THREAD);
         }
         else                                     // 16 bits image.
         {
@@ -320,7 +323,7 @@ void GreycstorationIface::restoration()
                                             d->settings.fastApprox,
                                             d->settings.tile,
                                             d->settings.btile,
-                                            2);                     // 2 separated threads to compute.
+                                            COMPUTATION_THREAD);
         }
 
         iterationLoop(iter);
@@ -374,7 +377,7 @@ void GreycstorationIface::inpainting()
                                            d->settings.fastApprox,
                                            d->settings.tile,
                                            d->settings.btile,
-                                           2);                     // 2 separated threads to compute.
+                                           COMPUTATION_THREAD);
         }
         else                                     // 16 bits image.
         {
@@ -391,7 +394,7 @@ void GreycstorationIface::inpainting()
                                             d->settings.fastApprox,
                                             d->settings.tile,
                                             d->settings.btile,
-                                            2);                     // 2 separated threads to compute.
+                                            COMPUTATION_THREAD);
         }
 
         iterationLoop(iter);
@@ -454,7 +457,7 @@ void GreycstorationIface::resize()
                                            d->settings.fastApprox,
                                            d->settings.tile,
                                            d->settings.btile,
-                                           2);                     // 2 separated threads to compute.
+                                           COMPUTATION_THREAD);
         }
         else                                     // 16 bits image.
         {
@@ -471,7 +474,7 @@ void GreycstorationIface::resize()
                                             d->settings.fastApprox,
                                             d->settings.tile,
                                             d->settings.btile,
-                                            2);                     // 2 separated threads to compute.
+                                            COMPUTATION_THREAD);
         }
 
         iterationLoop(iter);
