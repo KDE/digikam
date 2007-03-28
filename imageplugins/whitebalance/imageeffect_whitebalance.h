@@ -101,15 +101,19 @@ private:
     
     enum TemperaturePreset
     {
-        Lamp40W=0,
+        Candle=0,
+        Lamp40W,
+        Lamp100W,
         Lamp200W,
         Sunrise,
-        Tungsten,
+        StudioLamp,
+        MoonLight,
         Neutral,
-        Xenon,
-        Sun,
+        DaylightD50,
         Flash,
-        Sky,
+        Sun,
+        XeonLamp,
+        DaylightD65,
         None
     };
 
@@ -125,7 +129,6 @@ private:
     
     QHButtonGroup                *m_scaleBG;  
         
-    QLabel                       *m_temperatureLabel;
     QLabel                       *m_temperaturePresetLabel;
     QLabel                       *m_darkLabel;
     QLabel                       *m_blackLabel;
@@ -136,6 +139,7 @@ private:
     QLabel                       *m_greenLabel;
     
     KActiveLabel                 *m_exposureLabel;
+    KActiveLabel                 *m_temperatureLabel;
 
     KDoubleNumInput              *m_temperatureInput;
     KDoubleNumInput              *m_darkInput;

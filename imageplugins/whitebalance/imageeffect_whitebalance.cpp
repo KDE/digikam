@@ -183,7 +183,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
     QGridLayout *grid2 = new QGridLayout(layout2, 12, 5, spacingHint());
 
-    m_temperatureLabel = new QLabel(i18n("Temperature (K):"), gboxSettings);
+    m_temperatureLabel = new KActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Color_temperature'>Temperature</a> "
+                                               " (K): </qt>"), gboxSettings);
     m_temperatureInput = new KDoubleNumInput(gboxSettings);
     m_temperatureInput->setPrecision(1);
     m_temperatureInput->setRange(2200.0, 7000.0, 10.0, true);
@@ -191,28 +192,36 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     
     m_temperaturePresetLabel = new QLabel(i18n("Preset:"), gboxSettings);
     m_temperaturePresetCB = new QComboBox( false, gboxSettings );
+    m_temperaturePresetCB->insertItem( i18n("Candle") );
     m_temperaturePresetCB->insertItem( i18n("40W Lamp") );
+    m_temperaturePresetCB->insertItem( i18n("100W Lamp") );
     m_temperaturePresetCB->insertItem( i18n("200W Lamp") );
     m_temperaturePresetCB->insertItem( i18n("Sunrise") );
-    m_temperaturePresetCB->insertItem( i18n("Tungsten Lamp") );
+    m_temperaturePresetCB->insertItem( i18n("Studio Lamp") );
+    m_temperaturePresetCB->insertItem( i18n("Moonlight") );
     m_temperaturePresetCB->insertItem( i18n("Neutral") );
-    m_temperaturePresetCB->insertItem( i18n("Xenon Lamp") );
-    m_temperaturePresetCB->insertItem( i18n("Sun") );
+    m_temperaturePresetCB->insertItem( i18n("Daylight D50") );
     m_temperaturePresetCB->insertItem( i18n("Photo Flash") );
-    m_temperaturePresetCB->insertItem( i18n("Sky") );
+    m_temperaturePresetCB->insertItem( i18n("Sun") );
+    m_temperaturePresetCB->insertItem( i18n("Xenon Lamp") );
+    m_temperaturePresetCB->insertItem( i18n("Daylight D65") );
     m_temperaturePresetCB->insertItem( i18n("None") );
     QWhatsThis::add( m_temperaturePresetCB, i18n("<p>Select here the white balance color temperature "
                                                  "preset to use:<p>"
+                                                 "<b>Candle</b>: candle light (1850K).<p>"
                                                  "<b>40W Lamp</b>: 40 Watt incandescent lamp (2680K).<p>"
+                                                 "<b>100W Lamp</b>: 100 Watt incandescent lamp (2800K).<p>"
                                                  "<b>200W Lamp</b>: 200 Watt incandescent lamp (3000K).<p>"
                                                  "<b>Sunrise</b>: sunrise or sunset light (3200K).<p>"
-                                                 "<b>Tungsten Lamp</b>: tungsten lamp or light at 1 hour from "
-                                                 "dusk/dawn (3400K).<p>"
+                                                 "<b>Studio Lamp</b>: tungsten lamp used in photo studio "
+                                                 "or light at 1 hour from dusk/dawn (3400K).<p>"
+                                                 "<b>Moonlight</b>: moon light (4100K).<p>"
                                                  "<b>Neutral</b>: neutral color temperature (4750K).<p>"
-                                                 "<b>Xenon Lamp</b>: xenon lamp or light arc (5000K).<p>"
-                                                 "<b>Sun</b>: sunny daylight around noon (5500K).<p>"
-                                                 "<b>Photo Flash</b>: electronic photo flash (5600K).<p>"
-                                                 "<b>Sky</b>: overcast sky light (6500K).<p>"
+                                                 "<b>Daylight D50</b>: sunny daylight around noon (5000K).<p>"
+                                                 "<b>Photo Flash</b>: electronic photo flash (5500K).<p>"
+                                                 "<b>Sun</b>: effective sun temperature (5770K).<p>"
+                                                 "<b>Xenon Lamp</b>: xenon lamp or light arc (6420K).<p>"
+                                                 "<b>Daylight D65</b>: overcast sky light (6500K).<p>"
                                                  "<b>None</b>: no preset value."));
     m_pickTemperature = new QPushButton(gboxSettings);
     KGlobal::dirs()->addResourceType("color-picker-grey", KGlobal::dirs()->kde_default("data") + "digikam/data");
@@ -387,8 +396,16 @@ void ImageEffect_WhiteBalance::slotTemperatureChanged(double temperature)
 {
    switch((uint)temperature)
    {
+       case 1850:
+          m_temperaturePresetCB->setCurrentItem(Candle);
+          break;
+
        case 2680:
           m_temperaturePresetCB->setCurrentItem(Lamp40W);
+          break;
+
+       case 2800:
+          m_temperaturePresetCB->setCurrentItem(Lamp100W);
           break;
        
        case 3000:
@@ -400,7 +417,11 @@ void ImageEffect_WhiteBalance::slotTemperatureChanged(double temperature)
           break;
        
        case 3400:
-          m_temperaturePresetCB->setCurrentItem(Tungsten);
+          m_temperaturePresetCB->setCurrentItem(StudioLamp);
+          break;
+
+       case 4100:
+          m_temperaturePresetCB->setCurrentItem(MoonLight);
           break;
 
        case 4750:
@@ -408,19 +429,23 @@ void ImageEffect_WhiteBalance::slotTemperatureChanged(double temperature)
           break;
                  
        case 5000:
-          m_temperaturePresetCB->setCurrentItem(Xenon);
+          m_temperaturePresetCB->setCurrentItem(DaylightD50);
           break;
        
        case 5500:
-          m_temperaturePresetCB->setCurrentItem(Sun);
-          break;
-       
-       case 5600:
           m_temperaturePresetCB->setCurrentItem(Flash);
           break;
        
+       case 5770:
+          m_temperaturePresetCB->setCurrentItem(Sun);
+          break;
+       
+       case 6420:
+          m_temperaturePresetCB->setCurrentItem(XeonLamp);
+          break;
+
        case 6500:
-          m_temperaturePresetCB->setCurrentItem(Sky);
+          m_temperaturePresetCB->setCurrentItem(DaylightD65);
           break;
           
        default:
@@ -435,8 +460,16 @@ void ImageEffect_WhiteBalance::slotTemperaturePresetChanged(int tempPreset)
 {
    switch(tempPreset)
    {
+       case Candle:
+          m_temperatureInput->setValue(1850.0);
+          break;
+
        case Lamp40W:
           m_temperatureInput->setValue(2680.0);
+          break;
+
+       case Lamp100W:
+          m_temperatureInput->setValue(2800.0);
           break;
        
        case Lamp200W:
@@ -447,27 +480,35 @@ void ImageEffect_WhiteBalance::slotTemperaturePresetChanged(int tempPreset)
           m_temperatureInput->setValue(3200.0);
           break;
        
-       case Tungsten:
+       case StudioLamp:
           m_temperatureInput->setValue(3400.0);
+          break;
+
+       case MoonLight:
+          m_temperatureInput->setValue(4100.0);
           break;
 
        case Neutral:
           m_temperatureInput->setValue(4750.0);
           break;
                  
-       case Xenon:
+       case DaylightD50:
           m_temperatureInput->setValue(5000.0);
           break;
        
-       case Sun:
+       case Flash:
           m_temperatureInput->setValue(5500.0);
           break;
        
-       case Flash:
-          m_temperatureInput->setValue(5600.0);
+       case Sun:
+          m_temperatureInput->setValue(5770.0);
           break;
        
-       case Sky:
+       case XeonLamp:
+          m_temperatureInput->setValue(6420.0);
+          break;
+
+       case DaylightD65:
           m_temperatureInput->setValue(6500.0);
           break;
        
