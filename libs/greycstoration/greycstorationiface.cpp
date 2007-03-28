@@ -52,7 +52,7 @@ public:
 
     int                    mode;
 
-    QImage                 inPaintingMask;
+    QImage                 inPaintingMask;  // Monochrome mask.
 
     GreycstorationSettings settings;
 
@@ -71,7 +71,7 @@ GreycstorationIface::GreycstorationIface(DImg *orgImage,
     d = new GreycstorationIfacePriv;
     d->settings       = settings;
     d->mode           = mode;
-    d->inPaintingMask = inPaintingMask;
+    d->inPaintingMask = inPaintingMask.convertDepth(1);
 
     if (d->mode == Resize || d->mode == SimpleResize)
     {
@@ -126,9 +126,9 @@ void GreycstorationIface::stopComputation()
         DDebug() << "Stop Greycstoration computation..." << endl;
 
         d->img.greycstoration_stop();
-        usleep(500000);
     }
 
+    // And now when stop main loop and clean up all
     Digikam::DImgThreadedFilter::stopComputation();
 }
 
@@ -298,17 +298,15 @@ void GreycstorationIface::inpainting()
 
         register int x, y;
 
-        d->mask    = CImg<uchar>(d->inPaintingMask.width(), d->inPaintingMask.height(), 1, 3);
+        d->mask    = CImg<uchar>(d->inPaintingMask.width(), d->inPaintingMask.height(), 1, 1);
         uchar *ptr = d->inPaintingMask.bits();
 
         for (y = 0; y < d->inPaintingMask.height(); y++)
         {
             for (x = 0; x < d->inPaintingMask.width(); x++)
             {
-                d->mask(x, y, 0) = ptr[2];        // blue.
-                d->mask(x, y, 1) = ptr[1];        // green.
-                d->mask(x, y, 2) = ptr[0];        // red.
-                ptr += 4;
+                d->mask(x, y, 0) = ptr[0];
+                ptr ++;
             }
         }
     }
