@@ -180,46 +180,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    QGridLayout *grid2 = new QGridLayout( layout2, 9, 5, spacingHint());
-    KIconLoader icon;
-    
-    m_exposureLabel = new QLabel(i18n("Exposure (EV):"), gboxSettings);
-    m_autoAdjustExposure = new QPushButton(gboxSettings);
-    m_autoAdjustExposure->setPixmap( icon.loadIcon( "run", (KIcon::Group)KIcon::Toolbar ) );
-    QToolTip::add( m_autoAdjustExposure, i18n( "Auto exposure adjustments" ) );
-    QWhatsThis::add( m_autoAdjustExposure, i18n("<p>With this button, you can automatically adjust Exposure "
-                                                "and Black Point values."));
-    m_exposureInput = new KDoubleNumInput(gboxSettings);
-    m_exposureInput->setPrecision(2);
-    m_exposureInput->setRange(-6.0, 8.0, 0.01, true);
-    QWhatsThis::add( m_exposureInput, i18n("<p>Set here the Exposure Value (EV)."));
-    
-    m_blackLabel = new QLabel(i18n("Black point:"), gboxSettings);
-    m_blackInput = new KDoubleNumInput(gboxSettings);
-    m_blackInput->setPrecision(2);
-    m_blackInput->setRange(0.0, 0.05, 0.01, true);
-    QWhatsThis::add( m_blackInput, i18n("<p>Set here the black level value."));
-        
-    m_darkLabel = new QLabel(i18n("Shadows:"), gboxSettings);
-    m_darkInput = new KDoubleNumInput(gboxSettings);
-    m_darkInput->setPrecision(2);
-    m_darkInput->setRange(0.0, 1.0, 0.01, true);
-    QWhatsThis::add( m_darkInput, i18n("<p>Set here the shadows noise suppresion level."));
+    QGridLayout *grid2 = new QGridLayout(layout2, 9, 5, spacingHint());
 
-    m_saturationLabel = new QLabel(i18n("Saturation:"), gboxSettings);
-    m_saturationInput = new KDoubleNumInput(gboxSettings);
-    m_saturationInput->setPrecision(2);
-    m_saturationInput->setRange(0.0, 2.0, 0.01, true);
-    QWhatsThis::add( m_saturationInput, i18n("<p>Set here the saturation value."));
-        
-    m_gammaLabel = new QLabel(i18n("Gamma:"), gboxSettings);
-    m_gammaInput = new KDoubleNumInput(gboxSettings);
-    m_gammaInput->setPrecision(2);
-    m_gammaInput->setRange(0.1, 3.0, 0.01, true);
-    QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma correction value."));
-
-    KSeparator *line = new KSeparator (Horizontal, gboxSettings);
-            
     m_temperatureLabel = new QLabel(i18n("Temperature (K):"), gboxSettings);
     m_temperatureInput = new KDoubleNumInput(gboxSettings);
     m_temperatureInput->setPrecision(1);
@@ -252,19 +214,62 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
                                                  "<b>Sky</b>: overcast sky light (6500K).<p>"
                                                  "<b>None</b>: no preset value."));
     m_pickTemperature = new QPushButton(gboxSettings);
-    KGlobal::dirs()->addResourceType("color-picker-gray", KGlobal::dirs()->kde_default("data") + "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("color-picker-gray", "color-picker-gray.png");
-    m_pickTemperature->setPixmap( QPixmap( directory + "color-picker-gray.png" ) );
+    KGlobal::dirs()->addResourceType("color-picker-grey", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("color-picker-grey", "color-picker-grey.png");
+    m_pickTemperature->setPixmap( QPixmap( directory + "color-picker-grey.png" ) );
     m_pickTemperature->setToggleButton(true);
     QToolTip::add( m_pickTemperature, i18n( "Temperature tone color picker." ) );
-    QWhatsThis::add( m_pickTemperature, i18n("<p>With this button, you can pick the color from original image used to set "
-                                             "white color balance temperature and green component."));
+    QWhatsThis::add( m_pickTemperature, i18n("<p>With this button, you can pick the color from original "
+                                             "image used to set white color balance temperature and "
+                                             "green component."));
+
+    KSeparator *line = new KSeparator (Horizontal, gboxSettings);
+
+    // -------------------------------------------------------------
+    
+    m_blackLabel = new QLabel(i18n("Black point:"), gboxSettings);
+    m_blackInput = new KDoubleNumInput(gboxSettings);
+    m_blackInput->setPrecision(2);
+    m_blackInput->setRange(0.0, 0.05, 0.01, true);
+    QWhatsThis::add( m_blackInput, i18n("<p>Set here the black level value."));
         
+    m_darkLabel = new QLabel(i18n("Shadows:"), gboxSettings);
+    m_darkInput = new KDoubleNumInput(gboxSettings);
+    m_darkInput->setPrecision(2);
+    m_darkInput->setRange(0.0, 1.0, 0.01, true);
+    QWhatsThis::add( m_darkInput, i18n("<p>Set here the shadows noise suppresion level."));
+
+    m_saturationLabel = new QLabel(i18n("Saturation:"), gboxSettings);
+    m_saturationInput = new KDoubleNumInput(gboxSettings);
+    m_saturationInput->setPrecision(2);
+    m_saturationInput->setRange(0.0, 2.0, 0.01, true);
+    QWhatsThis::add( m_saturationInput, i18n("<p>Set here the saturation value."));
+        
+    m_gammaLabel = new QLabel(i18n("Gamma:"), gboxSettings);
+    m_gammaInput = new KDoubleNumInput(gboxSettings);
+    m_gammaInput->setPrecision(2);
+    m_gammaInput->setRange(0.1, 3.0, 0.01, true);
+    QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma correction value."));
+
     m_greenLabel = new QLabel(i18n("Green:"), gboxSettings);
     m_greenInput = new KDoubleNumInput(gboxSettings);
     m_greenInput->setPrecision(2);
     m_greenInput->setRange(1.0, 2.5, 0.01, true);
-    QWhatsThis::add( m_greenInput, i18n("<p>Set here the green component to set magenta color cast removal level."));
+    QWhatsThis::add(m_greenInput, i18n("<p>Set here the green component to set magenta color "
+                                       "cast removal level."));
+
+    m_exposureLabel      = new QLabel(i18n("Exposure (EV):"), gboxSettings);
+    m_autoAdjustExposure = new QPushButton(gboxSettings);
+    m_autoAdjustExposure->setPixmap(kapp->iconLoader()->loadIcon("run", (KIcon::Group)KIcon::Toolbar));
+    QToolTip::add( m_autoAdjustExposure, i18n( "Auto exposure adjustments" ) );
+    QWhatsThis::add( m_autoAdjustExposure, i18n("<p>With this button, you can automatically adjust Exposure "
+                                                "and Black Point values."));
+    m_exposureInput = new KDoubleNumInput(gboxSettings);
+    m_exposureInput->setPrecision(2);
+    m_exposureInput->setRange(-6.0, 8.0, 0.01, true);
+    QWhatsThis::add( m_exposureInput, i18n("<p>Set here the Exposure Value (EV)."));
+
+    // -------------------------------------------------------------
 
     grid2->addMultiCellWidget(m_temperatureLabel, 0, 0, 0, 0);
     grid2->addMultiCellWidget(m_pickTemperature, 0, 0, 1, 1);
