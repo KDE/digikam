@@ -174,7 +174,7 @@ void GreycstorationIface::filterImage()
     if (!m_orgImage.sixteenBit())           // 8 bits image.
     {
         d->img8bits = CImg<uchar>(imageWidth, imageHeight, 1, 4);
-        uchar *ptr = imageData;
+        uchar *ptr  = imageData;
 
         for (y = 0; y < imageHeight; y++)
         {
@@ -190,7 +190,7 @@ void GreycstorationIface::filterImage()
     }
     else                                // 16 bits image.
     {
-        d->img16bits = CImg<unsigned short>(imageWidth, imageHeight, 1, 4);
+        d->img16bits        = CImg<unsigned short>(imageWidth, imageHeight, 1, 4);
         unsigned short *ptr = (unsigned short *)imageData;
 
         for (y = 0; y < imageHeight; y++)
