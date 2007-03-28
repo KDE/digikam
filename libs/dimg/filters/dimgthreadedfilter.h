@@ -77,23 +77,6 @@ public:
     
 protected:
 
-    /** Copy of original Image data. */
-    DImg      m_orgImage;
-
-    /** Output image data. */
-    DImg      m_destImage;
-    
-    /** Filter name.*/
-    QString   m_name;
-    
-    /** Used to stop compution loop. */
-    bool      m_cancel;
-
-    /** To post event from thread to parent. */
-    QObject  *m_parent;
-
-protected:
-
     /** Start filter operation before threaded method. Must be calls by your constructor. */
     virtual void initFilter(void);
         
@@ -136,15 +119,30 @@ protected:
 
 protected:
 
+    /** Used to stop compution loop. */
+    bool                m_cancel;
+
+    /** The progress span that a slave filter uses in the parent filter's progress. */
+    int                 m_progressBegin;
+    int                 m_progressSpan;
+
+    /** To post event from thread to parent. */
+    QObject            *m_parent;
+
+    /** Filter name.*/
+    QString             m_name;
+
+    /** Copy of original Image data. */
+    DImg                m_orgImage;
+
+    /** Output image data. */
+    DImg                m_destImage;
+
     /** The current slave. Any filter might want to use another filter while processing. */
     DImgThreadedFilter *m_slave;
 
     /** The master of this slave filter. Progress info will be routed to this one. */
     DImgThreadedFilter *m_master;
-
-    /** The progress span that a slave filter uses in the parent filter's progress. */
-    int m_progressBegin;
-    int m_progressSpan;
 };
 
 }  // NameSpace Digikam
