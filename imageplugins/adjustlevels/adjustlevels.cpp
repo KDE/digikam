@@ -278,13 +278,12 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_pickerColorButtonGroup->setFrameShape(QFrame::NoFrame);    
 
     m_autoButton = new QPushButton(gboxSettings);
-    m_autoButton->setPixmap( SmallIcon("run", 18) );
-    QToolTip::add( m_autoButton, i18n( "Adjust all levels automatically." ) );
+    m_autoButton->setPixmap(kapp->iconLoader()->loadIcon("run", (KIcon::Group)KIcon::Toolbar));    QToolTip::add( m_autoButton, i18n( "Adjust all levels automatically." ) );
     QWhatsThis::add( m_autoButton, i18n("<p>If you press this button, all channel levels will be adjusted "
                                         "automatically."));
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
-    m_resetButton->setPixmap( SmallIcon("reload_page", 18) );
+    m_resetButton->setPixmap(kapp->iconLoader()->loadIcon("reload_page", (KIcon::Group)KIcon::Toolbar));     
     QToolTip::add( m_resetButton, i18n( "Reset current channel levels' values." ) );
     QWhatsThis::add( m_resetButton, i18n("<p>If you press this button, all levels' values "
                                          "from the current selected channel "
