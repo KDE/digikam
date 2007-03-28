@@ -4,7 +4,7 @@
  <MenuBar>
 
    <Menu name="Color" >
-    <text>amp;Color</text>
+    <text>&amp;Color</text>
      <Action name="imageplugin_adjustlevels" /> 
    </Menu>
 
