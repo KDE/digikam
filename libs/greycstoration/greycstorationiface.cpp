@@ -126,7 +126,7 @@ void GreycstorationIface::stopComputation()
         DDebug() << "Stop Greycstoration computation..." << endl;
 
         d->img.greycstoration_stop();
-        usleep(500);
+        usleep(500000);
     }
 
     Digikam::DImgThreadedFilter::stopComputation();
@@ -413,7 +413,7 @@ void GreycstorationIface::iterationLoop(uint iter)
                 mp = p;
             }
 
-            usleep(100);
+            usleep(100000);
         }
     }
     while (d->img.greycstoration_is_running() && !m_cancel);
