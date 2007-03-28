@@ -64,5 +64,6 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 021 ==> 134037 : Respect current sort order when passing list to KIPI plugin
 022 ==> 139466 : Remove configuration of digikam image plugins
 023 ==> 119418 : "set as album thumbnail" should work for different albums too.
-024 ==>   
+024 ==> 125916 : Problem with opening 16bit TIFF.
+025 ==>   
 
