@@ -480,8 +480,11 @@ void ImageResize::slotOk()
     enableButton(User3, false);
 
     d->parent->setCursor( KCursor::waitCursor() );
-    d->progressBar->setValue(0);
-    d->progressBar->setEnabled(true);
+    if (d->useGreycstorationBox->isChecked())
+    {
+        d->progressBar->setValue(0);
+        d->progressBar->setEnabled(true);
+    }
     writeUserSettings();
 
     ImageIface iface(0, 0);
