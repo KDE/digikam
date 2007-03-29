@@ -50,8 +50,11 @@ public:
 
     GreycstorationIfacePriv()
     {
-        mode = GreycstorationIface::Restore;
+        mode  = GreycstorationIface::Restore;
+        gfact = 1.0;
     }
+
+    float                  gfact;           
 
     int                    mode;            // The interface running mode.
 
@@ -76,6 +79,9 @@ GreycstorationIface::GreycstorationIface(DImg *orgImage,
     d->settings       = settings;
     d->mode           = mode;
     d->inPaintingMask = inPaintingMask;
+
+    if (m_orgImage.sixteenBit())           // 16 bits image.
+        d->gfact = 1.0/256.0;
 
     if (d->mode == Resize || d->mode == SimpleResize)
     {
@@ -298,6 +304,7 @@ void GreycstorationIface::restoration()
                                            d->settings.anisotropy,
                                            d->settings.alpha,
                                            d->settings.sigma,
+                                           d->gfact,
                                            d->settings.dl,
                                            d->settings.da,
                                            d->settings.gaussPrec,
@@ -314,6 +321,7 @@ void GreycstorationIface::restoration()
                                             d->settings.anisotropy,
                                             d->settings.alpha,
                                             d->settings.sigma,
+                                            d->gfact,
                                             d->settings.dl,
                                             d->settings.da,
                                             d->settings.gaussPrec,
@@ -372,6 +380,7 @@ void GreycstorationIface::inpainting()
                                            d->settings.anisotropy,
                                            d->settings.alpha,
                                            d->settings.sigma,
+                                           d->gfact,
                                            d->settings.dl,
                                            d->settings.da,
                                            d->settings.gaussPrec,
@@ -389,6 +398,7 @@ void GreycstorationIface::inpainting()
                                             d->settings.anisotropy,
                                             d->settings.alpha,
                                             d->settings.sigma,
+                                            d->gfact,
                                             d->settings.dl,
                                             d->settings.da,
                                             d->settings.gaussPrec,
@@ -452,6 +462,7 @@ void GreycstorationIface::resize()
                                            d->settings.anisotropy,
                                            d->settings.alpha,
                                            d->settings.sigma,
+                                           d->gfact,
                                            d->settings.dl,
                                            d->settings.da,
                                            d->settings.gaussPrec,
@@ -469,6 +480,7 @@ void GreycstorationIface::resize()
                                             d->settings.anisotropy,
                                             d->settings.alpha,
                                             d->settings.sigma,
+                                            d->gfact,
                                             d->settings.dl,
                                             d->settings.da,
                                             d->settings.gaussPrec,
