@@ -1237,8 +1237,7 @@ void Canvas::slotPanIconSelectionMoved(QRect r, bool b)
 
     if (b)
     {
-        int r;
-        d->panIconPopup->close(r);
+        d->panIconPopup->hide();
         delete d->panIconPopup;
         d->panIconPopup = 0;
     }
