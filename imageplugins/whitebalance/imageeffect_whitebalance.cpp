@@ -181,11 +181,12 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    QGridLayout *grid2 = new QGridLayout(layout2, 12, 5, spacingHint());
+    QGridLayout *grid2 = new QGridLayout(layout2, 13, 5, spacingHint());
 
-    m_temperatureLabel = new KActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Color_temperature'>Temperature</a> "
-                                               " (K): </qt>"), gboxSettings);
-    m_temperatureInput = new KDoubleNumInput(gboxSettings);
+    m_temperatureLabel    = new KActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Color_temperature'>Color Temperature</a> "
+                                                  " (K): </qt>"), gboxSettings);
+    m_adjTemperatureLabel = new QLabel(i18n("Adjustment:"), gboxSettings);
+    m_temperatureInput    = new KDoubleNumInput(gboxSettings);
     m_temperatureInput->setPrecision(1);
     m_temperatureInput->setRange(2200.0, 7000.0, 10.0, true);
     QWhatsThis::add( m_temperatureInput, i18n("<p>Set here the white balance color temperature in Kelvin."));
@@ -294,34 +295,35 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    grid2->addMultiCellWidget(m_temperatureLabel, 0, 0, 0, 0);
-    grid2->addMultiCellWidget(m_pickTemperature, 0, 0, 1, 1);
-    grid2->addMultiCellWidget(m_temperatureInput, 0, 0, 2, 5);
-    grid2->addMultiCellWidget(m_temperaturePresetLabel, 1, 1, 0, 0);
-    grid2->addMultiCellWidget(m_temperaturePresetCB, 1, 1, 2, 5);
+    grid2->addMultiCellWidget(m_temperatureLabel, 0, 0, 0, 5);
+    grid2->addMultiCellWidget(m_adjTemperatureLabel, 1, 1, 0, 0);
+    grid2->addMultiCellWidget(m_pickTemperature, 1, 1, 1, 1);
+    grid2->addMultiCellWidget(m_temperatureInput, 1, 1, 2, 5);
+    grid2->addMultiCellWidget(m_temperaturePresetLabel, 2, 2, 0, 0);
+    grid2->addMultiCellWidget(m_temperaturePresetCB, 2, 2, 2, 5);
     
-    grid2->addMultiCellWidget(line, 2, 2, 0, 5);
+    grid2->addMultiCellWidget(line, 3, 3, 0, 5);
     
-    grid2->addMultiCellWidget(m_blackLabel, 3, 3, 0, 0);
-    grid2->addMultiCellWidget(m_blackInput, 3, 3, 1, 5);
-    grid2->addMultiCellWidget(m_darkLabel, 4, 4, 0, 0);
-    grid2->addMultiCellWidget(m_darkInput, 4, 4, 1, 5);
-    grid2->addMultiCellWidget(m_saturationLabel, 5, 5, 0, 0);
-    grid2->addMultiCellWidget(m_saturationInput, 5, 5, 1, 5);
-    grid2->addMultiCellWidget(m_gammaLabel, 6, 6, 0, 0);
-    grid2->addMultiCellWidget(m_gammaInput, 6, 6, 1, 5);
-    grid2->addMultiCellWidget(m_greenLabel, 7, 7, 0, 0);
-    grid2->addMultiCellWidget(m_greenInput, 7, 7, 1, 5);
+    grid2->addMultiCellWidget(m_blackLabel, 4, 4, 0, 0);
+    grid2->addMultiCellWidget(m_blackInput, 4, 4, 1, 5);
+    grid2->addMultiCellWidget(m_darkLabel, 5, 5, 0, 0);
+    grid2->addMultiCellWidget(m_darkInput, 5, 5, 1, 5);
+    grid2->addMultiCellWidget(m_saturationLabel, 6, 6, 0, 0);
+    grid2->addMultiCellWidget(m_saturationInput, 6, 6, 1, 5);
+    grid2->addMultiCellWidget(m_gammaLabel, 7, 7, 0, 0);
+    grid2->addMultiCellWidget(m_gammaInput, 7, 7, 1, 5);
+    grid2->addMultiCellWidget(m_greenLabel, 8, 8, 0, 0);
+    grid2->addMultiCellWidget(m_greenInput, 8, 8, 1, 5);
 
-    grid2->addMultiCellWidget(line2, 8, 8, 0, 5);
+    grid2->addMultiCellWidget(line2, 9, 9, 0, 5);
 
-    grid2->addMultiCellWidget(m_exposureLabel, 9, 9, 0, 5);
-    grid2->addMultiCellWidget(m_mainExposureLabel, 10, 10, 0, 0);
-    grid2->addMultiCellWidget(m_autoAdjustExposure, 10, 10, 1, 1);
-    grid2->addMultiCellWidget(m_mainExposureInput, 10, 10, 2, 5);
-    grid2->addMultiCellWidget(m_fineExposureLabel, 11, 11, 0, 1);
-    grid2->addMultiCellWidget(m_fineExposureInput, 11, 11, 2, 5);
-    grid2->setRowStretch(12, 10);
+    grid2->addMultiCellWidget(m_exposureLabel, 10, 10, 0, 5);
+    grid2->addMultiCellWidget(m_mainExposureLabel, 11, 11, 0, 0);
+    grid2->addMultiCellWidget(m_autoAdjustExposure, 11, 11, 1, 1);
+    grid2->addMultiCellWidget(m_mainExposureInput, 11, 11, 2, 5);
+    grid2->addMultiCellWidget(m_fineExposureLabel, 12, 12, 0, 1);
+    grid2->addMultiCellWidget(m_fineExposureInput, 12, 12, 2, 5);
+    grid2->setRowStretch(13, 10);
             
     setUserAreaWidget(gboxSettings);
             

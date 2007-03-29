@@ -129,6 +129,7 @@ private:
     
     QHButtonGroup                *m_scaleBG;  
         
+    QLabel                       *m_adjTemperatureLabel;
     QLabel                       *m_temperaturePresetLabel;
     QLabel                       *m_darkLabel;
     QLabel                       *m_blackLabel;
