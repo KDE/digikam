@@ -55,7 +55,7 @@ public:
 
     int                    mode;            // The interface running mode.
 
-    QImage                 inPaintingMask;  // Monochrome mask for inpainting.
+    QImage                 inPaintingMask;  // Mask for inpainting.
 
     GreycstorationSettings settings;        // Current Greycstoraion algorithm settings.
 
@@ -73,11 +73,9 @@ GreycstorationIface::GreycstorationIface(DImg *orgImage,
                    : DImgThreadedFilter(orgImage, parent)
 {
     d = new GreycstorationIfacePriv;
-    d->settings = settings;
-    d->mode     = mode;
-
-    if (d->mode == InPainting)
-        d->inPaintingMask = inPaintingMask.convertDepth(1);
+    d->settings       = settings;
+    d->mode           = mode;
+    d->inPaintingMask = inPaintingMask;
 
     if (d->mode == Resize || d->mode == SimpleResize)
     {
@@ -334,7 +332,7 @@ void GreycstorationIface::inpainting()
 {
     if (!d->inPaintingMask.isNull())
     {
-        // Copy the monochrome inpainting image data into a CImg type image.
+        // Copy the inpainting image data into a monochrome CImg type image.
 
         register int x, y;
 
@@ -345,8 +343,12 @@ void GreycstorationIface::inpainting()
         {
             for (x = 0; x < d->inPaintingMask.width(); x++)
             {
-                d->mask(x, y, 0) = ptr[0];
-                ptr ++;
+                if (ptr[0] == 255 && ptr[1] == 255 && ptr[2] == 255) 
+                    d->mask(x, y, 0) = 1;
+                else
+                    d->mask(x, y, 0) = 0;
+
+                ptr +=4;
             }
         }
     }
