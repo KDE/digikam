@@ -34,6 +34,9 @@ using namespace cimg_library;
 /** Number of childs thread used to run Greystoration algorithm */ 
 #define COMPUTATION_THREAD 1
 
+/** Uncomment this line if you use future GreycStoration implementation with GFact parameter */
+#define GREYSTORATION_USING_GFACT 1
+
 // Local includes.
 
 #include "ddebug.h"
@@ -105,7 +108,7 @@ GreycstorationIface::~GreycstorationIface()
 }
 
 // We need to re-implemente this method from DImgThreadedFilter class because
-// target image size can be different from original if m_resize is enable.
+// target image size can be different from original if d->mode = Resize.
 
 void GreycstorationIface::initFilter()
 {
@@ -304,7 +307,9 @@ void GreycstorationIface::restoration()
                                            d->settings.anisotropy,
                                            d->settings.alpha,
                                            d->settings.sigma,
+#ifdef GREYSTORATION_USING_GFACT
                                            d->gfact,
+#endif
                                            d->settings.dl,
                                            d->settings.da,
                                            d->settings.gaussPrec,
@@ -321,7 +326,9 @@ void GreycstorationIface::restoration()
                                             d->settings.anisotropy,
                                             d->settings.alpha,
                                             d->settings.sigma,
+#ifdef GREYSTORATION_USING_GFACT
                                             d->gfact,
+#endif
                                             d->settings.dl,
                                             d->settings.da,
                                             d->settings.gaussPrec,
@@ -340,23 +347,21 @@ void GreycstorationIface::inpainting()
 {
     if (!d->inPaintingMask.isNull())
     {
-        // Copy the inpainting image data into a monochrome CImg type image.
+        // Copy the inpainting image data into a CImg type image with three channels and no alpha.
 
         register int x, y;
 
-        d->mask    = CImg<uchar>(d->inPaintingMask.width(), d->inPaintingMask.height(), 1, 1);
+        d->mask    = CImg<uchar>(d->inPaintingMask.width(), d->inPaintingMask.height(), 1, 3);
         uchar *ptr = d->inPaintingMask.bits();
 
         for (y = 0; y < d->inPaintingMask.height(); y++)
         {
             for (x = 0; x < d->inPaintingMask.width(); x++)
             {
-                if (ptr[0] == 255 && ptr[1] == 255 && ptr[2] == 255) 
-                    d->mask(x, y, 0) = 1;
-                else
-                    d->mask(x, y, 0) = 0;
-
-                ptr +=4;
+                d->mask(x, y, 0) = ptr[2];        // blue.
+                d->mask(x, y, 1) = ptr[1];        // green.
+                d->mask(x, y, 2) = ptr[0];        // red.
+                ptr += 4;
             }
         }
     }
@@ -380,7 +385,9 @@ void GreycstorationIface::inpainting()
                                            d->settings.anisotropy,
                                            d->settings.alpha,
                                            d->settings.sigma,
+#ifdef GREYSTORATION_USING_GFACT
                                            d->gfact,
+#endif
                                            d->settings.dl,
                                            d->settings.da,
                                            d->settings.gaussPrec,
@@ -398,7 +405,9 @@ void GreycstorationIface::inpainting()
                                             d->settings.anisotropy,
                                             d->settings.alpha,
                                             d->settings.sigma,
+#ifdef GREYSTORATION_USING_GFACT
                                             d->gfact,
+#endif
                                             d->settings.dl,
                                             d->settings.da,
                                             d->settings.gaussPrec,
@@ -462,7 +471,9 @@ void GreycstorationIface::resize()
                                            d->settings.anisotropy,
                                            d->settings.alpha,
                                            d->settings.sigma,
+#ifdef GREYSTORATION_USING_GFACT
                                            d->gfact,
+#endif
                                            d->settings.dl,
                                            d->settings.da,
                                            d->settings.gaussPrec,
@@ -480,7 +491,9 @@ void GreycstorationIface::resize()
                                             d->settings.anisotropy,
                                             d->settings.alpha,
                                             d->settings.sigma,
+#ifdef GREYSTORATION_USING_GFACT
                                             d->gfact,
+#endif
                                             d->settings.dl,
                                             d->settings.da,
                                             d->settings.gaussPrec,
