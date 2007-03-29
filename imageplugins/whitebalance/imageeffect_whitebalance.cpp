@@ -635,7 +635,7 @@ void ImageEffect_WhiteBalance::slotEffect()
     double black        = m_blackInput->value();
     double mainExposure = m_mainExposureInput->value();
     double fineExposure = m_fineExposureInput->value();
-    double gamma        = 2.0-m_gammaInput->value();
+    double gamma        = m_gammaInput->value();
     double saturation   = m_saturationInput->value();
     double green        = m_greenInput->value();
             
@@ -668,7 +668,7 @@ void ImageEffect_WhiteBalance::finalRendering()
     double black        = m_blackInput->value();
     double mainExposure = m_mainExposureInput->value();
     double fineExposure = m_fineExposureInput->value();
-    double gamma        = 2.0-m_gammaInput->value();
+    double gamma        = m_gammaInput->value();
     double saturation   = m_saturationInput->value();
     double green        = m_greenInput->value();
             

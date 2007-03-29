@@ -227,29 +227,33 @@ void WhiteBalance::setRGBmult()
 
 void WhiteBalance::setLUTv()
 {
-    double b, g;
-
-    b    = d->mg * pow(2, d->exposition);
-    g    = d->gamma;
-    d->BP = (uint)(d->rgbMax * d->black);
-    d->WP = (uint)(d->rgbMax / b);
+    double b = d->mg * pow(2, d->exposition);
+    d->BP    = (uint)(d->rgbMax * d->black);
+    d->WP    = (uint)(d->rgbMax / b);
     
     if (d->WP - d->BP < 1) d->WP = d->BP + 1;
 
     DDebug() << "T(K): " << d->temperature
-              << " => R:" << d->mr
-              << " G:"    << d->mg
-              << " B:"    << d->mb
-              << " BP:"   << d->BP
-              << " WP:"   << d->WP
-              << endl;
+             << " => R:" << d->mr
+             << " G:"    << d->mg
+             << " B:"    << d->mb
+             << " BP:"   << d->BP
+             << " WP:"   << d->WP
+             << endl;
     
     d->curve[0] = 0;
     
+    // We will try to reproduce the same Gamma effect here than BCG tool.
+    double gamma; 
+    if (d->gamma >= 1.0)
+        gamma = 0.335*(2.0-d->gamma) + 0.665;
+    else 
+        gamma = 1.8*(2.0-d->gamma) - 0.8; 
+    
     for (int i = 1; i < (int)d->rgbMax; i++)
     {
-        float x     = (float)(i - d->BP)/(d->WP - d->BP);
-        d->curve[i]  = (i < d->BP) ? 0 : (d->rgbMax-1) * pow(x, g);
+        float x      = (float)(i - d->BP)/(d->WP - d->BP);
+        d->curve[i]  = (i < d->BP) ? 0 : (d->rgbMax-1) * pow(x, gamma);
         d->curve[i] *= (1 - d->dark * exp(-x * x / 0.002));
         d->curve[i] /= (float)i;
     }
