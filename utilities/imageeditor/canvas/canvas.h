@@ -155,7 +155,7 @@ private slots:
     void slotModified();
     void slotImageLoaded(const QString& filePath, bool success);
     void slotImageSaved(const QString& filePath, bool success);
-    void slotCornerButtonClicked();
+    void slotCornerButtonToggled(bool);
     void slotPanIconSelectionMoved(QRect, bool);
     void slotZoomChanged(float);
     

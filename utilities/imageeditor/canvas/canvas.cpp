@@ -164,6 +164,7 @@ Canvas::Canvas(QWidget *parent)
 
     d->cornerButton = new QToolButton(this);
     d->cornerButton->setIconSet(SmallIcon("move"));
+    d->cornerButton->setToggleButton(true);
     d->cornerButton->hide();
     setCornerWidget(d->cornerButton);
 
@@ -176,8 +177,8 @@ Canvas::Canvas(QWidget *parent)
     connect(this, SIGNAL(signalZoomChanged(float)),
             this, SLOT(slotZoomChanged(float)));
 
-    connect(d->cornerButton, SIGNAL(clicked()),
-            this, SLOT(slotCornerButtonClicked()));
+    connect(d->cornerButton, SIGNAL(toggled(bool)),
+            this, SLOT(slotCornerButtonToggled(bool)));
 
     connect(d->im, SIGNAL(signalColorManagementTool()),
             this, SIGNAL(signalColorManagementTool()));
@@ -1208,16 +1209,26 @@ void Canvas::slotModified()
     emit signalChanged();
 }
 
-void Canvas::slotCornerButtonClicked()
+void Canvas::slotCornerButtonToggled(bool on)
 {    
+    if (!on)
+    {
+        if (d->panIconPopup)
+        {
+            d->panIconPopup->hide();
+            delete d->panIconPopup;
+            d->panIconPopup = 0;
+        }
+        return;
+    }
+
     if (!d->panIconPopup)
     {
-        d->panIconPopup = new KPopupFrame(this);
-    
-        ImagePanIconWidget *pan = new ImagePanIconWidget(90, 60, d->panIconPopup);
+        d->panIconPopup         = new KPopupFrame(this);
+        ImagePanIconWidget *pan = new ImagePanIconWidget(120, 80, d->panIconPopup);
         d->panIconPopup->setMainWidget(pan);
 
-        QRect r((int)(contentsX() / d->zoom), (int)(contentsY() / d->zoom),
+        QRect r((int)(contentsX()    / d->zoom), (int)(contentsY()     / d->zoom),
                 (int)(visibleWidth() / d->zoom), (int)(visibleHeight() / d->zoom));
         pan->setRegionSelection(r);
 
@@ -1228,7 +1239,8 @@ void Canvas::slotCornerButtonClicked()
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
     g.setY(g.y()+ viewport()->size().height());
-    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(), g.y() - d->panIconPopup->height()));
+    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(), 
+                                  g.y() - d->panIconPopup->height()));
 }
 
 void Canvas::slotPanIconSelectionMoved(QRect r, bool b)
@@ -1240,6 +1252,7 @@ void Canvas::slotPanIconSelectionMoved(QRect r, bool b)
         d->panIconPopup->hide();
         delete d->panIconPopup;
         d->panIconPopup = 0;
+        d->cornerButton->setOn(false);
     }
 }
 
