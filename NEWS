@@ -66,5 +66,6 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 023 ==> 119418 : "set as album thumbnail" should work for different albums too.
 024 ==> 125916 : Problem with opening 16bit TIFF.
 025 ==> 143578 : New Pan Tool crash.
-026 ==>  
+026 ==> 118539 : Lossless image-editor for JPEGs.
+027 ==> 
 
