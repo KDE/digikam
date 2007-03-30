@@ -18,6 +18,10 @@
  *
  * ============================================================ */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 // C++ includes.
 
 #include <cassert>
@@ -25,9 +29,18 @@
 // Local includes.
 
 #define cimg_plugin "greycstoration.h"
-#if cimg_OS!=2
+#if defined(sun)         || defined(__sun)      || defined(linux)       || defined(__linux) \
+ || defined(__linux__)   || defined(__CYGWIN__) || defined(BSD)         || defined(__FreeBSD__) \
+ || defined(__OPENBSD__) || defined(__MACOSX__) || defined(__APPLE__)   || defined(sgi) \
+ || defined(__sgi)
 #include <pthread.h>
 #endif
+
+/** Don't use CImg interface (keyboard/mouse interaction) */
+#define cimg_display_type 0
+/** Only print debug information on the console */
+#define cimg_debug 1
+
 #include "CImg.h"
 using namespace cimg_library;
 

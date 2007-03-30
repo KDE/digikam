@@ -2,9 +2,6 @@ METASOURCES = AUTO
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS) -w 
 
-# Don't use CImg interface (keyboard/mouse interaction)
-AM_CPPFLAGS = -Dcimg_OS=1 -Dcimg_display_type=0 
-
 noinst_LTLIBRARIES = libgreycstoration.la
 
 libgreycstoration_la_SOURCES = greycstorationiface.cpp greycstorationwidget.cpp
