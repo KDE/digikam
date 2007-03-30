@@ -1,4 +1,4 @@
-DIGIKAM PROJECT
+DIGIKAM PROJECT (http://www.digikam.org)
 
 
 -- AUTHORS -----------------------------------------------------------
@@ -24,9 +24,6 @@ See AUTHORS file for details.
  import and export, etc.  The kipi-plugins package contains many
  very useful extentions.
 
- Homepages: http://www.digikam.org
-            http://extragear.kde.org/apps/digikamimageplugins
- 
  digiKam is based in part on the work of the Independent JPEG Group.
 
 
