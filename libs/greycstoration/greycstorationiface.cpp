@@ -18,10 +18,6 @@
  *
  * ============================================================ */
 
-/*#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif*/
-
 // C++ includes.
 
 #include <cassert>
@@ -36,7 +32,7 @@
 using namespace cimg_library;
 
 /** Number of childs thread used to run Greystoration algorithm */ 
-#define COMPUTATION_THREAD 1
+#define COMPUTATION_THREAD 2
 
 /** Uncomment this line if you use future GreycStoration implementation with GFact parameter */
 #define GREYSTORATION_USING_GFACT 1
