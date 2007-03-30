@@ -57,12 +57,12 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 014 ==> 126127 : Enlarge small images when autozoom is activated.
 015 ==> 104439 : Use left mouse button to scroll image.
 016 ==> 137391 : Picture navigation in image editor using the mouse.
-017 ==> 102029 : Configurable size of icons in sidebars
+017 ==> 102029 : Configurable size of icons in sidebars.
 018 ==> 102029 : Wish: no/small icons in album tree.
 019 ==> 131155 : Smooth increasing/decreasing size of thumbnails like in iPhoto.
-020 ==> 89365  : Reorganize menu structure in Image Editor
-021 ==> 134037 : Respect current sort order when passing list to KIPI plugin
-022 ==> 139466 : Remove configuration of digikam image plugins
+020 ==> 89365  : Reorganize menu structure in Image Editor.
+021 ==> 134037 : Respect current sort order when passing list to KIPI plugin.
+022 ==> 139466 : Remove configuration of digikam image plugins.
 023 ==> 119418 : "set as album thumbnail" should work for different albums too.
 024 ==> 125916 : Problem with opening 16bit TIFF.
 025 ==> 143578 : New Pan Tool crash.
