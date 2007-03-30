@@ -470,6 +470,14 @@ void Canvas::viewportPaintEvent(QPaintEvent *e)
         d->paintTimer->start(100, true);
 }
 
+void Canvas::slotPaintSmooth()
+{
+    if (d->paintTimer->isActive())
+        return;
+
+    paintViewport(contentsRect(), true);
+}
+
 void Canvas::paintViewport(const QRect& er, bool antialias)
 {
     QRect o_cr(viewportToContents(er.topLeft()), viewportToContents(er.bottomRight()));
@@ -1198,14 +1206,6 @@ void Canvas::slotModified()
     slotZoomChanged(d->zoom);
 
     emit signalChanged();
-}
-
-void Canvas::slotPaintSmooth()
-{
-    if (d->paintTimer->isActive())
-        return;
-
-    paintViewport(contentsRect(), true);
 }
 
 void Canvas::slotCornerButtonClicked()
