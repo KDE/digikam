@@ -65,8 +65,7 @@ public:
 
     GreycstorationSettings settings;        // Current Greycstoraion algorithm settings.
 
-    CImg<uchar>            img8bits;        // Main image used only in 8 bits. 
-    CImg<unsigned short>   img16bits;       // Main image used only in 16 bits.
+    CImg<>                 img;             // Main image.
     CImg<uchar>            mask;            // The mask used with inpaint or resize mode
 };
 
@@ -82,9 +81,6 @@ GreycstorationIface::GreycstorationIface(DImg *orgImage,
     d->settings       = settings;
     d->mode           = mode;
     d->inPaintingMask = inPaintingMask;
-
-    if (m_orgImage.sixteenBit())           // 16 bits image.
-        d->gfact = 1.0/256.0;
 
     if (d->mode == Resize || d->mode == SimpleResize)
     {
@@ -133,23 +129,11 @@ void GreycstorationIface::stopComputation()
 {
     // Because Greycstoration algorithm run in a child thread, we need
     // to stop it before to stop this thread.
-    if (!m_orgImage.sixteenBit())          // 8 bits image.
+    if (d->img.greycstoration_is_running())
     {
-        if (d->img8bits.greycstoration_is_running())
-        {
-            // If the user abort, we stop the algorithm.
-            DDebug() << "Stop Greycstoration computation..." << endl;    
-            d->img8bits.greycstoration_stop();
-        }
-    }
-    else                                   // 16 bits image.
-    {
-        if (d->img16bits.greycstoration_is_running())
-        {
-            // If the user abort, we stop the algorithm.
-            DDebug() << "Stop Greycstoration computation..." << endl;    
-            d->img16bits.greycstoration_stop();
-        }
+        // If the user abort, we stop the algorithm.
+        DDebug() << "Stop Greycstoration computation..." << endl;    
+        d->img.greycstoration_stop();
     }
 
     // And now when stop main loop and clean up all
@@ -158,11 +142,7 @@ void GreycstorationIface::stopComputation()
 
 void GreycstorationIface::cleanupFilter()
 {
-    if (!m_orgImage.sixteenBit())          // 8 bits image.
-        d->img8bits = CImg<uchar>();
-    else                                   // 16 bits image.
-        d->img16bits = CImg<unsigned short>();
-    
+    d->img  = CImg<>();
     d->mask = CImg<uchar>();
 }
 
@@ -177,37 +157,36 @@ void GreycstorationIface::filterImage()
     uchar* imageData = m_orgImage.bits();
     int imageWidth   = m_orgImage.width();
     int imageHeight  = m_orgImage.height();
+    d->img           = CImg<>(imageWidth, imageHeight, 1, 4);
 
     if (!m_orgImage.sixteenBit())           // 8 bits image.
     {
-        d->img8bits = CImg<uchar>(imageWidth, imageHeight, 1, 4);
         uchar *ptr  = imageData;
 
         for (y = 0; y < imageHeight; y++)
         {
             for (x = 0; x < imageWidth; x++)
             {
-                d->img8bits(x, y, 0) = ptr[0];        // Blue.
-                d->img8bits(x, y, 1) = ptr[1];        // Green.
-                d->img8bits(x, y, 2) = ptr[2];        // Red.
-                d->img8bits(x, y, 3) = ptr[3];        // Alpha.
+                d->img(x, y, 0) = ptr[0];        // Blue.
+                d->img(x, y, 1) = ptr[1];        // Green.
+                d->img(x, y, 2) = ptr[2];        // Red.
+                d->img(x, y, 3) = ptr[3];        // Alpha.
                 ptr += 4;
             }
         }
     }
     else                                // 16 bits image.
     {
-        d->img16bits        = CImg<unsigned short>(imageWidth, imageHeight, 1, 4);
         unsigned short *ptr = (unsigned short *)imageData;
 
         for (y = 0; y < imageHeight; y++)
         {
             for (x = 0; x < imageWidth; x++)
             {
-                d->img16bits(x, y, 0) = ptr[0];        // Blue.
-                d->img16bits(x, y, 1) = ptr[1];        // Green.
-                d->img16bits(x, y, 2) = ptr[2];        // Red.
-                d->img16bits(x, y, 3) = ptr[3];        // Alpha.
+                d->img(x, y, 0) = ptr[0];        // Blue.
+                d->img(x, y, 1) = ptr[1];        // Green.
+                d->img(x, y, 2) = ptr[2];        // Red.
+                d->img(x, y, 3) = ptr[3];        // Alpha.
                 ptr += 4;
             }
         }
@@ -266,10 +245,10 @@ void GreycstorationIface::filterImage()
             for (x = 0; x < newWidth; x++)
             {
                 // Overwrite RGB values to destination.
-                ptr[0] = (uchar) d->img8bits(x, y, 0);        // Blue
-                ptr[1] = (uchar) d->img8bits(x, y, 1);        // Green
-                ptr[2] = (uchar) d->img8bits(x, y, 2);        // Red
-                ptr[3] = (uchar) d->img8bits(x, y, 3);        // Alpha
+                ptr[0] = (uchar) d->img(x, y, 0);        // Blue
+                ptr[1] = (uchar) d->img(x, y, 1);        // Green
+                ptr[2] = (uchar) d->img(x, y, 2);        // Red
+                ptr[3] = (uchar) d->img(x, y, 3);        // Alpha
                 ptr += 4;
             }
         }
@@ -283,10 +262,10 @@ void GreycstorationIface::filterImage()
             for (x = 0; x < newWidth; x++)
             {
                 // Overwrite RGB values to destination.
-                ptr[0] = (unsigned short) d->img16bits(x, y, 0);        // Blue
-                ptr[1] = (unsigned short) d->img16bits(x, y, 1);        // Green
-                ptr[2] = (unsigned short) d->img16bits(x, y, 2);        // Red
-                ptr[3] = (unsigned short) d->img16bits(x, y, 3);        // Alpha
+                ptr[0] = (unsigned short) d->img(x, y, 0);        // Blue
+                ptr[1] = (unsigned short) d->img(x, y, 1);        // Green
+                ptr[2] = (unsigned short) d->img(x, y, 2);        // Red
+                ptr[3] = (unsigned short) d->img(x, y, 3);        // Alpha
                 ptr += 4;
             }
         }
@@ -300,44 +279,22 @@ void GreycstorationIface::restoration()
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
         // instance).
-        if (!m_orgImage.sixteenBit())           // 8 bits image.
-        {
-            d->img8bits.greycstoration_run(d->settings.amplitude,
-                                           d->settings.sharpness,
-                                           d->settings.anisotropy,
-                                           d->settings.alpha,
-                                           d->settings.sigma,
+        d->img.greycstoration_run(d->settings.amplitude,
+                                  d->settings.sharpness,
+                                  d->settings.anisotropy,
+                                  d->settings.alpha,
+                                  d->settings.sigma,
 #ifdef GREYSTORATION_USING_GFACT
-                                           d->gfact,
+                                  d->gfact,
 #endif
-                                           d->settings.dl,
-                                           d->settings.da,
-                                           d->settings.gaussPrec,
-                                           d->settings.interp,
-                                           d->settings.fastApprox,
-                                           d->settings.tile,
-                                           d->settings.btile,
-                                           COMPUTATION_THREAD);
-        }
-        else                                     // 16 bits image.
-        {
-            d->img16bits.greycstoration_run(d->settings.amplitude,
-                                            d->settings.sharpness,
-                                            d->settings.anisotropy,
-                                            d->settings.alpha,
-                                            d->settings.sigma,
-#ifdef GREYSTORATION_USING_GFACT
-                                            d->gfact,
-#endif
-                                            d->settings.dl,
-                                            d->settings.da,
-                                            d->settings.gaussPrec,
-                                            d->settings.interp,
-                                            d->settings.fastApprox,
-                                            d->settings.tile,
-                                            d->settings.btile,
-                                            COMPUTATION_THREAD);
-        }
+                                  d->settings.dl,
+                                  d->settings.da,
+                                  d->settings.gaussPrec,
+                                  d->settings.interp,
+                                  d->settings.fastApprox,
+                                  d->settings.tile,
+                                  d->settings.btile,
+                                  COMPUTATION_THREAD);
 
         iterationLoop(iter);
     }
@@ -377,46 +334,23 @@ void GreycstorationIface::inpainting()
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
         // instance).
-        if (!m_orgImage.sixteenBit())           // 8 bits image.
-        {
-            d->img8bits.greycstoration_run(d->mask,
-                                           d->settings.amplitude,
-                                           d->settings.sharpness,
-                                           d->settings.anisotropy,
-                                           d->settings.alpha,
-                                           d->settings.sigma,
+        d->img.greycstoration_run(d->mask,
+                                  d->settings.amplitude,
+                                  d->settings.sharpness,
+                                  d->settings.anisotropy,
+                                  d->settings.alpha,
+                                  d->settings.sigma,
 #ifdef GREYSTORATION_USING_GFACT
-                                           d->gfact,
+                                  d->gfact,
 #endif
-                                           d->settings.dl,
-                                           d->settings.da,
-                                           d->settings.gaussPrec,
-                                           d->settings.interp,
-                                           d->settings.fastApprox,
-                                           d->settings.tile,
-                                           d->settings.btile,
-                                           COMPUTATION_THREAD);
-        }
-        else                                     // 16 bits image.
-        {
-            d->img16bits.greycstoration_run(d->mask,
-                                            d->settings.amplitude,
-                                            d->settings.sharpness,
-                                            d->settings.anisotropy,
-                                            d->settings.alpha,
-                                            d->settings.sigma,
-#ifdef GREYSTORATION_USING_GFACT
-                                            d->gfact,
-#endif
-                                            d->settings.dl,
-                                            d->settings.da,
-                                            d->settings.gaussPrec,
-                                            d->settings.interp,
-                                            d->settings.fastApprox,
-                                            d->settings.tile,
-                                            d->settings.btile,
-                                            COMPUTATION_THREAD);
-        }
+                                  d->settings.dl,
+                                  d->settings.da,
+                                  d->settings.gaussPrec,
+                                  d->settings.interp,
+                                  d->settings.fastApprox,
+                                  d->settings.tile,
+                                  d->settings.btile,
+                                  COMPUTATION_THREAD);
 
         iterationLoop(iter);
     }
@@ -427,82 +361,44 @@ void GreycstorationIface::resize()
     const bool anchor       = true;   // Anchor original pixels.
     const unsigned int init = 5;      // Initial estimate (1=block, 3=linear, 5=bicubic).
 
-    if (!m_orgImage.sixteenBit())           // 8 bits image.
-    {
-        const CImgStats stats(d->img8bits, false);
-        DDebug() << "Resizing image: size " << d->img8bits.width << " x " << d->img8bits.height 
-                 << ", value range [" << stats.min << " , " << stats.max << "]" << endl;
-    }
-    else                                    // 16 bits image.
-    {
-        const CImgStats stats(d->img16bits, false);
-        DDebug() << "Resizing image: size " << d->img16bits.width << " x " << d->img16bits.height 
-                 << ", value range [" << stats.min << " , " << stats.max << "]" << endl;
-    }
+    const CImgStats stats(d->img, false);
+    DDebug() << "Resizing image: size " << d->img.width << " x " << d->img.height 
+             << ", value range [" << stats.min << " , " << stats.max << "]" << endl;
 
     int w = m_destImage.width();
     int h = m_destImage.height();
 
-    if (!m_orgImage.sixteenBit())           // 8 bits image.
-        d->mask.assign(d->img8bits.dimx(), d->img8bits.dimy(), 1, 1, 255);
-    else                                    // 16 bits image.
-        d->mask.assign(d->img16bits.dimx(), d->img16bits.dimy(), 1, 1, 255);
+    d->mask.assign(d->img.dimx(), d->img.dimy(), 1, 1, 255);
 
     if (!anchor) 
         d->mask.resize(w, h, 1, 1, 1); 
     else 
         d->mask = !d->mask.resize(w, h, 1, 1, 4);
 
-    if (!m_orgImage.sixteenBit())           // 8 bits image.
-        d->img8bits.resize(w, h, 1, -100, init);
-    else                                    // 16 bits image.
-        d->img16bits.resize(w, h, 1, -100, init);
+    d->img.resize(w, h, 1, -100, init);
 
     for (uint iter = 0 ; !m_cancel && (iter < d->settings.nbIter) ; iter++)
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
         // instance).
-        if (!m_orgImage.sixteenBit())           // 8 bits image.
-        {
-            d->img8bits.greycstoration_run(d->mask,
-                                           d->settings.amplitude,
-                                           d->settings.sharpness,
-                                           d->settings.anisotropy,
-                                           d->settings.alpha,
-                                           d->settings.sigma,
+        d->img.greycstoration_run(d->mask,
+                                  d->settings.amplitude,
+                                  d->settings.sharpness,
+                                  d->settings.anisotropy,
+                                  d->settings.alpha,
+                                  d->settings.sigma,
 #ifdef GREYSTORATION_USING_GFACT
-                                           d->gfact,
+                                  d->gfact,
 #endif
-                                           d->settings.dl,
-                                           d->settings.da,
-                                           d->settings.gaussPrec,
-                                           d->settings.interp,
-                                           d->settings.fastApprox,
-                                           d->settings.tile,
-                                           d->settings.btile,
-                                           COMPUTATION_THREAD);
-        }
-        else                                     // 16 bits image.
-        {
-            d->img16bits.greycstoration_run(d->mask,
-                                            d->settings.amplitude,
-                                            d->settings.sharpness,
-                                            d->settings.anisotropy,
-                                            d->settings.alpha,
-                                            d->settings.sigma,
-#ifdef GREYSTORATION_USING_GFACT
-                                            d->gfact,
-#endif
-                                            d->settings.dl,
-                                            d->settings.da,
-                                            d->settings.gaussPrec,
-                                            d->settings.interp,
-                                            d->settings.fastApprox,
-                                            d->settings.tile,
-                                            d->settings.btile,
-                                            COMPUTATION_THREAD);
-        }
+                                  d->settings.dl,
+                                  d->settings.da,
+                                  d->settings.gaussPrec,
+                                  d->settings.interp,
+                                  d->settings.fastApprox,
+                                  d->settings.tile,
+                                  d->settings.btile,
+                                  COMPUTATION_THREAD);
 
         iterationLoop(iter);
     }
@@ -515,17 +411,13 @@ void GreycstorationIface::simpleResize()
     int w = m_destImage.width();
     int h = m_destImage.height();
 
-    if (!m_orgImage.sixteenBit())           // 8 bits image.
-        d->img8bits.resize(w, h, 1, -100, init);
-    else                                    // 16 bits image.
-        d->img16bits.resize(w, h, 1, -100, init);
+    d->img.resize(w, h, 1, -100, init);
 }
 
 void GreycstorationIface::iterationLoop(uint iter)
 {
     uint mp  = 0;
     uint p   = 0;
-    bool run = false;
 
     do
     {
@@ -534,10 +426,7 @@ void GreycstorationIface::iterationLoop(uint iter)
             // Update the progress bar in dialog. We simply computes the global
             // progression indice (including all iterations).
 
-            if (!m_orgImage.sixteenBit())           // 8 bits image.
-                p = (uint)((iter*100 + d->img8bits.greycstoration_progress())/d->settings.nbIter);
-            else                                    // 16 bits image.
-                p = (uint)((iter*100 + d->img16bits.greycstoration_progress())/d->settings.nbIter);
+            p = (uint)((iter*100 + d->img.greycstoration_progress())/d->settings.nbIter);
 
             if (p > mp)
             {
@@ -547,13 +436,8 @@ void GreycstorationIface::iterationLoop(uint iter)
         }
 
         usleep(100000);
-
-        if (!m_orgImage.sixteenBit())           // 8 bits image.
-            run = d->img8bits.greycstoration_is_running();
-        else                                    // 16 bits image.
-            run = d->img16bits.greycstoration_is_running();
     }    
-    while (run && !m_cancel);
+    while (d->img.greycstoration_is_running() && !m_cancel);
 }
 
 }  // NameSpace Digikam
