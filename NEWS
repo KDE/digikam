@@ -67,5 +67,6 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 024 ==> 125916 : Problem with opening 16bit TIFF.
 025 ==> 143578 : New Pan Tool crash.
 026 ==> 118539 : Lossless image-editor for JPEGs.
-027 ==> 
+027 ==> 133913 : sRGB profile white point may be incorrect.
+028 ==> 
 
