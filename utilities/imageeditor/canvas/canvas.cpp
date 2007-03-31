@@ -164,7 +164,6 @@ Canvas::Canvas(QWidget *parent)
 
     d->cornerButton = new QToolButton(this);
     d->cornerButton->setIconSet(SmallIcon("move"));
-    d->cornerButton->setToggleButton(true);
     d->cornerButton->hide();
     setCornerWidget(d->cornerButton);
 
@@ -177,8 +176,8 @@ Canvas::Canvas(QWidget *parent)
     connect(this, SIGNAL(signalZoomChanged(float)),
             this, SLOT(slotZoomChanged(float)));
 
-    connect(d->cornerButton, SIGNAL(toggled(bool)),
-            this, SLOT(slotCornerButtonToggled(bool)));
+    connect(d->cornerButton, SIGNAL(released()),
+            this, SLOT(slotCornerButtonReleased()));
 
     connect(d->im, SIGNAL(signalColorManagementTool()),
             this, SIGNAL(signalColorManagementTool()));
@@ -1209,19 +1208,8 @@ void Canvas::slotModified()
     emit signalChanged();
 }
 
-void Canvas::slotCornerButtonToggled(bool on)
+void Canvas::slotCornerButtonReleased()
 {    
-    if (!on)
-    {
-        if (d->panIconPopup)
-        {
-            d->panIconPopup->hide();
-            delete d->panIconPopup;
-            d->panIconPopup = 0;
-        }
-        return;
-    }
-
     if (!d->panIconPopup)
     {
         d->panIconPopup         = new KPopupFrame(this);
@@ -1252,7 +1240,6 @@ void Canvas::slotPanIconSelectionMoved(QRect r, bool b)
         d->panIconPopup->hide();
         delete d->panIconPopup;
         d->panIconPopup = 0;
-        d->cornerButton->setOn(false);
     }
 }
 
