@@ -447,7 +447,7 @@ void GreycstorationIface::iterationLoop(uint iter)
             }
         }
     }    
-    while (d->img.greycstoration_is_running()/* && !m_cancel*/);
+    while (d->img.greycstoration_is_running() && !m_cancel);
 }
 
 }  // NameSpace Digikam
