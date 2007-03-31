@@ -18,6 +18,11 @@
  *
  * ============================================================ */
 
+/** Don't use CImg interface (keyboard/mouse interaction) */
+#define cimg_display_type 0
+/** Only print debug information on the console */
+#define cimg_debug 1
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -36,16 +41,11 @@
 #include <pthread.h>
 #endif
 
-/** Don't use CImg interface (keyboard/mouse interaction) */
-#define cimg_display_type 0
-/** Only print debug information on the console */
-#define cimg_debug 1
-
 #include "CImg.h"
 using namespace cimg_library;
 
 /** Number of childs thread used to run Greystoration algorithm */ 
-#define COMPUTATION_THREAD 2
+#define COMPUTATION_THREAD 1
 
 /** Uncomment this line if you use future GreycStoration implementation with GFact parameter */
 #define GREYSTORATION_USING_GFACT 1
@@ -94,6 +94,9 @@ GreycstorationIface::GreycstorationIface(DImg *orgImage,
     d->settings       = settings;
     d->mode           = mode;
     d->inPaintingMask = inPaintingMask;
+
+    if (m_orgImage.sixteenBit())           // 16 bits image.
+        d->gfact = 1.0/256.0;
 
     if (d->mode == Resize || d->mode == SimpleResize)
     {
@@ -153,12 +156,6 @@ void GreycstorationIface::stopComputation()
     Digikam::DImgThreadedFilter::stopComputation();
 }
 
-void GreycstorationIface::cleanupFilter()
-{
-    d->img  = CImg<>();
-    d->mask = CImg<uchar>();
-}
-
 void GreycstorationIface::filterImage()
 {
     register int x, y;
@@ -174,7 +171,7 @@ void GreycstorationIface::filterImage()
 
     if (!m_orgImage.sixteenBit())           // 8 bits image.
     {
-        uchar *ptr  = imageData;
+        uchar *ptr = imageData;
 
         for (y = 0; y < imageHeight; y++)
         {
@@ -258,10 +255,10 @@ void GreycstorationIface::filterImage()
             for (x = 0; x < newWidth; x++)
             {
                 // Overwrite RGB values to destination.
-                ptr[0] = (uchar) d->img(x, y, 0);        // Blue
-                ptr[1] = (uchar) d->img(x, y, 1);        // Green
-                ptr[2] = (uchar) d->img(x, y, 2);        // Red
-                ptr[3] = (uchar) d->img(x, y, 3);        // Alpha
+                ptr[0] = static_cast<uchar>(d->img(x, y, 0));        // Blue
+                ptr[1] = static_cast<uchar>(d->img(x, y, 1));        // Green
+                ptr[2] = static_cast<uchar>(d->img(x, y, 2));        // Red
+                ptr[3] = static_cast<uchar>(d->img(x, y, 3));        // Alpha
                 ptr += 4;
             }
         }
@@ -275,10 +272,10 @@ void GreycstorationIface::filterImage()
             for (x = 0; x < newWidth; x++)
             {
                 // Overwrite RGB values to destination.
-                ptr[0] = (unsigned short) d->img(x, y, 0);        // Blue
-                ptr[1] = (unsigned short) d->img(x, y, 1);        // Green
-                ptr[2] = (unsigned short) d->img(x, y, 2);        // Red
-                ptr[3] = (unsigned short) d->img(x, y, 3);        // Alpha
+                ptr[0] = static_cast<unsigned short>(d->img(x, y, 0));        // Blue
+                ptr[1] = static_cast<unsigned short>(d->img(x, y, 1));        // Green
+                ptr[2] = static_cast<unsigned short>(d->img(x, y, 2));        // Red
+                ptr[3] = static_cast<unsigned short>(d->img(x, y, 3));        // Alpha
                 ptr += 4;
             }
         }
@@ -434,6 +431,8 @@ void GreycstorationIface::iterationLoop(uint iter)
 
     do
     {
+        usleep(100000);
+
         if (m_parent && !m_cancel)
         {
             // Update the progress bar in dialog. We simply computes the global
@@ -447,10 +446,8 @@ void GreycstorationIface::iterationLoop(uint iter)
                 mp = p;
             }
         }
-
-        usleep(100000);
     }    
-    while (d->img.greycstoration_is_running() && !m_cancel);
+    while (d->img.greycstoration_is_running()/* && !m_cancel*/);
 }
 
 }  // NameSpace Digikam

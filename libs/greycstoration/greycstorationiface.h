@@ -69,7 +69,6 @@ private:
 
     void initFilter();
     void filterImage();
-    void cleanupFilter();
 
     void restoration();
     void inpainting();
