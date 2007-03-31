@@ -60,7 +60,7 @@ public:
     {
         fastApprox = true;
     
-        tile       = 512;
+        tile       = 256;
         btile      = 4;
     
         nbIter     = 1;
@@ -80,7 +80,7 @@ public:
     {
         fastApprox = true;
     
-        tile       = 512;
+        tile       = 256;
         btile      = 4;
     
         nbIter     = 30;
@@ -100,7 +100,7 @@ public:
     {
         fastApprox = true;
     
-        tile       = 512;
+        tile       = 256;
         btile      = 4;
     
         nbIter     = 3;
