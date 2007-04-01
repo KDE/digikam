@@ -448,6 +448,10 @@ void GreycstorationIface::iterationLoop(uint iter)
         }
     }    
     while (d->img.greycstoration_is_running() && !m_cancel);
+
+    // A delay is require here. I suspect a sync problem between threads 
+    // used by GreycStoration algorithm. 
+    usleep(100000);
 }
 
 }  // NameSpace Digikam
