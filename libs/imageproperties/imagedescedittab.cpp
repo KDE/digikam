@@ -59,6 +59,7 @@
 #include "album.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
+#include "databasetransaction.h"
 #include "tagcreatedlg.h"
 #include "navigatebarwidget.h"
 #include "ratingwidget.h"
@@ -462,20 +463,21 @@ void ImageDescEditTab::slotApplyAllChanges()
 
     // we are now changing attributes ourselves
     d->ignoreImageAttributesWatch = true;
-    AlbumManager::instance()->albumDB()->beginTransaction();
     int i=0;
-    for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
     {
-        // apply to database
-        d->hub.write(info);
-        // apply to file metadata
-        d->hub.write(info->filePath(), MetadataHub::FullWrite, writeSettings);
+        DatabaseTransaction transaction;
+        for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
+        {
+            // apply to database
+            d->hub.write(info);
+            // apply to file metadata
+            d->hub.write(info->filePath(), MetadataHub::FullWrite, writeSettings);
 
-        emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
-        if (progressInfo)
-            kapp->processEvents();
+            emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
+            if (progressInfo)
+                kapp->processEvents();
+        }
     }
-    AlbumManager::instance()->albumDB()->commitTransaction();
     d->ignoreImageAttributesWatch = false;
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
@@ -551,21 +553,22 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
                                i18n("Reading metadata from files. Please wait..."));
 
     d->ignoreImageAttributesWatch = true;
-    AlbumManager::instance()->albumDB()->beginTransaction();
     int i=0;
-    for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
     {
-        // A batch operation: a hub for each single file, not the common hub
-        MetadataHub fileHub(MetadataHub::NewTagsImport);
-        // read in from DMetadata
-        fileHub.load(info->filePath());
-        // write out to database
-        fileHub.write(info);
+        DatabaseTransaction transaction;
+        for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
+        {
+            // A batch operation: a hub for each single file, not the common hub
+            MetadataHub fileHub(MetadataHub::NewTagsImport);
+            // read in from DMetadata
+            fileHub.load(info->filePath());
+            // write out to database
+            fileHub.write(info);
 
-        emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
-        kapp->processEvents();
+            emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
+            kapp->processEvents();
+        }
     }
-    AlbumManager::instance()->albumDB()->commitTransaction();
     d->ignoreImageAttributesWatch = false;
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
@@ -1400,9 +1403,8 @@ void ImageDescEditTab::updateRecentTags()
 {
     QPopupMenu *menu = d->recentTagsBtn->popup();
     menu->clear();
-    
-    AlbumManager* albumMan = AlbumManager::instance();
-    IntList recentTags     = albumMan->albumDB()->getRecentlyAssignedTags();
+
+    AlbumList recentTags = AlbumManager::instance()->getRecentlyAssignedTags();
 
     if (recentTags.isEmpty())
     {
@@ -1411,10 +1413,10 @@ void ImageDescEditTab::updateRecentTags()
     }
     else
     {
-        for (IntList::const_iterator it = recentTags.begin();
+        for (AlbumList::const_iterator it = recentTags.begin();
              it != recentTags.end(); ++it)
         {
-            TAlbum* album = albumMan->findTAlbum(*it);
+            TAlbum* album = static_cast<TAlbum*>(*it);
             if (album)
             {
                 AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();

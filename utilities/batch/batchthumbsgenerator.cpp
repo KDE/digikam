@@ -46,6 +46,7 @@ extern "C"
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "databaseaccess.h"
 #include "thumbnailjob.h"
 #include "batchthumbsgenerator.h"
 #include "batchthumbsgenerator.moc"
@@ -130,7 +131,6 @@ void BatchThumbsGenerator::rebuildAllThumbs(int size)
     QString thumbCacheDir = QDir::homeDirPath() + "/.thumbnails/";
     QString filesFilter   = AlbumSettings::instance()->getAllFileFilter();
     bool exifRotate       = AlbumSettings::instance()->getExifRotate();
-    AlbumDB *db           = AlbumManager::instance()->albumDB();
     AlbumList palbumList  = AlbumManager::instance()->allPAlbums();
 
     // Get all digiKam albums collection pictures path.
@@ -142,9 +142,11 @@ void BatchThumbsGenerator::rebuildAllThumbs(int size)
         if ((*it)->isRoot())
             continue;
 
-        db->beginTransaction();
-        QStringList albumItemsPath = db->getItemURLsInAlbum((*it)->id());
-        db->commitTransaction();
+        QStringList albumItemsPath;
+        {
+            DatabaseAccess access;
+            albumItemsPath = access.db()->getItemURLsInAlbum((*it)->id());
+        }
 
         QStringList pathSorted;
         for (QStringList::iterator it2 = albumItemsPath.begin();

@@ -43,6 +43,7 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/histogram \
 	       -I$(top_srcdir)/digikam/libs/dialogs \
 	       -I$(top_srcdir)/digikam/libs/dimg \
 	       -I$(top_srcdir)/digikam/libs/threadimageio \
+	       -I$(top_srcdir)/digikam/libs/database \
 	       -I$(top_srcdir)/digikam/utilities/cameragui \
 	       -I$(top_srcdir)/digikam/utilities/batch \
 	       -I$(top_srcdir)/digikam/digikam \

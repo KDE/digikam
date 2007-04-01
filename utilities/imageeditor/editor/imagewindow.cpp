@@ -72,6 +72,7 @@
 #include "albummanager.h"
 #include "album.h"
 #include "albumdb.h"
+#include "databaseaccess.h"
 #include "albumsettings.h"
 #include "syncjob.h"
 #include "imageinfo.h"
@@ -409,11 +410,9 @@ void ImageWindow::loadImageInfos(const ImageInfoList &imageInfoList, ImageInfo *
     // create URL list
     d->urlList = KURL::List();
 
-    ImageInfoListIterator it(d->imageInfoList);
-    ImageInfo *info;
-    for (; (info = it.current()); ++it)
+    for (ImageInfoListIterator it = d->imageInfoList.begin(); it != d->imageInfoList.end(); ++it)
     {
-        d->urlList.append(info->kurl());
+        d->urlList.append((*it)->kurl());
     }
 
     d->urlCurrent  = d->imageInfoCurrent->kurl();
@@ -559,9 +558,11 @@ void ImageWindow::slotContextMenu()
             connect(removeTagsMenu, SIGNAL(signalTagActivated(int)),
                     this, SLOT(slotRemoveTag(int)));
 
-            AlbumDB* db = AlbumManager::instance()->albumDB();
-            if (!db->hasTags( idList ))
-                m_contextMenu->setItemEnabled(i, false);
+            {
+                DatabaseAccess access;
+                if (!access.db()->hasTags( idList ))
+                    m_contextMenu->setItemEnabled(i, false);
+            }
 
             separatorID2 = m_contextMenu->insertSeparator();
 
@@ -782,7 +783,7 @@ void ImageWindow::saveAsIsComplete()
     {
         // Now copy the metadata of the original file to the new file ------------
 
-        ImageInfo newInfo(d->imageInfoCurrent->copyItem(dstAlbum, m_savingContext->destinationURL.fileName()));
+        ImageInfo newInfo(d->imageInfoCurrent->copyItem(dstAlbum->id(), m_savingContext->destinationURL.fileName()));
 
         if ( d->urlList.find(m_savingContext->destinationURL) == d->urlList.end() )
         {   // The image file did not exist in the list.
@@ -1016,7 +1017,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
              !m_cancelSlideShow && info ; info = d->imageInfoList.next())
         {
             SlidePictureInfo pictInfo;
-            pictInfo.comment = info->caption();
+            pictInfo.comment = info->comment();
 
             // Perform optimizations: only read pictures metadata if necessary.
             if (settings.printApertureFocal || settings.printExpoSensitivity || settings.printMakeModel)

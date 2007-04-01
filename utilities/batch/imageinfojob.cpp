@@ -81,17 +81,9 @@ void ImageInfoJob::allItemsFromAlbum(Album *album)
 
     if (!album)
         return;
-    
-    QByteArray  ba;
-    QDataStream ds(ba, IO_WriteOnly);
-    ds << AlbumManager::instance()->getLibraryPath();
-    ds << album->kurl();
-    ds << d->imagefilter;
-    ds << false;            // No need image resolution info.
 
-    // Protocol = digikamalbums -> kio_digikamalbums
-    d->job = new KIO::TransferJob(album->kurl(), KIO::CMD_SPECIAL,
-                                  ba, QByteArray(), false);
+    ImageLister lister;
+    d->job = lister.startListJob(album->kurl(), d->imagefilter, false);
 
     connect(d->job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotResult(KIO::Job*)));
@@ -127,27 +119,15 @@ void ImageInfoJob::slotData(KIO::Job*, const QByteArray& data)
     if (data.isEmpty())
         return;
 
-    Q_LLONG       imageID;
-    int           albumID;
-    QString       name;
-    QString       date;
-    size_t        size;
-    QSize         dims;
     ImageInfoList itemsList;
     QDataStream   ds(data, IO_ReadOnly);
 
     while (!ds.atEnd())
     {
-        ds >> imageID;
-        ds >> albumID;
-        ds >> name;
-        ds >> date;
-        ds >> size;
-        ds >> dims;
+        ImageListerRecord record;
+        ds >> record;
 
-        ImageInfo* info = new ImageInfo(imageID, albumID, name,
-                                        QDateTime::fromString(date, Qt::ISODate),
-                                        size, dims);
+        ImageInfo* info = new ImageInfo(record);
 
         itemsList.append(info);
     }
