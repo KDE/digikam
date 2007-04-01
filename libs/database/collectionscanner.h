@@ -1,0 +1,64 @@
+/* ============================================================
+ * Authors: Marcel Wiesweg
+ *          Renchi RajuMarcel Wiesweg
+ * Date   : 2007-03-21
+ * Description : database interface.
+ *
+ * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
+
+#ifndef COLLECTIONSCANNER_H
+#define COLLECTIONSCANNER_H
+
+// Qt includes
+
+#include <qstring.h>
+
+// Local includes
+
+#include "digikam_export.h"
+#include "databaseaccess.h"
+
+namespace Digikam
+{
+
+class DIGIKAM_EXPORT CollectionScanner
+{
+public:
+
+    // Scanning from ioslave
+    void scanAlbum(const QString &albumRoot, const QString &album);
+    void scanOneAlbum(const QString &albumRoot, const QString &album);
+    void removeInvalidAlbums(const QString &albumRoot);
+
+    // Scanning from Scanlib
+
+    // Tools
+    static void addItem(int albumID, const QString& albumRoot, const QString &album, const QString &name);
+    static void addItem(DatabaseAccess &access, int albumID,
+                        const QString& albumRoot, const QString &album, const QString &name);
+    static void updateItemDate(int albumID, const QString& albumRoot, const QString &album, const QString &fileName);
+    static void updateItemDate(Digikam::DatabaseAccess &access, int albumID,
+                               const QString& albumRoot, const QString &album, const QString &fileName);
+
+
+};
+
+
+}
+
+#endif
+
