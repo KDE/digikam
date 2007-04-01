@@ -1109,7 +1109,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
         ImageInfo *info = *it;
         settings.fileList.append(info->kurl());
         SlidePictureInfo pictInfo;
-        pictInfo.comment = info->caption();
+        pictInfo.comment = info->comment();
 
         // Perform optimizations: only read pictures metadata if necessary.
         if (settings.printApertureFocal || settings.printExpoSensitivity || settings.printMakeModel)

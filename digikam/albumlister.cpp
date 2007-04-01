@@ -52,6 +52,7 @@ extern "C"
 // Local includes.
 
 #include "ddebug.h"
+#include "imagelister.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
@@ -141,16 +142,10 @@ void AlbumLister::openAlbum(Album *album)
     if (!album)
         return;
 
-    QByteArray ba;
-    QDataStream ds(ba, IO_WriteOnly);
-    ds << AlbumManager::instance()->getLibraryPath();
-    ds << album->kurl();
-    ds << d->filter;
-    ds << AlbumSettings::instance()->getIconShowResolution();
-
     // Protocol = digikamalbums -> kio_digikamalbums
-    d->job = new KIO::TransferJob(album->kurl(), KIO::CMD_SPECIAL,
-                                  ba, QByteArray(), false);
+    d->job = ImageLister::startListJob(album->kurl(),
+                                       d->filter,
+                                       AlbumSettings::instance()->getIconShowResolution());
 
     connect(d->job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotResult(KIO::Job*)));
@@ -173,21 +168,13 @@ void AlbumLister::refresh()
     }
 
     d->itemMap.clear();
-    ImageInfo* item;
-    for (ImageInfoListIterator it(d->itemList); (item = it.current()); ++it)
+    for (ImageInfoListIterator it = d->itemList.begin(); it != d->itemList.end(); ++it)
     {
-        d->itemMap.insert(item->id(), item);
+        d->itemMap.insert((*it)->id(), *it);
     }
 
-    QByteArray ba;
-    QDataStream ds(ba, IO_WriteOnly);
-    ds << AlbumManager::instance()->getLibraryPath();
-    ds << d->currAlbum->kurl();
-    ds << d->filter;
-    ds << AlbumSettings::instance()->getIconShowResolution();
-
-    d->job = new KIO::TransferJob(d->currAlbum->kurl(), KIO::CMD_SPECIAL,
-                                  ba, QByteArray(), false);
+    ImageLister lister;
+    d->job = lister.startListJob(d->currAlbum->kurl(), d->filter, AlbumSettings::instance()->getIconShowResolution());
 
     connect(d->job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotResult(KIO::Job*)));
@@ -311,22 +298,19 @@ void AlbumLister::slotFilterItems()
         return;
     }
 
-    QPtrList<ImageInfo> newFilteredItemsList;
-    QPtrList<ImageInfo> deleteFilteredItemsList;
+    ImageInfoList newFilteredItemsList;
+    ImageInfoList deleteFilteredItemsList;
 
-    ImageInfo* item;
-    for (ImageInfoListIterator it(d->itemList);
-         (item = it.current()); ++it)
+    for (ImageInfoListIterator it = d->itemList.begin();
+         it != d->itemList.end(); ++it)
     {
-        if (matchesFilter(item))
+        if (matchesFilter(*it))
         {
-            if (!item->getViewItem())
-                newFilteredItemsList.append(item);
+            newFilteredItemsList.append(*it);
         }
         else
         {
-            if (item->getViewItem())
-                deleteFilteredItemsList.append(item);
+            deleteFilteredItemsList.append(*it);
         }
     }
 
@@ -382,13 +366,6 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     if (data.isEmpty())
         return;
 
-    Q_LLONG imageID;
-    int     albumID;
-    QString name;
-    QString date;
-    size_t  size;
-    QSize   dims;
-
     ImageInfoList newItemsList;
     ImageInfoList newFilteredItemsList;
 
@@ -396,19 +373,15 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
 
     while (!ds.atEnd())
     {
-        ds >> imageID;
-        ds >> albumID;
-        ds >> name;
-        ds >> date;
-        ds >> size;
-        ds >> dims;
+        ImageListerRecord record;
+        ds >> record;
 
-        if (d->itemMap.contains(imageID))
+        if (d->itemMap.contains(record.imageID))
         {
-            ImageInfo* info = d->itemMap[imageID];
-            d->itemMap.remove(imageID);
+            ImageInfo* info = d->itemMap[record.imageID];
+            d->itemMap.remove(record.imageID);
 
-            if (d->invalidatedItems.contains(imageID))
+            if (d->invalidatedItems.contains(record.imageID))
             {
                 emit signalDeleteItem(info);
                 emit signalDeleteFilteredItem(info);
@@ -424,9 +397,7 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
             }
         }
 
-        ImageInfo* info = new ImageInfo(imageID, albumID, name,
-                                        QDateTime::fromString(date, Qt::ISODate),
-                                        size, dims);
+        ImageInfo* info = new ImageInfo(record);
 
         if (matchesFilter(info))
             newFilteredItemsList.append(info);

@@ -49,6 +49,9 @@ extern "C"
 // Local includes.
 
 #include "ddebug.h"
+#include "collectionscanner.h"
+#include "databaseaccess.h"
+#include "databasetransaction.h"
 #include "dprogressdlg.h"
 #include "dmetadata.h"
 #include "albumdb.h"
@@ -110,23 +113,26 @@ void ScanLib::startScan()
 
     deleteStaleEntries();
 
-    AlbumDB* db = AlbumManager::instance()->albumDB();
-    db->setSetting("Scanned", QDateTime::currentDateTime().toString(Qt::ISODate));
+    DatabaseAccess access;
+    access.db()->setSetting("Scanned", QDateTime::currentDateTime().toString(Qt::ISODate));
 }
 
 void ScanLib::findFoldersWhichDoNotExist()
 {
     QMap<QString, int> toBeDeleted;
-    QString basePath(AlbumManager::instance()->getLibraryPath());
+    QString albumRoot(AlbumManager::instance()->getLibraryPath());
 
-    AlbumDB* db = AlbumManager::instance()->albumDB();
-    AlbumInfo::List aList = db->scanAlbums();
-    
+    AlbumInfo::List aList;
+    {
+        DatabaseAccess access;
+        aList = access.db()->scanAlbums();
+    }
+
     for (AlbumInfo::List::iterator it = aList.begin(); it != aList.end(); ++it)
     {
         AlbumInfo info = *it;
         info.url = QDir::cleanDirPath(info.url);
-        QFileInfo fi(basePath + info.url);
+        QFileInfo fi(albumRoot + info.url);
         if (!fi.exists() || !fi.isDir())
         {
             toBeDeleted[info.url] = info.id;
@@ -163,11 +169,12 @@ void ScanLib::findFoldersWhichDoNotExist()
         if (rc != KMessageBox::Yes)
             exit(0);
 
+        DatabaseAccess access;
         QMapIterator<QString,int> it;
         for (it = toBeDeleted.begin() ; it != toBeDeleted.end(); ++it)
         {
             DDebug() << "Removing Album: " << it.key() << endl;
-            db->deleteAlbum( it.data() );
+            access.db()->deleteAlbum( it.data() );
         }
     }
 }
@@ -195,19 +202,18 @@ void ScanLib::findMissingItems()
     QPixmap pix = KApplication::kApplication()->iconLoader()->loadIcon(
                   "folder_image", KIcon::NoGroup, 32);
 
-    AlbumDB* db = AlbumManager::instance()->albumDB();
-    db->beginTransaction(); 
-
-    for (QStringList::iterator it = fileList.begin(); it != fileList.end(); ++it)
     {
-        if ((*it) == "." || (*it) == "..")
-            continue;
+        DatabaseTransaction transaction;
+        for (QStringList::iterator it = fileList.begin(); it != fileList.end(); ++it)
+        {
+            if ((*it) == "." || (*it) == "..")
+                continue;
 
-        QString path = albumPath + '/' + (*it);
-        allFiles(path);
-        m_progressBar->addedAction(pix, path);
+            QString path = albumPath + '/' + (*it);
+            allFiles(path);
+            m_progressBar->addedAction(pix, path);
+        }
     }
-    db->commitTransaction();    
 
     m_progressBar->hide();
     kapp->processEvents();
@@ -215,8 +221,11 @@ void ScanLib::findMissingItems()
 
 void ScanLib::updateItemsWithoutDate()
 {
-    AlbumDB* db = AlbumManager::instance()->albumDB();
-    QStringList urls = db->getAllItemURLsWithoutDate();
+    QStringList urls;
+    {
+        DatabaseAccess access;
+        urls = access.db()->getAllItemURLsWithoutDate();
+    }
 
     if (urls.isEmpty())
     {
@@ -234,49 +243,52 @@ void ScanLib::updateItemsWithoutDate()
     m_progressBar->show();
     kapp->processEvents();
 
-    QString basePath = AlbumManager::instance()->getLibraryPath();
-    basePath = QDir::cleanDirPath(basePath);
+    QString albumRoot = AlbumManager::instance()->getLibraryPath();
+    albumRoot = QDir::cleanDirPath(albumRoot);
 
-    db->beginTransaction();    
-
-    int counter=0;
-    for (QStringList::iterator it = urls.begin(); it != urls.end(); ++it)
     {
-        m_progressBar->progressBar()->advance(1);
-        ++counter;
-        if ( counter % 30 == 0 )
+        DatabaseTransaction transaction;
+        int counter=0;
+        for (QStringList::iterator it = urls.begin(); it != urls.end(); ++it)
         {
-            kapp->processEvents();
-        }
-
-        QFileInfo fi(*it);
-        QString albumURL = fi.dirPath();
-        albumURL = QDir::cleanDirPath(albumURL.remove(basePath));
-        
-        int albumID = db->getOrCreateAlbumId(albumURL);
-
-        if (albumID <= 0)
-        {
-            DWarning() << "Album ID == -1: " << albumURL << endl;
-        }
-        
-        if (fi.exists())
-        {
-            updateItemDate(albumURL, fi.fileName(), albumID);
-        }
-        else
-        {
-            QPair<QString, int> fileID = qMakePair(fi.fileName(),albumID);
-            
-            if (m_filesToBeDeleted.findIndex(fileID) == -1)
+            m_progressBar->progressBar()->advance(1);
+            ++counter;
+            if ( counter % 30 == 0 )
             {
-                m_filesToBeDeleted.append(fileID);
+                kapp->processEvents();
+            }
+
+            QFileInfo fi(*it);
+            QString albumURL = fi.dirPath();
+            albumURL = QDir::cleanDirPath(albumURL.remove(albumRoot));
+
+            int albumID;
+            {
+                DatabaseAccess access;
+                albumID = access.db()->getAlbumForPath(albumURL, true);
+            }
+
+            if (albumID <= 0)
+            {
+                DWarning() << "Album ID == -1: " << albumURL << endl;
+            }
+
+            if (fi.exists())
+            {
+                CollectionScanner::updateItemDate(albumID, albumRoot, albumURL, fi.fileName());
+            }
+            else
+            {
+                QPair<QString, int> fileID = qMakePair(fi.fileName(),albumID);
+
+                if (m_filesToBeDeleted.findIndex(fileID) == -1)
+                {
+                    m_filesToBeDeleted.append(fileID);
+                }
             }
         }
     }
 
-    db->commitTransaction();    
-    
     m_progressBar->hide();
     kapp->processEvents();
 }
@@ -303,7 +315,7 @@ int ScanLib::countItemsInFolder(const QString& directory)
         {
             items += countItemsInFolder( fi->filePath() );
         }
-        
+
         ++it;
     }
 
@@ -320,24 +332,30 @@ void ScanLib::allFiles(const QString& directory)
         return;
     }
 
-    QString basePath = AlbumManager::instance()->getLibraryPath();
-    basePath = QDir::cleanDirPath(basePath);
-            
+    QString albumRoot = AlbumManager::instance()->getLibraryPath();
+    albumRoot = QDir::cleanDirPath(albumRoot);
+
     QString albumURL = directory;
-    albumURL = QDir::cleanDirPath(albumURL.remove(basePath));
+    albumURL = QDir::cleanDirPath(albumURL.remove(albumRoot));
 
-    AlbumDB* db = AlbumManager::instance()->albumDB();
-
-    int albumID = db->getOrCreateAlbumId(albumURL);
+    int albumID;
+    {
+        DatabaseAccess access;
+        albumID = access.db()->getAlbumForPath(albumURL, true);
+    }
 
     if (albumID <= 0)
     {
         DWarning() << "Album ID == -1: " << albumURL << endl;
     }
-    
-    QStringList filesInAlbum = db->getItemNamesInAlbum( albumID );
+
+    QStringList filesInAlbum;
+    {
+        DatabaseAccess access;
+        filesInAlbum = access.db()->getItemNamesInAlbum( albumID );
+    }
     QMap<QString, bool> filesFoundInDB;
-    
+
     for (QStringList::iterator it = filesInAlbum.begin();
          it != filesInAlbum.end(); ++it)
     {
@@ -364,14 +382,14 @@ void ScanLib::allFiles(const QString& directory)
             }
             else
             {
-                storeItemInDatabase(albumURL, fi->fileName(), albumID);
+                CollectionScanner::addItem(albumID, albumRoot, albumURL, fi->fileName());
             }
         }
         else if ( fi->isDir() && fi->fileName() != "." && fi->fileName() != "..")
         {
             allFiles( fi->filePath() );
         }
-        
+
         ++it;
     }
 
@@ -389,10 +407,12 @@ void ScanLib::allFiles(const QString& directory)
     }
 }
 
+/*
 void ScanLib::storeItemInDatabase(const QString& albumURL,
                                   const QString& filename,
                                   int albumID)
 {
+    CollectionScanner::addImage(access, albumID, f
     // Do not store items found in the root of the albumdb
     if (albumURL.isEmpty())
         return;
@@ -464,18 +484,21 @@ void ScanLib::updateItemDate(const QString& albumURL,
     AlbumDB* dbstore = AlbumManager::instance()->albumDB();
     dbstore->setItemDate(albumID, filename, datetime);
 }
+*/
 
 void ScanLib::deleteStaleEntries()
 {
     QStringList listToBeDeleted;
     QValueList< QPair<QString,int> >::iterator it;
-    
-    for (it = m_filesToBeDeleted.begin() ; it != m_filesToBeDeleted.end(); ++it)
-    {
-        AlbumDB* dbstore = AlbumManager::instance()->albumDB();
-        QString location = " (" + dbstore->getAlbumURL((*it).second) + ')';
 
-        listToBeDeleted.append((*it).first + location);
+    {
+        DatabaseAccess access;
+        for (it = m_filesToBeDeleted.begin() ; it != m_filesToBeDeleted.end(); ++it)
+        {
+            QString location = " (" + access.db()->getAlbumURL((*it).second) + ')';
+
+            listToBeDeleted.append((*it).first + location);
+        }
     }
 
     if ( !m_filesToBeDeleted.isEmpty() )
@@ -504,16 +527,17 @@ void ScanLib::deleteStaleEntries()
         if (rc != KMessageBox::Yes)
             exit(0);
 
-        AlbumDB* db = AlbumManager::instance()->albumDB();
-        db->beginTransaction();
+        DatabaseAccess access;
+        DatabaseTransaction transaction(&access);
+        //access.db()->beginTransaction();
         for (it = m_filesToBeDeleted.begin() ; it != m_filesToBeDeleted.end();
              ++it)
         {
             DDebug() << "Removing: " << (*it).first << " in "
                       << (*it).second << endl;
-            db->deleteItem( (*it).second, (*it).first );
+            access.db()->deleteItem( (*it).second, (*it).first );
         }
-        db->commitTransaction();
+        //access.db()->commitTransaction();
     }
 }
 

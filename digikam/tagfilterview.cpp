@@ -48,6 +48,7 @@
 #include "album.h"
 #include "albumlister.h"
 #include "albumthumbnailloader.h"
+#include "databasetransaction.h"
 #include "syncjob.h"
 #include "dragobjects.h"
 #include "folderitem.h"
@@ -524,24 +525,25 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
             emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                        i18n("Assign tag to pictures. Please wait..."));
 
-            AlbumManager::instance()->albumDB()->beginTransaction();
-            int i=0;
-            for (QValueList<int>::const_iterator it = imageIDs.begin();
-                 it != imageIDs.end(); ++it)
             {
-                // create temporary ImageInfo object
-                ImageInfo info(*it);
+                DatabaseTransaction transaction;
+                int i=0;
+                for (QValueList<int>::const_iterator it = imageIDs.begin();
+                    it != imageIDs.end(); ++it)
+                {
+                    // create temporary ImageInfo object
+                    ImageInfo info(*it);
 
-                MetadataHub hub;
-                hub.load(&info);
-                hub.setTag(destAlbum, true);
-                hub.write(&info, MetadataHub::PartialWrite);
-                hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+                    MetadataHub hub;
+                    hub.load(&info);
+                    hub.setTag(destAlbum, true);
+                    hub.write(&info, MetadataHub::PartialWrite);
+                    hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
 
-                emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));
-                kapp->processEvents();
+                    emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));
+                    kapp->processEvents();
+                }
             }
-            AlbumManager::instance()->albumDB()->commitTransaction();
 
             ImageAttributesWatch::instance()->imagesChanged(destAlbum->id());
 

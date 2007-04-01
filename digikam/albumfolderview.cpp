@@ -662,6 +662,7 @@ void AlbumFolderView::albumDelete(AlbumFolderViewItem *item)
 
     // Currently trash kioslave can handle only full paths.
     // pass full folder path to the trashing job
+    //TODO: Use digikamalbums:// url?
     KURL u;
     u.setProtocol("file");
     u.setPath(album->folderPath());

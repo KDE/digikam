@@ -99,11 +99,14 @@ extern "C"
 
 #include "ddebug.h"
 #include "album.h"
+#include "albumdb.h"
 #include "albummanager.h"
 #include "dio.h"
 #include "albumlister.h"
 #include "albumfiletip.h"
 #include "albumsettings.h"
+#include "databasetransaction.h"
+#include "databaseaccess.h"
 #include "imagewindow.h"
 #include "thumbnailsize.h"
 #include "themeengine.h"
@@ -167,7 +170,8 @@ public:
     QFont                         fnXtra;
 
     QDict<AlbumIconItem>          itemDict;
-    
+    QMap<ImageInfo*, AlbumIconItem*> itemInfoMap;
+
     AlbumLister                  *imageLister;
     Album                        *currentAlbum;
     const AlbumSettings          *albumSettings;
@@ -355,6 +359,7 @@ void AlbumIconView::clear(bool update)
     d->pixMan->clear();
     d->itemDict.clear();
     d->albumDict.clear();
+    d->itemInfoMap.clear();
 
     IconView::clear(update);
 
@@ -366,35 +371,38 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
     if (!d->currentAlbum || d->currentAlbum->isRoot())
         return;
 
-    ImageInfo* item;
-    for (ImageInfoListIterator it(itemList); (item = it.current()); ++it)
+    for (ImageInfoListIterator it = itemList.begin(); it != itemList.end(); ++it)
     {
-        KURL url( item->kurl() );
+        KURL url( (*it)->kurl() );
         url.cleanPath();
 
-        if (AlbumIconItem *oldItem = d->itemDict.find(url.url()))
+        QMap<ImageInfo*, AlbumIconItem*>::iterator itMap = d->itemInfoMap.find(*it);
+        if (itMap != d->itemInfoMap.end())
         {
-            slotImageListerDeleteItem(oldItem->imageInfo());
-        }
-
-        AlbumIconGroupItem* group = d->albumDict.find(item->albumID());
-        if (!group)
-        {
-            group = new AlbumIconGroupItem(this, item->albumID());
-            d->albumDict.insert(item->albumID(), group);
-        }
-
-        if (!item->album())
-        {
-            DWarning() << "No album for item: " << item->name()
-                       << ", albumID: " << item->albumID() << endl;
+            // TODO: Make sure replacing slotImageListerDeleteItem with continue here is not wrong
+            //slotImageListerDeleteItem((*itMap)->imageInfo());
             continue;
         }
 
-        AlbumIconItem* iconItem = new AlbumIconItem(group, item);
-        item->setViewItem(iconItem);
+        AlbumIconGroupItem* group = d->albumDict.find((*it)->albumID());
+        if (!group)
+        {
+            group = new AlbumIconGroupItem(this, (*it)->albumID());
+            d->albumDict.insert((*it)->albumID(), group);
+        }
+
+        PAlbum *album = AlbumManager::instance()->findPAlbum((*it)->albumID());
+        if (!album)
+        {
+            DWarning() << "No album for item: " << (*it)->name()
+                       << ", albumID: " << (*it)->albumID() << endl;
+            continue;
+        }
+
+        AlbumIconItem* iconItem = new AlbumIconItem(group, (*it));
 
         d->itemDict.insert(url.url(), iconItem);
+        d->itemInfoMap.insert((*it), iconItem);
     }
 
     emit signalItemsAdded();
@@ -402,30 +410,34 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
 
 void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
 {
-    if (!item->getViewItem())
+    QMap<ImageInfo*, AlbumIconItem*>::iterator itMap = d->itemInfoMap.find(item);
+    if (itMap == d->itemInfoMap.end())
         return;
 
-    AlbumIconItem* iconItem = static_cast<AlbumIconItem*>(item->getViewItem());
+    AlbumIconItem* iconItem = (*itMap);
 
+    /*
+    // ?? Necessary? For what situation?
     KURL url(item->kurl());
     url.cleanPath();
-    
+
     AlbumIconItem *oldItem = d->itemDict[url.url()];
-    
+
     if( oldItem &&
        (oldItem->imageInfo()->id() != iconItem->imageInfo()->id()))
     {
         return;
     }
+    */
 
     //d->pixMan->remove(item->kurl());
 
     emit signalItemDeleted(iconItem);
 
     delete iconItem;
-    item->setViewItem(0);
 
-    d->itemDict.remove(url.url());
+    d->itemInfoMap.erase(item);
+    d->itemDict.remove(item->kurl().url());
 
     IconGroupItem* group = firstGroup();
     IconGroupItem* tmp;
@@ -620,12 +632,13 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     int removeTagId = popmenu.insertItem(i18n("Remove Tag"), removeTagsPopup);
 
-    AlbumManager* man = AlbumManager::instance();
-
     // Performance: Only check for tags if there are <250 images selected
-    if (selectedImageIDs.count() > 250 ||
-        !man->albumDB()->hasTags(selectedImageIDs))
-            popmenu.setItemEnabled(removeTagId, false);
+    {
+        DatabaseAccess access;
+        if (selectedImageIDs.count() > 250 ||
+            !access.db()->hasTags(selectedImageIDs))
+                popmenu.setItemEnabled(removeTagId, false);
+    }
 
     popmenu.insertSeparator();
 
@@ -972,7 +985,6 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
         if ( imagefilter.find(fileExtension) != -1 )
         {
             ImageInfo *info = new ImageInfo(*iconItem->imageInfo());
-            info->setViewItem(0);
             imageInfoList.append(info);
             if (iconItem == item)
                 currentImageInfo = info;
@@ -1341,28 +1353,29 @@ void AlbumIconView::changeTagOnImageInfos(const QPtrList<ImageInfo> &list, const
     float cnt = list.count();
     int i = 0;
 
-    AlbumManager::instance()->albumDB()->beginTransaction();
-    for (QPtrList<ImageInfo>::const_iterator it = list.begin(); it != list.end(); ++it)
     {
-        MetadataHub hub;
-
-        hub.load(*it);
-
-        for (QValueList<int>::const_iterator tagIt = tagIDs.begin(); tagIt != tagIDs.end(); ++tagIt)
+        DatabaseTransaction transaction;
+        for (QPtrList<ImageInfo>::const_iterator it = list.begin(); it != list.end(); ++it)
         {
-            hub.setTag(*tagIt, addOrRemove);
-        }
+            MetadataHub hub;
 
-        hub.write(*it, MetadataHub::PartialWrite);
-        hub.write((*it)->filePath(), MetadataHub::FullWriteIfChanged);
+            hub.load(*it);
 
-        if (progress)
-        {
-            emit signalProgressValue((int)((i++/cnt)*100.0));
-            kapp->processEvents();
+            for (QValueList<int>::const_iterator tagIt = tagIDs.begin(); tagIt != tagIDs.end(); ++tagIt)
+            {
+                hub.setTag(*tagIt, addOrRemove);
+            }
+
+            hub.write(*it, MetadataHub::PartialWrite);
+            hub.write((*it)->filePath(), MetadataHub::FullWriteIfChanged);
+
+            if (progress)
+            {
+                emit signalProgressValue((int)((i++/cnt)*100.0));
+                kapp->processEvents();
+            }
         }
     }
-    AlbumManager::instance()->albumDB()->commitTransaction();
 
     if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
     {
@@ -1909,25 +1922,26 @@ void AlbumIconView::slotAssignRating(int rating)
     float cnt = (float)countSelected();
     rating    = QMIN(5, QMAX(0, rating));
 
-    AlbumManager::instance()->albumDB()->beginTransaction();
-    for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
-        if (it->isSelected())
+        DatabaseTransaction transaction;
+        for (IconItem *it = firstItem() ; it ; it = it->nextItem())
         {
-            AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
-            ImageInfo* info          = albumItem->imageInfo();
+            if (it->isSelected())
+            {
+                AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
+                ImageInfo* info          = albumItem->imageInfo();
 
-            MetadataHub hub;
-            hub.load(info);
-            hub.setRating(rating);
-            hub.write(info, MetadataHub::PartialWrite);
-            hub.write(info->filePath(), MetadataHub::FullWriteIfChanged);
+                MetadataHub hub;
+                hub.load(info);
+                hub.setRating(rating);
+                hub.write(info, MetadataHub::PartialWrite);
+                hub.write(info->filePath(), MetadataHub::FullWriteIfChanged);
 
-            emit signalProgressValue((int)((i++/cnt)*100.0));
-            kapp->processEvents();
+                emit signalProgressValue((int)((i++/cnt)*100.0));
+                kapp->processEvents();
+            }
         }
     }
-    AlbumManager::instance()->albumDB()->commitTransaction();
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
     updateContents();

@@ -46,6 +46,7 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "databaseaccess.h"
 #include "imageinfo.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
@@ -247,9 +248,11 @@ void ImagePreviewView::mousePressEvent(QMouseEvent* e)
         connect(removeTagsMenu, SIGNAL(signalTagActivated(int)),
                 this, SLOT(slotRemoveTag(int)));
 
-        AlbumDB* db = AlbumManager::instance()->albumDB();
-        if (!db->hasTags( idList ))
-            popmenu.setItemEnabled(i, false);
+        {
+            DatabaseAccess access;
+            if (!access.db()->hasTags( idList ))
+                popmenu.setItemEnabled(i, false);
+        }
 
         popmenu.insertSeparator();
 

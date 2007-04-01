@@ -171,11 +171,10 @@ public slots:
 
     void slotSelectionChanged( bool b );
     void slotCurrentAlbumChanged( Album *palbum );
-    
+
 private:
-    
+
     AlbumManager *albumManager_;
-    AlbumDB      *albumDB_;
 };
 
 }  // namespace Digikam

@@ -223,7 +223,10 @@ void TagsPopupMenu::slotAboutToShow()
         if (d->selectedImageIDs.isEmpty())
             return;
 
-        d->assignedTags = man->albumDB()->getItemCommonTagIDs(d->selectedImageIDs);
+        {
+            DatabaseAccess access;
+            d->assignedTags = access.db()->getItemCommonTagIDs(d->selectedImageIDs);
+        }
 
         if (d->assignedTags.isEmpty())
             return;
@@ -255,10 +258,11 @@ void TagsPopupMenu::slotAboutToShow()
     {
         if (d->selectedImageIDs.count() == 1)
         {
-            d->assignedTags = man->albumDB()->getItemCommonTagIDs(d->selectedImageIDs);
+            DatabaseAccess access;
+            d->assignedTags = access.db()->getItemCommonTagIDs(d->selectedImageIDs);
         }
     }
-        
+
     TAlbum* album = man->findTAlbum(0);
     if (!album)
         return;

@@ -33,6 +33,10 @@
 
 #include <kurl.h>
 
+// Local includes
+
+#include "databaseurl.h"
+
 namespace Digikam
 {
 
@@ -145,7 +149,7 @@ public:
     /**
      * @return the kde url of the album
      */
-    virtual KURL kurl() const = 0;
+    virtual DatabaseUrl kurl() const = 0;
 
     /**
      * @return true is the album is a Root Album
@@ -302,8 +306,8 @@ public:
     QDate      date() const;
     QString    url() const;
     QString    prettyURL() const;
-    QString    folderPath() const;
-    KURL       kurl() const;
+    KDE_DEPRECATED QString    folderPath() const;
+    DatabaseUrl kurl() const;
     QString    icon() const;
     KURL       iconKURL() const;
     
@@ -336,9 +340,10 @@ public:
      *         The root TAlbum returns "/" resp. "".
      */
     QString tagPath(bool leadingSlash = true) const;
-    KURL    kurl() const;
+    DatabaseUrl kurl() const;
     QString prettyURL() const;
     QString icon() const;
+    QValueList<int> tagIDs() const;
 
 private:
 
@@ -362,7 +367,7 @@ public:
     ~DAlbum();
 
     QDate date() const;
-    KURL  kurl() const;
+    DatabaseUrl kurl() const;
 
 private:
 
@@ -385,7 +390,8 @@ public:
     SAlbum(int id, const KURL& url, bool simple, bool root=false);
     ~SAlbum();
 
-    KURL    kurl() const;
+    DatabaseUrl kurl() const;
+    KURL   searchUrl() const;
     bool    isSimple() const;
 
 private:

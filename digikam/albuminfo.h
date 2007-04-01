@@ -31,6 +31,10 @@
 
 #include <kurl.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
@@ -39,7 +43,7 @@ namespace Digikam
  * A container class for transporting album information
  * from the database to AlbumManager
  */
-class AlbumInfo
+class DIGIKAM_EXPORT AlbumInfo
 {
 public:
 
@@ -66,7 +70,7 @@ public:
  * A container class for transporting tag information
  * from the database to AlbumManager
  */
-class TagInfo
+class DIGIKAM_EXPORT TagInfo
 {
 public:
 
@@ -83,7 +87,7 @@ public:
  * A container class for transporting search information
  * from the database to AlbumManager
  */
-class SearchInfo
+class DIGIKAM_EXPORT SearchInfo
 {
 public:
 

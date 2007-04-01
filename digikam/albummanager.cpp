@@ -60,8 +60,12 @@ extern "C"
 #include "album.h"
 #include "albumdb.h"
 #include "albumitemhandler.h"
-#include "dio.h"
 #include "albumsettings.h"
+#include "databaseaccess.h"
+#include "databaseurl.h"
+#include "databaseparameters.h"
+#include "dio.h"
+#include "imagelister.h"
 #include "scanlib.h"
 #include "upgradedb_sqlite2tosqlite3.h"
 #include "albummanager.h"
@@ -76,7 +80,7 @@ class AlbumManagerPriv
 {
 public:
     
-    AlbumDB          *db;
+    //AlbumDB          *db;
     AlbumItemHandler *itemHandler;
     
     QString           libraryPath;
@@ -113,7 +117,7 @@ AlbumManager::AlbumManager()
 
     d = new AlbumManagerPriv;
     
-    d->db = new AlbumDB;
+    //d->db = new AlbumDB;
     d->dateListJob = 0;
 
     d->rootPAlbum = 0;
@@ -144,17 +148,18 @@ AlbumManager::~AlbumManager()
 
     delete d->dirWatch;
     
-    delete d->db;
+    //delete d->db;
     delete d;
 
     m_instance = 0;
 }
 
-
+/*
 AlbumDB* AlbumManager::albumDB()
 {
     return d->db;    
 }
+*/
 
 void AlbumManager::setLibraryPath(const QString& path)
 {
@@ -193,6 +198,7 @@ void AlbumManager::setLibraryPath(const QString& path)
     
     d->libraryPath = cleanPath;
 
+    /*
     QString dbPath = cleanPath + "/digikam3.db";
 
 #ifdef NFS_HACK
@@ -200,11 +206,12 @@ void AlbumManager::setLibraryPath(const QString& path)
 #endif
 
     d->db->setDBPath(dbPath);
+    */
 
     // -- Locale Checking ---------------------------------------------------------
-    
+
     QString currLocale(QTextCodec::codecForLocale()->name());
-    QString dbLocale = d->db->getSetting("Locale");
+    QString dbLocale = DatabaseAccess().db()->getSetting("Locale");
 
     // guilty until proven innocent
     bool localeChanged = true;
@@ -232,7 +239,7 @@ void AlbumManager::setLibraryPath(const QString& path)
             {
                 dbLocale = currLocale;
                 localeChanged = false;
-                d->db->setSetting("Locale", dbLocale);
+                DatabaseAccess().db()->setSetting("Locale", dbLocale);
             }
         }
         else
@@ -241,7 +248,7 @@ void AlbumManager::setLibraryPath(const QString& path)
             dbLocale = currLocale;
 
             localeChanged = false;
-            d->db->setSetting("Locale",dbLocale);
+            DatabaseAccess().db()->setSetting("Locale",dbLocale);
         }
     }
     else
@@ -267,7 +274,7 @@ void AlbumManager::setLibraryPath(const QString& path)
         if (result != KMessageBox::Yes)
             exit(0);
 
-        d->db->setSetting("Locale",currLocale);
+        DatabaseAccess().db()->setSetting("Locale",currLocale);
     }
 
     // -- Check if we need to upgrade 0.7.x db to 0.8 db ---------------------
@@ -283,7 +290,7 @@ void AlbumManager::setLibraryPath(const QString& path)
     KConfig* config = KGlobal::config();
     config->setGroup("General Settings");
     if (config->readBoolEntry("Scan At Start", true) ||
-        d->db->getSetting("Scanned").isEmpty())
+        DatabaseAccess().db()->getSetting("Scanned").isEmpty())
     {
         ScanLib sLib;
         sLib.startScan();
@@ -292,7 +299,7 @@ void AlbumManager::setLibraryPath(const QString& path)
 
 QString AlbumManager::getLibraryPath() const
 {
-    return d->libraryPath;    
+    return d->libraryPath;
 }
 
 void AlbumManager::startScan()
@@ -331,11 +338,9 @@ void AlbumManager::refresh()
 
     if (!d->dirtyAlbums.empty())
     {
-        KURL u;
-        u.setProtocol("digikamalbums");
-        u.setPath(d->dirtyAlbums.first());
+        KURL u(d->dirtyAlbums.first());
         d->dirtyAlbums.pop_front();
-    
+
         DIO::scan(u);
     }
 }
@@ -355,7 +360,7 @@ void AlbumManager::scanPAlbums()
     }
 
     // scan db and get a list of all albums
-    AlbumInfo::List aList = d->db->scanAlbums();
+    AlbumInfo::List aList = DatabaseAccess().db()->scanAlbums();
     qHeapSort(aList);
 
     AlbumInfo::List newAlbumList;
@@ -454,7 +459,7 @@ void AlbumManager::scanTAlbums()
     }
 
     // Retrieve the list of tags from the database
-    TagInfo::List tList = d->db->scanTags();
+    TagInfo::List tList = DatabaseAccess().db()->scanTags();
 
     // sort the list. needed because we want the tags can be read in any order,
     // but we want to make sure that we are ensure to find the parent TAlbum
@@ -567,7 +572,7 @@ void AlbumManager::scanSAlbums()
     }
 
     // Retrieve the list of searches from the database
-    SearchInfo::List sList = d->db->scanSearches();
+    SearchInfo::List sList = DatabaseAccess().db()->scanSearches();
 
     for (SearchInfo::List::iterator it = sList.begin(); it != sList.end(); ++it)
     {
@@ -589,7 +594,9 @@ void AlbumManager::scanSAlbums()
 
 void AlbumManager::scanDAlbums()
 {
-    // List dates using kioslave
+    // List dates using kioslave:
+    // The kioslave has a special mode listing the dates
+    // for which there are images in the DB.
 
     if (d->dateListJob)
     {
@@ -601,15 +608,9 @@ void AlbumManager::scanDAlbums()
     u.setProtocol("digikamdates");
     u.setPath("/");
 
-    QByteArray ba;
-    QDataStream ds(ba, IO_WriteOnly);
-    ds << d->libraryPath;
-    ds << KURL();
-    ds << AlbumSettings::instance()->getAllFileFilter();
-
-    
-    d->dateListJob = new KIO::TransferJob(u, KIO::CMD_SPECIAL,
-                                          ba, QByteArray(), false);
+    d->dateListJob = ImageLister::startListJob(u,
+                                               AlbumSettings::instance()->getAllFileFilter(),
+                                               0);
     d->dateListJob->addMetaData("folders", "yes");
 
     connect(d->dateListJob, SIGNAL(result(KIO::Job*)),
@@ -827,7 +828,8 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
     if (!path.startsWith("/"))
         path.prepend("/");
 
-    int id = d->db->addAlbum(path, caption, date, collection);
+    int id = DatabaseAccess().db()->addAlbum(path, caption, date, collection);;
+
     if (id == -1)
     {
         errMsg = i18n("Failed to add album to database");
@@ -838,11 +840,11 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
     album->m_caption    = caption;
     album->m_collection = collection;
     album->m_date       = date;
-    
+
     album->setParent(parent);
-    
+
     d->dirWatch->addDir(album->folderPath());
-        
+
     insertPAlbum(album);
 
     return album;
@@ -902,14 +904,17 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     // their url set correctly
 
     album->setTitle(newName);
-    d->db->setAlbumURL(album->id(), album->url());
-
-    Album* subAlbum = 0;
-    AlbumIterator it(album);
-    while ((subAlbum = it.current()) != 0)
     {
-        d->db->setAlbumURL(subAlbum->id(), ((PAlbum*)subAlbum)->url());
-        ++it;
+        DatabaseAccess access;
+        access.db()->renameAlbum(album->id(), album->url(), false);
+
+        Album* subAlbum = 0;
+        AlbumIterator it(album);
+        while ((subAlbum = it.current()) != 0)
+        {
+            access.db()->renameAlbum(subAlbum->id(), ((PAlbum*)subAlbum)->url(), false);
+            ++it;
+        }
     }
 
     // Update AlbumDict. basically clear it and rebuild from scratch
@@ -944,10 +949,13 @@ bool AlbumManager::updatePAlbumIcon(PAlbum *album, Q_LLONG iconID, QString& errM
         return false;
     }
 
-    d->db->setAlbumIcon(album->id(), iconID);
-    album->m_icon = d->db->getAlbumIcon(album->id());
+    {
+        DatabaseAccess access;
+        access.db()->setAlbumIcon(album->id(), iconID);
+        album->m_icon = access.db()->getAlbumIcon(album->id());
+    }
 
-    emit signalAlbumIconChanged(album);    
+    emit signalAlbumIconChanged(album);
 
     return true;
 }
@@ -986,7 +994,7 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
         child = child->m_next;
     }
 
-    int id = d->db->addTag(parent->id(), name, iconkde, 0);
+    int id = DatabaseAccess().db()->addTag(parent->id(), name, iconkde, 0);
     if (id == -1)
     {
         errMsg = i18n("Failed to add tag to database");
@@ -1004,10 +1012,8 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
 
 AlbumList AlbumManager::findOrCreateTAlbums(const QStringList &tagPaths)
 {
-    IntList tagIDs;
-
     // find tag ids for tag paths in list, create if they don't exist
-    tagIDs = d->db->getTagsFromTagPaths(tagPaths);
+    IntList tagIDs = DatabaseAccess().db()->getTagsFromTagPaths(tagPaths);
 
     // create TAlbum objects for the newly created tags
     scanTAlbums();
@@ -1036,16 +1042,19 @@ bool AlbumManager::deleteTAlbum(TAlbum* album, QString& errMsg)
         return false;
     }
 
-    d->db->deleteTag(album->id());
-
-    Album* subAlbum = 0;
-    AlbumIterator it(album);
-    while ((subAlbum = it.current()) != 0)
     {
-        d->db->deleteTag(subAlbum->id());
-        ++it;
+        DatabaseAccess access;
+        access.db()->deleteTag(album->id());
+
+        Album* subAlbum = 0;
+        AlbumIterator it(album);
+        while ((subAlbum = it.current()) != 0)
+        {
+            access.db()->deleteTag(subAlbum->id());
+            ++it;
+        }
     }
-    
+
     removeTAlbum(album);
 
     d->albumIntDict.remove(album->globalID());
@@ -1088,10 +1097,10 @@ bool AlbumManager::renameTAlbum(TAlbum* album, const QString& name,
         sibling = sibling->m_next;
     }
 
-    d->db->setTagName(album->id(), name);
+    DatabaseAccess().db()->setTagName(album->id(), name);
     album->setTitle(name);
     emit signalAlbumRenamed(album);
-    
+
     return true;
 }
 
@@ -1108,13 +1117,13 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *newParent, QString &errMsg)
         errMsg = i18n("Cannot move root tag");
         return false;
     }
-    
-    d->db->setTagParentID(album->id(), newParent->id());
+
+    DatabaseAccess().db()->setTagParentID(album->id(), newParent->id());
     album->parent()->removeChild(album);
     album->setParent(newParent);
 
     emit signalTAlbumMoved(album, newParent);
-    
+
     return true;
 }
 
@@ -1133,12 +1142,45 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& iconKDE,
         return false;
     }
 
-    d->db->setTagIcon(album->id(), iconKDE, iconID);
-    album->m_icon = d->db->getTagIcon(album->id());
-    
+    {
+        DatabaseAccess access;
+        access.db()->setTagIcon(album->id(), iconKDE, iconID);
+        album->m_icon = access.db()->getTagIcon(album->id());
+    }
+
     emit signalAlbumIconChanged(album);
-    
+
     return true;
+}
+
+AlbumList AlbumManager::getRecentlyAssignedTags() const
+{
+    IntList tagIDs = DatabaseAccess().db()->getRecentlyAssignedTags();
+
+    AlbumList resultList;
+
+    for (IntList::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
+    {
+        resultList.append(findTAlbum(*it));
+    }
+
+    return resultList;
+}
+
+QStringList AlbumManager::tagPaths(const QValueList<int> &tagIDs, bool leadingSlash) const
+{
+    QStringList tagPaths;
+
+    for (QValueList<int>::const_iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
+    {
+        TAlbum *album = findTAlbum(*it);
+        if (album)
+        {
+            tagPaths.append(album->tagPath(leadingSlash));
+        }
+    }
+
+    return tagPaths;
 }
 
 SAlbum* AlbumManager::createSAlbum(const KURL& url, bool simple)
@@ -1153,22 +1195,24 @@ SAlbum* AlbumManager::createSAlbum(const KURL& url, bool simple)
         {
             SAlbum* sa = (SAlbum*)album;
             sa->m_kurl = url;
-            d->db->updateSearch(sa->id(), url.queryItem("name"), url);
+            DatabaseAccess access;
+            access.db()->updateSearch(sa->id(), url.queryItem("name"), url);
             return sa;
         }
     }
-    
-    int id = d->db->addSearch(url.queryItem("name"), url);
+
+    int id = DatabaseAccess().db()->addSearch(url.queryItem("name"), url);;
+
     if (id == -1)
         return 0;
-    
+
     SAlbum* album = new SAlbum(id, url, simple, false);
     album->setTitle(url.queryItem("name"));
     album->setParent(d->rootSAlbum);
 
     d->albumIntDict.insert(album->globalID(), album);
     emit signalAlbumAdded(album);
-    
+
     return album;
 }
 
@@ -1177,10 +1221,10 @@ bool AlbumManager::updateSAlbum(SAlbum* album, const KURL& newURL)
     if (!album)
         return false;
 
-    d->db->updateSearch(album->id(), newURL.queryItem("name"), newURL);
+    DatabaseAccess().db()->updateSearch(album->id(), newURL.queryItem("name"), newURL);
 
     QString oldName = album->title();
-    
+
     album->m_kurl = newURL;
     album->setTitle(newURL.queryItem("name"));
     if (oldName != album->title())
@@ -1196,11 +1240,11 @@ bool AlbumManager::deleteSAlbum(SAlbum* album)
 
     emit signalAlbumDeleted(album);
 
-    d->db->deleteSearch(album->id());
-    
+    DatabaseAccess().db()->deleteSearch(album->id());
+
     d->albumIntDict.remove(album->globalID());
     delete album;
-    
+
     return true;
 }
 
@@ -1232,8 +1276,9 @@ void AlbumManager::removePAlbum(PAlbum *album)
     d->pAlbumDict.remove(album->url());
     d->albumIntDict.remove(album->globalID());
 
-    d->dirtyAlbums.remove(album->url());
-    d->dirWatch->removeDir(album->folderPath());
+    DatabaseUrl url = album->kurl();
+    d->dirtyAlbums.remove(url.url());
+    d->dirWatch->removeDir(url.fileUrl().path());
 
     if (album == d->currentAlbum)
     {
@@ -1367,26 +1412,22 @@ void AlbumManager::slotData(KIO::Job* , const QByteArray& data)
 
 void AlbumManager::slotDirty(const QString& path)
 {
-    QString url = QDir::cleanDirPath(path);
-    url = QDir::cleanDirPath(url.remove(d->libraryPath));
+    KURL fileUrl;
+    fileUrl.setPath(QDir::cleanDirPath(path + '/'));
+    KURL url = DatabaseUrl::fromFileUrl(fileUrl, DatabaseAccess::albumRoot());
 
-    if (url.isEmpty())
-        url = "/";
-
-    if (d->dirtyAlbums.contains(url))
+    if (d->dirtyAlbums.contains(url.url()))
         return;
 
     DDebug() << "Dirty: " << url << endl;
-    d->dirtyAlbums.append(url);
+    d->dirtyAlbums.append(url.url());
 
     if (DIO::running())
         return;
 
-    KURL u;
-    u.setProtocol("digikamalbums");
-    u.setPath(d->dirtyAlbums.first());
+    KURL u(d->dirtyAlbums.first());
     d->dirtyAlbums.pop_front();
-    
+
     DIO::scan(u);
 }
 

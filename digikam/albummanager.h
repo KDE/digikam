@@ -99,7 +99,7 @@ public:
     /**
      * returns a pointer to the current AlbumDB
      */
-    AlbumDB*   albumDB();
+    //AlbumDB*   albumDB();
 
     /** @name Library path And Scanning
      */
@@ -346,6 +346,19 @@ public:
      */
     bool updateTAlbumIcon(TAlbum* album, const QString& iconKDE,
                           Q_LLONG iconID, QString& errMsg);
+
+    /**
+     * Get a list of recently assigned tags (only last 6 tags are listed)
+     * @return the list of recently assigned TAlbums
+     */
+    AlbumList getRecentlyAssignedTags() const;
+
+    /**
+     * @return A list with the tagPaths for a list of tag IDs.
+     * @param tagIDs list of tag album IDs
+     */
+    QStringList tagPaths(const QValueList<int> &tagIDs, bool leadingSlash = true) const;
+
     //@}
     
 

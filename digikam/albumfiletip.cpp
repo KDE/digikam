@@ -57,6 +57,7 @@
 #include "dmetadata.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
+#include "albummanager.h"
 #include "albumsettings.h"
 #include "album.h"
 #include "albumfiletip.h"
@@ -505,21 +506,21 @@ void AlbumFileTip::updateText()
 
         if (settings->getToolTipsShowAlbumName())
         {
-            PAlbum* album = info->album();
+            PAlbum* album = AlbumManager::instance()->findPAlbum(info->albumID());
             if (album)
                 tip += cellSpecBeg + i18n("Album:") + cellSpecMid + album->url().remove(0, 1) + cellSpecEnd;
         }
 
         if (settings->getToolTipsShowComments())
         {
-            str = info->caption();
+            str = info->comment();
             if (str.isEmpty()) str = QString("---");
             tip += cellSpecBeg + i18n("Comments:") + cellSpecMid + breakString(str) + cellSpecEnd;
         }
 
         if (settings->getToolTipsShowTags())
         {
-            QStringList tagPaths = info->tagPaths(false);
+            QStringList tagPaths = AlbumManager::instance()->tagPaths(info->tagIDs(), false);
 
             str = tagPaths.join(", ");
             if (str.isEmpty()) str = QString("---");

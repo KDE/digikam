@@ -86,6 +86,7 @@ signals:
 
 protected:
 
+    ImageAttributesWatch();
     ~ImageAttributesWatch();
 
     static ImageAttributesWatch *m_instance;

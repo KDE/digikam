@@ -278,7 +278,7 @@ void AlbumIconItem::paintItem()
     
     if (settings->getIconShowComments())
     {
-        QString comments = d->info->caption();
+        QString comments = d->info->comment();
         
         r = d->view->itemCommentsRect();
         p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), comments));

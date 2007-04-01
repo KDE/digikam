@@ -21,12 +21,34 @@
 
 // Local includes
 
+#include "databaseattributeswatch.h"
 #include "imageattributeswatch.h"
 
 namespace Digikam
 {
 
 ImageAttributesWatch *ImageAttributesWatch::m_instance = 0;
+
+ImageAttributesWatch::ImageAttributesWatch()
+{
+    // temporary solution
+    DatabaseAttributesWatch *dbwatch = DatabaseAttributesWatch::instance();
+
+    connect(dbwatch, SIGNAL(signalImageTagsChanged(Q_LLONG)),
+            this, SIGNAL(signalImageTagsChanged(Q_LLONG)));
+
+    connect(dbwatch, SIGNAL(signalImagesChanged(int)),
+            this, SIGNAL(signalImagesChanged(int)));
+
+    connect(dbwatch, SIGNAL(signalImageRatingChanged(Q_LLONG)),
+            this, SIGNAL(signalImageRatingChanged(Q_LLONG)));
+
+    connect(dbwatch, SIGNAL(signalImageDateChanged(Q_LLONG)),
+            this, SIGNAL(signalImageDateChanged(Q_LLONG)));
+
+    connect(dbwatch, SIGNAL(signalImageCaptionChanged(Q_LLONG)),
+            this, SIGNAL(signalImageCaptionChanged(Q_LLONG)));
+}
 
 ImageAttributesWatch::~ImageAttributesWatch()
 {
@@ -35,12 +57,14 @@ ImageAttributesWatch::~ImageAttributesWatch()
 
 void ImageAttributesWatch::cleanUp()
 {
+    DatabaseAttributesWatch::cleanUp();
     delete m_instance;
     m_instance = 0;
 }
 
 void ImageAttributesWatch::shutDown()
 {
+    ImageAttributesWatch::shutDown();
     if (m_instance)
         m_instance->disconnect(0, 0, 0);
 }

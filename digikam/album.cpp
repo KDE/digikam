@@ -27,6 +27,8 @@
 #include "ddebug.h"
 #include "albummanager.h"
 #include "albumdb.h"
+#include "databaseaccess.h"
+#include "databaseurl.h"
 #include "album.h"
 
 namespace Digikam
@@ -254,23 +256,24 @@ void PAlbum::setCaption(const QString& caption)
 {
     m_caption = caption;
 
-    AlbumDB* db = AlbumManager::instance()->albumDB();
-    db->setAlbumCaption(id(), m_caption);
+    DatabaseAccess access;
+    access.db()->setAlbumCaption(id(), m_caption);
 }
 
 void PAlbum::setCollection(const QString& collection)
 {
     m_collection = collection;
-    AlbumDB* db = AlbumManager::instance()->albumDB();
-    db->setAlbumCollection(id(), m_collection);
+
+    DatabaseAccess access;
+    access.db()->setAlbumCollection(id(), m_collection);
 }
 
 void PAlbum::setDate(const QDate& date)
 {
     m_date = date;
 
-    AlbumDB* db = AlbumManager::instance()->albumDB();
-    db->setAlbumDate(id(), m_date);
+    DatabaseAccess access;
+    access.db()->setAlbumDate(id(), m_date);
 }
 
 QString PAlbum::caption() const
@@ -305,17 +308,10 @@ QString PAlbum::url() const
     return u;
 }
 
-KURL PAlbum::kurl() const
+DatabaseUrl PAlbum::kurl() const
 {
-    KURL u;
-    u.setProtocol("digikamalbums");
-    u.setUser(AlbumManager::instance()->getLibraryPath());
-    // add an empty host. KURLDrag will eat away the user
-    // attribute if a host is not present. probably a URL
-    // specification
-    u.setHost(" ");
-    u.setPath(url());
-    return u;
+    return DatabaseUrl::fromAlbumAndName(QString(), url(),
+                                         DatabaseAccess::albumRoot());
 }
 
 QString PAlbum::prettyURL() const
@@ -338,9 +334,7 @@ KURL PAlbum::iconKURL() const
 
 QString PAlbum::folderPath() const
 {
-    KURL u(AlbumManager::instance()->getLibraryPath());
-    u.addPath(url());
-    return u.path();
+    return kurl().fileUrl().path();
 }
 
 // --------------------------------------------------------------------------
@@ -380,28 +374,26 @@ QString TAlbum::prettyURL() const
     return u;
 }
 
-KURL TAlbum::kurl() const
+DatabaseUrl TAlbum::kurl() const
 {
-    KURL url;
-    url.setProtocol("digikamtags");
+    return DatabaseUrl::fromTagIds(tagIDs());
+}
 
+QValueList<int> TAlbum::tagIDs() const
+{
     if (isRoot())
     {
-        url.setPath("/");
+        return QValueList<int>();
     }
     else if (parent())
     {
-        TAlbum *p = static_cast<TAlbum*>(parent());
-        url.setPath(p->kurl().path(1));
-        url.addPath(QString::number(id()));
+        return static_cast<TAlbum*>(parent())->tagIDs() << id();
     }
     else
     {
-        url = KURL();
+        return QValueList<int>() << id();
     }
-    return url;
 }
-
 
 QString TAlbum::icon() const
 {
@@ -427,15 +419,9 @@ QDate DAlbum::date() const
     return m_date;
 }
 
-KURL DAlbum::kurl() const
+DatabaseUrl DAlbum::kurl() const
 {
-    KURL u;
-    u.setProtocol("digikamdates");
-    u.setPath(QString("/%1/%2")
-              .arg(m_date.year())
-              .arg(m_date.month()));
-
-    return u;
+    return DatabaseUrl::fromDate(m_date);
 }
 
 // --------------------------------------------------------------------------
@@ -451,7 +437,12 @@ SAlbum::~SAlbum()
 {
 }
 
-KURL SAlbum::kurl() const
+DatabaseUrl SAlbum::kurl() const
+{
+    return DatabaseUrl::fromSearchUrl(m_kurl);
+}
+
+KURL SAlbum::searchUrl() const
 {
     return m_kurl;
 }

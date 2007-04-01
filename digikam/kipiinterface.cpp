@@ -59,8 +59,10 @@ extern "C"
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"
+#include "databaseaccess.h"
 #include "dmetadata.h"
 #include "imageattributeswatch.h"
+#include "imagelister.h"
 #include "kipiinterface.h"
 #include "kipiinterface.moc"
 
@@ -99,8 +101,8 @@ QString DigikamImageInfo::description()
 
     if (p)
     {
-        AlbumDB* db = AlbumManager::instance()->albumDB();
-        return db->getItemCaption(p->id(), _url.fileName());
+        DatabaseAccess access;
+        access.db()->getItemCaption(p->id(), _url.fileName());
     }
 
     return QString();
@@ -109,13 +111,13 @@ QString DigikamImageInfo::description()
 void DigikamImageInfo::setTitle( const QString& newName )
 {
     // Here we get informed that a plugin has renamed the file 
-    
+
     PAlbum* p = parentAlbum();
 
     if ( p && !newName.isEmpty() )
     {
-        AlbumDB* db = AlbumManager::instance()->albumDB();
-        db->moveItem(p->id(), _url.fileName(), p->id(), newName);
+        DatabaseAccess access;
+        access.db()->moveItem(p->id(), _url.fileName(), p->id(), newName);
         _url = _url.upURL();
         _url.addPath(newName);
     }
@@ -127,9 +129,12 @@ void DigikamImageInfo::setDescription( const QString& description )
 
     if ( p  )
     {
-        AlbumDB* db = AlbumManager::instance()->albumDB();
-        Q_LLONG imageId = db->getImageId(p->id(), _url.filename());
-        db->setItemCaption(imageId, description);
+        Q_LLONG imageId;
+        {
+            DatabaseAccess access;
+            imageId = access.db()->getImageId(p->id(), _url.filename());
+            access.db()->setItemCaption(imageId, description);
+        }
         ImageAttributesWatch::instance()->imageCaptionChanged(imageId);
 
         AlbumSettings *settings = AlbumSettings::instance();
@@ -150,8 +155,8 @@ QDateTime DigikamImageInfo::time( KIPI::TimeSpec /*spec*/ )
 
     if (p)
     {
-        AlbumDB* db = AlbumManager::instance()->albumDB();
-        return db->getItemDate(p->id(), _url.fileName());
+        DatabaseAccess access;
+        access.db()->getItemDate(p->id(), _url.fileName());
     }
 
     return QDateTime();
@@ -169,9 +174,12 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
 
     if ( p )
     {
-        AlbumDB* db = AlbumManager::instance()->albumDB();
-        Q_LLONG imageId = db->getImageId(p->id(), _url.filename());
-        db->setItemDate(imageId, time);
+        Q_LLONG imageId;
+        {
+            DatabaseAccess access;
+            imageId = access.db()->getImageId(p->id(), _url.filename());
+            access.db()->setItemDate(imageId, time);
+        }
         ImageAttributesWatch::instance()->imageDateChanged(imageId);
         AlbumManager::instance()->refreshItemHandler( _url );
     }
@@ -193,15 +201,15 @@ QMap<QString, QVariant> DigikamImageInfo::attributes()
     PAlbum* p = parentAlbum();
     if (p)
     {
-        AlbumDB* db      = AlbumManager::instance()->albumDB();
-        Q_LLONG imageId  = db->getImageId(p->id(), _url.filename());
-        
+        DatabaseAccess access;
+        Q_LLONG imageId  = access.db()->getImageId(p->id(), _url.filename());
+
         // Get digiKam Tags list of picture.
-        QStringList tags         = db->getItemTagNames(imageId); 
+        QStringList tags         = access.db()->getItemTagNames(imageId);
         res["tags"]              = tags;
 
         // Get digiKam Rating of picture.
-        int rating               = db->getItemRating(imageId); 
+        int rating               = access.db()->getItemRating(imageId);
         res["rating"]            = rating;
 
         // TODO: add here future picture attributes stored by digiKam database
@@ -214,10 +222,10 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
     PAlbum* p = parentAlbum();
     if (p)
     {
-        AlbumDB* db                        = AlbumManager::instance()->albumDB();
-        Q_LLONG imageId                    = db->getImageId(p->id(), _url.filename());
+        DatabaseAccess access;
+        Q_LLONG imageId                    = access.db()->getImageId(p->id(), _url.filename());
         QMap<QString, QVariant> attributes = res;
-        
+
         // Set digiKam Tags list of picture.
         if (attributes.find("tags") != attributes.end())
         {
@@ -229,8 +237,8 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
         if (attributes.find("rating") != attributes.end())
         {
             int rating = attributes["rating"].asInt();
-	    if (rating >= 0 && rating <= 5)
-                db->setItemRating(imageId, rating); 
+            if (rating >= 0 && rating <= 5)
+                access.db()->setItemRating(imageId, rating);
         }
 
         // TODO: add here future picture attributes stored by digiKam database
@@ -340,44 +348,6 @@ QString DigikamImageCollection::comment()
         return QString();
 }
 
-static QValueList<QRegExp> makeFilterList( const QString &filter )
-{
-    QValueList<QRegExp> regExps;
-    if ( filter.isEmpty() )
-        return regExps;
-
-    QChar sep( ';' );
-    int i = filter.find( sep, 0 );
-
-    if ( i == -1 && filter.find( ' ', 0 ) != -1 )
-        sep = QChar( ' ' );
-
-    QStringList list = QStringList::split( sep, filter );
-    QStringList::Iterator it = list.begin();
-    
-    while ( it != list.end() ) 
-    {
-        regExps << QRegExp( (*it).stripWhiteSpace(), false, true );
-        ++it;
-    }
-    
-    return regExps;
-}
-
-static bool matchFilterList( const QValueList<QRegExp>& filters, const QString &fileName )
-{
-    QValueList<QRegExp>::ConstIterator rit = filters.begin();
-    
-    while ( rit != filters.end() ) 
-    {
-        if ( (*rit).exactMatch(fileName) )
-            return true;
-        ++rit;
-    }
-
-    return false;
-}
-
 KURL::List DigikamImageCollection::images()
 {
     switch ( tp_ )
@@ -439,21 +409,33 @@ KURL::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
 {
     // get the images from the database and return the items found
 
-    AlbumDB* db = AlbumManager::instance()->albumDB();
+    AlbumDB::ItemSortOrder sortOrder = AlbumDB::NoItemSorting;
+    switch (AlbumSettings::instance()->getImageSortOrder())
+    {
+        case AlbumSettings::ByIName:
+            sortOrder = AlbumDB::ByItemName;
+            break;
+        case AlbumSettings::ByIPath:
+            sortOrder = AlbumDB::ByItemPath;
+            break;
+        case AlbumSettings::ByIDate:
+            sortOrder = AlbumDB::ByItemDate;
+            break;
+        case AlbumSettings::ByIRating:
+            sortdOer = AlbumDB::ByItemRating;
+            break;
+        // ByISize not supported
+    }
 
-    db->beginTransaction();
-
-    QStringList urls = db->getItemURLsInAlbum(album->id());
-
-    db->commitTransaction();
+    QStringList urls = DatabaseAccess().db()->getItemURLsInAlbum(album->id(), sortOrder);
 
     KURL::List urlList;
 
-    QValueList<QRegExp> regex = makeFilterList(imgFilter_);
-    
+    QValueList<QRegExp> regex = ImageLister::makeFilterList(imgFilter_);
+
     for (QStringList::iterator it = urls.begin(); it != urls.end(); ++it)
     {
-        if (matchFilterList(regex, *it))
+        if (ImageLister::matchFilterList(regex, *it))
             urlList.append(*it);
     }
 
@@ -464,21 +446,16 @@ KURL::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
 
 KURL::List DigikamImageCollection::imagesFromTAlbum(TAlbum* album) const
 {
-    AlbumDB* db = AlbumManager::instance()->albumDB();
-
-    db->beginTransaction();
-
-    QStringList urls = db->getItemURLsInTag(album->id());
-
-    db->commitTransaction();
+    QStringList urls;
+    urls = DatabaseAccess().db()->getItemURLsInTag(album->id());
 
     KURL::List urlList;
 
-    QValueList<QRegExp> regex = makeFilterList(imgFilter_);
-    
+    QValueList<QRegExp> regex = ImageLister::makeFilterList(imgFilter_);
+
     for (QStringList::iterator it = urls.begin(); it != urls.end(); ++it)
     {
-        if (matchFilterList(regex, *it))
+        if (ImageLister::matchFilterList(regex, *it))
             urlList.append(*it);
     }
 
@@ -547,7 +524,6 @@ DigikamKipiInterface::DigikamKipiInterface( QObject *parent, const char *name)
                     : KIPI::Interface( parent, name )
 {
     albumManager_ = AlbumManager::instance();
-    albumDB_      = albumManager_->albumDB();
 
     connect( albumManager_, SIGNAL( signalAlbumItemsSelected( bool ) ),
              this, SLOT( slotSelectionChanged( bool ) ) );
@@ -695,7 +671,8 @@ void DigikamKipiInterface::delImage( const KURL& url )
     if ( palbum )
     {
         // delete the item from the database
-        albumDB_->deleteItem( palbum->id(), url.fileName() );
+        DatabaseAccess access;
+        access.db()->deleteItem( palbum->id(), url.fileName() );
     }
     else
     {

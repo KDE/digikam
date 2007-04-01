@@ -28,6 +28,7 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qdir.h>
 #include <qfileinfo.h>
 #include <qfile.h>
 
@@ -71,6 +72,8 @@ extern "C"
 #include "version.h"
 #include "albumdb.h"
 #include "albummanager.h"
+#include "databaseaccess.h"
+#include "databaseparameters.h"
 #include "digikamapp.h"
 #include "digikamfirstrun.h"
 
@@ -283,8 +286,11 @@ int main(int argc, char *argv[])
         return app.exec();
     }
 
+    Digikam::DatabaseAccess::setParameters(Digikam::DatabaseParameters::parametersForSQLiteDefaultFile(albumPath));
+    Digikam::DatabaseAccess::setAlbumRoot(albumPath);
+
     Digikam::AlbumManager* man = new Digikam::AlbumManager();
-    man->setLibraryPath(albumPath);
+    man->setLibraryPath(Digikam::DatabaseAccess::albumRoot());
 
     // Register image formats (especially for TIFF )
     KImageIO::registerFormats();

@@ -146,7 +146,7 @@ void MetadataHub::load(ImageInfo *info)
 {
     d->count++;
 
-    load(info->dateTime(), info->caption(), info->rating());
+    load(info->dateTime(), info->comment(), info->rating());
 
     AlbumManager *man = AlbumManager::instance();
     QValueList<int> tagIDs = info->tagIDs();
@@ -170,7 +170,7 @@ void MetadataHub::load(ImageInfo *info)
     }
     else
     {
-        loadTags(info->tagPaths(false));
+        loadTags(man->tagPaths(info->tagIDs(), false));
     }
 }
 
@@ -416,7 +416,7 @@ bool MetadataHub::write(ImageInfo *info, WriteMode writeMode)
 
     if (saveComment && (writeAllFields || d->commentChanged))
     {
-        info->setCaption(d->comment);
+        info->setComment(d->comment);
         changed = true;
     }
     if (saveDateTime && (writeAllFields || d->dateTimeChanged))

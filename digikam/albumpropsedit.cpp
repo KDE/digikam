@@ -61,6 +61,7 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "databaseaccess.h"
 #include "albumpropsedit.h"
 
 namespace Digikam
@@ -327,32 +328,44 @@ void AlbumPropsEdit::slotDateLowButtonClicked()
 {
     setCursor( KCursor::waitCursor() );
 
-    AlbumDB* db = AlbumManager::instance()->albumDB();
-    QDate avDate = db->getAlbumLowestDate( d->album->id() );
+    QDate lowDate;
+    {
+        DatabaseAccess access;
+        lowDate = access.db()->getAlbumLowestDate( d->album->id() );
+    }
+
     setCursor( KCursor::arrowCursor() );
 
-    if ( avDate.isValid() )
-        d->datePicker->setDate( avDate );
+    if ( lowDate.isValid() )
+        d->datePicker->setDate( lowDate );
 }
 
 void AlbumPropsEdit::slotDateHighButtonClicked()
 {
     setCursor( KCursor::waitCursor() );
 
-    AlbumDB* db = AlbumManager::instance()->albumDB();
-    QDate avDate = db->getAlbumHighestDate( d->album->id() );
+    QDate highDate;
+    {
+        DatabaseAccess access;
+        highDate = access.db()->getAlbumHighestDate( d->album->id() );
+    }
+
     setCursor( KCursor::arrowCursor() );
 
-    if ( avDate.isValid() )
-        d->datePicker->setDate( avDate );
+    if ( highDate.isValid() )
+        d->datePicker->setDate( highDate );
 }
 
 void AlbumPropsEdit::slotDateAverageButtonClicked()
 {
     setCursor( KCursor::waitCursor() );
 
-    AlbumDB* db = AlbumManager::instance()->albumDB();
-    QDate avDate = db->getAlbumAverageDate( d->album->id() );
+    QDate avDate;
+    {
+        DatabaseAccess access;
+        avDate = access.db()->getAlbumAverageDate( d->album->id() );
+    }
+
     setCursor( KCursor::arrowCursor() );
 
     if ( avDate.isValid() )

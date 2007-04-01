@@ -51,6 +51,7 @@ extern "C"
 #include "albumlister.h"
 #include "albumdb.h"
 #include "album.h"
+#include "imagelister.h"
 #include "dio.h"
 #include "dio_p.h"
 
@@ -193,7 +194,7 @@ KIO::CopyJob *rename(const KURL& src, const KURL& dest)
             break;
     }
 
-    Digikam::AlbumDB* db = Digikam::AlbumManager::instance()->albumDB();
+    Digikam::AlbumDB* db = Digikam::AlbumManager::instance()->albumD();
     if (::rename(QFile::encodeName(srcPath), QFile::encodeName(dstPath)) == 0)
     {
         db->moveItem(srcAlbum->id(), src.fileName(),
@@ -209,18 +210,10 @@ KIO::CopyJob *rename(const KURL& src, const KURL& dest)
 
 KIO::Job* scan(const KURL& albumURL)
 {
-    QByteArray ba;
-    QDataStream ds(ba, IO_WriteOnly);
-    ds << Digikam::AlbumManager::instance()->getLibraryPath();
-    ds << albumURL;
-    ds << QString();
-    ds << 0;
-    ds << 1;
-
-    KIO::Job* job = new KIO::TransferJob(albumURL,
-                                         KIO::CMD_SPECIAL,
-                                         ba, QByteArray(),
-                                         false);
+    KIO::Job* job = Digikam::ImageLister::startListJob(albumURL,
+                                                       QString(), // filter - invalid for scan
+                                                       0,         // getDimension - invalid for scan
+                                                       1);        // scan
     new Watch(job);
 
     return job;

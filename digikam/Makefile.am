@@ -13,6 +13,7 @@ INCLUDES = -I$(top_srcdir)/digikam/sqlite \
 	   -I$(top_srcdir)/digikam/libs/dmetadata \
 	   -I$(top_srcdir)/digikam/libs/imageproperties \
 	   -I$(top_srcdir)/digikam/libs/threadimageio \
+	   -I$(top_srcdir)/digikam/libs/database \
 	   -I$(top_builddir)/digikam/libs/dialogs \
 	   -I$(top_srcdir)/digikam/libs/dialogs \
 	   -I$(top_srcdir)/digikam/utilities/cameragui \
@@ -37,7 +38,6 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                metadatahub.cpp \
 	                digikamapp.cpp \
 	                album.cpp \
-	                albumdb.cpp \
 	                albumdb_sqlite2.cpp \
 	                albumiconview.cpp \
 	                albumicongroupitem.cpp \
@@ -69,7 +69,6 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                icongroupitem.cpp \
 	                iconitem.cpp \
 	                imageattributeswatch.cpp \
-	                imageinfo.cpp \
 	                imagepreviewwidget.cpp \
 	                imagepreviewview.cpp \
 	                kdatetimeedit.cpp \
@@ -107,6 +106,7 @@ libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) $(LIB_KHTML) \
 	               $(top_builddir)/digikam/libs/imageproperties/libimagepropertiesdigikam.la \
 	               $(top_builddir)/digikam/libs/threadimageio/libthreadimageio.la \
 	               $(top_builddir)/digikam/libs/greycstoration/libgreycstoration.la \
+	               $(top_builddir)/digikam/libs/database/libdatabase.la \
 	               $(top_builddir)/digikam/utilities/batch/libbatch.la \
 	               $(top_builddir)/digikam/utilities/slideshow/libslideshow.la \
 	               $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
