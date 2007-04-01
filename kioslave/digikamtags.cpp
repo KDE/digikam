@@ -46,6 +46,10 @@ extern "C"
 #include <time.h>
 }
 
+#include "databaseaccess.h"
+#include "databaseurl.h"
+#include "imagelister.h"
+#include "imagelisterreceiver.h"
 #include "digikamtags.h"
 
 kio_digikamtagsProtocol::kio_digikamtagsProtocol(const QCString &pool_socket,
@@ -58,162 +62,28 @@ kio_digikamtagsProtocol::~kio_digikamtagsProtocol()
 {
 }
 
-static QValueList<QRegExp> makeFilterList( const QString &filter )
-{
-    QValueList<QRegExp> regExps;
-    if ( filter.isEmpty() )
-        return regExps;
-
-    QChar sep( ';' );
-    int i = filter.find( sep, 0 );
-    if ( i == -1 && filter.find( ' ', 0 ) != -1 )
-        sep = QChar( ' ' );
-
-    QStringList list = QStringList::split( sep, filter );
-    QStringList::Iterator it = list.begin();
-    while ( it != list.end() ) {
-        regExps << QRegExp( (*it).stripWhiteSpace(), false, true );
-        ++it;
-    }
-    return regExps;
-}
-
-static bool matchFilterList( const QValueList<QRegExp>& filters,
-                             const QString &fileName )
-{
-    QValueList<QRegExp>::ConstIterator rit = filters.begin();
-    while ( rit != filters.end() ) {
-        if ( (*rit).exactMatch(fileName) )
-            return true;
-        ++rit;
-    }
-    return false;
-}
-
 void kio_digikamtagsProtocol::special(const QByteArray& data)
 {
-    QString libraryPath;
     KURL    kurl;
-    QString url;
     QString filter;
     int     getDimensions;
-    int     tagID;
 
     QDataStream ds(data, IO_ReadOnly);
-    ds >> libraryPath;
     ds >> kurl;
     ds >> filter;
     ds >> getDimensions;
 
-    url = kurl.path();
+    kdDebug() << "kio_digikamtags::special " << kurl << endl;
 
-    QValueList<QRegExp> regex = makeFilterList(filter);
+    Digikam::DatabaseUrl dbUrl(kurl);
+    Digikam::DatabaseAccess::setParameters(dbUrl);
 
-    if (m_libraryPath != libraryPath)
-    {
-        m_libraryPath = libraryPath;
-        m_db.closeDB();
-        m_db.openDB(libraryPath);
-    }
-
-    tagID = QStringList::split('/',url).last().toInt();
-
-    QStringList values;
-
-    m_db.execSql( QString( "SELECT DISTINCT Images.id, Images.name, Images.dirid, \n "
-                           "       Images.datetime, Albums.url \n "
-                           " FROM Images, Albums \n "
-                           " WHERE Images.id IN \n "
-                           "       (SELECT imageid FROM ImageTags \n "
-                           "        WHERE tagid=%1 \n "
-                           "           OR tagid IN (SELECT id FROM TagsTree WHERE pid=%2)) \n "
-                           "   AND Albums.id=Images.dirid \n " )
-                  .arg(tagID)
-                  .arg(tagID), &values );
-
-    QByteArray  ba;
-
-    Q_LLONG imageid;
-    QString name;
-    QString path;
-    int     dirid;
-    QString date;
-    QString purl;
-    QSize   dims;
-
-    int count = 0;
-    QDataStream* os = new QDataStream(ba, IO_WriteOnly);
-
-    struct stat stbuf;
-    for (QStringList::iterator it = values.begin(); it != values.end();)
-    {
-        imageid = (*it).toLongLong();
-        ++it;
-        name  = *it;
-        ++it;
-        dirid = (*it).toInt();
-        ++it;
-        date  = *it;
-        ++it;
-        purl  = *it;
-        ++it;
-
-        if (!matchFilterList(regex, name))
-            continue;
-
-        path = m_libraryPath + purl + '/' + name;
-        if (::stat(QFile::encodeName(path), &stbuf) != 0)
-            continue;
-
-        dims = QSize();
-        if (getDimensions)
-        {
-            KFileMetaInfo metaInfo(path);
-            if (metaInfo.isValid())
-            {
-                if (metaInfo.containsGroup("Jpeg EXIF Data"))
-                {
-                    dims = metaInfo.group("Jpeg EXIF Data").
-                           item("Dimensions").value().toSize();
-                }
-                else if (metaInfo.containsGroup("General"))
-                {
-                    dims = metaInfo.group("General").
-                           item("Dimensions").value().toSize();
-                }
-                else if (metaInfo.containsGroup("Technical"))
-                {
-                    dims = metaInfo.group("Technical").
-                           item("Dimensions").value().toSize();
-                }
-            }
-        }
-
-        *os << imageid;
-        *os << dirid;
-        *os << name;
-        *os << date;
-        *os << static_cast<size_t>(stbuf.st_size);
-        *os << dims;
-
-        count++;
-
-        if (count > 200)
-        {
-            delete os;
-            os = 0;
-
-            SlaveBase::data(ba);
-            ba.resize(0);
-
-            count = 0;
-            os = new QDataStream(ba, IO_WriteOnly);
-        }
-    }
-
-    delete os;
-
-    SlaveBase::data(ba);
+    Digikam::ImageLister lister;
+    // send data every 200 images to be more responsive
+    Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
+    lister.list(&receiver, kurl, filter, getDimensions);
+    // send rest
+    receiver.sendData();
 
     finished();
 }

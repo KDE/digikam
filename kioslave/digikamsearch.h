@@ -24,43 +24,8 @@
 
 #include <kio/slavebase.h>
 
-// Local includes.
-
-#include "sqlitedb.h"
-
-class QStringList;
-
 class kio_digikamsearch : public KIO::SlaveBase
 {
-
-public:
-
-    enum SKey
-    {
-        ALBUM = 0,
-        ALBUMNAME,
-        ALBUMCAPTION,
-        ALBUMCOLLECTION,
-        TAG,
-        TAGNAME,
-        IMAGENAME,
-        IMAGECAPTION,
-        IMAGEDATE,
-        KEYWORD,
-        RATING
-    };
-
-    enum SOperator
-    {
-        EQ = 0,
-        NE,
-        LT,
-        GT,
-        LIKE,
-        NLIKE,
-        LTE,
-        GTE
-    };
 
 public:
 
@@ -70,28 +35,6 @@ public:
     void special(const QByteArray& data);
 
 private:
-
-    QString buildQuery(const KURL& url) const;
-
-    QString subQuery(enum SKey key, enum SOperator op, const QString& val) const;
-
-    QString possibleDate(const QString& str, bool& exact) const;
-    
-private:
-
-    class RuleType
-    {
-    public:
-
-        SKey      key;
-        SOperator op;
-        QString   val;
-    };
-
-    SqliteDB m_db;
-    QString  m_libraryPath;
-    QString  m_longMonths[12];
-    QString  m_shortMonths[12];
 };
 
 #endif /* DIGIKAMSEARCH_H */

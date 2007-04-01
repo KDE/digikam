@@ -27,22 +27,7 @@
 #include <kio/slavebase.h>
 #include <qvaluelist.h>
 #include <qdatetime.h>
-#include <sqlitedb.h>
 
-class QStringList;
-
-class AlbumInfo
-{
-public:
-
-    int      id;
-    Q_LLONG  icon;
-    QString  url;
-    QString  caption;
-    QString  collection;
-    QDate    date;
-};        
-    
 class kio_digikamalbums : public KIO::SlaveBase
 {
 public:
@@ -62,34 +47,23 @@ public:
     void listDir( const KURL& url );
     void mkdir( const KURL& url, int permissions );
     void chmod( const KURL& url, int permissions );
-    void del( const KURL& url, bool isfile);         
-    
+    void del( const KURL& url, bool isfile);
+
 private:
 
-    bool createUDSEntry(const QString& path, KIO::UDSEntry& entry);
     void createDigikamPropsUDSEntry(KIO::UDSEntry& entry);
 
-    void       buildAlbumList();
-    AlbumInfo  findAlbum(const QString& url, bool addIfNotExists=true);
-    void       delAlbum(int albumID);
-    void       renameAlbum(const QString& oldURL, const QString& newURL);
-    bool       findImage(int albumID, const QString& name) const;
-    void       addImage(int albumID, const QString& filePath);
-    void       delImage(int albumID, const QString& name);
-    void       renameImage(int oldAlbumID, const QString& oldName,
-                           int newAlbumID, const QString& newName);
-    void       copyImage(int srcAlbumID, const QString& srcName,
-                         int dstAlbumID, const QString& dstName);
+    bool createUDSEntry(const QString& path, KIO::UDSEntry& entry);
+    bool file_get( const KURL& url );
+    bool file_put( const KURL& url, int _mode, bool _overwrite, bool _resume );
+    bool file_copy( const KURL &src, const KURL &dest, int mode, bool overwrite );
+    bool file_rename( const KURL &src, const KURL &dest, bool overwrite );
+    bool file_stat( const KURL& url );
+    bool file_listDir( const KURL& url );
+    bool file_mkdir( const KURL& url, int permissions );
+    bool file_chmod( const KURL& url, int permissions );
+    bool file_del( const KURL& url, bool isfile);
 
-    void       scanAlbum(const QString& url);
-    void       scanOneAlbum(const QString& url);
-    void       removeInvalidAlbums();
-    
-private:
-
-    SqliteDB              m_sqlDB;
-    QString               m_libraryPath;
-    QValueList<AlbumInfo> m_albumList;
 };
 
 

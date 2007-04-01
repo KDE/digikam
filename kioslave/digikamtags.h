@@ -23,7 +23,6 @@
 
 #include <kio/slavebase.h>
 #include <qstring.h>
-#include "sqlitedb.h"
 
 class KURL;
 class QCString;
@@ -37,11 +36,6 @@ public:
     virtual ~kio_digikamtagsProtocol();
 
     void special(const QByteArray& data);
-
-private:
-
-    SqliteDB           m_db;
-    QString            m_libraryPath;
 };
 
 

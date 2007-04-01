@@ -44,6 +44,9 @@ extern "C"
 #include <time.h>
 }
 
+#include "imagelister.h"
+#include "albumdb.h"
+#include "databaseaccess.h"
 #include "digikamdates.h"
 
 kio_digikamdates::kio_digikamdates(const QCString &pool_socket,
@@ -54,38 +57,6 @@ kio_digikamdates::kio_digikamdates(const QCString &pool_socket,
 
 kio_digikamdates::~kio_digikamdates()
 {
-}
-
-static QValueList<QRegExp> makeFilterList( const QString &filter )
-{
-    QValueList<QRegExp> regExps;
-    if ( filter.isEmpty() )
-        return regExps;
-
-    QChar sep( ';' );
-    int i = filter.find( sep, 0 );
-    if ( i == -1 && filter.find( ' ', 0 ) != -1 )
-        sep = QChar( ' ' );
-
-    QStringList list = QStringList::split( sep, filter );
-    QStringList::Iterator it = list.begin();
-    while ( it != list.end() ) {
-        regExps << QRegExp( (*it).stripWhiteSpace(), false, true );
-        ++it;
-    }
-    return regExps;
-}
-
-static bool matchFilterList( const QValueList<QRegExp>& filters,
-                             const QString &fileName )
-{
-    QValueList<QRegExp>::ConstIterator rit = filters.begin();
-    while ( rit != filters.end() ) {
-        if ( (*rit).exactMatch(fileName) )
-            return true;
-        ++rit;
-    }
-    return false;
 }
 
 void kio_digikamdates::special(const QByteArray& data)
@@ -104,51 +75,40 @@ void kio_digikamdates::special(const QByteArray& data)
     ds >> filter;
     ds >> getDimensions;
 
+    kdDebug() << "kio_digikamdates::special " << kurl << endl;
+
+    Digikam::DatabaseUrl dbUrl(kurl);
+    Digikam::DatabaseAccess::setParameters(dbUrl);
+
     url = kurl.path();
-
-    QValueList<QRegExp> regex = makeFilterList(filter);
-
-    if (m_libraryPath != libraryPath)
-    {
-        m_libraryPath = libraryPath;
-        m_db.closeDB();
-        m_db.openDB(libraryPath);
-    }
-
-    QByteArray  ba;
 
     if (folders)
     {
+        QValueList<QRegExp> regex = Digikam::ImageLister::makeFilterList(filter);
+        QByteArray  ba;
+
         typedef QPair<int, int> YearMonth;
         QMap<YearMonth, bool> yearMonthMap;
-        
-        QStringList values;
-        m_db.execSql( "SELECT name, datetime FROM Images;", &values );
 
-        QString name, dateStr;
-        QDate date;
-        for ( QStringList::iterator it = values.begin(); it != values.end(); )
+        QValueList<QPair<QString, QDateTime> > images;
         {
-            name    = *it;
-            ++it;
-            dateStr = *it;
-            ++it;
-            
-            if ( !matchFilterList( regex, name ) )
+            Digikam::DatabaseAccess access;
+            images = access.db()->getItemsAndDate();
+        }
+
+        for ( QValueList<QPair<QString, QDateTime> >::iterator it = images.begin(); it != images.end(); )
+        {
+            if ( !Digikam::ImageLister::matchFilterList( regex, (*it).first ) )
                 continue;
 
-            date = QDate::fromString( dateStr,  Qt::ISODate );
-            if ( !date.isValid() )
-                continue;
-
-            if ( !yearMonthMap.contains(YearMonth(date.year(), date.month())) )
+            if ( !yearMonthMap.contains(YearMonth((*it).second.date().year(), (*it).second.date().month())) )
             {
-                yearMonthMap.insert( YearMonth( date.year(), date.month() ), true );
+                yearMonthMap.insert( YearMonth( (*it).second.date().year(), (*it).second.date().month() ), true );
             }
         }
 
         QDataStream os(ba, IO_WriteOnly);
-        
+
         int year, month;
         for ( QMap<YearMonth, bool>::iterator it = yearMonthMap.begin();
               it != yearMonthMap.end(); ++it )
@@ -159,118 +119,18 @@ void kio_digikamdates::special(const QByteArray& data)
             QDate date( year,  month,  1 );
             os << date;
         }
+
+        SlaveBase::data(ba);
     }
     else
     {
-        QStringList subpaths = QStringList::split("/", url, false);
-        if (subpaths.count() == 2)
-        {
-
-            int yr = QString(subpaths[0]).toInt();
-            int mo = QString(subpaths[1]).toInt();
-
-            QString moStr1, moStr2;
-            moStr1.sprintf("%.2d", mo);
-            moStr2.sprintf("%.2d", mo+1);
-
-            QStringList values;
-
-            m_db.execSql(QString("SELECT Images.id, Images.name, Images.dirid, \n "
-                                 "  Images.datetime, Albums.url \n "
-                                 "FROM Images, Albums \n "
-                                 "WHERE Images.datetime < '%1-%2-01' \n "
-                                 "AND Images.datetime >= '%3-%4-01' \n "
-                                 "AND Albums.id=Images.dirid \n "
-                                 "ORDER BY Albums.id;")
-                         .arg(yr,4)
-                         .arg(moStr2)
-                         .arg(yr,4)
-                         .arg(moStr1,2),
-                         &values, false);
-
-            Q_LLONG     imageid;
-            QString     name;
-            QString     path;
-            int         dirid;
-            QString     date;
-            QString     purl;
-            QSize       dims;
-            struct stat stbuf;
-
-            int  count = 0;
-            QDataStream* os = new QDataStream(ba, IO_WriteOnly);
-
-            for (QStringList::iterator it = values.begin(); it != values.end();)
-            {
-                imageid = (*it).toLongLong();
-                ++it;
-                name  = *it;
-                ++it;
-                dirid = (*it).toInt();
-                ++it;
-                date  = *it;
-                ++it;
-                purl  = *it;
-                ++it;
-
-                if (!matchFilterList(regex, name))
-                    continue;
-
-                path = m_libraryPath + purl + '/' + name;
-                if (::stat(QFile::encodeName(path), &stbuf) != 0)
-                    continue;
-
-                dims = QSize();
-                if (getDimensions)
-                {
-                    KFileMetaInfo metaInfo(path);
-                    if (metaInfo.isValid())
-                    {
-                        if (metaInfo.containsGroup("Jpeg EXIF Data"))
-                        {
-                            dims = metaInfo.group("Jpeg EXIF Data").
-                                   item("Dimensions").value().toSize();
-                        }
-                        else if (metaInfo.containsGroup("General"))
-                        {
-                            dims = metaInfo.group("General").
-                                   item("Dimensions").value().toSize();
-                        }
-                        else if (metaInfo.containsGroup("Technical"))
-                        {
-                            dims = metaInfo.group("Technical").
-                                   item("Dimensions").value().toSize();
-                        }
-                    }
-                }
-
-                *os << imageid;
-                *os << dirid;
-                *os << name;
-                *os << date;
-                *os << static_cast<size_t>(stbuf.st_size);
-                *os << dims;
-
-                count++;
-
-                if (count > 200)
-                {
-                    delete os;
-                    os = 0;
-
-                    SlaveBase::data(ba);
-                    ba.resize(0);
-
-                    count = 0;
-                    os = new QDataStream(ba, IO_WriteOnly);
-                }
-            }
-
-            delete os;
-        }
+        Digikam::ImageLister lister;
+        // send data every 200 images to be more responsive
+        Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
+        lister.list(&receiver, kurl, filter, getDimensions);
+        // send rest
+        receiver.sendData();
     }
-
-    SlaveBase::data(ba);
 
     finished();
 }

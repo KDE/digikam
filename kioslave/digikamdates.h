@@ -20,8 +20,6 @@
 
 #include <kio/slavebase.h>
 
-#include "sqlitedb.h"
-
 class QStringList;
 
 class kio_digikamdates : public KIO::SlaveBase
@@ -33,11 +31,6 @@ public:
     ~kio_digikamdates();
 
     void special(const QByteArray& data);
-
-private:
-
-    SqliteDB  m_db;
-    QString   m_libraryPath;
 };
 
 
