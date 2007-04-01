@@ -466,8 +466,8 @@ void Canvas::viewportPaintEvent(QPaintEvent *e)
                QMIN(er.height() + 2, contentsRect().height()));
     
     paintViewport(er, (d->zoom <= 1.0) ? true : false);
-    if (d->zoom > 1.0)
-        d->paintTimer->start(100, true);
+/*    if (d->zoom > 1.0)
+        d->paintTimer->start(100, true);*/
 }
 
 void Canvas::slotPaintSmooth()
@@ -537,7 +537,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                     sw = (int)floor(d->tileSize / d->zoom);
                     sh = (int)floor(d->tileSize / d->zoom);
 
-                    if (d->rubber && d->pressedMoved)
+                    if (d->rubber && d->pressedMoved && !d->pressedMoving)
                     {
                         QRect rr(d->rubber->normalize());
                         rr = QRect(d->rubber->normalize());
@@ -655,8 +655,12 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
             }
         
             viewport()->setMouseTracking(false);
-
+            d->pressedMoved  = false;
             d->pressedMoving = true;
+
+            d->tileCache.clear();
+            viewport()->repaint(false);
+
             return;
         }
     }
@@ -716,21 +720,27 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
               d->lbActive || d->rbActive))
             return;
 
-        drawRubber();
+        // Clear old rubber.
+        if (d->pressedMoved)
+            drawRubber();
 
+        // Move content if necessary.
+        blockSignals(true);
+        ensureVisible(e->x(), e->y(), 10, 10);
+        blockSignals(false);
+
+        // draw the new rubber position.
         int r, b;
         r = (e->x() > d->pixmapRect.left()) ? e->x() : d->pixmapRect.left();
         r = (r < d->pixmapRect.right())     ? r      : d->pixmapRect.right();
         b = (e->y() > d->pixmapRect.top())  ? e->y() : d->pixmapRect.top();
         b = (b < d->pixmapRect.bottom())    ? b      : d->pixmapRect.bottom();
-
         d->rubber->setRight(r);
         d->rubber->setBottom(b);
+        drawRubber();
 
         d->pressedMoved  = true;
         d->pressedMoving = true;
-
-        drawRubber();
 
         // To refresh editor status bar with current selection.
         emit signalSelectionChanged(calcSeletedArea());
