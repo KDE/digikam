@@ -151,7 +151,6 @@ public slots:
 private slots:
 
     void slotSelected();
-    void slotPaintSmooth();
     void slotModified();
     void slotImageLoaded(const QString& filePath, bool success);
     void slotImageSaved(const QString& filePath, bool success);

@@ -97,7 +97,6 @@ public:
         autoZoom         = false;
         fullScreen       = false;
         zoom             = 1.0;
-        paintTimer       = new QTimer;
         tileTmpPix       = new QPixmap(tileSize, tileSize);
 
         tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
@@ -128,8 +127,6 @@ public:
     QRect               *rubber;
     QRect                pixmapRect;
     
-    QTimer              *paintTimer;
-
     QCache<QPixmap>      tileCache;
 
     QPixmap*             tileTmpPix;
@@ -202,16 +199,10 @@ Canvas::Canvas(QWidget *parent)
             
     connect(this, SIGNAL(signalSelected(bool)),
             this, SLOT(slotSelected()));
-            
-    connect(d->paintTimer, SIGNAL(timeout()),
-            this, SLOT(slotPaintSmooth()));
 }
 
 Canvas::~Canvas()
 {
-    d->paintTimer->stop();
-    delete d->paintTimer;
-
     delete d->tileTmpPix;
     
     delete d->im;
@@ -395,7 +386,6 @@ void Canvas::updateContentsSize()
 {
     viewport()->setUpdatesEnabled(false);
 
-    d->paintTimer->stop();
     d->ltActive = false;
     d->rtActive = false;
     d->lbActive = false;
@@ -466,16 +456,6 @@ void Canvas::viewportPaintEvent(QPaintEvent *e)
                QMIN(er.height() + 2, contentsRect().height()));
     
     paintViewport(er, (d->zoom <= 1.0) ? true : false);
-/*    if (d->zoom > 1.0)
-        d->paintTimer->start(100, true);*/
-}
-
-void Canvas::slotPaintSmooth()
-{
-    if (d->paintTimer->isActive())
-        return;
-
-    paintViewport(contentsRect(), true);
 }
 
 void Canvas::paintViewport(const QRect& er, bool antialias)
