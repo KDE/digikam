@@ -357,7 +357,10 @@ void ImageEffect_InPainting_Dialog::prepareEffect()
 void ImageEffect_InPainting_Dialog::prepareFinal()
 {
     if (!m_isComputed)
+    {
+        setProgressVisible(true);
         prepareEffect();
+    }
     else
     {
         putFinalData();
@@ -368,7 +371,7 @@ void ImageEffect_InPainting_Dialog::prepareFinal()
 
 void ImageEffect_InPainting_Dialog::putPreviewData()
 {
-    Digikam::ImageIface* iface                           = m_imagePreviewWidget->imageIface();
+    Digikam::ImageIface* iface               = m_imagePreviewWidget->imageIface();
     Digikam::GreycstorationSettings settings = m_settingsWidget->getSettings();
 
     m_cropImage = m_threadedFilter->getTargetImage();
