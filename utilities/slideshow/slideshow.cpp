@@ -269,7 +269,8 @@ void SlideShow::slotGotImagePreview(const LoadingDescription&, const QImage& pre
 
     if (!d->endOfShow)
     {
-        d->timer->start(d->settings.delay, true);
+        if (!d->pause)
+            d->timer->start(d->settings.delay, true);
         preloadNextImage();
     }
 }
@@ -445,15 +446,12 @@ void SlideShow::updatePixmap()
         p.drawPixmap(50, 100, logo);
         p.drawText(60 + logo.width(), 100 + logo.height()/3,   i18n("SlideShow Completed."));
         p.drawText(60 + logo.width(), 100 + 2*logo.height()/3, i18n("Click To Exit..."));
-        p.end();
 
         d->endOfShow = true;
         d->toolBar->setEnabledPlay(false);
         d->toolBar->setEnabledNext(false);
         d->toolBar->setEnabledPrev(false);
     }
-
-    p.end();
 }
 
 void SlideShow::printInfoText(QPainter &p, int &offset, const QString& str)
