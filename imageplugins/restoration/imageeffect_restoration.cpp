@@ -102,6 +102,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
     
     QLabel *typeLabel   = new QLabel(i18n("Filtering type:"), firstPage);
+    typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_restorationTypeCB = new QComboBox( false, firstPage ); 
     m_restorationTypeCB->insertItem( i18n("None") );
     m_restorationTypeCB->insertItem( i18n("Reduce Uniform Noise") );
@@ -128,6 +129,9 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     
     connect(cimgLogoLabel, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processCImgURL(const QString&)));
+
+    connect(m_restorationTypeCB, SIGNAL(activated(int)),
+            this, SLOT(slotResetValues(int)));
 }
 
 ImageEffect_Restoration::~ImageEffect_Restoration()
@@ -161,6 +165,13 @@ void ImageEffect_Restoration::readUserSettings()
     settings.tile       = config->readNumEntry("Tile", 512);
     settings.btile      = config->readNumEntry("BTile", 4);
     m_settingsWidget->setSettings(settings);
+
+    int p = config->readNumEntry("Preset", NoPreset);
+    m_restorationTypeCB->setCurrentItem(p);
+    if (p == NoPreset)
+        m_settingsWidget->setEnabled(true);
+    else        
+        m_settingsWidget->setEnabled(false);
 }
 
 void ImageEffect_Restoration::writeUserSettings()
@@ -168,6 +179,7 @@ void ImageEffect_Restoration::writeUserSettings()
     Digikam::GreycstorationSettings settings = m_settingsWidget->getSettings();
     KConfig* config = kapp->config();
     config->setGroup("restoration Tool Dialog");
+    config->writeEntry("Preset", m_restorationTypeCB->currentItem());
     config->writeEntry("FastApprox", settings.fastApprox);
     config->writeEntry("Interpolation", settings.interp);
     config->writeEntry("Amplitude", settings.amplitude);
@@ -182,6 +194,16 @@ void ImageEffect_Restoration::writeUserSettings()
     config->writeEntry("Tile", settings.tile);
     config->writeEntry("BTile", settings.btile);
     config->sync();
+}
+
+void ImageEffect_Restoration::slotResetValues(int i)
+{
+    if (i == NoPreset)
+        m_settingsWidget->setEnabled(true);
+    else        
+        m_settingsWidget->setEnabled(false);
+
+    resetValues();
 }
 
 void ImageEffect_Restoration::resetValues()

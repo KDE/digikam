@@ -56,6 +56,7 @@ private slots:
     void slotUser3();
     void processCImgURL(const QString&);
     void readUserSettings();
+    void slotResetValues(int);
 
 private:
     
