@@ -64,6 +64,7 @@ public:
 
     void setAboutData(KAboutData *about);
     void setUserAreaWidget(QWidget *w);
+    void setProgressVisible(bool v);
     
 public:
         
@@ -107,10 +108,6 @@ protected:
     virtual void putPreviewData(void){};
     virtual void putFinalData(void){};
     virtual void renderingFinished(void){};
-
-private:
-
-    void setProgressVisible(bool v);
 
 private:
     

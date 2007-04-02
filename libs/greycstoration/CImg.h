@@ -826,14 +826,18 @@ namespace cimg_library {
   namespace cimg {
 
     // Define the trait that will be used to determine the best data type to work with.
+    // Considered types are : bool, uchar, char, short, ushort, int, uint, long, ulong, float and double.
+    // Two rules applies there :
+    // - largest of two integer types is an integer type.
+    // - largest of integer/float type is a float type.
     template<typename T,typename t> struct largest          { typedef t type; };
     template<> struct largest<unsigned char,bool>           { typedef unsigned char type; };
     template<> struct largest<unsigned char,char>           { typedef short type; };
     template<> struct largest<char,bool>                    { typedef char type; };
     template<> struct largest<char,unsigned char>           { typedef short type; };
     template<> struct largest<char,unsigned short>          { typedef int type; };
-    template<> struct largest<char,unsigned int>            { typedef float type; };
-    template<> struct largest<char,unsigned long>           { typedef float type; };
+    template<> struct largest<char,unsigned int>            { typedef unsigned int type; };
+    template<> struct largest<char,unsigned long>           { typedef unsigned long type; };
     template<> struct largest<unsigned short,bool>          { typedef unsigned short type; };
     template<> struct largest<unsigned short,unsigned char> { typedef unsigned short type; };
     template<> struct largest<unsigned short,char>          { typedef int type; };
@@ -842,21 +846,21 @@ namespace cimg_library {
     template<> struct largest<short,unsigned char>          { typedef short type; };
     template<> struct largest<short,char>                   { typedef short type; };
     template<> struct largest<short,unsigned short>         { typedef int type; };
-    template<> struct largest<short,unsigned int>           { typedef float type; };
-    template<> struct largest<short,unsigned long>          { typedef float type; };
+    template<> struct largest<short,unsigned int>           { typedef unsigned int type; };
+    template<> struct largest<short,unsigned long>          { typedef unsigned long type; };
     template<> struct largest<unsigned int,bool>            { typedef unsigned int type; };
     template<> struct largest<unsigned int,unsigned char>   { typedef unsigned int type; };
     template<> struct largest<unsigned int,char>            { typedef unsigned int type; };
     template<> struct largest<unsigned int,unsigned short>  { typedef unsigned int type; };
-    template<> struct largest<unsigned int,short>           { typedef float type; };
-    template<> struct largest<unsigned int,int>             { typedef float type; };
+    template<> struct largest<unsigned int,short>           { typedef unsigned int type; };
+    template<> struct largest<unsigned int,int>             { typedef unsigned int type; };
     template<> struct largest<int,bool>                     { typedef int type; };
     template<> struct largest<int,unsigned char>            { typedef int type; };
     template<> struct largest<int,char>                     { typedef int type; };
     template<> struct largest<int,unsigned short>           { typedef int type; };
     template<> struct largest<int,short>                    { typedef int type; };
-    template<> struct largest<int,unsigned int>             { typedef float type; };
-    template<> struct largest<int,unsigned long>            { typedef float type; };
+    template<> struct largest<int,unsigned int>             { typedef unsigned int type; };
+    template<> struct largest<int,unsigned long>            { typedef unsigned long type; };
     template<> struct largest<float,bool>                   { typedef float type; };
     template<> struct largest<float,unsigned char>          { typedef float type; };
     template<> struct largest<float,char>                   { typedef float type; };
@@ -14558,9 +14562,11 @@ namespace cimg_library {
                                       "alpha>0, sigma>0, dl>0, da>0, gauss_prec>0.",
                                       pixel_type(),amplitude,sharpness,anisotropy,alpha,sigma,dl,da,gauss_prec);
         const bool threed = (depth>1), no_mask = mask.is_empty();
-        const float power1 = 0.5f*sharpness, power2 = power1/(1e-7f+1.0f-anisotropy);
-        CImg<float> blurred = CImg<float>(*this).blur(alpha);
-	if (geom_factor!=1.0f) { if (geom_factor>0) blurred*=geom_factor; else blurred.normalize(0,-geom_factor); }
+        const float nsharpness = cimg::max(sharpness,1e-5f), power1 = 0.5f*nsharpness, power2 = power1/(1e-7f+1.0f-anisotropy);
+
+        CImg<float> blurred = CImg<float>(*this,false).blur(alpha);
+        if (geom_factor>0) blurred*=geom_factor;
+        else blurred.normalize(0,-geom_factor);
 
         if (threed) { // Field for 3D volumes
           CImg<float> val(3), vec(3,3), G(blurred.get_structure_tensorXYZ());
@@ -22211,12 +22217,6 @@ namespace cimg {
 
 #ifdef std
 #undef std
-#endif
-#ifdef SetWindowTextA
-#undef SetWindowTextA
-#endif
-#ifdef CreateWindowA
-#undef CreateWindowA
 #endif
 
 #endif

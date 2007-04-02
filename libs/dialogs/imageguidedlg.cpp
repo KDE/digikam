@@ -230,14 +230,20 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     vLayout->addWidget(gboxGuideSettings);
 
-    d->progressBar = new KProgress(100, d->settings);
+    QHBox *hbox    = new QHBox(d->settings);
+    QLabel *space1 = new QLabel(hbox);
+    space1->setFixedWidth(spacingHint());    
+    d->progressBar = new KProgress(100, hbox);
     d->progressBar->setMaximumHeight( fontMetrics().height() );
     QWhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
     d->progressBar->setValue(0);
     setProgressVisible(false);
-    vLayout->addWidget(d->progressBar);
-
+    QLabel *space2 = new QLabel(hbox);
+    space2->setFixedWidth(spacingHint());
+    
+    vLayout->addWidget(hbox);
     vLayout->addStretch(10);
+
     d->settingsLayout->addMultiCellLayout(vLayout, 1, 1, 0, 0);
 
     d->settingsSideBar->appendTab(d->settings, SmallIcon("configure"), i18n("Settings"));    
