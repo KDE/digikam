@@ -317,7 +317,11 @@ void ImageEffect_Restoration::slotUser3()
     else
         KMessageBox::error(this, i18n("Cannot load settings from the Photograph Restoration text file."));
 
-    file.close();             
+    file.close();
+    m_restorationTypeCB->blockSignals(true);
+    m_restorationTypeCB->setCurrentItem(NoPreset);
+    m_restorationTypeCB->blockSignals(false);
+    m_settingsWidget->setEnabled(true);
 }
 
 void ImageEffect_Restoration::slotUser2()
