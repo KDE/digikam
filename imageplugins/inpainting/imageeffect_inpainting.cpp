@@ -201,7 +201,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
             this, SLOT(processCImgURL(const QString&)));
 
     connect(m_inpaintingTypeCB, SIGNAL(activated(int)),
-            this, SLOT(slotResetValues()));
+            this, SLOT(slotResetValues(int)));
 }
 
 ImageEffect_InPainting_Dialog::~ImageEffect_InPainting_Dialog()
@@ -234,6 +234,13 @@ void ImageEffect_InPainting_Dialog::readUserSettings()
     settings.tile       = config->readNumEntry("Tile", 512);
     settings.btile      = config->readNumEntry("BTile", 4);
     m_settingsWidget->setSettings(settings);
+
+    int p = config->readNumEntry("Preset", NoPreset);
+    m_inpaintingTypeCB->setCurrentItem(p);
+    if (p == NoPreset)
+        m_settingsWidget->setEnabled(true);
+    else        
+        m_settingsWidget->setEnabled(false);
 }
 
 void ImageEffect_InPainting_Dialog::writeUserSettings()
@@ -241,6 +248,7 @@ void ImageEffect_InPainting_Dialog::writeUserSettings()
     Digikam::GreycstorationSettings settings = m_settingsWidget->getSettings();
     KConfig* config = kapp->config();
     config->setGroup("inpainting Tool Dialog");
+    config->writeEntry("Preset", m_inpaintingTypeCB->currentItem());
     config->writeEntry("FastApprox", settings.fastApprox);
     config->writeEntry("Interpolation", settings.interp);
     config->writeEntry("Amplitude", settings.amplitude);
@@ -257,8 +265,13 @@ void ImageEffect_InPainting_Dialog::writeUserSettings()
     config->sync();
 }
 
-void ImageEffect_InPainting_Dialog::slotResetValues()
+void ImageEffect_InPainting_Dialog::slotResetValues(int i)
 {
+    if (i == NoPreset)
+        m_settingsWidget->setEnabled(true);
+    else        
+        m_settingsWidget->setEnabled(false);
+
     resetValues();
 }
 
