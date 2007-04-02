@@ -435,6 +435,10 @@ void ImageEffect_InPainting_Dialog::slotUser3()
         KMessageBox::error(this, i18n("Cannot load settings from the Photograph Inpainting text file."));
 
     file.close();
+    m_inpaintingTypeCB->blockSignals(true);
+    m_inpaintingTypeCB->setCurrentItem(NoPreset);
+    m_inpaintingTypeCB->blockSignals(false);
+    m_settingsWidget->setEnabled(true);             
 }
 
 void ImageEffect_InPainting_Dialog::slotUser2()
