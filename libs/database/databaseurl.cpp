@@ -54,7 +54,7 @@ DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString &name,
     url.setProtocol("digikamalbums");
 
     url.setPath("/");
-    url.addPath(album);
+    url.addPath(album + '/');
     url.addPath(name);
 
     url.addQueryItem("albumRoot", albumRoot.path(-1));
