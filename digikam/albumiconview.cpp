@@ -877,7 +877,8 @@ void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
 
     bool useTrash = !dialog.shouldDelete();
 
-    KIO::Job* job = DIO::del(kioUrlList, useTrash);
+    // trash does not like non-local URLs, put is not implemented
+    KIO::Job* job = DIO::del(useTrash ? urlList : kioUrlList, useTrash);
     connect(job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotDIOResult(KIO::Job*)));
 
@@ -890,7 +891,8 @@ void AlbumIconView::slotDeleteSelectedItemsDirectly(bool useTrash)
     // This method deletes the selected items directly, without confirmation.
     // It is not used in the default setup.
 
-    KURL::List  kioUrlList;
+    KURL::List kioUrlList;
+    KURL::List urlList;
 
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
@@ -898,13 +900,15 @@ void AlbumIconView::slotDeleteSelectedItemsDirectly(bool useTrash)
         {
             AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
             kioUrlList.append(iconItem->imageInfo()->kurlForKIO());
+            urlList.append(iconItem->imageInfo()->kurl());
         }
     }
 
     if (kioUrlList.count() <= 0)
         return;
 
-    KIO::Job* job = DIO::del(kioUrlList, useTrash);
+    // trash does not like non-local URLs, put is not implemented
+    KIO::Job* job = DIO::del(useTrash ? urlList : kioUrlList , useTrash);
 
     connect(job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotDIOResult(KIO::Job*)));
