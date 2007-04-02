@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_ColorFx
+Name[nl]=Afbeeldingsplugin_Kleureffecten
 Name[sv]=Insticksprogram med färgeffekter
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
