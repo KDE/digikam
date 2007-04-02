@@ -168,7 +168,6 @@ static void* greycstoration_thread(void *arg) {
           if (!stopflag) cimg::wait(50);
         } while (!stopflag);
       }
-      p.is_running = false;
       if (p.counter) delete p.counter;
       if (p.temporary) { source = *(p.temporary); delete p.temporary; }
       if (p.stop_request) delete p.stop_request;
@@ -181,7 +180,8 @@ static void* greycstoration_thread(void *arg) {
       p.counter = 0;
       p.tile = p.tile_border = p.thread = p.threads = 0;
       p.stop_request = false;
-    } else p.is_running = false;
+    }
+    p.is_running = false;
 
 #if cimg_OS==1
     pthread_exit(arg);
@@ -245,12 +245,10 @@ static void* greycstoration_thread(void *arg) {
         throw CImgArgumentException("CImg<%s>::greycstoration_run() : Given mask (%u,%u,%u,%u,%p) and instance image "
                                     "(%u,%u,%u,%u,%p) have different dimensions.",
                                     pixel_type(),mask.width,mask.height,mask.depth,mask.dim,mask.data,width,height,depth,dim,data);
-      cimg::warn(!tile && threads!=1,"CImg<%s>::greycstoration_run() : Multi-threading cannot be done in non-tiled mode.",
-                 pixel_type());
       cimg::warn(threads>16,"CImg<%s>::greycstoration_run() : Multi-threading mode limited to 16 threads max.");
       const unsigned int
-        nthreads = tile?cimg::max(cimg::min(threads,16U),1U):1,
-        ntile = (tile && (tile>=width || tile>=height || tile>=depth))?tile:0;
+        ntile = (tile && (tile<width || tile<height || (depth>1 && tile<depth)))?tile:0,
+        nthreads = ntile?cimg::max(cimg::min(threads,16U),1U):1;
 
       CImg<T> *const temporary = ntile?new CImg<T>(*this):0;
       unsigned long *const counter = new unsigned long;
@@ -282,9 +280,14 @@ static void* greycstoration_thread(void *arg) {
         greycstoration_params[k].stop_request = stop_request;
       }
 #if cimg_OS==1
+      pthread_attr_t attr;
+      pthread_attr_init(&attr);
+      pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
       for (unsigned int k=0; k<greycstoration_params->threads; k++) {
         pthread_t thread;
-        pthread_create(&thread, 0, greycstoration_thread, (void*)(greycstoration_params+k));
+        const int err = pthread_create(&thread, &attr, greycstoration_thread, (void*)(greycstoration_params+k));
+        if (err) throw CImgException("CImg<%s>::greycstoration_run() : pthread_create returned error %d",
+                                     pixel_type(), err);
       }
 #elif cimg_OS==2
       for (unsigned int k=0; k<greycstoration_params->threads; k++) {
