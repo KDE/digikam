@@ -897,6 +897,7 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
         kioURL = d->imageInfoCurrent->kurlForKIO();
     else
         kioURL = d->urlCurrent;
+    KURL fileURL = d->urlCurrent;
 
     if (!palbum)
         return;
@@ -926,6 +927,10 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
 
     // bring all (sidebar) to a defined state without letting them sit on the deleted file
     emit signalNoCurrentItem();
+
+    // trash does not like non-local URLs, put is not implemented
+    if (useTrash)
+        kioURL = fileURL;
 
     if (!SyncJob::del(kioURL, useTrash))
     {
