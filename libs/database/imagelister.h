@@ -102,17 +102,6 @@ public:
      * Tool method to retrieve the dimension from a file. Not a database query, slow!
      */
     static QSize retrieveDimension(const QString &filePath);
-    /**
-     * Tool method:
-     * Create a filter list from a list of file suffixes
-     */
-    static QValueList<QRegExp> makeFilterList(const QString &filter);
-    /**
-     * Tool method:
-     * Tests whether a filename matches a filter list created with makeFilterList
-     */
-    static bool matchFilterList(const QValueList<QRegExp>& filters,
-                                const QString &fileName );
 };
 
 }

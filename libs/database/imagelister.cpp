@@ -54,6 +54,7 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "dmetadata.h"
+#include "namefilter.h"
 #include "imagelister.h"
 
 namespace Digikam
@@ -99,38 +100,6 @@ KIO::TransferJob *ImageLister::startListJob(const DatabaseUrl &url, const QStrin
 
     return new KIO::TransferJob(url, KIO::CMD_SPECIAL,
                                 ba, QByteArray(), false);
-}
-
-QValueList<QRegExp> ImageLister::makeFilterList( const QString &filter )
-{
-    QValueList<QRegExp> regExps;
-    if ( filter.isEmpty() )
-        return regExps;
-
-    QChar sep( ';' );
-    int i = filter.find( sep, 0 );
-    if ( i == -1 && filter.find( ' ', 0 ) != -1 )
-        sep = QChar( ' ' );
-
-    QStringList list = QStringList::split( sep, filter );
-    QStringList::Iterator it = list.begin();
-    while ( it != list.end() ) {
-        regExps << QRegExp( (*it).stripWhiteSpace(), false, true );
-        ++it;
-    }
-    return regExps;
-}
-
-bool ImageLister::matchFilterList(const QValueList<QRegExp>& filters,
-                                  const QString &fileName )
-{
-    QValueList<QRegExp>::ConstIterator rit = filters.begin();
-    while ( rit != filters.end() ) {
-        if ( (*rit).exactMatch(fileName) )
-            return true;
-        ++rit;
-    }
-    return false;
 }
 
 QSize ImageLister::retrieveDimension(const QString &filePath)
@@ -230,7 +199,7 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
         */
     }
 
-    QValueList<QRegExp> regex = makeFilterList(filter);
+    NameFilter nameFilter(filter);
     struct stat stbuf;
     for (QStringList::iterator it = values.begin(); it != values.end();)
     {
@@ -246,7 +215,7 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
         record.albumName = album;
         record.albumRoot = albumRoot;
 
-        if (!matchFilterList(regex, record.name))
+        if (!nameFilter.matches(record.name))
             continue;
 
         QString filePath = base + '/' + record.name;
@@ -283,7 +252,7 @@ void ImageLister::listTag(ImageListerReceiver *receiver,
                                .arg(tagId), &values );
     }
 
-    QValueList<QRegExp> regex = makeFilterList(filter);
+    NameFilter nameFilter(filter);
     struct stat stbuf;
     for (QStringList::iterator it = values.begin(); it != values.end();)
     {
@@ -301,7 +270,7 @@ void ImageLister::listTag(ImageListerReceiver *receiver,
 
         record.albumRoot = albumRoot;
 
-        if (!matchFilterList(regex, record.name))
+        if (!nameFilter.matches(record.name))
             continue;
 
         QString path = albumRoot + record.albumName + '/' + record.name;
@@ -344,7 +313,7 @@ void ImageLister::listMonth(ImageListerReceiver *receiver,
                              &values);
     }
 
-    QValueList<QRegExp> regex = makeFilterList(filter);
+    NameFilter nameFilter(filter);
     struct stat stbuf;
     for (QStringList::iterator it = values.begin(); it != values.end();)
     {
@@ -362,7 +331,7 @@ void ImageLister::listMonth(ImageListerReceiver *receiver,
 
         record.albumRoot = albumRoot;
 
-        if (!matchFilterList(regex, record.name))
+        if (!nameFilter.matches(record.name))
             continue;
 
         QString path = albumRoot + record.albumName + '/' + record.name;
@@ -417,7 +386,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
         return;
     }
 
-    QValueList<QRegExp> regex = makeFilterList(filter);
+    NameFilter nameFilter(filter);
     struct stat stbuf;
     for (QStringList::iterator it = values.begin(); it != values.end();)
     {
@@ -435,7 +404,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
 
         record.albumRoot = albumRoot;
 
-        if (!matchFilterList(regex, record.name))
+        if (!nameFilter.matches(record.name))
             continue;
 
         QString path = albumRoot + record.albumName + '/' + record.name;
