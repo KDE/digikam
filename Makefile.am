@@ -30,3 +30,11 @@ fastcompile:
 		make || exit 1; \
 		cd ..; \
 	done
+
+fastinstall:
+	for i in libs utilities digikam kioslave; \
+	do \
+		cd $$i; \
+		make install || exit 1; \
+		cd ..; \
+	done

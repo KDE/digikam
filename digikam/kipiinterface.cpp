@@ -63,6 +63,7 @@ extern "C"
 #include "dmetadata.h"
 #include "imageattributeswatch.h"
 #include "imagelister.h"
+#include "namefilter.h"
 #include "kipiinterface.h"
 #include "kipiinterface.moc"
 
@@ -422,7 +423,7 @@ KURL::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
             sortOrder = AlbumDB::ByItemDate;
             break;
         case AlbumSettings::ByIRating:
-            sortdOer = AlbumDB::ByItemRating;
+            sortOrder = AlbumDB::ByItemRating;
             break;
         // ByISize not supported
     }
@@ -431,11 +432,11 @@ KURL::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
 
     KURL::List urlList;
 
-    QValueList<QRegExp> regex = ImageLister::makeFilterList(imgFilter_);
+    NameFilter nameFilter(imgFilter_);
 
     for (QStringList::iterator it = urls.begin(); it != urls.end(); ++it)
     {
-        if (ImageLister::matchFilterList(regex, *it))
+        if (nameFilter.matches(*it))
             urlList.append(*it);
     }
 
@@ -451,11 +452,11 @@ KURL::List DigikamImageCollection::imagesFromTAlbum(TAlbum* album) const
 
     KURL::List urlList;
 
-    QValueList<QRegExp> regex = ImageLister::makeFilterList(imgFilter_);
+    NameFilter nameFilter(imgFilter_);
 
     for (QStringList::iterator it = urls.begin(); it != urls.end(); ++it)
     {
-        if (ImageLister::matchFilterList(regex, *it))
+        if (nameFilter.matches(*it))
             urlList.append(*it);
     }
 

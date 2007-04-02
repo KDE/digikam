@@ -13,7 +13,8 @@ libdatabase_la_SOURCES = albumdb.cpp \
 	                 imageinfolist.cpp \
 	                 imagelister.cpp \
 	                 imagelisterreceiver.cpp \
-	                 imagequerybuilder.cpp
+	                 imagequerybuilder.cpp \
+	                 namefilter.cpp
 
 libdatabase_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
