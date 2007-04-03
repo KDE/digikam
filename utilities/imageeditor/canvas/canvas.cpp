@@ -520,8 +520,8 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                     if (d->rubber && d->pressedMoved && !d->pressedMoving)
                     {
                         QRect rr(d->rubber->normalize());
-                        rr = QRect(d->rubber->normalize());
-                        QRect  r(i,j,d->tileSize,d->tileSize);
+                        QRect  r(i, j, d->tileSize, d->tileSize);
+
                         d->im->paintOnDevice(pix, sx, sy, sw, sh,
                                              0, 0, d->tileSize, d->tileSize,
                                              rr.x() - i - d->pixmapRect.x(),
@@ -529,7 +529,6 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                                              rr.width(), rr.height(),
                                              antialias);
 
-                        rr = QRect(d->rubber->normalize());
                         rr.moveBy(-i -d->pixmapRect.x(), -j -d->pixmapRect.y());
  
                         QPainter p(pix);
@@ -552,10 +551,10 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                     }
                 }
 
-                QRect  r(i,j,d->tileSize,d->tileSize);
+                QRect  r(i, j, d->tileSize, d->tileSize);
                 QRect  ir = pr.intersect(r);
-                QPoint pt(contentsToViewport(QPoint(ir.x()+d->pixmapRect.x(),
-                                                    ir.y()+d->pixmapRect.y())));
+                QPoint pt(contentsToViewport(QPoint(ir.x() + d->pixmapRect.x(),
+                                                    ir.y() + d->pixmapRect.y())));
 
                 bitBlt(viewport(), pt.x(), pt.y(),
                        pix,
