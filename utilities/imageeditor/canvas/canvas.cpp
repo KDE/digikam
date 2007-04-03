@@ -512,6 +512,11 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                         pix->fill(d->bgColor);
                     }
 
+                    // FIXME : Marcel, there is a serious problem here with high zoom level (> 500).
+                    // The sx, sy, sw, sh values aren't computed properly and a tile artefact appear 
+                    // over the image. Look the exmaple here:
+                    // http://digikam3rdparty.free.fr/Screenshots/editorhighzoomartefact.png
+
                     sx = (int)floor(i           / d->zoom);
                     sy = (int)floor(j           / d->zoom);
                     sw = (int)floor(d->tileSize / d->zoom);
