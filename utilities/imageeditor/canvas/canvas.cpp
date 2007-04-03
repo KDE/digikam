@@ -1211,7 +1211,7 @@ void Canvas::slotCornerButtonReleased()
     if (!d->panIconPopup)
     {
         d->panIconPopup         = new KPopupFrame(this);
-        ImagePanIconWidget *pan = new ImagePanIconWidget(120, 80, d->panIconPopup);
+        ImagePanIconWidget *pan = new ImagePanIconWidget(180, 120, d->panIconPopup);
         d->panIconPopup->setMainWidget(pan);
 
         QRect r((int)(contentsX()    / d->zoom), (int)(contentsY()     / d->zoom),
