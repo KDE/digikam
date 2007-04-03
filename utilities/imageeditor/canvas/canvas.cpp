@@ -480,6 +480,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
 
         QPixmap pix(d->tileSize, d->tileSize);
         int sx, sy, sw, sh;
+        int step = (int)floor(d->tileSize / d->zoom); 
 
         for (int j = y1 ; j < y2 ; j += d->tileSize)
         {
@@ -512,15 +513,18 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                         pix->fill(d->bgColor);
                     }
 
-                    // FIXME : Marcel, there is a serious problem here with high zoom level (> 500).
-                    // The sx, sy, sw, sh values aren't computed properly and a tile artefact appear 
-                    // over the image. Look the exmaple here:
+                    // NOTE : with implementations <= 0.9.1, the canvas doesn't work properly using high zoom level (> 500).
+                    // The sx, sy, sw, sh values haven't be computed properly and "tile" artefacts been appears 
+                    // over the image. Look the example here:
                     // http://digikam3rdparty.free.fr/Screenshots/editorhighzoomartefact.png
+                    // Note than these "tile" artifacts are not the real tiles of canvas.
+                    // The new implementation below fix this problem to handle properly the areas to 
+                    // use from the source image to generate the canvas pixmap tiles.  
 
-                    sx = (int)floor(i           / d->zoom);
-                    sy = (int)floor(j           / d->zoom);
-                    sw = (int)floor(d->tileSize / d->zoom);
-                    sh = (int)floor(d->tileSize / d->zoom);
+                    sx = (int)floor(((double)i / d->zoom) / (d->tileSize / d->zoom)) * step;
+                    sy = (int)floor(((double)j / d->zoom) / (d->tileSize / d->zoom)) * step;
+                    sw = step;
+                    sh = step;
 
                     if (d->rubber && d->pressedMoved && !d->pressedMoving)
                     {
