@@ -170,8 +170,8 @@ Canvas::Canvas(QWidget *parent)
 
     // ------------------------------------------------------------
 
-    connect(this, SIGNAL(signalZoomChanged(float)),
-            this, SLOT(slotZoomChanged(float)));
+    connect(this, SIGNAL(signalZoomChanged(double)),
+            this, SLOT(slotZoomChanged(double)));
 
     connect(d->cornerButton, SIGNAL(released()),
             this, SLOT(slotCornerButtonReleased()));
@@ -362,7 +362,7 @@ QRect Canvas::getSelectedArea()
     return ( QRect(x, y, w, h) );
 }
 
-float Canvas::calcAutoZoomFactor()
+double Canvas::calcAutoZoomFactor()
 {
     if (!d->im->imageValid()) return d->zoom;
 
@@ -473,10 +473,10 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
         QRect pr = QRect(cr.x() - d->pixmapRect.x(), cr.y() - d->pixmapRect.y(),
                          cr.width(), cr.height());
 
-        int x1 = (int)floor((float)pr.x()      / (float)d->tileSize) * d->tileSize;
-        int y1 = (int)floor((float)pr.y()      / (float)d->tileSize) * d->tileSize;
-        int x2 = (int)ceilf((float)pr.right()  / (float)d->tileSize) * d->tileSize;
-        int y2 = (int)ceilf((float)pr.bottom() / (float)d->tileSize) * d->tileSize;
+        int x1 = (int)floor((double)pr.x()      / (double)d->tileSize) * d->tileSize;
+        int y1 = (int)floor((double)pr.y()      / (double)d->tileSize) * d->tileSize;
+        int x2 = (int)ceilf((double)pr.right()  / (double)d->tileSize) * d->tileSize;
+        int y2 = (int)ceilf((double)pr.bottom() / (double)d->tileSize) * d->tileSize;
 
         QPixmap pix(d->tileSize, d->tileSize);
         int sx, sy, sw, sh;
@@ -876,13 +876,13 @@ void Canvas::slotDecreaseZoom()
     setZoomFactor(d->zoom / d->zoomMultiplier);
 }
 
-void Canvas::setZoomFactor(float zoom)
+void Canvas::setZoomFactor(double zoom)
 {
     if (d->autoZoom)
         return;
 
-    float cpx, cpy;
-    int   xSel, ySel, wSel, hSel;
+    double cpx, cpy;
+    int    xSel, ySel, wSel, hSel;
     d->im->getSelectedArea(xSel, ySel, wSel, hSel);
     
     if (!wSel && !hSel )   
@@ -1232,7 +1232,7 @@ void Canvas::slotPanIconSelectionMoved(QRect r, bool b)
     }
 }
 
-void Canvas::slotZoomChanged(float zoom)
+void Canvas::slotZoomChanged(double zoom)
 {
     if (zoom > calcAutoZoomFactor())
         d->cornerButton->show();

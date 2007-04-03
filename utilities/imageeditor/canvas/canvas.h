@@ -75,7 +75,7 @@ public:
     DImg  currentImage();
     QString currentImageFileFormat();
 
-    void  setZoomFactor(float z);
+    void  setZoomFactor(double z);
     bool  maxZoom();
     bool  minZoom();
     bool  exifRotated();
@@ -116,7 +116,7 @@ protected:
 private:
 
     QRect calcSeletedArea();
-    float calcAutoZoomFactor();
+    double calcAutoZoomFactor();
     void updateAutoZoom();
     void updateContentsSize();
     void drawRubber();
@@ -156,12 +156,12 @@ private slots:
     void slotImageSaved(const QString& filePath, bool success);
     void slotCornerButtonReleased();
     void slotPanIconSelectionMoved(QRect, bool);
-    void slotZoomChanged(float);
+    void slotZoomChanged(double);
     
 signals:
 
     void signalColorManagementTool();
-    void signalZoomChanged(float zoom);
+    void signalZoomChanged(double zoom);
     void signalMaxZoom();
     void signalMinZoom();
     void signalChanged();

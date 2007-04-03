@@ -176,8 +176,8 @@ void EditorWindow::setupStandardConnections()
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
             
-    connect(m_canvas, SIGNAL(signalZoomChanged(float)),
-            this, SLOT(slotZoomChanged(float)));
+    connect(m_canvas, SIGNAL(signalZoomChanged(double)),
+            this, SLOT(slotZoomChanged(double)));
             
     connect(m_canvas, SIGNAL(signalChanged()),
             this, SLOT(slotChanged()));
@@ -668,7 +668,7 @@ void EditorWindow::slotZoomSelected()
     slotZoomTextChanged(txt);
 }
 
-void EditorWindow::slotZoomChanged(float zoom)
+void EditorWindow::slotZoomChanged(double zoom)
 {
     d->zoomPlusAction->setEnabled(!m_canvas->maxZoom() && !d->zoomFitAction->isChecked());
     d->zoomMinusAction->setEnabled(!m_canvas->minZoom() && !d->zoomFitAction->isChecked());

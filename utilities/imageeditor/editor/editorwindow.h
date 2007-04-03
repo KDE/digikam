@@ -206,7 +206,7 @@ private slots:
     void slotToggleSlideShow();
     void slotZoomSelected();
     void slotZoomTextChanged(const QString &);
-    void slotZoomChanged(float zoom);
+    void slotZoomChanged(double zoom);
     void slotSelectionChanged(const QRect& sel);
 
 private:
