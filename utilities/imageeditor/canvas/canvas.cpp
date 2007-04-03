@@ -485,7 +485,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
         {
             for (int i = x1 ; i < x2 ; i += d->tileSize)
             {
-                QString key  = QString("%1,%1").arg(i).arg(j);
+                QString key  = QString("%1,%2").arg(i).arg(j);
                 QPixmap *pix = d->tileCache.find(key);
                 
                 if (!pix)
