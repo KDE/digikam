@@ -26,6 +26,7 @@
 #include <qbrush.h> 
 #include <qpixmap.h>
 #include <qpen.h>
+#include <qtimer.h>
 
 // KDE include.
 
@@ -50,6 +51,8 @@ public:
 
     ImagePanIconWidgetPriv()
     {
+        flicker       = false;
+        timerID       = 0;
         pixmap        = 0;
         iface         = 0;
         data          = 0;
@@ -58,17 +61,16 @@ public:
     }
 
     bool         moveSelection;
+    bool         flicker;
 
     uchar *      data;
 
     int          separateView;
-    
+    int          timerID;
     int          width;
-    int          height;
-    
+    int          height;    
     int          zoomedOrgWidth;
-    int          zoomedOrgHeight;
-    
+    int          zoomedOrgHeight;    
     int          xpos;
     int          ypos;
     
@@ -102,10 +104,14 @@ ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent, WFlags f)
 
     d->rect = QRect(width()/2-d->width/2, height()/2-d->height/2, d->width, d->height);
     updatePixmap();
+    d->timerID = startTimer(800);
 }
 
 ImagePanIconWidget::~ImagePanIconWidget()
 {
+    if (d->timerID)
+        killTimer(d->timerID);
+
     delete d->pixmap;
     delete d->iface;
     delete [] d->data;
@@ -219,12 +225,22 @@ void ImagePanIconWidget::updatePixmap( void )
     }   
     
     // Drawing selection border
-    p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+
+    if (d->flicker)
+        p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+    else 
+        p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
+
     p.drawRect(d->localRegionSelection.x(), 
                d->localRegionSelection.y(),
                d->localRegionSelection.width(), 
                d->localRegionSelection.height());
-    p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+
+    if (d->flicker)
+        p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+    else 
+        p.setPen(QPen(Qt::white, 1, Qt::DotLine));
+
     p.drawRect(d->localRegionSelection.x(), 
                d->localRegionSelection.y(),
                d->localRegionSelection.width(), 
@@ -333,6 +349,18 @@ void ImagePanIconWidget::slotSeparateViewToggled(int t)
     d->separateView = t;
     updatePixmap();
     repaint(false);
+}
+
+void ImagePanIconWidget::timerEvent(QTimerEvent * e)
+{
+    if (e->timerId() == d->timerID)
+    {
+        d->flicker = !d->flicker;
+        updatePixmap();
+        repaint(false);
+    }
+    else
+        QWidget::timerEvent(e);
 }
 
 }  // NameSpace Digikam
