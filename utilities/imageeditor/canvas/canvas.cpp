@@ -1160,10 +1160,13 @@ QRect Canvas::calcSeletedArea()
     {
         r.moveBy(- d->pixmapRect.x(), - d->pixmapRect.y());
 
-        x = (int)floor((double)r.x()      / d->zoom);   
-        y = (int)floor((double)r.y()      / d->zoom);  
-        w = (int)floor((double)r.width()  / d->zoom);  
-        h = (int)floor((double)r.height() / d->zoom);  
+        int step = (int)floor(d->tileSize / d->zoom); 
+
+        x = (int)((((double)r.x()      / d->zoom) / (d->tileSize / d->zoom)) * step);
+        y = (int)((((double)r.y()      / d->zoom) / (d->tileSize / d->zoom)) * step);
+
+        w = (int)((((double)r.width()  / d->zoom) / (d->tileSize / d->zoom)) * step);
+        h = (int)((((double)r.height() / d->zoom) / (d->tileSize / d->zoom)) * step);
 
         x = QMIN(imageWidth(),  QMAX(x, 0));   
         y = QMIN(imageHeight(), QMAX(y, 0));
