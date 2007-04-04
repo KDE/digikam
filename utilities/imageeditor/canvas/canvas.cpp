@@ -1160,22 +1160,16 @@ QRect Canvas::calcSeletedArea()
     {
         r.moveBy(- d->pixmapRect.x(), - d->pixmapRect.y());
 
-        double scale = 1.0/d->zoom;   
+        x = (int)floor((double)r.x()      / d->zoom);   
+        y = (int)floor((double)r.y()      / d->zoom);  
+        w = (int)floor((double)r.width()  / d->zoom);  
+        h = (int)floor((double)r.height() / d->zoom);  
 
-        x = (int)((double)r.x()      * scale);   
-        y = (int)((double)r.y()      * scale);   
-        w = (int)((double)r.width()  * scale);   
-        h = (int)((double)r.height() * scale);   
+        x = QMIN(imageWidth(),  QMAX(x, 0));   
+        y = QMIN(imageHeight(), QMAX(y, 0));
 
-        x = QMAX(x, 0);   
-        y = QMAX(y, 0);   
-        x = QMIN(imageWidth(),  x);   
-        y = QMIN(imageHeight(), y);
-
-        w = QMAX(w, 0);
-        h = QMAX(h, 0);
-        w = QMIN(imageWidth(),  w);
-        h = QMIN(imageHeight(), h);
+        w = QMIN(imageWidth(),  QMAX(w, 0));
+        h = QMIN(imageHeight(), QMAX(h, 0));
 
         // Avoid empty selection by rubberband - at least mark one pixel
         // At high zoom factors, the rubberband may operate at subpixel level!
