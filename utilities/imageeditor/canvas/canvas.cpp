@@ -899,8 +899,13 @@ void Canvas::setZoomFactor(double zoom)
     {   
         // No current selection, zoom using center of canvas 
         // and given zoom factor.
-        cpx = (contentsX() + visibleWidth()  / 2.0) / d->zoom; 
-        cpy = (contentsY() + visibleHeight() / 2.0) / d->zoom;
+
+        cpx = contentsX() + visibleWidth()  / 2.0; 
+        cpy = contentsY() + visibleHeight() / 2.0;
+
+        cpx = ((cpx / d->zoom) / (d->tileSize / d->zoom)) * floor(d->tileSize / d->zoom);
+        cpy = ((cpy / d->zoom) / (d->tileSize / d->zoom)) * floor(d->tileSize / d->zoom);
+
         d->zoom = zoom;
     }
     else           
