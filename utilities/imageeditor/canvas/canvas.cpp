@@ -927,7 +927,8 @@ void Canvas::setZoomFactor(double zoom)
     updateContentsSize();
 
     viewport()->setUpdatesEnabled(false);
-    center((int)(cpx * d->zoom), (int)(cpy * d->zoom));
+    center((int)(((cpx * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)), 
+           (int)(((cpy * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)));
     viewport()->setUpdatesEnabled(true);
 
     viewport()->update();
