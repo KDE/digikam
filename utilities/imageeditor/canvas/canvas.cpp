@@ -986,32 +986,27 @@ void Canvas::slotFlipVert()
 
 void Canvas::slotCrop()
 {
-     if (!d->rubber) return;
+    if (!d->rubber) return;
 
-     QRect r(d->rubber->normalize());
-     if (!r.isValid()) return;
+    QRect r(d->rubber->normalize());
+    if (!r.isValid()) return;
 
-     r.moveBy(- d->pixmapRect.x(),
-              - d->pixmapRect.y());
+    r.moveBy(- d->pixmapRect.x(), - d->pixmapRect.y());
 
-     double scale = 1.0/d->zoom;
+    int step = (int)floor(d->tileSize / d->zoom); 
 
-     int x = (int)((double)r.x()      * scale);
-     int y = (int)((double)r.y()      * scale);
-     int w = (int)((double)r.width()  * scale);
-     int h = (int)((double)r.height() * scale);
+    int x = (int)((((double)r.x()      / d->zoom) / (d->tileSize / d->zoom)) * step);
+    int y = (int)((((double)r.y()      / d->zoom) / (d->tileSize / d->zoom)) * step);
+    int w = (int)((((double)r.width()  / d->zoom) / (d->tileSize / d->zoom)) * step);
+    int h = (int)((((double)r.height() / d->zoom) / (d->tileSize / d->zoom)) * step);
 
-     x = QMAX(x, 0);
-     y = QMAX(y, 0);
-     x = QMIN(imageWidth(),  x);
-     y = QMIN(imageHeight(), y);
+    x = QMIN(imageWidth(),  QMAX(x, 0));
+    y = QMIN(imageHeight(), QMAX(y, 0));
 
-     w = QMAX(w, 0);
-     h = QMAX(h, 0);
-     w = QMIN(imageWidth(),  w);
-     h = QMIN(imageHeight(), h);
+    w = QMIN(imageWidth(),  QMAX(w, 0));
+    h = QMIN(imageHeight(), QMAX(h, 0));
 
-     d->im->crop(x, y, w, h);
+    d->im->crop(x, y, w, h);
 }
 
 void Canvas::resizeImage(int w, int h)
@@ -1171,8 +1166,7 @@ QRect Canvas::calcSeletedArea()
         x = (int)((((double)r.x()      / d->zoom) / (d->tileSize / d->zoom)) * step);
         y = (int)((((double)r.y()      / d->zoom) / (d->tileSize / d->zoom)) * step);
 
-        w = (int)((((double)r.width()  / d->zoom) / (d->tileSize / d->zoom)) * step);
-        h = (int)((((double)r.height() / d->zoom) / (d->tileSize / d->zoom)) * step);
+
 
         x = QMIN(imageWidth(),  QMAX(x, 0));   
         y = QMIN(imageHeight(), QMAX(y, 0));
