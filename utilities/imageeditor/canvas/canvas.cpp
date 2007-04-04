@@ -815,6 +815,7 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
         d->lbActive = false;
         d->rbActive = false;
         viewport()->setMouseTracking(false);
+        viewport()->unsetCursor();
         if (d->im->imageValid())
             emit signalSelected(false);
     }
