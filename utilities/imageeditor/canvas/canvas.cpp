@@ -1137,8 +1137,7 @@ void Canvas::slotCopy()
 
 void Canvas::slotSelected()
 {
-    int x, y, w, h;
-    x = y = w = h = 0;
+    int x=0, y=0, w=0, h=0;
     
     if (d->rubber && d->pressedMoved) 
     {
@@ -1154,8 +1153,7 @@ void Canvas::slotSelected()
 
 QRect Canvas::calcSeletedArea()
 {
-    int x, y, w, h;
-    x = y = w = h = 0;
+    int x=0, y=0, w=0, h=0;
     QRect r(d->rubber->normalize());
     
     if (r.isValid()) 
@@ -1164,9 +1162,9 @@ QRect Canvas::calcSeletedArea()
 
         double scale = 1.0/d->zoom;   
 
-        x = (int)((double)r.x() * scale);   
-        y = (int)((double)r.y() * scale);   
-        w = (int)((double)r.width() * scale);   
+        x = (int)((double)r.x()      * scale);   
+        y = (int)((double)r.y()      * scale);   
+        w = (int)((double)r.width()  * scale);   
         h = (int)((double)r.height() * scale);   
 
         x = QMAX(x, 0);   
