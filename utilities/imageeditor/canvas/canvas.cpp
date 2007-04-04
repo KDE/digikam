@@ -929,6 +929,7 @@ void Canvas::setZoomFactor(double zoom)
     viewport()->setUpdatesEnabled(false);
     center((int)(cpx * d->zoom), (int)(cpy * d->zoom));
     viewport()->setUpdatesEnabled(true);
+
     viewport()->update();
 
     emit signalZoomChanged(d->zoom);
@@ -1166,7 +1167,8 @@ QRect Canvas::calcSeletedArea()
         x = (int)((((double)r.x()      / d->zoom) / (d->tileSize / d->zoom)) * step);
         y = (int)((((double)r.y()      / d->zoom) / (d->tileSize / d->zoom)) * step);
 
-
+        w = (int)((((double)r.width()  / d->zoom) / (d->tileSize / d->zoom)) * step);   
+        h = (int)((((double)r.height() / d->zoom) / (d->tileSize / d->zoom)) * step);
 
         x = QMIN(imageWidth(),  QMAX(x, 0));   
         y = QMIN(imageHeight(), QMAX(y, 0));
