@@ -194,7 +194,7 @@ void ImagePanIconWidget::regionSelectionMoved( bool targetDone )
     emit signalSelectionMoved( d->regionSelection, targetDone );
 }
 
-void ImagePanIconWidget::updatePixmap( void )
+void ImagePanIconWidget::updatePixmap()
 {
     // Drawing background and image.
     d->pixmap->fill(colorGroup().background());
@@ -226,20 +226,16 @@ void ImagePanIconWidget::updatePixmap( void )
     
     // Drawing selection border
 
-    if (d->flicker)
-        p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
-    else 
-        p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
+    if (d->flicker) p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+    else p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
 
     p.drawRect(d->localRegionSelection.x(), 
                d->localRegionSelection.y(),
                d->localRegionSelection.width(), 
                d->localRegionSelection.height());
 
-    if (d->flicker)
-        p.setPen(QPen(Qt::red, 1, Qt::DotLine));
-    else 
-        p.setPen(QPen(Qt::white, 1, Qt::DotLine));
+    if (d->flicker) p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+    else p.setPen(QPen(Qt::white, 1, Qt::DotLine));
 
     p.drawRect(d->localRegionSelection.x(), 
                d->localRegionSelection.y(),
@@ -248,12 +244,17 @@ void ImagePanIconWidget::updatePixmap( void )
     
     if (d->separateView == ImageRegionWidget::SeparateViewVertical)
     {
-        p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+        if (d->flicker) p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+        else p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
+
         p.drawLine(d->localRegionSelection.topLeft().x() + d->localRegionSelection.width()/2,
                    d->localRegionSelection.topLeft().y(),
                    d->localRegionSelection.bottomLeft().x() + d->localRegionSelection.width()/2,
                    d->localRegionSelection.bottomLeft().y());
-        p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+
+        if (d->flicker) p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+        else p.setPen(QPen(Qt::white, 1, Qt::DotLine));
+
         p.drawLine(d->localRegionSelection.topLeft().x() + d->localRegionSelection.width()/2,
                    d->localRegionSelection.topLeft().y() + 1,
                    d->localRegionSelection.bottomLeft().x() + d->localRegionSelection.width()/2,
@@ -261,12 +262,17 @@ void ImagePanIconWidget::updatePixmap( void )
     }
     else if (d->separateView == ImageRegionWidget::SeparateViewHorizontal)
     {
-        p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+        if (d->flicker) p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+        else p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
+        
         p.drawLine(d->localRegionSelection.topLeft().x(),
                    d->localRegionSelection.topLeft().y() + d->localRegionSelection.height()/2,
                    d->localRegionSelection.topRight().x(),
                    d->localRegionSelection.topRight().y() + d->localRegionSelection.height()/2);
-        p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+
+        if (d->flicker) p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+        else p.setPen(QPen(Qt::white, 1, Qt::DotLine));
+
         p.drawLine(d->localRegionSelection.topLeft().x() + 1,
                    d->localRegionSelection.topLeft().y() + d->localRegionSelection.height()/2,
                    d->localRegionSelection.topRight().x() - 1,

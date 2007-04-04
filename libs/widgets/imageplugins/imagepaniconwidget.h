@@ -76,12 +76,11 @@ private:
     // Recalculate the target selection position and emit 'signalSelectionMoved'.
     
     void regionSelectionMoved( bool targetDone );
-    void updatePixmap( void );
+    void updatePixmap();
 
 private:
 
-    ImagePanIconWidgetPriv* d;
-        
+    ImagePanIconWidgetPriv* d;        
 };
 
 }  // NameSpace Digikam
