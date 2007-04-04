@@ -504,7 +504,7 @@ void EditorWindow::setupStatusBar()
     m_resLabel->setAlignment(Qt::AlignCenter);
     m_resLabel->setMaximumHeight(fontMetrics().height()+2);   
     statusBar()->addWidget(m_resLabel, 100);
-    QToolTip::add(d->m_resLabel, i18n("Informations about image size"));
+    QToolTip::add(m_resLabel, i18n("Informations about image size"));
 
     d->underExposureIndicator = new QToolButton(statusBar());
     d->underExposureIndicator->setIconSet(SmallIcon("underexposure"));
