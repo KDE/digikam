@@ -498,6 +498,7 @@ void EditorWindow::setupStatusBar()
     d->selectLabel->setAlignment(Qt::AlignCenter);
     d->selectLabel->setMaximumHeight(fontMetrics().height()+2);   
     statusBar()->addWidget(d->selectLabel, 100);
+    QToolTip::add(d->selectLabel, i18n("Informations about current selection area"));
 
     m_resLabel  = new QLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
