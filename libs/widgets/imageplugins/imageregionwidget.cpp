@@ -465,14 +465,6 @@ void ImageRegionWidget::contentsMousePressEvent ( QMouseEvent * e )
     }
 }
 
-void ImageRegionWidget::contentsMouseReleaseEvent ( QMouseEvent *  )
-{
-    d->movingInProgress = false;
-    unsetCursor(); 
-    backupPixmapRegion();
-    emit contentsMovedEvent(true);
-}
-
 void ImageRegionWidget::contentsMouseMoveEvent( QMouseEvent * e )
 {
     if ( e->state() == Qt::LeftButton )
@@ -490,6 +482,17 @@ void ImageRegionWidget::contentsMouseMoveEvent( QMouseEvent * e )
     }
 
     setCursor( KCursor::handCursor() );    
+}
+
+void ImageRegionWidget::contentsMouseReleaseEvent ( QMouseEvent * e )
+{
+    if (d->movingInProgress == true)
+    {
+        d->movingInProgress = false;
+        unsetCursor(); 
+        backupPixmapRegion();
+        emit contentsMovedEvent(true);
+    }
 }
 
 }  // NameSpace Digikam
