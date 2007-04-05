@@ -27,6 +27,7 @@
 
 // Qt includes.
  
+#include <qtooltip.h>
 #include <qfile.h>
 #include <qstring.h>
 #include <qevent.h>
@@ -162,6 +163,7 @@ Canvas::Canvas(QWidget *parent)
     d->cornerButton = new QToolButton(this);
     d->cornerButton->setIconSet(SmallIcon("move"));
     d->cornerButton->hide();
+    QToolTip::add(d->cornerButton, i18n("Pan the image to a region"));
     setCornerWidget(d->cornerButton);
 
     viewport()->setBackgroundMode(Qt::NoBackground);
