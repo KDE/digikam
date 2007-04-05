@@ -150,10 +150,15 @@ QRect ImagePanIconWidget::getRegionSelection(void)
     return (d->regionSelection);
 }
 
+void ImagePanIconWidget::setCursorToLocalRegionSelectionCenter(void)
+{
+    QCursor::setPos(mapToGlobal(d->localRegionSelection.center()));
+}
+
 void ImagePanIconWidget::setCenterSelection(void)
 {
     setRegionSelection(QRect( 
-             (int)(((float)d->zoomedOrgWidth / 2.0)  - ((float)d->regionSelection.width() / 2.0)),
+             (int)(((float)d->zoomedOrgWidth  / 2.0) - ((float)d->regionSelection.width() / 2.0)),
              (int)(((float)d->zoomedOrgHeight / 2.0) - ((float)d->regionSelection.height() / 2.0)),
              d->regionSelection.width(),
              d->regionSelection.height()));
@@ -285,6 +290,28 @@ void ImagePanIconWidget::updatePixmap()
 void ImagePanIconWidget::paintEvent( QPaintEvent * )
 {
     bitBlt(this, 0, 0, d->pixmap);
+}
+
+void ImagePanIconWidget::setMouseFocus()
+{
+    raise();
+    d->xpos = d->localRegionSelection.center().x();
+    d->ypos = d->localRegionSelection.center().y();
+    d->moveSelection = true;
+    setCursor( KCursor::sizeAllCursor() );           
+    emit signalSelectionTakeFocus();
+}
+
+void ImagePanIconWidget::hideEvent(QHideEvent *e)
+{
+    QWidget::hideEvent(e);
+
+    if ( d->moveSelection )
+    {    
+        d->moveSelection = false;
+        setCursor( KCursor::arrowCursor() );           
+        emit signalHiden();  
+    }
 }
 
 void ImagePanIconWidget::mousePressEvent ( QMouseEvent * e )

@@ -46,6 +46,9 @@ public:
     void  setRegionSelection(QRect regionSelection);
     QRect getRegionSelection(void);
     void  setCenterSelection(void);
+
+    void  setCursorToLocalRegionSelectionCenter(void);
+    void  setMouseFocus(void);
         
     void  setHighLightPoints(QPointArray pointsList);
        
@@ -58,18 +61,21 @@ signals:
     
     void signalSelectionTakeFocus(void);
 
+    void signalHiden(void);
+
 public slots:
 
     void slotZoomFactorChanged( double );
     void slotSeparateViewToggled(int t);
             
 protected:
-    
-    void paintEvent( QPaintEvent *e );
-    void mousePressEvent ( QMouseEvent * e );
-    void mouseReleaseEvent ( QMouseEvent * e );
-    void mouseMoveEvent ( QMouseEvent * e );
-    void timerEvent(QTimerEvent * e);
+
+    void hideEvent(QHideEvent *);
+    void paintEvent(QPaintEvent *);
+    void mousePressEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
+    void timerEvent(QTimerEvent *);
         
 private:
     
