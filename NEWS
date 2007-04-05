@@ -69,5 +69,6 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 026 ==> 118539 : Lossless image-editor for JPEGs.
 027 ==> 133913 : sRGB profile white point may be incorrect.
 028 ==> 116148 : Auto-scrolling when selecting large area.
-029 ==> 
+029 ==> 134498 : Date stamp display option for photos in full-screen mode.
+030 ==> 
 
