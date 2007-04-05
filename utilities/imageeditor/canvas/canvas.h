@@ -154,9 +154,10 @@ private slots:
     void slotModified();
     void slotImageLoaded(const QString& filePath, bool success);
     void slotImageSaved(const QString& filePath, bool success);
-    void slotCornerButtonReleased();
-    void slotPanIconSelectionMoved(QRect, bool);
+    void slotCornerButtonPressed();
     void slotZoomChanged(double);
+    void slotPanIconSelectionMoved(QRect, bool);
+    void slotPanIconHiden();
     
 signals:
 

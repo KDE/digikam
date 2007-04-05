@@ -173,8 +173,8 @@ Canvas::Canvas(QWidget *parent)
     connect(this, SIGNAL(signalZoomChanged(double)),
             this, SLOT(slotZoomChanged(double)));
 
-    connect(d->cornerButton, SIGNAL(released()),
-            this, SLOT(slotCornerButtonReleased()));
+    connect(d->cornerButton, SIGNAL(pressed()),
+            this, SLOT(slotCornerButtonPressed()));
 
     connect(d->im, SIGNAL(signalColorManagementTool()),
             this, SIGNAL(signalColorManagementTool()));
@@ -1204,7 +1204,7 @@ void Canvas::slotModified()
     emit signalChanged();
 }
 
-void Canvas::slotCornerButtonReleased()
+void Canvas::slotCornerButtonPressed()
 {    
     if (d->panIconPopup)
     {
@@ -1220,15 +1220,28 @@ void Canvas::slotCornerButtonReleased()
     QRect r((int)(contentsX()    / d->zoom), (int)(contentsY()     / d->zoom),
             (int)(visibleWidth() / d->zoom), (int)(visibleHeight() / d->zoom));
     pan->setRegionSelection(r);
+    pan->setMouseFocus();
 
     connect(pan, SIGNAL(signalSelectionMoved(QRect, bool)),
             this, SLOT(slotPanIconSelectionMoved(QRect, bool)));
-
+    
+    connect(pan, SIGNAL(signalHiden()),
+            this, SLOT(slotPanIconHiden()));
+    
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
     g.setY(g.y()+ viewport()->size().height());
     d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(), 
                                   g.y() - d->panIconPopup->height()));
+
+    pan->setCursorToLocalRegionSelectionCenter();
+}
+
+void Canvas::slotPanIconHiden()
+{
+    d->cornerButton->blockSignals(true);
+    d->cornerButton->animateClick();
+    d->cornerButton->blockSignals(false);
 }
 
 void Canvas::slotPanIconSelectionMoved(QRect r, bool b)
@@ -1240,6 +1253,7 @@ void Canvas::slotPanIconSelectionMoved(QRect r, bool b)
         d->panIconPopup->hide();
         delete d->panIconPopup;
         d->panIconPopup = 0;
+        slotPanIconHiden();
     }
 }
 
