@@ -385,22 +385,21 @@ void Canvas::updateContentsSize(bool deleteRubber)
 {
     viewport()->setUpdatesEnabled(false);
 
-    d->ltActive = false;
-    d->rtActive = false;
-    d->lbActive = false;
-    d->rbActive = false;
-    viewport()->unsetCursor();
-    viewport()->setMouseTracking(false);
-
     if (deleteRubber && d->rubber)
     {
         delete d->rubber;
-        d->rubber = 0;
+        d->rubber       = 0;
+        d->ltActive     = false;
+        d->rtActive     = false;
+        d->lbActive     = false;
+        d->rbActive     = false;
         d->pressedMoved = false;
+        viewport()->unsetCursor();
+        viewport()->setMouseTracking(false);
         if (d->im->imageValid())
             emit signalSelected(false);
     }
-
+    
     int wZ = d->im->width();
     int hZ = d->im->height();
     
@@ -421,6 +420,21 @@ void Canvas::updateContentsSize(bool deleteRubber)
         d->pixmapRect = QRect(0, 0, wZ, hZ);
     }
 
+    if (!deleteRubber && d->rubber)
+    {
+        int xSel, ySel, wSel, hSel;
+        d->im->getSelectedArea(xSel, ySel, wSel, hSel);
+        xSel = (int)(((xSel * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom));
+        ySel = (int)(((ySel * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom));
+        wSel = (int)(((wSel * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom));
+        hSel = (int)(((hSel * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom));
+        d->rubber->setX(xSel);
+        d->rubber->setY(ySel);
+        d->rubber->setWidth(wSel);
+        d->rubber->setHeight(hSel);
+        d->rubber->moveBy(d->pixmapRect.x(), d->pixmapRect.y());
+    }
+    
     d->tileCache.clear();    
     resizeContents(wZ, hZ);
     viewport()->setUpdatesEnabled(true);
