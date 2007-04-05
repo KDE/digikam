@@ -1206,19 +1206,23 @@ void Canvas::slotModified()
 
 void Canvas::slotCornerButtonReleased()
 {    
-    if (!d->panIconPopup)
+    if (d->panIconPopup)
     {
-        d->panIconPopup         = new KPopupFrame(this);
-        ImagePanIconWidget *pan = new ImagePanIconWidget(180, 120, d->panIconPopup);
-        d->panIconPopup->setMainWidget(pan);
-
-        QRect r((int)(contentsX()    / d->zoom), (int)(contentsY()     / d->zoom),
-                (int)(visibleWidth() / d->zoom), (int)(visibleHeight() / d->zoom));
-        pan->setRegionSelection(r);
-
-        connect(pan, SIGNAL(signalSelectionMoved(QRect, bool)),
-                this, SLOT(slotPanIconSelectionMoved(QRect, bool)));
+        d->panIconPopup->hide();
+        delete d->panIconPopup;
+        d->panIconPopup = 0;
     }
+
+    d->panIconPopup         = new KPopupFrame(this);
+    ImagePanIconWidget *pan = new ImagePanIconWidget(180, 120, d->panIconPopup);
+    d->panIconPopup->setMainWidget(pan);
+
+    QRect r((int)(contentsX()    / d->zoom), (int)(contentsY()     / d->zoom),
+            (int)(visibleWidth() / d->zoom), (int)(visibleHeight() / d->zoom));
+    pan->setRegionSelection(r);
+
+    connect(pan, SIGNAL(signalSelectionMoved(QRect, bool)),
+            this, SLOT(slotPanIconSelectionMoved(QRect, bool)));
 
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
