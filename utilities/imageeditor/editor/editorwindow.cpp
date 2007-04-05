@@ -509,13 +509,13 @@ void EditorWindow::setupStatusBar()
     d->selectLabel->setAlignment(Qt::AlignCenter);
     d->selectLabel->setMaximumHeight(fontMetrics().height()+2);   
     statusBar()->addWidget(d->selectLabel, 100);
-    QToolTip::add(d->selectLabel, i18n("Informations about current selection area"));
+    QToolTip::add(d->selectLabel, i18n("Information about current selection area"));
 
     m_resLabel  = new QLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
     m_resLabel->setMaximumHeight(fontMetrics().height()+2);   
     statusBar()->addWidget(m_resLabel, 100);
-    QToolTip::add(m_resLabel, i18n("Informations about image size"));
+    QToolTip::add(m_resLabel, i18n("Information about image size"));
 
     d->underExposureIndicator = new QToolButton(statusBar());
     d->underExposureIndicator->setIconSet(SmallIcon("underexposure"));
