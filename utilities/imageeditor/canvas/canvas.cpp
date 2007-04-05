@@ -253,7 +253,7 @@ void Canvas::slotImageLoaded(const QString& filePath, bool success)
     if (d->autoZoom)
         updateAutoZoom();
 
-    updateContentsSize();
+    updateContentsSize(true);
 
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
@@ -359,7 +359,6 @@ bool Canvas::isReadOnly()
 QRect Canvas::getSelectedArea()
 {
     int x, y, w, h;
-    
     d->im->getSelectedArea(x, y, w, h);
     return ( QRect(x, y, w, h) );
 }
@@ -372,7 +371,6 @@ double Canvas::calcAutoZoomFactor()
     double srcHeight = d->im->origHeight();
     double dstWidth  = contentsRect().width();
     double dstHeight = contentsRect().height();
-
     return QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
 }
 
@@ -380,11 +378,10 @@ void Canvas::updateAutoZoom()
 {
     d->zoom = calcAutoZoomFactor();
     d->im->zoom(d->zoom);
-    
     emit signalZoomChanged(d->zoom);
 }
 
-void Canvas::updateContentsSize()
+void Canvas::updateContentsSize(bool deleteRubber)
 {
     viewport()->setUpdatesEnabled(false);
 
@@ -395,7 +392,7 @@ void Canvas::updateContentsSize()
     viewport()->unsetCursor();
     viewport()->setMouseTracking(false);
 
-    if (d->rubber)
+    if (deleteRubber && d->rubber)
     {
         delete d->rubber;
         d->rubber = 0;
@@ -439,7 +436,7 @@ void Canvas::resizeEvent(QResizeEvent* e)
     if (d->autoZoom)
         updateAutoZoom();
 
-    updateContentsSize();
+    updateContentsSize(false);
 
     // No need to repaint. its called   
     // automatically after resize
@@ -926,7 +923,7 @@ void Canvas::setZoomFactor(double zoom)
     } 
 
     d->im->zoom(d->zoom);
-    updateContentsSize();
+    updateContentsSize(true);
 
     viewport()->setUpdatesEnabled(false);
     center((int)(((cpx * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)), 
@@ -954,7 +951,7 @@ void Canvas::slotSetAutoZoom(bool val)
 
     d->im->zoom(d->zoom);
 
-    updateContentsSize();
+    updateContentsSize(true);
     viewport()->update();
 }
 
@@ -1196,7 +1193,7 @@ void Canvas::slotModified()
         updateAutoZoom();
     d->im->zoom(d->zoom);
 
-    updateContentsSize();
+    updateContentsSize(true);
     viewport()->update();
 
     // To be sure than corner widget used to pan image will be hide/show 

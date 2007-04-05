@@ -118,7 +118,7 @@ private:
     QRect calcSeletedArea();
     double calcAutoZoomFactor();
     void updateAutoZoom();
-    void updateContentsSize();
+    void updateContentsSize(bool deleteRubber);
     void drawRubber();
 
     void paintViewport(const QRect& er, bool antialias);
