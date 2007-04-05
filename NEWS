@@ -22,6 +22,8 @@ Image Editor  : Usability improvement : a new pan tool is available on the right
 Image Editor  : Usability issue : Blowup and Resize tools have been merged.
 Image Editor  : Usability issue : Unsharp Mask, Refocus, and Sharpen tools have been merged to a new Sharpness Editor.
 Image Editor  : Usability issue : Reorganize menu structure
+Image Editor  : Usability issue : persistant selection in all zoom mode.
+Image Editor  : Add new option to fit on current selection.
 
 Image Plugins : Red Eyes Correction tool have been completly re-writen. There is 
                 a preview of effect and the capability to taint the eye pupil with
@@ -34,6 +36,8 @@ Image Plugins : Black & White converter now support a lots of B&W analog camera 
                 amount of Lens filters effect.  
 Image Plugins : Update internal CImg library to 1.1.9. The Greycstoration algorithm used 
                 by Restoration, Inpainting and Blowup plugins is more fast and more optimized.
+Image Plugins : DigikamImagePlugins have been merged to digiKam core. All tools still available 
+                like plugins at the same place than image plugin core. 
 
 
 ----------------------------------------------------------------------------
