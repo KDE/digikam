@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="15" name="showfoto" >
+<gui version="16" name="showfoto" >
 
 <MenuBar>
 
@@ -37,7 +37,8 @@
         <Separator/>
         <Action name="editorwindow_zoomplus" />
         <Action name="editorwindow_zoomminus" />
-        <Action name="editorwindow_zoomfit" /> 
+        <Action name="editorwindow_zoomfit2window" />
+        <Action name="editorwindow_zoomfit2select" />
         <Separator/>
         <Action name="shofoto_showthumbs" /> 
         <Separator/>
@@ -107,7 +108,8 @@
     <Action name="editorwindow_zoomplus" />
     <Action name="editorwindow_zoomto" />
     <Action name="editorwindow_zoomminus" />
-    <Action name="editorwindow_zoomfit" />
+    <Action name="editorwindow_zoomfit2window" /> 
+    <Action name="editorwindow_zoomfit2select" /> 
     <Separator/>
     <Action name="editorwindow_rotate_left" /> 
     <Action name="editorwindow_rotate_right" /> 

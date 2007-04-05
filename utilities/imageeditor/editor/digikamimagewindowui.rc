@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="12" name="digikamimagewindow" >
+<gui version="13" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -34,7 +34,8 @@
         <Separator/>
         <Action name="editorwindow_zoomplus" /> 
         <Action name="editorwindow_zoomminus" /> 
-        <Action name="editorwindow_zoomfit" />
+        <Action name="editorwindow_zoomfit2window" />
+        <Action name="editorwindow_zoomfit2select" />
         <Separator/>
         <Action name="editorwindow_underexposure" />        
         <Action name="editorwindow_overexposure" />        
@@ -99,7 +100,8 @@
      <Action name="editorwindow_zoomplus" /> 
      <Action name="editorwindow_zoomto" />
      <Action name="editorwindow_zoomminus" /> 
-     <Action name="editorwindow_zoomfit" /> 
+     <Action name="editorwindow_zoomfit2window" /> 
+     <Action name="editorwindow_zoomfit2select" /> 
      <Separator/>     
      <Action name="editorwindow_rotate_left" /> 
      <Action name="editorwindow_rotate_right" /> 

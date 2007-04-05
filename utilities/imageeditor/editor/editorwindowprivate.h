@@ -58,9 +58,6 @@ public:
         filePrintAction        = 0;
         copyAction             = 0;
         resizeAction           = 0;
-        zoomFitAction          = 0;
-        zoomPlusAction         = 0;
-        zoomMinusAction        = 0;
         cropAction             = 0;
         rotateLeftAction       = 0;
         rotateRightAction      = 0;
@@ -74,6 +71,10 @@ public:
         viewUnderExpoAction    = 0;
         viewOverExpoAction     = 0;
         slideShowAction        = 0;
+        zoomFitToWindowAction  = 0;
+        zoomFitToSelectAction  = 0;
+        zoomPlusAction         = 0;
+        zoomMinusAction        = 0;
         zoomCombo              = 0;
         zoomComboAction        = 0;
     }
@@ -102,13 +103,14 @@ public:
     KAction                   *cropAction;
     KAction                   *zoomPlusAction;
     KAction                   *zoomMinusAction;
+    KAction                   *zoomFitToSelectAction;
     KAction                   *rotateLeftAction;
     KAction                   *rotateRightAction;
     KAction                   *flipHorizAction;
     KAction                   *flipVertAction;
     KAction                   *slideShowAction;
 
-    KToggleAction             *zoomFitAction;
+    KToggleAction             *zoomFitToWindowAction;
     KToggleAction             *viewCMViewAction;
     KToggleAction             *viewUnderExpoAction;
     KToggleAction             *viewOverExpoAction;

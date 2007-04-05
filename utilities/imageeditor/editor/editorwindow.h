@@ -171,7 +171,7 @@ protected slots:
     void slotToggleFullScreen();
     void slotEscapePressed();
 
-    void slotToggleAutoZoom();
+    void slotToggleFitToWindow();
     void slotSelected(bool);
 
     void slotLoadingProgress(const QString& filePath, float progress);

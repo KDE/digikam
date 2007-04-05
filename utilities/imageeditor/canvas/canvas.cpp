@@ -904,40 +904,18 @@ void Canvas::setZoomFactor(double zoom)
     if (d->autoZoom)
         return;
 
-    double cpx, cpy;
-    int    xSel, ySel, wSel, hSel;
-    d->im->getSelectedArea(xSel, ySel, wSel, hSel);
-    
-    if (!wSel && !hSel )   
-    {   
-        // No current selection, zoom using center of canvas 
-        // and given zoom factor.
+    // Zoom using center of canvas and given zoom factor.
 
-        cpx = contentsX() + visibleWidth()  / 2.0; 
-        cpy = contentsY() + visibleHeight() / 2.0;
+    double cpx = contentsX() + visibleWidth()  / 2.0; 
+    double cpy = contentsY() + visibleHeight() / 2.0;
 
-        cpx = ((cpx / d->zoom) / (d->tileSize / d->zoom)) * floor(d->tileSize / d->zoom);
-        cpy = ((cpy / d->zoom) / (d->tileSize / d->zoom)) * floor(d->tileSize / d->zoom);
+    cpx = ((cpx / d->zoom) / (d->tileSize / d->zoom)) * floor(d->tileSize / d->zoom);
+    cpy = ((cpy / d->zoom) / (d->tileSize / d->zoom)) * floor(d->tileSize / d->zoom);
 
-        d->zoom = zoom;
-    }
-    else           
-    {
-        // If selected area, use center of selection
-        // and recompute zoom factor accordinly.
-        cpx = xSel + wSel / 2.0; 
-        cpy = ySel + hSel / 2.0;
-
-        double srcWidth  = wSel;
-        double srcHeight = hSel;
-        double dstWidth  = contentsRect().width();
-        double dstHeight = contentsRect().height();
-    
-        d->zoom = QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
-    } 
+    d->zoom = zoom;
 
     d->im->zoom(d->zoom);
-    updateContentsSize(true);
+    updateContentsSize(false);
 
     viewport()->setUpdatesEnabled(false);
     center((int)(((cpx * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)), 
@@ -949,12 +927,48 @@ void Canvas::setZoomFactor(double zoom)
     emit signalZoomChanged(d->zoom);
 }
 
-void Canvas::slotSetAutoZoom(bool val)
+void Canvas::slotFitToSelect()
 {
-    if (d->autoZoom == val)
-        return;
+    int xSel, ySel, wSel, hSel;
+    d->im->getSelectedArea(xSel, ySel, wSel, hSel);
+    
+    if (wSel && hSel )   
+    {   
+        // If selected area, use center of selection
+        // and recompute zoom factor accordinly.
+        double cpx = xSel + wSel / 2.0; 
+        double cpy = ySel + hSel / 2.0;
 
-    d->autoZoom = val;
+        double srcWidth  = wSel;
+        double srcHeight = hSel;
+        double dstWidth  = contentsRect().width();
+        double dstHeight = contentsRect().height();
+    
+        d->zoom = QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
+
+        d->im->zoom(d->zoom);
+        updateContentsSize(true);
+    
+        viewport()->setUpdatesEnabled(false);
+        center((int)(((cpx * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)), 
+            (int)(((cpy * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)));
+        viewport()->setUpdatesEnabled(true);
+    
+        viewport()->update();
+    
+        emit signalZoomChanged(d->zoom);
+    }
+}
+
+bool Canvas::fitToWindow()
+{
+    return d->autoZoom;
+}
+
+void Canvas::toggleFitToWindow()
+{
+    d->autoZoom = !d->autoZoom;
+
     if (d->autoZoom)
         updateAutoZoom();
     else
@@ -965,13 +979,8 @@ void Canvas::slotSetAutoZoom(bool val)
 
     d->im->zoom(d->zoom);
 
-    updateContentsSize(true);
+    updateContentsSize(false);
     viewport()->update();
-}
-
-void Canvas::slotToggleAutoZoom()
-{
-    slotSetAutoZoom(!d->autoZoom);
 }
 
 void Canvas::slotRotate90()

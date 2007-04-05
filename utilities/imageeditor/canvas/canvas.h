@@ -76,12 +76,14 @@ public:
     QString currentImageFileFormat();
 
     void  setZoomFactor(double z);
+    bool  fitToWindow();
     bool  maxZoom();
     bool  minZoom();
     bool  exifRotated();
     int   imageWidth();
     int   imageHeight();
     QRect getSelectedArea();
+
     // If current image file format is only available in read only,
     // typicially all RAW image file formats.
     bool  isReadOnly();
@@ -104,61 +106,8 @@ public:
     void  getUndoHistory(QStringList &titles);
     void  getRedoHistory(QStringList &titles);
 
-protected:
-    
-    void resizeEvent(QResizeEvent* e);
-    void viewportPaintEvent(QPaintEvent *e);
-    void contentsMousePressEvent(QMouseEvent *e);
-    void contentsMouseMoveEvent(QMouseEvent *e);
-    void contentsMouseReleaseEvent(QMouseEvent *e);
-    void contentsWheelEvent(QWheelEvent *e);
-    
-private:
+    void  toggleFitToWindow();
 
-    QRect calcSeletedArea();
-    double calcAutoZoomFactor();
-    void updateAutoZoom();
-    void updateContentsSize(bool deleteRubber);
-    void drawRubber();
-
-    void paintViewport(const QRect& er, bool antialias);
-
-    void reset();
-
-public slots:
-
-    void slotIncreaseZoom();
-    void slotDecreaseZoom();
-    void slotSetAutoZoom(bool val);
-    void slotToggleAutoZoom();
-
-    // image modifiers
-    void slotRotate90();
-    void slotRotate180();
-    void slotRotate270();
-
-    void slotFlipHoriz();
-    void slotFlipVert();
-    
-    void slotCrop();
-    
-    void slotRestore();
-    void slotUndo(int steps=1);
-    void slotRedo(int steps=1);
-
-    void slotCopy();
-
-private slots:
-
-    void slotSelected();
-    void slotModified();
-    void slotImageLoaded(const QString& filePath, bool success);
-    void slotImageSaved(const QString& filePath, bool success);
-    void slotCornerButtonPressed();
-    void slotZoomChanged(double);
-    void slotPanIconSelectionMoved(QRect, bool);
-    void slotPanIconHiden();
-    
 signals:
 
     void signalColorManagementTool();
@@ -178,6 +127,61 @@ signals:
     void signalSavingFinished(const QString &filename, bool success);
     void signalSavingProgress(const QString& filePath, float progress);
     void signalSelectionChanged(const QRect&);
+    void signalSetCheckedFitToWindow(bool);
+
+public slots:
+
+    void slotIncreaseZoom();
+    void slotDecreaseZoom();
+    void slotFitToSelect();
+
+    // image modifiers
+    void slotRotate90();
+    void slotRotate180();
+    void slotRotate270();
+
+    void slotFlipHoriz();
+    void slotFlipVert();
+    
+    void slotCrop();
+    
+    void slotRestore();
+    void slotUndo(int steps=1);
+    void slotRedo(int steps=1);
+
+    void slotCopy();
+
+protected:
+    
+    void resizeEvent(QResizeEvent* e);
+    void viewportPaintEvent(QPaintEvent *e);
+    void contentsMousePressEvent(QMouseEvent *e);
+    void contentsMouseMoveEvent(QMouseEvent *e);
+    void contentsMouseReleaseEvent(QMouseEvent *e);
+    void contentsWheelEvent(QWheelEvent *e);
+
+private:
+
+    QRect  calcSeletedArea();
+    double calcAutoZoomFactor();
+    void   updateAutoZoom();
+    void   updateContentsSize(bool deleteRubber);
+
+    void drawRubber();
+    void paintViewport(const QRect& er, bool antialias);
+
+    void reset();
+
+private slots:
+
+    void slotSelected();
+    void slotModified();
+    void slotImageLoaded(const QString& filePath, bool success);
+    void slotImageSaved(const QString& filePath, bool success);
+    void slotCornerButtonPressed();
+    void slotZoomChanged(double);
+    void slotPanIconSelectionMoved(QRect, bool);
+    void slotPanIconHiden();
 
 private:
     
