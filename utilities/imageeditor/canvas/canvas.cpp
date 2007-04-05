@@ -921,13 +921,12 @@ void Canvas::setZoomFactor(double zoom)
     center((int)(((cpx * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)), 
            (int)(((cpy * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)));
     viewport()->setUpdatesEnabled(true);
-
     viewport()->update();
 
     emit signalZoomChanged(d->zoom);
 }
 
-void Canvas::slotFitToSelect()
+void Canvas::fitToSelect()
 {
     int xSel, ySel, wSel, hSel;
     d->im->getSelectedArea(xSel, ySel, wSel, hSel);
@@ -946,14 +945,14 @@ void Canvas::slotFitToSelect()
     
         d->zoom = QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
 
+        d->autoZoom = false;
         d->im->zoom(d->zoom);
         updateContentsSize(true);
     
         viewport()->setUpdatesEnabled(false);
         center((int)(((cpx * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)), 
-            (int)(((cpy * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)));
+               (int)(((cpy * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)));
         viewport()->setUpdatesEnabled(true);
-    
         viewport()->update();
     
         emit signalZoomChanged(d->zoom);

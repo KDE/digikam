@@ -329,11 +329,8 @@ void EditorWindow::setupStandardActions()
                                          CTRL+SHIFT+Key_A, this, SLOT(slotToggleFitToWindow()),
                                          actionCollection(), "editorwindow_zoomfit2window");
 
-    connect(m_canvas, SIGNAL(signalSetCheckedFitToWindow(bool)),
-            d->zoomFitToWindowAction, SLOT(setChecked (bool)));
-
     d->zoomFitToSelectAction = new KAction(i18n("Fit to &Selection"), "viewmagfit",
-                                         CTRL+SHIFT+Key_S, m_canvas, SLOT(slotFitToSelect()),
+                                         CTRL+SHIFT+Key_S, this, SLOT(slotFitToSelect()),
                                          actionCollection(), "editorwindow_zoomfit2select");
     d->zoomFitToSelectAction->setEnabled(false);
     d->zoomFitToSelectAction->setWhatsThis(i18n("This option can be used to zoom the image to the "
@@ -665,6 +662,17 @@ void EditorWindow::slotToggleFitToWindow()
     d->zoomMinusAction->setEnabled(!checked);
 
     m_canvas->toggleFitToWindow();
+}
+
+void EditorWindow::slotFitToSelect()
+{
+    d->zoomFitToWindowAction->blockSignals(true);
+    d->zoomFitToWindowAction->setChecked(false);
+    d->zoomFitToWindowAction->blockSignals(false);
+    d->zoomPlusAction->setEnabled(true);
+    d->zoomComboAction->setEnabled(true);
+    d->zoomMinusAction->setEnabled(true);
+    m_canvas->fitToSelect();
 }
 
 void EditorWindow::slotZoomTextChanged(const QString &txt)

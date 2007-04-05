@@ -107,7 +107,7 @@ public:
     void  getRedoHistory(QStringList &titles);
 
     void  toggleFitToWindow();
-
+    void  fitToSelect();
 signals:
 
     void signalColorManagementTool();
@@ -127,13 +127,11 @@ signals:
     void signalSavingFinished(const QString &filename, bool success);
     void signalSavingProgress(const QString& filePath, float progress);
     void signalSelectionChanged(const QRect&);
-    void signalSetCheckedFitToWindow(bool);
 
 public slots:
 
     void slotIncreaseZoom();
     void slotDecreaseZoom();
-    void slotFitToSelect();
 
     // image modifiers
     void slotRotate90();
