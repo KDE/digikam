@@ -604,9 +604,7 @@ void AlbumManager::scanDAlbums()
         d->dateListJob = 0;
     }
 
-    KURL u;
-    u.setProtocol("digikamdates");
-    u.setPath("/");
+    DatabaseUrl u = DatabaseUrl::fromDate(QDate());
 
     d->dateListJob = ImageLister::startListJob(u,
                                                AlbumSettings::instance()->getAllFileFilter(),

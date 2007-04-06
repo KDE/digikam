@@ -73,8 +73,6 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     ds >> filter;
     ds >> getDimensions;
 
-    kdDebug() << "kio_digikamtags::special " << kurl << endl;
-
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
 

@@ -30,7 +30,6 @@
 
 #include <qfile.h>
 #include <qdatastream.h>
-#include <qregexp.h>
 #include <qbuffer.h>
 
 extern "C"
@@ -47,6 +46,7 @@ extern "C"
 #include "imagelister.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
+#include "namefilter.h"
 #include "digikamdates.h"
 
 kio_digikamdates::kio_digikamdates(const QCString &pool_socket,
@@ -63,19 +63,15 @@ void kio_digikamdates::special(const QByteArray& data)
 {
     bool folders = (metaData("folders") == "yes");
 
-    QString libraryPath;
     KURL    kurl;
     QString url;
     QString filter;
     int     getDimensions;
 
     QDataStream ds(data, IO_ReadOnly);
-    ds >> libraryPath;
     ds >> kurl;
     ds >> filter;
     ds >> getDimensions;
-
-    kdDebug() << "kio_digikamdates::special " << kurl << endl;
 
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
@@ -84,7 +80,7 @@ void kio_digikamdates::special(const QByteArray& data)
 
     if (folders)
     {
-        QValueList<QRegExp> regex = Digikam::ImageLister::makeFilterList(filter);
+        Digikam::NameFilter nameFilter(filter);
         QByteArray  ba;
 
         typedef QPair<int, int> YearMonth;
@@ -96,9 +92,9 @@ void kio_digikamdates::special(const QByteArray& data)
             images = access.db()->getItemsAndDate();
         }
 
-        for ( QValueList<QPair<QString, QDateTime> >::iterator it = images.begin(); it != images.end(); )
+        for ( QValueList<QPair<QString, QDateTime> >::iterator it = images.begin(); it != images.end(); ++it)
         {
-            if ( !Digikam::ImageLister::matchFilterList( regex, (*it).first ) )
+            if ( !nameFilter.matches((*it).first) )
                 continue;
 
             if ( !yearMonthMap.contains(YearMonth((*it).second.date().year(), (*it).second.date().month())) )
