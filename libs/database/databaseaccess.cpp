@@ -71,20 +71,24 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
         d = new DatabaseAccessStaticPriv();
         d->db = new AlbumDB();
     }
-    else
-    {
-        QMutexLocker lock(&d->mutex);
-        if (d->parameters != parameters)
-        {
-            d->db->close();
-        }
-    }
-    d->parameters = parameters;
-}
 
-void DatabaseAccess::setAlbumRoot(const QString &root)
-{
-    d->albumRoot = root;
+    QMutexLocker lock(&d->mutex);
+
+    if (d->parameters == parameters)
+        return;
+
+    if (d->db->isOpen())
+        d->db->close();
+
+    d->parameters = parameters;
+
+    //TODO: remove when albumRoot is removed
+    if (d->parameters.databaseType == "QSQLITE")
+    {
+        KURL url;
+        url.setPath(d->parameters.databaseName);
+        d->albumRoot = url.directory(false);
+    }
 }
 
 QString DatabaseAccess::albumRoot()

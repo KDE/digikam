@@ -78,8 +78,10 @@ public:
       */
     static void cleanUpDatabase();
 
-    //TODO: remove
-    static void setAlbumRoot(const QString &root);
+    /**
+      * This method is a temporary workaround until the album root is contained in the db.
+      * Returns the global album root, including the trailing slash.
+      */
     static QString albumRoot();
 
 private:
