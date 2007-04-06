@@ -75,5 +75,6 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 028 ==> 116148 : Auto-scrolling when selecting large area.
 029 ==> 134498 : Date stamp display option for photos in full-screen mode.
 030 ==> 130525 : Saving large (>5M) jpg's result in corrupt file.
-031 ==> 
+031 ==> 132047 : Faster display of images and/or prefetch wished for.
+032 ==> 
 
