@@ -5,12 +5,13 @@
 
    <Menu name="Color">
      <text>&amp;Color</text>
+     <Action name="implugcore_autocorrection" /> 
       <Action name="implugcore_bcg" /> 
       <Action name="implugcore_hsl" /> 
       <Action name="implugcore_rgb" /> 
       <Separator />
-      <Action name="implugcore_autocorrection" /> 
       <Action name="implugcore_invert" /> 
+      <Action name="implugcore_blackwhite" /> 
       <Menu name="Depth">
         <text>&amp;Depth</text>
         <Action name="implugcore_convertto8bits" />
@@ -32,12 +33,6 @@
    <text>Tra&amp;nsform</text>
    <Action name="implugcore_ratiocrop" /> 
   </Menu>
-
-  <Menu name="Effects">
-   <text>Effec&amp;ts</text>
-   <Action name="implugcore_blackwhite" /> 
-  </Menu>
-
 
  </MenuBar>
 

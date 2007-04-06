@@ -3,8 +3,8 @@
 
  <MenuBar>
 
-  <Menu name="Effects" >
-   <text>Effec&amp;ts</text>
+  <Menu name="Filter" >
+   <text>F&amp;ilter</text>
    <Action name="imageplugin_distortionfx" /> 
   </Menu>
 

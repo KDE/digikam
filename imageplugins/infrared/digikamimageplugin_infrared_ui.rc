@@ -2,8 +2,8 @@
 <kpartgui version="4" name="digikamimageplugin_infrared" >
  <MenuBar>
 
-  <Menu name="Effects" >
-   <text>Effec&amp;ts</text>
+  <Menu name="Filter" >
+   <text>F&amp;ilter</text>
    <Action name="imageplugin_infrared" /> 
   </Menu>
 
