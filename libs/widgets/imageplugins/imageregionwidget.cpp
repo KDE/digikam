@@ -453,7 +453,7 @@ QRect ImageRegionWidget::getLocalTargetImageRegion(void)
     return region;
 }
 
-void ImageRegionWidget::contentsMousePressEvent ( QMouseEvent * e )
+void ImageRegionWidget::contentsMousePressEvent(QMouseEvent *e)
 {
     if ( e->button() == Qt::LeftButton )
     {
@@ -465,15 +465,7 @@ void ImageRegionWidget::contentsMousePressEvent ( QMouseEvent * e )
     }
 }
 
-void ImageRegionWidget::contentsMouseReleaseEvent ( QMouseEvent *  )
-{
-    d->movingInProgress = false;
-    unsetCursor(); 
-    backupPixmapRegion();
-    emit contentsMovedEvent(true);
-}
-
-void ImageRegionWidget::contentsMouseMoveEvent( QMouseEvent * e )
+void ImageRegionWidget::contentsMouseMoveEvent(QMouseEvent *e)
 {
     if ( e->state() == Qt::LeftButton )
     {
@@ -490,6 +482,17 @@ void ImageRegionWidget::contentsMouseMoveEvent( QMouseEvent * e )
     }
 
     setCursor( KCursor::handCursor() );    
+}
+
+void ImageRegionWidget::contentsMouseReleaseEvent(QMouseEvent *)
+{
+    if (d->movingInProgress == true)
+    {
+        d->movingInProgress = false;
+        unsetCursor(); 
+        backupPixmapRegion();
+        emit contentsMovedEvent(true);
+    }
 }
 
 }  // NameSpace Digikam

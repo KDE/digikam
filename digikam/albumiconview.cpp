@@ -807,6 +807,10 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     if (!item)
         return;
 
+    // Create a copy of the item. After entering the event loop
+    // in the dialog, we cannot be sure about the item's status.
+    ImageInfo renameInfo(*item->imageInfo());
+
     QFileInfo fi(item->imageInfo()->name());
     QString ext  = QString(".") + fi.extension(false);
     QString name = fi.fileName();
@@ -827,7 +831,7 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     if (!ok)
         return;
 
-    KURL oldURL = item->imageInfo()->kurlForKIO();
+    KURL oldURL = renameInfo.kurlForKIO();
     KURL newURL = oldURL;
     newURL.setFileName(newName + ext);
 
@@ -841,7 +845,7 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     // When this is completed, DIO will call AlbumLister::instance()->refresh().
     // Usually the AlbumLister will ignore changes to already listed items.
     // So the renamed item need explicitly be invalidated.
-    d->imageLister->invalidateItem(item->imageInfo());
+    d->imageLister->invalidateItem(&renameInfo);
 }
 
 void AlbumIconView::slotRenamed(KIO::Job*, const KURL &, const KURL&newURL)
@@ -886,7 +890,8 @@ void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
 
     bool useTrash = !dialog.shouldDelete();
 
-    KIO::Job* job = DIO::del(kioUrlList, useTrash);
+    // trash does not like non-local URLs, put is not implemented
+    KIO::Job* job = DIO::del(useTrash ? urlList : kioUrlList, useTrash);
     connect(job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotDIOResult(KIO::Job*)));
 
@@ -899,7 +904,8 @@ void AlbumIconView::slotDeleteSelectedItemsDirectly(bool useTrash)
     // This method deletes the selected items directly, without confirmation.
     // It is not used in the default setup.
 
-    KURL::List  kioUrlList;
+    KURL::List kioUrlList;
+    KURL::List urlList;
 
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
@@ -907,13 +913,15 @@ void AlbumIconView::slotDeleteSelectedItemsDirectly(bool useTrash)
         {
             AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
             kioUrlList.append(iconItem->imageInfo()->kurlForKIO());
+            urlList.append(iconItem->imageInfo()->kurl());
         }
     }
 
     if (kioUrlList.count() <= 0)
         return;
 
-    KIO::Job* job = DIO::del(kioUrlList, useTrash);
+    // trash does not like non-local URLs, put is not implemented
+    KIO::Job* job = DIO::del(useTrash ? urlList : kioUrlList , useTrash);
 
     connect(job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotDIOResult(KIO::Job*)));

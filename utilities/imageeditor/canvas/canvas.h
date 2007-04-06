@@ -75,13 +75,15 @@ public:
     DImg  currentImage();
     QString currentImageFileFormat();
 
-    void  setZoomFactor(float z);
+    void  setZoomFactor(double z);
+    bool  fitToWindow();
     bool  maxZoom();
     bool  minZoom();
     bool  exifRotated();
     int   imageWidth();
     int   imageHeight();
     QRect getSelectedArea();
+
     // If current image file format is only available in read only,
     // typicially all RAW image file formats.
     bool  isReadOnly();
@@ -104,33 +106,32 @@ public:
     void  getUndoHistory(QStringList &titles);
     void  getRedoHistory(QStringList &titles);
 
-protected:
-    
-    void resizeEvent(QResizeEvent* e);
-    void viewportPaintEvent(QPaintEvent *e);
-    void contentsMousePressEvent(QMouseEvent *e);
-    void contentsMouseMoveEvent(QMouseEvent *e);
-    void contentsMouseReleaseEvent(QMouseEvent *e);
-    void contentsWheelEvent(QWheelEvent *e);
-    
-private:
+    void  toggleFitToWindow();
+    void  fitToSelect();
+signals:
 
-    QRect calcSeletedArea();
-    float calcAutoZoomFactor();
-    void updateAutoZoom();
-    void updateContentsSize();
-    void drawRubber();
-
-    void paintViewport(const QRect& er, bool antialias);
-
-    void reset();
+    void signalColorManagementTool();
+    void signalZoomChanged(double zoom);
+    void signalMaxZoom();
+    void signalMinZoom();
+    void signalChanged();
+    void signalUndoStateChanged(bool, bool, bool);
+    void signalSelected(bool);
+    void signalRightButtonClicked();
+    void signalShowNextImage();
+    void signalShowPrevImage();
+    void signalLoadingStarted(const QString &filename);
+    void signalLoadingFinished(const QString &filename, bool success);
+    void signalLoadingProgress(const QString& filePath, float progress);
+    void signalSavingStarted(const QString &filename);
+    void signalSavingFinished(const QString &filename, bool success);
+    void signalSavingProgress(const QString& filePath, float progress);
+    void signalSelectionChanged(const QRect&);
 
 public slots:
 
     void slotIncreaseZoom();
     void slotDecreaseZoom();
-    void slotSetAutoZoom(bool val);
-    void slotToggleAutoZoom();
 
     // image modifiers
     void slotRotate90();
@@ -148,35 +149,37 @@ public slots:
 
     void slotCopy();
 
+protected:
+    
+    void resizeEvent(QResizeEvent* e);
+    void viewportPaintEvent(QPaintEvent *e);
+    void contentsMousePressEvent(QMouseEvent *e);
+    void contentsMouseMoveEvent(QMouseEvent *e);
+    void contentsMouseReleaseEvent(QMouseEvent *e);
+    void contentsWheelEvent(QWheelEvent *e);
+
+private:
+
+    QRect  calcSeletedArea();
+    double calcAutoZoomFactor();
+    void   updateAutoZoom();
+    void   updateContentsSize(bool deleteRubber);
+
+    void drawRubber();
+    void paintViewport(const QRect& er, bool antialias);
+
+    void reset();
+
 private slots:
 
     void slotSelected();
     void slotModified();
     void slotImageLoaded(const QString& filePath, bool success);
     void slotImageSaved(const QString& filePath, bool success);
-    void slotCornerButtonReleased();
+    void slotCornerButtonPressed();
+    void slotZoomChanged(double);
     void slotPanIconSelectionMoved(QRect, bool);
-    void slotZoomChanged(float);
-    
-signals:
-
-    void signalColorManagementTool();
-    void signalZoomChanged(float zoom);
-    void signalMaxZoom();
-    void signalMinZoom();
-    void signalChanged();
-    void signalUndoStateChanged(bool, bool, bool);
-    void signalSelected(bool);
-    void signalRightButtonClicked();
-    void signalShowNextImage();
-    void signalShowPrevImage();
-    void signalLoadingStarted(const QString &filename);
-    void signalLoadingFinished(const QString &filename, bool success);
-    void signalLoadingProgress(const QString& filePath, float progress);
-    void signalSavingStarted(const QString &filename);
-    void signalSavingFinished(const QString &filename, bool success);
-    void signalSavingProgress(const QString& filePath, float progress);
-    void signalSelectionChanged(const QRect&);
+    void slotPanIconHiden();
 
 private:
     

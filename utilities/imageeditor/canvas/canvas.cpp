@@ -27,6 +27,7 @@
 
 // Qt includes.
  
+#include <qtooltip.h>
 #include <qfile.h>
 #include <qstring.h>
 #include <qevent.h>
@@ -162,6 +163,7 @@ Canvas::Canvas(QWidget *parent)
     d->cornerButton = new QToolButton(this);
     d->cornerButton->setIconSet(SmallIcon("move"));
     d->cornerButton->hide();
+    QToolTip::add(d->cornerButton, i18n("Pan the image to a region"));
     setCornerWidget(d->cornerButton);
 
     viewport()->setBackgroundMode(Qt::NoBackground);
@@ -170,11 +172,11 @@ Canvas::Canvas(QWidget *parent)
 
     // ------------------------------------------------------------
 
-    connect(this, SIGNAL(signalZoomChanged(float)),
-            this, SLOT(slotZoomChanged(float)));
+    connect(this, SIGNAL(signalZoomChanged(double)),
+            this, SLOT(slotZoomChanged(double)));
 
-    connect(d->cornerButton, SIGNAL(released()),
-            this, SLOT(slotCornerButtonReleased()));
+    connect(d->cornerButton, SIGNAL(pressed()),
+            this, SLOT(slotCornerButtonPressed()));
 
     connect(d->im, SIGNAL(signalColorManagementTool()),
             this, SIGNAL(signalColorManagementTool()));
@@ -251,7 +253,7 @@ void Canvas::slotImageLoaded(const QString& filePath, bool success)
     if (d->autoZoom)
         updateAutoZoom();
 
-    updateContentsSize();
+    updateContentsSize(true);
 
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
@@ -357,12 +359,11 @@ bool Canvas::isReadOnly()
 QRect Canvas::getSelectedArea()
 {
     int x, y, w, h;
-    
     d->im->getSelectedArea(x, y, w, h);
     return ( QRect(x, y, w, h) );
 }
 
-float Canvas::calcAutoZoomFactor()
+double Canvas::calcAutoZoomFactor()
 {
     if (!d->im->imageValid()) return d->zoom;
 
@@ -370,7 +371,6 @@ float Canvas::calcAutoZoomFactor()
     double srcHeight = d->im->origHeight();
     double dstWidth  = contentsRect().width();
     double dstHeight = contentsRect().height();
-
     return QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
 }
 
@@ -378,30 +378,28 @@ void Canvas::updateAutoZoom()
 {
     d->zoom = calcAutoZoomFactor();
     d->im->zoom(d->zoom);
-    
     emit signalZoomChanged(d->zoom);
 }
 
-void Canvas::updateContentsSize()
+void Canvas::updateContentsSize(bool deleteRubber)
 {
     viewport()->setUpdatesEnabled(false);
 
-    d->ltActive = false;
-    d->rtActive = false;
-    d->lbActive = false;
-    d->rbActive = false;
-    viewport()->unsetCursor();
-    viewport()->setMouseTracking(false);
-
-    if (d->rubber)
+    if (deleteRubber && d->rubber)
     {
         delete d->rubber;
-        d->rubber = 0;
+        d->rubber       = 0;
+        d->ltActive     = false;
+        d->rtActive     = false;
+        d->lbActive     = false;
+        d->rbActive     = false;
         d->pressedMoved = false;
+        viewport()->unsetCursor();
+        viewport()->setMouseTracking(false);
         if (d->im->imageValid())
             emit signalSelected(false);
     }
-
+    
     int wZ = d->im->width();
     int hZ = d->im->height();
     
@@ -422,6 +420,21 @@ void Canvas::updateContentsSize()
         d->pixmapRect = QRect(0, 0, wZ, hZ);
     }
 
+    if (!deleteRubber && d->rubber)
+    {
+        int xSel, ySel, wSel, hSel;
+        d->im->getSelectedArea(xSel, ySel, wSel, hSel);
+        xSel = (int)(((xSel * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom));
+        ySel = (int)(((ySel * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom));
+        wSel = (int)(((wSel * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom));
+        hSel = (int)(((hSel * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom));
+        d->rubber->setX(xSel);
+        d->rubber->setY(ySel);
+        d->rubber->setWidth(wSel);
+        d->rubber->setHeight(hSel);
+        d->rubber->moveBy(d->pixmapRect.x(), d->pixmapRect.y());
+    }
+    
     d->tileCache.clear();    
     resizeContents(wZ, hZ);
     viewport()->setUpdatesEnabled(true);
@@ -437,7 +450,7 @@ void Canvas::resizeEvent(QResizeEvent* e)
     if (d->autoZoom)
         updateAutoZoom();
 
-    updateContentsSize();
+    updateContentsSize(false);
 
     // No need to repaint. its called   
     // automatically after resize
@@ -473,19 +486,20 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
         QRect pr = QRect(cr.x() - d->pixmapRect.x(), cr.y() - d->pixmapRect.y(),
                          cr.width(), cr.height());
 
-        int x1 = (int)floor((float)pr.x()      / (float)d->tileSize) * d->tileSize;
-        int y1 = (int)floor((float)pr.y()      / (float)d->tileSize) * d->tileSize;
-        int x2 = (int)ceilf((float)pr.right()  / (float)d->tileSize) * d->tileSize;
-        int y2 = (int)ceilf((float)pr.bottom() / (float)d->tileSize) * d->tileSize;
+        int x1 = (int)floor((double)pr.x()      / (double)d->tileSize) * d->tileSize;
+        int y1 = (int)floor((double)pr.y()      / (double)d->tileSize) * d->tileSize;
+        int x2 = (int)ceilf((double)pr.right()  / (double)d->tileSize) * d->tileSize;
+        int y2 = (int)ceilf((double)pr.bottom() / (double)d->tileSize) * d->tileSize;
 
         QPixmap pix(d->tileSize, d->tileSize);
         int sx, sy, sw, sh;
+        int step = (int)floor(d->tileSize / d->zoom); 
 
         for (int j = y1 ; j < y2 ; j += d->tileSize)
         {
             for (int i = x1 ; i < x2 ; i += d->tileSize)
             {
-                QString key  = QString("%1,%1").arg(i).arg(j);
+                QString key  = QString("%1,%2").arg(i).arg(j);
                 QPixmap *pix = d->tileCache.find(key);
                 
                 if (!pix)
@@ -512,16 +526,24 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                         pix->fill(d->bgColor);
                     }
 
-                    sx = (int)floor(i           / d->zoom);
-                    sy = (int)floor(j           / d->zoom);
-                    sw = (int)floor(d->tileSize / d->zoom);
-                    sh = (int)floor(d->tileSize / d->zoom);
+                    // NOTE : with implementations <= 0.9.1, the canvas doesn't work properly using high zoom level (> 500).
+                    // The sx, sy, sw, sh values haven't be computed properly and "tile" artefacts been appears 
+                    // over the image. Look the example here:
+                    // http://digikam3rdparty.free.fr/Screenshots/editorhighzoomartefact.png
+                    // Note than these "tile" artifacts are not the real tiles of canvas.
+                    // The new implementation below fix this problem to handle properly the areas to 
+                    // use from the source image to generate the canvas pixmap tiles.  
+
+                    sx = (int)floor(((double)i / d->zoom) / (d->tileSize / d->zoom)) * step;
+                    sy = (int)floor(((double)j / d->zoom) / (d->tileSize / d->zoom)) * step;
+                    sw = step;
+                    sh = step;
 
                     if (d->rubber && d->pressedMoved && !d->pressedMoving)
                     {
                         QRect rr(d->rubber->normalize());
-                        rr = QRect(d->rubber->normalize());
-                        QRect  r(i,j,d->tileSize,d->tileSize);
+                        QRect  r(i, j, d->tileSize, d->tileSize);
+
                         d->im->paintOnDevice(pix, sx, sy, sw, sh,
                                              0, 0, d->tileSize, d->tileSize,
                                              rr.x() - i - d->pixmapRect.x(),
@@ -529,7 +551,6 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                                              rr.width(), rr.height(),
                                              antialias);
 
-                        rr = QRect(d->rubber->normalize());
                         rr.moveBy(-i -d->pixmapRect.x(), -j -d->pixmapRect.y());
  
                         QPainter p(pix);
@@ -552,10 +573,10 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                     }
                 }
 
-                QRect  r(i,j,d->tileSize,d->tileSize);
+                QRect  r(i, j, d->tileSize, d->tileSize);
                 QRect  ir = pr.intersect(r);
-                QPoint pt(contentsToViewport(QPoint(ir.x()+d->pixmapRect.x(),
-                                                    ir.y()+d->pixmapRect.y())));
+                QPoint pt(contentsToViewport(QPoint(ir.x() + d->pixmapRect.x(),
+                                                    ir.y() + d->pixmapRect.y())));
 
                 bitBlt(viewport(), pt.x(), pt.y(),
                        pix,
@@ -807,6 +828,7 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
         d->lbActive = false;
         d->rbActive = false;
         viewport()->setMouseTracking(false);
+        viewport()->unsetCursor();
         if (d->im->imageValid())
             emit signalSelected(false);
     }
@@ -877,29 +899,44 @@ void Canvas::slotDecreaseZoom()
     setZoomFactor(d->zoom / d->zoomMultiplier);
 }
 
-void Canvas::setZoomFactor(float zoom)
+void Canvas::setZoomFactor(double zoom)
 {
     if (d->autoZoom)
         return;
 
-    float cpx, cpy;
-    int   xSel, ySel, wSel, hSel;
+    // Zoom using center of canvas and given zoom factor.
+
+    double cpx = contentsX() + visibleWidth()  / 2.0; 
+    double cpy = contentsY() + visibleHeight() / 2.0;
+
+    cpx = ((cpx / d->zoom) / (d->tileSize / d->zoom)) * floor(d->tileSize / d->zoom);
+    cpy = ((cpy / d->zoom) / (d->tileSize / d->zoom)) * floor(d->tileSize / d->zoom);
+
+    d->zoom = zoom;
+
+    d->im->zoom(d->zoom);
+    updateContentsSize(false);
+
+    viewport()->setUpdatesEnabled(false);
+    center((int)(((cpx * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)), 
+           (int)(((cpy * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)));
+    viewport()->setUpdatesEnabled(true);
+    viewport()->update();
+
+    emit signalZoomChanged(d->zoom);
+}
+
+void Canvas::fitToSelect()
+{
+    int xSel, ySel, wSel, hSel;
     d->im->getSelectedArea(xSel, ySel, wSel, hSel);
     
-    if (!wSel && !hSel )   
+    if (wSel && hSel )   
     {   
-        // No current selection, zoom using center of canvas 
-        // and given zoom factor.
-        cpx = (contentsX() + visibleWidth()  / 2.0) / d->zoom; 
-        cpy = (contentsY() + visibleHeight() / 2.0) / d->zoom;
-        d->zoom = zoom;
-    }
-    else           
-    {
         // If selected area, use center of selection
         // and recompute zoom factor accordinly.
-        cpx = xSel + wSel / 2.0; 
-        cpy = ySel + hSel / 2.0;
+        double cpx = xSel + wSel / 2.0; 
+        double cpy = ySel + hSel / 2.0;
 
         double srcWidth  = wSel;
         double srcHeight = hSel;
@@ -907,25 +944,30 @@ void Canvas::setZoomFactor(float zoom)
         double dstHeight = contentsRect().height();
     
         d->zoom = QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
-    } 
 
-    d->im->zoom(d->zoom);
-    updateContentsSize();
-
-    viewport()->setUpdatesEnabled(false);
-    center((int)(cpx * d->zoom), (int)(cpy * d->zoom));
-    viewport()->setUpdatesEnabled(true);
-    viewport()->update();
-
-    emit signalZoomChanged(d->zoom);
+        d->autoZoom = false;
+        d->im->zoom(d->zoom);
+        updateContentsSize(true);
+    
+        viewport()->setUpdatesEnabled(false);
+        center((int)(((cpx * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)), 
+               (int)(((cpy * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)));
+        viewport()->setUpdatesEnabled(true);
+        viewport()->update();
+    
+        emit signalZoomChanged(d->zoom);
+    }
 }
 
-void Canvas::slotSetAutoZoom(bool val)
+bool Canvas::fitToWindow()
 {
-    if (d->autoZoom == val)
-        return;
+    return d->autoZoom;
+}
 
-    d->autoZoom = val;
+void Canvas::toggleFitToWindow()
+{
+    d->autoZoom = !d->autoZoom;
+
     if (d->autoZoom)
         updateAutoZoom();
     else
@@ -936,13 +978,8 @@ void Canvas::slotSetAutoZoom(bool val)
 
     d->im->zoom(d->zoom);
 
-    updateContentsSize();
+    updateContentsSize(false);
     viewport()->update();
-}
-
-void Canvas::slotToggleAutoZoom()
-{
-    slotSetAutoZoom(!d->autoZoom);
 }
 
 void Canvas::slotRotate90()
@@ -972,32 +1009,27 @@ void Canvas::slotFlipVert()
 
 void Canvas::slotCrop()
 {
-     if (!d->rubber) return;
+    if (!d->rubber) return;
 
-     QRect r(d->rubber->normalize());
-     if (!r.isValid()) return;
+    QRect r(d->rubber->normalize());
+    if (!r.isValid()) return;
 
-     r.moveBy(- d->pixmapRect.x(),
-              - d->pixmapRect.y());
+    r.moveBy(- d->pixmapRect.x(), - d->pixmapRect.y());
 
-     double scale = 1.0/d->zoom;
+    int step = (int)floor(d->tileSize / d->zoom); 
 
-     int x = (int)((double)r.x()      * scale);
-     int y = (int)((double)r.y()      * scale);
-     int w = (int)((double)r.width()  * scale);
-     int h = (int)((double)r.height() * scale);
+    int x = (int)((((double)r.x()      / d->zoom) / (d->tileSize / d->zoom)) * step);
+    int y = (int)((((double)r.y()      / d->zoom) / (d->tileSize / d->zoom)) * step);
+    int w = (int)((((double)r.width()  / d->zoom) / (d->tileSize / d->zoom)) * step);
+    int h = (int)((((double)r.height() / d->zoom) / (d->tileSize / d->zoom)) * step);
 
-     x = QMAX(x, 0);
-     y = QMAX(y, 0);
-     x = QMIN(imageWidth(),  x);
-     y = QMIN(imageHeight(), y);
+    x = QMIN(imageWidth(),  QMAX(x, 0));
+    y = QMIN(imageHeight(), QMAX(y, 0));
 
-     w = QMAX(w, 0);
-     h = QMAX(h, 0);
-     w = QMIN(imageWidth(),  w);
-     h = QMIN(imageHeight(), h);
+    w = QMIN(imageWidth(),  QMAX(w, 0));
+    h = QMIN(imageHeight(), QMAX(h, 0));
 
-     d->im->crop(x, y, w, h);
+    d->im->crop(x, y, w, h);
 }
 
 void Canvas::resizeImage(int w, int h)
@@ -1129,8 +1161,7 @@ void Canvas::slotCopy()
 
 void Canvas::slotSelected()
 {
-    int x, y, w, h;
-    x = y = w = h = 0;
+    int x=0, y=0, w=0, h=0;
     
     if (d->rubber && d->pressedMoved) 
     {
@@ -1146,30 +1177,26 @@ void Canvas::slotSelected()
 
 QRect Canvas::calcSeletedArea()
 {
-    int x, y, w, h;
-    x = y = w = h = 0;
+    int x=0, y=0, w=0, h=0;
     QRect r(d->rubber->normalize());
     
     if (r.isValid()) 
     {
         r.moveBy(- d->pixmapRect.x(), - d->pixmapRect.y());
 
-        double scale = 1.0/d->zoom;   
+        int step = (int)floor(d->tileSize / d->zoom); 
 
-        x = (int)((double)r.x() * scale);   
-        y = (int)((double)r.y() * scale);   
-        w = (int)((double)r.width() * scale);   
-        h = (int)((double)r.height() * scale);   
+        x = (int)((((double)r.x()      / d->zoom) / (d->tileSize / d->zoom)) * step);
+        y = (int)((((double)r.y()      / d->zoom) / (d->tileSize / d->zoom)) * step);
 
-        x = QMAX(x, 0);   
-        y = QMAX(y, 0);   
-        x = QMIN(imageWidth(),  x);   
-        y = QMIN(imageHeight(), y);
+        w = (int)((((double)r.width()  / d->zoom) / (d->tileSize / d->zoom)) * step);   
+        h = (int)((((double)r.height() / d->zoom) / (d->tileSize / d->zoom)) * step);
 
-        w = QMAX(w, 0);
-        h = QMAX(h, 0);
-        w = QMIN(imageWidth(),  w);
-        h = QMIN(imageHeight(), h);
+        x = QMIN(imageWidth(),  QMAX(x, 0));   
+        y = QMIN(imageHeight(), QMAX(y, 0));
+
+        w = QMIN(imageWidth(),  QMAX(w, 0));
+        h = QMIN(imageHeight(), QMAX(h, 0));
 
         // Avoid empty selection by rubberband - at least mark one pixel
         // At high zoom factors, the rubberband may operate at subpixel level!
@@ -1188,7 +1215,7 @@ void Canvas::slotModified()
         updateAutoZoom();
     d->im->zoom(d->zoom);
 
-    updateContentsSize();
+    updateContentsSize(true);
     viewport()->update();
 
     // To be sure than corner widget used to pan image will be hide/show 
@@ -1198,27 +1225,44 @@ void Canvas::slotModified()
     emit signalChanged();
 }
 
-void Canvas::slotCornerButtonReleased()
+void Canvas::slotCornerButtonPressed()
 {    
-    if (!d->panIconPopup)
+    if (d->panIconPopup)
     {
-        d->panIconPopup         = new KPopupFrame(this);
-        ImagePanIconWidget *pan = new ImagePanIconWidget(120, 80, d->panIconPopup);
-        d->panIconPopup->setMainWidget(pan);
-
-        QRect r((int)(contentsX()    / d->zoom), (int)(contentsY()     / d->zoom),
-                (int)(visibleWidth() / d->zoom), (int)(visibleHeight() / d->zoom));
-        pan->setRegionSelection(r);
-
-        connect(pan, SIGNAL(signalSelectionMoved(QRect, bool)),
-                this, SLOT(slotPanIconSelectionMoved(QRect, bool)));
+        d->panIconPopup->hide();
+        delete d->panIconPopup;
+        d->panIconPopup = 0;
     }
 
+    d->panIconPopup         = new KPopupFrame(this);
+    ImagePanIconWidget *pan = new ImagePanIconWidget(180, 120, d->panIconPopup);
+    d->panIconPopup->setMainWidget(pan);
+
+    QRect r((int)(contentsX()    / d->zoom), (int)(contentsY()     / d->zoom),
+            (int)(visibleWidth() / d->zoom), (int)(visibleHeight() / d->zoom));
+    pan->setRegionSelection(r);
+    pan->setMouseFocus();
+
+    connect(pan, SIGNAL(signalSelectionMoved(QRect, bool)),
+            this, SLOT(slotPanIconSelectionMoved(QRect, bool)));
+    
+    connect(pan, SIGNAL(signalHiden()),
+            this, SLOT(slotPanIconHiden()));
+    
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
     g.setY(g.y()+ viewport()->size().height());
     d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(), 
                                   g.y() - d->panIconPopup->height()));
+
+    pan->setCursorToLocalRegionSelectionCenter();
+}
+
+void Canvas::slotPanIconHiden()
+{
+    d->cornerButton->blockSignals(true);
+    d->cornerButton->animateClick();
+    d->cornerButton->blockSignals(false);
 }
 
 void Canvas::slotPanIconSelectionMoved(QRect r, bool b)
@@ -1230,10 +1274,11 @@ void Canvas::slotPanIconSelectionMoved(QRect r, bool b)
         d->panIconPopup->hide();
         delete d->panIconPopup;
         d->panIconPopup = 0;
+        slotPanIconHiden();
     }
 }
 
-void Canvas::slotZoomChanged(float zoom)
+void Canvas::slotZoomChanged(double zoom)
 {
     if (zoom > calcAutoZoomFactor())
         d->cornerButton->show();

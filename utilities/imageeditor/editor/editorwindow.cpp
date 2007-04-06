@@ -176,8 +176,8 @@ void EditorWindow::setupStandardConnections()
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
             
-    connect(m_canvas, SIGNAL(signalZoomChanged(float)),
-            this, SLOT(slotZoomChanged(float)));
+    connect(m_canvas, SIGNAL(signalZoomChanged(double)),
+            this, SLOT(slotZoomChanged(double)));
             
     connect(m_canvas, SIGNAL(signalChanged()),
             this, SLOT(slotChanged()));
@@ -325,9 +325,16 @@ void EditorWindow::setupStandardActions()
     d->zoomMinusAction = KStdAction::zoomOut(m_canvas, SLOT(slotDecreaseZoom()),
                                              actionCollection(), "editorwindow_zoomminus");
 
-    d->zoomFitAction = new KToggleAction(i18n("Zoom &AutoFit"), "viewmagfit",
-                                         CTRL+SHIFT+Key_A, this, SLOT(slotToggleAutoZoom()),
-                                         actionCollection(), "editorwindow_zoomfit");
+    d->zoomFitToWindowAction = new KToggleAction(i18n("Fit to &Window"), "view_fit_window",
+                                         CTRL+SHIFT+Key_A, this, SLOT(slotToggleFitToWindow()),
+                                         actionCollection(), "editorwindow_zoomfit2window");
+
+    d->zoomFitToSelectAction = new KAction(i18n("Fit to &Selection"), "viewmagfit",
+                                         CTRL+SHIFT+Key_S, this, SLOT(slotFitToSelect()),
+                                         actionCollection(), "editorwindow_zoomfit2select");
+    d->zoomFitToSelectAction->setEnabled(false);
+    d->zoomFitToSelectAction->setWhatsThis(i18n("This option can be used to zoom the image to the "
+                                                "current selection area."));
 
     d->zoomCombo = new KComboBox(true);
     d->zoomCombo->setDuplicatesEnabled(false);
@@ -347,6 +354,7 @@ void EditorWindow::setupStandardActions()
     d->zoomCombo->insertItem(QString("450%"));
     d->zoomCombo->insertItem(QString("600%"));
     d->zoomCombo->insertItem(QString("800%"));
+    d->zoomCombo->insertItem(QString("1200%"));
 
     connect(d->zoomCombo, SIGNAL(activated(int)),
             this, SLOT(slotZoomSelected()) );
@@ -498,11 +506,13 @@ void EditorWindow::setupStatusBar()
     d->selectLabel->setAlignment(Qt::AlignCenter);
     d->selectLabel->setMaximumHeight(fontMetrics().height()+2);   
     statusBar()->addWidget(d->selectLabel, 100);
+    QToolTip::add(d->selectLabel, i18n("Information about current selection area"));
 
     m_resLabel  = new QLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
     m_resLabel->setMaximumHeight(fontMetrics().height()+2);   
     statusBar()->addWidget(m_resLabel, 100);
+    QToolTip::add(m_resLabel, i18n("Information about image size"));
 
     d->underExposureIndicator = new QToolButton(statusBar());
     d->underExposureIndicator->setIconSet(SmallIcon("underexposure"));
@@ -643,15 +653,26 @@ void EditorWindow::slotNewToolbarConfig()
     applyMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
 }
 
-void EditorWindow::slotToggleAutoZoom()
+void EditorWindow::slotToggleFitToWindow()
 {
-    bool checked = d->zoomFitAction->isChecked();
+    bool checked = d->zoomFitToWindowAction->isChecked();
 
     d->zoomPlusAction->setEnabled(!checked);
     d->zoomComboAction->setEnabled(!checked);
     d->zoomMinusAction->setEnabled(!checked);
 
-    m_canvas->slotToggleAutoZoom();
+    m_canvas->toggleFitToWindow();
+}
+
+void EditorWindow::slotFitToSelect()
+{
+    d->zoomFitToWindowAction->blockSignals(true);
+    d->zoomFitToWindowAction->setChecked(false);
+    d->zoomFitToWindowAction->blockSignals(false);
+    d->zoomPlusAction->setEnabled(true);
+    d->zoomComboAction->setEnabled(true);
+    d->zoomMinusAction->setEnabled(true);
+    m_canvas->fitToSelect();
 }
 
 void EditorWindow::slotZoomTextChanged(const QString &txt)
@@ -668,10 +689,10 @@ void EditorWindow::slotZoomSelected()
     slotZoomTextChanged(txt);
 }
 
-void EditorWindow::slotZoomChanged(float zoom)
+void EditorWindow::slotZoomChanged(double zoom)
 {
-    d->zoomPlusAction->setEnabled(!m_canvas->maxZoom() && !d->zoomFitAction->isChecked());
-    d->zoomMinusAction->setEnabled(!m_canvas->minZoom() && !d->zoomFitAction->isChecked());
+    d->zoomPlusAction->setEnabled(!m_canvas->maxZoom() && !m_canvas->fitToWindow());
+    d->zoomMinusAction->setEnabled(!m_canvas->minZoom() && !m_canvas->fitToWindow());
 
     d->zoomCombo->blockSignals(true);
     d->zoomCombo->setCurrentText(QString::number(lround(zoom*100.0)) + QString("%"));
@@ -754,7 +775,7 @@ void EditorWindow::readStandardSettings()
 
     if (autoZoom)
     {
-        d->zoomFitAction->activate();
+        d->zoomFitToWindowAction->activate();
         d->zoomPlusAction->setEnabled(false);
         d->zoomMinusAction->setEnabled(false);
     }
@@ -864,7 +885,7 @@ void EditorWindow::saveStandardSettings()
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
     
-    config->writeEntry("AutoZoom", d->zoomFitAction->isChecked());
+    config->writeEntry("AutoZoom", d->zoomFitToWindowAction->isChecked());
     config->writeEntry("Splitter Sizes", m_splitter->sizes());
 
     config->writeEntry("FullScreen", m_fullScreenAction->isChecked());
@@ -876,7 +897,7 @@ void EditorWindow::saveStandardSettings()
 
 void EditorWindow::toggleStandardActions(bool val)
 {
-    d->zoomFitAction->setEnabled(val);
+    d->zoomFitToWindowAction->setEnabled(val);
     m_saveAsAction->setEnabled(val);
     d->rotateLeftAction->setEnabled(val);
     d->rotateRightAction->setEnabled(val);
@@ -956,7 +977,8 @@ void EditorWindow::slotToggleFullScreen()
         unplugActionAccel(m_saveAsAction);
         unplugActionAccel(d->zoomPlusAction);
         unplugActionAccel(d->zoomMinusAction);
-        unplugActionAccel(d->zoomFitAction);
+        unplugActionAccel(d->zoomFitToWindowAction);
+        unplugActionAccel(d->zoomFitToSelectAction);
         unplugActionAccel(d->cropAction);
         unplugActionAccel(d->filePrintAction);
         unplugActionAccel(m_fileDeleteAction);
@@ -1014,7 +1036,8 @@ void EditorWindow::slotToggleFullScreen()
         plugActionAccel(m_saveAsAction);
         plugActionAccel(d->zoomPlusAction);
         plugActionAccel(d->zoomMinusAction);
-        plugActionAccel(d->zoomFitAction);
+        plugActionAccel(d->zoomFitToWindowAction);
+        plugActionAccel(d->zoomFitToSelectAction);
         plugActionAccel(d->cropAction);
         plugActionAccel(d->filePrintAction);
         plugActionAccel(m_fileDeleteAction);
@@ -1128,6 +1151,7 @@ void EditorWindow::slotSelected(bool val)
 {
     // Update menu actions.
     d->cropAction->setEnabled(val);
+    d->zoomFitToSelectAction->setEnabled(val);
     d->copyAction->setEnabled(val);
 
     for (ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();

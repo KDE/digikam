@@ -1,4 +1,4 @@
-SUBDIRS = sqlite libs utilities digikam kioslave imageplugins data showfoto
+SUBDIRS = sqlite libs utilities digikam showfoto data kioslave imageplugins
 
 EXTRA_DIST = digikam.kdevelop AUTHORS COPYING ChangeLog INSTALL README TODO digikam.lsm 
 

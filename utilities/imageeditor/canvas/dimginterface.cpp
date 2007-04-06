@@ -20,6 +20,11 @@
  *
  * ============================================================ */
 
+#define OPACITY  0.7
+#define RCOL     0xAA
+#define GCOL     0xAA
+#define BCOL     0xAA
+
 // C++ includes.
 
 #include <cmath>
@@ -792,9 +797,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     img.convertDepth(32);
 
     uint* data  = (uint*)img.bits();
-
     uchar r, g, b, a;
-    uchar color = 0xAA;
 
     for (int j=0; j < (int)img.height(); j++)
     {
@@ -808,9 +811,9 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
                 g = (*data >>  8) & 0xff;
                 b = (*data      ) & 0xff;
 
-                r = ((r-color) >> 2 + 1) + color;
-                g = ((g-color) >> 2 + 1) + color;
-                b = ((b-color) >> 2 + 1) + color;
+                r += (uchar)((RCOL - r) * OPACITY);
+                g += (uchar)((GCOL - g) * OPACITY);
+                b += (uchar)((BCOL - b) * OPACITY);
 
                 *data = (a << 24) | (r << 16) | (g << 8) | b;
             }

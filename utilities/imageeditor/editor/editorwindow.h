@@ -171,7 +171,6 @@ protected slots:
     void slotToggleFullScreen();
     void slotEscapePressed();
 
-    void slotToggleAutoZoom();
     void slotSelected(bool);
 
     void slotLoadingProgress(const QString& filePath, float progress);
@@ -206,8 +205,10 @@ private slots:
     void slotToggleSlideShow();
     void slotZoomSelected();
     void slotZoomTextChanged(const QString &);
-    void slotZoomChanged(float zoom);
+    void slotZoomChanged(double zoom);
     void slotSelectionChanged(const QRect& sel);
+    void slotToggleFitToWindow();
+    void slotFitToSelect();
 
 private:
 
