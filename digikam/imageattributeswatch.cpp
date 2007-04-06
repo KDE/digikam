@@ -64,7 +64,7 @@ void ImageAttributesWatch::cleanUp()
 
 void ImageAttributesWatch::shutDown()
 {
-    ImageAttributesWatch::shutDown();
+    DatabaseAttributesWatch::shutDown();
     if (m_instance)
         m_instance->disconnect(0, 0, 0);
 }
