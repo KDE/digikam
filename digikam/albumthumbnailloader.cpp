@@ -18,6 +18,10 @@
  *
  * ============================================================ */
 
+// C includes
+
+#include <math.h>
+
 // Qt includes
 
 #include <qmap.h>
@@ -124,68 +128,81 @@ AlbumThumbnailLoader::~AlbumThumbnailLoader()
     m_instance = 0;
 }
 
-QPixmap AlbumThumbnailLoader::getStandardTagIcon(int size)
+QPixmap AlbumThumbnailLoader::getStandardTagIcon(RelativeSize relativeSize)
 {
-    if(size==0)
-        size = d->iconSize;
-    return loadIcon("tag", size);
+    return loadIcon("tag", computeIconSize(relativeSize));
 }
 
-QPixmap AlbumThumbnailLoader::getStandardTagRootIcon(int size)
+QPixmap AlbumThumbnailLoader::getStandardTagRootIcon(RelativeSize relativeSize)
 {
-    if(size==0)
-        size = d->iconSize;
-    return loadIcon("tag-folder", size);
+    return loadIcon("tag-folder", computeIconSize(relativeSize));
 }
 
-QPixmap AlbumThumbnailLoader::getStandardTagIcon(TAlbum *album, int size)
+QPixmap AlbumThumbnailLoader::getStandardTagIcon(TAlbum *album, RelativeSize relativeSize)
 {
-    if(size==0)
-        size = d->iconSize;
     if (album->isRoot())
-        return getStandardTagRootIcon((size > d->minBlendSize) ? size-8 : size);
+        return getStandardTagRootIcon(relativeSize);
     else
-        return getStandardTagIcon((size > d->minBlendSize) ? size-8 : size);
+        return getStandardTagIcon(relativeSize);
 }
 
-QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(int size)
+QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(RelativeSize relativeSize)
 {
-    if(size==0)
-        size = d->iconSize;
-    return loadIcon("folder", size);
+    return loadIcon("folder", computeIconSize(relativeSize));
 }
 
-QPixmap AlbumThumbnailLoader::getStandardAlbumRootIcon(int size)
+QPixmap AlbumThumbnailLoader::getStandardAlbumRootIcon(RelativeSize relativeSize)
 {
-    if(size==0)
-        size = d->iconSize;
-    return loadIcon("folder_image", size);
+    return loadIcon("folder_image", computeIconSize(relativeSize));
 }
 
-QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(PAlbum *album, int size)
+QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(PAlbum *album, RelativeSize relativeSize)
 {
-    if(size==0)
-        size = d->iconSize;
     if (album->isRoot())
-        return getStandardAlbumRootIcon(size);
+        return getStandardAlbumRootIcon(relativeSize);
     else
-        return getStandardAlbumIcon(size);
+        return getStandardAlbumIcon(relativeSize);
+}
+
+int AlbumThumbnailLoader::computeIconSize(RelativeSize relativeSize)
+{
+    if (relativeSize == SmallerSize)
+    {
+        // when size was 32 smaller was 20. Scale.
+        return lround(20.0 / 32.0 * (double)d->iconSize);
+    }
+    return d->iconSize;
+}
+
+QRect AlbumThumbnailLoader::computeBlendRect(int iconSize)
+{
+    // when drawing a 20x20 thumbnail in a 32x32 icon, starting point was (6,9). Scale.
+    double largerSize = iconSize;
+    double x = 6.0 / 32.0 * largerSize;
+    double y = 9.0 / 32.0 * largerSize;
+    double size = 20.0 / 32.0 * largerSize;
+    return QRect(lround(x), lround(y), lround(size), lround(size));
 }
 
 QPixmap AlbumThumbnailLoader::loadIcon(const QString &name, int size)
 {
-    if(size==0)
-        size = d->iconSize;
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
     return iconLoader->loadIcon(name, KIcon::NoGroup,
                                 size, KIcon::DefaultState,
                                 0, true);
 }
 
-bool AlbumThumbnailLoader::getTagThumbnail(TAlbum *album, QPixmap &icon, int size)
+bool AlbumThumbnailLoader::getTagThumbnail(TAlbum *album, QPixmap &icon)
 {
-    if(size==0)
-        size = d->iconSize;
+    int size = computeIconSize(SmallerSize);
+    /*
+    if (size >= d->minBlendSize)
+    {
+        QRect rect = computeBlendRect(size);
+        size = rect.width();
+    }
+    */
+
     if(!album->icon().isEmpty())
     {
         if(album->icon().startsWith("/"))
@@ -198,7 +215,7 @@ bool AlbumThumbnailLoader::getTagThumbnail(TAlbum *album, QPixmap &icon, int siz
         }
         else
         {
-            icon = loadIcon(album->icon(), (size >= d->minBlendSize) ? size-12 : size);
+            icon = loadIcon(album->icon(), size);
             return false;
         }
     }
@@ -391,13 +408,15 @@ QPixmap AlbumThumbnailLoader::createTagThumbnail(const QPixmap &albumThumbnail)
     // tag thumbnails are cropped
 
     QPixmap tagThumbnail;
+    int thumbSize = QMAX(albumThumbnail.width(), albumThumbnail.height());
 
-    if(!albumThumbnail.isNull())
+    if(!albumThumbnail.isNull() && thumbSize >= d->minBlendSize)
     {
+        QRect rect = computeBlendRect(thumbSize);
         int w1 = albumThumbnail.width();
-        int w2 = d->iconSize;
+        int w2 = rect.width();
         int h1 = albumThumbnail.height();
-        int h2 = d->iconSize;
+        int h2 = rect.height();
         tagThumbnail.resize(w2,h2);
         bitBlt(&tagThumbnail, 0, 0, &albumThumbnail, (w1-w2)/2, (h1-h2)/2, w2, h2);
     }
@@ -431,12 +450,15 @@ void AlbumThumbnailLoader::slotThumbnailLost(const KURL &url)
 
 QPixmap AlbumThumbnailLoader::blendIcons(QPixmap dstIcon, const QPixmap &tagIcon)
 {
-    if(d->iconSize >= d->minBlendSize)
+    int dstIconSize = QMAX(dstIcon.width(), dstIcon.height());
+
+    if (dstIconSize >= d->minBlendSize)
     {
         if(!tagIcon.isNull())
         {
+            QRect rect = computeBlendRect(dstIconSize);
             QPainter p(&dstIcon);
-            p.drawPixmap(6, 9, tagIcon, 0, 0, -1, -1);
+            p.drawPixmap(rect.x(), rect.y(), tagIcon, 0, 0, rect.width(), rect.height());
             p.end();
         }
         return dstIcon;
