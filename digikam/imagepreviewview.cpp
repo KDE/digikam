@@ -23,8 +23,6 @@
 #include <qcursor.h>
 #include <qstring.h>
 #include <qvaluevector.h>
-#include <qpainter.h>
-#include <qpixmap.h>
 
 // KDE includes.
 
@@ -53,8 +51,6 @@
 #include "metadatahub.h"
 #include "tagspopupmenu.h"
 #include "ratingpopupmenu.h"
-#include "themeengine.h"
-#include "thumbnailsize.h"
 #include "imagepreviewview.h"
 #include "imagepreviewview.moc"
 
@@ -67,44 +63,40 @@ public:
 
     ImagePreviewViewPriv()
     {
-        hasPrev            = false;
-        hasNext            = false;
-        imagePreviewWidget = 0;
-        imageInfo          = 0;
+        hasPrev   = false;
+        hasNext   = false;
+        imageInfo = 0;
     }
 
-    bool                hasPrev;
-    bool                hasNext;
+    bool       hasPrev;
+    bool       hasNext;
 
-    ImageInfo          *imageInfo;
-
-    ImagePreviewWidget *imagePreviewWidget;
+    ImageInfo *imageInfo;
 };
     
 ImagePreviewView::ImagePreviewView(QWidget *parent)
-                : QVBox(parent)
+                : ImagePreviewWidget(parent)
 {
     d = new ImagePreviewViewPriv;
-    d->imagePreviewWidget = new ImagePreviewWidget(this);
 
     // ----------------------------------------------------------------
 
-    connect(d->imagePreviewWidget, SIGNAL(signalPreviewComplete()),
+    connect(this, SIGNAL(signalPreviewComplete()),
             this, SIGNAL(signalPreviewLoaded()));          
     
-    connect(d->imagePreviewWidget, SIGNAL(signalPreviewFailed()),
+    connect(this, SIGNAL(signalPreviewFailed()),
             this, SIGNAL(signalPreviewLoaded()));    
 
-    connect(d->imagePreviewWidget, SIGNAL(signalShowNextImage()),
+    connect(this, SIGNAL(signalShowNextImage()),
             this, SIGNAL(signalNextItem()));
 
-    connect(d->imagePreviewWidget, SIGNAL(signalShowPrevImage()),
+    connect(this, SIGNAL(signalShowPrevImage()),
             this, SIGNAL(signalPrevItem()));
 
-    connect(d->imagePreviewWidget, SIGNAL(signalRightButtonClicked()),
+    connect(this, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
 
-    connect(d->imagePreviewWidget, SIGNAL(signalLeftButtonClicked()),
+    connect(this, SIGNAL(signalLeftButtonClicked()),
             this, SIGNAL(signalBack2Album()));
 }
 
@@ -120,22 +112,17 @@ void ImagePreviewView::setImageInfo(ImageInfo* info, ImageInfo *previous, ImageI
     d->hasNext   = next;
 
     if (d->imageInfo)
-        d->imagePreviewWidget->setImagePath(info->filePath());
+        setImagePath(info->filePath());
     else
-        d->imagePreviewWidget->setImagePath();
+        setImagePath();
 
-    d->imagePreviewWidget->setPreviousNextPaths(previous ? previous->filePath() : QString(),
-                                                next     ? next->filePath()     : QString());
+    setPreviousNextPaths(previous ? previous->filePath() : QString(),
+                         next     ? next->filePath()     : QString());
 }
 
 ImageInfo* ImagePreviewView::getImageInfo()
 {
     return d->imageInfo;
-}
-
-void ImagePreviewView::reload()
-{
-    d->imagePreviewWidget->reload();
 }
 
 void ImagePreviewView::slotContextMenu()

@@ -21,10 +21,6 @@
 #ifndef IMAGEPREVIEWVIEW_H
 #define IMAGEPREVIEWVIEW_H
 
-// Qt includes.
-
-#include <qvbox.h>
-
 // Local includes
 
 #include "imagepreviewwidget.h"
@@ -35,8 +31,9 @@ namespace Digikam
 
 class ImagePreviewViewPriv;
 
-class DIGIKAM_EXPORT ImagePreviewView : public QVBox
+class DIGIKAM_EXPORT ImagePreviewView : public ImagePreviewWidget
 {
+
 Q_OBJECT
 
 public:
@@ -46,8 +43,6 @@ public:
 
     void setImageInfo(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
     ImageInfo* getImageInfo();
-
-    void reload();
 
 signals:
 
