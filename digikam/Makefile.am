@@ -62,6 +62,7 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                digikamview.cpp \
 	                dio.cpp \
 	                dragobjects.cpp \
+	                fastscale.cpp \
 	                firstrun.cpp \
 	                folderitem.cpp \
 	                folderview.cpp \

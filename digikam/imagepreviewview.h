@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier 
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  * 
@@ -61,14 +61,10 @@ signals:
 
 private slots:
 
-    void slotThemeChanged();
+    void slotContextMenu();
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
     void slotAssignRating(int rating);
-
-private:
-
-    void mousePressEvent(QMouseEvent* e);
 
 private:
 
