@@ -87,7 +87,7 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
     {
         KURL url;
         url.setPath(d->parameters.databaseName);
-        d->albumRoot = url.directory(false);
+        d->albumRoot = url.directory(true);
     }
 }
 
