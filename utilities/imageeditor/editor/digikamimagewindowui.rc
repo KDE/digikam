@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="14" name="digikamimagewindow" >
+<gui version="15" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -59,7 +59,7 @@
         <Action name="editorwindow_resize" /> 
     </Menu>
 
-    <Menu name="Decorate" ><text>&amp;Decoration</text>
+    <Menu name="Decorate" ><text>&amp;Decorate</text>
     </Menu>
 
     <Menu name="Filters" ><text>F&amp;ilters</text>
