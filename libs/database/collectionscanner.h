@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <qstring.h>
+#include <qobject.h>
 
 // Local includes
 
@@ -35,8 +36,9 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT CollectionScanner
+class DIGIKAM_EXPORT CollectionScanner : public QObject
 {
+    Q_OBJECT
 public:
 
     // Scanning from ioslave
@@ -45,6 +47,21 @@ public:
     void removeInvalidAlbums(const QString &albumRoot);
 
     // Scanning from Scanlib
+    void scanAlbums();
+    void scanAlbumScanLib(const QString& filePath);
+    void scanAlbumScanLib(const QString &albumRoot, const QString& album);
+
+    void scanForStaleAlbums();
+    void scanForStaleAlbums(const QString &albumRoot);
+    QStringList formattedListOfStaleAlbums();
+    void removeStaleAlbums();
+
+    QStringList formattedListOfStaleFiles();
+    void removeStaleFiles();
+
+    void updateItemsWithoutDate();
+
+    void markDatabaseAsScanned();
 
     // Tools
     static void addItem(int albumID, const QString& albumRoot, const QString &album, const QString &name);
@@ -54,6 +71,21 @@ public:
     static void updateItemDate(Digikam::DatabaseAccess &access, int albumID,
                                const QString& albumRoot, const QString &album, const QString &fileName);
 
+signals:
+
+    void totalFilesToScan(int count);
+    void startScanningAlbum(const QString &albumRoot, const QString &album);
+    void finishedScanningAlbum(const QString &albumRoot, const QString &album, int filesScanned);
+
+    void totalFilesToUpdate(int count);
+    void scanningFile(const QString &filePath);
+
+protected:
+
+    int countItemsInFolder(const QString& directory);
+
+    QValueList< QPair<QString,int> >  m_filesToBeDeleted;
+    QMap<QString, int> m_foldersToBeDeleted;
 
 };
 

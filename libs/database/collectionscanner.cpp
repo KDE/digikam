@@ -1,10 +1,12 @@
 /* ============================================================
  * Authors: Marcel Wiesweg
- *          Renchi RajuMarcel Wiesweg
+ *          Renchi Raju
+ *          Tom Albers <tomalbers@kde.nl>
  * Date   : 2007-03-21
  * Description : database interface.
  *
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright 2005-2006 by Tom Albers
  * Copyright 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -41,11 +43,15 @@
 #include "albumdb.h"
 #include "collectionscanner.h"
 #include "databaseaccess.h"
+#include "databasetransaction.h"
 #include "ddebug.h"
 #include "dmetadata.h"
 
 namespace Digikam
 {
+
+
+// ------------------------- Ioslave scanning code ----------------------------------
 
 void CollectionScanner::scanAlbum(const QString &albumRoot, const QString &album)
 {
@@ -210,6 +216,260 @@ void CollectionScanner::removeInvalidAlbums(const QString &albumRoot)
 
     access.db()->execSql("COMMIT TRANSACTION");
 }
+
+
+// ------------------- CollectionScanner code -------------------------
+
+void CollectionScanner::scanForStaleAlbums()
+{
+    QString albumRoot = DatabaseAccess::albumRoot();
+    scanForStaleAlbums(albumRoot);
+}
+
+void CollectionScanner::scanForStaleAlbums(const QString &albumRoot)
+{
+    AlbumInfo::List aList = DatabaseAccess().db()->scanAlbums();
+
+    for (AlbumInfo::List::iterator it = aList.begin(); it != aList.end(); ++it)
+    {
+        AlbumInfo info = *it;
+        info.url = QDir::cleanDirPath(info.url);
+        QFileInfo fi(albumRoot + info.url);
+        if (!fi.exists() || !fi.isDir())
+        {
+            m_foldersToBeDeleted[info.url] = info.id;
+        }
+    }
+}
+
+QStringList CollectionScanner::formattedListOfStaleAlbums()
+{
+    return m_foldersToBeDeleted.keys();
+}
+
+void CollectionScanner::removeStaleAlbums()
+{
+    DatabaseAccess access;
+    for (QMap<QString, int>::const_iterator it = m_foldersToBeDeleted.begin() ; it != m_foldersToBeDeleted.end(); ++it)
+    {
+        DDebug() << "Removing Album: " << it.key() << endl;
+        access.db()->deleteAlbum( it.data() );
+    }
+}
+
+void CollectionScanner::scanAlbums()
+{
+    QString albumRoot = DatabaseAccess::albumRoot();
+    emit totalFilesToScan(countItemsInFolder( albumRoot ) );
+
+    QDir dir(albumRoot);
+    QStringList fileList(dir.entryList(QDir::Dirs));
+
+    {
+        DatabaseTransaction transaction;
+        for (QStringList::iterator it = fileList.begin(); it != fileList.end(); ++it)
+        {
+            if ((*it) == "." || (*it) == "..")
+                continue;
+
+            scanAlbumScanLib(albumRoot, '/' + (*it));
+        }
+    }
+}
+
+void CollectionScanner::scanAlbumScanLib(const QString& filePath)
+{
+    QString albumRoot = DatabaseAccess::albumRoot();
+    QString album = filePath;
+    album = QDir::cleanDirPath(album.remove(albumRoot));
+    scanAlbumScanLib(albumRoot, album);
+}
+
+void CollectionScanner::scanAlbumScanLib(const QString &albumRoot, const QString& album)
+{
+    QDir dir( albumRoot + album );
+    if ( !dir.exists() or !dir.isReadable() )
+    {
+        DWarning() << "Folder does not exist or is not readable: "
+                    << dir.path() << endl;
+        return;
+    }
+
+    emit startScanningAlbum(albumRoot, album);
+
+    int albumID = DatabaseAccess().db()->getAlbumForPath(albumRoot, album, true);
+
+    if (albumID <= 0)
+    {
+        DWarning() << "Album ID == -1: " << album << endl;
+    }
+
+    QStringList filesInAlbum = DatabaseAccess().db()->getItemNamesInAlbum( albumID );
+
+    QMap<QString, bool> filesFoundInDB;
+
+    for (QStringList::iterator it = filesInAlbum.begin();
+         it != filesInAlbum.end(); ++it)
+    {
+        filesFoundInDB.insert(*it, true);
+    }
+
+    const QFileInfoList *list = dir.entryInfoList();
+    if (!list)
+    {
+        emit finishedScanningAlbum(albumRoot, album, 0);
+        return;
+    }
+
+    QFileInfoListIterator it( *list );
+    QFileInfo *fi;
+
+    while ( (fi = it.current()) != 0 )
+    {
+        if ( fi->isFile())
+        {
+            if (filesFoundInDB.contains(fi->fileName()) )
+            {
+                filesFoundInDB.erase(fi->fileName());
+            }
+            else
+            {
+                DDebug() << "Adding item " << fi->fileName() << endl;
+                addItem(albumID, albumRoot, album, fi->fileName());
+            }
+        }
+        else if ( fi->isDir() && fi->fileName() != "." && fi->fileName() != "..")
+        {
+            scanAlbumScanLib( fi->filePath() );
+        }
+
+        ++it;
+    }
+
+    // Removing items from the db which we did not see on disk.
+    if (!filesFoundInDB.isEmpty())
+    {
+        QMapIterator<QString,bool> it;
+        for (it = filesFoundInDB.begin(); it != filesFoundInDB.end(); ++it)
+        {
+            if (m_filesToBeDeleted.findIndex(qMakePair(it.key(),albumID)) == -1)
+            {
+                m_filesToBeDeleted.append(qMakePair(it.key(),albumID));
+            }
+        }
+    }
+
+    emit finishedScanningAlbum(albumRoot, album, list->count());
+}
+
+void CollectionScanner::updateItemsWithoutDate()
+{
+    QStringList urls = DatabaseAccess().db()->getAllItemURLsWithoutDate();
+
+    emit totalFilesToScan(urls.count());
+
+    QString albumRoot = DatabaseAccess::albumRoot();
+
+    {
+        DatabaseTransaction transaction;
+        for (QStringList::iterator it = urls.begin(); it != urls.end(); ++it)
+        {
+            emit scanningFile(*it);
+
+            QFileInfo fi(*it);
+            QString albumURL = fi.dirPath();
+            albumURL = QDir::cleanDirPath(albumURL.remove(albumRoot));
+
+            int albumID = DatabaseAccess().db()->getAlbumForPath(albumRoot, albumURL);
+
+            if (albumID <= 0)
+            {
+                DWarning() << "Album ID == -1: " << albumURL << endl;
+            }
+
+            if (fi.exists())
+            {
+                CollectionScanner::updateItemDate(albumID, albumRoot, albumURL, fi.fileName());
+            }
+            else
+            {
+                QPair<QString, int> fileID = qMakePair(fi.fileName(), albumID);
+
+                if (m_filesToBeDeleted.findIndex(fileID) == -1)
+                {
+                    m_filesToBeDeleted.append(fileID);
+                }
+            }
+        }
+    }
+}
+
+QStringList CollectionScanner::formattedListOfStaleFiles()
+{
+    QStringList listToBeDeleted;
+
+    DatabaseAccess access;
+    for (QValueList< QPair<QString,int> >::iterator it = m_filesToBeDeleted.begin();
+        it != m_filesToBeDeleted.end(); ++it)
+    {
+        QString location = " (" + access.db()->getAlbumURL((*it).second) + ')';
+
+        listToBeDeleted.append((*it).first + location);
+    }
+
+    return listToBeDeleted;
+}
+
+void CollectionScanner::removeStaleFiles()
+{
+    DatabaseAccess access;
+    DatabaseTransaction transaction(&access);
+    for (QValueList< QPair<QString,int> >::iterator it = m_filesToBeDeleted.begin();
+         it != m_filesToBeDeleted.end(); ++it)
+    {
+        DDebug() << "Removing: " << (*it).first << " in "
+                << (*it).second << endl;
+        access.db()->deleteItem( (*it).second, (*it).first );
+    }
+}
+
+int CollectionScanner::countItemsInFolder(const QString& directory)
+{
+    int items = 0;
+
+    QDir dir( directory );
+    if ( !dir.exists() or !dir.isReadable() )
+        return 0;
+
+    const QFileInfoList *list = dir.entryInfoList();
+    QFileInfoListIterator it( *list );
+    QFileInfo *fi;
+
+    items += list->count();
+
+    while ( (fi = it.current()) != 0 )
+    {
+        if ( fi->isDir() &&
+             fi->fileName() != "." &&
+             fi->fileName() != "..")
+        {
+            items += countItemsInFolder( fi->filePath() );
+        }
+
+        ++it;
+    }
+
+    return items;
+}
+
+void CollectionScanner::markDatabaseAsScanned()
+{
+    DatabaseAccess access;
+    access.db()->setSetting("Scanned", QDateTime::currentDateTime().toString(Qt::ISODate));
+}
+
+
+// ------------------- Tools ------------------------
 
 void CollectionScanner::addItem(int albumID, const QString& albumRoot, const QString &album, const QString &fileName)
 {
