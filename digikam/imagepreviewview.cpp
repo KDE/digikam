@@ -170,8 +170,6 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
     if (description.filePath != d->path)
         return;
 
-    setImage(preview);
-
     if (preview.isNull())
     {
         QPixmap pix(visibleWidth(), visibleHeight());
@@ -189,7 +187,10 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
         emit signalPreviewFailed();
     }
     else
+    {
+        setImage(preview);
         emit signalPreviewComplete();
+    }
 
     updateImage();
 
