@@ -129,10 +129,14 @@ public:
 
     /// Album URL
 
-    /** Returns the album root of the file or album referenced by this URL
-     *  In the example above, this is "/media/fotos"
+    /** Returns the album root URL of the file or album referenced by this URL
+     *  In the example above, this is "file://media/fotos"
      */
     KURL albumRoot() const;
+    /** Returns the album root path of the file or album referenced by this URL
+     *  In the example above, this is "/media/fotos"
+     */
+    QString albumRootPath() const;
     /** Returns the album: This is the directory hierarchy below the album root.
      *  In the example above, the album is "/Summer 2007"
      */

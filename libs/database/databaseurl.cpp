@@ -188,6 +188,11 @@ KURL DatabaseUrl::albumRoot() const
     return KURL();
 }
 
+QString DatabaseUrl::albumRootPath() const
+{
+    return queryItem("albumRoot");
+}
+
 QString DatabaseUrl::album() const
 {
     // strip the trailing slash from result
