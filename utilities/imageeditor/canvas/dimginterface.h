@@ -51,8 +51,10 @@ class DIGIKAM_EXPORT DImgInterface : public QObject
 
 public:
 
-    static DImgInterface* instance();
+    static DImgInterface* defaultInterface();
+    static void setDefaultInterface(DImgInterface *defaultInterface);
 
+    DImgInterface();
     ~DImgInterface();
 
     void   load(const QString& filename, IOFileSettingsContainer *iofileSettings, QWidget *parent=0);
@@ -179,11 +181,9 @@ private:
     void   exifRotate(const QString& filename);
     void   resetValues();
 
-    DImgInterface();
-
 private:
 
-    static DImgInterface *m_instance;
+    static DImgInterface *m_defaultInterface;
     
     DImgInterfacePrivate *d;
 };

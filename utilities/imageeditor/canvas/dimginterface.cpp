@@ -99,7 +99,7 @@ public:
     bool                       rotatedOrFlipped;
     bool                       exifOrient;
     bool                       changedBCG;
-    
+
     int                        width;
     int                        height;
     int                        origWidth;
@@ -108,13 +108,13 @@ public:
     int                        selY;
     int                        selW;
     int                        selH;
-    
+
     float                      gamma;
     float                      brightness;
     float                      contrast;
 
     double                     zoom;
-    
+
     // Used by ICC color profile dialog.
     QWidget                   *parent;
 
@@ -124,7 +124,7 @@ public:
     DImg                       image;
 
     UndoManager               *undoMan;
-    
+
     BCGModifier                cmod;
 
     ICCSettingsContainer      *cmSettings;
@@ -138,23 +138,21 @@ public:
     IccTransform               monitorICCtrans;
 };
 
-DImgInterface* DImgInterface::instance()
-{
-    if (!m_instance)
-    {
-        new DImgInterface();
-    }
+DImgInterface* DImgInterface::m_defaultInterface = 0;
 
-    return m_instance;
+DImgInterface* DImgInterface::defaultInterface()
+{
+    return m_defaultInterface;
 }
 
-DImgInterface* DImgInterface::m_instance = 0;
+void DImgInterface::setDefaultInterface(DImgInterface *defaultInterface)
+{
+    m_defaultInterface = defaultInterface;
+}
 
 DImgInterface::DImgInterface()
              : QObject()
 {
-    m_instance = this;
-    
     d = new DImgInterfacePrivate;
 
     d->undoMan = new UndoManager(this);
@@ -162,13 +160,13 @@ DImgInterface::DImgInterface()
 
     connect( d->thread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg&)),
              this, SLOT(slotImageLoaded(const LoadingDescription &, const DImg&)) );
-             
+
     connect( d->thread, SIGNAL(signalImageSaved(const QString&, bool)),
              this, SLOT(slotImageSaved(const QString&, bool)) );
 
     connect( d->thread, SIGNAL(signalLoadingProgress(const LoadingDescription &, float)),
              this, SLOT(slotLoadingProgress(const LoadingDescription &, float)) );
-             
+
     connect( d->thread, SIGNAL(signalSavingProgress(const QString&, float)),
              this, SLOT(slotSavingProgress(const QString&, float)) );
 }
@@ -178,7 +176,8 @@ DImgInterface::~DImgInterface()
     delete d->undoMan;
     delete d->thread;
     delete d;
-    m_instance = 0;
+    if (m_defaultInterface == this)
+        m_defaultInterface = 0;
 }
 
 void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofileSettings,

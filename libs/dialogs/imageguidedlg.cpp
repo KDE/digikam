@@ -134,7 +134,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
                            i18n("&Load..."))
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    setCaption(DImgInterface::instance()->getImageFileName() + QString(" - ") + title);
+    setCaption(DImgInterface::defaultInterface()->getImageFileName() + QString(" - ") + title);
     
     d = new ImageGuideDlgPriv;
     d->parent        = parent;
