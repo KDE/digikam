@@ -20,9 +20,11 @@
 
 // Qt includes.
 
+#include <qpainter.h>
 #include <qcursor.h>
 #include <qstring.h>
 #include <qvaluevector.h>
+#include <qfileinfo.h>
 
 // KDE includes.
 
@@ -33,6 +35,7 @@
 #include <ktrader.h>
 #include <kmimetype.h>
 #include <kiconloader.h>
+#include <kcursor.h>
 
 // LibKipi includes.
 
@@ -49,8 +52,10 @@
 #include "dmetadata.h"
 #include "dpopupmenu.h"
 #include "metadatahub.h"
+#include "previewloadthread.h"
 #include "tagspopupmenu.h"
 #include "ratingpopupmenu.h"
+#include "themeengine.h"
 #include "imagepreviewview.h"
 #include "imagepreviewview.moc"
 
@@ -63,15 +68,24 @@ public:
 
     ImagePreviewViewPriv()
     {
-        hasPrev   = false;
-        hasNext   = false;
-        imageInfo = 0;
+        previewThread        = 0;
+        previewPreloadThread = 0;
+        hasPrev              = false;
+        hasNext              = false;
+        imageInfo            = 0;
     }
 
-    bool       hasPrev;
-    bool       hasNext;
+    bool               hasPrev;
+    bool               hasNext;
 
-    ImageInfo *imageInfo;
+    QString            path;
+    QString            nextPath;
+    QString            previousPath;
+
+    ImageInfo         *imageInfo;
+
+    PreviewLoadThread *previewThread;
+    PreviewLoadThread *previewPreloadThread;
 };
     
 ImagePreviewView::ImagePreviewView(QWidget *parent)
@@ -102,7 +116,105 @@ ImagePreviewView::ImagePreviewView(QWidget *parent)
 
 ImagePreviewView::~ImagePreviewView()
 {
+    delete d->previewThread;
+    delete d->previewPreloadThread;
     delete d;
+}
+
+void ImagePreviewView::reload()
+{
+    // cache is cleaned from AlbumIconView::refreshItems
+    setImagePath(d->path);
+}
+
+void ImagePreviewView::setImagePath(const QString& path)
+{
+    setCursor( KCursor::waitCursor() );
+    d->path = path;
+
+    d->nextPath     = QString();
+    d->previousPath = QString();
+
+    if (d->path.isEmpty())
+    {
+        unsetCursor();
+        return;
+    }
+
+    if (!d->previewThread)
+    {
+        d->previewThread = new PreviewLoadThread();
+        connect(d->previewThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
+                this, SLOT(slotGotImagePreview(const LoadingDescription &, const QImage&)));
+    }
+    if (!d->previewPreloadThread)
+    {
+        d->previewPreloadThread = new PreviewLoadThread();
+        connect(d->previewPreloadThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
+                this, SLOT(slotNextPreload()));
+    }
+
+    d->previewThread->load(LoadingDescription(path, 1024, AlbumSettings::instance()->getExifRotate()));
+
+    emit signalPreviewStarted();
+}
+
+void ImagePreviewView::setPreviousNextPaths(const QString& previous, const QString &next)
+{
+    d->nextPath     = next;
+    d->previousPath = previous;
+}
+
+void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
+{
+    if (description.filePath != d->path)
+        return;
+
+    setImage(preview);
+
+    if (preview.isNull())
+    {
+        QPixmap pix(visibleWidth(), visibleHeight());
+        pix.fill(ThemeEngine::instance()->baseColor());
+        QPainter p(&pix);
+        QFileInfo info(d->path);
+        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
+        p.drawText(0, 0, pix.width(), pix.height(),
+                   Qt::AlignCenter|Qt::WordBreak, 
+                   i18n("Cannot display preview for\n\"%1\"")
+                   .arg(info.fileName()));
+        p.end();
+        setImage(pix.convertToImage());
+
+        emit signalPreviewFailed();
+    }
+    else
+        emit signalPreviewComplete();
+
+    updateImage();
+
+    unsetCursor();
+    slotNextPreload();
+}
+
+void ImagePreviewView::slotNextPreload()
+{
+    QString loadPath;
+    if (!d->nextPath.isNull())
+    {
+        loadPath    = d->nextPath;
+        d->nextPath = QString();
+    }
+    else if (!d->previousPath.isNull())
+    {
+        loadPath        = d->previousPath;
+        d->previousPath = QString();
+    }
+    else
+        return;
+
+    d->previewPreloadThread->load(LoadingDescription(loadPath, 1024,
+                                  AlbumSettings::instance()->getExifRotate()));
 }
 
 void ImagePreviewView::setImageInfo(ImageInfo* info, ImageInfo *previous, ImageInfo *next)

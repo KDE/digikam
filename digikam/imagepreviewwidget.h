@@ -24,6 +24,7 @@
 // Qt includes.
 
 #include <qstring.h>
+#include <qimage.h>
 
 // Local includes
 
@@ -32,8 +33,6 @@
 #include "loadingdescription.h"
 
 class QPixmap;
-
-class KURL;
 
 namespace Digikam
 {
@@ -49,10 +48,7 @@ public:
     ImagePreviewWidget(QWidget *parent=0);
     ~ImagePreviewWidget();
 
-    void setImagePath(const QString& path=QString());
-    void setPreviousNextPaths(const QString& previous, const QString &next);
-    void reload();
-
+    void setImage(const QImage& image);
     void setZoomFactor(double z);
     bool fitToWindow();
     void toggleFitToWindow();
@@ -76,6 +72,7 @@ public slots:
 
 protected:
     
+    void updateImage();
     void resizeEvent(QResizeEvent* e);
     void viewportPaintEvent(QPaintEvent *e);
     void contentsMousePressEvent(QMouseEvent *e);
@@ -85,8 +82,6 @@ protected:
    
 private slots:
 
-    void slotGotImagePreview(const LoadingDescription &loadingDescription, const QImage &image);
-    void slotNextPreload();
     void slotThemeChanged();
 
 private:

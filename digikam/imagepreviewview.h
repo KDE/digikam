@@ -21,6 +21,11 @@
 #ifndef IMAGEPREVIEWVIEW_H
 #define IMAGEPREVIEWVIEW_H
 
+// Qt includes.
+
+#include <qstring.h>
+#include <qimage.h>
+
 // Local includes
 
 #include "imagepreviewwidget.h"
@@ -29,6 +34,8 @@
 namespace Digikam
 {
 
+class LoadingDescription;
+class ImageInfo;
 class ImagePreviewViewPriv;
 
 class DIGIKAM_EXPORT ImagePreviewView : public ImagePreviewWidget
@@ -44,6 +51,10 @@ public:
     void setImageInfo(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
     ImageInfo* getImageInfo();
 
+    void reload();
+    void setImagePath(const QString& path=QString());
+    void setPreviousNextPaths(const QString& previous, const QString &next);
+
 signals:
 
     void signalNextItem();
@@ -56,6 +67,8 @@ signals:
 
 private slots:
 
+    void slotGotImagePreview(const LoadingDescription &loadingDescription, const QImage &image);
+    void slotNextPreload();
     void slotContextMenu();
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);

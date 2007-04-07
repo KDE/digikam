@@ -27,7 +27,6 @@
 #include <qcache.h>
 #include <qpainter.h>
 #include <qimage.h>
-#include <qfileinfo.h>
 #include <qpixmap.h>
 #include <qrect.h>
 #include <qtimer.h>
@@ -43,7 +42,6 @@
 
 #include "ddebug.h"
 #include "fastscale.h"
-#include "previewloadthread.h"
 #include "themeengine.h"
 #include "albumsettings.h"
 #include "imagepreviewwidget.h"
@@ -59,13 +57,10 @@ public:
     ImagePreviewWidgetPriv() :
         tileSize(128), minZoom(0.1), maxZoom(10.0), zoomMultiplier(1.2) 
     {
-        previewThread        = 0;
-        previewPreloadThread = 0;
         pressedMoving        = false;
         midButtonPressed     = false;
         midButtonX           = 0;
         midButtonY           = 0;
-        parent               = 0;
         autoZoom             = false;
         fullScreen           = false;
         zoom                 = 1.0;
@@ -101,23 +96,13 @@ public:
 
     QColor               bgColor;
 
-    QWidget             *parent;
-
-    QString              path;
-    QString              nextPath;
-    QString              previousPath;
-
     QImage               preview;
-
-    PreviewLoadThread   *previewThread;
-    PreviewLoadThread   *previewPreloadThread;
 };
 
 ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
                   : QScrollView(parent)
 {
     d = new ImagePreviewWidgetPriv;
-    d->parent = parent;
     d->bgColor.setRgb(0, 0, 0);
     
     viewport()->setBackgroundMode(Qt::NoBackground);
@@ -135,111 +120,13 @@ ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
 
 ImagePreviewWidget::~ImagePreviewWidget()
 {
-    delete d->previewThread;
-    delete d->previewPreloadThread;
     delete d->tileTmpPix;
     delete d;
 }
 
-void ImagePreviewWidget::reload()
-{
-    // cache is cleaned from AlbumIconView::refreshItems
-    setImagePath(d->path);
-}
-
-void ImagePreviewWidget::setImagePath(const QString& path)
-{
-    setCursor( KCursor::waitCursor() );
-    d->path = path;
-
-    d->nextPath     = QString();
-    d->previousPath = QString();
-
-    if (d->path.isEmpty())
-    {
-        unsetCursor();
-        return;
-    }
-
-    if (!d->previewThread)
-    {
-        d->previewThread = new PreviewLoadThread();
-        connect(d->previewThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
-                this, SLOT(slotGotImagePreview(const LoadingDescription &, const QImage&)));
-    }
-    if (!d->previewPreloadThread)
-    {
-        d->previewPreloadThread = new PreviewLoadThread();
-        connect(d->previewPreloadThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
-                this, SLOT(slotNextPreload()));
-    }
-
-    d->previewThread->load(LoadingDescription(path, 1024, AlbumSettings::instance()->getExifRotate()));
-
-    emit signalPreviewStarted();
-}
-
-void ImagePreviewWidget::setPreviousNextPaths(const QString& previous, const QString &next)
-{
-    d->nextPath     = next;
-    d->previousPath = previous;
-}
-
-void ImagePreviewWidget::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
-{
-    if (description.filePath != d->path)
-        return;
-
-    d->preview = preview;
-
-    if (preview.isNull())
-    {
-        QPixmap pix(visibleWidth(), visibleHeight());
-        pix.fill(d->bgColor);
-        QPainter p(&pix);
-        QFileInfo info(d->path);
-        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
-        p.drawText(0, 0, pix.width(), pix.height(),
-                   Qt::AlignCenter|Qt::WordBreak, 
-                   i18n("Cannot display preview for\n\"%1\"")
-                   .arg(info.fileName()));
-        p.end();
-        d->preview = pix.convertToImage();
-
-        emit signalPreviewFailed();
-    }
-    else
-        emit signalPreviewComplete();
-
-    // We will adapt the zoom factor to content size.
-    updateAutoZoom();
-    updateContentsSize();
-
-    viewport()->setUpdatesEnabled(true);
-    viewport()->update();
-    unsetCursor();
-
-    slotNextPreload();
-}
-
-void ImagePreviewWidget::slotNextPreload()
-{
-    QString loadPath;
-    if (!d->nextPath.isNull())
-    {
-        loadPath = d->nextPath;
-        d->nextPath = QString();
-    }
-    else if (!d->previousPath.isNull())
-    {
-        loadPath = d->previousPath;
-        d->previousPath = QString();
-    }
-    else
-        return;
-
-    d->previewPreloadThread->load(LoadingDescription(loadPath, 1024,
-                                  AlbumSettings::instance()->getExifRotate()));
+void ImagePreviewWidget::setImage(const QImage& image)
+{   
+    d->preview = image;
 }
 
 void ImagePreviewWidget::slotThemeChanged()
@@ -560,6 +447,15 @@ void ImagePreviewWidget::toggleFitToWindow()
         d->zoom = 1.0;
 
     updateContentsSize();
+    viewport()->update();
+}
+
+void ImagePreviewWidget::updateImage()
+{
+    updateAutoZoom();
+    updateContentsSize();
+
+    viewport()->setUpdatesEnabled(true);
     viewport()->update();
 }
 
