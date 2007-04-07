@@ -137,6 +137,7 @@ ImagePreviewWidget::~ImagePreviewWidget()
 {
     delete d->previewThread;
     delete d->previewPreloadThread;
+    delete d->tileTmpPix;
     delete d;
 }
 
