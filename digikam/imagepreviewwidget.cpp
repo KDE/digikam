@@ -472,7 +472,7 @@ void ImagePreviewWidget::contentsWheelEvent(QWheelEvent *e)
 {
     e->accept();
 
-/*    if (e->state() == Qt::ShiftButton)
+    if (e->state() == Qt::ShiftButton)
     {
         if (e->delta() < 0)
             emit signalShowNextImage();
@@ -481,15 +481,15 @@ void ImagePreviewWidget::contentsWheelEvent(QWheelEvent *e)
         return;
     }
     else if (e->state() == Qt::ControlButton)
-    {*/
+    {
         if (e->delta() < 0)
             slotIncreaseZoom();
         else if (e->delta() > 0)
             slotDecreaseZoom();
         return;
-/*    }
+    }
 
-    QScrollView::contentsWheelEvent(e);*/
+    QScrollView::contentsWheelEvent(e);
 }
 
 bool ImagePreviewWidget::maxZoom()
