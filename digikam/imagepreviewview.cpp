@@ -138,8 +138,8 @@ void ImagePreviewView::setPreviousNextPaths(const QString& previous, const QStri
 void ImagePreviewView::setImagePath(const QString& path)
 {
     setCursor( KCursor::waitCursor() );
-    d->path = path;
 
+    d->path         = path;
     d->nextPath     = QString();
     d->previousPath = QString();
 
@@ -172,8 +172,14 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
     if (description.filePath != d->path)
         return;
 
+    // NOTE: order to send signals to AlbumWidgetStack is important to 
+    // Raise the preview widget before to show the image, because the widget 
+    // container size can have a wrong size. Raising the preview widget will 
+    // set the widget container size properlly.   
+
     if (preview.isNull())
     {
+        emit signalPreviewFailed();
         QPixmap pix(visibleWidth(), visibleHeight());
         pix.fill(ThemeEngine::instance()->baseColor());
         QPainter p(&pix);
@@ -185,13 +191,11 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
                    .arg(info.fileName()));
         p.end();
         setImage(pix.convertToImage());
-
-        emit signalPreviewFailed();
     }
     else
     {
-        setImage(preview);
         emit signalPreviewComplete();
+        setImage(preview);
     }
 
     unsetCursor();
