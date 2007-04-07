@@ -3,8 +3,8 @@
 
  <MenuBar>
 
-  <Menu name="Correct" >
-   <text>Co&amp;rrect</text>
+  <Menu name="Enhance" >
+   <text>Enh&amp;ance</text>
       <Action name="imageplugin_inpainting" /> 
   </Menu>
 

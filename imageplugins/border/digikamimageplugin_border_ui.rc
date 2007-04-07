@@ -3,8 +3,8 @@
 
  <MenuBar>
 
-  <Menu name="Decoration" >
-   <text>&amp;Decoration</text>
+  <Menu name="Decorate" >
+   <text>&amp;Decorate</text>
    <Action name="imageplugin_border" />
   </Menu>
 

@@ -1,15 +1,19 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="5" name="digikamimageplugin_core" >
+<kpartgui version="6" name="digikamimageplugin_core" >
 
  <MenuBar>
 
    <Menu name="Color">
      <text>&amp;Color</text>
-     <Action name="implugcore_autocorrection" /> 
+      <Action name="implugcore_autocorrection" /> 
+      <Action name="imageplugin_whitebalance" /> 
       <Action name="implugcore_bcg" /> 
       <Action name="implugcore_hsl" /> 
+      <Action name="imageplugin_colorfx" /> 
       <Action name="implugcore_rgb" /> 
       <Separator />
+      <Action name="imageplugin_adjustcurves" />
+      <Action name="imageplugin_adjustlevels" />
       <Action name="implugcore_invert" /> 
       <Action name="implugcore_blackwhite" /> 
       <Menu name="Depth">
@@ -21,10 +25,10 @@
       <Action name="implugcore_colormanagement" />
       <Separator />
    </Menu>
-   <Menu name="Correct">
-     <text>Co&amp;rrect</text>
-    <Action name="implugcore_blur" /> 
-    <Action name="implugcore_sharpen" /> 
+   <Menu name="Enhance">
+     <text>Enh&amp;ance</text>
+     <Action name="implugcore_sharpen" /> 
+     <Action name="implugcore_blur" /> 
     <Separator />
     <Action name="implugcore_redeye" /> 
   </Menu>
@@ -32,6 +36,18 @@
   <Menu name="Transform" >
    <text>Tra&amp;nsform</text>
    <Action name="implugcore_ratiocrop" /> 
+  </Menu>
+
+  <Menu name="Filter" >
+    <text>F&amp;ilter</text>
+    <Action name="imageplugin_infrared" /> 
+    <Action name="imageplugin_filmgrain" /> 
+    <Action name="imageplugin_oilpaint" /> 
+    <Action name="imageplugin_charcoal" /> 
+    <Action name="imageplugin_emboss" /> 
+    <Action name="imageplugin_distortionfx" /> 
+    <Action name="imageplugin_blurfx" /> 
+    <Action name="imageplugin_raindrop" /> 
   </Menu>
 
  </MenuBar>
