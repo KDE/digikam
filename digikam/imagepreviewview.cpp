@@ -93,6 +93,8 @@ ImagePreviewView::ImagePreviewView(QWidget *parent)
 {
     d = new ImagePreviewViewPriv;
 
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
     // ----------------------------------------------------------------
 
     connect(this, SIGNAL(signalPreviewComplete()),

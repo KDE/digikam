@@ -133,7 +133,6 @@ void ImagePreviewWidget::setImage(const QImage& image)
 
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
-
 }
 
 void ImagePreviewWidget::slotThemeChanged()
@@ -152,6 +151,13 @@ void ImagePreviewWidget::resetImage()
     d->preview.reset();
 }
 
+void ImagePreviewWidget::updateAutoZoom()
+{
+    d->zoom       = calcAutoZoomFactor();
+    d->zoomWidth  = (int)(d->preview.width()  * d->zoom);
+    d->zoomHeight = (int)(d->preview.height() * d->zoom);
+}
+
 double ImagePreviewWidget::calcAutoZoomFactor()
 {
     if (d->preview.isNull()) return d->zoom;
@@ -160,42 +166,33 @@ double ImagePreviewWidget::calcAutoZoomFactor()
     double srcHeight = d->preview.height();
     double dstWidth  = contentsRect().width();
     double dstHeight = contentsRect().height();
-    return QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
-}
 
-void ImagePreviewWidget::updateAutoZoom()
-{
-    d->zoom       = calcAutoZoomFactor();
-    d->zoomWidth  = (int)(d->preview.width()  * d->zoom);
-    d->zoomHeight = (int)(d->preview.height() * d->zoom);
+    return QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
 }
 
 void ImagePreviewWidget::updateContentsSize()
 {
     viewport()->setUpdatesEnabled(false);
     
-    int wZ = d->zoomWidth;
-    int hZ = d->zoomHeight;
-    
-    if (visibleWidth() > wZ || visibleHeight() > hZ)
+    if (visibleWidth() > d->zoomWidth || visibleHeight() > d->zoomHeight)
     {
         // Center the image
         int centerx = contentsRect().width()/2;
         int centery = contentsRect().height()/2;
-        int xoffset = int(centerx - wZ/2);
-        int yoffset = int(centery - hZ/2);
+        int xoffset = int(centerx - d->zoomWidth/2);
+        int yoffset = int(centery - d->zoomHeight/2);
         xoffset     = QMAX(xoffset, 0);
         yoffset     = QMAX(yoffset, 0);
 
-        d->pixmapRect = QRect(xoffset, yoffset, wZ, hZ);
+        d->pixmapRect = QRect(xoffset, yoffset, d->zoomWidth, d->zoomHeight);
     }
     else
     {
-        d->pixmapRect = QRect(0, 0, wZ, hZ);
+        d->pixmapRect = QRect(0, 0, d->zoomWidth, d->zoomHeight);
     }
 
     d->tileCache.clear();    
-    resizeContents(wZ, hZ);
+    resizeContents(d->zoomWidth, d->zoomHeight);
     viewport()->setUpdatesEnabled(true);
 }
 
