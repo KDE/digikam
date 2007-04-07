@@ -91,7 +91,6 @@ extern "C"
 #include "thumbnailsize.h"
 #include "kdatetimeedit.h"
 #include "sidebar.h"
-#include "scanlib.h"
 #include "downloadsettingscontainer.h"
 #include "imagepropertiessidebarcamgui.h"
 #include "albummanager.h"
@@ -100,6 +99,7 @@ extern "C"
 #include "albumselectdialog.h"
 #include "renamecustomizer.h"
 #include "animwidget.h"
+#include "collectionscanner.h"
 #include "camerafolderdialog.h"
 #include "camerainfodialog.h"
 #include "cameraiconview.h"
@@ -720,12 +720,12 @@ void CameraUI::finishDialog()
     // over the folders we used. Bug: 119201
 
     d->status->setText(i18n("Scanning for new files, please wait..."));
-    ScanLib sLib;
+    CollectionScanner scanner;
     for (QStringList::iterator it = d->foldersToScan.begin();
          it != d->foldersToScan.end(); ++it)
     {
         //DDebug() << "Scanning " << (*it) << endl;
-        sLib.findMissingItems( (*it) );
+        scanner.scanAlbumScanLib(*it);
     }
 
     // Never call finalScan after deleteLater() - ScanLib will call processEvent(),
