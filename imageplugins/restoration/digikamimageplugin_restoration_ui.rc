@@ -1,10 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="3" name="digikamimageplugin_restorate" >
+<kpartgui version="4" name="digikamimageplugin_restorate" >
 
  <MenuBar>
 
-  <Menu name="Enhance" >
-   <text>Enh&amp;ance</text>
+  <Menu name="Enhance" ><text>Enh&amp;ance</text>
       <Action name="imageplugin_restorate" /> 
   </Menu>
 

@@ -45,7 +45,7 @@
     <Menu name="Color" ><text>&amp;Color</text>
     </Menu>
 
-    <Menu name="Correct" ><text>Co&amp;rrect</text>
+    <Menu name="Enhance" ><text>Enh&amp;ance</text>
     </Menu>
 
     <Menu name="Transform" ><text>Tra&amp;nsform</text>
@@ -62,7 +62,7 @@
     <Menu name="Decoration" ><text>&amp;Decoration</text>
     </Menu>
 
-    <Menu name="Effects" ><text>Effec&amp;ts</text>
+    <Menu name="Filters" ><text>F&amp;ilters</text>
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>

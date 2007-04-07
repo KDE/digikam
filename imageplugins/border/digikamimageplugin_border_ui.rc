@@ -1,10 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="5" name="digikamimageplugin_border" >
+<kpartgui version="6" name="digikamimageplugin_border" >
 
  <MenuBar>
 
-  <Menu name="Decorate" >
-   <text>&amp;Decorate</text>
+  <Menu name="Decorate" ><text>&amp;Decorate</text>
    <Action name="imageplugin_border" />
   </Menu>
 
