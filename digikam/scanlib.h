@@ -32,6 +32,7 @@
 
 // Local includes.
 
+#include "collectionscanner.h"
 #include "digikam_export.h"
 
 /** @file scanlib.h */
@@ -51,8 +52,9 @@ class DProgressDlg;
  * make sure to add the file to the database and insert the date and
  * comments.
  */
-class DIGIKAM_EXPORT ScanLib
+class DIGIKAM_EXPORT ScanLib : public QObject
 {
+    Q_OBJECT
 public:
     /** 
     * Constructor
@@ -76,68 +78,26 @@ public:
      * on the disk
      */
     void findFoldersWhichDoNotExist();
-            
+
     /**
     * This calls allFiles with the albumPath.
     */
     void findMissingItems();
 
-    
     /**
-     * This calls allFiles with a given path.
-     * @param path the path to scan.
-     */
-    void findMissingItems(const QString &path);
-            
-    /** 
      * This queries the db for items that have no date
      * for each item found, storeItemInDatabase is called.
      */
     void updateItemsWithoutDate();
 
+private slots:
+
+    void slotTotalFilesToScan(int count);
+    void slotStartScanningAlbum(const QString &albumRoot, const QString &album);
+    void slotFinishedScanningAlbum(const QString &, const QString &, int filesScanned);
+    void slotScanningFile(const QString &filePath);
+
 private:
-    /**
-    * This counts all existing files recursively, starting from
-    * directory. 
-    * @param directory The path to the start searching from
-    * @return The amount of items
-    */
-    int countItemsInFolder(const QString& directory);
-
-    /** 
-    * This checks all existing files recursively, starting from
-    * directory. Calls storeItemInDatabase to store the found items
-    * which are not in the database.
-    * @param directory The path to the start searching from
-    */
-    void allFiles(const QString& directory);
-
-    /**
-    * This fetches the exif-date or the modification date when
-    * the exif-date is not available and retrieves the JFIF-comment
-    * and calls AlbumDB::setItemDateComment to store the info in
-    * the db.
-    * @param albumURL The album path (relative to the
-    *                           album library Path)
-    * @param filename The filename of the item to store
-    * @param albumID The albumID as used in the database
-    */
-    void storeItemInDatabase(const QString& albumURL, 
-                             const QString& filename, 
-                             int albumID);
-
-    /** 
-    * This fetches the exif-date or the modification date when
-    * the exif-date is not available and calls AlbumDB::setItemDate
-    * to store the info in
-    * the db.
-    * @param albumURL The album path (relative to the album library Path)
-    * @param filename The filename of the item to store
-    * @param albumID The albumID as used in the database
-    */
-    void updateItemDate(const QString& albumURL,
-                        const QString& filename,
-                        int albumID);
 
     /**
      * This will delete all items stored in m_filesToBeDeleted
@@ -149,10 +109,7 @@ private:
      */
     DProgressDlg     *m_progressBar;
 
-    /**
-     * Member to store stale filesystem
-     */
-    QValueList< QPair<QString,int> >  m_filesToBeDeleted;
+    CollectionScanner m_scanner;
 
     /**
      * This is used to print out some timings.
