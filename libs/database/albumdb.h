@@ -158,7 +158,7 @@ public:
      * @return The albumID for that folder,
                or -1 if it does not exist and create is false.
      */
-    int  getAlbumForPath(const QString& path, bool create = true);
+    int  getAlbumForPath(const QString &albumRoot, const QString& path, bool create = true);
 
     /**
      * Deletes an album from the database. This will not delete the

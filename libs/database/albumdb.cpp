@@ -1051,7 +1051,7 @@ QValueList<QPair<QString, QDateTime> > AlbumDB::getItemsAndDate()
 }
 
 
-int AlbumDB::getAlbumForPath(const QString& folder, bool create)
+int AlbumDB::getAlbumForPath(const QString &albumRoot, const QString& folder, bool create)
 {
     QStringList values;
     execSql( QString("SELECT id FROM Albums WHERE url ='%1';")

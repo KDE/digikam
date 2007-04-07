@@ -166,7 +166,7 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
 
     {
         DatabaseAccess access;
-        albumid = access.db()->getAlbumForPath(album, false);
+        albumid = access.db()->getAlbumForPath(albumRoot, album, false);
 
         if (albumid == -1)
             return;
