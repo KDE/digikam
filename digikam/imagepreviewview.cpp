@@ -127,6 +127,12 @@ void ImagePreviewView::reload()
     setImagePath(d->path);
 }
 
+void ImagePreviewView::setPreviousNextPaths(const QString& previous, const QString &next)
+{
+    d->nextPath     = next;
+    d->previousPath = previous;
+}
+
 void ImagePreviewView::setImagePath(const QString& path)
 {
     setCursor( KCursor::waitCursor() );
@@ -159,12 +165,6 @@ void ImagePreviewView::setImagePath(const QString& path)
     emit signalPreviewStarted();
 }
 
-void ImagePreviewView::setPreviousNextPaths(const QString& previous, const QString &next)
-{
-    d->nextPath     = next;
-    d->previousPath = previous;
-}
-
 void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
 {
     if (description.filePath != d->path)
@@ -191,8 +191,6 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
         setImage(preview);
         emit signalPreviewComplete();
     }
-
-    updateImage();
 
     unsetCursor();
     slotNextPreload();

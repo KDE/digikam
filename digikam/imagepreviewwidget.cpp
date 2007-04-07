@@ -127,6 +127,13 @@ ImagePreviewWidget::~ImagePreviewWidget()
 void ImagePreviewWidget::setImage(const QImage& image)
 {   
     d->preview = image;
+
+    updateAutoZoom();
+    updateContentsSize();
+
+    viewport()->setUpdatesEnabled(true);
+    viewport()->update();
+
 }
 
 void ImagePreviewWidget::slotThemeChanged()
@@ -447,15 +454,6 @@ void ImagePreviewWidget::toggleFitToWindow()
         d->zoom = 1.0;
 
     updateContentsSize();
-    viewport()->update();
-}
-
-void ImagePreviewWidget::updateImage()
-{
-    updateAutoZoom();
-    updateContentsSize();
-
-    viewport()->setUpdatesEnabled(true);
     viewport()->update();
 }
 

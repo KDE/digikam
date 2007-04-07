@@ -72,7 +72,6 @@ public slots:
 
 protected:
     
-    void updateImage();
     void resizeEvent(QResizeEvent* e);
     void viewportPaintEvent(QPaintEvent *e);
     void contentsMousePressEvent(QMouseEvent *e);
