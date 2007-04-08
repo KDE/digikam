@@ -360,7 +360,7 @@ void DigikamApp::setupStatusBar()
     connect(d->thumbSizeSlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotThumbSizeTimer(int)));
 
-    connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
+    connect(d->view, SIGNAL(signalZoomChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
     
     connect(d->view, SIGNAL(signalTogglePreview(bool)),
@@ -757,25 +757,21 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->thumbSizePlusAction = new KAction(i18n("Increase Thumbnail Size"),
+    d->thumbSizePlusAction = new KAction(i18n("Zoom in"),
                                    "viewmag+",
                                    CTRL+Key_Plus,
                                    d->view,
-                                   SLOT(slotThumbSizePlus()),
+                                   SLOT(slotZoomIn()),
                                    actionCollection(),
-                                   "album_thumbSizeIncrease");
-    d->thumbSizePlusAction->setWhatsThis(i18n("This option allows you to increase "
-                                              "the Album thumbnails size."));
+                                   "album_zoomin");
 
-    d->thumbSizeMinusAction = new KAction(i18n("Decrease Thumbnail Size"),
+    d->thumbSizeMinusAction = new KAction(i18n("Zoom out"),
                                    "viewmag-",
                                    CTRL+Key_Minus,
                                    d->view,
-                                   SLOT(slotThumbSizeMinus()),
+                                   SLOT(slotZoomOut()),
                                    actionCollection(),
-                                   "album_thumbSizeDecrease");
-    d->thumbSizeMinusAction->setWhatsThis(i18n("This option allows you to decrease "
-                                               "the Album thumbnails size."));
+                                   "album_zoomout");
 
 #if KDE_IS_VERSION(3,2,0)
     d->fullScreenAction = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
@@ -1796,28 +1792,6 @@ void DigikamApp::slotDonateMoney()
     KApplication::kApplication()->invokeBrowser("http://www.digikam.org/?q=donation");
 }
 
-void DigikamApp::toggledToPreviewMode(bool t)
-{
-    // NOTE: if 't' is true, we are in Preview Mode, else we are in AlbumView Mode
-
-    // This is require if ESC is pressed to go out of Preview Mode. 
-    // imagePreviewAction is handled by F3 key only. 
-    d->imagePreviewAction->setChecked(t);
-
-    // Here, we will toggle some menu actions depending of current Mode.
-    
-    // Select menu.
-    d->selectAllAction->setEnabled(!t);
-    d->selectNoneAction->setEnabled(!t);
-    d->selectInvertAction->setEnabled(!t);
-
-    // View menu     
-    d->thumbSizePlusAction->setEnabled(!t);
-    d->thumbSizeMinusAction->setEnabled(!t);
-    d->albumSortAction->setEnabled(!t);
-    d->imageSortAction->setEnabled(!t);
-}
-
 void DigikamApp::slotThumbSizeTimer(int size)
 {
     d->thumbSizeTracker->setText(i18n("Thumbnail size: %1").arg(size));
@@ -1847,14 +1821,26 @@ void DigikamApp::slotThumbSizeChanged(int size)
     d->thumbSizeSlider->blockSignals(false);
 }
 
-void DigikamApp::slotTooglePreview(bool b)
+void DigikamApp::slotTooglePreview(bool t)
 {
-    d->thumbSizeSlider->setEnabled(!b);
-    // TODO : enable/disable the menu actions accordinly with the current mode. 
-    // For ex., in Image Preview mode:
-    //  - disable Thumbs size +/-
-    //  - diable thumbs selection.
-    // etc. 
+    // NOTE: if 't' is true, we are in Preview Mode, else we are in AlbumView Mode
+
+    d->thumbSizeSlider->setEnabled(!t);
+
+    // This is require if ESC is pressed to go out of Preview Mode. 
+    // imagePreviewAction is handled by F3 key only. 
+    d->imagePreviewAction->setChecked(t);
+
+    // Here, we will toggle some menu actions depending of current Mode.
+    
+    // Select menu.
+    d->selectAllAction->setEnabled(!t);
+    d->selectNoneAction->setEnabled(!t);
+    d->selectInvertAction->setEnabled(!t);
+
+    // View menu     
+    d->albumSortAction->setEnabled(!t);
+    d->imageSortAction->setEnabled(!t);
 }
 
 }  // namespace Digikam

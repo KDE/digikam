@@ -1,10 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="3" name="digikamimageplugin_freerotation" >
+<kpartgui version="4" name="digikamimageplugin_freerotation" >
 
  <MenuBar>
 
-  <Menu name="Transform" >
-   <text>Tra&amp;nsform</text>
+  <Menu name="Transform" ><text>Tra&amp;nsform</text>
    <Action name="imageplugin_freerotation" /> 
   </Menu>
 

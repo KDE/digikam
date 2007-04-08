@@ -1294,7 +1294,7 @@ void ImageDescEditTab::setTagThumbnail(TAlbum *album)
     {
         if (icon.isNull())
         {
-            item->setPixmap(0, loader->getStandardTagIcon(album));
+            item->setPixmap(0, loader->getStandardTagIcon(album, AlbumThumbnailLoader::SmallerSize));
         }
         else
         {
@@ -1425,7 +1425,7 @@ void ImageDescEditTab::updateRecentTags()
                 {
                     if (icon.isNull())
                     {
-                        icon = loader->getStandardTagIcon(album, 20);
+                        icon = loader->getStandardTagIcon(album, AlbumThumbnailLoader::SmallerSize);
                     }
                 }
                 QString text = album->title() + " (" + ((TAlbum*)album->parent())->prettyURL() + ')';

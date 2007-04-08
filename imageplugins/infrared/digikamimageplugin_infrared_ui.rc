@@ -1,9 +1,8 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="4" name="digikamimageplugin_infrared" >
+<kpartgui version="5" name="digikamimageplugin_infrared" >
  <MenuBar>
 
-  <Menu name="Effects" >
-   <text>Effec&amp;ts</text>
+  <Menu name="Filters" ><text>F&amp;ilters</text>
    <Action name="imageplugin_infrared" /> 
   </Menu>
 

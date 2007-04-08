@@ -271,6 +271,8 @@ void ImageWindow::setupUserArea()
     m_splitter       = new QSplitter(widget);
     m_canvas         = new Canvas(m_splitter);
 
+    m_canvas->makeDefaultEditingCanvas();
+
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     m_canvas->setSizePolicy(rightSzPolicy);
 
@@ -602,7 +604,7 @@ void ImageWindow::slotChanged()
     {
         KURL u(d->urlCurrent.directory());
 
-        DImg* img = DImgInterface::instance()->getImg();
+        DImg* img = m_canvas->interface()->getImg();
 
         if (d->imageInfoCurrent)
         {

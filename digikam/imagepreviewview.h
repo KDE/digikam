@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier 
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  * 
@@ -23,7 +23,8 @@
 
 // Qt includes.
 
-#include <qvbox.h>
+#include <qstring.h>
+#include <qimage.h>
 
 // Local includes
 
@@ -33,10 +34,13 @@
 namespace Digikam
 {
 
+class LoadingDescription;
+class ImageInfo;
 class ImagePreviewViewPriv;
 
-class DIGIKAM_EXPORT ImagePreviewView : public QVBox
+class DIGIKAM_EXPORT ImagePreviewView : public ImagePreviewWidget
 {
+
 Q_OBJECT
 
 public:
@@ -48,9 +52,12 @@ public:
     ImageInfo* getImageInfo();
 
     void reload();
+    void setImagePath(const QString& path=QString());
+    void setPreviousNextPaths(const QString& previous, const QString &next);
 
 signals:
 
+    void signalPreviewStarted();
     void signalNextItem();
     void signalPrevItem();
     void signalDeleteItem();
@@ -61,14 +68,12 @@ signals:
 
 private slots:
 
-    void slotThemeChanged();
+    void slotGotImagePreview(const LoadingDescription &loadingDescription, const QImage &image);
+    void slotNextPreload();
+    void slotContextMenu();
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
     void slotAssignRating(int rating);
-
-private:
-
-    void mousePressEvent(QMouseEvent* e);
 
 private:
 

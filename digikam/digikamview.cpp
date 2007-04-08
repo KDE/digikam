@@ -711,16 +711,9 @@ void DigikamView::setThumbSize(int size)
 
     emit signalNoCurrentItem();
 
-    d->parent->enableThumbSizeMinusAction(true);
-    d->parent->enableThumbSizePlusAction(true);
-
-    if (size == ThumbnailSize::Huge)
-        d->parent->enableThumbSizePlusAction(false);
-
-    if (size == ThumbnailSize::Small)
-        d->parent->enableThumbSizeMinusAction(false);
-
     d->iconView->setThumbnailSize(size);
+
+    toogleZoomActions();
 
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings)
@@ -728,18 +721,62 @@ void DigikamView::setThumbSize(int size)
     settings->setDefaultIconSize(size);
 }
 
-void DigikamView::slotThumbSizePlus()
+void DigikamView::toogleZoomActions()
 {
-    int newSize = d->iconView->thumbnailSize().size() + ThumbnailSize::Step; 
-    setThumbSize(newSize);
-    emit signalThumbSizeChanged(newSize);  
+    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
+    {
+        d->parent->enableThumbSizeMinusAction(true);
+        d->parent->enableThumbSizePlusAction(true);
+    
+        if (d->albumWidgetStack->maxZoom())
+            d->parent->enableThumbSizePlusAction(false);
+    
+        if (d->albumWidgetStack->minZoom())
+            d->parent->enableThumbSizeMinusAction(false);
+    }  
+    else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+    {
+        int size = d->iconView->thumbnailSize().size();
+    
+        d->parent->enableThumbSizeMinusAction(true);
+        d->parent->enableThumbSizePlusAction(true);
+    
+        if (size == ThumbnailSize::Huge)
+            d->parent->enableThumbSizePlusAction(false);
+    
+        if (size == ThumbnailSize::Small)
+            d->parent->enableThumbSizeMinusAction(false);
+    }
 }
 
-void DigikamView::slotThumbSizeMinus()
+void DigikamView::slotZoomIn()
 {
-    int newSize = d->iconView->thumbnailSize().size() - ThumbnailSize::Step; 
-    setThumbSize(newSize);
-    emit signalThumbSizeChanged(newSize);  
+    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+    {
+        int newSize = d->iconView->thumbnailSize().size() + ThumbnailSize::Step; 
+        setThumbSize(newSize);
+        emit signalZoomChanged(newSize);
+    }
+    else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
+    {
+        d->albumWidgetStack->increaseZoom();
+        toogleZoomActions();
+    }
+}
+
+void DigikamView::slotZoomOut()
+{
+    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+    {
+        int newSize = d->iconView->thumbnailSize().size() - ThumbnailSize::Step; 
+        setThumbSize(newSize);
+        emit signalZoomChanged(newSize);
+    }  
+    else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
+    {
+        d->albumWidgetStack->decreaseZoom();
+        toogleZoomActions();
+    }
 }
 
 void DigikamView::slotAlbumPropsEdit()
@@ -867,24 +904,26 @@ void DigikamView::slotTogglePreviewMode(AlbumIconItem *iconItem)
     {
         // We will go to ImagePreview Mode.
         ImageInfo *previousInfo=0, *nextInfo=0;
+
         if (iconItem->prevItem())
             previousInfo = static_cast<AlbumIconItem*>(iconItem->prevItem())->imageInfo();
+
         if (iconItem->nextItem())
             nextInfo = static_cast<AlbumIconItem*>(iconItem->nextItem())->imageInfo();
+
         d->albumWidgetStack->setPreviewItem(iconItem->imageInfo(), previousInfo, nextInfo);
-        emit signalTogglePreview(true);
     }
     else
     {
         // We go back to AlbumView Mode.
         d->albumWidgetStack->setPreviewMode( AlbumWidgetStack::PreviewAlbumMode );
-        emit signalTogglePreview(false);
     }
 }
 
-void DigikamView::slotToggledToPreviewMode(bool t)
+void DigikamView::slotToggledToPreviewMode(bool b)
 {
-    d->parent->toggledToPreviewMode(t);
+    toogleZoomActions();
+    emit signalTogglePreview(b);
 }
 
 void DigikamView::slotImageEdit()

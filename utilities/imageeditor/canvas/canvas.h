@@ -46,6 +46,7 @@ namespace Digikam
 {
 
 class CanvasPrivate;
+class DImgInterface;
 class ExposureSettingsContainer;
 class ICCSettingsContainer;
 class IOFileSettingsContainer;
@@ -74,6 +75,9 @@ public:
     void  updateUndoState();
     DImg  currentImage();
     QString currentImageFileFormat();
+
+    DImgInterface *interface() const;
+    void makeDefaultEditingCanvas();
 
     void  setZoomFactor(double z);
     bool  fitToWindow();

@@ -50,6 +50,21 @@ public:
     static void cleanUp();
 
     /**
+     * Album thumbnail size is configurable via the settings menu.
+     * Some widgets use smaller icons than other widgets.
+     * These widgets do not need to know the currently set icon size from
+     * the setup and calculate a smaller size, but can simply request
+     * a relatively smaller icon.
+     * Depending on the user-chosen icon size, this size may in fact not
+     * be smaller than the normal size.
+     */
+    enum RelativeSize
+    {
+        NormalSize,
+        SmallerSize
+    };
+
+    /**
      * Request thumbnail for given album.
      * The thumbnail will be loaded
      * and returned asynchronously by the signals.
@@ -70,22 +85,26 @@ public:
       * If a custom icon is associated with the tag,
       * it is loaded asynchronously, icon is set to null,
       * and true is returned.
+      * Tag thumbnails are always smaller than album thumbnails -
+      * as small as an album thumbnail with SmallerSize.
+      * They are supposed to be blended into the standard tag icon
+      * obtained below, or used as is when SmallerSize is requested anyway.
       * @return Returns true if icon is loaded asynchronously.
       */
-    bool getTagThumbnail(TAlbum *album, QPixmap &icon, int size = 0);
+    bool getTagThumbnail(TAlbum *album, QPixmap &icon);
 
     /**
      * Return standard tag and album icons.
      * The third methods check if album is the root,
      * and returns the standard icon or the root standard icon.
      */
-    QPixmap getStandardTagIcon(int size = 0);
-    QPixmap getStandardTagRootIcon(int size = 0);
-    QPixmap getStandardTagIcon(TAlbum *album, int size = 0);
+    QPixmap getStandardTagIcon(RelativeSize size = NormalSize);
+    QPixmap getStandardTagRootIcon(RelativeSize size = NormalSize);
+    QPixmap getStandardTagIcon(TAlbum *album, RelativeSize size = NormalSize);
 
-    QPixmap getStandardAlbumIcon(int size);
-    QPixmap getStandardAlbumRootIcon(int size);
-    QPixmap getStandardAlbumIcon(PAlbum *album, int size = 0);
+    QPixmap getStandardAlbumIcon(RelativeSize size = NormalSize);
+    QPixmap getStandardAlbumRootIcon(RelativeSize size = NormalSize);
+    QPixmap getStandardAlbumIcon(PAlbum *album, RelativeSize size = NormalSize);
 
     /**
      * Blend tagIcon centered on dstIcon, where dstIcon is a standard
@@ -130,6 +149,8 @@ private:
     void addURL(Album *album, const KURL &url);
     QPixmap loadIcon(const QString &name, int size = 0);
     QPixmap createTagThumbnail(const QPixmap &albumThumbnail);
+    int computeIconSize(RelativeSize size);
+    QRect computeBlendRect(int iconSize);
 
 };
 

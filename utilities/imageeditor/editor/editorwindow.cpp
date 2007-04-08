@@ -541,11 +541,11 @@ void EditorWindow::setupStatusBar()
 
 void EditorWindow::printImage(KURL url)
 {
-    uchar* ptr      = DImgInterface::instance()->getImage();
-    int w           = DImgInterface::instance()->origWidth();
-    int h           = DImgInterface::instance()->origHeight();
-    bool hasAlpha   = DImgInterface::instance()->hasAlpha();
-    bool sixteenBit = DImgInterface::instance()->sixteenBit();
+    uchar* ptr      = m_canvas->interface()->getImage();
+    int w           = m_canvas->interface()->origWidth();
+    int h           = m_canvas->interface()->origHeight();
+    bool hasAlpha   = m_canvas->interface()->hasAlpha();
+    bool sixteenBit = m_canvas->interface()->sixteenBit();
 
     if (!ptr || !w || !h)
         return;

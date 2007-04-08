@@ -72,14 +72,14 @@ signals:
     void signalNoCurrentItem();
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
-    void signalThumbSizeChanged(int);
+    void signalZoomChanged(int);
     void signalTogglePreview(bool);
 
 public slots:
 
     // View Action slots
-    void slotThumbSizePlus();
-    void slotThumbSizeMinus();
+    void slotZoomIn();
+    void slotZoomOut();
     void slotSlideShowAll();
     void slotSlideShowSelection();
     void slotSlideShowRecursive();
@@ -136,6 +136,7 @@ public slots:
 
 private:
 
+    void toogleZoomActions();
     void setupConnections();
     void loadViewState();
     void saveViewState();
@@ -152,7 +153,6 @@ private slots:
 
     void slotImageSelected();
     void slotTogglePreviewMode(AlbumIconItem *iconItem=0);
-    void slotToggledToPreviewMode(bool);
     void slotDispatchImageSelected();
     void slotImageCopyResult(KIO::Job* job);
     void slotItemsInfoFromAlbums(const ImageInfoList&);
@@ -164,6 +164,7 @@ private slots:
     void slotNextItem(void);
     void slotLastItem(void);
 
+    void slotToggledToPreviewMode(bool);
     void slotEscapePreview();
     void slotCancelSlideShow();
 

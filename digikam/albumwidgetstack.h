@@ -67,6 +67,11 @@ public:
     void setPreviewItem(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
     int  previewMode(void);
     void setPreviewMode(int mode);
+    
+    void increaseZoom();
+    void decreaseZoom();
+    bool maxZoom();
+    bool minZoom();
 
 signals:
 

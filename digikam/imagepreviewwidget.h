@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier 
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2006-06-13
  * Description : a widget to display an image preview
  *
@@ -23,24 +23,23 @@
 
 // Qt includes.
 
-#include <qframe.h>
 #include <qstring.h>
+#include <qimage.h>
 
 // Local includes
 
 #include "digikam_export.h"
+#include "canvas.h"
 #include "loadingdescription.h"
 
 class QPixmap;
-
-class KURL;
 
 namespace Digikam
 {
 
 class ImagePreviewWidgetPriv;
 
-class DIGIKAM_EXPORT ImagePreviewWidget : public QFrame
+class DIGIKAM_EXPORT ImagePreviewWidget : public QScrollView
 {
 Q_OBJECT
 
@@ -49,37 +48,46 @@ public:
     ImagePreviewWidget(QWidget *parent=0);
     ~ImagePreviewWidget();
 
-    void setImagePath(const QString& path=QString());
-    void setPreviousNextPaths(const QString& previous, const QString &next);
-    void reload();
+    void setImage(const QImage& image);
+    void setZoomFactor(double z);
+    bool fitToWindow();
+    void toggleFitToWindow();
+    bool maxZoom();
+    bool minZoom();
 
 signals:
 
-    void signalNextItem();
-    void signalPrevItem();
-    
-    void signalPreviewStarted();
-    void signalPreviewComplete();
-    void signalPreviewFailed();
-    
+    void signalRightButtonClicked();
+    void signalLeftButtonClicked();    
+    void signalShowNextImage();
+    void signalShowPrevImage();
+
 public slots:
+
+    void slotIncreaseZoom();
+    void slotDecreaseZoom();
+
+protected:
+    
+    void resizeEvent(QResizeEvent* e);
+    void viewportPaintEvent(QPaintEvent *e);
+    void contentsMousePressEvent(QMouseEvent *e);
+    void contentsMouseMoveEvent(QMouseEvent *e);
+    void contentsMouseReleaseEvent(QMouseEvent *e);
+    void contentsWheelEvent(QWheelEvent *e);
+   
+private slots:
 
     void slotThemeChanged();
 
-protected:
-
-    void drawContents(QPainter *);
-    void resizeEvent(QResizeEvent *);
-    void wheelEvent(QWheelEvent * e);
-
-private slots:
-
-    void slotGotImagePreview(const LoadingDescription &loadingDescription, const QImage &image);
-    void slotNextPreload();
-
 private:
 
-    void updatePixmap(void);
+    //void updatePixmap(void);
+
+    void   resetImage();
+    double calcAutoZoomFactor();
+    void   updateAutoZoom();
+    void   updateContentsSize();
 
 private:
 

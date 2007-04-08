@@ -117,7 +117,7 @@ public:
     const int            tileSize;
     int                  midButtonX;
     int                  midButtonY;
-    
+
     double               zoom;
     const double         minZoom;
     const double         maxZoom;
@@ -127,7 +127,7 @@ public:
 
     QRect               *rubber;
     QRect                pixmapRect;
-    
+
     QCache<QPixmap>      tileCache;
 
     QPixmap*             tileTmpPix;
@@ -138,7 +138,7 @@ public:
     QWidget             *parent;
 
     KPopupFrame         *panIconPopup;
-    
+
     DImgInterface       *im;
 
     ImagePanIconWidget  *panIconWidget;
@@ -148,7 +148,7 @@ Canvas::Canvas(QWidget *parent)
       : QScrollView(parent)
 {
     d = new CanvasPrivate;
-    d->im     = DImgInterface::instance();
+    d->im     = new DImgInterface();
     d->parent = parent;
     d->bgColor.setRgb(0, 0, 0);
     
@@ -206,7 +206,6 @@ Canvas::Canvas(QWidget *parent)
 Canvas::~Canvas()
 {
     delete d->tileTmpPix;
-    
     delete d->im;
 
     if (d->rubber)
@@ -363,6 +362,16 @@ QRect Canvas::getSelectedArea()
     return ( QRect(x, y, w, h) );
 }
 
+DImgInterface *Canvas::interface() const
+{
+    return d->im;
+}
+
+void Canvas::makeDefaultEditingCanvas()
+{
+    DImgInterface::setDefaultInterface(d->im);
+}
+
 double Canvas::calcAutoZoomFactor()
 {
     if (!d->im->imageValid()) return d->zoom;
@@ -493,7 +502,14 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
 
         QPixmap pix(d->tileSize, d->tileSize);
         int sx, sy, sw, sh;
-        int step = (int)floor(d->tileSize / d->zoom); 
+        int step = (int)floor(d->tileSize / d->zoom);
+
+        bool hasRubber = (d->rubber && d->pressedMoved && d->pressedMoving && d->rubber->intersects(pr));
+        if (hasRubber)
+        {
+            // remove rubber
+            drawRubber();
+        }
 
         for (int j = y1 ; j < y2 ; j += d->tileSize)
         {
@@ -501,7 +517,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
             {
                 QString key  = QString("%1,%2").arg(i).arg(j);
                 QPixmap *pix = d->tileCache.find(key);
-                
+
                 if (!pix)
                 {
                     if (antialias)
@@ -583,6 +599,12 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                        ir.x()-r.x(), ir.y()-r.y(),
                        ir.width(), ir.height());
             }
+        }
+
+        if (hasRubber)
+        {
+            // restore rubber
+            drawRubber();
         }
     }
 
@@ -727,7 +749,9 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
 
         // Move content if necessary.
         blockSignals(true);
+        setUpdatesEnabled(false);
         ensureVisible(e->x(), e->y(), 10, 10);
+        setUpdatesEnabled(true);
         blockSignals(false);
 
         // draw the new rubber position.

@@ -80,9 +80,9 @@ ImageIface::ImageIface(int w, int h)
     d->constrainWidth  = w;
     d->constrainHeight = h;
 
-    d->originalWidth      = DImgInterface::instance()->origWidth();
-    d->originalHeight     = DImgInterface::instance()->origHeight();
-    d->originalBytesDepth = DImgInterface::instance()->bytesDepth();
+    d->originalWidth      = DImgInterface::defaultInterface()->origWidth();
+    d->originalHeight     = DImgInterface::defaultInterface()->origHeight();
+    d->originalBytesDepth = DImgInterface::defaultInterface()->bytesDepth();
 
     d->qpix.setMask(d->qmask);
     d->qcheck.resize(8, 8);
@@ -113,13 +113,13 @@ bool ImageIface::previewType()
 
 DColor ImageIface::getColorInfoFromOriginalImage(QPoint point)
 {
-    if ( !DImgInterface::instance()->getImage() || point.x() > originalWidth() || point.y() > originalHeight() )
+    if ( !DImgInterface::defaultInterface()->getImage() || point.x() > originalWidth() || point.y() > originalHeight() )
     {
         DWarning() << k_funcinfo << "Coordinate out of range or no image data available!" << endl;
         return DColor();
     }
 
-    return DImgInterface::instance()->getImg()->getPixelColor(point.x(), point.y());
+    return DImgInterface::defaultInterface()->getImg()->getPixelColor(point.x(), point.y());
 }
 
 DColor ImageIface::getColorInfoFromPreviewImage(QPoint point)
@@ -162,14 +162,14 @@ uchar* ImageIface::getPreviewImage()
         DImg *im = 0;
 
         if (!d->usePreviewSelection)
-            im = DImgInterface::instance()->getImg();
+            im = DImgInterface::defaultInterface()->getImg();
         else 
         {
             int    x, y, w, h;
-            bool   s    = DImgInterface::instance()->sixteenBit();
-            bool   a    = DImgInterface::instance()->hasAlpha();
-            uchar *data = DImgInterface::instance()->getImageSelection();
-            DImgInterface::instance()->getSelectedArea(x, y, w, h);
+            bool   s    = DImgInterface::defaultInterface()->sixteenBit();
+            bool   a    = DImgInterface::defaultInterface()->hasAlpha();
+            uchar *data = DImgInterface::defaultInterface()->getImageSelection();
+            DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
             im = new DImg(w, h, s, a, data, true); 
             delete [] data;
         }
@@ -197,7 +197,7 @@ uchar* ImageIface::getPreviewImage()
 
 uchar* ImageIface::getOriginalImage()
 {
-    DImg *im = DImgInterface::instance()->getImg();
+    DImg *im = DImgInterface::defaultInterface()->getImg();
 
     if (!im || im->isNull())
         return 0;
@@ -208,12 +208,12 @@ uchar* ImageIface::getOriginalImage()
 
 DImg* ImageIface::getOriginalImg()
 {
-    return DImgInterface::instance()->getImg();
+    return DImgInterface::defaultInterface()->getImg();
 }
 
 uchar* ImageIface::getImageSelection()
 {
-    return DImgInterface::instance()->getImageSelection();
+    return DImgInterface::defaultInterface()->getImageSelection();
 }
 
 void ImageIface::putPreviewImage(uchar* data)
@@ -237,12 +237,12 @@ void ImageIface::putOriginalImage(const QString &caller, uchar* data, int w, int
     if (!data)
         return;
 
-    DImgInterface::instance()->putImage(caller, data, w, h);
+    DImgInterface::defaultInterface()->putImage(caller, data, w, h);
 }
 
 void ImageIface::setEmbeddedICCToOriginalImage( QString profilePath)
 {
-    DImgInterface::instance()->setEmbeddedICCToOriginalImage( profilePath );
+    DImgInterface::defaultInterface()->setEmbeddedICCToOriginalImage( profilePath );
 }
 
 void ImageIface::putImageSelection(const QString &caller, uchar* data)
@@ -250,7 +250,7 @@ void ImageIface::putImageSelection(const QString &caller, uchar* data)
     if (!data)
         return;
 
-    DImgInterface::instance()->putImageSelection(caller, data);
+    DImgInterface::defaultInterface()->putImageSelection(caller, data);
 }
 
 int ImageIface::previewWidth()
@@ -275,49 +275,49 @@ bool ImageIface::previewHasAlpha()
 
 int ImageIface::originalWidth()
 {
-    return DImgInterface::instance()->origWidth();
+    return DImgInterface::defaultInterface()->origWidth();
 }
 
 int ImageIface::originalHeight()
 {
-    return DImgInterface::instance()->origHeight();
+    return DImgInterface::defaultInterface()->origHeight();
 }
 
 bool ImageIface::originalSixteenBit()
 {
-    return DImgInterface::instance()->sixteenBit();
+    return DImgInterface::defaultInterface()->sixteenBit();
 }
 
 bool ImageIface::originalHasAlpha()
 {
-    return DImgInterface::instance()->hasAlpha();
+    return DImgInterface::defaultInterface()->hasAlpha();
 }
 
 int ImageIface::selectedWidth()
 {
     int x, y, w, h;
-    DImgInterface::instance()->getSelectedArea(x, y, w, h);
+    DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
     return w;
 }
 
 int ImageIface::selectedHeight()
 {
     int x, y, w, h;
-    DImgInterface::instance()->getSelectedArea(x, y, w, h);
+    DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
     return h;
 }
 
 int ImageIface::selectedXOrg()
 {
     int x, y, w, h;
-    DImgInterface::instance()->getSelectedArea(x, y, w, h);
+    DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
     return x;
 }
 
 int ImageIface::selectedYOrg()
 {
     int x, y, w, h;
-    DImgInterface::instance()->getSelectedArea(x, y, w, h);
+    DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
     return y;
 }
 
@@ -334,39 +334,39 @@ void ImageIface::setPreviewBCG(double brightness, double contrast, double gamma)
 
 void ImageIface::setOriginalBCG(double brightness, double contrast, double gamma)
 {
-    DImgInterface::instance()->setBCG(brightness, contrast, gamma);    
+    DImgInterface::defaultInterface()->setBCG(brightness, contrast, gamma);
 }
 
 void ImageIface::convertOriginalColorDepth(int depth)
 {
-    DImgInterface::instance()->convertDepth(depth);
+    DImgInterface::defaultInterface()->convertDepth(depth);
 }
 
 QPixmap ImageIface::convertToPixmap(DImg& img)
 {
-    return DImgInterface::instance()->convertToPixmap(img);
+    return DImgInterface::defaultInterface()->convertToPixmap(img);
 }
 
 QByteArray ImageIface::getEmbeddedICCFromOriginalImage()
 {
-    return DImgInterface::instance()->getEmbeddedICC();
+    return DImgInterface::defaultInterface()->getEmbeddedICC();
 }
 
 QByteArray ImageIface::getExifFromOriginalImage()
 {
-    return DImgInterface::instance()->getExif();
+    return DImgInterface::defaultInterface()->getExif();
 }
 
 QByteArray ImageIface::getIptcFromOriginalImage()
 {
-    return DImgInterface::instance()->getIptc();
+    return DImgInterface::defaultInterface()->getIptc();
 }
 
 PhotoInfoContainer ImageIface::getPhotographInformations() const
 {
     DMetadata meta;
-    meta.setExif(DImgInterface::instance()->getExif());
-    meta.setIptc(DImgInterface::instance()->getIptc());
+    meta.setExif(DImgInterface::defaultInterface()->getExif());
+    meta.setIptc(DImgInterface::defaultInterface()->getIptc());
     return meta.getPhotographInformations();
 }
 
@@ -383,7 +383,7 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
         }
         
         QPixmap pixImage;
-        ICCSettingsContainer *iccSettings = DImgInterface::instance()->getICCSettings();
+        ICCSettingsContainer *iccSettings = DImgInterface::defaultInterface()->getICCSettings();
 
         if (iccSettings)
         {
@@ -413,8 +413,8 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
             ExposureSettingsContainer expoSettings;
             expoSettings.underExposureIndicator = underExposure;
             expoSettings.overExposureIndicator  = overExposure;
-            expoSettings.underExposureColor     = DImgInterface::instance()->underExposureColor();
-            expoSettings.overExposureColor      = DImgInterface::instance()->overExposureColor();
+            expoSettings.underExposureColor     = DImgInterface::defaultInterface()->underExposureColor();
+            expoSettings.overExposureColor      = DImgInterface::defaultInterface()->overExposureColor();
 
             QImage pureColorMask = d->targetPreviewImage.pureColorMask(&expoSettings);
             QPixmap pixMask(pureColorMask); 

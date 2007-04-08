@@ -1,10 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="4" name="digikamimageplugin_oilpaint" >
+<kpartgui version="5" name="digikamimageplugin_oilpaint" >
 
  <MenuBar>
 
-  <Menu name="Effects" >
-   <text>Effec&amp;ts</text>
+  <Menu name="Filters" ><text>F&amp;ilters</text>
    <Action name="imageplugin_oilpaint" /> 
   </Menu>
 

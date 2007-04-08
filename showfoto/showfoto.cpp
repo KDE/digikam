@@ -367,6 +367,8 @@ void ShowFoto::setupUserArea()
         m_splitter        = new QSplitter(widget);
         m_canvas          = new Digikam::Canvas(m_splitter);
         m_canvas->setSizePolicy(rightSzPolicy);
+
+        m_canvas->makeDefaultEditingCanvas();
         
         d->rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
                                                                  Digikam::Sidebar::Right);
@@ -656,7 +658,7 @@ void ShowFoto::slotChanged()
         if (d->currentItem->url().isValid())
         {
             QRect sel          = m_canvas->getSelectedArea();
-            Digikam::DImg* img = Digikam::DImgInterface::instance()->getImg();
+            Digikam::DImg* img = m_canvas->interface()->getImg();
             d->rightSidebar->itemChanged(d->currentItem->url(), sel, img);
         }
     }    

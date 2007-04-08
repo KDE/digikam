@@ -17,10 +17,13 @@ General       : Make size of icons used in sidebars configurable in order to all
 General       : Make size of icons used in album icon view more configurable using a slider 
                 in status bar. 
 
+Album GUI     : Add Zoom/Scrooling functions with preview mode.
+
 Image Editor  : Usability improvement : a new pan tool is available on the right bottom 
                 corner of canvas to naviguate over large pictures.
 Image Editor  : Usability issue : Blowup and Resize tools have been merged.
-Image Editor  : Usability issue : Unsharp Mask, Refocus, and Sharpen tools have been merged to a new Sharpness Editor.
+Image Editor  : Usability issue : Unsharp Mask, Refocus, and Sharpen tools have been merged
+                to a new Sharpness Editor.
 Image Editor  : Usability issue : Reorganize menu structure
 Image Editor  : Usability issue : persistant selection in all zoom mode.
 Image Editor  : Add new option to fit on current selection.
@@ -46,7 +49,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 *** 0.9.2-beta1 *******************************************************
 
 001 ==> 142443 : Red eye correction should change eye colour to an alternate colour.
-002 ==> 138744 : Wish: dcraw 8.45 supports Pentax K10D.
+002 ==> 138744 : Dcraw 8.45 supports Pentax K10D.
 003 ==> 142427 : Rotate image tool too complicated.
 004 ==> 141439 : A velvia similar plugin. AKA vivid saturation.
 005 ==> 127583 : keywords, copyright, photographer info not saved to IPTC tags.
@@ -62,7 +65,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 015 ==> 104439 : Use left mouse button to scroll image.
 016 ==> 137391 : Picture navigation in image editor using the mouse.
 017 ==> 102029 : Configurable size of icons in sidebars.
-018 ==> 102029 : Wish: no/small icons in album tree.
+018 ==> 102029 : No/small icons in album tree.
 019 ==> 131155 : Smooth increasing/decreasing size of thumbnails like in iPhoto.
 020 ==> 89365  : Reorganize menu structure in Image Editor.
 021 ==> 134037 : Respect current sort order when passing list to KIPI plugin.
@@ -75,5 +78,8 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 028 ==> 116148 : Auto-scrolling when selecting large area.
 029 ==> 134498 : Date stamp display option for photos in full-screen mode.
 030 ==> 130525 : Saving large (>5M) jpg's result in corrupt file.
-031 ==> 
+031 ==> 132047 : Faster display of images and/or prefetch wished for.
+032 ==> 140131 : No zoom in image preview.
+033 ==> 89365  : More standard menu structure.
+034 ==> 
 

@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier 
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  * 
@@ -20,10 +20,11 @@
 
 // Qt includes.
 
+#include <qpainter.h>
+#include <qcursor.h>
 #include <qstring.h>
 #include <qvaluevector.h>
-#include <qpainter.h>
-#include <qpixmap.h>
+#include <qfileinfo.h>
 
 // KDE includes.
 
@@ -34,6 +35,7 @@
 #include <ktrader.h>
 #include <kmimetype.h>
 #include <kiconloader.h>
+#include <kcursor.h>
 
 // LibKipi includes.
 
@@ -51,6 +53,7 @@
 #include "dmetadata.h"
 #include "dpopupmenu.h"
 #include "metadatahub.h"
+#include "previewloadthread.h"
 #include "tagspopupmenu.h"
 #include "ratingpopupmenu.h"
 #include "themeengine.h"
@@ -66,56 +69,152 @@ public:
 
     ImagePreviewViewPriv()
     {
-        hasPrev            = false;
-        hasNext            = false;
-        imagePreviewWidget = 0;
-        imageInfo          = 0;
+        previewThread        = 0;
+        previewPreloadThread = 0;
+        hasPrev              = false;
+        hasNext              = false;
+        imageInfo            = 0;
     }
 
-    bool                hasPrev;
-    bool                hasNext;
+    bool               hasPrev;
+    bool               hasNext;
 
-    ImageInfo          *imageInfo;
+    QString            path;
+    QString            nextPath;
+    QString            previousPath;
 
-    ImagePreviewWidget *imagePreviewWidget;
+    ImageInfo         *imageInfo;
+
+    PreviewLoadThread *previewThread;
+    PreviewLoadThread *previewPreloadThread;
 };
     
 ImagePreviewView::ImagePreviewView(QWidget *parent)
-                : QVBox(parent)
+                : ImagePreviewWidget(parent)
 {
     d = new ImagePreviewViewPriv;
-    d->imagePreviewWidget = new ImagePreviewWidget(this);
 
-    setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain); 
-    setMargin(0); 
-    setLineWidth(1); 
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // ----------------------------------------------------------------
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));  
-
-    connect(d->imagePreviewWidget, SIGNAL( signalPreviewComplete() ),
-            this, SIGNAL( signalPreviewLoaded() ) );          
-    
-    connect(d->imagePreviewWidget, SIGNAL( signalPreviewFailed() ),
-            this, SIGNAL( signalPreviewLoaded() ) );    
-
-    connect(d->imagePreviewWidget, SIGNAL(signalNextItem()),
+    connect(this, SIGNAL(signalShowNextImage()),
             this, SIGNAL(signalNextItem()));
 
-    connect(d->imagePreviewWidget, SIGNAL(signalPrevItem()),
+    connect(this, SIGNAL(signalShowPrevImage()),
             this, SIGNAL(signalPrevItem()));
+
+    connect(this, SIGNAL(signalRightButtonClicked()),
+            this, SLOT(slotContextMenu()));
+
+    connect(this, SIGNAL(signalLeftButtonClicked()),
+            this, SIGNAL(signalBack2Album()));
 }
 
 ImagePreviewView::~ImagePreviewView()
 {
+    delete d->previewThread;
+    delete d->previewPreloadThread;
     delete d;
 }
 
-void ImagePreviewView::slotThemeChanged()
+void ImagePreviewView::reload()
 {
-    setPaletteBackgroundColor(ThemeEngine::instance()->baseColor());
+    // cache is cleaned from AlbumIconView::refreshItems
+    setImagePath(d->path);
+}
+
+void ImagePreviewView::setPreviousNextPaths(const QString& previous, const QString &next)
+{
+    d->nextPath     = next;
+    d->previousPath = previous;
+}
+
+void ImagePreviewView::setImagePath(const QString& path)
+{
+    setCursor( KCursor::waitCursor() );
+
+    d->path         = path;
+    d->nextPath     = QString();
+    d->previousPath = QString();
+
+    if (d->path.isEmpty())
+    {
+        unsetCursor();
+        return;
+    }
+
+    if (!d->previewThread)
+    {
+        d->previewThread = new PreviewLoadThread();
+        connect(d->previewThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
+                this, SLOT(slotGotImagePreview(const LoadingDescription &, const QImage&)));
+    }
+    if (!d->previewPreloadThread)
+    {
+        d->previewPreloadThread = new PreviewLoadThread();
+        connect(d->previewPreloadThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
+                this, SLOT(slotNextPreload()));
+    }
+
+    d->previewThread->load(LoadingDescription(path, 1024, AlbumSettings::instance()->getExifRotate()));
+
+    emit signalPreviewStarted();
+}
+
+void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
+{
+    if (description.filePath != d->path)
+        return;
+
+    // NOTE: order to send signals to AlbumWidgetStack is important to 
+    // Raise the preview widget before to show the image, because the widget 
+    // container size can have a wrong size. Raising the preview widget will 
+    // set the widget container size properlly.   
+
+    if (preview.isNull())
+    {
+        emit signalPreviewLoaded();
+        QPixmap pix(visibleWidth(), visibleHeight());
+        pix.fill(ThemeEngine::instance()->baseColor());
+        QPainter p(&pix);
+        QFileInfo info(d->path);
+        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
+        p.drawText(0, 0, pix.width(), pix.height(),
+                   Qt::AlignCenter|Qt::WordBreak, 
+                   i18n("Cannot display preview for\n\"%1\"")
+                   .arg(info.fileName()));
+        p.end();
+        setImage(pix.convertToImage());
+    }
+    else
+    {
+        emit signalPreviewLoaded();
+        setImage(preview);
+    }
+
+    unsetCursor();
+    slotNextPreload();
+}
+
+void ImagePreviewView::slotNextPreload()
+{
+    QString loadPath;
+    if (!d->nextPath.isNull())
+    {
+        loadPath    = d->nextPath;
+        d->nextPath = QString();
+    }
+    else if (!d->previousPath.isNull())
+    {
+        loadPath        = d->previousPath;
+        d->previousPath = QString();
+    }
+    else
+        return;
+
+    d->previewPreloadThread->load(LoadingDescription(loadPath, 1024,
+                                  AlbumSettings::instance()->getExifRotate()));
 }
 
 void ImagePreviewView::setImageInfo(ImageInfo* info, ImageInfo *previous, ImageInfo *next)
@@ -125,12 +224,12 @@ void ImagePreviewView::setImageInfo(ImageInfo* info, ImageInfo *previous, ImageI
     d->hasNext   = next;
 
     if (d->imageInfo)
-        d->imagePreviewWidget->setImagePath(info->filePath());
+        setImagePath(info->filePath());
     else
-        d->imagePreviewWidget->setImagePath();
+        setImagePath();
 
-    d->imagePreviewWidget->setPreviousNextPaths(previous ? previous->filePath() : QString(),
-                                                next     ? next->filePath()     : QString());
+    setPreviousNextPaths(previous ? previous->filePath() : QString(),
+                         next     ? next->filePath()     : QString());
 }
 
 ImageInfo* ImagePreviewView::getImageInfo()
@@ -138,195 +237,180 @@ ImageInfo* ImagePreviewView::getImageInfo()
     return d->imageInfo;
 }
 
-void ImagePreviewView::reload()
+void ImagePreviewView::slotContextMenu()
 {
-    d->imagePreviewWidget->reload();
-}
+    RatingPopupMenu *ratingMenu     = 0;
+    TagsPopupMenu   *assignTagsMenu = 0;
+    TagsPopupMenu   *removeTagsMenu = 0;
 
-void ImagePreviewView::mousePressEvent(QMouseEvent* e)
-{
-    if (e->button() == Qt::RightButton)
+    if (!d->imageInfo)
+        return;
+
+    //-- Open With Actions ------------------------------------
+
+    KURL url(d->imageInfo->kurl().path());
+    KMimeType::Ptr mimePtr = KMimeType::findByURL(url, 0, true, true);
+
+    QValueVector<KService::Ptr> serviceVector;
+    KTrader::OfferList offers = KTrader::self()->query(mimePtr->name(), "Type == 'Application'");
+
+    QPopupMenu openWithMenu;
+
+    KTrader::OfferList::Iterator iter;
+    KService::Ptr ptr;
+    int index = 100;
+
+    for( iter = offers.begin(); iter != offers.end(); ++iter )
     {
-        RatingPopupMenu *ratingMenu     = 0;
-        TagsPopupMenu   *assignTagsMenu = 0;
-        TagsPopupMenu   *removeTagsMenu = 0;
+        ptr = *iter;
+        openWithMenu.insertItem( ptr->pixmap(KIcon::Small), ptr->name(), index++);
+        serviceVector.push_back(ptr);
+    }
 
-        if (!d->imageInfo)
-            return;
+    //-- Navigate actions -------------------------------------------
 
-        //-- Open With Actions ------------------------------------
-    
-        KURL url(d->imageInfo->kurl().path());
-        KMimeType::Ptr mimePtr = KMimeType::findByURL(url, 0, true, true);
-    
-        QValueVector<KService::Ptr> serviceVector;
-        KTrader::OfferList offers = KTrader::self()->query(mimePtr->name(), "Type == 'Application'");
+    DPopupMenu popmenu(this);
+    popmenu.insertItem(SmallIcon("back"), i18n("Back"), 10);
+    if (!d->hasPrev) popmenu.setItemEnabled(10, false);
 
-        QPopupMenu openWithMenu;
+    popmenu.insertItem(SmallIcon("forward"), i18n("Forward"), 11);
+    if (!d->hasNext) popmenu.setItemEnabled(11, false);
+
+    popmenu.insertItem(SmallIcon("folder_image"), i18n("Back to Album"), 15);
     
-        KTrader::OfferList::Iterator iter;
-        KService::Ptr ptr;
-        int index = 100;
+    //-- Edit actions -----------------------------------------------
+
+    popmenu.insertSeparator();
+    popmenu.insertItem(SmallIcon("slideshow"), i18n("SlideShow"), 16);
+    popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 12);
+    popmenu.insertItem(i18n("Open With"), &openWithMenu, 13);
+
+    // Merge in the KIPI plugins actions ----------------------------
+
+    KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
+    KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
     
-        for( iter = offers.begin(); iter != offers.end(); ++iter )
+    for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.begin();
+        it != pluginList.end(); ++it)
+    {
+        KIPI::Plugin* plugin = (*it)->plugin();
+
+        if (plugin && (*it)->name() == "JPEGLossless")
         {
-            ptr = *iter;
-            openWithMenu.insertItem( ptr->pixmap(KIcon::Small), ptr->name(), index++);
-            serviceVector.push_back(ptr);
-        }
+            DDebug() << "Found JPEGLossless plugin" << endl;
 
-        //-- Navigate actions -------------------------------------------
-
-        DPopupMenu popmenu(this);
-        popmenu.insertItem(SmallIcon("back"), i18n("Back"), 10);
-        if (!d->hasPrev) popmenu.setItemEnabled(10, false);
-
-        popmenu.insertItem(SmallIcon("forward"), i18n("Forward"), 11);
-        if (!d->hasNext) popmenu.setItemEnabled(11, false);
-
-        popmenu.insertItem(SmallIcon("folder_image"), i18n("Back to Album"), 15);
-        
-        //-- Edit actions -----------------------------------------------
-
-        popmenu.insertSeparator();
-        popmenu.insertItem(SmallIcon("slideshow"), i18n("SlideShow"), 16);
-        popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 12);
-        popmenu.insertItem(i18n("Open With"), &openWithMenu, 13);
-
-        // Merge in the KIPI plugins actions ----------------------------
-
-        KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
-        KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
-        
-        for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.begin();
-            it != pluginList.end(); ++it)
-        {
-            KIPI::Plugin* plugin = (*it)->plugin();
-    
-            if (plugin && (*it)->name() == "JPEGLossless")
+            KActionPtrList actionList = plugin->actions();
+            
+            for (KActionPtrList::const_iterator iter = actionList.begin();
+                iter != actionList.end(); ++iter)
             {
-                DDebug() << "Found JPEGLossless plugin" << endl;
-    
-                KActionPtrList actionList = plugin->actions();
+                KAction* action = *iter;
                 
-                for (KActionPtrList::const_iterator iter = actionList.begin();
-                    iter != actionList.end(); ++iter)
+                if (QString::fromLatin1(action->name())
+                    == QString::fromLatin1("jpeglossless_rotate"))
                 {
-                    KAction* action = *iter;
-                    
-                    if (QString::fromLatin1(action->name())
-                        == QString::fromLatin1("jpeglossless_rotate"))
-                    {
-                        action->plug(&popmenu);
-                    }
+                    action->plug(&popmenu);
                 }
             }
         }
-
-        //-- Trash action -------------------------------------------
-
-        popmenu.insertSeparator();
-        popmenu.insertItem(SmallIcon("edittrash"), i18n("Move to Trash"), 14);
-
-        // Bulk assignment/removal of tags --------------------------
-
-        Q_LLONG id = d->imageInfo->id();
-        QValueList<Q_LLONG> idList;
-        idList.append(id);
-
-        assignTagsMenu = new TagsPopupMenu(idList, 1000, TagsPopupMenu::ASSIGN);
-        removeTagsMenu = new TagsPopupMenu(idList, 2000, TagsPopupMenu::REMOVE);
-
-        popmenu.insertSeparator();
-
-        popmenu.insertItem(i18n("Assign Tag"), assignTagsMenu);
-        int i = popmenu.insertItem(i18n("Remove Tag"), removeTagsMenu);
-
-        connect(assignTagsMenu, SIGNAL(signalTagActivated(int)),
-                this, SLOT(slotAssignTag(int)));
-
-        connect(removeTagsMenu, SIGNAL(signalTagActivated(int)),
-                this, SLOT(slotRemoveTag(int)));
-
-        {
-            DatabaseAccess access;
-            if (!access.db()->hasTags( idList ))
-                popmenu.setItemEnabled(i, false);
-        }
-
-        popmenu.insertSeparator();
-
-        // Assign Star Rating -------------------------------------------
-    
-        ratingMenu = new RatingPopupMenu();
-        
-        connect(ratingMenu, SIGNAL(activated(int)),
-                this, SLOT(slotAssignRating(int)));
-    
-        popmenu.insertItem(i18n("Assign Rating"), ratingMenu);
-
-        // --------------------------------------------------------
-
-        int idm = popmenu.exec(e->globalPos());
-    
-        switch(idm) 
-        {
-            case 10:     // Back
-            {
-                emit signalPrevItem();
-                break;
-            }
-
-            case 11:     // Forward
-            {
-                emit signalNextItem();
-                break;
-            }
-
-            case 12:     // Edit...
-            {
-                emit signalEditItem();
-                break;
-            }
-  
-            case 14:     // Move to trash
-            {
-                emit signalDeleteItem();
-                break;
-            }
-
-            case 15:     // Back to album
-            {
-                emit signalBack2Album();
-                break;
-            }
-
-            case 16:     // SlideShow
-            {
-                emit signalSlideShow();
-                break;
-            }
-
-            default:
-                break;
-        }
-
-        // Open With...
-        if (idm >= 100 && idm < 1000) 
-        {
-            KService::Ptr imageServicePtr = serviceVector[idm-100];
-            KRun::run(*imageServicePtr, url);
-        }
-    
-        serviceVector.clear();
-        delete assignTagsMenu;
-        delete removeTagsMenu;
-        delete ratingMenu;
     }
-    else if (e->button() == Qt::LeftButton)
+
+    //-- Trash action -------------------------------------------
+
+    popmenu.insertSeparator();
+    popmenu.insertItem(SmallIcon("edittrash"), i18n("Move to Trash"), 14);
+
+    // Bulk assignment/removal of tags --------------------------
+
+    Q_LLONG id = d->imageInfo->id();
+    QValueList<Q_LLONG> idList;
+    idList.append(id);
+
+    assignTagsMenu = new TagsPopupMenu(idList, 1000, TagsPopupMenu::ASSIGN);
+    removeTagsMenu = new TagsPopupMenu(idList, 2000, TagsPopupMenu::REMOVE);
+
+    popmenu.insertSeparator();
+
+    popmenu.insertItem(i18n("Assign Tag"), assignTagsMenu);
+    int i = popmenu.insertItem(i18n("Remove Tag"), removeTagsMenu);
+
+    connect(assignTagsMenu, SIGNAL(signalTagActivated(int)),
+            this, SLOT(slotAssignTag(int)));
+
+    connect(removeTagsMenu, SIGNAL(signalTagActivated(int)),
+            this, SLOT(slotRemoveTag(int)));
+
+    if (!DatabaseAccess().db()->hasTags( idList ))
+        popmenu.setItemEnabled(i, false);
+
+    popmenu.insertSeparator();
+
+    // Assign Star Rating -------------------------------------------
+
+    ratingMenu = new RatingPopupMenu();
+    
+    connect(ratingMenu, SIGNAL(activated(int)),
+            this, SLOT(slotAssignRating(int)));
+
+    popmenu.insertItem(i18n("Assign Rating"), ratingMenu);
+
+    // --------------------------------------------------------
+
+    int idm = popmenu.exec(QCursor::pos());
+
+    switch(idm) 
     {
-        emit signalBack2Album();
+        case 10:     // Back
+        {
+            emit signalPrevItem();
+            break;
+        }
+
+        case 11:     // Forward
+        {
+            emit signalNextItem();
+            break;
+        }
+
+        case 12:     // Edit...
+        {
+            emit signalEditItem();
+            break;
+        }
+
+        case 14:     // Move to trash
+        {
+            emit signalDeleteItem();
+            break;
+        }
+
+        case 15:     // Back to album
+        {
+            emit signalBack2Album();
+            break;
+        }
+
+        case 16:     // SlideShow
+        {
+            emit signalSlideShow();
+            break;
+        }
+
+        default:
+            break;
     }
+
+    // Open With...
+    if (idm >= 100 && idm < 1000) 
+    {
+        KService::Ptr imageServicePtr = serviceVector[idm-100];
+        KRun::run(*imageServicePtr, url);
+    }
+
+    serviceVector.clear();
+    delete assignTagsMenu;
+    delete removeTagsMenu;
+    delete ratingMenu;
 }
 
 void ImagePreviewView::slotAssignTag(int tagID)
