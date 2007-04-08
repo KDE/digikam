@@ -951,19 +951,23 @@ void DigikamView::slotTogglePreviewMode(AlbumIconItem *iconItem)
             nextInfo = static_cast<AlbumIconItem*>(iconItem->nextItem())->imageInfo();
 
         d->albumWidgetStack->setPreviewItem(iconItem->imageInfo(), previousInfo, nextInfo);
-        emit signalZoomChanged(d->albumWidgetStack->zoomFactor());
     }
     else
     {
         // We go back to AlbumView Mode.
         d->albumWidgetStack->setPreviewMode( AlbumWidgetStack::PreviewAlbumMode );
-        emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
     }
 }
 
 void DigikamView::slotToggledToPreviewMode(bool b)
 {
     toogleZoomActions();
+
+    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+        emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
+    else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
+        emit signalZoomChanged(d->albumWidgetStack->zoomFactor());
+
     emit signalTogglePreview(b);
 }
 
