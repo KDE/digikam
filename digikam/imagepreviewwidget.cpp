@@ -382,7 +382,7 @@ void ImagePreviewWidget::contentsWheelEvent(QWheelEvent *e)
         return;
     }
 
-    QScrollView::contentsWheelEvent(e);*/
+    QScrollView::contentsWheelEvent(e);
 }
 
 bool ImagePreviewWidget::maxZoom()
