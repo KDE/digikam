@@ -57,6 +57,7 @@ public:
 
 signals:
 
+    void signalPreviewStarted();
     void signalNextItem();
     void signalPrevItem();
     void signalDeleteItem();

@@ -270,6 +270,7 @@ void ImagePreviewWidget::viewportPaintEvent(QPaintEvent *e)
                     sw = step;
                     sh = step;
 
+                    // Fast smooth scale method from Antonio.
                     QImage img = FastScale::fastScaleQImage(d->preview.copy(sx, sy, sw, sh),
                                                             d->tileSize, d->tileSize);
                     bitBlt(pix, 0, 0, &img, 0, 0);
@@ -381,7 +382,7 @@ void ImagePreviewWidget::contentsWheelEvent(QWheelEvent *e)
         return;
     }
 
-    QScrollView::contentsWheelEvent(e);
+    QScrollView::contentsWheelEvent(e);*/
 }
 
 bool ImagePreviewWidget::maxZoom()

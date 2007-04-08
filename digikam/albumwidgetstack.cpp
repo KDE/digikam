@@ -179,12 +179,14 @@ void AlbumWidgetStack::setPreviewMode(int mode)
     {
         d->albumIconView->setFocus();   
         setPreviewItem();
+        raiseWidget(mode);
         emit signalToggledToPreviewMode(false);
     }
-    else 
+    else
+    { 
+        raiseWidget(mode);
         emit signalToggledToPreviewMode(true);
-
-    raiseWidget(mode);
+    }
 }
 
 void AlbumWidgetStack::slotPreviewLoaded()
@@ -204,6 +206,26 @@ void AlbumWidgetStack::slotItemsUpdated(const KURL::List& list)
 
     if (list.contains(imagePreviewView()->getImageInfo()->kurl()))
         d->imagePreviewView->reload();
+}
+
+void AlbumWidgetStack::increaseZoom()
+{
+    d->imagePreviewView->slotIncreaseZoom();
+}
+
+void AlbumWidgetStack::decreaseZoom()
+{
+    d->imagePreviewView->slotDecreaseZoom();
+}
+
+bool AlbumWidgetStack::maxZoom()
+{
+    return d->imagePreviewView->maxZoom();
+}
+
+bool AlbumWidgetStack::minZoom()
+{
+    return d->imagePreviewView->minZoom();
 }
 
 }  // namespace Digikam

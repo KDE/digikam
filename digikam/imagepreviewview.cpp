@@ -97,12 +97,6 @@ ImagePreviewView::ImagePreviewView(QWidget *parent)
 
     // ----------------------------------------------------------------
 
-    connect(this, SIGNAL(signalPreviewComplete()),
-            this, SIGNAL(signalPreviewLoaded()));          
-    
-    connect(this, SIGNAL(signalPreviewFailed()),
-            this, SIGNAL(signalPreviewLoaded()));    
-
     connect(this, SIGNAL(signalShowNextImage()),
             this, SIGNAL(signalNextItem()));
 
@@ -179,7 +173,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
 
     if (preview.isNull())
     {
-        emit signalPreviewFailed();
+        emit signalPreviewLoaded();
         QPixmap pix(visibleWidth(), visibleHeight());
         pix.fill(ThemeEngine::instance()->baseColor());
         QPainter p(&pix);
@@ -194,7 +188,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
     }
     else
     {
-        emit signalPreviewComplete();
+        emit signalPreviewLoaded();
         setImage(preview);
     }
 

@@ -61,9 +61,6 @@ signals:
     void signalLeftButtonClicked();    
     void signalShowNextImage();
     void signalShowPrevImage();
-    void signalPreviewStarted();
-    void signalPreviewComplete();
-    void signalPreviewFailed();
 
 public slots:
 
