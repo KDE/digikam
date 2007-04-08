@@ -228,4 +228,14 @@ bool AlbumWidgetStack::minZoom()
     return d->imagePreviewView->minZoom();
 }
 
+void AlbumWidgetStack::setZoomFactor(double z)
+{
+    d->imagePreviewView->setZoomFactor(z);
+}
+
+double AlbumWidgetStack::zoomFactor()
+{
+    return d->imagePreviewView->zoomFactor();
+}
+
 }  // namespace Digikam

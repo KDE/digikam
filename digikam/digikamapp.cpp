@@ -174,9 +174,6 @@ DigikamApp::DigikamApp()
 
 DigikamApp::~DigikamApp()
 {
-    if (d->thumbSizeTimer)
-        delete d->thumbSizeTimer;
-
     ImageAttributesWatch::shutDown();
 
     if (ImageWindow::imagewindowCreated())
@@ -360,8 +357,11 @@ void DigikamApp::setupStatusBar()
     connect(d->thumbSizeSlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotThumbSizeTimer(int)));
 
-    connect(d->view, SIGNAL(signalZoomChanged(int)),
+    connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
+
+    connect(d->view, SIGNAL(signalZoomChanged(double)),
+            this, SLOT(slotZoomChanged(double)));
     
     connect(d->view, SIGNAL(signalTogglePreview(bool)),
             this, SLOT(slotTooglePreview(bool)));
@@ -918,7 +918,7 @@ void DigikamApp::setupActions()
     d->imageSortAction->setCurrentItem((int)d->albumSettings->getImageSortOrder());
 
     d->thumbSizeSlider->setValue(d->albumSettings->getDefaultIconSize());
-    slotThumbSizeEffect();
+    slotThumbSizeChanged(d->thumbSizeSlider->value());
 }
 
 void DigikamApp::enableThumbSizePlusAction(bool val)
@@ -1794,23 +1794,7 @@ void DigikamApp::slotDonateMoney()
 
 void DigikamApp::slotThumbSizeTimer(int size)
 {
-    d->thumbSizeTracker->setText(i18n("Thumbnail size: %1").arg(size));
-
-    if (d->thumbSizeTimer)
-    {
-       d->thumbSizeTimer->stop();
-       delete d->thumbSizeTimer;
-    }
-
-    d->thumbSizeTimer = new QTimer( this );
-    connect(d->thumbSizeTimer, SIGNAL(timeout()),
-            this, SLOT(slotThumbSizeEffect()) );
-    d->thumbSizeTimer->start(300, true);
-}
-
-void DigikamApp::slotThumbSizeEffect()
-{
-    d->view->setThumbSize(d->thumbSizeSlider->value());
+    d->view->setThumbSize(size);
 }
 
 void DigikamApp::slotThumbSizeChanged(int size)
@@ -1821,11 +1805,26 @@ void DigikamApp::slotThumbSizeChanged(int size)
     d->thumbSizeSlider->blockSignals(false);
 }
 
+void DigikamApp::slotZoomChanged(double zoom)
+{
+    d->thumbSizeSlider->blockSignals(true);
+
+    double h    = (double)ThumbnailSize::Huge;
+    double s    = (double)ThumbnailSize::Small;
+    double zmin = 0.1;
+    double zmax = 10.0;
+    double b    = (zmin-(zmax*s/h))/(1-s/h);
+    double a    = (zmax-b)/h;
+    int size    = (int)((zoom - b) /a); 
+
+    d->thumbSizeSlider->setValue(size);
+    d->thumbSizeTracker->setText(i18n("zoom: %1%").arg((int)(zoom*100.0)));
+    d->thumbSizeSlider->blockSignals(false);
+}
+
 void DigikamApp::slotTooglePreview(bool t)
 {
     // NOTE: if 't' is true, we are in Preview Mode, else we are in AlbumView Mode
-
-    d->thumbSizeSlider->setEnabled(!t);
 
     // This is require if ESC is pressed to go out of Preview Mode. 
     // imagePreviewAction is handled by F3 key only. 

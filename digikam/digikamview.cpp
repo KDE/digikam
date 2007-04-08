@@ -101,6 +101,7 @@ public:
         tagFilterView         = 0;
         albumWidgetStack      = 0;
         selectionTimer        = 0;
+        thumbSizeTimer        = 0;
         needDispatchSelection = false;
         cancelSlideShow       = false;
     }
@@ -109,10 +110,12 @@ public:
     bool                      cancelSlideShow;
 
     int                       initialAlbumID;
+    int                       thumbSize;
 
     QSplitter                *splitter;
 
     QTimer                   *selectionTimer;
+    QTimer                   *thumbSizeTimer;
 
     DigikamApp               *parent;
 
@@ -178,6 +181,9 @@ DigikamView::DigikamView(QWidget *parent)
 
 DigikamView::~DigikamView()
 {
+    if (d->thumbSizeTimer)
+        delete d->thumbSizeTimer;
+
     saveViewState();
 
     delete d->albumHistory;
@@ -706,19 +712,50 @@ void DigikamView::slotAlbumsCleared()
 
 void DigikamView::setThumbSize(int size)
 {
-    if (size > ThumbnailSize::Huge || size < ThumbnailSize::Small)
-        return;
+    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
+    {
+        double h    = (double)ThumbnailSize::Huge;
+        double s    = (double)ThumbnailSize::Small;
+        double zmin = 0.1;
+        double zmax = 10.0;
+        double b    = (zmin-(zmax*s/h))/(1-s/h);
+        double a    = (zmax-b)/h;
+        double z    = a*size+b; 
+        d->albumWidgetStack->setZoomFactor(z);   
+        emit signalZoomChanged(d->albumWidgetStack->zoomFactor());
+    }
+    else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+    {
+        if (size > ThumbnailSize::Huge || size < ThumbnailSize::Small)
+            return;
 
+        emit signalThumbSizeChanged(size);
+        d->thumbSize = size;
+
+        if (d->thumbSizeTimer)
+        {
+            d->thumbSizeTimer->stop();
+            delete d->thumbSizeTimer;
+        }
+    
+        d->thumbSizeTimer = new QTimer( this );
+        connect(d->thumbSizeTimer, SIGNAL(timeout()),
+                this, SLOT(slotThumbSizeEffect()) );
+        d->thumbSizeTimer->start(300, true);    
+    }
+}
+
+void DigikamView::slotThumbSizeEffect()
+{
     emit signalNoCurrentItem();
 
-    d->iconView->setThumbnailSize(size);
-
+    d->iconView->setThumbnailSize(d->thumbSize);
     toogleZoomActions();
 
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings)
         return;
-    settings->setDefaultIconSize(size);
+    settings->setDefaultIconSize(d->thumbSize);
 }
 
 void DigikamView::toogleZoomActions()
@@ -755,12 +792,13 @@ void DigikamView::slotZoomIn()
     {
         int newSize = d->iconView->thumbnailSize().size() + ThumbnailSize::Step; 
         setThumbSize(newSize);
-        emit signalZoomChanged(newSize);
+        emit signalThumbSizeChanged(newSize);
     }
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
     {
         d->albumWidgetStack->increaseZoom();
         toogleZoomActions();
+        emit signalZoomChanged(d->albumWidgetStack->zoomFactor());
     }
 }
 
@@ -770,12 +808,13 @@ void DigikamView::slotZoomOut()
     {
         int newSize = d->iconView->thumbnailSize().size() - ThumbnailSize::Step; 
         setThumbSize(newSize);
-        emit signalZoomChanged(newSize);
+        emit signalThumbSizeChanged(newSize);
     }  
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
     {
         d->albumWidgetStack->decreaseZoom();
         toogleZoomActions();
+        emit signalZoomChanged(d->albumWidgetStack->zoomFactor());
     }
 }
 
@@ -912,11 +951,13 @@ void DigikamView::slotTogglePreviewMode(AlbumIconItem *iconItem)
             nextInfo = static_cast<AlbumIconItem*>(iconItem->nextItem())->imageInfo();
 
         d->albumWidgetStack->setPreviewItem(iconItem->imageInfo(), previousInfo, nextInfo);
+        emit signalZoomChanged(d->albumWidgetStack->zoomFactor());
     }
     else
     {
         // We go back to AlbumView Mode.
         d->albumWidgetStack->setPreviewMode( AlbumWidgetStack::PreviewAlbumMode );
+        emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
     }
 }
 

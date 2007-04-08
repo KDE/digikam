@@ -130,7 +130,6 @@ public:
         view                                 = 0;
         splashScreen                         = 0;
         thumbSizeSlider                      = 0;
-        thumbSizeTimer                       = 0;
         thumbSizeTracker                     = 0;
     }
 
@@ -144,8 +143,6 @@ public:
     QPtrList<KAction>      kipiToolsActions;
     QPtrList<KAction>      kipiBatchActions;
     QPtrList<KAction>      kipiAlbumActions;
-
-    QTimer                *thumbSizeTimer;
 
     QSlider               *thumbSizeSlider;
 

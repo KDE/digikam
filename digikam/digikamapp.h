@@ -154,8 +154,8 @@ private slots:
     void slotProgressValue(int);
 
     void slotThumbSizeTimer(int);
-    void slotThumbSizeEffect();
     void slotThumbSizeChanged(int);
+    void slotZoomChanged(double);
     void slotTooglePreview(bool);
 
 private:

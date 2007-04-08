@@ -437,6 +437,11 @@ void ImagePreviewWidget::setZoomFactor(double zoom)
     viewport()->update();
 }
 
+double ImagePreviewWidget::zoomFactor()
+{
+    return d->zoom; 
+}
+
 bool ImagePreviewWidget::fitToWindow()
 {
     return d->autoZoom;
