@@ -1033,25 +1033,11 @@ void Canvas::slotFlipVert()
 
 void Canvas::slotCrop()
 {
-    if (!d->rubber) return;
+    int x, y, w, h;
+    d->im->getSelectedArea(x, y, w, h);
 
-    QRect r(d->rubber->normalize());
-    if (!r.isValid()) return;
-
-    r.moveBy(- d->pixmapRect.x(), - d->pixmapRect.y());
-
-    int step = (int)floor(d->tileSize / d->zoom); 
-
-    int x = (int)((((double)r.x()      / d->zoom) / (d->tileSize / d->zoom)) * step);
-    int y = (int)((((double)r.y()      / d->zoom) / (d->tileSize / d->zoom)) * step);
-    int w = (int)((((double)r.width()  / d->zoom) / (d->tileSize / d->zoom)) * step);
-    int h = (int)((((double)r.height() / d->zoom) / (d->tileSize / d->zoom)) * step);
-
-    x = QMIN(imageWidth(),  QMAX(x, 0));
-    y = QMIN(imageHeight(), QMAX(y, 0));
-
-    w = QMIN(imageWidth(),  QMAX(w, 0));
-    h = QMIN(imageHeight(), QMAX(h, 0));
+    if (!w && !h )  // No current selection.
+        return;
 
     d->im->crop(x, y, w, h);
 }
