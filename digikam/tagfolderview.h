@@ -76,6 +76,7 @@ private slots:
     void slotABCContextMenu();
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
+    void slotReloadThumbnails();
 
 private:
 

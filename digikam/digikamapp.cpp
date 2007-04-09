@@ -1486,6 +1486,8 @@ void DigikamApp::slotSetupChanged()
 
     d->view->applySettings(d->albumSettings);
 
+    AlbumThumbnailLoader::instance()->setThumbnailSize(d->albumSettings->getDefaultTreeIconSize());
+
     if (ImageWindow::imagewindowCreated())
         ImageWindow::imagewindow()->applySettings();
 

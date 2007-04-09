@@ -208,29 +208,32 @@ TagFilterView::TagFilterView(QWidget* parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotTagAdded(Album*)));
-            
+
     connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotTagDeleted(Album*)));
-            
+
     connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotTagRenamed(Album*)));
-            
+
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotClear()));
-            
+
     connect(AlbumManager::instance(), SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotAlbumIconChanged(Album*)));
-            
+
     connect(AlbumManager::instance(), SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
             this, SLOT(slotTagMoved(TAlbum*, TAlbum*)));
 
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
-    
+
     connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
             this, SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
-            
+
     connect(loader, SIGNAL(signalFailed(Album *)),
             this, SLOT(slotThumbnailLost(Album *)));
+
+    connect(loader, SIGNAL(signalReloadThumbnails()),
+            this, SLOT(slotReloadThumbnails()));
 
     connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
             this, SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
@@ -700,6 +703,16 @@ void TagFilterView::slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbn
 void TagFilterView::slotThumbnailLost(Album *)
 {
     // we already set the standard icon before loading
+}
+
+void TagFilterView::slotReloadThumbnails()
+{
+    AlbumList tList = AlbumManager::instance()->allTAlbums();
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    {
+        TAlbum* tag  = (TAlbum*)(*it);
+        setTagThumbnail(tag);
+    }
 }
 
 void TagFilterView::slotAlbumIconChanged(Album* album)

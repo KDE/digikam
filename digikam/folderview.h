@@ -55,7 +55,7 @@ public:
     QRect    itemRect(QListViewItem *item) const;
     QPixmap  itemBasePixmapRegular() const;
     QPixmap  itemBasePixmapSelected() const;
-    
+
 protected:
 
     void contentsMousePressEvent(QMouseEvent *e);
@@ -65,38 +65,39 @@ protected:
     void contentsDragMoveEvent(QDragMoveEvent *e);
     void contentsDragLeaveEvent(QDragLeaveEvent * e);
     void contentsDropEvent(QDropEvent *e);
-            
+
     virtual bool acceptDrop(const QDropEvent *e) const;
-        
+
     void startDrag();
     FolderItem* dragItem() const;
-    
+
     void resizeEvent(QResizeEvent* e);
     void fontChange(const QFont& oldFont);
-    
+
     virtual void selectItem(int id);
- 
+
     /**
      * load the last state from the view from disk
      */
     virtual void loadViewState();
-    
+
     /**
      * writes the views state to disk
      */
     virtual void saveViewState();
-    
+
     bool mouseInItemRect(QListViewItem* item, int x) const;
-    
+
 protected slots:
-    
+
     virtual void slotSelectionChanged();
     virtual void slotAllAlbumsLoaded();
 
 private slots:
 
     void slotThemeChanged();
-    
+    void slotIconSizeChanged();
+
 private:
 
     FolderViewPriv      *d;

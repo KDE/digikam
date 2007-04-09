@@ -303,6 +303,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     connect(loader, SIGNAL(signalFailed(Album *)),
             this, SLOT(slotThumbnailLost(Album *)));
 
+    connect(loader, SIGNAL(signalReloadThumbnails()),
+            this, SLOT(slotReloadThumbnails()));
+
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
     connect(watch, SIGNAL(signalImageTagsChanged(Q_LLONG)),
@@ -1324,6 +1327,16 @@ void ImageDescEditTab::slotGotThumbnailFromIcon(Album *album, const QPixmap& thu
 void ImageDescEditTab::slotThumbnailLost(Album *)
 {
     // we already set the standard icon before loading
+}
+
+void ImageDescEditTab::slotReloadThumbnails()
+{
+    AlbumList tList = AlbumManager::instance()->allTAlbums();
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    {
+        TAlbum* tag  = (TAlbum*)(*it);
+        setTagThumbnail(tag);
+    }
 }
 
 void ImageDescEditTab::slotImageTagsChanged(Q_LLONG imageId)
