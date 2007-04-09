@@ -158,8 +158,8 @@ KIO::CopyJob *rename(const KURL& src, const KURL& dest)
         return false;
     }
 
-    QString srcPath = Digikam::AlbumManager::instance()->getLibraryPath() + src.path();
-    QString dstPath = Digikam::AlbumManager::instance()->getLibraryPath() + dest.path();
+    QString srcPath = Digikam::AlbumManager::instance()->getLi braryPath() + src.path();
+    QString dstPath = Digikam::AlbumManager::instance()->getLi braryPath() + dest.path();
     QString newDstPath;
 
     bool overwrite = false;

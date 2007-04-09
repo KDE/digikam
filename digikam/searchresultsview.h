@@ -44,7 +44,7 @@ namespace Digikam
 class SearchResultsView : public QIconView
 {
     Q_OBJECT
-    
+
 public:
 
     SearchResultsView(QWidget* parent);
@@ -52,16 +52,15 @@ public:
 
     void openURL(const KURL& url);
     void clear();
-    
+
 private:
 
     KIO::TransferJob*         m_listJob;
-    
+
     QGuardedPtr<ThumbnailJob> m_thumbJob;
-    
+
     QDict<QIconViewItem>      m_itemDict;
-    
-    QString                   m_libraryPath;
+
     QString                   m_filter;
 
 private slots:

@@ -46,7 +46,6 @@ SearchResultsView::SearchResultsView(QWidget* parent)
     m_listJob  = 0;
     m_thumbJob = 0;
 
-    m_libraryPath = AlbumManager::instance()->getLibraryPath();
     m_filter      = AlbumSettings::instance()->getAllFileFilter();
 
     setAutoArrange(true);
