@@ -59,6 +59,7 @@ public:
     {
         currTheme = 0;
         db        = 0;
+        themeInitiallySet = false;
     }
 
     QPtrList<Theme> themeList;
@@ -66,6 +67,7 @@ public:
     
     Theme*          currTheme;
     Theme*          defaultTheme;
+    bool            themeInitiallySet;
 
     XrmDatabase     db;
 };
@@ -165,14 +167,17 @@ void ThemeEngine::setCurrentTheme(const QString& name)
         return;
     }
 
-    if (d->currTheme == theme)
+    if (d->currTheme == theme && d->themeInitiallySet)
         return;
 
     d->currTheme = theme;
     loadTheme();
 
+    // this is only to ensure that even if the chosen theme is the default theme,
+    // the signalThemeChanged is emitted when themes are loaded in DigikamApp
+    d->themeInitiallySet = true;
+
     //theme->print();
-    
     QTimer::singleShot(0, this, SIGNAL(signalThemeChanged()));
 }
 
