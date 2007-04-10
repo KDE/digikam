@@ -498,7 +498,7 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url)
 
     if (photoInfo.dateTime.isValid())
     {
-        str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
+        str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
         d->labelPhotoDateTime->setText(str);
     }
     else
