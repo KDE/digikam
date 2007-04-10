@@ -403,7 +403,7 @@ void SlideShow::updatePixmap()
             {
                 if (photoInfo.dateTime.isValid())
                 {
-                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortFormat, true);
+                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
                     printInfoText(p, offset, str);
                 }
             }

@@ -75,7 +75,7 @@ public:
 
 static void dateToString(const QDateTime& datetime, QString& str)
 {
-    str = KGlobal::locale()->formatDateTime(datetime, KLocale::ShortFormat, false);
+    str = KGlobal::locale()->formatDateTime(datetime, true, false);
 }
 
 AlbumIconItem::AlbumIconItem(IconGroupItem* parent, ImageInfo* info)

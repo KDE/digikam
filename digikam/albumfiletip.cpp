@@ -350,7 +350,7 @@ void AlbumFileTip::updateText()
         if (settings->getToolTipsShowFileDate())
         {
             QDateTime modifiedDate = fileInfo.lastModified();
-            str = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortFormat, true);
+            str = KGlobal::locale()->formatDateTime(modifiedDate, true, true);
             tip += cellBeg + i18n("Modified:") + cellMid + str + cellEnd;
         }
 
@@ -432,7 +432,7 @@ void AlbumFileTip::updateText()
             {
                 if (photoInfo.dateTime.isValid())
                 {
-                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortFormat, true);
+                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
                     if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
                     metaStr += cellBeg + i18n("Created:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
                 }

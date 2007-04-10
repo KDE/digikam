@@ -361,7 +361,7 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url)
     d->labelFolder->setText(url.directory());
 
     QDateTime modifiedDate = fileInfo.lastModified();
-    str = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortFormat, true);
+    str = KGlobal::locale()->formatDateTime(modifiedDate, true, true);
     d->labelFileModifiedDate->setText(str);
 
     str = QString("%1 (%2)").arg(KIO::convertSize(fi.size()))
@@ -498,7 +498,7 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url)
 
     if (photoInfo.dateTime.isValid())
     {
-        str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortFormat, true);
+        str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
         d->labelPhotoDateTime->setText(str);
     }
     else
