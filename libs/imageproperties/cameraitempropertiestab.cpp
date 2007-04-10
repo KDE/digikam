@@ -345,7 +345,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
 
     QDateTime date;
     date.setTime_t(itemInfo->mtime);
-    d->labelFileDate->setText(KGlobal::locale()->formatDateTime(date, true, true));
+    d->labelFileDate->setText(KGlobal::locale()->formatDateTime(date, KLocale::ShortDate, true));
 
     str = i18n("%1 (%2)").arg(KIO::convertSize(itemInfo->size))
                          .arg(KGlobal::locale()->formatNumber(itemInfo->size, 0));
@@ -465,7 +465,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
 
     if (photoInfo.dateTime.isValid())
     {
-        str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
+        str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
         d->labelPhotoDateTime->setText(str);
     }
     else
