@@ -82,7 +82,7 @@ KDateEdit::KDateEdit( QWidget *parent, const char *name )
   setMaxCount( 1 );
 
   mDate = QDate::currentDate();
-  QString today = KGlobal::locale()->formatDate( mDate, KLocale::ShortDate );
+  QString today = KGlobal::locale()->formatDate( mDate, KLocale::ShortFormat );
 
   insertItem( today );
   setCurrentItem( 0 );
@@ -364,7 +364,7 @@ void KDateEdit::updateView()
 {
   QString dateString;
   if ( mDate.isValid() )
-    dateString = KGlobal::locale()->formatDate( mDate, KLocale::ShortDate );
+    dateString = KGlobal::locale()->formatDate( mDate, KLocale::ShortFormat );
 
   // We do not want to generate a signal here,
   // since we explicitly setting the date

@@ -784,7 +784,7 @@ void ThumbBarToolTip::maybeTip(const QPoint& pos)
     QDateTime date;
     date.setTime_t(fileItem.time(KIO::UDS_MODIFICATION_TIME));
     tipText += cellBeg + i18n("Modification Date:") + cellMid +
-               KGlobal::locale()->formatDateTime(date, KLocale::ShortDate, true)
+               KGlobal::locale()->formatDateTime(date, KLocale::ShortFormat, true)
                + cellEnd;
 
     tipText += cellBeg + i18n("Size:") + cellMid;
