@@ -68,12 +68,14 @@ public:
     int  previewMode(void);
     void setPreviewMode(int mode);
     
-    void increaseZoom();
-    void decreaseZoom();
-    bool maxZoom();
-    bool minZoom();
-    void setZoomFactor(double z);
+    void   increaseZoom();
+    void   decreaseZoom();
+    bool   maxZoom();
+    bool   minZoom();
+    void   setZoomFactor(double z);
     double zoomFactor();
+    double zoomMin();
+    double zoomMax();
 
 signals:
 

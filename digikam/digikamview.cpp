@@ -341,7 +341,7 @@ void DigikamView::setupConnections()
             this, SLOT(slotSlideShowAll()));
 
     connect(d->albumWidgetStack, SIGNAL(signalZoomFactorChanged(double)),
-            this, SIGNAL(signalZoomChanged(double)));
+            this, SLOT(slotZoomFactorChanged(double)));
 
     // -- Selection timer ---------------
 
@@ -719,8 +719,8 @@ void DigikamView::setThumbSize(int size)
     {
         double h    = (double)ThumbnailSize::Huge;
         double s    = (double)ThumbnailSize::Small;
-        double zmin = 0.1;
-        double zmax = 10.0;
+        double zmin = d->albumWidgetStack->zoomMin();
+        double zmax = d->albumWidgetStack->zoomMax();
         double b    = (zmin-(zmax*s/h))/(1-s/h);
         double a    = (zmax-b)/h;
         double z    = a*size+b; 
@@ -967,9 +967,22 @@ void DigikamView::slotToggledToPreviewMode(bool b)
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
         emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
-        emit signalZoomChanged(d->albumWidgetStack->zoomFactor());
+        slotZoomFactorChanged(d->albumWidgetStack->zoomFactor());
 
     emit signalTogglePreview(b);
+}
+
+void DigikamView::slotZoomFactorChanged(double zoom)
+{
+    double h    = (double)ThumbnailSize::Huge;
+    double s    = (double)ThumbnailSize::Small;
+    double zmin = d->albumWidgetStack->zoomMin();
+    double zmax = d->albumWidgetStack->zoomMax();
+    double b    = (zmin-(zmax*s/h))/(1-s/h);
+    double a    = (zmax-b)/h;
+    int size    = (int)((zoom - b) /a); 
+
+    emit signalZoomChanged(zoom, size);
 }
 
 void DigikamView::slotImageEdit()

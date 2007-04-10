@@ -50,11 +50,15 @@ public:
 
     void setImage(const QImage& image);
     void setZoomFactor(double z);
-    double zoomFactor();
     bool fitToWindow();
     void toggleFitToWindow();
+
     bool maxZoom();
     bool minZoom();
+
+    double zoomFactor();
+    double zoomMax();
+    double zoomMin();
 
 signals:
 

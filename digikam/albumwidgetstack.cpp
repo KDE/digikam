@@ -241,4 +241,14 @@ double AlbumWidgetStack::zoomFactor()
     return d->imagePreviewView->zoomFactor();
 }
 
+double AlbumWidgetStack::zoomMin()
+{
+    return d->imagePreviewView->zoomMin();
+}
+
+double AlbumWidgetStack::zoomMax()
+{
+    return d->imagePreviewView->zoomMax();
+}
+
 }  // namespace Digikam

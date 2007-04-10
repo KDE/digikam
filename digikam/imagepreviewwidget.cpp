@@ -385,6 +385,16 @@ void ImagePreviewWidget::contentsWheelEvent(QWheelEvent *e)
     QScrollView::contentsWheelEvent(e);
 }
 
+double ImagePreviewWidget::zoomMax()
+{
+    return d->maxZoom;
+}
+
+double ImagePreviewWidget::zoomMin()
+{
+    return d->minZoom;
+}
+
 bool ImagePreviewWidget::maxZoom()
 {
     return ((d->zoom * d->zoomMultiplier) >= d->maxZoom);

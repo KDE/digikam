@@ -73,7 +73,7 @@ signals:
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
     void signalThumbSizeChanged(int);
-    void signalZoomChanged(double);
+    void signalZoomChanged(double, int);
     void signalTogglePreview(bool);
 
 public slots:
@@ -170,6 +170,7 @@ private slots:
     void slotCancelSlideShow();
 
     void slotThumbSizeEffect();
+    void slotZoomFactorChanged(double);
 
 private:
 

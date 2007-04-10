@@ -387,8 +387,8 @@ void DigikamApp::setupStatusBar()
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
 
-    connect(d->view, SIGNAL(signalZoomChanged(double)),
-            this, SLOT(slotZoomChanged(double)));
+    connect(d->view, SIGNAL(signalZoomChanged(double, int)),
+            this, SLOT(slotZoomChanged(double, int)));
     
     connect(d->view, SIGNAL(signalTogglePreview(bool)),
             this, SLOT(slotTooglePreview(bool)));
@@ -1836,18 +1836,9 @@ void DigikamApp::slotThumbSizeChanged(int size)
     d->zoomSlider->blockSignals(false);
 }
 
-void DigikamApp::slotZoomChanged(double zoom)
+void DigikamApp::slotZoomChanged(double zoom, int size)
 {
     d->zoomSlider->blockSignals(true);
-
-    double h    = (double)ThumbnailSize::Huge;
-    double s    = (double)ThumbnailSize::Small;
-    double zmin = 0.1;
-    double zmax = 10.0;
-    double b    = (zmin-(zmax*s/h))/(1-s/h);
-    double a    = (zmax-b)/h;
-    int size    = (int)((zoom - b) /a); 
-
     d->zoomSlider->setValue(size);
     d->zoomTracker->setText(i18n("zoom: %1%").arg((int)(zoom*100.0)));
     d->zoomSlider->blockSignals(false);
