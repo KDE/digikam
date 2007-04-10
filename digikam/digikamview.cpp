@@ -726,11 +726,14 @@ void DigikamView::setThumbSize(int size)
     }
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
-        if (size > ThumbnailSize::Huge || size < ThumbnailSize::Small)
-            return;
+        if (size > ThumbnailSize::Huge)
+            d->thumbSize = ThumbnailSize::Huge;
+        else if (size < ThumbnailSize::Small)
+            d->thumbSize = ThumbnailSize::Small;
+        else 
+            d->thumbSize = size;
 
-        emit signalThumbSizeChanged(size);
-        d->thumbSize = size;
+        emit signalThumbSizeChanged(d->thumbSize);
 
         if (d->thumbSizeTimer)
         {
@@ -773,15 +776,13 @@ void DigikamView::toogleZoomActions()
     }  
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
-        int size = d->iconView->thumbnailSize().size();
-    
         d->parent->enableThumbSizeMinusAction(true);
         d->parent->enableThumbSizePlusAction(true);
     
-        if (size == ThumbnailSize::Huge)
+        if (d->thumbSize >= ThumbnailSize::Huge)
             d->parent->enableThumbSizePlusAction(false);
     
-        if (size == ThumbnailSize::Small)
+        if (d->thumbSize <= ThumbnailSize::Small)
             d->parent->enableThumbSizeMinusAction(false);
     }
 }
@@ -790,9 +791,9 @@ void DigikamView::slotZoomIn()
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
-        int newSize = d->iconView->thumbnailSize().size() + ThumbnailSize::Step; 
-        setThumbSize(newSize);
-        emit signalThumbSizeChanged(newSize);
+        setThumbSize(d->thumbSize + ThumbnailSize::Step);
+        toogleZoomActions();
+        emit signalThumbSizeChanged(d->thumbSize);
     }
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
     {
@@ -806,9 +807,9 @@ void DigikamView::slotZoomOut()
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
-        int newSize = d->iconView->thumbnailSize().size() - ThumbnailSize::Step; 
-        setThumbSize(newSize);
-        emit signalThumbSizeChanged(newSize);
+        setThumbSize(d->thumbSize - ThumbnailSize::Step);
+        toogleZoomActions();
+        emit signalThumbSizeChanged(d->thumbSize);
     }  
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
     {

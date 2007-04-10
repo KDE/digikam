@@ -354,6 +354,7 @@ void DigikamApp::setupStatusBar()
     d->thumbSizeSlider = new QSlider(ThumbnailSize::Small, ThumbnailSize::Huge,
                                      ThumbnailSize::Step, ThumbnailSize::Medium, 
                                      Qt::Horizontal, zoomBar);
+    d->thumbSizeSlider->setLineStep(ThumbnailSize::Step);
     d->thumbSizeSlider->setMaximumHeight(fontMetrics().height()+2);    
     d->thumbSizeSlider->setFixedWidth(120);
 
@@ -364,7 +365,6 @@ void DigikamApp::setupStatusBar()
 
     d->thumbSizeTracker = new DTipTracker("", d->thumbSizeSlider);
 
-
     statusBar()->addWidget(zoomBar, 1, true);
 
     //------------------------------------------------------------------------------
@@ -372,6 +372,8 @@ void DigikamApp::setupStatusBar()
     d->statusNavigateBar = new StatusNavigateBar(statusBar());
     d->statusNavigateBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->statusNavigateBar, 1, true);
+
+    //------------------------------------------------------------------------------
 
     connect(d->zoomMinusButton, SIGNAL(clicked()),
             d->view, SLOT(slotZoomOut()));
