@@ -352,8 +352,8 @@ void DigikamApp::setupStatusBar()
     QToolTip::add(d->zoomMinusButton, i18n("Zoom out"));
 
     d->zoomSlider = new QSlider(ThumbnailSize::Small, ThumbnailSize::Huge,
-                                     ThumbnailSize::Step, ThumbnailSize::Medium, 
-                                     Qt::Horizontal, zoomBar);
+                                ThumbnailSize::Step, ThumbnailSize::Medium, 
+                                Qt::Horizontal, zoomBar);
     d->zoomSlider->setLineStep(ThumbnailSize::Step);
     d->zoomSlider->setMaximumHeight(fontMetrics().height()+2);    
     d->zoomSlider->setFixedWidth(120);
@@ -382,7 +382,7 @@ void DigikamApp::setupStatusBar()
             d->view, SLOT(slotZoomIn()));
 
     connect(d->zoomSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(slotThumbSizeTimer(int)));
+            this, SLOT(slotZoomSliderChanged(int)));
 
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
@@ -1823,7 +1823,7 @@ void DigikamApp::slotDonateMoney()
     KApplication::kApplication()->invokeBrowser("http://www.digikam.org/?q=donation");
 }
 
-void DigikamApp::slotThumbSizeTimer(int size)
+void DigikamApp::slotZoomSliderChanged(int size)
 {
     d->view->setThumbSize(size);
 }

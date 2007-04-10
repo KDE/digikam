@@ -153,7 +153,7 @@ private slots:
     void slotProgressBarMode(int, const QString&);
     void slotProgressValue(int);
 
-    void slotThumbSizeTimer(int);
+    void slotZoomSliderChanged(int);
     void slotThumbSizeChanged(int);
     void slotZoomChanged(double);
     void slotTooglePreview(bool);
