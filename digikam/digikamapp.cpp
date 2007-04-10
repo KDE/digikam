@@ -1832,7 +1832,7 @@ void DigikamApp::slotThumbSizeChanged(int size)
 {
     d->zoomSlider->blockSignals(true);
     d->zoomSlider->setValue(size);
-    d->zoomTracker->setText(i18n("Thumbnail size: %1").arg(size));
+    d->zoomTracker->setText(i18n("Size: %1").arg(size));
     d->zoomSlider->blockSignals(false);
 }
 
