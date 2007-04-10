@@ -197,7 +197,7 @@ DigikamApp::~DigikamApp()
 
     m_instance = 0;
 
-    delete d->thumbSizeTracker;
+    delete d->zoomTracker;
     delete d;
 }
 
@@ -351,19 +351,19 @@ void DigikamApp::setupStatusBar()
     d->zoomMinusButton->setIconSet(SmallIconSet("viewmag-"));
     QToolTip::add(d->zoomMinusButton, i18n("Zoom out"));
 
-    d->thumbSizeSlider = new QSlider(ThumbnailSize::Small, ThumbnailSize::Huge,
+    d->zoomSlider = new QSlider(ThumbnailSize::Small, ThumbnailSize::Huge,
                                      ThumbnailSize::Step, ThumbnailSize::Medium, 
                                      Qt::Horizontal, zoomBar);
-    d->thumbSizeSlider->setLineStep(ThumbnailSize::Step);
-    d->thumbSizeSlider->setMaximumHeight(fontMetrics().height()+2);    
-    d->thumbSizeSlider->setFixedWidth(120);
+    d->zoomSlider->setLineStep(ThumbnailSize::Step);
+    d->zoomSlider->setMaximumHeight(fontMetrics().height()+2);    
+    d->zoomSlider->setFixedWidth(120);
 
     d->zoomPlusButton = new QToolButton(zoomBar);
     d->zoomPlusButton->setAutoRaise(true);
     d->zoomPlusButton->setIconSet(SmallIconSet("viewmag+"));
     QToolTip::add(d->zoomPlusButton, i18n("Zoom in"));
 
-    d->thumbSizeTracker = new DTipTracker("", d->thumbSizeSlider);
+    d->zoomTracker = new DTipTracker("", d->zoomSlider);
 
     statusBar()->addWidget(zoomBar, 1, true);
 
@@ -381,7 +381,7 @@ void DigikamApp::setupStatusBar()
     connect(d->zoomPlusButton, SIGNAL(clicked()),
             d->view, SLOT(slotZoomIn()));
 
-    connect(d->thumbSizeSlider, SIGNAL(valueChanged(int)),
+    connect(d->zoomSlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotThumbSizeTimer(int)));
 
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
@@ -944,8 +944,8 @@ void DigikamApp::setupActions()
     d->albumSortAction->setCurrentItem((int)d->albumSettings->getAlbumSortOrder());
     d->imageSortAction->setCurrentItem((int)d->albumSettings->getImageSortOrder());
 
-    d->thumbSizeSlider->setValue(d->albumSettings->getDefaultIconSize());
-    slotThumbSizeChanged(d->thumbSizeSlider->value());
+    d->zoomSlider->setValue(d->albumSettings->getDefaultIconSize());
+    slotThumbSizeChanged(d->zoomSlider->value());
 }
 
 void DigikamApp::enableThumbSizePlusAction(bool val)
@@ -1830,15 +1830,15 @@ void DigikamApp::slotThumbSizeTimer(int size)
 
 void DigikamApp::slotThumbSizeChanged(int size)
 {
-    d->thumbSizeSlider->blockSignals(true);
-    d->thumbSizeSlider->setValue(size);
-    d->thumbSizeTracker->setText(i18n("Thumbnail size: %1").arg(size));
-    d->thumbSizeSlider->blockSignals(false);
+    d->zoomSlider->blockSignals(true);
+    d->zoomSlider->setValue(size);
+    d->zoomTracker->setText(i18n("Thumbnail size: %1").arg(size));
+    d->zoomSlider->blockSignals(false);
 }
 
 void DigikamApp::slotZoomChanged(double zoom)
 {
-    d->thumbSizeSlider->blockSignals(true);
+    d->zoomSlider->blockSignals(true);
 
     double h    = (double)ThumbnailSize::Huge;
     double s    = (double)ThumbnailSize::Small;
@@ -1848,9 +1848,9 @@ void DigikamApp::slotZoomChanged(double zoom)
     double a    = (zmax-b)/h;
     int size    = (int)((zoom - b) /a); 
 
-    d->thumbSizeSlider->setValue(size);
-    d->thumbSizeTracker->setText(i18n("zoom: %1%").arg((int)(zoom*100.0)));
-    d->thumbSizeSlider->blockSignals(false);
+    d->zoomSlider->setValue(size);
+    d->zoomTracker->setText(i18n("zoom: %1%").arg((int)(zoom*100.0)));
+    d->zoomSlider->blockSignals(false);
 }
 
 void DigikamApp::slotTooglePreview(bool t)

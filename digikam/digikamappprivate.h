@@ -130,8 +130,8 @@ public:
         kipiPluginLoader                     = 0;
         view                                 = 0;
         splashScreen                         = 0;
-        thumbSizeSlider                      = 0;
-        thumbSizeTracker                     = 0;
+        zoomSlider                           = 0;
+        zoomTracker                          = 0;
         zoomMinusButton                      = 0;
         zoomPlusButton                       = 0;
     }
@@ -147,11 +147,11 @@ public:
     QPtrList<KAction>      kipiBatchActions;
     QPtrList<KAction>      kipiAlbumActions;
 
-    QSlider               *thumbSizeSlider;
-
     QMap<int, QString>     mediaItems;
 
     QString                cameraGuiPath;
+
+    QSlider               *zoomSlider;
 
     QToolButton           *zoomPlusButton;
     QToolButton           *zoomMinusButton;
@@ -229,7 +229,7 @@ public:
     KActionMenu           *cameraMenuAction;
     KSelectAction         *themeMenuAction;
     
-    DTipTracker           *thumbSizeTracker;
+    DTipTracker           *zoomTracker;
     AlbumSettings         *albumSettings;
     AlbumManager          *albumManager;
     SplashScreen          *splashScreen;
