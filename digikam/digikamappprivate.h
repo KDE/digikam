@@ -24,6 +24,7 @@
 #include <qstring.h>
 #include <qmap.h>
 #include <qslider.h>
+#include <qtoolbutton.h>
 #include <qtimer.h>
 
 // KDE includes.
@@ -131,6 +132,8 @@ public:
         splashScreen                         = 0;
         thumbSizeSlider                      = 0;
         thumbSizeTracker                     = 0;
+        zoomMinusButton                      = 0;
+        zoomPlusButton                       = 0;
     }
 
     bool                   fullScreen;
@@ -149,6 +152,9 @@ public:
     QMap<int, QString>     mediaItems;
 
     QString                cameraGuiPath;
+
+    QToolButton           *zoomPlusButton;
+    QToolButton           *zoomMinusButton;
 
     KPopupMenu            *cameraMediaList;
 

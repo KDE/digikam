@@ -30,6 +30,7 @@
 #include <qtooltip.h>
 #include <qsignalmapper.h>
 #include <qdockarea.h>
+#include <qhbox.h>
 
 // KDE includes.
 
@@ -341,18 +342,42 @@ void DigikamApp::setupStatusBar()
     d->statusProgressBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->statusProgressBar, 100, true);
 
+    //------------------------------------------------------------------------------
+
+    QHBox *zoomBar = new QHBox(statusBar());
+
+    d->zoomMinusButton = new QToolButton(zoomBar);
+    d->zoomMinusButton->setAutoRaise(true);
+    d->zoomMinusButton->setIconSet(SmallIconSet("viewmag-"));
+    QToolTip::add(d->zoomMinusButton, i18n("Zoom out"));
+
     d->thumbSizeSlider = new QSlider(ThumbnailSize::Small, ThumbnailSize::Huge,
                                      ThumbnailSize::Step, ThumbnailSize::Medium, 
-                                     Qt::Horizontal, statusBar());
+                                     Qt::Horizontal, zoomBar);
     d->thumbSizeSlider->setMaximumHeight(fontMetrics().height()+2);    
     d->thumbSizeSlider->setFixedWidth(120);
 
+    d->zoomPlusButton = new QToolButton(zoomBar);
+    d->zoomPlusButton->setAutoRaise(true);
+    d->zoomPlusButton->setIconSet(SmallIconSet("viewmag+"));
+    QToolTip::add(d->zoomPlusButton, i18n("Zoom in"));
+
     d->thumbSizeTracker = new DTipTracker("", d->thumbSizeSlider);
-    statusBar()->addWidget(d->thumbSizeSlider, 1, true);
+
+
+    statusBar()->addWidget(zoomBar, 1, true);
+
+    //------------------------------------------------------------------------------
 
     d->statusNavigateBar = new StatusNavigateBar(statusBar());
     d->statusNavigateBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->statusNavigateBar, 1, true);
+
+    connect(d->zoomMinusButton, SIGNAL(clicked()),
+            d->view, SLOT(slotZoomOut()));
+
+    connect(d->zoomPlusButton, SIGNAL(clicked()),
+            d->view, SLOT(slotZoomIn()));
 
     connect(d->thumbSizeSlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotThumbSizeTimer(int)));
@@ -924,11 +949,13 @@ void DigikamApp::setupActions()
 void DigikamApp::enableThumbSizePlusAction(bool val)
 {
     d->thumbSizePlusAction->setEnabled(val);
+    d->zoomPlusButton->setEnabled(val);
 }
 
 void DigikamApp::enableThumbSizeMinusAction(bool val)
 {
     d->thumbSizeMinusAction->setEnabled(val);
+    d->zoomMinusButton->setEnabled(val);
 }
 
 void DigikamApp::enableAlbumBackwardHistory(bool enable)
