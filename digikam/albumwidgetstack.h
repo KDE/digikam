@@ -67,6 +67,7 @@ public:
     void setPreviewItem(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
     int  previewMode(void);
     void setPreviewMode(int mode);
+    void previewLoaded();
     
     void   increaseZoom();
     void   decreaseZoom();
@@ -92,10 +93,6 @@ public slots:
 
     void slotEscapePreview();
     void slotItemsUpdated(const KURL::List&);
-
-private slots:
-
-    void slotPreviewLoaded();
 
 private:
 

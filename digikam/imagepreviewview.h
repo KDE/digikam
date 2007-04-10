@@ -34,6 +34,7 @@
 namespace Digikam
 {
 
+class AlbumWidgetStack;
 class LoadingDescription;
 class ImageInfo;
 class ImagePreviewViewPriv;
@@ -45,7 +46,7 @@ Q_OBJECT
 
 public:
 
-    ImagePreviewView(QWidget *parent=0);
+    ImagePreviewView(AlbumWidgetStack *parent=0);
     ~ImagePreviewView();
 
     void setImageInfo(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
@@ -57,7 +58,6 @@ public:
 
 signals:
 
-    void signalPreviewStarted();
     void signalNextItem();
     void signalPrevItem();
     void signalDeleteItem();

@@ -48,6 +48,7 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "albumwidgetstack.h"
 #include "imageinfo.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
@@ -70,9 +71,10 @@ public:
     {
         previewThread        = 0;
         previewPreloadThread = 0;
+        imageInfo            = 0;
+        parent               = 0;
         hasPrev              = false;
         hasNext              = false;
-        imageInfo            = 0;
     }
 
     bool               hasPrev;
@@ -86,12 +88,15 @@ public:
 
     PreviewLoadThread *previewThread;
     PreviewLoadThread *previewPreloadThread;
+
+    AlbumWidgetStack  *parent;
 };
     
-ImagePreviewView::ImagePreviewView(QWidget *parent)
+ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
                 : ImagePreviewWidget(parent)
 {
     d = new ImagePreviewViewPriv;
+    d->parent = parent;
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -157,23 +162,16 @@ void ImagePreviewView::setImagePath(const QString& path)
     }
 
     d->previewThread->load(LoadingDescription(path, 1024, AlbumSettings::instance()->getExifRotate()));
-
-    emit signalPreviewStarted();
 }
 
 void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
 {
     if (description.filePath != d->path)
-        return;
-
-    // NOTE: order to send signals to AlbumWidgetStack is important to 
-    // Raise the preview widget before to show the image, because the widget 
-    // container size can have a wrong size. Raising the preview widget will 
-    // set the widget container size properlly.   
+        return;   
 
     if (preview.isNull())
     {
-        emit signalPreviewLoaded();
+        d->parent->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         QPixmap pix(visibleWidth(), visibleHeight());
         pix.fill(ThemeEngine::instance()->baseColor());
         QPainter p(&pix);
@@ -185,11 +183,13 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
                    .arg(info.fileName()));
         p.end();
         setImage(pix.convertToImage());
+        d->parent->previewLoaded();
     }
     else
     {
-        emit signalPreviewLoaded();
+        d->parent->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         setImage(preview);
+        d->parent->previewLoaded();
     }
 
     unsetCursor();

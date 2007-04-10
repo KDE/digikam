@@ -94,9 +94,6 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     connect(d->imagePreviewView, SIGNAL(signalDeleteItem()),
             this, SIGNAL(signalDeleteItem()));
 
-    connect(d->imagePreviewView, SIGNAL(signalPreviewLoaded()),
-            this, SLOT(slotPreviewLoaded()));
-
     connect(d->imagePreviewView, SIGNAL(signalBack2Album()),
             this, SIGNAL(signalBack2Album()));
 
@@ -188,13 +185,12 @@ void AlbumWidgetStack::setPreviewMode(int mode)
     else
     { 
         raiseWidget(mode);
-        emit signalToggledToPreviewMode(true);
     }
 }
 
-void AlbumWidgetStack::slotPreviewLoaded()
+void AlbumWidgetStack::previewLoaded()
 {
-    setPreviewMode(PreviewImageMode);
+     emit signalToggledToPreviewMode(true);
 }
 
 void AlbumWidgetStack::slotItemsUpdated(const KURL::List& list)
