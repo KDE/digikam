@@ -948,13 +948,13 @@ void DigikamApp::setupActions()
     slotThumbSizeChanged(d->zoomSlider->value());
 }
 
-void DigikamApp::enableThumbSizePlusAction(bool val)
+void DigikamApp::enableZoomPlusAction(bool val)
 {
     d->thumbSizePlusAction->setEnabled(val);
     d->zoomPlusButton->setEnabled(val);
 }
 
-void DigikamApp::enableThumbSizeMinusAction(bool val)
+void DigikamApp::enableZoomMinusAction(bool val)
 {
     d->thumbSizeMinusAction->setEnabled(val);
     d->zoomMinusButton->setEnabled(val);

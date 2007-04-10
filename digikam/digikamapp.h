@@ -73,8 +73,8 @@ public:
 
     void autoDetect();
     void downloadFrom(const QString &cameraGuiPath);
-    void enableThumbSizePlusAction(bool val);
-    void enableThumbSizeMinusAction(bool val);
+    void enableZoomPlusAction(bool val);
+    void enableZoomMinusAction(bool val);
     void enableAlbumBackwardHistory(bool enable);
     void enableAlbumForwardHistory(bool enable);
     

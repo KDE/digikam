@@ -765,25 +765,25 @@ void DigikamView::toogleZoomActions()
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
     {
-        d->parent->enableThumbSizeMinusAction(true);
-        d->parent->enableThumbSizePlusAction(true);
+        d->parent->enableZoomMinusAction(true);
+        d->parent->enableZoomPlusAction(true);
     
         if (d->albumWidgetStack->maxZoom())
-            d->parent->enableThumbSizePlusAction(false);
+            d->parent->enableZoomPlusAction(false);
     
         if (d->albumWidgetStack->minZoom())
-            d->parent->enableThumbSizeMinusAction(false);
+            d->parent->enableZoomMinusAction(false);
     }  
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
-        d->parent->enableThumbSizeMinusAction(true);
-        d->parent->enableThumbSizePlusAction(true);
+        d->parent->enableZoomMinusAction(true);
+        d->parent->enableZoomPlusAction(true);
     
         if (d->thumbSize >= ThumbnailSize::Huge)
-            d->parent->enableThumbSizePlusAction(false);
+            d->parent->enableZoomPlusAction(false);
     
         if (d->thumbSize <= ThumbnailSize::Small)
-            d->parent->enableThumbSizeMinusAction(false);
+            d->parent->enableZoomMinusAction(false);
     }
 }
 
