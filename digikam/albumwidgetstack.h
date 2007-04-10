@@ -1,10 +1,10 @@
 /* ============================================================
- * Authors: Gilles Caulier 
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2006-06-13
  * Description : A widget stack to embedded album content view
  *               or the current image preview.
  *
- * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -84,6 +84,7 @@ signals:
     void signalToggledToPreviewMode(bool);
     void signalBack2Album();
     void signalSlideShow();
+    void signalZoomFactorChanged(double);
 
 public slots:
 

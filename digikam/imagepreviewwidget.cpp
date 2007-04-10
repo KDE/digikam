@@ -435,6 +435,8 @@ void ImagePreviewWidget::setZoomFactor(double zoom)
            (int)(((cpy * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)));
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
+
+    emit signalZoomFactorChanged(d->zoom);
 }
 
 double ImagePreviewWidget::zoomFactor()

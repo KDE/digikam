@@ -340,6 +340,9 @@ void DigikamView::setupConnections()
     connect(d->albumWidgetStack, SIGNAL(signalSlideShow()),
             this, SLOT(slotSlideShowAll()));
 
+    connect(d->albumWidgetStack, SIGNAL(signalZoomFactorChanged(double)),
+            this, SIGNAL(signalZoomChanged(double)));
+
     // -- Selection timer ---------------
 
     connect(d->selectionTimer, SIGNAL(timeout()),
@@ -722,7 +725,6 @@ void DigikamView::setThumbSize(int size)
         double a    = (zmax-b)/h;
         double z    = a*size+b; 
         d->albumWidgetStack->setZoomFactor(z);   
-        emit signalZoomChanged(d->albumWidgetStack->zoomFactor());
     }
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
@@ -799,7 +801,6 @@ void DigikamView::slotZoomIn()
     {
         d->albumWidgetStack->increaseZoom();
         toogleZoomActions();
-        emit signalZoomChanged(d->albumWidgetStack->zoomFactor());
     }
 }
 
@@ -815,7 +816,6 @@ void DigikamView::slotZoomOut()
     {
         d->albumWidgetStack->decreaseZoom();
         toogleZoomActions();
-        emit signalZoomChanged(d->albumWidgetStack->zoomFactor());
     }
 }
 

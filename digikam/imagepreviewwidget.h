@@ -62,6 +62,7 @@ signals:
     void signalLeftButtonClicked();    
     void signalShowNextImage();
     void signalShowPrevImage();
+    void signalZoomFactorChanged(double);
 
 public slots:
 
