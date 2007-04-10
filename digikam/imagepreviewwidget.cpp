@@ -55,7 +55,7 @@ class ImagePreviewWidgetPriv
 public:
 
     ImagePreviewWidgetPriv() :
-        tileSize(128), minZoom(0.1), maxZoom(10.0), zoomMultiplier(1.2) 
+        tileSize(128), minZoom(0.1), maxZoom(12.0), zoomMultiplier(1.2) 
     {
         pressedMoving        = false;
         midButtonPressed     = false;
@@ -397,33 +397,29 @@ double ImagePreviewWidget::zoomMin()
 
 bool ImagePreviewWidget::maxZoom()
 {
-    return ((d->zoom * d->zoomMultiplier) >= d->maxZoom);
+    return (d->zoom >= d->maxZoom);
 }
 
 bool ImagePreviewWidget::minZoom()
 {
-    return ((d->zoom / d->zoomMultiplier) <= d->minZoom);
+    return (d->zoom <= d->minZoom);
 }
 
 void ImagePreviewWidget::slotIncreaseZoom()
 {
-    if (maxZoom())
-        return;
-
-    setZoomFactor(d->zoom * d->zoomMultiplier);
+    double zoom = d->zoom * d->zoomMultiplier;
+    setZoomFactor(zoom > zoomMax() ? zoomMax() : zoom);
 }
 
 void ImagePreviewWidget::slotDecreaseZoom()
 {
-    if (minZoom())
-        return;
-
-    setZoomFactor(d->zoom / d->zoomMultiplier);
+    double zoom = d->zoom / d->zoomMultiplier;
+    setZoomFactor(zoom < zoomMin() ? zoomMin() : zoom);
 }
 
 void ImagePreviewWidget::setZoomFactor(double zoom)
 {
-    if (d->autoZoom)
+    if (d->autoZoom || zoom == d->zoom)
         return;
 
     // Zoom using center of canvas and given zoom factor.
@@ -434,7 +430,8 @@ void ImagePreviewWidget::setZoomFactor(double zoom)
     cpx = ((cpx / d->zoom) / (d->tileSize / d->zoom)) * floor(d->tileSize / d->zoom);
     cpy = ((cpy / d->zoom) / (d->tileSize / d->zoom)) * floor(d->tileSize / d->zoom);
 
-    d->zoom       = zoom;
+    // To limit precision of zoom value and reduce error with check of max/min zoom. 
+    d->zoom       = floor(zoom * 10000.0) / 10000.0;
     d->zoomWidth  = (int)(d->preview.width()  * d->zoom);
     d->zoomHeight = (int)(d->preview.height() * d->zoom);
 

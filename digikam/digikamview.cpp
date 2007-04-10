@@ -800,7 +800,6 @@ void DigikamView::slotZoomIn()
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
     {
         d->albumWidgetStack->increaseZoom();
-        toogleZoomActions();
     }
 }
 
@@ -815,8 +814,22 @@ void DigikamView::slotZoomOut()
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
     {
         d->albumWidgetStack->decreaseZoom();
-        toogleZoomActions();
     }
+}
+
+void DigikamView::slotZoomFactorChanged(double zoom)
+{
+    toogleZoomActions();
+
+    double h    = (double)ThumbnailSize::Huge;
+    double s    = (double)ThumbnailSize::Small;
+    double zmin = d->albumWidgetStack->zoomMin();
+    double zmax = d->albumWidgetStack->zoomMax();
+    double b    = (zmin-(zmax*s/h))/(1-s/h);
+    double a    = (zmax-b)/h;
+    int size    = (int)((zoom - b) /a); 
+
+    emit signalZoomChanged(zoom, size);
 }
 
 void DigikamView::slotAlbumPropsEdit()
@@ -970,19 +983,6 @@ void DigikamView::slotToggledToPreviewMode(bool b)
         slotZoomFactorChanged(d->albumWidgetStack->zoomFactor());
 
     emit signalTogglePreview(b);
-}
-
-void DigikamView::slotZoomFactorChanged(double zoom)
-{
-    double h    = (double)ThumbnailSize::Huge;
-    double s    = (double)ThumbnailSize::Small;
-    double zmin = d->albumWidgetStack->zoomMin();
-    double zmax = d->albumWidgetStack->zoomMax();
-    double b    = (zmin-(zmax*s/h))/(1-s/h);
-    double a    = (zmax-b)/h;
-    int size    = (int)((zoom - b) /a); 
-
-    emit signalZoomChanged(zoom, size);
 }
 
 void DigikamView::slotImageEdit()
