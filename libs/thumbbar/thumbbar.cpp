@@ -339,6 +339,7 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
           
         item->repaint();
         emit signalURLSelected(item->url());
+        emit signalItemSelected(item);
     }
 }
 
@@ -512,6 +513,7 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
     barItem->repaint();
     
     emit signalURLSelected(barItem->url());
+    emit signalItemSelected(barItem);
 }
 
 void ThumbBarView::insertItem(ThumbBarItem* item)

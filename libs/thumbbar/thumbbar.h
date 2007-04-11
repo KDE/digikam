@@ -96,9 +96,10 @@ private:
 
 signals:
 
+    void signalItemSelected(ThumbBarItem*);
     void signalURLSelected(const KURL&);
     void signalItemAdded(void);
-    
+
 private slots:
 
     void slotUpdate();
