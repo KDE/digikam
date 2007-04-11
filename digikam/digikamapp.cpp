@@ -1626,6 +1626,9 @@ void DigikamApp::slotShowKipiHelp()
 
 void DigikamApp::loadPlugins()
 {
+    if(d->splashScreen)
+        d->splashScreen->message(i18n("Loading Kipi Plugins"), AlignLeft, white);
+
     QStringList ignores;
     d->kipiInterface = new DigikamKipiInterface( this, "Digikam_KIPI_interface" );
 
@@ -1676,8 +1679,8 @@ void DigikamApp::slotKipiPluginPlug()
 
         ++cpt;
 
-        if(d->splashScreen)
-            d->splashScreen->message(i18n("Loading: %1").arg((*it)->name()));
+        //if(d->splashScreen)
+          //  d->splashScreen->message(i18n("Loading: %1").arg((*it)->name()));
 
         plugin->setup( this );
         QPtrList<KAction>* popup = 0;
@@ -1717,8 +1720,8 @@ void DigikamApp::slotKipiPluginPlug()
         plugin->actionCollection()->readShortcutSettings();
     }
 
-    if(d->splashScreen)
-        d->splashScreen->message(i18n("1 Kipi Plugin Loaded", "%n Kipi Plugins Loaded", cpt));
+    //if(d->splashScreen)
+      //  d->splashScreen->message(i18n("1 Kipi Plugin Loaded", "%n Kipi Plugins Loaded", cpt));
 
     // Create GUI menu in according with plugins.
 

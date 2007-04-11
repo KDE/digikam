@@ -111,11 +111,14 @@ ImagePluginLoader::~ImagePluginLoader()
 
 void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
 {
+    if (d->splash)
+        d->splash->message(i18n("Loading Image Plugins"));
+
     KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
     KTrader::OfferList::ConstIterator iter;
-    
+
     int cpt = 0;
-    
+
     // Load plugin core at the first time.
 
     for(iter = offers.begin(); iter != offers.end(); ++iter)
@@ -134,12 +137,12 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
                 {
                     d->pluginList.append(ImagePluginLoaderPrivate::PluginType(service->name(), plugin));
-                
+
                     DDebug() << "ImagePluginLoader: Loaded plugin " << service->name() << endl;
-                 
-                    if (d->splash)      
-                        d->splash->message(i18n("Loading: %1").arg(service->name()));
-                    
+
+                    //if (d->splash)
+                      //  d->splash->message(i18n("Loading: %1").arg(service->name()));
+
                     ++cpt;
                 }
                 else
@@ -157,9 +160,9 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
             break;
         }
     }
-    
+
     // Load all other image plugins after (make a coherant menu construction in Image Editor).
-      
+
     for (iter = offers.begin(); iter != offers.end(); ++iter)
     {
         KService::Ptr service = *iter;
@@ -182,12 +185,12 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 if (plugin)
                 {
                     d->pluginList.append(ImagePluginLoaderPrivate::PluginType(service->name(), plugin));
-                
+
                     DDebug() << "ImagePluginLoader: Loaded plugin " << service->name() << endl;
-                
-                    if (d->splash)      
-                        d->splash->message(i18n("Loading: %1").arg(service->name()));
-                
+
+                    //if (d->splash)
+                      //  d->splash->message(i18n("Loading: %1").arg(service->name()));
+
                     ++cpt;
                 }
                 else
@@ -198,8 +201,8 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
         }
     }
 
-    if (d->splash)      
-        d->splash->message(i18n("1 Image Plugin Loaded", "%n Image Plugins Loaded", cpt));    
+    //if (d->splash)
+      //  d->splash->message(i18n("1 Image Plugin Loaded", "%n Image Plugins Loaded", cpt));
 
     d->splash = 0;       // Splashcreen is only lanched at the first time.
                          // If user change plugins list to use in setup, don't try to 
