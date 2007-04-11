@@ -96,7 +96,7 @@ private:
 
 signals:
 
-    void signalURLSelected(const KURL& url);
+    void signalURLSelected(const KURL&);
     void signalItemAdded(void);
     
 private slots:
@@ -104,8 +104,8 @@ private slots:
     void slotUpdate();
     void slotGotPreview(const KFileItem *, const QPixmap &);
     void slotFailedPreview(const KFileItem *);
-    void slotGotThumbnail(const KURL& url, const QPixmap& pix);
-    void slotFailedThumbnail(const KURL& url);
+    void slotGotThumbnail(const KURL&, const QPixmap&);
+    void slotFailedThumbnail(const KURL&);
     
 private:
 
