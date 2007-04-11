@@ -42,6 +42,8 @@ Image Plugins : Update internal CImg library to 1.1.9. The Greycstoration algori
 Image Plugins : DigikamImagePlugins have been merged to digiKam core. All tools still available 
                 like plugins at the same place than image plugin core. 
 
+Showfoto      : The thumbbar is now resizable. The thumbnails contents will be redimensionned in live.
+
 
 ----------------------------------------------------------------------------
 digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
