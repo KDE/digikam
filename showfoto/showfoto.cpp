@@ -118,6 +118,7 @@ public:
         rightSidebar            = 0;
         splash                  = 0;
         itemsNb                 = 0;
+        vSplitter               = 0;
         deleteItem2Trash        = true;
         fullScreenHideThumbBar  = true;
         validIccPath            = true;
@@ -128,6 +129,8 @@ public:
     bool                             validIccPath;
     
     int                              itemsNb;
+
+    QSplitter                       *vSplitter;
 
     KURL                             lastOpenedDirectory;
     
@@ -365,6 +368,7 @@ void ShowFoto::setupUserArea()
     {
         QHBoxLayout *hlay = new QHBoxLayout(widget);
         m_splitter        = new QSplitter(widget);
+        d->thumbBar       = new Digikam::ThumbBarView(m_splitter, Digikam::ThumbBarView::Vertical);
         m_canvas          = new Digikam::Canvas(m_splitter);
         m_canvas->setSizePolicy(rightSzPolicy);
 
@@ -372,7 +376,6 @@ void ShowFoto::setupUserArea()
         
         d->rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
                                                                  Digikam::Sidebar::Right);
-        d->thumbBar        = new Digikam::ThumbBarView(widget, Digikam::ThumbBarView::Vertical);
         
         hlay->addWidget(d->thumbBar);
         hlay->addWidget(m_splitter);
@@ -380,21 +383,24 @@ void ShowFoto::setupUserArea()
     }
     else                                                     // Horizontal thumbbar layout
     {
-        m_splitter        = new QSplitter(widget);
-        QWidget* widget2  = new QWidget(m_splitter);
-        QVBoxLayout *vlay = new QVBoxLayout(widget2);
-        m_canvas          = new Digikam::Canvas(widget2);
+        m_splitter           = new QSplitter(Qt::Horizontal, widget);
+        QWidget* widget2     = new QWidget(m_splitter);
+        QVBoxLayout *vlay    = new QVBoxLayout(widget2);
+        d->vSplitter         = new QSplitter(Qt::Vertical, widget2);
+        m_canvas             = new Digikam::Canvas(d->vSplitter);
+        d->thumbBar          = new Digikam::ThumbBarView(d->vSplitter, Digikam::ThumbBarView::Horizontal);
+
         m_canvas->setSizePolicy(rightSzPolicy);
+        d->vSplitter->setFrameStyle( QFrame::NoFrame );
+        d->vSplitter->setFrameShadow( QFrame::Plain );
+        d->vSplitter->setFrameShape( QFrame::NoFrame );
+        d->vSplitter->setOpaqueResize(false);
 
-        d->thumbBar       = new Digikam::ThumbBarView(widget2, Digikam::ThumbBarView::Horizontal);
+        vlay->addWidget(d->vSplitter);
 
-        vlay->addWidget(m_canvas);
-        vlay->addWidget(d->thumbBar);
-                
         QHBoxLayout *hlay = new QHBoxLayout(widget);
         d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
                                                                 Digikam::Sidebar::Right);
-
         hlay->addWidget(m_splitter);
         hlay->addWidget(d->rightSidebar);        
     }        
@@ -458,7 +464,13 @@ void ShowFoto::readSettings()
         d->showBarAction->activate();
 
     d->lastOpenedDirectory.setPath( config->readEntry("Last Opened Directory",
-                                    KGlobalSettings::documentPath()) );    
+                                    KGlobalSettings::documentPath()) );
+
+    QSizePolicy szPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    if(config->hasKey("Vertical Splitter Sizes") && d->vSplitter)
+        d->vSplitter->setSizes(config->readIntListEntry("Vertical Splitter Sizes"));
+    else 
+        m_canvas->setSizePolicy(szPolicy);    
 }
 
 void ShowFoto::saveSettings()
@@ -470,6 +482,8 @@ void ShowFoto::saveSettings()
     
     config->writeEntry("Last Opened Directory", d->lastOpenedDirectory.path() );
     config->writeEntry("Show Thumbnails", !d->showBarAction->isChecked());
+    if (d->vSplitter)
+        config->writeEntry("Vertical Splitter Sizes", d->vSplitter->sizes());
 
     config->sync();    
 }

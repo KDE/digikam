@@ -84,6 +84,7 @@ public:
         
 protected:
 
+    void resizeEvent(QResizeEvent* e);
     void viewportPaintEvent(QPaintEvent* e);
     void contentsMousePressEvent(QMouseEvent* e);
 
