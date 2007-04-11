@@ -363,20 +363,20 @@ void ShowFoto::setupUserArea()
 
     QWidget* widget = new QWidget(this);
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
-    
+
     if(!config->readBoolEntry("HorizontalThumbbar", false)) // Vertical thumbbar layout
     {
         QHBoxLayout *hlay = new QHBoxLayout(widget);
         m_splitter        = new QSplitter(widget);
         d->thumbBar       = new Digikam::ThumbBarView(m_splitter, Digikam::ThumbBarView::Vertical);
         m_canvas          = new Digikam::Canvas(m_splitter);
-        m_canvas->setSizePolicy(rightSzPolicy);
 
+        m_canvas->setSizePolicy(rightSzPolicy);
         m_canvas->makeDefaultEditingCanvas();
-        
+
         d->rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
                                                                  Digikam::Sidebar::Right);
-        
+
         hlay->addWidget(d->thumbBar);
         hlay->addWidget(m_splitter);
         hlay->addWidget(d->rightSidebar);
@@ -391,6 +391,8 @@ void ShowFoto::setupUserArea()
         d->thumbBar          = new Digikam::ThumbBarView(d->vSplitter, Digikam::ThumbBarView::Horizontal);
 
         m_canvas->setSizePolicy(rightSzPolicy);
+        m_canvas->makeDefaultEditingCanvas();
+
         d->vSplitter->setFrameStyle( QFrame::NoFrame );
         d->vSplitter->setFrameShadow( QFrame::Plain );
         d->vSplitter->setFrameShape( QFrame::NoFrame );
@@ -402,8 +404,8 @@ void ShowFoto::setupUserArea()
         d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
                                                                 Digikam::Sidebar::Right);
         hlay->addWidget(m_splitter);
-        hlay->addWidget(d->rightSidebar);        
-    }        
+        hlay->addWidget(d->rightSidebar);
+    }
 
     m_splitter->setFrameStyle( QFrame::NoFrame );
     m_splitter->setFrameShadow( QFrame::Plain );
