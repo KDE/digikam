@@ -265,8 +265,8 @@ void ImagePreviewWidget::viewportPaintEvent(QPaintEvent *e)
 
                     pix->fill(d->bgColor);
 
-                    sx = (int)floor(((double)i / d->zoom) / (d->tileSize / d->zoom)) * step;
-                    sy = (int)floor(((double)j / d->zoom) / (d->tileSize / d->zoom)) * step;
+                    sx = (int)floor((double)i  / d->tileSize ) * step;
+                    sy = (int)floor((double)j  / d->tileSize ) * step;
                     sw = step;
                     sh = step;
 
@@ -427,8 +427,8 @@ void ImagePreviewWidget::setZoomFactor(double zoom)
     double cpx = contentsX() + visibleWidth()  / 2.0; 
     double cpy = contentsY() + visibleHeight() / 2.0;
 
-    cpx = ((cpx / d->zoom) / (d->tileSize / d->zoom)) * floor(d->tileSize / d->zoom);
-    cpy = ((cpy / d->zoom) / (d->tileSize / d->zoom)) * floor(d->tileSize / d->zoom);
+    cpx = ( cpx / d->tileSize ) * floor(d->tileSize / d->zoom);
+    cpy = ( cpy / d->tileSize ) * floor(d->tileSize / d->zoom);
 
     // To limit precision of zoom value and reduce error with check of max/min zoom. 
     d->zoom       = floor(zoom * 10000.0) / 10000.0;
@@ -438,8 +438,8 @@ void ImagePreviewWidget::setZoomFactor(double zoom)
     updateContentsSize();
 
     viewport()->setUpdatesEnabled(false);
-    center((int)(((cpx * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)), 
-           (int)(((cpy * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)));
+    center((int)((cpx * d->tileSize ) / floor(d->tileSize / d->zoom)), 
+           (int)((cpy * d->tileSize ) / floor(d->tileSize / d->zoom)));
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
 
