@@ -69,7 +69,8 @@ class ThumbBarViewPriv
 {
 public:
 
-    ThumbBarViewPriv()
+    ThumbBarViewPriv() :
+        margin(5)
     {
         exifRotate = false;
         firstItem  = 0;
@@ -77,14 +78,16 @@ public:
         currItem   = 0;
         count      = 0;
         thumbJob   = 0;
+        tileSize   = ThumbnailSize::Small;
+
         itemDict.setAutoDelete(false);
     }
     
     bool                      clearing;
     bool                      exifRotate;
 
+    const int                 margin;
     int                       count;
-    int                       margin;
     int                       tileSize;
     int                       orientation;
     
@@ -129,8 +132,6 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate)
             : QScrollView(parent)
 {
     d = new ThumbBarViewPriv;
-    d->margin      = 5;
-    d->tileSize    = 64;
     d->orientation = orientation;
     d->exifRotate  = exifRotate;
 
