@@ -46,10 +46,15 @@ public:
 	DCursorTracker(const QString& txt, QWidget *parent);
 
 	void setText(const QString& txt);
-
+    void setEnable(bool b); 
+    
 protected:
 
 	bool eventFilter(QObject*, QEvent*);
+
+private:
+
+    bool m_enable;
 };
 
 
