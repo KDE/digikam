@@ -24,16 +24,18 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qrect.h>
 #include <qpointarray.h>
+
+// Local includes.
+
+#include "paniconwidget.h"
 
 namespace Digikam
 {
 
 class ImagePanIconWidgetPriv;
 
-class ImagePanIconWidget : public QWidget
+class ImagePanIconWidget : public PanIconWidget
 {
 Q_OBJECT
 
@@ -42,45 +44,14 @@ public:
     ImagePanIconWidget(int width, int height, QWidget *parent=0, WFlags flags=Qt::WDestructiveClose);
     ~ImagePanIconWidget();
 
-    void  setRegionSelection(QRect regionSelection);
-    QRect getRegionSelection(void);
-    void  setCenterSelection(void);
-
-    void  setCursorToLocalRegionSelectionCenter(void);
-    void  setMouseFocus(void);
-        
     void  setHighLightPoints(QPointArray pointsList);
        
-signals:
-
-    // Used with ImagePreview widget. 
-    // Emit when selection have been moved with mouse. 'targetDone' booleen 
-    // value is used for indicate if the mouse have been released.
-    void signalSelectionMoved( QRect rect, bool targetDone );     
-    
-    void signalSelectionTakeFocus(void);
-
-    void signalHiden(void);
-
 public slots:
 
-    void slotZoomFactorChanged( double );
     void slotSeparateViewToggled(int t);
             
-protected:
-
-    void hideEvent(QHideEvent *);
-    void paintEvent(QPaintEvent *);
-    void mousePressEvent(QMouseEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
-    void timerEvent(QTimerEvent *);
-        
 private:
     
-    // Recalculate the target selection position and emit 'signalSelectionMoved'.
-    
-    void regionSelectionMoved( bool targetDone );
     void updatePixmap();
 
 private:

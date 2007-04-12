@@ -31,6 +31,7 @@
 namespace Digikam
 {
 
+class ImagePanIconWidget;
 class PanIconWidgetPriv;
 
 class PanIconWidget : public QWidget
@@ -75,12 +76,26 @@ protected:
     void mouseMoveEvent(QMouseEvent *);
     void timerEvent(QTimerEvent *);
         
-private:
-    
-    // Recalculate the target selection position and emit 'signalSelectionMoved'.
-    
+    /** Recalculate the target selection position and emit 'signalSelectionMoved'.*/
     void regionSelectionMoved( bool targetDone );
-    void updatePixmap();
+
+    virtual void updatePixmap();
+
+protected:
+
+    bool     m_flicker;
+
+    int      m_timerID;
+    int      m_width;
+    int      m_height;
+    int      m_zoomedOrgWidth;
+    int      m_zoomedOrgHeight;
+    
+    QRect    m_rect;
+    QRect    m_localRegionSelection;    // Thumbnail size selection.
+
+    QPixmap *m_pixmap;
+
 
 private:
 
