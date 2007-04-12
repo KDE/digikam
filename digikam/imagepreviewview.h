@@ -28,7 +28,7 @@
 
 // Local includes
 
-#include "imagepreviewwidget.h"
+#include "previewwidget.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -39,7 +39,7 @@ class LoadingDescription;
 class ImageInfo;
 class ImagePreviewViewPriv;
 
-class DIGIKAM_EXPORT ImagePreviewView : public ImagePreviewWidget
+class DIGIKAM_EXPORT ImagePreviewView : public PreviewWidget
 {
 
 Q_OBJECT
@@ -74,6 +74,7 @@ private slots:
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
     void slotAssignRating(int rating);
+    void slotThemeChanged();
 
 private:
 

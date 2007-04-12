@@ -18,8 +18,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPREVIEWWIDGET_H
-#define IMAGEPREVIEWWIDGET_H
+#ifndef PREVIEWWIDGET_H
+#define PREVIEWWIDGET_H
 
 // Qt includes.
 
@@ -29,27 +29,27 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "canvas.h"
-#include "loadingdescription.h"
 
 class QPixmap;
+class QColor;
 
 namespace Digikam
 {
 
-class ImagePreviewWidgetPriv;
+class PreviewWidgetPriv;
 
-class DIGIKAM_EXPORT ImagePreviewWidget : public QScrollView
+class DIGIKAM_EXPORT PreviewWidget : public QScrollView
 {
 Q_OBJECT
 
 public:
 
-    ImagePreviewWidget(QWidget *parent=0);
-    ~ImagePreviewWidget();
+    PreviewWidget(QWidget *parent=0);
+    ~PreviewWidget();
 
     void setImage(const QImage& image);
     void setZoomFactor(double z);
+    void setBackgroundColor(const QColor& color);
     bool fitToWindow();
     void toggleFitToWindow();
 
@@ -84,15 +84,12 @@ protected:
    
 private slots:
 
-    void slotThemeChanged();
     void slotCornerButtonPressed();
     void slotZoomChanged(double);
     void slotPanIconSelectionMoved(QRect, bool);
     void slotPanIconHiden();
 
 private:
-
-    //void updatePixmap(void);
 
     void   resetImage();
     double calcAutoZoomFactor();
@@ -101,9 +98,9 @@ private:
 
 private:
 
-    ImagePreviewWidgetPriv* d;
+    PreviewWidgetPriv* d;
 };
 
 }  // NameSpace Digikam
 
-#endif /* IMAGEPREVIEWWIDGET_H */
+#endif /* PREVIEWWIDGET_H */

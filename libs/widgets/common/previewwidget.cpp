@@ -46,20 +46,19 @@
 
 #include "ddebug.h"
 #include "fastscale.h"
-#include "themeengine.h"
 #include "albumsettings.h"
 #include "paniconwidget.h"
-#include "imagepreviewwidget.h"
-#include "imagepreviewwidget.moc"
+#include "previewwidget.h"
+#include "previewwidget.moc"
 
 namespace Digikam
 {
 
-class ImagePreviewWidgetPriv
+class PreviewWidgetPriv
 {
 public:
 
-    ImagePreviewWidgetPriv() :
+    PreviewWidgetPriv() :
         tileSize(128), minZoom(0.1), maxZoom(12.0), zoomMultiplier(1.2) 
     {
         pressedMoving    = false;
@@ -113,10 +112,10 @@ public:
     PanIconWidget       *panIconWidget;
 };
 
-ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
-                  : QScrollView(parent)
+PreviewWidget::PreviewWidget(QWidget *parent)
+             : QScrollView(parent)
 {
-    d = new ImagePreviewWidgetPriv;
+    d = new PreviewWidgetPriv;
     d->bgColor.setRgb(0, 0, 0);
     
     viewport()->setBackgroundMode(Qt::NoBackground);
@@ -139,18 +138,15 @@ ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
 
     connect(d->cornerButton, SIGNAL(pressed()),
             this, SLOT(slotCornerButtonPressed()));
-
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));
 }
 
-ImagePreviewWidget::~ImagePreviewWidget()
+PreviewWidget::~PreviewWidget()
 {
     delete d->tileTmpPix;
     delete d;
 }
 
-void ImagePreviewWidget::setImage(const QImage& image)
+void PreviewWidget::setImage(const QImage& image)
 {   
     d->preview = image;
 
@@ -161,23 +157,23 @@ void ImagePreviewWidget::setImage(const QImage& image)
     viewport()->update();
 }
 
-void ImagePreviewWidget::slotThemeChanged()
+void PreviewWidget::setBackgroundColor(const QColor& color)
 {
-    if (d->bgColor == ThemeEngine::instance()->baseColor())
+    if (d->bgColor == color)
         return;
     
-    d->bgColor = ThemeEngine::instance()->baseColor();
+    d->bgColor = color;
     viewport()->update();
 }
 
-void ImagePreviewWidget::resetImage()
+void PreviewWidget::resetImage()
 {
     d->tileCache.clear();
     viewport()->setUpdatesEnabled(false);
     d->preview.reset();
 }
 
-void ImagePreviewWidget::updateAutoZoom()
+void PreviewWidget::updateAutoZoom()
 {
     d->zoom       = calcAutoZoomFactor();
     d->zoomWidth  = (int)(d->preview.width()  * d->zoom);
@@ -186,7 +182,7 @@ void ImagePreviewWidget::updateAutoZoom()
     emit signalZoomFactorChanged(d->zoom);
 }
 
-double ImagePreviewWidget::calcAutoZoomFactor()
+double PreviewWidget::calcAutoZoomFactor()
 {
     if (d->preview.isNull()) return d->zoom;
 
@@ -198,7 +194,7 @@ double ImagePreviewWidget::calcAutoZoomFactor()
     return QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
 }
 
-void ImagePreviewWidget::updateContentsSize()
+void PreviewWidget::updateContentsSize()
 {
     viewport()->setUpdatesEnabled(false);
     
@@ -224,7 +220,7 @@ void ImagePreviewWidget::updateContentsSize()
     viewport()->setUpdatesEnabled(true);
 }
 
-void ImagePreviewWidget::resizeEvent(QResizeEvent* e)
+void PreviewWidget::resizeEvent(QResizeEvent* e)
 {
     if (!e)
         return;
@@ -244,7 +240,7 @@ void ImagePreviewWidget::resizeEvent(QResizeEvent* e)
     slotZoomChanged(d->zoom);
 }
 
-void ImagePreviewWidget::viewportPaintEvent(QPaintEvent *e)
+void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
 {
     QRect er(e->rect());
     er = QRect(QMAX(er.x()      - 1, 0),
@@ -327,7 +323,7 @@ void ImagePreviewWidget::viewportPaintEvent(QPaintEvent *e)
     painter.end();
 }
 
-void ImagePreviewWidget::contentsMousePressEvent(QMouseEvent *e)
+void PreviewWidget::contentsMousePressEvent(QMouseEvent *e)
 {
     if (!e || e->button() == Qt::RightButton)
         return;
@@ -356,7 +352,7 @@ void ImagePreviewWidget::contentsMousePressEvent(QMouseEvent *e)
     viewport()->setMouseTracking(false);
 }
 
-void ImagePreviewWidget::contentsMouseMoveEvent(QMouseEvent *e)
+void PreviewWidget::contentsMouseMoveEvent(QMouseEvent *e)
 {
     if (!e) return;
 
@@ -370,7 +366,7 @@ void ImagePreviewWidget::contentsMouseMoveEvent(QMouseEvent *e)
     }
 }
     
-void ImagePreviewWidget::contentsMouseReleaseEvent(QMouseEvent *e)
+void PreviewWidget::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     if (!e) return;
 
@@ -393,7 +389,7 @@ void ImagePreviewWidget::contentsMouseReleaseEvent(QMouseEvent *e)
     }
 }
 
-void ImagePreviewWidget::contentsWheelEvent(QWheelEvent *e)
+void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
 {
     e->accept();
 
@@ -417,39 +413,39 @@ void ImagePreviewWidget::contentsWheelEvent(QWheelEvent *e)
     QScrollView::contentsWheelEvent(e);
 }
 
-double ImagePreviewWidget::zoomMax()
+double PreviewWidget::zoomMax()
 {
     return d->maxZoom;
 }
 
-double ImagePreviewWidget::zoomMin()
+double PreviewWidget::zoomMin()
 {
     return d->minZoom;
 }
 
-bool ImagePreviewWidget::maxZoom()
+bool PreviewWidget::maxZoom()
 {
     return (d->zoom >= d->maxZoom);
 }
 
-bool ImagePreviewWidget::minZoom()
+bool PreviewWidget::minZoom()
 {
     return (d->zoom <= d->minZoom);
 }
 
-void ImagePreviewWidget::slotIncreaseZoom()
+void PreviewWidget::slotIncreaseZoom()
 {
     double zoom = d->zoom * d->zoomMultiplier;
     setZoomFactor(zoom > zoomMax() ? zoomMax() : zoom);
 }
 
-void ImagePreviewWidget::slotDecreaseZoom()
+void PreviewWidget::slotDecreaseZoom()
 {
     double zoom = d->zoom / d->zoomMultiplier;
     setZoomFactor(zoom < zoomMin() ? zoomMin() : zoom);
 }
 
-void ImagePreviewWidget::setZoomFactor(double zoom)
+void PreviewWidget::setZoomFactor(double zoom)
 {
     if (d->autoZoom || zoom == d->zoom)
         return;
@@ -478,17 +474,17 @@ void ImagePreviewWidget::setZoomFactor(double zoom)
     emit signalZoomFactorChanged(d->zoom);
 }
 
-double ImagePreviewWidget::zoomFactor()
+double PreviewWidget::zoomFactor()
 {
     return d->zoom; 
 }
 
-bool ImagePreviewWidget::fitToWindow()
+bool PreviewWidget::fitToWindow()
 {
     return d->autoZoom;
 }
 
-void ImagePreviewWidget::toggleFitToWindow()
+void PreviewWidget::toggleFitToWindow()
 {
     d->autoZoom = !d->autoZoom;
 
@@ -504,7 +500,7 @@ void ImagePreviewWidget::toggleFitToWindow()
     viewport()->update();
 }
 
-void ImagePreviewWidget::slotCornerButtonPressed()
+void PreviewWidget::slotCornerButtonPressed()
 {    
     if (d->panIconPopup)
     {
@@ -538,14 +534,14 @@ void ImagePreviewWidget::slotCornerButtonPressed()
     pan->setCursorToLocalRegionSelectionCenter();
 }
 
-void ImagePreviewWidget::slotPanIconHiden()
+void PreviewWidget::slotPanIconHiden()
 {
     d->cornerButton->blockSignals(true);
     d->cornerButton->animateClick();
     d->cornerButton->blockSignals(false);
 }
 
-void ImagePreviewWidget::slotPanIconSelectionMoved(QRect r, bool b)
+void PreviewWidget::slotPanIconSelectionMoved(QRect r, bool b)
 {
     setContentsPos((int)(r.x()*d->zoom), (int)(r.y()*d->zoom));
 
@@ -558,7 +554,7 @@ void ImagePreviewWidget::slotPanIconSelectionMoved(QRect r, bool b)
     }
 }
 
-void ImagePreviewWidget::slotZoomChanged(double zoom)
+void PreviewWidget::slotZoomChanged(double zoom)
 {
     if (zoom > calcAutoZoomFactor())
         d->cornerButton->show();

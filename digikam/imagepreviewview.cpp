@@ -54,6 +54,7 @@
 #include "dpopupmenu.h"
 #include "metadatahub.h"
 #include "previewloadthread.h"
+#include "loadingdescription.h"
 #include "tagspopupmenu.h"
 #include "ratingpopupmenu.h"
 #include "themeengine.h"
@@ -93,7 +94,7 @@ public:
 };
     
 ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
-                : ImagePreviewWidget(parent)
+                : PreviewWidget(parent)
 {
     d = new ImagePreviewViewPriv;
     d->parent = parent;
@@ -113,6 +114,9 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
 
     connect(this, SIGNAL(signalLeftButtonClicked()),
             this, SIGNAL(signalBack2Album()));
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
 }
 
 ImagePreviewView::~ImagePreviewView()
@@ -448,6 +452,11 @@ void ImagePreviewView::slotAssignRating(int rating)
         hub.write(d->imageInfo, MetadataHub::PartialWrite);
         hub.write(d->imageInfo->filePath(), MetadataHub::FullWriteIfChanged);
     }
+}
+
+void ImagePreviewView::slotThemeChanged()
+{
+    setBackgroundColor(ThemeEngine::instance()->baseColor());
 }
 
 }  // NameSpace Digikam
