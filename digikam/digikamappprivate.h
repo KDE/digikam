@@ -100,8 +100,6 @@ public:
         selectAllAction                      = 0;
         selectNoneAction                     = 0;
         selectInvertAction                   = 0;
-        thumbSizePlusAction                  = 0;
-        thumbSizeMinusAction                 = 0;
         fullScreenAction                     = 0;
         slideShowAction                      = 0;
         slideShowAllAction                   = 0;
@@ -134,6 +132,9 @@ public:
         zoomTracker                          = 0;
         zoomMinusButton                      = 0;
         zoomPlusButton                       = 0;
+        zoomFitToWindowAction                = 0;
+        zoomPlusAction                       = 0;
+        zoomMinusAction                      = 0;
     }
 
     bool                   fullScreen;
@@ -209,10 +210,11 @@ public:
     KAction               *slideShowAllAction;
     KAction               *slideShowSelectionAction;
     KAction               *slideShowRecursiveAction;
-    KAction               *thumbSizePlusAction;
-    KAction               *thumbSizeMinusAction;
     KSelectAction         *imageSortAction;
     KSelectAction         *albumSortAction;
+    KAction               *zoomPlusAction;
+    KAction               *zoomMinusAction;
+    KAction               *zoomFitToWindowAction;
 
     KAction               *rating0Star;
     KAction               *rating1Star;

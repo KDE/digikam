@@ -217,6 +217,11 @@ void AlbumWidgetStack::decreaseZoom()
     d->imagePreviewView->slotDecreaseZoom();
 }
 
+void AlbumWidgetStack::fitToWindow()
+{
+    d->imagePreviewView->fitToWindow();
+}
+
 bool AlbumWidgetStack::maxZoom()
 {
     return d->imagePreviewView->maxZoom();

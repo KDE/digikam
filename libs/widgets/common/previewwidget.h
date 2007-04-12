@@ -50,8 +50,9 @@ public:
     void setImage(const QImage& image);
     void setZoomFactor(double z);
     void setBackgroundColor(const QColor& color);
-    bool fitToWindow();
-    void toggleFitToWindow();
+    void fitToWindow();
+    bool isFitToWindow();
+    void lockFitToWindow();
 
     bool maxZoom();
     bool minZoom();

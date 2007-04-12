@@ -64,6 +64,7 @@
      <Separator/>
      <Action name="album_zoomin" />
      <Action name="album_zoomout" />
+     <Action name="album_zoomfit2window" />
      <Separator />
      <Action name="album_sort" />
      <Action name="image_sort" />

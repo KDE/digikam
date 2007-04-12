@@ -784,7 +784,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->thumbSizePlusAction = new KAction(i18n("Zoom in"),
+    d->zoomPlusAction = new KAction(i18n("Zoom in"),
                                    "viewmag+",
                                    CTRL+Key_Plus,
                                    d->view,
@@ -792,13 +792,21 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "album_zoomin");
 
-    d->thumbSizeMinusAction = new KAction(i18n("Zoom out"),
+    d->zoomMinusAction = new KAction(i18n("Zoom out"),
                                    "viewmag-",
                                    CTRL+Key_Minus,
                                    d->view,
                                    SLOT(slotZoomOut()),
                                    actionCollection(),
                                    "album_zoomout");
+
+    d->zoomFitToWindowAction = new KAction(i18n("Fit to &Window"), 
+                                   "view_fit_window",
+                                   CTRL+SHIFT+Key_A, 
+                                   d->view, 
+                                   SLOT(slotFitToWindow()),
+                                   actionCollection(), 
+                                   "album_zoomfit2window");
 
 #if KDE_IS_VERSION(3,2,0)
     d->fullScreenAction = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
@@ -950,13 +958,13 @@ void DigikamApp::setupActions()
 
 void DigikamApp::enableZoomPlusAction(bool val)
 {
-    d->thumbSizePlusAction->setEnabled(val);
+    d->zoomPlusAction->setEnabled(val);
     d->zoomPlusButton->setEnabled(val);
 }
 
 void DigikamApp::enableZoomMinusAction(bool val)
 {
-    d->thumbSizeMinusAction->setEnabled(val);
+    d->zoomMinusAction->setEnabled(val);
     d->zoomMinusButton->setEnabled(val);
 }
 
@@ -1865,6 +1873,7 @@ void DigikamApp::slotTooglePreview(bool t)
     // View menu     
     d->albumSortAction->setEnabled(!t);
     d->imageSortAction->setEnabled(!t);
+    d->zoomFitToWindowAction->setEnabled(t);
 }
 
 }  // namespace Digikam

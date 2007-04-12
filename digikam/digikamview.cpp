@@ -817,6 +817,14 @@ void DigikamView::slotZoomOut()
     }
 }
 
+void DigikamView::slotFitToWindow()
+{
+    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
+    {
+        d->albumWidgetStack->fitToWindow();
+    }
+}
+
 void DigikamView::slotZoomFactorChanged(double zoom)
 {
     toogleZoomActions();

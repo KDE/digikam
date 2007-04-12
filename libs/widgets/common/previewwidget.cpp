@@ -479,12 +479,19 @@ double PreviewWidget::zoomFactor()
     return d->zoom; 
 }
 
-bool PreviewWidget::fitToWindow()
+bool PreviewWidget::isFitToWindow()
 {
     return d->autoZoom;
 }
 
-void PreviewWidget::toggleFitToWindow()
+void PreviewWidget::fitToWindow()
+{
+    updateAutoZoom();
+    updateContentsSize();
+    viewport()->update();
+}
+
+void PreviewWidget::lockFitToWindow()
 {
     d->autoZoom = !d->autoZoom;
 
