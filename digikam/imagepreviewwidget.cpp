@@ -24,6 +24,7 @@
 
 // Qt includes.
 
+#include <qtooltip.h>
 #include <qcache.h>
 #include <qpainter.h>
 #include <qimage.h>
@@ -31,12 +32,15 @@
 #include <qrect.h>
 #include <qtimer.h>
 #include <qguardedptr.h>
+#include <qtoolbutton.h>
 
 // KDE include.
 
 #include <kcursor.h>
 #include <kprocess.h>
 #include <klocale.h>
+#include <kdatetbl.h>
+#include <kiconloader.h>
 
 // Local includes.
 
@@ -44,6 +48,7 @@
 #include "fastscale.h"
 #include "themeengine.h"
 #include "albumsettings.h"
+#include "paniconwidget.h"
 #include "imagepreviewwidget.h"
 #include "imagepreviewwidget.moc"
 
@@ -57,16 +62,19 @@ public:
     ImagePreviewWidgetPriv() :
         tileSize(128), minZoom(0.1), maxZoom(12.0), zoomMultiplier(1.2) 
     {
-        pressedMoving        = false;
-        midButtonPressed     = false;
-        midButtonX           = 0;
-        midButtonY           = 0;
-        autoZoom             = false;
-        fullScreen           = false;
-        zoom                 = 1.0;
-        zoomWidth            = 0;
-        zoomHeight           = 0;
-        tileTmpPix           = new QPixmap(tileSize, tileSize);
+        pressedMoving    = false;
+        midButtonPressed = false;
+        midButtonX       = 0;
+        midButtonY       = 0;
+        autoZoom         = false;
+        fullScreen       = false;
+        zoom             = 1.0;
+        zoomWidth        = 0;
+        zoomHeight       = 0;
+        panIconPopup     = 0;
+        panIconWidget    = 0;
+        cornerButton     = 0;
+        tileTmpPix       = new QPixmap(tileSize, tileSize);
 
         tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
         tileCache.setAutoDelete(true);
@@ -88,6 +96,8 @@ public:
     const double         maxZoom;
     const double         zoomMultiplier;
 
+    QToolButton         *cornerButton;
+
     QRect                pixmapRect;
     
     QCache<QPixmap>      tileCache;
@@ -97,6 +107,10 @@ public:
     QColor               bgColor;
 
     QImage               preview;
+
+    KPopupFrame         *panIconPopup;
+
+    PanIconWidget       *panIconWidget;
 };
 
 ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
@@ -112,7 +126,19 @@ ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
     setMargin(0); 
     setLineWidth(1); 
 
+    d->cornerButton = new QToolButton(this);
+    d->cornerButton->setIconSet(SmallIcon("move"));
+    d->cornerButton->hide();
+    QToolTip::add(d->cornerButton, i18n("Pan the image to a region"));
+    setCornerWidget(d->cornerButton);
+
     // ------------------------------------------------------------
+
+    connect(this, SIGNAL(signalZoomFactorChanged(double)),
+            this, SLOT(slotZoomChanged(double)));
+
+    connect(d->cornerButton, SIGNAL(pressed()),
+            this, SLOT(slotCornerButtonPressed()));
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -156,6 +182,8 @@ void ImagePreviewWidget::updateAutoZoom()
     d->zoom       = calcAutoZoomFactor();
     d->zoomWidth  = (int)(d->preview.width()  * d->zoom);
     d->zoomHeight = (int)(d->preview.height() * d->zoom);
+
+    emit signalZoomFactorChanged(d->zoom);
 }
 
 double ImagePreviewWidget::calcAutoZoomFactor()
@@ -210,6 +238,10 @@ void ImagePreviewWidget::resizeEvent(QResizeEvent* e)
 
     // No need to repaint. its called   
     // automatically after resize
+
+    // To be sure than corner widget used to pan image will be hide/show 
+    // accordinly with resize event.
+    slotZoomChanged(d->zoom);
 }
 
 void ImagePreviewWidget::viewportPaintEvent(QPaintEvent *e)
@@ -463,10 +495,75 @@ void ImagePreviewWidget::toggleFitToWindow()
     if (d->autoZoom)
         updateAutoZoom();
     else
+    {
         d->zoom = 1.0;
+        emit signalZoomFactorChanged(d->zoom);
+    }
 
     updateContentsSize();
     viewport()->update();
+}
+
+void ImagePreviewWidget::slotCornerButtonPressed()
+{    
+    if (d->panIconPopup)
+    {
+        d->panIconPopup->hide();
+        delete d->panIconPopup;
+        d->panIconPopup = 0;
+    }
+
+    d->panIconPopup    = new KPopupFrame(this);
+    PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
+    pan->setImage(180, 120, d->preview); 
+    d->panIconPopup->setMainWidget(pan);
+
+    QRect r((int)(contentsX()    / d->zoom), (int)(contentsY()     / d->zoom),
+            (int)(visibleWidth() / d->zoom), (int)(visibleHeight() / d->zoom));
+    pan->setRegionSelection(r);
+    pan->setMouseFocus();
+
+    connect(pan, SIGNAL(signalSelectionMoved(QRect, bool)),
+            this, SLOT(slotPanIconSelectionMoved(QRect, bool)));
+    
+    connect(pan, SIGNAL(signalHiden()),
+            this, SLOT(slotPanIconHiden()));
+    
+    QPoint g = mapToGlobal(viewport()->pos());
+    g.setX(g.x()+ viewport()->size().width());
+    g.setY(g.y()+ viewport()->size().height());
+    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(), 
+                                  g.y() - d->panIconPopup->height()));
+
+    pan->setCursorToLocalRegionSelectionCenter();
+}
+
+void ImagePreviewWidget::slotPanIconHiden()
+{
+    d->cornerButton->blockSignals(true);
+    d->cornerButton->animateClick();
+    d->cornerButton->blockSignals(false);
+}
+
+void ImagePreviewWidget::slotPanIconSelectionMoved(QRect r, bool b)
+{
+    setContentsPos((int)(r.x()*d->zoom), (int)(r.y()*d->zoom));
+
+    if (b)
+    {
+        d->panIconPopup->hide();
+        delete d->panIconPopup;
+        d->panIconPopup = 0;
+        slotPanIconHiden();
+    }
+}
+
+void ImagePreviewWidget::slotZoomChanged(double zoom)
+{
+    if (zoom > calcAutoZoomFactor())
+        d->cornerButton->show();
+    else
+        d->cornerButton->hide();        
 }
 
 }  // NameSpace Digikam
