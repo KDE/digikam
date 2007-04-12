@@ -9,11 +9,13 @@
 
 name       = "digikam"
 egmodule   = "graphics"
-version    = "0.9.1"
+version    = "0.9.1+new-msgstrs"
 docs       = "no"
 
-svnbase    = "svn+ssh://gkulzer@svn.kde.org/home/kde"
-svnroot    = "#{svnbase}/trunk"
+svnbase    = "https://ach@svn.kde.org/home/kde"
+
+#svnroot    = "#{svnbase}/trunk"
+svnroot    = "#{svnbase}/branches/stable"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
 
 addDocs    = []
