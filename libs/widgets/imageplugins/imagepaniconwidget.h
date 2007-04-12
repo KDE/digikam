@@ -39,8 +39,7 @@ Q_OBJECT
 
 public:
 
-    ImagePanIconWidget(int width, int height, 
-                       QWidget *parent=0, WFlags f=Qt::WDestructiveClose);
+    ImagePanIconWidget(int width, int height, QWidget *parent=0, WFlags flags=Qt::WDestructiveClose);
     ~ImagePanIconWidget();
 
     void  setRegionSelection(QRect regionSelection);

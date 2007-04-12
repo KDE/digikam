@@ -19,6 +19,10 @@
  * 
  * ============================================================ */
 
+// C++ include.
+
+#include <cmath>
+
 // Qt includes.
 
 #include <qregion.h>
@@ -85,8 +89,8 @@ public:
     ImageIface  *iface;
 };
 
-ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent, WFlags f)
-                  : QWidget(parent, 0, f)
+ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent, WFlags flags)
+                  : QWidget(parent, 0, flags)
 {
     d = new ImagePanIconWidgetPriv;
 
@@ -130,16 +134,16 @@ void ImagePanIconWidget::setRegionSelection(QRect regionSelection)
 {
     d->regionSelection = regionSelection;
     d->localRegionSelection.setX( 1 + d->rect.x() + (int)((float)d->regionSelection.x() *
-                                  ( (float)d->width / (float)d->zoomedOrgWidth )) );
+                                  ((float)d->width / (float)d->zoomedOrgWidth)) );
                                             
     d->localRegionSelection.setY( 1 + d->rect.y() + (int)((float)d->regionSelection.y() *
-                                  ( (float)d->height / (float)d->zoomedOrgHeight )) );
+                                  ((float)d->height / (float)d->zoomedOrgHeight)) );
                                             
     d->localRegionSelection.setWidth( (int)((float)d->regionSelection.width() *
-                                      ( (float)d->width / (float)d->zoomedOrgWidth )) );
+                                      ((float)d->width / (float)d->zoomedOrgWidth)) );
                                      
     d->localRegionSelection.setHeight( (int)((float)d->regionSelection.height() *
-                                       ( (float)d->height / (float)d->zoomedOrgHeight )) );
+                                       ((float)d->height / (float)d->zoomedOrgHeight)) );
 
     updatePixmap();
     repaint(false);
@@ -158,7 +162,7 @@ void ImagePanIconWidget::setCursorToLocalRegionSelectionCenter(void)
 void ImagePanIconWidget::setCenterSelection(void)
 {
     setRegionSelection(QRect( 
-             (int)(((float)d->zoomedOrgWidth  / 2.0) - ((float)d->regionSelection.width() / 2.0)),
+             (int)(((float)d->zoomedOrgWidth  / 2.0) - ((float)d->regionSelection.width()  / 2.0)),
              (int)(((float)d->zoomedOrgHeight / 2.0) - ((float)d->regionSelection.height() / 2.0)),
              d->regionSelection.width(),
              d->regionSelection.height()));
@@ -179,17 +183,17 @@ void ImagePanIconWidget::regionSelectionMoved( bool targetDone )
        repaint(false);
     }
     
-    int x = ROUND( ((float)d->localRegionSelection.x() - (float)d->rect.x() ) *
-                   ( (float)d->zoomedOrgWidth / (float)d->width ));
+    int x = (int)lround( ((float)d->localRegionSelection.x() - (float)d->rect.x() ) *
+                         ((float)d->zoomedOrgWidth / (float)d->width) );
                                             
-    int y = ROUND( ((float)d->localRegionSelection.y() - (float)d->rect.y() ) *
-                   ( (float)d->zoomedOrgHeight / (float)d->height ));
+    int y = (int)lround( ((float)d->localRegionSelection.y() - (float)d->rect.y() ) *
+                         ((float)d->zoomedOrgHeight / (float)d->height) );
                                             
-    int w = ROUND((float)d->localRegionSelection.width() *
-                 ( (float)d->zoomedOrgWidth / (float)d->width ));
+    int w = (int)lround( (float)d->localRegionSelection.width() *
+                         ((float)d->zoomedOrgWidth / (float)d->width) );
                                      
-    int h = ROUND((float)d->localRegionSelection.height() *
-                 ( (float)d->zoomedOrgHeight / (float)d->height ));
+    int h = (int)lround( (float)d->localRegionSelection.height() *
+                         ((float)d->zoomedOrgHeight / (float)d->height) );
                      
     d->regionSelection.setX(x);
     d->regionSelection.setY(y);
