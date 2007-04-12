@@ -81,6 +81,7 @@ public slots:
     // View Action slots
     void slotZoomIn();
     void slotZoomOut();
+    void slotZoomTo100Percents();
     void slotFitToWindow();
     void slotSlideShowAll();
     void slotSlideShowSelection();

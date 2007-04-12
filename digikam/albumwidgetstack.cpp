@@ -217,6 +217,11 @@ void AlbumWidgetStack::decreaseZoom()
     d->imagePreviewView->slotDecreaseZoom();
 }
 
+void AlbumWidgetStack::zoomTo100Percents()
+{
+    d->imagePreviewView->setZoomFactor(1.0);
+}
+
 void AlbumWidgetStack::fitToWindow()
 {
     d->imagePreviewView->fitToWindow();

@@ -800,6 +800,14 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "album_zoomout");
 
+    d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), 
+                                   "viewmag1",
+                                   CTRL+SHIFT+Key_Z, 
+                                   d->view, 
+                                   SLOT(slotZoomTo100Percents()),
+                                   actionCollection(), 
+                                   "album_zoomto100percents");
+
     d->zoomFitToWindowAction = new KAction(i18n("Fit to &Window"), 
                                    "view_fit_window",
                                    CTRL+SHIFT+Key_A, 
@@ -1873,6 +1881,7 @@ void DigikamApp::slotTooglePreview(bool t)
     // View menu     
     d->albumSortAction->setEnabled(!t);
     d->imageSortAction->setEnabled(!t);
+    d->zoomTo100percents->setEnabled(t);
     d->zoomFitToWindowAction->setEnabled(t);
 }
 

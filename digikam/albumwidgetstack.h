@@ -72,6 +72,7 @@ public:
     void   increaseZoom();
     void   decreaseZoom();
     void   fitToWindow();
+    void   zoomTo100Percents();
     bool   maxZoom();
     bool   minZoom();
     void   setZoomFactor(double z);

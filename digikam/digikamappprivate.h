@@ -132,6 +132,7 @@ public:
         zoomTracker                          = 0;
         zoomMinusButton                      = 0;
         zoomPlusButton                       = 0;
+        zoomTo100percents                    = 0;
         zoomFitToWindowAction                = 0;
         zoomPlusAction                       = 0;
         zoomMinusAction                      = 0;
@@ -215,6 +216,7 @@ public:
     KAction               *zoomPlusAction;
     KAction               *zoomMinusAction;
     KAction               *zoomFitToWindowAction;
+    KAction               *zoomTo100percents;
 
     KAction               *rating0Star;
     KAction               *rating1Star;
