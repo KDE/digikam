@@ -44,6 +44,7 @@
                 to start download dialog
                 ditto for unmounting in usm case 
 
+* Compatibility with little cms version 1.16 which provides improvements
 
 ------------------------------------------------------------------------------------
 LATER 0.9.0 TODO LIST
