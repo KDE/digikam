@@ -52,7 +52,7 @@ public:
     void setBackgroundColor(const QColor& color);
     void fitToWindow();
     bool isFitToWindow();
-    void lockFitToWindow();
+    void toggleFitToWindow();
 
     bool maxZoom();
     bool minZoom();

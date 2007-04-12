@@ -491,7 +491,7 @@ void PreviewWidget::fitToWindow()
     viewport()->update();
 }
 
-void PreviewWidget::lockFitToWindow()
+void PreviewWidget::toggleFitToWindow()
 {
     d->autoZoom = !d->autoZoom;
 
