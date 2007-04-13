@@ -54,10 +54,10 @@ public:
     }
 
     bool         moveSelection;
-    int          orgWidth;    
-    int          orgHeight;    
+
     int          xpos;
     int          ypos;
+
     QRect        regionSelection;         // Original size image selection.
 
     QImage       image;
@@ -92,8 +92,8 @@ void PanIconWidget::setImage(int previewWidth, int previewHeight, const QImage& 
     m_width           = sz.width();
     m_height          = sz.height();
     d->image          = image.smoothScale(sz.width(), sz.height());
-    d->orgWidth       = image.width();
-    d->orgHeight      = image.height();
+    m_orgWidth        = image.width();
+    m_orgHeight       = image.height();
     m_zoomedOrgWidth  = image.width();
     m_zoomedOrgHeight = image.height();
     setFixedSize(m_width, m_height);
@@ -105,8 +105,8 @@ void PanIconWidget::setImage(int previewWidth, int previewHeight, const QImage& 
 
 void PanIconWidget::slotZoomFactorChanged(double factor)
 {
-    m_zoomedOrgWidth  = (int)(d->orgWidth  * factor);
-    m_zoomedOrgHeight = (int)(d->orgHeight * factor);
+    m_zoomedOrgWidth  = (int)(m_orgWidth  * factor);
+    m_zoomedOrgHeight = (int)(m_orgHeight * factor);
     updatePixmap();
     repaint(false);
 }

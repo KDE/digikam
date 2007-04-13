@@ -70,6 +70,8 @@ ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent, WFlags fla
     d->data           = d->iface->getPreviewImage();
     m_width           = d->iface->previewWidth();
     m_height          = d->iface->previewHeight();
+    m_orgWidth        = d->iface->originalWidth();
+    m_orgHeight       = d->iface->originalHeight();
     m_zoomedOrgWidth  = d->iface->originalWidth();
     m_zoomedOrgHeight = d->iface->originalHeight();
     m_pixmap          = new QPixmap(w, h);
