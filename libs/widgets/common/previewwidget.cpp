@@ -105,6 +105,11 @@ PreviewWidget::PreviewWidget(QWidget *parent)
     viewport()->setBackgroundMode(Qt::NoBackground);
     viewport()->setMouseTracking(false);
 
+    horizontalScrollBar()->setLineStep( 1 );
+    horizontalScrollBar()->setPageStep( 1 );
+    verticalScrollBar()->setLineStep( 1 );
+    verticalScrollBar()->setPageStep( 1 );
+
     setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain); 
     setMargin(0); 
     setLineWidth(1); 
@@ -181,7 +186,7 @@ void PreviewWidget::slotDecreaseZoom()
 
 void PreviewWidget::setZoomFactor(double zoom)
 {
-    if (d->autoZoom || zoom == d->zoom)
+    if (d->autoZoom)
         return;
 
     // Zoom using center of canvas and given zoom factor.
