@@ -24,8 +24,6 @@
 // Qt includes.
 
 #include <qscrollview.h>
-#include <qstring.h>
-#include <qimage.h>
 
 // Local includes
 
@@ -48,9 +46,6 @@ public:
     PreviewWidget(QWidget *parent=0);
     ~PreviewWidget();
 
-    void setImage(const QImage& image);
-    QImage& getImage() const;
-
     void setZoomFactor(double z);
     void setBackgroundColor(const QColor& color);
     void fitToWindow();
@@ -63,6 +58,8 @@ public:
     double zoomFactor();
     double zoomMax();
     double zoomMin();
+
+    void reset();
 
 signals:
 
@@ -86,13 +83,16 @@ protected:
     void   contentsMouseReleaseEvent(QMouseEvent *);
     void   contentsWheelEvent(QWheelEvent *);
     double calcAutoZoomFactor();
-   
-private:
-
-    void   resetImage();
+    int    tileSize();
     void   updateAutoZoom();
     void   updateContentsSize();
 
+    virtual int  previewWidth()=0;
+    virtual int  previewHeight()=0;
+    virtual bool previewIsNull()=0;
+    virtual void resetPreview()=0;
+    virtual void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)=0;
+   
 private:
 
     PreviewWidgetPriv* d;

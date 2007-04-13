@@ -24,6 +24,7 @@
 
 // Qt includes.
 
+#include <qstring.h>
 #include <qcache.h>
 #include <qpainter.h>
 #include <qimage.h>
@@ -40,7 +41,6 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "fastscale.h"
 #include "previewwidget.h"
 #include "previewwidget.moc"
 
@@ -92,8 +92,6 @@ public:
     QPixmap*             tileTmpPix;
 
     QColor               bgColor;
-
-    QImage               preview;
 };
 
 PreviewWidget::PreviewWidget(QWidget *parent)
@@ -116,22 +114,6 @@ PreviewWidget::~PreviewWidget()
     delete d;
 }
 
-void PreviewWidget::setImage(const QImage& image)
-{   
-    d->preview = image;
-
-    updateAutoZoom();
-    updateContentsSize();
-
-    viewport()->setUpdatesEnabled(true);
-    viewport()->update();
-}
-
-QImage& PreviewWidget::getImage() const
-{
-    return d->preview;
-}
-
 void PreviewWidget::setBackgroundColor(const QColor& color)
 {
     if (d->bgColor == color)
@@ -141,11 +123,16 @@ void PreviewWidget::setBackgroundColor(const QColor& color)
     viewport()->update();
 }
 
-void PreviewWidget::resetImage()
+void PreviewWidget::reset()
 {
     d->tileCache.clear();
     viewport()->setUpdatesEnabled(false);
-    d->preview.reset();
+    resetPreview();
+}
+
+int PreviewWidget::tileSize()
+{
+    return d->tileSize;
 }
 
 double PreviewWidget::zoomMax()
@@ -195,8 +182,8 @@ void PreviewWidget::setZoomFactor(double zoom)
 
     // To limit precision of zoom value and reduce error with check of max/min zoom. 
     d->zoom       = floor(zoom * 10000.0) / 10000.0;
-    d->zoomWidth  = (int)(d->preview.width()  * d->zoom);
-    d->zoomHeight = (int)(d->preview.height() * d->zoom);
+    d->zoomWidth  = (int)(previewWidth()  * d->zoom);
+    d->zoomHeight = (int)(previewHeight() * d->zoom);
 
     updateContentsSize();
 
@@ -245,18 +232,18 @@ void PreviewWidget::toggleFitToWindow()
 void PreviewWidget::updateAutoZoom()
 {
     d->zoom       = calcAutoZoomFactor();
-    d->zoomWidth  = (int)(d->preview.width()  * d->zoom);
-    d->zoomHeight = (int)(d->preview.height() * d->zoom);
+    d->zoomWidth  = (int)(previewWidth()  * d->zoom);
+    d->zoomHeight = (int)(previewHeight() * d->zoom);
 
     emit signalZoomFactorChanged(d->zoom);
 }
 
 double PreviewWidget::calcAutoZoomFactor()
 {
-    if (d->preview.isNull()) return d->zoom;
+    if (previewIsNull()) return d->zoom;
 
-    double srcWidth  = d->preview.width();
-    double srcHeight = d->preview.height();
+    double srcWidth  = previewWidth();
+    double srcHeight = previewHeight();
     double dstWidth  = contentsRect().width();
     double dstHeight = contentsRect().height();
 
@@ -325,7 +312,7 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
     QRegion clipRegion(er);
     cr = d->pixmapRect.intersect(cr);
 
-    if (!cr.isEmpty() && !d->preview.isNull())
+    if (!cr.isEmpty() && !previewIsNull())
     {
         clipRegion -= QRect(contentsToViewport(cr.topLeft()), cr.size());
 
@@ -367,10 +354,7 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
                     sw = step;
                     sh = step;
 
-                    // Fast smooth scale method from Antonio.
-                    QImage img = FastScale::fastScaleQImage(d->preview.copy(sx, sy, sw, sh),
-                                                            d->tileSize, d->tileSize);
-                    bitBlt(pix, 0, 0, &img, 0, 0);
+                    paintPreview(pix, sx, sy, sw, sh);
                 }
 
                 QRect  r(i, j, d->tileSize, d->tileSize);
@@ -405,8 +389,8 @@ void PreviewWidget::contentsMousePressEvent(QMouseEvent *e)
     }
     else if (e->button() == Qt::MidButton)
     {
-        if (visibleWidth()  < d->preview.width() ||
-            visibleHeight() < d->preview.height())
+        if (visibleWidth()  < previewWidth() ||
+            visibleHeight() < previewHeight())
         {
             viewport()->setCursor(Qt::SizeAllCursor);
             d->midButtonPressed = true;

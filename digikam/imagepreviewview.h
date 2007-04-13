@@ -31,6 +31,8 @@
 #include "previewwidget.h"
 #include "digikam_export.h"
 
+class QPixmap;
+
 namespace Digikam
 {
 
@@ -48,6 +50,9 @@ public:
 
     ImagePreviewView(AlbumWidgetStack *parent=0);
     ~ImagePreviewView();
+
+    void setImage(const QImage& image);
+    QImage& getImage() const;
 
     void setImageInfo(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
     ImageInfo* getImageInfo();
@@ -79,6 +84,14 @@ private slots:
     void slotZoomChanged(double);
     void slotPanIconSelectionMoved(QRect, bool);
     void slotPanIconHiden();
+
+private:
+    
+    int  previewWidth();
+    int  previewHeight();
+    bool previewIsNull();
+    void resetPreview();
+    inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
 
 private:
 

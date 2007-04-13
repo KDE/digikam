@@ -27,6 +27,7 @@
 #include <qfileinfo.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
+#include <qpixmap.h>
 
 // KDE includes.
 
@@ -54,6 +55,7 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "albumwidgetstack.h"
+#include "fastscale.h"
 #include "imageinfo.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
@@ -95,6 +97,8 @@ public:
     QString            previousPath;
 
     QToolButton       *cornerButton;
+
+    QImage             preview;
 
     KPopupFrame       *panIconPopup;
 
@@ -151,6 +155,22 @@ ImagePreviewView::~ImagePreviewView()
     delete d->previewThread;
     delete d->previewPreloadThread;
     delete d;
+}
+
+void ImagePreviewView::setImage(const QImage& image)
+{   
+    d->preview = image;
+
+    updateAutoZoom();
+    updateContentsSize();
+
+    viewport()->setUpdatesEnabled(true);
+    viewport()->update();
+}
+
+QImage& ImagePreviewView::getImage() const
+{
+    return d->preview;
 }
 
 void ImagePreviewView::reload()
@@ -548,5 +568,32 @@ void ImagePreviewView::slotZoomChanged(double zoom)
         d->cornerButton->hide();        
 }
 
-}  // NameSpace Digikam
+int ImagePreviewView::previewWidth()
+{
+    return d->preview.width();
+}
 
+int ImagePreviewView::previewHeight()
+{
+    return d->preview.height();
+}
+
+bool ImagePreviewView::previewIsNull()
+{
+    return d->preview.isNull();
+}
+
+void ImagePreviewView::resetPreview()
+{
+    d->preview.reset();
+}
+
+void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
+{
+    // Fast smooth scale method from Antonio.   
+    QImage img = FastScale::fastScaleQImage(d->preview.copy(sx, sy, sw, sh),
+                                            tileSize(), tileSize());
+    bitBlt(pix, 0, 0, &img, 0, 0);
+}
+
+}  // NameSpace Digikam
