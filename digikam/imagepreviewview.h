@@ -75,6 +75,10 @@ private slots:
     void slotRemoveTag(int tagID);
     void slotAssignRating(int rating);
     void slotThemeChanged();
+    void slotCornerButtonPressed();
+    void slotZoomChanged(double);
+    void slotPanIconSelectionMoved(QRect, bool);
+    void slotPanIconHiden();
 
 private:
 

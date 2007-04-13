@@ -23,6 +23,7 @@
 
 // Qt includes.
 
+#include <qscrollview.h>
 #include <qstring.h>
 #include <qimage.h>
 
@@ -48,6 +49,8 @@ public:
     ~PreviewWidget();
 
     void setImage(const QImage& image);
+    QImage& getImage() const;
+
     void setZoomFactor(double z);
     void setBackgroundColor(const QColor& color);
     void fitToWindow();
@@ -76,24 +79,17 @@ public slots:
 
 protected:
     
-    void resizeEvent(QResizeEvent* e);
-    void viewportPaintEvent(QPaintEvent *e);
-    void contentsMousePressEvent(QMouseEvent *e);
-    void contentsMouseMoveEvent(QMouseEvent *e);
-    void contentsMouseReleaseEvent(QMouseEvent *e);
-    void contentsWheelEvent(QWheelEvent *e);
+    void   resizeEvent(QResizeEvent *);
+    void   viewportPaintEvent(QPaintEvent *);
+    void   contentsMousePressEvent(QMouseEvent *);
+    void   contentsMouseMoveEvent(QMouseEvent *);
+    void   contentsMouseReleaseEvent(QMouseEvent *);
+    void   contentsWheelEvent(QWheelEvent *);
+    double calcAutoZoomFactor();
    
-private slots:
-
-    void slotCornerButtonPressed();
-    void slotZoomChanged(double);
-    void slotPanIconSelectionMoved(QRect, bool);
-    void slotPanIconHiden();
-
 private:
 
     void   resetImage();
-    double calcAutoZoomFactor();
     void   updateAutoZoom();
     void   updateContentsSize();
 

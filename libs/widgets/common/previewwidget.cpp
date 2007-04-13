@@ -24,7 +24,6 @@
 
 // Qt includes.
 
-#include <qtooltip.h>
 #include <qcache.h>
 #include <qpainter.h>
 #include <qimage.h>
@@ -32,22 +31,16 @@
 #include <qrect.h>
 #include <qtimer.h>
 #include <qguardedptr.h>
-#include <qtoolbutton.h>
 
 // KDE include.
 
 #include <kcursor.h>
-#include <kprocess.h>
 #include <klocale.h>
-#include <kdatetbl.h>
-#include <kiconloader.h>
 
 // Local includes.
 
 #include "ddebug.h"
 #include "fastscale.h"
-#include "albumsettings.h"
-#include "paniconwidget.h"
 #include "previewwidget.h"
 #include "previewwidget.moc"
 
@@ -70,9 +63,6 @@ public:
         zoom             = 1.0;
         zoomWidth        = 0;
         zoomHeight       = 0;
-        panIconPopup     = 0;
-        panIconWidget    = 0;
-        cornerButton     = 0;
         tileTmpPix       = new QPixmap(tileSize, tileSize);
 
         tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
@@ -95,8 +85,6 @@ public:
     const double         maxZoom;
     const double         zoomMultiplier;
 
-    QToolButton         *cornerButton;
-
     QRect                pixmapRect;
     
     QCache<QPixmap>      tileCache;
@@ -106,10 +94,6 @@ public:
     QColor               bgColor;
 
     QImage               preview;
-
-    KPopupFrame         *panIconPopup;
-
-    PanIconWidget       *panIconWidget;
 };
 
 PreviewWidget::PreviewWidget(QWidget *parent)
@@ -124,20 +108,6 @@ PreviewWidget::PreviewWidget(QWidget *parent)
     setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain); 
     setMargin(0); 
     setLineWidth(1); 
-
-    d->cornerButton = new QToolButton(this);
-    d->cornerButton->setIconSet(SmallIcon("move"));
-    d->cornerButton->hide();
-    QToolTip::add(d->cornerButton, i18n("Pan the image to a region"));
-    setCornerWidget(d->cornerButton);
-
-    // ------------------------------------------------------------
-
-    connect(this, SIGNAL(signalZoomFactorChanged(double)),
-            this, SLOT(slotZoomChanged(double)));
-
-    connect(d->cornerButton, SIGNAL(pressed()),
-            this, SLOT(slotCornerButtonPressed()));
 }
 
 PreviewWidget::~PreviewWidget()
@@ -157,6 +127,11 @@ void PreviewWidget::setImage(const QImage& image)
     viewport()->update();
 }
 
+QImage& PreviewWidget::getImage() const
+{
+    return d->preview;
+}
+
 void PreviewWidget::setBackgroundColor(const QColor& color)
 {
     if (d->bgColor == color)
@@ -171,6 +146,100 @@ void PreviewWidget::resetImage()
     d->tileCache.clear();
     viewport()->setUpdatesEnabled(false);
     d->preview.reset();
+}
+
+double PreviewWidget::zoomMax()
+{
+    return d->maxZoom;
+}
+
+double PreviewWidget::zoomMin()
+{
+    return d->minZoom;
+}
+
+bool PreviewWidget::maxZoom()
+{
+    return (d->zoom >= d->maxZoom);
+}
+
+bool PreviewWidget::minZoom()
+{
+    return (d->zoom <= d->minZoom);
+}
+
+void PreviewWidget::slotIncreaseZoom()
+{
+    double zoom = d->zoom * d->zoomMultiplier;
+    setZoomFactor(zoom > zoomMax() ? zoomMax() : zoom);
+}
+
+void PreviewWidget::slotDecreaseZoom()
+{
+    double zoom = d->zoom / d->zoomMultiplier;
+    setZoomFactor(zoom < zoomMin() ? zoomMin() : zoom);
+}
+
+void PreviewWidget::setZoomFactor(double zoom)
+{
+    if (d->autoZoom || zoom == d->zoom)
+        return;
+
+    // Zoom using center of canvas and given zoom factor.
+
+    double cpx = contentsX() + visibleWidth()  / 2.0; 
+    double cpy = contentsY() + visibleHeight() / 2.0;
+
+    cpx = ( cpx / d->tileSize ) * floor(d->tileSize / d->zoom);
+    cpy = ( cpy / d->tileSize ) * floor(d->tileSize / d->zoom);
+
+    // To limit precision of zoom value and reduce error with check of max/min zoom. 
+    d->zoom       = floor(zoom * 10000.0) / 10000.0;
+    d->zoomWidth  = (int)(d->preview.width()  * d->zoom);
+    d->zoomHeight = (int)(d->preview.height() * d->zoom);
+
+    updateContentsSize();
+
+    viewport()->setUpdatesEnabled(false);
+    center((int)((cpx * d->tileSize ) / floor(d->tileSize / d->zoom)), 
+           (int)((cpy * d->tileSize ) / floor(d->tileSize / d->zoom)));
+    viewport()->setUpdatesEnabled(true);
+    viewport()->update();
+
+    emit signalZoomFactorChanged(d->zoom);
+}
+
+double PreviewWidget::zoomFactor()
+{
+    return d->zoom; 
+}
+
+bool PreviewWidget::isFitToWindow()
+{
+    return d->autoZoom;
+}
+
+void PreviewWidget::fitToWindow()
+{
+    updateAutoZoom();
+    updateContentsSize();
+    viewport()->update();
+}
+
+void PreviewWidget::toggleFitToWindow()
+{
+    d->autoZoom = !d->autoZoom;
+
+    if (d->autoZoom)
+        updateAutoZoom();
+    else
+    {
+        d->zoom = 1.0;
+        emit signalZoomFactorChanged(d->zoom);
+    }
+
+    updateContentsSize();
+    viewport()->update();
 }
 
 void PreviewWidget::updateAutoZoom()
@@ -237,7 +306,7 @@ void PreviewWidget::resizeEvent(QResizeEvent* e)
 
     // To be sure than corner widget used to pan image will be hide/show 
     // accordinly with resize event.
-    slotZoomChanged(d->zoom);
+    emit signalZoomFactorChanged(d->zoom);
 }
 
 void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
@@ -411,162 +480,6 @@ void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
     }
 
     QScrollView::contentsWheelEvent(e);
-}
-
-double PreviewWidget::zoomMax()
-{
-    return d->maxZoom;
-}
-
-double PreviewWidget::zoomMin()
-{
-    return d->minZoom;
-}
-
-bool PreviewWidget::maxZoom()
-{
-    return (d->zoom >= d->maxZoom);
-}
-
-bool PreviewWidget::minZoom()
-{
-    return (d->zoom <= d->minZoom);
-}
-
-void PreviewWidget::slotIncreaseZoom()
-{
-    double zoom = d->zoom * d->zoomMultiplier;
-    setZoomFactor(zoom > zoomMax() ? zoomMax() : zoom);
-}
-
-void PreviewWidget::slotDecreaseZoom()
-{
-    double zoom = d->zoom / d->zoomMultiplier;
-    setZoomFactor(zoom < zoomMin() ? zoomMin() : zoom);
-}
-
-void PreviewWidget::setZoomFactor(double zoom)
-{
-    if (d->autoZoom || zoom == d->zoom)
-        return;
-
-    // Zoom using center of canvas and given zoom factor.
-
-    double cpx = contentsX() + visibleWidth()  / 2.0; 
-    double cpy = contentsY() + visibleHeight() / 2.0;
-
-    cpx = ( cpx / d->tileSize ) * floor(d->tileSize / d->zoom);
-    cpy = ( cpy / d->tileSize ) * floor(d->tileSize / d->zoom);
-
-    // To limit precision of zoom value and reduce error with check of max/min zoom. 
-    d->zoom       = floor(zoom * 10000.0) / 10000.0;
-    d->zoomWidth  = (int)(d->preview.width()  * d->zoom);
-    d->zoomHeight = (int)(d->preview.height() * d->zoom);
-
-    updateContentsSize();
-
-    viewport()->setUpdatesEnabled(false);
-    center((int)((cpx * d->tileSize ) / floor(d->tileSize / d->zoom)), 
-           (int)((cpy * d->tileSize ) / floor(d->tileSize / d->zoom)));
-    viewport()->setUpdatesEnabled(true);
-    viewport()->update();
-
-    emit signalZoomFactorChanged(d->zoom);
-}
-
-double PreviewWidget::zoomFactor()
-{
-    return d->zoom; 
-}
-
-bool PreviewWidget::isFitToWindow()
-{
-    return d->autoZoom;
-}
-
-void PreviewWidget::fitToWindow()
-{
-    updateAutoZoom();
-    updateContentsSize();
-    viewport()->update();
-}
-
-void PreviewWidget::toggleFitToWindow()
-{
-    d->autoZoom = !d->autoZoom;
-
-    if (d->autoZoom)
-        updateAutoZoom();
-    else
-    {
-        d->zoom = 1.0;
-        emit signalZoomFactorChanged(d->zoom);
-    }
-
-    updateContentsSize();
-    viewport()->update();
-}
-
-void PreviewWidget::slotCornerButtonPressed()
-{    
-    if (d->panIconPopup)
-    {
-        d->panIconPopup->hide();
-        delete d->panIconPopup;
-        d->panIconPopup = 0;
-    }
-
-    d->panIconPopup    = new KPopupFrame(this);
-    PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
-    pan->setImage(180, 120, d->preview); 
-    d->panIconPopup->setMainWidget(pan);
-
-    QRect r((int)(contentsX()    / d->zoom), (int)(contentsY()     / d->zoom),
-            (int)(visibleWidth() / d->zoom), (int)(visibleHeight() / d->zoom));
-    pan->setRegionSelection(r);
-    pan->setMouseFocus();
-
-    connect(pan, SIGNAL(signalSelectionMoved(QRect, bool)),
-            this, SLOT(slotPanIconSelectionMoved(QRect, bool)));
-    
-    connect(pan, SIGNAL(signalHiden()),
-            this, SLOT(slotPanIconHiden()));
-    
-    QPoint g = mapToGlobal(viewport()->pos());
-    g.setX(g.x()+ viewport()->size().width());
-    g.setY(g.y()+ viewport()->size().height());
-    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(), 
-                                  g.y() - d->panIconPopup->height()));
-
-    pan->setCursorToLocalRegionSelectionCenter();
-}
-
-void PreviewWidget::slotPanIconHiden()
-{
-    d->cornerButton->blockSignals(true);
-    d->cornerButton->animateClick();
-    d->cornerButton->blockSignals(false);
-}
-
-void PreviewWidget::slotPanIconSelectionMoved(QRect r, bool b)
-{
-    setContentsPos((int)(r.x()*d->zoom), (int)(r.y()*d->zoom));
-
-    if (b)
-    {
-        d->panIconPopup->hide();
-        delete d->panIconPopup;
-        d->panIconPopup = 0;
-        slotPanIconHiden();
-    }
-}
-
-void PreviewWidget::slotZoomChanged(double zoom)
-{
-    if (zoom > calcAutoZoomFactor())
-        d->cornerButton->show();
-    else
-        d->cornerButton->hide();        
 }
 
 }  // NameSpace Digikam

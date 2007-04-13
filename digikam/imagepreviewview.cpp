@@ -25,6 +25,8 @@
 #include <qstring.h>
 #include <qvaluevector.h>
 #include <qfileinfo.h>
+#include <qtoolbutton.h>
+#include <qtooltip.h>
 
 // KDE includes.
 
@@ -36,6 +38,9 @@
 #include <kmimetype.h>
 #include <kiconloader.h>
 #include <kcursor.h>
+#include <kdatetbl.h>
+#include <kiconloader.h>
+#include <kprocess.h>
 
 // LibKipi includes.
 
@@ -53,6 +58,7 @@
 #include "dmetadata.h"
 #include "dpopupmenu.h"
 #include "metadatahub.h"
+#include "paniconwidget.h"
 #include "previewloadthread.h"
 #include "loadingdescription.h"
 #include "tagspopupmenu.h"
@@ -70,6 +76,9 @@ public:
 
     ImagePreviewViewPriv()
     {
+        panIconPopup         = 0;
+        panIconWidget        = 0;
+        cornerButton         = 0;
         previewThread        = 0;
         previewPreloadThread = 0;
         imageInfo            = 0;
@@ -84,6 +93,12 @@ public:
     QString            path;
     QString            nextPath;
     QString            previousPath;
+
+    QToolButton       *cornerButton;
+
+    KPopupFrame       *panIconPopup;
+
+    PanIconWidget     *panIconWidget;
 
     ImageInfo         *imageInfo;
 
@@ -101,7 +116,19 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    // ----------------------------------------------------------------
+    d->cornerButton = new QToolButton(this);
+    d->cornerButton->setIconSet(SmallIcon("move"));
+    d->cornerButton->hide();
+    QToolTip::add(d->cornerButton, i18n("Pan the image to a region"));
+    setCornerWidget(d->cornerButton);
+
+    // ------------------------------------------------------------
+
+    connect(this, SIGNAL(signalZoomFactorChanged(double)),
+            this, SLOT(slotZoomChanged(double)));
+
+    connect(d->cornerButton, SIGNAL(pressed()),
+            this, SLOT(slotCornerButtonPressed()));
 
     connect(this, SIGNAL(signalShowNextImage()),
             this, SIGNAL(signalNextItem()));
@@ -457,6 +484,68 @@ void ImagePreviewView::slotAssignRating(int rating)
 void ImagePreviewView::slotThemeChanged()
 {
     setBackgroundColor(ThemeEngine::instance()->baseColor());
+}
+
+void ImagePreviewView::slotCornerButtonPressed()
+{    
+    if (d->panIconPopup)
+    {
+        d->panIconPopup->hide();
+        delete d->panIconPopup;
+        d->panIconPopup = 0;
+    }
+
+    d->panIconPopup    = new KPopupFrame(this);
+    PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
+    pan->setImage(180, 120, getImage()); 
+    d->panIconPopup->setMainWidget(pan);
+
+    QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),
+            (int)(visibleWidth() / zoomFactor()), (int)(visibleHeight() / zoomFactor()));
+    pan->setRegionSelection(r);
+    pan->setMouseFocus();
+
+    connect(pan, SIGNAL(signalSelectionMoved(QRect, bool)),
+            this, SLOT(slotPanIconSelectionMoved(QRect, bool)));
+    
+    connect(pan, SIGNAL(signalHiden()),
+            this, SLOT(slotPanIconHiden()));
+    
+    QPoint g = mapToGlobal(viewport()->pos());
+    g.setX(g.x()+ viewport()->size().width());
+    g.setY(g.y()+ viewport()->size().height());
+    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(), 
+                                  g.y() - d->panIconPopup->height()));
+
+    pan->setCursorToLocalRegionSelectionCenter();
+}
+
+void ImagePreviewView::slotPanIconHiden()
+{
+    d->cornerButton->blockSignals(true);
+    d->cornerButton->animateClick();
+    d->cornerButton->blockSignals(false);
+}
+
+void ImagePreviewView::slotPanIconSelectionMoved(QRect r, bool b)
+{
+    setContentsPos((int)(r.x()*zoomFactor()), (int)(r.y()*zoomFactor()));
+
+    if (b)
+    {
+        d->panIconPopup->hide();
+        delete d->panIconPopup;
+        d->panIconPopup = 0;
+        slotPanIconHiden();
+    }
+}
+
+void ImagePreviewView::slotZoomChanged(double zoom)
+{
+    if (zoom > calcAutoZoomFactor())
+        d->cornerButton->show();
+    else
+        d->cornerButton->hide();        
 }
 
 }  // NameSpace Digikam
