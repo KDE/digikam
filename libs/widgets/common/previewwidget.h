@@ -52,6 +52,9 @@ public:
     bool isFitToWindow();
     void toggleFitToWindow();
 
+    int  zoomWidth();
+    int  zoomHeight();
+
     bool maxZoom();
     bool minZoom();
 

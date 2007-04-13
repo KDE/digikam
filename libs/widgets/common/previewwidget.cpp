@@ -142,6 +142,16 @@ int PreviewWidget::tileSize()
     return d->tileSize;
 }
 
+int PreviewWidget::zoomWidth()
+{
+    return d->zoomWidth;
+}
+
+int PreviewWidget::zoomHeight()
+{
+    return d->zoomHeight;
+}
+
 double PreviewWidget::zoomMax()
 {
     return d->maxZoom;
