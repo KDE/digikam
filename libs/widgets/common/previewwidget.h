@@ -58,6 +58,8 @@ public:
     double zoomFactor();
     double zoomMax();
     double zoomMin();
+    void   setZoomMax(double z);
+    void   setZoomMin(double z);
 
     void reset();
 

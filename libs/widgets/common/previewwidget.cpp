@@ -52,7 +52,7 @@ class PreviewWidgetPriv
 public:
 
     PreviewWidgetPriv() :
-        tileSize(128), minZoom(0.1), maxZoom(12.0), zoomMultiplier(1.2) 
+        tileSize(128), zoomMultiplier(1.2) 
     {
         pressedMoving    = false;
         midButtonPressed = false;
@@ -61,6 +61,8 @@ public:
         autoZoom         = false;
         fullScreen       = false;
         zoom             = 1.0;
+        minZoom          = 0.1;
+        maxZoom          = 12.0;
         zoomWidth        = 0;
         zoomHeight       = 0;
         tileTmpPix       = new QPixmap(tileSize, tileSize);
@@ -81,8 +83,8 @@ public:
     int                  zoomHeight;
     
     double               zoom;
-    const double         minZoom;
-    const double         maxZoom;
+    double               minZoom;
+    double               maxZoom;
     const double         zoomMultiplier;
 
     QRect                pixmapRect;
@@ -143,6 +145,16 @@ double PreviewWidget::zoomMax()
 double PreviewWidget::zoomMin()
 {
     return d->minZoom;
+}
+
+void PreviewWidget::setZoomMax(double z)
+{
+    d->maxZoom = z;
+}
+
+void PreviewWidget::setZoomMin(double z)
+{
+    d->minZoom = z;
 }
 
 bool PreviewWidget::maxZoom()
