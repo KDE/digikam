@@ -442,6 +442,7 @@ void PreviewWidget::contentsMouseMoveEvent(QMouseEvent *e)
         {
             scrollBy(d->midButtonX - e->x(),
                      d->midButtonY - e->y());
+            emit signalContentsMovedEvent(false);
         }
     }
 }
@@ -455,7 +456,8 @@ void PreviewWidget::contentsMouseReleaseEvent(QMouseEvent *e)
     if (d->pressedMoving)
     {
         d->pressedMoving = false;
-        viewport()->update();
+        viewport()->repaint(false);
+        emit signalContentsMovedEvent(true);
     }
 
     if (e->button() != Qt::LeftButton)

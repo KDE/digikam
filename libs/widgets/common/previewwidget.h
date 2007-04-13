@@ -29,6 +29,7 @@
 
 #include "digikam_export.h"
 
+class QPainter;
 class QPixmap;
 class QColor;
 
@@ -73,6 +74,7 @@ signals:
     void signalShowNextImage();
     void signalShowPrevImage();
     void signalZoomFactorChanged(double);
+    void signalContentsMovedEvent(bool);
 
 public slots:
 
