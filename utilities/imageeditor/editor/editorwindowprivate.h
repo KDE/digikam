@@ -75,6 +75,7 @@ public:
         zoomFitToSelectAction  = 0;
         zoomPlusAction         = 0;
         zoomMinusAction        = 0;
+        zoomTo100percents      = 0;
         zoomCombo              = 0;
         zoomComboAction        = 0;
     }
@@ -103,6 +104,7 @@ public:
     KAction                   *cropAction;
     KAction                   *zoomPlusAction;
     KAction                   *zoomMinusAction;
+    KAction                   *zoomTo100percents;
     KAction                   *zoomFitToSelectAction;
     KAction                   *rotateLeftAction;
     KAction                   *rotateRightAction;

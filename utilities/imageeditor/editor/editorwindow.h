@@ -203,6 +203,7 @@ private slots:
     void slotSavingFinished(const QString &filename, bool success);
     void slotDonateMoney();
     void slotToggleSlideShow();
+    void slotZoomTo100Percents();
     void slotZoomSelected();
     void slotZoomTextChanged(const QString &);
     void slotZoomChanged(double zoom);
