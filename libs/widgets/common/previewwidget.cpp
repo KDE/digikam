@@ -95,7 +95,7 @@ public:
 };
 
 PreviewWidget::PreviewWidget(QWidget *parent)
-             : QScrollView(parent)
+             : QScrollView(parent, 0, Qt::WDestructiveClose)
 {
     d = new PreviewWidgetPriv;
     d->bgColor.setRgb(0, 0, 0);
