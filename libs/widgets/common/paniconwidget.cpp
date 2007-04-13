@@ -80,7 +80,8 @@ PanIconWidget::~PanIconWidget()
     if (m_timerID)
         killTimer(m_timerID);
 
-    delete m_pixmap;
+    if (m_pixmap) delete m_pixmap;
+
     delete d;
 }
 
