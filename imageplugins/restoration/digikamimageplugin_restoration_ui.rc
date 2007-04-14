@@ -14,7 +14,7 @@
  </ToolBar>
  
  <ActionProperties>
-  <Action shortcut="" name="imageplugin_restorate" />
+      <Action shortcut="" name="imageplugin_restoration" />
  </ActionProperties>
 
 </kpartgui>
