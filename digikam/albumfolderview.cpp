@@ -57,6 +57,7 @@
 #include "albummanager.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "collectionmanager.h"
 #include "thumbnailjob.h"
 #include "thumbnailsize.h"
 #include "albumpropsedit.h"
@@ -273,7 +274,7 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
     if (failed)
     {
         DWarning() << k_funcinfo << " Failed to find parent for Album "
-                   << palbum->url() << endl;
+                   << palbum->albumPath() << endl;
         return;
     }
 
@@ -569,6 +570,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
         return;
     }
 
+    /*
     QDir libraryDir(settings->getAlbumLibraryPath());
     if(!libraryDir.exists())
     {
@@ -579,6 +581,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
                                 "Library."));
         return;
     }
+    */
 
     PAlbum *parent;
 
@@ -589,6 +592,14 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
 
     if (!parent)
         return;
+
+    // if we create an album under root, need to supply the album root path.
+    QString albumRootPath;
+    if (parent->isRoot())
+    {
+        //TODO: Let user choose an album root
+        albumRootPath = CollectionManager::instance()->oneAlbumRootPath();
+    }
 
     QString     title;
     QString     comments;
@@ -608,7 +619,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     }
 
     QString errMsg;
-    PAlbum* album = d->albumMan->createPAlbum(parent, title, comments,
+    PAlbum* album = d->albumMan->createPAlbum(parent, albumRootPath, title, comments,
                                               date, collection, errMsg);
     if (!album)
     {
@@ -1232,10 +1243,36 @@ AlbumFolderViewItem* AlbumFolderView::findParentByFolder(PAlbum* album, bool& fa
 {
     AlbumFolderViewItem* parent =
         (AlbumFolderViewItem*) album->parent()->extraData(this);
+
     if (!parent)
     {
         failed = true;
         return 0;
+    }
+
+    if (album->parent()->isRoot())
+    {
+        QStringList albumRoots = CollectionManager::instance()->allAvailableAlbumRootPaths();
+        if (albumRoots.count() > 1)
+        {
+            for (QValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
+                 it != d->groupItems.end(); ++it)
+            {
+                AlbumFolderViewItem* groupItem = *it;
+                if (groupItem->text(0) == album->albumRootPath())
+                {
+                    parent = groupItem;
+                    break;
+                }
+            }
+
+            // Need to create a new parent item
+            if (!parent)
+            {
+                parent = new AlbumFolderViewItem(firstChild(), album->albumRootPath(), 0, 0);
+                d->groupItems.append(parent);
+            }
+        }
     }
 
     failed = false;

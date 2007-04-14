@@ -100,6 +100,7 @@ extern "C"
 #include "renamecustomizer.h"
 #include "animwidget.h"
 #include "collectionscanner.h"
+#include "collectionmanager.h"
 #include "camerafolderdialog.h"
 #include "camerainfodialog.h"
 #include "cameraiconview.h"
@@ -983,7 +984,7 @@ void CameraUI::slotUpload()
 
     DDebug () << "fileformats=" << fileformats << endl;   
 
-    KURL::List urls = KFileDialog::getOpenURLs(AlbumManager::instance()->getLibraryPath(), 
+    KURL::List urls = KFileDialog::getOpenURLs(CollectionManager::instance()->oneAlbumRootPath(),
                                                fileformats, this, i18n("Select Image to Upload"));
     if (!urls.isEmpty())
         slotUploadItems(urls);
@@ -1579,8 +1580,9 @@ bool CameraUI::createAutoAlbum(const KURL& parentURL, const QString& name,
                  .arg(parentURL.path());
         return false;
     }
+    QString albumRootPath = CollectionManager::instance()->albumRootPath(parentURL);
 
-    return aman->createPAlbum(parent, name, QString(""), date, QString(""), errMsg);
+    return aman->createPAlbum(parent, albumRootPath, name, QString(""), date, QString(""), errMsg);
 }
 
 void CameraUI::addFileExtension(const QString& ext)

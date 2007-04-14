@@ -47,6 +47,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "collectionmanager.h"
 #include "albumselectdialog.h"
 #include "albumselectdialog.moc"
 
@@ -285,8 +286,16 @@ void AlbumSelectDialog::slotUser1()
     if (!ok)
         return;
 
+    // if we create an album under root, need to supply the album root path.
+    QString albumRootPath;
+    if (album->isRoot())
+    {
+        //TODO: Let user choose an album root
+        albumRootPath = CollectionManager::instance()->oneAlbumRootPath();
+    }
+
     QString errMsg;
-    PAlbum* newAlbum = AlbumManager::instance()->createPAlbum(album, newAlbumName,
+    PAlbum* newAlbum = AlbumManager::instance()->createPAlbum(album, albumRootPath, newAlbumName,
                                                               QString(), QDate::currentDate(),
                                                               QString(), errMsg);
     if (!newAlbum)
