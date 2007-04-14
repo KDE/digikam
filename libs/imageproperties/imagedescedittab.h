@@ -111,10 +111,11 @@ private slots:
     void slotAlbumRenamed(Album* a);
     void slotAlbumsCleared();
     void slotAlbumMoved(TAlbum* tag, TAlbum* newParent);
-    
+
     void slotABCContextMenu();
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
+    void slotReloadThumbnails();
 
     void slotImageTagsChanged(Q_LLONG imageId);
     void slotImagesChanged(int albumId);

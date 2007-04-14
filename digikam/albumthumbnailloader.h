@@ -50,6 +50,17 @@ public:
     static void cleanUp();
 
     /**
+     * Change the size of the thumbnails.
+     * If the size differs from the current size,
+     * signalReloadThumbnails will be emitted.
+     */
+    void setThumbnailSize(int size);
+    /**
+     * Get the current default icon size
+     */
+    int  thumbnailSize() const;
+
+    /**
      * Album thumbnail size is configurable via the settings menu.
      * Some widgets use smaller icons than other widgets.
      * These widgets do not need to know the currently set icon size from
@@ -128,6 +139,12 @@ signals:
      *  Same considerations as above.
      */
     void signalFailed(Album *album);
+
+    /**
+     * Indicates that all album and tag thumbnails need to be reloaded.
+     * This is usually because the icon size has changed in the setup.
+     */
+    void signalReloadThumbnails();
 
 protected slots:
 

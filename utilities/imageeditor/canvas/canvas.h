@@ -112,6 +112,7 @@ public:
 
     void  toggleFitToWindow();
     void  fitToSelect();
+
 signals:
 
     void signalColorManagementTool();

@@ -1,10 +1,10 @@
 /* ============================================================
- * Authors: Gilles Caulier 
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2006-06-13
  * Description : A widget stack to embedded album content view
  *               or the current image preview.
  *
- * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -94,14 +94,14 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     connect(d->imagePreviewView, SIGNAL(signalDeleteItem()),
             this, SIGNAL(signalDeleteItem()));
 
-    connect(d->imagePreviewView, SIGNAL(signalPreviewLoaded()),
-            this, SLOT(slotPreviewLoaded()));
-
     connect(d->imagePreviewView, SIGNAL(signalBack2Album()),
             this, SIGNAL(signalBack2Album()));
 
     connect(d->imagePreviewView, SIGNAL(signalSlideShow()),
             this, SIGNAL(signalSlideShow()));
+
+    connect(d->imagePreviewView, SIGNAL(signalZoomFactorChanged(double)),
+            this, SIGNAL(signalZoomFactorChanged(double)));
 }
 
 AlbumWidgetStack::~AlbumWidgetStack()
@@ -185,13 +185,12 @@ void AlbumWidgetStack::setPreviewMode(int mode)
     else
     { 
         raiseWidget(mode);
-        emit signalToggledToPreviewMode(true);
     }
 }
 
-void AlbumWidgetStack::slotPreviewLoaded()
+void AlbumWidgetStack::previewLoaded()
 {
-    setPreviewMode(PreviewImageMode);
+     emit signalToggledToPreviewMode(true);
 }
 
 void AlbumWidgetStack::slotItemsUpdated(const KURL::List& list)
@@ -218,6 +217,16 @@ void AlbumWidgetStack::decreaseZoom()
     d->imagePreviewView->slotDecreaseZoom();
 }
 
+void AlbumWidgetStack::zoomTo100Percents()
+{
+    d->imagePreviewView->setZoomFactor(1.0);
+}
+
+void AlbumWidgetStack::fitToWindow()
+{
+    d->imagePreviewView->fitToWindow();
+}
+
 bool AlbumWidgetStack::maxZoom()
 {
     return d->imagePreviewView->maxZoom();
@@ -226,6 +235,26 @@ bool AlbumWidgetStack::maxZoom()
 bool AlbumWidgetStack::minZoom()
 {
     return d->imagePreviewView->minZoom();
+}
+
+void AlbumWidgetStack::setZoomFactor(double z)
+{
+    d->imagePreviewView->setZoomFactor(z);
+}
+
+double AlbumWidgetStack::zoomFactor()
+{
+    return d->imagePreviewView->zoomFactor();
+}
+
+double AlbumWidgetStack::zoomMin()
+{
+    return d->imagePreviewView->zoomMin();
+}
+
+double AlbumWidgetStack::zoomMax()
+{
+    return d->imagePreviewView->zoomMax();
 }
 
 }  // namespace Digikam

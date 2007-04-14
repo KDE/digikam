@@ -30,6 +30,7 @@
 #include <qtooltip.h>
 #include <qsignalmapper.h>
 #include <qdockarea.h>
+#include <qhbox.h>
 
 // KDE includes.
 
@@ -174,9 +175,6 @@ DigikamApp::DigikamApp()
 
 DigikamApp::~DigikamApp()
 {
-    if (d->thumbSizeTimer)
-        delete d->thumbSizeTimer;
-
     ImageAttributesWatch::shutDown();
 
     if (ImageWindow::imagewindowCreated())
@@ -199,7 +197,7 @@ DigikamApp::~DigikamApp()
 
     m_instance = 0;
 
-    delete d->thumbSizeTracker;
+    delete d->zoomTracker;
     delete d;
 }
 
@@ -344,24 +342,53 @@ void DigikamApp::setupStatusBar()
     d->statusProgressBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->statusProgressBar, 100, true);
 
-    d->thumbSizeSlider = new QSlider(ThumbnailSize::Small, ThumbnailSize::Huge,
-                                     ThumbnailSize::Step, ThumbnailSize::Medium, 
-                                     Qt::Horizontal, statusBar());
-    d->thumbSizeSlider->setMaximumHeight(fontMetrics().height()+2);    
-    d->thumbSizeSlider->setFixedWidth(120);
+    //------------------------------------------------------------------------------
 
-    d->thumbSizeTracker = new DTipTracker("", d->thumbSizeSlider);
-    statusBar()->addWidget(d->thumbSizeSlider, 1, true);
+    QHBox *zoomBar = new QHBox(statusBar());
+
+    d->zoomMinusButton = new QToolButton(zoomBar);
+    d->zoomMinusButton->setAutoRaise(true);
+    d->zoomMinusButton->setIconSet(SmallIconSet("viewmag-"));
+    QToolTip::add(d->zoomMinusButton, i18n("Zoom out"));
+
+    d->zoomSlider = new QSlider(ThumbnailSize::Small, ThumbnailSize::Huge,
+                                ThumbnailSize::Step, ThumbnailSize::Medium, 
+                                Qt::Horizontal, zoomBar);
+    d->zoomSlider->setLineStep(ThumbnailSize::Step);
+    d->zoomSlider->setMaximumHeight(fontMetrics().height()+2);    
+    d->zoomSlider->setFixedWidth(120);
+
+    d->zoomPlusButton = new QToolButton(zoomBar);
+    d->zoomPlusButton->setAutoRaise(true);
+    d->zoomPlusButton->setIconSet(SmallIconSet("viewmag+"));
+    QToolTip::add(d->zoomPlusButton, i18n("Zoom in"));
+
+    d->zoomTracker = new DTipTracker("", d->zoomSlider);
+
+    statusBar()->addWidget(zoomBar, 1, true);
+
+    //------------------------------------------------------------------------------
 
     d->statusNavigateBar = new StatusNavigateBar(statusBar());
     d->statusNavigateBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->statusNavigateBar, 1, true);
 
-    connect(d->thumbSizeSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(slotThumbSizeTimer(int)));
+    //------------------------------------------------------------------------------
 
-    connect(d->view, SIGNAL(signalZoomChanged(int)),
+    connect(d->zoomMinusButton, SIGNAL(clicked()),
+            d->view, SLOT(slotZoomOut()));
+
+    connect(d->zoomPlusButton, SIGNAL(clicked()),
+            d->view, SLOT(slotZoomIn()));
+
+    connect(d->zoomSlider, SIGNAL(valueChanged(int)),
+            this, SLOT(slotZoomSliderChanged(int)));
+
+    connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
+
+    connect(d->view, SIGNAL(signalZoomChanged(double, int)),
+            this, SLOT(slotZoomChanged(double, int)));
     
     connect(d->view, SIGNAL(signalTogglePreview(bool)),
             this, SLOT(slotTooglePreview(bool)));
@@ -757,7 +784,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->thumbSizePlusAction = new KAction(i18n("Zoom in"),
+    d->zoomPlusAction = new KAction(i18n("Zoom in"),
                                    "viewmag+",
                                    CTRL+Key_Plus,
                                    d->view,
@@ -765,13 +792,29 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "album_zoomin");
 
-    d->thumbSizeMinusAction = new KAction(i18n("Zoom out"),
+    d->zoomMinusAction = new KAction(i18n("Zoom out"),
                                    "viewmag-",
                                    CTRL+Key_Minus,
                                    d->view,
                                    SLOT(slotZoomOut()),
                                    actionCollection(),
                                    "album_zoomout");
+
+    d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), 
+                                   "viewmag1",
+                                   CTRL+SHIFT+Key_Z, 
+                                   d->view, 
+                                   SLOT(slotZoomTo100Percents()),
+                                   actionCollection(), 
+                                   "album_zoomto100percents");
+
+    d->zoomFitToWindowAction = new KAction(i18n("Fit to &Window"), 
+                                   "view_fit_window",
+                                   CTRL+SHIFT+Key_A, 
+                                   d->view, 
+                                   SLOT(slotFitToWindow()),
+                                   actionCollection(), 
+                                   "album_zoomfit2window");
 
 #if KDE_IS_VERSION(3,2,0)
     d->fullScreenAction = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
@@ -917,18 +960,20 @@ void DigikamApp::setupActions()
     d->albumSortAction->setCurrentItem((int)d->albumSettings->getAlbumSortOrder());
     d->imageSortAction->setCurrentItem((int)d->albumSettings->getImageSortOrder());
 
-    d->thumbSizeSlider->setValue(d->albumSettings->getDefaultIconSize());
-    slotThumbSizeEffect();
+    d->zoomSlider->setValue(d->albumSettings->getDefaultIconSize());
+    slotThumbSizeChanged(d->zoomSlider->value());
 }
 
-void DigikamApp::enableThumbSizePlusAction(bool val)
+void DigikamApp::enableZoomPlusAction(bool val)
 {
-    d->thumbSizePlusAction->setEnabled(val);
+    d->zoomPlusAction->setEnabled(val);
+    d->zoomPlusButton->setEnabled(val);
 }
 
-void DigikamApp::enableThumbSizeMinusAction(bool val)
+void DigikamApp::enableZoomMinusAction(bool val)
 {
-    d->thumbSizeMinusAction->setEnabled(val);
+    d->zoomMinusAction->setEnabled(val);
+    d->zoomMinusButton->setEnabled(val);
 }
 
 void DigikamApp::enableAlbumBackwardHistory(bool enable)
@@ -1488,6 +1533,8 @@ void DigikamApp::slotSetupChanged()
 
     d->view->applySettings(d->albumSettings);
 
+    AlbumThumbnailLoader::instance()->setThumbnailSize(d->albumSettings->getDefaultTreeIconSize());
+
     if (ImageWindow::imagewindowCreated())
         ImageWindow::imagewindow()->applySettings();
 
@@ -1597,6 +1644,9 @@ void DigikamApp::slotShowKipiHelp()
 
 void DigikamApp::loadPlugins()
 {
+    if(d->splashScreen)
+        d->splashScreen->message(i18n("Loading Kipi Plugins"), AlignLeft, white);
+
     QStringList ignores;
     d->kipiInterface = new DigikamKipiInterface( this, "Digikam_KIPI_interface" );
 
@@ -1647,8 +1697,8 @@ void DigikamApp::slotKipiPluginPlug()
 
         ++cpt;
 
-        if(d->splashScreen)
-            d->splashScreen->message(i18n("Loading: %1").arg((*it)->name()));
+        //if(d->splashScreen)
+          //  d->splashScreen->message(i18n("Loading: %1").arg((*it)->name()));
 
         plugin->setup( this );
         QPtrList<KAction>* popup = 0;
@@ -1688,8 +1738,8 @@ void DigikamApp::slotKipiPluginPlug()
         plugin->actionCollection()->readShortcutSettings();
     }
 
-    if(d->splashScreen)
-        d->splashScreen->message(i18n("1 Kipi Plugin Loaded", "%n Kipi Plugins Loaded", cpt));
+    //if(d->splashScreen)
+      //  d->splashScreen->message(i18n("1 Kipi Plugin Loaded", "%n Kipi Plugins Loaded", cpt));
 
     // Create GUI menu in according with plugins.
 
@@ -1794,40 +1844,30 @@ void DigikamApp::slotDonateMoney()
     KApplication::kApplication()->invokeBrowser("http://www.digikam.org/?q=donation");
 }
 
-void DigikamApp::slotThumbSizeTimer(int size)
+void DigikamApp::slotZoomSliderChanged(int size)
 {
-    d->thumbSizeTracker->setText(i18n("Thumbnail size: %1").arg(size));
-
-    if (d->thumbSizeTimer)
-    {
-       d->thumbSizeTimer->stop();
-       delete d->thumbSizeTimer;
-    }
-
-    d->thumbSizeTimer = new QTimer( this );
-    connect(d->thumbSizeTimer, SIGNAL(timeout()),
-            this, SLOT(slotThumbSizeEffect()) );
-    d->thumbSizeTimer->start(300, true);
-}
-
-void DigikamApp::slotThumbSizeEffect()
-{
-    d->view->setThumbSize(d->thumbSizeSlider->value());
+    d->view->setThumbSize(size);
 }
 
 void DigikamApp::slotThumbSizeChanged(int size)
 {
-    d->thumbSizeSlider->blockSignals(true);
-    d->thumbSizeSlider->setValue(size);
-    d->thumbSizeTracker->setText(i18n("Thumbnail size: %1").arg(size));
-    d->thumbSizeSlider->blockSignals(false);
+    d->zoomSlider->blockSignals(true);
+    d->zoomSlider->setValue(size);
+    d->zoomTracker->setText(i18n("Size: %1").arg(size));
+    d->zoomSlider->blockSignals(false);
+}
+
+void DigikamApp::slotZoomChanged(double zoom, int size)
+{
+    d->zoomSlider->blockSignals(true);
+    d->zoomSlider->setValue(size);
+    d->zoomTracker->setText(i18n("zoom: %1%").arg((int)(zoom*100.0)));
+    d->zoomSlider->blockSignals(false);
 }
 
 void DigikamApp::slotTooglePreview(bool t)
 {
     // NOTE: if 't' is true, we are in Preview Mode, else we are in AlbumView Mode
-
-    d->thumbSizeSlider->setEnabled(!t);
 
     // This is require if ESC is pressed to go out of Preview Mode. 
     // imagePreviewAction is handled by F3 key only. 
@@ -1843,6 +1883,8 @@ void DigikamApp::slotTooglePreview(bool t)
     // View menu     
     d->albumSortAction->setEnabled(!t);
     d->imageSortAction->setEnabled(!t);
+    d->zoomTo100percents->setEnabled(t);
+    d->zoomFitToWindowAction->setEnabled(t);
 }
 
 }  // namespace Digikam

@@ -77,7 +77,7 @@ class CanvasPrivate
 public:
 
     CanvasPrivate() : 
-        tileSize(128), minZoom(0.1), maxZoom(10.0), zoomMultiplier(1.2) 
+        tileSize(128), minZoom(0.1), maxZoom(12.0), zoomMultiplier(1.2) 
     {
         rubber           = 0;
         pressedMoved     = false;
@@ -433,10 +433,10 @@ void Canvas::updateContentsSize(bool deleteRubber)
     {
         int xSel, ySel, wSel, hSel;
         d->im->getSelectedArea(xSel, ySel, wSel, hSel);
-        xSel = (int)(((xSel * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom));
-        ySel = (int)(((ySel * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom));
-        wSel = (int)(((wSel * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom));
-        hSel = (int)(((hSel * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom));
+        xSel = (int)((xSel * d->tileSize) / floor(d->tileSize / d->zoom));
+        ySel = (int)((ySel * d->tileSize) / floor(d->tileSize / d->zoom));
+        wSel = (int)((wSel * d->tileSize) / floor(d->tileSize / d->zoom));
+        hSel = (int)((hSel * d->tileSize) / floor(d->tileSize / d->zoom));
         d->rubber->setX(xSel);
         d->rubber->setY(ySel);
         d->rubber->setWidth(wSel);
@@ -550,8 +550,8 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                     // The new implementation below fix this problem to handle properly the areas to 
                     // use from the source image to generate the canvas pixmap tiles.  
 
-                    sx = (int)floor(((double)i / d->zoom) / (d->tileSize / d->zoom)) * step;
-                    sy = (int)floor(((double)j / d->zoom) / (d->tileSize / d->zoom)) * step;
+                    sx = (int)floor((double)i / d->tileSize) * step;
+                    sy = (int)floor((double)j / d->tileSize) * step;
                     sw = step;
                     sh = step;
 
@@ -725,7 +725,7 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
     if (!e)
         return;
 
-    if (e->state() == Qt::MidButton)
+    if (e->state() & Qt::MidButton)
     {
         if (d->midButtonPressed)
         {
@@ -872,7 +872,7 @@ void Canvas::contentsWheelEvent(QWheelEvent *e)
 {
     e->accept();
 
-    if (e->state() == Qt::ShiftButton)
+    if (e->state() & Qt::ShiftButton)
     {
         if (e->delta() < 0)
             emit signalShowNextImage();
@@ -880,7 +880,7 @@ void Canvas::contentsWheelEvent(QWheelEvent *e)
             emit signalShowPrevImage();
         return;
     }
-    else if (e->state() == Qt::ControlButton)
+    else if (e->state() & Qt::ControlButton)
     {
         if (e->delta() < 0)
             slotIncreaseZoom();
@@ -933,8 +933,8 @@ void Canvas::setZoomFactor(double zoom)
     double cpx = contentsX() + visibleWidth()  / 2.0; 
     double cpy = contentsY() + visibleHeight() / 2.0;
 
-    cpx = ((cpx / d->zoom) / (d->tileSize / d->zoom)) * floor(d->tileSize / d->zoom);
-    cpy = ((cpy / d->zoom) / (d->tileSize / d->zoom)) * floor(d->tileSize / d->zoom);
+    cpx = (cpx / d->tileSize) * floor(d->tileSize / d->zoom);
+    cpy = (cpy / d->tileSize) * floor(d->tileSize / d->zoom);
 
     d->zoom = zoom;
 
@@ -942,8 +942,8 @@ void Canvas::setZoomFactor(double zoom)
     updateContentsSize(false);
 
     viewport()->setUpdatesEnabled(false);
-    center((int)(((cpx * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)), 
-           (int)(((cpy * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)));
+    center((int)((cpx * d->tileSize) / floor(d->tileSize / d->zoom)), 
+           (int)((cpy * d->tileSize) / floor(d->tileSize / d->zoom)));
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
 
@@ -974,8 +974,8 @@ void Canvas::fitToSelect()
         updateContentsSize(true);
     
         viewport()->setUpdatesEnabled(false);
-        center((int)(((cpx * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)), 
-               (int)(((cpy * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)));
+        center((int)((cpx * d->tileSize) / floor(d->tileSize / d->zoom)), 
+               (int)((cpy * d->tileSize) / floor(d->tileSize / d->zoom)));
         viewport()->setUpdatesEnabled(true);
         viewport()->update();
     
@@ -1033,25 +1033,11 @@ void Canvas::slotFlipVert()
 
 void Canvas::slotCrop()
 {
-    if (!d->rubber) return;
+    int x, y, w, h;
+    d->im->getSelectedArea(x, y, w, h);
 
-    QRect r(d->rubber->normalize());
-    if (!r.isValid()) return;
-
-    r.moveBy(- d->pixmapRect.x(), - d->pixmapRect.y());
-
-    int step = (int)floor(d->tileSize / d->zoom); 
-
-    int x = (int)((((double)r.x()      / d->zoom) / (d->tileSize / d->zoom)) * step);
-    int y = (int)((((double)r.y()      / d->zoom) / (d->tileSize / d->zoom)) * step);
-    int w = (int)((((double)r.width()  / d->zoom) / (d->tileSize / d->zoom)) * step);
-    int h = (int)((((double)r.height() / d->zoom) / (d->tileSize / d->zoom)) * step);
-
-    x = QMIN(imageWidth(),  QMAX(x, 0));
-    y = QMIN(imageHeight(), QMAX(y, 0));
-
-    w = QMIN(imageWidth(),  QMAX(w, 0));
-    h = QMIN(imageHeight(), QMAX(h, 0));
+    if (!w && !h )  // No current selection.
+        return;
 
     d->im->crop(x, y, w, h);
 }
@@ -1208,17 +1194,13 @@ QRect Canvas::calcSeletedArea()
     {
         r.moveBy(- d->pixmapRect.x(), - d->pixmapRect.y());
 
-        int step = (int)floor(d->tileSize / d->zoom); 
-
-        x = (int)((((double)r.x()      / d->zoom) / (d->tileSize / d->zoom)) * step);
-        y = (int)((((double)r.y()      / d->zoom) / (d->tileSize / d->zoom)) * step);
-
-        w = (int)((((double)r.width()  / d->zoom) / (d->tileSize / d->zoom)) * step);   
-        h = (int)((((double)r.height() / d->zoom) / (d->tileSize / d->zoom)) * step);
+        x = (int)(((double)r.x()      / d->tileSize) * floor(d->tileSize / d->zoom));
+        y = (int)(((double)r.y()      / d->tileSize) * floor(d->tileSize / d->zoom));
+        w = (int)(((double)r.width()  / d->tileSize) * floor(d->tileSize / d->zoom));   
+        h = (int)(((double)r.height() / d->tileSize) * floor(d->tileSize / d->zoom));
 
         x = QMIN(imageWidth(),  QMAX(x, 0));   
         y = QMIN(imageHeight(), QMAX(y, 0));
-
         w = QMIN(imageWidth(),  QMAX(w, 0));
         h = QMIN(imageHeight(), QMAX(h, 0));
 

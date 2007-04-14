@@ -5,7 +5,6 @@
  * Description : a bar widget to display image thumbnails
  * 
  * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
- * Copyrigth 2005-2006 by Tom Albers <tomalbers@kde.nl>
  * Copyright 2006-2007 by Gilles Caulier
  * 
  * This program is free software; you can redistribute it
@@ -36,6 +35,7 @@ extern "C"
 
 #include <qdir.h>
 #include <qpixmap.h>
+#include <qimage.h>
 #include <qtimer.h>
 #include <qpainter.h>
 #include <qdict.h>
@@ -58,6 +58,7 @@ extern "C"
 // Local includes.
 
 #include "thumbnailjob.h"
+#include "thumbnailsize.h"
 #include "thumbbar.h"
 #include "thumbbar.moc"
 
@@ -68,7 +69,8 @@ class ThumbBarViewPriv
 {
 public:
 
-    ThumbBarViewPriv()
+    ThumbBarViewPriv() :
+        margin(5)
     {
         exifRotate = false;
         firstItem  = 0;
@@ -76,14 +78,16 @@ public:
         currItem   = 0;
         count      = 0;
         thumbJob   = 0;
+        tileSize   = ThumbnailSize::Small;
+
         itemDict.setAutoDelete(false);
     }
     
     bool                      clearing;
     bool                      exifRotate;
 
+    const int                 margin;
     int                       count;
-    int                       margin;
     int                       tileSize;
     int                       orientation;
     
@@ -128,8 +132,6 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate)
             : QScrollView(parent)
 {
     d = new ThumbBarViewPriv;
-    d->margin      = 5;
-    d->tileSize    = 64;
     d->orientation = orientation;
     d->exifRotate  = exifRotate;
 
@@ -145,15 +147,11 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate)
     
     if (d->orientation == Vertical)
     {
-       setHScrollBarMode(QScrollView::AlwaysOff);
-       setFixedWidth(d->tileSize + 2*d->margin
-                     + verticalScrollBar()->sizeHint().width());
+        setHScrollBarMode(QScrollView::AlwaysOff);
     }
     else
     {
-       setVScrollBarMode(QScrollView::AlwaysOff);
-       setFixedHeight(d->tileSize + 2*d->margin
-                      + horizontalScrollBar()->sizeHint().height());
+        setVScrollBarMode(QScrollView::AlwaysOff);
     }
 }
 
@@ -170,6 +168,27 @@ ThumbBarView::~ThumbBarView()
     delete d->timer;
     delete d->tip;
     delete d;
+}
+
+void ThumbBarView::resizeEvent(QResizeEvent* e)
+{
+    if (!e)
+        return;
+
+    QScrollView::resizeEvent(e);
+
+    if (d->orientation == Vertical)
+    {
+       d->tileSize = width() - 2*d->margin
+                     - verticalScrollBar()->sizeHint().width();
+    }
+    else
+    {
+       d->tileSize = height() - 2*d->margin
+                     - horizontalScrollBar()->sizeHint().height();
+    }
+
+    rearrangeItems();
 }
 
 void ThumbBarView::setExifRotate(bool exifRotate)
@@ -320,6 +339,7 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
           
         item->repaint();
         emit signalURLSelected(item->url());
+        emit signalItemSelected(item);
     }
 }
 
@@ -340,7 +360,7 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* item)
        d->thumbJob = 0;
     }
        
-    d->thumbJob = new ThumbnailJob(item->url(), d->tileSize, true, d->exifRotate);
+    d->thumbJob = new ThumbnailJob(item->url(), ThumbnailSize::Huge, true, d->exifRotate);
     
     connect(d->thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
             this, SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
@@ -400,9 +420,12 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 
                 if (item->d->pixmap)
                 {
-                    int x = (tile.width() -item->d->pixmap->width())/2;
-                    int y = (tile.height()-item->d->pixmap->height())/2;
-                    bitBlt(&tile, x, y, item->d->pixmap);
+                    QPixmap pix; 
+                    pix.convertFromImage(QImage(item->d->pixmap->convertToImage()).
+                                         smoothScale(d->tileSize, d->tileSize, QImage::ScaleMin));
+                    int x = (tile.width()  - pix.width())/2;
+                    int y = (tile.height() - pix.height())/2;
+                    bitBlt(&tile, x, y, &pix);
                 }
                 
                 bitBlt(&bgPix, 0, item->d->pos - cy, &tile);
@@ -424,9 +447,12 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 
                 if (item->d->pixmap)
                 {
-                    int x = (tile.width() -item->d->pixmap->width())/2;
-                    int y = (tile.height()-item->d->pixmap->height())/2;
-                    bitBlt(&tile, x, y, item->d->pixmap);
+                    QPixmap pix; 
+                    pix.convertFromImage(QImage(item->d->pixmap->convertToImage()).
+                                         smoothScale(d->tileSize, d->tileSize, QImage::ScaleMin));
+                    int x = (tile.width() - pix.width())/2;
+                    int y = (tile.height()- pix.height())/2;
+                    bitBlt(&tile, x, y, &pix);
                 }
                 
                 bitBlt(&bgPix, item->d->pos - cx, 0, &tile);
@@ -487,6 +513,7 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
     barItem->repaint();
     
     emit signalURLSelected(barItem->url());
+    emit signalItemSelected(barItem);
 }
 
 void ThumbBarView::insertItem(ThumbBarItem* item)
@@ -597,7 +624,7 @@ void ThumbBarView::rearrangeItems()
            d->thumbJob = 0;
         }
 
-        d->thumbJob = new ThumbnailJob(urlList, d->tileSize, true, d->exifRotate);
+        d->thumbJob = new ThumbnailJob(urlList, ThumbnailSize::Huge, true, d->exifRotate);
         
         connect(d->thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
                 this, SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
@@ -645,7 +672,7 @@ void ThumbBarView::slotGotThumbnail(const KURL& url, const QPixmap& pix)
 
 void ThumbBarView::slotFailedThumbnail(const KURL& url)
 {
-    KIO::PreviewJob* job = KIO::filePreview(url, d->tileSize, 0, 0, 70, true, false);
+    KIO::PreviewJob* job = KIO::filePreview(url, ThumbnailSize::Huge, 0, 0, 70, true, false);
     
     connect(job, SIGNAL(gotPreview(const KFileItem *, const QPixmap &)),
             this, SLOT(slotGotPreview(const KFileItem *, const QPixmap &)));
@@ -654,8 +681,7 @@ void ThumbBarView::slotFailedThumbnail(const KURL& url)
             this, SLOT(slotFailedPreview(const KFileItem *)));
 }
 
-void ThumbBarView::slotGotPreview(const KFileItem *fileItem,
-                                  const QPixmap& pix)
+void ThumbBarView::slotGotPreview(const KFileItem *fileItem, const QPixmap& pix)
 {
     ThumbBarItem* item = d->itemDict.find(fileItem->url().url());
     if (!item)
@@ -678,8 +704,7 @@ void ThumbBarView::slotFailedPreview(const KFileItem* fileItem)
         return;
 
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
-    QPixmap pix = iconLoader->loadIcon("image", KIcon::NoGroup,
-                                       d->tileSize);
+    QPixmap pix = iconLoader->loadIcon("image", KIcon::NoGroup, ThumbnailSize::Huge);
 
     if (item->d->pixmap)
     {

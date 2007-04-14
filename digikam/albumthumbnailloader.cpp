@@ -322,21 +322,36 @@ void AlbumThumbnailLoader::addURL(Album *album, const KURL &url)
     }
 }
 
-/*
 void AlbumThumbnailLoader::setThumbnailSize(int size)
 {
-    if (d->size == size)
+    if (d->iconSize == size)
         return;
 
-    d->size = size;
-    d->cache->clear();
-    if (d->thumbJob)
+    d->iconSize = size;
+
+    // clear task list
+    d->urlAlbumMap.clear();
+    // clear cached thumbnails
+    d->tagThumbnailMap.clear();
+
+    if (d->iconAlbumThumbJob)
     {
-        d->thumbJob->kill();
-        d->thumbJob = 0;
+        d->iconAlbumThumbJob->kill();
+        d->iconAlbumThumbJob= 0;
     }
+    if (d->iconTagThumbJob)
+    {
+        d->iconTagThumbJob->kill();
+        d->iconTagThumbJob= 0;
+    }
+
+    emit signalReloadThumbnails();
 }
-*/
+
+int AlbumThumbnailLoader::thumbnailSize() const
+{
+    return d->iconSize;
+}
 
 void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const KURL &url, const QPixmap &thumbnail)
 {

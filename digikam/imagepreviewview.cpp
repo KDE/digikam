@@ -25,6 +25,9 @@
 #include <qstring.h>
 #include <qvaluevector.h>
 #include <qfileinfo.h>
+#include <qtoolbutton.h>
+#include <qtooltip.h>
+#include <qpixmap.h>
 
 // KDE includes.
 
@@ -36,6 +39,9 @@
 #include <kmimetype.h>
 #include <kiconloader.h>
 #include <kcursor.h>
+#include <kdatetbl.h>
+#include <kiconloader.h>
+#include <kprocess.h>
 
 // LibKipi includes.
 
@@ -48,12 +54,16 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "albumwidgetstack.h"
 #include "databaseaccess.h"
+#include "fastscale.h"
 #include "imageinfo.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
 #include "metadatahub.h"
+#include "paniconwidget.h"
 #include "previewloadthread.h"
+#include "loadingdescription.h"
 #include "tagspopupmenu.h"
 #include "ratingpopupmenu.h"
 #include "themeengine.h"
@@ -69,11 +79,15 @@ public:
 
     ImagePreviewViewPriv()
     {
+        panIconPopup         = 0;
+        panIconWidget        = 0;
+        cornerButton         = 0;
         previewThread        = 0;
         previewPreloadThread = 0;
+        imageInfo            = 0;
+        parent               = 0;
         hasPrev              = false;
         hasNext              = false;
-        imageInfo            = 0;
     }
 
     bool               hasPrev;
@@ -83,20 +97,43 @@ public:
     QString            nextPath;
     QString            previousPath;
 
+    QToolButton       *cornerButton;
+
+    QImage             preview;
+
+    KPopupFrame       *panIconPopup;
+
+    PanIconWidget     *panIconWidget;
+
     ImageInfo         *imageInfo;
 
     PreviewLoadThread *previewThread;
     PreviewLoadThread *previewPreloadThread;
+
+    AlbumWidgetStack  *parent;
 };
     
-ImagePreviewView::ImagePreviewView(QWidget *parent)
-                : ImagePreviewWidget(parent)
+ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
+                : PreviewWidget(parent)
 {
     d = new ImagePreviewViewPriv;
+    d->parent = parent;
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    // ----------------------------------------------------------------
+    d->cornerButton = new QToolButton(this);
+    d->cornerButton->setIconSet(SmallIcon("move"));
+    d->cornerButton->hide();
+    QToolTip::add(d->cornerButton, i18n("Pan the image to a region"));
+    setCornerWidget(d->cornerButton);
+
+    // ------------------------------------------------------------
+
+    connect(this, SIGNAL(signalZoomFactorChanged(double)),
+            this, SLOT(slotZoomChanged(double)));
+
+    connect(d->cornerButton, SIGNAL(pressed()),
+            this, SLOT(slotCornerButtonPressed()));
 
     connect(this, SIGNAL(signalShowNextImage()),
             this, SIGNAL(signalNextItem()));
@@ -109,6 +146,9 @@ ImagePreviewView::ImagePreviewView(QWidget *parent)
 
     connect(this, SIGNAL(signalLeftButtonClicked()),
             this, SIGNAL(signalBack2Album()));
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
 }
 
 ImagePreviewView::~ImagePreviewView()
@@ -116,6 +156,22 @@ ImagePreviewView::~ImagePreviewView()
     delete d->previewThread;
     delete d->previewPreloadThread;
     delete d;
+}
+
+void ImagePreviewView::setImage(const QImage& image)
+{   
+    d->preview = image;
+
+    updateAutoZoom();
+    updateContentsSize();
+
+    viewport()->setUpdatesEnabled(true);
+    viewport()->update();
+}
+
+QImage& ImagePreviewView::getImage() const
+{
+    return d->preview;
 }
 
 void ImagePreviewView::reload()
@@ -158,23 +214,16 @@ void ImagePreviewView::setImagePath(const QString& path)
     }
 
     d->previewThread->load(LoadingDescription(path, 1024, AlbumSettings::instance()->getExifRotate()));
-
-    emit signalPreviewStarted();
 }
 
 void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
 {
     if (description.filePath != d->path)
-        return;
-
-    // NOTE: order to send signals to AlbumWidgetStack is important to 
-    // Raise the preview widget before to show the image, because the widget 
-    // container size can have a wrong size. Raising the preview widget will 
-    // set the widget container size properlly.   
+        return;   
 
     if (preview.isNull())
     {
-        emit signalPreviewLoaded();
+        d->parent->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         QPixmap pix(visibleWidth(), visibleHeight());
         pix.fill(ThemeEngine::instance()->baseColor());
         QPainter p(&pix);
@@ -186,11 +235,13 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
                    .arg(info.fileName()));
         p.end();
         setImage(pix.convertToImage());
+        d->parent->previewLoaded();
     }
     else
     {
-        emit signalPreviewLoaded();
+        d->parent->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         setImage(preview);
+        d->parent->previewLoaded();
     }
 
     unsetCursor();
@@ -450,5 +501,99 @@ void ImagePreviewView::slotAssignRating(int rating)
     }
 }
 
-}  // NameSpace Digikam
+void ImagePreviewView::slotThemeChanged()
+{
+    setBackgroundColor(ThemeEngine::instance()->baseColor());
+}
 
+void ImagePreviewView::slotCornerButtonPressed()
+{    
+    if (d->panIconPopup)
+    {
+        d->panIconPopup->hide();
+        delete d->panIconPopup;
+        d->panIconPopup = 0;
+    }
+
+    d->panIconPopup    = new KPopupFrame(this);
+    PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
+    pan->setImage(180, 120, getImage()); 
+    d->panIconPopup->setMainWidget(pan);
+
+    QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),
+            (int)(visibleWidth() / zoomFactor()), (int)(visibleHeight() / zoomFactor()));
+    pan->setRegionSelection(r);
+    pan->setMouseFocus();
+
+    connect(pan, SIGNAL(signalSelectionMoved(QRect, bool)),
+            this, SLOT(slotPanIconSelectionMoved(QRect, bool)));
+    
+    connect(pan, SIGNAL(signalHiden()),
+            this, SLOT(slotPanIconHiden()));
+    
+    QPoint g = mapToGlobal(viewport()->pos());
+    g.setX(g.x()+ viewport()->size().width());
+    g.setY(g.y()+ viewport()->size().height());
+    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(), 
+                                  g.y() - d->panIconPopup->height()));
+
+    pan->setCursorToLocalRegionSelectionCenter();
+}
+
+void ImagePreviewView::slotPanIconHiden()
+{
+    d->cornerButton->blockSignals(true);
+    d->cornerButton->animateClick();
+    d->cornerButton->blockSignals(false);
+}
+
+void ImagePreviewView::slotPanIconSelectionMoved(QRect r, bool b)
+{
+    setContentsPos((int)(r.x()*zoomFactor()), (int)(r.y()*zoomFactor()));
+
+    if (b)
+    {
+        d->panIconPopup->hide();
+        delete d->panIconPopup;
+        d->panIconPopup = 0;
+        slotPanIconHiden();
+    }
+}
+
+void ImagePreviewView::slotZoomChanged(double zoom)
+{
+    if (zoom > calcAutoZoomFactor())
+        d->cornerButton->show();
+    else
+        d->cornerButton->hide();        
+}
+
+int ImagePreviewView::previewWidth()
+{
+    return d->preview.width();
+}
+
+int ImagePreviewView::previewHeight()
+{
+    return d->preview.height();
+}
+
+bool ImagePreviewView::previewIsNull()
+{
+    return d->preview.isNull();
+}
+
+void ImagePreviewView::resetPreview()
+{
+    d->preview.reset();
+}
+
+void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
+{
+    // Fast smooth scale method from Antonio.   
+    QImage img = FastScale::fastScaleQImage(d->preview.copy(sx, sy, sw, sh),
+                                            tileSize(), tileSize());
+    bitBlt(pix, 0, 0, &img, 0, 0);
+}
+
+}  // NameSpace Digikam

@@ -24,6 +24,7 @@
 #include <qstring.h>
 #include <qmap.h>
 #include <qslider.h>
+#include <qtoolbutton.h>
 #include <qtimer.h>
 
 // KDE includes.
@@ -99,8 +100,6 @@ public:
         selectAllAction                      = 0;
         selectNoneAction                     = 0;
         selectInvertAction                   = 0;
-        thumbSizePlusAction                  = 0;
-        thumbSizeMinusAction                 = 0;
         fullScreenAction                     = 0;
         slideShowAction                      = 0;
         slideShowAllAction                   = 0;
@@ -129,9 +128,14 @@ public:
         kipiPluginLoader                     = 0;
         view                                 = 0;
         splashScreen                         = 0;
-        thumbSizeSlider                      = 0;
-        thumbSizeTimer                       = 0;
-        thumbSizeTracker                     = 0;
+        zoomSlider                           = 0;
+        zoomTracker                          = 0;
+        zoomMinusButton                      = 0;
+        zoomPlusButton                       = 0;
+        zoomTo100percents                    = 0;
+        zoomFitToWindowAction                = 0;
+        zoomPlusAction                       = 0;
+        zoomMinusAction                      = 0;
     }
 
     bool                   fullScreen;
@@ -145,13 +149,14 @@ public:
     QPtrList<KAction>      kipiBatchActions;
     QPtrList<KAction>      kipiAlbumActions;
 
-    QTimer                *thumbSizeTimer;
-
-    QSlider               *thumbSizeSlider;
-
     QMap<int, QString>     mediaItems;
 
     QString                cameraGuiPath;
+
+    QSlider               *zoomSlider;
+
+    QToolButton           *zoomPlusButton;
+    QToolButton           *zoomMinusButton;
 
     KPopupMenu            *cameraMediaList;
 
@@ -206,10 +211,12 @@ public:
     KAction               *slideShowAllAction;
     KAction               *slideShowSelectionAction;
     KAction               *slideShowRecursiveAction;
-    KAction               *thumbSizePlusAction;
-    KAction               *thumbSizeMinusAction;
     KSelectAction         *imageSortAction;
     KSelectAction         *albumSortAction;
+    KAction               *zoomPlusAction;
+    KAction               *zoomMinusAction;
+    KAction               *zoomFitToWindowAction;
+    KAction               *zoomTo100percents;
 
     KAction               *rating0Star;
     KAction               *rating1Star;
@@ -226,7 +233,7 @@ public:
     KActionMenu           *cameraMenuAction;
     KSelectAction         *themeMenuAction;
     
-    DTipTracker           *thumbSizeTracker;
+    DTipTracker           *zoomTracker;
     AlbumSettings         *albumSettings;
     AlbumManager          *albumManager;
     SplashScreen          *splashScreen;

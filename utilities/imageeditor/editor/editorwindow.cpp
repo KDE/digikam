@@ -325,6 +325,11 @@ void EditorWindow::setupStandardActions()
     d->zoomMinusAction = KStdAction::zoomOut(m_canvas, SLOT(slotDecreaseZoom()),
                                              actionCollection(), "editorwindow_zoomminus");
 
+    d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), "viewmag1",
+                                   CTRL+SHIFT+Key_Z, this, SLOT(slotZoomTo100Percents()),
+                                   actionCollection(), "editorwindow_zoomto100percents");
+
+
     d->zoomFitToWindowAction = new KToggleAction(i18n("Fit to &Window"), "view_fit_window",
                                          CTRL+SHIFT+Key_A, this, SLOT(slotToggleFitToWindow()),
                                          actionCollection(), "editorwindow_zoomfit2window");
@@ -673,6 +678,17 @@ void EditorWindow::slotFitToSelect()
     d->zoomComboAction->setEnabled(true);
     d->zoomMinusAction->setEnabled(true);
     m_canvas->fitToSelect();
+}
+
+void EditorWindow::slotZoomTo100Percents()
+{
+    d->zoomFitToWindowAction->blockSignals(true);
+    d->zoomFitToWindowAction->setChecked(false);
+    d->zoomFitToWindowAction->blockSignals(false);
+    d->zoomPlusAction->setEnabled(true);
+    d->zoomComboAction->setEnabled(true);
+    d->zoomMinusAction->setEnabled(true);
+    m_canvas->setZoomFactor(1.0);
 }
 
 void EditorWindow::slotZoomTextChanged(const QString &txt)

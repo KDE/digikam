@@ -24,6 +24,7 @@
 
 // Qt includes.
 
+#include <qstring.h>
 #include <qcache.h>
 #include <qpainter.h>
 #include <qimage.h>
@@ -35,38 +36,36 @@
 // KDE include.
 
 #include <kcursor.h>
-#include <kprocess.h>
 #include <klocale.h>
 
 // Local includes.
 
 #include "ddebug.h"
-#include "fastscale.h"
-#include "themeengine.h"
-#include "albumsettings.h"
-#include "imagepreviewwidget.h"
-#include "imagepreviewwidget.moc"
+#include "previewwidget.h"
+#include "previewwidget.moc"
 
 namespace Digikam
 {
 
-class ImagePreviewWidgetPriv
+class PreviewWidgetPriv
 {
 public:
 
-    ImagePreviewWidgetPriv() :
-        tileSize(128), minZoom(0.1), maxZoom(10.0), zoomMultiplier(1.2) 
+    PreviewWidgetPriv() :
+        tileSize(128), zoomMultiplier(1.2) 
     {
-        pressedMoving        = false;
-        midButtonPressed     = false;
-        midButtonX           = 0;
-        midButtonY           = 0;
-        autoZoom             = false;
-        fullScreen           = false;
-        zoom                 = 1.0;
-        zoomWidth            = 0;
-        zoomHeight           = 0;
-        tileTmpPix           = new QPixmap(tileSize, tileSize);
+        pressedMoving    = false;
+        midButtonPressed = false;
+        midButtonX       = 0;
+        midButtonY       = 0;
+        autoZoom         = false;
+        fullScreen       = false;
+        zoom             = 1.0;
+        minZoom          = 0.1;
+        maxZoom          = 12.0;
+        zoomWidth        = 0;
+        zoomHeight       = 0;
+        tileTmpPix       = new QPixmap(tileSize, tileSize);
 
         tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
         tileCache.setAutoDelete(true);
@@ -84,8 +83,8 @@ public:
     int                  zoomHeight;
     
     double               zoom;
-    const double         minZoom;
-    const double         maxZoom;
+    double               minZoom;
+    double               maxZoom;
     const double         zoomMultiplier;
 
     QRect                pixmapRect;
@@ -95,82 +94,190 @@ public:
     QPixmap*             tileTmpPix;
 
     QColor               bgColor;
-
-    QImage               preview;
 };
 
-ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
-                  : QScrollView(parent)
+PreviewWidget::PreviewWidget(QWidget *parent)
+             : QScrollView(parent, 0, Qt::WDestructiveClose)
 {
-    d = new ImagePreviewWidgetPriv;
+    d = new PreviewWidgetPriv;
     d->bgColor.setRgb(0, 0, 0);
     
     viewport()->setBackgroundMode(Qt::NoBackground);
     viewport()->setMouseTracking(false);
 
+    horizontalScrollBar()->setLineStep( 1 );
+    horizontalScrollBar()->setPageStep( 1 );
+    verticalScrollBar()->setLineStep( 1 );
+    verticalScrollBar()->setPageStep( 1 );
+
     setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain); 
     setMargin(0); 
     setLineWidth(1); 
-
-    // ------------------------------------------------------------
-
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));
 }
 
-ImagePreviewWidget::~ImagePreviewWidget()
+PreviewWidget::~PreviewWidget()
 {
     delete d->tileTmpPix;
     delete d;
 }
 
-void ImagePreviewWidget::setImage(const QImage& image)
-{   
-    d->preview = image;
-
-    updateAutoZoom();
-    updateContentsSize();
-
-    viewport()->setUpdatesEnabled(true);
-    viewport()->update();
-}
-
-void ImagePreviewWidget::slotThemeChanged()
+void PreviewWidget::setBackgroundColor(const QColor& color)
 {
-    if (d->bgColor == ThemeEngine::instance()->baseColor())
+    if (d->bgColor == color)
         return;
     
-    d->bgColor = ThemeEngine::instance()->baseColor();
+    d->bgColor = color;
     viewport()->update();
 }
 
-void ImagePreviewWidget::resetImage()
+void PreviewWidget::reset()
 {
     d->tileCache.clear();
     viewport()->setUpdatesEnabled(false);
-    d->preview.reset();
+    resetPreview();
 }
 
-void ImagePreviewWidget::updateAutoZoom()
+int PreviewWidget::tileSize()
+{
+    return d->tileSize;
+}
+
+int PreviewWidget::zoomWidth()
+{
+    return d->zoomWidth;
+}
+
+int PreviewWidget::zoomHeight()
+{
+    return d->zoomHeight;
+}
+
+double PreviewWidget::zoomMax()
+{
+    return d->maxZoom;
+}
+
+double PreviewWidget::zoomMin()
+{
+    return d->minZoom;
+}
+
+void PreviewWidget::setZoomMax(double z)
+{
+    d->maxZoom = z;
+}
+
+void PreviewWidget::setZoomMin(double z)
+{
+    d->minZoom = z;
+}
+
+bool PreviewWidget::maxZoom()
+{
+    return (d->zoom >= d->maxZoom);
+}
+
+bool PreviewWidget::minZoom()
+{
+    return (d->zoom <= d->minZoom);
+}
+
+void PreviewWidget::slotIncreaseZoom()
+{
+    double zoom = d->zoom * d->zoomMultiplier;
+    setZoomFactor(zoom > zoomMax() ? zoomMax() : zoom);
+}
+
+void PreviewWidget::slotDecreaseZoom()
+{
+    double zoom = d->zoom / d->zoomMultiplier;
+    setZoomFactor(zoom < zoomMin() ? zoomMin() : zoom);
+}
+
+void PreviewWidget::setZoomFactor(double zoom)
+{
+    if (d->autoZoom)
+        return;
+
+    // Zoom using center of canvas and given zoom factor.
+
+    double cpx = contentsX() + visibleWidth()  / 2.0; 
+    double cpy = contentsY() + visibleHeight() / 2.0;
+
+    cpx = ( cpx / d->tileSize ) * floor(d->tileSize / d->zoom);
+    cpy = ( cpy / d->tileSize ) * floor(d->tileSize / d->zoom);
+
+    // To limit precision of zoom value and reduce error with check of max/min zoom. 
+    d->zoom       = floor(zoom * 10000.0) / 10000.0;
+    d->zoomWidth  = (int)(previewWidth()  * d->zoom);
+    d->zoomHeight = (int)(previewHeight() * d->zoom);
+
+    updateContentsSize();
+
+    viewport()->setUpdatesEnabled(false);
+    center((int)((cpx * d->tileSize ) / floor(d->tileSize / d->zoom)), 
+           (int)((cpy * d->tileSize ) / floor(d->tileSize / d->zoom)));
+    viewport()->setUpdatesEnabled(true);
+    viewport()->update();
+
+    emit signalZoomFactorChanged(d->zoom);
+}
+
+double PreviewWidget::zoomFactor()
+{
+    return d->zoom; 
+}
+
+bool PreviewWidget::isFitToWindow()
+{
+    return d->autoZoom;
+}
+
+void PreviewWidget::fitToWindow()
+{
+    updateAutoZoom();
+    updateContentsSize();
+    viewport()->update();
+}
+
+void PreviewWidget::toggleFitToWindow()
+{
+    d->autoZoom = !d->autoZoom;
+
+    if (d->autoZoom)
+        updateAutoZoom();
+    else
+    {
+        d->zoom = 1.0;
+        emit signalZoomFactorChanged(d->zoom);
+    }
+
+    updateContentsSize();
+    viewport()->update();
+}
+
+void PreviewWidget::updateAutoZoom()
 {
     d->zoom       = calcAutoZoomFactor();
-    d->zoomWidth  = (int)(d->preview.width()  * d->zoom);
-    d->zoomHeight = (int)(d->preview.height() * d->zoom);
+    d->zoomWidth  = (int)(previewWidth()  * d->zoom);
+    d->zoomHeight = (int)(previewHeight() * d->zoom);
+
+    emit signalZoomFactorChanged(d->zoom);
 }
 
-double ImagePreviewWidget::calcAutoZoomFactor()
+double PreviewWidget::calcAutoZoomFactor()
 {
-    if (d->preview.isNull()) return d->zoom;
+    if (previewIsNull()) return d->zoom;
 
-    double srcWidth  = d->preview.width();
-    double srcHeight = d->preview.height();
+    double srcWidth  = previewWidth();
+    double srcHeight = previewHeight();
     double dstWidth  = contentsRect().width();
     double dstHeight = contentsRect().height();
 
     return QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
 }
 
-void ImagePreviewWidget::updateContentsSize()
+void PreviewWidget::updateContentsSize()
 {
     viewport()->setUpdatesEnabled(false);
     
@@ -196,7 +303,7 @@ void ImagePreviewWidget::updateContentsSize()
     viewport()->setUpdatesEnabled(true);
 }
 
-void ImagePreviewWidget::resizeEvent(QResizeEvent* e)
+void PreviewWidget::resizeEvent(QResizeEvent* e)
 {
     if (!e)
         return;
@@ -210,9 +317,13 @@ void ImagePreviewWidget::resizeEvent(QResizeEvent* e)
 
     // No need to repaint. its called   
     // automatically after resize
+
+    // To be sure than corner widget used to pan image will be hide/show 
+    // accordinly with resize event.
+    emit signalZoomFactorChanged(d->zoom);
 }
 
-void ImagePreviewWidget::viewportPaintEvent(QPaintEvent *e)
+void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
 {
     QRect er(e->rect());
     er = QRect(QMAX(er.x()      - 1, 0),
@@ -228,7 +339,7 @@ void ImagePreviewWidget::viewportPaintEvent(QPaintEvent *e)
     QRegion clipRegion(er);
     cr = d->pixmapRect.intersect(cr);
 
-    if (!cr.isEmpty() && !d->preview.isNull())
+    if (!cr.isEmpty() && !previewIsNull())
     {
         clipRegion -= QRect(contentsToViewport(cr.topLeft()), cr.size());
 
@@ -265,15 +376,12 @@ void ImagePreviewWidget::viewportPaintEvent(QPaintEvent *e)
 
                     pix->fill(d->bgColor);
 
-                    sx = (int)floor(((double)i / d->zoom) / (d->tileSize / d->zoom)) * step;
-                    sy = (int)floor(((double)j / d->zoom) / (d->tileSize / d->zoom)) * step;
+                    sx = (int)floor((double)i  / d->tileSize ) * step;
+                    sy = (int)floor((double)j  / d->tileSize ) * step;
                     sw = step;
                     sh = step;
 
-                    // Fast smooth scale method from Antonio.
-                    QImage img = FastScale::fastScaleQImage(d->preview.copy(sx, sy, sw, sh),
-                                                            d->tileSize, d->tileSize);
-                    bitBlt(pix, 0, 0, &img, 0, 0);
+                    paintPreview(pix, sx, sy, sw, sh);
                 }
 
                 QRect  r(i, j, d->tileSize, d->tileSize);
@@ -295,7 +403,7 @@ void ImagePreviewWidget::viewportPaintEvent(QPaintEvent *e)
     painter.end();
 }
 
-void ImagePreviewWidget::contentsMousePressEvent(QMouseEvent *e)
+void PreviewWidget::contentsMousePressEvent(QMouseEvent *e)
 {
     if (!e || e->button() == Qt::RightButton)
         return;
@@ -308,8 +416,8 @@ void ImagePreviewWidget::contentsMousePressEvent(QMouseEvent *e)
     }
     else if (e->button() == Qt::MidButton)
     {
-        if (visibleWidth()  < d->preview.width() ||
-            visibleHeight() < d->preview.height())
+        if (visibleWidth()  < previewWidth() ||
+            visibleHeight() < previewHeight())
         {
             viewport()->setCursor(Qt::SizeAllCursor);
             d->midButtonPressed = true;
@@ -324,21 +432,22 @@ void ImagePreviewWidget::contentsMousePressEvent(QMouseEvent *e)
     viewport()->setMouseTracking(false);
 }
 
-void ImagePreviewWidget::contentsMouseMoveEvent(QMouseEvent *e)
+void PreviewWidget::contentsMouseMoveEvent(QMouseEvent *e)
 {
     if (!e) return;
 
-    if (e->state() == Qt::MidButton)
+    if (e->state() & Qt::MidButton)
     {
         if (d->midButtonPressed)
         {
             scrollBy(d->midButtonX - e->x(),
                      d->midButtonY - e->y());
+            emit signalContentsMovedEvent(false);
         }
     }
 }
     
-void ImagePreviewWidget::contentsMouseReleaseEvent(QMouseEvent *e)
+void PreviewWidget::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     if (!e) return;
 
@@ -347,7 +456,8 @@ void ImagePreviewWidget::contentsMouseReleaseEvent(QMouseEvent *e)
     if (d->pressedMoving)
     {
         d->pressedMoving = false;
-        viewport()->update();
+        viewport()->repaint(false);
+        emit signalContentsMovedEvent(true);
     }
 
     if (e->button() != Qt::LeftButton)
@@ -361,11 +471,11 @@ void ImagePreviewWidget::contentsMouseReleaseEvent(QMouseEvent *e)
     }
 }
 
-void ImagePreviewWidget::contentsWheelEvent(QWheelEvent *e)
+void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
 {
     e->accept();
 
-    if (e->state() == Qt::ShiftButton)
+    if (e->state() & Qt::ShiftButton)
     {
         if (e->delta() < 0)
             emit signalShowNextImage();
@@ -373,7 +483,7 @@ void ImagePreviewWidget::contentsWheelEvent(QWheelEvent *e)
             emit signalShowPrevImage();
         return;
     }
-    else if (e->state() == Qt::ControlButton)
+    else if (e->state() & Qt::ControlButton)
     {
         if (e->delta() < 0)
             slotIncreaseZoom();
@@ -383,76 +493,6 @@ void ImagePreviewWidget::contentsWheelEvent(QWheelEvent *e)
     }
 
     QScrollView::contentsWheelEvent(e);
-}
-
-bool ImagePreviewWidget::maxZoom()
-{
-    return ((d->zoom * d->zoomMultiplier) >= d->maxZoom);
-}
-
-bool ImagePreviewWidget::minZoom()
-{
-    return ((d->zoom / d->zoomMultiplier) <= d->minZoom);
-}
-
-void ImagePreviewWidget::slotIncreaseZoom()
-{
-    if (maxZoom())
-        return;
-
-    setZoomFactor(d->zoom * d->zoomMultiplier);
-}
-
-void ImagePreviewWidget::slotDecreaseZoom()
-{
-    if (minZoom())
-        return;
-
-    setZoomFactor(d->zoom / d->zoomMultiplier);
-}
-
-void ImagePreviewWidget::setZoomFactor(double zoom)
-{
-    if (d->autoZoom)
-        return;
-
-    // Zoom using center of canvas and given zoom factor.
-
-    double cpx = contentsX() + visibleWidth()  / 2.0; 
-    double cpy = contentsY() + visibleHeight() / 2.0;
-
-    cpx = ((cpx / d->zoom) / (d->tileSize / d->zoom)) * floor(d->tileSize / d->zoom);
-    cpy = ((cpy / d->zoom) / (d->tileSize / d->zoom)) * floor(d->tileSize / d->zoom);
-
-    d->zoom       = zoom;
-    d->zoomWidth  = (int)(d->preview.width()  * d->zoom);
-    d->zoomHeight = (int)(d->preview.height() * d->zoom);
-
-    updateContentsSize();
-
-    viewport()->setUpdatesEnabled(false);
-    center((int)(((cpx * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)), 
-           (int)(((cpy * d->zoom) * (d->tileSize / d->zoom)) / floor(d->tileSize / d->zoom)));
-    viewport()->setUpdatesEnabled(true);
-    viewport()->update();
-}
-
-bool ImagePreviewWidget::fitToWindow()
-{
-    return d->autoZoom;
-}
-
-void ImagePreviewWidget::toggleFitToWindow()
-{
-    d->autoZoom = !d->autoZoom;
-
-    if (d->autoZoom)
-        updateAutoZoom();
-    else
-        d->zoom = 1.0;
-
-    updateContentsSize();
-    viewport()->update();
 }
 
 }  // NameSpace Digikam

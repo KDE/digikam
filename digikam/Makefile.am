@@ -70,7 +70,6 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                icongroupitem.cpp \
 	                iconitem.cpp \
 	                imageattributeswatch.cpp \
-	                imagepreviewwidget.cpp \
 	                imagepreviewview.cpp \
 	                kdatetimeedit.cpp \
 	                kdatepickerpopup.cpp \

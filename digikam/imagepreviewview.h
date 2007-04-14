@@ -28,25 +28,31 @@
 
 // Local includes
 
-#include "imagepreviewwidget.h"
+#include "previewwidget.h"
 #include "digikam_export.h"
+
+class QPixmap;
 
 namespace Digikam
 {
 
+class AlbumWidgetStack;
 class LoadingDescription;
 class ImageInfo;
 class ImagePreviewViewPriv;
 
-class DIGIKAM_EXPORT ImagePreviewView : public ImagePreviewWidget
+class DIGIKAM_EXPORT ImagePreviewView : public PreviewWidget
 {
 
 Q_OBJECT
 
 public:
 
-    ImagePreviewView(QWidget *parent=0);
+    ImagePreviewView(AlbumWidgetStack *parent=0);
     ~ImagePreviewView();
+
+    void setImage(const QImage& image);
+    QImage& getImage() const;
 
     void setImageInfo(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
     ImageInfo* getImageInfo();
@@ -57,7 +63,6 @@ public:
 
 signals:
 
-    void signalPreviewStarted();
     void signalNextItem();
     void signalPrevItem();
     void signalDeleteItem();
@@ -74,6 +79,19 @@ private slots:
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
     void slotAssignRating(int rating);
+    void slotThemeChanged();
+    void slotCornerButtonPressed();
+    void slotZoomChanged(double);
+    void slotPanIconSelectionMoved(QRect, bool);
+    void slotPanIconHiden();
+
+private:
+    
+    int  previewWidth();
+    int  previewHeight();
+    bool previewIsNull();
+    void resetPreview();
+    inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
 
 private:
 

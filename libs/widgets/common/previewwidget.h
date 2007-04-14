@@ -18,42 +18,54 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPREVIEWWIDGET_H
-#define IMAGEPREVIEWWIDGET_H
+#ifndef PREVIEWWIDGET_H
+#define PREVIEWWIDGET_H
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qimage.h>
+#include <qscrollview.h>
 
 // Local includes
 
 #include "digikam_export.h"
-#include "canvas.h"
-#include "loadingdescription.h"
 
+class QPainter;
 class QPixmap;
+class QColor;
 
 namespace Digikam
 {
 
-class ImagePreviewWidgetPriv;
+class PreviewWidgetPriv;
 
-class DIGIKAM_EXPORT ImagePreviewWidget : public QScrollView
+class DIGIKAM_EXPORT PreviewWidget : public QScrollView
 {
 Q_OBJECT
 
 public:
 
-    ImagePreviewWidget(QWidget *parent=0);
-    ~ImagePreviewWidget();
+    PreviewWidget(QWidget *parent=0);
+    ~PreviewWidget();
 
-    void setImage(const QImage& image);
     void setZoomFactor(double z);
-    bool fitToWindow();
+    void setBackgroundColor(const QColor& color);
+    void fitToWindow();
+    bool isFitToWindow();
     void toggleFitToWindow();
+
+    int  zoomWidth();
+    int  zoomHeight();
+
     bool maxZoom();
     bool minZoom();
+
+    double zoomFactor();
+    double zoomMax();
+    double zoomMin();
+    void   setZoomMax(double z);
+    void   setZoomMin(double z);
+
+    void reset();
 
 signals:
 
@@ -61,6 +73,8 @@ signals:
     void signalLeftButtonClicked();    
     void signalShowNextImage();
     void signalShowPrevImage();
+    void signalZoomFactorChanged(double);
+    void signalContentsMovedEvent(bool);
 
 public slots:
 
@@ -69,31 +83,28 @@ public slots:
 
 protected:
     
-    void resizeEvent(QResizeEvent* e);
-    void viewportPaintEvent(QPaintEvent *e);
-    void contentsMousePressEvent(QMouseEvent *e);
-    void contentsMouseMoveEvent(QMouseEvent *e);
-    void contentsMouseReleaseEvent(QMouseEvent *e);
-    void contentsWheelEvent(QWheelEvent *e);
-   
-private slots:
-
-    void slotThemeChanged();
-
-private:
-
-    //void updatePixmap(void);
-
-    void   resetImage();
+    void   resizeEvent(QResizeEvent *);
+    void   viewportPaintEvent(QPaintEvent *);
+    void   contentsMousePressEvent(QMouseEvent *);
+    void   contentsMouseMoveEvent(QMouseEvent *);
+    void   contentsMouseReleaseEvent(QMouseEvent *);
+    void   contentsWheelEvent(QWheelEvent *);
     double calcAutoZoomFactor();
+    int    tileSize();
     void   updateAutoZoom();
     void   updateContentsSize();
 
+    virtual int  previewWidth()=0;
+    virtual int  previewHeight()=0;
+    virtual bool previewIsNull()=0;
+    virtual void resetPreview()=0;
+    virtual void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)=0;
+   
 private:
 
-    ImagePreviewWidgetPriv* d;
+    PreviewWidgetPriv* d;
 };
 
 }  // NameSpace Digikam
 
-#endif /* IMAGEPREVIEWWIDGET_H */
+#endif /* PREVIEWWIDGET_H */

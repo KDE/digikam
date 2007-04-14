@@ -20,6 +20,9 @@
  *
  * ============================================================ */
 
+#ifndef FASTSCALE_H
+#define FASTSCALE_H
+
 // Qt includes.
 
 #include <qimage.h>
@@ -62,3 +65,5 @@ private:
 };
 
 }  // NameSpace Digikam
+
+#endif /* FASTSCALE_H */

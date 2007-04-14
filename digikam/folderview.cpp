@@ -35,6 +35,7 @@
 #include "ddebug.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "albumthumbnailloader.h"
 #include "themeengine.h"
 #include "dragobjects.h"
 #include "folderitem.h"
@@ -74,7 +75,7 @@ FolderView::FolderView(QWidget *parent, const char *name)
 {
 
     d = new FolderViewPriv;
-    
+
     d->active = false;
     d->dragItem         = 0;
     d->oldHighlightItem = 0;
@@ -84,7 +85,10 @@ FolderView::FolderView(QWidget *parent, const char *name)
 
     connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(slotAllAlbumsLoaded()));
-    
+
+    connect(AlbumThumbnailLoader::instance(), SIGNAL(signalReloadThumbnails()),
+            this, SLOT(slotIconSizeChanged()));
+
     setColumnAlignment(0, Qt::AlignLeft|Qt::AlignVCenter);
     fontChange(font());
 }
@@ -150,8 +154,14 @@ void FolderView::fontChange(const QFont& oldFont)
 {
     // this is bad, since the settings value might not always be the _real_ height of the thumbnail.
     // (e.g. when it is blended, as for the tags)
-    d->itemHeight = QMAX(AlbumSettings::instance()->getDefaultTreeIconSize() + 2*itemMargin(), fontMetrics().height());
+    d->itemHeight = QMAX(AlbumThumbnailLoader::instance()->thumbnailSize() + 2*itemMargin(), fontMetrics().height());
     QListView::fontChange(oldFont);
+    slotThemeChanged();
+}
+
+void FolderView::slotIconSizeChanged()
+{
+    d->itemHeight = QMAX(AlbumThumbnailLoader::instance()->thumbnailSize() + 2*itemMargin(), fontMetrics().height());
     slotThemeChanged();
 }
 

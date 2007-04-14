@@ -37,6 +37,7 @@ DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent)
 {
 	parent->setMouseTracking(true);
 	parent->installEventFilter(this);
+    setEnable(true);
 }
 
 /**
@@ -48,6 +49,11 @@ void DCursorTracker::setText(const QString& txt)
 	adjustSize();
 }
 
+void DCursorTracker::setEnable(bool b) 
+{
+    m_enable = b;
+}
+
 bool DCursorTracker::eventFilter(QObject *object, QEvent *e) 
 {
 	QWidget *widget = static_cast<QWidget*>(object);
@@ -57,7 +63,8 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
         case QEvent::MouseMove: 
         {
             QMouseEvent *event = static_cast<QMouseEvent*>(e);
-            if (widget->rect().contains(event->pos()) || (event->stateAfter() & LeftButton)) 
+            if (m_enable && (widget->rect().contains(event->pos()) || 
+                            (event->stateAfter() & LeftButton))) 
             {
                 show();
                 move(event->globalPos().x() + 15, event->globalPos().y() + 15);

@@ -224,26 +224,29 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
 
     connect(d->albumMan, SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
-            
+
     connect(d->albumMan, SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotAlbumDeleted(Album*)));
-            
+
     connect(d->albumMan, SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotAlbumsCleared()));
-            
+
     connect(d->albumMan, SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotAlbumIconChanged(Album*)));
-            
+
     connect(d->albumMan, SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotAlbumRenamed(Album*)));
 
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
-    
+
     connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
             this, SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
-            
+
     connect(loader, SIGNAL(signalFailed(Album *)),
             this, SLOT(slotThumbnailLost(Album *)));
+
+    connect(loader, SIGNAL(signalReloadThumbnails()),
+            this, SLOT(slotReloadThumbnails()));
 
     connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
             this, SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
@@ -376,6 +379,16 @@ void AlbumFolderView::slotGotThumbnailFromIcon(Album *album,
 void AlbumFolderView::slotThumbnailLost(Album *)
 {
     // we already set the standard icon before loading
+}
+
+void AlbumFolderView::slotReloadThumbnails()
+{
+    AlbumList tList = AlbumManager::instance()->allPAlbums();
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    {
+        PAlbum* album  = (PAlbum*)(*it);
+        setAlbumThumbnail(album);
+    }
 }
 
 void AlbumFolderView::slotAlbumIconChanged(Album* album)

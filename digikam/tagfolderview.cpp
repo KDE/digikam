@@ -163,12 +163,15 @@ TagFolderView::TagFolderView(QWidget *parent)
             this, SLOT(slotAlbumMoved(TAlbum*, TAlbum*)));
 
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
-    
+
     connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
             this, SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
 
     connect(loader, SIGNAL(signalFailed(Album *)),
             this, SLOT(slotThumbnailLost(Album *)));
+
+    connect(loader, SIGNAL(signalReloadThumbnails()),
+            this, SLOT(slotReloadThumbnails()));
 
     connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
             SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
@@ -338,6 +341,16 @@ void TagFolderView::slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbn
 void TagFolderView::slotThumbnailLost(Album *)
 {
     // we already set the standard icon before loading
+}
+
+void TagFolderView::slotReloadThumbnails()
+{
+    AlbumList tList = AlbumManager::instance()->allTAlbums();
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    {
+        TAlbum* tag  = (TAlbum*)(*it);
+        setTagThumbnail(tag);
+    }
 }
 
 void TagFolderView::slotAlbumIconChanged(Album* album)

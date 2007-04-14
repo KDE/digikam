@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="22" name="digikam" >
+<kpartgui version="25" name="digikam" >
 
  <MenuBar>
 
@@ -64,6 +64,8 @@
      <Separator/>
      <Action name="album_zoomin" />
      <Action name="album_zoomout" />
+     <Action name="album_zoomto100percents" />
+     <Action name="album_zoomfit2window" />
      <Separator />
      <Action name="album_sort" />
      <Action name="image_sort" />
@@ -122,9 +124,6 @@
   <Action name="image_view" />
   <Action name="image_edit" />
   <Action name="image_rename" />
-  <Separator/>
-  <Action name="album_zoomin" />
-  <Action name="album_zoomout" />
   <Separator/>
   <Action name="full_screen" />
   <Action name="slideshow" />
