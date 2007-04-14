@@ -83,5 +83,6 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 031 ==> 132047 : Faster display of images and/or prefetch wished for.
 032 ==> 140131 : No zoom in image preview.
 033 ==> 89365  : More standard menu structure.
-034 ==> 
+034 ==> 144214 : The plural form of "child" is "children", not "childs".
+035 ==> 
 
