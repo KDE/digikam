@@ -148,7 +148,8 @@ public:
      * @param collection the album collection
      * @return the id of the album added or -1 if it failed
      */
-    int addAlbum(const QString& url, const QString& caption,
+    int addAlbum(const QString& albumRoot, const QString& url,
+                 const QString& caption,
                  const QDate& date, const QString& collection);
 
     /**

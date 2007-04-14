@@ -46,6 +46,7 @@ public:
     typedef QValueList<AlbumInfo> List;
 
     int      id;
+    QString  albumRoot;
     QString  url;
     QString  caption;
     QString  collection;

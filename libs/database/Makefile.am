@@ -4,6 +4,8 @@ noinst_LTLIBRARIES = libdatabase.la
 
 libdatabase_la_SOURCES = albumdb.cpp \
 	                 collectionscanner.cpp \
+	                 collectionmanager.cpp \
+	                 collectionlocation.cpp \
 	                 databaseaccess.cpp \
 	                 databaseattributeswatch.cpp \
 	                 databaseparameters.cpp \

@@ -328,6 +328,7 @@ AlbumInfo::List AlbumDB::scanAlbums()
     {
         AlbumInfo info;
 
+        info.albumRoot = basePath;
         info.id = (*it).toInt();
         ++it;
         info.url = *it;
@@ -433,7 +434,8 @@ void AlbumDB::commitTransaction()
     execSql( "COMMIT TRANSACTION;" );
 }
 
-int AlbumDB::addAlbum(const QString& url, const QString& caption,
+int AlbumDB::addAlbum(const QString &albumRoot, const QString& url,
+                      const QString& caption,
                       const QDate& date, const QString& collection)
 {
     if (!d->dataBase)

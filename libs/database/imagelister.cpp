@@ -144,7 +144,7 @@ void ImageLister::list(ImageListerReceiver *receiver, const DatabaseUrl &url,
 {
     if (url.isAlbumUrl())
     {
-        QString albumRoot = url.albumRoot().path();
+        QString albumRoot = url.albumRootPath();
         QString album     = url.album();
         listAlbum(receiver, albumRoot, album, filter, getDimension);
     }

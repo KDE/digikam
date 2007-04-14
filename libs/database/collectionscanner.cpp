@@ -41,11 +41,12 @@
 // Local includes
 
 #include "albumdb.h"
-#include "collectionscanner.h"
+#include "collectionmanager.h"
 #include "databaseaccess.h"
 #include "databasetransaction.h"
 #include "ddebug.h"
 #include "dmetadata.h"
+#include "collectionscanner.h"
 
 namespace Digikam
 {
@@ -222,8 +223,9 @@ void CollectionScanner::removeInvalidAlbums(const QString &albumRoot)
 
 void CollectionScanner::scanForStaleAlbums()
 {
-    QString albumRoot = DatabaseAccess::albumRoot();
-    scanForStaleAlbums(albumRoot);
+    QStringList albumRootPaths = CollectionManager::instance()->allAvailableAlbumRootPaths();
+    for (QStringList::iterator it = albumRootPaths.begin(); it != albumRootPaths.end(); ++it)
+        scanForStaleAlbums(*it);
 }
 
 void CollectionScanner::scanForStaleAlbums(const QString &albumRoot)
@@ -259,20 +261,25 @@ void CollectionScanner::removeStaleAlbums()
 
 void CollectionScanner::scanAlbums()
 {
-    QString albumRoot = DatabaseAccess::albumRoot();
-    emit totalFilesToScan(countItemsInFolder( albumRoot ) );
+    QStringList albumRootPaths = CollectionManager::instance()->allAvailableAlbumRootPaths();
+    int count = 0;
+    for (QStringList::iterator it = albumRootPaths.begin(); it != albumRootPaths.end(); ++it)
+        count += countItemsInFolder(*it);
 
-    QDir dir(albumRoot);
-    QStringList fileList(dir.entryList(QDir::Dirs));
+    emit totalFilesToScan(count);
 
+    for (QStringList::iterator it = albumRootPaths.begin(); it != albumRootPaths.end(); ++it)
     {
+        QDir dir(*it);
+        QStringList fileList(dir.entryList(QDir::Dirs));
+
         DatabaseTransaction transaction;
-        for (QStringList::iterator it = fileList.begin(); it != fileList.end(); ++it)
+        for (QStringList::iterator fileIt = fileList.begin(); fileIt != fileList.end(); ++fileIt)
         {
-            if ((*it) == "." || (*it) == "..")
+            if ((*fileIt) == "." || (*fileIt) == "..")
                 continue;
 
-            scanAlbumScanLib(albumRoot, '/' + (*it));
+            scanAlbumScanLib(*it, '/' + (*fileIt));
         }
     }
 }
