@@ -61,6 +61,7 @@ extern "C"
 #include "albumdb.h"
 #include "albumitemhandler.h"
 #include "albumsettings.h"
+#include "collectionmanager.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
 #include "databaseparameters.h"
@@ -79,11 +80,9 @@ typedef QIntDict<Album>  AlbumIntDict;
 class AlbumManagerPriv
 {
 public:
-    
+
     //AlbumDB          *db;
     AlbumItemHandler *itemHandler;
-    
-    QString           libraryPath;
 
     PAlbum           *rootPAlbum;
     TAlbum           *rootTAlbum;
@@ -91,7 +90,7 @@ public:
     SAlbum           *rootSAlbum;
 
     bool              changed;
-    
+
     PAlbumDict        pAlbumDict;
     AlbumIntDict      albumIntDict;
 
@@ -102,7 +101,7 @@ public:
     KDirWatch        *dirWatch;
     QStringList       dirtyAlbums;
 };
-    
+
 
 AlbumManager* AlbumManager::m_instance = 0;
 
@@ -161,15 +160,10 @@ AlbumDB* AlbumManager::albumDB()
 }
 */
 
-void AlbumManager::setLibraryPath(const QString& path)
+void AlbumManager::initialize()
 {
-    QString cleanPath = QDir::cleanDirPath(path);
-    
-    if (cleanPath == d->libraryPath)
-        return;
-
     d->changed = true;
-    
+
     if (d->dateListJob)
     {
         d->dateListJob->kill();
@@ -179,34 +173,22 @@ void AlbumManager::setLibraryPath(const QString& path)
     delete d->dirWatch;
     d->dirWatch = 0;
     d->dirtyAlbums.clear();
-    
+
     d->currentAlbum = 0;
     emit signalAlbumCurrentChanged(0);
     emit signalAlbumsCleared();
-    
+
     d->pAlbumDict.clear();
     d->albumIntDict.clear();
 
     delete d->rootPAlbum;
     delete d->rootTAlbum;
     delete d->rootDAlbum;
-    
+
     d->rootPAlbum = 0;
     d->rootTAlbum = 0;
     d->rootDAlbum = 0;
     d->rootSAlbum = 0;
-    
-    d->libraryPath = cleanPath;
-
-    /*
-    QString dbPath = cleanPath + "/digikam3.db";
-
-#ifdef NFS_HACK
-    dbPath = locateLocal("appdata", KIO::encodeFileName(QDir::cleanDirPath(dbPath)));
-#endif
-
-    d->db->setDBPath(dbPath);
-    */
 
     // -- Locale Checking ---------------------------------------------------------
 
@@ -279,7 +261,7 @@ void AlbumManager::setLibraryPath(const QString& path)
 
     // -- Check if we need to upgrade 0.7.x db to 0.8 db ---------------------
 
-    if (!upgradeDB_Sqlite2ToSqlite3(d->libraryPath))
+    if (!upgradeDB_Sqlite2ToSqlite3(DatabaseAccess::albumRoot()))
     {
         KMessageBox::error(0, i18n("Failed to update old Database to new Database format"));
         exit(0);
@@ -297,26 +279,23 @@ void AlbumManager::setLibraryPath(const QString& path)
     }
 }
 
-QString AlbumManager::getLibraryPath() const
-{
-    return d->libraryPath;
-}
-
 void AlbumManager::startScan()
 {
     if (!d->changed)
         return;
     d->changed = false;
-    
+
     d->dirWatch = new KDirWatch(this);
     connect(d->dirWatch, SIGNAL(dirty(const QString&)),
             SLOT(slotDirty(const QString&)));
 
-    d->dirWatch->addDir(d->libraryPath);
+    QStringList albumRootPaths = CollectionManager::instance()->allAvailableAlbumRootPaths();
+    for (QStringList::iterator it = albumRootPaths.begin(); it != albumRootPaths.end(); ++it)
+        d->dirWatch->addDir(*it);
 
-    d->rootPAlbum = new PAlbum(i18n("My Albums"), 0, true);
+    d->rootPAlbum = new PAlbum(i18n("My Albums"));
     insertPAlbum(d->rootPAlbum);
-    
+
     d->rootTAlbum = new TAlbum(i18n("My Tags"), 0, true);
     insertTAlbum(d->rootTAlbum);
 
@@ -325,7 +304,7 @@ void AlbumManager::startScan()
     d->rootDAlbum = new DAlbum(QDate(), true);
 
     refresh();
-    
+
     emit signalAllAlbumsLoaded();
 }
 
@@ -355,7 +334,7 @@ void AlbumManager::scanPAlbums()
     while (it.current())
     {
         PAlbum* a = (PAlbum*)(*it);
-        aMap.insert(a->url(), a);
+        aMap.insert(a->albumPath(), a);
         ++it;
     }
 
@@ -428,7 +407,7 @@ void AlbumManager::scanPAlbums()
         }
 
         // Create the new album
-        PAlbum* album       = new PAlbum(name, info.id, false);
+        PAlbum* album       = new PAlbum(info.albumRoot, name, info.id);
         album->m_caption    = info.caption;
         album->m_collection = info.collection;
         album->m_date       = info.date;
@@ -694,11 +673,7 @@ Album* AlbumManager::currentAlbum() const
 
 PAlbum* AlbumManager::findPAlbum(const KURL& url) const
 {
-    QString path = url.path();
-    path.remove(d->libraryPath);
-    path = QDir::cleanDirPath(path);
-
-    return d->pAlbumDict.find(path);
+    return d->pAlbumDict.find(CollectionManager::instance()->album(url));
 }
 
 PAlbum* AlbumManager::findPAlbum(int id) const
@@ -764,6 +739,7 @@ TAlbum* AlbumManager::findTAlbum(const QString &tagPath) const
 
 
 PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
+                                   const QString& albumRoot,
                                    const QString& name,
                                    const QString& caption,
                                    const QDate& date,
@@ -782,13 +758,28 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
         errMsg = i18n("Album name cannot be empty.");
         return 0;
     }
-    
+
     if (name.contains("/"))
     {
         errMsg = i18n("Album name cannot contain '/'.");
         return 0;
     }
-    
+
+    QString albumRootPath;
+    if (parent->isRoot())
+    {
+        if (albumRoot.isNull())
+        {
+            errMsg = i18n("No album root path supplied");
+            return 0;
+        }
+        albumRootPath = albumRoot;
+    }
+    else
+    {
+        albumRootPath = parent->albumRootPath();
+    }
+
     // first check if we have another album with the same name
     Album *child = parent->m_firstChild;
     while (child)
@@ -801,13 +792,14 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
         child = child->m_next;
     }
 
-    QString path = parent->folderPath();
-    path += '/' + name;
-    path = QDir::cleanDirPath(path);
+    DatabaseUrl url = parent->databaseUrl();
+    url.addPath(name);
+    KURL fileUrl = url.fileUrl();
 
+    //TODO: Use KIO::NetAccess?
     // make the directory synchronously, so that we can add the
     // album info to the database directly
-    if (::mkdir(QFile::encodeName(path), 0777) != 0)
+    if (::mkdir(QFile::encodeName(fileUrl.path()), 0777) != 0)
     {
         if (errno == EEXIST)
             errMsg = i18n("Another file or folder with same name exists");
@@ -821,12 +813,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
         return 0;
     }
 
-    // Now insert the album properties into the database
-    path = path.remove(0, d->libraryPath.length());
-    if (!path.startsWith("/"))
-        path.prepend("/");
-
-    int id = DatabaseAccess().db()->addAlbum(path, caption, date, collection);;
+    int id = DatabaseAccess().db()->addAlbum(albumRootPath, url.album(), caption, date, collection);
 
     if (id == -1)
     {
@@ -834,14 +821,14 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
         return 0;
     }
 
-    PAlbum *album = new PAlbum(name, id, false);
+    PAlbum *album = new PAlbum(albumRootPath, name, id);
     album->m_caption    = caption;
     album->m_collection = collection;
     album->m_date       = date;
 
     album->setParent(parent);
 
-    d->dirWatch->addDir(album->folderPath());
+    d->dirWatch->addDir(fileUrl.path());
 
     insertPAlbum(album);
 
@@ -868,7 +855,7 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
         errMsg = i18n("Album name cannot contain '/'");
         return false;
     }
-    
+
     // first check if we have another sibling with the same name
     Album *sibling = album->m_parent->m_firstChild;
     while (sibling)
@@ -882,11 +869,11 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
         sibling = sibling->m_next;
     }
 
-    QString oldURL = album->url();
-    
-    KURL u = KURL(album->folderPath()).upURL();
+    QString oldAlbumPath = album->albumPath();
+
+    KURL u = album->fileUrl();
+    u = u.upURL();
     u.addPath(newName);
-    u.cleanPath();
 
     if (::rename(QFile::encodeName(album->folderPath()),
                  QFile::encodeName(u.path(-1))) != 0)
@@ -894,7 +881,7 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
         errMsg = i18n("Failed to rename Album");
         return false;
     }
-    
+
     // now rename the album and subalbums in the database
 
     // all we need to do is set the title of the album which is being
@@ -904,13 +891,13 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     album->setTitle(newName);
     {
         DatabaseAccess access;
-        access.db()->renameAlbum(album->id(), album->url(), false);
+        access.db()->renameAlbum(album->id(), album->albumPath(), false);
 
         Album* subAlbum = 0;
         AlbumIterator it(album);
         while ((subAlbum = it.current()) != 0)
         {
-            access.db()->renameAlbum(subAlbum->id(), ((PAlbum*)subAlbum)->url(), false);
+            access.db()->renameAlbum(subAlbum->id(), ((PAlbum*)subAlbum)->albumPath(), false);
             ++it;
         }
     }
@@ -918,18 +905,18 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     // Update AlbumDict. basically clear it and rebuild from scratch
     {
         d->pAlbumDict.clear();
-        d->pAlbumDict.insert(d->rootPAlbum->url(), d->rootPAlbum);
+        d->pAlbumDict.insert(d->rootPAlbum->albumPath(), d->rootPAlbum);
         AlbumIterator it(d->rootPAlbum);
         PAlbum* subAlbum = 0;
         while ((subAlbum = (PAlbum*)it.current()) != 0)
         {
-            d->pAlbumDict.insert(subAlbum->url(), subAlbum);
+            d->pAlbumDict.insert(subAlbum->albumPath(), subAlbum);
             ++it;
         }
     }
-    
+
     emit signalAlbumRenamed(album);
-    
+
     return true;
 }
 
@@ -1251,7 +1238,7 @@ void AlbumManager::insertPAlbum(PAlbum *album)
     if (!album)
         return;
 
-    d->pAlbumDict.insert(album->url(), album);
+    d->pAlbumDict.insert(album->albumPath(), album);
     d->albumIntDict.insert(album->globalID(), album);
 
     emit signalAlbumAdded(album);
@@ -1271,10 +1258,10 @@ void AlbumManager::removePAlbum(PAlbum *album)
         child = next;
     }
     
-    d->pAlbumDict.remove(album->url());
+    d->pAlbumDict.remove(album->albumPath());
     d->albumIntDict.remove(album->globalID());
 
-    DatabaseUrl url = album->kurl();
+    DatabaseUrl url = album->databaseUrl();
     d->dirtyAlbums.remove(url.url());
     d->dirWatch->removeDir(url.fileUrl().path());
 
@@ -1412,7 +1399,7 @@ void AlbumManager::slotDirty(const QString& path)
 {
     KURL fileUrl;
     fileUrl.setPath(QDir::cleanDirPath(path + '/'));
-    KURL url = DatabaseUrl::fromFileUrl(fileUrl, DatabaseAccess::albumRoot());
+    KURL url = DatabaseUrl::fromFileUrl(fileUrl, CollectionManager::instance()->albumRoot(fileUrl));
 
     if (d->dirtyAlbums.contains(url.url()))
         return;

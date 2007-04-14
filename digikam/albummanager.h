@@ -105,20 +105,9 @@ public:
      */
     //@{
     /**
-    * Set the @p libraryPath to the given path
-    *
-    * If the libraryPath is the same as the current path, nothing happens.
-    * Otherwise the currently listed albums are cleared. The albums in the new
-    * library path are not listed till you call startScan()
-    * @param path the new libraryPath
-    * @see startScan
+    * Initialize
     */
-    void       setLibraryPath(const QString& path);
-
-    /**
-    * @return the current libraryPath
-    */
-    QString    getLibraryPath() const;
+    void       initialize();
 
     /**
     * starts scanning the libraryPath and listing the albums. If the
@@ -234,7 +223,10 @@ public:
      * \note the signalAlbumAdded will be fired before this function returns. Its
      * recommended to connect to that signal to get notification of new album added
      * @return the newly created PAlbum or 0 if it fails
-     * @param parent  the parent album under which to create the new Album
+     * @param parent  The parent album under which to create the new Album.
+     *                If parent is root, the albumRootPath must be supplied.
+     * @param albumRootPath The album root path of the new album. This parameter will be
+     *                      ignored if parent is not root. It must be supplied if parent is root.
      * @param name    the name of the new album
      * @param caption the caption for the new album
      * @param date    the date for the new album
@@ -242,11 +234,11 @@ public:
      * @param errMsg  this will contain the error message describing why the
      * operation failed
      */
-    PAlbum* createPAlbum(PAlbum* parent, const QString& name,
+    PAlbum* createPAlbum(PAlbum* parent, const QString& albumRootPath, const QString& name,
                          const QString& caption, const QDate& date,
-                         const QString& collection, 
+                         const QString& collection,
                          QString& errMsg);
-    
+
     /**
      * Renames a PAlbum. This is equivalent to actually renaming the corresponding
      * folder on the disk.
