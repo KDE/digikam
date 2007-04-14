@@ -294,25 +294,31 @@ class PAlbum : public Album
 {
 public:
 
-    PAlbum(const QString& title, int id, bool root=false);
+    PAlbum(const QString& title);
+    PAlbum(const QString &albumRoot, const QString& title, int id);
     ~PAlbum();
 
     void setCaption(const QString& caption);
     void setCollection(const QString& collection);
     void setDate(const QDate& date);
 
+    QString    albumRootPath() const;
     QString    caption() const;
     QString    collection() const;
     QDate      date() const;
-    QString    url() const;
+    KDE_DEPRECATED QString    url() const;
+    QString    albumPath() const;
     QString    prettyURL() const;
-    KDE_DEPRECATED QString    folderPath() const;
-    DatabaseUrl kurl() const;
+    QString    folderPath() const;
+    DatabaseUrl databaseUrl() const;
+    KDE_DEPRECATED DatabaseUrl kurl() const;
+    KURL       fileUrl() const;
     QString    icon() const;
     KURL       iconKURL() const;
-    
+
 private:
 
+    QString    m_albumRoot;
     QString    m_collection;
     QString    m_caption;
     QDate      m_date;

@@ -239,12 +239,20 @@ bool Album::isAncestorOf(Album* album) const
 
 // ------------------------------------------------------------------------------
 
-PAlbum::PAlbum(const QString& title, int id,  bool root)
-      : Album(Album::PHYSICAL, id, root)
+PAlbum::PAlbum(const QString& title)
+      : Album(Album::PHYSICAL, 0, true)
 {
     setTitle(title);
-    m_caption    = "";
-    m_collection = "";
+    m_date       = QDate::currentDate();
+}
+
+PAlbum::PAlbum(const QString &albumRoot, const QString& title, int id)
+      : Album(Album::PHYSICAL, id, false)
+{
+    // Note that the title here is really only the title, not the full path under root!
+    // Be root=/media/fotos, album is /holidays/2007, then title is only "2007".
+    setTitle(title);
+    m_albumRoot  = albumRoot;
     m_date       = QDate::currentDate();
 }
 
@@ -276,6 +284,11 @@ void PAlbum::setDate(const QDate& date)
     access.db()->setAlbumDate(id(), m_date);
 }
 
+QString PAlbum::albumRootPath() const
+{
+    return m_albumRoot;
+}
+
 QString PAlbum::caption() const
 {
     return m_caption;
@@ -293,14 +306,19 @@ QDate PAlbum::date() const
 
 QString PAlbum::url() const
 {
-    QString u("");
+    return albumPath();
+}
+
+QString PAlbum::albumPath() const
+{
+    QString u;
     if (isRoot())
     {
         return "/";
     }
     else if (parent())
     {
-        u = ((PAlbum*)parent())->url();
+        u = ((PAlbum*)parent())->albumPath();
         if (!u.endsWith("/"))
             u += '/';
     }
@@ -310,13 +328,17 @@ QString PAlbum::url() const
 
 DatabaseUrl PAlbum::kurl() const
 {
-    return DatabaseUrl::fromAlbumAndName(QString(), url(),
-                                         DatabaseAccess::albumRoot());
+    return databaseUrl();
+}
+
+DatabaseUrl PAlbum::databaseUrl() const
+{
+    return DatabaseUrl::fromAlbumAndName(QString(), albumPath(), m_albumRoot);
 }
 
 QString PAlbum::prettyURL() const
 {
-    QString u = i18n("My Albums") + url();
+    QString u = i18n("My Albums") + albumPath();
     return u;
 }
 
@@ -332,9 +354,14 @@ KURL PAlbum::iconKURL() const
     return u;
 }
 
+KURL PAlbum::fileUrl() const
+{
+    return databaseUrl().fileUrl();
+}
+
 QString PAlbum::folderPath() const
 {
-    return kurl().fileUrl().path();
+    return databaseUrl().fileUrl().path();
 }
 
 // --------------------------------------------------------------------------
