@@ -63,6 +63,7 @@
 #include "albumsettings.h"
 #include "albumhistory.h"
 #include "batchsyncmetadata.h"
+#include "collectionmanager.h"
 #include "slideshow.h"
 #include "sidebar.h"
 #include "imagepropertiessidebardb.h"
@@ -841,7 +842,7 @@ void DigikamView::slotAlbumAddImages()
 
     DDebug () << "fileformats=" << fileformats << endl;   
 
-    KURL::List urls = KFileDialog::getOpenURLs(AlbumManager::instance()->getLibraryPath(), 
+    KURL::List urls = KFileDialog::getOpenURLs(CollectionManager::instance()->oneAlbumRootPath(),
                                                fileformats, this, i18n("Select Image to Add"));
 
     if (!urls.isEmpty())

@@ -289,7 +289,7 @@ int main(int argc, char *argv[])
     Digikam::DatabaseAccess::setParameters(Digikam::DatabaseParameters::parametersForSQLiteDefaultFile(albumPath));
 
     Digikam::AlbumManager* man = new Digikam::AlbumManager();
-    man->setLibraryPath(Digikam::DatabaseAccess::albumRoot());
+    man->initialize();
 
     // Register image formats (especially for TIFF )
     KImageIO::registerFormats();

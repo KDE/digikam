@@ -115,7 +115,7 @@ void kio_digikamalbums::special(const QByteArray& data)
     if (scan)
     {
         Digikam::CollectionScanner scanner;
-        scanner.scanAlbum(dbUrl.albumRoot().path(), dbUrl.album());
+        scanner.scanAlbum(dbUrl.albumRootPath(), dbUrl.album());
         finished();
         return;
     }
@@ -168,7 +168,7 @@ void kio_digikamalbums::put(const KURL& url, int permissions, bool overwrite, bo
     if (access.db()->getImageId(albumID, url.fileName()) == -1)
     {
         // Now insert the file into the database
-        Digikam::CollectionScanner::addItem(access, albumID, dbUrl.albumRoot().path(), dbUrl.album(), dbUrl.name());
+        Digikam::CollectionScanner::addItem(access, albumID, dbUrl.albumRootPath(), dbUrl.album(), dbUrl.name());
     }
     
     // We have done our job => finish
@@ -327,7 +327,7 @@ void kio_digikamalbums::mkdir( const KURL& url, int permissions )
     if (!file_mkdir(dbUrl.fileUrl(), permissions))
         return;
 
-    access.db()->addAlbum(dbUrl.album(), QString(), QDate::currentDate(), QString());
+    access.db()->addAlbum(dbUrl.albumRootPath(), dbUrl.album(), QString(), QDate::currentDate(), QString());
 
     finished();
 }

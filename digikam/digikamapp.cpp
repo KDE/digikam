@@ -147,7 +147,7 @@ DigikamApp::DigikamApp()
     KDcrawIface::DcrawBinary::instance()->checkSystem();
 
     // Actual file scanning is done in main() - is this necessary here?
-    d->albumManager->setLibraryPath(d->albumSettings->getAlbumLibraryPath());
+    //d->albumManager->setLibraryPath(d->albumSettings->getAlbumLibraryPath());
 
     // Read albums from database
     if(d->splashScreen)
@@ -1478,10 +1478,12 @@ void DigikamApp::slotSetupChanged()
     // raw loading options might have changed
     LoadingCacheInterface::cleanCache();
 
-    if(d->albumSettings->getAlbumLibraryPath() != d->albumManager->getLibraryPath())
-        d->view->clearHistory();
+    // TODO: clear history when location changed
+    //if(d->albumSettings->getAlbumLibraryPath() != d->albumManager->getLibraryPath())
+      //  d->view->clearHistory();
 
-    d->albumManager->setLibraryPath(d->albumSettings->getAlbumLibraryPath());
+    //TODO!! Change collection location
+    //d->albumManager->setLibraryPath(d->albumSettings->getAlbumLibraryPath());
     d->albumManager->startScan();
 
     d->view->applySettings(d->albumSettings);

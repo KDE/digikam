@@ -59,6 +59,7 @@ extern "C"
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"
+#include "collectionmanager.h"
 #include "databaseaccess.h"
 #include "dmetadata.h"
 #include "imageattributeswatch.h"
@@ -413,6 +414,7 @@ KURL::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
     AlbumDB::ItemSortOrder sortOrder = AlbumDB::NoItemSorting;
     switch (AlbumSettings::instance()->getImageSortOrder())
     {
+        default:
         case AlbumSettings::ByIName:
             sortOrder = AlbumDB::ByItemName;
             break;
@@ -497,7 +499,7 @@ KURL DigikamImageCollection::uploadPath()
 
 KURL DigikamImageCollection::uploadRoot()
 {
-    return KURL(AlbumManager::instance()->getLibraryPath() + '/');
+    return KURL(CollectionManager::instance()->oneAlbumRootPath() + '/');
 }
 
 QString DigikamImageCollection::uploadRootName()
@@ -659,7 +661,7 @@ bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
 
 void DigikamKipiInterface::delImage( const KURL& url )
 {
-    KURL rootURL(albumManager_->getLibraryPath());
+    KURL rootURL(CollectionManager::instance()->albumRoot(url));
     if ( !rootURL.isParentOf(url) )
     {
         DWarning() << k_funcinfo << "URL not in the Digikam Album library" << endl;
