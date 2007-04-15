@@ -3,8 +3,8 @@ METASOURCES = AUTO
 noinst_LTLIBRARIES = libcommonwidgets.la
 
 libcommonwidgets_la_SOURCES = histogramwidget.cpp colorgradientwidget.cpp curveswidget.cpp \
-                              sidebar.cpp squeezedcombobox.cpp filesaveoptionsbox.cpp \
-                              dpopupmenu.cpp statusnavigatebar.cpp statusprogressbar.cpp \
+                              sidebar.cpp squeezedcombobox.cpp filesaveoptionsbox.cpp dpopupmenu.cpp \
+                              statuszoombar.cpp statusnavigatebar.cpp statusprogressbar.cpp \
                               dcursortracker.cpp paniconwidget.cpp previewwidget.cpp
 
 libcommonwidgets_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
@@ -16,7 +16,8 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/histogram \
 	       -I$(top_srcdir)/digikam/digikam \
 	       $(all_includes)
 
-digikaminclude_HEADERS = histogramwidget.h colorgradientwidget.h sidebar.h curveswidget.h \
-	                 squeezedcombobox.h dcursortracker.h paniconwidget.h previewwidget.h 
+digikaminclude_HEADERS = histogramwidget.h colorgradientwidget.h curveswidget.h sidebar.h \
+                         squeezedcombobox.h dpopupmenu.h statuszoombar.h statusnavigatebar.h \
+			 statusprogressbar.h dcursortracker.h paniconwidget.h previewwidget.h 
 
 digikamincludedir = $(includedir)/digikam
