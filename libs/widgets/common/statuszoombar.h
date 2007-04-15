@@ -56,6 +56,12 @@ signals:
     void signalZoomPlusClicked();
     void signalZoomMinusClicked();
     void signalZoomSliderChanged(int);
+    void signalDelayedZoomSliderChanged(int);
+
+private slots:
+
+    void slotZoomSliderChanged(int);
+    void slotDelayedZoomSliderChanged();
 
 private:
 

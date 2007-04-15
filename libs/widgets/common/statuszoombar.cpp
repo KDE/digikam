@@ -21,6 +21,7 @@
 // Qt includes.
 
 #include <qtoolbutton.h>
+#include <qtimer.h>
 #include <qslider.h>
 #include <qtooltip.h>
 
@@ -50,10 +51,13 @@ public:
         zoomMinusButton = 0;
         zoomPlusButton  = 0;
         zoomSlider      = 0;
+        zoomTimer       = 0;
     }
 
     QToolButton *zoomPlusButton;
     QToolButton *zoomMinusButton;
+
+    QTimer      *zoomTimer;
 
     QSlider     *zoomSlider;
 
@@ -94,17 +98,44 @@ StatusZoomBar::StatusZoomBar(QWidget *parent)
 
     connect(d->zoomSlider, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalZoomSliderChanged(int)));
+
+    connect(d->zoomSlider, SIGNAL(valueChanged(int)),
+            this, SLOT(slotZoomSliderChanged(int)));
 }
 
 StatusZoomBar::~StatusZoomBar()
 {
+    if (d->zoomTimer)
+        delete d->zoomTimer;
+
     delete d->zoomTracker;
     delete d;
 }
 
+void StatusZoomBar::slotZoomSliderChanged(int)
+{
+    if (d->zoomTimer)
+    {
+        d->zoomTimer->stop();
+        delete d->zoomTimer;
+    }
+
+    d->zoomTimer = new QTimer( this );
+    connect(d->zoomTimer, SIGNAL(timeout()),
+            this, SLOT(slotDelayedZoomSliderChanged()) );
+    d->zoomTimer->start(300, true);    
+}
+
+void StatusZoomBar::slotDelayedZoomSliderChanged()
+{
+    emit signalDelayedZoomSliderChanged(d->zoomSlider->value());
+}
+
 void StatusZoomBar::setZoomSliderValue(int v)
 {
+    d->zoomSlider->blockSignals(true);
     d->zoomSlider->setValue(v);
+    d->zoomSlider->blockSignals(false);
 }
 
 void StatusZoomBar::setZoomTrackerText(const QString& text)
