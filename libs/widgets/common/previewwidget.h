@@ -82,18 +82,24 @@ public slots:
     void slotDecreaseZoom();
 
 protected:
+
+    bool m_movingInProgress;
+
+protected:
     
     void   resizeEvent(QResizeEvent *);
     void   viewportPaintEvent(QPaintEvent *);
     void   contentsMousePressEvent(QMouseEvent *);
     void   contentsMouseMoveEvent(QMouseEvent *);
     void   contentsMouseReleaseEvent(QMouseEvent *);
-    void   contentsWheelEvent(QWheelEvent *);
     double calcAutoZoomFactor();
     int    tileSize();
     void   updateAutoZoom();
     void   updateContentsSize();
 
+    virtual void contentsWheelEvent(QWheelEvent *);
+    virtual void setContentsSize();
+    virtual void viewportPaintExtraData(){};
     virtual int  previewWidth()=0;
     virtual int  previewHeight()=0;
     virtual bool previewIsNull()=0;
