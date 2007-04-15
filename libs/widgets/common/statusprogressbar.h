@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2006-01-24
+ * Date   : 2007-01-24
  * Description : a progress bar used to display file access
  *               progress or a text in status bar.
  *
@@ -72,4 +72,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* IOFILEPROGRESSBAR_H */
+#endif /* STATUSPROGRESSBAR_H */
