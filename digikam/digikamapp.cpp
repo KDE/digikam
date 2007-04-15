@@ -197,7 +197,6 @@ DigikamApp::~DigikamApp()
 
     m_instance = 0;
 
-    delete d->zoomTracker;
     delete d;
 }
 
@@ -344,28 +343,8 @@ void DigikamApp::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
-    QHBox *zoomBar = new QHBox(statusBar());
-
-    d->zoomMinusButton = new QToolButton(zoomBar);
-    d->zoomMinusButton->setAutoRaise(true);
-    d->zoomMinusButton->setIconSet(SmallIconSet("viewmag-"));
-    QToolTip::add(d->zoomMinusButton, i18n("Zoom out"));
-
-    d->zoomSlider = new QSlider(ThumbnailSize::Small, ThumbnailSize::Huge,
-                                ThumbnailSize::Step, ThumbnailSize::Medium, 
-                                Qt::Horizontal, zoomBar);
-    d->zoomSlider->setLineStep(ThumbnailSize::Step);
-    d->zoomSlider->setMaximumHeight(fontMetrics().height()+2);    
-    d->zoomSlider->setFixedWidth(120);
-
-    d->zoomPlusButton = new QToolButton(zoomBar);
-    d->zoomPlusButton->setAutoRaise(true);
-    d->zoomPlusButton->setIconSet(SmallIconSet("viewmag+"));
-    QToolTip::add(d->zoomPlusButton, i18n("Zoom in"));
-
-    d->zoomTracker = new DTipTracker("", d->zoomSlider);
-
-    statusBar()->addWidget(zoomBar, 1, true);
+    d->statusZoomBar = new StatusZoomBar(statusBar());
+    statusBar()->addWidget(d->statusZoomBar, 1, true);
 
     //------------------------------------------------------------------------------
 
@@ -375,13 +354,13 @@ void DigikamApp::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
-    connect(d->zoomMinusButton, SIGNAL(clicked()),
+    connect(d->statusZoomBar, SIGNAL(signalZoomMinusClicked()),
             d->view, SLOT(slotZoomOut()));
 
-    connect(d->zoomPlusButton, SIGNAL(clicked()),
+    connect(d->statusZoomBar, SIGNAL(signalZoomPlusClicked()),
             d->view, SLOT(slotZoomIn()));
 
-    connect(d->zoomSlider, SIGNAL(valueChanged(int)),
+    connect(d->statusZoomBar, SIGNAL(signalZoomSliderChanged(int)),
             this, SLOT(slotZoomSliderChanged(int)));
 
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
@@ -960,20 +939,20 @@ void DigikamApp::setupActions()
     d->albumSortAction->setCurrentItem((int)d->albumSettings->getAlbumSortOrder());
     d->imageSortAction->setCurrentItem((int)d->albumSettings->getImageSortOrder());
 
-    d->zoomSlider->setValue(d->albumSettings->getDefaultIconSize());
-    slotThumbSizeChanged(d->zoomSlider->value());
+    d->statusZoomBar->setZoomSliderValue(d->albumSettings->getDefaultIconSize());
+    slotThumbSizeChanged(d->albumSettings->getDefaultIconSize());
 }
 
 void DigikamApp::enableZoomPlusAction(bool val)
 {
     d->zoomPlusAction->setEnabled(val);
-    d->zoomPlusButton->setEnabled(val);
+    d->statusZoomBar->setEnableZoomPlus(val);
 }
 
 void DigikamApp::enableZoomMinusAction(bool val)
 {
     d->zoomMinusAction->setEnabled(val);
-    d->zoomMinusButton->setEnabled(val);
+    d->statusZoomBar->setEnableZoomMinus(val);
 }
 
 void DigikamApp::enableAlbumBackwardHistory(bool enable)
@@ -1849,18 +1828,18 @@ void DigikamApp::slotZoomSliderChanged(int size)
 
 void DigikamApp::slotThumbSizeChanged(int size)
 {
-    d->zoomSlider->blockSignals(true);
-    d->zoomSlider->setValue(size);
-    d->zoomTracker->setText(i18n("Size: %1").arg(size));
-    d->zoomSlider->blockSignals(false);
+    d->statusZoomBar->blockSignals(true);
+    d->statusZoomBar->setZoomSliderValue(size);
+    d->statusZoomBar->setZoomTrackerText(i18n("Size: %1").arg(size));
+    d->statusZoomBar->blockSignals(false);
 }
 
 void DigikamApp::slotZoomChanged(double zoom, int size)
 {
-    d->zoomSlider->blockSignals(true);
-    d->zoomSlider->setValue(size);
-    d->zoomTracker->setText(i18n("zoom: %1%").arg((int)(zoom*100.0)));
-    d->zoomSlider->blockSignals(false);
+    d->statusZoomBar->blockSignals(true);
+    d->statusZoomBar->setZoomSliderValue(size);
+    d->statusZoomBar->setZoomTrackerText(i18n("zoom: %1%").arg((int)(zoom*100.0)));
+    d->statusZoomBar->blockSignals(false);
 }
 
 void DigikamApp::slotTooglePreview(bool t)

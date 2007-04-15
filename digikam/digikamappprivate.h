@@ -23,7 +23,6 @@
 #include <qcstring.h>
 #include <qstring.h>
 #include <qmap.h>
-#include <qslider.h>
 #include <qtoolbutton.h>
 #include <qtimer.h>
 
@@ -41,13 +40,13 @@
 
 // Local includes.
 
-#include "dcursortracker.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "cameralist.h"
 #include "imagepluginloader.h"
 #include "splashscreen.h"
 #include "kipiinterface.h"
+#include "statuszoombar.h"
 #include "statusprogressbar.h"
 #include "statusnavigatebar.h"
 #include "digikamview.h"
@@ -125,13 +124,10 @@ public:
         cameraList                           = 0;
         statusProgressBar                    = 0;
         statusNavigateBar                    = 0;    
+        statusZoomBar                        = 0;    
         kipiPluginLoader                     = 0;
         view                                 = 0;
         splashScreen                         = 0;
-        zoomSlider                           = 0;
-        zoomTracker                          = 0;
-        zoomMinusButton                      = 0;
-        zoomPlusButton                       = 0;
         zoomTo100percents                    = 0;
         zoomFitToWindowAction                = 0;
         zoomPlusAction                       = 0;
@@ -152,11 +148,6 @@ public:
     QMap<int, QString>     mediaItems;
 
     QString                cameraGuiPath;
-
-    QSlider               *zoomSlider;
-
-    QToolButton           *zoomPlusButton;
-    QToolButton           *zoomMinusButton;
 
     KPopupMenu            *cameraMediaList;
 
@@ -233,7 +224,6 @@ public:
     KActionMenu           *cameraMenuAction;
     KSelectAction         *themeMenuAction;
     
-    DTipTracker           *zoomTracker;
     AlbumSettings         *albumSettings;
     AlbumManager          *albumManager;
     SplashScreen          *splashScreen;
@@ -242,6 +232,7 @@ public:
     DigikamKipiInterface  *kipiInterface;
     DigikamView           *view;
     CameraList            *cameraList;
+    StatusZoomBar         *statusZoomBar;
     StatusProgressBar     *statusProgressBar;
     StatusNavigateBar     *statusNavigateBar;    
 
