@@ -134,6 +134,11 @@ void PreviewWidget::reset()
     resetPreview();
 }
 
+QRect PreviewWidget::previewRect()
+{
+    return d->pixmapRect;
+}
+
 int PreviewWidget::tileSize()
 {
     return d->tileSize;

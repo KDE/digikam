@@ -47,25 +47,23 @@ public:
     PreviewWidget(QWidget *parent=0);
     ~PreviewWidget();
 
-    void setZoomFactor(double z);
-    void setBackgroundColor(const QColor& color);
-    void fitToWindow();
-    bool isFitToWindow();
-    void toggleFitToWindow();
+    void   setZoomFactor(double z);
+    void   setBackgroundColor(const QColor& color);
+    void   fitToWindow();
+    bool   isFitToWindow();
+    void   toggleFitToWindow();
 
-    int  zoomWidth();
-    int  zoomHeight();
-
-    bool maxZoom();
-    bool minZoom();
-
+    int    zoomWidth();
+    int    zoomHeight();
+    bool   maxZoom();
+    bool   minZoom();
     double zoomFactor();
     double zoomMax();
     double zoomMin();
     void   setZoomMax(double z);
     void   setZoomMin(double z);
 
-    void reset();
+    void   reset();
 
 signals:
 
@@ -96,6 +94,7 @@ protected:
     int    tileSize();
     void   updateAutoZoom();
     void   updateContentsSize();
+    QRect  previewRect();
 
     virtual void contentsWheelEvent(QWheelEvent *);
     virtual void setContentsSize();
