@@ -248,7 +248,11 @@ void DigikamApp::show()
 
     // Report errors from dcraw detection.
 
-    KDcrawIface::DcrawBinary::instance()->checkReport();  
+    KDcrawIface::DcrawBinary::instance()->checkReport();
+
+    // Init album icon view zoom factor. 
+    d->statusZoomBar->setZoomSliderValue(d->albumSettings->getDefaultIconSize());
+    slotThumbSizeChanged(d->albumSettings->getDefaultIconSize());
 }
 
 const QPtrList<KAction>& DigikamApp::menuImageActions()
@@ -938,9 +942,6 @@ void DigikamApp::setupActions()
 
     d->albumSortAction->setCurrentItem((int)d->albumSettings->getAlbumSortOrder());
     d->imageSortAction->setCurrentItem((int)d->albumSettings->getImageSortOrder());
-
-    d->statusZoomBar->setZoomSliderValue(d->albumSettings->getDefaultIconSize());
-    slotThumbSizeChanged(d->albumSettings->getDefaultIconSize());
 }
 
 void DigikamApp::enableZoomPlusAction(bool val)

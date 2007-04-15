@@ -96,6 +96,10 @@ public slots:
     void slotEscapePreview();
     void slotItemsUpdated(const KURL::List&);
 
+private slots: 
+
+    void slotZoomFactorChanged(double);
+
 private:
 
     AlbumWidgetStackPriv* d;
