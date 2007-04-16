@@ -54,42 +54,42 @@ public:
     PreviewWidgetPriv() :
         tileSize(128), zoomMultiplier(1.2) 
     {
-        midButtonX       = 0;
-        midButtonY       = 0;
-        autoZoom         = false;
-        fullScreen       = false;
-        zoom             = 1.0;
-        minZoom          = 0.1;
-        maxZoom          = 12.0;
-        zoomWidth        = 0;
-        zoomHeight       = 0;
-        tileTmpPix       = new QPixmap(tileSize, tileSize);
+        midButtonX = 0;
+        midButtonY = 0;
+        autoZoom   = false;
+        fullScreen = false;
+        zoom       = 1.0;
+        minZoom    = 0.1;
+        maxZoom    = 12.0;
+        zoomWidth  = 0;
+        zoomHeight = 0;
+        tileTmpPix = new QPixmap(tileSize, tileSize);
 
         tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
         tileCache.setAutoDelete(true);
     }
 
-    bool                 autoZoom;
-    bool                 fullScreen;
+    bool            autoZoom;
+    bool            fullScreen;
 
-    const int            tileSize;
-    int                  midButtonX;
-    int                  midButtonY;
-    int                  zoomWidth;
-    int                  zoomHeight;
+    const int       tileSize;
+    int             midButtonX;
+    int             midButtonY;
+    int             zoomWidth;
+    int             zoomHeight;
     
-    double               zoom;
-    double               minZoom;
-    double               maxZoom;
-    const double         zoomMultiplier;
+    double          zoom;
+    double          minZoom;
+    double          maxZoom;
+    const double    zoomMultiplier;
 
-    QRect                pixmapRect;
+    QRect           pixmapRect;
     
-    QCache<QPixmap>      tileCache;
+    QCache<QPixmap> tileCache;
 
-    QPixmap*             tileTmpPix;
+    QPixmap*        tileTmpPix;
 
-    QColor               bgColor;
+    QColor          bgColor;
 };
 
 PreviewWidget::PreviewWidget(QWidget *parent)
@@ -427,9 +427,9 @@ void PreviewWidget::contentsMousePressEvent(QMouseEvent *e)
         if (visibleWidth()  < previewWidth() ||
             visibleHeight() < previewHeight())
         {
-            m_movingInProgress  = true;
-            d->midButtonX       = e->x();
-            d->midButtonY       = e->y();
+            m_movingInProgress = true;
+            d->midButtonX      = e->x();
+            d->midButtonY      = e->y();
             viewport()->repaint(false);
             viewport()->setCursor(Qt::SizeAllCursor);            
         }
