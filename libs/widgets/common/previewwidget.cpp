@@ -424,8 +424,8 @@ void PreviewWidget::contentsMousePressEvent(QMouseEvent *e)
     }
     else if (e->button() == Qt::MidButton)
     {
-        if (visibleWidth()  < previewWidth() ||
-            visibleHeight() < previewHeight())
+        if (visibleWidth()  < d->zoomWidth ||
+            visibleHeight() < d->zoomHeight)
         {
             m_movingInProgress = true;
             d->midButtonX      = e->x();
