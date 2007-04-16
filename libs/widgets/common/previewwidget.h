@@ -85,17 +85,17 @@ protected:
 
 protected:
     
-    void   resizeEvent(QResizeEvent *);
-    void   viewportPaintEvent(QPaintEvent *);
-    void   contentsMousePressEvent(QMouseEvent *);
-    void   contentsMouseMoveEvent(QMouseEvent *);
-    void   contentsMouseReleaseEvent(QMouseEvent *);
     double calcAutoZoomFactor();
     int    tileSize();
     void   updateAutoZoom();
     void   updateContentsSize();
     QRect  previewRect();
 
+    virtual void resizeEvent(QResizeEvent *);
+    virtual void viewportPaintEvent(QPaintEvent *);
+    virtual void contentsMousePressEvent(QMouseEvent *);
+    virtual void contentsMouseMoveEvent(QMouseEvent *);
+    virtual void contentsMouseReleaseEvent(QMouseEvent *);
     virtual void contentsWheelEvent(QWheelEvent *);
     virtual void setContentsSize();
     virtual void viewportPaintExtraData(){};

@@ -312,8 +312,7 @@ void PreviewWidget::setContentsSize()
 
 void PreviewWidget::resizeEvent(QResizeEvent* e)
 {
-    if (!e)
-        return;
+    if (!e) return;
 
     QScrollView::resizeEvent(e);
 
