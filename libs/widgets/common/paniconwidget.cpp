@@ -67,9 +67,10 @@ PanIconWidget::PanIconWidget(QWidget *parent, WFlags flags)
              : QWidget(parent, 0, flags)
 {
     d = new PanIconWidgetPriv;
-    m_flicker = false;
-    m_timerID = 0;
-    m_pixmap  = 0;
+    m_flicker    = false;
+    m_timerID    = 0;
+    m_pixmap     = 0;
+    m_zoomFactor = 1.0;  
 
     setBackgroundMode(Qt::NoBackground);
     setMouseTracking(true);
@@ -77,8 +78,7 @@ PanIconWidget::PanIconWidget(QWidget *parent, WFlags flags)
 
 PanIconWidget::~PanIconWidget()
 {
-    if (m_timerID)
-        killTimer(m_timerID);
+    if (m_timerID) killTimer(m_timerID);
 
     if (m_pixmap) delete m_pixmap;
 
@@ -106,6 +106,8 @@ void PanIconWidget::setImage(int previewWidth, int previewHeight, const QImage& 
 
 void PanIconWidget::slotZoomFactorChanged(double factor)
 {
+    if (m_zoomFactor == factor) return;
+    m_zoomFactor      = factor;
     m_zoomedOrgWidth  = (int)(m_orgWidth  * factor);
     m_zoomedOrgHeight = (int)(m_orgHeight * factor);
     updatePixmap();
