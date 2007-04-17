@@ -91,8 +91,6 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
        setVScrollBarMode( QScrollView::AlwaysOff );
        setHScrollBarMode( QScrollView::AlwaysOff );
     }
-
-    QTimer::singleShot(0, this, SLOT(slotZoomFactorChanged())); 
     
     connect(this, SIGNAL(signalZoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged()));
@@ -165,7 +163,7 @@ void ImageRegionWidget::slotSeparateViewToggled(int mode)
 {
     d->separateView = mode;
     updateContentsSize();
-    QTimer::singleShot(0, this, SLOT(slotZoomFactorChanged())); 
+    slotZoomFactorChanged(); 
 }
 
 QRect ImageRegionWidget::getImageRegion()
@@ -192,7 +190,7 @@ QRect ImageRegionWidget::getImageRegion()
 
 void ImageRegionWidget::viewportPaintExtraData()
 {   
-    if (!m_movingInProgress)
+    if (!m_movingInProgress && !d->pixmapRegion.isNull())
     {
         QPainter p(viewport());
         QRect region = getLocalTargetImageRegion();
@@ -201,8 +199,7 @@ void ImageRegionWidget::viewportPaintExtraData()
         region = getLocalImageRegionToRender();
         QRect ro(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight())); 
 
-        if (!d->pixmapRegion.isNull())
-            bitBlt(viewport(), rt.x(), rt.y(), &d->pixmapRegion, 0, 0, rt.width(), rt.height());
+        bitBlt(viewport(), rt.x(), rt.y(), &d->pixmapRegion, 0, 0, rt.width(), rt.height());
 
         // Drawing separate view.
         
