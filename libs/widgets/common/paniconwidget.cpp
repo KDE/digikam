@@ -53,7 +53,7 @@ public:
         moveSelection = false;
     }
 
-    bool         moveSelection;
+    bool   moveSelection;
 
     int    xpos;
     int    ypos;
@@ -215,8 +215,8 @@ void PanIconWidget::paintEvent( QPaintEvent * )
 void PanIconWidget::setMouseFocus()
 {
     raise();
-    d->xpos = m_localRegionSelection.center().x();
-    d->ypos = m_localRegionSelection.center().y();
+    d->xpos          = m_localRegionSelection.center().x();
+    d->ypos          = m_localRegionSelection.center().y();
     d->moveSelection = true;
     setCursor( KCursor::sizeAllCursor() );           
     emit signalSelectionTakeFocus();
@@ -239,8 +239,8 @@ void PanIconWidget::mousePressEvent ( QMouseEvent * e )
     if ( (e->button() == Qt::LeftButton || e->button() == Qt::MidButton) &&
          m_localRegionSelection.contains( e->x(), e->y() ) )
     {
-        d->xpos = e->x();
-        d->ypos = e->y();
+        d->xpos          = e->x();
+        d->ypos          = e->y();
         d->moveSelection = true;
         setCursor( KCursor::sizeAllCursor() );           
         emit signalSelectionTakeFocus();
