@@ -47,12 +47,12 @@ public:
 
     ImagePanIconWidgetPriv()
     {
-        iface         = 0;
-        data          = 0;
-        separateView  = ImageRegionWidget::SeparateViewNone;
+        iface        = 0;
+        data         = 0;
+        separateView = ImageRegionWidget::SeparateViewNone;
     }
 
-    uchar *      data;
+    uchar       *data;
 
     int          separateView;
     
