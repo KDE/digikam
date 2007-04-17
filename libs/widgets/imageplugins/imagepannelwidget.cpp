@@ -291,8 +291,8 @@ void ImagePannelWidget::readSettings()
     KConfig *config = kapp->config();
     config->setGroup(d->settingsSection);
     int mode = config->readNumEntry("Separate View", ImageRegionWidget::SeparateViewDuplicateVert);
-    mode = QMAX(ImageRegionWidget::SeparateViewHorizontal, mode);
-    mode = QMIN(ImageRegionWidget::SeparateViewDuplicateHorz, mode);
+    mode     = QMAX(ImageRegionWidget::SeparateViewHorizontal, mode);
+    mode     = QMIN(ImageRegionWidget::SeparateViewDuplicateHorz, mode);
     
     d->imageRegionWidget->blockSignals(true);
     d->imagePanIconWidget->blockSignals(true);

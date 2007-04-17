@@ -117,10 +117,10 @@ void PanIconWidget::slotZoomFactorChanged(double factor)
 void PanIconWidget::setRegionSelection(QRect regionSelection)
 {
     d->regionSelection = regionSelection;
-    m_localRegionSelection.setX( 1 + m_rect.x() + (int)((float)d->regionSelection.x() *
+    m_localRegionSelection.setX( m_rect.x() + (int)((float)d->regionSelection.x() *
                                  ((float)m_width / (float)m_zoomedOrgWidth)) );
                                             
-    m_localRegionSelection.setY( 1 + m_rect.y() + (int)((float)d->regionSelection.y() *
+    m_localRegionSelection.setY( m_rect.y() + (int)((float)d->regionSelection.y() *
                                  ((float)m_height / (float)m_zoomedOrgHeight)) );
                                             
     m_localRegionSelection.setWidth( (int)((float)d->regionSelection.width() *
@@ -143,7 +143,7 @@ void PanIconWidget::setCursorToLocalRegionSelectionCenter(void)
     QCursor::setPos(mapToGlobal(m_localRegionSelection.center()));
 }
 
-void PanIconWidget::setCenterSelection(void)
+void PanIconWidget::setCenterSelection()
 {
     setRegionSelection(QRect( 
              (int)(((float)m_zoomedOrgWidth  / 2.0) - ((float)d->regionSelection.width()  / 2.0)),
@@ -152,7 +152,7 @@ void PanIconWidget::setCenterSelection(void)
              d->regionSelection.height()));
 }
 
-void PanIconWidget::regionSelectionMoved( bool targetDone )
+void PanIconWidget::regionSelectionMoved(bool targetDone)
 {
     if (targetDone)
     {
