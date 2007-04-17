@@ -37,6 +37,7 @@
 #include "ddebug.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
+#include "databasebackend.h"
 #include "albumdb_sqlite2.h"
 #include "upgradedb_sqlite2tosqlite3.h"
 
@@ -61,33 +62,27 @@ struct _Tag
     QString icon;
 };
 
-static QString escapeString(QString str)
-{
-    str.replace( "'", "''" );
-    return str;
-}
-
 Q_LLONG findOrAddImage(DatabaseAccess &access, int dirid, const QString& name,
                const QString& caption)
 {
     QStringList values;
     
-    access.db()->execSql(QString("SELECT id FROM Images WHERE dirid=%1 AND name='%2'")
+    access.backend()->execSql(QString("SELECT id FROM Images WHERE dirid=%1 AND name='%2'")
         .arg(dirid)
-        .arg(escapeString(name)), &values);
+        .arg(access.backend()->escapeString(name)), &values);
 
     if (!values.isEmpty())
     {
     return values.first().toLongLong();
     }
     
-    access.db()->execSql(QString("INSERT INTO Images (dirid, name, caption) \n "
+    access.backend()->execSql(QString("INSERT INTO Images (dirid, name, caption) \n "
             "VALUES(%1, '%2', '%3');")
         .arg(dirid)
-        .arg(escapeString(name))
-        .arg(escapeString(caption)), &values);
+        .arg(access.backend()->escapeString(name))
+        .arg(access.backend()->escapeString(caption)), &values);
 
-    return access.db()->lastInsertedRow();
+    return access.backend()->lastInsertedRow();
 }
 
 
@@ -142,12 +137,12 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
     }
 
     // delete entries from sqlite3 database
-    access.db()->execSql("DELETE FROM Albums;");
-    access.db()->execSql("DELETE FROM Tags;");
-    access.db()->execSql("DELETE FROM TagsTree;");
-    access.db()->execSql("DELETE FROM Images;");
-    access.db()->execSql("DELETE FROM ImageTags;");
-    access.db()->execSql("DELETE FROM ImageProperties;");
+    access.backend()->execSql("DELETE FROM Albums;");
+    access.backend()->execSql("DELETE FROM Tags;");
+    access.backend()->execSql("DELETE FROM TagsTree;");
+    access.backend()->execSql("DELETE FROM Images;");
+    access.backend()->execSql("DELETE FROM ImageTags;");
+    access.backend()->execSql("DELETE FROM ImageProperties;");
     
     QStringList values;
 
@@ -163,7 +158,7 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
     typedef QMap<QString, int> AlbumMap;
     AlbumMap albumMap;
 
-    access.db()->beginTransaction();
+    access.backend()->beginTransaction();
     for (QStringList::iterator it=values.begin(); it!=values.end();)
     {
     _Album album;
@@ -184,15 +179,15 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
     albumList.append(album);
     albumMap.insert(album.url, album.id);
 
-    access.db()->execSql(QString("INSERT INTO Albums (id, url, date, caption, collection) "
+    access.backend()->execSql(QString("INSERT INTO Albums (id, url, date, caption, collection) "
                 "VALUES(%1, '%2', '%3', '%4', '%5');")
             .arg(album.id)
-            .arg(escapeString(album.url))
-            .arg(escapeString(album.date))
-            .arg(escapeString(album.caption))
-            .arg(escapeString(album.collection)));
+            .arg(access.backend()->escapeString(album.url))
+            .arg(access.backend()->escapeString(album.date))
+            .arg(access.backend()->escapeString(album.caption))
+            .arg(access.backend()->escapeString(album.collection)));
     }
-    access.db()->commitTransaction();
+    access.backend()->commitTransaction();
 
     // update tags -------------------------------------------------
     
@@ -203,7 +198,7 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
     typedef QValueList<_Tag> TagList;
     TagList tagList;
 
-    access.db()->beginTransaction();
+    access.backend()->beginTransaction();
     for (QStringList::iterator it=values.begin(); it!=values.end();)
     {
     _Tag tag;
@@ -219,13 +214,13 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
 
     tagList.append(tag);
 
-    access.db()->execSql(QString("INSERT INTO Tags (id, pid, name) "
+    access.backend()->execSql(QString("INSERT INTO Tags (id, pid, name) "
                 "VALUES(%1, %2, '%3');")
             .arg(tag.id)
             .arg(tag.pid)
-            .arg(escapeString(tag.name)));
+            .arg(access.backend()->escapeString(tag.name)));
     }
-    access.db()->commitTransaction();
+    access.backend()->commitTransaction();
 
     // update images -------------------------------------------------
     
@@ -233,7 +228,7 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
     db2.execSql("SELECT dirid, name, caption FROM Images;",
         &values);
 
-    access.db()->beginTransaction();
+    access.backend()->beginTransaction();
     for (QStringList::iterator it=values.begin(); it!=values.end();)
     {
     int dirid   = (*it).toInt();
@@ -245,14 +240,14 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
 
     findOrAddImage(access, dirid, name, caption);
     }
-    access.db()->commitTransaction();
+    access.backend()->commitTransaction();
 
     // update imagetags -----------------------------------------------
     
     values.clear();
     db2.execSql("SELECT dirid, name, tagid FROM ImageTags;",
         &values);
-    access.db()->beginTransaction();
+    access.backend()->beginTransaction();
     for (QStringList::iterator it=values.begin(); it!=values.end();)
     {
     int dirid = (*it).toInt();
@@ -266,14 +261,14 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
 
     Q_LLONG imageid = findOrAddImage(access, dirid, name, QString());
     
-    access.db()->execSql(QString("INSERT INTO ImageTags VALUES( %1, %2 )")
+    access.backend()->execSql(QString("INSERT INTO ImageTags VALUES( %1, %2 )")
             .arg(imageid).arg(tagid));
     }
-    access.db()->commitTransaction();
+    access.backend()->commitTransaction();
 
     // update album icons -------------------------------------------------
 
-    access.db()->beginTransaction();
+    access.backend()->beginTransaction();
     for (AlbumList::iterator it = albumList.begin(); it != albumList.end();
      ++it)
     {
@@ -284,15 +279,15 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
 
     Q_LLONG imageid = findOrAddImage(access, album.id, album.icon, QString());
 
-    access.db()->execSql(QString("UPDATE Albums SET icon=%1 WHERE id=%2")
+    access.backend()->execSql(QString("UPDATE Albums SET icon=%1 WHERE id=%2")
             .arg(imageid)
             .arg(album.id));
     }
-    access.db()->commitTransaction();
+    access.backend()->commitTransaction();
 
     // -- update tag icons ---------------------------------------------------
 
-    access.db()->beginTransaction();
+    access.backend()->beginTransaction();
     for (TagList::iterator it = tagList.begin(); it != tagList.end(); ++it)
     {
     _Tag tag = *it;
@@ -303,8 +298,8 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
     QFileInfo fi(tag.icon);
     if (fi.isRelative())
     {
-        access.db()->execSql(QString("UPDATE Tags SET iconkde='%1' WHERE id=%2")
-            .arg(escapeString(tag.icon))
+        access.backend()->execSql(QString("UPDATE Tags SET iconkde='%1' WHERE id=%2")
+            .arg(access.backend()->escapeString(tag.icon))
             .arg(tag.id));
         continue;
     }
@@ -327,15 +322,15 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
 
     Q_LLONG imageid = findOrAddImage(access, dirid, name, QString());;
 
-    access.db()->execSql(QString("UPDATE Tags SET icon=%1 WHERE id=%2")
+    access.backend()->execSql(QString("UPDATE Tags SET icon=%1 WHERE id=%2")
             .arg(imageid)
             .arg(tag.id));
 
     }
-    access.db()->commitTransaction();
+    access.backend()->commitTransaction();
 
     // -- Remove invalid entries ----------------------------------------
-    access.db()->execSql("DELETE FROM Images WHERE dirid=-1");
+    access.backend()->execSql("DELETE FROM Images WHERE dirid=-1");
 
     // -- update setting entry ------------------------------------------
     access.db()->setSetting("UpgradedFromSqlite2", "yes");
@@ -365,17 +360,17 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
     ++it;
 
     QStringList list;
-    access.db()->execSql(QString("SELECT id FROM Albums WHERE \n"
+    access.backend()->execSql(QString("SELECT id FROM Albums WHERE \n"
                 "    id=%1 AND \n"
                 "    url='%2' AND \n"
                 "    date='%3' AND \n"
                 "    caption='%4' AND \n"
                 "    collection='%5';")
             .arg(album.id)
-            .arg(escapeString(album.url))
-            .arg(escapeString(album.date))
-            .arg(escapeString(album.caption))
-            .arg(escapeString(album.collection)), &list, false);
+            .arg(access.backend()->escapeString(album.url))
+            .arg(access.backend()->escapeString(album.date))
+            .arg(access.backend()->escapeString(album.caption))
+            .arg(access.backend()->escapeString(album.collection)), &list, false);
     if (list.size() != 1)
     {
         std::cerr << "Failed" << std::endl;
@@ -401,13 +396,13 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
     ++it;
 
     QStringList list;
-    access.db()->execSql(QString("SELECT id FROM Tags WHERE \n"
+    access.backend()->execSql(QString("SELECT id FROM Tags WHERE \n"
                 "    id=%1 AND \n"
                 "    pid=%2 AND \n"
                 "    name='%3';")
             .arg(id)
             .arg(pid)
-            .arg(escapeString(name)),
+            .arg(access.backend()->escapeString(name)),
             &list, false);
     if (list.size() != 1)
     {
@@ -435,14 +430,14 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
     ++it;
 
     QStringList list;
-    access.db()->execSql(QString("SELECT Images.id FROM Images, Albums WHERE \n "
+    access.backend()->execSql(QString("SELECT Images.id FROM Images, Albums WHERE \n "
                 "Albums.url = '%1' AND \n "
                 "Images.dirid = Albums.id AND \n "
                 "Images.name = '%2' AND \n "
                 "Images.caption = '%3';")
-            .arg(escapeString(url))
-            .arg(escapeString(name))
-            .arg(escapeString(caption)),
+            .arg(access.backend()->escapeString(url))
+            .arg(access.backend()->escapeString(name))
+            .arg(access.backend()->escapeString(caption)),
             &list, false);
     if (list.size() != 1)
     {
@@ -471,14 +466,14 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
     ++it;
 
     QStringList list;
-    access.db()->execSql(QString("SELECT Images.id FROM Albums, Images, ImageTags WHERE \n "
+    access.backend()->execSql(QString("SELECT Images.id FROM Albums, Images, ImageTags WHERE \n "
                 "Albums.url = '%1' AND \n "
                 "Images.dirid = Albums.id AND \n "
                 "Images.name = '%2' AND \n "
                 "ImageTags.imageid = Images.id AND \n "
                 "ImageTags.tagid = %3;")
-            .arg(escapeString(url))
-            .arg(escapeString(name))
+            .arg(access.backend()->escapeString(url))
+            .arg(access.backend()->escapeString(name))
             .arg(tagid),
             &list, false);
     if (list.size() != 1)
@@ -506,12 +501,12 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
         continue;
     
     QStringList list;
-    access.db()->execSql(QString("SELECT Images.id FROM Images, Albums WHERE \n "
+    access.backend()->execSql(QString("SELECT Images.id FROM Images, Albums WHERE \n "
                 "Albums.url = '%1' AND \n "
                 "Images.id = Albums.icon AND \n "
                 "Images.name = '%2';")
-            .arg(escapeString(url))
-            .arg(escapeString(icon)), &list);
+            .arg(access.backend()->escapeString(url))
+            .arg(access.backend()->escapeString(icon)), &list);
 
     if (list.size() != 1)
     {
@@ -542,11 +537,11 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
     if (!icon.startsWith("/"))
     {
         QStringList list;
-        access.db()->execSql(QString("SELECT id FROM Tags WHERE \n "
+        access.backend()->execSql(QString("SELECT id FROM Tags WHERE \n "
                 "id = %1 AND \n "
                 "iconkde = '%2';")
             .arg(id)
-            .arg(escapeString(icon)), &list);
+            .arg(access.backend()->escapeString(icon)), &list);
 
         if (list.size() != 1)
         {
@@ -569,8 +564,8 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
         QStringList list;
 
         list.clear();
-        access.db()->execSql(QString("SELECT id FROM Albums WHERE url='%1'")
-            .arg(escapeString(url)), &list);
+        access.backend()->execSql(QString("SELECT id FROM Albums WHERE url='%1'")
+            .arg(access.backend()->escapeString(url)), &list);
         if (list.isEmpty())
         {
         DWarning() << "Tag icon not in Album Library Path, Rejecting " << endl;
@@ -579,13 +574,13 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
         }
 
         list.clear();
-        access.db()->execSql(QString("SELECT Images.id FROM Images, Tags WHERE \n "
+        access.backend()->execSql(QString("SELECT Images.id FROM Images, Tags WHERE \n "
                 " Images.dirid=(SELECT id FROM Albums WHERE url='%1') AND \n "
                 " Images.name='%2' AND \n "
                 " Tags.id=%3 AND \n "
                 " Tags.icon=Images.id")
-            .arg(escapeString(url))
-            .arg(escapeString(name))
+            .arg(access.backend()->escapeString(url))
+            .arg(access.backend()->escapeString(name))
             .arg(id), &list);
         if (list.size() != 1)
         {

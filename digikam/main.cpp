@@ -286,7 +286,9 @@ int main(int argc, char *argv[])
         return app.exec();
     }
 
+    // Database initialization
     Digikam::DatabaseAccess::setParameters(Digikam::DatabaseParameters::parametersForSQLiteDefaultFile(albumPath));
+    Digikam::DatabaseAccess::checkReadyForUse();
 
     Digikam::AlbumManager* man = new Digikam::AlbumManager();
     man->initialize();
