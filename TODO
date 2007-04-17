@@ -18,14 +18,9 @@
 
 * B.K.O files to fix :
 
-==> 111446 : Image Editor   : bad behaviour when out of disk space.
-
 ==> 127179 : Main interface : thumbnails does not adhere to the Rotate Images setting in Configure digiKam.
 ==> 113797 : Main interface : Little thumbnail refresh problem. 
 ==> 121804 : Main interface : Image overwritten with blank file when importing into same folder.
-
-==> 113801 : Main interface : Little problem with image files extensions.
-
 
 * Media support:
 
@@ -47,7 +42,7 @@
 * Compatibility with little cms version 1.16 which provides improvements
 
 ------------------------------------------------------------------------------------
-LATER 0.9.0 TODO LIST
+LATER 0.9.1 TODO LIST
 ------------------------------------------------------------------------------------
 
 * Port project to CMake (see: http://dot.kde.org/1151688350 for notice)
@@ -75,6 +70,7 @@ LATER 0.9.0 TODO LIST
    - Implement versioning of picture based on Image editor 'Action List' feature.
    - New option to set digiKam tags on the fly.
    - Storing new Pictures meta-information : all major photograph informations and GPS.
+   - Allow for multiple root album directories.
 
 * New CD/DVD album folders+database backup/restore tool :
    - Take a look of music database backup in amarok.
@@ -86,9 +82,8 @@ LATER 0.9.0 TODO LIST
 
 * General:
    - Custom ordering of images
-   - New TimeLine tool (take a look in kimdaba and f-spot)
+   - New TimeLine tool (take a look in kphotoalbum and f-spot)
    - Post conversion to qlistview: allow selection of multiple albums/tags/dates:
      1/ instead of a "current album" there will a list of "current urls"
      2/ will lead to widesweeping changes all over the core and the kioslaves
-   - Allow for multiple root directories
 
