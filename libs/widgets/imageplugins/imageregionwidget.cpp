@@ -380,7 +380,7 @@ QRect ImageRegionWidget::getLocalImageRegionToRender(void)
     if (d->separateView == SeparateViewVertical)
     {
         region = QRect((int)floor(contentsX()+visibleWidth()/2.0), contentsY(), 
-                       (int)ceilf(visibleHeight()/2.0),            visibleHeight());
+                       (int)ceilf(visibleWidth()/2.0),             visibleHeight());
     }
     else if (d->separateView == SeparateViewHorizontal)
     {
