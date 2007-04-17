@@ -166,12 +166,12 @@ double PreviewWidget::zoomMin()
 
 void PreviewWidget::setZoomMax(double z)
 {
-    d->maxZoom = z;
+    d->maxZoom = ceilf(z * 10000.0) / 10000.0;
 }
 
 void PreviewWidget::setZoomMin(double z)
 {
-    d->minZoom = z;
+    d->minZoom = floor(z * 10000.0) / 10000.0;
 }
 
 bool PreviewWidget::maxZoom()
@@ -487,9 +487,9 @@ void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
     }
     else if (e->state() & Qt::ControlButton)
     {
-        if (e->delta() < 0)
+        if (e->delta() < 0 && !maxZoom())
             slotIncreaseZoom();
-        else if (e->delta() > 0)
+        else if (e->delta() > 0 && !minZoom())
             slotDecreaseZoom();
         return;
     }

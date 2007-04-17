@@ -91,11 +91,11 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
        setVScrollBarMode( QScrollView::AlwaysOff );
        setHScrollBarMode( QScrollView::AlwaysOff );
     }
+
+    QTimer::singleShot(0, this, SLOT(slotZoomFactorChanged())); 
     
     connect(this, SIGNAL(signalZoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged()));
-
-    QTimer::singleShot(0, this, SLOT(slotZoomFactorChanged())); 
 }
 
 ImageRegionWidget::~ImageRegionWidget()
@@ -165,7 +165,7 @@ void ImageRegionWidget::slotSeparateViewToggled(int mode)
 {
     d->separateView = mode;
     updateContentsSize();
-    slotZoomFactorChanged();
+    QTimer::singleShot(0, this, SLOT(slotZoomFactorChanged())); 
 }
 
 QRect ImageRegionWidget::getImageRegion()
@@ -453,9 +453,9 @@ void ImageRegionWidget::contentsWheelEvent(QWheelEvent *e)
 
     if (e->state() & Qt::ControlButton)
     {
-        if (e->delta() < 0)
+        if (e->delta() < 0 && !maxZoom())
             slotIncreaseZoom();
-        else if (e->delta() > 0)
+        else if (e->delta() > 0 && !minZoom())
             slotDecreaseZoom();
         return;
     }
