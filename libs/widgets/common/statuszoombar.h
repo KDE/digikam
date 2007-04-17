@@ -57,11 +57,13 @@ signals:
     void signalZoomMinusClicked();
     void signalZoomSliderChanged(int);
     void signalDelayedZoomSliderChanged(int);
+    void signalZoomSliderReleased(int);
 
 private slots:
 
     void slotZoomSliderChanged(int);
     void slotDelayedZoomSliderChanged();
+    void slotZoomSliderReleased();
 
 private:
 

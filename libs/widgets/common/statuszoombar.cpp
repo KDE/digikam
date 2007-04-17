@@ -101,6 +101,9 @@ StatusZoomBar::StatusZoomBar(QWidget *parent)
 
     connect(d->zoomSlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotZoomSliderChanged(int)));
+
+    connect(d->zoomSlider, SIGNAL(sliderReleased()),
+            this, SLOT(slotZoomSliderReleased()));
 }
 
 StatusZoomBar::~StatusZoomBar()
@@ -129,6 +132,11 @@ void StatusZoomBar::slotZoomSliderChanged(int)
 void StatusZoomBar::slotDelayedZoomSliderChanged()
 {
     emit signalDelayedZoomSliderChanged(d->zoomSlider->value());
+}
+
+void StatusZoomBar::slotZoomSliderReleased()
+{
+    emit signalZoomSliderReleased(d->zoomSlider->value());
 }
 
 void StatusZoomBar::setZoomSliderValue(int v)
