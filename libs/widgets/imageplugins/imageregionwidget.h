@@ -57,22 +57,22 @@ public:
     ~ImageRegionWidget();
     
     void   setContentsPosition(int x, int y, bool targetDone);    
-    void   setCenterContentsPosition(void);
+    void   setCenterContentsPosition();
 
     /** To get image region including original or/and target area depending of separate view mode.
         The region is given using not scaled image unit.*/
-    QRect  getImageRegion(void);
+    QRect  getImageRegion();
     
     /** To get target image region area to render */
-    QRect  getImageRegionToRender(void);
+    QRect  getImageRegionToRender();
     
     /** To get target image region image to use for render operations */
-    DImg   getImageRegionImage(void);
+    DImg   getImageRegionImage();
 
     void   updatePreviewImage(DImg *img);
 
-    void   backupPixmapRegion(void);
-    void   restorePixmapRegion(void);
+    void   backupPixmapRegion();
+    void   restorePixmapRegion();
     
     void   setHighLightPoints(QPointArray pointsList);
     void   drawSeparateView();
@@ -83,13 +83,13 @@ public slots:
 
 private slots:
     
-    void slotTimerResizeEvent();
+    void slotZoomFactorChanged();
 
 private:
 
     void  updatePixmap(DImg& img);
-    QRect getLocalTargetImageRegion(void);
-    QRect getLocalImageRegionToRender(void);
+    QRect getLocalTargetImageRegion();
+    QRect getLocalImageRegionToRender();
     void  viewportPaintExtraData();
     int   previewWidth();
     int   previewHeight();

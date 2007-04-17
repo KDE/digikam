@@ -92,10 +92,10 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
        setHScrollBarMode( QScrollView::AlwaysOff );
     }
     
-    QTimer::singleShot(0, this, SLOT(slotTimerResizeEvent())); 
-
     connect(this, SIGNAL(signalZoomFactorChanged(double)),
-            this, SLOT(slotTimerResizeEvent()));
+            this, SLOT(slotZoomFactorChanged()));
+
+    QTimer::singleShot(0, this, SLOT(slotZoomFactorChanged())); 
 }
 
 ImageRegionWidget::~ImageRegionWidget()
@@ -156,7 +156,7 @@ void ImageRegionWidget::setHighLightPoints(QPointArray pointsList)
     repaintContents(false);   
 }
 
-void ImageRegionWidget::slotTimerResizeEvent()
+void ImageRegionWidget::slotZoomFactorChanged()
 {
     emit signalContentsMovedEvent(true);
 }
@@ -165,7 +165,7 @@ void ImageRegionWidget::slotSeparateViewToggled(int mode)
 {
     d->separateView = mode;
     updateContentsSize();
-    QTimer::singleShot(0, this, SLOT(slotTimerResizeEvent())); 
+    slotZoomFactorChanged();
 }
 
 QRect ImageRegionWidget::getImageRegion()
@@ -320,7 +320,7 @@ void ImageRegionWidget::viewportPaintExtraData()
 void ImageRegionWidget::setCenterContentsPosition(void)
 {
     center(contentsWidth()/2, contentsHeight()/2);    
-    emit signalContentsMovedEvent(true);
+    slotZoomFactorChanged();
 }
 
 void ImageRegionWidget::setContentsPosition(int x, int y, bool targetDone)
@@ -331,7 +331,7 @@ void ImageRegionWidget::setContentsPosition(int x, int y, bool targetDone)
     setContentsPos(x, y);    
     
     if( targetDone )
-       emit signalContentsMovedEvent(true);
+       slotZoomFactorChanged();
 }
 
 void ImageRegionWidget::backupPixmapRegion(void)
