@@ -195,14 +195,11 @@ void ImageRegionWidget::viewportPaintExtraData()
     if (!m_movingInProgress)
     {
         QPainter p(viewport());
-        QRect rt, ro, region;
-        region = getLocalTargetImageRegion();
-        rt.setTopLeft(contentsToViewport(region.topLeft())); 
-        rt.setBottomRight(contentsToViewport(region.bottomRight())); 
+        QRect region = getLocalTargetImageRegion();
+        QRect rt(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight())); 
 
         region = getLocalImageRegionToRender();
-        ro.setTopLeft(contentsToViewport(region.topLeft())); 
-        ro.setBottomRight(contentsToViewport(region.bottomRight())); 
+        QRect ro(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight())); 
 
         if (!d->pixmapRegion.isNull())
             bitBlt(viewport(), rt.x(), rt.y(), &d->pixmapRegion, 0, 0, rt.width(), rt.height());
