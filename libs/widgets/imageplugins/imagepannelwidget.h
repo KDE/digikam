@@ -60,12 +60,12 @@ public:
                       int separateViewMode=SeparateViewAll);
     ~ImagePannelWidget();
     
-    QRect  getOriginalImageRegion(void);
-    QRect  getOriginalImageRegionToRender(void);
-    DImg   getOriginalRegionImage(void);
+    QRect  getOriginalImageRegion();
+    QRect  getOriginalImageRegionToRender();
+    DImg   getOriginalRegionImage();
     void   setPreviewImage(DImg img);
     void   setPreviewImageWaitCursor(bool enable);
-    void   setCenterImageRegionPosition(void);
+    void   setCenterImageRegionPosition();
     
     void   setEnable(bool b);
     
@@ -77,7 +77,12 @@ public:
     
     void   setPanIconHighLightPoints(QPointArray pt);
     
-    KProgress *progressBar(void);
+    KProgress *progressBar();
+
+signals:
+
+    void signalOriginalClipFocusChanged();
+    void signalResized();
            
 public slots:
 
@@ -87,27 +92,22 @@ public slots:
     // Slot used when the original image clip focus is changed by the user.
     void slotOriginalImageRegionChanged(bool target);
 
-protected slots:
-
-    void slotPanIconTakeFocus(void);    
-    void slotInitGui(void);
-    void slotZoomButtonReleased(int);
-                
-signals:
-
-    void signalOriginalClipFocusChanged( void );
-    void signalResized( void );
-    void signalZoomFactorChanged( double );
-    
 protected:
     
     void resizeEvent(QResizeEvent *e);
 
+private slots:
+
+    void slotPanIconTakeFocus();    
+    void slotInitGui();
+    void slotZoomSliderChanged(int);
+    void slotZoomFactorChanged(double);
+
 private:
         
     void updateSelectionInfo(QRect rect);
-    void readSettings(void);
-    void writeSettings(void);
+    void readSettings();
+    void writeSettings();
 
 private:
 
