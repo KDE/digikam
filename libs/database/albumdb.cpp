@@ -51,13 +51,11 @@ extern "C"
 // Local includes.
 
 #include "ddebug.h"
+#include "databasebackend.h"
 #include "albumdb.h"
 
 namespace Digikam
 {
-
-typedef struct sqlite3_stmt sqlite3_stmt;
-typedef struct sqlite3 sqleet3;            // hehe.
 
 class AlbumDBPriv
 {
@@ -66,248 +64,22 @@ public:
 
     AlbumDBPriv()
     {
-        valid    = false;
-        dataBase = 0;
+        sql = 0;
     }
 
-    bool     valid;
-
-    sqleet3 *dataBase;
-
+    DatabaseBackend *sql;
     IntList  recentlyAssignedTags;
 };
 
-AlbumDB::AlbumDB()
+AlbumDB::AlbumDB(DatabaseBackend *backend)
 {
     d = new AlbumDBPriv;
+    d->sql = backend;
 }
 
 AlbumDB::~AlbumDB()
 {
-    close();
-
     delete d;
-}
-
-bool AlbumDB::isValid() const
-{
-    return d->valid; 
-}
-
-bool AlbumDB::open(const DatabaseParameters &parameters)
-{
-    if (parameters.databaseType == "QSQLITE")
-    {
-        close();
-
-        sqlite3_open(QFile::encodeName(parameters.databaseName), &d->dataBase);
-
-        if (d->dataBase == 0)
-        {
-            DWarning() << "Cannot open database: "
-                        << sqlite3_errmsg(d->dataBase)
-                        << endl;
-            return false;
-        }
-        else
-        {
-            initSchema();
-        }
-    }
-    return d->valid;
-}
-
-bool AlbumDB::isOpen() const
-{
-    return d->dataBase;
-}
-
-void AlbumDB::close()
-{
-    if (d->dataBase)
-    {
-        sqlite3_close(d->dataBase);
-        d->dataBase = 0;
-    }
-    d->valid = false;
-}
-
-void AlbumDB::initSchema()
-{
-    // TODO: Schema upgrade
-    d->valid = false;
-
-    // Check if we have the required tables
-
-    QStringList values;
-
-    if (!execSql( QString("SELECT name FROM sqlite_master"
-                          " WHERE type='table'"
-                          " ORDER BY name;"),
-                  &values ))
-    {
-        return;
-    }
-
-    if (!values.contains("Albums"))
-    {
-        if (!execSql( QString("CREATE TABLE Albums\n"
-                              " (id INTEGER PRIMARY KEY,\n"
-                              "  url TEXT NOT NULL UNIQUE,\n"
-                              "  date DATE NOT NULL,\n"
-                              "  caption TEXT,\n"
-                              "  collection TEXT,\n"
-                              "  icon INTEGER);") ))
-        {
-            return;
-        }
-
-        if (!execSql( QString("CREATE TABLE Tags\n"
-                              " (id INTEGER PRIMARY KEY,\n"
-                              "  pid INTEGER,\n"
-                              "  name TEXT NOT NULL,\n"
-                              "  icon INTEGER,\n"
-                              "  iconkde TEXT,\n"
-                              "  UNIQUE (name, pid));") ))
-        {
-            return;
-        }
-
-        if (!execSql( QString("CREATE TABLE TagsTree\n"
-                              " (id INTEGER NOT NULL,\n"
-                              "  pid INTEGER NOT NULL,\n"
-                              "  UNIQUE (id, pid));") ))
-        {
-            return;
-        }
-
-        if (!execSql( QString("CREATE TABLE Images\n"
-                              " (id INTEGER PRIMARY KEY,\n"
-                              "  name TEXT NOT NULL,\n"
-                              "  dirid INTEGER NOT NULL,\n"
-                              "  caption TEXT,\n"
-                              "  datetime DATETIME,\n"
-                              "  UNIQUE (name, dirid));") ))
-        {
-            return;
-        }
-
-
-        if (!execSql( QString("CREATE TABLE ImageTags\n"
-                              " (imageid INTEGER NOT NULL,\n"
-                              "  tagid INTEGER NOT NULL,\n"
-                              "  UNIQUE (imageid, tagid));") ))
-        {
-            return;
-        }
-
-        if (!execSql( QString("CREATE TABLE ImageProperties\n"
-                              " (imageid  INTEGER NOT NULL,\n"
-                              "  property TEXT    NOT NULL,\n"
-                              "  value    TEXT    NOT NULL,\n"
-                              "  UNIQUE (imageid, property));") ))
-        {
-            return;
-        }
-
-        if ( !execSql( QString( "CREATE TABLE Searches  \n"
-                                " (id INTEGER PRIMARY KEY, \n"
-                                "  name TEXT NOT NULL UNIQUE, \n"
-                                "  url  TEXT NOT NULL);" ) ) )
-        {
-            return;
-        }
-
-        if (!execSql( QString("CREATE TABLE Settings         \n"
-                              "(keyword TEXT NOT NULL UNIQUE,\n"
-                              " value TEXT);") ))
-            return;
-        else
-            setSetting("DBVersion","1");
-
-        // TODO: see which more indices are needed
-        // create indices
-        execSql("CREATE INDEX dir_index ON Images    (dirid);");
-        execSql("CREATE INDEX tag_index ON ImageTags (tagid);");
-
-        // create triggers
-
-        // trigger: delete from Images/ImageTags/ImageProperties
-        // if Album has been deleted
-        execSql("CREATE TRIGGER delete_album DELETE ON Albums\n"
-                "BEGIN\n"
-                " DELETE FROM ImageTags\n"
-                "   WHERE imageid IN (SELECT id FROM Images WHERE dirid=OLD.id);\n"
-                " DELETE From ImageProperties\n"
-                "   WHERE imageid IN (SELECT id FROM Images WHERE dirid=OLD.id);\n"
-                " DELETE FROM Images\n"
-                "   WHERE dirid = OLD.id;\n"
-                "END;");
-
-        // trigger: delete from ImageTags/ImageProperties
-        // if Image has been deleted
-        execSql("CREATE TRIGGER delete_image DELETE ON Images\n"
-                "BEGIN\n"
-                "  DELETE FROM ImageTags\n"
-                "    WHERE imageid=OLD.id;\n"
-                "  DELETE From ImageProperties\n "
-                "    WHERE imageid=OLD.id;\n"
-                "  UPDATE Albums SET icon=null \n "
-                "    WHERE icon=OLD.id;\n"
-                "  UPDATE Tags SET icon=null \n "
-                "    WHERE icon=OLD.id;\n"
-                "END;");
-
-        // trigger: delete from ImageTags if Tag has been deleted
-        execSql("CREATE TRIGGER delete_tag DELETE ON Tags\n"
-                "BEGIN\n"
-                "  DELETE FROM ImageTags WHERE tagid=OLD.id;\n"
-                "END;");
-
-        // trigger: insert into TagsTree if Tag has been added
-        execSql("CREATE TRIGGER insert_tagstree AFTER INSERT ON Tags\n"
-                "BEGIN\n"
-                "  INSERT INTO TagsTree\n"
-                "    SELECT NEW.id, NEW.pid\n"
-                "    UNION\n"
-                "    SELECT NEW.id, pid FROM TagsTree WHERE id=NEW.pid;\n"
-                "END;");
-
-        // trigger: delete from TagsTree if Tag has been deleted
-        execSql("CREATE TRIGGER delete_tagstree DELETE ON Tags\n"
-                "BEGIN\n"
-                " DELETE FROM Tags\n"
-                "   WHERE id  IN (SELECT id FROM TagsTree WHERE pid=OLD.id);\n"
-                " DELETE FROM TagsTree\n"
-                "   WHERE id IN (SELECT id FROM TagsTree WHERE pid=OLD.id);\n"
-                " DELETE FROM TagsTree\n"
-                "    WHERE id=OLD.id;\n"
-                "END;");
-
-        // trigger: delete from TagsTree if Tag has been deleted
-        execSql("CREATE TRIGGER move_tagstree UPDATE OF pid ON Tags\n"
-                "BEGIN\n"
-                "  DELETE FROM TagsTree\n"
-                "    WHERE\n"
-                "      ((id = OLD.id)\n"
-                "        OR\n"
-                "        id IN (SELECT id FROM TagsTree WHERE pid=OLD.id))\n"
-                "      AND\n"
-                "      pid IN (SELECT pid FROM TagsTree WHERE id=OLD.id);\n"
-                "  INSERT INTO TagsTree\n"
-                "     SELECT NEW.id, NEW.pid\n"
-                "     UNION\n"
-                "     SELECT NEW.id, pid FROM TagsTree WHERE id=NEW.pid\n"
-                "     UNION\n"
-                "     SELECT id, NEW.pid FROM TagsTree WHERE pid=NEW.id\n"
-                "     UNION\n"
-                "     SELECT A.id, B.pid FROM TagsTree A, TagsTree B\n"
-                "        WHERE\n"
-                "        A.pid = NEW.id AND B.id = NEW.pid;\n"
-                "END;");
-    }
-
-    d->valid = true;
 }
 
 AlbumInfo::List AlbumDB::scanAlbums()
@@ -424,23 +196,10 @@ SearchInfo::List AlbumDB::scanSearches()
     return searchList;
 }
 
-void AlbumDB::beginTransaction()
-{
-    execSql( "BEGIN TRANSACTION;" );
-}
-
-void AlbumDB::commitTransaction()
-{
-    execSql( "COMMIT TRANSACTION;" );
-}
-
 int AlbumDB::addAlbum(const QString &albumRoot, const QString& url,
                       const QString& caption,
                       const QDate& date, const QString& collection)
 {
-    if (!d->dataBase)
-        return -1;
-
     execSql( QString("REPLACE INTO Albums (url, date, caption, collection) "
                      "VALUES('%1', '%2', '%3', '%4');")
              .arg(escapeString(url),
@@ -448,7 +207,7 @@ int AlbumDB::addAlbum(const QString &albumRoot, const QString& url,
                   escapeString(caption),
                   escapeString(collection)));
 
-    int id = sqlite3_last_insert_rowid(d->dataBase);
+    int id = d->sql->lastInsertedRow();
     return id;
 }
 
@@ -480,7 +239,7 @@ void AlbumDB::setAlbumIcon(int albumID, Q_LLONG iconID)
              .arg(albumID) );
 }
 
-    
+
 QString AlbumDB::getAlbumIcon(int albumID)
 {
     QStringList values;
@@ -516,9 +275,6 @@ void AlbumDB::deleteAlbum(int albumID)
 int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE,
                     Q_LLONG iconID)
 {
-    if (!d->dataBase)
-        return -1;
-
     if (!execSql( QString("INSERT INTO Tags (pid, name) "
                           "VALUES( %1, '%2')")
                   .arg(parentTagID)
@@ -527,7 +283,7 @@ int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE
         return -1;
     }
 
-    int id = sqlite3_last_insert_rowid(d->dataBase);
+    int id = d->sql->lastInsertedRow();
 
     if (!iconKDE.isEmpty())
     {
@@ -614,20 +370,17 @@ void AlbumDB::setTagParentID(int tagID, int newParentTagID)
 
 int AlbumDB::addSearch(const QString& name, const KURL& url)
 {
-    if (!d->dataBase)
-    return -1;
-
     QString str("INSERT INTO Searches (name, url) \n"
                 "VALUES('$$@@$$', '$$##$$');");
     str.replace("$$@@$$", escapeString(name));
     str.replace("$$##$$", escapeString(url.url()));
-    
+
     if (!execSql(str))
     {
-    return -1;
+        return -1;
     }
 
-    return sqlite3_last_insert_rowid(d->dataBase);
+    return d->sql->lastInsertedRow();
 }
 
 void AlbumDB::updateSearch(int searchID, const QString& name,
@@ -672,84 +425,12 @@ QString AlbumDB::getSetting(const QString& keyword)
 bool AlbumDB::execSql(const QString& sql, QStringList* const values,
                       QString *errMsg, bool debug)
 {
-    if ( debug )
-        DDebug() << "SQL-query: " << sql << endl;
-
-    if ( !d->dataBase )
-    {
-        DWarning() << k_funcinfo << "SQLite pointer == NULL"
-                    << endl;
-        if (errMsg)
-        {
-            *errMsg = QString::fromLatin1("SQLite database not open");
-        }
-        return false;
-    }
-
-    const char*   tail;
-    sqlite3_stmt* stmt;
-    int           error;
-
-    //compile SQL program to virtual machine
-    error = sqlite3_prepare(d->dataBase, sql.utf8(), -1, &stmt, &tail);
-    if ( error != SQLITE_OK )
-    {
-        DWarning() << k_funcinfo
-                    << "sqlite_compile error: "
-                    << sqlite3_errmsg(d->dataBase)
-                    << " on query: "
-                    << sql << endl;
-        if (errMsg)
-        {
-            *errMsg = QString::fromLatin1("sqlite_compile error: ") +
-                      QString::fromLatin1(sqlite3_errmsg(d->dataBase)) +
-                      QString::fromLatin1(" on query: ") +
-                      sql;
-        }
-        return false;
-    }
-
-    int cols = sqlite3_column_count(stmt);
-
-    while ( true )
-    {
-        error = sqlite3_step( stmt );
-
-        if ( error == SQLITE_DONE || error == SQLITE_ERROR )
-            break;
-
-        //iterate over columns
-        for ( int i = 0; values && i < cols; i++ )
-        {
-            *values << QString::fromUtf8( (const char*)sqlite3_column_text( stmt, i ) );
-        }
-    }
-
-    sqlite3_finalize( stmt );
-
-    if ( error != SQLITE_DONE )
-    {
-        DWarning() << "sqlite_step error: "
-                    << sqlite3_errmsg( d->dataBase )
-                    << " on query: "
-                    << sql << endl;
-        if (errMsg)
-        {
-            *errMsg = QString::fromLatin1("sqlite_step error: ") +
-                      QString::fromLatin1(sqlite3_errmsg(d->dataBase)) +
-                      QString::fromLatin1(" on query: ") +
-                      sql;
-        }
-        return false;
-    }
-
-    return true;
+    return d->sql->execSql(sql, values, errMsg, debug);
 }
 
 QString AlbumDB::escapeString(QString str) const
 {
-    str.replace( "'", "''" );
-    return str;
+    return d->sql->escapeString(str);
 }
 
 QString AlbumDB::getItemCaption(Q_LLONG imageID)
@@ -1066,7 +747,7 @@ int AlbumDB::getAlbumForPath(const QString &albumRoot, const QString& folder, bo
                           "VALUES ('%1','%2')")
                  .arg(escapeString(folder),
                       QDateTime::currentDateTime().toString(Qt::ISODate)) );
-        albumID = sqlite3_last_insert_rowid(d->dataBase);
+        albumID = d->sql->lastInsertedRow();
     } else
         albumID = values[0].toInt();
 
@@ -1088,7 +769,7 @@ Q_LLONG AlbumDB::addItem(int albumID,
                    escapeString(name),
                    QString::number(albumID)) );
 
-    Q_LLONG item = sqlite3_last_insert_rowid(d->dataBase);
+    Q_LLONG item = d->sql->lastInsertedRow();
 
     // Set Rating value to item in database.
 
@@ -1583,7 +1264,7 @@ int AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
              .arg(QString::number(dstAlbumID), escapeString(dstName),
                   QString::number(srcId)) );
 
-    int dstId = sqlite3_last_insert_rowid(d->dataBase);
+    int dstId = d->sql->lastInsertedRow();
 
     // copy tags
     execSql( QString("INSERT INTO ImageTags (imageid, tagid) "
@@ -1625,11 +1306,6 @@ bool AlbumDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)
                          QString( " WHERE id=%1" )
                          .arg(dstAlbumID) );
     return true;
-}
-
-Q_LLONG AlbumDB::lastInsertedRow()
-{
-    return sqlite3_last_insert_rowid(d->dataBase);    
 }
 
 }  // namespace Digikam

@@ -21,6 +21,7 @@
 #include <qmutex.h>
 
 #include "albumdb.h"
+#include "databasebackend.h"
 #include "databaseaccess.h"
 
 namespace Digikam
@@ -29,9 +30,13 @@ namespace Digikam
 class DatabaseAccessStaticPriv
 {
 public:
-    DatabaseAccessStaticPriv() : db(0) {};
+    DatabaseAccessStaticPriv()
+    : db(0), mutex(true) // create a recursive mutex
+    {
+    };
     ~DatabaseAccessStaticPriv() {};
 
+    DatabaseBackend *backend;
     AlbumDB *db;
     DatabaseParameters parameters;
     QMutex mutex;
@@ -43,9 +48,11 @@ DatabaseAccessStaticPriv *DatabaseAccess::d = 0;
 DatabaseAccess::DatabaseAccess()
 {
     d->mutex.lock();
-    if (!d->db->isOpen())
+    if (!d->backend->isReady())
     {
-        d->db->open(d->parameters);
+        if (!d->backend->isOpen())
+            d->backend->open(d->parameters);
+        d->backend->initSchema();
     }
 }
 
@@ -54,9 +61,14 @@ DatabaseAccess::~DatabaseAccess()
     d->mutex.unlock();
 }
 
-AlbumDB *DatabaseAccess::db()
+AlbumDB *DatabaseAccess::db() const
 {
     return d->db;
+}
+
+DatabaseBackend *DatabaseAccess::backend() const
+{
+    return d->backend;
 }
 
 DatabaseParameters DatabaseAccess::parameters()
@@ -69,7 +81,6 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
     if (!d)
     {
         d = new DatabaseAccessStaticPriv();
-        d->db = new AlbumDB();
     }
 
     QMutexLocker lock(&d->mutex);
@@ -77,10 +88,18 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
     if (d->parameters == parameters)
         return;
 
-    if (d->db->isOpen())
-        d->db->close();
+    if (d->backend && d->backend->isOpen())
+        d->backend->close();
 
     d->parameters = parameters;
+
+    if (!d->backend || !d->backend->isCompatible(parameters))
+    {
+        delete d->db;
+        delete d->backend;
+        d->backend = DatabaseBackend::createBackend(parameters);
+        d->db = new AlbumDB(d->backend);
+    }
 
     //TODO: remove when albumRoot is removed
     if (d->parameters.databaseType == "QSQLITE")
@@ -89,6 +108,23 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
         url.setPath(d->parameters.databaseName);
         d->albumRoot = url.directory(true);
     }
+}
+
+bool DatabaseAccess::checkReadyForUse()
+{
+    // this code is similar to the constructor
+    QMutexLocker locker(&d->mutex);
+
+    if (!d->backend)
+        return false;
+    if (d->backend->isReady())
+        return true;
+    if (!d->backend->isOpen())
+    {
+        if (!d->backend->open(d->parameters))
+            return false;
+    }
+    return d->backend->initSchema();
 }
 
 QString DatabaseAccess::albumRoot()
@@ -101,8 +137,9 @@ void DatabaseAccess::cleanUpDatabase()
     if (d)
     {
         QMutexLocker lock(&d->mutex);
-        d->db->close();
+        d->backend->close();
         delete d->db;
+        delete d->backend;
     }
     delete d;
     d = 0;

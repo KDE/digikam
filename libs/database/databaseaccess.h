@@ -27,6 +27,7 @@
 namespace Digikam
 {
 
+class DatabaseBackend;
 class AlbumDB;
 class DatabaseAccessStaticPriv;
 
@@ -39,6 +40,11 @@ public:
       * While you hold an instance of DatabaseAccess, the database access is locked for other threads,
       * but _not_ for other processes. This is due to the fact that while databases allow
       * concurrent access (of course), their client libs may not be thread-safe.
+      *
+      * When initializing your application, you need to call two methods:
+      * - in a not-yet-multithreaded context, you need to call setParameters
+      * - to make sure that the database is available and the schema
+      *   is properly initialized, call checkReadyForUse()
       */
 
     /**
@@ -50,9 +56,14 @@ public:
     ~DatabaseAccess();
 
     /**
-      * Retrieve a pointer to the database (this is what you want)
+      * Retrieve a pointer to the album database
       */
-    AlbumDB *db();
+    AlbumDB *db() const;
+
+    /**
+      * Retrieve a pointer to the database backend
+      */
+    DatabaseBackend *backend() const;
 
     /**
       * Return the default parameters
@@ -70,6 +81,15 @@ public:
       * i.e. when the first DatabaseAccess object is constructed.
       */
     static void setParameters(const DatabaseParameters &parameters);
+
+    /**
+      * Convenience method to initialize a database when new parameters have been set:
+      * Make sure that the database is open, that the schema has properly been initialized,
+      * and returns true on success.
+      * If the parameters were not changed, this method has no effect.
+      * @returns if the database is ready for use
+      */
+    static bool checkReadyForUse();
 
     /**
       * Clean up the database access.

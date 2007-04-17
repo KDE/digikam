@@ -53,6 +53,7 @@
 
 #include "albumdb.h"
 #include "databaseaccess.h"
+#include "databasebackend.h"
 #include "dmetadata.h"
 #include "namefilter.h"
 #include "imagelister.h"
@@ -185,10 +186,10 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
 
     {
         DatabaseAccess access;
-        access.db()->execSql(QString("SELECT id, name, datetime FROM Images "
-                                     "WHERE dirid = %1;")
-                                    .arg(albumid),
-                             &values);
+        access.backend()->execSql(QString("SELECT id, name, datetime FROM Images "
+                                          "WHERE dirid = %1;")
+                                         .arg(albumid),
+                                  &values);
         /*
         With rating:
         SELECT Images.id, Images.name, Images.datetime, Albums.url, ImageProperties.value
@@ -240,16 +241,16 @@ void ImageLister::listTag(ImageListerReceiver *receiver,
 
     {
         DatabaseAccess access;
-        access.db()->execSql( QString( "SELECT DISTINCT Images.id, Images.name, Images.dirid, \n "
-                                       "       Images.datetime, Albums.url \n "
-                                       " FROM Images, Albums \n "
-                                       " WHERE Images.id IN \n "
-                                       "       (SELECT imageid FROM ImageTags \n "
-                                       "        WHERE tagid=%1 \n "
-                                       "           OR tagid IN (SELECT id FROM TagsTree WHERE pid=%2)) \n "
-                                       "   AND Albums.id=Images.dirid \n " )
-                               .arg(tagId)
-                               .arg(tagId), &values );
+        access.backend()->execSql( QString( "SELECT DISTINCT Images.id, Images.name, Images.dirid, \n "
+                                            "       Images.datetime, Albums.url \n "
+                                            " FROM Images, Albums \n "
+                                            " WHERE Images.id IN \n "
+                                            "       (SELECT imageid FROM ImageTags \n "
+                                            "        WHERE tagid=%1 \n "
+                                            "           OR tagid IN (SELECT id FROM TagsTree WHERE pid=%2)) \n "
+                                            "   AND Albums.id=Images.dirid \n " )
+                                    .arg(tagId)
+                                    .arg(tagId), &values );
     }
 
     NameFilter nameFilter(filter);
@@ -299,18 +300,18 @@ void ImageLister::listMonth(ImageListerReceiver *receiver,
 
     {
         DatabaseAccess access;
-        access.db()->execSql(QString("SELECT Images.id, Images.name, Images.dirid, \n "
-                                     "  Images.datetime, Albums.url \n "
-                                     "FROM Images, Albums \n "
-                                     "WHERE Images.datetime < '%1-%2-01' \n "
-                                     "AND Images.datetime >= '%3-%4-01' \n "
-                                     "AND Albums.id=Images.dirid \n "
-                                     "ORDER BY Albums.id;")
-                             .arg(date.year(),4)
-                             .arg(moStr2)
-                             .arg(date.year(),4)
-                             .arg(moStr1,2),
-                             &values);
+        access.backend()->execSql(QString("SELECT Images.id, Images.name, Images.dirid, \n "
+                                          "  Images.datetime, Albums.url \n "
+                                          "FROM Images, Albums \n "
+                                          "WHERE Images.datetime < '%1-%2-01' \n "
+                                          "AND Images.datetime >= '%3-%4-01' \n "
+                                          "AND Albums.id=Images.dirid \n "
+                                          "ORDER BY Albums.id;")
+                                  .arg(date.year(),4)
+                                  .arg(moStr2)
+                                  .arg(date.year(),4)
+                                  .arg(moStr1,2),
+                                  &values);
     }
 
     NameFilter nameFilter(filter);
@@ -377,7 +378,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
     bool executionSuccess;
     {
         DatabaseAccess access;
-        executionSuccess = access.db()->execSql(sqlQuery, &values, &errMsg);
+        executionSuccess = access.backend()->execSql(sqlQuery, &values, &errMsg);
     }
 
     if (!executionSuccess)

@@ -8,6 +8,7 @@ libdatabase_la_SOURCES = albumdb.cpp \
 	                 collectionlocation.cpp \
 	                 databaseaccess.cpp \
 	                 databaseattributeswatch.cpp \
+	                 databasebackend.cpp \
 	                 databaseparameters.cpp \
 	                 databasetransaction.cpp\
 	                 databaseurl.cpp \
@@ -16,7 +17,9 @@ libdatabase_la_SOURCES = albumdb.cpp \
 	                 imagelister.cpp \
 	                 imagelisterreceiver.cpp \
 	                 imagequerybuilder.cpp \
-	                 namefilter.cpp
+	                 namefilter.cpp \
+	                 schemaupdater.cpp \
+	                 backendsqlite3.cpp
 
 libdatabase_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 

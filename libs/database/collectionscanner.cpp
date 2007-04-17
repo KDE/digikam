@@ -43,6 +43,7 @@
 #include "albumdb.h"
 #include "collectionmanager.h"
 #include "databaseaccess.h"
+#include "databasebackend.h"
 #include "databasetransaction.h"
 #include "ddebug.h"
 #include "dmetadata.h"
@@ -79,11 +80,11 @@ void CollectionScanner::scanOneAlbum(const QString &albumRoot, const QString &al
 
         {
             DatabaseAccess access;
-            subURL = access.db()->escapeString( subURL);
-            access.db()->execSql( QString("SELECT url FROM Albums WHERE ") +
-                                  QString("url LIKE '") + subURL + QString("%' ") +
-                                  QString("AND url NOT LIKE '") + subURL + QString("%/%' "),
-                                  &currAlbumList );
+            subURL = access.backend()->escapeString( subURL);
+            access.backend()->execSql( QString("SELECT url FROM Albums WHERE ") +
+                                       QString("url LIKE '") + subURL + QString("%' ") +
+                                       QString("AND url NOT LIKE '") + subURL + QString("%/%' "),
+                                       &currAlbumList );
         }
 
         const QFileInfoList* infoList = dir.entryInfoList(QDir::Dirs);
@@ -122,10 +123,10 @@ void CollectionScanner::scanOneAlbum(const QString &albumRoot, const QString &al
 
             {
                 DatabaseAccess access;
-                access.db()->execSql(QString("INSERT INTO Albums (url, date) "
-                                             "VALUES('%1', '%2')")
-                                     .arg(access.db()->escapeString(*it),
-                                          fi.lastModified().date().toString(Qt::ISODate)));
+                access.backend()->execSql(QString("INSERT INTO Albums (url, date) "
+                                                 "VALUES('%1', '%2')")
+                                          .arg(access.backend()->escapeString(*it),
+                                               fi.lastModified().date().toString(Qt::ISODate)));
             }
 
             scanAlbum(albumRoot, *it);
@@ -142,15 +143,15 @@ void CollectionScanner::scanOneAlbum(const QString &albumRoot, const QString &al
 
         {
             DatabaseAccess access;
-            access.db()->execSql(QString("SELECT id FROM Albums WHERE url='%1'")
-                                         .arg(access.db()->escapeString(album)), &values );
+            access.backend()->execSql(QString("SELECT id FROM Albums WHERE url='%1'")
+                                      .arg(access.backend()->escapeString(album)), &values );
             if (values.isEmpty())
                 return;
 
             albumID = values.first().toInt();
 
-            access.db()->execSql( QString("SELECT name FROM Images WHERE dirid=%1")
-                            .arg(albumID), &currItemList );
+            access.backend()->execSql( QString("SELECT name FROM Images WHERE dirid=%1")
+                                       .arg(albumID), &currItemList );
         }
 
         const QFileInfoList* infoList = dir.entryInfoList(QDir::Files);
@@ -197,10 +198,10 @@ void CollectionScanner::removeInvalidAlbums(const QString &albumRoot)
     QStringList urlList;
 
     //Attention: When allowing multiple album roots
-    access.db()->execSql(QString("SELECT url FROM Albums;"),
-                         &urlList);
+    access.backend()->execSql(QString("SELECT url FROM Albums;"),
+                              &urlList);
 
-    access.db()->execSql("BEGIN TRANSACTION");
+    access.backend()->execSql("BEGIN TRANSACTION");
 
     struct stat stbuf;
 
@@ -211,11 +212,11 @@ void CollectionScanner::removeInvalidAlbums(const QString &albumRoot)
             continue;
 
         DDebug() << "Deleted Album: " << *it << endl;
-        access.db()->execSql(QString("DELETE FROM Albums WHERE url='%1'")
-                             .arg(access.db()->escapeString(*it)));
+        access.backend()->execSql(QString("DELETE FROM Albums WHERE url='%1'")
+                                  .arg(access.backend()->escapeString(*it)));
     }
 
-    access.db()->execSql("COMMIT TRANSACTION");
+    access.backend()->execSql("COMMIT TRANSACTION");
 }
 
 

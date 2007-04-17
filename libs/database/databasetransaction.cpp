@@ -20,6 +20,7 @@
 
 #include "albumdb.h"
 #include "databaseaccess.h"
+#include "databasebackend.h"
 #include "databasetransaction.h"
 
 namespace Digikam
@@ -29,25 +30,25 @@ DatabaseTransaction::DatabaseTransaction()
     : m_access(0)
 {
     DatabaseAccess access;
-    access.db()->beginTransaction();
+    access.backend()->beginTransaction();
 }
 
 DatabaseTransaction::DatabaseTransaction(DatabaseAccess *access)
     : m_access(access)
 {
-    m_access->db()->beginTransaction();
+    m_access->backend()->beginTransaction();
 }
 
 DatabaseTransaction::~DatabaseTransaction()
 {
     if (m_access)
     {
-        m_access->db()->commitTransaction();
+        m_access->backend()->commitTransaction();
     }
     else
     {
         DatabaseAccess access;
-        access.db()->commitTransaction();
+        access.backend()->commitTransaction();
     }
 }
 

@@ -41,6 +41,7 @@
 
 #include "albumdb.h"
 #include "databaseaccess.h"
+#include "databasebackend.h"
 #include "ddebug.h"
 #include "imagequerybuilder.h"
 
@@ -227,7 +228,7 @@ QString ImageQueryBuilder::subQuery(enum ImageQueryBuilder::SKey key,
     QString escapedVal;
     {
         DatabaseAccess access;
-        escapedVal = access.db()->escapeString(val);
+        escapedVal = access.backend()->escapeString(val);
     }
 
     switch (key)

@@ -51,6 +51,7 @@ namespace Digikam
 typedef QValueList<int>     IntList;
 typedef QValueList<Q_LLONG> LLongList;
 
+class DatabaseBackend;
 class AlbumDBPriv;
 
 /**
@@ -60,19 +61,6 @@ class AlbumDBPriv;
 class DIGIKAM_EXPORT AlbumDB
 {
 public:
-
-    /**
-     * Check if the database has been opened. This does not mean
-     * that isValid() is true as well
-     * (if the file could be opened, but the schema could not be initialized).
-     */
-    bool isOpen() const;
-
-    /**
-     * Check if the database interface is initialized properly.
-     * @return true if it's ready to use, else false.
-     */
-    bool isValid() const;
 
     /**
      * This adds a keyword-value combination to the database Settings table
@@ -90,34 +78,6 @@ public:
      * @return The values which belongs to the keyword.
      */
     QString getSetting(const QString& keyword);
-
-    /**
-     * This will execute a given SQL statement to the database.
-     * @param sql The SQL statement
-     * @param values This will be filled with the result of the SQL statement
-     * @param debug If true, it will output the SQL statement 
-     * @return It will return if the execution of the statement was succesfull
-     */
-    bool execSql(const QString& sql, QStringList* const values = 0,
-                 QString *errMsg = 0, bool debug = false);
-
-    /**
-     * Escapes text fields. This is needed for all queries to the database
-     * which happens with an argument which is a text field. It makes sure
-     * a ' is replaced with '', as this is needed for sqlite.
-     * @param str String to escape
-     * @return The escaped string
-     */
-    QString escapeString(QString str) const;
-
-    /**
-     * To be used only if you are sure of what you are doing
-     * @return the last inserted row in one the db table.
-     */
-    Q_LLONG lastInsertedRow();
-
-    void beginTransaction();
-    void commitTransaction();
 
     // ----------- Album Listing operations -----------
     /**
@@ -619,16 +579,16 @@ private:
     /**
      * Constructor
      */
-    AlbumDB();
+    AlbumDB(DatabaseBackend *backend);
 
     /**
      * Destructor
      */
     ~AlbumDB();
 
-    bool open(const DatabaseParameters &parameters);
-    void close();
-    void initSchema();
+    bool execSql(const QString& sql, QStringList* const values = 0,
+                 QString *errMsg = 0, bool debug = false);
+    QString escapeString(QString str) const;
 
 private:
 
