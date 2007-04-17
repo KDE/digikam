@@ -240,7 +240,7 @@ void ImageGuideWidget::updatePixmap( void )
         text = i18n("Original");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
         textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + 20));
-        textRect.setSize( QSize(fontRect.width(), fontRect.height() ) );
+        textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
         p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
@@ -258,7 +258,7 @@ void ImageGuideWidget::updatePixmap( void )
             text = i18n("Target");
             fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
             textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + 20));
-            textRect.setSize( QSize(fontRect.width(), fontRect.height() ) );
+            textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
             p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
             p.drawRect(textRect);
             p.drawText(textRect, Qt::AlignCenter, text);
@@ -317,7 +317,7 @@ void ImageGuideWidget::updatePixmap( void )
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
         textRect.setTopLeft(QPoint(d->rect.x() + d->rect.width()/2 + 20,
                                    d->rect.y() + 20));
-        textRect.setSize( QSize(fontRect.width(), fontRect.height()) );
+        textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
         p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
@@ -325,7 +325,7 @@ void ImageGuideWidget::updatePixmap( void )
         text = i18n("Original");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
         textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + 20));
-        textRect.setSize( QSize(fontRect.width(), fontRect.height() ) );
+        textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
         p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
@@ -382,7 +382,7 @@ void ImageGuideWidget::updatePixmap( void )
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
         textRect.setTopLeft(QPoint(d->rect.x() + 20,
                                    d->rect.y() + d->rect.height()/2 + 20));
-        textRect.setSize( QSize(fontRect.width(), fontRect.height()) );
+        textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
         p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
@@ -390,7 +390,7 @@ void ImageGuideWidget::updatePixmap( void )
         text = i18n("Original");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
         textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + 20));
-        textRect.setSize( QSize(fontRect.width(), fontRect.height() ) );
+        textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
         p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
