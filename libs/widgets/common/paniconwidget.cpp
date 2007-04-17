@@ -55,12 +55,12 @@ public:
 
     bool         moveSelection;
 
-    int          xpos;
-    int          ypos;
+    int    xpos;
+    int    ypos;
 
-    QRect        regionSelection;         // Original size image selection.
+    QRect  regionSelection;         // Original size image selection.
 
-    QImage       image;
+    QImage image;
 };
 
 PanIconWidget::PanIconWidget(QWidget *parent, WFlags flags)
@@ -236,14 +236,55 @@ void PanIconWidget::hideEvent(QHideEvent *e)
 
 void PanIconWidget::mousePressEvent ( QMouseEvent * e )
 {
-    if ( e->button() == Qt::LeftButton &&
+    if ( (e->button() == Qt::LeftButton || e->button() == Qt::MidButton) &&
          m_localRegionSelection.contains( e->x(), e->y() ) )
     {
-       d->xpos = e->x();
-       d->ypos = e->y();
-       d->moveSelection = true;
-       setCursor( KCursor::sizeAllCursor() );           
-       emit signalSelectionTakeFocus();
+        d->xpos = e->x();
+        d->ypos = e->y();
+        d->moveSelection = true;
+        setCursor( KCursor::sizeAllCursor() );           
+        emit signalSelectionTakeFocus();
+    }
+}
+
+void PanIconWidget::mouseMoveEvent ( QMouseEvent * e )
+{
+    if ( d->moveSelection && 
+         (e->state() == Qt::LeftButton || e->state() == Qt::MidButton) )
+    {
+        int newxpos = e->x();
+        int newypos = e->y();
+    
+        m_localRegionSelection.moveBy (newxpos - d->xpos, newypos - d->ypos);
+        
+        d->xpos = newxpos;
+        d->ypos = newypos;
+                
+        // Perform normalization of selection area.
+            
+        if (m_localRegionSelection.left() < m_rect.left())
+            m_localRegionSelection.moveLeft(m_rect.left());
+                
+        if (m_localRegionSelection.top() < m_rect.top())
+            m_localRegionSelection.moveTop(m_rect.top());
+                
+        if (m_localRegionSelection.right() > m_rect.right())
+            m_localRegionSelection.moveRight(m_rect.right());
+                
+        if (m_localRegionSelection.bottom() > m_rect.bottom())
+            m_localRegionSelection.moveBottom(m_rect.bottom());
+        
+        updatePixmap();
+        repaint(false);
+        regionSelectionMoved(false);
+        return;
+    }        
+    else 
+    {
+        if ( m_localRegionSelection.contains( e->x(), e->y() ) )
+            setCursor( KCursor::handCursor() );           
+        else
+            setCursor( KCursor::arrowCursor() );           
     }
 }
 
@@ -251,49 +292,9 @@ void PanIconWidget::mouseReleaseEvent ( QMouseEvent * )
 {
     if ( d->moveSelection )
     {    
-       d->moveSelection = false;
-       setCursor( KCursor::arrowCursor() );           
-       regionSelectionMoved(true);
-    }
-}
-
-void PanIconWidget::mouseMoveEvent ( QMouseEvent * e )
-{
-    if ( d->moveSelection && e->state() == Qt::LeftButton )
-    {
-       int newxpos = e->x();
-       int newypos = e->y();
-
-       m_localRegionSelection.moveBy (newxpos - d->xpos, newypos - d->ypos);
-     
-       d->xpos = newxpos;
-       d->ypos = newypos;
-              
-       // Perform normalization of selection area.
-          
-       if (m_localRegionSelection.left() < m_rect.left())
-          m_localRegionSelection.moveLeft(m_rect.left());
-            
-       if (m_localRegionSelection.top() < m_rect.top())
-          m_localRegionSelection.moveTop(m_rect.top());
-            
-       if (m_localRegionSelection.right() > m_rect.right())
-          m_localRegionSelection.moveRight(m_rect.right());
-            
-       if (m_localRegionSelection.bottom() > m_rect.bottom())
-          m_localRegionSelection.moveBottom(m_rect.bottom());
-       
-       updatePixmap();
-       repaint(false);
-       regionSelectionMoved(false);
-       return;
-    }        
-    else 
-    {
-       if ( m_localRegionSelection.contains( e->x(), e->y() ) )
-           setCursor( KCursor::handCursor() );           
-       else
-           setCursor( KCursor::arrowCursor() );           
+        d->moveSelection = false;
+        setCursor( KCursor::arrowCursor() );           
+        regionSelectionMoved(true);
     }
 }
 
