@@ -311,7 +311,7 @@ void ImageRegionWidget::viewportPaintExtraData()
     }
 }
 
-void ImageRegionWidget::setCenterContentsPosition(void)
+void ImageRegionWidget::setCenterContentsPosition()
 {
     center(contentsWidth()/2, contentsHeight()/2);    
     slotZoomFactorChanged();
@@ -328,12 +328,12 @@ void ImageRegionWidget::setContentsPosition(int x, int y, bool targetDone)
        slotZoomFactorChanged();
 }
 
-void ImageRegionWidget::backupPixmapRegion(void)
+void ImageRegionWidget::backupPixmapRegion()
 {
     d->pixmapRegion = QPixmap();
 }
 
-void ImageRegionWidget::restorePixmapRegion(void)
+void ImageRegionWidget::restorePixmapRegion()
 {
     m_movingInProgress = true;
     viewport()->repaint(false);
@@ -352,12 +352,12 @@ void ImageRegionWidget::updatePreviewImage(DImg *img)
     d->pixmapRegion = d->iface->convertToPixmap(image);
 }
 
-DImg ImageRegionWidget::getImageRegionImage(void)
+DImg ImageRegionWidget::getImageRegionImage()
 {
     return (d->image.copy(getImageRegionToRender()));
 }
 
-QRect ImageRegionWidget::getImageRegionToRender(void)
+QRect ImageRegionWidget::getImageRegionToRender()
 {
     QRect r = getLocalImageRegionToRender();
 
@@ -370,18 +370,18 @@ QRect ImageRegionWidget::getImageRegionToRender(void)
     return (rect);
 }
 
-QRect ImageRegionWidget::getLocalImageRegionToRender(void)
+QRect ImageRegionWidget::getLocalImageRegionToRender()
 {
     QRect region;
     
     if (d->separateView == SeparateViewVertical)
     {
-        region = QRect((int)floor(contentsX()+visibleWidth()/2.0), contentsY(), 
+        region = QRect((int)ceilf(contentsX()+visibleWidth()/2.0), contentsY(), 
                        (int)ceilf(visibleWidth()/2.0),             visibleHeight());
     }
     else if (d->separateView == SeparateViewHorizontal)
     {
-        region = QRect(contentsX(),    (int)floor(contentsY()+visibleHeight()/2.0), 
+        region = QRect(contentsX(),    (int)ceilf(contentsY()+visibleHeight()/2.0), 
                        visibleWidth(), (int)ceilf(visibleHeight()/2.0));
     }
     else if (d->separateView == SeparateViewDuplicateVert)
@@ -403,7 +403,7 @@ QRect ImageRegionWidget::getLocalImageRegionToRender(void)
     return (region);
 }
 
-QRect ImageRegionWidget::getLocalTargetImageRegion(void)
+QRect ImageRegionWidget::getLocalTargetImageRegion()
 {
     QRect region = getLocalImageRegionToRender();
     
