@@ -290,19 +290,23 @@ void ImageRegionWidget::viewportPaintExtraData()
                 
                 if ( getImageRegionToRender().contains(pt) )
                 {
+                    int x = (int)(((double)pt.x() * tileSize()) / floor(tileSize() / zoomFactor()));
+                    int y = (int)(((double)pt.y() * tileSize()) / floor(tileSize() / zoomFactor()));
+
+                    QPoint hp(contentsToViewport(QPoint(x, y)));
                     p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
                     ptArea.setSize(QSize(12, 12));
-                    ptArea.moveCenter(QPoint((int)(pt.x() * zoomFactor()), (int)(pt.y() * zoomFactor())));
+                    ptArea.moveCenter(hp);
                     p.drawEllipse(ptArea);
                     ptArea.setSize(QSize(8, 8));
-                    ptArea.moveCenter(QPoint((int)(pt.x() * zoomFactor()), (int)(pt.y() * zoomFactor())));
+                    ptArea.moveCenter(hp);
                     p.drawEllipse(ptArea);
                     p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
                     ptArea.setSize(QSize(10, 10));
-                    ptArea.moveCenter(QPoint((int)(pt.x() * zoomFactor()), (int)(pt.y() * zoomFactor())));
+                    ptArea.moveCenter(hp);
                     p.drawEllipse(ptArea);
                     ptArea.setSize(QSize(6, 6));
-                    ptArea.moveCenter(QPoint((int)(pt.x() * zoomFactor()), (int)(pt.y() * zoomFactor())));
+                    ptArea.moveCenter(hp);
                     p.drawEllipse(ptArea);
                 }
             }
