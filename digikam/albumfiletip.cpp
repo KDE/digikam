@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Caulier Gilles 
+ *          Caulier Gilles <caulier dot gilles at gmail dot com> 
  * Date   : 2004-08-19
  * Description : Album item file tip adapted from kfiletip 
  *               (konqueror - konq_iconviewwidget.cc)
@@ -8,7 +8,7 @@
  * Copyright (C) 1998-1999 by Torben Weis <weis@kde.org>
  * Copyright (C) 2000-2002 by David Faure <david@mandrakesoft.com>
  * Copyright (C) 2004-2005 by Renchi Raju 
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2007 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -99,11 +99,11 @@ AlbumFileTip::AlbumFileTip(AlbumIconView* view)
     setFrameStyle(QFrame::Plain | QFrame::Box);
     setLineWidth(1);
 
-    QVBoxLayout *layout = new QVBoxLayout(this, TIPBORDER, 0);
+    QVBoxLayout *layout = new QVBoxLayout(this, TIPBORDER+1, 0);
 
     d->label = new QLabel(this);
     d->label->setMargin(0);
-    d->label->setAlignment(Qt::AlignAuto | Qt::AlignVCenter);
+    d->label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
     layout->addWidget(d->label);
     layout->setResizeMode(QLayout::Fixed);
