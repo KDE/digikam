@@ -382,8 +382,8 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
 
                     pix->fill(d->bgColor);
 
-                    sx = (int)floor((double)i  / d->tileSize ) * step;
-                    sy = (int)floor((double)j  / d->tileSize ) * step;
+                    sx = (int)floor((double)i / d->tileSize ) * step;
+                    sy = (int)floor((double)j / d->tileSize ) * step;
                     sw = step;
                     sh = step;
 
