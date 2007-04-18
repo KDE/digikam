@@ -282,7 +282,7 @@ void ImageRegionWidget::viewportPaintExtraData()
         if (!d->hightlightPoints.isEmpty())
         {
             QPoint pt;
-            QRect  ptArea;
+            QRect  hpArea;
             
             for (uint i = 0 ; i < d->hightlightPoints.count() ; i++)
             {
@@ -294,20 +294,28 @@ void ImageRegionWidget::viewportPaintExtraData()
                     int y = (int)(((double)pt.y() * tileSize()) / floor(tileSize() / zoomFactor()));
 
                     QPoint hp(contentsToViewport(QPoint(x, y)));
-                    p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
-                    ptArea.setSize(QSize(12, 12));
-                    ptArea.moveCenter(hp);
-                    p.drawEllipse(ptArea);
-                    ptArea.setSize(QSize(8, 8));
-                    ptArea.moveCenter(hp);
-                    p.drawEllipse(ptArea);
-                    p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
-                    ptArea.setSize(QSize(10, 10));
-                    ptArea.moveCenter(hp);
-                    p.drawEllipse(ptArea);
-                    ptArea.setSize(QSize(6, 6));
-                    ptArea.moveCenter(hp);
-                    p.drawEllipse(ptArea);
+                    hpArea.setSize(QSize((int)(16*zoomFactor()), (int)(16*zoomFactor())));
+                    hpArea.moveCenter(hp);
+
+                    p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
+                    p.drawLine(hp.x(), hpArea.y(), 
+                               hp.x(), hp.y()-(int)(3*zoomFactor()));
+                    p.drawLine(hp.x(), hp.y()+(int)(3*zoomFactor()), 
+                               hp.x(), hpArea.bottom());
+                    p.drawLine(hpArea.x(),                   hp.y(), 
+                               hp.x()-(int)(3*zoomFactor()), hp.y());
+                    p.drawLine(hp.x()+(int)(3*zoomFactor()), hp.y(), 
+                               hpArea.right(),                hp.y());
+
+                    p.setPen(QPen(Qt::red, 2, Qt::DotLine));
+                    p.drawLine(hp.x(), hpArea.y(), 
+                               hp.x(), hp.y()-(int)(3*zoomFactor()));
+                    p.drawLine(hp.x(), hp.y()+(int)(3*zoomFactor()), 
+                               hp.x(), hpArea.bottom());
+                    p.drawLine(hpArea.x(),                   hp.y(), 
+                               hp.x()-(int)(3*zoomFactor()), hp.y());
+                    p.drawLine(hp.x()+(int)(3*zoomFactor()), hp.y(), 
+                               hpArea.right(),                hp.y());
                 }
             }
         }
