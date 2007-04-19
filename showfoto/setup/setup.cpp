@@ -33,6 +33,7 @@
 
 // Local includes.
 
+#include "setuptooltip.h"
 #include "setupeditor.h"
 #include "setupdcraw.h"
 #include "setupiofiles.h"
@@ -51,11 +52,13 @@ public:
     SetupPrivate()
     {
         editorPage      = 0;
+        toolTipPage     = 0;
         dcrawPage       = 0;
         iofilesPage     = 0;
         slideshowPage   = 0;
         iccPage         = 0;
         page_editor     = 0;
+        page_toolTip    = 0;
         page_dcraw      = 0;
         page_iofiles    = 0;
         page_slideshow  = 0;
@@ -63,12 +66,14 @@ public:
     }
 
     QFrame                   *page_editor;
+    QFrame                   *page_toolTip;
     QFrame                   *page_dcraw;
     QFrame                   *page_iofiles;
     QFrame                   *page_slideshow;
     QFrame                   *page_icc;
     
     SetupEditor              *editorPage;
+    SetupToolTip             *toolTipPage;
 
     Digikam::SetupDcraw      *dcrawPage;
     Digikam::SetupIOFiles    *iofilesPage;
@@ -86,6 +91,10 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_editor = addPage(i18n("General"), i18n("General Settings"),
                              BarIcon("showfoto", KIcon::SizeMedium));
     d->editorPage = new SetupEditor(d->page_editor);
+
+    d->page_toolTip = addPage(i18n("Tool Tip"), i18n("Thumbbar Items Tool Tip Settings"),
+                             BarIcon("filetypes", KIcon::SizeMedium));
+    d->toolTipPage = new SetupToolTip(d->page_toolTip);
 
     d->page_dcraw = addPage(i18n("RAW decoding"), i18n("RAW Files Decoding Settings"),
                               BarIcon("kdcraw", KIcon::SizeMedium));
@@ -130,6 +139,7 @@ Setup::~Setup()
 void Setup::slotOkClicked()
 {
     d->editorPage->applySettings();
+    d->toolTipPage->applySettings();
     d->dcrawPage->applySettings();
     d->iofilesPage->applySettings();
     d->slideshowPage->applySettings();

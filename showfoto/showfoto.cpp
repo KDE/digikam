@@ -514,9 +514,25 @@ void ShowFoto::applySettings()
     m_canvas->setExifOrient(exifRotate);
     d->thumbBar->setExifRotate(exifRotate);
 
-    m_setExifOrientationTag = config->readBoolEntry("EXIF Set Orientation", true);
+    m_setExifOrientationTag   = config->readBoolEntry("EXIF Set Orientation", true);
     
     d->fullScreenHideThumbBar = config->readBoolEntry("FullScreenHideThumbBar", true);
+
+    Digikam::ThumbBarToolTipSettings settings;
+    settings.showToolTips   = config->readBoolEntry("Show ToolTips", true);
+    settings.showFileName   = config->readBoolEntry("ToolTips Show File Name", true);
+    settings.showFileDate   = config->readBoolEntry("ToolTips Show File Date", false);
+    settings.showFileSize   = config->readBoolEntry("ToolTips Show File Size", false);
+    settings.showImageType  = config->readBoolEntry("ToolTips Show Image Type", false);
+    settings.showImageDim   = config->readBoolEntry("ToolTips Show Image Dim", true);
+    settings.showPhotoMake  = config->readBoolEntry("ToolTips Show Photo Make", true);
+    settings.showPhotoDate  = config->readBoolEntry("ToolTips Show Photo Date", true);
+    settings.showPhotoFocal = config->readBoolEntry("ToolTips Show Photo Focal", true);
+    settings.showPhotoExpo  = config->readBoolEntry("ToolTips Show Photo Expo", true);
+    settings.showPhotoMode  = config->readBoolEntry("ToolTips Show Photo Mode", true);
+    settings.showPhotoFlash = config->readBoolEntry("ToolTips Show Photo Flash", false);
+    settings.showPhotoWB    = config->readBoolEntry("ToolTips Show Photo WB", false);
+    d->thumbBar->setToolTipSettings(settings);
 }
 
 void ShowFoto::slotOpenFile()

@@ -45,6 +45,44 @@ class ThumbBarItem;
 class ThumbBarViewPriv;
 class ThumbBarItemPriv;
 
+class DIGIKAM_EXPORT ThumbBarToolTipSettings 
+{
+public:
+
+    ThumbBarToolTipSettings()
+    {
+        showToolTips   = true;
+        showFileName   = true;
+        showFileDate   = false;
+        showFileSize   = false;
+        showImageType  = false;
+        showImageDim   = true;
+        showPhotoMake  = true;
+        showPhotoDate  = true;
+        showPhotoFocal = true;
+        showPhotoExpo  = true;
+        showPhotoMode  = true;
+        showPhotoFlash = false;
+        showPhotoWB    = false;
+    };
+   
+    bool showToolTips;
+    bool showFileName;
+    bool showFileDate;
+    bool showFileSize;
+    bool showImageType;
+    bool showImageDim;
+    bool showPhotoMake;
+    bool showPhotoDate;
+    bool showPhotoFocal;
+    bool showPhotoExpo;
+    bool showPhotoMode;
+    bool showPhotoFlash;
+    bool showPhotoWB;
+};
+
+// -------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT ThumbBarView : public QScrollView
 {
     Q_OBJECT
@@ -59,7 +97,8 @@ public:
 
 public:
 
-    ThumbBarView(QWidget* parent, int orientation=Vertical, bool exifRotate=false);
+    ThumbBarView(QWidget* parent, int orientation=Vertical, bool exifRotate=false,
+                 ThumbBarToolTipSettings settings=ThumbBarToolTipSettings());
     ~ThumbBarView();
 
     int  countItems();
@@ -74,6 +113,10 @@ public:
     void setSelected(ThumbBarItem* item);
 
     void setExifRotate(bool exifRotate);
+    bool getExifRotate();
+
+    void setToolTipSettings(const ThumbBarToolTipSettings &settings);
+    ThumbBarToolTipSettings& getToolTipSettings();
 
     ThumbBarItem* firstItem() const;
     ThumbBarItem* lastItem()  const;
@@ -121,11 +164,11 @@ class DIGIKAM_EXPORT ThumbBarItem
 {
 public:
 
-    ThumbBarItem(ThumbBarView* view, const KURL& url);
+    ThumbBarItem(ThumbBarView *view, const KURL& url);
     ~ThumbBarItem();
 
-    KURL url() const;
-    
+    KURL          url() const;
+
     ThumbBarItem* next() const;
     ThumbBarItem* prev() const;
     int           position() const;
@@ -146,15 +189,19 @@ class DIGIKAM_EXPORT ThumbBarToolTip : public QToolTip
 {
 public:
 
-    ThumbBarToolTip(ThumbBarView* parent);
+    ThumbBarToolTip(ThumbBarView *parent);
 
 protected:
     
-    void maybeTip(const QPoint& pos);
+    virtual void maybeTip(const QPoint& pos);
 
 private:
 
-    ThumbBarView* m_view;
+    QString breakString(const QString& input);
+
+private: 
+
+    ThumbBarView *m_view;
 };
 
 }  // NameSpace Digikam
