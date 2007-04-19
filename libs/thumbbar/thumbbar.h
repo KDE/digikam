@@ -25,6 +25,7 @@
 
 // Qt includes.
 
+#include <qstring.h>
 #include <qscrollview.h>
 #include <qtooltip.h>
 
@@ -193,15 +194,25 @@ public:
 
 protected:
     
-    virtual void maybeTip(const QPoint& pos);
+    QString       m_headBeg;
+    QString       m_headEnd;
+    QString       m_cellBeg;
+    QString       m_cellMid;
+    QString       m_cellEnd;
+    QString       m_cellSpecBeg;
+    QString       m_cellSpecMid;
+    QString       m_cellSpecEnd;
+
+    ThumbBarView *m_view;
+
+protected:
+
+    virtual QString tipContent(ThumbBarItem* item);
 
 private:
 
+    void maybeTip(const QPoint& pos);
     QString breakString(const QString& input);
-
-private: 
-
-    ThumbBarView *m_view;
 };
 
 }  // NameSpace Digikam
