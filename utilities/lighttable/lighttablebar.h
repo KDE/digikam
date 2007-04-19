@@ -31,6 +31,7 @@ namespace Digikam
 
 class ImageInfo;
 class LightTableBarItem;
+class LightTableBarToolTip;
 class LightTableBarPriv;
 class LightTableBarItemPriv;
 
@@ -58,7 +59,9 @@ private slots:
 
 private:
 
-    void setupToolTip();
+    LightTableBarToolTip *m_toolTip;
+
+private:
 
     friend class LightTableBarItem;
 };
@@ -91,7 +94,7 @@ public:
 
 private:
 
-    QString tipContent(ThumbBarItem* item);
+    QString tipContentExtraData(ThumbBarItem* item);
 };
 
 }  // NameSpace Digikam

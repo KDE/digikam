@@ -103,7 +103,7 @@ public:
                  ThumbBarToolTipSettings settings=ThumbBarToolTipSettings());
     ~ThumbBarView();
 
-    int  countItems();
+    int countItems();
     KURL::List itemsURLs();
     
     void clear(bool updateView=true);
@@ -132,12 +132,6 @@ protected:
     void resizeEvent(QResizeEvent* e);
     void viewportPaintEvent(QPaintEvent* e);
     void contentsMousePressEvent(QMouseEvent* e);
-
-    virtual void setupToolTip();
-
-protected:
-
-    ThumbBarToolTip *m_toolTip;
 
 private:
 
@@ -198,9 +192,12 @@ class DIGIKAM_EXPORT ThumbBarToolTip : public QToolTip
 public:
 
     ThumbBarToolTip(ThumbBarView *parent);
+    ~ThumbBarToolTip(){};
 
 protected:
     
+    const uint    m_maxStringLen;
+
     QString       m_headBeg;
     QString       m_headEnd;
     QString       m_cellBeg;
@@ -215,11 +212,13 @@ protected:
 protected:
 
     QString breakString(const QString& input);
-    virtual QString tipContent(ThumbBarItem* item);
+
+    virtual QString tipContentExtraData(ThumbBarItem*){ return QString(); };
 
 private:
-
+     
     void maybeTip(const QPoint& pos);
+    QString tipContent(ThumbBarItem* item);
 };
 
 }  // NameSpace Digikam

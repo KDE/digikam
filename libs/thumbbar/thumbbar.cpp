@@ -20,8 +20,6 @@
  * 
  * ============================================================ */
 
-#define MAXSTRINGLEN 30 
-
 // C Ansi includes.
 
 extern "C"
@@ -81,6 +79,7 @@ public:
         margin(5)
     {
         exifRotate = false;
+        toolTip    = 0;
         firstItem  = 0;
         lastItem   = 0;
         currItem   = 0;
@@ -109,6 +108,8 @@ public:
     QGuardedPtr<ThumbnailJob>  thumbJob;
 
     ThumbBarToolTipSettings    toolTipSettings;
+
+    ThumbBarToolTip           *toolTip;
 };
 
 // -------------------------------------------------------------------------
@@ -148,10 +149,8 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     d->orientation     = orientation;
     d->exifRotate      = exifRotate;
     d->toolTipSettings = settings;
-
-    setupToolTip();
-
-    d->timer = new QTimer(this);
+    d->toolTip         = new ThumbBarToolTip(this);
+    d->timer           = new QTimer(this);
     
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotUpdate()));
@@ -181,13 +180,8 @@ ThumbBarView::~ThumbBarView()
     clear(false);
         
     delete d->timer;
-    delete m_toolTip;
+    delete d->toolTip;
     delete d;
-}
-
-void ThumbBarView::setupToolTip()
-{
-    m_toolTip = new ThumbBarToolTip(this);
 }
 
 void ThumbBarView::resizeEvent(QResizeEvent* e)
@@ -806,7 +800,7 @@ void ThumbBarItem::repaint()
 // -------------------------------------------------------------------------
 
 ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent)
-               : QToolTip(parent->viewport()), m_view(parent)
+               : QToolTip(parent->viewport()), m_maxStringLen(30), m_view(parent)
 {
     m_headBeg = QString("<tr bgcolor=\"orange\"><td colspan=\"2\">"
                         "<nobr><font size=\"-1\" color=\"black\"><b>");
@@ -830,13 +824,11 @@ void ThumbBarToolTip::maybeTip(const QPoint& pos)
     ThumbBarItem* item = m_view->findItem( m_view->viewportToContents(pos) );
     if (!item) return;
 
-    QString tipText;
-    if (!m_view->getToolTipSettings().showToolTips) 
-        return;
-    else 
-        tipText = tipContent(item);
+    if (!m_view->getToolTipSettings().showToolTips) return;
 
-    tipText += "</table>";
+    QString tipText = tipContent(item);
+    tipText.append(tipContentExtraData(item));
+    tipText.append("</table>");
 
     QRect r(item->rect());
     r = QRect( m_view->contentsToViewport(r.topLeft()), r.size() );
@@ -950,7 +942,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
             {
                 str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? unavailable : photoInfo.make)
                                         .arg(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
-                if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 metaStr += m_cellBeg + i18n("Make/Model:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
             }
 
@@ -959,7 +951,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
                 if (photoInfo.dateTime.isValid())
                 {
                     str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
-                    if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+                    if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                     metaStr += m_cellBeg + i18n("Created:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
                 }
                 else
@@ -975,7 +967,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
                 else 
                     str += QString(" / %1").arg(i18n("%1 (35mm: %2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm));
 
-                if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 metaStr += m_cellBeg + i18n("Aperture/Focal:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
             }
 
@@ -983,7 +975,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
             {
                 str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime)
                                         .arg(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO").arg(photoInfo.sensitivity));
-                if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 metaStr += m_cellBeg + i18n("Exposure/Sensitivity:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
             }
 
@@ -998,21 +990,21 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
                     str = photoInfo.exposureProgram;
                 else 
                     str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
-                if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 metaStr += m_cellBeg + i18n("Mode/Program:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
             }
 
             if (settings.showPhotoFlash)
             {
                 str = photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash;
-                if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 metaStr += m_cellBeg + i18n("Flash:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
             }
 
             if (settings.showPhotoWB)
             {
                 str = photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance;
-                if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 metaStr += m_cellBeg + i18n("White Balance:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
             }
 
@@ -1027,7 +1019,7 @@ QString ThumbBarToolTip::breakString(const QString& input)
 {
     QString str = input.simplifyWhiteSpace();
     str = QStyleSheet::escape(str);
-    const uint maxLen = MAXSTRINGLEN;
+    const uint maxLen = m_maxStringLen;
 
     if (str.length() <= maxLen)
         return str;

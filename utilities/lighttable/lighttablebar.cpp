@@ -18,8 +18,6 @@
  *
  * ============================================================ */
 
-#define MAXSTRINGLEN 30 
-
 // KDE includes.
 
 #include <klocale.h>
@@ -38,17 +36,16 @@ namespace Digikam
 LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
              : ThumbBarView(parent, orientation, exifRotate)
 {
+    readToolTipSettings();
+    m_toolTip = new LightTableBarToolTip(this);
+
     connect(this, SIGNAL(signalItemSelected(ThumbBarItem*)),
             this, SLOT(slotItemSelected(ThumbBarItem*)));    
 }
 
 LightTableBar::~LightTableBar()
 {
-}
-
-void LightTableBar::setupToolTip()
-{
-    m_toolTip = dynamic_cast<ThumbBarToolTip *>(new LightTableBarToolTip(this));
+    delete m_toolTip;
 }
 
 void LightTableBar::slotItemSelected(ThumbBarItem* i)
@@ -109,10 +106,9 @@ LightTableBarToolTip::LightTableBarToolTip(ThumbBarView* parent)
 {
 }
 
-QString LightTableBarToolTip::tipContent(ThumbBarItem* item)
+QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
 {
     QString tip, str;
-    QString tipText         = ThumbBarToolTip::tipContent(item);
     AlbumSettings* settings = AlbumSettings::instance();
     ImageInfo* info         = static_cast<LightTableBarItem *>(item)->info();
 
@@ -146,7 +142,7 @@ QString LightTableBarToolTip::tipContent(ThumbBarItem* item)
     
                 str = tagPaths.join(", ");
                 if (str.isEmpty()) str = QString("---");
-                if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 tip += m_cellSpecBeg + i18n("Tags:") + m_cellSpecMid + str + m_cellSpecEnd;
             }
     
@@ -159,8 +155,7 @@ QString LightTableBarToolTip::tipContent(ThumbBarItem* item)
         }
     }
 
-    return tipText;
+    return tip;
 }
 
 }  // NameSpace Digikam
-
