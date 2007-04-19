@@ -153,7 +153,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->tooltipPage = new SetupToolTip(d->page_tooltip);
 
     d->page_mime = addPage(i18n("Mime Types"), i18n("File (MIME) Types Settings"),
-                           BarIcon("filetypes", KIcon::SizeMedium));
+                           BarIcon("kcmsystem", KIcon::SizeMedium));
     d->mimePage = new SetupMime(d->page_mime);
 
     d->page_editor = addPage(i18n("Image Editor"), i18n("Image Editor General Settings"),
