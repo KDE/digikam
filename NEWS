@@ -84,5 +84,6 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 032 ==> 140131 : No zoom in image preview.
 033 ==> 89365  : More standard menu structure.
 034 ==> 144214 : The plural form of "child" is "children", not "childs".
-035 ==> 
+035 ==> 124487 : No way to pause a slide show.
+036 ==> 
 
