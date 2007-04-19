@@ -66,9 +66,9 @@ public:
         showTagsBox       = 0;
         showRatingBox     = 0;
 
+        fileSettingBox    = 0;
         photoSettingBox   = 0;
-        photoSettingBox   = 0;
-        photoSettingBox   = 0;
+        digikamSettingBox = 0;
     }
 
     QCheckBox  *showToolTipsBox;
@@ -240,7 +240,6 @@ void SetupToolTip::readSettings()
     if (!settings) return;
 
     d->showToolTipsBox->setChecked(settings->getShowToolTips());
-
 
     d->showFileNameBox->setChecked(settings->getToolTipsShowFileName());
     d->showFileDateBox->setChecked(settings->getToolTipsShowFileDate());
