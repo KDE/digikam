@@ -45,6 +45,9 @@ public:
 
     ImageInfo* currentItemImageInfo() const;
 
+    /** Read tool tip settings from Album Settings instance */
+    void readToolTipSettings();
+
 signals:
 
     void signalLightTableBarItemSelected(ImageInfo*);
@@ -54,6 +57,8 @@ private slots:
     void slotItemSelected(ThumbBarItem* i);
 
 private:
+
+    void setupToolTip();
 
     friend class LightTableBarItem;
 };
@@ -74,6 +79,19 @@ private:
     ImageInfo   *m_info;
 
     friend class LightTableBar;
+};
+
+// -------------------------------------------------------------------------
+
+class DIGIKAM_EXPORT LightTableBarToolTip : public ThumbBarToolTip
+{
+public:
+
+    LightTableBarToolTip(ThumbBarView *parent);
+
+private:
+
+    QString tipContent(ThumbBarItem* item);
 };
 
 }  // NameSpace Digikam

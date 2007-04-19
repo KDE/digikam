@@ -43,6 +43,7 @@ namespace Digikam
 {
 
 class ThumbBarItem;
+class ThumbBarToolTip;
 class ThumbBarViewPriv;
 class ThumbBarItemPriv;
 
@@ -132,6 +133,12 @@ protected:
     void viewportPaintEvent(QPaintEvent* e);
     void contentsMousePressEvent(QMouseEvent* e);
 
+    virtual void setupToolTip();
+
+protected:
+
+    ThumbBarToolTip *m_toolTip;
+
 private:
 
     void insertItem(ThumbBarItem* item);
@@ -207,12 +214,12 @@ protected:
 
 protected:
 
+    QString breakString(const QString& input);
     virtual QString tipContent(ThumbBarItem* item);
 
 private:
 
     void maybeTip(const QPoint& pos);
-    QString breakString(const QString& input);
 };
 
 }  // NameSpace Digikam

@@ -18,8 +18,16 @@
  *
  * ============================================================ */
 
+#define MAXSTRINGLEN 30 
+
+// KDE includes.
+
+#include <klocale.h>
+
 // Local includes.
 
+#include "album.h"
+#include "albumsettings.h"
 #include "imageinfo.h"
 #include "lighttablebar.h"
 #include "lighttablebar.moc"
@@ -38,6 +46,11 @@ LightTableBar::~LightTableBar()
 {
 }
 
+void LightTableBar::setupToolTip()
+{
+    m_toolTip = dynamic_cast<ThumbBarToolTip *>(new LightTableBarToolTip(this));
+}
+
 void LightTableBar::slotItemSelected(ThumbBarItem* i)
 {
     LightTableBarItem *item = static_cast<LightTableBarItem*>(i);
@@ -50,10 +63,32 @@ ImageInfo* LightTableBar::currentItemImageInfo() const
     return item->info();
 }
 
+void LightTableBar::readToolTipSettings()
+{
+    AlbumSettings* albumSettings = AlbumSettings::instance();
+    if (!albumSettings) return;
+
+    Digikam::ThumbBarToolTipSettings settings;
+    settings.showToolTips   = albumSettings->getShowToolTips();
+    settings.showFileName   = albumSettings->getToolTipsShowFileName();
+    settings.showFileDate   = albumSettings->getToolTipsShowFileDate();
+    settings.showFileSize   = albumSettings->getToolTipsShowFileSize();
+    settings.showImageType  = albumSettings->getToolTipsShowImageType();
+    settings.showImageDim   = albumSettings->getToolTipsShowImageDim();
+    settings.showPhotoMake  = albumSettings->getToolTipsShowPhotoMake();
+    settings.showPhotoDate  = albumSettings->getToolTipsShowPhotoDate();
+    settings.showPhotoFocal = albumSettings->getToolTipsShowPhotoFocal();
+    settings.showPhotoExpo  = albumSettings->getToolTipsShowPhotoExpo();
+    settings.showPhotoMode  = albumSettings->getToolTipsShowPhotoMode();
+    settings.showPhotoFlash = albumSettings->getToolTipsShowPhotoFlash();
+    settings.showPhotoWB    = albumSettings->getToolTipsShowPhotoWB();
+    setToolTipSettings(settings);
+}
+
 // -------------------------------------------------------------------------
 
 LightTableBarItem::LightTableBarItem(LightTableBar *view, ImageInfo *info)
-              : ThumbBarItem(view, info->kurl())
+                 : ThumbBarItem(view, info->kurl())
 {
     m_info = info;
 }
@@ -65,6 +100,66 @@ LightTableBarItem::~LightTableBarItem()
 ImageInfo* LightTableBarItem::info()
 {
     return m_info;
+}
+
+// -------------------------------------------------------------------------
+
+LightTableBarToolTip::LightTableBarToolTip(ThumbBarView* parent)
+                    : ThumbBarToolTip(parent)
+{
+}
+
+QString LightTableBarToolTip::tipContent(ThumbBarItem* item)
+{
+    QString tip, str;
+    QString tipText         = ThumbBarToolTip::tipContent(item);
+    AlbumSettings* settings = AlbumSettings::instance();
+    ImageInfo* info         = static_cast<LightTableBarItem *>(item)->info();
+
+    if (settings)
+    {
+        if (settings->getToolTipsShowAlbumName() ||
+            settings->getToolTipsShowComments()  ||
+            settings->getToolTipsShowTags()      ||
+            settings->getToolTipsShowRating())
+        {
+            tip += m_headBeg + i18n("digiKam Properties") + m_headEnd;
+    
+            if (settings->getToolTipsShowAlbumName())
+            {
+                PAlbum* album = info->album();
+                if (album)
+                    tip += m_cellSpecBeg + i18n("Album:") + m_cellSpecMid + 
+                           album->url().remove(0, 1) + m_cellSpecEnd;
+            }
+    
+            if (settings->getToolTipsShowComments())
+            {
+                str = info->caption();
+                if (str.isEmpty()) str = QString("---");
+                tip += m_cellSpecBeg + i18n("Comments:") + m_cellSpecMid + breakString(str) + m_cellSpecEnd;
+            }
+    
+            if (settings->getToolTipsShowTags())
+            {
+                QStringList tagPaths = info->tagPaths(false);
+    
+                str = tagPaths.join(", ");
+                if (str.isEmpty()) str = QString("---");
+                if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+                tip += m_cellSpecBeg + i18n("Tags:") + m_cellSpecMid + str + m_cellSpecEnd;
+            }
+    
+            if (settings->getToolTipsShowRating())
+            {
+                str.fill( '*', info->rating() );
+                if (str.isEmpty()) str = QString("---");
+                tip += m_cellSpecBeg + i18n("Rating:") + m_cellSpecMid + str + m_cellSpecEnd;
+            }
+        }
+    }
+
+    return tipText;
 }
 
 }  // NameSpace Digikam

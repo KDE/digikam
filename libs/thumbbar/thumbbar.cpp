@@ -91,26 +91,24 @@ public:
         itemDict.setAutoDelete(false);
     }
     
-    bool                      clearing;
-    bool                      exifRotate;
+    bool                       clearing;
+    bool                       exifRotate;
 
-    const int                 margin;
-    int                       count;
-    int                       tileSize;
-    int                       orientation;
+    const int                  margin;
+    int                        count;
+    int                        tileSize;
+    int                        orientation;
     
-    QTimer                   *timer;
+    QTimer                    *timer;
 
-    ThumbBarItem             *firstItem;
-    ThumbBarItem             *lastItem;
-    ThumbBarItem             *currItem;
+    ThumbBarItem              *firstItem;
+    ThumbBarItem              *lastItem;
+    ThumbBarItem              *currItem;
 
-    ThumbBarToolTip          *tip;
-    
-    QDict<ThumbBarItem>       itemDict;
-    QGuardedPtr<ThumbnailJob> thumbJob;
+    QDict<ThumbBarItem>        itemDict;
+    QGuardedPtr<ThumbnailJob>  thumbJob;
 
-    ThumbBarToolTipSettings   toolTipSettings;
+    ThumbBarToolTipSettings    toolTipSettings;
 };
 
 // -------------------------------------------------------------------------
@@ -151,7 +149,8 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     d->exifRotate      = exifRotate;
     d->toolTipSettings = settings;
 
-    d->tip   = new ThumbBarToolTip(this);
+    setupToolTip();
+
     d->timer = new QTimer(this);
     
     connect(d->timer, SIGNAL(timeout()),
@@ -182,14 +181,18 @@ ThumbBarView::~ThumbBarView()
     clear(false);
         
     delete d->timer;
-    delete d->tip;
+    delete m_toolTip;
     delete d;
+}
+
+void ThumbBarView::setupToolTip()
+{
+    m_toolTip = new ThumbBarToolTip(this);
 }
 
 void ThumbBarView::resizeEvent(QResizeEvent* e)
 {
-    if (!e)
-        return;
+    if (!e) return;
 
     QScrollView::resizeEvent(e);
 
@@ -342,11 +345,9 @@ ThumbBarItem* ThumbBarView::findItemByURL(const KURL& url) const
 
 void ThumbBarView::setSelected(ThumbBarItem* item)
 {
-    if (!item)
-        return;
+    if (!item) return;
         
-    if (d->currItem == item)
-        return;
+    if (d->currItem == item) return;
 
     if (d->currItem)
     {
@@ -376,8 +377,7 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
 
 void ThumbBarView::invalidateThumb(ThumbBarItem* item)
 {
-    if (!item)
-        return;
+    if (!item) return;
 
     if (item->d->pixmap)
     {
