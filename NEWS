@@ -43,6 +43,8 @@ Image Plugins : DigikamImagePlugins have been merged to digiKam core. All tools 
                 like plugins at the same place than image plugin core. 
 
 Showfoto      : The thumbbar is now resizable. The thumbnails contents can be redimensionned in live.
+Showfoto      : The thumbbar items can show a full configurable tool tip like digiKam album icon 
+                items tool tip.
 
 
 ----------------------------------------------------------------------------
