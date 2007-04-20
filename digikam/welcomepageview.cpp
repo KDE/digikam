@@ -130,6 +130,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("Metadata support for RAW pictures");
     newFeatures << i18n("New advanced options to download pictures from camera");
     newFeatures << i18n("New advanced options to manage picture Tags");
+    newFeatures << i18n("New zooming/panning function in preview mode");
 
     QString featureItems;
     for ( uint i = 0 ; i < newFeatures.count() ; i++ )
