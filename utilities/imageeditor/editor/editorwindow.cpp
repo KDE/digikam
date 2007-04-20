@@ -693,8 +693,9 @@ void EditorWindow::slotZoomTo100Percents()
 
 void EditorWindow::slotZoomTextChanged(const QString &txt)
 {
-    double zoom = KGlobal::locale()->readNumber(txt) / 100.0;
-    if (zoom > 0.0)
+    bool r      = false;
+    double zoom = KGlobal::locale()->readNumber(txt, &r) / 100.0;
+    if (r && zoom > 0.0)
         m_canvas->setZoomFactor(zoom);
 }
 
