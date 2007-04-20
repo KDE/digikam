@@ -251,8 +251,8 @@ void DigikamApp::show()
     KDcrawIface::DcrawBinary::instance()->checkReport();
 
     // Init album icon view zoom factor. 
-    d->statusZoomBar->setZoomSliderValue(d->albumSettings->getDefaultIconSize());
     slotThumbSizeChanged(d->albumSettings->getDefaultIconSize());
+    slotZoomSliderChanged(d->albumSettings->getDefaultIconSize());
 }
 
 const QPtrList<KAction>& DigikamApp::menuImageActions()
