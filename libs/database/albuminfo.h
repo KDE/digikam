@@ -43,6 +43,8 @@ class AlbumInfo
 {
 public:
 
+    AlbumInfo() : id(0) {};
+
     typedef QValueList<AlbumInfo> List;
 
     int      id;
@@ -71,6 +73,8 @@ class TagInfo
 {
 public:
 
+    TagInfo() : id(0), pid(0) {};
+
     typedef QValueList<TagInfo> List;
 
     int      id;
@@ -88,6 +92,8 @@ class SearchInfo
 {
 public:
 
+    SearchInfo() : id(0) {};
+
     typedef QValueList<SearchInfo> List;
 
     int      id;
@@ -101,6 +107,30 @@ public:
     {
         return id < info.id;
     }
+};
+
+class AlbumShortInfo
+{
+public:
+
+    AlbumShortInfo() : id(0) {};
+
+    int         id;
+    QString     url;
+    QString     albumRoot;
+};
+
+class ItemShortInfo
+{
+public:
+
+    ItemShortInfo() : id(0), albumID(0) {};
+
+    int         id;
+    QString     itemName;
+    int         albumID;
+    QString     albumRoot;
+    QString     album;
 };
 
 }  // namespace Digikam

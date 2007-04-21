@@ -196,6 +196,58 @@ SearchInfo::List AlbumDB::scanSearches()
     return searchList;
 }
 
+QValueList<AlbumShortInfo> AlbumDB::getAlbumShortInfos()
+{
+    QStringList values;
+    execSql( QString("SELECT id, url from Albums;"),
+             &values);
+
+    QValueList<AlbumShortInfo> albumList;
+
+    for (QStringList::iterator it = values.begin(); it != values.end();)
+    {
+        AlbumShortInfo info;
+
+        info.id        = (*it).toInt();
+        ++it;
+        info.url       = (*it);
+        ++it;
+        info.albumRoot = DatabaseAccess::albumRoot();
+
+        albumList << info;
+    }
+
+    return albumList;
+}
+
+QStringList AlbumDB::getSubalbumsForPath(const QString &albumRoot,
+                                         const QString& path,
+                                         bool onlyDirectSubalbums)
+{
+    QString subURL = path;
+    if (!path.endsWith("/"))
+        subURL += '/';
+    subURL = escapeString(subURL);
+
+    QStringList values;
+
+    if (onlyDirectSubalbums)
+    {
+        execSql( QString("SELECT id, url FROM Albums WHERE url LIKE '") +
+                 subURL + QString("%' ") + QString("AND url NOT LIKE '") +
+                 subURL + QString("%/%'; "),
+                 &values );
+    }
+    else
+    {
+        execSql( QString("SELECT id, url FROM Albums WHERE url LIKE '") +
+                 subURL + QString("%'; "),
+                 &values );
+    }
+
+    return values;
+}
+
 int AlbumDB::addAlbum(const QString &albumRoot, const QString& url,
                       const QString& caption,
                       const QDate& date, const QString& collection)
@@ -562,6 +614,7 @@ ItemShortInfo AlbumDB::getItemShortInfo(Q_LLONG imageID)
 
     if (!values.isEmpty())
     {
+        info.id        = imageID;
         info.itemName  = values[0];
         info.albumRoot = DatabaseAccess::albumRoot();
         info.album     = values[1];
@@ -768,11 +821,7 @@ int AlbumDB::getAlbumForPath(const QString &albumRoot, const QString& folder, bo
     int albumID = -1;
     if (values.isEmpty() && create)
     {
-        execSql( QString ("INSERT INTO Albums (url, date) "
-                          "VALUES ('%1','%2')")
-                 .arg(escapeString(folder),
-                      QDateTime::currentDateTime().toString(Qt::ISODate)) );
-        albumID = d->sql->lastInsertedRow();
+        albumID = addAlbum(albumRoot, folder, QString(), QDate::currentDate(), QString());
     } else
         albumID = values[0].toInt();
 
@@ -1142,7 +1191,7 @@ QStringList AlbumDB::getItemURLsInTag(int tagID)
 QString AlbumDB::getAlbumURL(int albumID)
 {
     QStringList values;
-    execSql( QString("SELECT url from Albums where id=%1")
+    execSql( QString("SELECT url from Albums WHERE id=%1")
              .arg( albumID), &values);
     return values[0];
 }

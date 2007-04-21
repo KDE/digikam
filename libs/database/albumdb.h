@@ -51,15 +51,6 @@ namespace Digikam
 typedef QValueList<int>     IntList;
 typedef QValueList<Q_LLONG> LLongList;
 
-class ItemShortInfo
-{
-public:
-    QString     itemName;
-    QString     albumRoot;
-    QString     album;
-    int         albumID;
-};
-
 class DatabaseBackend;
 class AlbumDBPriv;
 
@@ -103,6 +94,11 @@ public:
      */
     SearchInfo::List scanSearches();
 
+    /**
+     * Returns all albums in the database with their albumRoot and ID.
+     */
+    QValueList<AlbumShortInfo> getAlbumShortInfos();
+
     // ----------- Operations on PAlbums -----------
 
     /**
@@ -125,6 +121,13 @@ public:
                or -1 if it does not exist and create is false.
      */
     int  getAlbumForPath(const QString &albumRoot, const QString& path, bool create = true);
+
+    /**
+     * List the urls of all subalbums of the album specified by albumRoot and path.
+     * @param onlyDirectSubalbums if this is true, only first-level subalbums are returned,
+     *                            if false, all levels of children are returned (include subalbums of subalbums).
+     */
+    QStringList getSubalbumsForPath(const QString &albumRoot, const QString& path, bool onlyDirectSubalbums = true);
 
     /**
      * Deletes an album from the database. This will not delete the
