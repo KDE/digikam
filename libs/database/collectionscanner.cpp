@@ -63,29 +63,21 @@ void CollectionScanner::scanAlbum(const QString &albumRoot, const QString &album
 
 void CollectionScanner::scanOneAlbum(const QString &albumRoot, const QString &album)
 {
+    DDebug() << "CollectionScanner::scanOneAlbum " << albumRoot << "/" << album << endl;
     QDir dir(albumRoot + album);
     if (!dir.exists() || !dir.isReadable())
     {
         return;
     }
 
-    QString subURL = album;
-    if (!album.endsWith("/"))
-        subURL += '/';
-
     {
         // scan albums
 
         QStringList currAlbumList;
 
-        {
-            DatabaseAccess access;
-            subURL = access.backend()->escapeString( subURL);
-            access.backend()->execSql( QString("SELECT url FROM Albums WHERE ") +
-                                       QString("url LIKE '") + subURL + QString("%' ") +
-                                       QString("AND url NOT LIKE '") + subURL + QString("%/%' "),
-                                       &currAlbumList );
-        }
+        // get sub albums, but only direct subalbums (Album/*, not Album/*/*)
+        currAlbumList = DatabaseAccess().db()->getSubalbumsForPath(albumRoot, album, true);
+        DDebug() << "currAlbumList is " << currAlbumList << endl;
 
         const QFileInfoList* infoList = dir.entryInfoList(QDir::Dirs);
         if (!infoList)
@@ -120,14 +112,7 @@ void CollectionScanner::scanOneAlbum(const QString &albumRoot, const QString &al
             DDebug() << "New Album: " << *it << endl;
 
             QFileInfo fi(albumRoot + *it);
-
-            {
-                DatabaseAccess access;
-                access.backend()->execSql(QString("INSERT INTO Albums (url, date) "
-                                                 "VALUES('%1', '%2')")
-                                          .arg(access.backend()->escapeString(*it),
-                                               fi.lastModified().date().toString(Qt::ISODate)));
-            }
+            DatabaseAccess().db()->addAlbum(albumRoot, *it, QString(), fi.lastModified().date(), QString());
 
             scanAlbum(albumRoot, *it);
         }
@@ -143,15 +128,12 @@ void CollectionScanner::scanOneAlbum(const QString &albumRoot, const QString &al
 
         {
             DatabaseAccess access;
-            access.backend()->execSql(QString("SELECT id FROM Albums WHERE url='%1'")
-                                      .arg(access.backend()->escapeString(album)), &values );
-            if (values.isEmpty())
+            albumID = access.db()->getAlbumForPath(albumRoot, album, false);
+
+            if (albumID == -1)
                 return;
 
-            albumID = values.first().toInt();
-
-            access.backend()->execSql( QString("SELECT name FROM Images WHERE dirid=%1")
-                                       .arg(albumID), &currItemList );
+            currItemList = access.db()->getItemNamesInAlbum(albumID);
         }
 
         const QFileInfoList* infoList = dir.entryInfoList(QDir::Files);
@@ -195,28 +177,22 @@ void CollectionScanner::removeInvalidAlbums(const QString &albumRoot)
 {
     DatabaseAccess access;
 
-    QStringList urlList;
+    QValueList<AlbumShortInfo> albumList = access.db()->getAlbumShortInfos();
+    QValueList<AlbumShortInfo> toBeDeleted;
 
-    //Attention: When allowing multiple album roots
-    access.backend()->execSql(QString("SELECT url FROM Albums;"),
-                              &urlList);
-
-    access.backend()->execSql("BEGIN TRANSACTION");
-
-    struct stat stbuf;
-
-    for (QStringList::iterator it = urlList.begin();
-         it != urlList.end(); ++it)
+    for (QValueList<AlbumShortInfo>::iterator it = albumList.begin(); it != albumList.end(); ++it)
     {
-        if (::stat(QFile::encodeName(albumRoot + *it), &stbuf) == 0)
-            continue;
-
-        DDebug() << "Deleted Album: " << *it << endl;
-        access.backend()->execSql(QString("DELETE FROM Albums WHERE url='%1'")
-                                  .arg(access.backend()->escapeString(*it)));
+        QFileInfo fileInfo((*it).albumRoot + (*it).url);
+        if (!fileInfo.exists())
+            toBeDeleted << (*it);
     }
 
-    access.backend()->execSql("COMMIT TRANSACTION");
+    DatabaseTransaction transaction(&access);
+    for (QValueList<AlbumShortInfo>::iterator it = toBeDeleted.begin(); it != toBeDeleted.end(); ++it)
+    {
+        DDebug() << "Removing album " << (*it).albumRoot + '/' + (*it).url << endl;
+        access.db()->deleteAlbum((*it).id);
+    }
 }
 
 
