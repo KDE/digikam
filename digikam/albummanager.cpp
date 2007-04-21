@@ -1401,13 +1401,14 @@ void AlbumManager::slotData(KIO::Job* , const QByteArray& data)
 void AlbumManager::slotDirty(const QString& path)
 {
     KURL fileUrl;
-    fileUrl.setPath(QDir::cleanDirPath(path + '/'));
-    KURL url = DatabaseUrl::fromFileUrl(fileUrl, CollectionManager::instance()->albumRoot(fileUrl));
+    // we need to provide a trailing slash to DatabaseUrl to mark it as a directory
+    fileUrl.setPath(QDir::cleanDirPath(path) + '/');
+    DatabaseUrl url = DatabaseUrl::fromFileUrl(fileUrl, CollectionManager::instance()->albumRoot(fileUrl));
 
     if (d->dirtyAlbums.contains(url.url()))
         return;
 
-    DDebug() << "Dirty: " << url << endl;
+    DDebug() << "Dirty: " << url.fileUrl().path() << endl;
     d->dirtyAlbums.append(url.url());
 
     if (DIO::running())
