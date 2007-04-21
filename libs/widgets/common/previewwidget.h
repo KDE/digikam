@@ -47,25 +47,23 @@ public:
     PreviewWidget(QWidget *parent=0);
     ~PreviewWidget();
 
-    void setZoomFactor(double z);
-    void setBackgroundColor(const QColor& color);
-    void fitToWindow();
-    bool isFitToWindow();
-    void toggleFitToWindow();
+    void   setZoomFactor(double z);
+    void   setBackgroundColor(const QColor& color);
+    void   fitToWindow();
+    bool   isFitToWindow();
+    void   toggleFitToWindow();
 
-    int  zoomWidth();
-    int  zoomHeight();
-
-    bool maxZoom();
-    bool minZoom();
-
+    int    zoomWidth();
+    int    zoomHeight();
+    bool   maxZoom();
+    bool   minZoom();
     double zoomFactor();
     double zoomMax();
     double zoomMin();
     void   setZoomMax(double z);
     void   setZoomMin(double z);
 
-    void reset();
+    void   reset();
 
 signals:
 
@@ -82,18 +80,25 @@ public slots:
     void slotDecreaseZoom();
 
 protected:
+
+    bool m_movingInProgress;
+
+protected:
     
-    void   resizeEvent(QResizeEvent *);
-    void   viewportPaintEvent(QPaintEvent *);
-    void   contentsMousePressEvent(QMouseEvent *);
-    void   contentsMouseMoveEvent(QMouseEvent *);
-    void   contentsMouseReleaseEvent(QMouseEvent *);
-    void   contentsWheelEvent(QWheelEvent *);
     double calcAutoZoomFactor();
     int    tileSize();
     void   updateAutoZoom();
     void   updateContentsSize();
+    QRect  previewRect();
 
+    virtual void resizeEvent(QResizeEvent *);
+    virtual void viewportPaintEvent(QPaintEvent *);
+    virtual void contentsMousePressEvent(QMouseEvent *);
+    virtual void contentsMouseMoveEvent(QMouseEvent *);
+    virtual void contentsMouseReleaseEvent(QMouseEvent *);
+    virtual void contentsWheelEvent(QWheelEvent *);
+    virtual void setContentsSize();
+    virtual void viewportPaintExtraData(){};
     virtual int  previewWidth()=0;
     virtual int  previewHeight()=0;
     virtual bool previewIsNull()=0;

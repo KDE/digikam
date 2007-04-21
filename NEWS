@@ -42,7 +42,9 @@ Image Plugins : Update internal CImg library to 1.1.9. The Greycstoration algori
 Image Plugins : DigikamImagePlugins have been merged to digiKam core. All tools still available 
                 like plugins at the same place than image plugin core. 
 
-Showfoto      : The thumbbar is now resizable. The thumbnails contents will be redimensionned in live.
+Showfoto      : The thumbbar is now resizable. The thumbnails contents can be redimensionned in live.
+Showfoto      : The thumbbar items can show a full configurable tool tip like digiKam album icon 
+                items tool tip.
 
 
 ----------------------------------------------------------------------------
@@ -83,5 +85,9 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 031 ==> 132047 : Faster display of images and/or prefetch wished for.
 032 ==> 140131 : No zoom in image preview.
 033 ==> 89365  : More standard menu structure.
-034 ==> 
+034 ==> 144214 : The plural form of "child" is "children", not "childs".
+035 ==> 124487 : No way to pause a slide show.
+036 ==> 128975 : "Correct Exif Orientation Tag" does not change the mtime 
+                 of the image file.
+037 ==> 
 

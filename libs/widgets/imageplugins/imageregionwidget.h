@@ -23,11 +23,11 @@
 
 // Qt includes.
 
-#include <qscrollview.h>
 #include <qrect.h>
 
 // Local includes
 
+#include "previewwidget.h"
 #include "dimg.h"
 #include "digikam_export.h"
 
@@ -36,7 +36,7 @@ namespace Digikam
 
 class ImageRegionWidgetPriv;
 
-class DIGIKAM_EXPORT ImageRegionWidget : public QScrollView
+class DIGIKAM_EXPORT ImageRegionWidget : public PreviewWidget
 {
 Q_OBJECT
 
@@ -57,52 +57,49 @@ public:
     ~ImageRegionWidget();
     
     void   setContentsPosition(int x, int y, bool targetDone);    
-    void   setCenterContentsPosition(void);
+    void   setCenterContentsPosition();
 
-    /** To get image region including original or/and target area depending of separate view mode */
-    QRect  getImageRegion(void);
+    /** To get image region including original or/and target area depending of separate view mode.
+        The region is given using not scaled image unit.*/
+    QRect  getImageRegion();
     
     /** To get target image region area to render */
-    QRect  getImageRegionToRender(void);
+    QRect  getImageRegionToRender();
     
     /** To get target image region image to use for render operations */
-    DImg   getImageRegionImage(void);
+    DImg   getImageRegionImage();
 
     void   updatePreviewImage(DImg *img);
-    void   updateOriginalImage(void);   
 
-    void   backupPixmapRegion(void);
-    void   restorePixmapRegion(void);
+    void   backupPixmapRegion();
+    void   restorePixmapRegion();
     
     void   setHighLightPoints(QPointArray pointsList);
+    void   drawSeparateView();
              
-signals:
-    
-    void contentsMovedEvent( bool target );
-    
-protected:
-    
-    void viewportResizeEvent(QResizeEvent*);
-    void contentsMousePressEvent(QMouseEvent*);
-    void contentsMouseReleaseEvent(QMouseEvent*);
-    void contentsMouseMoveEvent(QMouseEvent*);
-    void contentsWheelEvent(QWheelEvent *e){ e->accept(); };
-
-private:
-    
-    void  drawContents(QPainter *p, int x, int y, int w, int h);
-    void  updatePixmap(DImg& img);
-    QRect getLocalTargetImageRegion(void);
-    QRect getLocalImageRegionToRender(void);
-
 public slots:
 
     void slotSeparateViewToggled(int mode);
-    void slotZoomFactorChanged(double);
 
 private slots:
     
-    void slotTimerResizeEvent();
+    void slotZoomFactorChanged();
+
+private:
+
+    void  updatePixmap(DImg& img);
+    QRect getLocalTargetImageRegion();
+    QRect getLocalImageRegionToRender();
+    void  viewportPaintExtraData();
+    int   previewWidth();
+    int   previewHeight();
+    bool  previewIsNull();
+    void  resetPreview();
+    void  setContentsSize();
+    void  resizeEvent(QResizeEvent *);
+    void  contentsWheelEvent(QWheelEvent *);
+
+    inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
 
 private:
     

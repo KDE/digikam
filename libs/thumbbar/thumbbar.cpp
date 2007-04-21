@@ -40,6 +40,7 @@ extern "C"
 #include <qpainter.h>
 #include <qdict.h>
 #include <qpoint.h>
+#include <qstylesheet.h>
 #include <qdatetime.h>
 #include <qguardedptr.h>
 
@@ -55,8 +56,13 @@ extern "C"
 #include <kfileitem.h>
 #include <kglobal.h>
 
+// LibKDcraw includes. 
+ 
+#include <libkdcraw/rawfiles.h> 
+
 // Local includes.
 
+#include "dmetadata.h"
 #include "thumbnailjob.h"
 #include "thumbnailsize.h"
 #include "thumbbar.h"
@@ -73,6 +79,7 @@ public:
         margin(5)
     {
         exifRotate = false;
+        toolTip    = 0;
         firstItem  = 0;
         lastItem   = 0;
         currItem   = 0;
@@ -83,25 +90,29 @@ public:
         itemDict.setAutoDelete(false);
     }
     
-    bool                      clearing;
-    bool                      exifRotate;
+    bool                       clearing;
+    bool                       exifRotate;
 
-    const int                 margin;
-    int                       count;
-    int                       tileSize;
-    int                       orientation;
+    const int                  margin;
+    int                        count;
+    int                        tileSize;
+    int                        orientation;
     
-    QTimer                   *timer;
+    QTimer                    *timer;
 
-    ThumbBarItem             *firstItem;
-    ThumbBarItem             *lastItem;
-    ThumbBarItem             *currItem;
+    ThumbBarItem              *firstItem;
+    ThumbBarItem              *lastItem;
+    ThumbBarItem              *currItem;
 
-    ThumbBarToolTip          *tip;
-    
-    QDict<ThumbBarItem>       itemDict;
-    QGuardedPtr<ThumbnailJob> thumbJob;
+    QDict<ThumbBarItem>        itemDict;
+    QGuardedPtr<ThumbnailJob>  thumbJob;
+
+    ThumbBarToolTipSettings    toolTipSettings;
+
+    ThumbBarToolTip           *toolTip;
 };
+
+// -------------------------------------------------------------------------
 
 class ThumbBarItemPriv
 {
@@ -128,15 +139,18 @@ public:
     ThumbBarView *view;
 };
 
-ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate)
+// -------------------------------------------------------------------------
+
+ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
+                           ThumbBarToolTipSettings settings)
             : QScrollView(parent)
 {
     d = new ThumbBarViewPriv;
-    d->orientation = orientation;
-    d->exifRotate  = exifRotate;
-
-    d->tip   = new ThumbBarToolTip(this);
-    d->timer = new QTimer(this);
+    d->orientation     = orientation;
+    d->exifRotate      = exifRotate;
+    d->toolTipSettings = settings;
+    d->toolTip         = new ThumbBarToolTip(this);
+    d->timer           = new QTimer(this);
     
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotUpdate()));
@@ -166,14 +180,13 @@ ThumbBarView::~ThumbBarView()
     clear(false);
         
     delete d->timer;
-    delete d->tip;
+    delete d->toolTip;
     delete d;
 }
 
 void ThumbBarView::resizeEvent(QResizeEvent* e)
 {
-    if (!e)
-        return;
+    if (!e) return;
 
     QScrollView::resizeEvent(e);
 
@@ -214,6 +227,21 @@ void ThumbBarView::setExifRotate(bool exifRotate)
     }
     
     triggerUpdate();
+}
+
+bool ThumbBarView::getExifRotate()
+{
+    return d->exifRotate;
+}
+
+void ThumbBarView::setToolTipSettings(const ThumbBarToolTipSettings &settings)
+{
+    d->toolTipSettings = settings;
+}
+
+ThumbBarToolTipSettings& ThumbBarView::getToolTipSettings()
+{
+    return d->toolTipSettings;
 }
 
 int ThumbBarView::countItems()
@@ -311,11 +339,9 @@ ThumbBarItem* ThumbBarView::findItemByURL(const KURL& url) const
 
 void ThumbBarView::setSelected(ThumbBarItem* item)
 {
-    if (!item)
-        return;
+    if (!item) return;
         
-    if (d->currItem == item)
-        return;
+    if (d->currItem == item) return;
 
     if (d->currItem)
     {
@@ -345,8 +371,7 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
 
 void ThumbBarView::invalidateThumb(ThumbBarItem* item)
 {
-    if (!item)
-        return;
+    if (!item) return;
 
     if (item->d->pixmap)
     {
@@ -775,52 +800,252 @@ void ThumbBarItem::repaint()
 // -------------------------------------------------------------------------
 
 ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent)
-               : QToolTip(parent->viewport()), m_view(parent)
+               : QToolTip(parent->viewport()), m_maxStringLen(30), m_view(parent)
 {
+    m_headBeg = QString("<tr bgcolor=\"orange\"><td colspan=\"2\">"
+                        "<nobr><font size=\"-1\" color=\"black\"><b>");
+    m_headEnd = QString("</b></font></nobr></td></tr>");
+
+    m_cellBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"black\">");
+    m_cellMid = QString("</font></nobr></td>"
+                        "<td><nobr><font size=\"-1\" color=\"black\">");
+    m_cellEnd = QString("</font></nobr></td></tr>");
+
+    m_cellSpecBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"black\">");
+    m_cellSpecMid = QString("</font></nobr></td>"
+                            "<td><nobr><font size=\"-1\" color=\"steelblue\"><i>");
+    m_cellSpecEnd = QString("</i></font></nobr></td></tr>");
 }
 
 void ThumbBarToolTip::maybeTip(const QPoint& pos)
 {
-    if ( !parentWidget() || !m_view)
-        return;
+    if ( !parentWidget() || !m_view) return;
 
     ThumbBarItem* item = m_view->findItem( m_view->viewportToContents(pos) );
-    if (!item)
-        return;
+    if (!item) return;
+
+    if (!m_view->getToolTipSettings().showToolTips) return;
+
+    QString tipText = tipContent(item);
+    tipText.append(tipContentExtraData(item));
+    tipText.append("</table>");
 
     QRect r(item->rect());
     r = QRect( m_view->contentsToViewport(r.topLeft()), r.size() );
-
-    QString cellBeg("<tr><td><nobr><font size=-1>");
-    QString cellMid("</font></nobr></td>"
-                    "<td><nobr><font size=-1>");
-    QString cellEnd("</font></nobr></td></tr>");
-    
-    QString tipText;
-    tipText  = "<table cellspacing=0 cellpadding=0>";
-    tipText += cellBeg + i18n("Name:") + cellMid;
-    tipText += item->url().filename() + cellEnd;
-
-    tipText += cellBeg + i18n("Type:") + cellMid;
-    tipText += KMimeType::findByURL(item->url())->comment() + cellEnd;
-
-    KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, item->url());
-
-    QDateTime date;
-    date.setTime_t(fileItem.time(KIO::UDS_MODIFICATION_TIME));
-    tipText += cellBeg + i18n("Modification Date:") + cellMid +
-               KGlobal::locale()->formatDateTime(date, true, true)
-               + cellEnd;
-
-    tipText += cellBeg + i18n("Size:") + cellMid;
-    tipText += i18n("%1 (%2)")
-               .arg(KIO::convertSize(fileItem.size()))
-               .arg(KGlobal::locale()->formatNumber(fileItem.size(), 0))
-               + cellEnd;
-
-    tipText += "</table>";
     
     tip(r, tipText);
+}
+
+QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
+{
+    ThumbBarToolTipSettings settings = m_view->getToolTipSettings();
+
+    QString tipText, str;
+    QString unavailable(i18n("unavailable"));
+
+    tipText = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">";
+
+    QFileInfo fileInfo(item->url().path());
+
+    KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, item->url());
+    DMetadata metaData(item->url().path());
+
+    // -- File properties ----------------------------------------------
+
+    if (settings.showFileName  ||
+        settings.showFileDate  ||
+        settings.showFileSize  ||
+        settings.showImageType ||
+        settings.showImageDim)
+    {
+        tipText += m_headBeg + i18n("File Properties") + m_headEnd;
+
+        if (settings.showFileName)
+        {
+            tipText += m_cellBeg + i18n("Name:") + m_cellMid;
+            tipText += item->url().fileName() + m_cellEnd;
+        }
+
+        if (settings.showFileDate)
+        {
+            QDateTime modifiedDate = fileInfo.lastModified();
+            str = KGlobal::locale()->formatDateTime(modifiedDate, true, true);
+            tipText += m_cellBeg + i18n("Modified:") + m_cellMid + str + m_cellEnd;
+        }
+
+        if (settings.showFileSize)
+        {
+            tipText += m_cellBeg + i18n("Size:") + m_cellMid;
+            str = i18n("%1 (%2)").arg(KIO::convertSize(fi.size()))
+                                .arg(KGlobal::locale()->formatNumber(fi.size(), 0));
+            tipText += str + m_cellEnd;
+        }
+
+        QSize   dims;
+        QString rawFilesExt(raw_file_extentions);
+        QString ext = fileInfo.extension(false).upper();
+
+        if (!ext.isEmpty() && rawFilesExt.upper().contains(ext))
+        {
+            str = i18n("RAW Image");
+            dims = metaData.getImageDimensions();
+        }
+        else
+        {
+            str = fi.mimeComment();
+
+            KFileMetaInfo meta = fi.metaInfo();
+            if (meta.isValid())
+            {
+                if (meta.containsGroup("Jpeg EXIF Data"))
+                    dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
+                else if (meta.containsGroup("General"))
+                    dims = meta.group("General").item("Dimensions").value().toSize();
+                else if (meta.containsGroup("Technical"))
+                    dims = meta.group("Technical").item("Dimensions").value().toSize();
+            }
+        }
+
+        if (settings.showImageType)
+        {
+            tipText += m_cellBeg + i18n("Type:") + m_cellMid + str + m_cellEnd;
+        }
+
+        if (settings.showImageDim)
+        {
+            QString mpixels;
+            mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
+            str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)")
+                .arg(dims.width()).arg(dims.height()).arg(mpixels);
+            tipText += m_cellBeg + i18n("Dimensions:") + m_cellMid + str + m_cellEnd;
+        }
+    }
+
+    // -- Photograph Info ----------------------------------------------------
+    
+    if (settings.showPhotoMake  ||
+        settings.showPhotoDate  ||
+        settings.showPhotoFocal ||
+        settings.showPhotoExpo  ||
+        settings.showPhotoMode  ||
+        settings.showPhotoFlash ||
+        settings.showPhotoWB)
+    {
+        PhotoInfoContainer photoInfo = metaData.getPhotographInformations();
+
+        if (!photoInfo.isEmpty())
+        {
+            QString metaStr;
+            tipText += m_headBeg + i18n("Photograph Properties") + m_headEnd;
+
+            if (settings.showPhotoMake)
+            {
+                str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? unavailable : photoInfo.make)
+                                        .arg(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
+                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                metaStr += m_cellBeg + i18n("Make/Model:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
+            }
+
+            if (settings.showPhotoDate)
+            {
+                if (photoInfo.dateTime.isValid())
+                {
+                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
+                    if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
+                }
+                else
+                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + QStyleSheet::escape( unavailable ) + m_cellEnd;
+            }
+
+            if (settings.showPhotoFocal)
+            {
+                str = photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture;
+
+                if (photoInfo.focalLength35mm.isEmpty())
+                    str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
+                else 
+                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm));
+
+                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                metaStr += m_cellBeg + i18n("Aperture/Focal:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
+            }
+
+            if (settings.showPhotoExpo)
+            {
+                str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime)
+                                        .arg(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO").arg(photoInfo.sensitivity));
+                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                metaStr += m_cellBeg + i18n("Exposure/Sensitivity:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
+            }
+
+            if (settings.showPhotoMode)
+            {
+
+                if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+                    str = unavailable;
+                else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+                    str = photoInfo.exposureMode;
+                else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
+                    str = photoInfo.exposureProgram;
+                else 
+                    str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
+                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                metaStr += m_cellBeg + i18n("Mode/Program:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
+            }
+
+            if (settings.showPhotoFlash)
+            {
+                str = photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash;
+                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                metaStr += m_cellBeg + i18n("Flash:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
+            }
+
+            if (settings.showPhotoWB)
+            {
+                str = photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance;
+                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
+                metaStr += m_cellBeg + i18n("White Balance:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
+            }
+
+            tipText += metaStr;
+        }
+    }
+
+    return tipText;
+}
+
+QString ThumbBarToolTip::breakString(const QString& input)
+{
+    QString str = input.simplifyWhiteSpace();
+    str = QStyleSheet::escape(str);
+    const uint maxLen = m_maxStringLen;
+
+    if (str.length() <= maxLen)
+        return str;
+
+    QString br;
+
+    uint i = 0;
+    uint count = 0;
+
+    while (i < str.length())
+    {
+        if (count >= maxLen && str[i].isSpace())
+        {
+            count = 0;
+            br.append("<br>");
+        }
+        else
+        {
+            br.append(str[i]);
+        }
+
+        i++;
+        count++;
+    }
+
+    return br;
 }
 
 }  // NameSpace Digikam

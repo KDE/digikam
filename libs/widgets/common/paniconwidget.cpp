@@ -53,23 +53,24 @@ public:
         moveSelection = false;
     }
 
-    bool         moveSelection;
+    bool   moveSelection;
 
-    int          xpos;
-    int          ypos;
+    int    xpos;
+    int    ypos;
 
-    QRect        regionSelection;         // Original size image selection.
+    QRect  regionSelection;         // Original size image selection.
 
-    QImage       image;
+    QImage image;
 };
 
 PanIconWidget::PanIconWidget(QWidget *parent, WFlags flags)
              : QWidget(parent, 0, flags)
 {
     d = new PanIconWidgetPriv;
-    m_flicker = false;
-    m_timerID = 0;
-    m_pixmap  = 0;
+    m_flicker    = false;
+    m_timerID    = 0;
+    m_pixmap     = 0;
+    m_zoomFactor = 1.0;  
 
     setBackgroundMode(Qt::NoBackground);
     setMouseTracking(true);
@@ -77,8 +78,7 @@ PanIconWidget::PanIconWidget(QWidget *parent, WFlags flags)
 
 PanIconWidget::~PanIconWidget()
 {
-    if (m_timerID)
-        killTimer(m_timerID);
+    if (m_timerID) killTimer(m_timerID);
 
     if (m_pixmap) delete m_pixmap;
 
@@ -106,6 +106,8 @@ void PanIconWidget::setImage(int previewWidth, int previewHeight, const QImage& 
 
 void PanIconWidget::slotZoomFactorChanged(double factor)
 {
+    if (m_zoomFactor == factor) return;
+    m_zoomFactor      = factor;
     m_zoomedOrgWidth  = (int)(m_orgWidth  * factor);
     m_zoomedOrgHeight = (int)(m_orgHeight * factor);
     updatePixmap();
@@ -115,10 +117,10 @@ void PanIconWidget::slotZoomFactorChanged(double factor)
 void PanIconWidget::setRegionSelection(QRect regionSelection)
 {
     d->regionSelection = regionSelection;
-    m_localRegionSelection.setX( 1 + m_rect.x() + (int)((float)d->regionSelection.x() *
+    m_localRegionSelection.setX( m_rect.x() + (int)((float)d->regionSelection.x() *
                                  ((float)m_width / (float)m_zoomedOrgWidth)) );
                                             
-    m_localRegionSelection.setY( 1 + m_rect.y() + (int)((float)d->regionSelection.y() *
+    m_localRegionSelection.setY( m_rect.y() + (int)((float)d->regionSelection.y() *
                                  ((float)m_height / (float)m_zoomedOrgHeight)) );
                                             
     m_localRegionSelection.setWidth( (int)((float)d->regionSelection.width() *
@@ -141,7 +143,7 @@ void PanIconWidget::setCursorToLocalRegionSelectionCenter(void)
     QCursor::setPos(mapToGlobal(m_localRegionSelection.center()));
 }
 
-void PanIconWidget::setCenterSelection(void)
+void PanIconWidget::setCenterSelection()
 {
     setRegionSelection(QRect( 
              (int)(((float)m_zoomedOrgWidth  / 2.0) - ((float)d->regionSelection.width()  / 2.0)),
@@ -150,7 +152,7 @@ void PanIconWidget::setCenterSelection(void)
              d->regionSelection.height()));
 }
 
-void PanIconWidget::regionSelectionMoved( bool targetDone )
+void PanIconWidget::regionSelectionMoved(bool targetDone)
 {
     if (targetDone)
     {
@@ -215,8 +217,8 @@ void PanIconWidget::paintEvent( QPaintEvent * )
 void PanIconWidget::setMouseFocus()
 {
     raise();
-    d->xpos = m_localRegionSelection.center().x();
-    d->ypos = m_localRegionSelection.center().y();
+    d->xpos          = m_localRegionSelection.center().x();
+    d->ypos          = m_localRegionSelection.center().y();
     d->moveSelection = true;
     setCursor( KCursor::sizeAllCursor() );           
     emit signalSelectionTakeFocus();
@@ -236,14 +238,55 @@ void PanIconWidget::hideEvent(QHideEvent *e)
 
 void PanIconWidget::mousePressEvent ( QMouseEvent * e )
 {
-    if ( e->button() == Qt::LeftButton &&
+    if ( (e->button() == Qt::LeftButton || e->button() == Qt::MidButton) &&
          m_localRegionSelection.contains( e->x(), e->y() ) )
     {
-       d->xpos = e->x();
-       d->ypos = e->y();
-       d->moveSelection = true;
-       setCursor( KCursor::sizeAllCursor() );           
-       emit signalSelectionTakeFocus();
+        d->xpos          = e->x();
+        d->ypos          = e->y();
+        d->moveSelection = true;
+        setCursor( KCursor::sizeAllCursor() );           
+        emit signalSelectionTakeFocus();
+    }
+}
+
+void PanIconWidget::mouseMoveEvent ( QMouseEvent * e )
+{
+    if ( d->moveSelection && 
+         (e->state() == Qt::LeftButton || e->state() == Qt::MidButton) )
+    {
+        int newxpos = e->x();
+        int newypos = e->y();
+    
+        m_localRegionSelection.moveBy (newxpos - d->xpos, newypos - d->ypos);
+        
+        d->xpos = newxpos;
+        d->ypos = newypos;
+                
+        // Perform normalization of selection area.
+            
+        if (m_localRegionSelection.left() < m_rect.left())
+            m_localRegionSelection.moveLeft(m_rect.left());
+                
+        if (m_localRegionSelection.top() < m_rect.top())
+            m_localRegionSelection.moveTop(m_rect.top());
+                
+        if (m_localRegionSelection.right() > m_rect.right())
+            m_localRegionSelection.moveRight(m_rect.right());
+                
+        if (m_localRegionSelection.bottom() > m_rect.bottom())
+            m_localRegionSelection.moveBottom(m_rect.bottom());
+        
+        updatePixmap();
+        repaint(false);
+        regionSelectionMoved(false);
+        return;
+    }        
+    else 
+    {
+        if ( m_localRegionSelection.contains( e->x(), e->y() ) )
+            setCursor( KCursor::handCursor() );           
+        else
+            setCursor( KCursor::arrowCursor() );           
     }
 }
 
@@ -251,49 +294,9 @@ void PanIconWidget::mouseReleaseEvent ( QMouseEvent * )
 {
     if ( d->moveSelection )
     {    
-       d->moveSelection = false;
-       setCursor( KCursor::arrowCursor() );           
-       regionSelectionMoved(true);
-    }
-}
-
-void PanIconWidget::mouseMoveEvent ( QMouseEvent * e )
-{
-    if ( d->moveSelection && e->state() == Qt::LeftButton )
-    {
-       int newxpos = e->x();
-       int newypos = e->y();
-
-       m_localRegionSelection.moveBy (newxpos - d->xpos, newypos - d->ypos);
-     
-       d->xpos = newxpos;
-       d->ypos = newypos;
-              
-       // Perform normalization of selection area.
-          
-       if (m_localRegionSelection.left() < m_rect.left())
-          m_localRegionSelection.moveLeft(m_rect.left());
-            
-       if (m_localRegionSelection.top() < m_rect.top())
-          m_localRegionSelection.moveTop(m_rect.top());
-            
-       if (m_localRegionSelection.right() > m_rect.right())
-          m_localRegionSelection.moveRight(m_rect.right());
-            
-       if (m_localRegionSelection.bottom() > m_rect.bottom())
-          m_localRegionSelection.moveBottom(m_rect.bottom());
-       
-       updatePixmap();
-       repaint(false);
-       regionSelectionMoved(false);
-       return;
-    }        
-    else 
-    {
-       if ( m_localRegionSelection.contains( e->x(), e->y() ) )
-           setCursor( KCursor::handCursor() );           
-       else
-           setCursor( KCursor::arrowCursor() );           
+        d->moveSelection = false;
+        setCursor( KCursor::arrowCursor() );           
+        regionSelectionMoved(true);
     }
 }
 

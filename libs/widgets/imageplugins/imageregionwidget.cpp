@@ -18,6 +18,10 @@
  * 
  * ============================================================ */
 
+// C++ includes
+
+#include <cmath>
+
 // Qt includes.
 
 #include <qpainter.h>
@@ -47,29 +51,23 @@
 
 namespace Digikam
 {
+
 class ImageRegionWidgetPriv
 {
+
 public:
 
     ImageRegionWidgetPriv()
     {
         iface            = 0;
-        movingInProgress = false;
-        pixmapRegion     = 0;
-        zoomFactor       = 1.0;
         separateView     = ImageRegionWidget::SeparateViewVertical;
     }
-
-    bool         movingInProgress;
 
     int          separateView;
     int          xpos;
     int          ypos;
 
-    double       zoomFactor;
-
-    QPixmap      pixmap;                // Entire content widget pixmap.
-    QPixmap     *pixmapRegion;          // Pixmap of current region to render.
+    QPixmap      pixmapRegion;          // Pixmap of current region to render.
     
     QPointArray  hightlightPoints;
     
@@ -79,10 +77,14 @@ public:
 };
 
 ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrollBar)
-                 : QScrollView(parent, 0, Qt::WDestructiveClose)
+                 : PreviewWidget(parent)
 {
     d = new ImageRegionWidgetPriv;
     d->iface = new ImageIface(0, 0);
+    d->image = d->iface->getOriginalImg()->copy(); 
+
+    setMinimumSize(wp, hp);
+    setBackgroundColor(colorGroup().background());
 
     if( !scrollBar ) 
     {
@@ -90,52 +92,60 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
        setHScrollBarMode( QScrollView::AlwaysOff );
     }
     
-    setMinimumSize(wp, hp);
-    viewport()->setMouseTracking(true);
-    viewport()->setPaletteBackgroundColor(colorGroup().background());
-    slotZoomFactorChanged(1.0);
+    connect(this, SIGNAL(signalZoomFactorChanged(double)),
+            this, SLOT(slotZoomFactorChanged()));
 }
 
 ImageRegionWidget::~ImageRegionWidget()
 {
-    if (d->iface)        delete d->iface;
-    if (d->pixmapRegion) delete d->pixmapRegion;
+    if (d->iface) delete d->iface;
     delete d;
 }
 
-void ImageRegionWidget::slotZoomFactorChanged(double factor)
+void ImageRegionWidget::resizeEvent(QResizeEvent* e)
 {
-    QPoint currentPos((int)(contentsX() / d->zoomFactor), (int)(contentsY() / d->zoomFactor));
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    
-    d->image = d->iface->getOriginalImg()->copy(); 
+    if (!e) return;
 
-    d->zoomFactor = factor;
+    QScrollView::resizeEvent(e);
 
-    if(d->zoomFactor != 1.0)
-    {
-        DImg img = d->image.smoothScale((uint)(d->image.width()  * d->zoomFactor), 
-                                        (uint)(d->image.height() * d->zoomFactor));
-        d->image = img;
-    }
-    
-    updateOriginalImage();
-    setContentsPos((int)(currentPos.x() * d->zoomFactor), (int)(currentPos.y() * d->zoomFactor));
-    kapp->restoreOverrideCursor();
-    QTimer::singleShot(0, this, SLOT(slotTimerResizeEvent())); 
+    // NOTE: We will always adapt the min. zoom factor to the visible size of canvas
+ 
+    double srcWidth  = previewWidth();
+    double srcHeight = previewHeight();
+    double dstWidth  = contentsRect().width();
+    double dstHeight = contentsRect().height();
+    double zoom      = QMAX(dstWidth/srcWidth, dstHeight/srcHeight); 
+
+    setZoomMin(zoom);
+    setZoomMax(zoom*12.0);
+    setZoomFactor(zoom);
 }
 
-void ImageRegionWidget::viewportResizeEvent(QResizeEvent *)
+int ImageRegionWidget::previewWidth()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    updateOriginalImage();
-    kapp->restoreOverrideCursor();
-    QTimer::singleShot(0, this, SLOT(slotTimerResizeEvent())); 
+    return d->image.width();
 }
 
-void ImageRegionWidget::slotTimerResizeEvent()
+int ImageRegionWidget::previewHeight()
 {
-    emit contentsMovedEvent(true);
+    return d->image.height();
+}
+
+bool ImageRegionWidget::previewIsNull()
+{
+    return d->image.isNull();
+}
+
+void ImageRegionWidget::resetPreview()
+{
+    d->image.reset();
+}
+
+void ImageRegionWidget::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
+{
+    DImg img = d->image.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());    
+    QPixmap pix2 = d->iface->convertToPixmap(img);
+    bitBlt(pix, 0, 0, &pix2, 0, 0);
 }
 
 void ImageRegionWidget::setHighLightPoints(QPointArray pointsList)
@@ -144,71 +154,53 @@ void ImageRegionWidget::setHighLightPoints(QPointArray pointsList)
     repaintContents(false);   
 }
 
+void ImageRegionWidget::slotZoomFactorChanged()
+{
+    emit signalContentsMovedEvent(true);
+}
+
 void ImageRegionWidget::slotSeparateViewToggled(int mode)
 {
     d->separateView = mode;
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    updateOriginalImage();
-    kapp->restoreOverrideCursor();
-    QTimer::singleShot(0, this, SLOT(slotTimerResizeEvent())); 
+    updateContentsSize();
+    slotZoomFactorChanged(); 
 }
 
-void ImageRegionWidget::updateOriginalImage()
+QRect ImageRegionWidget::getImageRegion()
 {
-    updatePixmap(d->image);
-}
+    QRect region;    
 
-void ImageRegionWidget::updatePixmap(DImg& img)
-{
-    horizontalScrollBar()->setLineStep( 1 );
-    horizontalScrollBar()->setPageStep( 1 );
-    verticalScrollBar()->setLineStep( 1 );
-    verticalScrollBar()->setPageStep( 1 );
-    
-    int w = img.width();
-    int h = img.height();
-    
     switch (d->separateView)
     {
         case SeparateViewVertical:
         case SeparateViewHorizontal:
         case SeparateViewNone:
-        {
-            d->pixmap = d->iface->convertToPixmap(img);
-            resizeContents(w, h);
+            region = QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight()); 
             break;
-        }
         case SeparateViewDuplicateVert:
-        {
-            QPixmap pix = d->iface->convertToPixmap(img);
-            d->pixmap   = QPixmap(w+visibleWidth()/2, h);
-            d->pixmap.fill(paletteBackgroundColor().rgb());
-            copyBlt( &d->pixmap, 0, 0, &pix, 0, 0, w, h );
-            resizeContents(w+visibleWidth()/2, h);
+            region = QRect(contentsX(), contentsY(), visibleWidth()/2, visibleHeight());  
             break;
-        }
         case SeparateViewDuplicateHorz:
-        {
-            QPixmap pix = d->iface->convertToPixmap(img);
-            d->pixmap   = QPixmap(w, h+visibleHeight()/2);
-            d->pixmap.fill(paletteBackgroundColor().rgb());
-            copyBlt( &d->pixmap, 0, 0, &pix, 0, 0, w, h );
-            resizeContents(w, h+visibleHeight()/2);
+            region = QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight()/2);  
             break;
-        }
-        default:
-            DWarning() << "Unknown separation view specified" << endl;
     }
-
-    repaintContents(false);    
+        
+    return region;   
 }
 
-void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
-{
-    p->drawPixmap(x, y, d->pixmap, x, y, w, h);
-    
-    if (!d->movingInProgress)
+void ImageRegionWidget::viewportPaintExtraData()
+{   
+    if (!m_movingInProgress && !d->pixmapRegion.isNull())
     {
+        QPainter p(viewport());
+        QRect region = getLocalTargetImageRegion();
+        QRect rt(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight())); 
+
+        region = getLocalImageRegionToRender();
+        QRect ro(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight())); 
+
+        bitBlt(viewport(), rt.x(), rt.y(), &d->pixmapRegion, 0, 0, rt.width(), rt.height());
+
         // Drawing separate view.
         
         switch (d->separateView)
@@ -216,73 +208,71 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
             case SeparateViewVertical:
             case SeparateViewDuplicateVert:
             {
-                p->setPen(QPen(Qt::white, 2, Qt::SolidLine));
-                p->drawLine(getLocalTargetImageRegion().topLeft().x(),
-                            getLocalTargetImageRegion().topLeft().y(),
-                            getLocalTargetImageRegion().bottomLeft().x(),
-                            getLocalTargetImageRegion().bottomLeft().y());
-                p->setPen(QPen(Qt::red, 2, Qt::DotLine));
-                p->drawLine(getLocalTargetImageRegion().topLeft().x(),
-                            getLocalTargetImageRegion().topLeft().y()+1,
-                            getLocalTargetImageRegion().bottomLeft().x(),
-                            getLocalTargetImageRegion().bottomLeft().y()-1);
+                p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
+                p.drawLine(rt.topLeft().x(),    rt.topLeft().y(),
+                           rt.bottomLeft().x(), rt.bottomLeft().y());
+                p.setPen(QPen(Qt::red, 2, Qt::DotLine));
+                p.drawLine(rt.topLeft().x(),    rt.topLeft().y()+1,
+                           rt.bottomLeft().x(), rt.bottomLeft().y()-1);
                             
-                p->setPen(QPen(Qt::red, 1)) ;                    
-                QFontMetrics fontMt = p->fontMetrics();
+                p.setPen(QPen(Qt::red, 1)) ;                    
+                QFontMetrics fontMt = p.fontMetrics();
                 
                 QString text(i18n("Target"));
                 QRect textRect;
                 QRect fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text); 
-                textRect.setTopLeft(QPoint(getLocalTargetImageRegion().topLeft().x()+20,
-                                           getLocalTargetImageRegion().topLeft().y()+20));
-                textRect.setSize( QSize(fontRect.width(), fontRect.height()) );
-                p->fillRect(textRect, QBrush(QColor(250, 250, 255)) );
-                p->drawRect(textRect);
-                p->drawText(textRect, Qt::AlignCenter, text);
+                textRect.setTopLeft(QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20));
+                textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
+                p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+                p.drawRect(textRect);
+                p.drawText(textRect, Qt::AlignCenter, text);
                             
                 text = i18n("Original");                    
                 fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text); 
-                textRect.setTopLeft(QPoint(contentsX()+20, contentsY()+20));
-                textRect.setSize( QSize(fontRect.width(), fontRect.height() ) );       
-                p->fillRect(textRect, QBrush(QColor(250, 250, 255)) );
-                p->drawRect(textRect);
-                p->drawText(textRect, Qt::AlignCenter, text);
+
+                if (d->separateView == SeparateViewVertical)
+                    ro.moveBy(-ro.width(), 0);
+
+                textRect.setTopLeft(QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20));
+                textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );       
+                p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+                p.drawRect(textRect);
+                p.drawText(textRect, Qt::AlignCenter, text);
                 break;
             }
             case SeparateViewHorizontal:
             case SeparateViewDuplicateHorz:
             {
-                p->setPen(QPen(Qt::white, 2, Qt::SolidLine));
-                p->drawLine(getLocalTargetImageRegion().topLeft().x()+1,
-                            getLocalTargetImageRegion().topLeft().y(),
-                            getLocalTargetImageRegion().topRight().x()-1,
-                            getLocalTargetImageRegion().topRight().y());
-                p->setPen(QPen(Qt::red, 2, Qt::DotLine));
-                p->drawLine(getLocalTargetImageRegion().topLeft().x(),
-                            getLocalTargetImageRegion().topLeft().y(),
-                            getLocalTargetImageRegion().topRight().x(),
-                            getLocalTargetImageRegion().topRight().y());
+                p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
+                p.drawLine(rt.topLeft().x()+1,  rt.topLeft().y(),
+                           rt.topRight().x()-1, rt.topRight().y());
+                p.setPen(QPen(Qt::red, 2, Qt::DotLine));
+                p.drawLine(rt.topLeft().x(),   rt.topLeft().y(),
+                           rt.topRight().x(), rt.topRight().y());
                             
-                p->setPen(QPen(Qt::red, 1)) ;                    
-                QFontMetrics fontMt = p->fontMetrics();
+                p.setPen(QPen(Qt::red, 1)) ;                    
+                QFontMetrics fontMt = p.fontMetrics();
                 
                 QString text(i18n("Target"));
                 QRect textRect;
                 QRect fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text); 
-                textRect.setTopLeft(QPoint(getLocalTargetImageRegion().topLeft().x()+20,
-                                           getLocalTargetImageRegion().topLeft().y()+20));
-                textRect.setSize( QSize(fontRect.width(), fontRect.height()) );
-                p->fillRect(textRect, QBrush(QColor(250, 250, 255)) );
-                p->drawRect(textRect);
-                p->drawText(textRect, Qt::AlignCenter, text);
+                textRect.setTopLeft(QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20));
+                textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
+                p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+                p.drawRect(textRect);
+                p.drawText(textRect, Qt::AlignCenter, text);
                             
                 text = i18n("Original");                    
-                fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text); 
-                textRect.setTopLeft(QPoint(contentsX()+20, contentsY()+20));
-                textRect.setSize( QSize(fontRect.width(), fontRect.height() ) );       
-                p->fillRect(textRect, QBrush(QColor(250, 250, 255)) );
-                p->drawRect(textRect);
-                p->drawText(textRect, Qt::AlignCenter, text);
+                fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
+
+                if (d->separateView == SeparateViewHorizontal)
+                    ro.moveBy(0, -ro.height());
+
+                textRect.setTopLeft(QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20));
+                textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );       
+                p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+                p.drawRect(textRect);
+                p.drawText(textRect, Qt::AlignCenter, text);
                 break;
             }
         }
@@ -292,7 +282,7 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
         if (!d->hightlightPoints.isEmpty())
         {
             QPoint pt;
-            QRect  ptArea;
+            QRect  hpArea;
             
             for (uint i = 0 ; i < d->hightlightPoints.count() ; i++)
             {
@@ -300,148 +290,132 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
                 
                 if ( getImageRegionToRender().contains(pt) )
                 {
-                    p->setPen(QPen(Qt::white, 1, Qt::SolidLine));
-                    ptArea.setSize(QSize(12, 12));
-                    ptArea.moveCenter(QPoint((int)(pt.x() * d->zoomFactor), (int)(pt.y() * d->zoomFactor)));
-                    p->drawEllipse(ptArea);
-                    ptArea.setSize(QSize(8, 8));
-                    ptArea.moveCenter(QPoint((int)(pt.x() * d->zoomFactor), (int)(pt.y() * d->zoomFactor)));
-                    p->drawEllipse(ptArea);
-                    p->setPen(QPen(Qt::black, 1, Qt::SolidLine));
-                    ptArea.setSize(QSize(10, 10));
-                    ptArea.moveCenter(QPoint((int)(pt.x() * d->zoomFactor), (int)(pt.y() * d->zoomFactor)));
-                    p->drawEllipse(ptArea);
-                    ptArea.setSize(QSize(6, 6));
-                    ptArea.moveCenter(QPoint((int)(pt.x() * d->zoomFactor), (int)(pt.y() * d->zoomFactor)));
-                    p->drawEllipse(ptArea);
+                    int x = (int)(((double)pt.x() * tileSize()) / floor(tileSize() / zoomFactor()));
+                    int y = (int)(((double)pt.y() * tileSize()) / floor(tileSize() / zoomFactor()));
+
+                    QPoint hp(contentsToViewport(QPoint(x, y)));
+                    hpArea.setSize(QSize((int)(16*zoomFactor()), (int)(16*zoomFactor())));
+                    hpArea.moveCenter(hp);
+
+                    p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
+                    p.drawLine(hp.x(), hpArea.y(), 
+                               hp.x(), hp.y()-(int)(3*zoomFactor()));
+                    p.drawLine(hp.x(), hp.y()+(int)(3*zoomFactor()), 
+                               hp.x(), hpArea.bottom());
+                    p.drawLine(hpArea.x(),                   hp.y(), 
+                               hp.x()-(int)(3*zoomFactor()), hp.y());
+                    p.drawLine(hp.x()+(int)(3*zoomFactor()), hp.y(), 
+                               hpArea.right(),                hp.y());
+
+                    p.setPen(QPen(Qt::red, 2, Qt::DotLine));
+                    p.drawLine(hp.x(), hpArea.y(), 
+                               hp.x(), hp.y()-(int)(3*zoomFactor()));
+                    p.drawLine(hp.x(), hp.y()+(int)(3*zoomFactor()), 
+                               hp.x(), hpArea.bottom());
+                    p.drawLine(hpArea.x(),                   hp.y(), 
+                               hp.x()-(int)(3*zoomFactor()), hp.y());
+                    p.drawLine(hp.x()+(int)(3*zoomFactor()), hp.y(), 
+                               hpArea.right(),                hp.y());
                 }
             }
         }
+        p.end();
     }
 }
 
-void ImageRegionWidget::setCenterContentsPosition(void)
+void ImageRegionWidget::setCenterContentsPosition()
 {
     center(contentsWidth()/2, contentsHeight()/2);    
-    emit contentsMovedEvent(true);
+    slotZoomFactorChanged();
 }
 
 void ImageRegionWidget::setContentsPosition(int x, int y, bool targetDone)
 {
+    if( targetDone )
+        m_movingInProgress = false;
+
     setContentsPos(x, y);    
     
     if( targetDone )
-       d->movingInProgress = false;
-    else
-       d->movingInProgress = true;
-    
-    repaintContents(false);    
-    
-    if( targetDone )
-       emit contentsMovedEvent(true);
+       slotZoomFactorChanged();
 }
 
-void ImageRegionWidget::backupPixmapRegion(void)
+void ImageRegionWidget::backupPixmapRegion()
 {
-    if (d->pixmapRegion) delete d->pixmapRegion;
-    QRect area      = getLocalTargetImageRegion();
-    d->pixmapRegion = new QPixmap(area.size());
-    copyBlt( d->pixmapRegion, 0, 0, &d->pixmap, area.x(), area.y(), area.width(), area.height() );
+    d->pixmapRegion = QPixmap();
 }
 
-void ImageRegionWidget::restorePixmapRegion(void)
+void ImageRegionWidget::restorePixmapRegion()
 {
-    if (!d->pixmapRegion) return;
-    QRect area = getLocalTargetImageRegion();
-    copyBlt( &d->pixmap, area.x(), area.y(), d->pixmapRegion, 0, 0, area.width(), area.height() );
+    m_movingInProgress = true;
+    viewport()->repaint(false);
 }
 
 void ImageRegionWidget::updatePreviewImage(DImg *img)
 {
     DImg image = img->copy();
+    QRect r    = getLocalImageRegionToRender();
+    image.resize(r.width(), r.height());
 
     // Because image plugins are tool witch only work on image data, the DImg container
     // do not contain metadata from original image. About Color Managed View, we need to 
     // restore the embedded ICC color profile. 
     image.setICCProfil(d->image.getICCProfil());
-
-    image.resize((uint)(image.width()  * d->zoomFactor), 
-                 (uint)(image.height() * d->zoomFactor));
-    QPixmap pix = d->iface->convertToPixmap(image);
-    QRect area  = getLocalTargetImageRegion();
-    copyBlt( &d->pixmap, area.x(), area.y(), &pix, 0, 0, area.width(), area.height() );
+    d->pixmapRegion = d->iface->convertToPixmap(image);
 }
 
-DImg ImageRegionWidget::getImageRegionImage(void)
+DImg ImageRegionWidget::getImageRegionImage()
 {
-    return ( d->iface->getOriginalImg()->copy(getImageRegionToRender()) );
+    return (d->image.copy(getImageRegionToRender()));
 }
 
-QRect ImageRegionWidget::getImageRegion(void)
+QRect ImageRegionWidget::getImageRegionToRender()
 {
-    QRect region;    
+    QRect r = getLocalImageRegionToRender();
 
-    switch (d->separateView)
-    {
-        case SeparateViewVertical:
-        case SeparateViewHorizontal:
-        case SeparateViewNone:
-            region = QRect(contentsX(), contentsY(), 
-                (visibleWidth()  < d->image.width()) ? visibleWidth()  : d->image.width(),
-                (visibleHeight() < d->image.height()) ? visibleHeight() : d->image.height());
-            break;
-        case SeparateViewDuplicateVert:
-            region = QRect(contentsX(), contentsY(), 
-                (visibleWidth()/2  < d->image.width()) ? visibleWidth()/2  : d->image.width(),
-                (visibleHeight() < d->image.height()) ? visibleHeight() : d->image.height());
-            break;
-        case SeparateViewDuplicateHorz:
-            region = QRect(contentsX(), contentsY(), 
-                (visibleWidth()  < d->image.width()) ? visibleWidth()  : d->image.width(),
-                (visibleHeight()/2 < d->image.height()) ? visibleHeight()/2 : d->image.height());
-            break;
-    }
-        
-    return region;        
+    int x = (int)(((double)r.x()      / tileSize()) * floor(tileSize() / zoomFactor()));
+    int y = (int)(((double)r.y()      / tileSize()) * floor(tileSize() / zoomFactor()));
+    int w = (int)(((double)r.width()  / tileSize()) * floor(tileSize() / zoomFactor()));   
+    int h = (int)(((double)r.height() / tileSize()) * floor(tileSize() / zoomFactor()));
+
+    QRect rect(x, y, w, h);
+    return (rect);
 }
 
-QRect ImageRegionWidget::getImageRegionToRender(void)
+QRect ImageRegionWidget::getLocalImageRegionToRender()
 {
-    QRect region = getLocalImageRegionToRender();
-    region.setX((int)(region.x()/d->zoomFactor));
-    region.setY((int)(region.y()/d->zoomFactor));
-    region.setWidth((int)(region.width()/d->zoomFactor));
-    region.setHeight((int)(region.height()/d->zoomFactor));
-    return (region);
-}
-
-QRect ImageRegionWidget::getLocalImageRegionToRender(void)
-{
-    int normalizedW, normalizedH;
-    
-    // For large screen.
-    if (visibleWidth()  > d->image.width())  normalizedW = d->image.width();
-    else normalizedW = visibleWidth();
-    if (visibleHeight() > d->image.height()) normalizedH = d->image.height();
-    else normalizedH = visibleHeight();
-
     QRect region;
     
     if (d->separateView == SeparateViewVertical)
-        region = QRect(contentsX()+normalizedW/2, contentsY(), normalizedW/2, normalizedH);
+    {
+        region = QRect((int)ceilf(contentsX()+visibleWidth()/2.0), contentsY(), 
+                       (int)ceilf(visibleWidth()/2.0),             visibleHeight());
+    }
     else if (d->separateView == SeparateViewHorizontal)
-        region = QRect(contentsX(), contentsY()+normalizedH/2, normalizedW, normalizedH/2);
+    {
+        region = QRect(contentsX(),    (int)ceilf(contentsY()+visibleHeight()/2.0), 
+                       visibleWidth(), (int)ceilf(visibleHeight()/2.0));
+    }
     else if (d->separateView == SeparateViewDuplicateVert)
-        region = QRect(contentsX(), contentsY(), normalizedW/2, normalizedH);
+    {
+        region = QRect(contentsX(),                    contentsY(), 
+                       (int)ceilf(visibleWidth()/2.0), visibleHeight());
+    }
     else if (d->separateView == SeparateViewDuplicateHorz)
-        region = QRect(contentsX(), contentsY(), normalizedW, normalizedH/2);
+    {
+        region = QRect(contentsX(),    contentsY(), 
+                       visibleWidth(), (int)ceilf(visibleHeight()/2.0));
+    }
     else 
-        region = QRect(contentsX(), contentsY(), normalizedW, normalizedH);
-            
+    {
+        region = QRect(contentsX(),    contentsY(), 
+                       visibleWidth(), visibleHeight());
+    }
+    
     return (region);
 }
 
-QRect ImageRegionWidget::getLocalTargetImageRegion(void)
+QRect ImageRegionWidget::getLocalTargetImageRegion()
 {
     QRect region = getLocalImageRegionToRender();
     
@@ -453,45 +427,43 @@ QRect ImageRegionWidget::getLocalTargetImageRegion(void)
     return region;
 }
 
-void ImageRegionWidget::contentsMousePressEvent(QMouseEvent *e)
+void ImageRegionWidget::setContentsSize()
 {
-    if ( e->button() == Qt::LeftButton )
+    switch (d->separateView)
     {
-       d->xpos = e->x();
-       d->ypos = e->y();
-       d->movingInProgress = true;
-       setCursor( KCursor::sizeAllCursor() );    
-       restorePixmapRegion();
+        case SeparateViewVertical:
+        case SeparateViewHorizontal:
+        case SeparateViewNone:
+        {
+            PreviewWidget::setContentsSize();
+            break;
+        }
+        case SeparateViewDuplicateVert:
+        {
+            resizeContents(zoomWidth()+visibleWidth()/2, zoomHeight());
+            break;
+        }
+        case SeparateViewDuplicateHorz:
+        {
+            resizeContents(zoomWidth(), zoomHeight()+visibleHeight()/2);
+            break;
+        }
+        default:
+            DWarning() << "Unknown separation view specified" << endl;
     }
 }
 
-void ImageRegionWidget::contentsMouseMoveEvent(QMouseEvent *e)
+void ImageRegionWidget::contentsWheelEvent(QWheelEvent *e)
 {
-    if ( e->state() == Qt::LeftButton )
-    {
-       uint newxpos = e->x();
-       uint newypos = e->y();
-       
-       scrollBy (-(newxpos - d->xpos), -(newypos - d->ypos));
-       repaintContents(false);    
-       
-       d->xpos = newxpos - (newxpos-d->xpos);
-       d->ypos = newypos - (newypos-d->ypos);
-       emit contentsMovedEvent(false);
-       return;
-    }
+    e->accept();
 
-    setCursor( KCursor::handCursor() );    
-}
-
-void ImageRegionWidget::contentsMouseReleaseEvent(QMouseEvent *)
-{
-    if (d->movingInProgress == true)
+    if (e->state() & Qt::ControlButton)
     {
-        d->movingInProgress = false;
-        unsetCursor(); 
-        backupPixmapRegion();
-        emit contentsMovedEvent(true);
+        if (e->delta() < 0 && !maxZoom())
+            slotIncreaseZoom();
+        else if (e->delta() > 0 && !minZoom())
+            slotDecreaseZoom();
+        return;
     }
 }
 

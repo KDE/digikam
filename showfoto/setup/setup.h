@@ -50,6 +50,7 @@ public:
     {
         LastPageUsed = -1,
         EditorPage=0,
+        ToolTipPage,
         DcrawPage,
         IOFilesPage,
         SlideshowPage,

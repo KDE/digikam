@@ -784,7 +784,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
     if (item)
     {
         selectTagsMenu.insertSeparator(-1);
-        selectTagsMenu.insertItem(i18n("Childs"),     17);
+        selectTagsMenu.insertItem(i18n("Children"),     17);
         selectTagsMenu.insertItem(i18n("Parents"),    19);
     }
     popmenu.insertItem(i18n("Select"), &selectTagsMenu);
@@ -794,7 +794,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
     if (item)
     {
         deselectTagsMenu.insertSeparator(-1);
-        deselectTagsMenu.insertItem(i18n("Childs"),   18);
+        deselectTagsMenu.insertItem(i18n("Children"),   18);
         deselectTagsMenu.insertItem(i18n("Parents"),  20);
     }
     popmenu.insertItem(i18n("Deselect"), &deselectTagsMenu);
@@ -806,7 +806,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
     toggleAutoMenu.setCheckable(true);
     toggleAutoMenu.insertItem(i18n("None"),    21);
     toggleAutoMenu.insertSeparator(-1);
-    toggleAutoMenu.insertItem(i18n("Childs"),  22);
+    toggleAutoMenu.insertItem(i18n("Children"),  22);
     toggleAutoMenu.insertItem(i18n("Parents"), 23);
     toggleAutoMenu.insertItem(i18n("Both"),    24);
     toggleAutoMenu.setItemChecked(21 + d->toggleAutoTags, true);
@@ -940,7 +940,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
             d->toggleAutoTags = NoToggleAuto;
             break;
         }
-        case 22:   // Toggle auto Childs tags.
+        case 22:   // Toggle auto Children tags.
         {
             d->toggleAutoTags = Children;
             break;
@@ -950,7 +950,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
             d->toggleAutoTags = Parents;
             break;
         }
-        case 24:   // Toggle auto Childs and Parents tags.
+        case 24:   // Toggle auto Children and Parents tags.
         {
             d->toggleAutoTags = ChildrenAndParents;
             break;

@@ -27,7 +27,6 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qtimer.h>
-#include <qcheckbox.h>
 #include <qhbuttongroup.h> 
 #include <qpushbutton.h>
 #include <qlayout.h>
@@ -49,6 +48,8 @@
 
 #include "ddebug.h"
 #include "sidebar.h"
+#include "statuszoombar.h"
+#include "thumbnailsize.h"
 #include "imageregionwidget.h"
 #include "imagepaniconwidget.h"
 #include "imagepannelwidget.h"
@@ -61,15 +62,6 @@ class ImagePannelWidgetPriv
 {
 public:
 
-    enum ZoomOptions 
-    {
-        ZoomX10=10,   //  1.0 zoom factor
-        ZoomX15=15,   //  1.5 zoom factor
-        ZoomX20=20,   //  2.0 zoom factor
-        ZoomX25=25,   //  2.5 zoom factor
-        ZoomX30=30    //  3.0 zoom factor
-    };
-
     ImagePannelWidgetPriv()
     {
         imageRegionWidget  = 0;
@@ -77,18 +69,17 @@ public:
         mainLayout         = 0;
         separateView       = 0;
         progressBar        = 0;
-        zoomButtons        = 0;
         settingsSideBar    = 0;
         splitter           = 0;        
         settingsLayout     = 0;
         settings           = 0;
         previewWidget      = 0;
+        zoomBar            = 0;
     }
 
     QGridLayout        *mainLayout;
     
     QHButtonGroup      *separateView;
-    QHButtonGroup      *zoomButtons;
     
     QString             settingsSection;
     
@@ -105,6 +96,8 @@ public:
     ImagePanIconWidget *imagePanIconWidget;
     
     Sidebar            *settingsSideBar;
+
+    StatusZoomBar      *zoomBar;
 };
     
 ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSection, 
@@ -124,11 +117,11 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
 
     // -------------------------------------------------------------
 
-    QFrame *preview = new QFrame(d->previewWidget);
-    preview->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l1 = new QVBoxLayout(preview, 5, 0);
+    QFrame *preview      = new QFrame(d->previewWidget);
+    QVBoxLayout* l1      = new QVBoxLayout(preview, 5, 0);
     d->imageRegionWidget = new ImageRegionWidget(w, h, preview, false);
     d->imageRegionWidget->setFrameStyle(QFrame::NoFrame);
+    preview->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QWhatsThis::add( d->imageRegionWidget, i18n("<p>Here you can see the original clip image "
                                                 "which will be used for the preview computation."
                                                 "<p>Click and drag the mouse cursor in the "
@@ -140,55 +133,12 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
 
     // -------------------------------------------------------------
     
-    d->zoomButtons = new QHButtonGroup(d->previewWidget);
-    d->zoomButtons->setExclusive(true);
-    d->zoomButtons->setInsideMargin( 0 );
-    d->zoomButtons->setFrameShape(QFrame::NoFrame);
-
-    QPushButton *zoomX10Button = new QPushButton( d->zoomButtons );
-    KGlobal::dirs()->addResourceType("zoom10", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("zoom10", "zoom10.png");
-    zoomX10Button->setPixmap( QPixmap( directory + "zoom10.png" ) );
-    d->zoomButtons->insert(zoomX10Button, ImagePannelWidgetPriv::ZoomX10);
-    zoomX10Button->setToggleButton(true);
-    QWhatsThis::add( zoomX10Button, i18n( "<p>Press this button to stop magnifying the image" ) );
-
-    QPushButton *zoomX15Button = new QPushButton( d->zoomButtons );
-    KGlobal::dirs()->addResourceType("zoom15", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("zoom15", "zoom15.png");
-    zoomX15Button->setPixmap( QPixmap( directory + "zoom15.png" ) );
-    d->zoomButtons->insert(zoomX15Button, ImagePannelWidgetPriv::ZoomX15);
-    zoomX15Button->setToggleButton(true);
-    QWhatsThis::add( zoomX15Button, i18n( "<p>Press this button to magnify image using 1.5:1 zoom factor." ) );
-
-    QPushButton *zoomX20Button = new QPushButton( d->zoomButtons );
-    KGlobal::dirs()->addResourceType("zoom20", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("zoom20", "zoom20.png");
-    zoomX20Button->setPixmap( QPixmap( directory + "zoom20.png" ) );
-    d->zoomButtons->insert(zoomX20Button, ImagePannelWidgetPriv::ZoomX20);
-    zoomX20Button->setToggleButton(true);
-    QWhatsThis::add( zoomX20Button, i18n( "<p>Press this button to magnify image using 2:1 zoom factor." ) );
-
-    QPushButton *zoomX25Button = new QPushButton( d->zoomButtons );
-    KGlobal::dirs()->addResourceType("zoom25", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("zoom25", "zoom25.png");
-    zoomX25Button->setPixmap( QPixmap( directory + "zoom25.png" ) );
-    d->zoomButtons->insert(zoomX25Button, ImagePannelWidgetPriv::ZoomX25);
-    zoomX25Button->setToggleButton(true);
-    QWhatsThis::add( zoomX25Button, i18n( "<p>Press this button to magnify image using 2.5:1 zoom factor." ) );
-
-    QPushButton *zoomX30Button = new QPushButton( d->zoomButtons );
-    KGlobal::dirs()->addResourceType("zoom30", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("zoom30", "zoom30.png");
-    zoomX30Button->setPixmap( QPixmap( directory + "zoom30.png" ) );
-    d->zoomButtons->insert(zoomX30Button, ImagePannelWidgetPriv::ZoomX30);
-    zoomX30Button->setToggleButton(true);
-    QWhatsThis::add( zoomX30Button, i18n( "<p>Press this button to magnify image using 3:1 zoom factor." ) );
-
-    d->zoomButtons->setButton(ImagePannelWidgetPriv::ZoomX10);
+    d->zoomBar = new StatusZoomBar(d->previewWidget);
+    QWhatsThis::add( d->zoomBar, i18n("<p>Set here the zoom factor used to render picture on preview pannel.") );
 
     // -------------------------------------------------------------
     
+    QString directory;
     d->separateView = new QHButtonGroup(d->previewWidget);
     d->separateView->setExclusive(true);
     d->separateView->setInsideMargin( 0 );
@@ -265,7 +215,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     // -------------------------------------------------------------
         
     d->mainLayout->addMultiCellWidget(preview, 0, 1, 0, 3);
-    d->mainLayout->addMultiCellWidget(d->zoomButtons, 2, 2, 0, 0);
+    d->mainLayout->addMultiCellWidget(d->zoomBar, 2, 2, 0, 0);
     d->mainLayout->addMultiCellWidget(d->progressBar, 2, 2, 2, 2);
     d->mainLayout->addMultiCellWidget(d->separateView, 2, 2, 3, 3);
     
@@ -304,7 +254,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     
     // -------------------------------------------------------------
     
-    connect(d->imageRegionWidget, SIGNAL(contentsMovedEvent(bool)),
+    connect(d->imageRegionWidget, SIGNAL(signalContentsMovedEvent(bool)),
             this, SLOT(slotOriginalImageRegionChanged(bool)));
 
     connect(d->imagePanIconWidget, SIGNAL(signalSelectionMoved(QRect, bool)),
@@ -319,14 +269,14 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     connect(d->separateView, SIGNAL(released(int)),
             d->imagePanIconWidget, SLOT(slotSeparateViewToggled(int)));
 
-    connect(this, SIGNAL(signalZoomFactorChanged(double)),
-            d->imageRegionWidget, SLOT(slotZoomFactorChanged(double)));
+    connect(d->zoomBar, SIGNAL(signalZoomMinusClicked()),
+            d->imageRegionWidget, SLOT(slotDecreaseZoom()));
 
-    connect(this, SIGNAL(signalZoomFactorChanged(double)),
-            d->imagePanIconWidget, SLOT(slotZoomFactorChanged(double)));
+    connect(d->zoomBar, SIGNAL(signalZoomPlusClicked()),
+            d->imageRegionWidget, SLOT(slotIncreaseZoom()));
 
-    connect(d->zoomButtons, SIGNAL(released(int)),
-            this, SLOT(slotZoomButtonReleased(int)));
+    connect(d->zoomBar, SIGNAL(signalZoomSliderReleased(int)),
+            this, SLOT(slotZoomSliderChanged(int)));
 }
 
 ImagePannelWidget::~ImagePannelWidget()
@@ -336,13 +286,13 @@ ImagePannelWidget::~ImagePannelWidget()
     delete d;
 }
 
-void ImagePannelWidget::readSettings(void)
+void ImagePannelWidget::readSettings()
 {
     KConfig *config = kapp->config();
     config->setGroup(d->settingsSection);
     int mode = config->readNumEntry("Separate View", ImageRegionWidget::SeparateViewDuplicateVert);
-    mode = QMAX(ImageRegionWidget::SeparateViewHorizontal, mode);
-    mode = QMIN(ImageRegionWidget::SeparateViewDuplicateHorz, mode);
+    mode     = QMAX(ImageRegionWidget::SeparateViewHorizontal, mode);
+    mode     = QMIN(ImageRegionWidget::SeparateViewDuplicateHorz, mode);
     
     d->imageRegionWidget->blockSignals(true);
     d->imagePanIconWidget->blockSignals(true);
@@ -355,7 +305,7 @@ void ImagePannelWidget::readSettings(void)
     d->separateView->blockSignals(false);
 }
     
-void ImagePannelWidget::writeSettings(void)
+void ImagePannelWidget::writeSettings()
 {
     KConfig *config = kapp->config();
     config->setGroup(d->settingsSection);
@@ -363,12 +313,59 @@ void ImagePannelWidget::writeSettings(void)
     config->sync();
 }
 
-void ImagePannelWidget::slotZoomButtonReleased(int buttonId)
+void ImagePannelWidget::slotOriginalImageRegionChanged(bool target)
 {
-    emit signalZoomFactorChanged((double)(buttonId/10.0));
+    slotZoomFactorChanged(d->imageRegionWidget->zoomFactor());
+    QRect rect = getOriginalImageRegion();
+    d->imagePanIconWidget->setRegionSelection(rect);
+    updateSelectionInfo(rect);
+
+    if (target)
+    {
+        d->imageRegionWidget->backupPixmapRegion();
+        emit signalOriginalClipFocusChanged();
+    }
 }
 
-KProgress *ImagePannelWidget::progressBar(void)
+void ImagePannelWidget::slotZoomFactorChanged(double zoom)
+{
+    double h    = (double)ThumbnailSize::Huge;
+    double s    = (double)ThumbnailSize::Small;
+    double zmin = d->imageRegionWidget->zoomMin();
+    double zmax = d->imageRegionWidget->zoomMax();
+    double b    = (zmin-(zmax*s/h))/(1-s/h);
+    double a    = (zmax-b)/h;
+    int size    = (int)((zoom - b) /a); 
+
+    d->zoomBar->setZoomSliderValue(size);
+    d->zoomBar->setZoomTrackerText(i18n("zoom: %1%").arg((int)(zoom*100.0)));
+
+    d->zoomBar->setEnableZoomPlus(true);
+    d->zoomBar->setEnableZoomMinus(true);
+
+    if (d->imageRegionWidget->maxZoom())
+        d->zoomBar->setEnableZoomPlus(false);
+
+    if (d->imageRegionWidget->minZoom())
+        d->zoomBar->setEnableZoomMinus(false);
+
+    d->imagePanIconWidget->slotZoomFactorChanged(zoom);
+}
+
+void ImagePannelWidget::slotZoomSliderChanged(int size)
+{
+    double h    = (double)ThumbnailSize::Huge;
+    double s    = (double)ThumbnailSize::Small;
+    double zmin = d->imageRegionWidget->zoomMin();
+    double zmax = d->imageRegionWidget->zoomMax();
+    double b    = (zmin-(zmax*s/h))/(1-s/h);
+    double a    = (zmax-b)/h;
+    double z    = a*size+b; 
+
+    d->imageRegionWidget->setZoomFactor(z);
+}
+
+KProgress *ImagePannelWidget::progressBar()
 {
     return d->progressBar;
 }
@@ -378,7 +375,7 @@ void ImagePannelWidget::resizeEvent(QResizeEvent *)
     emit signalResized();
 }
 
-void ImagePannelWidget::slotInitGui(void)
+void ImagePannelWidget::slotInitGui()
 {
     readSettings();
     setCenterImageRegionPosition();
@@ -391,7 +388,7 @@ void ImagePannelWidget::setPanIconHighLightPoints(QPointArray pt)
     d->imagePanIconWidget->setHighLightPoints(pt);
 }
 
-void ImagePannelWidget::slotPanIconTakeFocus(void)
+void ImagePannelWidget::slotPanIconTakeFocus()
 {
     d->imageRegionWidget->restorePixmapRegion();
 }
@@ -409,7 +406,7 @@ void ImagePannelWidget::setEnable(bool b)
     d->imageRegionWidget->setEnabled(b);
     d->imagePanIconWidget->setEnabled(b);
     d->separateView->setEnabled(b);
-    d->zoomButtons->setEnabled(b);
+    d->zoomBar->setEnabled(b);
 }
 
 void ImagePannelWidget::setProgress(int val)
@@ -436,17 +433,17 @@ void ImagePannelWidget::setPreviewImageWaitCursor(bool enable)
        d->imageRegionWidget->unsetCursor();
 }
 
-QRect ImagePannelWidget::getOriginalImageRegion(void)
+QRect ImagePannelWidget::getOriginalImageRegion()
 {
     return ( d->imageRegionWidget->getImageRegion() );
 }
 
-QRect ImagePannelWidget::getOriginalImageRegionToRender(void)
+QRect ImagePannelWidget::getOriginalImageRegionToRender()
 {
     return ( d->imageRegionWidget->getImageRegionToRender() );
 }
 
-DImg ImagePannelWidget::getOriginalRegionImage(void)
+DImg ImagePannelWidget::getOriginalRegionImage()
 {
     return ( d->imageRegionWidget->getImageRegionImage() );
 }
@@ -456,7 +453,7 @@ void ImagePannelWidget::setPreviewImage(DImg img)
     d->imageRegionWidget->updatePreviewImage(&img);
 }    
 
-void ImagePannelWidget::setCenterImageRegionPosition(void)
+void ImagePannelWidget::setCenterImageRegionPosition()
 {
     d->imageRegionWidget->setCenterContentsPosition();
 }
@@ -466,25 +463,12 @@ void ImagePannelWidget::slotSetImageRegionPosition(QRect rect, bool targetDone)
     d->imageRegionWidget->setContentsPosition(rect.x(), rect.y(), targetDone);
 }
 
-void ImagePannelWidget::slotOriginalImageRegionChanged(bool target)
-{
-    QRect rect = getOriginalImageRegion();
-    d->imagePanIconWidget->setRegionSelection( rect );
-    updateSelectionInfo(rect);
-    
-    if (target)
-    {
-        d->imageRegionWidget->backupPixmapRegion();
-        emit signalOriginalClipFocusChanged();
-    }
-}
-
 void ImagePannelWidget::updateSelectionInfo(QRect rect)
 {
     QToolTip::add( d->imagePanIconWidget,
-                   i18n("<nobr>Top left: (%1,%2)</nobr><br><nobr>Bottom right: (%3,%4)</nobr>")
+                   i18n("<nobr>(%1,%2)(%3x%4)</nobr>")
                         .arg(rect.left()).arg(rect.top())
-                        .arg(rect.right()).arg(rect.bottom()));
+                        .arg(rect.width()).arg(rect.height()));
 }
 
 }  // NameSpace Digikam

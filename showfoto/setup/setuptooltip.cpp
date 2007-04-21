@@ -29,6 +29,8 @@
 
 #include <klocale.h>
 #include <kdialogbase.h>
+#include <kapplication.h>
+#include <kconfig.h>
 
 // // Local includes.
 
@@ -36,7 +38,7 @@
 #include "setuptooltip.h"
 #include "setuptooltip.moc"
 
-namespace Digikam
+namespace ShowFoto
 {
 
 class SetupToolTipPriv
@@ -61,14 +63,8 @@ public:
         showPhotoFlashBox = 0;
         showPhotoWbBox    = 0;
 
-        showAlbumNameBox  = 0;
-        showCommentsBox   = 0;
-        showTagsBox       = 0;
-        showRatingBox     = 0;
-
         fileSettingBox    = 0;
         photoSettingBox   = 0;
-        digikamSettingBox = 0;
     }
 
     QCheckBox  *showToolTipsBox;
@@ -87,14 +83,8 @@ public:
     QCheckBox  *showPhotoFlashBox;
     QCheckBox  *showPhotoWbBox;
 
-    QCheckBox  *showAlbumNameBox;
-    QCheckBox  *showCommentsBox;
-    QCheckBox  *showTagsBox;
-    QCheckBox  *showRatingBox;
-
     QVGroupBox *fileSettingBox;
     QVGroupBox *photoSettingBox;
-    QVGroupBox *digikamSettingBox;
 };
 
 SetupToolTip::SetupToolTip(QWidget* parent)
@@ -103,9 +93,9 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     d = new SetupToolTipPriv;
     QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
 
-    d->showToolTipsBox = new QCheckBox(i18n("Show album items toolti&ps"), parent);
+    d->showToolTipsBox = new QCheckBox(i18n("Show Thumbbar items toolti&ps"), parent);
     QWhatsThis::add( d->showToolTipsBox, i18n("<p>Set this option to display image information when "
-                                              "the mouse is hovered over an album item."));
+                                              "the mouse is hovered over a thumbbar item."));
 
     layout->addWidget(d->showToolTipsBox);
 
@@ -162,24 +152,6 @@ SetupToolTip::SetupToolTip(QWidget* parent)
                      "used to take the picture."));
 
     layout->addWidget(d->photoSettingBox);
-
-    // --------------------------------------------------------
-
-    d->digikamSettingBox = new QVGroupBox(i18n("digiKam Information"), parent);
-
-    d->showAlbumNameBox = new QCheckBox(i18n("Show album name"), d->digikamSettingBox);
-    QWhatsThis::add( d->showAlbumNameBox, i18n("<p>Set this option to display the album name."));
-
-    d->showCommentsBox = new QCheckBox(i18n("Show picture comments"), d->digikamSettingBox);
-    QWhatsThis::add( d->showCommentsBox, i18n("<p>Set this option to display picture comments."));
-
-    d->showTagsBox = new QCheckBox(i18n("Show picture tags"), d->digikamSettingBox);
-    QWhatsThis::add( d->showTagsBox, i18n("<p>Set this option to display picture tags."));
-
-    d->showRatingBox = new QCheckBox(i18n("Show picture rating"), d->digikamSettingBox);
-    QWhatsThis::add( d->showRatingBox, i18n("<p>Set this option to display the picture rating."));
-
-    layout->addWidget(d->digikamSettingBox);
     layout->addStretch();
 
     // --------------------------------------------------------
@@ -189,9 +161,6 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     connect(d->showToolTipsBox, SIGNAL(toggled(bool)),
             d->photoSettingBox, SLOT(setEnabled(bool)));
-
-    connect(d->showToolTipsBox, SIGNAL(toggled(bool)),
-            d->digikamSettingBox, SLOT(setEnabled(bool)));
 
     // --------------------------------------------------------
 
@@ -204,66 +173,54 @@ SetupToolTip::~SetupToolTip()
     delete d;
 }
 
-void SetupToolTip::applySettings()
-{
-    AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings) return;
-
-    settings->setShowToolTips(d->showToolTipsBox->isChecked());
-
-    settings->setToolTipsShowFileName(d->showFileNameBox->isChecked());
-    settings->setToolTipsShowFileDate(d->showFileDateBox->isChecked());
-    settings->setToolTipsShowFileSize(d->showFileSizeBox->isChecked());
-    settings->setToolTipsShowImageType(d->showImageTypeBox->isChecked());
-    settings->setToolTipsShowImageDim(d->showImageDimBox->isChecked());
-
-    settings->setToolTipsShowPhotoMake(d->showPhotoMakeBox->isChecked());
-    settings->setToolTipsShowPhotoDate(d->showPhotoDateBox->isChecked());
-    settings->setToolTipsShowPhotoFocal(d->showPhotoFocalBox->isChecked());
-    settings->setToolTipsShowPhotoExpo(d->showPhotoExpoBox->isChecked());
-    settings->setToolTipsShowPhotoMode(d->showPhotoModeBox->isChecked());
-    settings->setToolTipsShowPhotoFlash(d->showPhotoFlashBox->isChecked());
-    settings->setToolTipsShowPhotoWB(d->showPhotoWbBox->isChecked());
-
-    settings->setToolTipsShowAlbumName(d->showAlbumNameBox->isChecked());
-    settings->setToolTipsShowComments(d->showCommentsBox->isChecked());
-    settings->setToolTipsShowTags(d->showTagsBox->isChecked());
-    settings->setToolTipsShowRating(d->showRatingBox->isChecked());
-
-    settings->saveSettings();
-}
-
 void SetupToolTip::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    KConfig* config = kapp->config();
+    config->setGroup("ImageViewer Settings");
 
-    if (!settings) return;
+    d->showToolTipsBox->setChecked(config->readBoolEntry("Show ToolTips", true));
 
-    d->showToolTipsBox->setChecked(settings->getShowToolTips());
+    d->showFileNameBox->setChecked(config->readBoolEntry("ToolTips Show File Name", true));
+    d->showFileDateBox->setChecked(config->readBoolEntry("ToolTips Show File Date", false));
+    d->showFileSizeBox->setChecked(config->readBoolEntry("ToolTips Show File Size", false));
+    d->showImageTypeBox->setChecked(config->readBoolEntry("ToolTips Show Image Type", false));
+    d->showImageDimBox->setChecked(config->readBoolEntry("ToolTips Show Image Dim", true));
 
-    d->showFileNameBox->setChecked(settings->getToolTipsShowFileName());
-    d->showFileDateBox->setChecked(settings->getToolTipsShowFileDate());
-    d->showFileSizeBox->setChecked(settings->getToolTipsShowFileSize());
-    d->showImageTypeBox->setChecked(settings->getToolTipsShowImageType());
-    d->showImageDimBox->setChecked(settings->getToolTipsShowImageDim());
-
-    d->showPhotoMakeBox->setChecked(settings->getToolTipsShowPhotoMake());
-    d->showPhotoDateBox->setChecked(settings->getToolTipsShowPhotoDate());
-    d->showPhotoFocalBox->setChecked(settings->getToolTipsShowPhotoFocal());
-    d->showPhotoExpoBox->setChecked(settings->getToolTipsShowPhotoExpo());
-    d->showPhotoModeBox->setChecked(settings->getToolTipsShowPhotoMode());
-    d->showPhotoFlashBox->setChecked(settings->getToolTipsShowPhotoFlash());
-    d->showPhotoWbBox->setChecked(settings->getToolTipsShowPhotoWB());
-
-    d->showAlbumNameBox->setChecked(settings->getToolTipsShowAlbumName());
-    d->showCommentsBox->setChecked(settings->getToolTipsShowComments());
-    d->showTagsBox->setChecked(settings->getToolTipsShowTags());
-    d->showRatingBox->setChecked(settings->getToolTipsShowRating());
+    d->showPhotoMakeBox->setChecked(config->readBoolEntry("ToolTips Show Photo Make", true));
+    d->showPhotoDateBox->setChecked(config->readBoolEntry("ToolTips Show Photo Date", true));
+    d->showPhotoFocalBox->setChecked(config->readBoolEntry("ToolTips Show Photo Focal", true));
+    d->showPhotoExpoBox->setChecked(config->readBoolEntry("ToolTips Show Photo Expo", true));
+    d->showPhotoModeBox->setChecked(config->readBoolEntry("ToolTips Show Photo Mode", true));
+    d->showPhotoFlashBox->setChecked(config->readBoolEntry("ToolTips Show Photo Flash", false));
+    d->showPhotoWbBox->setChecked(config->readBoolEntry("ToolTips Show Photo WB", false));
 
     d->fileSettingBox->setEnabled(d->showToolTipsBox->isChecked());
     d->photoSettingBox->setEnabled(d->showToolTipsBox->isChecked());
-    d->digikamSettingBox->setEnabled(d->showToolTipsBox->isChecked());
 }
 
-}  // namespace Digikam
+void SetupToolTip::applySettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("ImageViewer Settings");
+
+    config->writeEntry("Show ToolTips", d->showToolTipsBox->isChecked());
+
+    config->writeEntry("ToolTips Show File Name", d->showFileNameBox->isChecked());
+    config->writeEntry("ToolTips Show File Date", d->showFileDateBox->isChecked());
+    config->writeEntry("ToolTips Show File Size", d->showFileSizeBox->isChecked());
+    config->writeEntry("ToolTips Show Image Type", d->showImageTypeBox->isChecked());
+    config->writeEntry("ToolTips Show Image Dim", d->showImageDimBox->isChecked());
+
+    config->writeEntry("ToolTips Show Photo Make", d->showPhotoMakeBox->isChecked());
+    config->writeEntry("ToolTips Show Photo Date", d->showPhotoDateBox->isChecked());
+    config->writeEntry("ToolTips Show Photo Focal", d->showPhotoFocalBox->isChecked());
+    config->writeEntry("ToolTips Show Photo Expo", d->showPhotoExpoBox->isChecked());
+    config->writeEntry("ToolTips Show Photo Mode", d->showPhotoModeBox->isChecked());
+    config->writeEntry("ToolTips Show Photo Flash", d->showPhotoFlashBox->isChecked());
+    config->writeEntry("ToolTips Show Photo WB", d->showPhotoWbBox->isChecked());
+
+    config->sync();
+}
+
+}  // namespace ShowFoto
 

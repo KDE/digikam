@@ -93,6 +93,8 @@ protected:
     int      m_orgWidth;    
     int      m_orgHeight;   
     
+    double   m_zoomFactor;
+
     QRect    m_rect;
     QRect    m_localRegionSelection;    // Thumbnail size selection.
 

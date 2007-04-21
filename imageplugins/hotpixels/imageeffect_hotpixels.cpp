@@ -87,7 +87,7 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 2, 0, spacingHint());
     
     QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), gboxSettings);
-    m_filterMethodCombo = new QComboBox(gboxSettings);
+    m_filterMethodCombo       = new QComboBox(gboxSettings);
     m_filterMethodCombo->insertItem(i18n("Average"));
     m_filterMethodCombo->insertItem(i18n("Linear"));
     m_filterMethodCombo->insertItem(i18n("Quadratic"));
@@ -155,20 +155,18 @@ void ImageEffect_HotPixels::slotAddBlackFrame()
     //Does one need to do this if digikam did so already?
     KImageIO::registerFormats(); 
     
-    KFileDialog *fileSelectDialog = new KFileDialog(QString(), KImageIO::pattern(), this, "", true);
-    fileSelectDialog->setCaption(i18n("Select Black Frame Image"));
-    fileSelectDialog->setURL(m_blackFrameURL.path());
+    KFileDialog fileSelectDialog(QString(), KImageIO::pattern(), this, "", true);
+    fileSelectDialog.setCaption(i18n("Select Black Frame Image"));
+    fileSelectDialog.setURL(m_blackFrameURL.path());
     
-    if (fileSelectDialog->exec() != QDialog::Rejected)
+    if (fileSelectDialog.exec() != QDialog::Rejected)
     {
        //Load the selected file and insert into the list
         
-       m_blackFrameURL = fileSelectDialog->selectedURL();
+       m_blackFrameURL = fileSelectDialog.selectedURL();
        m_blackFrameListView->clear();
        new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
     }
-        
-    delete fileSelectDialog;
 }
 
 void ImageEffect_HotPixels::renderingFinished(void)
@@ -184,8 +182,7 @@ void ImageEffect_HotPixels::prepareEffect()
     m_blackFrameListView->setEnabled(false);
     enableButton(Apply, false);     
 
-    Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
-    
+    Digikam::DImg image     = m_imagePreviewWidget->getOriginalRegionImage();
     int interpolationMethod = m_filterMethodCombo->currentItem();
 
     QValueList<HotPixel> hotPixelsRegion;
@@ -250,4 +247,3 @@ void ImageEffect_HotPixels::slotBlackFrame(QValueList<HotPixel> hpList, const KU
 }
 
 }  // NameSpace DigikamHotPixelsImagesPlugin
-

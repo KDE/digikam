@@ -1,8 +1,7 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2007-01-24
- * Description : a progress bar used to display file access
- *               progress or a text in status bar.
+ * Date   : 2007-04-15
+ * Description : a zoom bar used in status bar.
  *
  * Copyright 2007 by Gilles Caulier
  *
@@ -19,12 +18,12 @@
  *
  * ============================================================ */
 
-#ifndef STATUSPROGRESSBAR_H
-#define STATUSPROGRESSBAR_H
+#ifndef STATUSSTATUSBAR_H
+#define STATUSSTATUSBAR_H
 
 // KDE includes.
 
-#include <qwidgetstack.h>
+#include <qhbox.h>
 #include <qstring.h>
 
 // Local includes
@@ -34,42 +33,43 @@
 namespace Digikam
 {
 
-class StatusProgressBarPriv;
+class StatusZoomBarPriv;
 
-class DIGIKAM_EXPORT StatusProgressBar : public QWidgetStack
+class DIGIKAM_EXPORT StatusZoomBar : public QHBox
 {
+
 Q_OBJECT
 
 public:
 
-    enum StatusProgressBarMode
-    {
-        TextMode=0,
-        ProgressBarMode,
-        CancelProgressBarMode
-    };
+    StatusZoomBar( QWidget *parent=0 );
+    ~StatusZoomBar();
 
-public:
+    void setEnableZoomPlus(bool e);
+    void setEnableZoomMinus(bool e);
 
-    StatusProgressBar( QWidget *parent=0 );
-    ~StatusProgressBar();
-
-    void setText(const QString& text);
-    void setAlignment(int a);
-
-    void progressBarMode(int mode, const QString& text=QString());
-    void setProgressValue(int v);
-    void setProgressText(const QString& text);
+    void setZoomSliderValue(int v);
+    void setZoomTrackerText(const QString& text);
 
 signals:
 
-    void signalCancelButtonPressed();
+    void signalZoomPlusClicked();
+    void signalZoomMinusClicked();
+    void signalZoomSliderChanged(int);
+    void signalDelayedZoomSliderChanged(int);
+    void signalZoomSliderReleased(int);
+
+private slots:
+
+    void slotZoomSliderChanged(int);
+    void slotDelayedZoomSliderChanged();
+    void slotZoomSliderReleased();
 
 private:
 
-    StatusProgressBarPriv* d;
+    StatusZoomBarPriv* d;
 };
 
 }  // namespace Digikam
 
-#endif /* STATUSPROGRESSBAR_H */
+#endif /* STATUSSTATUSBAR_H */

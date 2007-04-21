@@ -47,12 +47,12 @@ public:
 
     ImagePanIconWidgetPriv()
     {
-        iface         = 0;
-        data          = 0;
-        separateView  = ImageRegionWidget::SeparateViewNone;
+        iface        = 0;
+        data         = 0;
+        separateView = ImageRegionWidget::SeparateViewNone;
     }
 
-    uchar *      data;
+    uchar       *data;
 
     int          separateView;
     
@@ -114,8 +114,8 @@ void ImagePanIconWidget::updatePixmap()
        for (uint i = 0 ; i < d->hightlightPoints.count() ; i++)
        {
           pt = d->hightlightPoints.point(i);
-          pt.setX((int)(pt.x() * (float)(m_width)/(float)d->iface->originalWidth())); 
-          pt.setY((int)(pt.y() * (float)(m_height)/(float)d->iface->originalHeight()));
+          pt.setX((int)(pt.x() * (float)(m_width)  / (float)d->iface->originalWidth())); 
+          pt.setY((int)(pt.y() * (float)(m_height) / (float)d->iface->originalHeight()));
           p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
           p.drawLine(pt.x(), pt.y()-1, pt.x(), pt.y()+1);
           p.drawLine(pt.x()-1, pt.y(), pt.x()+1, pt.y());

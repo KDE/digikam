@@ -54,46 +54,42 @@ public:
     PreviewWidgetPriv() :
         tileSize(128), zoomMultiplier(1.2) 
     {
-        pressedMoving    = false;
-        midButtonPressed = false;
-        midButtonX       = 0;
-        midButtonY       = 0;
-        autoZoom         = false;
-        fullScreen       = false;
-        zoom             = 1.0;
-        minZoom          = 0.1;
-        maxZoom          = 12.0;
-        zoomWidth        = 0;
-        zoomHeight       = 0;
-        tileTmpPix       = new QPixmap(tileSize, tileSize);
+        midButtonX = 0;
+        midButtonY = 0;
+        autoZoom   = false;
+        fullScreen = false;
+        zoom       = 1.0;
+        minZoom    = 0.1;
+        maxZoom    = 12.0;
+        zoomWidth  = 0;
+        zoomHeight = 0;
+        tileTmpPix = new QPixmap(tileSize, tileSize);
 
         tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
         tileCache.setAutoDelete(true);
     }
 
-    bool                 autoZoom;
-    bool                 fullScreen;
-    bool                 pressedMoving;
-    bool                 midButtonPressed;
+    bool            autoZoom;
+    bool            fullScreen;
 
-    const int            tileSize;
-    int                  midButtonX;
-    int                  midButtonY;
-    int                  zoomWidth;
-    int                  zoomHeight;
+    const int       tileSize;
+    int             midButtonX;
+    int             midButtonY;
+    int             zoomWidth;
+    int             zoomHeight;
     
-    double               zoom;
-    double               minZoom;
-    double               maxZoom;
-    const double         zoomMultiplier;
+    double          zoom;
+    double          minZoom;
+    double          maxZoom;
+    const double    zoomMultiplier;
 
-    QRect                pixmapRect;
+    QRect           pixmapRect;
     
-    QCache<QPixmap>      tileCache;
+    QCache<QPixmap> tileCache;
 
-    QPixmap*             tileTmpPix;
+    QPixmap*        tileTmpPix;
 
-    QColor               bgColor;
+    QColor          bgColor;
 };
 
 PreviewWidget::PreviewWidget(QWidget *parent)
@@ -101,6 +97,7 @@ PreviewWidget::PreviewWidget(QWidget *parent)
 {
     d = new PreviewWidgetPriv;
     d->bgColor.setRgb(0, 0, 0);
+    m_movingInProgress = false;
     
     viewport()->setBackgroundMode(Qt::NoBackground);
     viewport()->setMouseTracking(false);
@@ -137,6 +134,11 @@ void PreviewWidget::reset()
     resetPreview();
 }
 
+QRect PreviewWidget::previewRect()
+{
+    return d->pixmapRect;
+}
+
 int PreviewWidget::tileSize()
 {
     return d->tileSize;
@@ -164,12 +166,12 @@ double PreviewWidget::zoomMin()
 
 void PreviewWidget::setZoomMax(double z)
 {
-    d->maxZoom = z;
+    d->maxZoom = ceilf(z * 10000.0) / 10000.0;
 }
 
 void PreviewWidget::setZoomMin(double z)
 {
-    d->minZoom = z;
+    d->minZoom = floor(z * 10000.0) / 10000.0;
 }
 
 bool PreviewWidget::maxZoom()
@@ -298,15 +300,19 @@ void PreviewWidget::updateContentsSize()
         d->pixmapRect = QRect(0, 0, d->zoomWidth, d->zoomHeight);
     }
 
-    d->tileCache.clear();    
-    resizeContents(d->zoomWidth, d->zoomHeight);
+    d->tileCache.clear();
+    setContentsSize();
     viewport()->setUpdatesEnabled(true);
+}
+
+void PreviewWidget::setContentsSize()
+{
+    resizeContents(d->zoomWidth, d->zoomHeight);
 }
 
 void PreviewWidget::resizeEvent(QResizeEvent* e)
 {
-    if (!e)
-        return;
+    if (!e) return;
 
     QScrollView::resizeEvent(e);
 
@@ -376,8 +382,8 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
 
                     pix->fill(d->bgColor);
 
-                    sx = (int)floor((double)i  / d->tileSize ) * step;
-                    sy = (int)floor((double)j  / d->tileSize ) * step;
+                    sx = (int)floor((double)i / d->tileSize ) * step;
+                    sy = (int)floor((double)j / d->tileSize ) * step;
                     sw = step;
                     sh = step;
 
@@ -397,10 +403,12 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
         }
     }
 
-    QPainter painter(viewport());
-    painter.setClipRegion(clipRegion);
-    painter.fillRect(er, d->bgColor);
-    painter.end();
+    QPainter p(viewport());
+    p.setClipRegion(clipRegion);
+    p.fillRect(er, d->bgColor);
+    p.end();
+
+    viewportPaintExtraData();
 }
 
 void PreviewWidget::contentsMousePressEvent(QMouseEvent *e)
@@ -408,7 +416,7 @@ void PreviewWidget::contentsMousePressEvent(QMouseEvent *e)
     if (!e || e->button() == Qt::RightButton)
         return;
 
-    d->midButtonPressed = false;
+    m_movingInProgress = false;
 
     if (e->button() == Qt::LeftButton)
     {
@@ -416,19 +424,18 @@ void PreviewWidget::contentsMousePressEvent(QMouseEvent *e)
     }
     else if (e->button() == Qt::MidButton)
     {
-        if (visibleWidth()  < previewWidth() ||
-            visibleHeight() < previewHeight())
+        if (visibleWidth()  < d->zoomWidth ||
+            visibleHeight() < d->zoomHeight)
         {
-            viewport()->setCursor(Qt::SizeAllCursor);
-            d->midButtonPressed = true;
-            d->midButtonX       = e->x();
-            d->midButtonY       = e->y();
+            m_movingInProgress = true;
+            d->midButtonX      = e->x();
+            d->midButtonY      = e->y();
+            viewport()->repaint(false);
+            viewport()->setCursor(Qt::SizeAllCursor);            
         }
         return;
     }
     
-    d->pressedMoving = true;
-
     viewport()->setMouseTracking(false);
 }
 
@@ -438,7 +445,7 @@ void PreviewWidget::contentsMouseMoveEvent(QMouseEvent *e)
 
     if (e->state() & Qt::MidButton)
     {
-        if (d->midButtonPressed)
+        if (m_movingInProgress)
         {
             scrollBy(d->midButtonX - e->x(),
                      d->midButtonY - e->y());
@@ -451,18 +458,13 @@ void PreviewWidget::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     if (!e) return;
 
-    d->midButtonPressed = false;
-    
-    if (d->pressedMoving)
-    {
-        d->pressedMoving = false;
-        viewport()->repaint(false);
-        emit signalContentsMovedEvent(true);
-    }
+    m_movingInProgress = false;
 
-    if (e->button() != Qt::LeftButton)
+    if (e->button() == Qt::MidButton)
     {
+        emit signalContentsMovedEvent(true);
         viewport()->unsetCursor();
+        viewport()->repaint(false);
     }
 
     if (e->button() == Qt::RightButton)
@@ -485,9 +487,9 @@ void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
     }
     else if (e->state() & Qt::ControlButton)
     {
-        if (e->delta() < 0)
+        if (e->delta() < 0 && !maxZoom())
             slotIncreaseZoom();
-        else if (e->delta() > 0)
+        else if (e->delta() > 0 && !minZoom())
             slotDecreaseZoom();
         return;
     }

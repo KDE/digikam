@@ -101,7 +101,7 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
             this, SIGNAL(signalSlideShow()));
 
     connect(d->imagePreviewView, SIGNAL(signalZoomFactorChanged(double)),
-            this, SIGNAL(signalZoomFactorChanged(double)));
+            this, SLOT(slotZoomFactorChanged(double)));
 }
 
 AlbumWidgetStack::~AlbumWidgetStack()
@@ -191,6 +191,12 @@ void AlbumWidgetStack::setPreviewMode(int mode)
 void AlbumWidgetStack::previewLoaded()
 {
      emit signalToggledToPreviewMode(true);
+}
+
+void AlbumWidgetStack::slotZoomFactorChanged(double z)
+{
+    if (previewMode() == AlbumWidgetStack::PreviewImageMode)
+        emit signalZoomFactorChanged(z);
 }
 
 void AlbumWidgetStack::slotItemsUpdated(const KURL::List& list)

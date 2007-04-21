@@ -3865,7 +3865,7 @@ v0.9.1-beta1 - 11-Feb-2007
 
 	* trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
 	  digiKam from trunk : Comments & Tags pop-up menu : fix behaviour
-	  if Toggle Auto Tags == "Childs and Parents"
+	  if Toggle Auto Tags == "Children and Parents"
 	  
 	  CCBUGS: 139547
 
@@ -4043,7 +4043,7 @@ v0.9.1-beta1 - 11-Feb-2007
 	* trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
 	  digikam from trunk: Comments & Tags : if root tags album is
 	  selected from album treeview, do not show
-	  Select/Deselect->Childs/Parents option on popup menu
+	  Select/Deselect->Children/Parents option on popup menu
 
 2007-01-05 09:04  cgilles
 
@@ -4128,7 +4128,7 @@ v0.9.1-beta1 - 11-Feb-2007
 	* trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
 	  digiKam from trunk : Comments & Tags pop-up menu : always
 	  select/deselect the current item from the Tags treeview when
-	  Parents/Childs tags are selected/deselected by user
+	  Parents/Children tags are selected/deselected by user
 
 2007-01-04 13:04  cgilles
 
@@ -4160,7 +4160,7 @@ v0.9.1-beta1 - 11-Feb-2007
 	* trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
 	  digiKam from trunk : Improvment of Selection/Deselection of Tags
 	  in tree list view from Comments & Tags sidebar : add 2 new
-	  options sub popup-menu to Select/Deselect All/Parents/Childs
+	  options sub popup-menu to Select/Deselect All/Parents/Children
 	  tags. Refactoring of pop-up menu.
 	  CCBUGS: 139547
 

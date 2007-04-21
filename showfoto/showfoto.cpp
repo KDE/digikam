@@ -374,21 +374,20 @@ void ShowFoto::setupUserArea()
         m_canvas->setSizePolicy(rightSzPolicy);
         m_canvas->makeDefaultEditingCanvas();
 
-        d->rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
-                                                                 Digikam::Sidebar::Right);
+        d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
+                                                                Digikam::Sidebar::Right);
 
-        hlay->addWidget(d->thumbBar);
         hlay->addWidget(m_splitter);
         hlay->addWidget(d->rightSidebar);
     }
     else                                                     // Horizontal thumbbar layout
     {
-        m_splitter           = new QSplitter(Qt::Horizontal, widget);
-        QWidget* widget2     = new QWidget(m_splitter);
-        QVBoxLayout *vlay    = new QVBoxLayout(widget2);
-        d->vSplitter         = new QSplitter(Qt::Vertical, widget2);
-        m_canvas             = new Digikam::Canvas(d->vSplitter);
-        d->thumbBar          = new Digikam::ThumbBarView(d->vSplitter, Digikam::ThumbBarView::Horizontal);
+        m_splitter        = new QSplitter(Qt::Horizontal, widget);
+        QWidget* widget2  = new QWidget(m_splitter);
+        QVBoxLayout *vlay = new QVBoxLayout(widget2);
+        d->vSplitter      = new QSplitter(Qt::Vertical, widget2);
+        m_canvas          = new Digikam::Canvas(d->vSplitter);
+        d->thumbBar       = new Digikam::ThumbBarView(d->vSplitter, Digikam::ThumbBarView::Horizontal);
 
         m_canvas->setSizePolicy(rightSzPolicy);
         m_canvas->makeDefaultEditingCanvas();
@@ -428,7 +427,7 @@ void ShowFoto::setupActions()
     // Extra 'File' menu actions ---------------------------------------------
 
     d->fileOpenAction = KStdAction::open(this, SLOT(slotOpenFile()),
-                       actionCollection(), "showfoto_open_file");
+                        actionCollection(), "showfoto_open_file");
 
     d->openFilesInFolderAction = new KAction(i18n("Open folder"),
                                              "folder_image",
@@ -459,11 +458,8 @@ void ShowFoto::readSettings()
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
     
-    bool showBar = false;
-    showBar      = config->readBoolEntry("Show Thumbnails", true);
-    
-    if (showBar && !d->showBarAction->isChecked())
-        d->showBarAction->activate();
+    d->showBarAction->setChecked(config->readBoolEntry("Show Thumbnails", true));
+    slotToggleShowBar();
 
     d->lastOpenedDirectory.setPath( config->readEntry("Last Opened Directory",
                                     KGlobalSettings::documentPath()) );
@@ -483,7 +479,8 @@ void ShowFoto::saveSettings()
     config->setGroup("ImageViewer Settings");
     
     config->writeEntry("Last Opened Directory", d->lastOpenedDirectory.path() );
-    config->writeEntry("Show Thumbnails", !d->showBarAction->isChecked());
+    config->writeEntry("Show Thumbnails", d->showBarAction->isChecked());
+
     if (d->vSplitter)
         config->writeEntry("Vertical Splitter Sizes", d->vSplitter->sizes());
 
@@ -517,9 +514,25 @@ void ShowFoto::applySettings()
     m_canvas->setExifOrient(exifRotate);
     d->thumbBar->setExifRotate(exifRotate);
 
-    m_setExifOrientationTag = config->readBoolEntry("EXIF Set Orientation", true);
+    m_setExifOrientationTag   = config->readBoolEntry("EXIF Set Orientation", true);
     
     d->fullScreenHideThumbBar = config->readBoolEntry("FullScreenHideThumbBar", true);
+
+    Digikam::ThumbBarToolTipSettings settings;
+    settings.showToolTips   = config->readBoolEntry("Show ToolTips", true);
+    settings.showFileName   = config->readBoolEntry("ToolTips Show File Name", true);
+    settings.showFileDate   = config->readBoolEntry("ToolTips Show File Date", false);
+    settings.showFileSize   = config->readBoolEntry("ToolTips Show File Size", false);
+    settings.showImageType  = config->readBoolEntry("ToolTips Show Image Type", false);
+    settings.showImageDim   = config->readBoolEntry("ToolTips Show Image Dim", true);
+    settings.showPhotoMake  = config->readBoolEntry("ToolTips Show Photo Make", true);
+    settings.showPhotoDate  = config->readBoolEntry("ToolTips Show Photo Date", true);
+    settings.showPhotoFocal = config->readBoolEntry("ToolTips Show Photo Focal", true);
+    settings.showPhotoExpo  = config->readBoolEntry("ToolTips Show Photo Expo", true);
+    settings.showPhotoMode  = config->readBoolEntry("ToolTips Show Photo Mode", true);
+    settings.showPhotoFlash = config->readBoolEntry("ToolTips Show Photo Flash", false);
+    settings.showPhotoWB    = config->readBoolEntry("ToolTips Show Photo WB", false);
+    d->thumbBar->setToolTipSettings(settings);
 }
 
 void ShowFoto::slotOpenFile()

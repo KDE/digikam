@@ -27,7 +27,7 @@
 
 class KDialogBase;
 
-namespace Digikam
+namespace ShowFoto
 {
 
 class SetupToolTipPriv;
@@ -52,6 +52,6 @@ private:
     SetupToolTipPriv* d;
 };
 
-}  // namespace Digikam
+}  // namespace ShowFoto
 
 #endif // SETUPTOOLTIP_H
