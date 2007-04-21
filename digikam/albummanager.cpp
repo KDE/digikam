@@ -153,13 +153,6 @@ AlbumManager::~AlbumManager()
     m_instance = 0;
 }
 
-/*
-AlbumDB* AlbumManager::albumDB()
-{
-    return d->db;    
-}
-*/
-
 void AlbumManager::initialize()
 {
     d->changed = true;
@@ -189,6 +182,16 @@ void AlbumManager::initialize()
     d->rootTAlbum = 0;
     d->rootDAlbum = 0;
     d->rootSAlbum = 0;
+
+    // -- Database initialization -------------------------------------------------
+
+    if (!Digikam::DatabaseAccess::checkReadyForUse())
+    {
+        KMessageBox::error(0, i18n("Failed to open the database.\n"
+                                   "You cannot use digiKam without a working database."
+                                   "Please check the database settings in the configuration menu."));
+        return;
+    }
 
     // -- Locale Checking ---------------------------------------------------------
 
