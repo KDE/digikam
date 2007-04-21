@@ -31,7 +31,7 @@ class DatabaseAccessStaticPriv
 {
 public:
     DatabaseAccessStaticPriv()
-    : db(0), mutex(true) // create a recursive mutex
+    : backend(0), db(0), mutex(true) // create a recursive mutex
     {
     };
     ~DatabaseAccessStaticPriv() {};

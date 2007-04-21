@@ -51,13 +51,18 @@ namespace Digikam
 typedef QValueList<int>     IntList;
 typedef QValueList<Q_LLONG> LLongList;
 
+class ItemShortInfo
+{
+public:
+    QString     itemName;
+    QString     albumRoot;
+    QString     album;
+    int         albumID;
+};
+
 class DatabaseBackend;
 class AlbumDBPriv;
 
-/**
- * This class is responsible for the communication
- * with the sqlite database.
- */
 class DIGIKAM_EXPORT AlbumDB
 {
 public:
@@ -424,6 +429,11 @@ public:
      * @return the rating for the item
      */
     int getItemRating(Q_LLONG imageID);
+
+    /**
+     * Get item and album info from the image ID
+     */
+    ItemShortInfo getItemShortInfo(Q_LLONG imageID);
 
 
     /**

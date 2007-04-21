@@ -66,10 +66,9 @@ ImageInfo::ImageInfo(Q_LLONG ID)
 {
     // retrieve these now, the rest on demand
     DatabaseAccess access;
-    m_albumID = access.db()->getItemAlbum(m_ID);
-    QString name = access.db()->getItemName(m_ID);
-    QString albumName = access.db()->getAlbumURL(m_albumID);
-    m_url = DatabaseUrl::fromAlbumAndName(name, albumName, DatabaseAccess::albumRoot());
+    ItemShortInfo info = access.db()->getItemShortInfo(ID);
+    m_albumID = info.albumID;
+    m_url = DatabaseUrl::fromAlbumAndName(info.itemName, info.album, info.albumRoot);
 }
 
 ImageInfo::~ImageInfo()

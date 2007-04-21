@@ -546,6 +546,31 @@ IntList AlbumDB::getItemTagIDs(Q_LLONG imageID)
     return ids;
 }
 
+ItemShortInfo AlbumDB::getItemShortInfo(Q_LLONG imageID)
+{
+    QStringList values;
+
+    execSql( QString("SELECT Images.name, Albums.url, Albums.id "
+                     "FROM Images "
+                     "LEFT OUTER JOIN Albums "
+                     "ON Albums.id=Images.dirid "
+                     "WHERE Images.id=%1;")
+             .arg(imageID),
+             &values );
+
+    ItemShortInfo info;
+
+    if (!values.isEmpty())
+    {
+        info.itemName  = values[0];
+        info.albumRoot = DatabaseAccess::albumRoot();
+        info.album     = values[1];
+        info.albumID   = values[2].toInt();
+    }
+
+    return info;
+}
+
 bool AlbumDB::hasTags(const LLongList& imageIDList)
 {
     IntList ids;
