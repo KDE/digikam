@@ -186,8 +186,8 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     d->mime                     = new QLabel(i18n("<b>Type</b>:"), d->settingsArea);
     d->dimensions               = new QLabel(i18n("<b>Dimensions</b>:"), d->settingsArea);
     d->compression              = new QLabel(i18n("<b>Compression</b>:"), d->settingsArea);
-    d->bitDepth                 = new QLabel(i18n("<nobr><b>Bits Depth</b></nobr>:"), d->settingsArea);
-    d->colorMode                = new QLabel(i18n("<nobr><b>Color Mode</b></nobr>:"), d->settingsArea);
+    d->bitDepth                 = new QLabel(i18n("<nobr><b>Bit depth</b></nobr>:"), d->settingsArea);
+    d->colorMode                = new QLabel(i18n("<nobr><b>Color mode</b></nobr>:"), d->settingsArea);
 
     KSeparator *line2           = new KSeparator (Horizontal, d->settingsArea);
     d->title3                   = new QLabel(i18n("<big><b>Photograph Properties</b></big>"), d->settingsArea);
@@ -226,9 +226,54 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     d->labelPhotoFlash          = new KSqueezedTextLabel(0, d->settingsArea);
     d->labelPhotoWhiteBalance   = new KSqueezedTextLabel(0, d->settingsArea);
 
+    int hgt = fontMetrics().height()+2;
     d->title->setAlignment(Qt::AlignCenter);
+    d->file->setMaximumHeight(hgt);
+    d->folder->setMaximumHeight(hgt);
+    d->modifiedDate->setMaximumHeight(hgt);
+    d->size->setMaximumHeight(hgt);
+    d->owner->setMaximumHeight(hgt);
+    d->permissions->setMaximumHeight(hgt);
+    d->labelFile->setMaximumHeight(hgt);
+    d->labelFolder->setMaximumHeight(hgt);
+    d->labelFileModifiedDate->setMaximumHeight(hgt);
+    d->labelFileSize->setMaximumHeight(hgt);
+    d->labelFileOwner->setMaximumHeight(hgt);
+    d->labelFilePermissions->setMaximumHeight(hgt);
+
     d->title2->setAlignment(Qt::AlignCenter);
+    d->mime->setMaximumHeight(hgt);
+    d->dimensions->setMaximumHeight(hgt);
+    d->compression->setMaximumHeight(hgt);
+    d->bitDepth->setMaximumHeight(hgt);
+    d->colorMode->setMaximumHeight(hgt);
+    d->labelImageMime->setMaximumHeight(hgt);
+    d->labelImageDimensions->setMaximumHeight(hgt);
+    d->labelImageCompression->setMaximumHeight(hgt);
+    d->labelImageBitDepth->setMaximumHeight(hgt);
+    d->labelImageColorMode->setMaximumHeight(hgt);
+
     d->title3->setAlignment(Qt::AlignCenter);
+    d->make->setMaximumHeight(hgt);
+    d->model->setMaximumHeight(hgt);
+    d->photoDate->setMaximumHeight(hgt);
+    d->aperture->setMaximumHeight(hgt);
+    d->focalLength->setMaximumHeight(hgt);
+    d->exposureTime->setMaximumHeight(hgt);
+    d->sensitivity->setMaximumHeight(hgt);
+    d->exposureMode->setMaximumHeight(hgt);
+    d->flash->setMaximumHeight(hgt);
+    d->whiteBalance->setMaximumHeight(hgt);
+    d->labelPhotoMake->setMaximumHeight(hgt);
+    d->labelPhotoModel->setMaximumHeight(hgt);
+    d->labelPhotoDateTime->setMaximumHeight(hgt);
+    d->labelPhotoAperture->setMaximumHeight(hgt);
+    d->labelPhotoFocalLenght->setMaximumHeight(hgt);
+    d->labelPhotoExposureTime->setMaximumHeight(hgt);
+    d->labelPhotoSensitivity->setMaximumHeight(hgt);
+    d->labelPhotoExposureMode->setMaximumHeight(hgt);
+    d->labelPhotoFlash->setMaximumHeight(hgt);
+    d->labelPhotoWhiteBalance->setMaximumHeight(hgt);
 
     // --------------------------------------------------
 
