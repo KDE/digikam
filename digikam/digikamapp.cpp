@@ -397,7 +397,7 @@ void DigikamApp::setupAccelerators()
     d->accelerators = new KAccel(this);
 
     d->accelerators->insert("Exit Preview Mode", i18n("Exit Preview"),
-                           i18n("Exit out of the preview mode"),
+                           i18n("Exit from preview mode"),
                            Key_Escape, this, SIGNAL(signalEscapePressed()),
                            false, true);
     
@@ -497,7 +497,7 @@ void DigikamApp::setupActions()
                                    SLOT(slotNewAlbum()),
                                    actionCollection(),
                                    "album_new");
-    d->newAction->setWhatsThis(i18n("This option creates a new empty Album in the database."));
+    d->newAction->setWhatsThis(i18n("Creates a new empty Album in the database."));
 
     d->albumSortAction = new KSelectAction(i18n("&Sort Albums"),
                                     0,
@@ -530,7 +530,7 @@ void DigikamApp::setupActions()
                                     SLOT(slotAlbumAddImages()),
                                     actionCollection(),
                                     "album_addImages");
-    d->addImagesAction->setWhatsThis(i18n("This option adds new items to the current Album."));
+    d->addImagesAction->setWhatsThis(i18n("Adds new items to the current Album."));
 
     d->albumImportAction = new KAction( i18n("Import Folders..."),
                                     "albumfolder-importdir",
@@ -547,8 +547,7 @@ void DigikamApp::setupActions()
                                     SLOT(slotAlbumPropsEdit()),
                                     actionCollection(),
                                     "album_propsEdit");
-    d->propsEditAction->setWhatsThis(i18n("This option allows you to set the Album Properties information "
-                                        "about the Collection."));
+    d->propsEditAction->setWhatsThis(i18n("Edit the Album Properties and Collection information."));
 
     d->refreshAlbumAction = new KAction( i18n("Refresh"),
                                     "rebuild",
@@ -557,16 +556,16 @@ void DigikamApp::setupActions()
                                     SLOT(slotAlbumRefresh()),
                                     actionCollection(),
                                     "album_refresh");
-    d->refreshAlbumAction->setWhatsThis(i18n("This option refresh all album content."));
+    d->refreshAlbumAction->setWhatsThis(i18n("This action refreshes all album contents"));
 
-    d->syncAlbumMetadataAction = new KAction( i18n("Sync Pictures Metadata"),
+    d->syncAlbumMetadataAction = new KAction( i18n("Update Metadata Database"),
                                     "rebuild",
                                     0,
                                     d->view,
                                     SLOT(slotAlbumSyncPicturesMetadata()),
                                     actionCollection(),
                                     "album_syncmetadata");
-    d->syncAlbumMetadataAction->setWhatsThis(i18n("This option sync pictures metadata from current "
+    d->syncAlbumMetadataAction->setWhatsThis(i18n("This updates all image metadata from current "
                                                 "album with digiKam database contents."));
 
     d->openInKonquiAction = new KAction( i18n("Open in Konqueror"),
@@ -608,8 +607,7 @@ void DigikamApp::setupActions()
                                     SLOT(slotImageEdit()),
                                     actionCollection(),
                                     "image_edit");
-    d->imageViewAction->setWhatsThis(i18n("This option allows you to open the editor with the "
-                                        "current selected item."));
+    d->imageViewAction->setWhatsThis(i18n("This will open the selected item in the image editor."));
 
     d->imageRenameAction = new KAction(i18n("Rename..."),
                                     "pencil",
@@ -618,8 +616,7 @@ void DigikamApp::setupActions()
                                     SLOT(slotImageRename()),
                                     actionCollection(),
                                     "image_rename");
-    d->imageRenameAction->setWhatsThis(i18n("This option allows you to rename the filename "
-                                          "of the current selected item"));
+    d->imageRenameAction->setWhatsThis(i18n("Rename the filename of the currently selected item."));
 
     // Pop up dialog to ask user whether to move to trash
     d->imageDeleteAction            = new KAction(i18n("Delete"),
@@ -641,7 +638,7 @@ void DigikamApp::setupActions()
 
     // These two actions are hidden, no menu entry, no toolbar entry, no shortcut.
     // Power users may add them.
-    d->imageDeletePermanentlyDirectlyAction = new KAction(i18n("Delete Permanently without Confirmation"),
+    d->imageDeletePermanentlyDirectlyAction = new KAction(i18n("Delete Permanently without confirmation"),
                                                         "editdelete",
                                                         0,
                                                         d->view,
@@ -649,7 +646,7 @@ void DigikamApp::setupActions()
                                                         actionCollection(),
                                                         "image_delete_permanently_directly");
 
-    d->imageTrashDirectlyAction = new KAction(i18n("Move to Trash without Confirmation"),
+    d->imageTrashDirectlyAction = new KAction(i18n("Move to Trash without confirmation"),
                                               "edittrash",
                                                0,
                                                d->view,
@@ -905,7 +902,7 @@ void DigikamApp::setupActions()
                 this, SLOT(slotRebuildAllThumbs()), actionCollection(),
                 "thumbs_rebuild");
 
-    new KAction(i18n("Sync all Pictures Metadata..."), "reload_page", 0,
+    new KAction(i18n("Update Metadata Database..."), "reload_page", 0,
                 this, SLOT(slotSyncAllPicturesMetadata()), actionCollection(),
                 "sync_metadata");
 
@@ -1798,7 +1795,7 @@ void DigikamApp::slotRebuildAllThumbsDone()
 
 void DigikamApp::slotSyncAllPicturesMetadata()
 {
-    QString msg = i18n("Sync all pictures metadata from all albums with digiKam database "
+    QString msg = i18n("Synchronizing all image metadata from all albums with digiKam database "
                        "can take a while.\nDo you want to continue?");
     int result = KMessageBox::warningContinueCancel(this, msg);
     if (result != KMessageBox::Continue)
