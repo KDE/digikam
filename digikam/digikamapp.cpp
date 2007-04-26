@@ -558,7 +558,7 @@ void DigikamApp::setupActions()
                                     "album_refresh");
     d->refreshAlbumAction->setWhatsThis(i18n("This action refreshes all album contents"));
 
-    d->syncAlbumMetadataAction = new KAction( i18n("Update Metadata Database"),
+    d->syncAlbumMetadataAction = new KAction( i18n("Synchronize images from database"),
                                     "rebuild",
                                     0,
                                     d->view,
@@ -566,7 +566,8 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "album_syncmetadata");
     d->syncAlbumMetadataAction->setWhatsThis(i18n("This updates all image metadata from current "
-                                                "album with digiKam database contents."));
+                                                "album with digiKam database contents "
+						"(image metadata will be over-written)."));
 
     d->openInKonquiAction = new KAction( i18n("Open in Konqueror"),
                                     "konqueror",
@@ -679,7 +680,7 @@ void DigikamApp::setupActions()
     connect( exifOrientationMapper, SIGNAL( mapped( int ) ),
              d->view, SLOT( slotImageExifOrientation( int ) ) );
 
-    d->imageExifOrientationActionMenu = new KActionMenu(i18n("Correct Exif Orientation Tag"),
+    d->imageExifOrientationActionMenu = new KActionMenu(i18n("Adjust Exif Orientation Tag"),
                                                         actionCollection(),
                                                         "image_set_exif_orientation");
     d->imageExifOrientationActionMenu->setDelayed(false);
@@ -828,7 +829,7 @@ void DigikamApp::setupActions()
                                               "slideshow_selected");
     d->slideShowAction->insert(d->slideShowSelectionAction);
 
-    d->slideShowRecursiveAction = new KAction(i18n("Recursive"), 0, SHIFT+Key_F9,
+    d->slideShowRecursiveAction = new KAction(i18n("With all sub-albums"), 0, SHIFT+Key_F9,
                                               d->view, 
                                               SLOT(slotSlideShowRecursive()),
                                               actionCollection(), 
