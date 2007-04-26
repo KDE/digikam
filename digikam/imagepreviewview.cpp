@@ -87,6 +87,7 @@ public:
         parent               = 0;
         hasPrev              = false;
         hasNext              = false;
+        currentFitWindowZoom = 0;
     }
 
     bool               hasPrev;
@@ -103,6 +104,8 @@ public:
     KPopupFrame       *panIconPopup;
 
     PanIconWidget     *panIconWidget;
+
+    double             currentFitWindowZoom;
 
     ImageInfo         *imageInfo;
 
@@ -161,8 +164,7 @@ void ImagePreviewView::setImage(const QImage& image)
 {   
     d->preview = image;
 
-    updateAutoZoom();
-    updateContentsSize();
+    updateZoomAndSize(true);
 
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
@@ -566,6 +568,39 @@ void ImagePreviewView::slotZoomChanged(double zoom)
         d->cornerButton->show();
     else
         d->cornerButton->hide();        
+}
+
+void ImagePreviewView::resizeEvent(QResizeEvent* e)
+{
+    if (!e) return;
+
+    if (previewIsNull())
+        return;
+
+    QScrollView::resizeEvent(e);
+
+    updateZoomAndSize(false);
+    //emit signalZoomFactorChanged(zoomFactor());
+}
+
+void ImagePreviewView::updateZoomAndSize(bool alwaysFitToWindow)
+{
+    // Set zoom for fit-in-window as minimum, but dont scale up images
+    // that are smaller than the available space, only scale down.
+    double zoom = calcAutoZoomFactor(ZoomInOnly);
+    setZoomMin(zoom);
+    setZoomMax(zoom*12.0);
+
+    // Is currently the zoom factor set to fit to window? Then set it again to fit the new size.
+    if (zoomFactor() < zoom || alwaysFitToWindow || zoomFactor() == d->currentFitWindowZoom)
+    {
+        setZoomFactor(zoom);
+    }
+
+    // store which zoom factor means it is fit to window
+    d->currentFitWindowZoom = zoom;
+
+    updateContentsSize();
 }
 
 int ImagePreviewView::previewWidth()

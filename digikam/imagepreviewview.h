@@ -71,6 +71,10 @@ signals:
     void signalBack2Album();
     void signalSlideShow();
 
+protected:
+
+    void resizeEvent(QResizeEvent* e);
+
 private slots:
 
     void slotGotImagePreview(const LoadingDescription &loadingDescription, const QImage &image);
@@ -91,6 +95,7 @@ private:
     int  previewHeight();
     bool previewIsNull();
     void resetPreview();
+    void updateZoomAndSize(bool alwaysFitToWindow);
     inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
 
 private:
