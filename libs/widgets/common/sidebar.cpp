@@ -90,7 +90,7 @@ Sidebar::~Sidebar()
 void Sidebar::setSplitter(QSplitter *sp)
 {
 #if KDE_IS_VERSION(3,3,0)
-    setStyle(KMultiTabBar::KDEV3ICON);
+    setStyle(KMultiTabBar::VSNET);
 #else
     setStyle(KMultiTabBar::KDEV3);
 #endif
