@@ -89,19 +89,19 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     QWhatsThis::add( d->loopMode, i18n("<p>Run the slideshow in a loop."));
     
     d->printName = new QCheckBox(i18n("Print image file name"), parent);
-    QWhatsThis::add( d->printName, i18n("<p>Print image file name on bottom of screen."));
+    QWhatsThis::add( d->printName, i18n("<p>Print image file name to the screen bottom."));
 
     d->printDate = new QCheckBox(i18n("Print image creation date"), parent);
-    QWhatsThis::add( d->printDate, i18n("<p>Print image creation on bottom of screen."));
+    QWhatsThis::add( d->printDate, i18n("<p>Print image creation to the screen bottom."));
 
-    d->printApertureFocal = new QCheckBox(i18n("Print camera aperture and focal"), parent);
-    QWhatsThis::add( d->printApertureFocal, i18n("<p>Print camera aperture and focal on bottom of screen."));
+    d->printApertureFocal = new QCheckBox(i18n("Print camera aperture and focal length"), parent);
+    QWhatsThis::add( d->printApertureFocal, i18n("<p>Print camera aperture and focal length to the screen bottom."));
 
     d->printExpoSensitivity = new QCheckBox(i18n("Print camera exposure and sensitivity"), parent);
-    QWhatsThis::add( d->printExpoSensitivity, i18n("<p>Print camera exposure and sensitivity on bottom of screen."));
+    QWhatsThis::add( d->printExpoSensitivity, i18n("<p>Print camera exposure and sensitivity to the screen  bottom."));
 
     d->printMakeModel = new QCheckBox(i18n("Print camera make and model"), parent);
-    QWhatsThis::add( d->printMakeModel, i18n("<p>Print camera make and model on bottom of screen."));
+    QWhatsThis::add( d->printMakeModel, i18n("<p>Print camera make and model to the screen bottom."));
 
     d->printComment = new QCheckBox(i18n("Print image comment"), parent);
     QWhatsThis::add( d->printComment, i18n("<p>Print image comment on bottom of screen."));
