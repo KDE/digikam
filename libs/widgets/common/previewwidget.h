@@ -84,10 +84,16 @@ protected:
     bool m_movingInProgress;
 
 protected:
-    
-    double calcAutoZoomFactor();
+
+    enum AutoZoomMode
+    {
+        ZoomInOrOut,
+        ZoomInOnly
+    };
+
+    double calcAutoZoomFactor(AutoZoomMode mode = ZoomInOrOut);
     int    tileSize();
-    void   updateAutoZoom();
+    void   updateAutoZoom(AutoZoomMode mode = ZoomInOrOut);
     void   updateContentsSize();
     QRect  previewRect();
 

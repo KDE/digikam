@@ -258,16 +258,16 @@ void PreviewWidget::toggleFitToWindow()
     viewport()->update();
 }
 
-void PreviewWidget::updateAutoZoom()
+void PreviewWidget::updateAutoZoom(AutoZoomMode mode)
 {
-    d->zoom       = calcAutoZoomFactor();
+    d->zoom       = calcAutoZoomFactor(mode);
     d->zoomWidth  = (int)(previewWidth()  * d->zoom);
     d->zoomHeight = (int)(previewHeight() * d->zoom);
 
     emit signalZoomFactorChanged(d->zoom);
 }
 
-double PreviewWidget::calcAutoZoomFactor()
+double PreviewWidget::calcAutoZoomFactor(AutoZoomMode mode)
 {
     if (previewIsNull()) return d->zoom;
 
@@ -276,7 +276,15 @@ double PreviewWidget::calcAutoZoomFactor()
     double dstWidth  = contentsRect().width();
     double dstHeight = contentsRect().height();
 
-    return QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
+    double zoom = QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
+    // limit precision as above
+    zoom = floor(zoom * 10000.0) / 10000.0;
+    if (mode == ZoomInOrOut)
+        // fit to available space, scale up or down
+        return zoom;
+    else
+        // ZoomInOnly: accept that an image is smaller than available space, dont scale up
+        return QMIN(1.0, zoom);
 }
 
 void PreviewWidget::updateContentsSize()
