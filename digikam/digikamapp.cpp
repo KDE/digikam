@@ -558,16 +558,16 @@ void DigikamApp::setupActions()
                                     "album_refresh");
     d->refreshAlbumAction->setWhatsThis(i18n("This action refreshes all album contents"));
 
-    d->syncAlbumMetadataAction = new KAction( i18n("Synchronize images from database"),
+    d->syncAlbumMetadataAction = new KAction( i18n("Synchronize images with database"),
                                     "rebuild",
                                     0,
                                     d->view,
                                     SLOT(slotAlbumSyncPicturesMetadata()),
                                     actionCollection(),
                                     "album_syncmetadata");
-    d->syncAlbumMetadataAction->setWhatsThis(i18n("This updates all image metadata from current "
+    d->syncAlbumMetadataAction->setWhatsThis(i18n("This updates all image metadata of the current "
                                                 "album with digiKam database contents "
-						"(image metadata will be over-written)."));
+						"(image metadata will be over-written with data from the database)."));
 
     d->openInKonquiAction = new KAction( i18n("Open in Konqueror"),
                                     "konqueror",
@@ -629,7 +629,7 @@ void DigikamApp::setupActions()
                                                 "image_delete");
 
     // Pop up dialog to ask user whether to permanently delete
-    d->imageDeletePermanentlyAction = new KAction(i18n("Delete Permanently"),
+    d->imageDeletePermanentlyAction = new KAction(i18n("Delete permanently"),
                                                 "editdelete",
                                                 SHIFT+Key_Delete,
                                                 d->view,
@@ -639,7 +639,7 @@ void DigikamApp::setupActions()
 
     // These two actions are hidden, no menu entry, no toolbar entry, no shortcut.
     // Power users may add them.
-    d->imageDeletePermanentlyDirectlyAction = new KAction(i18n("Delete Permanently without confirmation"),
+    d->imageDeletePermanentlyDirectlyAction = new KAction(i18n("Delete permanently without confirmation"),
                                                         "editdelete",
                                                         0,
                                                         d->view,
@@ -647,7 +647,7 @@ void DigikamApp::setupActions()
                                                         actionCollection(),
                                                         "image_delete_permanently_directly");
 
-    d->imageTrashDirectlyAction = new KAction(i18n("Move to Trash without confirmation"),
+    d->imageTrashDirectlyAction = new KAction(i18n("Move to trash without confirmation"),
                                               "edittrash",
                                                0,
                                                d->view,
@@ -808,8 +808,7 @@ void DigikamApp::setupActions()
                                    SLOT(slotToggleFullScreen()),
                                    actionCollection(),
                                    "full_screen");
-    d->fullScreenAction->setWhatsThis(i18n("This option allows you to toggle the main window "
-                                         "in full screen mode."));
+    d->fullScreenAction->setWhatsThis(i18n("Toggles the main window to full screen mode."));
 #endif
 
     d->slideShowAction = new KActionMenu(i18n("Slide Show"), "slideshow",
@@ -854,7 +853,7 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "help_tipofday");
 
-    d->donateMoneyAction = new KAction(i18n("Donate Money..."),
+    d->donateMoneyAction = new KAction(i18n("Donate money..."),
                                    0,
                                    0,
                                    this,
@@ -1775,7 +1774,7 @@ void DigikamApp::slotDatabaseRescan()
 
 void DigikamApp::slotRebuildAllThumbs()
 {
-    QString msg = i18n("Rebuild all albums items thumbnails can take a while.\n"
+    QString msg = i18n("Rebuilding all album item thumbnails can take a while.\n"
                        "Do you want to continue?");
     int result = KMessageBox::warningContinueCancel(this, msg);
     if (result != KMessageBox::Continue)
@@ -1796,8 +1795,7 @@ void DigikamApp::slotRebuildAllThumbsDone()
 
 void DigikamApp::slotSyncAllPicturesMetadata()
 {
-    QString msg = i18n("Synchronizing all image metadata from all albums with digiKam database "
-                       "can take a while.\nDo you want to continue?");
+    QString msg = i18n("Updating the metadata database can take some time. \nDo you want to continue?");
     int result = KMessageBox::warningContinueCancel(this, msg);
     if (result != KMessageBox::Continue)
         return;
