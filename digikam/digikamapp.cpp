@@ -1735,7 +1735,7 @@ void DigikamApp::loadCameras()
     
     d->cameraMenuAction->popupMenu()->insertSeparator();
     
-    d->cameraMenuAction->popupMenu()->insertItem(i18n("Media Browse"), d->cameraMediaList);
+    d->cameraMenuAction->popupMenu()->insertItem(i18n("Browse Media"), d->cameraMediaList);
     
     d->cameraMenuAction->popupMenu()->insertSeparator();
     
