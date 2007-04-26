@@ -30,6 +30,7 @@ namespace Digikam
 QImage FastScale::fastScaleQImage(const QImage &img, int width, int height)
 {
     QImage tgt(width, height, 32);
+    tgt.setAlphaBuffer(img.hasAlphaBuffer());
     fastScaleRectAvg( (Q_UINT32 *)tgt.bits(), (Q_UINT32 *)img.bits(),
                       img.width(), img.height(), tgt.width(), tgt.height() );
     return tgt;

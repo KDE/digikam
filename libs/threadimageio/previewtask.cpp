@@ -35,6 +35,7 @@
 #include "ddebug.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
+#include "fastscale.h"
 #include "previewloadthread.h"
 #include "previewtask.h"
 
@@ -168,7 +169,17 @@ void PreviewLoadingTask::execute()
     if (qimage.depth() != 32)
         qimage = qimage.convertDepth(32);
 
-    qimage = qimage.smoothScale(size, size, QImage::ScaleMin);
+    //qimage = qimage.smoothScale(size, size, QImage::ScaleMin);
+
+    // Reduce size of image:
+    // - using fastscale algorithm
+    // - only scale down, do not scale up
+    QSize scaledSize = qimage.size();
+    if (scaledSize.width() > size || scaledSize.height() > size)
+    {
+        scaledSize.scale(size, size, QSize::ScaleMin);
+        qimage = FastScale::fastScaleQImage(qimage, scaledSize.width(), scaledSize.height());
+    }
 
     if (m_loadingDescription.previewParameters.exifRotate)
         exifRotate(m_loadingDescription.filePath, qimage);
