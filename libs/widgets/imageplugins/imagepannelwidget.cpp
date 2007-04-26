@@ -134,7 +134,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     // -------------------------------------------------------------
     
     d->zoomBar = new StatusZoomBar(d->previewWidget);
-    QWhatsThis::add( d->zoomBar, i18n("<p>Set here the zoom factor used to render picture on preview pannel.") );
+    QWhatsThis::add( d->zoomBar, i18n("<p>Set here the zoom factor used to render picture in the preview area.") );
 
     // -------------------------------------------------------------
     
