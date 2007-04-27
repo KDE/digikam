@@ -237,7 +237,7 @@ void DImg::copyMetaData(const DImgPrivate *src)
     m_priv->attributes   = src->attributes;
     m_priv->embeddedText = src->embeddedText;
 
-    // since qbytearrays are explicitely shared, we need to make sure that they are
+    // since qbytearrays are explicitly shared, we need to make sure that they are
     // detached from any shared references
 
     for (QMap<int, QByteArray>::const_iterator it = src->metaData.begin();
