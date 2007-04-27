@@ -346,7 +346,7 @@ void BlurFX::radialBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X
  * data             => The image data in RGBA mode.                            
  * Width            => Width of image.                          
  * Height           => Height of image.                            
- * BlurRadius       => Radius of blured image. 
+ * BlurRadius       => Radius of blurred image. 
  * BlendRadius      => Radius of blending effect.
  * bInversed        => If true, invert focus effect.
  * pArea            => Preview area.
@@ -454,7 +454,7 @@ void BlurFX::focusBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
             // In normal mode, the image is focused in the middle
             // and less focused towards the border.
             // In inversed mode, the image is more focused towards the edge
-            // and less focussed in the middle.
+            // and less focused in the middle.
             // This is achieved by swapping src and dest while blending.
             if (bInversed)
             {
