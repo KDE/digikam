@@ -57,7 +57,7 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     
     readMetadata(filePath, DImg::RAW);
   
-    // NOTE: Here, we don't check a possible embeded work-space color profile using 
+    // NOTE: Here, we don't check a possible embedded work-space color profile using 
     // the method checkExifWorkingColorSpace() like with JPEG, PNG, and TIFF loaders, 
     // because RAW file are always in linear mode.
     
