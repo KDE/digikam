@@ -1054,7 +1054,7 @@ void BlurFX::frostGlass(Digikam::DImg *orgImage, Digikam::DImg *destImage, int F
 
     int range = sixteenBit ? 65535 : 255;
 
-    // it is a huge optimisation to allocate these here once
+    // it is a huge optimizsation to allocate these here once
     uchar *IntensityCount = new uchar[range + 1];
     uint *AverageColorR = new uint[range + 1];
     uint *AverageColorG = new uint[range + 1];
