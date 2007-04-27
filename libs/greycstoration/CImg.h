@@ -710,13 +710,13 @@ namespace cimg_library {
   } \
   if (cimg::exception_mode()>=3) cimg_library::cimg::info(); \
 
-  //! Class which is thrown when an error occured during a %CImg library function call.
+  //! Class which is thrown when an error occurred during a %CImg library function call.
   /**
 
       \section ex1 Overview
 
       CImgException is the base class of %CImg exceptions.
-      Exceptions are thrown by the %CImg Library when an error occured in a %CImg library function call.
+      Exceptions are thrown by the %CImg Library when an error occurred in a %CImg library function call.
       CImgException is seldom thrown itself. Children classes that specify the kind of error encountered
       are generally used instead. These sub-classes are :
 
@@ -736,13 +736,13 @@ namespace cimg_library {
       img = 0;                     // Try to fill pixels from the 0 pointer (invalid argument to operator=() ).
       \endcode
 
-      - \b CImgIOException : Thrown when an error occured when trying to load or save image files.
+      - \b CImgIOException : Thrown when an error occurred when trying to load or save image files.
       The example below will throw a \a CImgIOException.
       \code
       CImg<float> img("file_doesnt_exist.jpg");    // Try to load a file that doesn't exist.
       \endcode
 
-      - \b CImgDisplayException : Thrown when an error occured when trying to display an image in a window.
+      - \b CImgDisplayException : Thrown when an error occurred when trying to display an image in a window.
       This exception is thrown when image display request cannot be satisfied.
 
       The parent class CImgException may be thrown itself when errors that cannot be classified in one of
@@ -3629,9 +3629,9 @@ namespace cimg_library {
       return ((unsigned char*)&x)[0]?false:true;
     }
 
-    //! Print informations about %CImg environement variables.
+    //! Print information about %CImg environement variables.
     /**
-       Printing is done on the standart error output.
+       Printing is done on the standard error output.
     **/
     inline void info() {
       char tmp[1024] = {0};
@@ -3810,7 +3810,7 @@ namespace cimg_library {
 
     //! Sleep for a certain numbers of milliseconds.
     /**
-       This function frees the CPU ressources during the sleeping time.
+       This function frees the CPU resources during the sleeping time.
        It may be used to temporize your program properly, without wasting CPU time.
        \sa wait(), time().
     **/
@@ -4327,31 +4327,31 @@ namespace cimg_library {
       return *this;
     }
 
-    //! Wait for an event occuring on the current display
+    //! Wait for an event occurring on the current display
     CImgDisplay& wait() {
       wait(*this);
       return *this;
     }
 
-    //! Wait for any event occuring on the display \c disp1
+    //! Wait for any event occurring on the display \c disp1
     static void wait(CImgDisplay& disp1) {
       disp1.is_event = 0;
       while (!disp1.is_event) wait_all();
     }
 
-    //! Wait for any event occuring either on the display \c disp1 or \c disp2
+    //! Wait for any event occurring either on the display \c disp1 or \c disp2
     static void wait(CImgDisplay& disp1, CImgDisplay& disp2) {
       disp1.is_event = disp2.is_event = 0;
       while (!disp1.is_event && !disp2.is_event) wait_all();
     }
 
-    //! Wait for any event occuring either on the display \c disp1, \c disp2 or \c disp3
+    //! Wait for any event occurring either on the display \c disp1, \c disp2 or \c disp3
     static void wait(CImgDisplay& disp1, CImgDisplay& disp2, CImgDisplay& disp3) {
       disp1.is_event = disp2.is_event = disp3.is_event = 0;
       while (!disp1.is_event && !disp2.is_event && !disp3.is_event) wait_all();
     }
 
-    //! Wait for any event occuring either on the display \c disp1, \c disp2, \c disp3 or \c disp4
+    //! Wait for any event occurring either on the display \c disp1, \c disp2, \c disp3 or \c disp4
     static void wait(CImgDisplay& disp1, CImgDisplay& disp2, CImgDisplay& disp3, CImgDisplay& disp4) {
       disp1.is_event = disp2.is_event = disp3.is_event = disp4.is_event = 0;
       while (!disp1.is_event && !disp2.is_event && !disp3.is_event && !disp4.is_event) wait_all();
@@ -6596,7 +6596,7 @@ namespace cimg_library {
        - The image format is deduced from the filename only by looking for the filename extension i.e. without
        analyzing the file itself.
        - Recognized image formats depend on the tools installed on your system or the external libraries you use to link your code with.
-       More informations on this topic can be found in cimg_files_io.
+       More information on this topic can be found in cimg_files_io.
        - If the filename is not found, a CImgIOException is thrown by this constructor.
        \see assign(const char *const), load(const char *const)
     **/
@@ -6611,7 +6611,7 @@ namespace cimg_library {
        - The image format is deduced from the filename only by looking for the filename extension i.e. without
        analyzing the file itself.
        - Recognized image formats depend on the tools installed on your system or the external libraries you use to link your code with.
-       More informations on this topic can be found in cimg_files_io.
+       More information on this topic can be found in cimg_files_io.
        - If the filename is not found, a CImgIOException is thrown by this constructor.
     **/
     CImg& assign(const char *const filename) {
@@ -6872,7 +6872,7 @@ namespace cimg_library {
        \param z Z-coordinate of the pixel.
        \param v V-coordinate of the pixel.
 
-       - When called without parameters, ptr() returns a pointer to the begining of the pixel buffer.
+       - When called without parameters, ptr() returns a pointer to the beginning of the pixel buffer.
        - If the macro \c cimg_debug == 3, boundary checking is performed and warning messages may appear if
        given coordinates are outside the image range (but function performances decrease).
 
@@ -6998,7 +6998,7 @@ namespace cimg_library {
 
     //! Fast access to pixel value for reading or writing, using an offset to the image pixel.
     /**
-       \param off Offset of the pixel according to the begining of the pixel buffer, given by ptr().
+       \param off Offset of the pixel according to the beginning of the pixel buffer, given by ptr().
 
        - If the macro \c cimg_debug==3, boundary checking is performed and warning messages may appear
        (but function performances decrease).
@@ -7363,20 +7363,20 @@ namespace cimg_library {
         Rxp*Rya*m + Rxc*Rya*n + Rxn*Rya*o + Rxa*Rya*p;
     }
 
-    //! Display informations about the image on the standard error output.
+    //! Display information about the image on the standard error output.
     /**
        \param title Name for the considered image (optional).
-       \param print_flag Level of informations to be printed.
+       \param print_flag Level of information to be printed.
 
        - The possible values for \c print_flag are :
-           - 0 : print only informations about image size and pixel buffer.
+           - 0 : print only information about image size and pixel buffer.
            - 1 : print also statistics on the image pixels.
            - 2 : print also the content of the pixel buffer, in a matlab-style.
 
        \par example:
        \code
        CImg<float> img("foo.jpg");      // Load image from a JPEG file.
-       img.print("Image : foo.jpg",1);  // Print image informations and statistics.
+       img.print("Image : foo.jpg",1);  // Print image information and statistics.
        \endcode
 
        \sa CImgStats
@@ -7401,7 +7401,7 @@ namespace cimg_library {
       return *this;
     }
 
-    //! Display informations about the image on the standart output.
+    //! Display information about the image on the standart output.
     const CImg& print(const unsigned int print_flag) const {
       return print(0,print_flag);
     }
@@ -8919,7 +8919,7 @@ namespace cimg_library {
        \param pdz = Number of slices (new size along the Z-axis).
        \param pdv = Number of vector-channels (new size along the V-axis).
        \param interp = Resizing type :
-       - 0 = no interpolation : additionnal space is filled with 0.
+       - 0 = no interpolation : additional space is filled with 0.
        - 1 = bloc interpolation (nearest point).
        - 2 = mosaic : image is repeated if necessary.
        - 3 = linear interpolation.
@@ -9142,7 +9142,7 @@ namespace cimg_library {
     /**
        \param src = Image giving the geometry of the resize.
        \param interp = Resizing type :
-       - 0 = no interpolation : additionnal space is filled with 0.
+       - 0 = no interpolation : additional space is filled with 0.
        - 1 = bloc interpolation (nearest point).
        - 2 = mosaic : image is repeated if necessary.
        - 3 = linear interpolation.
@@ -9158,7 +9158,7 @@ namespace cimg_library {
     /**
        \param disp = Display giving the geometry of the resize.
        \param interp = Resizing type :
-       - 0 = no interpolation : additionnal space is filled with 0.
+       - 0 = no interpolation : additional space is filled with 0.
        - 1 = bloc interpolation (nearest point).
        - 2 = mosaic : image is repeated if necessary.
        - 3 = linear interpolation.
@@ -9177,7 +9177,7 @@ namespace cimg_library {
        \param pdz = Number of slices (new size along the Z-axis).
        \param pdv = Number of vector-channels (new size along the V-axis).
        \param interp = Resizing type :
-       - 0 = no interpolation : additionnal space is filled with 0.
+       - 0 = no interpolation : additional space is filled with 0.
        - 1 = bloc interpolation (nearest point).
        - 2 = mosaic : image is repeated if necessary.
        - 3 = linear interpolation.
@@ -9201,7 +9201,7 @@ namespace cimg_library {
     /**
        \param src = Image giving the geometry of the resize.
        \param interp = Resizing type :
-       - 0 = no interpolation : additionnal space is filled with 0.
+       - 0 = no interpolation : additional space is filled with 0.
        - 1 = bloc interpolation (nearest point).
        - 2 = mosaic : image is repeated if necessary.
        - 3 = linear interpolation.
@@ -9217,7 +9217,7 @@ namespace cimg_library {
     /**
        \param disp = Display giving the geometry of the resize.
        \param interp = Resizing type :
-       - 0 = no interpolation : additionnal space is filled with 0.
+       - 0 = no interpolation : additional space is filled with 0.
        - 1 = bloc interpolation (nearest point).
        - 2 = mosaic : image is repeated if necessary.
        - 3 = linear interpolation.
@@ -9939,7 +9939,7 @@ namespace cimg_library {
     //! Return the image histogram.
     /**
        The histogram H of an image I is a 1D-function where H(x) is the number of
-       occurences of the value x in I.
+       occurrences of the value x in I.
        \param nblevels = Number of different levels of the computed histogram.
        For classical images, this value is 256 (default value). You should specify more levels
        if you are working with CImg<float> or images with high range of pixel values.
@@ -9950,7 +9950,7 @@ namespace cimg_library {
        \note If val_min==val_max==0 (default values), the function first estimates the minimum and maximum
        pixel values of the current image, then uses these values for the histogram computation.
        \result The histogram is returned as a 1D CImg<float> image H, having a size of (nblevels,1,1,1) such that
-       H(0) and H(nblevels-1) are respectively equal to the number of occurences of the values val_min and val_max in I.
+       H(0) and H(nblevels-1) are respectively equal to the number of occurrences of the values val_min and val_max in I.
        \note Histogram computation always returns a 1D function. Histogram of multi-valued (such as color) images
        are not multi-dimensional.
        \see get_equalize_histogram(), equalize_histogram()
@@ -20664,7 +20664,7 @@ namespace cimg_library {
     //@{
     //----------------------------------
 
-    //! Print informations about the list on the standard output.
+    //! Print information about the list on the standard output.
     const CImgList& print(const char* title=0, const unsigned int print_flag=1) const {
       char tmp[1024];
       std::fprintf(stderr,"%-8s(this=%p) : { size=%u, data=%p }\n",title?title:"CImgList",
@@ -20676,7 +20676,7 @@ namespace cimg_library {
       return *this;
     }
 
-    //! Display informations about the list on the standart output.
+    //! Display information about the list on the standart output.
     const CImgList& print(const unsigned int print_flag) const {
       return print(0,print_flag);
     }

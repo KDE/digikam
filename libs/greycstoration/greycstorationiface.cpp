@@ -44,7 +44,7 @@
 #include "CImg.h"
 using namespace cimg_library;
 
-/** Number of childs thread used to run Greystoration algorithm */ 
+/** Number of children threads used to run Greystoration algorithm */ 
 #define COMPUTATION_THREAD 1
 
 /** Uncomment this line if you use future GreycStoration implementation with GFact parameter */
@@ -436,7 +436,7 @@ void GreycstorationIface::iterationLoop(uint iter)
         if (m_parent && !m_cancel)
         {
             // Update the progress bar in dialog. We simply computes the global
-            // progression indice (including all iterations).
+            // progression index (including all iterations).
 
             p = (uint)((iter*100 + d->img.greycstoration_progress())/d->settings.nbIter);
 
