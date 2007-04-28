@@ -113,6 +113,7 @@ public:
 
     ThumbBarItem* currentItem() const;
     void setSelected(ThumbBarItem* item);
+    void ensureItemVisible(ThumbBarItem* item);
 
     void setExifRotate(bool exifRotate);
     bool getExifRotate();

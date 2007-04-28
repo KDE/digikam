@@ -202,6 +202,7 @@ void ThumbBarView::resizeEvent(QResizeEvent* e)
     }
 
     rearrangeItems();
+    ensureItemVisible(currentItem());
 }
 
 void ThumbBarView::setExifRotate(bool exifRotate)
@@ -353,19 +354,27 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
     d->currItem = item;
     if (d->currItem)
     {
+        ensureItemVisible(item);          
+        item->repaint();
+
+        emit signalURLSelected(item->url());
+        emit signalItemSelected(item);
+    }
+}
+
+void ThumbBarView::ensureItemVisible(ThumbBarItem* item)
+{
+    if (item)
+    {
         // We want the complete thumb visible and the next one.
         // find the middle of the image and give a margin of 1,5 image
         // When changed, watch regression for bug 104031
         if (d->orientation == Vertical)
-            ensureVisible(0, (int)(item->d->pos+d->margin+d->tileSize*.5),
-                          0, (int)(d->tileSize*1.5+3*d->margin));
+            ensureVisible(0, (int)(item->d->pos + d->margin + d->tileSize*.5),
+                          0, (int)(d->tileSize*1.5 + 3*d->margin));
         else
-            ensureVisible((int)(item->d->pos+d->margin+d->tileSize*.5), 0,
-                          (int)(d->tileSize*1.5+3*d->margin), 0);
-          
-        item->repaint();
-        emit signalURLSelected(item->url());
-        emit signalItemSelected(item);
+            ensureVisible((int)(item->d->pos + d->margin + d->tileSize*.5), 0,
+                          (int)(d->tileSize*1.5 + 3*d->margin), 0);
     }
 }
 
