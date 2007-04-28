@@ -32,6 +32,7 @@
 
 // Local includes
 
+#include "dmetadata.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -51,8 +52,6 @@ public:
         SIMPLE=0,
         FULL
     };
-
-    typedef QMap<QString, QString>  MetaDataMap;
 
 public:
 
@@ -92,11 +91,11 @@ protected:
     bool   setMetadata(const QByteArray& data=QByteArray());
     const  QByteArray& getMetadata();
 
-    void   setMetadataMap(const MetaDataMap& data=MetaDataMap());
-    const  MetadataWidget::MetaDataMap& getMetadataMap();
+    void   setMetadataMap(const DMetadata::MetaDataMap& data=DMetadata::MetaDataMap());
+    const  DMetadata::MetaDataMap& getMetadataMap();
 
-    void   setIfdList(const MetaDataMap &ifds, const QStringList& tagsFilter=QStringList());
-    void   setIfdList(const MetaDataMap &ifds, const QStringList& keysFilter,
+    void   setIfdList(const DMetadata::MetaDataMap &ifds, const QStringList& tagsFilter=QStringList());
+    void   setIfdList(const DMetadata::MetaDataMap &ifds, const QStringList& keysFilter,
                       const QStringList& tagsFilter);
 
     KURL   saveMetadataToFile(const QString& caption, const QString& fileFilter);

@@ -254,7 +254,7 @@ bool ICCProfileWidget::decodeMetadata()
         return false;
     }
 
-    MetaDataMap metaDataMap;
+    DMetadata::MetaDataMap metaDataMap;
 
     if ( !QString(cmsTakeProductName(hProfile)).isEmpty() )
         metaDataMap.insert("Icc.Header.Name", QString(cmsTakeProductName(hProfile)).replace("\n", " "));

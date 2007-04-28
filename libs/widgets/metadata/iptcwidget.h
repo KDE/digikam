@@ -57,6 +57,7 @@ private:
 private:
     
     QStringList m_tagsfilter;    
+    QStringList m_keysFilter;
 };
 
 }  // namespace Digikam

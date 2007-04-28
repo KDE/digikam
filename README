@@ -79,10 +79,9 @@ AutoMake   >= 1.7.x                        http://www.gnu.org/software/automake
 libqt      >= 3.3.x                        http://www.trolltech.com
 libkde     >= 3.4.x (>=3.5.x recommended)  http://www.kde.org
 libsqlite  >= 3.x                          http://www.sqlite.org
-libexiv2   >= 0.12  (>=0.14  recommended)  http://www.exiv2.org
 libgphoto2 >= 2.x   (>=2.2.x recommended)  http://www.gphoto.org
 libkipi    >= 0.1                          http://www.kipi-plugins.org
-libkexiv2  >= 0.1.2                        http://www.kipi-plugins.org
+libkexiv2  >= 0.1.3                        http://www.kipi-plugins.org
 libkdcraw  >= 0.1                          http://www.kipi-plugins.org
 liblcms    >= 1.14.x                       http://www.littlecms.com
 libtiff    >= 3.6.x (>=3.8.2 recommended)  http://www.remotesensing.org/libtiff
@@ -117,4 +116,7 @@ all needed information in a bug report.
 
 -- DONATE MONEY --------------------------------------------------------
 
-Look at this url : http://www.digikam.org/?q=donation
+If you love digiKam, you can help developpers to buy new photo devices to test 
+and implemente new features. Thanks in advance for your generous donations.
+
+For more informations, look at this url : http://www.digikam.org/?q=donation

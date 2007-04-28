@@ -72,18 +72,18 @@ public:
         mainLayout   = 0;
     }
 
-    QGridLayout                 *mainLayout;
+    QGridLayout            *mainLayout;
 
-    QHButtonGroup               *toolButtons;
-    QHButtonGroup               *levelButtons;
+    QHButtonGroup          *toolButtons;
+    QHButtonGroup          *levelButtons;
 
-    QByteArray                   metadata;
+    QByteArray              metadata;
 
-    QString                      fileName;
+    QString                 fileName;
 
-    MetadataListView            *view;
+    MetadataListView       *view;
 
-    MetadataWidget::MetaDataMap  metaDataMap;
+    DMetadata::MetaDataMap  metaDataMap;
 };
 
 MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
@@ -218,22 +218,22 @@ bool MetadataWidget::storeMetadataToFile(const KURL& url)
     return true;
 }
 
-void MetadataWidget::setMetadataMap(const MetaDataMap& data)
+void MetadataWidget::setMetadataMap(const DMetadata::MetaDataMap& data)
 {
     d->metaDataMap = data;
 }
 
-const MetadataWidget::MetaDataMap& MetadataWidget::getMetadataMap()
+const DMetadata::MetaDataMap& MetadataWidget::getMetadataMap()
 {
     return d->metaDataMap;
 }
 
-void MetadataWidget::setIfdList(const MetaDataMap &ifds, const QStringList& tagsFilter)
+void MetadataWidget::setIfdList(const DMetadata::MetaDataMap &ifds, const QStringList& tagsFilter)
 {
     d->view->setIfdList(ifds, tagsFilter);
 }
 
-void MetadataWidget::setIfdList(const MetaDataMap &ifds, const QStringList& keysFilter,
+void MetadataWidget::setIfdList(const DMetadata::MetaDataMap &ifds, const QStringList& keysFilter,
                                 const QStringList& tagsFilter)
 {
     d->view->setIfdList(ifds, keysFilter, tagsFilter);

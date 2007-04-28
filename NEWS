@@ -16,6 +16,8 @@ General       : Make size of icons used in sidebars configurable in order to all
                 entries to be presented. 
 General       : Make size of icons used in album icon view more configurable using a slider 
                 in status bar. 
+General       : Removing direct Exiv2 library depency. libkexiv2 interface is used everywhere 
+                instead.  
 
 Album GUI     : Add Zoom/Scrooling functions with preview mode.
 

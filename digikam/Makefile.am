@@ -96,7 +96,7 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                welcomepageview.cpp 
 
 libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) $(LIB_KHTML) \
-	               $(LIBKIPI_LIBS) $(LIB_KUTILS) $(EXIV2_LIBS) \
+	               $(LIBKIPI_LIBS) $(LIB_KUTILS) \
 	               $(top_builddir)/digikam/sqlite/libsqlite.la \
 	               $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 	               $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
@@ -124,8 +124,8 @@ bin_PROGRAMS = digikam
 
 digikam_SOURCES = main.cpp
 digikam_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) \
-		  $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS) $(LIB_KUTILS) \
-		  libdigikam.la
+		          $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS) $(LIB_KUTILS) \
+		          libdigikam.la
 
 digikam_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_KUTILS) 
 

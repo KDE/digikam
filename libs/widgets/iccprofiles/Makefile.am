@@ -12,6 +12,7 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/widgets/metadata \
 	       -I$(top_srcdir)/digikam/libs/widgets/common \
 	       -I$(top_srcdir)/digikam/libs/lprof \
 	       -I$(top_srcdir)/digikam/libs/dimg \
+	       -I$(top_srcdir)/digikam/libs/dmetadata \
 	       -I$(top_srcdir)/digikam/digikam \
 	       $(all_includes)
            

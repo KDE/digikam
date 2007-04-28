@@ -188,24 +188,6 @@ if test "x$have_libkipi" != "xyes"; then
      DO_NOT_COMPILE="$DO_NOT_COMPILE digikam digikamimageplugins"
 fi
 
-#------------------------------------------------------------------
-#
-# Check for Exiv2 library
-#
-#------------------------------------------------------------------
-
-have_exiv2='no'
-if test "$PKGCONFIGFOUND" = "yes" ; then
- KDE_PKG_CHECK_MODULES(EXIV2, exiv2 >= 0.12, have_exiv2=yes,have_exiv2=no)
-else
- AC_MSG_WARN([pkg-config not found. You have to install pkg-config first. digiKam depends on it.])
-fi
-
-if test "x$have_exiv2" != "xyes"; then
-  AC_MSG_WARN([Exiv2 library not found, digiKam will not be compiled.])
-  DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
-fi
-
 # --------------------------------------------------------------------
 #
 # Check for libkexiv2

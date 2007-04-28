@@ -52,8 +52,8 @@ public:
     QString getCurrentItemKey();
     void    setCurrentItemByKey(QString itemKey);
 
-    void    setIfdList(MetadataWidget::MetaDataMap ifds, const QStringList& tagsfilter);
-    void    setIfdList(MetadataWidget::MetaDataMap ifds, QStringList keysFilter,
+    void    setIfdList(DMetadata::MetaDataMap ifds, const QStringList& tagsfilter);
+    void    setIfdList(DMetadata::MetaDataMap ifds, QStringList keysFilter,
                        const QStringList& tagsFilter);
 
 protected:

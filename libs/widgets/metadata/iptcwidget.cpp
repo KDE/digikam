@@ -18,13 +18,6 @@
  * 
  * ============================================================ */
 
-// C++ includes.
-
-#include <cstdlib>
-#include <cstdio>
-#include <cassert>
-#include <string>
-
 // Qt includes.
 
 #include <qmap.h>
@@ -33,11 +26,6 @@
 // KDE includes.
 
 #include <klocale.h>
-
-// LibExiv2 includes.
-
-#include <exiv2/iptc.hpp>
-#include <exiv2/datasets.hpp>
 
 // Local includes.
 
@@ -66,9 +54,19 @@ static const char* IptcHumanList[] =
      "-1"
 };
 
+static const char* StandardIptcEntryList[] =
+{
+     "Envelope",
+     "Application2",
+     "-1"
+};
+
 IptcWidget::IptcWidget(QWidget* parent, const char* name)
           : MetadataWidget(parent, name)
 {
+    for (int i=0 ; QString(StandardIptcEntryList[i]) != QString("-1") ; i++)
+        m_keysFilter << StandardIptcEntryList[i];
+
     for (int i=0 ; QString(IptcHumanList[i]) != QString("-1") ; i++)
         m_tagsfilter << IptcHumanList[i];
 }
@@ -110,54 +108,12 @@ bool IptcWidget::loadFromURL(const KURL& url)
 
 bool IptcWidget::decodeMetadata()
 {
-    try
-    {
-        Exiv2::IptcData iptcData;
-        if (iptcData.load((Exiv2::byte*)getMetadata().data(), getMetadata().size()) != 0)
-        {
-            DDebug() << "Cannot parse IPTC metadata using Exiv2" << endl;
-            return false;
-        }
+    DMetadata metaData;
+    if (!metaData.setIptc(getMetadata()))
+        return false;
 
-        iptcData.sortByKey();
-        
-        QString ifDItemName;
-        MetaDataMap metaDataMap;
-
-        for (Exiv2::IptcData::iterator md = iptcData.begin(); md != iptcData.end(); ++md)
-        {
-            QString key = QString::fromAscii(md->key().c_str());
-            
-            // Decode the tag value with a user friendly output.
-            std::ostringstream os;
-            os << *md;
-            QString value = QString::fromAscii(os.str().c_str());
-            // To make a string just on one line.
-            value.replace("\n", " ");
-
-            // Some IPTC key are redondancy. check if already one exist...
-            MetaDataMap::iterator it = metaDataMap.find(key);
-            
-            if (it == metaDataMap.end())
-                metaDataMap.insert(key, value);
-            else
-            {
-                QString v = *it;
-                v.append(", ");
-                v.append(value);
-                metaDataMap.replace(key, v);
-            }                
-        }
-
-        // Update all metadata contents.        
-        setMetadataMap(metaDataMap);
-
-        return true;
-    }
-    catch (Exiv2::Error& e)
-    {
-        DMetadata::printExiv2ExceptionError("Cannot parse IPTC metadata using Exiv2 ", e);
-    }
+    // Update all metadata contents.
+    setMetadataMap(metaData.getIptcTagsDataList(m_keysFilter));
 
     return false;
 }
@@ -176,34 +132,22 @@ void IptcWidget::buildView(void)
 
 QString IptcWidget::getTagTitle(const QString& key)
 {
-    try 
-    {
-        std::string iptckey(key.ascii());
-        Exiv2::IptcKey ik(iptckey); 
-        return QString::fromLocal8Bit( Exiv2::IptcDataSets::dataSetTitle(ik.tag(), ik.record()) );
-    }
-    catch (Exiv2::Error& e) 
-    {
-        DMetadata::printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
-    }
+    QString title = DMetadata::getIptcTagTitle(key.ascii());
 
-    return i18n("Unknow");
+    if (title.isEmpty())
+        return i18n("Unknown");
+
+    return title;
 }
 
 QString IptcWidget::getTagDescription(const QString& key)
 {
-    try 
-    {
-        std::string iptckey(key.ascii());
-        Exiv2::IptcKey ik(iptckey); 
-        return QString::fromLocal8Bit( Exiv2::IptcDataSets::dataSetDesc(ik.tag(), ik.record()) );
-    }
-    catch (Exiv2::Error& e) 
-    {
-        DMetadata::printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
-    }
+    QString desc = DMetadata::getIptcTagDescription(key.ascii());
 
-    return i18n("No description available");
+    if (desc.isEmpty())
+        return i18n("No description available");
+
+    return desc;
 }
 
 void IptcWidget::slotSaveMetadataToFile(void)
