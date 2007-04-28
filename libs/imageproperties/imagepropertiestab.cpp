@@ -226,7 +226,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     d->labelPhotoFlash          = new KSqueezedTextLabel(0, d->settingsArea);
     d->labelPhotoWhiteBalance   = new KSqueezedTextLabel(0, d->settingsArea);
 
-    int hgt = fontMetrics().height()+2;
+    int hgt = fontMetrics().height()-2;
     d->title->setAlignment(Qt::AlignCenter);
     d->file->setMaximumHeight(hgt);
     d->folder->setMaximumHeight(hgt);

@@ -107,6 +107,9 @@ public:
     QDict<ThumbBarItem>        itemDict;
     QGuardedPtr<ThumbnailJob>  thumbJob;
 
+    QColor                     background;
+    QColor                     highlight;
+
     ThumbBarToolTipSettings    toolTipSettings;
 
     ThumbBarToolTip           *toolTip;
@@ -151,6 +154,8 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     d->toolTipSettings = settings;
     d->toolTip         = new ThumbBarToolTip(this);
     d->timer           = new QTimer(this);
+    d->background      = colorGroup().background();
+    d->highlight       = colorGroup().highlight();
     
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotUpdate()));
@@ -182,6 +187,13 @@ ThumbBarView::~ThumbBarView()
     delete d->timer;
     delete d->toolTip;
     delete d;
+}
+
+void ThumbBarView::setColors(const QColor& background, const QColor& highlight)
+{
+    d->background = background;
+    d->highlight  = highlight;
+    triggerUpdate();
 }
 
 void ThumbBarView::resizeEvent(QResizeEvent* e)
@@ -434,7 +446,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
        x2 = ((x1 + er.width())/ts +1)*ts;
     }
     
-    bgPix.fill(colorGroup().background());
+    bgPix.fill(d->background);
     
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
@@ -443,9 +455,9 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
             if (y1 <= item->d->pos && item->d->pos <= y2)
             {
                 if (item == d->currItem)
-                    tile.fill(colorGroup().highlight());
+                    tile.fill(d->highlight);
                 else
-                    tile.fill(colorGroup().background());
+                    tile.fill(d->background);
     
                 QPainter p(&tile);
                 p.setPen(Qt::white);
@@ -470,9 +482,9 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
             if (x1 <= item->d->pos && item->d->pos <= x2)
             {
                 if (item == d->currItem)
-                    tile.fill(colorGroup().highlight());
+                    tile.fill(d->highlight);
                 else
-                    tile.fill(colorGroup().background());
+                    tile.fill(d->background);
     
                 QPainter p(&tile);
                 p.setPen(Qt::white);

@@ -121,6 +121,8 @@ public:
     void setToolTipSettings(const ThumbBarToolTipSettings &settings);
     ThumbBarToolTipSettings& getToolTipSettings();
 
+    void setColors(const QColor& background, const QColor& highlight);
+
     ThumbBarItem* firstItem() const;
     ThumbBarItem* lastItem()  const;
     ThumbBarItem* findItem(const QPoint& pos) const;
