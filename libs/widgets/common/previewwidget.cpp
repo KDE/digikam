@@ -495,10 +495,10 @@ void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
     }
     else if (e->state() & Qt::ControlButton)
     {
-        if (e->delta() < 0 && !maxZoom())
-            slotIncreaseZoom();
-        else if (e->delta() > 0 && !minZoom())
+        if (e->delta() < 0 && !minZoom())
             slotDecreaseZoom();
+        else if (e->delta() > 0 && !maxZoom())
+            slotIncreaseZoom();
         return;
     }
 

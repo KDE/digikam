@@ -883,9 +883,9 @@ void Canvas::contentsWheelEvent(QWheelEvent *e)
     else if (e->state() & Qt::ControlButton)
     {
         if (e->delta() < 0)
-            slotIncreaseZoom();
-        else if (e->delta() > 0)
             slotDecreaseZoom();
+        else if (e->delta() > 0)
+            slotIncreaseZoom();
         return;
     }
 
