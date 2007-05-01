@@ -18,6 +18,11 @@
  *
  * ============================================================ */
 
+// Qt includes.
+
+#include <qpainter.h>
+#include <qimage.h>
+
 // KDE includes.
 
 #include <klocale.h>
@@ -26,6 +31,7 @@
 
 #include "album.h"
 #include "albumsettings.h"
+#include "themeengine.h"
 #include "imageinfo.h"
 #include "lighttablebar.h"
 #include "lighttablebar.moc"
@@ -38,6 +44,9 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
 {
     readToolTipSettings();
     m_toolTip = new LightTableBarToolTip(this);
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotUpdate()));
 
     connect(this, SIGNAL(signalItemSelected(ThumbBarItem*)),
             this, SLOT(slotItemSelected(ThumbBarItem*)));    
@@ -80,6 +89,103 @@ void LightTableBar::readToolTipSettings()
     settings.showPhotoFlash = albumSettings->getToolTipsShowPhotoFlash();
     settings.showPhotoWB    = albumSettings->getToolTipsShowPhotoWB();
     setToolTipSettings(settings);
+}
+
+void LightTableBar::viewportPaintEvent(QPaintEvent* e)
+{
+    int cy, cx, ts, y1, y2, x1, x2;
+    QPixmap bgPix, tile;
+    QRect er(e->rect());
+    
+    if (getOrientation() == Vertical)
+    {
+       cy = viewportToContents(er.topLeft()).y();
+        
+       bgPix.resize(contentsRect().width(), er.height());
+    
+       ts = getTileSize() + 2*getMargin();
+       tile.resize(visibleWidth(), ts);
+    
+       y1 = (cy/ts)*ts;
+       y2 = ((y1 + er.height())/ts +1)*ts;
+    }
+    else
+    {
+       cx = viewportToContents(er.topLeft()).x();
+        
+       bgPix.resize(er.width(), contentsRect().height());
+    
+       ts = getTileSize() + 2*getMargin();
+       tile.resize(ts, visibleHeight());
+    
+       x1 = (cx/ts)*ts;
+       x2 = ((x1 + er.width())/ts +1)*ts;
+    }
+
+    bgPix.fill(ThemeEngine::instance()->baseColor());
+    
+    for (ThumbBarItem *item = firstItem(); item; item = item->next())
+    {
+        if (getOrientation() == Vertical)
+        {
+            if (y1 <= item->position() && item->position() <= y2)
+            {
+                if (item == currentItem())
+                    tile = ThemeEngine::instance()->thumbSelPixmap(tile.width(), tile.height());
+                else
+                    tile = ThemeEngine::instance()->thumbRegPixmap(tile.width(), tile.height());
+    
+                QPainter p(&tile);
+                p.setPen(Qt::white);
+                p.drawRect(0, 0, tile.width(), tile.height());
+                p.end();
+                
+                if (item->pixmap())
+                {
+                    QPixmap pix; 
+                    pix.convertFromImage(QImage(item->pixmap()->convertToImage()).
+                                         smoothScale(getTileSize(), getTileSize(), QImage::ScaleMin));
+                    int x = (tile.width()  - pix.width())/2;
+                    int y = (tile.height() - pix.height())/2;
+                    bitBlt(&tile, x, y, &pix);
+                }
+                
+                bitBlt(&bgPix, 0, item->position() - cy, &tile);
+            }
+        }
+        else
+        {
+            if (x1 <= item->position() && item->position() <= x2)
+            {
+                if (item == currentItem())
+                    tile = ThemeEngine::instance()->thumbSelPixmap(tile.width(), tile.height());
+                else
+                    tile = ThemeEngine::instance()->thumbRegPixmap(tile.width(), tile.height());
+    
+                QPainter p(&tile);
+                p.setPen(Qt::white);
+                p.drawRect(0, 0, tile.width(), tile.height());
+                p.end();
+                
+                if (item->pixmap())
+                {
+                    QPixmap pix; 
+                    pix.convertFromImage(QImage(item->pixmap()->convertToImage()).
+                                         smoothScale(getTileSize(), getTileSize(), QImage::ScaleMin));
+                    int x = (tile.width() - pix.width())/2;
+                    int y = (tile.height()- pix.height())/2;
+                    bitBlt(&tile, x, y, &pix);
+                }
+                
+                bitBlt(&bgPix, item->position() - cx, 0, &tile);
+            }
+        }
+    }
+
+    if (getOrientation() == Vertical)
+       bitBlt(viewport(), 0, er.y(), &bgPix);
+    else
+       bitBlt(viewport(), er.x(), 0, &bgPix);
 }
 
 // -------------------------------------------------------------------------

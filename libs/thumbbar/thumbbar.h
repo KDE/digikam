@@ -111,7 +111,6 @@ public:
 
     void removeItem(ThumbBarItem* item);
 
-    ThumbBarItem* currentItem() const;
     void setSelected(ThumbBarItem* item);
     void ensureItemVisible(ThumbBarItem* item);
 
@@ -121,8 +120,7 @@ public:
     void setToolTipSettings(const ThumbBarToolTipSettings &settings);
     ThumbBarToolTipSettings& getToolTipSettings();
 
-    void setColors(const QColor& background, const QColor& highlight);
-
+    ThumbBarItem* currentItem() const;
     ThumbBarItem* firstItem() const;
     ThumbBarItem* lastItem()  const;
     ThumbBarItem* findItem(const QPoint& pos) const;
@@ -132,9 +130,14 @@ public:
         
 protected:
 
+    int  getOrientation();
+    int  getTileSize();
+    int  getMargin();
+
     void resizeEvent(QResizeEvent* e);
-    void viewportPaintEvent(QPaintEvent* e);
     void contentsMousePressEvent(QMouseEvent* e);
+
+    virtual void viewportPaintEvent(QPaintEvent* e);
 
 private:
 
@@ -178,6 +181,7 @@ public:
     ThumbBarItem* prev() const;
     int           position() const;
     QRect         rect() const;
+    QPixmap*      pixmap() const;
 
     void          repaint();
 

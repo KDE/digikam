@@ -107,9 +107,6 @@ public:
     QDict<ThumbBarItem>        itemDict;
     QGuardedPtr<ThumbnailJob>  thumbJob;
 
-    QColor                     background;
-    QColor                     highlight;
-
     ThumbBarToolTipSettings    toolTipSettings;
 
     ThumbBarToolTip           *toolTip;
@@ -154,8 +151,6 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     d->toolTipSettings = settings;
     d->toolTip         = new ThumbBarToolTip(this);
     d->timer           = new QTimer(this);
-    d->background      = colorGroup().background();
-    d->highlight       = colorGroup().highlight();
     
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotUpdate()));
@@ -187,13 +182,6 @@ ThumbBarView::~ThumbBarView()
     delete d->timer;
     delete d->toolTip;
     delete d;
-}
-
-void ThumbBarView::setColors(const QColor& background, const QColor& highlight)
-{
-    d->background = background;
-    d->highlight  = highlight;
-    triggerUpdate();
 }
 
 void ThumbBarView::resizeEvent(QResizeEvent* e)
@@ -245,6 +233,21 @@ void ThumbBarView::setExifRotate(bool exifRotate)
 bool ThumbBarView::getExifRotate()
 {
     return d->exifRotate;
+}
+
+int ThumbBarView::getOrientation()
+{
+    return d->orientation;
+}
+
+int ThumbBarView::getTileSize()
+{
+    return d->tileSize;
+}
+
+int ThumbBarView::getMargin()
+{
+    return d->margin;
 }
 
 void ThumbBarView::setToolTipSettings(const ThumbBarToolTipSettings &settings)
@@ -445,8 +448,8 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
        x1 = (cx/ts)*ts;
        x2 = ((x1 + er.width())/ts +1)*ts;
     }
-    
-    bgPix.fill(d->background);
+
+    bgPix.fill(colorGroup().background());
     
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
@@ -455,9 +458,9 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
             if (y1 <= item->d->pos && item->d->pos <= y2)
             {
                 if (item == d->currItem)
-                    tile.fill(d->highlight);
+                    tile.fill(colorGroup().highlight());
                 else
-                    tile.fill(d->background);
+                    tile.fill(colorGroup().background());
     
                 QPainter p(&tile);
                 p.setPen(Qt::white);
@@ -482,9 +485,9 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
             if (x1 <= item->d->pos && item->d->pos <= x2)
             {
                 if (item == d->currItem)
-                    tile.fill(d->highlight);
+                    tile.fill(colorGroup().highlight());
                 else
-                    tile.fill(d->background);
+                    tile.fill(colorGroup().background());
     
                 QPainter p(&tile);
                 p.setPen(Qt::white);
@@ -811,6 +814,16 @@ QRect ThumbBarItem::rect() const
                      d->view->d->tileSize + 2*d->view->d->margin,
                      d->view->visibleHeight());
     }
+}
+
+int ThumbBarItem::position() const
+{
+    return d->pos;
+}
+
+QPixmap* ThumbBarItem::pixmap() const
+{
+    return d->pixmap;
 }
 
 void ThumbBarItem::repaint()

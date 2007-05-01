@@ -52,7 +52,11 @@ public:
 signals:
 
     void signalLightTableBarItemSelected(ImageInfo*);
-    
+
+protected:
+
+    void viewportPaintEvent(QPaintEvent* e);    
+
 private slots:
 
     void slotItemSelected(ThumbBarItem* i);
