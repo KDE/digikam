@@ -1,9 +1,9 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   :  2004-12-01
+ * Authors     : Gilles Caulier 
+ * Date        :  2004-12-01
  * Description : image curves manipulation methods.
  * 
- * Copyright 2004-2007 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Some code parts are inspired from gimp 2.0
  * app/base/curves.c, gimplut.c, and app/base/gimpcurvetool.c 
