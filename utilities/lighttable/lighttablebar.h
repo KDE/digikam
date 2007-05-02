@@ -24,12 +24,12 @@
 // Local includes.
 
 #include "thumbbar.h"
+#include "imageinfo.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
-class ImageInfo;
 class LightTableBarItem;
 class LightTableBarToolTip;
 class LightTableBarPriv;
@@ -44,7 +44,8 @@ public:
     LightTableBar(QWidget* parent, int orientation=Vertical, bool exifRotate=false);
     ~LightTableBar();
 
-    ImageInfo* currentItemImageInfo() const;
+    ImageInfo*    currentItemImageInfo() const;
+    ImageInfoList itemsImageInfoList();
 
     /** Read tool tip settings from Album Settings instance */
     void readToolTipSettings();

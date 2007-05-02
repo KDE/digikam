@@ -32,7 +32,6 @@
 #include "album.h"
 #include "albumsettings.h"
 #include "themeengine.h"
-#include "imageinfo.h"
 #include "lighttablebar.h"
 #include "lighttablebar.moc"
 
@@ -67,6 +66,20 @@ ImageInfo* LightTableBar::currentItemImageInfo() const
 {
     LightTableBarItem *item = static_cast<LightTableBarItem*>(currentItem());
     return item->info();
+}
+
+ImageInfoList LightTableBar::itemsImageInfoList()
+{
+    ImageInfoList list;
+
+    for (ThumbBarItem *item = firstItem(); item; item = item->next())
+    {
+        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+        if (ltItem) 
+            list.append(ltItem->info());            
+    }
+
+    return list;
 }
 
 void LightTableBar::readToolTipSettings()
