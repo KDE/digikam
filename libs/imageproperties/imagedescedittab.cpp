@@ -1,12 +1,13 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Caulier Gilles <caulier dot gilles at gmail dot com>
- *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Date   : 2003-03-09
+ * Authors     : Renchi Raju 
+ *               Caulier Gilles 
+ *               Marcel Wiesweg 
+ * Date        : 2003-03-09
  * Description : Comments, Tags, and Rating properties editor
  *
- * Copyright 2003-2005 by Renchi Raju & Gilles Caulier
- * Copyright 2006-2007 by Gilles Caulier & Marcel Wiesweg
+ * Copyright 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright 2003-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
