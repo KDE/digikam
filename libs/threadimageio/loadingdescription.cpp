@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Date  : 2007-02-03
+ * Authors     : Marcel Wiesweg 
+ * Date        : 2007-02-03
  * Description : Loading parameters for multithreaded loading
  *
- * Copyright 2006-2007 by Marcel Wiesweg
+ * Copyright 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

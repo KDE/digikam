@@ -1,10 +1,11 @@
 /* ============================================================
- * Author: Marcel Wiesweg <marcel.wiesweg@gmx.de>
- *         Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2005-12-17
+ * Authors     : Marcel Wiesweg
+ *               Gilles Caulier
+ * Date        : 2005-12-17
  * Description : image file IO threaded interface.
  *
- * Copyright 2005-2006 by Marcel Wiesweg, Gilles Caulier
+ * Copyright 2005-2006 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright 2005-2006 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

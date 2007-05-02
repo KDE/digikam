@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Date  : 2006-02-06
+ * Authors     : Marcel Wiesweg 
+ * Date        : 2006-02-06
  * Description : shared image loading and caching
  *
- * Copyright 2005 by Marcel Wiesweg
+ * Copyright 2005-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
