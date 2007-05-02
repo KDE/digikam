@@ -1,9 +1,9 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com> 
- * Date   : 2006-21-07
+ * Authors     : Gilles Caulier 
+ * Date        : 2006-21-07
  * Description : Greycstoration settings container.
  * 
- * Copyright 2007 by Gilles Caulier
+ * Copyright 2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  * 
  * For a full settings description, look at this url :
  * http://www.greyc.ensicaen.fr/~dtschump/greycstoration/guide.html
