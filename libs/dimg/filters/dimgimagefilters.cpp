@@ -1,9 +1,9 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2005-24-01
- * Description : image filters. 
+ * Authors     : Gilles Caulier 
+ * Date        : 2005-24-01
+ * Description : misc image filters
  * 
- * Copyright 2004-2007 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original Equalise and StretchContrast Algorithms copyright 2002
  * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.

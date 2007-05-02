@@ -1,9 +1,9 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2005-17-07
+ * Authors     : Gilles Caulier 
+ * Date        : 2005-17-07
  * Description : A Gaussian Blur threaded image filter.
  * 
- * Copyright 2005-2007 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original Gaussian Blur algorithm copyrighted 2004 by 
  * Pieter Z. Voloshyn <pieter_voloshyn at ame dot com dot br>.

@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Date  : 2006-01-03
+ * Authors     : Marcel Wiesweg 
+ * Date        : 2006-01-03
  * Description : DImgLoader observer interface
  *
- * Copyright 2006 by Marcel Wiesweg
+ * Copyright 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
