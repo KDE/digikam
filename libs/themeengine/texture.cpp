@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-07-26
- * Description : 
+ * Authors     : Renchi Raju 
+ * Date        : 2004-07-26
+ * Description : texture pixmap methods
  *
  * Copyright 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
