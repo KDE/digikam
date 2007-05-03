@@ -1,11 +1,11 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Caulier Gilles <caulier dot gilles at gmail dot com>
- * Date   : 2003-16-10
+ * Authors     : Renchi Raju 
+ *               Caulier Gilles 
+ * Date        : 2003-16-10
  * Description : albums settings interface
  *
- * Copyright 2003-2004 by Renchi Raju by Gilles Caulier 
- * Copyright 2005-2007 by Gilles Caulier 
+ * Copyright 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu> 
+ * Copyright 2003-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

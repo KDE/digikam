@@ -1,7 +1,8 @@
 /* ============================================================
- * Author: Leonid Zeitlin 
- * Date  : 2005-01-12
- * Description : 
+ * Authors     : Leonid Zeitlin 
+ *               Tom Albers
+ * Date        : 2005-01-12
+ * Description : a DCROP interface. 
  * 
  * Copyright (C) 2005 by Leonid Zeitlin <lz@europe.com> 
  * Copyright (C) 2006 Tom Albers <tomalbers@kde.nl>

@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Leonid Zeitlin <lz@europe.com>
- * Date  : 2005-01-12
- * Description : 
+ * Authors     : Leonid Zeitlin 
+ * Date        : 2005-01-12
+ * Description : a DCOP interface.
  * 
  * Copyright 2005 by Leonid Zeitlin <lz@europe.com>
  *
@@ -21,12 +21,13 @@
 // Local includes.
 
 #include "dcopiface.h"
+#include "dcopiface.moc"
 
 namespace Digikam
 {
 
 DCOPIface::DCOPIface(QObject *parent, const char *name)
-    : QObject(parent, name), DCOPObject(name)
+         : QObject(parent, name), DCOPObject(name)
 {
 }
 
@@ -46,4 +47,3 @@ void DCOPIface::downloadFrom( const QString &folder)
 
 }  // namespace Digikam
 
-#include "dcopiface.moc"

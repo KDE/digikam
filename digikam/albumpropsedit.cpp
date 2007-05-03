@@ -1,13 +1,13 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Tom Albers <tomalbers@kde.nl>
- *          Gilles Caulier 
- * Date   : 2003-03-09
+ * Authors     : Renchi Raju 
+ *               Tom Albers 
+ *               Gilles Caulier 
+ * Date        : 2003-03-09
  * Description : Album properties dialog.
  *
- * Copyright 2003-2004 by Renchi Raju
- * Copyright 2005 by Tom Albers
- * Copyright 2006 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright 2005 by Tom Albers <tomalbers@kde.nl>
+ * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,13 +62,14 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "albumpropsedit.h"
+#include "albumpropsedit.moc"
 
 namespace Digikam
 {
 
-
 class AlbumPropsEditPriv
 {
+
 public:
 
     AlbumPropsEditPriv()
@@ -365,4 +366,4 @@ void AlbumPropsEdit::slotDateAverageButtonClicked()
 
 }  // namespace Digikam
 
-#include "albumpropsedit.moc"
+

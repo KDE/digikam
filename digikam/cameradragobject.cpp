@@ -1,11 +1,11 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Caulier Gilles 
- * Date   : 2003-02-18
+ * Authors     : Renchi Raju 
+ *               Caulier Gilles 
+ * Date        : 2003-02-18
  * Description : drag and drop camera management 
  * 
- * Copyright 2003-2005 by Renchi Raju
- * Copyright 2006 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

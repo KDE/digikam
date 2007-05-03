@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Date  : 2006-04-14
+ * Authors     : Marcel Wiesweg 
+ * Date        : 2006-04-14
  * Description : Load and cache tag thumbnails
  *
- * Copyright 2006 by Marcel Wiesweg
+ * Copyright 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
