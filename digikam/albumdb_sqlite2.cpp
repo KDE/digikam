@@ -28,7 +28,7 @@ extern "C"
 
 // C++ includes.
 
-#include <ctime.h>
+#include <ctime>
 #include <cstdio>
 #include <cstdlib>
 
