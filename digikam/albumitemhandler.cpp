@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-10-15
- * Description : 
+ * Authors     : Renchi Raju 
+ * Date        : 2003-10-15
+ * Description : album item handler.
  * 
  * Copyright 2003 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
@@ -20,8 +20,8 @@
 
 // Local includes.
 
-#include "albumitemhandler.h"
 #include "albummanager.h"
+#include "albumitemhandler.h"
 
 namespace Digikam
 {

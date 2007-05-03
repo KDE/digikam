@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-06-26
- * Description :
+ * Authors     : Renchi Raju 
+ * Date        : 2004-06-26
+ * Description : Albums lister.
  *
  * Copyright 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
@@ -56,6 +56,7 @@ extern "C"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "albumlister.h"
+#include "albumlister.moc"
 
 namespace Digikam
 {
@@ -444,5 +445,5 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
 
 }  // namespace Digikam
 
-#include "albumlister.moc"
+
 

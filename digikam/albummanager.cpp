@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-06-15
- * Description : 
+ * Authors     : Renchi Raju 
+ * Date        : 2004-06-15
+ * Description : Albums manager interface.
  * 
  * Copyright 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
@@ -24,14 +24,18 @@
 
 extern "C"
 {
-#include <errno.h> 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <stdio.h>
 #include <unistd.h>
-#include <stdlib.h>
 #include <locale.h>
 }
+
+// C++ includes.
+
+#include <cstdlib>
+#include <cstdio>
+#include <cerrno> 
+
 
 // Qt includes.
 
@@ -65,6 +69,7 @@ extern "C"
 #include "scanlib.h"
 #include "upgradedb_sqlite2tosqlite3.h"
 #include "albummanager.h"
+#include "albummanager.moc"
 
 namespace Digikam
 {
@@ -1392,4 +1397,4 @@ void AlbumManager::slotDirty(const QString& path)
 
 }  // namespace Digikam
 
-#include "albummanager.moc"
+

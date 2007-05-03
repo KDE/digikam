@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-06-15
- * Description : 
+ * Authors     : Renchi Raju 
+ * Date        : 2004-06-15
+ * Description : Albums manager interface.
  * 
  * Copyright 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *

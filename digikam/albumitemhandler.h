@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-09-26
- * Description : 
+ * Authors     : Renchi Raju 
+ * Date        : 2003-09-26
+ * Description : album item handler. 
  * 
  * Copyright 2003 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
