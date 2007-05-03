@@ -1,10 +1,10 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2006-02-21
+ * Authors     : Gilles Caulier
+ * Date        : 2006-02-21
  * Description : a generic list view widget to 
  *               display metadata
  * 
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,6 +36,7 @@
 #include "mdkeylistviewitem.h"
 #include "metadatalistviewitem.h"
 #include "metadatalistview.h"
+#include "metadatalistview.moc"
 
 namespace Digikam
 {
@@ -252,4 +253,3 @@ void MetadataListView::viewportResizeEvent(QResizeEvent* e)
 
 }  // namespace Digikam
 
-#include "metadatalistview.moc"
