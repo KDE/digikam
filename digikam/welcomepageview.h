@@ -1,6 +1,6 @@
 /* ============================================================
- * Authors: Caulier Gilles 
- * Date   : 2006-12-20
+ * Authors     : Caulier Gilles 
+ * Date        : 2006-12-20
  * Description : a view to display a welcome page 
  *               on root album.
  * 
