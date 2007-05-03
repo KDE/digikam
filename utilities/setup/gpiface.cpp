@@ -1,6 +1,6 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-02-19
+ * Authors     : Renchi Raju 
+ * Date        : 2003-02-19
  * Description : Gphoto2 interface
  * 
  * Copyright 2003 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
