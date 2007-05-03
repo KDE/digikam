@@ -1,9 +1,9 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2006-21-12
+ * Authors     : Gilles Caulier
+ * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  * 
- * Copyright 2006-2007 Gilles Caulier
+ * Copyright 2006-2007 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

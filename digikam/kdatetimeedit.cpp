@@ -24,6 +24,7 @@
 // KDE includes.
 
 #include "kdatetimeedit.h"
+#include "kdatetimeedit.moc"
 #include "kdateedit.h"
 
 namespace Digikam
@@ -68,4 +69,4 @@ void KDateTimeEdit::slotDateTimeChanged()
 
 }  // namespace Digikam
 
-#include "kdatetimeedit.moc"
+

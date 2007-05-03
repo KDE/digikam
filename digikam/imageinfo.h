@@ -1,6 +1,8 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-21
+ * Authors     : Renchi Raju 
+ * Date        : 2005-04-21
+ * Description : image informations container.
+ *
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it

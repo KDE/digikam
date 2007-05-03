@@ -1,9 +1,9 @@
 /* ============================================================
- * Authors: Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Date   : 2007-01-05
+ * Authors     : Marcel Wiesweg 
+ * Date        : 2007-01-05
  * Description : Metadata handling
  * 
- * Copyright      2007 by Marcel Wiesweg
+ * Copyright 2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -352,7 +352,7 @@ private:
     MetadataHubPriv     *d;
 };
 
-}
+} // namespace Digikam
 
 #endif // METADATAHUB_H
 

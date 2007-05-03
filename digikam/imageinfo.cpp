@@ -1,8 +1,7 @@
 /* ============================================================
- * File  : imageinfo.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-21
- * Description : 
+ * Authors     : Renchi Raju 
+ * Date        : 2005-04-21
+ * Description : image informations container. 
  * 
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
 
@@ -42,7 +41,7 @@ namespace Digikam
 AlbumManager* ImageInfo::m_man = 0;
 
 ImageInfo::ImageInfo()
-    : m_ID(-1), m_albumID(-1), m_size(0), m_viewitem(0)
+         : m_ID(-1), m_albumID(-1), m_size(0), m_viewitem(0)
 {
 }
 
