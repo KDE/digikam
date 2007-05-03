@@ -18,7 +18,9 @@
  *
  * ============================================================ */
 
+#ifdef HAVE_CONFIG_H
 #include "config.h"    // Needed for NFS_HACK
+#endif
 
 // Qt includes.
 
