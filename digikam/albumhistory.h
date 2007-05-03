@@ -1,8 +1,7 @@
 /* ============================================================
- * File  : albumhistory.h
- * Author: Joern Ahrens <joern.ahrens@kdemail.net>
- * Date  : 2004-11-17
- * Description : 
+ * Authors     : Joern Ahrens
+ * Date        : 2004-11-17
+ * Description : Albums history manager. 
  * 
  * Copyright 2004 by Joern Ahrens <joern.ahrens@kdemail.net>
  *

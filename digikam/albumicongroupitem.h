@@ -1,7 +1,7 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date   : 2005-04-25
- * Description : 
+ * Authors     : Renchi Raju 
+ * Date        : 2005-04-25
+ * Description : implementation to render album icons group item.
  * 
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *

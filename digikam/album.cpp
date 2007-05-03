@@ -1,10 +1,10 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date   : 2004-06-15
- * Description :
+ * Authors     : Renchi Raju 
+ * Date        : 2004-06-15
+ * Description : digiKam album types
  *
  * Copyright 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;

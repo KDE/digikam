@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-06-18
- * Description : 
+ * Authors     : Renchi Raju 
+ * Date        : 2004-06-18
+ * Description : SQlite version 2 database interface.
  * 
  * Copyright 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
 
