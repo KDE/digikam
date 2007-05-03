@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-09-30
- * Description : 
+ * Authors     : Renchi Raju 
+ * Date        : 2004-09-30
+ * Description : camera download multi-threading handler.
  * 
  * Copyright 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
 
