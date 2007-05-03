@@ -42,6 +42,7 @@
 #include <kdatetbl.h>
 #include <kiconloader.h>
 #include <kprocess.h>
+#include <kapplication.h>
 
 // LibKipi includes.
 
@@ -88,6 +89,7 @@ public:
         hasPrev              = false;
         hasNext              = false;
         currentFitWindowZoom = 0;
+        previewSize          = 1024;
     }
 
     bool               hasPrev;
@@ -107,6 +109,8 @@ public:
 
     double             currentFitWindowZoom;
 
+    int                previewSize;
+
     ImageInfo         *imageInfo;
 
     PreviewLoadThread *previewThread;
@@ -120,6 +124,14 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
 {
     d = new ImagePreviewViewPriv;
     d->parent = parent;
+
+    // get preview size from screen size, but limit from VGA to WQXGA
+    d->previewSize = QMAX(KApplication::desktop()->height(),
+                          KApplication::desktop()->width());
+    if (d->previewSize < 640)
+        d->previewSize = 640;
+    if (d->previewSize > 2560)
+        d->previewSize = 2560;
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -214,7 +226,7 @@ void ImagePreviewView::setImagePath(const QString& path)
                 this, SLOT(slotNextPreload()));
     }
 
-    d->previewThread->load(LoadingDescription(path, 1024, AlbumSettings::instance()->getExifRotate()));
+    d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
 }
 
 void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
@@ -265,7 +277,7 @@ void ImagePreviewView::slotNextPreload()
     else
         return;
 
-    d->previewPreloadThread->load(LoadingDescription(loadPath, 1024,
+    d->previewPreloadThread->load(LoadingDescription(loadPath, d->previewSize,
                                   AlbumSettings::instance()->getExifRotate()));
 }
 
