@@ -1,12 +1,13 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Caulier Gilles 
- *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Date   : 2002-16-10
+ * Authors     : Renchi Raju 
+ *               Caulier Gilles 
+ *               Marcel Wiesweg 
+ * Date        : 2002-16-10
  * Description : album icon view 
  * 
- * Copyright 2002-2005 by Renchi Raju by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> and Marcel Wiesweg
+ * Copyright 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright 2002-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,6 +21,9 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
+
+// Uncomment this line to enable Light Table tool.
+#define ENABLE_LIGHTTABLE 1
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -120,6 +124,7 @@ extern "C"
 #include "albumiconitem.h"
 #include "albumicongroupitem.h"
 #include "loadingcacheinterface.h"
+#include "lighttablewindow.h"
 #include "statusprogressbar.h"
 #include "metadatahub.h"
 #include "albumiconview.h"
@@ -526,6 +531,10 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 10);
     popmenu.insertItem(i18n("Open With"), &openWithMenu, 11);
 
+#ifdef ENABLE_LIGHTTABLE
+    popmenu.insertItem(SmallIcon("idea"), i18n("Insert to Light Table"), 19);
+#endif
+
     // Merge in the KIPI plugins actions ----------------------------
 
     KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
@@ -674,6 +683,12 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
           break;
       }
   
+      case 19: 
+      {
+          slotInsertToLightTable(iconItem);
+          break;
+      }
+
       default:
           break;
     }
@@ -931,7 +946,7 @@ void AlbumIconView::slotImageWindowURLChanged(const KURL &url)
         setCurrentItem(item);
 }
 
-void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
+void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
 {
     if (!item) return;
 
@@ -1013,6 +1028,60 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
 
     imview->raise();
     imview->setFocus();
+}
+
+void AlbumIconView::slotInsertToLightTable(AlbumIconItem *item)
+{
+    AlbumSettings *settings = AlbumSettings::instance();
+
+    if (!settings) return;
+
+    QString imagefilter = settings->getImageFileFilter().lower() +
+                          settings->getImageFileFilter().upper();
+
+    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
+    {
+        // add raw files only if dcraw is available
+        imagefilter += settings->getRawFileFilter().lower() +
+                       settings->getRawFileFilter().upper();
+    }
+
+    // Run Light Table with all selected image files in the current Album.
+
+    ImageInfoList imageInfoList;
+    ImageInfo *currentImageInfo = 0;
+
+    for (IconItem *it = firstItem() ; it ; it = it->nextItem())
+    {
+        if ((*it).isSelected())
+        {
+            AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
+            QString fileExtension = iconItem->imageInfo()->kurl().fileName().section( '.', -1 );
+    
+            if ( imagefilter.find(fileExtension) != -1 )
+            {
+                ImageInfo *info = new ImageInfo(*iconItem->imageInfo());
+                info->setViewItem(0);
+                imageInfoList.append(info);
+                if (iconItem == item)
+                    currentImageInfo = info;
+            }
+        }
+    }
+
+    LightTableWindow *ltview = LightTableWindow::lightTableWindow();
+
+    ltview->disconnect(this);
+
+    // TODO: Added slots connection here if necessary.
+
+    ltview->loadImageInfos(imageInfoList, currentImageInfo);
+
+    if (ltview->isHidden())
+        ltview->show();
+
+    ltview->raise();
+    ltview->setFocus();
 }
 
 // ------------------------------------------------------------------------------
