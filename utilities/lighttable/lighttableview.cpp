@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors     : Gilles Caulier 
  * Date        : 2004-02-12
- * Description : digiKam light table GUI
+ * Description : digiKam light table preview item.
  *
  * Copyright 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -65,8 +65,8 @@
 #include "tagspopupmenu.h"
 #include "ratingpopupmenu.h"
 #include "themeengine.h"
-#include "lighttableview.h"
-#include "lighttableview.moc"
+#include "lighttablepreview.h"
+#include "lighttablepreview.moc"
 
 namespace Digikam
 {
@@ -111,8 +111,8 @@ public:
     PreviewLoadThread *previewPreloadThread;
 };
     
-LightTableView::LightTableView(QWidget *parent)
-              : PreviewWidget(parent)
+LightTablePreview::LightTablePreview(QWidget *parent)
+                 : PreviewWidget(parent)
 {
     d = new LightTableViewPriv;
 
@@ -139,14 +139,14 @@ LightTableView::LightTableView(QWidget *parent)
             this, SLOT(slotThemeChanged()));
 }
 
-LightTableView::~LightTableView()
+LightTablePreview::~LightTablePreview()
 {
     delete d->previewThread;
     delete d->previewPreloadThread;
     delete d;
 }
 
-void LightTableView::setImage(const QImage& image)
+void LightTablePreview::setImage(const QImage& image)
 {   
     d->preview = image;
 
@@ -156,24 +156,24 @@ void LightTableView::setImage(const QImage& image)
     viewport()->update();
 }
 
-QImage& LightTableView::getImage() const
+QImage& LightTablePreview::getImage() const
 {
     return d->preview;
 }
 
-void LightTableView::reload()
+void LightTablePreview::reload()
 {
     // cache is cleaned from AlbumIconView::refreshItems
     setImagePath(d->path);
 }
 
-void LightTableView::setPreviousNextPaths(const QString& previous, const QString &next)
+void LightTablePreview::setPreviousNextPaths(const QString& previous, const QString &next)
 {
     d->nextPath     = next;
     d->previousPath = previous;
 }
 
-void LightTableView::setImagePath(const QString& path)
+void LightTablePreview::setImagePath(const QString& path)
 {
     setCursor( KCursor::waitCursor() );
 
@@ -203,7 +203,7 @@ void LightTableView::setImagePath(const QString& path)
     d->previewThread->load(LoadingDescription(path, 1024, AlbumSettings::instance()->getExifRotate()));
 }
 
-void LightTableView::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
+void LightTablePreview::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
 {
     if (description.filePath != d->path)
         return;   
@@ -231,7 +231,7 @@ void LightTableView::slotGotImagePreview(const LoadingDescription &description, 
     slotNextPreload();
 }
 
-void LightTableView::slotNextPreload()
+void LightTablePreview::slotNextPreload()
 {
     QString loadPath;
     if (!d->nextPath.isNull())
@@ -251,7 +251,7 @@ void LightTableView::slotNextPreload()
                                   AlbumSettings::instance()->getExifRotate()));
 }
 
-void LightTableView::setImageInfo(ImageInfo* info, ImageInfo *previous, ImageInfo *next)
+void LightTablePreview::setImageInfo(ImageInfo* info, ImageInfo *previous, ImageInfo *next)
 {
     d->imageInfo = info;
     d->hasPrev   = previous;
@@ -266,12 +266,12 @@ void LightTableView::setImageInfo(ImageInfo* info, ImageInfo *previous, ImageInf
                          next     ? next->filePath()     : QString());
 }
 
-ImageInfo* LightTableView::getImageInfo()
+ImageInfo* LightTablePreview::getImageInfo()
 {
     return d->imageInfo;
 }
 
-void LightTableView::slotContextMenu()
+void LightTablePreview::slotContextMenu()
 {
     RatingPopupMenu *ratingMenu     = 0;
     TagsPopupMenu   *assignTagsMenu = 0;
@@ -445,7 +445,7 @@ void LightTableView::slotContextMenu()
     delete ratingMenu;
 }
 
-void LightTableView::slotAssignTag(int tagID)
+void LightTablePreview::slotAssignTag(int tagID)
 {
     if (d->imageInfo)
     {
@@ -457,7 +457,7 @@ void LightTableView::slotAssignTag(int tagID)
     }
 }
 
-void LightTableView::slotRemoveTag(int tagID)
+void LightTablePreview::slotRemoveTag(int tagID)
 {
     if (d->imageInfo)
     {
@@ -469,7 +469,7 @@ void LightTableView::slotRemoveTag(int tagID)
     }
 }
 
-void LightTableView::slotAssignRating(int rating)
+void LightTablePreview::slotAssignRating(int rating)
 {
     rating = QMIN(5, QMAX(0, rating));
     if (d->imageInfo)
@@ -482,12 +482,12 @@ void LightTableView::slotAssignRating(int rating)
     }
 }
 
-void LightTableView::slotThemeChanged()
+void LightTablePreview::slotThemeChanged()
 {
     setBackgroundColor(ThemeEngine::instance()->baseColor());
 }
 
-void LightTableView::slotCornerButtonPressed()
+void LightTablePreview::slotCornerButtonPressed()
 {    
     if (d->panIconPopup)
     {
@@ -521,14 +521,14 @@ void LightTableView::slotCornerButtonPressed()
     pan->setCursorToLocalRegionSelectionCenter();
 }
 
-void LightTableView::slotPanIconHiden()
+void LightTablePreview::slotPanIconHiden()
 {
     d->cornerButton->blockSignals(true);
     d->cornerButton->animateClick();
     d->cornerButton->blockSignals(false);
 }
 
-void LightTableView::slotPanIconSelectionMoved(QRect r, bool b)
+void LightTablePreview::slotPanIconSelectionMoved(QRect r, bool b)
 {
     setContentsPos((int)(r.x()*zoomFactor()), (int)(r.y()*zoomFactor()));
 
@@ -541,7 +541,7 @@ void LightTableView::slotPanIconSelectionMoved(QRect r, bool b)
     }
 }
 
-void LightTableView::slotZoomChanged(double zoom)
+void LightTablePreview::slotZoomChanged(double zoom)
 {
     if (zoom > calcAutoZoomFactor())
         d->cornerButton->show();
@@ -549,7 +549,7 @@ void LightTableView::slotZoomChanged(double zoom)
         d->cornerButton->hide();        
 }
 
-void LightTableView::resizeEvent(QResizeEvent* e)
+void LightTablePreview::resizeEvent(QResizeEvent* e)
 {
     if (!e) return;
 
@@ -562,7 +562,7 @@ void LightTableView::resizeEvent(QResizeEvent* e)
     //emit signalZoomFactorChanged(zoomFactor());
 }
 
-void LightTableView::updateZoomAndSize(bool alwaysFitToWindow)
+void LightTablePreview::updateZoomAndSize(bool alwaysFitToWindow)
 {
     // Set zoom for fit-in-window as minimum, but dont scale up images
     // that are smaller than the available space, only scale down.
@@ -582,27 +582,27 @@ void LightTableView::updateZoomAndSize(bool alwaysFitToWindow)
     updateContentsSize();
 }
 
-int LightTableView::previewWidth()
+int LightTablePreview::previewWidth()
 {
     return d->preview.width();
 }
 
-int LightTableView::previewHeight()
+int LightTablePreview::previewHeight()
 {
     return d->preview.height();
 }
 
-bool LightTableView::previewIsNull()
+bool LightTablePreview::previewIsNull()
 {
     return d->preview.isNull();
 }
 
-void LightTableView::resetPreview()
+void LightTablePreview::resetPreview()
 {
     d->preview.reset();
 }
 
-void LightTableView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
+void LightTablePreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 {
     // Fast smooth scale method from Antonio.   
     QImage img = FastScale::fastScaleQImage(d->preview.copy(sx, sy, sw, sh),

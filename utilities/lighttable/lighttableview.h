@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors     : Gilles Caulier
  * Date        : 2006-21-12
- * Description : a light table view to show the image preview.
+ * Description : digiKam light table preview item.
  * 
  * Copyright 2006-2007 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -18,8 +18,8 @@
  * 
  * ============================================================ */
 
-#ifndef LIGHTTABLEVIEW_H
-#define LIGHTTABLEVIEW_H
+#ifndef LIGHTTABLEPREVIEW_H
+#define LIGHTTABLEPREVIEW_H
 
 // Qt includes.
 
@@ -40,15 +40,15 @@ class LoadingDescription;
 class ImageInfo;
 class LightTableViewPriv;
 
-class DIGIKAM_EXPORT LightTableView : public PreviewWidget
+class DIGIKAM_EXPORT LightTablePreview : public PreviewWidget
 {
 
 Q_OBJECT
 
 public:
 
-    LightTableView(QWidget *parent=0);
-    ~LightTableView();
+    LightTablePreview(QWidget *parent=0);
+    ~LightTablePreview();
 
     void setImage(const QImage& image);
     QImage& getImage() const;
@@ -101,4 +101,4 @@ private:
 
 }  // NameSpace Digikam
 
-#endif /* LIGHTTABLEVIEW_H */
+#endif /* LIGHTTABLEPREVIEW_H */
