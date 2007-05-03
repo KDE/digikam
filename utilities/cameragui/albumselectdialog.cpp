@@ -199,7 +199,8 @@ void AlbumSelectDialog::slotAlbumAdded(Album* album)
 
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
     QPixmap icon = iconLoader->loadIcon("folder", KIcon::NoGroup,
-                                        32, KIcon::DefaultState, 0, true);
+                                        AlbumSettings::instance()->getDefaultTreeIconSize(),
+                                        KIcon::DefaultState, 0, true);
     
     FolderItem* viewItem = new FolderItem(parentItem, album->title());
     viewItem->setPixmap(0, icon);
