@@ -19,7 +19,7 @@ INCLUDES = -I$(top_srcdir)/digikam/digikam \
 
 noinst_LTLIBRARIES = liblighttable.la 
 
-liblighttable_la_SOURCES = lighttablebar.cpp lighttablewindow.cpp lighttableview.cpp
+liblighttable_la_SOURCES = lighttablebar.cpp lighttablewindow.cpp lighttablepreview.cpp
 
 liblighttable_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 

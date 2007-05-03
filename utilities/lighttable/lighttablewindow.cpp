@@ -51,7 +51,7 @@
 #include "statusprogressbar.h"
 #include "statuszoombar.h"
 #include "thumbnailsize.h"
-#include "lighttableview.h"
+#include "lighttablepreview.h"
 #include "lighttablebar.h"
 #include "lighttablewindow.h"
 #include "lighttablewindow.moc"
@@ -126,7 +126,7 @@ public:
 
     LightTableBar            *barView;
 
-    LightTableView           *previewView;
+    LightTablePreview        *previewView;
 
     StatusZoomBar            *zoomBar;
 
@@ -212,7 +212,7 @@ void LightTableWindow::setupUserArea()
     QHBoxLayout *lay = new QHBoxLayout(widget);
     d->splitter      = new QSplitter(widget);
     d->barView       = new LightTableBar(d->splitter, ThumbBarView::Vertical);
-    d->previewView   = new LightTableView(d->splitter);
+    d->previewView   = new LightTablePreview(d->splitter);
 
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     d->previewView->setSizePolicy(rightSzPolicy);
