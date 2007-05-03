@@ -1,6 +1,8 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-05-17
+ * Authors     : Renchi Raju 
+ * Date        : 2005-05-17
+ * Description : low level files management interface.
+ *
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
