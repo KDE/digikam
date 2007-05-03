@@ -1,8 +1,7 @@
 /* ============================================================
- * File  : iconitem.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-24
- * Description : 
+ * Authors     : Renchi Raju 
+ * Date        : 2005-04-24
+ * Description : icon item.
  * 
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
@@ -34,12 +33,12 @@ namespace Digikam
 {
 
 IconItem::IconItem(IconGroupItem* parent)
-    : m_group(parent)
+        : m_group(parent)
 {
-    m_next = 0;
-    m_prev = 0;
-    m_x    = 0;
-    m_y    = 0;
+    m_next     = 0;
+    m_prev     = 0;
+    m_x        = 0;
+    m_y        = 0;
     m_selected = false;
 
     m_group->insertItem(this);

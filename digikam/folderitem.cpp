@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-05-31
- * Description : 
+ * Authors     : Renchi Raju 
+ * Date        : 2005-05-31
+ * Description : implementation of item folder 
  * 
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
 

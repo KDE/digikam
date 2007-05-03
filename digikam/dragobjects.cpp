@@ -1,10 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Joern Ahrens <joern.ahrens@kdemail.net>
- * Date  : 2004-06-26
- * Description : 
+ * Authors     : Renchi Raju
+ *               Joern Ahrens
+ * Date        : 2004-06-26
+ * Description : Drag object info container
  * 
- * Copyright 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>, Joern Ahrens <joern.ahrens@kdemail.net>
+ * Copyright 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright 2004 by Joern Ahrens <joern.ahrens@kdemail.net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

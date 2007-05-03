@@ -55,6 +55,7 @@ extern "C"
 #include "album.h"
 #include "dio.h"
 #include "dio_p.h"
+#include "dio_p.moc"
 
 namespace DIO
 {
@@ -253,4 +254,3 @@ uint Watch::m_runCount = 0;
 
 }  // namespace DIO
 
-#include "dio_p.moc"
