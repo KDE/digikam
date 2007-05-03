@@ -58,6 +58,7 @@ public:
 
 private:
 
+    void closeEvent(QCloseEvent* e);
     void setupActions();
     void setupConnections();
     void setupUserArea();

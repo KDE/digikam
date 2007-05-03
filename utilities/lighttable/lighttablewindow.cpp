@@ -173,6 +173,16 @@ LightTableWindow::LightTableWindow()
 
     d->rightSidebar->loadViewState();
     d->rightSidebar->populateTags();
+
+    KConfig* config = kapp->config();
+    config->setGroup("LightTable Settings");
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    if(config->hasKey("Splitter Sizes"))
+        d->splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
+    else 
+        d->previewView->setSizePolicy(rightSzPolicy);
+
+    setAutoSaveSettings("LightTable Settings");
 }
 
 LightTableWindow::~LightTableWindow()
@@ -182,6 +192,18 @@ LightTableWindow::~LightTableWindow()
     delete d->barView;
     delete d->rightSidebar;
     delete d;
+}
+
+void LightTableWindow::closeEvent(QCloseEvent* e)
+{
+    if (!e) return;
+
+    KConfig* config = kapp->config();
+    config->setGroup("LightTable Settings");
+    config->writeEntry("Splitter Sizes", d->splitter->sizes());
+    config->sync();
+
+    e->accept();
 }
 
 void LightTableWindow::setupUserArea()
