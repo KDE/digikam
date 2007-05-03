@@ -1,11 +1,11 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2003-01-09
+ * Authors     : Renchi Raju 
+ *               Gilles Caulier 
+ * Date        : 2003-01-09
  * Description : image editor canvas management class
  * 
- * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
- * Copyright 2006-2007 by Gilles Caulier
+ * Copyright 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

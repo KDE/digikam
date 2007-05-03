@@ -1,7 +1,7 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date   : 2004-06-04
- * Description : 
+ * Authors     : Renchi Raju 
+ * Date        : 2004-06-04
+ * Description : image plugins interface for image editor.
  * 
  * Copyright 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
 

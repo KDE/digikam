@@ -1,10 +1,11 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Joern Ahrens <joern.ahrens@kdemail.net>
- * Date   : 2005-02-05
- * Description :
+ * Authors     : Renchi Raju
+ *               Joern Ahrens
+ * Date        : 2005-02-05
+ * Description : undo cache manager for image editor.
  *
- * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>, Joern Ahrens <joern.ahrens@kdemail.net>
+ * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright 2005 by Joern Ahrens <joern.ahrens@kdemail.net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
