@@ -1,6 +1,8 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-05-20
+ * Authors     : Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date        : 2005-05-20
+ * Description : search results view.
+ *
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
@@ -13,6 +15,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef SEARCHRESULTSVIEW_H

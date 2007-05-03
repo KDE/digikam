@@ -1,10 +1,11 @@
 /* ============================================================
- * Authors: Tom Albers <tomalbers@kde.nl>
- *          Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date   : 2005-01-01
+ * Authors     : Tom Albers 
+ *               Renchi Raju 
+ * Date        : 2005-01-01
  * Description : 
  * 
- * Copyright 2005 by Tom Albers and Renchi Raju
+ * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright 2005 by Tom Albers <tomalbers@kde.nl>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -380,7 +381,6 @@ private:
     QVGroupBox*                     m_groupbox;
     QCheckBox*                      m_check;
     QValueList<SearchAdvancedRule*> m_childRules;
-
 };
 
 }  // namespace Digikam

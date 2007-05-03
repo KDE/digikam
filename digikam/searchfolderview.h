@@ -1,6 +1,6 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-05-21
+ * Authors     : Renchi Raju 
+ * Date        : 2005-05-21
  * Description : Searches folder view 
  *
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>

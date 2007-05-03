@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-10-04
- * Description : 
+ * Authors     : Renchi Raju
+ * Date        : 2004-10-04
+ * Description : sync IO jobs.
  * 
  * Copyright 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *

@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-05-20
- * Description : 
+ * Authors     : Renchi Raju
+ * Date        : 2005-05-20
+ * Description : search results item.
  * 
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *

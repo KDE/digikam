@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-05-20
- * Description : 
+ * Authors     : Renchi Raju 
+ * Date        : 2005-05-20
+ * Description : search results view.
  * 
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
@@ -34,6 +34,7 @@
 #include "albumsettings.h"
 #include "searchresultsitem.h"
 #include "searchresultsview.h"
+#include "searchresultsview.moc"
 
 namespace Digikam
 {
@@ -176,5 +177,4 @@ void SearchResultsView::slotFailedThumbnail(const KURL&)
 
 }  // namespace Digikam
 
-#include "searchresultsview.moc"
 

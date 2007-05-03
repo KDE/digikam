@@ -1,10 +1,11 @@
 /* ============================================================
- * Authors: Tom Albers <tomalbers@kde.nl>
- *          Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date   : 2005-01-01
- * Description : 
+ * Authors     : Tom Albers 
+ *               Renchi Raju 
+ * Date        : 2005-01-01
+ * Description : search widgets collection.
  * 
- * Copyright 2005 by Tom Albers and Renchi Raju
+ * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright 2005 by Tom Albers <tomalbers@kde.nl>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

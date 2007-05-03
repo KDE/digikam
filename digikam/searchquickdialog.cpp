@@ -1,11 +1,11 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Gilles Caulier 
- * Date   : 2005-05-19
+ * Authors     : Renchi Raju 
+ *               Gilles Caulier 
+ * Date        : 2005-05-19
  * Description : a dialog to perform simple search in albums
  *
- * Copyright 2005 by Renchi Raju
- *           2006 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,6 +42,7 @@
 #include "ddebug.h"
 #include "searchresultsview.h"
 #include "searchquickdialog.h"
+#include "searchquickdialog.moc"
 
 namespace Digikam
 {
@@ -191,4 +192,3 @@ void SearchQuickDialog::hideEvent(QHideEvent* e)
 
 }  // namespace Digikam
 
-#include "searchquickdialog.moc"

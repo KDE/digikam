@@ -1,12 +1,13 @@
 /* ============================================================
- * Authors: Tom Albers <tomalbers@kde.nl>
- *          Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Gilles Caulier 
- * Date   : 2005-01-01
+ * Authors     : Tom Albers 
+ *               Renchi Raju 
+ *               Gilles Caulier 
+ * Date        : 2005-01-01
  * Description : a dialog to perform advanced search in albums
  * 
- * Copyright 2005 by Tom Albers and Renchi Raju
- *           2006 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005 by Tom Albers <tomalbers@kde.nl>
+ * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

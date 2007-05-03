@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-10-04
- * Description :
+ * Authors     : Renchi Raju 
+ * Date        : 2004-10-04
+ * Description : sync IO jobs.
  *
  * Copyright 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
@@ -41,11 +41,12 @@
 
 #include "ddebug.h"
 #include "albumsettings.h"
-#include "syncjob.h"
 #include "thumbnailjob.h"
 #include "thumbnailsize.h"
 #include "albumthumbnailloader.h"
 #include "album.h"
+#include "syncjob.h"
+#include "syncjob.moc"
 
 void qt_enter_modal( QWidget *widget );
 void qt_leave_modal( QWidget *widget );
@@ -282,4 +283,3 @@ int SyncJob::lastErrorCode()
 
 }  // namespace Digikam
 
-#include "syncjob.moc"
