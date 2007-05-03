@@ -1,6 +1,6 @@
 /* ============================================================
- * Authors: Guillaume Laurent <glaurent@telegraph-road.org>
- * Date   : 2006-10-05
+ * Authors     : Guillaume Laurent 
+ * Date        : 2006-10-05
  * Description : a QListBoxItem which can display an image preview
  *               as a thumbnail and a customized qwhatsthis class 
  *               for listbox items
