@@ -18,6 +18,8 @@
  *
  * ============================================================ */
 
+#include "config.h"    // Needed for NFS_HACK
+
 // Qt includes.
 
 #include <qstringlist.h>
@@ -35,7 +37,6 @@
 
 // Local includes.
 
-#include "config.h"    // Needed for NFS_HACK
 #include "sqlitedb.h"
 
 SqliteDB::SqliteDB()

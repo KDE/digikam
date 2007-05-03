@@ -22,8 +22,16 @@
 #ifndef DIGIKAMTAGS_H
 #define DIGIKAMTAGS_H
 
-#include <kio/slavebase.h>
+// Qt includes.
+
 #include <qstring.h>
+
+// KDE includes.
+
+#include <kio/slavebase.h>
+
+// Local includes.
+
 #include "sqlitedb.h"
 
 class KURL;
