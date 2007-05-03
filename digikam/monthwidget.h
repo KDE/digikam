@@ -1,6 +1,8 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-05-02
+ * Authors     : Renchi Raju 
+ * Date        : 2005-05-02
+ * Description : a widget to perform month selection.
+ *
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it

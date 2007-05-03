@@ -1,6 +1,6 @@
 /* ============================================================
- * Authors: Caulier Gilles 
- * Date   : 2007-02-02
+ * Authors     : Caulier Gilles 
+ * Date        : 2007-02-02
  * Description : a pop-up menu to show stars rating selection.
  * 
  * Copyright 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
