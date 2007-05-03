@@ -1,6 +1,8 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-06-05
+ * Authors     : Renchi Raju 
+ * Date        : 2005-06-05
+ * Description : QSlite DB interface.
+ *
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
@@ -18,12 +20,15 @@
 #ifndef SQLITEDB_H
 #define SQLITEDB_H
 
+// Qt includes.
+
 #include <qstring.h>
 
 class QStringList;
 
 class SqliteDB
 {
+
 public:
 
     SqliteDB();

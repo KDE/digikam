@@ -1,10 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-07-09
- * Description :
+ * Authors     : Renchi Raju
+ * Date        : 2004-07-09
+ * Description : a kio-slave to process tag query on 
+ *               digiKam albums.
  *
  * Copyright 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,7 +19,31 @@
  *
  * ============================================================ */
 
-#include <digikam_export.h>
+// C Ansi includes.
+
+extern "C"
+{
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/time.h>
+}
+
+// C++ includes.
+
+#include <cstdlib>
+#include <cstdio>
+#include <ctime>
+
+// Qt incudes.
+
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qstring.h>
+#include <qdir.h>
+#include <qregexp.h>
+
+// KDE includes.
 
 #include <kinstance.h>
 #include <kdebug.h>
@@ -29,28 +54,14 @@
 #include <kio/global.h>
 #include <kfilemetainfo.h>
 
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qstring.h>
-#include <qdir.h>
-#include <qregexp.h>
+// Local includes.
 
-extern "C"
-{
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/time.h>
-#include <time.h>
-}
-
+#include "digikam_export.h"
 #include "digikamtags.h"
 
 kio_digikamtagsProtocol::kio_digikamtagsProtocol(const QCString &pool_socket,
                                                  const QCString &app_socket)
-    : SlaveBase("kio_digikamtags", pool_socket, app_socket)
+                       : SlaveBase("kio_digikamtags", pool_socket, app_socket)
 {
 }
 

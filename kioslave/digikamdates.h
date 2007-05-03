@@ -1,6 +1,9 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-21
+ * Authors     : Renchi Raju 
+ * Date        : 2005-04-21
+ * Description : a kio-slave to process date query on 
+ *               digiKam albums. 
+ *
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
@@ -18,7 +21,11 @@
 #ifndef DIGIKAMDATES_H
 #define DIGIKAMDATES_H
 
+// KDE includes.
+
 #include <kio/slavebase.h>
+
+// Local includes.
 
 #include "sqlitedb.h"
 
@@ -26,6 +33,7 @@ class QStringList;
 
 class kio_digikamdates : public KIO::SlaveBase
 {
+
 public:
 
     kio_digikamdates(const QCString &pool_socket,
@@ -36,9 +44,8 @@ public:
 
 private:
 
-    SqliteDB  m_db;
-    QString   m_libraryPath;
+    SqliteDB m_db;
+    QString  m_libraryPath;
 };
-
 
 #endif /* DIGIKAMDATES_H */

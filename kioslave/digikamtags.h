@@ -1,10 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-07-09
- * Description :
+ * Authors     : Renchi Raju 
+ * Date        : 2004-07-09
+ * Description : a kio-slave to process tag query on 
+ *               digiKam albums.
  *
  * Copyright 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;

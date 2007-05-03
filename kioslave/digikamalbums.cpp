@@ -1,8 +1,8 @@
 /* ============================================================
- * File  : digikamalbums.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-21
- * Description : 
+ * Authors     : Renchi Raju 
+ * Date        : 2005-04-21
+ * Description : a kio-slave to process file operations on 
+ *               digiKam albums. 
  * 
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *

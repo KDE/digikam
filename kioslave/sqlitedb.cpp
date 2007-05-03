@@ -1,10 +1,10 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-06-05
- * Description :
+ * Authors     : Renchi Raju 
+ * Date        : 2005-06-05
+ * Description : QSlite DB interface.
  *
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,17 +18,25 @@
  *
  * ============================================================ */
 
+// Qt includes.
+
 #include <qstringlist.h>
 #include <qdir.h>
 #include <qfile.h>
+
+// KDE includes.
+
 #include <kio/global.h>
 #include <kdebug.h>
 
+// SQlite includes.
+
 #include <sqlite3.h>
 
-#include "sqlitedb.h"
+// Local includes.
 
-#include "config.h" // Needed for NFS_HACK
+#include "config.h"    // Needed for NFS_HACK
+#include "sqlitedb.h"
 
 SqliteDB::SqliteDB()
 {
