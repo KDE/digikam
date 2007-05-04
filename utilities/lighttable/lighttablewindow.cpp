@@ -75,10 +75,12 @@ public:
         removeFullScreenButton              = false;
         cancelSlideShow                     = false;
         accelerators                        = 0;
+        leftSidebar                         = 0;
         rightSidebar                        = 0;
         previewView                         = 0;
         barView                             = 0;
-        splitter                            = 0;
+        hSplitter                           = 0;
+        vSplitter                           = 0;
         fileDeleteAction                    = 0;
         slideShowAction                     = 0;
         fullScreenAction                    = 0;
@@ -97,7 +99,8 @@ public:
         zoomMinusAction                     = 0;
         zoomTo100percents                   = 0;
         nameLabel                           = 0;
-        zoomBar                             = 0;  
+        leftZoomBar                         = 0;  
+        rightZoomBar                        = 0;  
     }
 
     bool                      fullScreenHideToolBar;
@@ -105,7 +108,8 @@ public:
     bool                      removeFullScreenButton;
     bool                      cancelSlideShow;
 
-    QSplitter                *splitter;
+    QSplitter                *hSplitter;
+    QSplitter                *vSplitter;
 
     KAction                  *fileDeleteAction;
     KAction                  *slideShowAction;
@@ -132,10 +136,12 @@ public:
 
     LightTableView           *previewView;
 
-    StatusZoomBar            *zoomBar;
+    StatusZoomBar            *leftZoomBar;
+    StatusZoomBar            *rightZoomBar;
 
     StatusProgressBar        *nameLabel;
 
+    ImagePropertiesSideBarDB *leftSidebar;
     ImagePropertiesSideBarDB *rightSidebar;
 };
 
@@ -175,13 +181,19 @@ LightTableWindow::LightTableWindow()
 
     //-------------------------------------------------------------
 
+    d->leftSidebar->loadViewState();
     d->rightSidebar->loadViewState();
+    d->leftSidebar->populateTags();
     d->rightSidebar->populateTags();
 
     KConfig* config = kapp->config();
     config->setGroup("LightTable Settings");
-    if(config->hasKey("Splitter Sizes"))
-        d->splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
+
+    if(config->hasKey("Vertical Splitter Sizes"))
+        d->vSplitter->setSizes(config->readIntListEntry("Vertical Splitter Sizes"));
+
+    if(config->hasKey("Horizontal Splitter Sizes"))
+        d->hSplitter->setSizes(config->readIntListEntry("Horizontal Splitter Sizes"));
 
     setAutoSaveSettings("LightTable Settings");
 }
@@ -201,7 +213,8 @@ void LightTableWindow::closeEvent(QCloseEvent* e)
 
     KConfig* config = kapp->config();
     config->setGroup("LightTable Settings");
-    config->writeEntry("Splitter Sizes", d->splitter->sizes());
+    config->writeEntry("Vertical Splitter Sizes", d->vSplitter->sizes());
+    config->writeEntry("Horizontal Splitter Sizes", d->hSplitter->sizes());
     config->sync();
 
     e->accept();
@@ -209,61 +222,94 @@ void LightTableWindow::closeEvent(QCloseEvent* e)
 
 void LightTableWindow::setupUserArea()
 {
-    QWidget* widget  = new QWidget(this);
-    QHBoxLayout *lay = new QHBoxLayout(widget);
-    d->splitter      = new QSplitter(widget);
-    d->barView       = new LightTableBar(d->splitter, ThumbBarView::Vertical);
-    d->previewView   = new LightTableView(d->splitter);
-    d->rightSidebar  = new ImagePropertiesSideBarDB(widget, "LightTable Right Sidebar", d->splitter,
-                                                    Sidebar::Right, true);
-    lay->addWidget(d->splitter);
-    lay->addWidget(d->rightSidebar);
+    QWidget* mainW    = new QWidget(this);
+    d->hSplitter      = new QSplitter(Qt::Horizontal, mainW);
+    QHBoxLayout *hlay = new QHBoxLayout(mainW);
+    d->leftSidebar    = new ImagePropertiesSideBarDB(mainW, "LightTable Left Sidebar", d->hSplitter,
+                                                     Sidebar::Left, true);
 
-    d->splitter->setFrameStyle( QFrame::NoFrame );
-    d->splitter->setFrameShadow( QFrame::Plain );
-    d->splitter->setFrameShape( QFrame::NoFrame );
-    d->splitter->setOpaqueResize(false);
-    setCentralWidget(widget);
+    QWidget* centralW = new QWidget(d->hSplitter);
+    QVBoxLayout *vlay = new QVBoxLayout(centralW);
+    d->vSplitter      = new QSplitter(Qt::Vertical, centralW);
+    d->barView        = new LightTableBar(d->vSplitter, ThumbBarView::Horizontal);
+    d->previewView    = new LightTableView(d->vSplitter);
+    vlay->addWidget(d->vSplitter);
+
+    d->rightSidebar   = new ImagePropertiesSideBarDB(mainW, "LightTable Right Sidebar", d->hSplitter,
+                                                     Sidebar::Right, true);
+
+    hlay->addWidget(d->leftSidebar);
+    hlay->addWidget(d->hSplitter);
+    hlay->addWidget(d->rightSidebar);
+
+    d->hSplitter->setFrameStyle( QFrame::NoFrame );
+    d->hSplitter->setFrameShadow( QFrame::Plain );
+    d->hSplitter->setFrameShape( QFrame::NoFrame );
+    d->hSplitter->setOpaqueResize(false);
+    d->vSplitter->setFrameStyle( QFrame::NoFrame );
+    d->vSplitter->setFrameShadow( QFrame::Plain );
+    d->vSplitter->setFrameShape( QFrame::NoFrame );
+    d->vSplitter->setOpaqueResize(false);
+
+    setCentralWidget(mainW);
 }
 
 void LightTableWindow::setupStatusBar()
 {
+    d->leftZoomBar = new StatusZoomBar(statusBar());
+    statusBar()->addWidget(d->leftZoomBar, 1);
+
     d->nameLabel = new StatusProgressBar(statusBar());
     d->nameLabel->setAlignment(Qt::AlignCenter);
     d->nameLabel->setMaximumHeight(fontMetrics().height()+2);    
     statusBar()->addWidget(d->nameLabel, 100);
  
-    d->zoomBar = new StatusZoomBar(statusBar());
-    statusBar()->addWidget(d->zoomBar, 1, true);
+    d->rightZoomBar = new StatusZoomBar(statusBar());
+    statusBar()->addWidget(d->rightZoomBar, 1);
 }
 
 void LightTableWindow::setupConnections()
 {
-    connect(d->barView, SIGNAL(signalLightTableBarItemSelected(ImageInfo*)),
-            this, SLOT(slotLightTableBarItemSelected(ImageInfo*)));
+    connect(d->barView, SIGNAL(setLeftPanelInfo(ImageInfo*)),
+            this, SLOT(slotSetLeftPanelInfo(ImageInfo*)));
+
+    connect(d->barView, SIGNAL(setRightPanelInfo(ImageInfo*)),
+            this, SLOT(slotSetRightPanelInfo(ImageInfo*)));
 
     connect(d->nameLabel, SIGNAL(signalCancelButtonPressed()),
             this, SLOT(slotNameLabelCancelButtonPressed()));
+
+    connect(d->leftZoomBar, SIGNAL(signalZoomMinusClicked()),
+            d->previewView, SLOT(slotDecreaseLeftZoom()));
+
+    connect(d->leftZoomBar, SIGNAL(signalZoomPlusClicked()),
+            d->previewView, SLOT(slotIncreaseLeftZoom()));
+
+    connect(d->leftZoomBar, SIGNAL(signalZoomSliderChanged(int)),
+            d->previewView, SLOT(slotLeftZoomSliderChanged(int)));
+
+    connect(d->rightZoomBar, SIGNAL(signalZoomMinusClicked()),
+            d->previewView, SLOT(slotDecreaseRightZoom()));
+
+    connect(d->rightZoomBar, SIGNAL(signalZoomPlusClicked()),
+            d->previewView, SLOT(slotIncreaseRightZoom()));
+
+    connect(d->rightZoomBar, SIGNAL(signalZoomSliderChanged(int)),
+            d->previewView, SLOT(slotRightZoomSliderChanged(int)));
+
+    connect(d->previewView, SIGNAL(signalLeftZoomFactorChanged(double)),
+            this, SLOT(slotLeftZoomFactorChanged(double)));
+
+    connect(d->previewView, SIGNAL(signalRightZoomFactorChanged(double)),
+            this, SLOT(slotRightZoomFactorChanged(double)));
+
+    connect(d->previewView, SIGNAL(signalSlideShow()),
+            this, SLOT(slotToggleSlideShow()));
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
     connect(watch, SIGNAL(signalFileMetadataChanged(const KURL &)),
             this, SLOT(slotFileMetadataChanged(const KURL &)));
-
-    connect(d->zoomBar, SIGNAL(signalZoomMinusClicked()),
-           d->previewView, SLOT(slotDecreaseZoom()));
-
-    connect(d->zoomBar, SIGNAL(signalZoomPlusClicked()),
-           d->previewView, SLOT(slotIncreaseZoom()));
-
-    connect(d->zoomBar, SIGNAL(signalZoomSliderChanged(int)),
-           this, SLOT(slotZoomSliderChanged(int)));
-
-    connect(d->previewView, SIGNAL(signalZoomFactorChanged(double)),
-           this, SLOT(slotZoomFactorChanged(double)));
-
-    connect(d->previewView, SIGNAL(signalSlideShow()),
-           this, SLOT(slotToggleSlideShow()));
 }
 
 void LightTableWindow::setupActions()
@@ -373,13 +419,14 @@ void LightTableWindow::setupAccelerators()
 
 void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imageInfoCurrent)
 {
-    d->previewView->setImageInfo(imageInfoCurrent);
-
     for (QPtrList<ImageInfo>::const_iterator it = list.begin(); it != list.end(); ++it)
     {
-        LightTableBarItem *item = new LightTableBarItem(d->barView, *it);
-        if (*it == imageInfoCurrent)
-            d->barView->setSelected(item);
+        if (!d->barView->findItemByInfo(*it))
+        {
+            LightTableBarItem *item = new LightTableBarItem(d->barView, *it);
+            if (*it == imageInfoCurrent)
+                d->barView->setSelected(item);
+        }
     }   
 
     // if window is iconified, show it
@@ -387,17 +434,24 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
     {
         KWin::deIconifyWindow(winId());
     }
+}   
+
+void LightTableWindow::slotSetLeftPanelInfo(ImageInfo* info)
+{
+    d->previewView->setLeftImageInfo(info);
+    d->leftSidebar->itemChanged(info);
 }
 
-void LightTableWindow::slotLightTableBarItemSelected(ImageInfo* info)
+void LightTableWindow::slotSetRightPanelInfo(ImageInfo* info)
 {
-    d->previewView->setImageInfo(info);
+    d->previewView->setRightImageInfo(info);
     d->rightSidebar->itemChanged(info);
 }
 
 void LightTableWindow::slotZoomTo100Percents()
 {
-    d->previewView->setZoomFactor(1.0);
+    d->previewView->setLeftZoomFactor(1.0);
+    d->previewView->setRightZoomFactor(1.0);
 }
 
 void LightTableWindow::slotFitToWindow()
@@ -671,40 +725,50 @@ void LightTableWindow::slotFileMetadataChanged(const KURL &url)
     }
 }
 
-void LightTableWindow::slotZoomFactorChanged(double zoom)
+void LightTableWindow::slotLeftZoomFactorChanged(double zoom)
 {
     double h    = (double)ThumbnailSize::Huge;
     double s    = (double)ThumbnailSize::Small;
-    double zmin = d->previewView->zoomMin();
-    double zmax = d->previewView->zoomMax();
+    double zmin = d->previewView->leftZoomMin();
+    double zmax = d->previewView->leftZoomMax();
     double b    = (zmin-(zmax*s/h))/(1-s/h);
     double a    = (zmax-b)/h;
     int size    = (int)((zoom - b) /a); 
 
-    d->zoomBar->setZoomSliderValue(size);
-    d->zoomBar->setZoomTrackerText(i18n("zoom: %1%").arg((int)(zoom*100.0)));
+    d->leftZoomBar->setZoomSliderValue(size);
+    d->leftZoomBar->setZoomTrackerText(i18n("zoom: %1%").arg((int)(zoom*100.0)));
 
-    d->zoomBar->setEnableZoomPlus(true);
-    d->zoomBar->setEnableZoomMinus(true);
+    d->leftZoomBar->setEnableZoomPlus(true);
+    d->leftZoomBar->setEnableZoomMinus(true);
 
-    if (d->previewView->maxZoom())
-        d->zoomBar->setEnableZoomPlus(false);
+    if (d->previewView->leftMaxZoom())
+        d->leftZoomBar->setEnableZoomPlus(false);
 
-    if (d->previewView->minZoom())
-        d->zoomBar->setEnableZoomMinus(false);
+    if (d->previewView->leftMinZoom())
+        d->leftZoomBar->setEnableZoomMinus(false);
 }
 
-void LightTableWindow::slotZoomSliderChanged(int size)
+void LightTableWindow::slotRightZoomFactorChanged(double zoom)
 {
     double h    = (double)ThumbnailSize::Huge;
     double s    = (double)ThumbnailSize::Small;
-    double zmin = d->previewView->zoomMin();
-    double zmax = d->previewView->zoomMax();
+    double zmin = d->previewView->rightZoomMin();
+    double zmax = d->previewView->rightZoomMax();
     double b    = (zmin-(zmax*s/h))/(1-s/h);
     double a    = (zmax-b)/h;
-    double z    = a*size+b; 
+    int size    = (int)((zoom - b) /a); 
 
-    d->previewView->setZoomFactor(z);
+    d->rightZoomBar->setZoomSliderValue(size);
+    d->rightZoomBar->setZoomTrackerText(i18n("zoom: %1%").arg((int)(zoom*100.0)));
+
+    d->rightZoomBar->setEnableZoomPlus(true);
+    d->rightZoomBar->setEnableZoomMinus(true);
+
+    if (d->previewView->rightMaxZoom())
+        d->rightZoomBar->setEnableZoomPlus(false);
+
+    if (d->previewView->rightMinZoom())
+        d->rightZoomBar->setEnableZoomMinus(false);
 }
 
 }  // namespace Digikam

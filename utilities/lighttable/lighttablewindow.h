@@ -77,7 +77,8 @@ private:
 
 private slots:
 
-    void slotLightTableBarItemSelected(ImageInfo*);
+    void slotSetLeftPanelInfo(ImageInfo*);
+    void slotSetRightPanelInfo(ImageInfo*);
     void slotZoomTo100Percents();
     void slotFitToWindow();
     void slotNameLabelCancelButtonPressed();
@@ -90,8 +91,8 @@ private slots:
     void slotNewToolbarConfig();
     void slotSetup();
     void slotFileMetadataChanged(const KURL &);
-    void slotZoomSliderChanged(int);
-    void slotZoomFactorChanged(double);
+    void slotLeftZoomFactorChanged(double);
+    void slotRightZoomFactorChanged(double);
 
 private:
 
