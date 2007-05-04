@@ -134,19 +134,20 @@ void StatusProgressBar::progressBarMode( int mode, const QString& text )
     {
         raiseWidget(StatusProgressBarPriv::TextLabel);
         setProgressValue(0);
+        setText( text );
     }
     else if ( mode == ProgressBarMode )
     {
         d->cancelButton->hide();
         raiseWidget(StatusProgressBarPriv::ProgressBar);
+        setProgressText( text );
     }
     else  // CancelProgressBarMode
     {
         d->cancelButton->show();
         raiseWidget(StatusProgressBarPriv::ProgressBar);
+        setProgressText( text );
     }
-
-    setProgressText( text );
 }
 
 }  // namespace Digikam
