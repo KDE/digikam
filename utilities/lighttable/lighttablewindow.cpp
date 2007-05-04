@@ -437,7 +437,8 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
     }
 
     d->nameLabel->progressBarMode(StatusProgressBar::TextMode, 
-                  i18n("1 item inserted in Light Table"/*, "%1 items inserted in Light Table"*/)
+                  i18n("1 item inserted in Light Table", 
+                       "%1 items inserted in Light Table")
                   .arg(d->barView->countItems()));   
 }   
 
