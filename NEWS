@@ -93,5 +93,6 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
                  of the image file.
 037 ==> 139814 : The window of digiKam exceed the screen if the resolution is 800x600.
 038 ==> 144481 : Vertical window size cannot be reduced to VGA resolution.
-039 ==> 
+039 ==> 136254 : Editing tags does not change IPTC-keywords.
+040 ==> 
 
