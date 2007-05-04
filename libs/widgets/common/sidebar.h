@@ -143,8 +143,6 @@ private:
      * save the view state to disk
      */
     void saveViewState();
-
-    void closeEvent(QCloseEvent* e);
     
 private slots:
     

@@ -40,6 +40,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "sidebar.h"
 #include "sidebar.moc"
 
@@ -91,15 +92,8 @@ Sidebar::Sidebar(QWidget *parent, const char *name, Side side, bool minimizedDef
 
 Sidebar::~Sidebar()
 {
-    delete d;
-}
-
-void Sidebar::closeEvent(QCloseEvent* e)
-{
-    if (!e) return;
-
     saveViewState();
-    e->accept();
+    delete d;
 }
 
 void Sidebar::setSplitter(QSplitter *sp)
