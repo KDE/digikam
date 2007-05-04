@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors     : F.J. Cruz 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
  * Date        : 2005-12-08
  * Description : ICC Settings Container.
  * 
- * Copyright 2005-2007 by F.J. Cruz <fj.cruz@supercable.es>
+ * Copyright (C) 2005-2007 by F.J. Cruz <fj.cruz@supercable.es>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

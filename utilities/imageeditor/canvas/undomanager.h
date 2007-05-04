@@ -1,11 +1,13 @@
 /* ============================================================
- * Authors     : Renchi Raju 
- *               Joern Ahrens 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
  * Date        : 2005-02-06
  * Description : an image editor actions undo/redo manager
  *
- * Copyright 2005-2006 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
+ * Copyright (C) 2005-2006 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
