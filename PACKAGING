@@ -7,8 +7,7 @@ Notice to make release tarballs from SVN
 1/ Update the release info in these files and commit it to svn :
    - digikam/digikam/version.h
    - digikam/digikam.lsm - update date as well
-   (For digikamimageplugins, the version.h is at digikamimageplugins/common/include/)
-
+  
 2/ Edited release_digikam.rb and release_digikam_docs.rb script. Update these settings :
    - version.
    - svnbase (your own svn access that  you used for checkout must appear here. In case of pb, eliminate the others).
