@@ -96,6 +96,10 @@ private slots:
 
 private:
 
+    void refreshStatusBar();
+
+private:
+
     LightTableWindowPriv    *d;
 
     static LightTableWindow *m_instance;

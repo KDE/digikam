@@ -98,7 +98,7 @@ public:
         zoomPlusAction                      = 0;
         zoomMinusAction                     = 0;
         zoomTo100percents                   = 0;
-        nameLabel                           = 0;
+        statusProgressBar                   = 0;
         leftZoomBar                         = 0;  
         rightZoomBar                        = 0;  
     }
@@ -139,7 +139,7 @@ public:
     StatusZoomBar            *leftZoomBar;
     StatusZoomBar            *rightZoomBar;
 
-    StatusProgressBar        *nameLabel;
+    StatusProgressBar        *statusProgressBar;
 
     ImagePropertiesSideBarDB *leftSidebar;
     ImagePropertiesSideBarDB *rightSidebar;
@@ -226,8 +226,9 @@ void LightTableWindow::setupUserArea()
     QWidget* mainW    = new QWidget(this);
     d->hSplitter      = new QSplitter(Qt::Horizontal, mainW);
     QHBoxLayout *hlay = new QHBoxLayout(mainW);
-    d->leftSidebar    = new ImagePropertiesSideBarDB(mainW, "LightTable Left Sidebar", d->hSplitter,
-                                                     Sidebar::Left, true);
+    d->leftSidebar    = new ImagePropertiesSideBarDB(mainW, 
+                            "LightTable Left Sidebar", d->hSplitter,
+                            Sidebar::Left, true);
 
     QWidget* centralW = new QWidget(d->hSplitter);
     QVBoxLayout *vlay = new QVBoxLayout(centralW);
@@ -236,8 +237,9 @@ void LightTableWindow::setupUserArea()
     d->previewView    = new LightTableView(d->vSplitter);
     vlay->addWidget(d->vSplitter);
 
-    d->rightSidebar   = new ImagePropertiesSideBarDB(mainW, "LightTable Right Sidebar", d->hSplitter,
-                                                     Sidebar::Right, true);
+    d->rightSidebar   = new ImagePropertiesSideBarDB(mainW, 
+                            "LightTable Right Sidebar", d->hSplitter,
+                            Sidebar::Right, true);
 
     hlay->addWidget(d->leftSidebar);
     hlay->addWidget(d->hSplitter);
@@ -260,10 +262,10 @@ void LightTableWindow::setupStatusBar()
     d->leftZoomBar = new StatusZoomBar(statusBar());
     statusBar()->addWidget(d->leftZoomBar, 1);
 
-    d->nameLabel = new StatusProgressBar(statusBar());
-    d->nameLabel->setAlignment(Qt::AlignCenter);
-    d->nameLabel->setMaximumHeight(fontMetrics().height()+2);    
-    statusBar()->addWidget(d->nameLabel, 100);
+    d->statusProgressBar = new StatusProgressBar(statusBar());
+    d->statusProgressBar->setAlignment(Qt::AlignCenter);
+    d->statusProgressBar->setMaximumHeight(fontMetrics().height()+2);    
+    statusBar()->addWidget(d->statusProgressBar, 100);
  
     d->rightZoomBar = new StatusZoomBar(statusBar());
     statusBar()->addWidget(d->rightZoomBar, 1);
@@ -277,7 +279,7 @@ void LightTableWindow::setupConnections()
     connect(d->barView, SIGNAL(setRightPanelInfo(ImageInfo*)),
             this, SLOT(slotSetRightPanelInfo(ImageInfo*)));
 
-    connect(d->nameLabel, SIGNAL(signalCancelButtonPressed()),
+    connect(d->statusProgressBar, SIGNAL(signalCancelButtonPressed()),
             this, SLOT(slotNameLabelCancelButtonPressed()));
 
     connect(d->leftZoomBar, SIGNAL(signalZoomMinusClicked()),
@@ -436,11 +438,16 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
         KWin::deIconifyWindow(winId());
     }
 
-    d->nameLabel->progressBarMode(StatusProgressBar::TextMode, 
+    refreshStatusBar();
+}   
+
+void LightTableWindow::refreshStatusBar()
+{
+    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, 
                   i18n("1 item inserted in Light Table", 
                        "%1 items inserted in Light Table")
                   .arg(d->barView->countItems()));   
-}   
+}
 
 void LightTableWindow::slotSetLeftPanelInfo(ImageInfo* info)
 {
@@ -489,7 +496,7 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
     DMetadata meta;
     d->cancelSlideShow = false;
 
-    d->nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode, 
+    d->statusProgressBar->progressBarMode(StatusProgressBar::CancelProgressBarMode, 
                                   i18n("Prepare slideshow. Please wait..."));
 
     ImageInfoList list = d->barView->itemsImageInfoList();
@@ -511,11 +518,12 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
         settings.pictInfoMap.insert(info->kurl(), pictInfo);
         settings.fileList.append(info->kurl());
 
-        d->nameLabel->setProgressValue((int)((i++/(float)list.count())*100.0));
+        d->statusProgressBar->setProgressValue((int)((i++/(float)list.count())*100.0));
         kapp->processEvents();
     }
 
-    d->nameLabel->progressBarMode(StatusProgressBar::TextMode, QString());   
+    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, QString());   
+    refreshStatusBar();
 
     if (!d->cancelSlideShow)
     {
