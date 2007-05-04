@@ -52,11 +52,17 @@ public:
 
     SidebarPriv()
     {
-        stack     = 0;
-        splitter  = 0;
-        tabs      = 0;
-        activeTab = -1;
-        minimized = false;
+        minimizedDefault = false;
+        minimized        = false;
+        isMinimized      = false;
+
+        tabs             = 0;
+        activeTab        = -1;
+        minSize          = 0;
+        maxSize          = 0;
+
+        stack            = 0;
+        splitter         = 0;
     }
 
     bool           minimizedDefault;
@@ -67,7 +73,7 @@ public:
     int            activeTab;
     int            minSize;
     int            maxSize;
-        
+
     QWidgetStack  *stack;
     QSplitter     *splitter;
     QSize          bigSize;
