@@ -91,8 +91,15 @@ Sidebar::Sidebar(QWidget *parent, const char *name, Side side, bool minimizedDef
 
 Sidebar::~Sidebar()
 {
-    saveViewState();
     delete d;
+}
+
+void Sidebar::closeEvent(QCloseEvent* e)
+{
+    if (!e) return;
+
+    saveViewState();
+    e->accept();
 }
 
 void Sidebar::setSplitter(QSplitter *sp)
