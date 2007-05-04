@@ -569,8 +569,16 @@ void LightTableWindow::slotToggleFullScreen()
         unplugActionAccel(d->zoomMinusAction);
         unplugActionAccel(d->zoomFitToWindowAction);
 
-        if (d->fullScreen) d->rightSidebar->restore();
-        else               d->rightSidebar->backup();        
+        if (d->fullScreen)
+        {
+            d->leftSidebar->restore();
+            d->rightSidebar->restore();
+        }
+        else       
+        {
+            d->leftSidebar->backup();        
+            d->rightSidebar->backup();        
+        }
         
         d->fullScreen = false;
     }
@@ -618,8 +626,16 @@ void LightTableWindow::slotToggleFullScreen()
         plugActionAccel(d->zoomMinusAction);
         plugActionAccel(d->zoomFitToWindowAction);
 
-        if (d->fullScreen) d->rightSidebar->restore();
-        else               d->rightSidebar->backup();        
+        if (d->fullScreen) 
+        {
+            d->leftSidebar->restore();
+            d->rightSidebar->restore();
+        }
+        else
+        {
+            d->leftSidebar->backup();        
+            d->rightSidebar->backup();        
+        }
 
         showFullScreen();
         d->fullScreen = true;
