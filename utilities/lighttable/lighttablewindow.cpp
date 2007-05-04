@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors     : Gilles Caulier 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
  * Date        : 2004-02-12
  * Description : digiKam light table GUI
  *
- * Copyright 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,6 +55,7 @@
 #include "statuszoombar.h"
 #include "thumbnailsize.h"
 #include "lighttablepreview.h"
+#include "lighttableview.h"
 #include "lighttablebar.h"
 #include "lighttablewindow.h"
 #include "lighttablewindow.moc"
@@ -126,7 +130,7 @@ public:
 
     LightTableBar            *barView;
 
-    LightTablePreview        *previewView;
+    LightTableView           *previewView;
 
     StatusZoomBar            *zoomBar;
 
@@ -209,7 +213,7 @@ void LightTableWindow::setupUserArea()
     QHBoxLayout *lay = new QHBoxLayout(widget);
     d->splitter      = new QSplitter(widget);
     d->barView       = new LightTableBar(d->splitter, ThumbBarView::Vertical);
-    d->previewView   = new LightTablePreview(d->splitter);
+    d->previewView   = new LightTableView(d->splitter);
     d->rightSidebar  = new ImagePropertiesSideBarDB(widget, "LightTable Right Sidebar", d->splitter,
                                                     Sidebar::Right, true);
     lay->addWidget(d->splitter);
