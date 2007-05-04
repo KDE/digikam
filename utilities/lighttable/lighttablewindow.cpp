@@ -176,11 +176,8 @@ LightTableWindow::LightTableWindow()
 
     KConfig* config = kapp->config();
     config->setGroup("LightTable Settings");
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     if(config->hasKey("Splitter Sizes"))
         d->splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
-    else 
-        d->previewView->setSizePolicy(rightSzPolicy);
 
     setAutoSaveSettings("LightTable Settings");
 }
@@ -213,10 +210,6 @@ void LightTableWindow::setupUserArea()
     d->splitter      = new QSplitter(widget);
     d->barView       = new LightTableBar(d->splitter, ThumbBarView::Vertical);
     d->previewView   = new LightTablePreview(d->splitter);
-
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
-    d->previewView->setSizePolicy(rightSzPolicy);
-
     d->rightSidebar  = new ImagePropertiesSideBarDB(widget, "LightTable Right Sidebar", d->splitter,
                                                     Sidebar::Right, true);
     lay->addWidget(d->splitter);

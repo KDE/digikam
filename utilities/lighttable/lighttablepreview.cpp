@@ -115,7 +115,8 @@ LightTablePreview::LightTablePreview(QWidget *parent)
                  : PreviewWidget(parent)
 {
     d = new LightTableViewPriv;
-
+    
+    slotThemeChanged();
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     d->cornerButton = new QToolButton(this);
