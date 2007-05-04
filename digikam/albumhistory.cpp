@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors     : Joern Ahrens
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
  * Date        : 2004-11-17
  * Description : albums history manager.
  * 
- * Copyright 2004 by Joern Ahrens <joern.ahrens@kdemail.net>
+ * Copyright (C) 2004 by Joern Ahrens <joern.ahrens@kdemail.net>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

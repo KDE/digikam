@@ -1,6 +1,8 @@
 /* ============================================================
- * Authors     : Renchi Raju 
- *               Caulier Gilles 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
  * Date        : 2004-08-19
  * Description : Album item file tip adapted from kfiletip 
  *               (konqueror - konq_iconviewwidget.cc)
