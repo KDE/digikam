@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date   : 2007-04-11
+ * Date        : 2007-04-11
  * Description : light table thumbs bar
  *
  * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
