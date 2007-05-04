@@ -16,7 +16,6 @@
     <ignoreparts/>
     <projectname>digikam</projectname>
     <defaultencoding/>
-    <versioncontrol>kdevsubversion</versioncontrol>
   </general>
   <kdevfileview>
     <groups>
