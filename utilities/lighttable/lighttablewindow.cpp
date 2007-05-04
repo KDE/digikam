@@ -204,6 +204,7 @@ LightTableWindow::~LightTableWindow()
 
     delete d->barView;
     delete d->rightSidebar;
+    delete d->leftSidebar;
     delete d;
 }
 
