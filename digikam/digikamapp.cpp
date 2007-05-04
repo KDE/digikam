@@ -72,6 +72,7 @@
 #include "setupplugins.h"
 #include "setupeditor.h"
 #include "setupicc.h"
+#include "lighttablewindow.h"
 #include "imagewindow.h"
 #include "imageinfo.h"
 #include "thumbnailsize.h"
@@ -178,9 +179,15 @@ DigikamApp::~DigikamApp()
 {
     ImageAttributesWatch::shutDown();
 
+    // Close and delete image editor instance.
+
     if (ImageWindow::imagewindowCreated())
-        // close and delete
         ImageWindow::imagewindow()->close(true);
+
+    // Close and delete light table instance.
+        
+    if (LightTableWindow::lightTableWindowCreated())
+        LightTableWindow::lightTableWindow()->close(true);
 
     if (d->view)
         delete d->view;
