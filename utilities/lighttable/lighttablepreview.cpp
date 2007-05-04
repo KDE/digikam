@@ -71,11 +71,11 @@
 namespace Digikam
 {
 
-class LightTableViewPriv
+class LightTablePreviewPriv
 {
 public:
 
-    LightTableViewPriv()
+    LightTablePreviewPriv()
     {
         panIconPopup         = 0;
         panIconWidget        = 0;
@@ -114,7 +114,7 @@ public:
 LightTablePreview::LightTablePreview(QWidget *parent)
                  : PreviewWidget(parent)
 {
-    d = new LightTableViewPriv;
+    d = new LightTablePreviewPriv;
     
     slotThemeChanged();
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

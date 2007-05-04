@@ -38,7 +38,7 @@ namespace Digikam
 
 class LoadingDescription;
 class ImageInfo;
-class LightTableViewPriv;
+class LightTablePreviewPriv;
 
 class DIGIKAM_EXPORT LightTablePreview : public PreviewWidget
 {
@@ -96,7 +96,7 @@ private:
 
 private:
 
-    LightTableViewPriv* d;
+    LightTablePreviewPriv* d;
 };
 
 }  // NameSpace Digikam
