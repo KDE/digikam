@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors     : Gilles Caulier 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
  * Date        : 2004-09-09
  * Description : digiKam release ID header.
  * 
- * Copyright 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
