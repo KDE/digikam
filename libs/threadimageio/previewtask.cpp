@@ -1,11 +1,13 @@
 /* ============================================================
- * Authors     : Marcel Wiesweg
- *               Gilles Caulier
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
  * Date        : 2006-12-26
  * Description : Multithreaded loader for previews
  *
- * Copyright 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
