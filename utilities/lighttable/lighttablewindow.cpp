@@ -434,6 +434,10 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
     {
         KWin::deIconifyWindow(winId());
     }
+
+    d->nameLabel->progressBarMode(StatusProgressBar::TextMode, 
+                  i18n("1 item inserted in Light Table"/*, "%1 items inserted in Light Table"*/)
+                  .arg(d->barView->countItems()));   
 }   
 
 void LightTableWindow::slotSetLeftPanelInfo(ImageInfo* info)
