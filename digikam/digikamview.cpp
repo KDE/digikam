@@ -858,7 +858,7 @@ void DigikamView::slotAlbumPropsEdit()
 void DigikamView::slotAlbumSyncPicturesMetadata()
 {
     Album *album = d->albumManager->currentAlbum();
-    if (!album || album->type() != Album::PHYSICAL)
+    if (!album)
         return;
 
     BatchSyncMetadata *syncMetadata = new BatchSyncMetadata(this, album);
