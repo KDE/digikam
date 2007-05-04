@@ -1,6 +1,8 @@
 /* ============================================================
- * Authors     : Leonid Zeitlin 
- *               Tom Albers
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
  * Date        : 2005-01-12
  * Description : a DCROP interface. 
  * 
