@@ -50,16 +50,21 @@ public:
     ImageInfo*    currentItemImageInfo() const;
     ImageInfoList itemsImageInfoList();
 
+    LightTableBarItem* findItemByInfo(const ImageInfo* info) const;
+
     /** Read tool tip settings from Album Settings instance */
     void readToolTipSettings();
 
 signals:
 
     void signalLightTableBarItemSelected(ImageInfo*);
+    void setLeftPanelInfo(ImageInfo*);
+    void setRightPanelInfo(ImageInfo*);
 
 protected:
 
     void viewportPaintEvent(QPaintEvent* e);    
+    void contentsMouseReleaseEvent(QMouseEvent *e);
 
 private slots:
 

@@ -25,13 +25,17 @@
 
 #include <qpainter.h>
 #include <qimage.h>
+#include <qcursor.h>
 
 // KDE includes.
 
 #include <klocale.h>
+#include <kpopupmenu.h>
+#include <kiconloader.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "album.h"
 #include "albumsettings.h"
 #include "themeengine.h"
@@ -44,6 +48,7 @@ namespace Digikam
 LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
              : ThumbBarView(parent, orientation, exifRotate)
 {
+    setMouseTracking(true);
     readToolTipSettings();
     m_toolTip = new LightTableBarToolTip(this);
 
@@ -57,6 +62,36 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
 LightTableBar::~LightTableBar()
 {
     delete m_toolTip;
+}
+
+void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
+{
+    if (!e) return;
+
+    if (e->button() == Qt::RightButton)
+    {
+        KPopupMenu popmenu(this);
+        popmenu.insertTitle(SmallIcon("idea"), i18n("My Light Table"));
+        popmenu.insertItem(SmallIcon("previous"), i18n("Set on left panel"), 10);
+        popmenu.insertItem(SmallIcon("next"), i18n("Set on right panel"), 11);
+        switch(popmenu.exec((QCursor::pos())))
+        {
+            case 10:
+            {
+                if (currentItemImageInfo())
+                    emit setLeftPanelInfo(currentItemImageInfo());
+                break;
+            }
+            case 11:
+            {
+                if (currentItemImageInfo())
+                    emit setRightPanelInfo(currentItemImageInfo());
+                break;
+            }
+            default:
+                break;
+        }
+    }
 }
 
 void LightTableBar::slotItemSelected(ThumbBarItem* i)
@@ -83,6 +118,20 @@ ImageInfoList LightTableBar::itemsImageInfoList()
     }
 
     return list;
+}
+
+LightTableBarItem* LightTableBar::findItemByInfo(const ImageInfo* info) const
+{
+    for (ThumbBarItem *item = firstItem(); item; item = item->next())
+    {
+        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+        if (ltItem->info()->kurl() == info->kurl())
+        {
+            return ltItem;
+        }
+    }
+
+    return 0;
 }
 
 void LightTableBar::readToolTipSettings()
