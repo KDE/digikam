@@ -179,6 +179,8 @@ LightTableWindow::LightTableWindow()
 
     setupConnections();
 
+    setAutoSaveSettings("LightTable Settings");
+
     //-------------------------------------------------------------
 
     d->leftSidebar->loadViewState();
@@ -194,8 +196,6 @@ LightTableWindow::LightTableWindow()
 
     if(config->hasKey("Horizontal Splitter Sizes"))
         d->hSplitter->setSizes(config->readIntListEntry("Horizontal Splitter Sizes"));
-
-    setAutoSaveSettings("LightTable Settings");
 }
 
 LightTableWindow::~LightTableWindow()

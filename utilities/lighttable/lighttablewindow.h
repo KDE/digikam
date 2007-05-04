@@ -43,6 +43,7 @@ class KURL;
 namespace Digikam
 {
 
+class SlideShowSettings;
 class ThumbBarItem;
 class LightTableWindowPriv;
 
