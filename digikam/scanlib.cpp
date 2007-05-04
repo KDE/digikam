@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors     : Tom Albers 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
  * Date        : 2005-01-01
  * Description : scan pictures interface.
  * 
- * Copyright 2005-2006 by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
