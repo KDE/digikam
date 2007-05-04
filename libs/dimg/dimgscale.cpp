@@ -1,14 +1,16 @@
 /* ============================================================
- * Authors     : Renchi Raju 
- *               Gilles Caulier 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
  * Date        : 2005-06-14
  * Description : This is the normal smoothscale method,
  *               based on Imlib2's smoothscale. Added
  *               smoothScaleSection - Scaling only of a
  *               section of a image. Added 16bit image support
  *
- * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Ported to C++/QImage by Daniel M. Duley
  * Following modification are (C) Daniel M. Duley

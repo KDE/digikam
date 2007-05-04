@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors     : Marcel Wiesweg 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
  * Date        : 2006-03-01
  * Description : DColor methods for blending
  *
- * Copyright 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

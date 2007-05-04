@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors     : Gilles Caulier 
- * Date        :  2004-12-01
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2004-12-01
  * Description : image curves manipulation methods.
  * 
- * Copyright 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Some code parts are inspired from gimp 2.0
  * app/base/curves.c, gimplut.c, and app/base/gimpcurvetool.c 

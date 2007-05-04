@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors     : Gilles Caulier 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
  * Date        : 2005-12-02
  * Description : 8-16 bits color container.
  *
- * Copyright 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * RGB<->HLS transformation algorithms are inspired from methods
  * describe at this url :
