@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors     : Gilles Caulier 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
  * Date        : 2006-21-07
  * Description : Greycstoration settings container.
  * 
- * Copyright 2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  * 
  * For a full settings description, look at this url :
  * http://www.greyc.ensicaen.fr/~dtschump/greycstoration/guide.html
