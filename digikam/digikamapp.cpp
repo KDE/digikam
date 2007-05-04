@@ -1602,9 +1602,6 @@ void DigikamApp::slotShowTip()
     QStringList tipsFiles;
     tipsFiles.append("digikam/tips");
 
-    // NOTE : to remove later when DigikamImagePlugins will be merged to digiKam core. 
-    tipsFiles.append("digikamimageplugins/tips");
-
     tipsFiles.append("kipi/tips");
 
     KTipDialog::showMultiTip(this, tipsFiles, true);

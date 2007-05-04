@@ -307,14 +307,8 @@ int main(int argc, char *argv[])
     tipsFiles.append("digikam/tips");
     tipsFiles.append("kipi/tips");
     
-    // NOTE : to remove later when DigikamImagePlugins will be merged to digiKam core. 
-    tipsFiles.append("digikamimageplugins/tips");
-
     KGlobal::locale()->insertCatalogue("kipiplugins");
 
-    // NOTE : to remove later when DigikamImagePlugins will be merged to digiKam core. 
-    KGlobal::locale()->insertCatalogue("digikamimageplugins");
-    
     KTipDialog::showMultiTip(0, tipsFiles, false);
 #else
     KTipDialog::showTip(0, "digikam/tips", false);

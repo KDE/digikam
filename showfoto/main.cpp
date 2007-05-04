@@ -130,9 +130,6 @@ int main(int argc, char *argv[])
     app.setMainWidget(w);
     w->show();
     
-    // NOTE : to remove later when DigikamImagePlugins will be merged to digiKam core. 
-    KGlobal::locale()->insertCatalogue("digikamimageplugins");
-
     return app.exec();
 
     delete w;
