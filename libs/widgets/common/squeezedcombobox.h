@@ -1,12 +1,14 @@
 /* ============================================================
- * Authors     : Tom Albers
- *               Gilles Caulier
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
  * Date        : 2005-01-01
  * Description : a combo box with a width not depending of text 
  *               content size
  * 
- * Copyright 2005 by Tom Albers <tomalbers@kde.nl>
- * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2005 by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
