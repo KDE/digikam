@@ -240,7 +240,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     jpeg_destroy_decompress(&cinfo);
     fclose(inputFile);
 
-    image = img.smoothScale(newx,newy);
+    image = img;
 
     return true;
 }

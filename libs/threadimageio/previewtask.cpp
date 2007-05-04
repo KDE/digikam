@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// C includes
+
+#include <math.h>
+
 // Qt includes
 
 #include <qapplication.h>
@@ -172,16 +176,15 @@ void PreviewLoadingTask::execute()
     if (qimage.depth() != 32)
         qimage = qimage.convertDepth(32);
 
-    //qimage = qimage.smoothScale(size, size, QImage::ScaleMin);
-
     // Reduce size of image:
-    // - using fastscale algorithm
+    // - only scale down if size is considerably larger
     // - only scale down, do not scale up
     QSize scaledSize = qimage.size();
-    if (scaledSize.width() > size || scaledSize.height() > size)
+    if (needToScale(scaledSize, size))
     {
         scaledSize.scale(size, size, QSize::ScaleMin);
         qimage = FastScale::fastScaleQImage(qimage, scaledSize.width(), scaledSize.height());
+        //qimage = qimage.smoothScale(scaledSize);
     }
 
     if (m_loadingDescription.previewParameters.exifRotate)
@@ -226,6 +229,13 @@ void PreviewLoadingTask::execute()
         // set to 0, as checked in setStatus
         m_usedProcess = 0;
     }
+}
+
+bool PreviewLoadingTask::needToScale(const QSize &imageSize, int previewSize)
+{
+    int maxSize = imageSize.width() > imageSize.height() ? imageSize.width() : imageSize.height();
+    int acceptableUpperSize = lround(1.25 * (double)previewSize);
+    return  maxSize >= acceptableUpperSize;
 }
 
 // -- Exif/IPTC preview extraction using Exiv2 --------------------------------------------------------

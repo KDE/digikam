@@ -66,6 +66,7 @@ public:
 
 private:
 
+    bool needToScale(const QSize &imageSize, int previewSize);
     bool loadImagePreview(QImage& image, const QString& path);
     void exifRotate(const QString& filePath, QImage& thumb);
 };
