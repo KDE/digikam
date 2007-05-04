@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors     : Marcel Wiesweg 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
  * Date        : 2006-01-11
  * Description : shared image loading and caching
  *
- * Copyright 2005-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,14 +21,20 @@
  *
  * ============================================================ */
 
+// Qt includes.
 
 #include <qapplication.h>
 #include <qvariant.h>
 
+// KDE includes.
+
 #include <kdirwatch.h>
 
-#include "loadingcache.h"
+// Local includes.
+
 #include "ddebug.h"
+#include "loadingcache.h"
+#include "loadingcache.moc"
 
 namespace Digikam
 {
