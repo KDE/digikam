@@ -547,7 +547,7 @@ void LightTablePreview::slotPanIconSelectionMoved(QRect r, bool b)
 
 void LightTablePreview::slotZoomChanged(double zoom)
 {
-    if (zoom > calcAutoZoomFactor())
+    if (zoom > calcAutoZoomFactor() && !previewIsNull())
         d->cornerButton->show();
     else
         d->cornerButton->hide();        
@@ -558,7 +558,10 @@ void LightTablePreview::resizeEvent(QResizeEvent* e)
     if (!e) return;
 
     if (previewIsNull())
+    {
+        d->cornerButton->hide(); 
         return;
+    }
 
     QScrollView::resizeEvent(e);
 
