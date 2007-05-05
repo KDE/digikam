@@ -215,6 +215,7 @@ void ImagePreviewView::setImagePath(const QString& path)
 
     if (d->path.isEmpty())
     {
+        resetPreview();
         unsetCursor();
         return;
     }
@@ -642,6 +643,7 @@ bool ImagePreviewView::previewIsNull()
 void ImagePreviewView::resetPreview()
 {
     d->preview.reset();
+    updateZoomAndSize(true);
 }
 
 void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
