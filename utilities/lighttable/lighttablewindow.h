@@ -78,8 +78,9 @@ private:
 
 private slots:
 
-    void slotSetLeftPanelInfo(ImageInfo*);
-    void slotSetRightPanelInfo(ImageInfo*);
+    void slotSetItemOnLeftPanel(ImageInfo*);
+    void slotSetItemOnRightPanel(ImageInfo*);
+    void slotRemoveItem(const KURL&);
     void slotZoomTo100Percents();
     void slotFitToWindow();
     void slotNameLabelCancelButtonPressed();
@@ -91,7 +92,7 @@ private slots:
     void slotConfToolbars();
     void slotNewToolbarConfig();
     void slotSetup();
-    void slotFileMetadataChanged(const KURL &);
+    void slotFileMetadataChanged(const KURL&);
     void slotLeftZoomFactorChanged(double);
     void slotRightZoomFactorChanged(double);
 

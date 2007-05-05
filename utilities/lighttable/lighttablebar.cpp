@@ -72,20 +72,33 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
     {
         KPopupMenu popmenu(this);
         popmenu.insertTitle(SmallIcon("digikam"), i18n("My Light Table"));
-        popmenu.insertItem(SmallIcon("previous"), i18n("Set on left panel"), 10);
-        popmenu.insertItem(SmallIcon("next"), i18n("Set on right panel"), 11);
+        popmenu.insertItem(SmallIcon("previous"), i18n("Put on left panel"), 10);
+        popmenu.insertItem(SmallIcon("next"), i18n("Put on right panel"), 11);
+        popmenu.insertSeparator(-1);
+        popmenu.insertItem(SmallIcon("remove"), i18n("Remove this item"), 12);
+
         switch(popmenu.exec((QCursor::pos())))
         {
             case 10:
             {
                 if (currentItemImageInfo())
-                    emit setLeftPanelInfo(currentItemImageInfo());
+                    emit signalSetItemOnLeftPanel(currentItemImageInfo());
                 break;
             }
             case 11:
             {
                 if (currentItemImageInfo())
-                    emit setRightPanelInfo(currentItemImageInfo());
+                    emit signalSetItemOnRightPanel(currentItemImageInfo());
+                break;
+            }
+            case 12:
+            {
+                if (currentItemImageInfo())
+                {
+                    KURL url = currentItemImageInfo()->kurl();
+                    emit signalRemoveItem(url);
+                    removeItem(currentItem());
+                }
                 break;
             }
             default:

@@ -190,6 +190,7 @@ void LightTablePreview::setImagePath(const QString& path)
 
     if (d->path.isEmpty())
     {
+        resetPreview();
         unsetCursor();
         return;
     }
@@ -273,7 +274,7 @@ void LightTablePreview::setImageInfo(ImageInfo* info, ImageInfo *previous, Image
                          next     ? next->filePath()     : QString());
 }
 
-ImageInfo* LightTablePreview::getImageInfo()
+ImageInfo* LightTablePreview::getImageInfo() const
 {
     return d->imageInfo;
 }
@@ -610,6 +611,7 @@ bool LightTablePreview::previewIsNull()
 void LightTablePreview::resetPreview()
 {
     d->preview.reset();
+    updateZoomAndSize(true);
 }
 
 void LightTablePreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)

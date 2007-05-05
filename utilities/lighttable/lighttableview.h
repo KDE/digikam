@@ -52,6 +52,9 @@ public:
     void   setLeftImageInfo(ImageInfo* info=0);
     void   setRightImageInfo(ImageInfo* info=0);
 
+    ImageInfo* leftImageInfo() const;
+    ImageInfo* rightImageInfo() const;
+
     void   setLeftZoomFactor(double z);
     void   setRightZoomFactor(double z);
 

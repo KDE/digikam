@@ -30,6 +30,8 @@
 #include "imageinfo.h"
 #include "digikam_export.h"
 
+class KURL;
+
 namespace Digikam
 {
 
@@ -58,8 +60,9 @@ public:
 signals:
 
     void signalLightTableBarItemSelected(ImageInfo*);
-    void setLeftPanelInfo(ImageInfo*);
-    void setRightPanelInfo(ImageInfo*);
+    void signalSetItemOnLeftPanel(ImageInfo*);
+    void signalSetItemOnRightPanel(ImageInfo*);
+    void signalRemoveItem(const KURL&);
 
 protected:
 

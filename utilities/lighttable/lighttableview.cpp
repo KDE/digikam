@@ -105,6 +105,16 @@ void LightTableView::setRightImageInfo(ImageInfo* info)
     d->rightPreview->setImageInfo(info);    
 }
 
+ImageInfo* LightTableView::leftImageInfo() const
+{
+    return d->leftPreview->getImageInfo();
+}
+
+ImageInfo* LightTableView::rightImageInfo() const
+{
+    return d->rightPreview->getImageInfo();
+}
+
 void LightTableView::slotDecreaseLeftZoom()
 {
     d->leftPreview->slotDecreaseZoom(); 

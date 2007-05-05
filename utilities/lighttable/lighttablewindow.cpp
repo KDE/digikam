@@ -273,46 +273,49 @@ void LightTableWindow::setupStatusBar()
 
 void LightTableWindow::setupConnections()
 {
-    connect(d->barView, SIGNAL(setLeftPanelInfo(ImageInfo*)),
-            this, SLOT(slotSetLeftPanelInfo(ImageInfo*)));
+    connect(d->barView, SIGNAL(signalSetItemOnLeftPanel(ImageInfo*)),
+           this, SLOT(slotSetItemOnLeftPanel(ImageInfo*)));
 
-    connect(d->barView, SIGNAL(setRightPanelInfo(ImageInfo*)),
-            this, SLOT(slotSetRightPanelInfo(ImageInfo*)));
+    connect(d->barView, SIGNAL(signalSetItemOnRightPanel(ImageInfo*)),
+           this, SLOT(slotSetItemOnRightPanel(ImageInfo*)));
+
+    connect(d->barView, SIGNAL(signalRemoveItem(const KURL&)),
+           this, SLOT(slotRemoveItem(const KURL&)));
 
     connect(d->statusProgressBar, SIGNAL(signalCancelButtonPressed()),
-            this, SLOT(slotNameLabelCancelButtonPressed()));
+           this, SLOT(slotNameLabelCancelButtonPressed()));
 
     connect(d->leftZoomBar, SIGNAL(signalZoomMinusClicked()),
-            d->previewView, SLOT(slotDecreaseLeftZoom()));
+           d->previewView, SLOT(slotDecreaseLeftZoom()));
 
     connect(d->leftZoomBar, SIGNAL(signalZoomPlusClicked()),
-            d->previewView, SLOT(slotIncreaseLeftZoom()));
+           d->previewView, SLOT(slotIncreaseLeftZoom()));
 
     connect(d->leftZoomBar, SIGNAL(signalZoomSliderChanged(int)),
-            d->previewView, SLOT(slotLeftZoomSliderChanged(int)));
+           d->previewView, SLOT(slotLeftZoomSliderChanged(int)));
 
     connect(d->rightZoomBar, SIGNAL(signalZoomMinusClicked()),
-            d->previewView, SLOT(slotDecreaseRightZoom()));
+           d->previewView, SLOT(slotDecreaseRightZoom()));
 
     connect(d->rightZoomBar, SIGNAL(signalZoomPlusClicked()),
-            d->previewView, SLOT(slotIncreaseRightZoom()));
+           d->previewView, SLOT(slotIncreaseRightZoom()));
 
     connect(d->rightZoomBar, SIGNAL(signalZoomSliderChanged(int)),
-            d->previewView, SLOT(slotRightZoomSliderChanged(int)));
+           d->previewView, SLOT(slotRightZoomSliderChanged(int)));
 
     connect(d->previewView, SIGNAL(signalLeftZoomFactorChanged(double)),
-            this, SLOT(slotLeftZoomFactorChanged(double)));
+           this, SLOT(slotLeftZoomFactorChanged(double)));
 
     connect(d->previewView, SIGNAL(signalRightZoomFactorChanged(double)),
-            this, SLOT(slotRightZoomFactorChanged(double)));
+           this, SLOT(slotRightZoomFactorChanged(double)));
 
     connect(d->previewView, SIGNAL(signalSlideShow()),
-            this, SLOT(slotToggleSlideShow()));
+           this, SLOT(slotToggleSlideShow()));
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
     connect(watch, SIGNAL(signalFileMetadataChanged(const KURL &)),
-            this, SLOT(slotFileMetadataChanged(const KURL &)));
+           this, SLOT(slotFileMetadataChanged(const KURL &)));
 }
 
 void LightTableWindow::setupActions()
@@ -449,16 +452,37 @@ void LightTableWindow::refreshStatusBar()
                   .arg(d->barView->countItems()));   
 }
 
-void LightTableWindow::slotSetLeftPanelInfo(ImageInfo* info)
+void LightTableWindow::slotSetItemOnLeftPanel(ImageInfo* info)
 {
     d->previewView->setLeftImageInfo(info);
     d->leftSidebar->itemChanged(info);
 }
 
-void LightTableWindow::slotSetRightPanelInfo(ImageInfo* info)
+void LightTableWindow::slotSetItemOnRightPanel(ImageInfo* info)
 {
     d->previewView->setRightImageInfo(info);
     d->rightSidebar->itemChanged(info);
+}
+
+void LightTableWindow::slotRemoveItem(const KURL& url)
+{
+    if (d->previewView->leftImageInfo())
+    {
+        if (d->previewView->leftImageInfo()->kurl() == url)
+        {
+            d->previewView->setLeftImageInfo();
+            d->leftSidebar->slotNoCurrentItem();
+        }
+    }
+
+    if (d->previewView->rightImageInfo())
+    {
+        if (d->previewView->rightImageInfo()->kurl() == url)
+        {
+            d->previewView->setRightImageInfo();
+            d->rightSidebar->slotNoCurrentItem();
+        }
+    }
 }
 
 void LightTableWindow::slotZoomTo100Percents()
