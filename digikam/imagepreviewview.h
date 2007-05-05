@@ -58,7 +58,7 @@ public:
     QImage& getImage() const;
 
     void setImageInfo(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
-    ImageInfo* getImageInfo();
+    ImageInfo* getImageInfo() const;
 
     void reload();
     void setImagePath(const QString& path=QString());

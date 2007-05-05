@@ -302,7 +302,7 @@ void ImagePreviewView::setImageInfo(ImageInfo* info, ImageInfo *previous, ImageI
                          next     ? next->filePath()     : QString());
 }
 
-ImageInfo* ImagePreviewView::getImageInfo()
+ImageInfo* ImagePreviewView::getImageInfo() const
 {
     return d->imageInfo;
 }
