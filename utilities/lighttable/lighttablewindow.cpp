@@ -81,6 +81,7 @@ public:
         barView                             = 0;
         hSplitter                           = 0;
         vSplitter                           = 0;
+        removeItemAction                    = 0;
         fileDeleteAction                    = 0;
         slideShowAction                     = 0;
         fullScreenAction                    = 0;
@@ -111,6 +112,7 @@ public:
     QSplitter                *hSplitter;
     QSplitter                *vSplitter;
 
+    KAction                  *removeItemAction;
     KAction                  *fileDeleteAction;
     KAction                  *slideShowAction;
     KAction                  *donateMoneyAction;
@@ -282,6 +284,9 @@ void LightTableWindow::setupConnections()
     connect(d->barView, SIGNAL(signalRemoveItem(const KURL&)),
            this, SLOT(slotRemoveItem(const KURL&)));
 
+    connect(d->barView, SIGNAL(signalLightTableBarItemSelected(ImageInfo*)),
+           this, SLOT(slotItemSelected(ImageInfo*)));
+
     connect(d->statusProgressBar, SIGNAL(signalCancelButtonPressed()),
            this, SLOT(slotNameLabelCancelButtonPressed()));
 
@@ -321,6 +326,12 @@ void LightTableWindow::setupConnections()
 void LightTableWindow::setupActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
+
+    d->removeItemAction = new KAction(i18n("Remove Item"), "remove",
+                                       0, this, SLOT(slotRemoveItem()),
+                                       actionCollection(), "lighttable_removeitem");
+
+    d->removeItemAction->setEnabled(false);
 
     KStdAction::quit(this, SLOT(close()), actionCollection(), "lighttable_exit");
 
@@ -452,6 +463,14 @@ void LightTableWindow::refreshStatusBar()
                   .arg(d->barView->countItems()));   
 }
 
+void LightTableWindow::slotItemSelected(ImageInfo* info)
+{
+    if (info)
+    {
+        d->removeItemAction->setEnabled(true);
+    }
+}    
+
 void LightTableWindow::slotSetItemOnLeftPanel(ImageInfo* info)
 {
     d->previewView->setLeftImageInfo(info);
@@ -482,6 +501,15 @@ void LightTableWindow::slotRemoveItem(const KURL& url)
             d->previewView->setRightImageInfo();
             d->rightSidebar->slotNoCurrentItem();
         }
+    }
+}
+
+void LightTableWindow::slotRemoveItem()
+{
+    if (d->barView->currentItemImageInfo())
+    {
+        slotRemoveItem(d->barView->currentItemImageInfo()->kurl());
+        d->barView->removeItem(d->barView->currentItem());
     }
 }
 
