@@ -103,7 +103,7 @@ void Sidebar::setSplitter(QSplitter *sp)
 #else
     setStyle(KMultiTabBar::KDEV3);
 #endif
-    showActiveTabTexts(true);
+
     d->stack = new QWidgetStack(sp);
             
     if(d->side == Left)
@@ -114,26 +114,22 @@ void Sidebar::setSplitter(QSplitter *sp)
 
 void Sidebar::loadViewState()
 {
-    int tab;
-    int minimized;
-    
     KConfig *config = kapp->config();
     config->setGroup(QString("%1").arg(name()));
-   
-    tab = config->readNumEntry("ActiveTab", 0);
-    minimized = config->readBoolEntry("Minimized", d->minimizedDefault);
+
+    int tab        = config->readNumEntry("ActiveTab", 0);
+    bool minimized = config->readBoolEntry("Minimized", d->minimizedDefault);
         
-    if(minimized)
+    if (minimized)
     {
         d->activeTab = tab;
-        setTab(d->activeTab, true);
+        //setTab(d->activeTab, true);
         d->stack->raiseWidget(d->activeTab);
-
         emit signalChangedTab(d->stack->visibleWidget());
     }
     else
         d->activeTab = -1;
-    
+
     clicked(tab);
 }
 
