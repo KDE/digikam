@@ -71,7 +71,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
     if (e->button() == Qt::RightButton)
     {
         KPopupMenu popmenu(this);
-        popmenu.insertTitle(SmallIcon("idea"), i18n("My Light Table"));
+        popmenu.insertTitle(SmallIcon("digikam"), i18n("My Light Table"));
         popmenu.insertItem(SmallIcon("previous"), i18n("Set on left panel"), 10);
         popmenu.insertItem(SmallIcon("next"), i18n("Set on right panel"), 11);
         switch(popmenu.exec((QCursor::pos())))
