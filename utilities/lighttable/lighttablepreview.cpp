@@ -128,6 +128,9 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     QToolTip::add(d->cornerButton, i18n("Pan the image to a region"));
     setCornerWidget(d->cornerButton);
 
+    // To force to init zoom factor and content size as well with a null preview.
+    updateZoomAndSize(true);
+
     // ------------------------------------------------------------
 
     connect(this, SIGNAL(signalZoomFactorChanged(double)),
