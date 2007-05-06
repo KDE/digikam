@@ -149,13 +149,13 @@ void MetadataHub::load(ImageInfo *info)
     load(info->dateTime(), info->comment(), info->rating());
 
     AlbumManager *man = AlbumManager::instance();
-    QValueList<int> tagIDs = info->tagIDs();
+    QValueList<int> tagIds = info->tagIds();
     QValueList<TAlbum *> loadedTags;
 
     if (d->dbmode == ManagedTags)
     {
         QValueList<TAlbum *> loadedTags;
-        for (QValueList<int>::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
+        for (QValueList<int>::iterator it = tagIds.begin(); it != tagIds.end(); ++it)
         {
             TAlbum *album = man->findTAlbum(*it);
             if (!album)
@@ -170,7 +170,7 @@ void MetadataHub::load(ImageInfo *info)
     }
     else
     {
-        loadTags(man->tagPaths(info->tagIDs(), false));
+        loadTags(man->tagPaths(info->tagIds(), false));
     }
 }
 

@@ -25,6 +25,7 @@
 // Local includes.
 
 #include "album.h"
+#include "albummanager.h"
 #include "albumsettings.h"
 #include "imageinfo.h"
 #include "lighttablebar.h"
@@ -123,7 +124,7 @@ QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
     
             if (settings->getToolTipsShowAlbumName())
             {
-                PAlbum* album = info->album();
+                PAlbum* album = AlbumManager::instance()->findPAlbum(info->albumId());
                 if (album)
                     tip += m_cellSpecBeg + i18n("Album:") + m_cellSpecMid + 
                            album->url().remove(0, 1) + m_cellSpecEnd;
@@ -131,14 +132,14 @@ QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
     
             if (settings->getToolTipsShowComments())
             {
-                str = info->caption();
+                str = info->comment();
                 if (str.isEmpty()) str = QString("---");
                 tip += m_cellSpecBeg + i18n("Comments:") + m_cellSpecMid + breakString(str) + m_cellSpecEnd;
             }
     
             if (settings->getToolTipsShowTags())
             {
-                QStringList tagPaths = info->tagPaths(false);
+                QStringList tagPaths = AlbumManager::instance()->tagPaths(info->tagIds(), false);
     
                 str = tagPaths.join(", ");
                 if (str.isEmpty()) str = QString("---");

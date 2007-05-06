@@ -48,6 +48,7 @@
 #include "ddebug.h"
 #include "dmetadata.h"
 #include "collectionscanner.h"
+#include "collectionscanner.moc"
 
 namespace Digikam
 {

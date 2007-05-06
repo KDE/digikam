@@ -21,6 +21,7 @@
 
 // Local includes
 
+#include "databaseaccess.h"
 #include "databaseattributeswatch.h"
 #include "imageattributeswatch.h"
 
@@ -31,23 +32,10 @@ ImageAttributesWatch *ImageAttributesWatch::m_instance = 0;
 
 ImageAttributesWatch::ImageAttributesWatch()
 {
-    // temporary solution
-    DatabaseAttributesWatch *dbwatch = DatabaseAttributesWatch::instance();
+    DatabaseAttributesWatch *dbwatch = DatabaseAccess::attributesWatch();
 
-    connect(dbwatch, SIGNAL(signalImageTagsChanged(Q_LLONG)),
-            this, SIGNAL(signalImageTagsChanged(Q_LLONG)));
-
-    connect(dbwatch, SIGNAL(signalImagesChanged(int)),
-            this, SIGNAL(signalImagesChanged(int)));
-
-    connect(dbwatch, SIGNAL(signalImageRatingChanged(Q_LLONG)),
-            this, SIGNAL(signalImageRatingChanged(Q_LLONG)));
-
-    connect(dbwatch, SIGNAL(signalImageDateChanged(Q_LLONG)),
-            this, SIGNAL(signalImageDateChanged(Q_LLONG)));
-
-    connect(dbwatch, SIGNAL(signalImageCaptionChanged(Q_LLONG)),
-            this, SIGNAL(signalImageCaptionChanged(Q_LLONG)));
+    connect(dbwatch, SIGNAL(signalImageFieldChanged(Q_LLONG, Digikam::DatabaseAttributesWatch::ImageDataField)),
+            this, SLOT(slotImageFieldChanged(Q_LLONG, Digikam::DatabaseAttributesWatch::ImageDataField)));
 }
 
 ImageAttributesWatch::~ImageAttributesWatch()
@@ -57,14 +45,12 @@ ImageAttributesWatch::~ImageAttributesWatch()
 
 void ImageAttributesWatch::cleanUp()
 {
-    DatabaseAttributesWatch::cleanUp();
     delete m_instance;
     m_instance = 0;
 }
 
 void ImageAttributesWatch::shutDown()
 {
-    DatabaseAttributesWatch::shutDown();
     if (m_instance)
         m_instance->disconnect(0, 0, 0);
 }
@@ -76,6 +62,29 @@ ImageAttributesWatch *ImageAttributesWatch::instance()
     return m_instance;
 }
 
+void ImageAttributesWatch::slotImageFieldChanged(Q_LLONG imageId, DatabaseAttributesWatch::ImageDataField field)
+{
+    // Translate signals
+    // TODO: compress?
+    // TODO!!: we have databaseaccess lock here as well. Make connection queued in one place (above!)
+    switch (field)
+    {
+        case DatabaseAttributesWatch::ImageComment:
+            emit signalImageCaptionChanged(imageId);
+            break;
+        case DatabaseAttributesWatch::ImageDate:
+            emit signalImageDateChanged(imageId);
+            break;
+        case DatabaseAttributesWatch::ImageRating:
+            emit signalImageRatingChanged(imageId);
+            break;
+        case DatabaseAttributesWatch::ImageTags:
+            emit signalImageTagsChanged(imageId);
+            break;
+    }
+}
+
+/*
 void ImageAttributesWatch::imageTagsChanged(Q_LLONG imageId)
 {
     emit signalImageTagsChanged(imageId);
@@ -100,6 +109,7 @@ void ImageAttributesWatch::imageCaptionChanged(Q_LLONG imageId)
 {
     emit signalImageCaptionChanged(imageId);
 }
+*/
 
 void ImageAttributesWatch::fileMetadataChanged(const KURL &url)
 {

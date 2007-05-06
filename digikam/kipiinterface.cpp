@@ -137,7 +137,7 @@ void DigikamImageInfo::setDescription( const QString& description )
             imageId = access.db()->getImageId(p->id(), _url.filename());
             access.db()->setItemCaption(imageId, description);
         }
-        ImageAttributesWatch::instance()->imageCaptionChanged(imageId);
+        //ImageAttributesWatch::instance()->imageCaptionChanged(imageId);
 
         AlbumSettings *settings = AlbumSettings::instance();
         if (settings->getSaveComments())
@@ -182,7 +182,7 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
             imageId = access.db()->getImageId(p->id(), _url.filename());
             access.db()->setItemDate(imageId, time);
         }
-        ImageAttributesWatch::instance()->imageDateChanged(imageId);
+        //ImageAttributesWatch::instance()->imageDateChanged(imageId);
         AlbumManager::instance()->refreshItemHandler( _url );
     }
 }

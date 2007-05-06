@@ -30,6 +30,10 @@
 
 #include <kurl.h>
 
+// Local includes
+
+#include "databaseattributeswatch.h"
+
 namespace Digikam
 {
 
@@ -44,12 +48,14 @@ public:
     static void cleanUp();
     static void shutDown();
 
+    /*
     void imageTagsChanged(Q_LLONG imageId);
     void imagesChanged(int albumId);
 
     void imageRatingChanged(Q_LLONG imageId);
     void imageDateChanged(Q_LLONG imageId);
     void imageCaptionChanged(Q_LLONG imageId);
+    */
 
     void fileMetadataChanged(const KURL &url);
 
@@ -84,12 +90,17 @@ signals:
     */
     void signalFileMetadataChanged(const KURL &url);
 
-protected:
+private:
 
     ImageAttributesWatch();
     ~ImageAttributesWatch();
 
     static ImageAttributesWatch *m_instance;
+
+private slots:
+
+    void slotImageFieldChanged(Q_LLONG imageId, DatabaseAttributesWatch::ImageDataField field);
+
 };
 
 

@@ -212,14 +212,14 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
 
     if (!d->tagFilter.isEmpty())
     {
-        QValueList<int> tagIDs = info->tagIDs();
+        QValueList<int> tagIds = info->tagIds();
         QValueList<int>::iterator it;
 
         if (d->matchingCond == OrCondition)        
         {
             for (it = d->tagFilter.begin(); it != d->tagFilter.end(); ++it)
             {
-                if (tagIDs.contains(*it))
+                if (tagIds.contains(*it))
                 {
                     match = true;
                     break;
@@ -232,7 +232,7 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
 
             for (it = d->tagFilter.begin(); it != d->tagFilter.end(); ++it)
             {
-                if (!tagIDs.contains(*it))
+                if (!tagIds.contains(*it))
                     break;
             }
     
@@ -240,11 +240,11 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
                 match = true;
         }
 
-        match |= (d->untaggedFilter && tagIDs.isEmpty());
+        match |= (d->untaggedFilter && tagIds.isEmpty());
     }
     else if (d->untaggedFilter)
     {
-        match = info->tagIDs().isEmpty();
+        match = info->tagIds().isEmpty();
     }
     else
     {

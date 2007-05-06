@@ -329,9 +329,10 @@ void AlbumFileTip::updateText()
 
     AlbumSettings* settings = AlbumSettings::instance();
     const ImageInfo* info   = d->iconItem->imageInfo();
-    QFileInfo fileInfo(info->kurl().path());
-    KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, info->kurl());
-    DMetadata metaData(info->kurl().path());
+    KURL fileUrl(info->fileUrl());
+    QFileInfo fileInfo(fileUrl.path());
+    KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, fileUrl);
+    DMetadata metaData(fileUrl.path());
 
     // -- File properties ----------------------------------------------
 
@@ -346,7 +347,7 @@ void AlbumFileTip::updateText()
         if (settings->getToolTipsShowFileName())
         {
             tip += cellBeg + i18n("Name:") + cellMid;
-            tip += info->kurl().fileName() + cellEnd;
+            tip += fileUrl.fileName() + cellEnd;
         }
 
         if (settings->getToolTipsShowFileDate())
@@ -507,9 +508,9 @@ void AlbumFileTip::updateText()
 
         if (settings->getToolTipsShowAlbumName())
         {
-            PAlbum* album = AlbumManager::instance()->findPAlbum(info->albumID());
+            PAlbum* album = AlbumManager::instance()->findPAlbum(info->albumId());
             if (album)
-                tip += cellSpecBeg + i18n("Album:") + cellSpecMid + album->url().remove(0, 1) + cellSpecEnd;
+                tip += cellSpecBeg + i18n("Album:") + cellSpecMid + album->albumPath().remove(0, 1) + cellSpecEnd;
         }
 
         if (settings->getToolTipsShowComments())
@@ -521,7 +522,7 @@ void AlbumFileTip::updateText()
 
         if (settings->getToolTipsShowTags())
         {
-            QStringList tagPaths = AlbumManager::instance()->tagPaths(info->tagIDs(), false);
+            QStringList tagPaths = AlbumManager::instance()->tagPaths(info->tagIds(), false);
 
             str = tagPaths.join(", ");
             if (str.isEmpty()) str = QString("---");

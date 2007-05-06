@@ -373,7 +373,7 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
 
     for (ImageInfoListIterator it = itemList.begin(); it != itemList.end(); ++it)
     {
-        KURL url( (*it)->kurl() );
+        KURL url( (*it)->fileUrl() );
         url.cleanPath();
 
         QMap<ImageInfo*, AlbumIconItem*>::iterator itMap = d->itemInfoMap.find(*it);
@@ -384,18 +384,18 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
             continue;
         }
 
-        AlbumIconGroupItem* group = d->albumDict.find((*it)->albumID());
+        AlbumIconGroupItem* group = d->albumDict.find((*it)->albumId());
         if (!group)
         {
-            group = new AlbumIconGroupItem(this, (*it)->albumID());
-            d->albumDict.insert((*it)->albumID(), group);
+            group = new AlbumIconGroupItem(this, (*it)->albumId());
+            d->albumDict.insert((*it)->albumId(), group);
         }
 
-        PAlbum *album = AlbumManager::instance()->findPAlbum((*it)->albumID());
+        PAlbum *album = AlbumManager::instance()->findPAlbum((*it)->albumId());
         if (!album)
         {
             DWarning() << "No album for item: " << (*it)->name()
-                       << ", albumID: " << (*it)->albumID() << endl;
+                       << ", albumID: " << (*it)->albumId() << endl;
             continue;
         }
 
@@ -437,7 +437,7 @@ void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
     delete iconItem;
 
     d->itemInfoMap.erase(item);
-    d->itemDict.remove(item->kurl().url());
+    d->itemDict.remove(item->fileUrl().url());
 
     IconGroupItem* group = firstGroup();
     IconGroupItem* tmp;
@@ -513,7 +513,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // --------------------------------------------------------
 
-    KMimeType::Ptr mimePtr = KMimeType::findByURL(iconItem->imageInfo()->kurl(), 0, true, true);
+    KMimeType::Ptr mimePtr = KMimeType::findByURL(iconItem->imageInfo()->fileUrl(), 0, true, true);
 
     QValueVector<KService::Ptr> serviceVector;
     KTrader::OfferList offers = KTrader::self()->query(mimePtr->name(), "Type == 'Application'");
@@ -702,7 +702,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
             if (it->isSelected())
             {
                 AlbumIconItem *selItem = static_cast<AlbumIconItem *>(it);
-                urlList.append(selItem->imageInfo()->kurl());
+                urlList.append(selItem->imageInfo()->fileUrl());
             }
         }
         if (urlList.count())
@@ -731,8 +731,8 @@ void AlbumIconView::slotCopy()
         if (it->isSelected())
         {
             AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
-            urls.append(albumItem->imageInfo()->kurl());
-            kioURLs.append(albumItem->imageInfo()->kurlForKIO());
+            urls.append(albumItem->imageInfo()->fileUrl());
+            kioURLs.append(albumItem->imageInfo()->databaseUrl());
             imageIDs.append(albumItem->imageInfo()->id());
         }
     }
@@ -759,12 +759,12 @@ void AlbumIconView::slotPaste()
             d->currentAlbum->type() == Album::PHYSICAL)
         {
             PAlbum* palbum = (PAlbum*)d->currentAlbum;
-            
+
             // B.K.O #119205: do not handle root album.
             if (palbum->isRoot())
                 return;
 
-            KURL destURL(palbum->kurl());
+            KURL destURL(palbum->databaseUrl());
 
             KURL::List srcURLs;
             KURLDrag::decode(data, srcURLs);
@@ -831,7 +831,7 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     if (!ok)
         return;
 
-    KURL oldURL = renameInfo.kurlForKIO();
+    KURL oldURL = renameInfo.databaseUrl();
     KURL newURL = oldURL;
     newURL.setFileName(newName + ext);
 
@@ -871,8 +871,8 @@ void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
         if (it->isSelected()) 
         {
             AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-            urlList.append(iconItem->imageInfo()->kurl());
-            kioUrlList.append(iconItem->imageInfo()->kurlForKIO());
+            urlList.append(iconItem->imageInfo()->fileUrl());
+            kioUrlList.append(iconItem->imageInfo()->databaseUrl());
         }
     }
 
@@ -912,8 +912,8 @@ void AlbumIconView::slotDeleteSelectedItemsDirectly(bool useTrash)
         if (it->isSelected())
         {
             AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-            kioUrlList.append(iconItem->imageInfo()->kurlForKIO());
-            urlList.append(iconItem->imageInfo()->kurl());
+            kioUrlList.append(iconItem->imageInfo()->databaseUrl());
+            urlList.append(iconItem->imageInfo()->fileUrl());
         }
     }
 
@@ -966,7 +966,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     // If the current item is not an image file.
     if ( !imagefilter.contains(currentFileExtension) )
     {
-        KMimeType::Ptr mimePtr = KMimeType::findByURL(item->imageInfo()->kurl(),
+        KMimeType::Ptr mimePtr = KMimeType::findByURL(item->imageInfo()->fileUrl(),
                                                       0, true, true);
         KTrader::OfferList offers = KTrader::self()->query(mimePtr->name(),
                                                            "Type == 'Application'");
@@ -976,7 +976,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
 
         KService::Ptr ptr = offers.first();
         // Run the dedicated app to show the item.
-        KRun::run(*ptr, item->imageInfo()->kurl());
+        KRun::run(*ptr, item->imageInfo()->fileUrl());
         return;
     }
 
@@ -988,7 +988,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
         AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-        QString fileExtension = iconItem->imageInfo()->kurl().fileName().section( '.', -1 );
+        QString fileExtension = iconItem->imageInfo()->fileUrl().fileName().section( '.', -1 );
 
         if ( imagefilter.find(fileExtension) != -1 )
         {
@@ -1079,8 +1079,8 @@ void AlbumIconView::startDrag()
         if (it->isSelected())
         {
             AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
-            urls.append(albumItem->imageInfo()->kurl());
-            kioURLs.append(albumItem->imageInfo()->kurlForKIO());
+            urls.append(albumItem->imageInfo()->fileUrl());
+            kioURLs.append(albumItem->imageInfo()->databaseUrl());
             imageIDs.append(albumItem->imageInfo()->id());
         }
     }
@@ -1157,7 +1157,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         d->currentAlbum->type() == Album::PHYSICAL)
     {
         PAlbum* palbum = (PAlbum*)d->currentAlbum;
-        KURL destURL(palbum->kurl());
+        KURL destURL(palbum->databaseUrl());
 
         KURL::List srcURLs;
         KURLDrag::decode(event, srcURLs);
@@ -1418,7 +1418,7 @@ KURL::List AlbumIconView::allItems()
      for (IconItem *it = firstItem(); it; it = it->nextItem())
      {
          AlbumIconItem *item = (AlbumIconItem*) it;
-         itemList.append(item->imageInfo()->kurl());
+         itemList.append(item->imageInfo()->fileUrl());
      }
 
     return itemList;
@@ -1433,7 +1433,7 @@ KURL::List AlbumIconView::selectedItems()
          if (it->isSelected())
          {
              AlbumIconItem *item = (AlbumIconItem*) it;
-             itemList.append(item->imageInfo()->kurl());
+             itemList.append(item->imageInfo()->fileUrl());
          }
      }
 
@@ -1508,7 +1508,7 @@ void AlbumIconView::refreshItems(const KURL::List& urlList)
             continue;
 
         iconItem->imageInfo()->refresh();
-        d->pixMan->remove(iconItem->imageInfo()->kurl());
+        d->pixMan->remove(iconItem->imageInfo()->fileUrl());
         // clean LoadingCache as well - be pragmatic, do it here.
         LoadingCacheInterface::cleanFromCache((*it).path());
     }
@@ -1546,7 +1546,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
         if (it->isSelected()) 
         {
             AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-            urlList.append(iconItem->imageInfo()->kurl());
+            urlList.append(iconItem->imageInfo()->fileUrl());
         }
     }
 
