@@ -78,6 +78,7 @@ private:
 
 private slots:
 
+    void slotEditItem(ImageInfo* info);
     void slotItemSelected(ImageInfo*);
     void slotSetItemOnLeftPanel(ImageInfo*);
     void slotSetItemOnRightPanel(ImageInfo*);

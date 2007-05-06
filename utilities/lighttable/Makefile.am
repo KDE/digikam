@@ -13,7 +13,7 @@ INCLUDES = -I$(top_srcdir)/digikam/digikam \
 	       -I$(top_srcdir)/digikam/utilities/setup \
 	       -I$(top_srcdir)/digikam/utilities/slideshow \
 	       -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
-	       -I$(top_srcdir)/digikam/utilities/imageeditor/tools \
+	       -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       -I$(top_builddir)/digikam/libs/dialogs \
 	       $(LIBKEXIV2_CFLAGS) $(LIBKDCRAW_CFLAGS) $(all_includes) 
 

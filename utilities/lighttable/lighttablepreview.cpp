@@ -402,13 +402,13 @@ void LightTablePreview::slotContextMenu()
     {
         case 12:     // Edit...
         {
-            emit signalEditItem();
+            emit signalEditItem(d->imageInfo);
             break;
         }
 
         case 14:     // Move to trash
         {
-            emit signalDeleteItem();
+            emit signalDeleteItem(d->imageInfo);
             break;
         }
 

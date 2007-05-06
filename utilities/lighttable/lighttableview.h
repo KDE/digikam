@@ -37,6 +37,7 @@
 namespace Digikam
 {
 
+class ImageInfo;
 class LightTableViewPriv;
 
 class DIGIKAM_EXPORT LightTableView : public QFrame
@@ -77,6 +78,8 @@ signals:
     void signalLeftZoomFactorChanged(double);
     void signalRightZoomFactorChanged(double);
     void signalSlideShow();
+    void signalDeleteItem(ImageInfo*);
+    void signalEditItem(ImageInfo*);
 
 public slots:
 

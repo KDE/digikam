@@ -65,8 +65,8 @@ public:
 
 signals:
 
-    void signalDeleteItem();
-    void signalEditItem();
+    void signalDeleteItem(ImageInfo*);
+    void signalEditItem(ImageInfo*);
     void signalPreviewLoaded();
     void signalSlideShow();
 

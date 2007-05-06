@@ -47,6 +47,7 @@
 #include "dimg.h"
 #include "dmetadata.h"
 #include "albumsettings.h"
+#include "imagewindow.h"
 #include "imagepropertiessidebardb.h"
 #include "imageattributeswatch.h"
 #include "slideshow.h"
@@ -316,6 +317,9 @@ void LightTableWindow::setupConnections()
     connect(d->previewView, SIGNAL(signalRightZoomFactorChanged(double)),
            this, SLOT(slotRightZoomFactorChanged(double)));
 
+    connect(d->previewView, SIGNAL(signalEditItem(ImageInfo*)),
+           this, SLOT(slotEditItem(ImageInfo*)));
+
     connect(d->previewView, SIGNAL(signalSlideShow()),
            this, SLOT(slotToggleSlideShow()));
 
@@ -534,6 +538,20 @@ void LightTableWindow::slotRemoveItem()
         slotRemoveItem(d->barView->currentItemImageInfo()->kurl());
         d->barView->removeItem(d->barView->currentItem());
     }
+}
+
+void LightTableWindow::slotEditItem(ImageInfo* info)
+{
+    ImageWindow *im = ImageWindow::imagewindow();
+    im->loadImageInfos(d->barView->itemsImageInfoList(),
+                       info, i18n("Light Table"), true);
+    
+    if (im->isHidden())
+        im->show();
+    else
+        im->raise();
+        
+    im->setFocus();
 }
 
 void LightTableWindow::slotZoomTo100Percents()
