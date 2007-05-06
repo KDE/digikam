@@ -51,6 +51,7 @@ extern "C"
 // Local includes.
 
 #include "ddebug.h"
+#include "databaseattributeswatch.h"
 #include "databasebackend.h"
 #include "albumdb.h"
 
@@ -700,10 +701,14 @@ void AlbumDB::setItemCaption(Q_LLONG imageID,const QString& caption)
                      "WHERE id=%2;")
              .arg(escapeString(caption),
                   QString::number(imageID) ));
+
+    DatabaseAccess::attributesWatch()
+            ->sendImageFieldChanged(imageID, DatabaseAttributesWatch::ImageComment);
 }
 
 void AlbumDB::setItemCaption(int albumID, const QString& name, const QString& caption)
 {
+    /*
     QStringList values;
 
     execSql( QString("UPDATE Images SET caption='%1' "
@@ -711,6 +716,10 @@ void AlbumDB::setItemCaption(int albumID, const QString& name, const QString& ca
              .arg(escapeString(caption),
                   QString::number(albumID),
                   escapeString(name)) );
+    */
+
+    // easier because of attributes watch
+    return setItemCaption(getImageId(albumID, name), caption);
 }
 
 void AlbumDB::addItemTag(Q_LLONG imageID, int tagID)
@@ -719,6 +728,9 @@ void AlbumDB::addItemTag(Q_LLONG imageID, int tagID)
                      "VALUES(%1, %2);")
                  .arg(imageID)
                  .arg(tagID) );
+
+    DatabaseAccess::attributesWatch()
+            ->sendImageFieldChanged(imageID, DatabaseAttributesWatch::ImageTags);
 
     if (!d->recentlyAssignedTags.contains(tagID))
     {
@@ -730,12 +742,17 @@ void AlbumDB::addItemTag(Q_LLONG imageID, int tagID)
 
 void AlbumDB::addItemTag(int albumID, const QString& name, int tagID)
 {
+    /*
     execSql( QString("REPLACE INTO ImageTags (imageid, tagid) \n "
                      "(SELECT id, %1 FROM Images \n "
                      " WHERE dirid=%2 AND name='%3');")
              .arg(tagID)
              .arg(albumID)
              .arg(escapeString(name)) );
+    */
+
+    // easier because of attributes watch
+    return addItemTag(getImageId(albumID, name), tagID);
 }
 
 IntList AlbumDB::getRecentlyAssignedTags() const
@@ -749,6 +766,9 @@ void AlbumDB::removeItemTag(Q_LLONG imageID, int tagID)
                      "WHERE imageID=%1 AND tagid=%2;")
              .arg(imageID)
              .arg(tagID) );
+
+    DatabaseAccess::attributesWatch()
+            ->sendImageFieldChanged(imageID, DatabaseAttributesWatch::ImageTags);
 }
 
 void AlbumDB::removeItemAllTags(Q_LLONG imageID)
@@ -756,6 +776,9 @@ void AlbumDB::removeItemAllTags(Q_LLONG imageID)
     execSql( QString("DELETE FROM ImageTags "
                      "WHERE imageID=%1;")
              .arg(imageID) );
+
+    DatabaseAccess::attributesWatch()
+            ->sendImageFieldChanged(imageID, DatabaseAttributesWatch::ImageTags);
 }
 
 QStringList AlbumDB::getItemNamesInAlbum(int albumID)
@@ -1074,12 +1097,16 @@ bool AlbumDB::setItemDate(Q_LLONG imageID,
               .arg(datetime.toString(Qt::ISODate),
                    QString::number(imageID)) );
 
+    DatabaseAccess::attributesWatch()
+            ->sendImageFieldChanged(imageID, DatabaseAttributesWatch::ImageDate);
+
     return true;
 }
 
 bool AlbumDB::setItemDate(int albumID, const QString& name,
                           const QDateTime& datetime)
 {
+    /*
     execSql ( QString ("UPDATE Images SET datetime='%1'"
                        "WHERE dirid=%2 AND name='%3';")
               .arg(datetime.toString(Qt::ISODate),
@@ -1087,6 +1114,9 @@ bool AlbumDB::setItemDate(int albumID, const QString& name,
                    escapeString(name)) );
 
     return true;
+    */
+    // easier because of attributes watch
+    return setItemDate(getImageId(albumID, name), datetime);
 }
 
 void AlbumDB::setItemRating(Q_LLONG imageID, int rating)
@@ -1097,6 +1127,9 @@ void AlbumDB::setItemRating(Q_LLONG imageID, int rating)
               .arg(imageID)
               .arg("Rating")
               .arg(rating) );
+
+    DatabaseAccess::attributesWatch()
+            ->sendImageFieldChanged(imageID, DatabaseAttributesWatch::ImageRating);
 }
 
 int AlbumDB::getItemRating(Q_LLONG imageID)

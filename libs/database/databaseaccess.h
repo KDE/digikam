@@ -29,6 +29,8 @@ namespace Digikam
 
 class DatabaseBackend;
 class AlbumDB;
+class ImageInfoCache;
+class DatabaseAttributesWatch;
 class DatabaseAccessStaticPriv;
 
 class DIGIKAM_EXPORT DatabaseAccess
@@ -103,6 +105,16 @@ public:
       * Returns the global album root, including the trailing slash.
       */
     static QString albumRoot();
+
+    /**
+      * Return the ImageInfoCache. This object is not for public use outside libs/database/
+      */
+    ImageInfoCache *imageInfoCache() const;
+
+    /**
+      * Return the DatabaseAttributesWatch. This object is not for public use outside libs/database/
+      */
+    static DatabaseAttributesWatch *attributesWatch();
 
 private:
 

@@ -21,6 +21,8 @@
 #include <qmutex.h>
 
 #include "albumdb.h"
+#include "imageinfocache.h"
+#include "databaseattributeswatch.h"
 #include "databasebackend.h"
 #include "databaseaccess.h"
 
@@ -31,13 +33,15 @@ class DatabaseAccessStaticPriv
 {
 public:
     DatabaseAccessStaticPriv()
-    : backend(0), db(0), mutex(true) // create a recursive mutex
+    : backend(0), db(0), infoCache(0), attributesWatch(0), mutex(true) // create a recursive mutex
     {
     };
     ~DatabaseAccessStaticPriv() {};
 
     DatabaseBackend *backend;
     AlbumDB *db;
+    ImageInfoCache *infoCache;
+    DatabaseAttributesWatch *attributesWatch;
     DatabaseParameters parameters;
     QMutex mutex;
     QString albumRoot;
@@ -71,6 +75,16 @@ DatabaseBackend *DatabaseAccess::backend() const
     return d->backend;
 }
 
+ImageInfoCache *DatabaseAccess::imageInfoCache() const
+{
+    return d->infoCache;
+}
+
+DatabaseAttributesWatch *DatabaseAccess::attributesWatch()
+{
+    return d->attributesWatch;
+}
+
 DatabaseParameters DatabaseAccess::parameters()
 {
     return d->parameters;
@@ -97,8 +111,13 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
     {
         delete d->db;
         delete d->backend;
+        delete d->infoCache;
         d->backend = DatabaseBackend::createBackend(parameters);
         d->db = new AlbumDB(d->backend);
+        d->infoCache = new ImageInfoCache();
+
+        if (!d->attributesWatch)
+            d->attributesWatch = new DatabaseAttributesWatch();
     }
 
     //TODO: remove when albumRoot is removed

@@ -36,58 +36,46 @@ namespace Digikam
 {
 
 
-/*
-    TODO:
-    This class is a copy of ImagesAttributesWatch,
-    and currently not too cleanly integrated.
-    Rethink.
-*/
 class DIGIKAM_EXPORT DatabaseAttributesWatch : public QObject
 {
 
     Q_OBJECT
 
+    /**
+     * This class notifies of changes in the database.
+     * The context when these signals are emitted is important:
+     * DatabaseAccess is locked when these signals are emitted,
+     * but this allows direct notification immediately after the change.
+     */
+
 public:
 
-    static DatabaseAttributesWatch *instance();
-    static void cleanUp();
-    static void shutDown();
-
-    void imageTagsChanged(Q_LLONG imageId);
-    void imagesChanged(int albumId);
-
-    void imageRatingChanged(Q_LLONG imageId);
-    void imageDateChanged(Q_LLONG imageId);
-    void imageCaptionChanged(Q_LLONG imageId);
+    enum ImageDataField
+    {
+        ImageRating,
+        ImageDate,
+        ImageComment,
+        ImageTags
+    };
 
 signals:
 
-    /** Indicates that tags have been assigned or removed
-        for image with given imageId.
-        There is no guarantee that the tags were actually changed.
-        This signal, the signal below, or both may be sent.
-    */
-    void signalImageTagsChanged(Q_LLONG imageId);
-
     /**
-        Indicates that images in the given album id may have changed their tags.
-        This signal, the signal above, or both may be sent.
+     * This signal indicates that the specified field of the
+     * specified image has been changed.
+     * (Note: there is no absolute guarantee
+     *  that the field has actually been changed)
      */
-    void signalImagesChanged(int albumId);
-
-    /** These signals indicated that the rating, data or caption
-        of the image with given imageId was set.
-        There is no guarantee that it actually changed.
-    */
-    void signalImageRatingChanged(Q_LLONG imageId);
-    void signalImageDateChanged(Q_LLONG imageId);
-    void signalImageCaptionChanged(Q_LLONG imageId);
+    void imageFieldChanged(Q_LLONG imageId, Digikam::DatabaseAttributesWatch::ImageDataField field);
 
 protected:
 
     ~DatabaseAttributesWatch();
 
-    static DatabaseAttributesWatch *m_instance;
+public:
+
+    void sendImageFieldChanged(Q_LLONG imageId, ImageDataField field);
+
 };
 
 

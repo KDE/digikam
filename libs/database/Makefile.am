@@ -14,6 +14,7 @@ libdatabase_la_SOURCES = albumdb.cpp \
 	                 databaseurl.cpp \
 	                 imageinfo.cpp \
 	                 imageinfolist.cpp \
+	                 imageinfocache.cpp \
 	                 imagelister.cpp \
 	                 imagelisterreceiver.cpp \
 	                 imagequerybuilder.cpp \

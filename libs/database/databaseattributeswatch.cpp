@@ -22,21 +22,18 @@
 // Local includes
 
 #include "databaseattributeswatch.h"
+#include "databaseattributeswatch.moc"
 
 namespace Digikam
 {
 
-DatabaseAttributesWatch *DatabaseAttributesWatch::m_instance = 0;
-
 DatabaseAttributesWatch::~DatabaseAttributesWatch()
 {
-    m_instance = 0;
 }
 
+/*
 void DatabaseAttributesWatch::cleanUp()
 {
-    delete m_instance;
-    m_instance = 0;
 }
 
 void DatabaseAttributesWatch::shutDown()
@@ -44,39 +41,13 @@ void DatabaseAttributesWatch::shutDown()
     if (m_instance)
         m_instance->disconnect(0, 0, 0);
 }
+*/
 
-DatabaseAttributesWatch *DatabaseAttributesWatch::instance()
+void DatabaseAttributesWatch::sendImageFieldChanged(Q_LLONG imageId, ImageDataField field)
 {
-    if (!m_instance)
-        m_instance = new DatabaseAttributesWatch;
-    return m_instance;
+    emit imageFieldChanged(imageId, field);
 }
 
-void DatabaseAttributesWatch::imageTagsChanged(Q_LLONG imageId)
-{
-    emit signalImageTagsChanged(imageId);
-}
-
-void DatabaseAttributesWatch::imagesChanged(int albumId)
-{
-    emit signalImagesChanged(albumId);
-}
-
-void DatabaseAttributesWatch::imageRatingChanged(Q_LLONG imageId)
-{
-    emit signalImageRatingChanged(imageId);
-}
-
-void DatabaseAttributesWatch::imageDateChanged(Q_LLONG imageId)
-{
-    emit signalImageDateChanged(imageId);
-}
-
-void DatabaseAttributesWatch::imageCaptionChanged(Q_LLONG imageId)
-{
-    emit signalImageCaptionChanged(imageId);
-}
 
 } // namespace Digikam
 
-#include "databaseattributeswatch.moc"
