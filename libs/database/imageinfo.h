@@ -1,7 +1,9 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Marcel Wiesweg
  * Date  : 2005-04-21
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,22 +44,13 @@
 namespace Digikam
 {
 
-class PAlbum;
+class ImageInfoData;
 
 /**
- * This is an abstraction of a file entity on the disk.
- *
- * This is an abstraction of a file entity on the disk and is uniquely 
- * identified by an Album identifier (PAlbum in which its located) and its
- * name. Additional methods are provided for accessing/modifying:
- * - datetime
- * - caption
- * - filesize
- * - tags
- * - url (ImageInfo::kurl()) -> Note: accessing this will give you the 
- *   standard KDE file representation. 
- * (for eg: file:///home/johndoe/Pictures/ItalyPictures/Rome-2004/file001.jpeg)
+ * The ImageInfo class contains provides access to the database for a single image.
+ * The properties can be read and written. Information will be cached.
  */
+
 class DIGIKAM_EXPORT ImageInfo
 {
 public:
@@ -69,7 +62,14 @@ public:
     ImageInfo();
 
     /**
-     * Constructor
+     * Constructor. Creates an ImageInfo object without any cached data initially.
+     * @param    ID       unique ID for this image
+     */
+    ImageInfo(Q_LLONG ID);
+
+    /**
+     * Constructor. Creates an ImageInfo object where the provided information
+     * will initially be available cached, without database access.
      * @param     ID       unique ID for this image
      * @param     albumID  id of the PAlbum to which this item belongs
      * @param     name     name of the image
@@ -80,7 +80,8 @@ public:
     ImageInfo(Q_LLONG ID, int albumID,
               const QString &album, const QString& albumName,
               const KURL& albumRoot,
-              const QDateTime& datetime, size_t size,
+              const QDateTime& datetime,
+              uint size,
               const QSize& dims=QSize());
 
     /**
@@ -88,16 +89,14 @@ public:
      */
     ImageInfo(const ImageListerRecord &record);
 
-    /**
-     * Constructor
-     * @param    ID       unique ID for this image
-     */
-    ImageInfo(Q_LLONG ID);
+    ImageInfo(const ImageInfo &info);
 
-    /** 
+    /**
      * Destructor
      */
     ~ImageInfo();
+
+    ImageInfo &operator=(const ImageInfo &info);
 
     /**
      * Returns if this objects contains valid data
@@ -122,7 +121,7 @@ public:
     /**
      * @return the filesize of the image
      */
-    size_t    fileSize() const;
+    uint      fileSize() const;
 
     /**
      * @return the dimensions of the image (valid only if dimensions
@@ -167,7 +166,7 @@ public:
     /**
      * @return the id of the PAlbum to which this item belongs
      */
-    int       albumID() const;
+    int       albumId() const;
 
     /**
      * @return the caption for this item
@@ -188,7 +187,7 @@ public:
      * @see tagPaths
      * @see Album::id()
      */
-    QValueList<int> tagIDs() const;
+    QValueList<int> tagIds() const;
 
 
 
@@ -251,14 +250,7 @@ public:
 
 private:
 
-    Q_LLONG               m_ID;
-    int                   m_albumID;
-    DatabaseUrl           m_url;
-
-    mutable QDateTime     m_datetime;
-    mutable QDateTime     m_modDatetime;
-    mutable size_t        m_size;
-    mutable QSize         m_dims;
+    ImageInfoData        *m_data;
 };
 
 }  // namespace Digikam
