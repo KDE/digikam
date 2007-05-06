@@ -35,6 +35,7 @@
 #include <kdeversion.h>
 #include <klocale.h>
 #include <kwin.h>
+#include <kmessagebox.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kstatusbar.h>
@@ -47,6 +48,8 @@
 #include "dimg.h"
 #include "dmetadata.h"
 #include "albumsettings.h"
+#include "albummanager.h"
+#include "deletedialog.h"
 #include "imagewindow.h"
 #include "imagepropertiessidebardb.h"
 #include "imageattributeswatch.h"
@@ -54,6 +57,7 @@
 #include "setup.h"
 #include "statusprogressbar.h"
 #include "statuszoombar.h"
+#include "syncjob.h"
 #include "thumbnailsize.h"
 #include "lighttablepreview.h"
 #include "lighttableview.h"
@@ -320,6 +324,9 @@ void LightTableWindow::setupConnections()
     connect(d->previewView, SIGNAL(signalEditItem(ImageInfo*)),
            this, SLOT(slotEditItem(ImageInfo*)));
 
+    connect(d->previewView, SIGNAL(signalDeleteItem(ImageInfo*)),
+           this, SLOT(slotDeleteItem(ImageInfo*)));
+
     connect(d->previewView, SIGNAL(signalSlideShow()),
            this, SLOT(slotToggleSlideShow()));
 
@@ -508,6 +515,62 @@ void LightTableWindow::slotClearItemsList()
     }
 
     d->barView->clear();
+}
+
+void LightTableWindow::slotDeleteItem(ImageInfo* info)
+{
+    bool ask         = true;
+    bool permanently = false;
+
+    KURL u = info->kurl();
+    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u.directory());
+    if (!palbum)
+        return;
+
+    // Provide a digikamalbums:// URL to KIO
+    KURL kioURL  = info->kurlForKIO();
+    KURL fileURL = u;
+
+    bool useTrash;
+
+    if (ask)
+    {
+        bool preselectDeletePermanently = permanently;
+
+        DeleteDialog dialog(this);
+
+        KURL::List urlList;
+        urlList.append(u);
+        if (!dialog.confirmDeleteList(urlList,
+             DeleteDialogMode::Files,
+             preselectDeletePermanently ?
+                     DeleteDialogMode::NoChoiceDeletePermanently : DeleteDialogMode::NoChoiceTrash))
+            return;
+
+        useTrash = !dialog.shouldDelete();
+    }
+    else
+    {
+        useTrash = !permanently;
+    }
+
+    // trash does not like non-local URLs, put is not implemented
+    if (useTrash)
+        kioURL = fileURL;
+
+    if (!SyncJob::del(kioURL, useTrash))
+    {
+        QString errMsg(SyncJob::lastErrorMsg());
+        KMessageBox::error(this, errMsg, errMsg);
+        return;
+    }
+
+    LightTableBarItem* item = d->barView->findItemByInfo(info);
+    if (item) d->barView->removeItem(item);
+
+    emit signalFileDeleted(u);
+
+    slotRemoveItem(u);
 }
 
 void LightTableWindow::slotRemoveItem(const KURL& url)

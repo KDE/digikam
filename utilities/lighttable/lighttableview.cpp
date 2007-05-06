@@ -90,7 +90,7 @@ LightTableView::LightTableView(QWidget *parent)
             this, SIGNAL(signalDeleteItem(ImageInfo*)));
 
     connect(d->leftPreview, SIGNAL(signalDeleteItem(ImageInfo*)),
-            this, SIGNAL(signalDeleteItem(ImageInfo*)()));
+            this, SIGNAL(signalDeleteItem(ImageInfo*)));
     
     connect(d->rightPreview, SIGNAL(signalEditItem(ImageInfo*)),
             this, SIGNAL(signalEditItem(ImageInfo*)));

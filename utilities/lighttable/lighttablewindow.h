@@ -60,6 +60,10 @@ public:
 
     void loadImageInfos(const ImageInfoList &list, ImageInfo *imageInfoCurrent);
 
+signals: 
+
+    void signalFileDeleted(const KURL&);
+
 private:
 
     void closeEvent(QCloseEvent* e);
@@ -79,6 +83,7 @@ private:
 private slots:
 
     void slotEditItem(ImageInfo* info);
+    void slotDeleteItem(ImageInfo* info);
     void slotItemSelected(ImageInfo*);
     void slotSetItemOnLeftPanel(ImageInfo*);
     void slotSetItemOnRightPanel(ImageInfo*);
