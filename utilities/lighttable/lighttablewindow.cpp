@@ -81,6 +81,7 @@ public:
         barView                             = 0;
         hSplitter                           = 0;
         vSplitter                           = 0;
+        clearListAction                     = 0;
         removeItemAction                    = 0;
         fileDeleteAction                    = 0;
         slideShowAction                     = 0;
@@ -112,6 +113,7 @@ public:
     QSplitter                *hSplitter;
     QSplitter                *vSplitter;
 
+    KAction                  *clearListAction;
     KAction                  *removeItemAction;
     KAction                  *fileDeleteAction;
     KAction                  *slideShowAction;
@@ -327,9 +329,13 @@ void LightTableWindow::setupActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
-    d->removeItemAction = new KAction(i18n("Remove Item"), "remove",
+    d->removeItemAction = new KAction(i18n("Remove item from list"), "remove",
                                        0, this, SLOT(slotRemoveItem()),
                                        actionCollection(), "lighttable_removeitem");
+
+    d->clearListAction = new KAction(i18n("Clear all items"), "clear",
+                                     0, this, SLOT(slotClearItemsList()),
+                                     actionCollection(), "lighttable_clearlist");
 
     d->removeItemAction->setEnabled(false);
 
@@ -481,6 +487,23 @@ void LightTableWindow::slotSetItemOnRightPanel(ImageInfo* info)
 {
     d->previewView->setRightImageInfo(info);
     d->rightSidebar->itemChanged(info);
+}
+
+void LightTableWindow::slotClearItemsList()
+{
+    if (d->previewView->leftImageInfo())
+    {
+        d->previewView->setLeftImageInfo();
+        d->leftSidebar->slotNoCurrentItem();
+    }
+
+    if (d->previewView->rightImageInfo())
+    {
+        d->previewView->setRightImageInfo();
+        d->rightSidebar->slotNoCurrentItem();
+    }
+
+    d->barView->clear();
 }
 
 void LightTableWindow::slotRemoveItem(const KURL& url)
@@ -854,5 +877,4 @@ void LightTableWindow::slotRightZoomFactorChanged(double zoom)
 }
 
 }  // namespace Digikam
-
 

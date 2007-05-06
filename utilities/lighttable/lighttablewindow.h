@@ -81,6 +81,7 @@ private slots:
     void slotItemSelected(ImageInfo*);
     void slotSetItemOnLeftPanel(ImageInfo*);
     void slotSetItemOnRightPanel(ImageInfo*);
+    void slotClearItemsList();
     void slotRemoveItem();
     void slotRemoveItem(const KURL&);
     void slotZoomTo100Percents();
