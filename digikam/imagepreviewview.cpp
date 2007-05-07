@@ -354,6 +354,7 @@ void ImagePreviewView::slotContextMenu()
     popmenu.insertSeparator();
     popmenu.insertItem(SmallIcon("slideshow"), i18n("SlideShow"), 16);
     popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 12);
+    popmenu.insertItem(SmallIcon("idea"), i18n("Insert to Light Table"), 17);
     popmenu.insertItem(i18n("Open With"), &openWithMenu, 13);
 
     // Merge in the KIPI plugins actions ----------------------------
@@ -465,6 +466,12 @@ void ImagePreviewView::slotContextMenu()
         case 16:     // SlideShow
         {
             emit signalSlideShow();
+            break;
+        }
+
+        case 17:     // Insert to Light Table
+        {
+            emit signalInsert2LightTable();
             break;
         }
 

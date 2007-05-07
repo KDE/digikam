@@ -117,6 +117,9 @@ public:
     AlbumIconItem* nextItemToThumbnail() const;
     PixmapManager* pixmapManager() const;
 
+    void insertSelectionToLightTable();
+    void insertToLightTable(const ImageInfoList& list, ImageInfo* current);
+
 signals:
 
     void signalPreviewItem(AlbumIconItem*);
@@ -134,7 +137,6 @@ public slots:
     void slotDeleteSelectedItems(bool deletePermanently = false);
     void slotDeleteSelectedItemsDirectly(bool useTrash);
     void slotDisplayItem(AlbumIconItem *item=0);
-    void slotInsertToLightTable(AlbumIconItem *item=0);
     void slotAlbumModified();
     void slotSetAlbumThumbnail(AlbumIconItem *iconItem);
     void slotCopy();

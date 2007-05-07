@@ -680,7 +680,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
   
       case 19: 
       {
-          slotInsertToLightTable(iconItem);
+          insertSelectionToLightTable();
           break;
       }
 
@@ -1025,7 +1025,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
     imview->setFocus();
 }
 
-void AlbumIconView::slotInsertToLightTable(AlbumIconItem *item)
+void AlbumIconView::insertSelectionToLightTable()
 {
     AlbumSettings *settings = AlbumSettings::instance();
 
@@ -1044,13 +1044,13 @@ void AlbumIconView::slotInsertToLightTable(AlbumIconItem *item)
     // Run Light Table with all selected image files in the current Album.
 
     ImageInfoList imageInfoList;
-    ImageInfo *currentImageInfo = 0;
-
+    
     for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
         if ((*it).isSelected())
         {
             AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
+
             QString fileExtension = iconItem->imageInfo()->kurl().fileName().section( '.', -1 );
     
             if ( imagefilter.find(fileExtension) != -1 )
@@ -1058,12 +1058,15 @@ void AlbumIconView::slotInsertToLightTable(AlbumIconItem *item)
                 ImageInfo *info = new ImageInfo(*iconItem->imageInfo());
                 info->setViewItem(0);
                 imageInfoList.append(info);
-                if (iconItem == item)
-                    currentImageInfo = info;
             }
         }
     }
+    
+    insertToLightTable(imageInfoList, imageInfoList.first());
+}
 
+void AlbumIconView::insertToLightTable(const ImageInfoList& list, ImageInfo* current)
+{
     LightTableWindow *ltview = LightTableWindow::lightTableWindow();
 
     ltview->disconnect(this);
@@ -1071,7 +1074,7 @@ void AlbumIconView::slotInsertToLightTable(AlbumIconItem *item)
     connect(ltview, SIGNAL(signalFileDeleted(const KURL&)),
            this, SLOT(slotFilesModified()));
 
-    ltview->loadImageInfos(imageInfoList, currentImageInfo);
+    ltview->loadImageInfos(list, current);
 
     if (ltview->isHidden())
         ltview->show();
