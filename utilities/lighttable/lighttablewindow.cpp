@@ -96,8 +96,6 @@ public:
         fileTrashDirectlyAction             = 0;
         donateMoneyAction                   = 0;
         zoomFitToWindowAction               = 0;
-        zoomPlusAction                      = 0;
-        zoomMinusAction                     = 0;
         zoomTo100percents                   = 0;
         statusProgressBar                   = 0;
         leftZoomBar                         = 0;  
@@ -120,8 +118,6 @@ public:
     KAction                  *fileDeletePermanentlyAction;
     KAction                  *fileDeletePermanentlyDirectlyAction;
     KAction                  *fileTrashDirectlyAction;
-    KAction                  *zoomPlusAction;
-    KAction                  *zoomMinusAction;
     KAction                  *zoomTo100percents;
     KAction                  *zoomFitToWindowAction;
 
@@ -347,13 +343,6 @@ void LightTableWindow::setupActions()
     KStdAction::quit(this, SLOT(close()), actionCollection(), "lighttable_exit");
 
     // -- Standard 'View' menu actions ---------------------------------------------
-
-    d->zoomPlusAction = KStdAction::zoomIn(d->previewView, SLOT(slotIncreaseZoom()),
-                                           actionCollection(), "lighttable_zoomplus");
-
-
-    d->zoomMinusAction = KStdAction::zoomOut(d->previewView, SLOT(slotDecreaseZoom()),
-                                             actionCollection(), "lighttable_zoomminus");
 
     d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), "viewmag1",
                                        CTRL+SHIFT+Key_Z, this, SLOT(slotZoomTo100Percents()),
@@ -758,8 +747,6 @@ void LightTableWindow::slotToggleFullScreen()
 
         // -- remove the gui action accels ----
 
-        unplugActionAccel(d->zoomPlusAction);
-        unplugActionAccel(d->zoomMinusAction);
         unplugActionAccel(d->zoomFitToWindowAction);
 
         if (d->fullScreen)
@@ -815,8 +802,6 @@ void LightTableWindow::slotToggleFullScreen()
 
         // -- Insert all the gui actions into the accel --
 
-        plugActionAccel(d->zoomPlusAction);
-        plugActionAccel(d->zoomMinusAction);
         plugActionAccel(d->zoomFitToWindowAction);
 
         if (d->fullScreen) 
