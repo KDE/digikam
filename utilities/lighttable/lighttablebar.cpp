@@ -38,6 +38,7 @@
 #include "ddebug.h"
 #include "album.h"
 #include "albumsettings.h"
+#include "dragobjects.h"
 #include "themeengine.h"
 #include "lighttablebar.h"
 #include "lighttablebar.moc"
@@ -68,6 +69,10 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     if (!e) return;
 
+    QPoint pos = QCursor::pos();
+    LightTableBarItem *item = findItemByPos(e->pos());
+    if (!item) return;        
+
     if (e->button() == Qt::RightButton)
     {
         KPopupMenu popmenu(this);
@@ -77,28 +82,23 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
         popmenu.insertSeparator(-1);
         popmenu.insertItem(SmallIcon("remove"), i18n("Remove this item"), 12);
 
-        switch(popmenu.exec((QCursor::pos())))
+        switch(popmenu.exec(pos))
         {
             case 10:
             {
-                if (currentItemImageInfo())
-                    emit signalSetItemOnLeftPanel(currentItemImageInfo());
+                emit signalSetItemOnLeftPanel(item->info());
                 break;
             }
             case 11:
             {
-                if (currentItemImageInfo())
-                    emit signalSetItemOnRightPanel(currentItemImageInfo());
+                emit signalSetItemOnRightPanel(item->info());
                 break;
             }
             case 12:
             {
-                if (currentItemImageInfo())
-                {
-                    KURL url = currentItemImageInfo()->kurl();
-                    emit signalRemoveItem(url);
-                    removeItem(currentItem());
-                }
+                KURL url = item->info()->kurl();
+                emit signalRemoveItem(url);
+                removeItem(currentItem());
                 break;
             }
             default:
@@ -115,8 +115,13 @@ void LightTableBar::slotItemSelected(ThumbBarItem* i)
 
 ImageInfo* LightTableBar::currentItemImageInfo() const
 {
-    LightTableBarItem *item = static_cast<LightTableBarItem*>(currentItem());
-    return item->info();
+    if (currentItem())
+    {
+        LightTableBarItem *item = static_cast<LightTableBarItem*>(currentItem());
+        return item->info();
+    }
+
+    return 0;
 }
 
 ImageInfoList LightTableBar::itemsImageInfoList()
@@ -137,13 +142,28 @@ LightTableBarItem* LightTableBar::findItemByInfo(const ImageInfo* info) const
 {
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
     {
-        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
-        if (ltItem->info()->kurl() == info->kurl())
+        KURL url1 = item->url();
+        KURL url2 = info->kurl();
+    
+        if (url1 == url2)
         {
+            LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
             return ltItem;
         }
     }
 
+    return 0;
+}
+
+LightTableBarItem* LightTableBar::findItemByPos(const QPoint& pos) const
+{
+    ThumbBarItem *item = findItem(pos);
+    if (item)
+    {
+        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+        return ltItem;
+    }
+    
     return 0;
 }
 
@@ -264,6 +284,88 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
        bitBlt(viewport(), 0, er.y(), &bgPix);
     else
        bitBlt(viewport(), er.x(), 0, &bgPix);
+}
+
+void LightTableBar::startDrag()
+{
+    if (!currentItem()) return;
+
+    KURL::List      urls;
+    KURL::List      kioURLs;
+    QValueList<int> albumIDs;
+    QValueList<int> imageIDs;
+
+    LightTableBarItem *item = static_cast<LightTableBarItem*>(currentItem());
+
+    urls.append(item->info()->kurl());
+    kioURLs.append(item->info()->kurlForKIO());
+    imageIDs.append(item->info()->id());
+    albumIDs.append(item->info()->albumID());
+
+    QPixmap icon(DesktopIcon("image", 48));
+    int w = icon.width();
+    int h = icon.height();
+
+    QPixmap pix(w+4,h+4);
+    QPainter p(&pix);
+    p.fillRect(0, 0, w+4, h+4, QColor(Qt::white));
+    p.setPen(QPen(Qt::black, 1));
+    p.drawRect(0, 0, w+4, h+4);
+    p.drawPixmap(2, 2, icon);
+    p.end();
+
+    QDragObject* drag = 0;
+
+    drag = new ItemDrag(urls, kioURLs, albumIDs, imageIDs, this);
+    if (drag)
+    {
+        drag->setPixmap(pix);
+        drag->drag();
+    }
+}
+
+void LightTableBar::contentsDragMoveEvent(QDragMoveEvent *e)
+{
+    KURL::List      urls;
+    KURL::List      kioURLs;        
+    QValueList<int> albumIDs;
+    QValueList<int> imageIDs;
+
+    if (!ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
+    {
+        e->ignore();
+        return;
+    }
+    e->accept();
+}
+
+void LightTableBar::contentsDropEvent(QDropEvent *e)
+{
+    KURL::List      urls;
+    KURL::List      kioURLs;        
+    QValueList<int> albumIDs;
+    QValueList<int> imageIDs;
+
+    if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
+    {
+        for (QValueList<int>::const_iterator it = imageIDs.begin();
+                it != imageIDs.end(); ++it)
+        {
+            ImageInfo *info = new ImageInfo(*it);
+            if (!findItemByInfo(info))
+            {
+                new LightTableBarItem(this, info);
+            }
+            else
+            {
+                delete info;
+            }
+        }
+    }
+    else 
+    {
+        e->ignore();
+    }
 }
 
 // -------------------------------------------------------------------------
