@@ -75,7 +75,7 @@ StatusZoomBar::StatusZoomBar(QWidget *parent)
     d->zoomMinusButton = new QToolButton(this);
     d->zoomMinusButton->setAutoRaise(true);
     d->zoomMinusButton->setIconSet(SmallIconSet("viewmag-"));
-    QToolTip::add(d->zoomMinusButton, i18n("Zoom out"));
+    QToolTip::add(d->zoomMinusButton, i18n("Zoom Out"));
 
     d->zoomSlider = new QSlider(ThumbnailSize::Small, ThumbnailSize::Huge,
                                 ThumbnailSize::Step, ThumbnailSize::Medium, 
@@ -87,7 +87,7 @@ StatusZoomBar::StatusZoomBar(QWidget *parent)
     d->zoomPlusButton = new QToolButton(this);
     d->zoomPlusButton->setAutoRaise(true);
     d->zoomPlusButton->setIconSet(SmallIconSet("viewmag+"));
-    QToolTip::add(d->zoomPlusButton, i18n("Zoom in"));
+    QToolTip::add(d->zoomPlusButton, i18n("Zoom In"));
 
     d->zoomTracker = new DTipTracker("", d->zoomSlider);
 
