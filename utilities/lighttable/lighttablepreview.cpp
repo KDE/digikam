@@ -57,8 +57,8 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "dragobjects.h"
 #include "fastscale.h"
-#include "imageinfo.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
 #include "metadatahub.h"
@@ -119,6 +119,9 @@ LightTablePreview::LightTablePreview(QWidget *parent)
 {
     d = new LightTablePreviewPriv;
     
+    viewport()->setAcceptDrops(true);
+    setAcceptDrops(true); 
+
     slotThemeChanged();
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -620,6 +623,44 @@ void LightTablePreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int s
     QImage img = FastScale::fastScaleQImage(d->preview.copy(sx, sy, sw, sh),
                                             tileSize(), tileSize());
     bitBlt(pix, 0, 0, &img, 0, 0);
+}
+
+void LightTablePreview::contentsDragMoveEvent(QDragMoveEvent *e)
+{
+    KURL::List      urls;
+    KURL::List      kioURLs;        
+    QValueList<int> albumIDs;
+    QValueList<int> imageIDs;
+
+    if (!ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
+    {
+        e->ignore();
+        return;
+    }
+    e->accept();
+}
+
+void LightTablePreview::contentsDropEvent(QDropEvent *e)
+{
+    KURL::List      urls;
+    KURL::List      kioURLs;        
+    QValueList<int> albumIDs;
+    QValueList<int> imageIDs;
+    ImageInfoList   list;
+
+    if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
+    {
+        for (QValueList<int>::const_iterator it = imageIDs.begin();
+                it != imageIDs.end(); ++it)
+        {
+            list.append(new ImageInfo(*it));
+            emit signalDroppedItems(list);
+        }
+    }
+    else 
+    {
+        e->ignore();
+    }
 }
 
 }  // NameSpace Digikam

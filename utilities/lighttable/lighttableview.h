@@ -32,12 +32,12 @@
 
 // Local includes.
 
+#include "imageinfo.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
-class ImageInfo;
 class LightTableViewPriv;
 
 class DIGIKAM_EXPORT LightTableView : public QFrame
@@ -77,6 +77,8 @@ signals:
 
     void signalLeftZoomFactorChanged(double);
     void signalRightZoomFactorChanged(double);
+    void signalLeftDroppedItems(const ImageInfoList&);
+    void signalRightDroppedItems(const ImageInfoList&);
     void signalSlideShow();
     void signalDeleteItem(ImageInfo*);
     void signalEditItem(ImageInfo*);

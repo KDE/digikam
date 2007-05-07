@@ -31,6 +31,7 @@
 
 // Local includes
 
+#include "imageinfo.h"
 #include "previewwidget.h"
 #include "digikam_export.h"
 
@@ -40,7 +41,6 @@ namespace Digikam
 {
 
 class LoadingDescription;
-class ImageInfo;
 class LightTablePreviewPriv;
 
 class DIGIKAM_EXPORT LightTablePreview : public PreviewWidget
@@ -65,6 +65,7 @@ public:
 
 signals:
 
+    void signalDroppedItems(const ImageInfoList&);
     void signalDeleteItem(ImageInfo*);
     void signalEditItem(ImageInfo*);
     void signalPreviewLoaded();
@@ -96,6 +97,9 @@ private:
     void resetPreview();
     void updateZoomAndSize(bool alwaysFitToWindow);
     inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
+
+    void contentsDragMoveEvent(QDragMoveEvent*);
+    void contentsDropEvent(QDropEvent*);
 
 private:
 

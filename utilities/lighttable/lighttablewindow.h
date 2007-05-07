@@ -104,6 +104,8 @@ private slots:
     void slotFileMetadataChanged(const KURL&);
     void slotLeftZoomFactorChanged(double);
     void slotRightZoomFactorChanged(double);
+    void slotLeftDroppedItems(const ImageInfoList&);
+    void slotRightDroppedItems(const ImageInfoList&);
 
 private:
 

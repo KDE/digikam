@@ -330,6 +330,12 @@ void LightTableWindow::setupConnections()
     connect(d->previewView, SIGNAL(signalSlideShow()),
            this, SLOT(slotToggleSlideShow()));
 
+    connect(d->previewView, SIGNAL(signalLeftDroppedItems(const ImageInfoList&)),
+           this, SLOT(slotLeftDroppedItems(const ImageInfoList&)));
+
+    connect(d->previewView, SIGNAL(signalRightDroppedItems(const ImageInfoList&)),
+           this, SLOT(slotRightDroppedItems(const ImageInfoList&)));
+
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
     connect(watch, SIGNAL(signalFileMetadataChanged(const KURL &)),
@@ -487,6 +493,30 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
         d->removeItemAction->setEnabled(true);
     }
 }    
+
+void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
+{
+    ImageInfo *info = *(list.begin());
+    loadImageInfos(list, info);
+
+    // We will check if first item from list is already stored in thumbbar
+    // Note than thumbbar store all ImageInfo reference in memory for preview object.
+    LightTableBarItem *item = d->barView->findItemByInfo(info);
+    if (item)
+        slotSetItemOnLeftPanel(item->info());
+}
+
+void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
+{
+    ImageInfo *info = *(list.begin());
+    loadImageInfos(list, info);
+
+    // We will check if first item from list is already stored in thumbbar
+    // Note than thumbbar store all ImageInfo reference in memory for preview object.
+    LightTableBarItem *item = d->barView->findItemByInfo(info);
+    if (item)
+        slotSetItemOnRightPanel(item->info());
+}
 
 void LightTableWindow::slotSetItemOnLeftPanel(ImageInfo* info)
 {
