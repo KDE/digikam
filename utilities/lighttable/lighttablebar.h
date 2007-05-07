@@ -30,6 +30,11 @@
 #include "imageinfo.h"
 #include "digikam_export.h"
 
+class QDragMoveEvent;
+class QDropEvent;
+class QMouseEvent;
+class QPaintEvent;
+
 class KURL;
 
 namespace Digikam
@@ -53,6 +58,7 @@ public:
     ImageInfoList itemsImageInfoList();
 
     LightTableBarItem* findItemByInfo(const ImageInfo* info) const;
+    LightTableBarItem* findItemByPos(const QPoint& pos) const;
 
     /** Read tool tip settings from Album Settings instance */
     void readToolTipSettings();
@@ -64,10 +70,13 @@ signals:
     void signalSetItemOnRightPanel(ImageInfo*);
     void signalRemoveItem(const KURL&);
 
-protected:
+private:
 
-    void viewportPaintEvent(QPaintEvent* e);    
-    void contentsMouseReleaseEvent(QMouseEvent *e);
+    void viewportPaintEvent(QPaintEvent*);    
+    void contentsMouseReleaseEvent(QMouseEvent*);
+    void startDrag();
+    void contentsDragMoveEvent(QDragMoveEvent*);
+    void contentsDropEvent(QDropEvent*);
 
 private slots:
 

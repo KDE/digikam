@@ -93,6 +93,7 @@ signals:
     void signalBack2Album();
     void signalSlideShow();
     void signalZoomFactorChanged(double);
+    void signalInsert2LightTable();
 
 public slots:
 

@@ -80,6 +80,7 @@ public:
     ThumbBarViewPriv() :
         margin(5)
     {
+        dragging   = false;
         exifRotate = false;
         toolTip    = 0;
         firstItem  = 0;
@@ -94,6 +95,7 @@ public:
     
     bool                       clearing;
     bool                       exifRotate;
+    bool                       dragging;
 
     const int                  margin;
     int                        count;
@@ -101,6 +103,8 @@ public:
     int                        orientation;
     
     QTimer                    *timer;
+
+    QPoint                     dragStartPos;
 
     ThumbBarItem              *firstItem;
     ThumbBarItem              *lastItem;
@@ -159,8 +163,11 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
 
     viewport()->setBackgroundMode(Qt::NoBackground);
     viewport()->setMouseTracking(true);
+    viewport()->setAcceptDrops(true);
+
     setFrameStyle(QFrame::NoFrame);
-    
+    setAcceptDrops(true); 
+
     if (d->orientation == Vertical)
     {
         setHScrollBarMode(QScrollView::AlwaysOff);
@@ -560,11 +567,37 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
         item->repaint();
     }
 
-    d->currItem = barItem;
+    d->dragging     = true;
+    d->dragStartPos = e->pos();
+    d->currItem     = barItem;
     barItem->repaint();
-    
+
     emit signalURLSelected(barItem->url());
     emit signalItemSelected(barItem);
+}
+
+void ThumbBarView::contentsMouseMoveEvent(QMouseEvent *e)
+{
+    if (!e) return;
+
+    if (d->dragging && (e->state() & Qt::LeftButton))
+    {
+        if ( (d->dragStartPos - e->pos()).manhattanLength()
+             > QApplication::startDragDistance() )
+        {
+            startDrag();
+        }
+        return;
+    }
+}
+
+void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent*)
+{
+    d->dragging = false;
+}
+
+void ThumbBarView::startDrag()
+{
 }
 
 void ThumbBarView::insertItem(ThumbBarItem* item)

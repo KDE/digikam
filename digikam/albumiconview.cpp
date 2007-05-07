@@ -23,9 +23,6 @@
  * 
  * ============================================================ */
 
-// Uncomment this line to enable Light Table tool.
-#define ENABLE_LIGHTTABLE 1
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -543,10 +540,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     popmenu.insertItem(SmallIcon("viewimage"), i18n("View..."), 18);
     popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 10);
     popmenu.insertItem(i18n("Open With"), &openWithMenu, 11);
-
-#ifdef ENABLE_LIGHTTABLE
     popmenu.insertItem(SmallIcon("idea"), i18n("Insert to Light Table"), 19);
-#endif
 
     // Merge in the KIPI plugins actions ----------------------------
 
@@ -696,7 +690,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
   
       case 19: 
       {
-          slotInsertToLightTable(iconItem);
+          insertSelectionToLightTable();
           break;
       }
 
@@ -1040,7 +1034,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
     imview->setFocus();
 }
 
-void AlbumIconView::slotInsertToLightTable(AlbumIconItem *item)
+void AlbumIconView::insertSelectionToLightTable()
 {
     AlbumSettings *settings = AlbumSettings::instance();
 
@@ -1059,32 +1053,36 @@ void AlbumIconView::slotInsertToLightTable(AlbumIconItem *item)
     // Run Light Table with all selected image files in the current Album.
 
     ImageInfoList imageInfoList;
-    ImageInfo *currentImageInfo = 0;
-
+    
     for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
         if ((*it).isSelected())
         {
             AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
+
             QString fileExtension = iconItem->imageInfo()->kurl().fileName().section( '.', -1 );
 
             if ( imagefilter.find(fileExtension) != -1 )
             {
                 ImageInfo *info = new ImageInfo(*iconItem->imageInfo());
                 imageInfoList.append(info);
-                if (iconItem == item)
-                    currentImageInfo = info;
             }
         }
     }
+    
+    insertToLightTable(imageInfoList, imageInfoList.first());
+}
 
+void AlbumIconView::insertToLightTable(const ImageInfoList& list, ImageInfo* current)
+{
     LightTableWindow *ltview = LightTableWindow::lightTableWindow();
 
     ltview->disconnect(this);
 
-    // TODO: Added slots connection here if necessary.
+    connect(ltview, SIGNAL(signalFileDeleted(const KURL&)),
+           this, SLOT(slotFilesModified()));
 
-    ltview->loadImageInfos(imageInfoList, currentImageInfo);
+    ltview->loadImageInfos(list, current);
 
     if (ltview->isHidden())
         ltview->show();

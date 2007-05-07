@@ -73,6 +73,7 @@ signals:
     void signalPreviewLoaded();
     void signalBack2Album();
     void signalSlideShow();
+    void signalInsert2LightTable();
 
 protected:
 

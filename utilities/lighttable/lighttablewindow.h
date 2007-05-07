@@ -60,6 +60,10 @@ public:
 
     void loadImageInfos(const ImageInfoList &list, ImageInfo *imageInfoCurrent);
 
+signals: 
+
+    void signalFileDeleted(const KURL&);
+
 private:
 
     void closeEvent(QCloseEvent* e);
@@ -78,9 +82,12 @@ private:
 
 private slots:
 
+    void slotEditItem(ImageInfo* info);
+    void slotDeleteItem(ImageInfo* info);
     void slotItemSelected(ImageInfo*);
     void slotSetItemOnLeftPanel(ImageInfo*);
     void slotSetItemOnRightPanel(ImageInfo*);
+    void slotClearItemsList();
     void slotRemoveItem();
     void slotRemoveItem(const KURL&);
     void slotZoomTo100Percents();
@@ -97,6 +104,8 @@ private slots:
     void slotFileMetadataChanged(const KURL&);
     void slotLeftZoomFactorChanged(double);
     void slotRightZoomFactorChanged(double);
+    void slotLeftDroppedItems(const ImageInfoList&);
+    void slotRightDroppedItems(const ImageInfoList&);
 
 private:
 

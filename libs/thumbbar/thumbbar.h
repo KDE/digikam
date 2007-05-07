@@ -136,10 +136,13 @@ protected:
     int  getTileSize();
     int  getMargin();
 
-    void resizeEvent(QResizeEvent* e);
-    void contentsMousePressEvent(QMouseEvent* e);
+    void resizeEvent(QResizeEvent*);
+    void contentsMousePressEvent(QMouseEvent*);
+    void contentsMouseMoveEvent(QMouseEvent*);
+    void contentsMouseReleaseEvent(QMouseEvent*);
 
-    virtual void viewportPaintEvent(QPaintEvent* e);
+    virtual void viewportPaintEvent(QPaintEvent*);
+    virtual void startDrag();
 
 private:
 

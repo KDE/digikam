@@ -48,6 +48,9 @@ Showfoto      : The thumbbar is now resizable. The thumbnails contents can be re
 Showfoto      : The thumbbar items can show a full configurable tool tip like digiKam album icon 
                 items tool tip.
 
+*** 0.9.2-beta1 *******************************************************
+
+General       : digiKam has a new powerfull tool to compare images side by side : the Light Table.
 
 ----------------------------------------------------------------------------
 digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
@@ -94,5 +97,9 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 037 ==> 139814 : The window of digiKam exceed the screen if the resolution is 800x600.
 038 ==> 144481 : Vertical window size cannot be reduced to VGA resolution.
 039 ==> 136254 : Editing tags does not change IPTC-keywords.
-040 ==> 
+
+*** 0.9.2-beta2 *******************************************************
+
+040 ==> 135048 : Easy comparing similar pictures using a lighttable.
+041 ==> 
 

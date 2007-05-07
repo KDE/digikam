@@ -70,6 +70,7 @@
 #include "sidebar.h"
 #include "imagepropertiessidebardb.h"
 #include "imageinfoalbumsjob.h"
+#include "imagepreviewview.h"
 #include "datefolderview.h"
 #include "tagfolderview.h"
 #include "searchfolderview.h"
@@ -345,6 +346,9 @@ void DigikamView::setupConnections()
 
     connect(d->albumWidgetStack, SIGNAL(signalZoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged(double)));
+
+    connect(d->albumWidgetStack, SIGNAL(signalInsert2LightTable()),
+            this, SLOT(slotImageLightTable()));
 
     // -- Selection timer ---------------
 
@@ -1031,6 +1035,21 @@ void DigikamView::imageEdit(AlbumIconItem *iconItem)
 void DigikamView::slotImageExifOrientation(int orientation)
 {
     d->iconView->slotSetExifOrientation(orientation);
+}
+
+void DigikamView::slotImageLightTable()
+{
+    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+    {
+        d->iconView->insertSelectionToLightTable();
+    }
+    else
+    {
+        ImageInfoList list;
+        ImageInfo *info = d->albumWidgetStack->imagePreviewView()->getImageInfo();
+        list.append(info);
+        d->iconView->insertToLightTable(list, info);
+    }
 }
 
 void DigikamView::slotImageRename(AlbumIconItem *iconItem)

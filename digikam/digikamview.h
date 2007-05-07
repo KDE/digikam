@@ -117,6 +117,7 @@ public slots:
     void slotNewAdvancedSearch();
 
     // Image action slots
+    void slotImageLightTable();
     void slotImagePreview();
     void slotImageEdit();
     void slotImageExifOrientation(int orientation);

@@ -32,6 +32,7 @@
 
 // Local includes.
 
+#include "imageinfo.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -76,7 +77,11 @@ signals:
 
     void signalLeftZoomFactorChanged(double);
     void signalRightZoomFactorChanged(double);
+    void signalLeftDroppedItems(const ImageInfoList&);
+    void signalRightDroppedItems(const ImageInfoList&);
     void signalSlideShow();
+    void signalDeleteItem(ImageInfo*);
+    void signalEditItem(ImageInfo*);
 
 public slots:
 

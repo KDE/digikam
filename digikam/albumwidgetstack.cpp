@@ -105,6 +105,9 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
 
     connect(d->imagePreviewView, SIGNAL(signalZoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged(double)));
+
+    connect(d->imagePreviewView, SIGNAL(signalInsert2LightTable()),
+            this, SIGNAL(signalInsert2LightTable()));
 }
 
 AlbumWidgetStack::~AlbumWidgetStack()

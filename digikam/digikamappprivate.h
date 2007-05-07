@@ -87,6 +87,7 @@ public:
         editTagAction                        = 0;
         imagePreviewAction                   = 0;
         imageViewAction                      = 0;
+        imageLightTableAction                = 0;
         imageSetExifOrientation1Action       = 0;
         imageSetExifOrientation2Action       = 0;
         imageSetExifOrientation3Action       = 0;
@@ -181,6 +182,7 @@ public:
     
     // Image Actions
     KToggleAction         *imagePreviewAction;
+    KAction               *imageLightTableAction;
     KAction               *imageViewAction;
     KAction               *imageSetExifOrientation1Action;
     KAction               *imageSetExifOrientation2Action;

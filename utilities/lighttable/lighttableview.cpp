@@ -86,8 +86,27 @@ LightTableView::LightTableView(QWidget *parent)
     connect(d->leftPreview, SIGNAL(signalSlideShow()),
             this, SIGNAL(signalSlideShow()));
     
+    connect(d->rightPreview, SIGNAL(signalDeleteItem(ImageInfo*)),
+            this, SIGNAL(signalDeleteItem(ImageInfo*)));
+
+    connect(d->leftPreview, SIGNAL(signalDeleteItem(ImageInfo*)),
+            this, SIGNAL(signalDeleteItem(ImageInfo*)));
+    
+    connect(d->rightPreview, SIGNAL(signalEditItem(ImageInfo*)),
+            this, SIGNAL(signalEditItem(ImageInfo*)));
+
+    connect(d->leftPreview, SIGNAL(signalEditItem(ImageInfo*)),
+            this, SIGNAL(signalEditItem(ImageInfo*)));
+
+    connect(d->rightPreview, SIGNAL(signalDroppedItems(const ImageInfoList&)),
+            this, SIGNAL(signalRightDroppedItems(const ImageInfoList&)));
+
+    connect(d->leftPreview, SIGNAL(signalDroppedItems(const ImageInfoList&)),
+            this, SIGNAL(signalLeftDroppedItems(const ImageInfoList&)));
+    
     connect(d->rightPreview, SIGNAL(signalSlideShow()),
             this, SIGNAL(signalSlideShow()));
+
 }
 
 LightTableView::~LightTableView()

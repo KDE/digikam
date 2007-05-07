@@ -35,6 +35,7 @@
 #include <kdeversion.h>
 #include <klocale.h>
 #include <kwin.h>
+#include <kmessagebox.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kstatusbar.h>
@@ -47,12 +48,16 @@
 #include "dimg.h"
 #include "dmetadata.h"
 #include "albumsettings.h"
+#include "albummanager.h"
+#include "deletedialog.h"
+#include "imagewindow.h"
 #include "imagepropertiessidebardb.h"
 #include "imageattributeswatch.h"
 #include "slideshow.h"
 #include "setup.h"
 #include "statusprogressbar.h"
 #include "statuszoombar.h"
+#include "syncjob.h"
 #include "thumbnailsize.h"
 #include "lighttablepreview.h"
 #include "lighttableview.h"
@@ -81,6 +86,7 @@ public:
         barView                             = 0;
         hSplitter                           = 0;
         vSplitter                           = 0;
+        clearListAction                     = 0;
         removeItemAction                    = 0;
         fileDeleteAction                    = 0;
         slideShowAction                     = 0;
@@ -112,6 +118,7 @@ public:
     QSplitter                *hSplitter;
     QSplitter                *vSplitter;
 
+    KAction                  *clearListAction;
     KAction                  *removeItemAction;
     KAction                  *fileDeleteAction;
     KAction                  *slideShowAction;
@@ -314,8 +321,20 @@ void LightTableWindow::setupConnections()
     connect(d->previewView, SIGNAL(signalRightZoomFactorChanged(double)),
            this, SLOT(slotRightZoomFactorChanged(double)));
 
+    connect(d->previewView, SIGNAL(signalEditItem(ImageInfo*)),
+           this, SLOT(slotEditItem(ImageInfo*)));
+
+    connect(d->previewView, SIGNAL(signalDeleteItem(ImageInfo*)),
+           this, SLOT(slotDeleteItem(ImageInfo*)));
+
     connect(d->previewView, SIGNAL(signalSlideShow()),
            this, SLOT(slotToggleSlideShow()));
+
+    connect(d->previewView, SIGNAL(signalLeftDroppedItems(const ImageInfoList&)),
+           this, SLOT(slotLeftDroppedItems(const ImageInfoList&)));
+
+    connect(d->previewView, SIGNAL(signalRightDroppedItems(const ImageInfoList&)),
+           this, SLOT(slotRightDroppedItems(const ImageInfoList&)));
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
@@ -327,9 +346,13 @@ void LightTableWindow::setupActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
-    d->removeItemAction = new KAction(i18n("Remove Item"), "remove",
+    d->removeItemAction = new KAction(i18n("Remove item from list"), "remove",
                                        0, this, SLOT(slotRemoveItem()),
                                        actionCollection(), "lighttable_removeitem");
+
+    d->clearListAction = new KAction(i18n("Clear all items"), "clear",
+                                     0, this, SLOT(slotClearItemsList()),
+                                     actionCollection(), "lighttable_clearlist");
 
     d->removeItemAction->setEnabled(false);
 
@@ -471,6 +494,30 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
     }
 }    
 
+void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
+{
+    ImageInfo *info = *(list.begin());
+    loadImageInfos(list, info);
+
+    // We will check if first item from list is already stored in thumbbar
+    // Note than thumbbar store all ImageInfo reference in memory for preview object.
+    LightTableBarItem *item = d->barView->findItemByInfo(info);
+    if (item)
+        slotSetItemOnLeftPanel(item->info());
+}
+
+void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
+{
+    ImageInfo *info = *(list.begin());
+    loadImageInfos(list, info);
+
+    // We will check if first item from list is already stored in thumbbar
+    // Note than thumbbar store all ImageInfo reference in memory for preview object.
+    LightTableBarItem *item = d->barView->findItemByInfo(info);
+    if (item)
+        slotSetItemOnRightPanel(item->info());
+}
+
 void LightTableWindow::slotSetItemOnLeftPanel(ImageInfo* info)
 {
     d->previewView->setLeftImageInfo(info);
@@ -481,6 +528,79 @@ void LightTableWindow::slotSetItemOnRightPanel(ImageInfo* info)
 {
     d->previewView->setRightImageInfo(info);
     d->rightSidebar->itemChanged(info);
+}
+
+void LightTableWindow::slotClearItemsList()
+{
+    if (d->previewView->leftImageInfo())
+    {
+        d->previewView->setLeftImageInfo();
+        d->leftSidebar->slotNoCurrentItem();
+    }
+
+    if (d->previewView->rightImageInfo())
+    {
+        d->previewView->setRightImageInfo();
+        d->rightSidebar->slotNoCurrentItem();
+    }
+
+    d->barView->clear();
+}
+
+void LightTableWindow::slotDeleteItem(ImageInfo* info)
+{
+    bool ask         = true;
+    bool permanently = false;
+
+    KURL u = info->kurl();
+    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u.directory());
+    if (!palbum)
+        return;
+
+    // Provide a digikamalbums:// URL to KIO
+    KURL kioURL  = info->kurlForKIO();
+    KURL fileURL = u;
+
+    bool useTrash;
+
+    if (ask)
+    {
+        bool preselectDeletePermanently = permanently;
+
+        DeleteDialog dialog(this);
+
+        KURL::List urlList;
+        urlList.append(u);
+        if (!dialog.confirmDeleteList(urlList,
+             DeleteDialogMode::Files,
+             preselectDeletePermanently ?
+                     DeleteDialogMode::NoChoiceDeletePermanently : DeleteDialogMode::NoChoiceTrash))
+            return;
+
+        useTrash = !dialog.shouldDelete();
+    }
+    else
+    {
+        useTrash = !permanently;
+    }
+
+    // trash does not like non-local URLs, put is not implemented
+    if (useTrash)
+        kioURL = fileURL;
+
+    if (!SyncJob::del(kioURL, useTrash))
+    {
+        QString errMsg(SyncJob::lastErrorMsg());
+        KMessageBox::error(this, errMsg, errMsg);
+        return;
+    }
+
+    LightTableBarItem* item = d->barView->findItemByInfo(info);
+    if (item) d->barView->removeItem(item);
+
+    emit signalFileDeleted(u);
+
+    slotRemoveItem(u);
 }
 
 void LightTableWindow::slotRemoveItem(const KURL& url)
@@ -511,6 +631,20 @@ void LightTableWindow::slotRemoveItem()
         slotRemoveItem(d->barView->currentItemImageInfo()->kurl());
         d->barView->removeItem(d->barView->currentItem());
     }
+}
+
+void LightTableWindow::slotEditItem(ImageInfo* info)
+{
+    ImageWindow *im = ImageWindow::imagewindow();
+    im->loadImageInfos(d->barView->itemsImageInfoList(),
+                       info, i18n("Light Table"), true);
+    
+    if (im->isHidden())
+        im->show();
+    else
+        im->raise();
+        
+    im->setFocus();
 }
 
 void LightTableWindow::slotZoomTo100Percents()
@@ -854,5 +988,4 @@ void LightTableWindow::slotRightZoomFactorChanged(double zoom)
 }
 
 }  // namespace Digikam
-
 
