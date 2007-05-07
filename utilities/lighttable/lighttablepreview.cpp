@@ -316,8 +316,8 @@ void LightTablePreview::slotContextMenu()
     
     //-- Zoom actions -----------------------------------------------
 
-    popmenu.insertItem(SmallIcon("viewmag"), i18n("Zoom in"), 17);
-    popmenu.insertItem(SmallIcon("viewmag-"), i18n("Zoom out"), 18);
+    popmenu.insertItem(SmallIcon("viewmag"), i18n("Zoom In"), 17);
+    popmenu.insertItem(SmallIcon("viewmag-"), i18n("Zoom Out"), 18);
     popmenu.insertItem(SmallIcon("view_fit_window"), i18n("Fit to &Window"), 19);
 
     //-- Edit actions -----------------------------------------------
