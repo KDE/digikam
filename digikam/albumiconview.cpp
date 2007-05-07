@@ -1074,7 +1074,8 @@ void AlbumIconView::slotInsertToLightTable(AlbumIconItem *item)
 
     ltview->disconnect(this);
 
-    // TODO: Added slots connection here if necessary.
+    connect(ltview, SIGNAL(signalFileDeleted(const KURL&)),
+           this, SLOT(slotFilesModified()));
 
     ltview->loadImageInfos(imageInfoList, currentImageInfo);
 
