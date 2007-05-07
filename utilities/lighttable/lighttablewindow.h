@@ -38,7 +38,6 @@
 #include "imageinfo.h"
 
 class KAction;
-class KURL;
 
 namespace Digikam
 {
@@ -63,6 +62,10 @@ public:
 signals: 
 
     void signalFileDeleted(const KURL&);
+
+public slots:
+
+    void slotItemsUpdated(const KURL::List&);
 
 private:
 

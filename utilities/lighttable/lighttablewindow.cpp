@@ -95,12 +95,6 @@ public:
         fileDeletePermanentlyDirectlyAction = 0;
         fileTrashDirectlyAction             = 0;
         donateMoneyAction                   = 0;
-        star0                               = 0;
-        star1                               = 0;
-        star2                               = 0;
-        star3                               = 0;
-        star4                               = 0;
-        star5                               = 0;
         zoomFitToWindowAction               = 0;
         zoomPlusAction                      = 0;
         zoomMinusAction                     = 0;
@@ -126,12 +120,6 @@ public:
     KAction                  *fileDeletePermanentlyAction;
     KAction                  *fileDeletePermanentlyDirectlyAction;
     KAction                  *fileTrashDirectlyAction;
-    KAction                  *star0;
-    KAction                  *star1;
-    KAction                  *star2;
-    KAction                  *star3;
-    KAction                  *star4;
-    KAction                  *star5;
     KAction                  *zoomPlusAction;
     KAction                  *zoomMinusAction;
     KAction                  *zoomTo100percents;
@@ -411,27 +399,6 @@ void LightTableWindow::setupActions()
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
 
-    // -- Rating actions ---------------------------------------------------------------
-
-    d->star0 = new KAction(i18n("Assign Rating \"No Star\""), CTRL+Key_0,
-                          d->rightSidebar, SLOT(slotAssignRatingNoStar()),
-                          actionCollection(), "lighttable_ratenostar");
-    d->star1 = new KAction(i18n("Assign Rating \"One Star\""), CTRL+Key_1,
-                          d->rightSidebar, SLOT(slotAssignRatingOneStar()),
-                          actionCollection(), "lighttable_rateonestar");
-    d->star2 = new KAction(i18n("Assign Rating \"Two Stars\""), CTRL+Key_2,
-                          d->rightSidebar, SLOT(slotAssignRatingTwoStar()),
-                          actionCollection(), "lighttable_ratetwostar");
-    d->star3 = new KAction(i18n("Assign Rating \"Three Stars\""), CTRL+Key_3,
-                          d->rightSidebar, SLOT(slotAssignRatingThreeStar()),
-                          actionCollection(), "lighttable_ratethreestar");
-    d->star4 = new KAction(i18n("Assign Rating \"Four Stars\""), CTRL+Key_4,
-                          d->rightSidebar, SLOT(slotAssignRatingFourStar()),
-                          actionCollection(), "lighttable_ratefourstar");
-    d->star5 = new KAction(i18n("Assign Rating \"Five Stars\""), CTRL+Key_5,
-                          d->rightSidebar, SLOT(slotAssignRatingFiveStar()),
-                          actionCollection(), "lighttable_ratefivestar");
-
     // ---------------------------------------------------------------------------------
 
     createGUI("lighttablewindowui.rc", false);
@@ -484,6 +451,37 @@ void LightTableWindow::refreshStatusBar()
                   i18n("1 item inserted in Light Table", 
                        "%1 items inserted in Light Table")
                   .arg(d->barView->countItems()));   
+}
+
+void LightTableWindow::slotItemsUpdated(const KURL::List& urls)
+{
+    d->barView->refreshThumbs(urls);
+
+    for (KURL::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
+    {
+        if (d->previewView->leftImageInfo())
+        {
+            if (d->previewView->leftImageInfo()->kurl() == *it)
+            {
+                d->previewView->leftReload();
+                d->leftSidebar->itemChanged(d->previewView->leftImageInfo());
+            }
+        }
+    
+        if (d->previewView->rightImageInfo())
+        {
+            if (d->previewView->rightImageInfo()->kurl() == *it)
+            {
+                d->previewView->rightReload();
+                d->rightSidebar->itemChanged(d->previewView->rightImageInfo());
+            }
+        }
+    }
+}
+
+void LightTableWindow::slotFileMetadataChanged(const KURL &/*url*/)
+{
+    // TODO ???
 }
 
 void LightTableWindow::slotItemSelected(ImageInfo* info)
@@ -931,14 +929,6 @@ void LightTableWindow::slotSetup()
     kapp->config()->sync();
     
     // TODO: Apply Settings here if necessary
-}
-
-void LightTableWindow::slotFileMetadataChanged(const KURL &url)
-{
-    if (url == d->barView->currentItemImageInfo()->kurl())
-    {
-        // TODO
-    }
 }
 
 void LightTableWindow::slotLeftZoomFactorChanged(double zoom)

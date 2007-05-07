@@ -1074,6 +1074,9 @@ void AlbumIconView::insertToLightTable(const ImageInfoList& list, ImageInfo* cur
     connect(ltview, SIGNAL(signalFileDeleted(const KURL&)),
            this, SLOT(slotFilesModified()));
 
+    connect(this, SIGNAL(signalItemsUpdated(const KURL::List&)),
+           ltview, SLOT(slotItemsUpdated(const KURL::List&)));
+
     ltview->loadImageInfos(list, current);
 
     if (ltview->isHidden())

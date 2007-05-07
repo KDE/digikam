@@ -236,5 +236,15 @@ void LightTableView::slotRightZoomSliderChanged(int size)
     d->rightPreview->setZoomFactor(z);
 }
 
+void LightTableView::leftReload()
+{
+    d->leftPreview->reload();
+}
+
+void LightTableView::rightReload()
+{
+    d->rightPreview->reload();
+}
+
 }  // namespace Digikam
 

@@ -71,6 +71,9 @@ public:
     bool   rightMaxZoom();
     bool   rightMinZoom();
 
+    void   leftReload();
+    void   rightReload();
+
     void   fitToWindow();
 
 signals:
