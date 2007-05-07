@@ -618,6 +618,15 @@ void DigikamApp::setupActions()
                                     "image_edit");
     d->imageViewAction->setWhatsThis(i18n("This will open the selected item in the image editor."));
 
+    d->imageLightTableAction = new KAction(i18n("Insert to Light Table"),
+                                    "idea",
+                                    Key_F6,
+                                    d->view,
+                                    SLOT(slotImageLightTable()),
+                                    actionCollection(),
+                                    "image_lighttable");
+    d->imageLightTableAction->setWhatsThis(i18n("This will insert the selected items to light table."));
+
     d->imageRenameAction = new KAction(i18n("Rename..."),
                                     "pencil",
                                     Key_F2,
@@ -940,6 +949,7 @@ void DigikamApp::setupActions()
 
     d->imageViewAction->setEnabled(false);
     d->imagePreviewAction->setEnabled(false);
+    d->imageLightTableAction->setEnabled(false);
     d->imageRenameAction->setEnabled(false);
     d->imageDeleteAction->setEnabled(false);
     d->imageExifOrientationActionMenu->setEnabled(false);
@@ -1154,6 +1164,7 @@ void DigikamApp::slotImageSelected(const QPtrList<ImageInfo>& list, bool hasPrev
     bool val = selection.isEmpty() ? false : true;
     d->imageViewAction->setEnabled(val);
     d->imagePreviewAction->setEnabled(val);
+    d->imageLightTableAction->setEnabled(val);
     d->imageRenameAction->setEnabled(val);
     d->imageDeleteAction->setEnabled(val);
     d->imageExifOrientationActionMenu->setEnabled(val);

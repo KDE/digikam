@@ -23,9 +23,6 @@
  * 
  * ============================================================ */
 
-// Uncomment this line to enable Light Table tool.
-#define ENABLE_LIGHTTABLE 1
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -531,10 +528,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     popmenu.insertItem(SmallIcon("viewimage"), i18n("View..."), 18);
     popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 10);
     popmenu.insertItem(i18n("Open With"), &openWithMenu, 11);
-
-#ifdef ENABLE_LIGHTTABLE
     popmenu.insertItem(SmallIcon("idea"), i18n("Insert to Light Table"), 19);
-#endif
 
     // Merge in the KIPI plugins actions ----------------------------
 

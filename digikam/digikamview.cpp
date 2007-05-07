@@ -1032,6 +1032,14 @@ void DigikamView::slotImageExifOrientation(int orientation)
     d->iconView->slotSetExifOrientation(orientation);
 }
 
+void DigikamView::slotImageLightTable()
+{
+    AlbumIconItem *item = d->iconView->firstSelectedItem();
+    if (!item) return;
+
+    d->iconView->slotInsertToLightTable(item);
+}
+
 void DigikamView::slotImageRename(AlbumIconItem *iconItem)
 {
     AlbumIconItem *item;
