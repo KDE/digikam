@@ -1,7 +1,13 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-21
- * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ * 
+ * Date        : 2005-04-21
+ * Description : a dio-slave to process file operations on 
+ *               digiKam albums.
+ *
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * Lots of the file io code is copied from KDE file kioslave.
  * Copyright for the KDE file kioslave follows:
@@ -24,12 +30,18 @@
 #ifndef DIGIKAMALBUMS_H
 #define DIGIKAMALBUMS_H
 
-#include <kio/slavebase.h>
+// Qt includes.
+
 #include <qvaluelist.h>
 #include <qdatetime.h>
 
+// KDE includes
+
+#include <kio/slavebase.h>
+
 class kio_digikamalbums : public KIO::SlaveBase
 {
+
 public:
 
     kio_digikamalbums(const QCString &pool_socket,

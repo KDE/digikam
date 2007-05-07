@@ -1,10 +1,14 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-07-09
- * Description :
  *
- * Copyright 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
-
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ * 
+ * Date        : 2004-07-09
+ * Description : a kio-slave to process tag query on 
+ *               digiKam albums.
+ *
+ * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -21,8 +25,16 @@
 #ifndef DIGIKAMTAGS_H
 #define DIGIKAMTAGS_H
 
-#include <kio/slavebase.h>
+// Qt includes.
+
 #include <qstring.h>
+
+// KDE includes.
+
+#include <kio/slavebase.h>
+
+// Local includes.
+
 
 class KURL;
 class QCString;

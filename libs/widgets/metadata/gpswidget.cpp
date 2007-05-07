@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2006-02-22
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2006-02-22
  * Description : a tab widget to display GPS info
  *
- * Copyright 2006-2007 by Gilles Caulier
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,13 +26,6 @@ Any good explainations about GPS (in French) can be found at this url :
 http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 */
 
-// C++ includes.
-
-#include <cstdlib>
-#include <cstdio>
-#include <cassert>
-#include <string>
-
 // Qt includes.
 
 #include <qlayout.h>
@@ -45,11 +41,6 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <kdialogbase.h>
 #include <klocale.h>
 #include <kapplication.h>
-
-// LibExiv2 includes.
-
-#include <exiv2/tags.hpp>
-#include <exiv2/exif.hpp>
 
 // Local includes.
 
@@ -257,58 +248,27 @@ bool GPSWidget::loadFromURL(const KURL& url)
 
 bool GPSWidget::decodeMetadata()
 {
-    try
-    {
-        Exiv2::ExifData exifData;
-        if (exifData.load((Exiv2::byte*)getMetadata().data(), getMetadata().size()) != 0)
-        {
-            setMetadataEmpty();
-            return false;
-        }
-
-        exifData.sortByKey();
-        
-        QString     ifDItemName;
-        MetaDataMap metaDataMap;
-
-        for (Exiv2::ExifData::iterator md = exifData.begin(); md != exifData.end(); ++md)
-        {
-            QString key = QString::fromAscii(md->key().c_str());
-
-            // Decode the tag value with a user friendly output.
-            std::ostringstream os;
-            os << *md;
-
-            // Exif tag contents can be an i18n strings, no only simple ascii.
-            QString tagValue = QString::fromLocal8Bit(os.str().c_str());
-            tagValue.replace("\n", " ");
-
-            // We apply a filter to get only standard Exif tags, not maker notes.
-            if (d->keysFilter.contains(key.section(".", 1, 1)))
-                metaDataMap.insert(key, tagValue);
-        }
-
-        // Update all metadata contents.
-        setMetadataMap(metaDataMap);
-        bool ret = decodeGPSPosition();
-        if (!ret)
-        {
-            setMetadataEmpty();
-            return false;
-        }
-
-        d->map->setEnabled(true);
-        d->detailsButton->setEnabled(true);
-        d->detailsCombo->setEnabled(true);
-        return true;
-    }
-    catch (Exiv2::Error& e)
+    DMetadata metaData;
+    if (!metaData.setExif(getMetadata()))
     {
         setMetadataEmpty();
-        DMetadata::printExiv2ExceptionError("Cannot parse EXIF metadata using Exiv2 ", e);        
+        return false;
     }
 
-    return false;
+    // Update all metadata contents.
+    setMetadataMap(metaData.getExifTagsDataList(d->keysFilter));
+
+    bool ret = decodeGPSPosition();
+    if (!ret)
+    {
+        setMetadataEmpty();
+        return false;
+    }
+
+    d->map->setEnabled(true);
+    d->detailsButton->setEnabled(true);
+    d->detailsCombo->setEnabled(true);
+    return true;
 }
 
 void GPSWidget::setMetadataEmpty()
@@ -334,34 +294,22 @@ void GPSWidget::buildView(void)
 
 QString GPSWidget::getTagTitle(const QString& key)
 {
-    try 
-    {
-        std::string exifkey(key.ascii());
-        Exiv2::ExifKey ek(exifkey); 
-        return QString::fromLocal8Bit( Exiv2::ExifTags::tagTitle(ek.tag(), ek.ifdId()) );
-    }
-    catch (Exiv2::Error& e) 
-    {
-        DMetadata::printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
-    }
+    QString title = DMetadata::getExifTagTitle(key.ascii());
 
-    return i18n("Unknown");
+    if (title.isEmpty())
+        return i18n("Unknown");
+
+    return title;
 }
 
 QString GPSWidget::getTagDescription(const QString& key)
 {
-    try 
-    {
-        std::string exifkey(key.ascii());
-        Exiv2::ExifKey ek(exifkey); 
-        return QString::fromLocal8Bit( Exiv2::ExifTags::tagDesc(ek.tag(), ek.ifdId()) );
-    }
-    catch (Exiv2::Error& e) 
-    {   
-        DMetadata::printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
-    }
+    QString desc = DMetadata::getExifTagDescription(key.ascii());
 
-    return i18n("No description available");
+    if (desc.isEmpty())
+        return i18n("No description available");
+
+    return desc;
 }
 
 bool GPSWidget::decodeGPSPosition(void)

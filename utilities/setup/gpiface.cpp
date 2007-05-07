@@ -1,9 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-02-19
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2003-02-19
  * Description : Gphoto2 interface
  * 
- * Copyright 2003 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2003 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

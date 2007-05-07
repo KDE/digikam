@@ -7,8 +7,7 @@ Notice to make release tarballs from SVN
 1/ Update the release info in these files and commit it to svn :
    - digikam/digikam/version.h
    - digikam/digikam.lsm - update date as well
-   (For digikamimageplugins, the version.h is at digikamimageplugins/common/include/)
-
+  
 2/ Edited release_digikam.rb and release_digikam_docs.rb script. Update these settings :
    - version.
    - svnbase (your own svn access that  you used for checkout must appear here. In case of pb, eliminate the others).
@@ -20,7 +19,7 @@ Note : docs must be set to 'no' because the documentation must be packaged in a 
 
 4/ Backup old ChangeLog file to ChangeLog.old.
 
-5a/ Create a fresh ChangeLog file using svn2cl script. Just run it from main digiKam root directory. 
+5a/ Create a fresh ChangeLog file using svn2cl script. Just run it from main digiKam root directory.
     Please check if ChangeLog file is updated properly.
 
 svn2cl can be dowloaded at this url: http://ch.tudelft.nl/~arthur/svn2cl/

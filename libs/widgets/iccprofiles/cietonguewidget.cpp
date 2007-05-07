@@ -1,10 +1,13 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2006-01-10
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2006-01-10
  * Description : a widget to display CIE tongue from
  *               an ICC profile.
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Any source code are inspired from lprof project and
  * Copyright (C) 1998-2001 Marti Maria
@@ -43,6 +46,7 @@
 #include "ddebug.h"
 #include "lcmsprf.h"
 #include "cietonguewidget.h"
+#include "cietonguewidget.moc"
 
 namespace Digikam
 {
@@ -795,5 +799,4 @@ void CIETongueWidget::slotBlinkTimerDone(void)
 
 }  // namespace Digikam
 
-#include "cietonguewidget.moc"
 

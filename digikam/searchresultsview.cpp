@@ -1,9 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-05-20
- * Description : 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-05-20
+ * Description : search results view.
  * 
- * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,6 +39,7 @@
 #include "imagelister.h"
 #include "searchresultsitem.h"
 #include "searchresultsview.h"
+#include "searchresultsview.moc"
 
 namespace Digikam
 {
@@ -177,5 +181,4 @@ void SearchResultsView::slotFailedThumbnail(const KURL&)
 
 }  // namespace Digikam
 
-#include "searchresultsview.moc"
 

@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2006-21-12
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  * 
- * Copyright 2006-2007 Gilles Caulier
+ * Copyright (C) 2006-2007 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,6 +45,7 @@
 #include <kdatetbl.h>
 #include <kiconloader.h>
 #include <kprocess.h>
+#include <kapplication.h>
 
 // LibKipi includes.
 
@@ -88,6 +92,8 @@ public:
         parent               = 0;
         hasPrev              = false;
         hasNext              = false;
+        currentFitWindowZoom = 0;
+        previewSize          = 1024;
     }
 
     bool               hasPrev;
@@ -105,6 +111,10 @@ public:
 
     PanIconWidget     *panIconWidget;
 
+    double             currentFitWindowZoom;
+
+    int                previewSize;
+
     ImageInfo         *imageInfo;
 
     PreviewLoadThread *previewThread;
@@ -119,6 +129,14 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
     d = new ImagePreviewViewPriv;
     d->parent = parent;
 
+    // get preview size from screen size, but limit from VGA to WQXGA
+    d->previewSize = QMAX(KApplication::desktop()->height(),
+                          KApplication::desktop()->width());
+    if (d->previewSize < 640)
+        d->previewSize = 640;
+    if (d->previewSize > 2560)
+        d->previewSize = 2560;
+
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     d->cornerButton = new QToolButton(this);
@@ -126,6 +144,9 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
     d->cornerButton->hide();
     QToolTip::add(d->cornerButton, i18n("Pan the image to a region"));
     setCornerWidget(d->cornerButton);
+
+    // To force to init zoom factor and content size as well with a null preview.
+    updateZoomAndSize(true);
 
     // ------------------------------------------------------------
 
@@ -162,8 +183,7 @@ void ImagePreviewView::setImage(const QImage& image)
 {   
     d->preview = image;
 
-    updateAutoZoom();
-    updateContentsSize();
+    updateZoomAndSize(true);
 
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
@@ -196,6 +216,7 @@ void ImagePreviewView::setImagePath(const QString& path)
 
     if (d->path.isEmpty())
     {
+        resetPreview();
         unsetCursor();
         return;
     }
@@ -213,7 +234,7 @@ void ImagePreviewView::setImagePath(const QString& path)
                 this, SLOT(slotNextPreload()));
     }
 
-    d->previewThread->load(LoadingDescription(path, 1024, AlbumSettings::instance()->getExifRotate()));
+    d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
 }
 
 void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
@@ -264,7 +285,7 @@ void ImagePreviewView::slotNextPreload()
     else
         return;
 
-    d->previewPreloadThread->load(LoadingDescription(loadPath, 1024,
+    d->previewPreloadThread->load(LoadingDescription(loadPath, d->previewSize,
                                   AlbumSettings::instance()->getExifRotate()));
 }
 
@@ -283,7 +304,7 @@ void ImagePreviewView::setImageInfo(ImageInfo* info, ImageInfo *previous, ImageI
                          next     ? next->filePath()     : QString());
 }
 
-ImageInfo* ImagePreviewView::getImageInfo()
+ImageInfo* ImagePreviewView::getImageInfo() const
 {
     return d->imageInfo;
 }
@@ -568,6 +589,42 @@ void ImagePreviewView::slotZoomChanged(double zoom)
         d->cornerButton->hide();        
 }
 
+void ImagePreviewView::resizeEvent(QResizeEvent* e)
+{
+    if (!e) return;
+
+    if (previewIsNull())
+    {
+        d->cornerButton->hide(); 
+        return;
+    }
+
+    QScrollView::resizeEvent(e);
+
+    updateZoomAndSize(false);
+    //emit signalZoomFactorChanged(zoomFactor());
+}
+
+void ImagePreviewView::updateZoomAndSize(bool alwaysFitToWindow)
+{
+    // Set zoom for fit-in-window as minimum, but dont scale up images
+    // that are smaller than the available space, only scale down.
+    double zoom = calcAutoZoomFactor(ZoomInOnly);
+    setZoomMin(zoom);
+    setZoomMax(zoom*12.0);
+
+    // Is currently the zoom factor set to fit to window? Then set it again to fit the new size.
+    if (zoomFactor() < zoom || alwaysFitToWindow || zoomFactor() == d->currentFitWindowZoom)
+    {
+        setZoomFactor(zoom);
+    }
+
+    // store which zoom factor means it is fit to window
+    d->currentFitWindowZoom = zoom;
+
+    updateContentsSize();
+}
+
 int ImagePreviewView::previewWidth()
 {
     return d->preview.width();
@@ -586,6 +643,7 @@ bool ImagePreviewView::previewIsNull()
 void ImagePreviewView::resetPreview()
 {
     d->preview.reset();
+    updateZoomAndSize(true);
 }
 
 void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)

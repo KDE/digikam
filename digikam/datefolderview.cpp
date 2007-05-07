@@ -1,10 +1,12 @@
 /* ============================================================
- * File  : datefolderview.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-27
- * Description : 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-04-27
+ * Description : a view for date albums.
  * 
- * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,6 +52,7 @@
 #include "folderitem.h"
 #include "folderview.h"
 #include "datefolderview.h"
+#include "datefolderview.moc"
 
 namespace Digikam
 {
@@ -318,4 +321,3 @@ void DateFolderView::setSelected(QListViewItem *item)
 
 }  // namespace Digikam
 
-#include "datefolderview.moc"

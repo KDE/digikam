@@ -1,9 +1,12 @@
 /* ============================================================
- * Author: Tom Albers <tomalbers@kde.nl>
- * Date  : 2005-01-01
- * Description : 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-01-01
+ * Description : scan pictures interface.
  * 
- * Copyright 2005-2006 by Tom Albers
+ * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,9 +26,13 @@
 extern "C"
 {
 #include <sys/time.h>
-#include <time.h>
-#include <stdlib.h>
 }
+
+// C++ includes
+
+#include <ctime>
+#include <cstdlib>
+
 
 // Qt includes.
 

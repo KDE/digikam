@@ -1,9 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-10-15
- * Description : 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2003-10-15
+ * Description : album item handler.
  * 
- * Copyright 2003 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2003 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,8 +23,8 @@
 
 // Local includes.
 
-#include "albumitemhandler.h"
 #include "albummanager.h"
+#include "albumitemhandler.h"
 
 namespace Digikam
 {

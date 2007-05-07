@@ -1,10 +1,13 @@
 /* ============================================================
- * Authors: Marcel Wiesweg <marcel.wiesweg@gmx.de>
- *          Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2006-12-26
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2006-12-26
  * Description : Multithreaded loader for previews
  *
- * Copyright 2006-2007 by Marcel Wiesweg, Gilles Caulier
+ * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,6 +21,10 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+// C includes
+
+#include <math.h>
 
 // Qt includes
 
@@ -35,6 +42,7 @@
 #include "ddebug.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
+#include "fastscale.h"
 #include "previewloadthread.h"
 #include "previewtask.h"
 
@@ -168,7 +176,16 @@ void PreviewLoadingTask::execute()
     if (qimage.depth() != 32)
         qimage = qimage.convertDepth(32);
 
-    qimage = qimage.smoothScale(size, size, QImage::ScaleMin);
+    // Reduce size of image:
+    // - only scale down if size is considerably larger
+    // - only scale down, do not scale up
+    QSize scaledSize = qimage.size();
+    if (needToScale(scaledSize, size))
+    {
+        scaledSize.scale(size, size, QSize::ScaleMin);
+        qimage = FastScale::fastScaleQImage(qimage, scaledSize.width(), scaledSize.height());
+        //qimage = qimage.smoothScale(scaledSize);
+    }
 
     if (m_loadingDescription.previewParameters.exifRotate)
         exifRotate(m_loadingDescription.filePath, qimage);
@@ -212,6 +229,13 @@ void PreviewLoadingTask::execute()
         // set to 0, as checked in setStatus
         m_usedProcess = 0;
     }
+}
+
+bool PreviewLoadingTask::needToScale(const QSize &imageSize, int previewSize)
+{
+    int maxSize = imageSize.width() > imageSize.height() ? imageSize.width() : imageSize.height();
+    int acceptableUpperSize = lround(1.25 * (double)previewSize);
+    return  maxSize >= acceptableUpperSize;
 }
 
 // -- Exif/IPTC preview extraction using Exiv2 --------------------------------------------------------

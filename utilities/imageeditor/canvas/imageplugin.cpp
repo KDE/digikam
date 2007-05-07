@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date   : 2004-06-04
- * Description : 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2004-06-04
+ * Description : image plugins interface for image editor
  * 
- * Copyright 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

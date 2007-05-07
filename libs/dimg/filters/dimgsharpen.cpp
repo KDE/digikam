@@ -1,10 +1,12 @@
 /* ============================================================
- * File  : dimgsharpen.cpp
- * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2005-17-07
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-17-07
  * Description : A Sharpen threaded image filter.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * Original Sharpen algorithm copyright 2002
  * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.

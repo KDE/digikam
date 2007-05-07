@@ -1,10 +1,13 @@
 /* ============================================================
- * Author: Caulier Gilles <caulier dot gilles at gmail dot com>
- * Date  : 2004-11-17
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2004-11-17
  * Description : simple image properties side bar (without support 
  *               of digiKam database).
  *
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

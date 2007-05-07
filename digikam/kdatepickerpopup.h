@@ -1,12 +1,14 @@
 /* ============================================================
- * Authors: bram Schoenmakers <bramschoenmakers@kde.nl>
- *          Mikolaj Machowski <mikmach@wp.pl>
- * Date   : 2004-04-21
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ * 
+ * Date        : 2004-04-21
  * Description : a menu widget to pick a date.
  *               this widget come from libkdepim.
  *
- * Copyright (c) 2004 Bram Schoenmakers <bramschoenmakers@kde.nl>
- *           (c) 2006 Mikolaj Machowski <mikmach@wp.pl>
+ * Copyright (C) 2004 Bram Schoenmakers <bramschoenmakers@kde.nl>
+ * Copyright (C) 2006 Mikolaj Machowski <mikmach@wp.pl>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

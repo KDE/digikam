@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2005-07-01
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-07-01
  * Description : a widget to draw a control pannel image tool.
  * 
- * Copyright 2005-2007 by Gilles Caulier
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -134,7 +137,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     // -------------------------------------------------------------
     
     d->zoomBar = new StatusZoomBar(d->previewWidget);
-    QWhatsThis::add( d->zoomBar, i18n("<p>Set here the zoom factor used to render picture on preview pannel.") );
+    QWhatsThis::add( d->zoomBar, i18n("<p>Set here the zoom factor used to render picture in the preview area.") );
 
     // -------------------------------------------------------------
     

@@ -1,11 +1,13 @@
 /* ============================================================
- * Authors: F.J. Cruz <fj.cruz@supercable.es>
- *          Gilles Caulier <caulier dot gilles at gmail dot com> 
- * Date   : 2004-07-13
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2004-07-13
  * Description : image editor printing interface.
  *
- * Copyright 2004-2007 by Gilles Caulier
- * Copyright 2006 by F.J. Cruz
+ * Copyright (C) 2006 by F.J. Cruz <fj.cruz@supercable.es>
+ * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * KeepRatio and Alignment options imported from Gwenview program.
  * Copyright (c) 2003 Angelo Naselli

@@ -1,12 +1,14 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Caulier Gilles <caulier dot gilles at gmail dot com>
- * Date   : 2005-06-16
- * Description : a dialog to select a target album to downoad
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-06-16
+ * Description : a dialog to select a target album to download
  *               pictures from camera
  * 
- * Copyright 2005 by Renchi Raju
- * Copyright 2006 by Gilles Caulier
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -200,7 +202,8 @@ void AlbumSelectDialog::slotAlbumAdded(Album* album)
 
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
     QPixmap icon = iconLoader->loadIcon("folder", KIcon::NoGroup,
-                                        32, KIcon::DefaultState, 0, true);
+                                        AlbumSettings::instance()->getDefaultTreeIconSize(),
+                                        KIcon::DefaultState, 0, true);
     
     FolderItem* viewItem = new FolderItem(parentItem, album->title());
     viewItem->setPixmap(0, icon);

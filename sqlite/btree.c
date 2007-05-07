@@ -250,7 +250,7 @@ struct Cell {
 /*
 ** Free space on a page is remembered using a linked list of the FreeBlk
 ** structures.  Space on a database page is allocated in increments of
-** at least 4 bytes and is always aligned to a 4-byte boundry.  The
+** at least 4 bytes and is always aligned to a 4-byte boundary.  The
 ** linked list of FreeBlks is always kept in order by address.
 */
 struct FreeBlk {

@@ -1,7 +1,10 @@
 /* ============================================================
- * Author: Leonid Zeitlin 
- * Date  : 2005-01-12
- * Description : 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-01-12
+ * Description : a DCROP interface. 
  * 
  * Copyright (C) 2005 by Leonid Zeitlin <lz@europe.com> 
  * Copyright (C) 2006 Tom Albers <tomalbers@kde.nl>

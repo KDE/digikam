@@ -1,13 +1,14 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Tom Albers <tomalbers@kde.nl>
- *          Caulier Gilles <caulier dot gilles at gmail dot com>
- * Date   : 2002-16-10
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2002-16-10
  * Description : main digiKam interface implementation
  * 
- * Copyright 2002-2005 by Renchi Raju by Gilles Caulier 
- * Copyright      2006 by Tom Albers
- * Copyright 2006-2007 by Gilles Caulier 
+ * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu> 
+ * Copyright (C)      2006 by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2002-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -71,6 +72,7 @@
 #include "setupplugins.h"
 #include "setupeditor.h"
 #include "setupicc.h"
+#include "lighttablewindow.h"
 #include "imagewindow.h"
 #include "imageinfo.h"
 #include "thumbnailsize.h"
@@ -177,9 +179,15 @@ DigikamApp::~DigikamApp()
 {
     ImageAttributesWatch::shutDown();
 
+    // Close and delete image editor instance.
+
     if (ImageWindow::imagewindowCreated())
-        // close and delete
         ImageWindow::imagewindow()->close(true);
+
+    // Close and delete light table instance.
+        
+    if (LightTableWindow::lightTableWindowCreated())
+        LightTableWindow::lightTableWindow()->close(true);
 
     if (d->view)
         delete d->view;
@@ -397,7 +405,7 @@ void DigikamApp::setupAccelerators()
     d->accelerators = new KAccel(this);
 
     d->accelerators->insert("Exit Preview Mode", i18n("Exit Preview"),
-                           i18n("Exit out of the preview mode"),
+                           i18n("Exit from preview mode"),
                            Key_Escape, this, SIGNAL(signalEscapePressed()),
                            false, true);
     
@@ -497,7 +505,7 @@ void DigikamApp::setupActions()
                                    SLOT(slotNewAlbum()),
                                    actionCollection(),
                                    "album_new");
-    d->newAction->setWhatsThis(i18n("This option creates a new empty Album in the database."));
+    d->newAction->setWhatsThis(i18n("Creates a new empty Album in the database."));
 
     d->albumSortAction = new KSelectAction(i18n("&Sort Albums"),
                                     0,
@@ -530,7 +538,7 @@ void DigikamApp::setupActions()
                                     SLOT(slotAlbumAddImages()),
                                     actionCollection(),
                                     "album_addImages");
-    d->addImagesAction->setWhatsThis(i18n("This option adds new items to the current Album."));
+    d->addImagesAction->setWhatsThis(i18n("Adds new items to the current Album."));
 
     d->albumImportAction = new KAction( i18n("Import Folders..."),
                                     "albumfolder-importdir",
@@ -547,8 +555,7 @@ void DigikamApp::setupActions()
                                     SLOT(slotAlbumPropsEdit()),
                                     actionCollection(),
                                     "album_propsEdit");
-    d->propsEditAction->setWhatsThis(i18n("This option allows you to set the Album Properties information "
-                                        "about the Collection."));
+    d->propsEditAction->setWhatsThis(i18n("Edit the Album Properties and Collection information."));
 
     d->refreshAlbumAction = new KAction( i18n("Refresh"),
                                     "rebuild",
@@ -557,17 +564,18 @@ void DigikamApp::setupActions()
                                     SLOT(slotAlbumRefresh()),
                                     actionCollection(),
                                     "album_refresh");
-    d->refreshAlbumAction->setWhatsThis(i18n("This option refresh all album content."));
+    d->refreshAlbumAction->setWhatsThis(i18n("This action refreshes all album contents"));
 
-    d->syncAlbumMetadataAction = new KAction( i18n("Sync Pictures Metadata"),
+    d->syncAlbumMetadataAction = new KAction( i18n("Synchronize images with database"),
                                     "rebuild",
                                     0,
                                     d->view,
                                     SLOT(slotAlbumSyncPicturesMetadata()),
                                     actionCollection(),
                                     "album_syncmetadata");
-    d->syncAlbumMetadataAction->setWhatsThis(i18n("This option sync pictures metadata from current "
-                                                "album with digiKam database contents."));
+    d->syncAlbumMetadataAction->setWhatsThis(i18n("This updates all image metadata of the current "
+                                                "album with digiKam database contents "
+						"(image metadata will be over-written with data from the database)."));
 
     d->openInKonquiAction = new KAction( i18n("Open in Konqueror"),
                                     "konqueror",
@@ -608,8 +616,7 @@ void DigikamApp::setupActions()
                                     SLOT(slotImageEdit()),
                                     actionCollection(),
                                     "image_edit");
-    d->imageViewAction->setWhatsThis(i18n("This option allows you to open the editor with the "
-                                        "current selected item."));
+    d->imageViewAction->setWhatsThis(i18n("This will open the selected item in the image editor."));
 
     d->imageRenameAction = new KAction(i18n("Rename..."),
                                     "pencil",
@@ -618,8 +625,7 @@ void DigikamApp::setupActions()
                                     SLOT(slotImageRename()),
                                     actionCollection(),
                                     "image_rename");
-    d->imageRenameAction->setWhatsThis(i18n("This option allows you to rename the filename "
-                                          "of the current selected item"));
+    d->imageRenameAction->setWhatsThis(i18n("Rename the filename of the currently selected item."));
 
     // Pop up dialog to ask user whether to move to trash
     d->imageDeleteAction            = new KAction(i18n("Delete"),
@@ -631,7 +637,7 @@ void DigikamApp::setupActions()
                                                 "image_delete");
 
     // Pop up dialog to ask user whether to permanently delete
-    d->imageDeletePermanentlyAction = new KAction(i18n("Delete Permanently"),
+    d->imageDeletePermanentlyAction = new KAction(i18n("Delete permanently"),
                                                 "editdelete",
                                                 SHIFT+Key_Delete,
                                                 d->view,
@@ -641,7 +647,7 @@ void DigikamApp::setupActions()
 
     // These two actions are hidden, no menu entry, no toolbar entry, no shortcut.
     // Power users may add them.
-    d->imageDeletePermanentlyDirectlyAction = new KAction(i18n("Delete Permanently without Confirmation"),
+    d->imageDeletePermanentlyDirectlyAction = new KAction(i18n("Delete permanently without confirmation"),
                                                         "editdelete",
                                                         0,
                                                         d->view,
@@ -649,7 +655,7 @@ void DigikamApp::setupActions()
                                                         actionCollection(),
                                                         "image_delete_permanently_directly");
 
-    d->imageTrashDirectlyAction = new KAction(i18n("Move to Trash without Confirmation"),
+    d->imageTrashDirectlyAction = new KAction(i18n("Move to trash without confirmation"),
                                               "edittrash",
                                                0,
                                                d->view,
@@ -682,7 +688,7 @@ void DigikamApp::setupActions()
     connect( exifOrientationMapper, SIGNAL( mapped( int ) ),
              d->view, SLOT( slotImageExifOrientation( int ) ) );
 
-    d->imageExifOrientationActionMenu = new KActionMenu(i18n("Correct Exif Orientation Tag"),
+    d->imageExifOrientationActionMenu = new KActionMenu(i18n("Adjust Exif Orientation Tag"),
                                                         actionCollection(),
                                                         "image_set_exif_orientation");
     d->imageExifOrientationActionMenu->setDelayed(false);
@@ -810,8 +816,7 @@ void DigikamApp::setupActions()
                                    SLOT(slotToggleFullScreen()),
                                    actionCollection(),
                                    "full_screen");
-    d->fullScreenAction->setWhatsThis(i18n("This option allows you to toggle the main window "
-                                         "in full screen mode."));
+    d->fullScreenAction->setWhatsThis(i18n("Toggles the main window to full screen mode."));
 #endif
 
     d->slideShowAction = new KActionMenu(i18n("Slide Show"), "slideshow",
@@ -831,7 +836,7 @@ void DigikamApp::setupActions()
                                               "slideshow_selected");
     d->slideShowAction->insert(d->slideShowSelectionAction);
 
-    d->slideShowRecursiveAction = new KAction(i18n("Recursive"), 0, SHIFT+Key_F9,
+    d->slideShowRecursiveAction = new KAction(i18n("With all sub-albums"), 0, SHIFT+Key_F9,
                                               d->view, 
                                               SLOT(slotSlideShowRecursive()),
                                               actionCollection(), 
@@ -856,7 +861,7 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "help_tipofday");
 
-    d->donateMoneyAction = new KAction(i18n("Donate Money..."),
+    d->donateMoneyAction = new KAction(i18n("Donate money..."),
                                    0,
                                    0,
                                    this,
@@ -905,7 +910,7 @@ void DigikamApp::setupActions()
                 this, SLOT(slotRebuildAllThumbs()), actionCollection(),
                 "thumbs_rebuild");
 
-    new KAction(i18n("Sync all Pictures Metadata..."), "reload_page", 0,
+    new KAction(i18n("Update Metadata Database..."), "reload_page", 0,
                 this, SLOT(slotSyncAllPicturesMetadata()), actionCollection(),
                 "sync_metadata");
 
@@ -1606,9 +1611,6 @@ void DigikamApp::slotShowTip()
     QStringList tipsFiles;
     tipsFiles.append("digikam/tips");
 
-    // NOTE : to remove later when DigikamImagePlugins will be merged to digiKam core. 
-    tipsFiles.append("digikamimageplugins/tips");
-
     tipsFiles.append("kipi/tips");
 
     KTipDialog::showMultiTip(this, tipsFiles, true);
@@ -1737,7 +1739,7 @@ void DigikamApp::loadCameras()
     
     d->cameraMenuAction->popupMenu()->insertSeparator();
     
-    d->cameraMenuAction->popupMenu()->insertItem(i18n("Media Browse"), d->cameraMediaList);
+    d->cameraMenuAction->popupMenu()->insertItem(i18n("Browse Media"), d->cameraMediaList);
     
     d->cameraMenuAction->popupMenu()->insertSeparator();
     
@@ -1779,7 +1781,7 @@ void DigikamApp::slotDatabaseRescan()
 
 void DigikamApp::slotRebuildAllThumbs()
 {
-    QString msg = i18n("Rebuild all albums items thumbnails can take a while.\n"
+    QString msg = i18n("Rebuilding all album item thumbnails can take a while.\n"
                        "Do you want to continue?");
     int result = KMessageBox::warningContinueCancel(this, msg);
     if (result != KMessageBox::Continue)
@@ -1800,8 +1802,7 @@ void DigikamApp::slotRebuildAllThumbsDone()
 
 void DigikamApp::slotSyncAllPicturesMetadata()
 {
-    QString msg = i18n("Sync all pictures metadata from all albums with digiKam database "
-                       "can take a while.\nDo you want to continue?");
+    QString msg = i18n("Updating the metadata database can take some time. \nDo you want to continue?");
     int result = KMessageBox::warningContinueCancel(this, msg);
     if (result != KMessageBox::Continue)
         return;

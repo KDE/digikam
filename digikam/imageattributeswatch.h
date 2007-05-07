@@ -1,10 +1,12 @@
 /* ============================================================
- * File  : imageattributeswatch.h
- * Author: Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2006-05-04
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ * 
+ * Date        : 2006-05-04
  * Description : Watch image attributes
  * 
- * Copyright 2006 by Marcel Wiesweg
+ * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +41,6 @@ namespace Digikam
 
 class ImageAttributesWatch : public QObject
 {
-
     Q_OBJECT
 
 public:
@@ -103,7 +104,6 @@ private slots:
 
 };
 
+} // namespace Digikam
 
-}
-
-#endif
+#endif // IMAGEATTRIBUTESWATCH_H

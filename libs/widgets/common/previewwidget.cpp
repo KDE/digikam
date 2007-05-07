@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2006-06-13
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2006-06-13
  * Description : a widget to display an image preview
  *
- * Copyright 2006-2007 Gilles Caulier
+ * Copyright (C) 2006-2007 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -258,16 +261,16 @@ void PreviewWidget::toggleFitToWindow()
     viewport()->update();
 }
 
-void PreviewWidget::updateAutoZoom()
+void PreviewWidget::updateAutoZoom(AutoZoomMode mode)
 {
-    d->zoom       = calcAutoZoomFactor();
+    d->zoom       = calcAutoZoomFactor(mode);
     d->zoomWidth  = (int)(previewWidth()  * d->zoom);
     d->zoomHeight = (int)(previewHeight() * d->zoom);
 
     emit signalZoomFactorChanged(d->zoom);
 }
 
-double PreviewWidget::calcAutoZoomFactor()
+double PreviewWidget::calcAutoZoomFactor(AutoZoomMode mode)
 {
     if (previewIsNull()) return d->zoom;
 
@@ -276,7 +279,15 @@ double PreviewWidget::calcAutoZoomFactor()
     double dstWidth  = contentsRect().width();
     double dstHeight = contentsRect().height();
 
-    return QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
+    double zoom = QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
+    // limit precision as above
+    zoom = floor(zoom * 10000.0) / 10000.0;
+    if (mode == ZoomInOrOut)
+        // fit to available space, scale up or down
+        return zoom;
+    else
+        // ZoomInOnly: accept that an image is smaller than available space, dont scale up
+        return QMIN(1.0, zoom);
 }
 
 void PreviewWidget::updateContentsSize()
@@ -487,10 +498,10 @@ void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
     }
     else if (e->state() & Qt::ControlButton)
     {
-        if (e->delta() < 0 && !maxZoom())
-            slotIncreaseZoom();
-        else if (e->delta() > 0 && !minZoom())
+        if (e->delta() < 0 && !minZoom())
             slotDecreaseZoom();
+        else if (e->delta() > 0 && !maxZoom())
+            slotIncreaseZoom();
         return;
     }
 

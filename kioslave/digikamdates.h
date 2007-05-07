@@ -1,7 +1,13 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-21
- * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ * 
+ * Date        : 2005-04-21
+ * Description : a kio-slave to process date query on 
+ *               digiKam albums. 
+ *
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,12 +24,15 @@
 #ifndef DIGIKAMDATES_H
 #define DIGIKAMDATES_H
 
+// KDE includes.
+
 #include <kio/slavebase.h>
 
 class QStringList;
 
 class kio_digikamdates : public KIO::SlaveBase
 {
+
 public:
 
     kio_digikamdates(const QCString &pool_socket,
@@ -32,6 +41,5 @@ public:
 
     void special(const QByteArray& data);
 };
-
 
 #endif /* DIGIKAMDATES_H */

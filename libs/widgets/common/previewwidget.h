@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2006-06-13
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2006-06-13
  * Description : a widget to display an image preview
  *
- * Copyright 2006-2007 Gilles Caulier
+ * Copyright (C) 2006-2007 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -84,10 +87,16 @@ protected:
     bool m_movingInProgress;
 
 protected:
-    
-    double calcAutoZoomFactor();
+
+    enum AutoZoomMode
+    {
+        ZoomInOrOut,
+        ZoomInOnly
+    };
+
+    double calcAutoZoomFactor(AutoZoomMode mode = ZoomInOrOut);
     int    tileSize();
-    void   updateAutoZoom();
+    void   updateAutoZoom(AutoZoomMode mode = ZoomInOrOut);
     void   updateContentsSize();
     QRect  previewRect();
 

@@ -1,11 +1,14 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2004-11-22
- * Description :
  *
- * Copyright 2004-2006 by Renchi Raju, Gilles Caulier
- * Copyright 2007 by Gilles Caulier
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2004-11-22
+ * Description : showfoto is a stand alone version of image 
+ *               editor with no support of digiKam database.
+ *
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -127,9 +130,6 @@ int main(int argc, char *argv[])
     app.setMainWidget(w);
     w->show();
     
-    // NOTE : to remove later when DigikamImagePlugins will be merged to digiKam core. 
-    KGlobal::locale()->insertCatalogue("digikamimageplugins");
-
     return app.exec();
 
     delete w;

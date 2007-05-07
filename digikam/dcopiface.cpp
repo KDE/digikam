@@ -1,9 +1,12 @@
 /* ============================================================
- * Author: Leonid Zeitlin <lz@europe.com>
- * Date  : 2005-01-12
- * Description : 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-01-12
+ * Description : a DCOP interface.
  * 
- * Copyright 2005 by Leonid Zeitlin <lz@europe.com>
+ * Copyright (C) 2005 by Leonid Zeitlin <lz@europe.com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,12 +24,13 @@
 // Local includes.
 
 #include "dcopiface.h"
+#include "dcopiface.moc"
 
 namespace Digikam
 {
 
 DCOPIface::DCOPIface(QObject *parent, const char *name)
-    : QObject(parent, name), DCOPObject(name)
+         : QObject(parent, name), DCOPObject(name)
 {
 }
 
@@ -46,4 +50,3 @@ void DCOPIface::downloadFrom( const QString &folder)
 
 }  // namespace Digikam
 
-#include "dcopiface.moc"

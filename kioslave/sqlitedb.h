@@ -1,7 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-06-05
- * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-06-05
+ * Description : QSlite DB interface.
+ *
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,12 +23,15 @@
 #ifndef SQLITEDB_H
 #define SQLITEDB_H
 
+// Qt includes.
+
 #include <qstring.h>
 
 class QStringList;
 
 class SqliteDB
 {
+
 public:
 
     SqliteDB();

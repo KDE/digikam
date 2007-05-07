@@ -1,11 +1,13 @@
 /* ============================================================
- * Authors: Antonio Larrosa <larrosa at kde dot org>
- *          Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2007-06-04
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2007-06-04
  * Description : fast smooth QImage based on Bresenham method
  *
- * Copyright 2002-2007 Antonio Larrosa
- * Copyright      2007 Gilles Caulier
+ * Copyright (C) 2002-2007 Antonio Larrosa <larrosa at kde dot org>
+ * Copyright (C)      2007 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

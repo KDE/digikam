@@ -1,9 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-10-04
- * Description :
  *
- * Copyright 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2004-10-04
+ * Description : sync IO jobs.
+ *
+ * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * Concept copied from kdelibs/kio/kio/netaccess.h/cpp
  *   This file is part of the KDE libraries
@@ -41,11 +44,12 @@
 
 #include "ddebug.h"
 #include "albumsettings.h"
-#include "syncjob.h"
 #include "thumbnailjob.h"
 #include "thumbnailsize.h"
 #include "albumthumbnailloader.h"
 #include "album.h"
+#include "syncjob.h"
+#include "syncjob.moc"
 
 void qt_enter_modal( QWidget *widget );
 void qt_leave_modal( QWidget *widget );
@@ -282,4 +286,3 @@ int SyncJob::lastErrorCode()
 
 }  // namespace Digikam
 
-#include "syncjob.moc"

@@ -1,9 +1,12 @@
 /* ============================================================
- * Author: Joern Ahrens <joern.ahrens@kdemail.net>
- * Date  : 2005-05-06
- * Copyright 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
  *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-05-06
  * Description : Albums folder view.
+ *
+ * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

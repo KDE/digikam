@@ -1,7 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-24
- * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-04-24
+ * Description : icon item. 
+ *
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,12 +70,12 @@ protected:
 
 private:
 
-    IconGroupItem   *m_group;
-    IconItem        *m_next;
-    IconItem        *m_prev;
-    int              m_x;
-    int              m_y;
-    bool             m_selected;
+    IconGroupItem *m_group;
+    IconItem      *m_next;
+    IconItem      *m_prev;
+    int            m_x;
+    int            m_y;
+    bool           m_selected;
 };
     
 }  // namespace Digikam

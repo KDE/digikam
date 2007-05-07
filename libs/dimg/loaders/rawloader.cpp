@@ -1,11 +1,14 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com> 
- *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Date   : 2005-11-01
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-11-01
  * Description : A digital camera RAW files loader for DImg 
  *               framework using an external dcraw instance.
  *
- * Copyright 2005-2007 by Gilles Caulier and Marcel Wiesweg
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,7 +60,7 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     
     readMetadata(filePath, DImg::RAW);
   
-    // NOTE: Here, we don't check a possible embeded work-space color profile using 
+    // NOTE: Here, we don't check a possible embedded work-space color profile using 
     // the method checkExifWorkingColorSpace() like with JPEG, PNG, and TIFF loaders, 
     // because RAW file are always in linear mode.
     

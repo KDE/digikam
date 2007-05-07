@@ -1,10 +1,13 @@
 /* ============================================================
- * File  : digikamalbums.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-21
- * Description : 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-04-21
+ * Description : a kio-slave to process file operations on 
+ *               digiKam albums. 
  * 
- * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * Lots of the file io code is copied from KDE file kioslave.
  * Copyright for the KDE file kioslave follows:

@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2007-04-11
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2007-04-11
  * Description : light table thumbs bar
  *
- * Copyright 2007 by Gilles Caulier
+ * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,12 +27,14 @@
 // Local includes.
 
 #include "thumbbar.h"
+#include "imageinfo.h"
 #include "digikam_export.h"
+
+class KURL;
 
 namespace Digikam
 {
 
-class ImageInfo;
 class LightTableBarItem;
 class LightTableBarToolTip;
 class LightTableBarPriv;
@@ -44,7 +49,10 @@ public:
     LightTableBar(QWidget* parent, int orientation=Vertical, bool exifRotate=false);
     ~LightTableBar();
 
-    ImageInfo* currentItemImageInfo() const;
+    ImageInfo*    currentItemImageInfo() const;
+    ImageInfoList itemsImageInfoList();
+
+    LightTableBarItem* findItemByInfo(const ImageInfo* info) const;
 
     /** Read tool tip settings from Album Settings instance */
     void readToolTipSettings();
@@ -52,7 +60,15 @@ public:
 signals:
 
     void signalLightTableBarItemSelected(ImageInfo*);
-    
+    void signalSetItemOnLeftPanel(ImageInfo*);
+    void signalSetItemOnRightPanel(ImageInfo*);
+    void signalRemoveItem(const KURL&);
+
+protected:
+
+    void viewportPaintEvent(QPaintEvent* e);    
+    void contentsMouseReleaseEvent(QMouseEvent *e);
+
 private slots:
 
     void slotItemSelected(ThumbBarItem* i);

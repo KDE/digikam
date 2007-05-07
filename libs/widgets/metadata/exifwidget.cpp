@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2006-02-20
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2006-02-20
  * Description : a widget to display Standard Exif metadata
  * 
- * Copyright 2006-2007 by Gilles Caulier
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,13 +21,6 @@
  * 
  * ============================================================ */
 
-// C++ includes.
-
-#include <cstdlib>
-#include <cstdio>
-#include <cassert>
-#include <string>
-
 // Qt includes.
 
 #include <qmap.h>
@@ -33,12 +29,6 @@
 // KDE includes.
 
 #include <klocale.h>
-
-// LibExiv2 includes.
-
-#include <exiv2/exif.hpp>
-#include <exiv2/tags.hpp>
-#include <exiv2/ifd.hpp>
 
 // Local includes.
 
@@ -138,53 +128,14 @@ bool ExifWidget::loadFromURL(const KURL& url)
 
 bool ExifWidget::decodeMetadata()
 {
-    try
-    {
-        Exiv2::ExifData exifData;
-        if (exifData.load((Exiv2::byte*)getMetadata().data(), getMetadata().size()) != 0)
-            return false;
+    DMetadata metaData;
+    if (!metaData.setExif(getMetadata()))
+        return false;
 
-        exifData.sortByKey();
-        
-        QString     ifDItemName;
-        MetaDataMap metaDataMap;
+    // Update all metadata contents.
+    setMetadataMap(metaData.getExifTagsDataList(m_keysFilter));
 
-        for (Exiv2::ExifData::iterator md = exifData.begin(); md != exifData.end(); ++md)
-        {
-            QString key = QString::fromAscii(md->key().c_str());
-
-            // Decode the tag value with a user friendly output.
-            QString tagValue;
-            if (key == "Exif.Photo.UserComment")
-            {
-                tagValue = DMetadata::convertCommentValue(*md);
-            }
-            else
-            {
-                std::ostringstream os;
-                os << *md;
-
-                // Exif tag contents can be an i18n strings, no only simple ascii.
-                tagValue = QString::fromLocal8Bit(os.str().c_str());
-            }
-            tagValue.replace("\n", " ");
-
-            // We apply a filter to get only standard Exif tags, not maker notes.
-            if (m_keysFilter.contains(key.section(".", 1, 1)))
-                metaDataMap.insert(key, tagValue);
-        }
-
-        // Update all metadata contents.
-        setMetadataMap(metaDataMap);
-
-        return true;
-    }
-    catch (Exiv2::Error& e)
-    {
-        DMetadata::printExiv2ExceptionError("Cannot parse EXIF metadata using Exiv2 ", e);
-    }
-
-    return false;
+    return true;
 }
 
 void ExifWidget::buildView(void)
@@ -202,34 +153,22 @@ void ExifWidget::buildView(void)
 
 QString ExifWidget::getTagTitle(const QString& key)
 {
-    try 
-    {
-        std::string exifkey(key.ascii());
-        Exiv2::ExifKey ek(exifkey); 
-        return QString::fromLocal8Bit( Exiv2::ExifTags::tagTitle(ek.tag(), ek.ifdId()) );
-    }
-    catch (Exiv2::Error& e) 
-    {
-        DMetadata::printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
-    }
+    QString title = DMetadata::getExifTagTitle(key.ascii());
 
-    return i18n("Unknown");
+    if (title.isEmpty())
+        return i18n("Unknown");
+
+    return title;
 }
 
 QString ExifWidget::getTagDescription(const QString& key)
 {
-    try 
-    {
-        std::string exifkey(key.ascii());
-        Exiv2::ExifKey ek(exifkey); 
-        return QString::fromLocal8Bit( Exiv2::ExifTags::tagDesc(ek.tag(), ek.ifdId()) );
-    }
-    catch (Exiv2::Error& e) 
-    {
-        DMetadata::printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
-    }
+    QString desc = DMetadata::getExifTagDescription(key.ascii());
 
-    return i18n("No description available");
+    if (desc.isEmpty())
+        return i18n("No description available");
+
+    return desc;
 }
 
 void ExifWidget::slotSaveMetadataToFile(void)

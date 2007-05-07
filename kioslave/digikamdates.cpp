@@ -1,11 +1,14 @@
 /* ============================================================
- * File  : digikamdates.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-21
- * Description :
  *
- * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
-
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-04-21
+ * Description : a kio-slave to process date query on 
+ *               digiKam albums. 
+ *
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -19,7 +22,17 @@
  *
  * ============================================================ */
 
-#include <digikam_export.h>
+// C++ includes.
+
+#include <cstdlib>
+
+// Qt includes.
+
+#include <qfile.h>
+#include <qdatastream.h>
+#include <qbuffer.h>
+
+// KDE includes.
 
 #include <kio/global.h>
 #include <kglobal.h>
@@ -28,21 +41,9 @@
 #include <kfilemetainfo.h>
 #include <kdebug.h>
 
-#include <qfile.h>
-#include <qdatastream.h>
-#include <qbuffer.h>
+// Local includes.
 
-extern "C"
-{
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/time.h>
-#include <time.h>
-}
-
+#include "digikam_export.h"
 #include "imagelister.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
@@ -50,8 +51,8 @@ extern "C"
 #include "digikamdates.h"
 
 kio_digikamdates::kio_digikamdates(const QCString &pool_socket,
-                                     const QCString &app_socket)
-    : SlaveBase("kio_digikamdates", pool_socket, app_socket)
+                                   const QCString &app_socket)
+                : SlaveBase("kio_digikamdates", pool_socket, app_socket)
 {
 }
 

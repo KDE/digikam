@@ -1,10 +1,12 @@
 /* ============================================================
- * File  : imageattributeswatch.cpp
- * Author: Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2006-05-04
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2006-05-04
  * Description : Watch image attributes
  * 
- * Copyright 2006 by Marcel Wiesweg
+ * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,6 +26,7 @@
 #include "databaseaccess.h"
 #include "databaseattributeswatch.h"
 #include "imageattributeswatch.h"
+#include "imageattributeswatch.moc"
 
 namespace Digikam
 {
@@ -118,4 +121,3 @@ void ImageAttributesWatch::fileMetadataChanged(const KURL &url)
 
 } // namespace Digikam
 
-#include "imageattributeswatch.moc"

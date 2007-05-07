@@ -1,10 +1,13 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2006-02-20
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2006-02-20
  * Description : a widget to display non standard Exif metadata
  *               used by camera makers
  *
- * Copyright 2006-2007 by Gilles Caulier
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -163,45 +166,14 @@ bool MakerNoteWidget::loadFromURL(const KURL& url)
 
 bool MakerNoteWidget::decodeMetadata()
 {
-    try
-    {
-        Exiv2::ExifData exifData;
-        if (exifData.load((Exiv2::byte*)getMetadata().data(), getMetadata().size()) != 0)
-            return false;
+    DMetadata metaData;
+    if (!metaData.setExif(getMetadata()))
+        return false;
 
-        exifData.sortByKey();
-        
-        QString ifDItemName;
-        MetaDataMap metaDataMap;
+    // Update all metadata contents.
+    setMetadataMap(metaData.getExifTagsDataList(m_keysFilter, true));
 
-        for (Exiv2::ExifData::iterator md = exifData.begin(); md != exifData.end(); ++md)
-        {
-            QString key = QString::fromAscii(md->key().c_str());
-            
-            // Decode the tag value with a user friendly output.
-            std::ostringstream os;
-            os << *md;
-
-            // Exif tag contents can be an i18n strings, no only simple ascii.
-            QString tagValue = QString::fromLocal8Bit(os.str().c_str());
-            tagValue.replace("\n", " ");
-
-            // We apply a filter to get only standard Exif tags, not maker notes.
-            if (!m_keysFilter.contains(key.section(".", 1, 1)))
-                metaDataMap.insert(key, tagValue);
-        }
-        
-        // Update all metadata contents.
-        setMetadataMap(metaDataMap);
-
-        return true;
-    }
-    catch (Exiv2::Error& e)
-    {
-        DMetadata::printExiv2ExceptionError("Cannot parse MAKERNOTE metadata using Exiv2 ", e);
-    }
-
-    return false;
+    return true;
 }
 
 void MakerNoteWidget::buildView(void)
@@ -218,34 +190,22 @@ void MakerNoteWidget::buildView(void)
 
 QString MakerNoteWidget::getTagTitle(const QString& key)
 {
-    try 
-    {
-        std::string exifkey(key.ascii());
-        Exiv2::ExifKey ek(exifkey); 
-        return QString::fromLocal8Bit( Exiv2::ExifTags::tagTitle(ek.tag(), ek.ifdId()) );
-    }
-    catch (Exiv2::Error& e) 
-    {
-        DMetadata::printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
-    }
+    QString title = DMetadata::getExifTagTitle(key.ascii());
 
-    return i18n("Unknown");
+    if (title.isEmpty())
+        return i18n("Unknown");
+
+    return title;
 }
 
 QString MakerNoteWidget::getTagDescription(const QString& key)
 {
-    try 
-    {
-        std::string exifkey(key.ascii());
-        Exiv2::ExifKey ek(exifkey); 
-        return QString::fromLocal8Bit( Exiv2::ExifTags::tagDesc(ek.tag(), ek.ifdId()) );
-    }
-    catch (Exiv2::Error& e) 
-    {
-        DMetadata::printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
-    }
+    QString desc = DMetadata::getExifTagDescription(key.ascii());
 
-    return i18n("No description available");
+    if (desc.isEmpty())
+        return i18n("No description available");
+
+    return desc;
 }
 
 void MakerNoteWidget::slotSaveMetadataToFile(void)

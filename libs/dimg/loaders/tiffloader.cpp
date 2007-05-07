@@ -1,11 +1,13 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at gmail dot com> 
- * Date  : 2005-06-17
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-06-17
  * Description : A TIFF IO file for DImg framework
  * 
- * Copyright 2005 by Renchi Raju, Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * Specifications & references:
  * - TIFF 6.0  : http://partners.adobe.com/public/developer/en/tiff/TIFF6.pdf

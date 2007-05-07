@@ -41,7 +41,6 @@ Image Plugins : New zooming capabilities in image plugins dialogs.
 Image Plugins : Ported all core image plugins to new DImg API. Support of 16 bits images.
 Image Plugins : Ported all DigikamImagePlugins tools to new DImg API. Support of 16 bits images.
 
-
 Setup         : Advanced settings to load RAW files in Image Editor using external dcraw instance.
 Setup         : Setup implementation are now common between Showfoto and digiKam.
 Setup         : New Identity setup page to set default strings informations about Photographer and 
@@ -116,6 +115,7 @@ General       : New kipi plugin to edit EXIF and IPTC metadata (available with n
 
 General       : Exiv2 depency fixed to 0.12 release.
 General       : Fix broken compilation using "./configure -enable-final" option.
+
 ImageEditor   : Fixed and improved Color Management View workflow.
 
 *** 0.9.0-final *********************************************************

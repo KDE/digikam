@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2006-21-12
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  * 
- * Copyright 2006-2007 Gilles Caulier
+ * Copyright (C) 2006-2007 Gilles Caulier  <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,7 +58,7 @@ public:
     QImage& getImage() const;
 
     void setImageInfo(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
-    ImageInfo* getImageInfo();
+    ImageInfo* getImageInfo() const;
 
     void reload();
     void setImagePath(const QString& path=QString());
@@ -70,6 +73,10 @@ signals:
     void signalPreviewLoaded();
     void signalBack2Album();
     void signalSlideShow();
+
+protected:
+
+    void resizeEvent(QResizeEvent* e);
 
 private slots:
 
@@ -91,6 +98,7 @@ private:
     int  previewHeight();
     bool previewIsNull();
     void resetPreview();
+    void updateZoomAndSize(bool alwaysFitToWindow);
     inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
 
 private:

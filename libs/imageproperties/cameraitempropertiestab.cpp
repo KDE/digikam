@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors: Caulier Gilles <caulier dot gilles at gmail dot com>
- * Date   : 2006-02-08
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2006-02-08
  * Description : A tab to display camera item information
  *
- * Copyright 2006-2007 by Gilles Caulier
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -212,8 +215,50 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     d->labelPhotoFlash        = new KSqueezedTextLabel(0, d->settingsArea);
     d->labelPhotoWhiteBalance = new KSqueezedTextLabel(0, d->settingsArea);
 
+    int hgt = fontMetrics().height()-2;
     d->title->setAlignment(Qt::AlignCenter);
+    d->file->setMaximumHeight(hgt);
+    d->folder->setMaximumHeight(hgt);
+    d->date->setMaximumHeight(hgt);
+    d->size->setMaximumHeight(hgt);
+    d->isReadable->setMaximumHeight(hgt);
+    d->isWritable->setMaximumHeight(hgt);
+    d->mime->setMaximumHeight(hgt);
+    d->dimensions->setMaximumHeight(hgt);
+    d->newFileName->setMaximumHeight(hgt);
+    d->downloaded->setMaximumHeight(hgt);
+    d->labelFile->setMaximumHeight(hgt);
+    d->labelFolder->setMaximumHeight(hgt);
+    d->labelFileDate->setMaximumHeight(hgt);
+    d->labelFileSize->setMaximumHeight(hgt);
+    d->labelFileIsReadable->setMaximumHeight(hgt);
+    d->labelFileIsWritable->setMaximumHeight(hgt);
+    d->labelImageMime->setMaximumHeight(hgt);
+    d->labelImageDimensions->setMaximumHeight(hgt);
+    d->labelNewFileName->setMaximumHeight(hgt);
+    d->labelAlreadyDownloaded->setMaximumHeight(hgt);
+
     d->title2->setAlignment(Qt::AlignCenter);
+    d->make->setMaximumHeight(hgt);
+    d->model->setMaximumHeight(hgt);
+    d->photoDate->setMaximumHeight(hgt);
+    d->aperture->setMaximumHeight(hgt);
+    d->focalLength->setMaximumHeight(hgt);
+    d->exposureTime->setMaximumHeight(hgt);
+    d->sensitivity->setMaximumHeight(hgt);
+    d->exposureMode->setMaximumHeight(hgt);
+    d->flash->setMaximumHeight(hgt);
+    d->whiteBalance->setMaximumHeight(hgt);
+    d->labelPhotoMake->setMaximumHeight(hgt);
+    d->labelPhotoModel->setMaximumHeight(hgt);
+    d->labelPhotoDateTime->setMaximumHeight(hgt);
+    d->labelPhotoAperture->setMaximumHeight(hgt);
+    d->labelPhotoFocalLenght->setMaximumHeight(hgt);
+    d->labelPhotoExposureTime->setMaximumHeight(hgt);
+    d->labelPhotoSensitivity->setMaximumHeight(hgt);
+    d->labelPhotoExposureMode->setMaximumHeight(hgt);
+    d->labelPhotoFlash->setMaximumHeight(hgt);
+    d->labelPhotoWhiteBalance->setMaximumHeight(hgt);
 
     // --------------------------------------------------
 

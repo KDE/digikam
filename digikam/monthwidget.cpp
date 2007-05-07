@@ -1,10 +1,12 @@
 /* ============================================================
- * File  : monthwidget.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-05-02
- * Description : 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-05-02
+ * Description : a widget to perform month selection.
  * 
- * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,6 +41,7 @@
 #include "imageinfo.h"
 #include "albumlister.h"
 #include "monthwidget.h"
+#include "monthwidget.moc"
 
 namespace Digikam
 {
@@ -388,4 +391,3 @@ void MonthWidget::slotDeleteItem(ImageInfo* item)
 
 }  // namespace Digikam
 
-#include "monthwidget.moc"

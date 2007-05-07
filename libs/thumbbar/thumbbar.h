@@ -1,11 +1,13 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2004-11-22
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2004-11-22
  * Description : a bar widget to display image thumbnails
  *
- * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
- * Copyright 2006-2007 by Gilles Caulier
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -111,8 +113,8 @@ public:
 
     void removeItem(ThumbBarItem* item);
 
-    ThumbBarItem* currentItem() const;
     void setSelected(ThumbBarItem* item);
+    void ensureItemVisible(ThumbBarItem* item);
 
     void setExifRotate(bool exifRotate);
     bool getExifRotate();
@@ -120,6 +122,7 @@ public:
     void setToolTipSettings(const ThumbBarToolTipSettings &settings);
     ThumbBarToolTipSettings& getToolTipSettings();
 
+    ThumbBarItem* currentItem() const;
     ThumbBarItem* firstItem() const;
     ThumbBarItem* lastItem()  const;
     ThumbBarItem* findItem(const QPoint& pos) const;
@@ -129,9 +132,14 @@ public:
         
 protected:
 
+    int  getOrientation();
+    int  getTileSize();
+    int  getMargin();
+
     void resizeEvent(QResizeEvent* e);
-    void viewportPaintEvent(QPaintEvent* e);
     void contentsMousePressEvent(QMouseEvent* e);
+
+    virtual void viewportPaintEvent(QPaintEvent* e);
 
 private:
 
@@ -175,6 +183,7 @@ public:
     ThumbBarItem* prev() const;
     int           position() const;
     QRect         rect() const;
+    QPixmap*      pixmap() const;
 
     void          repaint();
 

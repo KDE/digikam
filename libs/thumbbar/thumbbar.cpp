@@ -1,11 +1,13 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2004-11-22
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2004-11-22
  * Description : a bar widget to display image thumbnails
  * 
- * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
- * Copyright 2006-2007 by Gilles Caulier
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -202,6 +204,7 @@ void ThumbBarView::resizeEvent(QResizeEvent* e)
     }
 
     rearrangeItems();
+    ensureItemVisible(currentItem());
 }
 
 void ThumbBarView::setExifRotate(bool exifRotate)
@@ -232,6 +235,21 @@ void ThumbBarView::setExifRotate(bool exifRotate)
 bool ThumbBarView::getExifRotate()
 {
     return d->exifRotate;
+}
+
+int ThumbBarView::getOrientation()
+{
+    return d->orientation;
+}
+
+int ThumbBarView::getTileSize()
+{
+    return d->tileSize;
+}
+
+int ThumbBarView::getMargin()
+{
+    return d->margin;
 }
 
 void ThumbBarView::setToolTipSettings(const ThumbBarToolTipSettings &settings)
@@ -353,19 +371,27 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
     d->currItem = item;
     if (d->currItem)
     {
+        ensureItemVisible(item);          
+        item->repaint();
+
+        emit signalURLSelected(item->url());
+        emit signalItemSelected(item);
+    }
+}
+
+void ThumbBarView::ensureItemVisible(ThumbBarItem* item)
+{
+    if (item)
+    {
         // We want the complete thumb visible and the next one.
         // find the middle of the image and give a margin of 1,5 image
         // When changed, watch regression for bug 104031
         if (d->orientation == Vertical)
-            ensureVisible(0, (int)(item->d->pos+d->margin+d->tileSize*.5),
-                          0, (int)(d->tileSize*1.5+3*d->margin));
+            ensureVisible(0, (int)(item->d->pos + d->margin + d->tileSize*.5),
+                          0, (int)(d->tileSize*1.5 + 3*d->margin));
         else
-            ensureVisible((int)(item->d->pos+d->margin+d->tileSize*.5), 0,
-                          (int)(d->tileSize*1.5+3*d->margin), 0);
-          
-        item->repaint();
-        emit signalURLSelected(item->url());
-        emit signalItemSelected(item);
+            ensureVisible((int)(item->d->pos + d->margin + d->tileSize*.5), 0,
+                          (int)(d->tileSize*1.5 + 3*d->margin), 0);
     }
 }
 
@@ -424,7 +450,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
        x1 = (cx/ts)*ts;
        x2 = ((x1 + er.width())/ts +1)*ts;
     }
-    
+
     bgPix.fill(colorGroup().background());
     
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
@@ -790,6 +816,16 @@ QRect ThumbBarItem::rect() const
                      d->view->d->tileSize + 2*d->view->d->margin,
                      d->view->visibleHeight());
     }
+}
+
+int ThumbBarItem::position() const
+{
+    return d->pos;
+}
+
+QPixmap* ThumbBarItem::pixmap() const
+{
+    return d->pixmap;
 }
 
 void ThumbBarItem::repaint()

@@ -1,12 +1,14 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Caulier Gilles 
- *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Date   : 2002-16-10
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2002-16-10
  * Description : album icon view 
  * 
- * Copyright 2002-2005 by Renchi Raju by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> and Marcel Wiesweg
+ * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2002-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -132,6 +134,7 @@ public slots:
     void slotDeleteSelectedItems(bool deletePermanently = false);
     void slotDeleteSelectedItemsDirectly(bool useTrash);
     void slotDisplayItem(AlbumIconItem *item=0);
+    void slotInsertToLightTable(AlbumIconItem *item=0);
     void slotAlbumModified();
     void slotSetAlbumThumbnail(AlbumIconItem *iconItem);
     void slotCopy();

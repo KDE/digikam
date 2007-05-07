@@ -1,9 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-09-26
- * Description : 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
  * 
- * Copyright 2003 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date        : 2003-09-26
+ * Description : album item handler. 
+ * 
+ * Copyright (C) 2003 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

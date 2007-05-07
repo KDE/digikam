@@ -1,9 +1,12 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2004-07-21
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2004-07-21
  * Description : a widget to display an image histogram.
  *
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Some code parts are inspired from from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
@@ -49,6 +52,7 @@
 #include "ddebug.h"
 #include "imagehistogram.h"
 #include "histogramwidget.h"
+#include "histogramwidget.moc"
 
 namespace Digikam
 {
@@ -1041,5 +1045,4 @@ void HistogramWidget::slotMaxValueChanged( int max )
 
 }  // namespace Digikam
 
-#include "histogramwidget.moc"
 

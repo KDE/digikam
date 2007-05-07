@@ -1,10 +1,13 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date  : 2006-02-21
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2006-02-21
  * Description : a generic list view widget to 
  *               display metadata
  * 
- * Copyright 2006 by Gilles Caulier
+ * Copyright (c) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,6 +39,7 @@
 #include "mdkeylistviewitem.h"
 #include "metadatalistviewitem.h"
 #include "metadatalistview.h"
+#include "metadatalistview.moc"
 
 namespace Digikam
 {
@@ -127,15 +131,15 @@ void MetadataListView::slotSelectionChanged(QListViewItem *item)
                           .arg(tagDesc));
 }
 
-void MetadataListView::setIfdList(MetadataWidget::MetaDataMap ifds, const QStringList& tagsfilter)
+void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, const QStringList& tagsfilter)
 {
     clear();
     
-    uint subItems = 0;
-    QString ifDItemName;
+    uint               subItems = 0;
+    QString            ifDItemName;
     MdKeyListViewItem *parentifDItem = 0;
 
-    for (MetadataWidget::MetaDataMap::iterator it = ifds.begin(); it != ifds.end(); ++it)
+    for (DMetadata::MetaDataMap::iterator it = ifds.begin(); it != ifds.end(); ++it)
     {
         // We checking if we have changed of ifDName
         QString currentIfDName = it.key().section('.', 1, 1);
@@ -185,7 +189,7 @@ void MetadataListView::setIfdList(MetadataWidget::MetaDataMap ifds, const QStrin
     QTimer::singleShot( 0, this, SLOT( triggerUpdate() ) );
 }
 
-void MetadataListView::setIfdList(MetadataWidget::MetaDataMap ifds, QStringList keysFilter,
+void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, QStringList keysFilter,
                                   const QStringList& tagsFilter)
 {
     clear();
@@ -200,7 +204,7 @@ void MetadataListView::setIfdList(MetadataWidget::MetaDataMap ifds, QStringList 
         subItems = 0;
         parentifDItem = new MdKeyListViewItem(this, *itKeysFilter);
         
-        MetadataWidget::MetaDataMap::iterator it = ifds.end(); 
+        DMetadata::MetaDataMap::iterator it = ifds.end(); 
 
         while(1)   
         {
@@ -252,4 +256,3 @@ void MetadataListView::viewportResizeEvent(QResizeEvent* e)
 
 }  // namespace Digikam
 
-#include "metadatalistview.moc"

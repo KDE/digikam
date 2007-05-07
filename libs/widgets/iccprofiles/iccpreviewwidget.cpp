@@ -1,10 +1,13 @@
 /* ============================================================
- * Author: Francisco J. Cruz <fj.cruz@supercable.es>
- * Date  : 2006-01-12
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2006-01-12
  * Description : a widget to display ICC profiles descriptions
  *               in file dialog preview.
  * 
- * Copyright 2006 by Francisco J. Cruz <fj.cruz@supercable.es>
+ * Copyright (C) 2006-2007 by Francisco J. Cruz <fj.cruz@supercable.es>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,6 +37,7 @@
 #include "ddebug.h"
 #include "iccprofilewidget.h"
 #include "iccpreviewwidget.h"
+#include "iccpreviewwidget.moc"
 
 namespace Digikam 
 {
@@ -76,4 +80,4 @@ void ICCPreviewWidget::clearPreview()
 
 } // namespace Digikam
 
-#include "iccpreviewwidget.moc"
+

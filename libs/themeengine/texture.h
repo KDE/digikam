@@ -1,9 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-07-26
- * Description : 
  *
- * Copyright 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2004-07-26
+ * Description : texture pixmap methods
+ *
+ * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * 
  * Adapted from fluxbox: Texture/TextureRender
  *

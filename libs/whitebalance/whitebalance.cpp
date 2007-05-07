@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2007-16-01
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ * 
+ * Date        : 2007-16-01
  * Description : white balance color correction.
  * 
- * Copyright 2007 by Gilles Caulier
+ * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Some parts are inspired from RawPhoto implementation copyrighted 
  * 2004-2005 by Pawel T. Jochym <jochym at ifj edu pl>

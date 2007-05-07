@@ -1,11 +1,13 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
-            Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date   : 2005-05-25
- * Description : Texture threaded image filter.
- * 
- * Copyright 2005 by Gilles Caulier 
- * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-05-25
+ * Description : Blur FX threaded image filter.
+ *
+ * Copyright 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * 
  * Original Blur algorithms copyrighted 2004 by 
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -346,7 +348,7 @@ void BlurFX::radialBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X
  * data             => The image data in RGBA mode.                            
  * Width            => Width of image.                          
  * Height           => Height of image.                            
- * BlurRadius       => Radius of blured image. 
+ * BlurRadius       => Radius of blurred image. 
  * BlendRadius      => Radius of blending effect.
  * bInversed        => If true, invert focus effect.
  * pArea            => Preview area.
@@ -454,7 +456,7 @@ void BlurFX::focusBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
             // In normal mode, the image is focused in the middle
             // and less focused towards the border.
             // In inversed mode, the image is more focused towards the edge
-            // and less focussed in the middle.
+            // and less focused in the middle.
             // This is achieved by swapping src and dest while blending.
             if (bInversed)
             {
@@ -1054,7 +1056,7 @@ void BlurFX::frostGlass(Digikam::DImg *orgImage, Digikam::DImg *destImage, int F
 
     int range = sixteenBit ? 65535 : 255;
 
-    // it is a huge optimisation to allocate these here once
+    // it is a huge optimizsation to allocate these here once
     uchar *IntensityCount = new uchar[range + 1];
     uint *AverageColorR = new uint[range + 1];
     uint *AverageColorG = new uint[range + 1];
