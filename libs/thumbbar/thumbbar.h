@@ -128,6 +128,7 @@ public:
     ThumbBarItem* findItem(const QPoint& pos) const;
     ThumbBarItem* findItemByURL(const KURL& url) const;
 
+    void refreshThumbs(const KURL::List& urls);
     void invalidateThumb(ThumbBarItem* item);
         
 protected:

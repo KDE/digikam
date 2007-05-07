@@ -402,6 +402,18 @@ void ThumbBarView::ensureItemVisible(ThumbBarItem* item)
     }
 }
 
+void ThumbBarView::refreshThumbs(const KURL::List& urls)
+{
+    for (KURL::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
+    {
+        ThumbBarItem *item = findItemByURL(*it);
+        if (item)
+        {
+            invalidateThumb(item);
+        }
+    }
+}
+
 void ThumbBarView::invalidateThumb(ThumbBarItem* item)
 {
     if (!item) return;
