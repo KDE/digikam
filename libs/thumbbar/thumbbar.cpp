@@ -163,9 +163,10 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
 
     viewport()->setBackgroundMode(Qt::NoBackground);
     viewport()->setMouseTracking(true);
+    viewport()->setAcceptDrops(true);
+
     setFrameStyle(QFrame::NoFrame);
     setAcceptDrops(true); 
-    viewport()->setAcceptDrops(true);
 
     if (d->orientation == Vertical)
     {
