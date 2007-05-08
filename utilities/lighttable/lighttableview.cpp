@@ -292,9 +292,11 @@ void LightTableView::slotRightContentsMoved(int x, int y)
 void LightTableView::slotPreviewLoaded()
 {
     if (d->leftPreview->getImageSize() == d->rightPreview->getImageSize())
-        emit signalToggleOnSyncPreview(true); 
+        d->syncPreview = true; 
     else
-        emit signalToggleOnSyncPreview(false); 
+        d->syncPreview = false; 
+
+    emit signalToggleOnSyncPreview(d->syncPreview); 
 }
 
 }  // namespace Digikam
