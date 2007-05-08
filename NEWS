@@ -1,20 +1,22 @@
-digiKam and DigikamImagePlugins 0.9.2-beta2 - Release date: 2007-05-??
-----------------------------------------------------------------------------------------------------
-*** 0.9.2-beta2 *******************************************************
+digiKam 0.9.2-beta2 - Release date: 2007-05-??
 
-NEW FEATURES :
+NEW FEATURES:
 
 General       : digiKam has a new powerfull tool to compare images side by side : the Light Table.
 
 ----------------------------------------------------------------------------
-digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+digiKam BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
 040 ==> 135048 : Easy comparing similar pictures using a lighttable.
 
-digiKam and DigikamImagePlugins 0.9.2-beta1 - Release date: 2007-05-04
 
-NEW FEATURES :
+**********************************************************************************************
 
-*** 0.9.2-beta1 *******************************************************
+
+digiKam 0.9.2-beta1 - Release date: 2007-05-04
+
+NEW FEATURES:
 
 General       : DigikamImagePlugins have been merged into digiKam. It more simple to release
                 on package for all. Image plugins translations are hosted to digikam.po file 
@@ -45,7 +47,8 @@ Image Plugins : Red Eyes Correction tool have been completly re-writen. There is
                 a preview of effect and the capability to taint the eye pupil with
                 a customized color. The new eye pupil can be blured to smooth the 
                 result. 
-Image Plugins : Solarize plugin is now a "Color Effects" pack including Solarize, Velvia (new                   plugin), Neon, and Edge effects. 
+Image Plugins : Solarize plugin is now a "Color Effects" pack including Solarize, Velvia (new
+                plugin), Neon, and Edge effects. 
 Image Plugins : Black & White converter now support a lots of B&W analog camera film 
                 types (Agfa, Ilford, Kodak). A new 'strength' setting can simulate the 
                 amount of Lens filters effect.  
@@ -59,7 +62,8 @@ Showfoto      : The thumbbar items can show a full configurable tool tip like di
                 items tool tip.
 
 ----------------------------------------------------------------------------
-digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+digiKam BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 142443 : Red eye correction should change eye colour to an alternate colour.
 002 ==> 138744 : Dcraw 8.45 supports Pentax K10D.
