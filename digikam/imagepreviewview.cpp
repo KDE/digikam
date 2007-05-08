@@ -98,6 +98,10 @@ public:
     bool               hasPrev;
     bool               hasNext;
 
+    int                previewSize;
+
+    double             currentFitWindowZoom;
+
     QString            path;
     QString            nextPath;
     QString            previousPath;
@@ -109,10 +113,6 @@ public:
     KPopupFrame       *panIconPopup;
 
     PanIconWidget     *panIconWidget;
-
-    double             currentFitWindowZoom;
-
-    int                previewSize;
 
     ImageInfo         *imageInfo;
 
