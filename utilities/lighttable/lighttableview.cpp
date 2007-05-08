@@ -153,6 +153,20 @@ ImageInfo* LightTableView::rightImageInfo() const
     return d->rightPreview->getImageInfo();
 }
 
+void LightTableView::slotDecreaseZoom()
+{
+    if (!d->syncPreview) return;
+
+    slotDecreaseLeftZoom();
+}   
+
+void LightTableView::slotIncreaseZoom()
+{
+    if (!d->syncPreview) return;
+
+    slotIncreaseLeftZoom();
+}   
+
 void LightTableView::slotDecreaseLeftZoom()
 {
     d->leftPreview->slotDecreaseZoom(); 

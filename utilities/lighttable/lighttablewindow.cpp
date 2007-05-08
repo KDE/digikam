@@ -98,6 +98,8 @@ public:
         donateMoneyAction                   = 0;
         zoomFitToWindowAction               = 0;
         zoomTo100percents                   = 0;
+        zoomPlusAction                      = 0;
+        zoomMinusAction                     = 0;
         statusProgressBar                   = 0;
         leftZoomBar                         = 0;  
         rightZoomBar                        = 0;  
@@ -119,6 +121,8 @@ public:
     KAction                  *fileDeletePermanentlyAction;
     KAction                  *fileDeletePermanentlyDirectlyAction;
     KAction                  *fileTrashDirectlyAction;
+    KAction                  *zoomPlusAction;
+    KAction                  *zoomMinusAction;
     KAction                  *zoomTo100percents;
     KAction                  *zoomFitToWindowAction;
 
@@ -353,6 +357,15 @@ void LightTableWindow::setupActions()
                                             SLOT(slotToggleSyncPreview()),
                                             actionCollection(), "lighttable_syncpreview");
     d->syncPreviewAction->setEnabled(false);
+
+
+    d->zoomPlusAction = KStdAction::zoomIn(d->previewView, SLOT(slotIncreaseZoom()),
+                                          actionCollection(), "lighttable_zoomplus");
+    d->zoomPlusAction->setEnabled(false);
+
+    d->zoomMinusAction = KStdAction::zoomOut(d->previewView, SLOT(slotDecreaseZoom()),
+                                             actionCollection(), "lighttable_zoomminus");
+    d->zoomMinusAction->setEnabled(false);
 
     d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), "viewmag1",
                                        CTRL+SHIFT+Key_Z, this, SLOT(slotZoomTo100Percents()),
@@ -975,6 +988,8 @@ void LightTableWindow::slotRightZoomFactorChanged(double zoom)
 
 void LightTableWindow::slotToggleSyncPreview()
 {
+    d->zoomPlusAction->setEnabled(d->syncPreviewAction->isChecked());
+    d->zoomMinusAction->setEnabled(d->syncPreviewAction->isChecked());
     d->previewView->setSyncPreview(d->syncPreviewAction->isChecked());
 }
 

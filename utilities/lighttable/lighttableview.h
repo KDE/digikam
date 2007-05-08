@@ -91,6 +91,8 @@ signals:
 
 public slots:
 
+    void slotDecreaseZoom();
+    void slotIncreaseZoom();
     void slotDecreaseLeftZoom();   
     void slotIncreaseLeftZoom();
     void slotLeftZoomSliderChanged(int);
