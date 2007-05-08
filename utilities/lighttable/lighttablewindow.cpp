@@ -632,9 +632,10 @@ void LightTableWindow::slotRemoveItem()
 
 void LightTableWindow::slotEditItem(ImageInfo* info)
 {
-    ImageWindow *im = ImageWindow::imagewindow();
-    im->loadImageInfos(d->barView->itemsImageInfoList(),
-                       info, i18n("Light Table"), true);
+    ImageWindow *im    = ImageWindow::imagewindow();
+    ImageInfoList list = d->barView->itemsImageInfoList();
+
+    im->loadImageInfos(list, info, i18n("Light Table"), true);
     
     if (im->isHidden())
         im->show();

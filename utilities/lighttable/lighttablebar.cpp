@@ -132,7 +132,10 @@ ImageInfoList LightTableBar::itemsImageInfoList()
     {
         LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
         if (ltItem) 
-            list.append(ltItem->info());            
+        {
+            ImageInfo *info = new ImageInfo(*(ltItem->info()));
+            list.append(info);            
+        }
     }
 
     return list;
