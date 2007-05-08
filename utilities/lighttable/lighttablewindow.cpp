@@ -338,12 +338,11 @@ void LightTableWindow::setupActions()
     d->removeItemAction = new KAction(i18n("Remove item from thumbbar"), "remove",
                                        0, this, SLOT(slotRemoveItem()),
                                        actionCollection(), "lighttable_removeitem");
+    d->removeItemAction->setEnabled(false);
 
     d->clearListAction = new KAction(i18n("Clear all items"), "clear",
                                      0, this, SLOT(slotClearItemsList()),
                                      actionCollection(), "lighttable_clearlist");
-
-    d->removeItemAction->setEnabled(false);
 
     KStdAction::quit(this, SLOT(close()), actionCollection(), "lighttable_exit");
 
@@ -353,6 +352,7 @@ void LightTableWindow::setupActions()
                                             CTRL+SHIFT+Key_Y, this,
                                             SLOT(slotToggleSyncPreview()),
                                             actionCollection(), "lighttable_syncpreview");
+    d->syncPreviewAction->setEnabled(false);
 
     d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), "viewmag1",
                                        CTRL+SHIFT+Key_Z, this, SLOT(slotZoomTo100Percents()),
