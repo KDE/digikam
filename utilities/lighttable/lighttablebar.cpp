@@ -77,8 +77,8 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
     {
         KPopupMenu popmenu(this);
         popmenu.insertTitle(SmallIcon("digikam"), i18n("My Light Table"));
-        popmenu.insertItem(SmallIcon("previous"), i18n("Put on left panel"), 10);
-        popmenu.insertItem(SmallIcon("next"), i18n("Put on right panel"), 11);
+        popmenu.insertItem(SmallIcon("previous"), i18n("Show on left panel"), 10);
+        popmenu.insertItem(SmallIcon("next"), i18n("Show on right panel"), 11);
         popmenu.insertSeparator(-1);
         popmenu.insertItem(SmallIcon("remove"), i18n("Remove this item"), 12);
 

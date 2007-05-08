@@ -128,7 +128,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     d->cornerButton = new QToolButton(this);
     d->cornerButton->setIconSet(SmallIcon("move"));
     d->cornerButton->hide();
-    QToolTip::add(d->cornerButton, i18n("Pan the image to a region"));
+    QToolTip::add(d->cornerButton, i18n("Pan the image"));
     setCornerWidget(d->cornerButton);
 
     // To force to init zoom factor and content size as well with a null preview.
@@ -228,7 +228,7 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription &descriptio
         p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::WordBreak, 
-                   i18n("Cannot display preview for\n\"%1\"")
+                   i18n("Unable to display preview for\n\"%1\"")
                    .arg(info.fileName()));
         p.end();
         setImage(pix.convertToImage());
@@ -316,8 +316,8 @@ void LightTablePreview::slotContextMenu()
     
     //-- Zoom actions -----------------------------------------------
 
-    popmenu.insertItem(SmallIcon("viewmag"), i18n("Zoom In"), 17);
-    popmenu.insertItem(SmallIcon("viewmag-"), i18n("Zoom Out"), 18);
+    popmenu.insertItem(SmallIcon("viewmag"), i18n("Zoom in"), 17);
+    popmenu.insertItem(SmallIcon("viewmag-"), i18n("Zoom out"), 18);
     popmenu.insertItem(SmallIcon("view_fit_window"), i18n("Fit to &Window"), 19);
 
     //-- Edit actions -----------------------------------------------

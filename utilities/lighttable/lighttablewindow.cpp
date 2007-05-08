@@ -330,7 +330,7 @@ void LightTableWindow::setupActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
-    d->removeItemAction = new KAction(i18n("Remove item from list"), "remove",
+    d->removeItemAction = new KAction(i18n("Remove item from thumbbar"), "remove",
                                        0, this, SLOT(slotRemoveItem()),
                                        actionCollection(), "lighttable_removeitem");
 
@@ -398,17 +398,17 @@ void LightTableWindow::setupAccelerators()
     d->accelerators = new KAccel(this);
 
     d->accelerators->insert("Exit fullscreen", i18n("Exit Fullscreen mode"),
-                    i18n("Exit out of the fullscreen mode"),
+                    i18n("Exit from fullscreen viewing mode"),
                     Key_Escape, this, SLOT(slotEscapePressed()),
                     false, true);
 
-    d->accelerators->insert("Zoom Plus Key_Plus", i18n("Zoom In"),
-                    i18n("Zoom in on Image"),
+    d->accelerators->insert("Zoom Plus Key_Plus", i18n("Zoom in"),
+                    i18n("Zoom in on image"),
                     Key_Plus, d->previewView, SLOT(slotIncreaseZoom()),
                     false, true);
     
-    d->accelerators->insert("Zoom Plus Key_Minus", i18n("Zoom Out"),
-                    i18n("Zoom out of Image"),
+    d->accelerators->insert("Zoom Plus Key_Minus", i18n("Zoom out"),
+                    i18n("Zoom out of image"),
                     Key_Minus, d->previewView, SLOT(slotDecreaseZoom()),
                     false, true);
 }
@@ -437,8 +437,8 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
 void LightTableWindow::refreshStatusBar()
 {
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, 
-                  i18n("1 item inserted in Light Table", 
-                       "%1 items inserted in Light Table")
+                  i18n("1 item on Light Table", 
+                       "%1 items on Light Table")
                   .arg(d->barView->countItems()));   
 }
 

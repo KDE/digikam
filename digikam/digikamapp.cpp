@@ -618,14 +618,14 @@ void DigikamApp::setupActions()
                                     "image_edit");
     d->imageViewAction->setWhatsThis(i18n("This will open the selected item in the image editor."));
 
-    d->imageLightTableAction = new KAction(i18n("Insert to Light Table"),
+    d->imageLightTableAction = new KAction(i18n("Put onto Light Table"),
                                     "idea",
                                     Key_F6,
                                     d->view,
                                     SLOT(slotImageLightTable()),
                                     actionCollection(),
                                     "image_lighttable");
-    d->imageLightTableAction->setWhatsThis(i18n("This will insert the selected items to light table."));
+    d->imageLightTableAction->setWhatsThis(i18n("This will put the selected items into the light table thumbbar."));
 
     d->imageRenameAction = new KAction(i18n("Rename..."),
                                     "pencil",
@@ -707,19 +707,19 @@ void DigikamApp::setupActions()
     d->imageSetExifOrientation2Action =
         new KAction(i18n("Flipped Horizontally"),0,d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation3Action =
-        new KAction(i18n("Rotated 180 Degrees"),0,d->imageExifOrientationActionMenu);
+        new KAction(i18n("Rotated upside down"),0,d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation4Action =
         new KAction(i18n("Flipped Vertically"),0,d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation5Action =
-        new KAction(i18n("Rotated 90 Degrees / Horiz. Flipped"),
+        new KAction(i18n("Rotated right / Horiz. Flipped"),
                     0, d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation6Action =
-        new KAction(i18n("Rotated 90 Degrees"),0,d->imageExifOrientationActionMenu);
+        new KAction(i18n("Rotated right"),0,d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation7Action =
-        new KAction(i18n("Rotated 90 Degrees / Vert. Flipped"),
+        new KAction(i18n("Rotated right / Vert. Flipped"),
                     0, d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation8Action =
-        new KAction(i18n("Rotated 270 Degrees"),0,d->imageExifOrientationActionMenu);
+        new KAction(i18n("Rotated left"),0,d->imageExifOrientationActionMenu);
 
     d->imageExifOrientationActionMenu->insert(d->imageSetExifOrientation1Action);
     d->imageExifOrientationActionMenu->insert(d->imageSetExifOrientation2Action);
@@ -818,7 +818,7 @@ void DigikamApp::setupActions()
     d->fullScreenAction = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
                                                  actionCollection(), this, "full_screen");
 #else
-    d->fullScreenAction = new KToggleAction(i18n("Full Screen Mode"),
+    d->fullScreenAction = new KToggleAction(i18n("FullScreen Mode"),
                                    "window_fullscreen",
                                    CTRL+SHIFT+Key_F,
                                    this,
