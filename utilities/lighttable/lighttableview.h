@@ -50,6 +50,8 @@ public:
     LightTableView(QWidget *parent=0);
     ~LightTableView();
 
+    void   setSyncPreview(bool sync);
+
     void   setLeftImageInfo(ImageInfo* info=0);
     void   setRightImageInfo(ImageInfo* info=0);
 
@@ -85,6 +87,7 @@ signals:
     void signalSlideShow();
     void signalDeleteItem(ImageInfo*);
     void signalEditItem(ImageInfo*);
+    void signalToggleOnSyncPreview(bool);
 
 public slots:
 
@@ -95,6 +98,12 @@ public slots:
     void slotDecreaseRightZoom();   
     void slotIncreaseRightZoom();
     void slotRightZoomSliderChanged(int);
+
+private slots:
+
+    void slotLeftContentsMoved(int, int);
+    void slotRightContentsMoved(int, int);
+    void slotPreviewLoaded();
 
 private :
 

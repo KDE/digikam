@@ -46,10 +46,13 @@ public:
 
     LightTableViewPriv()
     {
+        syncPreview  = false;
         leftPreview  = 0;
         rightPreview = 0;
         grid         = 0;
     }
+
+    bool               syncPreview;
 
     QGridLayout       *grid;
 
@@ -107,11 +110,27 @@ LightTableView::LightTableView(QWidget *parent)
     connect(d->rightPreview, SIGNAL(signalSlideShow()),
             this, SIGNAL(signalSlideShow()));
 
+    connect(d->leftPreview, SIGNAL(contentsMoving(int, int)),
+            this, SLOT(slotLeftContentsMoved(int, int)));
+
+    connect(d->rightPreview, SIGNAL(contentsMoving(int, int)),
+            this, SLOT(slotRightContentsMoved(int, int)));
+
+    connect(d->leftPreview, SIGNAL(signalPreviewLoaded()),
+            this, SLOT(slotPreviewLoaded()));
+
+    connect(d->rightPreview, SIGNAL(signalPreviewLoaded()),
+            this, SLOT(slotPreviewLoaded()));
 }
 
 LightTableView::~LightTableView()
 {
     delete d;
+}
+
+void LightTableView::setSyncPreview(bool sync)
+{
+    d->syncPreview = sync;
 }
 
 void LightTableView::setLeftImageInfo(ImageInfo* info)
@@ -244,6 +263,38 @@ void LightTableView::leftReload()
 void LightTableView::rightReload()
 {
     d->rightPreview->reload();
+}
+
+void LightTableView::slotLeftContentsMoved(int x, int y)
+{
+    if (d->syncPreview)
+    {
+        d->rightPreview->blockSignals(true);
+        setRightZoomFactor(d->leftPreview->zoomFactor());
+        emit signalRightZoomFactorChanged(d->leftPreview->zoomFactor());
+        d->rightPreview->setContentsPos(x, y);
+        d->rightPreview->blockSignals(false);
+    }
+}
+
+void LightTableView::slotRightContentsMoved(int x, int y)
+{
+    if (d->syncPreview)
+    {
+        d->leftPreview->blockSignals(true);
+        setLeftZoomFactor(d->rightPreview->zoomFactor());
+        emit signalLeftZoomFactorChanged(d->rightPreview->zoomFactor());
+        d->leftPreview->setContentsPos(x, y);
+        d->leftPreview->blockSignals(false);
+    }
+}
+
+void LightTableView::slotPreviewLoaded()
+{
+    if (d->leftPreview->getImageSize() == d->rightPreview->getImageSize())
+        emit signalToggleOnSyncPreview(true); 
+    else
+        emit signalToggleOnSyncPreview(false); 
 }
 
 }  // namespace Digikam

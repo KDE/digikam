@@ -85,6 +85,7 @@ private:
 
 private slots:
 
+    void slotToggleSyncPreview();
     void slotEditItem(ImageInfo* info);
     void slotDeleteItem(ImageInfo* info);
     void slotItemSelected(ImageInfo*);
@@ -109,6 +110,7 @@ private slots:
     void slotRightZoomFactorChanged(double);
     void slotLeftDroppedItems(const ImageInfoList&);
     void slotRightDroppedItems(const ImageInfoList&);
+    void slotToggleOnSynPreview(bool);
 
 private:
 

@@ -149,9 +149,6 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
 
     // ------------------------------------------------------------
 
-    connect(this, SIGNAL(signalZoomFactorChanged(double)),
-            this, SLOT(slotZoomChanged(double)));
-
     connect(d->cornerButton, SIGNAL(pressed()),
             this, SLOT(slotCornerButtonPressed()));
 
@@ -590,12 +587,14 @@ void ImagePreviewView::slotPanIconSelectionMoved(QRect r, bool b)
     }
 }
 
-void ImagePreviewView::slotZoomChanged(double zoom)
+void ImagePreviewView::zoomFactorChanged(double zoom)
 {
     if (zoom > calcAutoZoomFactor())
         d->cornerButton->show();
     else
         d->cornerButton->hide();        
+
+    PreviewWidget::zoomFactorChanged(zoom);
 }
 
 void ImagePreviewView::resizeEvent(QResizeEvent* e)
@@ -611,7 +610,6 @@ void ImagePreviewView::resizeEvent(QResizeEvent* e)
     QScrollView::resizeEvent(e);
 
     updateZoomAndSize(false);
-    //emit signalZoomFactorChanged(zoomFactor());
 }
 
 void ImagePreviewView::updateZoomAndSize(bool alwaysFitToWindow)

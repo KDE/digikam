@@ -86,6 +86,7 @@ public:
         barView                             = 0;
         hSplitter                           = 0;
         vSplitter                           = 0;
+        syncPreviewAction                   = 0;
         clearListAction                     = 0;
         removeItemAction                    = 0;
         fileDeleteAction                    = 0;
@@ -122,6 +123,7 @@ public:
     KAction                  *zoomFitToWindowAction;
 
     KToggleAction            *fullScreenAction;
+    KToggleAction            *syncPreviewAction;
 
     KAccel                   *accelerators;
 
@@ -319,6 +321,9 @@ void LightTableWindow::setupConnections()
 
     connect(d->previewView, SIGNAL(signalRightDroppedItems(const ImageInfoList&)),
            this, SLOT(slotRightDroppedItems(const ImageInfoList&)));
+                                  
+    connect(d->previewView, SIGNAL(signalToggleOnSyncPreview(bool)),
+           this, SLOT(slotToggleOnSynPreview(bool)));
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
@@ -343,6 +348,11 @@ void LightTableWindow::setupActions()
     KStdAction::quit(this, SLOT(close()), actionCollection(), "lighttable_exit");
 
     // -- Standard 'View' menu actions ---------------------------------------------
+
+    d->syncPreviewAction = new KToggleAction(i18n("Sync Preview"), "goto",
+                                            CTRL+SHIFT+Key_Y, this,
+                                            SLOT(slotToggleSyncPreview()),
+                                            actionCollection(), "lighttable_syncpreview");
 
     d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), "viewmag1",
                                        CTRL+SHIFT+Key_Z, this, SLOT(slotZoomTo100Percents()),
@@ -960,6 +970,21 @@ void LightTableWindow::slotRightZoomFactorChanged(double zoom)
 
     if (d->previewView->rightMinZoom())
         d->rightZoomBar->setEnableZoomMinus(false);
+}
+
+void LightTableWindow::slotToggleSyncPreview()
+{
+    d->previewView->setSyncPreview(d->syncPreviewAction->isChecked());
+}
+
+void LightTableWindow::slotToggleOnSynPreview(bool t)
+{
+    d->syncPreviewAction->setEnabled(t);
+
+    if (!t)
+    {
+        d->syncPreviewAction->setChecked(false);
+    }
 }
 
 }  // namespace Digikam

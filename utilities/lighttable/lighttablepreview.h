@@ -28,6 +28,7 @@
 
 #include <qstring.h>
 #include <qimage.h>
+#include <qsize.h>
 
 // Local includes
 
@@ -55,6 +56,8 @@ public:
 
     void setImage(const QImage& image);
     QImage& getImage() const;
+
+    QSize getImageSize();
 
     void setImageInfo(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
     ImageInfo* getImageInfo() const;
@@ -85,7 +88,6 @@ private slots:
     void slotAssignRating(int rating);
     void slotThemeChanged();
     void slotCornerButtonPressed();
-    void slotZoomChanged(double);
     void slotPanIconSelectionMoved(QRect, bool);
     void slotPanIconHiden();
 
@@ -95,6 +97,7 @@ private:
     int  previewHeight();
     bool previewIsNull();
     void resetPreview();
+    void zoomFactorChanged(double zoom);
     void updateZoomAndSize(bool alwaysFitToWindow);
     inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
 

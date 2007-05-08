@@ -225,7 +225,7 @@ void PreviewWidget::setZoomFactor(double zoom)
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
 
-    emit signalZoomFactorChanged(d->zoom);
+    zoomFactorChanged(d->zoom);
 }
 
 double PreviewWidget::zoomFactor()
@@ -254,7 +254,7 @@ void PreviewWidget::toggleFitToWindow()
     else
     {
         d->zoom = 1.0;
-        emit signalZoomFactorChanged(d->zoom);
+        zoomFactorChanged(d->zoom);
     }
 
     updateContentsSize();
@@ -267,7 +267,7 @@ void PreviewWidget::updateAutoZoom(AutoZoomMode mode)
     d->zoomWidth  = (int)(previewWidth()  * d->zoom);
     d->zoomHeight = (int)(previewHeight() * d->zoom);
 
-    emit signalZoomFactorChanged(d->zoom);
+    zoomFactorChanged(d->zoom);
 }
 
 double PreviewWidget::calcAutoZoomFactor(AutoZoomMode mode)
@@ -337,7 +337,7 @@ void PreviewWidget::resizeEvent(QResizeEvent* e)
 
     // To be sure than corner widget used to pan image will be hide/show 
     // accordinly with resize event.
-    emit signalZoomFactorChanged(d->zoom);
+    zoomFactorChanged(d->zoom);
 }
 
 void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
@@ -506,6 +506,11 @@ void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
     }
 
     QScrollView::contentsWheelEvent(e);
+}
+
+void PreviewWidget::zoomFactorChanged(double zoom)
+{
+    emit signalZoomFactorChanged(zoom);
 }
 
 }  // NameSpace Digikam

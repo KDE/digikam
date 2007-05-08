@@ -45,6 +45,7 @@
 #include <kdatetbl.h>
 #include <kiconloader.h>
 #include <kprocess.h>
+#include <kapplication.h>
 
 // LibKipi includes.
 
@@ -89,10 +90,15 @@ public:
         hasPrev              = false;
         hasNext              = false;
         currentFitWindowZoom = 0;
+        previewSize          = 1024;
     }
 
     bool               hasPrev;
     bool               hasNext;
+
+    int                previewSize;
+
+    double             currentFitWindowZoom;
 
     QString            path;
     QString            nextPath;
@@ -106,8 +112,6 @@ public:
 
     PanIconWidget     *panIconWidget;
 
-    double             currentFitWindowZoom;
-
     ImageInfo         *imageInfo;
 
     PreviewLoadThread *previewThread;
@@ -118,6 +122,14 @@ LightTablePreview::LightTablePreview(QWidget *parent)
                  : PreviewWidget(parent)
 {
     d = new LightTablePreviewPriv;
+
+    // get preview size from screen size, but limit from VGA to WQXGA
+    d->previewSize = QMAX(KApplication::desktop()->height(),
+                          KApplication::desktop()->width());
+    if (d->previewSize < 640)
+        d->previewSize = 640;
+    if (d->previewSize > 2560)
+        d->previewSize = 2560;
     
     viewport()->setAcceptDrops(true);
     setAcceptDrops(true); 
@@ -135,9 +147,6 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     updateZoomAndSize(true);
 
     // ------------------------------------------------------------
-
-    connect(this, SIGNAL(signalZoomFactorChanged(double)),
-            this, SLOT(slotZoomChanged(double)));
 
     connect(d->cornerButton, SIGNAL(pressed()),
             this, SLOT(slotCornerButtonPressed()));
@@ -169,6 +178,11 @@ void LightTablePreview::setImage(const QImage& image)
 QImage& LightTablePreview::getImage() const
 {
     return d->preview;
+}
+
+QSize LightTablePreview::getImageSize()
+{
+    return d->preview.size();
 }
 
 void LightTablePreview::reload()
@@ -211,7 +225,7 @@ void LightTablePreview::setImagePath(const QString& path)
                 this, SLOT(slotNextPreload()));
     }
 
-    d->previewThread->load(LoadingDescription(path, 1024, AlbumSettings::instance()->getExifRotate()));
+    d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
 }
 
 void LightTablePreview::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
@@ -240,6 +254,8 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription &descriptio
 
     unsetCursor();
     slotNextPreload();
+
+    emit signalPreviewLoaded();
 }
 
 void LightTablePreview::slotNextPreload()
@@ -258,7 +274,7 @@ void LightTablePreview::slotNextPreload()
     else
         return;
 
-    d->previewPreloadThread->load(LoadingDescription(loadPath, 1024,
+    d->previewPreloadThread->load(LoadingDescription(loadPath, d->previewSize,
                                   AlbumSettings::instance()->getExifRotate()));
 }
 
@@ -552,12 +568,14 @@ void LightTablePreview::slotPanIconSelectionMoved(QRect r, bool b)
     }
 }
 
-void LightTablePreview::slotZoomChanged(double zoom)
+void LightTablePreview::zoomFactorChanged(double zoom)
 {
-    if (zoom > calcAutoZoomFactor() && !previewIsNull())
+    if (zoom > calcAutoZoomFactor())
         d->cornerButton->show();
     else
         d->cornerButton->hide();        
+
+    PreviewWidget::zoomFactorChanged(zoom);
 }
 
 void LightTablePreview::resizeEvent(QResizeEvent* e)
