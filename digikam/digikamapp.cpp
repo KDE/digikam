@@ -618,7 +618,7 @@ void DigikamApp::setupActions()
                                     "image_edit");
     d->imageViewAction->setWhatsThis(i18n("This will open the selected item in the image editor."));
 
-    d->imageLightTableAction = new KAction(i18n("Put onto Light Table"),
+    d->imageLightTableAction = new KAction(i18n("Place onto Light Table"),
                                     "idea",
                                     Key_F6,
                                     d->view,
