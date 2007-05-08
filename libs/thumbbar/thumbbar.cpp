@@ -569,7 +569,13 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
        }
     }
 
-    if (!barItem || barItem == d->currItem)
+    if (!barItem)
+        return;
+
+    d->dragging     = true;
+    d->dragStartPos = e->pos();
+
+    if (barItem == d->currItem)
         return;
 
     if (d->currItem)
@@ -579,9 +585,7 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
         item->repaint();
     }
 
-    d->dragging     = true;
-    d->dragStartPos = e->pos();
-    d->currItem     = barItem;
+    d->currItem = barItem;
     barItem->repaint();
 
     emit signalURLSelected(barItem->url());
