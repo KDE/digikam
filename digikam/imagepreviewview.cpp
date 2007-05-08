@@ -649,7 +649,7 @@ bool ImagePreviewView::previewIsNull()
 
 void ImagePreviewView::resetPreview()
 {
-    d->preview.reset();
+    d->preview = QImage();
     updateZoomAndSize(true);
 }
 
