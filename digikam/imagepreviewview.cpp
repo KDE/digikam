@@ -266,6 +266,8 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
 
     unsetCursor();
     slotNextPreload();
+
+    emit signalPreviewLoaded();
 }
 
 void ImagePreviewView::slotNextPreload()
