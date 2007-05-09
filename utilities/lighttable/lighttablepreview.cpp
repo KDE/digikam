@@ -143,8 +143,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     QToolTip::add(d->cornerButton, i18n("Pan the image"));
     setCornerWidget(d->cornerButton);
 
-    // To force to init zoom factor and content size as well with a null preview.
-    updateZoomAndSize(true);
+    resetPreview();
 
     // ------------------------------------------------------------
 
@@ -634,6 +633,7 @@ void LightTablePreview::resetPreview()
 {
     d->preview = QImage();
     updateZoomAndSize(true);
+    emit signalPreviewLoaded(false);
 }
 
 void LightTablePreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
