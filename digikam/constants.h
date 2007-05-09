@@ -21,6 +21,9 @@
  *
  * ============================================================ */
 
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
 namespace Digikam
 {
 
@@ -30,3 +33,5 @@ static const int RatingMin = 0;
 static const int RatingMax = 5;
 
 }  // namespace Digikam
+
+#endif /* CONSTANTS_H */
