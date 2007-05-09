@@ -204,7 +204,7 @@ void LightTablePreview::setImagePath(const QString& path)
 
     if (d->path.isEmpty())
     {
-        resetPreview();
+        slotReset();
         unsetCursor();
         return;
     }
