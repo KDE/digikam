@@ -123,10 +123,10 @@ LightTableView::LightTableView(QWidget *parent)
             this, SIGNAL(signalRightPreviewLoaded(bool)));
 
     connect(d->leftPreview, SIGNAL(signalPreviewLoaded(bool)),
-            this, SLOT(slotPreviewLoaded(bool)));
+            this, SLOT(slotPreviewLoaded()));
 
     connect(d->rightPreview, SIGNAL(signalPreviewLoaded(bool)),
-            this, SLOT(slotPreviewLoaded(bool)));
+            this, SLOT(slotPreviewLoaded()));
 }
 
 LightTableView::~LightTableView()
