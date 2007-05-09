@@ -143,8 +143,6 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     QToolTip::add(d->cornerButton, i18n("Pan the image"));
     setCornerWidget(d->cornerButton);
 
-    resetPreview();
-
     // ------------------------------------------------------------
 
     connect(d->cornerButton, SIGNAL(pressed()),
@@ -631,7 +629,21 @@ bool LightTablePreview::previewIsNull()
 
 void LightTablePreview::resetPreview()
 {
-    d->preview = QImage();
+    d->preview   = QImage();
+    d->path      = QString(); 
+    d->imageInfo = 0;
+
+    QPixmap pix(visibleWidth(), visibleHeight());
+    pix.fill(ThemeEngine::instance()->baseColor());
+    QPainter p(&pix);
+    QFileInfo info(d->path);
+    p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
+    p.drawText(0, 0, pix.width(), pix.height(),
+                Qt::AlignCenter|Qt::WordBreak, 
+                i18n("Drag and drop here an item from thumbbar"));
+    p.end();
+    setImage(pix.convertToImage());
+
     updateZoomAndSize(true);
     emit signalPreviewLoaded(false);
 }

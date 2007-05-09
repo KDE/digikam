@@ -66,8 +66,6 @@ public:
     void   setZoomMax(double z);
     void   setZoomMin(double z);
 
-    void   reset();
-
 signals:
 
     void signalRightButtonClicked();
@@ -81,6 +79,7 @@ public slots:
 
     void slotIncreaseZoom();
     void slotDecreaseZoom();
+    void slotReset();
 
 protected:
 

@@ -144,8 +144,6 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
     QToolTip::add(d->cornerButton, i18n("Pan the image to a region"));
     setCornerWidget(d->cornerButton);
 
-    resetPreview();
-
     // ------------------------------------------------------------
 
     connect(d->cornerButton, SIGNAL(pressed()),
@@ -648,7 +646,10 @@ bool ImagePreviewView::previewIsNull()
 
 void ImagePreviewView::resetPreview()
 {
-    d->preview = QImage();
+    d->preview   = QImage();
+    d->path      = QString(); 
+    d->imageInfo = 0;
+
     updateZoomAndSize(true);
     emit signalPreviewLoaded(false);
 }

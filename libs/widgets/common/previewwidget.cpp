@@ -112,7 +112,9 @@ PreviewWidget::PreviewWidget(QWidget *parent)
 
     setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain); 
     setMargin(0); 
-    setLineWidth(1); 
+    setLineWidth(1);
+
+    QTimer::singleShot(0, this, SLOT(slotReset())); 
 }
 
 PreviewWidget::~PreviewWidget()
@@ -130,7 +132,7 @@ void PreviewWidget::setBackgroundColor(const QColor& color)
     viewport()->update();
 }
 
-void PreviewWidget::reset()
+void PreviewWidget::slotReset()
 {
     d->tileCache.clear();
     viewport()->setUpdatesEnabled(false);
