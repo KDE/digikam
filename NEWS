@@ -21,7 +21,8 @@ NEW FEATURES:
 
 General       : DigikamImagePlugins have been merged into digiKam. It more simple to release
                 on package for all. Image plugins translations are hosted to digikam.po file 
-                instead a .po file for each tool.  
+                instead a .po file for each tool. All tools still available like plugins at 
+                the same place than image plugin core.   
 General       : New depency to libkdcraw shared library used to decode RAW file.
                 This library is shared between digiKam and kipi-plugins. The internal 
                 dcraw version used is 8.60. digiKam support now all recent digital 
@@ -33,7 +34,7 @@ General       : Make size of icons used in album icon view more configurable usi
 General       : Removing direct Exiv2 library depency. libkexiv2 interface is used everywhere 
                 instead.  
 
-Album GUI     : Add Zoom/Scrooling functions with preview mode. Speed incease.
+Album GUI     : Add Zoom/Scrooling functions with preview mode.
 
 Image Editor  : Usability improvement : a new pan tool is available on the right bottom 
                 corner of canvas to naviguate over large pictures.
@@ -55,8 +56,6 @@ Image Plugins : Black & White converter now support a lots of B&W analog camera 
                 amount of Lens filters effect.  
 Image Plugins : Update internal CImg library to 1.1.9. The Greycstoration algorithm used 
                 by Restoration, Inpainting and Blowup plugins is faster and optimized.
-Image Plugins : DigikamImagePlugins have been merged to digiKam core. All tools still available 
-                like plugins at the same place than image plugin core. 
 
 Showfoto      : The thumbbar is now resizable. The thumbnails contents can be redimensionned in live.
 Showfoto      : The thumbbar items can show a full configurable tool tip like digiKam album icon 
