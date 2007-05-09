@@ -88,6 +88,8 @@ public:
         vSplitter                           = 0;
         syncPreviewAction                   = 0;
         clearListAction                     = 0;
+        setItemLeftAction                   = 0;
+        setItemRightAction                  = 0;
         removeItemAction                    = 0;
         fileDeleteAction                    = 0;
         slideShowAction                     = 0;
@@ -113,6 +115,8 @@ public:
     QSplitter                *hSplitter;
     QSplitter                *vSplitter;
 
+    KAction                  *setItemLeftAction;
+    KAction                  *setItemRightAction;
     KAction                  *clearListAction;
     KAction                  *removeItemAction;
     KAction                  *fileDeleteAction;
@@ -339,12 +343,22 @@ void LightTableWindow::setupActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
-    d->removeItemAction = new KAction(i18n("Remove item from thumbbar"), "remove",
+    d->setItemLeftAction = new KAction(i18n("Show on left panel"), "previous",
+                                       0, this, SLOT(slotSetItemLeft()),
+                                       actionCollection(), "lighttable_setitemleft");
+    d->setItemLeftAction->setEnabled(false);
+
+    d->setItemRightAction = new KAction(i18n("Show on right panel"), "next",
+                                       0, this, SLOT(slotSetItemRight()),
+                                       actionCollection(), "lighttable_setitemright");
+    d->setItemRightAction->setEnabled(false);
+
+    d->removeItemAction = new KAction(i18n("Remove item from thumbbar"), "fileclose",
                                        0, this, SLOT(slotRemoveItem()),
                                        actionCollection(), "lighttable_removeitem");
     d->removeItemAction->setEnabled(false);
 
-    d->clearListAction = new KAction(i18n("Clear all items"), "clear",
+    d->clearListAction = new KAction(i18n("Clear all items"), "editshred",
                                      0, this, SLOT(slotClearItemsList()),
                                      actionCollection(), "lighttable_clearlist");
 
@@ -500,7 +514,17 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
 {
     if (info)
     {
+        d->setItemLeftAction->setEnabled(true);
+        d->setItemRightAction->setEnabled(true);
         d->removeItemAction->setEnabled(true);
+        d->clearListAction->setEnabled(true);
+    }
+    else
+    {
+        d->setItemLeftAction->setEnabled(false);
+        d->setItemRightAction->setEnabled(false);
+        d->removeItemAction->setEnabled(false);
+        d->clearListAction->setEnabled(false);
     }
 }    
 
@@ -526,6 +550,22 @@ void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
     LightTableBarItem *item = d->barView->findItemByInfo(info);
     if (item)
         slotSetItemOnRightPanel(item->info());
+}
+
+void LightTableWindow::slotSetItemLeft()
+{
+    if (d->barView->currentItemImageInfo())
+    {
+        slotSetItemOnLeftPanel(d->barView->currentItemImageInfo());
+    }
+}
+
+void LightTableWindow::slotSetItemRight()
+{
+    if (d->barView->currentItemImageInfo())
+    {
+        slotSetItemOnRightPanel(d->barView->currentItemImageInfo());
+    }
 }
 
 void LightTableWindow::slotSetItemOnLeftPanel(ImageInfo* info)

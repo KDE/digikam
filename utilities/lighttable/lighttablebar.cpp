@@ -80,7 +80,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
         popmenu.insertItem(SmallIcon("previous"), i18n("Show on left panel"), 10);
         popmenu.insertItem(SmallIcon("next"), i18n("Show on right panel"), 11);
         popmenu.insertSeparator(-1);
-        popmenu.insertItem(SmallIcon("remove"), i18n("Remove this item"), 12);
+        popmenu.insertItem(SmallIcon("fileclose"), i18n("Remove this item"), 12);
 
         switch(popmenu.exec(pos))
         {
@@ -109,8 +109,13 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
 
 void LightTableBar::slotItemSelected(ThumbBarItem* i)
 {
-    LightTableBarItem *item = static_cast<LightTableBarItem*>(i);
-    emit signalLightTableBarItemSelected(item->info());
+    if (i)
+    {
+        LightTableBarItem *item = static_cast<LightTableBarItem*>(i);
+        emit signalLightTableBarItemSelected(item->info());
+    }
+    else
+        emit signalLightTableBarItemSelected(0);
 }
 
 ImageInfo* LightTableBar::currentItemImageInfo() const

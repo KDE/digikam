@@ -85,12 +85,14 @@ private:
 
 private slots:
 
+    void slotSetItemLeft();
+    void slotSetItemRight();
+    void slotSetItemOnLeftPanel(ImageInfo*);
+    void slotSetItemOnRightPanel(ImageInfo*);
     void slotToggleSyncPreview();
     void slotEditItem(ImageInfo* info);
     void slotDeleteItem(ImageInfo* info);
     void slotItemSelected(ImageInfo*);
-    void slotSetItemOnLeftPanel(ImageInfo*);
-    void slotSetItemOnRightPanel(ImageInfo*);
     void slotClearItemsList();
     void slotRemoveItem();
     void slotRemoveItem(const KURL&);
