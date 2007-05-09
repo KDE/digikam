@@ -80,7 +80,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
         popmenu.insertItem(SmallIcon("previous"), i18n("Show on left panel"), 10);
         popmenu.insertItem(SmallIcon("next"), i18n("Show on right panel"), 11);
         popmenu.insertSeparator(-1);
-        popmenu.insertItem(SmallIcon("fileclose"), i18n("Remove this item"), 12);
+        popmenu.insertItem(SmallIcon("fileclose"), i18n("Remove"), 12);
 
         switch(popmenu.exec(pos))
         {

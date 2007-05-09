@@ -343,17 +343,17 @@ void LightTableWindow::setupActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
-    d->setItemLeftAction = new KAction(i18n("Show on left panel"), "previous",
+    d->setItemLeftAction = new KAction(i18n("Show item on left panel"), "previous",
                                        0, this, SLOT(slotSetItemLeft()),
                                        actionCollection(), "lighttable_setitemleft");
     d->setItemLeftAction->setEnabled(false);
 
-    d->setItemRightAction = new KAction(i18n("Show on right panel"), "next",
+    d->setItemRightAction = new KAction(i18n("Show item on right panel"), "next",
                                        0, this, SLOT(slotSetItemRight()),
                                        actionCollection(), "lighttable_setitemright");
     d->setItemRightAction->setEnabled(false);
 
-    d->removeItemAction = new KAction(i18n("Remove item from thumbbar"), "fileclose",
+    d->removeItemAction = new KAction(i18n("Remove item"), "fileclose",
                                        0, this, SLOT(slotRemoveItem()),
                                        actionCollection(), "lighttable_removeitem");
     d->removeItemAction->setEnabled(false);
