@@ -8,9 +8,10 @@ General       : digiKam has a new powerfull tool to compare images side by side 
 
 digiKam BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-040 ==> 135048 : Easy comparing similar pictures using a lighttable.
-041 ==> 145159 : Improvements to the lightable.
-042 ==>
+040 ==> 135048 : Easy comparing similar pictures using a light-table.
+041 ==> 145159 : Improvements to the light-table.
+042 ==> 145204 : Small issues with the light-table.
+043 ==> 
 
 **********************************************************************************************
 
