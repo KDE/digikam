@@ -651,6 +651,7 @@ void ImagePreviewView::resetPreview()
 {
     d->preview = QImage();
     updateZoomAndSize(true);
+    emit signalPreviewLoaded(false);
 }
 
 void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
