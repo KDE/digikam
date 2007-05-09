@@ -35,6 +35,7 @@
 
 // Local includes.
 
+#include "constants.h"
 #include "themeengine.h"
 #include "ratingwidget.h"
 #include "ratingwidget.moc"
@@ -133,7 +134,7 @@ void RatingWidget::paintEvent(QPaintEvent*)
         x += d->selPixmap.width();
     }
 
-    for (int i=d->rating; i<5; i++)
+    for (int i=d->rating; i<RatingMax; i++)
     {
         p.drawPixmap(x, 0, d->regPixmap);
         x += d->regPixmap.width();
