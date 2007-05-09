@@ -134,6 +134,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("New advanced options to download pictures from camera");
     newFeatures << i18n("New advanced options to manage picture Tags");
     newFeatures << i18n("New zooming/panning function in preview mode");
+    newFeatures << i18n("New Light Table to easy compare similar pictures");
 
     QString featureItems;
     for ( uint i = 0 ; i < newFeatures.count() ; i++ )
