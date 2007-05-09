@@ -333,6 +333,12 @@ void LightTableWindow::setupConnections()
     connect(d->previewView, SIGNAL(signalToggleOnSyncPreview(bool)),
            this, SLOT(slotToggleOnSynPreview(bool)));
 
+    connect(d->previewView, SIGNAL(signalLeftPreviewLoaded(bool)),
+           d->leftZoomBar, SLOT(setEnabled(bool)));
+
+    connect(d->previewView, SIGNAL(signalRightPreviewLoaded(bool)),
+           d->rightZoomBar, SLOT(setEnabled(bool)));
+
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
     connect(watch, SIGNAL(signalFileMetadataChanged(const KURL &)),

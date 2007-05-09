@@ -116,11 +116,17 @@ LightTableView::LightTableView(QWidget *parent)
     connect(d->rightPreview, SIGNAL(contentsMoving(int, int)),
             this, SLOT(slotRightContentsMoved(int, int)));
 
-    connect(d->leftPreview, SIGNAL(signalPreviewLoaded()),
-            this, SLOT(slotPreviewLoaded()));
+    connect(d->leftPreview, SIGNAL(signalPreviewLoaded(bool)),
+            this, SIGNAL(signalLeftPreviewLoaded(bool)));
 
-    connect(d->rightPreview, SIGNAL(signalPreviewLoaded()),
-            this, SLOT(slotPreviewLoaded()));
+    connect(d->rightPreview, SIGNAL(signalPreviewLoaded(bool)),
+            this, SIGNAL(signalRightPreviewLoaded(bool)));
+
+    connect(d->leftPreview, SIGNAL(signalPreviewLoaded(bool)),
+            this, SLOT(slotPreviewLoaded(bool)));
+
+    connect(d->rightPreview, SIGNAL(signalPreviewLoaded(bool)),
+            this, SLOT(slotPreviewLoaded(bool)));
 }
 
 LightTableView::~LightTableView()

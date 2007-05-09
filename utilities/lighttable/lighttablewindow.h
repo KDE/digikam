@@ -89,15 +89,26 @@ private slots:
     void slotSetItemRight();
     void slotSetItemOnLeftPanel(ImageInfo*);
     void slotSetItemOnRightPanel(ImageInfo*);
+    void slotLeftDroppedItems(const ImageInfoList&);
+    void slotRightDroppedItems(const ImageInfoList&);
+
+    void slotLeftZoomFactorChanged(double);
+    void slotRightZoomFactorChanged(double);
+
+    void slotToggleOnSynPreview(bool);
     void slotToggleSyncPreview();
+
     void slotEditItem(ImageInfo* info);
     void slotDeleteItem(ImageInfo* info);
     void slotItemSelected(ImageInfo*);
+
     void slotClearItemsList();
     void slotRemoveItem();
     void slotRemoveItem(const KURL&);
+
     void slotZoomTo100Percents();
     void slotFitToWindow();
+
     void slotNameLabelCancelButtonPressed();
     void slotToggleSlideShow();
     void slotToggleFullScreen();
@@ -108,11 +119,6 @@ private slots:
     void slotNewToolbarConfig();
     void slotSetup();
     void slotFileMetadataChanged(const KURL&);
-    void slotLeftZoomFactorChanged(double);
-    void slotRightZoomFactorChanged(double);
-    void slotLeftDroppedItems(const ImageInfoList&);
-    void slotRightDroppedItems(const ImageInfoList&);
-    void slotToggleOnSynPreview(bool);
 
 private:
 

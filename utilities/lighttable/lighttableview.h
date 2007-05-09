@@ -80,10 +80,15 @@ public:
 
 signals:
 
+    void signalLeftPreviewLoaded(bool);
+    void signalRightPreviewLoaded(bool);
+
     void signalLeftZoomFactorChanged(double);
     void signalRightZoomFactorChanged(double);
+
     void signalLeftDroppedItems(const ImageInfoList&);
     void signalRightDroppedItems(const ImageInfoList&);
+
     void signalSlideShow();
     void signalDeleteItem(ImageInfo*);
     void signalEditItem(ImageInfo*);

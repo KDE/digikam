@@ -246,16 +246,17 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription &descriptio
                    .arg(info.fileName()));
         p.end();
         setImage(pix.convertToImage());
+
+        emit signalPreviewLoaded(false);
     }
     else
     {
         setImage(preview);
+        emit signalPreviewLoaded(true);
     }
 
     unsetCursor();
     slotNextPreload();
-
-    emit signalPreviewLoaded();
 }
 
 void LightTablePreview::slotNextPreload()

@@ -71,7 +71,7 @@ signals:
     void signalDroppedItems(const ImageInfoList&);
     void signalDeleteItem(ImageInfo*);
     void signalEditItem(ImageInfo*);
-    void signalPreviewLoaded();
+    void signalPreviewLoaded(bool success);
     void signalSlideShow();
 
 protected:
