@@ -253,18 +253,18 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
         p.end();
         setImage(pix.convertToImage());
         d->parent->previewLoaded();
+        emit signalPreviewLoaded(false);
     }
     else
     {
         d->parent->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         setImage(preview);
         d->parent->previewLoaded();
+        emit signalPreviewLoaded(true);
     }
 
     unsetCursor();
     slotNextPreload();
-
-    emit signalPreviewLoaded();
 }
 
 void ImagePreviewView::slotNextPreload()
