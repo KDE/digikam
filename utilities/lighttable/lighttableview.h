@@ -110,7 +110,12 @@ private slots:
 
     void slotLeftContentsMoved(int, int);
     void slotRightContentsMoved(int, int);
-    void slotPreviewLoaded();
+    void slotLeftPreviewLoaded(bool);
+    void slotRightPreviewLoaded(bool);
+
+private :
+
+    void checkForSyncPreview();
 
 private :
 

@@ -47,12 +47,16 @@ public:
     LightTableViewPriv()
     {
         syncPreview  = false;
+        leftLoading  = false;
+        rightLoading = false;
         leftPreview  = 0;
         rightPreview = 0;
         grid         = 0;
     }
 
     bool               syncPreview;
+    bool               leftLoading;     // To not sync right panel during left loading.
+    bool               rightLoading;    // To not sync left panel during right loading.
 
     QGridLayout       *grid;
 
@@ -119,16 +123,10 @@ LightTableView::LightTableView(QWidget *parent)
             this, SLOT(slotRightContentsMoved(int, int)));
 
     connect(d->leftPreview, SIGNAL(signalPreviewLoaded(bool)),
-            this, SIGNAL(signalLeftPreviewLoaded(bool)));
+            this, SLOT(slotLeftPreviewLoaded(bool)));
 
     connect(d->rightPreview, SIGNAL(signalPreviewLoaded(bool)),
-            this, SIGNAL(signalRightPreviewLoaded(bool)));
-
-    connect(d->leftPreview, SIGNAL(signalPreviewLoaded(bool)),
-            this, SLOT(slotPreviewLoaded()));
-
-    connect(d->rightPreview, SIGNAL(signalPreviewLoaded(bool)),
-            this, SLOT(slotPreviewLoaded()));
+            this, SLOT(slotRightPreviewLoaded(bool)));
 }
 
 LightTableView::~LightTableView()
@@ -139,26 +137,6 @@ LightTableView::~LightTableView()
 void LightTableView::setSyncPreview(bool sync)
 {
     d->syncPreview = sync;
-}
-
-void LightTableView::setLeftImageInfo(ImageInfo* info)
-{
-    d->leftPreview->setImageInfo(info);    
-}
-
-void LightTableView::setRightImageInfo(ImageInfo* info)
-{
-    d->rightPreview->setImageInfo(info);    
-}
-
-ImageInfo* LightTableView::leftImageInfo() const
-{
-    return d->leftPreview->getImageInfo();
-}
-
-ImageInfo* LightTableView::rightImageInfo() const
-{
-    return d->rightPreview->getImageInfo();
 }
 
 void LightTableView::slotDecreaseZoom()
@@ -289,7 +267,7 @@ void LightTableView::rightReload()
 
 void LightTableView::slotLeftContentsMoved(int x, int y)
 {
-    if (d->syncPreview)
+    if (d->syncPreview && !d->leftLoading)
     {
         d->rightPreview->blockSignals(true);
         setRightZoomFactor(d->leftPreview->zoomFactor());
@@ -301,7 +279,7 @@ void LightTableView::slotLeftContentsMoved(int x, int y)
 
 void LightTableView::slotRightContentsMoved(int x, int y)
 {
-    if (d->syncPreview)
+    if (d->syncPreview && !d->rightLoading)
     {
         d->leftPreview->blockSignals(true);
         setLeftZoomFactor(d->rightPreview->zoomFactor());
@@ -311,7 +289,49 @@ void LightTableView::slotRightContentsMoved(int x, int y)
     }
 }
 
-void LightTableView::slotPreviewLoaded()
+ImageInfo* LightTableView::leftImageInfo() const
+{
+    return d->leftPreview->getImageInfo();
+}
+
+ImageInfo* LightTableView::rightImageInfo() const
+{
+    return d->rightPreview->getImageInfo();
+}
+
+void LightTableView::setLeftImageInfo(ImageInfo* info)
+{
+    d->leftLoading = true;
+    d->leftPreview->setImageInfo(info);    
+}
+
+void LightTableView::setRightImageInfo(ImageInfo* info)
+{
+    d->rightLoading = true;
+    d->rightPreview->setImageInfo(info);    
+}
+
+void LightTableView::slotLeftPreviewLoaded(bool success)
+{
+    emit signalLeftPreviewLoaded(success);
+
+    checkForSyncPreview();
+    d->leftLoading = false;
+    slotRightContentsMoved(d->rightPreview->contentsX(), 
+                           d->rightPreview->contentsY());
+}
+
+void LightTableView::slotRightPreviewLoaded(bool success)
+{
+    emit signalRightPreviewLoaded(success);
+
+    checkForSyncPreview();
+    d->rightLoading = false;
+    slotLeftContentsMoved(d->leftPreview->contentsX(), 
+                          d->leftPreview->contentsY());
+}
+
+void LightTableView::checkForSyncPreview()
 {
     if (d->leftPreview->getImageInfo() && d->rightPreview->getImageInfo() &&
         d->leftPreview->getImageSize() == d->rightPreview->getImageSize())

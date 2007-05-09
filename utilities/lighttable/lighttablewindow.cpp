@@ -474,7 +474,9 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
         {
             LightTableBarItem *item = new LightTableBarItem(d->barView, *it);
             if (*it == imageInfoCurrent)
+            {
                 d->barView->setSelected(item);
+            }
         }
     }   
 
