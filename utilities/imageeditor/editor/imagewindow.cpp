@@ -61,6 +61,7 @@
 
 // Local includes.
 
+#include "constants.h"
 #include "ddebug.h"
 #include "dpopupmenu.h"
 #include "canvas.h"
@@ -658,7 +659,7 @@ void ImageWindow::slotRemoveTag(int tagID)
 
 void ImageWindow::slotAssignRating(int rating)
 {
-    rating = QMIN(5, QMAX(0, rating));
+    rating = QMIN(RatingMax, QMAX(RatingMin, rating));
     if (d->imageInfoCurrent)
     {
         MetadataHub hub;
