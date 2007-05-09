@@ -307,6 +307,8 @@ void ThumbBarView::clear(bool updateView)
         slotUpdate();
 
     d->clearing = false;
+
+    emit signalItemSelected(0);
 }
 
 void ThumbBarView::triggerUpdate()
@@ -640,6 +642,7 @@ void ThumbBarView::insertItem(ThumbBarItem* item)
     {
         d->currItem = item;
         emit signalURLSelected(item->url());
+        emit signalItemSelected(item);
     }
     
     d->itemDict.insert(item->url().url(), item);
@@ -693,6 +696,9 @@ void ThumbBarView::removeItem(ThumbBarItem* item)
     {
         triggerUpdate();
     }
+
+    if (d->count == 0)
+        emit signalItemSelected(0);
 }
 
 void ThumbBarView::rearrangeItems()
