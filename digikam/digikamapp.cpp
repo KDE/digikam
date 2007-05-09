@@ -911,6 +911,10 @@ void DigikamApp::setupActions()
     advFindAction->setText(i18n("Advanced Search..."));
     advFindAction->setShortcut("Ctrl+Alt+F");
 
+    new KAction(i18n("Light Table"), "idea", ALT+Key_F6,
+                d->view, SLOT(slotLightTable()), actionCollection(), 
+                "light_table");
+
     new KAction(i18n("Scan for New Images"), "reload_page", 0,
                 this, SLOT(slotDatabaseRescan()), actionCollection(), 
                 "database_rescan");
