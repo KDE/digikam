@@ -99,6 +99,7 @@ extern "C"
 
 // Local includes.
 
+#include "constants.h"
 #include "ddebug.h"
 #include "album.h"
 #include "albummanager.h"
@@ -1986,7 +1987,7 @@ void AlbumIconView::slotAssignRating(int rating)
 
     int   i   = 0;
     float cnt = (float)countSelected();
-    rating    = QMIN(5, QMAX(0, rating));
+    rating    = QMIN(RatingMax, QMAX(RatingMin, rating));
 
     AlbumManager::instance()->albumDB()->beginTransaction();
     for (IconItem *it = firstItem() ; it ; it = it->nextItem())
