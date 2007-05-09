@@ -153,6 +153,10 @@ LightTablePreview::LightTablePreview(QWidget *parent)
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
+
+    // ------------------------------------------------------------
+
+    QTimer::singleShot(0, this, SLOT(slotReset())); 
 }
 
 LightTablePreview::~LightTablePreview()
@@ -640,7 +644,7 @@ void LightTablePreview::resetPreview()
     p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
     p.drawText(0, 0, pix.width(), pix.height(),
                 Qt::AlignCenter|Qt::WordBreak, 
-                i18n("Drag and drop here an item from thumbbar"));
+                i18n("Drag and drop here an item"));
     p.end();
     setImage(pix.convertToImage());
 

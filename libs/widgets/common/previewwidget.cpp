@@ -113,8 +113,6 @@ PreviewWidget::PreviewWidget(QWidget *parent)
     setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain); 
     setMargin(0); 
     setLineWidth(1);
-
-    QTimer::singleShot(0, this, SLOT(slotReset())); 
 }
 
 PreviewWidget::~PreviewWidget()

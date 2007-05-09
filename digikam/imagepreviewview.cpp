@@ -163,6 +163,10 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
+
+    // ------------------------------------------------------------
+
+    QTimer::singleShot(0, this, SLOT(slotReset())); 
 }
 
 ImagePreviewView::~ImagePreviewView()

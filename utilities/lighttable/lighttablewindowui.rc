@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="9" name="lighttablewindow" >
+<gui version="10" name="lighttablewindow" >
 
 <MenuBar>
 
@@ -35,6 +35,8 @@
         <Action name="options_show_toolbar"/>
         <Merge name="StandardToolBarMenuHandler" />
         <Action name="options_show_statusbar"/>
+        <Separator/>
+        <Action name="lighttable_autosyncpreview"/>
         <Separator/>
         <Action name="options_configure_keybinding"/>
         <Action name="options_configure_toolbars"/>

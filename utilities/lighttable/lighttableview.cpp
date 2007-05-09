@@ -65,20 +65,22 @@ LightTableView::LightTableView(QWidget *parent)
 {
     d = new LightTableViewPriv;
 
+    setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
+    setMargin(0);
+    setLineWidth(1);
+
     d->grid         = new QGridLayout(this, 1, 1, 0, KDialogBase::spacingHint());
     d->leftPreview  = new LightTablePreview(this);
     d->rightPreview = new LightTablePreview(this);
+
+    d->grid->addMultiCellWidget(d->leftPreview,  0, 0, 0, 0);
+    d->grid->addMultiCellWidget(d->rightPreview, 0, 0, 1, 1);
 
     d->grid->setColStretch(0, 10),
     d->grid->setColStretch(1, 10),
     d->grid->setRowStretch(0, 10),
 
-    d->grid->addMultiCellWidget(d->leftPreview,  0, 0, 0, 0);
-    d->grid->addMultiCellWidget(d->rightPreview, 0, 0, 1, 1);
-
-    setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
-    setMargin(0);
-    setLineWidth(1);
+    // -------------------------------------------------------------------
 
     connect(d->leftPreview, SIGNAL(signalZoomFactorChanged(double)),
             this, SIGNAL(signalLeftZoomFactorChanged(double)));
@@ -311,10 +313,15 @@ void LightTableView::slotRightContentsMoved(int x, int y)
 
 void LightTableView::slotPreviewLoaded()
 {
-    if (d->leftPreview->getImageSize() == d->rightPreview->getImageSize())
-        d->syncPreview = true; 
+    if (d->leftPreview->getImageInfo() && d->rightPreview->getImageInfo() &&
+        d->leftPreview->getImageSize() == d->rightPreview->getImageSize())
+    {
+        d->syncPreview = true;
+    }
     else
-        d->syncPreview = false; 
+    {
+        d->syncPreview = false;
+    } 
 
     emit signalToggleOnSyncPreview(d->syncPreview); 
 }

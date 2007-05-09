@@ -87,6 +87,7 @@ public:
         hSplitter                           = 0;
         vSplitter                           = 0;
         syncPreviewAction                   = 0;
+        autoSyncPreviewAction               = 0;
         clearListAction                     = 0;
         setItemLeftAction                   = 0;
         setItemRightAction                  = 0;
@@ -132,6 +133,7 @@ public:
 
     KToggleAction            *fullScreenAction;
     KToggleAction            *syncPreviewAction;
+    KToggleAction            *autoSyncPreviewAction;
 
     KAccel                   *accelerators;
 
@@ -199,6 +201,8 @@ LightTableWindow::LightTableWindow()
 
     if(config->hasKey("Horizontal Splitter Sizes"))
         d->hSplitter->setSizes(config->readIntListEntry("Horizontal Splitter Sizes"));
+
+    d->autoSyncPreviewAction->setChecked(config->readBoolEntry("Auto Sync Preview", true));
 }
 
 LightTableWindow::~LightTableWindow()
@@ -219,6 +223,7 @@ void LightTableWindow::closeEvent(QCloseEvent* e)
     config->setGroup("LightTable Settings");
     config->writeEntry("Vertical Splitter Sizes", d->vSplitter->sizes());
     config->writeEntry("Horizontal Splitter Sizes", d->hSplitter->sizes());
+    config->writeEntry("Auto Sync Preview", d->autoSyncPreviewAction->isChecked());
     config->sync();
 
     e->accept();
@@ -333,7 +338,7 @@ void LightTableWindow::setupConnections()
            this, SLOT(slotRightDroppedItems(const ImageInfoList&)));
                                   
     connect(d->previewView, SIGNAL(signalToggleOnSyncPreview(bool)),
-           this, SLOT(slotToggleOnSynPreview(bool)));
+           this, SLOT(slotToggleOnSyncPreview(bool)));
 
     connect(d->previewView, SIGNAL(signalLeftPreviewLoaded(bool)),
            d->leftZoomBar, SLOT(setEnabled(bool)));
@@ -374,12 +379,11 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->syncPreviewAction = new KToggleAction(i18n("Sync Preview"), "goto",
+    d->syncPreviewAction = new KToggleAction(i18n("Synchronize Preview"), "goto",
                                             CTRL+SHIFT+Key_Y, this,
                                             SLOT(slotToggleSyncPreview()),
                                             actionCollection(), "lighttable_syncpreview");
     d->syncPreviewAction->setEnabled(false);
-
 
     d->zoomPlusAction = KStdAction::zoomIn(d->previewView, SLOT(slotIncreaseZoom()),
                                           actionCollection(), "lighttable_zoomplus");
@@ -413,6 +417,10 @@ void LightTableWindow::setupActions()
                                      actionCollection(),"lighttable_slideshow");
 
     // -- Standard 'Configure' menu actions ----------------------------------------
+
+    d->autoSyncPreviewAction = new KToggleAction(i18n("Auto-Synchronize Preview"), 
+                                                 0, 0, 0, 0,
+                                                 actionCollection(), "lighttable_autosyncpreview");
 
     KStdAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
     KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
@@ -1041,7 +1049,7 @@ void LightTableWindow::slotToggleSyncPreview()
     d->previewView->setSyncPreview(d->syncPreviewAction->isChecked());
 }
 
-void LightTableWindow::slotToggleOnSynPreview(bool t)
+void LightTableWindow::slotToggleOnSyncPreview(bool t)
 {
     d->syncPreviewAction->setEnabled(t);
     d->zoomPlusAction->setEnabled(t);
@@ -1050,6 +1058,11 @@ void LightTableWindow::slotToggleOnSynPreview(bool t)
     if (!t)
     {
         d->syncPreviewAction->setChecked(false);
+    }
+    else
+    {
+        if (d->autoSyncPreviewAction->isChecked())
+            d->syncPreviewAction->setChecked(true);
     }
 }
 

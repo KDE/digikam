@@ -95,7 +95,7 @@ private slots:
     void slotLeftZoomFactorChanged(double);
     void slotRightZoomFactorChanged(double);
 
-    void slotToggleOnSynPreview(bool);
+    void slotToggleOnSyncPreview(bool);
     void slotToggleSyncPreview();
 
     void slotEditItem(ImageInfo* info);
