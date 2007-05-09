@@ -264,6 +264,7 @@ void LightTableWindow::setupStatusBar()
 {
     d->leftZoomBar = new StatusZoomBar(statusBar());
     statusBar()->addWidget(d->leftZoomBar, 1);
+    d->leftZoomBar->setEnabled(false);
 
     d->statusProgressBar = new StatusProgressBar(statusBar());
     d->statusProgressBar->setAlignment(Qt::AlignCenter);
@@ -272,6 +273,7 @@ void LightTableWindow::setupStatusBar()
  
     d->rightZoomBar = new StatusZoomBar(statusBar());
     statusBar()->addWidget(d->rightZoomBar, 1);
+    d->rightZoomBar->setEnabled(false);
 }
 
 void LightTableWindow::setupConnections()
