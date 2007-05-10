@@ -647,11 +647,10 @@ void LightTablePreview::resetPreview()
     QPixmap pix(visibleWidth(), visibleHeight());
     pix.fill(ThemeEngine::instance()->baseColor());
     QPainter p(&pix);
-    QFileInfo info(d->path);
     p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
     p.drawText(0, 0, pix.width(), pix.height(),
-                Qt::AlignCenter|Qt::WordBreak, 
-                i18n("Drag and drop here an item"));
+               Qt::AlignCenter|Qt::WordBreak, 
+               i18n("Drag and drop here an item"));
     p.end();
     setImage(pix.convertToImage());
 
