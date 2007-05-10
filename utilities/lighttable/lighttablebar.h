@@ -80,7 +80,7 @@ private:
 
 private slots:
 
-    void slotItemSelected(ThumbBarItem* i);
+    void slotItemSelected(ThumbBarItem*);
 
 private:
 

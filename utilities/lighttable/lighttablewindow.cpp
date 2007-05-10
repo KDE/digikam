@@ -341,10 +341,10 @@ void LightTableWindow::setupConnections()
            this, SLOT(slotToggleOnSyncPreview(bool)));
 
     connect(d->previewView, SIGNAL(signalLeftPreviewLoaded(bool)),
-           d->leftZoomBar, SLOT(setEnabled(bool)));
+            this, SLOT(slotLeftPreviewLoaded(bool)));
 
     connect(d->previewView, SIGNAL(signalRightPreviewLoaded(bool)),
-           d->rightZoomBar, SLOT(setEnabled(bool)));
+            this, SLOT(slotRightPreviewLoaded(bool)));
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
@@ -523,6 +523,18 @@ void LightTableWindow::slotItemsUpdated(const KURL::List& urls)
     }
 }
 
+void LightTableWindow::slotLeftPreviewLoaded(bool b)
+{
+    d->leftZoomBar->setEnabled(b);
+    d->previewView->checkForSelection(d->barView->currentItemImageInfo());
+}
+
+void LightTableWindow::slotRightPreviewLoaded(bool b)
+{
+    d->rightZoomBar->setEnabled(b);
+    d->previewView->checkForSelection(d->barView->currentItemImageInfo());
+}
+
 void LightTableWindow::slotFileMetadataChanged(const KURL &/*url*/)
 {
     // TODO ???
@@ -544,6 +556,8 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
         d->removeItemAction->setEnabled(false);
         d->clearListAction->setEnabled(false);
     }
+
+    d->previewView->checkForSelection(info);
 }    
 
 void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)

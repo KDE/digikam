@@ -69,11 +69,11 @@ LightTableView::LightTableView(QWidget *parent)
 {
     d = new LightTableViewPriv;
 
-    setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
+    setFrameStyle(QFrame::NoFrame);
     setMargin(0);
-    setLineWidth(1);
+    setLineWidth(0);
 
-    d->grid         = new QGridLayout(this, 1, 1, 0, KDialogBase::spacingHint());
+    d->grid         = new QGridLayout(this, 1, 1, 0, 1);
     d->leftPreview  = new LightTablePreview(this);
     d->rightPreview = new LightTablePreview(this);
 
@@ -344,6 +344,38 @@ void LightTableView::checkForSyncPreview()
     } 
 
     emit signalToggleOnSyncPreview(d->syncPreview); 
+}
+
+void LightTableView::checkForSelection(ImageInfo* info)
+{
+    if (!info)
+    {
+        d->leftPreview->setSelected(false);
+        d->rightPreview->setSelected(false);
+        return;
+    }
+
+    if (d->leftPreview->getImageInfo())
+    {
+        KURL url1 = d->leftPreview->getImageInfo()->kurl();
+        KURL url2 = info->kurl();
+    
+        if (url1 == url2)
+            d->leftPreview->setSelected(true);
+        else
+            d->leftPreview->setSelected(false);
+    }
+
+    if (d->rightPreview->getImageInfo())
+    {
+        KURL url1 = d->rightPreview->getImageInfo()->kurl();
+        KURL url2 = info->kurl();
+    
+        if (url1 == url2)
+            d->rightPreview->setSelected(true);
+        else
+            d->rightPreview->setSelected(false);
+    }
 }
 
 }  // namespace Digikam

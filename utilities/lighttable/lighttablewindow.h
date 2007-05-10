@@ -92,14 +92,17 @@ private slots:
     void slotLeftDroppedItems(const ImageInfoList&);
     void slotRightDroppedItems(const ImageInfoList&);
 
+    void slotLeftPreviewLoaded(bool);
+    void slotRightPreviewLoaded(bool);
+
     void slotLeftZoomFactorChanged(double);
     void slotRightZoomFactorChanged(double);
 
     void slotToggleOnSyncPreview(bool);
     void slotToggleSyncPreview();
 
-    void slotEditItem(ImageInfo* info);
-    void slotDeleteItem(ImageInfo* info);
+    void slotEditItem(ImageInfo*);
+    void slotDeleteItem(ImageInfo*);
     void slotItemSelected(ImageInfo*);
 
     void slotClearItemsList();

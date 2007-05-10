@@ -66,6 +66,8 @@ public:
     void setImagePath(const QString& path=QString());
     void setPreviousNextPaths(const QString& previous, const QString &next);
 
+    void setSelected(bool sel);
+
 signals:
 
     void signalDroppedItems(const ImageInfoList&);
@@ -77,6 +79,7 @@ signals:
 protected:
 
     void resizeEvent(QResizeEvent* e);
+    void drawFrame(QPainter *p);
 
 private slots:
 

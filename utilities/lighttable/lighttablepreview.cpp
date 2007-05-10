@@ -31,6 +31,7 @@
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qpixmap.h>
+#include <qdrawutil.h>
 
 // KDE includes.
 
@@ -89,12 +90,14 @@ public:
         imageInfo            = 0;
         hasPrev              = false;
         hasNext              = false;
+        selected             = false;
         currentFitWindowZoom = 0;
         previewSize          = 1024;
     }
 
     bool               hasPrev;
     bool               hasNext;
+    bool               selected;
 
     int                previewSize;
 
@@ -142,6 +145,9 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     d->cornerButton->hide();
     QToolTip::add(d->cornerButton, i18n("Pan the image"));
     setCornerWidget(d->cornerButton);
+
+    setLineWidth(4);
+    setSelected(false);
 
     // ------------------------------------------------------------
 
@@ -514,6 +520,7 @@ void LightTablePreview::slotAssignRating(int rating)
 void LightTablePreview::slotThemeChanged()
 {
     setBackgroundColor(ThemeEngine::instance()->baseColor());
+    frameChanged();
 }
 
 void LightTablePreview::slotCornerButtonPressed()
@@ -696,6 +703,20 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
     {
         e->ignore();
     }
+}
+
+void LightTablePreview::setSelected(bool sel)
+{
+    d->selected = sel;
+    frameChanged();
+}
+
+void LightTablePreview::drawFrame(QPainter *p)
+{
+    if (d->selected)
+        qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->thumbSelColor(), lineWidth());
+    else 
+        qDrawPlainRect(p, frameRect(), colorGroup().background(), lineWidth());
 }
 
 }  // NameSpace Digikam

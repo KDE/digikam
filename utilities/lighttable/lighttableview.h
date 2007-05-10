@@ -61,6 +61,8 @@ public:
     void   setLeftZoomFactor(double z);
     void   setRightZoomFactor(double z);
 
+    void   checkForSelection(ImageInfo* info);
+
     double leftZoomMax();
     double leftZoomMin();
 
