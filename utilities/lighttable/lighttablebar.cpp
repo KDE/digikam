@@ -32,6 +32,8 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <kiconloader.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
 
 // Local includes.
 
@@ -39,6 +41,7 @@
 #include "album.h"
 #include "albumsettings.h"
 #include "dragobjects.h"
+#include "imageattributeswatch.h"
 #include "themeengine.h"
 #include "lighttablebar.h"
 #include "lighttablebar.moc"
@@ -57,12 +60,45 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
             this, SLOT(slotUpdate()));
 
     connect(this, SIGNAL(signalItemSelected(ThumbBarItem*)),
-            this, SLOT(slotItemSelected(ThumbBarItem*)));    
+            this, SLOT(slotItemSelected(ThumbBarItem*)));
+
+    // -- Load rating Pixmap ------------------------------------------
+
+    KGlobal::dirs()->addResourceType("digikam_rating", KGlobal::dirs()->kde_default("data")
+                                     + "digikam/data");
+    QString ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating", "rating.png");
+    ratingPixPath += "/rating.png";
+    m_ratingPixmap = QPixmap(ratingPixPath);
+
+    QPainter painter(&m_ratingPixmap);
+    painter.fillRect(0, 0, m_ratingPixmap.width(), m_ratingPixmap.height(),
+                     ThemeEngine::instance()->textSpecialRegColor());
+    painter.end();    
+
+    // ----------------------------------------------------------------
+
+    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
+
+    connect(watch, SIGNAL(signalImageRatingChanged(Q_LLONG)),
+            this, SLOT(slotImageRatingChanged(Q_LLONG)));
 }
 
 LightTableBar::~LightTableBar()
 {
     delete m_toolTip;
+}
+
+void LightTableBar::slotImageRatingChanged(Q_LLONG imageId)
+{
+    for (ThumbBarItem *item = firstItem(); item; item = item->next())
+    {
+        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+        if (ltItem->info()->id() == imageId)
+        {
+            triggerUpdate();
+            return;
+        }
+    }
 }
 
 void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
@@ -286,6 +322,27 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
                     bitBlt(&tile, x, y, &pix);
+
+                    LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+    
+                    if (ltItem->getOnLeftPanel())
+                    {
+                        QPixmap lPix = SmallIcon("previous"); 
+                        bitBlt(&tile, getMargin(), getMargin(), &lPix);
+                    }
+                    if (ltItem->getOnRightPanel())
+                    {
+                        QPixmap rPix = SmallIcon("next"); 
+                        bitBlt(&tile, tile.width() - getMargin() - rPix.width(), getMargin(), &rPix);
+                    }
+
+                    QRect r(0, tile.height()-getMargin()-m_ratingPixmap.height(), 
+                            tile.width(), m_ratingPixmap.height());
+                    int rating = ltItem->info()->rating();
+                    int xr = (r.width() - rating * m_ratingPixmap.width())/2;
+                    int wr = rating * m_ratingPixmap.width();
+                    QPainter p(&tile);
+                    p.drawTiledPixmap(xr, r.y(), wr, r.height(), m_ratingPixmap);
                 }
                 
                 bitBlt(&bgPix, 0, item->position() - cy, &tile);
@@ -326,6 +383,14 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         QPixmap rPix = SmallIcon("next"); 
                         bitBlt(&tile, tile.width() - getMargin() - rPix.width(), getMargin(), &rPix);
                     }
+
+                    QRect r(0, tile.height()-getMargin()-m_ratingPixmap.height(), 
+                            tile.width(), m_ratingPixmap.height());
+                    int rating = ltItem->info()->rating();
+                    int xr = (r.width() - rating * m_ratingPixmap.width())/2;
+                    int wr = rating * m_ratingPixmap.width();
+                    QPainter p(&tile);
+                    p.drawTiledPixmap(xr, r.y(), wr, r.height(), m_ratingPixmap);
                 }
                 
                 bitBlt(&bgPix, item->position() - cx, 0, &tile);
