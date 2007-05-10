@@ -77,6 +77,11 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
                      ThemeEngine::instance()->textSpecialRegColor());
     painter.end();    
 
+    if (orientation == Vertical)
+        setMinimumWidth(m_ratingPixmap.width()*5 + 4 + 2*getMargin());
+    else
+        setMinimumHeight(m_ratingPixmap.width()*5 + 4 + 2*getMargin());
+
     // ----------------------------------------------------------------
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
