@@ -87,6 +87,7 @@ private slots:
 
     void slotImageRatingChanged(Q_LLONG);
     void slotItemSelected(ThumbBarItem*);
+    void slotAssignRating(int);
 
 private:
 

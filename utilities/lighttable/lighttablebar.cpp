@@ -42,6 +42,8 @@
 #include "albumsettings.h"
 #include "dragobjects.h"
 #include "imageattributeswatch.h"
+#include "metadatahub.h"
+#include "ratingpopupmenu.h"
 #include "themeengine.h"
 #include "lighttablebar.h"
 #include "lighttablebar.moc"
@@ -109,14 +111,26 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
     LightTableBarItem *item = findItemByPos(e->pos());
     if (!item) return;        
 
+    RatingPopupMenu *ratingMenu = 0;
+
     if (e->button() == Qt::RightButton)
     {
         KPopupMenu popmenu(this);
         popmenu.insertTitle(SmallIcon("digikam"), i18n("My Light Table"));
         popmenu.insertItem(SmallIcon("previous"), i18n("Show on left panel"), 10);
         popmenu.insertItem(SmallIcon("next"), i18n("Show on right panel"), 11);
-        popmenu.insertSeparator(-1);
+        popmenu.insertSeparator();
         popmenu.insertItem(SmallIcon("fileclose"), i18n("Remove"), 12);
+        popmenu.insertSeparator();
+
+        // Assign Star Rating -------------------------------------------
+    
+        ratingMenu = new RatingPopupMenu();
+        
+        connect(ratingMenu, SIGNAL(activated(int)),
+                this, SLOT(slotAssignRating(int)));
+    
+        popmenu.insertItem(i18n("Assign Rating"), ratingMenu);
 
         switch(popmenu.exec(pos))
         {
@@ -140,6 +154,22 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
             default:
                 break;
         }
+    }
+
+    delete ratingMenu;
+}
+
+void LightTableBar::slotAssignRating(int rating)
+{
+    rating = QMIN(5, QMAX(0, rating));
+    ImageInfo *info = currentItemImageInfo();
+    if (info)
+    {
+        MetadataHub hub;
+        hub.load(info);
+        hub.setRating(rating);
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info->filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
