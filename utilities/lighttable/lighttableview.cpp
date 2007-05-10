@@ -127,6 +127,12 @@ LightTableView::LightTableView(QWidget *parent)
 
     connect(d->rightPreview, SIGNAL(signalPreviewLoaded(bool)),
             this, SLOT(slotRightPreviewLoaded(bool)));
+
+    connect(d->leftPreview, SIGNAL(signalLeftButtonClicked()),
+            this, SIGNAL(signalLeftPanelLeftButtonClicked()));
+
+    connect(d->rightPreview, SIGNAL(signalLeftButtonClicked()),
+            this, SIGNAL(signalRightPanelLeftButtonClicked()));
 }
 
 LightTableView::~LightTableView()

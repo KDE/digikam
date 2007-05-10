@@ -91,6 +91,9 @@ signals:
     void signalLeftDroppedItems(const ImageInfoList&);
     void signalRightDroppedItems(const ImageInfoList&);
 
+    void signalLeftPanelLeftButtonClicked();
+    void signalRightPanelLeftButtonClicked();
+
     void signalSlideShow();
     void signalDeleteItem(ImageInfo*);
     void signalEditItem(ImageInfo*);

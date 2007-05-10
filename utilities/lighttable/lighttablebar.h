@@ -59,6 +59,8 @@ public:
     ImageInfo*    currentItemImageInfo() const;
     ImageInfoList itemsImageInfoList();
 
+    void setSelected(LightTableBarItem* ltItem);
+
     LightTableBarItem* findItemByInfo(const ImageInfo* info) const;
     LightTableBarItem* findItemByPos(const QPoint& pos) const;
 

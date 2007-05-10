@@ -242,6 +242,12 @@ ImageInfoList LightTableBar::itemsImageInfoList()
     return list;
 }
 
+void LightTableBar::setSelected(LightTableBarItem* ltItem)
+{
+    ThumbBarItem *item = static_cast<ThumbBarItem*>(ltItem);
+    if (item) ThumbBarView::setSelected(item);
+}
+
 LightTableBarItem* LightTableBar::findItemByInfo(const ImageInfo* info) const
 {
     if (info)

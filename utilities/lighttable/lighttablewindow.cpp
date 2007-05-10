@@ -346,6 +346,12 @@ void LightTableWindow::setupConnections()
     connect(d->previewView, SIGNAL(signalRightPreviewLoaded(bool)),
             this, SLOT(slotRightPreviewLoaded(bool)));
 
+    connect(d->previewView, SIGNAL(signalLeftPanelLeftButtonClicked()),
+            this, SLOT(slotLeftPanelLeftButtonClicked()));
+
+    connect(d->previewView, SIGNAL(signalRightPanelLeftButtonClicked()),
+            this, SLOT(slotRightPanelLeftButtonClicked()));
+
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
     connect(watch, SIGNAL(signalFileMetadataChanged(const KURL &)),
@@ -521,6 +527,16 @@ void LightTableWindow::slotItemsUpdated(const KURL::List& urls)
             }
         }
     }
+}
+
+void LightTableWindow::slotLeftPanelLeftButtonClicked()
+{
+    d->barView->setSelected(d->barView->findItemByInfo(d->previewView->leftImageInfo()));
+}
+
+void LightTableWindow::slotRightPanelLeftButtonClicked()
+{
+    d->barView->setSelected(d->barView->findItemByInfo(d->previewView->rightImageInfo()));
 }
 
 void LightTableWindow::slotLeftPreviewLoaded(bool b)

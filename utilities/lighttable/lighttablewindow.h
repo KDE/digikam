@@ -92,6 +92,9 @@ private slots:
     void slotLeftDroppedItems(const ImageInfoList&);
     void slotRightDroppedItems(const ImageInfoList&);
 
+    void slotLeftPanelLeftButtonClicked();
+    void slotRightPanelLeftButtonClicked();
+
     void slotLeftPreviewLoaded(bool);
     void slotRightPreviewLoaded(bool);
 
