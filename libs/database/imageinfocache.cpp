@@ -31,8 +31,8 @@ ImageInfoCache::ImageInfoCache()
 {
     DatabaseAttributesWatch *dbwatch = DatabaseAccess::attributesWatch();
 
-    connect(dbwatch, SIGNAL(signalImageFieldChanged(Q_LLONG, Digikam::DatabaseAttributesWatch::ImageDataField)),
-            this, SLOT(slotImageFieldChanged(Q_LLONG, Digikam::DatabaseAttributesWatch::ImageDataField)));
+    connect(dbwatch, SIGNAL(imageFieldChanged(Q_LLONG, int)),
+            this, SLOT(slotImageFieldChanged(Q_LLONG, int)));
 }
 
 ImageInfoCache::~ImageInfoCache()
@@ -71,7 +71,7 @@ void ImageInfoCache::dropInfo(ImageInfoData *infodata)
     }
 }
 
-void ImageInfoCache::slotImageFieldChanged(Q_LLONG imageId, DatabaseAttributesWatch::ImageDataField field)
+void ImageInfoCache::slotImageFieldChanged(Q_LLONG imageId, int field)
 {
     // we have databaseaccess lock here as well!
     QMap<Q_LLONG, ImageInfoData *>::iterator it = m_map.find(imageId);

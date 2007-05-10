@@ -66,7 +66,7 @@ signals:
      * (Note: there is no absolute guarantee
      *  that the field has actually been changed)
      */
-    void imageFieldChanged(Q_LLONG imageId, Digikam::DatabaseAttributesWatch::ImageDataField field);
+    void imageFieldChanged(Q_LLONG imageId, int field);
 
 protected:
 

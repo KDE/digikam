@@ -37,8 +37,8 @@ ImageAttributesWatch::ImageAttributesWatch()
 {
     DatabaseAttributesWatch *dbwatch = DatabaseAccess::attributesWatch();
 
-    connect(dbwatch, SIGNAL(signalImageFieldChanged(Q_LLONG, Digikam::DatabaseAttributesWatch::ImageDataField)),
-            this, SLOT(slotImageFieldChanged(Q_LLONG, Digikam::DatabaseAttributesWatch::ImageDataField)));
+    connect(dbwatch, SIGNAL(imageFieldChanged(Q_LLONG, int)),
+            this, SLOT(slotImageFieldChanged(Q_LLONG, int)));
 }
 
 ImageAttributesWatch::~ImageAttributesWatch()
@@ -65,7 +65,7 @@ ImageAttributesWatch *ImageAttributesWatch::instance()
     return m_instance;
 }
 
-void ImageAttributesWatch::slotImageFieldChanged(Q_LLONG imageId, DatabaseAttributesWatch::ImageDataField field)
+void ImageAttributesWatch::slotImageFieldChanged(Q_LLONG imageId, int field)
 {
     // Translate signals
     // TODO: compress?

@@ -107,6 +107,9 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
 
     d->parameters = parameters;
 
+    if (!d->attributesWatch)
+        d->attributesWatch = new DatabaseAttributesWatch();
+
     if (!d->backend || !d->backend->isCompatible(parameters))
     {
         delete d->db;
@@ -115,9 +118,6 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
         d->backend = DatabaseBackend::createBackend(parameters);
         d->db = new AlbumDB(d->backend);
         d->infoCache = new ImageInfoCache();
-
-        if (!d->attributesWatch)
-            d->attributesWatch = new DatabaseAttributesWatch();
     }
 
     //TODO: remove when albumRoot is removed

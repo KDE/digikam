@@ -69,7 +69,7 @@ public:
 
 private slots:
 
-    void slotImageFieldChanged(Q_LLONG imageId, DatabaseAttributesWatch::ImageDataField field);
+    void slotImageFieldChanged(Q_LLONG imageId, int field);
 
 private:
 
