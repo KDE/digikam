@@ -63,6 +63,9 @@ public:
     /** Read tool tip settings from Album Settings instance */
     void readToolTipSettings();
 
+    void setOnLeftPanel(const ImageInfo* info);
+    void setOnRightPanel(const ImageInfo* info);
+
 signals:
 
     void signalLightTableBarItemSelected(ImageInfo*);
@@ -101,10 +104,18 @@ public:
     ~LightTableBarItem();
 
     ImageInfo* info();
+
+    void setOnLeftPanel(bool on);
+    void setOnRightPanel(bool on);
+    bool getOnLeftPanel() const;
+    bool getOnRightPanel() const;
     
 private:
 
-    ImageInfo   *m_info;
+    bool       m_onLeftPanel;
+    bool       m_onRightPanel;
+ 
+    ImageInfo *m_info;
 
     friend class LightTableBar;
 };

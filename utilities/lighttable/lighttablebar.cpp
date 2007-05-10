@@ -107,6 +107,36 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
     }
 }
 
+void LightTableBar::setOnLeftPanel(const ImageInfo* info)
+{
+    if (!info) return;
+
+    for (ThumbBarItem *item = firstItem(); item; item = item->next())
+    {
+        KURL url1 = item->url();
+        KURL url2 = info->kurl();
+        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+        ltItem->setOnLeftPanel(url1 == url2);
+    }
+
+    triggerUpdate();
+}
+
+void LightTableBar::setOnRightPanel(const ImageInfo* info)
+{
+    if (!info) return;
+
+    for (ThumbBarItem *item = firstItem(); item; item = item->next())
+    {
+        KURL url1 = item->url();
+        KURL url2 = info->kurl();
+        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+        ltItem->setOnRightPanel(url1 == url2);
+    }
+
+    triggerUpdate();
+}
+
 void LightTableBar::slotItemSelected(ThumbBarItem* i)
 {
     if (i)
@@ -148,18 +178,20 @@ ImageInfoList LightTableBar::itemsImageInfoList()
 
 LightTableBarItem* LightTableBar::findItemByInfo(const ImageInfo* info) const
 {
-    for (ThumbBarItem *item = firstItem(); item; item = item->next())
+    if (info)
     {
-        KURL url1 = item->url();
-        KURL url2 = info->kurl();
-    
-        if (url1 == url2)
+        for (ThumbBarItem *item = firstItem(); item; item = item->next())
         {
-            LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
-            return ltItem;
+            KURL url1 = item->url();
+            KURL url2 = info->kurl();
+        
+            if (url1 == url2)
+            {
+                LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+                return ltItem;
+            }
         }
     }
-
     return 0;
 }
 
@@ -281,6 +313,19 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                     int x = (tile.width() - pix.width())/2;
                     int y = (tile.height()- pix.height())/2;
                     bitBlt(&tile, x, y, &pix);
+
+                    LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+    
+                    if (ltItem->getOnLeftPanel())
+                    {
+                        QPixmap lPix = SmallIcon("previous"); 
+                        bitBlt(&tile, getMargin(), getMargin(), &lPix);
+                    }
+                    if (ltItem->getOnRightPanel())
+                    {
+                        QPixmap rPix = SmallIcon("next"); 
+                        bitBlt(&tile, tile.width() - getMargin() - rPix.width(), getMargin(), &rPix);
+                    }
                 }
                 
                 bitBlt(&bgPix, item->position() - cx, 0, &tile);
@@ -381,7 +426,9 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
 LightTableBarItem::LightTableBarItem(LightTableBar *view, ImageInfo *info)
                  : ThumbBarItem(view, info->kurl())
 {
-    m_info = info;
+    m_info         = info;
+    m_onLeftPanel  = false;
+    m_onRightPanel = false;
 }
 
 LightTableBarItem::~LightTableBarItem()
@@ -391,6 +438,26 @@ LightTableBarItem::~LightTableBarItem()
 ImageInfo* LightTableBarItem::info()
 {
     return m_info;
+}
+
+void LightTableBarItem::setOnLeftPanel(bool on)
+{
+    m_onLeftPanel = on;
+}
+
+void LightTableBarItem::setOnRightPanel(bool on)
+{
+    m_onRightPanel = on;
+}
+
+bool LightTableBarItem::getOnLeftPanel() const
+{
+    return m_onLeftPanel;
+}
+
+bool LightTableBarItem::getOnRightPanel() const
+{
+    return m_onRightPanel;
 }
 
 // -------------------------------------------------------------------------

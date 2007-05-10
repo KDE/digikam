@@ -527,12 +527,22 @@ void LightTableWindow::slotLeftPreviewLoaded(bool b)
 {
     d->leftZoomBar->setEnabled(b);
     d->previewView->checkForSelection(d->barView->currentItemImageInfo());
+    d->barView->setOnLeftPanel(d->previewView->leftImageInfo());
+
+    LightTableBarItem *item = d->barView->findItemByInfo(d->previewView->leftImageInfo());
+    if (item) item->setOnLeftPanel(true);
+    d->barView->update();
 }
 
 void LightTableWindow::slotRightPreviewLoaded(bool b)
 {
     d->rightZoomBar->setEnabled(b);
     d->previewView->checkForSelection(d->barView->currentItemImageInfo());
+    d->barView->setOnRightPanel(d->previewView->rightImageInfo());
+
+    LightTableBarItem *item = d->barView->findItemByInfo(d->previewView->rightImageInfo());
+    if (item) item->setOnRightPanel(true);
+    d->barView->update();
 }
 
 void LightTableWindow::slotFileMetadataChanged(const KURL &/*url*/)
