@@ -34,6 +34,7 @@
 
 // Local includes.
 
+#include "constants.h"
 #include "version.h"
 #include "ddebug.h"
 #include "dmetadata.h"
@@ -214,7 +215,7 @@ int DMetadata::getImageRating() const
         long rating = -1;
         if (getExifTagLong("Exif.Image.0x4746", rating))
         {
-            if (rating >= 0 && rating <= 5)
+            if (rating >= RatingMin && rating <= RatingMax)
                 return rating;            
         }
     }
@@ -251,9 +252,9 @@ int DMetadata::getImageRating() const
 
 bool DMetadata::setImageRating(int rating)
 {
-    if (rating < 0 || rating > 5)
+    if (rating < RatingMin || rating > RatingMax)
     {
-        DDebug() << k_funcinfo << "Rating value to write out of range!" << endl;
+        DDebug() << k_funcinfo << "Rating value to write is out of range!" << endl;
         return false;
     }
 
@@ -297,7 +298,7 @@ bool DMetadata::setImageRating(int rating)
     // Set Iptc Urgency tag value.
 
     QString urgencyTag;
-    
+
     switch(rating)
     {
         case 0:
@@ -319,11 +320,19 @@ bool DMetadata::setImageRating(int rating)
             urgencyTag = QString("1");
             break;
     }
-        
+
     if (!setIptcTagString("Iptc.Application2.Urgency", urgencyTag))
         return false;
 
     return true;
+}
+
+bool DMetadata::setIptcTag(const QString& text, int maxLength, const char* debugLabel, const char* tagKey) 
+{
+    QString truncatedText = text;
+    truncatedText.truncate(maxLength);
+    DDebug() << getFilePath() << " ==> " << debugLabel << ": " << truncatedText << endl;
+    return setIptcTagString(tagKey, truncatedText);    // returns false if failed
 }
 
 bool DMetadata::setImagePhotographerId(const QString& author, const QString& authorTitle)
@@ -331,19 +340,9 @@ bool DMetadata::setImagePhotographerId(const QString& author, const QString& aut
     if (!setProgramId())
         return false;
 
-    // Byline IPTC tag is limited to 32 char.
-    QString Byline = author;
-    Byline.truncate(32);
-    DDebug() << getFilePath() << " ==> Author: " << Byline << endl;
-    if (!setIptcTagString("Iptc.Application2.Byline", Byline))
-        return false;
-    
-    // BylineTitle IPTC tag is limited to 32 char.
-    QString BylineTitle = authorTitle;
-    BylineTitle.truncate(32);
-    DDebug() << getFilePath() << " ==> Author Title: " << BylineTitle << endl;
-    if (!setIptcTagString("Iptc.Application2.BylineTitle", BylineTitle))
-        return false;
+    //TODO  Exernalize the hard-coded values
+    if (!setIptcTag(author,      32, "Author",       "Iptc.Application2.Byline"))      return false;
+    if (!setIptcTag(authorTitle, 32, "Author Title", "Iptc.Application2.BylineTitle")) return false;
 
     return true;
 }
@@ -353,26 +352,10 @@ bool DMetadata::setImageCredits(const QString& credit, const QString& source, co
     if (!setProgramId())
         return false;
 
-    // Credit IPTC tag is limited to 32 char.
-    QString Credit = credit;
-    Credit.truncate(32);
-    DDebug() << getFilePath() << " ==> Credit: " << Credit << endl;
-    if (!setIptcTagString("Iptc.Application2.Credit", Credit))
-        return false;
-
-    // Source IPTC tag is limited to 32 char.
-    QString Source = source;
-    Source.truncate(32);
-    DDebug() << getFilePath() << " ==> Source: " << Source << endl;
-    if (!setIptcTagString("Iptc.Application2.Source", Source))
-        return false;
-
-    // Copyright IPTC tag is limited to 128 char.
-    QString Copyright = copyright;
-    Copyright.truncate(128);
-    DDebug() << getFilePath() << " ==> Copyright: " << Copyright << endl;
-    if (!setIptcTagString("Iptc.Application2.Copyright", Copyright))
-        return false;
+    //TODO  Exernalize the hard-coded values
+    if (!setIptcTag(credit,     32, "Credit",    "Iptc.Application2.Credit"))    return false;
+    if (!setIptcTag(source,     32, "Source",    "Iptc.Application2.Source"))    return false;
+    if (!setIptcTag(copyright, 128, "Copyright", "Iptc.Application2.Copyright")) return false;
 
     return true;
 }
@@ -385,7 +368,7 @@ bool DMetadata::setProgramId(bool on)
         QString software("digiKam");
         return setImageProgramId(software, version);
     }
-    
+ 
     return true;
 }
 
