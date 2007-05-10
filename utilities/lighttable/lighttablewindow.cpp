@@ -75,43 +75,40 @@ public:
 
     LightTableWindowPriv()
     {
-        fullScreenHideToolBar               = true;
-        fullScreen                          = false;
-        removeFullScreenButton              = false;
-        cancelSlideShow                     = false;
-        star0                               = 0;
-        star1                               = 0;
-        star2                               = 0;
-        star3                               = 0;
-        star4                               = 0;
-        star5                               = 0;
-        accelerators                        = 0;
-        leftSidebar                         = 0;
-        rightSidebar                        = 0;
-        previewView                         = 0;
-        barView                             = 0;
-        hSplitter                           = 0;
-        vSplitter                           = 0;
-        syncPreviewAction                   = 0;
-        autoSyncPreviewAction               = 0;
-        clearListAction                     = 0;
-        setItemLeftAction                   = 0;
-        setItemRightAction                  = 0;
-        removeItemAction                    = 0;
-        fileDeleteAction                    = 0;
-        slideShowAction                     = 0;
-        fullScreenAction                    = 0;
-        fileDeletePermanentlyAction         = 0;
-        fileDeletePermanentlyDirectlyAction = 0;
-        fileTrashDirectlyAction             = 0;
-        donateMoneyAction                   = 0;
-        zoomFitToWindowAction               = 0;
-        zoomTo100percents                   = 0;
-        zoomPlusAction                      = 0;
-        zoomMinusAction                     = 0;
-        statusProgressBar                   = 0;
-        leftZoomBar                         = 0;  
-        rightZoomBar                        = 0;  
+        fullScreenHideToolBar  = true;
+        fullScreen             = false;
+        removeFullScreenButton = false;
+        cancelSlideShow        = false;
+        star0                  = 0;
+        star1                  = 0;
+        star2                  = 0;
+        star3                  = 0;
+        star4                  = 0;
+        star5                  = 0;
+        accelerators           = 0;
+        leftSidebar            = 0;
+        rightSidebar           = 0;
+        previewView            = 0;
+        barView                = 0;
+        hSplitter              = 0;
+        vSplitter              = 0;
+        syncPreviewAction      = 0;
+        autoSyncPreviewAction  = 0;
+        clearListAction        = 0;
+        setItemLeftAction      = 0;
+        setItemRightAction     = 0;
+        removeItemAction       = 0;
+        fileDeleteAction       = 0;
+        slideShowAction        = 0;
+        fullScreenAction       = 0;
+        donateMoneyAction      = 0;
+        zoomFitToWindowAction  = 0;
+        zoomTo100percents      = 0;
+        zoomPlusAction         = 0;
+        zoomMinusAction        = 0;
+        statusProgressBar      = 0;
+        leftZoomBar            = 0;  
+        rightZoomBar           = 0;  
     }
 
     bool                      fullScreenHideToolBar;
@@ -137,9 +134,6 @@ public:
     KAction                  *fileDeleteAction;
     KAction                  *slideShowAction;
     KAction                  *donateMoneyAction;
-    KAction                  *fileDeletePermanentlyAction;
-    KAction                  *fileDeletePermanentlyDirectlyAction;
-    KAction                  *fileTrashDirectlyAction;
     KAction                  *zoomPlusAction;
     KAction                  *zoomMinusAction;
     KAction                  *zoomTo100percents;
@@ -394,6 +388,13 @@ void LightTableWindow::setupActions()
     d->clearListAction = new KAction(i18n("Clear all items"), "editshred",
                                      0, this, SLOT(slotClearItemsList()),
                                      actionCollection(), "lighttable_clearlist");
+    d->clearListAction->setEnabled(false);
+
+    d->fileDeleteAction = new KAction(i18n("Move to Trash"), "edittrash",
+                                     Key_Delete,
+                                     this, SLOT(slotDeleteItem()),
+                                     actionCollection(), "lighttable_filedelete");
+    d->fileDeleteAction->setEnabled(false);
 
     KStdAction::quit(this, SLOT(close()), actionCollection(), "lighttable_exit");
 
@@ -609,6 +610,7 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
         d->setItemRightAction->setEnabled(true);
         d->removeItemAction->setEnabled(true);
         d->clearListAction->setEnabled(true);
+        d->fileDeleteAction->setEnabled(true);
     }
     else
     {
@@ -616,6 +618,7 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
         d->setItemRightAction->setEnabled(false);
         d->removeItemAction->setEnabled(false);
         d->clearListAction->setEnabled(false);
+        d->fileDeleteAction->setEnabled(false);
     }
 
     d->previewView->checkForSelection(info);
@@ -688,6 +691,12 @@ void LightTableWindow::slotClearItemsList()
     }
 
     d->barView->clear();
+}
+
+void LightTableWindow::slotDeleteItem()
+{
+    if (d->barView->currentItemImageInfo())
+        slotDeleteItem(d->barView->currentItemImageInfo());
 }
 
 void LightTableWindow::slotDeleteItem(ImageInfo* info)

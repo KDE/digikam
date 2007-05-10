@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="10" name="lighttablewindow" >
+<gui version="11" name="lighttablewindow" >
 
 <MenuBar>
 
@@ -9,6 +9,8 @@
         <Separator/>
         <Action name="lighttable_removeitem" />
         <Action name="lighttable_clearlist" />
+        <Separator/>
+        <Action name="lighttable_filedelete" />
         <Separator/>
         <Action name="lighttable_exit" />
     </Menu>
