@@ -369,104 +369,116 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 
     bgPix.fill(ThemeEngine::instance()->baseColor());
     
-    for (ThumbBarItem *item = firstItem(); item; item = item->next())
+    if (countItems() > 0)
+    {    
+        for (ThumbBarItem *item = firstItem(); item; item = item->next())
+        {
+            if (getOrientation() == Vertical)
+            {
+                if (y1 <= item->position() && item->position() <= y2)
+                {
+                    if (item == currentItem())
+                        tile = ThemeEngine::instance()->thumbSelPixmap(tile.width(), tile.height());
+                    else
+                        tile = ThemeEngine::instance()->thumbRegPixmap(tile.width(), tile.height());
+        
+                    QPainter p(&tile);
+                    p.setPen(Qt::white);
+                    p.drawRect(0, 0, tile.width(), tile.height());
+                    p.end();
+                    
+                    if (item->pixmap())
+                    {
+                        QPixmap pix; 
+                        pix.convertFromImage(QImage(item->pixmap()->convertToImage()).
+                                            smoothScale(getTileSize(), getTileSize(), QImage::ScaleMin));
+                        int x = (tile.width()  - pix.width())/2;
+                        int y = (tile.height() - pix.height())/2;
+                        bitBlt(&tile, x, y, &pix);
+    
+                        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+        
+                        if (ltItem->getOnLeftPanel())
+                        {
+                            QPixmap lPix = SmallIcon("previous"); 
+                            bitBlt(&tile, getMargin(), getMargin(), &lPix);
+                        }
+                        if (ltItem->getOnRightPanel())
+                        {
+                            QPixmap rPix = SmallIcon("next"); 
+                            bitBlt(&tile, tile.width() - getMargin() - rPix.width(), getMargin(), &rPix);
+                        }
+    
+                        QRect r(0, tile.height()-getMargin()-m_ratingPixmap.height(), 
+                                tile.width(), m_ratingPixmap.height());
+                        int rating = ltItem->info()->rating();
+                        int xr = (r.width() - rating * m_ratingPixmap.width())/2;
+                        int wr = rating * m_ratingPixmap.width();
+                        QPainter p(&tile);
+                        p.drawTiledPixmap(xr, r.y(), wr, r.height(), m_ratingPixmap);
+                    }
+                    
+                    bitBlt(&bgPix, 0, item->position() - cy, &tile);
+                }
+            }
+            else
+            {
+                if (x1 <= item->position() && item->position() <= x2)
+                {
+                    if (item == currentItem())
+                        tile = ThemeEngine::instance()->thumbSelPixmap(tile.width(), tile.height());
+                    else
+                        tile = ThemeEngine::instance()->thumbRegPixmap(tile.width(), tile.height());
+        
+                    QPainter p(&tile);
+                    p.setPen(Qt::white);
+                    p.drawRect(0, 0, tile.width(), tile.height());
+                    p.end();
+                    
+                    if (item->pixmap())
+                    {
+                        QPixmap pix; 
+                        pix.convertFromImage(QImage(item->pixmap()->convertToImage()).
+                                            smoothScale(getTileSize(), getTileSize(), QImage::ScaleMin));
+                        int x = (tile.width() - pix.width())/2;
+                        int y = (tile.height()- pix.height())/2;
+                        bitBlt(&tile, x, y, &pix);
+    
+                        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+        
+                        if (ltItem->getOnLeftPanel())
+                        {
+                            QPixmap lPix = SmallIcon("previous"); 
+                            bitBlt(&tile, getMargin(), getMargin(), &lPix);
+                        }
+                        if (ltItem->getOnRightPanel())
+                        {
+                            QPixmap rPix = SmallIcon("next"); 
+                            bitBlt(&tile, tile.width() - getMargin() - rPix.width(), getMargin(), &rPix);
+                        }
+    
+                        QRect r(0, tile.height()-getMargin()-m_ratingPixmap.height(), 
+                                tile.width(), m_ratingPixmap.height());
+                        int rating = ltItem->info()->rating();
+                        int xr = (r.width() - rating * m_ratingPixmap.width())/2;
+                        int wr = rating * m_ratingPixmap.width();
+                        QPainter p(&tile);
+                        p.drawTiledPixmap(xr, r.y(), wr, r.height(), m_ratingPixmap);
+                    }
+                    
+                    bitBlt(&bgPix, item->position() - cx, 0, &tile);
+                }
+            }
+        }
+    }
+    else
     {
-        if (getOrientation() == Vertical)
-        {
-            if (y1 <= item->position() && item->position() <= y2)
-            {
-                if (item == currentItem())
-                    tile = ThemeEngine::instance()->thumbSelPixmap(tile.width(), tile.height());
-                else
-                    tile = ThemeEngine::instance()->thumbRegPixmap(tile.width(), tile.height());
-    
-                QPainter p(&tile);
-                p.setPen(Qt::white);
-                p.drawRect(0, 0, tile.width(), tile.height());
-                p.end();
-                
-                if (item->pixmap())
-                {
-                    QPixmap pix; 
-                    pix.convertFromImage(QImage(item->pixmap()->convertToImage()).
-                                         smoothScale(getTileSize(), getTileSize(), QImage::ScaleMin));
-                    int x = (tile.width()  - pix.width())/2;
-                    int y = (tile.height() - pix.height())/2;
-                    bitBlt(&tile, x, y, &pix);
-
-                    LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
-    
-                    if (ltItem->getOnLeftPanel())
-                    {
-                        QPixmap lPix = SmallIcon("previous"); 
-                        bitBlt(&tile, getMargin(), getMargin(), &lPix);
-                    }
-                    if (ltItem->getOnRightPanel())
-                    {
-                        QPixmap rPix = SmallIcon("next"); 
-                        bitBlt(&tile, tile.width() - getMargin() - rPix.width(), getMargin(), &rPix);
-                    }
-
-                    QRect r(0, tile.height()-getMargin()-m_ratingPixmap.height(), 
-                            tile.width(), m_ratingPixmap.height());
-                    int rating = ltItem->info()->rating();
-                    int xr = (r.width() - rating * m_ratingPixmap.width())/2;
-                    int wr = rating * m_ratingPixmap.width();
-                    QPainter p(&tile);
-                    p.drawTiledPixmap(xr, r.y(), wr, r.height(), m_ratingPixmap);
-                }
-                
-                bitBlt(&bgPix, 0, item->position() - cy, &tile);
-            }
-        }
-        else
-        {
-            if (x1 <= item->position() && item->position() <= x2)
-            {
-                if (item == currentItem())
-                    tile = ThemeEngine::instance()->thumbSelPixmap(tile.width(), tile.height());
-                else
-                    tile = ThemeEngine::instance()->thumbRegPixmap(tile.width(), tile.height());
-    
-                QPainter p(&tile);
-                p.setPen(Qt::white);
-                p.drawRect(0, 0, tile.width(), tile.height());
-                p.end();
-                
-                if (item->pixmap())
-                {
-                    QPixmap pix; 
-                    pix.convertFromImage(QImage(item->pixmap()->convertToImage()).
-                                         smoothScale(getTileSize(), getTileSize(), QImage::ScaleMin));
-                    int x = (tile.width() - pix.width())/2;
-                    int y = (tile.height()- pix.height())/2;
-                    bitBlt(&tile, x, y, &pix);
-
-                    LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
-    
-                    if (ltItem->getOnLeftPanel())
-                    {
-                        QPixmap lPix = SmallIcon("previous"); 
-                        bitBlt(&tile, getMargin(), getMargin(), &lPix);
-                    }
-                    if (ltItem->getOnRightPanel())
-                    {
-                        QPixmap rPix = SmallIcon("next"); 
-                        bitBlt(&tile, tile.width() - getMargin() - rPix.width(), getMargin(), &rPix);
-                    }
-
-                    QRect r(0, tile.height()-getMargin()-m_ratingPixmap.height(), 
-                            tile.width(), m_ratingPixmap.height());
-                    int rating = ltItem->info()->rating();
-                    int xr = (r.width() - rating * m_ratingPixmap.width())/2;
-                    int wr = rating * m_ratingPixmap.width();
-                    QPainter p(&tile);
-                    p.drawTiledPixmap(xr, r.y(), wr, r.height(), m_ratingPixmap);
-                }
-                
-                bitBlt(&bgPix, item->position() - cx, 0, &tile);
-            }
-        }
+            QPainter p(&bgPix);
+            p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
+            p.drawText(0, 0, bgPix.width(), bgPix.height(),
+                       Qt::AlignCenter|Qt::WordBreak, 
+                       i18n("Drag and drop here your items"));
+            p.end();
     }
 
     if (getOrientation() == Vertical)
