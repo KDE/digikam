@@ -377,12 +377,12 @@ void LightTableWindow::setupActions()
     // -- Standard 'File' menu actions ---------------------------------------------
 
     d->setItemLeftAction = new KAction(i18n("Show item on left panel"), "previous",
-                                       0, this, SLOT(slotSetItemLeft()),
+                                       CTRL+Key_L, this, SLOT(slotSetItemLeft()),
                                        actionCollection(), "lighttable_setitemleft");
     d->setItemLeftAction->setEnabled(false);
 
     d->setItemRightAction = new KAction(i18n("Show item on right panel"), "next",
-                                       0, this, SLOT(slotSetItemRight()),
+                                       CTRL+Key_R, this, SLOT(slotSetItemRight()),
                                        actionCollection(), "lighttable_setitemright");
     d->setItemRightAction->setEnabled(false);
 
