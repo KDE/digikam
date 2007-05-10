@@ -84,7 +84,7 @@ fi
 if test "x$have_libkexiv2" != "xyes"; then
   echo "-- libkexiv2 library found........ NO"
   echo ""
-  echo "digiKam needs libkexiv2 library >= 0.1.5 You need to install libkexiv2 first"
+  echo "digiKam needs libkexiv2 library >= 0.1.4 You need to install libkexiv2 first"
   echo "libkexiv2 website is at http://www.kipi-plugins.org"
   echo ""
   all_tests=bad
