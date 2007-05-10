@@ -78,9 +78,9 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
     painter.end();    
 
     if (orientation == Vertical)
-        setMinimumWidth(m_ratingPixmap.width()*5 + 4 + 2*getMargin());
+        setMinimumWidth(m_ratingPixmap.width()*5 + 6 + 2*getMargin());
     else
-        setMinimumHeight(m_ratingPixmap.width()*5 + 4 + 2*getMargin());
+        setMinimumHeight(m_ratingPixmap.width()*5 + 6 + 2*getMargin());
 
     // ----------------------------------------------------------------
 
