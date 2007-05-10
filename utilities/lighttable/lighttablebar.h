@@ -89,6 +89,13 @@ private slots:
 
     void slotImageRatingChanged(Q_LLONG);
     void slotItemSelected(ThumbBarItem*);
+
+    void slotAssignRatingNoStar();
+    void slotAssignRatingOneStar();
+    void slotAssignRatingTwoStar();
+    void slotAssignRatingThreeStar();
+    void slotAssignRatingFourStar();
+    void slotAssignRatingFiveStar();
     void slotAssignRating(int);
 
 private:
