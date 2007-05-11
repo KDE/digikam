@@ -99,7 +99,7 @@ void LightTableBar::slotImageRatingChanged(Q_LLONG imageId)
 {
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
     {
-        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
         if (ltItem->info()->id() == imageId)
         {
             triggerUpdate();
@@ -223,7 +223,7 @@ void LightTableBar::setOnLeftPanel(const ImageInfo* info)
 
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
     {
-        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
         if (ltItem)
             ltItem->setOnLeftPanel(ltItem->info()->id() == info->id());
     }
@@ -237,7 +237,7 @@ void LightTableBar::setOnRightPanel(const ImageInfo* info)
 
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
     {
-        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
         if (ltItem)
             ltItem->setOnRightPanel(ltItem->info()->id() == info->id());
     }
@@ -249,18 +249,22 @@ void LightTableBar::slotItemSelected(ThumbBarItem* item)
 {
     if (item)
     {
-        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
-        emit signalLightTableBarItemSelected(ltItem->info());
+        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
+        if (ltItem)
+        {
+            emit signalLightTableBarItemSelected(ltItem->info());
+            return;
+        }
     }
-    else
-        emit signalLightTableBarItemSelected(0);
+
+    emit signalLightTableBarItemSelected(0);
 }
 
 ImageInfo* LightTableBar::currentItemImageInfo() const
 {
     if (currentItem())
     {
-        LightTableBarItem *item = static_cast<LightTableBarItem*>(currentItem());
+        LightTableBarItem *item = dynamic_cast<LightTableBarItem*>(currentItem());
         return item->info();
     }
 
@@ -273,7 +277,7 @@ ImageInfoList LightTableBar::itemsImageInfoList()
 
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
     {
-        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
         if (ltItem) 
         {
             ImageInfo *info = new ImageInfo(*(ltItem->info()));
@@ -305,7 +309,7 @@ LightTableBarItem* LightTableBar::findItemByInfo(const ImageInfo* info) const
     {
         for (ThumbBarItem *item = firstItem(); item; item = item->next())
         {
-            LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);  
+            LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);  
             if (ltItem)
             {
                 if (ltItem->info()->id() == info->id())
@@ -321,7 +325,7 @@ LightTableBarItem* LightTableBar::findItemByPos(const QPoint& pos) const
     ThumbBarItem *item = findItem(pos);
     if (item)
     {
-        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
         return ltItem;
     }
     
@@ -410,7 +414,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         int y = (tile.height() - pix.height())/2;
                         bitBlt(&tile, x, y, &pix);
     
-                        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+                        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
         
                         if (ltItem->getOnLeftPanel())
                         {
@@ -458,7 +462,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         int y = (tile.height()- pix.height())/2;
                         bitBlt(&tile, x, y, &pix);
     
-                        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+                        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
         
                         if (ltItem->getOnLeftPanel())
                         {
@@ -510,7 +514,7 @@ void LightTableBar::startDrag()
     QValueList<int> albumIDs;
     QValueList<int> imageIDs;
 
-    LightTableBarItem *item = static_cast<LightTableBarItem*>(currentItem());
+    LightTableBarItem *item = dynamic_cast<LightTableBarItem*>(currentItem());
 
     urls.append(item->info()->kurl());
     kioURLs.append(item->info()->kurlForKIO());
@@ -586,11 +590,9 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
 // -------------------------------------------------------------------------
 
 LightTableBarItem::LightTableBarItem(LightTableBar *view, ImageInfo *info)
-                 : ThumbBarItem(view, info->kurl())
+                 : ThumbBarItem(view, info->kurl()), 
+                   m_onLeftPanel(false), m_onRightPanel(false), m_info(info)   
 {
-    m_info         = info;
-    m_onLeftPanel  = false;
-    m_onRightPanel = false;
 }
 
 LightTableBarItem::~LightTableBarItem()

@@ -363,24 +363,12 @@ void LightTableView::checkForSelection(ImageInfo* info)
 
     if (d->leftPreview->getImageInfo())
     {
-        KURL url1 = d->leftPreview->getImageInfo()->kurl();
-        KURL url2 = info->kurl();
-    
-        if (url1 == url2)
-            d->leftPreview->setSelected(true);
-        else
-            d->leftPreview->setSelected(false);
+        d->leftPreview->setSelected(d->leftPreview->getImageInfo()->id() == info->id());
     }
 
     if (d->rightPreview->getImageInfo())
     {
-        KURL url1 = d->rightPreview->getImageInfo()->kurl();
-        KURL url2 = info->kurl();
-    
-        if (url1 == url2)
-            d->rightPreview->setSelected(true);
-        else
-            d->rightPreview->setSelected(false);
+        d->rightPreview->setSelected(d->rightPreview->getImageInfo()->id() == info->id());
     }
 }
 

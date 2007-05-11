@@ -673,6 +673,22 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
         d->forwardAction->setEnabled(true);
         d->firstAction->setEnabled(true);
         d->lastAction->setEnabled(true);
+
+        LightTableBarItem* curr = d->barView->findItemByInfo(info);
+        if (curr)
+        {
+            if (curr->prev())
+            {
+                d->backwardAction->setEnabled(false);
+                d->firstAction->setEnabled(false);
+            }
+    
+            if (curr->next())
+            {
+                d->forwardAction->setEnabled(false);
+                d->lastAction->setEnabled(false);
+            }
+        }
     }
     else
     {
