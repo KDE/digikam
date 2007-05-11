@@ -157,9 +157,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
             }
             case 13:    // Remove
             {
-                KURL url = item->info()->kurl();
-                emit signalRemoveItem(url);
-                removeItem(currentItem());
+                emit signalRemoveItem(item->info());
                 break;
             }
             case 14:    // Clear All
@@ -247,12 +245,12 @@ void LightTableBar::setOnRightPanel(const ImageInfo* info)
     triggerUpdate();
 }
 
-void LightTableBar::slotItemSelected(ThumbBarItem* i)
+void LightTableBar::slotItemSelected(ThumbBarItem* item)
 {
-    if (i)
+    if (item)
     {
-        LightTableBarItem *item = static_cast<LightTableBarItem*>(i);
-        emit signalLightTableBarItemSelected(item->info());
+        LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
+        emit signalLightTableBarItemSelected(ltItem->info());
     }
     else
         emit signalLightTableBarItemSelected(0);
@@ -290,6 +288,15 @@ void LightTableBar::setSelected(LightTableBarItem* ltItem)
 {
     ThumbBarItem *item = static_cast<ThumbBarItem*>(ltItem);
     if (item) ThumbBarView::setSelected(item);
+}
+
+void LightTableBar::removeItem(const ImageInfo* info)
+{
+    if (!info) return;
+
+    LightTableBarItem* ltItem = findItemByInfo(info);
+    ThumbBarItem *item        = static_cast<ThumbBarItem*>(ltItem);  
+    if (item) ThumbBarView::removeItem(item);
 }
 
 LightTableBarItem* LightTableBar::findItemByInfo(const ImageInfo* info) const

@@ -70,13 +70,15 @@ public:
     void setOnLeftPanel(const ImageInfo* info);
     void setOnRightPanel(const ImageInfo* info);
 
+    void removeItem(const ImageInfo* info);
+
 signals:
 
     void signalLightTableBarItemSelected(ImageInfo*);
     void signalSetItemOnLeftPanel(ImageInfo*);
     void signalSetItemOnRightPanel(ImageInfo*);
     void signalEditItem(ImageInfo*);
-    void signalRemoveItem(const KURL&);
+    void signalRemoveItem(ImageInfo*);
     void signalClearAll();
 
 private:

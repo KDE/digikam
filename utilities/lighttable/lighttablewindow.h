@@ -106,13 +106,15 @@ private slots:
 
     void slotEditItem();
     void slotEditItem(ImageInfo*);
+
     void slotDeleteItem();
     void slotDeleteItem(ImageInfo*);
-    void slotItemSelected(ImageInfo*);
 
-    void slotClearItemsList();
     void slotRemoveItem();
-    void slotRemoveItem(const KURL&);
+    void slotRemoveItem(ImageInfo*);
+
+    void slotItemSelected(ImageInfo*);
+    void slotClearItemsList();
 
     void slotZoomTo100Percents();
     void slotFitToWindow();

@@ -303,8 +303,8 @@ void LightTableWindow::setupConnections()
     connect(d->barView, SIGNAL(signalSetItemOnRightPanel(ImageInfo*)),
            this, SLOT(slotSetItemOnRightPanel(ImageInfo*)));
 
-    connect(d->barView, SIGNAL(signalRemoveItem(const KURL&)),
-           this, SLOT(slotRemoveItem(const KURL&)));
+    connect(d->barView, SIGNAL(signalRemoveItem(ImageInfo*)),
+           this, SLOT(slotRemoveItem(ImageInfo*)));
 
     connect(d->barView, SIGNAL(signalEditItem(ImageInfo*)),
            this, SLOT(slotEditItem(ImageInfo*)));
@@ -757,19 +757,22 @@ void LightTableWindow::slotDeleteItem(ImageInfo* info)
         return;
     }
 
-    LightTableBarItem* item = d->barView->findItemByInfo(info);
-    if (item) d->barView->removeItem(item);
-
     emit signalFileDeleted(u);
 
-    slotRemoveItem(u);
+    slotRemoveItem(info);
 }
 
-void LightTableWindow::slotRemoveItem(const KURL& url)
+void LightTableWindow::slotRemoveItem()
+{
+    if (d->barView->currentItemImageInfo())
+        slotRemoveItem(d->barView->currentItemImageInfo());
+}
+
+void LightTableWindow::slotRemoveItem(ImageInfo* info)
 {
     if (d->previewView->leftImageInfo())
     {
-        if (d->previewView->leftImageInfo()->kurl() == url)
+        if (d->previewView->leftImageInfo()->id() == info->id())
         {
             d->previewView->setLeftImageInfo();
             d->leftSidebar->slotNoCurrentItem();
@@ -778,21 +781,15 @@ void LightTableWindow::slotRemoveItem(const KURL& url)
 
     if (d->previewView->rightImageInfo())
     {
-        if (d->previewView->rightImageInfo()->kurl() == url)
+        if (d->previewView->rightImageInfo()->id() == info->id())
         {
             d->previewView->setRightImageInfo();
             d->rightSidebar->slotNoCurrentItem();
         }
     }
-}
 
-void LightTableWindow::slotRemoveItem()
-{
-    if (d->barView->currentItemImageInfo())
-    {
-        slotRemoveItem(d->barView->currentItemImageInfo()->kurl());
-        d->barView->removeItem(d->barView->currentItem());
-    }
+    d->barView->removeItem(info);
+    d->previewView->checkForSelection(d->barView->currentItemImageInfo());
 }
 
 void LightTableWindow::slotEditItem()

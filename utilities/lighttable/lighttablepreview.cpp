@@ -295,7 +295,10 @@ void LightTablePreview::setImageInfo(ImageInfo* info, ImageInfo *previous, Image
     if (d->imageInfo)
         setImagePath(info->filePath());
     else
+    {
         setImagePath();
+        setSelected(false);
+    }
 
     setPreviousNextPaths(previous ? previous->filePath() : QString(),
                          next     ? next->filePath()     : QString());
