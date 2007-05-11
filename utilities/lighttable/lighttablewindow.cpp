@@ -389,19 +389,23 @@ void LightTableWindow::setupActions()
 
     d->backwardAction = KStdAction::back(this, SLOT(slotBackward()),
                                     actionCollection(), "lighttable_backward");
+    d->backwardAction->setEnabled(false);
 
     d->forwardAction = KStdAction::forward(this, SLOT(slotForward()),
                                    actionCollection(), "lighttable_forward");
+    d->forwardAction->setEnabled(false);
 
     d->firstAction = new KAction(i18n("&First"), "start",
                                  KStdAccel::shortcut( KStdAccel::Home),
                                  this, SLOT(slotFirst()),
                                  actionCollection(), "lighttable_first");
+    d->firstAction->setEnabled(false);
 
     d->lastAction = new KAction(i18n("&Last"), "finish",
                                 KStdAccel::shortcut( KStdAccel::End),
                                 this, SLOT(slotLast()),
                                 actionCollection(), "lighttable_last");
+    d->lastAction->setEnabled(false);
 
     d->setItemLeftAction = new KAction(i18n("Show item on left panel"), "previous",
                                        CTRL+Key_L, this, SLOT(slotSetItemLeft()),
@@ -665,6 +669,10 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
         d->removeItemAction->setEnabled(true);
         d->clearListAction->setEnabled(true);
         d->fileDeleteAction->setEnabled(true);
+        d->backwardAction->setEnabled(true);
+        d->forwardAction->setEnabled(true);
+        d->firstAction->setEnabled(true);
+        d->lastAction->setEnabled(true);
     }
     else
     {
@@ -674,6 +682,10 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
         d->removeItemAction->setEnabled(false);
         d->clearListAction->setEnabled(false);
         d->fileDeleteAction->setEnabled(false);
+        d->backwardAction->setEnabled(false);
+        d->forwardAction->setEnabled(false);
+        d->firstAction->setEnabled(false);
+        d->lastAction->setEnabled(false);
     }
 
     d->previewView->checkForSelection(info);
