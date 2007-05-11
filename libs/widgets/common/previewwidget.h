@@ -66,8 +66,6 @@ public:
     void   setZoomMax(double z);
     void   setZoomMin(double z);
 
-    void   reset();
-
 signals:
 
     void signalRightButtonClicked();
@@ -81,6 +79,7 @@ public slots:
 
     void slotIncreaseZoom();
     void slotDecreaseZoom();
+    void slotReset();
 
 protected:
 
@@ -113,6 +112,7 @@ protected:
     virtual bool previewIsNull()=0;
     virtual void resetPreview()=0;
     virtual void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)=0;
+    virtual void zoomFactorChanged(double zoom);
    
 private:
 

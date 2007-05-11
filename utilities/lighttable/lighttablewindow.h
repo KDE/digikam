@@ -38,7 +38,6 @@
 #include "imageinfo.h"
 
 class KAction;
-class KURL;
 
 namespace Digikam
 {
@@ -64,6 +63,10 @@ signals:
 
     void signalFileDeleted(const KURL&);
 
+public slots:
+
+    void slotItemsUpdated(const KURL::List&);
+
 private:
 
     void closeEvent(QCloseEvent* e);
@@ -82,16 +85,45 @@ private:
 
 private slots:
 
-    void slotEditItem(ImageInfo* info);
-    void slotDeleteItem(ImageInfo* info);
-    void slotItemSelected(ImageInfo*);
+    void slotBackward();
+    void slotForward();
+    void slotFirst();
+    void slotLast();
+
+    void slotSetItemLeft();
+    void slotSetItemRight();
     void slotSetItemOnLeftPanel(ImageInfo*);
     void slotSetItemOnRightPanel(ImageInfo*);
-    void slotClearItemsList();
+    void slotLeftDroppedItems(const ImageInfoList&);
+    void slotRightDroppedItems(const ImageInfoList&);
+
+    void slotLeftPanelLeftButtonClicked();
+    void slotRightPanelLeftButtonClicked();
+
+    void slotLeftPreviewLoaded(bool);
+    void slotRightPreviewLoaded(bool);
+
+    void slotLeftZoomFactorChanged(double);
+    void slotRightZoomFactorChanged(double);
+
+    void slotToggleOnSyncPreview(bool);
+    void slotToggleSyncPreview();
+
+    void slotEditItem();
+    void slotEditItem(ImageInfo*);
+
+    void slotDeleteItem();
+    void slotDeleteItem(ImageInfo*);
+
     void slotRemoveItem();
-    void slotRemoveItem(const KURL&);
+    void slotRemoveItem(ImageInfo*);
+
+    void slotItemSelected(ImageInfo*);
+    void slotClearItemsList();
+
     void slotZoomTo100Percents();
     void slotFitToWindow();
+
     void slotNameLabelCancelButtonPressed();
     void slotToggleSlideShow();
     void slotToggleFullScreen();
@@ -101,11 +133,6 @@ private slots:
     void slotConfToolbars();
     void slotNewToolbarConfig();
     void slotSetup();
-    void slotFileMetadataChanged(const KURL&);
-    void slotLeftZoomFactorChanged(double);
-    void slotRightZoomFactorChanged(double);
-    void slotLeftDroppedItems(const ImageInfoList&);
-    void slotRightDroppedItems(const ImageInfoList&);
 
 private:
 

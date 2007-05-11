@@ -307,6 +307,8 @@ void ThumbBarView::clear(bool updateView)
         slotUpdate();
 
     d->clearing = false;
+
+    emit signalItemSelected(0);
 }
 
 void ThumbBarView::triggerUpdate()
@@ -399,6 +401,18 @@ void ThumbBarView::ensureItemVisible(ThumbBarItem* item)
         else
             ensureVisible((int)(item->d->pos + d->margin + d->tileSize*.5), 0,
                           (int)(d->tileSize*1.5 + 3*d->margin), 0);
+    }
+}
+
+void ThumbBarView::refreshThumbs(const KURL::List& urls)
+{
+    for (KURL::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
+    {
+        ThumbBarItem *item = findItemByURL(*it);
+        if (item)
+        {
+            invalidateThumb(item);
+        }
     }
 }
 
@@ -557,7 +571,13 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
        }
     }
 
-    if (!barItem || barItem == d->currItem)
+    if (!barItem)
+        return;
+
+    d->dragging     = true;
+    d->dragStartPos = e->pos();
+
+    if (barItem == d->currItem)
         return;
 
     if (d->currItem)
@@ -567,9 +587,7 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
         item->repaint();
     }
 
-    d->dragging     = true;
-    d->dragStartPos = e->pos();
-    d->currItem     = barItem;
+    d->currItem = barItem;
     barItem->repaint();
 
     emit signalURLSelected(barItem->url());
@@ -624,6 +642,7 @@ void ThumbBarView::insertItem(ThumbBarItem* item)
     {
         d->currItem = item;
         emit signalURLSelected(item->url());
+        emit signalItemSelected(item);
     }
     
     d->itemDict.insert(item->url().url(), item);
@@ -677,6 +696,9 @@ void ThumbBarView::removeItem(ThumbBarItem* item)
     {
         triggerUpdate();
     }
+
+    if (d->count == 0)
+        emit signalItemSelected(0);
 }
 
 void ThumbBarView::rearrangeItems()

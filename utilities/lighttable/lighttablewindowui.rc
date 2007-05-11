@@ -1,11 +1,22 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="4" name="lighttablewindow" >
+<gui version="14" name="lighttablewindow" >
 
 <MenuBar>
 
     <Menu name="File" ><text>&amp;File</text>
+        <Action name="lighttable_first" />
+        <Action name="lighttable_backward" />
+        <Action name="lighttable_forward" />
+        <Action name="lighttable_last" />
+        <Separator/>
+        <Action name="lighttable_setitemleft" />
+        <Action name="lighttable_setitemright" />
+        <Action name="lighttable_edititem" />
+        <Separator/>
         <Action name="lighttable_removeitem" />
         <Action name="lighttable_clearlist" />
+        <Separator/>
+        <Action name="lighttable_filedelete" />
         <Separator/>
         <Action name="lighttable_exit" />
     </Menu>
@@ -13,6 +24,8 @@
     <Menu name="View" ><text>&amp;View</text>
         <Action name="lighttable_fullscreen" />
         <Action name="lighttable_slideshow" />
+        <Separator/>
+        <Action name="lighttable_syncpreview" />
         <Separator/>
         <Action name="lighttable_zoomplus" /> 
         <Action name="lighttable_zoomminus" /> 
@@ -31,6 +44,8 @@
         <Merge name="StandardToolBarMenuHandler" />
         <Action name="options_show_statusbar"/>
         <Separator/>
+        <Action name="lighttable_autosyncpreview"/>
+        <Separator/>
         <Action name="options_configure_keybinding"/>
         <Action name="options_configure_toolbars"/>
         <Action name="options_configure" />        
@@ -39,9 +54,18 @@
 </MenuBar>
 
 <ToolBar name="ToolBar" ><text>Main Toolbar</text>
+     <Action name="lighttable_first" />
+     <Action name="lighttable_backward" />
+     <Action name="lighttable_forward" />
+     <Action name="lighttable_last" />
+     <Separator/>     
+     <Action name="lighttable_syncpreview" /> 
      <Action name="lighttable_zoomplus" /> 
-     <Action name="lighttable_zoomto" />
      <Action name="lighttable_zoomminus" /> 
+     <Separator/>     
+     <Action name="lighttable_setitemleft" />
+     <Action name="lighttable_setitemright" />
+     <Separator/>     
      <Action name="lighttable_zoomfit2window" /> 
      <Action name="lighttable_zoomfit2select" /> 
      <Separator/>     

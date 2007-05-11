@@ -24,6 +24,10 @@
 #ifndef LIGHTTABLEBAR_H
 #define LIGHTTABLEBAR_H
 
+// Qt includes.
+
+#include <qpixmap.h>
+
 // Local includes.
 
 #include "thumbbar.h"
@@ -42,8 +46,6 @@ namespace Digikam
 
 class LightTableBarItem;
 class LightTableBarToolTip;
-class LightTableBarPriv;
-class LightTableBarItemPriv;
 
 class DIGIKAM_EXPORT LightTableBar : public ThumbBarView
 {
@@ -57,18 +59,27 @@ public:
     ImageInfo*    currentItemImageInfo() const;
     ImageInfoList itemsImageInfoList();
 
+    void setSelectedItem(LightTableBarItem* ltItem);
+
     LightTableBarItem* findItemByInfo(const ImageInfo* info) const;
     LightTableBarItem* findItemByPos(const QPoint& pos) const;
 
     /** Read tool tip settings from Album Settings instance */
     void readToolTipSettings();
 
+    void setOnLeftPanel(const ImageInfo* info);
+    void setOnRightPanel(const ImageInfo* info);
+
+    void removeItem(const ImageInfo* info);
+
 signals:
 
     void signalLightTableBarItemSelected(ImageInfo*);
     void signalSetItemOnLeftPanel(ImageInfo*);
     void signalSetItemOnRightPanel(ImageInfo*);
-    void signalRemoveItem(const KURL&);
+    void signalEditItem(ImageInfo*);
+    void signalRemoveItem(ImageInfo*);
+    void signalClearAll();
 
 private:
 
@@ -80,9 +91,20 @@ private:
 
 private slots:
 
-    void slotItemSelected(ThumbBarItem* i);
+    void slotImageRatingChanged(Q_LLONG);
+    void slotItemSelected(ThumbBarItem*);
+
+    void slotAssignRatingNoStar();
+    void slotAssignRatingOneStar();
+    void slotAssignRatingTwoStar();
+    void slotAssignRatingThreeStar();
+    void slotAssignRatingFourStar();
+    void slotAssignRatingFiveStar();
+    void slotAssignRating(int);
 
 private:
+
+    QPixmap               m_ratingPixmap;
 
     LightTableBarToolTip *m_toolTip;
 
@@ -101,10 +123,18 @@ public:
     ~LightTableBarItem();
 
     ImageInfo* info();
+
+    void setOnLeftPanel(bool on);
+    void setOnRightPanel(bool on);
+    bool getOnLeftPanel() const;
+    bool getOnRightPanel() const;
     
 private:
 
-    ImageInfo   *m_info;
+    bool       m_onLeftPanel;
+    bool       m_onRightPanel;
+ 
+    ImageInfo *m_info;
 
     friend class LightTableBar;
 };

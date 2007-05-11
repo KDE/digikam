@@ -1037,6 +1037,12 @@ void DigikamView::slotImageExifOrientation(int orientation)
     d->iconView->slotSetExifOrientation(orientation);
 }
 
+void DigikamView::slotLightTable()
+{
+    ImageInfoList empty;
+    d->iconView->insertToLightTable(empty, 0);
+}
+
 void DigikamView::slotImageLightTable()
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)

@@ -36,6 +36,7 @@
 
 // Local includes.
 
+#include "constants.h"
 #include "themeengine.h"
 #include "ratingpopupmenu.h"
 #include "ratingpopupmenu.moc"
@@ -55,7 +56,7 @@ RatingPopupMenu::RatingPopupMenu(QWidget* parent)
     QBitmap starbm(ratingPixPath);
     QBitmap clearbm(starbm.width(), starbm.height(), true);    
 
-    for (int i = 1 ; i <= 5 ; i++)
+    for (int i = 1 ; i <= RatingMax ; i++)
     {
         QPixmap pix(starbm.width() * 5, starbm.height());
         pix.fill(ThemeEngine::instance()->textSpecialRegColor());

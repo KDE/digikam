@@ -170,6 +170,11 @@ class A
 General recommendations
 ========================================================================
 
+Please take a look into KDE contrib page tips before to write code/patches for 
+digiKam project : http://techbase.kde.org/Contribute
+
+Use the same .cpp/.h header than the rest of digiKam project.
+
 Use a decent editor which does auto-indentation/syntax-highlighting for you. 
 I personally use Emacs (Renchi) or Kdevelop (Gilles).
 There are excellent initializer scripts in the kdesdk

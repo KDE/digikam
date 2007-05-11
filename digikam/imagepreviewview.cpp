@@ -99,6 +99,10 @@ public:
     bool               hasPrev;
     bool               hasNext;
 
+    int                previewSize;
+
+    double             currentFitWindowZoom;
+
     QString            path;
     QString            nextPath;
     QString            previousPath;
@@ -110,10 +114,6 @@ public:
     KPopupFrame       *panIconPopup;
 
     PanIconWidget     *panIconWidget;
-
-    double             currentFitWindowZoom;
-
-    int                previewSize;
 
     ImageInfo         *imageInfo;
 
@@ -145,13 +145,7 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
     QToolTip::add(d->cornerButton, i18n("Pan the image to a region"));
     setCornerWidget(d->cornerButton);
 
-    // To force to init zoom factor and content size as well with a null preview.
-    updateZoomAndSize(true);
-
     // ------------------------------------------------------------
-
-    connect(this, SIGNAL(signalZoomFactorChanged(double)),
-            this, SLOT(slotZoomChanged(double)));
 
     connect(d->cornerButton, SIGNAL(pressed()),
             this, SLOT(slotCornerButtonPressed()));
@@ -170,6 +164,10 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
+
+    // ------------------------------------------------------------
+
+    QTimer::singleShot(0, this, SLOT(slotReset())); 
 }
 
 ImagePreviewView::~ImagePreviewView()
@@ -216,7 +214,7 @@ void ImagePreviewView::setImagePath(const QString& path)
 
     if (d->path.isEmpty())
     {
-        resetPreview();
+        slotReset();
         unsetCursor();
         return;
     }
@@ -257,12 +255,14 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
         p.end();
         setImage(pix.convertToImage());
         d->parent->previewLoaded();
+        emit signalPreviewLoaded(false);
     }
     else
     {
         d->parent->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         setImage(preview);
         d->parent->previewLoaded();
+        emit signalPreviewLoaded(true);
     }
 
     unsetCursor();
@@ -355,7 +355,7 @@ void ImagePreviewView::slotContextMenu()
     popmenu.insertSeparator();
     popmenu.insertItem(SmallIcon("slideshow"), i18n("SlideShow"), 16);
     popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 12);
-    popmenu.insertItem(SmallIcon("idea"), i18n("Insert to Light Table"), 17);
+    popmenu.insertItem(SmallIcon("idea"), i18n("Place onto Light Table"), 17);
     popmenu.insertItem(i18n("Open With"), &openWithMenu, 13);
 
     // Merge in the KIPI plugins actions ----------------------------
@@ -469,7 +469,7 @@ void ImagePreviewView::slotContextMenu()
             break;
         }
 
-        case 17:     // Insert to Light Table
+        case 17:     // Place onto Light Table
         {
             emit signalInsert2LightTable();
             break;
@@ -588,12 +588,14 @@ void ImagePreviewView::slotPanIconSelectionMoved(QRect r, bool b)
     }
 }
 
-void ImagePreviewView::slotZoomChanged(double zoom)
+void ImagePreviewView::zoomFactorChanged(double zoom)
 {
     if (zoom > calcAutoZoomFactor())
         d->cornerButton->show();
     else
         d->cornerButton->hide();        
+
+    PreviewWidget::zoomFactorChanged(zoom);
 }
 
 void ImagePreviewView::resizeEvent(QResizeEvent* e)
@@ -609,7 +611,6 @@ void ImagePreviewView::resizeEvent(QResizeEvent* e)
     QScrollView::resizeEvent(e);
 
     updateZoomAndSize(false);
-    //emit signalZoomFactorChanged(zoomFactor());
 }
 
 void ImagePreviewView::updateZoomAndSize(bool alwaysFitToWindow)
@@ -649,8 +650,12 @@ bool ImagePreviewView::previewIsNull()
 
 void ImagePreviewView::resetPreview()
 {
-    d->preview.reset();
+    d->preview   = QImage();
+    d->path      = QString(); 
+    d->imageInfo = 0;
+
     updateZoomAndSize(true);
+    emit signalPreviewLoaded(false);
 }
 
 void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)

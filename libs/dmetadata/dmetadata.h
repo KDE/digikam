@@ -78,6 +78,7 @@ public:
 private:
 
     bool setProgramId(bool on=true);
+    bool setIptcTag(const QString& text, int maxLength, const char* debugLabel, const char* tagKey);
 };
 
 }  // NameSpace Digikam

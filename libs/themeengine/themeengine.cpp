@@ -6,7 +6,8 @@
  * Date        : 2004-08-02
  * Description : theme engine methods 
  * 
- * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,6 +51,7 @@ extern "C"
 #include "theme.h"
 #include "texture.h"
 #include "themeengine.h"
+#include "themeengine.moc"
 
 namespace Digikam
 {
@@ -201,40 +203,40 @@ void ThemeEngine::buildDefaultTheme()
     t->textSpecialRegColor = QColor("#0000EF");
     t->textSpecialSelColor = cg.highlightedText();
 
-    t->bannerColor      = cg.highlight();
-    t->bannerColorTo    = cg.highlight().dark(120);
-    t->bannerBevel      = Theme::FLAT;
-    t->bannerGrad       = Theme::SOLID;
-    t->bannerBorder     = false;
-    t->bannerBorderColor  = Qt::black;
+    t->bannerColor         = cg.highlight();
+    t->bannerColorTo       = cg.highlight().dark(120);
+    t->bannerBevel         = Theme::FLAT;
+    t->bannerGrad          = Theme::SOLID;
+    t->bannerBorder        = false;
+    t->bannerBorderColor   = Qt::black;
     
-    t->thumbRegColor    = cg.base();
-    t->thumbRegColorTo  = cg.base();
-    t->thumbRegBevel    = Theme::FLAT;
-    t->thumbRegGrad     = Theme::SOLID;
-    t->thumbRegBorder   = true;
+    t->thumbRegColor       = cg.base();
+    t->thumbRegColorTo     = cg.base();
+    t->thumbRegBevel       = Theme::FLAT;
+    t->thumbRegGrad        = Theme::SOLID;
+    t->thumbRegBorder      = true;
     t->thumbRegBorderColor = QColor("#E0E0EF");
 
-    t->thumbSelColor    = cg.highlight();
-    t->thumbSelColorTo  = cg.highlight();
-    t->thumbSelBevel    = Theme::FLAT;
-    t->thumbSelGrad     = Theme::SOLID;
-    t->thumbSelBorder   = true;
+    t->thumbSelColor       = cg.highlight();
+    t->thumbSelColorTo     = cg.highlight();
+    t->thumbSelBevel       = Theme::FLAT;
+    t->thumbSelGrad        = Theme::SOLID;
+    t->thumbSelBorder      = true;
     t->thumbSelBorderColor = QColor("#E0E0EF");
 
-    t->listRegColor     = cg.base();
-    t->listRegColorTo   = cg.base();
-    t->listRegBevel     = Theme::FLAT;
-    t->listRegGrad      = Theme::SOLID;
-    t->listRegBorder    = false;
-    t->listRegBorderColor = Qt::black;
+    t->listRegColor        = cg.base();
+    t->listRegColorTo      = cg.base();
+    t->listRegBevel        = Theme::FLAT;
+    t->listRegGrad         = Theme::SOLID;
+    t->listRegBorder       = false;
+    t->listRegBorderColor  = Qt::black;
                         
-    t->listSelColor     = cg.highlight();
-    t->listSelColorTo   = cg.highlight();
-    t->listSelBevel     = Theme::FLAT;
-    t->listSelGrad      = Theme::SOLID;
-    t->listSelBorder    = true;
-    t->listSelBorderColor = Qt::black;
+    t->listSelColor        = cg.highlight();
+    t->listSelColorTo      = cg.highlight();
+    t->listSelBevel        = Theme::FLAT;
+    t->listSelGrad         = Theme::SOLID;
+    t->listSelBorder       = true;
+    t->listSelBorderColor  = Qt::black;
 }
 
 void ThemeEngine::loadTheme()
@@ -530,6 +532,11 @@ QColor ThemeEngine::baseColor() const
     return d->currTheme->baseColor;    
 }
 
+QColor ThemeEngine::thumbSelColor() const
+{
+    return d->currTheme->thumbSelColor;    
+}
+
 QColor ThemeEngine::textRegColor() const
 {
     return d->currTheme->textRegColor;    
@@ -592,4 +599,4 @@ QPixmap ThemeEngine::listSelPixmap(int w, int h)
 
 }  // NameSpace Digikam
 
-#include "themeengine.moc"
+

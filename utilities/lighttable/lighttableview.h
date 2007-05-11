@@ -50,6 +50,8 @@ public:
     LightTableView(QWidget *parent=0);
     ~LightTableView();
 
+    void   setSyncPreview(bool sync);
+
     void   setLeftImageInfo(ImageInfo* info=0);
     void   setRightImageInfo(ImageInfo* info=0);
 
@@ -58,6 +60,8 @@ public:
 
     void   setLeftZoomFactor(double z);
     void   setRightZoomFactor(double z);
+
+    void   checkForSelection(ImageInfo* info);
 
     double leftZoomMax();
     double leftZoomMin();
@@ -71,20 +75,34 @@ public:
     bool   rightMaxZoom();
     bool   rightMinZoom();
 
+    void   leftReload();
+    void   rightReload();
+
     void   fitToWindow();
 
 signals:
 
+    void signalLeftPreviewLoaded(bool);
+    void signalRightPreviewLoaded(bool);
+
     void signalLeftZoomFactorChanged(double);
     void signalRightZoomFactorChanged(double);
+
     void signalLeftDroppedItems(const ImageInfoList&);
     void signalRightDroppedItems(const ImageInfoList&);
+
+    void signalLeftPanelLeftButtonClicked();
+    void signalRightPanelLeftButtonClicked();
+
     void signalSlideShow();
     void signalDeleteItem(ImageInfo*);
     void signalEditItem(ImageInfo*);
+    void signalToggleOnSyncPreview(bool);
 
 public slots:
 
+    void slotDecreaseZoom();
+    void slotIncreaseZoom();
     void slotDecreaseLeftZoom();   
     void slotIncreaseLeftZoom();
     void slotLeftZoomSliderChanged(int);
@@ -92,6 +110,17 @@ public slots:
     void slotDecreaseRightZoom();   
     void slotIncreaseRightZoom();
     void slotRightZoomSliderChanged(int);
+
+private slots:
+
+    void slotLeftContentsMoved(int, int);
+    void slotRightContentsMoved(int, int);
+    void slotLeftPreviewLoaded(bool);
+    void slotRightPreviewLoaded(bool);
+
+private :
+
+    void checkForSyncPreview();
 
 private :
 

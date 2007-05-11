@@ -99,6 +99,7 @@ extern "C"
 
 // Local includes.
 
+#include "constants.h"
 #include "ddebug.h"
 #include "album.h"
 #include "albumdb.h"
@@ -539,8 +540,8 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     DPopupMenu popmenu(this);
     popmenu.insertItem(SmallIcon("viewimage"), i18n("View..."), 18);
     popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 10);
+    popmenu.insertItem(SmallIcon("idea"), i18n("Place onto Light Table"), 19);
     popmenu.insertItem(i18n("Open With"), &openWithMenu, 11);
-    popmenu.insertItem(SmallIcon("idea"), i18n("Insert to Light Table"), 19);
 
     // Merge in the KIPI plugins actions ----------------------------
 
@@ -1081,6 +1082,9 @@ void AlbumIconView::insertToLightTable(const ImageInfoList& list, ImageInfo* cur
 
     connect(ltview, SIGNAL(signalFileDeleted(const KURL&)),
            this, SLOT(slotFilesModified()));
+
+    connect(this, SIGNAL(signalItemsUpdated(const KURL::List&)),
+           ltview, SLOT(slotItemsUpdated(const KURL::List&)));
 
     ltview->loadImageInfos(list, current);
 
@@ -1992,7 +1996,7 @@ void AlbumIconView::slotAssignRating(int rating)
 
     int   i   = 0;
     float cnt = (float)countSelected();
-    rating    = QMIN(5, QMAX(0, rating));
+    rating    = QMIN(RatingMax, QMAX(RatingMin, rating));
 
     {
         DatabaseTransaction transaction;

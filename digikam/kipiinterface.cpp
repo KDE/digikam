@@ -56,6 +56,7 @@ extern "C"
 
 // Local includes.
 
+#include "constants.h"
 #include "ddebug.h"
 #include "albummanager.h"
 #include "albumitemhandler.h"
@@ -242,7 +243,7 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
         if (attributes.find("rating") != attributes.end())
         {
             int rating = attributes["rating"].asInt();
-            if (rating >= 0 && rating <= 5)
+            if (rating >= RatingMin && rating <= RatingMax)
                 access.db()->setItemRating(imageId, rating);
         }
 

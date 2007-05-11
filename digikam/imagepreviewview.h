@@ -70,7 +70,7 @@ signals:
     void signalPrevItem();
     void signalDeleteItem();
     void signalEditItem();
-    void signalPreviewLoaded();
+    void signalPreviewLoaded(bool success);
     void signalBack2Album();
     void signalSlideShow();
     void signalInsert2LightTable();
@@ -89,7 +89,6 @@ private slots:
     void slotAssignRating(int rating);
     void slotThemeChanged();
     void slotCornerButtonPressed();
-    void slotZoomChanged(double);
     void slotPanIconSelectionMoved(QRect, bool);
     void slotPanIconHiden();
 
@@ -99,6 +98,7 @@ private:
     int  previewHeight();
     bool previewIsNull();
     void resetPreview();
+    void zoomFactorChanged(double zoom);
     void updateZoomAndSize(bool alwaysFitToWindow);
     inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
 

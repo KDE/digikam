@@ -140,6 +140,9 @@ public slots:
     void slotAssignRatingFourStar();
     void slotAssignRatingFiveStar();
 
+    // Tools action slots.
+    void slotLightTable();
+
 private:
 
     void toogleZoomActions();

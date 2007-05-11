@@ -28,6 +28,7 @@
 
 #include <qstring.h>
 #include <qimage.h>
+#include <qsize.h>
 
 // Local includes
 
@@ -56,6 +57,8 @@ public:
     void setImage(const QImage& image);
     QImage& getImage() const;
 
+    QSize getImageSize();
+
     void setImageInfo(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
     ImageInfo* getImageInfo() const;
 
@@ -63,17 +66,20 @@ public:
     void setImagePath(const QString& path=QString());
     void setPreviousNextPaths(const QString& previous, const QString &next);
 
+    void setSelected(bool sel);
+
 signals:
 
     void signalDroppedItems(const ImageInfoList&);
     void signalDeleteItem(ImageInfo*);
     void signalEditItem(ImageInfo*);
-    void signalPreviewLoaded();
+    void signalPreviewLoaded(bool success);
     void signalSlideShow();
 
 protected:
 
     void resizeEvent(QResizeEvent* e);
+    void drawFrame(QPainter *p);
 
 private slots:
 
@@ -85,7 +91,6 @@ private slots:
     void slotAssignRating(int rating);
     void slotThemeChanged();
     void slotCornerButtonPressed();
-    void slotZoomChanged(double);
     void slotPanIconSelectionMoved(QRect, bool);
     void slotPanIconHiden();
 
@@ -95,6 +100,7 @@ private:
     int  previewHeight();
     bool previewIsNull();
     void resetPreview();
+    void zoomFactorChanged(double zoom);
     void updateZoomAndSize(bool alwaysFitToWindow);
     inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
 
