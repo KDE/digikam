@@ -51,7 +51,6 @@ public:
     {
         removeFullScreenButton = false;
         fullScreenHideToolBar  = false;
-        slideShowInFullScreen  = true;
 
         selectLabel            = 0;
         imagePluginsHelpAction = 0;
@@ -89,7 +88,6 @@ public:
 
     bool                       removeFullScreenButton;
     bool                       fullScreenHideToolBar;
-    bool                       slideShowInFullScreen;
 
     KComboBox                 *zoomCombo;
 
