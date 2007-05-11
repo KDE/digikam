@@ -494,8 +494,10 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 if (item->d->pixmap)
                 {
                     QPixmap pix; 
+                    QSize   scaledSize(item->d->pixmap->size());
+                    scaledSize.scale(d->tileSize, d->tileSize, QSize::ScaleMin);
                     pix.convertFromImage(FastScale::fastScaleQImage(QImage(item->d->pixmap->convertToImage()), 
-                                         d->tileSize, d->tileSize));
+                                         scaledSize.width(), scaledSize.height()));
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
                     bitBlt(&tile, x, y, &pix);
@@ -521,8 +523,10 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 if (item->d->pixmap)
                 {
                     QPixmap pix; 
+                    QSize   scaledSize(item->d->pixmap->size());
+                    scaledSize.scale(d->tileSize, d->tileSize, QSize::ScaleMin);
                     pix.convertFromImage(FastScale::fastScaleQImage(QImage(item->d->pixmap->convertToImage()), 
-                                         d->tileSize, d->tileSize));
+                                         scaledSize.width(), scaledSize.height()));
                     int x = (tile.width() - pix.width())/2;
                     int y = (tile.height()- pix.height())/2;
                     bitBlt(&tile, x, y, &pix);
