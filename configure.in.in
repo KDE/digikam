@@ -71,7 +71,7 @@ AC_LANG_RESTORE
 
 # -----------------------------------------------------------------
 #
-# sqlite3 check
+# Check for libsqlite3
 #
 # -----------------------------------------------------------------
 
@@ -83,7 +83,7 @@ if test x$PKGCONFIGFOUND = xyes; then
    if test x$have_sqlite3 = xyes; then
       LIB_SQLITE3=`pkg-config --libs sqlite3`
    else
-      DO_NOT_COMPILE="$DO_NOT_COMPILE digikam digikamimageplugins"
+      DO_NOT_COMPILE="$DO_NOT_COMPILE digikam"
    fi
 fi
 
@@ -91,7 +91,7 @@ AC_SUBST(LIB_SQLITE3)
 
 # -----------------------------------------------------------------
 #
-# lcms check
+# Check for liblcms
 #
 # -----------------------------------------------------------------
 
@@ -129,18 +129,16 @@ cmsOpenProfileFromFile("foo", "r");
 fi
 
 if test -z "$LCMS_LIBS"; then
-    DO_NOT_COMPILE="$DO_NOT_COMPILE digikam digikamimageplugins"
+    DO_NOT_COMPILE="$DO_NOT_COMPILE digikam"
 fi
 
 AC_SUBST(LCMS_LIBS)
 
 #------------------------------------------------------------------
 #
-# gphoto2 detection
+# Check for libgphoto2
 #
 #------------------------------------------------------------------
-
-dnl Check for gPhoto2 configuration
 
 AC_PATH_PROG(GPHOTO_CONFIG,gphoto2-config)
 AC_PATH_PROG(GPHOTO_PORT_CONFIG,gphoto2-port-config)
@@ -151,19 +149,18 @@ if test -n "${GPHOTO_CONFIG}"; then
   AC_SUBST(LIB_GPHOTO)
 else
   AC_MSG_WARN([gPhoto2 not found.])
-  DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
+  DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
 fi
 
 CXXFLAGS="$CXXFLAGS -DQT_CLEAN_NAMESPACE"
 
 #------------------------------------------------------------------
 #
-# KIPI support (KDE Image Plugin Interface) 
+# Check for libkipi 
 #
 #------------------------------------------------------------------
 
 if test "$PKGCONFIGFOUND" = "yes" ; then
-   # check for libkipi
    have_libkipi=no
 
    KDE_PKG_CHECK_MODULES(LIBKIPI, libkipi >= 0.1,
@@ -185,7 +182,7 @@ AC_SUBST(LIBKIPI_CFLAGS)
 AC_SUBST(LIBKIPI_LIBS)
 
 if test "x$have_libkipi" != "xyes"; then
-     DO_NOT_COMPILE="$DO_NOT_COMPILE digikam digikamimageplugins"
+     DO_NOT_COMPILE="$DO_NOT_COMPILE digikam"
 fi
 
 # --------------------------------------------------------------------
@@ -195,7 +192,6 @@ fi
 # --------------------------------------------------------------------
 
 if test "$PKGCONFIGFOUND" = "yes" ; then
-   # check for libkexiv2
    have_libkexiv2=no
 
    KDE_PKG_CHECK_MODULES(LIBKEXIV2, libkexiv2 >= 0.1.4,
@@ -217,7 +213,7 @@ AC_SUBST(LIBKEXIV2_CFLAGS)
 AC_SUBST(LIBKEXIV2_LIBS)
 
 if test "x$have_libkexiv2" != "xyes"; then
-   DO_NOT_COMPILE="$DO_NOT_COMPILE digikam digikamimageplugins"
+   DO_NOT_COMPILE="$DO_NOT_COMPILE digikam"
 fi
 
 # --------------------------------------------------------------------
@@ -227,7 +223,6 @@ fi
 # --------------------------------------------------------------------
 
 if test "$PKGCONFIGFOUND" = "yes" ; then
-   # check for libkdcraw
    have_libkdcraw=no
 
    KDE_PKG_CHECK_MODULES(LIBKDCRAW, libkdcraw >= 0.1,
@@ -248,6 +243,10 @@ fi
 AC_SUBST(LIBKDCRAW_CFLAGS)
 AC_SUBST(LIBKDCRAW_LIBS)
 
+if test "x$have_libkdcraw" != "xyes"; then
+   DO_NOT_COMPILE="$DO_NOT_COMPILE digikam"
+fi
+
 #------------------------------------------------------------------
 #
 # Check for libtiff
@@ -266,7 +265,7 @@ fi
 
 if test "x$have_tiff" != "xyes"; then
   AC_WARN([TIFF library not found, digiKam will not be compiled.])
-  DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
+  DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
 else
   LIB_TIFF="-ltiff"
   AC_SUBST(LIB_TIFF)
@@ -274,7 +273,7 @@ fi
 
 #------------------------------------------------------------------
 #
-# Check for libpng with png_set_add_alpha() function
+# Check for libpng (with png_set_add_alpha() function)
 #
 #------------------------------------------------------------------
 
@@ -286,7 +285,7 @@ KDE_CHECK_LIB(png, png_set_add_alpha,
 
 if test "x$have_png" != "xyes"; then
   AC_WARN([digiKam requires libpng >= 1.2.7; digiKam will not be compiled.])
-  DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
+  DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
 else
   LIB_PNG="-lpng"
   AC_SUBST(LIB_PNG)
@@ -306,7 +305,7 @@ KDE_CHECK_LIB(jasper, jas_init,
 
 if test "x$have_jasper" != "xyes"; then
   AC_WARN([digiKam requires libjasper >= 1.7.0; digiKam will not be compiled.])
-  DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
+  DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
 else
   LIB_JASPER="-ljasper"
   AC_SUBST(LIB_JASPER)
