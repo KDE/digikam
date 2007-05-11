@@ -74,7 +74,8 @@ public:
 
     LightTableWindowPriv()
     {
-        fullScreenHideToolBar  = true;
+        autoSyncPreview        = true;
+        fullScreenHideToolBar  = false;
         fullScreen             = false;
         removeFullScreenButton = false;
         cancelSlideShow        = false;
@@ -92,7 +93,6 @@ public:
         hSplitter              = 0;
         vSplitter              = 0;
         syncPreviewAction      = 0;
-        autoSyncPreviewAction  = 0;
         clearListAction        = 0;
         setItemLeftAction      = 0;
         setItemRightAction     = 0;
@@ -115,6 +115,7 @@ public:
         lastAction             = 0;
     }
 
+    bool                      autoSyncPreview;
     bool                      fullScreenHideToolBar;
     bool                      fullScreen;
     bool                      removeFullScreenButton;
@@ -151,7 +152,6 @@ public:
 
     KToggleAction            *fullScreenAction;
     KToggleAction            *syncPreviewAction;
-    KToggleAction            *autoSyncPreviewAction;
 
     KAccel                   *accelerators;
 
@@ -202,8 +202,6 @@ LightTableWindow::LightTableWindow()
 
     setupConnections();
 
-    setAutoSaveSettings("LightTable Settings");
-
     //-------------------------------------------------------------
 
     d->leftSidebar->loadViewState();
@@ -211,16 +209,9 @@ LightTableWindow::LightTableWindow()
     d->leftSidebar->populateTags();
     d->rightSidebar->populateTags();
 
-    KConfig* config = kapp->config();
-    config->setGroup("LightTable Settings");
-
-    if(config->hasKey("Vertical Splitter Sizes"))
-        d->vSplitter->setSizes(config->readIntListEntry("Vertical Splitter Sizes"));
-
-    if(config->hasKey("Horizontal Splitter Sizes"))
-        d->hSplitter->setSizes(config->readIntListEntry("Horizontal Splitter Sizes"));
-
-    d->autoSyncPreviewAction->setChecked(config->readBoolEntry("Auto Sync Preview", true));
+    readSettings();
+    applySettings();
+    setAutoSaveSettings("LightTable Settings");
 }
 
 LightTableWindow::~LightTableWindow()
@@ -233,16 +224,41 @@ LightTableWindow::~LightTableWindow()
     delete d;
 }
 
-void LightTableWindow::closeEvent(QCloseEvent* e)
+void LightTableWindow::readSettings()
 {
-    if (!e) return;
+    KConfig* config = kapp->config();
+    config->setGroup("LightTable Settings");
 
+    if(config->hasKey("Vertical Splitter Sizes"))
+        d->vSplitter->setSizes(config->readIntListEntry("Vertical Splitter Sizes"));
+
+    if(config->hasKey("Horizontal Splitter Sizes"))
+        d->hSplitter->setSizes(config->readIntListEntry("Horizontal Splitter Sizes"));
+}
+
+void LightTableWindow::writeSettings()
+{
     KConfig* config = kapp->config();
     config->setGroup("LightTable Settings");
     config->writeEntry("Vertical Splitter Sizes", d->vSplitter->sizes());
     config->writeEntry("Horizontal Splitter Sizes", d->hSplitter->sizes());
-    config->writeEntry("Auto Sync Preview", d->autoSyncPreviewAction->isChecked());
     config->sync();
+}
+
+void LightTableWindow::applySettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("LightTable Settings");
+
+    d->autoSyncPreview       = config->readBoolEntry("Auto Sync Preview", true);
+    d->fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
+}
+
+void LightTableWindow::closeEvent(QCloseEvent* e)
+{
+    if (!e) return;
+
+    writeSettings();
 
     e->accept();
 }
@@ -480,10 +496,6 @@ void LightTableWindow::setupActions()
                                      actionCollection(),"lighttable_slideshow");
 
     // -- Standard 'Configure' menu actions ----------------------------------------
-
-    d->autoSyncPreviewAction = new KToggleAction(i18n("Auto-Synchronize Preview"), 
-                                                 0, 0, 0, 0,
-                                                 actionCollection(), "lighttable_autosyncpreview");
 
     KStdAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
     KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
@@ -1165,7 +1177,7 @@ void LightTableWindow::slotSetup()
 
     kapp->config()->sync();
     
-    // TODO: Apply Settings here if necessary
+    applySettings();
 }
 
 void LightTableWindow::slotLeftZoomFactorChanged(double zoom)
@@ -1233,7 +1245,7 @@ void LightTableWindow::slotToggleOnSyncPreview(bool t)
     }
     else
     {
-        if (d->autoSyncPreviewAction->isChecked())
+        if (d->autoSyncPreview)
             d->syncPreviewAction->setChecked(true);
     }
 }

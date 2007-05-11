@@ -80,6 +80,10 @@ private:
     void hideToolBars();
     void plugActionAccel(KAction* action);
     void unplugActionAccel(KAction* action);
+    void readSettings();
+    void writeSettings();
+    void applySettings();
+    void refreshStatusBar();
 
     LightTableWindow();
 
@@ -133,10 +137,6 @@ private slots:
     void slotConfToolbars();
     void slotNewToolbarConfig();
     void slotSetup();
-
-private:
-
-    void refreshStatusBar();
 
 private:
 
