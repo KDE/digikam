@@ -75,6 +75,7 @@ signals:
     void signalLightTableBarItemSelected(ImageInfo*);
     void signalSetItemOnLeftPanel(ImageInfo*);
     void signalSetItemOnRightPanel(ImageInfo*);
+    void signalEditItem(ImageInfo*);
     void signalRemoveItem(const KURL&);
 
 private:

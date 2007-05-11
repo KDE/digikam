@@ -126,7 +126,6 @@ private slots:
     void slotConfToolbars();
     void slotNewToolbarConfig();
     void slotSetup();
-    void slotFileMetadataChanged(const KURL&);
 
 private:
 

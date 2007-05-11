@@ -124,8 +124,9 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
         popmenu.insertTitle(SmallIcon("digikam"), i18n("My Light Table"));
         popmenu.insertItem(SmallIcon("previous"), i18n("Show on left panel"), 10);
         popmenu.insertItem(SmallIcon("next"), i18n("Show on right panel"), 11);
+        popmenu.insertItem(SmallIcon("editimage"), i18n("Edit"), 12);
         popmenu.insertSeparator();
-        popmenu.insertItem(SmallIcon("fileclose"), i18n("Remove"), 12);
+        popmenu.insertItem(SmallIcon("fileclose"), i18n("Remove"), 13);
         popmenu.insertSeparator();
 
         // Assign Star Rating -------------------------------------------
@@ -139,17 +140,22 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
 
         switch(popmenu.exec(pos))
         {
-            case 10:
+            case 10:    // Left panel
             {
                 emit signalSetItemOnLeftPanel(item->info());
                 break;
             }
-            case 11:
+            case 11:    // Right panel
             {
                 emit signalSetItemOnRightPanel(item->info());
                 break;
             }
-            case 12:
+            case 12:    // Edit
+            {
+                emit signalEditItem(item->info());
+                break;
+            }
+            case 13:    // Remove
             {
                 KURL url = item->info()->kurl();
                 emit signalRemoveItem(url);

@@ -52,7 +52,6 @@
 #include "deletedialog.h"
 #include "imagewindow.h"
 #include "imagepropertiessidebardb.h"
-#include "imageattributeswatch.h"
 #include "slideshow.h"
 #include "setup.h"
 #include "statusprogressbar.h"
@@ -293,6 +292,11 @@ void LightTableWindow::setupStatusBar()
 
 void LightTableWindow::setupConnections()
 {
+    connect(d->statusProgressBar, SIGNAL(signalCancelButtonPressed()),
+           this, SLOT(slotNameLabelCancelButtonPressed()));
+
+    // Thumbs bar connections ---------------------------------------
+
     connect(d->barView, SIGNAL(signalSetItemOnLeftPanel(ImageInfo*)),
            this, SLOT(slotSetItemOnLeftPanel(ImageInfo*)));
 
@@ -302,11 +306,13 @@ void LightTableWindow::setupConnections()
     connect(d->barView, SIGNAL(signalRemoveItem(const KURL&)),
            this, SLOT(slotRemoveItem(const KURL&)));
 
+    connect(d->barView, SIGNAL(signalEditItem(ImageInfo*)),
+           this, SLOT(slotEditItem(ImageInfo*)));
+
     connect(d->barView, SIGNAL(signalLightTableBarItemSelected(ImageInfo*)),
            this, SLOT(slotItemSelected(ImageInfo*)));
 
-    connect(d->statusProgressBar, SIGNAL(signalCancelButtonPressed()),
-           this, SLOT(slotNameLabelCancelButtonPressed()));
+    // Zoom bars connections -----------------------------------------
 
     connect(d->leftZoomBar, SIGNAL(signalZoomMinusClicked()),
            d->previewView, SLOT(slotDecreaseLeftZoom()));
@@ -325,6 +331,8 @@ void LightTableWindow::setupConnections()
 
     connect(d->rightZoomBar, SIGNAL(signalZoomSliderChanged(int)),
            d->previewView, SLOT(slotRightZoomSliderChanged(int)));
+
+    // View connections ---------------------------------------------
 
     connect(d->previewView, SIGNAL(signalLeftZoomFactorChanged(double)),
            this, SLOT(slotLeftZoomFactorChanged(double)));
@@ -361,11 +369,6 @@ void LightTableWindow::setupConnections()
 
     connect(d->previewView, SIGNAL(signalRightPanelLeftButtonClicked()),
             this, SLOT(slotRightPanelLeftButtonClicked()));
-
-    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
-
-    connect(watch, SIGNAL(signalFileMetadataChanged(const KURL &)),
-           this, SLOT(slotFileMetadataChanged(const KURL &)));
 }
 
 void LightTableWindow::setupActions()
@@ -602,11 +605,6 @@ void LightTableWindow::slotRightPreviewLoaded(bool b)
     LightTableBarItem *item = d->barView->findItemByInfo(d->previewView->rightImageInfo());
     if (item) item->setOnRightPanel(true);
     d->barView->update();
-}
-
-void LightTableWindow::slotFileMetadataChanged(const KURL &/*url*/)
-{
-    // TODO ???
 }
 
 void LightTableWindow::slotItemSelected(ImageInfo* info)
