@@ -284,7 +284,7 @@ ImageInfoList LightTableBar::itemsImageInfoList()
     return list;
 }
 
-void LightTableBar::setSelected(LightTableBarItem* ltItem)
+void LightTableBar::setSelectedItem(LightTableBarItem* ltItem)
 {
     ThumbBarItem *item = static_cast<ThumbBarItem*>(ltItem);
     if (item) ThumbBarView::setSelected(item);

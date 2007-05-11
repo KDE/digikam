@@ -109,6 +109,10 @@ public:
         statusProgressBar      = 0;
         leftZoomBar            = 0;  
         rightZoomBar           = 0;  
+        forwardAction          = 0;
+        backwardAction         = 0;
+        firstAction            = 0;
+        lastAction             = 0;
     }
 
     bool                      fullScreenHideToolBar;
@@ -126,6 +130,11 @@ public:
     KAction                  *star3;
     KAction                  *star4;
     KAction                  *star5;
+
+    KAction                  *forwardAction;
+    KAction                  *backwardAction;
+    KAction                  *firstAction;
+    KAction                  *lastAction;
 
     KAction                  *setItemLeftAction;
     KAction                  *setItemRightAction;
@@ -378,6 +387,22 @@ void LightTableWindow::setupActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
+    d->backwardAction = KStdAction::back(this, SLOT(slotBackward()),
+                                    actionCollection(), "lighttable_backward");
+
+    d->forwardAction = KStdAction::forward(this, SLOT(slotForward()),
+                                   actionCollection(), "lighttable_forward");
+
+    d->firstAction = new KAction(i18n("&First"), "start",
+                                 KStdAccel::shortcut( KStdAccel::Home),
+                                 this, SLOT(slotFirst()),
+                                 actionCollection(), "lighttable_first");
+
+    d->lastAction = new KAction(i18n("&Last"), "finish",
+                                KStdAccel::shortcut( KStdAccel::End),
+                                this, SLOT(slotLast()),
+                                actionCollection(), "lighttable_last");
+
     d->setItemLeftAction = new KAction(i18n("Show item on left panel"), "previous",
                                        CTRL+Key_L, this, SLOT(slotSetItemLeft()),
                                        actionCollection(), "lighttable_setitemleft");
@@ -510,6 +535,26 @@ void LightTableWindow::setupAccelerators()
                     Key_Escape, this, SLOT(slotEscapePressed()),
                     false, true);
 
+    d->accelerators->insert("Next Image Key_Space", i18n("Next Image"),
+                    i18n("Load Next Image"),
+                    Key_Space, this, SLOT(slotForward()),
+                    false, true);
+
+    d->accelerators->insert("Previous Image Key_Backspace", i18n("Previous Image"),
+                    i18n("Load Previous Image"),
+                    Key_Backspace, this, SLOT(slotBackward()),
+                    false, true);
+
+    d->accelerators->insert("Next Image Key_Next", i18n("Next Image"),
+                    i18n("Load Next Image"),
+                    Key_Next, this, SLOT(slotForward()),
+                    false, true);
+
+    d->accelerators->insert("Previous Image Key_Prior", i18n("Previous Image"),
+                    i18n("Load Previous Image"),
+                    Key_Prior, this, SLOT(slotBackward()),
+                    false, true);
+
     d->accelerators->insert("Zoom Plus Key_Plus", i18n("Zoom in"),
                     i18n("Zoom in on image"),
                     Key_Plus, d->previewView, SLOT(slotIncreaseZoom()),
@@ -530,7 +575,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
             LightTableBarItem *item = new LightTableBarItem(d->barView, *it);
             if (*it == imageInfoCurrent)
             {
-                d->barView->setSelected(item);
+                d->barView->setSelectedItem(item);
             }
         }
     }   
@@ -580,12 +625,12 @@ void LightTableWindow::slotItemsUpdated(const KURL::List& urls)
 
 void LightTableWindow::slotLeftPanelLeftButtonClicked()
 {
-    d->barView->setSelected(d->barView->findItemByInfo(d->previewView->leftImageInfo()));
+    d->barView->setSelectedItem(d->barView->findItemByInfo(d->previewView->leftImageInfo()));
 }
 
 void LightTableWindow::slotRightPanelLeftButtonClicked()
 {
-    d->barView->setSelected(d->barView->findItemByInfo(d->previewView->rightImageInfo()));
+    d->barView->setSelectedItem(d->barView->findItemByInfo(d->previewView->rightImageInfo()));
 }
 
 void LightTableWindow::slotLeftPreviewLoaded(bool b)
@@ -1163,6 +1208,30 @@ void LightTableWindow::slotToggleOnSyncPreview(bool t)
         if (d->autoSyncPreviewAction->isChecked())
             d->syncPreviewAction->setChecked(true);
     }
+}
+
+void LightTableWindow::slotBackward()
+{
+    ThumbBarItem* curr = d->barView->currentItem();
+    if (curr && curr->prev())
+        d->barView->setSelected(curr->prev());
+}
+
+void LightTableWindow::slotForward()
+{
+    ThumbBarItem* curr = d->barView->currentItem();
+    if (curr && curr->next())
+        d->barView->setSelected(curr->next());
+}
+
+void LightTableWindow::slotFirst()
+{
+    d->barView->setSelected( d->barView->firstItem() );
+}
+
+void LightTableWindow::slotLast()
+{
+    d->barView->setSelected( d->barView->lastItem() );
 }
 
 }  // namespace Digikam

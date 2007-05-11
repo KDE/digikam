@@ -85,6 +85,11 @@ private:
 
 private slots:
 
+    void slotBackward();
+    void slotForward();
+    void slotFirst();
+    void slotLast();
+
     void slotSetItemLeft();
     void slotSetItemRight();
     void slotSetItemOnLeftPanel(ImageInfo*);

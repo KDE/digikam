@@ -1,9 +1,14 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="12" name="lighttablewindow" >
+<gui version="13" name="lighttablewindow" >
 
 <MenuBar>
 
     <Menu name="File" ><text>&amp;File</text>
+        <Action name="lighttable_first" />
+        <Action name="lighttable_backward" />
+        <Action name="lighttable_forward" />
+        <Action name="lighttable_last" />
+        <Separator/>
         <Action name="lighttable_setitemleft" />
         <Action name="lighttable_setitemright" />
         <Action name="lighttable_edititem" />
@@ -49,6 +54,14 @@
 </MenuBar>
 
 <ToolBar name="ToolBar" ><text>Main Toolbar</text>
+     <Action name="lighttable_first" />
+     <Action name="lighttable_backward" />
+     <Action name="lighttable_forward" />
+     <Action name="lighttable_last" />
+     <Separator/>     
+     <Action name="lighttable_setitemleft" />
+     <Action name="lighttable_setitemright" />
+     <Separator/>     
      <Action name="lighttable_syncpreview" /> 
      <Action name="lighttable_zoomplus" /> 
      <Action name="lighttable_zoomminus" /> 
