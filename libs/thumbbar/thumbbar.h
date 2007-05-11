@@ -103,7 +103,7 @@ public:
 
     ThumbBarView(QWidget* parent, int orientation=Vertical, bool exifRotate=false,
                  ThumbBarToolTipSettings settings=ThumbBarToolTipSettings());
-    ~ThumbBarView();
+    virtual ~ThumbBarView();
 
     int countItems();
     KURL::List itemsURLs();
@@ -179,7 +179,7 @@ class DIGIKAM_EXPORT ThumbBarItem
 public:
 
     ThumbBarItem(ThumbBarView *view, const KURL& url);
-    ~ThumbBarItem();
+    virtual ~ThumbBarItem();
 
     KURL          url() const;
 
