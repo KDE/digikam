@@ -225,10 +225,9 @@ void LightTableBar::setOnLeftPanel(const ImageInfo* info)
 
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
     {
-        KURL url1 = item->url();
-        KURL url2 = info->kurl();
         LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
-        ltItem->setOnLeftPanel(url1 == url2);
+        if (ltItem)
+            ltItem->setOnLeftPanel(ltItem->info()->id() == info->id());
     }
 
     triggerUpdate();
@@ -240,10 +239,9 @@ void LightTableBar::setOnRightPanel(const ImageInfo* info)
 
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
     {
-        KURL url1 = item->url();
-        KURL url2 = info->kurl();
         LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
-        ltItem->setOnRightPanel(url1 == url2);
+        if (ltItem)
+            ltItem->setOnRightPanel(ltItem->info()->id() == info->id());
     }
 
     triggerUpdate();
@@ -300,13 +298,11 @@ LightTableBarItem* LightTableBar::findItemByInfo(const ImageInfo* info) const
     {
         for (ThumbBarItem *item = firstItem(); item; item = item->next())
         {
-            KURL url1 = item->url();
-            KURL url2 = info->kurl();
-        
-            if (url1 == url2)
+            LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);  
+            if (ltItem)
             {
-                LightTableBarItem *ltItem = static_cast<LightTableBarItem*>(item);
-                return ltItem;
+                if (ltItem->info()->id() == info->id())
+                    return ltItem;
             }
         }
     }
