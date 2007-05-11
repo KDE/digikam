@@ -45,6 +45,7 @@
 #include "setupidentity.h"
 #include "setupcollections.h"
 #include "setupmime.h"
+#include "setuplighttable.h"
 #include "setupeditor.h"
 #include "setupdcraw.h"
 #include "setupiofiles.h"
@@ -71,6 +72,7 @@ public:
         page_identity    = 0;
         page_collections = 0;
         page_mime        = 0;
+        page_lighttable  = 0;
         page_editor      = 0;
         page_dcraw       = 0;
         page_iofiles     = 0;
@@ -86,6 +88,7 @@ public:
         identityPage     = 0;
         collectionsPage  = 0;
         mimePage         = 0;
+        lighttablePage   = 0;
         editorPage       = 0;
         dcrawPage        = 0;
         iofilesPage      = 0;
@@ -102,6 +105,7 @@ public:
     QFrame           *page_identity;
     QFrame           *page_collections;
     QFrame           *page_mime;
+    QFrame           *page_lighttable;
     QFrame           *page_editor;
     QFrame           *page_dcraw;
     QFrame           *page_iofiles;
@@ -117,6 +121,7 @@ public:
     SetupIdentity    *identityPage;
     SetupCollections *collectionsPage;
     SetupMime        *mimePage;
+    SetupLightTable  *lighttablePage;
     SetupEditor      *editorPage;
     SetupDcraw       *dcrawPage;
     SetupIOFiles     *iofilesPage;
@@ -157,6 +162,10 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_mime = addPage(i18n("Mime Types"), i18n("File (MIME) Types Settings"),
                            BarIcon("kcmsystem", KIcon::SizeMedium));
     d->mimePage = new SetupMime(d->page_mime);
+
+    d->page_lighttable = addPage(i18n("Light Table"), i18n("Light Table Settings"),
+                                 BarIcon("idea", KIcon::SizeMedium));
+    d->lighttablePage = new SetupLightTable(d->page_lighttable);
 
     d->page_editor = addPage(i18n("Image Editor"), i18n("Image Editor General Settings"),
                              BarIcon("image", KIcon::SizeMedium));
@@ -223,6 +232,7 @@ void Setup::slotOkClicked()
     d->collectionsPage->applySettings();
     d->mimePage->applySettings();
     d->cameraPage->applySettings();
+    d->lighttablePage->applySettings();
     d->editorPage->applySettings();
     d->dcrawPage->applySettings();
     d->iofilesPage->applySettings();
