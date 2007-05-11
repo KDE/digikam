@@ -55,6 +55,8 @@ public:
     QStringList themeNames() const;
     
     void    setCurrentTheme(const QString& name);
+    void    setCurrentTheme(const Theme& theme, const QString& name,
+                            bool loadFromDisk=false);
     Theme*  getCurrentTheme();
 
     QColor  baseColor()     const;

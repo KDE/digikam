@@ -1,0 +1,14 @@
+# KDE Config File
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Categories=Qt;KDE;Graphics;
+Exec=digikamthemedesigner
+Icon=digikam
+Name=digiKamThemeDesigner
+Name[xx]=xxdigiKamThemeDesignerxx
+Comment=Color Theme designer for digiKam
+Comment[xx]=xxColor Theme designer for digiKamxx
+GenericName=digiKam Theme Designer
+GenericName[xx]=xxdigiKam Theme Designerxx
+Terminal=false
