@@ -1,11 +1,12 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="11" name="lighttablewindow" >
+<gui version="12" name="lighttablewindow" >
 
 <MenuBar>
 
     <Menu name="File" ><text>&amp;File</text>
         <Action name="lighttable_setitemleft" />
         <Action name="lighttable_setitemright" />
+        <Action name="lighttable_edititem" />
         <Separator/>
         <Action name="lighttable_removeitem" />
         <Action name="lighttable_clearlist" />

@@ -104,6 +104,7 @@ private slots:
     void slotToggleOnSyncPreview(bool);
     void slotToggleSyncPreview();
 
+    void slotEditItem();
     void slotEditItem(ImageInfo*);
     void slotDeleteItem();
     void slotDeleteItem(ImageInfo*);

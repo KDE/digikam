@@ -97,6 +97,7 @@ public:
         clearListAction        = 0;
         setItemLeftAction      = 0;
         setItemRightAction     = 0;
+        editItemAction         = 0;
         removeItemAction       = 0;
         fileDeleteAction       = 0;
         slideShowAction        = 0;
@@ -130,6 +131,7 @@ public:
     KAction                  *setItemLeftAction;
     KAction                  *setItemRightAction;
     KAction                  *clearListAction;
+    KAction                  *editItemAction;
     KAction                  *removeItemAction;
     KAction                  *fileDeleteAction;
     KAction                  *slideShowAction;
@@ -380,6 +382,11 @@ void LightTableWindow::setupActions()
                                        actionCollection(), "lighttable_setitemright");
     d->setItemRightAction->setEnabled(false);
 
+    d->editItemAction = new KAction(i18n("Edit"), "editimage",
+                                       Key_F4, this, SLOT(slotEditItem()),
+                                       actionCollection(), "lighttable_edititem");
+    d->editItemAction->setEnabled(false);
+
     d->removeItemAction = new KAction(i18n("Remove item"), "fileclose",
                                        0, this, SLOT(slotRemoveItem()),
                                        actionCollection(), "lighttable_removeitem");
@@ -608,6 +615,7 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
     {
         d->setItemLeftAction->setEnabled(true);
         d->setItemRightAction->setEnabled(true);
+        d->editItemAction->setEnabled(true);
         d->removeItemAction->setEnabled(true);
         d->clearListAction->setEnabled(true);
         d->fileDeleteAction->setEnabled(true);
@@ -616,6 +624,7 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
     {
         d->setItemLeftAction->setEnabled(false);
         d->setItemRightAction->setEnabled(false);
+        d->editItemAction->setEnabled(false);
         d->removeItemAction->setEnabled(false);
         d->clearListAction->setEnabled(false);
         d->fileDeleteAction->setEnabled(false);
@@ -783,6 +792,12 @@ void LightTableWindow::slotRemoveItem()
         slotRemoveItem(d->barView->currentItemImageInfo()->kurl());
         d->barView->removeItem(d->barView->currentItem());
     }
+}
+
+void LightTableWindow::slotEditItem()
+{
+    if (d->barView->currentItemImageInfo())
+        slotEditItem(d->barView->currentItemImageInfo());
 }
 
 void LightTableWindow::slotEditItem(ImageInfo* info)
