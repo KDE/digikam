@@ -64,6 +64,7 @@ extern "C"
 
 // Local includes.
 
+#include "fastscale.h"
 #include "dmetadata.h"
 #include "thumbnailjob.h"
 #include "thumbnailsize.h"
@@ -493,8 +494,8 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 if (item->d->pixmap)
                 {
                     QPixmap pix; 
-                    pix.convertFromImage(QImage(item->d->pixmap->convertToImage()).
-                                         smoothScale(d->tileSize, d->tileSize, QImage::ScaleMin));
+                    pix.convertFromImage(FastScale::fastScaleQImage(QImage(item->d->pixmap->convertToImage()), 
+                                         d->tileSize, d->tileSize));
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
                     bitBlt(&tile, x, y, &pix);
@@ -520,8 +521,8 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 if (item->d->pixmap)
                 {
                     QPixmap pix; 
-                    pix.convertFromImage(QImage(item->d->pixmap->convertToImage()).
-                                         smoothScale(d->tileSize, d->tileSize, QImage::ScaleMin));
+                    pix.convertFromImage(FastScale::fastScaleQImage(QImage(item->d->pixmap->convertToImage()), 
+                                         d->tileSize, d->tileSize));
                     int x = (tile.width() - pix.width())/2;
                     int y = (tile.height()- pix.height())/2;
                     bitBlt(&tile, x, y, &pix);
