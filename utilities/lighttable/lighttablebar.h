@@ -77,6 +77,7 @@ signals:
     void signalSetItemOnRightPanel(ImageInfo*);
     void signalEditItem(ImageInfo*);
     void signalRemoveItem(const KURL&);
+    void signalClearAll();
 
 private:
 

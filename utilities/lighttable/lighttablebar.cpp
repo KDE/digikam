@@ -127,6 +127,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
         popmenu.insertItem(SmallIcon("editimage"), i18n("Edit"), 12);
         popmenu.insertSeparator();
         popmenu.insertItem(SmallIcon("fileclose"), i18n("Remove"), 13);
+        popmenu.insertItem(SmallIcon("editshred"), i18n("Clear all"), 14);
         popmenu.insertSeparator();
 
         // Assign Star Rating -------------------------------------------
@@ -160,6 +161,11 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
                 KURL url = item->info()->kurl();
                 emit signalRemoveItem(url);
                 removeItem(currentItem());
+                break;
+            }
+            case 14:    // Clear All
+            {
+                emit signalClearAll();
                 break;
             }
             default:

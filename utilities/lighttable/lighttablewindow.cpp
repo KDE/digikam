@@ -309,6 +309,9 @@ void LightTableWindow::setupConnections()
     connect(d->barView, SIGNAL(signalEditItem(ImageInfo*)),
            this, SLOT(slotEditItem(ImageInfo*)));
 
+    connect(d->barView, SIGNAL(signalClearAll()),
+           this, SLOT(slotClearItemsList()));
+
     connect(d->barView, SIGNAL(signalLightTableBarItemSelected(ImageInfo*)),
            this, SLOT(slotItemSelected(ImageInfo*)));
 
