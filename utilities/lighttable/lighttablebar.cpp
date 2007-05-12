@@ -359,6 +359,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
     int cy, cx, ts, y1, y2, x1, x2;
     QPixmap bgPix, tile;
     QRect er(e->rect());
+    ThemeEngine* te = ThemeEngine::instance();
     
     if (getOrientation() == Vertical)
     {
@@ -385,7 +386,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
        x2 = ((x1 + er.width())/ts +1)*ts;
     }
 
-    bgPix.fill(ThemeEngine::instance()->baseColor());
+    bgPix.fill(te->baseColor());
     
     if (countItems() > 0)
     {    
@@ -396,20 +397,28 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                 if (y1 <= item->position() && item->position() <= y2)
                 {
                     if (item == currentItem())
-                        tile = ThemeEngine::instance()->thumbSelPixmap(tile.width(), tile.height());
+                        tile = te->thumbSelPixmap(tile.width(), tile.height());
                     else
-                        tile = ThemeEngine::instance()->thumbRegPixmap(tile.width(), tile.height());
+                        tile = te->thumbRegPixmap(tile.width(), tile.height());
         
                     QPainter p(&tile);
-                    p.setPen(Qt::white);
-                    p.drawRect(0, 0, tile.width(), tile.height());
+                    if (item == currentItem())
+                    {
+                        p.setPen(QPen(te->textSelColor(), 2));
+                        p.drawRect(1, 1, tile.width()-1, tile.height()-1);
+                    }
+                    else
+                    {
+                        p.setPen(QPen(te->textRegColor(), 1));
+                        p.drawRect(0, 0, tile.width(), tile.height());
+                    }
                     p.end();
                     
                     if (item->pixmap())
                     {
                         QPixmap pix; 
                         pix.convertFromImage(QImage(item->pixmap()->convertToImage()).
-                                            smoothScale(getTileSize(), getTileSize(), QImage::ScaleMin));
+                                             smoothScale(getTileSize(), getTileSize(), QImage::ScaleMin));
                         int x = (tile.width()  - pix.width())/2;
                         int y = (tile.height() - pix.height())/2;
                         bitBlt(&tile, x, y, &pix);
@@ -444,20 +453,28 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                 if (x1 <= item->position() && item->position() <= x2)
                 {
                     if (item == currentItem())
-                        tile = ThemeEngine::instance()->thumbSelPixmap(tile.width(), tile.height());
+                        tile = te->thumbSelPixmap(tile.width(), tile.height());
                     else
-                        tile = ThemeEngine::instance()->thumbRegPixmap(tile.width(), tile.height());
+                        tile = te->thumbRegPixmap(tile.width(), tile.height());
         
                     QPainter p(&tile);
-                    p.setPen(Qt::white);
-                    p.drawRect(0, 0, tile.width(), tile.height());
+                    if (item == currentItem())
+                    {
+                        p.setPen(QPen(te->textSelColor(), 2));
+                        p.drawRect(1, 1, tile.width()-1, tile.height()-1);
+                    }
+                    else
+                    {
+                        p.setPen(QPen(te->textRegColor(), 1));
+                        p.drawRect(0, 0, tile.width(), tile.height());
+                    }
                     p.end();
                     
                     if (item->pixmap())
                     {
                         QPixmap pix; 
                         pix.convertFromImage(QImage(item->pixmap()->convertToImage()).
-                                            smoothScale(getTileSize(), getTileSize(), QImage::ScaleMin));
+                                             smoothScale(getTileSize(), getTileSize(), QImage::ScaleMin));
                         int x = (tile.width() - pix.width())/2;
                         int y = (tile.height()- pix.height())/2;
                         bitBlt(&tile, x, y, &pix);
@@ -492,7 +509,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
     else
     {
             QPainter p(&bgPix);
-            p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
+            p.setPen(QPen(te->textRegColor()));
             p.drawText(0, 0, bgPix.width(), bgPix.height(),
                        Qt::AlignCenter|Qt::WordBreak, 
                        i18n("Drag and drop here your items"));
