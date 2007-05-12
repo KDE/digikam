@@ -219,6 +219,12 @@ void PreviewWidget::setZoomFactor(double zoom)
 
     updateContentsSize();
 
+    int step = QMAX(2, 2*lround(d->zoom));
+    horizontalScrollBar()->setLineStep( step );
+    horizontalScrollBar()->setPageStep( step * 10 );
+    verticalScrollBar()->setLineStep( step );
+    verticalScrollBar()->setPageStep( step * 10 );
+
     viewport()->setUpdatesEnabled(false);
     center((int)((cpx * d->tileSize ) / floor(d->tileSize / d->zoom)), 
            (int)((cpy * d->tileSize ) / floor(d->tileSize / d->zoom)));
