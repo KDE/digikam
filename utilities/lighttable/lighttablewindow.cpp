@@ -1230,7 +1230,7 @@ void LightTableWindow::slotToggleSyncPreview()
 {
     d->zoomPlusAction->setEnabled(d->syncPreviewAction->isChecked());
     d->zoomMinusAction->setEnabled(d->syncPreviewAction->isChecked());
-    d->previewView->setSyncPreview(d->syncPreviewAction->isChecked());
+    d->previewView->setSyncPreview(d->syncPreviewAction->isChecked());    
 }
 
 void LightTableWindow::slotToggleOnSyncPreview(bool t)

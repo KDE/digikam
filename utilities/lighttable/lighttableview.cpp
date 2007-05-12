@@ -143,6 +143,10 @@ LightTableView::~LightTableView()
 void LightTableView::setSyncPreview(bool sync)
 {
     d->syncPreview = sync;
+
+    // Left panel like a reference to resync preview.
+    if (d->syncPreview)    
+        slotLeftContentsMoved(d->leftPreview->contentsX(), d->leftPreview->contentsY());
 }
 
 void LightTableView::slotDecreaseZoom()
