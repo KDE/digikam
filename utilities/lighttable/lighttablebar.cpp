@@ -56,7 +56,8 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
 {
     setMouseTracking(true);
     readToolTipSettings();
-    m_toolTip = new LightTableBarToolTip(this);
+    m_toolTip        = new LightTableBarToolTip(this);
+    m_navigateByPair = false;
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotUpdate()));
@@ -95,6 +96,11 @@ LightTableBar::~LightTableBar()
     delete m_toolTip;
 }
 
+void LightTableBar::setNavigateByPair(bool b)
+{
+    m_navigateByPair = b;
+}
+
 void LightTableBar::slotImageRatingChanged(Q_LLONG imageId)
 {
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
@@ -124,6 +130,13 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
         popmenu.insertItem(SmallIcon("previous"), i18n("Show on left panel"), 10);
         popmenu.insertItem(SmallIcon("next"), i18n("Show on right panel"), 11);
         popmenu.insertItem(SmallIcon("editimage"), i18n("Edit"), 12);
+        
+        if (m_navigateByPair)
+        {
+            popmenu.setItemEnabled(10, false);    
+            popmenu.setItemEnabled(11, false);    
+        }
+
         popmenu.insertSeparator();
         popmenu.insertItem(SmallIcon("fileclose"), i18n("Remove"), 13);
         popmenu.insertItem(SmallIcon("editshred"), i18n("Clear all"), 14);
@@ -219,13 +232,16 @@ void LightTableBar::slotAssignRatingFiveStar()
 
 void LightTableBar::setOnLeftPanel(const ImageInfo* info)
 {
-    if (!info) return;
-
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
     {
         LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
         if (ltItem)
-            ltItem->setOnLeftPanel(ltItem->info()->id() == info->id());
+        {
+            if (info)
+                ltItem->setOnLeftPanel(ltItem->info()->id() == info->id());
+            else
+                ltItem->setOnLeftPanel(false);
+        }
     }
 
     triggerUpdate();
@@ -233,13 +249,16 @@ void LightTableBar::setOnLeftPanel(const ImageInfo* info)
 
 void LightTableBar::setOnRightPanel(const ImageInfo* info)
 {
-    if (!info) return;
-
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
     {
         LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
         if (ltItem)
-            ltItem->setOnRightPanel(ltItem->info()->id() == info->id());
+        {
+            if (info)
+                ltItem->setOnRightPanel(ltItem->info()->id() == info->id());
+            else
+                ltItem->setOnRightPanel(false);
+        }
     }
 
     triggerUpdate();

@@ -68,6 +68,8 @@ public:
 
     void setSelected(bool sel);
 
+    void setDragAndDropEnabled(bool b); 
+
 signals:
 
     void signalDroppedItems(const ImageInfoList&);

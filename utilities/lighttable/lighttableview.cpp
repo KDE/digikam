@@ -149,6 +149,12 @@ void LightTableView::setSyncPreview(bool sync)
         slotLeftContentsMoved(d->leftPreview->contentsX(), d->leftPreview->contentsY());
 }
 
+void LightTableView::setNavigateByPair(bool b)
+{
+    d->leftPreview->setDragAndDropEnabled(!b); 
+    d->rightPreview->setDragAndDropEnabled(!b); 
+}
+
 void LightTableView::slotDecreaseZoom()
 {
     if (!d->syncPreview) return;

@@ -113,6 +113,7 @@ public:
         backwardAction         = 0;
         firstAction            = 0;
         lastAction             = 0;
+        navigateByPairAction   = 0;
     }
 
     bool                      autoSyncPreview;
@@ -152,6 +153,7 @@ public:
 
     KToggleAction            *fullScreenAction;
     KToggleAction            *syncPreviewAction;
+    KToggleAction            *navigateByPairAction;
 
     KAccel                   *accelerators;
 
@@ -464,6 +466,12 @@ void LightTableWindow::setupActions()
                                             actionCollection(), "lighttable_syncpreview");
     d->syncPreviewAction->setEnabled(false);
 
+    d->navigateByPairAction = new KToggleAction(i18n("Navigate by Pair"), "kcmsystem",
+                                            CTRL+SHIFT+Key_P, this,
+                                            SLOT(slotToggleNavigateByPair()),
+                                            actionCollection(), "lighttable_navigatebypair");
+    d->navigateByPairAction->setEnabled(false);
+
     d->zoomPlusAction = KStdAction::zoomIn(d->previewView, SLOT(slotIncreaseZoom()),
                                           actionCollection(), "lighttable_zoomplus");
     d->zoomPlusAction->setEnabled(false);
@@ -685,6 +693,8 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
         d->forwardAction->setEnabled(true);
         d->firstAction->setEnabled(true);
         d->lastAction->setEnabled(true);
+        d->syncPreviewAction->setEnabled(true);
+        d->navigateByPairAction->setEnabled(true);
 
         LightTableBarItem* curr = d->barView->findItemByInfo(info);
         if (curr)
@@ -700,6 +710,26 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
                 d->forwardAction->setEnabled(false);
                 d->lastAction->setEnabled(false);
             }
+
+            if (d->navigateByPairAction->isChecked())
+            {
+                d->setItemLeftAction->setEnabled(false);
+                d->setItemRightAction->setEnabled(false);
+  
+                d->barView->setOnLeftPanel(info);
+                slotSetItemOnLeftPanel(info);
+
+                LightTableBarItem* next = dynamic_cast<LightTableBarItem*>(curr->next());
+                if (next)
+                {
+                    d->barView->setOnRightPanel(next->info());
+                    slotSetItemOnRightPanel(next->info());
+                }
+                else
+                {
+                    slotSetItemOnRightPanel(0);
+                }
+            }
         }
     }
     else
@@ -714,6 +744,8 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
         d->forwardAction->setEnabled(false);
         d->firstAction->setEnabled(false);
         d->lastAction->setEnabled(false);
+        d->syncPreviewAction->setEnabled(false);
+        d->navigateByPairAction->setEnabled(false);
     }
 
     d->previewView->checkForSelection(info);
@@ -762,13 +794,19 @@ void LightTableWindow::slotSetItemRight()
 void LightTableWindow::slotSetItemOnLeftPanel(ImageInfo* info)
 {
     d->previewView->setLeftImageInfo(info);
-    d->leftSidebar->itemChanged(info);
+    if (info)
+        d->leftSidebar->itemChanged(info);
+    else
+        d->leftSidebar->slotNoCurrentItem();
 }
 
 void LightTableWindow::slotSetItemOnRightPanel(ImageInfo* info)
 {
     d->previewView->setRightImageInfo(info);
-    d->rightSidebar->itemChanged(info);
+    if (info)
+        d->rightSidebar->itemChanged(info);
+    else
+        d->rightSidebar->slotNoCurrentItem();
 }
 
 void LightTableWindow::slotClearItemsList()
@@ -1272,6 +1310,13 @@ void LightTableWindow::slotFirst()
 void LightTableWindow::slotLast()
 {
     d->barView->setSelected( d->barView->lastItem() );
+}
+
+void LightTableWindow::slotToggleNavigateByPair()
+{
+    d->barView->setNavigateByPair(d->navigateByPairAction->isChecked());
+    d->previewView->setNavigateByPair(d->navigateByPairAction->isChecked());
+    slotItemSelected(d->barView->currentItemImageInfo());
 }
 
 }  // namespace Digikam

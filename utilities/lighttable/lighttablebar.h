@@ -72,6 +72,8 @@ public:
 
     void removeItem(const ImageInfo* info);
 
+    void setNavigateByPair(bool b);
+
 signals:
 
     void signalLightTableBarItemSelected(ImageInfo*);
@@ -103,6 +105,8 @@ private slots:
     void slotAssignRating(int);
 
 private:
+
+    bool                  m_navigateByPair;
 
     QPixmap               m_ratingPixmap;
 

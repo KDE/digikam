@@ -112,6 +112,7 @@ private slots:
 
     void slotToggleOnSyncPreview(bool);
     void slotToggleSyncPreview();
+    void slotToggleNavigateByPair();
 
     void slotEditItem();
     void slotEditItem(ImageInfo*);

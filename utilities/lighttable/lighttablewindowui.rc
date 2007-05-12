@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="15" name="lighttablewindow" >
+<gui version="17" name="lighttablewindow" >
 
 <MenuBar>
 
@@ -26,6 +26,7 @@
         <Action name="lighttable_slideshow" />
         <Separator/>
         <Action name="lighttable_syncpreview" />
+        <Action name="lighttable_navigatebypair" />
         <Separator/>
         <Action name="lighttable_zoomplus" /> 
         <Action name="lighttable_zoomminus" /> 
@@ -63,6 +64,7 @@
      <Separator/>     
      <Action name="lighttable_setitemleft" />
      <Action name="lighttable_setitemright" />
+     <Action name="lighttable_navigatebypair" />     
      <Separator/>     
      <Action name="lighttable_zoomfit2window" /> 
      <Action name="lighttable_zoomfit2select" /> 
