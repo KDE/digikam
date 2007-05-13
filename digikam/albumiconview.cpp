@@ -1078,13 +1078,12 @@ void AlbumIconView::insertToLightTable(const ImageInfoList& list, ImageInfo* cur
     connect(this, SIGNAL(signalItemsUpdated(const KURL::List&)),
            ltview, SLOT(slotItemsUpdated(const KURL::List&)));
 
-    ltview->loadImageInfos(list, current);
-
     if (ltview->isHidden())
         ltview->show();
 
     ltview->raise();
     ltview->setFocus();
+    ltview->loadImageInfos(list, current);
 }
 
 // ------------------------------------------------------------------------------
