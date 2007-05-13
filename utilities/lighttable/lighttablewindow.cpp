@@ -649,11 +649,16 @@ void LightTableWindow::slotItemsUpdated(const KURL::List& urls)
 
 void LightTableWindow::slotLeftPanelLeftButtonClicked()
 {
+    if (d->navigateByPairAction->isChecked()) return;
+
     d->barView->setSelectedItem(d->barView->findItemByInfo(d->previewView->leftImageInfo()));
 }
 
 void LightTableWindow::slotRightPanelLeftButtonClicked()
 {
+    // With navigate by pair option, only the Feft panel can be selected.
+    if (d->navigateByPairAction->isChecked()) return;
+
     d->barView->setSelectedItem(d->barView->findItemByInfo(d->previewView->rightImageInfo()));
 }
 
