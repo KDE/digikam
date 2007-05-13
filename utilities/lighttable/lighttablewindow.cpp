@@ -596,13 +596,22 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
     {
         if (!d->barView->findItemByInfo(*it))
         {
-            LightTableBarItem *item = new LightTableBarItem(d->barView, *it);
-            if (*it == imageInfoCurrent)
-            {
-                d->barView->setSelectedItem(item);
-            }
+            new LightTableBarItem(d->barView, *it);
         }
     }   
+
+    if (imageInfoCurrent)
+    {
+        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(imageInfoCurrent));
+        if (ltItem) 
+            d->barView->setSelectedItem(ltItem);
+    }
+    else
+    {
+        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
+        if (ltItem) 
+            d->barView->setSelectedItem(ltItem);
+    }
 
     // if window is iconified, show it
     if (isMinimized())
@@ -921,7 +930,8 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
     }
 
     d->barView->removeItem(info);
-    d->previewView->checkForSelection(d->barView->currentItemImageInfo());
+    d->barView->setSelected(d->barView->currentItem());
+    //d->previewView->checkForSelection(d->barView->currentItemImageInfo());
 }
 
 void LightTableWindow::slotEditItem()
