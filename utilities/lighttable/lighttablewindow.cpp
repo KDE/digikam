@@ -931,7 +931,6 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
 
     d->barView->removeItem(info);
     d->barView->setSelected(d->barView->currentItem());
-    //d->previewView->checkForSelection(d->barView->currentItemImageInfo());
 }
 
 void LightTableWindow::slotEditItem()
