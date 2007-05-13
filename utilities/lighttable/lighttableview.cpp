@@ -329,22 +329,22 @@ void LightTableView::setRightImageInfo(ImageInfo* info)
 
 void LightTableView::slotLeftPreviewLoaded(bool success)
 {
-    emit signalLeftPreviewLoaded(success);
-
     checkForSyncPreview();
     d->leftLoading = false;
     slotRightContentsMoved(d->rightPreview->contentsX(), 
                            d->rightPreview->contentsY());
+
+    emit signalLeftPreviewLoaded(success);
 }
 
 void LightTableView::slotRightPreviewLoaded(bool success)
 {
-    emit signalRightPreviewLoaded(success);
-
     checkForSyncPreview();
     d->rightLoading = false;
     slotLeftContentsMoved(d->leftPreview->contentsX(), 
                           d->leftPreview->contentsY());
+
+    emit signalRightPreviewLoaded(success);
 }
 
 void LightTableView::checkForSyncPreview()

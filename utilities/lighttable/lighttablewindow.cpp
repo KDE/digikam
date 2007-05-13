@@ -666,6 +666,20 @@ void LightTableWindow::slotLeftPreviewLoaded(bool b)
     LightTableBarItem *item = d->barView->findItemByInfo(d->previewView->leftImageInfo());
     if (item) item->setOnLeftPanel(true);
     d->barView->update();
+
+    if (d->navigateByPairAction->isChecked() && item)
+    {
+        LightTableBarItem* next = dynamic_cast<LightTableBarItem*>(item->next());
+        if (next)
+        {
+            d->barView->setOnRightPanel(next->info());
+            slotSetItemOnRightPanel(next->info());
+        }
+        else
+        {
+            slotSetItemOnRightPanel(0);
+        }
+    }
 }
 
 void LightTableWindow::slotRightPreviewLoaded(bool b)
@@ -718,17 +732,6 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
   
                 d->barView->setOnLeftPanel(info);
                 slotSetItemOnLeftPanel(info);
-
-                LightTableBarItem* next = dynamic_cast<LightTableBarItem*>(curr->next());
-                if (next)
-                {
-                    d->barView->setOnRightPanel(next->info());
-                    slotSetItemOnRightPanel(next->info());
-                }
-                else
-                {
-                    slotSetItemOnRightPanel(0);
-                }
             }
         }
     }
