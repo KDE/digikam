@@ -236,6 +236,8 @@ void LightTableWindow::readSettings()
 
     if(config->hasKey("Horizontal Splitter Sizes"))
         d->hSplitter->setSizes(config->readIntListEntry("Horizontal Splitter Sizes"));
+
+    d->navigateByPairAction->setChecked(config->readBoolEntry("Navigate By Pair", false));
 }
 
 void LightTableWindow::writeSettings()
@@ -244,6 +246,7 @@ void LightTableWindow::writeSettings()
     config->setGroup("LightTable Settings");
     config->writeEntry("Vertical Splitter Sizes", d->vSplitter->sizes());
     config->writeEntry("Horizontal Splitter Sizes", d->hSplitter->sizes());
+    config->writeEntry("Navigate By Pair", d->navigateByPairAction->isChecked());
     config->sync();
 }
 
