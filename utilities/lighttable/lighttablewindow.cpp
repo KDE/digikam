@@ -677,7 +677,8 @@ void LightTableWindow::slotLeftPreviewLoaded(bool b)
         }
         else
         {
-            slotSetItemOnRightPanel(0);
+            LightTableBarItem* first = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
+            slotSetItemOnRightPanel(first ? first->info() : 0);
         }
     }
 }
