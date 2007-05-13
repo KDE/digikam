@@ -86,6 +86,8 @@ public:
     double          maxZoom;
     const double    zoomMultiplier;
 
+    QPoint          centerZoomPoint;
+
     QRect           pixmapRect;
     
     QCache<QPixmap> tileCache;
@@ -206,19 +208,34 @@ void PreviewWidget::setZoomFactor(double zoom)
 
     // Zoom using center of canvas and given zoom factor.
 
-    double cpx = contentsX() + visibleWidth()  / 2.0; 
-    double cpy = contentsY() + visibleHeight() / 2.0;
+    double oldZoom = d->zoom;
+    double cpx, cpy;
+    if (d->centerZoomPoint.isNull())
+    {
+        // center on current center
+        // store old center pos
+        cpx = contentsX() + visibleWidth()  / 2.0;
+        cpy = contentsY() + visibleHeight() / 2.0;
 
-    cpx = ( cpx / d->tileSize ) * floor(d->tileSize / d->zoom);
-    cpy = ( cpy / d->tileSize ) * floor(d->tileSize / d->zoom);
+        cpx = ( cpx / d->tileSize ) * floor(d->tileSize / d->zoom);
+        cpy = ( cpy / d->tileSize ) * floor(d->tileSize / d->zoom);
+    }
+    else
+    {
+        // keep mouse pointer position constant
+        // store old content pos
+        cpx = contentsX();
+        cpy = contentsY();
+    }
 
-    // To limit precision of zoom value and reduce error with check of max/min zoom. 
+    // To limit precision of zoom value and reduce error with check of max/min zoom.
     d->zoom       = floor(zoom * 10000.0) / 10000.0;
     d->zoomWidth  = (int)(previewWidth()  * d->zoom);
     d->zoomHeight = (int)(previewHeight() * d->zoom);
 
     updateContentsSize();
 
+    // adapt step size to zoom factor. Overall, using a finer step size than scrollbar default.
     int step = QMAX(2, 2*lround(d->zoom));
     horizontalScrollBar()->setLineStep( step );
     horizontalScrollBar()->setPageStep( step * 10 );
@@ -226,8 +243,20 @@ void PreviewWidget::setZoomFactor(double zoom)
     verticalScrollBar()->setPageStep( step * 10 );
 
     viewport()->setUpdatesEnabled(false);
-    center((int)((cpx * d->tileSize ) / floor(d->tileSize / d->zoom)), 
-           (int)((cpy * d->tileSize ) / floor(d->tileSize / d->zoom)));
+    if (d->centerZoomPoint.isNull())
+    {
+        cpx = ( cpx * d->tileSize ) / floor(d->tileSize / d->zoom);
+        cpy = ( cpy * d->tileSize ) / floor(d->tileSize / d->zoom);
+
+        center((int)cpx, (int)(cpy));
+    }
+    else
+    {
+        cpx = d->zoom * d->centerZoomPoint.x() / oldZoom - d->centerZoomPoint.x() + cpx;
+        cpy = d->zoom * d->centerZoomPoint.y() / oldZoom - d->centerZoomPoint.y() + cpy;
+
+        setContentsPos((int)cpx, (int)(cpy));
+    }
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
 
@@ -504,10 +533,12 @@ void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
     }
     else if (e->state() & Qt::ControlButton)
     {
+        d->centerZoomPoint = e->pos();
         if (e->delta() < 0 && !minZoom())
             slotDecreaseZoom();
         else if (e->delta() > 0 && !maxZoom())
             slotIncreaseZoom();
+        d->centerZoomPoint = QPoint();
         return;
     }
 
