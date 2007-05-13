@@ -1,12 +1,13 @@
-SUBDIRS = sqlite libs utilities digikam showfoto data kioslave imageplugins
+COMPILE_FIRST = sqlite
 
-EXTRA_DIST = digikam.kdevelop AUTHORS COPYING ChangeLog INSTALL README TODO digikam.lsm 
+SUBDIRS = sqlite libs utilities digikam themedesigner showfoto data kioslave imageplugins
+
+EXTRA_DIST = AUTHORS COPYING ChangeLog INSTALL README TODO digikam.lsm 
 
 AUTOMAKE_OPTIONS = foreign 
 
 MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 configure.files 
 
-COMPILE_FIRST = sqlite
 
 tip_DATA = tips
 tipdir = $(kde_datadir)/digikam

@@ -74,7 +74,8 @@ public:
 
     LightTableWindowPriv()
     {
-        fullScreenHideToolBar  = true;
+        autoSyncPreview        = true;
+        fullScreenHideToolBar  = false;
         fullScreen             = false;
         removeFullScreenButton = false;
         cancelSlideShow        = false;
@@ -92,7 +93,6 @@ public:
         hSplitter              = 0;
         vSplitter              = 0;
         syncPreviewAction      = 0;
-        autoSyncPreviewAction  = 0;
         clearListAction        = 0;
         setItemLeftAction      = 0;
         setItemRightAction     = 0;
@@ -113,8 +113,10 @@ public:
         backwardAction         = 0;
         firstAction            = 0;
         lastAction             = 0;
+        navigateByPairAction   = 0;
     }
 
+    bool                      autoSyncPreview;
     bool                      fullScreenHideToolBar;
     bool                      fullScreen;
     bool                      removeFullScreenButton;
@@ -151,7 +153,7 @@ public:
 
     KToggleAction            *fullScreenAction;
     KToggleAction            *syncPreviewAction;
-    KToggleAction            *autoSyncPreviewAction;
+    KToggleAction            *navigateByPairAction;
 
     KAccel                   *accelerators;
 
@@ -202,8 +204,6 @@ LightTableWindow::LightTableWindow()
 
     setupConnections();
 
-    setAutoSaveSettings("LightTable Settings");
-
     //-------------------------------------------------------------
 
     d->leftSidebar->loadViewState();
@@ -211,16 +211,9 @@ LightTableWindow::LightTableWindow()
     d->leftSidebar->populateTags();
     d->rightSidebar->populateTags();
 
-    KConfig* config = kapp->config();
-    config->setGroup("LightTable Settings");
-
-    if(config->hasKey("Vertical Splitter Sizes"))
-        d->vSplitter->setSizes(config->readIntListEntry("Vertical Splitter Sizes"));
-
-    if(config->hasKey("Horizontal Splitter Sizes"))
-        d->hSplitter->setSizes(config->readIntListEntry("Horizontal Splitter Sizes"));
-
-    d->autoSyncPreviewAction->setChecked(config->readBoolEntry("Auto Sync Preview", true));
+    readSettings();
+    applySettings();
+    setAutoSaveSettings("LightTable Settings");
 }
 
 LightTableWindow::~LightTableWindow()
@@ -233,16 +226,44 @@ LightTableWindow::~LightTableWindow()
     delete d;
 }
 
-void LightTableWindow::closeEvent(QCloseEvent* e)
+void LightTableWindow::readSettings()
 {
-    if (!e) return;
+    KConfig* config = kapp->config();
+    config->setGroup("LightTable Settings");
 
+    if(config->hasKey("Vertical Splitter Sizes"))
+        d->vSplitter->setSizes(config->readIntListEntry("Vertical Splitter Sizes"));
+
+    if(config->hasKey("Horizontal Splitter Sizes"))
+        d->hSplitter->setSizes(config->readIntListEntry("Horizontal Splitter Sizes"));
+
+    d->navigateByPairAction->setChecked(config->readBoolEntry("Navigate By Pair", false));
+}
+
+void LightTableWindow::writeSettings()
+{
     KConfig* config = kapp->config();
     config->setGroup("LightTable Settings");
     config->writeEntry("Vertical Splitter Sizes", d->vSplitter->sizes());
     config->writeEntry("Horizontal Splitter Sizes", d->hSplitter->sizes());
-    config->writeEntry("Auto Sync Preview", d->autoSyncPreviewAction->isChecked());
+    config->writeEntry("Navigate By Pair", d->navigateByPairAction->isChecked());
     config->sync();
+}
+
+void LightTableWindow::applySettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("LightTable Settings");
+
+    d->autoSyncPreview       = config->readBoolEntry("Auto Sync Preview", true);
+    d->fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
+}
+
+void LightTableWindow::closeEvent(QCloseEvent* e)
+{
+    if (!e) return;
+
+    writeSettings();
 
     e->accept();
 }
@@ -448,6 +469,12 @@ void LightTableWindow::setupActions()
                                             actionCollection(), "lighttable_syncpreview");
     d->syncPreviewAction->setEnabled(false);
 
+    d->navigateByPairAction = new KToggleAction(i18n("Navigate by Pair"), "kcmsystem",
+                                            CTRL+SHIFT+Key_P, this,
+                                            SLOT(slotToggleNavigateByPair()),
+                                            actionCollection(), "lighttable_navigatebypair");
+    d->navigateByPairAction->setEnabled(false);
+
     d->zoomPlusAction = KStdAction::zoomIn(d->previewView, SLOT(slotIncreaseZoom()),
                                           actionCollection(), "lighttable_zoomplus");
     d->zoomPlusAction->setEnabled(false);
@@ -480,10 +507,6 @@ void LightTableWindow::setupActions()
                                      actionCollection(),"lighttable_slideshow");
 
     // -- Standard 'Configure' menu actions ----------------------------------------
-
-    d->autoSyncPreviewAction = new KToggleAction(i18n("Auto-Synchronize Preview"), 
-                                                 0, 0, 0, 0,
-                                                 actionCollection(), "lighttable_autosyncpreview");
 
     KStdAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
     KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
@@ -576,13 +599,22 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
     {
         if (!d->barView->findItemByInfo(*it))
         {
-            LightTableBarItem *item = new LightTableBarItem(d->barView, *it);
-            if (*it == imageInfoCurrent)
-            {
-                d->barView->setSelectedItem(item);
-            }
+            new LightTableBarItem(d->barView, *it);
         }
     }   
+
+    if (imageInfoCurrent)
+    {
+        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(imageInfoCurrent));
+        if (ltItem) 
+            d->barView->setSelectedItem(ltItem);
+    }
+    else
+    {
+        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
+        if (ltItem) 
+            d->barView->setSelectedItem(ltItem);
+    }
 
     // if window is iconified, show it
     if (isMinimized())
@@ -629,11 +661,16 @@ void LightTableWindow::slotItemsUpdated(const KURL::List& urls)
 
 void LightTableWindow::slotLeftPanelLeftButtonClicked()
 {
+    if (d->navigateByPairAction->isChecked()) return;
+
     d->barView->setSelectedItem(d->barView->findItemByInfo(d->previewView->leftImageInfo()));
 }
 
 void LightTableWindow::slotRightPanelLeftButtonClicked()
 {
+    // With navigate by pair option, only the Feft panel can be selected.
+    if (d->navigateByPairAction->isChecked()) return;
+
     d->barView->setSelectedItem(d->barView->findItemByInfo(d->previewView->rightImageInfo()));
 }
 
@@ -646,6 +683,21 @@ void LightTableWindow::slotLeftPreviewLoaded(bool b)
     LightTableBarItem *item = d->barView->findItemByInfo(d->previewView->leftImageInfo());
     if (item) item->setOnLeftPanel(true);
     d->barView->update();
+
+    if (d->navigateByPairAction->isChecked() && item)
+    {
+        LightTableBarItem* next = dynamic_cast<LightTableBarItem*>(item->next());
+        if (next)
+        {
+            d->barView->setOnRightPanel(next->info());
+            slotSetItemOnRightPanel(next->info());
+        }
+        else
+        {
+            LightTableBarItem* first = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
+            slotSetItemOnRightPanel(first ? first->info() : 0);
+        }
+    }
 }
 
 void LightTableWindow::slotRightPreviewLoaded(bool b)
@@ -673,6 +725,8 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
         d->forwardAction->setEnabled(true);
         d->firstAction->setEnabled(true);
         d->lastAction->setEnabled(true);
+        d->syncPreviewAction->setEnabled(true);
+        d->navigateByPairAction->setEnabled(true);
 
         LightTableBarItem* curr = d->barView->findItemByInfo(info);
         if (curr)
@@ -688,6 +742,15 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
                 d->forwardAction->setEnabled(false);
                 d->lastAction->setEnabled(false);
             }
+
+            if (d->navigateByPairAction->isChecked())
+            {
+                d->setItemLeftAction->setEnabled(false);
+                d->setItemRightAction->setEnabled(false);
+  
+                d->barView->setOnLeftPanel(info);
+                slotSetItemOnLeftPanel(info);
+            }
         }
     }
     else
@@ -702,6 +765,8 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
         d->forwardAction->setEnabled(false);
         d->firstAction->setEnabled(false);
         d->lastAction->setEnabled(false);
+        d->syncPreviewAction->setEnabled(false);
+        d->navigateByPairAction->setEnabled(false);
     }
 
     d->previewView->checkForSelection(info);
@@ -750,13 +815,19 @@ void LightTableWindow::slotSetItemRight()
 void LightTableWindow::slotSetItemOnLeftPanel(ImageInfo* info)
 {
     d->previewView->setLeftImageInfo(info);
-    d->leftSidebar->itemChanged(info);
+    if (info)
+        d->leftSidebar->itemChanged(info);
+    else
+        d->leftSidebar->slotNoCurrentItem();
 }
 
 void LightTableWindow::slotSetItemOnRightPanel(ImageInfo* info)
 {
     d->previewView->setRightImageInfo(info);
-    d->rightSidebar->itemChanged(info);
+    if (info)
+        d->rightSidebar->itemChanged(info);
+    else
+        d->rightSidebar->slotNoCurrentItem();
 }
 
 void LightTableWindow::slotClearItemsList()
@@ -862,7 +933,7 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
     }
 
     d->barView->removeItem(info);
-    d->previewView->checkForSelection(d->barView->currentItemImageInfo());
+    d->barView->setSelected(d->barView->currentItem());
 }
 
 void LightTableWindow::slotEditItem()
@@ -1165,7 +1236,7 @@ void LightTableWindow::slotSetup()
 
     kapp->config()->sync();
     
-    // TODO: Apply Settings here if necessary
+    applySettings();
 }
 
 void LightTableWindow::slotLeftZoomFactorChanged(double zoom)
@@ -1218,7 +1289,7 @@ void LightTableWindow::slotToggleSyncPreview()
 {
     d->zoomPlusAction->setEnabled(d->syncPreviewAction->isChecked());
     d->zoomMinusAction->setEnabled(d->syncPreviewAction->isChecked());
-    d->previewView->setSyncPreview(d->syncPreviewAction->isChecked());
+    d->previewView->setSyncPreview(d->syncPreviewAction->isChecked());    
 }
 
 void LightTableWindow::slotToggleOnSyncPreview(bool t)
@@ -1233,7 +1304,7 @@ void LightTableWindow::slotToggleOnSyncPreview(bool t)
     }
     else
     {
-        if (d->autoSyncPreviewAction->isChecked())
+        if (d->autoSyncPreview)
             d->syncPreviewAction->setChecked(true);
     }
 }
@@ -1260,6 +1331,13 @@ void LightTableWindow::slotFirst()
 void LightTableWindow::slotLast()
 {
     d->barView->setSelected( d->barView->lastItem() );
+}
+
+void LightTableWindow::slotToggleNavigateByPair()
+{
+    d->barView->setNavigateByPair(d->navigateByPairAction->isChecked());
+    d->previewView->setNavigateByPair(d->navigateByPairAction->isChecked());
+    slotItemSelected(d->barView->currentItemImageInfo());
 }
 
 }  // namespace Digikam

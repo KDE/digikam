@@ -91,6 +91,7 @@ public:
         hasPrev              = false;
         hasNext              = false;
         selected             = false;
+        dragAndDropEnabled   = true;
         currentFitWindowZoom = 0;
         previewSize          = 1024;
     }
@@ -98,6 +99,7 @@ public:
     bool               hasPrev;
     bool               hasNext;
     bool               selected;
+    bool               dragAndDropEnabled;
 
     int                previewSize;
 
@@ -170,6 +172,11 @@ LightTablePreview::~LightTablePreview()
     delete d->previewThread;
     delete d->previewPreloadThread;
     delete d;
+}
+
+void LightTablePreview::setDragAndDropEnabled(bool b)
+{
+    d->dragAndDropEnabled = b;
 }
 
 void LightTablePreview::setImage(const QImage& image)
@@ -646,15 +653,18 @@ void LightTablePreview::resetPreview()
     d->path      = QString(); 
     d->imageInfo = 0;
 
-    QPixmap pix(visibleWidth(), visibleHeight());
-    pix.fill(ThemeEngine::instance()->baseColor());
-    QPainter p(&pix);
-    p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
-    p.drawText(0, 0, pix.width(), pix.height(),
-               Qt::AlignCenter|Qt::WordBreak, 
-               i18n("Drag and drop here an item"));
-    p.end();
-    setImage(pix.convertToImage());
+    if (d->dragAndDropEnabled)
+    {
+        QPixmap pix(visibleWidth(), visibleHeight());
+        pix.fill(ThemeEngine::instance()->baseColor());
+        QPainter p(&pix);
+        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
+        p.drawText(0, 0, pix.width(), pix.height(),
+                Qt::AlignCenter|Qt::WordBreak, 
+                i18n("Drag and drop here an item"));
+        p.end();
+        setImage(pix.convertToImage());
+    }
 
     updateZoomAndSize(true);
     emit signalPreviewLoaded(false);
@@ -670,6 +680,8 @@ void LightTablePreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int s
 
 void LightTablePreview::contentsDragMoveEvent(QDragMoveEvent *e)
 {
+    if (!d->dragAndDropEnabled) return;
+
     KURL::List      urls;
     KURL::List      kioURLs;        
     QValueList<int> albumIDs;
@@ -685,6 +697,8 @@ void LightTablePreview::contentsDragMoveEvent(QDragMoveEvent *e)
 
 void LightTablePreview::contentsDropEvent(QDropEvent *e)
 {
+    if (!d->dragAndDropEnabled) return;
+
     KURL::List      urls;
     KURL::List      kioURLs;        
     QValueList<int> albumIDs;

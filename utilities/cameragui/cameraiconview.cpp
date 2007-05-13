@@ -341,7 +341,6 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
         }
     }
 
-    triggerRearrangement();
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
 }

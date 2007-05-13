@@ -143,6 +143,16 @@ LightTableView::~LightTableView()
 void LightTableView::setSyncPreview(bool sync)
 {
     d->syncPreview = sync;
+
+    // Left panel like a reference to resync preview.
+    if (d->syncPreview)    
+        slotLeftContentsMoved(d->leftPreview->contentsX(), d->leftPreview->contentsY());
+}
+
+void LightTableView::setNavigateByPair(bool b)
+{
+    d->leftPreview->setDragAndDropEnabled(!b); 
+    d->rightPreview->setDragAndDropEnabled(!b); 
 }
 
 void LightTableView::slotDecreaseZoom()
@@ -319,22 +329,22 @@ void LightTableView::setRightImageInfo(ImageInfo* info)
 
 void LightTableView::slotLeftPreviewLoaded(bool success)
 {
-    emit signalLeftPreviewLoaded(success);
-
     checkForSyncPreview();
     d->leftLoading = false;
     slotRightContentsMoved(d->rightPreview->contentsX(), 
                            d->rightPreview->contentsY());
+
+    emit signalLeftPreviewLoaded(success);
 }
 
 void LightTableView::slotRightPreviewLoaded(bool success)
 {
-    emit signalRightPreviewLoaded(success);
-
     checkForSyncPreview();
     d->rightLoading = false;
     slotLeftContentsMoved(d->leftPreview->contentsX(), 
                           d->leftPreview->contentsY());
+
+    emit signalRightPreviewLoaded(success);
 }
 
 void LightTableView::checkForSyncPreview()

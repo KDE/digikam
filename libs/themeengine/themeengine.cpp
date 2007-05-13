@@ -186,6 +186,28 @@ void ThemeEngine::setCurrentTheme(const QString& name)
     QTimer::singleShot(0, this, SIGNAL(signalThemeChanged()));
 }
 
+void ThemeEngine::setCurrentTheme(const Theme& theme, const QString& name, bool loadFromDisk)
+{
+    Theme* t = d->themeDict.find(name);
+    if (t)
+    {
+        d->themeDict.remove(name);
+        d->themeList.remove(t);
+        delete t;
+    }
+
+    t = new Theme(theme);
+    t->filePath = theme.filePath;
+    d->themeDict.insert(name, t);
+    d->themeList.append(t);
+
+    d->currTheme = t;
+    if (loadFromDisk)
+        loadTheme();
+    
+    QTimer::singleShot(0, this, SIGNAL(signalThemeChanged()));
+}
+
 Theme* ThemeEngine::getCurrentTheme()
 {
     return d->currTheme;

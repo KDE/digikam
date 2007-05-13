@@ -368,6 +368,10 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
 {
     if (!item) return;
         
+    ensureItemVisible(item);          
+    emit signalURLSelected(item->url());
+    emit signalItemSelected(item);
+
     if (d->currItem == item) return;
 
     if (d->currItem)
@@ -379,13 +383,7 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
 
     d->currItem = item;
     if (d->currItem)
-    {
-        ensureItemVisible(item);          
         item->repaint();
-
-        emit signalURLSelected(item->url());
-        emit signalItemSelected(item);
-    }
 }
 
 void ThumbBarView::ensureItemVisible(ThumbBarItem* item)

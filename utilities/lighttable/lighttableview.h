@@ -51,6 +51,7 @@ public:
     ~LightTableView();
 
     void   setSyncPreview(bool sync);
+    void   setNavigateByPair(bool b);
 
     void   setLeftImageInfo(ImageInfo* info=0);
     void   setRightImageInfo(ImageInfo* info=0);
