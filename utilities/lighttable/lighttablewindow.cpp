@@ -546,10 +546,22 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
 
 void LightTableWindow::refreshStatusBar()
 {
-    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, 
-                  i18n("1 item on Light Table", 
-                       "%1 items on Light Table")
-                  .arg(d->barView->countItems()));   
+    switch (d->barView->countItems())
+    {
+        case 0:
+            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, 
+                                                  i18n("No item on Light Table"));   
+            break;
+        case 1:
+            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, 
+                                                  i18n("1 item on Light Table"));   
+            break;
+        default:
+            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, 
+                                                  i18n("%1 items on Light Table")
+                                                  .arg(d->barView->countItems()));   
+            break;
+    }  
 }
 
 void LightTableWindow::slotItemsUpdated(const KURL::List& urls)
