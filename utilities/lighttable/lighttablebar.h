@@ -24,10 +24,6 @@
 #ifndef LIGHTTABLEBAR_H
 #define LIGHTTABLEBAR_H
 
-// Qt includes.
-
-#include <qpixmap.h>
-
 // Local includes.
 
 #include "thumbbar.h"
@@ -45,7 +41,8 @@ namespace Digikam
 {
 
 class LightTableBarItem;
-class LightTableBarToolTip;
+class LightTableBarItemPriv;
+class LightTableBarPriv;
 
 class DIGIKAM_EXPORT LightTableBar : public ThumbBarView
 {
@@ -106,13 +103,7 @@ private slots:
 
 private:
 
-    bool                  m_navigateByPair;
-
-    QPixmap               m_ratingPixmap;
-
-    LightTableBarToolTip *m_toolTip;
-
-private:
+    LightTableBarPriv *d;
 
     friend class LightTableBarItem;
 };
@@ -135,10 +126,7 @@ public:
     
 private:
 
-    bool       m_onLeftPanel;
-    bool       m_onRightPanel;
- 
-    ImageInfo *m_info;
+    LightTableBarItemPriv *d;
 
     friend class LightTableBar;
 };
