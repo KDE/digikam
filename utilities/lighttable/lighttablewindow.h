@@ -129,7 +129,7 @@ private slots:
     void slotZoomTo100Percents();
     void slotFitToWindow();
 
-    void slotNameLabelCancelButtonPressed();
+    void slotProgressBarCancelButtonPressed();
     void slotToggleSlideShow();
     void slotToggleFullScreen();
     void slotEscapePressed();

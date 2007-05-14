@@ -213,7 +213,7 @@ void LightTableWindow::setupStatusBar()
 void LightTableWindow::setupConnections()
 {
     connect(d->statusProgressBar, SIGNAL(signalCancelButtonPressed()),
-           this, SLOT(slotNameLabelCancelButtonPressed()));
+           this, SLOT(slotProgressBarCancelButtonPressed()));
 
     // Thumbs bar connections ---------------------------------------
 
@@ -923,7 +923,7 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
     }
 }
 
-void LightTableWindow::slotNameLabelCancelButtonPressed()
+void LightTableWindow::slotProgressBarCancelButtonPressed()
 {
     d->cancelSlideShow = true;
 }
