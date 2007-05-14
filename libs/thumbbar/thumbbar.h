@@ -142,14 +142,13 @@ protected:
     void contentsMouseMoveEvent(QMouseEvent*);
     void contentsMouseReleaseEvent(QMouseEvent*);
 
-    virtual void viewportPaintEvent(QPaintEvent*);
-    virtual void startDrag();
-
-private:
 
     void insertItem(ThumbBarItem* item);
     void rearrangeItems();
     void repaintItem(ThumbBarItem* item);
+
+    virtual void viewportPaintEvent(QPaintEvent*);
+    virtual void startDrag();
 
 signals:
 

@@ -275,13 +275,25 @@ void LightTableBar::setOnLeftPanel(const ImageInfo* info)
         if (ltItem)
         {
             if (info)
-                ltItem->setOnLeftPanel(ltItem->info()->id() == info->id());
-            else
+            {
+                if (ltItem->info()->id() == info->id())
+                {
+                    ltItem->setOnLeftPanel(true);
+                    repaintItem(item);
+                }
+                else if (ltItem->getOnLeftPanel() == true)
+                {
+                    ltItem->setOnLeftPanel(false);
+                    repaintItem(item);
+                }
+            }
+            else if (ltItem->getOnLeftPanel() == true)
+            {
                 ltItem->setOnLeftPanel(false);
+                repaintItem(item);
+            }
         }
     }
-
-    triggerUpdate();
 }
 
 void LightTableBar::setOnRightPanel(const ImageInfo* info)
@@ -292,13 +304,25 @@ void LightTableBar::setOnRightPanel(const ImageInfo* info)
         if (ltItem)
         {
             if (info)
-                ltItem->setOnRightPanel(ltItem->info()->id() == info->id());
-            else
+            {
+                if (ltItem->info()->id() == info->id())
+                {
+                    ltItem->setOnRightPanel(true);
+                    repaintItem(item);
+                }
+                else if (ltItem->getOnRightPanel() == true)
+                {
+                    ltItem->setOnRightPanel(false);
+                    repaintItem(item);
+                }
+            }
+            else if (ltItem->getOnRightPanel() == true)
+            {
                 ltItem->setOnRightPanel(false);
+                repaintItem(item);
+            }
         }
     }
-
-    triggerUpdate();
 }
 
 void LightTableBar::slotItemSelected(ThumbBarItem* item)
