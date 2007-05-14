@@ -412,40 +412,42 @@ void LightTableBar::readToolTipSettings()
 
 void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 {
-    int cy, cx, ts, y1, y2, x1, x2;
-    QPixmap bgPix, tile;
-    QRect er(e->rect());
     ThemeEngine* te = ThemeEngine::instance();
-    
-    if (getOrientation() == Vertical)
-    {
-       cy = viewportToContents(er.topLeft()).y();
-        
-       bgPix.resize(contentsRect().width(), er.height());
-    
-       ts = getTileSize() + 2*getMargin();
-       tile.resize(visibleWidth(), ts);
-    
-       y1 = (cy/ts)*ts;
-       y2 = ((y1 + er.height())/ts +1)*ts;
-    }
-    else
-    {
-       cx = viewportToContents(er.topLeft()).x();
-        
-       bgPix.resize(er.width(), contentsRect().height());
-    
-       ts = getTileSize() + 2*getMargin();
-       tile.resize(ts, visibleHeight());
-    
-       x1 = (cx/ts)*ts;
-       x2 = ((x1 + er.width())/ts +1)*ts;
-    }
+    QRect er(e->rect());
+    QPixmap bgPix;
 
-    bgPix.fill(te->baseColor());
-    
     if (countItems() > 0)
     {    
+        int cy, cx, ts, y1, y2, x1, x2;
+        QPixmap tile;
+    
+        if (getOrientation() == Vertical)
+        {
+            cy = viewportToContents(er.topLeft()).y();
+                
+            bgPix.resize(contentsRect().width(), er.height());
+            
+            ts = getTileSize() + 2*getMargin();
+            tile.resize(visibleWidth(), ts);
+            
+            y1 = (cy/ts)*ts;
+            y2 = ((y1 + er.height())/ts +1)*ts;
+        }
+        else
+        {
+            cx = viewportToContents(er.topLeft()).x();
+                
+            bgPix.resize(er.width(), contentsRect().height());
+            
+            ts = getTileSize() + 2*getMargin();
+            tile.resize(ts, visibleHeight());
+            
+            x1 = (cx/ts)*ts;
+            x2 = ((x1 + er.width())/ts +1)*ts;
+        }
+    
+        bgPix.fill(te->baseColor());
+    
         for (ThumbBarItem *item = firstItem(); item; item = item->next())
         {
             if (getOrientation() == Vertical)
@@ -561,21 +563,24 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                 }
             }
         }
+
+        if (getOrientation() == Vertical)
+            bitBlt(viewport(), 0, er.y(), &bgPix);
+        else
+            bitBlt(viewport(), er.x(), 0, &bgPix);
     }
     else
     {
-            QPainter p(&bgPix);
-            p.setPen(QPen(te->textRegColor()));
-            p.drawText(0, 0, bgPix.width(), bgPix.height(),
-                       Qt::AlignCenter|Qt::WordBreak, 
-                       i18n("Drag and drop here your items"));
-            p.end();
+        bgPix.resize(contentsRect().width(), contentsRect().height());
+        bgPix.fill(te->baseColor());
+        QPainter p(&bgPix);
+        p.setPen(QPen(te->textRegColor()));
+        p.drawText(0, 0, bgPix.width(), bgPix.height(),
+                    Qt::AlignCenter|Qt::WordBreak, 
+                    i18n("Drag and drop here your items"));
+        p.end();
+        bitBlt(viewport(), 0, 0, &bgPix);
     }
-
-    if (getOrientation() == Vertical)
-       bitBlt(viewport(), 0, er.y(), &bgPix);
-    else
-       bitBlt(viewport(), er.x(), 0, &bgPix);
 }
 
 void LightTableBar::startDrag()
