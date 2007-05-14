@@ -143,7 +143,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     QToolTip::add(d->cornerButton, i18n("Pan the image"));
     setCornerWidget(d->cornerButton);
 
-    setLineWidth(4);
+    setLineWidth(5);
     setSelected(false);
 
     // ------------------------------------------------------------
@@ -695,9 +695,12 @@ void LightTablePreview::setSelected(bool sel)
 void LightTablePreview::drawFrame(QPainter *p)
 {
     if (d->selected)
+    {
         qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->thumbSelColor(), lineWidth());
+        qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->textSelColor(), 2);
+    }
     else 
-        qDrawPlainRect(p, frameRect(), colorGroup().background(), lineWidth());
+        qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->baseColor(), lineWidth());
 }
 
 }  // NameSpace Digikam

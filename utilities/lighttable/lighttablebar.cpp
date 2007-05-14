@@ -486,8 +486,8 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                     QPainter p(&tile);
                     if (item == currentItem())
                     {
-                        p.setPen(QPen(te->textSelColor(), 2));
-                        p.drawRect(1, 1, tile.width()-1, tile.height()-1);
+                        p.setPen(QPen(te->textSelColor(), 3));
+                        p.drawRect(2, 2, tile.width()-2, tile.height()-2);
                     }
                     else
                     {
