@@ -485,6 +485,7 @@ void LightTableWindow::setupAccelerators()
 
 void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imageInfoCurrent)
 {
+    d->barView->blockSignals(true);
     for (QPtrList<ImageInfo>::const_iterator it = list.begin(); it != list.end(); ++it)
     {
         if (!d->barView->findItemByInfo(*it))
@@ -492,6 +493,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
             new LightTableBarItem(d->barView, *it);
         }
     }   
+    d->barView->blockSignals(false);
 
     if (imageInfoCurrent)
     {
@@ -567,25 +569,28 @@ void LightTableWindow::slotRightPanelLeftButtonClicked()
 void LightTableWindow::slotLeftPreviewLoaded(bool b)
 {
     d->leftZoomBar->setEnabled(b);
-    d->previewView->checkForSelection(d->barView->currentItemImageInfo());
-    d->barView->setOnLeftPanel(d->previewView->leftImageInfo());
 
-    LightTableBarItem *item = d->barView->findItemByInfo(d->previewView->leftImageInfo());
-    if (item) item->setOnLeftPanel(true);
-    d->barView->update();
-
-    if (d->navigateByPairAction->isChecked() && item)
+    if (b)
     {
-        LightTableBarItem* next = dynamic_cast<LightTableBarItem*>(item->next());
-        if (next)
+        d->previewView->checkForSelection(d->barView->currentItemImageInfo());
+        d->barView->setOnLeftPanel(d->previewView->leftImageInfo());
+    
+        LightTableBarItem *item = d->barView->findItemByInfo(d->previewView->leftImageInfo());
+        if (item) item->setOnLeftPanel(true);
+    
+        if (d->navigateByPairAction->isChecked() && item)
         {
-            d->barView->setOnRightPanel(next->info());
-            slotSetItemOnRightPanel(next->info());
-        }
-        else
-        {
-            LightTableBarItem* first = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
-            slotSetItemOnRightPanel(first ? first->info() : 0);
+            LightTableBarItem* next = dynamic_cast<LightTableBarItem*>(item->next());
+            if (next)
+            {
+                d->barView->setOnRightPanel(next->info());
+                slotSetItemOnRightPanel(next->info());
+            }
+            else
+            {
+                LightTableBarItem* first = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
+                slotSetItemOnRightPanel(first ? first->info() : 0);
+            }
         }
     }
 }
@@ -593,12 +598,14 @@ void LightTableWindow::slotLeftPreviewLoaded(bool b)
 void LightTableWindow::slotRightPreviewLoaded(bool b)
 {
     d->rightZoomBar->setEnabled(b);
-    d->previewView->checkForSelection(d->barView->currentItemImageInfo());
-    d->barView->setOnRightPanel(d->previewView->rightImageInfo());
-
-    LightTableBarItem *item = d->barView->findItemByInfo(d->previewView->rightImageInfo());
-    if (item) item->setOnRightPanel(true);
-    d->barView->update();
+    if (b)
+    {
+        d->previewView->checkForSelection(d->barView->currentItemImageInfo());
+        d->barView->setOnRightPanel(d->previewView->rightImageInfo());
+    
+        LightTableBarItem *item = d->barView->findItemByInfo(d->previewView->rightImageInfo());
+        if (item) item->setOnRightPanel(true);
+    }
 }
 
 void LightTableWindow::slotItemSelected(ImageInfo* info)

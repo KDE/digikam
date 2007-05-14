@@ -159,7 +159,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
 
     // ------------------------------------------------------------
 
-    QTimer::singleShot(0, this, SLOT(slotReset())); 
+    slotReset(); 
 }
 
 LightTablePreview::~LightTablePreview()
