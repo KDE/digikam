@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-02-12
+ * Date        : 2007-03-05
  * Description : digiKam light table GUI
  *
  * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -23,15 +23,12 @@
 
 // Qt includes.
 
-#include <qsplitter.h>
 #include <qdockarea.h>
 
 // KDE includes.
 
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
-#include <kaction.h>
-#include <kaccel.h>
 #include <kdeversion.h>
 #include <klocale.h>
 #include <kwin.h>
@@ -51,124 +48,17 @@
 #include "albummanager.h"
 #include "deletedialog.h"
 #include "imagewindow.h"
-#include "imagepropertiessidebardb.h"
 #include "slideshow.h"
 #include "setup.h"
-#include "statusprogressbar.h"
-#include "statuszoombar.h"
 #include "syncjob.h"
 #include "thumbnailsize.h"
 #include "lighttablepreview.h"
-#include "lighttableview.h"
-#include "lighttablebar.h"
+#include "lighttablewindowprivate.h"
 #include "lighttablewindow.h"
 #include "lighttablewindow.moc"
 
 namespace Digikam
 {
-
-class LightTableWindowPriv
-{
-
-public:
-
-    LightTableWindowPriv()
-    {
-        autoSyncPreview        = true;
-        fullScreenHideToolBar  = false;
-        fullScreen             = false;
-        removeFullScreenButton = false;
-        cancelSlideShow        = false;
-        star0                  = 0;
-        star1                  = 0;
-        star2                  = 0;
-        star3                  = 0;
-        star4                  = 0;
-        star5                  = 0;
-        accelerators           = 0;
-        leftSidebar            = 0;
-        rightSidebar           = 0;
-        previewView            = 0;
-        barView                = 0;
-        hSplitter              = 0;
-        vSplitter              = 0;
-        syncPreviewAction      = 0;
-        clearListAction        = 0;
-        setItemLeftAction      = 0;
-        setItemRightAction     = 0;
-        editItemAction         = 0;
-        removeItemAction       = 0;
-        fileDeleteAction       = 0;
-        slideShowAction        = 0;
-        fullScreenAction       = 0;
-        donateMoneyAction      = 0;
-        zoomFitToWindowAction  = 0;
-        zoomTo100percents      = 0;
-        zoomPlusAction         = 0;
-        zoomMinusAction        = 0;
-        statusProgressBar      = 0;
-        leftZoomBar            = 0;  
-        rightZoomBar           = 0;  
-        forwardAction          = 0;
-        backwardAction         = 0;
-        firstAction            = 0;
-        lastAction             = 0;
-        navigateByPairAction   = 0;
-    }
-
-    bool                      autoSyncPreview;
-    bool                      fullScreenHideToolBar;
-    bool                      fullScreen;
-    bool                      removeFullScreenButton;
-    bool                      cancelSlideShow;
-
-    QSplitter                *hSplitter;
-    QSplitter                *vSplitter;
-
-    // Rating actions.
-    KAction                  *star0;
-    KAction                  *star1;
-    KAction                  *star2;
-    KAction                  *star3;
-    KAction                  *star4;
-    KAction                  *star5;
-
-    KAction                  *forwardAction;
-    KAction                  *backwardAction;
-    KAction                  *firstAction;
-    KAction                  *lastAction;
-
-    KAction                  *setItemLeftAction;
-    KAction                  *setItemRightAction;
-    KAction                  *clearListAction;
-    KAction                  *editItemAction;
-    KAction                  *removeItemAction;
-    KAction                  *fileDeleteAction;
-    KAction                  *slideShowAction;
-    KAction                  *donateMoneyAction;
-    KAction                  *zoomPlusAction;
-    KAction                  *zoomMinusAction;
-    KAction                  *zoomTo100percents;
-    KAction                  *zoomFitToWindowAction;
-
-    KToggleAction            *fullScreenAction;
-    KToggleAction            *syncPreviewAction;
-    KToggleAction            *navigateByPairAction;
-
-    KAccel                   *accelerators;
-
-    LightTableBar            *barView;
-
-    LightTableView           *previewView;
-
-    StatusZoomBar            *leftZoomBar;
-    StatusZoomBar            *rightZoomBar;
-
-    StatusProgressBar        *statusProgressBar;
-
-    ImagePropertiesSideBarDB *leftSidebar;
-    ImagePropertiesSideBarDB *rightSidebar;
-};
 
 LightTableWindow* LightTableWindow::m_instance = 0;
 
