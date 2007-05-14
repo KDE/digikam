@@ -559,6 +559,11 @@ QColor ThemeEngine::thumbSelColor() const
     return d->currTheme->thumbSelColor;    
 }
 
+QColor ThemeEngine::thumbRegColor() const
+{
+    return d->currTheme->thumbRegColor;    
+}
+
 QColor ThemeEngine::textRegColor() const
 {
     return d->currTheme->textRegColor;    

@@ -61,6 +61,7 @@ public:
 
     QColor  baseColor()     const;
     QColor  thumbSelColor() const;
+    QColor  thumbRegColor() const;
 
     QColor  textRegColor() const;
     QColor  textSelColor() const;
