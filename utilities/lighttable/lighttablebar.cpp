@@ -93,7 +93,7 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
     d = new LightTableBarPriv;
     setMouseTracking(true);
     readToolTipSettings();
-    d->toolTip        = new LightTableBarToolTip(this);
+    d->toolTip = new LightTableBarToolTip(this);
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotUpdate()));
