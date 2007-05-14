@@ -167,7 +167,7 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
 
     // ------------------------------------------------------------
 
-    QTimer::singleShot(0, this, SLOT(slotReset())); 
+    slotReset(); 
 }
 
 ImagePreviewView::~ImagePreviewView()

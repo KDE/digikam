@@ -48,11 +48,6 @@
 #include <kprocess.h>
 #include <kapplication.h>
 
-// LibKipi includes.
-
-#include <libkipi/pluginloader.h>
-#include <libkipi/plugin.h>
-
 // Local includes.
 
 #include "ddebug.h"
@@ -148,7 +143,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     QToolTip::add(d->cornerButton, i18n("Pan the image"));
     setCornerWidget(d->cornerButton);
 
-    setLineWidth(4);
+    setLineWidth(5);
     setSelected(false);
 
     // ------------------------------------------------------------
@@ -164,7 +159,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
 
     // ------------------------------------------------------------
 
-    QTimer::singleShot(0, this, SLOT(slotReset())); 
+    slotReset(); 
 }
 
 LightTablePreview::~LightTablePreview()
@@ -360,36 +355,6 @@ void LightTablePreview::slotContextMenu()
     popmenu.insertItem(SmallIcon("slideshow"), i18n("SlideShow"), 16);
     popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 12);
     popmenu.insertItem(i18n("Open With"), &openWithMenu, 13);
-
-    // Merge in the KIPI plugins actions ----------------------------
-
-    KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
-    KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
-    
-    for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.begin();
-        it != pluginList.end(); ++it)
-    {
-        KIPI::Plugin* plugin = (*it)->plugin();
-
-        if (plugin && (*it)->name() == "JPEGLossless")
-        {
-            DDebug() << "Found JPEGLossless plugin" << endl;
-
-            KActionPtrList actionList = plugin->actions();
-            
-            for (KActionPtrList::const_iterator iter = actionList.begin();
-                iter != actionList.end(); ++iter)
-            {
-                KAction* action = *iter;
-                
-                if (QString::fromLatin1(action->name())
-                    == QString::fromLatin1("jpeglossless_rotate"))
-                {
-                    action->plug(&popmenu);
-                }
-            }
-        }
-    }
 
     //-- Trash action -------------------------------------------
 
@@ -729,9 +694,12 @@ void LightTablePreview::setSelected(bool sel)
 void LightTablePreview::drawFrame(QPainter *p)
 {
     if (d->selected)
+    {
         qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->thumbSelColor(), lineWidth());
+        qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->textSelColor(), 2);
+    }
     else 
-        qDrawPlainRect(p, frameRect(), colorGroup().background(), lineWidth());
+        qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->baseColor(), lineWidth());
 }
 
 }  // NameSpace Digikam

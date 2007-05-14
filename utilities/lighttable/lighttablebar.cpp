@@ -23,6 +23,7 @@
 
 // Qt includes.
 
+#include <qpixmap.h>
 #include <qpainter.h>
 #include <qimage.h>
 #include <qcursor.h>
@@ -52,13 +53,48 @@
 namespace Digikam
 {
 
+class LightTableBarPriv
+{
+
+public:
+
+    LightTableBarPriv()
+    {
+        navigateByPair = false;
+    }
+    
+    bool                  navigateByPair;
+
+    QPixmap               ratingPixmap;
+
+    LightTableBarToolTip *toolTip;
+};
+
+class LightTableBarItemPriv
+{
+
+public:
+
+    LightTableBarItemPriv()
+    {
+        onLeftPanel  = false;
+        onRightPanel = false;
+        info         = 0;
+    }
+
+    bool       onLeftPanel;
+    bool       onRightPanel;
+ 
+    ImageInfo *info;
+};
+
 LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
              : ThumbBarView(parent, orientation, exifRotate)
 {
+    d = new LightTableBarPriv;
     setMouseTracking(true);
     readToolTipSettings();
-    m_toolTip        = new LightTableBarToolTip(this);
-    m_navigateByPair = false;
+    d->toolTip = new LightTableBarToolTip(this);
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotUpdate()));
@@ -72,17 +108,17 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
                                      + "digikam/data");
     QString ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating", "rating.png");
     ratingPixPath += "/rating.png";
-    m_ratingPixmap = QPixmap(ratingPixPath);
+    d->ratingPixmap = QPixmap(ratingPixPath);
 
-    QPainter painter(&m_ratingPixmap);
-    painter.fillRect(0, 0, m_ratingPixmap.width(), m_ratingPixmap.height(),
+    QPainter painter(&d->ratingPixmap);
+    painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
                      ThemeEngine::instance()->textSpecialRegColor());
     painter.end();    
 
     if (orientation == Vertical)
-        setMinimumWidth(m_ratingPixmap.width()*5 + 6 + 2*getMargin());
+        setMinimumWidth(d->ratingPixmap.width()*5 + 6 + 2*getMargin());
     else
-        setMinimumHeight(m_ratingPixmap.width()*5 + 6 + 2*getMargin());
+        setMinimumHeight(d->ratingPixmap.width()*5 + 6 + 2*getMargin());
 
     // ----------------------------------------------------------------
 
@@ -94,12 +130,13 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
 
 LightTableBar::~LightTableBar()
 {
-    delete m_toolTip;
+    delete d->toolTip;
+    delete d;
 }
 
 void LightTableBar::setNavigateByPair(bool b)
 {
-    m_navigateByPair = b;
+    d->navigateByPair = b;
 }
 
 void LightTableBar::slotImageRatingChanged(Q_LLONG imageId)
@@ -132,7 +169,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
         popmenu.insertItem(SmallIcon("next"), i18n("Show on right panel"), 11);
         popmenu.insertItem(SmallIcon("editimage"), i18n("Edit"), 12);
         
-        if (m_navigateByPair)
+        if (d->navigateByPair)
         {
             popmenu.setItemEnabled(10, false);    
             popmenu.setItemEnabled(11, false);    
@@ -239,13 +276,25 @@ void LightTableBar::setOnLeftPanel(const ImageInfo* info)
         if (ltItem)
         {
             if (info)
-                ltItem->setOnLeftPanel(ltItem->info()->id() == info->id());
-            else
+            {
+                if (ltItem->info()->id() == info->id())
+                {
+                    ltItem->setOnLeftPanel(true);
+                    repaintItem(item);
+                }
+                else if (ltItem->getOnLeftPanel() == true)
+                {
+                    ltItem->setOnLeftPanel(false);
+                    repaintItem(item);
+                }
+            }
+            else if (ltItem->getOnLeftPanel() == true)
+            {
                 ltItem->setOnLeftPanel(false);
+                repaintItem(item);
+            }
         }
     }
-
-    triggerUpdate();
 }
 
 void LightTableBar::setOnRightPanel(const ImageInfo* info)
@@ -256,13 +305,25 @@ void LightTableBar::setOnRightPanel(const ImageInfo* info)
         if (ltItem)
         {
             if (info)
-                ltItem->setOnRightPanel(ltItem->info()->id() == info->id());
-            else
+            {
+                if (ltItem->info()->id() == info->id())
+                {
+                    ltItem->setOnRightPanel(true);
+                    repaintItem(item);
+                }
+                else if (ltItem->getOnRightPanel() == true)
+                {
+                    ltItem->setOnRightPanel(false);
+                    repaintItem(item);
+                }
+            }
+            else if (ltItem->getOnRightPanel() == true)
+            {
                 ltItem->setOnRightPanel(false);
+                repaintItem(item);
+            }
         }
     }
-
-    triggerUpdate();
 }
 
 void LightTableBar::slotItemSelected(ThumbBarItem* item)
@@ -376,40 +437,42 @@ void LightTableBar::readToolTipSettings()
 
 void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 {
-    int cy, cx, ts, y1, y2, x1, x2;
-    QPixmap bgPix, tile;
-    QRect er(e->rect());
     ThemeEngine* te = ThemeEngine::instance();
-    
-    if (getOrientation() == Vertical)
-    {
-       cy = viewportToContents(er.topLeft()).y();
-        
-       bgPix.resize(contentsRect().width(), er.height());
-    
-       ts = getTileSize() + 2*getMargin();
-       tile.resize(visibleWidth(), ts);
-    
-       y1 = (cy/ts)*ts;
-       y2 = ((y1 + er.height())/ts +1)*ts;
-    }
-    else
-    {
-       cx = viewportToContents(er.topLeft()).x();
-        
-       bgPix.resize(er.width(), contentsRect().height());
-    
-       ts = getTileSize() + 2*getMargin();
-       tile.resize(ts, visibleHeight());
-    
-       x1 = (cx/ts)*ts;
-       x2 = ((x1 + er.width())/ts +1)*ts;
-    }
+    QRect er(e->rect());
+    QPixmap bgPix;
 
-    bgPix.fill(te->baseColor());
-    
     if (countItems() > 0)
     {    
+        int cy, cx, ts, y1, y2, x1, x2;
+        QPixmap tile;
+    
+        if (getOrientation() == Vertical)
+        {
+            cy = viewportToContents(er.topLeft()).y();
+                
+            bgPix.resize(contentsRect().width(), er.height());
+            
+            ts = getTileSize() + 2*getMargin();
+            tile.resize(visibleWidth(), ts);
+            
+            y1 = (cy/ts)*ts;
+            y2 = ((y1 + er.height())/ts +1)*ts;
+        }
+        else
+        {
+            cx = viewportToContents(er.topLeft()).x();
+                
+            bgPix.resize(er.width(), contentsRect().height());
+            
+            ts = getTileSize() + 2*getMargin();
+            tile.resize(ts, visibleHeight());
+            
+            x1 = (cx/ts)*ts;
+            x2 = ((x1 + er.width())/ts +1)*ts;
+        }
+    
+        bgPix.fill(te->baseColor());
+    
         for (ThumbBarItem *item = firstItem(); item; item = item->next())
         {
             if (getOrientation() == Vertical)
@@ -424,8 +487,8 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                     QPainter p(&tile);
                     if (item == currentItem())
                     {
-                        p.setPen(QPen(te->textSelColor(), 2));
-                        p.drawRect(1, 1, tile.width()-1, tile.height()-1);
+                        p.setPen(QPen(te->textSelColor(), 3));
+                        p.drawRect(2, 2, tile.width()-2, tile.height()-2);
                     }
                     else
                     {
@@ -456,13 +519,13 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                             bitBlt(&tile, tile.width() - getMargin() - rPix.width(), getMargin(), &rPix);
                         }
     
-                        QRect r(0, tile.height()-getMargin()-m_ratingPixmap.height(), 
-                                tile.width(), m_ratingPixmap.height());
+                        QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height(), 
+                                tile.width(), d->ratingPixmap.height());
                         int rating = ltItem->info()->rating();
-                        int xr = (r.width() - rating * m_ratingPixmap.width())/2;
-                        int wr = rating * m_ratingPixmap.width();
+                        int xr = (r.width() - rating * d->ratingPixmap.width())/2;
+                        int wr = rating * d->ratingPixmap.width();
                         QPainter p(&tile);
-                        p.drawTiledPixmap(xr, r.y(), wr, r.height(), m_ratingPixmap);
+                        p.drawTiledPixmap(xr, r.y(), wr, r.height(), d->ratingPixmap);
                     }
                     
                     bitBlt(&bgPix, 0, item->position() - cy, &tile);
@@ -512,34 +575,37 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                             bitBlt(&tile, tile.width() - getMargin() - rPix.width(), getMargin(), &rPix);
                         }
     
-                        QRect r(0, tile.height()-getMargin()-m_ratingPixmap.height(), 
-                                tile.width(), m_ratingPixmap.height());
+                        QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height(), 
+                                tile.width(), d->ratingPixmap.height());
                         int rating = ltItem->info()->rating();
-                        int xr = (r.width() - rating * m_ratingPixmap.width())/2;
-                        int wr = rating * m_ratingPixmap.width();
+                        int xr = (r.width() - rating * d->ratingPixmap.width())/2;
+                        int wr = rating * d->ratingPixmap.width();
                         QPainter p(&tile);
-                        p.drawTiledPixmap(xr, r.y(), wr, r.height(), m_ratingPixmap);
+                        p.drawTiledPixmap(xr, r.y(), wr, r.height(), d->ratingPixmap);
                     }
                     
                     bitBlt(&bgPix, item->position() - cx, 0, &tile);
                 }
             }
         }
+
+        if (getOrientation() == Vertical)
+            bitBlt(viewport(), 0, er.y(), &bgPix);
+        else
+            bitBlt(viewport(), er.x(), 0, &bgPix);
     }
     else
     {
-            QPainter p(&bgPix);
-            p.setPen(QPen(te->textRegColor()));
-            p.drawText(0, 0, bgPix.width(), bgPix.height(),
-                       Qt::AlignCenter|Qt::WordBreak, 
-                       i18n("Drag and drop here your items"));
-            p.end();
+        bgPix.resize(contentsRect().width(), contentsRect().height());
+        bgPix.fill(te->baseColor());
+        QPainter p(&bgPix);
+        p.setPen(QPen(te->textRegColor()));
+        p.drawText(0, 0, bgPix.width(), bgPix.height(),
+                    Qt::AlignCenter|Qt::WordBreak, 
+                    i18n("Drag and drop here your items"));
+        p.end();
+        bitBlt(viewport(), 0, 0, &bgPix);
     }
-
-    if (getOrientation() == Vertical)
-       bitBlt(viewport(), 0, er.y(), &bgPix);
-    else
-       bitBlt(viewport(), er.x(), 0, &bgPix);
 }
 
 void LightTableBar::startDrag()
@@ -604,19 +670,23 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
 
     if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
     {
+        ImageInfoList imageInfoList;
+
         for (QValueList<int>::const_iterator it = imageIDs.begin();
-                it != imageIDs.end(); ++it)
+             it != imageIDs.end(); ++it)
         {
             ImageInfo *info = new ImageInfo(*it);
             if (!findItemByInfo(info))
             {
-                new LightTableBarItem(this, info);
+                imageInfoList.append(info);
             }
             else
             {
                 delete info;
             }
         }
+        
+        emit signalDroppedItems(imageInfoList);
     }
     else 
     {
@@ -627,38 +697,40 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
 // -------------------------------------------------------------------------
 
 LightTableBarItem::LightTableBarItem(LightTableBar *view, ImageInfo *info)
-                 : ThumbBarItem(view, info->kurl()), 
-                   m_onLeftPanel(false), m_onRightPanel(false), m_info(info)   
+                 : ThumbBarItem(view, info->kurl())                      
 {
+    d = new LightTableBarItemPriv;
+    d->info = info;
 }
 
 LightTableBarItem::~LightTableBarItem()
 {
+    delete d;
 }
 
 ImageInfo* LightTableBarItem::info()
 {
-    return m_info;
+    return d->info;
 }
 
 void LightTableBarItem::setOnLeftPanel(bool on)
 {
-    m_onLeftPanel = on;
+    d->onLeftPanel = on;
 }
 
 void LightTableBarItem::setOnRightPanel(bool on)
 {
-    m_onRightPanel = on;
+    d->onRightPanel = on;
 }
 
 bool LightTableBarItem::getOnLeftPanel() const
 {
-    return m_onLeftPanel;
+    return d->onLeftPanel;
 }
 
 bool LightTableBarItem::getOnRightPanel() const
 {
-    return m_onRightPanel;
+    return d->onRightPanel;
 }
 
 // -------------------------------------------------------------------------

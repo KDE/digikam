@@ -879,6 +879,7 @@ void ShowFoto::slotFirst()
         return;
 
     d->thumbBar->setSelected( d->thumbBar->firstItem() );
+    d->currentItem = d->thumbBar->firstItem();
 }
 
 void ShowFoto::slotLast()
@@ -887,6 +888,7 @@ void ShowFoto::slotLast()
         return;
 
     d->thumbBar->setSelected( d->thumbBar->lastItem() );
+    d->currentItem = d->thumbBar->lastItem();
 }
 
 void ShowFoto::slotForward()

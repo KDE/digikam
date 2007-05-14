@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-02-12
+ * Date        : 2007-03-05
  * Description : digiKam light table GUI
  *
  * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -23,15 +23,12 @@
 
 // Qt includes.
 
-#include <qsplitter.h>
 #include <qdockarea.h>
 
 // KDE includes.
 
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
-#include <kaction.h>
-#include <kaccel.h>
 #include <kdeversion.h>
 #include <klocale.h>
 #include <kwin.h>
@@ -40,6 +37,10 @@
 #include <kconfig.h>
 #include <kstatusbar.h>
 #include <kmenubar.h>
+
+// LibKDcraw includes.
+
+#include <libkdcraw/dcrawbinary.h>
 
 // Local includes.
 
@@ -51,124 +52,17 @@
 #include "albummanager.h"
 #include "deletedialog.h"
 #include "imagewindow.h"
-#include "imagepropertiessidebardb.h"
 #include "slideshow.h"
 #include "setup.h"
-#include "statusprogressbar.h"
-#include "statuszoombar.h"
 #include "syncjob.h"
 #include "thumbnailsize.h"
 #include "lighttablepreview.h"
-#include "lighttableview.h"
-#include "lighttablebar.h"
+#include "lighttablewindowprivate.h"
 #include "lighttablewindow.h"
 #include "lighttablewindow.moc"
 
 namespace Digikam
 {
-
-class LightTableWindowPriv
-{
-
-public:
-
-    LightTableWindowPriv()
-    {
-        autoSyncPreview        = true;
-        fullScreenHideToolBar  = false;
-        fullScreen             = false;
-        removeFullScreenButton = false;
-        cancelSlideShow        = false;
-        star0                  = 0;
-        star1                  = 0;
-        star2                  = 0;
-        star3                  = 0;
-        star4                  = 0;
-        star5                  = 0;
-        accelerators           = 0;
-        leftSidebar            = 0;
-        rightSidebar           = 0;
-        previewView            = 0;
-        barView                = 0;
-        hSplitter              = 0;
-        vSplitter              = 0;
-        syncPreviewAction      = 0;
-        clearListAction        = 0;
-        setItemLeftAction      = 0;
-        setItemRightAction     = 0;
-        editItemAction         = 0;
-        removeItemAction       = 0;
-        fileDeleteAction       = 0;
-        slideShowAction        = 0;
-        fullScreenAction       = 0;
-        donateMoneyAction      = 0;
-        zoomFitToWindowAction  = 0;
-        zoomTo100percents      = 0;
-        zoomPlusAction         = 0;
-        zoomMinusAction        = 0;
-        statusProgressBar      = 0;
-        leftZoomBar            = 0;  
-        rightZoomBar           = 0;  
-        forwardAction          = 0;
-        backwardAction         = 0;
-        firstAction            = 0;
-        lastAction             = 0;
-        navigateByPairAction   = 0;
-    }
-
-    bool                      autoSyncPreview;
-    bool                      fullScreenHideToolBar;
-    bool                      fullScreen;
-    bool                      removeFullScreenButton;
-    bool                      cancelSlideShow;
-
-    QSplitter                *hSplitter;
-    QSplitter                *vSplitter;
-
-    // Rating actions.
-    KAction                  *star0;
-    KAction                  *star1;
-    KAction                  *star2;
-    KAction                  *star3;
-    KAction                  *star4;
-    KAction                  *star5;
-
-    KAction                  *forwardAction;
-    KAction                  *backwardAction;
-    KAction                  *firstAction;
-    KAction                  *lastAction;
-
-    KAction                  *setItemLeftAction;
-    KAction                  *setItemRightAction;
-    KAction                  *clearListAction;
-    KAction                  *editItemAction;
-    KAction                  *removeItemAction;
-    KAction                  *fileDeleteAction;
-    KAction                  *slideShowAction;
-    KAction                  *donateMoneyAction;
-    KAction                  *zoomPlusAction;
-    KAction                  *zoomMinusAction;
-    KAction                  *zoomTo100percents;
-    KAction                  *zoomFitToWindowAction;
-
-    KToggleAction            *fullScreenAction;
-    KToggleAction            *syncPreviewAction;
-    KToggleAction            *navigateByPairAction;
-
-    KAccel                   *accelerators;
-
-    LightTableBar            *barView;
-
-    LightTableView           *previewView;
-
-    StatusZoomBar            *leftZoomBar;
-    StatusZoomBar            *rightZoomBar;
-
-    StatusProgressBar        *statusProgressBar;
-
-    ImagePropertiesSideBarDB *leftSidebar;
-    ImagePropertiesSideBarDB *rightSidebar;
-};
 
 LightTableWindow* LightTableWindow::m_instance = 0;
 
@@ -238,6 +132,7 @@ void LightTableWindow::readSettings()
         d->hSplitter->setSizes(config->readIntListEntry("Horizontal Splitter Sizes"));
 
     d->navigateByPairAction->setChecked(config->readBoolEntry("Navigate By Pair", false));
+    slotToggleNavigateByPair();
 }
 
 void LightTableWindow::writeSettings()
@@ -280,7 +175,8 @@ void LightTableWindow::setupUserArea()
     QWidget* centralW = new QWidget(d->hSplitter);
     QVBoxLayout *vlay = new QVBoxLayout(centralW);
     d->vSplitter      = new QSplitter(Qt::Vertical, centralW);
-    d->barView        = new LightTableBar(d->vSplitter, ThumbBarView::Horizontal);
+    d->barView        = new LightTableBar(d->vSplitter, ThumbBarView::Horizontal, 
+                                          AlbumSettings::instance()->getExifRotate());
     d->previewView    = new LightTableView(d->vSplitter);
     vlay->addWidget(d->vSplitter);
 
@@ -323,7 +219,7 @@ void LightTableWindow::setupStatusBar()
 void LightTableWindow::setupConnections()
 {
     connect(d->statusProgressBar, SIGNAL(signalCancelButtonPressed()),
-           this, SLOT(slotNameLabelCancelButtonPressed()));
+           this, SLOT(slotProgressBarCancelButtonPressed()));
 
     // Thumbs bar connections ---------------------------------------
 
@@ -344,6 +240,9 @@ void LightTableWindow::setupConnections()
 
     connect(d->barView, SIGNAL(signalLightTableBarItemSelected(ImageInfo*)),
            this, SLOT(slotItemSelected(ImageInfo*)));
+
+    connect(d->barView, SIGNAL(signalDroppedItems(const ImageInfoList&)),
+           this, SLOT(slotThumbbarDroppedItems(const ImageInfoList&)));
 
     // Zoom bars connections -----------------------------------------
 
@@ -444,12 +343,12 @@ void LightTableWindow::setupActions()
     d->editItemAction->setEnabled(false);
 
     d->removeItemAction = new KAction(i18n("Remove item"), "fileclose",
-                                       0, this, SLOT(slotRemoveItem()),
+                                       CTRL+Key_K, this, SLOT(slotRemoveItem()),
                                        actionCollection(), "lighttable_removeitem");
     d->removeItemAction->setEnabled(false);
 
     d->clearListAction = new KAction(i18n("Clear all items"), "editshred",
-                                     0, this, SLOT(slotClearItemsList()),
+                                     CTRL+SHIFT+Key_K, this, SLOT(slotClearItemsList()),
                                      actionCollection(), "lighttable_clearlist");
     d->clearListAction->setEnabled(false);
 
@@ -593,28 +492,48 @@ void LightTableWindow::setupAccelerators()
                     false, true);
 }
 
+void LightTableWindow::slotThumbbarDroppedItems(const ImageInfoList& list)
+{
+    loadImageInfos(list, 0);
+}
+
 void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imageInfoCurrent)
 {
-    for (QPtrList<ImageInfo>::const_iterator it = list.begin(); it != list.end(); ++it)
+    ImageInfoList l = list;
+
+    if (!imageInfoCurrent) 
+        imageInfoCurrent = l.first();
+
+    AlbumSettings *settings = AlbumSettings::instance();
+
+    if (!settings) return;
+
+    QString imagefilter = settings->getImageFileFilter().lower() +
+                          settings->getImageFileFilter().upper();
+
+    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
-        if (!d->barView->findItemByInfo(*it))
+        // add raw files only if dcraw is available
+        imagefilter += settings->getRawFileFilter().lower() +
+                       settings->getRawFileFilter().upper();
+    }
+
+    d->barView->blockSignals(true);
+    for (QPtrList<ImageInfo>::const_iterator it = l.begin(); it != l.end(); ++it)
+    {
+        QString fileExtension = (*it)->kurl().fileName().section( '.', -1 );
+
+        if ( imagefilter.find(fileExtension) != -1 && 
+             !d->barView->findItemByInfo(*it) )
         {
             new LightTableBarItem(d->barView, *it);
         }
     }   
+    d->barView->blockSignals(false);
 
-    if (imageInfoCurrent)
-    {
-        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(imageInfoCurrent));
-        if (ltItem) 
-            d->barView->setSelectedItem(ltItem);
-    }
-    else
-    {
-        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
-        if (ltItem) 
-            d->barView->setSelectedItem(ltItem);
-    }
+    LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(imageInfoCurrent));
+    if (ltItem) 
+        d->barView->setSelectedItem(ltItem);
 
     // if window is iconified, show it
     if (isMinimized())
@@ -677,25 +596,28 @@ void LightTableWindow::slotRightPanelLeftButtonClicked()
 void LightTableWindow::slotLeftPreviewLoaded(bool b)
 {
     d->leftZoomBar->setEnabled(b);
-    d->previewView->checkForSelection(d->barView->currentItemImageInfo());
-    d->barView->setOnLeftPanel(d->previewView->leftImageInfo());
 
-    LightTableBarItem *item = d->barView->findItemByInfo(d->previewView->leftImageInfo());
-    if (item) item->setOnLeftPanel(true);
-    d->barView->update();
-
-    if (d->navigateByPairAction->isChecked() && item)
+    if (b)
     {
-        LightTableBarItem* next = dynamic_cast<LightTableBarItem*>(item->next());
-        if (next)
+        d->previewView->checkForSelection(d->barView->currentItemImageInfo());
+        d->barView->setOnLeftPanel(d->previewView->leftImageInfo());
+    
+        LightTableBarItem *item = d->barView->findItemByInfo(d->previewView->leftImageInfo());
+        if (item) item->setOnLeftPanel(true);
+    
+        if (d->navigateByPairAction->isChecked() && item)
         {
-            d->barView->setOnRightPanel(next->info());
-            slotSetItemOnRightPanel(next->info());
-        }
-        else
-        {
-            LightTableBarItem* first = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
-            slotSetItemOnRightPanel(first ? first->info() : 0);
+            LightTableBarItem* next = dynamic_cast<LightTableBarItem*>(item->next());
+            if (next)
+            {
+                d->barView->setOnRightPanel(next->info());
+                slotSetItemOnRightPanel(next->info());
+            }
+            else
+            {
+                LightTableBarItem* first = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
+                slotSetItemOnRightPanel(first ? first->info() : 0);
+            }
         }
     }
 }
@@ -703,12 +625,14 @@ void LightTableWindow::slotLeftPreviewLoaded(bool b)
 void LightTableWindow::slotRightPreviewLoaded(bool b)
 {
     d->rightZoomBar->setEnabled(b);
-    d->previewView->checkForSelection(d->barView->currentItemImageInfo());
-    d->barView->setOnRightPanel(d->previewView->rightImageInfo());
-
-    LightTableBarItem *item = d->barView->findItemByInfo(d->previewView->rightImageInfo());
-    if (item) item->setOnRightPanel(true);
-    d->barView->update();
+    if (b)
+    {
+        d->previewView->checkForSelection(d->barView->currentItemImageInfo());
+        d->barView->setOnRightPanel(d->previewView->rightImageInfo());
+    
+        LightTableBarItem *item = d->barView->findItemByInfo(d->previewView->rightImageInfo());
+        if (item) item->setOnRightPanel(true);
+    }
 }
 
 void LightTableWindow::slotItemSelected(ImageInfo* info)
@@ -845,6 +769,7 @@ void LightTableWindow::slotClearItemsList()
     }
 
     d->barView->clear();
+    refreshStatusBar();
 }
 
 void LightTableWindow::slotDeleteItem()
@@ -934,6 +859,7 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
 
     d->barView->removeItem(info);
     d->barView->setSelected(d->barView->currentItem());
+    refreshStatusBar();
 }
 
 void LightTableWindow::slotEditItem()
@@ -1033,7 +959,7 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
     }
 }
 
-void LightTableWindow::slotNameLabelCancelButtonPressed()
+void LightTableWindow::slotProgressBarCancelButtonPressed()
 {
     d->cancelSlideShow = true;
 }
