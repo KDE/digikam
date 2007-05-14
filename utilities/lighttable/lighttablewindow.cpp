@@ -132,6 +132,7 @@ void LightTableWindow::readSettings()
         d->hSplitter->setSizes(config->readIntListEntry("Horizontal Splitter Sizes"));
 
     d->navigateByPairAction->setChecked(config->readBoolEntry("Navigate By Pair", false));
+    slotToggleNavigateByPair();
 }
 
 void LightTableWindow::writeSettings()
@@ -768,6 +769,7 @@ void LightTableWindow::slotClearItemsList()
     }
 
     d->barView->clear();
+    refreshStatusBar();
 }
 
 void LightTableWindow::slotDeleteItem()
@@ -857,6 +859,7 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
 
     d->barView->removeItem(info);
     d->barView->setSelected(d->barView->currentItem());
+    refreshStatusBar();
 }
 
 void LightTableWindow::slotEditItem()
