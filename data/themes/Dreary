@@ -34,9 +34,9 @@ listview.regular.gradient:           SOLID
 listview.regular.border:             true
 listview.regular.borderColor:        rgb:D0/D0/D0
 
-listview.selected.color:	    rgb:A0/A0/A0
-listview.selected.colorTo:	    rgb:40/40/40
-listview.selected.bevel:	    RAISED
-listview.selected.gradient:         DIAGONAL
-listview.selected.border:           true
-listview.selected.borderColor:      rgb:00/00/00
+listview.selected.color:	     rgb:A0/A0/A0
+listview.selected.colorTo:	     rgb:40/40/40
+listview.selected.bevel:	     RAISED
+listview.selected.gradient:          DIAGONAL
+listview.selected.border:            true
+listview.selected.borderColor:       rgb:00/00/00

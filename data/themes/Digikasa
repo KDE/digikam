@@ -15,11 +15,11 @@ banner.border:                       false
 banner.borderColor:                  rgb:00/00/00
 
 thumbnail.regular.color:             rgb:f2/f2/f2
-!thumbnail.regular.colorTo:           rgb:EF/EF/EF
+!thumbnail.regular.colorTo:          rgb:EF/EF/EF
 thumbnail.regular.bevel:	     FLAT
 thumbnail.regular.gradient:          SOLID
 thumbnail.regular.border:            false
-!thumbnail.regular.borderColor:       rgb:70/70/70
+!thumbnail.regular.borderColor:      rgb:70/70/70
 
 thumbnail.selected.color:	     #25648B
 !thumbnail.selected.colorTo:	     #4B6CC7
