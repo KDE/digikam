@@ -174,7 +174,8 @@ void LightTableWindow::setupUserArea()
     QWidget* centralW = new QWidget(d->hSplitter);
     QVBoxLayout *vlay = new QVBoxLayout(centralW);
     d->vSplitter      = new QSplitter(Qt::Vertical, centralW);
-    d->barView        = new LightTableBar(d->vSplitter, ThumbBarView::Horizontal);
+    d->barView        = new LightTableBar(d->vSplitter, ThumbBarView::Horizontal, 
+                                          AlbumSettings::instance()->getExifRotate());
     d->previewView    = new LightTableView(d->vSplitter);
     vlay->addWidget(d->vSplitter);
 
