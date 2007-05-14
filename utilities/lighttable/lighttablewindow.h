@@ -126,6 +126,8 @@ private slots:
     void slotItemSelected(ImageInfo*);
     void slotClearItemsList();
 
+    void slotThumbbarDroppedItems(const ImageInfoList&);
+
     void slotZoomTo100Percents();
     void slotFitToWindow();
 

@@ -669,19 +669,23 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
 
     if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
     {
+        ImageInfoList imageInfoList;
+
         for (QValueList<int>::const_iterator it = imageIDs.begin();
-                it != imageIDs.end(); ++it)
+             it != imageIDs.end(); ++it)
         {
             ImageInfo *info = new ImageInfo(*it);
             if (!findItemByInfo(info))
             {
-                new LightTableBarItem(this, info);
+                imageInfoList.append(info);
             }
             else
             {
                 delete info;
             }
         }
+        
+        emit signalDroppedItems(imageInfoList);
     }
     else 
     {

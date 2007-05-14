@@ -38,6 +38,10 @@
 #include <kstatusbar.h>
 #include <kmenubar.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/dcrawbinary.h>
+
 // Local includes.
 
 #include "ddebug.h"
@@ -234,6 +238,9 @@ void LightTableWindow::setupConnections()
 
     connect(d->barView, SIGNAL(signalLightTableBarItemSelected(ImageInfo*)),
            this, SLOT(slotItemSelected(ImageInfo*)));
+
+    connect(d->barView, SIGNAL(signalDroppedItems(const ImageInfoList&)),
+           this, SLOT(slotThumbbarDroppedItems(const ImageInfoList&)));
 
     // Zoom bars connections -----------------------------------------
 
@@ -483,30 +490,48 @@ void LightTableWindow::setupAccelerators()
                     false, true);
 }
 
+void LightTableWindow::slotThumbbarDroppedItems(const ImageInfoList& list)
+{
+    loadImageInfos(list, 0);
+}
+
 void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imageInfoCurrent)
 {
-    d->barView->blockSignals(true);
-    for (QPtrList<ImageInfo>::const_iterator it = list.begin(); it != list.end(); ++it)
+    ImageInfoList l = list;
+
+    if (!imageInfoCurrent) 
+        imageInfoCurrent = l.first();
+
+    AlbumSettings *settings = AlbumSettings::instance();
+
+    if (!settings) return;
+
+    QString imagefilter = settings->getImageFileFilter().lower() +
+                          settings->getImageFileFilter().upper();
+
+    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
-        if (!d->barView->findItemByInfo(*it))
+        // add raw files only if dcraw is available
+        imagefilter += settings->getRawFileFilter().lower() +
+                       settings->getRawFileFilter().upper();
+    }
+
+    d->barView->blockSignals(true);
+    for (QPtrList<ImageInfo>::const_iterator it = l.begin(); it != l.end(); ++it)
+    {
+        QString fileExtension = (*it)->kurl().fileName().section( '.', -1 );
+
+        if ( imagefilter.find(fileExtension) != -1 && 
+             !d->barView->findItemByInfo(*it) )
         {
             new LightTableBarItem(d->barView, *it);
         }
     }   
     d->barView->blockSignals(false);
 
-    if (imageInfoCurrent)
-    {
-        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(imageInfoCurrent));
-        if (ltItem) 
-            d->barView->setSelectedItem(ltItem);
-    }
-    else
-    {
-        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
-        if (ltItem) 
-            d->barView->setSelectedItem(ltItem);
-    }
+    LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(imageInfoCurrent));
+    if (ltItem) 
+        d->barView->setSelectedItem(ltItem);
 
     // if window is iconified, show it
     if (isMinimized())

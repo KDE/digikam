@@ -79,6 +79,7 @@ signals:
     void signalEditItem(ImageInfo*);
     void signalRemoveItem(ImageInfo*);
     void signalClearAll();
+    void signalDroppedItems(const ImageInfoList&);
 
 private:
 

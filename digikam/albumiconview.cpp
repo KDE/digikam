@@ -1028,20 +1028,6 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
 
 void AlbumIconView::insertSelectionToLightTable()
 {
-    AlbumSettings *settings = AlbumSettings::instance();
-
-    if (!settings) return;
-
-    QString imagefilter = settings->getImageFileFilter().lower() +
-                          settings->getImageFileFilter().upper();
-
-    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
-    {
-        // add raw files only if dcraw is available
-        imagefilter += settings->getRawFileFilter().lower() +
-                       settings->getRawFileFilter().upper();
-    }
-
     // Run Light Table with all selected image files in the current Album.
 
     ImageInfoList imageInfoList;
@@ -1051,15 +1037,9 @@ void AlbumIconView::insertSelectionToLightTable()
         if ((*it).isSelected())
         {
             AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-
-            QString fileExtension = iconItem->imageInfo()->kurl().fileName().section( '.', -1 );
-    
-            if ( imagefilter.find(fileExtension) != -1 )
-            {
-                ImageInfo *info = new ImageInfo(*iconItem->imageInfo());
-                info->setViewItem(0);
-                imageInfoList.append(info);
-            }
+            ImageInfo *info         = new ImageInfo(*iconItem->imageInfo());
+            info->setViewItem(0);
+            imageInfoList.append(info);
         }
     }
     
