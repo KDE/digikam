@@ -444,12 +444,12 @@ void LightTableWindow::setupActions()
     d->editItemAction->setEnabled(false);
 
     d->removeItemAction = new KAction(i18n("Remove item"), "fileclose",
-                                       0, this, SLOT(slotRemoveItem()),
+                                       CTRL+Key_K, this, SLOT(slotRemoveItem()),
                                        actionCollection(), "lighttable_removeitem");
     d->removeItemAction->setEnabled(false);
 
     d->clearListAction = new KAction(i18n("Clear all items"), "editshred",
-                                     0, this, SLOT(slotClearItemsList()),
+                                     CTRL+SHIFT+Key_K, this, SLOT(slotClearItemsList()),
                                      actionCollection(), "lighttable_clearlist");
     d->clearListAction->setEnabled(false);
 
