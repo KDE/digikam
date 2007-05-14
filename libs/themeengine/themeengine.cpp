@@ -193,7 +193,6 @@ void ThemeEngine::setCurrentTheme(const Theme& theme, const QString& name, bool 
     {
         d->themeDict.remove(name);
         d->themeList.remove(t);
-        delete t;
     }
 
     t = new Theme(theme);
