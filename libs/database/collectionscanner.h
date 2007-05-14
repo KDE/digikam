@@ -1,10 +1,13 @@
 /* ============================================================
- * Authors: Marcel Wiesweg
- *          Renchi RajuMarcel Wiesweg
- * Date   : 2007-03-21
- * Description : database interface.
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2007-03-21
+ * Description : Collection scanning to database.
  *
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright 2005-2006 by Tom Albers <tomalbers@kde.nl>
  * Copyright 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it

@@ -1,10 +1,12 @@
 /* ============================================================
- * File  : imageattributeswatch.h
- * Author: Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2006-03-23
- * Description : Watch database image attributes
- * 
- * Copyright 2006 by Marcel Wiesweg
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2007-03-23
+ * Description : Keeping image properties in sync.
+ *
+ * Copyright 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
