@@ -24,6 +24,7 @@
 // Qt includes.
 
 #include <qlayout.h>
+#include <qstyle.h>
 #include <qfile.h>
 #include <qlabel.h>
 #include <qpixmap.h>
@@ -168,10 +169,11 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     d = new ImagePropertiesTabPriv;
 
     setupNavigateBar(navBar);
-    d->settingsArea             = new QFrame(this);
-    d->settingsArea->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
+    d->settingsArea = new QFrame(this);
+    d->settingsArea->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+    d->settingsArea->setLineWidth( style().pixelMetric(QStyle::PM_DefaultFrameWidth, this) );
     d->settingsArea->setMargin(0);
-    d->settingsArea->setLineWidth(1);
+
     QGridLayout *settingsLayout = new QGridLayout(d->settingsArea, 33, 1, KDialog::spacingHint(), 0);
 
     // --------------------------------------------------
