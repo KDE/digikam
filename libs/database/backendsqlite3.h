@@ -1,9 +1,13 @@
 /* ============================================================
- * Authors: Marcel Wiesweg
- * Date   : 2007-04-15
- * Description : SQLite3 database
- * 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2007-04-15
+ * Description : SQLite3 backend
+ *
  * Copyright 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

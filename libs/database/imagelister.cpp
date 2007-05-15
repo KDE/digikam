@@ -1,9 +1,11 @@
 /* ============================================================
- * Authors: Marcel Wiesweg
- *          Renchi Raju
- * Date   : 2007-03-20
- * Description : database interface.
- * 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2007-03-20
+ * Description : Listing information from database.
+ *
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *

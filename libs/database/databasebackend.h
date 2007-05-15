@@ -1,8 +1,11 @@
 /* ============================================================
- * Authors: Marcel Wiesweg
- * Date   : 2007-04-15
- * Description : Database backend
- * 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2007-04-15
+ * Description : Abstract database backend
+ *
  * Copyright 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it

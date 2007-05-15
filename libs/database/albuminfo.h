@@ -1,6 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-21
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2007-04-21
+ * Description : Structures for use in AlbumDB
+ *
+ * Copyright 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it

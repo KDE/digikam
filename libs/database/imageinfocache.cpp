@@ -1,6 +1,9 @@
 /* ============================================================
- * Authors: Marcel Wiesweg
- * Date   : 2007-05-01
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2007-05-01
  * Description : ImageInfo common data
  * 
  * Copyright 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
