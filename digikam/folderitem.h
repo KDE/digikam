@@ -54,8 +54,9 @@ private:
 
     bool m_focus;
     bool m_special;
-
 };
+
+// ------------------------------------------------------------------------------------
 
 class FolderCheckListItem : public QCheckListItem
 {

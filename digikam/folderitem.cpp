@@ -183,15 +183,15 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
     int styleflags = QStyle::Style_Default;
     switch (state())
     {
-    case(QCheckListItem::Off):
-        styleflags |= QStyle::Style_Off;
-        break;
-    case(QCheckListItem::NoChange):
-        styleflags |= QStyle::Style_NoChange;
-        break;
-    case(QCheckListItem::On):
-        styleflags |= QStyle::Style_On;
-        break;
+        case(QCheckListItem::Off):
+            styleflags |= QStyle::Style_Off;
+            break;
+        case(QCheckListItem::NoChange):
+            styleflags |= QStyle::Style_NoChange;
+            break;
+        case(QCheckListItem::On):
+            styleflags |= QStyle::Style_On;
+            break;
     }
 
     if (isSelected())
@@ -225,7 +225,6 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
         p->drawPixmap(r, 0, fv->itemBasePixmapRegular());
         p->setPen(cg.text());
     }
-
     
     if (icon)
     {
