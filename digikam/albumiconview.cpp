@@ -1434,7 +1434,7 @@ bool AlbumIconView::acceptToolTip(IconItem *item, const QPoint &mousePos)
 {
     AlbumIconItem *iconItem = dynamic_cast<AlbumIconItem*>(item);
 
-    if (iconItem && iconItem->thumbnailRect().contains(mousePos))
+    if (iconItem && iconItem->clickToOpenRect().contains(mousePos))
     {
         return true;
     }
