@@ -61,7 +61,7 @@ namespace Digikam
 {
 
 MainWindow::MainWindow()
-    : QWidget(0, 0, WDestructiveClose)
+          : QWidget(0, 0, WDestructiveClose)
 {
     AlbumSettings *albumSettings = new AlbumSettings();
     albumSettings->readSettings();

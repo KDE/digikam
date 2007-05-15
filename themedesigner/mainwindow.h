@@ -34,12 +34,12 @@ class QCheckBox;
 class QLabel;
 class KColorButton;
 
+namespace Digikam
+{
+
 class FolderView;
 class ThemedIconView;
 class Theme;
-
-namespace Digikam
-{
 
 class MainWindow : public QWidget
 {
@@ -47,7 +47,8 @@ class MainWindow : public QWidget
 
 public:
 
-    enum PROPERTY {
+    enum PROPERTY 
+    {
         BASE = 0,
         REGULARTEXT,
         SELECTEDTEXT,
@@ -60,13 +61,15 @@ public:
         LISTVIEWSELECTED
     };
 
-    enum BEVEL {
+    enum BEVEL 
+    {
         FLAT = 0,
         RAISED,
         SUNKEN
     };
 
-    enum GRADIENT {
+    enum GRADIENT 
+    {
         SOLID = 0,
         HORIZONTAL,
         VERTICAL,
@@ -81,25 +84,25 @@ private:
     FolderView*     m_folderView;
     ThemedIconView* m_iconView;
 
-    QComboBox*    m_propertyCombo;
-    QLabel*       m_bevelLabel;
-    QComboBox*    m_bevelCombo;
-    QLabel*       m_gradientLabel;
-    QComboBox*    m_gradientCombo;
-    QLabel*       m_begColorLabel;
-    KColorButton* m_begColorBtn;
-    QLabel*       m_endColorLabel;
-    KColorButton* m_endColorBtn;
-    QCheckBox*    m_addBorderCheck;
-    QLabel*       m_borderColorLabel;
-    KColorButton* m_borderColorBtn;
+    QComboBox*      m_propertyCombo;
+    QLabel*         m_bevelLabel;
+    QComboBox*      m_bevelCombo;
+    QLabel*         m_gradientLabel;
+    QComboBox*      m_gradientCombo;
+    QLabel*         m_begColorLabel;
+    KColorButton*   m_begColorBtn;
+    QLabel*         m_endColorLabel;
+    KColorButton*   m_endColorBtn;
+    QCheckBox*      m_addBorderCheck;
+    QLabel*         m_borderColorLabel;
+    KColorButton*   m_borderColorBtn;
 
-    Theme*        m_theme;
+    Theme*          m_theme;
 
-    QMap<int,int> m_bevelMap;
-    QMap<int,int> m_bevelReverseMap;
-    QMap<int,int> m_gradientMap;
-    QMap<int,int> m_gradientReverseMap;
+    QMap<int,int>   m_bevelMap;
+    QMap<int,int>   m_bevelReverseMap;
+    QMap<int,int>   m_gradientMap;
+    QMap<int,int>   m_gradientReverseMap;
     
 private slots:
 
