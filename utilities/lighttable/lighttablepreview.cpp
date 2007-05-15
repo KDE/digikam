@@ -566,16 +566,27 @@ void LightTablePreview::resizeEvent(QResizeEvent* e)
 {
     if (!e) return;
 
-    if (previewIsNull())
-    {
-        d->cornerButton->hide(); 
-        return;
-    }
-
     QScrollView::resizeEvent(e);
 
+    if (!d->imageInfo)
+    {
+        d->cornerButton->hide();
+ 
+        if (d->dragAndDropEnabled)
+        {
+            QPixmap pix(visibleWidth(), visibleHeight());
+            pix.fill(ThemeEngine::instance()->baseColor());
+            QPainter p(&pix);
+            p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
+            p.drawText(0, 0, pix.width(), pix.height(),
+                    Qt::AlignCenter|Qt::WordBreak, 
+                    i18n("Drag and drop here an item"));
+            p.end();
+            setImage(pix.convertToImage());
+        }
+    }
+
     updateZoomAndSize(false);
-    //emit signalZoomFactorChanged(zoomFactor());
 }
 
 void LightTablePreview::updateZoomAndSize(bool alwaysFitToWindow)
@@ -618,19 +629,6 @@ void LightTablePreview::resetPreview()
     d->preview   = QImage();
     d->path      = QString(); 
     d->imageInfo = 0;
-
-    if (d->dragAndDropEnabled)
-    {
-        QPixmap pix(visibleWidth(), visibleHeight());
-        pix.fill(ThemeEngine::instance()->baseColor());
-        QPainter p(&pix);
-        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
-        p.drawText(0, 0, pix.width(), pix.height(),
-                Qt::AlignCenter|Qt::WordBreak, 
-                i18n("Drag and drop here an item"));
-        p.end();
-        setImage(pix.convertToImage());
-    }
 
     updateZoomAndSize(true);
     emit signalPreviewLoaded(false);
