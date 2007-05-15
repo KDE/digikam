@@ -31,23 +31,23 @@
 
 // Local includes.
 
-#include "folderview.h"
-#include "folderitem.h"
 #include "thumbnailsize.h"
 #include "albumsettings.h"
+#include "folderview.h"
+#include "folderitem.h"
 
 namespace Digikam
 {
 
 FolderItem::FolderItem(QListView* parent, const QString& text, bool special)
-    : QListViewItem(parent, text)
+          : QListViewItem(parent, text)
 {
     m_special = special;
     m_focus = false;
 }
 
 FolderItem::FolderItem(QListViewItem* parent, const QString& text, bool special)
-    : QListViewItem(parent, text)
+          : QListViewItem(parent, text)
 {
     m_special = special;
     m_focus = false;    
@@ -147,15 +147,17 @@ int FolderItem::id() const
     return 0;
 }
 
+// ------------------------------------------------------------------------------------
+
 FolderCheckListItem::FolderCheckListItem(QListView* parent, const QString& text,
                                          QCheckListItem::Type tt)
-    : QCheckListItem(parent, text, tt)
+                   : QCheckListItem(parent, text, tt)
 {
 }
 
 FolderCheckListItem::FolderCheckListItem(QListViewItem* parent, const QString& text,
                                          QCheckListItem::Type tt)
-    : QCheckListItem(parent, text, tt)
+                   : QCheckListItem(parent, text, tt)
 {
 }
 
@@ -169,7 +171,6 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
     FolderView *fv = dynamic_cast<FolderView*>(listView());
     if (!fv)
         return;
-
     
     QFontMetrics fm(p->fontMetrics());
 
@@ -213,7 +214,6 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
                                   QRect(x, y, boxsize, height()),
                                   cg, styleflags, QStyleOption(this));
     }
-
     
     if (isSelected())
     {
