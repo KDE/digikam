@@ -602,13 +602,10 @@ void ImagePreviewView::resizeEvent(QResizeEvent* e)
 {
     if (!e) return;
 
-    if (previewIsNull())
-    {
-        d->cornerButton->hide(); 
-        return;
-    }
-
     QScrollView::resizeEvent(e);
+
+    if (!d->imageInfo)
+        d->cornerButton->hide(); 
 
     updateZoomAndSize(false);
 }
