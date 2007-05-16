@@ -686,8 +686,11 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
 
 void LightTablePreview::setSelected(bool sel)
 {
-    d->selected = sel;
-    frameChanged();
+    if (d->selected != sel)
+    {
+        d->selected = sel;
+        frameChanged();
+    }
 }
 
 void LightTablePreview::drawFrame(QPainter *p)
