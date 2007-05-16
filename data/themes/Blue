@@ -1,43 +1,43 @@
 ! Blue
-! Digikam theme by gilles (2007 may)
+! Digikam theme by Caulier Gilles (2007 May)
 
-base.color:				#5087c3
-text.regular.color:			#003366
-text.selected.color:			#99ccff
-text.special.regular.color:		#52cd52
-text.special.selected.color:		#99ff99
+base.color:				#8ec7ff
+text.regular.color:			#405772
+text.selected.color:			#16166f
+text.special.regular.color:		#c44e4e
+text.special.selected.color:		#ff0000
 
-banner.color:				#5087c3
-banner.colorTo:				#4673a5
+banner.color:				#8ec7ff
+banner.colorTo:				#709dca
 banner.bevel:				SUNKEN
 banner.gradient:			HORIZONTAL
-banner.border:				false
+banner.border:				true
 banner.borderColor			#000000
 
-thumbnail.regular.color:		#5087c3
-thumbnail.regular.colorTo:		#4673a5
-thumbnail.regular.bevel:		SUNKEN
-thumbnail.regular.gradient:		HORIZONTAL
+thumbnail.regular.color:		#8ec7ff
+thumbnail.regular.colorTo:		#709dca
+thumbnail.regular.bevel:		FLAT
+thumbnail.regular.gradient:		SOLID
 thumbnail.regular.border:		false
 thumbnail.regular.borderColor		#e0e0ef
 
-thumbnail.selected.color:		#5087c3
-thumbnail.selected.colorTo:		#4673a5
+thumbnail.selected.color:		#8ec7ff
+thumbnail.selected.colorTo:		#709dca
 thumbnail.selected.bevel:		SUNKEN
 thumbnail.selected.gradient:		HORIZONTAL
 thumbnail.selected.border:		true
-thumbnail.selected.borderColor		#e0e0ef
+thumbnail.selected.borderColor		#16166f
 
-listview.regular.color:			#5087c3
+listview.regular.color:			#8ec7ff
 listview.regular.colorTo:		#4673a5
 listview.regular.bevel:			FLAT
 listview.regular.gradient:		SOLID
 listview.regular.border:		false
 listview.regular.borderColor		#000000
 
-listview.selected.color:		#5087c3
-listview.selected.colorTo:		#4673a5
+listview.selected.color:		#8ec7ff
+listview.selected.colorTo:		#709dca
 listview.selected.bevel:		SUNKEN
 listview.selected.gradient:		HORIZONTAL
 listview.selected.border:		true
-listview.selected.borderColor		#e0e0ef
+listview.selected.borderColor		#16166f
