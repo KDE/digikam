@@ -1,5 +1,5 @@
-! Blue
-! Digikam theme by Caulier Gilles (2007 May)
+! "Blue"
+! Digikam theme by Caulier Gilles (2007 may)
 
 base.color:				#eeeef6
 text.regular.color:			#405772
@@ -7,12 +7,12 @@ text.selected.color:			#080ccd
 text.special.regular.color:		#107141
 text.special.selected.color:		#007000
 
-banner.color:				#eeeef6
-banner.colorTo:				#c5daff
+banner.color:				#c5daff
+banner.colorTo:				#a7b9d8
 banner.bevel:				SUNKEN
 banner.gradient:			HORIZONTAL
 banner.border:				true
-banner.borderColor			#bdbabd
+banner.borderColor			#000000
 
 thumbnail.regular.color:		#eeeef6
 thumbnail.regular.colorTo:		#709dca
@@ -22,11 +22,11 @@ thumbnail.regular.border:		false
 thumbnail.regular.borderColor		#e0e0ef
 
 thumbnail.selected.color:		#c5daff
-thumbnail.selected.colorTo:		#eeeef6
+thumbnail.selected.colorTo:		#a7b9d8
 thumbnail.selected.bevel:		SUNKEN
 thumbnail.selected.gradient:		HORIZONTAL
 thumbnail.selected.border:		true
-thumbnail.selected.borderColor		#bdbabd
+thumbnail.selected.borderColor		#000000
 
 listview.regular.color:			#eeeef6
 listview.regular.colorTo:		#4673a5
@@ -36,8 +36,8 @@ listview.regular.border:		false
 listview.regular.borderColor		#000000
 
 listview.selected.color:		#c5daff
-listview.selected.colorTo:		#eeeef6
+listview.selected.colorTo:		#a7b9d8
 listview.selected.bevel:		SUNKEN
 listview.selected.gradient:		HORIZONTAL
 listview.selected.border:		true
-listview.selected.borderColor		#bdbabd
+listview.selected.borderColor		#000000
