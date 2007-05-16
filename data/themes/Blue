@@ -11,7 +11,7 @@ banner.color:				#c5daff
 banner.colorTo:				#a7b9d8
 banner.bevel:				SUNKEN
 banner.gradient:			HORIZONTAL
-banner.border:				true
+banner.border:				false
 banner.borderColor			#000000
 
 thumbnail.regular.color:		#eeeef6
@@ -39,5 +39,5 @@ listview.selected.color:		#c5daff
 listview.selected.colorTo:		#a7b9d8
 listview.selected.bevel:		SUNKEN
 listview.selected.gradient:		HORIZONTAL
-listview.selected.border:		true
+listview.selected.border:		false
 listview.selected.borderColor		#000000
