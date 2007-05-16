@@ -81,24 +81,23 @@ MainWindow::MainWindow()
     // header ------------------------------------------------------
 
     QLabel* headerLabel = new QLabel( this );
-    headerLabel->setText( "<font size=\"+3\"><b>Digikam Theme Designer</b></font>" );
+    headerLabel->setText( "<font size=\"+2\"><b>Digikam Theme Designer</b></font>" );
     
     QFrame* headerLine  = new QFrame( this );
     headerLine->setFrameShape( QFrame::HLine );
     headerLine->setFrameShadow( QFrame::Sunken );
 
-    layout->addMultiCellWidget(headerLabel, 0, 0, 0, 1);
-    layout->addMultiCellWidget(headerLine, 1, 1, 0, 1);
+    layout->addMultiCellWidget(headerLabel, 0, 0, 0, 2);
+    layout->addMultiCellWidget(headerLine, 1, 1, 0, 2);
 
     // Actual views ------------------------------------------------
     
     QSplitter* splitter = new QSplitter( this );
     splitter->setOrientation( QSplitter::Horizontal );
-    splitter->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,
-                                        QSizePolicy::Expanding));
+    splitter->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
     m_folderView = new FolderView( splitter );
-    m_iconView = new ThemedIconView( splitter );
+    m_iconView   = new ThemedIconView( splitter );
 
     layout->addWidget(splitter, 2, 0);
 
