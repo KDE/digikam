@@ -1,0 +1,43 @@
+! Blue
+! Digikam theme by gilles (2007 may)
+
+base.color:				#5087c3
+text.regular.color:			#003366
+text.selected.color:			#99ccff
+text.special.regular.color:		#52cd52
+text.special.selected.color:		#99ff99
+
+banner.color:				#5087c3
+banner.colorTo:				#4673a5
+banner.bevel:				SUNKEN
+banner.gradient:			HORIZONTAL
+banner.border:				false
+banner.borderColor			#000000
+
+thumbnail.regular.color:		#5087c3
+thumbnail.regular.colorTo:		#4673a5
+thumbnail.regular.bevel:		SUNKEN
+thumbnail.regular.gradient:		HORIZONTAL
+thumbnail.regular.border:		false
+thumbnail.regular.borderColor		#e0e0ef
+
+thumbnail.selected.color:		#5087c3
+thumbnail.selected.colorTo:		#4673a5
+thumbnail.selected.bevel:		SUNKEN
+thumbnail.selected.gradient:		HORIZONTAL
+thumbnail.selected.border:		true
+thumbnail.selected.borderColor		#e0e0ef
+
+listview.regular.color:			#5087c3
+listview.regular.colorTo:		#4673a5
+listview.regular.bevel:			FLAT
+listview.regular.gradient:		SOLID
+listview.regular.border:		false
+listview.regular.borderColor		#000000
+
+listview.selected.color:		#5087c3
+listview.selected.colorTo:		#4673a5
+listview.selected.bevel:		SUNKEN
+listview.selected.gradient:		HORIZONTAL
+listview.selected.border:		true
+listview.selected.borderColor		#e0e0ef
