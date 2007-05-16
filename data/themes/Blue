@@ -1,43 +1,43 @@
 ! Blue
 ! Digikam theme by Caulier Gilles (2007 May)
 
-base.color:				#8ec7ff
+base.color:				#eeeef6
 text.regular.color:			#405772
-text.selected.color:			#16166f
-text.special.regular.color:		#c44e4e
-text.special.selected.color:		#ff0000
+text.selected.color:			#080ccd
+text.special.regular.color:		#107141
+text.special.selected.color:		#007000
 
-banner.color:				#8ec7ff
-banner.colorTo:				#709dca
+banner.color:				#eeeef6
+banner.colorTo:				#c5daff
 banner.bevel:				SUNKEN
 banner.gradient:			HORIZONTAL
 banner.border:				true
-banner.borderColor			#000000
+banner.borderColor			#bdbabd
 
-thumbnail.regular.color:		#8ec7ff
+thumbnail.regular.color:		#eeeef6
 thumbnail.regular.colorTo:		#709dca
 thumbnail.regular.bevel:		FLAT
 thumbnail.regular.gradient:		SOLID
 thumbnail.regular.border:		false
 thumbnail.regular.borderColor		#e0e0ef
 
-thumbnail.selected.color:		#8ec7ff
-thumbnail.selected.colorTo:		#709dca
+thumbnail.selected.color:		#c5daff
+thumbnail.selected.colorTo:		#eeeef6
 thumbnail.selected.bevel:		SUNKEN
 thumbnail.selected.gradient:		HORIZONTAL
 thumbnail.selected.border:		true
-thumbnail.selected.borderColor		#16166f
+thumbnail.selected.borderColor		#bdbabd
 
-listview.regular.color:			#8ec7ff
+listview.regular.color:			#eeeef6
 listview.regular.colorTo:		#4673a5
 listview.regular.bevel:			FLAT
 listview.regular.gradient:		SOLID
 listview.regular.border:		false
 listview.regular.borderColor		#000000
 
-listview.selected.color:		#8ec7ff
-listview.selected.colorTo:		#709dca
+listview.selected.color:		#c5daff
+listview.selected.colorTo:		#eeeef6
 listview.selected.bevel:		SUNKEN
 listview.selected.gradient:		HORIZONTAL
 listview.selected.border:		true
-listview.selected.borderColor		#16166f
+listview.selected.borderColor		#bdbabd
