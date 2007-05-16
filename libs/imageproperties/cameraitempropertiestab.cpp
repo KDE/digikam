@@ -162,7 +162,6 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
 
     setupNavigateBar(navBar);
     d->settingsArea = new QFrame(this);
-    d->settingsArea->setMargin(0);
     d->settingsArea->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     d->settingsArea->setLineWidth( style().pixelMetric(QStyle::PM_DefaultFrameWidth, this) );
     

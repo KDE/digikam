@@ -172,7 +172,6 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     d->settingsArea = new QFrame(this);
     d->settingsArea->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     d->settingsArea->setLineWidth( style().pixelMetric(QStyle::PM_DefaultFrameWidth, this) );
-    d->settingsArea->setMargin(0);
 
     QGridLayout *settingsLayout = new QGridLayout(d->settingsArea, 33, 1, KDialog::spacingHint(), 0);
 
