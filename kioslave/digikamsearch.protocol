@@ -27,5 +27,6 @@ Description[pl]=Wtyczka protokołu do przeszukiwania digiKama
 Description[pt]='kioslave' de procura do digiKam
 Description[sk]=kioslave vyhľadávaní digiKamu
 Description[sv]=I/O-slav för Digikams sökning
+Description[tr]=digiKam Arama kioslave
 Description[uk]=Підлеглий В/В (kioslave) пошуку для digiKam
 Class=:local

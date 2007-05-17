@@ -33,5 +33,6 @@ Description[pl]=Wtyczka protokołu dat digiKama
 Description[pt]='kioslave' de datas do digiKam
 Description[sk]=kioslave dátumov digiKamu
 Description[sv]=I/O-slav för Digikams datum
+Description[tr]=digiKam Tarih kioslave
 Description[uk]=Підлеглий В/В (kioslave) дат для digiKam
 Class=:local

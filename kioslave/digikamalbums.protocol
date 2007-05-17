@@ -34,5 +34,6 @@ Description[pl]=Wtyczka protokołu albumów digiKam
 Description[pt]='kioslave' de álbuns do digiKam
 Description[sk]=kioslave albumov digiKamu
 Description[sv]=I/O-slav för Digikams album
+Description[tr]=digiKam Albüm kioslave
 Description[uk]=Підлеглий В/В (kioslave) альбомів для digiKam
 Class=:local

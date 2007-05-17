@@ -33,5 +33,6 @@ Description[pl]=Wtyczka protokołu do znaczników digiKama
 Description[pt]='kioslave' de marcas do digiKam
 Description[sk]=kioslave tagov digiKamu
 Description[sv]=I/O-slav för Digikams etiketter
+Description[tr]=digiKam Etiket kioslave
 Description[uk]=Підлеглий В/В (kioslave) міток для digiKam
 Class=:local
