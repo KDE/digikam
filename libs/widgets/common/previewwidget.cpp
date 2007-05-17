@@ -135,7 +135,6 @@ void PreviewWidget::setBackgroundColor(const QColor& color)
 void PreviewWidget::slotReset()
 {
     d->tileCache.clear();
-    viewport()->setUpdatesEnabled(false);
     resetPreview();
 }
 
