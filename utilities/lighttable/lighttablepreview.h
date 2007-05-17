@@ -69,6 +69,7 @@ public:
     void setSelected(bool sel);
 
     void setDragAndDropEnabled(bool b); 
+    void setDragAndDropMessage();
 
 signals:
 

@@ -174,6 +174,22 @@ void LightTablePreview::setDragAndDropEnabled(bool b)
     d->dragAndDropEnabled = b;
 }
 
+void LightTablePreview::setDragAndDropMessage()
+{
+    if (d->dragAndDropEnabled)
+    {
+        QPixmap pix(visibleWidth(), visibleHeight());
+        pix.fill(ThemeEngine::instance()->baseColor());
+        QPainter p(&pix);
+        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
+        p.drawText(0, 0, pix.width(), pix.height(),
+                   Qt::AlignCenter|Qt::WordBreak, 
+                   i18n("Drag and drop here an item"));
+        p.end();
+        setImage(pix.convertToImage());
+    }
+}
+
 void LightTablePreview::setImage(const QImage& image)
 {   
     d->preview = image;
@@ -571,19 +587,7 @@ void LightTablePreview::resizeEvent(QResizeEvent* e)
     if (!d->imageInfo)
     {
         d->cornerButton->hide();
- 
-        if (d->dragAndDropEnabled)
-        {
-            QPixmap pix(visibleWidth(), visibleHeight());
-            pix.fill(ThemeEngine::instance()->baseColor());
-            QPainter p(&pix);
-            p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
-            p.drawText(0, 0, pix.width(), pix.height(),
-                    Qt::AlignCenter|Qt::WordBreak, 
-                    i18n("Drag and drop here an item"));
-            p.end();
-            setImage(pix.convertToImage());
-        }
+        setDragAndDropMessage();
     }
 
     updateZoomAndSize(false);
@@ -630,7 +634,10 @@ void LightTablePreview::resetPreview()
     d->path      = QString(); 
     d->imageInfo = 0;
 
+    setDragAndDropMessage();
     updateZoomAndSize(true);
+    viewport()->setUpdatesEnabled(true);
+    viewport()->update();
     emit signalPreviewLoaded(false);
 }
 
