@@ -570,7 +570,9 @@ void LightTablePreview::slotPanIconSelectionMoved(QRect r, bool b)
 
 void LightTablePreview::zoomFactorChanged(double zoom)
 {
-    if (zoom > calcAutoZoomFactor())
+    updateScrollBars();
+
+    if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
         d->cornerButton->show();
     else
         d->cornerButton->hide();        
