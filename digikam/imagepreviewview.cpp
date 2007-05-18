@@ -590,7 +590,9 @@ void ImagePreviewView::slotPanIconSelectionMoved(QRect r, bool b)
 
 void ImagePreviewView::zoomFactorChanged(double zoom)
 {
-    if (zoom > calcAutoZoomFactor())
+    updateScrollBars();
+
+    if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
         d->cornerButton->show();
     else
         d->cornerButton->hide();        
