@@ -1286,9 +1286,11 @@ void Canvas::slotPanIconSelectionMoved(QRect r, bool b)
     }
 }
 
-void Canvas::slotZoomChanged(double zoom)
+void Canvas::slotZoomChanged(double /*zoom*/)
 {
-    if (zoom > calcAutoZoomFactor())
+    updateScrollBars();
+
+    if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
         d->cornerButton->show();
     else
         d->cornerButton->hide();        
