@@ -74,8 +74,7 @@ SetupLightTable::SetupLightTable(QWidget* parent )
     QVGroupBox *interfaceOptionsGroup = new QVGroupBox(i18n("Interface Options"), parent);
 
 
-    d->autoSyncPreview = new QCheckBox(i18n("Synchronize automaticly Left and "
-                                           "Right panels"),
+    d->autoSyncPreview = new QCheckBox(i18n("Synchronize panels automatically"),
                                       interfaceOptionsGroup);
 
     d->hideToolBar = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"),
