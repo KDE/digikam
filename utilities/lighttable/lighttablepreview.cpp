@@ -653,44 +653,63 @@ void LightTablePreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int s
 
 void LightTablePreview::contentsDragMoveEvent(QDragMoveEvent *e)
 {
-    if (!d->dragAndDropEnabled) return;
-
-    KURL::List      urls;
-    KURL::List      kioURLs;        
-    QValueList<int> albumIDs;
-    QValueList<int> imageIDs;
-
-    if (!ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
+    if (d->dragAndDropEnabled)
     {
-        e->ignore();
-        return;
+        int             albumID;
+        QValueList<int> albumIDs;
+        QValueList<int> imageIDs;
+        KURL::List      urls;
+        KURL::List      kioURLs;        
+    
+        if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs) ||
+            AlbumDrag::decode(e, urls, albumID))
+        {
+            e->accept();
+            return;
+        }
     }
-    e->accept();
+
+    e->ignore();
 }
 
 void LightTablePreview::contentsDropEvent(QDropEvent *e)
 {
-    if (!d->dragAndDropEnabled) return;
-
-    KURL::List      urls;
-    KURL::List      kioURLs;        
-    QValueList<int> albumIDs;
-    QValueList<int> imageIDs;
-    ImageInfoList   list;
-
-    if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
+    if (d->dragAndDropEnabled)
     {
-        for (QValueList<int>::const_iterator it = imageIDs.begin();
-                it != imageIDs.end(); ++it)
+        int             albumID;
+        QValueList<int> albumIDs;
+        QValueList<int> imageIDs;
+        KURL::List      urls;
+        KURL::List      kioURLs;  
+        ImageInfoList   list;
+    
+        if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
         {
-            list.append(new ImageInfo(*it));
+            for (QValueList<int>::const_iterator it = imageIDs.begin();
+                 it != imageIDs.end(); ++it)
+            {
+                list.append(new ImageInfo(*it));
+            }
             emit signalDroppedItems(list);
+            e->accept();
+            return;
+        }
+        else if (AlbumDrag::decode(e, urls, albumID))
+        {
+            QValueList<Q_LLONG> itemIDs = AlbumManager::instance()->albumDB()->getItemIDsInAlbum(albumID);
+    
+            for (QValueList<Q_LLONG>::const_iterator it = itemIDs.begin();
+                it != itemIDs.end(); ++it)
+            {
+                list.append(new ImageInfo(*it));
+            }
+            emit signalDroppedItems(list);
+            e->accept();
+            return;
         }
     }
-    else 
-    {
-        e->ignore();
-    }
+
+    e->ignore();
 }
 
 void LightTablePreview::setSelected(bool sel)

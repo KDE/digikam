@@ -39,6 +39,8 @@
 
 #include "ddebug.h"
 #include "album.h"
+#include "albumdb.h"
+#include "albummanager.h"
 #include "albumsettings.h"
 #include "dragobjects.h"
 #include "imageattributeswatch.h"
@@ -647,25 +649,29 @@ void LightTableBar::startDrag()
 
 void LightTableBar::contentsDragMoveEvent(QDragMoveEvent *e)
 {
-    KURL::List      urls;
-    KURL::List      kioURLs;        
+    int             albumID;
     QValueList<int> albumIDs;
     QValueList<int> imageIDs;
+    KURL::List      urls;
+    KURL::List      kioURLs;        
 
-    if (!ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
+    if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs) ||
+        AlbumDrag::decode(e, urls, albumID))
     {
-        e->ignore();
+        e->accept();
         return;
     }
-    e->accept();
+
+    e->ignore();
 }
 
 void LightTableBar::contentsDropEvent(QDropEvent *e)
 {
-    KURL::List      urls;
-    KURL::List      kioURLs;        
+    int             albumID;
     QValueList<int> albumIDs;
     QValueList<int> imageIDs;
+    KURL::List      urls;
+    KURL::List      kioURLs;        
 
     if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
     {
@@ -686,6 +692,29 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
         }
         
         emit signalDroppedItems(imageInfoList);
+        e->accept();
+    }
+    else if (AlbumDrag::decode(e, urls, albumID))
+    {
+        QValueList<Q_LLONG> itemIDs = AlbumManager::instance()->albumDB()->getItemIDsInAlbum(albumID);
+        ImageInfoList imageInfoList;
+
+        for (QValueList<Q_LLONG>::const_iterator it = itemIDs.begin();
+             it != itemIDs.end(); ++it)
+        {
+            ImageInfo *info = new ImageInfo(*it);
+            if (!findItemByInfo(info))
+            {
+                imageInfoList.append(info);
+            }
+            else
+            {
+                delete info;
+            }
+        }
+
+        emit signalDroppedItems(imageInfoList);
+        e->accept();
     }
     else 
     {
