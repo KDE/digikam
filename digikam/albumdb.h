@@ -478,8 +478,8 @@ public:
     QStringList getItemNamesInAlbum(int albumID);
 
     /**
-     * Given a albumID, get a list of the url of all items in the tag
-     * @param  albumID the id of the tag
+     * Given a albumID, get a list of the url of all items in the album
+     * @param  albumID the id of the album
      * @return a list of urls for the items in the album. The urls are the
      * absolute path of the items
      */
