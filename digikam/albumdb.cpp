@@ -1363,6 +1363,21 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID)
     return values;
 }
 
+LLongList AlbumDB::getItemIDsInAlbum(int albumID)
+{
+    LLongList itemIDs;
+
+    QStringList itemNames = getItemNamesInAlbum(albumID);
+
+    for (QStringList::iterator it = itemNames.begin(); it != itemNames.end(); ++it)
+    {
+        Q_LLONG id = getImageId(albumID, *it);
+        itemIDs.append(id);
+    }
+
+    return itemIDs;
+}
+
 QStringList AlbumDB::getItemURLsInTag(int tagID)
 {
     QStringList values;

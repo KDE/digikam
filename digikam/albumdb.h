@@ -486,6 +486,13 @@ public:
     QStringList getItemURLsInAlbum(int albumID);
 
     /**
+     * Given a albumID, get a list of Ids of all items in the album
+     * @param  albumID the id of the album
+     * @return a list of Ids for the items in the album.
+     */
+    LLongList getItemIDsInAlbum(int albumID);
+
+    /**
      * Returns all items in the database without a date. This is used
      * in the scanlib class which tries to find out the date of the 
      * items, so the database holds the date for each item. This was
