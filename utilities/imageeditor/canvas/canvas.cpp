@@ -1003,8 +1003,8 @@ void Canvas::toggleFitToWindow()
     }
 
     d->im->zoom(d->zoom);
-
     updateContentsSize(false);
+    slotZoomChanged(d->zoom);
     viewport()->update();
 }
 
