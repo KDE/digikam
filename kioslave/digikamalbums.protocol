@@ -12,6 +12,7 @@ deleting=true
 moving=true
 maxInstances=1
 Description=digiKam albums kioslave
+Description[bg]=digiKam kioslave за албуми
 Description[br]=kioslave an albomoù evit Digikam
 Description[ca]=Kioslave d'àlbums del digiKam
 Description[cs]=digiKam kioslave alb

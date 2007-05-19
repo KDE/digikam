@@ -12,6 +12,7 @@ deleting=false
 moving=false
 maxInstances=1
 Description=digikam tags kioslave
+Description[bg]=Digikam kioslave за тагове
 Description[ca]=Kioslave d'etiquetes del digikam
 Description[cs]=digiKam kioslave tagů
 Description[da]=Digikam mærker-kioslave

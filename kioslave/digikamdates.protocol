@@ -12,6 +12,7 @@ deleting=false
 moving=false
 maxInstances=1
 Description=digiKam dates kioslave
+Description[bg]=digiKam kioslave за дати
 Description[ca]=Kioslave de dates del digiKam
 Description[cs]=digiKam datový kioslave
 Description[da]=Digikam datoer-kioslave

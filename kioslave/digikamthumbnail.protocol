@@ -6,6 +6,7 @@ output=stream
 reading=true
 source=false
 Description=digiKam thumbnail kioslave
+Description[bg]=Digikam kioslave за умалени копия
 Description[br]=kioslave ar skeudennigoù evit Digikam
 Description[ca]=Kioslave de miniatures del digiKam
 Description[cs]=digiKam kioslave miniatur
