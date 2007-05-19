@@ -276,6 +276,7 @@ void PreviewWidget::fitToWindow()
 {
     updateAutoZoom();
     updateContentsSize();
+    zoomFactorChanged(d->zoom);
     viewport()->update();
 }
 
