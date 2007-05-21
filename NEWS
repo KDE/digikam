@@ -18,7 +18,8 @@ digiKam BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 047 ==> 145078 : Ctrl-Y does not tied to Redo.
 048 ==> 145083 : Space and Shift-Space isn't used for navigation between images.
 049 ==> 145077 : Ctrl-W and Ctrl-Q shortcuts not tied to proper actions.
-050 ==> 
+050 ==> 145558 : In menu view: window size/original size: ctrl-shift-z obsolete?
+051 ==> 
 
 **********************************************************************************************
 
