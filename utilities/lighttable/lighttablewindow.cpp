@@ -358,7 +358,7 @@ void LightTableWindow::setupActions()
                                      actionCollection(), "lighttable_filedelete");
     d->fileDeleteAction->setEnabled(false);
 
-    KStdAction::quit(this, SLOT(close()), actionCollection(), "lighttable_exit");
+    KStdAction::close(this, SLOT(close()), actionCollection(), "lighttable_close");
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
