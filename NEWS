@@ -21,7 +21,8 @@ digiKam BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 050 ==> 145558 : In menu view: window size/original size: ctrl-shift-z obsolete?
 051 ==> 144640 : CTRL-P does nothing in Album GUI.
 052 ==> 144643 : Ctrl-Shift-A does not deselect in Album GUI.
-053 ==> 
+053 ==> 144644 : Ctrl-0 does not set zoom to 100% in Preview mode.
+054 ==> 
 
 **********************************************************************************************
 
