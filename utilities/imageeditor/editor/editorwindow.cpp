@@ -331,8 +331,9 @@ void EditorWindow::setupStandardActions()
                                              actionCollection(), "editorwindow_zoomminus");
 
     d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), "viewmag1",
-                                   CTRL+SHIFT+Key_Z, this, SLOT(slotZoomTo100Percents()),
-                                   actionCollection(), "editorwindow_zoomto100percents");
+                                       ALT+CTRL+Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0. 
+                                       this, SLOT(slotZoomTo100Percents()),
+                                       actionCollection(), "editorwindow_zoomto100percents");
 
 
     d->zoomFitToWindowAction = new KToggleAction(i18n("Fit to &Window"), "view_fit_window",

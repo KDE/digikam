@@ -800,7 +800,7 @@ void DigikamApp::setupActions()
 
     d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), 
                                    "viewmag1",
-                                   CTRL+SHIFT+Key_Z, 
+                                   ALT+CTRL+Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0.
                                    d->view, 
                                    SLOT(slotZoomTo100Percents()),
                                    actionCollection(), 

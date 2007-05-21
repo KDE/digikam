@@ -383,9 +383,9 @@ void LightTableWindow::setupActions()
     d->zoomMinusAction->setEnabled(false);
 
     d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), "viewmag1",
-                                       CTRL+SHIFT+Key_Z, this, SLOT(slotZoomTo100Percents()),
+                                       ALT+CTRL+Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0.
+                                       this, SLOT(slotZoomTo100Percents()),
                                        actionCollection(), "lighttable_zoomto100percents");
-
 
     d->zoomFitToWindowAction = new KAction(i18n("Fit to &Window"), "view_fit_window",
                                            CTRL+SHIFT+Key_A, this, SLOT(slotFitToWindow()),
