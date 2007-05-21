@@ -218,6 +218,15 @@ void LightTablePreview::reload()
 
 void LightTablePreview::setPreviousNextPaths(const QString& previous, const QString &next)
 {
+    if (d->previewPreloadThread)
+    {
+        // stop preloading, but only if the loading is no longer needed
+        if (d->nextPath != d->path && d->nextPath != next && d->nextPath != previous)
+            d->previewPreloadThread->stopLoading(d->nextPath);
+        if (d->previousPath != d->path && d->previousPath != previous && d->previousPath != next)
+            d->previewPreloadThread->stopLoading(d->previousPath);
+    }
+
     d->nextPath     = next;
     d->previousPath = previous;
 }
@@ -281,7 +290,16 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription &descriptio
     }
 
     unsetCursor();
-    slotNextPreload();
+
+    if (description.previewParameters.size != 0)
+    {
+        d->previewThread->loadHighQuality(LoadingDescription(description.filePath,
+                                          0, AlbumSettings::instance()->getExifRotate()));
+    }
+    else
+    {
+        slotNextPreload();
+    }
 }
 
 void LightTablePreview::slotNextPreload()
@@ -300,7 +318,7 @@ void LightTablePreview::slotNextPreload()
     else
         return;
 
-    d->previewPreloadThread->load(LoadingDescription(loadPath, d->previewSize,
+    d->previewPreloadThread->loadHighQuality(LoadingDescription(loadPath, 0,
                                   AlbumSettings::instance()->getExifRotate()));
 }
 
@@ -645,9 +663,10 @@ void LightTablePreview::resetPreview()
 
 void LightTablePreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 {
-    // Fast smooth scale method from Antonio.   
-    QImage img = FastScale::fastScaleQImage(d->preview.copy(sx, sy, sw, sh),
-                                            tileSize(), tileSize());
+    QImage img = FastScale::fastScaleQImage(d->preview.copy(sx-sw/10, sy-sh/10, sw+sw/5, sh+sh/5), 
+                                            tileSize()+tileSize()/5, tileSize()+tileSize()/5)
+                           .copy(tileSize()/10, tileSize()/10, tileSize(), tileSize());
+
     bitBlt(pix, 0, 0, &img, 0, 0);
 }
 
