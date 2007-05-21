@@ -476,6 +476,11 @@ void EditorWindow::setupStandardAccelerators()
                     Key_Space, this, SLOT(slotForward()),
                     false, true);
 
+    d->accelerators->insert("Next Image SHIFT+Key_Space", i18n("Next Image"),
+                    i18n("Load Next Image"),
+                    SHIFT+Key_Space, this, SLOT(slotForward()),
+                    false, true);
+
     d->accelerators->insert("Previous Image Key_Backspace", i18n("Previous Image"),
                     i18n("Load Previous Image"),
                     Key_Backspace, this, SLOT(slotBackward()),
@@ -501,7 +506,7 @@ void EditorWindow::setupStandardAccelerators()
                     Key_Minus, this, SLOT(slotDecreaseZoom()),
                     false, true);
 
-    d->accelerators->insert("Redo", i18n("Redo"),
+    d->accelerators->insert("Redo CTRL+Key_Y", i18n("Redo"),
                     i18n("Redo Last action"),
                     CTRL+Key_Y, m_canvas, SLOT(slotRedo()),
                     false, true);
