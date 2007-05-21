@@ -14,7 +14,8 @@ digiKam BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 043 ==> 145227 : Change ratings via short-cuts in the light-table.
 044 ==> 145236 : Small wishes for the light-table.
 045 ==> 145237 : Small wishes for the light-table (2).
-046 ==> 
+046 ==> 145170 : Always allow zooming in/out in imageeditor.
+047 ==> 
 
 **********************************************************************************************
 
