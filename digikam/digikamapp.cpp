@@ -448,6 +448,11 @@ void DigikamApp::setupAccelerators()
                            i18n("Paste Album Items Selection"),
                            CTRL+Key_V, this, SIGNAL(signalPasteAlbumItemsSelection()),
                            false, true);
+
+    d->accelerators->insert("Select None CTRL+SHIFT+Key_A", i18n("Select None"),
+                           i18n("Select None"),
+                           CTRL+SHIFT+Key_A, d->view, SIGNAL(slotSelectNone()),
+                           false, true);
 }
 
 void DigikamApp::setupActions()
