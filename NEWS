@@ -19,7 +19,8 @@ digiKam BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 048 ==> 145083 : Space and Shift-Space isn't used for navigation between images.
 049 ==> 145077 : Ctrl-W and Ctrl-Q shortcuts not tied to proper actions.
 050 ==> 145558 : In menu view: window size/original size: ctrl-shift-z obsolete?
-051 ==> 
+051 ==> 144640 : CTRL-P does nothing in Album GUI.
+052 ==> 
 
 **********************************************************************************************
 
