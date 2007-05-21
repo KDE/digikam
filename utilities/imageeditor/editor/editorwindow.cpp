@@ -170,6 +170,9 @@ void EditorWindow::setupStandardConnections()
 {
     // -- Canvas connections ------------------------------------------------
 
+    connect(m_canvas, SIGNAL(signalToggleOffFitToWindow()),
+            this, SLOT(slotToggleOffFitToWindow()));
+
     connect(m_canvas, SIGNAL(signalShowNextImage()),
             this, SLOT(slotForward()));
             
@@ -672,17 +675,11 @@ void EditorWindow::slotNewToolbarConfig()
 
 void EditorWindow::slotIncreaseZoom()
 {
-    d->zoomFitToWindowAction->blockSignals(true);
-    d->zoomFitToWindowAction->setChecked(false);
-    d->zoomFitToWindowAction->blockSignals(false);
     m_canvas->slotIncreaseZoom();
 }
 
 void EditorWindow::slotDecreaseZoom()
 {
-    d->zoomFitToWindowAction->blockSignals(true);
-    d->zoomFitToWindowAction->setChecked(false);
-    d->zoomFitToWindowAction->blockSignals(false);
     m_canvas->slotDecreaseZoom();
 }
 
@@ -696,9 +693,6 @@ void EditorWindow::slotToggleFitToWindow()
 
 void EditorWindow::slotFitToSelect()
 {
-    d->zoomFitToWindowAction->blockSignals(true);
-    d->zoomFitToWindowAction->setChecked(false);
-    d->zoomFitToWindowAction->blockSignals(false);
     d->zoomPlusAction->setEnabled(true);
     d->zoomComboAction->setEnabled(true);
     d->zoomMinusAction->setEnabled(true);
@@ -707,9 +701,6 @@ void EditorWindow::slotFitToSelect()
 
 void EditorWindow::slotZoomTo100Percents()
 {
-    d->zoomFitToWindowAction->blockSignals(true);
-    d->zoomFitToWindowAction->setChecked(false);
-    d->zoomFitToWindowAction->blockSignals(false);
     d->zoomPlusAction->setEnabled(true);
     d->zoomComboAction->setEnabled(true);
     d->zoomMinusAction->setEnabled(true);
@@ -728,12 +719,7 @@ void EditorWindow::slotZoomTextChanged(const QString &txt)
     bool r      = false;
     double zoom = KGlobal::locale()->readNumber(txt, &r) / 100.0;
     if (r && zoom > 0.0)
-    {
-        d->zoomFitToWindowAction->blockSignals(true);
-        d->zoomFitToWindowAction->setChecked(false);
-        d->zoomFitToWindowAction->blockSignals(false);
         m_canvas->setZoomFactor(zoom);
-    }
 }
 
 void EditorWindow::slotZoomChanged(double zoom)
@@ -744,6 +730,13 @@ void EditorWindow::slotZoomChanged(double zoom)
     d->zoomCombo->blockSignals(true);
     d->zoomCombo->setCurrentText(QString::number(lround(zoom*100.0)) + QString("%"));
     d->zoomCombo->blockSignals(false);
+}
+
+void EditorWindow::slotToggleOffFitToWindow()
+{
+    d->zoomFitToWindowAction->blockSignals(true);
+    d->zoomFitToWindowAction->setChecked(false);
+    d->zoomFitToWindowAction->blockSignals(false);
 }
 
 void EditorWindow::slotEscapePressed()

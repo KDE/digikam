@@ -928,7 +928,10 @@ void Canvas::slotDecreaseZoom()
 void Canvas::setZoomFactor(double zoom)
 {
     if (d->autoZoom)
+    {
         d->autoZoom = false;
+        emit signalToggleOffFitToWindow();
+    }
 
     // Zoom using center of canvas and given zoom factor.
 
@@ -972,6 +975,7 @@ void Canvas::fitToSelect()
         d->zoom = QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
 
         d->autoZoom = false;
+        emit signalToggleOffFitToWindow();
         d->im->zoom(d->zoom);
         updateContentsSize(true);
     
