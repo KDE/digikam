@@ -17,7 +17,8 @@ digiKam BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 046 ==> 145170 : Always allow zooming in/out in imageeditor.
 047 ==> 145078 : Ctrl-Y does not tied to Redo.
 048 ==> 145083 : Space and Shift-Space isn't used for navigation between images.
-049 ==> 
+049 ==> 145077 : Ctrl-W and Ctrl-Q shortcuts not tied to proper actions.
+050 ==> 
 
 **********************************************************************************************
 
