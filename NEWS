@@ -22,7 +22,8 @@ digiKam BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 051 ==> 144640 : CTRL-P does nothing in Album GUI.
 052 ==> 144643 : Ctrl-Shift-A does not deselect in Album GUI.
 053 ==> 144644 : Ctrl-0 does not set zoom to 100% in Preview mode.
-054 ==> 
+054 ==> 144650 : Shift-Space doesn't work as PageUp.
+055 ==> 
 
 **********************************************************************************************
 
