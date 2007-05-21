@@ -818,7 +818,7 @@ void DigikamApp::setupActions()
 
     d->zoomFitToWindowAction = new KAction(i18n("Fit to &Window"), 
                                    "view_fit_window",
-                                   CTRL+SHIFT+Key_A, 
+                                   CTRL+SHIFT+Key_E, 
                                    d->view, 
                                    SLOT(slotFitToWindow()),
                                    actionCollection(), 

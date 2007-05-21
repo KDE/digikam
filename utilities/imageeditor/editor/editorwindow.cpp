@@ -337,7 +337,7 @@ void EditorWindow::setupStandardActions()
 
 
     d->zoomFitToWindowAction = new KToggleAction(i18n("Fit to &Window"), "view_fit_window",
-                                         CTRL+SHIFT+Key_A, this, SLOT(slotToggleFitToWindow()),
+                                         CTRL+SHIFT+Key_E, this, SLOT(slotToggleFitToWindow()),
                                          actionCollection(), "editorwindow_zoomfit2window");
 
     d->zoomFitToSelectAction = new KAction(i18n("Fit to &Selection"), "viewmagfit",

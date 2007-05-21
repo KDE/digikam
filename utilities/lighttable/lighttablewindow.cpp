@@ -388,7 +388,7 @@ void LightTableWindow::setupActions()
                                        actionCollection(), "lighttable_zoomto100percents");
 
     d->zoomFitToWindowAction = new KAction(i18n("Fit to &Window"), "view_fit_window",
-                                           CTRL+SHIFT+Key_A, this, SLOT(slotFitToWindow()),
+                                           CTRL+SHIFT+Key_E, this, SLOT(slotFitToWindow()),
                                            actionCollection(), "lighttable_zoomfit2window");
 
 #if KDE_IS_VERSION(3,2,0)
