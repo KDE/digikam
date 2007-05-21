@@ -659,9 +659,10 @@ void ImagePreviewView::resetPreview()
 
 void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 {
-    // Fast smooth scale method from Antonio.   
-    QImage img = FastScale::fastScaleQImage(d->preview.copy(sx, sy, sw, sh),
-                                            tileSize(), tileSize());
+    QImage img = FastScale::fastScaleQImage(d->preview.copy(sx-sw/10, sy-sh/10, sw+sw/5, sh+sh/5), 
+                                            tileSize()+tileSize()/5, tileSize()+tileSize()/5)
+                           .copy(tileSize()/10, tileSize()/10, tileSize(), tileSize());
+
     bitBlt(pix, 0, 0, &img, 0, 0);
 }
 
