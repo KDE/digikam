@@ -928,7 +928,7 @@ void Canvas::slotDecreaseZoom()
 void Canvas::setZoomFactor(double zoom)
 {
     if (d->autoZoom)
-        return;
+        d->autoZoom = false;
 
     // Zoom using center of canvas and given zoom factor.
 

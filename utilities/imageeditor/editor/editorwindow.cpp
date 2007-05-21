@@ -321,11 +321,10 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->zoomPlusAction = KStdAction::zoomIn(m_canvas, SLOT(slotIncreaseZoom()),
+    d->zoomPlusAction = KStdAction::zoomIn(this, SLOT(slotIncreaseZoom()),
                                           actionCollection(), "editorwindow_zoomplus");
 
-
-    d->zoomMinusAction = KStdAction::zoomOut(m_canvas, SLOT(slotDecreaseZoom()),
+    d->zoomMinusAction = KStdAction::zoomOut(this, SLOT(slotDecreaseZoom()),
                                              actionCollection(), "editorwindow_zoomminus");
 
     d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), "viewmag1",
@@ -494,12 +493,12 @@ void EditorWindow::setupStandardAccelerators()
 
     d->accelerators->insert("Zoom Plus Key_Plus", i18n("Zoom In"),
                     i18n("Zoom in on Image"),
-                    Key_Plus, m_canvas, SLOT(slotIncreaseZoom()),
+                    Key_Plus, this, SLOT(slotIncreaseZoom()),
                     false, true);
     
     d->accelerators->insert("Zoom Plus Key_Minus", i18n("Zoom Out"),
                     i18n("Zoom out of Image"),
-                    Key_Minus, m_canvas, SLOT(slotDecreaseZoom()),
+                    Key_Minus, this, SLOT(slotDecreaseZoom()),
                     false, true);
 }
 
@@ -661,14 +660,27 @@ void EditorWindow::slotNewToolbarConfig()
     applyMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
 }
 
+void EditorWindow::slotIncreaseZoom()
+{
+    d->zoomFitToWindowAction->blockSignals(true);
+    d->zoomFitToWindowAction->setChecked(false);
+    d->zoomFitToWindowAction->blockSignals(false);
+    m_canvas->slotIncreaseZoom();
+}
+
+void EditorWindow::slotDecreaseZoom()
+{
+    d->zoomFitToWindowAction->blockSignals(true);
+    d->zoomFitToWindowAction->setChecked(false);
+    d->zoomFitToWindowAction->blockSignals(false);
+    m_canvas->slotDecreaseZoom();
+}
+
 void EditorWindow::slotToggleFitToWindow()
 {
-    bool checked = d->zoomFitToWindowAction->isChecked();
-
-    d->zoomPlusAction->setEnabled(!checked);
-    d->zoomComboAction->setEnabled(!checked);
-    d->zoomMinusAction->setEnabled(!checked);
-
+    d->zoomPlusAction->setEnabled(true);
+    d->zoomComboAction->setEnabled(true);
+    d->zoomMinusAction->setEnabled(true);
     m_canvas->toggleFitToWindow();
 }
 
@@ -694,14 +706,6 @@ void EditorWindow::slotZoomTo100Percents()
     m_canvas->setZoomFactor(1.0);
 }
 
-void EditorWindow::slotZoomTextChanged(const QString &txt)
-{
-    bool r      = false;
-    double zoom = KGlobal::locale()->readNumber(txt, &r) / 100.0;
-    if (r && zoom > 0.0)
-        m_canvas->setZoomFactor(zoom);
-}
-
 void EditorWindow::slotZoomSelected()
 {
     QString txt = d->zoomCombo->currentText();
@@ -709,10 +713,23 @@ void EditorWindow::slotZoomSelected()
     slotZoomTextChanged(txt);
 }
 
+void EditorWindow::slotZoomTextChanged(const QString &txt)
+{
+    bool r      = false;
+    double zoom = KGlobal::locale()->readNumber(txt, &r) / 100.0;
+    if (r && zoom > 0.0)
+    {
+        d->zoomFitToWindowAction->blockSignals(true);
+        d->zoomFitToWindowAction->setChecked(false);
+        d->zoomFitToWindowAction->blockSignals(false);
+        m_canvas->setZoomFactor(zoom);
+    }
+}
+
 void EditorWindow::slotZoomChanged(double zoom)
 {
-    d->zoomPlusAction->setEnabled(!m_canvas->maxZoom() && !m_canvas->fitToWindow());
-    d->zoomMinusAction->setEnabled(!m_canvas->minZoom() && !m_canvas->fitToWindow());
+    d->zoomPlusAction->setEnabled(!m_canvas->maxZoom());
+    d->zoomMinusAction->setEnabled(!m_canvas->minZoom());
 
     d->zoomCombo->blockSignals(true);
     d->zoomCombo->setCurrentText(QString::number(lround(zoom*100.0)) + QString("%"));
@@ -792,13 +809,8 @@ void EditorWindow::readStandardSettings()
 
     // Restore Auto zoom action ?
     bool autoZoom = config->readBoolEntry("AutoZoom", true);
-
     if (autoZoom)
-    {
         d->zoomFitToWindowAction->activate();
-        d->zoomPlusAction->setEnabled(false);
-        d->zoomMinusAction->setEnabled(false);
-    }
 }
 
 void EditorWindow::applyStandardSettings()

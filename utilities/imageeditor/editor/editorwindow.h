@@ -213,6 +213,8 @@ private slots:
     void slotSelectionChanged(const QRect& sel);
     void slotToggleFitToWindow();
     void slotFitToSelect();
+    void slotIncreaseZoom();
+    void slotDecreaseZoom();
 
 private:
 
