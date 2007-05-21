@@ -202,9 +202,6 @@ void PreviewWidget::slotDecreaseZoom()
 
 void PreviewWidget::setZoomFactor(double zoom)
 {
-    if (d->autoZoom)
-        return;
-
     // Zoom using center of canvas and given zoom factor.
 
     double oldZoom = d->zoom;
