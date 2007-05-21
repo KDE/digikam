@@ -218,15 +218,6 @@ void LightTablePreview::reload()
 
 void LightTablePreview::setPreviousNextPaths(const QString& previous, const QString &next)
 {
-    if (d->previewPreloadThread)
-    {
-        // stop preloading, but only if the loading is no longer needed
-        if (d->nextPath != d->path && d->nextPath != next && d->nextPath != previous)
-            d->previewPreloadThread->stopLoading(d->nextPath);
-        if (d->previousPath != d->path && d->previousPath != previous && d->previousPath != next)
-            d->previewPreloadThread->stopLoading(d->previousPath);
-    }
-
     d->nextPath     = next;
     d->previousPath = previous;
 }
@@ -290,16 +281,7 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription &descriptio
     }
 
     unsetCursor();
-
-    if (description.previewParameters.size != 0)
-    {
-        d->previewThread->loadHighQuality(LoadingDescription(description.filePath,
-                                          0, AlbumSettings::instance()->getExifRotate()));
-    }
-    else
-    {
-        slotNextPreload();
-    }
+    slotNextPreload();
 }
 
 void LightTablePreview::slotNextPreload()
@@ -318,7 +300,7 @@ void LightTablePreview::slotNextPreload()
     else
         return;
 
-    d->previewPreloadThread->loadHighQuality(LoadingDescription(loadPath, 0,
+    d->previewPreloadThread->load(LoadingDescription(loadPath, d->previewSize,
                                   AlbumSettings::instance()->getExifRotate()));
 }
 
