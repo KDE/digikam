@@ -500,6 +500,11 @@ void EditorWindow::setupStandardAccelerators()
                     i18n("Zoom out of Image"),
                     Key_Minus, this, SLOT(slotDecreaseZoom()),
                     false, true);
+
+    d->accelerators->insert("Redo", i18n("Redo"),
+                    i18n("Redo Last action"),
+                    CTRL+Key_Y, m_canvas, SLOT(slotRedo()),
+                    false, true);
 }
 
 void EditorWindow::setupStatusBar()
