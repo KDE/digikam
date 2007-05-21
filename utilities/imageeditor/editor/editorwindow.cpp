@@ -341,7 +341,7 @@ void EditorWindow::setupStandardActions()
                                          actionCollection(), "editorwindow_zoomfit2window");
 
     d->zoomFitToSelectAction = new KAction(i18n("Fit to &Selection"), "viewmagfit",
-                                         CTRL+SHIFT+Key_S, this, SLOT(slotFitToSelect()),
+                                         ALT+CTRL+Key_S, this, SLOT(slotFitToSelect()),
                                          actionCollection(), "editorwindow_zoomfit2select");
     d->zoomFitToSelectAction->setEnabled(false);
     d->zoomFitToSelectAction->setWhatsThis(i18n("This option can be used to zoom the image to the "
