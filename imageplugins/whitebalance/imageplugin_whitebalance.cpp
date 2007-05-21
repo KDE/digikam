@@ -40,7 +40,7 @@ ImagePlugin_WhiteBalance::ImagePlugin_WhiteBalance(QObject *parent, const char*,
                         : Digikam::ImagePlugin(parent, "ImagePlugin_WhiteBalance")
 {
     m_whitebalanceAction = new KAction(i18n("White Balance..."), "whitebalance", 
-                               CTRL+Key_W, 
+                               CTRL+SHIFT+Key_W, 
                                this, SLOT(slotWhiteBalance()),
                                actionCollection(), "imageplugin_whitebalance");
     
