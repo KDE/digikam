@@ -284,7 +284,7 @@ void EditorWindow::setupStandardActions()
                                      this, SLOT(slotDeleteCurrentItem()),
                                      actionCollection(), "editorwindow_delete");
 
-    KStdAction::quit(this, SLOT(close()), actionCollection(), "editorwindow_exit");
+    KStdAction::close(this, SLOT(close()), actionCollection(), "editorwindow_close");
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
 
