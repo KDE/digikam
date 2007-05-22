@@ -72,6 +72,13 @@ DImg::DImg()
 {
 }
 
+DImg::DImg(const QCString& filePath, DImgLoaderObserver *observer,
+           KDcrawIface::RawDecodingSettings rawDecodingSettings)
+    : m_priv(new DImgPrivate)
+{
+    load(filePath, observer, rawDecodingSettings);
+}
+
 DImg::DImg(const QString& filePath, DImgLoaderObserver *observer,
            KDcrawIface::RawDecodingSettings rawDecodingSettings)
     : m_priv(new DImgPrivate)
@@ -101,6 +108,34 @@ DImg::DImg(const DImg &image, int w, int h)
     copyMetaData(image.m_priv);
     setImageDimension(w, h);
     allocateData();
+}
+
+DImg::DImg(const QImage& image)
+    : m_priv(new DImgPrivate)
+{
+    if (!image.isNull())
+    {
+        QImage target = image.convertDepth(32);
+        
+        uint w      = target.width();
+        uint h      = target.height();
+        uchar* data = new uchar[w*h*4];
+        uint*  sptr = (uint*)target.bits();
+        uchar* dptr = data;
+        
+        for (uint i = 0 ; i < w*h ; i++)
+        {
+            dptr[0] = qBlue(*sptr);
+            dptr[1] = qGreen(*sptr);
+            dptr[2] = qRed(*sptr);
+            dptr[3] = qAlpha(*sptr);
+            
+            dptr += 4;
+            sptr++;
+        }
+    
+        putImageData(w, h, false, image.hasAlphaBuffer(), data, false);
+    }
 }
 
 DImg::~DImg()
