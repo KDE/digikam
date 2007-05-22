@@ -45,11 +45,17 @@ public:
     * @returns an image of size @p width x @p height, resulting from resizing the @p img image
     */
     static QImage fastScaleQImage(const QImage &img, int width, int height);
-    
+
     /**
     * Resizes the @p img QImage to the size of @p tgt and stores the result into @p tgt
     */
     static void fastScaleQImage(const QImage &img, QImage &tgt);
+
+    /**
+    * @returns an image of size @p dw x @p dh, resulting from resizing the 
+      section ( @p sx , @p sy - @p sw x @p sh ) of @p img image.
+    */
+    static QImage fastScaleSectionQImage(const QImage &img, int sx, int sy, int sw, int sh, int dw, int dh);
 
 private:
 
