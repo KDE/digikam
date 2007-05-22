@@ -438,6 +438,8 @@ void ShowFoto::setupActions()
                                              actionCollection(),
                                              "showfoto_open_folder");
 
+    KStdAction::quit(this, SLOT(close()), actionCollection(), "showfoto_quit");
+
     // Extra 'View' menu actions ---------------------------------------------
 
     d->showBarAction = new KToggleAction(i18n("Show Thumbnails"), 0, 
