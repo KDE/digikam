@@ -204,6 +204,8 @@ QImage FastScale::fastScaleSectionQImage(const QImage &img, int sx, int sy, int 
         return img.copy(sx, sy, sw, sh);
     }
 
+    // FIXME : this code is not optimized and can give artifact.
+
     QImage section = img.copy(sx-sw/10, sy-sh/10, sw+sw/5, sh+sh/5);
     QImage scaled  = FastScale::fastScaleQImage(section, dw+dw/5, dh+dh/5);
     return (scaled.copy(dw/10, dh/10, dw, dh));
