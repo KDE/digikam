@@ -50,6 +50,7 @@
 
 // Local includes.
 
+#include "dimg.h"
 #include "ddebug.h"
 #include "albumdb.h"
 #include "albummanager.h"
@@ -106,11 +107,11 @@ public:
 
     QToolButton       *cornerButton;
 
-    QImage             preview;
-
     KPopupFrame       *panIconPopup;
 
     PanIconWidget     *panIconWidget;
+
+    DImg               preview;
 
     ImageInfo         *imageInfo;
 
@@ -190,7 +191,7 @@ void LightTablePreview::setDragAndDropMessage()
     }
 }
 
-void LightTablePreview::setImage(const QImage& image)
+void LightTablePreview::setImage(const DImg& image)
 {   
     d->preview = image;
 
@@ -200,7 +201,7 @@ void LightTablePreview::setImage(const QImage& image)
     viewport()->update();
 }
 
-QImage& LightTablePreview::getImage() const
+DImg& LightTablePreview::getImage() const
 {
     return d->preview;
 }
@@ -270,13 +271,13 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription &descriptio
                    i18n("Unable to display preview for\n\"%1\"")
                    .arg(info.fileName()));
         p.end();
-        setImage(pix.convertToImage());
+        setImage(DImg(pix.convertToImage()));
 
         emit signalPreviewLoaded(false);
     }
     else
     {
-        setImage(preview);
+        setImage(DImg(preview));
         emit signalPreviewLoaded(true);
     }
 
@@ -525,7 +526,7 @@ void LightTablePreview::slotCornerButtonPressed()
 
     d->panIconPopup    = new KPopupFrame(this);
     PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
-    pan->setImage(180, 120, getImage()); 
+    pan->setImage(180, 120, getImage().copyQImage()); 
     d->panIconPopup->setMainWidget(pan);
 
     QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),
@@ -632,7 +633,7 @@ bool LightTablePreview::previewIsNull()
 
 void LightTablePreview::resetPreview()
 {
-    d->preview   = QImage();
+    d->preview   = DImg();
     d->path      = QString(); 
     d->imageInfo = 0;
 
@@ -645,9 +646,9 @@ void LightTablePreview::resetPreview()
 
 void LightTablePreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 {
-    QImage img = FastScale::fastScaleSectionQImage(d->preview, sx, sy, sw, sh, tileSize(), tileSize());
-
-    bitBlt(pix, 0, 0, &img, 0, 0);
+    DImg img     = d->preview.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());    
+    QPixmap pix2 = img.convertToPixmap();
+    bitBlt(pix, 0, 0, &pix2, 0, 0);
 }
 
 void LightTablePreview::contentsDragMoveEvent(QDragMoveEvent *e)

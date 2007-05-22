@@ -41,6 +41,7 @@ class QPixmap;
 namespace Digikam
 {
 
+class DImg;
 class LoadingDescription;
 class LightTablePreviewPriv;
 
@@ -54,8 +55,8 @@ public:
     LightTablePreview(QWidget *parent=0);
     ~LightTablePreview();
 
-    void setImage(const QImage& image);
-    QImage& getImage() const;
+    void setImage(const DImg& image);
+    DImg& getImage() const;
 
     QSize getImageSize();
 

@@ -39,6 +39,7 @@ class QPixmap;
 namespace Digikam
 {
 
+class DImg;
 class AlbumWidgetStack;
 class LoadingDescription;
 class ImageInfo;
@@ -55,7 +56,7 @@ public:
     ~ImagePreviewView();
 
     void setImage(const QImage& image);
-    QImage& getImage() const;
+    DImg& getImage() const;
 
     void setImageInfo(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
     ImageInfo* getImageInfo() const;

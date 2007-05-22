@@ -54,6 +54,7 @@
 
 // Local includes.
 
+#include "dimg.h"
 #include "ddebug.h"
 #include "albumdb.h"
 #include "albummanager.h"
@@ -108,11 +109,11 @@ public:
 
     QToolButton       *cornerButton;
 
-    QImage             preview;
-
     KPopupFrame       *panIconPopup;
 
     PanIconWidget     *panIconWidget;
+
+    DImg               preview;
 
     ImageInfo         *imageInfo;
 
@@ -178,7 +179,7 @@ ImagePreviewView::~ImagePreviewView()
 
 void ImagePreviewView::setImage(const QImage& image)
 {   
-    d->preview = image;
+    d->preview = DImg(image);
 
     updateZoomAndSize(true);
 
@@ -186,7 +187,7 @@ void ImagePreviewView::setImage(const QImage& image)
     viewport()->update();
 }
 
-QImage& ImagePreviewView::getImage() const
+DImg& ImagePreviewView::getImage() const
 {
     return d->preview;
 }
@@ -545,7 +546,7 @@ void ImagePreviewView::slotCornerButtonPressed()
 
     d->panIconPopup    = new KPopupFrame(this);
     PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
-    pan->setImage(180, 120, getImage()); 
+    pan->setImage(180, 120, getImage().copyQImage()); 
     d->panIconPopup->setMainWidget(pan);
 
     QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),
@@ -649,7 +650,7 @@ bool ImagePreviewView::previewIsNull()
 
 void ImagePreviewView::resetPreview()
 {
-    d->preview   = QImage();
+    d->preview   = DImg();
     d->path      = QString(); 
     d->imageInfo = 0;
 
@@ -659,9 +660,9 @@ void ImagePreviewView::resetPreview()
 
 void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 {
-    QImage img = FastScale::fastScaleSectionQImage(d->preview, sx, sy, sw, sh, tileSize(), tileSize());
-
-    bitBlt(pix, 0, 0, &img, 0, 0);
+    DImg img     = d->preview.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());    
+    QPixmap pix2 = img.convertToPixmap();
+    bitBlt(pix, 0, 0, &pix2, 0, 0);
 }
 
 }  // NameSpace Digikam
