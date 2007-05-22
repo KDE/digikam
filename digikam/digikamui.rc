@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="27" name="digikam" >
+<kpartgui version="29" name="digikam" >
 
  <MenuBar>
 
@@ -51,8 +51,8 @@
      <Action name="image_delete" />
   </Menu>
 
-  <Menu name="select" >
-   <text>Se&amp;lect</text>
+  <Menu name="Edit" >
+   <text>&amp;Edit</text>
      <Action name="selectAll" />
      <Action name="selectNone" />
      <Action name="selectInvert" />
