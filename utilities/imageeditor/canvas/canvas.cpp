@@ -1300,5 +1300,29 @@ void Canvas::slotZoomChanged(double /*zoom*/)
         d->cornerButton->hide();        
 }
 
+void Canvas::slotSelectAll()
+{
+    if (d->rubber)
+    {
+        delete d->rubber;
+        d->rubber = 0;        
+    }
+
+    d->rubber       = new QRect(d->pixmapRect);
+    d->pressedMoved = true;
+    d->tileCache.clear();
+    viewport()->setMouseTracking(true);
+    viewport()->update();
+
+    if (d->im->imageValid())
+        emit signalSelected(true);
+}
+
+void Canvas::slotSelectNone()
+{
+    reset();
+    viewport()->update();
+}
+
 }  // namespace Digikam
 

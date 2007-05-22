@@ -322,6 +322,22 @@ void EditorWindow::setupStandardActions()
 
     m_redoAction->setEnabled(false);
 
+    d->selectAllAction = new KAction(i18n("Select All"),
+                                     0,
+                                     CTRL+Key_A,
+                                     m_canvas,
+                                     SLOT(slotSelectAll()),
+                                     actionCollection(),
+                                     "editorwindow_selectAll");
+
+    d->selectNoneAction = new KAction(i18n("Select None"),
+                                     0,
+                                     CTRL+SHIFT+Key_A,
+                                     m_canvas,
+                                     SLOT(slotSelectNone()),
+                                     actionCollection(),
+                                     "editorwindow_selectNone");
+
     // -- Standard 'View' menu actions ---------------------------------------------
 
     d->zoomPlusAction = KStdAction::zoomIn(this, SLOT(slotIncreaseZoom()),
@@ -935,7 +951,6 @@ void EditorWindow::saveStandardSettings()
 void EditorWindow::toggleStandardActions(bool val)
 {
     d->zoomFitToWindowAction->setEnabled(val);
-    m_saveAsAction->setEnabled(val);
     d->rotateLeftAction->setEnabled(val);
     d->rotateRightAction->setEnabled(val);
     d->flipHorizAction->setEnabled(val);
@@ -944,6 +959,8 @@ void EditorWindow::toggleStandardActions(bool val)
     d->resizeAction->setEnabled(val);
     m_fileDeleteAction->setEnabled(val);
     m_saveAsAction->setEnabled(val);
+    d->selectAllAction->setEnabled(val);
+    d->selectNoneAction->setEnabled(val);
 
     // these actions are special: They are turned off if val is false,
     // but if val is true, they may be turned on or off.
@@ -1019,6 +1036,8 @@ void EditorWindow::slotToggleFullScreen()
         unplugActionAccel(d->cropAction);
         unplugActionAccel(d->filePrintAction);
         unplugActionAccel(m_fileDeleteAction);
+        unplugActionAccel(d->selectAllAction);
+        unplugActionAccel(d->selectNoneAction);
 
         toggleGUI2FullScreen();
         m_fullScreen = false;
@@ -1078,6 +1097,8 @@ void EditorWindow::slotToggleFullScreen()
         plugActionAccel(d->cropAction);
         plugActionAccel(d->filePrintAction);
         plugActionAccel(m_fileDeleteAction);
+        plugActionAccel(d->selectAllAction);
+        plugActionAccel(d->selectNoneAction);
 
         toggleGUI2FullScreen();
         showFullScreen();

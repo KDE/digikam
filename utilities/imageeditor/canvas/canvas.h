@@ -157,6 +157,9 @@ public slots:
 
     void slotCopy();
 
+    void slotSelectAll();
+    void slotSelectNone();
+
 protected:
     
     void resizeEvent(QResizeEvent* e);
