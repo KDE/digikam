@@ -107,6 +107,7 @@ public:
         thumbSizeTimer        = 0;
         needDispatchSelection = false;
         cancelSlideShow       = false;
+        thumbSize             = ThumbnailSize::Medium;
     }
 
     bool                      needDispatchSelection;
