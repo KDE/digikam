@@ -122,8 +122,7 @@ DImg DImg::smoothScale(int dw, int dh, QSize::ScaleMode scaleMode)
         return copy();
     }
 
-    DImgScale::DImgScaleInfo *scaleinfo = dimgCalcScaleInfo(*this, w, h, dw, dh, 
-						     sixteenBit(), true);
+    DImgScale::DImgScaleInfo *scaleinfo = dimgCalcScaleInfo(*this, w, h, dw, dh, sixteenBit(), true);
     if (!scaleinfo)
         return *this;
 
@@ -139,7 +138,7 @@ DImg DImg::smoothScale(int dw, int dh, QSize::ScaleMode scaleMode)
         else
         {
             dimgScaleAARGB16(scaleinfo, (ullong*) buffer.bits(), 
-                               0, 0, dw, dh, dw, w);
+                             0, 0, dw, dh, dw, w);
         }
     }
     else
@@ -147,12 +146,12 @@ DImg DImg::smoothScale(int dw, int dh, QSize::ScaleMode scaleMode)
         if (hasAlpha())
         {
             dimgScaleAARGBA(scaleinfo, (unsigned int *)buffer.bits(),
-                              0, 0, 0, 0, dw, dh, dw, w);
+                            0, 0, 0, 0, dw, dh, dw, w);
         }
         else
         {
             dimgScaleAARGB(scaleinfo, (unsigned int *)buffer.bits(),
-                             0, 0, 0, 0, dw, dh, dw, w);
+                           0, 0, 0, 0, dw, dh, dw, w);
         }
     }
     
@@ -211,8 +210,7 @@ DImg DImg::smoothScaleSection(int sx, int sy,
     }
     
     // calculate scaleinfo
-    DImgScaleInfo *scaleinfo = dimgCalcScaleInfo(*this, sw, sh, dw, dh, 
-						     sixteenBit(), true);
+    DImgScaleInfo *scaleinfo = dimgCalcScaleInfo(*this, sw, sh, dw, dh, sixteenBit(), true);
     if (!scaleinfo)
         return DImg();
 
@@ -223,42 +221,42 @@ DImg DImg::smoothScaleSection(int sx, int sy,
         if (hasAlpha())
         {
             dimgScaleAARGBA16(scaleinfo, (ullong*) buffer.bits(), 
-                                ((sx * dw) / sw),
-                                ((sy * dh) / sh),
-                                dw, dh, 
-                                dw, w);
+                              ((sx * dw) / sw),
+                              ((sy * dh) / sh),
+                              dw, dh, 
+                              dw, w);
         }
         else
         {
             dimgScaleAARGB16(scaleinfo, (ullong*) buffer.bits(), 
-			      ((sx * dw) / sw),
-			      ((sy * dh) / sh),
-			       dw, dh, 
-			       dw, w);
+                             ((sx * dw) / sw),
+                             ((sy * dh) / sh),
+                             dw, dh, 
+                             dw, w);
         }
     }
     else
     {
-	if (hasAlpha())
+    	if (hasAlpha())
         { 
-	    dimgScaleAARGBA(scaleinfo,
-			      (uint *)buffer.bits(),
-			      ((sx * dw) / sw),
-			      ((sy * dh) / sh),
-			      0, 0,
-			      dw, dh,
-			      dw, w);
-	}
-	else
-	{
-	    dimgScaleAARGB(scaleinfo,
-			     (uint *)buffer.bits(),
-			     ((sx * dw) / sw),
-			     ((sy * dh) / sh),
-			     0, 0,
-			     dw, dh,
-			     dw, w);
-	}
+    	    dimgScaleAARGBA(scaleinfo,
+			                (uint *)buffer.bits(),
+			                ((sx * dw) / sw),
+			                ((sy * dh) / sh),
+			                0, 0,
+			                dw, dh,
+			                dw, w);
+        }
+        else
+        {
+	       dimgScaleAARGB(scaleinfo,
+			              (uint *)buffer.bits(),
+			              ((sx * dw) / sw),
+			              ((sy * dh) / sh),
+			              0, 0,
+			              dw, dh,
+			              dw, w);
+	    }
     }
 
     dimgFreeScaleInfo(scaleinfo);
@@ -268,7 +266,7 @@ DImg DImg::smoothScaleSection(int sx, int sy,
 
 
 //
-// Code ported from Imlib...
+// Code ported from Imlib2...
 //
 
 // FIXME: replace with mRed, etc... These work on pointers to pixels, not
@@ -283,8 +281,7 @@ DImg DImg::smoothScaleSection(int sx, int sy,
 #define INV_YAP                   (256 - yapoints[dyy + y])
 #define YAP                       (yapoints[dyy + y])
 
-unsigned int** DImgScale::dimgCalcYPoints(unsigned int *src,
-                                          int sw, int sh, int dh)
+unsigned int** DImgScale::dimgCalcYPoints(unsigned int *src, int sw, int sh, int dh)
 {
     unsigned int **p;
     int i, j = 0;
@@ -381,6 +378,66 @@ int* DImgScale::dimgCalcApoints(int s, int d, int up)
     return(p);
 }
 
+DImgScaleInfo* DImgScale::dimgCalcScaleInfo(const DImg &img, 
+                                            int sw, int sh,
+                                            int dw, int dh, 
+                                            bool /*sixteenBit*/,
+                                            bool aa)
+{
+    DImgScaleInfo *isi;
+    int scw, sch;
+
+    scw = dw * img.width()  / sw;
+    sch = dh * img.height() / sh;
+
+    isi = new DImgScaleInfo;
+    if(!isi)
+        return(NULL);
+
+    memset(isi, 0, sizeof(DImgScaleInfo));
+
+    isi->xup_yup = (abs(dw) >= sw) + ((abs(dh) >= sh) << 1);
+
+    isi->xpoints = dimgCalcXPoints(img.width(), scw);
+    if(!isi->xpoints)
+        return(dimgFreeScaleInfo(isi));
+
+    if (img.sixteenBit())
+    {
+        isi->ypoints   = 0;
+        isi->ypoints16 = dimgCalcYPoints16((ullong*)img.bits(), img.width(), img.height(), sch);
+    	if (!isi->ypoints16) return(dimgFreeScaleInfo(isi));
+    }
+    else
+    {
+        isi->ypoints16 = 0;
+        isi->ypoints   = dimgCalcYPoints((uint*)img.bits(), img.width(), img.height(), sch);
+	    if (!isi->ypoints) return(dimgFreeScaleInfo(isi));
+    }
+
+    if (aa)
+    {
+        isi->xapoints = dimgCalcApoints(img.width(), scw, isi->xup_yup & 1);
+        if(!isi->xapoints) return(dimgFreeScaleInfo(isi));
+
+        isi->yapoints = dimgCalcApoints(img.height(), sch, isi->xup_yup & 2);
+        if(!isi->yapoints) return(dimgFreeScaleInfo(isi));
+    }
+/*  It doesn't work...
+    else
+    {
+        isi->xapoints = new int[scw];
+        if(!isi->xapoints) return(dimgFreeScaleInfo(isi));
+        for(int i = 0; i < scw; i++) isi->xapoints[i] = 0; 
+        
+        isi->yapoints = new int[sch];
+        if(!isi->yapoints) return(dimgFreeScaleInfo(isi));
+        for(int i = 0; i < sch; i++) isi->yapoints[i] = 0; 
+    }*/
+
+    return(isi);
+}
+
 DImgScaleInfo* DImgScale::dimgFreeScaleInfo(DImgScaleInfo *isi)
 {
     if(isi)
@@ -396,63 +453,10 @@ DImgScaleInfo* DImgScale::dimgFreeScaleInfo(DImgScaleInfo *isi)
     return 0;
 }
 
-DImgScaleInfo* DImgScale::dimgCalcScaleInfo(const DImg &img, 
-						  int sw, int sh,
-                                                  int dw, int dh, 
-                                                  bool /*sixteenBit*/,
-						  bool aa)
-{
-    DImgScaleInfo *isi;
-    int scw, sch;
-
-    scw = dw * img.width() / sw;
-    sch = dh * img.height() / sh;
-
-    isi = new DImgScaleInfo;
-    if(!isi)
-        return(NULL);
-    memset(isi, 0, sizeof(DImgScaleInfo));
-
-    isi->xup_yup = (abs(dw) >= sw) + ((abs(dh) >= sh) << 1);
-
-    isi->xpoints = dimgCalcXPoints(img.width(), scw);
-    if(!isi->xpoints)
-        return(dimgFreeScaleInfo(isi));
-
-    if (img.sixteenBit())
-    {
-        isi->ypoints   = 0;
-        isi->ypoints16 = dimgCalcYPoints16((ullong*)img.bits(),
-					     img.width(), img.height(), sch);
-	if (!isi->ypoints16)
-	    return(dimgFreeScaleInfo(isi));
-    }
-    else
-    {
-        isi->ypoints16 = 0;
-        isi->ypoints = dimgCalcYPoints((uint*)img.bits(),
-					 img.width(), img.height(), sch);
-	if (!isi->ypoints)
-	    return(dimgFreeScaleInfo(isi));
-    }
-
-    if (aa)
-    {
-        isi->xapoints = dimgCalcApoints(img.width(), scw, isi->xup_yup & 1);
-        if(!isi->xapoints)
-            return(dimgFreeScaleInfo(isi));
-        isi->yapoints = dimgCalcApoints(img.height(), sch, isi->xup_yup & 2);
-        if(!isi->yapoints)
-            return(dimgFreeScaleInfo(isi));
-    }
-
-    return(isi);
-}
-
-/* scale by pixel sampling only */
+/** scale by pixel sampling only */
 void DImgScale::dimgSampleRGBA(DImgScaleInfo *isi, unsigned int *dest,
-                                   int dxx, int dyy, int dx, int dy, int dw,
-                                   int dh, int dow)
+                               int dxx, int dyy, int dx, int dy, int dw,
+                               int dh, int dow)
 {
     unsigned int *sptr, *dptr;
     int x, y, end;
@@ -476,7 +480,7 @@ void DImgScale::dimgSampleRGBA(DImgScaleInfo *isi, unsigned int *dest,
 
 /* FIXME: NEED to optimise ScaleAARGBA - currently its "ok" but needs work*/
 
-/* scale by area sampling */
+/** scale by area sampling */
 void DImgScale::dimgScaleAARGBA(DImgScaleInfo *isi, unsigned int *dest,
                                     int dxx, int dyy, int dx, int dy, int dw,
                                     int dh, int dow, int sow)
@@ -903,7 +907,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo *isi, unsigned int *dest,
     }
 }
 
-/* scale by area sampling - IGNORE the ALPHA byte*/
+/** scale by area sampling - IGNORE the ALPHA byte */
 void DImgScale::dimgScaleAARGB(DImgScaleInfo *isi, unsigned int *dest,
                                    int dxx, int dyy, int dx, int dy, int dw,
                                    int dh, int dow, int sow)
@@ -1291,10 +1295,10 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo *isi, unsigned int *dest,
 #define G_VAL16(p) ((ushort *)(p))[1]
 #define B_VAL16(p) ((ushort *)(p))[0]
 
-// scale by area sampling - IGNORE the ALPHA byte
+/** scale by area sampling - IGNORE the ALPHA byte*/
 void DImgScale::dimgScaleAARGB16(DImgScaleInfo *isi, ullong *dest,
-                                     int dxx, int dyy, int dw, int dh, 
-				     int dow, int sow)
+                                 int dxx, int dyy, int dw, int dh, 
+                                 int dow, int sow)
 {
     ullong *sptr, *dptr;
     int x, y, end;
@@ -1731,12 +1735,12 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo *isi, ullong *dest,
                         b = ((bb * YAP) + (b * INV_YAP)) >> 16;
                         a = ((aa * YAP) + (a * INV_YAP)) >> 16;
 
-			R_VAL16(dptr) = r;
-			G_VAL16(dptr) = g;
-			B_VAL16(dptr) = b;
+                        R_VAL16(dptr) = r;
+                        G_VAL16(dptr) = g;
+                        B_VAL16(dptr) = b;
                         A_VAL16(dptr) = a;
 
-			dptr++;
+            			dptr++;
                     }
                     else
                     {
@@ -1755,12 +1759,12 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo *isi, ullong *dest,
                         b >>= 8;
                         a >>= 8;
                         
-			R_VAL16(dptr) = r;
-			G_VAL16(dptr) = g;
-			B_VAL16(dptr) = b;
+                        R_VAL16(dptr) = r;
+                        G_VAL16(dptr) = g;
+                        B_VAL16(dptr) = b;
                         A_VAL16(dptr) = a;
 
-			dptr++;
+			            dptr++;
                     }
                 }
             }
@@ -1788,12 +1792,12 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo *isi, ullong *dest,
                         b >>= 8;
                         a >>= 8;
 
-			R_VAL16(dptr) = r;
-			G_VAL16(dptr) = g;
-			B_VAL16(dptr) = b;
+                        R_VAL16(dptr) = r;
+                        G_VAL16(dptr) = g;
+                        B_VAL16(dptr) = b;
                         A_VAL16(dptr) = a;
 
-			dptr++;
+            			dptr++;
                     }
                     else
                         *dptr++ = sptr[xpoints[x] ];
@@ -2101,7 +2105,7 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo *isi, ullong *dest,
     }
 }
 
-/*
+/**
 //Documentation of the cryptic dimgScaleAARGBA
 dimgScaleAARGBA(
 DImgScaleInfo *isi, // scaleinfo
