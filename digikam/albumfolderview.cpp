@@ -589,10 +589,10 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     if(!libraryDir.exists())
     {
         KMessageBox::error(0,
-                           i18n("The Albums Library has not been set correctly.\n"
+                           i18n("The album library has not been set correctly.\n"
                                 "Select \"Configure Digikam\" from the Settings "
-                                "menu and choose a folder to use for the Albums "
-                                "Library."));
+                                "menu and choose a folder to use for the album "
+                                "library."));
         return;
     }
 
@@ -982,7 +982,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         srcAlbum    = d->albumMan->findPAlbum(albumID);
         if (!srcAlbum)
         {
-            DWarning() << "Could not find source album of drag"
+            DWarning() << "Could not find drag source album"
                     << endl;
             return;
         }
@@ -1165,10 +1165,10 @@ void AlbumFolderView::albumImportFolder()
     if(!libraryDir.exists())
     {
         KMessageBox::error(0,
-                           i18n("The Albums Library has not been set correctly.\n"
+                           i18n("The album library has not been set correctly.\n"
                                 "Select \"Configure Digikam\" from the Settings "
-                                "menu and choose a folder to use for the Albums "
-                                "Library."));
+                                "menu and choose a folder to use for the album "
+                                "library."));
         return;
     }
 
