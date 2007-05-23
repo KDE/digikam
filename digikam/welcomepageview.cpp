@@ -102,7 +102,7 @@ QString WelcomePageView::infoPage()
         "--- end of comment ---",
         "<h2 style='margin-top: 0px;'>Welcome to digiKam %1</h2><p>"
         "digiKam is a photo-management program for the K Desktop Environment. "
-        "It is designed to import, organize and export your digital photographs on your computer."
+        "It is designed to import, organize, and export your digital photographs on your computer."
         "</p>\n<ul><li>"
         "digiKam has many powerful features which are described in the "
         "<a href=\"%2\">documentation</a></li>\n"
@@ -122,19 +122,19 @@ QString WelcomePageView::infoPage()
         .arg("0.8.2");                   // previous digiKam release.
     
     QStringList newFeatures;
-    newFeatures << i18n("16 bits/color/pixels image support");
+    newFeatures << i18n("16-bit/color/pixels image support");
     newFeatures << i18n("Full color management support");
     newFeatures << i18n("Native JPEG-2000 support");
     newFeatures << i18n("Makernote and IPTC metadata support");
-    newFeatures << i18n("Geolocalization of photograph");
-    newFeatures << i18n("Sidebars used everywhere");
+    newFeatures << i18n("Photograph geolocalization");
+    newFeatures << i18n("Extensive Sidebars");
     newFeatures << i18n("Advanced RAW pictures decoding settings");
-    newFeatures << i18n("Fast preview of RAW pictures");
-    newFeatures << i18n("Metadata support for RAW pictures");
-    newFeatures << i18n("New advanced options to download pictures from camera");
-    newFeatures << i18n("New advanced options to manage picture Tags");
-    newFeatures << i18n("New zooming/panning function in preview mode");
-    newFeatures << i18n("New Light Table to easy compare similar pictures");
+    newFeatures << i18n("Fast RAW preview");
+    newFeatures << i18n("RAW Metadata support");
+    newFeatures << i18n("New advanced camera download options");
+    newFeatures << i18n("New advanced picture Tag management");
+    newFeatures << i18n("New zooming/panning support in preview mode");
+    newFeatures << i18n("New Light Table provides easy comparison for similar pictures");
 
     QString featureItems;
     for ( uint i = 0 ; i < newFeatures.count() ; i++ )
