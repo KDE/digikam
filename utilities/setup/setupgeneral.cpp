@@ -267,7 +267,7 @@ void SetupGeneral::slotChangeAlbumPath(const QString &result)
 {
     if (KURL(result).equals(KURL(QDir::homeDirPath()), true)) 
     {
-        KMessageBox::sorry(0, i18n("Sorry; cannot use home directory as albums library."));
+        KMessageBox::sorry(0, i18n("Sorry; cannot use home directory as album library."));
         return;
     }
 
@@ -276,7 +276,7 @@ void SetupGeneral::slotChangeAlbumPath(const QString &result)
     if (!result.isEmpty() && !targetPath.isWritable()) 
     {
         KMessageBox::information(0, i18n("No write access for this path.\n"
-                                         "Warning: the comments and tag features will not work."));
+                                         "Warning: the comment and tag features will not work."));
     }
 }
 
