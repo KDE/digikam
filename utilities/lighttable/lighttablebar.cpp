@@ -603,7 +603,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
         p.setPen(QPen(te->textRegColor()));
         p.drawText(0, 0, bgPix.width(), bgPix.height(),
                     Qt::AlignCenter|Qt::WordBreak, 
-                    i18n("Drag and drop here your items"));
+                    i18n("Drag and drop images here"));
         p.end();
         bitBlt(viewport(), 0, 0, &bgPix);
     }
