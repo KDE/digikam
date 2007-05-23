@@ -573,7 +573,7 @@ void DigikamApp::setupActions()
 
     d->syncAlbumMetadataAction = new KAction( i18n("Synchronize images with database"),
                                     "rebuild",
-                                    0,his u
+                                    0,
                                     d->view,
                                     SLOT(slotAlbumSyncPicturesMetadata()),
                                     actionCollection(),
