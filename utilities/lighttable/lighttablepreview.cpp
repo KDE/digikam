@@ -53,6 +53,7 @@
 #include "dimg.h"
 #include "ddebug.h"
 #include "albumdb.h"
+#include "constants.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "dragobjects.h"
@@ -185,7 +186,7 @@ void LightTablePreview::setDragAndDropMessage()
         p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::WordBreak, 
-                   i18n("Drag and drop here an item"));
+                   i18n("Drag and drop an image here"));
         p.end();
         setImage(pix.convertToImage());
     }
@@ -498,7 +499,7 @@ void LightTablePreview::slotRemoveTag(int tagID)
 
 void LightTablePreview::slotAssignRating(int rating)
 {
-    rating = QMIN(5, QMAX(0, rating));
+    rating = QMIN(RatingMax, QMAX(RatingMin, rating));
     if (d->imageInfo)
     {
         MetadataHub hub;
