@@ -168,13 +168,13 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     QHBox *buttonRow = new QHBox( plainPage( ) );
     QPushButton *dateLowButton = new QPushButton( 
-            i18n("Button to select the date of the oldest image", 
+            i18n("Selects the date of the oldest image",
                  "&Oldest" ), buttonRow );
     QPushButton *dateAvgButton = new QPushButton( 
-            i18n("This is a button which calculates the average date",
+            i18n("Calculates the average date",
                  "&Average" ), buttonRow );
     QPushButton *dateHighButton = new QPushButton( 
-            i18n("Button to select the date of the newest image", 
+            i18n("Selects the date of the newest image",
                  "Newest" ), buttonRow );
         
     topLayout->addWidget( buttonRow, 6, 1);
