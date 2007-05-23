@@ -931,7 +931,7 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
     d->cancelSlideShow = false;
 
     d->statusProgressBar->progressBarMode(StatusProgressBar::CancelProgressBarMode, 
-                                  i18n("Prepare slideshow. Please wait..."));
+                                  i18n("Preparing slideshow. Please wait..."));
 
     ImageInfoList list = d->barView->itemsImageInfoList();
 
