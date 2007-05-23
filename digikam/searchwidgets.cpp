@@ -249,7 +249,7 @@ void SearchAdvancedRule::slotLabelDoubleClick()
     else
     {
         m_option=AND;
-        m_label->setText( i18n("As Well As") );
+        m_label->setText( i18n("As well as") );
     }
     emit signalPropertyChanged();
 }
