@@ -109,13 +109,13 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     d->resultsView   = new SearchResultsView( page );
     d->resultsView->setMinimumSize( QSize(200, 200) );
     d->resultsView->setMaximumWidth(  130*2 + d->resultsView->spacing()*3 + 20 );
-    QWhatsThis::add( d->resultsView, i18n("<p>Here you can see the items found in album "
-                                         "library using the current search settings."));
+    QWhatsThis::add( d->resultsView, i18n("<p>Here you can review the images found "
+                                         "using the current search settings."));
     hbox->addWidget( d->resultsView );
 
     // Box for all the rules
     d->rulesBox = new QVGroupBox( i18n("Search Rules"), page);
-    QWhatsThis::add( d->rulesBox, i18n("<p>Here you can see the search rules list used to process items "
+    QWhatsThis::add( d->rulesBox, i18n("<p>Here you can review the search rules used to filter images "
                                       "searching in album library."));
     d->rulesBox->layout()->setSpacing( spacingHint() );
     d->rulesBox->layout()->setMargin( 5 );
@@ -130,14 +130,14 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     QGroupBox* groupbox = 0;
     groupbox            = new QGroupBox( i18n("Add/Delete Option"),
                                          page, "groupbox" );
-    QWhatsThis::add( groupbox, i18n("<p>You can control here the search rules list contents, "
-                                    "to adding/removing an option."));
+    QWhatsThis::add( groupbox, i18n("<p>You can edit the search rules "
+                                    "by adding/removing criteria."));
                                          
     groupbox->setColumnLayout(0, Qt::Vertical );
     groupbox->layout()->setSpacing( KDialog::spacingHint() );
     groupbox->layout()->setMargin( KDialog::marginHint() );
     d->optionsCombo = new QComboBox( groupbox );
-    d->optionsCombo->insertItem(i18n("As Well As"), 0);
+    d->optionsCombo->insertItem(i18n("As well as"), 0);
     d->optionsCombo->insertItem(i18n("Or"), 1);
     d->optionsCombo->setEnabled(false);
     d->addButton    = new QPushButton(i18n("&Add"), groupbox);
@@ -154,8 +154,8 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     // Box for the group/ungroup
     groupbox            = new QGroupBox( i18n("Group/Ungroup Options"),
                                          page, "groupbox" );
-    QWhatsThis::add( groupbox, i18n("<p>You can group together or ungroup any search options "
-                                    "from the Search Rules list."));   
+    QWhatsThis::add( groupbox, i18n("<p>You can group or ungroup any search criteria "
+                                    "from the Search Rule set."));
     groupbox->setColumnLayout(0, Qt::Vertical );
     groupbox->layout()->setSpacing( KDialog::spacingHint() );
     groupbox->layout()->setMargin( KDialog::marginHint() );
@@ -174,7 +174,7 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     groupbox->layout()->setSpacing( KDialog::spacingHint() );
     QLabel* label = new QLabel(i18n("&Save search as:"), groupbox);
     d->title = new KLineEdit(groupbox, "searchTitle");
-    QWhatsThis::add( d->title, i18n("<p>Enter here the name used to save the current search in "
+    QWhatsThis::add( d->title, i18n("<p>Enter the name used to save the current search in "
                                    "\"My Searches\" view"));
     groupbox->setFrameStyle( QFrame::NoFrame );
 
