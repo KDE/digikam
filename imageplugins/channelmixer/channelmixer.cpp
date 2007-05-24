@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2005-02-26
- * Description : 
- * 
- * Copyright 2005-2007 by Gilles Caulier 
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-02-26
+ * Description : image channels mixer.
+ *
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Load and save mixer gains methods inspired from 
  * Gimp 2.2.3 and copyrighted 2002 by Martin Guldahl 
