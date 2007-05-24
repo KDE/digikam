@@ -663,7 +663,8 @@ void LightTablePreview::contentsDragMoveEvent(QDragMoveEvent *e)
         KURL::List      kioURLs;        
     
         if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs) ||
-            AlbumDrag::decode(e, urls, albumID))
+            AlbumDrag::decode(e, urls, albumID) ||
+            TagDrag::canDecode(e))
         {
             e->accept();
             return;
@@ -691,6 +692,7 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
             {
                 list.append(new ImageInfo(*it));
             }
+
             emit signalDroppedItems(list);
             e->accept();
             return;
@@ -704,10 +706,32 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
             {
                 list.append(new ImageInfo(*it));
             }
+
             emit signalDroppedItems(list);
             e->accept();
             return;
         }
+        else if(TagDrag::canDecode(e))
+        {
+            QByteArray ba = e->encodedData("digikam/tag-id");
+            QDataStream ds(ba, IO_ReadOnly);
+            int tagID;
+            ds >> tagID;
+    
+            AlbumManager* man           = AlbumManager::instance();
+            QValueList<Q_LLONG> itemIDs = man->albumDB()->getItemIDsInTag(tagID);
+            ImageInfoList imageInfoList;
+    
+            for (QValueList<Q_LLONG>::const_iterator it = itemIDs.begin();
+                it != itemIDs.end(); ++it)
+            {
+                list.append(new ImageInfo(*it));
+            }
+        
+            emit signalDroppedItems(list);
+            e->accept();
+            return;
+        }   
     }
 
     e->ignore();
