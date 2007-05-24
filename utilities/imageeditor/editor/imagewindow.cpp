@@ -64,6 +64,7 @@
 #include "constants.h"
 #include "ddebug.h"
 #include "dpopupmenu.h"
+#include "dragobjects.h"
 #include "canvas.h"
 #include "dimginterface.h"
 #include "themeengine.h"
@@ -164,6 +165,7 @@ ImageWindow::ImageWindow()
 {
     d = new ImageWindowPriv;
     m_instance = this;
+    setAcceptDrops(true); 
 
     // -- Build the GUI -------------------------------
 
@@ -263,6 +265,9 @@ void ImageWindow::setupConnections()
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
+
+    connect(m_canvas, SIGNAL(signalDroppedEvent(QDropEvent *)),
+            this, SLOT(slotDroppedEvent(QDropEvent *)));
 }
 
 void ImageWindow::setupUserArea()
@@ -436,7 +441,10 @@ void ImageWindow::loadCurrentList(const QString& caption, bool allowSaving)
         KWin::deIconifyWindow(winId());
     }
 
-    setCaption(i18n("digiKam Image Editor - %1").arg(caption));
+    if (!caption.isEmpty())
+        setCaption(i18n("Image Editor - %1").arg(caption));
+    else
+        setCaption(i18n("Image Editor"));
 
     d->allowSaving = allowSaving;
 
@@ -1078,6 +1086,127 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
             slide->setCurrent(d->urlCurrent);
     
         slide->show();
+    }
+}
+
+void ImageWindow::dragMoveEvent(QDragMoveEvent *e)
+{
+    int             albumID;
+    QValueList<int> albumIDs;
+    QValueList<int> imageIDs;
+    KURL::List      urls;
+    KURL::List      kioURLs;        
+
+    if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs) ||
+        AlbumDrag::decode(e, urls, albumID) ||
+        TagDrag::canDecode(e))
+    {
+        e->accept();
+        return;
+    }
+
+    e->ignore();
+}
+
+void ImageWindow::dropEvent(QDropEvent *e)
+{
+    int             albumID;
+    QValueList<int> albumIDs;
+    QValueList<int> imageIDs;
+    KURL::List      urls;
+    KURL::List      kioURLs;        
+
+    if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
+    {
+        ImageInfoList imageInfoList;
+
+        for (QValueList<int>::const_iterator it = imageIDs.begin();
+             it != imageIDs.end(); ++it)
+        {
+            ImageInfo *info = new ImageInfo(*it);
+            imageInfoList.append(info);
+        }
+
+        if (imageInfoList.isEmpty())
+        {
+            e->ignore();
+            return;
+        }
+
+        QString ATitle;
+        AlbumManager* man  = AlbumManager::instance();
+        PAlbum* palbum     = man->findPAlbum(albumIDs.first());
+        if (palbum) ATitle = palbum->title();  
+
+        TAlbum* talbum     = man->findTAlbum(albumIDs.first());
+        if (talbum) ATitle = talbum->title();  
+
+        loadImageInfos(imageInfoList, imageInfoList.first(), 
+                       i18n("Album \"%1\"").arg(ATitle), true);
+        e->accept();
+    }
+    else if (AlbumDrag::decode(e, urls, albumID))
+    {
+        AlbumManager* man           = AlbumManager::instance();
+        QValueList<Q_LLONG> itemIDs = man->albumDB()->getItemIDsInAlbum(albumID);
+        ImageInfoList imageInfoList;
+
+        for (QValueList<Q_LLONG>::const_iterator it = itemIDs.begin();
+             it != itemIDs.end(); ++it)
+        {
+            ImageInfo *info = new ImageInfo(*it);
+            imageInfoList.append(info);
+        }
+
+        if (imageInfoList.isEmpty())
+        {
+            e->ignore();
+            return;
+        }
+
+        QString ATitle;
+        PAlbum* palbum     = man->findPAlbum(albumIDs.first());
+        if (palbum) ATitle = palbum->title();  
+
+        loadImageInfos(imageInfoList, imageInfoList.first(), 
+                       i18n("Album \"%1\"").arg(ATitle), true);
+        e->accept();
+    }
+    else if(TagDrag::canDecode(e))
+    {
+        QByteArray ba = e->encodedData("digikam/tag-id");
+        QDataStream ds(ba, IO_ReadOnly);
+        int tagID;
+        ds >> tagID;
+
+        AlbumManager* man           = AlbumManager::instance();
+        QValueList<Q_LLONG> itemIDs = man->albumDB()->getItemIDsInTag(tagID);
+        ImageInfoList imageInfoList;
+
+        for (QValueList<Q_LLONG>::const_iterator it = itemIDs.begin();
+             it != itemIDs.end(); ++it)
+        {
+            ImageInfo *info = new ImageInfo(*it);
+            imageInfoList.append(info);
+        }
+
+        if (imageInfoList.isEmpty())
+        {
+            e->ignore();
+            return;
+        }
+
+        QString ATitle;
+        TAlbum* talbum     = man->findTAlbum(tagID);
+        if (talbum) ATitle = talbum->title();  
+
+        loadImageInfos(imageInfoList, imageInfoList.first(), 
+                       i18n("Album \"%1\"").arg(ATitle), true);
+        e->accept();
+    }   
+    else 
+    {
+        e->ignore();
     }
 }
 

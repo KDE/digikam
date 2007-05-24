@@ -38,6 +38,9 @@
 #include "editorwindow.h"
 #include "imageinfo.h"
 
+class QDragMoveEvent;
+class QDropEvent;
+
 namespace Digikam
 {
 
@@ -80,6 +83,9 @@ private:
 
     void loadCurrentList(const QString& caption, bool allowSaving);
     void closeEvent(QCloseEvent* e);
+    
+    void dragMoveEvent(QDragMoveEvent *e);
+    void dropEvent(QDropEvent *e);
 
     void setupActions();
     void setupConnections();
@@ -122,7 +128,7 @@ private slots:
     void slotRemoveTag(int tagID);
     void slotAssignRating(int rating);
 
-    void slotFileMetadataChanged(const KURL &url);
+    void slotFileMetadataChanged(const KURL &);
 
     void slotThemeChanged();
 
