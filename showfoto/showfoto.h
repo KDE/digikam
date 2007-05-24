@@ -90,6 +90,8 @@ private:
 
     void slideShow(bool startWithCurrent, Digikam::SlideShowSettings& settings);
 
+    void openFolder(const KURL& url);
+
 private slots:
 
     void slotForward();

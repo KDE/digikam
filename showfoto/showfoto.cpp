@@ -248,8 +248,18 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     for (KURL::List::const_iterator it = urlList.begin();
          it != urlList.end(); ++it)
     {
-        new Digikam::ThumbBarItem(d->thumbBar, *it);
-        d->lastOpenedDirectory=(*it);
+        KURL url = *it;
+        if (url.isLocalFile())
+        {
+            QFileInfo fi(url.path());
+            if (fi.isDir())
+                openFolder(url);                 
+        }
+        else
+        {
+            new Digikam::ThumbBarItem(d->thumbBar, url);
+            d->lastOpenedDirectory=(*it);
+        }
     }
 
     if ( urlList.isEmpty() )
@@ -789,7 +799,13 @@ void ShowFoto::slotOpenFolder(const KURL& url)
     d->thumbBar->clear(true);
     emit signalNoCurrentItem();
     d->currentItem = 0;
-    
+    openFolder(url);
+    toggleActions(true);
+    toggleNavigation(1);
+}
+
+void ShowFoto::openFolder(const KURL& url)
+{
     if (!url.isValid() || !url.isLocalFile())
        return;
 
@@ -855,9 +871,6 @@ void ShowFoto::slotOpenFolder(const KURL& url)
         new Digikam::ThumbBarItem( d->thumbBar, KURL(fi->filePath()) );
         ++it;
     }
-        
-    toggleActions(true);
-    toggleNavigation(1);
 }
     
 void ShowFoto::slotOpenFilesInFolder()
