@@ -1,11 +1,16 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date   : 2005-02-11
- * Description : 
- * 
- * Copyright 2005 by Gilles Caulier
- * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-02-11
+ * Description : a plugin to apply Distortion FX to a picture.
+ *
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ *
+ * Original Distortion algorithms copyrighted 2004-2005 by 
+ * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,7 +23,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  * 
- * ============================================================ */
+ * ============================================================ */ 
 
 #ifndef IMAGEEFFECT_DISTORTIONFX_H
 #define IMAGEEFFECT_DISTORTIONFX_H
