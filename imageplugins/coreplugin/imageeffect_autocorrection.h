@@ -3,44 +3,39 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-06-06
- * Description : Red eyes correction tool for image editor
+ * Date        : 2005-05-31
+ * Description : Auto-Color correction tool.
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * ============================================================ */
 
+#ifndef IMAGEEFFECT_AUTOCORRECTION_H
+#define IMAGEEFFECT_AUTOCORRECTION_H
 
-#ifndef IMAGEEFFECT_REDEYE_H
-#define IMAGEEFFECT_REDEYE_H
+// Qt Includes.
 
-// KDE includes.
-
-#include <kpassivepopup.h>
+#include <qstring.h>
 
 // Digikam include.
 
 #include "imagedlgbase.h"
 
-class QLabel;
-class QComboBox;
 class QHButtonGroup;
-
-class KHSSelector;
-class KValueSelector;
-class KIntNumInput;
+class QComboBox;
+class QListBox;
+class QButtonGroup;
 
 namespace Digikam
 {
@@ -54,51 +49,45 @@ class DImg;
 namespace DigikamImagesPluginCore
 {
 
-class RedEyePassivePopup : public KPassivePopup
-{
-public:
-
-    RedEyePassivePopup(QWidget* parent)
-        : KPassivePopup(parent), m_parent(parent)
-    {
-    }
-
-protected:
-
-    virtual void positionSelf()
-    {
-        move(m_parent->x() + 30, m_parent->y() + 30);
-    }
-
-private:
-
-    QWidget* m_parent;
-};
-
-class ImageEffect_RedEye : public Digikam::ImageDlgBase
+class ImageEffect_AutoCorrection : public Digikam::ImageDlgBase
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_RedEye(QWidget *parent);
-    ~ImageEffect_RedEye();
+    ImageEffect_AutoCorrection(QWidget *parent);
+    ~ImageEffect_AutoCorrection();
 
+protected:
+
+    void finalRendering();
+   
 private slots:
 
     void slotEffect();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
-    void slotHSChanged(int h, int s);
+
+private:
+
+    enum AutoCorrectionType
+    {
+        AutoLevelsCorrection=0,
+        NormalizeCorrection,
+        EqualizeCorrection,
+        StretchContrastCorrection,
+        AutoExposureCorrection
+    };
 
 private:
 
     void readUserSettings();
     void writeUserSettings();
     void resetValues();
-    void finalRendering();
-    void redEyeFilter(Digikam::DImg& selection);
+
+    void autoCorrection(uchar *data, int w, int h, bool sb, int type);
+    QPixmap getThumbnailForEffect(AutoCorrectionType type);
 
 private:
 
@@ -116,35 +105,23 @@ private:
         BlueChannel
     };
 
-    enum RedThresold
-    {
-        Mild=0,
-        Aggressive
-    };
-
     uchar                        *m_destinationPreviewData;
-
-    QLabel                       *m_thresholdLabel;
-    QLabel                       *m_smoothLabel;
-
-    QComboBox                    *m_channelCB;   
-
-    QHButtonGroup                *m_scaleBG;  
-
-    KIntNumInput                 *m_tintLevel;
-    KIntNumInput                 *m_redThreshold; 
-    KIntNumInput                 *m_smoothLevel;
-
-    KHSSelector                  *m_HSSelector;
-    KValueSelector               *m_VSelector;
     
+    QComboBox                    *m_channelCB;
+    
+    QHButtonGroup                *m_scaleBG;
+
+    QListBox                     *m_correctionTools;
+
     Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
     
-    Digikam::HistogramWidget     *m_histogramWidget;
+    Digikam::HistogramWidget     *m_histogramWidget;    
+
+    Digikam::DImg                 m_thumbnailImage;
 };
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif /* IMAGEEFFECT_REDEYE_H */
+#endif /* IMAGEEFFECT_AUTOCORRECTION_H */

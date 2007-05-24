@@ -3,44 +3,39 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-06-06
- * Description : Red eyes correction tool for image editor
+ * Date        : 2004-06-05
+ * Description : digiKam image editor to adjust Brightness, 
+                 Contrast, and Gamma of picture.
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * ============================================================ */
 
-
-#ifndef IMAGEEFFECT_REDEYE_H
-#define IMAGEEFFECT_REDEYE_H
-
-// KDE includes.
-
-#include <kpassivepopup.h>
+#ifndef IMAGEEFFECT_BCG_H
+#define IMAGEEFFECT_BCG_H
 
 // Digikam include.
 
 #include "imagedlgbase.h"
 
-class QLabel;
+class QCheckBox;
 class QComboBox;
 class QHButtonGroup;
 
-class KHSSelector;
-class KValueSelector;
 class KIntNumInput;
+class KDoubleNumInput;
 
 namespace Digikam
 {
@@ -48,49 +43,26 @@ class HistogramWidget;
 class ColorGradientWidget;
 class ImageWidget;
 class DColor;
-class DImg;
 }
 
 namespace DigikamImagesPluginCore
 {
 
-class RedEyePassivePopup : public KPassivePopup
-{
-public:
-
-    RedEyePassivePopup(QWidget* parent)
-        : KPassivePopup(parent), m_parent(parent)
-    {
-    }
-
-protected:
-
-    virtual void positionSelf()
-    {
-        move(m_parent->x() + 30, m_parent->y() + 30);
-    }
-
-private:
-
-    QWidget* m_parent;
-};
-
-class ImageEffect_RedEye : public Digikam::ImageDlgBase
+class ImageEffect_BCG : public Digikam::ImageDlgBase
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_RedEye(QWidget *parent);
-    ~ImageEffect_RedEye();
+    ImageEffect_BCG(QWidget *parent);
+    ~ImageEffect_BCG();
 
 private slots:
 
     void slotEffect();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
-    void slotColorSelectedFromTarget(const Digikam::DColor &color);
-    void slotHSChanged(int h, int s);
+    void slotColorSelectedFromTarget( const Digikam::DColor &color );
 
 private:
 
@@ -98,7 +70,6 @@ private:
     void writeUserSettings();
     void resetValues();
     void finalRendering();
-    void redEyeFilter(Digikam::DImg& selection);
 
 private:
 
@@ -116,27 +87,15 @@ private:
         BlueChannel
     };
 
-    enum RedThresold
-    {
-        Mild=0,
-        Aggressive
-    };
-
     uchar                        *m_destinationPreviewData;
 
-    QLabel                       *m_thresholdLabel;
-    QLabel                       *m_smoothLabel;
-
-    QComboBox                    *m_channelCB;   
-
+    QComboBox                    *m_channelCB;    
+    
     QHButtonGroup                *m_scaleBG;  
 
-    KIntNumInput                 *m_tintLevel;
-    KIntNumInput                 *m_redThreshold; 
-    KIntNumInput                 *m_smoothLevel;
-
-    KHSSelector                  *m_HSSelector;
-    KValueSelector               *m_VSelector;
+    KIntNumInput                 *m_bInput;
+    KIntNumInput                 *m_cInput;
+    KDoubleNumInput              *m_gInput;
     
     Digikam::ImageWidget         *m_previewWidget;
 
@@ -147,4 +106,4 @@ private:
 
 }  // NameSpace DigikamImagesPluginCore
 
-#endif /* IMAGEEFFECT_REDEYE_H */
+#endif /* IMAGEEFFECT_BCG_H */
