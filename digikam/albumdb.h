@@ -511,6 +511,13 @@ public:
     QStringList getItemURLsInTag(int tagID);
 
     /**
+     * Given a tagID, get a list of Ids of all items in the tag
+     * @param  tagID the id of the tag
+     * @return a list of Ids for the items in the tag.
+     */
+    LLongList getItemIDsInTag(int tagID);
+
+    /**
      * Given an albumid, this returns the url for that albumdb
      * @param albumID the id of the albumdb
      * @return the url of the albumdb
