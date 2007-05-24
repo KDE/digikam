@@ -85,7 +85,7 @@ LightTableWindow::LightTableWindow()
     d = new LightTableWindowPriv;
     m_instance = this;
 
-    setCaption(i18n("digiKam Light Table"));
+    setCaption(i18n("Light Table"));
 
     // -- Build the GUI -------------------------------
 
