@@ -68,6 +68,7 @@ public:
     void setPreviousNextPaths(const QString& previous, const QString &next);
 
     void setSelected(bool sel);
+    bool isSelected();
 
     void setDragAndDropEnabled(bool b); 
     void setDragAndDropMessage();

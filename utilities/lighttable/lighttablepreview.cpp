@@ -746,6 +746,11 @@ void LightTablePreview::setSelected(bool sel)
     }
 }
 
+bool LightTablePreview::isSelected()
+{
+    return d->selected;
+}
+
 void LightTablePreview::drawFrame(QPainter *p)
 {
     if (d->selected)
