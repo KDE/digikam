@@ -261,3 +261,12 @@ Usability issues
 OpenUsability project has define default menu structure and keyboard shortcuts:
 
 http://wiki.openusability.org/guidelines/index.php/Appendices:Keyboard_Shortcuts
+
+========================================================================
+Generate API documentation
+========================================================================
+
+To generate API documentation, you need Doxygen program (http://www.doxygen.org).
+
+Go to 'project' sub-folder and just run doxygen binary program. A new subfolder 'api' 
+is create on root directory.
