@@ -6,8 +6,8 @@
  * Date        : 2007-04-02
  * Description : Building complex database SQL queries from search descriptions
  *
- * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

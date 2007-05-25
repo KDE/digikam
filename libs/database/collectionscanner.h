@@ -6,9 +6,9 @@
  * Date        : 2007-03-21
  * Description : Collection scanning to database.
  *
- * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright 2005-2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
