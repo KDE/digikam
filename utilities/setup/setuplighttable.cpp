@@ -76,14 +76,17 @@ SetupLightTable::SetupLightTable(QWidget* parent )
     QVGroupBox *interfaceOptionsGroup = new QVGroupBox(i18n("Interface Options"), parent);
 
 
-    d->autoSyncPreview      = new QCheckBox(i18n("Synchronize panels automatically"),
-                                            interfaceOptionsGroup);
+    d->autoSyncPreview = new QCheckBox(i18n("Synchronize panels automatically"), interfaceOptionsGroup);
+    QWhatsThis::add( d->autoSyncPreview, i18n("<p>Set this option to synchronize automaticly "
+                     "zooming and paning between left and right panels if the pictures have "
+                     "the same size."));
 
     d->autoLoadOnRightPanel = new QCheckBox(i18n("Selecting a thumbbar item load picture on right panel"),
                                             interfaceOptionsGroup);
+    QWhatsThis::add( d->autoLoadOnRightPanel, i18n("<p>Set this option to load automaticly the pictures "
+                     "on right panel when an item is selected on thumbbar."));
 
-    d->hideToolBar          = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"),
-                                            interfaceOptionsGroup);
+    d->hideToolBar = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
 
     // --------------------------------------------------------
 
