@@ -159,16 +159,30 @@ void LightTableView::setNavigateByPair(bool b)
 
 void LightTableView::slotDecreaseZoom()
 {
-    if (!d->syncPreview) return;
+    if (d->syncPreview)
+    {
+        slotDecreaseLeftZoom();
+        return;
+    }
 
-    slotDecreaseLeftZoom();
+    if (d->leftPreview->isSelected())
+        slotDecreaseLeftZoom();
+    else if (d->rightPreview->isSelected())
+        slotDecreaseRightZoom();
 }   
 
 void LightTableView::slotIncreaseZoom()
 {
-    if (!d->syncPreview) return;
+    if (d->syncPreview)
+    { 
+        slotIncreaseLeftZoom();
+        return;
+    }
 
-    slotIncreaseLeftZoom();
+    if (d->leftPreview->isSelected())
+        slotIncreaseLeftZoom();
+    else if (d->rightPreview->isSelected())
+        slotIncreaseRightZoom();
 }   
 
 void LightTableView::slotDecreaseLeftZoom()

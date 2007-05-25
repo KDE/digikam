@@ -662,6 +662,8 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
         d->firstAction->setEnabled(true);
         d->lastAction->setEnabled(true);
         d->syncPreviewAction->setEnabled(true);
+        d->zoomPlusAction->setEnabled(true);
+        d->zoomMinusAction->setEnabled(true);
         d->navigateByPairAction->setEnabled(true);
 
         LightTableBarItem* curr = d->barView->findItemByInfo(info);
@@ -701,6 +703,8 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
         d->forwardAction->setEnabled(false);
         d->firstAction->setEnabled(false);
         d->lastAction->setEnabled(false);
+        d->zoomPlusAction->setEnabled(false);
+        d->zoomMinusAction->setEnabled(false);
         d->syncPreviewAction->setEnabled(false);
         d->navigateByPairAction->setEnabled(false);
     }
@@ -1225,16 +1229,12 @@ void LightTableWindow::slotRightZoomFactorChanged(double zoom)
 
 void LightTableWindow::slotToggleSyncPreview()
 {
-    d->zoomPlusAction->setEnabled(d->syncPreviewAction->isChecked());
-    d->zoomMinusAction->setEnabled(d->syncPreviewAction->isChecked());
     d->previewView->setSyncPreview(d->syncPreviewAction->isChecked());    
 }
 
 void LightTableWindow::slotToggleOnSyncPreview(bool t)
 {
     d->syncPreviewAction->setEnabled(t);
-    d->zoomPlusAction->setEnabled(t);
-    d->zoomMinusAction->setEnabled(t);
 
     if (!t)
     {
