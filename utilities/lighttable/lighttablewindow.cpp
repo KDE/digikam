@@ -690,7 +690,7 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
                 d->barView->setOnLeftPanel(info);
                 slotSetItemOnLeftPanel(info);
             }
-            else if (d->autoLoadOnRightPanel && !curr->getOnLeftPanel()) 
+            else if (d->autoLoadOnRightPanel && !curr->isOnLeftPanel()) 
             {
                 d->barView->setOnRightPanel(info);
                 slotSetItemOnRightPanel(info);

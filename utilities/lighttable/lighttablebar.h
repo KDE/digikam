@@ -122,8 +122,8 @@ public:
 
     void setOnLeftPanel(bool on);
     void setOnRightPanel(bool on);
-    bool getOnLeftPanel() const;
-    bool getOnRightPanel() const;
+    bool isOnLeftPanel() const;
+    bool isOnRightPanel() const;
     
 private:
 

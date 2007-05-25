@@ -283,13 +283,13 @@ void LightTableBar::setOnLeftPanel(const ImageInfo* info)
                     ltItem->setOnLeftPanel(true);
                     repaintItem(item);
                 }
-                else if (ltItem->getOnLeftPanel() == true)
+                else if (ltItem->isOnLeftPanel() == true)
                 {
                     ltItem->setOnLeftPanel(false);
                     repaintItem(item);
                 }
             }
-            else if (ltItem->getOnLeftPanel() == true)
+            else if (ltItem->isOnLeftPanel() == true)
             {
                 ltItem->setOnLeftPanel(false);
                 repaintItem(item);
@@ -312,13 +312,13 @@ void LightTableBar::setOnRightPanel(const ImageInfo* info)
                     ltItem->setOnRightPanel(true);
                     repaintItem(item);
                 }
-                else if (ltItem->getOnRightPanel() == true)
+                else if (ltItem->isOnRightPanel() == true)
                 {
                     ltItem->setOnRightPanel(false);
                     repaintItem(item);
                 }
             }
-            else if (ltItem->getOnRightPanel() == true)
+            else if (ltItem->isOnRightPanel() == true)
             {
                 ltItem->setOnRightPanel(false);
                 repaintItem(item);
@@ -509,12 +509,12 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
     
                         LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
         
-                        if (ltItem->getOnLeftPanel())
+                        if (ltItem->isOnLeftPanel())
                         {
                             QPixmap lPix = SmallIcon("previous"); 
                             bitBlt(&tile, getMargin(), getMargin(), &lPix);
                         }
-                        if (ltItem->getOnRightPanel())
+                        if (ltItem->isOnRightPanel())
                         {
                             QPixmap rPix = SmallIcon("next"); 
                             bitBlt(&tile, tile.width() - getMargin() - rPix.width(), getMargin(), &rPix);
@@ -565,12 +565,12 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
     
                         LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
         
-                        if (ltItem->getOnLeftPanel())
+                        if (ltItem->isOnLeftPanel())
                         {
                             QPixmap lPix = SmallIcon("previous"); 
                             bitBlt(&tile, getMargin(), getMargin(), &lPix);
                         }
-                        if (ltItem->getOnRightPanel())
+                        if (ltItem->isOnRightPanel())
                         {
                             QPixmap rPix = SmallIcon("next"); 
                             bitBlt(&tile, tile.width() - getMargin() - rPix.width(), getMargin(), &rPix);
@@ -780,12 +780,12 @@ void LightTableBarItem::setOnRightPanel(bool on)
     d->onRightPanel = on;
 }
 
-bool LightTableBarItem::getOnLeftPanel() const
+bool LightTableBarItem::isOnLeftPanel() const
 {
     return d->onLeftPanel;
 }
 
-bool LightTableBarItem::getOnRightPanel() const
+bool LightTableBarItem::isOnRightPanel() const
 {
     return d->onRightPanel;
 }
