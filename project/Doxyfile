@@ -82,7 +82,11 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = ../
+INPUT                  = ../digikam \
+                         ../kioslave \
+                         ../libs \
+                         ../showfoto \
+                         ../utilities
 FILE_PATTERNS          = *.c \
                          *.cc \
                          *.cxx \
@@ -102,7 +106,8 @@ FILE_PATTERNS          = *.c \
                          *.C \
                          *.H
 RECURSIVE              = YES
-EXCLUDE                = 
+EXCLUDE                = ../libs/greycstoration/greycstoration.h \
+                         ../libs/greycstoration/CImg.h
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = 
 EXAMPLE_PATH           = 
