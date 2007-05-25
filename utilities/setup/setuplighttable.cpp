@@ -55,12 +55,14 @@ public:
 
     SetupLightTablePriv()
     {
-        hideToolBar     = 0;
-        autoSyncPreview = 0;
+        hideToolBar          = 0;
+        autoSyncPreview      = 0;
+        autoLoadOnRightPanel = 0;
     }
 
     QCheckBox *hideToolBar;
     QCheckBox *autoSyncPreview;
+    QCheckBox *autoLoadOnRightPanel;
 };
 
 SetupLightTable::SetupLightTable(QWidget* parent )
@@ -74,11 +76,14 @@ SetupLightTable::SetupLightTable(QWidget* parent )
     QVGroupBox *interfaceOptionsGroup = new QVGroupBox(i18n("Interface Options"), parent);
 
 
-    d->autoSyncPreview = new QCheckBox(i18n("Synchronize panels automatically"),
-                                      interfaceOptionsGroup);
+    d->autoSyncPreview      = new QCheckBox(i18n("Synchronize panels automatically"),
+                                            interfaceOptionsGroup);
 
-    d->hideToolBar = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"),
-                                   interfaceOptionsGroup);
+    d->autoLoadOnRightPanel = new QCheckBox(i18n("Selecting a thumbbar item load picture on right panel"),
+                                            interfaceOptionsGroup);
+
+    d->hideToolBar          = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"),
+                                            interfaceOptionsGroup);
 
     // --------------------------------------------------------
 
@@ -103,6 +108,7 @@ void SetupLightTable::readSettings()
     config->setGroup("LightTable Settings");
     d->hideToolBar->setChecked(config->readBoolEntry("FullScreen Hide ToolBar", false));
     d->autoSyncPreview->setChecked(config->readBoolEntry("Auto Sync Preview", true));
+    d->autoLoadOnRightPanel->setChecked(config->readBoolEntry("Auto Load Right Panel", true));
 }
 
 void SetupLightTable::applySettings()
@@ -111,6 +117,7 @@ void SetupLightTable::applySettings()
     config->setGroup("LightTable Settings");
     config->writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
     config->writeEntry("Auto Sync Preview", d->autoSyncPreview->isChecked());
+    config->writeEntry("Auto Load Right Panel", d->autoLoadOnRightPanel->isChecked());
     config->sync();
 }
 

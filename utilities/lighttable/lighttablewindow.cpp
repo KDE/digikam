@@ -150,6 +150,7 @@ void LightTableWindow::applySettings()
     KConfig* config = kapp->config();
     config->setGroup("LightTable Settings");
 
+    d->autoLoadOnRightPanel  = config->readBoolEntry("Auto Load Right Panel", true);
     d->autoSyncPreview       = config->readBoolEntry("Auto Sync Preview", true);
     d->fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
 }
@@ -688,6 +689,11 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
   
                 d->barView->setOnLeftPanel(info);
                 slotSetItemOnLeftPanel(info);
+            }
+            else if (d->autoLoadOnRightPanel && !curr->getOnLeftPanel()) 
+            {
+                d->barView->setOnRightPanel(info);
+                slotSetItemOnRightPanel(info);
             }
         }
     }
