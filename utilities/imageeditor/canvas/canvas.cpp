@@ -342,6 +342,11 @@ QString Canvas::currentImageFileFormat()
     return d->im->getImageFormat();
 }
 
+QString Canvas::currentImageFilePath()
+{
+    return d->im->getImageFilePath();
+}
+
 int Canvas::imageWidth()
 {
     return d->im->origWidth();  

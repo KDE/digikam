@@ -77,6 +77,7 @@ public:
     void  updateUndoState();
     DImg  currentImage();
     QString currentImageFileFormat();
+    QString currentImageFilePath();
 
     DImgInterface *interface() const;
     void makeDefaultEditingCanvas();
