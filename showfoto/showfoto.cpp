@@ -1002,7 +1002,6 @@ void ShowFoto::saveIsComplete()
 {
     Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
     d->thumbBar->invalidateThumb(d->currentItem);
-    //slotOpenURL(d->currentItem->url());
 }
 
 void ShowFoto::saveAsIsComplete()

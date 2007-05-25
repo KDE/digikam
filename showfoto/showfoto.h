@@ -124,7 +124,6 @@ private slots:
 private:
     
     ShowFotoPriv* d;
-
 };
 
 }   // namespace ShowFoto
