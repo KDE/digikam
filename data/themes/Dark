@@ -1,43 +1,43 @@
-! "Dark"
-! Digikam theme by Gerhard Kulzer (2005 Nov)
+! Dark
+! Digikam theme by Gerhard Kulzer (Sam Mai 26 09:00:54 2007)
 
 base.color:				#000000
-text.regular.color:			#dadada
-text.selected.color:			#ffffff
-text.special.regular.color:		#6ed1ef
-text.special.selected.color:		#ffffff
+text.regular.color:			#7f7f7f
+text.selected.color:			#bdbdbd
+text.special.regular.color:		#5db0ca
+text.special.selected.color:		#96d2d8
 
-banner.color:				#678db2
-banner.colorTo:				#567594
-banner.bevel:				FLAT
-banner.gradient:				SOLID
+banner.color:				#475a74
+banner.colorTo:				#222e3a
+banner.bevel:				RAISED
+banner.gradient:				DIAGONAL
 banner.border:				false
-banner.borderColor:			#000000
+banner.borderColor			#000000
 
 thumbnail.regular.color:		#131313
-thumbnail.regular.colorTo:		#191919
+thumbnail.regular.colorTo:		#2e2a26
 thumbnail.regular.bevel:		RAISED
 thumbnail.regular.gradient:		SOLID
 thumbnail.regular.border:		false
-thumbnail.regular.borderColor:		#e0e0ef
+thumbnail.regular.borderColor		#e0e0ef
 
-thumbnail.selected.color:		#819ebb
-thumbnail.selected.colorTo:		#2c3c4c
-thumbnail.selected.bevel:		RAISED
+thumbnail.selected.color:		#4e6581
+thumbnail.selected.colorTo:		#222e3a
+thumbnail.selected.bevel:		FLAT
 thumbnail.selected.gradient:		VERTICAL
 thumbnail.selected.border:		false
-thumbnail.selected.borderColor:		#e0e0ef
+thumbnail.selected.borderColor		#536c8a
 
-listview.regular.color:			#030303
-listview.regular.colorTo:		#474644
+listview.regular.color:			#0d0d0d
+listview.regular.colorTo:		#222120
 listview.regular.bevel:			RAISED
 listview.regular.gradient:		HORIZONTAL
 listview.regular.border:		false
-listview.regular.borderColor:		#000000
+listview.regular.borderColor		#000000
 
-listview.selected.color:		#678cb2
-listview.selected.colorTo:		#37485a
-listview.selected.bevel:		SUNKEN
-listview.selected.gradient:		HORIZONTAL
+listview.selected.color:		#4e6581
+listview.selected.colorTo:		#303e4e
+listview.selected.bevel:		RAISED
+listview.selected.gradient:		DIAGONAL
 listview.selected.border:		true
-listview.selected.borderColor:		#000000
+listview.selected.borderColor		#000000
