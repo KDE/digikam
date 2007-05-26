@@ -1378,16 +1378,25 @@ LLongList AlbumDB::getItemIDsInAlbum(int albumID)
     return itemIDs;
 }
 
-QStringList AlbumDB::getItemURLsInTag(int tagID)
+QStringList AlbumDB::getItemURLsInTag(int tagID, bool recursive)
 {
     QStringList values;
 
     QString basePath(AlbumManager::instance()->getLibraryPath());
 
+    QString imagesIdClause;
+    if (recursive)
+        imagesIdClause = QString("SELECT imageid FROM ImageTags "
+                                 " WHERE tagid=%1 "
+                                 " OR tagid IN (SELECT id FROM TagsTree WHERE pid=%2)")
+                                .arg(tagID).arg(tagID);
+    else
+        imagesIdClause = QString("SELECT imageid FROM ImageTags WHERE tagid=%1").arg(tagID);
+
     execSql( QString("SELECT Albums.url||'/'||Images.name FROM Images, Albums "
-                     "WHERE Images.id IN (SELECT imageid FROM ImageTags WHERE tagid=%1) "
+                     "WHERE Images.id IN (%1) "
                      "AND Albums.id=Images.dirid;")
-             .arg(tagID), &values );
+             .arg(imagesIdClause), &values );
 
     for (QStringList::iterator it = values.begin(); it != values.end(); ++it)
     {
@@ -1397,13 +1406,19 @@ QStringList AlbumDB::getItemURLsInTag(int tagID)
     return values;
 }
 
-LLongList AlbumDB::getItemIDsInTag(int tagID)
+LLongList AlbumDB::getItemIDsInTag(int tagID, bool recursive)
 {
     LLongList itemIDs;
     QStringList values;
 
-    execSql( QString("SELECT imageid FROM ImageTags WHERE tagid=%1;")
-             .arg(tagID), &values );
+    if (recursive)
+        execSql( QString("SELECT imageid FROM ImageTags "
+                         " WHERE tagid=%1 "
+                         " OR tagid IN (SELECT id FROM TagsTree WHERE pid=%2)")
+                .arg(tagID).arg(tagID), &values );
+    else
+        execSql( QString("SELECT imageid FROM ImageTags WHERE tagid=%1;")
+                .arg(tagID), &values );
 
     for (QStringList::iterator it = values.begin(); it != values.end(); ++it)
     {
