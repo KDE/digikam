@@ -24,7 +24,6 @@ Emacs by default will indent to 4 spaces
 vim users add this to you .vimrc
  set tabstop=4        
 
-
 -------------------------------------------------------------------------
 * Tabs vs Spaces
 -------------------------------------------------------------------------
@@ -84,7 +83,6 @@ Follow a consistent order in defining these attributes. The recommended
 order is public, protected (functions), private (functions), 
 signals, public slots, protected slots, private slots, private (variables)
 
-
 ========================================================================
 Class, file and Variable names:
 ========================================================================
@@ -111,6 +109,7 @@ Class, file and Variable names:
 -------------------------------------------------------------------------
 * Non-Member variables
 -------------------------------------------------------------------------
+
 - non-member variables should follow the same naming convention as the member 
   variables, except for the leading m_
 
@@ -144,8 +143,8 @@ a = (b == foobar) ? 1 : -1; // you are asking for trouble by putting comments he
 Header files
 ========================================================================
 
-
-- Add copyright to top of every file
+- Add copyright to top of every file. Use the same header than others digiKam
+  source code.
 - Double inclusion protection defines are all upper case letters and are 
   composed of the classname and a H suffix separated by underscore
 
@@ -154,6 +153,7 @@ Header files
 
 class AnotherNiceClass
 {
+...
 }
 
 #endif
@@ -248,6 +248,7 @@ kcachegrind callgrind.out.16693.1
 =================================================================================
 API Documentation Validation, User Documentation Validation, Source Code Checking
 =================================================================================
+
 The following site check on a dayly basis for the a.m. errors:
 www.englishbreakfastnetwork.org/krazy/
 
@@ -266,7 +267,10 @@ http://wiki.openusability.org/guidelines/index.php/Appendices:Keyboard_Shortcuts
 Generate API documentation
 ========================================================================
 
-To generate API documentation, you need Doxygen program (http://www.doxygen.org).
+To generate API documentation, you need to install:
 
-Go to 'project' sub-folder and just run doxygen binary program. A new subfolder 'api' 
-is create on root directory.
+- Doxygen program (http://www.doxygen.org).
+- Dot program (http://www.graphviz.org)
+
+Go to 'project' sub-folder and just run doxygen binary program. A new subfolder 
+named 'api' will be create. Warning, this can take a while.
