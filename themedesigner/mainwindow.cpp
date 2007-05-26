@@ -314,11 +314,36 @@ void MainWindow::slotSave()
 
     // header ------------------------------------------------------------------
     
-    ts << QString("! %1").arg(fi.fileName()) << endl;
     KUser user;
-    ts << QString("! Digikam theme by %1 (%2)")
-        .arg(user.fullName())
-        .arg(QDateTime::currentDateTime().toString()) << endl;
+    ts << QString("/* ============================================================") << endl;
+    ts << QString(" *") << endl;
+    ts << QString(" * This file is a part of digiKam project") << endl;
+    ts << QString(" * http://www.digikam.org") << endl;
+    ts << QString(" *") << endl;
+    ts << QString(" * Date        : %1-%2-%3")
+          .arg(QDate::currentDate().year() )
+          .arg(QDate::currentDate().month() )
+          .arg(QDate::currentDate().day() ) << endl;
+    ts << QString(" * Description : Digikam theme by %1").arg(user.fullName()) << endl;
+    ts << QString(" *") << endl;
+    ts << QString(" * Copyright (C) %1 by %2")
+          .arg(QDate::currentDate().year() )
+          .arg(user.fullName()) << endl;
+    ts << QString(" *") << endl;
+    ts << QString(" * This program is free software; you can redistribute it") << endl;
+    ts << QString(" * and/or modify it under the terms of the GNU General") << endl;
+    ts << QString(" * Public License as published by the Free Software Foundation;") << endl;
+    ts << QString(" * either version 2, or (at your option)") << endl;
+    ts << QString(" * any later version.") << endl;
+    ts << QString(" * ") << endl;
+    ts << QString(" * This program is distributed in the hope that it will be useful,") << endl;
+    ts << QString(" * but WITHOUT ANY WARRANTY; without even the implied warranty of") << endl;
+    ts << QString(" * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the") << endl;
+    ts << QString(" * GNU General Public License for more details.") << endl;
+    ts << QString(" *") << endl;
+    ts << QString(" * ============================================================ */") << endl;
+    ts << endl;
+    ts << QString("! %1").arg(fi.fileName()) << endl;
 
     // base props --------------------------------------------------------------
     
