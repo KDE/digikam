@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2007-05-26
+ * Date        : 2007-5-26
  * Description : Digikam theme by Gerhard Kulzer
  *
- * Copyright (C) 2007 by Gerhard Kulzer <gerhard at kulzer dot net>
+ * Copyright (C) 2007 by Gerhard Kulzer <gerhard at kulzer dor net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,17 +23,16 @@
 
 ! Dark
 
-
 base.color:				#000000
 text.regular.color:			#7f7f7f
-text.selected.color:			#bdbdbd
-text.special.regular.color:		#5db0ca
-text.special.selected.color:		#96d2d8
+text.selected.color:			#b4b4b4
+text.special.regular.color:		#549fb6
+text.special.selected.color:		#83b8bd
 
-banner.color:				#475a74
-banner.colorTo:				#222e3a
+banner.color:				#313f50
+banner.colorTo:				#1e2731
 banner.bevel:				RAISED
-banner.gradient:				DIAGONAL
+banner.gradient:				VERTICAL
 banner.border:				false
 banner.borderColor			#000000
 
@@ -44,12 +43,12 @@ thumbnail.regular.gradient:		SOLID
 thumbnail.regular.border:		false
 thumbnail.regular.borderColor		#e0e0ef
 
-thumbnail.selected.color:		#4e6581
-thumbnail.selected.colorTo:		#222e3a
-thumbnail.selected.bevel:		FLAT
+thumbnail.selected.color:		#313f50
+thumbnail.selected.colorTo:		#1b252f
+thumbnail.selected.bevel:		RAISED
 thumbnail.selected.gradient:		VERTICAL
 thumbnail.selected.border:		false
-thumbnail.selected.borderColor		#536c8a
+thumbnail.selected.borderColor		#e0e0ef
 
 listview.regular.color:			#0d0d0d
 listview.regular.colorTo:		#222120
@@ -58,9 +57,9 @@ listview.regular.gradient:		HORIZONTAL
 listview.regular.border:		false
 listview.regular.borderColor		#000000
 
-listview.selected.color:		#4e6581
-listview.selected.colorTo:		#303e4e
+listview.selected.color:		#2e3d4e
+listview.selected.colorTo:		#212a34
 listview.selected.bevel:		RAISED
-listview.selected.gradient:		DIAGONAL
+listview.selected.gradient:		VERTICAL
 listview.selected.border:		true
 listview.selected.borderColor		#000000
