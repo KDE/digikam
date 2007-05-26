@@ -1222,6 +1222,22 @@ QStringList AlbumDB::getItemURLsInTag(int tagID)
     return values;
 }
 
+LLongList AlbumDB::getItemIDsInTag(int tagID)
+{
+    LLongList itemIDs;
+    QStringList values;
+
+    execSql( QString("SELECT imageid FROM ImageTags WHERE tagid=%1;")
+             .arg(tagID), &values );
+
+    for (QStringList::iterator it = values.begin(); it != values.end(); ++it)
+    {
+        itemIDs << (*it).toLong();
+    }
+
+    return itemIDs;
+}
+
 QString AlbumDB::getAlbumURL(int albumID)
 {
     QStringList values;
