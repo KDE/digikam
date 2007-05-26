@@ -1,5 +1,28 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2007-05-26
+ * Description : Digikam theme by Gerhard Kulzer
+ *
+ * Copyright (C) 2007 by Gerhard Kulzer <gerhard at kulzer dot net>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
 ! Dark
-! Digikam theme by Gerhard Kulzer (Sam Mai 26 09:00:54 2007)
+
 
 base.color:				#000000
 text.regular.color:			#7f7f7f
