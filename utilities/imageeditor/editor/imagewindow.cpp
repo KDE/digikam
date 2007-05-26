@@ -1180,7 +1180,7 @@ void ImageWindow::dropEvent(QDropEvent *e)
         ds >> tagID;
 
         AlbumManager* man           = AlbumManager::instance();
-        QValueList<Q_LLONG> itemIDs = man->albumDB()->getItemIDsInTag(tagID);
+        QValueList<Q_LLONG> itemIDs = man->albumDB()->getItemIDsInTag(tagID, true);
         ImageInfoList imageInfoList;
 
         for (QValueList<Q_LLONG>::const_iterator it = itemIDs.begin();
