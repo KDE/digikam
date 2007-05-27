@@ -31,6 +31,7 @@
 
 // Local includes
 
+#include "dimg.h"
 #include "previewwidget.h"
 #include "digikam_export.h"
 
@@ -39,7 +40,6 @@ class QPixmap;
 namespace Digikam
 {
 
-class DImg;
 class AlbumWidgetStack;
 class LoadingDescription;
 class ImageInfo;
@@ -55,7 +55,7 @@ public:
     ImagePreviewView(AlbumWidgetStack *parent=0);
     ~ImagePreviewView();
 
-    void setImage(const QImage& image);
+    void setImage(const DImg& image);
     DImg& getImage() const;
 
     void setImageInfo(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
@@ -82,7 +82,7 @@ protected:
 
 private slots:
 
-    void slotGotImagePreview(const LoadingDescription &loadingDescription, const QImage &image);
+    void slotGotImagePreview(const LoadingDescription &loadingDescription, const DImg &image);
     void slotNextPreload();
     void slotContextMenu();
     void slotAssignTag(int tagID);

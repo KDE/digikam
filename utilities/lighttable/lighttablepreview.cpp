@@ -242,20 +242,20 @@ void LightTablePreview::setImagePath(const QString& path)
     if (!d->previewThread)
     {
         d->previewThread = new PreviewLoadThread();
-        connect(d->previewThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
-                this, SLOT(slotGotImagePreview(const LoadingDescription &, const QImage&)));
+        connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
+                this, SLOT(slotGotImagePreview(const LoadingDescription &, const DImg&)));
     }
     if (!d->previewPreloadThread)
     {
         d->previewPreloadThread = new PreviewLoadThread();
-        connect(d->previewPreloadThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
+        connect(d->previewPreloadThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
                 this, SLOT(slotNextPreload()));
     }
 
     d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
 }
 
-void LightTablePreview::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
+void LightTablePreview::slotGotImagePreview(const LoadingDescription &description, const DImg& preview)
 {
     if (description.filePath != d->path)
         return;   
@@ -278,7 +278,7 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription &descriptio
     }
     else
     {
-        setImage(DImg(preview));
+        setImage(preview);
         emit signalPreviewLoaded(true);
     }
 
@@ -527,7 +527,7 @@ void LightTablePreview::slotCornerButtonPressed()
 
     d->panIconPopup    = new KPopupFrame(this);
     PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
-    pan->setImage(180, 120, getImage().copyQImage()); 
+    pan->setImage(180, 120, getImage());
     d->panIconPopup->setMainWidget(pan);
 
     QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),

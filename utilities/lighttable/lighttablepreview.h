@@ -88,7 +88,7 @@ protected:
 
 private slots:
 
-    void slotGotImagePreview(const LoadingDescription &loadingDescription, const QImage &image);
+    void slotGotImagePreview(const LoadingDescription &loadingDescription, const DImg &image);
     void slotNextPreload();
     void slotContextMenu();
     void slotAssignTag(int tagID);

@@ -177,9 +177,9 @@ ImagePreviewView::~ImagePreviewView()
     delete d;
 }
 
-void ImagePreviewView::setImage(const QImage& image)
-{   
-    d->preview = DImg(image);
+void ImagePreviewView::setImage(const DImg& image)
+{
+    d->preview = image;
 
     updateZoomAndSize(true);
 
@@ -222,20 +222,20 @@ void ImagePreviewView::setImagePath(const QString& path)
     if (!d->previewThread)
     {
         d->previewThread = new PreviewLoadThread();
-        connect(d->previewThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
-                this, SLOT(slotGotImagePreview(const LoadingDescription &, const QImage&)));
+        connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
+                this, SLOT(slotGotImagePreview(const LoadingDescription &, const DImg&)));
     }
     if (!d->previewPreloadThread)
     {
         d->previewPreloadThread = new PreviewLoadThread();
-        connect(d->previewPreloadThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
+        connect(d->previewPreloadThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
                 this, SLOT(slotNextPreload()));
     }
 
     d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
 }
 
-void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
+void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description, const DImg& preview)
 {
     if (description.filePath != d->path)
         return;   
@@ -253,7 +253,8 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
                    i18n("Cannot display preview for\n\"%1\"")
                    .arg(info.fileName()));
         p.end();
-        setImage(pix.convertToImage());
+        // three copies - but the image is small
+        setImage(DImg(pix.convertToImage()));
         d->parent->previewLoaded();
         emit signalPreviewLoaded(false);
     }
@@ -546,7 +547,7 @@ void ImagePreviewView::slotCornerButtonPressed()
 
     d->panIconPopup    = new KPopupFrame(this);
     PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
-    pan->setImage(180, 120, getImage().copyQImage()); 
+    pan->setImage(180, 120, getImage());
     d->panIconPopup->setMainWidget(pan);
 
     QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),

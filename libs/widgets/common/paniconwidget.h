@@ -31,6 +31,10 @@
 #include <qrect.h>
 #include <qimage.h>
 
+// Local includes
+
+#include "dimg.h"
+
 namespace Digikam
 {
 
@@ -47,6 +51,7 @@ public:
     ~PanIconWidget();
 
     void setImage(int previewWidth, int previewHeight, const QImage& image);
+    void setImage(int previewWidth, int previewHeight, const DImg& image);
 
     void  setRegionSelection(QRect regionSelection);
     QRect getRegionSelection(void);
