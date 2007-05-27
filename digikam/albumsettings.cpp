@@ -574,7 +574,7 @@ void AlbumSettings::setDefaultTreeIconSize(int val)
 
 int AlbumSettings::getDefaultTreeIconSize() const
 {
-    return ((d->treeThumbnailSize < 8) || (d->treeThumbnailSize > 32)) ? 32 : d->treeThumbnailSize;
+    return ((d->treeThumbnailSize < 8) || (d->treeThumbnailSize > 48)) ? 48 : d->treeThumbnailSize;
 }
 
 void AlbumSettings::setIconShowName(bool val)
