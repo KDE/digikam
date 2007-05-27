@@ -62,6 +62,7 @@ public:
     LightTableBarPriv()
     {
         navigateByPair = false;
+        toolTip        = 0;
     }
     
     bool                  navigateByPair;
