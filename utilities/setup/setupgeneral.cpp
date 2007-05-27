@@ -137,6 +137,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     d->iconTreeThumbSize->insertItem("16");
     d->iconTreeThumbSize->insertItem("22");
     d->iconTreeThumbSize->insertItem("32");
+    d->iconTreeThumbSize->insertItem("48");
     QToolTip::add( d->iconTreeThumbSize, i18n("<p>Set this option to configure the size "
                                               "in pixels of the thumbnails in digiKam's sidebars. "
                                               "This option will take effect when you restart "
@@ -249,8 +250,11 @@ void SetupGeneral::readSettings()
         d->iconTreeThumbSize->setCurrentItem(0);
     else if (settings->getDefaultTreeIconSize() == 22)
         d->iconTreeThumbSize->setCurrentItem(1);
-    else
+    else if (settings->getDefaultTreeIconSize() == 32)
         d->iconTreeThumbSize->setCurrentItem(2);
+    else 
+        d->iconTreeThumbSize->setCurrentItem(3);
+    
     d->iconShowNameBox->setChecked(settings->getIconShowName());
     d->iconShowTagsBox->setChecked(settings->getIconShowTags());
     d->iconShowSizeBox->setChecked(settings->getIconShowSize());
