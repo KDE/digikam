@@ -24,6 +24,7 @@
 
 // Local includes.
 
+#include "previewtask.h"
 #include "previewloadthread.h"
 #include "previewloadthread.moc"
 
@@ -32,8 +33,6 @@ namespace Digikam
 
 PreviewLoadThread::PreviewLoadThread()
 {
-    connect(this, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg&)),
-            this, SLOT(slotTranslateLoadedSignal(const LoadingDescription &, const DImg&)));
 }
 
 void PreviewLoadThread::load(LoadingDescription description)
@@ -41,19 +40,11 @@ void PreviewLoadThread::load(LoadingDescription description)
     ManagedLoadSaveThread::loadPreview(description);
 }
 
-void PreviewLoadThread::slotTranslateLoadedSignal(const LoadingDescription &loadingDescription, const DImg& img)
+void PreviewLoadThread::loadHighQuality(LoadingDescription description)
 {
-    /*
-        So what's this?
-        Usually, there is a PreviewTask which will send a signalPreviewLoaded.
-        However, in one case, a signalImageLoaded will be sent instead:
-        If the task is waiting on a normal loading task in another thread which is currently
-        loading the same image.
-        This task will then send a LoadedEvent to all its listeners, which will trigger the
-        signalImageLoaded, which is intercepted and translated here.
-    */
-    DImg copy(img);
-    emit signalPreviewLoaded(loadingDescription, copy.copyQImage());
+    description.rawDecodingSettings.optimizeTimeLoading();
+    description.rawDecodingSettings.sixteenBitsImage = false;
+    ManagedLoadSaveThread::load(description, LoadingModeShared, LoadingPolicyFirstRemovePrevious);
 }
 
 }   // namespace Digikam
