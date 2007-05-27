@@ -158,6 +158,8 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     if (!e) return;
 
+    ThumbBarView::contentsMouseReleaseEvent(e);
+
     QPoint pos = QCursor::pos();
     LightTableBarItem *item = findItemByPos(e->pos());
     if (!item) return;        
