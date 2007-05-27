@@ -569,13 +569,10 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
        }
     }
 
-    if (!barItem)
-        return;
-
     d->dragging     = true;
     d->dragStartPos = e->pos();
 
-    if (barItem == d->currItem)
+    if (!barItem || barItem == d->currItem)
         return;
 
     if (d->currItem)
@@ -598,8 +595,8 @@ void ThumbBarView::contentsMouseMoveEvent(QMouseEvent *e)
 
     if (d->dragging && (e->state() & Qt::LeftButton))
     {
-        if ( (d->dragStartPos - e->pos()).manhattanLength()
-             > QApplication::startDragDistance() )
+        if ( findItem(d->dragStartPos) &&
+             (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance() )
         {
             startDrag();
         }
