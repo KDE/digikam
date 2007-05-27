@@ -538,39 +538,9 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
 
 void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
 {
-    ThumbBarItem* barItem = 0;
-    
-    if (d->orientation == Vertical)
-    {
-       int y = e->pos().y();
-       
-       for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
-       {
-           if (y >= item->d->pos &&
-               y <= (item->d->pos + d->tileSize + 2*d->margin))
-           {
-                barItem = item;
-                break;
-           }
-       }
-    }
-    else
-    {
-       int x = e->pos().x();
-       
-       for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
-       {
-           if (x >= item->d->pos &&
-               x <= (item->d->pos + d->tileSize + 2*d->margin))
-           {
-                barItem = item;
-                break;
-           }
-       }
-    }
-
-    d->dragging     = true;
-    d->dragStartPos = e->pos();
+    ThumbBarItem* barItem = findItem(e->pos());
+    d->dragging           = true;
+    d->dragStartPos       = e->pos();
 
     if (!barItem || barItem == d->currItem)
         return;
@@ -585,8 +555,8 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
     d->currItem = barItem;
     barItem->repaint();
 
-    emit signalURLSelected(barItem->url());
-    emit signalItemSelected(barItem);
+    emit signalURLSelected(d->currItem->url());
+    emit signalItemSelected(d->currItem);
 }
 
 void ThumbBarView::contentsMouseMoveEvent(QMouseEvent *e)
