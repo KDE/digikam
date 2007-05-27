@@ -404,13 +404,20 @@ bool TagFilterView::acceptDrop(const QDropEvent *e) const
         return true;
     }
 
-    if (ItemDrag::canDecode(e) && itemDrop && 
-        itemDrop->m_tag->parent() && !itemDrop->m_untagged)
+    if (ItemDrag::canDecode(e) && itemDrop && !itemDrop->m_untagged)
     {
-        // Only other possibility is image items being dropped
-        // And allow this only if there is a Tag to be dropped
-        // on and also the Tag is not root or "Not Tagged" item.
-        return true;
+        TAlbum *tag = itemDrop->m_tag;
+        
+        if (tag)
+        {
+            if (tag->parent())
+            {         
+                // Only other possibility is image items being dropped
+                // And allow this only if there is a Tag to be dropped
+                // on and also the Tag is not root or "Not Tagged" item.
+                return true;
+            }
+        }
     }
 
     return false;
