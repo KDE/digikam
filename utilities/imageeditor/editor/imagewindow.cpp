@@ -265,9 +265,6 @@ void ImageWindow::setupConnections()
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
-
-    connect(m_canvas, SIGNAL(signalDroppedEvent(QDropEvent *)),
-            this, SLOT(slotDroppedEvent(QDropEvent *)));
 }
 
 void ImageWindow::setupUserArea()
