@@ -109,11 +109,8 @@ void PanIconWidget::setImage(int previewWidth, int previewHeight, const QImage& 
 
 void PanIconWidget::setImage(int previewWidth, int previewHeight, const DImg& image)
 {
-    QSize sz(image.width(), image.height());
-    sz.scale(previewWidth, previewHeight, QSize::ScaleMin);
     DImg img(image);
-    QImage qimage = img.smoothScale(sz.width(), sz.height()).copyQImage();
-    setImage(previewWidth, previewHeight, qimage);
+    setImage(previewWidth, previewHeight, img.copyQImage());
 }
 
 void PanIconWidget::slotZoomFactorChanged(double factor)
