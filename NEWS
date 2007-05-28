@@ -29,7 +29,8 @@ digiKam BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 055 ==> 145079 : Ctrl-A, Ctrl-Shift-A don't peform proper selection actions.
 056 ==> 145627 : Showfoto /path/to/directory doesn't work, while the "open dir" feature exists.
 057 ==> 146012 : Dragging an image over a tag in "tag filters" pane crashes digiKam.
-058 ==> 
+058 ==> 146032 : Panning doesn't work in Light Table.
+059 ==> 
 
 **********************************************************************************************
 
