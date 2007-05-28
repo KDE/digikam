@@ -1,3 +1,2684 @@
+v0.9.2-beta2 - 2007-05-28
+----------------------------------------------------------------------------
+
+2007-05-28 08:53  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-28 08:52  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/common/paniconwidget.cpp:
+	  digikam from trunk : do not resize Dimg before to pass it like
+	  QImage else original image size informations will be lost.
+	  BUG: 146032
+
+2007-05-27 16:53  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/setup/setupgeneral.cpp:
+	  give 48 px icons size
+
+2007-05-27 16:53  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumsettings.cpp: give
+	  48 px icons size
+
+2007-05-27 13:31  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewview.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/paniconwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/paniconwidget.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.h:
+	  Adapt to DImg-based preview
+
+2007-05-27 13:29  mwiesweg
+
+	* trunk/extragear/graphics/digikam/libs/threadimageio/previewloadthread.cpp,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/previewloadthread.h,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/previewtask.cpp,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/previewtask.h:
+	  Port the preview loading to depend on DImg, instead of QImage
+
+2007-05-27 10:24  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp:
+	  use parent class contentReleaseEvent method
+
+2007-05-27 10:23  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp: only
+	  emit selected item when mouse button is released
+
+2007-05-27 10:04  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp:
+	  factorize
+
+2007-05-27 09:58  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp:
+	  polish drag & drop rule
+
+2007-05-27 08:12  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-27 08:10  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-27 08:09  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp:
+	  digiKam from trunk : Fix crash on Tags Filter view when item is
+	  moved under "Not Tagged" item.
+	  BUG: 146012
+
+2007-05-27 06:54  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp:
+	  init pointer
+
+2007-05-26 21:31  mwiesweg
+
+	* trunk/extragear/graphics/digikam/libs/threadimageio/loadingdescription.cpp,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/loadingdescription.h:
+	  Fix API docs in header.
+	  Add bool parameter "isPreview"
+
+2007-05-26 21:27  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  use recursive Tag folders with Drag & Drop
+
+2007-05-26 21:27  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp:
+	  use recursive Tag folders with Drag & Drop
+
+2007-05-26 21:27  mwiesweg
+
+	* trunk/extragear/graphics/digikam/libs/dimg/loaders/jpegloader.cpp:
+	  Add the possibility to give the DImg JPEG loader a hint (DImg
+	  attribute)
+	  to use the fast scale-before-decoding loading used by preview.
+
+2007-05-26 20:48  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/albumdb.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumdb.h: Add recursive
+	  listing support to AlbumDB::getItemIDsInTag and
+	  AlbumDB::getItemURLsInTag
+
+2007-05-26 16:26  gkulzer
+
+	* trunk/extragear/graphics/digikam/data/themes/Dark: update Dark
+	  theme, make it less contrasty
+
+2007-05-26 16:16  gkulzer
+
+	* trunk/extragear/graphics/digikam/themedesigner/mainwindow.cpp:
+	  include copyright and GPL into file spec
+
+2007-05-26 11:58  gkulzer
+
+	* trunk/extragear/graphics/digikam/data/themes/Clean,
+	  trunk/extragear/graphics/digikam/data/themes/Marine,
+	  trunk/extragear/graphics/digikam/data/themes/OrangeCrush,
+	  trunk/extragear/graphics/digikam/data/themes/Sandy: fixing
+	  copyright and GPL in the header
+
+2007-05-26 08:23  gkulzer
+
+	* trunk/extragear/graphics/digikam/data/themes/Blue: fixing
+	  copyright and GPL in the header
+
+2007-05-26 08:20  gkulzer
+
+	* trunk/extragear/graphics/digikam/data/themes/Digikasa,
+	  trunk/extragear/graphics/digikam/data/themes/Dreary,
+	  trunk/extragear/graphics/digikam/data/themes/Gray: fixing
+	  copyright and GPL in the header
+
+2007-05-26 08:16  gkulzer
+
+	* trunk/extragear/graphics/digikam/data/themes/Dark,
+	  trunk/extragear/graphics/digikam/data/themes/Dessert: fixing
+	  copyright and GPL in the header
+
+2007-05-26 07:16  gkulzer
+
+	* trunk/extragear/graphics/digikam/data/themes/Dark: update Dark
+	  theme, make it less contrasty
+
+2007-05-26 07:14  cgilles
+
+	* trunk/extragear/graphics/digikam/project/Doxyfile: optimize
+
+2007-05-26 06:45  cgilles
+
+	* trunk/extragear/graphics/digikam/HACKING: update
+
+2007-05-26 06:41  cgilles
+
+	* trunk/extragear/graphics/digikam/project/Doxyfile: optimize
+
+2007-05-25 22:20  cgilles
+
+	* trunk/extragear/graphics/digikam/project/Doxyfile: optimize
+
+2007-05-25 20:41  cgilles
+
+	* trunk/extragear/graphics/digikam/project/Doxyfile: optimize
+
+2007-05-25 20:30  cgilles
+
+	* trunk/extragear/graphics/digikam/project/Doxyfile: fix
+
+2007-05-25 19:17  cgilles
+
+	* trunk/extragear/graphics/digikam/HACKING: how to generate API doc
+
+2007-05-25 19:06  cgilles
+
+	* trunk/extragear/graphics/digikam/project/Doxyfile: update again
+
+2007-05-25 18:49  cgilles
+
+	* trunk/extragear/graphics/digikam/project/Doxyfile: update
+
+2007-05-25 14:11  gkulzer
+
+	* trunk/extragear/graphics/digikam/utilities/setup/setuplighttable.cpp:
+	  i18 polish and corrections
+
+2007-05-25 13:58  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/setup/setuplighttable.cpp:
+	  add whats-this
+
+2007-05-25 12:32  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  polish api
+
+2007-05-25 12:28  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindowprivate.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setuplighttable.cpp:
+	  digikam from trunk : Light Table : new option to load automaticly
+	  the selected item on thumbbar to the Right panel to speed up
+	  comparison of picture from Left panel (Ideas inspired from Luis
+	  De la Parra
+	  
+	  CCMAIL: lparrab@gmx.net
+	  CCMAIL: digikam-devel@kde.org
+
+2007-05-25 10:26  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digikam from trunk : Light Table : enable zoom +/- everytime, and
+	  not only when right and left panel can be syncronized. zooming
+	  actions will depand of the current select panel in this case.
+
+2007-05-25 10:09  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindowui.rc:
+	  polish tool bar
+
+2007-05-25 06:43  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.h:
+	  new method to check if preview panel is selected
+
+2007-05-25 06:37  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.h:
+	  canvas + dimginterface : new method to get current file path
+
+2007-05-25 05:48  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.h: polish
+
+2007-05-24 14:19  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-24 14:18  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/main.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.h: digiKam
+	  from trunk : Showfoto: add support to open folders from command
+	  line
+	  BUG: 145627
+
+2007-05-24 13:05  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/emboss/emboss.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/emboss/emboss.h,
+	  trunk/extragear/graphics/digikam/imageplugins/emboss/imageeffect_emboss.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/emboss/imageeffect_emboss.h,
+	  trunk/extragear/graphics/digikam/imageplugins/emboss/imageplugin_emboss.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/emboss/imageplugin_emboss.h:
+	  fix header
+
+2007-05-24 12:58  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/distortionfx/distortionfx.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/distortionfx/distortionfx.h,
+	  trunk/extragear/graphics/digikam/imageplugins/distortionfx/imageeffect_distortionfx.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/distortionfx/imageeffect_distortionfx.h,
+	  trunk/extragear/graphics/digikam/imageplugins/distortionfx/imageplugin_distortionfx.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/distortionfx/imageplugin_distortionfx.h:
+	  fix header
+
+2007-05-24 12:53  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  digikam from trunk : Light Table now support Drag & Drop of Tags
+	  Albums.
+
+2007-05-24 12:34  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumdb.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumdb.h: digikam from
+	  trunk : AlbumDB: new method to get all items Id from a Tag album.
+
+2007-05-24 12:33  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.h:
+	  digikam from trunk : Image Editor now support Drag & Drop from
+	  Album Gui or Light Table. Accepted object are Physicals Albums,
+	  Items selection, and Tags Albums.
+	  CCMAIL: digikam-devel@kde.org
+
+2007-05-24 11:11  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  fix i18n
+
+2007-05-24 07:47  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.h,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/sharpnesseditor/matrix.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/sharpnesseditor/matrix.h,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/sharpnesseditor/refocus.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/sharpnesseditor/refocus.h,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/sharpnesseditor/unsharp.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/sharpnesseditor/unsharp.h:
+	  fix header
+
+2007-05-24 07:41  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.h,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/ratiocrop/imageselectionwidget.h:
+	  fix header
+
+2007-05-24 07:39  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/coreplugin/hsl/hspreviewwidget.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/hsl/hspreviewwidget.h,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/hsl/imageeffect_hsl.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/hsl/imageeffect_hsl.h:
+	  fix header
+
+2007-05-24 07:36  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/coreplugin/imageeffect_autocorrection.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/imageeffect_autocorrection.h,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/imageeffect_bcg.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/imageeffect_bcg.h,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/imageeffect_blur.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/imageeffect_blur.h,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/imageeffect_bwsepia.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/imageeffect_bwsepia.h,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/imageeffect_iccproof.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/imageeffect_iccproof.h,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/imageeffect_redeye.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/imageeffect_redeye.h,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/imageeffect_rgb.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/imageeffect_rgb.h,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/imageplugin_core.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/coreplugin/imageplugin_core.h:
+	  fix headers
+
+2007-05-24 07:27  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/colorfx/imageeffect_colorfx.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/colorfx/imageeffect_colorfx.h,
+	  trunk/extragear/graphics/digikam/imageplugins/colorfx/imageplugin_colorfx.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/colorfx/imageplugin_colorfx.h:
+	  fix header
+
+2007-05-24 07:25  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/charcoal/charcoal.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/charcoal/charcoal.h,
+	  trunk/extragear/graphics/digikam/imageplugins/charcoal/imageeffect_charcoal.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/charcoal/imageeffect_charcoal.h,
+	  trunk/extragear/graphics/digikam/imageplugins/charcoal/imageplugin_charcoal.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/charcoal/imageplugin_charcoal.h:
+	  fix header
+
+2007-05-24 07:20  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/channelmixer/channelmixer.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/channelmixer/channelmixer.h,
+	  trunk/extragear/graphics/digikam/imageplugins/channelmixer/imageplugin_channelmixer.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/channelmixer/imageplugin_channelmixer.h:
+	  fix header
+
+2007-05-24 05:36  cgilles
+
+	* trunk/extragear/graphics/digikam/release_digikam_docs.rb: fix
+	  release id
+
+2007-05-24 05:35  cgilles
+
+	* trunk/extragear/graphics/digikam/release_digikam.rb: fix release
+	  id
+
+2007-05-24 05:33  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/version.h: fix version
+	  id
+
+2007-05-23 08:08  bremedios
+
+	* trunk/extragear/graphics/digikam/tips: various copyedits
+
+2007-05-23 07:57  bremedios
+
+	* trunk/extragear/graphics/digikam/utilities/setup/setupgeneral.cpp:
+	  i18l revision
+
+2007-05-23 07:51  bremedios
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  i18l revisions
+
+2007-05-23 07:51  bremedios
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp:
+	  i18l revisions
+
+2007-05-23 07:17  bremedios
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  updated i18l & constants.h
+
+2007-05-23 07:09  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp: typo
+	  bugfix
+
+2007-05-23 06:02  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/welcomepageview.cpp:
+	  Various i18l updates
+
+2007-05-23 06:01  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp:
+	  Various i18l updates
+
+2007-05-23 06:01  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp:
+	  Various i18l updates
+
+2007-05-23 06:00  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/searchwidgets.cpp:
+	  Various i18l updates
+
+2007-05-23 06:00  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/searchquickdialog.cpp:
+	  Various i18l updates
+
+2007-05-23 05:59  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/searchfolderview.cpp:
+	  Various i18l updates
+
+2007-05-23 05:58  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.cpp:
+	  Various i18l updates
+
+2007-05-23 05:57  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/kipiinterface.cpp:
+	  Various i18l updates
+
+2007-05-23 05:57  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp:
+	  Various i18l updates
+
+2007-05-23 05:56  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/digikamview.cpp: Various
+	  i18l updates
+
+2007-05-23 05:56  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/digikamfirstrun.cpp:
+	  Various i18l updates
+
+2007-05-23 05:56  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp: Various
+	  i18l updates
+
+2007-05-23 05:55  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/albumpropsedit.cpp:
+	  Various i18l updates
+
+2007-05-23 05:54  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/albummanager.cpp:
+	  Various i18l updates
+
+2007-05-23 05:54  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp:
+	  Various i18l updates
+
+2007-05-23 05:51  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp:
+	  i18l updates
+
+2007-05-22 19:13  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp: no need
+	  to have more than one shortcut for Edit/Deselect All option.
+	  CTRL+SHIFT+A is the official
+
+2007-05-22 14:17  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/showfotoui.rc: digikam
+	  from trunk : showfoto close action perform quit
+
+2007-05-22 14:11  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-22 14:09  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfotoui.rc,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/digikamimagewindowui.rc,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindowprivate.h:
+	  digikam from trunk : Image Editor : added Edit/SelectAll and
+	  SelectNone actions
+	  BUG: 145079
+
+2007-05-22 12:59  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamview.cpp: fix
+	  valgrind error about uninitialized value at startup
+
+2007-05-22 12:43  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/dimgscale.cpp: polish
+
+2007-05-22 10:54  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.h:
+	  digikam from trunk : use DImg instead QImage image data container
+	  with Album GUI/Light Table preview to fix definitivly the tile
+	  side effect at high zoom level.
+
+2007-05-22 10:07  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/fastscale.cpp: add
+	  comment
+
+2007-05-22 10:06  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/dimg.cpp,
+	  trunk/extragear/graphics/digikam/libs/dimg/dimg.h: new method to
+	  create a DImg object from QImage
+
+2007-05-22 08:14  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamui.rc: digikam
+	  from trunk : accordinly with KDE4 HIG tips, moving Select menu
+	  from Album Gui to Edit witch is the more common place for select
+	  actions.
+	  CCMAIL: gerhard@kulzer.net
+
+2007-05-22 08:02  cgilles
+
+	* trunk/extragear/graphics/digikam/HACKING: added link to
+	  openusability project
+
+2007-05-22 07:37  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp,
+	  trunk/extragear/graphics/digikam/libs/dimg/fastscale.cpp,
+	  trunk/extragear/graphics/digikam/libs/dimg/fastscale.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  digikam from trunk : add new common FastScale::fastScaleSection()
+	  method used by Album GUI and Light Table preview
+
+2007-05-21 21:19  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  rever source form Marcel patch. commited by accident (:=))
+
+2007-05-21 21:05  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  digiKam from trunk : Light Table preview : fix tile side effect
+	  with high zoom level. This is a first approach how to solv ethis
+	  problem. It's not optimum but work fine.
+	  
+	  What the problem exactly ? Well it's simple : we scaling a part
+	  of full image to render a preview unsing a tile matrix. The part
+	  of ful image is scaled with take a care of
+	  image data outside the region. With a high zoom level the scale
+	  algorithm cannot compute properlly the border of the tile and a
+	  side effect appear.
+	  
+	  CCBUGS: 145198
+
+2007-05-21 21:01  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp:
+	  digikam from trunk : fix tile side effect on preview widget with
+	  high zoom level.
+
+2007-05-21 11:53  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+	  add comments
+
+2007-05-21 11:51  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+	  digikam from trunk : fix conflict between CTRL+SHIFT+S shortcuts
+	  to "save as" and "fit to select". Use ALT+CTRL+S shorcut with fit
+	  to select action
+
+2007-05-21 11:37  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digikam from trunk : fix conflict between CTRL+SHIFT+A shortcuts
+	  to "unselect item" and "fit to window". Use CTRL+SHIFT+E shorcut
+	  with fit to window action, like gimp
+
+2007-05-21 11:08  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-21 11:07  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp: digikam
+	  from trunk : added new accelerator SHIFT+SPACE to go to next item
+	  in current album
+	  BUG: 144650
+
+2007-05-21 10:47  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-21 10:43  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-21 10:42  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp: digikam
+	  from trunk : Album GUI : Add CTRL+SHIFT+A accelerator to unselect
+	  items from current album.
+	  CCBUGS: 144643
+
+2007-05-21 10:26  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-21 10:05  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-21 10:03  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digiKam from trunk : Use everywhere ALT+CTRL+0 shortcut to
+	  perform "Zoom To 1:1" action instead CTRL+SHIFT+Z witch is in
+	  conflict with Redo std shortcut defined by KDE API.
+	  Note : ALT+CTRL+0 is also used by Photoshop 7.0
+	  BUG: 145558
+
+2007-05-21 09:54  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/whitebalance/imageplugin_whitebalance.cpp:
+	  digiKam from trunk : White Balance tool : use CTRL+SHIFT+W
+	  instead CTRL+W to prevent conflict with std KDE shortcuts
+	  CCBUGS: 145077
+
+2007-05-21 09:36  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.h:
+	  digiKam from trunk: Image Editor disable Fit To Window option
+	  properlly in all cases (Reported by Rainer Krienke).
+	  CCBUGS: 145170
+
+2007-05-21 09:06  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-21 09:05  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindowui.rc:
+	  digikam from trunk : Light Table : fix fixed File/Close and
+	  File/Quit std actions. Only File/Close action must be available.
+	  CCBUGS: 145077
+
+2007-05-21 09:04  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfotoui.rc: digikam
+	  from trunk : Showfoto : fix fixed File/Close and File/Quit std
+	  actions. Only File/Close action must be available.
+	  CCBUGS: 145077
+
+2007-05-21 09:03  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/digikamimagewindowui.rc,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+	  digikam from trunk : Image Editor : fix fixed File/Close and
+	  File/Quit std actions. Only File/Close action must be available.
+	  BUG: 145077
+
+2007-05-21 08:50  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-21 08:49  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+	  digikam from trunk : added new accelerator SHIFT+SPACE to go to
+	  next image in editor
+	  BUG: 145083
+
+2007-05-21 08:27  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/common/previewwidget.cpp:
+	  polish
+
+2007-05-21 08:15  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-21 08:15  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+	  digikam from trunk : added new accelerator CTRL+Y to Redo and
+	  action
+	  BUG: 145078
+
+2007-05-21 07:58  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-21 07:58  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.h:
+	  digikam from trunk : Image Editor : to be able to use the zoom
+	  +/- functions if "Fit To Window" option is enabled.
+	  BUG: 145170
+
+2007-05-19 12:40  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.cpp:
+	  fix corner button visiblity with tit to window
+
+2007-05-19 12:22  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/common/previewwidget.cpp:
+	  dispatch properly the new zoom factor when fit to window function
+	  is used.
+
+2007-05-18 21:24  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.cpp:
+	  digikam from trunk : Image Editor canvas : use the same way than
+	  Light Table preview and ALgum GUI preview to hide/show corner
+	  button used to pan image
+
+2007-05-18 12:31  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  digikam from trunk : Light Table : now, you can drag & drop drag
+	  & drop an album from Album Gui to Light Table. All items from
+	  this album wil be automaticly loaded in thumbbar.
+	  CCMAIL: digikam-devel@kde.org
+
+2007-05-18 12:15  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumdb.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumdb.h: digiKam from
+	  trunk : new method to get all item Ids from and album.
+
+2007-05-18 11:40  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumdb.h: fix doc API
+
+2007-05-18 09:20  gkulzer
+
+	* trunk/extragear/graphics/digikam/utilities/setup/setuplighttable.cpp:
+	  automaticly -> automatically
+
+2007-05-18 08:51  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp:
+	  digikam from trunk : sync album gui preview widget with Light
+	  Table preview widget (corner widget visibilty test)
+
+2007-05-18 08:50  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  digikam from trunk : Light table prewiew widget : chage the test
+	  to enable disable teh corner widget. DO not use the zoom stuff
+	  for that, because some precision error can be give a wrong
+	  result.
+	  The utimate way to do it is to force the widget to update all
+	  scroll bars and to test witch is visible
+
+2007-05-18 08:48  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp:
+	  digikam from trunk : Light Table view implementation.
+	  
+	  - Regorganize signal slots connection to be more readable.
+	  - When we synchronize Left and Right panels, only disconect the
+	  signals/slots between preview widgets, not all using
+	  blocksignals, else all internals panel signals will not be
+	  dispatched.
+
+2007-05-17 18:55  cgilles
+
+	* trunk/extragear/graphics/digikam/README,
+	  trunk/extragear/graphics/digikam/configure.in.in: fix libkexiv2
+	  release number depency
+
+2007-05-17 14:42  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.h:
+	  digikam from trunk : Light Table : if thummbar is cleared and
+	  Drag & Drop is enable, write a message on Left and Right panel
+	  about it.
+
+2007-05-17 14:39  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/common/previewwidget.cpp:
+	  polish
+
+2007-05-16 19:44  cgilles
+
+	* trunk/extragear/graphics/digikam/data/themes/Blue: polish
+
+2007-05-16 17:46  cgilles
+
+	* trunk/extragear/graphics/digikam/data/themes/Blue,
+	  trunk/extragear/graphics/digikam/data/themes/Sandy: fix
+
+2007-05-16 16:48  cgilles
+
+	* trunk/extragear/graphics/digikam/data/themes/Blue: update
+
+2007-05-16 13:43  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  prevent flicker effect with selection
+
+2007-05-16 13:26  cgilles
+
+	* trunk/extragear/graphics/digikam/data/themes/Blue: update
+
+2007-05-16 12:07  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/imageproperties/cameraitempropertiestab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiestab.cpp:
+	  no need margin here
+
+2007-05-16 10:15  cgilles
+
+	* trunk/extragear/graphics/digikam/data/themes/Blue,
+	  trunk/extragear/graphics/digikam/data/themes/Makefile.am: digikam
+	  from trunk : New "Blue" color theme
+
+2007-05-16 09:21  cgilles
+
+	* trunk/extragear/graphics/digikam/themedesigner/mainwindow.cpp:
+	  polish
+
+2007-05-15 14:39  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  digikam from trunk : Light Table : Fix resize event with preview
+	  widget when to display properlly a message about to Drag and Drop
+	  an item when no image is loaded.
+
+2007-05-15 14:38  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp:
+	  polish
+
+2007-05-15 14:06  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp: fix
+	  flicker effect with album item tool tip
+
+2007-05-15 08:49  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/folderitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/folderitem.h: polish
+
+2007-05-15 07:21  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/folderitem.cpp: polish
+
+2007-05-15 06:27  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/imageproperties/cameraitempropertiestab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiestab.cpp:
+	  fix frame style
+
+2007-05-15 05:46  cgilles
+
+	* trunk/extragear/graphics/digikam/themedesigner/mainwindow.cpp,
+	  trunk/extragear/graphics/digikam/themedesigner/mainwindow.h: fix
+	  header
+
+2007-05-15 05:40  cgilles
+
+	* trunk/extragear/graphics/digikam/themedesigner/mainwindow.cpp,
+	  trunk/extragear/graphics/digikam/themedesigner/mainwindow.h:
+	  compile with --enable-final
+
+2007-05-14 21:16  cgilles
+
+	* trunk/extragear/graphics/digikam/data/themes/Dark,
+	  trunk/extragear/graphics/digikam/data/themes/Dessert,
+	  trunk/extragear/graphics/digikam/data/themes/Digikasa,
+	  trunk/extragear/graphics/digikam/data/themes/Dreary,
+	  trunk/extragear/graphics/digikam/data/themes/Gray,
+	  trunk/extragear/graphics/digikam/data/themes/Makefile.am: digiKam
+	  from trunk : new color theme by Risto Saukonpää (18% Gray)
+	  CCMAIL: digikam-devel@kde.org
+
+2007-05-14 20:55  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/themeengine/themeengine.cpp:
+	  no need to delete Theme instance, because QDict::setAutoDelete is
+	  enable
+
+2007-05-14 20:32  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  fix statusbar messages
+
+2007-05-14 19:49  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  better support of color scheme
+
+2007-05-14 19:24  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/themeengine/themeengine.cpp,
+	  trunk/extragear/graphics/digikam/libs/themeengine/themeengine.h:
+	  new method to get regular color of thumb
+
+2007-05-14 18:19  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digikam from trunk: Light Table : missing to refresh status bar
+	  when items are removed from thumbbar
+
+2007-05-14 14:14  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp:
+	  polish
+
+2007-05-14 14:12  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digikam from trunk : Light Table: check Exif orientation tag to
+	  render Thumbbar items accordinly with Metadata settings
+
+2007-05-14 14:02  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h:
+	  digikam from trunk : Light Table: check if an item inserted in
+	  Light Table using Drag & Drop is really a picture.
+
+2007-05-14 12:17  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp,
+	  trunk/extragear/graphics/digikam/project/project.kdevelop: polish
+
+2007-05-14 12:16  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digikam from trunk : Light Table: do not reset by a QTimer the
+	  image preview widget on constructor
+
+2007-05-14 11:03  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp:
+	  digikam from trunk : Light Table: thummbar : repaint item is more
+	  fast than refresh all items to set on/off left/right position on
+	  panels
+
+2007-05-14 09:29  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  digikam from trunk : JPEGLossLess kipi plugin cannot be used as
+	  well with Light Table because plugin work only with current
+	  selection from Album GUI.
+	  So, if we want a rotation tool in Light Table, we need to find
+	  another way to do it...
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-05-14 09:11  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp:
+	  digikam from trunk : Light Table : if thumbbar has no item,
+	  repaint properly the contents area when users drag & drop new
+	  items
+
+2007-05-14 08:50  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h:
+	  fix slot name
+
+2007-05-14 08:48  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindowprivate.h:
+	  digikam from trunk : separate LightTable Window private class
+
+2007-05-14 08:38  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: digikam
+	  from trunk : showfoto bugfix : missing to update currentItem when
+	  user select first or last item
+
+2007-05-14 07:45  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  keyboard shortcuts for Remove Item and Clear All Items
+
+2007-05-14 07:43  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h:
+	  using d private internal class
+
+2007-05-13 19:56  mwiesweg
+
+	* trunk/extragear/graphics/digikam/libs/widgets/common/previewwidget.cpp:
+	  Apply patch from Arnd Baecker to keep the position under the
+	  mouse cursor constant
+	  when zooming in with Ctrl+Mouse Wheel.
+	  
+	  I changed the patch a bit to avoid code duplication, but the
+	  logic is
+	  the same.
+	  As Arnd pointed out, the position jumps around a bit, it is only
+	  approximately
+	  constant. I dont know why. But for now it works well enough.
+	  
+	  CCMAIL: arnd.baecker@web.de
+
+2007-05-13 18:53  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp:
+	  polish
+
+2007-05-13 16:40  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digikam from trunk: Light Table : remember "Navigate by Pair"
+	  option between sessions
+
+2007-05-13 16:24  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  polish
+
+2007-05-13 16:23  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-13 16:20  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digikam from trunk : Light Table :
+	  - when thumbbar is empty, enable properlly all menu options when
+	  new item are inserted.
+	  - when "Navigate by Pair" option is enable and when an item is
+	  removed from thumbbar, reorganize properlly the pair.
+	  CCBUGS: 145236
+
+2007-05-13 16:17  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp:
+	  polish
+
+2007-05-13 15:52  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digikam from trunk : Light Table : disable thumbar item selection
+	  when user left click on panels using "Navigate by Pair" option
+
+2007-05-13 08:04  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digikam from trunk : Light Table : use first item of list in
+	  Right panel if last item is selected on Left Panel with "Navigate
+	  by pair"
+
+2007-05-13 07:54  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digikam from trunk : Light Table : do not lost zoom level
+	  synchronization between Left and Right panels using "NAvigate by
+	  Pair" function.
+	  CCBUGS: 145236
+
+2007-05-12 19:42  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-12 19:36  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindowui.rc:
+	  digiKam from trunk : Light Table : Add "Navigate by Pair" option.
+	  
+	  In this mode drag & drop is disable between thumbbar and
+	  left/right panels.
+	  The options to set amnually the item on Left or Right panel are
+	  also disable (main menu and pop-up menu)
+	  
+	  The light table will set automaticly the left item with the
+	  current item selected on thumbbar and the right item
+	  is the next item on thumbbar.
+	  
+	  CCBUGS: 145236
+
+2007-05-12 15:33  mwiesweg
+
+	* trunk/extragear/graphics/digikam/libs/widgets/common/previewwidget.cpp:
+	  Adapt the line step of the scroll bars to the zoom factor.
+	  For low zoom factors, scrolling with the mouse wheel is still
+	  precise,
+	  for higher zoom rates the steps get bigger.
+	  This means the approx. the same amount of mouse wheel scrolling
+	  is required
+	  for to scroll the same span in the original picture, regardless
+	  of zoom rate.
+	  
+	  For the overall relative speed, I added a factor of 2 which feels
+	  good, please report
+	  if scrolling steps are too big or too small.
+	  
+	  (bug 145237, #4)
+	  
+	  CCBUG: 145237
+
+2007-05-12 15:27  mwiesweg
+
+	* trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp:
+	  Remove the triggerRearrangement call here, it is not needed.
+	  This was causing the bug that an empty selection in
+	  cameraiconview was not possible.
+
+2007-05-12 09:35  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp:
+	  digikam from trunk : Light Table : better support of theme color
+	  in thumbbar
+
+2007-05-12 06:49  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digikam from trunk: Light Table : re-synchronize preview
+	  properlly when "Sync Left/Right" panel option is toogle on.
+	  CCBUGS: 145236
+
+2007-05-11 22:11  cgilles
+
+	* trunk/extragear/graphics/digikam/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/themeengine/themeengine.cpp,
+	  trunk/extragear/graphics/digikam/libs/themeengine/themeengine.h,
+	  trunk/extragear/graphics/digikam/themedesigner,
+	  trunk/extragear/graphics/digikam/themedesigner/Makefile.am,
+	  trunk/extragear/graphics/digikam/themedesigner/digikamthemedesigner.desktop,
+	  trunk/extragear/graphics/digikam/themedesigner/main.cpp,
+	  trunk/extragear/graphics/digikam/themedesigner/mainwindow.cpp,
+	  trunk/extragear/graphics/digikam/themedesigner/mainwindow.h,
+	  trunk/extragear/graphics/digikam/themedesigner/themedicongroupitem.cpp,
+	  trunk/extragear/graphics/digikam/themedesigner/themedicongroupitem.h,
+	  trunk/extragear/graphics/digikam/themedesigner/themediconitem.cpp,
+	  trunk/extragear/graphics/digikam/themedesigner/themediconitem.h,
+	  trunk/extragear/graphics/digikam/themedesigner/themediconview.cpp,
+	  trunk/extragear/graphics/digikam/themedesigner/themediconview.h:
+	  digikam from trunk : add Color Theme Designer tool
+
+2007-05-11 20:58  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindowui.rc:
+	  digikamm from trunk : Light Table use the new dedicaced setup
+	  panel
+
+2007-05-11 20:57  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/setup/Makefile.am,
+	  trunk/extragear/graphics/digikam/utilities/setup/setup.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setup.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setuplighttable.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setuplighttable.h:
+	  digikam from trunk : new Light Table setup panel
+
+2007-05-11 17:05  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindowprivate.h:
+	  polish
+
+2007-05-11 14:30  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  polish
+
+2007-05-11 14:18  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindowui.rc:
+	  fix tool bar order
+
+2007-05-11 14:17  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digikam from trunk : Light Table :
+	  
+	  - Fix crash if static_cast are dummy, especially when fisrt item
+	  is inserted to thumbbar
+	  - Use dynamic_cast to check cast result.
+	  - Use image info everywhere to compare thumb item and panel item
+	  for selection.
+	  - Fix navigate buttons for first and last item selection
+
+2007-05-11 14:10  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.h: use
+	  polymorphism class
+
+2007-05-11 13:29  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  enambe/disable navigate actions within context
+
+2007-05-11 13:22  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindowui.rc:
+	  digikam from trunk : Light Table : added new options to navigate
+	  between thumbbar items (first, previous, next, last). Shortcuts
+	  are the same than Album Gui and Image Editor
+	  CCBUGS: 145237
+
+2007-05-11 12:31  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp:
+	  revert. There is a problem with FastScale algorithm
+
+2007-05-11 11:39  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp: fix
+	  scaled size rule with FastScale
+
+2007-05-11 10:52  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h:
+	  digikam from trunk : Light Table : use Image info everywhere
+	  instead KURL. Fix bug when an image is removed from thumbbar with
+	  is unselected in panel (if active)
+
+2007-05-11 10:15  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp:
+	  digikam from trunk : Light Table : using ImageInfo::id() instead
+	  KURL to compare two image instances is better and more homogenous
+	  with rest of digiKam
+
+2007-05-11 09:07  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp:
+	  digikam from trunk: Light Table: using digiKam pop-up menu with
+	  thumbbar
+
+2007-05-11 08:38  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digiKam from trunk: Light Table: added Clear All items on
+	  thumbbar pop-up menu
+
+2007-05-11 08:24  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h:
+	  digiKam from trunk : Light Table : added Edit Item to thumbbar
+	  pop-up menu.
+
+2007-05-11 08:10  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindowui.rc:
+	  digiKam from trunk : Light Table : add File Edit (F4) menu option
+
+2007-05-11 08:00  cgilles
+
+	* trunk/extragear/graphics/digikam/project/digikam.kdevelop,
+	  trunk/extragear/graphics/digikam/project/project.kdevelop:
+	  renamed
+
+2007-05-11 07:58  cgilles
+
+	* trunk/extragear/graphics/digikam/project/digikam.kdevelop: update
+
+2007-05-11 07:55  cgilles
+
+	* trunk/extragear/graphics/digikam/configure.in.bot,
+	  trunk/extragear/graphics/digikam/configure.in.in:
+	  digikamimageplugins do not exist anymore. polish report messages
+
+2007-05-11 06:10  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp:
+	  digikam from trunk: Thumbbar use FastScale algorithm from Antonio
+	  to speed up thumbnails render.
+
+2007-05-10 19:30  cgilles
+
+	* trunk/extragear/graphics/digikam/project/digikam.kdevelop,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindowui.rc:
+	  digikam from trunk : Light Table : added "File/Delete" option in
+	  main menu
+	  CCBUGS: 145236
+
+2007-05-10 19:26  cgilles
+
+	* trunk/extragear/graphics/digikam/README,
+	  trunk/extragear/graphics/digikam/configure.in.bot,
+	  trunk/extragear/graphics/digikam/configure.in.in: oups, libkexiv2
+	  0.1.5 is not yet released
+
+2007-05-10 19:19  cgilles
+
+	* trunk/extragear/graphics/digikam/README,
+	  trunk/extragear/graphics/digikam/configure.in.bot,
+	  trunk/extragear/graphics/digikam/configure.in.in: fix libkexiv2
+	  depency
+
+2007-05-10 18:47  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digikam from trunk: Light Table : use CTRL+R and CTRL+L to place
+	  thumbbar item on Right or Left panel.
+	  CCBUGS: 145236
+
+2007-05-10 13:37  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp:
+	  digikam from trunk : Light Table : If there is no item in
+	  thumbbar, display a message to user about to drag and drop items
+	  in this area
+
+2007-05-10 13:35  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  polish
+
+2007-05-10 13:24  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp:
+	  polish
+
+2007-05-10 13:23  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp:
+	  digikam from trunk : Light Table : limit minimim width/height of
+	  light table to the max Rating pixmap size
+
+2007-05-10 13:05  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp:
+	  polish
+
+2007-05-10 12:55  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-10 12:53  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digikam from trunk : Light Table : and finaly, to be able to
+	  assign Rating to the current selected picture in thumbbar using
+	  standard digiKam keyboard shorcuts (CTRL+0, CTRL+1, ..., CTRL+5)
+	  BUG: 145227
+
+2007-05-10 12:34  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h:
+	  digikam from trunk : Light Table : to be able to select and
+	  ensure visible the thumbbar icon associed with the Left or Right
+	  panel when user click with left mouse button on preview.
+	  CCBUGS: 145227
+
+2007-05-10 12:01  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h:
+	  digikam from trunk : Light Table : to be able to assign Rating
+	  directly by thumbbar pop-up menu.
+	  CCBUGS: 145227
+
+2007-05-10 11:31  cgilles
+
+	* trunk/extragear/graphics/digikam/project/digikam.kdevelop,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h:
+	  digikam from trunk : Light Table : to be abble to display rating
+	  information over over the thumbbar icons.
+	  CCBUGS: 145227
+
+2007-05-10 10:33  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digikam from trunk : Light Table : add an icon over the thumbbar
+	  icon to indicate the position of image on Left or Right panel.
+	  CCBUGS: 145227
+
+2007-05-10 08:39  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumiconitem.h: polish
+
+2007-05-10 08:30  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/themeengine/themeengine.cpp,
+	  trunk/extragear/graphics/digikam/libs/themeengine/themeengine.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h:
+	  digikam from trunk : Light Table : Highlight the current image
+	  selected in thumbbar to right or left panel used a color frame
+	  around the preview. The current color scheme theme is used to
+	  draw the frame border.
+	  CCBUGS: 145227
+
+2007-05-10 01:39  bremedios
+
+	* trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.h: Code
+	  cleanup: refactoring common code
+
+2007-05-10 01:39  bremedios
+
+	* trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp:
+	  Code cleanup: refactoring common code & use of constants.h
+
+2007-05-09 23:39  bremedios
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp:
+	  Code cleanup: use of constants.h
+
+2007-05-09 23:39  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/kipiinterface.cpp: Code
+	  cleanup: use of constants.h
+
+2007-05-09 23:09  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp: Code
+	  cleanup: use of constants.h
+
+2007-05-09 14:46  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/welcomepageview.cpp:
+	  digikam from trunk : add Light Table in new features of welcome
+	  page
+
+2007-05-09 14:43  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam.lsm: update
+
+2007-05-09 14:40  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamui.rc,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.h: digikam
+	  from trunk : Light Table integration in Tool menu of Album Gui.
+	  ALT+F6 show Light Table window without add new picture.
+
+2007-05-09 14:08  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/constants.h: missing no
+	  newline at end of file
+
+2007-05-09 14:06  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/constants.h: Use a macro
+	  wrapper to prevent re-definitions
+
+2007-05-09 13:31  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/constants.h: Use Digikam
+	  namespace.
+	  Fix header
+
+2007-05-09 13:18  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-09 13:18  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/constants.h: added
+	  missing file to repository
+
+2007-05-09 13:14  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digikam from trunk : BKO #145204 point (c) fixed.
+	  CCBUGS: 145204
+
+2007-05-09 12:15  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-09 12:13  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/previewwidget.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindowui.rc:
+	  digikam from trunk : Light table : new option to synchronize
+	  automaticly Left/right panel when a new image is added in preview
+
+2007-05-09 09:45  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  use slotReset() instead resetPreview() directly
+
+2007-05-09 09:43  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/previewwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/previewwidget.h,
+	  trunk/extragear/graphics/digikam/project/digikam.kdevelop,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  digiKam from trunk : change PreviewWidget::reset() to slotReset()
+	  to perform a cleanup when widget is created using a QTimer
+
+2007-05-09 09:06  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  polish
+
+2007-05-09 08:59  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  polish
+
+2007-05-09 08:59  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp:
+	  polish
+
+2007-05-09 08:55  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp:
+	  polish
+
+2007-05-09 08:50  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp:
+	  fix slots
+
+2007-05-09 08:47  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h:
+	  digikam from trunk : Light table : Enable/Disable Left/Right zoom
+	  bar accordinly with Left/right preview panels loading picture
+	  results
+
+2007-05-09 08:45  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewview.h:
+	  polish
+
+2007-05-09 07:54  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/ratingwidget.cpp:
+	  initial contribution: code cleanup - created constants.h to hold
+	  hard-coded values found in project
+
+2007-05-09 07:46  bremedios
+
+	* trunk/extragear/graphics/digikam/digikam/ratingpopupmenu.cpp:
+	  Initial contribution: Code cleanup - created constants.h to hold
+	  numerous hard-coded values found throughout the project
+
+2007-05-09 07:30  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  fix i18n
+
+2007-05-09 07:29  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindowui.rc:
+	  digikam from trunk : Light table : added "Show on Left/Right
+	  Panel" actions from thumbbar to main File menu.
+
+2007-05-09 07:27  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp:
+	  polish
+
+2007-05-08 21:14  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp:
+	  digikam from trunk : BKO #145204 point (a) fixed.
+	  CCBUGS: 145204
+
+2007-05-08 20:58  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  polish
+
+2007-05-08 20:55  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindowui.rc:
+	  digikam from trunk : Light Table : added 2 new options on View
+	  menu to zoom in/out with right/left preview panels synchronized
+
+2007-05-08 20:40  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  Fix problem that cached preview image is null.
+	  In Qt3, QImage is using explicit sharing. This means any
+	  operation
+	  on the actual data of the QImage object will modify the data of
+	  all objects, in this case, including the cached image.
+	  
+	  This is indeed unintuitive, and the Trolls have changed it so
+	  that
+	  in Qt4 QImage is also implicitly shared. So this fix should be
+	  enough for now.
+	  
+	  CCMAIL: caulier.gilles@gmail.com
+
+2007-05-08 19:41  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  digikam from trunk : Light Table : fix crash when item is open in
+	  editor. All Image Info get from thumbbar need to be copied
+	  indeep.
+
+2007-05-08 17:12  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  polish
+
+2007-05-08 17:09  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp:
+	  polish
+
+2007-05-08 17:00  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewview.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/previewwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/previewwidget.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindowui.rc:
+	  digikam from trunk : Light Table improvement : add option to
+	  synchronize left and right panels when user pan/zoom preview
+	  images.
+	  This option is only enable when left and right preview image have
+	  the same size.
+	  
+	  BUG: 145159
+
+2007-05-08 16:51  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp: fix i18n
+
+2007-05-08 16:46  gkulzer
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp:
+	  Insert to Light Table -> Place onto Light Table
+	  CCMAIL:louis.roederer@gmail.com
+
+2007-05-08 16:45  gkulzer
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp:
+	  Insert to Light Table -> Place onto Light Table
+	  CCMAIL:louis.roederer@gmail.com
+
+2007-05-08 16:27  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp:
+	  polish again
+
+2007-05-08 16:25  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp:
+	  polish
+
+2007-05-08 14:20  cgilles
+
+	* trunk/extragear/graphics/digikam/HACKING: add link to KDE contrib
+	  page
+
+2007-05-08 08:53  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp:
+	  fix i18n
+
+2007-05-08 08:34  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: polish
+
+2007-05-08 07:43  gkulzer
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  improve light table i18 strings. CCMAIL:
+
+2007-05-08 05:51  gkulzer
+
+	* trunk/extragear/graphics/digikam/NEWS: 0.9.2-beta2 NEWS added
+	  (lighttable)
+
+2007-05-07 20:12  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindowui.rc:
+	  digikam from trunk: Light Table : removing Zoom + and Zoom -
+	  actions from main menu.
+
+2007-05-07 20:06  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h:
+	  digikam from trunk : Light Table : update contents of thumbbar
+	  and preview panels if an image has changed form album gui (for ex
+	  to use JpegLossLess kipi-plugin)
+	  CCMAIL: digikam-devel@kde.org
+
+2007-05-07 19:44  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp,
+	  trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.h: new
+	  method to refresh a list of items
+
+2007-05-07 18:26  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/common/statuszoombar.cpp:
+	  fix i18n
+
+2007-05-07 18:23  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  fix i18n
+
+2007-05-07 15:51  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumiconview.h,
+	  trunk/extragear/graphics/digikam/digikam/albumwidgetstack.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumwidgetstack.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewview.h:
+	  digikam from trunk : added option to insert current item
+	  displayed in Preview from Album GUI to Light Table
+
+2007-05-07 15:06  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamui.rc: fix
+	  version id
+
+2007-05-07 14:07  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-07 14:06  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamappprivate.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamui.rc,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.h: digikam
+	  from trunk : added Insert to Light Table action on album gui
+	  Image menu... Now the new Light Table tool is officially
+	  available on digiKam.
+	  BUG: 135048
+
+2007-05-07 13:44  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-07 13:41  cgilles
+
+	* trunk/extragear/graphics/digikam/project/digikam.kdevelop,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h:
+	  digikam from trunk : Light Table : full support of Drag & Drop
+	  CCMAIL: digikam-devel@kde.org
+
+2007-05-07 12:55  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp:
+	  polish
+
+2007-05-07 12:52  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h:
+	  digikam from trunk : Light Table : Drag & Drop support between
+	  Abum view and Light Table Thum bar and vis versa...
+
+2007-05-07 12:51  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp:
+	  missing deletion of item from Light table slot connection
+
+2007-05-07 11:58  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp,
+	  trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.h:
+	  digikam from trunk: prepare to support drag & drop with Light
+	  Table
+
+2007-05-06 20:31  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h:
+	  digikam form trunk : Light Table : new option to move item from
+	  left or right preview area to trash.
+
+2007-05-06 20:26  cgilles
+
+	* trunk/extragear/graphics/digikam/configure.in.in: fix libkexiv2
+	  version to check with digiKam
+
+2007-05-06 19:06  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/Makefile.am,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h:
+	  digikam from trunk : Light Table : to be abble to open image from
+	  LT in image editor
+
+2007-05-06 16:25  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindowui.rc:
+	  digikam from trunk : new option to clear all item inserted on LT
+
+2007-05-05 16:39  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindowui.rc:
+	  digikam from trunk : Light Table : new option on File menu to
+	  remove current selected item in thumbbar
+
+2007-05-05 16:13  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp:
+	  polish
+
+2007-05-05 16:10  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h:
+	  digikam from trunk : add new option to remove an item from Light
+	  Table
+
+2007-05-05 15:48  gkulzer
+
+	* trunk/extragear/graphics/digikam/PACKAGING: 0.9.2-beta1 release
+
+2007-05-05 15:42  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewview.h:
+	  polish
+
+2007-05-05 15:18  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp:
+	  polish
+
+2007-05-05 15:15  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp:
+	  polish
+
+2007-05-05 15:15  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  init LT preview content size as well using null preview
+
+2007-05-05 14:10  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/border/border.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/border/border.h,
+	  trunk/extragear/graphics/digikam/imageplugins/border/imageeffect_border.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/border/imageeffect_border.h,
+	  trunk/extragear/graphics/digikam/imageplugins/border/imageplugin_border.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/border/imageplugin_border.h:
+	  fix header
+
+2007-05-05 13:17  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/blurfx/blurfx.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/blurfx/blurfx.h,
+	  trunk/extragear/graphics/digikam/imageplugins/blurfx/imageeffect_blurfx.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/blurfx/imageeffect_blurfx.h,
+	  trunk/extragear/graphics/digikam/imageplugins/blurfx/imageplugin_blurfx.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/blurfx/imageplugin_blurfx.h:
+	  fix header
+
+2007-05-05 12:59  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp:
+	  polish
+
+2007-05-05 12:55  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/common/sidebar.cpp:
+	  digikam from trunk : bugfix in sidebar : the Text + Icons button
+	  status is inverted at startup.
+
+2007-05-04 21:34  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/common/sidebar.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/sidebar.h:
+	  polish
+
+2007-05-04 21:33  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h:
+	  compile
+
+2007-05-04 21:32  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp: request
+	  to shutdown light table if created
+
+2007-05-04 21:06  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/common/sidebar.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/sidebar.h:
+	  to preven trace condition, using close event is better than
+	  destructor to savec settings in rc file
+
+2007-05-04 20:35  gkulzer
+
+	* trunk/extragear/graphics/digikam/ChangeLog: 0.9.2-beta1 release
+
+2007-05-04 20:10  mwiesweg
+
+	* trunk/extragear/graphics/digikam/libs/widgets/common/sidebar.cpp:
+	  Initialize all private variables in Sidebar.
+
+2007-05-04 19:30  mwiesweg
+
+	* trunk/extragear/graphics/digikam/libs/jpegutils/jpegutils.cpp,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/previewtask.cpp,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/previewtask.h:
+	  The JPEGutils used QImage::smoothScale to scale JPEGs. Remove
+	  this call,
+	  so now all scaling is done at one place.
+	  Scale down only if the image is considerably larger (~ >150%).
+	  
+	  Scaling with FastScale seems 5x faster (callgrind) than the
+	  scaling with
+	  smoothScale (takes 4% vs. 20% of the preload time). To me it
+	  appears better
+	  to use the faster algorithm, even with faint quality loss.
+	  Note: this is not about scaling when drawing, but about scaling
+	  when loading the preview.
+
+2007-05-04 19:14  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  hide corner widget is preview is null
+
+2007-05-04 19:04  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h:
+	  new method to refresh status bar
+
+2007-05-04 18:56  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  fix plural form
+
+2007-05-04 18:55  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/common/statusprogressbar.cpp:
+	  fix printing text condition on status progress bar
+
+2007-05-04 18:23  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/antivignetting/antivignetting.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/antivignetting/antivignetting.h,
+	  trunk/extragear/graphics/digikam/imageplugins/antivignetting/imageeffect_antivignetting.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/antivignetting/imageeffect_antivignetting.h,
+	  trunk/extragear/graphics/digikam/imageplugins/antivignetting/imageplugin_antivignetting.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/antivignetting/imageplugin_antivignetting.h:
+	  fix header
+
+2007-05-04 18:19  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/adjustcurves/adjustcurves.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/adjustcurves/adjustcurves.h,
+	  trunk/extragear/graphics/digikam/imageplugins/adjustcurves/imageplugin_adjustcurves.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/adjustcurves/imageplugin_adjustcurves.h,
+	  trunk/extragear/graphics/digikam/imageplugins/adjustlevels/adjustlevels.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/adjustlevels/adjustlevels.h,
+	  trunk/extragear/graphics/digikam/imageplugins/adjustlevels/imageplugin_adjustlevels.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/adjustlevels/imageplugin_adjustlevels.h:
+	  fix header
+
+2007-05-04 18:16  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/adjustcurves/adjustcurves.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/adjustcurves/adjustcurves.h,
+	  trunk/extragear/graphics/digikam/imageplugins/adjustcurves/imageplugin_adjustcurves.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/adjustcurves/imageplugin_adjustcurves.h:
+	  fix header
+
+2007-05-04 17:51  cgilles
+
+	* trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.cpp:
+	  add link to freedesktop.org
+
+2007-05-04 17:05  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-04 17:01  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/digikamview.cpp: Don't
+	  confine action to physical albums
+	  
+	  BUG: 136254
+
+2007-05-04 16:04  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  handle left side bar in full screen mode
+
+2007-05-04 16:02  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  delete left sidebar in destructor
+
+2007-05-04 14:27  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+	  print number of items in LT
+
+2007-05-04 14:14  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/digikam/main.cpp,
+	  trunk/extragear/graphics/digikam/project/digikam.kdevelop,
+	  trunk/extragear/graphics/digikam/showfoto/main.cpp: digikamand
+	  DigikamImageplugins have been merged togeter. remove the locale
+	  and tips request from DigiKamImagePlugins
+
+2007-05-04 13:54  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/version.h: fix header
+
+2007-05-04 13:53  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/searchfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchfolderview.h,
+	  trunk/extragear/graphics/digikam/digikam/searchquickdialog.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchquickdialog.h,
+	  trunk/extragear/graphics/digikam/digikam/searchresultsitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchresultsitem.h,
+	  trunk/extragear/graphics/digikam/digikam/searchresultsview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchresultsview.h,
+	  trunk/extragear/graphics/digikam/digikam/searchwidgets.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchwidgets.h,
+	  trunk/extragear/graphics/digikam/digikam/syncjob.cpp,
+	  trunk/extragear/graphics/digikam/digikam/syncjob.h,
+	  trunk/extragear/graphics/digikam/digikam/tagcreatedlg.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagcreatedlg.h,
+	  trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfilterview.h,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.h,
+	  trunk/extragear/graphics/digikam/digikam/tagspopupmenu.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagspopupmenu.h,
+	  trunk/extragear/graphics/digikam/digikam/thumbnailsize.h,
+	  trunk/extragear/graphics/digikam/digikam/upgradedb_sqlite2tosqlite3.cpp,
+	  trunk/extragear/graphics/digikam/digikam/upgradedb_sqlite2tosqlite3.h,
+	  trunk/extragear/graphics/digikam/digikam/welcomepageview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/welcomepageview.h: fix
+	  header
+
+2007-05-04 13:47  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/folderitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/folderitem.h,
+	  trunk/extragear/graphics/digikam/digikam/folderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/folderview.h,
+	  trunk/extragear/graphics/digikam/digikam/icongroupitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/icongroupitem.h,
+	  trunk/extragear/graphics/digikam/digikam/iconitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/iconitem.h,
+	  trunk/extragear/graphics/digikam/digikam/iconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/iconview.h,
+	  trunk/extragear/graphics/digikam/digikam/imageattributeswatch.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imageattributeswatch.h,
+	  trunk/extragear/graphics/digikam/digikam/imageinfo.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imageinfo.h,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewview.h,
+	  trunk/extragear/graphics/digikam/digikam/kdatepickerpopup.cpp,
+	  trunk/extragear/graphics/digikam/digikam/kdatepickerpopup.h,
+	  trunk/extragear/graphics/digikam/digikam/kdatetimeedit.cpp,
+	  trunk/extragear/graphics/digikam/digikam/kdatetimeedit.h,
+	  trunk/extragear/graphics/digikam/digikam/kipiinterface.cpp,
+	  trunk/extragear/graphics/digikam/digikam/kipiinterface.h,
+	  trunk/extragear/graphics/digikam/digikam/main.cpp,
+	  trunk/extragear/graphics/digikam/digikam/mediaplayerview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/mediaplayerview.h,
+	  trunk/extragear/graphics/digikam/digikam/metadatahub.cpp,
+	  trunk/extragear/graphics/digikam/digikam/metadatahub.h,
+	  trunk/extragear/graphics/digikam/digikam/monthwidget.cpp,
+	  trunk/extragear/graphics/digikam/digikam/monthwidget.h,
+	  trunk/extragear/graphics/digikam/digikam/pixmapmanager.cpp,
+	  trunk/extragear/graphics/digikam/digikam/pixmapmanager.h,
+	  trunk/extragear/graphics/digikam/digikam/ratingpopupmenu.cpp,
+	  trunk/extragear/graphics/digikam/digikam/ratingpopupmenu.h,
+	  trunk/extragear/graphics/digikam/digikam/ratingwidget.cpp,
+	  trunk/extragear/graphics/digikam/digikam/ratingwidget.h,
+	  trunk/extragear/graphics/digikam/digikam/scanlib.cpp,
+	  trunk/extragear/graphics/digikam/digikam/scanlib.h,
+	  trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.h:
+	  fix header
+
+2007-05-04 13:38  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/cameradragobject.cpp,
+	  trunk/extragear/graphics/digikam/digikam/cameradragobject.h,
+	  trunk/extragear/graphics/digikam/digikam/cameralist.cpp,
+	  trunk/extragear/graphics/digikam/digikam/cameralist.h,
+	  trunk/extragear/graphics/digikam/digikam/cameratype.cpp,
+	  trunk/extragear/graphics/digikam/digikam/cameratype.h,
+	  trunk/extragear/graphics/digikam/digikam/datefolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/datefolderview.h,
+	  trunk/extragear/graphics/digikam/digikam/dcopiface.cpp,
+	  trunk/extragear/graphics/digikam/digikam/dcopiface.h,
+	  trunk/extragear/graphics/digikam/digikam/digikam_export.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamapp.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamappprivate.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamfirstrun.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamfirstrun.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.h,
+	  trunk/extragear/graphics/digikam/digikam/dio.cpp,
+	  trunk/extragear/graphics/digikam/digikam/dio.h,
+	  trunk/extragear/graphics/digikam/digikam/dio_p.h,
+	  trunk/extragear/graphics/digikam/digikam/dragobjects.cpp,
+	  trunk/extragear/graphics/digikam/digikam/dragobjects.h,
+	  trunk/extragear/graphics/digikam/digikam/firstrun.cpp,
+	  trunk/extragear/graphics/digikam/digikam/firstrun.h: fix header
+
+2007-05-04 13:31  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/album.cpp,
+	  trunk/extragear/graphics/digikam/digikam/album.h,
+	  trunk/extragear/graphics/digikam/digikam/albumdb.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumdb.h,
+	  trunk/extragear/graphics/digikam/digikam/albumdb_sqlite2.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumdb_sqlite2.h,
+	  trunk/extragear/graphics/digikam/digikam/albumfiletip.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfiletip.h,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview.h,
+	  trunk/extragear/graphics/digikam/digikam/albumhistory.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumhistory.h,
+	  trunk/extragear/graphics/digikam/digikam/albumicongroupitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumicongroupitem.h,
+	  trunk/extragear/graphics/digikam/digikam/albumiconitem.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumiconitem.h,
+	  trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumiconview.h,
+	  trunk/extragear/graphics/digikam/digikam/albuminfo.h,
+	  trunk/extragear/graphics/digikam/digikam/albumitemhandler.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumitemhandler.h,
+	  trunk/extragear/graphics/digikam/digikam/albumlister.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumlister.h,
+	  trunk/extragear/graphics/digikam/digikam/albummanager.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albummanager.h,
+	  trunk/extragear/graphics/digikam/digikam/albumpropsedit.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumpropsedit.h,
+	  trunk/extragear/graphics/digikam/digikam/albumsettings.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumsettings.h,
+	  trunk/extragear/graphics/digikam/digikam/albumthumbnailloader.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumthumbnailloader.h,
+	  trunk/extragear/graphics/digikam/digikam/albumwidgetstack.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumwidgetstack.h: fix
+	  header
+
+2007-05-04 13:24  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/cameragui/albumselectdialog.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/albumselectdialog.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/animwidget.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/animwidget.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderdialog.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderdialog.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderitem.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderitem.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderview.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/camerainfodialog.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/camerainfodialog.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/dkcamera.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/dkcamera.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/downloadsettingscontainer.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/gpiteminfo.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/gpiteminfo.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/mtqueue.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.h,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.h:
+	  fix header
+
+2007-05-04 13:17  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/colorcorrectiondlg.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/iccsettingscontainer.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/imageplugin.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/imageplugin.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/imagepluginloader.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/imagepluginloader.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/iofilesettingscontainer.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/undoaction.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/undoaction.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/undocache.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/undocache.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/undomanager.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/undomanager.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindowprivate.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imageiface.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imageiface.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/savingcontextcontainer.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/tools/imageprint.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/tools/imageprint.h,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/tools/imageresize.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/tools/imageresize.h:
+	  fix header
+
+2007-05-04 13:12  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/setup/cameraselection.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/cameraselection.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/gpiface.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/gpiface.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setup.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setup.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupcamera.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupcamera.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupcollections.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupcollections.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupdcraw.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupdcraw.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupeditor.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupeditor.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupgeneral.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupgeneral.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupicc.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupicc.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupidentity.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupidentity.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupiofiles.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupiofiles.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupmetadata.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupmetadata.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupmime.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupmime.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupmisc.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupmisc.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupplugins.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupplugins.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupslideshow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupslideshow.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setuptooltip.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setuptooltip.h:
+	  fix header
+
+2007-05-04 13:07  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/batch/batchalbumssyncmetadata.cpp,
+	  trunk/extragear/graphics/digikam/utilities/batch/batchalbumssyncmetadata.h,
+	  trunk/extragear/graphics/digikam/utilities/batch/batchsyncmetadata.cpp,
+	  trunk/extragear/graphics/digikam/utilities/batch/batchsyncmetadata.h,
+	  trunk/extragear/graphics/digikam/utilities/batch/batchthumbsgenerator.cpp,
+	  trunk/extragear/graphics/digikam/utilities/batch/batchthumbsgenerator.h,
+	  trunk/extragear/graphics/digikam/utilities/batch/imageinfoalbumsjob.cpp,
+	  trunk/extragear/graphics/digikam/utilities/batch/imageinfoalbumsjob.h,
+	  trunk/extragear/graphics/digikam/utilities/batch/imageinfojob.cpp,
+	  trunk/extragear/graphics/digikam/utilities/batch/imageinfojob.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.h,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshowsettings.h,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/toolbar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/toolbar.h,
+	  trunk/extragear/graphics/digikam/utilities/splashscreen/splashscreen.cpp,
+	  trunk/extragear/graphics/digikam/utilities/splashscreen/splashscreen.h:
+	  fix header
+
+2007-05-04 13:02  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/main.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/setup/setup.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/setup/setup.h,
+	  trunk/extragear/graphics/digikam/showfoto/setup/setupeditor.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/setup/setupeditor.h,
+	  trunk/extragear/graphics/digikam/showfoto/setup/setuptooltip.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/setup/setuptooltip.h,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.h: fix header
+
+2007-05-04 12:59  cgilles
+
+	* trunk/extragear/graphics/digikam/kioslave/digikamalbums.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamalbums.h,
+	  trunk/extragear/graphics/digikam/kioslave/digikamdates.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamdates.h,
+	  trunk/extragear/graphics/digikam/kioslave/digikamsearch.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamsearch.h,
+	  trunk/extragear/graphics/digikam/kioslave/digikamtags.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamtags.h,
+	  trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.h,
+	  trunk/extragear/graphics/digikam/kioslave/sqlitedb.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/sqlitedb.h: fix header
+
+2007-05-04 12:57  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp,
+	  trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.h,
+	  trunk/extragear/graphics/digikam/libs/thumbbar/thumbnailjob.cpp,
+	  trunk/extragear/graphics/digikam/libs/thumbbar/thumbnailjob.h,
+	  trunk/extragear/graphics/digikam/libs/whitebalance/blackbody.h,
+	  trunk/extragear/graphics/digikam/libs/whitebalance/whitebalance.cpp,
+	  trunk/extragear/graphics/digikam/libs/whitebalance/whitebalance.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/colorgradientwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/colorgradientwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/curveswidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/curveswidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/dcursortracker.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/dcursortracker.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/dpopupmenu.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/dpopupmenu.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/filesaveoptionsbox.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/filesaveoptionsbox.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/histogramwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/histogramwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/paniconwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/paniconwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/previewwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/previewwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/sidebar.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/sidebar.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/squeezedcombobox.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/squeezedcombobox.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/statusnavigatebar.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/statusnavigatebar.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/statusprogressbar.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/statusprogressbar.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/statuszoombar.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/statuszoombar.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/iccprofiles/cietonguewidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/iccprofiles/cietonguewidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/iccprofiles/iccpreviewwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/iccprofiles/iccpreviewwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/iccprofiles/iccprofilewidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/iccprofiles/iccprofilewidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imageguidewidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imageguidewidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imagepaniconwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imagepaniconwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imagepannelwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imagepannelwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imageregionwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imageregionwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imagewidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imagewidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/listboxpreviewitem.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/listboxpreviewitem.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/exifwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/exifwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/gpswidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/gpswidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/iptcwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/iptcwidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/makernotewidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/makernotewidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/mdkeylistviewitem.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/mdkeylistviewitem.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/metadatalistview.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/metadatalistview.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/metadatalistviewitem.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/metadatalistviewitem.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/metadatawidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/metadatawidget.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/worldmapwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/worldmapwidget.h:
+	  fix header
+
+2007-05-04 12:53  gkulzer
+
+	* trunk/extragear/graphics/digikam/PACKAGING,
+	  trunk/extragear/graphics/digikam/digikam.lsm,
+	  trunk/extragear/graphics/digikam/digikam/version.h,
+	  trunk/extragear/graphics/digikam/release_digikam.rb,
+	  trunk/extragear/graphics/digikam/release_digikam_docs.rb:
+	  0.9.2-beta1 release
+
+2007-05-04 12:39  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/jpegutils/jpegutils.cpp,
+	  trunk/extragear/graphics/digikam/libs/jpegutils/jpegutils.h,
+	  trunk/extragear/graphics/digikam/libs/levels/imagelevels.cpp,
+	  trunk/extragear/graphics/digikam/libs/levels/imagelevels.h,
+	  trunk/extragear/graphics/digikam/libs/themeengine/texture.cpp,
+	  trunk/extragear/graphics/digikam/libs/themeengine/texture.h,
+	  trunk/extragear/graphics/digikam/libs/themeengine/theme.cpp,
+	  trunk/extragear/graphics/digikam/libs/themeengine/theme.h,
+	  trunk/extragear/graphics/digikam/libs/themeengine/themeengine.cpp,
+	  trunk/extragear/graphics/digikam/libs/themeengine/themeengine.h,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/loadingcache.h,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/loadingcacheinterface.cpp,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/loadingcacheinterface.h,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/loadingdescription.cpp,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/loadingdescription.h,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/loadsavetask.cpp,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/loadsavetask.h,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/loadsavethread.cpp,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/loadsavethread.h,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/managedloadsavethread.cpp,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/managedloadsavethread.h,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/previewloadthread.h,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/previewtask.cpp,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/previewtask.h,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/sharedloadsavethread.cpp,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/sharedloadsavethread.h:
+	  fix header
+
+2007-05-04 12:38  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/threadimageio/loadingcache.cpp,
+	  trunk/extragear/graphics/digikam/libs/threadimageio/previewloadthread.cpp:
+	  fix missing moc includes.
+
+2007-05-04 12:28  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp,
+	  trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.h,
+	  trunk/extragear/graphics/digikam/libs/dmetadata/photoinfocontainer.h,
+	  trunk/extragear/graphics/digikam/libs/greycstoration/greycstorationiface.cpp,
+	  trunk/extragear/graphics/digikam/libs/greycstoration/greycstorationiface.h,
+	  trunk/extragear/graphics/digikam/libs/greycstoration/greycstorationsettings.h,
+	  trunk/extragear/graphics/digikam/libs/greycstoration/greycstorationwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/greycstoration/greycstorationwidget.h,
+	  trunk/extragear/graphics/digikam/libs/histogram/imagehistogram.cpp,
+	  trunk/extragear/graphics/digikam/libs/histogram/imagehistogram.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/cameraitempropertiestab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/cameraitempropertiestab.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiescolorstab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiescolorstab.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiesmetadatatab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiesmetadatatab.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebar.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebar.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebarcamgui.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebarcamgui.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebardb.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebardb.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiestab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiestab.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/navigatebartab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/navigatebartab.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/navigatebarwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/navigatebarwidget.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/talbumlistview.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/talbumlistview.h:
+	  fix header
+
+2007-05-04 11:59  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/Makefile.am,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h:
+	  digiKam from trunk : Light Table improvements.
+	  
+	  The new LT is now able to compare 2 images at the same time. Just
+	  insert some pictures to LT and set one on left panel and one
+	  other to right panel using the thumbbar context menu. On the
+	  bottom (status bar) there are 2 sliders to zoom independantly the
+	  right or the left panel.
+	  
+	  In a first time i have targeted to sync left and right panel but
+	  its complex to do it if size of left and right images are not the
+	  same.
+	  
+	  There is a screenshot of LT in action at this url :
+	  
+	  http://digikam3rdparty.free.fr/Screenshots/lighttable_v3.png
+	  
+	  The LT still under alpha stage. there are some part witch are not
+	  yet implemented/tested...
+	  
+	  CCBUG: 135048
+	  CCMAIL: digikam-devel@kde.org
+	  CCMAIL: francisco.jct@gmail.com
+	  CCMAIL: gerhard@kulzer.net
+
+2007-05-04 09:53  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablebar.h:
+	  digiKam from trunk : Light Table : new method to find an item il
+	  LT bar using ImageInfo
+
 v0.9.2-beta1 - 2007-05-04
 ----------------------------------------------------------------------------
 
