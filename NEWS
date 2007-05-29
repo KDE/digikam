@@ -2,14 +2,15 @@ digiKam 0.9.2-rc1 - Release date: 2007-06-??
 
 NEW FEATURES:
 
-General       : Light Table can work with full image size instead a reduced one.
+General       : Light Table and Preview Mode can work with full image size instead a reduced one.
 
 ----------------------------------------------------------------------------
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 059 ==> 145198 : Light-table should also work with the full image.
-060 ==> 
+060 ==> 146072 : Slideshow shows black screen.
+061 ==> 
 
 **********************************************************************************************
 
