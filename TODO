@@ -39,8 +39,6 @@
                 to start download dialog
                 ditto for unmounting in usm case 
 
-* Compatibility with little cms version 1.16 which provides improvements
-
 ------------------------------------------------------------------------------------
 LATER 0.9.1 TODO LIST
 ------------------------------------------------------------------------------------
@@ -64,6 +62,7 @@ LATER 0.9.1 TODO LIST
    - Writing Metadata into TIFF file like JPEG (Exiv2).
    - Writing Metadata to DNG format (=TIFF see above)
    - Writing Metadata to JPEG 2k files like JPEG (Exiv2).
+   - Support of XMP metadata (http://dev.robotbattle.com/bugs/view.php?id=463)
 
 * Database:
    - New database interface to suport remote repository and others DB backend than sqlite.
