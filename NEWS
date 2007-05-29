@@ -1,3 +1,19 @@
+digiKam 0.9.2-rc1 - Release date: 2007-06-??
+
+NEW FEATURES:
+
+General       : Light Table can work with full image size instead a reduced one.
+
+----------------------------------------------------------------------------
+
+digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+059 ==> 145198 : Light-table should also work with the full image.
+060 ==> 
+
+**********************************************************************************************
+
+
 digiKam 0.9.2-beta2 - Release date: 2007-05-28
 
 NEW FEATURES:
@@ -31,8 +47,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 057 ==> 146012 : Dragging an image over a tag in "tag filters" panel crashes digiKam.
 058 ==> 146032 : Panning doesn't work in Light Table.
 
-**********************************************************************************************
 
+**********************************************************************************************
 
 digiKam 0.9.2-beta1 - Release date: 2007-05-04
 
