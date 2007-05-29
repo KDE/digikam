@@ -39,6 +39,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cmath>
+#include <cstdlib>
 
 // Qt includes.
 
