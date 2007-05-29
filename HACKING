@@ -1,9 +1,17 @@
-Adhere to this style guide strictly while adding new code to digiKam or 
-working on existing code. 
+========================================================================
+10 golden rules for starting with open source
+========================================================================
+
+Before to contribute to digiKam project, please take a look to this link:
+
+http://schlitt.info/applications/blog/index.php?/archives/541-10-golden-rules-for-starting-with-open-source.html
 
 ========================================================================
-Formatting:
+Source code formatting:
 ========================================================================
+
+Adhere to this style guide strictly while adding new code to digiKam or 
+working on existing code. 
 
 -------------------------------------------------------------------------
 * Indentation length
