@@ -55,6 +55,8 @@ public:
     ImagePreviewView(AlbumWidgetStack *parent=0);
     ~ImagePreviewView();
 
+    void setLoadFullImageSize(bool b);
+
     void setImage(const DImg& image);
     DImg& getImage() const;
 

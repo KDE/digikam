@@ -92,12 +92,14 @@ public:
         parent               = 0;
         hasPrev              = false;
         hasNext              = false;
+        loadFullImageSize    = false;
         currentFitWindowZoom = 0;
         previewSize          = 1024;
     }
 
     bool               hasPrev;
     bool               hasNext;
+    bool               loadFullImageSize;
 
     int                previewSize;
 
@@ -177,6 +179,12 @@ ImagePreviewView::~ImagePreviewView()
     delete d;
 }
 
+void ImagePreviewView::setLoadFullImageSize(bool b)
+{
+    d->loadFullImageSize = b;
+    reload();
+}
+
 void ImagePreviewView::setImage(const DImg& image)
 {
     d->preview = image;
@@ -232,7 +240,10 @@ void ImagePreviewView::setImagePath(const QString& path)
                 this, SLOT(slotNextPreload()));
     }
 
-    d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
+    if (d->loadFullImageSize)
+        d->previewThread->loadHighQuality(LoadingDescription(path, 0, AlbumSettings::instance()->getExifRotate()));
+    else
+        d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
 }
 
 void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description, const DImg& preview)

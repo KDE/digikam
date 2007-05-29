@@ -94,6 +94,8 @@ public:
     bool saveDateTime;
     bool saveRating;
 
+    bool previewLoadFullImageSize;
+
     int  thumbnailSize;
     int  treeThumbnailSize;
 
@@ -226,6 +228,8 @@ void AlbumSettings::init()
     d->saveComments           = false;
     d->saveDateTime           = false;
     d->saveRating             = false;
+
+    d->previewLoadFullImageSize = false;
 }
 
 void AlbumSettings::readSettings()
@@ -255,13 +259,13 @@ void AlbumSettings::readSettings()
                                                                   "Item Right Click Action",
                                                                   (int)AlbumSettings::ShowPreview));
 
-    d->imageFilefilter = config->readEntry("File Filter", d->imageFilefilter);
-    d->movieFilefilter = config->readEntry("Movie File Filter", d->movieFilefilter);
-    d->audioFilefilter = config->readEntry("Audio File Filter", d->audioFilefilter);
-    d->rawFilefilter   = config->readEntry("Raw File Filter", d->rawFilefilter);
-    d->thumbnailSize   = config->readNumEntry("Default Icon Size", ThumbnailSize::Medium);
+    d->imageFilefilter   = config->readEntry("File Filter", d->imageFilefilter);
+    d->movieFilefilter   = config->readEntry("Movie File Filter", d->movieFilefilter);
+    d->audioFilefilter   = config->readEntry("Audio File Filter", d->audioFilefilter);
+    d->rawFilefilter     = config->readEntry("Raw File Filter", d->rawFilefilter);
+    d->thumbnailSize     = config->readNumEntry("Default Icon Size", ThumbnailSize::Medium);
     d->treeThumbnailSize = config->readNumEntry("Default Tree Icon Size", ThumbnailSize::Tiny);
-    d->currentTheme    = config->readEntry("Theme", i18n("Default"));
+    d->currentTheme      = config->readEntry("Theme", i18n("Default"));
 
     d->iconShowName       = config->readBoolEntry("Icon Show Name", false); 
     d->iconShowResolution = config->readBoolEntry("Icon Show Resolution", false);
@@ -290,6 +294,8 @@ void AlbumSettings::readSettings()
     d->tooltipShowTags       = config->readBoolEntry("ToolTips Show Tags", true);
     d->tooltipShowRating     = config->readBoolEntry("ToolTips Show Rating", true);
 
+    d->previewLoadFullImageSize = config->readBoolEntry("Preview Load Full Image Size", false);
+    
     // ---------------------------------------------------------------------
 
     config->setGroup("EXIF Settings");
@@ -373,6 +379,8 @@ void AlbumSettings::saveSettings()
     config->writeEntry("ToolTips Show Comments", d->tooltipShowComments);
     config->writeEntry("ToolTips Show Tags", d->tooltipShowTags);
     config->writeEntry("ToolTips Show Rating", d->tooltipShowRating);
+
+    config->writeEntry("Preview Load Full Image Size", d->previewLoadFullImageSize);
 
     // ---------------------------------------------------------------------
 
@@ -1041,6 +1049,16 @@ QString AlbumSettings::getDefaultAudioFileFilter() const
 QString AlbumSettings::getDefaultRawFileFilter() const
 {
     return d->defaultRawFilefilter;
+}
+
+void AlbumSettings::setPreviewLoadFullImageSize(bool val)
+{
+    d->previewLoadFullImageSize = val;
+}
+
+bool AlbumSettings::getPreviewLoadFullImageSize() const
+{
+    return d->previewLoadFullImageSize;
 }
 
 }  // namespace Digikam

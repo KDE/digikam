@@ -245,6 +245,9 @@ public:
     QString getDefaultAudioFileFilter() const;
     QString getDefaultRawFileFilter() const;
 
+    void setPreviewLoadFullImageSize(bool val);
+    bool getPreviewLoadFullImageSize() const;
+
     static AlbumSettings *instance();
 
 private:

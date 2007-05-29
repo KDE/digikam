@@ -198,6 +198,7 @@ DigikamView::~DigikamView()
 void DigikamView::applySettings(const AlbumSettings* settings)
 {
     d->iconView->applySettings(settings);
+    d->albumWidgetStack->imagePreviewView()->setLoadFullImageSize(settings->getPreviewLoadFullImageSize());
 }
 
 void DigikamView::setupConnections()

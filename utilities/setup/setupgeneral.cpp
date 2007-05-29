@@ -77,10 +77,11 @@ public:
         iconShowTagsBox          = 0;
         iconShowRatingBox        = 0;
         rightClickActionComboBox = 0;
+        previewLoadFullImageSize = 0;
     }
 
-    QComboBox     *iconTreeThumbSize;
     QLabel        *iconTreeThumbLabel;
+
     QCheckBox     *iconShowNameBox;
     QCheckBox     *iconShowSizeBox;
     QCheckBox     *iconShowDateBox;
@@ -89,7 +90,9 @@ public:
     QCheckBox     *iconShowCommentsBox;
     QCheckBox     *iconShowTagsBox;
     QCheckBox     *iconShowRatingBox;
+    QCheckBox     *previewLoadFullImageSize;
 
+    QComboBox     *iconTreeThumbSize;
     QComboBox     *rightClickActionComboBox;
 
     KURLRequester *albumPathEdit;
@@ -129,7 +132,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     QVGroupBox *iconTextGroup = new QVGroupBox(i18n("Thumbnails"), parent);
     iconTextGroup->setColumnLayout(0, Qt::Vertical );
     iconTextGroup->layout()->setMargin(KDialog::marginHint());
-    QGridLayout* tagSettingsLayout = new QGridLayout(iconTextGroup->layout(), 5, 10,
+    QGridLayout* tagSettingsLayout = new QGridLayout(iconTextGroup->layout(), 10, 4,
                                                      KDialog::spacingHint());
       
     d->iconTreeThumbLabel = new QLabel(i18n("Sidebar thumbnail size:"), iconTextGroup);
@@ -200,6 +203,12 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     tagSettingsLayout->addMultiCellWidget(rightClickLabel, 9 ,9, 0, 0);
     tagSettingsLayout->addMultiCellWidget(d->rightClickActionComboBox, 9, 9, 1, 4);
 
+    d->previewLoadFullImageSize = new QCheckBox(i18n("Embedded preview load full image size"), iconTextGroup);
+    QWhatsThis::add( d->previewLoadFullImageSize, i18n("<p>Set this option to load full image size "
+                     "with embedded preview instead a reduced one. Because this option will take more time "
+                     "to load image, use it only if you have a fast computer."));
+    tagSettingsLayout->addMultiCellWidget(d->previewLoadFullImageSize, 10, 10, 0, 4);
+
     layout->addWidget(iconTextGroup);
 
     // --------------------------------------------------------
@@ -235,6 +244,7 @@ void SetupGeneral::applySettings()
     settings->setItemRightClickAction((AlbumSettings::ItemRightClickAction)
                                       d->rightClickActionComboBox->currentItem());
 
+    settings->setPreviewLoadFullImageSize(d->previewLoadFullImageSize->isChecked());
     settings->saveSettings();
 }
 
@@ -265,6 +275,8 @@ void SetupGeneral::readSettings()
     d->iconShowRatingBox->setChecked(settings->getIconShowRating());
 
     d->rightClickActionComboBox->setCurrentItem((int)settings->getItemRightClickAction());
+
+    d->previewLoadFullImageSize->setChecked(settings->getPreviewLoadFullImageSize());
 }
 
 void SetupGeneral::slotChangeAlbumPath(const QString &result)
