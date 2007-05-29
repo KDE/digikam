@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-19
- * Description : a dialog to perform simple search in albums
+ * Description : "OrangeCrush" colors theme.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
@@ -21,8 +21,7 @@
  *
  * ============================================================ */
 
-! "Clean"
-
+! "OrangeCrush"
 
 base.color:			     rgb:FF/FF/FF
 text.regular.color:		     rgb:00/00/00
