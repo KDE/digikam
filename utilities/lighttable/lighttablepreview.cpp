@@ -89,6 +89,7 @@ public:
         hasNext              = false;
         selected             = false;
         dragAndDropEnabled   = true;
+        loadFullImageSize    = false;
         currentFitWindowZoom = 0;
         previewSize          = 1024;
     }
@@ -97,6 +98,7 @@ public:
     bool               hasNext;
     bool               selected;
     bool               dragAndDropEnabled;
+    bool               loadFullImageSize;
 
     int                previewSize;
 
@@ -169,6 +171,12 @@ LightTablePreview::~LightTablePreview()
     delete d->previewThread;
     delete d->previewPreloadThread;
     delete d;
+}
+
+void LightTablePreview::setLoadFullImageSize(bool b)
+{
+    d->loadFullImageSize = b;
+    reload();
 }
 
 void LightTablePreview::setDragAndDropEnabled(bool b)
@@ -252,7 +260,10 @@ void LightTablePreview::setImagePath(const QString& path)
                 this, SLOT(slotNextPreload()));
     }
 
-    d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
+    if (d->loadFullImageSize)
+        d->previewThread->loadHighQuality(LoadingDescription(path, 0, AlbumSettings::instance()->getExifRotate()));
+    else
+        d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
 }
 
 void LightTablePreview::slotGotImagePreview(const LoadingDescription &description, const DImg& preview)

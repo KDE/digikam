@@ -59,6 +59,8 @@ public:
     ImageInfo* leftImageInfo() const;
     ImageInfo* rightImageInfo() const;
 
+    void   setLoadFullImageSize(bool b);
+
     void   setLeftZoomFactor(double z);
     void   setRightZoomFactor(double z);
 

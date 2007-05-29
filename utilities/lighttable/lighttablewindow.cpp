@@ -150,9 +150,10 @@ void LightTableWindow::applySettings()
     KConfig* config = kapp->config();
     config->setGroup("LightTable Settings");
 
-    d->autoLoadOnRightPanel  = config->readBoolEntry("Auto Load Right Panel", true);
-    d->autoSyncPreview       = config->readBoolEntry("Auto Sync Preview", true);
+    d->autoLoadOnRightPanel  = config->readBoolEntry("Auto Load Right Panel",   true);
+    d->autoSyncPreview       = config->readBoolEntry("Auto Sync Preview",       true);
     d->fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
+    d->previewView->setLoadFullImageSize(config->readBoolEntry("Load Full Image size", false));
 }
 
 void LightTableWindow::closeEvent(QCloseEvent* e)

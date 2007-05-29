@@ -55,6 +55,8 @@ public:
     LightTablePreview(QWidget *parent=0);
     ~LightTablePreview();
 
+    void setLoadFullImageSize(bool b);
+
     void setImage(const DImg& image);
     DImg& getImage() const;
 

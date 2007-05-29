@@ -142,6 +142,12 @@ LightTableView::~LightTableView()
     delete d;
 }
 
+void LightTableView::setLoadFullImageSize(bool b)
+{
+    d->leftPreview->setLoadFullImageSize(b); 
+    d->rightPreview->setLoadFullImageSize(b); 
+}
+
 void LightTableView::setSyncPreview(bool sync)
 {
     d->syncPreview = sync;
