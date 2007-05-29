@@ -44,6 +44,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "dimg.h"
 #include "toolbar.h"
 #include "previewloadthread.h"
 #include "slideshow.h"
@@ -81,7 +82,7 @@ public:
 
     QPixmap            pixmap;
 
-    QImage             preview;
+    DImg               preview;
 
     KURL               currentImage;
 
@@ -149,8 +150,8 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     d->timer                = new QTimer();
     d->mouseMoveTimer       = new QTimer();
 
-    connect(d->previewThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
-            this, SLOT(slotGotImagePreview(const LoadingDescription &, const QImage&)));
+    connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
+            this, SLOT(slotGotImagePreview(const LoadingDescription &, const DImg&)));
 
     connect(d->mouseMoveTimer, SIGNAL(timeout()),
             this, SLOT(slotMouseMoveTimeOut()));
@@ -221,7 +222,7 @@ void SlideShow::loadNextImage()
     else
     {
         d->currentImage = KURL();
-        d->preview = QImage();
+        d->preview = DImg();
         updatePixmap();
         update();
     }
@@ -256,14 +257,14 @@ void SlideShow::loadPrevImage()
     else
     {
         d->currentImage = KURL();
-        d->preview = QImage();
+        d->preview = DImg();
         updatePixmap();
         update();
     }
 
 }
 
-void SlideShow::slotGotImagePreview(const LoadingDescription&, const QImage& preview)
+void SlideShow::slotGotImagePreview(const LoadingDescription&, const DImg& preview)
 {
     d->preview = preview;
 
@@ -310,7 +311,7 @@ void SlideShow::updatePixmap()
         {
             // Preview extraction is complete... Draw the image.
 
-            QPixmap pix(d->preview.smoothScale(size(), QImage::ScaleMin));
+            QPixmap pix(d->preview.smoothScale(width(), height(), QSize::ScaleMin).convertToPixmap());
             p.drawPixmap((width()-pix.width())/2,
                          (height()-pix.height())/2, pix,
                          0, 0, pix.width(), pix.height());
