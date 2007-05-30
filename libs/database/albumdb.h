@@ -379,14 +379,14 @@ public:
      * @return a list of urls for the items in the tag. The urls are the
      * absolute path of the items
      */
-    QStringList getItemURLsInTag(int tagID);
+    QStringList getItemURLsInTag(int tagID, bool recursive = false);
 
     /**
      * Given a tagID, get a list of Ids of all items in the tag
      * @param  tagID the id of the tag
      * @return a list of Ids for the items in the tag.
      */
-    LLongList getItemIDsInTag(int tagID);
+    LLongList getItemIDsInTag(int tagID, bool recursive = false);
 
     /**
      * Returns all items in the database without a date. This is used
