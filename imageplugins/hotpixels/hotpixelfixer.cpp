@@ -1,15 +1,14 @@
 /* ============================================================
- * Authors: Unai Garro <ugarro at users dot sourceforge dot net>
- *          Gilles Caulier <caulier dot gilles at free dot fr> 
- * Date   : 2005-03-27
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-03-27
  * Description : Threaded image filter to fix hot pixels
  * 
- * Copyright 2005-2007 by Unai Garro and Gilles Caulier 
- *
- * The algorithm for fixing the hot pixels was based on
- * the code of jpegpixi, which was released under the GPL license,
- * and is Copyright (C) 2003, 2004 Martin Dickopp
- *
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
+ * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -21,7 +20,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  * 
- * ============================================================*/
+ * ============================================================ */
 
 // C++ includes. 
  
