@@ -32,12 +32,14 @@ namespace Digikam
 {
 
 class DatabaseBackend;
+class DatabaseAccess;
+class AlbumDB;
 
 class SchemaUpdater
 {
 public:
 
-    SchemaUpdater(DatabaseBackend *backend);
+    SchemaUpdater(DatabaseAccess *access);
 
     static int schemaVersion();
     bool update();
@@ -45,7 +47,14 @@ public:
 private:
 
     bool createTables();
-    DatabaseBackend* m_backend;
+    bool makeUpdates();
+    bool copyV3toV4(const QString &digikam3DBPath, const QString &currentDBPath);
+    bool updateV2toV4(const QString &sqlite2DBPath);
+    bool createTablesV3();
+
+    DatabaseAccess *m_access;
+
+    int m_currentVersion;
 };
 
 
