@@ -24,14 +24,14 @@
 #ifndef UPGRADEDB_SQLITE2TOSQLITE3_H
 #define UPGRADEDB_SQLITE2TOSQLITE3_H
 
+#include <qstring.h>
 #include "digikam_export.h"
-
-class QString;
+#include "databaseaccess.h"
 
 namespace Digikam
 {
 
-extern bool DIGIKAM_EXPORT upgradeDB_Sqlite2ToSqlite3(const QString& libraryPath);
+extern bool DIGIKAM_EXPORT upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPath);
 
 }  // namespace Digikam
 
