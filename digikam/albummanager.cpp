@@ -195,9 +195,11 @@ void AlbumManager::initialize()
 
     if (!Digikam::DatabaseAccess::checkReadyForUse())
     {
-        KMessageBox::error(0, i18n("Failed to open the database.\n"
-                                   "You cannot use digiKam without a working database."
-                                   "Please check the database settings in the configuration menu."));
+        KMessageBox::error(0, i18n("<qt><p>Failed to open the database. "
+                                   " Error message from database: %1 "
+                                   "</p><p>You cannot use digiKam without a working database."
+                                   "Please check the database settings in the configuration menu.</p></qt>")
+                               .arg(DatabaseAccess().lastError()));
         return;
     }
 
@@ -270,14 +272,6 @@ void AlbumManager::initialize()
         DatabaseAccess().db()->setSetting("Locale",currLocale);
     }
 
-    // -- Check if we need to upgrade 0.7.x db to 0.8 db ---------------------
-
-    if (!upgradeDB_Sqlite2ToSqlite3(DatabaseAccess::albumRoot()))
-    {
-        KMessageBox::error(0, i18n("Failed to update old Database to new Database format"));
-        exit(0);
-    }
-    
     // -- Check if we need to do scanning -------------------------------------
 
     KConfig* config = KGlobal::config();

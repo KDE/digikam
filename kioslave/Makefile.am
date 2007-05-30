@@ -35,6 +35,7 @@ kio_digikamtags_la_SOURCES = digikamtags.cpp sqlitedb.cpp
 kio_digikamtags_la_LIBADD  = $(LIB_KIO)  $(LIB_SQLITE3) \
 	                     $(LIBKEXIV2_LIBS) $(LIBKDCRAW_LIBS) \
 	                     $(top_builddir)/digikam/libs/database/libdatabase.la \
+	                     $(top_builddir)/digikam/sqlite/libsqlite.la \
 	                     $(top_builddir)/digikam/libs/dimg/libdimg.la
 
 kio_digikamtags_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGIN) 
@@ -46,7 +47,8 @@ kio_digikamalbums_la_SOURCES = digikamalbums.cpp sqlitedb.cpp
 kio_digikamalbums_la_LIBADD  = $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
 	                           $(LIB_KIO) $(LIB_SQLITE3) \
 	                           $(top_builddir)/digikam/libs/dimg/libdimg.la \
-	                           $(top_builddir)/digikam/libs/database/libdatabase.la
+	                           $(top_builddir)/digikam/libs/database/libdatabase.la \
+	                           $(top_builddir)/digikam/sqlite/libsqlite.la
 
 kio_digikamalbums_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGIN) 
 
@@ -57,6 +59,7 @@ kio_digikamdates_la_SOURCES = digikamdates.cpp sqlitedb.cpp
 kio_digikamdates_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3)\
 	                      $(LIBKEXIV2_LIBS) $(LIBKDCRAW_LIBS) \
 	                      $(top_builddir)/digikam/libs/database/libdatabase.la \
+	                      $(top_builddir)/digikam/sqlite/libsqlite.la \
 	                      $(top_builddir)/digikam/libs/dimg/libdimg.la
 
 kio_digikamdates_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGIN) 
@@ -66,8 +69,9 @@ kio_digikamdates_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUG
 kio_digikamsearch_la_SOURCES = digikamsearch.cpp sqlitedb.cpp
 
 kio_digikamsearch_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3)\
- 	                       $(LIBKEXIV2_LIBS) $(LIBKDCRAW_LIBS) \
+	                       $(LIBKEXIV2_LIBS) $(LIBKDCRAW_LIBS) \
 	                       $(top_builddir)/digikam/libs/database/libdatabase.la \
+	                       $(top_builddir)/digikam/sqlite/libsqlite.la \
 	                       $(top_builddir)/digikam/libs/dimg/libdimg.la
 
 kio_digikamsearch_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGIN) 

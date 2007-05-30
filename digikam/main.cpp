@@ -289,7 +289,6 @@ int main(int argc, char *argv[])
     }
 
     Digikam::DatabaseAccess::setParameters(Digikam::DatabaseParameters::parametersForSQLiteDefaultFile(albumPath));
-
     Digikam::AlbumManager* man = new Digikam::AlbumManager();
     man->initialize();
 

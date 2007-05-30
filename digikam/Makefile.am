@@ -1,7 +1,6 @@
 METASOURCES = AUTO  
 
-INCLUDES = -I$(top_srcdir)/digikam/sqlite \
-	   -I$(top_srcdir)/digikam/libs/histogram \
+INCLUDES = -I$(top_srcdir)/digikam/libs/histogram \
 	   -I$(top_srcdir)/digikam/libs/levels \
 	   -I$(top_srcdir)/digikam/libs/curves \
 	   -I$(top_srcdir)/digikam/libs/themeengine \
@@ -39,7 +38,6 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                metadatahub.cpp \
 	                digikamapp.cpp \
 	                album.cpp \
-	                albumdb_sqlite2.cpp \
 	                albumiconview.cpp \
 	                albumicongroupitem.cpp \
 	                albumiconitem.cpp \
@@ -91,8 +89,7 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                tagfilterview.cpp \
 	                tagfolderview.cpp \
 	                tagspopupmenu.cpp \
-	                upgradedb_sqlite2tosqlite3.cpp \
-	                welcomepageview.cpp 
+	                welcomepageview.cpp
 
 libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) $(LIB_KHTML) \
 	               $(LIBKIPI_LIBS) $(LIB_KUTILS) \
