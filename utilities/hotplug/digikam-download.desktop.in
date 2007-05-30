@@ -3,7 +3,7 @@ Exec=@digikamhelper_dir@/digikam-camera storage %u
 Icon=digikam
 Name=Download Photos with digiKam
 Name[de]=Bilder mit digiKam herunterladen
-Name[fr]=télécharger photos avec digiKam
+Name[fr]=TÃ©lÃ©charger les photos avec digiKam
 Name[tr]=digiKam ile resimleri göster
 
 [Desktop Entry]
