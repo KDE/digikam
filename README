@@ -15,9 +15,10 @@ See AUTHORS file for details.
  and/or delete them.
 
  digiKam builtin image editor makes the common photo correction
- a simple task.  The image editor is extensible via plugins.
- The digikamimageplugins package contains many useful image editor
- plugins.
+ a simple task.  The image editor is extensible via plugins and 
+ like digikamimageplugins project have been merged to digiKam core
+ since release 0.9.2, all useful image editor plugins are available 
+ as well.
 
  digiKam can also make use of the KIPI image handling plugins to
  extend its capabilities even further for photo manipulations,
@@ -53,9 +54,13 @@ at these urls :
 
 http://bugs.kde.org/buglist.cgi?product=digikam&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
 
-* DigikamImagePlugins (KDE bugzilla):
+* Image Editor plugins (KDE bugzilla):
 
 http://bugs.kde.org/buglist.cgi?product=digikamimageplugins&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
+
+* Showfoto (KDE bugzilla):
+
+http://bugs.kde.org/buglist.cgi?product=showfoto&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
 
 * Kipi-plugins (KDE bugzilla):
 
