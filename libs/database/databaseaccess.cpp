@@ -21,10 +21,20 @@
  * 
  * ============================================================ */
 
+// Qt includes
+
 #include <qmutex.h>
 
+// KDE includes
+
+#include <klocale.h>
+
+// Local includes
+
+#include "ddebug.h"
 #include "albumdb.h"
 #include "imageinfocache.h"
+#include "schemaupdater.h"
 #include "databaseattributeswatch.h"
 #include "databasebackend.h"
 #include "databaseaccess.h"
@@ -48,6 +58,7 @@ public:
     DatabaseParameters parameters;
     QMutex mutex;
     QString albumRoot;
+    QString lastError;
 };
 
 DatabaseAccessStaticPriv *DatabaseAccess::d = 0;
@@ -55,17 +66,21 @@ DatabaseAccessStaticPriv *DatabaseAccess::d = 0;
 DatabaseAccess::DatabaseAccess()
 {
     d->mutex.lock();
-    if (!d->backend->isReady())
+    if (!d->backend->isOpen())
     {
-        if (!d->backend->isOpen())
-            d->backend->open(d->parameters);
-        d->backend->initSchema();
+        d->backend->open(d->parameters);
     }
 }
 
 DatabaseAccess::~DatabaseAccess()
 {
     d->mutex.unlock();
+}
+
+DatabaseAccess::DatabaseAccess(QMutexLocker *)
+{
+    // private constructor, when mutex is locked and
+    // backend should not be checked
 }
 
 AlbumDB *DatabaseAccess::db() const
@@ -137,16 +152,41 @@ bool DatabaseAccess::checkReadyForUse()
     // this code is similar to the constructor
     QMutexLocker locker(&d->mutex);
 
+    // create an object with private shortcut constructor
+    DatabaseAccess access(&locker);
+
     if (!d->backend)
+    {
+        DWarning() << "No database backend available in checkReadyForUse. "
+                      "Did you call setParameters before?" << endl;
         return false;
+    }
     if (d->backend->isReady())
         return true;
     if (!d->backend->isOpen())
     {
         if (!d->backend->open(d->parameters))
+        {
+            access.setLastError(i18n("Error opening database backend.\n ")
+                                + d->backend->lastError());
             return false;
+        }
     }
-    return d->backend->initSchema();
+
+    SchemaUpdater updater(&access);
+    d->backend->initSchema(&updater);
+
+    return d->backend->isReady();
+}
+
+QString DatabaseAccess::lastError()
+{
+    return d->lastError;
+}
+
+void DatabaseAccess::setLastError(const QString &error)
+{
+    d->lastError = error;
 }
 
 QString DatabaseAccess::albumRoot()

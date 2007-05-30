@@ -27,6 +27,8 @@
 #include "digikam_export.h"
 #include "databaseparameters.h"
 
+class QMutexLocker;
+
 namespace Digikam
 {
 
@@ -56,6 +58,9 @@ public:
       * Create a DatabaseAccess object for the default database.
       * Note that when initializing your app, setParameters need to be called
       * (in a not-yet-multithreaded context) for this to work.
+      * If the database is not yet opened, it will be opened.
+      * The schema will not be checked, use checkReadyForUse()
+      * for a full opening process including schema update and error messages.
       */
     DatabaseAccess();
     ~DatabaseAccess();
@@ -69,6 +74,12 @@ public:
       * Retrieve a pointer to the database backend
       */
     DatabaseBackend *backend() const;
+
+    /**
+      * Returns the error message for the last error that occurred,
+      * or a null QString of no error occurred.
+      */
+    QString lastError();
 
     /**
       * Return the default parameters
@@ -88,9 +99,8 @@ public:
     static void setParameters(const DatabaseParameters &parameters);
 
     /**
-      * Convenience method to initialize a database when new parameters have been set:
-      * Make sure that the database is open, that the schema has properly been initialized,
-      * and returns true on success.
+      * Method to one-time initialize a database when new parameters have been set:
+      * Make sure that the database is open, that the schema has properly been initialized.
       * If the parameters were not changed, this method has no effect.
       * @returns if the database is ready for use
       */
@@ -119,7 +129,14 @@ public:
       */
     static DatabaseAttributesWatch *attributesWatch();
 
+    /**
+      * Set the "last error" message. This method is not for public use.
+      */
+    void setLastError(const QString &error);
+
 private:
+
+    DatabaseAccess(QMutexLocker *locker);
 
     static DatabaseAccessStaticPriv *d;
 };
