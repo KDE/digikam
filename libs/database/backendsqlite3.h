@@ -51,26 +51,14 @@ public:
      * Initialize the database schema to the current version,
      * carry out upgrades if necessary.
      */
-    bool initSchema();
+    bool initSchema(SchemaUpdater *updater);
 
     /**
      * Close the database connection
      */
     void close();
 
-    /**
-     * Check if the database has been opened. This does not mean
-     * that isReady() is true as well
-     * (if the file could be opened, but the schema could not be initialized).
-     */
-    bool isOpen() const;
-
-    /**
-     * Check if the database interface is initialized properly.
-     * This means not only open() but also initSchema() succeeded.
-     * @return true if it's ready to use, else false.
-     */
-    bool isReady() const;
+    virtual Status status() const;
 
     /**
      * This will execute a given SQL statement to the database.
@@ -104,6 +92,9 @@ public:
      * Commit the current database transaction
      */
     void commitTransaction();
+
+    virtual QStringList tables();
+    virtual QString lastError();
 
 private:
 

@@ -53,11 +53,11 @@ public:
 
     BackendSQLite3Priv()
     {
-        ready    = false;
+        status   = DatabaseBackend::Unavailable;
         dataBase = 0;
     }
 
-    bool     ready;
+    DatabaseBackend::Status status;
 
     sqleet3 *dataBase;
 };
@@ -76,7 +76,7 @@ BackendSQLite3::~BackendSQLite3()
 
 bool BackendSQLite3::isCompatible(const DatabaseParameters &parameters)
 {
-    return parameters.databaseType == "QSQLITE";
+    return parameters.isSQLite();
 }
 
 
@@ -99,16 +99,20 @@ bool BackendSQLite3::open(const DatabaseParameters &parameters)
                 << endl;
         return false;
     }
+
+    d->status = Open;
     return true;
 }
 
-bool BackendSQLite3::initSchema()
+bool BackendSQLite3::initSchema(SchemaUpdater *updater)
 {
-    if (d->ready)
+    if (d->status == OpenSchemaChecked)
         return true;
-    SchemaUpdater updater(this);
-    d->ready = updater.update();
-    return d->ready;
+    if (d->status == Unavailable)
+        return false;
+    if (updater->update())
+        d->status = OpenSchemaChecked;
+    return true;
 }
 
 void BackendSQLite3::close()
@@ -118,17 +122,12 @@ void BackendSQLite3::close()
         sqlite3_close(d->dataBase);
         d->dataBase = 0;
     }
-    d->ready = false;
+    d->status = Unavailable;
 }
 
-bool BackendSQLite3::isOpen() const
+DatabaseBackend::Status BackendSQLite3::status() const
 {
-    return d->dataBase;
-}
-
-bool BackendSQLite3::isReady() const
-{
-    return d->ready;
+    return d->status;
 }
 
 bool BackendSQLite3::execSql(const QString& sql, QStringList* const values,
@@ -229,6 +228,23 @@ void BackendSQLite3::commitTransaction()
     execSql( "COMMIT TRANSACTION;" );
 }
 
+QStringList BackendSQLite3::tables()
+{
+    QStringList values;
+
+    execSql( QString("SELECT name FROM sqlite_master"
+                     " WHERE type='table'"
+                     " ORDER BY name;"),
+             &values );
+
+    return values;
+}
+
+QString BackendSQLite3::lastError()
+{
+    // unimplemented, could be done
+    return QString();
+}
 
 
 

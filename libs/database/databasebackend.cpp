@@ -28,6 +28,11 @@ namespace Digikam
 
 {
 
+DatabaseBackend::DatabaseBackend()
+{
+}
+
+
 DatabaseBackend* DatabaseBackend::createBackend(const DatabaseParameters &parameters)
 {
     if (parameters.databaseType == "QSQLITE")

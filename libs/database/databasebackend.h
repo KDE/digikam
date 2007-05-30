@@ -37,13 +37,21 @@
 namespace Digikam
 {
 
+class SchemaUpdater;
+
 class DIGIKAM_EXPORT DatabaseBackend
 {
 
     // NOTE: when porting to Qt SQL, most of the methods can be implemented here
 public:
 
+    /**
+     * Creates a DatabaseBackend based on the given parameters.
+     * Returns null on failure.
+     */
     static DatabaseBackend* createBackend(const DatabaseParameters &parameters);
+
+    DatabaseBackend();
     virtual ~DatabaseBackend() {};
 
     /**
@@ -61,26 +69,42 @@ public:
      * Initialize the database schema to the current version,
      * carry out upgrades if necessary.
      */
-    virtual bool initSchema() = 0;
+    virtual bool initSchema(SchemaUpdater *updater) = 0;
 
     /**
      * Close the database connection
      */
     virtual void close() = 0;
 
-    /**
-     * Check if the database has been opened. This does not mean
-     * that isReady() is true as well
-     * (if the file could be opened, but the schema could not be initialized).
-     */
-    virtual bool isOpen() const = 0;
+    enum Status
+    {
+        /**
+         * The database is not available, because it has not been
+         * opened yet or because of an error condition.
+         */
+        Unavailable,
+        /**
+         * The database is open. It has not been verified that
+         * the schema is up to date.
+         * This status is sufficient for use in a context where it
+         * can be assumed that the necessary schema check has been carried out
+         * by a master process.
+         */
+        Open,
+        /**
+         * The database is open, and it has been verified that the schema is up to
+         * date, or the schema has been updated.
+         */
+        OpenSchemaChecked
+    };
 
     /**
-     * Check if the database interface is initialized properly.
-     * This means not only open() but also initSchema() succeeded.
-     * @return true if it's ready to use, else false.
+     * Returns the current status of the database backend
      */
-    virtual bool isReady() const = 0;
+    virtual Status status() const = 0;
+
+    bool isOpen() const { return status() > Unavailable; }
+    bool isReady() const { return status() == OpenSchemaChecked; }
 
     /**
      * This will execute a given SQL statement to the database.
@@ -114,6 +138,19 @@ public:
      * Commit the current database transaction
      */
     virtual void commitTransaction() = 0;
+
+    /**
+     * Return a list with the names of the tables in the database
+     */
+    virtual QStringList tables() = 0;
+
+    /**
+     * Returns a description of the last error that occurred on this database.
+     * Use DatabaseAccess::lastError for errors presented to the user.
+     * This error will be included in that message.
+     * It may be empty.
+     */
+    virtual QString lastError() = 0;
 
 /*
     Qt SQL driver supported features
