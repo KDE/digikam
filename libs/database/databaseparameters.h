@@ -72,6 +72,8 @@ public:
     bool operator==(const DatabaseParameters &other);
     bool operator!=(const DatabaseParameters &other);
 
+    bool isSQLite() const;
+
     /**
      * Convenience method to create a DatabaseParameters object for an
      * SQLITE 3 database specified by the local file path.

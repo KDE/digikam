@@ -20,7 +20,9 @@ libdatabase_la_SOURCES = albumdb.cpp \
 	                 imagequerybuilder.cpp \
 	                 namefilter.cpp \
 	                 schemaupdater.cpp \
-	                 backendsqlite3.cpp
+	                 backendsqlite3.cpp \
+	                 upgradedb_sqlite2tosqlite3.cpp \
+	                 albumdb_sqlite2.cpp
 
 libdatabase_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
@@ -31,7 +33,8 @@ libdatabase_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 INCLUDES = $(LIBKEXIV2_CFLAGS) $(LIBKDCRAW_CFLAGS) $(all_includes) \
 	       -I$(top_srcdir)/digikam/libs/dimg \
 	       -I$(top_srcdir)/digikam/libs/dmetadata \
-	       -I$(top_srcdir)/digikam/libs/debug
+	       -I$(top_srcdir)/digikam/libs/debug \
+	       -I$(top_srcdir)/digikam/sqlite
 
 
 digikaminclude_HEADERS = albumdb.h

@@ -77,6 +77,11 @@ bool DatabaseParameters::operator!=(const DatabaseParameters &other)
     return !operator==(other);
 }
 
+bool DatabaseParameters::isSQLite() const
+{
+    return databaseType == "QSQLITE";
+}
+
 DatabaseParameters DatabaseParameters::parametersForSQLite(const QString &databaseFile)
 {
     // only the database name is needed
@@ -85,7 +90,7 @@ DatabaseParameters DatabaseParameters::parametersForSQLite(const QString &databa
 
 DatabaseParameters DatabaseParameters::parametersForSQLiteDefaultFile(const QString &directory)
 {
-    QString filePath = directory + '/' + "digikam3.db";
+    QString filePath = directory + '/' + "digikam4.db";
     filePath = QDir::cleanDirPath(filePath);
     return parametersForSQLite(filePath);
 }
