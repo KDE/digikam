@@ -1,10 +1,4 @@
-DIGIKAM PROJECT (http://www.digikam.org)
-
-
--- AUTHORS -----------------------------------------------------------
-
-See AUTHORS file for details.
-
+DIGIKAM - THE PHOTO MANAGEMENT FOR THE MASSES
 
 -- ABOUT -------------------------------------------------------------
 
@@ -27,6 +21,16 @@ See AUTHORS file for details.
 
  digiKam is based in part on the work of the Independent JPEG Group.
 
+
+-- AUTHORS ------------------------------------------------------------
+
+See AUTHORS file for details.
+
+
+-- RELATED URLS -------------------------------------------------------
+
+digiKam      : http://www.digikam.org
+kipi-plugins : http://www.kipi-plugins.org
 
 -- CONTACT ------------------------------------------------------------
 
