@@ -87,7 +87,6 @@ void ThemedIconGroupItem::paintBanner()
 
     p.drawText(5, r.y(), r.width(), r.height(),
                Qt::AlignLeft | Qt::AlignVCenter, "October 2005 - 10 Items");
-
     
     p.end();
 

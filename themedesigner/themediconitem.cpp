@@ -52,7 +52,6 @@ static void dateToString(const QDateTime& datetime, QString& str)
     str = KGlobal::locale()->formatDateTime(datetime, true, false);
 }
 
-
 static QString squeezedText(QPainter* p, int width, const QString& text)
 {
     QString fullText(text);
@@ -109,7 +108,7 @@ static QString squeezedText(QPainter* p, int width, const QString& text)
 }
 
 ThemedIconItem::ThemedIconItem(IconGroupItem* parent)
-    : IconItem(parent)
+              : IconItem(parent)
 {    
 }
 

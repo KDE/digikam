@@ -289,7 +289,6 @@ void ThemedIconView::updateItemRectsPixmap()
         y = d->itemCommentsRect.bottom();
     }
 
-
     {
         d->itemDateRect = QRect(margin, y, w, oneRowXtraRect.height());
         y = d->itemDateRect.bottom();
