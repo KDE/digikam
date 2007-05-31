@@ -34,12 +34,12 @@ class QCheckBox;
 class QLabel;
 class KColorButton;
 
+namespace Digikam
+{
+
 class FolderView;
 class ThemedIconView;
 class Theme;
-
-namespace Digikam
-{
 
 class MainWindow : public QWidget
 {
