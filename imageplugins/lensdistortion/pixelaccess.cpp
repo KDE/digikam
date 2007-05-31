@@ -1,15 +1,14 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date   : 2004-12-27
- * Description : 
  *
- * Copyright 2004-2005 by Gilles Caulier 
- * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
+ * This file is a part of digiKam project
+ * http://www.digikam.org
  *
- * Original Distortion Correction algorithm copyrighted 
- * 2001-2003 David Hodson <hodsond@acm.org>
- *
+ * Date        : 2004-12-27
+ * Description : acess pixels method for lens distortion algorithm.
+ * 
+ * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -22,6 +21,7 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
+
 
 // C++ include.
 
