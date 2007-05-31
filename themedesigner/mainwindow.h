@@ -38,6 +38,7 @@ class KColorButton;
 namespace Digikam
 {
 
+class ImagePropertiesTab;
 class FolderView;
 class ThemedIconView;
 class Theme;
@@ -76,43 +77,47 @@ public:
         VERTICAL,
         DIAGONAL
     };
+
+public:
         
     MainWindow();
     ~MainWindow();
 
+private slots:
+
+    void slotLoad();
+    void slotSave();    
+    void slotPropertyChanged();
+    void slotUpdateTheme();
+    void slotThemeChanged();
+
 private:
     
-    FolderView*     m_folderView;
-    ThemedIconView* m_iconView;
+    QLabel*         m_bevelLabel;
+    QLabel*         m_gradientLabel;
+    QLabel*         m_begColorLabel;
+    QLabel*         m_endColorLabel;
+    QLabel*         m_borderColorLabel;
 
     QComboBox*      m_propertyCombo;
-    QLabel*         m_bevelLabel;
     QComboBox*      m_bevelCombo;
-    QLabel*         m_gradientLabel;
     QComboBox*      m_gradientCombo;
-    QLabel*         m_begColorLabel;
-    KColorButton*   m_begColorBtn;
-    QLabel*         m_endColorLabel;
-    KColorButton*   m_endColorBtn;
-    QCheckBox*      m_addBorderCheck;
-    QLabel*         m_borderColorLabel;
-    KColorButton*   m_borderColorBtn;
 
-    Theme*          m_theme;
+    QCheckBox*      m_addBorderCheck;
 
     QMap<int,int>   m_bevelMap;
     QMap<int,int>   m_bevelReverseMap;
     QMap<int,int>   m_gradientMap;
     QMap<int,int>   m_gradientReverseMap;
-    
-private slots:
 
-    void slotLoad();
-    void slotSave();
-    
-    void slotPropertyChanged();
+    KColorButton*   m_endColorBtn;
+    KColorButton*   m_begColorBtn;
+    KColorButton*   m_borderColorBtn;
 
-    void slotUpdateTheme();
+    FolderView         *m_folderView;
+    ThemedIconView     *m_iconView;
+    ImagePropertiesTab *m_propView;
+    Theme              *m_theme;
 };
 
 }  // NameSpace Digikam

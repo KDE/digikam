@@ -54,6 +54,7 @@
 #include "folderview.h"
 #include "folderitem.h"
 #include "themediconview.h"
+#include "imagepropertiestab.h"
 #include "themeengine.h"
 #include "theme.h"
 #include "mainwindow.h"
@@ -74,6 +75,9 @@ MainWindow::MainWindow()
 
     ThemeEngine::instance()->scanThemes();
     m_theme = new Theme(*(ThemeEngine::instance()->getCurrentTheme()));
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
         
     // Top Layout ------------------------------------------------
     
@@ -89,6 +93,7 @@ MainWindow::MainWindow()
 
     m_folderView = new FolderView( splitter );
     m_iconView   = new ThemedIconView( splitter );
+    m_propView   = new ImagePropertiesTab( splitter, false );
 
     layout->addWidget(splitter, 0, 0);
 
@@ -921,6 +926,13 @@ void MainWindow::slotUpdateTheme()
     };
 
     ThemeEngine::instance()->setCurrentTheme(*m_theme, "Digikam ThemeEditor Theme");
+}
+
+void MainWindow::slotThemeChanged()
+{
+    QColor backgroundColor(ThemeEngine::instance()->baseColor());
+    QColor foregroundColor(ThemeEngine::instance()->textRegColor());
+    m_propView->colorChanged(backgroundColor, foregroundColor);
 }
 
 }  // NameSpace Digikam
