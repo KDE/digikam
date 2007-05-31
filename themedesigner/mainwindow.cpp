@@ -39,6 +39,7 @@
 
 // KDE includes.
 
+#include <klocale.h>
 #include <kcolordialog.h>
 #include <kcolorbutton.h>
 #include <kapplication.h>
@@ -64,6 +65,8 @@ namespace Digikam
 MainWindow::MainWindow()
           : QWidget(0, 0, WDestructiveClose)
 {
+    setCaption(i18n("digiKam Theme Designer"));
+
     AlbumSettings *albumSettings = new AlbumSettings();
     albumSettings->readSettings();
 
@@ -78,18 +81,6 @@ MainWindow::MainWindow()
     layout->setMargin(5);
     layout->setSpacing(5);
 
-    // header ------------------------------------------------------
-
-    QLabel* headerLabel = new QLabel( this );
-    headerLabel->setText( "<font size=\"+2\"><b>Digikam Theme Designer</b></font>" );
-    
-    QFrame* headerLine  = new QFrame( this );
-    headerLine->setFrameShape( QFrame::HLine );
-    headerLine->setFrameShadow( QFrame::Sunken );
-
-    layout->addMultiCellWidget(headerLabel, 0, 0, 0, 2);
-    layout->addMultiCellWidget(headerLine, 1, 1, 0, 2);
-
     // Actual views ------------------------------------------------
     
     QSplitter* splitter = new QSplitter( this );
@@ -99,12 +90,12 @@ MainWindow::MainWindow()
     m_folderView = new FolderView( splitter );
     m_iconView   = new ThemedIconView( splitter );
 
-    layout->addWidget(splitter, 2, 0);
+    layout->addWidget(splitter, 0, 0);
 
     // Property Editor ---------------------------------------------
     
     QGroupBox *groupBox = new QGroupBox( this );
-    layout->addWidget(groupBox, 2, 1);
+    layout->addWidget(groupBox, 0, 1);
 
     groupBox->setColumnLayout(0, Qt::Vertical );
     groupBox->layout()->setSpacing( 5 );
@@ -116,37 +107,37 @@ MainWindow::MainWindow()
     QHBoxLayout* hboxLayout = 0;
     QLabel*      label = 0;
     
-    label = new QLabel( "Property: ", groupBox );
+    label           = new QLabel( "Property: ", groupBox );
     m_propertyCombo = new QComboBox( groupBox );
-    hboxLayout = new QHBoxLayout( 0 );
+    hboxLayout      = new QHBoxLayout( 0 );
     hboxLayout->addWidget( label );
     hboxLayout->addWidget( m_propertyCombo );
     groupBoxLayout->addLayout( hboxLayout);
 
     m_bevelLabel = new QLabel( "Bevel: ", groupBox );
     m_bevelCombo = new QComboBox( groupBox );
-    hboxLayout = new QHBoxLayout( 0 );
+    hboxLayout   = new QHBoxLayout( 0 );
     hboxLayout->addWidget( m_bevelLabel );
     hboxLayout->addWidget( m_bevelCombo );
     groupBoxLayout->addLayout( hboxLayout);
 
     m_gradientLabel = new QLabel( "Gradient: ", groupBox );
     m_gradientCombo = new QComboBox( groupBox );
-    hboxLayout = new QHBoxLayout( 0 );
+    hboxLayout      = new QHBoxLayout( 0 );
     hboxLayout->addWidget( m_gradientLabel );
     hboxLayout->addWidget( m_gradientCombo );
     groupBoxLayout->addLayout( hboxLayout);
 
     m_begColorLabel = new QLabel( "Start Color: ", groupBox );
     m_begColorBtn   = new KColorButton( groupBox );
-    hboxLayout = new QHBoxLayout( 0 );
+    hboxLayout      = new QHBoxLayout( 0 );
     hboxLayout->addWidget( m_begColorLabel );
     hboxLayout->addWidget( m_begColorBtn );
     groupBoxLayout->addLayout( hboxLayout);
 
     m_endColorLabel = new QLabel( "End Color: ", groupBox );
-    m_endColorBtn = new KColorButton( groupBox );
-    hboxLayout = new QHBoxLayout( 0 );
+    m_endColorBtn   = new KColorButton( groupBox );
+    hboxLayout      = new QHBoxLayout( 0 );
     hboxLayout->addWidget( m_endColorLabel );
     hboxLayout->addWidget( m_endColorBtn );
     groupBoxLayout->addLayout( hboxLayout);
@@ -155,8 +146,8 @@ MainWindow::MainWindow()
     groupBoxLayout->addWidget( m_addBorderCheck );
 
     m_borderColorLabel = new QLabel( "Border Color: ", groupBox );
-    m_borderColorBtn = new KColorButton( groupBox );
-    hboxLayout = new QHBoxLayout( 0 );
+    m_borderColorBtn   = new KColorButton( groupBox );
+    hboxLayout         = new QHBoxLayout( 0 );
     hboxLayout->addWidget( m_borderColorLabel );
     hboxLayout->addWidget( m_borderColorBtn );
     groupBoxLayout->addLayout( hboxLayout);
@@ -207,20 +198,20 @@ MainWindow::MainWindow()
     m_borderColorBtn->setColor(Qt::black);
 
     connect(m_propertyCombo, SIGNAL(activated(int)),
-            SLOT(slotPropertyChanged()));
+            this, SLOT(slotPropertyChanged()));
     connect(m_bevelCombo, SIGNAL(activated(int)),
-            SLOT(slotUpdateTheme()));
+            this, SLOT(slotUpdateTheme()));
     connect(m_gradientCombo, SIGNAL(activated(int)),
-            SLOT(slotUpdateTheme()));
+            this, SLOT(slotUpdateTheme()));
             
     connect(m_begColorBtn, SIGNAL(changed(const QColor&)),
-            SLOT(slotUpdateTheme()));
+            this, SLOT(slotUpdateTheme()));
     connect(m_endColorBtn, SIGNAL(changed(const QColor&)),
-            SLOT(slotUpdateTheme()));
+            this, SLOT(slotUpdateTheme()));
     connect(m_addBorderCheck, SIGNAL(toggled(bool)),
-            SLOT(slotUpdateTheme()));
+            this, SLOT(slotUpdateTheme()));
     connect(m_borderColorBtn, SIGNAL(changed(const QColor&)),
-            SLOT(slotUpdateTheme()));
+            this, SLOT(slotUpdateTheme()));
 
     // Bottom button bar -------------------------------------------------------
     
@@ -242,14 +233,14 @@ MainWindow::MainWindow()
     closeButton->setText( "&Close" );
     buttonLayout->addWidget( closeButton );
     
-    layout->addMultiCellLayout(buttonLayout, 3, 3, 0, 1);
+    layout->addMultiCellLayout(buttonLayout, 1, 1, 0, 1);
 
     connect(loadButton, SIGNAL(clicked()),
-            SLOT(slotLoad()));
+            this, SLOT(slotLoad()));
     connect(saveButton, SIGNAL(clicked()),
-            SLOT(slotSave()));
+            this, SLOT(slotSave()));
     connect(closeButton, SIGNAL(clicked()),
-            SLOT(close()));
+            this, SLOT(close()));
 
     // ------------------------------------------------------------------------
 
@@ -320,15 +311,13 @@ void MainWindow::slotSave()
     ts << QString(" * This file is a part of digiKam project") << endl;
     ts << QString(" * http://www.digikam.org") << endl;
     ts << QString(" *") << endl;
-    ts << QString(" * Date        : %1-%2-%3")
-          .arg(QDate::currentDate().year() )
-          .arg(QDate::currentDate().month() )
-          .arg(QDate::currentDate().day() ) << endl;
-    ts << QString(" * Description : Digikam theme by %1").arg(user.fullName()) << endl;
+    ts << QString(" * Date        : %1-%2-%3").arg(QDate::currentDate().year() )
+                                              .arg(QDate::currentDate().month() )
+                                              .arg(QDate::currentDate().day() ) << endl;
+    ts << QString(" * Description : %1 colors theme.").arg(fi.fileName()) << endl;
     ts << QString(" *") << endl;
-    ts << QString(" * Copyright (C) %1 by %2")
-          .arg(QDate::currentDate().year() )
-          .arg(user.fullName()) << endl;
+    ts << QString(" * Copyright (C) %1 by %2").arg(QDate::currentDate().year() )
+                                              .arg(user.fullName()) << endl;
     ts << QString(" *") << endl;
     ts << QString(" * This program is free software; you can redistribute it") << endl;
     ts << QString(" * and/or modify it under the terms of the GNU General") << endl;
@@ -839,96 +828,96 @@ void MainWindow::slotUpdateTheme()
 {
     switch(m_propertyCombo->currentItem())
     {
-    case(BASE):
-    {
-        m_theme->baseColor = m_begColorBtn->color();
-        break;
-    }
-    case(REGULARTEXT):
-    {
-        m_theme->textRegColor = m_begColorBtn->color();
-        break;
-    }
-    case(SELECTEDTEXT):
-    {
-        m_theme->textSelColor = m_begColorBtn->color();
-        break;
-    }
-    case(REGULARSPECIALTEXT):
-    {
-        m_theme->textSpecialRegColor = m_begColorBtn->color();
-        break;
-    }
-    case(SELECTEDSPECIALTEXT):
-    {
-        m_theme->textSpecialSelColor = m_begColorBtn->color();
-        break;
-    }
-    case(BANNER):
-    {
-        m_theme->bannerBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
-        m_theme->bannerGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
-
-        m_theme->bannerColor   = m_begColorBtn->color();
-        m_theme->bannerColorTo = m_endColorBtn->color();
-
-        m_theme->bannerBorder  = m_addBorderCheck->isChecked();
-        m_theme->bannerBorderColor = m_borderColorBtn->color();
-
-        break;
-    }
-    case(THUMBNAILREGULAR):
-    {
-        m_theme->thumbRegBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
-        m_theme->thumbRegGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
-
-        m_theme->thumbRegColor   = m_begColorBtn->color();
-        m_theme->thumbRegColorTo = m_endColorBtn->color();
-
-        m_theme->thumbRegBorder  = m_addBorderCheck->isChecked();
-        m_theme->thumbRegBorderColor = m_borderColorBtn->color();
-
-        break;
-    }
-    case(THUMBNAILSELECTED):
-    {
-        m_theme->thumbSelBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
-        m_theme->thumbSelGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
-
-        m_theme->thumbSelColor   = m_begColorBtn->color();
-        m_theme->thumbSelColorTo = m_endColorBtn->color();
-
-        m_theme->thumbSelBorder  = m_addBorderCheck->isChecked();
-        m_theme->thumbSelBorderColor = m_borderColorBtn->color();
-
-        break;
-    }
-    case(LISTVIEWREGULAR):
-    {
-        m_theme->listRegBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
-        m_theme->listRegGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
-
-        m_theme->listRegColor   = m_begColorBtn->color();
-        m_theme->listRegColorTo = m_endColorBtn->color();
-
-        m_theme->listRegBorder  = m_addBorderCheck->isChecked();
-        m_theme->listRegBorderColor = m_borderColorBtn->color();
-
-        break;
-    }
-    case(LISTVIEWSELECTED):
-    {
-        m_theme->listSelBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
-        m_theme->listSelGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
-
-        m_theme->listSelColor   = m_begColorBtn->color();
-        m_theme->listSelColorTo = m_endColorBtn->color();
-
-        m_theme->listSelBorder  = m_addBorderCheck->isChecked();
-        m_theme->listSelBorderColor = m_borderColorBtn->color();
-
-        break;
-    }
+        case(BASE):
+        {
+            m_theme->baseColor = m_begColorBtn->color();
+            break;
+        }
+        case(REGULARTEXT):
+        {
+            m_theme->textRegColor = m_begColorBtn->color();
+            break;
+        }
+        case(SELECTEDTEXT):
+        {
+            m_theme->textSelColor = m_begColorBtn->color();
+            break;
+        }
+        case(REGULARSPECIALTEXT):
+        {
+            m_theme->textSpecialRegColor = m_begColorBtn->color();
+            break;
+        }
+        case(SELECTEDSPECIALTEXT):
+        {
+            m_theme->textSpecialSelColor = m_begColorBtn->color();
+            break;
+        }
+        case(BANNER):
+        {
+            m_theme->bannerBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
+            m_theme->bannerGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
+    
+            m_theme->bannerColor   = m_begColorBtn->color();
+            m_theme->bannerColorTo = m_endColorBtn->color();
+    
+            m_theme->bannerBorder  = m_addBorderCheck->isChecked();
+            m_theme->bannerBorderColor = m_borderColorBtn->color();
+    
+            break;
+        }
+        case(THUMBNAILREGULAR):
+        {
+            m_theme->thumbRegBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
+            m_theme->thumbRegGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
+    
+            m_theme->thumbRegColor   = m_begColorBtn->color();
+            m_theme->thumbRegColorTo = m_endColorBtn->color();
+    
+            m_theme->thumbRegBorder  = m_addBorderCheck->isChecked();
+            m_theme->thumbRegBorderColor = m_borderColorBtn->color();
+    
+            break;
+        }
+        case(THUMBNAILSELECTED):
+        {
+            m_theme->thumbSelBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
+            m_theme->thumbSelGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
+    
+            m_theme->thumbSelColor   = m_begColorBtn->color();
+            m_theme->thumbSelColorTo = m_endColorBtn->color();
+    
+            m_theme->thumbSelBorder  = m_addBorderCheck->isChecked();
+            m_theme->thumbSelBorderColor = m_borderColorBtn->color();
+    
+            break;
+        }
+        case(LISTVIEWREGULAR):
+        {
+            m_theme->listRegBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
+            m_theme->listRegGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
+    
+            m_theme->listRegColor   = m_begColorBtn->color();
+            m_theme->listRegColorTo = m_endColorBtn->color();
+    
+            m_theme->listRegBorder  = m_addBorderCheck->isChecked();
+            m_theme->listRegBorderColor = m_borderColorBtn->color();
+    
+            break;
+        }
+        case(LISTVIEWSELECTED):
+        {
+            m_theme->listSelBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
+            m_theme->listSelGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
+    
+            m_theme->listSelColor   = m_begColorBtn->color();
+            m_theme->listSelColorTo = m_endColorBtn->color();
+    
+            m_theme->listSelBorder  = m_addBorderCheck->isChecked();
+            m_theme->listSelBorderColor = m_borderColorBtn->color();
+    
+            break;
+        }
     };
 
     ThemeEngine::instance()->setCurrentTheme(*m_theme, "Digikam ThemeEditor Theme");
