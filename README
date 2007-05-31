@@ -8,15 +8,15 @@ DIGIKAM - THE PHOTO MANAGEMENT FOR THE MASSES
  to connect to your digital camera, preview the images and download
  and/or delete them.
 
- digiKam builtin image editor makes the common photo correction
- a simple task.  The image editor is extensible via plugins and 
- like digikamimageplugins project have been merged to digiKam core
- since release 0.9.2, all useful image editor plugins are available 
- as well.
+ The digiKam built-in image editor makes the common photo correction
+ a simple task. The image editor is extensible via plugins and, 
+ since the digikamimageplugins project has been merged to digiKam core
+ since release 0.9.2, all useful image editor plugins are available
+ in the base installation.
 
  digiKam can also make use of the KIPI image handling plugins to
  extend its capabilities even further for photo manipulations,
- import and export, etc.  The kipi-plugins package contains many
+ import and export, etc. The kipi-plugins package contains many
  very useful extentions.
 
  digiKam is based in part on the work of the Independent JPEG Group.
