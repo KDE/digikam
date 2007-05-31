@@ -3,6 +3,7 @@ METASOURCES = AUTO
 noinst_LTLIBRARIES = libdatabase.la
 
 libdatabase_la_SOURCES = albumdb.cpp \
+	                 albumdb_sqlite2.cpp \
 	                 collectionscanner.cpp \
 	                 collectionmanager.cpp \
 	                 collectionlocation.cpp \
@@ -21,8 +22,7 @@ libdatabase_la_SOURCES = albumdb.cpp \
 	                 namefilter.cpp \
 	                 schemaupdater.cpp \
 	                 backendsqlite3.cpp \
-	                 upgradedb_sqlite2tosqlite3.cpp \
-	                 albumdb_sqlite2.cpp
+	                 upgradedb_sqlite2tosqlite3.cpp 
 
 libdatabase_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
