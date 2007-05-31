@@ -253,10 +253,20 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
         {
             QFileInfo fi(url.path());
             if (fi.isDir())
+            {
+                // Local Dir
                 openFolder(url);                 
+            }
+            else
+            {
+                // Local file
+                new Digikam::ThumbBarItem(d->thumbBar, url);
+                d->lastOpenedDirectory=(*it);
+            }
         }
         else
         {
+            // Remote file.
             new Digikam::ThumbBarItem(d->thumbBar, url);
             d->lastOpenedDirectory=(*it);
         }
