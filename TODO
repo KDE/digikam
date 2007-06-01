@@ -43,8 +43,12 @@
 LATER 0.9.2 TODO LIST
 ------------------------------------------------------------------------------------
 
-* Port project to CMake (see: http://dot.kde.org/1151688350 for notice)
-  Port to QT4/KDE4.
+* Port project to CMake:
+    http://dot.kde.org/1151688350
+    http://techbase.kde.org/Development/Tutorials/KDE4_Porting_Guide#CMake
+    http://www.cmake.org/Wiki/CMake_Useful_Variables
+
+* Port to QT4/KDE4.
   Overview documentation
     http://techbase.kde.org/Development/Tutorials/KDE4_Porting_Guide 
 
