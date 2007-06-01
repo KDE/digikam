@@ -45,6 +45,7 @@ LATER 0.9.2 TODO LIST
 
 * Port project to CMake:
     http://dot.kde.org/1151688350
+    http://techbase.kde.org/Development/Tutorials/CMake
     http://techbase.kde.org/Development/Tutorials/KDE4_Porting_Guide#CMake
     http://www.cmake.org/Wiki/CMake_Useful_Variables
 
