@@ -289,7 +289,10 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription &descriptio
     }
     else
     {
-        setImage(preview);
+        DImg img(preview);
+        if (AlbumSettings::instance()->getExifRotate())
+            d->previewThread->exifRotate(img, description.filePath);
+        setImage(img);
         emit signalPreviewLoaded(true);
     }
 

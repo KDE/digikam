@@ -271,8 +271,11 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
     }
     else
     {
+        DImg img(preview);
+        if (AlbumSettings::instance()->getExifRotate())
+            d->previewThread->exifRotate(img, description.filePath);
         d->parent->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
-        setImage(preview);
+        setImage(img);
         d->parent->previewLoaded();
         emit signalPreviewLoaded(true);
     }

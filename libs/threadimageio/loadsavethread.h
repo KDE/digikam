@@ -55,12 +55,14 @@ public:
 
     enum NotificationPolicy
     {
-        // Always send notification, unless the last event is still in the event queue
+        /** Always send notification, unless the last event is still in the event queue */
         NotificationPolicyDirect,
-        // Always wait for a certain amount of time after the last event sent.
-        // In particular, the first event will be sent only after waiting for this time span.
-        // (Or no event will be sent, when the loading has finished before)
-        // This is the default.
+        /**
+         * Always wait for a certain amount of time after the last event sent.
+         * In particular, the first event will be sent only after waiting for this time span.
+         * (Or no event will be sent, when the loading has finished before)
+         * This is the default.
+         */
         NotificationPolicyTimeLimited
     };
 
@@ -74,35 +76,53 @@ public:
     };
 
     LoadSaveThread();
-    // The thread will execute all pending tasks and wait for this upon destruction
+    /**
+     * Destructor:
+     * The thread will execute all pending tasks and wait for this upon destruction
+     */
     ~LoadSaveThread();
 
-    // Append a task to load the given file to the task list
+    /** Append a task to load the given file to the task list */
     void load(LoadingDescription description);
-    // Append a task to save the image to the task list
+    /** Append a task to save the image to the task list */
     void save(DImg &image, const QString& filePath, const QString &format);
 
     void setNotificationPolicy(NotificationPolicy notificationPolicy);
 
     bool isShuttingDown();
 
+    /**
+     * Utility to make sure that an image is rotated according to exif tag.
+     * Detects if an image has previously already been rotated: You can
+     * call this method more than one time on the same image.
+     * Returns true if the image has actually been rotated or flipped.
+     * Returns false if a rotation was not needed.
+     */
+    static bool exifRotate(DImg &image, const QString& filePath);
+
 signals:
 
-    // This signal is emitted when the loading process begins.
+    /** This signal is emitted when the loading process begins. */
     void signalImageStartedLoading(const LoadingDescription &loadingDescription);
-    // This signal is emitted whenever new progress info is available
-    // and the notification policy allows emitting the signal.
-    // No progress info will be sent for preloaded images (ManagedLoadSaveThread).
+    /**
+     * This signal is emitted whenever new progress info is available
+     * and the notification policy allows emitting the signal.
+     * No progress info will be sent for preloaded images (ManagedLoadSaveThread).
+     */
     void signalLoadingProgress(const LoadingDescription &loadingDescription, float progress);
-    // This signal is emitted when the loading process has finished.
-    // If the process failed, img is null.
+    /**
+     * This signal is emitted when the loading process has finished.
+     * If the process failed, img is null.
+     */
     void signalImageLoaded(const LoadingDescription &loadingDescription, const DImg& img);
-    // This signal is emitted if
-    //  - you are doing shared loading (SharedLoadSaveThread)
-    //  - you started a loading operation with a LoadingDescription for
-    //    a reduced version of the image
-    //  - another thread started a loading operation for a more complete version
-    // You may want to cancel the current operation and start with the given loadingDescription
+    /**
+     * This signal is emitted if
+     *  - you are doing shared loading (SharedLoadSaveThread)
+     *  - you started a loading operation with a LoadingDescription for
+     *    a reduced version of the image
+     *  - another thread started a loading operation for a more complete version
+     * You may want to cancel the current operation and start with the given loadingDescription
+     */
     void signalMoreCompleteLoadingAvailable(const LoadingDescription &oldLoadingDescription,
                                             const LoadingDescription &newLoadingDescription);
 

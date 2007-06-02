@@ -77,16 +77,10 @@ void PreviewLoadingTask::execute()
 
             // rotate if needed - images are unrotated in the cache,
             // except for RAW images, which are already rotated by dcraw.
-            if (m_loadingDescription.previewParameters.exifRotate &&
-                 DImg::fileFormat(m_loadingDescription.filePath) != DImg::RAW)
+            if (m_loadingDescription.previewParameters.exifRotate)
             {
-                QVariant attribute(cachedImg->attribute("exifRotated"));
-                if (!attribute.isValid() || !attribute.toBool())
-                {
-                    // images in the cache are unrotated - except for RAWs
-                    img = img.copy();
-                    exifRotate(m_loadingDescription.filePath, img);
-                }
+                img = img.copy();
+                LoadSaveThread::exifRotate(img, m_loadingDescription.filePath);
             }
 
             QApplication::postEvent(m_thread, new LoadedEvent(m_loadingDescription.filePath, img));
@@ -191,8 +185,9 @@ void PreviewLoadingTask::execute()
         //img = img.fastScale(scaledSize.width(), scaledSize.height());
     }
 
+    // Scale if hinted, Store previews rotated in the cache (?)
     if (m_loadingDescription.previewParameters.exifRotate)
-        exifRotate(m_loadingDescription.filePath, img);
+        LoadSaveThread::exifRotate(img, m_loadingDescription.filePath);
 
     {
         LoadingCache::CacheLock lock(cache);
@@ -249,106 +244,6 @@ bool PreviewLoadingTask::loadImagePreview(QImage& image, const QString& path)
     }
 
     return false;
-}
-
-
-
-void PreviewLoadingTask::exifRotate(const QString& filePath, DImg& image)
-{
-    // Rotate thumbnail based on metadata orientation information
-
-    DMetadata metadata(filePath);
-    DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
-
-    if(orientation != DMetadata::ORIENTATION_NORMAL)
-    {
-        switch (orientation) 
-        {
-            case DMetadata::ORIENTATION_NORMAL:
-            case DMetadata::ORIENTATION_UNSPECIFIED:
-                break;
-
-            case DMetadata::ORIENTATION_HFLIP:
-                image.flip(DImg::HORIZONTAL);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_180:
-                image.rotate(DImg::ROT180);
-                break;
-
-            case DMetadata::ORIENTATION_VFLIP:
-                image.flip(DImg::VERTICAL);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90_HFLIP:
-                image.rotate(DImg::ROT90);
-                image.flip(DImg::HORIZONTAL);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90:
-                image.rotate(DImg::ROT90);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90_VFLIP:
-                image.rotate(DImg::ROT90);
-                image.flip(DImg::VERTICAL);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_270:
-                image.rotate(DImg::ROT270);
-                break;
-        }
-    }
-
-    image.setAttribute("exifRotated", true);
-
-    /*
-    if (orientation == DMetadata::ORIENTATION_NORMAL ||
-        orientation == DMetadata::ORIENTATION_UNSPECIFIED)
-        return;
-
-    QWMatrix matrix;
-
-    switch (orientation)
-    {
-        case DMetadata::ORIENTATION_NORMAL:
-        case DMetadata::ORIENTATION_UNSPECIFIED:
-            break;
-
-        case DMetadata::ORIENTATION_HFLIP:
-            matrix.scale(-1, 1);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_180:
-            matrix.rotate(180);
-            break;
-
-        case DMetadata::ORIENTATION_VFLIP:
-            matrix.scale(1, -1);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_90_HFLIP:
-            matrix.scale(-1, 1);
-            matrix.rotate(90);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_90:
-            matrix.rotate(90);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_90_VFLIP:
-            matrix.scale(1, -1);
-            matrix.rotate(90);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_270:
-            matrix.rotate(270);
-            break;
-    }
-
-    // transform accordingly
-    thumb = thumb.xForm( matrix );
-    */
 }
 
 } // namespace Digikam

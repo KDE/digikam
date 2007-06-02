@@ -52,7 +52,7 @@ public:
 
     /**
      * An invalid LoadingDescription
-    */
+     */
     LoadingDescription()
     {
     }
@@ -60,7 +60,7 @@ public:
     /**
      * Use this for files that are not raw files.
      * Stores only the filePath.
-    */
+     */
     LoadingDescription(const QString &filePath)
         : filePath(filePath)
         {
@@ -70,15 +70,18 @@ public:
     /**
      * For raw files:
      * Stores filePath and RawDecodingSettings
-    */
+     */
     LoadingDescription(const QString &filePath, KDcrawIface::RawDecodingSettings settings)
         : filePath(filePath), rawDecodingSettings(settings)
         {};
 
     /**
      * For preview jobs:
-     * Stores preview max size and exif rotation
-    */
+     * Stores preview max size and exif rotation.
+     * The exif rotation is only a hint.
+     * Call LoadSaveThread::exifRotate to make sure that the image is really
+     * rotated. It is safe to call this method even if the image is rotated.
+     */
     LoadingDescription(const QString &filePath, int size, bool exifRotate)
         : filePath(filePath)
         {
