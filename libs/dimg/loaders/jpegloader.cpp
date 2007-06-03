@@ -98,7 +98,13 @@ JPEGLoader::JPEGLoader(DImg* image)
 }
 
 bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
-{    
+{
+    // Find out if we do the fast-track loading with reduced size. Jpeg specific.
+    int scaledLoadingSize = 0;
+    QVariant attribute = imageGetAttribute("jpegScaledLoadingSize");
+    if (attribute.isValid())
+        scaledLoadingSize = attribute.toInt();
+
     readMetadata(filePath, DImg::JPEG);
 
     FILE *file = fopen(QFile::encodeName(filePath), "rb");
@@ -159,6 +165,23 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // set decompression parameters
     cinfo.do_fancy_upsampling = false;
     cinfo.do_block_smoothing  = false;
+
+    if (scaledLoadingSize)
+    {
+        int imgSize = QMAX(cinfo.image_width, cinfo.image_height);
+
+        // libjpeg supports 1/1, 1/2, 1/4, 1/8
+        int scale=1;
+        while(scaledLoadingSize*scale*2<=imgSize)
+        {
+            scale*=2;
+        }
+        if(scale>8) scale=8;
+
+        cinfo.scale_num=1;
+        cinfo.scale_denom=scale;
+    }
+
     // Libjpeg handles the following conversions:
     // YCbCr => GRAYSCALE, YCbCr => RGB, GRAYSCALE => RGB, YCCK => CMYK
     // So we cannot get RGB from CMYK or YCCK, CMYK conversion is handled below

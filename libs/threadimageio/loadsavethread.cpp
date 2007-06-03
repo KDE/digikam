@@ -25,6 +25,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "dmetadata.h"
 #include "loadsavethread.h"
 #include "managedloadsavethread.h"
 #include "sharedloadsavethread.h"
@@ -200,6 +201,128 @@ bool LoadSaveThread::isShuttingDown()
     // the condition is met after d->running is set to false in the destructor
     return running() && !d->running;
 }
+
+bool LoadSaveThread::exifRotate(DImg &image, const QString& filePath)
+{
+    QVariant attribute(image.attribute("exifRotated"));
+    if (attribute.isValid() && attribute.toBool())
+        return false;
+
+    // Raw files are already rotated properlly by dcraw. Only perform auto-rotation with JPEG/PNG/TIFF file.
+    // We don't have a feedback from dcraw about auto-rotated RAW file during decoding. Return true anyway.
+
+    if (DImg::fileFormat(filePath) == DImg::RAW)
+    {
+        return true;
+    }
+
+    // Rotate thumbnail based on metadata orientation information
+
+    DMetadata metadata(filePath);
+    DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
+
+    bool rotatedOrFlipped = false;
+
+    if(orientation != DMetadata::ORIENTATION_NORMAL)
+    {
+        switch (orientation) 
+        {
+            case DMetadata::ORIENTATION_NORMAL:
+            case DMetadata::ORIENTATION_UNSPECIFIED:
+                break;
+
+            case DMetadata::ORIENTATION_HFLIP:
+                image.flip(DImg::HORIZONTAL);
+                rotatedOrFlipped = true;
+                break;
+
+            case DMetadata::ORIENTATION_ROT_180:
+                image.rotate(DImg::ROT180);
+                rotatedOrFlipped = true;
+                break;
+
+            case DMetadata::ORIENTATION_VFLIP:
+                image.flip(DImg::VERTICAL);
+                rotatedOrFlipped = true;
+                break;
+
+            case DMetadata::ORIENTATION_ROT_90_HFLIP:
+                image.rotate(DImg::ROT90);
+                image.flip(DImg::HORIZONTAL);
+                rotatedOrFlipped = true;
+                break;
+
+            case DMetadata::ORIENTATION_ROT_90:
+                image.rotate(DImg::ROT90);
+                rotatedOrFlipped = true;
+                break;
+
+            case DMetadata::ORIENTATION_ROT_90_VFLIP:
+                image.rotate(DImg::ROT90);
+                image.flip(DImg::VERTICAL);
+                rotatedOrFlipped = true;
+                break;
+
+            case DMetadata::ORIENTATION_ROT_270:
+                image.rotate(DImg::ROT270);
+                rotatedOrFlipped = true;
+                break;
+        }
+    }
+
+    image.setAttribute("exifRotated", true);
+    return rotatedOrFlipped;
+
+    /*
+    if (orientation == DMetadata::ORIENTATION_NORMAL ||
+        orientation == DMetadata::ORIENTATION_UNSPECIFIED)
+        return;
+
+    QWMatrix matrix;
+
+    switch (orientation)
+    {
+        case DMetadata::ORIENTATION_NORMAL:
+        case DMetadata::ORIENTATION_UNSPECIFIED:
+            break;
+
+        case DMetadata::ORIENTATION_HFLIP:
+            matrix.scale(-1, 1);
+            break;
+
+        case DMetadata::ORIENTATION_ROT_180:
+            matrix.rotate(180);
+            break;
+
+        case DMetadata::ORIENTATION_VFLIP:
+            matrix.scale(1, -1);
+            break;
+
+        case DMetadata::ORIENTATION_ROT_90_HFLIP:
+            matrix.scale(-1, 1);
+            matrix.rotate(90);
+            break;
+
+        case DMetadata::ORIENTATION_ROT_90:
+            matrix.rotate(90);
+            break;
+
+        case DMetadata::ORIENTATION_ROT_90_VFLIP:
+            matrix.scale(1, -1);
+            matrix.rotate(90);
+            break;
+
+        case DMetadata::ORIENTATION_ROT_270:
+            matrix.rotate(270);
+            break;
+    }
+
+    // transform accordingly
+    thumb = thumb.xForm( matrix );
+    */
+}
+
+
 
 
 }   // namespace Digikam

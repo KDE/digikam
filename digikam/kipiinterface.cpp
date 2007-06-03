@@ -654,7 +654,7 @@ bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
 
     if ( !targetAlbum )
     {
-        errmsg = i18n("Target album is not in the albums library.");
+        errmsg = i18n("Target album is not in the album library.");
         return false;
     }
 
@@ -668,7 +668,7 @@ void DigikamKipiInterface::delImage( const KURL& url )
     KURL rootURL(CollectionManager::instance()->albumRoot(url));
     if ( !rootURL.isParentOf(url) )
     {
-        DWarning() << k_funcinfo << "URL not in the Digikam Album library" << endl;
+        DWarning() << k_funcinfo << "URL not in the album library" << endl;
     }
 
     // Is there a PAlbum for this url
@@ -683,7 +683,7 @@ void DigikamKipiInterface::delImage( const KURL& url )
     }
     else
     {
-        DWarning() << k_funcinfo << "Cannot find Parent album in digiKam Album library" << endl;
+        DWarning() << k_funcinfo << "Cannot find Parent album in album library" << endl;
     }
 }
 

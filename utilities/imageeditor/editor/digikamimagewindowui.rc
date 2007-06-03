@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="16" name="digikamimagewindow" >
+<gui version="18" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -18,7 +18,7 @@
         <Separator/>
         <Action name="editorwindow_delete" />
         <Separator/>
-        <Action name="editorwindow_exit" />
+        <Action name="editorwindow_close" />
     </Menu>
     
     <Menu name="Edit" ><text>&amp;Edit</text>
@@ -26,6 +26,9 @@
         <Separator/>
         <Action name="editorwindow_undo" />
         <Action name="editorwindow_redo" />
+        <Separator/>
+        <Action name="editorwindow_selectAll" />
+        <Action name="editorwindow_selectNone" />
     </Menu>
   
     <Menu name="View" ><text>&amp;View</text>

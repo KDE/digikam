@@ -1,9 +1,20 @@
-Adhere to this style guide strictly while adding new code to digiKam or 
-working on existing code. 
+This file's purpose is to guide contributors and developers to help on the
+digiKam project.
 
 ========================================================================
-Formatting:
+10 golden rules for starting with open source
 ========================================================================
+
+Before to contribute to digiKam project, please take a look to this link:
+
+http://schlitt.info/applications/blog/index.php?/archives/541-10-golden-rules-for-starting-with-open-source.html
+
+========================================================================
+Source code formatting:
+========================================================================
+
+Adhere to this style guide strictly while adding new code to digiKam or 
+working on existing code. 
 
 -------------------------------------------------------------------------
 * Indentation length
@@ -23,7 +34,6 @@ void function()
 Emacs by default will indent to 4 spaces
 vim users add this to you .vimrc
  set tabstop=4        
-
 
 -------------------------------------------------------------------------
 * Tabs vs Spaces
@@ -84,7 +94,6 @@ Follow a consistent order in defining these attributes. The recommended
 order is public, protected (functions), private (functions), 
 signals, public slots, protected slots, private slots, private (variables)
 
-
 ========================================================================
 Class, file and Variable names:
 ========================================================================
@@ -111,6 +120,7 @@ Class, file and Variable names:
 -------------------------------------------------------------------------
 * Non-Member variables
 -------------------------------------------------------------------------
+
 - non-member variables should follow the same naming convention as the member 
   variables, except for the leading m_
 
@@ -144,8 +154,8 @@ a = (b == foobar) ? 1 : -1; // you are asking for trouble by putting comments he
 Header files
 ========================================================================
 
-
-- Add copyright to top of every file
+- Add copyright to top of every file. Use the same header than others digiKam
+  source code.
 - Double inclusion protection defines are all upper case letters and are 
   composed of the classname and a H suffix separated by underscore
 
@@ -154,6 +164,7 @@ Header files
 
 class AnotherNiceClass
 {
+...
 }
 
 #endif
@@ -248,8 +259,29 @@ kcachegrind callgrind.out.16693.1
 =================================================================================
 API Documentation Validation, User Documentation Validation, Source Code Checking
 =================================================================================
+
 The following site check on a dayly basis for the a.m. errors:
 www.englishbreakfastnetwork.org/krazy/
 
 It can be very useful, in particular before major releases.
 Don't trust it blindly! Sometimes they propose too advanced modifications that are no compatible with the prevailant include files.
+
+========================================================================
+Usability issues
+========================================================================
+
+OpenUsability project has define default menu structure and keyboard shortcuts:
+
+http://wiki.openusability.org/guidelines/index.php/Appendices:Keyboard_Shortcuts
+
+========================================================================
+Generate API documentation
+========================================================================
+
+To generate API documentation, you need to install:
+
+- Doxygen program (http://www.doxygen.org).
+- Dot program (http://www.graphviz.org)
+
+Go to 'project' sub-folder and just run doxygen binary program. A new subfolder 
+named 'api' will be create. Warning, this can take a while.

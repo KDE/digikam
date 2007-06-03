@@ -37,23 +37,16 @@ public:
 
     PreviewLoadThread();
 
+    /**
+     * Load a preview that is optimized for fast loading.
+     */
     void load(LoadingDescription description);
-
-signals:
-
-    // This signal is emitted when the loading process has finished.
-    // If the process failed, img is null.
-    // The returned image is read-only. A copy needs to be made if changes are needed.
-    void signalPreviewLoaded(const LoadingDescription &loadingDescription, const QImage &image);
-
-public:
-
-    void previewLoaded(const LoadingDescription &loadingDescription, const QImage &image)
-            { emit signalPreviewLoaded(loadingDescription, image); };
-
-protected slots:
-
-    void slotTranslateLoadedSignal(const LoadingDescription &loadingDescription, const DImg& img);
+    /**
+     * Load a preview with higher resolution, trading more quality
+     * for less speed.
+     * In the LoadingDescription container, provide "0" as maximum size.
+     */
+    void loadHighQuality(LoadingDescription description);
 
 };
 

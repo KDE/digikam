@@ -405,13 +405,20 @@ bool TagFilterView::acceptDrop(const QDropEvent *e) const
         return true;
     }
 
-    if (ItemDrag::canDecode(e) && itemDrop && 
-        itemDrop->m_tag->parent() && !itemDrop->m_untagged)
+    if (ItemDrag::canDecode(e) && itemDrop && !itemDrop->m_untagged)
     {
-        // Only other possibility is image items being dropped
-        // And allow this only if there is a Tag to be dropped
-        // on and also the Tag is not root or "Not Tagged" item.
-        return true;
+        TAlbum *tag = itemDrop->m_tag;
+        
+        if (tag)
+        {
+            if (tag->parent())
+            {         
+                // Only other possibility is image items being dropped
+                // And allow this only if there is a Tag to be dropped
+                // on and also the Tag is not root or "Not Tagged" item.
+                return true;
+            }
+        }
     }
 
     return false;
@@ -528,7 +535,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
         if (id == 10)
         {
             emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
-                                       i18n("Assign tag to pictures. Please wait..."));
+                                       i18n("Assigning image tags. Please wait..."));
 
             {
                 DatabaseTransaction transaction;
@@ -1005,7 +1012,7 @@ void TagFilterView::slotABCContextMenu()
 
     if (counter == 100)
     {
-        d->ABCMenu->insertItem( i18n("No AddressBook Entries Found"), ++counter );
+        d->ABCMenu->insertItem( i18n("No AddressBook entries found"), ++counter );
         d->ABCMenu->setItemEnabled( counter, false );
     }
 }
@@ -1110,11 +1117,11 @@ void TagFilterView::tagDelete(TagFilterViewItem* item)
                      i18n("Tag '%1' has one subtag. "
                           "Deleting this will also delete "
                           "the subtag. "
-                          "Are you sure you want to continue?",
+                          "Do you want to continue?",
                           "Tag '%1' has %n subtags. "
                           "Deleting this will also delete "
                           "the subtags. "
-                          "Are you sure you want to continue?",
+                          "Do you want to continue?",
                           children).arg(tag->title()),
                           i18n("Delete Tag"),
                           KGuiItem(i18n("Delete"),"editdelete"));

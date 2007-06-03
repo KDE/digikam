@@ -84,52 +84,54 @@ LightTableView::LightTableView(QWidget *parent)
     d->grid->setColStretch(1, 10),
     d->grid->setRowStretch(0, 10),
 
-    // -------------------------------------------------------------------
+    // Left panel connections ------------------------------------------------
 
     connect(d->leftPreview, SIGNAL(signalZoomFactorChanged(double)),
             this, SIGNAL(signalLeftZoomFactorChanged(double)));
+
+    connect(d->leftPreview, SIGNAL(contentsMoving(int, int)),
+            this, SLOT(slotLeftContentsMoved(int, int)));
+
+    connect(d->leftPreview, SIGNAL(signalSlideShow()),
+            this, SIGNAL(signalSlideShow()));
+
+    connect(d->leftPreview, SIGNAL(signalDeleteItem(ImageInfo*)),
+            this, SIGNAL(signalDeleteItem(ImageInfo*)));
+
+    connect(d->leftPreview, SIGNAL(signalEditItem(ImageInfo*)),
+            this, SIGNAL(signalEditItem(ImageInfo*)));
+
+    connect(d->leftPreview, SIGNAL(signalDroppedItems(const ImageInfoList&)),
+            this, SIGNAL(signalLeftDroppedItems(const ImageInfoList&)));
+
+    connect(d->leftPreview, SIGNAL(signalPreviewLoaded(bool)),
+            this, SLOT(slotLeftPreviewLoaded(bool)));
+
+    connect(d->leftPreview, SIGNAL(signalLeftButtonClicked()),
+            this, SIGNAL(signalLeftPanelLeftButtonClicked()));
+
+    // Right panel connections ------------------------------------------------
     
     connect(d->rightPreview, SIGNAL(signalZoomFactorChanged(double)),
             this, SIGNAL(signalRightZoomFactorChanged(double)));
 
-    connect(d->leftPreview, SIGNAL(signalSlideShow()),
-            this, SIGNAL(signalSlideShow()));
+    connect(d->rightPreview, SIGNAL(contentsMoving(int, int)),
+            this, SLOT(slotRightContentsMoved(int, int)));
     
     connect(d->rightPreview, SIGNAL(signalDeleteItem(ImageInfo*)),
-            this, SIGNAL(signalDeleteItem(ImageInfo*)));
-
-    connect(d->leftPreview, SIGNAL(signalDeleteItem(ImageInfo*)),
             this, SIGNAL(signalDeleteItem(ImageInfo*)));
     
     connect(d->rightPreview, SIGNAL(signalEditItem(ImageInfo*)),
             this, SIGNAL(signalEditItem(ImageInfo*)));
 
-    connect(d->leftPreview, SIGNAL(signalEditItem(ImageInfo*)),
-            this, SIGNAL(signalEditItem(ImageInfo*)));
-
     connect(d->rightPreview, SIGNAL(signalDroppedItems(const ImageInfoList&)),
             this, SIGNAL(signalRightDroppedItems(const ImageInfoList&)));
 
-    connect(d->leftPreview, SIGNAL(signalDroppedItems(const ImageInfoList&)),
-            this, SIGNAL(signalLeftDroppedItems(const ImageInfoList&)));
-    
     connect(d->rightPreview, SIGNAL(signalSlideShow()),
             this, SIGNAL(signalSlideShow()));
 
-    connect(d->leftPreview, SIGNAL(contentsMoving(int, int)),
-            this, SLOT(slotLeftContentsMoved(int, int)));
-
-    connect(d->rightPreview, SIGNAL(contentsMoving(int, int)),
-            this, SLOT(slotRightContentsMoved(int, int)));
-
-    connect(d->leftPreview, SIGNAL(signalPreviewLoaded(bool)),
-            this, SLOT(slotLeftPreviewLoaded(bool)));
-
     connect(d->rightPreview, SIGNAL(signalPreviewLoaded(bool)),
             this, SLOT(slotRightPreviewLoaded(bool)));
-
-    connect(d->leftPreview, SIGNAL(signalLeftButtonClicked()),
-            this, SIGNAL(signalLeftPanelLeftButtonClicked()));
 
     connect(d->rightPreview, SIGNAL(signalLeftButtonClicked()),
             this, SIGNAL(signalRightPanelLeftButtonClicked()));
@@ -138,6 +140,12 @@ LightTableView::LightTableView(QWidget *parent)
 LightTableView::~LightTableView()
 {
     delete d;
+}
+
+void LightTableView::setLoadFullImageSize(bool b)
+{
+    d->leftPreview->setLoadFullImageSize(b); 
+    d->rightPreview->setLoadFullImageSize(b); 
 }
 
 void LightTableView::setSyncPreview(bool sync)
@@ -157,16 +165,30 @@ void LightTableView::setNavigateByPair(bool b)
 
 void LightTableView::slotDecreaseZoom()
 {
-    if (!d->syncPreview) return;
+    if (d->syncPreview)
+    {
+        slotDecreaseLeftZoom();
+        return;
+    }
 
-    slotDecreaseLeftZoom();
+    if (d->leftPreview->isSelected())
+        slotDecreaseLeftZoom();
+    else if (d->rightPreview->isSelected())
+        slotDecreaseRightZoom();
 }   
 
 void LightTableView::slotIncreaseZoom()
 {
-    if (!d->syncPreview) return;
+    if (d->syncPreview)
+    { 
+        slotIncreaseLeftZoom();
+        return;
+    }
 
-    slotIncreaseLeftZoom();
+    if (d->leftPreview->isSelected())
+        slotIncreaseLeftZoom();
+    else if (d->rightPreview->isSelected())
+        slotIncreaseRightZoom();
 }   
 
 void LightTableView::slotDecreaseLeftZoom()
@@ -285,11 +307,21 @@ void LightTableView::slotLeftContentsMoved(int x, int y)
 {
     if (d->syncPreview && !d->leftLoading)
     {
-        d->rightPreview->blockSignals(true);
+        disconnect(d->rightPreview, SIGNAL(signalZoomFactorChanged(double)),
+                   this, SIGNAL(signalRightZoomFactorChanged(double)));
+    
+        disconnect(d->rightPreview, SIGNAL(contentsMoving(int, int)),
+                   this, SLOT(slotRightContentsMoved(int, int)));
+
         setRightZoomFactor(d->leftPreview->zoomFactor());
         emit signalRightZoomFactorChanged(d->leftPreview->zoomFactor());
         d->rightPreview->setContentsPos(x, y);
-        d->rightPreview->blockSignals(false);
+
+        connect(d->rightPreview, SIGNAL(signalZoomFactorChanged(double)),
+                this, SIGNAL(signalRightZoomFactorChanged(double)));
+    
+        connect(d->rightPreview, SIGNAL(contentsMoving(int, int)),
+                this, SLOT(slotRightContentsMoved(int, int)));
     }
 }
 
@@ -297,11 +329,22 @@ void LightTableView::slotRightContentsMoved(int x, int y)
 {
     if (d->syncPreview && !d->rightLoading)
     {
-        d->leftPreview->blockSignals(true);
+        disconnect(d->leftPreview, SIGNAL(signalZoomFactorChanged(double)),
+                   this, SIGNAL(signalLeftZoomFactorChanged(double)));
+    
+        disconnect(d->leftPreview, SIGNAL(contentsMoving(int, int)),
+                   this, SLOT(slotLeftContentsMoved(int, int)));
+
+
         setLeftZoomFactor(d->rightPreview->zoomFactor());
         emit signalLeftZoomFactorChanged(d->rightPreview->zoomFactor());
         d->leftPreview->setContentsPos(x, y);
-        d->leftPreview->blockSignals(false);
+
+        connect(d->leftPreview, SIGNAL(signalZoomFactorChanged(double)),
+                this, SIGNAL(signalLeftZoomFactorChanged(double)));
+    
+        connect(d->leftPreview, SIGNAL(contentsMoving(int, int)),
+                this, SLOT(slotLeftContentsMoved(int, int)));
     }
 }
 

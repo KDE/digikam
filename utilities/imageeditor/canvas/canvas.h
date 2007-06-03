@@ -77,6 +77,7 @@ public:
     void  updateUndoState();
     DImg  currentImage();
     QString currentImageFileFormat();
+    QString currentImageFilePath();
 
     DImgInterface *interface() const;
     void makeDefaultEditingCanvas();
@@ -134,6 +135,7 @@ signals:
     void signalSavingFinished(const QString &filename, bool success);
     void signalSavingProgress(const QString& filePath, float progress);
     void signalSelectionChanged(const QRect&);
+    void signalToggleOffFitToWindow();
 
 public slots:
 
@@ -155,6 +157,9 @@ public slots:
     void slotRedo(int steps=1);
 
     void slotCopy();
+
+    void slotSelectAll();
+    void slotSelectNone();
 
 protected:
     

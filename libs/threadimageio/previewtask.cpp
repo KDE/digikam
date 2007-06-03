@@ -49,11 +49,6 @@
 namespace Digikam
 {
 
-void PreviewLoadedEvent::notify(LoadSaveThread *thread)
-{
-    static_cast<PreviewLoadThread *>(thread)->previewLoaded(m_loadingDescription, m_image);
-}
-
 void PreviewLoadingTask::execute()
 {
     if (m_loadingTaskStatus == LoadingTaskStatusStopping)
@@ -78,26 +73,17 @@ void PreviewLoadingTask::execute()
         {
             // image is found in image cache, loading is successful
 
-            // In the cache, the QImage is wrapped in a DImg object.
-            QImage qimage;
-            QVariant attribute(cachedImg->attribute("previewQImage"));
-            if (attribute.isValid())
-            {
-                // the image was stored as a QImage-in-a-DImg
-                qimage = attribute.toImage();
-            }
-            else
-            {
-                // we are using a normal DImg object. Convert it to QImage.
-                qimage = cachedImg->copyQImage();
+            DImg img(*cachedImg);
 
-                // rotate if needed - images are unrotated in the cache
-                if (m_loadingDescription.previewParameters.exifRotate)
-                    exifRotate(m_loadingDescription.filePath, qimage);
-
+            // rotate if needed - images are unrotated in the cache,
+            // except for RAW images, which are already rotated by dcraw.
+            if (m_loadingDescription.previewParameters.exifRotate)
+            {
+                img = img.copy();
+                LoadSaveThread::exifRotate(img, m_loadingDescription.filePath);
             }
 
-            QApplication::postEvent(m_thread, new PreviewLoadedEvent(m_loadingDescription.filePath, qimage));
+            QApplication::postEvent(m_thread, new LoadedEvent(m_loadingDescription.filePath, img));
             return;
         }
         else
@@ -150,57 +136,64 @@ void PreviewLoadingTask::execute()
     // load image
     int  size = m_loadingDescription.previewParameters.size;
 
+    DImg img;
     QImage qimage;
 
     // -- Get the image preview --------------------------------
-    // In first, we trying to load with dcraw : RAW files.
+
+    // First the QImage-dependent loading methods
+    // Trying to load with dcraw: RAW files.
     if ( !KDcrawIface::KDcraw::loadDcrawPreview(qimage, m_loadingDescription.filePath) )
     {
         // Try to extract Exif/Iptc preview.
-        if ( !loadImagePreview(qimage, m_loadingDescription.filePath) )
-        {
-            // Try to load a JPEG with the fast scale-before-decoding method
-            if (!loadJPEGScaled(qimage, m_loadingDescription.filePath, size))
-            {
-                // Try to load with Qt/KDE.
-                qimage.load(m_loadingDescription.filePath);
-            }
-        }
+        loadImagePreview(qimage, m_loadingDescription.filePath);
     }
 
+    // DImg-dependent loading methods
     if (qimage.isNull())
+    {
+        // Set a hint to try to load a JPEG with the fast scale-before-decoding method
+        img.setAttribute("jpegScaledLoadingSize", size);
+        img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
+    }
+    else
+    {
+        // convert from QImage
+        img = DImg(qimage);
+        // free memory
+        qimage.reset();
+    }
+
+    if (img.isNull())
     {
         DWarning() << "Cannot extract preview for " << m_loadingDescription.filePath << endl;
     }
 
-    if (qimage.depth() != 32)
-        qimage = qimage.convertDepth(32);
+    img.convertToEightBit();
 
     // Reduce size of image:
     // - only scale down if size is considerably larger
     // - only scale down, do not scale up
-    QSize scaledSize = qimage.size();
+    QSize scaledSize = img.size();
     if (needToScale(scaledSize, size))
     {
         scaledSize.scale(size, size, QSize::ScaleMin);
-        qimage = FastScale::fastScaleQImage(qimage, scaledSize.width(), scaledSize.height());
+        //qimage = FastScale::fastScaleQImage(qimage, scaledSize.width(), scaledSize.height());
         //qimage = qimage.smoothScale(scaledSize);
+        //TODO
+        img = img.smoothScale(scaledSize.width(), scaledSize.height());
+        //img = img.fastScale(scaledSize.width(), scaledSize.height());
     }
 
+    // Scale if hinted, Store previews rotated in the cache (?)
     if (m_loadingDescription.previewParameters.exifRotate)
-        exifRotate(m_loadingDescription.filePath, qimage);
+        LoadSaveThread::exifRotate(img, m_loadingDescription.filePath);
 
     {
         LoadingCache::CacheLock lock(cache);
         // put (valid) image into cache of loaded images
-        if (!qimage.isNull())
-        {
-            // Wrap QImage into DImg object
-            DImg img;
-            img.setAttribute("previewQImage", qimage);
-
+        if (!img.isNull())
             cache->putImage(m_loadingDescription.cacheKey(), new DImg(img), m_loadingDescription.filePath);
-        }
         // remove this from the list of loading processes in cache
         cache->removeLoadingProcess(this);
     }
@@ -216,7 +209,7 @@ void PreviewLoadingTask::execute()
         // dispatch image to all listeners, including this
         for (LoadingProcessListener *l = m_listeners.first(); l; l = m_listeners.next())
         {
-            QApplication::postEvent(l->eventReceiver(), new PreviewLoadedEvent(m_loadingDescription, qimage));
+            QApplication::postEvent(l->eventReceiver(), new LoadedEvent(m_loadingDescription, img));
         }
 
         // remove myself from list of listeners
@@ -251,62 +244,6 @@ bool PreviewLoadingTask::loadImagePreview(QImage& image, const QString& path)
     }
 
     return false;
-}
-
-
-
-void PreviewLoadingTask::exifRotate(const QString& filePath, QImage& thumb)
-{
-    // Rotate thumbnail based on metadata orientation information
-
-    DMetadata metadata(filePath);
-    DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
-
-    if (orientation == DMetadata::ORIENTATION_NORMAL ||
-        orientation == DMetadata::ORIENTATION_UNSPECIFIED)
-        return;
-
-    QWMatrix matrix;
-
-    switch (orientation)
-    {
-        case DMetadata::ORIENTATION_NORMAL:
-        case DMetadata::ORIENTATION_UNSPECIFIED:
-            break;
-
-        case DMetadata::ORIENTATION_HFLIP:
-            matrix.scale(-1, 1);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_180:
-            matrix.rotate(180);
-            break;
-
-        case DMetadata::ORIENTATION_VFLIP:
-            matrix.scale(1, -1);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_90_HFLIP:
-            matrix.scale(-1, 1);
-            matrix.rotate(90);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_90:
-            matrix.rotate(90);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_90_VFLIP:
-            matrix.scale(1, -1);
-            matrix.rotate(90);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_270:
-            matrix.rotate(270);
-            break;
-    }
-
-    // transform accordingly
-    thumb = thumb.xForm( matrix );
 }
 
 } // namespace Digikam

@@ -31,23 +31,23 @@
 
 // Local includes.
 
-#include "folderview.h"
-#include "folderitem.h"
 #include "thumbnailsize.h"
 #include "albumsettings.h"
+#include "folderview.h"
+#include "folderitem.h"
 
 namespace Digikam
 {
 
 FolderItem::FolderItem(QListView* parent, const QString& text, bool special)
-    : QListViewItem(parent, text)
+          : QListViewItem(parent, text)
 {
     m_special = special;
     m_focus = false;
 }
 
 FolderItem::FolderItem(QListViewItem* parent, const QString& text, bool special)
-    : QListViewItem(parent, text)
+          : QListViewItem(parent, text)
 {
     m_special = special;
     m_focus = false;    
@@ -147,15 +147,17 @@ int FolderItem::id() const
     return 0;
 }
 
+// ------------------------------------------------------------------------------------
+
 FolderCheckListItem::FolderCheckListItem(QListView* parent, const QString& text,
                                          QCheckListItem::Type tt)
-    : QCheckListItem(parent, text, tt)
+                   : QCheckListItem(parent, text, tt)
 {
 }
 
 FolderCheckListItem::FolderCheckListItem(QListViewItem* parent, const QString& text,
                                          QCheckListItem::Type tt)
-    : QCheckListItem(parent, text, tt)
+                   : QCheckListItem(parent, text, tt)
 {
 }
 
@@ -169,7 +171,6 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
     FolderView *fv = dynamic_cast<FolderView*>(listView());
     if (!fv)
         return;
-
     
     QFontMetrics fm(p->fontMetrics());
 
@@ -182,15 +183,15 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
     int styleflags = QStyle::Style_Default;
     switch (state())
     {
-    case(QCheckListItem::Off):
-        styleflags |= QStyle::Style_Off;
-        break;
-    case(QCheckListItem::NoChange):
-        styleflags |= QStyle::Style_NoChange;
-        break;
-    case(QCheckListItem::On):
-        styleflags |= QStyle::Style_On;
-        break;
+        case(QCheckListItem::Off):
+            styleflags |= QStyle::Style_Off;
+            break;
+        case(QCheckListItem::NoChange):
+            styleflags |= QStyle::Style_NoChange;
+            break;
+        case(QCheckListItem::On):
+            styleflags |= QStyle::Style_On;
+            break;
     }
 
     if (isSelected())
@@ -213,7 +214,6 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
                                   QRect(x, y, boxsize, height()),
                                   cg, styleflags, QStyleOption(this));
     }
-
     
     if (isSelected())
     {
@@ -225,7 +225,6 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
         p->drawPixmap(r, 0, fv->itemBasePixmapRegular());
         p->setPen(cg.text());
     }
-
     
     if (icon)
     {

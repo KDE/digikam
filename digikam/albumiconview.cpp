@@ -79,7 +79,7 @@ extern "C"
 #include <kaction.h>
 #include <kstandarddirs.h>
 #include <kiconeffect.h>
-
+                            #include <kdebug.h>
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,2,0)
 #include <kcalendarsystem.h>
@@ -493,19 +493,19 @@ void AlbumIconView::slotRightButtonClicked(const QPoint& pos)
     {
         return;
     }
-            
+
     QPopupMenu popmenu(this);
     KAction *paste    = KStdAction::paste(this, SLOT(slotPaste()), 0);
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
-    
+
     if(!data || !QUriDrag::canDecode(data))
     {
         paste->setEnabled(false);
     }
-    
+
     paste->plug(&popmenu);
     popmenu.exec(pos);
-    delete paste;    
+    delete paste;
 }
 
 void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
@@ -540,7 +540,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     DPopupMenu popmenu(this);
     popmenu.insertItem(SmallIcon("viewimage"), i18n("View..."), 18);
     popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 10);
-    popmenu.insertItem(SmallIcon("idea"), i18n("Place onto Light Table"), 19);
+    popmenu.insertItem(SmallIcon("idea"), i18n("Add to Light Table"), 19);
     popmenu.insertItem(i18n("Open With"), &openWithMenu, 11);
 
     // Merge in the KIPI plugins actions ----------------------------
@@ -1288,7 +1288,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                 case 10:    // Selected Items
                 {
                     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
-                                               i18n("Assign tag to pictures. Please wait..."));
+                                               i18n("Assigning image tags. Please wait..."));
 
                     // always give a copy of the image infos (the "true"). Else there were crashes reported.
                     changeTagOnImageInfos(selectedImageInfos(true), QValueList<int>() << tagID, true, true);
@@ -1299,7 +1299,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                 case 11:    // All Items
                 {
                     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
-                                               i18n("Assign tag to pictures. Please wait..."));
+                                               i18n("Assigning image tags. Please wait..."));
 
                     changeTagOnImageInfos(allImageInfos(true), QValueList<int>() << tagID, true, true);
 
@@ -1365,7 +1365,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             case 10:    // Selected Items
             {
                 emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
-                                            i18n("Assign tags to pictures. Please wait..."));
+                                            i18n("Assigning image tags. Please wait..."));
 
                 changeTagOnImageInfos(selectedImageInfos(true), tagIDs, true, true);
 
@@ -1375,7 +1375,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             case 11:    // All Items
             {
                 emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
-                                            i18n("Assign tags to pictures. Please wait..."));
+                                            i18n("Assigning image tags. Please wait..."));
 
                 changeTagOnImageInfos(allImageInfos(true), tagIDs, true, true);
 
@@ -1443,7 +1443,7 @@ bool AlbumIconView::acceptToolTip(IconItem *item, const QPoint &mousePos)
 {
     AlbumIconItem *iconItem = dynamic_cast<AlbumIconItem*>(item);
 
-    if (iconItem && iconItem->thumbnailRect().contains(mousePos))
+    if (iconItem && iconItem->clickToOpenRect().contains(mousePos))
     {
         return true;
     }
@@ -1602,7 +1602,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
     KURL::List::Iterator it;
     float cnt = (float)urlList.count();
     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
-                                i18n("Fix Exif Orientation tag on pictures. Please wait..."));
+                                i18n("Revising Exif Orientation tags. Please wait..."));
 
     for( it = urlList.begin(); it != urlList.end(); ++it )
     {
@@ -1614,7 +1614,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
 
         if (!metadata.applyChanges())
         {
-            KMessageBox::sorry(0, i18n("Failed to correct Exif orientation for file %1.")
+            KMessageBox::sorry(0, i18n("Failed to revise Exif orientation for file %1.")
                                .arg((*it).filename()));
             return;
         }
@@ -1951,7 +1951,7 @@ void AlbumIconView::slotAlbumModified()
 void AlbumIconView::slotAssignTag(int tagID)
 {
     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
-                                i18n("Assign tag to pictures. Please wait..."));
+                                i18n("Assigning image tags. Please wait..."));
 
     changeTagOnImageInfos(selectedImageInfos(true), QValueList<int>() << tagID, true, true);
 
@@ -1961,7 +1961,7 @@ void AlbumIconView::slotAssignTag(int tagID)
 void AlbumIconView::slotRemoveTag(int tagID)
 {
     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
-                                i18n("Remove tag from pictures. Please wait..."));
+                                i18n("Removing image tags. Please wait..."));
 
     changeTagOnImageInfos(selectedImageInfos(true), QValueList<int>() << tagID, false, true);
 
@@ -1971,7 +1971,7 @@ void AlbumIconView::slotRemoveTag(int tagID)
 void AlbumIconView::slotAssignRating(int rating)
 {
     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
-                                i18n("Assign rating to pictures. Please wait..."));
+                                i18n("Assigning image ratings. Please wait..."));
 
     int   i   = 0;
     float cnt = (float)countSelected();

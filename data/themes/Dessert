@@ -1,5 +1,27 @@
-! Dessert
-! Digikam theme by Gerhard Kulzer (Mon Dez 12 21:40:26 2005)
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-12-19
+ * Description : "Dessert" colors theme.
+ *
+ * Copyright (C) 2005 by Gerhard Kulzer <gerhard at kulzer dot net>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
+! "Dessert"
 
 base.color:				#2e3436
 text.regular.color:			#bababa

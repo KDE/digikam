@@ -1,11 +1,13 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date   : 2005-05-25
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-05-25
  * Description : Emboss threaded image filter.
- * 
- * Copyright 2005 by Gilles Caulier 
- * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
+ *
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Original Emboss algorithm copyrighted 2004 by 
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -21,8 +23,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  * 
- * ============================================================ */
- 
+ * ============================================================ */ 
+
 // C++ includes. 
  
 #include <cmath>

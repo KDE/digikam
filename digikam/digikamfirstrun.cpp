@@ -130,7 +130,7 @@ void DigikamFirstRun::slotOk()
                                    i18n("<qt>The folder you selected does not exist: "
 
                                         "<p><b>%1</b></p>"
-                                        "Would you like digiKam to make it for you now?</qt>")
+                                        "Would you like digiKam to create it?</qt>")
                                         .arg(albumLibraryFolder),
                                    i18n("Create Folder?"));
 
@@ -155,7 +155,7 @@ void DigikamFirstRun::slotOk()
     if (!path.isWritable()) 
     {
         KMessageBox::information(this, i18n("No write access for this path.\n"
-                                            "Warning: the comments and tag features "
+                                            "Warning: the comment and tag features "
                                             "will not work."));
         return;
     }

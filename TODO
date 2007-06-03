@@ -39,14 +39,17 @@
                 to start download dialog
                 ditto for unmounting in usm case 
 
-* Compatibility with little cms version 1.16 which provides improvements
-
 ------------------------------------------------------------------------------------
-LATER 0.9.1 TODO LIST
+LATER 0.9.2 TODO LIST
 ------------------------------------------------------------------------------------
 
-* Port project to CMake (see: http://dot.kde.org/1151688350 for notice)
-  Port to QT4/KDE4.
+* Port project to CMake:
+    http://dot.kde.org/1151688350
+    http://techbase.kde.org/Development/Tutorials/CMake
+    http://techbase.kde.org/Development/Tutorials/KDE4_Porting_Guide#CMake
+    http://www.cmake.org/Wiki/CMake_Useful_Variables
+
+* Port to QT4/KDE4.
   Overview documentation
     http://techbase.kde.org/Development/Tutorials/KDE4_Porting_Guide 
 
@@ -64,6 +67,7 @@ LATER 0.9.1 TODO LIST
    - Writing Metadata into TIFF file like JPEG (Exiv2).
    - Writing Metadata to DNG format (=TIFF see above)
    - Writing Metadata to JPEG 2k files like JPEG (Exiv2).
+   - Support of XMP metadata (http://dev.robotbattle.com/bugs/view.php?id=463)
 
 * Database:
    - New database interface to suport remote repository and others DB backend than sqlite.

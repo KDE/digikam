@@ -405,13 +405,18 @@ void DigikamApp::setupAccelerators()
     d->accelerators = new KAccel(this);
 
     d->accelerators->insert("Exit Preview Mode", i18n("Exit Preview"),
-                           i18n("Exit from preview mode"),
+                           i18n("Exit preview mode"),
                            Key_Escape, this, SIGNAL(signalEscapePressed()),
                            false, true);
     
     d->accelerators->insert("Next Image Key_Space", i18n("Next Image"),
                            i18n("Next Image"),
                            Key_Space, this, SIGNAL(signalNextItem()),
+                           false, true);
+
+    d->accelerators->insert("Next Image SHIFT+Key_Space", i18n("Next Image"),
+                           i18n("Next Image"),
+                           SHIFT+Key_Space, this, SIGNAL(signalNextItem()),
                            false, true);
 
     d->accelerators->insert("Previous Image Key_Backspace", i18n("Previous Image"),
@@ -555,7 +560,7 @@ void DigikamApp::setupActions()
                                     SLOT(slotAlbumPropsEdit()),
                                     actionCollection(),
                                     "album_propsEdit");
-    d->propsEditAction->setWhatsThis(i18n("Edit the Album Properties and Collection information."));
+    d->propsEditAction->setWhatsThis(i18n("Edit Album Properties and Collection information."));
 
     d->refreshAlbumAction = new KAction( i18n("Refresh"),
                                     "rebuild",
@@ -564,7 +569,7 @@ void DigikamApp::setupActions()
                                     SLOT(slotAlbumRefresh()),
                                     actionCollection(),
                                     "album_refresh");
-    d->refreshAlbumAction->setWhatsThis(i18n("This action refreshes all album contents"));
+    d->refreshAlbumAction->setWhatsThis(i18n("Refresh all album contents"));
 
     d->syncAlbumMetadataAction = new KAction( i18n("Synchronize images with database"),
                                     "rebuild",
@@ -573,7 +578,7 @@ void DigikamApp::setupActions()
                                     SLOT(slotAlbumSyncPicturesMetadata()),
                                     actionCollection(),
                                     "album_syncmetadata");
-    d->syncAlbumMetadataAction->setWhatsThis(i18n("This updates all image metadata of the current "
+    d->syncAlbumMetadataAction->setWhatsThis(i18n("Updates all image metadata of the current "
                                                 "album with digiKam database contents "
 						"(image metadata will be over-written with data from the database)."));
 
@@ -616,7 +621,7 @@ void DigikamApp::setupActions()
                                     SLOT(slotImageEdit()),
                                     actionCollection(),
                                     "image_edit");
-    d->imageViewAction->setWhatsThis(i18n("This will open the selected item in the image editor."));
+    d->imageViewAction->setWhatsThis(i18n("Open the selected item in the image editor."));
 
     d->imageLightTableAction = new KAction(i18n("Place onto Light Table"),
                                     "idea",
@@ -625,7 +630,7 @@ void DigikamApp::setupActions()
                                     SLOT(slotImageLightTable()),
                                     actionCollection(),
                                     "image_lighttable");
-    d->imageLightTableAction->setWhatsThis(i18n("This will put the selected items into the light table thumbbar."));
+    d->imageLightTableAction->setWhatsThis(i18n("Insert the selected items into the light table thumbbar."));
 
     d->imageRenameAction = new KAction(i18n("Rename..."),
                                     "pencil",
@@ -697,7 +702,7 @@ void DigikamApp::setupActions()
     connect( exifOrientationMapper, SIGNAL( mapped( int ) ),
              d->view, SLOT( slotImageExifOrientation( int ) ) );
 
-    d->imageExifOrientationActionMenu = new KActionMenu(i18n("Adjust Exif Orientation Tag"),
+    d->imageExifOrientationActionMenu = new KActionMenu(i18n("Adjust Exif orientation tag"),
                                                         actionCollection(),
                                                         "image_set_exif_orientation");
     d->imageExifOrientationActionMenu->setDelayed(false);
@@ -760,7 +765,7 @@ void DigikamApp::setupActions()
 
     d->selectNoneAction = new KAction(i18n("Select None"),
                                      0,
-                                     CTRL+Key_U,
+                                     CTRL+SHIFT+Key_A,
                                      d->view,
                                      SLOT(slotSelectNone()),
                                      actionCollection(),
@@ -800,7 +805,7 @@ void DigikamApp::setupActions()
 
     d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), 
                                    "viewmag1",
-                                   CTRL+SHIFT+Key_Z, 
+                                   ALT+CTRL+Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0.
                                    d->view, 
                                    SLOT(slotZoomTo100Percents()),
                                    actionCollection(), 
@@ -808,7 +813,7 @@ void DigikamApp::setupActions()
 
     d->zoomFitToWindowAction = new KAction(i18n("Fit to &Window"), 
                                    "view_fit_window",
-                                   CTRL+SHIFT+Key_A, 
+                                   CTRL+SHIFT+Key_E, 
                                    d->view, 
                                    SLOT(slotFitToWindow()),
                                    actionCollection(), 
@@ -825,7 +830,7 @@ void DigikamApp::setupActions()
                                    SLOT(slotToggleFullScreen()),
                                    actionCollection(),
                                    "full_screen");
-    d->fullScreenAction->setWhatsThis(i18n("Toggles the main window to full screen mode."));
+    d->fullScreenAction->setWhatsThis(i18n("Toggle the main window to full screen mode"));
 #endif
 
     d->slideShowAction = new KActionMenu(i18n("Slide Show"), "slideshow",
@@ -870,7 +875,7 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "help_tipofday");
 
-    d->donateMoneyAction = new KAction(i18n("Donate money..."),
+    d->donateMoneyAction = new KAction(i18n("Make a donation..."),
                                    0,
                                    0,
                                    this,
@@ -1400,7 +1405,7 @@ void DigikamApp::slotCameraMediaMenu()
     d->mediaItems.clear();
     
     d->cameraMediaList->clear();
-    d->cameraMediaList->insertItem(i18n("No Media Devices Found"), 0);
+    d->cameraMediaList->insertItem(i18n("No media devices found"), 0);
     d->cameraMediaList->setItemEnabled(0, false);
         
     KURL kurl("media:/");
@@ -1796,7 +1801,7 @@ void DigikamApp::slotDatabaseRescan()
 
 void DigikamApp::slotRebuildAllThumbs()
 {
-    QString msg = i18n("Rebuilding all album item thumbnails can take a while.\n"
+    QString msg = i18n("Rebuilding all image thumbnails can take some time.\n"
                        "Do you want to continue?");
     int result = KMessageBox::warningContinueCancel(this, msg);
     if (result != KMessageBox::Continue)

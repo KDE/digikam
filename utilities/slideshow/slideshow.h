@@ -37,6 +37,7 @@
 namespace Digikam
 {
 
+class DImg;
 class SlideShowPriv;
 
 class DIGIKAM_EXPORT SlideShow : public QWidget
@@ -62,7 +63,7 @@ private slots:
 
     void slotTimeOut();
     void slotMouseMoveTimeOut();
-    void slotGotImagePreview(const LoadingDescription &, const QImage &);
+    void slotGotImagePreview(const LoadingDescription &, const DImg &);
 
     void slotPause();
     void slotPlay();

@@ -1,11 +1,13 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- * Date   : 2004-12-23
- * Description : a digiKam image editor plugin to process 
- *               shearing image.
- * 
- * Copyright 2004-2007 by Gilles Caulier 
  *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2004-12-23
+ * Description : a plugin to shear an image
+ * 
+ * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;

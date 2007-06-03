@@ -135,7 +135,6 @@ void PreviewWidget::setBackgroundColor(const QColor& color)
 void PreviewWidget::slotReset()
 {
     d->tileCache.clear();
-    viewport()->setUpdatesEnabled(false);
     resetPreview();
 }
 
@@ -203,9 +202,6 @@ void PreviewWidget::slotDecreaseZoom()
 
 void PreviewWidget::setZoomFactor(double zoom)
 {
-    if (d->autoZoom)
-        return;
-
     // Zoom using center of canvas and given zoom factor.
 
     double oldZoom = d->zoom;
@@ -277,6 +273,7 @@ void PreviewWidget::fitToWindow()
 {
     updateAutoZoom();
     updateContentsSize();
+    zoomFactorChanged(d->zoom);
     viewport()->update();
 }
 

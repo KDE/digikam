@@ -342,6 +342,11 @@ QString Canvas::currentImageFileFormat()
     return d->im->getImageFormat();
 }
 
+QString Canvas::currentImageFilePath()
+{
+    return d->im->getImageFilePath();
+}
+
 int Canvas::imageWidth()
 {
     return d->im->origWidth();  
@@ -928,7 +933,10 @@ void Canvas::slotDecreaseZoom()
 void Canvas::setZoomFactor(double zoom)
 {
     if (d->autoZoom)
-        return;
+    {
+        d->autoZoom = false;
+        emit signalToggleOffFitToWindow();
+    }
 
     // Zoom using center of canvas and given zoom factor.
 
@@ -972,6 +980,7 @@ void Canvas::fitToSelect()
         d->zoom = QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
 
         d->autoZoom = false;
+        emit signalToggleOffFitToWindow();
         d->im->zoom(d->zoom);
         updateContentsSize(true);
     
@@ -1003,8 +1012,8 @@ void Canvas::toggleFitToWindow()
     }
 
     d->im->zoom(d->zoom);
-
     updateContentsSize(false);
+    slotZoomChanged(d->zoom);
     viewport()->update();
 }
 
@@ -1286,12 +1295,38 @@ void Canvas::slotPanIconSelectionMoved(QRect r, bool b)
     }
 }
 
-void Canvas::slotZoomChanged(double zoom)
+void Canvas::slotZoomChanged(double /*zoom*/)
 {
-    if (zoom > calcAutoZoomFactor())
+    updateScrollBars();
+
+    if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
         d->cornerButton->show();
     else
         d->cornerButton->hide();        
+}
+
+void Canvas::slotSelectAll()
+{
+    if (d->rubber)
+    {
+        delete d->rubber;
+        d->rubber = 0;        
+    }
+
+    d->rubber       = new QRect(d->pixmapRect);
+    d->pressedMoved = true;
+    d->tileCache.clear();
+    viewport()->setMouseTracking(true);
+    viewport()->update();
+
+    if (d->im->imageValid())
+        emit signalSelected(true);
+}
+
+void Canvas::slotSelectNone()
+{
+    reset();
+    viewport()->update();
 }
 
 }  // namespace Digikam

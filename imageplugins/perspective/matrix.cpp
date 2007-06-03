@@ -1,16 +1,18 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date   : 2005-02-17
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-02-17
  * Description : a matrix implementation for image
  *               perspective adjustment.
  * 
- * Copyright 2005 by Gilles Caulier 
- * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Matrix3 implementation inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
- *
+ * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -23,6 +25,7 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
+
 
 // C++ includes.
 

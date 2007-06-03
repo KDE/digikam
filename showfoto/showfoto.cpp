@@ -248,8 +248,28 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     for (KURL::List::const_iterator it = urlList.begin();
          it != urlList.end(); ++it)
     {
-        new Digikam::ThumbBarItem(d->thumbBar, *it);
-        d->lastOpenedDirectory=(*it);
+        KURL url = *it;
+        if (url.isLocalFile())
+        {
+            QFileInfo fi(url.path());
+            if (fi.isDir())
+            {
+                // Local Dir
+                openFolder(url);                 
+            }
+            else
+            {
+                // Local file
+                new Digikam::ThumbBarItem(d->thumbBar, url);
+                d->lastOpenedDirectory=(*it);
+            }
+        }
+        else
+        {
+            // Remote file.
+            new Digikam::ThumbBarItem(d->thumbBar, url);
+            d->lastOpenedDirectory=(*it);
+        }
     }
 
     if ( urlList.isEmpty() )
@@ -437,6 +457,8 @@ void ShowFoto::setupActions()
                                              SLOT(slotOpenFilesInFolder()),
                                              actionCollection(),
                                              "showfoto_open_folder");
+
+    KStdAction::quit(this, SLOT(close()), actionCollection(), "showfoto_quit");
 
     // Extra 'View' menu actions ---------------------------------------------
 
@@ -787,7 +809,13 @@ void ShowFoto::slotOpenFolder(const KURL& url)
     d->thumbBar->clear(true);
     emit signalNoCurrentItem();
     d->currentItem = 0;
-    
+    openFolder(url);
+    toggleActions(true);
+    toggleNavigation(1);
+}
+
+void ShowFoto::openFolder(const KURL& url)
+{
     if (!url.isValid() || !url.isLocalFile())
        return;
 
@@ -853,9 +881,6 @@ void ShowFoto::slotOpenFolder(const KURL& url)
         new Digikam::ThumbBarItem( d->thumbBar, KURL(fi->filePath()) );
         ++it;
     }
-        
-    toggleActions(true);
-    toggleNavigation(1);
 }
     
 void ShowFoto::slotOpenFilesInFolder()
@@ -987,7 +1012,6 @@ void ShowFoto::saveIsComplete()
 {
     Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
     d->thumbBar->invalidateThumb(d->currentItem);
-    //slotOpenURL(d->currentItem->url());
 }
 
 void ShowFoto::saveAsIsComplete()

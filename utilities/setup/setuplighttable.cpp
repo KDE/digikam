@@ -55,12 +55,16 @@ public:
 
     SetupLightTablePriv()
     {
-        hideToolBar     = 0;
-        autoSyncPreview = 0;
+        hideToolBar          = 0;
+        autoSyncPreview      = 0;
+        autoLoadOnRightPanel = 0;
+        loadFullImageSize    = 0;
     }
 
     QCheckBox *hideToolBar;
     QCheckBox *autoSyncPreview;
+    QCheckBox *autoLoadOnRightPanel;
+    QCheckBox *loadFullImageSize;
 };
 
 SetupLightTable::SetupLightTable(QWidget* parent )
@@ -74,12 +78,22 @@ SetupLightTable::SetupLightTable(QWidget* parent )
     QVGroupBox *interfaceOptionsGroup = new QVGroupBox(i18n("Interface Options"), parent);
 
 
-    d->autoSyncPreview = new QCheckBox(i18n("Synchronize automaticly Left and "
-                                           "Right panels"),
-                                      interfaceOptionsGroup);
+    d->autoSyncPreview = new QCheckBox(i18n("Synchronize panels automatically"), interfaceOptionsGroup);
+    QWhatsThis::add( d->autoSyncPreview, i18n("<p>Set this option to automatically synchronize "
+                     "zooming and panning between left and right panels if the images have "
+                     "the same size."));
 
-    d->hideToolBar = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"),
-                                   interfaceOptionsGroup);
+    d->autoLoadOnRightPanel = new QCheckBox(i18n("Selecting a thumbbar item loads image to the right panel"),
+                                            interfaceOptionsGroup);
+    QWhatsThis::add( d->autoLoadOnRightPanel, i18n("<p>Set this option to automatically load an image "
+                     "into the right panel when the corresponding item is selected on the thumbbar."));
+
+    d->loadFullImageSize = new QCheckBox(i18n("Load full image size"), interfaceOptionsGroup);
+    QWhatsThis::add( d->loadFullImageSize, i18n("<p>Set this option to load full image size "
+                     "in preview panel instead a reduced one. Because this option will take more time "
+                     "to load image, use it only if you have a fast computer."));
+
+    d->hideToolBar = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
 
     // --------------------------------------------------------
 
@@ -104,6 +118,8 @@ void SetupLightTable::readSettings()
     config->setGroup("LightTable Settings");
     d->hideToolBar->setChecked(config->readBoolEntry("FullScreen Hide ToolBar", false));
     d->autoSyncPreview->setChecked(config->readBoolEntry("Auto Sync Preview", true));
+    d->autoLoadOnRightPanel->setChecked(config->readBoolEntry("Auto Load Right Panel", true));
+    d->loadFullImageSize->setChecked(config->readBoolEntry("Load Full Image size", false));
 }
 
 void SetupLightTable::applySettings()
@@ -112,6 +128,8 @@ void SetupLightTable::applySettings()
     config->setGroup("LightTable Settings");
     config->writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
     config->writeEntry("Auto Sync Preview", d->autoSyncPreview->isChecked());
+    config->writeEntry("Auto Load Right Panel", d->autoLoadOnRightPanel->isChecked());
+    config->writeEntry("Load Full Image size", d->loadFullImageSize->isChecked());
     config->sync();
 }
 

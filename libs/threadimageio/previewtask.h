@@ -36,24 +36,6 @@
 namespace Digikam
 {
 
-class PreviewLoadedEvent : public NotifyEvent
-{
-public:
-
-    PreviewLoadedEvent(const LoadingDescription &loadingDescription, const QImage &image)
-        : m_loadingDescription(loadingDescription), m_image(image)
-        {};
-
-    virtual void notify(LoadSaveThread *thread);
-
-private:
-
-    LoadingDescription m_loadingDescription;
-    QImage m_image;
-};
-
-//---------------------------------------------------------------------------------------------------
-
 class PreviewLoadingTask : public SharedLoadingTask
 {
 public:
@@ -68,7 +50,6 @@ private:
 
     bool needToScale(const QSize &imageSize, int previewSize);
     bool loadImagePreview(QImage& image, const QString& path);
-    void exifRotate(const QString& filePath, QImage& thumb);
 };
 
 

@@ -1,6 +1,6 @@
 COMPILE_FIRST = sqlite
 
-SUBDIRS = sqlite libs utilities digikam themedesigner showfoto data kioslave imageplugins
+SUBDIRS = sqlite libs utilities digikam showfoto data kioslave imageplugins themedesigner
 
 EXTRA_DIST = AUTHORS COPYING ChangeLog INSTALL README TODO digikam.lsm 
 

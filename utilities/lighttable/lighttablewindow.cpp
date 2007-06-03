@@ -85,7 +85,7 @@ LightTableWindow::LightTableWindow()
     d = new LightTableWindowPriv;
     m_instance = this;
 
-    setCaption(i18n("digiKam Light Table"));
+    setCaption(i18n("Light Table"));
 
     // -- Build the GUI -------------------------------
 
@@ -150,8 +150,10 @@ void LightTableWindow::applySettings()
     KConfig* config = kapp->config();
     config->setGroup("LightTable Settings");
 
-    d->autoSyncPreview       = config->readBoolEntry("Auto Sync Preview", true);
+    d->autoLoadOnRightPanel  = config->readBoolEntry("Auto Load Right Panel",   true);
+    d->autoSyncPreview       = config->readBoolEntry("Auto Sync Preview",       true);
     d->fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
+    d->previewView->setLoadFullImageSize(config->readBoolEntry("Load Full Image size", false));
 }
 
 void LightTableWindow::closeEvent(QCloseEvent* e)
@@ -358,7 +360,7 @@ void LightTableWindow::setupActions()
                                      actionCollection(), "lighttable_filedelete");
     d->fileDeleteAction->setEnabled(false);
 
-    KStdAction::quit(this, SLOT(close()), actionCollection(), "lighttable_exit");
+    KStdAction::close(this, SLOT(close()), actionCollection(), "lighttable_close");
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
@@ -383,12 +385,12 @@ void LightTableWindow::setupActions()
     d->zoomMinusAction->setEnabled(false);
 
     d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), "viewmag1",
-                                       CTRL+SHIFT+Key_Z, this, SLOT(slotZoomTo100Percents()),
+                                       ALT+CTRL+Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0.
+                                       this, SLOT(slotZoomTo100Percents()),
                                        actionCollection(), "lighttable_zoomto100percents");
 
-
     d->zoomFitToWindowAction = new KAction(i18n("Fit to &Window"), "view_fit_window",
-                                           CTRL+SHIFT+Key_A, this, SLOT(slotFitToWindow()),
+                                           CTRL+SHIFT+Key_E, this, SLOT(slotFitToWindow()),
                                            actionCollection(), "lighttable_zoomfit2window");
 
 #if KDE_IS_VERSION(3,2,0)
@@ -546,10 +548,22 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
 
 void LightTableWindow::refreshStatusBar()
 {
-    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, 
-                  i18n("1 item on Light Table", 
-                       "%1 items on Light Table")
-                  .arg(d->barView->countItems()));   
+    switch (d->barView->countItems())
+    {
+        case 0:
+            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, 
+                                                  i18n("No item on Light Table"));   
+            break;
+        case 1:
+            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, 
+                                                  i18n("1 item on Light Table"));   
+            break;
+        default:
+            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, 
+                                                  i18n("%1 items on Light Table")
+                                                  .arg(d->barView->countItems()));   
+            break;
+    }  
 }
 
 void LightTableWindow::slotItemsUpdated(const KURL::List& urls)
@@ -650,6 +664,8 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
         d->firstAction->setEnabled(true);
         d->lastAction->setEnabled(true);
         d->syncPreviewAction->setEnabled(true);
+        d->zoomPlusAction->setEnabled(true);
+        d->zoomMinusAction->setEnabled(true);
         d->navigateByPairAction->setEnabled(true);
 
         LightTableBarItem* curr = d->barView->findItemByInfo(info);
@@ -675,6 +691,11 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
                 d->barView->setOnLeftPanel(info);
                 slotSetItemOnLeftPanel(info);
             }
+            else if (d->autoLoadOnRightPanel && !curr->isOnLeftPanel()) 
+            {
+                d->barView->setOnRightPanel(info);
+                slotSetItemOnRightPanel(info);
+            }
         }
     }
     else
@@ -689,6 +710,8 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
         d->forwardAction->setEnabled(false);
         d->firstAction->setEnabled(false);
         d->lastAction->setEnabled(false);
+        d->zoomPlusAction->setEnabled(false);
+        d->zoomMinusAction->setEnabled(false);
         d->syncPreviewAction->setEnabled(false);
         d->navigateByPairAction->setEnabled(false);
     }
@@ -919,7 +942,7 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
     d->cancelSlideShow = false;
 
     d->statusProgressBar->progressBarMode(StatusProgressBar::CancelProgressBarMode, 
-                                  i18n("Prepare slideshow. Please wait..."));
+                                  i18n("Preparing slideshow. Please wait..."));
 
     ImageInfoList list = d->barView->itemsImageInfoList();
 
@@ -1213,16 +1236,12 @@ void LightTableWindow::slotRightZoomFactorChanged(double zoom)
 
 void LightTableWindow::slotToggleSyncPreview()
 {
-    d->zoomPlusAction->setEnabled(d->syncPreviewAction->isChecked());
-    d->zoomMinusAction->setEnabled(d->syncPreviewAction->isChecked());
     d->previewView->setSyncPreview(d->syncPreviewAction->isChecked());    
 }
 
 void LightTableWindow::slotToggleOnSyncPreview(bool t)
 {
     d->syncPreviewAction->setEnabled(t);
-    d->zoomPlusAction->setEnabled(t);
-    d->zoomMinusAction->setEnabled(t);
 
     if (!t)
     {

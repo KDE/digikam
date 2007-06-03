@@ -98,7 +98,11 @@ public:
     /** Create null image */
     DImg();
 
-    /** Load image */
+    /** Load image using QCString as file path */
+    DImg(const QCString& filePath, DImgLoaderObserver *observer = 0,
+         KDcrawIface::RawDecodingSettings rawDecodingSettings=KDcrawIface::RawDecodingSettings());
+
+    /** Load image using QString as file path */
     DImg(const QString& filePath, DImgLoaderObserver *observer = 0,
          KDcrawIface::RawDecodingSettings rawDecodingSettings=KDcrawIface::RawDecodingSettings());
 
@@ -106,6 +110,11 @@ public:
         The two images will be equal. Call detach() or copy() to create deep copies.
     */
     DImg(const DImg& image);
+
+    /** Copy image: Creates a copy of a QImage object. If the QImage is null, a 
+        null DImg will be created.
+    */
+    DImg(const QImage& image);
 
     /** Create image from data.
         If data is 0, a new buffer will be allocated, otherwise the given data will be used:
@@ -140,8 +149,7 @@ public:
     */
     bool        operator==(const DImg& image) const;
 
-
-
+    
     /** Replaces image data of this object. Metadata is unchanged. Parameters like constructor above. */
     void        putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar *data, bool copyData = true);
 

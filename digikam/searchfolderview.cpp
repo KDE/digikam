@@ -187,7 +187,7 @@ bool SearchFolderView::checkName( KURL& url )
 
     while ( !checked) 
     {
-        QString label = i18n( "Another search with same name exists."
+        QString label = i18n( "Search name already exists."
                               "\nPlease enter a new name:" );
         bool ok;
 #if KDE_IS_VERSION(3,2,0)

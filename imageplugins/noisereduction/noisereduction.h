@@ -1,11 +1,13 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- *          Peter Heckert <peter dot heckert at arcor dot de>
- * Date   : 2005-05-25
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2005-05-25
  * Description : Noise Reduction threaded image filter.
  * 
- * Copyright 2005-2007 by Gilles Caulier
- *
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * 
  * Original Noise Filter algorithm copyright (C) 2005 
  * Peter Heckert <peter dot heckert at arcor dot de>
  * from dcamnoise2 gimp plugin available at this url :

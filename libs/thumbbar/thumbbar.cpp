@@ -538,44 +538,11 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
 
 void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
 {
-    ThumbBarItem* barItem = 0;
-    
-    if (d->orientation == Vertical)
-    {
-       int y = e->pos().y();
-       
-       for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
-       {
-           if (y >= item->d->pos &&
-               y <= (item->d->pos + d->tileSize + 2*d->margin))
-           {
-                barItem = item;
-                break;
-           }
-       }
-    }
-    else
-    {
-       int x = e->pos().x();
-       
-       for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
-       {
-           if (x >= item->d->pos &&
-               x <= (item->d->pos + d->tileSize + 2*d->margin))
-           {
-                barItem = item;
-                break;
-           }
-       }
-    }
+    ThumbBarItem* barItem = findItem(e->pos());
+    d->dragging           = true;
+    d->dragStartPos       = e->pos();
 
-    if (!barItem)
-        return;
-
-    d->dragging     = true;
-    d->dragStartPos = e->pos();
-
-    if (barItem == d->currItem)
+    if (!barItem || barItem == d->currItem)
         return;
 
     if (d->currItem)
@@ -587,9 +554,6 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
 
     d->currItem = barItem;
     barItem->repaint();
-
-    emit signalURLSelected(barItem->url());
-    emit signalItemSelected(barItem);
 }
 
 void ThumbBarView::contentsMouseMoveEvent(QMouseEvent *e)
@@ -598,8 +562,8 @@ void ThumbBarView::contentsMouseMoveEvent(QMouseEvent *e)
 
     if (d->dragging && (e->state() & Qt::LeftButton))
     {
-        if ( (d->dragStartPos - e->pos()).manhattanLength()
-             > QApplication::startDragDistance() )
+        if ( findItem(d->dragStartPos) &&
+             (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance() )
         {
             startDrag();
         }
@@ -607,9 +571,15 @@ void ThumbBarView::contentsMouseMoveEvent(QMouseEvent *e)
     }
 }
 
-void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent*)
+void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent* e)
 {
     d->dragging = false;
+    ThumbBarItem *item = findItem(e->pos());
+    if (item) 
+    {
+        emit signalURLSelected(item->url());
+        emit signalItemSelected(item);
+    }
 }
 
 void ThumbBarView::startDrag()

@@ -39,6 +39,7 @@
 
 #include "ddebug.h"
 #include "album.h"
+#include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "dragobjects.h"
@@ -61,6 +62,7 @@ public:
     LightTableBarPriv()
     {
         navigateByPair = false;
+        toolTip        = 0;
     }
     
     bool                  navigateByPair;
@@ -155,6 +157,8 @@ void LightTableBar::slotImageRatingChanged(Q_LLONG imageId)
 void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     if (!e) return;
+
+    ThumbBarView::contentsMouseReleaseEvent(e);
 
     QPoint pos = QCursor::pos();
     LightTableBarItem *item = findItemByPos(e->pos());
@@ -282,13 +286,13 @@ void LightTableBar::setOnLeftPanel(const ImageInfo* info)
                     ltItem->setOnLeftPanel(true);
                     repaintItem(item);
                 }
-                else if (ltItem->getOnLeftPanel() == true)
+                else if (ltItem->isOnLeftPanel() == true)
                 {
                     ltItem->setOnLeftPanel(false);
                     repaintItem(item);
                 }
             }
-            else if (ltItem->getOnLeftPanel() == true)
+            else if (ltItem->isOnLeftPanel() == true)
             {
                 ltItem->setOnLeftPanel(false);
                 repaintItem(item);
@@ -311,13 +315,13 @@ void LightTableBar::setOnRightPanel(const ImageInfo* info)
                     ltItem->setOnRightPanel(true);
                     repaintItem(item);
                 }
-                else if (ltItem->getOnRightPanel() == true)
+                else if (ltItem->isOnRightPanel() == true)
                 {
                     ltItem->setOnRightPanel(false);
                     repaintItem(item);
                 }
             }
-            else if (ltItem->getOnRightPanel() == true)
+            else if (ltItem->isOnRightPanel() == true)
             {
                 ltItem->setOnRightPanel(false);
                 repaintItem(item);
@@ -508,12 +512,12 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
     
                         LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
         
-                        if (ltItem->getOnLeftPanel())
+                        if (ltItem->isOnLeftPanel())
                         {
                             QPixmap lPix = SmallIcon("previous"); 
                             bitBlt(&tile, getMargin(), getMargin(), &lPix);
                         }
-                        if (ltItem->getOnRightPanel())
+                        if (ltItem->isOnRightPanel())
                         {
                             QPixmap rPix = SmallIcon("next"); 
                             bitBlt(&tile, tile.width() - getMargin() - rPix.width(), getMargin(), &rPix);
@@ -564,12 +568,12 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
     
                         LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
         
-                        if (ltItem->getOnLeftPanel())
+                        if (ltItem->isOnLeftPanel())
                         {
                             QPixmap lPix = SmallIcon("previous"); 
                             bitBlt(&tile, getMargin(), getMargin(), &lPix);
                         }
-                        if (ltItem->getOnRightPanel())
+                        if (ltItem->isOnRightPanel())
                         {
                             QPixmap rPix = SmallIcon("next"); 
                             bitBlt(&tile, tile.width() - getMargin() - rPix.width(), getMargin(), &rPix);
@@ -602,7 +606,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
         p.setPen(QPen(te->textRegColor()));
         p.drawText(0, 0, bgPix.width(), bgPix.height(),
                     Qt::AlignCenter|Qt::WordBreak, 
-                    i18n("Drag and drop here your items"));
+                    i18n("Drag and drop images here"));
         p.end();
         bitBlt(viewport(), 0, 0, &bgPix);
     }
@@ -648,25 +652,30 @@ void LightTableBar::startDrag()
 
 void LightTableBar::contentsDragMoveEvent(QDragMoveEvent *e)
 {
-    KURL::List      urls;
-    KURL::List      kioURLs;        
+    int             albumID;
     QValueList<int> albumIDs;
     QValueList<int> imageIDs;
+    KURL::List      urls;
+    KURL::List      kioURLs;        
 
-    if (!ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
+    if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs) ||
+        AlbumDrag::decode(e, urls, albumID) ||
+        TagDrag::canDecode(e))
     {
-        e->ignore();
+        e->accept();
         return;
     }
-    e->accept();
+
+    e->ignore();
 }
 
 void LightTableBar::contentsDropEvent(QDropEvent *e)
 {
-    KURL::List      urls;
-    KURL::List      kioURLs;        
+    int             albumID;
     QValueList<int> albumIDs;
     QValueList<int> imageIDs;
+    KURL::List      urls;
+    KURL::List      kioURLs;        
 
     if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
     {
@@ -687,7 +696,57 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
         }
         
         emit signalDroppedItems(imageInfoList);
+        e->accept();
     }
+    else if (AlbumDrag::decode(e, urls, albumID))
+    {
+        QValueList<Q_LLONG> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
+        ImageInfoList imageInfoList;
+
+        for (QValueList<Q_LLONG>::const_iterator it = itemIDs.begin();
+             it != itemIDs.end(); ++it)
+        {
+            ImageInfo *info = new ImageInfo(*it);
+            if (!findItemByInfo(info))
+            {
+                imageInfoList.append(info);
+            }
+            else
+            {
+                delete info;
+            }
+        }
+
+        emit signalDroppedItems(imageInfoList);
+        e->accept();
+    }
+    else if(TagDrag::canDecode(e))
+    {
+        QByteArray ba = e->encodedData("digikam/tag-id");
+        QDataStream ds(ba, IO_ReadOnly);
+        int tagID;
+        ds >> tagID;
+
+        QValueList<Q_LLONG> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
+        ImageInfoList imageInfoList;
+
+        for (QValueList<Q_LLONG>::const_iterator it = itemIDs.begin();
+             it != itemIDs.end(); ++it)
+        {
+            ImageInfo *info = new ImageInfo(*it);
+            if (!findItemByInfo(info))
+            {
+                imageInfoList.append(info);
+            }
+            else
+            {
+                delete info;
+            }
+        }
+       
+        emit signalDroppedItems(imageInfoList);
+        e->accept();
+    }   
     else 
     {
         e->ignore();
@@ -723,12 +782,12 @@ void LightTableBarItem::setOnRightPanel(bool on)
     d->onRightPanel = on;
 }
 
-bool LightTableBarItem::getOnLeftPanel() const
+bool LightTableBarItem::isOnLeftPanel() const
 {
     return d->onLeftPanel;
 }
 
-bool LightTableBarItem::getOnRightPanel() const
+bool LightTableBarItem::isOnRightPanel() const
 {
     return d->onRightPanel;
 }

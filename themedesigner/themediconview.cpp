@@ -58,7 +58,7 @@ public:
 };
 
 ThemedIconView::ThemedIconView(QWidget* parent)
-    : IconView(parent)
+              : IconView(parent)
 {
     d = new ThemedIconViewPriv;
     d->thumbSize = 128;
@@ -76,12 +76,11 @@ ThemedIconView::ThemedIconView(QWidget* parent)
     updateItemRectsPixmap();
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            SLOT(slotThemeChanged()));
+            this, SLOT(slotThemeChanged()));
 }
 
 ThemedIconView::~ThemedIconView()
-{
-    
+{    
 }
 
 QRect ThemedIconView::itemRect() const
@@ -289,7 +288,6 @@ void ThemedIconView::updateItemRectsPixmap()
         d->itemCommentsRect = QRect(margin, y, w, oneRowComRect.height());
         y = d->itemCommentsRect.bottom();
     }
-
 
     {
         d->itemDateRect = QRect(margin, y, w, oneRowXtraRect.height());

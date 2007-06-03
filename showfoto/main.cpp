@@ -43,7 +43,7 @@
 
 static KCmdLineOptions options[] =
 {
-    { "+[file(s)]", I18N_NOOP("File(s) to open"), 0 },
+    { "+[file(s) or folder(s)]", I18N_NOOP("File(s) or folder(s) to open"), 0 },
     KCmdLineLastOption
 };
 

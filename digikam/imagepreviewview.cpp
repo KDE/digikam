@@ -54,6 +54,7 @@
 
 // Local includes.
 
+#include "dimg.h"
 #include "ddebug.h"
 #include "albumdb.h"
 #include "albummanager.h"
@@ -92,12 +93,14 @@ public:
         parent               = 0;
         hasPrev              = false;
         hasNext              = false;
+        loadFullImageSize    = false;
         currentFitWindowZoom = 0;
         previewSize          = 1024;
     }
 
     bool               hasPrev;
     bool               hasNext;
+    bool               loadFullImageSize;
 
     int                previewSize;
 
@@ -109,11 +112,11 @@ public:
 
     QToolButton       *cornerButton;
 
-    QImage             preview;
-
     KPopupFrame       *panIconPopup;
 
     PanIconWidget     *panIconWidget;
+
+    DImg               preview;
 
     ImageInfo         *imageInfo;
 
@@ -177,8 +180,14 @@ ImagePreviewView::~ImagePreviewView()
     delete d;
 }
 
-void ImagePreviewView::setImage(const QImage& image)
-{   
+void ImagePreviewView::setLoadFullImageSize(bool b)
+{
+    d->loadFullImageSize = b;
+    reload();
+}
+
+void ImagePreviewView::setImage(const DImg& image)
+{
     d->preview = image;
 
     updateZoomAndSize(true);
@@ -187,7 +196,7 @@ void ImagePreviewView::setImage(const QImage& image)
     viewport()->update();
 }
 
-QImage& ImagePreviewView::getImage() const
+DImg& ImagePreviewView::getImage() const
 {
     return d->preview;
 }
@@ -222,20 +231,23 @@ void ImagePreviewView::setImagePath(const QString& path)
     if (!d->previewThread)
     {
         d->previewThread = new PreviewLoadThread();
-        connect(d->previewThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
-                this, SLOT(slotGotImagePreview(const LoadingDescription &, const QImage&)));
+        connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
+                this, SLOT(slotGotImagePreview(const LoadingDescription &, const DImg&)));
     }
     if (!d->previewPreloadThread)
     {
         d->previewPreloadThread = new PreviewLoadThread();
-        connect(d->previewPreloadThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
+        connect(d->previewPreloadThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
                 this, SLOT(slotNextPreload()));
     }
 
-    d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
+    if (d->loadFullImageSize)
+        d->previewThread->loadHighQuality(LoadingDescription(path, 0, AlbumSettings::instance()->getExifRotate()));
+    else
+        d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
 }
 
-void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
+void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description, const DImg& preview)
 {
     if (description.filePath != d->path)
         return;   
@@ -253,14 +265,18 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
                    i18n("Cannot display preview for\n\"%1\"")
                    .arg(info.fileName()));
         p.end();
-        setImage(pix.convertToImage());
+        // three copies - but the image is small
+        setImage(DImg(pix.convertToImage()));
         d->parent->previewLoaded();
         emit signalPreviewLoaded(false);
     }
     else
     {
+        DImg img(preview);
+        if (AlbumSettings::instance()->getExifRotate())
+            d->previewThread->exifRotate(img, description.filePath);
         d->parent->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
-        setImage(preview);
+        setImage(img);
         d->parent->previewLoaded();
         emit signalPreviewLoaded(true);
     }
@@ -355,7 +371,7 @@ void ImagePreviewView::slotContextMenu()
     popmenu.insertSeparator();
     popmenu.insertItem(SmallIcon("slideshow"), i18n("SlideShow"), 16);
     popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 12);
-    popmenu.insertItem(SmallIcon("idea"), i18n("Place onto Light Table"), 17);
+    popmenu.insertItem(SmallIcon("idea"), i18n("Add to Light Table"), 17);
     popmenu.insertItem(i18n("Open With"), &openWithMenu, 13);
 
     // Merge in the KIPI plugins actions ----------------------------
@@ -545,7 +561,7 @@ void ImagePreviewView::slotCornerButtonPressed()
 
     d->panIconPopup    = new KPopupFrame(this);
     PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
-    pan->setImage(180, 120, getImage()); 
+    pan->setImage(180, 120, getImage());
     d->panIconPopup->setMainWidget(pan);
 
     QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),
@@ -590,7 +606,9 @@ void ImagePreviewView::slotPanIconSelectionMoved(QRect r, bool b)
 
 void ImagePreviewView::zoomFactorChanged(double zoom)
 {
-    if (zoom > calcAutoZoomFactor())
+    updateScrollBars();
+
+    if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
         d->cornerButton->show();
     else
         d->cornerButton->hide();        
@@ -602,13 +620,10 @@ void ImagePreviewView::resizeEvent(QResizeEvent* e)
 {
     if (!e) return;
 
-    if (previewIsNull())
-    {
-        d->cornerButton->hide(); 
-        return;
-    }
-
     QScrollView::resizeEvent(e);
+
+    if (!d->imageInfo)
+        d->cornerButton->hide(); 
 
     updateZoomAndSize(false);
 }
@@ -650,7 +665,7 @@ bool ImagePreviewView::previewIsNull()
 
 void ImagePreviewView::resetPreview()
 {
-    d->preview   = QImage();
+    d->preview   = DImg();
     d->path      = QString(); 
     d->imageInfo = 0;
 
@@ -660,10 +675,9 @@ void ImagePreviewView::resetPreview()
 
 void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 {
-    // Fast smooth scale method from Antonio.   
-    QImage img = FastScale::fastScaleQImage(d->preview.copy(sx, sy, sw, sh),
-                                            tileSize(), tileSize());
-    bitBlt(pix, 0, 0, &img, 0, 0);
+    DImg img     = d->preview.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());    
+    QPixmap pix2 = img.convertToPixmap();
+    bitBlt(pix, 0, 0, &pix2, 0, 0);
 }
 
 }  // NameSpace Digikam

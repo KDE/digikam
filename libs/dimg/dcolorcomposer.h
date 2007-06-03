@@ -79,7 +79,7 @@ public:
         PorterDuffDstOut,
         PorterDuffSrcAtop,
         PorterDuffDstAtop,
-        PorterDuffXor,
+        PorterDuffXor
     };
 
     enum MultiplicationFlags

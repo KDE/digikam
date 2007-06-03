@@ -157,4 +157,58 @@ void FastScale::fastScaleRectAvg(Q_UINT32 *Target, Q_UINT32 *Source, int SrcWidt
     delete [] ScanLineAhead;
 }
 
+#define CLIP(x, y, w, h, xx, yy, ww, hh) \
+if (x < (xx)) {w += (x - (xx)); x = (xx);} \
+if (y < (yy)) {h += (y - (yy)); y = (yy);} \
+if ((x + w) > ((xx) + (ww))) {w = (ww) - (x - xx);} \
+if ((y + h) > ((yy) + (hh))) {h = (hh) - (y - yy);}
+
+QImage FastScale::fastScaleSectionQImage(const QImage &img, int sx, int sy, int sw, int sh, int dw, int dh)
+{
+    uint w = img.width();
+    uint h = img.height();
+
+    // sanity checks
+    if ((dw <= 0) || (dh <= 0))
+        return QImage();
+
+    if ((sw <= 0) || (sh <= 0))
+        return QImage();
+
+    // clip the source rect to be within the actual image 
+    int  psx, psy, psw, psh;
+    psx = sx;
+    psy = sy;
+    psw = sw;
+    psh = sh;
+    CLIP(sx, sy, sw, sh, 0, 0, (int)w, (int)h);
+    
+    // clip output coords to clipped input coords 
+    if (psw != sw)
+        dw = (dw * sw) / psw;
+    if (psh != sh)
+        dh = (dh * sh) / psh;
+
+    // do a second check to see if we now have invalid coords 
+    // do not do anything if we have a 0 widht or height image to render 
+    if ((dw <= 0) || (dh <= 0))
+        return QImage();
+
+    // if the input rect size < 0 do not render either 
+    if ((sw <= 0) || (sh <= 0))
+        return QImage();
+
+    // do we actually need to scale?
+    if ((sw == dw) && (sh == dh))
+    {
+        return img.copy(sx, sy, sw, sh);
+    }
+
+    // FIXME : this code is not optimized and can give artifact.
+
+    QImage section = img.copy(sx-sw/10, sy-sh/10, sw+sw/5, sh+sh/5);
+    QImage scaled  = FastScale::fastScaleQImage(section, dw+dw/5, dh+dh/5);
+    return (scaled.copy(dw/10, dh/10, dw, dh));
+}
+
 }  // NameSpace Digikam

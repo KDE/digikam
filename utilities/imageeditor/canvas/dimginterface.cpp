@@ -1173,6 +1173,11 @@ QByteArray DImgInterface::getIptc()
     return d->image.getIptc();
 }
 
+QString DImgInterface::getImageFilePath()
+{
+    return d->filename;
+}
+
 QString DImgInterface::getImageFileName()
 {
     return d->filename.section( '/', -1 );

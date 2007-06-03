@@ -50,8 +50,10 @@
 
 // Local includes.
 
+#include "dimg.h"
 #include "ddebug.h"
 #include "albumdb.h"
+#include "constants.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "dragobjects.h"
@@ -87,6 +89,7 @@ public:
         hasNext              = false;
         selected             = false;
         dragAndDropEnabled   = true;
+        loadFullImageSize    = false;
         currentFitWindowZoom = 0;
         previewSize          = 1024;
     }
@@ -95,6 +98,7 @@ public:
     bool               hasNext;
     bool               selected;
     bool               dragAndDropEnabled;
+    bool               loadFullImageSize;
 
     int                previewSize;
 
@@ -106,11 +110,11 @@ public:
 
     QToolButton       *cornerButton;
 
-    QImage             preview;
-
     KPopupFrame       *panIconPopup;
 
     PanIconWidget     *panIconWidget;
+
+    DImg               preview;
 
     ImageInfo         *imageInfo;
 
@@ -169,12 +173,34 @@ LightTablePreview::~LightTablePreview()
     delete d;
 }
 
+void LightTablePreview::setLoadFullImageSize(bool b)
+{
+    d->loadFullImageSize = b;
+    reload();
+}
+
 void LightTablePreview::setDragAndDropEnabled(bool b)
 {
     d->dragAndDropEnabled = b;
 }
 
-void LightTablePreview::setImage(const QImage& image)
+void LightTablePreview::setDragAndDropMessage()
+{
+    if (d->dragAndDropEnabled)
+    {
+        QPixmap pix(visibleWidth(), visibleHeight());
+        pix.fill(ThemeEngine::instance()->baseColor());
+        QPainter p(&pix);
+        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
+        p.drawText(0, 0, pix.width(), pix.height(),
+                   Qt::AlignCenter|Qt::WordBreak, 
+                   i18n("Drag and drop an image here"));
+        p.end();
+        setImage(pix.convertToImage());
+    }
+}
+
+void LightTablePreview::setImage(const DImg& image)
 {   
     d->preview = image;
 
@@ -184,7 +210,7 @@ void LightTablePreview::setImage(const QImage& image)
     viewport()->update();
 }
 
-QImage& LightTablePreview::getImage() const
+DImg& LightTablePreview::getImage() const
 {
     return d->preview;
 }
@@ -224,20 +250,23 @@ void LightTablePreview::setImagePath(const QString& path)
     if (!d->previewThread)
     {
         d->previewThread = new PreviewLoadThread();
-        connect(d->previewThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
-                this, SLOT(slotGotImagePreview(const LoadingDescription &, const QImage&)));
+        connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
+                this, SLOT(slotGotImagePreview(const LoadingDescription &, const DImg&)));
     }
     if (!d->previewPreloadThread)
     {
         d->previewPreloadThread = new PreviewLoadThread();
-        connect(d->previewPreloadThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
+        connect(d->previewPreloadThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
                 this, SLOT(slotNextPreload()));
     }
 
-    d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
+    if (d->loadFullImageSize)
+        d->previewThread->loadHighQuality(LoadingDescription(path, 0, AlbumSettings::instance()->getExifRotate()));
+    else
+        d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
 }
 
-void LightTablePreview::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
+void LightTablePreview::slotGotImagePreview(const LoadingDescription &description, const DImg& preview)
 {
     if (description.filePath != d->path)
         return;   
@@ -254,13 +283,16 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription &descriptio
                    i18n("Unable to display preview for\n\"%1\"")
                    .arg(info.fileName()));
         p.end();
-        setImage(pix.convertToImage());
+        setImage(DImg(pix.convertToImage()));
 
         emit signalPreviewLoaded(false);
     }
     else
     {
-        setImage(preview);
+        DImg img(preview);
+        if (AlbumSettings::instance()->getExifRotate())
+            d->previewThread->exifRotate(img, description.filePath);
+        setImage(img);
         emit signalPreviewLoaded(true);
     }
 
@@ -480,7 +512,7 @@ void LightTablePreview::slotRemoveTag(int tagID)
 
 void LightTablePreview::slotAssignRating(int rating)
 {
-    rating = QMIN(5, QMAX(0, rating));
+    rating = QMIN(RatingMax, QMAX(RatingMin, rating));
     if (d->imageInfo)
     {
         MetadataHub hub;
@@ -508,7 +540,7 @@ void LightTablePreview::slotCornerButtonPressed()
 
     d->panIconPopup    = new KPopupFrame(this);
     PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
-    pan->setImage(180, 120, getImage()); 
+    pan->setImage(180, 120, getImage());
     d->panIconPopup->setMainWidget(pan);
 
     QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),
@@ -553,7 +585,9 @@ void LightTablePreview::slotPanIconSelectionMoved(QRect r, bool b)
 
 void LightTablePreview::zoomFactorChanged(double zoom)
 {
-    if (zoom > calcAutoZoomFactor())
+    updateScrollBars();
+
+    if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
         d->cornerButton->show();
     else
         d->cornerButton->hide();        
@@ -565,16 +599,15 @@ void LightTablePreview::resizeEvent(QResizeEvent* e)
 {
     if (!e) return;
 
-    if (previewIsNull())
-    {
-        d->cornerButton->hide(); 
-        return;
-    }
-
     QScrollView::resizeEvent(e);
 
+    if (!d->imageInfo)
+    {
+        d->cornerButton->hide();
+        setDragAndDropMessage();
+    }
+
     updateZoomAndSize(false);
-    //emit signalZoomFactorChanged(zoomFactor());
 }
 
 void LightTablePreview::updateZoomAndSize(bool alwaysFitToWindow)
@@ -614,81 +647,120 @@ bool LightTablePreview::previewIsNull()
 
 void LightTablePreview::resetPreview()
 {
-    d->preview   = QImage();
+    d->preview   = DImg();
     d->path      = QString(); 
     d->imageInfo = 0;
 
-    if (d->dragAndDropEnabled)
-    {
-        QPixmap pix(visibleWidth(), visibleHeight());
-        pix.fill(ThemeEngine::instance()->baseColor());
-        QPainter p(&pix);
-        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
-        p.drawText(0, 0, pix.width(), pix.height(),
-                Qt::AlignCenter|Qt::WordBreak, 
-                i18n("Drag and drop here an item"));
-        p.end();
-        setImage(pix.convertToImage());
-    }
-
+    setDragAndDropMessage();
     updateZoomAndSize(true);
+    viewport()->setUpdatesEnabled(true);
+    viewport()->update();
     emit signalPreviewLoaded(false);
 }
 
 void LightTablePreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 {
-    // Fast smooth scale method from Antonio.   
-    QImage img = FastScale::fastScaleQImage(d->preview.copy(sx, sy, sw, sh),
-                                            tileSize(), tileSize());
-    bitBlt(pix, 0, 0, &img, 0, 0);
+    DImg img     = d->preview.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());    
+    QPixmap pix2 = img.convertToPixmap();
+    bitBlt(pix, 0, 0, &pix2, 0, 0);
 }
 
 void LightTablePreview::contentsDragMoveEvent(QDragMoveEvent *e)
 {
-    if (!d->dragAndDropEnabled) return;
-
-    KURL::List      urls;
-    KURL::List      kioURLs;        
-    QValueList<int> albumIDs;
-    QValueList<int> imageIDs;
-
-    if (!ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
+    if (d->dragAndDropEnabled)
     {
-        e->ignore();
-        return;
+        int             albumID;
+        QValueList<int> albumIDs;
+        QValueList<int> imageIDs;
+        KURL::List      urls;
+        KURL::List      kioURLs;        
+    
+        if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs) ||
+            AlbumDrag::decode(e, urls, albumID) ||
+            TagDrag::canDecode(e))
+        {
+            e->accept();
+            return;
+        }
     }
-    e->accept();
+
+    e->ignore();
 }
 
 void LightTablePreview::contentsDropEvent(QDropEvent *e)
 {
-    if (!d->dragAndDropEnabled) return;
-
-    KURL::List      urls;
-    KURL::List      kioURLs;        
-    QValueList<int> albumIDs;
-    QValueList<int> imageIDs;
-    ImageInfoList   list;
-
-    if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
+    if (d->dragAndDropEnabled)
     {
-        for (QValueList<int>::const_iterator it = imageIDs.begin();
-                it != imageIDs.end(); ++it)
+        int             albumID;
+        QValueList<int> albumIDs;
+        QValueList<int> imageIDs;
+        KURL::List      urls;
+        KURL::List      kioURLs;  
+        ImageInfoList   list;
+    
+        if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
         {
-            list.append(new ImageInfo(*it));
+            for (QValueList<int>::const_iterator it = imageIDs.begin();
+                 it != imageIDs.end(); ++it)
+            {
+                list.append(new ImageInfo(*it));
+            }
+
             emit signalDroppedItems(list);
+            e->accept();
+            return;
         }
+        else if (AlbumDrag::decode(e, urls, albumID))
+        {
+            QValueList<Q_LLONG> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
+    
+            for (QValueList<Q_LLONG>::const_iterator it = itemIDs.begin();
+                it != itemIDs.end(); ++it)
+            {
+                list.append(new ImageInfo(*it));
+            }
+
+            emit signalDroppedItems(list);
+            e->accept();
+            return;
+        }
+        else if(TagDrag::canDecode(e))
+        {
+            QByteArray ba = e->encodedData("digikam/tag-id");
+            QDataStream ds(ba, IO_ReadOnly);
+            int tagID;
+            ds >> tagID;
+    
+            QValueList<Q_LLONG> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
+            ImageInfoList imageInfoList;
+    
+            for (QValueList<Q_LLONG>::const_iterator it = itemIDs.begin();
+                it != itemIDs.end(); ++it)
+            {
+                list.append(new ImageInfo(*it));
+            }
+        
+            emit signalDroppedItems(list);
+            e->accept();
+            return;
+        }   
     }
-    else 
-    {
-        e->ignore();
-    }
+
+    e->ignore();
 }
 
 void LightTablePreview::setSelected(bool sel)
 {
-    d->selected = sel;
-    frameChanged();
+    if (d->selected != sel)
+    {
+        d->selected = sel;
+        frameChanged();
+    }
+}
+
+bool LightTablePreview::isSelected()
+{
+    return d->selected;
 }
 
 void LightTablePreview::drawFrame(QPainter *p)

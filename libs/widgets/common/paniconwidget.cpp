@@ -107,6 +107,12 @@ void PanIconWidget::setImage(int previewWidth, int previewHeight, const QImage& 
     m_timerID = startTimer(800);
 }
 
+void PanIconWidget::setImage(int previewWidth, int previewHeight, const DImg& image)
+{
+    DImg img(image);
+    setImage(previewWidth, previewHeight, img.copyQImage());
+}
+
 void PanIconWidget::slotZoomFactorChanged(double factor)
 {
     if (m_zoomFactor == factor) return;

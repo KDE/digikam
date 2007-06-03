@@ -1,11 +1,13 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- *          Jaromir Malenko <malenko at email.cz>
- * Date   : 2004-12-06
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2004-12-06
  * Description : digiKam image editor Ratio Crop tool
  *
- * Copyright 2004-2007 by Gilles Caulier
- * Copyright 2007 by Jaromir Malenko
+ * Copyright (C) 2007 by Jaromir Malenko <malenko at email.cz>
+ * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

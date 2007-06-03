@@ -254,6 +254,8 @@ void AlbumManager::initialize()
 
     if (localeChanged)
     {
+        // TODO it would be better to replace all yes/no confirmation dialogs with ones that has custom
+        // buttons that denote the actions directly, i.e.:  ["Ignore and Continue"]  ["Adjust locale"]
         int result =
             KMessageBox::warningYesNo(0,
                                       i18n("Your locale has changed from the previous time "
@@ -261,8 +263,8 @@ void AlbumManager::initialize()
                                            "Old Locale : %1, New Locale : %2\n"
                                            "This can cause unexpected problems. "
                                            "If you are sure that you want to "
-                                           "continue, click on 'Yes' to work with this album. "
-                                           "Otherwise, click on 'No' and correct your "
+                                           "continue, click 'Yes' to work with this album. "
+                                           "Otherwise, click 'No' and correct your "
                                            "locale setting before restarting digiKam")
                                       .arg(dbLocale)
                                       .arg(currLocale));
@@ -791,7 +793,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
     {
         if (child->title() == name)
         {
-            errMsg = i18n("Another album with same name exists.");
+            errMsg = i18n("An existing album has the same name.");
             return 0;
         }
         child = child->m_next;
@@ -811,7 +813,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
         else if (errno == EACCES)
             errMsg = i18n("Access denied to path");
         else if (errno == ENOSPC)
-            errMsg = i18n("Disk full");
+            errMsg = i18n("Disk is full");
         else
             errMsg = i18n("Unknown error"); // being lazy
 
@@ -867,7 +869,7 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     {
         if (sibling->title() == newName)
         {
-            errMsg = i18n("Another Album with same name exists\n"
+            errMsg = i18n("Another album with same name exists\n"
                           "Please choose another name");
             return false;
         }
@@ -978,7 +980,7 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
     {
         if (child->title() == name)
         {
-            errMsg = i18n("Another tag with same name exists");
+            errMsg = i18n("Tag name already exists");
             return 0;
         }
         child = child->m_next;

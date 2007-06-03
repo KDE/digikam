@@ -77,10 +77,11 @@ public:
         iconShowTagsBox          = 0;
         iconShowRatingBox        = 0;
         rightClickActionComboBox = 0;
+        previewLoadFullImageSize = 0;
     }
 
-    QComboBox     *iconTreeThumbSize;
     QLabel        *iconTreeThumbLabel;
+
     QCheckBox     *iconShowNameBox;
     QCheckBox     *iconShowSizeBox;
     QCheckBox     *iconShowDateBox;
@@ -89,7 +90,9 @@ public:
     QCheckBox     *iconShowCommentsBox;
     QCheckBox     *iconShowTagsBox;
     QCheckBox     *iconShowRatingBox;
+    QCheckBox     *previewLoadFullImageSize;
 
+    QComboBox     *iconTreeThumbSize;
     QComboBox     *rightClickActionComboBox;
 
     KURLRequester *albumPathEdit;
@@ -126,80 +129,76 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
 
     // --------------------------------------------------------
 
-    QVGroupBox *iconTextGroup = new QVGroupBox(i18n("Thumbnails"), parent);
-    iconTextGroup->setColumnLayout(0, Qt::Vertical );
-    iconTextGroup->layout()->setMargin(KDialog::marginHint());
-    QGridLayout* tagSettingsLayout = new QGridLayout(iconTextGroup->layout(), 5, 10,
-                                                     KDialog::spacingHint());
+    QVGroupBox *iconTextGroup = new QVGroupBox(i18n("Thumbnail Information"), parent);
       
-    d->iconTreeThumbLabel = new QLabel(i18n("Sidebar thumbnail size:"), iconTextGroup);
-    d->iconTreeThumbSize = new QComboBox(false, iconTextGroup);
+    d->iconShowNameBox = new QCheckBox(i18n("Show file &name"), iconTextGroup);
+    QWhatsThis::add( d->iconShowNameBox, i18n("<p>Set this option to show file name below image thumbnail."));
+
+    d->iconShowSizeBox = new QCheckBox(i18n("Show file si&ze"), iconTextGroup);
+    QWhatsThis::add( d->iconShowSizeBox, i18n("<p>Set this option to show file size below image thumbnail."));
+
+    d->iconShowDateBox = new QCheckBox(i18n("Show file creation &date"), iconTextGroup);
+    QWhatsThis::add( d->iconShowDateBox, i18n("<p>Set this option to show file creation date "
+                                              "below image thumbnail."));
+
+    d->iconShowModDateBox = new QCheckBox(i18n("Show file &modification date"), iconTextGroup);
+    QWhatsThis::add( d->iconShowModDateBox, i18n("<p>Set this option to show file modification date "
+                                                 "below image thumbnail."));
+
+    d->iconShowCommentsBox = new QCheckBox(i18n("Show digiKam &comments"), iconTextGroup);
+    QWhatsThis::add( d->iconShowCommentsBox, i18n("<p>Set this option to show digiKam comments "
+                                                  "below image thumbnail."));
+
+    d->iconShowTagsBox = new QCheckBox(i18n("Show digiKam &tags"), iconTextGroup);
+    QWhatsThis::add( d->iconShowTagsBox, i18n("<p>Set this option to show digiKam tags "
+                                              "below image thumbnail."));
+
+    d->iconShowRatingBox = new QCheckBox(i18n("Show digiKam &rating"), iconTextGroup);
+    QWhatsThis::add( d->iconShowRatingBox, i18n("<p>Set this option to show digiKam rating "
+                                                "below image thumbnail."));
+
+    d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions (warning: slow)"), iconTextGroup);
+    QWhatsThis::add( d->iconShowResolutionBox, i18n("<p>Set this option to show picture size in pixels "
+                                                    "below image thumbnail."));
+
+    layout->addWidget(iconTextGroup);
+
+    // --------------------------------------------------------
+
+    QVGroupBox *interfaceOptionsGroup = new QVGroupBox(i18n("Interface Options"), parent);
+    interfaceOptionsGroup->setColumnLayout(0, Qt::Vertical );
+    interfaceOptionsGroup->layout()->setMargin(KDialog::marginHint());
+    QGridLayout* ifaceSettingsLayout = new QGridLayout(interfaceOptionsGroup->layout(), 2, 4, KDialog::spacingHint());
+
+    d->iconTreeThumbLabel = new QLabel(i18n("Sidebar thumbnail size:"), interfaceOptionsGroup);
+    d->iconTreeThumbSize = new QComboBox(false, interfaceOptionsGroup);
     d->iconTreeThumbSize->insertItem("16");
     d->iconTreeThumbSize->insertItem("22");
     d->iconTreeThumbSize->insertItem("32");
+    d->iconTreeThumbSize->insertItem("48");
     QToolTip::add( d->iconTreeThumbSize, i18n("<p>Set this option to configure the size "
                                               "in pixels of the thumbnails in digiKam's sidebars. "
                                               "This option will take effect when you restart "
                                               "digiKam."));
-    tagSettingsLayout->addMultiCellWidget(d->iconTreeThumbLabel, 0, 0, 0, 0);
-    tagSettingsLayout->addMultiCellWidget(d->iconTreeThumbSize, 0, 0, 1, 1);
+    ifaceSettingsLayout->addMultiCellWidget(d->iconTreeThumbLabel, 0, 0, 0, 0);
+    ifaceSettingsLayout->addMultiCellWidget(d->iconTreeThumbSize, 0, 0, 1, 1);
 
-    d->iconShowNameBox = new QCheckBox(iconTextGroup);
-    d->iconShowNameBox->setText(i18n("Show file &name"));
-    QWhatsThis::add( d->iconShowNameBox, i18n("<p>Set this option to show file name below image thumbnail."));
-    tagSettingsLayout->addMultiCellWidget(d->iconShowNameBox, 1, 1, 0, 4);
-
-    d->iconShowSizeBox = new QCheckBox(iconTextGroup);
-    d->iconShowSizeBox->setText(i18n("Show file si&ze"));
-    QWhatsThis::add( d->iconShowSizeBox, i18n("<p>Set this option to show file size below image thumbnail."));
-    tagSettingsLayout->addMultiCellWidget(d->iconShowSizeBox, 2, 2, 0, 4);
-
-    d->iconShowDateBox = new QCheckBox(iconTextGroup);
-    d->iconShowDateBox->setText(i18n("Show file creation &date"));
-    QWhatsThis::add( d->iconShowDateBox, i18n("<p>Set this option to show file creation date "
-                                              "below image thumbnail."));
-    tagSettingsLayout->addMultiCellWidget(d->iconShowDateBox, 3, 3, 0, 4);
-
-    d->iconShowModDateBox = new QCheckBox(iconTextGroup);
-    d->iconShowModDateBox->setText(i18n("Show file &modification date"));
-    QWhatsThis::add( d->iconShowModDateBox, i18n("<p>Set this option to show file modification date "
-                                                 "below image thumbnail."));
-    tagSettingsLayout->addMultiCellWidget(d->iconShowModDateBox, 4, 4, 0, 4);
-
-    d->iconShowCommentsBox = new QCheckBox(iconTextGroup);
-    d->iconShowCommentsBox->setText(i18n("Show digiKam &comments"));
-    QWhatsThis::add( d->iconShowCommentsBox, i18n("<p>Set this option to show digiKam comments "
-                                                  "below image thumbnail."));
-    tagSettingsLayout->addMultiCellWidget(d->iconShowCommentsBox, 5, 5, 0, 4);
-
-    d->iconShowTagsBox = new QCheckBox(iconTextGroup);
-    d->iconShowTagsBox->setText(i18n("Show digiKam &tags"));
-    QWhatsThis::add( d->iconShowTagsBox, i18n("<p>Set this option to show digiKam tags "
-                                              "below image thumbnail."));
-    tagSettingsLayout->addMultiCellWidget(d->iconShowTagsBox, 6, 6, 0, 4);
-
-    d->iconShowRatingBox = new QCheckBox(iconTextGroup);
-    d->iconShowRatingBox->setText(i18n("Show digiKam &rating"));
-    QWhatsThis::add( d->iconShowRatingBox, i18n("<p>Set this option to show digiKam rating "
-                                                "below image thumbnail."));
-    tagSettingsLayout->addMultiCellWidget(d->iconShowRatingBox, 7, 7, 0, 4);
-
-    d->iconShowResolutionBox = new QCheckBox(iconTextGroup);
-    d->iconShowResolutionBox->setText(i18n("Show ima&ge dimensions (warning: slow)"));
-    QWhatsThis::add( d->iconShowResolutionBox, i18n("<p>Set this option to show picture size in pixels "
-                                                    "below image thumbnail."));
-    tagSettingsLayout->addMultiCellWidget(d->iconShowResolutionBox, 8, 8, 0, 4);
-
-    QLabel *rightClickLabel     = new QLabel(i18n("Click action:"), iconTextGroup);
-    d->rightClickActionComboBox = new QComboBox(false, iconTextGroup);
+    QLabel *rightClickLabel     = new QLabel(i18n("Thumbnail click action:"), interfaceOptionsGroup);
+    d->rightClickActionComboBox = new QComboBox(false, interfaceOptionsGroup);
     d->rightClickActionComboBox->insertItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
     d->rightClickActionComboBox->insertItem(i18n("Start image editor"), AlbumSettings::StartEditor);
     QToolTip::add( d->rightClickActionComboBox, i18n("<p>Select here the right action to do when you "
                                                      "right click with mouse button on thumbnail."));
-    tagSettingsLayout->addMultiCellWidget(rightClickLabel, 9 ,9, 0, 0);
-    tagSettingsLayout->addMultiCellWidget(d->rightClickActionComboBox, 9, 9, 1, 4);
+    ifaceSettingsLayout->addMultiCellWidget(rightClickLabel, 1 ,1, 0, 0);
+    ifaceSettingsLayout->addMultiCellWidget(d->rightClickActionComboBox, 1, 1, 1, 4);
 
-    layout->addWidget(iconTextGroup);
+    d->previewLoadFullImageSize = new QCheckBox(i18n("Embedded preview load full image size"), interfaceOptionsGroup);
+    QWhatsThis::add( d->previewLoadFullImageSize, i18n("<p>Set this option to load full image size "
+                     "with embedded preview instead a reduced one. Because this option will take more time "
+                     "to load image, use it only if you have a fast computer."));
+    ifaceSettingsLayout->addMultiCellWidget(d->previewLoadFullImageSize, 2, 2, 0, 4);
+
+    layout->addWidget(interfaceOptionsGroup);
 
     // --------------------------------------------------------
 
@@ -234,6 +233,7 @@ void SetupGeneral::applySettings()
     settings->setItemRightClickAction((AlbumSettings::ItemRightClickAction)
                                       d->rightClickActionComboBox->currentItem());
 
+    settings->setPreviewLoadFullImageSize(d->previewLoadFullImageSize->isChecked());
     settings->saveSettings();
 }
 
@@ -249,8 +249,11 @@ void SetupGeneral::readSettings()
         d->iconTreeThumbSize->setCurrentItem(0);
     else if (settings->getDefaultTreeIconSize() == 22)
         d->iconTreeThumbSize->setCurrentItem(1);
-    else
+    else if (settings->getDefaultTreeIconSize() == 32)
         d->iconTreeThumbSize->setCurrentItem(2);
+    else 
+        d->iconTreeThumbSize->setCurrentItem(3);
+    
     d->iconShowNameBox->setChecked(settings->getIconShowName());
     d->iconShowTagsBox->setChecked(settings->getIconShowTags());
     d->iconShowSizeBox->setChecked(settings->getIconShowSize());
@@ -261,13 +264,15 @@ void SetupGeneral::readSettings()
     d->iconShowRatingBox->setChecked(settings->getIconShowRating());
 
     d->rightClickActionComboBox->setCurrentItem((int)settings->getItemRightClickAction());
+
+    d->previewLoadFullImageSize->setChecked(settings->getPreviewLoadFullImageSize());
 }
 
 void SetupGeneral::slotChangeAlbumPath(const QString &result)
 {
     if (KURL(result).equals(KURL(QDir::homeDirPath()), true)) 
     {
-        KMessageBox::sorry(0, i18n("Sorry; cannot use home directory as albums library."));
+        KMessageBox::sorry(0, i18n("Sorry; cannot use home directory as album library."));
         return;
     }
 
@@ -276,7 +281,7 @@ void SetupGeneral::slotChangeAlbumPath(const QString &result)
     if (!result.isEmpty() && !targetPath.isWritable()) 
     {
         KMessageBox::information(0, i18n("No write access for this path.\n"
-                                         "Warning: the comments and tag features will not work."));
+                                         "Warning: the comment and tag features will not work."));
     }
 }
 

@@ -41,6 +41,7 @@ class QPixmap;
 namespace Digikam
 {
 
+class DImg;
 class LoadingDescription;
 class LightTablePreviewPriv;
 
@@ -54,8 +55,10 @@ public:
     LightTablePreview(QWidget *parent=0);
     ~LightTablePreview();
 
-    void setImage(const QImage& image);
-    QImage& getImage() const;
+    void setLoadFullImageSize(bool b);
+
+    void setImage(const DImg& image);
+    DImg& getImage() const;
 
     QSize getImageSize();
 
@@ -67,8 +70,10 @@ public:
     void setPreviousNextPaths(const QString& previous, const QString &next);
 
     void setSelected(bool sel);
+    bool isSelected();
 
     void setDragAndDropEnabled(bool b); 
+    void setDragAndDropMessage();
 
 signals:
 
@@ -85,7 +90,7 @@ protected:
 
 private slots:
 
-    void slotGotImagePreview(const LoadingDescription &loadingDescription, const QImage &image);
+    void slotGotImagePreview(const LoadingDescription &loadingDescription, const DImg &image);
     void slotNextPreload();
     void slotContextMenu();
     void slotAssignTag(int tagID);

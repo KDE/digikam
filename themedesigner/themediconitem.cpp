@@ -52,14 +52,14 @@ static void dateToString(const QDateTime& datetime, QString& str)
     str = KGlobal::locale()->formatDateTime(datetime, true, false);
 }
 
-
 static QString squeezedText(QPainter* p, int width, const QString& text)
 {
     QString fullText(text);
     fullText.replace("\n"," ");
     QFontMetrics fm(p->fontMetrics());
     int textWidth = fm.width(fullText);
-    if (textWidth > width) {
+    if (textWidth > width) 
+    {
         // start with the dots only
         QString squeezedText = "...";
         int squeezedWidth = fm.width(squeezedText);
@@ -70,28 +70,36 @@ static QString squeezedText(QPainter* p, int width, const QString& text)
         squeezedText = fullText.left(letters) + "...";
         squeezedWidth = fm.width(squeezedText);
 
-        if (squeezedWidth < width) {
+        if (squeezedWidth < width) 
+        {
             // we estimated too short
             // add letters while text < label
-            do {
+            do 
+            {
                 letters++;
                 squeezedText = fullText.left(letters) + "..."; 
                 squeezedWidth = fm.width(squeezedText);
-            } while (squeezedWidth < width);
+            }
+            while (squeezedWidth < width);
+
             letters--;
             squeezedText = fullText.left(letters) + "..."; 
-        } else if (squeezedWidth > width) {
+        } 
+        else if (squeezedWidth > width) 
+        {
             // we estimated too long
             // remove letters while text > label
-            do {
+            do 
+            {
                 letters--;
                 squeezedText = fullText.left(letters) + "...";
                 squeezedWidth = fm.width(squeezedText);
-            } while (letters && squeezedWidth > width);
+            } 
+            while (letters && squeezedWidth > width);
         }
 
-
-        if (letters >= 5) {
+        if (letters >= 5) 
+        {
             return squeezedText;
         }
     }
@@ -100,7 +108,7 @@ static QString squeezedText(QPainter* p, int width, const QString& text)
 }
 
 ThemedIconItem::ThemedIconItem(IconGroupItem* parent)
-    : IconItem(parent)
+              : IconItem(parent)
 {    
 }
 

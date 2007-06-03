@@ -1,43 +1,65 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2007-5-26
+ * Description : "Dark" colors theme.
+ *
+ * Copyright (C) 2007 by Gerhard Kulzer <gerhard at kulzer dor net>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
 ! Dark
-! Digikam theme by Gerhard Kulzer (Mit Nov 9 07:32:35 2005)
 
 base.color:				#000000
-text.regular.color:			#dadada
-text.selected.color:			#ffffff
-text.special.regular.color:		#6ed1ef
-text.special.selected.color:		#ffffff
+text.regular.color:			#7f7f7f
+text.selected.color:			#b4b4b4
+text.special.regular.color:		#549fb6
+text.special.selected.color:		#83b8bd
 
-banner.color:				#678db2
-banner.colorTo:				#567594
-banner.bevel:				FLAT
-banner.gradient:				SOLID
+banner.color:				#313f50
+banner.colorTo:				#1e2731
+banner.bevel:				RAISED
+banner.gradient:				VERTICAL
 banner.border:				false
-banner.borderColor:			#000000
+banner.borderColor			#000000
 
 thumbnail.regular.color:		#131313
-thumbnail.regular.colorTo:		#191919
+thumbnail.regular.colorTo:		#2e2a26
 thumbnail.regular.bevel:		RAISED
 thumbnail.regular.gradient:		SOLID
 thumbnail.regular.border:		false
-thumbnail.regular.borderColor:		#e0e0ef
+thumbnail.regular.borderColor		#e0e0ef
 
-thumbnail.selected.color:		#819ebb
-thumbnail.selected.colorTo:		#2c3c4c
+thumbnail.selected.color:		#313f50
+thumbnail.selected.colorTo:		#1b252f
 thumbnail.selected.bevel:		RAISED
 thumbnail.selected.gradient:		VERTICAL
 thumbnail.selected.border:		false
-thumbnail.selected.borderColor:		#e0e0ef
+thumbnail.selected.borderColor		#e0e0ef
 
-listview.regular.color:			#030303
-listview.regular.colorTo:		#474644
+listview.regular.color:			#0d0d0d
+listview.regular.colorTo:		#222120
 listview.regular.bevel:			RAISED
 listview.regular.gradient:		HORIZONTAL
 listview.regular.border:		false
-listview.regular.borderColor:		#000000
+listview.regular.borderColor		#000000
 
-listview.selected.color:		#678cb2
-listview.selected.colorTo:		#37485a
-listview.selected.bevel:		SUNKEN
-listview.selected.gradient:		HORIZONTAL
+listview.selected.color:		#2e3d4e
+listview.selected.colorTo:		#212a34
+listview.selected.bevel:		RAISED
+listview.selected.gradient:		VERTICAL
 listview.selected.border:		true
-listview.selected.borderColor:		#000000
+listview.selected.borderColor		#000000

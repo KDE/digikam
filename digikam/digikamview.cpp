@@ -108,6 +108,7 @@ public:
         thumbSizeTimer        = 0;
         needDispatchSelection = false;
         cancelSlideShow       = false;
+        thumbSize             = ThumbnailSize::Medium;
     }
 
     bool                      needDispatchSelection;
@@ -198,6 +199,7 @@ DigikamView::~DigikamView()
 void DigikamView::applySettings(const AlbumSettings* settings)
 {
     d->iconView->applySettings(settings);
+    d->albumWidgetStack->imagePreviewView()->setLoadFullImageSize(settings->getPreviewLoadFullImageSize());
 }
 
 void DigikamView::setupConnections()
@@ -1229,7 +1231,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
     int     i = 0;
     float cnt = (float)infoList.count();
     emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode, 
-                               i18n("Prepare data for slideshow from %1 pictures. Please wait...")
+                               i18n("Preparing slideshow from %1 pictures. Please wait...")
 			       .arg(infoList.count()));
 
     DMetadata         meta;

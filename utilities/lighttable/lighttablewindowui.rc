@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="17" name="lighttablewindow" >
+<gui version="19" name="lighttablewindow" >
 
 <MenuBar>
 
@@ -18,7 +18,7 @@
         <Separator/>
         <Action name="lighttable_filedelete" />
         <Separator/>
-        <Action name="lighttable_exit" />
+        <Action name="lighttable_close" />
     </Menu>
     
     <Menu name="View" ><text>&amp;View</text>
@@ -58,16 +58,14 @@
      <Action name="lighttable_forward" />
      <Action name="lighttable_last" />
      <Separator/>     
-     <Action name="lighttable_syncpreview" /> 
      <Action name="lighttable_zoomplus" /> 
      <Action name="lighttable_zoomminus" /> 
+     <Action name="lighttable_zoomfit2window" /> 
      <Separator/>     
      <Action name="lighttable_setitemleft" />
      <Action name="lighttable_setitemright" />
+     <Action name="lighttable_syncpreview" /> 
      <Action name="lighttable_navigatebypair" />     
-     <Separator/>     
-     <Action name="lighttable_zoomfit2window" /> 
-     <Action name="lighttable_zoomfit2select" /> 
      <Separator/>     
      <Action name="lighttable_fullscreen" />
      <Action name="lighttable_slideshow" />      

@@ -1,5 +1,27 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2006-07-19
+ * Description : "Digikasa" colors theme.
+ *
+ * Copyright (C) 2006 by SergioDiRio(Mare)
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
 ! "Digikasa"
-!  Digikam Theme by SergioDiRio(Mare) (2006 July)
 
 base.color:			     rgb:f2/f2/f2
 text.regular.color:		     rgb:72/72/72
@@ -15,11 +37,11 @@ banner.border:                       false
 banner.borderColor:                  rgb:00/00/00
 
 thumbnail.regular.color:             rgb:f2/f2/f2
-!thumbnail.regular.colorTo:           rgb:EF/EF/EF
+!thumbnail.regular.colorTo:          rgb:EF/EF/EF
 thumbnail.regular.bevel:	     FLAT
 thumbnail.regular.gradient:          SOLID
 thumbnail.regular.border:            false
-!thumbnail.regular.borderColor:       rgb:70/70/70
+!thumbnail.regular.borderColor:      rgb:70/70/70
 
 thumbnail.selected.color:	     #25648B
 !thumbnail.selected.colorTo:	     #4B6CC7

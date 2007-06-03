@@ -80,6 +80,8 @@ public:
         zoomTo100percents      = 0;
         zoomCombo              = 0;
         zoomComboAction        = 0;
+        selectAllAction        = 0;
+        selectNoneAction       = 0;
     }
 
     ~EditorWindowPriv()
@@ -112,6 +114,8 @@ public:
     KAction                   *flipHorizAction;
     KAction                   *flipVertAction;
     KAction                   *slideShowAction;
+    KAction                   *selectAllAction;
+    KAction                   *selectNoneAction;
 
     KToggleAction             *zoomFitToWindowAction;
     KToggleAction             *viewCMViewAction;

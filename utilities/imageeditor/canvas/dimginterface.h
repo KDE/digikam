@@ -154,6 +154,7 @@ public:
     ICCSettingsContainer *getICCSettings();
 
     QString               getImageFileName();
+    QString               getImageFilePath();
     QString               getImageFormat();
 
     QColor                underExposureColor();

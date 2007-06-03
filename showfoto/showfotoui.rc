@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="20" name="showfoto" >
+<gui version="23" name="showfoto" >
 
 <MenuBar>
 
@@ -21,7 +21,7 @@
         <Separator/>
         <Action name="editorwindow_delete" />
         <Separator/>
-        <Action name="editorwindow_exit" />     
+        <Action name="showfoto_quit" />     
     </Menu>
 
     <Menu name="Edit" ><text>&amp;Edit</text>
@@ -29,6 +29,9 @@
         <Separator/>     
         <Action name="editorwindow_undo" /> 
         <Action name="editorwindow_redo" />      
+        <Separator/>
+        <Action name="editorwindow_selectAll" />
+        <Action name="editorwindow_selectNone" />
     </Menu>
 
     <Menu name="View" ><text>&amp;View</text>

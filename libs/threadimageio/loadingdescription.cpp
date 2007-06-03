@@ -60,7 +60,7 @@ bool LoadingDescription::isReducedVersion() const
 {
     // return true if this loads anything but the full version
     return rawDecodingSettings.halfSizeColorImage
-        || previewParameters.size;
+        || previewParameters.isPreview;
 }
 
 bool LoadingDescription::operator==(const LoadingDescription &other) const

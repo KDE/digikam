@@ -48,6 +48,7 @@ public:
 
     LightTableWindowPriv()
     {
+        autoLoadOnRightPanel   = true;    
         autoSyncPreview        = true;
         fullScreenHideToolBar  = false;
         fullScreen             = false;
@@ -90,6 +91,7 @@ public:
         navigateByPairAction   = 0;
     }
 
+    bool                      autoLoadOnRightPanel;
     bool                      autoSyncPreview;
     bool                      fullScreenHideToolBar;
     bool                      fullScreen;

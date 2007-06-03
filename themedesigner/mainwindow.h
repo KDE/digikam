@@ -7,6 +7,7 @@
  * Description : main digiKam theme designer window
  * 
  * Copyright (C) 2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
+ * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +48,8 @@ class MainWindow : public QWidget
 
 public:
 
-    enum PROPERTY {
+    enum PROPERTY 
+    {
         BASE = 0,
         REGULARTEXT,
         SELECTEDTEXT,
@@ -60,55 +62,61 @@ public:
         LISTVIEWSELECTED
     };
 
-    enum BEVEL {
+    enum BEVEL 
+    {
         FLAT = 0,
         RAISED,
         SUNKEN
     };
 
-    enum GRADIENT {
+    enum GRADIENT 
+    {
         SOLID = 0,
         HORIZONTAL,
         VERTICAL,
         DIAGONAL
     };
+
+public:
         
     MainWindow();
     ~MainWindow();
 
-private:
-    
-    FolderView*     m_folderView;
-    ThemedIconView* m_iconView;
-
-    QComboBox*    m_propertyCombo;
-    QLabel*       m_bevelLabel;
-    QComboBox*    m_bevelCombo;
-    QLabel*       m_gradientLabel;
-    QComboBox*    m_gradientCombo;
-    QLabel*       m_begColorLabel;
-    KColorButton* m_begColorBtn;
-    QLabel*       m_endColorLabel;
-    KColorButton* m_endColorBtn;
-    QCheckBox*    m_addBorderCheck;
-    QLabel*       m_borderColorLabel;
-    KColorButton* m_borderColorBtn;
-
-    Theme*        m_theme;
-
-    QMap<int,int> m_bevelMap;
-    QMap<int,int> m_bevelReverseMap;
-    QMap<int,int> m_gradientMap;
-    QMap<int,int> m_gradientReverseMap;
-    
 private slots:
 
     void slotLoad();
-    void slotSave();
-    
+    void slotSave();    
     void slotPropertyChanged();
-
     void slotUpdateTheme();
+    void slotThemeChanged();
+
+private:
+    
+    QLabel*         m_bevelLabel;
+    QLabel*         m_gradientLabel;
+    QLabel*         m_begColorLabel;
+    QLabel*         m_endColorLabel;
+    QLabel*         m_borderColorLabel;
+
+    QComboBox*      m_propertyCombo;
+    QComboBox*      m_bevelCombo;
+    QComboBox*      m_gradientCombo;
+
+    QCheckBox*      m_addBorderCheck;
+
+    QMap<int,int>   m_bevelMap;
+    QMap<int,int>   m_bevelReverseMap;
+    QMap<int,int>   m_gradientMap;
+    QMap<int,int>   m_gradientReverseMap;
+
+    KColorButton*   m_endColorBtn;
+    KColorButton*   m_begColorBtn;
+    KColorButton*   m_borderColorBtn;
+
+    FolderView         *m_folderView;
+    ThemedIconView     *m_iconView;
+    ImagePropertiesTab *m_propView;
+    Theme              *m_theme;
 };
 
 }  // NameSpace Digikam

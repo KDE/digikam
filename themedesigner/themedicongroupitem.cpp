@@ -54,11 +54,13 @@ void ThemedIconGroupItem::paintBanner()
     fn.setBold(true);
     int fnSize = fn.pointSize();
     bool usePointSize;
-    if (fnSize > 0) {
+    if (fnSize > 0) 
+    {
         fn.setPointSize(fnSize+2);
         usePointSize = true;
     }
-    else {
+    else 
+    {
         fnSize = fn.pixelSize();
         fn.setPixelSize(fnSize+2);
         usePointSize = false;
@@ -67,7 +69,6 @@ void ThemedIconGroupItem::paintBanner()
     QPainter p(&pix);
     p.setPen(ThemeEngine::instance()->textSelColor());
     p.setFont(fn);
-
 
     QRect tr;
     p.drawText(5, 5, r.width(), r.height(),
@@ -86,7 +87,6 @@ void ThemedIconGroupItem::paintBanner()
 
     p.drawText(5, r.y(), r.width(), r.height(),
                Qt::AlignLeft | Qt::AlignVCenter, "October 2005 - 10 Items");
-
     
     p.end();
 
