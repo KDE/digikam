@@ -1203,6 +1203,22 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
     return values;
 }
 
+LLongList AlbumDB::getItemIDsInAlbum(int albumID)
+{
+    LLongList itemIDs;
+    QStringList values;
+
+    execSql( QString("SELECT id FROM Images WHERE dirid=%1;")
+                .arg(albumID), &values );
+
+    for (QStringList::iterator it = values.begin(); it != values.end(); ++it)
+    {
+        itemIDs << (*it).toLong();
+    }
+
+    return itemIDs;
+}
+
 QStringList AlbumDB::getItemURLsInTag(int tagID, bool recursive)
 {
     QStringList values;

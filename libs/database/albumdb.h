@@ -373,6 +373,13 @@ public:
      */
     QStringList getItemURLsInAlbum(int albumID, ItemSortOrder order = NoItemSorting);
 
+     /**
+      * Given a albumID, get a list of Ids of all items in the album
+      * @param  albumID the id of the album
+      * @return a list of Ids for the items in the album.
+      */
+    LLongList getItemIDsInAlbum(int albumID);
+
     /**
      * Given a tagid, get a list of the url of all items in the tag
      * @param  tagID the id of the tag
