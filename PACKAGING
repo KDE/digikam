@@ -77,13 +77,9 @@ You'll find the svn revision used in the tarball in the file RELEASE.rev. You ha
 
 For a X.Y.Z.UVW release
 
-    {last-used-rev_number} \
+  svn copy -r{last-used-rev_number} \
 	https://{svn-user}@svn.kde.org/home/kde/trunk/extragear/graphics/digikam \
 	https://{svn-user}@svn.kde.org/home/kde/tags/digikam/digikam_X_Y_Z_UVW
-
-   svn copy -r{last-used-rev_number} \
-	https://{svn-user}@svn.kde.org/home/kde/trunk/extragear/graphics/digikamimageplugins \
-	https://{svn-user}@svn.kde.org/home/kde/tags/digikam/digikamimageplugins_X_Y_Z_UVW
 
 You also can use svn+ssh://{svn-user... instead of password requiring interface https://
 
