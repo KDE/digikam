@@ -129,7 +129,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
 
     // --------------------------------------------------------
 
-    QVGroupBox *iconTextGroup = new QVGroupBox(i18n("Thumbnails Informations"), parent);
+    QVGroupBox *iconTextGroup = new QVGroupBox(i18n("Thumbnail Information"), parent);
       
     d->iconShowNameBox = new QCheckBox(i18n("Show file &name"), iconTextGroup);
     QWhatsThis::add( d->iconShowNameBox, i18n("<p>Set this option to show file name below image thumbnail."));

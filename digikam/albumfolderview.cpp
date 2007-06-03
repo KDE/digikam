@@ -438,7 +438,7 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
 {
     KActionMenu menuImport(i18n("Import"));
     KActionMenu menuExport(i18n("Export"));
-    KActionMenu menuKIPIBatch(i18n("Batch Processes"));
+    KActionMenu menuKIPIBatch(i18n("Batch Process"));
 
     KPopupMenu popmenu(this);
     popmenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
