@@ -48,6 +48,7 @@ LATER 0.9.2 TODO LIST
     http://techbase.kde.org/Development/Tutorials/CMake
     http://techbase.kde.org/Development/Tutorials/KDE4_Porting_Guide#CMake
     http://www.cmake.org/Wiki/CMake_Useful_Variables
+    http://www.kdedevelopers.org/node/1743
 
 * Port to QT4/KDE4.
   Overview documentation
