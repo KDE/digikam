@@ -94,18 +94,18 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_channelCB->insertItem( i18n("Blue") );
     QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
-                                       "<b>Red</b>: display the red image-channel values.<p>"
-                                       "<b>Green</b>: display the green image-channel values.<p>"
-                                       "<b>Blue</b>: display the blue image-channel values.<p>"));
+                                       "<b>Red</b>: display the red image channel values.<p>"
+                                       "<b>Green</b>: display the green image channel values.<p>"
+                                       "<b>Blue</b>: display the blue image channel values.<p>"));
 
     m_scaleBG = new QHButtonGroup(gboxSettings);
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
     m_scaleBG->setInsideMargin(0);
     QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
-                                     "If the image's maximal counts are small, you can use the linear scale.<p>"
-                                     "Logarithmic scale can be used when the maximal counts are big; "
-                                     "if it is used, all values (small and large) will be visible on the graph."));
+                                     "If the image's maximum counts are small, you can use the linear scale.<p>"
+                                     "The logarithmic scale can be used when the maximal counts are big "
+                                     "to show all values (small and large) on the graph."));
     
     QPushButton *linHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
@@ -136,8 +136,8 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     QVBox *histoBox   = new QVBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram "
-                                             "drawing of the selected image channel. This one is "
-                                             "re-computed at any settings changes."));
+                                             "of the selected image channel. It is "
+                                             "updated upon setting changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);    
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
@@ -151,7 +151,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_redThreshold   = new KIntNumInput(gboxSettings);
     m_redThreshold->setRange(10, 90, 1, true);
     m_redThreshold->setValue(20);
-    QWhatsThis::add(m_redThreshold, i18n("<p>Set here the red color pixels selection threshold. "
+    QWhatsThis::add(m_redThreshold, i18n("<p>Sets the red color pixels selection threshold. "
                                          "Low values will select more red color pixels, high "
                                          "values less."));
     gridSettings->addMultiCellWidget(m_thresholdLabel, 3, 3, 0, 4);
@@ -161,7 +161,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_smoothLevel = new KIntNumInput(gboxSettings);
     m_smoothLevel->setRange(0, 5, 1, true);
     m_smoothLevel->setValue(1);
-    QWhatsThis::add(m_smoothLevel, i18n("<p>Set here the smootness value used to blur red color "
+    QWhatsThis::add(m_smoothLevel, i18n("<p>Sets the smoothness value to blur red color "
                                         "pixels selection."));
     gridSettings->addMultiCellWidget(m_smoothLabel, 5, 5, 0, 4);
     gridSettings->addMultiCellWidget(m_smoothLevel, 6, 6, 0, 4);
