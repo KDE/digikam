@@ -30,12 +30,16 @@
 #include <qstringlist.h>
 #include <qstring.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class AlbumSettingsPrivate;
 
-class AlbumSettings 
+class DIGIKAM_EXPORT AlbumSettings 
 {
 public:
 

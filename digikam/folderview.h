@@ -31,6 +31,10 @@
 
 #include <qlistview.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
@@ -43,7 +47,7 @@ class FolderItem;
  */
 
 
-class FolderView : public QListView
+class DIGIKAM_EXPORT FolderView : public QListView
 {
     Q_OBJECT
 

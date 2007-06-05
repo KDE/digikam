@@ -28,6 +28,10 @@
 
 #include <qrect.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
@@ -35,7 +39,7 @@ class IconView;
 class IconItem;
 class IconGroupItemPriv;
 
-class IconGroupItem
+class DIGIKAM_EXPORT IconGroupItem
 {
     friend class IconView;
 
