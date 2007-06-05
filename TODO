@@ -53,6 +53,7 @@ LATER 0.9.2 TODO LIST
 * Port to QT4/KDE4.
   Overview documentation
     http://techbase.kde.org/Development/Tutorials/KDE4_Porting_Guide 
+    http://websvn.kde.org/*checkout*/trunk/KDE/kdelibs/KDE4PORTING.html
 
     There are scripts to relieve us of the tedious work:
     http://doc.trolltech.com/4.2/qt3to4.html
