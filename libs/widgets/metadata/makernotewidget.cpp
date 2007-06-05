@@ -22,13 +22,6 @@
  * 
  * ============================================================ */
 
-// C++ includes.
-
-#include <cstdlib>
-#include <cstdio>
-#include <cassert>
-#include <string>
-
 // Qt includes.
 
 #include <qmap.h>
@@ -37,12 +30,6 @@
 // KDE includes.
 
 #include <klocale.h>
-
-// LibExiv2 includes.
-
-#include <exiv2/exif.hpp>
-#include <exiv2/tags.hpp>
-#include <exiv2/ifd.hpp>
 
 // Local includes.
 
