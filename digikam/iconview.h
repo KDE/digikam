@@ -29,6 +29,10 @@
 
 #include <qscrollview.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 class QPainter;
 class QMouseEvent;
 class QPaintEvent;
@@ -42,7 +46,7 @@ class IconItem;
 class IconGroupItem;
 class IconViewPriv;
 
-class IconView : public QScrollView
+class DIGIKAM_EXPORT IconView : public QScrollView
 {
     Q_OBJECT
 

@@ -29,13 +29,17 @@
 #include <qrect.h>
 #include <qstring.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class IconGroupItem;
 class IconView;
 
-class IconItem
+class DIGIKAM_EXPORT IconItem
 {
     friend class IconView;
     friend class IconGroupItem;

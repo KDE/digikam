@@ -1,3 +1,429 @@
+v0.9.2-beta3 - 2007-06-03
+----------------------------------------------------------------------------
+
+2007-06-03 13:46  gkulzer
+
+	* branches/extragear/kde3/graphics/digikam/PACKAGING: no extra
+	  digikamimageplugins anymore
+
+2007-06-03 13:45  gkulzer
+
+	* branches/extragear/kde3/graphics/digikam/digikam/albumfolderview.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/digikamui.rc,
+	  branches/extragear/kde3/graphics/digikam/utilities/setup/setupgeneral.cpp:
+	  i18n patch from Frank Siegert
+
+2007-06-02 22:15  mwiesweg
+
+	* branches/extragear/kde3/graphics/digikam/digikam/imagepreviewview.cpp,
+	  branches/extragear/kde3/graphics/digikam/libs/threadimageio/loadingdescription.h,
+	  branches/extragear/kde3/graphics/digikam/libs/threadimageio/loadsavethread.cpp,
+	  branches/extragear/kde3/graphics/digikam/libs/threadimageio/loadsavethread.h,
+	  branches/extragear/kde3/graphics/digikam/libs/threadimageio/previewtask.cpp,
+	  branches/extragear/kde3/graphics/digikam/libs/threadimageio/previewtask.h,
+	  branches/extragear/kde3/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+	  Fix rotation in LightTable for high quality image.
+	  Move rotation method to a static method.
+	  Store the fact that an image is exif-rotated in the image object.
+	  Call method again in foreground thread, when as high quality
+	  images are unrotated in the cache. Currently, previews are
+	  rotated
+	  in the cache.
+	  
+	  I hope this fixes the problem in all possible situations.
+	  
+	  CCBUG: 145198
+
+2007-06-02 15:17  helio
+
+	* branches/extragear/kde3/graphics/digikam,
+	  trunk/extragear/graphics/digikam: - Moving keg network app for
+	  branches...
+
+2007-06-01 21:53  cgilles
+
+	* trunk/extragear/graphics/digikam/TODO: CMake tutorial
+
+2007-06-01 07:43  cgilles
+
+	* trunk/extragear/graphics/digikam/TODO: link to CMake port
+
+2007-05-31 09:12  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/perspective/imageeffect_perspective.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/perspective/imageeffect_perspective.h,
+	  trunk/extragear/graphics/digikam/imageplugins/perspective/imageplugin_perspective.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/perspective/imageplugin_perspective.h,
+	  trunk/extragear/graphics/digikam/imageplugins/perspective/matrix.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/perspective/matrix.h,
+	  trunk/extragear/graphics/digikam/imageplugins/perspective/perspectivewidget.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/perspective/perspectivewidget.h,
+	  trunk/extragear/graphics/digikam/imageplugins/perspective/triangle.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/perspective/triangle.h:
+	  fix header
+
+2007-05-31 09:07  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/raindrop/imageeffect_raindrop.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/raindrop/imageeffect_raindrop.h,
+	  trunk/extragear/graphics/digikam/imageplugins/raindrop/imageplugin_raindrop.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/raindrop/imageplugin_raindrop.h,
+	  trunk/extragear/graphics/digikam/imageplugins/raindrop/raindrop.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/raindrop/raindrop.h:
+	  fix header
+
+2007-05-31 09:03  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/sheartool/imageeffect_sheartool.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/sheartool/imageeffect_sheartool.h,
+	  trunk/extragear/graphics/digikam/imageplugins/sheartool/imageplugin_sheartool.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/sheartool/imageplugin_sheartool.h,
+	  trunk/extragear/graphics/digikam/imageplugins/sheartool/sheartool.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/sheartool/sheartool.h:
+	  fix header
+
+2007-05-31 09:00  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/texture/imageeffect_texture.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/texture/imageeffect_texture.h,
+	  trunk/extragear/graphics/digikam/imageplugins/texture/imageplugin_texture.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/texture/imageplugin_texture.h,
+	  trunk/extragear/graphics/digikam/imageplugins/texture/texture.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/texture/texture.h:
+	  fix header
+
+2007-05-31 08:55  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/oilpaint/oilpaint.cpp:
+	  missing (c)
+
+2007-05-31 08:54  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/oilpaint/imageeffect_oilpaint.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/oilpaint/imageeffect_oilpaint.h,
+	  trunk/extragear/graphics/digikam/imageplugins/oilpaint/imageplugin_oilpaint.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/oilpaint/imageplugin_oilpaint.h,
+	  trunk/extragear/graphics/digikam/imageplugins/oilpaint/oilpaint.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/oilpaint/oilpaint.h:
+	  fix header
+
+2007-05-31 08:49  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/noisereduction/imageeffect_noisereduction.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/noisereduction/imageeffect_noisereduction.h,
+	  trunk/extragear/graphics/digikam/imageplugins/noisereduction/imageplugin_noisereduction.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/noisereduction/imageplugin_noisereduction.h,
+	  trunk/extragear/graphics/digikam/imageplugins/noisereduction/noisereduction.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/noisereduction/noisereduction.h:
+	  fix header
+
+2007-05-31 08:46  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/lensdistortion/imageeffect_lensdistortion.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/lensdistortion/imageeffect_lensdistortion.h,
+	  trunk/extragear/graphics/digikam/imageplugins/lensdistortion/imageplugin_lensdistortion.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/lensdistortion/imageplugin_lensdistortion.h,
+	  trunk/extragear/graphics/digikam/imageplugins/lensdistortion/lensdistortion.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/lensdistortion/lensdistortion.h,
+	  trunk/extragear/graphics/digikam/imageplugins/lensdistortion/pixelaccess.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/lensdistortion/pixelaccess.h:
+	  fix header
+
+2007-05-31 08:41  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/inserttext/fontchooserwidget.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/inserttext/fontchooserwidget.h,
+	  trunk/extragear/graphics/digikam/imageplugins/inserttext/imageeffect_inserttext.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/inserttext/imageeffect_inserttext.h,
+	  trunk/extragear/graphics/digikam/imageplugins/inserttext/imageplugin_inserttext.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/inserttext/imageplugin_inserttext.h,
+	  trunk/extragear/graphics/digikam/imageplugins/inserttext/inserttextwidget.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/inserttext/inserttextwidget.h:
+	  fix header
+
+2007-05-31 08:28  cgilles
+
+	* trunk/extragear/graphics/digikam/themedesigner/Makefile.am:
+	  polish
+
+2007-05-31 08:27  cgilles
+
+	* trunk/extragear/graphics/digikam/themedesigner/mainwindow.cpp,
+	  trunk/extragear/graphics/digikam/themedesigner/mainwindow.h:
+	  added image properties tab
+
+2007-05-31 08:19  cgilles
+
+	* trunk/extragear/graphics/digikam/themedesigner/themedicongroupitem.cpp,
+	  trunk/extragear/graphics/digikam/themedesigner/themediconitem.cpp,
+	  trunk/extragear/graphics/digikam/themedesigner/themediconview.cpp:
+	  polish
+
+2007-05-31 08:18  cgilles
+
+	* trunk/extragear/graphics/digikam/themedesigner/themedicongroupitem.cpp,
+	  trunk/extragear/graphics/digikam/themedesigner/themediconitem.cpp,
+	  trunk/extragear/graphics/digikam/themedesigner/themediconview.cpp:
+	  polish
+
+2007-05-31 08:06  cgilles
+
+	* trunk/extragear/graphics/digikam/themedesigner/mainwindow.cpp: no
+	  need header banner
+
+2007-05-31 07:25  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-31 07:25  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: digikam
+	  from trunk : showfoto : fix how to handle local file from command
+	  line.
+	  BUG: 146184
+
+2007-05-31 07:07  gkulzer
+
+	* trunk/extragear/graphics/digikam/HACKING: polish
+
+2007-05-31 06:59  gkulzer
+
+	* trunk/extragear/graphics/digikam/README: polish
+
+2007-05-30 22:26  cgilles
+
+	* trunk/extragear/graphics/digikam/release_digikam_docs.rb: update
+
+2007-05-30 22:25  cgilles
+
+	* trunk/extragear/graphics/digikam/release_digikam.rb: update
+
+2007-05-30 22:24  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-30 22:24  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/version.h: update
+
+2007-05-30 22:23  cgilles
+
+	* trunk/extragear/graphics/digikam/HACKING: update
+
+2007-05-30 22:22  cgilles
+
+	* trunk/extragear/graphics/digikam/README: update
+
+2007-05-30 22:19  cgilles
+
+	* trunk/extragear/graphics/digikam/README: update
+
+2007-05-30 22:15  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam.lsm: update
+
+2007-05-30 19:49  lure
+
+	* trunk/extragear/graphics/digikam/utilities/hotplug/digikam-download.desktop.in,
+	  trunk/extragear/graphics/digikam/utilities/hotplug/digikam-gphoto2-camera.desktop.in,
+	  trunk/extragear/graphics/digikam/utilities/hotplug/digikam-mount-and-download.desktop.in:
+	  Fix French translation in .desktop files (UTF-8 encoding)
+	  Thanks to Anthony Mercatante <tonio@ubuntu.com>
+
+2007-05-30 13:13  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/whitebalance/imageeffect_whitebalance.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/whitebalance/imageeffect_whitebalance.h,
+	  trunk/extragear/graphics/digikam/imageplugins/whitebalance/imageplugin_whitebalance.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/whitebalance/imageplugin_whitebalance.h:
+	  fix header
+
+2007-05-30 13:02  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/restoration/imageeffect_restoration.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/restoration/imageeffect_restoration.h,
+	  trunk/extragear/graphics/digikam/imageplugins/restoration/imageplugin_restoration.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/restoration/imageplugin_restoration.h:
+	  fix header
+
+2007-05-30 13:00  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/inpainting/imageeffect_inpainting.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/inpainting/imageeffect_inpainting.h,
+	  trunk/extragear/graphics/digikam/imageplugins/inpainting/imageplugin_inpainting.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/inpainting/imageplugin_inpainting.h:
+	  fix header
+
+2007-05-30 12:57  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/infrared/imageeffect_infrared.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/infrared/imageeffect_infrared.h,
+	  trunk/extragear/graphics/digikam/imageplugins/infrared/imageplugin_infrared.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/infrared/imageplugin_infrared.h,
+	  trunk/extragear/graphics/digikam/imageplugins/infrared/infrared.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/infrared/infrared.h:
+	  fix header
+
+2007-05-30 12:44  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/hotpixels/blackframelistview.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/hotpixels/blackframelistview.h,
+	  trunk/extragear/graphics/digikam/imageplugins/hotpixels/blackframeparser.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/hotpixels/blackframeparser.h,
+	  trunk/extragear/graphics/digikam/imageplugins/hotpixels/hotpixel.h,
+	  trunk/extragear/graphics/digikam/imageplugins/hotpixels/hotpixelfixer.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/hotpixels/imageeffect_hotpixels.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/hotpixels/imageeffect_hotpixels.h,
+	  trunk/extragear/graphics/digikam/imageplugins/hotpixels/imageplugin_hotpixels.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/hotpixels/imageplugin_hotpixels.h,
+	  trunk/extragear/graphics/digikam/imageplugins/hotpixels/weights.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/hotpixels/weights.h:
+	  fix header
+
+2007-05-30 12:19  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/freerotation/freerotation.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/freerotation/freerotation.h,
+	  trunk/extragear/graphics/digikam/imageplugins/freerotation/imageeffect_freerotation.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/freerotation/imageeffect_freerotation.h,
+	  trunk/extragear/graphics/digikam/imageplugins/freerotation/imageplugin_freerotation.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/freerotation/imageplugin_freerotation.h:
+	  fix header
+
+2007-05-30 10:09  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/filmgrain/filmgrain.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/filmgrain/filmgrain.h,
+	  trunk/extragear/graphics/digikam/imageplugins/filmgrain/imageeffect_filmgrain.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/filmgrain/imageeffect_filmgrain.h,
+	  trunk/extragear/graphics/digikam/imageplugins/filmgrain/imageplugin_filmgrain.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/filmgrain/imageplugin_filmgrain.h:
+	  fix header
+
+2007-05-29 22:49  mueller
+
+	* trunk/extragear/graphics/digikam/imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp,
+	  trunk/extragear/graphics/digikam/libs/dimg/dcolorcomposer.h,
+	  trunk/extragear/graphics/doc/digikam/editorbcgadjust.png,
+	  trunk/extragear/graphics/doc/digikam/editorcolorbalance.png,
+	  trunk/extragear/graphics/doc/digikam/editorhsladjust.png,
+	  trunk/extragear/graphics/showimg/kexi/kexidb/parser/sqlparser.cpp,
+	  trunk/extragear/graphics/showimg/kexi/kexidb/parser/sqlparser.y:
+	  the usual "daily unbreak compilation"
+
+2007-05-29 20:49  cgilles
+
+	* trunk/extragear/graphics/digikam/TODO: update
+
+2007-05-29 19:07  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/setup/setupgeneral.cpp:
+	  digikam from trunk : polish setup general gui.
+
+2007-05-29 16:01  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-29 16:00  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/slideshow/slideshow.h:
+	  digikam from trunk : fix Slideshow and Threaded Image IO
+	  interface witch is broken since the last one is ported from
+	  QImage to Dimg
+	  BUG: 146072
+
+2007-05-29 14:14  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumsettings.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumsettings.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/imagepreviewview.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupgeneral.cpp:
+	  digikam from trunk : ALbum GUI : new option to handle full size
+	  image in Preview Mode, instead a reduced size.
+	  For performance reasons, this option is disable by default. Use
+	  it only if you have a fast computer...
+	  CCMAIL: digikam-devel@kde.org
+
+2007-05-29 12:44  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2007-05-29 12:33  cgilles
+
+	* trunk/extragear/graphics/digikam/project/project.kdevelop,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablepreview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.cpp,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttableview.h,
+	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setuplighttable.cpp:
+	  digikam from trunk : Light Table : new option to handle full size
+	  image in preview panel, instead a reduced size.
+	  For performance reasons, this option is disable by default. Use
+	  it if you have a fast computer...
+	  BUG: 145198
+
+2007-05-29 10:29  cgilles
+
+	* trunk/extragear/graphics/digikam/HACKING: add link to "10 golden
+	  rules for starting with open source" article.
+
+2007-05-29 09:02  cgilles
+
+	* trunk/extragear/graphics/digikam/TODO: update
+
+2007-05-29 08:55  cgilles
+
+	* trunk/extragear/graphics/digikam/Makefile.am: fix order to
+	  compile
+
+2007-05-29 08:49  cgilles
+
+	* trunk/extragear/graphics/digikam/data/themes/Blue,
+	  trunk/extragear/graphics/digikam/data/themes/Clean,
+	  trunk/extragear/graphics/digikam/data/themes/DLR,
+	  trunk/extragear/graphics/digikam/data/themes/Dark,
+	  trunk/extragear/graphics/digikam/data/themes/Dessert,
+	  trunk/extragear/graphics/digikam/data/themes/Digikasa,
+	  trunk/extragear/graphics/digikam/data/themes/Dreary,
+	  trunk/extragear/graphics/digikam/data/themes/Gray,
+	  trunk/extragear/graphics/digikam/data/themes/Makefile.am,
+	  trunk/extragear/graphics/digikam/data/themes/Marine,
+	  trunk/extragear/graphics/digikam/data/themes/OrangeCrush,
+	  trunk/extragear/graphics/digikam/data/themes/Sandy: digikam from
+	  trunk : new colors scheme theme "DLR" by joey7d6
+	  Fix header on theme file.
+	  Fix OrangeCrush theme witch disappear duing a wrong name
+	  declaration.
+	  
+	  CCMAIL: joey7d6@yahoo.com
+
+2007-05-29 06:45  scripty
+
+	* trunk/extragear/graphics/digikam/themedesigner/digikamthemedesigner.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2007-05-28 14:31  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp:
+	  remove obsolete signal/slot connection
+
+2007-05-28 13:38  gkulzer
+
+	* trunk/extragear/graphics/digikam/NEWS: English polish and
+	  shortcut details
+
+2007-05-28 12:53  gkulzer
+
+	* trunk/extragear/graphics/digikam/NEWS: update to 0.9.2-beta2
+
+2007-05-28 12:51  gkulzer
+
+	* trunk/extragear/graphics/digikam/ChangeLog: update to 0.9.2-beta2
+
 v0.9.2-beta2 - 2007-05-28
 ----------------------------------------------------------------------------
 

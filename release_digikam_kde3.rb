@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Ruby script for generating amaroK tarball releases from KDE SVN
+# Ruby script for generating digiKam tarball releases from KDE SVN
 #
 # (c) 2005 Mark Kretschmann <markey@web.de>
 # Some parts of this code taken from cvs2dist
@@ -9,20 +9,14 @@
 
 name       = "digikam"
 egmodule   = "graphics"
-version    = "doc-0.9.2-rc1"
-docs       = "yes"
+version    = "0.9.2-rc1"
+docs       = "no"
 
-# The last one will be taken
-svnbase    = "svn+ssh://toma@svn.kde.org/home/kde"
-svnbase    = "https://mwiesweg@svn.kde.org/home/kde"
-svnbase    = "https://fjcruz@svn.kde.org/home/kde"
-svnbase    = "https://ach@svn.kde.org/home/kde"
 svnbase    = "svn+ssh://gkulzer@svn.kde.org/home/kde"
-
-svnroot    = "#{svnbase}/branches/stable"
+svnroot    = "#{svnbase}/branches"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
 
-addDocs    = ["showfoto"]
+addDocs    = []
 addPo      = ["showfoto"]
 
 #----------------------------------------------------------------
@@ -35,7 +29,7 @@ addDocs    = [name] + addDocs
 oldmake = ENV["UNSERMAKE"]
 ENV["UNSERMAKE"] = "no"
 
-puts "Fetching #{svnroot}/extragear/#{egmodule}/#{name}..."
+puts "Fetching #{egmodule}/#{name}..."
 # Remove old folder, if exists
 `rm -rf #{folder} 2> /dev/null`
 `rm -rf #{folder}.tar.bz2 2> /dev/null`
@@ -43,10 +37,11 @@ puts "Fetching #{svnroot}/extragear/#{egmodule}/#{name}..."
 Dir.mkdir( folder )
 Dir.chdir( folder )
 
-`svn co -N #{svnroot}/extragear/#{egmodule}`
+`svn co -N #{svnroot}/extragear/kde3/#{egmodule}`
 Dir.chdir( egmodule )
-`svn up -N #{name}`
+`svn up #{name}`
 `svn up -N doc`
+`export LC_ALL=en_US.UTF-8; svn info #{name} | egrep '^Last Changed (Rev|Date):' > RELEASE.rev`
 
 if ( docs != "no")
     for dg in addDocs
@@ -62,7 +57,7 @@ puts "\n"
 puts "Fetching l10n docs for #{egmodule}/#{name}...\n"
 puts "\n"
 
-i18nlangs = `svn cat #{svnroot}/l10n/subdirs`
+i18nlangs = `svn cat #{svnbase}/trunk/l10n/subdirs`
 i18nlangsCleaned = []
 for lang in i18nlangs
   l = lang.chomp
@@ -84,7 +79,7 @@ for lang in i18nlangs
     `rm -rf #{dg}`
     docdirname = "l10n/#{lang}/docs/extragear-#{egmodule}/#{dg}"
     if ( docs != "no")
-        `svn co -q #{svnroot}/#{docdirname} > /dev/null 2>&1`
+        `svn co -q #{svnbase}/trunk/#{docdirname} > /dev/null 2>&1`
     end
     next unless FileTest.exists?( dg )
     print "Copying #{lang}'s #{dg} documentation over...  "
@@ -103,8 +98,53 @@ for lang in i18nlangs
   end
 end
 
-Dir.chdir( ".." ) # root folder
+puts "\n"
+puts "Fetching l10n po for #{egmodule}/#{name}...\n"
+puts "\n"
+
+Dir.chdir( ".." ) # in egmodule now
+
+$subdirs = false
+Dir.mkdir( "po" )
+
+for lang in i18nlangs
+  lang.chomp!
+  dest = "po/#{lang}"
+
+  for dg in addPo
+    dg.chomp!
+    pofilename = "l10n/#{lang}/messages/extragear-#{egmodule}/#{dg}.po"
+    `svn cat #{svnbase}/trunk/#{pofilename} 2> /dev/null | tee l10n/#{dg}.po`
+    next if FileTest.size( "l10n/#{dg}.po" ) == 0
+
+    if !FileTest.exist?( dest )
+      Dir.mkdir( dest )
+    end
+
+    print "Copying #{lang}'s #{dg}.po over ..  "
+    `mv l10n/#{dg}.po #{dest}`
+    puts( "done.\n" )
+
+    makefile = File.new( "#{dest}/Makefile.am", File::CREAT | File::RDWR | File::TRUNC )
+    makefile << "KDE_LANG = #{lang}\n"
+    makefile << "SUBDIRS  = $(AUTODIRS)\n"
+    makefile << "POFILES  = AUTO\n"
+    makefile.close()
+
+    $subdirs = true
+  end
+end
+
+if $subdirs
+  makefile = File.new( "po/Makefile.am", File::CREAT | File::RDWR | File::TRUNC )
+  makefile << "SUBDIRS = $(AUTODIRS)\n"
+  makefile.close()
+else
+  `rm -Rf po`
+end
+
 `rm -rf l10n`
+puts "\n"
 
 # Remove SVN data folder
 `find -name ".svn" | xargs rm -rf`
@@ -113,27 +153,25 @@ Dir.chdir( ".." ) # root folder
 Dir.chdir( ".." ) # name-version
 `rmdir #{egmodule}`
 
-puts "\n"
-`rm Mainpage.dox`
+# Move some important files to the root folder
+Dir.chdir( "#{name}" )
+`/bin/mv -f #{name}.lsm ..`
+`/bin/mv -f AUTHORS ..`
+`/bin/mv -f ChangeLog ..`
+`/bin/mv -f COPYING ..`
+`/bin/mv -f INSTALL ..`
+`/bin/mv -f README ..`
+`/bin/mv -f TODO ..`
+`/bin/mv -f HACKING ..`
+`/bin/mv -f NEWS ..`
+`/bin/rm release_digikam*`
+Dir.chdir( ".." )
 
 
 # Generate makefiles
 `find | xargs touch`
 
 puts "\n"
-puts "Remove dummy extragear README..  "
-`rm -f README`
-puts "done.\n"
-
-# Move some important files to the root folder
-Dir.chdir( "#{name}" )
-`/bin/mv -f COPYING-DOCS ..`
-`/bin/mv -f AUTHORS ..`
-`/bin/mv -f INSTALL ..`
-`/bin/rm *`
-Dir.chdir( ".." )
-Dir.rmdir(  "#{name}" )
-
 puts "Generating Makefiles..  "
 `make -f Makefile.cvs`
 puts "done.\n"

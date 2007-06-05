@@ -177,7 +177,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     m_effectType->insertItem( i18n("Find Edges") );    
     QWhatsThis::add( m_effectType, i18n("<p>Select here the effect type to apply on the image.<p>"
                                         "<b>Solarize</b>: simulates solarization of photograph.<p>"
-                                        "<b>Vivid</b>: simulates the Velvia negative film colors.<p>"
+                                        "<b>Vivid</b>: simulates the Velvia(tm) slide film colors.<p>"
                                         "<b>Neon</b>: coloring the edges in a photograph to "
                                         "reproduce a fluorescent light effect.<p>"
                                         "<b>Find Edges</b>: detects the edges in a photograph "

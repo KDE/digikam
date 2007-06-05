@@ -1,4 +1,16 @@
-digiKam 0.9.2-beta3 - Release date: 2007-06-??
+digiKam 0.9.2-RC1 - Release date: 2007-06-??
+
+NEW FEATURES:
+
+
+digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+062 ==> 144590 : English labels need cleanup in digiKam.
+
+
+**********************************************************************************************
+
+digiKam 0.9.2-beta3 - Release date: 2007-06-03
 
 NEW FEATURES:
 
@@ -11,7 +23,6 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 059 ==> 145198 : Light-table should also work with the full image.
 060 ==> 146072 : Slideshow shows black screen.
 061 ==> 146184 : Showfoto no filename specified .
-062 ==> 
 
 **********************************************************************************************
 
