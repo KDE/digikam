@@ -6,7 +6,8 @@ NEW FEATURES:
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 062 ==> 144590 : English labels need cleanup in digiKam.
-
+063 ==> 146436 : digiKam try to include Exiv2 library headers.
+064 ==> 
 
 **********************************************************************************************
 
