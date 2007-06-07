@@ -37,6 +37,7 @@ PreviewLoadThread::PreviewLoadThread()
 
 void PreviewLoadThread::load(LoadingDescription description)
 {
+    description.rawDecodingSettings.sixteenBitsImage = false;
     ManagedLoadSaveThread::loadPreview(description);
 }
 

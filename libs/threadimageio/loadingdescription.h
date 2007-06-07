@@ -45,9 +45,12 @@ public:
             size       = 0;
             exifRotate = false;
         }
+
         bool isPreview;
         int  size;
         bool exifRotate;
+
+        bool operator==(const PreviewParameters &other) const;
     };
 
     /**
@@ -61,34 +64,26 @@ public:
      * Use this for files that are not raw files.
      * Stores only the filePath.
      */
-    LoadingDescription(const QString &filePath)
-        : filePath(filePath)
-        {
-            rawDecodingSettings = KDcrawIface::RawDecodingSettings();
-        };
+    LoadingDescription(const QString &filePath);
 
     /**
      * For raw files:
      * Stores filePath and RawDecodingSettings
      */
-    LoadingDescription(const QString &filePath, KDcrawIface::RawDecodingSettings settings)
-        : filePath(filePath), rawDecodingSettings(settings)
-        {};
+    LoadingDescription(const QString &filePath, KDcrawIface::RawDecodingSettings settings);
 
     /**
      * For preview jobs:
      * Stores preview max size and exif rotation.
-     * The exif rotation is only a hint.
-     * Call LoadSaveThread::exifRotate to make sure that the image is really
-     * rotated. It is safe to call this method even if the image is rotated.
+     * Exif Rotation:
+     *    The exif rotation is only a hint.
+     *    Call LoadSaveThread::exifRotate to make sure that the image is really
+     *    rotated. It is safe to call this method even if the image is rotated.
+     * Raw files:
+     *    If size is not 0, the embedded preview will be loaded if available.
+     *    If size is 0, DImg based loading will be used with default raw decoding settings.
      */
-    LoadingDescription(const QString &filePath, int size, bool exifRotate)
-        : filePath(filePath)
-        {
-            previewParameters.isPreview  = false;
-            previewParameters.size       = size;
-            previewParameters.exifRotate = exifRotate;
-        };
+    LoadingDescription(const QString &filePath, int size, bool exifRotate);
 
     QString                          filePath;
     KDcrawIface::RawDecodingSettings rawDecodingSettings;
@@ -121,6 +116,7 @@ public:
      * ignoring parameters used to specify a reduced version.
      */
     bool equalsIgnoreReducedVersion(const LoadingDescription &other) const;
+
     /**
      * Returns whether this loading task equals the other one
      * or is superior to it, if the other one is a reduced version
