@@ -163,6 +163,11 @@ int main(int argc, char *argv[])
                           "lure at kubuntu dot org",
                           0);
 
+    aboutData.addCredit ( "Angelo Naselli",
+                          I18N_NOOP("Developer"),
+                          "a dot naselli at libero dot it",
+                          0);
+
     aboutData.addCredit ( "Fabien Salvi",
                           I18N_NOOP("Webmaster"),
                           "fabien dot ubuntu at gmail dot com",
