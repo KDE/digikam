@@ -54,13 +54,17 @@ public:
     //QList<CollectionLocation *> allAvailableLocations();
     QStringList allAvailableAlbumRootPaths();
 
-    CollectionLocation *locationForAlbumRoot(KURL fileUrl);
-    CollectionLocation *locationForAlbumRootPath(QString albumRootPath);
+    CollectionLocation *locationForAlbumRoot(const KURL &fileUrl);
+    CollectionLocation *locationForAlbumRootPath(const QString &albumRootPath);
 
-    KURL    albumRoot(KURL fileUrl);
-    QString albumRootPath(KURL fileUrl);
+    KURL    albumRoot(const KURL &fileUrl);
+    QString albumRootPath(const KURL &fileUrl);
+    //QString albumRootPath(const QString &filePath);
+    bool    isAlbumRoot(const KURL &fileUrl);
+    //bool    isAlbumRoot(const QString &filePath);
 
-    QString album(KURL fileUrl);
+    QString album(const KURL &fileUrl);
+    //QString album(const QString &filePath);
 
     /**
      * Returns just one album root, out of the list of available location,

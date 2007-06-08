@@ -79,21 +79,21 @@ QStringList CollectionManager::allAvailableAlbumRootPaths()
     return QStringList() << DatabaseAccess::albumRoot();
 }
 
-CollectionLocation *CollectionManager::locationForAlbumRoot(KURL fileUrl)
+CollectionLocation *CollectionManager::locationForAlbumRoot(const KURL &fileUrl)
 {
     if (!d->location)
         d->location = new SimpleLocation(DatabaseAccess::albumRoot());
     return d->location;
 }
 
-CollectionLocation *CollectionManager::locationForAlbumRootPath(QString albumRootPath)
+CollectionLocation *CollectionManager::locationForAlbumRootPath(const QString &albumRootPath)
 {
     if (!d->location)
         d->location = new SimpleLocation(DatabaseAccess::albumRoot());
     return d->location;
 }
 
-KURL CollectionManager::albumRoot(KURL fileUrl)
+KURL CollectionManager::albumRoot(const KURL &fileUrl)
 {
     QString path = fileUrl.path();
     if (path.startsWith(DatabaseAccess::albumRoot()))
@@ -105,7 +105,7 @@ KURL CollectionManager::albumRoot(KURL fileUrl)
     return KURL();
 }
 
-QString CollectionManager::albumRootPath(KURL fileUrl)
+QString CollectionManager::albumRootPath(const KURL &fileUrl)
 {
     QString path = fileUrl.path();
     if (path.startsWith(DatabaseAccess::albumRoot()))
@@ -115,11 +115,19 @@ QString CollectionManager::albumRootPath(KURL fileUrl)
     return QString();
 }
 
-QString CollectionManager::album(KURL fileUrl)
+bool CollectionManager::isAlbumRoot(const KURL &fileUrl)
 {
-    QString path = fileUrl.path();
+    return album(fileUrl) == "/";
+}
+
+QString CollectionManager::album(const KURL &fileUrl)
+{
+    QString path = fileUrl.path(-1);
     path.remove(DatabaseAccess::albumRoot());
-    return QDir::cleanDirPath(path);
+    path = QDir::cleanDirPath(path);
+    if (path.isEmpty())
+        path = "/";
+    return path;
 }
 
 KURL CollectionManager::oneAlbumRoot()
