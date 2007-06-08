@@ -118,7 +118,7 @@ void kio_digikamalbums::special(const QByteArray& data)
     if (scan)
     {
         Digikam::CollectionScanner scanner;
-        scanner.scanAlbum(dbUrl.albumRootPath(), dbUrl.album());
+        scanner.scan(dbUrl.albumRootPath(), dbUrl.album());
         finished();
         return;
     }

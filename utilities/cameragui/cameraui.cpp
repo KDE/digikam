@@ -728,7 +728,7 @@ void CameraUI::finishDialog()
          it != d->foldersToScan.end(); ++it)
     {
         //DDebug() << "Scanning " << (*it) << endl;
-        scanner.scanAlbumScanLib(*it);
+        scanner.scanAlbum(*it);
     }
 
     // Never call finalScan after deleteLater() - ScanLib will call processEvent(),
