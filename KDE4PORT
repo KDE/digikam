@@ -1,0 +1,96 @@
+List of directories ported by developpers:
+
+    DIRECTORIES                 WHO              REMARK
+
+   |-project                    -                NOTHING TO DO
+   |-sqlite                     Gilles           CMake port only
+
+   |-data                       Gilles           CMake port only
+   |---about                    Gilles           CMake port only
+   |---icons                    Gilles           CMake port only
+   |---pics                     Gilles           CMake port only
+   |---profiles                 Gilles           CMake port only
+   |---themes                   Gilles           CMake port only
+
+   |-digikam
+   |-kioslave
+
+   |-showfoto
+   |---icons                    Gilles           CMake port only
+   |---pics                     Gilles           CMake port only
+   |---setup
+
+   |-utilities
+   |---batch
+   |---cameragui
+   |---hotplug                  Gilles           CMake port only
+   |---imageeditor
+   |-----canvas
+   |-----editor
+   |-----tools
+   |---lighttable
+   |---scripts                  Gilles           CMake port only
+   |---setup
+   |---slideshow
+   |---splashscreen
+
+   |-libs
+   |---curves                   Gilles
+   |---database                 Marcel
+   |---dialogs
+   |---dimg
+   |-----filters
+   |-----loaders
+   |---dmetadata                Gilles
+   |---greycstoration           Gilles
+   |---histogram                Gilles
+   |---imageproperties
+   |---jpegutils                Gilles
+   |---levels                   Gilles
+   |---lprof                    Gilles           CMake port only
+   |---themeengine
+   |---threadimageio            Marcel
+   |---thumbbar                 Gilles
+   |---whitebalance             Gilles
+   |---widgets
+   |-----common
+   |-----iccprofiles
+   |-----imageplugins
+   |-----metadata
+
+   |-imageplugins
+   |---adjustcurves
+   |---adjustlevels
+   |---antivignetting
+   |---blurfx
+   |---border
+   |-----patterns
+   |---channelmixer
+   |---charcoal
+   |---colorfx
+   |---coreplugin
+   |-----hsl
+   |-----ratiocrop
+   |-----sharpnesseditor
+   |-------clapack
+   |---distortionfx
+   |---emboss
+   |---filmgrain
+   |---freerotation
+   |---hotpixels
+   |---infrared
+   |---inpainting
+   |---inserttext
+   |---lensdistortion
+   |---noisereduction
+   |---oilpaint
+   |---perspective
+   |---raindrop
+   |---restoration
+   |---sheartool
+   |---superimpose
+   |---texture
+   |-----patterns
+   |---whitebalance
+
+   |-themedesigner
