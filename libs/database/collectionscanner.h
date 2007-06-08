@@ -35,6 +35,7 @@
 
 #include "digikam_export.h"
 #include "databaseaccess.h"
+#include "albuminfo.h"
 
 namespace Digikam
 {
@@ -44,15 +45,12 @@ class DIGIKAM_EXPORT CollectionScanner : public QObject
     Q_OBJECT
 public:
 
-    // Scanning from ioslave
-    void scanAlbum(const QString &albumRoot, const QString &album);
-    void scanOneAlbum(const QString &albumRoot, const QString &album);
-    void removeInvalidAlbums(const QString &albumRoot);
-
-    // Scanning from Scanlib
+    void scan(const QString &folderPath);
+    void scan(const QString &albumRoot, const QString& album);
     void scanAlbums();
-    void scanAlbumScanLib(const QString& filePath);
-    void scanAlbumScanLib(const QString &albumRoot, const QString& album);
+
+    void scanAlbum(const QString& filePath);
+    void scanAlbum(const QString &albumRoot, const QString& album);
 
     void scanForStaleAlbums();
     void scanForStaleAlbums(const QString &albumRoot);
@@ -88,7 +86,7 @@ protected:
     int countItemsInFolder(const QString& directory);
 
     QValueList< QPair<QString,int> >  m_filesToBeDeleted;
-    QMap<QString, int> m_foldersToBeDeleted;
+    QValueList<AlbumShortInfo> m_foldersToBeDeleted;
 
 };
 

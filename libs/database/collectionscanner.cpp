@@ -54,150 +54,6 @@
 namespace Digikam
 {
 
-
-// ------------------------- Ioslave scanning code ----------------------------------
-
-void CollectionScanner::scanAlbum(const QString &albumRoot, const QString &album)
-{
-    scanOneAlbum(albumRoot, album);
-    removeInvalidAlbums(albumRoot);
-}
-
-void CollectionScanner::scanOneAlbum(const QString &albumRoot, const QString &album)
-{
-    DDebug() << "CollectionScanner::scanOneAlbum " << albumRoot << "/" << album << endl;
-    QDir dir(albumRoot + album);
-    if (!dir.exists() || !dir.isReadable())
-    {
-        return;
-    }
-
-    {
-        // scan albums
-
-        QStringList currAlbumList;
-
-        // get sub albums, but only direct subalbums (Album/*, not Album/*/*)
-        currAlbumList = DatabaseAccess().db()->getSubalbumsForPath(albumRoot, album, true);
-        DDebug() << "currAlbumList is " << currAlbumList << endl;
-
-        const QFileInfoList* infoList = dir.entryInfoList(QDir::Dirs);
-        if (!infoList)
-            return;
-
-        QFileInfoListIterator it(*infoList);
-        QFileInfo* fi;
-
-        QStringList newAlbumList;
-        while ((fi = it.current()) != 0)
-        {
-            ++it;
-
-            if (fi->fileName() == "." || fi->fileName() == "..")
-            {
-                continue;
-            }
-
-            QString u = QDir::cleanDirPath(album + '/' + fi->fileName());
-
-            if (currAlbumList.contains(u))
-            {
-                continue;
-            }
-
-            newAlbumList.append(u);
-        }
-
-        for (QStringList::iterator it = newAlbumList.begin();
-             it != newAlbumList.end(); ++it)
-        {
-            DDebug() << "New Album: " << *it << endl;
-
-            QFileInfo fi(albumRoot + *it);
-            DatabaseAccess().db()->addAlbum(albumRoot, *it, QString(), fi.lastModified().date(), QString());
-
-            scanAlbum(albumRoot, *it);
-        }
-    }
-
-    if (album != "/")
-    {
-        // scan files
-
-        QStringList values;
-        int albumID;
-        QStringList currItemList;
-
-        {
-            DatabaseAccess access;
-            albumID = access.db()->getAlbumForPath(albumRoot, album, false);
-
-            if (albumID == -1)
-                return;
-
-            currItemList = access.db()->getItemNamesInAlbum(albumID);
-        }
-
-        const QFileInfoList* infoList = dir.entryInfoList(QDir::Files);
-        if (!infoList)
-            return;
-
-        QFileInfoListIterator it(*infoList);
-        QFileInfo* fi;
-
-        // add any new files we find to the db
-        while ((fi = it.current()) != 0)
-        {
-            ++it;
-
-            // ignore temp files we created ourselves
-            if (fi->extension(true) == "digikamtempfile.tmp")
-            {
-                continue;
-            }
-
-            if (currItemList.contains(fi->fileName()))
-            {
-                currItemList.remove(fi->fileName());
-                continue;
-            }
-
-            addItem(albumID, albumRoot, album, fi->fileName());
-        }
-
-        DatabaseAccess access;
-        // currItemList now contains deleted file list. remove them from db
-        for (QStringList::iterator it = currItemList.begin();
-             it != currItemList.end(); ++it)
-        {
-            access.db()->deleteItem(albumID, *it);
-        }
-    }
-}
-
-void CollectionScanner::removeInvalidAlbums(const QString &albumRoot)
-{
-    DatabaseAccess access;
-
-    QValueList<AlbumShortInfo> albumList = access.db()->getAlbumShortInfos();
-    QValueList<AlbumShortInfo> toBeDeleted;
-
-    for (QValueList<AlbumShortInfo>::iterator it = albumList.begin(); it != albumList.end(); ++it)
-    {
-        QFileInfo fileInfo((*it).albumRoot + (*it).url);
-        if (!fileInfo.exists())
-            toBeDeleted << (*it);
-    }
-
-    DatabaseTransaction transaction(&access);
-    for (QValueList<AlbumShortInfo>::iterator it = toBeDeleted.begin(); it != toBeDeleted.end(); ++it)
-    {
-        DDebug() << "Removing album " << (*it).albumRoot + '/' + (*it).url << endl;
-        access.db()->deleteAlbum((*it).id);
-    }
-}
-
-
 // ------------------- CollectionScanner code -------------------------
 
 void CollectionScanner::scanForStaleAlbums()
@@ -209,32 +65,65 @@ void CollectionScanner::scanForStaleAlbums()
 
 void CollectionScanner::scanForStaleAlbums(const QString &albumRoot)
 {
-    AlbumInfo::List aList = DatabaseAccess().db()->scanAlbums();
+    Q_UNUSED(albumRoot);
+    QValueList<AlbumShortInfo> albumList = DatabaseAccess().db()->getAlbumShortInfos();
+    QValueList<AlbumShortInfo> toBeDeleted;
 
-    for (AlbumInfo::List::iterator it = aList.begin(); it != aList.end(); ++it)
+    for (QValueList<AlbumShortInfo>::iterator it = albumList.begin(); it != albumList.end(); ++it)
     {
-        AlbumInfo info = *it;
-        info.url = QDir::cleanDirPath(info.url);
-        QFileInfo fi(albumRoot + info.url);
-        if (!fi.exists() || !fi.isDir())
-        {
-            m_foldersToBeDeleted[info.url] = info.id;
-        }
+        QFileInfo fileInfo((*it).albumRoot + (*it).url);
+        if (!fileInfo.exists() || !fileInfo.isDir())
+            m_foldersToBeDeleted << (*it);
     }
 }
 
 QStringList CollectionScanner::formattedListOfStaleAlbums()
 {
-    return m_foldersToBeDeleted.keys();
+    QStringList list;
+    for (QValueList<AlbumShortInfo>::iterator it = m_foldersToBeDeleted.begin(); it != m_foldersToBeDeleted.end(); ++it)
+    {
+        list << (*it).url;
+    }
+    return list;
 }
 
 void CollectionScanner::removeStaleAlbums()
 {
     DatabaseAccess access;
-    for (QMap<QString, int>::const_iterator it = m_foldersToBeDeleted.begin() ; it != m_foldersToBeDeleted.end(); ++it)
+    DatabaseTransaction transaction(&access);
+    for (QValueList<AlbumShortInfo>::iterator it = m_foldersToBeDeleted.begin(); it != m_foldersToBeDeleted.end(); ++it)
     {
-        DDebug() << "Removing Album: " << it.key() << endl;
-        access.db()->deleteAlbum( it.data() );
+        DDebug() << "Removing album " << (*it).albumRoot + '/' + (*it).url << endl;
+        access.db()->deleteAlbum((*it).id);
+    }
+}
+
+QStringList CollectionScanner::formattedListOfStaleFiles()
+{
+    QStringList listToBeDeleted;
+
+    DatabaseAccess access;
+    for (QValueList< QPair<QString,int> >::iterator it = m_filesToBeDeleted.begin();
+        it != m_filesToBeDeleted.end(); ++it)
+    {
+        QString location = " (" + access.db()->getAlbumURL((*it).second) + ')';
+
+        listToBeDeleted.append((*it).first + location);
+    }
+
+    return listToBeDeleted;
+}
+
+void CollectionScanner::removeStaleFiles()
+{
+    DatabaseAccess access;
+    DatabaseTransaction transaction(&access);
+    for (QValueList< QPair<QString,int> >::iterator it = m_filesToBeDeleted.begin();
+         it != m_filesToBeDeleted.end(); ++it)
+    {
+        DDebug() << "Removing: " << (*it).first << " in "
+                << (*it).second << endl;
+        access.db()->deleteItem( (*it).second, (*it).first );
     }
 }
 
@@ -258,21 +147,77 @@ void CollectionScanner::scanAlbums()
             if ((*fileIt) == "." || (*fileIt) == "..")
                 continue;
 
-            scanAlbumScanLib(*it, '/' + (*fileIt));
+            scanAlbum(*it, '/' + (*fileIt));
         }
     }
 }
 
-void CollectionScanner::scanAlbumScanLib(const QString& filePath)
+void CollectionScanner::scan(const QString& folderPath)
 {
-    QString albumRoot = DatabaseAccess::albumRoot();
-    QString album = filePath;
-    album = QDir::cleanDirPath(album.remove(albumRoot));
-    scanAlbumScanLib(albumRoot, album);
+    CollectionManager *manager = CollectionManager::instance();
+    KURL url;
+    url.setPath(folderPath);
+    QString albumRoot = manager->albumRootPath(url);
+    QString album = manager->album(url);
+
+    if (albumRoot.isNull())
+    {
+        DWarning() << "scanAlbums(QString): folder " << folderPath << " not found in collection." << endl;
+        return;
+    }
+
+    scan(albumRoot, album);
 }
 
-void CollectionScanner::scanAlbumScanLib(const QString &albumRoot, const QString& album)
+void CollectionScanner::scan(const QString &albumRoot, const QString& album)
 {
+    // Step one: remove invalid albums
+    scanForStaleAlbums(albumRoot);
+    removeStaleAlbums();
+
+    emit totalFilesToScan(countItemsInFolder(albumRoot + album));
+
+    // Step two: Scan directories
+    if (album == "/")
+    {
+        // Don't scan files under album root, only descend into directories (?)
+        QDir dir(albumRoot + album);
+        QStringList fileList(dir.entryList(QDir::Dirs));
+
+        DatabaseTransaction transaction;
+        for (QStringList::iterator fileIt = fileList.begin(); fileIt != fileList.end(); ++fileIt)
+        {
+            if ((*fileIt) == "." || (*fileIt) == "..")
+                continue;
+
+            scanAlbum(albumRoot, '/' + (*fileIt));
+        }
+    }
+    else
+    {
+        DatabaseTransaction transaction;
+        scanAlbum(albumRoot, album);
+    }
+
+    // Step three: Remove invalid files
+    removeStaleFiles();
+}
+
+void CollectionScanner::scanAlbum(const QString& filePath)
+{
+    KURL url;
+    url.setPath(filePath);
+    scanAlbum(CollectionManager::instance()->albumRootPath(url), CollectionManager::instance()->album(url));
+}
+
+void CollectionScanner::scanAlbum(const QString &albumRoot, const QString& album)
+{
+    // + Adds album if it does not yet exist in the db.
+    // + Recursively scans subalbums of album.
+    // + Adds files if they do not yet exist in the db.
+    // + Adds stale files from the db to m_filesToBeDeleted
+    // - Does not add stale albums to m_foldersToBeDeleted.
+
     QDir dir( albumRoot + album );
     if ( !dir.exists() or !dir.isReadable() )
     {
@@ -283,15 +228,18 @@ void CollectionScanner::scanAlbumScanLib(const QString &albumRoot, const QString
 
     emit startScanningAlbum(albumRoot, album);
 
-    int albumID = DatabaseAccess().db()->getAlbumForPath(albumRoot, album, true);
+    // get album id if album exists
+    int albumID = DatabaseAccess().db()->getAlbumForPath(albumRoot, album, false);
 
-    if (albumID <= 0)
+    if (albumID == -1)
     {
-        DWarning() << "Album ID == -1: " << album << endl;
+        QFileInfo fi(albumRoot + album);
+        albumID = DatabaseAccess().db()->addAlbum(albumRoot, album, QString(), fi.lastModified().date(), QString());
     }
 
     QStringList filesInAlbum = DatabaseAccess().db()->getItemNamesInAlbum( albumID );
 
+    // Qt4: use QSet<QString>
     QMap<QString, bool> filesFoundInDB;
 
     for (QStringList::iterator it = filesInAlbum.begin();
@@ -301,6 +249,7 @@ void CollectionScanner::scanAlbumScanLib(const QString &albumRoot, const QString
     }
 
     const QFileInfoList *list = dir.entryInfoList();
+    // Qt4: remove if-clause
     if (!list)
     {
         emit finishedScanningAlbum(albumRoot, album, 0);
@@ -318,6 +267,11 @@ void CollectionScanner::scanAlbumScanLib(const QString &albumRoot, const QString
             {
                 filesFoundInDB.erase(fi->fileName());
             }
+            // ignore temp files we created ourselves
+            else if (fi->extension(true) == "digikamtempfile.tmp")
+            {
+                continue;
+            }
             else
             {
                 DDebug() << "Adding item " << fi->fileName() << endl;
@@ -326,7 +280,7 @@ void CollectionScanner::scanAlbumScanLib(const QString &albumRoot, const QString
         }
         else if ( fi->isDir() && fi->fileName() != "." && fi->fileName() != "..")
         {
-            scanAlbumScanLib( fi->filePath() );
+            scanAlbum( albumRoot, album + '/' + fi->fileName() );
         }
 
         ++it;
@@ -387,35 +341,6 @@ void CollectionScanner::updateItemsWithoutDate()
                 }
             }
         }
-    }
-}
-
-QStringList CollectionScanner::formattedListOfStaleFiles()
-{
-    QStringList listToBeDeleted;
-
-    DatabaseAccess access;
-    for (QValueList< QPair<QString,int> >::iterator it = m_filesToBeDeleted.begin();
-        it != m_filesToBeDeleted.end(); ++it)
-    {
-        QString location = " (" + access.db()->getAlbumURL((*it).second) + ')';
-
-        listToBeDeleted.append((*it).first + location);
-    }
-
-    return listToBeDeleted;
-}
-
-void CollectionScanner::removeStaleFiles()
-{
-    DatabaseAccess access;
-    DatabaseTransaction transaction(&access);
-    for (QValueList< QPair<QString,int> >::iterator it = m_filesToBeDeleted.begin();
-         it != m_filesToBeDeleted.end(); ++it)
-    {
-        DDebug() << "Removing: " << (*it).first << " in "
-                << (*it).second << endl;
-        access.db()->deleteItem( (*it).second, (*it).first );
     }
 }
 
@@ -535,6 +460,149 @@ void CollectionScanner::updateItemDate(Digikam::DatabaseAccess &access, int albu
     access.db()->setItemDate(albumID, fileName, datetime);
 }
 
+/*
+// ------------------------- Ioslave scanning code ----------------------------------
+
+void CollectionScanner::scanAlbum(const QString &albumRoot, const QString &album)
+{
+    scanOneAlbum(albumRoot, album);
+    removeInvalidAlbums(albumRoot);
+}
+
+void CollectionScanner::scanOneAlbum(const QString &albumRoot, const QString &album)
+{
+    DDebug() << "CollectionScanner::scanOneAlbum " << albumRoot << "/" << album << endl;
+    QDir dir(albumRoot + album);
+    if (!dir.exists() || !dir.isReadable())
+    {
+        return;
+    }
+
+    {
+        // scan albums
+
+        QStringList currAlbumList;
+
+        // get sub albums, but only direct subalbums (Album/ *, not Album/ * / *)
+        currAlbumList = DatabaseAccess().db()->getSubalbumsForPath(albumRoot, album, true);
+        DDebug() << "currAlbumList is " << currAlbumList << endl;
+
+        const QFileInfoList* infoList = dir.entryInfoList(QDir::Dirs);
+        if (!infoList)
+            return;
+
+        QFileInfoListIterator it(*infoList);
+        QFileInfo* fi;
+
+        QStringList newAlbumList;
+        while ((fi = it.current()) != 0)
+        {
+            ++it;
+
+            if (fi->fileName() == "." || fi->fileName() == "..")
+            {
+                continue;
+            }
+
+            QString u = QDir::cleanDirPath(album + '/' + fi->fileName());
+
+            if (currAlbumList.contains(u))
+            {
+                continue;
+            }
+
+            newAlbumList.append(u);
+        }
+
+        for (QStringList::iterator it = newAlbumList.begin();
+             it != newAlbumList.end(); ++it)
+        {
+            DDebug() << "New Album: " << *it << endl;
+
+            QFileInfo fi(albumRoot + *it);
+            DatabaseAccess().db()->addAlbum(albumRoot, *it, QString(), fi.lastModified().date(), QString());
+
+            scanAlbum(albumRoot, *it);
+        }
+    }
+
+    if (album != "/")
+    {
+        // scan files
+
+        QStringList values;
+        int albumID;
+        QStringList currItemList;
+
+        {
+            DatabaseAccess access;
+            albumID = access.db()->getAlbumForPath(albumRoot, album, false);
+
+            if (albumID == -1)
+                return;
+
+            currItemList = access.db()->getItemNamesInAlbum(albumID);
+        }
+
+        const QFileInfoList* infoList = dir.entryInfoList(QDir::Files);
+        if (!infoList)
+            return;
+
+        QFileInfoListIterator it(*infoList);
+        QFileInfo* fi;
+
+        // add any new files we find to the db
+        while ((fi = it.current()) != 0)
+        {
+            ++it;
+
+            // ignore temp files we created ourselves
+            if (fi->extension(true) == "digikamtempfile.tmp")
+            {
+                continue;
+            }
+
+            if (currItemList.contains(fi->fileName()))
+            {
+                currItemList.remove(fi->fileName());
+                continue;
+            }
+
+            addItem(albumID, albumRoot, album, fi->fileName());
+        }
+
+        DatabaseAccess access;
+        // currItemList now contains deleted file list. remove them from db
+        for (QStringList::iterator it = currItemList.begin();
+             it != currItemList.end(); ++it)
+        {
+            access.db()->deleteItem(albumID, *it);
+        }
+    }
+}
+
+void CollectionScanner::removeInvalidAlbums(const QString &albumRoot)
+{
+    DatabaseAccess access;
+
+    QValueList<AlbumShortInfo> albumList = access.db()->getAlbumShortInfos();
+    QValueList<AlbumShortInfo> toBeDeleted;
+
+    for (QValueList<AlbumShortInfo>::iterator it = albumList.begin(); it != albumList.end(); ++it)
+    {
+        QFileInfo fileInfo((*it).albumRoot + (*it).url);
+        if (!fileInfo.exists())
+            toBeDeleted << (*it);
+    }
+
+    DatabaseTransaction transaction(&access);
+    for (QValueList<AlbumShortInfo>::iterator it = toBeDeleted.begin(); it != toBeDeleted.end(); ++it)
+    {
+        DDebug() << "Removing album " << (*it).albumRoot + '/' + (*it).url << endl;
+        access.db()->deleteAlbum((*it).id);
+    }
+}
+*/
 
 
 
