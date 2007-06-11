@@ -79,40 +79,40 @@ public:
     };
 
 public:
-        
+
     MainWindow();
     ~MainWindow();
 
 private slots:
 
     void slotLoad();
-    void slotSave();    
+    void slotSave();
     void slotPropertyChanged();
     void slotUpdateTheme();
     void slotThemeChanged();
 
 private:
-    
-    QLabel*         m_bevelLabel;
-    QLabel*         m_gradientLabel;
-    QLabel*         m_begColorLabel;
-    QLabel*         m_endColorLabel;
-    QLabel*         m_borderColorLabel;
 
-    QComboBox*      m_propertyCombo;
-    QComboBox*      m_bevelCombo;
-    QComboBox*      m_gradientCombo;
+    QLabel             *m_bevelLabel;
+    QLabel             *m_gradientLabel;
+    QLabel             *m_begColorLabel;
+    QLabel             *m_endColorLabel;
+    QLabel             *m_borderColorLabel;
 
-    QCheckBox*      m_addBorderCheck;
+    QComboBox          *m_propertyCombo;
+    QComboBox          *m_bevelCombo;
+    QComboBox          *m_gradientCombo;
 
-    QMap<int,int>   m_bevelMap;
-    QMap<int,int>   m_bevelReverseMap;
-    QMap<int,int>   m_gradientMap;
-    QMap<int,int>   m_gradientReverseMap;
+    QCheckBox          *m_addBorderCheck;
 
-    KColorButton*   m_endColorBtn;
-    KColorButton*   m_begColorBtn;
-    KColorButton*   m_borderColorBtn;
+    QMap<int,int>       m_bevelMap;
+    QMap<int,int>       m_bevelReverseMap;
+    QMap<int,int>       m_gradientMap;
+    QMap<int,int>       m_gradientReverseMap;
+
+    KColorButton       *m_endColorBtn;
+    KColorButton       *m_begColorBtn;
+    KColorButton       *m_borderColorBtn;
 
     FolderView         *m_folderView;
     ThemedIconView     *m_iconView;
