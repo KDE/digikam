@@ -35,4 +35,5 @@ Description[sv]=I/O-slav för Digikams datum
 Description[tr]=digiKam tarihler kioslave
 Description[uk]=Підлеглий В/В дат для digiKam
 Description[vi]=kioslave ngày tháng digiKam
+Description[xx]=xxdigiKam dates kioslavexx
 Class=:local

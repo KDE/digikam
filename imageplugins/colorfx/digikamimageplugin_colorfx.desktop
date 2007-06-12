@@ -4,6 +4,7 @@ Name[it]=PluginImmagini_EffettiDiColore
 Name[nl]=Afbeeldingsplugin_Kleureffecten
 Name[sv]=Insticksprogram med färgeffekter
 Name[tr]=ResimEklentisi_RenkFx
+Name[xx]=xxImagePlugin_ColorFxxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -23,6 +24,7 @@ Comment[sk]=digiKam plugin pre špeciálne farebné efekty
 Comment[sv]=Digikam insticksprogram med specialeffekter för färg
 Comment[tr]=digiKam için özel renk eklentisi
 Comment[uk]=Втулок спецефектів кольорів для digiKam
+Comment[xx]=xxColor special effects plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_colorfx
 author=Caulier Gilles, caulier dot gilles at gmail dot com
