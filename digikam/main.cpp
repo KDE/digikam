@@ -83,6 +83,7 @@ static KCmdLineOptions options[] =
 {
     { "detect-camera", I18N_NOOP("Automatically detect and open camera"), 0 },
     { "download-from <path>", I18N_NOOP("Open camera dialog at <path>"), 0 },
+    { "album-root <path>", I18N_NOOP("Start digikam with the album root <path>"), 0 }, // TEMPORARY SOLUTION
     KCmdLineLastOption
 };
 
@@ -277,6 +278,16 @@ int main(int argc, char *argv[])
 
     config->setGroup("Album Settings");
     QString albumPath = config->readPathEntry("Album Path");
+
+    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+    // TEMPORARY SOLUTION
+    bool priorityAlbumPath = false;
+    if (args && args->isSet("album-root"))
+    {
+        priorityAlbumPath = true;
+        albumPath = args->getOption("album-root");
+    }
+
     QFileInfo dirInfo(albumPath);
 
     // version 0.6 was the version when the new Albums Library
@@ -293,9 +304,8 @@ int main(int argc, char *argv[])
         return app.exec();
     }
 
-    Digikam::DatabaseAccess::setParameters(Digikam::DatabaseParameters::parametersForSQLiteDefaultFile(albumPath));
     Digikam::AlbumManager* man = new Digikam::AlbumManager();
-    man->initialize();
+    man->setAlbumRoot(albumPath, priorityAlbumPath); // TEMPORARY SOLUTION
 
     // Register image formats (especially for TIFF )
     KImageIO::registerFormats();
@@ -304,8 +314,7 @@ int main(int argc, char *argv[])
 
     app.setMainWidget(digikam);
     digikam->show();
-    
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+
     if (args && args->isSet("detect-camera"))
         digikam->autoDetect();
     else if (args && args->isSet("download-from"))
@@ -315,7 +324,7 @@ int main(int argc, char *argv[])
     QStringList tipsFiles;
     tipsFiles.append("digikam/tips");
     tipsFiles.append("kipi/tips");
-    
+
     KGlobal::locale()->insertCatalogue("kipiplugins");
 
     KTipDialog::showMultiTip(0, tipsFiles, false);

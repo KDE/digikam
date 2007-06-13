@@ -89,7 +89,8 @@ class AlbumManagerPriv
 {
 public:
 
-    //AlbumDB          *db;
+    QString           priorityAlbumRoot;
+
     AlbumItemHandler *itemHandler;
 
     PAlbum           *rootPAlbum;
@@ -123,8 +124,7 @@ AlbumManager::AlbumManager()
     m_instance    = this;
 
     d = new AlbumManagerPriv;
-    
-    //d->db = new AlbumDB;
+
     d->dateListJob = 0;
 
     d->rootPAlbum = 0;
@@ -147,22 +147,34 @@ AlbumManager::~AlbumManager()
         d->dateListJob->kill();
         d->dateListJob = 0;
     }
-    
+
     delete d->rootPAlbum;
     delete d->rootTAlbum;
     delete d->rootDAlbum;
     delete d->rootSAlbum;
 
     delete d->dirWatch;
-    
-    //delete d->db;
+
     delete d;
 
     m_instance = 0;
 }
 
-void AlbumManager::initialize()
+void AlbumManager::setAlbumRoot(const QString &albumRoot, bool priority)
 {
+    // TEMPORARY SOLUTION
+    // This is to ensure that the setup does not overrule the command line.
+    // TODO: Replace with a better solution
+    if (priority)
+    {
+        d->priorityAlbumRoot = albumRoot;
+    }
+    else if (!d->priorityAlbumRoot.isNull())
+    {
+        // ignore change without priority
+        return;
+    }
+
     d->changed = true;
 
     if (d->dateListJob)
@@ -192,6 +204,8 @@ void AlbumManager::initialize()
     d->rootSAlbum = 0;
 
     // -- Database initialization -------------------------------------------------
+
+    Digikam::DatabaseAccess::setParameters(Digikam::DatabaseParameters::parametersForSQLiteDefaultFile(albumRoot));
 
     if (!Digikam::DatabaseAccess::checkReadyForUse())
     {

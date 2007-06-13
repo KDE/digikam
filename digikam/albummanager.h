@@ -99,18 +99,13 @@ public:
      */
     static AlbumManager* instance();
 
-    /**
-     * returns a pointer to the current AlbumDB
-     */
-    //AlbumDB*   albumDB();
-
     /** @name Library path And Scanning
      */
     //@{
     /**
     * Initialize
     */
-    void       initialize();
+    void setAlbumRoot(const QString &albumRoot, bool priority); // TEMPORARY SOLUTION
 
     /**
     * starts scanning the libraryPath and listing the albums. If the

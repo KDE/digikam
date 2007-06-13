@@ -1532,8 +1532,7 @@ void DigikamApp::slotSetupChanged()
     //if(d->albumSettings->getAlbumLibraryPath() != d->albumManager->getLibraryPath())
       //  d->view->clearHistory();
 
-    //TODO!! Change collection location
-    //d->albumManager->setLibraryPath(d->albumSettings->getAlbumLibraryPath());
+    d->albumManager->setAlbumRoot(d->albumSettings->getAlbumLibraryPath(), false);// TEMPORARY SOLUTION
     d->albumManager->startScan();
 
     d->view->applySettings(d->albumSettings);
