@@ -1,3 +1,154 @@
+v0.9.2-final - 2007-06-13
+----------------------------------------------------------------------------
+
+2007-06-11 20:11  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/digikamview.cpp,
+	  branches/extragear/kde3/graphics/digikam/project/project.kdevelop,
+	  branches/extragear/kde3/graphics/digikam/showfoto/showfoto.cpp:
+	  add "JPE" and "TIF" type mime witch are not provide by KDE mime
+	  type by default
+
+2007-06-11 11:51  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/AUTHORS: add Arnd to
+	  contrib list
+
+2007-06-11 11:46  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam.lsm: polish
+
+2007-06-11 11:44  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/configure.in.bot: polish
+
+2007-06-11 11:42  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/configure.in.in: fix
+	  likdcraw depency
+
+2007-06-11 11:41  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/README: update
+
+2007-06-11 10:33  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/themedesigner/mainwindow.h:
+	  compile with enable-final option
+
+2007-06-07 17:07  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2007-06-07 14:29  mwiesweg
+
+	* branches/extragear/kde3/graphics/digikam/libs/threadimageio/loadingdescription.cpp,
+	  branches/extragear/kde3/graphics/digikam/libs/threadimageio/loadingdescription.h,
+	  branches/extragear/kde3/graphics/digikam/libs/threadimageio/previewloadthread.cpp:
+	  Apply patch from Jakob Oestergaard to reflect 8/16 bit loading
+	  in the cache key, needed to distinguish between lighttable,
+	  histogram
+	  and image editor loading.
+	  
+	  Adapt equalsOrBetterThan to only accept changes in the
+	  halfSizeColorImage field.
+	  Adapt possibleCacheKeys.
+	  Move constructors from .h to .cpp
+	  Change some comments.
+	  
+	  CCBUG: 146464
+
+2007-06-07 08:59  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/main.cpp: add
+	  Angelo
+
+2007-06-07 08:59  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/showfoto/main.cpp: add
+	  Angelo
+
+2007-06-07 08:57  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/AUTHORS: add Angelo in
+	  team
+
+2007-06-05 22:46  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2007-06-05 22:45  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/makernotewidget.cpp:
+	  fix broken compilation duing obsolete Exiv2 depency
+	  BUG: 146436
+
+2007-06-05 17:08  mwiesweg
+
+	* branches/extragear/kde3/graphics/digikam/digikam/albumsettings.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/folderitem.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/folderview.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/icongroupitem.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/iconitem.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/iconview.h: Fix
+	  compilation of themedesigner with gcc-hidden-visibility:
+	  Export those classes that are used by Themedesigner
+
+2007-06-05 16:36  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/TODO: update
+
+2007-06-05 12:49  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/TODO: link to KDE4
+	  kdelibs port
+
+2007-06-04 16:13  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/TODO: CMake link
+
+2007-06-04 07:12  gkulzer
+
+	* branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/imageeffect_redeye.cpp:
+	  English polish and corections
+
+2007-06-04 07:04  gkulzer
+
+	* branches/extragear/kde3/graphics/digikam/imageplugins/colorfx/imageeffect_colorfx.cpp:
+	  change negative Velvia to slide film
+
+2007-06-03 21:09  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/release_digikam.rb,
+	  branches/extragear/kde3/graphics/digikam/release_digikam_docs.rb,
+	  branches/extragear/kde3/graphics/digikam/release_digikam_kde3.rb:
+	  update
+
+2007-06-03 21:08  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/version.h:
+	  update
+
+2007-06-03 21:07  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam.lsm: update
+
+2007-06-03 21:00  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2007-06-03 18:17  gkulzer
+
+	* branches/extragear/kde3/graphics/digikam/release_digikam_kde3.rb:
+	  takes new svn location into account
+
+2007-06-03 16:35  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/digikamui.rc:
+	  always increment version if something is changed into .rc file to
+	  prevent broken menu
+
+
 v0.9.2-beta3 - 2007-06-03
 ----------------------------------------------------------------------------
 
@@ -400,11 +551,6 @@ v0.9.2-beta3 - 2007-06-03
 	  declaration.
 	  
 	  CCMAIL: joey7d6@yahoo.com
-
-2007-05-29 06:45  scripty
-
-	* trunk/extragear/graphics/digikam/themedesigner/digikamthemedesigner.desktop:
-	  SVN_SILENT made messages (.desktop file)
 
 2007-05-28 14:31  cgilles
 
