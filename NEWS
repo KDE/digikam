@@ -8,7 +8,9 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 062 ==> 144590 : English labels need cleanup in digiKam.
 063 ==> 146436 : digiKam try to include Exiv2 library headers.
 064 ==> 146464 : Light Table does not deal with colour management.
-065 ==> 142133 : typo English documentation docbook.
+065 ==> 142133 : Typo English documentation docbook.
+066 ==> 146744 : Tag that contains '&' is not displayed correctly in menus.
+
 **********************************************************************************************
 
 digiKam 0.9.2-beta3 - Release date: 2007-06-03
