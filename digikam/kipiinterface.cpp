@@ -106,10 +106,7 @@ QString DigikamImageInfo::description()
     PAlbum* p = parentAlbum();
 
     if (p)
-    {
-        DatabaseAccess access;
-        access.db()->getItemCaption(p->id(), _url.fileName());
-    }
+        DatabaseAccess().db()->getItemCaption(p->id(), _url.fileName());
 
     return QString();
 }
@@ -122,8 +119,7 @@ void DigikamImageInfo::setTitle( const QString& newName )
 
     if ( p && !newName.isEmpty() )
     {
-        DatabaseAccess access;
-        access.db()->moveItem(p->id(), _url.fileName(), p->id(), newName);
+        DatabaseAccess().db()->moveItem(p->id(), _url.fileName(), p->id(), newName);
         _url = _url.upURL();
         _url.addPath(newName);
     }
@@ -141,7 +137,6 @@ void DigikamImageInfo::setDescription( const QString& description )
             imageId = access.db()->getImageId(p->id(), _url.filename());
             access.db()->setItemCaption(imageId, description);
         }
-        //ImageAttributesWatch::instance()->imageCaptionChanged(imageId);
 
         AlbumSettings *settings = AlbumSettings::instance();
         if (settings->getSaveComments())
@@ -160,10 +155,7 @@ QDateTime DigikamImageInfo::time( KIPI::TimeSpec /*spec*/ )
     PAlbum* p = parentAlbum();
 
     if (p)
-    {
-        DatabaseAccess access;
-        access.db()->getItemDate(p->id(), _url.fileName());
-    }
+        DatabaseAccess().db()->getItemDate(p->id(), _url.fileName());
 
     return QDateTime();
 }
@@ -186,7 +178,6 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
             imageId = access.db()->getImageId(p->id(), _url.filename());
             access.db()->setItemDate(imageId, time);
         }
-        //ImageAttributesWatch::instance()->imageDateChanged(imageId);
         AlbumManager::instance()->refreshItemHandler( _url );
     }
 }
@@ -678,8 +669,7 @@ void DigikamKipiInterface::delImage( const KURL& url )
     if ( palbum )
     {
         // delete the item from the database
-        DatabaseAccess access;
-        access.db()->deleteItem( palbum->id(), url.fileName() );
+        DatabaseAccess().db()->deleteItem( palbum->id(), url.fileName() );
     }
     else
     {

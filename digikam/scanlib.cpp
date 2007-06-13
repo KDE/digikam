@@ -91,8 +91,6 @@ ScanLib::ScanLib()
             this, SLOT(slotStartScanningAlbum(const QString &, const QString &)));
     connect(&m_scanner, SIGNAL(finishedScanningAlbum(const QString &, const QString &, int)),
             this, SLOT(slotFinishedScanningAlbum(const QString &, const QString &, int)));
-    connect(&m_scanner, SIGNAL(totalFilesToUpdate(int)),
-            this, SLOT(slotTotalFilesToScan(int)));
     connect(&m_scanner, SIGNAL(scanningFile(const QString &)),
             this, SLOT(slotScanningFile(const QString &)));
 }

@@ -330,11 +330,7 @@ void AlbumPropsEdit::slotDateLowButtonClicked()
 {
     setCursor( KCursor::waitCursor() );
 
-    QDate lowDate;
-    {
-        DatabaseAccess access;
-        lowDate = access.db()->getAlbumLowestDate( d->album->id() );
-    }
+    QDate lowDate = DatabaseAccess().db()->getAlbumLowestDate( d->album->id() );
 
     setCursor( KCursor::arrowCursor() );
 
@@ -346,11 +342,7 @@ void AlbumPropsEdit::slotDateHighButtonClicked()
 {
     setCursor( KCursor::waitCursor() );
 
-    QDate highDate;
-    {
-        DatabaseAccess access;
-        highDate = access.db()->getAlbumHighestDate( d->album->id() );
-    }
+    QDate highDate = DatabaseAccess().db()->getAlbumHighestDate( d->album->id() );
 
     setCursor( KCursor::arrowCursor() );
 
@@ -362,11 +354,7 @@ void AlbumPropsEdit::slotDateAverageButtonClicked()
 {
     setCursor( KCursor::waitCursor() );
 
-    QDate avDate;
-    {
-        DatabaseAccess access;
-        avDate = access.db()->getAlbumAverageDate( d->album->id() );
-    }
+    QDate avDate = DatabaseAccess().db()->getAlbumAverageDate( d->album->id() );
 
     setCursor( KCursor::arrowCursor() );
 

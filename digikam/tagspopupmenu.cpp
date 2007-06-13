@@ -225,10 +225,7 @@ void TagsPopupMenu::slotAboutToShow()
         if (d->selectedImageIDs.isEmpty())
             return;
 
-        {
-            DatabaseAccess access;
-            d->assignedTags = access.db()->getItemCommonTagIDs(d->selectedImageIDs);
-        }
+        d->assignedTags = DatabaseAccess().db()->getItemCommonTagIDs(d->selectedImageIDs);
 
         if (d->assignedTags.isEmpty())
             return;
@@ -260,8 +257,7 @@ void TagsPopupMenu::slotAboutToShow()
     {
         if (d->selectedImageIDs.count() == 1)
         {
-            DatabaseAccess access;
-            d->assignedTags = access.db()->getItemCommonTagIDs(d->selectedImageIDs);
+            d->assignedTags = DatabaseAccess().db()->getItemCommonTagIDs(d->selectedImageIDs);
         }
     }
 

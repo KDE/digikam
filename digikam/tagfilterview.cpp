@@ -557,8 +557,6 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
                 }
             }
 
-            //ImageAttributesWatch::instance()->imagesChanged(destAlbum->id());
-
             emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
         }
         else if(id == 11)
