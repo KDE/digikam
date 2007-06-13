@@ -570,10 +570,10 @@ void ShowFoto::slotOpenFile()
     // All Pictures from list must been always the first entry given by KDE API
     QString allPictures = patternList[0];
     
-    // Add RAW file format to All Pictures" type mime and remplace current.
+    // Add other files format witch are missing to All Pictures" type mime provided by KDE and remplace current.
     if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
-        allPictures.insert(allPictures.find("|"), QString(raw_file_extentions));
+        allPictures.insert(allPictures.find("|"), QString(raw_file_extentions) + QString(" *.JPE *.TIF"));
         patternList.remove(patternList[0]);
         patternList.prepend(allPictures);
     }

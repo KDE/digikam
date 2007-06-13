@@ -9,7 +9,7 @@
 
 name       = "digikam"
 egmodule   = "graphics"
-version    = "0.9.2-rc1"
+version    = "0.9.2-final"
 docs       = "no"
 
 svnbase    = "svn+ssh://gkulzer@svn.kde.org/home/kde"
@@ -57,7 +57,7 @@ puts "\n"
 puts "Fetching l10n docs for #{egmodule}/#{name}...\n"
 puts "\n"
 
-i18nlangs = `svn cat #{svnbase}/trunk/l10n/subdirs`
+i18nlangs = `svn cat #{svnbase}/trunk/l10n-kde3/subdirs`
 i18nlangsCleaned = []
 for lang in i18nlangs
   l = lang.chomp
@@ -113,7 +113,7 @@ for lang in i18nlangs
 
   for dg in addPo
     dg.chomp!
-    pofilename = "l10n/#{lang}/messages/extragear-#{egmodule}/#{dg}.po"
+    pofilename = "l10n-kde3/#{lang}/messages/extragear-#{egmodule}/#{dg}.po"
     `svn cat #{svnbase}/trunk/#{pofilename} 2> /dev/null | tee l10n/#{dg}.po`
     next if FileTest.size( "l10n/#{dg}.po" ) == 0
 

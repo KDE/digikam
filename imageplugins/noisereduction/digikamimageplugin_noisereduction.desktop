@@ -10,6 +10,7 @@ Name[pt]=ImagePlugin_Restoration
 Name[sv]=Insticksprogram för brusreducering
 Name[tr]=ResimEklentisi_Onarım
 Name[vi]=ImagePlugin_Restoration
+Name[xx]=xxImagePlugin_NoiseReductionxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8

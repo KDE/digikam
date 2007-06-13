@@ -1,0 +1,158 @@
+digiKam 0.9.2-final - Release date: 2007-06-13
+
+NEW FEATURES:
+
+
+digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+062 ==> 144590 : English labels need cleanup in digiKam.
+063 ==> 146436 : digiKam try to include Exiv2 library headers.
+064 ==> 146464 : Light Table does not deal with colour management.
+065 ==> 142133 : Typo English documentation docbook.
+066 ==> 146744 : Tag that contains '&' is not displayed correctly in menus.
+
+**********************************************************************************************
+
+digiKam 0.9.2-beta3 - Release date: 2007-06-03
+
+NEW FEATURES:
+
+General       : Light Table and Preview Mode can work with full image size instead a reduced one.
+
+----------------------------------------------------------------------------
+
+digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+059 ==> 145198 : Light-table should also work with the full image.
+060 ==> 146072 : Slideshow shows black screen.
+061 ==> 146184 : Showfoto no filename specified .
+
+**********************************************************************************************
+
+
+digiKam 0.9.2-beta2 - Release date: 2007-05-28
+
+NEW FEATURES:
+
+General       : digiKam has a new powerful tool to compare similar images side by side: 
+                the Light Table. Demo and screenshots:
+                    http://www.digikam.org/?q=node/221
+                    http://www.digikam.org/?q=node/222
+
+----------------------------------------------------------------------------
+
+digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+040 ==> 135048 : Easily compare similar images using a light-table.
+041 ==> 145159 : Improvements to the light-table.
+042 ==> 145204 : Small issues with the light-table.
+043 ==> 145227 : Change ratings via short-cuts in the light-table.
+044 ==> 145236 : Small wishes for the light-table.
+045 ==> 145237 : Small wishes for the light-table (2).
+046 ==> 145170 : Always allow zooming in/out in imageeditor.
+047 ==> 145078 : Ctrl-Y untied from Redo.
+048 ==> 145083 : Space and Shift-Space isn't used for navigation between images.
+049 ==> 145077 : Ctrl-W and Ctrl-Q shortcuts not tied to proper actions:fixed
+050 ==> 145558 : In menu view: window size/original size: ctrl-shift-z obsolete?
+051 ==> 144640 : CTRL-P does nothing in Album GUI: fixed to print action
+052 ==> 144643 : Ctrl-Shift-A does not deselect in Album GUI: fixed
+053 ==> 144644 : Ctrl-0 does not set zoom to 100% in Preview mode: Alt+Ctrl+0
+054 ==> 144650 : Shift-Space doesn't work as PageUp.
+055 ==> 145079 : Ctrl-A, Ctrl-Shift-A don't peform proper selection actions.
+056 ==> 145627 : Showfoto /path/to/directory doesn't work, while the "open dir" feature exists.
+057 ==> 146012 : Dragging an image over a tag in "tag filters" panel crashes digiKam.
+058 ==> 146032 : Panning doesn't work in Light Table.
+
+
+**********************************************************************************************
+
+digiKam 0.9.2-beta1 - Release date: 2007-05-04
+
+NEW FEATURES:
+
+General       : DigikamImagePlugins have been merged into digiKam. It more simple to release
+                on package for all. Image plugins translations are hosted to digikam.po file 
+                instead a .po file for each tool. All tools still available like plugins at 
+                the same place than image plugin core.   
+General       : New depency to libkdcraw shared library used to decode RAW file.
+                This library is shared between digiKam and kipi-plugins. The internal 
+                dcraw version used is 8.60. digiKam support now all recent digital 
+                camera RAW files released at PMA 2007.    
+General       : Make size of icons used in sidebars configurable in order to allow more
+                entries to be presented. 
+General       : Make size of icons used in album icon view more configurable using a slider 
+                in status bar. 
+General       : Removing direct Exiv2 library depency. libkexiv2 interface is used everywhere 
+                instead.  
+
+Album GUI     : Add Zoom/Scrooling functions with preview mode.
+
+Image Editor  : Usability improvement : a new pan tool is available on the right bottom 
+                corner of canvas to naviguate over large pictures.
+Image Editor  : Usability issue : Blowup and Resize tools have been merged.
+Image Editor  : Usability issue : Unsharp Mask, Refocus, and Sharpen tools have been merged
+                to a new Sharpness Editor.
+Image Editor  : Usability issue : Reorganize menu structure
+Image Editor  : Usability issue : persistant selection in all zoom mode.
+Image Editor  : Add new option to fit on current selection.
+
+Image Plugins : Red Eyes Correction tool have been completly re-writen. There is 
+                a preview of effect and the capability to taint the eye pupil with
+                a customized color. The new eye pupil can be blured to smooth the 
+                result. 
+Image Plugins : Solarize plugin is now a "Color Effects" pack including Solarize, Velvia (new
+                plugin), Neon, and Edge effects. 
+Image Plugins : Black & White converter now support a lots of B&W analog camera film 
+                types (Agfa, Ilford, Kodak). A new 'strength' setting can simulate the 
+                amount of Lens filters effect.  
+Image Plugins : Update internal CImg library to 1.1.9. The Greycstoration algorithm used 
+                by Restoration, Inpainting and Blowup plugins is faster and optimized.
+
+Showfoto      : The thumbbar is now resizable. The thumbnails contents can be redimensionned in live.
+Showfoto      : The thumbbar items can show a full configurable tool tip like digiKam album icon 
+                items tool tip.
+
+----------------------------------------------------------------------------
+
+digiKam BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 142443 : Red eye correction should change eye colour to an alternate colour.
+002 ==> 138744 : Dcraw 8.45 supports Pentax K10D.
+003 ==> 142427 : Rotate image tool too complicated.
+004 ==> 141439 : A velvia similar plugin. AKA vivid saturation.
+005 ==> 127583 : keywords, copyright, photographer info not saved to IPTC tags.
+006 ==> 142571 : Auto-exposure result is different from the preview.
+007 ==> 127377 : Restoration filter (CIMG) does not function properly.
+008 ==> 131446 : Using inpainting plugin crashes digiKam.
+009 ==> 103244 : Usability: Merge multiple similar menus into one.
+010 ==> 139790 : Image Editor: the center of the photo is moving when zooming in or out.
+011 ==> 106508 : Please change scaling behavior.
+012 ==> 137236 : Disable autozoom when picture fits in window.
+013 ==> 103645 : Zoom in with rectangle tool selection.
+014 ==> 126127 : Enlarge small images when autozoom is activated.
+015 ==> 104439 : Use left mouse button to scroll image.
+016 ==> 137391 : Picture navigation in image editor using the mouse.
+017 ==> 102029 : Configurable size of icons in sidebars.
+018 ==> 102029 : No/small icons in album tree.
+019 ==> 131155 : Smooth increasing/decreasing size of thumbnails like in iPhoto.
+020 ==> 89365  : Reorganize menu structure in Image Editor.
+021 ==> 134037 : Respect current sort order when passing list to KIPI plugin.
+022 ==> 139466 : Remove configuration of digikam image plugins.
+023 ==> 119418 : "set as album thumbnail" should work for different albums too.
+024 ==> 125916 : Problem with opening 16bit TIFF.
+025 ==> 143578 : New Pan Tool crash.
+026 ==> 118539 : Lossless image-editor for JPEGs.
+027 ==> 133913 : sRGB profile white point may be incorrect.
+028 ==> 116148 : Auto-scrolling when selecting large area.
+029 ==> 134498 : Date stamp display option for photos in full-screen mode.
+030 ==> 130525 : Saving large (>5M) jpg's result in corrupt file.
+031 ==> 132047 : Faster display of images and/or prefetch wished for.
+032 ==> 140131 : No zoom in image preview.
+033 ==> 89365  : More standard menu structure.
+034 ==> 144214 : The plural form of "child" is "children", not "childs".
+035 ==> 124487 : No way to pause a slide show.
+036 ==> 128975 : "Correct Exif Orientation Tag" does not change the mtime 
+                 of the image file.
+037 ==> 139814 : The window of digiKam exceed the screen if the resolution is 800x600.
+038 ==> 144481 : Vertical window size cannot be reduced to VGA resolution.
+039 ==> 136254 : Editing tags does not change IPTC-keywords. 

@@ -308,9 +308,12 @@ void TagsPopupMenu::iterateAndBuildMenu(QPopupMenu *menu, TAlbum *album)
         }
         
         QPixmap pix = SyncJob::getTagThumbnail((TAlbum*)a);
+        QString t = a->title();
+        t.replace('&',"&&");
+
         if (a->firstChild())
         {
-            menu->insertItem(pix, a->title(), buildSubMenu(a->id()));
+            menu->insertItem(pix, t, buildSubMenu(a->id()));
         }
         else
         {
@@ -321,7 +324,7 @@ void TagsPopupMenu::iterateAndBuildMenu(QPopupMenu *menu, TAlbum *album)
             }
             else
             {
-                menu->insertItem(pix, a->title(), d->addToID + a->id());
+                menu->insertItem(pix, t, d->addToID + a->id());
             }
         }
     }
