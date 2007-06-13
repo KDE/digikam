@@ -90,7 +90,7 @@ DatabaseParameters DatabaseParameters::parametersForSQLite(const QString &databa
 
 DatabaseParameters DatabaseParameters::parametersForSQLiteDefaultFile(const QString &directory)
 {
-    QString filePath = directory + '/' + "digikam4.db";
+    QString filePath = directory + '/' + "digikam3.db";
     filePath = QDir::cleanDirPath(filePath);
     return parametersForSQLite(filePath);
 }

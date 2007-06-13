@@ -47,7 +47,8 @@ namespace Digikam
 
 int SchemaUpdater::schemaVersion()
 {
-    return 4;
+    //return 4;
+    return 1;
 }
 
 SchemaUpdater::SchemaUpdater(DatabaseAccess *access)
@@ -111,6 +112,7 @@ bool SchemaUpdater::makeUpdates()
         // Version 3 wrote the setting "DBVersion", "1",
         // Version 4 writes "4".
 
+        /*
         DatabaseParameters parameters = m_access->parameters();
         if (parameters.isSQLite())
         {
@@ -127,6 +129,7 @@ bool SchemaUpdater::makeUpdates()
                 return updateV2toV4(digikamDB.dirPath());
             }
         }
+        */
 
         // No legacy handling: start with a fresh db
         if (!createTables())
