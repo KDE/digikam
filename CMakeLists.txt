@@ -1,0 +1,71 @@
+FIND_PACKAGE(KDE3 REQUIRED)
+
+SET(CMAKE_VERBOSE_MAKEFILE ON)
+
+ADD_DEFINITIONS(${QT_DEFINITIONS} ${KDE3_DEFINITIONS})
+
+LINK_DIRECTORIES(${KDE3_LIB_DIR})
+
+ADD_SUBDIRECTORY( sqlite ) 
+ADD_SUBDIRECTORY( sqlite ) 
+ADD_SUBDIRECTORY( libs ) 
+ADD_SUBDIRECTORY( utilities ) 
+ADD_SUBDIRECTORY( digikam ) 
+ADD_SUBDIRECTORY( showfoto ) 
+ADD_SUBDIRECTORY( data ) 
+ADD_SUBDIRECTORY( kioslave ) 
+ADD_SUBDIRECTORY( imageplugins ) 
+ADD_SUBDIRECTORY( themedesigner ) 
+
+INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+
+########### install files ###############
+
+INSTALL_FILES( /share/apps/digikam FILES  tips )
+
+
+
+#original Makefile.am contents follow:
+
+#COMPILE_FIRST = sqlite
+#
+#SUBDIRS = sqlite libs utilities digikam showfoto data kioslave imageplugins themedesigner
+#
+#EXTRA_DIST = AUTHORS COPYING ChangeLog INSTALL README TODO digikam.lsm 
+#
+#AUTOMAKE_OPTIONS = foreign 
+#
+#MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 configure.files 
+#
+#
+#tip_DATA = tips
+#tipdir = $(kde_datadir)/digikam
+#
+#messages: rc.cpp
+#	$(EXTRACTRC) `find . -name "*.ui"` >> rc.cpp
+#	$(EXTRACTRC) `find . -name "*.rc"` >> rc.cpp
+#	$(PREPARETIPS) > tips.cpp
+#	LIST=`find . -name \*.h -o -name \*.hh -o -name \*.H -o -name \*.hxx -o -name \*.hpp -o -name \*.cpp -o -name \*.cc -o -name \*.cxx -o -name \*.ecpp -o -name \*.C`; \
+#	if test -n "$$LIST"; then \
+#		$(XGETTEXT) $$LIST -o $(podir)/digikam.pot; \
+#	fi
+#	rm -f tips.cpp
+#
+#include ../admin/Doxyfile.am
+#
+#fastcompile:
+#	for i in libs utilities digikam kioslave; \
+#	do \
+#		cd $$i; \
+#		make || exit 1; \
+#		cd ..; \
+#	done
+#
+#fastinstall:
+#	for i in libs utilities digikam kioslave; \
+#	do \
+#		cd $$i; \
+#		make install || exit 1; \
+#		cd ..; \
+#	done

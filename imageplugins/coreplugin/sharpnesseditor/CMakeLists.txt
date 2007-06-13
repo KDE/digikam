@@ -1,0 +1,58 @@
+ADD_SUBDIRECTORY( clapack ) 
+ADD_SUBDIRECTORY( clapack ) 
+
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas ${CMAKE_SOURCE_DIR}/digikam/libs/histogram ${CMAKE_SOURCE_DIR}/digikam/libs/levels ${CMAKE_SOURCE_DIR}/digikam/libs/curves ${CMAKE_SOURCE_DIR}/digikam/libs/whitebalance ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/iccprofiles ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/imageplugins ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+
+########### next target ###############
+
+SET(sharpnesseditor_STAT_SRCS
+   imageeffect_sharpen.cpp
+   unsharp.cpp
+   matrix.cpp
+   refocus.cpp
+   )
+
+KDE3_AUTOMOC(${sharpnesseditor_STAT_SRCS})
+
+ADD_LIBRARY(sharpnesseditor STATIC ${sharpnesseditor_STAT_SRCS})
+
+
+########### install files ###############
+
+
+
+
+#original Makefile.am contents follow:
+
+#SUBDIRS = clapack 
+#COMPILE_FIRST = clapack 
+#
+#noinst_LTLIBRARIES = libsharpnesseditor.la
+#METASOURCES = AUTO
+#
+#INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
+#	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
+#	   -I$(top_srcdir)/digikam/libs/histogram \
+#	   -I$(top_srcdir)/digikam/libs/levels \
+#	   -I$(top_srcdir)/digikam/libs/curves \
+#	   -I$(top_srcdir)/digikam/libs/whitebalance \
+#	   -I$(top_srcdir)/digikam/libs/widgets/common \
+#	   -I$(top_srcdir)/digikam/libs/widgets/iccprofiles \
+#	   -I$(top_srcdir)/digikam/libs/widgets/imageplugins \
+#	   -I$(top_srcdir)/digikam/libs/dialogs \
+#	   -I$(top_srcdir)/digikam/libs/dimg \
+#	   -I$(top_srcdir)/digikam/libs/dmetadata \
+#	   -I$(top_srcdir)/digikam/libs/dimg/filters \
+#	   -I$(top_srcdir)/digikam/digikam \
+#	   -I$(top_srcdir)/digikam/imageplugins/coreplugin/sharpnesseditor/clapack \
+#	   $(all_includes) 
+#
+#libsharpnesseditor_la_LIBADD = $(top_builddir)/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/liblapack.la 
+#
+#libsharpnesseditor_la_SOURCES = imageeffect_sharpen.cpp unsharp.cpp matrix.cpp refocus.cpp 
+#
+#libsharpnesseditor_la_LDFLAGS = $(all_libraries)
+#
+#noinst_HEADERS = imageeffect_sharpen.h unsharp.h matrix.h refocus.h 
+#
