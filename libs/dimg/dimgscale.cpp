@@ -100,7 +100,7 @@ namespace DImgScale
 
 using namespace DImgScale;
 
-DImg DImg::smoothScale(int dw, int dh, Qt::AspectRatioMode aspectRatioMode)
+DImg DImg::smoothScale(int dw, int dh, QSize::ScaleMode scaleMode)
 {
     if (dw < 0 || dh < 0)
         return DImg();
@@ -109,7 +109,7 @@ DImg DImg::smoothScale(int dw, int dh, Qt::AspectRatioMode aspectRatioMode)
     uint h = height();
 
     QSize newSize(w, h);
-    newSize.scale( QSize(dw, dh), aspectRatioMode );
+    newSize.scale( QSize(dw, dh), scaleMode );
     if (!newSize.isValid())
         return DImg();
 

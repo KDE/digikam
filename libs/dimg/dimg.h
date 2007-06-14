@@ -28,12 +28,12 @@
 
 // QT includes.
 
-#include <QByteArray>
-#include <QSize>
-#include <QRect>
-#include <QImage>
-#include <QPixmap>
-#include <QVariant>
+#include <qcstring.h>
+#include <qsize.h>
+#include <qrect.h>
+#include <qimage.h>
+#include <qpixmap.h>
+#include <qvariant.h>
 
 // LibKDcraw includes.
 
@@ -289,7 +289,7 @@ public:
     /** Return a version of this image scaled to the specified size with the specified mode.
         See QSize documentation for information on available modes
     */
-    DImg       smoothScale(int width, int height, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio);
+    DImg       smoothScale(int width, int height, QSize::ScaleMode scaleMode=QSize::ScaleFree);
 
     /** Take the region specified by the rectangle sx|sy, width and height sw * sh,
         and scale it to an image with size dw * dh
