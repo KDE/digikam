@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <qcolor.h>
+#include <QColor>
 
 // Local Includes.
 
