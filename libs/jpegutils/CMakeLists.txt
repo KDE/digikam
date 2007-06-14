@@ -1,13 +1,20 @@
+## "Enable Final" triggers: http://bugs.kde.org/show_bug.cgi?id=126326
+## digikam: camera download: auto-rotated images lose EXIF info ...
+## So make sure nofinal is always used here!
+KDE4_NO_ENABLE_FINAL(libjpegutils)
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
+                     ${CMAKE_SOURCE_DIR}/digikam/digikam 
+                     ${KDE4_INCLUDE_DIR} 
+                     ${QT_INCLUDES}  
+                   )
 
+SET(libjpegutils_STAT_SRCS jpegutils.cpp transupp.cpp)
 
-########### next target ###############
+TARGET_LINK_LIBRARIES(libjpegutils ${JPEG_LIBRARY})
 
-
-########### install files ###############
-
-
+KDE4_ADD_LIBRARY(libjpegutils STATIC ${libjpegutils_STAT_SRCS})
 
 
 #original Makefile.am contents follow:
