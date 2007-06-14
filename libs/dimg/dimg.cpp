@@ -116,7 +116,7 @@ DImg::DImg(const QImage& image)
 {
     if (!image.isNull())
     {
-        QImage target = image.convertDepth(32);
+        QImage target = image.convertToFormat(QImage::Format_ARGB32);
         
         uint w      = target.width();
         uint h      = target.height();
@@ -135,7 +135,7 @@ DImg::DImg(const QImage& image)
             sptr++;
         }
     
-        putImageData(w, h, false, image.hasAlphaBuffer(), data, false);
+        putImageData(w, h, false, image.hasAlphaChannel(), data, false);
     }
 }
 
@@ -281,7 +281,8 @@ void DImg::copyMetaData(const DImgPrivate *src)
     for (QMap<int, QByteArray>::const_iterator it = src->metaData.begin();
          it != src->metaData.end(); ++it)
     {
-        m_priv->metaData.insert(it.key(), it.data().copy());
+        // Insert a deep copy...
+        m_priv->metaData.insert(it.key(), QByteArray(it.value()));  
     }
 }
 
@@ -442,7 +443,7 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
     if (format.isEmpty())
         return false;
 
-    QString frm = format.upper();
+    QString frm = format.toUpper();
 
     if (frm == "JPEG" || frm == "JPG" || frm == "JPE")
     {
