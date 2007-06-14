@@ -83,15 +83,14 @@ http://dev.robotbattle.com/bugs/main_page.php
 
 -- DEPENDENCIES -------------------------------------------------------
 
-AutoConf   >= 2.5.x                        http://www.gnu.org/software/autoconf
-AutoMake   >= 1.7.x                        http://www.gnu.org/software/automake
-libqt      >= 3.3.x                        http://www.trolltech.com
-libkde     >= 3.4.x (>=3.5.x recommended)  http://www.kde.org
+CMake      >= 2.4.x                        http://www.cmake.org
+libqt      >= 4.2.x                        http://www.trolltech.com
+libkde     >= 4.0.x                        http://www.kde.org
 libsqlite  >= 3.x                          http://www.sqlite.org
 libgphoto2 >= 2.x   (>=2.2.x recommended)  http://www.gphoto.org
-libkipi    >= 0.1                          http://www.kipi-plugins.org
-libkexiv2  >= 0.1.5                        http://www.kipi-plugins.org
-libkdcraw  >= 0.1.1                        http://www.kipi-plugins.org
+libkipi    >= 0.2.0                        http://www.kipi-plugins.org
+libkexiv2  >= 0.2.0                        http://www.kipi-plugins.org
+libkdcraw  >= 0.2.0                        http://www.kipi-plugins.org
 liblcms    >= 1.14.x                       http://www.littlecms.com
 libtiff    >= 3.6.x (>=3.8.2 recommended)  http://www.remotesensing.org/libtiff
 libpng     >= 1.2.x                        http://www.libpng.org/pub/png/libpng.html
@@ -103,24 +102,22 @@ computer to compile digiKam.
 
 -- INSTALLATION --------------------------------------------------------
 
-In the source directory do :
+In order to compile, especially when QT3/Qt4 are installed at the same time, 
+just use something like that:
 
-1) export WANT_AUTOCONF_2_5=1
-2) export KDEDIR=KDE_installation_dir_on_your_system
-3) if you are installing libkipi in a non-standard location
-  let pkg-config know about their paths:
-  export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/path/to/installation/lib/pkgconfig
-4) make -f Makefile.cvs
-5) ./configure
-6) make
-7) su
-8) make install
+# export VERBOSE=1
+# export QTDIR=/usr/lib/qt4/  
+# export PATH=$QTDIR/bin:$PATH 
+# cmake .
+# make
 
-More specific compilation and installation options can be used with the 'configure' script.
-Get more information with the './configure --help' command line.
+Common CMake options :
 
-Note : use the '--enable-debug=full' option with the configure script to provide
-all needed information in a bug report.
+-DCMAKE_INSTALL_PREFIX : cmake . -DCMAKE_INSTALL_PREFIX=/usr is the equivalent to ./configure --prefix=/usr 
+-DCMAKE_BUILD_TYPE     : decide which type of build you want. You can chose between "debugfull", "debug", "profile", "relwithdebinfo" and "release". 
+The default is "relwithdebinfo" (-O2 -g). 
+
+More details can be found ata this url: http://techbase.kde.org/Development/Tutorials/CMake#Environment_Variables
 
 
 -- DONATE MONEY --------------------------------------------------------
