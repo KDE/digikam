@@ -20,7 +20,7 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
         |---dimg
         |-----filters
         |-----loaders
-        |---dmetadata                Gilles
+        |---dmetadata                Gilles        Done
         |---greycstoration           Gilles
         |---histogram                Gilles        Done
         |---imageproperties
