@@ -9,11 +9,11 @@ Laurent Montel <montel at kde dot org>
 List of directories ported by developpers:
 ------------------------------------------
 
-ORDER   DIRECTORIES                  WHO              REMARK
+ORDER   DIRECTORIES                  WHO           STATUS      REMARK
 
- 1      |-sqlite                     Gilles           CMake port only. Used by digiKam core. Must be ported in first.
+ 1      |-sqlite                     Gilles        Done        CMake port only. Used by digiKam core. Must be ported in first.
 
- 2      |-libs                                        "libs" subfloders are used by all others parts of digiKam.
+ 2      |-libs                                                 "libs" subfloders are used by all others parts of digiKam.
         |---curves                   Gilles
         |---database                 Marcel
         |---dialogs
@@ -26,41 +26,41 @@ ORDER   DIRECTORIES                  WHO              REMARK
         |---imageproperties
         |---jpegutils                Gilles
         |---levels                   Gilles
-        |---lprof                    Gilles           CMake port only
+        |---lprof                    Gilles                    CMake port only
         |---themeengine
         |---threadimageio            Marcel
         |---thumbbar                 Gilles
         |---whitebalance             Gilles
-        |---widgets
-        |-----common
-        |-----iccprofiles
-        |-----imageplugins
-        |-----metadata
+        |---widgets                  Laurent
+        |-----common                 Laurent
+        |-----iccprofiles            Laurent
+        |-----imageplugins           Laurent
+        |-----metadata               Laurent
 
- 3      |-utilities                                   Utilities components are used as "libs" by digiKam main interface.
+ 3      |-utilities                                            Utilities components are used as "libs" by digiKam main interface.
         |---batch
         |---cameragui
-        |---hotplug                  Gilles           CMake port only
+        |---hotplug                  Gilles                    CMake port only
         |---imageeditor
         |-----canvas
         |-----editor
         |-----tools
         |---lighttable
-        |---scripts                  Gilles           CMake port only
+        |---scripts                  Gilles                    CMake port only
         |---setup
         |---slideshow
         |---splashscreen
  
- 4      |-digikam                                     The most long to do certainly
+ 4      |-digikam                                              The most long to do certainly
 
  5      |-kioslave
 
  6      |-showfoto
-        |---icons                    Gilles           CMake port only
-        |---pics                     Gilles           CMake port only
+        |---icons                    Gilles                    CMake port only
+        |---pics                     Gilles                    CMake port only
         |---setup
 
- 7      |-imageplugins                                All image editor plugins can be ported after digiKam core
+ 7      |-imageplugins                                         All image editor plugins can be ported after digiKam core
         |---adjustcurves
         |---adjustlevels
         |---antivignetting
@@ -95,14 +95,14 @@ ORDER   DIRECTORIES                  WHO              REMARK
         |-----patterns
         |---whitebalance
 
- 8      |-themedesigner                               The last one component. It completly independant. It will be the last one to port.
+ 8      |-themedesigner                                        The last one component. It completly independant. It will be the last one to port.
 
- 9      |-data                       Gilles           CMake port only
-        |---about                    Gilles           CMake port only
-        |---icons                    Gilles           CMake port only
-        |---pics                     Gilles           CMake port only
-        |---profiles                 Gilles           CMake port only
-        |---themes                   Gilles           CMake port only
+ 9      |-data                       Gilles                    CMake port only
+        |---about                    Gilles                    CMake port only
+        |---icons                    Gilles                    CMake port only
+        |---pics                     Gilles                    CMake port only
+        |---profiles                 Gilles                    CMake port only
+        |---themes                   Gilles                    CMake port only
 
- 10     |-project                    -                NOTHING TO DO
+ 10     |-project                    -                         NOTHING TO DO
 
