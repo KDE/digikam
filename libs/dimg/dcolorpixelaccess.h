@@ -58,16 +58,16 @@ inline void DColor::setPixel(uchar *data) const
     if (sixteenBit())       // 16 bits image.
     {
         unsigned short *data16 = (unsigned short *)data;
-        data16[0] = (unsigned short)Qt::blue();
-        data16[1] = (unsigned short)Qt::green();
-        data16[2] = (unsigned short)Qt::red();
+        data16[0] = (unsigned short)blue();
+        data16[1] = (unsigned short)green();
+        data16[2] = (unsigned short)red();
         data16[3] = (unsigned short)alpha();
     }
     else                    // 8 bits image.
     {
-        data[0] = (uchar)Qt::blue();
-        data[1] = (uchar)Qt::green();
-        data[2] = (uchar)Qt::red();
+        data[0] = (uchar)blue();
+        data[1] = (uchar)green();
+        data[2] = (uchar)red();
         data[3] = (uchar)alpha();
     }
 }
