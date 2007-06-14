@@ -6,13 +6,11 @@ include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
 		     ${QT_INCLUDES}
                    )
 
+SET(curves_STAT_SRCS imagecurves.cpp )
 
-########### next target ###############
+KDE4_ADD_LIBRARY(curves STATIC ${curves_STAT_SRCS})
 
-
-########### install files ###############
-
-install( FILES  imagecurves.h  DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
+install( FILES imagecurves.h DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
 
 
 
