@@ -20,8 +20,8 @@ TARGET_LINK_LIBRARIES(libdimg
                       libdmetadata
                       libdimgloaders
                       libdimgfilters 
-                      $(LIBKDCRAW_LIBS) 
-                      $(LCMS_LIBS) 
+                      ${KDCRAW_LIBRARIES} 
+                      ${LCMS_LIBRARIES}
                      )
 
 KDE4_ADD_LIBRARY(libdimg STATIC ${libdimg_STAT_SRCS})
