@@ -1,7 +1,7 @@
 add_subdirectory( lprof )
 add_subdirectory( curves )
-add_subdirectory( histogram )
 add_subdirectory( levels )
+add_subdirectory( histogram )
 add_subdirectory( whitebalance )
 add_subdirectory( dmetadata )
 add_subdirectory( dimg )
