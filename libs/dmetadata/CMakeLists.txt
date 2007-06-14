@@ -1,31 +1,13 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg
+                     ${CMAKE_SOURCE_DIR}/digikam/digikam 
+                     ${KDE4_INCLUDE_DIR} 
+                     ${QT_INCLUDES}  
+                   )
 
+SET(libdmetadata_STAT_SRCS dmetadata.cpp )
 
-########### next target ###############
+KDE4_ADD_LIBRARY(libdmetadata STATIC ${libdmetadata_STAT_SRCS})
 
-
-########### install files ###############
-
-install( FILES  dmetadata.h photoinfocontainer.h  DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
-
-
-
-#original Makefile.am contents follow:
-
-#METASOURCES = AUTO
-#
-#noinst_LTLIBRARIES = libdmetadata.la
-#
-#libdmetadata_la_SOURCES = dmetadata.cpp
-#
-#libdmetadata_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-#
-#libdmetadata_la_LIBADD  = $(LIBKEXIV2_LIBS) $(LIBKDCRAW_LIBS) 
-#	                 
-#INCLUDES = -I$(top_srcdir)/digikam/libs/dimg \
-#	   -I$(top_srcdir)/digikam/digikam \
-#	   $(LIBKEXIV2_CFLAGS) $(LIBKDCRAW_CFLAGS) $(all_includes)
-#
-#digikaminclude_HEADERS = dmetadata.h photoinfocontainer.h 
-#digikamincludedir = $(includedir)/digikam
+INSTALL( FILES dmetadata.h photoinfocontainer.h 
+         DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )

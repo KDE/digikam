@@ -24,7 +24,7 @@
 
 // Qt includes.
 
-#include <QDom>
+#include <QDomDocument>
 #include <QFile>
 
 // LibKDcraw includes.
@@ -79,10 +79,10 @@ bool DMetadata::loadUsingDcraw(const QString& filePath)
         long int num=1, den=1;
 
         if (!identify.model.isNull())
-            setExifTagString("Exif.Image.Model", identify.model.latin1(), false);
+            setExifTagString("Exif.Image.Model", identify.model.toLatin1(), false);
 
         if (!identify.make.isNull())
-            setExifTagString("Exif.Image.Make", identify.make.latin1(), false);
+            setExifTagString("Exif.Image.Make", identify.make.toLatin1(), false);
 
         if (identify.sensitivity != -1)
             setExifTagLong("Exif.Photo.ISOSpeedRatings", identify.sensitivity, false);
@@ -165,7 +165,7 @@ bool DMetadata::setImageComment(const QString& comment)
 
     // In first we trying to set image comments, outside of Exif and IPTC.
 
-    if (!setComments(comment.utf8()))
+    if (!setComments(comment.toUtf8()))
         return false;
 
     // In Second we write comments into Exif.
@@ -436,7 +436,7 @@ bool DMetadata::getXMLImageProperties(QString& comments, QDateTime& date,
         return false;
     QByteArray decompressedData = qUncompress(data);
     QString doc;
-    QDataStream ds(decompressedData, QIODevice::ReadOnly);
+    QDataStream ds(&decompressedData, QIODevice::ReadOnly);
     ds >> doc;
 
     QDomDocument xmlDoc;
@@ -532,7 +532,7 @@ bool DMetadata::setXMLImageProperties(const QString& comments, const QDateTime& 
     }
 
     QByteArray  data, compressedData;
-    QDataStream ds(data, QIODevice::WriteOnly);
+    QDataStream ds(&data, QIODevice::WriteOnly);
     ds << xmlDoc.toString();
     compressedData = qCompress(data);
     return (setIptcTagData("Iptc.Application2.0x00ff", compressedData));
