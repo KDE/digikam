@@ -77,9 +77,9 @@ inline void DColor::blendAlpha16(int alphaValue)
 {
     uint Sa = alphaValue + 1;
 
-    setRed  ((Sa * (uint)Qt::red()) >> 16);
-    setGreen((Sa * (uint)Qt::green()) >> 16);
-    setBlue ((Sa * (uint)Qt::blue()) >> 16);
+    setRed  ((Sa * (uint)red()) >> 16);
+    setGreen((Sa * (uint)green()) >> 16);
+    setBlue ((Sa * (uint)blue()) >> 16);
     setAlpha((Sa * (uint)alpha()) >> 16);
 }
 
@@ -87,9 +87,9 @@ inline void DColor::blendAlpha8(int alphaValue)
 {
     uint Sa = alphaValue + 1;
 
-    setRed  ((Sa * Qt::red()) >> 8);
-    setGreen((Sa * Qt::green()) >> 8);
-    setBlue ((Sa * Qt::blue()) >> 8);
+    setRed  ((Sa * red()) >> 8);
+    setGreen((Sa * green()) >> 8);
+    setBlue ((Sa * blue()) >> 8);
     setAlpha((Sa * alpha()) >> 8);
 }
 
@@ -97,9 +97,9 @@ inline void DColor::blendInvAlpha16(int alphaValue)
 {
     uint Sa = 65536 - alphaValue;
 
-    setRed  ((Sa * (uint)Qt::red()) >> 16);
-    setGreen((Sa * (uint)Qt::green()) >> 16);
-    setBlue ((Sa * (uint)Qt::blue()) >> 16);
+    setRed  ((Sa * (uint)red()) >> 16);
+    setGreen((Sa * (uint)green()) >> 16);
+    setBlue ((Sa * (uint)blue()) >> 16);
     setAlpha((Sa * (uint)alpha()) >> 16);
 }
 
@@ -107,9 +107,9 @@ inline void DColor::blendInvAlpha8(int alphaValue)
 {
     uint Sa = 256 - alphaValue;
 
-    setRed  ((Sa * Qt::red()) >> 8);
-    setGreen((Sa * Qt::green()) >> 8);
-    setBlue ((Sa * Qt::blue()) >> 8);
+    setRed  ((Sa * red()) >> 8);
+    setGreen((Sa * green()) >> 8);
+    setBlue ((Sa * blue()) >> 8);
     setAlpha((Sa * alpha()) >> 8);
 }
 
@@ -117,59 +117,59 @@ inline void DColor::premultiply16(int alphaValue)
 {
     uint Da = alphaValue + 1;
 
-    setRed  ((Da * (uint)Qt::red()) >> 16);
-    setGreen((Da * (uint)Qt::green()) >> 16);
-    setBlue ((Da * (uint)Qt::blue()) >> 16);
+    setRed  ((Da * (uint)red()) >> 16);
+    setGreen((Da * (uint)green()) >> 16);
+    setBlue ((Da * (uint)blue()) >> 16);
 }
 
 inline void DColor::premultiply8(int alphaValue)
 {
     uint Da = alphaValue + 1;
 
-    setRed  ((Da * Qt::red()) >> 8);
-    setGreen((Da * Qt::green()) >> 8);
-    setBlue ((Da * Qt::blue()) >> 8);
+    setRed  ((Da * red()) >> 8);
+    setGreen((Da * green()) >> 8);
+    setBlue ((Da * blue()) >> 8);
 }
 
 inline void DColor::demultiply16(int alphaValue)
 {
     uint Da = alphaValue + 1;
 
-    setRed  (((uint)Qt::red()   << 16) / Da);
-    setGreen(((uint)Qt::green() << 16) / Da);
-    setBlue (((uint)Qt::blue()  << 16) / Da);
+    setRed  (((uint)red()   << 16) / Da);
+    setGreen(((uint)green() << 16) / Da);
+    setBlue (((uint)blue()  << 16) / Da);
 }
 
 inline void DColor::demultiply8(int alphaValue)
 {
     uint Da = alphaValue + 1;
 
-    setRed  ((Qt::red()   << 8) / Da);
-    setGreen((Qt::green() << 8) / Da);
-    setBlue ((Qt::blue()  << 8) / Da);
+    setRed  ((red()   << 8) / Da);
+    setGreen((green() << 8) / Da);
+    setBlue ((blue()  << 8) / Da);
 }
 
 inline void DColor::blendAdd(const DColor &src)
 {
-    setRed  (Qt::red()   + src.Qt::red());
-    setGreen(Qt::green() + src.Qt::green());
-    setBlue (Qt::blue()  + src.Qt::blue());
+    setRed  (red()   + src.Qt::red());
+    setGreen(green() + src.Qt::green());
+    setBlue (blue()  + src.Qt::blue());
     setAlpha(alpha() + src.alpha());
 }
 
 inline void DColor::blendClamp16()
 {
-    if (0xFFFF0000 & Qt::red())   setRed(65535);
-    if (0xFFFF0000 & Qt::green()) setGreen(65535);
-    if (0xFFFF0000 & Qt::blue())  setBlue(65535);
+    if (0xFFFF0000 & red())   setRed(65535);
+    if (0xFFFF0000 & green()) setGreen(65535);
+    if (0xFFFF0000 & blue())  setBlue(65535);
     if (0xFFFF0000 & alpha()) setAlpha(65535);
 }
 
 inline void DColor::blendClamp8()
 {
-    if (0xFF00 & Qt::red())   setRed(255);
-    if (0xFF00 & Qt::green()) setGreen(255);
-    if (0xFF00 & Qt::blue())  setBlue(255);
+    if (0xFF00 & red())   setRed(255);
+    if (0xFF00 & green()) setGreen(255);
+    if (0xFF00 & blue())  setBlue(255);
     if (0xFF00 & alpha()) setAlpha(255);
 }
 
