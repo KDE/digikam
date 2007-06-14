@@ -22,7 +22,7 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
         |-----loaders
         |---dmetadata                Gilles
         |---greycstoration           Gilles
-        |---histogram                Gilles
+        |---histogram                Gilles        Done
         |---imageproperties
         |---jpegutils                Gilles
         |---levels                   Gilles        Done
