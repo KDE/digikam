@@ -58,6 +58,8 @@ public:
     // Remove when porting to Qt4.
     virtual bool isShuttingDown()
             { return false; }
+
+    virtual ~DImgLoaderObserver(){};
 };
 
 }      // namespace Digikam
