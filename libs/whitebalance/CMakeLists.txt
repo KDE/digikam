@@ -1,14 +1,16 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg
+                     ${CMAKE_SOURCE_DIR}/digikam/digikam 
+                     ${KDE4_INCLUDE_DIR} 
+                     ${QT_INCLUDES}  
+                   )
 
+SET(whitebalance_STAT_SRCS imagelevels.cpp )
 
-########### next target ###############
+KDE4_ADD_LIBRARY(whitebalance STATIC ${whitebalance_STAT_SRCS})
 
-
-########### install files ###############
-
-install( FILES  whitebalance.h  DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
-
+INSTALL( FILES whitebalance.h DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
 
 
 #original Makefile.am contents follow:
