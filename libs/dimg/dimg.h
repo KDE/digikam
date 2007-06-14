@@ -28,7 +28,7 @@
 
 // QT includes.
 
-#include <Q3Cstring>
+#include <QByteArray>
 #include <QSize>
 #include <QRect>
 #include <QImage>
