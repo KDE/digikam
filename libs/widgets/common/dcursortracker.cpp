@@ -26,6 +26,10 @@
 
 #include <qevent.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3Frame>
+#include <QLabel>
 
 // Local includes.
 
@@ -35,7 +39,7 @@ namespace Digikam
 {
 
 DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent)
-              : QLabel(txt, 0, "", WX11BypassWM) 
+              : QLabel(txt, 0, "", Qt::WX11BypassWM) 
 {
 	parent->setMouseTracking(true);
 	parent->installEventFilter(this);
@@ -66,7 +70,7 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
         {
             QMouseEvent *event = static_cast<QMouseEvent*>(e);
             if (m_enable && (widget->rect().contains(event->pos()) || 
-                            (event->stateAfter() & LeftButton))) 
+                            (event->stateAfter() & Qt::LeftButton))) 
             {
                 show();
                 move(event->globalPos().x() + 15, event->globalPos().y() + 15);
@@ -100,7 +104,7 @@ DTipTracker::DTipTracker(const QString& txt, QWidget *parent)
            : DCursorTracker(txt, parent) 
 {
 	setPalette(QToolTip::palette());
-	setFrameStyle(QFrame::Plain | QFrame::Box);
+	setFrameStyle(Q3Frame::Plain | Q3Frame::Box);
 	setLineWidth(1);
 	setAlignment(AlignAuto | AlignTop);
 }

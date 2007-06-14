@@ -28,13 +28,19 @@
 // Qt includes.
 
 #include <qstring.h>
-#include <qcache.h>
+#include <q3cache.h>
 #include <qpainter.h>
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qrect.h>
 #include <qtimer.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <QWheelEvent>
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <Q3Frame>
+#include <QMouseEvent>
 
 // KDE include.
 
@@ -90,7 +96,7 @@ public:
 
     QRect           pixmapRect;
     
-    QCache<QPixmap> tileCache;
+    Q3Cache<QPixmap> tileCache;
 
     QPixmap*        tileTmpPix;
 
@@ -98,7 +104,7 @@ public:
 };
 
 PreviewWidget::PreviewWidget(QWidget *parent)
-             : QScrollView(parent, 0, Qt::WDestructiveClose)
+             : Q3ScrollView(parent, 0, Qt::WDestructiveClose)
 {
     d = new PreviewWidgetPriv;
     d->bgColor.setRgb(0, 0, 0);
@@ -112,7 +118,7 @@ PreviewWidget::PreviewWidget(QWidget *parent)
     verticalScrollBar()->setLineStep( 1 );
     verticalScrollBar()->setPageStep( 1 );
 
-    setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain); 
+    setFrameStyle(QFrame::StyledPanel|Q3Frame::Plain); 
     setMargin(0); 
     setLineWidth(1);
 }
@@ -357,7 +363,7 @@ void PreviewWidget::resizeEvent(QResizeEvent* e)
 {
     if (!e) return;
 
-    QScrollView::resizeEvent(e);
+    Q3ScrollView::resizeEvent(e);
 
     if (d->autoZoom)
         updateAutoZoom();
@@ -520,7 +526,7 @@ void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
 {
     e->accept();
 
-    if (e->state() & Qt::ShiftButton)
+    if (e->state() & Qt::ShiftModifier)
     {
         if (e->delta() < 0)
             emit signalShowNextImage();
@@ -528,7 +534,7 @@ void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
             emit signalShowPrevImage();
         return;
     }
-    else if (e->state() & Qt::ControlButton)
+    else if (e->state() & Qt::ControlModifier)
     {
         d->centerZoomPoint = e->pos();
         if (e->delta() < 0 && !minZoom())
@@ -539,7 +545,7 @@ void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
         return;
     }
 
-    QScrollView::contentsWheelEvent(e);
+    Q3ScrollView::contentsWheelEvent(e);
 }
 
 void PreviewWidget::zoomFactorChanged(double zoom)

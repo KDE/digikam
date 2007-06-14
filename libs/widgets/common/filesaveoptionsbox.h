@@ -27,7 +27,7 @@
 
 // KDE includes.
 
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 #include <qstring.h>
 
 // Local includes
@@ -40,7 +40,7 @@ namespace Digikam
 
 class FileSaveOptionsBoxPriv;
 
-class DIGIKAM_EXPORT FileSaveOptionsBox : public QWidgetStack
+class DIGIKAM_EXPORT FileSaveOptionsBox : public Q3WidgetStack
 {
 Q_OBJECT
 

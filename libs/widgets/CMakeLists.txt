@@ -4,9 +4,6 @@ add_subdirectory( imageplugins )
 add_subdirectory( common )
 add_subdirectory( iccprofiles )
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
-
-
 ########### next target ###############
 
 

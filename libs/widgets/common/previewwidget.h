@@ -26,7 +26,13 @@
 
 // Qt includes.
 
-#include <qscrollview.h>
+#include <q3scrollview.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QWheelEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 // Local includes
 
@@ -41,7 +47,7 @@ namespace Digikam
 
 class PreviewWidgetPriv;
 
-class DIGIKAM_EXPORT PreviewWidget : public QScrollView
+class DIGIKAM_EXPORT PreviewWidget : public Q3ScrollView
 {
 Q_OBJECT
 

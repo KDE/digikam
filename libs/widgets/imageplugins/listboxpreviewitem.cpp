@@ -25,7 +25,7 @@
 
  // Qt includes.
 
-#include <qlistbox.h>
+#include <q3listbox.h>
 
 // Local includes.
 
@@ -34,15 +34,15 @@
 namespace Digikam
 {
 
-int ListBoxPreviewItem::height(const QListBox *lb) const
+int ListBoxPreviewItem::height(const Q3ListBox *lb) const
 {
-    int height = QListBoxPixmap::height(lb);
+    int height = Q3ListBoxPixmap::height(lb);
     return QMAX(height, pixmap()->height() + 5);
 }
 
-int ListBoxPreviewItem::width(const QListBox *lb) const
+int ListBoxPreviewItem::width(const Q3ListBox *lb) const
 {
-    int width = QListBoxPixmap::width(lb);
+    int width = Q3ListBoxPixmap::width(lb);
     return QMAX(width, pixmap()->width() + 5);
 }
 
@@ -50,7 +50,7 @@ int ListBoxPreviewItem::width(const QListBox *lb) const
 
 QString ListBoxWhatsThis::text(const QPoint &p)
 {
-    QListBoxItem* item = m_listBox->itemAt(p);
+    Q3ListBoxItem* item = m_listBox->itemAt(p);
 
     if (item != 0) 
         return m_itemWhatsThisMap[item];
@@ -58,7 +58,7 @@ QString ListBoxWhatsThis::text(const QPoint &p)
     return QString();
 }
 
-void ListBoxWhatsThis::add(QListBoxItem* item, const QString& text)
+void ListBoxWhatsThis::add(Q3ListBoxItem* item, const QString& text)
 {
     m_itemWhatsThisMap[item] = text;
 }

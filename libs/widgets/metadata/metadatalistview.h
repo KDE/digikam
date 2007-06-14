@@ -28,8 +28,10 @@
 // Qt includes.
 
 #include <qstring.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <QResizeEvent>
 
 // KDE includes.
 
@@ -65,7 +67,7 @@ protected:
 
 private slots:
 
-    void slotSelectionChanged(QListViewItem *item);
+    void slotSelectionChanged(Q3ListViewItem *item);
 
 private:
 

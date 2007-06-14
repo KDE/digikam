@@ -31,10 +31,13 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qmap.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qfile.h>
 #include <qcombobox.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3Frame>
 
 // KDE includes.
 
@@ -105,16 +108,16 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
     // --------------------------------------------------------
             
     QWidget *gpsInfo    = new QWidget(this);
-    QGridLayout *layout = new QGridLayout(gpsInfo, 3, 2);
+    Q3GridLayout *layout = new Q3GridLayout(gpsInfo, 3, 2);
     d->map              = new WorldMapWidget(256, 256, gpsInfo);
 
     // --------------------------------------------------------
     
-    QGroupBox* box2 = new QGroupBox( 0, Qt::Vertical, gpsInfo );
+    Q3GroupBox* box2 = new Q3GroupBox( 0, Qt::Vertical, gpsInfo );
     box2->setInsideMargin(0);
     box2->setInsideSpacing(0);    
-    box2->setFrameStyle( QFrame::NoFrame );
-    QGridLayout* box2Layout = new QGridLayout( box2->layout(), 0, 2, KDialog::spacingHint() );
+    box2->setFrameStyle( Q3Frame::NoFrame );
+    Q3GridLayout* box2Layout = new Q3GridLayout( box2->layout(), 0, 2, KDialog::spacingHint() );
 
     d->detailsCombo  = new QComboBox( false, box2 );
     d->detailsButton = new QPushButton(i18n("More Info..."), box2);

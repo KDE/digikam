@@ -32,6 +32,11 @@
 #include <qpixmap.h>
 #include <qpen.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QTimerEvent>
+#include <QPaintEvent>
+#include <QMouseEvent>
+#include <QHideEvent>
 
 // KDE include.
 
@@ -66,7 +71,7 @@ public:
     QImage image;
 };
 
-PanIconWidget::PanIconWidget(QWidget *parent, WFlags flags)
+PanIconWidget::PanIconWidget(QWidget *parent, Qt::WFlags flags)
              : QWidget(parent, 0, flags)
 {
     d = new PanIconWidgetPriv;
@@ -91,7 +96,7 @@ PanIconWidget::~PanIconWidget()
 void PanIconWidget::setImage(int previewWidth, int previewHeight, const QImage& image)
 {
     QSize sz(image.width(), image.height());
-    sz.scale(previewWidth, previewHeight, QSize::ScaleMin);
+    sz.scale(previewWidth, previewHeight, Qt::KeepAspectRatio);
     m_pixmap          = new QPixmap(previewWidth, previewHeight);
     m_width           = sz.width();
     m_height          = sz.height();

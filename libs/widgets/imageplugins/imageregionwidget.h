@@ -27,6 +27,11 @@
 // Qt includes.
 
 #include <qrect.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QWheelEvent>
+#include <Q3PointArray>
 
 // Local includes
 
@@ -77,7 +82,7 @@ public:
     void   backupPixmapRegion();
     void   restorePixmapRegion();
     
-    void   setHighLightPoints(QPointArray pointsList);
+    void   setHighLightPoints(Q3PointArray pointsList);
     void   drawSeparateView();
              
 public slots:

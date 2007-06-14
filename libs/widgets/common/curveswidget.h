@@ -27,6 +27,11 @@
 // Qt includes.
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <QCustomEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 // Local includes
 

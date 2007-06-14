@@ -27,13 +27,13 @@
 
 #include <qlayout.h>
 #include <qpushbutton.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlabel.h>
 #include <qmap.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qfile.h>
 #include <qcombobox.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qmap.h>
 
 // KDE includes.
@@ -162,7 +162,7 @@ ICCProfileWidget::ICCProfileWidget(QWidget* parent, const char* name, int w, int
     // Add CIE tongue graph to the widget area
         
     d->cieTongue = new CIETongueWidget(w, h, this);
-    QWhatsThis::add( d->cieTongue, i18n("<p>This area contains a CIE or chromaticity diagram. "
+    Q3WhatsThis::add( d->cieTongue, i18n("<p>This area contains a CIE or chromaticity diagram. "
                     "A CIE diagram is a representation of all the colors "
                     "that a person with normal vision can see. This is represented "
                     "by the colored sail-shaped area. In addition you will see a "
@@ -213,7 +213,7 @@ bool ICCProfileWidget::loadFromURL(const KURL& url)
     else
     {   
         QFile file(url.path());
-        if ( !file.open(IO_ReadOnly) ) 
+        if ( !file.open(QIODevice::ReadOnly) ) 
         {
             setMetadata();
             d->cieTongue->setProfileData();

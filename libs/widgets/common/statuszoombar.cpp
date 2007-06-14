@@ -68,7 +68,7 @@ public:
 };
 
 StatusZoomBar::StatusZoomBar(QWidget *parent)
-             : QHBox(parent, 0, Qt::WDestructiveClose)
+             : Q3HBox(parent, 0, Qt::WDestructiveClose)
 {
     d = new StatusZoomBarPriv;
 

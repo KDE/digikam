@@ -27,8 +27,10 @@
 // QT includes.
 
 #include <qsplitter.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 #include <qdatastream.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 // KDE includes.
 
@@ -75,7 +77,7 @@ public:
     int            minSize;
     int            maxSize;
 
-    QWidgetStack  *stack;
+    Q3WidgetStack  *stack;
     QSplitter     *splitter;
     QSize          bigSize;
 
@@ -104,9 +106,9 @@ void Sidebar::setSplitter(QSplitter *sp)
     setStyle(KMultiTabBar::KDEV3);
 #endif
 
-    d->stack = new QWidgetStack(sp);
+    d->stack = new Q3WidgetStack(sp);
             
-    if(d->side == Left)
+    if(d->side == Qt::DockLeft)
         setPosition(KMultiTabBar::Left);
     else
         setPosition(KMultiTabBar::Right);

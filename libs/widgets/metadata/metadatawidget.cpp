@@ -27,17 +27,21 @@
 #include <qmap.h>
 #include <qfile.h> 
 #include <qmime.h>
-#include <qheader.h>
-#include <qwhatsthis.h>
+#include <q3header.h>
+#include <q3whatsthis.h>
 #include <qpainter.h>
 #include <qhbuttongroup.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-#include <qdragobject.h> 
+#include <q3dragobject.h> 
 #include <qclipboard.h>
-#include <qsimplerichtext.h>
-#include <qpaintdevicemetrics.h>
-#include <qstylesheet.h>
+#include <q3simplerichtext.h>
+#include <q3paintdevicemetrics.h>
+#include <q3stylesheet.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3Frame>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -75,10 +79,10 @@ public:
         mainLayout   = 0;
     }
 
-    QGridLayout            *mainLayout;
+    Q3GridLayout            *mainLayout;
 
-    QHButtonGroup          *toolButtons;
-    QHButtonGroup          *levelButtons;
+    Q3HButtonGroup          *toolButtons;
+    Q3HButtonGroup          *levelButtons;
 
     QByteArray              metadata;
 
@@ -94,43 +98,43 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
 {
     d = new MetadataWidgetPriv;
 
-    d->mainLayout = new QGridLayout(this, 2, 4, KDialog::spacingHint(), KDialog::spacingHint());
+    d->mainLayout = new Q3GridLayout(this, 2, 4, KDialog::spacingHint(), KDialog::spacingHint());
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
 
-    d->levelButtons = new QHButtonGroup(this);
+    d->levelButtons = new Q3HButtonGroup(this);
     d->levelButtons->setInsideMargin( 0 );
     d->levelButtons->setExclusive(true);
-    d->levelButtons->setFrameShape(QFrame::NoFrame);
+    d->levelButtons->setFrameShape(Q3Frame::NoFrame);
 
     QPushButton *simpleLevel = new QPushButton( d->levelButtons );
     simpleLevel->setPixmap( iconLoader->loadIcon( "ascii", (KIcon::Group)KIcon::Toolbar ) );
     simpleLevel->setToggleButton(true);
-    QWhatsThis::add( simpleLevel, i18n( "Toggle tags view to a simple human-readable list" ) );
+    Q3WhatsThis::add( simpleLevel, i18n( "Toggle tags view to a simple human-readable list" ) );
     d->levelButtons->insert(simpleLevel, SIMPLE);
 
     QPushButton *fullLevel = new QPushButton( d->levelButtons );
     fullLevel->setPixmap( iconLoader->loadIcon( "document", (KIcon::Group)KIcon::Toolbar ) );
     fullLevel->setToggleButton(true);
-    QWhatsThis::add( fullLevel, i18n( "Toggle tags view to a full list" ) );
+    Q3WhatsThis::add( fullLevel, i18n( "Toggle tags view to a full list" ) );
     d->levelButtons->insert(fullLevel, FULL);
 
-    d->toolButtons = new QHButtonGroup(this);
+    d->toolButtons = new Q3HButtonGroup(this);
     d->toolButtons->setInsideMargin( 0 );
-    d->toolButtons->setFrameShape(QFrame::NoFrame);
+    d->toolButtons->setFrameShape(Q3Frame::NoFrame);
 
     QPushButton *saveMetadata = new QPushButton( d->toolButtons );
     saveMetadata->setPixmap( iconLoader->loadIcon( "filesave", (KIcon::Group)KIcon::Toolbar ) );
-    QWhatsThis::add( saveMetadata, i18n( "Save meta-data to a binary file" ) );
+    Q3WhatsThis::add( saveMetadata, i18n( "Save meta-data to a binary file" ) );
     d->toolButtons->insert(saveMetadata);
     
     QPushButton *printMetadata = new QPushButton( d->toolButtons );
     printMetadata->setPixmap( iconLoader->loadIcon( "fileprint", (KIcon::Group)KIcon::Toolbar ) );
-    QWhatsThis::add( printMetadata, i18n( "Print meta-data to printer" ) );
+    Q3WhatsThis::add( printMetadata, i18n( "Print meta-data to printer" ) );
     d->toolButtons->insert(printMetadata);
 
     QPushButton *copy2ClipBoard = new QPushButton( d->toolButtons );
     copy2ClipBoard->setPixmap( iconLoader->loadIcon( "editcopy", (KIcon::Group)KIcon::Toolbar ) );
-    QWhatsThis::add( copy2ClipBoard, i18n( "Copy meta-data to clipboard" ) );
+    Q3WhatsThis::add( copy2ClipBoard, i18n( "Copy meta-data to clipboard" ) );
     d->toolButtons->insert(copy2ClipBoard);
 
     d->mainLayout->addMultiCellWidget(d->levelButtons, 0, 0, 0, 1);
@@ -212,7 +216,7 @@ bool MetadataWidget::storeMetadataToFile(const KURL& url)
         return false;
 
     QFile file(url.path());
-    if ( !file.open(IO_WriteOnly) ) 
+    if ( !file.open(QIODevice::WriteOnly) ) 
         return false;
     
     QDataStream stream( &file );
@@ -250,7 +254,7 @@ void MetadataWidget::slotModeChanged(int)
 void MetadataWidget::slotCopy2Clipboard(void)
 {
     QString textmetadata = i18n("File name: %1 (%2)").arg(d->fileName).arg(getMetadataTitle());
-    QListViewItemIterator it( d->view );
+    Q3ListViewItemIterator it( d->view );
 
     while ( it.current() )
     {
@@ -263,7 +267,7 @@ void MetadataWidget::slotCopy2Clipboard(void)
         }
         else
         {
-            QListViewItem *item = it.current();
+            Q3ListViewItem *item = it.current();
             textmetadata.append(item->text(0));
             textmetadata.append(" : ");
             textmetadata.append(item->text(1));
@@ -273,7 +277,7 @@ void MetadataWidget::slotCopy2Clipboard(void)
         ++it;
     }
 
-    QApplication::clipboard()->setData(new QTextDrag(textmetadata), QClipboard::Clipboard);
+    QApplication::clipboard()->setData(new Q3TextDrag(textmetadata), QClipboard::Clipboard);
 }
 
 void MetadataWidget::slotPrintMetadata(void)
@@ -281,7 +285,7 @@ void MetadataWidget::slotPrintMetadata(void)
     QString textmetadata = i18n("<p><big><big><b>File name: %1 (%2)</b></big></big>")
                            .arg(d->fileName)
                            .arg(getMetadataTitle());
-    QListViewItemIterator it( d->view );
+    Q3ListViewItemIterator it( d->view );
 
     while ( it.current() )
     {
@@ -294,7 +298,7 @@ void MetadataWidget::slotPrintMetadata(void)
         }
         else
         {
-            QListViewItem *item = it.current();
+            Q3ListViewItem *item = it.current();
             textmetadata.append(item->text(0));
             textmetadata.append(" : <i>");
             textmetadata.append(item->text(1));
@@ -316,16 +320,16 @@ void MetadataWidget::slotPrintMetadata(void)
         if ( !p.device() ) 
             return;
 
-        QPaintDeviceMetrics metrics(p.device());
+        Q3PaintDeviceMetrics metrics(p.device());
         int dpiy = metrics.logicalDpiY();
         int margin = (int) ( (2/2.54)*dpiy ); // 2 cm margins
         QRect view( margin, margin, metrics.width() - 2*margin, metrics.height() - 2*margin );
         QFont font(KApplication::font());
         font.setPointSize( 10 ); // we define 10pt to be a nice base size for printing
-        QSimpleRichText richText( textmetadata, font,
+        Q3SimpleRichText richText( textmetadata, font,
                                   QString(),
-                                  QStyleSheet::defaultSheet(),
-                                  QMimeSourceFactory::defaultFactory(),
+                                  Q3StyleSheet::defaultSheet(),
+                                  Q3MimeSourceFactory::defaultFactory(),
                                   view.height() );
         richText.setWidth( &p, view.width() );
         int page = 1;
@@ -418,7 +422,7 @@ void MetadataWidget::setFileName(QString fileName)
 
 void MetadataWidget::setUserAreaWidget(QWidget *w)
 {
-    QVBoxLayout *vLayout = new QVBoxLayout( KDialog::spacingHint() ); 
+    Q3VBoxLayout *vLayout = new Q3VBoxLayout( KDialog::spacingHint() ); 
     vLayout->addWidget(w);
     vLayout->addStretch();
     d->mainLayout->addMultiCellLayout(vLayout, 2, 2, 0, 4);

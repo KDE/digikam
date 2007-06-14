@@ -40,6 +40,10 @@
 #include <qcolor.h>
 #include <qfont.h> 
 #include <qfontmetrics.h> 
+//Added by qt3to4:
+#include <QCustomEvent>
+#include <QPaintEvent>
+#include <QMouseEvent>
 
 // KDE includes.
 
@@ -476,19 +480,19 @@ void CurvesWidget::paintEvent( QPaintEvent * )
       switch(m_channelType)
       {
          case CurvesWidget::RedChannelHistogram:      
-            guidePos = d->colorGuide.red();
+            guidePos = d->colorGuide.Qt::red();
             break;
          
          case CurvesWidget::GreenChannelHistogram:    
-            guidePos = d->colorGuide.green();
+            guidePos = d->colorGuide.Qt::green();
             break;
              
          case CurvesWidget::BlueChannelHistogram:     
-            guidePos = d->colorGuide.blue();
+            guidePos = d->colorGuide.Qt::blue();
             break;
              
          case CurvesWidget::ValueHistogram:    
-            guidePos = QMAX(QMAX(d->colorGuide.red(), d->colorGuide.green()), d->colorGuide.blue());
+            guidePos = QMAX(QMAX(d->colorGuide.Qt::red(), d->colorGuide.Qt::green()), d->colorGuide.Qt::blue());
             break;
 
          default:                                     // Alpha.

@@ -27,6 +27,8 @@
 #include <qlayout.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 // KDE includes.
 
@@ -67,7 +69,7 @@ StatusNavigateBar::StatusNavigateBar(QWidget *parent)
 {
     d = new StatusNavigateBarPriv;
 
-    QHBoxLayout *lay = new QHBoxLayout(this);
+    Q3HBoxLayout *lay = new Q3HBoxLayout(this);
 
     d->firstButton = new QToolButton(this);
     d->firstButton->setAutoRaise(true);

@@ -27,6 +27,8 @@
 #include <qlayout.h>
 #include <qwidget.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 // KDE includes.
 
@@ -74,13 +76,13 @@ public:
 };
 
 StatusProgressBar::StatusProgressBar(QWidget *parent)
-                 : QWidgetStack(parent, 0, Qt::WDestructiveClose)
+                 : Q3WidgetStack(parent, 0, Qt::WDestructiveClose)
 {
     d = new StatusProgressBarPriv;
 
     d->textLabel      = new KSqueezedTextLabel(this);
     d->progressWidget = new QWidget(this);
-    QHBoxLayout *hBox = new QHBoxLayout(d->progressWidget);
+    Q3HBoxLayout *hBox = new Q3HBoxLayout(d->progressWidget);
     d->progressBar    = new KProgress(d->progressWidget);
     d->progressBar->setTotalSteps(100);
     d->cancelButton = new QPushButton(d->progressWidget);

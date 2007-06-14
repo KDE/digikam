@@ -25,10 +25,12 @@
 // Qt includes.
 
 #include <qtimer.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qpalette.h>
-#include <qheader.h>
-#include <qwhatsthis.h>
+#include <q3header.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QResizeEvent>
 
 // KDE includes.
 
@@ -56,12 +58,12 @@ MetadataListView::MetadataListView(QWidget* parent)
     setResizeMode(KListView::AllColumns);
     // Vertical scroll bar is always disable to give more 
     // free space to metadata content
-    setVScrollBarMode(QScrollView::AlwaysOff);
+    setVScrollBarMode(Q3ScrollView::AlwaysOff);
     
     m_parent = dynamic_cast<MetadataWidget *>(parent);
     
-    connect(this, SIGNAL(selectionChanged(QListViewItem*)),
-            this, SLOT(slotSelectionChanged(QListViewItem*)));
+    connect(this, SIGNAL(selectionChanged(Q3ListViewItem*)),
+            this, SLOT(slotSelectionChanged(Q3ListViewItem*)));
 }
 
 MetadataListView::~MetadataListView()
@@ -87,7 +89,7 @@ void MetadataListView::setCurrentItemByKey(QString itemKey)
     if (itemKey.isNull())
         return;
 
-    QListViewItemIterator it(this);
+    Q3ListViewItemIterator it(this);
     while ( it.current() )
     {
         if ( it.current()->isSelectable() )
@@ -107,7 +109,7 @@ void MetadataListView::setCurrentItemByKey(QString itemKey)
     }
 }
 
-void MetadataListView::slotSelectionChanged(QListViewItem *item)
+void MetadataListView::slotSelectionChanged(Q3ListViewItem *item)
 {
     if (!item)
         return;
@@ -123,7 +125,7 @@ void MetadataListView::slotSelectionChanged(QListViewItem *item)
         tagValue.append("...");
     }
     
-    QWhatsThis::add(this, i18n("<b>Title: </b><p>%1<p>"
+    Q3WhatsThis::add(this, i18n("<b>Title: </b><p>%1<p>"
                                "<b>Value: </b><p>%2<p>"
                                "<b>Description: </b><p>%3")
                           .arg(tagTitle)

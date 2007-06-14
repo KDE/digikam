@@ -26,7 +26,10 @@
 
 // Qt includes.
 
-#include <qscrollview.h>
+#include <q3scrollview.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QMouseEvent>
 
 // Local includes
 
@@ -37,7 +40,7 @@ namespace Digikam
 
 class WorldMapWidgetPriv;
 
-class DIGIKAM_EXPORT WorldMapWidget : public QScrollView
+class DIGIKAM_EXPORT WorldMapWidget : public Q3ScrollView
 {
 Q_OBJECT
 

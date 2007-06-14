@@ -32,6 +32,8 @@
 #include <qpixmap.h>
 #include <qpen.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3PointArray>
 
 // Local includes.
 
@@ -59,12 +61,12 @@ public:
 
     int          separateView;
     
-    QPointArray  hightlightPoints;
+    Q3PointArray  hightlightPoints;
     
     ImageIface  *iface;
 };
 
-ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent, WFlags flags)
+ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent, Qt::WFlags flags)
                   : PanIconWidget(parent, flags)
 {
     d = new ImagePanIconWidgetPriv;
@@ -93,7 +95,7 @@ ImagePanIconWidget::~ImagePanIconWidget()
     delete d;
 }
 
-void ImagePanIconWidget::setHighLightPoints(QPointArray pointsList)
+void ImagePanIconWidget::setHighLightPoints(Q3PointArray pointsList)
 {
     d->hightlightPoints = pointsList;
     updatePixmap();

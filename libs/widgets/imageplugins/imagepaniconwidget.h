@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <qpointarray.h>
+#include <q3pointarray.h>
 
 // Local includes.
 
@@ -44,10 +44,10 @@ Q_OBJECT
 
 public:
 
-    ImagePanIconWidget(int width, int height, QWidget *parent=0, WFlags flags=Qt::WDestructiveClose);
+    ImagePanIconWidget(int width, int height, QWidget *parent=0, Qt::WFlags flags=Qt::WDestructiveClose);
     ~ImagePanIconWidget();
 
-    void  setHighLightPoints(QPointArray pointsList);
+    void  setHighLightPoints(Q3PointArray pointsList);
        
 public slots:
 

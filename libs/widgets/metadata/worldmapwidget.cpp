@@ -27,6 +27,9 @@
 #include <qstring.h>
 #include <qpixmap.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3Frame>
 
 // KDE includes.
 
@@ -74,12 +77,12 @@ static KStaticDeleter<QPixmap> pixmapDeleter;
 QPixmap *WorldMapWidgetPriv::worldMap         = 0;
 
 WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
-              : QScrollView(parent, 0, Qt::WDestructiveClose)
+              : Q3ScrollView(parent, 0, Qt::WDestructiveClose)
 {
     d = new WorldMapWidgetPriv;
 
-    setVScrollBarMode(QScrollView::AlwaysOff);
-    setHScrollBarMode(QScrollView::AlwaysOff);
+    setVScrollBarMode(Q3ScrollView::AlwaysOff);
+    setHScrollBarMode(Q3ScrollView::AlwaysOff);
     viewport()->setMouseTracking(true);
     viewport()->setPaletteBackgroundColor(colorGroup().background());
     setMinimumWidth(w);
@@ -89,7 +92,7 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
     d->latLonPos = new QLabel(viewport());
     d->latLonPos->setMaximumHeight(fontMetrics().height());
     d->latLonPos->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    d->latLonPos->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    d->latLonPos->setFrameStyle(Q3Frame::Panel | Q3Frame::Sunken);
     addChild(d->latLonPos);
 }
 
@@ -126,7 +129,7 @@ void WorldMapWidget::setEnabled(bool b)
     else 
         d->latLonPos->show();        
     
-    QScrollView::setEnabled(b);
+    Q3ScrollView::setEnabled(b);
 }
 
 void WorldMapWidget::setGPSPosition(double lat, double lng)

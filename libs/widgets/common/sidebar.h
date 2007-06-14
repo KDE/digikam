@@ -39,6 +39,8 @@
 // Local includes.
 
 #include "digikam_export.h"
+//Added by qt3to4:
+#include <QPixmap>
 
 class QSplitter;
 
@@ -61,8 +63,8 @@ public:
      */
     enum Side
     {
-        Left,
-        Right
+        Qt::DockLeft,
+        Qt::DockRight
     };    
     
     /**
@@ -72,7 +74,7 @@ public:
      * @param side where the sidebar should be displayed. At the left or right border.
      * @param minimizedDefault hide the sidebar when the program is started the first time?
      */
-    Sidebar(QWidget *parent, const char *name, Side side=Left, bool mimimizedDefault=false);
+    Sidebar(QWidget *parent, const char *name, Side side=Qt::DockLeft, bool mimimizedDefault=false);
     virtual ~Sidebar();
 
     /**

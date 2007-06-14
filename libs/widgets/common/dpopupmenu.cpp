@@ -29,6 +29,9 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qstyle.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QPaintEvent>
 
 // KDE includes.
 
@@ -107,18 +110,18 @@ QColor DPopupMenu::calcPixmapColor()
     // limit max/min brightness
     int r, g, b;
     color.rgb(&r, &g, &b);
-    int gray = qGray(r, g, b);
-    if (gray > 180) 
+    int Qt::gray = qGray(r, g, b);
+    if (Qt::gray > 180) 
     {
-        r = (r - (gray - 180) < 0 ? 0 : r - (gray - 180));
-        g = (g - (gray - 180) < 0 ? 0 : g - (gray - 180));
-        b = (b - (gray - 180) < 0 ? 0 : b - (gray - 180));
+        r = (r - (Qt::gray - 180) < 0 ? 0 : r - (Qt::gray - 180));
+        g = (g - (Qt::gray - 180) < 0 ? 0 : g - (Qt::gray - 180));
+        b = (b - (Qt::gray - 180) < 0 ? 0 : b - (Qt::gray - 180));
     }
-    else if (gray < 76) 
+    else if (Qt::gray < 76) 
     {
-        r = (r + (76 - gray) > 255 ? 255 : r + (76 - gray));
-        g = (g + (76 - gray) > 255 ? 255 : g + (76 - gray));
-        b = (b + (76 - gray) > 255 ? 255 : b + (76 - gray));
+        r = (r + (76 - Qt::gray) > 255 ? 255 : r + (76 - Qt::gray));
+        g = (g + (76 - Qt::gray) > 255 ? 255 : g + (76 - Qt::gray));
+        b = (b + (76 - Qt::gray) > 255 ? 255 : b + (76 - Qt::gray));
     }
     color.setRgb(r, g, b);
 
@@ -186,7 +189,7 @@ void DPopupMenu::paintEvent( QPaintEvent* e )
 
     style().drawPrimitive( QStyle::PE_PanelPopup, &p,
                            QRect( 0, 0, width(), height() ),
-                           colorGroup(), QStyle::Style_Default,
+                           colorGroup(), QStyle::State_None,
                            QStyleOption( frameWidth(), 0 ) );
 }
 

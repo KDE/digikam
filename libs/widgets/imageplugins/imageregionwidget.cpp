@@ -36,7 +36,10 @@
 #include <qbrush.h>
 #include <qfont.h> 
 #include <qfontmetrics.h> 
-#include <qpointarray.h>
+#include <q3pointarray.h>
+//Added by qt3to4:
+#include <QWheelEvent>
+#include <QResizeEvent>
 
 // KDE includes.
 
@@ -72,7 +75,7 @@ public:
 
     QPixmap      pixmapRegion;          // Pixmap of current region to render.
     
-    QPointArray  hightlightPoints;
+    Q3PointArray  hightlightPoints;
     
     DImg         image;                 // Entire content image to render pixmap.
     
@@ -91,8 +94,8 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
 
     if( !scrollBar ) 
     {
-       setVScrollBarMode( QScrollView::AlwaysOff );
-       setHScrollBarMode( QScrollView::AlwaysOff );
+       setVScrollBarMode( Q3ScrollView::AlwaysOff );
+       setHScrollBarMode( Q3ScrollView::AlwaysOff );
     }
     
     connect(this, SIGNAL(signalZoomFactorChanged(double)),
@@ -109,7 +112,7 @@ void ImageRegionWidget::resizeEvent(QResizeEvent* e)
 {
     if (!e) return;
 
-    QScrollView::resizeEvent(e);
+    Q3ScrollView::resizeEvent(e);
 
     // NOTE: We will always adapt the min. zoom factor to the visible size of canvas
  
@@ -151,7 +154,7 @@ void ImageRegionWidget::paintPreview(QPixmap *pix, int sx, int sy, int sw, int s
     bitBlt(pix, 0, 0, &pix2, 0, 0);
 }
 
-void ImageRegionWidget::setHighLightPoints(QPointArray pointsList)
+void ImageRegionWidget::setHighLightPoints(Q3PointArray pointsList)
 {
     d->hightlightPoints = pointsList;
     repaintContents(false);   
@@ -460,7 +463,7 @@ void ImageRegionWidget::contentsWheelEvent(QWheelEvent *e)
 {
     e->accept();
 
-    if (e->state() & Qt::ControlButton)
+    if (e->state() & Qt::ControlModifier)
     {
         if (e->delta() < 0 && !maxZoom())
             slotIncreaseZoom();

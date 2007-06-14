@@ -26,10 +26,13 @@
 
 // Qt includes.
 
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qimage.h>
 #include <qrect.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <Q3PointArray>
 
 // Local includes
 
@@ -44,7 +47,7 @@ namespace Digikam
 class ImagePannelWidgetPriv;
 class ImageRegionWidget;
 
-class DIGIKAM_EXPORT ImagePannelWidget : public QHBox
+class DIGIKAM_EXPORT ImagePannelWidget : public Q3HBox
 {
 Q_OBJECT
 
@@ -78,7 +81,7 @@ public:
 
     void   setUserAreaWidget(QWidget *w);
     
-    void   setPanIconHighLightPoints(QPointArray pt);
+    void   setPanIconHighLightPoints(Q3PointArray pt);
     
     KProgress *progressBar();
 

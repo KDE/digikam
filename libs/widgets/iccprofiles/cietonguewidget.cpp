@@ -36,6 +36,8 @@
 #include <qpixmap.h>
 #include <qfile.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 
 // KDE includes.
 
@@ -474,7 +476,7 @@ void CIETongueWidget::fillTongue()
         }
     }
 
-    d->pixmap.convertFromImage(Img, QPixmap::AvoidDither );
+    d->pixmap.convertFromImage(Img, Qt::AvoidDither );
 }
 
 void CIETongueWidget::drawTongueAxis()

@@ -30,6 +30,12 @@
 #include <qwidget.h>
 #include <qrect.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QHideEvent>
+#include <QMouseEvent>
+#include <QTimerEvent>
+#include <QPaintEvent>
 
 // Local includes
 
@@ -47,7 +53,7 @@ Q_OBJECT
 
 public:
 
-    PanIconWidget(QWidget *parent=0, WFlags flags=Qt::WDestructiveClose);
+    PanIconWidget(QWidget *parent=0, Qt::WFlags flags=Qt::WDestructiveClose);
     ~PanIconWidget();
 
     void setImage(int previewWidth, int previewHeight, const QImage& image);

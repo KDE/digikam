@@ -27,7 +27,7 @@
 
 // KDE includes.
 
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 #include <qstring.h>
 
 // Local includes
@@ -39,7 +39,7 @@ namespace Digikam
 
 class StatusProgressBarPriv;
 
-class DIGIKAM_EXPORT StatusProgressBar : public QWidgetStack
+class DIGIKAM_EXPORT StatusProgressBar : public Q3WidgetStack
 {
 Q_OBJECT
 

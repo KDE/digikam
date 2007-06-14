@@ -41,6 +41,10 @@
 #include <qfont.h> 
 #include <qfontmetrics.h> 
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QCustomEvent>
+#include <QPaintEvent>
+#include <QMouseEvent>
 
 // KDE includes.
 
@@ -841,19 +845,19 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        switch(m_channelType)
        {
           case HistogramWidget::RedChannelHistogram:
-             guidePos = d->colorGuide.red();
+             guidePos = d->colorGuide.Qt::red();
              break;
 
           case HistogramWidget::GreenChannelHistogram:    
-             guidePos = d->colorGuide.green();
+             guidePos = d->colorGuide.Qt::green();
              break;
 
           case HistogramWidget::BlueChannelHistogram:     
-             guidePos = d->colorGuide.blue();
+             guidePos = d->colorGuide.Qt::blue();
              break;
 
           case HistogramWidget::ValueHistogram:    
-             guidePos = QMAX(QMAX(d->colorGuide.red(), d->colorGuide.green()), d->colorGuide.blue());
+             guidePos = QMAX(QMAX(d->colorGuide.Qt::red(), d->colorGuide.Qt::green()), d->colorGuide.Qt::blue());
              break;
 
           default:                                     // Alpha.

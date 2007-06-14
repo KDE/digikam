@@ -27,15 +27,17 @@
 
 // Qt includes.
 
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qcombobox.h>
 #include <qpair.h>
 #include <qtimer.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstyle.h>
 #include <qapplication.h>
 #include <qtooltip.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <QResizeEvent>
 
 // Local includes.
 
@@ -70,7 +72,7 @@ SqueezedComboBox::SqueezedComboBox(QWidget *parent, const char *name)
 
     // See B.K.O #138747 : always for QComboBox instance to use a QListbox to 
     // render content independently of Widget style used. 
-    setListBox(new QListBox(this));
+    setListBox(new Q3ListBox(this));
 
     d->tooltip = new SqueezedComboBoxTip(listBox()->viewport(), this);
     setMinimumWidth(100);
@@ -172,11 +174,11 @@ SqueezedComboBoxTip::SqueezedComboBoxTip(QWidget *parent, SqueezedComboBox *name
 
 void SqueezedComboBoxTip::maybeTip(const QPoint &pos)
 {
-    QListBox* listBox = m_originalWidget->listBox();
+    Q3ListBox* listBox = m_originalWidget->listBox();
     if (!listBox)
         return;
 
-    QListBoxItem* selectedItem = listBox->itemAt( pos );
+    Q3ListBoxItem* selectedItem = listBox->itemAt( pos );
     if (selectedItem)
     {
         QRect positionToolTip = listBox->itemRect(selectedItem);

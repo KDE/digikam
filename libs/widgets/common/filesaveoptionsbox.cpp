@@ -28,8 +28,10 @@
 #include <qlabel.h>
 #include <qwidget.h>
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -69,7 +71,7 @@ public:
 
     QWidget      *noneOptions;
 
-    QGridLayout  *noneGrid;
+    Q3GridLayout  *noneGrid;
 
     QLabel       *labelNone;
 
@@ -83,14 +85,14 @@ public:
 };
 
 FileSaveOptionsBox::FileSaveOptionsBox(QWidget *parent)
-                  : QWidgetStack(parent, 0, Qt::WDestructiveClose)
+                  : Q3WidgetStack(parent, 0, Qt::WDestructiveClose)
 {
     d = new FileSaveOptionsBoxPriv;
 
     //-- NONE Settings ------------------------------------------------------
 
     d->noneOptions = new QWidget(this);
-    d->noneGrid    = new QGridLayout(d->noneOptions, 1, 1, KDialog::spacingHint());
+    d->noneGrid    = new Q3GridLayout(d->noneOptions, 1, 1, KDialog::spacingHint());
     d->labelNone   = new QLabel(i18n("None options available"), d->noneOptions);
     d->noneGrid->addMultiCellWidget(d->labelNone, 0, 0, 0, 1);
 

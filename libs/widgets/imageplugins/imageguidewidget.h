@@ -29,6 +29,13 @@
 #include <qwidget.h>
 #include <qpoint.h>
 #include <qcolor.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QEvent>
+#include <QMouseEvent>
+#include <QTimerEvent>
+#include <QPaintEvent>
 
 // Local includes
 

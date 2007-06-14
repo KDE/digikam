@@ -28,8 +28,10 @@
 
  // Qt includes.
 
-#include <qlistbox.h>
-#include <qwhatsthis.h>
+#include <q3listbox.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 // Local includes.
 
@@ -38,18 +40,18 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ListBoxPreviewItem : public QListBoxPixmap
+class DIGIKAM_EXPORT ListBoxPreviewItem : public Q3ListBoxPixmap
 {
 
 public:
-    ListBoxPreviewItem(QListBox *listbox, const QPixmap &pix, const QString &text)
-        : QListBoxPixmap(listbox, pix, text) {};
+    ListBoxPreviewItem(Q3ListBox *listbox, const QPixmap &pix, const QString &text)
+        : Q3ListBoxPixmap(listbox, pix, text) {};
 
     ListBoxPreviewItem(const QPixmap &pix, const QString &text)
-        : QListBoxPixmap(pix, text) {};
+        : Q3ListBoxPixmap(pix, text) {};
 
-    virtual int height ( const QListBox * lb ) const;
-    virtual int width  ( const QListBox * lb ) const;
+    virtual int height ( const Q3ListBox * lb ) const;
+    virtual int width  ( const Q3ListBox * lb ) const;
 };
 
 /**
@@ -57,19 +59,19 @@ public:
  * in a QListBox rather than the QListBox itself
  *
  */
-class DIGIKAM_EXPORT ListBoxWhatsThis : public QWhatsThis 
+class DIGIKAM_EXPORT ListBoxWhatsThis : public Q3WhatsThis 
 {
 
 public:
 
-    ListBoxWhatsThis(QListBox* w) : QWhatsThis(w), m_listBox(w) {}
+    ListBoxWhatsThis(Q3ListBox* w) : Q3WhatsThis(w), m_listBox(w) {}
     virtual QString text (const QPoint &);
-    void add(QListBoxItem*, const QString& text);
+    void add(Q3ListBoxItem*, const QString& text);
 
 protected:
 
-    QMap<QListBoxItem*, QString>  m_itemWhatsThisMap;
-    QListBox                     *m_listBox;
+    QMap<Q3ListBoxItem*, QString>  m_itemWhatsThisMap;
+    Q3ListBox                     *m_listBox;
 };
 
 }  // namespace Digikam

@@ -24,11 +24,15 @@
 
 // Qt includes.
  
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qhbuttongroup.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QPixmap>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -64,7 +68,7 @@ public:
 
     QString             settingsSection;
 
-    QHButtonGroup      *previewButtons;
+    Q3HButtonGroup      *previewButtons;
 
     QPushButton        *underExposureButton;
     QPushButton        *overExposureButton;
@@ -84,17 +88,17 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
 
     // -------------------------------------------------------------
     
-    QGridLayout* grid = new QGridLayout(this, 2, 3);
+    Q3GridLayout* grid = new Q3GridLayout(this, 2, 3);
 
     d->spotInfoLabel = new KSqueezedTextLabel(this);
     d->spotInfoLabel->setAlignment(Qt::AlignRight);
 
     // -------------------------------------------------------------
     
-    d->previewButtons = new QHButtonGroup(this);
+    d->previewButtons = new Q3HButtonGroup(this);
     d->previewButtons->setExclusive(true);
     d->previewButtons->setInsideMargin(0);
-    d->previewButtons->setFrameShape(QFrame::NoFrame);
+    d->previewButtons->setFrameShape(Q3Frame::NoFrame);
 
     QPushButton *previewOriginalButton = new QPushButton( d->previewButtons );
     d->previewButtons->insert(previewOriginalButton, ImageGuideWidget::PreviewOriginalImage);
@@ -102,7 +106,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     QString directory = KGlobal::dirs()->findResourceDir("original", "original.png");
     previewOriginalButton->setPixmap( QPixmap( directory + "original.png" ) );
     previewOriginalButton->setToggleButton(true);
-    QWhatsThis::add( previewOriginalButton, i18n( "<p>If you enable this option, you will see "
+    Q3WhatsThis::add( previewOriginalButton, i18n( "<p>If you enable this option, you will see "
                                                   "the original image." ) );
 
     QPushButton *previewBothButtonVert = new QPushButton( d->previewButtons );
@@ -111,7 +115,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     directory = KGlobal::dirs()->findResourceDir("bothvert", "bothvert.png");
     previewBothButtonVert->setPixmap( QPixmap( directory + "bothvert.png" ) );
     previewBothButtonVert->setToggleButton(true);
-    QWhatsThis::add( previewBothButtonVert, i18n( "<p>If you enable this option, the preview area will "
+    Q3WhatsThis::add( previewBothButtonVert, i18n( "<p>If you enable this option, the preview area will "
                                                   "be separated vertically. "
                                                   "A contiguous area of the image will be shown, "
                                                   "with one half from the original image, "
@@ -123,7 +127,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     directory = KGlobal::dirs()->findResourceDir("bothhorz", "bothhorz.png");
     previewBothButtonHorz->setPixmap( QPixmap( directory + "bothhorz.png" ) );
     previewBothButtonHorz->setToggleButton(true);
-    QWhatsThis::add( previewBothButtonHorz, i18n( "<p>If you enable this option, the preview area will "
+    Q3WhatsThis::add( previewBothButtonHorz, i18n( "<p>If you enable this option, the preview area will "
                                                   "be separated horizontally. "
                                                   "A contiguous area of the image will be shown, "
                                                   "with one half from the original image, "
@@ -135,7 +139,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     directory = KGlobal::dirs()->findResourceDir("duplicatebothvert", "duplicatebothvert.png");
     previewDuplicateBothButtonVert->setPixmap( QPixmap( directory + "duplicatebothvert.png" ) );
     previewDuplicateBothButtonVert->setToggleButton(true);
-    QWhatsThis::add( previewDuplicateBothButtonVert, i18n( "<p>If you enable this option, the preview area will "
+    Q3WhatsThis::add( previewDuplicateBothButtonVert, i18n( "<p>If you enable this option, the preview area will "
                                                            "be separated vertically. "
                                                            "The same part of the original and the target image "
                                                            "will be shown side by side.") );
@@ -146,7 +150,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     directory = KGlobal::dirs()->findResourceDir("duplicatebothhorz", "duplicatebothhorz.png");
     previewDupplicateBothButtonHorz->setPixmap( QPixmap( directory + "duplicatebothhorz.png" ) );
     previewDupplicateBothButtonHorz->setToggleButton(true);
-    QWhatsThis::add( previewDupplicateBothButtonHorz, i18n( "<p>If you enable this option, the preview area will "
+    Q3WhatsThis::add( previewDupplicateBothButtonHorz, i18n( "<p>If you enable this option, the preview area will "
                                                             "be separated horizontally. "
                                                             "The same part of the original and the target image "
                                                             "will be shown side by side.") );
@@ -157,7 +161,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     directory = KGlobal::dirs()->findResourceDir("target", "target.png");
     previewtargetButton->setPixmap( QPixmap( directory + "target.png" ) );
     previewtargetButton->setToggleButton(true);
-    QWhatsThis::add( previewtargetButton, i18n( "<p>If you enable this option, you will see "
+    Q3WhatsThis::add( previewtargetButton, i18n( "<p>If you enable this option, you will see "
                                                 "the target image." ) );
 
     QPushButton *previewToggleMouseOverButton = new QPushButton( d->previewButtons );
@@ -166,21 +170,21 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     directory = KGlobal::dirs()->findResourceDir("togglemouseover", "togglemouseover.png");
     previewToggleMouseOverButton->setPixmap( QPixmap( directory + "togglemouseover.png" ) );
     previewToggleMouseOverButton->setToggleButton(true);
-    QWhatsThis::add( previewToggleMouseOverButton, i18n( "<p>If you enable this option, you will see "
+    Q3WhatsThis::add( previewToggleMouseOverButton, i18n( "<p>If you enable this option, you will see "
                                                          "the original image when the mouse is over image area, "
                                                          "else the target image." ) );
 
     // -------------------------------------------------------------
     
-    QHButtonGroup *exposureButtons = new QHButtonGroup(this);
+    Q3HButtonGroup *exposureButtons = new Q3HButtonGroup(this);
     exposureButtons->setInsideMargin(0);
-    exposureButtons->setFrameShape(QFrame::NoFrame);
+    exposureButtons->setFrameShape(Q3Frame::NoFrame);
 
     d->underExposureButton = new QPushButton(exposureButtons);
     exposureButtons->insert(d->underExposureButton, UnderExposure);
     d->underExposureButton->setPixmap(SmallIcon("underexposure"));
     d->underExposureButton->setToggleButton(true);
-    QWhatsThis::add(d->underExposureButton, i18n("<p>Set this option on to display pure black "
+    Q3WhatsThis::add(d->underExposureButton, i18n("<p>Set this option on to display pure black "
                                                  "over-colored on preview. This will help you to avoid "
                                                  "under-exposing the image." ) );
 
@@ -188,19 +192,19 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     exposureButtons->insert(d->overExposureButton, OverExposure);
     d->overExposureButton->setPixmap(SmallIcon("overexposure"));
     d->overExposureButton->setToggleButton(true);
-    QWhatsThis::add(d->overExposureButton, i18n("<p>Set this option on to display pure white "
+    Q3WhatsThis::add(d->overExposureButton, i18n("<p>Set this option on to display pure white "
                                                 "over-colored on preview. This will help you to avoid "
                                                 "over-exposing the image." ) );
 
     // -------------------------------------------------------------
     
-    QFrame *frame    = new QFrame(this);
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l   = new QVBoxLayout(frame, 5, 0);
+    Q3Frame *frame    = new Q3Frame(this);
+    frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
+    Q3VBoxLayout* l   = new Q3VBoxLayout(frame, 5, 0);
     d->previewWidget = new ImageGuideWidget(480, 320, frame, guideVisible, 
                                             guideMode, Qt::red, 1, false, 
                                             useImageSelection);
-    QWhatsThis::add( d->previewWidget, previewWhatsThis);
+    Q3WhatsThis::add( d->previewWidget, previewWhatsThis);
     l->addWidget(d->previewWidget, 0);
 
     // -------------------------------------------------------------
@@ -316,8 +320,8 @@ void ImageWidget::slotUpdateSpotInfo(const Digikam::DColor &col, const QPoint &p
     DColor color = col;
     d->spotInfoLabel->setText(i18n("(%1,%2) RGBA:%3,%4,%5,%6")
                              .arg(point.x()).arg(point.y())
-                             .arg(color.red()).arg(color.green())
-                             .arg(color.blue()).arg(color.alpha()) );
+                             .arg(color.Qt::red()).arg(color.Qt::green())
+                             .arg(color.Qt::blue()).arg(color.alpha()) );
 }
 
 void ImageWidget::readSettings(void)

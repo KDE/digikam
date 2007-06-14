@@ -26,6 +26,9 @@
 #include <qimage.h>
 #include <qpainter.h>
 #include <qdrawutil.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3Frame>
  
 // KDE includes.
 
@@ -53,20 +56,20 @@ public:
 };
 
 ColorGradientWidget::ColorGradientWidget(int o, int size, QWidget *parent)
-                   : QFrame(parent, 0, Qt::WDestructiveClose)
+                   : Q3Frame(parent, 0, Qt::WDestructiveClose)
 {
     d = new ColorGradientWidgetPriv;
     d->orientation = o;
 
-    setFrameStyle(QFrame::Box|QFrame::Plain);
+    setFrameStyle(Q3Frame::Box|Q3Frame::Plain);
     setLineWidth(1);
     
-    if ( d->orientation == Horizontal )
+    if ( d->orientation == Qt::Horizontal )
         setFixedHeight( size );
     else
         setFixedWidth( size );    
     
-    d->color1.setRgb( 0, 0, 0 );
+    d->Qt::color1.setRgb( 0, 0, 0 );
     d->color2.setRgb( 255, 255, 255 );
 }      
 
@@ -77,7 +80,7 @@ ColorGradientWidget::~ColorGradientWidget()
     
 void ColorGradientWidget::setColors( const QColor &col1, const QColor &col2 )
 {
-    d->color1 = col1;
+    d->Qt::color1 = col1;
     d->color2 = col2;
     update();
 }
@@ -86,33 +89,33 @@ void ColorGradientWidget::drawContents(QPainter *p)
 {
     QImage image(contentsRect().width(), contentsRect().height(), 32);
 
-    QColor col, color1, color2;
+    QColor col, Qt::color1, color2;
     float scale;
     
     // Widget is disable : drawing grayed frame.
     if ( !isEnabled() )
     {
-       color1 = palette().disabled().foreground();
+       Qt::color1 = palette().disabled().foreground();
        color2 = palette().disabled().background();
     }
     else 
     {
-       color1 = d->color1;
+       Qt::color1 = d->Qt::color1;
        color2 = d->color2;
     }
 
-    int redDiff   = color2.red()   - color1.red();
-    int greenDiff = color2.green() - color1.green();
-    int blueDiff  = color2.blue()  - color1.blue();
+    int redDiff   = color2.Qt::red()   - Qt::color1.Qt::red();
+    int greenDiff = color2.Qt::green() - Qt::color1.Qt::green();
+    int blueDiff  = color2.Qt::blue()  - Qt::color1.Qt::blue();
 
-    if ( d->orientation == Vertical )
+    if ( d->orientation == Qt::Vertical )
     {
         for ( int y = 0; y < image.height(); y++ )
         {
             scale = 1.0 * y / image.height();
-            col.setRgb( color1.red()   + int(redDiff   * scale),
-                        color1.green() + int(greenDiff * scale),
-                        color1.blue()  + int(blueDiff  * scale) );
+            col.setRgb( Qt::color1.Qt::red()   + int(redDiff   * scale),
+                        Qt::color1.Qt::green() + int(greenDiff * scale),
+                        Qt::color1.Qt::blue()  + int(blueDiff  * scale) );
 
             unsigned int *p = (uint *) image.scanLine( y );
             
@@ -127,9 +130,9 @@ void ColorGradientWidget::drawContents(QPainter *p)
         for ( int x = 0; x < image.width(); x++ )
         {
             scale = 1.0 * x / image.width();
-            col.setRgb( color1.red()   + int(redDiff   * scale),
-                        color1.green() + int(greenDiff * scale),
-                        color1.blue()  + int(blueDiff  * scale) );
+            col.setRgb( Qt::color1.Qt::red()   + int(redDiff   * scale),
+                        Qt::color1.Qt::green() + int(greenDiff * scale),
+                        Qt::color1.Qt::blue()  + int(blueDiff  * scale) );
             *p++ = col.rgb();
         }
 
@@ -145,9 +148,9 @@ void ColorGradientWidget::drawContents(QPainter *p)
 
     for ( int s = 0; s < psize; s++ )
     {
-        ditherPalette[s].setRgb( color1.red()   + redDiff   * s / psize,
-                                 color1.green() + greenDiff * s / psize,
-                                 color1.blue()  + blueDiff  * s / psize );
+        ditherPalette[s].setRgb( Qt::color1.Qt::red()   + redDiff   * s / psize,
+                                 Qt::color1.Qt::green() + greenDiff * s / psize,
+                                 Qt::color1.Qt::blue()  + blueDiff  * s / psize );
     }
 
     KImageEffect::dither(image, ditherPalette, psize);

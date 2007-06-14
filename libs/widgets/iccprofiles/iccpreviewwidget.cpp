@@ -26,7 +26,10 @@
 
 #include <qfileinfo.h>
 #include <qlayout.h>
-#include <qvgroupbox.h>
+#include <q3vgroupbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3Frame>
 
 // KDE includes
 
@@ -45,10 +48,10 @@ namespace Digikam
 ICCPreviewWidget::ICCPreviewWidget(QWidget *parent)
                 : KPreviewWidgetBase( parent )
 {
-    QVBoxLayout *layout = new QVBoxLayout( this );
-    QVGroupBox *box     = new QVGroupBox( this );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( this );
+    Q3VGroupBox *box     = new Q3VGroupBox( this );
     box->setInsideMargin(0);
-    box->setFrameStyle(QFrame::NoFrame|QFrame::Plain);
+    box->setFrameStyle(Q3Frame::NoFrame|Q3Frame::Plain);
     m_iccProfileWidget = new ICCProfileWidget(box);
     layout->addWidget( box );
 }
