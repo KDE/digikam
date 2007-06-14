@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <qmutex.h>
+#include <QMutex>
 
 // Local includes.
 
