@@ -17,14 +17,14 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
         |---curves                   Gilles        Done
         |---database                 Marcel
         |---dialogs
-        |---dimg
-        |-----filters
-        |-----loaders
+        |---dimg                     Gilles
+        |-----filters                Gilles
+        |-----loaders                Gilles
         |---dmetadata                Gilles        Done
         |---greycstoration           Gilles
         |---histogram                Gilles        Done
         |---imageproperties
-        |---jpegutils                Gilles
+        |---jpegutils                Gilles        Done
         |---levels                   Gilles        Done
         |---lprof                    Gilles        Done        CMake port only
         |---themeengine
