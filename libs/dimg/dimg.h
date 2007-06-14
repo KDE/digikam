@@ -28,12 +28,12 @@
 
 // QT includes.
 
-#include <qcstring.h>
-#include <qsize.h>
-#include <qrect.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qvariant.h>
+#include <QByteArray>
+#include <QSize>
+#include <QRect>
+#include <QImage>
+#include <QPixmap>
+#include <QVariant>
 
 // LibKDcraw includes.
 
