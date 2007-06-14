@@ -38,7 +38,7 @@
 
 // Qt includes.
 
-#include <qfile.h>
+#include <QFile>
 
 // Local includes.
 
@@ -438,32 +438,32 @@ void ImageCurves::curvesLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
     
     if (d->segmentMax == 255)        // 8 bits image.
     {
-        uchar Qt::red, Qt::green, Qt::blue, alpha;
+        uchar red, green, blue, alpha;
         uchar *ptr = srcPR;
         uchar *dst = destPR;
         
         for (i = 0 ; i < w*h ; i++)
         {
-            Qt::blue  = ptr[0];
-            Qt::green = ptr[1];
-            Qt::red   = ptr[2];
+            blue  = ptr[0];
+            green = ptr[1];
+            red   = ptr[2];
             alpha = ptr[3];
 
             if ( d->lut->nchannels > 0 )
-               Qt::red = lut0[Qt::red];
+               red = lut0[red];
             
             if ( d->lut->nchannels > 1 )
-               Qt::green = lut1[Qt::green];
+               green = lut1[green];
             
             if ( d->lut->nchannels > 2 )
-               Qt::blue = lut2[Qt::blue];
+               blue = lut2[blue];
         
             if ( d->lut->nchannels > 3 )
                alpha = lut3[alpha];
                        
-            dst[0] = Qt::blue;
-            dst[1] = Qt::green;
-            dst[2] = Qt::red;
+            dst[0] = blue;
+            dst[1] = green;
+            dst[2] = red;
             dst[3] = alpha;
 
             ptr += 4;
@@ -472,32 +472,32 @@ void ImageCurves::curvesLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
     }
     else               // 16 bits image.
     {
-        unsigned short Qt::red, Qt::green, Qt::blue, alpha;
+        unsigned short red, green, blue, alpha;
         unsigned short *ptr = (unsigned short *)srcPR;
         unsigned short *dst = (unsigned short *)destPR;
 
         for (i = 0 ; i < w*h ; i++)
         {
-            Qt::blue  = ptr[0];
-            Qt::green = ptr[1];
-            Qt::red   = ptr[2];
+            blue  = ptr[0];
+            green = ptr[1];
+            red   = ptr[2];
             alpha = ptr[3];
         
             if ( d->lut->nchannels > 0 )
-               Qt::red = lut0[Qt::red];
+               red = lut0[red];
             
             if ( d->lut->nchannels > 1 )
-               Qt::green = lut1[Qt::green];
+               green = lut1[green];
             
             if ( d->lut->nchannels > 2 )
-               Qt::blue = lut2[Qt::blue];
+               blue = lut2[blue];
         
             if ( d->lut->nchannels > 3 )
                alpha = lut3[alpha];
                                 
-            dst[0] = Qt::blue;
-            dst[1] = Qt::green;
-            dst[2] = Qt::red;
+            dst[0] = blue;
+            dst[1] = green;
+            dst[2] = red;
             dst[3] = alpha;
 
             ptr += 4;
@@ -607,7 +607,7 @@ void ImageCurves::setCurveType(int channel, CurveType type)
        d->curves->curve_type[channel] = type;
 }
 
-bool ImageCurves::loadCurvesFromGimpCurvesFile(KUrl fileUrl)
+bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl &fileUrl)
 {
     // TODO : support KUrl !
     
@@ -667,7 +667,7 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(KUrl fileUrl)
     return true;
 }
 
-bool ImageCurves::saveCurvesToGimpCurvesFile(KUrl fileUrl)
+bool ImageCurves::saveCurvesToGimpCurvesFile(const KUrl &fileUrl)
 {
     // TODO : support KUrl !
     

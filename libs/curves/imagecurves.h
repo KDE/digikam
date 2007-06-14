@@ -28,7 +28,7 @@
 
 // Qt includes.
 
-#include <qpoint.h>
+#include <QPoint>
                                    
 // KDE includes.
 
@@ -86,8 +86,8 @@ public:
 
     // Methods for to save/load the curves values to/from a Gimp curves text file.        
     
-    bool   saveCurvesToGimpCurvesFile(KUrl fileUrl);
-    bool   loadCurvesFromGimpCurvesFile(KUrl fileUrl);
+    bool   saveCurvesToGimpCurvesFile(const KUrl &fileUrl);
+    bool   loadCurvesFromGimpCurvesFile(const KUrl &fileUrl);
 
 private:
     
