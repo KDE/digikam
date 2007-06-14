@@ -151,9 +151,9 @@ inline void DColor::demultiply8(int alphaValue)
 
 inline void DColor::blendAdd(const DColor &src)
 {
-    setRed  (red()   + src.Qt::red());
-    setGreen(green() + src.Qt::green());
-    setBlue (blue()  + src.Qt::blue());
+    setRed  (red()   + src.red());
+    setGreen(green() + src.green());
+    setBlue (blue()  + src.blue());
     setAlpha(alpha() + src.alpha());
 }
 
