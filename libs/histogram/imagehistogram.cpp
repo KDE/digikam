@@ -33,8 +33,6 @@
 // Qt includes.
 
 #include <QObject>
-#include <QEvent>
-#include <QCustomEvent>
 
 // KDE includes.
 
@@ -150,7 +148,7 @@ void ImageHistogram::postProgress(bool starting, bool success)
     eventData->starting  = starting;
     eventData->success   = success;
     eventData->histogram = this;
-    QApplication::postEvent(d->parent, new QCustomEvent(QEvent::User, eventData));
+    QApplication::postEvent(d->parent, eventData);
 }
 
 void ImageHistogram::stopCalcHistogramValues(void)

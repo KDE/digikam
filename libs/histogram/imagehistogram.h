@@ -27,6 +27,7 @@
 
 // Qt includes.
 
+#include <QEvent>
 #include <QThread>
 
 // Local includes.
@@ -55,20 +56,22 @@ enum HistogramChannelType
     AlphaChannel
 };
 
-class EventData
+class EventData : public QEvent
 {
 public:
 
-    EventData() 
+    EventData() : QEvent(QEvent::User)
     {
-       starting = false;
-       success = false;
+       starting  = false;
+       success   = false;
        histogram = 0;
     }
 
-    bool starting;
-    bool success;
+    bool            starting;
+    bool            success;
     ImageHistogram *histogram;
+
+    virtual ~EventData(){};
 };
 
 public:
