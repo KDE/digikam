@@ -1,17 +1,32 @@
 
-add_subdirectory( loaders )
-add_subdirectory( filters )
+ADD_SUBDIRECTORY( loaders )
+ADD_SUBDIRECTORY( filters )
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters 
+		             ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
+		             ${CMAKE_SOURCE_DIR}/digikam/digikam 
+		             ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  
+		           )
 
+SET(dimg_STAT_SRCS dimg.cpp dimgscale.cpp dcolor.cpp dcolorcomposer.cpp ddebug.cpp fastscale.cpp )
 
-########### next target ###############
+TARGET_LINK_LIBRARIES(dimg 
+                      $(top_builddir)/digikam/libs/histogram/libhistogram.la 
+                      $(top_builddir)/digikam/libs/levels/liblevels.la 
+                      $(top_builddir)/digikam/libs/curves/libcurves.la 
+                      $(top_builddir)/digikam/libs/whitebalance/libwhitebalance.la 
+                      $(top_builddir)/digikam/libs/dimg/loaders/libdimgloaders.la 
+                      $(top_builddir)/digikam/libs/dimg/filters/libdimgfilters.la 
+                      $(top_builddir)/digikam/libs/dmetadata/libdmetadata.la 
+                      $(LIBKDCRAW_LIBS) 
+                      $(LCMS_LIBS) 
+                     )
 
+KDE4_ADD_LIBRARY(dimg STATIC ${dimg_STAT_SRCS})
 
-########### install files ###############
-
-install( FILES  dimg.h dcolor.h dcolorpixelaccess.h dcolorcomposer.h                           dcolorblend.h ddebug.h DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
-
+INSTALL( FILES dimg.h dcolor.h dcolorpixelaccess.h dcolorcomposer.h dcolorblend.h ddebug.h 
+         DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
 
 
 #original Makefile.am contents follow:
