@@ -28,7 +28,7 @@
 
 // Qt includes.
 
-#include <qfile.h>
+#include <QFile>
 
 // C++ includes. 
  
@@ -565,7 +565,7 @@ int ImageLevels::getLevelHighOutputValue(int Channel)
     return 0;
 }
 
-bool ImageLevels::loadLevelsFromGimpLevelsFile(KUrl fileUrl)
+bool ImageLevels::loadLevelsFromGimpLevelsFile(const KUrl& fileUrl)
 {
     // TODO : support KUrl !
     
@@ -641,7 +641,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(KUrl fileUrl)
     return true;
 }
 
-bool ImageLevels::saveLevelsToGimpLevelsFile(KUrl fileUrl)
+bool ImageLevels::saveLevelsToGimpLevelsFile(const KUrl& fileUrl)
 {
     // TODO : support KUrl !
   

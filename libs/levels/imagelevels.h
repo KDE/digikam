@@ -89,13 +89,12 @@ public:
 
     // Methods for to save/load the levels values to/from a Gimp levels text file.        
     
-    bool   saveLevelsToGimpLevelsFile(KUrl fileUrl);
-    bool   loadLevelsFromGimpLevelsFile(KUrl fileUrl);
+    bool   saveLevelsToGimpLevelsFile(const KUrl& fileUrl);
+    bool   loadLevelsFromGimpLevelsFile(const KUrl& fileUrl);
 
 private:
 
-    ImageLevelsPriv* d;
-    
+    ImageLevelsPriv* d;    
 };
 
 }  // NameSpace Digikam
