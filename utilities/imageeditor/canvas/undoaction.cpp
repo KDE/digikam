@@ -108,9 +108,9 @@ UndoActionFlip::UndoActionFlip(DImgInterface* iface,
                                UndoActionFlip::Direction dir)
               : UndoAction(iface), m_dir(dir)
 {
-    if(m_dir == Horizontal)
+    if(m_dir == Qt::Horizontal)
         m_title = i18n("Flip Horizontal");
-    else if(m_dir == Vertical)
+    else if(m_dir == Qt::Vertical)
         m_title = i18n("Flip Vertical");
 }
 
@@ -122,10 +122,10 @@ void UndoActionFlip::rollBack()
 {
     switch(m_dir)
     {
-        case(Horizontal):
+        case(Qt::Horizontal):
             m_iface->flipHoriz(false);
             return;
-        case(Vertical):
+        case(Qt::Vertical):
             m_iface->flipVert(false);
             return;
         default:

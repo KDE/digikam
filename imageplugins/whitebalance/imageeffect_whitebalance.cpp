@@ -24,21 +24,25 @@
 
 // Qt includes. 
  
-#include <qhgroupbox.h>
-#include <qvgroupbox.h>
+#include <q3hgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qhbuttongroup.h> 
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qcombobox.h>
 #include <qtimer.h>
 #include <qtooltip.h>
 #include <qpixmap.h>
 #include <qfile.h>
-#include <qtextstream.h>
-#include <qvbox.h>
+#include <q3textstream.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -118,8 +122,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QVBoxLayout* layout2  = new QVBoxLayout( gboxSettings, spacingHint() );
-    QGridLayout *grid     = new QGridLayout( layout2, 2, 4, spacingHint());
+    Q3VBoxLayout* layout2  = new Q3VBoxLayout( gboxSettings, spacingHint() );
+    Q3GridLayout *grid     = new Q3GridLayout( layout2, 2, 4, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -128,17 +132,17 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
     m_channelCB->insertItem( i18n("Blue") );
-    QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+    Q3WhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    m_scaleBG = new QHButtonGroup(gboxSettings);
+    m_scaleBG = new Q3HButtonGroup(gboxSettings);
     m_scaleBG->setExclusive(true);
-    m_scaleBG->setFrameShape(QFrame::NoFrame);
+    m_scaleBG->setFrameShape(Q3Frame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
-    QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
+    Q3WhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the "
@@ -160,7 +164,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
     logHistoButton->setToggleButton(true);
 
-    QHBoxLayout* l1 = new QHBoxLayout();
+    Q3HBoxLayout* l1 = new Q3HBoxLayout();
     l1->addWidget(label1);
     l1->addWidget(m_channelCB);
     l1->addStretch(10);
@@ -170,9 +174,9 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QVBox *histoBox   = new QVBox(gboxSettings);
+    Q3VBox *histoBox   = new Q3VBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
-    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram "
+    Q3WhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram "
                                              "drawing of the selected image channel. This one is "
                                              "re-computed at any filter settings changes."));
     QLabel *space = new QLabel(histoBox);
@@ -184,7 +188,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    QGridLayout *grid2 = new QGridLayout(layout2, 13, 5, spacingHint());
+    Q3GridLayout *grid2 = new Q3GridLayout(layout2, 13, 5, spacingHint());
 
     m_temperatureLabel    = new KActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Color_temperature'>Color Temperature</a> "
                                                   " (K): </qt>"), gboxSettings);
@@ -192,7 +196,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_temperatureInput    = new KDoubleNumInput(gboxSettings);
     m_temperatureInput->setPrecision(1);
     m_temperatureInput->setRange(2200.0, 7000.0, 10.0, true);
-    QWhatsThis::add( m_temperatureInput, i18n("<p>Set here the white balance color temperature in Kelvin."));
+    Q3WhatsThis::add( m_temperatureInput, i18n("<p>Set here the white balance color temperature in Kelvin."));
     
     m_temperaturePresetLabel = new QLabel(i18n("Preset:"), gboxSettings);
     m_temperaturePresetCB = new QComboBox( false, gboxSettings );
@@ -210,7 +214,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_temperaturePresetCB->insertItem( i18n("Xenon Lamp") );
     m_temperaturePresetCB->insertItem( i18n("Daylight D65") );
     m_temperaturePresetCB->insertItem( i18n("None") );
-    QWhatsThis::add( m_temperaturePresetCB, i18n("<p>Select here the white balance color temperature "
+    Q3WhatsThis::add( m_temperaturePresetCB, i18n("<p>Select here the white balance color temperature "
                                                  "preset to use:<p>"
                                                  "<b>Candle</b>: candle light (1850K).<p>"
                                                  "<b>40W Lamp</b>: 40 Watt incandescent lamp (2680K).<p>"
@@ -233,7 +237,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_pickTemperature->setPixmap( QPixmap( directory + "color-picker-grey.png" ) );
     m_pickTemperature->setToggleButton(true);
     QToolTip::add( m_pickTemperature, i18n( "Temperature tone color picker." ) );
-    QWhatsThis::add( m_pickTemperature, i18n("<p>With this button, you can pick the color from original "
+    Q3WhatsThis::add( m_pickTemperature, i18n("<p>With this button, you can pick the color from original "
                                              "image used to set white color balance temperature and "
                                              "green component."));
 
@@ -245,31 +249,31 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_blackInput = new KDoubleNumInput(gboxSettings);
     m_blackInput->setPrecision(2);
     m_blackInput->setRange(0.0, 0.05, 0.01, true);
-    QWhatsThis::add( m_blackInput, i18n("<p>Set here the black level value."));
+    Q3WhatsThis::add( m_blackInput, i18n("<p>Set here the black level value."));
         
     m_darkLabel = new QLabel(i18n("Shadows:"), gboxSettings);
     m_darkInput = new KDoubleNumInput(gboxSettings);
     m_darkInput->setPrecision(2);
     m_darkInput->setRange(0.0, 1.0, 0.01, true);
-    QWhatsThis::add( m_darkInput, i18n("<p>Set here the shadows noise suppresion level."));
+    Q3WhatsThis::add( m_darkInput, i18n("<p>Set here the shadows noise suppresion level."));
 
     m_saturationLabel = new QLabel(i18n("Saturation:"), gboxSettings);
     m_saturationInput = new KDoubleNumInput(gboxSettings);
     m_saturationInput->setPrecision(2);
     m_saturationInput->setRange(0.0, 2.0, 0.01, true);
-    QWhatsThis::add( m_saturationInput, i18n("<p>Set here the saturation value."));
+    Q3WhatsThis::add( m_saturationInput, i18n("<p>Set here the saturation value."));
         
     m_gammaLabel = new QLabel(i18n("Gamma:"), gboxSettings);
     m_gammaInput = new KDoubleNumInput(gboxSettings);
     m_gammaInput->setPrecision(2);
     m_gammaInput->setRange(0.1, 3.0, 0.01, true);
-    QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma correction value."));
+    Q3WhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma correction value."));
 
     m_greenLabel = new QLabel(i18n("Green:"), gboxSettings);
     m_greenInput = new KDoubleNumInput(gboxSettings);
     m_greenInput->setPrecision(2);
     m_greenInput->setRange(1.0, 2.5, 0.01, true);
-    QWhatsThis::add(m_greenInput, i18n("<p>Set here the green component to set magenta color "
+    Q3WhatsThis::add(m_greenInput, i18n("<p>Set here the green component to set magenta color "
                                        "cast removal level."));
 
     KSeparator *line2 = new KSeparator (Horizontal, gboxSettings);
@@ -282,18 +286,18 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_autoAdjustExposure = new QPushButton(gboxSettings);
     m_autoAdjustExposure->setPixmap(kapp->iconLoader()->loadIcon("run", (KIcon::Group)KIcon::Toolbar));
     QToolTip::add( m_autoAdjustExposure, i18n( "Auto exposure adjustments" ) );
-    QWhatsThis::add( m_autoAdjustExposure, i18n("<p>With this button, you can automatically adjust Exposure "
+    Q3WhatsThis::add( m_autoAdjustExposure, i18n("<p>With this button, you can automatically adjust Exposure "
                                                 "and Black Point values."));
     m_mainExposureInput = new KDoubleNumInput(gboxSettings);
     m_mainExposureInput->setPrecision(2);
     m_mainExposureInput->setRange(-6.0, 8.0, 0.1, true);
-    QWhatsThis::add( m_mainExposureInput, i18n("<p>Set here the main exposure compensation value in E.V."));
+    Q3WhatsThis::add( m_mainExposureInput, i18n("<p>Set here the main exposure compensation value in E.V."));
 
     m_fineExposureLabel = new QLabel(i18n("Fine:"), gboxSettings);
     m_fineExposureInput = new KDoubleNumInput(gboxSettings);
     m_fineExposureInput->setPrecision(2);
     m_fineExposureInput->setRange(-0.5, 0.5, 0.01, true);
-    QWhatsThis::add( m_fineExposureInput, i18n("<p>This value in E.V will be added to main exposure "
+    Q3WhatsThis::add( m_fineExposureInput, i18n("<p>This value in E.V will be added to main exposure "
                                                "compensation value to set fine exposure adjustment."));
 
     // -------------------------------------------------------------
@@ -775,9 +779,9 @@ void ImageEffect_WhiteBalance::slotUser3()
 
     QFile file(loadWhiteBalanceFile.path());
     
-    if ( file.open(IO_ReadOnly) )   
+    if ( file.open(QIODevice::ReadOnly) )   
     {
-        QTextStream stream( &file );
+        Q3TextStream stream( &file );
 
         if ( stream.readLine() != "# White Color Balance Configuration File V2" )
         {
@@ -818,9 +822,9 @@ void ImageEffect_WhiteBalance::slotUser2()
 
     QFile file(saveWhiteBalanceFile.path());
     
-    if ( file.open(IO_WriteOnly) )   
+    if ( file.open(QIODevice::WriteOnly) )   
     {
-        QTextStream stream( &file );        
+        Q3TextStream stream( &file );        
         stream << "# White Color Balance Configuration File V2\n";    
         stream << m_temperatureInput->value() << "\n";    
         stream << m_darkInput->value() << "\n";    

@@ -42,7 +42,7 @@ extern "C"
 #include <qmap.h>
 #include <qdir.h>
 #include <qfileinfo.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qpixmap.h>
 
 // KDE includes.
@@ -75,7 +75,7 @@ ScanLib::ScanLib()
     m_progressBar = new DProgressDlg(0);
     m_progressBar->setInitialSize(QSize(500, 100), true);
     m_progressBar->setActionListVSBarVisible(false);
-    QWhatsThis::add( m_progressBar, i18n("This shows the progress of the "
+    Q3WhatsThis::add( m_progressBar, i18n("This shows the progress of the "
         "scan. During the scan, all files on disk are registered in a "
         "database. This is required for sorting on exif-date and speeds up "
         "the overall performance of digiKam.") );

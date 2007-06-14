@@ -31,8 +31,10 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qsize.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 // KDE includes.
 
@@ -69,7 +71,7 @@ public:
      * Constructor. Creates an ImageInfo object without any cached data initially.
      * @param    ID       unique ID for this image
      */
-    ImageInfo(Q_LLONG ID);
+    ImageInfo(qlonglong ID);
 
     /**
      * Constructor. Creates an ImageInfo object where the provided information
@@ -81,7 +83,7 @@ public:
      * @param     size     filesize of the image
      * @param     dims     dimensions of the image
      */
-    ImageInfo(Q_LLONG ID, int albumID,
+    ImageInfo(qlonglong ID, int albumID,
               const QString &album, const QString& albumName,
               const KURL& albumRoot,
               const QDateTime& datetime,
@@ -165,7 +167,7 @@ public:
     /**
      * @return the unique image id for this item
      */
-    Q_LLONG   id() const;
+    qlonglong   id() const;
 
     /**
      * @return the id of the PAlbum to which this item belongs
@@ -191,7 +193,7 @@ public:
      * @see tagPaths
      * @see Album::id()
      */
-    QValueList<int> tagIds() const;
+    Q3ValueList<int> tagIds() const;
 
 
 

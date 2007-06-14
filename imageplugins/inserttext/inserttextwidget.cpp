@@ -32,6 +32,11 @@
 #include <qpainter.h>
 #include <qfont.h> 
 #include <qfontmetrics.h> 
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QPixmap>
+#include <QMouseEvent>
 
 // KDE include.
 

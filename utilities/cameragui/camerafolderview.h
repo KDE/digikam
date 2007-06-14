@@ -28,6 +28,8 @@
 // Qt includes.
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 // KDE includes.
 
@@ -69,7 +71,7 @@ signals:
     
 private slots:
 
-    void slotCurrentChanged(QListViewItem*);
+    void slotCurrentChanged(Q3ListViewItem*);
 
 private:
 

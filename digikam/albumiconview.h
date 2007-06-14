@@ -30,6 +30,13 @@
 
 #include <qrect.h>
 #include <qfont.h>
+//Added by qt3to4:
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QResizeEvent>
+#include <Q3ValueList>
+#include <QPixmap>
+#include <Q3PtrList>
 
 // Local includes.
 
@@ -83,8 +90,8 @@ public:
     KURL::List allItems();
     KURL::List selectedItems();
 
-    QPtrList<ImageInfo> allImageInfos(bool copy) const;
-    QPtrList<ImageInfo> selectedImageInfos(bool copy) const;
+    Q3PtrList<ImageInfo> allImageInfos(bool copy) const;
+    Q3PtrList<ImageInfo> selectedImageInfos(bool copy) const;
 
     void refresh();
     void refreshItems(const KURL::List& itemList);
@@ -188,14 +195,14 @@ private slots:
     void slotDIOResult(KIO::Job* job);
     void slotRenamed(KIO::Job*, const KURL &, const KURL&);
 
-    void slotImageAttributesChanged(Q_LLONG imageId);
+    void slotImageAttributesChanged(qlonglong imageId);
     void slotAlbumImagesChanged(int albumId);
 
 private:
 
     void updateBannerRectPixmap();
     void updateItemRectsPixmap();
-    void changeTagOnImageInfos(const QPtrList<ImageInfo> &list, const QValueList<int> &tagIDs, bool addOrRemove, bool progress);
+    void changeTagOnImageInfos(const Q3PtrList<ImageInfo> &list, const Q3ValueList<int> &tagIDs, bool addOrRemove, bool progress);
 
 private:
 

@@ -26,12 +26,18 @@
 #include <qpainter.h>
 #include <qcursor.h>
 #include <qstring.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qfileinfo.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qpixmap.h>
 #include <qdrawutil.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QResizeEvent>
+#include <Q3PopupMenu>
 
 // KDE includes.
 
@@ -193,7 +199,7 @@ void LightTablePreview::setDragAndDropMessage()
         QPainter p(&pix);
         p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
-                   Qt::AlignCenter|Qt::WordBreak, 
+                   Qt::AlignCenter|Qt::TextWordWrap, 
                    i18n("Drag and drop an image here"));
         p.end();
         setImage(pix.convertToImage());
@@ -279,7 +285,7 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription &descriptio
         QFileInfo info(d->path);
         p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
-                   Qt::AlignCenter|Qt::WordBreak, 
+                   Qt::AlignCenter|Qt::TextWordWrap, 
                    i18n("Unable to display preview for\n\"%1\"")
                    .arg(info.fileName()));
         p.end();
@@ -357,10 +363,10 @@ void LightTablePreview::slotContextMenu()
     KURL url(d->imageInfo->kurl().path());
     KMimeType::Ptr mimePtr = KMimeType::findByURL(url, 0, true, true);
 
-    QValueVector<KService::Ptr> serviceVector;
+    Q3ValueVector<KService::Ptr> serviceVector;
     KTrader::OfferList offers = KTrader::self()->query(mimePtr->name(), "Type == 'Application'");
 
-    QPopupMenu openWithMenu;
+    Q3PopupMenu openWithMenu;
 
     KTrader::OfferList::Iterator iter;
     KService::Ptr ptr;
@@ -395,8 +401,8 @@ void LightTablePreview::slotContextMenu()
 
     // Bulk assignment/removal of tags --------------------------
 
-    Q_LLONG id = d->imageInfo->id();
-    QValueList<Q_LLONG> idList;
+    qlonglong id = d->imageInfo->id();
+    Q3ValueList<qlonglong> idList;
     idList.append(id);
 
     assignTagsMenu = new TagsPopupMenu(idList, 1000, TagsPopupMenu::ASSIGN);
@@ -599,7 +605,7 @@ void LightTablePreview::resizeEvent(QResizeEvent* e)
 {
     if (!e) return;
 
-    QScrollView::resizeEvent(e);
+    Q3ScrollView::resizeEvent(e);
 
     if (!d->imageInfo)
     {
@@ -670,8 +676,8 @@ void LightTablePreview::contentsDragMoveEvent(QDragMoveEvent *e)
     if (d->dragAndDropEnabled)
     {
         int             albumID;
-        QValueList<int> albumIDs;
-        QValueList<int> imageIDs;
+        Q3ValueList<int> albumIDs;
+        Q3ValueList<int> imageIDs;
         KURL::List      urls;
         KURL::List      kioURLs;        
     
@@ -692,15 +698,15 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
     if (d->dragAndDropEnabled)
     {
         int             albumID;
-        QValueList<int> albumIDs;
-        QValueList<int> imageIDs;
+        Q3ValueList<int> albumIDs;
+        Q3ValueList<int> imageIDs;
         KURL::List      urls;
         KURL::List      kioURLs;  
         ImageInfoList   list;
     
         if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
         {
-            for (QValueList<int>::const_iterator it = imageIDs.begin();
+            for (Q3ValueList<int>::const_iterator it = imageIDs.begin();
                  it != imageIDs.end(); ++it)
             {
                 list.append(new ImageInfo(*it));
@@ -712,9 +718,9 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
         }
         else if (AlbumDrag::decode(e, urls, albumID))
         {
-            QValueList<Q_LLONG> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
+            Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
     
-            for (QValueList<Q_LLONG>::const_iterator it = itemIDs.begin();
+            for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
                 it != itemIDs.end(); ++it)
             {
                 list.append(new ImageInfo(*it));
@@ -727,14 +733,14 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
         else if(TagDrag::canDecode(e))
         {
             QByteArray ba = e->encodedData("digikam/tag-id");
-            QDataStream ds(ba, IO_ReadOnly);
+            QDataStream ds(ba, QIODevice::ReadOnly);
             int tagID;
             ds >> tagID;
     
-            QValueList<Q_LLONG> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
+            Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
             ImageInfoList imageInfoList;
     
-            for (QValueList<Q_LLONG>::const_iterator it = itemIDs.begin();
+            for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
                 it != itemIDs.end(); ++it)
             {
                 list.append(new ImageInfo(*it));

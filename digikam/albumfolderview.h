@@ -33,6 +33,9 @@
 // Local includes.
 
 #include "folderview.h"
+//Added by qt3to4:
+#include <QPixmap>
+#include <QDropEvent>
 
 class QPixmap;
 
@@ -82,14 +85,14 @@ private slots:
     void slotAlbumIconChanged(Album* album);
     void slotAlbumRenamed(Album *album);
 
-    void slotContextMenu(QListViewItem*, const QPoint&, int);
+    void slotContextMenu(Q3ListViewItem*, const QPoint&, int);
 
     void slotDIOResult(KIO::Job* job);
 
 protected:
 
     void contentsDropEvent(QDropEvent *e);
-    QDragObject* dragObject();
+    Q3DragObject* dragObject();
     bool acceptDrop(const QDropEvent *e) const;
 
     void selectItem(int id);

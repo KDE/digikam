@@ -29,9 +29,12 @@
 
 #include <qlayout.h>
 #include <qstring.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
 
 // KDE includes.
 
@@ -69,9 +72,9 @@ SetupPlugins::SetupPlugins(QWidget* parent )
             : QWidget(parent)
 {
     d = new SetupPluginsPriv;
-    QVBoxLayout *layout = new QVBoxLayout( parent );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( parent );
     
-    QHBoxLayout *hlay = new QHBoxLayout(layout);
+    Q3HBoxLayout *hlay = new Q3HBoxLayout(layout);
     d->pluginsNumber = new QLabel(parent);
     
     QLabel *KipiVersion = new QLabel(i18n("Kipi library version: %1").arg(kipi_version), parent);
@@ -84,7 +87,7 @@ SetupPlugins::SetupPlugins(QWidget* parent )
     d->kipiConfig = KIPI::PluginLoader::instance()->configWidget( parent );
     QString pluginsListHelp = i18n("<p>A list of available Kipi plugins "
                                     "appears below.");
-    QWhatsThis::add( d->kipiConfig, pluginsListHelp);
+    Q3WhatsThis::add( d->kipiConfig, pluginsListHelp);
     layout->addWidget( d->kipiConfig );
 }
 

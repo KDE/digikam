@@ -24,7 +24,7 @@
 // Qt includes.
 
 #include <qdatetime.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qfont.h>
 #include <qpainter.h>
 #include <qstyle.h>
@@ -72,17 +72,17 @@ class DateFolderItem : public FolderItem
 {
 public:
 
-    DateFolderItem(QListView* parent, const QString& name)
+    DateFolderItem(Q3ListView* parent, const QString& name)
         : FolderItem(parent, name, true), m_album(0)
     {
     }
 
-    DateFolderItem(QListViewItem* parent, const QString& name, DAlbum* album)
+    DateFolderItem(Q3ListViewItem* parent, const QString& name, DAlbum* album)
         : FolderItem(parent, name), m_album(album)
     {
     }
 
-    int compare(QListViewItem* i, int , bool ) const
+    int compare(Q3ListViewItem* i, int , bool ) const
     {
         if (!i)
             return 0;
@@ -113,7 +113,7 @@ public:
 
 
 DateFolderView::DateFolderView(QWidget* parent)
-    : QVBox(parent, "DateFolderView")
+    : Q3VBox(parent, "DateFolderView")
 {
     d = new DateFolderViewPriv;
     d->active    = false;
@@ -121,7 +121,7 @@ DateFolderView::DateFolderView(QWidget* parent)
     d->monthview = new MonthWidget(this);
 
     d->listview->addColumn(i18n("My Dates"));
-    d->listview->setResizeMode(QListView::LastColumn);
+    d->listview->setResizeMode(Q3ListView::LastColumn);
     d->listview->setRootIsDecorated(true);
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
@@ -183,7 +183,7 @@ void DateFolderView::slotAlbumAdded(Album* a)
     QString mo = KGlobal::locale()->monthName(date, false);
 #endif
     
-    QListViewItem* parent = d->listview->findItem(yr, 0);
+    Q3ListViewItem* parent = d->listview->findItem(yr, 0);
     if (!parent)
     {
         parent = new DateFolderItem(d->listview, yr);
@@ -216,9 +216,9 @@ void DateFolderView::slotSelectionChanged()
     if (!d->active)
         return;
     
-    QListViewItem* selItem = 0;
+    Q3ListViewItem* selItem = 0;
     
-    QListViewItemIterator it( d->listview );
+    Q3ListViewItemIterator it( d->listview );
     while (it.current())
     {
         if (it.current()->isSelected())
@@ -273,7 +273,7 @@ void DateFolderView::loadViewState()
     
     DateFolderItem *item;
     QString id;
-    QListViewItemIterator it(d->listview);
+    Q3ListViewItemIterator it(d->listview);
     for( ; it.current(); ++it)
     {        
         item = dynamic_cast<DateFolderItem*>(it.current());
@@ -298,7 +298,7 @@ void DateFolderView::saveViewState()
         config->writeEntry("LastSelectedItem", item->date());
     
     QStringList openFolders;
-    QListViewItemIterator it(d->listview);
+    Q3ListViewItemIterator it(d->listview);
     item = dynamic_cast<DateFolderItem*>(d->listview->firstChild());
     while(item)
     {
@@ -310,7 +310,7 @@ void DateFolderView::saveViewState()
     config->writeEntry("OpenFolders", openFolders);
 }
 
-void DateFolderView::setSelected(QListViewItem *item)
+void DateFolderView::setSelected(Q3ListViewItem *item)
 {
     if(!item)
         return;

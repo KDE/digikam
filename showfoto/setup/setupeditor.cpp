@@ -25,11 +25,13 @@
 
 #include <qlayout.h>
 #include <qcolor.h>
-#include <qhbox.h>
-#include <qvgroupbox.h>
+#include <q3hbox.h>
+#include <q3vgroupbox.h>
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -85,48 +87,48 @@ SetupEditor::SetupEditor(QWidget* parent )
            : QWidget(parent)
 {
     d = new SetupEditorPriv;
-    QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( parent, 0, KDialog::spacingHint() );
     
     // --------------------------------------------------------
     
-    QVGroupBox *interfaceOptionsGroup = new QVGroupBox(i18n("Interface Options"), parent);
+    Q3VGroupBox *interfaceOptionsGroup = new Q3VGroupBox(i18n("Interface Options"), parent);
     
-    QHBox* colorBox              = new QHBox(interfaceOptionsGroup);    
+    Q3HBox* colorBox              = new Q3HBox(interfaceOptionsGroup);    
     QLabel *backgroundColorlabel = new QLabel( i18n("&Background color:"), colorBox );
     d->backgroundColor           = new KColorButton(colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
-    QWhatsThis::add( d->backgroundColor, i18n("<p>Select the background color to use "
+    Q3WhatsThis::add( d->backgroundColor, i18n("<p>Select the background color to use "
                                               "for the image editor area.") );
     
     d->hideToolBar        = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
     d->hideThumbBar       = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
     d->horizontalThumbBar = new QCheckBox(i18n("Use &horizontal thumbbar (need to restart showFoto)"), interfaceOptionsGroup);
-    QWhatsThis::add( d->horizontalThumbBar, i18n("<p>If this option is enabled, thumbnails bar will be displayed horizontally behind "
+    Q3WhatsThis::add( d->horizontalThumbBar, i18n("<p>If this option is enabled, thumbnails bar will be displayed horizontally behind "
                                                  "image area. You need to restart showFoto for this option take effect.<p>"));
     d->useTrash   = new QCheckBox(i18n("&Deleting items should move them to trash"), interfaceOptionsGroup);
     d->showSplash = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
     
     // --------------------------------------------------------
 
-    QVGroupBox *exposureOptionsGroup = new QVGroupBox(i18n("Exposure Indicators"), parent);
+    Q3VGroupBox *exposureOptionsGroup = new Q3VGroupBox(i18n("Exposure Indicators"), parent);
 
-    QHBox *underExpoBox         = new QHBox(exposureOptionsGroup);
+    Q3HBox *underExpoBox         = new Q3HBox(exposureOptionsGroup);
     QLabel *underExpoColorlabel = new QLabel( i18n("&Under-exposure color:"), underExpoBox);
     d->underExposureColor       = new KColorButton(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
-    QWhatsThis::add( d->underExposureColor, i18n("<p>Customize the color used in image editor to identify "
+    Q3WhatsThis::add( d->underExposureColor, i18n("<p>Customize the color used in image editor to identify "
                                                  "the under-exposed pixels.") );
 
-    QHBox *overExpoBox         = new QHBox(exposureOptionsGroup);
+    Q3HBox *overExpoBox         = new Q3HBox(exposureOptionsGroup);
     QLabel *overExpoColorlabel = new QLabel( i18n("&Over-exposure color:"), overExpoBox);
     d->overExposureColor       = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
-    QWhatsThis::add( d->overExposureColor, i18n("<p>Customize the color used in image editor to identify "
+    Q3WhatsThis::add( d->overExposureColor, i18n("<p>Customize the color used in image editor to identify "
                                                 "the over-exposed pixels.") );
 
     // --------------------------------------------------------
     
-    QVGroupBox *ExifGroupOptions = new QVGroupBox(i18n("EXIF Actions"), parent);
+    Q3VGroupBox *ExifGroupOptions = new Q3VGroupBox(i18n("EXIF Actions"), parent);
     
     d->exifRotateBox = new QCheckBox(ExifGroupOptions);
     d->exifRotateBox->setText(i18n("Show images/thumbs &rotated according to orientation tag"));

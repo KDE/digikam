@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3CString>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -44,7 +46,7 @@ extern "C"
 
 #include <qfile.h>
 #include <qdatastream.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qregexp.h>
 #include <qdir.h>
 #include <qvariant.h>
@@ -72,8 +74,8 @@ extern "C"
 #include "databaseurl.h"
 #include "digikamsearch.h"
 
-kio_digikamsearch::kio_digikamsearch(const QCString &pool_socket,
-                                     const QCString &app_socket)
+kio_digikamsearch::kio_digikamsearch(const Q3CString &pool_socket,
+                                     const Q3CString &app_socket)
                  : SlaveBase("kio_digikamsearch", pool_socket, app_socket)
 {
 }
@@ -89,7 +91,7 @@ void kio_digikamsearch::special(const QByteArray& data)
     int     getDimensions;
     int     listingType = 0;
 
-    QDataStream ds(data, IO_ReadOnly);
+    QDataStream ds(data, QIODevice::ReadOnly);
     ds >> kurl;
     ds >> filter;
     ds >> getDimensions;

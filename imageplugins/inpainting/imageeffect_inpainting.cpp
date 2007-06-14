@@ -30,13 +30,13 @@
 
 // Qt includes.
 
-#include <qvgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qtabwidget.h>
@@ -46,6 +46,8 @@
 #include <qpainter.h>
 #include <qbrush.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -157,11 +159,11 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 2, 1, spacingHint());
+    Q3GridLayout* gridSettings = new Q3GridLayout(gboxSettings, 2, 1, spacingHint());
     m_mainTab = new QTabWidget( gboxSettings );
 
     QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid  = new QGridLayout( firstPage, 2, 2, marginHint(), spacingHint());
+    Q3GridLayout* grid  = new Q3GridLayout( firstPage, 2, 2, marginHint(), spacingHint());
     m_mainTab->addTab( firstPage, i18n("Preset") );
 
     KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
@@ -179,7 +181,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     m_inpaintingTypeCB->insertItem( i18n("Remove Small Artefact") );
     m_inpaintingTypeCB->insertItem( i18n("Remove Medium Artefact") );
     m_inpaintingTypeCB->insertItem( i18n("Remove Large Artefact") );
-    QWhatsThis::add( m_inpaintingTypeCB, i18n("<p>Select here the filter preset to use for photograph restoration:<p>"
+    Q3WhatsThis::add( m_inpaintingTypeCB, i18n("<p>Select here the filter preset to use for photograph restoration:<p>"
                                                "<b>None</b>: Most common values. Puts settings to default.<p>"
                                                "<b>Remove Small Artefact</b>: inpaint small image artefact like image glitch.<p>"
                                                "<b>Remove Medium Artefact</b>: inpaint medium image artefact.<p>"
@@ -423,7 +425,7 @@ void ImageEffect_InPainting_Dialog::slotUser3()
 
     QFile file(loadInpaintingFile.path());
 
-    if ( file.open(IO_ReadOnly) )
+    if ( file.open(QIODevice::ReadOnly) )
     {
         if (!m_settingsWidget->loadSettings(file, QString("# Photograph Inpainting Configuration File V2")))
         {
@@ -454,7 +456,7 @@ void ImageEffect_InPainting_Dialog::slotUser2()
 
     QFile file(saveRestorationFile.path());
 
-    if ( file.open(IO_WriteOnly) )
+    if ( file.open(QIODevice::WriteOnly) )
         m_settingsWidget->saveSettings(file, QString("# Photograph Inpainting Configuration File V2"));
     else
         KMessageBox::error(this, i18n("Cannot save settings to the Photograph Inpainting text file."));

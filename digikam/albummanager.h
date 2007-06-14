@@ -30,7 +30,7 @@
 
 #include <qobject.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 // KDE includes.
 
@@ -59,7 +59,7 @@ class AlbumDB;
 class AlbumItemHandler;
 class AlbumManagerPriv;
 
-typedef QValueList<Album*> AlbumList;
+typedef Q3ValueList<Album*> AlbumList;
 
 /**
  * \class AlbumManager
@@ -258,7 +258,7 @@ public:
      * @param errMsg if the operation fails, this will contain the error message
      * describing why the operation failed
      */
-    bool updatePAlbumIcon(PAlbum *album, Q_LLONG iconID, QString& errMsg);
+    bool updatePAlbumIcon(PAlbum *album, qlonglong iconID, QString& errMsg);
     //@}
     
     /** @name Operations on TAlbum
@@ -335,7 +335,7 @@ public:
      * iconKDE. otherwise pass a null QString to iconKDE and set iconID
      */
     bool updateTAlbumIcon(TAlbum* album, const QString& iconKDE,
-                          Q_LLONG iconID, QString& errMsg);
+                          qlonglong iconID, QString& errMsg);
 
     /**
      * Get a list of recently assigned tags (only last 6 tags are listed)
@@ -347,7 +347,7 @@ public:
      * @return A list with the tagPaths for a list of tag IDs.
      * @param tagIDs list of tag album IDs
      */
-    QStringList tagPaths(const QValueList<int> &tagIDs, bool leadingSlash = true) const;
+    QStringList tagPaths(const Q3ValueList<int> &tagIDs, bool leadingSlash = true) const;
 
     //@}
     

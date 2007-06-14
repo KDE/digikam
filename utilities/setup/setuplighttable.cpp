@@ -25,11 +25,13 @@
 
 #include <qlayout.h>
 #include <qcolor.h>
-#include <qhbox.h>
-#include <qvgroupbox.h>
+#include <q3hbox.h>
+#include <q3vgroupbox.h>
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -71,25 +73,25 @@ SetupLightTable::SetupLightTable(QWidget* parent )
                : QWidget(parent)
 {
     d = new SetupLightTablePriv;
-    QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( parent, 0, KDialog::spacingHint() );
 
     // --------------------------------------------------------
 
-    QVGroupBox *interfaceOptionsGroup = new QVGroupBox(i18n("Interface Options"), parent);
+    Q3VGroupBox *interfaceOptionsGroup = new Q3VGroupBox(i18n("Interface Options"), parent);
 
 
     d->autoSyncPreview = new QCheckBox(i18n("Synchronize panels automatically"), interfaceOptionsGroup);
-    QWhatsThis::add( d->autoSyncPreview, i18n("<p>Set this option to automatically synchronize "
+    Q3WhatsThis::add( d->autoSyncPreview, i18n("<p>Set this option to automatically synchronize "
                      "zooming and panning between left and right panels if the images have "
                      "the same size."));
 
     d->autoLoadOnRightPanel = new QCheckBox(i18n("Selecting a thumbbar item loads image to the right panel"),
                                             interfaceOptionsGroup);
-    QWhatsThis::add( d->autoLoadOnRightPanel, i18n("<p>Set this option to automatically load an image "
+    Q3WhatsThis::add( d->autoLoadOnRightPanel, i18n("<p>Set this option to automatically load an image "
                      "into the right panel when the corresponding item is selected on the thumbbar."));
 
     d->loadFullImageSize = new QCheckBox(i18n("Load full image size"), interfaceOptionsGroup);
-    QWhatsThis::add( d->loadFullImageSize, i18n("<p>Set this option to load full image size "
+    Q3WhatsThis::add( d->loadFullImageSize, i18n("<p>Set this option to load full image size "
                      "in preview panel instead a reduced one. Because this option will take more time "
                      "to load image, use it only if you have a fast computer."));
 

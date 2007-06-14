@@ -25,6 +25,8 @@
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #endif
 
 // C Ansi includes
@@ -131,7 +133,7 @@ void DigikamImageInfo::setDescription( const QString& description )
 
     if ( p  )
     {
-        Q_LLONG imageId;
+        qlonglong imageId;
         {
             DatabaseAccess access;
             imageId = access.db()->getImageId(p->id(), _url.filename());
@@ -172,7 +174,7 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
 
     if ( p )
     {
-        Q_LLONG imageId;
+        qlonglong imageId;
         {
             DatabaseAccess access;
             imageId = access.db()->getImageId(p->id(), _url.filename());
@@ -199,7 +201,7 @@ QMap<QString, QVariant> DigikamImageInfo::attributes()
     if (p)
     {
         DatabaseAccess access;
-        Q_LLONG imageId  = access.db()->getImageId(p->id(), _url.filename());
+        qlonglong imageId  = access.db()->getImageId(p->id(), _url.filename());
 
         // Get digiKam Tags list of picture.
         QStringList tags         = access.db()->getItemTagNames(imageId);
@@ -220,7 +222,7 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
     if (p)
     {
         DatabaseAccess access;
-        Q_LLONG imageId                    = access.db()->getImageId(p->id(), _url.filename());
+        qlonglong imageId                    = access.db()->getImageId(p->id(), _url.filename());
         QMap<QString, QVariant> attributes = res;
 
         // Set digiKam Tags list of picture.
@@ -564,9 +566,9 @@ KIPI::ImageCollection DigikamKipiInterface::currentSelection()
     }
 }
 
-QValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
+Q3ValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
 {
-    QValueList<KIPI::ImageCollection> result;
+    Q3ValueList<KIPI::ImageCollection> result;
 
     QString fileFilter(fileExtensions());
 

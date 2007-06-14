@@ -29,6 +29,8 @@
 
 #include "imageinfo.h"
 #include "dprogressdlg.h"
+//Added by qt3to4:
+#include <QCloseEvent>
 
 class QWidget;
 

@@ -26,11 +26,15 @@
 #include <qpainter.h>
 #include <qcursor.h>
 #include <qstring.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qfileinfo.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QResizeEvent>
+#include <Q3PopupMenu>
 
 // KDE includes.
 
@@ -339,10 +343,10 @@ void ImagePreviewView::slotContextMenu()
     KURL url(d->imageInfo->kurl().path());
     KMimeType::Ptr mimePtr = KMimeType::findByURL(url, 0, true, true);
 
-    QValueVector<KService::Ptr> serviceVector;
+    Q3ValueVector<KService::Ptr> serviceVector;
     KTrader::OfferList offers = KTrader::self()->query(mimePtr->name(), "Type == 'Application'");
 
-    QPopupMenu openWithMenu;
+    Q3PopupMenu openWithMenu;
 
     KTrader::OfferList::Iterator iter;
     KService::Ptr ptr;
@@ -411,8 +415,8 @@ void ImagePreviewView::slotContextMenu()
 
     // Bulk assignment/removal of tags --------------------------
 
-    Q_LLONG id = d->imageInfo->id();
-    QValueList<Q_LLONG> idList;
+    qlonglong id = d->imageInfo->id();
+    Q3ValueList<qlonglong> idList;
     idList.append(id);
 
     assignTagsMenu = new TagsPopupMenu(idList, 1000, TagsPopupMenu::ASSIGN);
@@ -620,7 +624,7 @@ void ImagePreviewView::resizeEvent(QResizeEvent* e)
 {
     if (!e) return;
 
-    QScrollView::resizeEvent(e);
+    Q3ScrollView::resizeEvent(e);
 
     if (!d->imageInfo)
         d->cornerButton->hide(); 

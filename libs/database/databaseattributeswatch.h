@@ -68,7 +68,7 @@ signals:
      * (Note: there is no absolute guarantee
      *  that the field has actually been changed)
      */
-    void imageFieldChanged(Q_LLONG imageId, int field);
+    void imageFieldChanged(qlonglong imageId, int field);
 
 protected:
 
@@ -76,7 +76,7 @@ protected:
 
 public:
 
-    void sendImageFieldChanged(Q_LLONG imageId, ImageDataField field);
+    void sendImageFieldChanged(qlonglong imageId, ImageDataField field);
 
 };
 

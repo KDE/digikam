@@ -31,7 +31,7 @@ extern "C"
 
 // QT includes.
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qstring.h>
 #include <qfile.h>
 #include <qdatastream.h>
@@ -104,7 +104,7 @@ bool UndoCache::putData(int level, int w, int h, int bytesDepth, uchar* data)
 
     QFile file(cacheFile);
     
-    if (file.exists() || !file.open(IO_WriteOnly))
+    if (file.exists() || !file.open(QIODevice::WriteOnly))
         return false;
 
     QDataStream ds(&file);
@@ -133,7 +133,7 @@ uchar* UndoCache::getData(int level, int& w, int& h, int& bytesDepth, bool del)
                         .arg(level);
 
     QFile file(cacheFile);
-    if (!file.open(IO_ReadOnly))
+    if (!file.open(QIODevice::ReadOnly))
         return 0;
 
     QDataStream ds(&file);

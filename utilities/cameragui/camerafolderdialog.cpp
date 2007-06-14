@@ -25,7 +25,9 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -57,8 +59,8 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
 
     m_rootPath = rootPath;
 
-    QFrame *page      = makeMainWidget();
-    QGridLayout* grid = new QGridLayout(page, 2, 1, 0, spacingHint());
+    Q3Frame *page      = makeMainWidget();
+    Q3GridLayout* grid = new Q3GridLayout(page, 2, 1, 0, spacingHint());
     
     m_folderView    = new CameraFolderView(page);
     QLabel *logo    = new QLabel(page);
@@ -107,7 +109,7 @@ CameraFolderDialog::~CameraFolderDialog()
 
 QString CameraFolderDialog::selectedFolderPath()
 {
-    QListViewItem *item = m_folderView->currentItem();
+    Q3ListViewItem *item = m_folderView->currentItem();
     if (!item) return QString();
 
     CameraFolderItem *folderItem = static_cast<CameraFolderItem *>(item);

@@ -28,9 +28,12 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qpushbutton.h>
-#include <qpointarray.h>
+#include <q3pointarray.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3ValueList>
 
 // KDE includes.
 
@@ -87,7 +90,7 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     // -------------------------------------------------------------
     
     QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 2, 0, spacingHint());
+    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 2, 2, 0, spacingHint());
     
     QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), gboxSettings);
     m_filterMethodCombo       = new QComboBox(gboxSettings);
@@ -117,8 +120,8 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     connect(m_blackFrameButton, SIGNAL(clicked()),
             this, SLOT(slotAddBlackFrame()));
                                                   
-    connect(m_blackFrameListView, SIGNAL(blackFrameSelected(QValueList<HotPixel>, const KURL&)),
-            this, SLOT(slotBlackFrame(QValueList<HotPixel>, const KURL&))); 
+    connect(m_blackFrameListView, SIGNAL(blackFrameSelected(Q3ValueList<HotPixel>, const KURL&)),
+            this, SLOT(slotBlackFrame(Q3ValueList<HotPixel>, const KURL&))); 
 }
 
 ImageEffect_HotPixels::~ImageEffect_HotPixels()
@@ -188,11 +191,11 @@ void ImageEffect_HotPixels::prepareEffect()
     Digikam::DImg image     = m_imagePreviewWidget->getOriginalRegionImage();
     int interpolationMethod = m_filterMethodCombo->currentItem();
 
-    QValueList<HotPixel> hotPixelsRegion;
+    Q3ValueList<HotPixel> hotPixelsRegion;
     QRect area = m_imagePreviewWidget->getOriginalImageRegionToRender();
-    QValueList<HotPixel>::Iterator end(m_hotPixelsList.end()); 
+    Q3ValueList<HotPixel>::Iterator end(m_hotPixelsList.end()); 
     
-    for (QValueList<HotPixel>::Iterator it = m_hotPixelsList.begin() ; it != end ; ++it )
+    for (Q3ValueList<HotPixel>::Iterator it = m_hotPixelsList.begin() ; it != end ; ++it )
     {
         HotPixel hp = (*it);
         
@@ -231,15 +234,15 @@ void ImageEffect_HotPixels::putFinalData(void)
     iface.putOriginalImage(i18n("Hot Pixels Correction"), m_threadedFilter->getTargetImage().bits());
 }
 
-void ImageEffect_HotPixels::slotBlackFrame(QValueList<HotPixel> hpList, const KURL& blackFrameURL)
+void ImageEffect_HotPixels::slotBlackFrame(Q3ValueList<HotPixel> hpList, const KURL& blackFrameURL)
 {
     m_blackFrameURL = blackFrameURL;
     m_hotPixelsList = hpList;
     
-    QPointArray pointList(m_hotPixelsList.size());
-    QValueList <HotPixel>::Iterator it;
+    Q3PointArray pointList(m_hotPixelsList.size());
+    Q3ValueList <HotPixel>::Iterator it;
     int i = 0;
-    QValueList <HotPixel>::Iterator end(m_hotPixelsList.end());
+    Q3ValueList <HotPixel>::Iterator end(m_hotPixelsList.end());
     
     for (it = m_hotPixelsList.begin() ; it != end ; ++it, i++)
        pointList.setPoint(i, (*it).rect.center());

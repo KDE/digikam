@@ -32,7 +32,7 @@
 
 class QCheckBox;
 class QComboBox;
-class QHButtonGroup;
+class Q3HButtonGroup;
 
 class KIntNumInput;
 class KDoubleNumInput;
@@ -91,7 +91,7 @@ private:
 
     QComboBox                    *m_channelCB;    
     
-    QHButtonGroup                *m_scaleBG;  
+    Q3HButtonGroup                *m_scaleBG;  
 
     KIntNumInput                 *m_bInput;
     KIntNumInput                 *m_cInput;

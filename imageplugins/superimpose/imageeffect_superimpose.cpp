@@ -23,18 +23,20 @@
 
 // Qt includes. 
  
-#include <qvgroupbox.h>
-#include <qgroupbox.h>
+#include <q3vgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qpixmap.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qdir.h>
 #include <qfile.h>
 #include <qhbuttongroup.h> 
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -97,19 +99,19 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QFrame *frame = new QFrame(plainPage());
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    Q3Frame *frame = new Q3Frame(plainPage());
+    frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
 
-    QGridLayout* gridFrame = new QGridLayout( frame, 1, 2, spacingHint());
+    Q3GridLayout* gridFrame = new Q3GridLayout( frame, 1, 2, spacingHint());
     m_previewWidget        = new SuperImposeWidget(400, 300, frame);
     gridFrame->addMultiCellWidget(m_previewWidget, 0, 0, 0, 2);
     gridFrame->setRowStretch(0, 10);
-    QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the template "
+    Q3WhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the template "
                                            "superimposed onto the image.") );
     
     // -------------------------------------------------------------
 
-    QHButtonGroup *bGroup = new QHButtonGroup(frame);
+    Q3HButtonGroup *bGroup = new Q3HButtonGroup(frame);
     KIconLoader icon;
     bGroup->addSpace(0);
     QPushButton *zoomInButton = new QPushButton( bGroup );
@@ -132,7 +134,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     QToolTip::add( moveButton, i18n( "Move" ) );
     bGroup->addSpace(20);
     bGroup->setExclusive(true);
-    bGroup->setFrameShape(QFrame::NoFrame);
+    bGroup->setFrameShape(Q3Frame::NoFrame);
     gridFrame->addMultiCellWidget(bGroup, 1, 1, 1, 1);
     gridFrame->setColStretch(0, 10);
     gridFrame->setColStretch(2, 10);
@@ -142,12 +144,12 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     // -------------------------------------------------------------
     
     QWidget *gbox2    = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gbox2, 1, 1, marginHint(), spacingHint());
+    Q3GridLayout* grid = new Q3GridLayout( gbox2, 1, 1, marginHint(), spacingHint());
     
     m_thumbnailsBar = new Digikam::ThumbBarView(gbox2);
     m_dirSelect     = new DirSelectWidget(gbox2);
     QPushButton *templateDirButton = new QPushButton( i18n("Root Directory..."), gbox2 );
-    QWhatsThis::add( templateDirButton, i18n("<p>Set here the current templates' root directory.") );
+    Q3WhatsThis::add( templateDirButton, i18n("<p>Set here the current templates' root directory.") );
 
     grid->addMultiCellWidget(m_thumbnailsBar, 0, 1, 0, 0);
     grid->addMultiCellWidget(m_dirSelect, 0, 0, 1, 1);    

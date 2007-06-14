@@ -29,21 +29,24 @@
 
 #include <qlayout.h>
 #include <qcolor.h>
-#include <qgroupbox.h>
-#include <qhgroupbox.h>
-#include <qvgroupbox.h>
+#include <q3groupbox.h>
+#include <q3hgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qlabel.h>
 #include <qpainter.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qtimer.h>
 #include <qhbuttongroup.h> 
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -123,7 +126,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* grid     = new QGridLayout(gboxSettings, 16, 8, spacingHint(), 0);
+    Q3GridLayout* grid     = new Q3GridLayout(gboxSettings, 16, 8, spacingHint(), 0);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -134,7 +137,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_channelCB->insertItem( i18n("Blue") );
     m_channelCB->insertItem( i18n("Alpha") );
     m_channelCB->setCurrentText( i18n("Luminosity") );
-    QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+    Q3WhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
@@ -143,11 +146,11 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
                                        "This channel corresponds to the transparency value and "
                                        "is supported by some image formats, such as PNG or TIF."));
 
-    m_scaleBG = new QHButtonGroup(gboxSettings);
+    m_scaleBG = new Q3HButtonGroup(gboxSettings);
     m_scaleBG->setExclusive(true);
-    m_scaleBG->setFrameShape(QFrame::NoFrame);
+    m_scaleBG->setFrameShape(Q3Frame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
-    QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
+    Q3WhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
@@ -168,7 +171,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
     logHistoButton->setToggleButton(true);
 
-    QHBoxLayout* l1 = new QHBoxLayout();
+    Q3HBoxLayout* l1 = new Q3HBoxLayout();
     l1->addWidget(label1);
     l1->addWidget(m_channelCB);
     l1->addStretch(10);
@@ -177,13 +180,13 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, gboxSettings, false, true, true);
-    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
+    Q3WhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
                                              "selected image channel. This one is re-computed at any levels "
                                              "settings changes."));
     
     m_levelsHistogramWidget = new Digikam::HistogramWidget(256, 140, m_originalImage.bits(), m_originalImage.width(),
                                                      m_originalImage.height(), m_originalImage.sixteenBit(), gboxSettings, false);
-    QWhatsThis::add( m_levelsHistogramWidget, i18n("<p>This is the histogram drawing of the selected channel "
+    Q3WhatsThis::add( m_levelsHistogramWidget, i18n("<p>This is the histogram drawing of the selected channel "
                                                    "from original image"));
 
     // -------------------------------------------------------------
@@ -192,7 +195,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMinInput->setFixedHeight( 20 );
     m_hGradientMinInput->setMinValue(0);
     m_hGradientMinInput->setMaxValue(m_histoSegments);
-    QWhatsThis::add( m_hGradientMinInput, i18n("<p>Select here the minimal intensity input value of the histogram."));
+    Q3WhatsThis::add( m_hGradientMinInput, i18n("<p>Select here the minimal intensity input value of the histogram."));
     QToolTip::add( m_hGradientMinInput, i18n( "Minimal intensity input." ) );
     m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
 
@@ -200,28 +203,28 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMaxInput->setFixedHeight( 20 );
     m_hGradientMaxInput->setMinValue(0);
     m_hGradientMaxInput->setMaxValue(m_histoSegments);
-    QWhatsThis::add( m_hGradientMaxInput, i18n("<p>Select here the maximal intensity input value of the histogram."));
+    Q3WhatsThis::add( m_hGradientMaxInput, i18n("<p>Select here the maximal intensity input value of the histogram."));
     QToolTip::add( m_hGradientMaxInput, i18n( "Maximal intensity input." ) );
     m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
 
     m_minInput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
     m_minInput->setValue(0);
-    QWhatsThis::add( m_minInput, i18n("<p>Select here the minimal intensity input value of the histogram."));
+    Q3WhatsThis::add( m_minInput, i18n("<p>Select here the minimal intensity input value of the histogram."));
     QToolTip::add( m_minInput, i18n( "Minimal intensity input." ) );
     m_gammaInput = new KDoubleNumInput(gboxSettings);
     m_gammaInput->setPrecision(2);
     m_gammaInput->setRange(0.1, 3.0, 0.01);
     m_gammaInput->setValue(1.0);
     QToolTip::add( m_gammaInput, i18n( "Gamma input value." ) );
-    QWhatsThis::add( m_gammaInput, i18n("<p>Select here the gamma input value."));
+    Q3WhatsThis::add( m_gammaInput, i18n("<p>Select here the gamma input value."));
     m_maxInput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
     m_maxInput->setValue(m_histoSegments);
     QToolTip::add( m_maxInput, i18n( "Maximal intensity input." ) );
-    QWhatsThis::add( m_maxInput, i18n("<p>Select here the maximal intensity input value of the histogram."));
+    Q3WhatsThis::add( m_maxInput, i18n("<p>Select here the maximal intensity input value of the histogram."));
 
     m_hGradientMinOutput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
     m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
-    QWhatsThis::add( m_hGradientMinOutput, i18n("<p>Select here the minimal intensity output value of the histogram."));    
+    Q3WhatsThis::add( m_hGradientMinOutput, i18n("<p>Select here the minimal intensity output value of the histogram."));    
     QToolTip::add( m_hGradientMinOutput, i18n( "Minimal intensity output." ) );
     m_hGradientMinOutput->setFixedHeight( 20 );
     m_hGradientMinOutput->setMinValue(0);
@@ -229,7 +232,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     m_hGradientMaxOutput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
     m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "white" ) );
-    QWhatsThis::add( m_hGradientMaxOutput, i18n("<p>Select here the maximal intensity output value of the histogram."));
+    Q3WhatsThis::add( m_hGradientMaxOutput, i18n("<p>Select here the maximal intensity output value of the histogram."));
     QToolTip::add( m_hGradientMaxOutput, i18n( "Maximal intensity output." ) );
     m_hGradientMaxOutput->setFixedHeight( 20 );
     m_hGradientMaxOutput->setMinValue(0);
@@ -238,15 +241,15 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_minOutput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
     m_minOutput->setValue(0);
     QToolTip::add( m_minOutput, i18n( "Minimal intensity output." ) );
-    QWhatsThis::add( m_minOutput, i18n("<p>Select here the minimal intensity output value of the histogram."));
+    Q3WhatsThis::add( m_minOutput, i18n("<p>Select here the minimal intensity output value of the histogram."));
     m_maxOutput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
     m_maxOutput->setValue(m_histoSegments);
     QToolTip::add( m_maxOutput, i18n( "Maximal intensity output." ) );
-    QWhatsThis::add( m_maxOutput, i18n("<p>Select here the maximal intensity output value of the histogram."));
+    Q3WhatsThis::add( m_maxOutput, i18n("<p>Select here the maximal intensity output value of the histogram."));
 
     // -------------------------------------------------------------
 
-    m_pickerColorButtonGroup = new QHButtonGroup(gboxSettings);
+    m_pickerColorButtonGroup = new Q3HButtonGroup(gboxSettings);
     m_pickBlack = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickBlack, BlackTonal);
     KGlobal::dirs()->addResourceType("color-picker-black", KGlobal::dirs()->kde_default("data") +
@@ -255,7 +258,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_pickBlack->setPixmap( QPixmap( directory + "color-picker-black.png" ) );
     m_pickBlack->setToggleButton(true);
     QToolTip::add( m_pickBlack, i18n( "All channels shadow tone color picker" ) );
-    QWhatsThis::add( m_pickBlack, i18n("<p>With this button, you can pick the color from original image used to set <b>Shadow Tone</b> "
+    Q3WhatsThis::add( m_pickBlack, i18n("<p>With this button, you can pick the color from original image used to set <b>Shadow Tone</b> "
                                        "levels input on Red, Green, Blue, and Luminosity channels."));
     m_pickGray  = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickGray, GrayTonal);
@@ -265,7 +268,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_pickGray->setPixmap( QPixmap( directory + "color-picker-gray.png" ) );
     m_pickGray->setToggleButton(true);
     QToolTip::add( m_pickGray, i18n( "All channels middle tone color picker" ) );
-    QWhatsThis::add( m_pickGray, i18n("<p>With this button, you can pick the color from original image used to set <b>Middle Tone</b> "
+    Q3WhatsThis::add( m_pickGray, i18n("<p>With this button, you can pick the color from original image used to set <b>Middle Tone</b> "
                                       "levels input on Red, Green, Blue, and Luminosity channels."));
     m_pickWhite = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickWhite, WhiteTonal);
@@ -275,27 +278,27 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_pickWhite->setPixmap( QPixmap( directory + "color-picker-white.png" ) );
     m_pickWhite->setToggleButton(true);
     QToolTip::add( m_pickWhite, i18n( "All channels highlight tone color picker" ) );
-    QWhatsThis::add( m_pickWhite, i18n("<p>With this button, you can pick the color from original image used to set <b>Highlight Tone</b> "
+    Q3WhatsThis::add( m_pickWhite, i18n("<p>With this button, you can pick the color from original image used to set <b>Highlight Tone</b> "
                                        "levels input on Red, Green, Blue, and Luminosity channels."));
     m_pickerColorButtonGroup->setExclusive(true);
-    m_pickerColorButtonGroup->setFrameShape(QFrame::NoFrame);    
+    m_pickerColorButtonGroup->setFrameShape(Q3Frame::NoFrame);    
 
     m_autoButton = new QPushButton(gboxSettings);
     m_autoButton->setPixmap(kapp->iconLoader()->loadIcon("run", (KIcon::Group)KIcon::Toolbar));    QToolTip::add( m_autoButton, i18n( "Adjust all levels automatically." ) );
-    QWhatsThis::add( m_autoButton, i18n("<p>If you press this button, all channel levels will be adjusted "
+    Q3WhatsThis::add( m_autoButton, i18n("<p>If you press this button, all channel levels will be adjusted "
                                         "automatically."));
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
     m_resetButton->setPixmap(kapp->iconLoader()->loadIcon("reload_page", (KIcon::Group)KIcon::Toolbar));     
     QToolTip::add( m_resetButton, i18n( "Reset current channel levels' values." ) );
-    QWhatsThis::add( m_resetButton, i18n("<p>If you press this button, all levels' values "
+    Q3WhatsThis::add( m_resetButton, i18n("<p>If you press this button, all levels' values "
                                          "from the current selected channel "
                                          "will be reset to the default values."));
 
     QLabel *space = new QLabel(gboxSettings);
     space->setFixedWidth(spacingHint());    
 
-    QHBoxLayout* l3 = new QHBoxLayout();
+    Q3HBoxLayout* l3 = new Q3HBoxLayout();
     l3->addWidget(m_pickerColorButtonGroup);
     l3->addWidget(m_autoButton);
     l3->addWidget(space);

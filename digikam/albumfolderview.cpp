@@ -24,12 +24,15 @@
 // Qt includes.
 
 #include <qpixmap.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <qdir.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <QDropEvent>
 #include <kpopupmenu.h>
 #include <qcursor.h>
 #include <qdatastream.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qdatetime.h>
 
 // KDE includes.
@@ -90,18 +93,18 @@ class AlbumFolderViewItem : public FolderItem
 {
 public:
 
-    AlbumFolderViewItem(QListView *parent, PAlbum *album);
-    AlbumFolderViewItem(QListViewItem *parent, PAlbum *album);
+    AlbumFolderViewItem(Q3ListView *parent, PAlbum *album);
+    AlbumFolderViewItem(Q3ListViewItem *parent, PAlbum *album);
 
     // special group item (collection/dates)
-    AlbumFolderViewItem(QListViewItem* parent, const QString& name,
+    AlbumFolderViewItem(Q3ListViewItem* parent, const QString& name,
                         int year, int month);
 
     PAlbum* getAlbum() const;
     int id() const;
     bool isGroupItem() const;
 
-    int compare(QListViewItem *i, int col, bool ascending) const;
+    int compare(Q3ListViewItem *i, int col, bool ascending) const;
 
 private:
 
@@ -111,7 +114,7 @@ private:
     bool    m_groupItem;
 };
 
-AlbumFolderViewItem::AlbumFolderViewItem(QListView *parent, PAlbum *album)
+AlbumFolderViewItem::AlbumFolderViewItem(Q3ListView *parent, PAlbum *album)
                    : FolderItem(parent, album->title())
 {
     setDragEnabled(true);
@@ -119,7 +122,7 @@ AlbumFolderViewItem::AlbumFolderViewItem(QListView *parent, PAlbum *album)
     m_groupItem = false;
 }
 
-AlbumFolderViewItem::AlbumFolderViewItem(QListViewItem *parent, PAlbum *album)
+AlbumFolderViewItem::AlbumFolderViewItem(Q3ListViewItem *parent, PAlbum *album)
                    : FolderItem(parent, album->title())
 {
     setDragEnabled(true);
@@ -128,7 +131,7 @@ AlbumFolderViewItem::AlbumFolderViewItem(QListViewItem *parent, PAlbum *album)
 }
 
 // special group item (collection/dates)
-AlbumFolderViewItem::AlbumFolderViewItem(QListViewItem* parent, const QString& name,
+AlbumFolderViewItem::AlbumFolderViewItem(Q3ListViewItem* parent, const QString& name,
                                          int year, int month)
                    : FolderItem(parent, name, true),
                      m_album(0), m_year(year), m_month(month), m_groupItem(true)
@@ -166,10 +169,10 @@ bool AlbumFolderViewItem::isGroupItem() const
     return m_groupItem;
 }
 
-int AlbumFolderViewItem::compare(QListViewItem *i, int col, bool ascending) const
+int AlbumFolderViewItem::compare(Q3ListViewItem *i, int col, bool ascending) const
 {
     if (!m_groupItem || m_year == 0 || m_month == 0)
-        return QListViewItem::compare(i, col, ascending);
+        return Q3ListViewItem::compare(i, col, ascending);
 
     AlbumFolderViewItem* thatItem = dynamic_cast<AlbumFolderViewItem*>(i);
     if (!thatItem)
@@ -203,7 +206,7 @@ public:
     
     AlbumManager                     *albumMan;
     ThumbnailJob                     *iconThumbJob;
-    QValueList<AlbumFolderViewItem*>  groupItems;
+    Q3ValueList<AlbumFolderViewItem*>  groupItems;
 };
 
 //-----------------------------------------------------------------------------
@@ -218,7 +221,7 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     d->iconThumbJob = 0;
 
     addColumn(i18n("My Albums"));
-    setResizeMode(QListView::LastColumn);
+    setResizeMode(Q3ListView::LastColumn);
     setRootIsDecorated(false);
     setAllColumnsShowFocus(true);
 
@@ -251,8 +254,8 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     connect(loader, SIGNAL(signalReloadThumbnails()),
             this, SLOT(slotReloadThumbnails()));
 
-    connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
-            this, SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
+    connect(this, SIGNAL(contextMenuRequested(Q3ListViewItem*, const QPoint&, int)),
+            this, SLOT(slotContextMenu(Q3ListViewItem*, const QPoint&, int)));
 
     connect(this, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
@@ -407,8 +410,8 @@ void AlbumFolderView::slotSelectionChanged()
     if(!active())
         return;
 
-    QListViewItem* selItem = 0;
-    QListViewItemIterator it(this);
+    Q3ListViewItem* selItem = 0;
+    Q3ListViewItemIterator it(this);
     while(it.current())
     {
         if(it.current()->isSelected())
@@ -435,7 +438,7 @@ void AlbumFolderView::slotSelectionChanged()
     d->albumMan->setCurrentAlbum(albumitem->getAlbum());
 }
 
-void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, int)
+void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, int)
 {
     KActionMenu menuImport(i18n("Import"));
     KActionMenu menuExport(i18n("Export"));
@@ -462,10 +465,10 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
 
         // Add KIPI Albums plugins Actions
         KAction *action;
-        const QPtrList<KAction>& albumActions = DigikamApp::getinstance()->menuAlbumActions();
+        const Q3PtrList<KAction>& albumActions = DigikamApp::getinstance()->menuAlbumActions();
         if(!albumActions.isEmpty())
         {
-            QPtrListIterator<KAction> it(albumActions);
+            Q3PtrListIterator<KAction> it(albumActions);
             while((action = it.current()))
             {
                 action->plug(&popmenu);
@@ -474,10 +477,10 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
         }
 
         // Add All Import Actions
-        const QPtrList<KAction> importActions = DigikamApp::getinstance()->menuImportActions();
+        const Q3PtrList<KAction> importActions = DigikamApp::getinstance()->menuImportActions();
         if(!importActions.isEmpty())
         {
-            QPtrListIterator<KAction> it3(importActions);
+            Q3PtrListIterator<KAction> it3(importActions);
             while((action = it3.current()))
             {
                 menuImport.insert(action);
@@ -487,10 +490,10 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
         }
 
         // Add All Export Actions
-        const QPtrList<KAction> exportActions = DigikamApp::getinstance()->menuExportActions();
+        const Q3PtrList<KAction> exportActions = DigikamApp::getinstance()->menuExportActions();
         if(!exportActions.isEmpty())
         {
-            QPtrListIterator<KAction> it4(exportActions);
+            Q3PtrListIterator<KAction> it4(exportActions);
             while((action = it4.current()))
             {
                 menuExport.insert(action);
@@ -500,10 +503,10 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
         }
 
         // Add KIPI Batch processes plugins Actions
-        const QPtrList<KAction>& batchActions = DigikamApp::getinstance()->menuBatchActions();
+        const Q3PtrList<KAction>& batchActions = DigikamApp::getinstance()->menuBatchActions();
         if(!batchActions.isEmpty())
         {
-            QPtrListIterator<KAction> it2(batchActions);
+            Q3PtrListIterator<KAction> it2(batchActions);
             while((action = it2.current()))
             {
                 menuKIPIBatch.insert(action);
@@ -816,7 +819,7 @@ void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)
     }
 }
 
-QDragObject* AlbumFolderView::dragObject()
+Q3DragObject* AlbumFolderView::dragObject()
 {
     AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(dragItem());
     if(!item)
@@ -895,7 +898,7 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
         return true;
     }
 
-    if(QUriDrag::canDecode(e))
+    if(Q3UriDrag::canDecode(e))
     {
         return true;
     }
@@ -980,8 +983,8 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
         KURL::List      urls;
         KURL::List      kioURLs;
-        QValueList<int> albumIDs;
-        QValueList<int> imageIDs;
+        Q3ValueList<int> albumIDs;
+        Q3ValueList<int> imageIDs;
 
         if (!ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
             return;
@@ -1094,7 +1097,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
     // -- DnD from an external source ----------------------------------------
 
-    if(QUriDrag::canDecode(e))               
+    if(Q3UriDrag::canDecode(e))               
     {
         PAlbum* destAlbum = 0;
 
@@ -1271,7 +1274,7 @@ AlbumFolderViewItem* AlbumFolderView::findParentByFolder(PAlbum* album, bool& fa
         QStringList albumRoots = CollectionManager::instance()->allAvailableAlbumRootPaths();
         if (albumRoots.count() > 1)
         {
-            for (QValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
+            for (Q3ValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
                  it != d->groupItems.end(); ++it)
             {
                 AlbumFolderViewItem* groupItem = *it;
@@ -1305,7 +1308,7 @@ AlbumFolderViewItem* AlbumFolderView::findParentByCollection(PAlbum* album, bool
 
     AlbumFolderViewItem* parent = 0;
 
-    for (QValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
+    for (Q3ValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
          it != d->groupItems.end(); ++it)
     {
         AlbumFolderViewItem* groupItem = *it;
@@ -1336,7 +1339,7 @@ AlbumFolderViewItem* AlbumFolderView::findParentByDate(PAlbum* album, bool& fail
 
     AlbumFolderViewItem* parent = 0;
 
-    for (QValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
+    for (Q3ValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
          it != d->groupItems.end(); ++it)
     {
         AlbumFolderViewItem* groupItem = *it;
@@ -1418,9 +1421,9 @@ void AlbumFolderView::reparentItem(AlbumFolderViewItem* folderItem)
 
 void AlbumFolderView::clearEmptyGroupItems()
 {
-    QValueList<AlbumFolderViewItem*> deleteItems;
+    Q3ValueList<AlbumFolderViewItem*> deleteItems;
 
-    for (QValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
+    for (Q3ValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
          it != d->groupItems.end(); ++it)
     {
         AlbumFolderViewItem* groupItem = *it;
@@ -1431,7 +1434,7 @@ void AlbumFolderView::clearEmptyGroupItems()
         }
     }
 
-    for (QValueList<AlbumFolderViewItem*>::iterator it=deleteItems.begin();
+    for (Q3ValueList<AlbumFolderViewItem*>::iterator it=deleteItems.begin();
          it != deleteItems.end(); ++it)
     {
         d->groupItems.remove(*it);

@@ -27,8 +27,15 @@
 
 // Qt includes.
 
-#include <qscrollview.h>
+#include <q3scrollview.h>
 #include <qrect.h>
+//Added by qt3to4:
+#include <QWheelEvent>
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 // Local includes
 
@@ -53,7 +60,7 @@ class ExposureSettingsContainer;
 class ICCSettingsContainer;
 class IOFileSettingsContainer;
 
-class DIGIKAM_EXPORT Canvas : public QScrollView
+class DIGIKAM_EXPORT Canvas : public Q3ScrollView
 {
     Q_OBJECT
 

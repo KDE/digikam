@@ -27,7 +27,9 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -53,7 +55,7 @@ public:
         TIFFcompression = 0;
     }
 
-    QGridLayout *TIFFGrid;
+    Q3GridLayout *TIFFGrid;
     
     QCheckBox   *TIFFcompression;
 };
@@ -63,10 +65,10 @@ TIFFSettings::TIFFSettings(QWidget *parent)
 {
     d = new TIFFSettingsPriv;
 
-    d->TIFFGrid        = new QGridLayout(this, 1, 1, KDialog::spacingHint());
+    d->TIFFGrid        = new Q3GridLayout(this, 1, 1, KDialog::spacingHint());
     d->TIFFcompression = new QCheckBox(i18n("Compress TIFF files"), this);
 
-    QWhatsThis::add( d->TIFFcompression, i18n("<p>Toggle compression for TIFF images.<p>"
+    Q3WhatsThis::add( d->TIFFcompression, i18n("<p>Toggle compression for TIFF images.<p>"
                                               "If you enable this option, you can reduce "
                                               "the final file size of the TIFF image.</p>"
                                               "<p>A lossless compression format (Deflate) "

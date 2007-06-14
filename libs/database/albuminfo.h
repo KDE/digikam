@@ -30,7 +30,7 @@
 // Qt includes.
 
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qdatetime.h>
 
 // KDE includes.
@@ -51,7 +51,7 @@ public:
 
     AlbumInfo() : id(0) {};
 
-    typedef QValueList<AlbumInfo> List;
+    typedef Q3ValueList<AlbumInfo> List;
 
     int      id;
     QString  albumRoot;
@@ -81,7 +81,7 @@ public:
 
     TagInfo() : id(0), pid(0) {};
 
-    typedef QValueList<TagInfo> List;
+    typedef Q3ValueList<TagInfo> List;
 
     int      id;
     int      pid;
@@ -100,7 +100,7 @@ public:
 
     SearchInfo() : id(0) {};
 
-    typedef QValueList<SearchInfo> List;
+    typedef Q3ValueList<SearchInfo> List;
 
     int      id;
     QString  name;

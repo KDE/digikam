@@ -53,7 +53,7 @@ class DIGIKAM_EXPORT ImagePropertiesSideBar : public Sidebar
 public:
 
     ImagePropertiesSideBar(QWidget* parent, const char *name, QSplitter *splitter,
-                           Side side=Left, bool mimimizedDefault=false, bool navBar=false);
+                           Side side=Qt::DockLeft, bool mimimizedDefault=false, bool navBar=false);
 
     ~ImagePropertiesSideBar();
 

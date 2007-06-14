@@ -27,6 +27,9 @@
 #include <qpainter.h>
 #include <qpalette.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 // KDE includes.
 

@@ -23,11 +23,13 @@
 
 // Qt includes.
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qstring.h>
 #include <qmap.h>
 #include <qtoolbutton.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 // KDE includes.
 
@@ -142,12 +144,12 @@ public:
     bool                   validIccPath;
     
     // KIPI plugins support
-    QPtrList<KAction>      kipiFileActionsExport;
-    QPtrList<KAction>      kipiFileActionsImport;
-    QPtrList<KAction>      kipiImageActions;
-    QPtrList<KAction>      kipiToolsActions;
-    QPtrList<KAction>      kipiBatchActions;
-    QPtrList<KAction>      kipiAlbumActions;
+    Q3PtrList<KAction>      kipiFileActionsExport;
+    Q3PtrList<KAction>      kipiFileActionsImport;
+    Q3PtrList<KAction>      kipiImageActions;
+    Q3PtrList<KAction>      kipiToolsActions;
+    Q3PtrList<KAction>      kipiBatchActions;
+    Q3PtrList<KAction>      kipiAlbumActions;
 
     QMap<int, QString>     mediaItems;
 

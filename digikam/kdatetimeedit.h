@@ -28,9 +28,9 @@
 
 // Qt includes.
 
-#include <qhbox.h>
+#include <q3hbox.h>
 
-class QTimeEdit;
+class Q3TimeEdit;
 
 namespace Digikam
 {
@@ -46,7 +46,7 @@ class KDateEdit;
  * @image html kdatetimeedit.png "This is how it looks"
  * @author Tom Albers
  */
-class KDateTimeEdit : public QHBox
+class KDateTimeEdit : public Q3HBox
 {
     Q_OBJECT
 
@@ -86,7 +86,7 @@ signals:
 private:
 
     KDateEdit* m_datePopUp;
-    QTimeEdit* m_timePopUp;
+    Q3TimeEdit* m_timePopUp;
 
 private slots:
 

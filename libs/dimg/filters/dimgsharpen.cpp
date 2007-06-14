@@ -131,7 +131,7 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
     uint    x, y;
     int     mx, my, sx, sy, mcx, mcy, progress;
     long    kernelWidth, i;
-    double  red, green, blue, alpha, normalize=0.0;
+    double  Qt::red, Qt::green, Qt::blue, alpha, normalize=0.0;
     double *k=0;
     DColor  color;
     
@@ -173,7 +173,7 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
         for(x=0 ; !m_cancel && (x < m_destImage.width()) ; x++)
         {
             k   = normal_kernel;
-            red = green = blue = alpha = 0;
+            Qt::red = Qt::green = Qt::blue = alpha = 0;
             sy  = y-(kernelWidth/2);
             
             for(mcy=0 ; !m_cancel && (mcy < kernelWidth) ; mcy++, sy++)
@@ -185,21 +185,21 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
                 {
                     mx     = sx < 0 ? 0 : sx > (int)m_destImage.width()-1 ? m_destImage.width()-1 : sx;
                     color  = m_orgImage.getPixelColor(mx, my);
-                    red   += (*k)*(color.red()   * 257.0);
-                    green += (*k)*(color.green() * 257.0);
-                    blue  += (*k)*(color.blue()  * 257.0);
+                    Qt::red   += (*k)*(color.Qt::red()   * 257.0);
+                    Qt::green += (*k)*(color.Qt::green() * 257.0);
+                    Qt::blue  += (*k)*(color.Qt::blue()  * 257.0);
                     alpha += (*k)*(color.alpha() * 257.0);
                     k++;
                 }
             }
 
-            red   =   red < 0.0 ? 0.0 :   red > maxClamp ? maxClamp :   red+0.5;
-            green = green < 0.0 ? 0.0 : green > maxClamp ? maxClamp : green+0.5;
-            blue  =  blue < 0.0 ? 0.0 :  blue > maxClamp ? maxClamp :  blue+0.5;
+            Qt::red   =   Qt::red < 0.0 ? 0.0 :   Qt::red > maxClamp ? maxClamp :   Qt::red+0.5;
+            Qt::green = Qt::green < 0.0 ? 0.0 : Qt::green > maxClamp ? maxClamp : Qt::green+0.5;
+            Qt::blue  =  Qt::blue < 0.0 ? 0.0 :  Qt::blue > maxClamp ? maxClamp :  Qt::blue+0.5;
             alpha = alpha < 0.0 ? 0.0 : alpha > maxClamp ? maxClamp : alpha+0.5;
 
-            m_destImage.setPixelColor(x, y, DColor((int)(red / 257UL),  (int)(green / 257UL),
-                                                   (int)(blue / 257UL), (int)(alpha / 257UL),
+            m_destImage.setPixelColor(x, y, DColor((int)(Qt::red / 257UL),  (int)(Qt::green / 257UL),
+                                                   (int)(Qt::blue / 257UL), (int)(alpha / 257UL),
                                                    m_destImage.sixteenBit()));
         }
 

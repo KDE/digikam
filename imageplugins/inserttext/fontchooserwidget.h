@@ -29,11 +29,13 @@
 
 #include <qlineedit.h>
 #include <qbutton.h>
+//Added by qt3to4:
+#include <QLabel>
 
 class QComboBox;
 class QCheckBox;
 class QFont;
-class QGroupBox;
+class Q3GroupBox;
 class QLabel;
 class QStringList;
 
@@ -78,14 +80,14 @@ public:
                       const QStringList &fontList = QStringList(),
                       int visibleListSize=8,
                       bool diff = false, 
-                      QButton::ToggleState *sizeIsRelativeState = 0L );
+                      QCheckBox::ToggleState *sizeIsRelativeState = 0L );
     
     ~FontChooserWidget();
     
     void setFont( const QFont &font, bool onlyFixed = false );
     void setColor( const QColor & col );
     void setBackgroundColor( const QColor & col );
-    void setSizeIsRelative( QButton::ToggleState relative );
+    void setSizeIsRelative( QCheckBox::ToggleState relative );
     
     QFont font() const { return selFont; };
     QColor color() const;
@@ -121,8 +123,8 @@ private:
     
     void setupDisplay();
     
-    int minimumListWidth( const QListBox *list );
-    int minimumListHeight( const QListBox *list, int numVisibleEntry );
+    int minimumListWidth( const Q3ListBox *list );
+    int minimumListHeight( const Q3ListBox *list, int numVisibleEntry );
 
 private:
     

@@ -29,21 +29,24 @@
 
 #include <qlayout.h>
 #include <qcolor.h>
-#include <qgroupbox.h>
-#include <qhgroupbox.h>
-#include <qvgroupbox.h>
+#include <q3groupbox.h>
+#include <q3hgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qlabel.h>
 #include <qpainter.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qtimer.h>
 #include <qhbuttongroup.h> 
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -124,7 +127,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* grid     = new QGridLayout( gboxSettings, 5, 5, spacingHint());
+    Q3GridLayout* grid     = new Q3GridLayout( gboxSettings, 5, 5, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -135,7 +138,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     m_channelCB->insertItem( i18n("Blue") );
     m_channelCB->insertItem( i18n("Alpha") );
     m_channelCB->setCurrentText( i18n("Luminosity") );
-    QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+    Q3WhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
@@ -144,8 +147,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
                                        "This channel corresponds to the transparency value and "
                                        "is supported by some image formats, such as PNG or TIF."));
 
-    m_scaleBG = new QHButtonGroup(gboxSettings);
-    QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
+    m_scaleBG = new Q3HButtonGroup(gboxSettings);
+    Q3WhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
@@ -168,10 +171,10 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     
     m_scaleBG->setExclusive(true);
     m_scaleBG->setButton(Digikam::CurvesWidget::LogScaleHistogram);
-    m_scaleBG->setFrameShape(QFrame::NoFrame);
+    m_scaleBG->setFrameShape(Q3Frame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
 
-    QHBoxLayout* l1 = new QHBoxLayout();
+    Q3HBoxLayout* l1 = new Q3HBoxLayout();
     l1->addStretch(10);
     l1->addWidget(m_scaleBG);
     
@@ -182,10 +185,10 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *curveBox = new QWidget(gboxSettings);
-    QGridLayout* gl   = new QGridLayout(curveBox, 4, 2, 0);
+    Q3GridLayout* gl   = new Q3GridLayout(curveBox, 4, 2, 0);
 
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, curveBox, false, true, true);
-    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
+    Q3WhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
                                              "curves settings changes."));
     
@@ -198,7 +201,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     m_curvesWidget = new Digikam::CurvesWidget(256, 256, m_originalImage.bits(), m_originalImage.width(),
                                                m_originalImage.height(), m_originalImage.sixteenBit(),
                                                m_curves, curveBox);
-    QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected channel from "
+    Q3WhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected channel from "
                                           "original image"));
     
     QLabel *spaceh = new QLabel(curveBox);
@@ -219,7 +222,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    m_curveType = new QHButtonGroup(gboxSettings);
+    m_curveType = new Q3HButtonGroup(gboxSettings);
     m_curveFree = new QPushButton(m_curveType);
     m_curveType->insert(m_curveFree, FreeDrawing);
     KGlobal::dirs()->addResourceType("curvefree", KGlobal::dirs()->kde_default("data") +
@@ -228,7 +231,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     m_curveFree->setPixmap( QPixmap( directory + "curvefree.png" ) );
     m_curveFree->setToggleButton(true);
     QToolTip::add( m_curveFree, i18n( "Curve free mode" ) );
-    QWhatsThis::add( m_curveFree, i18n("<p>With this button, you can draw your curve free-hand with the mouse."));
+    Q3WhatsThis::add( m_curveFree, i18n("<p>With this button, you can draw your curve free-hand with the mouse."));
     m_curveSmooth = new QPushButton(m_curveType);
     m_curveType->insert(m_curveSmooth, SmoothDrawing);
     KGlobal::dirs()->addResourceType("curvemooth", KGlobal::dirs()->kde_default("data") +
@@ -237,14 +240,14 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     m_curveSmooth->setPixmap( QPixmap( directory + "curvemooth.png" ) );
     m_curveSmooth->setToggleButton(true);
     QToolTip::add( m_curveSmooth, i18n( "Curve smooth mode" ) );
-    QWhatsThis::add( m_curveSmooth, i18n("<p>With this button, you constrains the curve type to a smooth line with tension."));
+    Q3WhatsThis::add( m_curveSmooth, i18n("<p>With this button, you constrains the curve type to a smooth line with tension."));
     m_curveType->setExclusive(true);
     m_curveType->setButton(SmoothDrawing);
-    m_curveType->setFrameShape(QFrame::NoFrame);
+    m_curveType->setFrameShape(Q3Frame::NoFrame);
     
     // -------------------------------------------------------------
     
-    m_pickerColorButtonGroup = new QHButtonGroup(gboxSettings);
+    m_pickerColorButtonGroup = new Q3HButtonGroup(gboxSettings);
     m_pickBlack = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickBlack, BlackTonal);
     KGlobal::dirs()->addResourceType("color-picker-black", KGlobal::dirs()->kde_default("data") +
@@ -253,7 +256,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     m_pickBlack->setPixmap( QPixmap( directory + "color-picker-black.png" ) );
     m_pickBlack->setToggleButton(true);
     QToolTip::add( m_pickBlack, i18n( "All channels shadow tone color picker" ) );
-    QWhatsThis::add( m_pickBlack, i18n("<p>With this button, you can pick the color from original image used to set <b>Shadow Tone</b> "
+    Q3WhatsThis::add( m_pickBlack, i18n("<p>With this button, you can pick the color from original image used to set <b>Shadow Tone</b> "
                                        "smooth curves point on Red, Green, Blue, and Luminosity channels."));
     m_pickGray  = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickGray, GrayTonal);
@@ -263,7 +266,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     m_pickGray->setPixmap( QPixmap( directory + "color-picker-grey.png" ) );
     m_pickGray->setToggleButton(true);
     QToolTip::add( m_pickGray, i18n( "All channels middle tone color picker" ) );
-    QWhatsThis::add( m_pickGray, i18n("<p>With this button, you can pick the color from original image used to set <b>Middle Tone</b> "
+    Q3WhatsThis::add( m_pickGray, i18n("<p>With this button, you can pick the color from original image used to set <b>Middle Tone</b> "
                                       "smooth curves point on Red, Green, Blue, and Luminosity channels."));
     m_pickWhite = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickWhite, WhiteTonal);
@@ -273,21 +276,21 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     m_pickWhite->setPixmap( QPixmap( directory + "color-picker-white.png" ) );
     m_pickWhite->setToggleButton(true);
     QToolTip::add( m_pickWhite, i18n( "All channels highlight tone color picker" ) );
-    QWhatsThis::add( m_pickWhite, i18n("<p>With this button, you can pick the color from original image used to set <b>Highlight Tone</b> "
+    Q3WhatsThis::add( m_pickWhite, i18n("<p>With this button, you can pick the color from original image used to set <b>Highlight Tone</b> "
                                        "smooth curves point on Red, Green, Blue, and Luminosity channels."));
     m_pickerColorButtonGroup->setExclusive(true);
-    m_pickerColorButtonGroup->setFrameShape(QFrame::NoFrame);
+    m_pickerColorButtonGroup->setFrameShape(Q3Frame::NoFrame);
     
     // -------------------------------------------------------------
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
     m_resetButton->setPixmap( SmallIcon("reload_page", 18) );
     QToolTip::add( m_resetButton, i18n( "Reset current channel curves' values." ) );
-    QWhatsThis::add( m_resetButton, i18n("<p>If you press this button, all curves' values "
+    Q3WhatsThis::add( m_resetButton, i18n("<p>If you press this button, all curves' values "
                                          "from the current selected channel "
                                          "will be reset to the default values."));
 
-    QHBoxLayout* l3 = new QHBoxLayout();
+    Q3HBoxLayout* l3 = new Q3HBoxLayout();
     l3->addWidget(m_curveType);
     l3->addWidget(m_pickerColorButtonGroup);
     l3->addWidget(m_resetButton);

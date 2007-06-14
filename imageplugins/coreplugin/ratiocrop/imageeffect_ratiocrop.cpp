@@ -25,17 +25,21 @@
 // Qt includes.
 
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qrect.h>
-#include <qvgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
 #include <qimage.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QPixmap>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -72,12 +76,12 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QFrame *frame = new QFrame(plainPage());
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
+    Q3Frame *frame = new Q3Frame(plainPage());
+    frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
+    Q3VBoxLayout* l = new Q3VBoxLayout(frame, 5, 0);
     m_imageSelectionWidget = new ImageSelectionWidget(480, 320, frame);
     l->addWidget(m_imageSelectionWidget);
-    QWhatsThis::add( m_imageSelectionWidget, i18n("<p>Here you can see the aspect ratio selection preview "
+    Q3WhatsThis::add( m_imageSelectionWidget, i18n("<p>Here you can see the aspect ratio selection preview "
                                                   "used for cropping. You can use the mouse for moving and "
                                                   "resizing the crop area. "
                                                   "Hold CTRL to move the opposite corner too. "
@@ -88,11 +92,11 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gbox2        = new QWidget(plainPage());
-    QGridLayout *gridBox2 = new QGridLayout( gbox2, 2, 0);
+    Q3GridLayout *gridBox2 = new Q3GridLayout( gbox2, 2, 0);
 
-    QFrame *cropSelection = new QFrame( gbox2 );
-    cropSelection->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QGridLayout* grid = new QGridLayout( cropSelection, 6, 4, spacingHint());
+    Q3Frame *cropSelection = new Q3Frame( gbox2 );
+    cropSelection->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
+    Q3GridLayout* grid = new Q3GridLayout( cropSelection, 6, 4, spacingHint());
 
     QLabel *label = new QLabel(i18n("Aspect ratio:"), cropSelection);
     m_ratioCB     = new QComboBox( false, cropSelection );
@@ -106,7 +110,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_ratioCB->insertItem( i18n("Golden Ratio") );
     m_ratioCB->insertItem( i18n("None") );
     m_ratioCB->setCurrentText( "1:1" );
-    QWhatsThis::add( m_ratioCB, i18n("<p>Select here your constrained aspect ratio for cropping. "
+    Q3WhatsThis::add( m_ratioCB, i18n("<p>Select here your constrained aspect ratio for cropping. "
                                      "Aspect Ratio Crop tool uses a relative ratio. That means it "
                                      "is the same if you use centimeters or inches and it doesn't "
                                      "specify the physical size.<p>"
@@ -127,10 +131,10 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_orientCB    = new QComboBox( false, cropSelection );
     m_orientCB->insertItem( i18n("Landscape") );
     m_orientCB->insertItem( i18n("Portrait") );
-    QWhatsThis::add( m_orientCB, i18n("<p>Select here constrained aspect ratio orientation."));
+    Q3WhatsThis::add( m_orientCB, i18n("<p>Select here constrained aspect ratio orientation."));
 
     m_autoOrientation = new QCheckBox(i18n("Auto"), cropSelection);
-    QWhatsThis::add( m_autoOrientation, i18n("<p>Enable this option to automatic setting of orientation."));
+    Q3WhatsThis::add( m_autoOrientation, i18n("<p>Enable this option to automatic setting of orientation."));
 
     grid->addMultiCellWidget(label, 0, 0, 0, 0);
     grid->addMultiCellWidget(m_ratioCB, 0, 0, 1, 3);
@@ -143,11 +147,11 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_customLabel1 = new QLabel(i18n("Custom ratio:"), cropSelection);
     m_customLabel1->setAlignment(AlignLeft|AlignVCenter);
     m_customRatioNInput = new KIntSpinBox(1, 10000, 1, 1, 10, cropSelection);
-    QWhatsThis::add( m_customRatioNInput, i18n("<p>Set here the desired custom aspect numerator value."));
+    Q3WhatsThis::add( m_customRatioNInput, i18n("<p>Set here the desired custom aspect numerator value."));
     m_customLabel2 = new QLabel(" : ", cropSelection);
     m_customLabel2->setAlignment(AlignCenter|AlignVCenter);
     m_customRatioDInput = new KIntSpinBox(1, 10000, 1, 1, 10, cropSelection);
-    QWhatsThis::add( m_customRatioDInput, i18n("<p>Set here the desired custom aspect denominator value."));
+    Q3WhatsThis::add( m_customRatioDInput, i18n("<p>Set here the desired custom aspect denominator value."));
 
     grid->addMultiCellWidget(m_customLabel1, 1, 1, 0, 0);
     grid->addMultiCellWidget(m_customRatioNInput, 1, 1, 1, 1);
@@ -157,20 +161,20 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     // -------------------------------------------------------------
 
     m_xInput = new KIntNumInput(cropSelection);
-    QWhatsThis::add( m_xInput, i18n("<p>Set here the top left selection corner position for cropping."));
+    Q3WhatsThis::add( m_xInput, i18n("<p>Set here the top left selection corner position for cropping."));
     m_xInput->setLabel(i18n("X:"), AlignLeft|AlignVCenter);
     m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
 
     m_widthInput = new KIntNumInput(cropSelection);
     m_widthInput->setLabel(i18n("Width:"), AlignLeft|AlignVCenter);
-    QWhatsThis::add( m_widthInput, i18n("<p>Set here the width selection for cropping."));
+    Q3WhatsThis::add( m_widthInput, i18n("<p>Set here the width selection for cropping."));
     m_widthInput->setRange(10, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
 
     m_centerWidth = new QPushButton(cropSelection);
     KGlobal::dirs()->addResourceType("centerwidth", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("centerwidth", "centerwidth.png");
     m_centerWidth->setPixmap( QPixmap( directory + "centerwidth.png" ) );
-    QWhatsThis::add( m_centerWidth, i18n("<p>Set width position to center."));
+    Q3WhatsThis::add( m_centerWidth, i18n("<p>Set width position to center."));
 
     grid->addMultiCellWidget(m_xInput, 3, 3, 0, 3);
     grid->addMultiCellWidget(m_widthInput, 4, 4, 0, 3);
@@ -180,19 +184,19 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     m_yInput = new KIntNumInput(cropSelection);
     m_yInput->setLabel(i18n("Y:"), AlignLeft|AlignVCenter);
-    QWhatsThis::add( m_yInput, i18n("<p>Set here the top left selection corner position for cropping."));
+    Q3WhatsThis::add( m_yInput, i18n("<p>Set here the top left selection corner position for cropping."));
     m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
 
     m_heightInput = new KIntNumInput(cropSelection);
     m_heightInput->setLabel(i18n("Height:"), AlignLeft|AlignVCenter);
-    QWhatsThis::add( m_heightInput, i18n("<p>Set here the height selection for cropping."));
+    Q3WhatsThis::add( m_heightInput, i18n("<p>Set here the height selection for cropping."));
     m_heightInput->setRange(10, m_imageSelectionWidget->getOriginalImageHeight(), 1, true);
 
     m_centerHeight = new QPushButton(cropSelection);
     KGlobal::dirs()->addResourceType("centerheight", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("centerheight", "centerheight.png");
     m_centerHeight->setPixmap( QPixmap( directory + "centerheight.png" ) );
-    QWhatsThis::add( m_centerHeight, i18n("<p>Set height position to center."));
+    Q3WhatsThis::add( m_centerHeight, i18n("<p>Set height position to center."));
 
     grid->addMultiCellWidget(m_yInput, 5, 5, 0, 3);
     grid->addMultiCellWidget(m_heightInput, 6, 6, 0, 3);
@@ -202,9 +206,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QFrame* compositionGuide = new QFrame( gbox2 );
-    QGridLayout* grid2       = new QGridLayout( compositionGuide, 7, 2, spacingHint());
-    compositionGuide->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    Q3Frame* compositionGuide = new Q3Frame( gbox2 );
+    Q3GridLayout* grid2       = new Q3GridLayout( compositionGuide, 7, 2, spacingHint());
+    compositionGuide->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
 
     QLabel *labelGuideLines = new QLabel(i18n("Composition guide:"), compositionGuide);
     m_guideLinesCB = new QComboBox( false, compositionGuide );
@@ -213,32 +217,32 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_guideLinesCB->insertItem( i18n("Golden Mean") );
     m_guideLinesCB->insertItem( i18n("None") );
     m_guideLinesCB->setCurrentText( i18n("None") );
-    QWhatsThis::add( m_guideLinesCB, i18n("<p>With this option, you can display guide lines "
+    Q3WhatsThis::add( m_guideLinesCB, i18n("<p>With this option, you can display guide lines "
                                           "which help you to compose your photograph."));
 
     m_goldenSectionBox = new QCheckBox(i18n("Golden sections"), compositionGuide);
-    QWhatsThis::add( m_goldenSectionBox, i18n("<p>Enable this option to show golden sections."));
+    Q3WhatsThis::add( m_goldenSectionBox, i18n("<p>Enable this option to show golden sections."));
 
     m_goldenSpiralSectionBox = new QCheckBox(i18n("Golden spiral sections"), compositionGuide);
-    QWhatsThis::add( m_goldenSpiralSectionBox, i18n("<p>Enable this option to show golden spiral sections."));
+    Q3WhatsThis::add( m_goldenSpiralSectionBox, i18n("<p>Enable this option to show golden spiral sections."));
 
     m_goldenSpiralBox = new QCheckBox(i18n("Golden spiral"), compositionGuide);
-    QWhatsThis::add( m_goldenSpiralBox, i18n("<p>Enable this option to show golden spiral guide."));
+    Q3WhatsThis::add( m_goldenSpiralBox, i18n("<p>Enable this option to show golden spiral guide."));
 
     m_goldenTriangleBox = new QCheckBox(i18n("Golden triangles"), compositionGuide);
-    QWhatsThis::add( m_goldenTriangleBox, i18n("<p>Enable this option to show golden triangles."));
+    Q3WhatsThis::add( m_goldenTriangleBox, i18n("<p>Enable this option to show golden triangles."));
 
     m_flipHorBox = new QCheckBox(i18n("Flip horizontally"), compositionGuide);
-    QWhatsThis::add( m_flipHorBox, i18n("<p>Enable this option to flip horizontally guidelines."));
+    Q3WhatsThis::add( m_flipHorBox, i18n("<p>Enable this option to flip horizontally guidelines."));
 
     m_flipVerBox = new QCheckBox(i18n("Flip vertically"), compositionGuide);
-    QWhatsThis::add( m_flipVerBox, i18n("<p>Enable this option to flip vertically guidelines."));
+    Q3WhatsThis::add( m_flipVerBox, i18n("<p>Enable this option to flip vertically guidelines."));
 
     m_colorGuideLabel = new QLabel(i18n("Color and width:"), compositionGuide);
     m_guideColorBt = new KColorButton( QColor( 250, 250, 255 ), compositionGuide );
     m_guideSize = new QSpinBox( 1, 5, 1, compositionGuide);
-    QWhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw composition guides."));
-    QWhatsThis::add( m_guideSize, i18n("<p>Set here the width in pixels used to draw composition guides."));
+    Q3WhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw composition guides."));
+    Q3WhatsThis::add( m_guideSize, i18n("<p>Set here the width in pixels used to draw composition guides."));
 
     grid2->addMultiCellWidget(labelGuideLines, 0, 0, 0, 0);
     grid2->addMultiCellWidget(m_guideLinesCB, 0, 0, 1, 2);

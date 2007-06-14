@@ -28,8 +28,13 @@
 // Qt includes.
 
 #include <qstring.h>
-#include <qscrollview.h>
+#include <q3scrollview.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 // KDE includes.
 
@@ -87,21 +92,21 @@ public:
 
 // -------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT ThumbBarView : public QScrollView
+class DIGIKAM_EXPORT ThumbBarView : public Q3ScrollView
 {
     Q_OBJECT
 
 public:
     
-    enum Orientation
+    enum Qt::Orientation
     {
-        Horizontal=0,      
-        Vertical         
+        Qt::Horizontal=0,      
+        Qt::Vertical         
     };
 
 public:
 
-    ThumbBarView(QWidget* parent, int orientation=Vertical, bool exifRotate=false,
+    ThumbBarView(QWidget* parent, int orientation=Qt::Vertical, bool exifRotate=false,
                  ThumbBarToolTipSettings settings=ThumbBarToolTipSettings());
     virtual ~ThumbBarView();
 

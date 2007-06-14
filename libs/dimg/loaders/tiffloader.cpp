@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3CString>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -822,7 +824,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // Write thumbnail in tiff directory IFD1
 
-    QImage thumb = m_image->smoothScale(160, 120, QSize::ScaleMin).copyQImage();
+    QImage thumb = m_image->smoothScale(160, 120, Qt::KeepAspectRatio).copyQImage();
 
     TIFFSetField(tif, TIFFTAG_IMAGEWIDTH,      (uint32)thumb.width());
     TIFFSetField(tif, TIFFTAG_IMAGELENGTH,     (uint32)thumb.height());
@@ -901,7 +903,7 @@ void TIFFLoader::tiffSetExifAsciiTag(TIFF* tif, ttag_t tiffTag,
     QByteArray tag = metaData->getExifTagData(exifTagName);
     if (!tag.isEmpty()) 
     {
-        QCString str(tag.data(), tag.size());
+        Q3CString str(tag.data(), tag.size());
         TIFFSetField(tif, tiffTag, (const char*)str);
     }
 }

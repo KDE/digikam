@@ -27,6 +27,9 @@
 #include <qtoolbutton.h>
 #include <qlayout.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <QKeyEvent>
 
 // KDE includes.
 
@@ -68,7 +71,7 @@ ToolBar::ToolBar(QWidget* parent)
 {
     d = new ToolBarPriv;
 
-    QHBoxLayout* lay = new QHBoxLayout(this);
+    Q3HBoxLayout* lay = new Q3HBoxLayout(this);
     d->playBtn = new QToolButton(this);
     d->prevBtn = new QToolButton(this);
     d->nextBtn = new QToolButton(this);
@@ -188,13 +191,13 @@ void ToolBar::keyPressEvent(QKeyEvent *event)
                 d->playBtn->animateClick();
             break;
         }
-        case(Qt::Key_Prior):
+        case(Qt::Key_PageUp):
         {
             if (d->prevBtn->isEnabled())
                 d->prevBtn->animateClick();
             break;
         }
-        case(Qt::Key_Next):
+        case(Qt::Key_PageDown):
         {
             if (d->nextBtn->isEnabled())
                 d->nextBtn->animateClick();

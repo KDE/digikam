@@ -49,8 +49,8 @@ public:
         { setColor(data, sixteenBit); }
 
     /** Initialize with given RGBA values */
-    DColor(int red, int green, int blue, int alpha, bool sixteenBit)
-        : m_red(red), m_green(green), m_blue(blue), m_alpha(alpha), m_sixteenBit(sixteenBit)
+    DColor(int Qt::red, int Qt::green, int Qt::blue, int alpha, bool sixteenBit)
+        : m_red(Qt::red), m_green(Qt::green), m_blue(Qt::blue), m_alpha(alpha), m_sixteenBit(sixteenBit)
         {};
 
     /** Read values from QColor, convert to sixteenBit of sixteenBit is true */
@@ -72,15 +72,15 @@ public:
     */
     void setPixel(uchar *data) const;
 
-    int  red  () const { return m_red; }
-    int  green() const { return m_green; }
-    int  blue () const { return m_blue; }
+    int  Qt::red  () const { return m_red; }
+    int  Qt::green() const { return m_green; }
+    int  Qt::blue () const { return m_blue; }
     int  alpha() const { return m_alpha; }
     bool sixteenBit() const { return m_sixteenBit; }
 
-    void setRed  (int red)   { m_red = red; }
-    void setGreen(int green) { m_green = green; }
-    void setBlue (int blue)  { m_blue = blue; }
+    void setRed  (int Qt::red)   { m_red = red; }
+    void setGreen(int Qt::green) { m_green = green; }
+    void setBlue (int Qt::blue)  { m_blue = blue; }
     void setAlpha(int alpha) { m_alpha = alpha; }
     void setSixteenBit(bool sixteenBit) { m_sixteenBit = sixteenBit; }
 

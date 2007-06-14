@@ -28,7 +28,7 @@
 #include <qlabel.h>
 #include <qpixmap.h>
 #include <qfileinfo.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 
 // KDE includes.
 

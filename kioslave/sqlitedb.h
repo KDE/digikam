@@ -43,7 +43,7 @@ public:
     bool execSql(const QString& sql, QStringList* const values = 0,
                  QString* const errMsg = 0, bool debug = false) const;
 
-    Q_LLONG lastInsertedRow() const;
+    qlonglong lastInsertedRow() const;
     
     void    setSetting( const QString& keyword, const QString& value );
     QString getSetting( const QString& keyword );

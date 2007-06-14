@@ -180,7 +180,7 @@ uchar* ImageIface::getPreviewImage()
             return 0;
 
         QSize sz(im->width(), im->height());
-        sz.scale(d->constrainWidth, d->constrainHeight, QSize::ScaleMin);
+        sz.scale(d->constrainWidth, d->constrainHeight, Qt::KeepAspectRatio);
 
         d->previewImage  = im->smoothScale(sz.width(), sz.height());
         d->previewWidth  = d->previewImage.width();

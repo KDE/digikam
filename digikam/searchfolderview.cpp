@@ -61,7 +61,7 @@ class SearchFolderItem : public FolderItem
     
 public:
 
-    SearchFolderItem(QListView* parent, SAlbum* album)
+    SearchFolderItem(Q3ListView* parent, SAlbum* album)
         : FolderItem(parent, album->title()),
           m_album(album)
     {
@@ -73,7 +73,7 @@ public:
         m_album->removeExtraData(listView());
     }
 
-    int compare(QListViewItem* i, int , bool ) const
+    int compare(Q3ListViewItem* i, int , bool ) const
     {
         if (!i)
             return 0;
@@ -96,7 +96,7 @@ SearchFolderView::SearchFolderView(QWidget* parent)
                 : FolderView(parent, "SearchFolderView")
 {
     addColumn(i18n("My Searches"));
-    setResizeMode(QListView::LastColumn);
+    setResizeMode(Q3ListView::LastColumn);
     setRootIsDecorated(false);
 
     m_lastAddedItem = 0;
@@ -110,11 +110,11 @@ SearchFolderView::SearchFolderView(QWidget* parent)
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(clear()));
 
-    connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
-            this, SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
+    connect(this, SIGNAL(contextMenuRequested(Q3ListViewItem*, const QPoint&, int)),
+            this, SLOT(slotContextMenu(Q3ListViewItem*, const QPoint&, int)));
 
-    connect(this, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
-            this, SLOT(slotDoubleClicked(QListViewItem*, const QPoint&, int)));
+    connect(this, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)),
+            this, SLOT(slotDoubleClicked(Q3ListViewItem*, const QPoint&, int)));
 
     connect(this, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
@@ -304,9 +304,9 @@ void SearchFolderView::slotSelectionChanged()
     if (!active())
         return;
     
-    QListViewItem* selItem = 0;
+    Q3ListViewItem* selItem = 0;
     
-    QListViewItemIterator it( this );
+    Q3ListViewItemIterator it( this );
     while (it.current())
     {
         if (it.current()->isSelected())
@@ -335,7 +335,7 @@ void SearchFolderView::slotSelectionChanged()
     }
 }
 
-void SearchFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int)
+void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
 {
     if (!item)
     {
@@ -400,7 +400,7 @@ void SearchFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int)
     }
 }
 
-void SearchFolderView::slotDoubleClicked(QListViewItem* item, const QPoint&, int)
+void SearchFolderView::slotDoubleClicked(Q3ListViewItem* item, const QPoint&, int)
 {
     if (!item)
         return;

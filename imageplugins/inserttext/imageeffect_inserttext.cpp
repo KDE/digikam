@@ -24,12 +24,12 @@
  
 // Qt includes. 
  
-#include <qvgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qpixmap.h>
@@ -40,6 +40,9 @@
 #include <qtimer.h> 
 #include <qhbuttongroup.h> 
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -97,36 +100,36 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QFrame *frame = new QFrame(plainPage());
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
+    Q3Frame *frame = new Q3Frame(plainPage());
+    frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
+    Q3VBoxLayout* l  = new Q3VBoxLayout(frame, 5, 0);
     m_previewWidget = new InsertTextWidget(480, 320, frame);
     l->addWidget(m_previewWidget);
-    QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the text inserted to the image. "
+    Q3WhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the text inserted to the image. "
                                            "You can use the mouse to move the text to the right location."));
     setPreviewAreaWidget(frame);                                           
     
     // -------------------------------------------------------------
 
     QWidget *gbox2        = new QWidget(plainPage());
-    QGridLayout *gridBox2 = new QGridLayout( gbox2, 9, 1, spacingHint());
+    Q3GridLayout *gridBox2 = new Q3GridLayout( gbox2, 9, 1, spacingHint());
     
     m_textEdit = new KTextEdit(gbox2);
     m_textEdit->setCheckSpellingEnabled(true);
-    m_textEdit->setWordWrap(QTextEdit::NoWrap);
-    QWhatsThis::add( m_textEdit, i18n("<p>Here, enter the text you want to insert in your image."));
+    m_textEdit->setWordWrap(Q3TextEdit::NoWrap);
+    Q3WhatsThis::add( m_textEdit, i18n("<p>Here, enter the text you want to insert in your image."));
     gridBox2->addMultiCellWidget(m_textEdit, 0, 2, 0, 1);
     
     // -------------------------------------------------------------
     
     m_fontChooserWidget = new FontChooserWidget(gbox2);
-    QWhatsThis::add( m_textEdit, i18n("<p>Here you can choose the font to be used."));
+    Q3WhatsThis::add( m_textEdit, i18n("<p>Here you can choose the font to be used."));
     gridBox2->addMultiCellWidget(m_fontChooserWidget, 3, 3, 0, 1);
     
     // -------------------------------------------------------------
     
     KIconLoader icon;
-    m_alignButtonGroup = new QHButtonGroup(gbox2);
+    m_alignButtonGroup = new Q3HButtonGroup(gbox2);
     
     QPushButton *alignLeft = new QPushButton( m_alignButtonGroup );
     m_alignButtonGroup->insert(alignLeft, ALIGN_LEFT);
@@ -153,7 +156,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     QToolTip::add( alignBlock, i18n( "Align text to a block" ) );
     
     m_alignButtonGroup->setExclusive(true);
-    m_alignButtonGroup->setFrameShape(QFrame::NoFrame);
+    m_alignButtonGroup->setFrameShape(Q3Frame::NoFrame);
     gridBox2->addMultiCellWidget(m_alignButtonGroup, 4, 4, 0, 1);
     
     // -------------------------------------------------------------
@@ -164,7 +167,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     m_textRotation->insertItem( i18n("90 Degrees") );
     m_textRotation->insertItem( i18n("180 Degrees") );
     m_textRotation->insertItem( i18n("270 Degrees") );
-    QWhatsThis::add( m_textRotation, i18n("<p>Select here the text rotation to use."));
+    Q3WhatsThis::add( m_textRotation, i18n("<p>Select here the text rotation to use."));
     gridBox2->addMultiCellWidget(label1, 5, 5, 0, 0);
     gridBox2->addMultiCellWidget(m_textRotation, 5, 5, 1, 1);
 
@@ -172,7 +175,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
         
     QLabel *label2    = new QLabel(i18n("Color:"), gbox2);
     m_fontColorButton = new KColorButton( Qt::black, gbox2 );
-    QWhatsThis::add( m_fontColorButton, i18n("<p>Set here the font color to use."));
+    Q3WhatsThis::add( m_fontColorButton, i18n("<p>Set here the font color to use."));
     gridBox2->addMultiCellWidget(label2, 6, 6, 0, 0);
     gridBox2->addMultiCellWidget(m_fontColorButton, 6, 6, 1, 1);
 

@@ -31,8 +31,8 @@ extern "C"
 
 // Qt includes.
 
-#include <qcache.h>
-#include <qguardedptr.h>
+#include <q3cache.h>
+#include <qpointer.h>
 #include <qpixmap.h>
 #include <qdir.h>
 #include <qfile.h>
@@ -75,8 +75,8 @@ public:
 
     int                        size;
 
-    QCache<QPixmap>           *cache;
-    QGuardedPtr<ThumbnailJob>  thumbJob;
+    Q3Cache<QPixmap>           *cache;
+    QPointer<ThumbnailJob>  thumbJob;
     QTimer                    *timer;
     QString                    thumbCacheDir;
 
@@ -87,7 +87,7 @@ PixmapManager::PixmapManager(AlbumIconView* view)
 {
     d = new PixmapManagerPriv;
     d->view  = view;
-    d->cache = new QCache<QPixmap>(101, 211);
+    d->cache = new Q3Cache<QPixmap>(101, 211);
     d->cache->setAutoDelete(true);
     d->thumbCacheDir = QDir::homeDirPath() + "/.thumbnails/";
     

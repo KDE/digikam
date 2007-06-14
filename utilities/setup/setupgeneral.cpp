@@ -27,17 +27,20 @@
 #include <qlayout.h>
 #include <qcombobox.h>
 #include <qvbuttongroup.h>
-#include <qvgroupbox.h>
-#include <qhgroupbox.h>
-#include <qgroupbox.h>
+#include <q3vgroupbox.h>
+#include <q3hgroupbox.h>
+#include <q3groupbox.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qdir.h>
-#include <qlistbox.h>
-#include <qwhatsthis.h>
+#include <q3listbox.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -105,11 +108,11 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
 {
     d = new SetupGeneralPriv;
     d->mainDialog       = dialog;
-    QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( parent, 0, KDialog::spacingHint() );
 
     // --------------------------------------------------------
 
-    QHGroupBox *albumPathBox = new QHGroupBox(parent);
+    Q3HGroupBox *albumPathBox = new Q3HGroupBox(parent);
     albumPathBox->setTitle(i18n("Album &Library Path"));
 
     d->albumPathEdit = new KURLRequester(albumPathBox);
@@ -129,46 +132,46 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
 
     // --------------------------------------------------------
 
-    QVGroupBox *iconTextGroup = new QVGroupBox(i18n("Thumbnail Information"), parent);
+    Q3VGroupBox *iconTextGroup = new Q3VGroupBox(i18n("Thumbnail Information"), parent);
       
     d->iconShowNameBox = new QCheckBox(i18n("Show file &name"), iconTextGroup);
-    QWhatsThis::add( d->iconShowNameBox, i18n("<p>Set this option to show file name below image thumbnail."));
+    Q3WhatsThis::add( d->iconShowNameBox, i18n("<p>Set this option to show file name below image thumbnail."));
 
     d->iconShowSizeBox = new QCheckBox(i18n("Show file si&ze"), iconTextGroup);
-    QWhatsThis::add( d->iconShowSizeBox, i18n("<p>Set this option to show file size below image thumbnail."));
+    Q3WhatsThis::add( d->iconShowSizeBox, i18n("<p>Set this option to show file size below image thumbnail."));
 
     d->iconShowDateBox = new QCheckBox(i18n("Show file creation &date"), iconTextGroup);
-    QWhatsThis::add( d->iconShowDateBox, i18n("<p>Set this option to show file creation date "
+    Q3WhatsThis::add( d->iconShowDateBox, i18n("<p>Set this option to show file creation date "
                                               "below image thumbnail."));
 
     d->iconShowModDateBox = new QCheckBox(i18n("Show file &modification date"), iconTextGroup);
-    QWhatsThis::add( d->iconShowModDateBox, i18n("<p>Set this option to show file modification date "
+    Q3WhatsThis::add( d->iconShowModDateBox, i18n("<p>Set this option to show file modification date "
                                                  "below image thumbnail."));
 
     d->iconShowCommentsBox = new QCheckBox(i18n("Show digiKam &comments"), iconTextGroup);
-    QWhatsThis::add( d->iconShowCommentsBox, i18n("<p>Set this option to show digiKam comments "
+    Q3WhatsThis::add( d->iconShowCommentsBox, i18n("<p>Set this option to show digiKam comments "
                                                   "below image thumbnail."));
 
     d->iconShowTagsBox = new QCheckBox(i18n("Show digiKam &tags"), iconTextGroup);
-    QWhatsThis::add( d->iconShowTagsBox, i18n("<p>Set this option to show digiKam tags "
+    Q3WhatsThis::add( d->iconShowTagsBox, i18n("<p>Set this option to show digiKam tags "
                                               "below image thumbnail."));
 
     d->iconShowRatingBox = new QCheckBox(i18n("Show digiKam &rating"), iconTextGroup);
-    QWhatsThis::add( d->iconShowRatingBox, i18n("<p>Set this option to show digiKam rating "
+    Q3WhatsThis::add( d->iconShowRatingBox, i18n("<p>Set this option to show digiKam rating "
                                                 "below image thumbnail."));
 
     d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions (warning: slow)"), iconTextGroup);
-    QWhatsThis::add( d->iconShowResolutionBox, i18n("<p>Set this option to show picture size in pixels "
+    Q3WhatsThis::add( d->iconShowResolutionBox, i18n("<p>Set this option to show picture size in pixels "
                                                     "below image thumbnail."));
 
     layout->addWidget(iconTextGroup);
 
     // --------------------------------------------------------
 
-    QVGroupBox *interfaceOptionsGroup = new QVGroupBox(i18n("Interface Options"), parent);
+    Q3VGroupBox *interfaceOptionsGroup = new Q3VGroupBox(i18n("Interface Options"), parent);
     interfaceOptionsGroup->setColumnLayout(0, Qt::Vertical );
     interfaceOptionsGroup->layout()->setMargin(KDialog::marginHint());
-    QGridLayout* ifaceSettingsLayout = new QGridLayout(interfaceOptionsGroup->layout(), 2, 4, KDialog::spacingHint());
+    Q3GridLayout* ifaceSettingsLayout = new Q3GridLayout(interfaceOptionsGroup->layout(), 2, 4, KDialog::spacingHint());
 
     d->iconTreeThumbLabel = new QLabel(i18n("Sidebar thumbnail size:"), interfaceOptionsGroup);
     d->iconTreeThumbSize = new QComboBox(false, interfaceOptionsGroup);
@@ -193,7 +196,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     ifaceSettingsLayout->addMultiCellWidget(d->rightClickActionComboBox, 1, 1, 1, 4);
 
     d->previewLoadFullImageSize = new QCheckBox(i18n("Embedded preview load full image size"), interfaceOptionsGroup);
-    QWhatsThis::add( d->previewLoadFullImageSize, i18n("<p>Set this option to load full image size "
+    Q3WhatsThis::add( d->previewLoadFullImageSize, i18n("<p>Set this option to load full image size "
                      "with embedded preview instead a reduced one. Because this option will take more time "
                      "to load image, use it only if you have a fast computer."));
     ifaceSettingsLayout->addMultiCellWidget(d->previewLoadFullImageSize, 2, 2, 0, 4);

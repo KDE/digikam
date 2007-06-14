@@ -27,7 +27,9 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -56,7 +58,7 @@ public:
         JPEG2000LossLess         = 0;
     }
 
-    QGridLayout  *JPEG2000Grid;
+    Q3GridLayout  *JPEG2000Grid;
 
     QLabel       *labelJPEG2000compression;
 
@@ -70,10 +72,10 @@ JP2KSettings::JP2KSettings(QWidget *parent)
 {
     d = new JP2KSettingsPriv;
 
-    d->JPEG2000Grid     = new QGridLayout(this, 1, 1, KDialog::spacingHint());
+    d->JPEG2000Grid     = new Q3GridLayout(this, 1, 1, KDialog::spacingHint());
     d->JPEG2000LossLess = new QCheckBox(i18n("LossLess JPEG 2000 files"), this);
 
-    QWhatsThis::add(d->JPEG2000LossLess, i18n("<p>Toggle lossless compression for JPEG 2000 images.<p>"
+    Q3WhatsThis::add(d->JPEG2000LossLess, i18n("<p>Toggle lossless compression for JPEG 2000 images.<p>"
                                               "If you enable this option, you will use a lossless method "
                                               "to compress JPEG 2000 pictures.<p>"));
 
@@ -81,7 +83,7 @@ JP2KSettings::JP2KSettings(QWidget *parent)
     d->JPEG2000compression->setRange(1, 100, 1, true );
     d->labelJPEG2000compression = new QLabel(i18n("JPEG 2000 quality:"), this);
 
-    QWhatsThis::add( d->JPEG2000compression, i18n("<p>The quality value for JPEG 2000 images:<p>"
+    Q3WhatsThis::add( d->JPEG2000compression, i18n("<p>The quality value for JPEG 2000 images:<p>"
                                                   "<b>1</b>: low quality (high compression and small "
                                                   "file size)<p>"
                                                   "<b>50</b>: medium quality<p>"

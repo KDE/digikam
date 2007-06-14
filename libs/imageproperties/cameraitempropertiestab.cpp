@@ -29,8 +29,10 @@
 #include <qlabel.h>
 #include <qpixmap.h>
 #include <qcombobox.h>
-#include <qwhatsthis.h>
-#include <qframe.h>
+#include <q3whatsthis.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -130,7 +132,7 @@ public:
     QLabel             *flash;
     QLabel             *whiteBalance;
 
-    QFrame             *settingsArea;
+    Q3Frame             *settingsArea;
 
     KSqueezedTextLabel *labelFile;
     KSqueezedTextLabel *labelFolder;
@@ -161,11 +163,11 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     d = new CameraItemPropertiesTabPriv;
 
     setupNavigateBar(navBar);
-    d->settingsArea = new QFrame(this);
-    d->settingsArea->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+    d->settingsArea = new Q3Frame(this);
+    d->settingsArea->setFrameStyle( Q3Frame::StyledPanel | Q3Frame::Sunken );
     d->settingsArea->setLineWidth( style().pixelMetric(QStyle::PM_DefaultFrameWidth, this) );
     
-    QGridLayout *settingsLayout = new QGridLayout(d->settingsArea, 27, 1, KDialog::spacingHint(), 0);
+    Q3GridLayout *settingsLayout = new Q3GridLayout(d->settingsArea, 27, 1, KDialog::spacingHint(), 0);
 
     // --------------------------------------------------
 
@@ -181,7 +183,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     d->newFileName            = new QLabel(i18n("<nobr><b>New Name</b></nobr>:"), d->settingsArea);
     d->downloaded             = new QLabel(i18n("<b>Downloaded</b>:"), d->settingsArea);
 
-    KSeparator *line          = new KSeparator (Horizontal, d->settingsArea);
+    KSeparator *line          = new KSeparator (Qt::Horizontal, d->settingsArea);
     d->title2                 = new QLabel(i18n("<big><b>Photograph Properties</b></big>"), d->settingsArea);
     d->make                   = new QLabel(i18n("<b>Make</b>:"), d->settingsArea);
     d->model                  = new QLabel(i18n("<b>Model</b>:"), d->settingsArea);

@@ -25,8 +25,10 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -77,37 +79,37 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
               : QWidget(parent)
 {
     d = new SetupSlideShowPriv;
-    QVBoxLayout *layout = new QVBoxLayout( parent );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( parent );
     
     d->delayInput = new KIntNumInput(5, parent);
     d->delayInput->setRange(1, 3600, 1, true );
-    d->delayInput->setLabel( i18n("&Delay between images:"), AlignLeft|AlignTop );
-    QWhatsThis::add( d->delayInput, i18n("<p>The delay, in seconds, between images."));
+    d->delayInput->setLabel( i18n("&Delay between images:"), Qt::AlignLeft|Qt::AlignTop );
+    Q3WhatsThis::add( d->delayInput, i18n("<p>The delay, in seconds, between images."));
     
     d->startWithCurrent = new QCheckBox(i18n("Start with current image"), parent);
-    QWhatsThis::add( d->startWithCurrent, i18n("<p>If this option is enabled, Slideshow will be started "
+    Q3WhatsThis::add( d->startWithCurrent, i18n("<p>If this option is enabled, Slideshow will be started "
                                                "with current image selected from the images list."));
     
     d->loopMode = new QCheckBox(i18n("Display in loop"), parent);
-    QWhatsThis::add( d->loopMode, i18n("<p>Run the slideshow in a loop."));
+    Q3WhatsThis::add( d->loopMode, i18n("<p>Run the slideshow in a loop."));
     
     d->printName = new QCheckBox(i18n("Print image file name"), parent);
-    QWhatsThis::add( d->printName, i18n("<p>Print image file name to the screen bottom."));
+    Q3WhatsThis::add( d->printName, i18n("<p>Print image file name to the screen bottom."));
 
     d->printDate = new QCheckBox(i18n("Print image creation date"), parent);
-    QWhatsThis::add( d->printDate, i18n("<p>Print image creation to the screen bottom."));
+    Q3WhatsThis::add( d->printDate, i18n("<p>Print image creation to the screen bottom."));
 
     d->printApertureFocal = new QCheckBox(i18n("Print camera aperture and focal length"), parent);
-    QWhatsThis::add( d->printApertureFocal, i18n("<p>Print camera aperture and focal length to the screen bottom."));
+    Q3WhatsThis::add( d->printApertureFocal, i18n("<p>Print camera aperture and focal length to the screen bottom."));
 
     d->printExpoSensitivity = new QCheckBox(i18n("Print camera exposure and sensitivity"), parent);
-    QWhatsThis::add( d->printExpoSensitivity, i18n("<p>Print camera exposure and sensitivity to the screen  bottom."));
+    Q3WhatsThis::add( d->printExpoSensitivity, i18n("<p>Print camera exposure and sensitivity to the screen  bottom."));
 
     d->printMakeModel = new QCheckBox(i18n("Print camera make and model"), parent);
-    QWhatsThis::add( d->printMakeModel, i18n("<p>Print camera make and model to the screen bottom."));
+    Q3WhatsThis::add( d->printMakeModel, i18n("<p>Print camera make and model to the screen bottom."));
 
     d->printComment = new QCheckBox(i18n("Print image comment"), parent);
-    QWhatsThis::add( d->printComment, i18n("<p>Print image comment on bottom of screen."));
+    Q3WhatsThis::add( d->printComment, i18n("<p>Print image comment on bottom of screen."));
     
     layout->addWidget(d->delayInput);
     layout->addWidget(d->startWithCurrent);

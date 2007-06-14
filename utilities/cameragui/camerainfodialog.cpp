@@ -25,8 +25,10 @@
 // Qt includes.
 
 #include <qlayout.h>
-#include <qframe.h>
-#include <qtextedit.h>
+#include <q3frame.h>
+#include <q3textedit.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -49,31 +51,31 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
 
     // ----------------------------------------------------------
     
-    QFrame *p1 = addPage( i18n("Summary"), i18n("Camera Summary"), BarIcon("contents2", KIcon::SizeMedium) );
-    QVBoxLayout *p1layout = new QVBoxLayout( p1, 0, 6 );
+    Q3Frame *p1 = addPage( i18n("Summary"), i18n("Camera Summary"), BarIcon("contents2", KIcon::SizeMedium) );
+    Q3VBoxLayout *p1layout = new Q3VBoxLayout( p1, 0, 6 );
 
-    QTextEdit *summaryView = new QTextEdit(summary, QString(), p1);
-    summaryView->setWordWrap(QTextEdit::WidgetWidth);
+    Q3TextEdit *summaryView = new Q3TextEdit(summary, QString(), p1);
+    summaryView->setWordWrap(Q3TextEdit::WidgetWidth);
     summaryView->setReadOnly(true);
     p1layout->addWidget(summaryView);
 
     // ----------------------------------------------------------
 
-    QFrame *p2 = addPage( i18n("Manual"), i18n("Camera Manual"), BarIcon("contents", KIcon::SizeMedium) );
-    QVBoxLayout *p2layout = new QVBoxLayout( p2, 0, 6 );
+    Q3Frame *p2 = addPage( i18n("Manual"), i18n("Camera Manual"), BarIcon("contents", KIcon::SizeMedium) );
+    Q3VBoxLayout *p2layout = new Q3VBoxLayout( p2, 0, 6 );
 
-    QTextEdit *manualView = new QTextEdit(manual, QString(), p2);
-    manualView->setWordWrap(QTextEdit::WidgetWidth);
+    Q3TextEdit *manualView = new Q3TextEdit(manual, QString(), p2);
+    manualView->setWordWrap(Q3TextEdit::WidgetWidth);
     manualView->setReadOnly(true);
     p2layout->addWidget(manualView);
 
     // ----------------------------------------------------------
 
-    QFrame *p3 = addPage( i18n("About"), i18n("About Driver"), BarIcon("camera", KIcon::SizeMedium) );
-    QVBoxLayout *p3layout = new QVBoxLayout( p3, 0, 6 );
+    Q3Frame *p3 = addPage( i18n("About"), i18n("About Driver"), BarIcon("camera", KIcon::SizeMedium) );
+    Q3VBoxLayout *p3layout = new Q3VBoxLayout( p3, 0, 6 );
     
-    QTextEdit *aboutView = new QTextEdit(about, QString(), p3);
-    aboutView->setWordWrap(QTextEdit::WidgetWidth);
+    Q3TextEdit *aboutView = new Q3TextEdit(about, QString(), p3);
+    aboutView->setWordWrap(Q3TextEdit::WidgetWidth);
     aboutView->setReadOnly(true);
     p3layout->addWidget(aboutView);
 }

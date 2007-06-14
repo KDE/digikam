@@ -44,7 +44,7 @@ ImagePlugin_InPainting::ImagePlugin_InPainting(QObject *parent, const char*, con
                       : Digikam::ImagePlugin(parent, "ImagePlugin_InPainting")
 {
     m_inPaintingAction = new KAction(i18n("Inpainting..."), "inpainting",
-                             CTRL+Key_E, 
+                             Qt::CTRL+Qt::Key_E, 
                              this, SLOT(slotInPainting()),
                              actionCollection(), "imageplugin_inpainting");
     

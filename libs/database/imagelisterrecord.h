@@ -43,7 +43,7 @@ public:
     {
     }
 
-    Q_LLONG    imageID;
+    qlonglong    imageID;
     int        albumID;
     QString    name;
     QString    albumName;

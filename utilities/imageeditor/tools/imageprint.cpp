@@ -33,18 +33,18 @@
 #include <qobject.h>
 #include <qpixmap.h>
 #include <qlayout.h>
-#include <qgroupbox.h>
-#include <qbuttongroup.h>
+#include <q3groupbox.h>
+#include <q3buttongroup.h>
 #include <qstring.h>
 #include <qsize.h>
 #include <qcursor.h>
 #include <qlabel.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qcheckbox.h>
 #include <qfont.h>
-#include <qgrid.h>
+#include <q3grid.h>
 #include <qimage.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 #include <qpainter.h>
 #include <qradiobutton.h>
 #include <qvbuttongroup.h>
@@ -52,6 +52,9 @@
 #include <qcombobox.h>
 #include <qstyle.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 
 // KDE lib includes
 
@@ -148,7 +151,7 @@ bool ImagePrint::printImageWithQt()
     QPainter p;
     p.begin( &m_printer );
 
-    QPaintDeviceMetrics metrics( &m_printer );
+    Q3PaintDeviceMetrics metrics( &m_printer );
     p.setFont( KGlobalSettings::generalFont() );
     QFontMetrics fm = p.fontMetrics();
 
@@ -175,7 +178,7 @@ bool ImagePrint::printImageWithQt()
                                        : KPrinter::Landscape );
 
         // Scale image to fit pagesize
-        size.scale( w, h, QSize::ScaleMin );
+        size.scale( w, h, Qt::KeepAspectRatio );
     }
     else
     {
@@ -217,7 +220,7 @@ bool ImagePrint::printImageWithQt()
             } 
             else if (resp == KMessageBox::No) 
             { // Shrink
-                size.scale(w, h, QSize::ScaleMin);
+                size.scale(w, h, Qt::KeepAspectRatio);
             }
         }
     }
@@ -369,13 +372,13 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
 
     readSettings();
 
-    QVBoxLayout *layout = new QVBoxLayout( this );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( this );
     layout->setMargin( KDialog::marginHint() );
     layout->setSpacing( KDialog::spacingHint() );
 
     // ------------------------------------------------------------------------
 
-    QHBoxLayout *layout2 = new QHBoxLayout( layout ); 
+    Q3HBoxLayout *layout2 = new Q3HBoxLayout( layout ); 
     layout2->setSpacing(3);
 
     QLabel* textLabel = new QLabel( this, "Image position:" );
@@ -410,7 +413,7 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
 
     // ------------------------------------------------------------------------
 
-    QHBox *cmbox = new QHBox(this);
+    Q3HBox *cmbox = new Q3HBox(this);
 
     d->colorManaged = new QCheckBox(i18n("Use Color Management for Printing"), cmbox);
     d->colorManaged->setChecked( false );
@@ -425,7 +428,7 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
    
     // ------------------------------------------------------------------------
 
-    QVButtonGroup *group = new QVButtonGroup( i18n("Scaling"), this );
+    Q3VButtonGroup *group = new Q3VButtonGroup( i18n("Scaling"), this );
     group->setRadioButtonExclusive( true );
     layout->addWidget( group );
 
@@ -434,7 +437,7 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
 
     d->scale = new QRadioButton( i18n("Print e&xact size: "), group );
 
-    QHBox *hb = new QHBox( group );
+    Q3HBox *hb = new Q3HBox( group );
     hb->setSpacing( KDialog::spacingHint() );
     QWidget *w = new QWidget(hb);
     w->setFixedWidth(d->scale->style().subRect( QStyle::SR_RadioButtonIndicator, d->scale ).width());

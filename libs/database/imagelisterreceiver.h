@@ -26,7 +26,7 @@
 #define IMAGELISTERRECEIVER_H
 
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include <kio/slavebase.h>
 
@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT ImageListerValueListReceiver
 {
 public:
     ImageListerValueListReceiver();
-    QValueList<ImageListerRecord> records;
+    Q3ValueList<ImageListerRecord> records;
     bool hasError;
     virtual void receive(const ImageListerRecord &record);
     virtual void error(const QString &errMsg);

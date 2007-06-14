@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3ValueList>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -198,13 +200,13 @@ SearchInfo::List AlbumDB::scanSearches()
     return searchList;
 }
 
-QValueList<AlbumShortInfo> AlbumDB::getAlbumShortInfos()
+Q3ValueList<AlbumShortInfo> AlbumDB::getAlbumShortInfos()
 {
     QStringList values;
     execSql( QString("SELECT id, url from Albums;"),
              &values);
 
-    QValueList<AlbumShortInfo> albumList;
+    Q3ValueList<AlbumShortInfo> albumList;
 
     for (QStringList::iterator it = values.begin(); it != values.end();)
     {
@@ -286,7 +288,7 @@ void AlbumDB::setAlbumDate(int albumID, const QDate& date)
              .arg(albumID) );
 }
 
-void AlbumDB::setAlbumIcon(int albumID, Q_LLONG iconID)
+void AlbumDB::setAlbumIcon(int albumID, qlonglong iconID)
 {
     execSql( QString("UPDATE Albums SET icon=%1 WHERE id=%2;")
              .arg(iconID)
@@ -327,7 +329,7 @@ void AlbumDB::deleteAlbum(int albumID)
 }
 
 int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE,
-                    Q_LLONG iconID)
+                    qlonglong iconID)
 {
     if (!execSql( QString("INSERT INTO Tags (pid, name) "
                           "VALUES( %1, '%2')")
@@ -361,7 +363,7 @@ void AlbumDB::deleteTag(int tagID)
                  .arg(tagID) );
 }
 
-void AlbumDB::setTagIcon(int tagID, const QString& iconKDE, Q_LLONG iconID)
+void AlbumDB::setTagIcon(int tagID, const QString& iconKDE, qlonglong iconID)
 {
     if (!iconKDE.isEmpty())
     {
@@ -487,7 +489,7 @@ QString AlbumDB::escapeString(QString str) const
     return d->sql->escapeString(str);
 }
 
-QString AlbumDB::getItemCaption(Q_LLONG imageID)
+QString AlbumDB::getItemCaption(qlonglong imageID)
 {
     QStringList values;
 
@@ -518,7 +520,7 @@ QString AlbumDB::getItemCaption(int albumID, const QString& name)
         return QString();
 }
 
-QDateTime AlbumDB::getItemDate(Q_LLONG imageID)
+QDateTime AlbumDB::getItemDate(qlonglong imageID)
 {
     QStringList values;
 
@@ -549,7 +551,7 @@ QDateTime AlbumDB::getItemDate(int albumID, const QString& name)
         return QDateTime::fromString(values[0], Qt::ISODate);
 }
 
-Q_LLONG AlbumDB::getImageId(int albumID, const QString& name)
+qlonglong AlbumDB::getImageId(int albumID, const QString& name)
 {
     QStringList values;
 
@@ -565,7 +567,7 @@ Q_LLONG AlbumDB::getImageId(int albumID, const QString& name)
         return (values[0]).toLongLong();
 }
 
-QStringList AlbumDB::getItemTagNames(Q_LLONG imageID)
+QStringList AlbumDB::getItemTagNames(qlonglong imageID)
 {
     QStringList values;
 
@@ -579,7 +581,7 @@ QStringList AlbumDB::getItemTagNames(Q_LLONG imageID)
     return values;
 }
 
-IntList AlbumDB::getItemTagIDs(Q_LLONG imageID)
+IntList AlbumDB::getItemTagIDs(qlonglong imageID)
 {
     QStringList values;
 
@@ -600,7 +602,7 @@ IntList AlbumDB::getItemTagIDs(Q_LLONG imageID)
     return ids;
 }
 
-ItemShortInfo AlbumDB::getItemShortInfo(Q_LLONG imageID)
+ItemShortInfo AlbumDB::getItemShortInfo(qlonglong imageID)
 {
     QStringList values;
 
@@ -694,7 +696,7 @@ IntList AlbumDB::getItemCommonTagIDs(const LLongList& imageIDList)
     return ids;
 }
 
-void AlbumDB::setItemCaption(Q_LLONG imageID,const QString& caption)
+void AlbumDB::setItemCaption(qlonglong imageID,const QString& caption)
 {
     QStringList values;
 
@@ -723,7 +725,7 @@ void AlbumDB::setItemCaption(int albumID, const QString& name, const QString& ca
     return setItemCaption(getImageId(albumID, name), caption);
 }
 
-void AlbumDB::addItemTag(Q_LLONG imageID, int tagID)
+void AlbumDB::addItemTag(qlonglong imageID, int tagID)
 {
     execSql( QString("REPLACE INTO ImageTags (imageid, tagid) "
                      "VALUES(%1, %2);")
@@ -761,7 +763,7 @@ IntList AlbumDB::getRecentlyAssignedTags() const
     return d->recentlyAssignedTags;    
 }
 
-void AlbumDB::removeItemTag(Q_LLONG imageID, int tagID)
+void AlbumDB::removeItemTag(qlonglong imageID, int tagID)
 {
     execSql( QString("DELETE FROM ImageTags "
                      "WHERE imageID=%1 AND tagid=%2;")
@@ -772,7 +774,7 @@ void AlbumDB::removeItemTag(Q_LLONG imageID, int tagID)
             ->sendImageFieldChanged(imageID, DatabaseAttributesWatch::ImageTags);
 }
 
-void AlbumDB::removeItemAllTags(Q_LLONG imageID)
+void AlbumDB::removeItemAllTags(qlonglong imageID)
 {
     execSql( QString("DELETE FROM ImageTags "
                      "WHERE imageID=%1;")
@@ -813,12 +815,12 @@ QStringList AlbumDB::getAllItemURLsWithoutDate()
     return values;
 }
 
-QValueList<QPair<QString, QDateTime> > AlbumDB::getItemsAndDate()
+Q3ValueList<QPair<QString, QDateTime> > AlbumDB::getItemsAndDate()
 {
     QStringList values;
     execSql( "SELECT name, datetime FROM Images;", &values );
 
-    QValueList<QPair<QString, QDateTime> > data;
+    Q3ValueList<QPair<QString, QDateTime> > data;
     for ( QStringList::iterator it = values.begin(); it != values.end(); )
     {
         QPair<QString, QDateTime> pair;
@@ -852,7 +854,7 @@ int AlbumDB::getAlbumForPath(const QString &albumRoot, const QString& folder, bo
     return albumID;
 }
 
-Q_LLONG AlbumDB::addItem(int albumID,
+qlonglong AlbumDB::addItem(int albumID,
                          const QString& name,
                          const QDateTime& datetime,
                          const QString& comment,
@@ -867,7 +869,7 @@ Q_LLONG AlbumDB::addItem(int albumID,
                    escapeString(name),
                    QString::number(albumID)) );
 
-    Q_LLONG item = d->sql->lastInsertedRow();
+    qlonglong item = d->sql->lastInsertedRow();
 
     // Set Rating value to item in database.
 
@@ -1060,7 +1062,7 @@ IntList AlbumDB::getTagsFromTagPaths(const QStringList &keywordsList, bool creat
     return tagIDs;
 }
 
-int AlbumDB::getItemAlbum(Q_LLONG imageID)
+int AlbumDB::getItemAlbum(qlonglong imageID)
 {
     QStringList values;
 
@@ -1075,7 +1077,7 @@ int AlbumDB::getItemAlbum(Q_LLONG imageID)
         return 1;
 }
 
-QString AlbumDB::getItemName(Q_LLONG imageID)
+QString AlbumDB::getItemName(qlonglong imageID)
 {
     QStringList values;
 
@@ -1090,7 +1092,7 @@ QString AlbumDB::getItemName(Q_LLONG imageID)
         return QString();
 }
 
-bool AlbumDB::setItemDate(Q_LLONG imageID,
+bool AlbumDB::setItemDate(qlonglong imageID,
                           const QDateTime& datetime)
 {
     execSql ( QString ("UPDATE Images SET datetime='%1'"
@@ -1120,7 +1122,7 @@ bool AlbumDB::setItemDate(int albumID, const QString& name,
     return setItemDate(getImageId(albumID, name), datetime);
 }
 
-void AlbumDB::setItemRating(Q_LLONG imageID, int rating)
+void AlbumDB::setItemRating(qlonglong imageID, int rating)
 {
     execSql ( QString ("REPLACE INTO ImageProperties "
                        "(imageid, property, value) "
@@ -1133,7 +1135,7 @@ void AlbumDB::setItemRating(Q_LLONG imageID, int rating)
             ->sendImageFieldChanged(imageID, DatabaseAttributesWatch::ImageRating);
 }
 
-int AlbumDB::getItemRating(Q_LLONG imageID)
+int AlbumDB::getItemRating(qlonglong imageID)
 {
     QStringList values;
 

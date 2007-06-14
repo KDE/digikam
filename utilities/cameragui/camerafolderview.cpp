@@ -33,6 +33,8 @@
 #include "camerafolderitem.h"
 #include "camerafolderview.h"
 #include "camerafolderview.moc"
+//Added by qt3to4:
+#include <QPixmap>
 
 namespace Digikam
 {
@@ -63,17 +65,17 @@ CameraFolderView::CameraFolderView(QWidget* parent)
     setDropVisualizer(false);
     setDropHighlighter(false);
     setAcceptDrops(true);
-    setSelectionMode(QListView::Single);
+    setSelectionMode(Q3ListView::Single);
 
     d->cameraName    = "Camera";
     d->virtualFolder = 0;
     d->rootFolder    = 0;
 
-    connect(this, SIGNAL(currentChanged(QListViewItem*)),
-            this, SLOT(slotCurrentChanged(QListViewItem*)));
+    connect(this, SIGNAL(currentChanged(Q3ListViewItem*)),
+            this, SLOT(slotCurrentChanged(Q3ListViewItem*)));
 
-    connect(this, SIGNAL(clicked(QListViewItem*)),
-            this, SLOT(slotCurrentChanged(QListViewItem*)));
+    connect(this, SIGNAL(clicked(Q3ListViewItem*)),
+            this, SLOT(slotCurrentChanged(Q3ListViewItem*)));
 }
 
 CameraFolderView::~CameraFolderView()
@@ -133,7 +135,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
 CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath)
 {
 
-    QListViewItemIterator it(this);
+    Q3ListViewItemIterator it(this);
     for ( ; it.current(); ++it) 
     {
         CameraFolderItem* item = static_cast<CameraFolderItem*>(it.current());
@@ -145,7 +147,7 @@ CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath)
     return 0;
 }
 
-void CameraFolderView::slotCurrentChanged(QListViewItem* item)
+void CameraFolderView::slotCurrentChanged(Q3ListViewItem* item)
 {
     if (!item) 
         emit signalFolderChanged(0);

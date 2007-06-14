@@ -29,6 +29,8 @@
 // Qt includes.
 
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 // Local includes.
 
@@ -53,8 +55,8 @@ public:
         origin    = 0;
     }
 
-    QValueList<UndoAction*>  undoActions;
-    QValueList<UndoAction*>  redoActions;
+    Q3ValueList<UndoAction*>  undoActions;
+    Q3ValueList<UndoAction*>  redoActions;
     int                      origin;
     
     UndoCache               *undoCache;
@@ -182,7 +184,7 @@ void UndoManager::clear(bool clearCache)
 void UndoManager::clearUndoActions()
 {
     UndoAction *action;
-    QValueList<UndoAction*>::iterator it;
+    Q3ValueList<UndoAction*>::iterator it;
     
     for(it = d->undoActions.begin(); it != d->undoActions.end(); ++it)
     {
@@ -198,7 +200,7 @@ void UndoManager::clearRedoActions()
         return;
 
     UndoAction *action;
-    QValueList<UndoAction*>::iterator it;
+    Q3ValueList<UndoAction*>::iterator it;
 
     // get the level of the first redo action
     int level = d->undoActions.size() + 1;
@@ -225,7 +227,7 @@ bool UndoManager::anyMoreRedo()
 
 void UndoManager::getUndoHistory(QStringList &titles)
 {
-    QValueList<UndoAction*>::iterator it;
+    Q3ValueList<UndoAction*>::iterator it;
 
     for(it = d->undoActions.begin(); it != d->undoActions.end(); ++it)
     {
@@ -235,7 +237,7 @@ void UndoManager::getUndoHistory(QStringList &titles)
 
 void UndoManager::getRedoHistory(QStringList &titles)
 {
-    QValueList<UndoAction*>::iterator it;
+    Q3ValueList<UndoAction*>::iterator it;
 
     for(it = d->redoActions.begin(); it != d->redoActions.end(); ++it)
     {

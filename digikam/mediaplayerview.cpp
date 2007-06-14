@@ -26,7 +26,9 @@
 #include <qlabel.h>
 #include <qstring.h>
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -67,29 +69,29 @@ public:
         mediaPlayerView   = 0;
     }
 
-    QFrame               *errorView;
+    Q3Frame               *errorView;
 
-    QFrame               *mediaPlayerView;
+    Q3Frame               *mediaPlayerView;
 
-    QGridLayout          *grid;
+    Q3GridLayout          *grid;
 
     KParts::ReadOnlyPart *mediaPlayerPart;
 };
     
 MediaPlayerView::MediaPlayerView(QWidget *parent)
-               : QWidgetStack(parent, 0, Qt::WDestructiveClose)
+               : Q3WidgetStack(parent, 0, Qt::WDestructiveClose)
 {
     d = new MediaPlayerViewPriv;
 
     // --------------------------------------------------------------------------
 
-    d->errorView          = new QFrame(this);
+    d->errorView          = new Q3Frame(this);
     QLabel *errorMsg      = new QLabel(i18n("No media player available..."), d->errorView);
-    QGridLayout *grid     = new QGridLayout(d->errorView, 2, 2, 
+    Q3GridLayout *grid     = new Q3GridLayout(d->errorView, 2, 2, 
                                             KDialogBase::marginHint(), KDialogBase::spacingHint());
 
     errorMsg->setAlignment(Qt::AlignCenter);
-    d->errorView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
+    d->errorView->setFrameStyle(Q3Frame::GroupBoxPanel|Q3Frame::Plain);
     d->errorView->setMargin(0);
     d->errorView->setLineWidth(1);
 
@@ -103,11 +105,11 @@ MediaPlayerView::MediaPlayerView(QWidget *parent)
 
     // --------------------------------------------------------------------------
 
-    d->mediaPlayerView    = new QFrame(this);
-    d->grid               = new QGridLayout(d->mediaPlayerView, 2, 2, 
+    d->mediaPlayerView    = new Q3Frame(this);
+    d->grid               = new Q3GridLayout(d->mediaPlayerView, 2, 2, 
                                             KDialogBase::marginHint(), KDialogBase::spacingHint());
 
-    d->mediaPlayerView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
+    d->mediaPlayerView->setFrameStyle(Q3Frame::GroupBoxPanel|Q3Frame::Plain);
     d->mediaPlayerView->setMargin(0);
     d->mediaPlayerView->setLineWidth(1);
 

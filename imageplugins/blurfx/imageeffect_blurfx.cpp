@@ -25,12 +25,14 @@
 // Qt includes. 
  
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
 #include <qslider.h>
 #include <qimage.h>
 #include <qcombobox.h>
 #include <qdatetime.h> 
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -85,7 +87,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 1, 0, spacingHint());
+    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 5, 1, 0, spacingHint());
     
     m_effectTypeLabel = new QLabel(i18n("Type:"), gboxSettings);
     
@@ -100,7 +102,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     m_effectType->insertItem( i18n("Smart Blur") );
     m_effectType->insertItem( i18n("Frost Glass") );
     m_effectType->insertItem( i18n("Mosaic") );
-    QWhatsThis::add( m_effectType, i18n("<p>Select here the blurring effect to apply on image.<p>"
+    Q3WhatsThis::add( m_effectType, i18n("<p>Select here the blurring effect to apply on image.<p>"
                                         "<b>Zoom Blur</b>:  blurs the image along radial lines starting from "
                                         "a specified center point. This simulates the blur of a zooming camera.<p>"
                                         "<b>Radial Blur</b>: blurs the image by rotating the pixels around "
@@ -129,7 +131,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     m_distanceLabel = new QLabel(i18n("Distance:"), gboxSettings);
     m_distanceInput = new KIntNumInput(gboxSettings);
     m_distanceInput->setRange(0, 100, 1, true);    
-    QWhatsThis::add( m_distanceInput, i18n("<p>Set here the blur distance in pixels."));
+    Q3WhatsThis::add( m_distanceInput, i18n("<p>Set here the blur distance in pixels."));
     
     gridSettings->addMultiCellWidget(m_distanceLabel, 2, 2, 0, 1);
     gridSettings->addMultiCellWidget(m_distanceInput, 3, 3, 0, 1);
@@ -137,7 +139,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     m_levelLabel = new QLabel(i18n("Level:"), gboxSettings);
     m_levelInput = new KIntNumInput(gboxSettings);
     m_levelInput->setRange(0, 360, 1, true);
-    QWhatsThis::add( m_levelInput, i18n("<p>This value controls the level to use with the current effect."));  
+    Q3WhatsThis::add( m_levelInput, i18n("<p>This value controls the level to use with the current effect."));  
     
     gridSettings->addMultiCellWidget(m_levelLabel, 4, 4, 0, 1);
     gridSettings->addMultiCellWidget(m_levelInput, 5, 5, 0, 1);

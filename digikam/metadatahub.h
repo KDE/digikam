@@ -29,7 +29,7 @@
 #include <qstringlist.h>
 #include <qdatetime.h>
 #include <qmap.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 // KDE includes
 
@@ -346,7 +346,7 @@ public:
 private:
 
     void load(const QDateTime &dateTime, const QString &comment, int rating);
-    void loadTags(const QValueList<TAlbum *> &loadedTags);
+    void loadTags(const Q3ValueList<TAlbum *> &loadedTags);
     void loadTags(const QStringList &loadedTagPaths);
     bool needWriteMetadata(WriteMode writeMode, const MetadataWriteSettings &settings) const;
 

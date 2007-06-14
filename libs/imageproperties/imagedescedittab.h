@@ -30,14 +30,16 @@
 
 #include <qwidget.h>
 #include <qpixmap.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QEvent>
 
 // Local includes.
 
 #include "digikam_export.h"
 #include "navigatebartab.h"
 
-class QListViewItem;
+class Q3ListViewItem;
 
 namespace Digikam
 {
@@ -59,7 +61,7 @@ public:
 
     void assignRating(int rating);
     void setItem(ImageInfo *info=0);
-    void setItems(QPtrList<ImageInfo> infos);
+    void setItems(Q3PtrList<ImageInfo> infos);
     void populateTags();
 
 signals:
@@ -73,7 +75,7 @@ protected:
 
 private:
 
-    void setInfos(QPtrList<ImageInfo> infos);
+    void setInfos(Q3PtrList<ImageInfo> infos);
 
     void updateTagsView();
     void updateComments();
@@ -92,7 +94,7 @@ private:
 
     bool singleSelection() const;
     void setMetadataWidgetStatus(int status, QWidget *widget);
-    void reloadForMetadataChange(Q_LLONG imageId);
+    void reloadForMetadataChange(qlonglong imageId);
 
 private slots:
 
@@ -104,7 +106,7 @@ private slots:
     void slotDateTimeChanged(const QDateTime& dateTime);
     void slotRatingChanged(int rating);
     void slotModified();
-    void slotRightButtonClicked(QListViewItem *, const QPoint &, int);
+    void slotRightButtonClicked(Q3ListViewItem *, const QPoint &, int);
     void slotTagsSearchChanged();
 
     void slotAlbumAdded(Album* a);
@@ -119,11 +121,11 @@ private slots:
     void slotThumbnailLost(Album *album);
     void slotReloadThumbnails();
 
-    void slotImageTagsChanged(Q_LLONG imageId);
+    void slotImageTagsChanged(qlonglong imageId);
     void slotImagesChanged(int albumId);
-    void slotImageRatingChanged(Q_LLONG imageId);
-    void slotImageDateChanged(Q_LLONG imageId);
-    void slotImageCaptionChanged(Q_LLONG imageId);
+    void slotImageRatingChanged(qlonglong imageId);
+    void slotImageDateChanged(qlonglong imageId);
+    void slotImageCaptionChanged(qlonglong imageId);
 
     void slotRecentTagsMenuActivated(int);
     void slotAssignedTagsToggled(bool);

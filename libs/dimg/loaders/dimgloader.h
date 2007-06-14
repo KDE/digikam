@@ -29,7 +29,7 @@
 
 #include <qmap.h>
 #include <qstring.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qvariant.h>
 
 // Local includes.

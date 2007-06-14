@@ -29,7 +29,15 @@
 
 // Qt includes.
 
-#include <qlistview.h>
+#include <q3listview.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QDragMoveEvent>
+#include <QDragLeaveEvent>
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <QPixmap>
 
 // Local includes
 
@@ -47,7 +55,7 @@ class FolderItem;
  */
 
 
-class DIGIKAM_EXPORT FolderView : public QListView
+class DIGIKAM_EXPORT FolderView : public Q3ListView
 {
     Q_OBJECT
 
@@ -60,7 +68,7 @@ public:
     bool active() const;
 
     int      itemHeight() const;
-    QRect    itemRect(QListViewItem *item) const;
+    QRect    itemRect(Q3ListViewItem *item) const;
     QPixmap  itemBasePixmapRegular() const;
     QPixmap  itemBasePixmapSelected() const;
 
@@ -94,7 +102,7 @@ protected:
      */
     virtual void saveViewState();
 
-    bool mouseInItemRect(QListViewItem* item, int x) const;
+    bool mouseInItemRect(Q3ListViewItem* item, int x) const;
 
 protected slots:
 

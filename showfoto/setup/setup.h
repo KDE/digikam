@@ -27,8 +27,10 @@
 // KDE includes.
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <Q3Frame>
 
-class QFrame;
+class Q3Frame;
 
 namespace Digikam
 {

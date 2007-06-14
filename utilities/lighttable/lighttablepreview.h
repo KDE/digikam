@@ -29,6 +29,11 @@
 #include <qstring.h>
 #include <qimage.h>
 #include <qsize.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QDropEvent>
+#include <QDragMoveEvent>
 
 // Local includes
 

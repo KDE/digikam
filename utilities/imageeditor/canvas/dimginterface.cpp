@@ -306,7 +306,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                         // To repaint image in canvas before to ask about to apply ICC profile.
                         emit signalImageLoaded(d->filename, valRet);
     
-                        DImg preview = d->image.smoothScale(240, 180, QSize::ScaleMin);
+                        DImg preview = d->image.smoothScale(240, 180, Qt::KeepAspectRatio);
                         trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting),
                                           QFile::encodeName(d->cmSettings->workspaceSetting));
                         ColorCorrectionDlg dlg(d->parent, &preview, &trans, fileName);
@@ -359,7 +359,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                             // To repaint image in canvas before to ask about to apply ICC profile.
                             emit signalImageLoaded(d->filename, valRet);
     
-                            DImg preview = d->image.smoothScale(240, 180, QSize::ScaleMin);
+                            DImg preview = d->image.smoothScale(240, 180, Qt::KeepAspectRatio);
                             trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
                             ColorCorrectionDlg dlg(d->parent, &preview, &trans, fileName);
     
@@ -578,7 +578,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     meta.setIptc(d->image.getIptc());
 
     // Update Iptc preview.
-    QImage preview = d->image.smoothScale(800, 600, QSize::ScaleMin).copyQImage();
+    QImage preview = d->image.smoothScale(800, 600, Qt::KeepAspectRatio).copyQImage();
 
     // TODO: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
     // bigger than 64K duing of image preview tag size, the target JPEG image will be
@@ -592,7 +592,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
         meta.setImagePreview(preview);
 
     // Update Exif thumbnail.
-    QImage thumb = preview.smoothScale(160, 120, QImage::ScaleMin);
+    QImage thumb = preview.smoothScale(160, 120, Qt::KeepAspectRatio);
     meta.setExifThumbnail(thumb);
 
     // Update Exif Image dimensions.

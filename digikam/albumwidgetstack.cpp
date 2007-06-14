@@ -67,7 +67,7 @@ public:
 };
 
 AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
-                : QWidgetStack(parent, 0, Qt::WDestructiveClose)
+                : Q3WidgetStack(parent, 0, Qt::WDestructiveClose)
 {
     d = new AlbumWidgetStackPriv;
 

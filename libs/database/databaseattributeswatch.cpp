@@ -45,7 +45,7 @@ void DatabaseAttributesWatch::shutDown()
 }
 */
 
-void DatabaseAttributesWatch::sendImageFieldChanged(Q_LLONG imageId, ImageDataField field)
+void DatabaseAttributesWatch::sendImageFieldChanged(qlonglong imageId, ImageDataField field)
 {
     emit imageFieldChanged(imageId, field);
 }

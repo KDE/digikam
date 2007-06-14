@@ -128,7 +128,7 @@ public:
     /**
      * @return the last inserted row in one the db table.
      */
-    virtual Q_LLONG lastInsertedRow() = 0;
+    virtual qlonglong lastInsertedRow() = 0;
 
     /**
      * Begin a database transaction

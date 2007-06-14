@@ -24,6 +24,8 @@
 // Qt includes.
 
 #include <qdatastream.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 // KDE includes.
 
@@ -45,7 +47,7 @@ namespace Digikam
 {
 
 SearchResultsView::SearchResultsView(QWidget* parent)
-    : QIconView(parent)
+    : Q3IconView(parent)
 {
     m_listJob  = 0;
     m_thumbJob = 0;
@@ -53,7 +55,7 @@ SearchResultsView::SearchResultsView(QWidget* parent)
     m_filter      = AlbumSettings::instance()->getAllFileFilter();
 
     setAutoArrange(true);
-    setResizeMode(QIconView::Adjust);
+    setResizeMode(Q3IconView::Adjust);
 }
 
 SearchResultsView::~SearchResultsView()
@@ -96,18 +98,18 @@ void SearchResultsView::clear()
     m_thumbJob = 0;
 
     m_itemDict.clear();
-    QIconView::clear();
+    Q3IconView::clear();
 }
 
 void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
 {
-    for (QIconViewItem* item = firstItem(); item; item = item->nextItem())
+    for (Q3IconViewItem* item = firstItem(); item; item = item->nextItem())
         ((SearchResultsItem*)item)->m_marked = false;
 
     KURL::List ulist;
 
     QString path;
-    QDataStream ds(data, IO_ReadOnly);
+    QDataStream ds(data, QIODevice::ReadOnly);
     while (!ds.atEnd())
     {
         ImageListerRecord record;
@@ -131,7 +133,7 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
     }
 
     SearchResultsItem* item = (SearchResultsItem*)firstItem();
-    QIconViewItem* nextItem;
+    Q3IconViewItem* nextItem;
     while (item)
     {
         nextItem = item->nextItem();
@@ -167,7 +169,7 @@ void SearchResultsView::slotResult(KIO::Job *job)
 
 void SearchResultsView::slotGotThumbnail(const KURL& url, const QPixmap& pix)
 {
-    QIconViewItem* i = m_itemDict.find(url.path());
+    Q3IconViewItem* i = m_itemDict.find(url.path());
     if (i)
         i->setPixmap(pix);
     

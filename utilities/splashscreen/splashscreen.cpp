@@ -28,6 +28,8 @@
 #include <qapplication.h>
 #include <qtimer.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 
 // KDE includes.
 
@@ -75,7 +77,7 @@ public:
 };
 
 SplashScreen::SplashScreen(const QString& splash)
-            : QWidget(0, 0, WStyle_Customize|WStyle_Splash)
+            : QWidget(0, 0, Qt::WStyle_Customize|Qt::WStyle_Splash)
 {
     d = new SplashScreenPriv;
     
@@ -167,7 +169,7 @@ void SplashScreen::drawContents( QPainter *painter )
     QColor basecolor (155, 192, 231);
 
     // Draw background circles
-    painter->setPen(NoPen);
+    painter->setPen(Qt::NoPen);
     painter->setBrush(QColor(225,234,231));
     painter->drawEllipse(21,7,9,9);
     painter->drawEllipse(32,7,9,9);
@@ -181,9 +183,9 @@ void SplashScreen::drawContents( QPainter *painter )
         position = (d->currState+i)%(2*d->progressBarSize-1);
         if (position < 3)
         {
-            painter->setBrush(QColor(basecolor.red()-18*i,
-                              basecolor.green()-28*i,
-                              basecolor.blue()-10*i));
+            painter->setBrush(QColor(basecolor.Qt::red()-18*i,
+                              basecolor.Qt::green()-28*i,
+                              basecolor.Qt::blue()-10*i));
             painter->drawEllipse(21+position*11,7,9,9);
         }
     }

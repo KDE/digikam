@@ -36,13 +36,13 @@ extern "C"
 // Qt includes.
 
 #include <qstring.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdatastream.h>
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qmap.h>
 #include <qpair.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qtimer.h>
 
 // KDE includes.
@@ -82,11 +82,11 @@ public:
 
     QString                         filter;
 
-    QMap<Q_LLONG, ImageInfo*>       itemMap;
+    QMap<qlonglong, ImageInfo*>       itemMap;
     QMap<int,int>                   invalidatedItems;
     QMap<int,bool>                  dayFilter;
 
-    QValueList<int>                 tagFilter;
+    Q3ValueList<int>                 tagFilter;
 
     QTimer                         *filterTimer;
 
@@ -187,17 +187,17 @@ void AlbumLister::refresh()
             this, SLOT(slotData(KIO::Job*, const QByteArray&)));
 }
 
-void AlbumLister::setDayFilter(const QValueList<int>& days)
+void AlbumLister::setDayFilter(const Q3ValueList<int>& days)
 {
     d->dayFilter.clear();
 
-    for (QValueList<int>::const_iterator it = days.begin(); it != days.end(); ++it)
+    for (Q3ValueList<int>::const_iterator it = days.begin(); it != days.end(); ++it)
         d->dayFilter.insert(*it, true);
 
     d->filterTimer->start(100, true);
 }
 
-void AlbumLister::setTagFilter(const QValueList<int>& tags, const MatchingCondition& matchingCond, 
+void AlbumLister::setTagFilter(const Q3ValueList<int>& tags, const MatchingCondition& matchingCond, 
                                bool showUnTagged)
 {
     d->tagFilter      = tags;
@@ -216,8 +216,8 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
 
     if (!d->tagFilter.isEmpty())
     {
-        QValueList<int> tagIds = info->tagIds();
-        QValueList<int>::iterator it;
+        Q3ValueList<int> tagIds = info->tagIds();
+        Q3ValueList<int>::iterator it;
 
         if (d->matchingCond == OrCondition)        
         {
@@ -349,7 +349,7 @@ void AlbumLister::slotResult(KIO::Job* job)
         return;
     }
 
-    typedef QMap<Q_LLONG, ImageInfo*> ImMap;
+    typedef QMap<qlonglong, ImageInfo*> ImMap;
 
     for (ImMap::iterator it = d->itemMap.begin();
          it != d->itemMap.end(); ++it)
@@ -373,7 +373,7 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     ImageInfoList newItemsList;
     ImageInfoList newFilteredItemsList;
 
-    QDataStream ds(data, IO_ReadOnly);
+    QDataStream ds(data, QIODevice::ReadOnly);
 
     while (!ds.atEnd())
     {

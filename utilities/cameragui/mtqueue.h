@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <qptrqueue.h>
+#include <q3ptrqueue.h>
 #include <qmutex.h>
 
 namespace Digikam
@@ -107,7 +107,7 @@ public:
     
 private:
 
-    QPtrQueue<Type> queue_;
+    Q3PtrQueue<Type> queue_;
     QMutex mutex_;
 };
 

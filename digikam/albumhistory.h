@@ -29,7 +29,7 @@
 // Qt includes.
 
 #include <qobject.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstringlist.h>
 
 namespace Digikam
@@ -71,7 +71,7 @@ private:
     HistoryItem*    getCurrentAlbum() const;
     void            forward(unsigned int steps=1);
     
-    typedef QValueList<HistoryItem*> AlbumStack;
+    typedef Q3ValueList<HistoryItem*> AlbumStack;
     
     AlbumStack      *m_backwardStack;
     AlbumStack      *m_forwardStack;

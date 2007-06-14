@@ -24,6 +24,8 @@
 // Local includes
 
 #include "imagelisterreceiver.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 namespace Digikam
 {
@@ -58,9 +60,9 @@ void ImageListerSlaveBaseReceiver::error(const QString &errMsg)
 void ImageListerSlaveBaseReceiver::sendData()
 {
     QByteArray  ba;
-    QDataStream os(ba, IO_WriteOnly);
+    QDataStream os(ba, QIODevice::WriteOnly);
 
-    for (QValueList<ImageListerRecord>::iterator it = records.begin(); it != records.end(); ++it)
+    for (Q3ValueList<ImageListerRecord>::iterator it = records.begin(); it != records.end(); ++it)
     {
         os << *it;
     }

@@ -31,9 +31,11 @@
 #include <qstring.h>
 #include <qpainter.h>
 #include <qstyle.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qpixmap.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 // KDE includes.
 
@@ -62,7 +64,7 @@ class TagsPopupCheckedMenuItem : public QCustomMenuItem
 {
 public:
 
-    TagsPopupCheckedMenuItem(QPopupMenu* popup, const QString& txt, const QPixmap& pix)
+    TagsPopupCheckedMenuItem(Q3PopupMenu* popup, const QString& txt, const QPixmap& pix)
         : QCustomMenuItem(), m_popup(popup), m_txt(txt), m_pix(pix)
     {
     }
@@ -108,7 +110,7 @@ public:
 
 private:
 
-    QPopupMenu *m_popup;
+    Q3PopupMenu *m_popup;
 
     QString     m_txt;
 
@@ -127,14 +129,14 @@ public:
 
     QPixmap             addTagPix;
 
-    QValueList<int>     assignedTags;
-    QValueList<Q_LLONG> selectedImageIDs;
+    Q3ValueList<int>     assignedTags;
+    Q3ValueList<qlonglong> selectedImageIDs;
 
     TagsPopupMenu::Mode mode;
 };
 
-TagsPopupMenu::TagsPopupMenu(const QValueList<Q_LLONG>& selectedImageIDs, int addToID, Mode mode)
-             : QPopupMenu(0)
+TagsPopupMenu::TagsPopupMenu(const Q3ValueList<qlonglong>& selectedImageIDs, int addToID, Mode mode)
+             : Q3PopupMenu(0)
 {
     d = new TagsPopupMenuPriv;
     d->selectedImageIDs = selectedImageIDs;
@@ -166,14 +168,14 @@ void TagsPopupMenu::clearPopup()
     clear();
 }
 
-QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
+Q3PopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
 {
     AlbumManager* man = AlbumManager::instance();
     TAlbum* album     = man->findTAlbum(tagid);
     if (!album)
         return 0;
 
-    QPopupMenu* popup = new QPopupMenu(this);
+    Q3PopupMenu* popup = new Q3PopupMenu(this);
 
     connect(popup, SIGNAL(activated(int)), 
             this, SLOT(slotActivated(int)));
@@ -284,18 +286,18 @@ bool operator<(const TagsMenuSortType &lhs, const TagsMenuSortType &rhs)
     return lhs.first < rhs.first;
 }
 
-void TagsPopupMenu::iterateAndBuildMenu(QPopupMenu *menu, TAlbum *album)
+void TagsPopupMenu::iterateAndBuildMenu(Q3PopupMenu *menu, TAlbum *album)
 {
-    QValueVector<TagsMenuSortType> sortedTags;
+    Q3ValueVector<TagsMenuSortType> sortedTags;
 
     for (Album* a = album->firstChild(); a; a = a->next())
     {
         sortedTags.push_back(qMakePair(a->title(), a));
     }
 
-    qHeapSort(sortedTags);
+    qSort(sortedTags);
     
-    for (QValueVector<TagsMenuSortType>::Iterator i = sortedTags.begin(); i != sortedTags.end(); ++i)
+    for (Q3ValueVector<TagsMenuSortType>::Iterator i = sortedTags.begin(); i != sortedTags.end(); ++i)
     {
         Album *a = i->second;
         

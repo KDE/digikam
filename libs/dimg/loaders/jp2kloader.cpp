@@ -39,7 +39,7 @@
 // QT includes.
 
 #include <qfile.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 
 // Local includes.
 
@@ -638,7 +638,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         quality = 100;
 
     QString     rate;
-    QTextStream ts( &rate, IO_WriteOnly );
+    Q3TextStream ts( &rate, QIODevice::WriteOnly );
         
     // NOTE: to have a lossless compression use quality=100.
     // jp2_encode()::optstr:

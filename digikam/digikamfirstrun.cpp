@@ -38,7 +38,7 @@ extern "C"
 // Qt includes.
 
 #include <qcheckbox.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
@@ -73,7 +73,7 @@ namespace Digikam
 using namespace std;
 
 DigikamFirstRun::DigikamFirstRun(KConfig* config, QWidget* parent,
-                                 const char* name, bool modal, WFlags fl)
+                                 const char* name, bool modal, Qt::WFlags fl)
                : KDialogBase(parent, name, modal, i18n( "Album Library Path" ),
                              Help|Ok|Cancel, Ok, true )
 

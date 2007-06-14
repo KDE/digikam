@@ -27,6 +27,8 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qbitmap.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 // KDE includes.
 
@@ -45,7 +47,7 @@ namespace Digikam
 {
 
 RatingPopupMenu::RatingPopupMenu(QWidget* parent)
-               : QPopupMenu(parent)
+               : Q3PopupMenu(parent)
 {
     KGlobal::dirs()->addResourceType("digikam_rating", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating", "rating.png");

@@ -34,6 +34,8 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 // LibKDcraw includes.
 
@@ -66,10 +68,10 @@ void CollectionScanner::scanForStaleAlbums()
 void CollectionScanner::scanForStaleAlbums(const QString &albumRoot)
 {
     Q_UNUSED(albumRoot);
-    QValueList<AlbumShortInfo> albumList = DatabaseAccess().db()->getAlbumShortInfos();
-    QValueList<AlbumShortInfo> toBeDeleted;
+    Q3ValueList<AlbumShortInfo> albumList = DatabaseAccess().db()->getAlbumShortInfos();
+    Q3ValueList<AlbumShortInfo> toBeDeleted;
 
-    for (QValueList<AlbumShortInfo>::iterator it = albumList.begin(); it != albumList.end(); ++it)
+    for (Q3ValueList<AlbumShortInfo>::iterator it = albumList.begin(); it != albumList.end(); ++it)
     {
         QFileInfo fileInfo((*it).albumRoot + (*it).url);
         if (!fileInfo.exists() || !fileInfo.isDir())
@@ -80,7 +82,7 @@ void CollectionScanner::scanForStaleAlbums(const QString &albumRoot)
 QStringList CollectionScanner::formattedListOfStaleAlbums()
 {
     QStringList list;
-    for (QValueList<AlbumShortInfo>::iterator it = m_foldersToBeDeleted.begin(); it != m_foldersToBeDeleted.end(); ++it)
+    for (Q3ValueList<AlbumShortInfo>::iterator it = m_foldersToBeDeleted.begin(); it != m_foldersToBeDeleted.end(); ++it)
     {
         list << (*it).url;
     }
@@ -91,7 +93,7 @@ void CollectionScanner::removeStaleAlbums()
 {
     DatabaseAccess access;
     DatabaseTransaction transaction(&access);
-    for (QValueList<AlbumShortInfo>::iterator it = m_foldersToBeDeleted.begin(); it != m_foldersToBeDeleted.end(); ++it)
+    for (Q3ValueList<AlbumShortInfo>::iterator it = m_foldersToBeDeleted.begin(); it != m_foldersToBeDeleted.end(); ++it)
     {
         DDebug() << "Removing album " << (*it).albumRoot + '/' + (*it).url << endl;
         access.db()->deleteAlbum((*it).id);
@@ -103,7 +105,7 @@ QStringList CollectionScanner::formattedListOfStaleFiles()
     QStringList listToBeDeleted;
 
     DatabaseAccess access;
-    for (QValueList< QPair<QString,int> >::iterator it = m_filesToBeDeleted.begin();
+    for (Q3ValueList< QPair<QString,int> >::iterator it = m_filesToBeDeleted.begin();
         it != m_filesToBeDeleted.end(); ++it)
     {
         QString location = " (" + access.db()->getAlbumURL((*it).second) + ')';
@@ -118,7 +120,7 @@ void CollectionScanner::removeStaleFiles()
 {
     DatabaseAccess access;
     DatabaseTransaction transaction(&access);
-    for (QValueList< QPair<QString,int> >::iterator it = m_filesToBeDeleted.begin();
+    for (Q3ValueList< QPair<QString,int> >::iterator it = m_filesToBeDeleted.begin();
          it != m_filesToBeDeleted.end(); ++it)
     {
         DDebug() << "Removing: " << (*it).first << " in "

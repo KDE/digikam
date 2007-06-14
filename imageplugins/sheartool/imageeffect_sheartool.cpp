@@ -25,9 +25,11 @@
  
 #include <qlabel.h>
 #include <qcheckbox.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -84,7 +86,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
 
     setAboutData(about);
     
-    QWhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the shearing image operation preview. "
+    Q3WhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the shearing image operation preview. "
                                            "If you move the mouse cursor on this preview, "
                                            "a vertical and horizontal dashed line will be drawn "
                                            "to guide you in adjusting the shearing correction. "
@@ -97,7 +99,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     Digikam::ImageIface iface(0, 0);
 
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 11, 2, spacingHint());
+    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 11, 2, spacingHint());
     
     QLabel *label1 = new QLabel(i18n("New width:"), gboxSettings);
     m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), gboxSettings);
@@ -119,7 +121,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     m_mainHAngleInput = new KIntNumInput(gboxSettings);
     m_mainHAngleInput->setRange(-45, 45, 1, true);
     m_mainHAngleInput->setValue(0);
-    QWhatsThis::add( m_mainHAngleInput, i18n("<p>The main horizontal shearing angle, in degrees."));
+    Q3WhatsThis::add( m_mainHAngleInput, i18n("<p>The main horizontal shearing angle, in degrees."));
     gridSettings->addMultiCellWidget(label3, 3, 3, 0, 2);
     gridSettings->addMultiCellWidget(m_mainHAngleInput, 4, 4, 0, 2);
             
@@ -127,7 +129,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     m_fineHAngleInput = new KDoubleNumInput(gboxSettings);
     m_fineHAngleInput->setRange(-5.0, 5.0, 0.01, true);
     m_fineHAngleInput->setValue(0);
-    QWhatsThis::add( m_fineHAngleInput, i18n("<p>This value in degrees will be added to main horizontal angle value "
+    Q3WhatsThis::add( m_fineHAngleInput, i18n("<p>This value in degrees will be added to main horizontal angle value "
                                              "to set fine adjustments."));
     gridSettings->addMultiCellWidget(label4, 5, 5, 0, 2);
     gridSettings->addMultiCellWidget(m_fineHAngleInput, 6, 6, 0, 2);
@@ -136,7 +138,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     m_mainVAngleInput = new KIntNumInput(gboxSettings);
     m_mainVAngleInput->setRange(-45, 45, 1, true);
     m_mainVAngleInput->setValue(0);
-    QWhatsThis::add( m_mainVAngleInput, i18n("<p>The main vertical shearing angle, in degrees."));
+    Q3WhatsThis::add( m_mainVAngleInput, i18n("<p>The main vertical shearing angle, in degrees."));
     gridSettings->addMultiCellWidget(label5, 7, 7, 0, 0);
     gridSettings->addMultiCellWidget(m_mainVAngleInput, 8, 8, 0, 2);
 
@@ -144,13 +146,13 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     m_fineVAngleInput = new KDoubleNumInput(gboxSettings);
     m_fineVAngleInput->setRange(-5.0, 5.0, 0.01, true);
     m_fineVAngleInput->setValue(0);
-    QWhatsThis::add( m_fineVAngleInput, i18n("<p>This value in degrees will be added to main vertical angle value "
+    Q3WhatsThis::add( m_fineVAngleInput, i18n("<p>This value in degrees will be added to main vertical angle value "
                                              "to set fine adjustments."));
     gridSettings->addMultiCellWidget(label6, 9, 9, 0, 2);
     gridSettings->addMultiCellWidget(m_fineVAngleInput, 10, 10, 0, 2);
                                              
     m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), gboxSettings);
-    QWhatsThis::add( m_antialiasInput, i18n("<p>Enable this option to process anti-aliasing filter "
+    Q3WhatsThis::add( m_antialiasInput, i18n("<p>Enable this option to process anti-aliasing filter "
                                             "to the sheared image. "
                                             "To smooth the target image, it will be blurred a little."));
     gridSettings->addMultiCellWidget(m_antialiasInput, 11, 11, 0, 2);

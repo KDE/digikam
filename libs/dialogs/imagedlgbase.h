@@ -27,6 +27,9 @@
 // Qt includes
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3Frame>
+#include <QCloseEvent>
 
 // KDE includes.
 
@@ -52,7 +55,7 @@ class DIGIKAM_EXPORT ImageDlgBase : public KDialogBase
 public:
 
     ImageDlgBase(QWidget *parent, QString title, QString name, 
-                 bool loadFileSettings=true, bool tryAction=false, QFrame* bannerFrame=0);
+                 bool loadFileSettings=true, bool tryAction=false, Q3Frame* bannerFrame=0);
     ~ImageDlgBase();
 
     void setAboutData(KAboutData *about);

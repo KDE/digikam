@@ -29,6 +29,9 @@
 // Qt includes.
 
 #include <qevent.h>
+//Added by qt3to4:
+#include <QCustomEvent>
+#include <Q3PtrList>
 
 // Local includes.
 
@@ -292,7 +295,7 @@ protected:
     LoadSaveThread::AccessMode m_accessMode;
     bool m_completed;
     LoadingProcess *m_usedProcess;
-    QPtrList<LoadingProcessListener> m_listeners;
+    Q3PtrList<LoadingProcessListener> m_listeners;
 };
 
 //---------------------------------------------------------------------------------------------------

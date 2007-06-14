@@ -27,9 +27,9 @@
 
 // Qt includes.
 
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qstringlist.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 // KDE includes.
 
@@ -57,16 +57,16 @@ class ItemDrag : public KURLDrag
 public:
 
     ItemDrag(const KURL::List& urls, const KURL::List& kioURLs,
-             const QValueList<int>& albumIDs,
-             const QValueList<int>& imageIDs,
+             const Q3ValueList<int>& albumIDs,
+             const Q3ValueList<int>& imageIDs,
              QWidget* dragSource=0, const char* name=0);
 
     static bool canDecode(const QMimeSource* e);
     static bool decode(const QMimeSource* e,
                        KURL::List &urls,
                        KURL::List &kioURLs,
-                       QValueList<int>& albumIDs,
-                       QValueList<int>& imageIDs);
+                       Q3ValueList<int>& albumIDs,
+                       Q3ValueList<int>& imageIDs);
 
 protected:
 
@@ -76,8 +76,8 @@ protected:
 private:
     
     KURL::List      m_kioURLs;
-    QValueList<int> m_albumIDs;    
-    QValueList<int> m_imageIDs;
+    Q3ValueList<int> m_albumIDs;    
+    Q3ValueList<int> m_imageIDs;
 };
 
 
@@ -87,7 +87,7 @@ private:
  * When a tag is moved through drag'n'drop an object of this class 
  * is created.
  */
-class TagDrag : public QDragObject
+class TagDrag : public Q3DragObject
 {
 public:
 
@@ -132,11 +132,11 @@ private:
  * When a tag is moved through drag'n'drop an object of this class 
  * is created.
  */
-class TagListDrag : public QDragObject
+class TagListDrag : public Q3DragObject
 {
 public:
 
-    TagListDrag(const QValueList<int>& tagIDs, QWidget *dragSource = 0,
+    TagListDrag(const Q3ValueList<int>& tagIDs, QWidget *dragSource = 0,
                 const char *name = 0);
     static bool canDecode(const QMimeSource* e);
     
@@ -147,7 +147,7 @@ protected:
     
 private:
 
-    QValueList<int> m_tagIDs;
+    Q3ValueList<int> m_tagIDs;
 };
 
 }  // namespace Digikam

@@ -54,12 +54,12 @@ public:
      * A new object is created, or an existing object is returned.
      * If a new object is created, the id field will be initialized.
      */
-    ImageInfoData *infoForId(Q_LLONG id);
+    ImageInfoData *infoForId(qlonglong id);
     /**
      * Returns whether an ImageInfoObject for the given image id
      * is contained in the cache.
      */
-    bool hasInfoForId(Q_LLONG id) const;
+    bool hasInfoForId(qlonglong id) const;
 
     /**
      * Call this when the reference count is dropped to 1.
@@ -72,11 +72,11 @@ public:
 
 private slots:
 
-    void slotImageFieldChanged(Q_LLONG imageId, int field);
+    void slotImageFieldChanged(qlonglong imageId, int field);
 
 private:
 
-    QMap<Q_LLONG, ImageInfoData *> m_map;
+    QMap<qlonglong, ImageInfoData *> m_map;
 };
 
 

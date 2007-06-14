@@ -26,14 +26,14 @@
 
 // Qt includes.
 
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 
 namespace Digikam
 {
 
 class RatingPopupMenuPriv;
 
-class RatingPopupMenu : public QPopupMenu
+class RatingPopupMenu : public Q3PopupMenu
 {
     Q_OBJECT
     

@@ -29,7 +29,7 @@
 // Qt includes.
 
 #include <qdatetime.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 
 // KDE includes.
 
@@ -53,7 +53,7 @@ namespace Digikam
 
    @author Bram Schoenmakers <bram_s@softhome.net>, Mikolaj Machowski <mikmach@wp.pl>
 */
-class KDatePickerPopup: public QPopupMenu
+class KDatePickerPopup: public Q3PopupMenu
 {
     Q_OBJECT
 

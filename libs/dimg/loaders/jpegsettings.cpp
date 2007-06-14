@@ -26,7 +26,10 @@
 #include <qstring.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3Frame>
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -56,7 +59,7 @@ public:
         labelWarning         = 0;
     }
 
-    QGridLayout  *JPEGGrid;
+    Q3GridLayout  *JPEGGrid;
 
     QLabel       *labelJPEGcompression;
 
@@ -70,12 +73,12 @@ JPEGSettings::JPEGSettings(QWidget *parent)
 {
     d = new JPEGSettingsPriv;
 
-    d->JPEGGrid        = new QGridLayout(this, 1, 2, KDialog::spacingHint());
+    d->JPEGGrid        = new Q3GridLayout(this, 1, 2, KDialog::spacingHint());
     d->JPEGcompression = new KIntNumInput(75, this);
     d->JPEGcompression->setRange(1, 100, 1, true );
     d->labelJPEGcompression = new QLabel(i18n("JPEG quality:"), this);
 
-    QWhatsThis::add(d->JPEGcompression, i18n("<p>The quality value for JPEG images:<p>"
+    Q3WhatsThis::add(d->JPEGcompression, i18n("<p>The quality value for JPEG images:<p>"
                                              "<b>1</b>: low quality (high compression and small "
                                              "file size)<p>"
                                              "<b>50</b>: medium quality<p>"
@@ -90,9 +93,9 @@ JPEGSettings::JPEGSettings(QWidget *parent)
                           "image format!</p>"
                           "</i></qt>"), this);
 
-    d->labelWarning->setFrameStyle(QFrame::Box | QFrame::Plain);
+    d->labelWarning->setFrameStyle(Q3Frame::Box | Q3Frame::Plain);
     d->labelWarning->setLineWidth(1);
-    d->labelWarning->setFrameShape(QFrame::Box);
+    d->labelWarning->setFrameShape(Q3Frame::Box);
 
     d->JPEGGrid->addMultiCellWidget(d->labelJPEGcompression, 0, 0, 0, 0);
     d->JPEGGrid->addMultiCellWidget(d->JPEGcompression, 0, 0, 1, 1);

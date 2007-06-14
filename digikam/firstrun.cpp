@@ -25,11 +25,14 @@
  
 #include <qvariant.h>
 #include <qlabel.h>
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
 #include <kurlrequester.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 
 // KDE includes.
 
@@ -48,18 +51,18 @@ FirstRunWidget::FirstRunWidget( QWidget* parent )
               : QWidget( parent )
 {
     setName( "FirstRunWidget" );
-    QVBoxLayout *vlayout = new QVBoxLayout( this, 0, 6 ); 
+    Q3VBoxLayout *vlayout = new Q3VBoxLayout( this, 0, 6 ); 
 
     m_textLabel2 = new QLabel( this );
     vlayout->addWidget( m_textLabel2 );
 
-    QFrame *line1 = new QFrame( this );
-    line1->setFrameShape( QFrame::HLine );
-    line1->setFrameShadow( QFrame::Sunken );
-    line1->setFrameShape( QFrame::HLine );
+    Q3Frame *line1 = new Q3Frame( this );
+    line1->setFrameShape( Q3Frame::HLine );
+    line1->setFrameShadow( Q3Frame::Sunken );
+    line1->setFrameShape( Q3Frame::HLine );
     vlayout->addWidget( line1 );
 
-    QGridLayout *grid = new QGridLayout( 0, 1, 1, 0, 6 ); 
+    Q3GridLayout *grid = new Q3GridLayout( 0, 1, 1, 0, 6 ); 
 
     m_pixLabel = new QLabel( this );
     m_pixLabel->setAlignment( int( QLabel::AlignTop ) );

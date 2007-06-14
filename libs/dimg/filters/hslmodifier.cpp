@@ -121,9 +121,9 @@ void HSLModifier::applyHSL(DImg& image)
             // convert HSL to RGB
             color.setRGB(d->htransfer16[hue], d->stransfer16[sat], d->ltransfer16[lig], sixteenBit);
 
-            data[2] = color.red();
-            data[1] = color.green();
-            data[0] = color.blue();
+            data[2] = color.Qt::red();
+            data[1] = color.Qt::green();
+            data[0] = color.Qt::blue();
 
             data += 4;
         }
@@ -144,9 +144,9 @@ void HSLModifier::applyHSL(DImg& image)
             // convert HSL to RGB
             color.setRGB(d->htransfer[hue], d->stransfer[sat], d->ltransfer[lig], sixteenBit);
 
-            data[2] = color.red();
-            data[1] = color.green();
-            data[0] = color.blue();
+            data[2] = color.Qt::red();
+            data[1] = color.Qt::green();
+            data[0] = color.Qt::blue();
 
             data += 4;
         }

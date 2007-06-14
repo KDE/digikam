@@ -28,6 +28,9 @@
 
 #include <qpainter.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
 
 // Local includes.
 
@@ -45,8 +48,8 @@ BlackFrameListView::BlackFrameListView(QWidget* parent)
     addColumn(i18n("This is a column which will contain the amount of HotPixels "
                    "found in the black frame file", "HP"));
     setAllColumnsShowFocus(true);
-    setResizeMode(QListView::LastColumn);
-    setSelectionMode(QListView::Single);
+    setResizeMode(Q3ListView::LastColumn);
+    setSelectionMode(Q3ListView::Single);
 }
 
 ///////////////////////////////////////////////////////////////
@@ -58,11 +61,11 @@ BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, KURL 
     m_blackFrameURL = url;
     m_parser.parseBlackFrame(url);
     
-    connect(&m_parser, SIGNAL(parsed(QValueList<HotPixel>)),
-            this, SLOT(slotParsed(QValueList<HotPixel>)));
+    connect(&m_parser, SIGNAL(parsed(Q3ValueList<HotPixel>)),
+            this, SLOT(slotParsed(Q3ValueList<HotPixel>)));
     
-    connect(this, SIGNAL(parsed(QValueList<HotPixel>, const KURL&)),
-            parent, SLOT(slotParsed(QValueList<HotPixel>, const KURL&)));
+    connect(this, SIGNAL(parsed(Q3ValueList<HotPixel>, const KURL&)),
+            parent, SLOT(slotParsed(Q3ValueList<HotPixel>, const KURL&)));
 }
 
 void BlackFrameListViewItem::activate()
@@ -101,10 +104,10 @@ QString BlackFrameListViewItem::text(int column)const
 void BlackFrameListViewItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int align)
 {
     //Let the normal listview item draw it all for now
-    QListViewItem::paintCell(p, cg, column, width, align);
+    Q3ListViewItem::paintCell(p, cg, column, width, align);
 }
 
-void BlackFrameListViewItem::slotParsed(QValueList<HotPixel> hotPixels)
+void BlackFrameListViewItem::slotParsed(Q3ValueList<HotPixel> hotPixels)
 {
     m_hotPixels = hotPixels;
     m_image     = m_parser.image();
@@ -113,8 +116,8 @@ void BlackFrameListViewItem::slotParsed(QValueList<HotPixel> hotPixels)
     setPixmap(0, m_thumb);
         
     m_blackFrameDesc = QString("<p><b>" + m_blackFrameURL.fileName() + "</b>:<p>");    
-    QValueList <HotPixel>::Iterator end(m_hotPixels.end());
-    for (QValueList <HotPixel>::Iterator it = m_hotPixels.begin() ; it != end ; ++it)
+    Q3ValueList <HotPixel>::Iterator end(m_hotPixels.end());
+    for (Q3ValueList <HotPixel>::Iterator it = m_hotPixels.begin() ; it != end ; ++it)
         m_blackFrameDesc.append( QString("[%1,%2] ").arg((*it).x()).arg((*it).y()) );
     
     emit parsed(m_hotPixels, m_blackFrameURL);
@@ -139,8 +142,8 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
     yRatio = (float)size.height()/(float)m_image.height();
     
     //Draw hot pixels one by one
-    QValueList <HotPixel>::Iterator it;    
-    QValueList <HotPixel>::Iterator end(m_hotPixels.end()); 
+    Q3ValueList <HotPixel>::Iterator it;    
+    Q3ValueList <HotPixel>::Iterator end(m_hotPixels.end()); 
     for (it=m_hotPixels.begin() ; it!=end ; ++it)
     {
         hpRect   = (*it).rect;
@@ -160,10 +163,10 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
     return thumb;
 }
 
-int BlackFrameListViewItem::width(const QFontMetrics& fm,const QListView* lv,int c)const
+int BlackFrameListViewItem::width(const QFontMetrics& fm,const Q3ListView* lv,int c)const
 {
     if (c==0) return THUMB_WIDTH;
-    else return QListViewItem::width(fm,lv,c);
+    else return Q3ListViewItem::width(fm,lv,c);
 }
 
 }  // NameSpace DigikamHotPixelsImagesPlugin

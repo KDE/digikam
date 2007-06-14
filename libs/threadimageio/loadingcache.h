@@ -24,10 +24,12 @@
 #ifndef LOADING_CACHE_H
 #define LOADING_CACHE_H
 
-#include <qptrlist.h>
-#include <qcache.h>
-#include <qdict.h>
+#include <q3ptrlist.h>
+#include <q3cache.h>
+#include <q3dict.h>
 #include <qmutex.h>
+//Added by qt3to4:
+#include <QCustomEvent>
 
 #include "dimg.h"
 #include "loadsavethread.h"

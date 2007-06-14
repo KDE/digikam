@@ -33,6 +33,8 @@
 #include "databaseaccess.h"
 #include "databaseurl.h"
 #include "album.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 namespace Digikam
 {
@@ -409,11 +411,11 @@ DatabaseUrl TAlbum::kurl() const
     return DatabaseUrl::fromTagIds(tagIDs());
 }
 
-QValueList<int> TAlbum::tagIDs() const
+Q3ValueList<int> TAlbum::tagIDs() const
 {
     if (isRoot())
     {
-        return QValueList<int>();
+        return Q3ValueList<int>();
     }
     else if (parent())
     {
@@ -421,7 +423,7 @@ QValueList<int> TAlbum::tagIDs() const
     }
     else
     {
-        return QValueList<int>() << id();
+        return Q3ValueList<int>() << id();
     }
 }
 

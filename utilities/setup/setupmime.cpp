@@ -24,14 +24,17 @@
 // QT includes.
 
 #include <qlayout.h>
-#include <qhbox.h>
-#include <qhgroupbox.h>
-#include <qgroupbox.h>
+#include <q3hbox.h>
+#include <q3hgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -80,12 +83,12 @@ SetupMime::SetupMime(QWidget* parent )
          : QWidget(parent)
 {
     d = new SetupMimePriv;
-    QVBoxLayout *layout = new QVBoxLayout(parent, 0, KDialog::spacingHint());
+    Q3VBoxLayout *layout = new Q3VBoxLayout(parent, 0, KDialog::spacingHint());
     
     // --------------------------------------------------------
     
-    QGroupBox *imageFileFilterBox = new QGroupBox(0, Qt::Horizontal, i18n("Image Files"), parent);
-    QGridLayout* grid1            = new QGridLayout(imageFileFilterBox->layout(), 1, 1, KDialog::spacingHint());
+    Q3GroupBox *imageFileFilterBox = new Q3GroupBox(0, Qt::Horizontal, i18n("Image Files"), parent);
+    Q3GridLayout* grid1            = new Q3GridLayout(imageFileFilterBox->layout(), 1, 1, KDialog::spacingHint());
 
     QLabel *logoLabel1 = new QLabel(imageFileFilterBox);
     logoLabel1->setPixmap(DesktopIcon("image"));
@@ -93,9 +96,9 @@ SetupMime::SetupMime(QWidget* parent )
     QLabel *imageFileFilterLabel = new QLabel(imageFileFilterBox);
     imageFileFilterLabel->setText(i18n("Show only &image files with extensions:"));
     
-    QHBox *hbox1 = new QHBox(imageFileFilterBox);    
+    Q3HBox *hbox1 = new Q3HBox(imageFileFilterBox);    
     d->imageFileFilterEdit = new QLineEdit(hbox1);
-    QWhatsThis::add( d->imageFileFilterEdit, i18n("<p>Here you can set the extensions of image files "
+    Q3WhatsThis::add( d->imageFileFilterEdit, i18n("<p>Here you can set the extensions of image files "
                                                   "to be displayed in Albums (such as JPEG or TIFF); "
                                                   "when these files are clicked on "
                                                   "they will be opened with the digiKam Image Editor."));
@@ -115,8 +118,8 @@ SetupMime::SetupMime(QWidget* parent )
     
     // --------------------------------------------------------
     
-    QGroupBox *movieFileFilterBox = new QGroupBox(0, Qt::Horizontal, i18n("Movie Files"), parent);
-    QGridLayout* grid2            = new QGridLayout(movieFileFilterBox->layout(), 1, 1, KDialog::spacingHint());
+    Q3GroupBox *movieFileFilterBox = new Q3GroupBox(0, Qt::Horizontal, i18n("Movie Files"), parent);
+    Q3GridLayout* grid2            = new Q3GridLayout(movieFileFilterBox->layout(), 1, 1, KDialog::spacingHint());
 
     QLabel *logoLabel2 = new QLabel(movieFileFilterBox);
     logoLabel2->setPixmap(DesktopIcon("video"));
@@ -124,9 +127,9 @@ SetupMime::SetupMime(QWidget* parent )
     QLabel *movieFileFilterLabel = new QLabel(movieFileFilterBox);
     movieFileFilterLabel->setText(i18n("Show only &movie files with extensions:"));
     
-    QHBox *hbox2 = new QHBox(movieFileFilterBox);    
+    Q3HBox *hbox2 = new Q3HBox(movieFileFilterBox);    
     d->movieFileFilterEdit = new QLineEdit(hbox2);
-    QWhatsThis::add( d->movieFileFilterEdit, i18n("<p>Here you can set the extensions of movie files "
+    Q3WhatsThis::add( d->movieFileFilterEdit, i18n("<p>Here you can set the extensions of movie files "
                                                   "to be displayed in Albums (such as MPEG or AVI); "
                                                   "when these files are clicked on they will "
                                                   "be opened with the default KDE movie player."));
@@ -146,8 +149,8 @@ SetupMime::SetupMime(QWidget* parent )
     
     // --------------------------------------------------------
     
-    QGroupBox *audioFileFilterBox = new QGroupBox(0, Qt::Horizontal, i18n("Audio Files"), parent);
-    QGridLayout* grid3            = new QGridLayout(audioFileFilterBox->layout(), 1, 1, KDialog::spacingHint());
+    Q3GroupBox *audioFileFilterBox = new Q3GroupBox(0, Qt::Horizontal, i18n("Audio Files"), parent);
+    Q3GridLayout* grid3            = new Q3GridLayout(audioFileFilterBox->layout(), 1, 1, KDialog::spacingHint());
 
     QLabel *logoLabel3 = new QLabel(audioFileFilterBox);
     logoLabel3->setPixmap(DesktopIcon("sound"));
@@ -155,9 +158,9 @@ SetupMime::SetupMime(QWidget* parent )
     QLabel *audioFileFilterLabel = new QLabel(audioFileFilterBox);
     audioFileFilterLabel->setText(i18n("Show only &audio files with extensions:"));
     
-    QHBox *hbox3 = new QHBox(audioFileFilterBox);  
+    Q3HBox *hbox3 = new Q3HBox(audioFileFilterBox);  
     d->audioFileFilterEdit = new QLineEdit(hbox3);
-    QWhatsThis::add( d->audioFileFilterEdit, i18n("<p>Here you can set the extensions of audio files "
+    Q3WhatsThis::add( d->audioFileFilterEdit, i18n("<p>Here you can set the extensions of audio files "
                                                   "to be displayed in Albums (such as MP3 or OGG); "
                                                   "when these files are clicked on they will "
                                                   "be opened with the default KDE audio player."));
@@ -177,8 +180,8 @@ SetupMime::SetupMime(QWidget* parent )
     
     // --------------------------------------------------------
     
-    QGroupBox *rawFileFilterBox = new QGroupBox(0, Qt::Horizontal, i18n("RAW Files"), parent);
-    QGridLayout* grid4          = new QGridLayout(rawFileFilterBox->layout(), 1, 1, KDialog::spacingHint());
+    Q3GroupBox *rawFileFilterBox = new Q3GroupBox(0, Qt::Horizontal, i18n("RAW Files"), parent);
+    Q3GridLayout* grid4          = new Q3GridLayout(rawFileFilterBox->layout(), 1, 1, KDialog::spacingHint());
 
     QLabel *logoLabel4 = new QLabel(rawFileFilterBox);
     logoLabel4->setPixmap(DesktopIcon("kdcraw"));
@@ -186,9 +189,9 @@ SetupMime::SetupMime(QWidget* parent )
     QLabel *rawFileFilterLabel = new QLabel(rawFileFilterBox);
     rawFileFilterLabel->setText(i18n("Show only &RAW files with extensions:"));
     
-    QHBox *hbox4 = new QHBox(rawFileFilterBox);  
+    Q3HBox *hbox4 = new Q3HBox(rawFileFilterBox);  
     d->rawFileFilterEdit = new QLineEdit(hbox4);
-    QWhatsThis::add( d->rawFileFilterEdit, i18n("<p>Here you can set the extensions of RAW image files "
+    Q3WhatsThis::add( d->rawFileFilterEdit, i18n("<p>Here you can set the extensions of RAW image files "
                                                 "to be displayed in Albums (such as CRW, for Canon cameras, "
                                                 "or NEF, for Nikon cameras)."));
     rawFileFilterLabel->setBuddy(d->rawFileFilterEdit);

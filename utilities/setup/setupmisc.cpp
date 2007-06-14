@@ -25,8 +25,10 @@
 // Qt includes.
 
 #include <qlayout.h>
-#include <qvgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -64,8 +66,8 @@ SetupMisc::SetupMisc(QWidget* parent)
 {
     d = new SetupMiscPriv;
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(parent);
-    QVBoxLayout *layout = new QVBoxLayout( this, 0, KDialog::spacingHint() );
+    Q3VBoxLayout *mainLayout = new Q3VBoxLayout(parent);
+    Q3VBoxLayout *layout = new Q3VBoxLayout( this, 0, KDialog::spacingHint() );
 
    // --------------------------------------------------------
 

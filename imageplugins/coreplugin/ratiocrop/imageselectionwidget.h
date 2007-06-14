@@ -31,6 +31,10 @@
 #include <qwidget.h>
 #include <qrect.h>
 #include <qcolor.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QMouseEvent>
 
 namespace Digikam
 {

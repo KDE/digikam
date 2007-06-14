@@ -25,18 +25,20 @@
 
 // Qt includes.
 
-#include <qiconview.h>
+#include <q3iconview.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 namespace Digikam
 {
 
-class SearchResultsItem : public QIconViewItem
+class SearchResultsItem : public Q3IconViewItem
 {
     friend class SearchResultsView;
 
 public:
 
-    SearchResultsItem(QIconView* view, const QString& path);
+    SearchResultsItem(Q3IconView* view, const QString& path);
     ~SearchResultsItem();
 
 protected:

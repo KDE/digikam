@@ -30,7 +30,7 @@
 
 #include <qimage.h>
 #include <qobject.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qrect.h>
 #include <qstring.h>
 
@@ -69,7 +69,7 @@ public:
 public:
         
     HotPixelFixer(Digikam::DImg *orgImage, QObject *parent, 
-                  const QValueList<HotPixel>& hpList, int interpolationMethod);
+                  const Q3ValueList<HotPixel>& hpList, int interpolationMethod);
     ~HotPixelFixer();
 
 private: 
@@ -77,20 +77,20 @@ private:
     virtual void filterImage(void);
     
     void interpolate (Digikam::DImg &img,HotPixel &hp, int method);
-    void weightPixels (Digikam::DImg &img, HotPixel &px, int method, Direction dir, int maxComponent);
+    void weightPixels (Digikam::DImg &img, HotPixel &px, int method, Qt::Orientation dir, int maxComponent);
     
     inline bool validPoint(Digikam::DImg &img, QPoint p)
     {
         return (p.x()>=0 && p.y()>=0 && p.x()<(long) img.width() && p.y()<(long) img.height());
     };
     
-    QValueList <Weights> mWeightList;
+    Q3ValueList <Weights> mWeightList;
 
 private: 
 
     int                  m_interpolationMethod;
        
-    QValueList<HotPixel> m_hpList;
+    Q3ValueList<HotPixel> m_hpList;
 };
 
 }  // NameSpace DigikamHotPixelsImagesPlugin

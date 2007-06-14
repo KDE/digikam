@@ -33,6 +33,8 @@
 // Qt includes.
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 // KDE includes.
 
@@ -65,12 +67,12 @@ public:
     static DigikamApp* getinstance();
 
     // KIPI Actions collections access.
-    const QPtrList<KAction>& menuImageActions();
-    const QPtrList<KAction>& menuBatchActions();
-    const QPtrList<KAction>& menuAlbumActions();
+    const Q3PtrList<KAction>& menuImageActions();
+    const Q3PtrList<KAction>& menuBatchActions();
+    const Q3PtrList<KAction>& menuAlbumActions();
     
-    const QPtrList<KAction> menuImportActions();
-    const QPtrList<KAction> menuExportActions();
+    const Q3PtrList<KAction> menuImportActions();
+    const Q3PtrList<KAction> menuExportActions();
 
     void autoDetect();
     void downloadFrom(const QString &cameraGuiPath);
@@ -113,7 +115,7 @@ private slots:
 
     void slotAlbumSelected(bool val);
     void slotTagSelected(bool val);
-    void slotImageSelected(const QPtrList<ImageInfo>&, bool, bool);
+    void slotImageSelected(const Q3PtrList<ImageInfo>&, bool, bool);
     void slotExit();
     void slotShowTip();
     void slotShowKipiHelp();

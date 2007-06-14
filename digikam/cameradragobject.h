@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <qdragobject.h>
+#include <q3dragobject.h>
 
 class QMimeSource;
 class QWidget;
@@ -37,7 +37,7 @@ namespace Digikam
 
 class CameraType;
 
-class CameraDragObject : public QStoredDrag
+class CameraDragObject : public Q3StoredDrag
 {
 
 public:

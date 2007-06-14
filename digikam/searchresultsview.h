@@ -26,10 +26,12 @@
 
 // Qt includes.
 
-#include <qiconview.h>
-#include <qcstring.h>
-#include <qdict.h>
-#include <qguardedptr.h>
+#include <q3iconview.h>
+#include <q3cstring.h>
+#include <q3dict.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 // Local includes.
 
@@ -47,7 +49,7 @@ class Job;
 namespace Digikam
 {
 
-class SearchResultsView : public QIconView
+class SearchResultsView : public Q3IconView
 {
     Q_OBJECT
 
@@ -63,9 +65,9 @@ private:
 
     KIO::TransferJob*         m_listJob;
 
-    QGuardedPtr<ThumbnailJob> m_thumbJob;
+    QPointer<ThumbnailJob> m_thumbJob;
 
-    QDict<QIconViewItem>      m_itemDict;
+    Q3Dict<Q3IconViewItem>      m_itemDict;
 
     QString                   m_filter;
 

@@ -35,6 +35,13 @@
 #include <qsplitter.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3ValueList>
+#include <Q3Frame>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QCloseEvent>
 
 // KDE includes.
 
@@ -271,7 +278,7 @@ void ImageWindow::setupConnections()
 void ImageWindow::setupUserArea()
 {
     QWidget* widget  = new QWidget(this);
-    QHBoxLayout *lay = new QHBoxLayout(widget);
+    Q3HBoxLayout *lay = new Q3HBoxLayout(widget);
 
     m_splitter       = new QSplitter(widget);
     m_canvas         = new Canvas(m_splitter);
@@ -286,9 +293,9 @@ void ImageWindow::setupUserArea()
     lay->addWidget(m_splitter);
     lay->addWidget(d->rightSidebar);
 
-    m_splitter->setFrameStyle( QFrame::NoFrame );
-    m_splitter->setFrameShadow( QFrame::Plain );
-    m_splitter->setFrameShape( QFrame::NoFrame );
+    m_splitter->setFrameStyle( Q3Frame::NoFrame );
+    m_splitter->setFrameShadow( Q3Frame::Plain );
+    m_splitter->setFrameShape( Q3Frame::NoFrame );
     m_splitter->setOpaqueResize(false);
     setCentralWidget(widget);
 }
@@ -550,8 +557,8 @@ void ImageWindow::slotContextMenu()
         {
             // Bulk assignment/removal of tags --------------------------
 
-            Q_LLONG id = d->imageInfoCurrent->id();
-            QValueList<Q_LLONG> idList;
+            qlonglong id = d->imageInfoCurrent->id();
+            Q3ValueList<qlonglong> idList;
             idList.append(id);
 
             assignTagsMenu = new TagsPopupMenu(idList, 1000, TagsPopupMenu::ASSIGN);
@@ -1090,8 +1097,8 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 void ImageWindow::dragMoveEvent(QDragMoveEvent *e)
 {
     int             albumID;
-    QValueList<int> albumIDs;
-    QValueList<int> imageIDs;
+    Q3ValueList<int> albumIDs;
+    Q3ValueList<int> imageIDs;
     KURL::List      urls;
     KURL::List      kioURLs;        
 
@@ -1109,8 +1116,8 @@ void ImageWindow::dragMoveEvent(QDragMoveEvent *e)
 void ImageWindow::dropEvent(QDropEvent *e)
 {
     int             albumID;
-    QValueList<int> albumIDs;
-    QValueList<int> imageIDs;
+    Q3ValueList<int> albumIDs;
+    Q3ValueList<int> imageIDs;
     KURL::List      urls;
     KURL::List      kioURLs;        
 
@@ -1118,7 +1125,7 @@ void ImageWindow::dropEvent(QDropEvent *e)
     {
         ImageInfoList imageInfoList;
 
-        for (QValueList<int>::const_iterator it = imageIDs.begin();
+        for (Q3ValueList<int>::const_iterator it = imageIDs.begin();
              it != imageIDs.end(); ++it)
         {
             ImageInfo *info = new ImageInfo(*it);
@@ -1146,10 +1153,10 @@ void ImageWindow::dropEvent(QDropEvent *e)
     else if (AlbumDrag::decode(e, urls, albumID))
     {
         AlbumManager* man           = AlbumManager::instance();
-        QValueList<Q_LLONG> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
+        Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
         ImageInfoList imageInfoList;
 
-        for (QValueList<Q_LLONG>::const_iterator it = itemIDs.begin();
+        for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
              it != itemIDs.end(); ++it)
         {
             ImageInfo *info = new ImageInfo(*it);
@@ -1173,15 +1180,15 @@ void ImageWindow::dropEvent(QDropEvent *e)
     else if(TagDrag::canDecode(e))
     {
         QByteArray ba = e->encodedData("digikam/tag-id");
-        QDataStream ds(ba, IO_ReadOnly);
+        QDataStream ds(ba, QIODevice::ReadOnly);
         int tagID;
         ds >> tagID;
 
         AlbumManager* man           = AlbumManager::instance();
-        QValueList<Q_LLONG> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
+        Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
         ImageInfoList imageInfoList;
 
-        for (QValueList<Q_LLONG>::const_iterator it = itemIDs.begin();
+        for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
              it != itemIDs.end(); ++it)
         {
             ImageInfo *info = new ImageInfo(*it);

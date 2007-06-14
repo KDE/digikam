@@ -39,15 +39,15 @@
 namespace Digikam
 {
 
-FolderItem::FolderItem(QListView* parent, const QString& text, bool special)
-          : QListViewItem(parent, text)
+FolderItem::FolderItem(Q3ListView* parent, const QString& text, bool special)
+          : Q3ListViewItem(parent, text)
 {
     m_special = special;
     m_focus = false;
 }
 
-FolderItem::FolderItem(QListViewItem* parent, const QString& text, bool special)
-          : QListViewItem(parent, text)
+FolderItem::FolderItem(Q3ListViewItem* parent, const QString& text, bool special)
+          : Q3ListViewItem(parent, text)
 {
     m_special = special;
     m_focus = false;    
@@ -149,15 +149,15 @@ int FolderItem::id() const
 
 // ------------------------------------------------------------------------------------
 
-FolderCheckListItem::FolderCheckListItem(QListView* parent, const QString& text,
-                                         QCheckListItem::Type tt)
-                   : QCheckListItem(parent, text, tt)
+FolderCheckListItem::FolderCheckListItem(Q3ListView* parent, const QString& text,
+                                         Q3CheckListItem::Type tt)
+                   : Q3CheckListItem(parent, text, tt)
 {
 }
 
-FolderCheckListItem::FolderCheckListItem(QListViewItem* parent, const QString& text,
-                                         QCheckListItem::Type tt)
-                   : QCheckListItem(parent, text, tt)
+FolderCheckListItem::FolderCheckListItem(Q3ListViewItem* parent, const QString& text,
+                                         Q3CheckListItem::Type tt)
+                   : Q3CheckListItem(parent, text, tt)
 {
 }
 
@@ -180,28 +180,28 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
     int r      = margin;
     const QPixmap* icon = pixmap(column);
 
-    int styleflags = QStyle::Style_Default;
+    int styleflags = QStyle::State_None;
     switch (state())
     {
-        case(QCheckListItem::Off):
-            styleflags |= QStyle::Style_Off;
+        case(Q3CheckListItem::Off):
+            styleflags |= QStyle::State_Off;
             break;
-        case(QCheckListItem::NoChange):
-            styleflags |= QStyle::Style_NoChange;
+        case(Q3CheckListItem::NoChange):
+            styleflags |= QStyle::State_NoChange;
             break;
-        case(QCheckListItem::On):
-            styleflags |= QStyle::Style_On;
+        case(Q3CheckListItem::On):
+            styleflags |= QStyle::State_On;
             break;
     }
 
     if (isSelected())
-        styleflags |= QStyle::Style_Selected;
+        styleflags |= QStyle::State_Selected;
 
     if (isEnabled() && fv->isEnabled())
-        styleflags |= QStyle::Style_Enabled;
+        styleflags |= QStyle::State_Enabled;
 
-    if ((type() == QCheckListItem::CheckBox) ||
-        (type() == QCheckListItem::CheckBoxController))
+    if ((type() == Q3CheckListItem::CheckBox) ||
+        (type() == Q3CheckListItem::CheckBoxController))
     {
         int boxsize = fv->style().pixelMetric(QStyle::PM_CheckListButtonSize, fv); 
         int x = 3;

@@ -28,6 +28,11 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpalette.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <Q3Frame>
+#include <Q3ValueList>
+#include <QMouseEvent>
 
 // KDE includes.
 
@@ -47,7 +52,7 @@ namespace Digikam
 {
 
 MonthWidget::MonthWidget(QWidget* parent)
-    : QFrame(parent, 0, Qt::WNoAutoErase)
+    : Q3Frame(parent, 0, Qt::WNoAutoErase)
 {
     init();
 
@@ -303,7 +308,7 @@ void MonthWidget::mousePressEvent(QMouseEvent *e)
             m_days[j*7+i].selected = !m_days[j*7+i].selected;
     }
 
-    QValueList<int> filterDays;
+    Q3ValueList<int> filterDays;
     for (int i=0; i<42; i++)
     {
         if (m_days[i].selected && m_days[i].day != -1)
@@ -335,7 +340,7 @@ void MonthWidget::setActive(bool val)
     {
         QDate date = QDate::currentDate();
         setYearMonth(date.year(), date.month());
-        AlbumLister::instance()->setDayFilter(QValueList<int>());
+        AlbumLister::instance()->setDayFilter(Q3ValueList<int>());
 
         disconnect(AlbumLister::instance());
     }

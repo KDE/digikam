@@ -25,6 +25,8 @@
 // Qt includes.
 
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 // Local includes.
 
@@ -100,7 +102,7 @@ bool QImageLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         quality = 100;
 
     QVariant formatAttr = imageGetAttribute("format");
-    QCString format     = formatAttr.toCString();
+    Q3CString format     = formatAttr.toCString();
 
     QImage image = m_image->copyQImage();
 

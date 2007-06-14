@@ -25,17 +25,21 @@
 // Qt includes.
 
 #include <qpushbutton.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qsplitter.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qlayout.h>
 #include <qfileinfo.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -64,7 +68,7 @@ namespace Digikam
 {
 
 MainWindow::MainWindow()
-          : QWidget(0, 0, WDestructiveClose)
+          : QWidget(0, 0, Qt::WDestructiveClose)
 {
     setCaption(i18n("digiKam Theme Designer"));
 
@@ -81,7 +85,7 @@ MainWindow::MainWindow()
         
     // Top Layout ------------------------------------------------
     
-    QGridLayout* layout = new QGridLayout(this);
+    Q3GridLayout* layout = new Q3GridLayout(this);
     layout->setMargin(5);
     layout->setSpacing(5);
 
@@ -99,50 +103,50 @@ MainWindow::MainWindow()
 
     // Property Editor ---------------------------------------------
     
-    QGroupBox *groupBox = new QGroupBox( this );
+    Q3GroupBox *groupBox = new Q3GroupBox( this );
     layout->addWidget(groupBox, 0, 1);
 
     groupBox->setColumnLayout(0, Qt::Vertical );
     groupBox->layout()->setSpacing( 5 );
     groupBox->layout()->setMargin( 5 );
 
-    QVBoxLayout* groupBoxLayout = new QVBoxLayout( groupBox->layout() );
+    Q3VBoxLayout* groupBoxLayout = new Q3VBoxLayout( groupBox->layout() );
     groupBoxLayout->setAlignment( Qt::AlignTop );
 
-    QHBoxLayout* hboxLayout = 0;
+    Q3HBoxLayout* hboxLayout = 0;
     QLabel*      label = 0;
     
     label           = new QLabel( "Property: ", groupBox );
     m_propertyCombo = new QComboBox( groupBox );
-    hboxLayout      = new QHBoxLayout( 0 );
+    hboxLayout      = new Q3HBoxLayout( 0 );
     hboxLayout->addWidget( label );
     hboxLayout->addWidget( m_propertyCombo );
     groupBoxLayout->addLayout( hboxLayout);
 
     m_bevelLabel = new QLabel( "Bevel: ", groupBox );
     m_bevelCombo = new QComboBox( groupBox );
-    hboxLayout   = new QHBoxLayout( 0 );
+    hboxLayout   = new Q3HBoxLayout( 0 );
     hboxLayout->addWidget( m_bevelLabel );
     hboxLayout->addWidget( m_bevelCombo );
     groupBoxLayout->addLayout( hboxLayout);
 
     m_gradientLabel = new QLabel( "Gradient: ", groupBox );
     m_gradientCombo = new QComboBox( groupBox );
-    hboxLayout      = new QHBoxLayout( 0 );
+    hboxLayout      = new Q3HBoxLayout( 0 );
     hboxLayout->addWidget( m_gradientLabel );
     hboxLayout->addWidget( m_gradientCombo );
     groupBoxLayout->addLayout( hboxLayout);
 
     m_begColorLabel = new QLabel( "Start Color: ", groupBox );
     m_begColorBtn   = new KColorButton( groupBox );
-    hboxLayout      = new QHBoxLayout( 0 );
+    hboxLayout      = new Q3HBoxLayout( 0 );
     hboxLayout->addWidget( m_begColorLabel );
     hboxLayout->addWidget( m_begColorBtn );
     groupBoxLayout->addLayout( hboxLayout);
 
     m_endColorLabel = new QLabel( "End Color: ", groupBox );
     m_endColorBtn   = new KColorButton( groupBox );
-    hboxLayout      = new QHBoxLayout( 0 );
+    hboxLayout      = new Q3HBoxLayout( 0 );
     hboxLayout->addWidget( m_endColorLabel );
     hboxLayout->addWidget( m_endColorBtn );
     groupBoxLayout->addLayout( hboxLayout);
@@ -152,7 +156,7 @@ MainWindow::MainWindow()
 
     m_borderColorLabel = new QLabel( "Border Color: ", groupBox );
     m_borderColorBtn   = new KColorButton( groupBox );
-    hboxLayout         = new QHBoxLayout( 0 );
+    hboxLayout         = new Q3HBoxLayout( 0 );
     hboxLayout->addWidget( m_borderColorLabel );
     hboxLayout->addWidget( m_borderColorBtn );
     groupBoxLayout->addLayout( hboxLayout);
@@ -220,7 +224,7 @@ MainWindow::MainWindow()
 
     // Bottom button bar -------------------------------------------------------
     
-    QHBoxLayout* buttonLayout = new QHBoxLayout(0);
+    Q3HBoxLayout* buttonLayout = new Q3HBoxLayout(0);
     buttonLayout->setMargin(5);
     buttonLayout->setSpacing(5);
     buttonLayout->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding,
@@ -250,7 +254,7 @@ MainWindow::MainWindow()
     // ------------------------------------------------------------------------
 
     m_folderView->addColumn("My Albums");
-    m_folderView->setResizeMode(QListView::LastColumn);
+    m_folderView->setResizeMode(Q3ListView::LastColumn);
     m_folderView->setRootIsDecorated(true);
 
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();    
@@ -299,14 +303,14 @@ void MainWindow::slotSave()
         return;
 
     QFile file(path);
-    if (!file.open(IO_WriteOnly))
+    if (!file.open(QIODevice::WriteOnly))
     {
         KMessageBox::error(this, "Failed to open file for writing");
         return;
     }
 
     QFileInfo fi(path);
-    QTextStream ts(&file);
+    Q3TextStream ts(&file);
 
     // header ------------------------------------------------------------------
     

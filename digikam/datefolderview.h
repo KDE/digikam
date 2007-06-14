@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <qvbox.h>
+#include <q3vbox.h>
 
 namespace Digikam
 {
@@ -34,7 +34,7 @@ namespace Digikam
 class DateFolderViewPriv;
 class DAlbum;
 
-class DateFolderView : public QVBox
+class DateFolderView : public Q3VBox
 {
     Q_OBJECT
     
@@ -45,7 +45,7 @@ public:
 
     void setActive(bool val);
 
-    void setSelected(QListViewItem *item);
+    void setSelected(Q3ListViewItem *item);
     
 private slots:
 

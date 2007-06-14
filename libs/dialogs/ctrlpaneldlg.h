@@ -28,6 +28,11 @@
 // Qt includes
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <QCustomEvent>
+#include <Q3Frame>
+#include <QKeyEvent>
+#include <QCloseEvent>
 
 // KDE include.
 
@@ -38,7 +43,7 @@
 #include "imagepannelwidget.h"
 #include "digikam_export.h"
 
-class QFrame;
+class Q3Frame;
 
 namespace Digikam
 {
@@ -55,7 +60,7 @@ public:
     CtrlPanelDlg(QWidget* parent, QString title, QString name,
                  bool loadFileSettings=false, bool tryAction=false, bool progressBar=true,
                  int separateViewMode=ImagePannelWidget::SeparateViewAll,
-                 QFrame* bannerFrame=0);
+                 Q3Frame* bannerFrame=0);
     ~CtrlPanelDlg();
 
     void setAboutData(KAboutData *about);

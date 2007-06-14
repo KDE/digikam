@@ -26,8 +26,10 @@
 // Qt includes.
 
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -81,12 +83,12 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     // -------------------------------------------------------------
     
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 1, 0, spacingHint());
+    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 1, 1, 0, spacingHint());
     QLabel *label1 = new QLabel(i18n("Depth:"), gboxSettings);
     
     m_depthInput = new KIntNumInput(gboxSettings);
     m_depthInput->setRange(10, 300, 1, true);
-    QWhatsThis::add( m_depthInput, i18n("<p>Set here the depth of the embossing image effect.") );
+    Q3WhatsThis::add( m_depthInput, i18n("<p>Set here the depth of the embossing image effect.") );
                                             
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
     gridSettings->addMultiCellWidget(m_depthInput, 1, 1, 0, 1);

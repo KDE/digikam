@@ -28,6 +28,8 @@
 #include <qrect.h>
 #include <qcolor.h>
 #include <qsplitter.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 // KDE includes.
 
@@ -70,7 +72,7 @@ public:
 
     bool                 dirtyDesceditTab;
 
-    QPtrList<ImageInfo>  currentInfos;
+    Q3PtrList<ImageInfo>  currentInfos;
 
     ImageDescEditTab    *desceditTab;
 
@@ -137,14 +139,14 @@ void ImagePropertiesSideBarDB::itemChanged(const KURL& url, ImageInfo *info,
 
     m_currentURL         = url;
 
-    QPtrList<ImageInfo> list;
+    Q3PtrList<ImageInfo> list;
     if (info)
         list.append(info);
 
     itemChanged(list, rect, img);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(QPtrList<ImageInfo> infos)
+void ImagePropertiesSideBarDB::itemChanged(Q3PtrList<ImageInfo> infos)
 {
     if (infos.isEmpty())
         return;
@@ -154,7 +156,7 @@ void ImagePropertiesSideBarDB::itemChanged(QPtrList<ImageInfo> infos)
     itemChanged(infos, QRect(), 0);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(QPtrList<ImageInfo> infos,
+void ImagePropertiesSideBarDB::itemChanged(Q3PtrList<ImageInfo> infos,
                                            const QRect &rect, DImg *img)
 {
     m_currentRect        = rect;
@@ -163,7 +165,7 @@ void ImagePropertiesSideBarDB::itemChanged(QPtrList<ImageInfo> infos,
     // The list _may_ have autoDelete set to true.
     // Keep old ImageInfo objects from being deleted
     // until the tab has had the chance to save changes and clear lists.
-    QPtrList<ImageInfo> temporaryList;
+    Q3PtrList<ImageInfo> temporaryList;
     if (d->hasImageInfoOwnership)
     {
         temporaryList = d->currentInfos;

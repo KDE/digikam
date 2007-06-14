@@ -82,7 +82,7 @@ public:
     /**
      * @return the last inserted row in one the db table.
      */
-    Q_LLONG lastInsertedRow();
+    qlonglong lastInsertedRow();
 
     /**
      * Begin a database transaction

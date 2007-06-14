@@ -29,8 +29,10 @@
 // Digikam includes.
 
 #include "imagedlgbase.h"
+//Added by qt3to4:
+#include <QLabel>
 
-class QHButtonGroup;
+class Q3HButtonGroup;
 class QComboBox;
 class QLabel;
 
@@ -109,7 +111,7 @@ private:
     QComboBox                    *m_channelCB;
     QComboBox                    *m_effectType;
     
-    QHButtonGroup                *m_scaleBG;
+    Q3HButtonGroup                *m_scaleBG;
 
     QLabel                       *m_effectTypeLabel;
     QLabel                       *m_levelLabel;

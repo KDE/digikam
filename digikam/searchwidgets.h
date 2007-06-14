@@ -1,3 +1,8 @@
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <QMouseEvent>
+#include <QLabel>
+#include <Q3ValueList>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -27,13 +32,13 @@
 #ifndef SEARCHWIDGETS_H
 #define SEARCHWIDGETS_H
 
-class QHBox;
-class QVBox;
+class Q3HBox;
+class Q3VBox;
 class QCheckBox;
 class QComboBox;
 class QLineEdit;
 class QLabel;
-class QVGroupBox;
+class Q3VGroupBox;
 class QLabel;
 
 class KURL;
@@ -66,7 +71,7 @@ public:
     SearchRuleLabel( const QString & text,
                QWidget * parent,
                const char * name=0,
-               WFlags f=0 );
+               Qt::WFlags f=0 );
 private:
 
     void mouseDoubleClickEvent( QMouseEvent * e );
@@ -295,11 +300,11 @@ private:
 
     QLabel*                 m_label;
 
-    QVBox*                  m_box;
+    Q3VBox*                  m_box;
     QWidget*                m_hbox;
-    QHBoxLayout*            m_hboxLayout;
+    Q3HBoxLayout*            m_hboxLayout;
 
-    QHBox*                  m_valueBox;
+    Q3HBox*                  m_valueBox;
 
     QCheckBox*              m_check;
 
@@ -313,7 +318,7 @@ private:
 
     QMap<int, int>          m_itemsIndexIDMap;
 
-    QHBox*                  m_optionsBox;
+    Q3HBox*                  m_optionsBox;
 
     enum valueWidgetTypes   m_widgetType;
 };
@@ -375,14 +380,14 @@ public:
      * gives back a list of pointers to the rules inside the group
      * @return a list of pointers to the childeren in the group
      */
-    QValueList<SearchAdvancedRule*> childRules() const;
+    Q3ValueList<SearchAdvancedRule*> childRules() const;
 
 private:
 
-    QHBox*                          m_box;
-    QVGroupBox*                     m_groupbox;
+    Q3HBox*                          m_box;
+    Q3VGroupBox*                     m_groupbox;
     QCheckBox*                      m_check;
-    QValueList<SearchAdvancedRule*> m_childRules;
+    Q3ValueList<SearchAdvancedRule*> m_childRules;
 };
 
 }  // namespace Digikam

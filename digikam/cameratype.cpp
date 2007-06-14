@@ -52,7 +52,7 @@ public:
     KAction  *action;
     bool      valid;
 
-    QGuardedPtr<CameraUI> currentCameraUI;
+    QPointer<CameraUI> currentCameraUI;
 };
 
 CameraType::CameraType()

@@ -94,7 +94,7 @@ KIO::TransferJob *ImageLister::startListJob(const DatabaseUrl &url, const QStrin
                                             int getDimension, int extraValue)
 {
     QByteArray ba;
-    QDataStream ds(ba, IO_WriteOnly);
+    QDataStream ds(ba, QIODevice::WriteOnly);
     ds << url;
     ds << filter;
     ds << getDimension;

@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 
 // KDE includes.
 
@@ -41,7 +41,7 @@ namespace Digikam
 
 class MediaPlayerViewPriv;
 
-class DIGIKAM_EXPORT MediaPlayerView : public QWidgetStack
+class DIGIKAM_EXPORT MediaPlayerView : public Q3WidgetStack
 {
 Q_OBJECT
 

@@ -436,7 +436,7 @@ bool DMetadata::getXMLImageProperties(QString& comments, QDateTime& date,
         return false;
     QByteArray decompressedData = qUncompress(data);
     QString doc;
-    QDataStream ds(decompressedData, IO_ReadOnly);
+    QDataStream ds(decompressedData, QIODevice::ReadOnly);
     ds >> doc;
 
     QDomDocument xmlDoc;
@@ -532,7 +532,7 @@ bool DMetadata::setXMLImageProperties(const QString& comments, const QDateTime& 
     }
 
     QByteArray  data, compressedData;
-    QDataStream ds(data, IO_WriteOnly);
+    QDataStream ds(data, QIODevice::WriteOnly);
     ds << xmlDoc.toString();
     compressedData = qCompress(data);
     return (setIptcTagData("Iptc.Application2.0x00ff", compressedData));

@@ -25,7 +25,7 @@
 
 #include <qtabwidget.h>
 #include <qapplication.h>
-#include <qframe.h>
+#include <q3frame.h>
 
 // KDE includes.
 
@@ -68,12 +68,12 @@ public:
         page_icc        = 0;
     }
 
-    QFrame                   *page_editor;
-    QFrame                   *page_toolTip;
-    QFrame                   *page_dcraw;
-    QFrame                   *page_iofiles;
-    QFrame                   *page_slideshow;
-    QFrame                   *page_icc;
+    Q3Frame                   *page_editor;
+    Q3Frame                   *page_toolTip;
+    Q3Frame                   *page_dcraw;
+    Q3Frame                   *page_iofiles;
+    Q3Frame                   *page_slideshow;
+    Q3Frame                   *page_icc;
     
     SetupEditor              *editorPage;
     SetupToolTip             *toolTipPage;

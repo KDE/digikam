@@ -27,7 +27,7 @@
 #include <qmime.h>
 #include <qstring.h>
 #include <qdatetime.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qwidget.h>
 #include <qdatastream.h>
 
@@ -40,7 +40,7 @@ namespace Digikam
 {
 
 CameraDragObject::CameraDragObject(const CameraType& ctype, QWidget *dragSource)
-                : QStoredDrag("camera/unknown", dragSource)
+                : Q3StoredDrag("camera/unknown", dragSource)
 {
     setCameraType(ctype);
 }
@@ -52,7 +52,7 @@ CameraDragObject::~CameraDragObject()
 void CameraDragObject::setCameraType(const CameraType& ctype)
 {
     QByteArray byteArray;
-    QDataStream ds(byteArray, IO_WriteOnly);
+    QDataStream ds(byteArray, QIODevice::WriteOnly);
 
     ds << ctype.title();
     ds << ctype.model();
@@ -76,7 +76,7 @@ bool CameraDragObject::decode(const QMimeSource* e, CameraType& ctype)
         QString   title, model, port, path;
         QDateTime lastAccess;
 
-        QDataStream ds(payload, IO_ReadOnly);
+        QDataStream ds(payload, QIODevice::ReadOnly);
         ds >> title;
         ds >> model;
         ds >> port;

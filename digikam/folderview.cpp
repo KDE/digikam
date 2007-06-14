@@ -25,7 +25,14 @@
 // Qt includes.
 
 #include <qpixmap.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QDragLeaveEvent>
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QDragEnterEvent>
 
 // KDE includes.
 
@@ -75,7 +82,7 @@ public:
 //-----------------------------------------------------------------------------
 
 FolderView::FolderView(QWidget *parent, const char *name)
-          : QListView(parent, name)
+          : Q3ListView(parent, name)
 {
 
     d = new FolderViewPriv;
@@ -121,12 +128,12 @@ int FolderView::itemHeight() const
     return d->itemHeight;
 }
 
-QRect FolderView::itemRect(QListViewItem *item) const
+QRect FolderView::itemRect(Q3ListViewItem *item) const
 {
     if(!item)
         return QRect();
     
-    QRect r = QListView::itemRect(item);
+    QRect r = Q3ListView::itemRect(item);
     r.setLeft(r.left()+(item->depth()+(rootIsDecorated() ? 1 : 0))*treeStepSize());
     return r;    
 }
@@ -143,7 +150,7 @@ QPixmap FolderView::itemBasePixmapSelected() const
 
 void FolderView::resizeEvent(QResizeEvent* e)
 {
-    QListView::resizeEvent(e);
+    Q3ListView::resizeEvent(e);
 
     int w = frameRect().width();
     int h = itemHeight();
@@ -159,7 +166,7 @@ void FolderView::fontChange(const QFont& oldFont)
     // this is bad, since the settings value might not always be the _real_ height of the thumbnail.
     // (e.g. when it is blended, as for the tags)
     d->itemHeight = QMAX(AlbumThumbnailLoader::instance()->thumbnailSize() + 2*itemMargin(), fontMetrics().height());
-    QListView::fontChange(oldFont);
+    Q3ListView::fontChange(oldFont);
     slotThemeChanged();
 }
 
@@ -171,14 +178,14 @@ void FolderView::slotIconSizeChanged()
 
 void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
 {
-    QListView::contentsMouseMoveEvent(e);
+    Q3ListView::contentsMouseMoveEvent(e);
 
     if(e->state() == NoButton)
     {
         if(KGlobalSettings::changeCursorOverIcon())
         {
             QPoint vp = contentsToViewport(e->pos());
-            QListViewItem *item = itemAt(vp);
+            Q3ListViewItem *item = itemAt(vp);
             if (mouseInItemRect(item, vp.x()))
                 setCursor(KCursor::handCursor());
             else
@@ -202,7 +209,7 @@ void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
 
 void FolderView::contentsMousePressEvent(QMouseEvent *e)
 {
-    QListView::contentsMousePressEvent(e);
+    Q3ListView::contentsMousePressEvent(e);
 
     QPoint vp        = contentsToViewport(e->pos());
     FolderItem *item = dynamic_cast<FolderItem*>(itemAt(vp));
@@ -216,14 +223,14 @@ void FolderView::contentsMousePressEvent(QMouseEvent *e)
 
 void FolderView::contentsMouseReleaseEvent(QMouseEvent *e)
 {
-    QListView::contentsMouseReleaseEvent(e);
+    Q3ListView::contentsMouseReleaseEvent(e);
 
     d->dragItem = 0;
 }
 
 void FolderView::startDrag()
 {
-    QDragObject *o = dragObject();
+    Q3DragObject *o = dragObject();
     if(o)
         o->drag();        
 }
@@ -235,14 +242,14 @@ FolderItem* FolderView::dragItem() const
 
 void FolderView::contentsDragEnterEvent(QDragEnterEvent *e)
 {
-    QListView::contentsDragEnterEvent(e);
+    Q3ListView::contentsDragEnterEvent(e);
     
     e->accept(acceptDrop(e));
 }
 
 void FolderView::contentsDragLeaveEvent(QDragLeaveEvent * e)
 {
-    QListView::contentsDragLeaveEvent(e);
+    Q3ListView::contentsDragLeaveEvent(e);
     
     if(d->oldHighlightItem)
     {
@@ -254,7 +261,7 @@ void FolderView::contentsDragLeaveEvent(QDragLeaveEvent * e)
 
 void FolderView::contentsDragMoveEvent(QDragMoveEvent *e)
 {
-    QListView::contentsDragMoveEvent(e);
+    Q3ListView::contentsDragMoveEvent(e);
     
     QPoint vp        = contentsToViewport(e->pos());
     FolderItem *item = dynamic_cast<FolderItem*>(itemAt(vp));
@@ -274,7 +281,7 @@ void FolderView::contentsDragMoveEvent(QDragMoveEvent *e)
 
 void FolderView::contentsDropEvent(QDropEvent *e)
 {
-    QListView::contentsDropEvent(e);
+    Q3ListView::contentsDropEvent(e);
     
     if(d->oldHighlightItem)
     {
@@ -289,7 +296,7 @@ bool FolderView::acceptDrop(const QDropEvent *) const
     return false;
 }
 
-bool FolderView::mouseInItemRect(QListViewItem* item, int x) const
+bool FolderView::mouseInItemRect(Q3ListViewItem* item, int x) const
 {
     if (!item)
         return false;
@@ -339,14 +346,14 @@ void FolderView::loadViewState()
     
     int selectedItem = config->readNumEntry("LastSelectedItem", 0);
     
-    QValueList<int> openFolders;
+    Q3ValueList<int> openFolders;
     if(config->hasKey("OpenFolders"))
     {
         openFolders = config->readIntListEntry("OpenFolders");
     }
     
     FolderItem *item;    
-    QListViewItemIterator it(this->lastItem());
+    Q3ListViewItemIterator it(this->lastItem());
     for( ; it.current(); --it)
     {
         item = dynamic_cast<FolderItem*>(it.current());
@@ -376,8 +383,8 @@ void FolderView::saveViewState()
     else
         config->writeEntry("LastSelectedItem", 0);
     
-    QValueList<int> openFolders;
-    QListViewItemIterator it(this);
+    Q3ValueList<int> openFolders;
+    Q3ListViewItemIterator it(this);
     for( ; it.current(); ++it)
     {
         item = dynamic_cast<FolderItem*>(it.current());
@@ -389,7 +396,7 @@ void FolderView::saveViewState()
 
 void FolderView::slotSelectionChanged()
 {
-    QListView::selectionChanged();    
+    Q3ListView::selectionChanged();    
 }
 
 void FolderView::selectItem(int)

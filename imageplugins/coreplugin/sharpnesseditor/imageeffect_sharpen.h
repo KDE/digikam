@@ -29,7 +29,7 @@
 #include "ctrlpaneldlg.h"
 
 class QComboBox;
-class QWidgetStack;
+class Q3WidgetStack;
 
 class KIntNumInput;
 class KDoubleNumInput;
@@ -78,7 +78,7 @@ private:
         Refocus
     };
 
-    QWidgetStack    *m_stack;
+    Q3WidgetStack    *m_stack;
     
     QComboBox       *m_sharpMethod;
 

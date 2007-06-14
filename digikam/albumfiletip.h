@@ -30,8 +30,11 @@
 
 // Qt includes.
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <QResizeEvent>
 
 namespace Digikam
 {
@@ -40,7 +43,7 @@ class AlbumIconView;
 class AlbumIconItem;
 class AlbumFileTipPriv;
 
-class AlbumFileTip : public QFrame
+class AlbumFileTip : public Q3Frame
 {
 public:
 

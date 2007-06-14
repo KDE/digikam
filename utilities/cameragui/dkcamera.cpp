@@ -24,7 +24,7 @@
 
 // Qt includes.
 
-#include <qdeepcopy.h>
+#include <q3deepcopy.h>
 
 // Local includes.
 
@@ -42,10 +42,10 @@ DKCamera::DKCamera(const QString& title, const QString& model, const QString& po
     m_path  = path;
 
     AlbumSettings* settings = AlbumSettings::instance();
-    m_imageFilter = QDeepCopy<QString>(settings->getImageFileFilter());
-    m_movieFilter = QDeepCopy<QString>(settings->getMovieFileFilter());
-    m_audioFilter = QDeepCopy<QString>(settings->getAudioFileFilter());
-    m_rawFilter   = QDeepCopy<QString>(settings->getRawFileFilter());
+    m_imageFilter = Q3DeepCopy<QString>(settings->getImageFileFilter());
+    m_movieFilter = Q3DeepCopy<QString>(settings->getMovieFileFilter());
+    m_audioFilter = Q3DeepCopy<QString>(settings->getAudioFileFilter());
+    m_rawFilter   = Q3DeepCopy<QString>(settings->getRawFileFilter());
 
     m_imageFilter = m_imageFilter.lower();
     m_movieFilter = m_movieFilter.lower();

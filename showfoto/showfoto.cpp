@@ -1,3 +1,8 @@
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3PtrList>
+#include <Q3Frame>
+#include <Q3VBoxLayout>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -223,7 +228,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
         d->BCGAction->insert(incGammaAction);
         d->BCGAction->insert(decGammaAction);
 
-        QPtrList<KAction> bcg_actions;
+        Q3PtrList<KAction> bcg_actions;
         bcg_actions.append( d->BCGAction );
         unplugActionList( "showfoto_bcg" );
         plugActionList( "showfoto_bcg", bcg_actions );
@@ -387,7 +392,7 @@ void ShowFoto::setupUserArea()
 
     if(!config->readBoolEntry("HorizontalThumbbar", false)) // Vertical thumbbar layout
     {
-        QHBoxLayout *hlay = new QHBoxLayout(widget);
+        Q3HBoxLayout *hlay = new Q3HBoxLayout(widget);
         m_splitter        = new QSplitter(widget);
         d->thumbBar       = new Digikam::ThumbBarView(m_splitter, Digikam::ThumbBarView::Vertical);
         m_canvas          = new Digikam::Canvas(m_splitter);
@@ -405,7 +410,7 @@ void ShowFoto::setupUserArea()
     {
         m_splitter        = new QSplitter(Qt::Horizontal, widget);
         QWidget* widget2  = new QWidget(m_splitter);
-        QVBoxLayout *vlay = new QVBoxLayout(widget2);
+        Q3VBoxLayout *vlay = new Q3VBoxLayout(widget2);
         d->vSplitter      = new QSplitter(Qt::Vertical, widget2);
         m_canvas          = new Digikam::Canvas(d->vSplitter);
         d->thumbBar       = new Digikam::ThumbBarView(d->vSplitter, Digikam::ThumbBarView::Horizontal);
@@ -413,23 +418,23 @@ void ShowFoto::setupUserArea()
         m_canvas->setSizePolicy(rightSzPolicy);
         m_canvas->makeDefaultEditingCanvas();
 
-        d->vSplitter->setFrameStyle( QFrame::NoFrame );
-        d->vSplitter->setFrameShadow( QFrame::Plain );
-        d->vSplitter->setFrameShape( QFrame::NoFrame );
+        d->vSplitter->setFrameStyle( Q3Frame::NoFrame );
+        d->vSplitter->setFrameShadow( Q3Frame::Plain );
+        d->vSplitter->setFrameShape( Q3Frame::NoFrame );
         d->vSplitter->setOpaqueResize(false);
 
         vlay->addWidget(d->vSplitter);
 
-        QHBoxLayout *hlay = new QHBoxLayout(widget);
+        Q3HBoxLayout *hlay = new Q3HBoxLayout(widget);
         d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
                                                                 Digikam::Sidebar::Right);
         hlay->addWidget(m_splitter);
         hlay->addWidget(d->rightSidebar);
     }
 
-    m_splitter->setFrameStyle( QFrame::NoFrame );
-    m_splitter->setFrameShadow( QFrame::Plain );
-    m_splitter->setFrameShape( QFrame::NoFrame );
+    m_splitter->setFrameStyle( Q3Frame::NoFrame );
+    m_splitter->setFrameShadow( Q3Frame::Plain );
+    m_splitter->setFrameShape( Q3Frame::NoFrame );
     m_splitter->setOpaqueResize(false);
     setCentralWidget(widget);
     d->rightSidebar->loadViewState();    

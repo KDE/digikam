@@ -35,8 +35,10 @@
 #include <qcursor.h>
 #include <qfontmetrics.h>
 #include <qfont.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qclipboard.h>
+//Added by qt3to4:
+#include <QDropEvent>
 
 // KDE includes.
 
@@ -77,7 +79,7 @@ public:
         thumbSize = ThumbnailSize::Large;
     }
 
-    QDict<CameraIconViewItem>  itemDict;
+    Q3Dict<CameraIconViewItem>  itemDict;
 
     QRect                      itemRect;
 
@@ -100,7 +102,7 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
     d->cameraUI  = ui;
     d->groupItem = new IconGroupItem(this);
 
-    setHScrollBarMode(QScrollView::AlwaysOff);
+    setHScrollBarMode(Q3ScrollView::AlwaysOff);
     setMinimumSize(400, 300);
 
     setAcceptDrops(true);
@@ -521,7 +523,7 @@ void CameraIconView::contentsDropEvent(QDropEvent *event)
     if (d->cameraUI->isBusy())
         return;
 
-    if ( (!QUriDrag::canDecode(event) && !CameraDragObject::canDecode(event) )
+    if ( (!Q3UriDrag::canDecode(event) && !CameraDragObject::canDecode(event) )
          || event->source() == this)
     {
         event->ignore();
@@ -540,7 +542,7 @@ void CameraIconView::slotRightButtonClicked(const QPoint&)
         return;
 
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
-    if(!data || !QUriDrag::canDecode(data))
+    if(!data || !Q3UriDrag::canDecode(data))
         return;
 
     KURL::List srcURLs;

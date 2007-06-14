@@ -25,7 +25,9 @@
 
 #include <qobject.h>
 #include <qevent.h>
-#include <qdeepcopy.h>
+#include <q3deepcopy.h>
+//Added by qt3to4:
+#include <QCustomEvent>
 
 // Local includes.
 
@@ -46,7 +48,7 @@ DImgThreadedFilter::DImgThreadedFilter(DImg *orgImage, QObject *parent,
 
     // See B.K.O #133026: make a deep copy of Qstring to prevent crash 
     // on Hyperthreading computer.
-    m_name          = QDeepCopy<QString>(name);
+    m_name          = Q3DeepCopy<QString>(name);
 
     m_master        = 0;
     m_slave         = 0;
@@ -65,7 +67,7 @@ DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter *master, const DImg &o
 
     // See B.K.O #133026: make a deep copy of Qstring to prevent crash 
     // on Hyperthreading computer.
-    m_name          = QDeepCopy<QString>(name);
+    m_name          = Q3DeepCopy<QString>(name);
 
     m_master        = master;
     m_slave         = 0;

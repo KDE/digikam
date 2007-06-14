@@ -31,8 +31,8 @@
 
 // Qt includes.
 
-#include <qvaluelist.h>
-#include <qcstring.h>
+#include <q3valuelist.h>
+#include <q3cstring.h>
 
 class QDataStream;
 
@@ -73,7 +73,7 @@ public:
 QDataStream& operator<<( QDataStream &, const GPItemInfo & );
 QDataStream& operator>>( QDataStream &, GPItemInfo & );
 
-typedef QValueList<GPItemInfo> GPItemInfoList;
+typedef Q3ValueList<GPItemInfo> GPItemInfoList;
 
 }  // namespace Digikam
 

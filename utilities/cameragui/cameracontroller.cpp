@@ -1,3 +1,6 @@
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QCustomEvent>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -43,7 +46,7 @@ extern "C"
 #include <qwaitcondition.h>
 #include <qevent.h>
 #include <qapplication.h>
-#include <qdeepcopy.h>
+#include <q3deepcopy.h>
 #include <qvariant.h>
 #include <qimage.h>
 #include <qdatastream.h>
@@ -255,7 +258,7 @@ void CameraThread::run()
     
                 /* TODO: ugly hack since qt <= 3.1.2 does not define
                 QStringList with QDeepCopy as a friend. */
-                QValueList<QString> flist(folderList);
+                Q3ValueList<QString> flist(folderList);
                 
                 CameraEvent* event = new CameraEvent(CameraEvent::gp_listedfolders);
                 event->map.insert("folders", QVariant(flist));
@@ -284,7 +287,7 @@ void CameraThread::run()
                     event->map.insert("folder", QVariant(folder));
                     
                     QByteArray  ba;
-                    QDataStream ds(ba, IO_WriteOnly);
+                    QDataStream ds(ba, QIODevice::WriteOnly);
                     ds << itemsList;
                     
                     event->map.insert("files", QVariant(ba));
@@ -332,7 +335,7 @@ void CameraThread::run()
                 if (edata || esize)
                 {
                     QByteArray  ba;
-                    QDataStream ds(ba, IO_WriteOnly);
+                    QDataStream ds(ba, QIODevice::WriteOnly);
                     ds.writeRawBytes(edata, esize);
                     delete [] edata;
             
@@ -509,7 +512,7 @@ void CameraThread::run()
                 {
                     CameraEvent* event = new CameraEvent(CameraEvent::gp_uploaded);
                     QByteArray  ba;
-                    QDataStream ds(ba, IO_WriteOnly);
+                    QDataStream ds(ba, QIODevice::WriteOnly);
                     ds << itemsInfo;                    
                     event->map.insert("info", QVariant(ba));
 
@@ -846,15 +849,15 @@ void CameraController::customEvent(QCustomEvent* e)
         }
         case (CameraEvent::gp_cameraInformations) :
         {
-            QString summary = QDeepCopy<QString>(event->map["summary"].asString());
-            QString manual  = QDeepCopy<QString>(event->map["manual"].asString());
-            QString about   = QDeepCopy<QString>(event->map["about"].asString());
+            QString summary = Q3DeepCopy<QString>(event->map["summary"].asString());
+            QString manual  = Q3DeepCopy<QString>(event->map["manual"].asString());
+            QString about   = Q3DeepCopy<QString>(event->map["about"].asString());
             emit signalCameraInformations(summary, manual, about);
             break;
         }
         case (CameraEvent::gp_errormsg) :
         {
-            emit signalErrorMsg(QDeepCopy<QString>(event->msg));
+            emit signalErrorMsg(Q3DeepCopy<QString>(event->msg));
             break;
         }
         case (CameraEvent::gp_busy) :
@@ -866,20 +869,20 @@ void CameraController::customEvent(QCustomEvent* e)
         case (CameraEvent::gp_infomsg) :
         {
             if (!d->canceled)
-                emit signalInfoMsg(QDeepCopy<QString>(event->msg));
+                emit signalInfoMsg(Q3DeepCopy<QString>(event->msg));
             break;
         }
         case (CameraEvent::gp_listedfolders) :
         {
             /* TODO: ugly hack since qt <= 3.1.2 does not define
             QStringList with QDeepCopy as a friend. */
-            QValueList<QVariant> flist = QDeepCopy< QValueList<QVariant> >(event->map["folders"].toList());
+            Q3ValueList<QVariant> flist = Q3DeepCopy< Q3ValueList<QVariant> >(event->map["folders"].toList());
     
             QStringList folderList;
-            QValueList<QVariant>::Iterator it;
+            Q3ValueList<QVariant>::Iterator it;
             for (it = flist.begin(); it != flist.end(); ++it )
             {
-                folderList.append(QDeepCopy<QString>((*it).asString()));
+                folderList.append(Q3DeepCopy<QString>((*it).asString()));
             }
             
             emit signalFolderList(folderList);
@@ -887,9 +890,9 @@ void CameraController::customEvent(QCustomEvent* e)
         }
         case (CameraEvent::gp_listedfiles) :
         {
-            QString    folder = QDeepCopy<QString>(event->map["folder"].asString());
-            QByteArray ba     = QDeepCopy<QByteArray>(event->map["files"].asByteArray());
-            QDataStream ds(ba, IO_ReadOnly);
+            QString    folder = Q3DeepCopy<QString>(event->map["folder"].asString());
+            QByteArray ba     = Q3DeepCopy<QByteArray>(event->map["files"].asByteArray());
+            QDataStream ds(ba, QIODevice::ReadOnly);
             GPItemInfoList items;
             ds >> items;
             emit signalFileList(items);
@@ -897,38 +900,38 @@ void CameraController::customEvent(QCustomEvent* e)
         }
         case (CameraEvent::gp_thumbnailed) :
         {
-            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
-            QString file   = QDeepCopy<QString>(event->map["file"].asString());
-            QImage  thumb  = QDeepCopy<QImage>(event->map["thumbnail"].asImage());
+            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
+            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
+            QImage  thumb  = Q3DeepCopy<QImage>(event->map["thumbnail"].asImage());
             emit signalThumbnail(folder, file, thumb);
             break;
         }
         case (CameraEvent::gp_exif) :
         {
-            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
-            QString file   = QDeepCopy<QString>(event->map["file"].asString());
-            QByteArray ba  = QDeepCopy<QByteArray>(event->map["exifData"].asByteArray());
+            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
+            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
+            QByteArray ba  = Q3DeepCopy<QByteArray>(event->map["exifData"].asByteArray());
             emit signalExifData(ba);
             break;
         }
         case (CameraEvent::gp_downloadstarted) :
         {
-            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
-            QString file   = QDeepCopy<QString>(event->map["file"].asString());
+            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
+            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
             emit signalDownloaded(folder, file, GPItemInfo::DownloadStarted);
             break;
         }
         case (CameraEvent::gp_downloaded) :
         {
-            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
-            QString file   = QDeepCopy<QString>(event->map["file"].asString());
+            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
+            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
             emit signalDownloaded(folder, file, GPItemInfo::DownloadedYes);
             break;
         }
         case (CameraEvent::gp_downloadFailed) :
         {
-            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
-            QString file   = QDeepCopy<QString>(event->map["file"].asString());
+            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
+            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
     
             d->timer->stop();
     
@@ -955,8 +958,8 @@ void CameraController::customEvent(QCustomEvent* e)
         }
         case (CameraEvent::gp_uploaded) :
         {
-            QByteArray ba  = QDeepCopy<QByteArray>(event->map["info"].asByteArray());
-            QDataStream ds(ba, IO_ReadOnly);
+            QByteArray ba  = Q3DeepCopy<QByteArray>(event->map["info"].asByteArray());
+            QDataStream ds(ba, QIODevice::ReadOnly);
             GPItemInfo itemInfo;
             ds >> itemInfo;
 
@@ -965,9 +968,9 @@ void CameraController::customEvent(QCustomEvent* e)
         }
         case (CameraEvent::gp_uploadFailed) :
         {
-            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
-            QString file   = QDeepCopy<QString>(event->map["file"].asString());
-            QString src    = QDeepCopy<QString>(event->map["src"].asString());
+            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
+            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
+            QString src    = Q3DeepCopy<QString>(event->map["src"].asString());
 
             d->timer->stop();
     
@@ -993,15 +996,15 @@ void CameraController::customEvent(QCustomEvent* e)
         }
         case (CameraEvent::gp_deleted) :
         {
-            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
-            QString file   = QDeepCopy<QString>(event->map["file"].asString());
+            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
+            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
             emit signalDeleted(folder, file, true);
             break;
         }
         case (CameraEvent::gp_deleteFailed) :
         {
-            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
-            QString file   = QDeepCopy<QString>(event->map["file"].asString());
+            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
+            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
     
             d->timer->stop();
             emit signalDeleted(folder, file, false);
@@ -1028,15 +1031,15 @@ void CameraController::customEvent(QCustomEvent* e)
         }
         case (CameraEvent::gp_locked) :
         {
-            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
-            QString file   = QDeepCopy<QString>(event->map["file"].asString());
+            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
+            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
             emit signalLocked(folder, file, true);
             break;
         }
         case (CameraEvent::gp_lockFailed) :
         {
-            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
-            QString file   = QDeepCopy<QString>(event->map["file"].asString());
+            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
+            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
     
             d->timer->stop();
             emit signalLocked(folder, file, false);
@@ -1063,8 +1066,8 @@ void CameraController::customEvent(QCustomEvent* e)
         }
         case (CameraEvent::gp_opened) :
         {
-            QString file = QDeepCopy<QString>(event->map["file"].asString());
-            QString dest = QDeepCopy<QString>(event->map["dest"].asString());
+            QString file = Q3DeepCopy<QString>(event->map["file"].asString());
+            QString dest = Q3DeepCopy<QString>(event->map["dest"].asString());
     
             KURL url(dest);
             KURL::List urlList;
@@ -1113,8 +1116,8 @@ void CameraController::slotProcessNext()
     if ((cmd->action == CameraCommand::gp_exif) &&
         (typeid(*(d->camera)) == typeid(UMSCamera)))
     {
-        folder = QDeepCopy<QString>(cmd->map["folder"].asString());
-        file   = QDeepCopy<QString>(cmd->map["file"].asString());
+        folder = Q3DeepCopy<QString>(cmd->map["folder"].asString());
+        file   = Q3DeepCopy<QString>(cmd->map["file"].asString());
 
         emit signalExifFromFile(folder, file);
 
@@ -1125,9 +1128,9 @@ void CameraController::slotProcessNext()
       
     if (cmd->action == CameraCommand::gp_download)
     {
-        folder = QDeepCopy<QString>(cmd->map["folder"].asString());
-        file   = QDeepCopy<QString>(cmd->map["file"].asString());
-        dest   = QDeepCopy<QString>(cmd->map["dest"].asString());
+        folder = Q3DeepCopy<QString>(cmd->map["folder"].asString());
+        file   = Q3DeepCopy<QString>(cmd->map["file"].asString());
+        dest   = Q3DeepCopy<QString>(cmd->map["dest"].asString());
 
         if (!d->overwriteAll)
         {
@@ -1188,7 +1191,7 @@ void CameraController::slotProcessNext()
             }
         }
 
-        cmd->map["dest"] = QVariant(QDeepCopy<QString>(dest));        
+        cmd->map["dest"] = QVariant(Q3DeepCopy<QString>(dest));        
     }
 
     if (cancel)

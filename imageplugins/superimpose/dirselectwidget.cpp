@@ -21,8 +21,8 @@
 // Qt includes. 
   
 #include <qlayout.h>
-#include <qheader.h>
-#include <qlistview.h>
+#include <q3header.h>
+#include <q3listview.h>
 #include <qdir.h>
 
 // KDE includes
@@ -159,8 +159,8 @@ void DirSelectWidget::setRootPath(KURL rootUrl, KURL currentUrl)
     
     load();
     
-    connect( this, SIGNAL( executed(QListViewItem *) ),
-             this, SLOT( slotFolderSelected(QListViewItem *) ) );
+    connect( this, SIGNAL( executed(Q3ListViewItem *) ),
+             this, SLOT( slotFolderSelected(Q3ListViewItem *) ) );
 }
 
 KURL DirSelectWidget::rootPath(void)
@@ -168,7 +168,7 @@ KURL DirSelectWidget::rootPath(void)
     return d->m_rootUrl;
 }
 
-void DirSelectWidget::slotFolderSelected(QListViewItem *)
+void DirSelectWidget::slotFolderSelected(Q3ListViewItem *)
 {
     emit folderItemSelected(currentURL());
 }

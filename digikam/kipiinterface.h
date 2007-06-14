@@ -32,7 +32,7 @@
 
 // Qt includes.
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstring.h>
 #include <qmap.h>
 
@@ -162,7 +162,7 @@ public:
 
     virtual KIPI::ImageCollection currentAlbum();
     virtual KIPI::ImageCollection currentSelection();
-    virtual QValueList<KIPI::ImageCollection> allAlbums();
+    virtual Q3ValueList<KIPI::ImageCollection> allAlbums();
     virtual KIPI::ImageInfo info( const KURL& );
     virtual bool addImage( const KURL&, QString& errmsg );
     virtual void delImage( const KURL& );

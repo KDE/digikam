@@ -1,3 +1,10 @@
+//Added by qt3to4:
+#include <QLabel>
+#include <QCloseEvent>
+#include <Q3GridLayout>
+#include <QKeyEvent>
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -35,26 +42,26 @@ extern "C"
 
 // Qt includes.
 
-#include <qvgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qtoolbutton.h>
-#include <qiconview.h>
-#include <qvbox.h>
-#include <qhbox.h>
-#include <qpopupmenu.h>
+#include <q3iconview.h>
+#include <q3vbox.h>
+#include <q3hbox.h>
+#include <q3popupmenu.h>
 #include <qsplitter.h>
 #include <qpixmap.h>
 #include <qcombobox.h>
 #include <qtoolbox.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qvbuttongroup.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qtooltip.h>
 #include <qtimer.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 
@@ -175,9 +182,9 @@ public:
     QStringList                   foldersToScan;
     QStringList                   cameraFolderList;
 
-    QPopupMenu                   *downloadMenu;
-    QPopupMenu                   *deleteMenu;
-    QPopupMenu                   *imageMenu;
+    Q3PopupMenu                   *downloadMenu;
+    Q3PopupMenu                   *deleteMenu;
+    Q3PopupMenu                   *imageMenu;
     
     QToolButton                  *cancelBtn;
 
@@ -240,7 +247,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     // -------------------------------------------------------------------------
     
-    QGridLayout* viewBoxLayout = new QGridLayout(plainPage(), 2, 5);
+    Q3GridLayout* viewBoxLayout = new Q3GridLayout(plainPage(), 2, 5);
     viewBoxLayout->setColStretch( 0, 0 );
     viewBoxLayout->setColStretch( 1, 0 );
     viewBoxLayout->setColStretch( 2, 3 );
@@ -248,7 +255,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     viewBoxLayout->setColStretch( 4, 0 );
     viewBoxLayout->setColStretch( 5, 0 );
 
-    QHBox* widget = new QHBox(plainPage());
+    Q3HBox* widget = new Q3HBox(plainPage());
     d->splitter   = new QSplitter(widget);
     d->view       = new CameraIconView(this, d->splitter);
     
@@ -257,9 +264,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
         
     d->rightSidebar = new ImagePropertiesSideBarCamGui(widget, "CameraGui Sidebar Right", d->splitter,
                                                        Sidebar::Right, true);
-    d->splitter->setFrameStyle( QFrame::NoFrame );
-    d->splitter->setFrameShadow( QFrame::Plain );
-    d->splitter->setFrameShape( QFrame::NoFrame );       
+    d->splitter->setFrameStyle( Q3Frame::NoFrame );
+    d->splitter->setFrameShadow( Q3Frame::Plain );
+    d->splitter->setFrameShape( Q3Frame::NoFrame );       
     d->splitter->setOpaqueResize(false);
     
     // -------------------------------------------------------------------------
@@ -268,7 +275,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->renameCustomizer  = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->view->setRenameCustomizer(d->renameCustomizer);
 
-    QWhatsThis::add( d->advBox, i18n("<p>Set how digiKam will rename picture files as they are downloaded."));
+    Q3WhatsThis::add( d->advBox, i18n("<p>Set how digiKam will rename picture files as they are downloaded."));
 
     d->advBox->insertItem(CameraUIPriv::RENAMEFILEPAGE, d->renameCustomizer, 
                           SmallIconSet("fileimport"), i18n("File Renaming Options"));
@@ -276,10 +283,10 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     // -- Albums Auto-creation options -----------------------------------------
 
     QWidget* albumBox      = new QWidget(d->advBox);
-    QVBoxLayout* albumVlay = new QVBoxLayout(albumBox, marginHint(), spacingHint());
+    Q3VBoxLayout* albumVlay = new Q3VBoxLayout(albumBox, marginHint(), spacingHint());
     d->autoAlbumExtCheck   = new QCheckBox(i18n("Extension-based sub-albums"), albumBox);
     d->autoAlbumDateCheck  = new QCheckBox(i18n("Date-based sub-albums"), albumBox);
-    QHBox *hbox1           = new QHBox(albumBox);
+    Q3HBox *hbox1           = new Q3HBox(albumBox);
     d->folderDateLabel     = new QLabel(i18n("Date format:"), hbox1);
     d->folderDateFormat    = new QComboBox(hbox1);
     d->folderDateFormat->insertItem(i18n("ISO"),            CameraUIPriv::IsoDateFormat);
@@ -290,14 +297,14 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     albumVlay->addWidget(hbox1);
     albumVlay->addStretch();
 
-    QWhatsThis::add( albumBox, i18n("<p>Set how digiKam creates albums automatically when downloading."));
-    QWhatsThis::add( d->autoAlbumExtCheck, i18n("<p>Toggle on this option if you want to download your "
+    Q3WhatsThis::add( albumBox, i18n("<p>Set how digiKam creates albums automatically when downloading."));
+    Q3WhatsThis::add( d->autoAlbumExtCheck, i18n("<p>Toggle on this option if you want to download your "
                      "pictures into automatically created file extension-based sub-albums of the destination "
                      "album. This way, you can separate JPEG and RAW files as they are downloaded from your camera."));
-    QWhatsThis::add( d->autoAlbumDateCheck, i18n("<p>Toggle on this option if you want to "
+    Q3WhatsThis::add( d->autoAlbumDateCheck, i18n("<p>Toggle on this option if you want to "
                      "download your pictures into automatically created file date-based sub-albums "
                      "of the destination album."));
-    QWhatsThis::add( d->folderDateFormat, i18n("<p>Select here your preferred date format used to "
+    Q3WhatsThis::add( d->folderDateFormat, i18n("<p>Select here your preferred date format used to "
                      "create new albums. The options available are:<p>"
                      "<b>ISO</b>: the date format is in accordance with ISO 8601 "
                      "(YYYY-MM-DD). E.g.: <i>2006-08-24</i><p>"
@@ -311,14 +318,14 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     // -- On the Fly options ---------------------------------------------------
 
     QWidget* onFlyBox      = new QWidget(d->advBox);
-    QVBoxLayout* onFlyVlay = new QVBoxLayout(onFlyBox, marginHint(), spacingHint());
+    Q3VBoxLayout* onFlyVlay = new Q3VBoxLayout(onFlyBox, marginHint(), spacingHint());
     d->setPhotographerId   = new QCheckBox(i18n("Set default photographer identity"), onFlyBox);
     d->setCredits          = new QCheckBox(i18n("Set default credit and copyright"), onFlyBox);
     d->fixDateTimeCheck    = new QCheckBox(i18n("Fix internal date && time"), onFlyBox);
     d->dateTimeEdit        = new KDateTimeEdit(onFlyBox, "datepicker");
     d->autoRotateCheck     = new QCheckBox(i18n("Auto-rotate/flip image"), onFlyBox);
     d->convertJpegCheck    = new QCheckBox(i18n("Convert to lossless file format"), onFlyBox);
-    QHBox *hbox2           = new QHBox(onFlyBox);
+    Q3HBox *hbox2           = new Q3HBox(onFlyBox);
     d->formatLabel         = new QLabel(i18n("New image format:"), hbox2);
     d->losslessFormat      = new QComboBox(hbox2);
     d->losslessFormat->insertItem("PNG", 0);
@@ -331,22 +338,22 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     onFlyVlay->addWidget(hbox2);
     onFlyVlay->addStretch();
 
-    QWhatsThis::add( onFlyBox, i18n("<p>Set here all options to fix/transform JPEG files automatically "
+    Q3WhatsThis::add( onFlyBox, i18n("<p>Set here all options to fix/transform JPEG files automatically "
                      "as they are downloaded."));
-    QWhatsThis::add( d->autoRotateCheck, i18n("<p>Toggle on this option if you want images automatically "
+    Q3WhatsThis::add( d->autoRotateCheck, i18n("<p>Toggle on this option if you want images automatically "
                      "rotated or flipped using EXIF information provided by the camera."));
-    QWhatsThis::add( d->setPhotographerId, i18n("<p>Toggle on this option to store the default "
+    Q3WhatsThis::add( d->setPhotographerId, i18n("<p>Toggle on this option to store the default "
                      "photographer identity into IPTC tags using digiKam's metadata settings."));
-    QWhatsThis::add( d->setCredits, i18n("<p>Toggle on this option to store the default credit "
+    Q3WhatsThis::add( d->setCredits, i18n("<p>Toggle on this option to store the default credit "
                      "and copyright information into IPTC tags using digiKam's metadata settings."));
-    QWhatsThis::add( d->fixDateTimeCheck, i18n("<p>Toggle on this option to set date and time metadata "
+    Q3WhatsThis::add( d->fixDateTimeCheck, i18n("<p>Toggle on this option to set date and time metadata "
                      "tags to the right values if your camera does not set "
                      "these tags correctly when pictures are taken. The values will "
                      "be saved in the DateTimeDigitized and DateTimeCreated EXIF/IPTC fields."));
-    QWhatsThis::add( d->convertJpegCheck, i18n("<p>Toggle on this option to automatically convert "
+    Q3WhatsThis::add( d->convertJpegCheck, i18n("<p>Toggle on this option to automatically convert "
                      "all JPEG files to a lossless image format. <b>Note:</b> Image conversion can take a "
                      "while on a slow computer."));
-    QWhatsThis::add( d->losslessFormat, i18n("<p>Select your preferred lossless image file format to "
+    Q3WhatsThis::add( d->losslessFormat, i18n("<p>Select your preferred lossless image file format to "
                      "convert to.  <b>Note:</b> All metadata will be preserved during the conversion."));
 
     d->advBox->insertItem(CameraUIPriv::ONFLYPAGE, onFlyBox, SmallIconSet("run"), 
@@ -372,10 +379,10 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->progress->setMaximumHeight( fontMetrics().height() );
     d->progress->hide();
 
-    QFrame *frame = new QFrame(plainPage());
+    Q3Frame *frame = new Q3Frame(plainPage());
     frame->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( frame );
+    frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
+    Q3HBoxLayout* layout = new Q3HBoxLayout( frame );
     layout->setMargin( 2 );  // To make sure the frame gets displayed
     layout->setSpacing( 0 );
 
@@ -403,22 +410,22 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     // -------------------------------------------------------------------------
     
-    d->imageMenu = new QPopupMenu(this);
-    d->imageMenu->insertItem(i18n("Select &All"),       d->view, SLOT(slotSelectAll()),    CTRL+Key_A, 0);
-    d->imageMenu->insertItem(i18n("Select N&one"),      d->view, SLOT(slotSelectNone()),   CTRL+Key_U, 1);
-    d->imageMenu->insertItem(i18n("&Invert Selection"), d->view, SLOT(slotSelectInvert()), CTRL+Key_Asterisk, 2);
+    d->imageMenu = new Q3PopupMenu(this);
+    d->imageMenu->insertItem(i18n("Select &All"),       d->view, SLOT(slotSelectAll()),    Qt::CTRL+Qt::Key_A, 0);
+    d->imageMenu->insertItem(i18n("Select N&one"),      d->view, SLOT(slotSelectNone()),   Qt::CTRL+Qt::Key_U, 1);
+    d->imageMenu->insertItem(i18n("&Invert Selection"), d->view, SLOT(slotSelectInvert()), Qt::CTRL+Qt::Key_Asterisk, 2);
     d->imageMenu->insertSeparator();
     d->imageMenu->insertItem(i18n("Select &New Items"), d->view, SLOT(slotSelectNew()), 0, 3);
     d->imageMenu->insertSeparator();
-    d->imageMenu->insertItem(i18n("Increase Thumbs"),   this,    SLOT(slotIncreaseThumbSize()), CTRL+Key_Plus, 4);
-    d->imageMenu->insertItem(i18n("Decrease Thumbs"),   this,    SLOT(slotDecreaseThumbSize()), CTRL+Key_Minus, 5);
+    d->imageMenu->insertItem(i18n("Increase Thumbs"),   this,    SLOT(slotIncreaseThumbSize()), Qt::CTRL+Qt::Key_Plus, 4);
+    d->imageMenu->insertItem(i18n("Decrease Thumbs"),   this,    SLOT(slotDecreaseThumbSize()), Qt::CTRL+Qt::Key_Minus, 5);
     d->imageMenu->insertSeparator();
     d->imageMenu->insertItem(i18n("Toggle Lock"),       this,    SLOT(slotToggleLock()), 0, 6);
     actionButton(User3)->setPopup(d->imageMenu);    
 
     // -------------------------------------------------------------------------
 
-    d->downloadMenu = new QPopupMenu(this);
+    d->downloadMenu = new Q3PopupMenu(this);
     d->downloadMenu->insertItem(i18n("Download Selected"), this, SLOT(slotDownloadSelected()), 0, 0);
     d->downloadMenu->insertItem(i18n("Download All"),      this, SLOT(slotDownloadAll()), 0, 1);
     d->downloadMenu->insertSeparator();
@@ -428,7 +435,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     // -------------------------------------------------------------------------
     
-    d->deleteMenu = new QPopupMenu(this);
+    d->deleteMenu = new Q3PopupMenu(this);
     d->deleteMenu->insertItem(i18n("Delete Selected"), this, SLOT(slotDeleteSelected()), 0, 0);
     d->deleteMenu->insertItem(i18n("Delete All"),      this, SLOT(slotDeleteAll()), 0, 1);
     d->deleteMenu->setItemEnabled(0, false);

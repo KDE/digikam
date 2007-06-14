@@ -28,9 +28,9 @@
 // Qt includes.
 
 #include <qobject.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qpair.h>
 
 // Local includes.
@@ -54,7 +54,7 @@ public:
 
     static ImagePluginLoader* instance();
 
-    QPtrList<ImagePlugin> pluginList();
+    Q3PtrList<ImagePlugin> pluginList();
     void loadPluginsFromList(const QStringList& list);
     
     // Return true if plugin library is loaded in memory.

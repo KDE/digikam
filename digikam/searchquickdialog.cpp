@@ -31,7 +31,10 @@
 #include <qstringlist.h>
 #include <qdatetime.h>
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QHideEvent>
 
 // KDE includes.
 
@@ -77,21 +80,21 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     d->timer = new QTimer(this);
     setHelp("quicksearchtool.anchor", "digikam");
     
-    QGridLayout* grid = new QGridLayout(plainPage(), 2, 2, 0, spacingHint());
+    Q3GridLayout* grid = new Q3GridLayout(plainPage(), 2, 2, 0, spacingHint());
     
     QLabel *label1 = new QLabel("<b>" + i18n("Search:") + "</b>", plainPage());
     d->searchEdit  = new KLineEdit(plainPage());
-    QWhatsThis::add( d->searchEdit, i18n("<p>Enter your search criteria to find items in the album library"));
+    Q3WhatsThis::add( d->searchEdit, i18n("<p>Enter your search criteria to find items in the album library"));
     
     d->resultsView = new SearchResultsView(plainPage());
     d->resultsView->setMinimumSize(320, 200);
-    QWhatsThis::add( d->resultsView, i18n("<p>Here you can see the items found in album library "
+    Q3WhatsThis::add( d->resultsView, i18n("<p>Here you can see the items found in album library "
                                           "using the current search criteria"));
     
     QLabel *label2 = new QLabel(i18n("Save search as:"), plainPage());
     d->nameEdit    = new KLineEdit(plainPage());
     d->nameEdit->setText(i18n("Last Search"));
-    QWhatsThis::add( d->nameEdit, i18n("<p>Enter the name of the current search to save in the "
+    Q3WhatsThis::add( d->nameEdit, i18n("<p>Enter the name of the current search to save in the "
                                        "\"My Searches\" view"));
 
     grid->addMultiCellWidget(label1, 0, 0, 0, 0);

@@ -26,7 +26,7 @@
 
 #include <qtabwidget.h>
 #include <qapplication.h>
-#include <qframe.h>
+#include <q3frame.h>
 
 // KDE includes.
 
@@ -99,21 +99,21 @@ public:
         pluginsPage      = 0;
     }
 
-    QFrame           *page_general;
-    QFrame           *page_tooltip;
-    QFrame           *page_metadata;
-    QFrame           *page_identity;
-    QFrame           *page_collections;
-    QFrame           *page_mime;
-    QFrame           *page_lighttable;
-    QFrame           *page_editor;
-    QFrame           *page_dcraw;
-    QFrame           *page_iofiles;
-    QFrame           *page_slideshow;
-    QFrame           *page_icc;
-    QFrame           *page_plugins;
-    QFrame           *page_camera;
-    QFrame           *page_misc;
+    Q3Frame           *page_general;
+    Q3Frame           *page_tooltip;
+    Q3Frame           *page_metadata;
+    Q3Frame           *page_identity;
+    Q3Frame           *page_collections;
+    Q3Frame           *page_mime;
+    Q3Frame           *page_lighttable;
+    Q3Frame           *page_editor;
+    Q3Frame           *page_dcraw;
+    Q3Frame           *page_iofiles;
+    Q3Frame           *page_slideshow;
+    Q3Frame           *page_icc;
+    Q3Frame           *page_plugins;
+    Q3Frame           *page_camera;
+    Q3Frame           *page_misc;
 
     SetupGeneral     *generalPage;
     SetupToolTip     *tooltipPage;

@@ -27,7 +27,7 @@
 // QT includes
 
 #include <qstring.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qfile.h>
 
 // KDE includes
@@ -156,7 +156,7 @@ bool IccTransform::getUseBPC()
 QByteArray IccTransform::loadICCProfilFile(const QString& filePath)
 {
     QFile file(filePath);
-    if ( !file.open(IO_ReadOnly) )
+    if ( !file.open(QIODevice::ReadOnly) )
         return QByteArray();
 
     QByteArray data(file.size());

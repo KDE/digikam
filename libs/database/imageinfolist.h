@@ -24,7 +24,7 @@
 #ifndef IMAGEINFOLIST_H
 #define IMAGEINFOLIST_H
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include "digikam_export.h"
 
@@ -33,7 +33,7 @@ namespace Digikam
 
 class ImageInfo;
 
-class DIGIKAM_EXPORT ImageInfoList : public QPtrList<ImageInfo>
+class DIGIKAM_EXPORT ImageInfoList : public Q3PtrList<ImageInfo>
 {
 public:
     ImageInfoList copy();

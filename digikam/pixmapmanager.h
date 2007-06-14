@@ -28,6 +28,8 @@
 // Qt includes.
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 /** @file pixmapmanager.h */
 

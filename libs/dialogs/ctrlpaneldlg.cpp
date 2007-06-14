@@ -24,14 +24,19 @@
 
 // Qt includes.
 
-#include <qvgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QCustomEvent>
+#include <QCloseEvent>
+#include <QKeyEvent>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -93,7 +98,7 @@ public:
 
 CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
                            bool loadFileSettings, bool tryAction, bool progressBar,
-                           int separateViewMode, QFrame* bannerFrame)
+                           int separateViewMode, Q3Frame* bannerFrame)
             : KDialogBase(Plain, 0,
                           Help|Default|User1|User2|User3|Try|Ok|Cancel, Ok,
                           parent, 0, true, true,
@@ -121,7 +126,7 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
     showButton(Try, tryAction);
 
     resize(configDialogSize(name + QString(" Tool Dialog")));
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
+    Q3VBoxLayout *topLayout = new Q3VBoxLayout( plainPage(), 0, spacingHint());
     
     // -------------------------------------------------------------
 
@@ -409,12 +414,12 @@ void CtrlPanelDlg::keyPressEvent(QKeyEvent *e)
     {
         switch ( e->key() )
         {
-        case Key_Escape:
+        case Qt::Key_Escape:
             e->accept();
             reject();
         break;
-        case Key_Enter:            
-        case Key_Return:     
+        case Qt::Key_Enter:            
+        case Qt::Key_Return:     
             e->ignore();              
         break;
         default:
@@ -425,8 +430,8 @@ void CtrlPanelDlg::keyPressEvent(QKeyEvent *e)
     else
     {
         // accept the dialog when Ctrl-Return is pressed
-        if ( e->state() == ControlButton &&
-            (e->key() == Key_Return || e->key() == Key_Enter) )
+        if ( e->state() == Qt::ControlModifier &&
+            (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) )
         {
             e->accept();
             accept();

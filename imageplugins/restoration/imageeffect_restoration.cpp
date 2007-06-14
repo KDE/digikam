@@ -26,12 +26,15 @@
 
 #include <qlabel.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
 #include <qcombobox.h>
 #include <qtabwidget.h>
 #include <qfile.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QPixmap>
 
 // KDE includes.
 
@@ -93,7 +96,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_mainTab = new QTabWidget( m_imagePreviewWidget );
     
     QWidget* firstPage = new QWidget( m_mainTab );
-    QGridLayout* grid  = new QGridLayout( firstPage, 2, 2, spacingHint());
+    Q3GridLayout* grid  = new Q3GridLayout( firstPage, 2, 2, spacingHint());
     m_mainTab->addTab( firstPage, i18n("Preset") );
 
     KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
@@ -111,7 +114,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_restorationTypeCB->insertItem( i18n("Reduce Uniform Noise") );
     m_restorationTypeCB->insertItem( i18n("Reduce JPEG Artefacts") );
     m_restorationTypeCB->insertItem( i18n("Reduce Texturing") );
-    QWhatsThis::add( m_restorationTypeCB, i18n("<p>Select here the filter preset to use for photograph restoration:<p>"
+    Q3WhatsThis::add( m_restorationTypeCB, i18n("<p>Select here the filter preset to use for photograph restoration:<p>"
                                                "<b>None</b>: Most common values. Puts settings to default.<p>"
                                                "<b>Reduce Uniform Noise</b>: reduce small image artifacts like sensor noise.<p>"
                                                "<b>Reduce JPEG Artefacts</b>: reduce large image artifacts like JPEG compression mosaic.<p>"
@@ -304,7 +307,7 @@ void ImageEffect_Restoration::slotUser3()
 
     QFile file(loadRestorationFile.path());
     
-    if ( file.open(IO_ReadOnly) )   
+    if ( file.open(QIODevice::ReadOnly) )   
     {
         if (!m_settingsWidget->loadSettings(file, QString("# Photograph Restoration Configuration File V2")))
         {
@@ -337,7 +340,7 @@ void ImageEffect_Restoration::slotUser2()
 
     QFile file(saveRestorationFile.path());
     
-    if ( file.open(IO_WriteOnly) )   
+    if ( file.open(QIODevice::WriteOnly) )   
         m_settingsWidget->saveSettings(file, QString("# Photograph Restoration Configuration File V2"));
     else
         KMessageBox::error(this, i18n("Cannot save settings to the Photograph Restoration text file."));

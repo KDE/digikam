@@ -27,6 +27,9 @@
 // Qt include.
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <QCloseEvent>
+#include <QCustomEvent>
 
 // KDE include.
 

@@ -28,6 +28,8 @@
 #include <qdir.h>
 #include <qstringlist.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 // KDE includes.
 
@@ -64,7 +66,7 @@ struct _Tag
     QString icon;
 };
 
-Q_LLONG findOrAddImage(DatabaseAccess &access, int dirid, const QString& name,
+qlonglong findOrAddImage(DatabaseAccess &access, int dirid, const QString& name,
                const QString& caption)
 {
     QStringList values;
@@ -156,7 +158,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     db2.execSql("SELECT id, url, date, caption, collection, icon FROM Albums;",
                 &values);
 
-    typedef QValueList<_Album> AlbumList;
+    typedef Q3ValueList<_Album> AlbumList;
     AlbumList albumList;
 
     typedef QMap<QString, int> AlbumMap;
@@ -199,7 +201,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     db2.execSql("SELECT id, pid, name, icon FROM Tags;",
                 &values);
 
-    typedef QValueList<_Tag> TagList;
+    typedef Q3ValueList<_Tag> TagList;
     TagList tagList;
 
     access.backend()->beginTransaction();
@@ -263,7 +265,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         int tagid = (*it).toInt();
         ++it;
 
-        Q_LLONG imageid = findOrAddImage(access, dirid, name, QString());
+        qlonglong imageid = findOrAddImage(access, dirid, name, QString());
 
         access.backend()->execSql(QString("INSERT INTO ImageTags VALUES( %1, %2 )")
                 .arg(imageid).arg(tagid));
@@ -281,7 +283,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         if (album.icon.isEmpty())
             continue;
 
-        Q_LLONG imageid = findOrAddImage(access, album.id, album.icon, QString());
+        qlonglong imageid = findOrAddImage(access, album.id, album.icon, QString());
 
         access.backend()->execSql(QString("UPDATE Albums SET icon=%1 WHERE id=%2")
                 .arg(imageid)
@@ -324,7 +326,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
         int dirid = it1.data();
 
-        Q_LLONG imageid = findOrAddImage(access, dirid, name, QString());;
+        qlonglong imageid = findOrAddImage(access, dirid, name, QString());;
 
         access.backend()->execSql(QString("UPDATE Tags SET icon=%1 WHERE id=%2")
                 .arg(imageid)

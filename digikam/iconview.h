@@ -27,7 +27,16 @@
 
 // Qt includes.
 
-#include <qscrollview.h>
+#include <q3scrollview.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QWheelEvent>
+#include <QEvent>
+#include <QDropEvent>
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QPaintEvent>
+#include <QFocusEvent>
 
 // Local includes
 
@@ -46,7 +55,7 @@ class IconItem;
 class IconGroupItem;
 class IconViewPriv;
 
-class DIGIKAM_EXPORT IconView : public QScrollView
+class DIGIKAM_EXPORT IconView : public Q3ScrollView
 {
     Q_OBJECT
 

@@ -35,8 +35,8 @@ namespace Digikam
 
 QPixmap* SearchResultsItem::m_basePixmap = 0;
 
-SearchResultsItem::SearchResultsItem(QIconView* view, const QString& path)
-    : QIconViewItem(view), m_path(path)
+SearchResultsItem::SearchResultsItem(Q3IconView* view, const QString& path)
+    : Q3IconViewItem(view), m_path(path)
 {
     if (!m_basePixmap)
     {

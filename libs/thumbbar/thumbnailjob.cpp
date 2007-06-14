@@ -258,7 +258,7 @@ void ThumbnailJob::slotThumbData(KIO::Job*, const QByteArray &data)
         return;
 
     QImage thumb;
-    QDataStream stream(data, IO_ReadOnly);
+    QDataStream stream(data, QIODevice::ReadOnly);
     if (d->shmaddr)
     {
         int width, height, depth;

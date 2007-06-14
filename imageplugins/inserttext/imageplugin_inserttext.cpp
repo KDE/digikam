@@ -43,7 +43,7 @@ ImagePlugin_InsertText::ImagePlugin_InsertText(QObject *parent, const char*, con
                       : Digikam::ImagePlugin(parent, "ImagePlugin_InsertText")
 {
     m_insertTextAction = new KAction(i18n("Insert Text..."), "inserttext", 
-                         CTRL+Key_T, 
+                         Qt::CTRL+Qt::Key_T, 
                          this, SLOT(slotInsertText()),
                          actionCollection(), "imageplugin_inserttext");
 

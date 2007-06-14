@@ -28,6 +28,11 @@
 // Qt includes
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <QCustomEvent>
+#include <Q3Frame>
+#include <QKeyEvent>
+#include <QCloseEvent>
 
 // KDE include.
 
@@ -39,7 +44,7 @@
 #include "imageguidewidget.h"
 #include "digikam_export.h"
 
-class QFrame;
+class Q3Frame;
 
 class KAboutData;
 
@@ -59,7 +64,7 @@ public:
                   bool loadFileSettings=false, bool progress=true,
                   bool guideVisible=true,
                   int guideMode=ImageGuideWidget::HVGuideMode,
-                  QFrame* bannerFrame=0,
+                  Q3Frame* bannerFrame=0,
                   bool prevModeOptions=false,
                   bool useImageSelection=false,
                   bool tryAction=false);

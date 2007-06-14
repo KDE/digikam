@@ -32,7 +32,7 @@
 class QComboBox;
 class QSpinBox;
 class QPushButton;
-class QHButtonGroup;
+class Q3HButtonGroup;
 
 class KDoubleSpinBox;
 class KGradientSelector;
@@ -126,8 +126,8 @@ private:
     QPushButton               *m_pickGray;
     QPushButton               *m_pickWhite;
     
-    QHButtonGroup             *m_pickerColorButtonGroup;
-    QHButtonGroup             *m_scaleBG;
+    Q3HButtonGroup             *m_pickerColorButtonGroup;
+    Q3HButtonGroup             *m_scaleBG;
 
     KDoubleNumInput           *m_gammaInput;
     

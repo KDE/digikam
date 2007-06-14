@@ -123,7 +123,7 @@ void ImageInfoJob::slotData(KIO::Job*, const QByteArray& data)
         return;
 
     ImageInfoList itemsList;
-    QDataStream   ds(data, IO_ReadOnly);
+    QDataStream   ds(data, QIODevice::ReadOnly);
 
     while (!ds.atEnd())
     {

@@ -25,10 +25,12 @@
 // Qt includes.
 
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
 #include <qcombobox.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -83,7 +85,7 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 1, 0, spacingHint());
+    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 2, 1, 0, spacingHint());
     QLabel *label1 = new QLabel(i18n("Type:"), gboxSettings);
 
     m_textureType = new QComboBox( false, gboxSettings );
@@ -103,7 +105,7 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     m_textureType->insertItem( i18n("Wall") );
     m_textureType->insertItem( i18n("Moss") );
     m_textureType->insertItem( i18n("Stone") );
-    QWhatsThis::add( m_textureType, i18n("<p>Set here the texture type to apply on image."));
+    Q3WhatsThis::add( m_textureType, i18n("<p>Set here the texture type to apply on image."));
     
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
     gridSettings->addMultiCellWidget(m_textureType, 0, 0, 1, 1);
@@ -115,7 +117,7 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     m_blendGain = new KIntNumInput(gboxSettings);
     m_blendGain->setRange(1, 255, 1, true);  
     m_blendGain->setValue(200);
-    QWhatsThis::add( m_blendGain, i18n("<p>Set here the relief gain used to merge texture and image."));
+    Q3WhatsThis::add( m_blendGain, i18n("<p>Set here the relief gain used to merge texture and image."));
 
     gridSettings->addMultiCellWidget(label2, 1, 1, 0, 1);
     gridSettings->addMultiCellWidget(m_blendGain, 2, 2, 0, 1);

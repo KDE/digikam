@@ -29,8 +29,10 @@
 #include <qlabel.h>
 #include <qpixmap.h>
 #include <qfileinfo.h>
-#include <qwhatsthis.h>
-#include <qframe.h>
+#include <q3whatsthis.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -136,7 +138,7 @@ public:
     QLabel             *flash;
     QLabel             *whiteBalance;
 
-    QFrame             *settingsArea;
+    Q3Frame             *settingsArea;
 
     KSqueezedTextLabel *labelFile;
     KSqueezedTextLabel *labelFolder;
@@ -169,11 +171,11 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     d = new ImagePropertiesTabPriv;
 
     setupNavigateBar(navBar);
-    d->settingsArea = new QFrame(this);
-    d->settingsArea->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+    d->settingsArea = new Q3Frame(this);
+    d->settingsArea->setFrameStyle( Q3Frame::StyledPanel | Q3Frame::Sunken );
     d->settingsArea->setLineWidth( style().pixelMetric(QStyle::PM_DefaultFrameWidth, this) );
 
-    QGridLayout *settingsLayout = new QGridLayout(d->settingsArea, 33, 1, KDialog::spacingHint(), 0);
+    Q3GridLayout *settingsLayout = new Q3GridLayout(d->settingsArea, 33, 1, KDialog::spacingHint(), 0);
 
     // --------------------------------------------------
 
@@ -185,7 +187,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     d->owner                    = new QLabel(i18n("<b>Owner</b>:"), d->settingsArea);
     d->permissions              = new QLabel(i18n("<b>Permissions</b>:"), d->settingsArea);
 
-    KSeparator *line            = new KSeparator (Horizontal, d->settingsArea);
+    KSeparator *line            = new KSeparator (Qt::Horizontal, d->settingsArea);
     d->title2                   = new QLabel(i18n("<big><b>Image Properties</b></big>"), d->settingsArea);
     d->mime                     = new QLabel(i18n("<b>Type</b>:"), d->settingsArea);
     d->dimensions               = new QLabel(i18n("<b>Dimensions</b>:"), d->settingsArea);
@@ -193,7 +195,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     d->bitDepth                 = new QLabel(i18n("<nobr><b>Bit depth</b></nobr>:"), d->settingsArea);
     d->colorMode                = new QLabel(i18n("<nobr><b>Color mode</b></nobr>:"), d->settingsArea);
 
-    KSeparator *line2           = new KSeparator (Horizontal, d->settingsArea);
+    KSeparator *line2           = new KSeparator (Qt::Horizontal, d->settingsArea);
     d->title3                   = new QLabel(i18n("<big><b>Photograph Properties</b></big>"), d->settingsArea);
     d->make                     = new QLabel(i18n("<b>Make</b>:"), d->settingsArea);
     d->model                    = new QLabel(i18n("<b>Model</b>:"), d->settingsArea);

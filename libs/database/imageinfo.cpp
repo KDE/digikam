@@ -28,6 +28,8 @@
 
 #include <qfile.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 // Local includes.
 
@@ -56,7 +58,7 @@ ImageInfo::ImageInfo()
 {
 }
 
-ImageInfo::ImageInfo(Q_LLONG Id, int albumId,
+ImageInfo::ImageInfo(qlonglong Id, int albumId,
                      const QString& name,
                      const QString &albumName,
                      const KURL& albumRoot,
@@ -88,7 +90,7 @@ ImageInfo::ImageInfo(const ImageListerRecord &record)
     m_data->imageDimension = record.dims;
 }
 
-ImageInfo::ImageInfo(Q_LLONG ID)
+ImageInfo::ImageInfo(qlonglong ID)
 {
     DatabaseAccess access;
     m_data = access.imageInfoCache()->infoForId(ID);
@@ -143,7 +145,7 @@ bool ImageInfo::isNull() const
  * primitive and will never change during the lifetime of an object.
  */
 
-Q_LLONG ImageInfo::id() const
+qlonglong ImageInfo::id() const
 {
     return m_data ? m_data->id : -1;
 }
@@ -308,11 +310,11 @@ QStringList ImageInfo::tagNames() const
     return access.db()->getItemTagNames(m_data->id);
 }
 
-QValueList<int> ImageInfo::tagIds() const
+Q3ValueList<int> ImageInfo::tagIds() const
 {
     // Cache tags?
     if (!m_data)
-        return QValueList<int>();
+        return Q3ValueList<int>();
     DatabaseAccess access;
     return access.db()->getItemTagIDs(m_data->id);
 }

@@ -25,10 +25,12 @@
 // Qt includes. 
  
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -81,7 +83,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
 
     setAboutData(about);
 
-    QWhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the preview of the Raindrop effect."
+    Q3WhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the preview of the Raindrop effect."
                                            "<p>Note: if you have previously selected an area in the editor, "
                                            "this will be unaffected by the filter. You can use this method to "
                                            "disable the Raindrops effect on a human face, for example.") );
@@ -89,14 +91,14 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     // -------------------------------------------------------------
     
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 2, spacingHint());
+    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 5, 2, spacingHint());
                                                   
     QLabel *label1 = new QLabel(i18n("Drop size:"), gboxSettings);
     
     m_dropInput = new KIntNumInput(gboxSettings);
     m_dropInput->setRange(0, 200, 1, true);
     m_dropInput->setValue(80);
-    QWhatsThis::add( m_dropInput, i18n("<p>Set here the raindrops' size."));
+    Q3WhatsThis::add( m_dropInput, i18n("<p>Set here the raindrops' size."));
     
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 2);
     gridSettings->addMultiCellWidget(m_dropInput, 1, 1, 0, 2);
@@ -108,7 +110,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     m_amountInput = new KIntNumInput(gboxSettings);
     m_amountInput->setRange(1, 500, 1, true);
     m_amountInput->setValue(150);
-    QWhatsThis::add( m_amountInput, i18n("<p>This value controls the maximum number of raindrops.")); 
+    Q3WhatsThis::add( m_amountInput, i18n("<p>This value controls the maximum number of raindrops.")); 
     
     gridSettings->addMultiCellWidget(label2, 2, 2, 0, 2);
     gridSettings->addMultiCellWidget(m_amountInput, 3, 3, 0, 2);
@@ -120,7 +122,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     m_coeffInput = new KIntNumInput(gboxSettings);
     m_coeffInput->setRange(1, 100, 1, true);
     m_coeffInput->setValue(30);
-    QWhatsThis::add( m_coeffInput, i18n("<p>This value is the fish-eye-effect optical "
+    Q3WhatsThis::add( m_coeffInput, i18n("<p>This value is the fish-eye-effect optical "
                                         "distortion coefficient."));     
     
     gridSettings->addMultiCellWidget(label3, 4, 4, 0, 2);

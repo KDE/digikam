@@ -40,7 +40,11 @@
 #include <qbrush.h>
 #include <qpixmap.h>
 #include <qimage.h>
-#include <qpointarray.h>
+#include <q3pointarray.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 // KDE include.
 
@@ -85,7 +89,7 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget *parent)
     m_pixmap = new QPixmap(w, h);
 
     m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
-    m_grid = QPointArray(60);
+    m_grid = Q3PointArray(60);
 
     reset();
 }
@@ -127,7 +131,7 @@ QPoint PerspectiveWidget::getBottomRightCorner(void)
 
 QRect PerspectiveWidget::getTargetSize(void)
 {
-    QPointArray perspectiveArea;
+    Q3PointArray perspectiveArea;
 
     perspectiveArea.putPoints( 0, 4,
                                getTopLeftCorner().x(), getTopLeftCorner().y(),
@@ -724,7 +728,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
     {
         if ( m_currentResizing != ResizingNone )
         {
-            QPointArray unsablePoints;
+            Q3PointArray unsablePoints;
             QPoint pm(e->x(), e->y());
 
             if (!m_rect.contains( pm ))

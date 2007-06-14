@@ -25,6 +25,9 @@
 
 #include <qapplication.h>
 #include <qvariant.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <QCustomEvent>
 
 // KDE includes.
 
@@ -43,8 +46,8 @@ class LoadingCachePriv
 {
 public:
 
-    QCache<DImg> imageCache;
-    QDict<LoadingProcess> loadingDict;
+    Q3Cache<DImg> imageCache;
+    Q3Dict<LoadingProcess> loadingDict;
     QMutex mutex;
     QWaitCondition condVar;
     KDirWatch *watch;
@@ -146,7 +149,7 @@ void LoadingCache::slotFileDirty(const QString &path)
     // Signal comes from main thread, we need to lock ourselves.
     CacheLock lock(this);
     //DDebug() << "LoadingCache slotFileDirty " << path << endl;
-    for (QCacheIterator<DImg> it(d->imageCache); it.current(); ++it)
+    for (Q3CacheIterator<DImg> it(d->imageCache); it.current(); ++it)
     {
         if (it.current()->attribute("loadingCacheFilePath").toString() == path)
         {
@@ -166,7 +169,7 @@ void LoadingCache::customEvent(QCustomEvent *)
     // get a list of files in cache that need watch
     QStringList toBeAdded;
     QStringList toBeRemoved = d->watchedFiles;
-    for (QCacheIterator<DImg> it(d->imageCache); it.current(); ++it)
+    for (Q3CacheIterator<DImg> it(d->imageCache); it.current(); ++it)
     {
         QString watchPath = it.current()->attribute("loadingCacheFilePath").toString();
         if (!watchPath.isEmpty())
@@ -216,7 +219,7 @@ void LoadingCache::removeLoadingProcess(LoadingProcess *process)
 
 void LoadingCache::notifyNewLoadingProcess(LoadingProcess *process, LoadingDescription description)
 {
-    for (QDictIterator<LoadingProcess> it(d->loadingDict); it.current(); ++it)
+    for (Q3DictIterator<LoadingProcess> it(d->loadingDict); it.current(); ++it)
     {
         it.current()->notifyNewLoadingProcess(process, description);
     }

@@ -28,7 +28,9 @@
 #include <qstring.h>
 #include <qfile.h>
 #include <qdom.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 // KDE includes.
 
@@ -58,7 +60,7 @@ public:
 
     bool                 modified;
     
-    QPtrList<CameraType> clist;
+    Q3PtrList<CameraType> clist;
     QString              file;
 };
 
@@ -88,7 +90,7 @@ bool CameraList::load()
     
     QFile cfile(d->file);
 
-    if (!cfile.open(IO_ReadOnly))
+    if (!cfile.open(QIODevice::ReadOnly))
         return false;
 
     QDomDocument doc("cameralist");
@@ -146,11 +148,11 @@ bool CameraList::save()
     }
 
     QFile cfile(d->file);
-    if (!cfile.open(IO_WriteOnly))
+    if (!cfile.open(QIODevice::WriteOnly))
         return false;
 
-    QTextStream stream(&cfile);
-    stream.setEncoding(QTextStream::UnicodeUTF8);
+    Q3TextStream stream(&cfile);
+    stream.setEncoding(Q3TextStream::UnicodeUTF8);
     stream << doc.toString();
     cfile.close();
 
@@ -201,7 +203,7 @@ void CameraList::removePrivate(CameraType* ctype)
     d->clist.remove(ctype);
 }
 
-QPtrList<CameraType>* CameraList::cameraList()
+Q3PtrList<CameraType>* CameraList::cameraList()
 {
     return &d->clist; 
 }

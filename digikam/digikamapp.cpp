@@ -30,8 +30,10 @@
 #include <qstringlist.h>
 #include <qtooltip.h>
 #include <qsignalmapper.h>
-#include <qdockarea.h>
-#include <qhbox.h>
+#include <q3dockarea.h>
+#include <q3hbox.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 // KDE includes.
 
@@ -263,31 +265,31 @@ void DigikamApp::show()
     slotZoomSliderChanged(d->albumSettings->getDefaultIconSize());
 }
 
-const QPtrList<KAction>& DigikamApp::menuImageActions()
+const Q3PtrList<KAction>& DigikamApp::menuImageActions()
 {
     return d->kipiImageActions;
 }
 
-const QPtrList<KAction>& DigikamApp::menuBatchActions()
+const Q3PtrList<KAction>& DigikamApp::menuBatchActions()
 {
     return d->kipiBatchActions;
 }
 
-const QPtrList<KAction>& DigikamApp::menuAlbumActions()
+const Q3PtrList<KAction>& DigikamApp::menuAlbumActions()
 {
     return d->kipiAlbumActions;
 }
 
-const QPtrList<KAction> DigikamApp::menuImportActions()
+const Q3PtrList<KAction> DigikamApp::menuImportActions()
 {
-    QPtrList<KAction> importMenu;
+    Q3PtrList<KAction> importMenu;
     importMenu = d->kipiFileActionsImport;
     importMenu.append( d->albumImportAction );
     importMenu.append( d->addImagesAction );
     return importMenu;
 }
 
-const QPtrList<KAction> DigikamApp::menuExportActions()
+const Q3PtrList<KAction> DigikamApp::menuExportActions()
 {
     return d->kipiFileActionsExport;
 }
@@ -342,8 +344,8 @@ void DigikamApp::setupView()
     connect(d->view, SIGNAL(signalTagSelected(bool)),
             this, SLOT(slotTagSelected(bool)));
 
-    connect(d->view, SIGNAL(signalImageSelected(const QPtrList<ImageInfo>&, bool, bool)),
-            this, SLOT(slotImageSelected(const QPtrList<ImageInfo>&, bool, bool)));
+    connect(d->view, SIGNAL(signalImageSelected(const Q3PtrList<ImageInfo>&, bool, bool)),
+            this, SLOT(slotImageSelected(const Q3PtrList<ImageInfo>&, bool, bool)));
 }
 
 void DigikamApp::setupStatusBar()
@@ -1167,9 +1169,9 @@ void DigikamApp::slotTagSelected(bool val)
     }
 }
 
-void DigikamApp::slotImageSelected(const QPtrList<ImageInfo>& list, bool hasPrev, bool hasNext)
+void DigikamApp::slotImageSelected(const Q3PtrList<ImageInfo>& list, bool hasPrev, bool hasNext)
 {
-    QPtrList<ImageInfo> selection = list;
+    Q3PtrList<ImageInfo> selection = list;
     bool val = selection.isEmpty() ? false : true;
     d->imageViewAction->setEnabled(val);
     d->imagePreviewAction->setEnabled(val);
@@ -1589,7 +1591,7 @@ void DigikamApp::slotToggleFullScreen()
     if (d->fullScreen)
     {
 #if QT_VERSION >= 0x030300
-        setWindowState( windowState() & ~WindowFullScreen );
+        setWindowState( windowState() & ~Qt::WindowFullScreen );
 #else
         showNormal();
 #endif
@@ -1702,7 +1704,7 @@ void DigikamApp::slotKipiPluginPlug()
           //  d->splashScreen->message(i18n("Loading: %1").arg((*it)->name()));
 
         plugin->setup( this );
-        QPtrList<KAction>* popup = 0;
+        Q3PtrList<KAction>* popup = 0;
 
         // Plugin category identification using KAction method based.
 

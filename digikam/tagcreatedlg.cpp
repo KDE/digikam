@@ -26,8 +26,11 @@
 
 #include <qcombobox.h>
 #include <qlabel.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -73,12 +76,12 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
     d = new TagCreateDlgPriv;
     setHelp("tagscreation.anchor", "digikam");
 
-    QGridLayout* grid = new QGridLayout(plainPage(), 1, 1, 0, spacingHint());
+    Q3GridLayout* grid = new Q3GridLayout(plainPage(), 1, 1, 0, spacingHint());
     QLabel *logo = new QLabel(plainPage());
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
     logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 96, KIcon::DefaultState, 0, true));    
 
-    QVBoxLayout *topLayout = new QVBoxLayout(spacingHint());
+    Q3VBoxLayout *topLayout = new Q3VBoxLayout(spacingHint());
 
     QLabel *topLabel = new QLabel(plainPage());
     QString tagName  = album->prettyURL();
@@ -89,14 +92,14 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
 
     // --------------------------------------------------------
 
-    QFrame *topLine = new QFrame( plainPage() );
-    topLine->setFrameShape( QFrame::HLine );
-    topLine->setFrameShadow( QFrame::Sunken );
+    Q3Frame *topLine = new Q3Frame( plainPage() );
+    topLine->setFrameShape( Q3Frame::HLine );
+    topLine->setFrameShadow( Q3Frame::Sunken );
     topLayout->addWidget( topLine );
 
     // --------------------------------------------------------
 
-    QGridLayout *gl = new QGridLayout(topLayout, spacingHint());
+    Q3GridLayout *gl = new Q3GridLayout(topLayout, spacingHint());
 
     QLabel *titleLabel = new QLabel(plainPage());
     titleLabel->setText(i18n("&Title:"));
@@ -226,12 +229,12 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
     d = new TagEditDlgPriv;
     setHelp("tagscreation.anchor", "digikam");
 
-    QGridLayout* grid = new QGridLayout(plainPage(), 1, 1, 0, spacingHint());
+    Q3GridLayout* grid = new Q3GridLayout(plainPage(), 1, 1, 0, spacingHint());
     QLabel *logo = new QLabel(plainPage());
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
     logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 96, KIcon::DefaultState, 0, true));    
 
-    QVBoxLayout *topLayout = new QVBoxLayout(spacingHint());
+    Q3VBoxLayout *topLayout = new Q3VBoxLayout(spacingHint());
 
     QLabel *topLabel = new QLabel(plainPage());
     QString tagName  = album->prettyURL();
@@ -242,14 +245,14 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
 
     // --------------------------------------------------------
 
-    QFrame *topLine = new QFrame( plainPage() );
-    topLine->setFrameShape( QFrame::HLine );
-    topLine->setFrameShadow( QFrame::Sunken );
+    Q3Frame *topLine = new Q3Frame( plainPage() );
+    topLine->setFrameShape( Q3Frame::HLine );
+    topLine->setFrameShadow( Q3Frame::Sunken );
     topLayout->addWidget( topLine );
 
     // --------------------------------------------------------
 
-    QGridLayout *gl = new QGridLayout(topLayout, spacingHint());
+    Q3GridLayout *gl = new Q3GridLayout(topLayout, spacingHint());
 
     QLabel *titleLabel = new QLabel(plainPage());
     titleLabel->setText(i18n("&Title:"));

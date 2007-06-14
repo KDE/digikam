@@ -27,7 +27,7 @@
 
 // QT includes.
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 // Local includes.
 

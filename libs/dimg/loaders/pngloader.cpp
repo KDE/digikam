@@ -44,7 +44,7 @@ extern "C"
 // QT includes.
 
 #include <qfile.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 
 // Local includes.
 
@@ -563,9 +563,9 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             data = new uchar[imageWidth() * 3 * sizeof(uchar)];        
     }
     
-    sig_bit.red   = imageBitsDepth();
-    sig_bit.green = imageBitsDepth();
-    sig_bit.blue  = imageBitsDepth();
+    sig_bit.Qt::red   = imageBitsDepth();
+    sig_bit.Qt::green = imageBitsDepth();
+    sig_bit.Qt::blue  = imageBitsDepth();
     sig_bit.alpha = imageBitsDepth();
     png_set_sBIT(png_ptr, info_ptr, &sig_bit);
         

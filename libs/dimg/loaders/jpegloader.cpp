@@ -44,7 +44,7 @@ extern "C"
 // QT includes.
 
 #include <qfile.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 
 // Local includes.
 

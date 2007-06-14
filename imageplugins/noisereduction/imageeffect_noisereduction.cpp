@@ -24,7 +24,7 @@
 // Qt includes.
 
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
 #include <qcheckbox.h>
 #include <qstring.h>
@@ -32,7 +32,9 @@
 #include <qimage.h>
 #include <qlayout.h>
 #include <qfile.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -90,7 +92,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     QTabWidget *mainTab = new QTabWidget(m_imagePreviewWidget);
     
     QWidget* firstPage = new QWidget( mainTab );
-    QGridLayout* gridSettings = new QGridLayout( firstPage, 6, 1, spacingHint());    
+    Q3GridLayout* gridSettings = new Q3GridLayout( firstPage, 6, 1, spacingHint());    
     mainTab->addTab( firstPage, i18n("Details") );
     
     QLabel *label1 = new QLabel(i18n("Radius:"), firstPage);
@@ -98,7 +100,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     m_radiusInput = new KDoubleNumInput(firstPage);
     m_radiusInput->setPrecision(1);
     m_radiusInput->setRange(0.0, 10.0, 0.1, true);
-    QWhatsThis::add( m_radiusInput, i18n("<p><b>Radius</b>: this control selects the "
+    Q3WhatsThis::add( m_radiusInput, i18n("<p><b>Radius</b>: this control selects the "
                                          "gliding window size used for the filter. Larger values do not increase "
                                          "the amount of time needed to filter each pixel in the image but "
                                          "can cause blurring. This window moves across the image, and the "
@@ -117,7 +119,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     m_thresholdInput = new KDoubleNumInput(firstPage);
     m_thresholdInput->setPrecision(2);
     m_thresholdInput->setRange(0.0, 1.0, 0.01, true);
-    QWhatsThis::add( m_thresholdInput, i18n("<p><b>Threshold</b>: use the slider for coarse adjustment, "
+    Q3WhatsThis::add( m_thresholdInput, i18n("<p><b>Threshold</b>: use the slider for coarse adjustment, "
                      "and the spin control for fine adjustment to control edge detection sensitivity. "
                      "This value should be set so that edges and details are clearly visible "
                      "and noise is smoothed out. "
@@ -135,7 +137,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     m_textureInput = new KDoubleNumInput(firstPage);
     m_textureInput->setPrecision(2);
     m_textureInput->setRange(-0.99, 0.99, 0.01, true);
-    QWhatsThis::add( m_textureInput, i18n("<p><b>Texture</b>: this control sets the texture accuracy. "
+    Q3WhatsThis::add( m_textureInput, i18n("<p><b>Texture</b>: this control sets the texture accuracy. "
                 "This value can be used, to get more or less texture accuracy. When decreased, "
                 "then noise and texture are blurred out, when increased then texture is "
                 "amplified, but also noise will increase. It has almost no effect on image edges."));
@@ -150,7 +152,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     m_sharpnessInput = new KDoubleNumInput(firstPage);
     m_sharpnessInput->setPrecision(2);
     m_sharpnessInput->setRange(0.0, 1.0, 0.1, true);
-    QWhatsThis::add( m_sharpnessInput, i18n("<p><b>Sharpness</b>: "
+    Q3WhatsThis::add( m_sharpnessInput, i18n("<p><b>Sharpness</b>: "
             "This value improves the frequency response for the filter. "
             "When it is too strong then not all noise can be removed, or spike noise may appear. "
             "Set it near to maximum, if you want to remove very weak noise or JPEG-artifacts, "
@@ -166,7 +168,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     m_lookaheadInput = new KDoubleNumInput(firstPage);
     m_lookaheadInput->setPrecision(2);
     m_lookaheadInput->setRange(0.01, 20.0, 0.01, true);
-    QWhatsThis::add( m_lookaheadInput, i18n("<p><b>Edge</b>: "
+    Q3WhatsThis::add( m_lookaheadInput, i18n("<p><b>Edge</b>: "
            "This value defines the pixel distance to which the filter looks ahead for edges. "
            "When this value is increased, then spike noise is erased. "
            "You can eventually re-adjust the <b>Edge</b> filter, when you have changed this setting. "
@@ -183,7 +185,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     m_phaseInput = new KDoubleNumInput(firstPage);
     m_phaseInput->setPrecision(1);
     m_phaseInput->setRange(0.5, 20.0, 0.5, true);
-    QWhatsThis::add( m_phaseInput, i18n("<p><b>Erosion</b>: "
+    Q3WhatsThis::add( m_phaseInput, i18n("<p><b>Erosion</b>: "
                 "Use this to increase edge noise erosion and spike noise erosion "
                 "(noise is removed by erosion)."));
     
@@ -195,7 +197,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget* secondPage = new QWidget( mainTab );
-    QGridLayout* gridSettings2 = new QGridLayout( secondPage, 4, 1, spacingHint());    
+    Q3GridLayout* gridSettings2 = new Q3GridLayout( secondPage, 4, 1, spacingHint());    
     mainTab->addTab( secondPage, i18n("Advanced") );
     
     QLabel *label2 = new QLabel(i18n("Luminance:"), secondPage);
@@ -203,7 +205,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     m_lumToleranceInput = new KDoubleNumInput(secondPage);
     m_lumToleranceInput->setPrecision(1);
     m_lumToleranceInput->setRange(0.0, 1.0, 0.1, true);
-    QWhatsThis::add( m_lumToleranceInput, i18n("<p><b>Luminance</b>: this control sets the luminance tolerance of the image."
+    Q3WhatsThis::add( m_lumToleranceInput, i18n("<p><b>Luminance</b>: this control sets the luminance tolerance of the image."
                 "We recommend to use either the <b>Color</b> or the <b>Luminance</b> tolerance settings "
                 "to make an image correction, not both at the same time. These settings "
                 "do not influence the main smoothing process controlled by the <b>Details</b> "
@@ -219,7 +221,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     m_csmoothInput = new KDoubleNumInput(secondPage);
     m_csmoothInput->setPrecision(1);
     m_csmoothInput->setRange(0.0, 1.0, 0.1, true);
-    QWhatsThis::add( m_csmoothInput, i18n("<p><b>Color</b>: this control sets the color tolerance of the image. It is "
+    Q3WhatsThis::add( m_csmoothInput, i18n("<p><b>Color</b>: this control sets the color tolerance of the image. It is "
                 "recommended to use either the <b>Color</b> or the <b>Luminance</b> tolerance "
                 "to make image correction, not both at the same time. These settings "
                 "do not influence the main smoothing process controlled by the <b>Details</b> "
@@ -235,7 +237,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     m_gammaInput = new KDoubleNumInput(secondPage);
     m_gammaInput->setPrecision(1);
     m_gammaInput->setRange(0.3, 3.0, 0.1, true);
-    QWhatsThis::add( m_gammaInput, i18n("<p><b>Gamma</b>: this control sets the gamma tolerance of the image. This value "
+    Q3WhatsThis::add( m_gammaInput, i18n("<p><b>Gamma</b>: this control sets the gamma tolerance of the image. This value "
                 "can be used to increase the tolerance values for darker areas (which commonly "
                 "are noisier). This results in more blur for shadow areas."));
     
@@ -249,7 +251,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     m_dampingInput = new KDoubleNumInput(secondPage);
     m_dampingInput->setPrecision(1);
     m_dampingInput->setRange(0.5, 20.0, 0.5, true);
-    QWhatsThis::add( m_dampingInput, i18n("<p><b>Damping</b>: this control sets the phase-jitter damping adjustment. "
+    Q3WhatsThis::add( m_dampingInput, i18n("<p><b>Damping</b>: this control sets the phase-jitter damping adjustment. "
                 "This value defines how fast the adaptive filter-radius reacts to luminance "
                 "variations. If increased, then edges appear smoother; if too high, then blur "
                 "may occur. If at minimum, then noise and phase jitter at the edges can occur. It "
@@ -485,9 +487,9 @@ void ImageEffect_NoiseReduction::slotUser3()
 
     QFile file(loadRestorationFile.path());
     
-    if ( file.open(IO_ReadOnly) )   
+    if ( file.open(QIODevice::ReadOnly) )   
     {
-        QTextStream stream( &file );
+        Q3TextStream stream( &file );
         if ( stream.readLine() != "# Photograph Noise Reduction Configuration File" )
         {
            KMessageBox::error(this, 
@@ -527,9 +529,9 @@ void ImageEffect_NoiseReduction::slotUser2()
 
     QFile file(saveRestorationFile.path());
     
-    if ( file.open(IO_WriteOnly) )   
+    if ( file.open(QIODevice::WriteOnly) )   
     {
-        QTextStream stream( &file );        
+        Q3TextStream stream( &file );        
         stream << "# Photograph Noise Reduction Configuration File\n";    
         stream << m_radiusInput->value() << "\n";    
         stream << m_lumToleranceInput->value() << "\n";    

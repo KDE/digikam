@@ -32,11 +32,19 @@
 
 #include <qtimer.h>
 #include <qpainter.h>
-#include <qvaluelist.h>
-#include <qptrdict.h>
+#include <q3valuelist.h>
+#include <q3ptrdict.h>
 #include <qstyle.h>
 #include <qapplication.h>
 #include <qdrawutil.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QResizeEvent>
+#include <QFocusEvent>
+#include <QMouseEvent>
+#include <QEvent>
+#include <QPaintEvent>
+#include <QWheelEvent>
 
 // KDE includes.
 
@@ -91,8 +99,8 @@ public:
 
     int                spacing;
 
-    QPtrDict<IconItem> selectedItems;
-    QPtrDict<IconItem> prevSelectedItems;
+    Q3PtrDict<IconItem> selectedItems;
+    Q3PtrDict<IconItem> prevSelectedItems;
 
     QRect*             rubber;
 
@@ -124,7 +132,7 @@ public:
 
         ItemContainer        *prev, *next;
         QRect                 rect;
-        QValueList<IconItem*> items;
+        Q3ValueList<IconItem*> items;
     } *firstContainer, *lastContainer;
 
     struct SortableItem 
@@ -134,7 +142,7 @@ public:
 };
 
 IconView::IconView(QWidget* parent, const char* name)
-        : QScrollView(parent, name, Qt::WStaticContents|Qt::WNoAutoErase)
+        : Q3ScrollView(parent, name, Qt::WStaticContents|Qt::WNoAutoErase)
 {
     viewport()->setBackgroundMode(Qt::NoBackground);
     viewport()->setFocusProxy(this);
@@ -214,7 +222,7 @@ IconItem* IconView::findItem(const QPoint& pos)
     {
         if ( c->rect.contains(pos) ) 
         {
-            for (QValueList<IconItem*>::iterator it = c->items.begin();
+            for (Q3ValueList<IconItem*>::iterator it = c->items.begin();
                  it != c->items.end(); ++it)
             {
                 IconItem* item = *it;
@@ -308,8 +316,8 @@ void IconView::clearSelection()
     if (!wasBlocked)
         blockSignals(true);
 
-    QPtrDict<IconItem> selItems = d->selectedItems;
-    QPtrDictIterator<IconItem> it( selItems );
+    Q3PtrDict<IconItem> selItems = d->selectedItems;
+    Q3PtrDictIterator<IconItem> it( selItems );
     for ( ; it.current(); ++it )
         it.current()->setSelected(false, false);
 
@@ -729,7 +737,7 @@ void IconView::viewportPaintEvent(QPaintEvent* pe)
         if (r.intersects(cr)) 
         {
             
-            for (QValueList<IconItem*>::iterator it = c->items.begin();
+            for (Q3ValueList<IconItem*>::iterator it = c->items.begin();
                  it != c->items.end(); ++it)
             {
                 IconItem* item = *it;
@@ -756,7 +764,7 @@ QRect IconView::contentsRectToViewport(const QRect& r) const
 
 void IconView::resizeEvent(QResizeEvent* e)
 {
-    QScrollView::resizeEvent(e);
+    Q3ScrollView::resizeEvent(e);
     triggerRearrangement();
 }
 
@@ -854,7 +862,7 @@ void IconView::leaveEvent(QEvent *e)
     // anymore
     d->dragging = false;
     
-    QScrollView::leaveEvent(e);
+    Q3ScrollView::leaveEvent(e);
 }
 
 void IconView::focusOutEvent(QFocusEvent* e)
@@ -864,7 +872,7 @@ void IconView::focusOutEvent(QFocusEvent* e)
     d->toolTipTimer->stop();
     slotToolTip();
 
-    QScrollView::focusOutEvent(e);
+    Q3ScrollView::focusOutEvent(e);
 }
 
 bool IconView::acceptToolTip(IconItem*, const QPoint&)
@@ -1008,7 +1016,7 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
     {
         // ctrl is pressed. make sure our current selection is not lost
         d->prevSelectedItems.clear();
-        QPtrDictIterator<IconItem> it( d->selectedItems );
+        Q3PtrDictIterator<IconItem> it( d->selectedItems );
         
         for ( ; it.current(); ++it )
         {
@@ -1128,7 +1136,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
     {
         if ( rubberUnion.intersects(c->rect) ) 
         {
-            for (QValueList<IconItem*>::iterator it = c->items.begin();
+            for (Q3ValueList<IconItem*>::iterator it = c->items.begin();
                  it != c->items.end(); ++it)
             {
                 IconItem* item = *it;
@@ -1245,7 +1253,7 @@ void IconView::contentsWheelEvent(QWheelEvent* e)
     slotToolTip();
     viewport()->update();
 
-    QScrollView::contentsWheelEvent(e);
+    Q3ScrollView::contentsWheelEvent(e);
 }
 
 void IconView::contentsMouseDoubleClickEvent(QMouseEvent *e)
@@ -1789,7 +1797,7 @@ IconItem* IconView::findFirstVisibleItem(const QRect& r, bool useThumbnailRect) 
         if ( c->rect.intersects( r ) )
         {
             alreadyIntersected = true;
-            for (QValueList<IconItem*>::iterator it = c->items.begin();
+            for (Q3ValueList<IconItem*>::iterator it = c->items.begin();
                  it != c->items.end(); ++it)
             {
                 IconItem *item = *it;
@@ -1835,7 +1843,7 @@ IconItem* IconView::findLastVisibleItem(const QRect& r, bool useThumbnailRect) c
         if ( c->rect.intersects( r ) )
         {
             alreadyIntersected = true;
-            for (QValueList<IconItem*>::iterator it = c->items.begin();
+            for (Q3ValueList<IconItem*>::iterator it = c->items.begin();
                  it != c->items.end(); ++it)
             {
                 IconItem *item = *it;

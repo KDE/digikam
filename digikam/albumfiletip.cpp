@@ -33,9 +33,14 @@
 #include <qlayout.h>
 #include <qpixmap.h>
 #include <qdatetime.h>
-#include <qstylesheet.h>
+#include <q3stylesheet.h>
 #include <qpainter.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <Q3Frame>
+#include <QEvent>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -92,18 +97,18 @@ public:
 };
 
 AlbumFileTip::AlbumFileTip(AlbumIconView* view)
-            : QFrame(0, 0, WStyle_Customize | WStyle_NoBorder | WStyle_Tool |
-                     WStyle_StaysOnTop | WX11BypassWM)
+            : Q3Frame(0, 0, Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool |
+                     Qt::WStyle_StaysOnTop | Qt::WX11BypassWM)
 {
     d = new AlbumFileTipPriv;
     d->view = view;
     hide();
 
     setPalette(QToolTip::palette());
-    setFrameStyle(QFrame::Plain | QFrame::Box);
+    setFrameStyle(Q3Frame::Plain | Q3Frame::Box);
     setLineWidth(1);
 
-    QVBoxLayout *layout = new QVBoxLayout(this, d->tipBorder+1, 0);
+    Q3VBoxLayout *layout = new Q3VBoxLayout(this, d->tipBorder+1, 0);
 
     d->label = new QLabel(this);
     d->label->setMargin(0);
@@ -270,12 +275,12 @@ bool AlbumFileTip::event(QEvent *e)
             break;
     }
 
-    return QFrame::event(e);
+    return Q3Frame::event(e);
 }
 
 void AlbumFileTip::resizeEvent(QResizeEvent* e)
 {
-    QFrame::resizeEvent(e);
+    Q3Frame::resizeEvent(e);
     reposition();
 }
 
@@ -283,7 +288,7 @@ void AlbumFileTip::drawContents(QPainter *p)
 {
     if (d->corner >= 4)
     {
-        QFrame::drawContents( p );
+        Q3Frame::drawContents( p );
         return;
     }
 
@@ -305,7 +310,7 @@ void AlbumFileTip::drawContents(QPainter *p)
             break;
     }
 
-    QFrame::drawContents(p);
+    Q3Frame::drawContents(p);
 }
 
 void AlbumFileTip::updateText()
@@ -430,7 +435,7 @@ void AlbumFileTip::updateText()
                 str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? unavailable : photoInfo.make)
                                         .arg(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
                 if (str.length() > d->maxStringLen) str = str.left(d->maxStringLen-3) + "...";
-                metaStr += cellBeg + i18n("Make/Model:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+                metaStr += cellBeg + i18n("Make/Model:") + cellMid + Q3StyleSheet::escape( str ) + cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoDate())
@@ -439,10 +444,10 @@ void AlbumFileTip::updateText()
                 {
                     str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
                     if (str.length() > d->maxStringLen) str = str.left(d->maxStringLen-3) + "...";
-                    metaStr += cellBeg + i18n("Created:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+                    metaStr += cellBeg + i18n("Created:") + cellMid + Q3StyleSheet::escape( str ) + cellEnd;
                 }
                 else
-                    metaStr += cellBeg + i18n("Created:") + cellMid + QStyleSheet::escape( unavailable ) + cellEnd;
+                    metaStr += cellBeg + i18n("Created:") + cellMid + Q3StyleSheet::escape( unavailable ) + cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoFocal())
@@ -455,7 +460,7 @@ void AlbumFileTip::updateText()
                     str += QString(" / %1").arg(i18n("%1 (35mm: %2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm));
 
                 if (str.length() > d->maxStringLen) str = str.left(d->maxStringLen-3) + "...";
-                metaStr += cellBeg + i18n("Aperture/Focal:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+                metaStr += cellBeg + i18n("Aperture/Focal:") + cellMid + Q3StyleSheet::escape( str ) + cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoExpo())
@@ -463,7 +468,7 @@ void AlbumFileTip::updateText()
                 str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime)
                                         .arg(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO").arg(photoInfo.sensitivity));
                 if (str.length() > d->maxStringLen) str = str.left(d->maxStringLen-3) + "...";
-                metaStr += cellBeg + i18n("Exposure/Sensitivity:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+                metaStr += cellBeg + i18n("Exposure/Sensitivity:") + cellMid + Q3StyleSheet::escape( str ) + cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoMode())
@@ -478,21 +483,21 @@ void AlbumFileTip::updateText()
                 else 
                     str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
                 if (str.length() > d->maxStringLen) str = str.left(d->maxStringLen-3) + "...";
-                metaStr += cellBeg + i18n("Mode/Program:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+                metaStr += cellBeg + i18n("Mode/Program:") + cellMid + Q3StyleSheet::escape( str ) + cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoFlash())
             {
                 str = photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash;
                 if (str.length() > d->maxStringLen) str = str.left(d->maxStringLen-3) + "...";
-                metaStr += cellBeg + i18n("Flash:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+                metaStr += cellBeg + i18n("Flash:") + cellMid + Q3StyleSheet::escape( str ) + cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoWB())
             {
                 str = photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance;
                 if (str.length() > d->maxStringLen) str = str.left(d->maxStringLen-3) + "...";
-                metaStr += cellBeg + i18n("White Balance:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+                metaStr += cellBeg + i18n("White Balance:") + cellMid + Q3StyleSheet::escape( str ) + cellEnd;
             }
 
             tip += metaStr;
@@ -548,7 +553,7 @@ void AlbumFileTip::updateText()
 QString AlbumFileTip::breakString(const QString& input)
 {
     QString str = input.simplifyWhiteSpace();
-    str = QStyleSheet::escape(str);
+    str = Q3StyleSheet::escape(str);
     uint maxLen = d->maxStringLen;
 
     if (str.length() <= maxLen)

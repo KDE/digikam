@@ -29,7 +29,11 @@
 
 #include <qmap.h>
 #include <qpainter.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QCustomEvent>
+#include <QPixmap>
+#include <QEvent>
 
 // KDE includes
 
@@ -50,7 +54,7 @@
 namespace Digikam
 {
 
-typedef QMap<KURL, QValueList<int> > UrlAlbumMap;
+typedef QMap<KURL, Q3ValueList<int> > UrlAlbumMap;
 typedef QMap<int, QPixmap> TagThumbnailMap;
 
 class AlbumThumbnailLoaderPrivate
@@ -313,7 +317,7 @@ void AlbumThumbnailLoader::addURL(Album *album, const KURL &url)
         }
 
         // insert new entry to map, add album globalID
-        QValueList<int> &list = d->urlAlbumMap[url];
+        Q3ValueList<int> &list = d->urlAlbumMap[url];
         list.remove(album->globalID());
         list.push_back(album->globalID());
     }
@@ -368,7 +372,7 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const KURL &url, const QPixm
         QPixmap tagThumbnail;
 
         AlbumManager *manager = AlbumManager::instance();
-        for (QValueList<int>::iterator vit = (*it).begin(); vit != (*it).end(); ++vit)
+        for (Q3ValueList<int>::iterator vit = (*it).begin(); vit != (*it).end(); ++vit)
         {
             // look up with global id
             Album *album = manager->findAlbum(*vit);
@@ -455,7 +459,7 @@ void AlbumThumbnailLoader::slotThumbnailLost(const KURL &url)
     if (it != d->urlAlbumMap.end())
     {
         AlbumManager *manager = AlbumManager::instance();
-        for (QValueList<int>::iterator vit = (*it).begin(); vit != (*it).end(); ++vit)
+        for (Q3ValueList<int>::iterator vit = (*it).begin(); vit != (*it).end(); ++vit)
         {
             Album *album = manager->findAlbum(*vit);
             if (album)

@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qstring.h>
 
 // Local includes.
@@ -40,7 +40,7 @@ namespace Digikam
 
 class LightTableViewPriv;
 
-class DIGIKAM_EXPORT LightTableView : public QFrame
+class DIGIKAM_EXPORT LightTableView : public Q3Frame
 {
 
 Q_OBJECT

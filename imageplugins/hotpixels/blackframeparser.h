@@ -35,7 +35,7 @@
 
 #include <qimage.h>
 #include <qobject.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstring.h>
 #include <qrect.h>
 
@@ -68,7 +68,7 @@ public:
 
 signals:
 
-    void parsed(QValueList<HotPixel>);
+    void parsed(Q3ValueList<HotPixel>);
     
 private slots:
         
@@ -79,7 +79,7 @@ private:
 
     QString mOutputString;
     void blackFrameParsing(bool useData=false);
-    void consolidatePixels (QValueList<HotPixel>& list);
+    void consolidatePixels (Q3ValueList<HotPixel>& list);
     void validateAndConsolidate(HotPixel *a, HotPixel *b);
         
 private:

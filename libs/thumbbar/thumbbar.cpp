@@ -1,3 +1,8 @@
+//Added by qt3to4:
+#include <Q3Frame>
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -40,11 +45,11 @@ extern "C"
 #include <qimage.h>
 #include <qtimer.h>
 #include <qpainter.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <qpoint.h>
-#include <qstylesheet.h>
+#include <q3stylesheet.h>
 #include <qdatetime.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 // KDE includes.
 
@@ -110,8 +115,8 @@ public:
     ThumbBarItem              *lastItem;
     ThumbBarItem              *currItem;
 
-    QDict<ThumbBarItem>        itemDict;
-    QGuardedPtr<ThumbnailJob>  thumbJob;
+    Q3Dict<ThumbBarItem>        itemDict;
+    QPointer<ThumbnailJob>  thumbJob;
 
     ThumbBarToolTipSettings    toolTipSettings;
 
@@ -149,7 +154,7 @@ public:
 
 ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
                            ThumbBarToolTipSettings settings)
-            : QScrollView(parent)
+            : Q3ScrollView(parent)
 {
     d = new ThumbBarViewPriv;
     d->orientation     = orientation;
@@ -165,16 +170,16 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     viewport()->setMouseTracking(true);
     viewport()->setAcceptDrops(true);
 
-    setFrameStyle(QFrame::NoFrame);
+    setFrameStyle(Q3Frame::NoFrame);
     setAcceptDrops(true); 
 
-    if (d->orientation == Vertical)
+    if (d->orientation == Qt::Vertical)
     {
-        setHScrollBarMode(QScrollView::AlwaysOff);
+        setHScrollBarMode(Q3ScrollView::AlwaysOff);
     }
     else
     {
-        setVScrollBarMode(QScrollView::AlwaysOff);
+        setVScrollBarMode(Q3ScrollView::AlwaysOff);
     }
 }
 
@@ -197,9 +202,9 @@ void ThumbBarView::resizeEvent(QResizeEvent* e)
 {
     if (!e) return;
 
-    QScrollView::resizeEvent(e);
+    Q3ScrollView::resizeEvent(e);
 
-    if (d->orientation == Vertical)
+    if (d->orientation == Qt::Vertical)
     {
        d->tileSize = width() - 2*d->margin
                      - verticalScrollBar()->sizeHint().width();
@@ -335,7 +340,7 @@ ThumbBarItem* ThumbBarView::findItem(const QPoint& pos) const
 {
     int itemPos;
     
-    if (d->orientation == Vertical)
+    if (d->orientation == Qt::Vertical)
         itemPos = pos.y();
     else
         itemPos = pos.x();
@@ -393,7 +398,7 @@ void ThumbBarView::ensureItemVisible(ThumbBarItem* item)
         // We want the complete thumb visible and the next one.
         // find the middle of the image and give a margin of 1,5 image
         // When changed, watch regression for bug 104031
-        if (d->orientation == Vertical)
+        if (d->orientation == Qt::Vertical)
             ensureVisible(0, (int)(item->d->pos + d->margin + d->tileSize*.5),
                           0, (int)(d->tileSize*1.5 + 3*d->margin));
         else
@@ -445,7 +450,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
     QPixmap bgPix, tile;
     QRect er(e->rect());
     
-    if (d->orientation == Vertical)
+    if (d->orientation == Qt::Vertical)
     {
        cy = viewportToContents(er.topLeft()).y();
         
@@ -474,7 +479,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
     
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
-        if (d->orientation == Vertical)
+        if (d->orientation == Qt::Vertical)
         {
             if (y1 <= item->d->pos && item->d->pos <= y2)
             {
@@ -492,7 +497,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 {
                     QPixmap pix; 
                     pix.convertFromImage(QImage(item->d->pixmap->convertToImage()).
-                                         smoothScale(d->tileSize, d->tileSize, QImage::ScaleMin));
+                                         smoothScale(d->tileSize, d->tileSize, Qt::KeepAspectRatio));
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
                     bitBlt(&tile, x, y, &pix);
@@ -519,7 +524,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 {
                     QPixmap pix; 
                     pix.convertFromImage(QImage(item->d->pixmap->convertToImage()).
-                                         smoothScale(d->tileSize, d->tileSize, QImage::ScaleMin));
+                                         smoothScale(d->tileSize, d->tileSize, Qt::KeepAspectRatio));
                     int x = (tile.width() - pix.width())/2;
                     int y = (tile.height()- pix.height())/2;
                     bitBlt(&tile, x, y, &pix);
@@ -530,7 +535,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
         }
     }
 
-    if (d->orientation == Vertical)
+    if (d->orientation == Qt::Vertical)
        bitBlt(viewport(), 0, er.y(), &bgPix);
     else
        bitBlt(viewport(), er.x(), 0, &bgPix);
@@ -685,7 +690,7 @@ void ThumbBarView::rearrangeItems()
         item = item->d->next;
     }
 
-    if (d->orientation == Vertical)
+    if (d->orientation == Qt::Vertical)
        resizeContents(width(), d->count*(d->tileSize+2*d->margin));
     else    
        resizeContents(d->count*(d->tileSize+2*d->margin), height());
@@ -712,7 +717,7 @@ void ThumbBarView::repaintItem(ThumbBarItem* item)
 {
     if (item)
     {
-       if (d->orientation == Vertical)
+       if (d->orientation == Qt::Vertical)
            repaintContents(0, item->d->pos, visibleWidth(), d->tileSize+2*d->margin);
        else
            repaintContents(item->d->pos, 0, d->tileSize+2*d->margin, visibleHeight());
@@ -1002,7 +1007,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
                 str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? unavailable : photoInfo.make)
                                         .arg(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Make/Model:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
+                metaStr += m_cellBeg + i18n("Make/Model:") + m_cellMid + Q3StyleSheet::escape( str ) + m_cellEnd;
             }
 
             if (settings.showPhotoDate)
@@ -1011,10 +1016,10 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
                 {
                     str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
                     if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
+                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Q3StyleSheet::escape( str ) + m_cellEnd;
                 }
                 else
-                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + QStyleSheet::escape( unavailable ) + m_cellEnd;
+                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Q3StyleSheet::escape( unavailable ) + m_cellEnd;
             }
 
             if (settings.showPhotoFocal)
@@ -1027,7 +1032,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
                     str += QString(" / %1").arg(i18n("%1 (35mm: %2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm));
 
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Aperture/Focal:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
+                metaStr += m_cellBeg + i18n("Aperture/Focal:") + m_cellMid + Q3StyleSheet::escape( str ) + m_cellEnd;
             }
 
             if (settings.showPhotoExpo)
@@ -1035,7 +1040,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
                 str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime)
                                         .arg(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO").arg(photoInfo.sensitivity));
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Exposure/Sensitivity:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
+                metaStr += m_cellBeg + i18n("Exposure/Sensitivity:") + m_cellMid + Q3StyleSheet::escape( str ) + m_cellEnd;
             }
 
             if (settings.showPhotoMode)
@@ -1050,21 +1055,21 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
                 else 
                     str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Mode/Program:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
+                metaStr += m_cellBeg + i18n("Mode/Program:") + m_cellMid + Q3StyleSheet::escape( str ) + m_cellEnd;
             }
 
             if (settings.showPhotoFlash)
             {
                 str = photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash;
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Flash:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
+                metaStr += m_cellBeg + i18n("Flash:") + m_cellMid + Q3StyleSheet::escape( str ) + m_cellEnd;
             }
 
             if (settings.showPhotoWB)
             {
                 str = photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance;
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("White Balance:") + m_cellMid + QStyleSheet::escape( str ) + m_cellEnd;
+                metaStr += m_cellBeg + i18n("White Balance:") + m_cellMid + Q3StyleSheet::escape( str ) + m_cellEnd;
             }
 
             tipText += metaStr;
@@ -1077,7 +1082,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
 QString ThumbBarToolTip::breakString(const QString& input)
 {
     QString str = input.simplifyWhiteSpace();
-    str = QStyleSheet::escape(str);
+    str = Q3StyleSheet::escape(str);
     const uint maxLen = m_maxStringLen;
 
     if (str.length() <= maxLen)

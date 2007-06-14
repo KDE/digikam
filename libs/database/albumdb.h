@@ -31,7 +31,7 @@
 // Qt includes.
 
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstringlist.h>
 #include <qdatetime.h>
 #include <qpair.h>
@@ -49,8 +49,8 @@
 namespace Digikam
 {
 
-typedef QValueList<int>     IntList;
-typedef QValueList<Q_LLONG> LLongList;
+typedef Q3ValueList<int>     IntList;
+typedef Q3ValueList<qlonglong> LLongList;
 
 class DatabaseBackend;
 class AlbumDBPriv;
@@ -98,7 +98,7 @@ public:
     /**
      * Returns all albums in the database with their albumRoot and ID.
      */
-    QValueList<AlbumShortInfo> getAlbumShortInfos();
+    Q3ValueList<AlbumShortInfo> getAlbumShortInfos();
 
     // ----------- Operations on PAlbums -----------
 
@@ -179,7 +179,7 @@ public:
      * @param albumID the id of the album
      * @param iconID  the id of the icon file
      */
-    void setAlbumIcon(int albumID, Q_LLONG iconID);
+    void setAlbumIcon(int albumID, qlonglong iconID);
 
     /**
      * Get the fullpath for the album icon file
@@ -228,7 +228,7 @@ public:
      * @return the id of the tag added or -1 if it failed
      */
     int addTag(int parentTagID, const QString& name,
-               const QString& iconKDE, Q_LLONG iconID);
+               const QString& iconKDE, qlonglong iconID);
 
     /**
      * Add tags for the item, create tags with the given paths if they do not yet exist
@@ -267,7 +267,7 @@ public:
      * Note: Only one of the iconKDE or iconID parameters is used.
      * if the iconKDE parameter is empty, then the iconID parameter is used
      */
-    void setTagIcon(int tagID, const QString& iconKDE, Q_LLONG iconID);
+    void setTagIcon(int tagID, const QString& iconKDE, qlonglong iconID);
 
     /**
      * Get the icon for the tag.
@@ -324,7 +324,7 @@ public:
      * file.
      * @return the id of item added or -1 if it fails
      */
-    Q_LLONG addItem(int albumID, const QString& name,
+    qlonglong addItem(int albumID, const QString& name,
                     const QDateTime& datetime,
                     const QString& comment,
                     int rating,
@@ -345,7 +345,7 @@ public:
      * @param name the name of the item
      * @return the ImageId for the item, or -1 if it does not exist
      */
-    Q_LLONG getImageId(int albumID, const QString& name);
+    qlonglong getImageId(int albumID, const QString& name);
 
     enum ItemSortOrder
     {
@@ -409,7 +409,7 @@ public:
      * Returns all item in the database and their dates.
      * Items that do not have a valid date set are excluded.
      */
-    QValueList<QPair<QString, QDateTime> > getItemsAndDate();
+    Q3ValueList<QPair<QString, QDateTime> > getItemsAndDate();
 
     // ----------- Item properties -----------
 
@@ -418,40 +418,40 @@ public:
      * @param imageID The ID of the item
      * @return The ID of the PAlbum of the item, or -1 if not found
     */
-    int getItemAlbum(Q_LLONG imageID);
+    int getItemAlbum(qlonglong imageID);
 
     /**
      * Retrieve the name of the item
      * @param imageID The ID of the item
      * @return The name of the item, or a null string if not found
      */
-    QString getItemName(Q_LLONG imageID);
+    QString getItemName(qlonglong imageID);
 
     /**
      * Get the caption for the item
      * @param imageID the id  of the item
      * @return the caption for the item
      */
-    QString getItemCaption(Q_LLONG imageID);
+    QString getItemCaption(qlonglong imageID);
 
     /**
      * Get the datetime for the item
      * @param imageID the ID of the item
      * @return the datetime for the item
      */
-    QDateTime getItemDate(Q_LLONG imageID);
+    QDateTime getItemDate(qlonglong imageID);
 
     /**
      * Get the item rating
      * @param imageID the ID of the item
      * @return the rating for the item
      */
-    int getItemRating(Q_LLONG imageID);
+    int getItemRating(qlonglong imageID);
 
     /**
      * Get item and album info from the image ID
      */
-    ItemShortInfo getItemShortInfo(Q_LLONG imageID);
+    ItemShortInfo getItemShortInfo(qlonglong imageID);
 
 
     /**
@@ -459,7 +459,7 @@ public:
      * @param imageID the id of the item
      * @param caption the caption for the item
      */
-    void setItemCaption(Q_LLONG imageID, const QString& caption);
+    void setItemCaption(qlonglong imageID, const QString& caption);
 
     /**
      * Update the date of a item to supplied date
@@ -468,14 +468,14 @@ public:
      * the exif-datetime, but if not available the modification date.
      * @return It will always return true. Maybe that will change.
      */
-    bool setItemDate(Q_LLONG imageID, const QDateTime& datetime);
+    bool setItemDate(qlonglong imageID, const QDateTime& datetime);
 
     /**
      * Update the rating of a item to supplied value
      * @param imageID The ID of the item
      * @param rating The rating value to be stored.
      */
-    void setItemRating(Q_LLONG imageID, int rating);
+    void setItemRating(qlonglong imageID, int rating);
 
 
     /**
@@ -521,7 +521,7 @@ public:
      * @param imageID the ID of the item
      * @param tagID   the tagID for the tag
      */
-    void addItemTag(Q_LLONG imageID, int tagID);
+    void addItemTag(qlonglong imageID, int tagID);
 
     /**
      * Add a tag for the item
@@ -536,27 +536,27 @@ public:
      * @param imageID the ID of the item
      * @param tagID   the tagID for the tag
      */
-    void removeItemTag(Q_LLONG imageID, int tagID);
+    void removeItemTag(qlonglong imageID, int tagID);
 
     /**
      * Remove all tags for the item
      * @param imageID the ID of the item
      */
-    void removeItemAllTags(Q_LLONG imageID);
+    void removeItemAllTags(qlonglong imageID);
 
     /**
      * Get a list of names of all the tags for the item
      * @param imageID the ID of the item
      * @return the list of names of all tags for the item
      */
-    QStringList getItemTagNames(Q_LLONG imageID);
+    QStringList getItemTagNames(qlonglong imageID);
 
     /**
      * Get a list of IDs of all the tags for the item
      * @param imageID the ID of the item
      * @return the list of IDs of all tags for the item
      */
-    IntList getItemTagIDs(Q_LLONG imageID);
+    IntList getItemTagIDs(qlonglong imageID);
 
     /**
      * Given a set of items (identified by their IDs),

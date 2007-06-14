@@ -27,7 +27,7 @@
 // Qt includes.
 
 #include <qrect.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 namespace DigikamHotPixelsImagesPlugin
 {
@@ -62,7 +62,7 @@ public:
     void     calculateWeights();
     bool     operator==(const Weights& ws) const;
     double** operator[](int n) const            { return mWeightMatrices[n]; }
-    const QValueList <QPoint> positions() const { return mPositions; }
+    const Q3ValueList <QPoint> positions() const { return mPositions; }
 
 protected:
 
@@ -82,7 +82,7 @@ private:
     bool                mTwoDim;
     unsigned int        mPolynomeOrder;
     double ***          mWeightMatrices; //Stores a list of weight matrices
-    QValueList <QPoint> mPositions;
+    Q3ValueList <QPoint> mPositions;
 };
 
 }  // NameSpace DigikamHotPixelsImagesPlugin

@@ -28,6 +28,8 @@
 
 #include <qcolor.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <QLabel>
 
 // Digikam includes.
 
@@ -35,7 +37,7 @@
 
 class QLabel;
 class QFont;
-class QHButtonGroup;
+class Q3HButtonGroup;
 class QComboBox;
 class QCheckBox;
 
@@ -84,7 +86,7 @@ private:
     QCheckBox         *m_borderText;    
     QCheckBox         *m_transparentText;
     
-    QHButtonGroup     *m_alignButtonGroup;
+    Q3HButtonGroup     *m_alignButtonGroup;
         
     QFont              m_textFont;
     

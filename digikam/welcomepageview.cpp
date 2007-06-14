@@ -27,6 +27,8 @@
 #include <qwidget.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 // KDE includes.
 
@@ -151,9 +153,9 @@ QString WelcomePageView::infoPage()
     return info;
 }
 
-QCString WelcomePageView::fileToString(const QString &aFileName)
+Q3CString WelcomePageView::fileToString(const QString &aFileName)
 {
-    QCString result;
+    Q3CString result;
     QFileInfo info(aFileName);
     unsigned int readLen;
     unsigned int len = info.size();
@@ -161,8 +163,8 @@ QCString WelcomePageView::fileToString(const QString &aFileName)
     
     if (aFileName.isEmpty() || len <= 0 || 
         !info.exists() || info.isDir() || !info.isReadable() ||
-        !file.open(IO_Raw|IO_ReadOnly)) 
-        return QCString();
+        !file.open(QIODevice::Unbuffered|QIODevice::ReadOnly)) 
+        return Q3CString();
     
     result.resize(len + 2);
     readLen = file.readBlock(result.data(), len);
@@ -174,7 +176,7 @@ QCString WelcomePageView::fileToString(const QString &aFileName)
     result[len] = '\0';
     
     if (readLen < len)
-        return QCString();
+        return Q3CString();
     
     return result;
 }

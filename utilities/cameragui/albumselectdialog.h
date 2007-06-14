@@ -66,7 +66,7 @@ private slots:
     void slotAlbumDeleted(Album* a);
     void slotAlbumsCleared();
     void slotSelectionChanged();
-    void slotContextMenu(QListViewItem *item, const QPoint &, int);
+    void slotContextMenu(Q3ListViewItem *item, const QPoint &, int);
     void slotUser1();
     
 private:

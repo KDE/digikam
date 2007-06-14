@@ -24,14 +24,17 @@
 
 // Qt includes. 
  
-#include <qvgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qpushbutton.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -88,12 +91,12 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QFrame *frame = new QFrame(plainPage());
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
+    Q3Frame *frame = new Q3Frame(plainPage());
+    frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
+    Q3VBoxLayout* l  = new Q3VBoxLayout(frame, 5, 0);
     m_previewWidget = new PerspectiveWidget(525, 350, frame);
     l->addWidget(m_previewWidget);
-    QWhatsThis::add( m_previewWidget, i18n("<p>This is the perspective transformation operation preview. "
+    Q3WhatsThis::add( m_previewWidget, i18n("<p>This is the perspective transformation operation preview. "
                                            "You can use the mouse for dragging the corner to adjust the "
                                            "perspective transformation area."));
     setPreviewAreaWidget(frame); 
@@ -104,7 +107,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     Digikam::ImageIface iface(0, 0);
 
     QWidget *gbox2          = new QWidget(plainPage());
-    QGridLayout *gridLayout = new QGridLayout( gbox2, 13, 2, spacingHint());
+    Q3GridLayout *gridLayout = new Q3GridLayout( gbox2, 13, 2, spacingHint());
 
     QLabel *label1  = new QLabel(i18n("New width:"), gbox2);
     m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), gbox2);
@@ -159,13 +162,13 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
 
     QLabel *label7 = new QLabel(i18n("Guide color:"), gbox2);
     m_guideColorBt = new KColorButton( QColor( Qt::red ), gbox2 );
-    QWhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw guides dashed-lines."));
+    Q3WhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw guides dashed-lines."));
     gridLayout->addMultiCellWidget(label7, 11, 11, 0, 0);
     gridLayout->addMultiCellWidget(m_guideColorBt, 11, 11, 2, 2);
 
     QLabel *label8 = new QLabel(i18n("Guide width:"), gbox2);
     m_guideSize    = new QSpinBox( 1, 5, 1, gbox2);
-    QWhatsThis::add( m_guideSize, i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
+    Q3WhatsThis::add( m_guideSize, i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
     gridLayout->addMultiCellWidget(label8, 12, 12, 0, 0);
     gridLayout->addMultiCellWidget(m_guideSize, 12, 12, 2, 2);
 

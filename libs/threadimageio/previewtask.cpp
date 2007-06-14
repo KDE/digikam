@@ -31,7 +31,7 @@
 #include <qapplication.h>
 #include <qimage.h>
 #include <qvariant.h>
-#include <qwmatrix.h>
+#include <qmatrix.h>
 
 // LibKDcraw includes.
 

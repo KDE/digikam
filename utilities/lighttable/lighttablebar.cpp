@@ -27,6 +27,12 @@
 #include <qpainter.h>
 #include <qimage.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 // KDE includes.
 
@@ -117,7 +123,7 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
                      ThemeEngine::instance()->textSpecialRegColor());
     painter.end();    
 
-    if (orientation == Vertical)
+    if (orientation == Qt::Vertical)
         setMinimumWidth(d->ratingPixmap.width()*5 + 6 + 2*getMargin());
     else
         setMinimumHeight(d->ratingPixmap.width()*5 + 6 + 2*getMargin());
@@ -126,8 +132,8 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
-    connect(watch, SIGNAL(signalImageRatingChanged(Q_LLONG)),
-            this, SLOT(slotImageRatingChanged(Q_LLONG)));
+    connect(watch, SIGNAL(signalImageRatingChanged(qlonglong)),
+            this, SLOT(slotImageRatingChanged(qlonglong)));
 }
 
 LightTableBar::~LightTableBar()
@@ -141,7 +147,7 @@ void LightTableBar::setNavigateByPair(bool b)
     d->navigateByPair = b;
 }
 
-void LightTableBar::slotImageRatingChanged(Q_LLONG imageId)
+void LightTableBar::slotImageRatingChanged(qlonglong imageId)
 {
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
     {
@@ -450,7 +456,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
         int cy, cx, ts, y1, y2, x1, x2;
         QPixmap tile;
     
-        if (getOrientation() == Vertical)
+        if (getOrientation() == Qt::Vertical)
         {
             cy = viewportToContents(er.topLeft()).y();
                 
@@ -479,7 +485,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
     
         for (ThumbBarItem *item = firstItem(); item; item = item->next())
         {
-            if (getOrientation() == Vertical)
+            if (getOrientation() == Qt::Vertical)
             {
                 if (y1 <= item->position() && item->position() <= y2)
                 {
@@ -505,7 +511,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                     {
                         QPixmap pix; 
                         pix.convertFromImage(QImage(item->pixmap()->convertToImage()).
-                                             smoothScale(getTileSize(), getTileSize(), QImage::ScaleMin));
+                                             smoothScale(getTileSize(), getTileSize(), Qt::KeepAspectRatio));
                         int x = (tile.width()  - pix.width())/2;
                         int y = (tile.height() - pix.height())/2;
                         bitBlt(&tile, x, y, &pix);
@@ -561,7 +567,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                     {
                         QPixmap pix; 
                         pix.convertFromImage(QImage(item->pixmap()->convertToImage()).
-                                             smoothScale(getTileSize(), getTileSize(), QImage::ScaleMin));
+                                             smoothScale(getTileSize(), getTileSize(), Qt::KeepAspectRatio));
                         int x = (tile.width() - pix.width())/2;
                         int y = (tile.height()- pix.height())/2;
                         bitBlt(&tile, x, y, &pix);
@@ -593,7 +599,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
             }
         }
 
-        if (getOrientation() == Vertical)
+        if (getOrientation() == Qt::Vertical)
             bitBlt(viewport(), 0, er.y(), &bgPix);
         else
             bitBlt(viewport(), er.x(), 0, &bgPix);
@@ -605,7 +611,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
         QPainter p(&bgPix);
         p.setPen(QPen(te->textRegColor()));
         p.drawText(0, 0, bgPix.width(), bgPix.height(),
-                    Qt::AlignCenter|Qt::WordBreak, 
+                    Qt::AlignCenter|Qt::TextWordWrap, 
                     i18n("Drag and drop images here"));
         p.end();
         bitBlt(viewport(), 0, 0, &bgPix);
@@ -618,8 +624,8 @@ void LightTableBar::startDrag()
 
     KURL::List      urls;
     KURL::List      kioURLs;
-    QValueList<int> albumIDs;
-    QValueList<int> imageIDs;
+    Q3ValueList<int> albumIDs;
+    Q3ValueList<int> imageIDs;
 
     LightTableBarItem *item = dynamic_cast<LightTableBarItem*>(currentItem());
 
@@ -640,7 +646,7 @@ void LightTableBar::startDrag()
     p.drawPixmap(2, 2, icon);
     p.end();
 
-    QDragObject* drag = 0;
+    Q3DragObject* drag = 0;
 
     drag = new ItemDrag(urls, kioURLs, albumIDs, imageIDs, this);
     if (drag)
@@ -653,8 +659,8 @@ void LightTableBar::startDrag()
 void LightTableBar::contentsDragMoveEvent(QDragMoveEvent *e)
 {
     int             albumID;
-    QValueList<int> albumIDs;
-    QValueList<int> imageIDs;
+    Q3ValueList<int> albumIDs;
+    Q3ValueList<int> imageIDs;
     KURL::List      urls;
     KURL::List      kioURLs;        
 
@@ -672,8 +678,8 @@ void LightTableBar::contentsDragMoveEvent(QDragMoveEvent *e)
 void LightTableBar::contentsDropEvent(QDropEvent *e)
 {
     int             albumID;
-    QValueList<int> albumIDs;
-    QValueList<int> imageIDs;
+    Q3ValueList<int> albumIDs;
+    Q3ValueList<int> imageIDs;
     KURL::List      urls;
     KURL::List      kioURLs;        
 
@@ -681,7 +687,7 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
     {
         ImageInfoList imageInfoList;
 
-        for (QValueList<int>::const_iterator it = imageIDs.begin();
+        for (Q3ValueList<int>::const_iterator it = imageIDs.begin();
              it != imageIDs.end(); ++it)
         {
             ImageInfo *info = new ImageInfo(*it);
@@ -700,10 +706,10 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
     }
     else if (AlbumDrag::decode(e, urls, albumID))
     {
-        QValueList<Q_LLONG> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
+        Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
         ImageInfoList imageInfoList;
 
-        for (QValueList<Q_LLONG>::const_iterator it = itemIDs.begin();
+        for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
              it != itemIDs.end(); ++it)
         {
             ImageInfo *info = new ImageInfo(*it);
@@ -723,14 +729,14 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
     else if(TagDrag::canDecode(e))
     {
         QByteArray ba = e->encodedData("digikam/tag-id");
-        QDataStream ds(ba, IO_ReadOnly);
+        QDataStream ds(ba, QIODevice::ReadOnly);
         int tagID;
         ds >> tagID;
 
-        QValueList<Q_LLONG> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
+        Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
         ImageInfoList imageInfoList;
 
-        for (QValueList<Q_LLONG>::const_iterator it = itemIDs.begin();
+        for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
              it != itemIDs.end(); ++it)
         {
             ImageInfo *info = new ImageInfo(*it);

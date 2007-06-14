@@ -26,7 +26,9 @@
 #include <qstring.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -54,7 +56,7 @@ public:
         PNGcompression      = 0;
     }
 
-    QGridLayout  *PNGGrid;
+    Q3GridLayout  *PNGGrid;
 
     QLabel       *labelPNGcompression;
 
@@ -66,12 +68,12 @@ PNGSettings::PNGSettings(QWidget *parent)
 {
     d = new PNGSettingsPriv;
 
-    d->PNGGrid        = new QGridLayout(this, 1, 1, KDialog::spacingHint());
+    d->PNGGrid        = new Q3GridLayout(this, 1, 1, KDialog::spacingHint());
     d->PNGcompression = new KIntNumInput(9, this);
     d->PNGcompression->setRange(1, 9, 1, true );
     d->labelPNGcompression = new QLabel(i18n("PNG compression:"), this);
 
-    QWhatsThis::add(d->PNGcompression, i18n("<p>The compression value for PNG images:<p>"
+    Q3WhatsThis::add(d->PNGcompression, i18n("<p>The compression value for PNG images:<p>"
                                             "<b>1</b>: low compression (large file size but "
                                             "short compression duration - default)<p>"
                                             "<b>5</b>: medium compression<p>"

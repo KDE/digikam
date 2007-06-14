@@ -27,13 +27,13 @@
 
 // Qt includes.
 
-#include <qvgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qtabwidget.h>
@@ -43,6 +43,11 @@
 #include <qbrush.h>
 #include <qfile.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <QCustomEvent>
+#include <QCloseEvent>
+#include <Q3GridLayout>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -158,39 +163,39 @@ ImageResize::ImageResize(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QVBoxLayout *vlay  = new QVBoxLayout(plainPage(), 0, spacingHint());
+    Q3VBoxLayout *vlay  = new Q3VBoxLayout(plainPage(), 0, spacingHint());
     d->mainTab          = new QTabWidget( plainPage() );
 
     QWidget* firstPage = new QWidget( d->mainTab );
-    QGridLayout* grid  = new QGridLayout( firstPage, 8, 2, spacingHint());
+    Q3GridLayout* grid  = new Q3GridLayout( firstPage, 8, 2, spacingHint());
     d->mainTab->addTab( firstPage, i18n("New Size") );
 
     QLabel *label1 = new QLabel(i18n("Width:"), firstPage);
     d->wInput = new KIntNumInput(firstPage);
     d->wInput->setRange(1, QMAX(d->orgWidth * 10, 9999), 1, true);
     d->wInput->setName("d->wInput");
-    QWhatsThis::add( d->wInput, i18n("<p>Set here the new image width in pixels."));
+    Q3WhatsThis::add( d->wInput, i18n("<p>Set here the new image width in pixels."));
 
     QLabel *label2 = new QLabel(i18n("Height:"), firstPage);
     d->hInput = new KIntNumInput(firstPage);
     d->hInput->setRange(1, QMAX(d->orgHeight * 10, 9999), 1, true);
     d->hInput->setName("d->hInput");
-    QWhatsThis::add( d->hInput, i18n("<p>Set here the new image height in pixels."));
+    Q3WhatsThis::add( d->hInput, i18n("<p>Set here the new image height in pixels."));
 
     QLabel *label3 = new QLabel(i18n("Width (%):"), firstPage);
     d->wpInput = new KDoubleNumInput(firstPage);
     d->wpInput->setRange(1.0, 999.0, 1.0, true);
     d->wpInput->setName("d->wpInput");
-    QWhatsThis::add( d->wpInput, i18n("<p>Set here the new image width in percents."));
+    Q3WhatsThis::add( d->wpInput, i18n("<p>Set here the new image width in percents."));
 
     QLabel *label4 = new QLabel(i18n("Height (%):"), firstPage);
     d->hpInput = new KDoubleNumInput(firstPage);
     d->hpInput->setRange(1.0, 999.0, 1.0, true);
     d->hpInput->setName("d->hpInput");
-    QWhatsThis::add( d->hpInput, i18n("<p>Set here the new image height in percents."));
+    Q3WhatsThis::add( d->hpInput, i18n("<p>Set here the new image height in percents."));
 
     d->preserveRatioBox = new QCheckBox(i18n("Maintain aspect ratio"), firstPage);
-    QWhatsThis::add( d->preserveRatioBox, i18n("<p>Enable this option to maintain aspect "
+    Q3WhatsThis::add( d->preserveRatioBox, i18n("<p>Enable this option to maintain aspect "
                                               "ratio with new image sizes."));
 
     KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
@@ -203,12 +208,12 @@ ImageResize::ImageResize(QWidget* parent)
     QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
 
     d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
-    QWhatsThis::add( d->useGreycstorationBox, i18n("<p>Enable this option to restore photograph content. "
+    Q3WhatsThis::add( d->useGreycstorationBox, i18n("<p>Enable this option to restore photograph content. "
                                                   "Warning: this process can take a while."));
 
     d->progressBar = new KProgress(100, firstPage);
     d->progressBar->setValue(0);
-    QWhatsThis::add(d->progressBar, i18n("<p>This is the current progress when you use Restoration mode."));
+    Q3WhatsThis::add(d->progressBar, i18n("<p>This is the current progress when you use Restoration mode."));
 
     grid->addMultiCellWidget(d->preserveRatioBox, 0, 0, 0, 2);
     grid->addMultiCellWidget(label1, 1, 1, 0, 0);
@@ -569,7 +574,7 @@ void ImageResize::slotUser3()
 
     QFile file(loadBlowupFile.path());
 
-    if ( file.open(IO_ReadOnly) )   
+    if ( file.open(QIODevice::ReadOnly) )   
     {
         if (!d->settingsWidget->loadSettings(file, QString("# Photograph Resizing Configuration File")))
         {
@@ -596,7 +601,7 @@ void ImageResize::slotUser2()
 
     QFile file(saveBlowupFile.path());
 
-    if ( file.open(IO_WriteOnly) )   
+    if ( file.open(QIODevice::WriteOnly) )   
         d->settingsWidget->saveSettings(file, QString("# Photograph Resizing Configuration File"));
     else
         KMessageBox::error(this, i18n("Cannot save settings to the Photograph Resizing text file."));

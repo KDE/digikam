@@ -24,9 +24,11 @@
 // QT includes.
 
 #include <qlayout.h>
-#include <qvgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qcheckbox.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -86,72 +88,72 @@ public:
     QCheckBox  *showPhotoFlashBox;
     QCheckBox  *showPhotoWbBox;
 
-    QVGroupBox *fileSettingBox;
-    QVGroupBox *photoSettingBox;
+    Q3VGroupBox *fileSettingBox;
+    Q3VGroupBox *photoSettingBox;
 };
 
 SetupToolTip::SetupToolTip(QWidget* parent)
             : QWidget(parent)
 {
     d = new SetupToolTipPriv;
-    QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( parent, 0, KDialog::spacingHint() );
 
     d->showToolTipsBox = new QCheckBox(i18n("Show Thumbbar items toolti&ps"), parent);
-    QWhatsThis::add( d->showToolTipsBox, i18n("<p>Set this option to display image information when "
+    Q3WhatsThis::add( d->showToolTipsBox, i18n("<p>Set this option to display image information when "
                                               "the mouse is hovered over a thumbbar item."));
 
     layout->addWidget(d->showToolTipsBox);
 
     // --------------------------------------------------------
 
-    d->fileSettingBox = new QVGroupBox(i18n("File/Image Information"), parent);
+    d->fileSettingBox = new Q3VGroupBox(i18n("File/Image Information"), parent);
 
     d->showFileNameBox = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
-    QWhatsThis::add( d->showFileNameBox, i18n("<p>Set this option to display image file name."));
+    Q3WhatsThis::add( d->showFileNameBox, i18n("<p>Set this option to display image file name."));
 
     d->showFileDateBox = new QCheckBox(i18n("Show file date"), d->fileSettingBox);
-    QWhatsThis::add( d->showFileDateBox, i18n("<p>Set this option to display image file date."));
+    Q3WhatsThis::add( d->showFileDateBox, i18n("<p>Set this option to display image file date."));
 
     d->showFileSizeBox = new QCheckBox(i18n("Show file size"), d->fileSettingBox);
-    QWhatsThis::add( d->showFileSizeBox, i18n("<p>Set this option to display image file size."));
+    Q3WhatsThis::add( d->showFileSizeBox, i18n("<p>Set this option to display image file size."));
 
     d->showImageTypeBox = new QCheckBox(i18n("Show image type"), d->fileSettingBox);
-    QWhatsThis::add( d->showImageTypeBox, i18n("<p>Set this option to display image type."));
+    Q3WhatsThis::add( d->showImageTypeBox, i18n("<p>Set this option to display image type."));
 
     d->showImageDimBox = new QCheckBox(i18n("Show image dimensions"), d->fileSettingBox);
-    QWhatsThis::add( d->showImageDimBox, i18n("<p>Set this option to display image dimensions in pixels."));
+    Q3WhatsThis::add( d->showImageDimBox, i18n("<p>Set this option to display image dimensions in pixels."));
 
     layout->addWidget(d->fileSettingBox);
 
     // --------------------------------------------------------
 
-    d->photoSettingBox = new QVGroupBox(i18n("Photograph Information"), parent);
+    d->photoSettingBox = new Q3VGroupBox(i18n("Photograph Information"), parent);
 
     d->showPhotoMakeBox = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
-    QWhatsThis::add( d->showPhotoMakeBox, i18n("<p>Set this option to display the camera make and model "
+    Q3WhatsThis::add( d->showPhotoMakeBox, i18n("<p>Set this option to display the camera make and model "
                                                "with which the picture has been taken."));
 
     d->showPhotoDateBox = new QCheckBox(i18n("Show camera date"), d->photoSettingBox);
-    QWhatsThis::add( d->showPhotoDateBox, i18n("<p>Set this option to display the date when the picture was taken."));
+    Q3WhatsThis::add( d->showPhotoDateBox, i18n("<p>Set this option to display the date when the picture was taken."));
 
     d->showPhotoFocalBox = new QCheckBox(i18n("Show camera aperture and focal"), d->photoSettingBox);
-    QWhatsThis::add( d->showPhotoFocalBox, i18n("<p>Set this option to display camera aperture and focal settings "
+    Q3WhatsThis::add( d->showPhotoFocalBox, i18n("<p>Set this option to display camera aperture and focal settings "
                      "used to take the picture."));
 
     d->showPhotoExpoBox = new QCheckBox(i18n("Show camera exposure and sensitivity"), d->photoSettingBox);
-    QWhatsThis::add( d->showPhotoExpoBox, i18n("<p>Set this option to display camera exposure and sensitivity "
+    Q3WhatsThis::add( d->showPhotoExpoBox, i18n("<p>Set this option to display camera exposure and sensitivity "
                      "used to take the picture."));
 
     d->showPhotoModeBox = new QCheckBox(i18n("Show camera mode and program"), d->photoSettingBox);
-    QWhatsThis::add( d->showPhotoModeBox, i18n("<p>Set this option to display camera mode and program "
+    Q3WhatsThis::add( d->showPhotoModeBox, i18n("<p>Set this option to display camera mode and program "
                      "used to take the picture."));
 
     d->showPhotoFlashBox = new QCheckBox(i18n("Show camera flash settings"), d->photoSettingBox);
-    QWhatsThis::add( d->showPhotoFlashBox, i18n("<p>Set this option to display camera flash settings "
+    Q3WhatsThis::add( d->showPhotoFlashBox, i18n("<p>Set this option to display camera flash settings "
                      "used to take the picture."));
 
     d->showPhotoWbBox = new QCheckBox(i18n("Show camera white balance settings"), d->photoSettingBox);
-    QWhatsThis::add( d->showPhotoWbBox, i18n("<p>Set this option to display camera white balance settings "
+    Q3WhatsThis::add( d->showPhotoWbBox, i18n("<p>Set this option to display camera white balance settings "
                      "used to take the picture."));
 
     layout->addWidget(d->photoSettingBox);

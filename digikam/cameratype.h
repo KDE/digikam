@@ -29,7 +29,7 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 class KAction;
 

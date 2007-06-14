@@ -26,12 +26,14 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qcolor.h>
-#include <qhbox.h>
-#include <qvgroupbox.h>
+#include <q3hbox.h>
+#include <q3vgroupbox.h>
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -71,7 +73,7 @@ SetupDcraw::SetupDcraw(QWidget* parent )
           : QWidget(parent)
 {
     d = new SetupDcrawPriv;
-    QVBoxLayout *layout = new QVBoxLayout(parent, 0, KDialog::spacingHint());
+    Q3VBoxLayout *layout = new Q3VBoxLayout(parent, 0, KDialog::spacingHint());
     d->dcrawSettings    = new KDcrawIface::DcrawSettingsWidget(parent, true, false);
     layout->addWidget(d->dcrawSettings);
     layout->addStretch();

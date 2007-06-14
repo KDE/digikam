@@ -26,11 +26,14 @@
 // Qt includes.
 
 #include <qlabel.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qlayout.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QPixmap>
 
 // KDE includes.
 
@@ -92,7 +95,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     d->allowRootSelection = allowRootSelection;
     d->newAlbumString     = newAlbumString;
     
-    QGridLayout* grid = new QGridLayout(plainPage(), 2, 1, 0, spacingHint());
+    Q3GridLayout* grid = new Q3GridLayout(plainPage(), 2, 1, 0, spacingHint());
 
     QLabel *logo = new QLabel(plainPage());
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
@@ -104,8 +107,8 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 
     d->folderView = new FolderView(plainPage());
     d->folderView->addColumn(i18n("digiKam Albums"));
-    d->folderView->setColumnWidthMode( 0, QListView::Maximum );
-    d->folderView->setResizeMode( QListView::AllColumns );
+    d->folderView->setColumnWidthMode( 0, Q3ListView::Maximum );
+    d->folderView->setResizeMode( Q3ListView::AllColumns );
     d->folderView->setRootIsDecorated(true);
 
     grid->addMultiCellWidget(logo, 0, 0, 0, 0);
@@ -172,8 +175,8 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     connect(d->folderView, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
 
-    connect(d->folderView, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
-            this, SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
+    connect(d->folderView, SIGNAL(contextMenuRequested(Q3ListViewItem*, const QPoint&, int)),
+            this, SLOT(slotContextMenu(Q3ListViewItem*, const QPoint&, int)));
 
     // -------------------------------------------------------------
 
@@ -233,8 +236,8 @@ void AlbumSelectDialog::slotAlbumsCleared()
 
 void AlbumSelectDialog::slotSelectionChanged()
 {
-    QListViewItem* selItem = 0;
-    QListViewItemIterator it(d->folderView);
+    Q3ListViewItem* selItem = 0;
+    Q3ListViewItemIterator it(d->folderView);
     
     while (it.current())
     {
@@ -256,9 +259,9 @@ void AlbumSelectDialog::slotSelectionChanged()
     enableButtonOK(true);
 }
 
-void AlbumSelectDialog::slotContextMenu(QListViewItem *, const QPoint &, int)
+void AlbumSelectDialog::slotContextMenu(Q3ListViewItem *, const QPoint &, int)
 {
-    QPopupMenu popmenu(d->folderView);
+    Q3PopupMenu popmenu(d->folderView);
     KAction *action = new KAction(i18n( "Create New Album" ),
                                   "albumfolder-new", 0, this,
                                   SLOT( slotUser1() ),
@@ -269,7 +272,7 @@ void AlbumSelectDialog::slotContextMenu(QListViewItem *, const QPoint &, int)
 
 void AlbumSelectDialog::slotUser1()
 {
-    QListViewItem* item = d->folderView->currentItem();
+    Q3ListViewItem* item = d->folderView->currentItem();
     if (!item)
         item = d->folderView->firstChild();
 

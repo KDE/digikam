@@ -27,9 +27,11 @@
 
 // Qt includes.
 
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qstringlist.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 // Local includes.
 
@@ -49,7 +51,7 @@ class AlbumSettings;
 class Album;
 class DigikamViewPriv;
 
-class DigikamView : public QHBox
+class DigikamView : public Q3HBox
 {
     Q_OBJECT
 
@@ -70,7 +72,7 @@ signals:
 
     void signalAlbumSelected(bool val);
     void signalTagSelected(bool val);
-    void signalImageSelected(const QPtrList<ImageInfo>& list, bool, bool);
+    void signalImageSelected(const Q3PtrList<ImageInfo>& list, bool, bool);
     void signalNoCurrentItem();
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);

@@ -34,17 +34,17 @@ ImageInfoCache::ImageInfoCache()
 {
     DatabaseAttributesWatch *dbwatch = DatabaseAccess::attributesWatch();
 
-    connect(dbwatch, SIGNAL(imageFieldChanged(Q_LLONG, int)),
-            this, SLOT(slotImageFieldChanged(Q_LLONG, int)));
+    connect(dbwatch, SIGNAL(imageFieldChanged(qlonglong, int)),
+            this, SLOT(slotImageFieldChanged(qlonglong, int)));
 }
 
 ImageInfoCache::~ImageInfoCache()
 {
 }
 
-ImageInfoData *ImageInfoCache::infoForId(Q_LLONG id)
+ImageInfoData *ImageInfoCache::infoForId(qlonglong id)
 {
-    QMap<Q_LLONG, ImageInfoData *>::iterator it = m_map.find(id);
+    QMap<qlonglong, ImageInfoData *>::iterator it = m_map.find(id);
     if (it == m_map.end())
     {
         ImageInfoData *data = new ImageInfoData();
@@ -55,7 +55,7 @@ ImageInfoData *ImageInfoCache::infoForId(Q_LLONG id)
     return *it;
 }
 
-bool ImageInfoCache::hasInfoForId(Q_LLONG id) const
+bool ImageInfoCache::hasInfoForId(qlonglong id) const
 {
     return m_map.contains(id);
 }
@@ -66,7 +66,7 @@ void ImageInfoCache::dropInfo(ImageInfoData *infodata)
     if (infodata->count > 1)
         return;
 
-    QMap<Q_LLONG, ImageInfoData *>::iterator it = m_map.find(infodata->id);
+    QMap<qlonglong, ImageInfoData *>::iterator it = m_map.find(infodata->id);
     if (it != m_map.end() && (*it) == infodata)
     {
         m_map.remove(it);
@@ -74,10 +74,10 @@ void ImageInfoCache::dropInfo(ImageInfoData *infodata)
     }
 }
 
-void ImageInfoCache::slotImageFieldChanged(Q_LLONG imageId, int field)
+void ImageInfoCache::slotImageFieldChanged(qlonglong imageId, int field)
 {
     // we have databaseaccess lock here as well!
-    QMap<Q_LLONG, ImageInfoData *>::iterator it = m_map.find(imageId);
+    QMap<qlonglong, ImageInfoData *>::iterator it = m_map.find(imageId);
     if (it != m_map.end())
     {
         // invalidate the relevant field. It will be lazy-loaded at first access.

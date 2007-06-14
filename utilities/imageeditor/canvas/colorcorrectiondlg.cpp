@@ -25,12 +25,16 @@
 // Qt includes.
 
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qstring.h>
 #include <qfileinfo.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -70,7 +74,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     setCaption(fi.fileName());
     
     QWidget *page     = new QWidget(this);
-    QGridLayout* grid = new QGridLayout(page, 3, 2, 0, KDialog::spacingHint());
+    Q3GridLayout* grid = new Q3GridLayout(page, 3, 2, 0, KDialog::spacingHint());
         
     QLabel *originalTitle         = new QLabel(i18n("Original Picture:"), page);
     QLabel *previewOriginal       = new QLabel(page);
@@ -84,7 +88,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     QLabel *embeddedProfileTitle  = new QLabel(i18n("Embedded color profile:"), page);
     QLabel *embeddedProfileDesc   = new QLabel(QString("<b>%1</b>").arg(m_iccTrans->getEmbeddedProfileDescriptor()), page);
     QPushButton *embeddedProfInfo = new QPushButton(i18n("Info..."), page);
-    KSeparator *line              = new KSeparator (Horizontal, page);
+    KSeparator *line              = new KSeparator (Qt::Horizontal, page);
     
     if (m_iccTrans->embeddedProfile().isEmpty())
     {
@@ -113,15 +117,15 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     grid->addMultiCellWidget(targetTitle, 2, 2, 0, 0);
     grid->addMultiCellWidget(previewTarget, 3, 3, 0, 0);
     
-    QVBoxLayout *vlay = new QVBoxLayout( KDialog::spacingHint() );
+    Q3VBoxLayout *vlay = new Q3VBoxLayout( KDialog::spacingHint() );
     vlay->addWidget(logo);
     vlay->addWidget(message);
     
-    vlay->addWidget(new KSeparator (Horizontal, page));
+    vlay->addWidget(new KSeparator (Qt::Horizontal, page));
     vlay->addWidget(currentProfileTitle);
     vlay->addWidget(currentProfileDesc);
     
-    QHBoxLayout *hlay1 = new QHBoxLayout( KDialog::spacingHint() );
+    Q3HBoxLayout *hlay1 = new Q3HBoxLayout( KDialog::spacingHint() );
     hlay1->addWidget(currentProfInfo);
     hlay1->addStretch();
     vlay->addLayout(hlay1);
@@ -130,7 +134,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     vlay->addWidget(embeddedProfileTitle);
     vlay->addWidget(embeddedProfileDesc);    
     
-    QHBoxLayout *hlay2 = new QHBoxLayout( KDialog::spacingHint() );
+    Q3HBoxLayout *hlay2 = new Q3HBoxLayout( KDialog::spacingHint() );
     hlay2->addWidget(embeddedProfInfo);
     hlay2->addStretch();
     vlay->addLayout(hlay2);

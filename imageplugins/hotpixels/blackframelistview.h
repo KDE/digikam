@@ -31,7 +31,9 @@
 #include <qstring.h>
 #include <qsize.h>
 #include <qpoint.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 // KDE includes.
 
@@ -58,11 +60,11 @@ public:
 
 signals:
 
-    void blackFrameSelected(QValueList<HotPixel>, const KURL&);
+    void blackFrameSelected(Q3ValueList<HotPixel>, const KURL&);
 
 private slots:
 
-    void slotParsed(QValueList<HotPixel> hotPixels, const KURL& blackFrameURL)
+    void slotParsed(Q3ValueList<HotPixel> hotPixels, const KURL& blackFrameURL)
     {
        emit blackFrameSelected(hotPixels, blackFrameURL);
     };           
@@ -81,11 +83,11 @@ public:
     
     virtual QString text(int column)const;
     virtual void paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int align);
-    virtual int width(const QFontMetrics& fm, const QListView* lv, int c)const;
+    virtual int width(const QFontMetrics& fm, const Q3ListView* lv, int c)const;
 
 signals:
 
-    void parsed(QValueList<HotPixel>, const KURL&);
+    void parsed(Q3ValueList<HotPixel>, const KURL&);
             
 protected:
 
@@ -97,7 +99,7 @@ private:
     
 private slots:
 
-    void slotParsed(QValueList<HotPixel>);        
+    void slotParsed(Q3ValueList<HotPixel>);        
 
 private:
 
@@ -107,7 +109,7 @@ private:
     
     QSize                 m_imageSize;
     
-    QValueList <HotPixel> m_hotPixels;
+    Q3ValueList <HotPixel> m_hotPixels;
     
     QString               m_blackFrameDesc;
     

@@ -24,6 +24,8 @@
 // Qt includes
 
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 // Local includes
 
@@ -65,13 +67,13 @@ DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString &name,
     return url;
 }
 
-DatabaseUrl DatabaseUrl::fromTagIds(const QValueList<int> tagIds,
+DatabaseUrl DatabaseUrl::fromTagIds(const Q3ValueList<int> tagIds,
                                    const DatabaseParameters &parameters)
 {
     DatabaseUrl url;
     url.setProtocol("digikamtags");
 
-    for (QValueList<int>::const_iterator it = tagIds.begin(); it != tagIds.end(); ++it)
+    for (Q3ValueList<int>::const_iterator it = tagIds.begin(); it != tagIds.end(); ++it)
     {
         url.addPath('/' + QString::number(*it));
     }
@@ -226,9 +228,9 @@ int DatabaseUrl::tagId() const
     return fileName().toInt();
 }
 
-QValueList<int> DatabaseUrl::tagIds() const
+Q3ValueList<int> DatabaseUrl::tagIds() const
 {
-    QValueList<int> ids;
+    Q3ValueList<int> ids;
     QStringList stringIds = QStringList::split('/', path());
     for (QStringList::iterator it = stringIds.begin(); it != stringIds.end(); ++it)
     {

@@ -25,6 +25,11 @@
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <Q3ValueList>
+#include <QDropEvent>
+#include <QDragMoveEvent>
 #endif
 
 // C Ansi includes.
@@ -49,16 +54,16 @@ extern "C"
 #include <qevent.h>
 #include <qpainter.h>
 #include <qpoint.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qdatetime.h>
 #include <qfileinfo.h>
 #include <qfile.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qcursor.h>
-#include <qvaluevector.h>
-#include <qptrlist.h>
-#include <qintdict.h>
-#include <qdict.h>
+#include <q3valuevector.h>
+#include <q3ptrlist.h>
+#include <q3intdict.h>
+#include <q3dict.h>
 #include <qdatastream.h>
 #include <qtimer.h>
 #include <qclipboard.h>
@@ -173,13 +178,13 @@ public:
     QFont                         fnCom;
     QFont                         fnXtra;
 
-    QDict<AlbumIconItem>          itemDict;
+    Q3Dict<AlbumIconItem>          itemDict;
     QMap<ImageInfo*, AlbumIconItem*> itemInfoMap;
 
     AlbumLister                  *imageLister;
     Album                        *currentAlbum;
     const AlbumSettings          *albumSettings;
-    QIntDict<AlbumIconGroupItem>  albumDict;
+    Q3IntDict<AlbumIconGroupItem>  albumDict;
     PixmapManager                *pixMan;
 
     ThumbnailSize                 thumbSize;
@@ -257,20 +262,20 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
-    connect(watch, SIGNAL(signalImageTagsChanged(Q_LLONG)),
-            this, SLOT(slotImageAttributesChanged(Q_LLONG)));
+    connect(watch, SIGNAL(signalImageTagsChanged(qlonglong)),
+            this, SLOT(slotImageAttributesChanged(qlonglong)));
 
     connect(watch, SIGNAL(signalImagesChanged(int)),
             this, SLOT(slotAlbumImagesChanged(int)));
 
-    connect(watch, SIGNAL(signalImageRatingChanged(Q_LLONG)),
-            this, SLOT(slotImageAttributesChanged(Q_LLONG)));
+    connect(watch, SIGNAL(signalImageRatingChanged(qlonglong)),
+            this, SLOT(slotImageAttributesChanged(qlonglong)));
 
-    connect(watch, SIGNAL(signalImageDateChanged(Q_LLONG)),
-            this, SLOT(slotImageAttributesChanged(Q_LLONG)));
+    connect(watch, SIGNAL(signalImageDateChanged(qlonglong)),
+            this, SLOT(slotImageAttributesChanged(qlonglong)));
 
-    connect(watch, SIGNAL(signalImageCaptionChanged(Q_LLONG)),
-            this, SLOT(slotImageAttributesChanged(Q_LLONG)));
+    connect(watch, SIGNAL(signalImageCaptionChanged(qlonglong)),
+            this, SLOT(slotImageAttributesChanged(qlonglong)));
 }
 
 AlbumIconView::~AlbumIconView()
@@ -494,11 +499,11 @@ void AlbumIconView::slotRightButtonClicked(const QPoint& pos)
         return;
     }
 
-    QPopupMenu popmenu(this);
+    Q3PopupMenu popmenu(this);
     KAction *paste    = KStdAction::paste(this, SLOT(slotPaste()), 0);
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
 
-    if(!data || !QUriDrag::canDecode(data))
+    if(!data || !Q3UriDrag::canDecode(data))
     {
         paste->setEnabled(false);
     }
@@ -519,10 +524,10 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     KMimeType::Ptr mimePtr = KMimeType::findByURL(iconItem->imageInfo()->fileUrl(), 0, true, true);
 
-    QValueVector<KService::Ptr> serviceVector;
+    Q3ValueVector<KService::Ptr> serviceVector;
     KTrader::OfferList offers = KTrader::self()->query(mimePtr->name(), "Type == 'Application'");
 
-    QPopupMenu openWithMenu;
+    Q3PopupMenu openWithMenu;
 
     KTrader::OfferList::Iterator iter;
     KService::Ptr ptr;
@@ -595,7 +600,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     KAction *copy     = KStdAction::copy(this, SLOT(slotCopy()), 0);
     KAction *paste    = KStdAction::paste(this, SLOT(slotPaste()), 0);
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
-    if(!data || !QUriDrag::canDecode(data))
+    if(!data || !Q3UriDrag::canDecode(data))
     {
         paste->setEnabled(false);
     }    
@@ -606,7 +611,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // --------------------------------------------------------
 
-    QValueList<Q_LLONG> selectedImageIDs;
+    Q3ValueList<qlonglong> selectedImageIDs;
     
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
@@ -731,8 +736,8 @@ void AlbumIconView::slotCopy()
 
     KURL::List      urls;
     KURL::List      kioURLs;
-    QValueList<int> albumIDs;
-    QValueList<int> imageIDs;
+    Q3ValueList<int> albumIDs;
+    Q3ValueList<int> imageIDs;
 
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
@@ -749,7 +754,7 @@ void AlbumIconView::slotCopy()
     if (urls.isEmpty())
         return;
 
-    QDragObject* drag = 0;
+    Q3DragObject* drag = 0;
 
     drag = new ItemDrag(urls, kioURLs, albumIDs, imageIDs, this);
     kapp->clipboard()->setData(drag);
@@ -758,12 +763,12 @@ void AlbumIconView::slotCopy()
 void AlbumIconView::slotPaste()
 {
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
-    if(!data || !QUriDrag::canDecode(data))
+    if(!data || !Q3UriDrag::canDecode(data))
         return;
 
     if(d->currentAlbum->type() == Album::PHYSICAL)
     {
-        if (QUriDrag::canDecode(data) &&
+        if (Q3UriDrag::canDecode(data) &&
             d->currentAlbum->type() == Album::PHYSICAL)
         {
             PAlbum* palbum = (PAlbum*)d->currentAlbum;
@@ -1118,8 +1123,8 @@ void AlbumIconView::startDrag()
 
     KURL::List      urls;
     KURL::List      kioURLs;
-    QValueList<int> albumIDs;
-    QValueList<int> imageIDs;
+    Q3ValueList<int> albumIDs;
+    Q3ValueList<int> imageIDs;
 
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
@@ -1159,7 +1164,7 @@ void AlbumIconView::startDrag()
     p.drawText(r, Qt::AlignCenter, text);
     p.end();
 
-    QDragObject* drag = 0;
+    Q3DragObject* drag = 0;
 
     drag = new ItemDrag(urls, kioURLs, albumIDs, imageIDs, this);
     if (drag)
@@ -1172,7 +1177,7 @@ void AlbumIconView::startDrag()
 void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *event)
 {
     if (!d->currentAlbum || (AlbumDrag::canDecode(event) ||
-                             !QUriDrag::canDecode(event) &&
+                             !Q3UriDrag::canDecode(event) &&
                              !CameraDragObject::canDecode(event) &&
                              !TagListDrag::canDecode(event) &&
                              !TagDrag::canDecode(event))
@@ -1190,7 +1195,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
     // groupitem items are dropped
 
     if (!d->currentAlbum || (AlbumDrag::canDecode(event) ||
-                             !QUriDrag::canDecode(event) &&
+                             !Q3UriDrag::canDecode(event) &&
                              !CameraDragObject::canDecode(event) &&
                              !TagListDrag::canDecode(event) &&
                              !TagDrag::canDecode(event))
@@ -1200,7 +1205,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         return;
     }
 
-    if (QUriDrag::canDecode(event) &&
+    if (Q3UriDrag::canDecode(event) &&
         d->currentAlbum->type() == Album::PHYSICAL)
     {
         PAlbum* palbum = (PAlbum*)d->currentAlbum;
@@ -1209,7 +1214,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         KURL::List srcURLs;
         KURLDrag::decode(event, srcURLs);
 
-        QPopupMenu popMenu(this);
+        Q3PopupMenu popMenu(this);
         popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
         popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
         popMenu.insertSeparator(-1);
@@ -1240,7 +1245,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
     else if(TagDrag::canDecode(event))
     {
         QByteArray ba = event->encodedData("digikam/tag-id");
-        QDataStream ds(ba, IO_ReadOnly);
+        QDataStream ds(ba, QIODevice::ReadOnly);
         int tagID;
         ds >> tagID;
 
@@ -1249,7 +1254,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 
         if (talbum)
         {
-            QPopupMenu popMenu(this);
+            Q3PopupMenu popMenu(this);
 
             bool moreItemsSelected = false;
             bool itemDropped = false;
@@ -1291,7 +1296,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                                                i18n("Assigning image tags. Please wait..."));
 
                     // always give a copy of the image infos (the "true"). Else there were crashes reported.
-                    changeTagOnImageInfos(selectedImageInfos(true), QValueList<int>() << tagID, true, true);
+                    changeTagOnImageInfos(selectedImageInfos(true), Q3ValueList<int>() << tagID, true, true);
 
                     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
                     break;
@@ -1301,7 +1306,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                                i18n("Assigning image tags. Please wait..."));
 
-                    changeTagOnImageInfos(allImageInfos(true), QValueList<int>() << tagID, true, true);
+                    changeTagOnImageInfos(allImageInfos(true), Q3ValueList<int>() << tagID, true, true);
 
                     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
                     break;
@@ -1311,9 +1316,9 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     AlbumIconItem *albumItem = findItem(event->pos());
                     if (albumItem)
                     {
-                        QPtrList<ImageInfo> infos;
+                        Q3PtrList<ImageInfo> infos;
                         infos.append(albumItem->imageInfo());
-                        changeTagOnImageInfos(infos, QValueList<int>() << tagID, true, false);
+                        changeTagOnImageInfos(infos, Q3ValueList<int>() << tagID, true, false);
                     }
                     break;
                 }
@@ -1325,11 +1330,11 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
     else if(TagListDrag::canDecode(event))
     {
         QByteArray ba = event->encodedData("digikam/taglist");
-        QDataStream ds(ba, IO_ReadOnly);
-        QValueList<int> tagIDs;
+        QDataStream ds(ba, QIODevice::ReadOnly);
+        Q3ValueList<int> tagIDs;
         ds >> tagIDs;
 
-        QPopupMenu popMenu(this);
+        Q3PopupMenu popMenu(this);
 
         bool moreItemsSelected = false;
         bool itemDropped = false;
@@ -1387,7 +1392,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                 AlbumIconItem *albumItem = findItem(event->pos());
                 if (albumItem)
                 {
-                    QPtrList<ImageInfo> infos;
+                    Q3PtrList<ImageInfo> infos;
                     infos.append(albumItem->imageInfo());
                     changeTagOnImageInfos(infos, tagIDs, true, false);
                 }
@@ -1403,20 +1408,20 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
     }
 }
 
-void AlbumIconView::changeTagOnImageInfos(const QPtrList<ImageInfo> &list, const QValueList<int> &tagIDs, bool addOrRemove, bool progress)
+void AlbumIconView::changeTagOnImageInfos(const Q3PtrList<ImageInfo> &list, const Q3ValueList<int> &tagIDs, bool addOrRemove, bool progress)
 {
     float cnt = list.count();
     int i = 0;
 
     {
         DatabaseTransaction transaction;
-        for (QPtrList<ImageInfo>::const_iterator it = list.begin(); it != list.end(); ++it)
+        for (Q3PtrList<ImageInfo>::const_iterator it = list.begin(); it != list.end(); ++it)
         {
             MetadataHub hub;
 
             hub.load(*it);
 
-            for (QValueList<int>::const_iterator tagIt = tagIDs.begin(); tagIt != tagIDs.end(); ++tagIt)
+            for (Q3ValueList<int>::const_iterator tagIt = tagIDs.begin(); tagIt != tagIDs.end(); ++tagIt)
             {
                 hub.setTag(*tagIt, addOrRemove);
             }
@@ -1487,11 +1492,11 @@ KURL::List AlbumIconView::selectedItems()
     return itemList;
 }
 
-QPtrList<ImageInfo> AlbumIconView::allImageInfos(bool copy) const
+Q3PtrList<ImageInfo> AlbumIconView::allImageInfos(bool copy) const
 {
     // Returns the list of ImageInfos of all items,
     // with the extra feature that the currentItem is the first in the list.
-    QPtrList<ImageInfo> list;
+    Q3PtrList<ImageInfo> list;
     for (IconItem *it = firstItem(); it; it = it->nextItem())
     {
         AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
@@ -1507,11 +1512,11 @@ QPtrList<ImageInfo> AlbumIconView::allImageInfos(bool copy) const
     return list;
 }
 
-QPtrList<ImageInfo> AlbumIconView::selectedImageInfos(bool copy) const
+Q3PtrList<ImageInfo> AlbumIconView::selectedImageInfos(bool copy) const
 {
     // Returns the list of ImageInfos of currently selected items,
     // with the extra feature that the currentItem is the first in the list.
-    QPtrList<ImageInfo> list;
+    Q3PtrList<ImageInfo> list;
     for (IconItem *it = firstItem(); it; it = it->nextItem())
     {
         AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
@@ -1953,7 +1958,7 @@ void AlbumIconView::slotAssignTag(int tagID)
     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                 i18n("Assigning image tags. Please wait..."));
 
-    changeTagOnImageInfos(selectedImageInfos(true), QValueList<int>() << tagID, true, true);
+    changeTagOnImageInfos(selectedImageInfos(true), Q3ValueList<int>() << tagID, true, true);
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
 }
@@ -1963,7 +1968,7 @@ void AlbumIconView::slotRemoveTag(int tagID)
     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                 i18n("Removing image tags. Please wait..."));
 
-    changeTagOnImageInfos(selectedImageInfos(true), QValueList<int>() << tagID, false, true);
+    changeTagOnImageInfos(selectedImageInfos(true), Q3ValueList<int>() << tagID, false, true);
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
 }
@@ -2038,7 +2043,7 @@ void AlbumIconView::slotDIOResult(KIO::Job* job)
         job->showErrorDialog(this);
 }
 
-void AlbumIconView::slotImageAttributesChanged(Q_LLONG imageId)
+void AlbumIconView::slotImageAttributesChanged(qlonglong imageId)
 {
     AlbumIconItem *firstItem = static_cast<AlbumIconItem *>(findFirstVisibleItem());
     AlbumIconItem *lastItem = static_cast<AlbumIconItem *>(findLastVisibleItem());

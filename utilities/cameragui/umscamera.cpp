@@ -38,8 +38,8 @@ extern "C"
 #include <qfileinfo.h>
 #include <qfile.h>
 #include <qstringlist.h>
-#include <qdeepcopy.h>
-#include <qwmatrix.h>
+#include <q3deepcopy.h>
+#include <qmatrix.h>
 
 // KDE includes.
 
@@ -223,14 +223,14 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
     QFile sFile(src);
     QFile dFile(dest);
 
-    if ( !sFile.open(IO_ReadOnly) )
+    if ( !sFile.open(QIODevice::ReadOnly) )
     {
         DWarning() << "Failed to open source file for reading: "
                     << src << endl;
         return false;
     }
 
-    if ( !dFile.open(IO_WriteOnly) )
+    if ( !dFile.open(QIODevice::WriteOnly) )
     {
         sFile.close();
         DWarning() << "Failed to open dest file for writing: "
@@ -322,14 +322,14 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
     QFile sFile(src);
     QFile dFile(dest);
 
-    if ( !sFile.open(IO_ReadOnly) )
+    if ( !sFile.open(QIODevice::ReadOnly) )
     {
         DWarning() << "Failed to open source file for reading: "
                     << src << endl;
         return false;
     }
 
-    if ( !dFile.open(IO_WriteOnly) )
+    if ( !dFile.open(QIODevice::WriteOnly) )
     {
         sFile.close();
         DWarning() << "Failed to open dest file for writing: "

@@ -37,14 +37,14 @@
 
 // Qt Includes.
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qstring.h>
 #include <qimage.h>
 #include <qdatastream.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qdir.h>
-#include <qwmatrix.h>
+#include <qmatrix.h>
 #include <qregexp.h>
 #include <qapplication.h>
 
@@ -212,7 +212,7 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
     }
 
     QByteArray imgData;
-    QDataStream stream( imgData, IO_WriteOnly );
+    QDataStream stream( imgData, QIODevice::WriteOnly );
 
     QString shmid = metaData("shmid");
 
@@ -298,7 +298,7 @@ void kio_digikamthumbnailProtocol::exifRotate(const QString& filePath, QImage& t
         orientation == DMetadata::ORIENTATION_UNSPECIFIED)
         return;
 
-    QWMatrix matrix;
+    QMatrix matrix;
 
     switch (orientation)
     {

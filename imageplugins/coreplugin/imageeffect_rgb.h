@@ -29,7 +29,7 @@
 #include "imagedlgbase.h"
 
 class QComboBox;
-class QHButtonGroup;
+class Q3HButtonGroup;
 
 class QSpinBox;
 class QSlider;
@@ -89,7 +89,7 @@ private:
 
     QComboBox                    *m_channelCB;    
     
-    QHButtonGroup                *m_scaleBG;  
+    Q3HButtonGroup                *m_scaleBG;  
 
     QSpinBox                     *m_rInput;
     QSpinBox                     *m_gInput;

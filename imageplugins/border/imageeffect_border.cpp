@@ -26,10 +26,12 @@
 // Qt includes. 
  
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -87,7 +89,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     // -------------------------------------------------------------
     
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 10, 2, spacingHint());
+    Q3GridLayout* gridSettings = new Q3GridLayout(gboxSettings, 10, 2, spacingHint());
                                                   
     QLabel *label1 = new QLabel(i18n("Type:"), gboxSettings);
     
@@ -112,7 +114,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     m_borderType->insertItem( i18n("Decorative Granite") );
     m_borderType->insertItem( i18n("Decorative Rock") );
     m_borderType->insertItem( i18n("Decorative Wall") );
-    QWhatsThis::add( m_borderType, i18n("<p>Select here the border type to add around the image."));
+    Q3WhatsThis::add( m_borderType, i18n("<p>Select here the border type to add around the image."));
 
     KSeparator *line1 = new KSeparator(Horizontal, gboxSettings);
 
@@ -120,7 +122,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     
     m_preserveAspectRatio = new QCheckBox(gboxSettings);
     m_preserveAspectRatio->setText(i18n("Preserve Aspect Ratio"));
-    QWhatsThis::add(m_preserveAspectRatio, i18n("Enable this option if you want to preserve aspect "
+    Q3WhatsThis::add(m_preserveAspectRatio, i18n("Enable this option if you want to preserve aspect "
                                                 "ratio of image. If enabled, the border width will be "
                                                 "in percent of image size, else the border width will "
                                                 "in pixels."));
@@ -128,11 +130,11 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     m_labelBorderPercent  = new QLabel(i18n("Width (%):"), gboxSettings);
     m_borderPercent       = new KIntNumInput(gboxSettings);
     m_borderPercent->setRange(1, 50, 1, true); 
-    QWhatsThis::add(m_borderPercent, i18n("<p>Set here the border width in percents of image size."));
+    Q3WhatsThis::add(m_borderPercent, i18n("<p>Set here the border width in percents of image size."));
             
     m_labelBorderWidth = new QLabel(i18n("Width (pixels):"), gboxSettings);
     m_borderWidth      = new KIntNumInput(gboxSettings);
-    QWhatsThis::add(m_borderWidth, i18n("<p>Set here the border width in pixels to add around the image."));
+    Q3WhatsThis::add(m_borderWidth, i18n("<p>Set here the border width in pixels to add around the image."));
 
     Digikam::ImageIface iface(0, 0);
     int w = iface.originalWidth();
@@ -381,8 +383,8 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
 {
     m_labelForeground->setText(i18n("First:"));
     m_labelBackground->setText(i18n("Second:"));
-    QWhatsThis::add( m_firstColorButton, i18n("<p>Set here the foreground color of the border."));
-    QWhatsThis::add( m_secondColorButton, i18n("<p>Set here the Background color of the border."));
+    Q3WhatsThis::add( m_firstColorButton, i18n("<p>Set here the foreground color of the border."));
+    Q3WhatsThis::add( m_secondColorButton, i18n("<p>Set here the Background color of the border."));
     m_firstColorButton->setEnabled(true);
     m_secondColorButton->setEnabled(true);
     m_labelForeground->setEnabled(true);
@@ -398,15 +400,15 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
           break;
        
        case Border::NiepceBorder:
-          QWhatsThis::add( m_firstColorButton, i18n("<p>Set here the color of the main border."));
-          QWhatsThis::add( m_secondColorButton, i18n("<p>Set here the color of the line."));
+          Q3WhatsThis::add( m_firstColorButton, i18n("<p>Set here the color of the main border."));
+          Q3WhatsThis::add( m_secondColorButton, i18n("<p>Set here the color of the line."));
           m_firstColorButton->setColor( m_niepceBorderColor );
           m_secondColorButton->setColor( m_niepceLineColor );
           break;
 
        case Border::BeveledBorder:
-          QWhatsThis::add( m_firstColorButton, i18n("<p>Set here the color of the upper left area."));
-          QWhatsThis::add( m_secondColorButton, i18n("<p>Set here the color of the lower right area."));
+          Q3WhatsThis::add( m_firstColorButton, i18n("<p>Set here the color of the upper left area."));
+          Q3WhatsThis::add( m_secondColorButton, i18n("<p>Set here the color of the lower right area."));
           m_firstColorButton->setColor( m_bevelUpperLeftColor );
           m_secondColorButton->setColor( m_bevelLowerRightColor );
           break;
@@ -427,8 +429,8 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
        case Border::GraniteBorder:
        case Border::RockBorder:
        case Border::WallBorder:
-          QWhatsThis::add( m_firstColorButton, i18n("<p>Set here the color of the first line."));
-          QWhatsThis::add( m_secondColorButton, i18n("<p>Set here the color of the second line."));
+          Q3WhatsThis::add( m_firstColorButton, i18n("<p>Set here the color of the first line."));
+          Q3WhatsThis::add( m_secondColorButton, i18n("<p>Set here the color of the second line."));
           m_firstColorButton->setColor( m_decorativeFirstColor );
           m_secondColorButton->setColor( m_decorativeSecondColor );
           break;

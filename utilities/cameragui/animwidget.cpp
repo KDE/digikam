@@ -29,6 +29,8 @@
 #include <qpalette.h>
 #include <qcolor.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 
 // Local includes.
 
@@ -59,7 +61,7 @@ public:
 
 
 AnimWidget::AnimWidget(QWidget* parent, int size)
-          : QWidget(parent, 0, WResizeNoErase|WRepaintNoErase)
+          : QWidget(parent, 0, Qt::WResizeNoErase|Qt::WNoAutoErase)
 {
     d = new AnimWidgetPriv;
     setBackgroundMode(Qt::NoBackground);

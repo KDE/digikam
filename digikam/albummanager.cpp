@@ -22,6 +22,8 @@
  * ============================================================ */
 
 #include <config.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 // C Ansi includes.
 
@@ -44,9 +46,9 @@ extern "C"
 
 #include <qfile.h>
 #include <qdir.h>
-#include <qdict.h>
-#include <qintdict.h>
-#include <qcstring.h>
+#include <q3dict.h>
+#include <q3intdict.h>
+#include <q3cstring.h>
 #include <qtextcodec.h>
 
 // KDE includes.
@@ -82,8 +84,8 @@ extern "C"
 namespace Digikam
 {
 
-typedef QDict<PAlbum>    PAlbumDict;
-typedef QIntDict<Album>  AlbumIntDict;
+typedef Q3Dict<PAlbum>    PAlbumDict;
+typedef Q3IntDict<Album>  AlbumIntDict;
 
 class AlbumManagerPriv
 {
@@ -361,7 +363,7 @@ void AlbumManager::scanPAlbums()
 
     // scan db and get a list of all albums
     AlbumInfo::List aList = DatabaseAccess().db()->scanAlbums();
-    qHeapSort(aList);
+    qSort(aList);
 
     AlbumInfo::List newAlbumList;
     
@@ -404,7 +406,7 @@ void AlbumManager::scanPAlbums()
         delete album;
     }
 
-    qHeapSort(newAlbumList);
+    qSort(newAlbumList);
     for (AlbumInfo::List::iterator it = newAlbumList.begin(); it != newAlbumList.end(); ++it)
     {
         AlbumInfo info = *it;
@@ -466,7 +468,7 @@ void AlbumManager::scanTAlbums()
     // for a new TAlbum
 
     {
-        QIntDict<TAlbum> tagDict;
+        Q3IntDict<TAlbum> tagDict;
         tagDict.setAutoDelete(false);
 
         // insert items into a dict for quick lookup
@@ -485,7 +487,7 @@ void AlbumManager::scanTAlbums()
         tagDict.insert(0, rootTag);
 
         // build tree
-        QIntDictIterator<TAlbum> iter(tagDict);
+        Q3IntDictIterator<TAlbum> iter(tagDict);
         for ( ; iter.current(); ++iter )
         {
             TAlbum* album = iter.current();
@@ -941,7 +943,7 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     return true;
 }
 
-bool AlbumManager::updatePAlbumIcon(PAlbum *album, Q_LLONG iconID, QString& errMsg)
+bool AlbumManager::updatePAlbumIcon(PAlbum *album, qlonglong iconID, QString& errMsg)
 {
     if (!album)
     {
@@ -1134,7 +1136,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *newParent, QString &errMsg)
 }
 
 bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& iconKDE,
-                                    Q_LLONG iconID, QString& errMsg)
+                                    qlonglong iconID, QString& errMsg)
 {
     if (!album)
     {
@@ -1173,11 +1175,11 @@ AlbumList AlbumManager::getRecentlyAssignedTags() const
     return resultList;
 }
 
-QStringList AlbumManager::tagPaths(const QValueList<int> &tagIDs, bool leadingSlash) const
+QStringList AlbumManager::tagPaths(const Q3ValueList<int> &tagIDs, bool leadingSlash) const
 {
     QStringList tagPaths;
 
-    for (QValueList<int>::const_iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
+    for (Q3ValueList<int>::const_iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
     {
         TAlbum *album = findTAlbum(*it);
         if (album)
@@ -1383,7 +1385,7 @@ void AlbumManager::slotData(KIO::Job* , const QByteArray& data)
         ++it;
     }
     
-    QDataStream ds(data, IO_ReadOnly);
+    QDataStream ds(data, QIODevice::ReadOnly);
     while (!ds.atEnd())
     {
         QDate date;

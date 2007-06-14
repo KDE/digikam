@@ -26,11 +26,13 @@
 
 #include <qfile.h>
 #include <qdatastream.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qregexp.h>
 #include <qdir.h>
 #include <qvariant.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 // KDE includes.
 
@@ -187,7 +189,7 @@ QString ImageQueryBuilder::buildQuery(const KURL& url) const
                 }
                 else
                 {
-                    QValueList<SKey> todo;
+                    Q3ValueList<SKey> todo;
                     todo.append( ALBUMNAME );
                     todo.append( IMAGENAME );
                     todo.append( TAGNAME );
@@ -197,7 +199,7 @@ QString ImageQueryBuilder::buildQuery(const KURL& url) const
                     todo.append( RATING );
 
                     sqlQuery += '(';
-                    QValueListIterator<SKey> it;
+                    Q3ValueListIterator<SKey> it;
                     it = todo.begin();
                     while ( it != todo.end() )
                     {

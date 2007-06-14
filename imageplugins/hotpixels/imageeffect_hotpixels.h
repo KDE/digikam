@@ -30,7 +30,7 @@
 
 // Qt includes.
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 // KDE includes.
 
@@ -63,7 +63,7 @@ public:
 
 private slots:
         
-    void slotBlackFrame(QValueList<HotPixel> hpList, const KURL& blackFrameURL);
+    void slotBlackFrame(Q3ValueList<HotPixel> hpList, const KURL& blackFrameURL);
     void slotAddBlackFrame();
     void readUserSettings();
 
@@ -84,7 +84,7 @@ private:
     
     QPushButton          *m_blackFrameButton;
     
-    QValueList<HotPixel>  m_hotPixelsList;
+    Q3ValueList<HotPixel>  m_hotPixelsList;
     
     KURL                  m_blackFrameURL;
     

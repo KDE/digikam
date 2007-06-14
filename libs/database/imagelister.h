@@ -29,7 +29,7 @@
 
 #include <qstring.h>
 #include <qdatastream.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include <kio/job.h>
 

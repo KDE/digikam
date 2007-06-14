@@ -25,7 +25,7 @@
 
 // QT includes.
 
-#include <qcstring.h>
+#include <q3cstring.h>
 
 // Local includes.
 

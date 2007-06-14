@@ -25,6 +25,9 @@
 // Qt includes.
 
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3Frame>
 
 // KDE includes.
 
@@ -58,22 +61,22 @@ public:
     bool               leftLoading;     // To not sync right panel during left loading.
     bool               rightLoading;    // To not sync left panel during right loading.
 
-    QGridLayout       *grid;
+    Q3GridLayout       *grid;
 
     LightTablePreview *leftPreview;
     LightTablePreview *rightPreview;
 };
 
 LightTableView::LightTableView(QWidget *parent)
-              : QFrame(parent, 0, Qt::WDestructiveClose)
+              : Q3Frame(parent, 0, Qt::WDestructiveClose)
 {
     d = new LightTableViewPriv;
 
-    setFrameStyle(QFrame::NoFrame);
+    setFrameStyle(Q3Frame::NoFrame);
     setMargin(0);
     setLineWidth(0);
 
-    d->grid         = new QGridLayout(this, 1, 1, 0, 1);
+    d->grid         = new Q3GridLayout(this, 1, 1, 0, 1);
     d->leftPreview  = new LightTablePreview(this);
     d->rightPreview = new LightTablePreview(this);
 

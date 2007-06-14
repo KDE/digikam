@@ -43,7 +43,7 @@ extern "C"
 
 // Qt includes.
 
-#include <qcstring.h> 
+#include <q3cstring.h> 
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qimage.h>
@@ -266,8 +266,8 @@ bool exifRotate(const QString& file, const QString& documentName)
         QString temp(fi.dirPath(true) + "/.digikam-exifrotate-");
         temp += QString::number(getpid());
         
-        QCString in  = QFile::encodeName(file);
-        QCString out = QFile::encodeName(temp);
+        Q3CString in  = QFile::encodeName(file);
+        Q3CString out = QFile::encodeName(temp);
         
         JCOPY_OPTION copyoption = JCOPYOPT_ALL;
         jpeg_transform_info transformoption;

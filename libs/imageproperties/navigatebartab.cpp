@@ -25,8 +25,10 @@
 // Qt includes.
 
 #include <qlayout.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 // Local includes.
 
@@ -49,7 +51,7 @@ public:
         label       = 0;
     }
 
-    QWidgetStack      *stack;
+    Q3WidgetStack      *stack;
 
     QLabel            *label;
 
@@ -70,11 +72,11 @@ NavigateBarTab::~NavigateBarTab()
 
 void NavigateBarTab::setupNavigateBar(bool withBar)
 {
-    m_navigateBarLayout = new QVBoxLayout(this);
+    m_navigateBarLayout = new Q3VBoxLayout(this);
 
     if (withBar)
     {
-        d->stack = new QWidgetStack(this);
+        d->stack = new Q3WidgetStack(this);
         m_navigateBarLayout->addWidget(d->stack);
 
         d->navigateBar  = new NavigateBarWidget(d->stack, withBar);

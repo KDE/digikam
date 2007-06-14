@@ -25,7 +25,9 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -57,13 +59,13 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
     setHelp("blursharpentool.anchor", KApplication::kApplication()->aboutData()->appName());
     
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 1, 0, spacingHint());
+    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 1, 1, 0, spacingHint());
     QLabel *label = new QLabel(i18n("Smoothness:"), gboxSettings);
     
     m_radiusInput = new KIntNumInput(gboxSettings);
     m_radiusInput->setRange(0, 100, 1, true);
     m_radiusInput->setValue(0);
-    QWhatsThis::add( m_radiusInput, i18n("<p>A smoothness of 0 has no effect, "
+    Q3WhatsThis::add( m_radiusInput, i18n("<p>A smoothness of 0 has no effect, "
                                          "1 and above determine the Gaussian blur matrix radius "
                                          "that determines how much to blur the image."));
 

@@ -44,7 +44,7 @@ ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const char*,
                         : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustLevels")
 {
     m_levelsAction = new KAction(i18n("Levels Adjust..."), "adjustlevels", 
-                                 CTRL+Key_L,         // NOTE: Photoshop 7 use CTRL+L. 
+                                 Qt::CTRL+Qt::Key_L,         // NOTE: Photoshop 7 use CTRL+L. 
                                  this, SLOT(slotLevelsAdjust()),
                                  actionCollection(), "imageplugin_adjustlevels");
 

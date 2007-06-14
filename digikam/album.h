@@ -31,6 +31,8 @@
 #include <qstring.h>
 #include <qdatetime.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 // KDE includes.
 
@@ -352,7 +354,7 @@ public:
     DatabaseUrl kurl() const;
     QString prettyURL() const;
     QString icon() const;
-    QValueList<int> tagIDs() const;
+    Q3ValueList<int> tagIDs() const;
 
 private:
 

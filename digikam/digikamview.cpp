@@ -26,7 +26,7 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qimage.h>
@@ -34,6 +34,9 @@
 #include <qapplication.h>
 #include <qsplitter.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <Q3Frame>
 
 // KDE includes.
 
@@ -140,7 +143,7 @@ public:
 };
 
 DigikamView::DigikamView(QWidget *parent)
-           : QHBox(parent)
+           : Q3HBox(parent)
 {
     d = new DigikamViewPriv;
     d->parent       = static_cast<DigikamApp *>(parent);
@@ -148,9 +151,9 @@ DigikamView::DigikamView(QWidget *parent)
     d->leftSideBar  = new Sidebar(this, "Digikam Left Sidebar", Sidebar::Left);
 
     d->splitter = new QSplitter(this);
-    d->splitter->setFrameStyle( QFrame::NoFrame );
-    d->splitter->setFrameShadow( QFrame::Plain );
-    d->splitter->setFrameShape( QFrame::NoFrame );
+    d->splitter->setFrameStyle( Q3Frame::NoFrame );
+    d->splitter->setFrameShadow( Q3Frame::Plain );
+    d->splitter->setFrameShape( Q3Frame::NoFrame );
     d->splitter->setOpaqueResize(false);
 
     d->leftSideBar->setSplitter(d->splitter);
@@ -559,8 +562,8 @@ void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
 {
     if (album && widget)
     {
-        QListViewItem *item;
-        item = (QListViewItem*)album->extraData(widget);
+        Q3ListViewItem *item;
+        item = (Q3ListViewItem*)album->extraData(widget);
         if(!item)
             return;
 
@@ -682,7 +685,7 @@ void DigikamView::slotDispatchImageSelected()
     if (d->needDispatchSelection)
     {
         // the list of copies of ImageInfos of currently selected items, currentItem first
-        QPtrList<ImageInfo> list = d->iconView->selectedImageInfos(true);
+        Q3PtrList<ImageInfo> list = d->iconView->selectedImageInfos(true);
 
         if (list.isEmpty())
         {

@@ -29,6 +29,8 @@
 
 #include <qwidget.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 
 // Local Includes.
 
@@ -50,8 +52,8 @@ public:
 
     void finish( QWidget *mainWin );
     void repaint();
-    void message(const QString &message, int alignment = AlignLeft,
-                 const QColor &color = white );
+    void message(const QString &message, int alignment = Qt::AlignLeft,
+                 const QColor &color = Qt::white );
 
 protected:
 

@@ -27,8 +27,8 @@
 
 // KDE includes.
 
-#include <qwidgetstack.h>
-#include <qcstring.h>
+#include <q3widgetstack.h>
+#include <q3cstring.h>
 #include <qstring.h>
 
 // Local includes
@@ -45,7 +45,7 @@ class AlbumIconView;
 class ImagePreviewView;
 class AlbumWidgetStackPriv;
 
-class DIGIKAM_EXPORT AlbumWidgetStack : public QWidgetStack
+class DIGIKAM_EXPORT AlbumWidgetStack : public Q3WidgetStack
 {
 Q_OBJECT
 

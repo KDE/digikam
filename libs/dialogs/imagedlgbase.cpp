@@ -26,16 +26,19 @@
 
 // Qt includes.
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qtimer.h>
 #include <qsplitter.h>
-#include <qhbox.h>
+#include <q3hbox.h>
+//Added by qt3to4:
+#include <QCloseEvent>
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -78,7 +81,7 @@ public:
 
     bool            tryAction;
 
-    QGridLayout    *mainLayout;
+    Q3GridLayout    *mainLayout;
     
     QWidget        *parent;
     
@@ -86,7 +89,7 @@ public:
 
     QTimer         *timer;
 
-    QHBox          *hbox;
+    Q3HBox          *hbox;
 
     QSplitter      *splitter;
 
@@ -96,7 +99,7 @@ public:
 };
 
 ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name, 
-                           bool loadFileSettings, bool tryAction, QFrame* bannerFrame)
+                           bool loadFileSettings, bool tryAction, Q3Frame* bannerFrame)
             : KDialogBase(Plain, 0, Help|Default|User1|User2|User3|Try|Ok|Cancel, Ok,
                           parent, 0, true, true,
                           QString(),
@@ -123,7 +126,7 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    d->mainLayout = new QGridLayout( plainPage(), 2, 1);
+    d->mainLayout = new Q3GridLayout( plainPage(), 2, 1);
     if (bannerFrame)
     {
         bannerFrame->reparent( plainPage(), QPoint(0, 0) );
@@ -132,11 +135,11 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    d->hbox     = new QHBox(plainPage());
+    d->hbox     = new Q3HBox(plainPage());
     d->splitter = new QSplitter(d->hbox);
-    d->splitter->setFrameStyle( QFrame::NoFrame );
-    d->splitter->setFrameShadow( QFrame::Plain );
-    d->splitter->setFrameShape( QFrame::NoFrame );    
+    d->splitter->setFrameStyle( Q3Frame::NoFrame );
+    d->splitter->setFrameShadow( Q3Frame::Plain );
+    d->splitter->setFrameShape( Q3Frame::NoFrame );    
     d->splitter->setOpaqueResize(false);
     
     d->mainLayout->addMultiCellWidget(d->hbox, 1, 2, 0, 1);

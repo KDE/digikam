@@ -191,7 +191,7 @@ extern QString escapeString(const QString& str)
     return st;
 }
 
-Q_LLONG SqliteDB::lastInsertedRow() const
+qlonglong SqliteDB::lastInsertedRow() const
 {
     return sqlite3_last_insert_rowid(m_db);    
 }

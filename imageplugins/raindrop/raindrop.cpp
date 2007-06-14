@@ -32,7 +32,7 @@
 
 // Qt includes.
 
-#include <qdeepcopy.h>
+#include <q3deepcopy.h>
 #include <qdatetime.h> 
 #include <qrect.h>
 

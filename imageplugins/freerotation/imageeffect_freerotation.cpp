@@ -26,10 +26,12 @@
 
 #include <qlabel.h>
 #include <qcheckbox.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
 #include <qimage.h>
 #include <qcombobox.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -84,7 +86,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
 
     setAboutData(about);
 
-    QWhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the free image operation preview. "
+    Q3WhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the free image operation preview. "
                                            "If you move the mouse cursor on this preview, "
                                            "a vertical and horizontal dashed line will be drawn "
                                            "to guide you in adjusting the free rotation correction. "
@@ -97,7 +99,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     Digikam::ImageIface iface(0, 0);
 
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 9, 2, spacingHint());
+    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 9, 2, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("New width:"), gboxSettings);
     m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), gboxSettings);
@@ -119,7 +121,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     m_angleInput = new KIntNumInput(gboxSettings);
     m_angleInput->setRange(-180, 180, 1, true);
     m_angleInput->setValue(0);
-    QWhatsThis::add( m_angleInput, i18n("<p>An angle in degrees by which to rotate the image. "
+    Q3WhatsThis::add( m_angleInput, i18n("<p>An angle in degrees by which to rotate the image. "
                                         "A positive angle rotates the image clockwise; "
                                         "a negative angle rotates it counter-clockwise."));
 
@@ -130,14 +132,14 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     m_fineAngleInput = new KDoubleNumInput(gboxSettings);
     m_fineAngleInput->setRange(-5.0, 5.0, 0.01, true);
     m_fineAngleInput->setValue(0);
-    QWhatsThis::add( m_fineAngleInput, i18n("<p>This value in degrees will be added to main angle value "
+    Q3WhatsThis::add( m_fineAngleInput, i18n("<p>This value in degrees will be added to main angle value "
                                             "to set fine target angle."));
 
     gridSettings->addMultiCellWidget(label4, 5, 5, 0, 2);
     gridSettings->addMultiCellWidget(m_fineAngleInput, 6, 6, 0, 2);
 
     m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), gboxSettings);
-    QWhatsThis::add( m_antialiasInput, i18n("<p>Enable this option to process anti-aliasing filter "
+    Q3WhatsThis::add( m_antialiasInput, i18n("<p>Enable this option to process anti-aliasing filter "
                                             "to the rotated image. "
                                             "In order to smooth the target image, it will be blurred a little."));
     gridSettings->addMultiCellWidget(m_antialiasInput, 7, 7, 0, 2);
@@ -147,7 +149,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     m_autoCropCB->insertItem( i18n("None") );
     m_autoCropCB->insertItem( i18n("Widest Area") );
     m_autoCropCB->insertItem( i18n("Largest Area") );
-    QWhatsThis::add( m_autoCropCB, i18n("<p>Select here the method to process image auto-cropping "
+    Q3WhatsThis::add( m_autoCropCB, i18n("<p>Select here the method to process image auto-cropping "
                                             "to remove black frames around a rotated image."));
     gridSettings->addMultiCellWidget(label5, 8, 8, 0, 0);
     gridSettings->addMultiCellWidget(m_autoCropCB, 8, 8, 1, 2);

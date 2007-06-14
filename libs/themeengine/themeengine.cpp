@@ -24,13 +24,15 @@
 
 // Qt includes.
 
-#include <qdict.h>
-#include <qptrlist.h>
+#include <q3dict.h>
+#include <q3ptrlist.h>
 #include <qfileinfo.h>
 #include <qfile.h>
 #include <qapplication.h>
 #include <qpalette.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 // KDE includes.
 
@@ -67,8 +69,8 @@ public:
         themeInitiallySet = false;
     }
 
-    QPtrList<Theme> themeList;
-    QDict<Theme>    themeDict;
+    Q3PtrList<Theme> themeList;
+    Q3Dict<Theme>    themeDict;
     
     Theme*          currTheme;
     Theme*          defaultTheme;

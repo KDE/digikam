@@ -37,8 +37,8 @@ ImageAttributesWatch::ImageAttributesWatch()
 {
     DatabaseAttributesWatch *dbwatch = DatabaseAccess::attributesWatch();
 
-    connect(dbwatch, SIGNAL(imageFieldChanged(Q_LLONG, int)),
-            this, SLOT(slotImageFieldChanged(Q_LLONG, int)));
+    connect(dbwatch, SIGNAL(imageFieldChanged(qlonglong, int)),
+            this, SLOT(slotImageFieldChanged(qlonglong, int)));
 }
 
 ImageAttributesWatch::~ImageAttributesWatch()
@@ -65,7 +65,7 @@ ImageAttributesWatch *ImageAttributesWatch::instance()
     return m_instance;
 }
 
-void ImageAttributesWatch::slotImageFieldChanged(Q_LLONG imageId, int field)
+void ImageAttributesWatch::slotImageFieldChanged(qlonglong imageId, int field)
 {
     // Translate signals
     // TODO: compress?

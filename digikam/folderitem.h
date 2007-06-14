@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <qlistview.h>
+#include <q3listview.h>
 
 // Local includes
 
@@ -35,12 +35,12 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT FolderItem : public QListViewItem
+class DIGIKAM_EXPORT FolderItem : public Q3ListViewItem
 {
 public:
 
-    FolderItem(QListView* parent, const QString& text, bool special=false);
-    FolderItem(QListViewItem* parent, const QString& text, bool special=false);
+    FolderItem(Q3ListView* parent, const QString& text, bool special=false);
+    FolderItem(Q3ListViewItem* parent, const QString& text, bool special=false);
 
     virtual ~FolderItem();
     
@@ -62,14 +62,14 @@ private:
 
 // ------------------------------------------------------------------------------------
 
-class FolderCheckListItem : public QCheckListItem
+class FolderCheckListItem : public Q3CheckListItem
 {
 public:
 
-    FolderCheckListItem(QListView* parent, const QString& text,
-                        QCheckListItem::Type tt);
-    FolderCheckListItem(QListViewItem* parent, const QString& text,
-                        QCheckListItem::Type tt);
+    FolderCheckListItem(Q3ListView* parent, const QString& text,
+                        Q3CheckListItem::Type tt);
+    FolderCheckListItem(Q3ListViewItem* parent, const QString& text,
+                        Q3CheckListItem::Type tt);
     virtual ~FolderCheckListItem();
 
 protected:

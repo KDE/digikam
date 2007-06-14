@@ -31,7 +31,7 @@
 
 #include <qpoint.h>
 #include <qregion.h>
-#include <qpointarray.h>
+#include <q3pointarray.h>
 
 // Local includes.
 
@@ -218,7 +218,7 @@ void Border::bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColo
     dest = Digikam::DImg(width, height, src.sixteenBit(), src.hasAlpha());
     dest.fill(topColor);
 
-    QPointArray btTriangle(3);
+    Q3PointArray btTriangle(3);
     btTriangle.setPoint(0, width, 0);
     btTriangle.setPoint(1, 0, height);
     btTriangle.setPoint(2, width, height);

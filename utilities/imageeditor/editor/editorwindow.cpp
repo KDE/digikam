@@ -1,3 +1,6 @@
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3PtrList>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -36,7 +39,7 @@ extern "C"
 // Qt includes.
 
 #include <qlabel.h>
-#include <qdockarea.h>
+#include <q3dockarea.h>
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qtoolbutton.h>
@@ -108,7 +111,7 @@ namespace Digikam
 {
 
 EditorWindow::EditorWindow(const char *name)
-            : KMainWindow(0, name, WType_TopLevel)
+            : KMainWindow(0, name, Qt::WType_TopLevel)
 {
     d = new EditorWindowPriv;
 
@@ -278,12 +281,12 @@ void EditorWindow::setupStandardActions()
     m_revertAction->setEnabled(false);
 
     d->filePrintAction = new KAction(i18n("Print Image..."), "fileprint",
-                                     CTRL+Key_P,
+                                     Qt::CTRL+Qt::Key_P,
                                      this, SLOT(slotFilePrint()),
                                      actionCollection(), "editorwindow_print");
 
     m_fileDeleteAction = new KAction(i18n("Move to Trash"), "edittrash",
-                                     Key_Delete,
+                                     Qt::Key_Delete,
                                      this, SLOT(slotDeleteCurrentItem()),
                                      actionCollection(), "editorwindow_delete");
 
@@ -324,7 +327,7 @@ void EditorWindow::setupStandardActions()
 
     d->selectAllAction = new KAction(i18n("Select All"),
                                      0,
-                                     CTRL+Key_A,
+                                     Qt::CTRL+Qt::Key_A,
                                      m_canvas,
                                      SLOT(slotSelectAll()),
                                      actionCollection(),
@@ -332,7 +335,7 @@ void EditorWindow::setupStandardActions()
 
     d->selectNoneAction = new KAction(i18n("Select None"),
                                      0,
-                                     CTRL+SHIFT+Key_A,
+                                     Qt::CTRL+Qt::SHIFT+Qt::Key_A,
                                      m_canvas,
                                      SLOT(slotSelectNone()),
                                      actionCollection(),
@@ -347,18 +350,18 @@ void EditorWindow::setupStandardActions()
                                              actionCollection(), "editorwindow_zoomminus");
 
     d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), "viewmag1",
-                                       ALT+CTRL+Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0. 
+                                       Qt::ALT+Qt::CTRL+Qt::Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0. 
                                        this, SLOT(slotZoomTo100Percents()),
                                        actionCollection(), "editorwindow_zoomto100percents");
 
 
     d->zoomFitToWindowAction = new KToggleAction(i18n("Fit to &Window"), "view_fit_window",
-                                       CTRL+SHIFT+Key_E,    // NOTE: Gimp 2 use CTRL+SHIFT+E.
+                                       Qt::CTRL+Qt::SHIFT+Qt::Key_E,    // NOTE: Gimp 2 use CTRL+SHIFT+E.
                                        this, SLOT(slotToggleFitToWindow()),
                                        actionCollection(), "editorwindow_zoomfit2window");
 
     d->zoomFitToSelectAction = new KAction(i18n("Fit to &Selection"), "viewmagfit",
-                                         ALT+CTRL+Key_S, this, SLOT(slotFitToSelect()),
+                                         Qt::ALT+Qt::CTRL+Qt::Key_S, this, SLOT(slotFitToSelect()),
                                          actionCollection(), "editorwindow_zoomfit2select");
     d->zoomFitToSelectAction->setEnabled(false);
     d->zoomFitToSelectAction->setWhatsThis(i18n("This option can be used to zoom the image to the "
@@ -366,8 +369,8 @@ void EditorWindow::setupStandardActions()
 
     d->zoomCombo = new KComboBox(true);
     d->zoomCombo->setDuplicatesEnabled(false);
-    d->zoomCombo->setFocusPolicy(ClickFocus);
-    d->zoomCombo->setInsertionPolicy(QComboBox::NoInsertion);
+    d->zoomCombo->setFocusPolicy(Qt::ClickFocus);
+    d->zoomCombo->setInsertionPolicy(QComboBox::NoInsert);
     d->zoomComboAction = new KWidgetAction(d->zoomCombo, i18n("Zoom"), 0, 0, 0, 
                                            actionCollection(), "editorwindow_zoomto");
 
@@ -396,27 +399,27 @@ void EditorWindow::setupStandardActions()
                                                 actionCollection(), this, "editorwindow_fullscreen");
 #else
     m_fullScreenAction = new KToggleAction(i18n("Fullscreen"), "window_fullscreen",
-                                           CTRL+SHIFT+Key_F, this,
+                                           Qt::CTRL+Qt::SHIFT+Qt::Key_F, this,
                                            SLOT(slotToggleFullScreen()),
                                            actionCollection(), "editorwindow_fullscreen");
 #endif
 
-    d->slideShowAction = new KAction(i18n("Slide Show"), "slideshow", Key_F9,
+    d->slideShowAction = new KAction(i18n("Slide Show"), "slideshow", Qt::Key_F9,
                                      this, SLOT(slotToggleSlideShow()),
                                      actionCollection(),"editorwindow_slideshow");
 
     d->viewUnderExpoAction = new KToggleAction(i18n("Under-Exposure Indicator"), "underexposure", 
-                                            Key_F10, this, 
+                                            Qt::Key_F10, this, 
                                             SLOT(slotToggleUnderExposureIndicator()),
                                             actionCollection(),"editorwindow_underexposure");
 
     d->viewOverExpoAction = new KToggleAction(i18n("Over-Exposure Indicator"), "overexposure", 
-                                            Key_F11, this, 
+                                            Qt::Key_F11, this, 
                                             SLOT(slotToggleOverExposureIndicator()),
                                             actionCollection(),"editorwindow_overexposure");
 
     d->viewCMViewAction = new KToggleAction(i18n("Color Managed View"), "tv", 
-                                            Key_F12, this, 
+                                            Qt::Key_F12, this, 
                                             SLOT(slotToggleColorManagedView()),
                                             actionCollection(),"editorwindow_cmview");
 
@@ -427,7 +430,7 @@ void EditorWindow::setupStandardActions()
                                   actionCollection(), "editorwindow_resize");
 
     d->cropAction = new KAction(i18n("Crop"), "crop",
-                                CTRL+Key_X,
+                                Qt::CTRL+Qt::Key_X,
                                 m_canvas, SLOT(slotCrop()),
                                 actionCollection(), "editorwindow_crop");
     
@@ -437,12 +440,12 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Flip' menu actions ---------------------------------------------
     
-    d->flipHorizAction = new KAction(i18n("Flip Horizontally"), "mirror", CTRL+Key_Asterisk,
+    d->flipHorizAction = new KAction(i18n("Flip Horizontally"), "mirror", Qt::CTRL+Qt::Key_Asterisk,
                                    m_canvas, SLOT(slotFlipHoriz()),
                                    actionCollection(), "editorwindow_flip_horiz");
     d->flipHorizAction->setEnabled(false);
 
-    d->flipVertAction = new KAction(i18n("Flip Vertically"), "flip", CTRL+Key_Slash,
+    d->flipVertAction = new KAction(i18n("Flip Vertically"), "flip", Qt::CTRL+Qt::Key_Slash,
                                    m_canvas, SLOT(slotFlipVert()),
                                    actionCollection(), "editorwindow_flip_vert");
     d->flipVertAction->setEnabled(false);
@@ -450,13 +453,13 @@ void EditorWindow::setupStandardActions()
     // -- Standard 'Rotate' menu actions ----------------------------------------
 
     d->rotateLeftAction = new KAction(i18n("Rotate Left"),
-                                     "rotate_ccw", SHIFT+CTRL+Key_Left, 
+                                     "rotate_ccw", Qt::SHIFT+Qt::CTRL+Qt::Key_Left, 
                                      m_canvas, SLOT(slotRotate270()),
                                      actionCollection(),
                                      "editorwindow_rotate_left");
     d->rotateLeftAction->setEnabled(false);
     d->rotateRightAction  = new KAction(i18n("Rotate Right"),
-                                     "rotate_cw", SHIFT+CTRL+Key_Right, 
+                                     "rotate_cw", Qt::SHIFT+Qt::CTRL+Qt::Key_Right, 
                                      m_canvas, SLOT(slotRotate90()),
                                      actionCollection(),
                                      "editorwindow_rotate_right");
@@ -489,47 +492,47 @@ void EditorWindow::setupStandardAccelerators()
 
     d->accelerators->insert("Exit fullscreen", i18n("Exit Fullscreen mode"),
                     i18n("Exit out of the fullscreen mode"),
-                    Key_Escape, this, SLOT(slotEscapePressed()),
+                    Qt::Key_Escape, this, SLOT(slotEscapePressed()),
                     false, true);
 
     d->accelerators->insert("Next Image Key_Space", i18n("Next Image"),
                     i18n("Load Next Image"),
-                    Key_Space, this, SLOT(slotForward()),
+                    Qt::Key_Space, this, SLOT(slotForward()),
                     false, true);
 
     d->accelerators->insert("Next Image SHIFT+Key_Space", i18n("Next Image"),
                     i18n("Load Next Image"),
-                    SHIFT+Key_Space, this, SLOT(slotForward()),
+                    Qt::SHIFT+Qt::Key_Space, this, SLOT(slotForward()),
                     false, true);
 
     d->accelerators->insert("Previous Image Key_Backspace", i18n("Previous Image"),
                     i18n("Load Previous Image"),
-                    Key_Backspace, this, SLOT(slotBackward()),
+                    Qt::Key_Backspace, this, SLOT(slotBackward()),
                     false, true);
 
     d->accelerators->insert("Next Image Key_Next", i18n("Next Image"),
                     i18n("Load Next Image"),
-                    Key_Next, this, SLOT(slotForward()),
+                    Qt::Key_PageDown, this, SLOT(slotForward()),
                     false, true);
 
     d->accelerators->insert("Previous Image Key_Prior", i18n("Previous Image"),
                     i18n("Load Previous Image"),
-                    Key_Prior, this, SLOT(slotBackward()),
+                    Qt::Key_PageUp, this, SLOT(slotBackward()),
                     false, true);
 
     d->accelerators->insert("Zoom Plus Key_Plus", i18n("Zoom In"),
                     i18n("Zoom in on Image"),
-                    Key_Plus, this, SLOT(slotIncreaseZoom()),
+                    Qt::Key_Plus, this, SLOT(slotIncreaseZoom()),
                     false, true);
     
     d->accelerators->insert("Zoom Plus Key_Minus", i18n("Zoom Out"),
                     i18n("Zoom out of Image"),
-                    Key_Minus, this, SLOT(slotDecreaseZoom()),
+                    Qt::Key_Minus, this, SLOT(slotDecreaseZoom()),
                     false, true);
 
     d->accelerators->insert("Redo CTRL+Key_Y", i18n("Redo"),
                     i18n("Redo Last action"),
-                    CTRL+Key_Y, m_canvas, SLOT(slotRedo()),
+                    Qt::CTRL+Qt::Key_Y, m_canvas, SLOT(slotRedo()),
                     false, true);
 }
 
@@ -621,7 +624,7 @@ void EditorWindow::slotEditKeys()
     KKeyDialog dialog(true, this);
     dialog.insert( actionCollection(), i18n( "General" ) );
 
-    QPtrList<ImagePlugin> pluginList = ImagePluginLoader::instance()->pluginList();
+    Q3PtrList<ImagePlugin> pluginList = ImagePluginLoader::instance()->pluginList();
 
     for (ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
@@ -783,7 +786,7 @@ void EditorWindow::unplugActionAccel(KAction* action)
 
 void EditorWindow::loadImagePlugins()
 {
-    QPtrList<ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
+    Q3PtrList<ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
 
     for (ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
@@ -801,7 +804,7 @@ void EditorWindow::loadImagePlugins()
 
 void EditorWindow::unLoadImagePlugins()
 {
-    QPtrList<ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
+    Q3PtrList<ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
 
     for (ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
@@ -917,12 +920,12 @@ void EditorWindow::applyStandardSettings()
 
     // -- Exposure Indicators Settings --------------------------------------- 
 
-    QColor black(Qt::black);
-    QColor white(Qt::white);
+    QColor Qt::black(Qt::black);
+    QColor Qt::white(Qt::white);
     d->exposureSettings->underExposureIndicator = config->readBoolEntry("UnderExposureIndicator", false);
     d->exposureSettings->overExposureIndicator  = config->readBoolEntry("OverExposureIndicator", false);
-    d->exposureSettings->underExposureColor     = config->readColorEntry("UnderExposureColor", &white);
-    d->exposureSettings->overExposureColor      = config->readColorEntry("OverExposureColor", &black);
+    d->exposureSettings->underExposureColor     = config->readColorEntry("UnderExposureColor", &Qt::white);
+    d->exposureSettings->overExposureColor      = config->readColorEntry("OverExposureColor", &Qt::black);
 
     d->viewUnderExpoAction->setChecked(d->exposureSettings->underExposureIndicator);
     d->viewOverExpoAction->setChecked(d->exposureSettings->overExposureIndicator);
@@ -978,7 +981,7 @@ void EditorWindow::toggleStandardActions(bool val)
         m_redoAction->setEnabled(val);
     }
 
-    QPtrList<ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
+    Q3PtrList<ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
     
     for (ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
@@ -997,7 +1000,7 @@ void EditorWindow::slotToggleFullScreen()
         m_canvas->setBackgroundColor(m_bgColor);
 
 #if QT_VERSION >= 0x030300
-        setWindowState( windowState() & ~WindowFullScreen );
+        setWindowState( windowState() & ~Qt::WindowFullScreen );
 #else
         showNormal();
 #endif
@@ -1198,8 +1201,8 @@ bool EditorWindow::waitForSavingToComplete()
 
 void EditorWindow::enter_loop()
 {
-    QWidget dummy(0, 0, WType_Dialog | WShowModal);
-    dummy.setFocusPolicy( QWidget::NoFocus );
+    QWidget dummy(0, 0, Qt::WType_Dialog | Qt::WShowModal);
+    dummy.setFocusPolicy( Qt::NoFocus );
     qt_enter_modal(&dummy);
     qApp->enter_loop();
     qt_leave_modal(&dummy);
@@ -1235,7 +1238,7 @@ void EditorWindow::slotSelected(bool val)
 
 void EditorWindow::hideToolBars()
 {
-    QPtrListIterator<KToolBar> it = toolBarIterator();
+    Q3PtrListIterator<KToolBar> it = toolBarIterator();
     KToolBar* bar;
 
     for(;it.current()!=0L; ++it)
@@ -1251,7 +1254,7 @@ void EditorWindow::hideToolBars()
 
 void EditorWindow::showToolBars()
 {
-    QPtrListIterator<KToolBar> it = toolBarIterator();
+    Q3PtrListIterator<KToolBar> it = toolBarIterator();
     KToolBar* bar;
 
     for( ; it.current()!=0L ; ++it)
@@ -1642,7 +1645,7 @@ bool EditorWindow::checkPermissions(const KURL& url)
 
 bool EditorWindow::moveFile()
 {
-    QCString dstFileName = QFile::encodeName(m_savingContext->destinationURL.path());
+    Q3CString dstFileName = QFile::encodeName(m_savingContext->destinationURL.path());
 
     // store old permissions
     mode_t filePermissions = S_IREAD | S_IWRITE;

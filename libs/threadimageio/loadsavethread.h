@@ -30,9 +30,11 @@
 #include <qthread.h>
 #include <qobject.h>
 #include <qmutex.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qdatetime.h>
 #include <qwaitcondition.h>
+//Added by qt3to4:
+#include <QCustomEvent>
 
 // Digikam includes.
 
@@ -166,7 +168,7 @@ protected:
 
     QWaitCondition       m_condVar;
 
-    QPtrList<LoadSaveTask> m_todo;
+    Q3PtrList<LoadSaveTask> m_todo;
 
     LoadSaveTask        *m_currentTask;
 

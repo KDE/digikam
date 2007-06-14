@@ -53,6 +53,10 @@
 #include <qpoint.h>
 #include <qtimer.h>
 #include <qsizepolicy.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 // KDE include.
 

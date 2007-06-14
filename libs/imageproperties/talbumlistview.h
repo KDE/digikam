@@ -26,14 +26,17 @@
 
 // Qt includes.
 
-#include <qlistview.h>
+#include <q3listview.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QDropEvent>
 
 // Local includes.
 
 #include "digikam_export.h"
 #include "metadatahub.h"
 
-class QListViewItem;
+class Q3ListViewItem;
 class QDropEvent;
 class QMouseEvent;
 
@@ -42,13 +45,13 @@ namespace Digikam
 class TAlbum;
 class TAlbumListViewPriv;
 
-class DIGIKAM_EXPORT TAlbumCheckListItem : public QCheckListItem
+class DIGIKAM_EXPORT TAlbumCheckListItem : public Q3CheckListItem
 {
 public:
 
-    TAlbumCheckListItem(QListView* parent, TAlbum* album);
+    TAlbumCheckListItem(Q3ListView* parent, TAlbum* album);
 
-    TAlbumCheckListItem(QCheckListItem* parent, TAlbum* album);
+    TAlbumCheckListItem(Q3CheckListItem* parent, TAlbum* album);
 
     void setStatus(MetadataHub::TagStatus status);
 
@@ -61,7 +64,7 @@ protected:
 
 // ------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT TAlbumListView : public QListView
+class DIGIKAM_EXPORT TAlbumListView : public Q3ListView
 {
     Q_OBJECT
 
@@ -87,13 +90,13 @@ protected:
     bool acceptDrop(const QDropEvent *e) const;
     void contentsDropEvent(QDropEvent *e);
 
-    QDragObject* dragObject();
+    Q3DragObject* dragObject();
     void startDrag();
     TAlbumCheckListItem* dragItem() const;
 
 private:
 
-    bool mouseInItemRect(QListViewItem* item, int x) const;
+    bool mouseInItemRect(Q3ListViewItem* item, int x) const;
 
 private:
 

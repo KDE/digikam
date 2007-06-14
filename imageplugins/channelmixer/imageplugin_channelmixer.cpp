@@ -44,7 +44,7 @@ ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent, const char*,
                         : Digikam::ImagePlugin(parent, "ImagePlugin_ChannelMixer")
 {
     m_channelMixerAction = new KAction(i18n("Channel Mixer..."), "channelmixer", 
-                               CTRL+Key_H, 
+                               Qt::CTRL+Qt::Key_H, 
                                this, SLOT(slotChannelMixer()),
                                actionCollection(), "imageplugin_channelmixer");
 

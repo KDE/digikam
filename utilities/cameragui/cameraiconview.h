@@ -27,8 +27,11 @@
 
 // Qt includes.
 
-#include <qdict.h>
+#include <q3dict.h>
 #include <qrect.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QDropEvent>
 
 // KDE includes.
 

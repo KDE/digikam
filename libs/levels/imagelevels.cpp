@@ -216,16 +216,16 @@ int ImageLevels::levelsInputFromColor(int channel, DColor color)
     switch (channel)
     {
        case ImageHistogram::ValueChannel:
-          return QMAX (QMAX (color.red(), color.green()), color.blue());
+          return QMAX (QMAX (color.Qt::red(), color.Qt::green()), color.Qt::blue());
        
        case ImageHistogram::RedChannel:
-          return color.red();
+          return color.Qt::red();
        
        case ImageHistogram::GreenChannel:
-          return color.green();
+          return color.Qt::green();
     
        case ImageHistogram::BlueChannel:
-          return color.blue();
+          return color.Qt::blue();
     }
 
     return 0;  // just to please the compiler.
@@ -257,7 +257,7 @@ void ImageLevels::levelsGrayToneAdjustByColors(int channel, DColor color)
 
     // Calculate lightness value.
        
-    lightness = (unsigned short)LEVELS_RGB_INTENSITY (color.red(), color.green(), color.blue());
+    lightness = (unsigned short)LEVELS_RGB_INTENSITY (color.Qt::red(), color.Qt::green(), color.Qt::blue());
 
     input     = levelsInputFromColor(channel, color);
 
@@ -427,32 +427,32 @@ void ImageLevels::levelsLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
 
     if (!d->sixteenBit)        // 8 bits image.
     {
-        uchar red, green, blue, alpha;
+        uchar Qt::red, Qt::green, Qt::blue, alpha;
         uchar *ptr = srcPR;
         uchar *dst = destPR;
         
         for (i = 0 ; i < w*h ; i++)
         {
-            blue  = ptr[0];
-            green = ptr[1];
-            red   = ptr[2];
+            Qt::blue  = ptr[0];
+            Qt::green = ptr[1];
+            Qt::red   = ptr[2];
             alpha = ptr[3];
         
             if ( d->lut->nchannels > 0 )
-               red = lut0[red];
+               Qt::red = lut0[Qt::red];
             
             if ( d->lut->nchannels > 1 )
-               green = lut1[green];
+               Qt::green = lut1[Qt::green];
             
             if ( d->lut->nchannels > 2 )
-               blue = lut2[blue];
+               Qt::blue = lut2[Qt::blue];
         
             if ( d->lut->nchannels > 3 )
                alpha = lut3[alpha];
                                 
-            dst[0] = blue;
-            dst[1] = green;
-            dst[2] = red;
+            dst[0] = Qt::blue;
+            dst[1] = Qt::green;
+            dst[2] = Qt::red;
             dst[3] = alpha;
 
             ptr += 4;
@@ -461,32 +461,32 @@ void ImageLevels::levelsLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
     }
     else               // 16 bits image.
     {
-        unsigned short red, green, blue, alpha;
+        unsigned short Qt::red, Qt::green, Qt::blue, alpha;
         unsigned short *ptr = (unsigned short *)srcPR;
         unsigned short *dst = (unsigned short *)destPR;
 
         for (i = 0 ; i < w*h ; i++)
         {
-            blue  = ptr[0];
-            green = ptr[1];
-            red   = ptr[2];
+            Qt::blue  = ptr[0];
+            Qt::green = ptr[1];
+            Qt::red   = ptr[2];
             alpha = ptr[3];
         
             if ( d->lut->nchannels > 0 )
-               red = lut0[red];
+               Qt::red = lut0[Qt::red];
             
             if ( d->lut->nchannels > 1 )
-               green = lut1[green];
+               Qt::green = lut1[Qt::green];
             
             if ( d->lut->nchannels > 2 )
-               blue = lut2[blue];
+               Qt::blue = lut2[Qt::blue];
         
             if ( d->lut->nchannels > 3 )
                alpha = lut3[alpha];
                                 
-            dst[0] = blue;
-            dst[1] = green;
-            dst[2] = red;
+            dst[0] = Qt::blue;
+            dst[1] = Qt::green;
+            dst[2] = Qt::red;
             dst[3] = alpha;
 
             ptr += 4;

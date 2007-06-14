@@ -43,11 +43,17 @@
 #include <qimage.h>
 #include <qregion.h>
 #include <qtimer.h>
-#include <qcache.h>
+#include <q3cache.h>
 #include <qcolor.h>
-#include <qdragobject.h> 
+#include <q3dragobject.h> 
 #include <qclipboard.h>
 #include <qtoolbutton.h>
+//Added by qt3to4:
+#include <Q3Frame>
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
+#include <QWheelEvent>
 
 // KDE includes.
 
@@ -130,7 +136,7 @@ public:
     QRect               *rubber;
     QRect                pixmapRect;
 
-    QCache<QPixmap>      tileCache;
+    Q3Cache<QPixmap>      tileCache;
 
     QPixmap*             tileTmpPix;
     QPixmap              qcheck;
@@ -147,7 +153,7 @@ public:
 };
 
 Canvas::Canvas(QWidget *parent)
-      : QScrollView(parent)
+      : Q3ScrollView(parent)
 {
     d = new CanvasPrivate;
     d->im     = new DImgInterface();
@@ -170,7 +176,7 @@ Canvas::Canvas(QWidget *parent)
 
     viewport()->setBackgroundMode(Qt::NoBackground);
     viewport()->setMouseTracking(false);
-    setFrameStyle( QFrame::NoFrame );
+    setFrameStyle( Q3Frame::NoFrame );
 
     // ------------------------------------------------------------
 
@@ -461,7 +467,7 @@ void Canvas::resizeEvent(QResizeEvent* e)
     if (!e)
         return;
 
-    QScrollView::resizeEvent(e);
+    Q3ScrollView::resizeEvent(e);
 
     if (d->autoZoom)
         updateAutoZoom();
@@ -628,8 +634,8 @@ void Canvas::drawRubber()
 
     QPainter p(viewport());
     p.setRasterOp(Qt::NotROP );
-    p.setPen(QPen(color0, 1));
-    p.setBrush(NoBrush);
+    p.setPen(QPen(Qt::color0, 1));
+    p.setBrush(Qt::NoBrush);
 
     QRect r(d->rubber->normalize());
     r = QRect(contentsToViewport(QPoint(r.x(), r.y())), r.size());
@@ -638,7 +644,7 @@ void Canvas::drawRubber()
 
     style().drawPrimitive(QStyle::PE_FocusRect, &p,
                           QRect(pnt.x(), pnt.y(), r.width(), r.height()),
-                          colorGroup(), QStyle::Style_Default,
+                          colorGroup(), QStyle::State_None,
                           QStyleOption(colorGroup().base()));
     p.end();
 }
@@ -879,7 +885,7 @@ void Canvas::contentsWheelEvent(QWheelEvent *e)
 {
     e->accept();
 
-    if (e->state() & Qt::ShiftButton)
+    if (e->state() & Qt::ShiftModifier)
     {
         if (e->delta() < 0)
             emit signalShowNextImage();
@@ -887,7 +893,7 @@ void Canvas::contentsWheelEvent(QWheelEvent *e)
             emit signalShowPrevImage();
         return;
     }
-    else if (e->state() & Qt::ControlButton)
+    else if (e->state() & Qt::ControlModifier)
     {
         if (e->delta() < 0)
             slotDecreaseZoom();
@@ -896,7 +902,7 @@ void Canvas::contentsWheelEvent(QWheelEvent *e)
         return;
     }
 
-    QScrollView::contentsWheelEvent(e);
+    Q3ScrollView::contentsWheelEvent(e);
 }
 
 bool Canvas::maxZoom()
@@ -1176,7 +1182,7 @@ void Canvas::slotCopy()
     delete [] data;
 
     QImage selImg = selDImg.copyQImage();
-    QApplication::clipboard()->setData(new QImageDrag(selImg), QClipboard::Clipboard);
+    QApplication::clipboard()->setData(new Q3ImageDrag(selImg), QClipboard::Clipboard);
     QApplication::restoreOverrideCursor ();
 }
 

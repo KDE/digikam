@@ -30,6 +30,8 @@
 
 #include <qstring.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 // Local includes
 
@@ -160,8 +162,8 @@ protected:
 
     int countItemsInFolder(const QString& directory);
 
-    QValueList< QPair<QString,int> >  m_filesToBeDeleted;
-    QValueList<AlbumShortInfo> m_foldersToBeDeleted;
+    Q3ValueList< QPair<QString,int> >  m_filesToBeDeleted;
+    Q3ValueList<AlbumShortInfo> m_foldersToBeDeleted;
 
 };
 

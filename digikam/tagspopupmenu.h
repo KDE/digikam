@@ -28,7 +28,9 @@
 
 // Qt includes.
 
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 namespace Digikam
 {
@@ -36,7 +38,7 @@ namespace Digikam
 class TAlbum;
 class TagsPopupMenuPriv;
 
-class TagsPopupMenu : public QPopupMenu
+class TagsPopupMenu : public Q3PopupMenu
 {
     Q_OBJECT
 
@@ -48,7 +50,7 @@ public:
         REMOVE
     };
     
-    TagsPopupMenu(const QValueList<Q_LLONG>& selectedImageIDs, int addToID, Mode mode);
+    TagsPopupMenu(const Q3ValueList<qlonglong>& selectedImageIDs, int addToID, Mode mode);
     ~TagsPopupMenu();
 
 signals:
@@ -63,8 +65,8 @@ private slots:
 private:
 
     void        clearPopup();
-    QPopupMenu* buildSubMenu(int tagid);
-    void        iterateAndBuildMenu(QPopupMenu *menu, TAlbum *album);
+    Q3PopupMenu* buildSubMenu(int tagid);
+    void        iterateAndBuildMenu(Q3PopupMenu *menu, TAlbum *album);
     bool        showThisTag(int tagid);
 
 private:

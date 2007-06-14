@@ -34,6 +34,8 @@
 
 #include <qobject.h>
 #include <qevent.h>
+//Added by qt3to4:
+#include <QCustomEvent>
 
 // KDE includes.
 
@@ -190,50 +192,50 @@ void ImageHistogram::calcHistogramValues()
 
     if (d->histoSegments == 65536)         // 16 bits image.
     {
-        unsigned short  blue, green, red, alpha;
+        unsigned short  Qt::blue, Qt::green, Qt::red, alpha;
         unsigned short *data = (unsigned short*)d->imageData;
 
         for (i = 0 ; (i < d->imageHeight*d->imageWidth*4) && d->runningFlag ; i+=4)
         {
-            blue  = data[ i ];
-            green = data[i+1];
-            red   = data[i+2];
+            Qt::blue  = data[ i ];
+            Qt::green = data[i+1];
+            Qt::red   = data[i+2];
             alpha = data[i+3];
 
-            d->histogram[blue].blue++;
-            d->histogram[green].green++;
-            d->histogram[red].red++;
+            d->histogram[Qt::blue].Qt::blue++;
+            d->histogram[Qt::green].Qt::green++;
+            d->histogram[Qt::red].Qt::red++;
             d->histogram[alpha].alpha++;
 
-            max = (blue > green) ? blue : green;
+            max = (Qt::blue > Qt::green) ? Qt::blue : Qt::green;
 
-            if (red > max) 
-                d->histogram[red].value++;
+            if (Qt::red > max) 
+                d->histogram[Qt::red].value++;
             else 
                 d->histogram[max].value++;
         }
     }
     else                                  // 8 bits images.
     {
-        uchar blue, green, red, alpha;
+        uchar Qt::blue, Qt::green, Qt::red, alpha;
         uchar *data = d->imageData;
 
         for (i = 0 ; (i < d->imageHeight*d->imageWidth*4) && d->runningFlag ; i+=4)
         {
-            blue  = data[ i ];
-            green = data[i+1];
-            red   = data[i+2];
+            Qt::blue  = data[ i ];
+            Qt::green = data[i+1];
+            Qt::red   = data[i+2];
             alpha = data[i+3];
 
-            d->histogram[blue].blue++;
-            d->histogram[green].green++;
-            d->histogram[red].red++;
+            d->histogram[Qt::blue].Qt::blue++;
+            d->histogram[Qt::green].Qt::green++;
+            d->histogram[Qt::red].Qt::red++;
             d->histogram[alpha].alpha++;
 
-            max = (blue > green) ? blue : green;
+            max = (Qt::blue > Qt::green) ? Qt::blue : Qt::green;
 
-            if (red > max) 
-                d->histogram[red].value++;
+            if (Qt::red > max) 
+                d->histogram[Qt::red].value++;
             else 
                 d->histogram[max].value++;
         }
@@ -261,17 +263,17 @@ double ImageHistogram::getCount(int channel, int start, int end)
 
     case ImageHistogram::RedChannel:
         for (i = start ; i <= end ; i++)
-            count += d->histogram[i].red;
+            count += d->histogram[i].Qt::red;
         break;
 
     case ImageHistogram::GreenChannel:
         for (i = start ; i <= end ; i++)
-            count += d->histogram[i].green;
+            count += d->histogram[i].Qt::green;
         break;
 
     case ImageHistogram::BlueChannel:
         for (i = start ; i <= end ; i++)
-            count += d->histogram[i].blue;
+            count += d->histogram[i].Qt::blue;
         break;
 
     case ImageHistogram::AlphaChannel:
@@ -314,17 +316,17 @@ double ImageHistogram::getMean(int channel, int start, int end)
 
         case ImageHistogram::RedChannel:
             for (i = start ; i <= end ; i++)
-                mean += i * d->histogram[i].red;
+                mean += i * d->histogram[i].Qt::red;
             break;
 
         case ImageHistogram::GreenChannel:
             for (i = start ; i <= end ; i++)
-                mean += i * d->histogram[i].green;
+                mean += i * d->histogram[i].Qt::green;
             break;
 
         case ImageHistogram::BlueChannel:
             for (i = start ; i <= end ; i++)
-                mean += i * d->histogram[i].blue;
+                mean += i * d->histogram[i].Qt::blue;
             break;
 
         case ImageHistogram::AlphaChannel:
@@ -370,7 +372,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
         case ImageHistogram::RedChannel:
             for (i = start ; i <= end ; i++)
             {
-                sum += d->histogram[i].red;
+                sum += d->histogram[i].Qt::red;
                 if (sum * 2 > count) return i;
             }
             break;
@@ -378,7 +380,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
         case ImageHistogram::GreenChannel:
             for (i = start ; i <= end ; i++)
             {
-                sum += d->histogram[i].green;
+                sum += d->histogram[i].Qt::green;
                 if (sum * 2 > count) return i;
             }
             break;
@@ -386,7 +388,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
         case ImageHistogram::BlueChannel:
             for (i = start ; i <= end ; i++)
             {
-                sum += d->histogram[i].blue;
+                sum += d->histogram[i].Qt::blue;
                 if (sum * 2 > count) return i;
             }
             break;
@@ -433,17 +435,17 @@ double ImageHistogram::getStdDev(int channel, int start, int end)
 
         case ImageHistogram::RedChannel:
             for (i = start ; i <= end ; i++)
-                dev += (i - mean) * (i - mean) * d->histogram[i].red;
+                dev += (i - mean) * (i - mean) * d->histogram[i].Qt::red;
             break;
 
         case ImageHistogram::GreenChannel:
             for (i = start ; i <= end ; i++)
-                dev += (i - mean) * (i - mean) * d->histogram[i].green;
+                dev += (i - mean) * (i - mean) * d->histogram[i].Qt::green;
             break;
 
         case ImageHistogram::BlueChannel:
             for (i = start ; i <= end ; i++)
-                dev += (i - mean) * (i - mean) * d->histogram[i].blue;
+                dev += (i - mean) * (i - mean) * d->histogram[i].Qt::blue;
             break;
 
         case ImageHistogram::AlphaChannel:
@@ -473,15 +475,15 @@ double ImageHistogram::getValue(int channel, int bin)
           break;
 
        case ImageHistogram::RedChannel:
-          value = d->histogram[bin].red;
+          value = d->histogram[bin].Qt::red;
           break;
 
        case ImageHistogram::GreenChannel:
-          value = d->histogram[bin].green;
+          value = d->histogram[bin].Qt::green;
           break;
 
        case ImageHistogram::BlueChannel:
-          value = d->histogram[bin].blue;
+          value = d->histogram[bin].Qt::blue;
           break;
 
        case ImageHistogram::AlphaChannel:
@@ -514,20 +516,20 @@ double ImageHistogram::getMaximum(int channel)
 
        case ImageHistogram::RedChannel:
           for (x = 0 ; x < d->histoSegments ; x++)
-             if (d->histogram[x].red > max)
-                max = d->histogram[x].red;
+             if (d->histogram[x].Qt::red > max)
+                max = d->histogram[x].Qt::red;
           break;
 
        case ImageHistogram::GreenChannel:
           for (x = 0 ; x < d->histoSegments ; x++)
-             if (d->histogram[x].green > max)
-                max = d->histogram[x].green;
+             if (d->histogram[x].Qt::green > max)
+                max = d->histogram[x].Qt::green;
           break;
 
        case ImageHistogram::BlueChannel:
           for (x = 0 ; x < d->histoSegments ; x++)
-             if (d->histogram[x].blue > max)
-                max = d->histogram[x].blue;
+             if (d->histogram[x].Qt::blue > max)
+                max = d->histogram[x].Qt::blue;
           break;
 
        case ImageHistogram::AlphaChannel:

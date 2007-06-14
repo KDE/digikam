@@ -25,24 +25,28 @@
  // Qt includes.
  
 #include <qcolor.h>
-#include <qgroupbox.h>
-#include <qhgroupbox.h>
-#include <qvgroupbox.h>
+#include <q3groupbox.h>
+#include <q3hgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qhbuttongroup.h> 
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
 #include <qcombobox.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
-#include <qintdict.h>
-#include <qtextstream.h>
+#include <q3intdict.h>
+#include <q3textstream.h>
 #include <qfile.h>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
+#include <QPixmap>
 
 // KDE includes.
 
@@ -93,7 +97,7 @@ private:
 
     QPixmap makePixmap(int id);
 
-    QIntDict<QPixmap>    m_previewPixmapMap;
+    Q3IntDict<QPixmap>    m_previewPixmapMap;
     ImageEffect_BWSepia *m_bwSepia;
 };
 
@@ -128,7 +132,7 @@ class ListBoxBWPreviewItem : public Digikam::ListBoxPreviewItem
 
 public:
 
-    ListBoxBWPreviewItem(QListBox *listbox, const QString &text,
+    ListBoxBWPreviewItem(Q3ListBox *listbox, const QString &text,
                          PreviewPixmapFactory* factory, int id)
         : ListBoxPreviewItem(listbox, QPixmap(), text)
     {
@@ -186,7 +190,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     // -------------------------------------------------------------
         
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 4, 4, spacingHint());
+    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 4, 4, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -195,17 +199,17 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
     m_channelCB->insertItem( i18n("Blue") );
-    QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+    Q3WhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    m_scaleBG = new QHButtonGroup(gboxSettings);
+    m_scaleBG = new Q3HButtonGroup(gboxSettings);
     m_scaleBG->setExclusive(true);
-    m_scaleBG->setFrameShape(QFrame::NoFrame);
+    m_scaleBG->setFrameShape(Q3Frame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
-    QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
+    Q3WhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
@@ -226,7 +230,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
     logHistoButton->setToggleButton(true);       
 
-    QHBoxLayout* l1 = new QHBoxLayout();
+    Q3HBoxLayout* l1 = new Q3HBoxLayout();
     l1->addWidget(label1);
     l1->addWidget(m_channelCB);
     l1->addStretch(10);
@@ -236,9 +240,9 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QVBox *histoBox   = new QVBox(gboxSettings);
+    Q3VBox *histoBox   = new Q3VBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
-    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
+    Q3WhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
                                              "settings changes."));
     QLabel *space = new QLabel(histoBox);
@@ -252,7 +256,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     m_tab = new KTabWidget(gboxSettings);
 
-    m_bwFilm = new QListBox(m_tab);
+    m_bwFilm = new Q3ListBox(m_tab);
     m_bwFilm->setColumnMode(1);
     m_bwFilm->setVariableWidth(false);
     m_bwFilm->setVariableHeight(false);
@@ -337,10 +341,10 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QVBox *vbox = new QVBox(m_tab);
+    Q3VBox *vbox = new Q3VBox(m_tab);
     vbox->setSpacing(spacingHint());
 
-    m_bwFilters = new QListBox(vbox);
+    m_bwFilters = new Q3ListBox(vbox);
     m_bwFilters->setColumnMode(1);
     m_bwFilters->setVariableWidth(false);
     m_bwFilters->setVariableHeight(false);
@@ -385,11 +389,11 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_strengthInput->setLabel(i18n("Strength:"), AlignLeft | AlignVCenter);
     m_strengthInput->setRange(1, 5, 1, true);
     m_strengthInput->setValue(1);
-    QWhatsThis::add(m_strengthInput, i18n("<p>Set here the strength adjustment of lens filter."));
+    Q3WhatsThis::add(m_strengthInput, i18n("<p>Set here the strength adjustment of lens filter."));
 
     // -------------------------------------------------------------
 
-    m_bwTone = new QListBox(m_tab);
+    m_bwTone = new Q3ListBox(m_tab);
     m_bwTone->setColumnMode(1);
     m_bwTone->setVariableWidth(false);
     m_bwTone->setVariableHeight(false);
@@ -436,7 +440,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     // -------------------------------------------------------------
     
     QWidget *curveBox     = new QWidget( m_tab );
-    QGridLayout *gridTab2 = new QGridLayout(curveBox, 5, 2, spacingHint(), 0);
+    Q3GridLayout *gridTab2 = new Q3GridLayout(curveBox, 5, 2, spacingHint(), 0);
 
     Digikam::ColorGradientWidget* vGradient = new Digikam::ColorGradientWidget(
                                                   Digikam::ColorGradientWidget::Vertical,
@@ -449,7 +453,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_curvesWidget = new Digikam::CurvesWidget(256, 256, m_originalImage->bits(), m_originalImage->width(),
                                                m_originalImage->height(), m_originalImage->sixteenBit(),
                                                m_curves, curveBox);
-    QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve adjustment of the image luminosity"));
+    Q3WhatsThis::add( m_curvesWidget, i18n("<p>This is the curve adjustment of the image luminosity"));
 
     QLabel *spaceh = new QLabel(curveBox);
     spaceh->setFixedHeight(1);
@@ -463,7 +467,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_cInput->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
     m_cInput->setRange(-100, 100, 1, true);
     m_cInput->setValue(0);
-    QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
+    Q3WhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
 
     gridTab2->addMultiCellWidget(vGradient, 0, 0, 0, 0);
     gridTab2->addMultiCellWidget(spacev, 0, 0, 1, 1);
@@ -1067,9 +1071,9 @@ void ImageEffect_BWSepia::slotUser3()
 
     QFile file(loadFile.path());
     
-    if ( file.open(IO_ReadOnly) )   
+    if ( file.open(QIODevice::ReadOnly) )   
     {
-        QTextStream stream( &file );
+        Q3TextStream stream( &file );
 
         if ( stream.readLine() != "# Black & White Configuration File" )
         {
@@ -1142,9 +1146,9 @@ void ImageEffect_BWSepia::slotUser2()
 
     QFile file(saveFile.path());
     
-    if ( file.open(IO_WriteOnly) )   
+    if ( file.open(QIODevice::WriteOnly) )   
     {
-        QTextStream stream( &file );        
+        Q3TextStream stream( &file );        
         stream << "# Black & White Configuration File\n";
         stream << m_bwFilters->currentItem() << "\n";    
         stream << m_bwTone->currentItem() << "\n";    

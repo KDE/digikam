@@ -32,8 +32,10 @@
 
 // Qt includes.
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 // KDE includes
 
@@ -44,8 +46,8 @@ class kio_digikamalbums : public KIO::SlaveBase
 
 public:
 
-    kio_digikamalbums(const QCString &pool_socket,
-                      const QCString &app_socket);
+    kio_digikamalbums(const Q3CString &pool_socket,
+                      const Q3CString &app_socket);
     ~kio_digikamalbums();
 
     void special(const QByteArray& data);

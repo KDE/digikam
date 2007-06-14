@@ -24,12 +24,17 @@
 
 // Qt includes.
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QPixmap>
+#include <Q3PtrList>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -79,9 +84,9 @@ SetupCamera::SetupCamera( QWidget* parent )
            : QWidget( parent )
 {
     d = new SetupCameraPriv;
-    QVBoxLayout *mainLayout = new QVBoxLayout(parent);
+    Q3VBoxLayout *mainLayout = new Q3VBoxLayout(parent);
 
-    QGridLayout* groupBoxLayout = new QGridLayout( this, 2, 5, 0, KDialog::spacingHint() );
+    Q3GridLayout* groupBoxLayout = new Q3GridLayout( this, 2, 5, 0, KDialog::spacingHint() );
     groupBoxLayout->setAlignment( Qt::AlignTop );
 
     d->listView = new KListView( this );
@@ -92,7 +97,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     d->listView->addColumn( "Last Access Date", 0 ); // No i18n here. Hidden column with the last access date.
     d->listView->setAllColumnsShowFocus(true);
     groupBoxLayout->addMultiCellWidget( d->listView, 0, 5, 0, 0 );
-    QWhatsThis::add( d->listView, i18n("<p>Here you can see the digital camera list used by digiKam "
+    Q3WhatsThis::add( d->listView, i18n("<p>Here you can see the digital camera list used by digiKam "
                                        "via the Gphoto interface."));
 
     // -------------------------------------------------------------
@@ -160,7 +165,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     
     if (clist) 
     {
-        QPtrList<CameraType>* cl = clist->cameraList();
+        Q3PtrList<CameraType>* cl = clist->cameraList();
 
         for (CameraType *ctype = cl->first(); ctype;
              ctype = cl->next()) 
@@ -184,7 +189,7 @@ void SetupCamera::processGphotoURL(const QString& url)
 
 void SetupCamera::slotSelectionChanged()
 {
-    QListViewItem *item = d->listView->selectedItem();
+    Q3ListViewItem *item = d->listView->selectedItem();
 
     if (!item) 
     {
@@ -211,7 +216,7 @@ void SetupCamera::slotAddCamera()
 
 void SetupCamera::slotRemoveCamera()
 {
-    QListViewItem *item = d->listView->currentItem();
+    Q3ListViewItem *item = d->listView->currentItem();
     if (!item) return;
 
     delete item;
@@ -219,7 +224,7 @@ void SetupCamera::slotRemoveCamera()
 
 void SetupCamera::slotEditCamera()
 {
-    QListViewItem *item = d->listView->currentItem();
+    Q3ListViewItem *item = d->listView->currentItem();
     if (!item) return;
 
     CameraSelection *select = new CameraSelection;
@@ -276,7 +281,7 @@ void SetupCamera::slotAddedCamera(const QString& title, const QString& model,
 void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
                                    const QString& port, const QString& path)
 {
-    QListViewItem *item = d->listView->currentItem();
+    Q3ListViewItem *item = d->listView->currentItem();
     if (!item) return;
 
     item->setText(0, title);
@@ -293,11 +298,11 @@ void SetupCamera::applySettings()
     {
         clist->clear();
 
-        QListViewItemIterator it(d->listView);
+        Q3ListViewItemIterator it(d->listView);
 
         for ( ; it.current(); ++it ) 
         {
-            QListViewItem *item  = it.current();
+            Q3ListViewItem *item  = it.current();
             QDateTime lastAccess = QDateTime::currentDateTime();
 
             if (!item->text(4).isEmpty())

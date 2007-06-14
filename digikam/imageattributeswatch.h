@@ -67,7 +67,7 @@ signals:
         There is no guarantee that the tags were actually changed.
         This signal, the signal below, or both may be sent.
     */
-    void signalImageTagsChanged(Q_LLONG imageId);
+    void signalImageTagsChanged(qlonglong imageId);
 
     /**
         Indicates that images in the given album id may have changed their tags.
@@ -79,9 +79,9 @@ signals:
         of the image with given imageId was set.
         There is no guarantee that it actually changed.
     */
-    void signalImageRatingChanged(Q_LLONG imageId);
-    void signalImageDateChanged(Q_LLONG imageId);
-    void signalImageCaptionChanged(Q_LLONG imageId);
+    void signalImageRatingChanged(qlonglong imageId);
+    void signalImageDateChanged(qlonglong imageId);
+    void signalImageCaptionChanged(qlonglong imageId);
 
     /**
         Indicates that the metadata if the given file
@@ -100,7 +100,7 @@ private:
 
 private slots:
 
-    void slotImageFieldChanged(Q_LLONG imageId, int field);
+    void slotImageFieldChanged(qlonglong imageId, int field);
 
 };
 

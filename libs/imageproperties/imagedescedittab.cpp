@@ -25,15 +25,22 @@
 
 // Qt includes.
 
-#include <qhbox.h>
-#include <qvbox.h>
+#include <q3hbox.h>
+#include <q3vbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtoolbutton.h>
 #include <qpushbutton.h>
-#include <qiconset.h>
-#include <qwhatsthis.h>
+#include <qicon.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <Q3GridLayout>
+#include <Q3PtrList>
+#include <QPixmap>
+#include <Q3PopupMenu>
+#include <QEvent>
 
 // KDE includes.
 
@@ -108,12 +115,12 @@ public:
     QToolButton                   *assignedTagsBtn;
     QToolButton                   *revertBtn;
 
-    QPopupMenu                    *ABCMenu;
+    Q3PopupMenu                    *ABCMenu;
 
     QPushButton                   *applyBtn;
 
     QPushButton                   *moreButton;
-    QPopupMenu                    *moreMenu;
+    Q3PopupMenu                    *moreMenu;
 
     KTextEdit                     *commentsEdit;
 
@@ -121,7 +128,7 @@ public:
 
     KDateTimeEdit                 *dateTimeEdit;
 
-    QPtrList<ImageInfo>            currInfos;
+    Q3PtrList<ImageInfo>            currInfos;
 
     TAlbumListView                *tagsView;
 
@@ -142,28 +149,28 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     m_navigateBarLayout->addWidget(settingsArea);
 
-    QGridLayout *settingsLayout = new QGridLayout(settingsArea, 5, 1, 
+    Q3GridLayout *settingsLayout = new Q3GridLayout(settingsArea, 5, 1, 
                                       KDialog::spacingHint(), KDialog::spacingHint());
 
     // Comments/Date/Rating view -----------------------------------
     
-    QVBox *commentsBox = new QVBox(settingsArea);
+    Q3VBox *commentsBox = new Q3VBox(settingsArea);
     new QLabel(i18n("Comments:"), commentsBox);
     d->commentsEdit = new KTextEdit(commentsBox);
-    d->commentsEdit->setTextFormat(QTextEdit::PlainText);
+    d->commentsEdit->setTextFormat(Qt::PlainText);
     d->commentsEdit->setCheckSpellingEnabled(true);
 
-    QHBox *dateBox  = new QHBox(settingsArea);
+    Q3HBox *dateBox  = new Q3HBox(settingsArea);
     new QLabel(i18n("Date:"), dateBox);
     d->dateTimeEdit = new KDateTimeEdit(dateBox, "datepicker");
 
-    QHBox *ratingBox = new QHBox(settingsArea);
+    Q3HBox *ratingBox = new Q3HBox(settingsArea);
     new QLabel(i18n("Rating:"), ratingBox);
     d->ratingWidget  = new RatingWidget(ratingBox);
 
     // Tags view ---------------------------------------------------
 
-    QHBox *tagsSearch = new QHBox(settingsArea);
+    Q3HBox *tagsSearch = new Q3HBox(settingsArea);
     tagsSearch->setSpacing(KDialog::spacingHint());
 
     d->tagsSearchClearBtn = new QToolButton(tagsSearch);
@@ -183,7 +190,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->assignedTagsBtn->setToggleButton(true);
 
     d->recentTagsBtn      = new QToolButton(tagsSearch);
-    QPopupMenu *popupMenu = new QPopupMenu(d->recentTagsBtn);
+    Q3PopupMenu *popupMenu = new Q3PopupMenu(d->recentTagsBtn);
     QToolTip::add(d->recentTagsBtn, i18n("Recent Tags"));
     d->recentTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-recents", 
                                  KIcon::NoGroup, KIcon::SizeSmall, 
@@ -196,7 +203,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     // Buttons -----------------------------------------
 
-    QHBox *buttonsBox = new QHBox(settingsArea);
+    Q3HBox *buttonsBox = new Q3HBox(settingsArea);
     buttonsBox->setSpacing(KDialog::spacingHint());
 
     d->revertBtn = new QToolButton(buttonsBox);
@@ -211,7 +218,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     buttonsBox->setStretchFactor(d->applyBtn, 10);
 
     d->moreButton = new QPushButton(i18n("More"), buttonsBox);
-    d->moreMenu = new QPopupMenu(this);
+    d->moreMenu = new Q3PopupMenu(this);
     d->moreButton->setPopup(d->moreMenu);
 
     // --------------------------------------------------
@@ -247,8 +254,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
             this, SLOT(slotRatingChanged(int)));
      
-    connect(d->tagsView, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint &, int)),
-            this, SLOT(slotRightButtonClicked(QListViewItem*, const QPoint&, int)));
+    connect(d->tagsView, SIGNAL(rightButtonClicked(Q3ListViewItem*, const QPoint &, int)),
+            this, SLOT(slotRightButtonClicked(Q3ListViewItem*, const QPoint&, int)));
             
     connect(d->tagsSearchClearBtn, SIGNAL(clicked()),
             d->tagsSearchEdit, SLOT(clear()));
@@ -311,20 +318,20 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
-    connect(watch, SIGNAL(signalImageTagsChanged(Q_LLONG)),
-            this, SLOT(slotImageTagsChanged(Q_LLONG)));
+    connect(watch, SIGNAL(signalImageTagsChanged(qlonglong)),
+            this, SLOT(slotImageTagsChanged(qlonglong)));
 
     connect(watch, SIGNAL(signalImagesChanged(int)),
             this, SLOT(slotImagesChanged(int)));
 
-    connect(watch, SIGNAL(signalImageRatingChanged(Q_LLONG)),
-            this, SLOT(slotImageRatingChanged(Q_LLONG)));
+    connect(watch, SIGNAL(signalImageRatingChanged(qlonglong)),
+            this, SLOT(slotImageRatingChanged(qlonglong)));
 
-    connect(watch, SIGNAL(signalImageDateChanged(Q_LLONG)),
-            this, SLOT(slotImageDateChanged(Q_LLONG)));
+    connect(watch, SIGNAL(signalImageDateChanged(qlonglong)),
+            this, SLOT(slotImageDateChanged(qlonglong)));
 
-    connect(watch, SIGNAL(signalImageCaptionChanged(Q_LLONG)),
-            this, SLOT(slotImageCaptionChanged(Q_LLONG)));
+    connect(watch, SIGNAL(signalImageCaptionChanged(qlonglong)),
+            this, SLOT(slotImageCaptionChanged(qlonglong)));
 
     // -- read config ---------------------------------------------------------
 
@@ -509,19 +516,19 @@ void ImageDescEditTab::slotRevertAllChanges()
 void ImageDescEditTab::setItem(ImageInfo *info)
 {
     slotChangingItems();
-    QPtrList<ImageInfo> list;
+    Q3PtrList<ImageInfo> list;
     if (info)
         list.append(info);
     setInfos(list);
 }
 
-void ImageDescEditTab::setItems(QPtrList<ImageInfo> infos)
+void ImageDescEditTab::setItems(Q3PtrList<ImageInfo> infos)
 {
     slotChangingItems();
     setInfos(infos);
 }
 
-void ImageDescEditTab::setInfos(QPtrList<ImageInfo> infos)
+void ImageDescEditTab::setInfos(Q3PtrList<ImageInfo> infos)
 {
     if (infos.isEmpty())
     {
@@ -609,13 +616,13 @@ bool ImageDescEditTab::eventFilter(QObject *, QEvent *e)
     if ( e->type() == QEvent::KeyPress )
     {
         QKeyEvent *k = (QKeyEvent *)e;
-        if (k->state() == Qt::ControlButton &&
+        if (k->state() == Qt::ControlModifier &&
             (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return))
         {
             emit signalNextItem();
             return true;
         }
-        else if (k->state() == Qt::ShiftButton &&
+        else if (k->state() == Qt::ShiftModifier &&
                  (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return))
         {
             emit signalPrevItem();
@@ -719,7 +726,7 @@ void ImageDescEditTab::updateTagsView()
 {
     d->tagsView->blockSignals(true);
 
-    QListViewItemIterator it( d->tagsView);
+    Q3ListViewItemIterator it( d->tagsView);
     while (it.current())
     {
         TAlbumCheckListItem* tItem = dynamic_cast<TAlbumCheckListItem*>(it.current());
@@ -777,7 +784,7 @@ void ImageDescEditTab::setMetadataWidgetStatus(int status, QWidget *widget)
     }
 }
 
-void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint &, int )
+void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint &, int )
 {
     TAlbum *album;
 
@@ -798,7 +805,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
     if(!album)
         return;
 
-    d->ABCMenu = new QPopupMenu;
+    d->ABCMenu = new Q3PopupMenu;
     
     connect(d->ABCMenu, SIGNAL( aboutToShow() ),
             this, SLOT( slotABCContextMenu() ));
@@ -818,7 +825,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
 
     popmenu.insertSeparator(-1);
 
-    QPopupMenu selectTagsMenu;
+    Q3PopupMenu selectTagsMenu;
     selectTagsMenu.insertItem(i18n("All Tags"),   14);
     if (!album->isRoot())
     {
@@ -828,7 +835,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
     }
     popmenu.insertItem(i18n("Select"), &selectTagsMenu);
 
-    QPopupMenu deselectTagsMenu;
+    Q3PopupMenu deselectTagsMenu;
     deselectTagsMenu.insertItem(i18n("All Tags"), 15);
     if (!album->isRoot())
     {
@@ -841,7 +848,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
     popmenu.insertItem(i18n("Invert Selection"),  16);
     popmenu.insertSeparator(-1);
 
-    QPopupMenu toggleAutoMenu;
+    Q3PopupMenu toggleAutoMenu;
     toggleAutoMenu.setCheckable(true);
     toggleAutoMenu.insertItem(i18n("None"),    21);
     toggleAutoMenu.insertSeparator(-1);
@@ -882,7 +889,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
         case 14:   // Select All Tags.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
-            QListViewItemIterator it(d->tagsView, QListViewItemIterator::NotChecked);
+            Q3ListViewItemIterator it(d->tagsView, Q3ListViewItemIterator::NotChecked);
             while (it.current())
             {
                 TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
@@ -896,7 +903,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
         case 15:   // Deselect All Tags.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
-            QListViewItemIterator it(d->tagsView, QListViewItemIterator::Checked);
+            Q3ListViewItemIterator it(d->tagsView, Q3ListViewItemIterator::Checked);
             while (it.current())
             {
                 TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
@@ -910,7 +917,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
         case 16:   // Invert All Tags Selection.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
-            QListViewItemIterator it(d->tagsView);
+            Q3ListViewItemIterator it(d->tagsView);
             while (it.current())
             {
                 TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
@@ -1002,7 +1009,7 @@ void ImageDescEditTab::slotABCContextMenu()
         names.push_back(it->formattedName());
     }
 
-    qHeapSort(names);
+    qSort(names);
 
     for ( QStringList::Iterator it = names.begin(); it != names.end(); ++it )
     {
@@ -1153,7 +1160,7 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
     }
     else
     {
-        QCheckListItem* parentItem = (QCheckListItem*)(tag->parent()->extraData(this));
+        Q3CheckListItem* parentItem = (Q3CheckListItem*)(tag->parent()->extraData(this));
 
         if (!parentItem)
         {
@@ -1180,7 +1187,7 @@ void ImageDescEditTab::slotAlbumDeleted(Album* a)
 
     TAlbum* album = (TAlbum*)a;
 
-    QCheckListItem* viewItem = (QCheckListItem*)(album->extraData(this));
+    Q3CheckListItem* viewItem = (Q3CheckListItem*)(album->extraData(this));
     delete viewItem;
     album->removeExtraData(this);
     d->hub.setTag(album, false, MetadataHub::MetadataDisjoint);
@@ -1204,13 +1211,13 @@ void ImageDescEditTab::slotAlbumMoved(TAlbum* tag, TAlbum* newParent)
     if (!tag || !newParent)
         return;
 
-    QCheckListItem* item = (QCheckListItem*)tag->extraData(this);
+    Q3CheckListItem* item = (Q3CheckListItem*)tag->extraData(this);
     if (!item)
         return;
 
     if (item->parent())
     {
-        QListViewItem* oldPItem = item->parent();
+        Q3ListViewItem* oldPItem = item->parent();
         oldPItem->takeItem(item);
     }
     else
@@ -1218,7 +1225,7 @@ void ImageDescEditTab::slotAlbumMoved(TAlbum* tag, TAlbum* newParent)
         d->tagsView->takeItem(item);
     }
 
-    QCheckListItem* newPItem = (QCheckListItem*)newParent->extraData(this);
+    Q3CheckListItem* newPItem = (Q3CheckListItem*)newParent->extraData(this);
     if (newPItem)
         newPItem->insertItem(item);
     else
@@ -1232,7 +1239,7 @@ void ImageDescEditTab::slotAlbumRenamed(Album* a)
 
     TAlbum* album = (TAlbum*)a;
 
-    QCheckListItem* viewItem = (QCheckListItem*)(album->extraData(this));
+    Q3CheckListItem* viewItem = (Q3CheckListItem*)(album->extraData(this));
     if (!viewItem)
     {
         DWarning() << "Failed to find view item for Tag "
@@ -1265,7 +1272,7 @@ void ImageDescEditTab::toggleParentTags(TAlbum *album, bool b)
     if (!album)
         return;
 
-    QListViewItemIterator it(d->tagsView);
+    Q3ListViewItemIterator it(d->tagsView);
     while (it.current())
     {
         TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
@@ -1288,7 +1295,7 @@ void ImageDescEditTab::setTagThumbnail(TAlbum *album)
     if(!album)
         return;
 
-    QCheckListItem* item = (QCheckListItem*) album->extraData(this);
+    Q3CheckListItem* item = (Q3CheckListItem*) album->extraData(this);
 
     if(!item)
         return;
@@ -1314,7 +1321,7 @@ void ImageDescEditTab::slotGotThumbnailFromIcon(Album *album, const QPixmap& thu
         return;
 
     // update item in tags tree
-    QCheckListItem* item = (QCheckListItem*)album->extraData(this);
+    Q3CheckListItem* item = (Q3CheckListItem*)album->extraData(this);
 
     if(!item)
         return;
@@ -1322,7 +1329,7 @@ void ImageDescEditTab::slotGotThumbnailFromIcon(Album *album, const QPixmap& thu
     item->setPixmap(0, thumbnail);
 
     // update item in recent tags popup menu, if found therein
-    QPopupMenu *menu = d->recentTagsBtn->popup();
+    Q3PopupMenu *menu = d->recentTagsBtn->popup();
     if (menu->indexOf(album->id()) != -1)
     {
         menu->changeItem(album->id(), thumbnail, menu->text(album->id()));
@@ -1344,7 +1351,7 @@ void ImageDescEditTab::slotReloadThumbnails()
     }
 }
 
-void ImageDescEditTab::slotImageTagsChanged(Q_LLONG imageId)
+void ImageDescEditTab::slotImageTagsChanged(qlonglong imageId)
 {
     // don't lose modifications
     if (d->ignoreImageAttributesWatch || d->modified)
@@ -1365,7 +1372,7 @@ void ImageDescEditTab::slotImagesChanged(int albumId)
     setInfos(d->currInfos);
 }
 
-void ImageDescEditTab::slotImageRatingChanged(Q_LLONG imageId)
+void ImageDescEditTab::slotImageRatingChanged(qlonglong imageId)
 {
     if (d->ignoreImageAttributesWatch || d->modified)
         return;
@@ -1373,7 +1380,7 @@ void ImageDescEditTab::slotImageRatingChanged(Q_LLONG imageId)
     reloadForMetadataChange(imageId);
 }
 
-void ImageDescEditTab::slotImageCaptionChanged(Q_LLONG imageId)
+void ImageDescEditTab::slotImageCaptionChanged(qlonglong imageId)
 {
     if (d->ignoreImageAttributesWatch || d->modified)
         return;
@@ -1381,7 +1388,7 @@ void ImageDescEditTab::slotImageCaptionChanged(Q_LLONG imageId)
     reloadForMetadataChange(imageId);
 }
 
-void ImageDescEditTab::slotImageDateChanged(Q_LLONG imageId)
+void ImageDescEditTab::slotImageDateChanged(qlonglong imageId)
 {
     if (d->ignoreImageAttributesWatch || d->modified)
         return;
@@ -1390,7 +1397,7 @@ void ImageDescEditTab::slotImageDateChanged(Q_LLONG imageId)
 }
 
 // private common code for above methods
-void ImageDescEditTab::reloadForMetadataChange(Q_LLONG imageId)
+void ImageDescEditTab::reloadForMetadataChange(qlonglong imageId)
 {
     if (d->currInfos.isEmpty())
         return;
@@ -1416,7 +1423,7 @@ void ImageDescEditTab::reloadForMetadataChange(Q_LLONG imageId)
 
 void ImageDescEditTab::updateRecentTags()
 {
-    QPopupMenu *menu = d->recentTagsBtn->popup();
+    Q3PopupMenu *menu = d->recentTagsBtn->popup();
     menu->clear();
 
     AlbumList recentTags = AlbumManager::instance()->getRecentlyAssignedTags();
@@ -1563,7 +1570,7 @@ void ImageDescEditTab::slotTagsSearchChanged()
 void ImageDescEditTab::slotAssignedTagsToggled(bool t)
 {
     //TODO: this will destroy name filtering. Unify in one method.
-    QListViewItemIterator it(d->tagsView);
+    Q3ListViewItemIterator it(d->tagsView);
     while (it.current())
     {
         TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
@@ -1584,7 +1591,7 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
                         Album* parent = tag->parent();
                         while (parent && !parent->isRoot())
                         {
-                            QCheckListItem *pitem = (QCheckListItem*)parent->extraData(this);
+                            Q3CheckListItem *pitem = (Q3CheckListItem*)parent->extraData(this);
                             pitem->setVisible(true);
                             parent = parent->parent();
                         }
@@ -1620,8 +1627,8 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
                     if (!tagAssigned)
                     {
                         bool somethingIsSet         = false;
-                        QListViewItem* nextSibling  = (*it)->nextSibling();
-                        QListViewItemIterator tmpIt = it;
+                        Q3ListViewItem* nextSibling  = (*it)->nextSibling();
+                        Q3ListViewItemIterator tmpIt = it;
                         ++tmpIt;
                         while (*tmpIt != nextSibling )
                         {

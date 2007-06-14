@@ -24,11 +24,16 @@
 // Qt includes.
 
 #include <qlayout.h>
-#include <qwhatsthis.h>
-#include <qheader.h>
+#include <q3whatsthis.h>
+#include <q3header.h>
 #include <qlabel.h>
 #include <qimage.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3GridLayout>
+#include <Q3VBoxLayout>
+#include <Q3Frame>
 
 // KDE includes.
 
@@ -80,9 +85,9 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
 {
     d = new DProgressDlgPriv;
     
-    QFrame *page      = makeMainWidget();
-    QGridLayout* grid = new QGridLayout(page, 1, 1, 0, spacingHint());
-    QVBoxLayout *vlay = new QVBoxLayout();
+    Q3Frame *page      = makeMainWidget();
+    Q3GridLayout* grid = new Q3GridLayout(page, 1, 1, 0, spacingHint());
+    Q3VBoxLayout *vlay = new Q3VBoxLayout();
     d->actionsList    = new KListView(page);
     d->label          = new QLabel(page);
     d->title          = new QLabel(page);
@@ -102,7 +107,7 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
     d->actionsList->setItemMargin(1);
     d->actionsList->setSelectionModeExt(KListView::NoSelection);
     d->actionsList->header()->hide();
-    d->actionsList->setResizeMode(QListView::LastColumn);
+    d->actionsList->setResizeMode(Q3ListView::LastColumn);
 
     grid->addMultiCellLayout(vlay, 0, 1, 0, 0);
     grid->addMultiCellWidget(d->label, 0, 0, 1, 1);
@@ -143,11 +148,11 @@ void DProgressDlg::addedAction(const QPixmap& pix, const QString &text)
                                                        "image-broken.png");
         dir = dir + "/image-broken.png";
         QPixmap pixbi(dir);
-        img = pixbi.convertToImage().scale(32, 32, QImage::ScaleMin);
+        img = pixbi.convertToImage().scale(32, 32, Qt::KeepAspectRatio);
     }
     else
     {
-        img = pix.convertToImage().scale(32, 32, QImage::ScaleMin);
+        img = pix.convertToImage().scale(32, 32, Qt::KeepAspectRatio);
     }
 
     QPixmap pixmap(img);
@@ -215,9 +220,9 @@ KProgress *DProgressDlg::progressBar() const
 void DProgressDlg::setActionListVSBarVisible(bool visible)
 {
     if (!visible)
-        d->actionsList->setVScrollBarMode(QScrollView::AlwaysOff);
+        d->actionsList->setVScrollBarMode(Q3ScrollView::AlwaysOff);
     else
-        d->actionsList->setVScrollBarMode(QScrollView::Auto);
+        d->actionsList->setVScrollBarMode(Q3ScrollView::Auto);
 }
 
 }  // NameSpace Digikam

@@ -32,6 +32,8 @@
 #include <qcolor.h>
 #include <qregexp.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 // Local includes.
 
@@ -55,7 +57,7 @@
 namespace DigikamHotPixelsImagesPlugin
 {
 
-HotPixelFixer::HotPixelFixer(Digikam::DImg *orgImage, QObject *parent, const QValueList<HotPixel>& hpList, 
+HotPixelFixer::HotPixelFixer(Digikam::DImg *orgImage, QObject *parent, const Q3ValueList<HotPixel>& hpList, 
                              int interpolationMethod)
              : Digikam::DImgThreadedFilter(orgImage, parent, "HotPixels")
 {
@@ -72,8 +74,8 @@ HotPixelFixer::~HotPixelFixer()
 
 void HotPixelFixer::filterImage(void)
 {
-    QValueList <HotPixel>::ConstIterator it;
-    QValueList <HotPixel>::ConstIterator end(m_hpList.end()); 
+    Q3ValueList <HotPixel>::ConstIterator it;
+    Q3ValueList <HotPixel>::ConstIterator end(m_hpList.end()); 
     for (it = m_hpList.begin() ; it != end ; ++it)
     {
         HotPixel hp = *it;
@@ -181,7 +183,7 @@ void HotPixelFixer::interpolate (Digikam::DImg &img, HotPixel &hp, int method)
     } //switch
 }
 
-void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, Direction dir,int maxComponent)
+void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, Qt::Orientation dir,int maxComponent)
 {
     //TODO: implement direction here too
         
@@ -263,9 +265,9 @@ void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, 
                                 weight=w[i][y][x];
                             }
                                     
-                            if (iComp==0) v += weight * img.getPixelColor(xx, yy).red();
-                            else if (iComp==1) v += weight * img.getPixelColor(xx, yy).green();
-                            else v += weight * img.getPixelColor(xx, yy).blue();
+                            if (iComp==0) v += weight * img.getPixelColor(xx, yy).Qt::red();
+                            else if (iComp==1) v += weight * img.getPixelColor(xx, yy).Qt::green();
+                            else v += weight * img.getPixelColor(xx, yy).Qt::blue();
                             
                             sum_weight += weight;
                         }

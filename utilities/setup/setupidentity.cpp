@@ -24,11 +24,14 @@
 // QT includes.
 
 #include <qlayout.h>
-#include <qhgroupbox.h>
-#include <qgroupbox.h>
+#include <q3hgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qvalidator.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -69,7 +72,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
              : QWidget(parent)
 {
     d = new SetupIdentityPriv;
-    QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( parent, 0, KDialog::spacingHint() );
     
     // --------------------------------------------------------
 
@@ -77,8 +80,8 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     QRegExp asciiRx("[\x20-\x7F]+$");
     QValidator *asciiValidator = new QRegExpValidator(asciiRx, this);
 
-    QGroupBox *photographerIdGroup = new QGroupBox(0, Qt::Horizontal, i18n("Photographer Information"), parent);
-    QGridLayout* grid = new QGridLayout( photographerIdGroup->layout(), 1, 1, KDialog::spacingHint());
+    Q3GroupBox *photographerIdGroup = new Q3GroupBox(0, Qt::Horizontal, i18n("Photographer Information"), parent);
+    Q3GridLayout* grid = new Q3GridLayout( photographerIdGroup->layout(), 1, 1, KDialog::spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Author:"), photographerIdGroup);
     d->authorEdit  = new KLineEdit(photographerIdGroup);
@@ -87,7 +90,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label1->setBuddy(d->authorEdit);
     grid->addMultiCellWidget(label1, 0, 0, 0, 0);
     grid->addMultiCellWidget(d->authorEdit, 0, 0, 1, 1);
-    QWhatsThis::add( d->authorEdit, i18n("<p>Set the photographer name. This field is limited "
+    Q3WhatsThis::add( d->authorEdit, i18n("<p>Set the photographer name. This field is limited "
                                          "to 32 ASCII characters."));
 
     QLabel *label2 = new QLabel(i18n("Author Title:"), photographerIdGroup);
@@ -97,13 +100,13 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label2->setBuddy(d->authorTitleEdit);
     grid->addMultiCellWidget(label2, 1, 1, 0, 0);
     grid->addMultiCellWidget(d->authorTitleEdit, 1, 1, 1, 1);
-    QWhatsThis::add( d->authorTitleEdit, i18n("<p>Set the photographer title. This field is limited "
+    Q3WhatsThis::add( d->authorTitleEdit, i18n("<p>Set the photographer title. This field is limited "
                                               "to 32 ASCII characters."));
         
     // --------------------------------------------------------
 
-    QGroupBox *creditsGroup = new QGroupBox(0, Qt::Horizontal, i18n("Credit and Copyright"), parent);
-    QGridLayout* grid2 = new QGridLayout( creditsGroup->layout(), 2, 1, KDialog::spacingHint());
+    Q3GroupBox *creditsGroup = new Q3GroupBox(0, Qt::Horizontal, i18n("Credit and Copyright"), parent);
+    Q3GridLayout* grid2 = new Q3GridLayout( creditsGroup->layout(), 2, 1, KDialog::spacingHint());
 
     QLabel *label3 = new QLabel(i18n("Credit:"), creditsGroup);
     d->creditEdit = new KLineEdit(creditsGroup);
@@ -112,7 +115,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label3->setBuddy(d->creditEdit);
     grid2->addMultiCellWidget(label3, 0, 0, 0, 0);
     grid2->addMultiCellWidget(d->creditEdit, 0, 0, 1, 1);
-    QWhatsThis::add( d->creditEdit, i18n("<p>Set the default provider identification of the picture, "
+    Q3WhatsThis::add( d->creditEdit, i18n("<p>Set the default provider identification of the picture, "
                                          "not necessarily the owner/creator. This field is limited "
                                          "to 32 ASCII characters."));
 
@@ -123,7 +126,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label4->setBuddy(d->sourceEdit);
     grid2->addMultiCellWidget(label4, 1, 1, 0, 0);
     grid2->addMultiCellWidget(d->sourceEdit, 1, 1, 1, 1);
-    QWhatsThis::add( d->sourceEdit, i18n("<p>Set the default original owner identification of the intellectual "
+    Q3WhatsThis::add( d->sourceEdit, i18n("<p>Set the default original owner identification of the intellectual "
                                          "content of the picture. This could be an agency, a member of an agency or "
                                          "an individual photographer name. This field is limited "
                                          "to 32 ASCII characters."));
@@ -135,7 +138,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label5->setBuddy(d->copyrightEdit);
     grid2->addMultiCellWidget(label5, 2, 2, 0, 0);
     grid2->addMultiCellWidget(d->copyrightEdit, 2, 2, 1, 1);
-    QWhatsThis::add( d->copyrightEdit, i18n("<p>Set the default copyright notice of the pictures. "
+    Q3WhatsThis::add( d->copyrightEdit, i18n("<p>Set the default copyright notice of the pictures. "
                                             "This field is limited to 128 ASCII characters."));
 
     // --------------------------------------------------------

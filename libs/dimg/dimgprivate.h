@@ -27,9 +27,9 @@
 
 // QT includes.
 
-#include <qshared.h>
+#include <q3shared.h>
 #include <qstring.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qvariant.h>
 #include <qmap.h>
 
@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DImgPrivate : public QShared
+class DIGIKAM_EXPORT DImgPrivate : public Q3Shared
 {
 public:
 

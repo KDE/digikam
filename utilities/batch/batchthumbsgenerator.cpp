@@ -1,3 +1,6 @@
+//Added by qt3to4:
+#include <QPixmap>
+#include <QCloseEvent>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -72,7 +75,7 @@ public:
     
     QTime                      duration;
     
-    QGuardedPtr<ThumbnailJob>  thumbJob;
+    QPointer<ThumbnailJob>  thumbJob;
 };
 
 BatchThumbsGenerator::BatchThumbsGenerator(QWidget* parent)

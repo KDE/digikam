@@ -28,7 +28,7 @@
 
 // Qt includes.
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 // KDE includes.
 
@@ -59,7 +59,7 @@ class DIGIKAM_EXPORT ImagePropertiesSideBarDB : public ImagePropertiesSideBar
 
 public:
 
-    ImagePropertiesSideBarDB(QWidget* parent, const char *name, QSplitter *splitter, Side side=Left,
+    ImagePropertiesSideBarDB(QWidget* parent, const char *name, QSplitter *splitter, Side side=Qt::DockLeft,
                              bool mimimizedDefault=false);
 
     ~ImagePropertiesSideBarDB();
@@ -67,7 +67,7 @@ public:
     virtual void itemChanged(const KURL& url, const QRect &rect = QRect(), DImg *img = 0);
 
     virtual void itemChanged(ImageInfo *info, const QRect &rect = QRect(), DImg *img = 0);
-    virtual void itemChanged(QPtrList<ImageInfo> infos);
+    virtual void itemChanged(Q3PtrList<ImageInfo> infos);
 
     void takeImageInfoOwnership(bool takeOwnership);
 
@@ -104,7 +104,7 @@ private:
 
     void itemChanged(const KURL& url, ImageInfo *info,
                      const QRect &rect, DImg *img);
-    void itemChanged(QPtrList<ImageInfo> infos, const QRect &rect, DImg *img);
+    void itemChanged(Q3PtrList<ImageInfo> infos, const QRect &rect, DImg *img);
 
 private:
 

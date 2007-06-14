@@ -31,6 +31,9 @@
 #include <qfile.h>
 #include <qdatastream.h>
 #include <qbuffer.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3ValueList>
 
 // KDE includes.
 
@@ -50,8 +53,8 @@
 #include "namefilter.h"
 #include "digikamdates.h"
 
-kio_digikamdates::kio_digikamdates(const QCString &pool_socket,
-                                   const QCString &app_socket)
+kio_digikamdates::kio_digikamdates(const Q3CString &pool_socket,
+                                   const Q3CString &app_socket)
                 : SlaveBase("kio_digikamdates", pool_socket, app_socket)
 {
 }
@@ -69,7 +72,7 @@ void kio_digikamdates::special(const QByteArray& data)
     QString filter;
     int     getDimensions;
 
-    QDataStream ds(data, IO_ReadOnly);
+    QDataStream ds(data, QIODevice::ReadOnly);
     ds >> kurl;
     ds >> filter;
     ds >> getDimensions;
@@ -87,13 +90,13 @@ void kio_digikamdates::special(const QByteArray& data)
         typedef QPair<int, int> YearMonth;
         QMap<YearMonth, bool> yearMonthMap;
 
-        QValueList<QPair<QString, QDateTime> > images;
+        Q3ValueList<QPair<QString, QDateTime> > images;
         {
             Digikam::DatabaseAccess access;
             images = access.db()->getItemsAndDate();
         }
 
-        for ( QValueList<QPair<QString, QDateTime> >::iterator it = images.begin(); it != images.end(); ++it)
+        for ( Q3ValueList<QPair<QString, QDateTime> >::iterator it = images.begin(); it != images.end(); ++it)
         {
             if ( !nameFilter.matches((*it).first) )
                 continue;
@@ -104,7 +107,7 @@ void kio_digikamdates::special(const QByteArray& data)
             }
         }
 
-        QDataStream os(ba, IO_WriteOnly);
+        QDataStream os(ba, QIODevice::WriteOnly);
 
         int year, month;
         for ( QMap<YearMonth, bool>::iterator it = yearMonthMap.begin();

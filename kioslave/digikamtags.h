@@ -28,6 +28,8 @@
 // Qt includes.
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 // KDE includes.
 
@@ -37,14 +39,14 @@
 
 
 class KURL;
-class QCString;
+class Q3CString;
 
 class kio_digikamtagsProtocol : public KIO::SlaveBase
 {
 public:
 
-    kio_digikamtagsProtocol(const QCString &pool_socket,
-                            const QCString &app_socket);
+    kio_digikamtagsProtocol(const Q3CString &pool_socket,
+                            const Q3CString &app_socket);
     virtual ~kio_digikamtagsProtocol();
 
     void special(const QByteArray& data);

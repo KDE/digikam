@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qobject.h>
 
 class QString;
@@ -56,7 +56,7 @@ public:
 
     CameraType* find(const QString& title);
     CameraType* autoDetect(bool& retry);
-    QPtrList<CameraType>* cameraList();
+    Q3PtrList<CameraType>* cameraList();
     
     bool changeCameraAccessTime(const QString& cameraTitle, const QDateTime& newDate);
 

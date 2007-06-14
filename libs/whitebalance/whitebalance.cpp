@@ -114,9 +114,9 @@ void WhiteBalance::whiteBalance(uchar *data, int width, int height, bool sixteen
                                 double gamma, double saturation)
 { 
     d->temperature = temperature;
-    d->green       = green;
+    d->Qt::green       = Qt::green;
     d->dark        = dark;
-    d->black       = black;
+    d->Qt::black       = Qt::black;
     d->exposition  = exposition;
     d->gamma       = gamma;
     d->saturation  = saturation;
@@ -139,10 +139,10 @@ void WhiteBalance::autoWBAdjustementFromColor(const QColor &tc, double &temperat
     register int l, r, m;
     double sR, sG, sB, mRB, t;
 
-    t   = QMAX( QMAX(tc.red(), tc.green()), tc.blue());
-    sR  = tc.red()   / t;
-    sG  = tc.green() / t;
-    sB  = tc.blue()  / t;
+    t   = QMAX( QMAX(tc.Qt::red(), tc.Qt::green()), tc.Qt::blue());
+    sR  = tc.Qt::red()   / t;
+    sG  = tc.Qt::green() / t;
+    sB  = tc.Qt::blue()  / t;
     mRB = sR / sB;
 
     DDebug() << "Sums:  R:" << sR << " G:" << sG  << " B:" << sB << endl;
@@ -170,7 +170,7 @@ void WhiteBalance::autoWBAdjustementFromColor(const QColor &tc, double &temperat
     DDebug() << "Green component:" << t << endl;
 
     temperature = m*10.0+2000.0;
-    green       = t;
+    Qt::green       = t;
 }
 
 void WhiteBalance::autoExposureAdjustement(uchar* data, int width, int height, bool sb,
@@ -199,10 +199,10 @@ void WhiteBalance::autoExposureAdjustement(uchar* data, int width, int height, b
     for (i = 1, sum = 0; (i < (int)rgbMax) && (sum < stop); i++)
         sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
     
-    black = (double)i / rgbMax;
-    black /= 2;
+    Qt::black = (double)i / rgbMax;
+    Qt::black /= 2;
     
-    DDebug() << "Black:" << black << "  Exposition:" << expo << endl;
+    DDebug() << "Black:" << Qt::black << "  Exposition:" << expo << endl;
 
     delete histogram;
 }
@@ -218,7 +218,7 @@ void WhiteBalance::setRGBmult()
     d->mr  = 1.0 / blackBodyWhiteBalance[t][0];
     d->mg  = 1.0 / blackBodyWhiteBalance[t][1];
     d->mb  = 1.0 / blackBodyWhiteBalance[t][2];
-    d->mg *= d->green;
+    d->mg *= d->Qt::green;
     
     // Normalize to at least 1.0, so we are not dimming colors only bumping.
     mi    = QMIN(d->mr, d->mg);
@@ -231,7 +231,7 @@ void WhiteBalance::setRGBmult()
 void WhiteBalance::setLUTv()
 {
     double b = d->mg * pow(2, d->exposition);
-    d->BP    = (uint)(d->rgbMax * d->black);
+    d->BP    = (uint)(d->rgbMax * d->Qt::black);
     d->WP    = (uint)(d->rgbMax / b);
     
     if (d->WP - d->BP < 1) d->WP = d->BP + 1;
@@ -268,20 +268,20 @@ void WhiteBalance::adjustWhiteBalance(uchar *data, int width, int height, bool s
          
     if (!sixteenBit)        // 8 bits image.
     {
-        uchar red, green, blue;
+        uchar Qt::red, Qt::green, Qt::blue;
         uchar *ptr = data;
         
         for (j = 0 ; j < (uint)(width*height) ; j++)
         {
             int v, rv[3];
 
-            blue  = ptr[0];
-            green = ptr[1];
-            red   = ptr[2];
+            Qt::blue  = ptr[0];
+            Qt::green = ptr[1];
+            Qt::red   = ptr[2];
 
-            rv[0] = (int)(blue  * d->mb);
-            rv[1] = (int)(green * d->mg);
-            rv[2] = (int)(red   * d->mr);
+            rv[0] = (int)(Qt::blue  * d->mb);
+            rv[1] = (int)(Qt::green * d->mg);
+            rv[2] = (int)(Qt::red   * d->mr);
             v = QMAX(rv[0], rv[1]);
             v = QMAX(v, rv[2]);
 
@@ -296,20 +296,20 @@ void WhiteBalance::adjustWhiteBalance(uchar *data, int width, int height, bool s
     }
     else               // 16 bits image.
     {
-        unsigned short red, green, blue;
+        unsigned short Qt::red, Qt::green, Qt::blue;
         unsigned short *ptr = (unsigned short *)data;
         
         for (j = 0 ; j < (uint)(width*height) ; j++)
         {
             int v, rv[3];
 
-            blue  = ptr[0];
-            green = ptr[1];
-            red   = ptr[2];
+            Qt::blue  = ptr[0];
+            Qt::green = ptr[1];
+            Qt::red   = ptr[2];
 
-            rv[0] = (int)(blue  * d->mb);
-            rv[1] = (int)(green * d->mg);
-            rv[2] = (int)(red   * d->mr);
+            rv[0] = (int)(Qt::blue  * d->mb);
+            rv[1] = (int)(Qt::green * d->mg);
+            rv[2] = (int)(Qt::red   * d->mr);
             v     = QMAX(rv[0], rv[1]);
             v     = QMAX(v, rv[2]);
 

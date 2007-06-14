@@ -26,11 +26,13 @@
 // Qt includes.
 
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlcdnumber.h>
 #include <qslider.h>
 #include <qlayout.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -84,7 +86,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 1, 0, spacingHint());
+    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 1, 1, 0, spacingHint());
     QLabel *label1 = new QLabel(i18n("Sensitivity (ISO):"), gboxSettings);
 
     m_sensibilitySlider = new QSlider(2, 30, 1, 12, Qt::Horizontal, gboxSettings);
@@ -97,8 +99,8 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     m_sensibilityLCDValue->display( QString::number(2400) );
     whatsThis = i18n("<p>Set here the film ISO-sensitivity to use for simulating the film graininess.");
 
-    QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
-    QWhatsThis::add( m_sensibilitySlider, whatsThis);
+    Q3WhatsThis::add( m_sensibilityLCDValue, whatsThis);
+    Q3WhatsThis::add( m_sensibilitySlider, whatsThis);
 
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
     gridSettings->addMultiCellWidget(m_sensibilitySlider, 1, 1, 0, 0);

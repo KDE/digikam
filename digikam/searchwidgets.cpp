@@ -26,16 +26,21 @@
 
 // Qt includes.
 
-#include <qhbox.h>
-#include <qvbox.h>
+#include <q3hbox.h>
+#include <q3vbox.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
-#include <qgroupbox.h>
-#include <qvgroupbox.h>
+#include <q3groupbox.h>
+#include <q3vgroupbox.h>
 #include <qlayout.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3Frame>
+#include <Q3ValueList>
+#include <QMouseEvent>
 
 // KDE includes.
 
@@ -112,7 +117,7 @@ RuleOpTable[] =
 static const int RuleOpTableCount = 16;
 
 SearchRuleLabel::SearchRuleLabel(const QString& text, QWidget *parent,
-                                 const char *name, WFlags f )
+                                 const char *name, Qt::WFlags f )
                : QLabel(text, parent, name, f)
 {
 }
@@ -125,7 +130,7 @@ void SearchRuleLabel::mouseDoubleClickEvent( QMouseEvent * e )
 SearchAdvancedRule::SearchAdvancedRule(QWidget* parent, SearchAdvancedRule::Option option)
                   : SearchAdvancedBase(SearchAdvancedBase::RULE)
 {
-    m_box = new QVBox(parent);
+    m_box = new Q3VBox(parent);
     m_box->layout()->setSpacing( KDialog::spacingHint() );
     m_box->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 
@@ -133,12 +138,12 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent, SearchAdvancedRule::Opti
     m_option       = option;
     if (option != NONE)
     {
-        m_optionsBox  = new QHBox( m_box );
+        m_optionsBox  = new Q3HBox( m_box );
         m_label = new SearchRuleLabel( option == AND ?
                                        i18n("As well as") : i18n("Or"),
                                        m_optionsBox);
-        QFrame* hline = new QFrame( m_optionsBox );
-        hline->setFrameStyle( QFrame::HLine|QFrame::Sunken );
+        Q3Frame* hline = new Q3Frame( m_optionsBox );
+        hline->setFrameStyle( Q3Frame::HLine|Q3Frame::Sunken );
         m_label->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
         hline->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 
@@ -158,13 +163,13 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent, SearchAdvancedRule::Opti
     m_operator = new QComboBox( m_hbox );
     m_operator->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 
-    m_valueBox = new QHBox( m_hbox );
+    m_valueBox = new Q3HBox( m_hbox );
     m_widgetType = NOWIDGET;
 
     slotKeyChanged( 0 );
     m_check = new QCheckBox( m_hbox );
 
-    m_hboxLayout = new QHBoxLayout( m_hbox );
+    m_hboxLayout = new Q3HBoxLayout( m_hbox );
     m_hboxLayout->setSpacing( KDialog::spacingHint() );
     m_hboxLayout->addWidget( m_key );
     m_hboxLayout->addWidget( m_operator );
@@ -434,10 +439,10 @@ void SearchAdvancedRule::addOption(Option option)
 
     m_box->layout()->remove(m_hbox);
 
-    m_optionsBox = new QHBox(m_box);
+    m_optionsBox = new Q3HBox(m_box);
     new QLabel(option == AND ? i18n("As well as") : i18n("Or"), m_optionsBox);
-    QFrame* hline = new QFrame(m_optionsBox);
-    hline->setFrameStyle(QFrame::HLine|QFrame::Sunken);
+    Q3Frame* hline = new Q3Frame(m_optionsBox);
+    hline->setFrameStyle(Q3Frame::HLine|Q3Frame::Sunken);
     hline->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     m_optionsBox->show();
 
@@ -472,9 +477,9 @@ void SearchAdvancedRule::removeCheck()
 SearchAdvancedGroup::SearchAdvancedGroup(QWidget* parent)
                    : SearchAdvancedBase(SearchAdvancedBase::GROUP)
 {
-    m_box      = new QHBox(parent);
+    m_box      = new Q3HBox(parent);
     m_box->layout()->setSpacing(KDialog::spacingHint());
-    m_groupbox = new QVGroupBox(m_box);
+    m_groupbox = new Q3VGroupBox(m_box);
     m_check    = new QCheckBox(m_box);
     m_option   = SearchAdvancedRule::NONE;
     m_box->show();
@@ -517,7 +522,7 @@ void SearchAdvancedGroup::addRule(SearchAdvancedRule* rule)
 
 void SearchAdvancedGroup::removeRules()
 {
-    typedef QValueList<SearchAdvancedRule*> RuleList;
+    typedef Q3ValueList<SearchAdvancedRule*> RuleList;
 
     for (RuleList::iterator it = m_childRules.begin();
          it != m_childRules.end(); ++it)
@@ -537,7 +542,7 @@ void SearchAdvancedGroup::removeRules()
     removeOption();
 }
 
-QValueList<SearchAdvancedRule*> SearchAdvancedGroup::childRules() const
+Q3ValueList<SearchAdvancedRule*> SearchAdvancedGroup::childRules() const
 {
     return m_childRules;
 }

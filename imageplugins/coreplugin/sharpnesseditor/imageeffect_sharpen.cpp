@@ -31,9 +31,11 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qcombobox.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -71,7 +73,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 1, 0, spacingHint());
+    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 2, 1, 0, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Method:"), gboxSettings);
 
@@ -79,9 +81,9 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     m_sharpMethod->insertItem( i18n("Simple sharp") );
     m_sharpMethod->insertItem( i18n("Unsharp mask") );
     m_sharpMethod->insertItem( i18n("Refocus") );
-    QWhatsThis::add( m_sharpMethod, i18n("<p>Select here the sharping method to apply on image."));
+    Q3WhatsThis::add( m_sharpMethod, i18n("<p>Select here the sharping method to apply on image."));
     
-    m_stack = new QWidgetStack(gboxSettings);
+    m_stack = new Q3WidgetStack(gboxSettings);
 
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
     gridSettings->addMultiCellWidget(m_sharpMethod, 0, 0, 1, 1);
@@ -91,13 +93,13 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     // -------------------------------------------------------------
     
     QWidget *simpleSharpSettings = new QWidget(m_stack);
-    QGridLayout* grid1           = new QGridLayout( simpleSharpSettings, 2, 1, 0, spacingHint());
+    Q3GridLayout* grid1           = new Q3GridLayout( simpleSharpSettings, 2, 1, 0, spacingHint());
 
     QLabel *label = new QLabel(i18n("Sharpness:"), simpleSharpSettings);
     m_radiusInput = new KIntNumInput(simpleSharpSettings);
     m_radiusInput->setRange(0, 100, 1, true);
     m_radiusInput->setValue(0);
-    QWhatsThis::add( m_radiusInput, i18n("<p>A sharpness of 0 has no effect, "
+    Q3WhatsThis::add( m_radiusInput, i18n("<p>A sharpness of 0 has no effect, "
                                          "1 and above determine the sharpen matrix radius "
                                          "that determines how much to sharpen the image."));
 
@@ -109,26 +111,26 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *unsharpMaskSettings = new QWidget(m_stack);
-    QGridLayout* grid2           = new QGridLayout( unsharpMaskSettings, 6, 1, 0, spacingHint());
+    Q3GridLayout* grid2           = new Q3GridLayout( unsharpMaskSettings, 6, 1, 0, spacingHint());
 
     QLabel *label2 = new QLabel(i18n("Radius:"), unsharpMaskSettings);
     m_radiusInput2 = new KIntNumInput(unsharpMaskSettings);
     m_radiusInput2->setRange(1, 120, 1, true);
-    QWhatsThis::add( m_radiusInput2, i18n("<p>Radius value is the gaussian blur matrix radius value "
+    Q3WhatsThis::add( m_radiusInput2, i18n("<p>Radius value is the gaussian blur matrix radius value "
                                          "used to determines how much to blur the image.") );
     
     QLabel *label3 = new QLabel(i18n("Amount:"), unsharpMaskSettings);
     m_amountInput  = new KDoubleNumInput(unsharpMaskSettings);
     m_amountInput->setPrecision(1);
     m_amountInput->setRange(0.0, 5.0, 0.1, true);
-    QWhatsThis::add( m_amountInput, i18n("<p>The value of the difference between the "
+    Q3WhatsThis::add( m_amountInput, i18n("<p>The value of the difference between the "
                      "original and the blur image that is added back into the original.") );
     
     QLabel *label4   = new QLabel(i18n("Threshold:"), unsharpMaskSettings);
     m_thresholdInput = new KDoubleNumInput(unsharpMaskSettings);
     m_thresholdInput->setPrecision(2);
     m_thresholdInput->setRange(0.0, 1.0, 0.01, true);
-    QWhatsThis::add( m_thresholdInput, i18n("<p>The threshold, as a fraction of the maximum "
+    Q3WhatsThis::add( m_thresholdInput, i18n("<p>The threshold, as a fraction of the maximum "
                      "luminosity value, needed to apply the difference amount.") );
 
     grid2->addMultiCellWidget(label2, 0, 0, 0, 1);
@@ -143,13 +145,13 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *refocusSettings = new QWidget(m_stack);
-    QGridLayout* grid3       = new QGridLayout(refocusSettings, 10, 1, 0, spacingHint());
+    Q3GridLayout* grid3       = new Q3GridLayout(refocusSettings, 10, 1, 0, spacingHint());
     
     QLabel *label5 = new QLabel(i18n("Circular sharpness:"), refocusSettings);
     m_radius       = new KDoubleNumInput(refocusSettings);
     m_radius->setPrecision(2);
     m_radius->setRange(0.0, 5.0, 0.01, true);
-    QWhatsThis::add( m_radius, i18n("<p>This is the radius of the circular convolution. It is the most important "
+    Q3WhatsThis::add( m_radius, i18n("<p>This is the radius of the circular convolution. It is the most important "
                                     "parameter for using the plugin. For most images the default value of 1.0 "
                                     "should give good results. Select a higher value when your image is very blurred."));
     
@@ -157,7 +159,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     m_correlation  = new KDoubleNumInput(refocusSettings);
     m_correlation->setPrecision(2);
     m_correlation->setRange(0.0, 1.0, 0.01, true);
-    QWhatsThis::add( m_correlation, i18n("<p>Increasing the correlation may help to reduce artifacts. The correlation can "
+    Q3WhatsThis::add( m_correlation, i18n("<p>Increasing the correlation may help to reduce artifacts. The correlation can "
                                          "range from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. "
                                          "Using a high value for the correlation will reduce the sharpening effect of the "
                                          "plugin."));
@@ -166,7 +168,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     m_noise        = new KDoubleNumInput(refocusSettings);
     m_noise->setPrecision(3);
     m_noise->setRange(0.0, 1.0, 0.001, true);
-    QWhatsThis::add( m_noise, i18n("<p>Increasing the noise filter parameter may help to reduce artifacts. The noise filter "
+    Q3WhatsThis::add( m_noise, i18n("<p>Increasing the noise filter parameter may help to reduce artifacts. The noise filter "
                                    "can range from 0-1 but values higher than 0.1 are rarely helpful. When the noise filter "
                                    "value is too low, e.g. 0.0 the image quality will be very poor. A useful value is 0.01. "
                                    "Using a high value for the noise filter will reduce the sharpening "
@@ -176,7 +178,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     m_gauss        = new KDoubleNumInput(refocusSettings);
     m_gauss->setPrecision(2);
     m_gauss->setRange(0.0, 1.0, 0.01, true);
-    QWhatsThis::add( m_gauss, i18n("<p>This is the sharpness for the gaussian convolution. Use this parameter when your "
+    Q3WhatsThis::add( m_gauss, i18n("<p>This is the sharpness for the gaussian convolution. Use this parameter when your "
                                    "blurring is of gaussian type. In most cases you should set this parameter to 0, because "
                                    "it causes nasty artifacts. When you use non-zero values you will probably have to "
                                    "increase the correlation and/or noise filter parameters too."));
@@ -184,7 +186,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     QLabel *label9 = new QLabel(i18n("Matrix size:"), refocusSettings);
     m_matrixSize   = new KIntNumInput(refocusSettings);
     m_matrixSize->setRange(0, MAX_MATRIX_SIZE, 1, true);  
-    QWhatsThis::add( m_matrixSize, i18n("<p>This parameter determines the size of the transformation matrix. "
+    Q3WhatsThis::add( m_matrixSize, i18n("<p>This parameter determines the size of the transformation matrix. "
                                         "Increasing the matrix width may give better results, especially when you have "
                                         "chosen large values for circular or gaussian sharpness."));
 
@@ -670,9 +672,9 @@ void ImageEffect_Sharpen::slotUser3()
 
     QFile file(loadRestorationFile.path());
     
-    if ( file.open(IO_ReadOnly) )   
+    if ( file.open(QIODevice::ReadOnly) )   
     {
-        QTextStream stream( &file );
+        Q3TextStream stream( &file );
         if ( stream.readLine() != "# Photograph Refocus Configuration File" )
         {
            KMessageBox::error(this, 
@@ -707,9 +709,9 @@ void ImageEffect_Sharpen::slotUser2()
 
     QFile file(saveRestorationFile.path());
     
-    if ( file.open(IO_WriteOnly) )   
+    if ( file.open(QIODevice::WriteOnly) )   
     {
-        QTextStream stream( &file );        
+        Q3TextStream stream( &file );        
         stream << "# Photograph Refocus Configuration File\n";    
         stream << m_matrixSize->value() << "\n";    
         stream << m_radius->value() << "\n";    

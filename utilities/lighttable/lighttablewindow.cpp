@@ -23,7 +23,13 @@
 
 // Qt includes.
 
-#include <qdockarea.h>
+#include <q3dockarea.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3PtrList>
+#include <Q3Frame>
+#include <Q3VBoxLayout>
+#include <QCloseEvent>
 
 // KDE includes.
 
@@ -80,7 +86,7 @@ bool LightTableWindow::lightTableWindowCreated()
 }
 
 LightTableWindow::LightTableWindow()
-                : KMainWindow(0, "lighttable", WType_TopLevel)
+                : KMainWindow(0, "lighttable", Qt::WType_TopLevel)
 {
     d = new LightTableWindowPriv;
     m_instance = this;
@@ -169,13 +175,13 @@ void LightTableWindow::setupUserArea()
 {
     QWidget* mainW    = new QWidget(this);
     d->hSplitter      = new QSplitter(Qt::Horizontal, mainW);
-    QHBoxLayout *hlay = new QHBoxLayout(mainW);
+    Q3HBoxLayout *hlay = new Q3HBoxLayout(mainW);
     d->leftSidebar    = new ImagePropertiesSideBarDB(mainW, 
                             "LightTable Left Sidebar", d->hSplitter,
                             Sidebar::Left, true);
 
     QWidget* centralW = new QWidget(d->hSplitter);
-    QVBoxLayout *vlay = new QVBoxLayout(centralW);
+    Q3VBoxLayout *vlay = new Q3VBoxLayout(centralW);
     d->vSplitter      = new QSplitter(Qt::Vertical, centralW);
     d->barView        = new LightTableBar(d->vSplitter, ThumbBarView::Horizontal, 
                                           AlbumSettings::instance()->getExifRotate());
@@ -190,13 +196,13 @@ void LightTableWindow::setupUserArea()
     hlay->addWidget(d->hSplitter);
     hlay->addWidget(d->rightSidebar);
 
-    d->hSplitter->setFrameStyle( QFrame::NoFrame );
-    d->hSplitter->setFrameShadow( QFrame::Plain );
-    d->hSplitter->setFrameShape( QFrame::NoFrame );
+    d->hSplitter->setFrameStyle( Q3Frame::NoFrame );
+    d->hSplitter->setFrameShadow( Q3Frame::Plain );
+    d->hSplitter->setFrameShape( Q3Frame::NoFrame );
     d->hSplitter->setOpaqueResize(false);
-    d->vSplitter->setFrameStyle( QFrame::NoFrame );
-    d->vSplitter->setFrameShadow( QFrame::Plain );
-    d->vSplitter->setFrameShape( QFrame::NoFrame );
+    d->vSplitter->setFrameStyle( Q3Frame::NoFrame );
+    d->vSplitter->setFrameShadow( Q3Frame::Plain );
+    d->vSplitter->setFrameShape( Q3Frame::NoFrame );
     d->vSplitter->setOpaqueResize(false);
 
     setCentralWidget(mainW);
@@ -521,7 +527,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
     }
 
     d->barView->blockSignals(true);
-    for (QPtrList<ImageInfo>::const_iterator it = l.begin(); it != l.end(); ++it)
+    for (Q3PtrList<ImageInfo>::const_iterator it = l.begin(); it != l.end(); ++it)
     {
         QString fileExtension = (*it)->kurl().fileName().section( '.', -1 );
 
@@ -993,7 +999,7 @@ void LightTableWindow::slotToggleFullScreen()
     {
 
 #if QT_VERSION >= 0x030300
-        setWindowState( windowState() & ~WindowFullScreen );
+        setWindowState( windowState() & ~Qt::WindowFullScreen );
 #else
         showNormal();
 #endif
@@ -1100,7 +1106,7 @@ void LightTableWindow::slotEscapePressed()
 
 void LightTableWindow::showToolBars()
 {
-    QPtrListIterator<KToolBar> it = toolBarIterator();
+    Q3PtrListIterator<KToolBar> it = toolBarIterator();
     KToolBar* bar;
 
     for( ; it.current()!=0L ; ++it)
@@ -1116,7 +1122,7 @@ void LightTableWindow::showToolBars()
 
 void LightTableWindow::hideToolBars()
 {
-    QPtrListIterator<KToolBar> it = toolBarIterator();
+    Q3PtrListIterator<KToolBar> it = toolBarIterator();
     KToolBar* bar;
 
     for( ; it.current()!=0L ; ++it)

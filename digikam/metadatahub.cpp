@@ -24,6 +24,8 @@
 // Qt includes
 
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 // KDE includes
 
@@ -152,13 +154,13 @@ void MetadataHub::load(ImageInfo *info)
     load(info->dateTime(), info->comment(), info->rating());
 
     AlbumManager *man = AlbumManager::instance();
-    QValueList<int> tagIds = info->tagIds();
-    QValueList<TAlbum *> loadedTags;
+    Q3ValueList<int> tagIds = info->tagIds();
+    Q3ValueList<TAlbum *> loadedTags;
 
     if (d->dbmode == ManagedTags)
     {
-        QValueList<TAlbum *> loadedTags;
-        for (QValueList<int>::iterator it = tagIds.begin(); it != tagIds.end(); ++it)
+        Q3ValueList<TAlbum *> loadedTags;
+        for (Q3ValueList<int>::iterator it = tagIds.begin(); it != tagIds.end(); ++it)
         {
             TAlbum *album = man->findTAlbum(*it);
             if (!album)
@@ -217,7 +219,7 @@ void MetadataHub::load(const DMetadata &metadata)
     {
         AlbumManager *man = AlbumManager::instance();
         QStringList tagPaths = metadata.getImageKeywords();
-        QValueList<TAlbum *> loadedTags;
+        Q3ValueList<TAlbum *> loadedTags;
 
         for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
         {
@@ -247,13 +249,13 @@ bool MetadataHub::load(const QString &filePath)
 }
 
 // private common code to merge tags
-void MetadataHub::loadTags(const QValueList<TAlbum *> &loadedTags)
+void MetadataHub::loadTags(const Q3ValueList<TAlbum *> &loadedTags)
 {
     // get copy of tags
-    QValueList<TAlbum *> previousTags = d->tags.keys();
+    Q3ValueList<TAlbum *> previousTags = d->tags.keys();
 
     // first go through all tags contained in this set
-    for (QValueList<TAlbum *>::const_iterator it = loadedTags.begin(); it != loadedTags.end(); ++it)
+    for (Q3ValueList<TAlbum *>::const_iterator it = loadedTags.begin(); it != loadedTags.end(); ++it)
     {
         // that is a reference
         TagStatus &status = d->tags[*it];
@@ -281,7 +283,7 @@ void MetadataHub::loadTags(const QValueList<TAlbum *> &loadedTags)
 
     // Those tags which had been set as MetadataAvailable before,
     // but are not contained in this set, have to be set to MetadataDisjoint
-    for (QValueList<TAlbum *>::iterator it = previousTags.begin(); it != previousTags.end(); ++it)
+    for (Q3ValueList<TAlbum *>::iterator it = previousTags.begin(); it != previousTags.end(); ++it)
     {
         QMap<TAlbum *, TagStatus>::iterator mapIt = d->tags.find(*it);
         if (mapIt != d->tags.end() && mapIt.data() == TagStatus(MetadataAvailable, true))

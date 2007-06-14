@@ -24,6 +24,8 @@
 // Qt includes.
  
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 // KDE includes.
 
@@ -60,7 +62,7 @@ NavigateBarWidget::NavigateBarWidget(QWidget *parent, bool show)
 {
     d = new NavigateBarWidgetPriv;
     
-    QHBoxLayout *lay = new QHBoxLayout(this);
+    Q3HBoxLayout *lay = new Q3HBoxLayout(this);
     d->navBar   = new StatusNavigateBar(this);    
     d->filename = new KSqueezedTextLabel(this);
     

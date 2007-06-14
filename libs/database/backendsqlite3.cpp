@@ -213,7 +213,7 @@ QString BackendSQLite3::escapeString(QString str) const
     return str;
 }
 
-Q_LLONG BackendSQLite3::lastInsertedRow()
+qlonglong BackendSQLite3::lastInsertedRow()
 {
     return sqlite3_last_insert_rowid(d->dataBase);
 }

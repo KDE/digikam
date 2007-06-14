@@ -118,7 +118,7 @@ PreviewWidget::PreviewWidget(QWidget *parent)
     verticalScrollBar()->setLineStep( 1 );
     verticalScrollBar()->setPageStep( 1 );
 
-    setFrameStyle(QFrame::StyledPanel|Q3Frame::Plain); 
+    setFrameStyle(Q3Frame::StyledPanel|Q3Frame::Plain); 
     setMargin(0); 
     setLineWidth(1);
 }

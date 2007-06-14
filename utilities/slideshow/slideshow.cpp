@@ -32,6 +32,11 @@
 #include <qcursor.h>
 #include <qpainter.h>
 #include <qfont.h>
+//Added by qt3to4:
+#include <QWheelEvent>
+#include <QPaintEvent>
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 // KDE includes.
 
@@ -95,8 +100,8 @@ public:
 };  
 
 SlideShow::SlideShow(const SlideShowSettings& settings)
-         : QWidget(0, 0, WStyle_StaysOnTop | WType_Popup | 
-                         WX11BypassWM | WDestructiveClose)
+         : QWidget(0, 0, Qt::WStyle_StaysOnTop | Qt::WType_Popup | 
+                         Qt::WX11BypassWM | Qt::WDestructiveClose)
 {
     d = new SlideShowPriv;
     d->settings = settings;
@@ -311,7 +316,7 @@ void SlideShow::updatePixmap()
         {
             // Preview extraction is complete... Draw the image.
 
-            QPixmap pix(d->preview.smoothScale(width(), height(), QSize::ScaleMin).convertToPixmap());
+            QPixmap pix(d->preview.smoothScale(width(), height(), Qt::KeepAspectRatio).convertToPixmap());
             p.drawPixmap((width()-pix.width())/2,
                          (height()-pix.height())/2, pix,
                          0, 0, pix.width(), pix.height());
@@ -429,7 +434,7 @@ void SlideShow::updatePixmap()
 
             p.setPen(Qt::white);
             p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
-                       Qt::AlignCenter|Qt::WordBreak, 
+                       Qt::AlignCenter|Qt::TextWordWrap, 
                        i18n("Cannot display picture\n\"%1\"")
                        .arg(d->currentImage.fileName()));
         }

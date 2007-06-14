@@ -26,20 +26,24 @@
 #include <qspinbox.h>
 #include <qslider.h>
 #include <qcolor.h>
-#include <qgroupbox.h>
-#include <qhgroupbox.h>
-#include <qvgroupbox.h>
+#include <q3groupbox.h>
+#include <q3hgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qhbuttongroup.h> 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qframe.h>
-#include <qvbox.h>
+#include <q3frame.h>
+#include <q3vbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
+#include <QPixmap>
 
 // KDE includes.
 
@@ -82,7 +86,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     // -------------------------------------------------------------
                 
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 7, 4, spacingHint());
+    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 7, 4, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -91,17 +95,17 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
     m_channelCB->insertItem( i18n("Blue") );
-    QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+    Q3WhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    m_scaleBG = new QHButtonGroup(gboxSettings);
+    m_scaleBG = new Q3HButtonGroup(gboxSettings);
     m_scaleBG->setExclusive(true);
-    m_scaleBG->setFrameShape(QFrame::NoFrame);
+    m_scaleBG->setFrameShape(Q3Frame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
-    QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
+    Q3WhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
@@ -122,7 +126,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
     logHistoButton->setToggleButton(true);       
 
-    QHBoxLayout* l1 = new QHBoxLayout();
+    Q3HBoxLayout* l1 = new Q3HBoxLayout();
     l1->addWidget(label1);
     l1->addWidget(m_channelCB);
     l1->addStretch(10);
@@ -132,9 +136,9 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QVBox *histoBox   = new QVBox(gboxSettings);
+    Q3VBox *histoBox   = new Q3VBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
-    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
+    Q3WhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
                                              "settings changes."));
     QLabel *space = new QLabel(histoBox);
@@ -151,7 +155,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     m_rSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_rSlider");
     m_rSlider->setTickmarks(QSlider::Below);
     m_rSlider->setTickInterval(20);
-    QWhatsThis::add( m_rSlider, i18n("<p>Set here the cyan/red color adjustment of the image."));
+    Q3WhatsThis::add( m_rSlider, i18n("<p>Set here the cyan/red color adjustment of the image."));
     QLabel *labelRight = new QLabel(i18n("Red"), gboxSettings);
     labelRight->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
     m_rInput = new QSpinBox(-100, 100, 1, gboxSettings, "m_rInput");
@@ -168,7 +172,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     m_gSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_gSlider");
     m_gSlider->setTickmarks(QSlider::Below);
     m_gSlider->setTickInterval(20);
-    QWhatsThis::add( m_gSlider, i18n("<p>Set here the magenta/green color adjustment of the image."));
+    Q3WhatsThis::add( m_gSlider, i18n("<p>Set here the magenta/green color adjustment of the image."));
     labelRight = new QLabel(i18n("Green"), gboxSettings);
     labelRight->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
     m_gInput = new QSpinBox(-100, 100, 1, gboxSettings, "m_gInput");
@@ -185,7 +189,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     m_bSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_bSlider");
     m_bSlider->setTickmarks(QSlider::Below);
     m_bSlider->setTickInterval(20);
-    QWhatsThis::add( m_bSlider, i18n("<p>Set here the yellow/blue color adjustment of the image."));
+    Q3WhatsThis::add( m_bSlider, i18n("<p>Set here the yellow/blue color adjustment of the image."));
     labelRight = new QLabel(i18n("Blue"), gboxSettings);
     labelRight->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
     m_bInput = new QSpinBox(-100, 100, 1, gboxSettings, "m_bInput");

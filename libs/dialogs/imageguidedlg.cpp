@@ -24,17 +24,23 @@
 
 // Qt includes.
 
-#include <qvgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qtimer.h>
 #include <qspinbox.h>
 #include <qsplitter.h>
-#include <qhbox.h>
+#include <q3hbox.h>
+//Added by qt3to4:
+#include <QCustomEvent>
+#include <QCloseEvent>
+#include <Q3GridLayout>
+#include <QKeyEvent>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -106,12 +112,12 @@ public:
     
     QString       name;
 
-    QGridLayout  *mainLayout;
-    QGridLayout  *settingsLayout;
+    Q3GridLayout  *mainLayout;
+    Q3GridLayout  *settingsLayout;
     
     QSpinBox     *guideSize;
 
-    QHBox        *hbox;
+    Q3HBox        *hbox;
 
     QSplitter    *splitter;
 
@@ -126,7 +132,7 @@ public:
 
 ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
                              bool loadFileSettings, bool progress,
-                             bool guideVisible, int guideMode, QFrame* bannerFrame,
+                             bool guideVisible, int guideMode, Q3Frame* bannerFrame,
                              bool prevModeOptions, bool useImageSelection,
                              bool tryAction)
              : KDialogBase(Plain, 0,
@@ -159,7 +165,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    d->mainLayout = new QGridLayout( plainPage(), 2, 1);
+    d->mainLayout = new Q3GridLayout( plainPage(), 2, 1);
 
     if (bannerFrame)
     {
@@ -181,14 +187,14 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     else
         desc = i18n("<p>This is the image filter effect preview.");
 
-    d->hbox              = new QHBox(plainPage());
+    d->hbox              = new Q3HBox(plainPage());
     d->splitter          = new QSplitter(d->hbox);
     m_imagePreviewWidget = new ImageWidget(d->name, d->splitter, desc, prevModeOptions, 
                                            guideMode, guideVisible, useImageSelection);
     
-    d->splitter->setFrameStyle( QFrame::NoFrame );
-    d->splitter->setFrameShadow( QFrame::Plain );
-    d->splitter->setFrameShape( QFrame::NoFrame );    
+    d->splitter->setFrameStyle( Q3Frame::NoFrame );
+    d->splitter->setFrameShadow( Q3Frame::Plain );
+    d->splitter->setFrameShape( Q3Frame::NoFrame );    
     d->splitter->setOpaqueResize(false);
     
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
@@ -205,25 +211,25 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     // -------------------------------------------------------------
 
     d->settings          = new QWidget(plainPage());
-    d->settingsLayout    = new QGridLayout( d->settings, 1, 0);
-    QVBoxLayout *vLayout = new QVBoxLayout( spacingHint() );
+    d->settingsLayout    = new Q3GridLayout( d->settings, 1, 0);
+    Q3VBoxLayout *vLayout = new Q3VBoxLayout( spacingHint() );
     
     // -------------------------------------------------------------
 
     QWidget *gboxGuideSettings = new QWidget(d->settings);
-    QGridLayout* grid          = new QGridLayout( gboxGuideSettings, 2, 2, marginHint(), spacingHint());
-    KSeparator *line           = new KSeparator (Horizontal, gboxGuideSettings);
+    Q3GridLayout* grid          = new Q3GridLayout( gboxGuideSettings, 2, 2, marginHint(), spacingHint());
+    KSeparator *line           = new KSeparator (Qt::Horizontal, gboxGuideSettings);
     grid->addMultiCellWidget(line, 0, 0, 0, 2);
 
     QLabel *label5  = new QLabel(i18n("Guide color:"), gboxGuideSettings);
     d->guideColorBt = new KColorButton( QColor( Qt::red ), gboxGuideSettings );
-    QWhatsThis::add( d->guideColorBt, i18n("<p>Set here the color used to draw guides dashed-lines."));
+    Q3WhatsThis::add( d->guideColorBt, i18n("<p>Set here the color used to draw guides dashed-lines."));
     grid->addMultiCellWidget(label5, 1, 1, 0, 0);
     grid->addMultiCellWidget(d->guideColorBt, 1, 1, 2, 2);
 
     QLabel *label6 = new QLabel(i18n("Guide width:"), gboxGuideSettings);
     d->guideSize   = new QSpinBox( 1, 5, 1, gboxGuideSettings);
-    QWhatsThis::add( d->guideSize, i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
+    Q3WhatsThis::add( d->guideSize, i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
     grid->addMultiCellWidget(label6, 2, 2, 0, 0);
     grid->addMultiCellWidget(d->guideSize, 2, 2, 2, 2);
     grid->setColStretch(1, 10);
@@ -233,12 +239,12 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     vLayout->addWidget(gboxGuideSettings);
 
-    QHBox *hbox    = new QHBox(d->settings);
+    Q3HBox *hbox    = new Q3HBox(d->settings);
     QLabel *space1 = new QLabel(hbox);
     space1->setFixedWidth(spacingHint());    
     d->progressBar = new KProgress(100, hbox);
     d->progressBar->setMaximumHeight( fontMetrics().height() );
-    QWhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
+    Q3WhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
     d->progressBar->setValue(0);
     setProgressVisible(false);
     QLabel *space2 = new QLabel(hbox);
@@ -323,7 +329,7 @@ void ImageGuideDlg::slotInit()
 void ImageGuideDlg::setUserAreaWidget(QWidget *w)
 {
     w->reparent( d->settings, QPoint(0, 0) );
-    QVBoxLayout *vLayout = new QVBoxLayout( spacingHint() );
+    Q3VBoxLayout *vLayout = new Q3VBoxLayout( spacingHint() );
     vLayout->addWidget(w);
     d->settingsLayout->addMultiCellLayout(vLayout, 0, 0, 0, 0);
 }
@@ -565,12 +571,12 @@ void ImageGuideDlg::keyPressEvent(QKeyEvent *e)
     {
         switch ( e->key() )
         {
-        case Key_Escape:
+        case Qt::Key_Escape:
             e->accept();
             reject();
         break;
-        case Key_Enter:            
-        case Key_Return:     
+        case Qt::Key_Enter:            
+        case Qt::Key_Return:     
             e->ignore();              
         break;
         default:
@@ -581,8 +587,8 @@ void ImageGuideDlg::keyPressEvent(QKeyEvent *e)
     else
     {
         // accept the dialog when Ctrl-Return is pressed
-        if ( e->state() == ControlButton &&
-            (e->key() == Key_Return || e->key() == Key_Enter) )
+        if ( e->state() == Qt::ControlModifier &&
+            (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) )
         {
             e->accept();
             accept();

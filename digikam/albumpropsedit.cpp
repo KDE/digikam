@@ -27,17 +27,19 @@
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qdatetime.h>
 #include <qlayout.h>
-#include <qlistview.h>
-#include <qframe.h>
-#include <qheader.h>
-#include <qhbox.h>
+#include <q3listview.h>
+#include <q3frame.h>
+#include <q3header.h>
+#include <q3hbox.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // KDE includes.
 
@@ -105,7 +107,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     d->album = album;
     setHelp("albumpropsedit.anchor", "digikam");
 
-    QGridLayout *topLayout = new QGridLayout( plainPage(), 2, 6,
+    Q3GridLayout *topLayout = new Q3GridLayout( plainPage(), 2, 6,
                                               0, spacingHint() );
 
     QLabel *topLabel = new QLabel( plainPage() );
@@ -124,9 +126,9 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     // --------------------------------------------------------
 
-    QFrame *topLine = new QFrame( plainPage() );
-    topLine->setFrameShape( QFrame::HLine );
-    topLine->setFrameShadow( QFrame::Sunken );
+    Q3Frame *topLine = new Q3Frame( plainPage() );
+    topLine->setFrameShape( Q3Frame::HLine );
+    topLine->setFrameShadow( Q3Frame::Sunken );
     topLayout->addMultiCellWidget( topLine, 1, 1, 0, 1  );
 
     // --------------------------------------------------------
@@ -156,8 +158,8 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     topLayout->addWidget( d->commentsEdit, 4, 1 );
     commentsLabel->setBuddy( d->commentsEdit );
     d->commentsEdit->setCheckSpellingEnabled(true);
-    d->commentsEdit->setWordWrap(QTextEdit::WidgetWidth);
-    d->commentsEdit->setWrapPolicy(QTextEdit::AtWhiteSpace);
+    d->commentsEdit->setWordWrap(Q3TextEdit::WidgetWidth);
+    d->commentsEdit->setWrapPolicy(Q3TextEdit::AtWhiteSpace);
 
     QLabel *dateLabel = new QLabel( plainPage( ) );
     dateLabel->setText( i18n( "Album &date:" ) );
@@ -167,7 +169,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     topLayout->addWidget( d->datePicker, 5, 1 );
     dateLabel->setBuddy( d->datePicker );
 
-    QHBox *buttonRow = new QHBox( plainPage( ) );
+    Q3HBox *buttonRow = new Q3HBox( plainPage( ) );
     QPushButton *dateLowButton = new QPushButton( 
             i18n("Selects the date of the oldest image",
                  "&Oldest" ), buttonRow );

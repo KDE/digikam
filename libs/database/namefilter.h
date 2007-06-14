@@ -26,7 +26,7 @@
 #define NAMEFILTER_H
 
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qregexp.h>
 
 #include "digikam_export.h"
@@ -53,7 +53,7 @@ public:
 
 protected:
 
-    QValueList<QRegExp> m_filterList;
+    Q3ValueList<QRegExp> m_filterList;
 
 };
 

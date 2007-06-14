@@ -35,6 +35,9 @@
 #include "ddebug.h"
 #include "splashscreen.h"
 #include "imagepluginloader.h"
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 namespace Digikam
 {
@@ -57,7 +60,7 @@ class ImagePluginLoaderPrivate
 public:
 
     typedef QPair<QString, ImagePlugin*> PluginType;
-    typedef QValueList< PluginType >     PluginList;
+    typedef Q3ValueList< PluginType >     PluginList;
 
 public:
 
@@ -263,9 +266,9 @@ bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName)
     return false;
 }
 
-QPtrList<ImagePlugin> ImagePluginLoader::pluginList()
+Q3PtrList<ImagePlugin> ImagePluginLoader::pluginList()
 {
-    QPtrList<ImagePlugin> list;
+    Q3PtrList<ImagePlugin> list;
 
     for (ImagePluginLoaderPrivate::PluginList::iterator it = d->pluginList.begin(); 
          it != d->pluginList.end(); ++it)

@@ -29,6 +29,8 @@
 // Qt includes.
 
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <QLabel>
 
 // KDE includes.
 
@@ -44,7 +46,7 @@ class QStringList;
 class KListBox;
 class KGuiItem;
 class QLabel;
-class QWidgetStack;
+class Q3WidgetStack;
 
 namespace Digikam
 {

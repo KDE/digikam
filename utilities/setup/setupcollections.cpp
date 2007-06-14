@@ -25,17 +25,20 @@
 
 #include <qlayout.h>
 #include <qvbuttongroup.h>
-#include <qvgroupbox.h>
-#include <qhgroupbox.h>
-#include <qgroupbox.h>
+#include <q3vgroupbox.h>
+#include <q3hgroupbox.h>
+#include <q3groupbox.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qdir.h>
-#include <qlistbox.h>
-#include <qwhatsthis.h>
+#include <q3listbox.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -73,7 +76,7 @@ public:
         delCollectionButton = 0;
     }
    
-    QListBox     *albumCollectionBox;
+    Q3ListBox     *albumCollectionBox;
 
     QPushButton  *addCollectionButton;
     QPushButton  *delCollectionButton;
@@ -83,19 +86,19 @@ SetupCollections::SetupCollections(QWidget* parent )
                 : QWidget(parent)
 {
     d = new SetupCollectionsPriv;
-    QVBoxLayout *mainLayout = new QVBoxLayout(parent);
+    Q3VBoxLayout *mainLayout = new Q3VBoxLayout(parent);
 
-    QGridLayout *collectionGroupLayout = new QGridLayout( this, 2, 5, 0, KDialog::spacingHint() );
+    Q3GridLayout *collectionGroupLayout = new Q3GridLayout( this, 2, 5, 0, KDialog::spacingHint() );
     collectionGroupLayout->setAlignment( Qt::AlignTop );
 
    // --------------------------------------------------------
 
-   d->albumCollectionBox = new QListBox(this);
-   QWhatsThis::add( d->albumCollectionBox, i18n("<p>You can add or remove Album "
+   d->albumCollectionBox = new Q3ListBox(this);
+   Q3WhatsThis::add( d->albumCollectionBox, i18n("<p>You can add or remove Album "
                                               "collection types here to improve how "
                                               "your Albums are sorted in digiKam."));
 
-   d->albumCollectionBox->setVScrollBarMode(QScrollView::AlwaysOn);
+   d->albumCollectionBox->setVScrollBarMode(Q3ScrollView::AlwaysOn);
 
    collectionGroupLayout->addMultiCellWidget( d->albumCollectionBox,
                                               0, 4, 0, 0 );
@@ -140,7 +143,7 @@ void SetupCollections::applySettings()
 
     QStringList collectionList;
 
-    for (QListBoxItem *item = d->albumCollectionBox->firstItem();
+    for (Q3ListBoxItem *item = d->albumCollectionBox->firstItem();
          item; item = item->next())
     {
         collectionList.append(item->text());
@@ -187,7 +190,7 @@ void SetupCollections::slotAddCollection()
     if (!ok) return;
 
     bool found = false;
-    for (QListBoxItem *item = d->albumCollectionBox->firstItem();
+    for (Q3ListBoxItem *item = d->albumCollectionBox->firstItem();
          item; item = item->next()) 
     {
         if (newCollection == item->text()) 
@@ -207,7 +210,7 @@ void SetupCollections::slotDelCollection()
     if (index == -1)
         return;
 
-    QListBoxItem* item = d->albumCollectionBox->item(index);
+    Q3ListBoxItem* item = d->albumCollectionBox->item(index);
     if (!item) return;
     delete item;
 }

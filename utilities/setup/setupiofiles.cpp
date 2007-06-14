@@ -24,6 +24,8 @@
 // QT includes.
 
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -72,26 +74,26 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
 {
     d = new SetupIOFilesPriv;
 
-    QVBoxLayout* vbox = new QVBoxLayout(parent);
+    Q3VBoxLayout* vbox = new Q3VBoxLayout(parent);
 
     //-- JPEG Settings ------------------------------------------------------
 
     d->JPEGOptions    = new JPEGSettings(parent);
-    KSeparator *line1 = new KSeparator(Horizontal, parent);
+    KSeparator *line1 = new KSeparator(Qt::Horizontal, parent);
     vbox->addWidget(d->JPEGOptions);
     vbox->addWidget(line1);
 
     //-- PNG Settings -------------------------------------------------------
 
     d->PNGOptions     = new PNGSettings(parent);
-    KSeparator *line2 = new KSeparator(Horizontal, parent);
+    KSeparator *line2 = new KSeparator(Qt::Horizontal, parent);
     vbox->addWidget(d->PNGOptions);
     vbox->addWidget(line2);
 
     //-- TIFF Settings ------------------------------------------------------
 
     d->TIFFOptions    = new TIFFSettings(parent);
-    KSeparator *line3 = new KSeparator(Horizontal, parent);
+    KSeparator *line3 = new KSeparator(Qt::Horizontal, parent);
     vbox->addWidget(d->TIFFOptions);
     vbox->addWidget(line3);
 

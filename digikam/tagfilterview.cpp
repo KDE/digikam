@@ -24,11 +24,16 @@
 
 // Qt includes.
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qtimer.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QDropEvent>
+#include <Q3PopupMenu>
+#include <QMouseEvent>
 
 // KDE includes.
 
@@ -77,9 +82,9 @@ class TagFilterViewItem : public FolderCheckListItem
 
 public:
 
-    TagFilterViewItem(QListView* parent, TAlbum* tag, bool untagged=false)
+    TagFilterViewItem(Q3ListView* parent, TAlbum* tag, bool untagged=false)
         : FolderCheckListItem(parent, tag ? tag->title() : i18n("Not Tagged"),
-                              QCheckListItem::CheckBox/*Controller*/)
+                              Q3CheckListItem::CheckBox/*Controller*/)
     {
         m_tag      = tag;
         m_untagged = untagged;
@@ -89,9 +94,9 @@ public:
             tag->setExtraData(listView(), this);
     }
 
-    TagFilterViewItem(QListViewItem* parent, TAlbum* tag)
+    TagFilterViewItem(Q3ListViewItem* parent, TAlbum* tag)
         : FolderCheckListItem(parent, tag->title(), 
-                              QCheckListItem::CheckBox/*Controller*/)
+                              Q3CheckListItem::CheckBox/*Controller*/)
     {
         m_tag      = tag;
         m_untagged = false;
@@ -103,7 +108,7 @@ public:
 
     virtual void stateChange(bool val)
     {
-        QCheckListItem::stateChange(val);
+        Q3CheckListItem::stateChange(val);
 
 /* NOTE G.Caulier 2007/01/08: this code is now disable because TagFilterViewItem 
                               have been changed from QCheckListItem::CheckBoxController 
@@ -123,7 +128,7 @@ public:
         ((TagFilterView*)listView())->stateChanged(this);
     }
 
-    int compare(QListViewItem* i, int column, bool ascending) const
+    int compare(Q3ListViewItem* i, int column, bool ascending) const
     {
         if (m_untagged)
             return 1;
@@ -135,7 +140,7 @@ public:
         if (dItem && dItem->m_untagged)
             return -1;
 
-        return QListViewItem::compare(i, column, ascending);
+        return Q3ListViewItem::compare(i, column, ascending);
     }
 
     void paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align)
@@ -181,7 +186,7 @@ public:
 
     QPoint                          dragStartPos;    
 
-    QPopupMenu                     *ABCMenu;
+    Q3PopupMenu                     *ABCMenu;
 
     TagFilterView::ToggleAutoTags   toggleAutoTags;
 
@@ -198,7 +203,7 @@ TagFilterView::TagFilterView(QWidget* parent)
     d->timer = new QTimer(this);
 
     addColumn(i18n("Tag Filters"));
-    setResizeMode(QListView::LastColumn);
+    setResizeMode(Q3ListView::LastColumn);
     setRootIsDecorated(true);
 
     setAcceptDrops(true);
@@ -238,8 +243,8 @@ TagFilterView::TagFilterView(QWidget* parent)
     connect(loader, SIGNAL(signalReloadThumbnails()),
             this, SLOT(slotReloadThumbnails()));
 
-    connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
-            this, SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
+    connect(this, SIGNAL(contextMenuRequested(Q3ListViewItem*, const QPoint&, int)),
+            this, SLOT(slotContextMenu(Q3ListViewItem*, const QPoint&, int)));
 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotTimeOut()));
@@ -302,14 +307,14 @@ void TagFilterView::triggerChange()
 
 void TagFilterView::contentsMouseMoveEvent(QMouseEvent *e)
 {
-    QListView::contentsMouseMoveEvent(e);
+    Q3ListView::contentsMouseMoveEvent(e);
 
     if(e->state() == NoButton)
     {
         if(KGlobalSettings::changeCursorOverIcon())
         {
             QPoint vp = contentsToViewport(e->pos());
-            QListViewItem *item = itemAt(vp);
+            Q3ListViewItem *item = itemAt(vp);
             if (mouseInItemRect(item, vp.x()))
                 setCursor(KCursor::handCursor());
             else
@@ -339,13 +344,13 @@ void TagFilterView::contentsMousePressEvent(QMouseEvent *e)
     if(item && e->button() == RightButton) 
     {
         bool isOn = item->isOn();
-        QListView::contentsMousePressEvent(e);
+        Q3ListView::contentsMousePressEvent(e);
         // Restore the status of checkbox. 
         item->setOn(isOn);
         return;
     }
 
-    QListView::contentsMousePressEvent(e);
+    Q3ListView::contentsMousePressEvent(e);
 
     if(item && e->button() == LeftButton) 
     {
@@ -356,12 +361,12 @@ void TagFilterView::contentsMousePressEvent(QMouseEvent *e)
 
 void TagFilterView::contentsMouseReleaseEvent(QMouseEvent *e)
 {
-    QListView::contentsMouseReleaseEvent(e);
+    Q3ListView::contentsMouseReleaseEvent(e);
 
     d->dragItem = 0;
 }
 
-QDragObject* TagFilterView::dragObject()
+Q3DragObject* TagFilterView::dragObject()
 {
     TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(dragItem());
     if(!item)
@@ -440,7 +445,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
     if(TagDrag::canDecode(e))
     {
         QByteArray ba = e->encodedData("digikam/tag-id");
-        QDataStream ds(ba, IO_ReadOnly);
+        QDataStream ds(ba, QIODevice::ReadOnly);
         int tagID;
         ds >> tagID;
 
@@ -495,8 +500,8 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
 
         KURL::List      urls;
         KURL::List      kioURLs;
-        QValueList<int> albumIDs;
-        QValueList<int> imageIDs;
+        Q3ValueList<int> albumIDs;
+        Q3ValueList<int> imageIDs;
 
         if (!ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
             return;
@@ -540,7 +545,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
             {
                 DatabaseTransaction transaction;
                 int i=0;
-                for (QValueList<int>::const_iterator it = imageIDs.begin();
+                for (Q3ValueList<int>::const_iterator it = imageIDs.begin();
                     it != imageIDs.end(); ++it)
                 {
                     // create temporary ImageInfo object
@@ -624,7 +629,7 @@ void TagFilterView::slotTagMoved(TAlbum* tag, TAlbum* newParent)
 
     if (item->parent())
     {
-        QListViewItem* oldPItem = item->parent();
+        Q3ListViewItem* oldPItem = item->parent();
         oldPItem->takeItem(item);
 
         TagFilterViewItem* newPItem = (TagFilterViewItem*)(newParent->extraData(this));
@@ -742,11 +747,11 @@ void TagFilterView::slotClear()
 
 void TagFilterView::slotTimeOut()
 {
-    QValueList<int> filterTags;
+    Q3ValueList<int> filterTags;
 
     bool showUnTagged = false;
 
-    QListViewItemIterator it(this, QListViewItemIterator::Checked);
+    Q3ListViewItemIterator it(this, Q3ListViewItemIterator::Checked);
     while (it.current())
     {
         TagFilterViewItem* item = (TagFilterViewItem*)it.current();
@@ -760,13 +765,13 @@ void TagFilterView::slotTimeOut()
     AlbumLister::instance()->setTagFilter(filterTags, d->matchingCond, showUnTagged);
 }
 
-void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
+void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
 {
     TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(it);
     if (item && item->m_untagged)
         return;
 
-    d->ABCMenu = new QPopupMenu;
+    d->ABCMenu = new Q3PopupMenu;
     
     connect(d->ABCMenu, SIGNAL( aboutToShow() ),
             this, SLOT( slotABCContextMenu() ));
@@ -786,7 +791,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
  
     popmenu.insertSeparator(-1);
 
-    QPopupMenu selectTagsMenu;
+    Q3PopupMenu selectTagsMenu;
     selectTagsMenu.insertItem(i18n("All Tags"),   14);
     if (item)
     {
@@ -796,7 +801,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
     }
     popmenu.insertItem(i18n("Select"), &selectTagsMenu);
 
-    QPopupMenu deselectTagsMenu;
+    Q3PopupMenu deselectTagsMenu;
     deselectTagsMenu.insertItem(i18n("All Tags"), 15);
     if (item)
     {
@@ -809,7 +814,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
     popmenu.insertItem(i18n("Invert Selection"),  16);
     popmenu.insertSeparator(-1);
 
-    QPopupMenu toggleAutoMenu;
+    Q3PopupMenu toggleAutoMenu;
     toggleAutoMenu.setCheckable(true);
     toggleAutoMenu.insertItem(i18n("None"),    21);
     toggleAutoMenu.insertSeparator(-1);
@@ -819,7 +824,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
     toggleAutoMenu.setItemChecked(21 + d->toggleAutoTags, true);
     popmenu.insertItem(i18n("Toogle Auto"), &toggleAutoMenu);
 
-    QPopupMenu matchingCongMenu;
+    Q3PopupMenu matchingCongMenu;
     matchingCongMenu.setCheckable(true);
     matchingCongMenu.insertItem(i18n("Or Between Tags"),  25);
     matchingCongMenu.insertItem(i18n("And Between Tags"), 26);
@@ -855,7 +860,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
         case 14:    // Select All Tags.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
-            QListViewItemIterator it(this, QListViewItemIterator::NotChecked);
+            Q3ListViewItemIterator it(this, Q3ListViewItemIterator::NotChecked);
             while (it.current())
             {
                 TagFilterViewItem* item = (TagFilterViewItem*)it.current();
@@ -873,7 +878,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
         case 15:    // Deselect All Tags.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
-            QListViewItemIterator it(this, QListViewItemIterator::Checked);
+            Q3ListViewItemIterator it(this, Q3ListViewItemIterator::Checked);
             while (it.current())
             {
                 TagFilterViewItem* item = (TagFilterViewItem*)it.current();
@@ -891,7 +896,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
         case 16:       // Invert All Tags Selection.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
-            QListViewItemIterator it(this);
+            Q3ListViewItemIterator it(this);
             while (it.current())
             {
                 TagFilterViewItem* item = (TagFilterViewItem*)it.current();
@@ -999,7 +1004,7 @@ void TagFilterView::slotABCContextMenu()
         names.push_back(it->formattedName());
     }
 
-    qHeapSort(names);
+    qSort(names);
 
     for ( QStringList::Iterator it = names.begin(); it != names.end(); ++it )
     {
@@ -1176,7 +1181,7 @@ void TagFilterView::toggleParentTags(TagFilterViewItem* tItem, bool b)
     if (!album)
         return;
 
-    QListViewItemIterator it(this);
+    Q3ListViewItemIterator it(this);
     while (it.current())
     {
         TagFilterViewItem* item = dynamic_cast<TagFilterViewItem*>(it.current());

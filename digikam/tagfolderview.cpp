@@ -26,7 +26,12 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <qlistview.h>
+#include <q3listview.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QPixmap>
+#include <QDropEvent>
+#include <Q3PopupMenu>
 
 // KDE includes.
 
@@ -75,8 +80,8 @@ class TagFolderViewItem : public FolderItem
 {
 public:
 
-    TagFolderViewItem(QListView *parent, TAlbum *tag);
-    TagFolderViewItem(QListViewItem *parent, TAlbum *tag);
+    TagFolderViewItem(Q3ListView *parent, TAlbum *tag);
+    TagFolderViewItem(Q3ListViewItem *parent, TAlbum *tag);
 
     TAlbum* getTag() const;
     int id() const;
@@ -86,14 +91,14 @@ private:
     TAlbum      *m_tag;
 };
 
-TagFolderViewItem::TagFolderViewItem(QListView *parent, TAlbum *tag)
+TagFolderViewItem::TagFolderViewItem(Q3ListView *parent, TAlbum *tag)
                  : FolderItem(parent, tag->title())
 {
     setDragEnabled(true);
     m_tag = tag;
 }
 
-TagFolderViewItem::TagFolderViewItem(QListViewItem *parent, TAlbum *tag)
+TagFolderViewItem::TagFolderViewItem(Q3ListViewItem *parent, TAlbum *tag)
                  : FolderItem(parent, tag->title())
 {
     setDragEnabled(true);
@@ -125,7 +130,7 @@ public:
         albumMan = 0;
     }
     
-    QPopupMenu   *ABCMenu;
+    Q3PopupMenu   *ABCMenu;
     
     AlbumManager *albumMan;
 };
@@ -141,7 +146,7 @@ TagFolderView::TagFolderView(QWidget *parent)
     d->albumMan = AlbumManager::instance();
 
     addColumn(i18n("My Tags"));
-    setResizeMode(QListView::LastColumn);
+    setResizeMode(Q3ListView::LastColumn);
     setRootIsDecorated(false);
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
@@ -177,8 +182,8 @@ TagFolderView::TagFolderView(QWidget *parent)
     connect(loader, SIGNAL(signalReloadThumbnails()),
             this, SLOT(slotReloadThumbnails()));
 
-    connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
-            SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
+    connect(this, SIGNAL(contextMenuRequested(Q3ListViewItem*, const QPoint&, int)),
+            SLOT(slotContextMenu(Q3ListViewItem*, const QPoint&, int)));
 
     connect(this, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
@@ -265,7 +270,7 @@ void TagFolderView::slotAlbumMoved(TAlbum* tag, TAlbum* newParent)
 
     if (item->parent())
     {
-        QListViewItem* oldPItem = item->parent();
+        Q3ListViewItem* oldPItem = item->parent();
         oldPItem->takeItem(item);
     }
     else
@@ -370,8 +375,8 @@ void TagFolderView::slotSelectionChanged()
     if (!active())
         return;
 
-    QListViewItem* selItem = 0;
-    QListViewItemIterator it(this);
+    Q3ListViewItem* selItem = 0;
+    Q3ListViewItemIterator it(this);
     while (it.current())
     {
         if (it.current()->isSelected())
@@ -398,9 +403,9 @@ void TagFolderView::slotSelectionChanged()
     d->albumMan->setCurrentAlbum(tagitem->getTag());
 }
 
-void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
+void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
 {
-    d->ABCMenu = new QPopupMenu;
+    d->ABCMenu = new Q3PopupMenu;
     
     connect( d->ABCMenu, SIGNAL( aboutToShow() ),
              this, SLOT( slotABCContextMenu() ) );
@@ -469,7 +474,7 @@ void TagFolderView::slotABCContextMenu()
         names.push_back(it->formattedName());
     }
 
-    qHeapSort(names);
+    qSort(names);
 
     for ( QStringList::Iterator it = names.begin(); it != names.end(); ++it )
     {
@@ -623,7 +628,7 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
     }
 }
 
-QDragObject* TagFolderView::dragObject()
+Q3DragObject* TagFolderView::dragObject()
 {
     TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(dragItem());
     if(!item)
@@ -688,7 +693,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
     if(TagDrag::canDecode(e))
     {
         QByteArray ba = e->encodedData("digikam/tag-id");
-        QDataStream ds(ba, IO_ReadOnly);
+        QDataStream ds(ba, QIODevice::ReadOnly);
         int tagID;
         ds >> tagID;
 
@@ -744,8 +749,8 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
 
         KURL::List      urls;
         KURL::List      kioURLs;        
-        QValueList<int> albumIDs;
-        QValueList<int> imageIDs;
+        Q3ValueList<int> albumIDs;
+        Q3ValueList<int> imageIDs;
 
         if (!ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
             return;
@@ -829,7 +834,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             int i=0;
             {
                 DatabaseTransaction transaction;
-                for (QValueList<int>::const_iterator it = imageIDs.begin();
+                for (Q3ValueList<int>::const_iterator it = imageIDs.begin();
                     it != imageIDs.end(); ++it)
                 {
                     // create temporary ImageInfo object

@@ -29,6 +29,8 @@
 // Qt include.
 
 #include <qcolor.h>
+//Added by qt3to4:
+#include <QLabel>
 
 // Digikam includes.
 
@@ -38,7 +40,7 @@ class QPushButton;
 class QLabel;
 class QComboBox;
 class QPushButton;
-class QHButtonGroup;
+class Q3HButtonGroup;
 
 class KDoubleNumInput;
 class KActiveLabel;
@@ -131,7 +133,7 @@ private:
     QComboBox                    *m_temperaturePresetCB;    
     QComboBox                    *m_channelCB;    
     
-    QHButtonGroup                *m_scaleBG;  
+    Q3HButtonGroup                *m_scaleBG;  
         
     QLabel                       *m_adjTemperatureLabel;
     QLabel                       *m_temperaturePresetLabel;

@@ -39,9 +39,9 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
-#include <qvbox.h>
-#include <qhbox.h>
-#include <qwidgetstack.h>
+#include <q3vbox.h>
+#include <q3hbox.h>
+#include <q3widgetstack.h>
 
 #include "deletedialog.h"
 #include "albumsettings.h"
@@ -175,7 +175,7 @@ void DeleteWidget::updateText()
 //////////////////////////////////////////////////////////////////////////////
 
 DeleteDialog::DeleteDialog(QWidget *parent, const char *name) :
-    KDialogBase(Swallow, WStyle_DialogBorder, parent, name,
+    KDialogBase(Swallow, Qt::WStyle_DialogBorder, parent, name,
                 true, // modal
                 i18n("About to delete selected files"), // caption
                 Ok | Cancel, // available buttons

@@ -27,15 +27,20 @@
 
 // Qt includes.
 
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
-#include <qhgroupbox.h>
-#include <qvgroupbox.h>
+#include <q3hgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qlabel.h>
 #include <qtimer.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3Frame>
+#include <Q3ValueList>
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -71,7 +76,7 @@ public:
         rulesBox      = 0;
     }
 
-    QVGroupBox                      *rulesBox;
+    Q3VGroupBox                      *rulesBox;
 
     QPushButton                     *addButton;
     QPushButton                     *delButton;
@@ -80,7 +85,7 @@ public:
 
     QComboBox                       *optionsCombo;
 
-    QValueList<SearchAdvancedBase*>  baseList;
+    Q3ValueList<SearchAdvancedBase*>  baseList;
 
     QTimer                          *timer;
 
@@ -103,19 +108,19 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     resize(configDialogSize("AdvancedSearch Dialog"));
 
     // two columns, one for the rules, one for the preview.
-    QHBoxLayout* hbox = new QHBoxLayout( page );
+    Q3HBoxLayout* hbox = new Q3HBoxLayout( page );
     hbox->setSpacing( spacingHint() );
-    QVBoxLayout* leftSide = new QVBoxLayout( hbox );
+    Q3VBoxLayout* leftSide = new Q3VBoxLayout( hbox );
     d->resultsView   = new SearchResultsView( page );
     d->resultsView->setMinimumSize( QSize(200, 200) );
     d->resultsView->setMaximumWidth(  130*2 + d->resultsView->spacing()*3 + 20 );
-    QWhatsThis::add( d->resultsView, i18n("<p>Here you can review the images found "
+    Q3WhatsThis::add( d->resultsView, i18n("<p>Here you can review the images found "
                                          "using the current search settings."));
     hbox->addWidget( d->resultsView );
 
     // Box for all the rules
-    d->rulesBox = new QVGroupBox( i18n("Search Rules"), page);
-    QWhatsThis::add( d->rulesBox, i18n("<p>Here you can review the search rules used to filter images "
+    d->rulesBox = new Q3VGroupBox( i18n("Search Rules"), page);
+    Q3WhatsThis::add( d->rulesBox, i18n("<p>Here you can review the search rules used to filter images "
                                       "searching in album library."));
     d->rulesBox->layout()->setSpacing( spacingHint() );
     d->rulesBox->layout()->setMargin( 5 );
@@ -127,10 +132,10 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     leftSide->addStretch(10);
 
     // Box for the add/delete
-    QGroupBox* groupbox = 0;
-    groupbox            = new QGroupBox( i18n("Add/Delete Option"),
+    Q3GroupBox* groupbox = 0;
+    groupbox            = new Q3GroupBox( i18n("Add/Delete Option"),
                                          page, "groupbox" );
-    QWhatsThis::add( groupbox, i18n("<p>You can edit the search rules "
+    Q3WhatsThis::add( groupbox, i18n("<p>You can edit the search rules "
                                     "by adding/removing criteria."));
                                          
     groupbox->setColumnLayout(0, Qt::Vertical );
@@ -143,8 +148,8 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     d->addButton    = new QPushButton(i18n("&Add"), groupbox);
     d->delButton    = new QPushButton(i18n("&Del"), groupbox);
 
-    QHBoxLayout* box = 0;
-    box = new QHBoxLayout( groupbox->layout() );
+    Q3HBoxLayout* box = 0;
+    box = new Q3HBoxLayout( groupbox->layout() );
     box->addWidget( d->optionsCombo );
     box->addWidget( d->addButton );
     box->addStretch( 10 );
@@ -152,9 +157,9 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     leftSide->addWidget( groupbox );
 
     // Box for the group/ungroup
-    groupbox            = new QGroupBox( i18n("Group/Ungroup Options"),
+    groupbox            = new Q3GroupBox( i18n("Group/Ungroup Options"),
                                          page, "groupbox" );
-    QWhatsThis::add( groupbox, i18n("<p>You can group or ungroup any search criteria "
+    Q3WhatsThis::add( groupbox, i18n("<p>You can group or ungroup any search criteria "
                                     "from the Search Rule set."));
     groupbox->setColumnLayout(0, Qt::Vertical );
     groupbox->layout()->setSpacing( KDialog::spacingHint() );
@@ -162,23 +167,23 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     d->groupButton       = new QPushButton(i18n("&Group"), groupbox);
     d->ungroupButton     = new QPushButton(i18n("&Ungroup"), groupbox);
 
-    box = new QHBoxLayout( groupbox->layout() );
+    box = new Q3HBoxLayout( groupbox->layout() );
     box->addWidget( d->groupButton );
     box->addStretch( 10 );
     box->addWidget( d->ungroupButton );
     leftSide->addWidget( groupbox );
 
     // box for saving the search.
-    groupbox = new QGroupBox( page, "groupbox");
+    groupbox = new Q3GroupBox( page, "groupbox");
     groupbox->setColumnLayout(0, Qt::Vertical );
     groupbox->layout()->setSpacing( KDialog::spacingHint() );
     QLabel* label = new QLabel(i18n("&Save search as:"), groupbox);
     d->title = new KLineEdit(groupbox, "searchTitle");
-    QWhatsThis::add( d->title, i18n("<p>Enter the name used to save the current search in "
+    Q3WhatsThis::add( d->title, i18n("<p>Enter the name used to save the current search in "
                                    "\"My Searches\" view"));
-    groupbox->setFrameStyle( QFrame::NoFrame );
+    groupbox->setFrameStyle( Q3Frame::NoFrame );
 
-    box = new QHBoxLayout( groupbox->layout() );
+    box = new Q3HBoxLayout( groupbox->layout() );
     box->addWidget( label );
     box->addWidget( d->title );
     label->setBuddy(d->title);
@@ -251,7 +256,7 @@ void SearchAdvancedDialog::slotDelRules()
     if (d->baseList.isEmpty())
         return;
 
-    typedef QValueList<SearchAdvancedBase*> BaseList;
+    typedef Q3ValueList<SearchAdvancedBase*> BaseList;
 
     BaseList itemsToRemove;
 
@@ -288,7 +293,7 @@ void SearchAdvancedDialog::slotDelRules()
 
 void SearchAdvancedDialog::slotGroupRules()
 {
-    typedef QValueList<SearchAdvancedBase*> BaseList;
+    typedef Q3ValueList<SearchAdvancedBase*> BaseList;
 
     BaseList itemsToGroup;
     BaseList groupsToUnGroupAndGroup;
@@ -312,8 +317,8 @@ void SearchAdvancedDialog::slotGroupRules()
         SearchAdvancedGroup* group = (SearchAdvancedGroup*)*it;
         BaseList::iterator itemsToGroupPos = itemsToGroup.find(group);
         BaseList::iterator itPos = d->baseList.find(group);
-        QValueList<SearchAdvancedRule*> childRules = group->childRules();
-        for (QValueList<SearchAdvancedRule*>::iterator iter = childRules.begin();
+        Q3ValueList<SearchAdvancedRule*> childRules = group->childRules();
+        for (Q3ValueList<SearchAdvancedRule*>::iterator iter = childRules.begin();
                  iter != childRules.end(); ++iter)
         {
             d->baseList.insert(itPos, *iter);
@@ -364,8 +369,8 @@ void SearchAdvancedDialog::slotGroupRules()
 
 void SearchAdvancedDialog::slotUnGroupRules()
 {
-    typedef QValueList<SearchAdvancedBase*>  BaseList;
-    typedef QValueList<SearchAdvancedGroup*> GroupList;
+    typedef Q3ValueList<SearchAdvancedBase*>  BaseList;
+    typedef Q3ValueList<SearchAdvancedGroup*> GroupList;
 
     GroupList itemsToUnGroup;
 
@@ -388,11 +393,11 @@ void SearchAdvancedDialog::slotUnGroupRules()
          it != itemsToUnGroup.end(); ++it)
     {
         SearchAdvancedGroup *group = *it;
-        QValueList<SearchAdvancedRule*> childRules = group->childRules();
+        Q3ValueList<SearchAdvancedRule*> childRules = group->childRules();
 
         BaseList::iterator itPos = d->baseList.find(group);
 
-        for (QValueList<SearchAdvancedRule*>::iterator iter = childRules.begin();
+        for (Q3ValueList<SearchAdvancedRule*>::iterator iter = childRules.begin();
              iter != childRules.end(); ++iter)
         {
             d->baseList.insert(itPos, *iter);
@@ -436,7 +441,7 @@ void SearchAdvancedDialog::slotTimeOut()
     if (d->baseList.isEmpty())
         return;
 
-    typedef QValueList<SearchAdvancedBase*>  BaseList;
+    typedef Q3ValueList<SearchAdvancedBase*>  BaseList;
 
     QString grouping;
     int     count  = 0;
@@ -474,8 +479,8 @@ void SearchAdvancedDialog::slotTimeOut()
             QString tempGrouping;
             int curCount = count;
 
-            QValueList<SearchAdvancedRule*> childRules = group->childRules();
-            for (QValueList<SearchAdvancedRule*>::iterator iter =
+            Q3ValueList<SearchAdvancedRule*> childRules = group->childRules();
+            for (Q3ValueList<SearchAdvancedRule*>::iterator iter =
                     childRules.begin();
                  iter != childRules.end(); ++iter)
             {
@@ -530,7 +535,7 @@ void SearchAdvancedDialog::slotChangeButtonStates()
     bool group = false;
     int counter = 0;
 
-    typedef QValueList<SearchAdvancedBase*>  BaseList;
+    typedef Q3ValueList<SearchAdvancedBase*>  BaseList;
     for (BaseList::iterator it = d->baseList.begin();
          it != d->baseList.end(); ++it)
     {

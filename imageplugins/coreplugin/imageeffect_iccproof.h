@@ -33,9 +33,9 @@
 
 class QCheckBox;
 class QComboBox;
-class QVButtonGroup;
-class QButtonGroup;
-class QHButtonGroup;
+class Q3VButtonGroup;
+class Q3ButtonGroup;
+class Q3HButtonGroup;
 class QRadioButton;
 class QPushButton;
 class QToolBox;
@@ -163,14 +163,14 @@ private:
     QString                         m_spacePath;
     QString                         m_proofPath;
 
-    QButtonGroup                   *m_optionsBG;
-    QButtonGroup                   *m_inProfileBG;
-    QButtonGroup                   *m_spaceProfileBG;
-    QButtonGroup                   *m_proofProfileBG;
+    Q3ButtonGroup                   *m_optionsBG;
+    Q3ButtonGroup                   *m_inProfileBG;
+    Q3ButtonGroup                   *m_spaceProfileBG;
+    Q3ButtonGroup                   *m_proofProfileBG;
 
-    QHButtonGroup                  *m_scaleBG;
-    QVButtonGroup                  *m_renderingIntentBG;
-    QVButtonGroup                  *m_profilesBG;
+    Q3HButtonGroup                  *m_scaleBG;
+    Q3VButtonGroup                  *m_renderingIntentBG;
+    Q3VButtonGroup                  *m_profilesBG;
     
     QByteArray                      m_embeddedICC;
 

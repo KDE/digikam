@@ -29,6 +29,8 @@
 
 #include <qwidget.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 // KDE includes.
 
@@ -39,7 +41,7 @@
 #include "digikam_export.h"
 #include "imagepropertiessidebar.h"
 
-class QVBoxLayout;
+class Q3VBoxLayout;
 
 namespace Digikam
 {
@@ -74,7 +76,7 @@ protected:
 
 protected:
 
-    QVBoxLayout        *m_navigateBarLayout;
+    Q3VBoxLayout        *m_navigateBarLayout;
     NavigateBarTabPriv *d;
 
 };

@@ -23,6 +23,8 @@
  * ============================================================ */
 
 #include "namefilter.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 namespace Digikam
 {
@@ -47,7 +49,7 @@ NameFilter::NameFilter(const QString &filter)
 
 bool NameFilter::matches(const QString &name)
 {
-    QValueList<QRegExp>::ConstIterator rit = m_filterList.begin();
+    Q3ValueList<QRegExp>::ConstIterator rit = m_filterList.begin();
     while ( rit != m_filterList.end() ) {
         if ( (*rit).exactMatch(name) )
             return true;

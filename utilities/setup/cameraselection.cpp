@@ -25,7 +25,7 @@
 // Qt includes.
 
 #include <qcombobox.h>
-#include <qvgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
@@ -33,7 +33,10 @@
 #include <qlayout.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3Frame>
 
 // KDE includes.
 
@@ -72,7 +75,7 @@ public:
         umsMountURL      = 0;
     }
 
-    QVButtonGroup *portButtonGroup;
+    Q3VButtonGroup *portButtonGroup;
 
     QRadioButton  *usbButton;
     QRadioButton  *serialButton;
@@ -105,7 +108,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->UMSCameraNameShown  = i18n("Mounted Camera");
     d->PTPCameraNameShown  = QString("USB PTP Class Camera");
 
-    QGridLayout* mainBoxLayout = new QGridLayout( plainPage(), 6, 1, 0, KDialog::spacingHint() );
+    Q3GridLayout* mainBoxLayout = new Q3GridLayout( plainPage(), 6, 1, 0, KDialog::spacingHint() );
     mainBoxLayout->setColStretch( 0, 10 );
     mainBoxLayout->setRowStretch( 6, 10 );
     
@@ -116,62 +119,62 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->listView->setAllColumnsShowFocus(true);
     d->listView->setResizeMode(KListView::LastColumn);
     d->listView->setMinimumWidth(350);
-    QWhatsThis::add( d->listView, i18n("<p>Select here the camera name that you want to use. All "
+    Q3WhatsThis::add( d->listView, i18n("<p>Select here the camera name that you want to use. All "
                                        "default settings on the right panel "
                                        "will be set automatically.</p><p>This list has been generated "
                                        "using the gphoto2 library installed on your computer.</p>"));
     
     // --------------------------------------------------------------
 
-    QVGroupBox* titleBox = new QVGroupBox( i18n("Camera Title"), plainPage() );
+    Q3VGroupBox* titleBox = new Q3VGroupBox( i18n("Camera Title"), plainPage() );
     d->titleEdit = new KLineEdit( titleBox );
-    QWhatsThis::add( d->titleEdit, i18n("<p>Set here the name used in digiKam interface to "
+    Q3WhatsThis::add( d->titleEdit, i18n("<p>Set here the name used in digiKam interface to "
                                         "identify this camera.</p>"));
     
     // --------------------------------------------------------------
     
-    d->portButtonGroup = new QVButtonGroup( i18n("Camera Port Type"), plainPage() );
+    d->portButtonGroup = new Q3VButtonGroup( i18n("Camera Port Type"), plainPage() );
     d->portButtonGroup->setRadioButtonExclusive( true );
 
     d->usbButton = new QRadioButton( d->portButtonGroup );
     d->usbButton->setText( i18n( "USB" ) );
-    QWhatsThis::add( d->usbButton, i18n("<p>Select this option if your camera is connected to your "
+    Q3WhatsThis::add( d->usbButton, i18n("<p>Select this option if your camera is connected to your "
                      "computer using an USB cable.</p>"));
 
     d->serialButton = new QRadioButton( d->portButtonGroup );
     d->serialButton->setText( i18n( "Serial" ) );
-    QWhatsThis::add( d->serialButton, i18n("<p>Select this option if your camera is connected to your "
+    Q3WhatsThis::add( d->serialButton, i18n("<p>Select this option if your camera is connected to your "
                      "computer using a serial cable.</p>"));
 
     // --------------------------------------------------------------
     
-    QVGroupBox* portPathBox = new QVGroupBox( i18n( "Camera Port Path" ), plainPage() );
+    Q3VGroupBox* portPathBox = new Q3VGroupBox( i18n( "Camera Port Path" ), plainPage() );
     d->portPathLabel = new QLabel( portPathBox);
     d->portPathLabel->setText( i18n( "Note: only for serial port camera" ) );
 
     d->portPathComboBox = new QComboBox( false, portPathBox );
     d->portPathComboBox->setDuplicatesEnabled( false );
-    QWhatsThis::add( d->portPathComboBox, i18n("<p>Select here the serial port to use on your computer. "
+    Q3WhatsThis::add( d->portPathComboBox, i18n("<p>Select here the serial port to use on your computer. "
                      "This option is only required if you use a serial camera.</p>"));
 
     // --------------------------------------------------------------
 
-    QVGroupBox* umsMountBox = new QVGroupBox( i18n( "Camera Mount Path"), plainPage() );
+    Q3VGroupBox* umsMountBox = new Q3VGroupBox( i18n( "Camera Mount Path"), plainPage() );
 
     QLabel* umsMountLabel = new QLabel( umsMountBox );
     umsMountLabel->setText( i18n( "Note: only for USB/IEEE mass storage camera" ) );
 
     d->umsMountURL = new KURLRequester( QString("/mnt/camera"), umsMountBox);
     d->umsMountURL->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
-    QWhatsThis::add( d->umsMountURL, i18n("<p>Set here the mount path to use on your computer. This "
+    Q3WhatsThis::add( d->umsMountURL, i18n("<p>Set here the mount path to use on your computer. This "
                                           "option is only required if you use an <b>USB Mass Storage</b> "
                                           "camera.</p>"));
     
     // --------------------------------------------------------------
     
-    QGroupBox* box2 = new QGroupBox( 0, Qt::Vertical, plainPage() );
-    box2->setFrameStyle( QFrame::NoFrame );
-    QGridLayout* box2Layout = new QGridLayout( box2->layout(), 1, 5 );
+    Q3GroupBox* box2 = new Q3GroupBox( 0, Qt::Vertical, plainPage() );
+    box2->setFrameStyle( Q3Frame::NoFrame );
+    Q3GridLayout* box2Layout = new Q3GridLayout( box2->layout(), 1, 5 );
 
     QLabel* logo = new QLabel( box2 );
 
@@ -224,8 +227,8 @@ CameraSelection::CameraSelection( QWidget* parent )
     connect(link2, SIGNAL(linkClicked(const QString &)),
             this, SLOT(slotPTPCameraLinkUsed()));
                 
-    connect(d->listView, SIGNAL(selectionChanged(QListViewItem *)),
-            this, SLOT(slotSelectionChanged(QListViewItem *)));
+    connect(d->listView, SIGNAL(selectionChanged(Q3ListViewItem *)),
+            this, SLOT(slotSelectionChanged(Q3ListViewItem *)));
 
     connect(d->portButtonGroup, SIGNAL(clicked(int)),
             this, SLOT(slotPortChanged()));
@@ -247,7 +250,7 @@ CameraSelection::~CameraSelection()
 
 void CameraSelection::slotUMSCameraLinkUsed()
 {
-    QListViewItem *item = d->listView->findItem(d->UMSCameraNameShown, 0);
+    Q3ListViewItem *item = d->listView->findItem(d->UMSCameraNameShown, 0);
     if (item)
     {
         d->listView->setCurrentItem(item);
@@ -257,7 +260,7 @@ void CameraSelection::slotUMSCameraLinkUsed()
 
 void CameraSelection::slotPTPCameraLinkUsed()
 {
-    QListViewItem *item = d->listView->findItem(d->PTPCameraNameShown, 0);
+    Q3ListViewItem *item = d->listView->findItem(d->PTPCameraNameShown, 0);
     if (item)
     {
         d->listView->setCurrentItem(item);
@@ -273,7 +276,7 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
     if (camModel == d->UMSCameraNameActual)
         camModel = d->UMSCameraNameShown;
 
-    QListViewItem* item = d->listView->findItem(camModel, 0);
+    Q3ListViewItem* item = d->listView->findItem(camModel, 0);
     if (!item) return;
 
     d->listView->setSelected(item, true);
@@ -333,7 +336,7 @@ void CameraSelection::getSerialPortList()
     }
 }
 
-void CameraSelection::slotSelectionChanged(QListViewItem *item)
+void CameraSelection::slotSelectionChanged(Q3ListViewItem *item)
 {
     if (!item) return;
 
@@ -426,7 +429,7 @@ QString CameraSelection::currentTitle()
 
 QString CameraSelection::currentModel()
 {
-    QListViewItem* item = d->listView->currentItem();
+    Q3ListViewItem* item = d->listView->currentItem();
     if (!item)
         return QString();
 

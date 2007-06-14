@@ -29,7 +29,9 @@
 // Qt includes.
 
 #include <qobject.h>
-#include <qcstring.h>
+#include <q3cstring.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 // Local includes.
 
@@ -89,8 +91,8 @@ public:
 
     void setNameFilter(const QString& nameFilter);
 
-    void setDayFilter(const QValueList<int>& days);
-    void setTagFilter(const QValueList<int>& tags, const MatchingCondition& matchingCond, 
+    void setDayFilter(const Q3ValueList<int>& days);
+    void setTagFilter(const Q3ValueList<int>& tags, const MatchingCondition& matchingCond, 
                       bool showUnTagged=false);
 
     /**

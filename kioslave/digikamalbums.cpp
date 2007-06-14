@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3CString>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -84,8 +86,8 @@ extern "C"
 #include "digikamalbums.h"
 #include "imagelister.h"
 
-kio_digikamalbums::kio_digikamalbums(const QCString &pool_socket,
-                                     const QCString &app_socket)
+kio_digikamalbums::kio_digikamalbums(const Q3CString &pool_socket,
+                                     const Q3CString &app_socket)
     : SlaveBase("kio_digikamalbums", pool_socket, app_socket)
 {
 }
@@ -103,7 +105,7 @@ void kio_digikamalbums::special(const QByteArray& data)
     int     getDimensions;
     int     scan = 0;
 
-    QDataStream ds(data, IO_ReadOnly);
+    QDataStream ds(data, QIODevice::ReadOnly);
     ds >> kurl;
     ds >> filter;
     ds >> getDimensions;
@@ -584,7 +586,7 @@ static int write_all(int fd, const char *buf, size_t len)
 
 bool kio_digikamalbums::file_get(const KURL &url)
 {
-    QCString path(QFile::encodeName(url.path()));
+    Q3CString path(QFile::encodeName(url.path()));
     KDE_struct_stat buff;
     if ( KDE_stat( path.data(), &buff ) == -1 )
     {
@@ -656,7 +658,7 @@ bool kio_digikamalbums::file_get(const KURL &url)
 
 bool kio_digikamalbums::file_put(const KURL& url, int permissions, bool overwrite, bool /*resume*/)
 {
-    QCString _dest( QFile::encodeName(url.path()));
+    Q3CString _dest( QFile::encodeName(url.path()));
 
     // check if the original file exists and we are not allowed to overwrite it
     KDE_struct_stat buff;
@@ -769,8 +771,8 @@ bool kio_digikamalbums::file_put(const KURL& url, int permissions, bool overwrit
 
 bool kio_digikamalbums::file_copy( const KURL &src, const KURL &dst, int mode, bool overwrite )
 {
-    QCString _src( QFile::encodeName(src.path()));
-    QCString _dst( QFile::encodeName(dst.path()));
+    Q3CString _src( QFile::encodeName(src.path()));
+    Q3CString _dst( QFile::encodeName(dst.path()));
 
     // stat the src file
     KDE_struct_stat buff_src;
@@ -942,8 +944,8 @@ bool kio_digikamalbums::file_copy( const KURL &src, const KURL &dst, int mode, b
 
 bool kio_digikamalbums::file_rename( const KURL& src, const KURL& dst, bool overwrite )
 {
-    QCString csrc( QFile::encodeName(src.path()));
-    QCString cdst( QFile::encodeName(dst.path()));
+    Q3CString csrc( QFile::encodeName(src.path()));
+    Q3CString cdst( QFile::encodeName(dst.path()));
 
     // stat the source file/folder
     KDE_struct_stat buff_src;
@@ -1007,7 +1009,7 @@ bool kio_digikamalbums::file_rename( const KURL& src, const KURL& dst, bool over
 
 bool kio_digikamalbums::file_mkdir( const KURL& url, int permissions )
 {
-    QCString _path( QFile::encodeName(url.path()));
+    Q3CString _path( QFile::encodeName(url.path()));
 
     KDE_struct_stat buff;
     if ( KDE_stat( _path, &buff ) == -1 )
@@ -1056,7 +1058,7 @@ bool kio_digikamalbums::file_mkdir( const KURL& url, int permissions )
 
 bool kio_digikamalbums::file_chmod( const KURL& url, int permissions )
 {
-    QCString path( QFile::encodeName(url.path()));
+    Q3CString path( QFile::encodeName(url.path()));
     if ( ::chmod( path.data(), permissions ) == -1 )
     {
         error( KIO::ERR_CANNOT_CHMOD, url.url() );
@@ -1068,7 +1070,7 @@ bool kio_digikamalbums::file_chmod( const KURL& url, int permissions )
 
 bool kio_digikamalbums::file_del( const KURL& url, bool isfile)
 {
-    QCString path( QFile::encodeName(url.path()));
+    Q3CString path( QFile::encodeName(url.path()));
 
     if (isfile)
     {
