@@ -60,7 +60,7 @@ namespace Digikam
 QString* SyncJob::lastErrorMsg_  = 0;
 int      SyncJob::lastErrorCode_ = 0;
 
-bool SyncJob::del(const KURL::List& urls, bool useTrash)
+bool SyncJob::del(const KUrl::List& urls, bool useTrash)
 {
     SyncJob sj;
 
@@ -70,7 +70,7 @@ bool SyncJob::del(const KURL::List& urls, bool useTrash)
         return sj.delPriv(urls);
 }
 
-bool SyncJob::file_move(const KURL &src, const KURL &dest)
+bool SyncJob::file_move(const KUrl &src, const KUrl &dest)
 {
     SyncJob sj;
     return sj.fileMovePriv(src, dest);
@@ -100,7 +100,7 @@ SyncJob::~SyncJob()
         delete thumbnail_;
 }
 
-bool SyncJob::delPriv(const KURL::List& urls)
+bool SyncJob::delPriv(const KUrl::List& urls)
 {
     success_ = true;
 
@@ -112,10 +112,10 @@ bool SyncJob::delPriv(const KURL::List& urls)
     return success_;
 }
 
-bool SyncJob::trashPriv(const KURL::List& urls)
+bool SyncJob::trashPriv(const KUrl::List& urls)
 {
     success_ = true;
-    KURL dest("trash:/");
+    KUrl dest("trash:/");
 
     if (!KProtocolInfo::isKnownProtocol(dest))
     {
@@ -130,7 +130,7 @@ bool SyncJob::trashPriv(const KURL::List& urls)
     return success_;
 }
 
-bool SyncJob::fileMovePriv(const KURL &src, const KURL &dest)
+bool SyncJob::fileMovePriv(const KUrl &src, const KUrl &dest)
 {
     success_ = true;
 
@@ -145,7 +145,7 @@ bool SyncJob::fileMovePriv(const KURL &src, const KURL &dest)
 
 void SyncJob::enter_loop()
 {
-    QWidget dummy(0,0,WType_Dialog | WShowModal);
+    QWidget dummy(0,0,Qt::WType_Dialog | WShowModal);
     dummy.setFocusPolicy( QWidget::NoFocus );
     qt_enter_modal(&dummy);
     qApp->enter_loop();
@@ -230,12 +230,12 @@ QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
                                              false,
                                              AlbumSettings::instance()->getExifRotate());
         connect(job,
-                SIGNAL(signalThumbnail(const KURL&,
+                SIGNAL(signalThumbnail(const KUrl&,
                                        const QPixmap&)),
-                SLOT(slotGotThumbnailFromIcon(const KURL&,
+                SLOT(slotGotThumbnailFromIcon(const KUrl&,
                                               const QPixmap&)));
         connect(job,
-                SIGNAL(signalFailed(const KURL&)),
+                SIGNAL(signalFailed(const KUrl&)),
                 SLOT(slotLoadThumbnailFailed()));
 
         enter_loop();
@@ -256,7 +256,7 @@ void SyncJob::slotLoadThumbnailFailed()
     qApp->exit_loop();
 }
 
-void SyncJob::slotGotThumbnailFromIcon(const KURL&, const QPixmap& pix)
+void SyncJob::slotGotThumbnailFromIcon(const KUrl&, const QPixmap& pix)
 {
     if(!pix.isNull() && (thumbnailSize_ < ThumbnailSize::Tiny))
     {

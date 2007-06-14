@@ -38,7 +38,7 @@
 // Local includes.
 
 
-class KURL;
+class KUrl;
 class Q3CString;
 
 class kio_digikamtagsProtocol : public KIO::SlaveBase

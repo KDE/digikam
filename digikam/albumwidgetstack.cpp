@@ -136,7 +136,7 @@ void AlbumWidgetStack::setPreviewItem(ImageInfo* info, ImageInfo *previous, Imag
     if (!info)
     {
         if (previewMode() == MediaPlayerMode)
-            d->mediaPlayerView->setMediaPlayerFromUrl(KURL());
+            d->mediaPlayerView->setMediaPlayerFromUrl(KUrl());
         else if (previewMode() == PreviewImageMode)
         {
             d->imagePreviewView->setImageInfo();
@@ -205,7 +205,7 @@ void AlbumWidgetStack::slotZoomFactorChanged(double z)
         emit signalZoomFactorChanged(z);
 }
 
-void AlbumWidgetStack::slotItemsUpdated(const KURL::List& list)
+void AlbumWidgetStack::slotItemsUpdated(const KUrl::List& list)
 {
     // If item are updated from Icon View, and if we are in Preview Mode,
     // We will check if the current item preview need to be reloaded.

@@ -236,7 +236,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
 
 void LightTableBar::slotAssignRating(int rating)
 {
-    rating = QMIN(5, QMAX(0, rating));
+    rating = qMin(5, qMax(0, rating));
     ImageInfo *info = currentItemImageInfo();
     if (info)
     {
@@ -622,8 +622,8 @@ void LightTableBar::startDrag()
 {
     if (!currentItem()) return;
 
-    KURL::List      urls;
-    KURL::List      kioURLs;
+    KUrl::List      urls;
+    KUrl::List      kioURLs;
     Q3ValueList<int> albumIDs;
     Q3ValueList<int> imageIDs;
 
@@ -661,8 +661,8 @@ void LightTableBar::contentsDragMoveEvent(QDragMoveEvent *e)
     int             albumID;
     Q3ValueList<int> albumIDs;
     Q3ValueList<int> imageIDs;
-    KURL::List      urls;
-    KURL::List      kioURLs;        
+    KUrl::List      urls;
+    KUrl::List      kioURLs;        
 
     if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs) ||
         AlbumDrag::decode(e, urls, albumID) ||
@@ -680,8 +680,8 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
     int             albumID;
     Q3ValueList<int> albumIDs;
     Q3ValueList<int> imageIDs;
-    KURL::List      urls;
-    KURL::List      kioURLs;        
+    KUrl::List      urls;
+    KUrl::List      kioURLs;        
 
     if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
     {

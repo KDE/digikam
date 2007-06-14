@@ -258,7 +258,7 @@ void CameraIconViewItem::paintItem()
     if (!d->downloadName.isEmpty())
     {
         if (fn.pointSize() > 0)
-            fn.setPointSize(QMAX(fn.pointSize()-2, 6));
+            fn.setPointSize(qMax(fn.pointSize()-2, 6));
 
         p.setFont(fn);
         p.setPen(isSelected() ? te->textSpecialSelColor() : te->textSpecialRegColor());
@@ -376,21 +376,21 @@ void CameraIconViewItem::calcRect(const QString& itemName, const QString& downlo
         QFont fn(iconView()->font());
         if (fn.pointSize() > 0)
         {
-            fn.setPointSize(QMAX(fn.pointSize()-2, 6));
+            fn.setPointSize(qMax(fn.pointSize()-2, 6));
         }
 
         fm = QFontMetrics(fn);
         r  = QRect(fm.boundingRect(0, 0, thumbSize, 0xFFFFFFFF,
-                                   Qt::AlignHCenter | Qt::WordBreak,
+                                   Qt::AlignHCenter | Qt::TextWordWrap,
                                    downloadName));
         d->extraRect.setWidth(r.width());
         d->extraRect.setHeight(r.height());
 
-        d->textRect.setWidth(QMAX(d->textRect.width(), d->extraRect.width()));
+        d->textRect.setWidth(qMax(d->textRect.width(), d->extraRect.width()));
         d->textRect.setHeight(d->textRect.height() + d->extraRect.height());
     }
     
-    int w = QMAX(d->textRect.width(), d->pixRect.width() );
+    int w = qMax(d->textRect.width(), d->pixRect.width() );
     int h = d->textRect.height() + d->pixRect.height() ;
 
     itemRect.setWidth(w+4);

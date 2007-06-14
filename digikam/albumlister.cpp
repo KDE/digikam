@@ -321,7 +321,7 @@ void AlbumLister::slotFilterItems()
     // This takes linear time - and deleting seems to take longer. Set wait cursor for large numbers.
     bool setCursor = (3*deleteFilteredItemsList.count() + newFilteredItemsList.count()) > 1500;
     if (setCursor)
-        kapp->setOverrideCursor(KCursor::waitCursor());
+        kapp->setOverrideCursor(Qt::WaitCursor);
 
     if (!deleteFilteredItemsList.isEmpty())
     {

@@ -157,7 +157,7 @@ void CollectionScanner::scanAlbums()
 void CollectionScanner::scan(const QString& folderPath)
 {
     CollectionManager *manager = CollectionManager::instance();
-    KURL url;
+    KUrl url;
     url.setPath(folderPath);
     QString albumRoot = manager->albumRootPath(url);
     QString album = manager->album(url);
@@ -207,7 +207,7 @@ void CollectionScanner::scan(const QString &albumRoot, const QString& album)
 
 void CollectionScanner::scanAlbum(const QString& filePath)
 {
-    KURL url;
+    KUrl url;
     url.setPath(filePath);
     scanAlbum(CollectionManager::instance()->albumRootPath(url), CollectionManager::instance()->album(url));
 }
@@ -320,7 +320,7 @@ void CollectionScanner::updateItemsWithoutDate()
 
             QFileInfo fi(*it);
             QString albumURL = fi.dirPath();
-            albumURL = QDir::cleanDirPath(albumURL.remove(albumRoot));
+            albumURL = QDir::cleanPath(albumURL.remove(albumRoot));
 
             int albumID = DatabaseAccess().db()->getAlbumForPath(albumRoot, albumURL);
 
@@ -506,7 +506,7 @@ void CollectionScanner::scanOneAlbum(const QString &albumRoot, const QString &al
                 continue;
             }
 
-            QString u = QDir::cleanDirPath(album + '/' + fi->fileName());
+            QString u = QDir::cleanPath(album + '/' + fi->fileName());
 
             if (currAlbumList.contains(u))
             {

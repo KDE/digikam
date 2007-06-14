@@ -759,7 +759,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                 if ( unsableArea.contains(pm) ) return;
 
                 m_topLeftPoint = pm - m_rect.topLeft();
-                setCursor( KCursor::sizeFDiagCursor() );
+                setCursor( Qt::SizeFDiagCursor );
             }
 
             else if ( m_currentResizing == ResizingTopRight )
@@ -777,7 +777,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                 if ( unsableArea.contains(pm) ) return;
 
                 m_topRightPoint = pm - m_rect.topLeft();
-                setCursor( KCursor::sizeBDiagCursor() );
+                setCursor( Qt::SizeBDiagCursor );
             }
 
             else if ( m_currentResizing == ResizingBottomLeft  )
@@ -795,7 +795,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                 if ( unsableArea.contains(pm) ) return;
 
                 m_bottomLeftPoint = pm - m_rect.topLeft();
-                setCursor( KCursor::sizeBDiagCursor() );
+                setCursor( Qt::SizeBDiagCursor );
             }
 
             else if ( m_currentResizing == ResizingBottomRight )
@@ -813,7 +813,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                 if ( unsableArea.contains(pm) ) return;
 
                 m_bottomRightPoint = pm - m_rect.topLeft();
-                setCursor( KCursor::sizeFDiagCursor() );
+                setCursor( Qt::SizeFDiagCursor );
             }
 
             else 
@@ -830,11 +830,11 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
     {
         if ( m_topLeftCorner.contains( e->x(), e->y() ) ||
              m_bottomRightCorner.contains( e->x(), e->y() ) )
-            setCursor( KCursor::sizeFDiagCursor() );
+            setCursor( Qt::SizeFDiagCursor );
 
         else if ( m_topRightCorner.contains( e->x(), e->y() ) ||
                   m_bottomLeftCorner.contains( e->x(), e->y() ) )
-            setCursor( KCursor::sizeBDiagCursor() );
+            setCursor( Qt::SizeBDiagCursor );
         else
             unsetCursor();
     }

@@ -53,7 +53,7 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <qlineedit.h>
-#include <klistbox.h>
+#include <k3listbox.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
@@ -190,7 +190,7 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
     
     // Now create the actual boxes that hold the info 
 
-    familyListBox = new KListBox( page, "familyListBox");
+    familyListBox = new K3ListBox( page, "familyListBox");
     familyListBox->setEnabled( !diff );
     gridLayout->addWidget( familyListBox, row, 0 );
     QString fontFamilyWhatsThisText = i18n("Here you can choose the font family to be used." );
@@ -211,7 +211,7 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
     
     familyListBox->setMinimumHeight( minimumListHeight( familyListBox, visibleListSize  ) );
     
-    styleListBox = new KListBox( page, "styleListBox");
+    styleListBox = new K3ListBox( page, "styleListBox");
     styleListBox->setEnabled( !diff );
     gridLayout->addWidget(styleListBox, row, 1);
     QString fontStyleWhatsThisText = i18n("Here you can choose the font style to be used." );
@@ -227,7 +227,7 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
     connect(styleListBox, SIGNAL(highlighted(const QString &)),
             this, SLOT(style_chosen_slot(const QString &)));
         
-    sizeListBox = new KListBox( page, "sizeListBox");
+    sizeListBox = new K3ListBox( page, "sizeListBox");
     sizeOfFont = new KIntNumInput( page, "sizeOfFont");
     sizeOfFont->setMinValue(4);
     
@@ -321,7 +321,7 @@ int FontChooserWidget::minimumListWidth( const Q3ListBox *list )
     for( uint i=0; i<list->count(); i++ )
     {
         int itemWidth = list->item(i)->width(list);
-        w = QMAX(w,itemWidth);
+        w = qMax(w,itemWidth);
     }
         
     if( w == 0 ) 
@@ -598,7 +598,7 @@ void FontChooserWidget::setupDisplay()
     {
         if (family.contains('['))
         {
-            family = family.left(family.find('[')).stripWhiteSpace();
+            family = family.left(family.find('[')).trimmed();
             for (i = 0; i < numEntries; i++) 
             {
                 if (family == familyListBox->text(i).lower()) 

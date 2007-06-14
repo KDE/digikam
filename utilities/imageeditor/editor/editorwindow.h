@@ -126,7 +126,7 @@ protected:
     void setupContextMenu();
     void toggleStandardActions(bool val);
 
-    void printImage(KURL url);
+    void printImage(KUrl url);
 
     void plugActionAccel(KAction* action);
     void unplugActionAccel(KAction* action);
@@ -134,11 +134,11 @@ protected:
     void unLoadImagePlugins();
     void loadImagePlugins();
 
-    bool promptUserSave(const KURL& url);
+    bool promptUserSave(const KUrl& url);
     bool waitForSavingToComplete();
-    void startingSave(const KURL& url);
-    bool startingSaveAs(const KURL& url);
-    bool checkPermissions(const KURL& url);
+    void startingSave(const KUrl& url);
+    bool startingSaveAs(const KUrl& url);
+    bool checkPermissions(const KUrl& url);
     bool moveFile();
 
     virtual void finishSaving(bool success);

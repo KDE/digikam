@@ -59,7 +59,7 @@ kio_digikamtagsProtocol::~kio_digikamtagsProtocol()
 
 void kio_digikamtagsProtocol::special(const QByteArray& data)
 {
-    KURL    kurl;
+    KUrl    kurl;
     QString filter;
     int     getDimensions;
 
@@ -87,14 +87,14 @@ extern "C"
 {
     DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
-        KLocale::setMainCatalogue("digikam");
+        KLocale::setMainCatalog("digikam");
         KInstance instance( "kio_digikamtags" );
         ( void ) KGlobal::locale();
 
-        kdDebug() << "*** kio_digikamtag started ***" << endl;
+        kDebug() << "*** kio_digikamtag started ***" << endl;
 
         if (argc != 4) {
-            kdDebug() << "Usage: kio_digikamtags  protocol domain-socket1 domain-socket2"
+            kDebug() << "Usage: kio_digikamtags  protocol domain-socket1 domain-socket2"
                       << endl;
             exit(-1);
         }
@@ -102,7 +102,7 @@ extern "C"
         kio_digikamtagsProtocol slave(argv[2], argv[3]);
         slave.dispatchLoop();
 
-        kdDebug() << "*** kio_digikamtags finished ***" << endl;
+        kDebug() << "*** kio_digikamtags finished ***" << endl;
         return 0;
     }
 }

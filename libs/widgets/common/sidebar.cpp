@@ -39,6 +39,7 @@
 #include <kdeversion.h>
 #include <kmultitabbar.h>
 #include <kiconloader.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -116,7 +117,7 @@ void Sidebar::setSplitter(QSplitter *sp)
 
 void Sidebar::loadViewState()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup(QString("%1").arg(name()));
 
     int tab        = config->readNumEntry("ActiveTab", 0);
@@ -137,7 +138,7 @@ void Sidebar::loadViewState()
 
 void Sidebar::saveViewState()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup(QString("%1").arg(name()));
     config->writeEntry("ActiveTab", d->activeTab);
     config->writeEntry("Minimized", d->minimized);

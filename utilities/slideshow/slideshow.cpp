@@ -89,7 +89,7 @@ public:
 
     DImg               preview;
 
-    KURL               currentImage;
+    KUrl               currentImage;
 
     PreviewLoadThread *previewThread;
     PreviewLoadThread *previewPreloadThread;
@@ -184,7 +184,7 @@ SlideShow::~SlideShow()
     delete d;
 }
 
-void SlideShow::setCurrent(const KURL& url)
+void SlideShow::setCurrent(const KUrl& url)
 {
     int index = d->settings.fileList.findIndex(url);
     if (index != -1)
@@ -222,11 +222,11 @@ void SlideShow::loadNextImage()
     {
         d->currentImage = d->settings.fileList[d->fileIndex];
         d->previewThread->load(LoadingDescription(d->currentImage.path(),
-                               QMAX(d->deskWidth, d->deskHeight), d->settings.exifRotate));
+                               qMax(d->deskWidth, d->deskHeight), d->settings.exifRotate));
     }
     else
     {
-        d->currentImage = KURL();
+        d->currentImage = KUrl();
         d->preview = DImg();
         updatePixmap();
         update();
@@ -257,11 +257,11 @@ void SlideShow::loadPrevImage()
     {
         d->currentImage = d->settings.fileList[d->fileIndex];
         d->previewThread->load(LoadingDescription(d->currentImage.path(),
-                               QMAX(d->deskWidth, d->deskHeight), d->settings.exifRotate));
+                               qMax(d->deskWidth, d->deskHeight), d->settings.exifRotate));
     }
     else
     {
-        d->currentImage = KURL();
+        d->currentImage = KUrl();
         d->preview = DImg();
         updatePixmap();
         update();
@@ -300,7 +300,7 @@ void SlideShow::preloadNextImage()
     if (index < num)
     {
         d->previewPreloadThread->load(LoadingDescription(d->settings.fileList[index].path(),
-                                      QMAX(d->deskWidth, d->deskHeight), d->settings.exifRotate));
+                                      qMax(d->deskWidth, d->deskHeight), d->settings.exifRotate));
     }
 }
 
@@ -528,7 +528,7 @@ void SlideShow::printComments(QPainter &p, int &offset, const QString& comments)
             }
         }
     
-        commentsByLines.prepend(newLine.stripWhiteSpace());
+        commentsByLines.prepend(newLine.trimmed());
     }
 
     for (int i = 0 ; i < (int)commentsByLines.count() ; i++ ) 

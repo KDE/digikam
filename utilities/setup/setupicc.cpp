@@ -62,6 +62,7 @@
 #include <kiconloader.h>
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 // lcms includes.
 
@@ -139,7 +140,7 @@ public:
     QMap<QString, QString>  proofICCPath;
     QMap<QString, QString>  monitorICCPath;
     
-    KURLRequester          *defaultPathKU;
+    KUrlRequester          *defaultPathKU;
 
     KComboBox              *renderingIntentKC;
 
@@ -168,7 +169,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     Q3WhatsThis::add( d->enableColorManagement, i18n("<ul><li>Checked: Color Management is enabled</li>"
                                                     "<li>Unchecked: Color Management is disabled</li></ul>"));
     
-    KURLLabel *lcmsLogoLabel = new KURLLabel(colorPolicy);
+    KUrlLabel *lcmsLogoLabel = new KUrlLabel(colorPolicy);
     lcmsLogoLabel->setText(QString());
     lcmsLogoLabel->setURL("http://www.littlecms.com");
     KGlobal::dirs()->addResourceType("logo-lcms", KGlobal::dirs()->kde_default("data") + "digikam/data");
@@ -214,7 +215,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->defaultPathGB = new Q3HGroupBox(parent);
     d->defaultPathGB->setTitle(i18n("Color Profiles Directory"));
     
-    d->defaultPathKU = new KURLRequester(d->defaultPathGB);
+    d->defaultPathKU = new KUrlRequester(d->defaultPathGB);
     d->defaultPathKU->lineEdit()->setReadOnly(true);
     d->defaultPathKU->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);    
     Q3WhatsThis::add( d->defaultPathKU, i18n("<p>Default path to the color profiles folder. "
@@ -400,7 +401,7 @@ void SetupICC::processLCMSURL(const QString& url)
 
 void SetupICC::applySettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("Color Management");
 
     config->writeEntry("EnableCM", d->enableColorManagement->isChecked());
@@ -435,7 +436,7 @@ void SetupICC::applySettings()
 
 void SetupICC::readSettings(bool restore)
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("Color Management");
 
     if (!restore)
@@ -487,10 +488,10 @@ void SetupICC::fillCombos(const QString& path, bool report)
             KMessageBox::sorry(this, i18n("<p>You must set a correct default "
                                           "path for your ICC color profiles files.</p>"));
     
-        d->mainDialog->enableButtonOK(false);
+        d->mainDialog->enableButtonOk(false);
         return;
     }    
-    d->mainDialog->enableButtonOK(true);
+    d->mainDialog->enableButtonOk(true);
 
     // Look the ICC profile path repository set by user.
     QDir userProfilesDir(QFile::encodeName(path), "*.icc;*.icm", QDir::Files);
@@ -508,7 +509,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
         }
         
         DDebug() << "No ICC profile files found!!!" << endl;
-        d->mainDialog->enableButtonOK(false);
+        d->mainDialog->enableButtonOk(false);
         return;
     }
 
@@ -540,11 +541,11 @@ void SetupICC::fillCombos(const QString& path, bool report)
     {
         // If there is no workspace icc profiles available, 
         // the CM is broken and cannot be used. 
-        d->mainDialog->enableButtonOK(false);
+        d->mainDialog->enableButtonOk(false);
         return;
     }
 
-    d->mainDialog->enableButtonOK(true);
+    d->mainDialog->enableButtonOk(true);
 }
 
 bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
@@ -682,7 +683,7 @@ void SetupICC::slotToggledWidgets(bool t)
         slotToggleManagedView(d->managedView->isChecked());
     }
     else
-        d->mainDialog->enableButtonOK(true);
+        d->mainDialog->enableButtonOk(true);
 }
 
 void SetupICC::slotClickedWork()
@@ -727,7 +728,7 @@ void SetupICC::slotToggleManagedView(bool b)
 
 bool SetupICC::iccRepositoryIsValid()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("Color Management");
 
     // If color management is disable, no need to check anymore.

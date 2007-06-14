@@ -120,7 +120,7 @@ void ImageRegionWidget::resizeEvent(QResizeEvent* e)
     double srcHeight = previewHeight();
     double dstWidth  = contentsRect().width();
     double dstHeight = contentsRect().height();
-    double zoom      = QMAX(dstWidth/srcWidth, dstHeight/srcHeight); 
+    double zoom      = qMax(dstWidth/srcWidth, dstHeight/srcHeight); 
 
     setZoomMin(zoom);
     setZoomMax(zoom*12.0);

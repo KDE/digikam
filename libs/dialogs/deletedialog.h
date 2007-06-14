@@ -43,7 +43,7 @@
 #include "deletedialogbase.h"
 
 class QStringList;
-class KListBox;
+class K3ListBox;
 class KGuiItem;
 class QLabel;
 class Q3WidgetStack;
@@ -78,7 +78,7 @@ public:
 
     DeleteWidget(QWidget *parent = 0, const char *name = 0);
 
-    void setFiles(const KURL::List &files);
+    void setFiles(const KUrl::List &files);
     void setListMode(DeleteDialogMode::ListMode mode);
     void setDeleteMode(DeleteDialogMode::DeleteMode deleteMode);
 
@@ -107,12 +107,12 @@ public:
 
     DeleteDialog(QWidget *parent, const char *name = "delete_dialog");
 
-    bool confirmDeleteList(const KURL::List &condemnedURLs,
+    bool confirmDeleteList(const KUrl::List &condemnedURLs,
                            DeleteDialogMode::ListMode listMode,
                            DeleteDialogMode::DeleteMode deleteMode);
     bool shouldDelete() const { return m_widget->ddShouldDelete->isChecked(); }
 
-    void setURLs(const KURL::List &files);
+    void setURLs(const KUrl::List &files);
     void presetDeleteMode(DeleteDialogMode::DeleteMode mode);
     void setListMode(DeleteDialogMode::ListMode mode);
 

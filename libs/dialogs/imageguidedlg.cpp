@@ -50,13 +50,15 @@
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
 #include <kprogress.h>
 #include <kcolorbutton.h>
 #include <kconfig.h>
 #include <kseparator.h>
+#include <kglobal.h>
+#include <ktoolinvocation.h>
 
 // Local includes.
 
@@ -142,7 +144,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
                            i18n("&Save As..."),
                            i18n("&Load..."))
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     setCaption(DImgInterface::defaultInterface()->getImageFileName() + QString(" - ") + title);
     
     d = new ImageGuideDlgPriv;
@@ -259,7 +261,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     d->settingsSideBar->loadViewState();
     
     // Reading splitter sizes here prevent flicker effect in dialog.
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup(d->name + QString(" Tool Dialog"));
     if(config->hasKey("SplitterSizes"))
         d->splitter->setSizes(config->readIntListEntry("SplitterSizes"));
@@ -288,7 +290,7 @@ ImageGuideDlg::~ImageGuideDlg()
 void ImageGuideDlg::readSettings(void)
 {
     QColor defaultGuideColor(Qt::red);
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup(d->name + QString(" Tool Dialog"));
     d->guideColorBt->setColor(config->readColorEntry("Guide Color", &defaultGuideColor));
     d->guideSize->setValue(config->readNumEntry("Guide Width", 1));
@@ -298,7 +300,7 @@ void ImageGuideDlg::readSettings(void)
 
 void ImageGuideDlg::writeSettings(void)
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup(d->name + QString(" Tool Dialog"));
     config->writeEntry( "Guide Color", d->guideColorBt->color() );
     config->writeEntry( "Guide Width", d->guideSize->value() );
@@ -434,7 +436,7 @@ void ImageGuideDlg::slotHelp()
     // else digiKam help. In this case, setHelp() method must be used to set anchor and handbook name.
 
     if (d->aboutData)
-        KApplication::kApplication()->invokeHelp(d->name, "digikam");
+        KToolInvocation::invokeHelp(d->name, "digikam");
     else
         KDialogBase::slotHelp();
 }
@@ -493,7 +495,7 @@ void ImageGuideDlg::slotOk()
     enableButton(User3,   false);
     enableButton(Default, false);
     enableButton(Try,     false);
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     d->progressBar->setValue(0);
 
     if (m_threadedFilter)

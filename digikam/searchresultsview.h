@@ -58,7 +58,7 @@ public:
     SearchResultsView(QWidget* parent);
     ~SearchResultsView();
 
-    void openURL(const KURL& url);
+    void openURL(const KUrl& url);
     void clear();
 
 private:
@@ -75,8 +75,8 @@ private slots:
 
     void slotData(KIO::Job *job, const QByteArray &data);
     void slotResult(KIO::Job *job);
-    void slotGotThumbnail(const KURL& url, const QPixmap& pix);
-    void slotFailedThumbnail(const KURL& url);
+    void slotGotThumbnail(const KUrl& url, const QPixmap& pix);
+    void slotFailedThumbnail(const KUrl& url);
 };
 
 }  // namespace Digikam

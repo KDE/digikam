@@ -53,7 +53,7 @@ public:
     ImagePropertiesTab(QWidget* parent, bool navBar=true);
     ~ImagePropertiesTab();
 
-    void setCurrentURL(const KURL& url=KURL());
+    void setCurrentURL(const KUrl& url=KUrl());
     void colorChanged(const QColor& back, const QColor& fore);
 
 private:

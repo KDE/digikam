@@ -87,14 +87,14 @@ public:
 
     AlbumIconItem* firstSelectedItem() const;
 
-    KURL::List allItems();
-    KURL::List selectedItems();
+    KUrl::List allItems();
+    KUrl::List selectedItems();
 
     Q3PtrList<ImageInfo> allImageInfos(bool copy) const;
     Q3PtrList<ImageInfo> selectedImageInfos(bool copy) const;
 
     void refresh();
-    void refreshItems(const KURL::List& itemList);
+    void refreshItems(const KUrl::List& itemList);
 
     QRect    itemRect() const;
     QRect    itemRatingRect() const;
@@ -135,7 +135,7 @@ signals:
     void signalCleared();
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
-    void signalItemsUpdated(const KURL::List&);
+    void signalItemsUpdated(const KUrl::List&);
 
 public slots:
 
@@ -178,12 +178,12 @@ private slots:
     void slotRightButtonClicked(const QPoint& pos);
     void slotRightButtonClicked(IconItem *item, const QPoint& pos);
 
-    void slotGotThumbnail(const KURL& url);
+    void slotGotThumbnail(const KUrl& url);
     void slotSelectionChanged();
 
     void slotFilesModified();
-    void slotFilesModified(const KURL& url);
-    void slotImageWindowURLChanged(const KURL &url);
+    void slotFilesModified(const KUrl& url);
+    void slotImageWindowURLChanged(const KUrl &url);
 
     void slotShowToolTip(IconItem* item);
 
@@ -193,7 +193,7 @@ private slots:
     void slotRemoveTag(int tagID);
 
     void slotDIOResult(KIO::Job* job);
-    void slotRenamed(KIO::Job*, const KURL &, const KURL&);
+    void slotRenamed(KIO::Job*, const KUrl &, const KUrl&);
 
     void slotImageAttributesChanged(qlonglong imageId);
     void slotAlbumImagesChanged(int albumId);

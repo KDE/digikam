@@ -55,6 +55,7 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <kapplication.h>
+#include <kglobal.h>
 
 // Digikam includes.
 
@@ -292,7 +293,7 @@ void ImageEffect_AutoCorrection::slotColorSelectedFromTarget( const Digikam::DCo
 
 void ImageEffect_AutoCorrection::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("autocorrection Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
@@ -303,7 +304,7 @@ void ImageEffect_AutoCorrection::readUserSettings()
 
 void ImageEffect_AutoCorrection::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("autocorrection Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
@@ -320,7 +321,7 @@ void ImageEffect_AutoCorrection::resetValues()
 
 void ImageEffect_AutoCorrection::slotEffect()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
 
     m_histogramWidget->stopHistogramComputation();
 
@@ -355,7 +356,7 @@ QPixmap ImageEffect_AutoCorrection::getThumbnailForEffect(AutoCorrectionType typ
 
 void ImageEffect_AutoCorrection::finalRendering()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getOriginalImage();
     int w                      = iface->originalWidth();

@@ -44,6 +44,7 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -120,8 +121,8 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     connect(m_blackFrameButton, SIGNAL(clicked()),
             this, SLOT(slotAddBlackFrame()));
                                                   
-    connect(m_blackFrameListView, SIGNAL(blackFrameSelected(Q3ValueList<HotPixel>, const KURL&)),
-            this, SLOT(slotBlackFrame(Q3ValueList<HotPixel>, const KURL&))); 
+    connect(m_blackFrameListView, SIGNAL(blackFrameSelected(Q3ValueList<HotPixel>, const KUrl&)),
+            this, SLOT(slotBlackFrame(Q3ValueList<HotPixel>, const KUrl&))); 
 }
 
 ImageEffect_HotPixels::~ImageEffect_HotPixels()
@@ -130,9 +131,9 @@ ImageEffect_HotPixels::~ImageEffect_HotPixels()
 
 void ImageEffect_HotPixels::readUserSettings(void)
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("hotpixels Tool Dialog");
-    m_blackFrameURL = KURL(config->readEntry("Last Black Frame File", QString()));
+    m_blackFrameURL = KUrl(config->readEntry("Last Black Frame File", QString()));
     m_filterMethodCombo->setCurrentItem(config->readNumEntry("Filter Method",
                                         HotPixelFixer::QUADRATIC_INTERPOLATION));
     
@@ -142,7 +143,7 @@ void ImageEffect_HotPixels::readUserSettings(void)
 
 void ImageEffect_HotPixels::writeUserSettings(void)
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("hotpixels Tool Dialog");
     config->writeEntry("Last Black Frame File", m_blackFrameURL.url());
     config->writeEntry("Filter Method", m_filterMethodCombo->currentItem());
@@ -159,7 +160,7 @@ void ImageEffect_HotPixels::resetValues(void)
 void ImageEffect_HotPixels::slotAddBlackFrame()
 {
     //Does one need to do this if digikam did so already?
-    KImageIO::registerFormats(); 
+     
     
     KFileDialog fileSelectDialog(QString(), KImageIO::pattern(), this, "", true);
     fileSelectDialog.setCaption(i18n("Select Black Frame Image"));
@@ -234,7 +235,7 @@ void ImageEffect_HotPixels::putFinalData(void)
     iface.putOriginalImage(i18n("Hot Pixels Correction"), m_threadedFilter->getTargetImage().bits());
 }
 
-void ImageEffect_HotPixels::slotBlackFrame(Q3ValueList<HotPixel> hpList, const KURL& blackFrameURL)
+void ImageEffect_HotPixels::slotBlackFrame(Q3ValueList<HotPixel> hpList, const KUrl& blackFrameURL)
 {
     m_blackFrameURL = blackFrameURL;
     m_hotPixelsList = hpList;

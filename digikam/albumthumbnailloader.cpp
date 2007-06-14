@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-typedef QMap<KURL, Q3ValueList<int> > UrlAlbumMap;
+typedef QMap<KUrl, Q3ValueList<int> > UrlAlbumMap;
 typedef QMap<int, QPixmap> TagThumbnailMap;
 
 class AlbumThumbnailLoaderPrivate
@@ -214,9 +214,9 @@ bool AlbumThumbnailLoader::getTagThumbnail(TAlbum *album, QPixmap &icon)
     {
         if(album->icon().startsWith("/"))
         {
-            KURL iconKURL;
+            KUrl iconKURL;
             iconKURL.setPath(album->icon());
-            addURL(album, iconKURL);
+            addUrl(album, iconKURL);
             icon = QPixmap();
             return true;
         }
@@ -237,7 +237,7 @@ bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum *album)
 {
     if(!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
     {
-        addURL(album, album->iconKURL());
+        addUrl(album, album->iconKURL());
     }
     else
     {
@@ -247,7 +247,7 @@ bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum *album)
     return true;
 }
 
-void AlbumThumbnailLoader::addURL(Album *album, const KURL &url)
+void AlbumThumbnailLoader::addUrl(Album *album, const KUrl &url)
 {
     /*
     QPixmap* pix = d->cache->find(album->iconKURL().path());
@@ -284,11 +284,11 @@ void AlbumThumbnailLoader::addURL(Album *album, const KURL &url)
                         true,
                         AlbumSettings::instance()->getExifRotate());
                 connect(d->iconTagThumbJob,
-                        SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
-                        SLOT(slotGotThumbnailFromIcon(const KURL&, const QPixmap&)));
+                        SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
+                        SLOT(slotGotThumbnailFromIcon(const KUrl&, const QPixmap&)));
                 connect(d->iconTagThumbJob,
-                        SIGNAL(signalFailed(const KURL&)),
-                        SLOT(slotThumbnailLost(const KURL&)));
+                        SIGNAL(signalFailed(const KUrl&)),
+                        SLOT(slotThumbnailLost(const KUrl&)));
             }
             else
             {
@@ -304,11 +304,11 @@ void AlbumThumbnailLoader::addURL(Album *album, const KURL &url)
                         true,
                         AlbumSettings::instance()->getExifRotate());
                 connect(d->iconAlbumThumbJob,
-                        SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
-                        SLOT(slotGotThumbnailFromIcon(const KURL&, const QPixmap&)));
+                        SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
+                        SLOT(slotGotThumbnailFromIcon(const KUrl&, const QPixmap&)));
                 connect(d->iconAlbumThumbJob,
-                        SIGNAL(signalFailed(const KURL&)),
-                        SLOT(slotThumbnailLost(const KURL&)));
+                        SIGNAL(signalFailed(const KUrl&)),
+                        SLOT(slotThumbnailLost(const KUrl&)));
             }
             else
             {
@@ -360,7 +360,7 @@ int AlbumThumbnailLoader::thumbnailSize() const
     return d->iconSize;
 }
 
-void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const KURL &url, const QPixmap &thumbnail)
+void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const KUrl &url, const QPixmap &thumbnail)
 {
     // We need to find all albums for which the given url has been requested,
     // and emit a signal for each album.
@@ -430,7 +430,7 @@ QPixmap AlbumThumbnailLoader::createTagThumbnail(const QPixmap &albumThumbnail)
     // tag thumbnails are cropped
 
     QPixmap tagThumbnail;
-    int thumbSize = QMAX(albumThumbnail.width(), albumThumbnail.height());
+    int thumbSize = qMax(albumThumbnail.width(), albumThumbnail.height());
 
     if(!albumThumbnail.isNull() && thumbSize >= d->minBlendSize)
     {
@@ -450,7 +450,7 @@ QPixmap AlbumThumbnailLoader::createTagThumbnail(const QPixmap &albumThumbnail)
     return tagThumbnail;
 }
 
-void AlbumThumbnailLoader::slotThumbnailLost(const KURL &url)
+void AlbumThumbnailLoader::slotThumbnailLost(const KUrl &url)
 {
     // Same code as above, only different signal
 
@@ -472,7 +472,7 @@ void AlbumThumbnailLoader::slotThumbnailLost(const KURL &url)
 
 QPixmap AlbumThumbnailLoader::blendIcons(QPixmap dstIcon, const QPixmap &tagIcon)
 {
-    int dstIconSize = QMAX(dstIcon.width(), dstIcon.height());
+    int dstIconSize = qMax(dstIcon.width(), dstIcon.height());
 
     if (dstIconSize >= d->minBlendSize)
     {

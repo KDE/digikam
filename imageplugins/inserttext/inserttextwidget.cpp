@@ -195,7 +195,7 @@ Digikam::DImg InsertTextWidget::makeInsertText(void)
     // Get original image
     Digikam::DImg image = m_iface->getOriginalImg()->copy();
 
-    int borderWidth = QMAX(1, lroundf(ratioW));
+    int borderWidth = qMax(1, lroundf(ratioW));
     // compose and draw result on image
     composeImage(&image, 0, x, y,
                   m_textFont, m_textFont.pointSizeFloat(),
@@ -342,13 +342,13 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
                 // so if now the larger distance is actually too small,
                 // fall back to standard placement, nothing to lose.
                 if (x + fontWidth > maxWidth)
-                    x = QMAX( (maxWidth - fontWidth) / 2, 0);
+                    x = qMax( (maxWidth - fontWidth) / 2, 0);
             }
             else
             {
                 x = maxWidth - (int)(fromRight * maxWidth) - fontWidth;
                 if ( x < 0 )
-                    x = QMAX( (maxWidth - fontWidth) / 2, 0);
+                    x = qMax( (maxWidth - fontWidth) / 2, 0);
             }
 
             // calculate vertical position
@@ -356,21 +356,21 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
             {
                 y = (int)(fromTop * maxHeight);
                 if (y + fontHeight > maxHeight)
-                    y = QMAX( (maxHeight - fontHeight) / 2, 0);
+                    y = qMax( (maxHeight - fontHeight) / 2, 0);
             }
             else
             {
                 y = maxHeight - (int)(fromBottom * maxHeight) - fontHeight;
                 if ( y < 0 )
-                    y = QMAX( (maxHeight - fontHeight) / 2, 0);
+                    y = qMax( (maxHeight - fontHeight) / 2, 0);
             }
 
             if (! QRect(x, y, fontWidth, fontHeight).
                    intersects(QRect(0, 0, maxWidth, maxHeight)) )
             {
                 // emergency fallback - nothing is visible
-                x = QMAX( (maxWidth - fontWidth) / 2, 0);
-                y = QMAX( (maxHeight - fontHeight) / 2, 0);
+                x = qMax( (maxWidth - fontWidth) / 2, 0);
+                y = qMax( (maxHeight - fontHeight) / 2, 0);
             }
 
             // invalidate position hint, use only once
@@ -379,8 +379,8 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
         else
         {
             // use standard position
-            x = QMAX( (maxWidth - fontWidth) / 2, 0);
-            y = QMAX( (maxHeight - fontHeight) / 2, 0);
+            x = qMax( (maxWidth - fontWidth) / 2, 0);
+            y = qMax( (maxHeight - fontHeight) / 2, 0);
         }
     }
 
@@ -584,14 +584,14 @@ void InsertTextWidget::mousePressEvent ( QMouseEvent * e )
     {
         m_xpos = e->x();
         m_ypos = e->y();
-        setCursor ( KCursor::sizeAllCursor() );
+        setCursor ( Qt::SizeAllCursor );
         m_currentMoving = true;
     }
 }
 
 void InsertTextWidget::mouseReleaseEvent ( QMouseEvent * )
 {
-    setCursor ( KCursor::arrowCursor() );
+    setCursor ( Qt::ArrowCursor );
     m_currentMoving = false;
 }
 
@@ -611,15 +611,15 @@ void InsertTextWidget::mouseMoveEvent ( QMouseEvent * e )
 
             m_xpos = newxpos;
             m_ypos = newypos;
-            setCursor( KCursor::handCursor() );
+            setCursor( Qt::PointingHandCursor );
         }
         else if ( m_textRect.contains( e->x(), e->y() ) )
         {
-            setCursor ( KCursor::sizeAllCursor() );
+            setCursor ( Qt::SizeAllCursor );
         }
         else
         {
-            setCursor ( KCursor::arrowCursor() );
+            setCursor ( Qt::ArrowCursor );
         }
     }
 }

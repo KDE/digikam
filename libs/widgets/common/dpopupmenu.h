@@ -38,7 +38,7 @@
 
 // KDE includes.
 
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 // Local includes.
 
@@ -49,7 +49,7 @@ class QSize;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DPopupMenu : public KPopupMenu
+class DIGIKAM_EXPORT DPopupMenu : public KMenu
 {
     Q_OBJECT
 

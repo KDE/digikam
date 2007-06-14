@@ -196,7 +196,7 @@ void ImagePlugin_Core::slotAutoCorrection()
 
 void ImagePlugin_Core::slotInvert()
 {
-    parentWidget()->setCursor( KCursor::waitCursor() );
+    parentWidget()->setCursor( Qt::WaitCursor );
         
     Digikam::ImageIface iface(0, 0);
 
@@ -269,7 +269,7 @@ void ImagePlugin_Core::slotConvertTo8Bits()
            return;
     }
     
-    parentWidget()->setCursor( KCursor::waitCursor() );
+    parentWidget()->setCursor( Qt::WaitCursor );
     iface.convertOriginalColorDepth(32);
     parentWidget()->unsetCursor();
 }
@@ -284,7 +284,7 @@ void ImagePlugin_Core::slotConvertTo16Bits()
        return;
     }
     
-    parentWidget()->setCursor( KCursor::waitCursor() );
+    parentWidget()->setCursor( Qt::WaitCursor );
     iface.convertOriginalColorDepth(64);
     parentWidget()->unsetCursor();
 }

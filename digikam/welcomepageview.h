@@ -58,7 +58,7 @@ private:
 
 private slots:
 
-    void slotUrlOpen(const KURL &);
+    void slotUrlOpen(const KUrl &);
 };
 
 }  // namespace Digikam

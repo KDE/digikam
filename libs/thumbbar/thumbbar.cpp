@@ -53,7 +53,7 @@ extern "C"
 
 // KDE includes.
 
-#include <kmdcodec.h>
+#include <kcodecs.h>
 #include <kfileitem.h>
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -66,6 +66,7 @@ extern "C"
 // LibKDcraw includes. 
  
 #include <libkdcraw/rawfiles.h> 
+#include <QTextDocument>
 
 // Local includes.
 
@@ -142,7 +143,7 @@ public:
         
     QPixmap      *pixmap;
 
-    KURL          url;
+    KUrl          url;
     
     ThumbBarItem *next;
     ThumbBarItem *prev;
@@ -222,13 +223,13 @@ void ThumbBarView::resizeEvent(QResizeEvent* e)
 void ThumbBarView::setExifRotate(bool exifRotate)
 {
     d->exifRotate = exifRotate;
-    QString thumbCacheDir = QDir::homeDirPath() + "/.thumbnails/";
+    QString thumbCacheDir = QDir::homePath() + "/.thumbnails/";
 
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
         // Remove all current album item thumbs from disk cache.
 
-        QString uri = "file://" + QDir::cleanDirPath(item->url().path(-1));
+        QString uri = "file://" + QDir::cleanPath(item->url().path(-1));
         KMD5 md5(QFile::encodeName(uri));
         uri = md5.hexDigest();
     
@@ -279,9 +280,9 @@ int ThumbBarView::countItems()
     return d->count;
 }
 
-KURL::List ThumbBarView::itemsURLs()
+KUrl::List ThumbBarView::itemsURLs()
 {
-    KURL::List urlList;
+    KUrl::List urlList;
     if (!countItems())
         return urlList;
 
@@ -356,7 +357,7 @@ ThumbBarItem* ThumbBarView::findItem(const QPoint& pos) const
     return 0;
 }
 
-ThumbBarItem* ThumbBarView::findItemByURL(const KURL& url) const
+ThumbBarItem* ThumbBarView::findItemByURL(const KUrl& url) const
 {
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
@@ -407,9 +408,9 @@ void ThumbBarView::ensureItemVisible(ThumbBarItem* item)
     }
 }
 
-void ThumbBarView::refreshThumbs(const KURL::List& urls)
+void ThumbBarView::refreshThumbs(const KUrl::List& urls)
 {
-    for (KURL::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
+    for (KUrl::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
     {
         ThumbBarItem *item = findItemByURL(*it);
         if (item)
@@ -437,11 +438,11 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* item)
        
     d->thumbJob = new ThumbnailJob(item->url(), ThumbnailSize::Huge, true, d->exifRotate);
     
-    connect(d->thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
-            this, SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
+    connect(d->thumbJob, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
+            this, SLOT(slotGotThumbnail(const KUrl&, const QPixmap&)));
    
-    connect(d->thumbJob, SIGNAL(signalFailed(const KURL&)),
-            this, SLOT(slotFailedThumbnail(const KURL&)));     
+    connect(d->thumbJob, SIGNAL(signalFailed(const KUrl&)),
+            this, SLOT(slotFailedThumbnail(const KUrl&)));     
 }
 
 void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
@@ -676,7 +677,7 @@ void ThumbBarView::removeItem(ThumbBarItem* item)
 
 void ThumbBarView::rearrangeItems()
 {
-    KURL::List urlList;
+    KUrl::List urlList;
 
     int pos = 0;
     ThumbBarItem *item = d->firstItem;
@@ -705,11 +706,11 @@ void ThumbBarView::rearrangeItems()
 
         d->thumbJob = new ThumbnailJob(urlList, ThumbnailSize::Huge, true, d->exifRotate);
         
-        connect(d->thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
-                this, SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
+        connect(d->thumbJob, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
+                this, SLOT(slotGotThumbnail(const KUrl&, const QPixmap&)));
     
-        connect(d->thumbJob, SIGNAL(signalFailed(const KURL&)),
-                this, SLOT(slotFailedThumbnail(const KURL&)));     
+        connect(d->thumbJob, SIGNAL(signalFailed(const KUrl&)),
+                this, SLOT(slotFailedThumbnail(const KUrl&)));     
     }
 }
 
@@ -730,7 +731,7 @@ void ThumbBarView::slotUpdate()
     viewport()->update();
 }
 
-void ThumbBarView::slotGotThumbnail(const KURL& url, const QPixmap& pix)
+void ThumbBarView::slotGotThumbnail(const KUrl& url, const QPixmap& pix)
 {
     if (!pix.isNull())
     {
@@ -749,7 +750,7 @@ void ThumbBarView::slotGotThumbnail(const KURL& url, const QPixmap& pix)
     }
 }
 
-void ThumbBarView::slotFailedThumbnail(const KURL& url)
+void ThumbBarView::slotFailedThumbnail(const KUrl& url)
 {
     KIO::PreviewJob* job = KIO::filePreview(url, ThumbnailSize::Huge, 0, 0, 70, true, false);
     
@@ -797,7 +798,7 @@ void ThumbBarView::slotFailedPreview(const KFileItem* fileItem)
 
 // -------------------------------------------------------------------------
 
-ThumbBarItem::ThumbBarItem(ThumbBarView* view, const KURL& url)
+ThumbBarItem::ThumbBarItem(ThumbBarView* view, const KUrl& url)
 {
     d = new ThumbBarItemPriv;
     d->url  = url;
@@ -815,7 +816,7 @@ ThumbBarItem::~ThumbBarItem()
     delete d;
 }
 
-KURL ThumbBarItem::url() const
+KUrl ThumbBarItem::url() const
 {
     return d->url;
 }
@@ -1007,7 +1008,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
                 str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? unavailable : photoInfo.make)
                                         .arg(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Make/Model:") + m_cellMid + Q3StyleSheet::escape( str ) + m_cellEnd;
+                metaStr += m_cellBeg + i18n("Make/Model:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
             if (settings.showPhotoDate)
@@ -1016,10 +1017,10 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
                 {
                     str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
                     if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Q3StyleSheet::escape( str ) + m_cellEnd;
+                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
                 }
                 else
-                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Q3StyleSheet::escape( unavailable ) + m_cellEnd;
+                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Qt::escape( unavailable ) + m_cellEnd;
             }
 
             if (settings.showPhotoFocal)
@@ -1032,7 +1033,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
                     str += QString(" / %1").arg(i18n("%1 (35mm: %2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm));
 
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Aperture/Focal:") + m_cellMid + Q3StyleSheet::escape( str ) + m_cellEnd;
+                metaStr += m_cellBeg + i18n("Aperture/Focal:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
             if (settings.showPhotoExpo)
@@ -1040,7 +1041,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
                 str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime)
                                         .arg(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO").arg(photoInfo.sensitivity));
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Exposure/Sensitivity:") + m_cellMid + Q3StyleSheet::escape( str ) + m_cellEnd;
+                metaStr += m_cellBeg + i18n("Exposure/Sensitivity:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
             if (settings.showPhotoMode)
@@ -1055,21 +1056,21 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
                 else 
                     str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Mode/Program:") + m_cellMid + Q3StyleSheet::escape( str ) + m_cellEnd;
+                metaStr += m_cellBeg + i18n("Mode/Program:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
             if (settings.showPhotoFlash)
             {
                 str = photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash;
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Flash:") + m_cellMid + Q3StyleSheet::escape( str ) + m_cellEnd;
+                metaStr += m_cellBeg + i18n("Flash:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
             if (settings.showPhotoWB)
             {
                 str = photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance;
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("White Balance:") + m_cellMid + Q3StyleSheet::escape( str ) + m_cellEnd;
+                metaStr += m_cellBeg + i18n("White Balance:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
 
             tipText += metaStr;
@@ -1081,8 +1082,8 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
 
 QString ThumbBarToolTip::breakString(const QString& input)
 {
-    QString str = input.simplifyWhiteSpace();
-    str = Q3StyleSheet::escape(str);
+    QString str = input.simplified();
+    str = Qt::escape(str);
     const uint maxLen = m_maxStringLen;
 
     if (str.length() <= maxLen)

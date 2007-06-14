@@ -71,7 +71,7 @@ public:
     
 signals:
     
-    void signalLastDestination(const KURL&);
+    void signalLastDestination(const KUrl&);
     void signalAlbumSettingsChanged();
 
 protected:
@@ -84,7 +84,7 @@ private:
     void readSettings();
     void saveSettings();
     bool dialogClosed();
-    bool createAutoAlbum(const KURL& parentURL, const QString& name,
+    bool createAutoAlbum(const KUrl& parentURL, const QString& name,
                          const QDate& date, QString& errMsg);
     void addFileExtension(const QString& ext);
     void finishDialog();
@@ -109,7 +109,7 @@ private slots:
     void slotDecreaseThumbSize();
     
     void slotUpload();
-    void slotUploadItems(const KURL::List&);
+    void slotUploadItems(const KUrl::List&);
     void slotDownloadSelected();
     void slotDownloadAll();
     void slotDownload(bool onlySelected);

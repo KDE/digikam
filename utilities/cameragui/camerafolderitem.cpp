@@ -49,8 +49,8 @@ public:
     QString name;
 };
 
-CameraFolderItem::CameraFolderItem(KListView* parent, const QString& name, const QPixmap& pixmap)
-                : KListViewItem(parent, name)
+CameraFolderItem::CameraFolderItem(K3ListView* parent, const QString& name, const QPixmap& pixmap)
+                : K3ListViewItem(parent, name)
 {
     d = new CameraFolderItemPriv;
     d->virtualFolder = true;
@@ -58,9 +58,9 @@ CameraFolderItem::CameraFolderItem(KListView* parent, const QString& name, const
     setPixmap(0, pixmap);
 }
 
-CameraFolderItem::CameraFolderItem(KListViewItem* parent, const QString& folderName,
+CameraFolderItem::CameraFolderItem(K3ListViewItem* parent, const QString& folderName,
                                    const QString& folderPath, const QPixmap& pixmap)
-                : KListViewItem(parent, folderName)
+                : K3ListViewItem(parent, folderName)
 {
     d = new CameraFolderItemPriv;
     d->folderName    = folderName;

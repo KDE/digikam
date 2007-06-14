@@ -51,7 +51,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
 
     // ----------------------------------------------------------
     
-    Q3Frame *p1 = addPage( i18n("Summary"), i18n("Camera Summary"), BarIcon("contents2", KIcon::SizeMedium) );
+    QFrame *p1 = addPage( i18n("Summary"), i18n("Camera Summary"), BarIcon("contents2", KIcon::SizeMedium) );
     Q3VBoxLayout *p1layout = new Q3VBoxLayout( p1, 0, 6 );
 
     Q3TextEdit *summaryView = new Q3TextEdit(summary, QString(), p1);
@@ -61,7 +61,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
 
     // ----------------------------------------------------------
 
-    Q3Frame *p2 = addPage( i18n("Manual"), i18n("Camera Manual"), BarIcon("contents", KIcon::SizeMedium) );
+    QFrame *p2 = addPage( i18n("Manual"), i18n("Camera Manual"), BarIcon("contents", KIcon::SizeMedium) );
     Q3VBoxLayout *p2layout = new Q3VBoxLayout( p2, 0, 6 );
 
     Q3TextEdit *manualView = new Q3TextEdit(manual, QString(), p2);
@@ -71,7 +71,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
 
     // ----------------------------------------------------------
 
-    Q3Frame *p3 = addPage( i18n("About"), i18n("About Driver"), BarIcon("camera", KIcon::SizeMedium) );
+    QFrame *p3 = addPage( i18n("About"), i18n("About Driver"), BarIcon("camera", KIcon::SizeMedium) );
     Q3VBoxLayout *p3layout = new Q3VBoxLayout( p3, 0, 6 );
     
     Q3TextEdit *aboutView = new Q3TextEdit(about, QString(), p3);

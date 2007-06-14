@@ -37,13 +37,13 @@ namespace Digikam
 int ListBoxPreviewItem::height(const Q3ListBox *lb) const
 {
     int height = Q3ListBoxPixmap::height(lb);
-    return QMAX(height, pixmap()->height() + 5);
+    return qMax(height, pixmap()->height() + 5);
 }
 
 int ListBoxPreviewItem::width(const Q3ListBox *lb) const
 {
     int width = Q3ListBoxPixmap::width(lb);
-    return QMAX(width, pixmap()->width() + 5);
+    return qMax(width, pixmap()->width() + 5);
 }
 
 // -------------------------------------------------------------------

@@ -54,7 +54,7 @@ public:
 
 private slots:
 
-    void slotTemplateDirChanged(const KURL& url);
+    void slotTemplateDirChanged(const KUrl& url);
     void slotRootTemplateDirChanged(void);
 
 private:
@@ -67,8 +67,8 @@ private:
     
 private:
     
-    KURL                   m_templatesUrl;
-    KURL                   m_templatesRootUrl;
+    KUrl                   m_templatesUrl;
+    KUrl                   m_templatesRootUrl;
 
     Digikam::ThumbBarView *m_thumbnailsBar;
     

@@ -33,7 +33,7 @@ class QString;
 class QImage;
 class QApplication;
 
-class KURL;
+class KUrl;
 
 class kio_digikamthumbnailProtocol : public KIO::SlaveBase
 {
@@ -42,7 +42,7 @@ public:
 
     kio_digikamthumbnailProtocol(int argc, char** argv);
     virtual ~kio_digikamthumbnailProtocol();
-    virtual void get(const KURL& url);
+    virtual void get(const KUrl& url);
 
 private:
 

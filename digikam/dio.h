@@ -31,21 +31,21 @@
 namespace DIO
 {
 
-    KIO::Job* copy(const KURL& src, const KURL& dest);
+    KIO::Job* copy(const KUrl& src, const KUrl& dest);
     
-    KIO::Job* copy(const KURL::List& srcList, const KURL& dest);
+    KIO::Job* copy(const KUrl::List& srcList, const KUrl& dest);
     
-    KIO::Job* move(const KURL& src, const KURL& dest);
+    KIO::Job* move(const KUrl& src, const KUrl& dest);
     
-    KIO::Job* move(const KURL::List& srcList, const KURL& dest);
+    KIO::Job* move(const KUrl::List& srcList, const KUrl& dest);
     
-    KIO::Job* del(const KURL& src, bool useTrash = true);
+    KIO::Job* del(const KUrl& src, bool useTrash = true);
     
-    KIO::Job* del(const KURL::List& srcList, bool useTrash = true);
+    KIO::Job* del(const KUrl::List& srcList, bool useTrash = true);
     
-    KIO::CopyJob* rename(const KURL& src, const KURL& dest);
+    KIO::CopyJob* rename(const KUrl& src, const KUrl& dest);
     
-    KIO::Job* scan(const KURL& albumURL);
+    KIO::Job* scan(const KUrl& albumURL);
     
     bool      running();
 

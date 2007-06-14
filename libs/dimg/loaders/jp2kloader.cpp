@@ -226,7 +226,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     for (i = 0; i < (long)number_components; i++)
     {
-        maximum_component_depth = QMAX(jas_image_cmptprec(jp2_image,components[i]),
+        maximum_component_depth = qMax(jas_image_cmptprec(jp2_image,components[i]),
                                        (long)maximum_component_depth);
         pixels[i] = jas_matrix_create(1, ((unsigned int)imageWidth())/x_step[i]);
         if (!pixels[i])

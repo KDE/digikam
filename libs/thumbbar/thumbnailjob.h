@@ -50,23 +50,23 @@ class ThumbnailJob : public KIO::Job
 
 public:
 
-    ThumbnailJob(const KURL& url, int size,
+    ThumbnailJob(const KUrl& url, int size,
                  bool highlight=true, bool exifRotate=false);
-    ThumbnailJob(const KURL::List& urlList, int size,
+    ThumbnailJob(const KUrl::List& urlList, int size,
                  bool highlight=true, bool exifRotate=false);
     ~ThumbnailJob();
 
-    void addItem(const  KURL& url);
-    void addItems(const KURL::List& urlList);
+    void addItem(const  KUrl& url);
+    void addItems(const KUrl::List& urlList);
 
-    bool setNextItemToLoad(const KURL& url);
-    void removeItem(const KURL& url);
+    bool setNextItemToLoad(const KUrl& url);
+    void removeItem(const KUrl& url);
 
 signals:
 
-    void signalThumbnail(const KURL& url, const QPixmap& pix);
+    void signalThumbnail(const KUrl& url, const QPixmap& pix);
     void signalCompleted();
-    void signalFailed(const KURL& url);
+    void signalFailed(const KUrl& url);
 
 private:
 

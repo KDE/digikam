@@ -78,8 +78,8 @@ public:
     QString             originalFormat;
     QString             format;
 
-    KURL                srcURL;
-    KURL                destinationURL;
+    KUrl                srcURL;
+    KUrl                destinationURL;
 
     KTempFile          *saveTempFile;
 };

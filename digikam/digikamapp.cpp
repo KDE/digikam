@@ -41,7 +41,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kstdaccel.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
@@ -51,7 +51,7 @@
 #include <kapplication.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
-#include <kwin.h>
+#include <kwindowsystem.h>
 #include <dcopref.h>
 
 // libKipi includes.
@@ -61,6 +61,8 @@
 // LibKDcraw includes.
 
 #include <libkdcraw/dcrawbinary.h>
+#include <kglobal.h>
+#include <ktoolinvocation.h>
 
 // Local includes.
 
@@ -103,10 +105,10 @@ DigikamApp::DigikamApp()
 {
     d = new DigikamAppPriv;
     m_instance = this;
-    d->config  = kapp->config();
+    d->config  = KGlobal::config();
 
     if(d->config->readBoolEntry("Show Splash", true) &&
-       !kapp->isRestored())
+       !kapp->isSessionRestored())
     {
         d->splashScreen = new SplashScreen("digikam-splash.png");
     }
@@ -117,7 +119,7 @@ DigikamApp::DigikamApp()
     d->albumManager = AlbumManager::instance();
     AlbumLister::instance();
 
-    d->cameraMediaList = new KPopupMenu;
+    d->cameraMediaList = new KMenu;
 
     connect(d->cameraMediaList, SIGNAL( aboutToShow() ),
             this, SLOT(slotCameraMediaMenu()));
@@ -140,14 +142,14 @@ DigikamApp::DigikamApp()
     // Check ICC profiles repository availability
 
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Checking ICC repository"), AlignLeft, white);
+        d->splashScreen->message(i18n("Checking ICC repository"), Qt::AlignLeft, white);
 
     d->validIccPath = SetupICC::iccRepositoryIsValid();
 
     // Check witch dcraw version available
 
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Checking dcraw version"), AlignLeft, white);
+        d->splashScreen->message(i18n("Checking dcraw version"), Qt::AlignLeft, white);
 
     KDcrawIface::DcrawBinary::instance()->checkSystem();
 
@@ -156,7 +158,7 @@ DigikamApp::DigikamApp()
 
     // Read albums from database
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Reading database"), AlignLeft, white);
+        d->splashScreen->message(i18n("Reading database"), Qt::AlignLeft, white);
 
     d->albumManager->startScan();
 
@@ -299,7 +301,7 @@ void DigikamApp::autoDetect()
     // Called from main if command line option is set
 
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Auto-detect camera"), AlignLeft, white);
+        d->splashScreen->message(i18n("Auto-detect camera"), Qt::AlignLeft, white);
 
     QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
 }
@@ -313,7 +315,7 @@ void DigikamApp::downloadFrom(const QString &cameraGuiPath)
         d->cameraGuiPath = cameraGuiPath;
 
         if(d->splashScreen)
-            d->splashScreen->message(i18n("Opening Download Dialog"), AlignLeft, white);
+            d->splashScreen->message(i18n("Opening Download Dialog"), Qt::AlignLeft, white);
 
         QTimer::singleShot(0, this, SLOT(slotDownloadImages()));
     }
@@ -332,7 +334,7 @@ bool DigikamApp::queryClose()
 void DigikamApp::setupView()
 {
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Initializing Main View"), AlignLeft, white);
+        d->splashScreen->message(i18n("Initializing Main View"), Qt::AlignLeft, white);
 
     d->view = new DigikamView(this);
     setCentralWidget(d->view);
@@ -408,52 +410,52 @@ void DigikamApp::setupAccelerators()
 
     d->accelerators->insert("Exit Preview Mode", i18n("Exit Preview"),
                            i18n("Exit preview mode"),
-                           Key_Escape, this, SIGNAL(signalEscapePressed()),
+                           Qt::Key_Escape, this, SIGNAL(signalEscapePressed()),
                            false, true);
     
-    d->accelerators->insert("Next Image Key_Space", i18n("Next Image"),
+    d->accelerators->insert("Next Image Qt::Key_Space", i18n("Next Image"),
                            i18n("Next Image"),
-                           Key_Space, this, SIGNAL(signalNextItem()),
+                           Qt::Key_Space, this, SIGNAL(signalNextItem()),
                            false, true);
 
-    d->accelerators->insert("Next Image SHIFT+Key_Space", i18n("Next Image"),
+    d->accelerators->insert("Next Image SHIFT+Qt::Key_Space", i18n("Next Image"),
                            i18n("Next Image"),
-                           SHIFT+Key_Space, this, SIGNAL(signalNextItem()),
+                           SHIFT+Qt::Key_Space, this, SIGNAL(signalNextItem()),
                            false, true);
 
-    d->accelerators->insert("Previous Image Key_Backspace", i18n("Previous Image"),
+    d->accelerators->insert("Previous Image Qt::Key_Backspace", i18n("Previous Image"),
                            i18n("Previous Image"),
-                           Key_Backspace, this, SIGNAL(signalPrevItem()),
+                           Qt::Key_Backspace, this, SIGNAL(signalPrevItem()),
                            false, true);
 
-    d->accelerators->insert("Next Image Key_Next", i18n("Next Image"),
+    d->accelerators->insert("Next Image Qt::Key_Next", i18n("Next Image"),
                            i18n("Next Image"),
-                           Key_Next, this, SIGNAL(signalNextItem()),
+                           Qt::Key_Next, this, SIGNAL(signalNextItem()),
                            false, true);
 
-    d->accelerators->insert("Previous Image Key_Prior", i18n("Previous Image"),
+    d->accelerators->insert("Previous Image Qt::Key_Prior", i18n("Previous Image"),
                            i18n("Previous Image"),
-                           Key_Prior, this, SIGNAL(signalPrevItem()),
+                           Qt::Key_Prior, this, SIGNAL(signalPrevItem()),
                            false, true);
 
-    d->accelerators->insert("First Image Key_Home", i18n("First Image"),
+    d->accelerators->insert("First Image Qt::Key_Home", i18n("First Image"),
                            i18n("First Image"),
-                           Key_Home, this, SIGNAL(signalFirstItem()),
+                           Qt::Key_Home, this, SIGNAL(signalFirstItem()),
                            false, true);
 
-    d->accelerators->insert("Last Image Key_End", i18n("Last Image"),
+    d->accelerators->insert("Last Image Qt::Key_End", i18n("Last Image"),
                            i18n("Last Image"),
-                           Key_End, this, SIGNAL(signalLastItem()),
+                           Qt::Key_End, this, SIGNAL(signalLastItem()),
                            false, true);
 
-    d->accelerators->insert("Copy Album Items Selection CTRL+Key_C", i18n("Copy Album Items Selection"),
+    d->accelerators->insert("Copy Album Items Selection CTRL+Qt::Key_C", i18n("Copy Album Items Selection"),
                            i18n("Copy Album Items Selection"),
-                           CTRL+Key_C, this, SIGNAL(signalCopyAlbumItemsSelection()),
+                           CTRL+Qt::Key_C, this, SIGNAL(signalCopyAlbumItemsSelection()),
                            false, true);
 
-    d->accelerators->insert("Paste Album Items Selection CTRL+Key_V", i18n("Paste Album Items Selection"),
+    d->accelerators->insert("Paste Album Items Selection CTRL+Qt::Key_V", i18n("Paste Album Items Selection"),
                            i18n("Paste Album Items Selection"),
-                           CTRL+Key_V, this, SIGNAL(signalPasteAlbumItemsSelection()),
+                           CTRL+Qt::Key_V, this, SIGNAL(signalPasteAlbumItemsSelection()),
                            false, true);
 }
 
@@ -477,7 +479,7 @@ void DigikamApp::setupActions()
 
     d->backwardActionMenu = new KToolBarPopupAction(i18n("&Back"),
                                     "back",
-                                    ALT+Key_Left,
+                                    ALT+Qt::Key_Left,
                                     d->view,
                                     SLOT(slotAlbumHistoryBack()),
                                     actionCollection(),
@@ -492,7 +494,7 @@ void DigikamApp::setupActions()
 
     d->forwardActionMenu = new  KToolBarPopupAction(i18n("Forward"),
                                     "forward",
-                                    ALT+Key_Right,
+                                    ALT+Qt::Key_Right,
                                     d->view,
                                     SLOT(slotAlbumHistoryForward()),
                                     actionCollection(),
@@ -507,7 +509,7 @@ void DigikamApp::setupActions()
 
     d->newAction = new KAction(i18n("&New Album..."),
                                    "albumfolder-new",
-                                   KStdAccel::shortcut(KStdAccel::New),
+                                   KStandardShortcut::shortcut(KStandardShortcut::New),
                                    d->view,
                                    SLOT(slotNewAlbum()),
                                    actionCollection(),
@@ -540,7 +542,7 @@ void DigikamApp::setupActions()
 
     d->addImagesAction = new KAction( i18n("Add Images..."),
                                     "albumfolder-importimages",
-                                    CTRL+Key_I,
+                                    CTRL+Qt::Key_I,
                                     d->view,
                                     SLOT(slotAlbumAddImages()),
                                     actionCollection(),
@@ -566,7 +568,7 @@ void DigikamApp::setupActions()
 
     d->refreshAlbumAction = new KAction( i18n("Refresh"),
                                     "rebuild",
-                                    Key_F5,
+                                    Qt::Key_F5,
                                     d->view,
                                     SLOT(slotAlbumRefresh()),
                                     actionCollection(),
@@ -610,7 +612,7 @@ void DigikamApp::setupActions()
 
     d->imagePreviewAction = new KToggleAction(i18n("View..."),
                                     "viewimage",
-                                    Key_F3,
+                                    Qt::Key_F3,
                                     d->view,
                                     SLOT(slotImagePreview()),
                                     actionCollection(),
@@ -618,7 +620,7 @@ void DigikamApp::setupActions()
 
     d->imageViewAction = new KAction(i18n("Edit..."),
                                     "editimage",
-                                    Key_F4,
+                                    Qt::Key_F4,
                                     d->view,
                                     SLOT(slotImageEdit()),
                                     actionCollection(),
@@ -627,7 +629,7 @@ void DigikamApp::setupActions()
 
     d->imageLightTableAction = new KAction(i18n("Place onto Light Table"),
                                     "idea",
-                                    Key_F6,
+                                    Qt::Key_F6,
                                     d->view,
                                     SLOT(slotImageLightTable()),
                                     actionCollection(),
@@ -636,7 +638,7 @@ void DigikamApp::setupActions()
 
     d->imageRenameAction = new KAction(i18n("Rename..."),
                                     "pencil",
-                                    Key_F2,
+                                    Qt::Key_F2,
                                     d->view,
                                     SLOT(slotImageRename()),
                                     actionCollection(),
@@ -646,7 +648,7 @@ void DigikamApp::setupActions()
     // Pop up dialog to ask user whether to move to trash
     d->imageDeleteAction            = new KAction(i18n("Delete"),
                                                 "edittrash",
-                                                Key_Delete,
+                                                Qt::Key_Delete,
                                                 d->view,
                                                 SLOT(slotImageDelete()),
                                                 actionCollection(),
@@ -655,7 +657,7 @@ void DigikamApp::setupActions()
     // Pop up dialog to ask user whether to permanently delete
     d->imageDeletePermanentlyAction = new KAction(i18n("Delete permanently"),
                                                 "editdelete",
-                                                SHIFT+Key_Delete,
+                                                SHIFT+Qt::Key_Delete,
                                                 d->view,
                                                 SLOT(slotImageDeletePermanently()),
                                                 actionCollection(),
@@ -759,7 +761,7 @@ void DigikamApp::setupActions()
 
     d->selectAllAction = new KAction(i18n("Select All"),
                                      0,
-                                     CTRL+Key_A,
+                                     CTRL+Qt::Key_A,
                                      d->view,
                                      SLOT(slotSelectAll()),
                                      actionCollection(),
@@ -767,7 +769,7 @@ void DigikamApp::setupActions()
 
     d->selectNoneAction = new KAction(i18n("Select None"),
                                      0,
-                                     CTRL+SHIFT+Key_A,
+                                     CTRL+SHIFT+Qt::Key_A,
                                      d->view,
                                      SLOT(slotSelectNone()),
                                      actionCollection(),
@@ -775,7 +777,7 @@ void DigikamApp::setupActions()
 
     d->selectInvertAction = new KAction(i18n("Invert Selection"),
                                         0,
-                                        CTRL+Key_Asterisk,
+                                        CTRL+Qt::Key_Asterisk,
                                         d->view,
                                         SLOT(slotSelectInvert()),
                                         actionCollection(),
@@ -783,15 +785,15 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KStdAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
-    KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
-    KStdAction::preferences(this, SLOT(slotSetup()),              actionCollection());
+    KStandardAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
+    KStandardAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
+    KStandardAction::preferences(this, SLOT(slotSetup()),              actionCollection());
 
     // -----------------------------------------------------------
 
     d->zoomPlusAction = new KAction(i18n("Zoom in"),
                                    "viewmag+",
-                                   CTRL+Key_Plus,
+                                   CTRL+Qt::Key_Plus,
                                    d->view,
                                    SLOT(slotZoomIn()),
                                    actionCollection(),
@@ -799,7 +801,7 @@ void DigikamApp::setupActions()
 
     d->zoomMinusAction = new KAction(i18n("Zoom out"),
                                    "viewmag-",
-                                   CTRL+Key_Minus,
+                                   CTRL+Qt::Key_Minus,
                                    d->view,
                                    SLOT(slotZoomOut()),
                                    actionCollection(),
@@ -807,7 +809,7 @@ void DigikamApp::setupActions()
 
     d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), 
                                    "viewmag1",
-                                   ALT+CTRL+Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0.
+                                   ALT+CTRL+Qt::Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0.
                                    d->view, 
                                    SLOT(slotZoomTo100Percents()),
                                    actionCollection(), 
@@ -815,19 +817,19 @@ void DigikamApp::setupActions()
 
     d->zoomFitToWindowAction = new KAction(i18n("Fit to &Window"), 
                                    "view_fit_window",
-                                   CTRL+SHIFT+Key_E, 
+                                   CTRL+SHIFT+Qt::Key_E, 
                                    d->view, 
                                    SLOT(slotFitToWindow()),
                                    actionCollection(), 
                                    "album_zoomfit2window");
 
 #if KDE_IS_VERSION(3,2,0)
-    d->fullScreenAction = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
+    d->fullScreenAction = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()),
                                                  actionCollection(), this, "full_screen");
 #else
     d->fullScreenAction = new KToggleAction(i18n("FullScreen Mode"),
                                    "window_fullscreen",
-                                   CTRL+SHIFT+Key_F,
+                                   CTRL+SHIFT+Qt::Key_F,
                                    this,
                                    SLOT(slotToggleFullScreen()),
                                    actionCollection(),
@@ -840,26 +842,26 @@ void DigikamApp::setupActions()
 
     d->slideShowAction->setDelayed(false);
 
-    d->slideShowAllAction = new KAction(i18n("All"), 0, Key_F9,
+    d->slideShowAllAction = new KAction(i18n("All"), 0, Qt::Key_F9,
                                 d->view, SLOT(slotSlideShowAll()),
                                 actionCollection(), "slideshow_all");
     d->slideShowAction->insert(d->slideShowAllAction);
 
-    d->slideShowSelectionAction = new KAction(i18n("Selection"), 0, ALT+Key_F9,
+    d->slideShowSelectionAction = new KAction(i18n("Selection"), 0, ALT+Qt::Key_F9,
                                               d->view, 
                                               SLOT(slotSlideShowSelection()),
                                               actionCollection(), 
                                               "slideshow_selected");
     d->slideShowAction->insert(d->slideShowSelectionAction);
 
-    d->slideShowRecursiveAction = new KAction(i18n("With all sub-albums"), 0, SHIFT+Key_F9,
+    d->slideShowRecursiveAction = new KAction(i18n("With all sub-albums"), 0, SHIFT+Qt::Key_F9,
                                               d->view, 
                                               SLOT(slotSlideShowRecursive()),
                                               actionCollection(), 
                                               "slideshow_recursive");
     d->slideShowAction->insert(d->slideShowRecursiveAction);
 
-    d->quitAction = KStdAction::quit(this,
+    d->quitAction = KStandardAction::quit(this,
                                    SLOT(slotExit()),
                                    actionCollection(),
                                    "app_exit");
@@ -872,7 +874,7 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "help_kipi");
 
-    d->tipAction = KStdAction::tipOfDay(this,
+    d->tipAction = KStandardAction::tipOfDay(this,
                                    SLOT(slotShowTip()),
                                    actionCollection(),
                                    "help_tipofday");
@@ -887,38 +889,38 @@ void DigikamApp::setupActions()
 
     // -- Rating actions ---------------------------------------------------------------
 
-    d->rating0Star = new KAction(i18n("Assign Rating \"No Star\""), CTRL+Key_0,
+    d->rating0Star = new KAction(i18n("Assign Rating \"No Star\""), CTRL+Qt::Key_0,
                           d->view, SLOT(slotAssignRatingNoStar()),
                           actionCollection(), "imageview_ratenostar");
-    d->rating1Star = new KAction(i18n("Assign Rating \"One Star\""), CTRL+Key_1,
+    d->rating1Star = new KAction(i18n("Assign Rating \"One Star\""), CTRL+Qt::Key_1,
                           d->view, SLOT(slotAssignRatingOneStar()),
                           actionCollection(), "imageview_rateonestar");
-    d->rating2Star = new KAction(i18n("Assign Rating \"Two Stars\""), CTRL+Key_2, 
+    d->rating2Star = new KAction(i18n("Assign Rating \"Two Stars\""), CTRL+Qt::Key_2, 
                           d->view, SLOT(slotAssignRatingTwoStar()),
                           actionCollection(), "imageview_ratetwostar");
-    d->rating3Star = new KAction(i18n("Assign Rating \"Three Stars\""), CTRL+Key_3, 
+    d->rating3Star = new KAction(i18n("Assign Rating \"Three Stars\""), CTRL+Qt::Key_3, 
                           d->view, SLOT(slotAssignRatingThreeStar()),
                           actionCollection(), "imageview_ratethreestar");
-    d->rating4Star = new KAction(i18n("Assign Rating \"Four Stars\""), CTRL+Key_4, 
+    d->rating4Star = new KAction(i18n("Assign Rating \"Four Stars\""), CTRL+Qt::Key_4, 
                           d->view, SLOT(slotAssignRatingFourStar()),
                           actionCollection(), "imageview_ratefourstar");
-    d->rating5Star = new KAction(i18n("Assign Rating \"Five Stars\""), CTRL+Key_5, 
+    d->rating5Star = new KAction(i18n("Assign Rating \"Five Stars\""), CTRL+Qt::Key_5, 
                           d->view, SLOT(slotAssignRatingFiveStar()),
                           actionCollection(), "imageview_ratefivestar");
 
     // -----------------------------------------------------------
 
-    KAction* findAction = KStdAction::find(d->view, SLOT(slotNewQuickSearch()),
+    KAction* findAction = KStandardAction::find(d->view, SLOT(slotNewQuickSearch()),
                                            actionCollection(), "search_quick");
     findAction->setText(i18n("Quick Search..."));
     findAction->setIconSet(BarIcon("filefind"));
 
-    KAction* advFindAction = KStdAction::find(d->view, SLOT(slotNewAdvancedSearch()),
+    KAction* advFindAction = KStandardAction::find(d->view, SLOT(slotNewAdvancedSearch()),
                                               actionCollection(), "search_advanced");
     advFindAction->setText(i18n("Advanced Search..."));
     advFindAction->setShortcut("Ctrl+Alt+F");
 
-    new KAction(i18n("Light Table"), "idea", ALT+Key_F6,
+    new KAction(i18n("Light Table"), "idea", ALT+Qt::Key_F6,
                 d->view, SLOT(slotLightTable()), actionCollection(), 
                 "light_table");
 
@@ -945,7 +947,7 @@ void DigikamApp::setupActions()
     // Load Cameras -- do this before the createGUI so that the cameras
     // are plugged into the toolbar at startup
     if (d->splashScreen)
-        d->splashScreen->message(i18n("Loading cameras"), AlignLeft, white);
+        d->splashScreen->message(i18n("Loading cameras"), Qt::AlignLeft, white);
     
     loadCameras();
 
@@ -1216,12 +1218,12 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
 {
     // This function is copied from k3b.
 
-    KURL url( folder );
+    KUrl url( folder );
     if( !url.isLocalFile() )
     {
 #if KDE_IS_VERSION(3,4,91)
         // Support for system:/ and media:/ (c) Stephan Kulow
-        KURL mlu = KIO::NetAccess::mostLocalURL( url, 0 );
+        KUrl mlu = KIO::NetAccess::mostLocalURL( url, 0 );
         if (mlu.isLocalFile())
             return mlu.path();
 
@@ -1264,7 +1266,7 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
             for( KIO::UDSEntry::ConstIterator it = e.begin(); it != end; ++it )
             {
                 if( (*it).m_uds == UDS_LOCAL_PATH && !(*it).m_str.isEmpty() )
-                    return KURL::fromPathOrURL( (*it).m_str ).path();
+                    return KUrl::fromPathOrUrl( (*it).m_str ).path();
             }
         }
 #endif
@@ -1279,8 +1281,8 @@ void DigikamApp::slotDcopDownloadImages( const QString& folder )
     {
         // activate window when called by media menu and DCOP
         if (isMinimized())
-            KWin::deIconifyWindow(winId());
-        KWin::activateWindow(winId());
+            KWindowSystem::deIconifyWindow(winId());
+        KWindowSystem::activateWindow(winId());
 
         slotDownloadImages(folder);
     }
@@ -1290,8 +1292,8 @@ void DigikamApp::slotDcopCameraAutoDetect()
 {
     // activate window when called by media menu and DCOP
     if (isMinimized())
-        KWin::deIconifyWindow(winId());
-    KWin::activateWindow(winId());
+        KWindowSystem::deIconifyWindow(winId());
+    KWindowSystem::activateWindow(winId());
 
     slotCameraAutoDetect();
 }
@@ -1313,7 +1315,7 @@ void DigikamApp::slotDownloadImages()
 
     // Fetch the contents of the device. This is needed to make sure that the
     // media:/device gets mounted.
-    KIO::ListJob *job = KIO::listDir(KURL(d->cameraGuiPath), false, false);
+    KIO::ListJob *job = KIO::listDir(KUrl(d->cameraGuiPath), false, false);
     KIO::NetAccess::synchronousRun(job,0);
 
     QString localUrl = convertToLocalUrl(d->cameraGuiPath);
@@ -1333,7 +1335,7 @@ void DigikamApp::slotDownloadImages()
     if (!alreadyThere)
     {
         KAction *cAction  = new KAction(
-                 i18n("Browse %1").arg(KURL(d->cameraGuiPath).prettyURL()),
+                 i18n("Browse %1").arg(KUrl(d->cameraGuiPath).prettyUrl()),
                  "kipi",
                  0,
                  this,
@@ -1350,8 +1352,8 @@ void DigikamApp::slotDownloadImages()
                                   "directory browse","Fixed", localUrl, QDateTime::currentDateTime());
     cgui->show();
 
-    connect(cgui, SIGNAL(signalLastDestination(const KURL&)),
-            d->view, SLOT(slotSelectAlbum(const KURL&)));
+    connect(cgui, SIGNAL(signalLastDestination(const KUrl&)),
+            d->view, SLOT(slotSelectAlbum(const KUrl&)));
 
     connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
             this, SLOT(slotSetupChanged()));
@@ -1368,8 +1370,8 @@ void DigikamApp::slotCameraConnect()
         {
             // show and raise dialog
             if (ctype->currentCameraUI()->isMinimized())
-                KWin::deIconifyWindow(ctype->currentCameraUI()->winId());
-            KWin::activateWindow(ctype->currentCameraUI()->winId());
+                KWindowSystem::deIconifyWindow(ctype->currentCameraUI()->winId());
+            KWindowSystem::activateWindow(ctype->currentCameraUI()->winId());
         }
         else
         {
@@ -1381,8 +1383,8 @@ void DigikamApp::slotCameraConnect()
 
             cgui->show();
 
-            connect(cgui, SIGNAL(signalLastDestination(const KURL&)),
-                    d->view, SLOT(slotSelectAlbum(const KURL&)));
+            connect(cgui, SIGNAL(signalLastDestination(const KUrl&)),
+                    d->view, SLOT(slotSelectAlbum(const KUrl&)));
 
             connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
                     this, SLOT(slotSetupChanged()));
@@ -1410,7 +1412,7 @@ void DigikamApp::slotCameraMediaMenu()
     d->cameraMediaList->insertItem(i18n("No media devices found"), 0);
     d->cameraMediaList->setItemEnabled(0, false);
         
-    KURL kurl("media:/");
+    KUrl kurl("media:/");
     KIO::ListJob *job = KIO::listDir(kurl, false, false);
     
     connect( job, SIGNAL(entries(KIO::Job*,const KIO::UDSEntryList&)),
@@ -1569,7 +1571,7 @@ void DigikamApp::slotEditKeys()
 void DigikamApp::slotConfToolbars()
 {
     saveMainWindowSettings(KGlobal::config());
-    KEditToolbar *dlg = new KEditToolbar(actionCollection(), "digikamui.rc");
+    KEditToolBar *dlg = new KEditToolBar(actionCollection(), "digikamui.rc");
 
     if(dlg->exec());
     {
@@ -1607,7 +1609,7 @@ void DigikamApp::slotToggleFullScreen()
     }
     else
     {
-        KConfig* config = kapp->config();
+        KConfig* config = KGlobal::config();
         config->setGroup("ImageViewer Settings");
         bool fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
 
@@ -1642,13 +1644,13 @@ void DigikamApp::slotShowTip()
 
 void DigikamApp::slotShowKipiHelp()
 {
-    KApplication::kApplication()->invokeHelp( QString(), "kipi-plugins" );
+    KToolInvocation::invokeHelp( QString(), "kipi-plugins" );
 }
 
 void DigikamApp::loadPlugins()
 {
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Loading Kipi Plugins"), AlignLeft, white);
+        d->splashScreen->message(i18n("Loading Kipi Plugins"), Qt::AlignLeft, white);
 
     QStringList ignores;
     d->kipiInterface = new DigikamKipiInterface( this, "Digikam_KIPI_interface" );
@@ -1773,7 +1775,7 @@ void DigikamApp::loadCameras()
 void DigikamApp::populateThemes()
 {
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Loading themes"), AlignLeft, white);
+        d->splashScreen->message(i18n("Loading themes"), Qt::AlignLeft, white);
 
     ThemeEngine::instance()->scanThemes();
     QStringList themes(ThemeEngine::instance()->themeNames());

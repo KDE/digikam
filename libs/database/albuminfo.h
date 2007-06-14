@@ -104,7 +104,7 @@ public:
 
     int      id;
     QString  name;
-    KURL     url;
+    KUrl     url;
 
     /**
      * needed for sorting

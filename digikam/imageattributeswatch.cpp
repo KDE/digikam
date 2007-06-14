@@ -88,7 +88,7 @@ void ImageAttributesWatch::slotImageFieldChanged(qlonglong imageId, int field)
 }
 
 /*
-void ImageAttributesWatch::imageTagsChanged(Q_LLONG imageId)
+void ImageAttributesWatch::imageTagsChanged(qint64 imageId)
 {
     emit signalImageTagsChanged(imageId);
 }
@@ -98,23 +98,23 @@ void ImageAttributesWatch::imagesChanged(int albumId)
     emit signalImagesChanged(albumId);
 }
 
-void ImageAttributesWatch::imageRatingChanged(Q_LLONG imageId)
+void ImageAttributesWatch::imageRatingChanged(qint64 imageId)
 {
     emit signalImageRatingChanged(imageId);
 }
 
-void ImageAttributesWatch::imageDateChanged(Q_LLONG imageId)
+void ImageAttributesWatch::imageDateChanged(qint64 imageId)
 {
     emit signalImageDateChanged(imageId);
 }
 
-void ImageAttributesWatch::imageCaptionChanged(Q_LLONG imageId)
+void ImageAttributesWatch::imageCaptionChanged(qint64 imageId)
 {
     emit signalImageCaptionChanged(imageId);
 }
 */
 
-void ImageAttributesWatch::fileMetadataChanged(const KURL &url)
+void ImageAttributesWatch::fileMetadataChanged(const KUrl &url)
 {
     emit signalFileMetadataChanged(url);
 }

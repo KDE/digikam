@@ -52,6 +52,7 @@
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 // Digikam includes.
 
@@ -153,7 +154,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     QLabel *labelLeft = new QLabel(i18n("Cyan"), gboxSettings);
     labelLeft->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     m_rSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_rSlider");
-    m_rSlider->setTickmarks(QSlider::Below);
+    m_rSlider->setTickmarks(QSlider::TicksBelow);
     m_rSlider->setTickInterval(20);
     Q3WhatsThis::add( m_rSlider, i18n("<p>Set here the cyan/red color adjustment of the image."));
     QLabel *labelRight = new QLabel(i18n("Red"), gboxSettings);
@@ -170,7 +171,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     labelLeft = new QLabel(i18n("Magenta"), gboxSettings);
     labelLeft->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     m_gSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_gSlider");
-    m_gSlider->setTickmarks(QSlider::Below);
+    m_gSlider->setTickmarks(QSlider::TicksBelow);
     m_gSlider->setTickInterval(20);
     Q3WhatsThis::add( m_gSlider, i18n("<p>Set here the magenta/green color adjustment of the image."));
     labelRight = new QLabel(i18n("Green"), gboxSettings);
@@ -187,7 +188,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     labelLeft = new QLabel(i18n("Yellow"), gboxSettings);
     labelLeft->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     m_bSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_bSlider");
-    m_bSlider->setTickmarks(QSlider::Below);
+    m_bSlider->setTickmarks(QSlider::TicksBelow);
     m_bSlider->setTickInterval(20);
     Q3WhatsThis::add( m_bSlider, i18n("<p>Set here the yellow/blue color adjustment of the image."));
     labelRight = new QLabel(i18n("Blue"), gboxSettings);
@@ -243,7 +244,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
                         
     // -------------------------------------------------------------
                 
-    enableButtonOK( false );
+    enableButtonOk( false );
 }
 
 ImageEffect_RGB::~ImageEffect_RGB()
@@ -298,7 +299,7 @@ void ImageEffect_RGB::slotColorSelectedFromTarget( const Digikam::DColor &color 
 
 void ImageEffect_RGB::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("colorbalance Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
@@ -312,7 +313,7 @@ void ImageEffect_RGB::readUserSettings()
 
 void ImageEffect_RGB::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("colorbalance Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
@@ -355,9 +356,9 @@ void ImageEffect_RGB::adjustSliders(int r, int g, int b)
 
 void ImageEffect_RGB::slotEffect()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
 
-    enableButtonOK(m_rInput->value() != 0 ||
+    enableButtonOk(m_rInput->value() != 0 ||
                    m_gInput->value() != 0 ||
                    m_bInput->value() != 0);
 
@@ -395,7 +396,7 @@ void ImageEffect_RGB::slotEffect()
 
 void ImageEffect_RGB::finalRendering()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
 
     double r = ((double)m_rInput->value() + 100.0)/100.0;
     double g = ((double)m_gInput->value() + 100.0)/100.0;

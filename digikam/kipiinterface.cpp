@@ -79,7 +79,7 @@ namespace Digikam
 
 //-- Image Info ------------------------------------------------------------------
 
-DigikamImageInfo::DigikamImageInfo( KIPI::Interface* interface, const KURL& url )
+DigikamImageInfo::DigikamImageInfo( KIPI::Interface* interface, const KUrl& url )
                 : KIPI::ImageInfoShared( interface, url ), palbum_(0)
 {
 }
@@ -92,7 +92,7 @@ PAlbum* DigikamImageInfo::parentAlbum()
 {
     if (!palbum_)
     {
-        KURL u(_url.directory());
+        KUrl u(_url.directory());
         palbum_ = AlbumManager::instance()->findPAlbum(u);
     }
     return palbum_;
@@ -122,7 +122,7 @@ void DigikamImageInfo::setTitle( const QString& newName )
     if ( p && !newName.isEmpty() )
     {
         DatabaseAccess().db()->moveItem(p->id(), _url.fileName(), p->id(), newName);
-        _url = _url.upURL();
+        _url = _url.upUrl();
         _url.addPath(newName);
     }
 }
@@ -347,7 +347,7 @@ QString DigikamImageCollection::comment()
         return QString();
 }
 
-KURL::List DigikamImageCollection::images()
+KUrl::List DigikamImageCollection::images()
 {
     switch ( tp_ )
     {
@@ -371,12 +371,12 @@ KURL::List DigikamImageCollection::images()
                     return handler->allItems();
                 }
     
-                return KURL::List();
+                return KUrl::List();
         }
             else
             {
                 DWarning() << k_funcinfo << "Unknown album type" << endl;
-                return KURL::List();
+                return KUrl::List();
             }
     
             break;
@@ -390,7 +390,7 @@ KURL::List DigikamImageCollection::images()
                 return handler->selectedItems();
             }
     
-            return KURL::List();
+            return KUrl::List();
     
             break;
         }
@@ -399,12 +399,12 @@ KURL::List DigikamImageCollection::images()
     }
 
     // We should never reach here
-    return KURL::List();
+    return KUrl::List();
 }
 
 /** get the images from the Physical album in database and return the items found */
 
-KURL::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
+KUrl::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
 {
     // get the images from the database and return the items found
 
@@ -429,7 +429,7 @@ KURL::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
 
     QStringList urls = DatabaseAccess().db()->getItemURLsInAlbum(album->id(), sortOrder);
 
-    KURL::List urlList;
+    KUrl::List urlList;
 
     NameFilter nameFilter(imgFilter_);
 
@@ -444,12 +444,12 @@ KURL::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
 
 /** get the images from the Tags album in database and return the items found */
 
-KURL::List DigikamImageCollection::imagesFromTAlbum(TAlbum* album) const
+KUrl::List DigikamImageCollection::imagesFromTAlbum(TAlbum* album) const
 {
     QStringList urls;
     urls = DatabaseAccess().db()->getItemURLsInTag(album->id());
 
-    KURL::List urlList;
+    KUrl::List urlList;
 
     NameFilter nameFilter(imgFilter_);
 
@@ -462,12 +462,12 @@ KURL::List DigikamImageCollection::imagesFromTAlbum(TAlbum* album) const
     return urlList;
 }
 
-KURL DigikamImageCollection::path()
+KUrl DigikamImageCollection::path()
 {
     if (album_->type() == Album::PHYSICAL)
     {
         PAlbum *p = dynamic_cast<PAlbum*>(album_);
-        KURL url;
+        KUrl url;
         url.setPath(p->folderPath());
         return url;
     }
@@ -478,25 +478,25 @@ KURL DigikamImageCollection::path()
     }
 }
 
-KURL DigikamImageCollection::uploadPath()
+KUrl DigikamImageCollection::uploadPath()
 {
     if (album_->type() == Album::PHYSICAL)
     {
         PAlbum *p = dynamic_cast<PAlbum*>(album_);
-        KURL url;
+        KUrl url;
         url.setPath(p->folderPath());
         return url;
     }
     else
     {
         DWarning() << k_funcinfo << "Requesting kurl from a virtual album" << endl;
-        return KURL();
+        return KUrl();
     }
 }
 
-KURL DigikamImageCollection::uploadRoot()
+KUrl DigikamImageCollection::uploadRoot()
 {
-    return KURL(CollectionManager::instance()->oneAlbumRootPath() + '/');
+    return KUrl(CollectionManager::instance()->oneAlbumRootPath() + '/');
 }
 
 QString DigikamImageCollection::uploadRootName()
@@ -601,17 +601,17 @@ Q3ValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
     return result;
 }
 
-KIPI::ImageInfo DigikamKipiInterface::info( const KURL& url )
+KIPI::ImageInfo DigikamKipiInterface::info( const KUrl& url )
 {
     return KIPI::ImageInfo( new DigikamImageInfo( this, url ) );
 }
 
-void DigikamKipiInterface::refreshImages( const KURL::List& urls )
+void DigikamKipiInterface::refreshImages( const KUrl::List& urls )
 {
-    KURL::List ulist = urls;
+    KUrl::List ulist = urls;
 
     // Re-scan metadata from pictures. This way will update Metadata sidebar and database.
-    for ( KURL::List::Iterator it = ulist.begin() ; it != ulist.end() ; ++it )
+    for ( KUrl::List::Iterator it = ulist.begin() ; it != ulist.end() ; ++it )
         ImageAttributesWatch::instance()->fileMetadataChanged(*it);
     
     // Refresh preview.
@@ -633,7 +633,7 @@ int DigikamKipiInterface::features() const
            );
 }
 
-bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
+bool DigikamKipiInterface::addImage( const KUrl& url, QString& errmsg )
 {
     // Nota : All copy/move operations are processed by the plugins.
 
@@ -656,9 +656,9 @@ bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
     return true;
 }
 
-void DigikamKipiInterface::delImage( const KURL& url )
+void DigikamKipiInterface::delImage( const KUrl& url )
 {
-    KURL rootURL(CollectionManager::instance()->albumRoot(url));
+    KUrl rootURL(CollectionManager::instance()->albumRoot(url));
     if ( !rootURL.isParentOf(url) )
     {
         DWarning() << k_funcinfo << "URL not in the album library" << endl;
@@ -666,7 +666,7 @@ void DigikamKipiInterface::delImage( const KURL& url )
 
     // Is there a PAlbum for this url
 
-    PAlbum *palbum = albumManager_->findPAlbum( KURL(url.directory()) );
+    PAlbum *palbum = albumManager_->findPAlbum( KUrl(url.directory()) );
 
     if ( palbum )
     {

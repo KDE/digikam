@@ -73,12 +73,12 @@ public:
     // And the data area
     uchar      *shmaddr;
 
-    KURL        curr_url;
-    KURL        next_url;
-    KURL::List  urlList;
+    KUrl        curr_url;
+    KUrl        next_url;
+    KUrl::List  urlList;
 };
 
-ThumbnailJob::ThumbnailJob(const KURL& url, int size,
+ThumbnailJob::ThumbnailJob(const KUrl& url, int size,
                            bool highlight, bool exifRotate)
             : KIO::Job(false)
 {
@@ -98,7 +98,7 @@ ThumbnailJob::ThumbnailJob(const KURL& url, int size,
     processNext();
 }
 
-ThumbnailJob::ThumbnailJob(const KURL::List& urlList, int size,
+ThumbnailJob::ThumbnailJob(const KUrl::List& urlList, int size,
                            bool highlight, bool exifRotate)
             : KIO::Job(false)
 {
@@ -128,7 +128,7 @@ ThumbnailJob::~ThumbnailJob()
     delete d;
 }
 
-void ThumbnailJob::addItem(const KURL& url)
+void ThumbnailJob::addItem(const KUrl& url)
 {
     d->urlList.append(url);
 
@@ -136,9 +136,9 @@ void ThumbnailJob::addItem(const KURL& url)
         processNext();
 }
 
-void ThumbnailJob::addItems(const KURL::List& urlList)
+void ThumbnailJob::addItems(const KUrl::List& urlList)
 {
-    for (KURL::List::const_iterator it = urlList.begin();
+    for (KUrl::List::const_iterator it = urlList.begin();
          it != urlList.end(); ++it)
     {
         d->urlList.append(*it);
@@ -148,9 +148,9 @@ void ThumbnailJob::addItems(const KURL::List& urlList)
         processNext();
 }
 
-bool ThumbnailJob::setNextItemToLoad(const KURL& url)
+bool ThumbnailJob::setNextItemToLoad(const KUrl& url)
 {
-    KURL::List::const_iterator it = d->urlList.find(url);
+    KUrl::List::const_iterator it = d->urlList.find(url);
     if (it != d->urlList.end())
     {
         d->next_url = *it;
@@ -160,7 +160,7 @@ bool ThumbnailJob::setNextItemToLoad(const KURL& url)
     return false;
 }
 
-void ThumbnailJob::removeItem(const KURL& url)
+void ThumbnailJob::removeItem(const KUrl& url)
 {
     d->urlList.remove(url);
 }
@@ -174,7 +174,7 @@ void ThumbnailJob::processNext()
         return;
     }
 
-    KURL::List::iterator it = d->urlList.find(d->next_url);
+    KUrl::List::iterator it = d->urlList.find(d->next_url);
     if (it == d->urlList.end())
     {
         it = d->urlList.begin();
@@ -188,10 +188,10 @@ void ThumbnailJob::processNext()
     }
     else
     {
-        d->next_url = KURL();
+        d->next_url = KUrl();
     }
 
-    KURL url(d->curr_url);
+    KUrl url(d->curr_url);
     url.setProtocol("digikamthumbnail");
 
     KIO::TransferJob *job = KIO::get(url, false, false);

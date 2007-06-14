@@ -47,7 +47,7 @@ namespace Digikam
 {
 
 MetadataListView::MetadataListView(QWidget* parent)
-                : KListView(parent)
+                : K3ListView(parent)
 {
     header()->hide();
     addColumn("Name");    // No need i18n here.
@@ -55,7 +55,7 @@ MetadataListView::MetadataListView(QWidget* parent)
     setTreeStepSize(0);
     setItemMargin(0);
     setAllColumnsShowFocus(true);
-    setResizeMode(KListView::AllColumns);
+    setResizeMode(K3ListView::AllColumns);
     // Vertical scroll bar is always disable to give more 
     // free space to metadata content
     setVScrollBarMode(Q3ScrollView::AlwaysOff);
@@ -116,7 +116,7 @@ void MetadataListView::slotSelectionChanged(Q3ListViewItem *item)
 
     MetadataListViewItem* viewItem = static_cast<MetadataListViewItem *>(item);
     m_selectedItemKey = viewItem->getKey();
-    QString tagValue  = viewItem->getValue().simplifyWhiteSpace();
+    QString tagValue  = viewItem->getValue().simplified();
     QString tagTitle  = m_parent->getTagTitle(m_selectedItemKey);
     QString tagDesc   = m_parent->getTagDescription(m_selectedItemKey);
     if (tagValue.length() > 128)
@@ -252,7 +252,7 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, QStringList keysF
 
 void MetadataListView::viewportResizeEvent(QResizeEvent* e)
 {
-    KListView::viewportResizeEvent(e);
+    K3ListView::viewportResizeEvent(e);
     QTimer::singleShot( 0, this, SLOT( triggerUpdate() ) );
 }
 

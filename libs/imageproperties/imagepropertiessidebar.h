@@ -57,7 +57,7 @@ public:
 
     ~ImagePropertiesSideBar();
 
-    virtual void itemChanged(const KURL& url, const QRect &rect = QRect(), DImg *img = 0);
+    virtual void itemChanged(const KUrl& url, const QRect &rect = QRect(), DImg *img = 0);
 
 public slots:
 
@@ -77,7 +77,7 @@ protected:
 
     QRect                       m_currentRect;
 
-    KURL                        m_currentURL;
+    KUrl                        m_currentURL;
 
     DImg                       *m_image;
 

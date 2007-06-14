@@ -6,7 +6,7 @@
  * Date        : 2006-06-11
  * Description : thread safe debugging.
  *
- * See B.K.O #133026: because kdDebug() is not thread-safe
+ * See B.K.O #133026: because kDebug() is not thread-safe
  * we need to use a dedicaced debug statements in threaded 
  * implementation to prevent crash.
  *

@@ -37,7 +37,7 @@
 
 // KDE includes.
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <kurl.h>
 #include <klocale.h>
 
@@ -49,7 +49,7 @@
 namespace DigikamHotPixelsImagesPlugin
 {
 
-class BlackFrameListView : public KListView
+class BlackFrameListView : public K3ListView
 {
     Q_OBJECT
 
@@ -60,11 +60,11 @@ public:
 
 signals:
 
-    void blackFrameSelected(Q3ValueList<HotPixel>, const KURL&);
+    void blackFrameSelected(Q3ValueList<HotPixel>, const KUrl&);
 
 private slots:
 
-    void slotParsed(Q3ValueList<HotPixel> hotPixels, const KURL& blackFrameURL)
+    void slotParsed(Q3ValueList<HotPixel> hotPixels, const KUrl& blackFrameURL)
     {
        emit blackFrameSelected(hotPixels, blackFrameURL);
     };           
@@ -72,13 +72,13 @@ private slots:
 
 ///////////////////////////////////////////////////////////////
 
-class BlackFrameListViewItem : public QObject, KListViewItem
+class BlackFrameListViewItem : public QObject, K3ListViewItem
 {
 Q_OBJECT
 
 public:
 
-    BlackFrameListViewItem(BlackFrameListView* parent, KURL url);
+    BlackFrameListViewItem(BlackFrameListView* parent, KUrl url);
     ~BlackFrameListViewItem(){};
     
     virtual QString text(int column)const;
@@ -87,7 +87,7 @@ public:
 
 signals:
 
-    void parsed(Q3ValueList<HotPixel>, const KURL&);
+    void parsed(Q3ValueList<HotPixel>, const KUrl&);
             
 protected:
 
@@ -113,7 +113,7 @@ private:
     
     QString               m_blackFrameDesc;
     
-    KURL                  m_blackFrameURL;
+    KUrl                  m_blackFrameURL;
     
     BlackFrameParser      m_parser;
     

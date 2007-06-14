@@ -37,7 +37,7 @@
 
 #include <kdialogbase.h>
 
-class KURL;
+class KUrl;
 
 namespace Digikam
 {
@@ -61,7 +61,7 @@ public:
      * @param parent parent window
      * @param url holds the url for the search
      */
-    SearchQuickDialog(QWidget* parent, KURL& url);
+    SearchQuickDialog(QWidget* parent, KUrl& url);
     /**
      * Destructor
      */
@@ -78,7 +78,7 @@ private slots:
 
 private:
 
-    KURL&                  m_url;
+    KUrl&                  m_url;
     
     SearchQuickDialogPriv* d;
 

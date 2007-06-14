@@ -58,7 +58,7 @@
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kprogress.h>
@@ -66,6 +66,7 @@
 #include <knuminput.h>
 #include <kglobalsettings.h>
 #include <kpassivepopup.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -166,7 +167,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     Q3GridLayout* grid  = new Q3GridLayout( firstPage, 2, 2, marginHint(), spacingHint());
     m_mainTab->addTab( firstPage, i18n("Preset") );
 
-    KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
+    KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setURL("http://cimg.sourceforge.net");
     KGlobal::dirs()->addResourceType("logo-cimg", KGlobal::dirs()->kde_default("data") + "digikam/data");
@@ -220,7 +221,7 @@ void ImageEffect_InPainting_Dialog::renderingFinished()
 
 void ImageEffect_InPainting_Dialog::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("inpainting Tool Dialog");
 
     Digikam::GreycstorationSettings settings;
@@ -251,7 +252,7 @@ void ImageEffect_InPainting_Dialog::readUserSettings()
 void ImageEffect_InPainting_Dialog::writeUserSettings()
 {
     Digikam::GreycstorationSettings settings = m_settingsWidget->getSettings();
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("inpainting Tool Dialog");
     config->writeEntry("Preset", m_inpaintingTypeCB->currentItem());
     config->writeEntry("FastApprox", settings.fastApprox);
@@ -417,7 +418,7 @@ void ImageEffect_InPainting_Dialog::putFinalData(void)
 
 void ImageEffect_InPainting_Dialog::slotUser3()
 {
-    KURL loadInpaintingFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    KUrl loadInpaintingFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Photograph Inpainting Settings File to Load")) );
     if( loadInpaintingFile.isEmpty() )
@@ -448,7 +449,7 @@ void ImageEffect_InPainting_Dialog::slotUser3()
 
 void ImageEffect_InPainting_Dialog::slotUser2()
 {
-    KURL saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    KUrl saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Photograph Inpainting Settings File to Save")) );
     if( saveRestorationFile.isEmpty() )

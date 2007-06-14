@@ -43,7 +43,7 @@ class QPushButton;
 class Q3HButtonGroup;
 
 class KDoubleNumInput;
-class KActiveLabel;
+class K3ActiveLabel;
 
 namespace Digikam
 {
@@ -145,8 +145,8 @@ private:
     QLabel                       *m_saturationLabel;
     QLabel                       *m_greenLabel;
     
-    KActiveLabel                 *m_exposureLabel;
-    KActiveLabel                 *m_temperatureLabel;
+    K3ActiveLabel                 *m_exposureLabel;
+    K3ActiveLabel                 *m_temperatureLabel;
 
     KDoubleNumInput              *m_temperatureInput;
     KDoubleNumInput              *m_darkInput;

@@ -55,15 +55,16 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <kmessagebox.h>
-#include <kselect.h>
+#include <kselector.h>
 #include <kfiledialog.h>
 #include <kglobalsettings.h>
 #include <kaboutdata.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -592,7 +593,7 @@ void AdjustLevelDialog::slotEffect()
 
 void AdjustLevelDialog::finalRendering()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
     uchar *orgData             = iface->getOriginalImage();
     int w                      = iface->originalWidth();
@@ -686,7 +687,7 @@ void AdjustLevelDialog::slotScaleChanged(int scale)
 
 void AdjustLevelDialog::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("adjustlevels Tool Dialog");
 
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
@@ -724,7 +725,7 @@ void AdjustLevelDialog::readUserSettings()
 
 void AdjustLevelDialog::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("adjustlevels Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
@@ -762,7 +763,7 @@ void AdjustLevelDialog::resetValues()
 // Load all settings.
 void AdjustLevelDialog::slotUser3()
 {
-    KURL loadLevelsFile;
+    KUrl loadLevelsFile;
 
     loadLevelsFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,
@@ -783,7 +784,7 @@ void AdjustLevelDialog::slotUser3()
 // Save all settings.
 void AdjustLevelDialog::slotUser2()
 {
-    KURL saveLevelsFile;
+    KUrl saveLevelsFile;
 
     saveLevelsFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,

@@ -41,7 +41,7 @@ class QLabel;
 class Q3VGroupBox;
 class QLabel;
 
-class KURL;
+class KUrl;
 
 class KDateEdit;
 
@@ -66,7 +66,7 @@ public:
      * @param text Text of the label
      * @param parent The parent widget
      * @param name The name
-     * @param f WFlags
+     * @param f Qt::WFlags
      */
     SearchRuleLabel( const QString & text,
                QWidget * parent,
@@ -229,7 +229,7 @@ public:
      * Sets the values of the rule.
      * @param url The url which sets defaults for the rule.
      */
-    void    setValues(const KURL& url);
+    void    setValues(const KUrl& url);
 
     /**
      * Sets the option of the rule, so this holds the

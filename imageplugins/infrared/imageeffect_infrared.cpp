@@ -44,6 +44,7 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -93,7 +94,7 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
     m_sensibilitySlider = new QSlider(1, 25, 1, 1, Qt::Horizontal, gboxSettings);
     m_sensibilitySlider->setTracking ( false );
     m_sensibilitySlider->setTickInterval(1);
-    m_sensibilitySlider->setTickmarks(QSlider::Below);
+    m_sensibilitySlider->setTickmarks(QSlider::TicksBelow);
 
     m_sensibilityLCDValue = new QLCDNumber (4, gboxSettings);
     m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
@@ -152,7 +153,7 @@ void ImageEffect_Infrared::renderingFinished()
 
 void ImageEffect_Infrared::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("infrared Tool Dialog");
     m_sensibilitySlider->blockSignals(true);
     m_addFilmGrain->blockSignals(true);
@@ -165,7 +166,7 @@ void ImageEffect_Infrared::readUserSettings()
 
 void ImageEffect_Infrared::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("infrared Tool Dialog");
     config->writeEntry("SensitivityAjustment", m_sensibilitySlider->value());
     config->writeEntry("AddFilmGrain", m_addFilmGrain->isChecked());

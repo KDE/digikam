@@ -45,6 +45,7 @@
 #include <kstandarddirs.h>
 #include <knuminput.h>
 #include <kseparator.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -213,7 +214,7 @@ void ImageEffect_AntiVignetting::renderingFinished()
 
 void ImageEffect_AntiVignetting::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("antivignettings Tool Dialog");
 
     m_densityInput->blockSignals(true);
@@ -242,7 +243,7 @@ void ImageEffect_AntiVignetting::readUserSettings()
 
 void ImageEffect_AntiVignetting::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("antivignettings Tool Dialog");
     config->writeEntry("DensityAjustment", m_densityInput->value());
     config->writeEntry("PowerAjustment", m_powerInput->value());

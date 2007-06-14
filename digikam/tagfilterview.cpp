@@ -38,7 +38,7 @@
 // KDE includes.
 
 #include <kabc/stdaddressbook.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -72,6 +72,7 @@
 extern "C"
 {
 #include <X11/Xlib.h>
+#include <kglobal.h>
 }
 
 namespace Digikam
@@ -251,7 +252,7 @@ TagFilterView::TagFilterView(QWidget* parent)
 
     // -- read config ---------------------------------------------------------
 
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("Tag Filters View");
     d->matchingCond = (AlbumLister::MatchingCondition)(config->readNumEntry("Matching Condition", 
                                                        AlbumLister::OrCondition));
@@ -261,7 +262,7 @@ TagFilterView::TagFilterView(QWidget* parent)
 
 TagFilterView::~TagFilterView()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("Tag Filters View");
     config->writeEntry("Matching Condition", (int)(d->matchingCond));
     config->writeEntry("Toggle Auto Tags", (int)(d->toggleAutoTags));
@@ -316,7 +317,7 @@ void TagFilterView::contentsMouseMoveEvent(QMouseEvent *e)
             QPoint vp = contentsToViewport(e->pos());
             Q3ListViewItem *item = itemAt(vp);
             if (mouseInItemRect(item, vp.x()))
-                setCursor(KCursor::handCursor());
+                setCursor(Qt::PointingHandCursor);
             else
                 unsetCursor();
         }
@@ -458,7 +459,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
         if (talbum == itemDrop->m_tag)
             return;
 
-        KPopupMenu popMenu(this);
+        KMenu popMenu(this);
         popMenu.insertTitle(SmallIcon("digikam"), i18n("Tag Filters"));
         popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
         popMenu.insertSeparator(-1);
@@ -498,8 +499,8 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
     {
         TAlbum *destAlbum = itemDrop->m_tag;
 
-        KURL::List      urls;
-        KURL::List      kioURLs;
+        KUrl::List      urls;
+        KUrl::List      kioURLs;
         Q3ValueList<int> albumIDs;
         Q3ValueList<int> imageIDs;
 
@@ -525,10 +526,10 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
         }
         else
         {
-            KPopupMenu popMenu(this);
+            KMenu popMenu(this);
             popMenu.insertTitle(SmallIcon("digikam"), i18n("Tag Filters"));
             popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tag '%1' to Items")
-                                .arg(destAlbum->prettyURL()), 10) ;
+                                .arg(destAlbum->prettyUrl()), 10) ;
             popMenu.insertItem(i18n("Set as Tag Thumbnail"),  11);
             popMenu.insertSeparator(-1);
             popMenu.insertItem(SmallIcon("cancel"), i18n("C&ancel"));
@@ -776,7 +777,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
     connect(d->ABCMenu, SIGNAL( aboutToShow() ),
             this, SLOT( slotABCContextMenu() ));
 
-    KPopupMenu popmenu(this);
+    KMenu popmenu(this);
     popmenu.insertTitle(SmallIcon("digikam"), i18n("Tag Filters"));
     popmenu.insertItem(SmallIcon("tag-new"), i18n("New Tag..."), 10);
     popmenu.insertItem(SmallIcon("tag-addressbook"), i18n("Create Tag From AddressBook"), d->ABCMenu);

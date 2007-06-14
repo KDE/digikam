@@ -35,7 +35,7 @@
 
 class QPixmap;
 
-class KURL;
+class KUrl;
 
 namespace Digikam
 {
@@ -58,20 +58,20 @@ public:
     PixmapManager(AlbumIconView* view);
     ~PixmapManager();
 
-    QPixmap* find(const KURL& path);
-    void     remove(const KURL& path);
+    QPixmap* find(const KUrl& path);
+    void     remove(const KUrl& path);
     void     clear();
     void     setThumbnailSize(int size);
     int      cacheSize() const;
    
 signals:
 
-    void signalPixmap(const KURL& url);
+    void signalPixmap(const KUrl& url);
 
 private slots:
 
-    void slotGotThumbnail(const KURL& url, const QPixmap& pix);
-    void slotFailedThumbnail(const KURL& url);
+    void slotGotThumbnail(const KUrl& url, const QPixmap& pix);
+    void slotFailedThumbnail(const KUrl& url);
     void slotCompleted();
 
 private:

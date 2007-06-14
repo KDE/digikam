@@ -106,7 +106,7 @@ DTipTracker::DTipTracker(const QString& txt, QWidget *parent)
 	setPalette(QToolTip::palette());
 	setFrameStyle(Q3Frame::Plain | Q3Frame::Box);
 	setLineWidth(1);
-	setAlignment(AlignAuto | AlignTop);
+	setAlignment(AlignAuto | Qt::AlignTop);
 }
 	
 } // namespace Digikam

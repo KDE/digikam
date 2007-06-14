@@ -1097,19 +1097,19 @@ void ImageSelectionWidget::setCursorResizing(void)
     switch(d->currentResizing)
     {
         case ImageSelectionWidgetPriv::ResizingTopLeft:
-            setCursor( KCursor::sizeFDiagCursor() );
+            setCursor( Qt::SizeFDiagCursor );
             break;
 
         case ImageSelectionWidgetPriv::ResizingTopRight:
-            setCursor( KCursor::sizeBDiagCursor() );
+            setCursor( Qt::SizeBDiagCursor );
             break;
 
         case ImageSelectionWidgetPriv::ResizingBottomLeft:
-            setCursor( KCursor::sizeBDiagCursor() );
+            setCursor( Qt::SizeBDiagCursor );
             break;
 
         case ImageSelectionWidgetPriv::ResizingBottomRight:
-            setCursor( KCursor::sizeFDiagCursor() );
+            setCursor( Qt::SizeFDiagCursor );
             break;
     }
 }
@@ -1223,9 +1223,9 @@ void ImageSelectionWidget::mousePressEvent ( QMouseEvent * e )
         QPoint pm = QPoint(e->x(), e->y());
         d->moving = false;
 
-        if ( (e->state() & Qt::ShiftButton) == Qt::ShiftButton )
+        if ( (e->state() & Qt::ShiftModifier) == Qt::ShiftButton )
         {
-            bool symetric = (e->state() & Qt::ControlButton ) == Qt::ControlButton;
+            bool symetric = (e->state() & Qt::ControlModifier ) == Qt::ControlButton;
             QPoint center = d->localRegionSelection.center();
 
             // Find the closest corner
@@ -1263,7 +1263,7 @@ void ImageSelectionWidget::mousePressEvent ( QMouseEvent * e )
             else
             {
                 d->lastPos = pm;
-                setCursor( KCursor::sizeAllCursor() );
+                setCursor( Qt::SizeAllCursor );
 
                 if (d->localRegionSelection.contains( pm ) )
                 {
@@ -1288,18 +1288,18 @@ void ImageSelectionWidget::mouseReleaseEvent ( QMouseEvent * )
 {
     if ( d->currentResizing != ImageSelectionWidgetPriv::ResizingNone )
     {
-        setCursor( KCursor::arrowCursor() );
+        setCursor( Qt::ArrowCursor );
         regionSelectionChanged(true);
         d->currentResizing = ImageSelectionWidgetPriv::ResizingNone;
     }
     else if ( d->localRegionSelection.contains( d->lastPos ) )
     {
-        setCursor( KCursor::handCursor() );
+        setCursor( Qt::PointingHandCursor );
         regionSelectionMoved(true);
     }
     else
     {
-        setCursor( KCursor::arrowCursor() );
+        setCursor( Qt::ArrowCursor );
         regionSelectionMoved(true);
     }
 }
@@ -1310,7 +1310,7 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
     {
         if ( d->moving )
         {
-            setCursor( KCursor::sizeAllCursor() );
+            setCursor( Qt::SizeAllCursor );
             QPoint newPos = QPoint(e->x(), e->y());
 
             d->localRegionSelection.moveBy (newPos.x() - d->lastPos.x(), newPos.y() - d->lastPos.y());
@@ -1335,7 +1335,7 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
             }
 
             QPoint center = d->localRegionSelection.center();
-            bool symetric = (e->state() & Qt::ControlButton ) == Qt::ControlButton;
+            bool symetric = (e->state() & Qt::ControlModifier ) == Qt::ControlButton;
 
             // Change resizing mode
 
@@ -1346,34 +1346,34 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
             {
                 d->currentResizing = ImageSelectionWidgetPriv::ResizingBottomRight;
                 d->localRegionSelection.setTopLeft( opp );
-                setCursor( KCursor::sizeFDiagCursor() );
+                setCursor( Qt::SizeFDiagCursor );
             }
             else if ( dir.x() > 0 && dir.y() < 0 && d->currentResizing != ImageSelectionWidgetPriv::ResizingTopRight)
             {
                 d->currentResizing = ImageSelectionWidgetPriv::ResizingTopRight;
                 d->localRegionSelection.setBottomLeft( opp );
-                setCursor( KCursor::sizeBDiagCursor() );
+                setCursor( Qt::SizeBDiagCursor );
             }
             else if ( dir.x() < 0 && dir.y() > 0 && d->currentResizing != ImageSelectionWidgetPriv::ResizingBottomLeft)
             {
                 d->currentResizing = ImageSelectionWidgetPriv::ResizingBottomLeft;
                 d->localRegionSelection.setTopRight( opp );
-                setCursor( KCursor::sizeBDiagCursor() );
+                setCursor( Qt::SizeBDiagCursor );
             }
             else if ( dir.x() < 0 && dir.y() < 0 && d->currentResizing != ImageSelectionWidgetPriv::ResizingTopLeft)
             {
                 d->currentResizing = ImageSelectionWidgetPriv::ResizingTopLeft;
                 d->localRegionSelection.setBottomRight( opp );
-                setCursor( KCursor::sizeFDiagCursor() );
+                setCursor( Qt::SizeFDiagCursor );
             }
             else
             {
                 if ( dir.x() == 0 && dir.y() == 0 )
-                    setCursor( KCursor::sizeAllCursor() );
+                    setCursor( Qt::SizeAllCursor );
                 else if ( dir.x() == 0 )
-                    setCursor( KCursor::sizeHorCursor() );
+                    setCursor( Qt::SizeHorCursor );
                 else if ( dir.y() == 0 )
-                    setCursor( KCursor::sizeVerCursor() );
+                    setCursor( Qt::SizeVerCursor );
             }
 
             placeSelection(pm, symetric, center);
@@ -1383,14 +1383,14 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
     {
         if ( d->localTopLeftCorner.contains( e->x(), e->y() ) ||
              d->localBottomRightCorner.contains( e->x(), e->y() ) )
-            setCursor( KCursor::sizeFDiagCursor() );
+            setCursor( Qt::SizeFDiagCursor );
         else if ( d->localTopRightCorner.contains( e->x(), e->y() ) ||
                   d->localBottomLeftCorner.contains( e->x(), e->y() ) )
-            setCursor( KCursor::sizeBDiagCursor() );
+            setCursor( Qt::SizeBDiagCursor );
         else if ( d->localRegionSelection.contains( e->x(), e->y() ) )
-            setCursor( KCursor::handCursor() );
+            setCursor( Qt::PointingHandCursor );
         else
-            setCursor( KCursor::arrowCursor() );
+            setCursor( Qt::ArrowCursor );
     }
 }
 

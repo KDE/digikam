@@ -40,6 +40,7 @@
 #include <kstandarddirs.h>
 #include <knuminput.h>
 #include <kconfig.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -112,7 +113,7 @@ void ImageEffect_Emboss::renderingFinished()
 
 void ImageEffect_Emboss::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("emboss Tool Dialog");
     m_depthInput->blockSignals(true);
     m_depthInput->setValue(config->readNumEntry("DepthAjustment", 30));
@@ -121,7 +122,7 @@ void ImageEffect_Emboss::readUserSettings()
 
 void ImageEffect_Emboss::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("emboss Tool Dialog");
     config->writeEntry("DepthAjustment", m_depthInput->value());
     config->sync();

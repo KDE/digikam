@@ -85,7 +85,7 @@ public:
      */
     ImageInfo(qlonglong ID, int albumID,
               const QString &album, const QString& albumName,
-              const KURL& albumRoot,
+              const KUrl& albumRoot,
               const QDateTime& datetime,
               uint size,
               const QSize& dims=QSize());
@@ -137,7 +137,7 @@ public:
 
     /**
      * Returns the digikamalbums:// URL.
-     * The returned object can be used as a KURL.
+     * The returned object can be used as a KUrl.
      * Always use this for KIO operations
      */
     DatabaseUrl databaseUrl() const;
@@ -146,12 +146,12 @@ public:
      * Returns the file:// url.
      * This is equivalent to databaseUrl().fileUrl()
      */
-    KURL       fileUrl() const;
+    KUrl       fileUrl() const;
 
     /**
      * Equivalent to fileUrl()
      */
-    KDE_DEPRECATED KURL      kurl() const;
+    KDE_DEPRECATED KUrl      kurl() const;
 
     /**
      * Equivalent to fileUrl().path()
@@ -162,7 +162,7 @@ public:
     /**
      * Equivalent to databaseUrl()
      */
-    KDE_DEPRECATED KURL      kurlForKIO() const;
+    KDE_DEPRECATED KUrl      kurlForKIO() const;
 
     /**
      * @return the unique image id for this item

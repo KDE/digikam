@@ -214,7 +214,7 @@ void DistortionFX::fisheye(Digikam::DImg *orgImage, Digikam::DImg *destImage, do
     else if (Height > Width)
         lfXScale = (double)Height / (double)Width;
 
-    lfRadMax = (double)QMAX(Height, Width) / 2.0;
+    lfRadMax = (double)qMax(Height, Width) / 2.0;
     lfCoeff = lfRadMax / log (fabs (lfCoeffStep) * lfRadMax + 1.0);
 
     // main loop
@@ -306,7 +306,7 @@ void DistortionFX::twirl(Digikam::DImg *orgImage, Digikam::DImg *destImage, int 
     // the angle step is twirl divided by 10000
     lfAngleStep = Twirl / 10000.0;
     // now, we get the minimum radius
-    lfRadMax = (double)QMAX(Width, Height) / 2.0;
+    lfRadMax = (double)qMax(Width, Height) / 2.0;
 
     // main loop
 
@@ -539,7 +539,7 @@ void DistortionFX::polarCoordinates(Digikam::DImg *orgImage, Digikam::DImg *dest
     else if (Height > Width)
         lfXScale = (double)Height / (double)Width;
 
-    lfRadMax = (double)QMAX(Height, Width) / 2.0;
+    lfRadMax = (double)qMax(Height, Width) / 2.0;
 
     // main loop
 
@@ -854,8 +854,8 @@ double DistortionFX::maximumRadius(int Height, int Width, double Angle)
     double MaxRad, MinRad;
     double Radius, DegAngle = fabs (Angle * 57.295);    // Rads -> Degrees
 
-    MinRad = QMIN (Height, Width) / 2.0;                // Gets the minor radius
-    MaxRad = QMAX (Height, Width) / 2.0;                // Gets the major radius
+    MinRad = qMin (Height, Width) / 2.0;                // Gets the minor radius
+    MaxRad = qMax (Height, Width) / 2.0;                // Gets the major radius
 
     // Find the quadrant between -PI/2 and PI/2
     if (DegAngle > 90.0)

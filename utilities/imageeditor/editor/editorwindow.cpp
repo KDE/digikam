@@ -60,7 +60,7 @@ extern "C"
 #include <kedittoolbar.h>
 #include <kaboutdata.h>
 #include <kcursor.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <klocale.h>
@@ -79,8 +79,9 @@ extern "C"
 #include <ktoolbar.h>
 #include <kstatusbar.h>
 #include <kprogress.h>
-#include <kwin.h>
+#include <kwindowsystem.h>
 #include <kcombobox.h>
+#include <ktoolinvocation.h>
 
 // Local includes.
 
@@ -251,29 +252,29 @@ void EditorWindow::setupStandardActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
-    m_backwardAction = KStdAction::back(this, SLOT(slotBackward()),
+    m_backwardAction = KStandardAction::back(this, SLOT(slotBackward()),
                                    actionCollection(), "editorwindow_backward");
 
-    m_forwardAction = KStdAction::forward(this, SLOT(slotForward()),
+    m_forwardAction = KStandardAction::forward(this, SLOT(slotForward()),
                                   actionCollection(), "editorwindow_forward");
 
     m_firstAction = new KAction(i18n("&First"), "start",
-                                KStdAccel::shortcut( KStdAccel::Home),
+                                KStandardShortcut::shortcut( KStandardShortcut::Home),
                                 this, SLOT(slotFirst()),
                                 actionCollection(), "editorwindow_first");
 
     m_lastAction = new KAction(i18n("&Last"), "finish",
-                               KStdAccel::shortcut( KStdAccel::End),
+                               KStandardShortcut::shortcut( KStandardShortcut::End),
                                this, SLOT(slotLast()),
                                actionCollection(), "editorwindow_last");
 
-    m_saveAction   = KStdAction::save(this, SLOT(slotSave()),
+    m_saveAction   = KStandardAction::save(this, SLOT(slotSave()),
                                       actionCollection(), "editorwindow_save");
 
-    m_saveAsAction = KStdAction::saveAs(this, SLOT(slotSaveAs()),
+    m_saveAsAction = KStandardAction::saveAs(this, SLOT(slotSaveAs()),
                                         actionCollection(), "editorwindow_saveas");
 
-    m_revertAction = KStdAction::revert(m_canvas, SLOT(slotRestore()),
+    m_revertAction = KStandardAction::revert(m_canvas, SLOT(slotRestore()),
                                         actionCollection(), "editorwindow_revert");
 
     m_saveAction->setEnabled(false);
@@ -290,17 +291,17 @@ void EditorWindow::setupStandardActions()
                                      this, SLOT(slotDeleteCurrentItem()),
                                      actionCollection(), "editorwindow_delete");
 
-    KStdAction::close(this, SLOT(close()), actionCollection(), "editorwindow_close");
+    KStandardAction::close(this, SLOT(close()), actionCollection(), "editorwindow_close");
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
 
-    d->copyAction = KStdAction::copy(m_canvas, SLOT(slotCopy()),
+    d->copyAction = KStandardAction::copy(m_canvas, SLOT(slotCopy()),
                                      actionCollection(), "editorwindow_copy");
     
     d->copyAction->setEnabled(false);
 
     m_undoAction = new KToolBarPopupAction(i18n("Undo"), "undo",
-                                           KStdAccel::shortcut(KStdAccel::Undo),
+                                           KStandardShortcut::shortcut(KStandardShortcut::Undo),
                                            m_canvas, SLOT(slotUndo()),
                                            actionCollection(), "editorwindow_undo");
 
@@ -313,7 +314,7 @@ void EditorWindow::setupStandardActions()
     m_undoAction->setEnabled(false);
 
     m_redoAction = new KToolBarPopupAction(i18n("Redo"), "redo",
-                                           KStdAccel::shortcut(KStdAccel::Redo),
+                                           KStandardShortcut::shortcut(KStandardShortcut::Redo),
                                            m_canvas, SLOT(slotRedo()),
                                            actionCollection(), "editorwindow_redo");
 
@@ -343,10 +344,10 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->zoomPlusAction = KStdAction::zoomIn(this, SLOT(slotIncreaseZoom()),
+    d->zoomPlusAction = KStandardAction::zoomIn(this, SLOT(slotIncreaseZoom()),
                                           actionCollection(), "editorwindow_zoomplus");
 
-    d->zoomMinusAction = KStdAction::zoomOut(this, SLOT(slotDecreaseZoom()),
+    d->zoomMinusAction = KStandardAction::zoomOut(this, SLOT(slotDecreaseZoom()),
                                              actionCollection(), "editorwindow_zoomminus");
 
     d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), "viewmag1",
@@ -371,7 +372,7 @@ void EditorWindow::setupStandardActions()
     d->zoomCombo->setDuplicatesEnabled(false);
     d->zoomCombo->setFocusPolicy(Qt::ClickFocus);
     d->zoomCombo->setInsertionPolicy(QComboBox::NoInsert);
-    d->zoomComboAction = new KWidgetAction(d->zoomCombo, i18n("Zoom"), 0, 0, 0, 
+    d->zoomComboAction = new K3WidgetAction(d->zoomCombo, i18n("Zoom"), 0, 0, 0, 
                                            actionCollection(), "editorwindow_zoomto");
 
     d->zoomCombo->insertItem(QString("10%"));
@@ -395,7 +396,7 @@ void EditorWindow::setupStandardActions()
 
 
 #if KDE_IS_VERSION(3,2,0)
-    m_fullScreenAction = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
+    m_fullScreenAction = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()),
                                                 actionCollection(), this, "editorwindow_fullscreen");
 #else
     m_fullScreenAction = new KToggleAction(i18n("Fullscreen"), "window_fullscreen",
@@ -467,9 +468,9 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
-    KStdAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
-    KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
-    KStdAction::preferences(this, SLOT(slotSetup()),              actionCollection());
+    KStandardAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
+    KStandardAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
+    KStandardAction::preferences(this, SLOT(slotSetup()),              actionCollection());
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
@@ -495,42 +496,42 @@ void EditorWindow::setupStandardAccelerators()
                     Qt::Key_Escape, this, SLOT(slotEscapePressed()),
                     false, true);
 
-    d->accelerators->insert("Next Image Key_Space", i18n("Next Image"),
+    d->accelerators->insert("Next Image Qt::Key_Space", i18n("Next Image"),
                     i18n("Load Next Image"),
                     Qt::Key_Space, this, SLOT(slotForward()),
                     false, true);
 
-    d->accelerators->insert("Next Image SHIFT+Key_Space", i18n("Next Image"),
+    d->accelerators->insert("Next Image SHIFT+Qt::Key_Space", i18n("Next Image"),
                     i18n("Load Next Image"),
                     Qt::SHIFT+Qt::Key_Space, this, SLOT(slotForward()),
                     false, true);
 
-    d->accelerators->insert("Previous Image Key_Backspace", i18n("Previous Image"),
+    d->accelerators->insert("Previous Image Qt::Key_Backspace", i18n("Previous Image"),
                     i18n("Load Previous Image"),
                     Qt::Key_Backspace, this, SLOT(slotBackward()),
                     false, true);
 
-    d->accelerators->insert("Next Image Key_Next", i18n("Next Image"),
+    d->accelerators->insert("Next Image Qt::Key_Next", i18n("Next Image"),
                     i18n("Load Next Image"),
                     Qt::Key_PageDown, this, SLOT(slotForward()),
                     false, true);
 
-    d->accelerators->insert("Previous Image Key_Prior", i18n("Previous Image"),
+    d->accelerators->insert("Previous Image Qt::Key_Prior", i18n("Previous Image"),
                     i18n("Load Previous Image"),
                     Qt::Key_PageUp, this, SLOT(slotBackward()),
                     false, true);
 
-    d->accelerators->insert("Zoom Plus Key_Plus", i18n("Zoom In"),
+    d->accelerators->insert("Zoom Plus Qt::Key_Plus", i18n("Zoom In"),
                     i18n("Zoom in on Image"),
                     Qt::Key_Plus, this, SLOT(slotIncreaseZoom()),
                     false, true);
     
-    d->accelerators->insert("Zoom Plus Key_Minus", i18n("Zoom Out"),
+    d->accelerators->insert("Zoom Plus Qt::Key_Minus", i18n("Zoom Out"),
                     i18n("Zoom out of Image"),
                     Qt::Key_Minus, this, SLOT(slotDecreaseZoom()),
                     false, true);
 
-    d->accelerators->insert("Redo CTRL+Key_Y", i18n("Redo"),
+    d->accelerators->insert("Redo CTRL+Qt::Key_Y", i18n("Redo"),
                     i18n("Redo Last action"),
                     Qt::CTRL+Qt::Key_Y, m_canvas, SLOT(slotRedo()),
                     false, true);
@@ -580,7 +581,7 @@ void EditorWindow::setupStatusBar()
             this, SLOT(slotToggleColorManagedView()));
 }
 
-void EditorWindow::printImage(KURL url)
+void EditorWindow::printImage(KUrl url)
 {
     uchar* ptr      = m_canvas->interface()->getImage();
     int w           = m_canvas->interface()->origWidth();
@@ -616,7 +617,7 @@ void EditorWindow::printImage(KURL url)
 
 void EditorWindow::slotImagePluginsHelp()
 {
-    KApplication::kApplication()->invokeHelp( QString(), "digikamimageplugins" );
+    KToolInvocation::invokeHelp( QString(), "digikamimageplugins" );
 }
 
 void EditorWindow::slotEditKeys()
@@ -681,7 +682,7 @@ void EditorWindow::slotAboutToShowRedoMenu()
 void EditorWindow::slotConfToolbars()
 {
     saveMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
-    KEditToolbar dlg(factory(), this);
+    KEditToolBar dlg(factory(), this);
 
     connect(&dlg, SIGNAL(newToolbarConfig()),
             this, SLOT(slotNewToolbarConfig()));
@@ -820,7 +821,7 @@ void EditorWindow::unLoadImagePlugins()
 
 void EditorWindow::readStandardSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
 
     // Restore full screen Mode ?
@@ -839,7 +840,7 @@ void EditorWindow::readStandardSettings()
 
 void EditorWindow::applyStandardSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
 
     // -- Settings for Color Management stuff ----------------------------------------------
 
@@ -938,7 +939,7 @@ void EditorWindow::applyStandardSettings()
 
 void EditorWindow::saveStandardSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     
     config->writeEntry("AutoZoom", d->zoomFitToWindowAction->isChecked());
@@ -1124,14 +1125,14 @@ void EditorWindow::slotSavingProgress(const QString&, float progress)
     m_nameLabel->setProgressValue((int)(progress*100.0));
 }
 
-bool EditorWindow::promptUserSave(const KURL& url)
+bool EditorWindow::promptUserSave(const KUrl& url)
 {
     if (m_saveAction->isEnabled())
     {
         // if window is iconified, show it
         if (isMinimized())
         {
-            KWin::deIconifyWindow(winId());
+            KWindowSystem::deIconifyWindow(winId());
         }
 
         int result = KMessageBox::warningYesNoCancel(this,
@@ -1139,8 +1140,8 @@ bool EditorWindow::promptUserSave(const KURL& url)
                                        "Do you want to save it?")
                                        .arg(url.filename()),
                                   QString(),
-                                  KStdGuiItem::save(),
-                                  KStdGuiItem::discard());
+                                  KStandardGuiItem::save(),
+                                  KStandardGuiItem::discard());
 
         if (result == KMessageBox::Yes)
         {
@@ -1270,7 +1271,7 @@ void EditorWindow::showToolBars()
 
 void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
 {
-    setCursor( KCursor::waitCursor() );
+    setCursor( Qt::WaitCursor );
 
     // Disable actions as appropriate during loading
     emit signalNoCurrentItem();
@@ -1322,7 +1323,7 @@ void EditorWindow::slotSave()
 }
 void EditorWindow::slotSavingStarted(const QString& /*filename*/)
 {
-    setCursor( KCursor::waitCursor() );
+    setCursor( Qt::WaitCursor );
     
     // Disable actions as appropriate during saving
     emit signalNoCurrentItem();
@@ -1441,7 +1442,7 @@ void EditorWindow::finishSaving(bool success)
     }
 }
 
-void EditorWindow::startingSave(const KURL& url)
+void EditorWindow::startingSave(const KUrl& url)
 {
     // avoid any reentrancy. Should be impossible anyway since actions will be disabled.
     if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
@@ -1466,7 +1467,7 @@ void EditorWindow::startingSave(const KURL& url)
                      m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()));
 }
 
-bool EditorWindow::startingSaveAs(const KURL& url)
+bool EditorWindow::startingSaveAs(const KUrl& url)
 {
     if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
         return false;
@@ -1479,7 +1480,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
 
     FileSaveOptionsBox *options = new FileSaveOptionsBox();
     KFileDialog imageFileSaveDialog(m_savingContext->srcURL.isLocalFile() ? 
-                                    m_savingContext->srcURL.directory() : QDir::homeDirPath(),
+                                    m_savingContext->srcURL.directory() : QDir::homePath(),
                                     QString(),
                                     this,
                                     "imageFileSaveDialog",
@@ -1508,7 +1509,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
     options->applySettings();
     applyStandardSettings();
 
-    KURL newURL = imageFileSaveDialog.selectedURL();
+    KUrl newURL = imageFileSaveDialog.selectedURL();
 
     // Check if target image format have been selected from Combo List of SaveAs dialog.
     m_savingContext->format = KImageIO::typeForMime(imageFileSaveDialog.currentMimeFilter());
@@ -1564,7 +1565,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
 
     // if new and original url are equal use slotSave() ------------------------------
     
-    KURL currURL(m_savingContext->srcURL);
+    KUrl currURL(m_savingContext->srcURL);
     currURL.cleanPath();
     newURL.cleanPath();
 
@@ -1588,7 +1589,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
                                        .arg(newURL.filename()),
                                        i18n("Overwrite File?"),
                                        i18n("Overwrite"),
-                                       KStdGuiItem::cancel() );
+                                       KStandardGuiItem::cancel() );
 
         if (result != KMessageBox::Yes)
             return false;
@@ -1616,7 +1617,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
     return true;
 }
 
-bool EditorWindow::checkPermissions(const KURL& url)
+bool EditorWindow::checkPermissions(const KUrl& url)
 {
     //TODO: Check that the permissions can actually be changed
     //      if write permissions are not available.
@@ -1634,7 +1635,7 @@ bool EditorWindow::checkPermissions(const KURL& url)
                                        .arg(url.filename()),
                                        i18n("Overwrite File?"),
                                        i18n("Overwrite"),
-                                       KStdGuiItem::cancel() );
+                                       KStandardGuiItem::cancel() );
 
         if (result != KMessageBox::Yes)
             return false;
@@ -1692,7 +1693,7 @@ void EditorWindow::slotToggleColorManagedView()
         // Save Color Managed View setting in config file. For performance 
         // reason, no need to flush file, it cached in memory and will be flushed 
         // to disk at end of session.  
-        KConfig* config = kapp->config();
+        KConfig* config = KGlobal::config();
         config->setGroup("Color Management");
         config->writeEntry("ManagedView", cmv);
     }
@@ -1773,7 +1774,7 @@ void EditorWindow::slotDonateMoney()
 
 void EditorWindow::slotToggleSlideShow()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
 

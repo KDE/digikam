@@ -111,7 +111,7 @@ public:
     virtual ~ThumbBarView();
 
     int countItems();
-    KURL::List itemsURLs();
+    KUrl::List itemsURLs();
     
     void clear(bool updateView=true);
     void triggerUpdate();
@@ -131,9 +131,9 @@ public:
     ThumbBarItem* firstItem() const;
     ThumbBarItem* lastItem()  const;
     ThumbBarItem* findItem(const QPoint& pos) const;
-    ThumbBarItem* findItemByURL(const KURL& url) const;
+    ThumbBarItem* findItemByURL(const KUrl& url) const;
 
-    void refreshThumbs(const KURL::List& urls);
+    void refreshThumbs(const KUrl::List& urls);
     void invalidateThumb(ThumbBarItem* item);
         
 protected:
@@ -158,7 +158,7 @@ protected:
 signals:
 
     void signalItemSelected(ThumbBarItem*);
-    void signalURLSelected(const KURL&);
+    void signalURLSelected(const KUrl&);
     void signalItemAdded(void);
 
 private slots:
@@ -166,8 +166,8 @@ private slots:
     void slotUpdate();
     void slotGotPreview(const KFileItem *, const QPixmap &);
     void slotFailedPreview(const KFileItem *);
-    void slotGotThumbnail(const KURL&, const QPixmap&);
-    void slotFailedThumbnail(const KURL&);
+    void slotGotThumbnail(const KUrl&, const QPixmap&);
+    void slotFailedThumbnail(const KUrl&);
     
 private:
 
@@ -182,10 +182,10 @@ class DIGIKAM_EXPORT ThumbBarItem
 {
 public:
 
-    ThumbBarItem(ThumbBarView *view, const KURL& url);
+    ThumbBarItem(ThumbBarView *view, const KUrl& url);
     virtual ~ThumbBarItem();
 
-    KURL          url() const;
+    KUrl          url() const;
 
     ThumbBarItem* next() const;
     ThumbBarItem* prev() const;

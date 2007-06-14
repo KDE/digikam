@@ -146,7 +146,7 @@ void SuperImposeWidget::slotEditModeChanged(int mode)
     m_editMode = mode;
 }
 
-void SuperImposeWidget::slotSetCurrentTemplate(const KURL& url)
+void SuperImposeWidget::slotSetCurrentTemplate(const KUrl& url)
 {
     m_template.load(url.path());
 
@@ -303,7 +303,7 @@ void SuperImposeWidget::mouseMoveEvent ( QMouseEvent * e )
 
                     m_xpos = newxpos;
                     m_ypos = newypos;
-                    setCursor( KCursor::handCursor() );
+                    setCursor( Qt::PointingHandCursor );
                     break;
             }
         }
@@ -320,11 +320,11 @@ void SuperImposeWidget::setEditModeCursor()
     {
         case ZOOMIN:
         case ZOOMOUT:
-            setCursor ( KCursor::crossCursor() );
+            setCursor ( Qt::CrossCursor );
             break;
 
         case MOVE:
-            setCursor ( KCursor::sizeAllCursor() );
+            setCursor ( Qt::SizeAllCursor );
     }
 }
 

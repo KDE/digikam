@@ -36,6 +36,7 @@
 // LibKDcraw includes.
 
 #include <libkdcraw/rawfiles.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -136,7 +137,7 @@ AlbumSettings* AlbumSettings::instance()
 AlbumSettings::AlbumSettings()
 {
     d = new AlbumSettingsPrivate;
-    d->config  = kapp->config();
+    d->config  = KGlobal::config();
     m_instance = this;
     init();
 }

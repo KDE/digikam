@@ -100,7 +100,7 @@ QString ExifWidget::getMetadataTitle(void)
     return i18n("Standard EXIF Tags");
 }
 
-bool ExifWidget::loadFromURL(const KURL& url)
+bool ExifWidget::loadFromURL(const KUrl& url)
 {
     setFileName(url.path());
     
@@ -173,7 +173,7 @@ QString ExifWidget::getTagDescription(const QString& key)
 
 void ExifWidget::slotSaveMetadataToFile(void)
 {
-    KURL url = saveMetadataToFile(i18n("EXIF File to Save"),
+    KUrl url = saveMetadataToFile(i18n("EXIF File to Save"),
                                   QString("*.dat|"+i18n("EXIF binary Files (*.dat)")));
     storeMetadataToFile(url);
 }

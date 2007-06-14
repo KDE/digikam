@@ -24,8 +24,8 @@
 #ifndef DIMGIMAGE_FILTERS_H
 #define DIMGIMAGE_FILTERS_H
 
-#define CLAMP0255(a)    QMIN(QMAX(a,0), 255)
-#define CLAMP065535(a)  QMIN(QMAX(a,0), 65535)
+#define CLAMP0255(a)    qMin(qMax(a,0), 255)
+#define CLAMP065535(a)  qMin(qMax(a,0), 65535)
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 #define ROUND(x) ((int) ((x) + 0.5))
 

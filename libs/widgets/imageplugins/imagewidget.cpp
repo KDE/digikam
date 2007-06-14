@@ -43,6 +43,7 @@
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -326,21 +327,21 @@ void ImageWidget::slotUpdateSpotInfo(const Digikam::DColor &col, const QPoint &p
 
 void ImageWidget::readSettings(void)
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup(d->settingsSection);
 
     d->underExposureButton->setOn(config->readBoolEntry("Under Exposure Indicator", false));
     d->overExposureButton->setOn(config->readBoolEntry("Over Exposure Indicator", false));
 
     int mode = config->readNumEntry("Separate View", ImageGuideWidget::PreviewBothImagesVertCont);
-    mode = QMAX(ImageGuideWidget::PreviewOriginalImage, mode);
-    mode = QMIN(ImageGuideWidget::NoPreviewMode, mode);
+    mode = qMax(ImageGuideWidget::PreviewOriginalImage, mode);
+    mode = qMin(ImageGuideWidget::NoPreviewMode, mode);
     setRenderingPreviewMode(mode);
 }
     
 void ImageWidget::writeSettings(void)
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup(d->settingsSection);
     config->writeEntry("Separate View", getRenderingPreviewMode());
     config->writeEntry("Under Exposure Indicator", d->underExposureButton->isOn());

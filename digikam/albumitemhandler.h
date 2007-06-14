@@ -45,10 +45,10 @@ public:
     AlbumItemHandler();
     virtual ~AlbumItemHandler();
     
-    virtual KURL::List allItems() = 0;
-    virtual KURL::List selectedItems() = 0;
+    virtual KUrl::List allItems() = 0;
+    virtual KUrl::List selectedItems() = 0;
     virtual void refresh() = 0;
-    virtual void refreshItems(const KURL::List& items) = 0;
+    virtual void refreshItems(const KUrl::List& items) = 0;
 
 protected:
 

@@ -47,7 +47,7 @@ DatabaseParameters::DatabaseParameters(const QString &type,
 {
 }
 
-DatabaseParameters::DatabaseParameters(const KURL &url)
+DatabaseParameters::DatabaseParameters(const KUrl &url)
     : port(-1)
 {
     databaseType   = url.queryItem("databaseType");
@@ -91,11 +91,11 @@ DatabaseParameters DatabaseParameters::parametersForSQLite(const QString &databa
 DatabaseParameters DatabaseParameters::parametersForSQLiteDefaultFile(const QString &directory)
 {
     QString filePath = directory + '/' + "digikam3.db";
-    filePath = QDir::cleanDirPath(filePath);
+    filePath = QDir::cleanPath(filePath);
     return parametersForSQLite(filePath);
 }
 
-void DatabaseParameters::insertInUrl(KURL &url) const
+void DatabaseParameters::insertInUrl(KUrl &url) const
 {
     removeFromUrl(url);
 
@@ -113,7 +113,7 @@ void DatabaseParameters::insertInUrl(KURL &url) const
         url.addQueryItem("password", password);
 }
 
-void DatabaseParameters::removeFromUrl(KURL &url)
+void DatabaseParameters::removeFromUrl(KUrl &url)
 {
     url.removeQueryItem("databaseType");
     url.removeQueryItem("databaseName");

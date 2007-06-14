@@ -44,6 +44,7 @@
 #include <kcursor.h>
 #include <kseparator.h>
 #include <kconfig.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -103,11 +104,11 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
 
     QLabel *label1 = new QLabel(i18n("New width:"), gboxSettings);
     m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), gboxSettings);
-    m_newWidthLabel->setAlignment( AlignBottom | AlignRight );
+    m_newWidthLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
     QLabel *label2 = new QLabel(i18n("New height:"), gboxSettings);
     m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"), gboxSettings);
-    m_newHeightLabel->setAlignment( AlignBottom | AlignRight );
+    m_newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
     gridSettings->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
@@ -177,7 +178,7 @@ ImageEffect_FreeRotation::~ImageEffect_FreeRotation()
 
 void ImageEffect_FreeRotation::readUserSettings(void)
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("freerotation Tool Dialog");
     m_angleInput->setValue(config->readNumEntry("Main Angle", 0));
     m_fineAngleInput->setValue(config->readDoubleNumEntry("Fine Angle", 0.0));
@@ -188,7 +189,7 @@ void ImageEffect_FreeRotation::readUserSettings(void)
 
 void ImageEffect_FreeRotation::writeUserSettings(void)
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("freerotation Tool Dialog");
     config->writeEntry("Main Angle", m_angleInput->value());
     config->writeEntry("Fine Angle", m_fineAngleInput->value());
@@ -213,7 +214,7 @@ void ImageEffect_FreeRotation::resetValues()
 
 void ImageEffect_FreeRotation::prepareEffect()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     m_angleInput->setEnabled(false);
     m_fineAngleInput->setEnabled(false);
     m_antialiasInput->setEnabled(false);

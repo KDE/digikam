@@ -43,6 +43,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <q3tl.h>
 
 // Local includes.
 
@@ -74,7 +75,7 @@ public:
         QFont fn = m_popup->font();
         QFontMetrics fm(fn);
         int w = fm.width(m_txt) + 5 + kapp->style().pixelMetric(QStyle::PM_IndicatorWidth, 0);
-        int h = QMAX(fm.height(), m_pix.height());
+        int h = qMax(fm.height(), m_pix.height());
         return QSize( w, h );
     }
 

@@ -79,7 +79,7 @@ public:
 public slots:
 
     void slotEditModeChanged(int mode);
-    void slotSetCurrentTemplate(const KURL& url);
+    void slotSetCurrentTemplate(const KUrl& url);
 
 protected:
 

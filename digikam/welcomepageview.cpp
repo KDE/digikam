@@ -58,14 +58,14 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     setJScriptEnabled(false); // just make this explicit.
     setJavaEnabled(false);    // just make this explicit.
     setMetaRefreshEnabled(false);
-    setURLCursor(KCursor::handCursor());
+    setURLCursor(Qt::PointingHandCursor);
 
     QString location = locate("data", "digikam/about/main.html");
     QString content  = fileToString(location);
     content          = content.arg( locate( "data", "digikam/about/kde_infopage.css" ) );
     content          = content.arg( "" );
     
-    begin(KURL( location ));
+    begin(KUrl( location ));
     
     QString fontSize         = QString::number( 12 );
     QString appTitle         = i18n("digiKam");
@@ -76,15 +76,15 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     end();
     show();
 
-    connect(browserExtension(), SIGNAL(openURLRequest(const KURL &, const KParts::URLArgs &)),
-            this, SLOT(slotUrlOpen(const KURL &)));    
+    connect(browserExtension(), SIGNAL(openURLRequest(const KUrl &, const KParts::URLArgs &)),
+            this, SLOT(slotUrlOpen(const KUrl &)));    
 }
 
 WelcomePageView::~WelcomePageView()
 {
 }
 
-void WelcomePageView::slotUrlOpen(const KURL &url)
+void WelcomePageView::slotUrlOpen(const KUrl &url)
 {
     KApplication::kApplication()->invokeBrowser(url.url());
 }

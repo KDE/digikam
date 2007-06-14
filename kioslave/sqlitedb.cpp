@@ -64,14 +64,14 @@ void SqliteDB::openDB(const QString& directory)
     QString dbPath = directory + "/digikam3.db";
 
 #ifdef NFS_HACK
-    dbPath = QDir::homeDirPath() + "/.kde/share/apps/digikam/"  +
-             KIO::encodeFileName(QDir::cleanDirPath(dbPath));
+    dbPath = QDir::homePath() + "/.kde/share/apps/digikam/"  +
+             KIO::encodeFileName(QDir::cleanPath(dbPath));
 #endif
 
     sqlite3_open(QFile::encodeName(dbPath), &m_db);
     if (m_db == 0)
     {
-        kdWarning() << "Cannot open database: "
+        kWarning() << "Cannot open database: "
                     << sqlite3_errmsg(m_db)
                     << endl;
     }
@@ -90,11 +90,11 @@ bool SqliteDB::execSql(const QString& sql, QStringList* const values,
                        QString* errMsg, bool debug ) const
 {
     if ( debug )
-        kdDebug() << "SQL-query: " << sql << endl;
+        kDebug() << "SQL-query: " << sql << endl;
 
     if ( !m_db )
     {
-        kdWarning() << k_funcinfo << "SQLite pointer == NULL"
+        kWarning() << k_funcinfo << "SQLite pointer == NULL"
                     << endl;
         if (errMsg)
         {
@@ -111,7 +111,7 @@ bool SqliteDB::execSql(const QString& sql, QStringList* const values,
     error = sqlite3_prepare(m_db, sql.utf8(), -1, &stmt, &tail);
     if ( error != SQLITE_OK )
     {
-        kdWarning() << k_funcinfo
+        kWarning() << k_funcinfo
                     << "sqlite_compile error: "
                     << sqlite3_errmsg(m_db)
                     << " on query: "
@@ -146,7 +146,7 @@ bool SqliteDB::execSql(const QString& sql, QStringList* const values,
 
     if ( error != SQLITE_DONE )
     {
-        kdWarning() << "sqlite_step error: "
+        kWarning() << "sqlite_step error: "
                     << sqlite3_errmsg( m_db )
                     << " on query: "
                     << sql << endl;

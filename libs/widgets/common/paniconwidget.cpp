@@ -234,7 +234,7 @@ void PanIconWidget::setMouseFocus()
     d->xpos          = m_localRegionSelection.center().x();
     d->ypos          = m_localRegionSelection.center().y();
     d->moveSelection = true;
-    setCursor( KCursor::sizeAllCursor() );           
+    setCursor( Qt::SizeAllCursor );           
     emit signalSelectionTakeFocus();
 }
 
@@ -245,7 +245,7 @@ void PanIconWidget::hideEvent(QHideEvent *e)
     if ( d->moveSelection )
     {    
         d->moveSelection = false;
-        setCursor( KCursor::arrowCursor() );           
+        setCursor( Qt::ArrowCursor );           
         emit signalHiden();  
     }
 }
@@ -258,7 +258,7 @@ void PanIconWidget::mousePressEvent ( QMouseEvent * e )
         d->xpos          = e->x();
         d->ypos          = e->y();
         d->moveSelection = true;
-        setCursor( KCursor::sizeAllCursor() );           
+        setCursor( Qt::SizeAllCursor );           
         emit signalSelectionTakeFocus();
     }
 }
@@ -298,9 +298,9 @@ void PanIconWidget::mouseMoveEvent ( QMouseEvent * e )
     else 
     {
         if ( m_localRegionSelection.contains( e->x(), e->y() ) )
-            setCursor( KCursor::handCursor() );           
+            setCursor( Qt::PointingHandCursor );           
         else
-            setCursor( KCursor::arrowCursor() );           
+            setCursor( Qt::ArrowCursor );           
     }
 }
 
@@ -309,7 +309,7 @@ void PanIconWidget::mouseReleaseEvent ( QMouseEvent * )
     if ( d->moveSelection )
     {    
         d->moveSelection = false;
-        setCursor( KCursor::arrowCursor() );           
+        setCursor( Qt::ArrowCursor );           
         regionSelectionMoved(true);
     }
 }

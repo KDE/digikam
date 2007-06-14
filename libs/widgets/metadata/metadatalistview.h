@@ -35,7 +35,7 @@
 
 // KDE includes.
 
-#include <klistview.h>
+#include <k3listview.h>
 
 // Local includes.
 
@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT MetadataListView : public KListView
+class DIGIKAM_EXPORT MetadataListView : public K3ListView
 {
     Q_OBJECT
 

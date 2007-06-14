@@ -42,7 +42,7 @@ NameFilter::NameFilter(const QString &filter)
     QStringList list = QStringList::split( sep, filter );
     QStringList::Iterator it = list.begin();
     while ( it != list.end() ) {
-        m_filterList << QRegExp( (*it).stripWhiteSpace(), false, true );
+        m_filterList << QRegExp( (*it).trimmed(), false, true );
         ++it;
     }
 }

@@ -216,7 +216,7 @@ int ImageLevels::levelsInputFromColor(int channel, DColor color)
     switch (channel)
     {
        case ImageHistogram::ValueChannel:
-          return QMAX (QMAX (color.Qt::red(), color.Qt::green()), color.Qt::blue());
+          return qMax (qMax (color.Qt::red(), color.Qt::green()), color.Qt::blue());
        
        case ImageHistogram::RedChannel:
           return color.Qt::red();
@@ -565,9 +565,9 @@ int ImageLevels::getLevelHighOutputValue(int Channel)
     return 0;
 }
 
-bool ImageLevels::loadLevelsFromGimpLevelsFile(KURL fileUrl)
+bool ImageLevels::loadLevelsFromGimpLevelsFile(KUrl fileUrl)
 {
-    // TODO : support KURL !
+    // TODO : support KUrl !
     
     FILE   *file;
     int     low_input[5];
@@ -641,9 +641,9 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(KURL fileUrl)
     return true;
 }
 
-bool ImageLevels::saveLevelsToGimpLevelsFile(KURL fileUrl)
+bool ImageLevels::saveLevelsToGimpLevelsFile(KUrl fileUrl)
 {
-    // TODO : support KURL !
+    // TODO : support KUrl !
   
     FILE *file;
     int   i;

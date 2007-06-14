@@ -153,8 +153,8 @@ signals:
 
 protected slots:
 
-    void slotGotThumbnailFromIcon(const KURL&, const QPixmap&);
-    void slotThumbnailLost(const KURL&);
+    void slotGotThumbnailFromIcon(const KUrl&, const QPixmap&);
+    void slotThumbnailLost(const KUrl&);
     void slotIconChanged(Album* album);
 
 protected:
@@ -168,7 +168,7 @@ private:
     AlbumThumbnailLoaderPrivate *d;
     static AlbumThumbnailLoader *m_instance;
 
-    void addURL(Album *album, const KURL &url);
+    void addUrl(Album *album, const KUrl &url);
     QPixmap loadIcon(const QString &name, int size = 0);
     QPixmap createTagThumbnail(const QPixmap &albumThumbnail);
     int computeIconSize(RelativeSize size);

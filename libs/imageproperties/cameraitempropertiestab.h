@@ -56,7 +56,7 @@ public:
     void setCurrentItem(const GPItemInfo* itemInfo=0,
                         const QString &newFileName=QString(),
                         const QByteArray& exifData=QByteArray(),
-                        const KURL &currentURL = KURL());
+                        const KUrl &currentURL = KUrl());
     void colorChanged(const QColor& back, const QColor& fore);
 
 private:

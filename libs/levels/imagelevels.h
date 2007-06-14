@@ -89,8 +89,8 @@ public:
 
     // Methods for to save/load the levels values to/from a Gimp levels text file.        
     
-    bool   saveLevelsToGimpLevelsFile(KURL fileUrl);
-    bool   loadLevelsFromGimpLevelsFile(KURL fileUrl);
+    bool   saveLevelsToGimpLevelsFile(KUrl fileUrl);
+    bool   loadLevelsFromGimpLevelsFile(KUrl fileUrl);
 
 private:
 

@@ -48,6 +48,7 @@
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 #include <kconfig.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -318,7 +319,7 @@ void ImageEffect_NoiseReduction::renderingFinished()
 
 void ImageEffect_NoiseReduction::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("noisereduction Tool Dialog");
     m_radiusInput->setEnabled(true);
     m_lumToleranceInput->setEnabled(true);
@@ -356,7 +357,7 @@ void ImageEffect_NoiseReduction::readUserSettings()
 
 void ImageEffect_NoiseReduction::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("noisereduction Tool Dialog");
     config->writeEntry("RadiusAjustment", m_radiusInput->value());
     config->writeEntry("LumToleranceAjustment", m_lumToleranceInput->value());
@@ -479,7 +480,7 @@ void ImageEffect_NoiseReduction::putFinalData(void)
 
 void ImageEffect_NoiseReduction::slotUser3()
 {
-    KURL loadRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    KUrl loadRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Photograph Noise Reduction Settings File to Load")) );
     if( loadRestorationFile.isEmpty() )
@@ -521,7 +522,7 @@ void ImageEffect_NoiseReduction::slotUser3()
 
 void ImageEffect_NoiseReduction::slotUser2()
 {
-    KURL saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    KUrl saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Photograph Noise Reduction Settings File to Save")) );
     if( saveRestorationFile.isEmpty() )

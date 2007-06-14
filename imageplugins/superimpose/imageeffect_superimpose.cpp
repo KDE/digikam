@@ -46,7 +46,7 @@
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstandarddirs.h>
 #include <kprogress.h>
 #include <knuminput.h>
@@ -55,6 +55,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kglobalsettings.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -99,7 +100,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    Q3Frame *frame = new Q3Frame(plainPage());
+    QFrame *frame = new Q3Frame(plainPage());
     frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
 
     Q3GridLayout* gridFrame = new Q3GridLayout( frame, 1, 2, spacingHint());
@@ -163,11 +164,11 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     connect(bGroup, SIGNAL(released(int)),
             m_previewWidget, SLOT(slotEditModeChanged(int)));
     
-    connect(m_thumbnailsBar, SIGNAL(signalURLSelected(const KURL&)),
-            m_previewWidget, SLOT(slotSetCurrentTemplate(const KURL&)));            
+    connect(m_thumbnailsBar, SIGNAL(signalURLSelected(const KUrl&)),
+            m_previewWidget, SLOT(slotSetCurrentTemplate(const KUrl&)));            
 
-    connect(m_dirSelect, SIGNAL(folderItemSelected(const KURL &)),
-            this, SLOT(slotTemplateDirChanged(const KURL &)));
+    connect(m_dirSelect, SIGNAL(folderItemSelected(const KUrl &)),
+            this, SLOT(slotTemplateDirChanged(const KUrl &)));
     
     connect(templateDirButton, SIGNAL(clicked()),
             this, SLOT(slotRootTemplateDirChanged()));
@@ -204,16 +205,16 @@ void ImageEffect_SuperImpose::populateTemplates(void)
 
     while( (fi = it.current() ) )
     {
-        new Digikam::ThumbBarItem( m_thumbnailsBar, KURL(fi->filePath()) );
+        new Digikam::ThumbBarItem( m_thumbnailsBar, KUrl(fi->filePath()) );
         ++it;
     }
 }
 
 void ImageEffect_SuperImpose::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("Album Settings");
-    KURL albumDBUrl( config->readPathEntry("Album Path", KGlobalSettings::documentPath()) );
+    KUrl albumDBUrl( config->readPathEntry("Album Path", KGlobalSettings::documentPath()) );
     config->setGroup("superimpose Tool Dialog");
     config->setGroup("Template Superimpose Tool Settings");
     m_templatesRootUrl.setPath( config->readEntry("Templates Root URL", albumDBUrl.path()) );
@@ -223,7 +224,7 @@ void ImageEffect_SuperImpose::readUserSettings()
 
 void ImageEffect_SuperImpose::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("superimpose Tool Dialog");
     config->writeEntry( "Templates Root URL", m_dirSelect->rootPath().path() );
     config->writeEntry( "Templates URL", m_templatesUrl.path() );
@@ -236,7 +237,7 @@ void ImageEffect_SuperImpose::resetValues()
 
 void ImageEffect_SuperImpose::slotRootTemplateDirChanged(void)
 {
-    KURL url = KFileDialog::getExistingDirectory(m_templatesRootUrl.path(), kapp->activeWindow(),
+    KUrl url = KFileDialog::getExistingDirectory(m_templatesRootUrl.path(), kapp->activeWindow(),
                                                  i18n("Select Template Root Directory to Use"));
 
     if( url.isValid() )
@@ -248,7 +249,7 @@ void ImageEffect_SuperImpose::slotRootTemplateDirChanged(void)
     }
 }
 
-void ImageEffect_SuperImpose::slotTemplateDirChanged(const KURL& url)
+void ImageEffect_SuperImpose::slotTemplateDirChanged(const KUrl& url)
 {
     if( url.isValid() )
     {
@@ -259,7 +260,7 @@ void ImageEffect_SuperImpose::slotTemplateDirChanged(const KURL& url)
 
 void ImageEffect_SuperImpose::finalRendering()
 {
-    setCursor(KCursor::waitCursor());
+    setCursor(Qt::WaitCursor);
     m_previewWidget->setEnabled(false);
     m_dirSelect->setEnabled(false);
     m_thumbnailsBar->setEnabled(false);

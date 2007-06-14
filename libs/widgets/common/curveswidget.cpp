@@ -200,7 +200,7 @@ void CurvesWidget::customEvent(QCustomEvent *event)
 
     if (ed->starting)
     {
-        setCursor( KCursor::waitCursor() );
+        setCursor( Qt::WaitCursor );
         d->clearFlag = CurvesWidgetPriv::HistogramStarted;
         d->blinkTimer->start( 200 );
         repaint(false);
@@ -213,14 +213,14 @@ void CurvesWidget::customEvent(QCustomEvent *event)
             d->clearFlag = CurvesWidgetPriv::HistogramCompleted;
             d->blinkTimer->stop();
             repaint(false);
-            setCursor( KCursor::arrowCursor() );    
+            setCursor( Qt::ArrowCursor );    
         }
         else
         {
             d->clearFlag = CurvesWidgetPriv::HistogramFailed;
             d->blinkTimer->stop();
             repaint(false);
-            setCursor( KCursor::arrowCursor() );    
+            setCursor( Qt::ArrowCursor );    
             emit signalHistogramComputationFailed();
         }
     }
@@ -492,7 +492,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
             break;
              
          case CurvesWidget::ValueHistogram:    
-            guidePos = QMAX(QMAX(d->colorGuide.Qt::red(), d->colorGuide.Qt::green()), d->colorGuide.Qt::blue());
+            guidePos = qMax(qMax(d->colorGuide.Qt::red(), d->colorGuide.Qt::green()), d->colorGuide.Qt::blue());
             break;
 
          default:                                     // Alpha.
@@ -578,7 +578,7 @@ void CurvesWidget::mousePressEvent ( QMouseEvent * e )
    if (distance > 8)
       closest_point = (x + delta/2) / delta;
    
-   setCursor( KCursor::crossCursor() );
+   setCursor( Qt::CrossCursor );
 
    switch( d->curves->getCurveType(m_channelType) )
    {
@@ -636,7 +636,7 @@ void CurvesWidget::mouseReleaseEvent ( QMouseEvent * e )
    if (e->button() != Qt::LeftButton || d->clearFlag == CurvesWidgetPriv::HistogramStarted)
       return;
    
-   setCursor( KCursor::arrowCursor() );    
+   setCursor( Qt::ArrowCursor );    
    d->grabPoint = -1;
    d->curves->curvesCalculateCurve(m_channelType);
    repaint(false);
@@ -685,13 +685,13 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
          if (d->grabPoint == -1)   // If no point is grabbed...
          {
             if ( d->curves->getCurvePointX(m_channelType, closest_point) != -1 )
-               setCursor( KCursor::arrowCursor() );    
+               setCursor( Qt::ArrowCursor );    
             else
-               setCursor( KCursor::crossCursor() );
+               setCursor( Qt::CrossCursor );
          }
          else                      // Else, drag the grabbed point
          {
-            setCursor( KCursor::crossCursor() );
+            setCursor( Qt::CrossCursor );
  
             d->curves->setCurvePointX(m_channelType, d->grabPoint, -1);
             

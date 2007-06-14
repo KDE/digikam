@@ -43,8 +43,8 @@
 #include "photoinfocontainer.h"
 #include "digikam_export.h"
 
-#define MAX3(a, b, c) (QMAX(QMAX(a,b),b))
-#define MIN3(a, b, c) (QMIN(QMIN(a,b),b))
+#define MAX3(a, b, c) (qMax(qMax(a,b),b))
+#define MIN3(a, b, c) (qMin(qMin(a,b),b))
 #define ROUND(x) ((int) ((x) + 0.5))
 
 class QPaintDevice;

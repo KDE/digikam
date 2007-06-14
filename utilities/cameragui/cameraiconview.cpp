@@ -42,7 +42,7 @@
 
 // KDE includes.
 
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kurldrag.h>
 #include <kmimetype.h>
 #include <klocale.h>
@@ -430,7 +430,7 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
 
     CameraIconViewItem* camItem = static_cast<CameraIconViewItem*>(item);
     
-    KPopupMenu menu(this);
+    KMenu menu(this);
     menu.insertTitle(SmallIcon("digikam"), d->cameraUI->cameraTitle());
     menu.insertItem(SmallIcon("editimage"), i18n("&View"), 0);
     menu.insertSeparator(-1);
@@ -530,7 +530,7 @@ void CameraIconView::contentsDropEvent(QDropEvent *event)
         return;
     }
 
-    KURL::List srcURLs;
+    KUrl::List srcURLs;
     KURLDrag::decode(event, srcURLs);
     uploadItemPopupMenu(srcURLs);
 }
@@ -545,14 +545,14 @@ void CameraIconView::slotRightButtonClicked(const QPoint&)
     if(!data || !Q3UriDrag::canDecode(data))
         return;
 
-    KURL::List srcURLs;
+    KUrl::List srcURLs;
     KURLDrag::decode(data, srcURLs);
     uploadItemPopupMenu(srcURLs);
 }
 
-void CameraIconView::uploadItemPopupMenu(const KURL::List& srcURLs)
+void CameraIconView::uploadItemPopupMenu(const KUrl::List& srcURLs)
 {
-    KPopupMenu popMenu(this);
+    KMenu popMenu(this);
     popMenu.insertTitle(SmallIcon("digikam"), d->cameraUI->cameraTitle());
     popMenu.insertItem( SmallIcon("goto"), i18n("&Upload into camera"), 10 );
     popMenu.insertSeparator(-1);
@@ -613,7 +613,7 @@ void CameraIconView::updateItemRectsPixmap()
     QFont fn(font());
     if (fn.pointSize() > 0)
     {
-        fn.setPointSize(QMAX(fn.pointSize()-2, 6));
+        fn.setPointSize(qMax(fn.pointSize()-2, 6));
     }
 
     fm = QFontMetrics(fn);
@@ -624,7 +624,7 @@ void CameraIconView::updateItemRectsPixmap()
     extraRect.setHeight(r.height());
 
     r = QRect();
-    r.setWidth(QMAX(QMAX(pixRect.width(), textRect.width()), extraRect.width()) + 4);
+    r.setWidth(qMax(qMax(pixRect.width(), textRect.width()), extraRect.width()) + 4);
     r.setHeight(pixRect.height() + textRect.height() + extraRect.height() + 4);
 
     d->itemRect = r;

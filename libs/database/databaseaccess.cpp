@@ -141,7 +141,7 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
     //TODO: remove when albumRoot is removed
     if (d->parameters.databaseType == "QSQLITE")
     {
-        KURL url;
+        KUrl url;
         url.setPath(d->parameters.databaseName);
         d->albumRoot = url.directory(true);
     }

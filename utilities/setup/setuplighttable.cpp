@@ -41,8 +41,9 @@
 #include <knuminput.h>
 #include <kconfig.h>
 #include <kapplication.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <ktrader.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -114,7 +115,7 @@ SetupLightTable::~SetupLightTable()
 
 void SetupLightTable::readSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     QColor Black(Qt::black);
     QColor White(Qt::white);
     config->setGroup("LightTable Settings");
@@ -126,7 +127,7 @@ void SetupLightTable::readSettings()
 
 void SetupLightTable::applySettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("LightTable Settings");
     config->writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
     config->writeEntry("Auto Sync Preview", d->autoSyncPreview->isChecked());

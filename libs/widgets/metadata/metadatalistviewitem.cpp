@@ -35,16 +35,16 @@
 namespace Digikam
 {
 
-MetadataListViewItem::MetadataListViewItem(KListViewItem *parent, const QString& key,
+MetadataListViewItem::MetadataListViewItem(K3ListViewItem *parent, const QString& key,
                                            const QString& title, const QString& value)
-                    : KListViewItem(parent)
+                    : K3ListViewItem(parent)
 {
     m_key = key;
     
     setSelectable(true);
     setText(0, title);
  
-    QString tagVal = value.simplifyWhiteSpace();   
+    QString tagVal = value.simplified();   
     if (tagVal.length() > 128)
     {
         tagVal.truncate(128);
@@ -83,7 +83,7 @@ void MetadataListViewItem::paintCell(QPainter* p, const QColorGroup& cg,
         p->setFont(fn);
     }
     
-    KListViewItem::paintCell(p, cg, column, width, align);
+    K3ListViewItem::paintCell(p, cg, column, width, align);
 
     if (column == 0)
         p->restore();

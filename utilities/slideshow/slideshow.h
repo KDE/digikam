@@ -54,7 +54,7 @@ public:
     SlideShow(const SlideShowSettings& settings);
     ~SlideShow();
 
-    void setCurrent(const KURL& url);
+    void setCurrent(const KUrl& url);
 
 protected:
 

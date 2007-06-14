@@ -72,7 +72,7 @@ public:
     SearchResultsView *resultsView;
 };
 
-SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
+SearchQuickDialog::SearchQuickDialog(QWidget* parent, KUrl& url)
                  : KDialogBase(Plain, i18n("Quick Search"), Help|Ok|Cancel, Ok, 
                                parent, 0, true, true), m_url(url)
 {
@@ -109,7 +109,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotTimeOut()));
 
-    enableButtonOK(false);
+    enableButtonOk(false);
     resize(configDialogSize("QuickSearch Dialog"));
 
     // check if we are being passed a valid url
@@ -148,13 +148,13 @@ void SearchQuickDialog::slotTimeOut()
     if (d->searchEdit->text().isEmpty())
     {
         d->resultsView->clear();
-        enableButtonOK(false);
+        enableButtonOk(false);
         return;
     }
 
-    enableButtonOK(true);
+    enableButtonOk(true);
     
-    KURL url;
+    KUrl url;
     url.setProtocol("digikamsearch");
 
     QString path, num;

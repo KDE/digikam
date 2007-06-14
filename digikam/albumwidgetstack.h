@@ -35,7 +35,7 @@
 
 #include "digikam_export.h"
 
-class KURL::List;
+class KUrl::List;
 
 namespace Digikam
 {
@@ -98,7 +98,7 @@ signals:
 public slots:
 
     void slotEscapePreview();
-    void slotItemsUpdated(const KURL::List&);
+    void slotItemsUpdated(const KUrl::List&);
 
 private slots: 
 

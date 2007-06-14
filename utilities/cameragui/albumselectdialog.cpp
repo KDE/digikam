@@ -90,7 +90,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 {
     d = new AlbumSelectDialogPrivate;
     setHelp("targetalbumdialog.anchor", "digikam");
-    enableButtonOK(false);
+    enableButtonOk(false);
 
     d->allowRootSelection = allowRootSelection;
     d->newAlbumString     = newAlbumString;
@@ -252,11 +252,11 @@ void AlbumSelectDialog::slotSelectionChanged()
     if (!selItem || (selItem == d->folderView->firstChild()) &&
         !d->allowRootSelection)
     {
-        enableButtonOK(false);
+        enableButtonOk(false);
         return;
     }
 
-    enableButtonOK(true);
+    enableButtonOk(true);
 }
 
 void AlbumSelectDialog::slotContextMenu(Q3ListViewItem *, const QPoint &, int)
@@ -287,7 +287,7 @@ void AlbumSelectDialog::slotUser1()
     QString newAlbumName = KInputDialog::getText(i18n("New Album Name"),
                                                  i18n("Creating new album in '%1'\n"
                                                       "Enter album name:")
-                                                 .arg(album->prettyURL()),
+                                                 .arg(album->prettyUrl()),
                                                  d->newAlbumString, &ok, this);
     if (!ok)
         return;

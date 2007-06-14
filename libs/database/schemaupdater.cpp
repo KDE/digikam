@@ -308,7 +308,7 @@ bool SchemaUpdater::copyV3toV4(const QString &digikam3DBPath, const QString &cur
 {
     m_access->backend()->close();
 
-    KURL digikam3DBUrl, currentDBUrl;
+    KUrl digikam3DBUrl, currentDBUrl;
     digikam3DBUrl.setPath(digikam3DBPath);
     currentDBUrl.setPath(currentDBPath);
 

@@ -37,7 +37,7 @@
 #include <kedittoolbar.h>
 #include <kdeversion.h>
 #include <klocale.h>
-#include <kwin.h>
+#include <kwindowsystem.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -47,6 +47,7 @@
 // LibKDcraw includes.
 
 #include <libkdcraw/dcrawbinary.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -128,7 +129,7 @@ LightTableWindow::~LightTableWindow()
 
 void LightTableWindow::readSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("LightTable Settings");
 
     if(config->hasKey("Vertical Splitter Sizes"))
@@ -143,7 +144,7 @@ void LightTableWindow::readSettings()
 
 void LightTableWindow::writeSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("LightTable Settings");
     config->writeEntry("Vertical Splitter Sizes", d->vSplitter->sizes());
     config->writeEntry("Horizontal Splitter Sizes", d->hSplitter->sizes());
@@ -153,7 +154,7 @@ void LightTableWindow::writeSettings()
 
 void LightTableWindow::applySettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("LightTable Settings");
 
     d->autoLoadOnRightPanel  = config->readBoolEntry("Auto Load Right Panel",   true);
@@ -315,109 +316,109 @@ void LightTableWindow::setupActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
-    d->backwardAction = KStdAction::back(this, SLOT(slotBackward()),
+    d->backwardAction = KStandardAction::back(this, SLOT(slotBackward()),
                                     actionCollection(), "lighttable_backward");
     d->backwardAction->setEnabled(false);
 
-    d->forwardAction = KStdAction::forward(this, SLOT(slotForward()),
+    d->forwardAction = KStandardAction::forward(this, SLOT(slotForward()),
                                    actionCollection(), "lighttable_forward");
     d->forwardAction->setEnabled(false);
 
     d->firstAction = new KAction(i18n("&First"), "start",
-                                 KStdAccel::shortcut( KStdAccel::Home),
+                                 KStandardShortcut::shortcut( KStandardShortcut::Home),
                                  this, SLOT(slotFirst()),
                                  actionCollection(), "lighttable_first");
     d->firstAction->setEnabled(false);
 
     d->lastAction = new KAction(i18n("&Last"), "finish",
-                                KStdAccel::shortcut( KStdAccel::End),
+                                KStandardShortcut::shortcut( KStandardShortcut::End),
                                 this, SLOT(slotLast()),
                                 actionCollection(), "lighttable_last");
     d->lastAction->setEnabled(false);
 
     d->setItemLeftAction = new KAction(i18n("Show item on left panel"), "previous",
-                                       CTRL+Key_L, this, SLOT(slotSetItemLeft()),
+                                       CTRL+Qt::Key_L, this, SLOT(slotSetItemLeft()),
                                        actionCollection(), "lighttable_setitemleft");
     d->setItemLeftAction->setEnabled(false);
 
     d->setItemRightAction = new KAction(i18n("Show item on right panel"), "next",
-                                       CTRL+Key_R, this, SLOT(slotSetItemRight()),
+                                       CTRL+Qt::Key_R, this, SLOT(slotSetItemRight()),
                                        actionCollection(), "lighttable_setitemright");
     d->setItemRightAction->setEnabled(false);
 
     d->editItemAction = new KAction(i18n("Edit"), "editimage",
-                                       Key_F4, this, SLOT(slotEditItem()),
+                                       Qt::Key_F4, this, SLOT(slotEditItem()),
                                        actionCollection(), "lighttable_edititem");
     d->editItemAction->setEnabled(false);
 
     d->removeItemAction = new KAction(i18n("Remove item"), "fileclose",
-                                       CTRL+Key_K, this, SLOT(slotRemoveItem()),
+                                       CTRL+Qt::Key_K, this, SLOT(slotRemoveItem()),
                                        actionCollection(), "lighttable_removeitem");
     d->removeItemAction->setEnabled(false);
 
     d->clearListAction = new KAction(i18n("Clear all items"), "editshred",
-                                     CTRL+SHIFT+Key_K, this, SLOT(slotClearItemsList()),
+                                     CTRL+SHIFT+Qt::Key_K, this, SLOT(slotClearItemsList()),
                                      actionCollection(), "lighttable_clearlist");
     d->clearListAction->setEnabled(false);
 
     d->fileDeleteAction = new KAction(i18n("Move to Trash"), "edittrash",
-                                     Key_Delete,
+                                     Qt::Key_Delete,
                                      this, SLOT(slotDeleteItem()),
                                      actionCollection(), "lighttable_filedelete");
     d->fileDeleteAction->setEnabled(false);
 
-    KStdAction::close(this, SLOT(close()), actionCollection(), "lighttable_close");
+    KStandardAction::close(this, SLOT(close()), actionCollection(), "lighttable_close");
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
     d->syncPreviewAction = new KToggleAction(i18n("Synchronize Preview"), "goto",
-                                            CTRL+SHIFT+Key_Y, this,
+                                            CTRL+SHIFT+Qt::Key_Y, this,
                                             SLOT(slotToggleSyncPreview()),
                                             actionCollection(), "lighttable_syncpreview");
     d->syncPreviewAction->setEnabled(false);
 
     d->navigateByPairAction = new KToggleAction(i18n("Navigate by Pair"), "kcmsystem",
-                                            CTRL+SHIFT+Key_P, this,
+                                            CTRL+SHIFT+Qt::Key_P, this,
                                             SLOT(slotToggleNavigateByPair()),
                                             actionCollection(), "lighttable_navigatebypair");
     d->navigateByPairAction->setEnabled(false);
 
-    d->zoomPlusAction = KStdAction::zoomIn(d->previewView, SLOT(slotIncreaseZoom()),
+    d->zoomPlusAction = KStandardAction::zoomIn(d->previewView, SLOT(slotIncreaseZoom()),
                                           actionCollection(), "lighttable_zoomplus");
     d->zoomPlusAction->setEnabled(false);
 
-    d->zoomMinusAction = KStdAction::zoomOut(d->previewView, SLOT(slotDecreaseZoom()),
+    d->zoomMinusAction = KStandardAction::zoomOut(d->previewView, SLOT(slotDecreaseZoom()),
                                              actionCollection(), "lighttable_zoomminus");
     d->zoomMinusAction->setEnabled(false);
 
     d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), "viewmag1",
-                                       ALT+CTRL+Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0.
+                                       ALT+CTRL+Qt::Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0.
                                        this, SLOT(slotZoomTo100Percents()),
                                        actionCollection(), "lighttable_zoomto100percents");
 
     d->zoomFitToWindowAction = new KAction(i18n("Fit to &Window"), "view_fit_window",
-                                           CTRL+SHIFT+Key_E, this, SLOT(slotFitToWindow()),
+                                           CTRL+SHIFT+Qt::Key_E, this, SLOT(slotFitToWindow()),
                                            actionCollection(), "lighttable_zoomfit2window");
 
 #if KDE_IS_VERSION(3,2,0)
-    d->fullScreenAction = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
+    d->fullScreenAction = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()),
                                                  actionCollection(), this, "lighttable_fullscreen");
 #else
     d->fullScreenAction = new KToggleAction(i18n("Fullscreen"), "window_fullscreen",
-                                            CTRL+SHIFT+Key_F, this,
+                                            CTRL+SHIFT+Qt::Key_F, this,
                                             SLOT(slotToggleFullScreen()),
                                             actionCollection(), "lighttable_fullscreen");
 #endif
 
-    d->slideShowAction = new KAction(i18n("Slide Show"), "slideshow", Key_F9,
+    d->slideShowAction = new KAction(i18n("Slide Show"), "slideshow", Qt::Key_F9,
                                      this, SLOT(slotToggleSlideShow()),
                                      actionCollection(),"lighttable_slideshow");
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
-    KStdAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
-    KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
-    KStdAction::preferences(this, SLOT(slotSetup()),              actionCollection());
+    KStandardAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
+    KStandardAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
+    KStandardAction::preferences(this, SLOT(slotSetup()),              actionCollection());
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
@@ -436,22 +437,22 @@ void LightTableWindow::setupActions()
 
     // -- Rating actions ---------------------------------------------------------------
 
-    d->star0 = new KAction(i18n("Assign Rating \"No Star\""), CTRL+Key_0,
+    d->star0 = new KAction(i18n("Assign Rating \"No Star\""), CTRL+Qt::Key_0,
                           d->barView, SLOT(slotAssignRatingNoStar()),
                           actionCollection(), "lighttable_ratenostar");
-    d->star1 = new KAction(i18n("Assign Rating \"One Star\""), CTRL+Key_1,
+    d->star1 = new KAction(i18n("Assign Rating \"One Star\""), CTRL+Qt::Key_1,
                           d->barView, SLOT(slotAssignRatingOneStar()),
                           actionCollection(), "lighttable_rateonestar");
-    d->star2 = new KAction(i18n("Assign Rating \"Two Stars\""), CTRL+Key_2,
+    d->star2 = new KAction(i18n("Assign Rating \"Two Stars\""), CTRL+Qt::Key_2,
                           d->barView, SLOT(slotAssignRatingTwoStar()),
                           actionCollection(), "lighttable_ratetwostar");
-    d->star3 = new KAction(i18n("Assign Rating \"Three Stars\""), CTRL+Key_3,
+    d->star3 = new KAction(i18n("Assign Rating \"Three Stars\""), CTRL+Qt::Key_3,
                           d->barView, SLOT(slotAssignRatingThreeStar()),
                           actionCollection(), "lighttable_ratethreestar");
-    d->star4 = new KAction(i18n("Assign Rating \"Four Stars\""), CTRL+Key_4,
+    d->star4 = new KAction(i18n("Assign Rating \"Four Stars\""), CTRL+Qt::Key_4,
                           d->barView, SLOT(slotAssignRatingFourStar()),
                           actionCollection(), "lighttable_ratefourstar");
-    d->star5 = new KAction(i18n("Assign Rating \"Five Stars\""), CTRL+Key_5,
+    d->star5 = new KAction(i18n("Assign Rating \"Five Stars\""), CTRL+Qt::Key_5,
                           d->barView, SLOT(slotAssignRatingFiveStar()),
                           actionCollection(), "lighttable_ratefivestar");
 
@@ -466,37 +467,37 @@ void LightTableWindow::setupAccelerators()
 
     d->accelerators->insert("Exit fullscreen", i18n("Exit Fullscreen mode"),
                     i18n("Exit from fullscreen viewing mode"),
-                    Key_Escape, this, SLOT(slotEscapePressed()),
+                    Qt::Key_Escape, this, SLOT(slotEscapePressed()),
                     false, true);
 
-    d->accelerators->insert("Next Image Key_Space", i18n("Next Image"),
+    d->accelerators->insert("Next Image Qt::Key_Space", i18n("Next Image"),
                     i18n("Load Next Image"),
-                    Key_Space, this, SLOT(slotForward()),
+                    Qt::Key_Space, this, SLOT(slotForward()),
                     false, true);
 
-    d->accelerators->insert("Previous Image Key_Backspace", i18n("Previous Image"),
+    d->accelerators->insert("Previous Image Qt::Key_Backspace", i18n("Previous Image"),
                     i18n("Load Previous Image"),
-                    Key_Backspace, this, SLOT(slotBackward()),
+                    Qt::Key_Backspace, this, SLOT(slotBackward()),
                     false, true);
 
-    d->accelerators->insert("Next Image Key_Next", i18n("Next Image"),
+    d->accelerators->insert("Next Image Qt::Key_Next", i18n("Next Image"),
                     i18n("Load Next Image"),
-                    Key_Next, this, SLOT(slotForward()),
+                    Qt::Key_Next, this, SLOT(slotForward()),
                     false, true);
 
-    d->accelerators->insert("Previous Image Key_Prior", i18n("Previous Image"),
+    d->accelerators->insert("Previous Image Qt::Key_Prior", i18n("Previous Image"),
                     i18n("Load Previous Image"),
-                    Key_Prior, this, SLOT(slotBackward()),
+                    Qt::Key_Prior, this, SLOT(slotBackward()),
                     false, true);
 
-    d->accelerators->insert("Zoom Plus Key_Plus", i18n("Zoom in"),
+    d->accelerators->insert("Zoom Plus Qt::Key_Plus", i18n("Zoom in"),
                     i18n("Zoom in on image"),
-                    Key_Plus, d->previewView, SLOT(slotIncreaseZoom()),
+                    Qt::Key_Plus, d->previewView, SLOT(slotIncreaseZoom()),
                     false, true);
     
-    d->accelerators->insert("Zoom Plus Key_Minus", i18n("Zoom out"),
+    d->accelerators->insert("Zoom Plus Qt::Key_Minus", i18n("Zoom out"),
                     i18n("Zoom out of image"),
-                    Key_Minus, d->previewView, SLOT(slotDecreaseZoom()),
+                    Qt::Key_Minus, d->previewView, SLOT(slotDecreaseZoom()),
                     false, true);
 }
 
@@ -546,7 +547,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
     // if window is iconified, show it
     if (isMinimized())
     {
-        KWin::deIconifyWindow(winId());
+        KWindowSystem::deIconifyWindow(winId());
     }
 
     refreshStatusBar();
@@ -572,11 +573,11 @@ void LightTableWindow::refreshStatusBar()
     }  
 }
 
-void LightTableWindow::slotItemsUpdated(const KURL::List& urls)
+void LightTableWindow::slotItemsUpdated(const KUrl::List& urls)
 {
     d->barView->refreshThumbs(urls);
 
-    for (KURL::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
+    for (KUrl::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
     {
         if (d->previewView->leftImageInfo())
         {
@@ -812,14 +813,14 @@ void LightTableWindow::slotDeleteItem(ImageInfo* info)
     bool ask         = true;
     bool permanently = false;
 
-    KURL u = info->kurl();
+    KUrl u = info->kurl();
     PAlbum *palbum = AlbumManager::instance()->findPAlbum(u.directory());
     if (!palbum)
         return;
 
     // Provide a digikamalbums:// URL to KIO
-    KURL kioURL  = info->kurlForKIO();
-    KURL fileURL = u;
+    KUrl kioURL  = info->kurlForKIO();
+    KUrl fileURL = u;
 
     bool useTrash;
 
@@ -829,7 +830,7 @@ void LightTableWindow::slotDeleteItem(ImageInfo* info)
 
         DeleteDialog dialog(this);
 
-        KURL::List urlList;
+        KUrl::List urlList;
         urlList.append(u);
         if (!dialog.confirmDeleteList(urlList,
              DeleteDialogMode::Files,
@@ -925,7 +926,7 @@ void LightTableWindow::slotFitToWindow()
 
 void LightTableWindow::slotToggleSlideShow()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
 
@@ -1169,7 +1170,7 @@ void LightTableWindow::slotEditKeys()
 void LightTableWindow::slotConfToolbars()
 {
     saveMainWindowSettings(KGlobal::config(), "LightTable Settings");
-    KEditToolbar dlg(factory(), this);
+    KEditToolBar dlg(factory(), this);
 
     connect(&dlg, SIGNAL(newToolbarConfig()),
             this, SLOT(slotNewToolbarConfig()));
@@ -1189,7 +1190,7 @@ void LightTableWindow::slotSetup()
     if (setup.exec() != QDialog::Accepted)
         return;
 
-    kapp->config()->sync();
+    KGlobal::config()->sync();
     
     applySettings();
 }

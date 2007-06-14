@@ -256,7 +256,7 @@ void DateFolderView::slotSelectionChanged()
 
 void DateFolderView::loadViewState()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup(name());
     
     QString selected;
@@ -290,7 +290,7 @@ void DateFolderView::loadViewState()
 
 void DateFolderView::saveViewState()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup(name());
    
     DateFolderItem *item = dynamic_cast<DateFolderItem*>(d->listview->selectedItem());

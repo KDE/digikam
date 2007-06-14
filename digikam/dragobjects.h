@@ -56,15 +56,15 @@ class ItemDrag : public KURLDrag
 {
 public:
 
-    ItemDrag(const KURL::List& urls, const KURL::List& kioURLs,
+    ItemDrag(const KUrl::List& urls, const KUrl::List& kioURLs,
              const Q3ValueList<int>& albumIDs,
              const Q3ValueList<int>& imageIDs,
              QWidget* dragSource=0, const char* name=0);
 
     static bool canDecode(const QMimeSource* e);
     static bool decode(const QMimeSource* e,
-                       KURL::List &urls,
-                       KURL::List &kioURLs,
+                       KUrl::List &urls,
+                       KUrl::List &kioURLs,
                        Q3ValueList<int>& albumIDs,
                        Q3ValueList<int>& imageIDs);
 
@@ -75,7 +75,7 @@ protected:
 
 private:
     
-    KURL::List      m_kioURLs;
+    KUrl::List      m_kioURLs;
     Q3ValueList<int> m_albumIDs;    
     Q3ValueList<int> m_imageIDs;
 };
@@ -112,10 +112,10 @@ private:
 class AlbumDrag : public KURLDrag
 {
 public:
-    AlbumDrag(const KURL &url, int albumid, 
+    AlbumDrag(const KUrl &url, int albumid, 
               QWidget *dragSource = 0, const char *name = 0);
     static bool     canDecode(const QMimeSource* e);
-    static bool     decode(const QMimeSource* e, KURL::List &urls, 
+    static bool     decode(const QMimeSource* e, KUrl::List &urls, 
                            int &albumID);
 protected:
 

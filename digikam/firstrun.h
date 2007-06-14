@@ -36,7 +36,7 @@
 
 class QLabel;
 
-class KURLRequester;
+class KUrlRequester;
 
 namespace Digikam 
 {
@@ -53,7 +53,7 @@ public:
 public:
     
     QLabel        *m_pixLabel;
-    KURLRequester *m_path;
+    KUrlRequester *m_path;
     
 protected slots:
     

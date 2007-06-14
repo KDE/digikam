@@ -50,6 +50,7 @@
 #include <kfiledialog.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -363,7 +364,7 @@ void ImageEffect_Sharpen::slotSharpMethodActived(int w)
 
 void ImageEffect_Sharpen::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("sharpen Tool Dialog");
     m_radiusInput->blockSignals(true);
     m_radiusInput2->blockSignals(true);
@@ -400,7 +401,7 @@ void ImageEffect_Sharpen::readUserSettings()
 
 void ImageEffect_Sharpen::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("sharpen Tool Dialog");
     config->writeEntry("SimpleSharpRadiusAjustment", m_radiusInput->value());
     config->writeEntry("UnsharpMaskRadiusAjustment", m_radiusInput2->value());
@@ -664,7 +665,7 @@ void ImageEffect_Sharpen::putFinalData(void)
 
 void ImageEffect_Sharpen::slotUser3()
 {
-    KURL loadRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    KUrl loadRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Photograph Refocus Settings File to Load")) );
     if( loadRestorationFile.isEmpty() )
@@ -701,7 +702,7 @@ void ImageEffect_Sharpen::slotUser3()
 
 void ImageEffect_Sharpen::slotUser2()
 {
-    KURL saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    KUrl saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Photograph Refocus Settings File to Save")) );
     if( saveRestorationFile.isEmpty() )

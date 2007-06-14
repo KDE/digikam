@@ -94,7 +94,7 @@ void AlbumIconGroupItem::paintBanner()
     PAlbum* album     = man->findPAlbum(m_albumID);
 
     QString dateAndComments;
-    QString prettyURL;
+    QString prettyUrl;
     
     if (album)
     {
@@ -110,7 +110,7 @@ void AlbumIconGroupItem::paintBanner()
             dateAndComments += " - " + caption.replace("\n", " ");
         }
 
-        prettyURL = album->prettyURL();
+        prettyUrl = album->prettyUrl();
     }        
     
     QRect r(0, 0, rect().width(), rect().height());
@@ -139,7 +139,7 @@ void AlbumIconGroupItem::paintBanner()
 
     QRect tr;
     p.drawText(5, 5, r.width(), r.height(),
-               Qt::AlignLeft | Qt::AlignTop, prettyURL,
+               Qt::AlignLeft | Qt::AlignTop, prettyUrl,
                -1, &tr);
 
     r.setY(tr.height() + 2);

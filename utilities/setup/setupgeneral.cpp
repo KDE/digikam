@@ -98,7 +98,7 @@ public:
     QComboBox     *iconTreeThumbSize;
     QComboBox     *rightClickActionComboBox;
 
-    KURLRequester *albumPathEdit;
+    KUrlRequester *albumPathEdit;
 
     KDialogBase   *mainDialog;
 };
@@ -115,7 +115,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     Q3HGroupBox *albumPathBox = new Q3HGroupBox(parent);
     albumPathBox->setTitle(i18n("Album &Library Path"));
 
-    d->albumPathEdit = new KURLRequester(albumPathBox);
+    d->albumPathEdit = new KUrlRequester(albumPathBox);
     d->albumPathEdit->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);    
     QToolTip::add( d->albumPathEdit, i18n("<p>Here you can set the main path to the digiKam album "
                                           "library in your computer."
@@ -273,7 +273,7 @@ void SetupGeneral::readSettings()
 
 void SetupGeneral::slotChangeAlbumPath(const QString &result)
 {
-    if (KURL(result).equals(KURL(QDir::homeDirPath()), true)) 
+    if (KUrl(result).equals(KUrl(QDir::homePath()), true)) 
     {
         KMessageBox::sorry(0, i18n("Sorry; cannot use home directory as album library."));
         return;
@@ -292,18 +292,18 @@ void SetupGeneral::slotPathEdited(const QString& newPath)
 {
     if (newPath.isEmpty()) 
     {
-       d->mainDialog->enableButtonOK(false);
+       d->mainDialog->enableButtonOk(false);
        return;
     }
 
     if (!newPath.startsWith("/")) 
     {
-        d->albumPathEdit->setURL(QDir::homeDirPath() + '/' + newPath);
+        d->albumPathEdit->setURL(QDir::homePath() + '/' + newPath);
     }
 
     QFileInfo targetPath(newPath);
     QDir dir(newPath);
-    d->mainDialog->enableButtonOK(dir.exists() && dir.path() != QDir::homeDirPath());
+    d->mainDialog->enableButtonOk(dir.exists() && dir.path() != QDir::homePath());
 }
 
 }  // namespace Digikam

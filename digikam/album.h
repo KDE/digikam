@@ -313,13 +313,13 @@ public:
     QDate      date() const;
     KDE_DEPRECATED QString    url() const;
     QString    albumPath() const;
-    QString    prettyURL() const;
+    QString    prettyUrl() const;
     QString    folderPath() const;
     DatabaseUrl databaseUrl() const;
     KDE_DEPRECATED DatabaseUrl kurl() const;
-    KURL       fileUrl() const;
+    KUrl       fileUrl() const;
     QString    icon() const;
-    KURL       iconKURL() const;
+    KUrl       iconKURL() const;
 
 private:
 
@@ -352,7 +352,7 @@ public:
      */
     QString tagPath(bool leadingSlash = true) const;
     DatabaseUrl kurl() const;
-    QString prettyURL() const;
+    QString prettyUrl() const;
     QString icon() const;
     Q3ValueList<int> tagIDs() const;
 
@@ -398,16 +398,16 @@ class SAlbum : public Album
 {
 public:
 
-    SAlbum(int id, const KURL& url, bool simple, bool root=false);
+    SAlbum(int id, const KUrl& url, bool simple, bool root=false);
     ~SAlbum();
 
     DatabaseUrl kurl() const;
-    KURL   searchUrl() const;
+    KUrl   searchUrl() const;
     bool    isSimple() const;
 
 private:
 
-    KURL m_kurl;
+    KUrl m_kurl;
     bool m_simple;
 
     friend class AlbumManager;

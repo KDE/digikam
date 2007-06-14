@@ -58,6 +58,7 @@ extern "C"
 #include <kurl.h>
 #include <kurlrequester.h>
 #include <kmessagebox.h>
+#include <ktoolinvocation.h>
 
 // Local includes.
 
@@ -84,7 +85,7 @@ DigikamFirstRun::DigikamFirstRun(KConfig* config, QWidget* parent,
     m_config = config;
     m_ui     = new FirstRunWidget(this);
     setMainWidget(m_ui);
-    m_ui->m_path->setURL(QDir::homeDirPath() + 
+    m_ui->m_path->setURL(QDir::homePath() + 
                          i18n("This is a path name so you should "
                               "include the slash in the translation","/Pictures"));
     m_ui->m_path->setMode(KFile::Directory | KFile::LocalOnly);
@@ -112,10 +113,10 @@ void DigikamFirstRun::slotOk()
 
     if (!albumLibraryFolder.startsWith("/"))
     {
-        albumLibraryFolder.prepend(QDir::homeDirPath());
+        albumLibraryFolder.prepend(QDir::homePath());
     }
 
-    if (KURL(albumLibraryFolder).equals(KURL(QDir::homeDirPath()), true))
+    if (KUrl(albumLibraryFolder).equals(KUrl(QDir::homePath()), true))
     {
         KMessageBox::sorry(this, i18n("digiKam cannot use your home folder as "
                                       "the Album Library folder."));
@@ -171,7 +172,7 @@ void DigikamFirstRun::slotOk()
 
     QString ErrorMsg, URL;
 
-    if (kapp->startServiceByDesktopName("digikam", URL , &ErrorMsg) > 0)
+    if (KToolInvocation::startServiceByDesktopName("digikam", URL , &ErrorMsg) > 0)
     {
         DError() << ErrorMsg << endl;
         KMessageBox::sorry(this, i18n("Cannot restart digiKam automatically.\n"

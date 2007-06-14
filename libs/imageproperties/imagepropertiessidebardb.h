@@ -64,7 +64,7 @@ public:
 
     ~ImagePropertiesSideBarDB();
 
-    virtual void itemChanged(const KURL& url, const QRect &rect = QRect(), DImg *img = 0);
+    virtual void itemChanged(const KUrl& url, const QRect &rect = QRect(), DImg *img = 0);
 
     virtual void itemChanged(ImageInfo *info, const QRect &rect = QRect(), DImg *img = 0);
     virtual void itemChanged(Q3PtrList<ImageInfo> infos);
@@ -98,11 +98,11 @@ private slots:
 
     void slotChangedTab(QWidget* tab);
     void slotThemeChanged();
-    void slotFileMetadataChanged(const KURL &url);
+    void slotFileMetadataChanged(const KUrl &url);
 
 private:
 
-    void itemChanged(const KURL& url, ImageInfo *info,
+    void itemChanged(const KUrl& url, ImageInfo *info,
                      const QRect &rect, DImg *img);
     void itemChanged(Q3PtrList<ImageInfo> infos, const QRect &rect, DImg *img);
 

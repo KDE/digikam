@@ -41,7 +41,7 @@ extern "C"
 
 // KDE includes.
 
-#include <kmdcodec.h>
+#include <kcodecs.h>
 #include <kiconloader.h>
 #include <kurl.h>
 
@@ -89,7 +89,7 @@ PixmapManager::PixmapManager(AlbumIconView* view)
     d->view  = view;
     d->cache = new Q3Cache<QPixmap>(101, 211);
     d->cache->setAutoDelete(true);
-    d->thumbCacheDir = QDir::homeDirPath() + "/.thumbnails/";
+    d->thumbCacheDir = QDir::homePath() + "/.thumbnails/";
     
     d->timer = new QTimer();
     connect(d->timer, SIGNAL(timeout()),
@@ -123,7 +123,7 @@ void PixmapManager::setThumbnailSize(int size)
     }
 }
 
-QPixmap* PixmapManager::find(const KURL& url)
+QPixmap* PixmapManager::find(const KUrl& url)
 {
     QPixmap* pix = d->cache->find(url.path());
     if (pix)
@@ -133,11 +133,11 @@ QPixmap* PixmapManager::find(const KURL& url)
     {
         d->thumbJob = new ThumbnailJob(url, d->size, true, AlbumSettings::instance()->getExifRotate());
         
-        connect(d->thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
-                this, SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
+        connect(d->thumbJob, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
+                this, SLOT(slotGotThumbnail(const KUrl&, const QPixmap&)));
 
-        connect(d->thumbJob, SIGNAL(signalFailed(const KURL&)),
-                this, SLOT(slotFailedThumbnail(const KURL&)));
+        connect(d->thumbJob, SIGNAL(signalFailed(const KUrl&)),
+                this, SLOT(slotFailedThumbnail(const KUrl&)));
 
         connect(d->thumbJob, SIGNAL(signalCompleted()),
                 this, SLOT(slotCompleted()));
@@ -146,7 +146,7 @@ QPixmap* PixmapManager::find(const KURL& url)
     return 0;
 }
 
-void PixmapManager::remove(const KURL& url)
+void PixmapManager::remove(const KUrl& url)
 {
     d->cache->remove(url.path());
 
@@ -154,7 +154,7 @@ void PixmapManager::remove(const KURL& url)
         d->thumbJob->removeItem(url);
 
     // remove the items from the thumbnail cache directory as well.
-    QString uri = "file://" + QDir::cleanDirPath(url.path());
+    QString uri = "file://" + QDir::cleanPath(url.path());
     KMD5 md5(QFile::encodeName(uri));
     uri = md5.hexDigest();
 
@@ -176,7 +176,7 @@ void PixmapManager::clear()
     d->cache->clear();
 }
 
-void PixmapManager::slotGotThumbnail(const KURL& url, const QPixmap& pix)
+void PixmapManager::slotGotThumbnail(const KUrl& url, const QPixmap& pix)
 {
     d->cache->remove(url.path());
     QPixmap* thumb = new QPixmap(pix);
@@ -184,7 +184,7 @@ void PixmapManager::slotGotThumbnail(const KURL& url, const QPixmap& pix)
     emit signalPixmap(url);
 }
 
-void PixmapManager::slotFailedThumbnail(const KURL& url)
+void PixmapManager::slotFailedThumbnail(const KUrl& url)
 {
     QImage img;
     QString ext = QFileInfo(url.path()).extension(false);

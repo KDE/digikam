@@ -60,7 +60,7 @@ ICCPreviewWidget::~ICCPreviewWidget()
 {
 }
 
-void ICCPreviewWidget::showPreview( const KURL &url)
+void ICCPreviewWidget::showPreview( const KUrl &url)
 {
     clearPreview();
     QFileInfo fInfo(url.path());
@@ -78,7 +78,7 @@ void ICCPreviewWidget::showPreview( const KURL &url)
 
 void ICCPreviewWidget::clearPreview()
 {
-    m_iccProfileWidget->loadFromURL(KURL());
+    m_iccProfileWidget->loadFromURL(KUrl());
 }
 
 } // namespace Digikam

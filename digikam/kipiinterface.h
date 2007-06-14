@@ -74,7 +74,7 @@ class DigikamImageInfo : public KIPI::ImageInfoShared
 {
 public:
     
-    DigikamImageInfo( KIPI::Interface* interface, const KURL& url );
+    DigikamImageInfo( KIPI::Interface* interface, const KUrl& url );
     ~DigikamImageInfo();
     
     virtual QString title();
@@ -128,18 +128,18 @@ public:
     virtual QString comment();
     virtual QString category();
     virtual QDate date();
-    virtual KURL::List images();
-    virtual KURL path();
-    virtual KURL uploadPath();
-    virtual KURL uploadRoot();
+    virtual KUrl::List images();
+    virtual KUrl path();
+    virtual KUrl uploadPath();
+    virtual KUrl uploadRoot();
     virtual QString uploadRootName();
     virtual bool isDirectory();
     virtual bool operator==(ImageCollectionShared&);
     
 private:
 
-    KURL::List imagesFromPAlbum(PAlbum* album) const;
-    KURL::List imagesFromTAlbum(TAlbum* album) const;
+    KUrl::List imagesFromPAlbum(PAlbum* album) const;
+    KUrl::List imagesFromTAlbum(TAlbum* album) const;
     
 private:
 
@@ -163,10 +163,10 @@ public:
     virtual KIPI::ImageCollection currentAlbum();
     virtual KIPI::ImageCollection currentSelection();
     virtual Q3ValueList<KIPI::ImageCollection> allAlbums();
-    virtual KIPI::ImageInfo info( const KURL& );
-    virtual bool addImage( const KURL&, QString& errmsg );
-    virtual void delImage( const KURL& );
-    virtual void refreshImages( const KURL::List& urls );
+    virtual KIPI::ImageInfo info( const KUrl& );
+    virtual bool addImage( const KUrl&, QString& errmsg );
+    virtual void delImage( const KUrl& );
+    virtual void refreshImages( const KUrl::List& urls );
     virtual int features() const;
     virtual QString fileExtensions();
 

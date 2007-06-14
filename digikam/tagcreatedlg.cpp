@@ -84,15 +84,15 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
     Q3VBoxLayout *topLayout = new Q3VBoxLayout(spacingHint());
 
     QLabel *topLabel = new QLabel(plainPage());
-    QString tagName  = album->prettyURL();
+    QString tagName  = album->prettyUrl();
     if (tagName.endsWith("/")) tagName.truncate(tagName.length()-1);
     topLabel->setText( i18n("<qt><b>Create New Tag in <i>\"%1\"</i></b></qt>").arg(tagName));
-    topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
+    topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::TextSingleLine);
     topLayout->addWidget(topLabel);
 
     // --------------------------------------------------------
 
-    Q3Frame *topLine = new Q3Frame( plainPage() );
+    QFrame *topLine = new Q3Frame( plainPage() );
     topLine->setFrameShape( Q3Frame::HLine );
     topLine->setFrameShadow( Q3Frame::Sunken );
     topLayout->addWidget( topLine );
@@ -145,7 +145,7 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
     
     d->iconButton->setIconSet(SyncJob::getTagThumbnail(d->icon, 20));
 
-    enableButtonOK(!d->titleEdit->text().isEmpty());
+    enableButtonOk(!d->titleEdit->text().isEmpty());
     adjustSize();
 }
 
@@ -185,7 +185,7 @@ void TagCreateDlg::slotIconChange()
 
 void TagCreateDlg::slotTitleChanged(const QString& newtitle)
 {
-    enableButtonOK(!newtitle.isEmpty());
+    enableButtonOk(!newtitle.isEmpty());
 }
 
 bool TagCreateDlg::tagCreate(QWidget *parent, TAlbum* album, QString& title, QString& icon)
@@ -237,15 +237,15 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
     Q3VBoxLayout *topLayout = new Q3VBoxLayout(spacingHint());
 
     QLabel *topLabel = new QLabel(plainPage());
-    QString tagName  = album->prettyURL();
+    QString tagName  = album->prettyUrl();
     if (tagName.endsWith("/")) tagName.truncate(tagName.length()-1);
     topLabel->setText( i18n("<qt><b>Tag <i>\"%1\"</i> Properties </b></qt>").arg(tagName));
-    topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
+    topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::TextSingleLine);
     topLayout->addWidget(topLabel);
 
     // --------------------------------------------------------
 
-    Q3Frame *topLine = new Q3Frame( plainPage() );
+    QFrame *topLine = new Q3Frame( plainPage() );
     topLine->setFrameShape( Q3Frame::HLine );
     topLine->setFrameShadow( Q3Frame::Sunken );
     topLayout->addWidget( topLine );
@@ -301,7 +301,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
     d->icon = album->icon();
     d->iconButton->setIconSet(SyncJob::getTagThumbnail(d->icon, 20));
 
-    enableButtonOK(!d->titleEdit->text().isEmpty());
+    enableButtonOk(!d->titleEdit->text().isEmpty());
     adjustSize();
 }
 
@@ -347,7 +347,7 @@ void TagEditDlg::slotIconChange()
 
 void TagEditDlg::slotTitleChanged(const QString& newtitle)
 {
-    enableButtonOK(!newtitle.isEmpty());
+    enableButtonOk(!newtitle.isEmpty());
 }
 
 bool TagEditDlg::tagEdit(QWidget *parent, TAlbum* album, QString& title, QString& icon)

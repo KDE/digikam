@@ -36,6 +36,7 @@
 #include <kdialogbase.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kglobal.h>
 
 // // Local includes.
 
@@ -180,7 +181,7 @@ SetupToolTip::~SetupToolTip()
 
 void SetupToolTip::readSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
 
     d->showToolTipsBox->setChecked(config->readBoolEntry("Show ToolTips", true));
@@ -205,7 +206,7 @@ void SetupToolTip::readSettings()
 
 void SetupToolTip::applySettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
 
     config->writeEntry("Show ToolTips", d->showToolTipsBox->isChecked());

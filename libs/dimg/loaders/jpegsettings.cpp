@@ -36,7 +36,7 @@
 #include <klocale.h>
 #include <kdialog.h>
 #include <knuminput.h>
-#include <kactivelabel.h>
+#include <k3activelabel.h>
 
 // Local includes.
 
@@ -63,7 +63,7 @@ public:
 
     QLabel       *labelJPEGcompression;
 
-    KActiveLabel *labelWarning;
+    K3ActiveLabel *labelWarning;
 
     KIntNumInput *JPEGcompression;
 };
@@ -87,7 +87,7 @@ JPEGSettings::JPEGSettings(QWidget *parent)
                                              "large file size)<p>"
                                              "<b>Note: JPEG use a lossy compression image algorithm.</b>"));
 
-    d->labelWarning = new KActiveLabel(i18n("<qt><font size=-1 color=\"red\"><i>"
+    d->labelWarning = new K3ActiveLabel(i18n("<qt><font size=-1 color=\"red\"><i>"
                           "Warning: <a href='http://en.wikipedia.org/wiki/JPEG'>JPEG</a> is a<br>"
                           "lossy compression<br>"
                           "image format!</p>"

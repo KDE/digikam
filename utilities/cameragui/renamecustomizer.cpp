@@ -53,6 +53,7 @@
 #include <kinputdialog.h>
 #else
 #include <klineeditdlg.h>
+#include <kglobal.h>
 #endif
 
 // Local includes.
@@ -359,7 +360,7 @@ QString RenameCustomizer::newName(const QDateTime &dateTime, int index, const QS
             name += seq;
 
         if (d->addCameraNameBox->isChecked())
-            name += QString("-%1").arg(d->cameraTitle.simplifyWhiteSpace().replace(" ", ""));
+            name += QString("-%1").arg(d->cameraTitle.simplified().replace(" ", ""));
 
         name += d->renameCustomSuffix->text();
         name += extension;
@@ -468,7 +469,7 @@ void RenameCustomizer::slotDateTimeButtonClicked()
 
 void RenameCustomizer::readSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     
     config->setGroup("Camera Settings");
     bool def         = config->readBoolEntry("Rename Use Default", true);
@@ -511,7 +512,7 @@ void RenameCustomizer::readSettings()
 
 void RenameCustomizer::saveSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
 
     config->setGroup("Camera Settings");
     config->writeEntry("Rename Use Default", d->renameDefault->isChecked());

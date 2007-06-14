@@ -114,10 +114,10 @@ public:
     int delay;
 
     /** List of pictures URL to slide */ 
-    KURL::List fileList;
+    KUrl::List fileList;
 
     /** Map of pictures information to slide */ 
-    QMap<KURL, SlidePictureInfo> pictInfoMap;
+    QMap<KUrl, SlidePictureInfo> pictInfoMap;
 };
 
 }  // namespace Digikam

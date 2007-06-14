@@ -43,7 +43,7 @@ struct DirSelectWidget::Private
     KFileTreeBranch* m_item;
     QStringList      m_pendingPath;
     QString          m_handled;
-    KURL             m_rootUrl;
+    KUrl             m_rootUrl;
 };
 
 DirSelectWidget::DirSelectWidget(QWidget* parent, const char* name, QString headerLabel)
@@ -59,7 +59,7 @@ DirSelectWidget::DirSelectWidget(QWidget* parent, const char* name, QString head
     setAlternateBackground(QColor::QColor());
 }
 
-DirSelectWidget::DirSelectWidget(KURL rootUrl, KURL currentUrl, 
+DirSelectWidget::DirSelectWidget(KUrl rootUrl, KUrl currentUrl, 
                                  QWidget* parent, const char* name, QString headerLabel)
                : KFileTreeView( parent, name)
 {
@@ -79,7 +79,7 @@ DirSelectWidget::~DirSelectWidget()
     delete d;
 }
 
-KURL DirSelectWidget::path() const
+KUrl DirSelectWidget::path() const
 {
     return currentURL();
 }
@@ -116,12 +116,12 @@ void DirSelectWidget::load()
     }
 }
 
-void DirSelectWidget::setCurrentPath(KURL currentUrl)
+void DirSelectWidget::setCurrentPath(KUrl currentUrl)
 {
     if ( !currentUrl.isValid() )
        return;
     
-    QString currentPath = QDir::cleanDirPath(currentUrl.path());
+    QString currentPath = QDir::cleanPath(currentUrl.path());
     currentPath = currentPath.mid( d->m_rootUrl.path().length() );
     d->m_pendingPath.clear();    
     d->m_handled = QString("");
@@ -135,16 +135,16 @@ void DirSelectWidget::setCurrentPath(KURL currentUrl)
     load();
 }
 
-void DirSelectWidget::setRootPath(KURL rootUrl, KURL currentUrl)
+void DirSelectWidget::setRootPath(KUrl rootUrl, KUrl currentUrl)
 {
     d->m_rootUrl = rootUrl;
     clear();
-    QString root = QDir::cleanDirPath(rootUrl.path());
+    QString root = QDir::cleanPath(rootUrl.path());
     
     if ( !root.endsWith("/"))
        root.append("/");
     
-    QString currentPath = QDir::cleanDirPath(currentUrl.isValid() ? currentUrl.path() : root);
+    QString currentPath = QDir::cleanPath(currentUrl.isValid() ? currentUrl.path() : root);
     
     d->m_item = addBranch( rootUrl, rootUrl.fileName() );    
     setDirOnlyMode( d->m_item, true );
@@ -163,7 +163,7 @@ void DirSelectWidget::setRootPath(KURL rootUrl, KURL currentUrl)
              this, SLOT( slotFolderSelected(Q3ListViewItem *) ) );
 }
 
-KURL DirSelectWidget::rootPath(void)
+KUrl DirSelectWidget::rootPath(void)
 {
     return d->m_rootUrl;
 }

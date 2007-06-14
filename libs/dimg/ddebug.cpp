@@ -6,7 +6,7 @@
  * Date        : 2006-06-11
  * Description : thread safe debugging.
  *
- * See B.K.O #133026: because kdDebug() is not thread-safe
+ * See B.K.O #133026: because kDebug() is not thread-safe
  * we need to use a dedicaced debug statements in threaded 
  * implementation to prevent crash.
  *
@@ -34,7 +34,7 @@
 #include "ddebug.h"
 
 #undef DDebug
-#undef kdDebug
+#undef kDebug
 
 namespace Digikam
 {
@@ -45,7 +45,7 @@ static QMutex *_ddebug_mutex_ = 0;
 Ddbgstream::Ddbgstream(kdbgstream stream)
           : kdbgstream(stream)
 {
-    // using a static variable here - we can safely assume that kdDebug
+    // using a static variable here - we can safely assume that kDebug
     // is called at least once from the main thread before threads start.
     if (!_ddebug_mutex_)
     {
@@ -65,7 +65,7 @@ Ddbgstream::~Ddbgstream()
 Dndbgstream::Dndbgstream(kndbgstream stream)
            : kndbgstream(stream)
 {
-    // using a static variable here - we can safely assume that kdDebug
+    // using a static variable here - we can safely assume that kDebug
     // is called at least once from the main thread before threads start.
     if (!_ddebug_mutex_)
     {
@@ -84,9 +84,9 @@ Dndbgstream::~Dndbgstream()
 
 } // namespace Digikam
 
-Digikam::Ddbgstream DDebug(int area)   { return Digikam::Ddbgstream(kdDebug(area));   }
-Digikam::Ddbgstream DError(int area)   { return Digikam::Ddbgstream(kdError(area));   }
-Digikam::Ddbgstream DWarning(int area) { return Digikam::Ddbgstream(kdWarning(area)); }
+Digikam::Ddbgstream DDebug(int area)   { return Digikam::Ddbgstream(kDebug(area));   }
+Digikam::Ddbgstream DError(int area)   { return Digikam::Ddbgstream(kError(area));   }
+Digikam::Ddbgstream DWarning(int area) { return Digikam::Ddbgstream(kWarning(area)); }
 
 Digikam::Dndbgstream DnDebug(int area) { return Digikam::Dndbgstream(kndDebug(area)); }
 

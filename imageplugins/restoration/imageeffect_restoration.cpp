@@ -47,6 +47,7 @@
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -99,7 +100,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     Q3GridLayout* grid  = new Q3GridLayout( firstPage, 2, 2, spacingHint());
     m_mainTab->addTab( firstPage, i18n("Preset") );
 
-    KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
+    KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setURL("http://cimg.sourceforge.net");
     KGlobal::dirs()->addResourceType("logo-cimg", KGlobal::dirs()->kde_default("data") + "digikam/data");
@@ -152,7 +153,7 @@ void ImageEffect_Restoration::renderingFinished()
 
 void ImageEffect_Restoration::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("restoration Tool Dialog");
 
     Digikam::GreycstorationSettings settings;
@@ -183,7 +184,7 @@ void ImageEffect_Restoration::readUserSettings()
 void ImageEffect_Restoration::writeUserSettings()
 {
     Digikam::GreycstorationSettings settings = m_settingsWidget->getSettings();
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("restoration Tool Dialog");
     config->writeEntry("Preset", m_restorationTypeCB->currentItem());
     config->writeEntry("FastApprox", settings.fastApprox);
@@ -299,7 +300,7 @@ void ImageEffect_Restoration::putFinalData(void)
 
 void ImageEffect_Restoration::slotUser3()
 {
-    KURL loadRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    KUrl loadRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Photograph Restoration Settings File to Load")) );
     if( loadRestorationFile.isEmpty() )
@@ -332,7 +333,7 @@ void ImageEffect_Restoration::slotUser3()
 
 void ImageEffect_Restoration::slotUser2()
 {
-    KURL saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    KUrl saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Photograph Restoration Settings File to Save")) );
     if( saveRestorationFile.isEmpty() )

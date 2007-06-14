@@ -171,7 +171,7 @@ public:
      * @return PAlbum correspoding to supplied @p url
      * @param url the url we need to check
      */
-    PAlbum*   findPAlbum(const KURL& url) const;
+    PAlbum*   findPAlbum(const KUrl& url) const;
 
     /**
      * @return a PAlbum with given ID
@@ -367,7 +367,7 @@ public:
      * @param simple indicates whether the Search album is of simple type or
      * extended type
      */
-    SAlbum* createSAlbum(const KURL& url, bool simple);
+    SAlbum* createSAlbum(const KUrl& url, bool simple);
     
     /**
      * Update the url for a SAlbum
@@ -375,7 +375,7 @@ public:
      * @param album the album to update
      * @param newURL the new url of the album
      */
-    bool updateSAlbum(SAlbum* album, const KURL& newURL);
+    bool updateSAlbum(SAlbum* album, const KUrl& newURL);
 
     /**
      * Delete a SAlbum from the database
@@ -389,7 +389,7 @@ public:
     
     void setItemHandler(AlbumItemHandler *handler);
     AlbumItemHandler* getItemHandler();
-    void refreshItemHandler(const KURL::List& itemList=KURL::List());
+    void refreshItemHandler(const KUrl::List& itemList=KUrl::List());
     void emitAlbumItemsSelected(bool val);
 
 private:

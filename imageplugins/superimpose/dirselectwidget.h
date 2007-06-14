@@ -42,19 +42,19 @@ public:
      
     DirSelectWidget(QWidget* parent, const char* name=0, QString headerLabel=QString());
 
-    DirSelectWidget(KURL rootUrl=KURL("/"), KURL currentUrl=KURL(), 
+    DirSelectWidget(KUrl rootUrl=KUrl("/"), KUrl currentUrl=KUrl(), 
                     QWidget* parent=0, const char* name=0, QString headerLabel=QString());
 
     ~DirSelectWidget();
      
-    KURL path() const;
-    KURL rootPath(void);
-    void setRootPath(KURL rootUrl, KURL currentUrl=KURL(QString()));
-    void setCurrentPath(KURL currentUrl);
+    KUrl path() const;
+    KUrl rootPath(void);
+    void setRootPath(KUrl rootUrl, KUrl currentUrl=KUrl(QString()));
+    void setCurrentPath(KUrl currentUrl);
 
 signals :
     
-    void folderItemSelected(const KURL &url);
+    void folderItemSelected(const KUrl &url);
         
 protected slots:
 

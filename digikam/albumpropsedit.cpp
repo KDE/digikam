@@ -121,12 +121,12 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
         topLabel->setText( i18n( "<qt><b>\"<i>%1</i>\" Album Properties</b></qt>")
                            .arg(album->title()));
     }
-    topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
+    topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::TextSingleLine);
     topLayout->addMultiCellWidget( topLabel, 0, 0, 0, 1  );
 
     // --------------------------------------------------------
 
-    Q3Frame *topLine = new Q3Frame( plainPage() );
+    QFrame *topLine = new Q3Frame( plainPage() );
     topLine->setFrameShape( Q3Frame::HLine );
     topLine->setFrameShadow( Q3Frame::Sunken );
     topLayout->addMultiCellWidget( topLine, 1, 1, 0, 1  );
@@ -325,16 +325,16 @@ bool AlbumPropsEdit::createNew(PAlbum  *parent,
 
 void AlbumPropsEdit::slotTitleChanged(const QString& newtitle)
 {
-    enableButtonOK(!newtitle.isEmpty());    
+    enableButtonOk(!newtitle.isEmpty());    
 }
 
 void AlbumPropsEdit::slotDateLowButtonClicked()
 {
-    setCursor( KCursor::waitCursor() );
+    setCursor( Qt::WaitCursor );
 
     QDate lowDate = DatabaseAccess().db()->getAlbumLowestDate( d->album->id() );
 
-    setCursor( KCursor::arrowCursor() );
+    setCursor( Qt::ArrowCursor );
 
     if ( lowDate.isValid() )
         d->datePicker->setDate( lowDate );
@@ -342,11 +342,11 @@ void AlbumPropsEdit::slotDateLowButtonClicked()
 
 void AlbumPropsEdit::slotDateHighButtonClicked()
 {
-    setCursor( KCursor::waitCursor() );
+    setCursor( Qt::WaitCursor );
 
     QDate highDate = DatabaseAccess().db()->getAlbumHighestDate( d->album->id() );
 
-    setCursor( KCursor::arrowCursor() );
+    setCursor( Qt::ArrowCursor );
 
     if ( highDate.isValid() )
         d->datePicker->setDate( highDate );
@@ -354,11 +354,11 @@ void AlbumPropsEdit::slotDateHighButtonClicked()
 
 void AlbumPropsEdit::slotDateAverageButtonClicked()
 {
-    setCursor( KCursor::waitCursor() );
+    setCursor( Qt::WaitCursor );
 
     QDate avDate = DatabaseAccess().db()->getAlbumAverageDate( d->album->id() );
 
-    setCursor( KCursor::arrowCursor() );
+    setCursor( Qt::ArrowCursor );
 
     if ( avDate.isValid() )
         d->datePicker->setDate( avDate );

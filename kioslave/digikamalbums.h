@@ -52,31 +52,31 @@ public:
 
     void special(const QByteArray& data);
 
-    void get( const KURL& url );
-    void put( const KURL& url, int _mode, bool _overwrite, bool _resume );
-    void copy( const KURL &src, const KURL &dest, int mode, bool overwrite );
-    void rename( const KURL &src, const KURL &dest, bool overwrite );
+    void get( const KUrl& url );
+    void put( const KUrl& url, int _mode, bool _overwrite, bool _resume );
+    void copy( const KUrl &src, const KUrl &dest, int mode, bool overwrite );
+    void rename( const KUrl &src, const KUrl &dest, bool overwrite );
 
-    void stat( const KURL& url );
-    void listDir( const KURL& url );
-    void mkdir( const KURL& url, int permissions );
-    void chmod( const KURL& url, int permissions );
-    void del( const KURL& url, bool isfile);
+    void stat( const KUrl& url );
+    void listDir( const KUrl& url );
+    void mkdir( const KUrl& url, int permissions );
+    void chmod( const KUrl& url, int permissions );
+    void del( const KUrl& url, bool isfile);
 
 private:
 
     void createDigikamPropsUDSEntry(KIO::UDSEntry& entry);
 
     bool createUDSEntry(const QString& path, KIO::UDSEntry& entry);
-    bool file_get( const KURL& url );
-    bool file_put( const KURL& url, int _mode, bool _overwrite, bool _resume );
-    bool file_copy( const KURL &src, const KURL &dest, int mode, bool overwrite );
-    bool file_rename( const KURL &src, const KURL &dest, bool overwrite );
-    bool file_stat( const KURL& url );
-    bool file_listDir( const KURL& url );
-    bool file_mkdir( const KURL& url, int permissions );
-    bool file_chmod( const KURL& url, int permissions );
-    bool file_del( const KURL& url, bool isfile);
+    bool file_get( const KUrl& url );
+    bool file_put( const KUrl& url, int _mode, bool _overwrite, bool _resume );
+    bool file_copy( const KUrl &src, const KUrl &dest, int mode, bool overwrite );
+    bool file_rename( const KUrl &src, const KUrl &dest, bool overwrite );
+    bool file_stat( const KUrl& url );
+    bool file_listDir( const KUrl& url );
+    bool file_mkdir( const KUrl& url, int permissions );
+    bool file_chmod( const KUrl& url, int permissions );
+    bool file_del( const KUrl& url, bool isfile);
 
 };
 

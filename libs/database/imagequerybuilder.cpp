@@ -64,7 +64,7 @@ ImageQueryBuilder::ImageQueryBuilder()
     }
 }
 
-QString ImageQueryBuilder::buildQuery(const KURL& url) const
+QString ImageQueryBuilder::buildQuery(const KUrl& url) const
 {
     int  count = url.queryItem("count").toInt();
     if (count <= 0)

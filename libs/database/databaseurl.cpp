@@ -34,8 +34,8 @@
 namespace Digikam
 {
 
-DatabaseUrl DatabaseUrl::fromFileUrl(const KURL &fileUrl,
-                                     const KURL &albumRoot,
+DatabaseUrl DatabaseUrl::fromFileUrl(const KUrl &fileUrl,
+                                     const KUrl &albumRoot,
                                      const DatabaseParameters &parameters)
 {
     DatabaseUrl url;
@@ -52,7 +52,7 @@ DatabaseUrl DatabaseUrl::fromFileUrl(const KURL &fileUrl,
 
 DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString &name,
                                           const QString &album,
-                                          const KURL &albumRoot,
+                                          const KUrl &albumRoot,
                                           const DatabaseParameters &parameters)
 {
     DatabaseUrl url;
@@ -94,7 +94,7 @@ DatabaseUrl DatabaseUrl::fromDate(const QDate &date,
     return url;
 }
 
-DatabaseUrl DatabaseUrl::fromSearchUrl(const KURL &searchURL,
+DatabaseUrl DatabaseUrl::fromSearchUrl(const KUrl &searchURL,
                           const DatabaseParameters &parameters)
 {
     DatabaseUrl url(searchURL);
@@ -104,13 +104,13 @@ DatabaseUrl DatabaseUrl::fromSearchUrl(const KURL &searchURL,
 
 
 
-DatabaseUrl::DatabaseUrl(const KURL &digikamalbumsUrl)
-    : KURL(digikamalbumsUrl)
+DatabaseUrl::DatabaseUrl(const KUrl &digikamalbumsUrl)
+    : KUrl(digikamalbumsUrl)
 {
 }
 
 DatabaseUrl::DatabaseUrl(const DatabaseUrl &url)
-    : KURL(url)
+    : KUrl(url)
 {
 }
 
@@ -118,21 +118,21 @@ DatabaseUrl::DatabaseUrl()
 {
 }
 
-DatabaseUrl &DatabaseUrl::operator=(const KURL &digikamalbumsUrl)
+DatabaseUrl &DatabaseUrl::operator=(const KUrl &digikamalbumsUrl)
 {
-    KURL::operator=(digikamalbumsUrl);
+    KUrl::operator=(digikamalbumsUrl);
     return *this;
 }
 
 DatabaseUrl &DatabaseUrl::operator=(const DatabaseUrl &url)
 {
-    KURL::operator=(url);
+    KUrl::operator=(url);
     return *this;
 }
 
-bool DatabaseUrl::operator==(const KURL &digikamalbumsUrl)
+bool DatabaseUrl::operator==(const KUrl &digikamalbumsUrl)
 {
-    return KURL::operator==(digikamalbumsUrl);
+    return KUrl::operator==(digikamalbumsUrl);
 }
 
 /*
@@ -181,16 +181,16 @@ bool DatabaseUrl::isSearchUrl() const
 
 // --- Album URL ---
 
-KURL DatabaseUrl::albumRoot() const
+KUrl DatabaseUrl::albumRoot() const
 {
     QString albumRoot = queryItem("albumRoot");
     if (!albumRoot.isNull())
     {
-        KURL albumRootUrl;
+        KUrl albumRootUrl;
         albumRootUrl.setPath(albumRoot);
         return albumRootUrl;
     }
-    return KURL();
+    return KUrl();
 }
 
 QString DatabaseUrl::albumRootPath() const
@@ -211,9 +211,9 @@ QString DatabaseUrl::name() const
     return fileName(false);
 }
 
-KURL DatabaseUrl::fileUrl() const
+KUrl DatabaseUrl::fileUrl() const
 {
-    KURL fileUrl(albumRoot());
+    KUrl fileUrl(albumRoot());
     fileUrl.addPath(path());
     return fileUrl;
 }
@@ -248,9 +248,9 @@ QDate DatabaseUrl::date() const
 
 // --- Search URL ---
 
-KURL DatabaseUrl::searchUrl() const
+KUrl DatabaseUrl::searchUrl() const
 {
-    KURL url(*this);
+    KUrl url(*this);
     DatabaseParameters::removeFromUrl(url);
     return url;
 }

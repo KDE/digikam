@@ -35,7 +35,7 @@
 
 // KDE includes.
 
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kabc/stdaddressbook.h>
 #include <kiconloader.h>
@@ -412,7 +412,7 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
 
     TagFolderViewItem *tag = dynamic_cast<TagFolderViewItem*>(item);
 
-    KPopupMenu popmenu(this);
+    KMenu popmenu(this);
     popmenu.insertTitle(SmallIcon("digikam"), i18n("My Tags"));
     popmenu.insertItem(SmallIcon("tag-new"), i18n("New Tag..."), 10);
     popmenu.insertItem(SmallIcon("tag-addressbook"), i18n("Create Tag From AddressBook"), d->ABCMenu);
@@ -706,7 +706,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         if (talbum == itemDrop->getTag())
             return;
 
-        KPopupMenu popMenu(this);
+        KMenu popMenu(this);
         popMenu.insertTitle(SmallIcon("digikam"), i18n("My Tags"));
         popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
         popMenu.insertSeparator(-1);
@@ -747,8 +747,8 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         TAlbum *destAlbum = itemDrop->getTag();
         TAlbum *srcAlbum;
 
-        KURL::List      urls;
-        KURL::List      kioURLs;        
+        KUrl::List      urls;
+        KUrl::List      kioURLs;        
         Q3ValueList<int> albumIDs;
         Q3ValueList<int> imageIDs;
 
@@ -786,7 +786,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             }
             else
             {
-                KPopupMenu popMenu(this);
+                KMenu popMenu(this);
                 popMenu.insertTitle(SmallIcon("digikam"), i18n("My Tags"));
                 popMenu.insertItem(i18n("Set as Tag Thumbnail"), 12);
                 popMenu.insertSeparator(-1);
@@ -815,10 +815,10 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         }
         else
         {
-            KPopupMenu popMenu(this);
+            KMenu popMenu(this);
             popMenu.insertTitle(SmallIcon("digikam"), i18n("My Tags"));
             popMenu.insertItem( SmallIcon("tag"), i18n("Assign Tag '%1' to Items")
-                                .arg(destAlbum->prettyURL()), 10) ;
+                                .arg(destAlbum->prettyUrl()), 10) ;
             popMenu.insertSeparator(-1);
             popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
 

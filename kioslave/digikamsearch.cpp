@@ -86,7 +86,7 @@ kio_digikamsearch::~kio_digikamsearch()
 
 void kio_digikamsearch::special(const QByteArray& data)
 {
-    KURL    kurl;
+    KUrl    kurl;
     QString filter;
     int     getDimensions;
     int     listingType = 0;
@@ -98,7 +98,7 @@ void kio_digikamsearch::special(const QByteArray& data)
     if (!ds.atEnd())
         ds >> listingType;
 
-    kdDebug() << "kio_digikamsearch::special " << kurl << endl;
+    kDebug() << "kio_digikamsearch::special " << kurl << endl;
 
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
@@ -135,13 +135,13 @@ extern "C"
 {
     DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
-        KLocale::setMainCatalogue("digikam");
+        KLocale::setMainCatalog("digikam");
         KInstance instance( "kio_digikamsearch" );
         KGlobal::locale();
 
         if (argc != 4) 
         {
-            kdDebug() << "Usage: kio_digikamsearch  protocol domain-socket1 domain-socket2"
+            kDebug() << "Usage: kio_digikamsearch  protocol domain-socket1 domain-socket2"
                       << endl;
             exit(-1);
         }

@@ -55,7 +55,7 @@ extern "C"
 
 #include <kcursor.h>
 #include <kaction.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <klocale.h>
@@ -138,7 +138,7 @@ public:
 
     QSplitter                       *vSplitter;
 
-    KURL                             lastOpenedDirectory;
+    KUrl                             lastOpenedDirectory;
     
     KToggleAction                   *showBarAction;
 
@@ -153,19 +153,19 @@ public:
     Digikam::SplashScreen           *splash;
 };
 
-ShowFoto::ShowFoto(const KURL::List& urlList)
+ShowFoto::ShowFoto(const KUrl::List& urlList)
         : Digikam::EditorWindow( "Showfoto" )
 {
     d = new ShowFotoPriv();
 
     // -- Show splash at start ----------------------------
     
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     KGlobal::dirs()->addResourceType("data", KGlobal::dirs()->kde_default("data") + "digikam");
-    KGlobal::iconLoader()->addAppDir("digikam");
+    KIconLoader::global()->addAppDir("digikam");
     
-    if(config->readBoolEntry("ShowSplash", true) && !kapp->isRestored())
+    if(config->readBoolEntry("ShowSplash", true) && !kapp->isSessionRestored())
     {
         d->splash = new Digikam::SplashScreen("showfoto-splash.png");
     }
@@ -173,14 +173,14 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     // Check ICC profiles repository availability
 
     if(d->splash)
-        d->splash->message(i18n("Checking ICC repository"), AlignLeft, white);
+        d->splash->message(i18n("Checking ICC repository"), Qt::AlignLeft, white);
 
     d->validIccPath = Digikam::SetupICC::iccRepositoryIsValid();
 
     // Check witch dcraw version available
 
     if(d->splash)
-        d->splash->message(i18n("Checking dcraw version"), AlignLeft, white);
+        d->splash->message(i18n("Checking dcraw version"), Qt::AlignLeft, white);
 
     KDcrawIface::DcrawBinary::instance()->checkSystem();
 
@@ -202,22 +202,22 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
         d->BCGAction = new KActionMenu(i18n("Brightness/Contrast/Gamma"), 0, 0, "showfoto_bcg");
         d->BCGAction->setDelayed(false);
     
-        KAction *incGammaAction = new KAction(i18n("Increase Gamma"), 0, ALT+Key_G,
+        KAction *incGammaAction = new KAction(i18n("Increase Gamma"), 0, ALT+Qt::Key_G,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "gamma_plus");
-        KAction *decGammaAction = new KAction(i18n("Decrease Gamma"), 0, ALT+SHIFT+Key_G,
+        KAction *decGammaAction = new KAction(i18n("Decrease Gamma"), 0, ALT+SHIFT+Qt::Key_G,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "gamma_minus");
-        KAction *incBrightAction = new KAction(i18n("Increase Brightness"), 0, ALT+Key_B,
+        KAction *incBrightAction = new KAction(i18n("Increase Brightness"), 0, ALT+Qt::Key_B,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "brightness_plus");
-        KAction *decBrightAction = new KAction(i18n("Decrease Brightness"), 0, ALT+SHIFT+Key_B,
+        KAction *decBrightAction = new KAction(i18n("Decrease Brightness"), 0, ALT+SHIFT+Qt::Key_B,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "brightness_minus");
-        KAction *incContrastAction = new KAction(i18n("Increase Contrast"), 0, ALT+Key_C,
+        KAction *incContrastAction = new KAction(i18n("Increase Contrast"), 0, ALT+Qt::Key_C,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "contrast_plus");
-        KAction *decContrastAction = new KAction(i18n("Decrease Contrast"), 0, ALT+SHIFT+Key_C,
+        KAction *decContrastAction = new KAction(i18n("Decrease Contrast"), 0, ALT+SHIFT+Qt::Key_C,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "contrast_minus");
     
@@ -250,10 +250,10 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     // -- Load current items ---------------------------
 
-    for (KURL::List::const_iterator it = urlList.begin();
+    for (KUrl::List::const_iterator it = urlList.begin();
          it != urlList.end(); ++it)
     {
-        KURL url = *it;
+        KUrl url = *it;
         if (url.isLocalFile())
         {
             QFileInfo fi(url.path());
@@ -335,7 +335,7 @@ void ShowFoto::show()
 
     // Report errors from ICC repository path.
 
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     if(!d->validIccPath)
     {
         QString message = i18n("<qt><p>The ICC profile path seems to be invalid.</p>"
@@ -369,8 +369,8 @@ void ShowFoto::setupConnections()
 {
     setupStandardConnections();
 
-    connect(d->thumbBar, SIGNAL(signalURLSelected(const KURL&)),
-            this, SLOT(slotOpenURL(const KURL&)));
+    connect(d->thumbBar, SIGNAL(signalURLSelected(const KUrl&)),
+            this, SLOT(slotOpenURL(const KUrl&)));
 
     connect(d->thumbBar, SIGNAL(signalItemAdded()),
             this, SLOT(slotUpdateItemInfo()));
@@ -384,7 +384,7 @@ void ShowFoto::setupConnections()
 
 void ShowFoto::setupUserArea()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
 
     QWidget* widget = new QWidget(this);
@@ -452,23 +452,23 @@ void ShowFoto::setupActions()
 
     // Extra 'File' menu actions ---------------------------------------------
 
-    d->fileOpenAction = KStdAction::open(this, SLOT(slotOpenFile()),
+    d->fileOpenAction = KStandardAction::open(this, SLOT(slotOpenFile()),
                         actionCollection(), "showfoto_open_file");
 
     d->openFilesInFolderAction = new KAction(i18n("Open folder"),
                                              "folder_image",
-                                             CTRL+SHIFT+Key_O,
+                                             CTRL+SHIFT+Qt::Key_O,
                                              this,
                                              SLOT(slotOpenFilesInFolder()),
                                              actionCollection(),
                                              "showfoto_open_folder");
 
-    KStdAction::quit(this, SLOT(close()), actionCollection(), "showfoto_quit");
+    KStandardAction::quit(this, SLOT(close()), actionCollection(), "showfoto_quit");
 
     // Extra 'View' menu actions ---------------------------------------------
 
     d->showBarAction = new KToggleAction(i18n("Show Thumbnails"), 0, 
-                                         CTRL+Key_T,
+                                         CTRL+Qt::Key_T,
                                          this, SLOT(slotToggleShowBar()),
                                          actionCollection(), "shofoto_showthumbs");
 
@@ -483,7 +483,7 @@ void ShowFoto::readSettings()
 {
     readStandardSettings();
     
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     
     d->showBarAction->setChecked(config->readBoolEntry("Show Thumbnails", true));
@@ -503,7 +503,7 @@ void ShowFoto::saveSettings()
 {
     saveStandardSettings();
     
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     
     config->writeEntry("Last Opened Directory", d->lastOpenedDirectory.path() );
@@ -519,7 +519,7 @@ void ShowFoto::applySettings()
 {
     applyStandardSettings();
 
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
 
     m_bgColor = config->readColorEntry("BackgroundColor", &Qt::black);
@@ -595,13 +595,13 @@ void ShowFoto::slotOpenFile()
 
     DDebug() << "fileformats=" << fileformats << endl;   
     
-    KURL::List urls =  KFileDialog::getOpenURLs(d->lastOpenedDirectory.path(), fileformats, this, i18n("Open Images"));
+    KUrl::List urls =  KFileDialog::getOpenURLs(d->lastOpenedDirectory.path(), fileformats, this, i18n("Open Images"));
 
     if (!urls.isEmpty())
     {
         d->thumbBar->clear();
 
-        for (KURL::List::const_iterator it = urls.begin();
+        for (KUrl::List::const_iterator it = urls.begin();
              it != urls.end(); ++it)
         {
             new Digikam::ThumbBarItem(d->thumbBar, *it);
@@ -612,7 +612,7 @@ void ShowFoto::slotOpenFile()
     }
 }
 
-void ShowFoto::slotOpenURL(const KURL& url)
+void ShowFoto::slotOpenURL(const KUrl& url)
 {
     if(d->currentItem && !promptUserSave(d->currentItem->url()))
     {
@@ -753,7 +753,7 @@ bool ShowFoto::setup(bool iccSetupPage)
     if (setup.exec() != QDialog::Accepted)
         return false;
 
-    kapp->config()->sync();
+    KGlobal::config()->sync();
     
     applySettings();
 
@@ -805,7 +805,7 @@ void ShowFoto::slotUpdateItemInfo(void)
     toggleNavigation( index );
 }
     
-void ShowFoto::slotOpenFolder(const KURL& url)
+void ShowFoto::slotOpenFolder(const KUrl& url)
 {
     if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return;
@@ -819,7 +819,7 @@ void ShowFoto::slotOpenFolder(const KURL& url)
     toggleNavigation(1);
 }
 
-void ShowFoto::openFolder(const KURL& url)
+void ShowFoto::openFolder(const KUrl& url)
 {
     if (!url.isValid() || !url.isLocalFile())
        return;
@@ -883,7 +883,7 @@ void ShowFoto::openFolder(const KURL& url)
 
     while( (fi = it.current() ) )
     {
-        new Digikam::ThumbBarItem( d->thumbBar, KURL(fi->filePath()) );
+        new Digikam::ThumbBarItem( d->thumbBar, KUrl(fi->filePath()) );
         ++it;
     }
 }
@@ -893,7 +893,7 @@ void ShowFoto::slotOpenFilesInFolder()
     if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return;
 
-    KURL url(KFileDialog::getExistingDirectory(d->lastOpenedDirectory.directory(), 
+    KUrl url(KFileDialog::getExistingDirectory(d->lastOpenedDirectory.directory(), 
                                                this, i18n("Open Images From Folder")));
 
     if (!url.isEmpty())
@@ -1068,7 +1068,7 @@ bool ShowFoto::saveAs()
 
 void ShowFoto::slotDeleteCurrentItem()
 {
-    KURL urlCurrent(d->currentItem->url());
+    KUrl urlCurrent(d->currentItem->url());
 
     if (!d->deleteItem2Trash)
     {
@@ -1091,7 +1091,7 @@ void ShowFoto::slotDeleteCurrentItem()
     }
     else
     {
-        KURL dest("trash:/");
+        KUrl dest("trash:/");
 
         if (!KProtocolInfo::isKnownProtocol(dest))
         {
@@ -1152,7 +1152,7 @@ void ShowFoto::slotContextMenu()
 
 void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& settings)
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
 
     settings.exifRotate = config->readBoolEntry("EXIF Rotate", true);
@@ -1166,7 +1166,7 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
     m_nameLabel->progressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode, 
                                  i18n("Prepare slideshow. Please wait..."));
 
-    for (KURL::List::Iterator it = settings.fileList.begin() ; 
+    for (KUrl::List::Iterator it = settings.fileList.begin() ; 
          !m_cancelSlideShow && (it != settings.fileList.end()) ; ++it)
     {
         Digikam::SlidePictureInfo pictInfo;

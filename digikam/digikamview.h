@@ -37,7 +37,7 @@
 
 #include "imageinfo.h"
 
-class KURL;
+class KUrl;
 
 namespace KIO
 {
@@ -95,7 +95,7 @@ public slots:
     void slotNewAlbum();
     void slotSortAlbums(int order);
     void slotDeleteAlbum();
-    void slotSelectAlbum(const KURL &url);
+    void slotSelectAlbum(const KUrl &url);
     void slotAlbumPropsEdit();
     void slotAlbumAddImages();
     void slotAlbumOpenInKonqui();

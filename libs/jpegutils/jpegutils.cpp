@@ -139,7 +139,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     jpeg_stdio_src(&cinfo, inputFile);
     jpeg_read_header(&cinfo, true);
 
-    int imgSize = QMAX(cinfo.image_width, cinfo.image_height);
+    int imgSize = qMax(cinfo.image_width, cinfo.image_height);
 
     // libjpeg supports 1/1, 1/2, 1/4, 1/8
     int scale=1;
@@ -233,7 +233,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
         }
     }
 
-    int newMax = QMAX(cinfo.output_width, cinfo.output_height);
+    int newMax = qMax(cinfo.output_width, cinfo.output_height);
     int newx = maximumSize*cinfo.output_width / newMax;
     int newy = maximumSize*cinfo.output_height / newMax;
 

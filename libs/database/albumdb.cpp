@@ -424,7 +424,7 @@ void AlbumDB::setTagParentID(int tagID, int newParentTagID)
              .arg(tagID) );
 }
 
-int AlbumDB::addSearch(const QString& name, const KURL& url)
+int AlbumDB::addSearch(const QString& name, const KUrl& url)
 {
     QString str("INSERT INTO Searches (name, url) \n"
                 "VALUES('$$@@$$', '$$##$$');");
@@ -440,7 +440,7 @@ int AlbumDB::addSearch(const QString& name, const KURL& url)
 }
 
 void AlbumDB::updateSearch(int searchID, const QString& name,
-               const KURL& url)
+               const KUrl& url)
 {
     QString str = QString("UPDATE Searches SET name='$$@@$$', url='$$##$$' \n"
                           "WHERE id=%1")

@@ -41,8 +41,9 @@
 #include <knuminput.h>
 #include <kconfig.h>
 #include <kapplication.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <ktrader.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -145,7 +146,7 @@ void SetupEditor::slotThemeBackgroundColor(bool e)
 
 void SetupEditor::readSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     QColor Black(Qt::black);
     QColor White(Qt::white);
     config->setGroup("ImageViewer Settings");
@@ -158,7 +159,7 @@ void SetupEditor::readSettings()
 
 void SetupEditor::applySettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     config->writeEntry("UseThemeBackgroundColor", d->themebackgroundColor->isChecked());
     config->writeEntry("BackgroundColor", d->backgroundColor->color());

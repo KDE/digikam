@@ -38,7 +38,7 @@
 
 // KDE includes.
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kurllabel.h>
@@ -77,7 +77,7 @@ public:
     QPushButton *editButton;
     QPushButton *autoDetectButton;
     
-    KListView   *listView;
+    K3ListView   *listView;
 };
 
 SetupCamera::SetupCamera( QWidget* parent )
@@ -89,7 +89,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     Q3GridLayout* groupBoxLayout = new Q3GridLayout( this, 2, 5, 0, KDialog::spacingHint() );
     groupBoxLayout->setAlignment( Qt::AlignTop );
 
-    d->listView = new KListView( this );
+    d->listView = new K3ListView( this );
     d->listView->addColumn( i18n("Title") );
     d->listView->addColumn( i18n("Model") );
     d->listView->addColumn( i18n("Port") );
@@ -122,7 +122,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
     groupBoxLayout->addItem( spacer, 4, 1 );
 
-    KURLLabel *gphotoLogoLabel = new KURLLabel(this);
+    KUrlLabel *gphotoLogoLabel = new KUrlLabel(this);
     gphotoLogoLabel->setText(QString());
     gphotoLogoLabel->setURL("http://www.gphoto.org");
     KGlobal::dirs()->addResourceType("logo-gphoto", KGlobal::dirs()->kde_default("data") + "digikam/data");
@@ -170,7 +170,7 @@ SetupCamera::SetupCamera( QWidget* parent )
         for (CameraType *ctype = cl->first(); ctype;
              ctype = cl->next()) 
         {
-            new KListViewItem(d->listView, ctype->title(), ctype->model(),
+            new K3ListViewItem(d->listView, ctype->title(), ctype->model(),
                               ctype->port(), ctype->path(), 
                               ctype->lastAccess().toString(Qt::ISODate));
         }
@@ -242,7 +242,7 @@ void SetupCamera::slotAutoDetectCamera()
 {
     QString model, port;
     
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     int ret = GPIface::autoDetect(model, port);
     kapp->restoreOverrideCursor();
     
@@ -266,7 +266,7 @@ void SetupCamera::slotAutoDetectCamera()
     {
         KMessageBox::information(this, i18n("Found camera '%1' (%2) and added it to the list.")
                                  .arg(model).arg(port));
-        new KListViewItem(d->listView, model, model, port, "/", 
+        new K3ListViewItem(d->listView, model, model, port, "/", 
                           QDateTime::currentDateTime().toString(Qt::ISODate));
     }
 }
@@ -274,7 +274,7 @@ void SetupCamera::slotAutoDetectCamera()
 void SetupCamera::slotAddedCamera(const QString& title, const QString& model,
                                   const QString& port, const QString& path)
 {
-    new KListViewItem(d->listView, title, model, port, path, 
+    new K3ListViewItem(d->listView, title, model, port, path, 
                       QDateTime::currentDateTime().toString(Qt::ISODate));
 }
 

@@ -65,7 +65,7 @@ protected:
     
 private:
 
-    bool checkName( KURL& url );
+    bool checkName( KUrl& url );
     bool checkAlbum( const QString& name ) const;
 
 private:

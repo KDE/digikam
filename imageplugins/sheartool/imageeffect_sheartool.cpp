@@ -42,6 +42,7 @@
 #include <kseparator.h>
 #include <kcursor.h>
 #include <kconfig.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -103,11 +104,11 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     
     QLabel *label1 = new QLabel(i18n("New width:"), gboxSettings);
     m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), gboxSettings);
-    m_newWidthLabel->setAlignment( AlignBottom | AlignRight );
+    m_newWidthLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
     
     QLabel *label2 = new QLabel(i18n("New height:"), gboxSettings);
     m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"), gboxSettings);
-    m_newHeightLabel->setAlignment( AlignBottom | AlignRight );
+    m_newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
     gridSettings->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
@@ -183,7 +184,7 @@ ImageEffect_ShearTool::~ImageEffect_ShearTool()
 
 void ImageEffect_ShearTool::readUserSettings(void)
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("sheartool Tool Dialog");
     m_mainHAngleInput->setValue(config->readNumEntry("Main HAngle", 0));
     m_mainVAngleInput->setValue(config->readNumEntry("Main VAngle", 0));
@@ -195,7 +196,7 @@ void ImageEffect_ShearTool::readUserSettings(void)
 
 void ImageEffect_ShearTool::writeUserSettings(void)
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("sheartool Tool Dialog");
     config->writeEntry("Main HAngle", m_mainHAngleInput->value());
     config->writeEntry("Main VAngle", m_mainVAngleInput->value());
@@ -226,7 +227,7 @@ void ImageEffect_ShearTool::resetValues()
 
 void ImageEffect_ShearTool::prepareEffect()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     m_mainHAngleInput->setEnabled(false);
     m_mainVAngleInput->setEnabled(false);
     m_fineHAngleInput->setEnabled(false);

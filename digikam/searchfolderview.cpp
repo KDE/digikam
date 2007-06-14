@@ -30,7 +30,7 @@
 
 // KDe includes.
 
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -126,7 +126,7 @@ SearchFolderView::~SearchFolderView()
 
 void SearchFolderView::quickSearchNew()
 {
-    KURL url;
+    KUrl url;
     SearchQuickDialog dlg(this, url);
 
     if (dlg.exec() != KDialogBase::Accepted)
@@ -153,7 +153,7 @@ void SearchFolderView::quickSearchNew()
 
 void SearchFolderView::extendedSearchNew()
 {
-    KURL url;
+    KUrl url;
     SearchAdvancedDialog dlg(this, url);
 
     if (dlg.exec() != KDialogBase::Accepted)
@@ -178,7 +178,7 @@ void SearchFolderView::extendedSearchNew()
     }
 }
 
-bool SearchFolderView::checkName( KURL& url )
+bool SearchFolderView::checkName( KUrl& url )
 {
     QString albumTitle     = url.queryItem("name");
     AlbumManager* aManager = AlbumManager::instance();
@@ -232,7 +232,7 @@ void SearchFolderView::quickSearchEdit(SAlbum* album)
     if (!album)
         return;
 
-    KURL url = album->kurl();
+    KUrl url = album->kurl();
     SearchQuickDialog dlg(this, url);
 
     if (dlg.exec() != KDialogBase::Accepted)
@@ -251,7 +251,7 @@ void SearchFolderView::extendedSearchEdit(SAlbum* album)
     if (!album)
         return;
 
-    KURL url = album->kurl();
+    KUrl url = album->kurl();
     SearchAdvancedDialog dlg(this, url);
 
     if (dlg.exec() != KDialogBase::Accepted)
@@ -339,7 +339,7 @@ void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
 {
     if (!item)
     {
-        KPopupMenu popmenu(this);
+        KMenu popmenu(this);
         popmenu.insertTitle(SmallIcon("digikam"), i18n("My Searches"));
         popmenu.insertItem(SmallIcon("filefind"), i18n("New Simple Search..."), 10);
         popmenu.insertItem(SmallIcon("find"),     i18n("New Advanced Search..."), 11);
@@ -364,7 +364,7 @@ void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
     {
         SearchFolderItem* sItem = dynamic_cast<SearchFolderItem*>(item);
 
-        KPopupMenu popmenu(this);
+        KMenu popmenu(this);
         popmenu.insertTitle(SmallIcon("digikam"), i18n("My Searches"));
         popmenu.insertItem(SmallIcon("filefind"), i18n("Edit Search..."), 10);
 

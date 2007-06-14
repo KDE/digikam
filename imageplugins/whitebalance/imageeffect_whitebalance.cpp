@@ -52,7 +52,7 @@
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstandarddirs.h>
 #include <kprogress.h>
 #include <kmessagebox.h>
@@ -61,7 +61,8 @@
 #include <kfiledialog.h>
 #include <kseparator.h>
 #include <kconfig.h>
-#include <kactivelabel.h>
+#include <k3activelabel.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -190,7 +191,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
     Q3GridLayout *grid2 = new Q3GridLayout(layout2, 13, 5, spacingHint());
 
-    m_temperatureLabel    = new KActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Color_temperature'>Color Temperature</a> "
+    m_temperatureLabel    = new K3ActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Color_temperature'>Color Temperature</a> "
                                                   " (K): </qt>"), gboxSettings);
     m_adjTemperatureLabel = new QLabel(i18n("Adjustment:"), gboxSettings);
     m_temperatureInput    = new KDoubleNumInput(gboxSettings);
@@ -280,7 +281,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_exposureLabel      = new KActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Exposure_value'>Exposure Compensation</a> "
+    m_exposureLabel      = new K3ActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Exposure_value'>Exposure Compensation</a> "
                                                  " (E.V): </qt>"), gboxSettings);
     m_mainExposureLabel  = new QLabel(i18n("Main:"), gboxSettings);
     m_autoAdjustExposure = new QPushButton(gboxSettings);
@@ -599,7 +600,7 @@ void ImageEffect_WhiteBalance::slotChannelChanged(int channel)
 
 void ImageEffect_WhiteBalance::slotAutoAdjustExposure()
 {
-    parentWidget()->setCursor( KCursor::waitCursor() );
+    parentWidget()->setCursor( Qt::WaitCursor );
 
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getOriginalImage();
@@ -663,7 +664,7 @@ void ImageEffect_WhiteBalance::slotEffect()
 
 void ImageEffect_WhiteBalance::finalRendering()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getOriginalImage();
     int w                      = iface->originalWidth();
@@ -732,7 +733,7 @@ void ImageEffect_WhiteBalance::resetValues()
 
 void ImageEffect_WhiteBalance::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("whitebalance Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
@@ -752,7 +753,7 @@ void ImageEffect_WhiteBalance::readUserSettings()
 
 void ImageEffect_WhiteBalance::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("whitebalance Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
@@ -771,7 +772,7 @@ void ImageEffect_WhiteBalance::writeUserSettings()
 // Load all settings.
 void ImageEffect_WhiteBalance::slotUser3()
 {
-    KURL loadWhiteBalanceFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    KUrl loadWhiteBalanceFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,
                                              QString( i18n("White Color Balance Settings File to Load")) );
     if( loadWhiteBalanceFile.isEmpty() )
@@ -814,7 +815,7 @@ void ImageEffect_WhiteBalance::slotUser3()
 // Save all settings.
 void ImageEffect_WhiteBalance::slotUser2()
 {
-    KURL saveWhiteBalanceFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    KUrl saveWhiteBalanceFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,
                                              QString( i18n("White Color Balance Settings File to Save")) );
     if( saveWhiteBalanceFile.isEmpty() )

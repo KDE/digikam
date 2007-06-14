@@ -49,9 +49,9 @@
 #include <kmimetype.h>
 #include <kiconloader.h>
 #include <kcursor.h>
-#include <kdatetbl.h>
+#include <kdatetable.h>
 #include <kiconloader.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kapplication.h>
 
 // Local includes.
@@ -134,7 +134,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     d = new LightTablePreviewPriv;
 
     // get preview size from screen size, but limit from VGA to WQXGA
-    d->previewSize = QMAX(KApplication::desktop()->height(),
+    d->previewSize = qMax(KApplication::desktop()->height(),
                           KApplication::desktop()->width());
     if (d->previewSize < 640)
         d->previewSize = 640;
@@ -240,7 +240,7 @@ void LightTablePreview::setPreviousNextPaths(const QString& previous, const QStr
 
 void LightTablePreview::setImagePath(const QString& path)
 {
-    setCursor( KCursor::waitCursor() );
+    setCursor( Qt::WaitCursor );
 
     d->path         = path;
     d->nextPath     = QString();
@@ -360,7 +360,7 @@ void LightTablePreview::slotContextMenu()
 
     //-- Open With Actions ------------------------------------
 
-    KURL url(d->imageInfo->kurl().path());
+    KUrl url(d->imageInfo->kurl().path());
     KMimeType::Ptr mimePtr = KMimeType::findByURL(url, 0, true, true);
 
     Q3ValueVector<KService::Ptr> serviceVector;
@@ -518,7 +518,7 @@ void LightTablePreview::slotRemoveTag(int tagID)
 
 void LightTablePreview::slotAssignRating(int rating)
 {
-    rating = QMIN(RatingMax, QMAX(RatingMin, rating));
+    rating = qMin(RatingMax, qMax(RatingMin, rating));
     if (d->imageInfo)
     {
         MetadataHub hub;
@@ -678,8 +678,8 @@ void LightTablePreview::contentsDragMoveEvent(QDragMoveEvent *e)
         int             albumID;
         Q3ValueList<int> albumIDs;
         Q3ValueList<int> imageIDs;
-        KURL::List      urls;
-        KURL::List      kioURLs;        
+        KUrl::List      urls;
+        KUrl::List      kioURLs;        
     
         if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs) ||
             AlbumDrag::decode(e, urls, albumID) ||
@@ -700,8 +700,8 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
         int             albumID;
         Q3ValueList<int> albumIDs;
         Q3ValueList<int> imageIDs;
-        KURL::List      urls;
-        KURL::List      kioURLs;  
+        KUrl::List      urls;
+        KUrl::List      kioURLs;  
         ImageInfoList   list;
     
         if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))

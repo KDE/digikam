@@ -218,7 +218,7 @@ void HistogramWidget::customEvent(QCustomEvent *event)
 
     if (ed->starting)
     {
-        setCursor( KCursor::waitCursor() );
+        setCursor( Qt::WaitCursor );
         d->clearFlag = HistogramWidgetPriv::HistogramStarted;
         if (!d->inInitialRepaintWait)
         {
@@ -245,7 +245,7 @@ void HistogramWidget::customEvent(QCustomEvent *event)
             d->clearFlag = HistogramWidgetPriv::HistogramCompleted;
             d->blinkTimer->stop();
             d->inInitialRepaintWait = false;
-            setCursor( KCursor::arrowCursor() );
+            setCursor( Qt::ArrowCursor );
 
             // Send signals to refresh information if necessary.
             // The signals may trigger multiple repaints, avoid this,
@@ -264,7 +264,7 @@ void HistogramWidget::customEvent(QCustomEvent *event)
             d->blinkTimer->stop();
             d->inInitialRepaintWait = false;
             repaint(false);
-            setCursor( KCursor::arrowCursor() );    
+            setCursor( Qt::ArrowCursor );    
             // Remove old histogram data from memory.
             if (m_imageHistogram)
             {
@@ -287,7 +287,7 @@ void HistogramWidget::setDataLoading()
 {
     if (d->clearFlag != HistogramWidgetPriv::HistogramDataLoading)
     {
-        setCursor( KCursor::waitCursor() );
+        setCursor( Qt::WaitCursor );
         d->clearFlag = HistogramWidgetPriv::HistogramDataLoading;
         // enter initial repaint wait, repaint only after waiting
         // a short time so that very fast computation does not create flicker
@@ -303,7 +303,7 @@ void HistogramWidget::setLoadingFailed()
     d->blinkTimer->stop();
     d->inInitialRepaintWait = false;
     repaint(false);
-    setCursor( KCursor::arrowCursor() );
+    setCursor( Qt::ArrowCursor );
 }
 
 void HistogramWidget::stopHistogramComputation(void)
@@ -475,7 +475,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
           break;
 
        case HistogramWidget::ColorChannelsHistogram:   // All color channels.
-          max = QMAX (QMAX (histogram->getMaximum(ImageHistogram::RedChannel),
+          max = qMax (qMax (histogram->getMaximum(ImageHistogram::RedChannel),
                             histogram->getMaximum(ImageHistogram::GreenChannel)),
                       histogram->getMaximum(ImageHistogram::BlueChannel));  
           break;
@@ -695,7 +695,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                     p1.drawLine(x, wHeight, x, wHeight - yr);
 
                     p1.setPen(QPen(Qt::white, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);
+                    p1.drawLine(x, wHeight - qMax(qMax(yr, yg), yb), x, 0);
                     p1.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
                     p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
@@ -718,7 +718,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                     p1.drawLine(x, wHeight, x, wHeight - yg);
 
                     p1.setPen(QPen(Qt::white, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);
+                    p1.drawLine(x, wHeight - qMax(qMax(yr, yg), yb), x, 0);
                     p1.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
                     p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
@@ -741,7 +741,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                     p1.drawLine(x, wHeight, x, wHeight - yb);
 
                     p1.setPen(QPen(Qt::white, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);
+                    p1.drawLine(x, wHeight - qMax(qMax(yr, yg), yb), x, 0);
                     p1.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
                     p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
@@ -771,7 +771,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                  p1.drawLine(x, wHeight, x, wHeight - yr);
 
                  p1.setPen(QPen(Qt::white, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);
+                 p1.drawLine(x, wHeight - qMax(qMax(yr, yg), yb), x, 0);
                  p1.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
                  p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
@@ -794,7 +794,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                  p1.drawLine(x, wHeight, x, wHeight - yg);
 
                  p1.setPen(QPen(Qt::white, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
+                 p1.drawLine(x, wHeight - qMax(qMax(yr, yg), yb), x, 0);                 
                  p1.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);                 
                  p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);                 
@@ -817,7 +817,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                  p1.drawLine(x, wHeight, x, wHeight - yb);                 
 
                  p1.setPen(QPen(Qt::white, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);                 
+                 p1.drawLine(x, wHeight - qMax(qMax(yr, yg), yb), x, 0);                 
                  p1.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);                 
                  p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);                 
@@ -857,7 +857,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
              break;
 
           case HistogramWidget::ValueHistogram:    
-             guidePos = QMAX(QMAX(d->colorGuide.Qt::red(), d->colorGuide.Qt::green()), d->colorGuide.Qt::blue());
+             guidePos = qMax(qMax(d->colorGuide.Qt::red(), d->colorGuide.Qt::green()), d->colorGuide.Qt::blue());
              break;
 
           default:                                     // Alpha.
@@ -979,7 +979,7 @@ void HistogramWidget::mouseMoveEvent ( QMouseEvent * e )
 {
     if ( d->selectMode == true && d->clearFlag == HistogramWidgetPriv::HistogramCompleted ) 
     {
-       setCursor( KCursor::crossCursor() );
+       setCursor( Qt::CrossCursor );
 
        if (d->inSelected)
        {

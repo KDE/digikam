@@ -39,7 +39,7 @@
 
 class QPixmap;
 
-class KURL;
+class KUrl;
 
 namespace Digikam
 {
@@ -104,7 +104,7 @@ private:
     void albumRename(AlbumFolderViewItem *item);
     void albumDelete(AlbumFolderViewItem *item);
 
-    void addAlbumChildrenToList(KURL::List &list, Album *album);
+    void addAlbumChildrenToList(KUrl::List &list, Album *album);
 
     AlbumFolderViewItem* findParent(PAlbum* album, bool& failed);
     AlbumFolderViewItem* findParentByFolder(PAlbum* album, bool& failed);

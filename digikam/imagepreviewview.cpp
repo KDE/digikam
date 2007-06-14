@@ -46,9 +46,9 @@
 #include <kmimetype.h>
 #include <kiconloader.h>
 #include <kcursor.h>
-#include <kdatetbl.h>
+#include <kdatetable.h>
 #include <kiconloader.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kapplication.h>
 
 // LibKipi includes.
@@ -137,7 +137,7 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
     d->parent = parent;
 
     // get preview size from screen size, but limit from VGA to WQXGA
-    d->previewSize = QMAX(KApplication::desktop()->height(),
+    d->previewSize = qMax(KApplication::desktop()->height(),
                           KApplication::desktop()->width());
     if (d->previewSize < 640)
         d->previewSize = 640;
@@ -219,7 +219,7 @@ void ImagePreviewView::setPreviousNextPaths(const QString& previous, const QStri
 
 void ImagePreviewView::setImagePath(const QString& path)
 {
-    setCursor( KCursor::waitCursor() );
+    setCursor( Qt::WaitCursor );
 
     d->path         = path;
     d->nextPath     = QString();
@@ -265,7 +265,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
         QFileInfo info(d->path);
         p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
-                   Qt::AlignCenter|Qt::WordBreak, 
+                   Qt::AlignCenter|Qt::TextWordWrap, 
                    i18n("Cannot display preview for\n\"%1\"")
                    .arg(info.fileName()));
         p.end();
@@ -340,7 +340,7 @@ void ImagePreviewView::slotContextMenu()
 
     //-- Open With Actions ------------------------------------
 
-    KURL url(d->imageInfo->kurl().path());
+    KUrl url(d->imageInfo->kurl().path());
     KMimeType::Ptr mimePtr = KMimeType::findByURL(url, 0, true, true);
 
     Q3ValueVector<KService::Ptr> serviceVector;
@@ -538,7 +538,7 @@ void ImagePreviewView::slotRemoveTag(int tagID)
 
 void ImagePreviewView::slotAssignRating(int rating)
 {
-    rating = QMIN(5, QMAX(0, rating));
+    rating = qMin(5, qMax(0, rating));
     if (d->imageInfo)
     {
         MetadataHub hub;

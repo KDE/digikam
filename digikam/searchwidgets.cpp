@@ -188,7 +188,7 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent, SearchAdvancedRule::Opti
              this, SIGNAL( signalBaseItemToggled() ));
 }
 
-void SearchAdvancedRule::setValues(const KURL& url)
+void SearchAdvancedRule::setValues(const KUrl& url)
 {
     if (url.isEmpty())
         return;

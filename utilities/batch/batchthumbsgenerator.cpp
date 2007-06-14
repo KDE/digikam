@@ -41,7 +41,7 @@ extern "C"
 
 // KDE includes.
 
-#include <kmdcodec.h>
+#include <kcodecs.h>
 #include <klocale.h>
 #include <kapplication.h>
 
@@ -134,7 +134,7 @@ void BatchThumbsGenerator::slotRebuildAllThumbComplete()
 void BatchThumbsGenerator::rebuildAllThumbs(int size)
 {
     QStringList allPicturesPath;
-    QString thumbCacheDir = QDir::homeDirPath() + "/.thumbnails/";
+    QString thumbCacheDir = QDir::homePath() + "/.thumbnails/";
     QString filesFilter   = AlbumSettings::instance()->getAllFileFilter();
     bool exifRotate       = AlbumSettings::instance()->getExifRotate();
     AlbumList palbumList  = AlbumManager::instance()->allPAlbums();
@@ -173,7 +173,7 @@ void BatchThumbsGenerator::rebuildAllThumbs(int size)
     for (QStringList::iterator it = allPicturesPath.begin(); 
          !d->cancel && (it != allPicturesPath.end()); ++it)
     {
-        QString uri = "file://" + QDir::cleanDirPath(*it);
+        QString uri = "file://" + QDir::cleanPath(*it);
         KMD5 md5(QFile::encodeName(uri));
         uri = md5.hexDigest();
     
@@ -192,19 +192,19 @@ void BatchThumbsGenerator::rebuildAllThumbs(int size)
         d->thumbJob = 0;
     }
     
-    d->thumbJob = new ThumbnailJob(KURL::List(allPicturesPath), size, true, exifRotate);
+    d->thumbJob = new ThumbnailJob(KUrl::List(allPicturesPath), size, true, exifRotate);
        
-    connect(d->thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
-            this, SLOT(slotRebuildThumbDone(const KURL&, const QPixmap&)));
+    connect(d->thumbJob, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
+            this, SLOT(slotRebuildThumbDone(const KUrl&, const QPixmap&)));
     
-    connect(d->thumbJob, SIGNAL(signalFailed(const KURL&)),
-            this, SLOT(slotRebuildThumbDone(const KURL&)));
+    connect(d->thumbJob, SIGNAL(signalFailed(const KUrl&)),
+            this, SLOT(slotRebuildThumbDone(const KUrl&)));
 
     connect(d->thumbJob, SIGNAL(signalCompleted()),
             this, SIGNAL(signalRebuildThumbsDone()));
 }
 
-void BatchThumbsGenerator::slotRebuildThumbDone(const KURL& url, const QPixmap& pix)
+void BatchThumbsGenerator::slotRebuildThumbDone(const KUrl& url, const QPixmap& pix)
 {
     addedAction(pix, url.path());
     advance(1);

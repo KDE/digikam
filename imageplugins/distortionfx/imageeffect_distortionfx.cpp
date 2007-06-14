@@ -48,6 +48,7 @@
 #include <knuminput.h>
 #include <kstandarddirs.h>
 #include <kprogress.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -221,7 +222,7 @@ void ImageEffect_DistortionFX::renderingFinished()
 
 void ImageEffect_DistortionFX::readUserSettings(void)
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("distortionfx Tool Dialog");
 
     m_effectType->blockSignals(true);
@@ -241,7 +242,7 @@ void ImageEffect_DistortionFX::readUserSettings(void)
 
 void ImageEffect_DistortionFX::writeUserSettings(void)
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("distortionfx Tool Dialog");
     config->writeEntry("EffectType", m_effectType->currentItem());
     config->writeEntry("IterationAjustment", m_iterationInput->value());

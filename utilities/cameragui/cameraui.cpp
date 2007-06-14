@@ -77,7 +77,7 @@ extern "C"
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kiconloader.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstandarddirs.h>
 #include <khelpmenu.h>
 #include <kcalendarsystem.h>
@@ -212,7 +212,7 @@ public:
 
     KSqueezedTextLabel           *status;
 
-    KURL                          lastDestURL;
+    KUrl                          lastDestURL;
 
     KHelpMenu                    *helpMenu;
 
@@ -379,14 +379,14 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->progress->setMaximumHeight( fontMetrics().height() );
     d->progress->hide();
 
-    Q3Frame *frame = new Q3Frame(plainPage());
+    QFrame *frame = new Q3Frame(plainPage());
     frame->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
     frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
     Q3HBoxLayout* layout = new Q3HBoxLayout( frame );
     layout->setMargin( 2 );  // To make sure the frame gets displayed
     layout->setSpacing( 0 );
 
-    KURLLabel *pixmapLogo = new KURLLabel( "http://www.digikam.org", QString(), frame );
+    KUrlLabel *pixmapLogo = new KUrlLabel( "http://www.digikam.org", QString(), frame );
     pixmapLogo->setMargin(0);
     pixmapLogo->setScaledContents( false );
     pixmapLogo->setPaletteBackgroundColor( QColor(201, 208, 255) );
@@ -480,8 +480,8 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     connect(d->view, SIGNAL(signalFileView(CameraIconViewItem*)),
             this, SLOT(slotFileView(CameraIconViewItem*)));
 
-    connect(d->view, SIGNAL(signalUpload(const KURL::List&)),
-            this, SLOT(slotUploadItems(const KURL::List&)));
+    connect(d->view, SIGNAL(signalUpload(const KUrl::List&)),
+            this, SLOT(slotUploadItems(const KUrl::List&)));
 
     connect(d->view, SIGNAL(signalDownload()),
             this, SLOT(slotDownloadSelected()));
@@ -578,7 +578,7 @@ CameraUI::~CameraUI()
 
 void CameraUI::readSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("Camera Settings");
     d->advBox->setCurrentIndex(config->readNumEntry("Settings Tab", CameraUIPriv::RENAMEFILEPAGE));
     d->autoRotateCheck->setChecked(config->readBoolEntry("AutoRotate", true));
@@ -610,7 +610,7 @@ void CameraUI::saveSettings()
 {
     saveDialogSize("Camera Settings");
 
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("Camera Settings");
     config->writeEntry("Settings Tab", d->advBox->currentIndex());
     config->writeEntry("AutoRotate", d->autoRotateCheck->isChecked());
@@ -993,13 +993,13 @@ void CameraUI::slotUpload()
 
     DDebug () << "fileformats=" << fileformats << endl;   
 
-    KURL::List urls = KFileDialog::getOpenURLs(CollectionManager::instance()->oneAlbumRootPath(),
+    KUrl::List urls = KFileDialog::getOpenURLs(CollectionManager::instance()->oneAlbumRootPath(),
                                                fileformats, this, i18n("Select Image to Upload"));
     if (!urls.isEmpty())
         slotUploadItems(urls);
 }
 
-void CameraUI::slotUploadItems(const KURL::List& urls)
+void CameraUI::slotUploadItems(const KUrl::List& urls)
 {
     if (d->busy)
         return;
@@ -1015,7 +1015,7 @@ void CameraUI::slotUploadItems(const KURL::List& urls)
 
     QString cameraFolder = dlg.selectedFolderPath();
 
-    for (KURL::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
+    for (KUrl::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
     {
         QFileInfo fi((*it).path());
         if (!fi.exists()) continue;
@@ -1109,7 +1109,7 @@ void CameraUI::slotDownload(bool onlySelected)
 
     // -- Prepare downloading of camera items ------------------------
 
-    KURL url;
+    KUrl url;
     url.setPath(((PAlbum*)album)->folderPath());
     
     d->controller->downloadPrep();
@@ -1157,7 +1157,7 @@ void CameraUI::slotDownload(bool onlySelected)
         if (downloadName.isEmpty())
             downloadName = d->view->defaultDownloadName(iconItem);
         
-        KURL u(url);
+        KUrl u(url);
         QString errMsg;
         QDateTime dateTime;
         dateTime.setTime_t(mtime);
@@ -1488,7 +1488,7 @@ void CameraUI::slotExifFromData(const QByteArray& exifData)
     if (!item)
         return;
 
-    KURL url(item->itemInfo()->folder + '/' + item->itemInfo()->name);
+    KUrl url(item->itemInfo()->folder + '/' + item->itemInfo()->name);
 
     // Sometimes, GPhoto2 drivers return complete APP1 JFIF section. Exiv2 cannot 
     // decode (yet) exif metadata from APP1. We will find Exif header to get data at this place 
@@ -1544,7 +1544,7 @@ void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
         if (d->currentlyDeleting.find(item->itemInfo()->folder + item->itemInfo()->name)
              == d->currentlyDeleting.end())
         {
-            KURL url(item->itemInfo()->folder + '/' + item->itemInfo()->name);
+            KUrl url(item->itemInfo()->folder + '/' + item->itemInfo()->name);
             d->rightSidebar->itemChanged(item->itemInfo(), url, QByteArray(), d->view, item);
             d->controller->getExif(item->itemInfo()->folder, item->itemInfo()->name);
         }
@@ -1557,10 +1557,10 @@ void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
         d->rightSidebar->slotNoCurrentItem();
 }
 
-bool CameraUI::createAutoAlbum(const KURL& parentURL, const QString& name,
+bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& name,
                                const QDate& date, QString& errMsg)
 {
-    KURL u(parentURL);
+    KUrl u(parentURL);
     u.addPath(name);
 
     // first stat to see if the album exists
@@ -1655,12 +1655,12 @@ void CameraUI::keyPressEvent(QKeyEvent *e)
     {
         switch ( e->key() )
         {
-        case Key_Escape:
+        case Qt::Key_Escape:
             e->accept();
             reject();
         break;
-        case Key_Enter:            
-        case Key_Return:     
+        case Qt::Key_Enter:            
+        case Qt::Key_Return:     
             e->ignore();              
         break;
         default:
@@ -1672,7 +1672,7 @@ void CameraUI::keyPressEvent(QKeyEvent *e)
     {
         // accept the dialog when Ctrl-Return is pressed
         if ( e->state() == ControlButton &&
-            (e->key() == Key_Return || e->key() == Key_Enter) )
+            (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) )
         {
             e->accept();
             accept();

@@ -41,6 +41,7 @@
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <knuminput.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -196,7 +197,7 @@ void ImageEffect_BlurFX::renderingFinished(void)
 
 void ImageEffect_BlurFX::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("blurfx Tool Dialog");
     m_effectType->blockSignals(true);
     m_distanceInput->blockSignals(true);
@@ -211,7 +212,7 @@ void ImageEffect_BlurFX::readUserSettings()
 
 void ImageEffect_BlurFX::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("blurfx Tool Dialog");
     config->writeEntry("EffectType", m_effectType->currentItem());
     config->writeEntry("DistanceAjustment", m_distanceInput->value());

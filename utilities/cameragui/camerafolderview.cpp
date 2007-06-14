@@ -56,7 +56,7 @@ public:
 };
 
 CameraFolderView::CameraFolderView(QWidget* parent)
-                : KListView(parent)
+                : K3ListView(parent)
 {
     d = new CameraFolderViewPriv;
     addColumn(i18n("Camera Folders"));
@@ -167,7 +167,7 @@ CameraFolderItem* CameraFolderView::rootFolder()
 
 void CameraFolderView::clear()
 {
-    KListView::clear();
+    K3ListView::clear();
     d->virtualFolder = 0;
     d->rootFolder    = 0;
     emit signalCleared();

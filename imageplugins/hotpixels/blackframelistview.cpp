@@ -41,7 +41,7 @@ namespace DigikamHotPixelsImagesPlugin
 {
 
 BlackFrameListView::BlackFrameListView(QWidget* parent)
-                  : KListView(parent)
+                  : K3ListView(parent)
 {
     addColumn(i18n("Preview"));
     addColumn(i18n("Size"));
@@ -54,8 +54,8 @@ BlackFrameListView::BlackFrameListView(QWidget* parent)
 
 ///////////////////////////////////////////////////////////////
 
-BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, KURL url)
-                      : QObject(parent), KListViewItem(parent)                        
+BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, KUrl url)
+                      : QObject(parent), K3ListViewItem(parent)                        
 {
     m_parent        = parent;
     m_blackFrameURL = url;
@@ -64,8 +64,8 @@ BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, KURL 
     connect(&m_parser, SIGNAL(parsed(Q3ValueList<HotPixel>)),
             this, SLOT(slotParsed(Q3ValueList<HotPixel>)));
     
-    connect(this, SIGNAL(parsed(Q3ValueList<HotPixel>, const KURL&)),
-            parent, SLOT(slotParsed(Q3ValueList<HotPixel>, const KURL&)));
+    connect(this, SIGNAL(parsed(Q3ValueList<HotPixel>, const KUrl&)),
+            parent, SLOT(slotParsed(Q3ValueList<HotPixel>, const KUrl&)));
 }
 
 void BlackFrameListViewItem::activate()

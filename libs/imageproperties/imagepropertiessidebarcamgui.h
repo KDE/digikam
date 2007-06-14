@@ -57,7 +57,7 @@ public:
 
     ~ImagePropertiesSideBarCamGui();
 
-    void itemChanged(GPItemInfo* itemInfo, const KURL& url, const QByteArray& exifData=QByteArray(),
+    void itemChanged(GPItemInfo* itemInfo, const KUrl& url, const QByteArray& exifData=QByteArray(),
                      CameraIconView* view=0, CameraIconViewItem* item=0);
 
 public slots:

@@ -41,6 +41,7 @@
 #include <kstandarddirs.h>
 #include <knuminput.h>
 #include <kconfig.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -132,7 +133,7 @@ void ImageEffect_OilPaint::renderingFinished()
 
 void ImageEffect_OilPaint::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("oilpaint Tool Dialog");
     m_brushSizeInput->blockSignals(true);
     m_smoothInput->blockSignals(true);
@@ -144,7 +145,7 @@ void ImageEffect_OilPaint::readUserSettings()
 
 void ImageEffect_OilPaint::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("oilpaint Tool Dialog");
     config->writeEntry("BrushSize", m_brushSizeInput->value());
     config->writeEntry("SmoothAjustment", m_smoothInput->value());

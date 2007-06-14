@@ -42,10 +42,10 @@
 
 #include <kiconloader.h>
 #include <kglobalsettings.h>
-#include <kactivelabel.h>
+#include <k3activelabel.h>
 #include <kurlrequester.h>
 #include <klocale.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <klineedit.h>
 #include <kcursor.h>
 #include <kapplication.h>
@@ -92,16 +92,16 @@ public:
     
     KLineEdit     *titleEdit;
     
-    KListView     *listView;
+    K3ListView     *listView;
 
-    KURLRequester *umsMountURL;
+    KUrlRequester *umsMountURL;
 };
 
 CameraSelection::CameraSelection( QWidget* parent )
                : KDialogBase(Plain, i18n("Camera Configuration"),
                              Help|Ok|Cancel, Ok, parent, 0, true, true)
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     d = new CameraSelectionPriv;
     setHelp("cameraselection.anchor", "digikam");
     d->UMSCameraNameActual = QString("Directory Browse");   // Don't be i18n!
@@ -114,10 +114,10 @@ CameraSelection::CameraSelection( QWidget* parent )
     
     // --------------------------------------------------------------
 
-    d->listView = new KListView( plainPage() );
+    d->listView = new K3ListView( plainPage() );
     d->listView->addColumn( i18n("Camera List") );
     d->listView->setAllColumnsShowFocus(true);
-    d->listView->setResizeMode(KListView::LastColumn);
+    d->listView->setResizeMode(K3ListView::LastColumn);
     d->listView->setMinimumWidth(350);
     Q3WhatsThis::add( d->listView, i18n("<p>Select here the camera name that you want to use. All "
                                        "default settings on the right panel "
@@ -164,7 +164,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     QLabel* umsMountLabel = new QLabel( umsMountBox );
     umsMountLabel->setText( i18n( "Note: only for USB/IEEE mass storage camera" ) );
 
-    d->umsMountURL = new KURLRequester( QString("/mnt/camera"), umsMountBox);
+    d->umsMountURL = new KUrlRequester( QString("/mnt/camera"), umsMountBox);
     d->umsMountURL->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
     Q3WhatsThis::add( d->umsMountURL, i18n("<p>Set here the mount path to use on your computer. This "
                                           "option is only required if you use an <b>USB Mass Storage</b> "
@@ -182,19 +182,19 @@ CameraSelection::CameraSelection( QWidget* parent )
     logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 64, 
                     KIcon::DefaultState, 0, true));
 
-    KActiveLabel* link = new KActiveLabel(box2);
+    K3ActiveLabel* link = new K3ActiveLabel(box2);
     link->setText(i18n("<p>To set an <b>USB Mass Storage</b> camera<br>"
                        "(which appears like a removable drive), please<br>"
                        "use <a href=\"umscamera\">%1</a> from camera list.</p>") 
                        .arg(d->UMSCameraNameShown));
 
-    KActiveLabel* link2 = new KActiveLabel(box2);
+    K3ActiveLabel* link2 = new K3ActiveLabel(box2);
     link2->setText(i18n("<p>To set a <b>Generic PTP USB Device</b><br>"
                         "(which use Picture Transfer Protocol), please<br>"
                         "use <a href=\"ptpcamera\">%1</a> from camera list.</p>")
                         .arg(d->PTPCameraNameShown));
                            
-    KActiveLabel* explanation = new KActiveLabel(box2);
+    K3ActiveLabel* explanation = new K3ActiveLabel(box2);
     explanation->setText(i18n("<p>A complete list of camera settings to use is<br>"
                               "available at <a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>"
                               "this url</a>.</p>"));
@@ -315,9 +315,9 @@ void CameraSelection::getCameraList()
     {
         cname = clist[i];
         if (cname == d->UMSCameraNameActual)
-            new KListViewItem(d->listView, d->UMSCameraNameShown);
+            new K3ListViewItem(d->listView, d->UMSCameraNameShown);
         else
-            new KListViewItem(d->listView, cname);
+            new K3ListViewItem(d->listView, cname);
     }
 }
 

@@ -60,7 +60,7 @@
 #include <kcursor.h>
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kdatetbl.h>
+#include <kdatetable.h>
 #include <kglobalsettings.h>
 
 // Local includes.
@@ -393,7 +393,7 @@ double Canvas::calcAutoZoomFactor()
     double srcHeight = d->im->origHeight();
     double dstWidth  = contentsRect().width();
     double dstHeight = contentsRect().height();
-    return QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
+    return qMin(dstWidth/srcWidth, dstHeight/srcHeight);
 }
 
 void Canvas::updateAutoZoom()
@@ -432,8 +432,8 @@ void Canvas::updateContentsSize(bool deleteRubber)
         int centery = contentsRect().height()/2;
         int xoffset = int(centerx - wZ/2);
         int yoffset = int(centery - hZ/2);
-        xoffset     = QMAX(xoffset, 0);
-        yoffset     = QMAX(yoffset, 0);
+        xoffset     = qMax(xoffset, 0);
+        yoffset     = qMax(yoffset, 0);
 
         d->pixmapRect = QRect(xoffset, yoffset, wZ, hZ);
     }
@@ -485,10 +485,10 @@ void Canvas::resizeEvent(QResizeEvent* e)
 void Canvas::viewportPaintEvent(QPaintEvent *e)
 {
     QRect er(e->rect());
-    er = QRect(QMAX(er.x() - 1, 0),
-               QMAX(er.y() - 1, 0),
-               QMIN(er.width()  + 2, contentsRect().width()),
-               QMIN(er.height() + 2, contentsRect().height()));
+    er = QRect(qMax(er.x() - 1, 0),
+               qMax(er.y() - 1, 0),
+               qMin(er.width()  + 2, contentsRect().width()),
+               qMin(er.height() + 2, contentsRect().height()));
     
     paintViewport(er, (d->zoom <= 1.0) ? true : false);
 }
@@ -983,7 +983,7 @@ void Canvas::fitToSelect()
         double dstWidth  = contentsRect().width();
         double dstHeight = contentsRect().height();
     
-        d->zoom = QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
+        d->zoom = qMin(dstWidth/srcWidth, dstHeight/srcHeight);
 
         d->autoZoom = false;
         emit signalToggleOffFitToWindow();
@@ -1176,7 +1176,7 @@ void Canvas::slotCopy()
     if (!w && !h )  // No current selection.
         return;
 
-    QApplication::setOverrideCursor (Qt::waitCursor);
+    QApplication::setOverrideCursor (Qt::WaitCursor);
     uchar* data = d->im->getImageSelection();
     DImg selDImg = DImg(w, h, d->im->sixteenBit(), d->im->hasAlpha(), data);
     delete [] data;
@@ -1216,10 +1216,10 @@ QRect Canvas::calcSeletedArea()
         w = (int)(((double)r.width()  / d->tileSize) * floor(d->tileSize / d->zoom));   
         h = (int)(((double)r.height() / d->tileSize) * floor(d->tileSize / d->zoom));
 
-        x = QMIN(imageWidth(),  QMAX(x, 0));   
-        y = QMIN(imageHeight(), QMAX(y, 0));
-        w = QMIN(imageWidth(),  QMAX(w, 0));
-        h = QMIN(imageHeight(), QMAX(h, 0));
+        x = qMin(imageWidth(),  qMax(x, 0));   
+        y = qMin(imageHeight(), qMax(y, 0));
+        w = qMin(imageWidth(),  qMax(w, 0));
+        h = qMin(imageHeight(), qMax(h, 0));
 
         // Avoid empty selection by rubberband - at least mark one pixel
         // At high zoom factors, the rubberband may operate at subpixel level!

@@ -255,8 +255,8 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     // -- Pixmap manager connections ------------------------------------
 
-    connect(d->pixMan, SIGNAL(signalPixmap(const KURL&)),
-            SLOT(slotGotThumbnail(const KURL&)));
+    connect(d->pixMan, SIGNAL(signalPixmap(const KUrl&)),
+            SLOT(slotGotThumbnail(const KUrl&)));
 
     // -- ImageAttributesWatch connections ------------------------------
 
@@ -382,7 +382,7 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
 
     for (ImageInfoListIterator it = itemList.begin(); it != itemList.end(); ++it)
     {
-        KURL url( (*it)->fileUrl() );
+        KUrl url( (*it)->fileUrl() );
         url.cleanPath();
 
         QMap<ImageInfo*, AlbumIconItem*>::iterator itMap = d->itemInfoMap.find(*it);
@@ -427,7 +427,7 @@ void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
 
     /*
     // ?? Necessary? For what situation?
-    KURL url(item->kurl());
+    KUrl url(item->kurl());
     url.cleanPath();
 
     AlbumIconItem *oldItem = d->itemDict[url.url()];
@@ -500,7 +500,7 @@ void AlbumIconView::slotRightButtonClicked(const QPoint& pos)
     }
 
     Q3PopupMenu popmenu(this);
-    KAction *paste    = KStdAction::paste(this, SLOT(slotPaste()), 0);
+    KAction *paste    = KStandardAction::paste(this, SLOT(slotPaste()), 0);
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
 
     if(!data || !Q3UriDrag::canDecode(data))
@@ -597,8 +597,8 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // --------------------------------------------------------
     
-    KAction *copy     = KStdAction::copy(this, SLOT(slotCopy()), 0);
-    KAction *paste    = KStdAction::paste(this, SLOT(slotPaste()), 0);
+    KAction *copy     = KStandardAction::copy(this, SLOT(slotCopy()), 0);
+    KAction *paste    = KStandardAction::paste(this, SLOT(slotPaste()), 0);
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
     if(!data || !Q3UriDrag::canDecode(data))
     {
@@ -709,7 +709,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     if (id >= 100 && id < 1000) 
     {
         KService::Ptr imageServicePtr = serviceVector[id-100];
-        KURL::List urlList;
+        KUrl::List urlList;
         for (IconItem *it = firstItem(); it; it=it->nextItem())
         {
             if (it->isSelected())
@@ -734,8 +734,8 @@ void AlbumIconView::slotCopy()
     if (!d->currentAlbum)
         return;
 
-    KURL::List      urls;
-    KURL::List      kioURLs;
+    KUrl::List      urls;
+    KUrl::List      kioURLs;
     Q3ValueList<int> albumIDs;
     Q3ValueList<int> imageIDs;
 
@@ -777,9 +777,9 @@ void AlbumIconView::slotPaste()
             if (palbum->isRoot())
                 return;
 
-            KURL destURL(palbum->databaseUrl());
+            KUrl destURL(palbum->databaseUrl());
 
-            KURL::List srcURLs;
+            KUrl::List srcURLs;
             KURLDrag::decode(data, srcURLs);
 
             KIO::Job* job = DIO::copy(srcURLs, destURL);
@@ -844,15 +844,15 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     if (!ok)
         return;
 
-    KURL oldURL = renameInfo.databaseUrl();
-    KURL newURL = oldURL;
+    KUrl oldURL = renameInfo.databaseUrl();
+    KUrl newURL = oldURL;
     newURL.setFileName(newName + ext);
 
     KIO::CopyJob* job = DIO::rename(oldURL, newURL);
     connect(job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotDIOResult(KIO::Job*)));
-    connect(job, SIGNAL(copyingDone(KIO::Job *, const KURL &, const KURL &, bool, bool)),
-            this, SLOT(slotRenamed(KIO::Job*, const KURL &, const KURL&)));
+    connect(job, SIGNAL(copyingDone(KIO::Job *, const KUrl &, const KUrl &, bool, bool)),
+            this, SLOT(slotRenamed(KIO::Job*, const KUrl &, const KUrl&)));
 
     // The AlbumManager KDirWatch will trigger a DIO::scan.
     // When this is completed, DIO will call AlbumLister::instance()->refresh().
@@ -861,10 +861,10 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     d->imageLister->invalidateItem(&renameInfo);
 }
 
-void AlbumIconView::slotRenamed(KIO::Job*, const KURL &, const KURL&newURL)
+void AlbumIconView::slotRenamed(KIO::Job*, const KUrl &, const KUrl&newURL)
 {
     // reconstruct file path from digikamalbums:// URL
-    KURL fileURL;
+    KUrl fileURL;
     fileURL.setPath(newURL.user());
     fileURL.addPath(newURL.path());
 
@@ -876,8 +876,8 @@ void AlbumIconView::slotRenamed(KIO::Job*, const KURL &, const KURL&newURL)
 
 void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
 {
-    KURL::List  urlList;
-    KURL::List  kioUrlList;
+    KUrl::List  urlList;
+    KUrl::List  kioUrlList;
 
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
@@ -917,8 +917,8 @@ void AlbumIconView::slotDeleteSelectedItemsDirectly(bool useTrash)
     // This method deletes the selected items directly, without confirmation.
     // It is not used in the default setup.
 
-    KURL::List kioUrlList;
-    KURL::List urlList;
+    KUrl::List kioUrlList;
+    KUrl::List urlList;
 
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
@@ -945,12 +945,12 @@ void AlbumIconView::slotFilesModified()
     d->imageLister->refresh();
 }
 
-void AlbumIconView::slotFilesModified(const KURL& url)
+void AlbumIconView::slotFilesModified(const KUrl& url)
 {
     refreshItems(url);
 }
 
-void AlbumIconView::slotImageWindowURLChanged(const KURL &url)
+void AlbumIconView::slotImageWindowURLChanged(const KUrl &url)
 {
     IconItem* item = findItem(url.url());
     if (item)
@@ -1016,17 +1016,17 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
 
     imview->disconnect(this);
 
-    connect(imview, SIGNAL(signalFileAdded(const KURL&)),
+    connect(imview, SIGNAL(signalFileAdded(const KUrl&)),
             this, SLOT(slotFilesModified()));
 
-    connect(imview, SIGNAL(signalFileModified(const KURL&)),
-            this, SLOT(slotFilesModified(const KURL&)));
+    connect(imview, SIGNAL(signalFileModified(const KUrl&)),
+            this, SLOT(slotFilesModified(const KUrl&)));
 
-    connect(imview, SIGNAL(signalFileDeleted(const KURL&)),
+    connect(imview, SIGNAL(signalFileDeleted(const KUrl&)),
             this, SLOT(slotFilesModified()));
 
-    connect(imview, SIGNAL(signalURLChanged(const KURL&)),
-            this, SLOT(slotImageWindowURLChanged(const KURL &)));
+    connect(imview, SIGNAL(signalURLChanged(const KUrl&)),
+            this, SLOT(slotImageWindowURLChanged(const KUrl &)));
 
     imview->loadImageInfos(imageInfoList,
                            currentImageInfo,
@@ -1065,11 +1065,11 @@ void AlbumIconView::insertToLightTable(const ImageInfoList& list, ImageInfo* cur
 
     ltview->disconnect(this);
 
-    connect(ltview, SIGNAL(signalFileDeleted(const KURL&)),
+    connect(ltview, SIGNAL(signalFileDeleted(const KUrl&)),
            this, SLOT(slotFilesModified()));
 
-    connect(this, SIGNAL(signalItemsUpdated(const KURL::List&)),
-           ltview, SLOT(slotItemsUpdated(const KURL::List&)));
+    connect(this, SIGNAL(signalItemsUpdated(const KUrl::List&)),
+           ltview, SLOT(slotItemsUpdated(const KUrl::List&)));
 
     if (ltview->isHidden())
         ltview->show();
@@ -1121,8 +1121,8 @@ void AlbumIconView::startDrag()
     if (!d->currentAlbum)
         return;
 
-    KURL::List      urls;
-    KURL::List      kioURLs;
+    KUrl::List      urls;
+    KUrl::List      kioURLs;
     Q3ValueList<int> albumIDs;
     Q3ValueList<int> imageIDs;
 
@@ -1154,8 +1154,8 @@ void AlbumIconView::startDrag()
     p.drawRect(0, 0, w+4, h+4);
     p.drawPixmap(2, 2, icon);
     QRect r = p.boundingRect(2,2,w,h,Qt::AlignLeft|Qt::AlignTop,text);
-    r.setWidth(QMAX(r.width(),r.height()));
-    r.setHeight(QMAX(r.width(),r.height()));
+    r.setWidth(qMax(r.width(),r.height()));
+    r.setHeight(qMax(r.width(),r.height()));
     p.fillRect(r, QColor(0,80,0));
     p.setPen(Qt::white);
     QFont f(font());
@@ -1209,9 +1209,9 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         d->currentAlbum->type() == Album::PHYSICAL)
     {
         PAlbum* palbum = (PAlbum*)d->currentAlbum;
-        KURL destURL(palbum->databaseUrl());
+        KUrl destURL(palbum->databaseUrl());
 
-        KURL::List srcURLs;
+        KUrl::List srcURLs;
         KURLDrag::decode(event, srcURLs);
 
         Q3PopupMenu popMenu(this);
@@ -1463,9 +1463,9 @@ void AlbumIconView::slotShowToolTip(IconItem* item)
     d->toolTip->setIconItem(dynamic_cast<AlbumIconItem*>(item));
 }
 
-KURL::List AlbumIconView::allItems()
+KUrl::List AlbumIconView::allItems()
 {
-    KURL::List itemList;
+    KUrl::List itemList;
 
      for (IconItem *it = firstItem(); it; it = it->nextItem())
      {
@@ -1476,9 +1476,9 @@ KURL::List AlbumIconView::allItems()
     return itemList;
 }
 
-KURL::List AlbumIconView::selectedItems()
+KUrl::List AlbumIconView::selectedItems()
 {
-    KURL::List itemList;
+    KUrl::List itemList;
 
      for (IconItem *it = firstItem(); it; it = it->nextItem())
      {
@@ -1543,7 +1543,7 @@ void AlbumIconView::refresh()
     d->imageLister->openAlbum(d->currentAlbum);
 }
 
-void AlbumIconView::refreshItems(const KURL::List& urlList)
+void AlbumIconView::refreshItems(const KUrl::List& urlList)
 {
     if (!d->currentAlbum || urlList.empty())
         return;
@@ -1552,7 +1552,7 @@ void AlbumIconView::refreshItems(const KURL::List& urlList)
     // 1. refresh the imageinfo for the file
     // 2. refresh the thumbnails
 
-    for (KURL::List::const_iterator it = urlList.begin();
+    for (KUrl::List::const_iterator it = urlList.begin();
          it != urlList.end(); ++it)
     {
         AlbumIconItem* iconItem = findItem((*it).url());
@@ -1571,7 +1571,7 @@ void AlbumIconView::refreshItems(const KURL::List& urlList)
     triggerRearrangement();
 }
 
-void AlbumIconView::slotGotThumbnail(const KURL& url)
+void AlbumIconView::slotGotThumbnail(const KUrl& url)
 {
     AlbumIconItem* iconItem = findItem(url.url());
     if (!iconItem)
@@ -1590,7 +1590,7 @@ void AlbumIconView::slotSelectionChanged()
 
 void AlbumIconView::slotSetExifOrientation( int orientation )
 {
-    KURL::List urlList;
+    KUrl::List urlList;
     int i = 0;
 
     for (IconItem *it = firstItem(); it; it=it->nextItem())
@@ -1604,7 +1604,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
 
     if (urlList.count() <= 0) return;
 
-    KURL::List::Iterator it;
+    KUrl::List::Iterator it;
     float cnt = (float)urlList.count();
     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                 i18n("Revising Exif Orientation tags. Please wait..."));
@@ -1980,7 +1980,7 @@ void AlbumIconView::slotAssignRating(int rating)
 
     int   i   = 0;
     float cnt = (float)countSelected();
-    rating    = QMIN(RatingMax, QMAX(RatingMin, rating));
+    rating    = qMin(RatingMax, qMax(RatingMin, rating));
 
     {
         DatabaseTransaction transaction;

@@ -33,7 +33,7 @@
 
 #include "digikam_export.h"
 
-class KURL;
+class KUrl;
 
 namespace Digikam
 {
@@ -52,7 +52,7 @@ public:
 
 public slots:
 
-    virtual void showPreview(const KURL &url);
+    virtual void showPreview(const KUrl &url);
 
 protected:
 

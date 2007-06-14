@@ -61,7 +61,7 @@ public:
     };
 
     ImageQueryBuilder();
-    QString buildQuery(const KURL& url) const;
+    QString buildQuery(const KUrl& url) const;
 
 protected:
 

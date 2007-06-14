@@ -50,6 +50,7 @@
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <kcolorbutton.h>
+#include <kglobal.h>
 
 // Digikam includes.
 
@@ -76,7 +77,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    Q3Frame *frame = new Q3Frame(plainPage());
+    QFrame *frame = new Q3Frame(plainPage());
     frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
     Q3VBoxLayout* l = new Q3VBoxLayout(frame, 5, 0);
     m_imageSelectionWidget = new ImageSelectionWidget(480, 320, frame);
@@ -145,11 +146,11 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     // -------------------------------------------------------------
 
     m_customLabel1 = new QLabel(i18n("Custom ratio:"), cropSelection);
-    m_customLabel1->setAlignment(AlignLeft|AlignVCenter);
+    m_customLabel1->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
     m_customRatioNInput = new KIntSpinBox(1, 10000, 1, 1, 10, cropSelection);
     Q3WhatsThis::add( m_customRatioNInput, i18n("<p>Set here the desired custom aspect numerator value."));
     m_customLabel2 = new QLabel(" : ", cropSelection);
-    m_customLabel2->setAlignment(AlignCenter|AlignVCenter);
+    m_customLabel2->setAlignment(Qt::AlignCenter|Qt::AlignVCenter);
     m_customRatioDInput = new KIntSpinBox(1, 10000, 1, 1, 10, cropSelection);
     Q3WhatsThis::add( m_customRatioDInput, i18n("<p>Set here the desired custom aspect denominator value."));
 
@@ -162,11 +163,11 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     m_xInput = new KIntNumInput(cropSelection);
     Q3WhatsThis::add( m_xInput, i18n("<p>Set here the top left selection corner position for cropping."));
-    m_xInput->setLabel(i18n("X:"), AlignLeft|AlignVCenter);
+    m_xInput->setLabel(i18n("X:"), Qt::AlignLeft|Qt::AlignVCenter);
     m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
 
     m_widthInput = new KIntNumInput(cropSelection);
-    m_widthInput->setLabel(i18n("Width:"), AlignLeft|AlignVCenter);
+    m_widthInput->setLabel(i18n("Width:"), Qt::AlignLeft|Qt::AlignVCenter);
     Q3WhatsThis::add( m_widthInput, i18n("<p>Set here the width selection for cropping."));
     m_widthInput->setRange(10, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
 
@@ -183,12 +184,12 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     // -------------------------------------------------------------
 
     m_yInput = new KIntNumInput(cropSelection);
-    m_yInput->setLabel(i18n("Y:"), AlignLeft|AlignVCenter);
+    m_yInput->setLabel(i18n("Y:"), Qt::AlignLeft|Qt::AlignVCenter);
     Q3WhatsThis::add( m_yInput, i18n("<p>Set here the top left selection corner position for cropping."));
     m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
 
     m_heightInput = new KIntNumInput(cropSelection);
-    m_heightInput->setLabel(i18n("Height:"), AlignLeft|AlignVCenter);
+    m_heightInput->setLabel(i18n("Height:"), Qt::AlignLeft|Qt::AlignVCenter);
     Q3WhatsThis::add( m_heightInput, i18n("<p>Set here the height selection for cropping."));
     m_heightInput->setRange(10, m_imageSelectionWidget->getOriginalImageHeight(), 1, true);
 
@@ -355,7 +356,7 @@ void ImageEffect_RatioCrop::readSettings(void)
     int h = iface.originalHeight();
 
     QColor defaultGuideColor(250, 250, 255);
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("aspectratiocrop Tool Dialog");
 
     // No guide lines per default.
@@ -439,7 +440,7 @@ void ImageEffect_RatioCrop::writeSettings(void)
     int w = iface.originalWidth();
     int h = iface.originalHeight();
 
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("aspectratiocrop Tool Dialog");
 
     if (w > h)
@@ -705,7 +706,7 @@ void ImageEffect_RatioCrop::slotCustomRatioChanged(void)
 
 void ImageEffect_RatioCrop::slotOk()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     
     QRect currentRegion        = m_imageSelectionWidget->getRegionSelection();
     Digikam::ImageIface* iface = m_imageSelectionWidget->imageIface();

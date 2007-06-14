@@ -93,7 +93,7 @@ signals:
     void signalSelected(CameraIconViewItem*, bool);
     void signalFileView(CameraIconViewItem*);
 
-    void signalUpload(const KURL::List&);
+    void signalUpload(const KUrl::List&);
     void signalDownload();
     void signalDelete();
     void signalToggleLock();
@@ -126,7 +126,7 @@ private:
 
     QString getTemplatedName(const GPItemInfo* itemInfo, int position);
     QString getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo* itemInfo);
-    void    uploadItemPopupMenu(const KURL::List& srcURLs);
+    void    uploadItemPopupMenu(const KUrl::List& srcURLs);
 
 private:
 

@@ -145,7 +145,7 @@ QString DMetadata::getImageComment() const
     if (!getIptc().isEmpty())
     {
         QString iptcComment = getIptcTagString("Iptc.Application2.Caption", false);
-        if (!iptcComment.isEmpty() && !iptcComment.stripWhiteSpace().isEmpty())
+        if (!iptcComment.isEmpty() && !iptcComment.trimmed().isEmpty())
             return iptcComment;
     }
 

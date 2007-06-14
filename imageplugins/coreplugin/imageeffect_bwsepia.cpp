@@ -60,6 +60,7 @@
 #include <knuminput.h>
 #include <ktabwidget.h>
 #include <kconfig.h>
+#include <kglobal.h>
 
 // Digikam includes.
 
@@ -386,7 +387,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                                "landscapes.</p>"));
     
     m_strengthInput = new KIntNumInput(vbox);
-    m_strengthInput->setLabel(i18n("Strength:"), AlignLeft | AlignVCenter);
+    m_strengthInput->setLabel(i18n("Strength:"), Qt::AlignLeft | Qt::AlignVCenter);
     m_strengthInput->setRange(1, 5, 1, true);
     m_strengthInput->setValue(1);
     Q3WhatsThis::add(m_strengthInput, i18n("<p>Set here the strength adjustment of lens filter."));
@@ -464,7 +465,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     
     m_cInput = new KIntNumInput(curveBox);
-    m_cInput->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
+    m_cInput->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
     m_cInput->setRange(-100, 100, 1, true);
     m_cInput->setValue(0);
     Q3WhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
@@ -633,7 +634,7 @@ void ImageEffect_BWSepia::slotColorSelectedFromTarget( const Digikam::DColor &co
 
 void ImageEffect_BWSepia::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("convertbw Tool Dialog");
 
     m_tab->setCurrentPage(config->readNumEntry("Settings Tab", BWFiltersTab));
@@ -675,7 +676,7 @@ void ImageEffect_BWSepia::readUserSettings()
 
 void ImageEffect_BWSepia::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("convertbw Tool Dialog");
     config->writeEntry("Settings Tab", m_tab->currentPageIndex());
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
@@ -735,7 +736,7 @@ void ImageEffect_BWSepia::resetValues()
 
 void ImageEffect_BWSepia::slotEffect()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     
     m_histogramWidget->stopHistogramComputation();
 
@@ -798,7 +799,7 @@ void ImageEffect_BWSepia::slotTimer()
 
 void ImageEffect_BWSepia::finalRendering()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getOriginalImage();
     int w                      = iface->originalWidth();
@@ -1063,7 +1064,7 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
 
 void ImageEffect_BWSepia::slotUser3()
 {
-    KURL loadFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    KUrl loadFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Black & White Settings File to Load")) );
     if( loadFile.isEmpty() )
@@ -1138,7 +1139,7 @@ void ImageEffect_BWSepia::slotUser3()
 
 void ImageEffect_BWSepia::slotUser2()
 {
-    KURL saveFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    KUrl saveFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Black & White Settings File to Save")) );
     if( saveFile.isEmpty() )

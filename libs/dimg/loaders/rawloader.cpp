@@ -49,7 +49,7 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
     m_observer = observer;
 
-    // We are using KProcess here, and make two assumptions:
+    // We are using K3Process here, and make two assumptions:
     // - there is an event loop (not for ioslaves)
     // - we are not called from the event loop thread
     // These assumptions are currently true for all use cases in digikam,

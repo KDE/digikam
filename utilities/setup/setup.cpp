@@ -35,6 +35,7 @@
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <kapplication.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -206,7 +207,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
         showPage((int) page);
     else 
     {
-        KConfig* config = kapp->config();
+        KConfig* config = KGlobal::config();
         config->setGroup("General Settings");
         showPage(config->readNumEntry("Setup Page", General));
     }
@@ -216,7 +217,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 
 Setup::~Setup()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("General Settings");
     config->writeEntry("Setup Page", activePageIndex());
     config->sync();

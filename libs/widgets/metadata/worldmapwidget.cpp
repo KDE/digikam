@@ -183,7 +183,7 @@ void WorldMapWidget::contentsMousePressEvent ( QMouseEvent * e )
     {
        d->xMousePos = e->x();
        d->yMousePos = e->y();
-       setCursor( KCursor::sizeAllCursor() );    
+       setCursor( Qt::SizeAllCursor );    
     }
 }
 
@@ -207,7 +207,7 @@ void WorldMapWidget::contentsMouseMoveEvent( QMouseEvent * e )
        return;
     }
 
-    setCursor( KCursor::handCursor() );    
+    setCursor( Qt::PointingHandCursor );    
 }
 
 }  // namespace Digikam

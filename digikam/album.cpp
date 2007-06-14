@@ -341,7 +341,7 @@ DatabaseUrl PAlbum::databaseUrl() const
     return DatabaseUrl::fromAlbumAndName(QString(), albumPath(), m_albumRoot);
 }
 
-QString PAlbum::prettyURL() const
+QString PAlbum::prettyUrl() const
 {
     QString u = i18n("My Albums") + albumPath();
     return u;
@@ -352,14 +352,14 @@ QString PAlbum::icon() const
     return m_icon;
 }
 
-KURL PAlbum::iconKURL() const
+KUrl PAlbum::iconKURL() const
 {
-    KURL u;
+    KUrl u;
     u.setPath( m_icon );
     return u;
 }
 
-KURL PAlbum::fileUrl() const
+KUrl PAlbum::fileUrl() const
 {
     return databaseUrl().fileUrl();
 }
@@ -400,7 +400,7 @@ QString TAlbum::tagPath(bool leadingSlash) const
     return u;
 }
 
-QString TAlbum::prettyURL() const
+QString TAlbum::prettyUrl() const
 {
     QString u = i18n("My Tags") + tagPath(true);
     return u;
@@ -458,7 +458,7 @@ DatabaseUrl DAlbum::kurl() const
 
 // --------------------------------------------------------------------------
 
-SAlbum::SAlbum(int id, const KURL& url, bool simple, bool root)
+SAlbum::SAlbum(int id, const KUrl& url, bool simple, bool root)
       : Album(Album::SEARCH, id, root),
               m_kurl(url), m_simple(simple)
 {
@@ -474,7 +474,7 @@ DatabaseUrl SAlbum::kurl() const
     return DatabaseUrl::fromSearchUrl(m_kurl);
 }
 
-KURL SAlbum::searchUrl() const
+KUrl SAlbum::searchUrl() const
 {
     return m_kurl;
 }

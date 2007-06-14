@@ -52,11 +52,12 @@
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kcolorbutton.h>
 #include <ktextedit.h> 
+#include <kglobal.h>
 
 // Local includes.
 
@@ -100,7 +101,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    Q3Frame *frame = new Q3Frame(plainPage());
+    QFrame *frame = new Q3Frame(plainPage());
     frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
     Q3VBoxLayout* l  = new Q3VBoxLayout(frame, 5, 0);
     m_previewWidget = new InsertTextWidget(480, 320, frame);
@@ -228,7 +229,7 @@ ImageEffect_InsertText::~ImageEffect_InsertText()
 
 void ImageEffect_InsertText::readUserSettings()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("inserttext Tool Dialog");
     QColor black(0, 0, 0);
     QFont  defaultFont;
@@ -256,7 +257,7 @@ void ImageEffect_InsertText::readUserSettings()
 
 void ImageEffect_InsertText::writeUserSettings()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("inserttext Tool Dialog");
 
     config->writeEntry( "Text Rotation", m_textRotation->currentItem() );
@@ -338,7 +339,7 @@ void ImageEffect_InsertText::slotUpdatePreview()
 void ImageEffect_InsertText::finalRendering()
 {
     accept();
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
 
     Digikam::ImageIface iface(0, 0);
     Digikam::DImg dest = m_previewWidget->makeInsertText();

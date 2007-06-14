@@ -34,7 +34,7 @@
 
 class QWidget;
 
-class KURL;
+class KUrl;
 
 namespace Digikam
 {

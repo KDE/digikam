@@ -46,9 +46,10 @@
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstandarddirs.h>
 #include <kseparator.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -91,7 +92,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    Q3Frame *frame = new Q3Frame(plainPage());
+    QFrame *frame = new Q3Frame(plainPage());
     frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
     Q3VBoxLayout* l  = new Q3VBoxLayout(frame, 5, 0);
     m_previewWidget = new PerspectiveWidget(525, 350, frame);
@@ -111,11 +112,11 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
 
     QLabel *label1  = new QLabel(i18n("New width:"), gbox2);
     m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), gbox2);
-    m_newWidthLabel->setAlignment( AlignBottom | AlignRight );
+    m_newWidthLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
     QLabel *label2   = new QLabel(i18n("New height:"), gbox2);
     m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"), gbox2);
-    m_newHeightLabel->setAlignment( AlignBottom | AlignRight );
+    m_newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
     
     gridLayout->addMultiCellWidget(label1, 0, 0, 0, 0);
     gridLayout->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
@@ -202,7 +203,7 @@ ImageEffect_Perspective::~ImageEffect_Perspective()
 void ImageEffect_Perspective::readUserSettings(void)
 {
     QColor defaultGuideColor(Qt::red);
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("perspective Tool Dialog");
     m_drawWhileMovingCheckBox->setChecked(config->readBoolEntry("Draw While Moving", true));
     m_drawGridCheckBox->setChecked(config->readBoolEntry("Draw Grid", false));
@@ -216,7 +217,7 @@ void ImageEffect_Perspective::readUserSettings(void)
 
 void ImageEffect_Perspective::writeUserSettings(void)
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("perspective Tool Dialog");
     config->writeEntry("Draw While Moving", m_drawWhileMovingCheckBox->isChecked());
     config->writeEntry("Draw Grid", m_drawGridCheckBox->isChecked());
@@ -232,7 +233,7 @@ void ImageEffect_Perspective::resetValues()
 
 void ImageEffect_Perspective::finalRendering()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     m_previewWidget->applyPerspectiveAdjustment();
     accept();   
     kapp->restoreOverrideCursor();       

@@ -63,7 +63,7 @@ public:
 
 private slots:
         
-    void slotBlackFrame(Q3ValueList<HotPixel> hpList, const KURL& blackFrameURL);
+    void slotBlackFrame(Q3ValueList<HotPixel> hpList, const KUrl& blackFrameURL);
     void slotAddBlackFrame();
     void readUserSettings();
 
@@ -86,7 +86,7 @@ private:
     
     Q3ValueList<HotPixel>  m_hotPixelsList;
     
-    KURL                  m_blackFrameURL;
+    KUrl                  m_blackFrameURL;
     
     BlackFrameListView   *m_blackFrameListView;
 };

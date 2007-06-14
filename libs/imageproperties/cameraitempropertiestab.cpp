@@ -333,7 +333,7 @@ CameraItemPropertiesTab::~CameraItemPropertiesTab()
 
 void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
                                              const QString &newFileName, const QByteArray& exifData,
-                                             const KURL &currentURL)
+                                             const KUrl &currentURL)
 {
     if (!itemInfo)
     {

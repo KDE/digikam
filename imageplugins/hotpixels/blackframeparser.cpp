@@ -67,17 +67,17 @@ void BlackFrameParser::parseHotPixels(QString file)
     mOutputString ="";
     
     //First, lets run jpeghotp on the blackframe file
-    KProcess *proc = new KProcess;
-    connect(proc, SIGNAL(processExited(KProcess*)),this, SLOT(processed(KProcess*)));
-    connect(proc, SIGNAL(receivedStdout(KProcess*, char*,int)),this,SLOT(HotPData(KProcess*, char*,int)));
-    connect(proc, SIGNAL(receivedStderr(KProcess*, char*,int)),this,SLOT(HotPData(KProcess*, char*,int)));
+    K3Process *proc = new K3Process;
+    connect(proc, SIGNAL(processExited(K3Process*)),this, SLOT(processed(K3Process*)));
+    connect(proc, SIGNAL(receivedStdout(K3Process*, char*,int)),this,SLOT(HotPData(K3Process*, char*,int)));
+    connect(proc, SIGNAL(receivedStderr(K3Process*, char*,int)),this,SLOT(HotPData(K3Process*, char*,int)));
     *proc << "jpeghotp";
     *proc << file;
-    proc->start( KProcess::NotifyOnExit, KProcess::Stdout);    
+    proc->start( K3Process::NotifyOnExit, K3Process::Stdout);    
     */
 }
 
-void BlackFrameParser::parseBlackFrame(KURL url)
+void BlackFrameParser::parseBlackFrame(KUrl url)
 {
     //Initialize the data buffer
     mData.resize(0);

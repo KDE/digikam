@@ -34,7 +34,7 @@
 #include "digikam_export.h"
 
 class KConfig;
-class KURLRequester;
+class KUrlRequester;
 
 namespace Digikam
 {

@@ -33,18 +33,18 @@ QImage FastScale::fastScaleQImage(const QImage &img, int width, int height)
 {
     QImage tgt(width, height, 32);
     tgt.setAlphaBuffer(img.hasAlphaBuffer());
-    fastScaleRectAvg( (Q_UINT32 *)tgt.bits(), (Q_UINT32 *)img.bits(),
+    fastScaleRectAvg( (quint32 *)tgt.bits(), (quint32 *)img.bits(),
                       img.width(), img.height(), tgt.width(), tgt.height() );
     return tgt;
 }
 
 void FastScale::fastScaleQImage(const QImage &img, QImage &tgt)
 {
-    fastScaleRectAvg( (Q_UINT32 *)tgt.bits(), (Q_UINT32 *)img.bits(),
+    fastScaleRectAvg( (quint32 *)tgt.bits(), (quint32 *)img.bits(),
                       img.width(), img.height(), tgt.width(), tgt.height() );
 }
 
-void FastScale::fastScaleLineAvg(Q_UINT32 *Target, Q_UINT32 *Source, int SrcWidth, int TgtWidth)
+void FastScale::fastScaleLineAvg(quint32 *Target, quint32 *Source, int SrcWidth, int TgtWidth)
 {
     int NumPixels = TgtWidth;
     int IntPart   = SrcWidth / TgtWidth;
@@ -52,7 +52,7 @@ void FastScale::fastScaleLineAvg(Q_UINT32 *Target, Q_UINT32 *Source, int SrcWidt
     int Mid       = TgtWidth / 2;
     int E         = 0;
     int skip;
-    Q_UINT32 p;
+    quint32 p;
     
     skip = (TgtWidth < SrcWidth) ? 0 : TgtWidth / (2*SrcWidth) + 1;
     NumPixels -= skip;
@@ -81,7 +81,7 @@ void FastScale::fastScaleLineAvg(Q_UINT32 *Target, Q_UINT32 *Source, int SrcWidt
     }
 }
 
-void FastScale::fastScaleRectAvg(Q_UINT32 *Target, Q_UINT32 *Source, int SrcWidth, int SrcHeight,
+void FastScale::fastScaleRectAvg(quint32 *Target, quint32 *Source, int SrcWidth, int SrcHeight,
                                  int TgtWidth, int TgtHeight)
 {
     int NumPixels = TgtHeight;
@@ -90,14 +90,14 @@ void FastScale::fastScaleRectAvg(Q_UINT32 *Target, Q_UINT32 *Source, int SrcWidt
     int Mid       = TgtHeight / 2;
     int E         = 0;
     int skip;
-    Q_UINT32 *PrevSource      = NULL;
-    Q_UINT32 *PrevSourceAhead = NULL;
+    quint32 *PrevSource      = NULL;
+    quint32 *PrevSourceAhead = NULL;
     
     skip = (TgtHeight < SrcHeight) ? 0 : TgtHeight / (2*SrcHeight) + 1;
     NumPixels -= skip;
     
-    Q_UINT32 *ScanLine      = new Q_UINT32[TgtWidth];
-    Q_UINT32 *ScanLineAhead = new Q_UINT32[TgtWidth];
+    quint32 *ScanLine      = new quint32[TgtWidth];
+    quint32 *ScanLineAhead = new quint32[TgtWidth];
     
     while (NumPixels-- > 0) 
     {
@@ -109,7 +109,7 @@ void FastScale::fastScaleRectAvg(Q_UINT32 *Target, Q_UINT32 *Source, int SrcWidt
                 * ScanLineAhead; swap the buffers that ScanLine and ScanLineAhead
                 * point to
                 */
-                Q_UINT32 *tmp = ScanLine;
+                quint32 *tmp = ScanLine;
                 ScanLine      = ScanLineAhead;
                 ScanLineAhead = tmp;
             }
@@ -132,7 +132,7 @@ void FastScale::fastScaleRectAvg(Q_UINT32 *Target, Q_UINT32 *Source, int SrcWidt
             PrevSourceAhead = Source + SrcWidth;
         } 
 
-        memcpy(Target, ScanLine, TgtWidth*sizeof(Q_UINT32));
+        memcpy(Target, ScanLine, TgtWidth*sizeof(quint32));
         Target += TgtWidth;
         Source += IntPart;
         E      += FractPart;
@@ -149,7 +149,7 @@ void FastScale::fastScaleRectAvg(Q_UINT32 *Target, Q_UINT32 *Source, int SrcWidt
 
     while (skip-- > 0) 
     {
-        memcpy(Target, ScanLine, TgtWidth*sizeof(Q_UINT32));
+        memcpy(Target, ScanLine, TgtWidth*sizeof(quint32));
         Target += TgtWidth;
     }
     

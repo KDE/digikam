@@ -168,7 +168,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (scaledLoadingSize)
     {
-        int imgSize = QMAX(cinfo.image_width, cinfo.image_height);
+        int imgSize = qMax(cinfo.image_width, cinfo.image_height);
 
         // libjpeg supports 1/1, 1/2, 1/4, 1/8
         int scale=1;

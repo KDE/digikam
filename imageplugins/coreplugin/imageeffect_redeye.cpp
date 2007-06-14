@@ -52,6 +52,7 @@
 #include <kcursor.h>
 #include <kstandarddirs.h>
 #include <kcolordialog.h>
+#include <kglobal.h>
 
 // Digikam includes.
 
@@ -284,7 +285,7 @@ void ImageEffect_RedEye::slotColorSelectedFromTarget( const Digikam::DColor &col
 
 void ImageEffect_RedEye::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("redeye Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0)); // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
@@ -302,7 +303,7 @@ void ImageEffect_RedEye::readUserSettings()
 
 void ImageEffect_RedEye::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("redeye Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
@@ -340,7 +341,7 @@ void ImageEffect_RedEye::resetValues()
 
 void ImageEffect_RedEye::slotEffect()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
 
     m_histogramWidget->stopHistogramComputation();
 
@@ -375,7 +376,7 @@ void ImageEffect_RedEye::slotEffect()
 
 void ImageEffect_RedEye::finalRendering()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
 
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getImageSelection();
@@ -455,22 +456,22 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
 
             if (r >= ( redThreshold * g))
             {
-                r1 = QMIN(255, (int)(red_norm * (red_chan.red_gain   * r +
+                r1 = qMin(255, (int)(red_norm * (red_chan.red_gain   * r +
                                                  red_chan.green_gain * g +
                                                  red_chan.blue_gain  * b)));
 
-                g1 = QMIN(255, (int)(green_norm * (green_chan.red_gain   * r +
+                g1 = qMin(255, (int)(green_norm * (green_chan.red_gain   * r +
                                                    green_chan.green_gain * g +
                                                    green_chan.blue_gain  * b)));
 
-                b1 = QMIN(255, (int)(blue_norm * (blue_chan.red_gain   * r +
+                b1 = qMin(255, (int)(blue_norm * (blue_chan.red_gain   * r +
                                                   blue_chan.green_gain * g +
                                                   blue_chan.blue_gain  * b)));
 
                 mptr[0] = b1;
                 mptr[1] = g1;
                 mptr[2] = r1;
-                mptr[3] = QMIN( (int)((r-g) / 150.0 * 255.0), 255);
+                mptr[3] = qMin( (int)((r-g) / 150.0 * 255.0), 255);
             }
 
             ptr += 4;
@@ -492,22 +493,22 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
 
             if (r >= ( redThreshold * g))
             {
-                r1 = QMIN(65535, (int)(red_norm * (red_chan.red_gain   * r +
+                r1 = qMin(65535, (int)(red_norm * (red_chan.red_gain   * r +
                                                          red_chan.green_gain * g +
                                                          red_chan.blue_gain  * b)));
 
-                g1 = QMIN(65535, (int)(green_norm * (green_chan.red_gain   * r +
+                g1 = qMin(65535, (int)(green_norm * (green_chan.red_gain   * r +
                                                             green_chan.green_gain * g +
                                                             green_chan.blue_gain  * b)));
 
-                b1 = QMIN(65535, (int)(blue_norm * (blue_chan.red_gain   * r +
+                b1 = qMin(65535, (int)(blue_norm * (blue_chan.red_gain   * r +
                                                           blue_chan.green_gain * g +
                                                           blue_chan.blue_gain  * b)));
 
                 mptr[0] = b1;
                 mptr[1] = g1;
                 mptr[2] = r1;
-                mptr[3] = QMIN( (int)((r-g) / 38400.0 * 65535.0), 65535);;
+                mptr[3] = qMin( (int)((r-g) / 38400.0 * 65535.0), 65535);;
             }
 
             ptr += 4;

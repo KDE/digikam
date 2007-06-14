@@ -46,7 +46,7 @@
 // KDE includes.
 
 #include <kdialogbase.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kglobalsettings.h>
@@ -210,7 +210,7 @@ const QByteArray& MetadataWidget::getMetadata()
     return d->metadata;
 }
 
-bool MetadataWidget::storeMetadataToFile(const KURL& url)
+bool MetadataWidget::storeMetadataToFile(const KUrl& url)
 {
     if( url.isEmpty() )
         return false;
@@ -353,7 +353,7 @@ void MetadataWidget::slotPrintMetadata(void)
     }
 }
 
-KURL MetadataWidget::saveMetadataToFile(const QString& caption, const QString& fileFilter)
+KUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& fileFilter)
 {
     KFileDialog fileSaveDialog(KGlobalSettings::documentPath(),
                                QString(),
@@ -371,7 +371,7 @@ KURL MetadataWidget::saveMetadataToFile(const QString& caption, const QString& f
     if ( fileSaveDialog.exec() == KFileDialog::Accepted )
         return fileSaveDialog.selectedURL().path();
     
-    return KURL();
+    return KUrl();
 }
 
 void MetadataWidget::setMode(int mode)

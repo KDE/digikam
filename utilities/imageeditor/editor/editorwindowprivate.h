@@ -33,7 +33,7 @@ class QLabel;
 class KComboBox;
 class KAction;
 class KToggleAction;
-class KWidgetAction;
+class K3WidgetAction;
 class KSelectAction;
 class KActionMenu;
 class KAccel;
@@ -124,7 +124,7 @@ public:
     KToggleAction             *viewUnderExpoAction;
     KToggleAction             *viewOverExpoAction;
 
-    KWidgetAction             *zoomComboAction;
+    K3WidgetAction             *zoomComboAction;
 
     KAccel                    *accelerators;
 

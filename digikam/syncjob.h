@@ -59,10 +59,10 @@ class SyncJob : public QObject
 public:
 
     /* this will delete the urls. */
-    static bool del(const KURL::List& urls, bool useTrash);
+    static bool del(const KUrl::List& urls, bool useTrash);
 
     /* remove this when we move dependency upto kde 3.2 */
-    static bool file_move(const KURL &src, const KURL &dest);
+    static bool file_move(const KUrl &src, const KUrl &dest);
 
     /* Load the image or icon for the tag thumbnail */    
     static QPixmap getTagThumbnail(TAlbum *album);
@@ -76,10 +76,10 @@ private:
     SyncJob();
     ~SyncJob();
 
-    bool delPriv(const KURL::List& urls);
-    bool trashPriv(const KURL::List& urls);
+    bool delPriv(const KUrl::List& urls);
+    bool trashPriv(const KUrl::List& urls);
 
-    bool fileMovePriv(const KURL &src, const KURL &dest);
+    bool fileMovePriv(const KUrl &src, const KUrl &dest);
     
     QPixmap getTagThumbnailPriv(TAlbum *album);
     QPixmap getTagThumbnailPriv(const QString &name, int size);
@@ -99,7 +99,7 @@ private slots:
     void slotResult( KIO::Job * job );
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& pix);
     void slotLoadThumbnailFailed(Album *album);
-    void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& pix);
+    void slotGotThumbnailFromIcon(const KUrl& url, const QPixmap& pix);
     void slotLoadThumbnailFailed();
 };
 

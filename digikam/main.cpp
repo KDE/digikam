@@ -308,7 +308,7 @@ int main(int argc, char *argv[])
     man->setAlbumRoot(albumPath, priorityAlbumPath); // TEMPORARY SOLUTION
 
     // Register image formats (especially for TIFF )
-    KImageIO::registerFormats();
+    
 
     Digikam::DigikamApp *digikam = new Digikam::DigikamApp();
 
@@ -325,7 +325,7 @@ int main(int argc, char *argv[])
     tipsFiles.append("digikam/tips");
     tipsFiles.append("kipi/tips");
 
-    KGlobal::locale()->insertCatalogue("kipiplugins");
+    KGlobal::locale()->insertCatalog("kipiplugins");
 
     KTipDialog::showMultiTip(0, tipsFiles, false);
 #else

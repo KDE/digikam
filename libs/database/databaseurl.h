@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DatabaseUrl : public KURL
+class DIGIKAM_EXPORT DatabaseUrl : public KUrl
 {
 public:
 
@@ -57,8 +57,8 @@ public:
       *   (if the file is "/media/fotos/Summer 2007/001.jpg", the album root may be "/media/fotos")
       * - The parameters of the database that is referenced
       */
-    static DatabaseUrl fromFileUrl(const KURL &fileUrl,
-                                   const KURL &albumRoot,
+    static DatabaseUrl fromFileUrl(const KUrl &fileUrl,
+                                   const KUrl &albumRoot,
                                    const DatabaseParameters &parameters = DatabaseAccess::parameters());
 
     /**
@@ -68,7 +68,7 @@ public:
      */
     static DatabaseUrl fromAlbumAndName(const QString &name,
                                         const QString &album,
-                                        const KURL &albumRoot,
+                                        const KUrl &albumRoot,
                                         const DatabaseParameters &parameters = DatabaseAccess::parameters());
 
     /**
@@ -91,12 +91,12 @@ public:
      * The database parameters will be added to the provided URL.
      * Populating the query items is out of the scope of this class.
      */
-    static DatabaseUrl fromSearchUrl(const KURL &searchURL,
+    static DatabaseUrl fromSearchUrl(const KUrl &searchURL,
                                      const DatabaseParameters &parameters = DatabaseAccess::parameters());
     /**
-      * Create a DatabaseUrl object from a KURL, to retrieve the information stored
+      * Create a DatabaseUrl object from a KUrl, to retrieve the information stored
       */
-    DatabaseUrl(const KURL &digikamUrl);
+    DatabaseUrl(const KUrl &digikamUrl);
 
     /**
      * Create an invalid database URL
@@ -135,7 +135,7 @@ public:
     /** Returns the album root URL of the file or album referenced by this URL
      *  In the example above, this is "file://media/fotos"
      */
-    KURL albumRoot() const;
+    KUrl albumRoot() const;
     /** Returns the album root path of the file or album referenced by this URL
      *  In the example above, this is "/media/fotos"
      */
@@ -151,7 +151,7 @@ public:
     /**
      * Converts this digikamalbums:// URL to a file:// URL
      */
-    KURL fileUrl() const;
+    KUrl fileUrl() const;
 
 
     /// Tag URL
@@ -182,15 +182,15 @@ public:
      * Return the search URL as provided to fromSearchUrl().
      * The returned URL has database information removed.
      */
-    KURL searchUrl() const;
+    KUrl searchUrl() const;
 
 
     DatabaseUrl(const DatabaseUrl &url);
 
-    DatabaseUrl &operator=(const KURL &digikamalbumsUrl);
+    DatabaseUrl &operator=(const KUrl &digikamalbumsUrl);
     DatabaseUrl &operator=(const DatabaseUrl &url);
 
-    bool operator==(const KURL &digikamalbumsUrl);
+    bool operator==(const KUrl &digikamalbumsUrl);
 
 };
 

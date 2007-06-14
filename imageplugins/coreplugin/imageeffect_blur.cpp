@@ -37,6 +37,7 @@
 #include <kcursor.h>
 #include <klocale.h>
 #include <kapplication.h>
+#include <kglobal.h>
 
 // Digikam includes.
 
@@ -86,14 +87,14 @@ ImageEffect_Blur::~ImageEffect_Blur()
 
 void ImageEffect_Blur::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("gaussianblur Tool Dialog");
     m_radiusInput->setValue(config->readNumEntry("RadiusAjustment", 0));
 }
 
 void ImageEffect_Blur::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("gaussianblur Tool Dialog");
     config->writeEntry("RadiusAjustment", m_radiusInput->value());
     config->sync();

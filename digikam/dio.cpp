@@ -64,7 +64,7 @@ extern "C"
 namespace DIO
 {
 
-KIO::Job* copy(const KURL& src, const KURL& dest)
+KIO::Job* copy(const KUrl& src, const KUrl& dest)
 {
     KIO::Job* job = KIO::copy(src, dest, true);
     new Watch(job);
@@ -72,7 +72,7 @@ KIO::Job* copy(const KURL& src, const KURL& dest)
     return job;
 }
 
-KIO::Job* copy(const KURL::List& srcList, const KURL& dest)
+KIO::Job* copy(const KUrl::List& srcList, const KUrl& dest)
 {
     KIO::Job* job = KIO::copy(srcList, dest, true);
     new Watch(job);
@@ -80,7 +80,7 @@ KIO::Job* copy(const KURL::List& srcList, const KURL& dest)
     return job;
 }
 
-KIO::Job* move(const KURL& src, const KURL& dest)
+KIO::Job* move(const KUrl& src, const KUrl& dest)
 {
     KIO::Job* job = KIO::move(src, dest, true);
     new Watch(job);
@@ -88,7 +88,7 @@ KIO::Job* move(const KURL& src, const KURL& dest)
     return job;
 }
 
-KIO::Job* move(const KURL::List& srcList, const KURL& dest)
+KIO::Job* move(const KUrl::List& srcList, const KUrl& dest)
 {
     KIO::Job* job = KIO::move(srcList, dest, true);
     new Watch(job);
@@ -96,13 +96,13 @@ KIO::Job* move(const KURL::List& srcList, const KURL& dest)
     return job;
 }
 
-KIO::Job* del(const KURL& src, bool useTrash)
+KIO::Job* del(const KUrl& src, bool useTrash)
 {
     KIO::Job* job = 0;
     
     if (useTrash)
     {
-        KURL dest("trash:/");
+        KUrl dest("trash:/");
 
         if (!KProtocolInfo::isKnownProtocol(dest))
         {
@@ -120,13 +120,13 @@ KIO::Job* del(const KURL& src, bool useTrash)
     return job;
 }
 
-KIO::Job* del(const KURL::List& srcList, bool useTrash)
+KIO::Job* del(const KUrl::List& srcList, bool useTrash)
 {
     KIO::Job* job = 0;
 
     if (useTrash)
     {
-        KURL dest("trash:/");
+        KUrl dest("trash:/");
 
         if (!KProtocolInfo::isKnownProtocol(dest))
         {
@@ -144,7 +144,7 @@ KIO::Job* del(const KURL::List& srcList, bool useTrash)
     return job;
 }
 
-KIO::CopyJob *rename(const KURL& src, const KURL& dest)
+KIO::CopyJob *rename(const KUrl& src, const KUrl& dest)
 {
     KIO::CopyJob * job = KIO::move(src, dest, false);
     new Watch(job);
@@ -152,9 +152,9 @@ KIO::CopyJob *rename(const KURL& src, const KURL& dest)
     return job;
 
     /*
-    KURL srcdir;
+    KUrl srcdir;
     srcdir.setDirectory(src.directory());
-    KURL dstdir;
+    KUrl dstdir;
     dstdir.setDirectory(dest.directory());
     Digikam::PAlbum* srcAlbum = Digikam::AlbumManager::instance()->findPAlbum(srcdir);
     Digikam::PAlbum* dstAlbum = Digikam::AlbumManager::instance()->findPAlbum(dstdir);
@@ -204,7 +204,7 @@ KIO::CopyJob *rename(const KURL& src, const KURL& dest)
     if (::rename(QFile::encodeName(srcPath), QFile::encodeName(dstPath)) == 0)
     {
         db->moveItem(srcAlbum->id(), src.fileName(),
-                     dstAlbum->id(), KURL(dstPath).fileName());
+                     dstAlbum->id(), KUrl(dstPath).fileName());
         return true;
     }
 
@@ -214,7 +214,7 @@ KIO::CopyJob *rename(const KURL& src, const KURL& dest)
     */
 }
 
-KIO::Job* scan(const KURL& albumURL)
+KIO::Job* scan(const KUrl& albumURL)
 {
     KIO::Job* job = Digikam::ImageLister::startListJob(albumURL,
                                                        QString(), // filter - invalid for scan

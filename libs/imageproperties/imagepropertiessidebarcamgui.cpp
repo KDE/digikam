@@ -67,7 +67,7 @@ public:
         cameraView         = 0;
         cameraItem         = 0;
         exifData           = QByteArray();
-        currentURL         = KURL();
+        currentURL         = KUrl();
     }
 
     bool                        dirtyMetadataTab;
@@ -75,7 +75,7 @@ public:
 
     QByteArray                  exifData;
 
-    KURL                        currentURL;
+    KUrl                        currentURL;
 
     GPItemInfo                 *itemInfo;
     
@@ -136,7 +136,7 @@ void ImagePropertiesSideBarCamGui::connectNavigateSignals(NavigateBarTab *tab)
             this, SIGNAL(signalLastItem()));
 }
 
-void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KURL& url,
+void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KUrl& url,
                                                const QByteArray& exifData,
                                                CameraIconView* view, CameraIconViewItem* item)
 {
@@ -165,7 +165,7 @@ void ImagePropertiesSideBarCamGui::slotNoCurrentItem(void)
     d->itemInfo           = 0;
     d->cameraItem         = 0;
     d->exifData           = QByteArray();
-    d->currentURL         = KURL();
+    d->currentURL         = KUrl();
     d->dirtyMetadataTab   = false;
     d->dirtyCameraItemTab = false;
 
@@ -178,7 +178,7 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
     if (!d->itemInfo)
         return;
 
-    setCursor(KCursor::waitCursor());
+    setCursor(Qt::WaitCursor);
 
     if (tab == d->cameraItemTab && !d->dirtyCameraItemTab)
     {

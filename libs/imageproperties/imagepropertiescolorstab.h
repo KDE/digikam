@@ -56,14 +56,14 @@ public:
     ImagePropertiesColorsTab(QWidget* parent, bool navBar=true);
     ~ImagePropertiesColorsTab();
 
-    void setData(const KURL& url=KURL(), const QRect &selectionArea = QRect(),
+    void setData(const KUrl& url=KUrl(), const QRect &selectionArea = QRect(),
                  DImg *img=0);
 
     void setSelection(const QRect &selectionArea);
 
 private:
 
-    void loadImageFromUrl(const KURL& url);
+    void loadImageFromUrl(const KUrl& url);
     void updateInformations();
     void updateStatistiques();
     void getICCData();

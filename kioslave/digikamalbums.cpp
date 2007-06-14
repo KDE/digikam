@@ -100,7 +100,7 @@ kio_digikamalbums::~kio_digikamalbums()
 
 void kio_digikamalbums::special(const QByteArray& data)
 {
-    KURL    kurl;
+    KUrl    kurl;
     QString filter;
     int     getDimensions;
     int     scan = 0;
@@ -112,7 +112,7 @@ void kio_digikamalbums::special(const QByteArray& data)
     if (!ds.atEnd())
         ds >> scan;
 
-    kdDebug() << "kio_digikamalbums::special " << kurl << endl;
+    kDebug() << "kio_digikamalbums::special " << kurl << endl;
 
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
@@ -135,9 +135,9 @@ void kio_digikamalbums::special(const QByteArray& data)
 
 // ------------------------ Implementation of KIO::SlaveBase ------------------------ //
 
-void kio_digikamalbums::get( const KURL& url )
+void kio_digikamalbums::get( const KUrl& url )
 {
-    kdDebug() << k_funcinfo << " : " << url << endl;
+    kDebug() << k_funcinfo << " : " << url << endl;
 
     // no need to open the db. we don't need to read/write to it
 
@@ -149,9 +149,9 @@ void kio_digikamalbums::get( const KURL& url )
     finished();
 }
 
-void kio_digikamalbums::put(const KURL& url, int permissions, bool overwrite, bool resume)
+void kio_digikamalbums::put(const KUrl& url, int permissions, bool overwrite, bool resume)
 {
-    kdDebug() << k_funcinfo << " : " << url.url() << endl;
+    kDebug() << k_funcinfo << " : " << url.url() << endl;
 
     Digikam::DatabaseUrl dbUrl(url);
     Digikam::DatabaseAccess::setParameters(dbUrl);
@@ -180,9 +180,9 @@ void kio_digikamalbums::put(const KURL& url, int permissions, bool overwrite, bo
     finished();
 }
 
-void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool overwrite )
+void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, bool overwrite )
 {
-    kdDebug() << k_funcinfo << "Src: " << src.path() << ", Dst: " << dst.path()   << endl;
+    kDebug() << k_funcinfo << "Src: " << src.path() << ", Dst: " << dst.path()   << endl;
 
     Digikam::DatabaseUrl dbUrlSrc(src);
     Digikam::DatabaseUrl dbUrlDst(dst);
@@ -245,9 +245,9 @@ void kio_digikamalbums::copy( const KURL &src, const KURL &dst, int mode, bool o
     finished();
 }
 
-void kio_digikamalbums::rename( const KURL& src, const KURL& dst, bool overwrite )
+void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, bool overwrite )
 {
-    kdDebug() << k_funcinfo << "Src: " << src << ", Dst: " << dst   << endl;
+    kDebug() << k_funcinfo << "Src: " << src << ", Dst: " << dst   << endl;
 
     // if the filename is .digikam_properties fake that we renamed it
     if (src.fileName() == ".digikam_properties")
@@ -321,9 +321,9 @@ void kio_digikamalbums::rename( const KURL& src, const KURL& dst, bool overwrite
     finished();
 }
 
-void kio_digikamalbums::mkdir( const KURL& url, int permissions )
+void kio_digikamalbums::mkdir( const KUrl& url, int permissions )
 {
-    kdDebug() << k_funcinfo << " : " << url.url() << endl;
+    kDebug() << k_funcinfo << " : " << url.url() << endl;
 
     Digikam::DatabaseUrl dbUrl(url);
     Digikam::DatabaseAccess::setParameters(dbUrl);
@@ -337,9 +337,9 @@ void kio_digikamalbums::mkdir( const KURL& url, int permissions )
     finished();
 }
 
-void kio_digikamalbums::chmod( const KURL& url, int permissions )
+void kio_digikamalbums::chmod( const KUrl& url, int permissions )
 {
-    kdDebug() << k_funcinfo << " : " << url.url() << endl;
+    kDebug() << k_funcinfo << " : " << url.url() << endl;
 
     Digikam::DatabaseUrl dbUrl(url);
 
@@ -349,9 +349,9 @@ void kio_digikamalbums::chmod( const KURL& url, int permissions )
     finished();
 }
 
-void kio_digikamalbums::del( const KURL& url, bool isFile)
+void kio_digikamalbums::del( const KUrl& url, bool isFile)
 {
-    kdDebug() << k_funcinfo << " : " << url.url() << endl;
+    kDebug() << k_funcinfo << " : " << url.url() << endl;
 
     // if the filename is .digikam_properties fake that we deleted it
     if (isFile && url.fileName() == ".digikam_properties")
@@ -406,7 +406,7 @@ void kio_digikamalbums::del( const KURL& url, bool isFile)
     finished();
 }
 
-void kio_digikamalbums::stat( const KURL& url )
+void kio_digikamalbums::stat( const KUrl& url )
 {
     Digikam::DatabaseUrl dbUrl(url);
 
@@ -416,9 +416,9 @@ void kio_digikamalbums::stat( const KURL& url )
     finished();
 }
 
-void kio_digikamalbums::listDir( const KURL& url )
+void kio_digikamalbums::listDir( const KUrl& url )
 {
-    kdDebug() << k_funcinfo << " : " << url.path() << endl;
+    kDebug() << k_funcinfo << " : " << url.path() << endl;
 
     Digikam::DatabaseUrl dbUrl(url);
 
@@ -468,7 +468,7 @@ void kio_digikamalbums::createDigikamPropsUDSEntry(KIO::UDSEntry& entry)
 // This code is mostly duplicated from the file:// ioslave.
 // When porting to KDE4, check if a chained ioslave is available to remove this here.
 
-bool kio_digikamalbums::file_stat( const KURL& url )
+bool kio_digikamalbums::file_stat( const KUrl& url )
 {
     KIO::UDSEntry entry;
     if (!createUDSEntry(url.path(), entry))
@@ -481,7 +481,7 @@ bool kio_digikamalbums::file_stat( const KURL& url )
     return true;
 }
 
-bool kio_digikamalbums::file_listDir( const KURL& url )
+bool kio_digikamalbums::file_listDir( const KUrl& url )
 {
     KDE_struct_stat stbuf;
     if (KDE_stat(QFile::encodeName(url.path()), &stbuf) != 0)
@@ -497,7 +497,7 @@ bool kio_digikamalbums::file_listDir( const KURL& url )
         return false;
     }
 
-    const QFileInfoList *list = dir.entryInfoList(QDir::All|QDir::Hidden);
+    const QFileInfoList *list = dir.entryInfoList(QDir::TypeMask|QDir::Hidden);
     QFileInfoListIterator it( *list );
     QFileInfo *fi;
 
@@ -506,7 +506,7 @@ bool kio_digikamalbums::file_listDir( const KURL& url )
     {
         if (fi->fileName() != "." && fi->fileName() != ".." || fi->extension(true) == "digikamtempfile.tmp")
         {
-            createUDSEntry(fi->absFilePath(), entry);
+            createUDSEntry(fi->absoluteFilePath(), entry);
             listEntry(entry, false);
         }
         ++it;
@@ -584,7 +584,7 @@ static int write_all(int fd, const char *buf, size_t len)
     return 0;
 }
 
-bool kio_digikamalbums::file_get(const KURL &url)
+bool kio_digikamalbums::file_get(const KUrl &url)
 {
     Q3CString path(QFile::encodeName(url.path()));
     KDE_struct_stat buff;
@@ -656,7 +656,7 @@ bool kio_digikamalbums::file_get(const KURL &url)
     return true;
 }
 
-bool kio_digikamalbums::file_put(const KURL& url, int permissions, bool overwrite, bool /*resume*/)
+bool kio_digikamalbums::file_put(const KUrl& url, int permissions, bool overwrite, bool /*resume*/)
 {
     Q3CString _dest( QFile::encodeName(url.path()));
 
@@ -683,7 +683,7 @@ bool kio_digikamalbums::file_put(const KURL& url, int permissions, bool overwrit
     int fd = KDE_open(_dest.data(), O_CREAT | O_TRUNC | O_WRONLY, initialPerms);
     if ( fd < 0 )
     {
-        kdWarning() << "####################### COULD NOT OPEN " << _dest << endl;
+        kWarning() << "####################### COULD NOT OPEN " << _dest << endl;
         if ( errno == EACCES )
             error( KIO::ERR_WRITE_ACCESS_DENIED, url.url() );
         else
@@ -711,7 +711,7 @@ bool kio_digikamalbums::file_put(const KURL& url, int permissions, bool overwrit
                 }
                 else
                 {
-                    kdWarning() << "Couldn't write. Error:" << strerror(errno) << endl;
+                    kWarning() << "Couldn't write. Error:" << strerror(errno) << endl;
                     error( KIO::ERR_COULD_NOT_WRITE, url.url());
                     result = -1;
                 }
@@ -723,7 +723,7 @@ bool kio_digikamalbums::file_put(const KURL& url, int permissions, bool overwrit
     // An error occurred deal with it.
     if (result < 0)
     {
-        kdDebug() << "Error during 'put'. Aborting." << endl;
+        kDebug() << "Error during 'put'. Aborting." << endl;
 
         close(fd);
         remove(_dest);
@@ -733,7 +733,7 @@ bool kio_digikamalbums::file_put(const KURL& url, int permissions, bool overwrit
     // close the file
     if ( close(fd) )
     {
-        kdWarning() << "Error when closing file descriptor:" << strerror(errno) << endl;
+        kWarning() << "Error when closing file descriptor:" << strerror(errno) << endl;
         error( KIO::ERR_COULD_NOT_WRITE, url.url());
         return false;
     }
@@ -759,7 +759,7 @@ bool kio_digikamalbums::file_put(const KURL& url, int permissions, bool overwrit
                 struct utimbuf utbuf;
                 utbuf.actime = dest_statbuf.st_atime; // access time, unchanged
                 utbuf.modtime = dt.toTime_t(); // modification time
-                kdDebug() << k_funcinfo << "setting modtime to " << utbuf.modtime << endl;
+                kDebug() << k_funcinfo << "setting modtime to " << utbuf.modtime << endl;
                 utime( _dest.data(), &utbuf );
             }
         }
@@ -769,7 +769,7 @@ bool kio_digikamalbums::file_put(const KURL& url, int permissions, bool overwrit
     return true;
 }
 
-bool kio_digikamalbums::file_copy( const KURL &src, const KURL &dst, int mode, bool overwrite )
+bool kio_digikamalbums::file_copy( const KUrl &src, const KUrl &dst, int mode, bool overwrite )
 {
     Q3CString _src( QFile::encodeName(src.path()));
     Q3CString _dst( QFile::encodeName(dst.path()));
@@ -846,7 +846,7 @@ bool kio_digikamalbums::file_copy( const KURL &src, const KURL &dst, int mode, b
     int dest_fd = KDE_open(_dst.data(), O_CREAT | O_TRUNC | O_WRONLY, initialMode);
     if ( dest_fd < 0 )
     {
-        kdDebug() << "###### COULD NOT WRITE " << dst.url() << endl;
+        kDebug() << "###### COULD NOT WRITE " << dst.url() << endl;
         if ( errno == EACCES )
         {
             error( KIO::ERR_WRITE_ACCESS_DENIED, dst.url() );
@@ -898,7 +898,7 @@ bool kio_digikamalbums::file_copy( const KURL &src, const KURL &dst, int mode, b
             }
             else
             {
-                kdWarning() << "Couldn't write[2]. Error:" << strerror(errno) << endl;
+                kWarning() << "Couldn't write[2]. Error:" << strerror(errno) << endl;
                 error( KIO::ERR_COULD_NOT_WRITE, dst.url());
             }
             return false;
@@ -912,7 +912,7 @@ bool kio_digikamalbums::file_copy( const KURL &src, const KURL &dst, int mode, b
 
     if (close( dest_fd))
     {
-        kdWarning() << "Error when closing file descriptor[2]:" << strerror(errno) << endl;
+        kWarning() << "Error when closing file descriptor[2]:" << strerror(errno) << endl;
         error( KIO::ERR_COULD_NOT_WRITE, dst.url());
         return false;
     }
@@ -934,7 +934,7 @@ bool kio_digikamalbums::file_copy( const KURL &src, const KURL &dst, int mode, b
     ut.modtime = buff_src.st_mtime;
     if ( ::utime( _dst.data(), &ut ) != 0 )
     {
-        kdWarning() << QString::fromLatin1("Couldn't preserve access and modification time for\n%1")
+        kWarning() << QString::fromLatin1("Couldn't preserve access and modification time for\n%1")
             .arg( dst.url() ) << endl;
     }
 
@@ -942,7 +942,7 @@ bool kio_digikamalbums::file_copy( const KURL &src, const KURL &dst, int mode, b
     return true;
 }
 
-bool kio_digikamalbums::file_rename( const KURL& src, const KURL& dst, bool overwrite )
+bool kio_digikamalbums::file_rename( const KUrl& src, const KUrl& dst, bool overwrite )
 {
     Q3CString csrc( QFile::encodeName(src.path()));
     Q3CString cdst( QFile::encodeName(dst.path()));
@@ -1007,7 +1007,7 @@ bool kio_digikamalbums::file_rename( const KURL& src, const KURL& dst, bool over
     return true;
 }
 
-bool kio_digikamalbums::file_mkdir( const KURL& url, int permissions )
+bool kio_digikamalbums::file_mkdir( const KUrl& url, int permissions )
 {
     Q3CString _path( QFile::encodeName(url.path()));
 
@@ -1056,7 +1056,7 @@ bool kio_digikamalbums::file_mkdir( const KURL& url, int permissions )
     return false;
 }
 
-bool kio_digikamalbums::file_chmod( const KURL& url, int permissions )
+bool kio_digikamalbums::file_chmod( const KUrl& url, int permissions )
 {
     Q3CString path( QFile::encodeName(url.path()));
     if ( ::chmod( path.data(), permissions ) == -1 )
@@ -1068,13 +1068,13 @@ bool kio_digikamalbums::file_chmod( const KURL& url, int permissions )
         return true;
 }
 
-bool kio_digikamalbums::file_del( const KURL& url, bool isfile)
+bool kio_digikamalbums::file_del( const KUrl& url, bool isfile)
 {
     Q3CString path( QFile::encodeName(url.path()));
 
     if (isfile)
     {
-        kdDebug(  ) <<  "Deleting file "<< url.url() << endl;
+        kDebug(  ) <<  "Deleting file "<< url.url() << endl;
 
         // actually delete the file
         if ( unlink( path.data() ) == -1 )
@@ -1090,7 +1090,7 @@ bool kio_digikamalbums::file_del( const KURL& url, bool isfile)
     }
     else
     {
-        kdDebug(  ) << "Deleting directory " << url.url() << endl;
+        kDebug(  ) << "Deleting directory " << url.url() << endl;
 
         if ( ::rmdir( path.data() ) == -1 )
         {
@@ -1103,7 +1103,7 @@ bool kio_digikamalbums::file_del( const KURL& url, bool isfile)
             }
             else
             {
-                kdDebug() << "could not rmdir " << perror << endl;
+                kDebug() << "could not rmdir " << perror << endl;
                 error( KIO::ERR_COULD_NOT_RMDIR, url.url() );
                 return false;
             }
@@ -1119,12 +1119,12 @@ extern "C"
 {
     DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
-        KLocale::setMainCatalogue("digikam");
+        KLocale::setMainCatalog("digikam");
         KInstance instance( "kio_digikamalbums" );
         KGlobal::locale();
         
         if (argc != 4) {
-            kdDebug() << "Usage: kio_digikamalbums  protocol domain-socket1 domain-socket2"
+            kDebug() << "Usage: kio_digikamalbums  protocol domain-socket1 domain-socket2"
                       << endl;
             exit(-1);
         }

@@ -55,11 +55,11 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
                                 Help|Ok|Cancel, Ok, true)
 {
     setHelp("camerainterface.anchor", "digikam");
-    enableButtonOK(false);
+    enableButtonOk(false);
 
     m_rootPath = rootPath;
 
-    Q3Frame *page      = makeMainWidget();
+    QFrame *page      = makeMainWidget();
     Q3GridLayout* grid = new Q3GridLayout(page, 2, 1, 0, spacingHint());
     
     m_folderView    = new CameraFolderView(page);
@@ -127,12 +127,12 @@ void CameraFolderDialog::slotFolderPathSelectionChanged(CameraFolderItem* item)
 {
     if (item) 
     {
-        enableButtonOK(true);
+        enableButtonOk(true);
         DDebug() << "Camera folder path: " << selectedFolderPath() << endl;
     }
     else
     {
-        enableButtonOK(false);
+        enableButtonOk(false);
     }
 }
 

@@ -238,7 +238,7 @@ void PreviewWidget::setZoomFactor(double zoom)
     updateContentsSize();
 
     // adapt step size to zoom factor. Overall, using a finer step size than scrollbar default.
-    int step = QMAX(2, 2*lround(d->zoom));
+    int step = qMax(2, 2*lround(d->zoom));
     horizontalScrollBar()->setLineStep( step );
     horizontalScrollBar()->setPageStep( step * 10 );
     verticalScrollBar()->setLineStep( step );
@@ -317,7 +317,7 @@ double PreviewWidget::calcAutoZoomFactor(AutoZoomMode mode)
     double dstWidth  = contentsRect().width();
     double dstHeight = contentsRect().height();
 
-    double zoom = QMIN(dstWidth/srcWidth, dstHeight/srcHeight);
+    double zoom = qMin(dstWidth/srcWidth, dstHeight/srcHeight);
     // limit precision as above
     zoom = floor(zoom * 10000.0) / 10000.0;
     if (mode == ZoomInOrOut)
@@ -325,7 +325,7 @@ double PreviewWidget::calcAutoZoomFactor(AutoZoomMode mode)
         return zoom;
     else
         // ZoomInOnly: accept that an image is smaller than available space, dont scale up
-        return QMIN(1.0, zoom);
+        return qMin(1.0, zoom);
 }
 
 void PreviewWidget::updateContentsSize()
@@ -339,8 +339,8 @@ void PreviewWidget::updateContentsSize()
         int centery = contentsRect().height()/2;
         int xoffset = int(centerx - d->zoomWidth/2);
         int yoffset = int(centery - d->zoomHeight/2);
-        xoffset     = QMAX(xoffset, 0);
-        yoffset     = QMAX(yoffset, 0);
+        xoffset     = qMax(xoffset, 0);
+        yoffset     = qMax(yoffset, 0);
 
         d->pixmapRect = QRect(xoffset, yoffset, d->zoomWidth, d->zoomHeight);
     }
@@ -381,10 +381,10 @@ void PreviewWidget::resizeEvent(QResizeEvent* e)
 void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
 {
     QRect er(e->rect());
-    er = QRect(QMAX(er.x()      - 1, 0),
-               QMAX(er.y()      - 1, 0),
-               QMIN(er.width()  + 2, contentsRect().width()),
-               QMIN(er.height() + 2, contentsRect().height()));
+    er = QRect(qMax(er.x()      - 1, 0),
+               qMax(er.y()      - 1, 0),
+               qMin(er.width()  + 2, contentsRect().width()),
+               qMin(er.height() + 2, contentsRect().height()));
     
     bool antialias = (d->zoom <= 1.0) ? true : false;
 

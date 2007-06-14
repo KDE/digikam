@@ -363,7 +363,7 @@ ImagePropertiesTab::~ImagePropertiesTab()
     delete d;
 }
 
-void ImagePropertiesTab::setCurrentURL(const KURL& url)
+void ImagePropertiesTab::setCurrentURL(const KUrl& url)
 {
     if (url.isEmpty())
     {

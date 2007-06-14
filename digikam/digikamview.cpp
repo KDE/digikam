@@ -54,6 +54,7 @@
 // LibKDcraw includes.
 
 #include <libkdcraw/rawfiles.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -264,8 +265,8 @@ void DigikamView::setupConnections()
 
     // -- IconView Connections -------------------------------------
 
-    connect(d->iconView, SIGNAL(signalItemsUpdated(const KURL::List&)),
-            d->albumWidgetStack, SLOT(slotItemsUpdated(const KURL::List&)));
+    connect(d->iconView, SIGNAL(signalItemsUpdated(const KUrl::List&)),
+            d->albumWidgetStack, SLOT(slotItemsUpdated(const KUrl::List&)));
 
     connect(d->iconView, SIGNAL(signalItemsAdded()),
             this, SLOT(slotImageSelected()));
@@ -363,7 +364,7 @@ void DigikamView::setupConnections()
 
 void DigikamView::loadViewState()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("MainWindow");
 
     if(config->hasKey("SplitterSizes"))
@@ -374,7 +375,7 @@ void DigikamView::loadViewState()
 
 void DigikamView::saveViewState()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup("MainWindow");
     config->writeEntry("SplitterSizes", d->splitter->sizes());
 
@@ -602,7 +603,7 @@ void DigikamView::getForwardHistory(QStringList &titles)
     d->albumHistory->getForwardHistory(titles);
 }
 
-void DigikamView::slotSelectAlbum(const KURL &)
+void DigikamView::slotSelectAlbum(const KUrl &)
 {
     /* TODO
     if (url.isEmpty())
@@ -922,7 +923,7 @@ void DigikamView::slotAlbumAddImages()
 
     DDebug () << "fileformats=" << fileformats << endl;   
 
-    KURL::List urls = KFileDialog::getOpenURLs(CollectionManager::instance()->oneAlbumRootPath(),
+    KUrl::List urls = KFileDialog::getOpenURLs(CollectionManager::instance()->oneAlbumRootPath(),
                                                fileformats, this, i18n("Select Image to Add"));
 
     if (!urls.isEmpty())
@@ -1227,7 +1228,7 @@ void DigikamView::slotItemsInfoFromAlbums(const ImageInfoList& infoList)
 
 void DigikamView::slideShow(ImageInfoList &infoList)
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
 

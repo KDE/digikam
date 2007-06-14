@@ -54,16 +54,16 @@ public:
     //QList<CollectionLocation *> allAvailableLocations();
     QStringList allAvailableAlbumRootPaths();
 
-    CollectionLocation *locationForAlbumRoot(const KURL &fileUrl);
+    CollectionLocation *locationForAlbumRoot(const KUrl &fileUrl);
     CollectionLocation *locationForAlbumRootPath(const QString &albumRootPath);
 
-    KURL    albumRoot(const KURL &fileUrl);
-    QString albumRootPath(const KURL &fileUrl);
+    KUrl    albumRoot(const KUrl &fileUrl);
+    QString albumRootPath(const KUrl &fileUrl);
     //QString albumRootPath(const QString &filePath);
-    bool    isAlbumRoot(const KURL &fileUrl);
+    bool    isAlbumRoot(const KUrl &fileUrl);
     //bool    isAlbumRoot(const QString &filePath);
 
-    QString album(const KURL &fileUrl);
+    QString album(const KUrl &fileUrl);
     //QString album(const QString &filePath);
 
     /**
@@ -71,7 +71,7 @@ public:
      * the one that is most suitable to serve as a default, e.g.
      * to suggest as default place when the user wants to add files.
      */
-    KURL oneAlbumRoot();
+    KUrl oneAlbumRoot();
     QString oneAlbumRootPath();
 
 private:

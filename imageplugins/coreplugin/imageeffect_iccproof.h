@@ -40,7 +40,7 @@ class QRadioButton;
 class QPushButton;
 class QToolBox;
 
-class KURLRequester;
+class KUrlRequester;
 class KIntNumInput;
 
 namespace Digikam
@@ -178,9 +178,9 @@ private:
 
     KIntNumInput                   *m_cInput;
 
-    KURLRequester                  *m_inProfilesPath;
-    KURLRequester                  *m_spaceProfilePath;
-    KURLRequester                  *m_proofProfilePath;
+    KUrlRequester                  *m_inProfilesPath;
+    KUrlRequester                  *m_spaceProfilePath;
+    KUrlRequester                  *m_proofProfilePath;
         
     Digikam::DImg                  *m_originalImage;
 

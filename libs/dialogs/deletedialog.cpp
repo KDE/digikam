@@ -65,17 +65,17 @@ DeleteWidget::DeleteWidget(QWidget *parent, const char *name)
     ddShouldDelete->setChecked(deleteInstead);
 }
 
-void DeleteWidget::setFiles(const KURL::List &files)
+void DeleteWidget::setFiles(const KUrl::List &files)
 {
     ddFileList->clear();
-    for( KURL::List::ConstIterator it = files.begin(); it != files.end(); it++)
+    for( KUrl::List::ConstIterator it = files.begin(); it != files.end(); it++)
     {
         if( (*it).isLocalFile() ) //path is nil for non-local
             ddFileList->insertItem( (*it).path() );
         else if ( (*it).protocol() == "digikamalbums")
             ddFileList->insertItem( (*it).path() );
         else
-            ddFileList->insertItem( (*it).prettyURL() );
+            ddFileList->insertItem( (*it).prettyUrl() );
     }
     updateText();
 }
@@ -109,13 +109,13 @@ void DeleteWidget::updateText()
         {
             ddDeleteText->setText(i18n("<qt>These items will be <b>permanently "
                                        "deleted</b> from your hard disk.</qt>"));
-            ddWarningIcon->setPixmap(KGlobal::iconLoader()->loadIcon("messagebox_warning",
+            ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("messagebox_warning",
                 KIcon::Desktop, KIcon::SizeLarge));
         }
         else
         {
             ddDeleteText->setText(i18n("<qt>These items will be moved to the Trash Bin.</qt>"));
-            ddWarningIcon->setPixmap(KGlobal::iconLoader()->loadIcon("trashcan_full",
+            ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("trashcan_full",
                 KIcon::Desktop, KIcon::SizeLarge));
         }
         ddNumFiles->setText(i18n("<b>1</b> file selected.", "<b>%n</b> files selected.", ddFileList->count()));
@@ -129,13 +129,13 @@ void DeleteWidget::updateText()
         {
             ddDeleteText->setText(i18n("<qt>These albums will be <b>permanently "
                                        "deleted</b> from your hard disk.</qt>"));
-            ddWarningIcon->setPixmap(KGlobal::iconLoader()->loadIcon("messagebox_warning",
+            ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("messagebox_warning",
                                      KIcon::Desktop, KIcon::SizeLarge));
         }
         else
         {
             ddDeleteText->setText(i18n("<qt>These albums will be moved to the Trash Bin.</qt>"));
-            ddWarningIcon->setPixmap(KGlobal::iconLoader()->loadIcon("trashcan_full",
+            ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("trashcan_full",
                                      KIcon::Desktop, KIcon::SizeLarge));
         }
         ddNumFiles->setText(i18n("<b>1</b> album selected.", "<b>%n</b> albums selected.", ddFileList->count()));
@@ -152,7 +152,7 @@ void DeleteWidget::updateText()
                                        "Note that <b>all subalbums</b> "
                                        "are included in this list and will "
                                        "be deleted permanently as well.</qt>"));
-            ddWarningIcon->setPixmap(KGlobal::iconLoader()->loadIcon("messagebox_warning",
+            ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("messagebox_warning",
                                      KIcon::Desktop, KIcon::SizeLarge));
         }
         else
@@ -161,7 +161,7 @@ void DeleteWidget::updateText()
                                        "Note that <b>all subalbums</b> "
                                        "are included in this list and will "
                                        "be moved to the Trash Bin as well.</qt>"));
-            ddWarningIcon->setPixmap(KGlobal::iconLoader()->loadIcon("trashcan_full",
+            ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("trashcan_full",
                                      KIcon::Desktop, KIcon::SizeLarge));
         }
         ddNumFiles->setText(i18n("<b>1</b> album selected.", "<b>%n</b> albums selected.", ddFileList->count()));
@@ -198,7 +198,7 @@ DeleteDialog::DeleteDialog(QWidget *parent, const char *name) :
     actionButton(Ok)->setFocus();
 }
 
-bool DeleteDialog::confirmDeleteList(const KURL::List& condemnedFiles,
+bool DeleteDialog::confirmDeleteList(const KUrl::List& condemnedFiles,
                                      DeleteDialogMode::ListMode listMode,
                                      DeleteDialogMode::DeleteMode deleteMode)
 {
@@ -214,7 +214,7 @@ bool DeleteDialog::confirmDeleteList(const KURL::List& condemnedFiles,
     return exec() == QDialog::Accepted;
 }
 
-void DeleteDialog::setURLs(const KURL::List &files)
+void DeleteDialog::setURLs(const KUrl::List &files)
 {
     m_widget->setFiles(files);
 }
@@ -240,7 +240,7 @@ void DeleteDialog::slotShouldDelete(bool shouldDelete)
     // This is called once from constructor, and then when the user changed the checkbox state.
     // In that case, save the user's preference.
     m_saveShouldDeleteUserPreference = true;
-    setButtonGuiItem(Ok, shouldDelete ? KStdGuiItem::del() : m_trashGuiItem);
+    setButtonGuiItem(Ok, shouldDelete ? KStandardGuiItem::del() : m_trashGuiItem);
 }
 
 void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)

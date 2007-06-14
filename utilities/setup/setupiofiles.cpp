@@ -34,6 +34,7 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kseparator.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -113,7 +114,7 @@ SetupIOFiles::~SetupIOFiles()
 
 void SetupIOFiles::applySettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     config->writeEntry("JPEGCompression", d->JPEGOptions->getCompressionValue());
     config->writeEntry("PNGCompression", d->PNGOptions->getCompressionValue());
@@ -125,7 +126,7 @@ void SetupIOFiles::applySettings()
 
 void SetupIOFiles::readSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     d->JPEGOptions->setCompressionValue(config->readNumEntry("JPEGCompression", 75) );
     d->PNGOptions->setCompressionValue(config->readNumEntry("PNGCompression", 9) );

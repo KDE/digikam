@@ -63,11 +63,11 @@ public:
 
 signals: 
 
-    void signalFileDeleted(const KURL&);
+    void signalFileDeleted(const KUrl&);
 
 public slots:
 
-    void slotItemsUpdated(const KURL::List&);
+    void slotItemsUpdated(const KUrl::List&);
 
 private:
 

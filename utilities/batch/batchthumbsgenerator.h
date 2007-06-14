@@ -34,7 +34,7 @@
 class QWidget;
 class QPixmap;
 
-class KURL;
+class KUrl;
 
 namespace Digikam
 {
@@ -72,7 +72,7 @@ private slots:
 
     void slotRebuildThumbs128();
     void slotRebuildThumbs256();
-    void slotRebuildThumbDone(const KURL& url, const QPixmap& pix=QPixmap());
+    void slotRebuildThumbDone(const KUrl& url, const QPixmap& pix=QPixmap());
     void slotRebuildAllThumbComplete();
 
 private:

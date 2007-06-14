@@ -65,15 +65,16 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <kmessagebox.h>
-#include <kselect.h>
+#include <kselector.h>
 #include <kfiledialog.h>
 #include <kglobalsettings.h>
 #include <kaboutdata.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -454,7 +455,7 @@ void ChannelMixerDialog::slotEffect()
 
 void ChannelMixerDialog::finalRendering()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getOriginalImage();
     int w                      = iface->originalWidth();
@@ -529,7 +530,7 @@ void ChannelMixerDialog::slotScaleChanged(int scale)
 
 void ChannelMixerDialog::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("channelmixer Tool Dialog");
 
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
@@ -563,7 +564,7 @@ void ChannelMixerDialog::readUserSettings()
 
 void ChannelMixerDialog::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("channelmixer Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
@@ -625,7 +626,7 @@ void ChannelMixerDialog::resetValues()
 // Load all gains.
 void ChannelMixerDialog::slotUser3()
 {
-    KURL loadGainsFileUrl;
+    KUrl loadGainsFileUrl;
     FILE *fp = 0L;
     int currentOutputChannel;
     bool monochrome;
@@ -712,7 +713,7 @@ void ChannelMixerDialog::slotUser3()
 // Save all gains.
 void ChannelMixerDialog::slotUser2()
 {
-    KURL saveGainsFileUrl;
+    KUrl saveGainsFileUrl;
     FILE *fp = 0L;
     
     saveGainsFileUrl = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),

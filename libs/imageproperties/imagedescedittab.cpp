@@ -45,7 +45,7 @@
 // KDE includes.
 
 #include <kabc/stdaddressbook.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kurl.h>
 #include <kcursor.h>
@@ -56,6 +56,7 @@
 #include <kconfig.h>
 #include <klineedit.h>
 #include <kdialogbase.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -335,7 +336,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     // -- read config ---------------------------------------------------------
 
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("Tag List View");
     d->toggleAutoTags = (TagFilterView::ToggleAutoTags)(config->readNumEntry("Toggle Auto Tags", 
                                                        TagFilterView::NoToggleAuto));
@@ -353,7 +354,7 @@ ImageDescEditTab::~ImageDescEditTab()
     }
     */
 
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("Tag List View");
     config->writeEntry("Toggle Auto Tags", (int)(d->toggleAutoTags));
     config->sync();
@@ -381,7 +382,7 @@ void ImageDescEditTab::slotChangingItems()
                                               KDialogBase::Yes, KDialogBase::No,
                                               this, "applyChanges",
                                               true, true,
-                                              KStdGuiItem::yes(), KStdGuiItem::discard());
+                                              KStandardGuiItem::yes(), KStandardGuiItem::discard());
 
         int changedFields = 0;
         if (d->hub.commentChanged())
@@ -810,7 +811,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
     connect(d->ABCMenu, SIGNAL( aboutToShow() ),
             this, SLOT( slotABCContextMenu() ));
 
-    KPopupMenu popmenu(this);
+    KMenu popmenu(this);
     popmenu.insertTitle(SmallIcon("digikam"), i18n("Tags"));
     popmenu.insertItem(SmallIcon("tag-new"),  i18n("New Tag..."), 10);
     popmenu.insertItem(SmallIcon("tag-addressbook"), i18n("Create Tag From AddressBook"), d->ABCMenu);
@@ -1450,7 +1451,7 @@ void ImageDescEditTab::updateRecentTags()
                         icon = loader->getStandardTagIcon(album, AlbumThumbnailLoader::SmallerSize);
                     }
                 }
-                QString text = album->title() + " (" + ((TAlbum*)album->parent())->prettyURL() + ')';
+                QString text = album->title() + " (" + ((TAlbum*)album->parent())->prettyUrl() + ')';
                 menu->insertItem(icon, text, album->id());
             }
         }

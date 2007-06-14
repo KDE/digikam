@@ -40,6 +40,7 @@
 #include <kcursor.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -165,14 +166,14 @@ void FolderView::fontChange(const QFont& oldFont)
 {
     // this is bad, since the settings value might not always be the _real_ height of the thumbnail.
     // (e.g. when it is blended, as for the tags)
-    d->itemHeight = QMAX(AlbumThumbnailLoader::instance()->thumbnailSize() + 2*itemMargin(), fontMetrics().height());
+    d->itemHeight = qMax(AlbumThumbnailLoader::instance()->thumbnailSize() + 2*itemMargin(), fontMetrics().height());
     Q3ListView::fontChange(oldFont);
     slotThemeChanged();
 }
 
 void FolderView::slotIconSizeChanged()
 {
-    d->itemHeight = QMAX(AlbumThumbnailLoader::instance()->thumbnailSize() + 2*itemMargin(), fontMetrics().height());
+    d->itemHeight = qMax(AlbumThumbnailLoader::instance()->thumbnailSize() + 2*itemMargin(), fontMetrics().height());
     slotThemeChanged();
 }
 
@@ -187,7 +188,7 @@ void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
             QPoint vp = contentsToViewport(e->pos());
             Q3ListViewItem *item = itemAt(vp);
             if (mouseInItemRect(item, vp.x()))
-                setCursor(KCursor::handCursor());
+                setCursor(Qt::PointingHandCursor);
             else
                 unsetCursor();
         }
@@ -341,7 +342,7 @@ void FolderView::slotAllAlbumsLoaded()
 
 void FolderView::loadViewState()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup(name());
     
     int selectedItem = config->readNumEntry("LastSelectedItem", 0);
@@ -374,7 +375,7 @@ void FolderView::loadViewState()
 
 void FolderView::saveViewState()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup(name());
    
     FolderItem *item = dynamic_cast<FolderItem*>(selectedItem());

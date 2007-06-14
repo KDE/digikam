@@ -41,7 +41,7 @@
 // KDE includes.
 
 #include <klocale.h>
-#include <kactivelabel.h>
+#include <k3activelabel.h>
 #include <kdialog.h>
 #include <kurllabel.h>
 #include <kiconloader.h>
@@ -155,7 +155,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     
     Q3HBox *hbox = new Q3HBox(parent);
 
-    KURLLabel *exiv2LogoLabel = new KURLLabel(hbox);
+    KUrlLabel *exiv2LogoLabel = new KUrlLabel(hbox);
     exiv2LogoLabel->setText(QString());
     exiv2LogoLabel->setURL("http://www.exiv2.org");
     KGlobal::dirs()->addResourceType("logo-exiv2", KGlobal::dirs()->kde_default("data") + "digikam/data");
@@ -163,7 +163,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     exiv2LogoLabel->setPixmap( QPixmap( directory + "logo-exiv2.png" ) );
     QToolTip::add(exiv2LogoLabel, i18n("Visit Exiv2 project website"));
 
-    KActiveLabel* explanation = new KActiveLabel(hbox);
+    K3ActiveLabel* explanation = new K3ActiveLabel(hbox);
     explanation->setText(i18n("<p><b>EXIF</b> is a standard used by most digital cameras today to store "
                               "technical information about the photograph as metadata in the image file. You can learn more "
                               "about EXIF at <a href='http://www.exif.org'>www.exif.org</a>.</p>"

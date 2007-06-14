@@ -111,8 +111,8 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
-    connect(watch, SIGNAL(signalFileMetadataChanged(const KURL &)),
-            this, SLOT(slotFileMetadataChanged(const KURL &)));
+    connect(watch, SIGNAL(signalFileMetadataChanged(const KUrl &)),
+            this, SLOT(slotFileMetadataChanged(const KUrl &)));
 }
 
 ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
@@ -126,12 +126,12 @@ void ImagePropertiesSideBarDB::itemChanged(ImageInfo *info,
     itemChanged(info->kurl(), info, rect, img);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const KURL& url, const QRect &rect, DImg *img)
+void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const QRect &rect, DImg *img)
 {
     itemChanged(url, 0, rect, img);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const KURL& url, ImageInfo *info,
+void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, ImageInfo *info,
                                            const QRect &rect, DImg *img)
 {
     if ( !url.isValid() )
@@ -227,7 +227,7 @@ void ImagePropertiesSideBarDB::populateTags(void)
 
 void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
 {
-    setCursor(KCursor::waitCursor());
+    setCursor(Qt::WaitCursor);
 
     // No database data available, for example in the case of image editor is 
     // started from camera GUI.
@@ -318,7 +318,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     unsetCursor();
 }
 
-void ImagePropertiesSideBarDB::slotFileMetadataChanged(const KURL &url)
+void ImagePropertiesSideBarDB::slotFileMetadataChanged(const KUrl &url)
 {
     if (url == m_currentURL)
     {

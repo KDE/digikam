@@ -54,7 +54,7 @@ QImage DPopupMenu::_dpopupmenu_sidePixmap_;
 QColor DPopupMenu::_dpopupmenu_sidePixmapColor_;
 
 DPopupMenu::DPopupMenu( QWidget* parent, const char* name )
-          : KPopupMenu( parent, name )
+          : KMenu( parent, name )
 {
     // Must be initialized so that we know the size on first invocation
     if ( _dpopupmenu_sidePixmap_.isNull() )
@@ -101,8 +101,8 @@ QColor DPopupMenu::calcPixmapColor()
     inactiveTitle.hsv(&h2, &s2, &v2);
     QApplication::palette().active().background().hsv(&h3, &s3, &v3);
 
-    if ( (kAbs(h1-h3)+kAbs(s1-s3)+kAbs(v1-v3) < kAbs(h2-h3)+kAbs(s2-s3)+kAbs(v2-v3)) &&
-            ((kAbs(h1-h3)+kAbs(s1-s3)+kAbs(v1-v3) < 32) || (s1 < 32)) && (s2 > s1))
+    if ( (qAbs(h1-h3)+kAbs(s1-s3)+kAbs(v1-v3) < qAbs(h2-h3)+kAbs(s2-s3)+kAbs(v2-v3)) &&
+            ((qAbs(h1-h3)+kAbs(s1-s3)+kAbs(v1-v3) < 32) || (s1 < 32)) && (s2 > s1))
         color = inactiveTitle;
     else
         color = activeTitle;
@@ -130,27 +130,27 @@ QColor DPopupMenu::calcPixmapColor()
 
 void DPopupMenu::setMinimumSize(const QSize & s)
 {
-    KPopupMenu::setMinimumSize(s.width() + _dpopupmenu_sidePixmap_.width(), s.height());
+    KMenu::setMinimumSize(s.width() + _dpopupmenu_sidePixmap_.width(), s.height());
 }
 
 void DPopupMenu::setMaximumSize(const QSize & s)
 {
-    KPopupMenu::setMaximumSize(s.width() + _dpopupmenu_sidePixmap_.width(), s.height());
+    KMenu::setMaximumSize(s.width() + _dpopupmenu_sidePixmap_.width(), s.height());
 }
 
 void DPopupMenu::setMinimumSize(int w, int h)
 {
-    KPopupMenu::setMinimumSize(w + _dpopupmenu_sidePixmap_.width(), h);
+    KMenu::setMinimumSize(w + _dpopupmenu_sidePixmap_.width(), h);
 }
 
 void DPopupMenu::setMaximumSize(int w, int h)
 {
-  KPopupMenu::setMaximumSize(w + _dpopupmenu_sidePixmap_.width(), h);
+  KMenu::setMaximumSize(w + _dpopupmenu_sidePixmap_.width(), h);
 }
 
 void DPopupMenu::resizeEvent(QResizeEvent * e)
 {
-    KPopupMenu::resizeEvent( e );
+    KMenu::resizeEvent( e );
 
     setFrameRect( QStyle::visualRect( QRect( _dpopupmenu_sidePixmap_.width(), 0,
                                       width() - _dpopupmenu_sidePixmap_.width(), 
@@ -160,8 +160,8 @@ void DPopupMenu::resizeEvent(QResizeEvent * e)
 //Workaround Qt3.3.x sizing bug, by ensuring we're always wide enough.
 void DPopupMenu::resize( int width, int height )
 {
-    width = kMax(width, maximumSize().width());
-    KPopupMenu::resize(width, height);
+    width = qMax(width, maximumSize().width());
+    KMenu::resize(width, height);
 }
 
 void DPopupMenu::paintEvent( QPaintEvent* e )

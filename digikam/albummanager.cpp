@@ -322,7 +322,7 @@ void AlbumManager::startScan()
     d->rootTAlbum = new TAlbum(i18n("My Tags"), 0, true);
     insertTAlbum(d->rootTAlbum);
 
-    d->rootSAlbum = new SAlbum(0, KURL(), true, true);
+    d->rootSAlbum = new SAlbum(0, KUrl(), true, true);
 
     d->rootDAlbum = new DAlbum(QDate(), true);
 
@@ -340,7 +340,7 @@ void AlbumManager::refresh()
 
     if (!d->dirtyAlbums.empty())
     {
-        KURL u(d->dirtyAlbums.first());
+        KUrl u(d->dirtyAlbums.first());
         d->dirtyAlbums.pop_front();
 
         DIO::scan(u);
@@ -371,7 +371,7 @@ void AlbumManager::scanPAlbums()
     for (AlbumInfo::List::iterator it = aList.begin(); it != aList.end(); ++it)
     {
         AlbumInfo info = *it;
-        info.url = QDir::cleanDirPath(info.url);
+        info.url = QDir::cleanPath(info.url);
 
         if (!aMap.contains(info.url))
         {
@@ -415,11 +415,11 @@ void AlbumManager::scanPAlbums()
 
         // Despite its name info.url is a QString.
         // setPath takes care for escaping characters that are valid for files but not for URLs ('#')
-        KURL u;
+        KUrl u;
         u.setPath(info.url);
         QString name = u.fileName();
         // Get its parent
-        QString purl = u.upURL().path(-1);
+        QString purl = u.upUrl().path(-1);
 
         PAlbum* parent = d->pAlbumDict.find(purl);
         if (!parent)
@@ -694,7 +694,7 @@ Album* AlbumManager::currentAlbum() const
     return d->currentAlbum;
 }
 
-PAlbum* AlbumManager::findPAlbum(const KURL& url) const
+PAlbum* AlbumManager::findPAlbum(const KUrl& url) const
 {
     return d->pAlbumDict.find(CollectionManager::instance()->album(url));
 }
@@ -817,7 +817,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
 
     DatabaseUrl url = parent->databaseUrl();
     url.addPath(name);
-    KURL fileUrl = url.fileUrl();
+    KUrl fileUrl = url.fileUrl();
 
     //TODO: Use KIO::NetAccess?
     // make the directory synchronously, so that we can add the
@@ -894,8 +894,8 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
 
     QString oldAlbumPath = album->albumPath();
 
-    KURL u = album->fileUrl();
-    u = u.upURL();
+    KUrl u = album->fileUrl();
+    u = u.upUrl();
     u.addPath(newName);
 
     if (::rename(QFile::encodeName(album->folderPath()),
@@ -1191,7 +1191,7 @@ QStringList AlbumManager::tagPaths(const Q3ValueList<int> &tagIDs, bool leadingS
     return tagPaths;
 }
 
-SAlbum* AlbumManager::createSAlbum(const KURL& url, bool simple)
+SAlbum* AlbumManager::createSAlbum(const KUrl& url, bool simple)
 {
     QString name = url.queryItem("name");
 
@@ -1224,7 +1224,7 @@ SAlbum* AlbumManager::createSAlbum(const KURL& url, bool simple)
     return album;
 }
 
-bool AlbumManager::updateSAlbum(SAlbum* album, const KURL& newURL)
+bool AlbumManager::updateSAlbum(SAlbum* album, const KUrl& newURL)
 {
     if (!album)
         return false;
@@ -1347,7 +1347,7 @@ AlbumItemHandler* AlbumManager::getItemHandler()
     return d->itemHandler;
 }
 
-void AlbumManager::refreshItemHandler(const KURL::List& itemList)
+void AlbumManager::refreshItemHandler(const KUrl::List& itemList)
 {
     if (itemList.empty())
         d->itemHandler->refresh();
@@ -1420,9 +1420,9 @@ void AlbumManager::slotData(KIO::Job* , const QByteArray& data)
 
 void AlbumManager::slotDirty(const QString& path)
 {
-    KURL fileUrl;
+    KUrl fileUrl;
     // we need to provide a trailing slash to DatabaseUrl to mark it as a directory
-    fileUrl.setPath(QDir::cleanDirPath(path) + '/');
+    fileUrl.setPath(QDir::cleanPath(path) + '/');
     DatabaseUrl url = DatabaseUrl::fromFileUrl(fileUrl, CollectionManager::instance()->albumRoot(fileUrl));
 
     if (d->dirtyAlbums.contains(url.url()))
@@ -1434,7 +1434,7 @@ void AlbumManager::slotDirty(const QString& path)
     if (DIO::running())
         return;
 
-    KURL u(d->dirtyAlbums.first());
+    KUrl u(d->dirtyAlbums.first());
     d->dirtyAlbums.pop_front();
 
     DIO::scan(u);

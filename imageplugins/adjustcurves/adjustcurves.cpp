@@ -55,15 +55,16 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <kmessagebox.h>
-#include <kselect.h>
+#include <kselector.h>
 #include <kfiledialog.h>
 #include <kglobalsettings.h>
 #include <kaboutdata.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -368,7 +369,7 @@ void AdjustCurveDialog::slotSpotColorChanged(const Digikam::DColor &color)
     {
        // Black tonal curves point.
        m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 1, 
-                               QPoint(QMAX(QMAX(sc.red(), sc.green()), sc.blue()), 42*m_histoSegments/256));
+                               QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 42*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 1, QPoint(sc.red(), 42*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 1, QPoint(sc.green(), 42*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 1, QPoint(sc.blue(), 42*m_histoSegments/256));
@@ -378,7 +379,7 @@ void AdjustCurveDialog::slotSpotColorChanged(const Digikam::DColor &color)
     {
        // Gray tonal curves point.
        m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 8, 
-                               QPoint(QMAX(QMAX(sc.red(), sc.green()), sc.blue()), 128*m_histoSegments/256));
+                               QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 128*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 8, QPoint(sc.red(), 128*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 8, QPoint(sc.green(), 128*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 8, QPoint(sc.blue(), 128*m_histoSegments/256));
@@ -388,7 +389,7 @@ void AdjustCurveDialog::slotSpotColorChanged(const Digikam::DColor &color)
     {
        // White tonal curves point.
        m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 15,
-                               QPoint(QMAX(QMAX(sc.red(), sc.green()), sc.blue()), 213*m_histoSegments/256));
+                               QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 213*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 15, QPoint(sc.red(), 213*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 15, QPoint(sc.green(), 213*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 15, QPoint(sc.blue(), 213*m_histoSegments/256));
@@ -459,7 +460,7 @@ void AdjustCurveDialog::slotEffect()
 
 void AdjustCurveDialog::finalRendering()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
     uchar *orgData             = iface->getOriginalImage();
     int w                      = iface->originalWidth();
@@ -561,7 +562,7 @@ void AdjustCurveDialog::slotCurveTypeChanged(int type)
 
 void AdjustCurveDialog::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("adjustcurves Tool Dialog");
 
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
@@ -598,7 +599,7 @@ void AdjustCurveDialog::readUserSettings()
 
 void AdjustCurveDialog::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("adjustcurves Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
@@ -636,7 +637,7 @@ void AdjustCurveDialog::resetValues()
 // Load all settings.
 void AdjustCurveDialog::slotUser3()
 {
-    KURL loadCurvesFile;
+    KUrl loadCurvesFile;
 
     loadCurvesFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,
@@ -658,7 +659,7 @@ void AdjustCurveDialog::slotUser3()
 // Save all settings.
 void AdjustCurveDialog::slotUser2()
 {
-    KURL saveCurvesFile;
+    KUrl saveCurvesFile;
 
     saveCurvesFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,

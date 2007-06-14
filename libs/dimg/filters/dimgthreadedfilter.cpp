@@ -139,7 +139,7 @@ void DImgThreadedFilter::postProgress(int progress, bool starting, bool success)
 
 void DImgThreadedFilter::startComputation()
 {
-    // See B.K.O #133026: do not use kdDebug() statements in threaded implementation
+    // See B.K.O #133026: do not use kDebug() statements in threaded implementation
     // to prevent crash under Hyperthreaded CPU.
 
     if (m_parent)

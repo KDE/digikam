@@ -49,9 +49,11 @@
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
+#include <kglobal.h>
+#include <ktoolinvocation.h>
 
 // Local includes.
 
@@ -106,7 +108,7 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
                           i18n("&Save As..."),
                           i18n("&Load..."))
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     setCaption(DImgInterface::defaultInterface()->getImageFileName() + QString(" - ") + title);
     showButton(User1, false);
 
@@ -163,7 +165,7 @@ ImageDlgBase::~ImageDlgBase()
 
 void ImageDlgBase::readSettings(void)
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup(d->name + QString(" Tool Dialog"));
     if(config->hasKey("SplitterSizes"))
         d->splitter->setSizes(config->readIntListEntry("SplitterSizes"));
@@ -173,7 +175,7 @@ void ImageDlgBase::readSettings(void)
 
 void ImageDlgBase::writeSettings()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup(d->name + QString(" Tool Dialog"));
     config->writeEntry("SplitterSizes", d->splitter->sizes());
     config->sync();
@@ -211,7 +213,7 @@ void ImageDlgBase::slotHelp()
     // else digiKam help. In this case, setHelp() method must be used to set anchor and handbook name.
 
     if (d->aboutData)
-        KApplication::kApplication()->invokeHelp(d->name, "digikam");
+        KToolInvocation::invokeHelp(d->name, "digikam");
     else
         KDialogBase::slotHelp();
 }

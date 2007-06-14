@@ -50,7 +50,7 @@ public:
     MediaPlayerView(QWidget *parent=0);
     ~MediaPlayerView();    
 
-    void setMediaPlayerFromUrl(const KURL& url);
+    void setMediaPlayerFromUrl(const KUrl& url);
     void escapePreview();
            
 private slots:

@@ -60,7 +60,7 @@ public:
 
     ~ImageWindow();
 
-    void loadURL(const KURL::List& urlList, const KURL& urlCurrent,
+    void loadURL(const KUrl::List& urlList, const KUrl& urlCurrent,
                  const QString& caption=QString(),
                  bool allowSaving=true);
 
@@ -78,10 +78,10 @@ public:
 
 signals:
 
-    void signalFileDeleted(const KURL& url);
-    void signalFileAdded(const KURL& url);
-    void signalFileModified(const KURL& url);
-    void signalURLChanged(const KURL& url);
+    void signalFileDeleted(const KUrl& url);
+    void signalFileAdded(const KUrl& url);
+    void signalFileModified(const KUrl& url);
+    void signalURLChanged(const KUrl& url);
 
 private:
 
@@ -101,7 +101,7 @@ private:
 
     void saveIsComplete();
     void saveAsIsComplete(); 
-    void setViewToURL(const KURL &url);
+    void setViewToURL(const KUrl &url);
     void deleteCurrentItem(bool ask, bool permanently);
 
     void slideShow(bool startWithCurrent, SlideShowSettings& settings);
@@ -132,7 +132,7 @@ private slots:
     void slotRemoveTag(int tagID);
     void slotAssignRating(int rating);
 
-    void slotFileMetadataChanged(const KURL &);
+    void slotFileMetadataChanged(const KUrl &);
 
     void slotThemeChanged();
 

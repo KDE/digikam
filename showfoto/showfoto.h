@@ -56,7 +56,7 @@ class ShowFoto : public Digikam::EditorWindow
     
 public:
 
-    ShowFoto(const KURL::List& urlList);
+    ShowFoto(const KUrl::List& urlList);
     ~ShowFoto();
     
     virtual void show();
@@ -90,7 +90,7 @@ private:
 
     void slideShow(bool startWithCurrent, Digikam::SlideShowSettings& settings);
 
-    void openFolder(const KURL& url);
+    void openFolder(const KUrl& url);
 
 private slots:
 
@@ -101,8 +101,8 @@ private slots:
     void slotFilePrint();
 
     void slotOpenFile();
-    void slotOpenURL(const KURL& url);
-    void slotOpenFolder(const KURL& url);
+    void slotOpenURL(const KUrl& url);
+    void slotOpenFolder(const KUrl& url);
     void slotOpenFilesInFolder();
     void slotDeleteCurrentItem();
 

@@ -252,7 +252,7 @@ void MonthWidget::drawContents(QPainter *)
 void MonthWidget::mousePressEvent(QMouseEvent *e)
 {
     int firstSelected = 0, lastSelected = 0;
-    if (e->state() != Qt::ControlButton)
+    if (e->state() != Qt::ControlModifier)
     {
         for (int i=0; i<42; i++)
         {
@@ -294,7 +294,7 @@ void MonthWidget::mousePressEvent(QMouseEvent *e)
         int i, j;
         i = (e->pos().x() - m_currw)/m_currw;
         j = (e->pos().y() - 3*m_currh)/m_currh;
-        if (e->state() == Qt::ShiftButton)
+        if (e->state() == Qt::ShiftModifier)
         {
             int endSelection = j*7+i;
             if (endSelection > firstSelected) 

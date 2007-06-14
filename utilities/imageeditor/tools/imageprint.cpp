@@ -70,6 +70,7 @@
 #include <kprinter.h>
 #include <ktempfile.h>
 #include <kpropertiesdialog.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -209,7 +210,7 @@ bool ImagePrint::printImageWithQt()
         {
             int resp = KMessageBox::warningYesNoCancel(KApplication::kApplication()->mainWidget(),
                 i18n("The image will not fit on the page, what do you want to do?"),
-                QString(),KStdGuiItem::cont(),
+                QString(),KStandardGuiItem::cont(),
                 i18n("Shrink") );
     
             if (resp==KMessageBox::Cancel) 
@@ -303,7 +304,7 @@ QString ImagePrint::minimizeString( QString text, const QFontMetrics& metrics,
 
 void ImagePrint::readSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
 
     config->setGroup("Color Management");
 
@@ -384,7 +385,8 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
     QLabel* textLabel = new QLabel( this, "Image position:" );
     textLabel->setText( i18n( "Image position:" ) );
     layout2->addWidget( textLabel );
-    d->position = new KComboBox( false, this, "Print position" );
+    d->position = new KComboBox( false, this );
+    d->position->setObjectName( "Print position" );
     d->position->clear();
     d->position->insertItem( i18n( "Top-Left" ) );
     d->position->insertItem( i18n( "Top-Central" ) );
@@ -450,7 +452,8 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
     d->height = new KDoubleNumInput( hb, "exact height" );
     d->height->setMinValue( 1 );
 
-    d->units = new KComboBox( false, hb, "unit combobox" );
+    d->units = new KComboBox( false, hb );
+    d->units->setObjectName( "unit combobox" );
     d->units->insertItem( i18n("Millimeters") );
     d->units->insertItem( i18n("Centimeters") );
     d->units->insertItem( i18n("Inches") );
@@ -743,7 +746,7 @@ void ImageEditorPrintDialogPage::slotUnitChanged(const QString& string)
 
 void ImageEditorPrintDialogPage::readSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("Color Management");
     d->cmEnabled = config->readBoolEntry("EnableCM", false);
 }

@@ -36,7 +36,7 @@
 #include <kconfig.h>
 #include <kaction.h>
 #include <kaccel.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstatusbar.h>
 
 // libKipi includes.
@@ -155,7 +155,7 @@ public:
 
     QString                cameraGuiPath;
 
-    KPopupMenu            *cameraMediaList;
+    KMenu            *cameraMediaList;
 
     KAccel                *accelerators;
 

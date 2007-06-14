@@ -22,8 +22,8 @@
  * ============================================================ */
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
-#define CLAMP_0_255(x)   QMAX(QMIN(x, 255), 0)
-#define CLAMP_0_65535(x) QMAX(QMIN(x, 65535), 0)
+#define CLAMP_0_255(x)   qMax(qMin(x, 255), 0)
+#define CLAMP_0_65535(x) qMax(qMin(x, 65535), 0)
 
 // C++ includes.
 

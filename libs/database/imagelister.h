@@ -52,7 +52,7 @@ public:
      * Create a TransferJob for the "special" method of one of the database ioslaves,
      * referenced by the URL.
      * Three or four parameters will be sent to the "special" method:
-     * KURL, QString, int (, int).
+     * KUrl, QString, int (, int).
      * @param extraValue If -1, nothing is sent. If it takes another value,
      *                   this value will be sent as a fourth parameter.
      */

@@ -83,7 +83,7 @@ QString IptcWidget::getMetadataTitle(void)
     return i18n("IPTC Records");
 }
 
-bool IptcWidget::loadFromURL(const KURL& url)
+bool IptcWidget::loadFromURL(const KUrl& url)
 {
     setFileName(url.filename());
 
@@ -155,7 +155,7 @@ QString IptcWidget::getTagDescription(const QString& key)
 
 void IptcWidget::slotSaveMetadataToFile(void)
 {
-    KURL url = saveMetadataToFile(i18n("IPTC File to Save"),
+    KUrl url = saveMetadataToFile(i18n("IPTC File to Save"),
                                   QString("*.dat|"+i18n("IPTC binary Files (*.dat)")));
     storeMetadataToFile(url);
 }

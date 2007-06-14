@@ -67,6 +67,7 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <ksqueezedtextlabel.h>
+#include <kglobal.h>
 
 // Digikam includes.
 
@@ -256,8 +257,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                 "important that the colors be vivid and contrast well with each other rather than a "
                 "specific color.</li></ul>"));
 
-    KURLLabel *lcmsLogoLabel = new KURLLabel(generalOptions);
-    lcmsLogoLabel->setAlignment( AlignTop | AlignRight );
+    KUrlLabel *lcmsLogoLabel = new KUrlLabel(generalOptions);
+    lcmsLogoLabel->setAlignment( Qt::AlignTop | Qt::AlignRight );
     lcmsLogoLabel->setText(QString());
     lcmsLogoLabel->setURL("http://www.littlecms.com");
     KGlobal::dirs()->addResourceType("logo-lcms", KGlobal::dirs()->kde_default("data") + "digikam/data");
@@ -299,7 +300,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_useInSelectedProfile = new QRadioButton(m_inProfileBG);
     m_useInSelectedProfile->setText(i18n("Use selected profile"));
 
-    m_inProfilesPath = new KURLRequester(inProfiles);
+    m_inProfilesPath = new KUrlRequester(inProfiles);
     m_inProfilesPath->setMode(KFile::File|KFile::ExistingOnly);
     m_inProfilesPath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
     KFileDialog *inProfiles_dialog = m_inProfilesPath->fileDialog();
@@ -342,7 +343,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_useSpaceSelectedProfile = new QRadioButton(m_spaceProfileBG);
     m_useSpaceSelectedProfile->setText(i18n("Use selected profile"));
 
-    m_spaceProfilePath = new KURLRequester(spaceProfiles);
+    m_spaceProfilePath = new KUrlRequester(spaceProfiles);
     m_spaceProfilePath->setMode(KFile::File|KFile::ExistingOnly);
     m_spaceProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
     KFileDialog *spaceProfiles_dialog = m_spaceProfilePath->fileDialog();
@@ -377,7 +378,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_useProofSelectedProfile = new QRadioButton(m_proofProfileBG);
     m_useProofSelectedProfile->setText(i18n("Use selected profile"));
 
-    m_proofProfilePath = new KURLRequester(proofProfiles);
+    m_proofProfilePath = new KUrlRequester(proofProfiles);
     m_proofProfilePath->setMode(KFile::File|KFile::ExistingOnly);
     m_proofProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
     KFileDialog *proofProfiles_dialog = m_proofProfilePath->fileDialog();
@@ -422,7 +423,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
     m_cInput = new KIntNumInput(lightnessadjust);
-    m_cInput->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
+    m_cInput->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
     m_cInput->setRange(-100, 100, 1, true);
     m_cInput->setValue(0);
     Q3WhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
@@ -440,7 +441,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     gridSettings->addMultiCellWidget(m_toolBoxWidgets, 3, 3, 0, 2);
     setUserAreaWidget(gboxSettings);
-    enableButtonOK(false);
+    enableButtonOk(false);
 
     // -------------------------------------------------------------
 
@@ -532,7 +533,7 @@ ImageEffect_ICCProof::~ImageEffect_ICCProof()
 void ImageEffect_ICCProof::readUserSettings()
 {
     QString defaultICCPath = KGlobalSettings::documentPath();
-    KConfig* config        = kapp->config();
+    KConfig* config        = KGlobal::config();
     
     // General settings of digiKam Color Management                            
     config->setGroup("Color Management");
@@ -608,7 +609,7 @@ void ImageEffect_ICCProof::readUserSettings()
 
 void ImageEffect_ICCProof::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("colormanagement Tool Dialog");
     config->writeEntry("Settings Tab", m_toolBoxWidgets->currentIndex());
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
@@ -705,8 +706,8 @@ void ImageEffect_ICCProof::resetValues()
 
 void ImageEffect_ICCProof::slotEffect()
 {
-    kapp->setOverrideCursor(KCursor::waitCursor());
-    enableButtonOK(true);
+    kapp->setOverrideCursor(Qt::WaitCursor);
+    enableButtonOk(true);
     m_histogramWidget->stopHistogramComputation();
 
     Digikam::IccTransform transform;
@@ -826,7 +827,7 @@ void ImageEffect_ICCProof::slotEffect()
                         "<p>If you want to do a \"soft-proof\" transform, in addition to these profiles "
                         "you need a \"Proof\" profile.</p>");
         KMessageBox::information(this, error);
-        enableButtonOK(false);
+        enableButtonOk(false);
     }
     else
     {
@@ -869,7 +870,7 @@ void ImageEffect_ICCProof::finalRendering()
 {
     if (!m_doSoftProofBox->isChecked())
     {
-        kapp->setOverrideCursor( KCursor::waitCursor() );
+        kapp->setOverrideCursor( Qt::WaitCursor );
         
         Digikam::ImageIface *iface = m_previewWidget->imageIface();
         uchar *data                = iface->getOriginalImage();
@@ -1166,7 +1167,7 @@ bool ImageEffect_ICCProof::useDefaultProofProfile()
 
 void ImageEffect_ICCProof::slotUser3()
 {
-    KURL loadColorManagementFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    KUrl loadColorManagementFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                                 QString( "*" ), this,
                                                 QString( i18n("Color Management Settings File to Load")) );
     if( loadColorManagementFile.isEmpty() )
@@ -1242,7 +1243,7 @@ void ImageEffect_ICCProof::slotUser3()
 
 void ImageEffect_ICCProof::slotUser2()
 {
-    KURL saveColorManagementFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    KUrl saveColorManagementFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                                 QString( "*" ), this,
                                                 QString( i18n("Color Management Settings File to Save")) );
     if( saveColorManagementFile.isEmpty() )

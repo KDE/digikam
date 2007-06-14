@@ -46,9 +46,10 @@
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
+#include <ktoolinvocation.h>
 
 // Local includes.
 
@@ -106,7 +107,7 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
                           i18n("&Save As..."),
                           i18n("&Load..."))
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     setCaption(DImgInterface::defaultInterface()->getImageFileName() + QString(" - ") + title);
     
     d = new CtrlPanelDlgPriv;
@@ -273,7 +274,7 @@ void CtrlPanelDlg::slotHelp()
     // else digiKam help. In this case, setHelp() method must be used to set anchor and handbook name.
 
     if (d->aboutData)
-        KApplication::kApplication()->invokeHelp(d->name, "digikam");
+        KToolInvocation::invokeHelp(d->name, "digikam");
     else
         KDialogBase::slotHelp();
 }
@@ -336,7 +337,7 @@ void CtrlPanelDlg::slotOk()
     enableButton(User3,   false);
     enableButton(Try,     false);
     enableButton(Default, false);
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     m_imagePreviewWidget->setProgress(0);
 
     if (m_threadedFilter)

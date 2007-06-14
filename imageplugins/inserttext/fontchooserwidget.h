@@ -39,7 +39,7 @@ class Q3GroupBox;
 class QLabel;
 class QStringList;
 
-class KListBox;
+class K3ListBox;
 class KIntNumInput;
 
 namespace DigikamInsertTextImagesPlugin
@@ -155,9 +155,9 @@ private:
     
     QLabel                 *sizeLabel;
     
-    KListBox               *familyListBox;
-    KListBox               *styleListBox;
-    KListBox               *sizeListBox;
+    K3ListBox               *familyListBox;
+    K3ListBox               *styleListBox;
+    K3ListBox               *sizeListBox;
     
     KIntNumInput           *sizeOfFont;
   

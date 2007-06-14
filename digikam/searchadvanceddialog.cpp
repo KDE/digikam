@@ -94,7 +94,7 @@ public:
     SearchResultsView               *resultsView;
 };
 
-SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
+SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
                     : KDialogBase(parent, 0, true, i18n("Advanced Search"),
                                   Help|Ok|Cancel, Ok, true), m_url(url)
 {
@@ -287,7 +287,7 @@ void SearchAdvancedDialog::slotDelRules()
     if (d->baseList.isEmpty()) {
         d->optionsCombo->setEnabled(false);
         d->addButton->setEnabled(true);
-        enableButtonOK( false );
+        enableButtonOk( false );
     }
 }
 
@@ -447,7 +447,7 @@ void SearchAdvancedDialog::slotTimeOut()
     int     count  = 0;
     bool    emptyVal = false;
 
-    KURL url;
+    KUrl url;
     url.setProtocol("digikamsearch");
 
     for (BaseList::iterator it = d->baseList.begin();
@@ -523,7 +523,7 @@ void SearchAdvancedDialog::slotTimeOut()
     if (!d->baseList.isEmpty())
     {
         if (!d->title->text().isEmpty())
-            enableButtonOK( !emptyVal );
+            enableButtonOk( !emptyVal );
         d->addButton->setEnabled( !emptyVal );
         d->optionsCombo->setEnabled( !emptyVal );
     }
@@ -567,20 +567,20 @@ void SearchAdvancedDialog::slotChangeButtonStates()
         d->groupButton->setEnabled(true);
     }
 
-    enableButtonOK( !d->title->text().isEmpty() );
+    enableButtonOk( !d->title->text().isEmpty() );
 }
 
-void SearchAdvancedDialog::fillWidgets( const KURL& url )
+void SearchAdvancedDialog::fillWidgets( const KUrl& url )
 {
     int  count = url.queryItem("count").toInt();
     if (count <= 0)
         return;
 
-    QMap<int, KURL> rulesMap;
+    QMap<int, KUrl> rulesMap;
 
     for (int i=1; i<=count; i++)
     {
-        KURL newRule;
+        KUrl newRule;
 
         QString key = url.queryItem(QString::number(i) + ".key");
         QString op  = url.queryItem(QString::number(i) + ".op");
@@ -648,7 +648,7 @@ void SearchAdvancedDialog::fillWidgets( const KURL& url )
         }
     }
 
-    enableButtonOK( true );
+    enableButtonOk( true );
 }
 
 }  // namespace Digikam

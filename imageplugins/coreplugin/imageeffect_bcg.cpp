@@ -53,6 +53,7 @@
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 // Digikam includes.
 
@@ -205,7 +206,7 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
             
     // -------------------------------------------------------------
                 
-    enableButtonOK( false );
+    enableButtonOk( false );
 }
 
 ImageEffect_BCG::~ImageEffect_BCG()
@@ -260,7 +261,7 @@ void ImageEffect_BCG::slotColorSelectedFromTarget( const Digikam::DColor &color 
 
 void ImageEffect_BCG::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("bcgadjust Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
@@ -273,7 +274,7 @@ void ImageEffect_BCG::readUserSettings()
 
 void ImageEffect_BCG::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("bcgadjust Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
@@ -298,13 +299,13 @@ void ImageEffect_BCG::resetValues()
 
 void ImageEffect_BCG::slotEffect()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
 
     double b = (double)m_bInput->value()/250.0;
     double c = (double)(m_cInput->value()/100.0) + 1.00;    
     double g = m_gInput->value();
 
-    enableButtonOK( b != 0.0 || c != 1.0 || g != 1.0 );
+    enableButtonOk( b != 0.0 || c != 1.0 || g != 1.0 );
     
     m_histogramWidget->stopHistogramComputation();
 
@@ -338,7 +339,7 @@ void ImageEffect_BCG::slotEffect()
 
 void ImageEffect_BCG::finalRendering()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
     double b = (double)m_bInput->value()/250.0;

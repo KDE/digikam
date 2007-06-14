@@ -65,16 +65,16 @@ FirstRunWidget::FirstRunWidget( QWidget* parent )
     Q3GridLayout *grid = new Q3GridLayout( 0, 1, 1, 0, 6 ); 
 
     m_pixLabel = new QLabel( this );
-    m_pixLabel->setAlignment( int( QLabel::AlignTop ) );
+    m_pixLabel->setAlignment( int( QLabel::Qt::AlignTop ) );
     grid->addMultiCellWidget( m_pixLabel, 0, 1, 0, 0 );
 
-    m_path = new KURLRequester( this );
+    m_path = new KUrlRequester( this );
     m_path->setShowLocalProtocol( true );
 
     grid->addWidget( m_path, 1, 1 );
 
     m_textLabel1 = new QLabel( this );
-    m_textLabel1->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
+    m_textLabel1->setAlignment( int( QLabel::WordBreak | QLabel::Qt::AlignVCenter ) );
     grid->addWidget( m_textLabel1, 0, 1 );
     
     vlayout->addLayout( grid );

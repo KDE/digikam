@@ -223,7 +223,7 @@ QString GPSWidget::getMetadataTitle(void)
     return i18n("Global Positioning System Information");
 }
 
-bool GPSWidget::loadFromURL(const KURL& url)
+bool GPSWidget::loadFromURL(const KUrl& url)
 {
     setFileName(url.path());
     
@@ -332,7 +332,7 @@ bool GPSWidget::decodeGPSPosition(void)
 
 void GPSWidget::slotSaveMetadataToFile(void)
 {
-    KURL url = saveMetadataToFile(i18n("EXIF File to Save"),
+    KUrl url = saveMetadataToFile(i18n("EXIF File to Save"),
                                   QString("*.dat|"+i18n("EXIF binary Files (*.dat)")));
     storeMetadataToFile(url);
 }

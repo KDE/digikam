@@ -42,6 +42,7 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -92,7 +93,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     m_sensibilitySlider = new QSlider(2, 30, 1, 12, Qt::Horizontal, gboxSettings);
     m_sensibilitySlider->setTracking ( false );
     m_sensibilitySlider->setTickInterval(1);
-    m_sensibilitySlider->setTickmarks(QSlider::Below);
+    m_sensibilitySlider->setTickmarks(QSlider::TicksBelow);
 
     m_sensibilityLCDValue = new QLCDNumber (4, gboxSettings);
     m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
@@ -133,7 +134,7 @@ void ImageEffect_FilmGrain::renderingFinished()
  
 void ImageEffect_FilmGrain::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("filmgrain Tool Dialog");
     m_sensibilitySlider->blockSignals(true);
     m_sensibilitySlider->setValue(config->readNumEntry("SensitivityAjustment", 12));
@@ -143,7 +144,7 @@ void ImageEffect_FilmGrain::readUserSettings()
 
 void ImageEffect_FilmGrain::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("filmgrain Tool Dialog");
     config->writeEntry("SensitivityAjustment", m_sensibilitySlider->value());
     config->sync();

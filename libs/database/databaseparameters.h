@@ -46,7 +46,7 @@ public:
     /**
       * This class encapsulates all parameters needed to establish
       * a connection to a database (inspired by the API of QT SQL of Qt4).
-      * The values can be read from and written to a KURL.
+      * The values can be read from and written to a KUrl.
       */
 
     DatabaseParameters(const QString &type,
@@ -57,7 +57,7 @@ public:
                        const QString &userName = QString(),
                        const QString &password = QString());
 
-    DatabaseParameters(const KURL &url);
+    DatabaseParameters(const KUrl &url);
     DatabaseParameters();
 
     QString databaseType;
@@ -68,7 +68,7 @@ public:
     QString userName;
     QString password;
 
-    void insertInUrl(KURL &url) const;
+    void insertInUrl(KUrl &url) const;
     bool operator==(const DatabaseParameters &other);
     bool operator!=(const DatabaseParameters &other);
 
@@ -81,7 +81,7 @@ public:
     static DatabaseParameters parametersForSQLite(const QString &databaseFile);
     static DatabaseParameters parametersForSQLiteDefaultFile(const QString &directory);
 
-    static void removeFromUrl(KURL &url);
+    static void removeFromUrl(KUrl &url);
 };
 
 }

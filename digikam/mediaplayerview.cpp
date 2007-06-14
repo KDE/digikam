@@ -138,7 +138,7 @@ MediaPlayerView::~MediaPlayerView()
     delete d;
 }
 
-void MediaPlayerView::setMediaPlayerFromUrl(const KURL& url)
+void MediaPlayerView::setMediaPlayerFromUrl(const KUrl& url)
 {
     if (url.isEmpty())
     {

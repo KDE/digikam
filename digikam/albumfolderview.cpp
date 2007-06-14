@@ -29,7 +29,7 @@
 //Added by qt3to4:
 #include <Q3PtrList>
 #include <QDropEvent>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <qcursor.h>
 #include <qdatastream.h>
 #include <q3valuelist.h>
@@ -444,7 +444,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
     KActionMenu menuExport(i18n("Export"));
     KActionMenu menuKIPIBatch(i18n("Batch Process"));
 
-    KPopupMenu popmenu(this);
+    KMenu popmenu(this);
     popmenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
     popmenu.insertItem(SmallIcon("albumfolder-new"), i18n("New Album..."), 10);
 
@@ -676,7 +676,7 @@ void AlbumFolderView::albumDelete(AlbumFolderViewItem *item)
         return;
 
     // find subalbums
-    KURL::List childrenList;
+    KUrl::List childrenList;
     addAlbumChildrenToList(childrenList, album);
 
     DeleteDialog dialog(this);
@@ -693,7 +693,7 @@ void AlbumFolderView::albumDelete(AlbumFolderViewItem *item)
     // Currently trash kioslave can handle only full paths.
     // pass full folder path to the trashing job
     //TODO: Use digikamalbums:// url?
-    KURL u;
+    KUrl u;
     u.setProtocol("file");
     u.setPath(album->folderPath());
     KIO::Job* job = DIO::del(u, useTrash);
@@ -701,7 +701,7 @@ void AlbumFolderView::albumDelete(AlbumFolderViewItem *item)
             this, SLOT(slotDIOResult(KIO::Job *)));
 }
 
-void AlbumFolderView::addAlbumChildrenToList(KURL::List &list, Album *album)
+void AlbumFolderView::addAlbumChildrenToList(KUrl::List &list, Album *album)
 {
     // simple recursive helper function
     if (album)
@@ -926,7 +926,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             == AlbumSettings::ByFolder)
         {
             // TODO: Copy?
-            KPopupMenu popMenu(this);
+            KMenu popMenu(this);
             popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
             popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
             popMenu.insertSeparator(-1);
@@ -981,8 +981,8 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         PAlbum *destAlbum = itemDrop->getAlbum();
         PAlbum *srcAlbum;
 
-        KURL::List      urls;
-        KURL::List      kioURLs;
+        KUrl::List      urls;
+        KUrl::List      kioURLs;
         Q3ValueList<int> albumIDs;
         Q3ValueList<int> imageIDs;
 
@@ -1022,7 +1022,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             }
             else
             {
-                KPopupMenu popMenu(this);
+                KMenu popMenu(this);
                 popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
                 popMenu.insertItem(i18n("Set as Album Thumbnail"), 12);
                 popMenu.insertSeparator(-1);
@@ -1055,7 +1055,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         }
         else
         {
-            KPopupMenu popMenu(this);
+            KMenu popMenu(this);
             popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
             popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
             popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
@@ -1110,9 +1110,9 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         if (destAlbum->isRoot())
             return;
 
-        KURL destURL(destAlbum->kurl());
+        KUrl destURL(destAlbum->kurl());
 
-        KURL::List srcURLs;
+        KUrl::List srcURLs;
         KURLDrag::decode(e, srcURLs);
 
         char keys_return[32];
@@ -1139,7 +1139,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         }
         else
         {
-            KPopupMenu popMenu(this);
+            KMenu popMenu(this);
             popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
             popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
             popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
@@ -1207,7 +1207,7 @@ void AlbumFolderView::albumImportFolder()
     if(dlg.exec() != QDialog::Accepted)
         return;
 
-    KURL::List urls = dlg.selectedURLs();
+    KUrl::List urls = dlg.selectedURLs();
     if(urls.empty())
         return;
 

@@ -52,6 +52,7 @@
 #include <kdialogbase.h>
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -379,7 +380,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     // -- read config ---------------------------------------------------------
 
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("Image Properties SideBar");
     d->tab->setCurrentPage(config->readNumEntry("ImagePropertiesColors Tab",
                            ImagePropertiesColorsTabPriv::HISTOGRAM));
@@ -398,7 +399,7 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
     // stop it before the d->image data are deleted automatically!
     d->histogramWidget->stopHistogramComputation();
 
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("Image Properties SideBar");
     config->writeEntry("ImagePropertiesColors Tab", d->tab->currentPageIndex());
     config->writeEntry("Histogram Channel", d->channelCB->currentItem());
@@ -421,7 +422,7 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
     delete d;
 }
 
-void ImagePropertiesColorsTab::setData(const KURL& url, const QRect &selectionArea,
+void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect &selectionArea,
                                        DImg *img)
 {
     // We might be getting duplicate events from AlbumIconView,
@@ -438,7 +439,7 @@ void ImagePropertiesColorsTab::setData(const KURL& url, const QRect &selectionAr
 
     d->currentFilePath = QString();
     d->currentLoadingDescription = LoadingDescription();
-    d->iccProfileWidget->loadFromURL(KURL());
+    d->iccProfileWidget->loadFromURL(KUrl());
 
     // Clear information.
     d->labelMeanValue->clear();
@@ -500,7 +501,7 @@ void ImagePropertiesColorsTab::setData(const KURL& url, const QRect &selectionAr
     }
 }
 
-void ImagePropertiesColorsTab::loadImageFromUrl(const KURL& url)
+void ImagePropertiesColorsTab::loadImageFromUrl(const KUrl& url)
 {
     // create thread on demand
     if (!d->imageLoaderThread)

@@ -116,13 +116,13 @@ void RefocusMatrix::finish_c_mat (CMat * mat)
 
 inline double *RefocusMatrix::c_mat_eltptr (CMat * mat, const int col, const int row)
 {
-    Q_ASSERT ((QABS (row) <= mat->radius) && (QABS (col) <= mat->radius));
+    Q_ASSERT ((qAbs (row) <= mat->radius) && (qAbs (col) <= mat->radius));
     return (mat->center + mat->row_stride * row + col);
 }
 
 inline double RefocusMatrix::c_mat_elt (const CMat * const mat, const int col, const int row)
 {
-    Q_ASSERT ((QABS (row) <= mat->radius) && (QABS (col) <= mat->radius));
+    Q_ASSERT ((qAbs (row) <= mat->radius) && (qAbs (col) <= mat->radius));
     return (mat->center[mat->row_stride * row + col]);
 }
 
@@ -134,10 +134,10 @@ void RefocusMatrix::convolve_mat (CMat * result, const CMat * const mata, const 
     {
         for (xr = -result->radius; xr <= result->radius; xr++)
         {
-            const int ya_low  = QMAX (-mata->radius, yr - matb->radius);
-            const int ya_high = QMIN (mata->radius, yr + matb->radius);
-            const int xa_low  = QMAX (-mata->radius, xr - matb->radius);
-            const int xa_high = QMIN (mata->radius, xr + matb->radius);
+            const int ya_low  = qMax (-mata->radius, yr - matb->radius);
+            const int ya_high = qMin (mata->radius, yr + matb->radius);
+            const int xa_low  = qMax (-mata->radius, xr - matb->radius);
+            const int xa_high = qMin (mata->radius, xr + matb->radius);
             register double val = 0.0;
     
             for (ya = ya_low; ya <= ya_high; ya++)
@@ -162,10 +162,10 @@ void RefocusMatrix::convolve_star_mat (CMat * result, const CMat * const mata, c
     {
         for (xr = -result->radius; xr <= result->radius; xr++)
         {
-            const int ya_low = QMAX (-mata->radius, -matb->radius - yr);
-            const int ya_high = QMIN (mata->radius, matb->radius - yr);
-            const int xa_low = QMAX (-mata->radius, -matb->radius - xr);
-            const int xa_high = QMIN (mata->radius, matb->radius - xr);
+            const int ya_low = qMax (-mata->radius, -matb->radius - yr);
+            const int ya_high = qMin (mata->radius, matb->radius - yr);
+            const int xa_low = qMax (-mata->radius, -matb->radius - xr);
+            const int xa_high = qMin (mata->radius, matb->radius - xr);
             register double val = 0.0;
     
             for (ya = ya_low; ya <= ya_high; ya++)
@@ -212,8 +212,8 @@ int RefocusMatrix::as_idx (const int k, const int l, const int m)
 
 int RefocusMatrix::as_cidx (const int k, const int l)
 {
-    const int a = QMAX (QABS (k), QABS (l));
-    const int b = QMIN (QABS (k), QABS (l));
+    const int a = qMax (qAbs (k), qAbs (l));
+    const int b = qMin (qAbs (k), qAbs (l));
     return ((a * (a + 1)) / 2 + b);
 }
 
@@ -589,8 +589,8 @@ double RefocusMatrix::circle_intensity (const int x, const int y, const double r
     }
     else
     {
-        register double xlo = QABS (x) - 0.5, xhi = QABS (x) + 0.5,
-            ylo = QABS (y) - 0.5, yhi = QABS (y) + 0.5;
+        register double xlo = qAbs (x) - 0.5, xhi = qAbs (x) + 0.5,
+            ylo = qAbs (y) - 0.5, yhi = qAbs (y) + 0.5;
         register double symmetry_factor = 1, xc1, xc2;
     
         if (xlo < 0)

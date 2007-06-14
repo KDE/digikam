@@ -31,7 +31,7 @@
 
 // KDE includes.
 
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kurl.h>
 #include <kcursor.h>
@@ -152,7 +152,7 @@ void TAlbumListView::contentsMouseMoveEvent(QMouseEvent *e)
             QPoint vp = contentsToViewport(e->pos());
             Q3ListViewItem *item = itemAt(vp);
             if (mouseInItemRect(item, vp.x()))
-                setCursor(KCursor::handCursor());
+                setCursor(Qt::PointingHandCursor);
             else
                 unsetCursor();
         }
@@ -302,7 +302,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         if (talbum == itemDrop->m_album)
             return;
 
-        KPopupMenu popMenu(this);
+        KMenu popMenu(this);
         popMenu.insertTitle(SmallIcon("digikam"), i18n("Tags"));
         popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
         popMenu.insertSeparator(-1);
@@ -343,8 +343,8 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         TAlbum *destAlbum = itemDrop->m_album;
         TAlbum *srcAlbum;
 
-        KURL::List      urls;
-        KURL::List      kioURLs;        
+        KUrl::List      urls;
+        KUrl::List      kioURLs;        
         Q3ValueList<int> albumIDs;
         Q3ValueList<int> imageIDs;
 
@@ -382,7 +382,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             }
             else
             {
-                KPopupMenu popMenu(this);
+                KMenu popMenu(this);
                 popMenu.insertTitle(SmallIcon("digikam"), i18n("Tags"));
                 popMenu.insertItem(i18n("Set as Tag Thumbnail"), 12);
                 popMenu.insertSeparator(-1);
@@ -411,10 +411,10 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         }
         else
         {
-            KPopupMenu popMenu(this);
+            KMenu popMenu(this);
             popMenu.insertTitle(SmallIcon("digikam"), i18n("Tags"));
             popMenu.insertItem( SmallIcon("tag"), i18n("Assign Tag '%1' to Items")
-                                .arg(destAlbum->prettyURL()), 10) ;
+                                .arg(destAlbum->prettyUrl()), 10) ;
             popMenu.insertSeparator(-1);
             popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
 

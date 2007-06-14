@@ -51,6 +51,7 @@
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <kseparator.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -296,11 +297,11 @@ ImagePannelWidget::~ImagePannelWidget()
 
 void ImagePannelWidget::readSettings()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup(d->settingsSection);
     int mode = config->readNumEntry("Separate View", ImageRegionWidget::SeparateViewDuplicateVert);
-    mode     = QMAX(ImageRegionWidget::SeparateViewHorizontal, mode);
-    mode     = QMIN(ImageRegionWidget::SeparateViewDuplicateHorz, mode);
+    mode     = qMax(ImageRegionWidget::SeparateViewHorizontal, mode);
+    mode     = qMin(ImageRegionWidget::SeparateViewDuplicateHorz, mode);
     
     d->imageRegionWidget->blockSignals(true);
     d->imagePanIconWidget->blockSignals(true);
@@ -315,7 +316,7 @@ void ImagePannelWidget::readSettings()
     
 void ImagePannelWidget::writeSettings()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = KGlobal::config();
     config->setGroup(d->settingsSection);
     config->writeEntry( "Separate View", d->separateView->selectedId() );
     config->sync();
@@ -436,7 +437,7 @@ void ImagePannelWidget::setProgressWhatsThis(QString desc)
 void ImagePannelWidget::setPreviewImageWaitCursor(bool enable)
 {
     if ( enable )
-       d->imageRegionWidget->setCursor( KCursor::waitCursor() );
+       d->imageRegionWidget->setCursor( Qt::WaitCursor );
     else 
        d->imageRegionWidget->unsetCursor();
 }

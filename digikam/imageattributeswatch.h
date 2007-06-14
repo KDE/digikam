@@ -50,15 +50,15 @@ public:
     static void shutDown();
 
     /*
-    void imageTagsChanged(Q_LLONG imageId);
+    void imageTagsChanged(qint64 imageId);
     void imagesChanged(int albumId);
 
-    void imageRatingChanged(Q_LLONG imageId);
-    void imageDateChanged(Q_LLONG imageId);
-    void imageCaptionChanged(Q_LLONG imageId);
+    void imageRatingChanged(qint64 imageId);
+    void imageDateChanged(qint64 imageId);
+    void imageCaptionChanged(qint64 imageId);
     */
 
-    void fileMetadataChanged(const KURL &url);
+    void fileMetadataChanged(const KUrl &url);
 
 signals:
 
@@ -89,7 +89,7 @@ signals:
         Usually, the database is updated accordingly, so then this
         signal is sent in combination with one or more of the above signals.
     */
-    void signalFileMetadataChanged(const KURL &url);
+    void signalFileMetadataChanged(const KUrl &url);
 
 private:
 

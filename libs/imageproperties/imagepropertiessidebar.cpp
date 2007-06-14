@@ -77,7 +77,7 @@ ImagePropertiesSideBar::~ImagePropertiesSideBar()
 {
 }
 
-void ImagePropertiesSideBar::itemChanged(const KURL& url, const QRect &rect, DImg *img)
+void ImagePropertiesSideBar::itemChanged(const KUrl& url, const QRect &rect, DImg *img)
 {
     if (!url.isValid())
         return;
@@ -94,7 +94,7 @@ void ImagePropertiesSideBar::itemChanged(const KURL& url, const QRect &rect, DIm
 
 void ImagePropertiesSideBar::slotNoCurrentItem(void)
 {
-    m_currentURL = KURL();
+    m_currentURL = KUrl();
 
     m_propertiesTab->setCurrentURL();
     m_propertiesTab->setNavigateBarFileName();
@@ -125,7 +125,7 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
     if (!m_currentURL.isValid())
         return;
     
-    setCursor(KCursor::waitCursor());
+    setCursor(Qt::WaitCursor);
     
     if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
     {

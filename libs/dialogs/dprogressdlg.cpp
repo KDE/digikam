@@ -42,7 +42,7 @@
 #include <kapplication.h>
 #include <kdialogbase.h>
 #include <kiconloader.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kstandarddirs.h>
 
 // Local includes
@@ -75,7 +75,7 @@ public:
     QLabel    *title;
     QLabel    *label;
     
-    KListView *actionsList;
+    K3ListView *actionsList;
    
     KProgress *progress;
 };
@@ -85,10 +85,10 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
 {
     d = new DProgressDlgPriv;
     
-    Q3Frame *page      = makeMainWidget();
+    QFrame *page      = makeMainWidget();
     Q3GridLayout* grid = new Q3GridLayout(page, 1, 1, 0, spacingHint());
     Q3VBoxLayout *vlay = new Q3VBoxLayout();
-    d->actionsList    = new KListView(page);
+    d->actionsList    = new K3ListView(page);
     d->label          = new QLabel(page);
     d->title          = new QLabel(page);
     d->logo           = new QLabel(page);
@@ -105,7 +105,7 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
     d->actionsList->addColumn("Status");  // no i18n here: hiden column
     d->actionsList->setSorting(-1);
     d->actionsList->setItemMargin(1);
-    d->actionsList->setSelectionModeExt(KListView::NoSelection);
+    d->actionsList->setSelectionModeExt(K3ListView::NoSelection);
     d->actionsList->header()->hide();
     d->actionsList->setResizeMode(Q3ListView::LastColumn);
 
@@ -139,7 +139,7 @@ void DProgressDlg::setButtonText(const QString &text)
 void DProgressDlg::addedAction(const QPixmap& pix, const QString &text)
 {
     QImage img;
-    KListViewItem *item = new KListViewItem(d->actionsList,
+    K3ListViewItem *item = new K3ListViewItem(d->actionsList,
                           d->actionsList->lastItem(), QString(), text);
 
     if (pix.isNull())

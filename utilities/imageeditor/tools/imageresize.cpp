@@ -63,6 +63,7 @@
 #include <kmessagebox.h>
 #include <knuminput.h>
 #include <kglobalsettings.h>
+#include <kglobal.h>
 
 // Digikam includes.
 
@@ -172,13 +173,13 @@ ImageResize::ImageResize(QWidget* parent)
 
     QLabel *label1 = new QLabel(i18n("Width:"), firstPage);
     d->wInput = new KIntNumInput(firstPage);
-    d->wInput->setRange(1, QMAX(d->orgWidth * 10, 9999), 1, true);
+    d->wInput->setRange(1, qMax(d->orgWidth * 10, 9999), 1, true);
     d->wInput->setName("d->wInput");
     Q3WhatsThis::add( d->wInput, i18n("<p>Set here the new image width in pixels."));
 
     QLabel *label2 = new QLabel(i18n("Height:"), firstPage);
     d->hInput = new KIntNumInput(firstPage);
-    d->hInput->setRange(1, QMAX(d->orgHeight * 10, 9999), 1, true);
+    d->hInput->setRange(1, qMax(d->orgHeight * 10, 9999), 1, true);
     d->hInput->setName("d->hInput");
     Q3WhatsThis::add( d->hInput, i18n("<p>Set here the new image height in pixels."));
 
@@ -198,7 +199,7 @@ ImageResize::ImageResize(QWidget* parent)
     Q3WhatsThis::add( d->preserveRatioBox, i18n("<p>Enable this option to maintain aspect "
                                               "ratio with new image sizes."));
 
-    KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
+    KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setURL("http://cimg.sourceforge.net");
     KGlobal::dirs()->addResourceType("logo-cimg", KGlobal::dirs()->kde_default("data") +
@@ -280,7 +281,7 @@ void ImageResize::slotRestorationToggled(bool b)
 
 void ImageResize::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("resize Tool Dialog");
 
     GreycstorationSettings settings;
@@ -322,7 +323,7 @@ void ImageResize::readUserSettings()
 void ImageResize::writeUserSettings()
 {
     GreycstorationSettings settings = d->settingsWidget->getSettings();
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("resize Tool Dialog");
     config->writeEntry("FastApprox", settings.fastApprox);
     config->writeEntry("Interpolation", settings.interp);
@@ -487,7 +488,7 @@ void ImageResize::slotOk()
     enableButton(User2, false);
     enableButton(User3, false);
 
-    d->parent->setCursor( KCursor::waitCursor() );
+    d->parent->setCursor( Qt::WaitCursor );
     if (d->useGreycstorationBox->isChecked())
     {
         d->progressBar->setValue(0);
@@ -566,7 +567,7 @@ void ImageResize::customEvent(QCustomEvent *event)
 
 void ImageResize::slotUser3()
 {
-    KURL loadBlowupFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    KUrl loadBlowupFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
                                        QString( "*" ), this,
                                        QString( i18n("Photograph Resizing Settings File to Load")) );
     if( loadBlowupFile.isEmpty() )
@@ -593,7 +594,7 @@ void ImageResize::slotUser3()
 
 void ImageResize::slotUser2()
 {
-    KURL saveBlowupFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    KUrl saveBlowupFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
                                        QString( "*" ), this,
                                        QString( i18n("Photograph Resizing Settings File to Save")) );
     if( saveBlowupFile.isEmpty() )

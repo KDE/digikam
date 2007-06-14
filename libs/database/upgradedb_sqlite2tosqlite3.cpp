@@ -92,13 +92,13 @@ qlonglong findOrAddImage(DatabaseAccess &access, int dirid, const QString& name,
 
 bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPath)
 {
-    QString libraryPath = QDir::cleanDirPath(sql2DBPath);
+    QString libraryPath = QDir::cleanPath(sql2DBPath);
 
     /*
     QString newDB= libraryPath + "/digikam3.db";
 
     #ifdef NFS_HACK
-    newDB = locateLocal("appdata", KIO::encodeFileName(QDir::cleanDirPath(newDB)));
+    newDB = locateLocal("appdata", KIO::encodeFileName(QDir::cleanPath(newDB)));
     DDebug() << "NFS: " << newDB << endl;
     #endif
 
@@ -120,7 +120,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
     /*
     #ifdef NFS_HACK
-    dbPath = locateLocal("appdata", KIO::encodeFileName(QDir::cleanDirPath(dbPath)));
+    dbPath = locateLocal("appdata", KIO::encodeFileName(QDir::cleanPath(dbPath)));
     DDebug() << "From NFS: " << dbPath << endl;
     #endif
     */
@@ -310,7 +310,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
             continue;
         }
 
-        tag.icon = QDir::cleanDirPath(tag.icon);
+        tag.icon = QDir::cleanPath(tag.icon);
         fi.setFile(tag.icon.remove(libraryPath));
 
         QString url  = fi.dirPath(true);
@@ -561,7 +561,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         }
         else
         {
-            icon = QDir::cleanDirPath(icon);
+            icon = QDir::cleanPath(icon);
             QFileInfo fi(icon.remove(libraryPath));
 
             QString url  = fi.dirPath(true);

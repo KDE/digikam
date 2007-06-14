@@ -33,7 +33,7 @@
 
 // KDE includes.
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <kiconloader.h>
 
 namespace Digikam
@@ -41,15 +41,15 @@ namespace Digikam
 
 class CameraFolderItemPriv;
 
-class CameraFolderItem : public KListViewItem
+class CameraFolderItem : public K3ListViewItem
 {
 
 public:
 
-    CameraFolderItem(KListView* parent, const QString& name, 
+    CameraFolderItem(K3ListView* parent, const QString& name, 
                      const QPixmap& pixmap=SmallIcon("folder"));
 
-    CameraFolderItem(KListViewItem* parent, const QString& folderName, const QString& folderPath, 
+    CameraFolderItem(K3ListViewItem* parent, const QString& folderName, const QString& folderPath, 
                      const QPixmap& pixmap=SmallIcon("folder"));
 
     ~CameraFolderItem();

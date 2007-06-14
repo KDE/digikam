@@ -91,7 +91,7 @@ StatusProgressBar::StatusProgressBar(QWidget *parent)
 
     // Parent widget will probably have the wait cursor set.
     // Set arrow cursor to indicate the button can be clicked
-    d->cancelButton->setCursor(KCursor::arrowCursor());
+    d->cancelButton->setCursor(Qt::ArrowCursor);
 
     hBox->addWidget(d->progressBar);
     hBox->addWidget(d->cancelButton);

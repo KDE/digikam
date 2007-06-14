@@ -271,7 +271,7 @@ bool CIETongueWidget::setProfileData(const QByteArray &profileData)
     return (d->profileDataAvailable);
 }
 
-bool CIETongueWidget::setProfileFromFile(const KURL& file)
+bool CIETongueWidget::setProfileFromFile(const KUrl& file)
 {
     if (!file.isEmpty() && file.isValid())
     {
@@ -762,7 +762,7 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
     int pixcols = d->pixmap.width();
     int pixrows = d->pixmap.height();
 
-    d->gridside = (QMIN(pixcols, pixrows)) / 512.0;
+    d->gridside = (qMin(pixcols, pixrows)) / 512.0;
     d->xBias = grids(32);
     d->yBias = grids(20);
     d->pxcols = pixcols - d->xBias;

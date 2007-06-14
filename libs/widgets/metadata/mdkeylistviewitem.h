@@ -31,7 +31,7 @@
 
 // KDE includes.
 
-#include <klistview.h>
+#include <k3listview.h>
 
 // Local includes.
 
@@ -40,12 +40,12 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT MdKeyListViewItem : public KListViewItem
+class DIGIKAM_EXPORT MdKeyListViewItem : public K3ListViewItem
 {
 
 public:
 
-    MdKeyListViewItem(KListView *parent, const QString& key);
+    MdKeyListViewItem(K3ListView *parent, const QString& key);
     ~MdKeyListViewItem();
 
     QString getMdKey();

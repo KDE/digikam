@@ -59,10 +59,10 @@ public:
 
 private:
 
-    static void fastScaleLineAvg(Q_UINT32 *Target, Q_UINT32 *Source, int SrcWidth, int TgtWidth);
+    static void fastScaleLineAvg(quint32 *Target, quint32 *Source, int SrcWidth, int TgtWidth);
 
     /**  Smooth 2D scaling */
-    static void fastScaleRectAvg(Q_UINT32 *Target, Q_UINT32 *Source, int SrcWidth, int SrcHeight,
+    static void fastScaleRectAvg(quint32 *Target, quint32 *Source, int SrcWidth, int SrcHeight,
                                  int TgtWidth, int TgtHeight);
 
     /** 24-bit RGB (a pixel is packed in a 32-bit integer) */

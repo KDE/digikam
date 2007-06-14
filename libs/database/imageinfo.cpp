@@ -61,7 +61,7 @@ ImageInfo::ImageInfo()
 ImageInfo::ImageInfo(qlonglong Id, int albumId,
                      const QString& name,
                      const QString &albumName,
-                     const KURL& albumRoot,
+                     const KUrl& albumRoot,
                      const QDateTime& datetime,
                      uint  size,
                      const QSize& dims)
@@ -250,17 +250,17 @@ DatabaseUrl ImageInfo::databaseUrl() const
     return m_data->url;
 }
 
-KURL ImageInfo::fileUrl() const
+KUrl ImageInfo::fileUrl() const
 {
     if (!m_data)
-        return KURL();
+        return KUrl();
 
     DatabaseAccess access;
     return m_data->url.fileUrl();
 }
 
 
-KURL ImageInfo::kurl() const
+KUrl ImageInfo::kurl() const
 {
     return fileUrl();
 }
@@ -270,7 +270,7 @@ QString ImageInfo::filePath() const
     return fileUrl().path();
 }
 
-KURL ImageInfo::kurlForKIO() const
+KUrl ImageInfo::kurlForKIO() const
 {
     return databaseUrl();
 }

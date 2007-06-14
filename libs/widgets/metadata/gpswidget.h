@@ -59,7 +59,7 @@ public:
     GPSWidget(QWidget* parent, const char* name=0);
     ~GPSWidget();
 
-    bool    loadFromURL(const KURL& url);
+    bool    loadFromURL(const KUrl& url);
     
     QString getTagDescription(const QString& key);
     QString getTagTitle(const QString& key);

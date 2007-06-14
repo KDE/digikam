@@ -37,6 +37,7 @@
 #include <knuminput.h>
 #include <kconfig.h>
 #include <kapplication.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -132,7 +133,7 @@ SetupSlideShow::~SetupSlideShow()
 
 void SetupSlideShow::applySettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
 
     config->setGroup("ImageViewer Settings");
     config->writeEntry("SlideShowDelay", d->delayInput->value());
@@ -149,7 +150,7 @@ void SetupSlideShow::applySettings()
 
 void SetupSlideShow::readSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
  
     config->setGroup("ImageViewer Settings");
     d->delayInput->setValue(config->readNumEntry("SlideShowDelay", 5));

@@ -675,7 +675,7 @@ bool IconView::arrangeItems()
                 col = 0;
             }
 
-            maxW = QMAX(maxW, x + itemW);
+            maxW = qMax(maxW, x + itemW);
             
             item = item->m_next;
         }
@@ -932,11 +932,11 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
     IconItem *item = findItem(e->pos());
     if (item) 
     {
-        if (e->state() & Qt::ControlButton)
+        if (e->state() & Qt::ControlModifier)
         {
             item->setSelected(!item->isSelected(), false);
         }
-        else if (e->state() & Qt::ShiftButton)
+        else if (e->state() & Qt::ShiftModifier)
         {
             blockSignals(true);
 
@@ -1007,7 +1007,7 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
     }
 
     // Press outside any item. 
-    if (!(e->state() & Qt::ControlButton))
+    if (!(e->state() & Qt::ControlModifier))
     {
         // unselect all if the ctrl button is not pressed        
         clearSelection();
@@ -1093,7 +1093,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
         if (KGlobalSettings::changeCursorOverIcon())
         {
             if (item && item->clickToOpenRect().contains(e->pos()))
-                setCursor(KCursor::handCursor());
+                setCursor(Qt::PointingHandCursor);
             else
                 unsetCursor();
         }
@@ -1277,7 +1277,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
 
     switch ( e->key() )
     {
-        case Key_Home: 
+        case Qt::Key_Home: 
         {
             IconItem* tmp = d->currItem;
             d->currItem = firstItem();
@@ -1291,7 +1291,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
             break;
         }
     
-        case Key_End: 
+        case Qt::Key_End: 
         {
             IconItem* tmp = d->currItem;
             d->currItem   = lastItem();
@@ -1305,8 +1305,8 @@ void IconView::keyPressEvent(QKeyEvent* e)
             break;
         }
     
-        case Key_Enter:
-        case Key_Return: 
+        case Qt::Key_Enter:
+        case Qt::Key_Return: 
         {
             if (d->currItem)
             {
@@ -1316,7 +1316,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
             break;
         }
 
-        case Key_Right: 
+        case Qt::Key_Right: 
         {
             IconItem *item = 0;
             
@@ -1324,7 +1324,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
             {
                 if (d->currItem->nextItem())
                 {
-                    if (e->state() & Qt::ControlButton)
+                    if (e->state() & Qt::ControlModifier)
                     {
                         IconItem* tmp = d->currItem;
                         d->currItem   = d->currItem->nextItem();
@@ -1334,7 +1334,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
     
                         item = d->currItem;
                     }
-                    else if (e->state() & Qt::ShiftButton)
+                    else if (e->state() & Qt::ShiftModifier)
                     {
                         IconItem* tmp = d->currItem;
                         d->currItem   = d->currItem->nextItem();
@@ -1375,7 +1375,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
             break;
         }
     
-        case Key_Left: 
+        case Qt::Key_Left: 
         {
             IconItem *item = 0;
             
@@ -1383,7 +1383,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
             {
                 if (d->currItem->prevItem())
                 {
-                    if (e->state() & Qt::ControlButton)
+                    if (e->state() & Qt::ControlModifier)
                     {
                         IconItem* tmp = d->currItem;
                         d->currItem   = d->currItem->prevItem();
@@ -1393,7 +1393,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
     
                         item = d->currItem;
                     }
-                    else if (e->state() & Qt::ShiftButton)
+                    else if (e->state() & Qt::ShiftModifier)
                     {
                         IconItem* tmp = d->currItem;
                         d->currItem   = d->currItem->prevItem();
@@ -1434,7 +1434,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
             break;
         }
     
-        case Key_Up:
+        case Qt::Key_Up:
         {
             IconItem *item = 0;
             
@@ -1453,7 +1453,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
     
                 if (it)            
                 {
-                    if (e->state() & Qt::ControlButton)
+                    if (e->state() & Qt::ControlModifier)
                     {
                         IconItem* tmp = d->currItem;
                         d->currItem   = it;
@@ -1463,7 +1463,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
     
                         item = d->currItem;
                     }
-                    else if (e->state() & Qt::ShiftButton)
+                    else if (e->state() & Qt::ShiftModifier)
                     {
                         IconItem* tmp = d->currItem;
                         d->currItem   = it;
@@ -1516,7 +1516,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
             break;
         }
     
-        case Key_Down:
+        case Qt::Key_Down:
         {
             IconItem *item = 0;
             
@@ -1535,7 +1535,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
     
                 if (it)            
                 {
-                    if (e->state() & Qt::ControlButton)
+                    if (e->state() & Qt::ControlModifier)
                     {
                         IconItem* tmp = d->currItem;
                         d->currItem   = it;
@@ -1545,7 +1545,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
     
                         item = d->currItem;
                     }
-                    else if (e->state() & Qt::ShiftButton)
+                    else if (e->state() & Qt::ShiftModifier)
                     {
                         IconItem* tmp = d->currItem;
                         d->currItem   = it;
@@ -1598,7 +1598,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
             break;
         }
     
-        case Key_Next: 
+        case Qt::Key_Next: 
         {
             IconItem *item = 0;
     
@@ -1638,7 +1638,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
             break;
         }
     
-        case Key_Prior: 
+        case Qt::Key_Prior: 
         {
             IconItem *item = 0;
     
@@ -1678,13 +1678,13 @@ void IconView::keyPressEvent(QKeyEvent* e)
             break;
         }
 
-        // Key_Space is used as a global shortcut in DigikamApp.
+        // Qt::Key_Space is used as a global shortcut in DigikamApp.
         // Ctrl+Space comes through, Shift+Space is filtered out.
-        case Key_Space:
+        case Qt::Key_Space:
         {
             if (d->currItem)
             {
-                if ( (e->state() & Qt::ControlButton) || (e->state() & Qt::ShiftButton) )
+                if ( (e->state() & Qt::ControlModifier) || (e->state() & Qt::ShiftModifier) )
                 {
                     d->currItem->setSelected(!d->currItem->isSelected(), false);
                 }
@@ -1698,7 +1698,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
             break;
         }
 
-        case Key_Menu:
+        case Qt::Key_Menu:
         {
             if (d->currItem)
             {

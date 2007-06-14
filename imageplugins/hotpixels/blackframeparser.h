@@ -62,7 +62,7 @@ public:
     ~BlackFrameParser();
         
     void parseHotPixels(QString file);
-    void parseBlackFrame(KURL url);
+    void parseBlackFrame(KUrl url);
     void parseBlackFrame(QImage& img);
     QImage image(){return mImage;}
 

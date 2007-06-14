@@ -139,7 +139,7 @@ void WhiteBalance::autoWBAdjustementFromColor(const QColor &tc, double &temperat
     register int l, r, m;
     double sR, sG, sB, mRB, t;
 
-    t   = QMAX( QMAX(tc.Qt::red(), tc.Qt::green()), tc.Qt::blue());
+    t   = qMax( qMax(tc.Qt::red(), tc.Qt::green()), tc.Qt::blue());
     sR  = tc.Qt::red()   / t;
     sG  = tc.Qt::green() / t;
     sB  = tc.Qt::blue()  / t;
@@ -221,8 +221,8 @@ void WhiteBalance::setRGBmult()
     d->mg *= d->Qt::green;
     
     // Normalize to at least 1.0, so we are not dimming colors only bumping.
-    mi    = QMIN(d->mr, d->mg);
-    mi    = QMIN(mi, d->mb);
+    mi    = qMin(d->mr, d->mg);
+    mi    = qMin(mi, d->mb);
     d->mr /= mi;
     d->mg /= mi;
     d->mb /= mi;
@@ -282,10 +282,10 @@ void WhiteBalance::adjustWhiteBalance(uchar *data, int width, int height, bool s
             rv[0] = (int)(Qt::blue  * d->mb);
             rv[1] = (int)(Qt::green * d->mg);
             rv[2] = (int)(Qt::red   * d->mr);
-            v = QMAX(rv[0], rv[1]);
-            v = QMAX(v, rv[2]);
+            v = qMax(rv[0], rv[1]);
+            v = qMax(v, rv[2]);
 
-            if (d->clipSat) v = QMIN(v, (int)d->rgbMax-1);
+            if (d->clipSat) v = qMin(v, (int)d->rgbMax-1);
             i = v;
 
             ptr[0] = (uchar)pixelColor(rv[0], i, v);
@@ -310,10 +310,10 @@ void WhiteBalance::adjustWhiteBalance(uchar *data, int width, int height, bool s
             rv[0] = (int)(Qt::blue  * d->mb);
             rv[1] = (int)(Qt::green * d->mg);
             rv[2] = (int)(Qt::red   * d->mr);
-            v     = QMAX(rv[0], rv[1]);
-            v     = QMAX(v, rv[2]);
+            v     = qMax(rv[0], rv[1]);
+            v     = qMax(v, rv[2]);
 
-            if (d->clipSat) v = QMIN(v, (int)d->rgbMax-1);
+            if (d->clipSat) v = qMin(v, (int)d->rgbMax-1);
             i = v;
 
             ptr[0] = pixelColor(rv[0], i, v);

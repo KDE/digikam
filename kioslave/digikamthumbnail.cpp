@@ -57,12 +57,12 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kmdcodec.h>
+#include <kcodecs.h>
 #include <ktempfile.h>
 #include <ktrader.h>
 #include <klibloader.h>
 #include <kmimetype.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kio/global.h>
 #include <kio/thumbcreator.h>
 #include <kfilemetainfo.h>
@@ -110,7 +110,7 @@ kio_digikamthumbnailProtocol::~kio_digikamthumbnailProtocol()
 {
 }
 
-void kio_digikamthumbnailProtocol::get(const KURL& url )
+void kio_digikamthumbnailProtocol::get(const KUrl& url )
 {
     int  size =  metaData("size").toInt();
     bool exif = (metaData("exif") == "yes");
@@ -120,12 +120,12 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
     if (cachedSize_ <= 0)
     {
         error(KIO::ERR_INTERNAL, i18n("No or invalid size specified"));
-        kdWarning() << "No or invalid size specified" << endl;
+        kWarning() << "No or invalid size specified" << endl;
         return;
     }
 
     // generate the thumbnail path
-    QString uri = "file://" + QDir::cleanDirPath(url.path(-1));
+    QString uri = "file://" + QDir::cleanPath(url.path(-1));
     KMD5 md5( QFile::encodeName(uri) );
     QString thumbPath = (cachedSize_ == 128) ? smallThumbPath_ : bigThumbPath_;
     thumbPath += QFile::encodeName( md5.hexDigest() ) + ".png";
@@ -176,12 +176,12 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
         if (img.isNull())
         {
             error(KIO::ERR_INTERNAL, i18n("Cannot create thumbnail for %1")
-                  .arg(url.prettyURL()));
-            kdWarning() << "Cannot create thumbnail for " << url.path() << endl;
+                  .arg(url.prettyUrl()));
+            kWarning() << "Cannot create thumbnail for " << url.path() << endl;
             return;
         }
 
-        if (QMAX(img.width(),img.height()) != cachedSize_)
+        if (qMax(img.width(),img.height()) != cachedSize_)
             img = img.smoothScale(cachedSize_, cachedSize_, QImage::ScaleMin);
 
         if (img.depth() != 32)
@@ -227,14 +227,14 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
         if (shmaddr == (void *)-1)
         {
             error(KIO::ERR_INTERNAL, "Failed to attach to shared memory segment " + shmid);
-            kdWarning() << "Failed to attach to shared memory segment " << shmid << endl;
+            kWarning() << "Failed to attach to shared memory segment " << shmid << endl;
             return;
         }
 
         if (img.width() * img.height() > cachedSize_ * cachedSize_)
         {
             error(KIO::ERR_INTERNAL, "Image is too big for the shared memory segment");
-            kdWarning() << "Image is too big for the shared memory segment" << endl;
+            kWarning() << "Image is too big for the shared memory segment" << endl;
             shmdt((char*)shmaddr);
             return;
         }
@@ -258,7 +258,7 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
     DMetadata metadata(path);
     if (metadata.getImagePreview(image))
     {
-        kdDebug() << "Use Exif/Iptc preview extraction. Size of image: " 
+        kDebug() << "Use Exif/Iptc preview extraction. Size of image: " 
                   << image.width() << "x" << image.height() << endl;
         return true;
     }
@@ -503,7 +503,7 @@ bool kio_digikamthumbnailProtocol::loadDImg(QImage& image, const QString& path)
     org_width_  = image.width();
     org_height_ = image.height();
 
-    if ( QMAX(org_width_, org_height_) != cachedSize_ )
+    if ( qMax(org_width_, org_height_) != cachedSize_ )
     {
         QSize sz(dimg_im.width(), dimg_im.height());
         sz.scale(cachedSize_, cachedSize_, QSize::ScaleMin);
@@ -531,7 +531,7 @@ bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QStr
     QString mimeType = KMimeType::findByURL(path)->name();
     if (mimeType.isEmpty())
     {
-        kdDebug() << "Mimetype not found" << endl;
+        kDebug() << "Mimetype not found" << endl;
         return false;
     }
 
@@ -558,14 +558,14 @@ bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QStr
 
     if (plugin.isEmpty())
     {
-        kdDebug() << "No relevant plugin found " << endl;
+        kDebug() << "No relevant plugin found " << endl;
         return false;
     }
 
     KLibrary *library = KLibLoader::self()->library(QFile::encodeName(plugin));
     if (!library)
     {
-        kdDebug() << "Plugin library not found " << plugin << endl;
+        kDebug() << "Plugin library not found " << plugin << endl;
         return false;
     }
 
@@ -576,13 +576,13 @@ bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QStr
 
     if (!creator)
     {
-        kdDebug() << "Cannot load ThumbCreator " << plugin << endl;
+        kDebug() << "Cannot load ThumbCreator " << plugin << endl;
         return false;
     }
 
     if (!creator->create(path, cachedSize_, cachedSize_, image))
     {
-        kdDebug() << "Cannot create thumbnail for " << path << endl;
+        kDebug() << "Cannot create thumbnail for " << path << endl;
         delete creator;
         return false;
     }  
@@ -593,7 +593,7 @@ bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QStr
 
 void kio_digikamthumbnailProtocol::createThumbnailDirs()
 {
-    QString path = QDir::homeDirPath() + "/.thumbnails/";
+    QString path = QDir::homePath() + "/.thumbnails/";
 
     smallThumbPath_ = path + "normal/";
     bigThumbPath_   = path + "large/";
@@ -608,18 +608,18 @@ extern "C"
 {
     DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
-        KLocale::setMainCatalogue("digikam");
+        KLocale::setMainCatalog("digikam");
         KInstance instance( "kio_digikamthumbnail" );
         ( void ) KGlobal::locale();
 
         if (argc != 4) 
         {
-            kdDebug() << "Usage: kio_digikamthumbnail  protocol domain-socket1 domain-socket2"
+            kDebug() << "Usage: kio_digikamthumbnail  protocol domain-socket1 domain-socket2"
                       << endl;
             exit(-1);
         }
 
-        KImageIO::registerFormats();
+        
 
         kio_digikamthumbnailProtocol slave(argc, argv);
         slave.dispatchLoop();

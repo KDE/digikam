@@ -98,13 +98,13 @@ typedef struct {
 	double alamda;
 	double chisq;
 
-} LMRQMIN, FAR* LPLMRQMIN;
+} LMRqMin, FAR* LPLMRqMin;
 
 
 
 
 static 
-void  mrqcof(LPLMRQMIN pLM, double *a, LPMATN alpha, LPMATN beta, double *chisq)
+void  mrqcof(LPLMRqMin pLM, double *a, LPMATN alpha, LPMATN beta, double *chisq)
 {
 	int i, j, k;
 	double ymod, wt, sig2i, dy;
@@ -147,7 +147,7 @@ void  mrqcof(LPLMRQMIN pLM, double *a, LPMATN alpha, LPMATN beta, double *chisq)
 
 
 static 
-void FreeStruct(LPLMRQMIN pLM)
+void FreeStruct(LPLMRqMin pLM)
 {	
 	if(pLM == NULL) return;
 
@@ -169,15 +169,15 @@ LCMSHANDLE cmsxLevenbergMarquardtInit(LPSAMPLEDCURVE x, LPSAMPLEDCURVE y, double
 							
 {
 	int i;
-	LPLMRQMIN pLM;
+	LPLMRqMin pLM;
 	
 	if (x ->nItems != y ->nItems) return NULL;
 
-	pLM = (LPLMRQMIN) malloc(sizeof(LMRQMIN));
+	pLM = (LPLMRqMin) malloc(sizeof(LMRqMin));
 	if(!pLM)
 		return NULL;
 
-	ZeroMemory(pLM, sizeof(LMRQMIN));
+	ZeroMemory(pLM, sizeof(LMRqMin));
 	
 	if((pLM->atry = (double*)malloc(ma * sizeof(double))) == NULL) goto failed;
 	if((pLM->beta = MATNalloc (ma, 1)) == NULL) goto failed;
@@ -214,7 +214,7 @@ failed:
 
 BOOL cmsxLevenbergMarquardtFree(LCMSHANDLE hMRQ)
 {
-	LPLMRQMIN pLM = (LPLMRQMIN)hMRQ;
+	LPLMRqMin pLM = (LPLMRqMin)hMRQ;
 	if(!pLM)
 		return false;
 
@@ -227,7 +227,7 @@ BOOL cmsxLevenbergMarquardtIterate(LCMSHANDLE hMRQ)
 {
 	int j, k;
 	BOOL sts;
-	LPLMRQMIN pLM = (LPLMRQMIN)hMRQ;
+	LPLMRqMin pLM = (LPLMRqMin)hMRQ;
 	if(!pLM)
 		return false;
 
@@ -275,14 +275,14 @@ BOOL cmsxLevenbergMarquardtIterate(LCMSHANDLE hMRQ)
 
 double cmsxLevenbergMarquardtAlamda(LCMSHANDLE hMRQ)
 {
-		LPLMRQMIN pLM = (LPLMRQMIN)hMRQ;
+		LPLMRqMin pLM = (LPLMRqMin)hMRQ;
 
 		return pLM ->alamda;
 }
 
 double cmsxLevenbergMarquardtChiSq(LCMSHANDLE hMRQ)
 {
-		LPLMRQMIN pLM = (LPLMRQMIN)hMRQ;
+		LPLMRqMin pLM = (LPLMRqMin)hMRQ;
 
 		return pLM ->chisq;
 }

@@ -51,8 +51,9 @@
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -246,7 +247,7 @@ ImageEffect_ColorFX::~ImageEffect_ColorFX()
 
 void ImageEffect_ColorFX::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("coloreffect Tool Dialog");
     m_effectType->setCurrentItem(config->readNumEntry("EffectType", ColorFX));
     m_levelInput->setValue(config->readNumEntry("LevelAjustment", 0));
@@ -256,7 +257,7 @@ void ImageEffect_ColorFX::readUserSettings()
 
 void ImageEffect_ColorFX::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("coloreffect Tool Dialog");
     config->writeEntry("EffectType", m_effectType->currentItem());
     config->writeEntry("LevelAjustment", m_levelInput->value());
@@ -353,7 +354,7 @@ void ImageEffect_ColorFX::slotEffectTypeChanged(int type)
 
 void ImageEffect_ColorFX::slotEffect()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
 
     m_histogramWidget->stopHistogramComputation();
 
@@ -380,7 +381,7 @@ void ImageEffect_ColorFX::slotEffect()
 
 void ImageEffect_ColorFX::finalRendering()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getOriginalImage();
     int w                      = iface->originalWidth();
@@ -448,7 +449,7 @@ void ImageEffect_ColorFX::solarize(int factor, uchar *data, int w, int h, bool s
     if (!sb)        // 8 bits image.
     {
         uint threshold = (uint)((100-factor)*(255+1)/100);
-        threshold      = QMAX(1, threshold);
+        threshold      = qMax(1, threshold);
         uchar *ptr = data;
         uchar  a, r, g, b;
 
@@ -486,7 +487,7 @@ void ImageEffect_ColorFX::solarize(int factor, uchar *data, int w, int h, bool s
     else                            // 16 bits image.
     {
         uint threshold = (uint)((100-factor)*(65535+1)/100);
-        threshold      = QMAX(1, threshold);
+        threshold      = qMax(1, threshold);
         unsigned short *ptr = (unsigned short *)data;
         unsigned short  a, r, g, b;
 

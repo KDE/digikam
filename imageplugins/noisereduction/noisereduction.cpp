@@ -107,18 +107,18 @@ void NoiseReduction::filterImage(void)
         
     // Allocate and init buffers
 
-    uchar *src    = new uchar[ QMAX (width, height) * bytes ];
-    uchar *dest   = new uchar[ QMAX (width, height) * bytes ];
-    float *data   = new float[ QMAX (width, height) + 2*w ];
-    float *data2  = new float[ QMAX (width, height) + 2*w ];
-    float *buffer = new float[ QMAX (width, height) + 2*w ];
-    float *rbuf   = new float[ QMAX (width, height) + 2*w ];
-    float *tbuf   = new float[ QMAX (width, height) + 2*w ];
+    uchar *src    = new uchar[ qMax (width, height) * bytes ];
+    uchar *dest   = new uchar[ qMax (width, height) * bytes ];
+    float *data   = new float[ qMax (width, height) + 2*w ];
+    float *data2  = new float[ qMax (width, height) + 2*w ];
+    float *buffer = new float[ qMax (width, height) + 2*w ];
+    float *rbuf   = new float[ qMax (width, height) + 2*w ];
+    float *tbuf   = new float[ qMax (width, height) + 2*w ];
 
-    memset (src,  0, QMAX (width, height) * bytes);
-    memset (dest, 0, QMAX (width, height) * bytes);
+    memset (src,  0, qMax (width, height) * bytes);
+    memset (dest, 0, qMax (width, height) * bytes);
     
-    for (i=0 ; i < QMAX(width,height)+2*w-1 ; i++)
+    for (i=0 ; i < qMax(width,height)+2*w-1 ; i++)
         data[i] = data2[i] = buffer[i] = rbuf[i] = tbuf[i] = 0.0;
     
     // Initialize the damping filter coefficients

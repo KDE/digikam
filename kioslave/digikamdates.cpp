@@ -67,7 +67,7 @@ void kio_digikamdates::special(const QByteArray& data)
 {
     bool folders = (metaData("folders") == "yes");
 
-    KURL    kurl;
+    KUrl    kurl;
     QString url;
     QString filter;
     int     getDimensions;
@@ -141,12 +141,12 @@ extern "C"
 {
     DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
-        KLocale::setMainCatalogue("digikam");
+        KLocale::setMainCatalog("digikam");
         KInstance instance( "kio_digikamdates" );
         KGlobal::locale();
 
         if (argc != 4) {
-            kdDebug() << "Usage: kio_digikamdates  protocol domain-socket1 domain-socket2"
+            kDebug() << "Usage: kio_digikamdates  protocol domain-socket1 domain-socket2"
                       << endl;
             exit(-1);
         }

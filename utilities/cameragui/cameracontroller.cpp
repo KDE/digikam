@@ -375,8 +375,8 @@ void CameraThread::run()
                 event->map.insert("dest", QVariant(dest));
                 QApplication::postEvent(parent, event);
 
-                KURL tempURL(dest);
-                tempURL = tempURL.upURL();
+                KUrl tempURL(dest);
+                tempURL = tempURL.upUrl();
                 tempURL.addPath( QString(".digikam-camera-tmp1-%1").arg(getpid()));
     
                 bool result = d->camera->downloadItem(folder, file, tempURL.path());
@@ -414,8 +414,8 @@ void CameraThread::run()
                     {
                         sendInfo(i18n("Converting %1 to lossless file format...").arg(file));
 
-                        KURL tempURL2(dest);
-                        tempURL2 = tempURL2.upURL();
+                        KUrl tempURL2(dest);
+                        tempURL2 = tempURL2.upUrl();
                         tempURL2.addPath( QString(".digikam-camera-tmp2-%1").arg(getpid()));
 
                         if (!jpegConvert(tempURL.path(), tempURL2.path(), file, losslessFormat))
@@ -630,7 +630,7 @@ CameraController::CameraController(QWidget* parent, const QString& title, const 
     // URL parsing (c) Stephan Kulow
     if (path.startsWith("camera:/"))
     {
-        KURL url(path);
+        KUrl url(path);
         DDebug() << "path " << path << " " << url <<  " " << url.host() << endl;
         QString xport = url.host();
         if (xport.startsWith("usb:"))
@@ -1069,8 +1069,8 @@ void CameraController::customEvent(QCustomEvent* e)
             QString file = Q3DeepCopy<QString>(event->map["file"].asString());
             QString dest = Q3DeepCopy<QString>(event->map["dest"].asString());
     
-            KURL url(dest);
-            KURL::List urlList;
+            KUrl url(dest);
+            KUrl::List urlList;
             urlList << url;
     
             ImageWindow *im = ImageWindow::imagewindow();

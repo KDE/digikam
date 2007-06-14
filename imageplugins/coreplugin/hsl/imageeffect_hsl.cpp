@@ -53,6 +53,7 @@
 #include <kcursor.h>
 #include <kstandarddirs.h>
 #include <kcolordialog.h>
+#include <kglobal.h>
 
 // Digikam includes.
 
@@ -227,7 +228,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
             
     // -------------------------------------------------------------            
 
-    enableButtonOK( false );
+    enableButtonOk( false );
 }
 
 ImageEffect_HSL::~ImageEffect_HSL()
@@ -319,7 +320,7 @@ void ImageEffect_HSL::slotSChanged(double s)
 
 void ImageEffect_HSL::readUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("hsladjust Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
@@ -334,7 +335,7 @@ void ImageEffect_HSL::readUserSettings()
 
 void ImageEffect_HSL::writeUserSettings()
 {
-    KConfig* config = kapp->config();
+    KConfig* config = KGlobal::config();
     config->setGroup("hsladjust Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
@@ -361,13 +362,13 @@ void ImageEffect_HSL::resetValues()
 
 void ImageEffect_HSL::slotEffect()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
 
     double hu  = m_hInput->value();
     double sa  = m_sInput->value();    
     double lu  = m_lInput->value();
     
-    enableButtonOK( hu != 0.0 || sa != 0.0 || lu != 0.0);
+    enableButtonOk( hu != 0.0 || sa != 0.0 || lu != 0.0);
     
     m_HSPreview->setHS(hu, sa);
     m_histogramWidget->stopHistogramComputation();
@@ -402,7 +403,7 @@ void ImageEffect_HSL::slotEffect()
 
 void ImageEffect_HSL::finalRendering()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    kapp->setOverrideCursor( Qt::WaitCursor );
 
     double hu  = m_hInput->value();
     double sa  = m_sInput->value();    

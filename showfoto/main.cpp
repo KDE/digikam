@@ -118,12 +118,12 @@ int main(int argc, char *argv[])
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options );
 
-    KGlobal::locale()->setMainCatalogue( "digikam" );
+    KGlobal::locale()->setMainCatalog( "digikam" );
 
     KApplication app;
-    KImageIO::registerFormats();
+    
 
-    KURL::List urlList;
+    KUrl::List urlList;
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     for(int i = 0; i < args->count(); i++)
     {

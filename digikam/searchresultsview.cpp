@@ -66,7 +66,7 @@ SearchResultsView::~SearchResultsView()
         m_listJob->kill();
 }
 
-void SearchResultsView::openURL(const KURL& url)
+void SearchResultsView::openURL(const KUrl& url)
 {
     if (m_listJob)
         m_listJob->kill();
@@ -106,7 +106,7 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
     for (Q3IconViewItem* item = firstItem(); item; item = item->nextItem())
         ((SearchResultsItem*)item)->m_marked = false;
 
-    KURL::List ulist;
+    KUrl::List ulist;
 
     QString path;
     QDataStream ds(data, QIODevice::ReadOnly);
@@ -129,7 +129,7 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
         SearchResultsItem* item = new SearchResultsItem(this, path);
         m_itemDict.insert(path, item);
 
-        ulist.append(KURL(path));
+        ulist.append(KUrl(path));
     }
 
     SearchResultsItem* item = (SearchResultsItem*)firstItem();
@@ -151,11 +151,11 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
     {
         m_thumbJob = new ThumbnailJob(ulist, 128, true, true);
 
-        connect(m_thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
-                this, SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
+        connect(m_thumbJob, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
+                this, SLOT(slotGotThumbnail(const KUrl&, const QPixmap&)));
 
-        connect(m_thumbJob, SIGNAL(signalFailed(const KURL&)),
-                this, SLOT(slotFailedThumbnail(const KURL&)));     
+        connect(m_thumbJob, SIGNAL(signalFailed(const KUrl&)),
+                this, SLOT(slotFailedThumbnail(const KUrl&)));     
     }
 }
 
@@ -167,7 +167,7 @@ void SearchResultsView::slotResult(KIO::Job *job)
 }
 
 
-void SearchResultsView::slotGotThumbnail(const KURL& url, const QPixmap& pix)
+void SearchResultsView::slotGotThumbnail(const KUrl& url, const QPixmap& pix)
 {
     Q3IconViewItem* i = m_itemDict.find(url.path());
     if (i)
@@ -176,7 +176,7 @@ void SearchResultsView::slotGotThumbnail(const KURL& url, const QPixmap& pix)
     m_thumbJob = 0;
 }
 
-void SearchResultsView::slotFailedThumbnail(const KURL&)
+void SearchResultsView::slotFailedThumbnail(const KUrl&)
 {
     m_thumbJob = 0;    
 }
