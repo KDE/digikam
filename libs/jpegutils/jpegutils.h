@@ -27,8 +27,8 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qimage.h>
+#include <QString>
+#include <QImage>
 
 namespace Digikam
 {

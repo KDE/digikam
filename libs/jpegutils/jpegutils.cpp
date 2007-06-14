@@ -43,10 +43,9 @@ extern "C"
 
 // Qt includes.
 
-#include <q3cstring.h> 
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qimage.h>
+#include <QByteArray> 
+#include <QFile>
+#include <QFileInfo>
 
 // KDE includes.
 
