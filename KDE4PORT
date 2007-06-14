@@ -25,7 +25,7 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
         |---histogram                Gilles
         |---imageproperties
         |---jpegutils                Gilles
-        |---levels                   Gilles
+        |---levels                   Gilles        Done
         |---lprof                    Gilles        Done        CMake port only
         |---themeengine
         |---threadimageio            Marcel
