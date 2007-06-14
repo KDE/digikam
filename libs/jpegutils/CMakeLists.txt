@@ -12,10 +12,9 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata
 
 SET(libjpegutils_STAT_SRCS jpegutils.cpp transupp.cpp)
 
-TARGET_LINK_LIBRARIES(libjpegutils ${JPEG_LIBRARY})
-
 KDE4_ADD_LIBRARY(libjpegutils STATIC ${libjpegutils_STAT_SRCS})
 
+TARGET_LINK_LIBRARIES(libjpegutils ${JPEG_LIBRARY})
 
 #original Makefile.am contents follow:
 
