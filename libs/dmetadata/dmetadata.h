@@ -27,7 +27,7 @@
 
 // QT includes.
 
-#include <qstring.h>
+#include <QByteArray>
 
 // LibKExiv2 includes. 
 

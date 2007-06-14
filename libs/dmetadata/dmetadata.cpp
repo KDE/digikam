@@ -24,8 +24,8 @@
 
 // Qt includes.
 
-#include <qdom.h>
-#include <qfile.h>
+#include <QDom>
+#include <QFile>
 
 // LibKDcraw includes.
 
