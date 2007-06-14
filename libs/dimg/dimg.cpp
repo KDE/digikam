@@ -1,6 +1,3 @@
-//Added by qt3to4:
-#include <Q3CString>
-#include <QPixmap>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -39,9 +36,10 @@ extern "C"
 
 // Qt includes.
 
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qmap.h>
+#include <QFile>
+#include <QFileInfo>
+#include <QMap>
+#include <QPixmap>
 
 // LibKDcraw includes.
 
@@ -75,7 +73,7 @@ DImg::DImg()
 {
 }
 
-DImg::DImg(const Q3CString& filePath, DImgLoaderObserver *observer,
+DImg::DImg(const QByteArray& filePath, DImgLoaderObserver *observer,
            KDcrawIface::RawDecodingSettings rawDecodingSettings)
     : m_priv(new DImgPrivate)
 {
