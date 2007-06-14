@@ -6,7 +6,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
                      ${QT_INCLUDES}  
                    )
 
-SET(whitebalance_STAT_SRCS imagelevels.cpp )
+SET(whitebalance_STAT_SRCS whitebalance.cpp )
 
 KDE4_ADD_LIBRARY(whitebalance STATIC ${whitebalance_STAT_SRCS})
 
