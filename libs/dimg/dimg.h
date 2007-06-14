@@ -98,8 +98,8 @@ public:
     /** Create null image */
     DImg();
 
-    /** Load image using QCString as file path */
-    DImg(const Q3CString& filePath, DImgLoaderObserver *observer = 0,
+    /** Load image using QByteArray as file path */
+    DImg(const QByteArray& filePath, DImgLoaderObserver *observer = 0,
          KDcrawIface::RawDecodingSettings rawDecodingSettings=KDcrawIface::RawDecodingSettings());
 
     /** Load image using QString as file path */
