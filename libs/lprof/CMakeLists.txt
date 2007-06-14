@@ -1,13 +1,27 @@
+## Gilles Caulier 12/01/06: lprof implementation is in C not C++ and do not 
+## support 'nofinal' compilation option.
+KDE4_NO_ENABLE_FINAL(lprof)
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE4_INCLUDE_DIR} ${QT_INCLUDE_DIR} )
 
+ADD_DEFINITIONS("-w -fomit-frame-pointer")
 
-########### next target ###############
+SET(lprof_STAT_SRCS
+    cmshull.cpp 
+    cmslm.cpp 
+    cmslnr.cpp 
+    cmsmatn.cpp 
+    cmsmkmsh.cpp 
+    cmsmntr.cpp 
+    cmsoutl.cpp 
+    cmspcoll.cpp
+    cmsprf.cpp 
+    cmsreg.cpp 
+    cmsscn.cpp 
+    cmssheet.cpp
+   )
 
-
-########### install files ###############
-
-
+KDE4_ADD_LIBRARY(lprof STATIC ${lprof_STAT_SRCS})
 
 
 #original Makefile.am contents follow:
