@@ -38,9 +38,9 @@
 
 */
 
-// C includes
+// C++ includes
 
-#include <math.h>
+#include <cmath>
 
 // Local includes
 
