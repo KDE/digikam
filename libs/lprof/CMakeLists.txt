@@ -2,8 +2,6 @@
 ## support 'nofinal' compilation option.
 KDE4_NO_ENABLE_FINAL(lprof)
 
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE4_INCLUDE_DIR} ${QT_INCLUDE_DIR} )
-
 ADD_DEFINITIONS("-w -fomit-frame-pointer")
 
 SET(lprof_STAT_SRCS

@@ -37,8 +37,7 @@ the same distribution terms that you use for the rest of that program.
 
 #ifndef __cmsprf_H
 
-#include <config.h>
-#include LCMS_HEADER
+#include <lcms.h>
 
 #include <ctype.h>
 #include <limits.h>
