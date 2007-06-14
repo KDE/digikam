@@ -1,14 +1,16 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/histogram ${CMAKE_SOURCE_DIR}/digikam/ ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/histogram 
+                     ${CMAKE_SOURCE_DIR}/digikam/digikam 
+                     ${KDE4_INCLUDE_DIR}
+                     ${QT_INCLUDES}  
+                   )
 
+SET(levels_STAT_SRCS imagelevels.cpp )
 
-########### next target ###############
+KDE4_ADD_LIBRARY(levels STATIC ${levels_STAT_SRCS})
 
-
-########### install files ###############
-
-install( FILES  imagelevels.h  DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
-
+INSTALL( FILES imagelevels.h DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
 
 
 #original Makefile.am contents follow:
