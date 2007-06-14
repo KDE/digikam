@@ -1,11 +1,17 @@
 project(digikam)
 
 find_package(KDE4 REQUIRED)
+find_package(LCMS REQUIRED)
+find_package(JPEG REQUIRED)
+find_package(PNG REQUIRED)
+find_package(TIFF REQUIRED)
+#find_package(Kexiv2 REQUIRED)
+#find_package(Kdcraw REQUIRED)
+#find_package(Kipi REQUIRED)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
-
 
 include(ConfigureChecks.cmake)
 
