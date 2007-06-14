@@ -565,7 +565,7 @@ int ImageLevels::getLevelHighOutputValue(int Channel)
     return 0;
 }
 
-bool ImageLevels::loadLevelsFromGimpLevelsFile(KURL fileUrl)
+bool ImageLevels::loadLevelsFromGimpLevelsFile(const KURL& fileUrl)
 {
     // TODO : support KURL !
     
@@ -641,7 +641,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(KURL fileUrl)
     return true;
 }
 
-bool ImageLevels::saveLevelsToGimpLevelsFile(KURL fileUrl)
+bool ImageLevels::saveLevelsToGimpLevelsFile(const KURL& fileUrl)
 {
     // TODO : support KURL !
   
