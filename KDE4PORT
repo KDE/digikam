@@ -14,7 +14,7 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
  1      |-sqlite                     Gilles        Done        CMake port only. Used by digiKam core. Must be ported in first.
 
  2      |-libs                                                 "libs" subfloders are used by all others parts of digiKam.
-        |---curves                   Gilles
+        |---curves                   Gilles        Done
         |---database                 Marcel
         |---dialogs
         |---dimg
