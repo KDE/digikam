@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <qthread.h>
+#include <QThread>
 
 // Local includes.
 
@@ -94,19 +94,18 @@ public:
     int    getHistogramSegment(void);
     int    getMedian(int channel, int start, int end);
 
-private:
+protected:
 
-    ImageHistogramPriv* d;
-    
+    virtual void run();
+
 private:
 
     void calcHistogramValues();
     void postProgress(bool starting, bool success);
 
-protected:
+private:
 
-    virtual void run();
-
+    ImageHistogramPriv* d;
 };
 
 }  // NameSpace Digikam
