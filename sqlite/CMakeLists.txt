@@ -1,7 +1,6 @@
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE4_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
 
-
-########### next target ###############
+ADD_DEFINITIONS( "-w" )
 
 SET(sqlite_STAT_SRCS
    attach.c
@@ -38,14 +37,7 @@ SET(sqlite_STAT_SRCS
    where.c
    )
 
-KDE3_AUTOMOC(${sqlite_STAT_SRCS})
-
-ADD_LIBRARY(sqlite STATIC ${sqlite_STAT_SRCS})
-
-
-########### install files ###############
-
-
+KDE4_ADD_LIBRARY(sqlite STATIC ${sqlite_STAT_SRCS})
 
 
 #original Makefile.am contents follow:
