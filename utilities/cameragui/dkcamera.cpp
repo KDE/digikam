@@ -41,7 +41,7 @@ DKCamera::DKCamera(const QString& title, const QString& model, const QString& po
     m_port  = port;
     m_path  = path;
 
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::componentData();
     m_imageFilter = Q3DeepCopy<QString>(settings->getImageFileFilter());
     m_movieFilter = Q3DeepCopy<QString>(settings->getMovieFileFilter());
     m_audioFilter = Q3DeepCopy<QString>(settings->getAudioFileFilter());

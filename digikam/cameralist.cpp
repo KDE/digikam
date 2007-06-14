@@ -47,11 +47,11 @@
 namespace Digikam
 {
 
-CameraList* CameraList::m_instance = 0;
+CameraList* CameraList::m_componentData = 0;
 
-CameraList* CameraList::instance()
+CameraList* CameraList::componentData()
 {
-    return m_instance;    
+    return m_componentData;    
 }
 
 class CameraListPrivate
@@ -71,7 +71,7 @@ CameraList::CameraList(QObject *parent, const QString& file)
     d->clist.setAutoDelete(true);
     d->file     = file;
     d->modified = false;
-    m_instance  = this;
+    m_componentData  = this;
 }
 
 CameraList::~CameraList()
@@ -81,7 +81,7 @@ CameraList::~CameraList()
     d->clist.clear();
     delete d;
 
-    m_instance = 0;
+    m_componentData = 0;
 }
 
 bool CameraList::load()

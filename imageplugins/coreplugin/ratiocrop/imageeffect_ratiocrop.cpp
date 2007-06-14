@@ -356,7 +356,7 @@ void ImageEffect_RatioCrop::readSettings(void)
     int h = iface.originalHeight();
 
     QColor defaultGuideColor(250, 250, 255);
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("aspectratiocrop Tool Dialog");
 
     // No guide lines per default.
@@ -440,7 +440,7 @@ void ImageEffect_RatioCrop::writeSettings(void)
     int w = iface.originalWidth();
     int h = iface.originalHeight();
 
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("aspectratiocrop Tool Dialog");
 
     if (w > h)

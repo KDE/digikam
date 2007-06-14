@@ -178,7 +178,7 @@ ImageEffect_FreeRotation::~ImageEffect_FreeRotation()
 
 void ImageEffect_FreeRotation::readUserSettings(void)
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("freerotation Tool Dialog");
     m_angleInput->setValue(config->readNumEntry("Main Angle", 0));
     m_fineAngleInput->setValue(config->readDoubleNumEntry("Fine Angle", 0.0));
@@ -189,7 +189,7 @@ void ImageEffect_FreeRotation::readUserSettings(void)
 
 void ImageEffect_FreeRotation::writeUserSettings(void)
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("freerotation Tool Dialog");
     config->writeEntry("Main Angle", m_angleInput->value());
     config->writeEntry("Fine Angle", m_fineAngleInput->value());

@@ -78,7 +78,7 @@ ThemedIconView::ThemedIconView(QWidget* parent)
     updateBannerRectPixmap();
     updateItemRectsPixmap();
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 }
 
@@ -165,9 +165,9 @@ void ThemedIconView::slotThemeChanged()
 {
     QPalette plt(palette());
     QColorGroup cg(plt.active());
-    cg.setColor(QColorGroup::Base, ThemeEngine::instance()->baseColor());
-    cg.setColor(QColorGroup::Text, ThemeEngine::instance()->textRegColor());
-    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::instance()->textSelColor());
+    cg.setColor(QColorGroup::Base, ThemeEngine::componentData().baseColor());
+    cg.setColor(QColorGroup::Text, ThemeEngine::componentData().textRegColor());
+    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::componentData().textSelColor());
     plt.setActive(cg);
     plt.setInactive(cg);
     setPalette(plt);
@@ -228,7 +228,7 @@ void ThemedIconView::updateBannerRectPixmap()
     d->bannerRect.setHeight(d->bannerRect.height() + tr.height() + 10);
     d->bannerRect.setWidth(frameRect().width());
 
-    d->bannerPixmap = ThemeEngine::instance()->bannerPixmap(d->bannerRect.width(),
+    d->bannerPixmap = ThemeEngine::componentData().bannerPixmap(d->bannerRect.width(),
                                                             d->bannerRect.height());
 }
 
@@ -304,10 +304,10 @@ void ThemedIconView::updateItemRectsPixmap()
 
     d->itemRect = QRect(0, 0, w+2*margin, y+margin);
 
-    d->itemRegPixmap = ThemeEngine::instance()->thumbRegPixmap(d->itemRect.width(),
+    d->itemRegPixmap = ThemeEngine::componentData().thumbRegPixmap(d->itemRect.width(),
                                                                d->itemRect.height());
 
-    d->itemSelPixmap = ThemeEngine::instance()->thumbSelPixmap(d->itemRect.width(),
+    d->itemSelPixmap = ThemeEngine::componentData().thumbSelPixmap(d->itemRect.width(),
                                                                d->itemRect.height());
 }
 

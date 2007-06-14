@@ -74,7 +74,7 @@ public:
 
 public:
 
-    static AlbumLister* instance();
+    static AlbumLister* componentData();
     
     ~AlbumLister();
 
@@ -127,7 +127,7 @@ private:
 
     AlbumListerPriv    *d;
 
-    static AlbumLister *m_instance; 
+    static AlbumLister *m_componentData; 
 
 };
 

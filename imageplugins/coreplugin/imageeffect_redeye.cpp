@@ -285,7 +285,7 @@ void ImageEffect_RedEye::slotColorSelectedFromTarget( const Digikam::DColor &col
 
 void ImageEffect_RedEye::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("redeye Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0)); // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
@@ -303,7 +303,7 @@ void ImageEffect_RedEye::readUserSettings()
 
 void ImageEffect_RedEye::writeUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("redeye Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());

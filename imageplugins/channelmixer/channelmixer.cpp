@@ -530,7 +530,7 @@ void ChannelMixerDialog::slotScaleChanged(int scale)
 
 void ChannelMixerDialog::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("channelmixer Tool Dialog");
 
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
@@ -564,7 +564,7 @@ void ChannelMixerDialog::readUserSettings()
 
 void ChannelMixerDialog::writeUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("channelmixer Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());

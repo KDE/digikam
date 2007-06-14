@@ -319,7 +319,7 @@ void ImageEffect_NoiseReduction::renderingFinished()
 
 void ImageEffect_NoiseReduction::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("noisereduction Tool Dialog");
     m_radiusInput->setEnabled(true);
     m_lumToleranceInput->setEnabled(true);
@@ -357,7 +357,7 @@ void ImageEffect_NoiseReduction::readUserSettings()
 
 void ImageEffect_NoiseReduction::writeUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("noisereduction Tool Dialog");
     config->writeEntry("RadiusAjustment", m_radiusInput->value());
     config->writeEntry("LumToleranceAjustment", m_lumToleranceInput->value());

@@ -57,6 +57,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
+#include <kconfiggroup.h>
 
 // Local includes.
 
@@ -304,7 +305,7 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
     if( sizeIsRelativeState && sizeIsRelativeCheckBox )
         setSizeIsRelative( *sizeIsRelativeState );
     
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroupSaver saver(config, QString::fromLatin1("General"));
     showXLFDArea(config->readBoolEntry(QString::fromLatin1("fontSelectorShowXLFD"), false));
 }

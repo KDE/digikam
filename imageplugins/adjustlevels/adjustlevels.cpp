@@ -687,7 +687,7 @@ void AdjustLevelDialog::slotScaleChanged(int scale)
 
 void AdjustLevelDialog::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("adjustlevels Tool Dialog");
 
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
@@ -725,7 +725,7 @@ void AdjustLevelDialog::readUserSettings()
 
 void AdjustLevelDialog::writeUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("adjustlevels Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());

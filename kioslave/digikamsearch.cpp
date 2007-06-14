@@ -57,7 +57,7 @@ extern "C"
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kfilemetainfo.h>
 #include <kmimetype.h>
 #include <kdebug.h>
@@ -136,7 +136,7 @@ extern "C"
     DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
         KLocale::setMainCatalog("digikam");
-        KInstance instance( "kio_digikamsearch" );
+        KComponentData componentData( "kio_digikamsearch" );
         KGlobal::locale();
 
         if (argc != 4) 

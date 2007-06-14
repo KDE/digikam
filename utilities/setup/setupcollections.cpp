@@ -137,7 +137,7 @@ SetupCollections::~SetupCollections()
 
 void SetupCollections::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::componentData();
 
     if (!settings) return;
 
@@ -156,7 +156,7 @@ void SetupCollections::applySettings()
 
 void SetupCollections::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::componentData();
 
     if (!settings) return;
 

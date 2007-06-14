@@ -207,7 +207,7 @@ void ImageEffect_Border::readUserSettings(void)
     m_secondColorButton->blockSignals(true);
     m_preserveAspectRatio->blockSignals(true);
 
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("border Tool Dialog");
     
     m_borderType->setCurrentItem(config->readNumEntry("Border Type", Border::SolidBorder));
@@ -240,7 +240,7 @@ void ImageEffect_Border::readUserSettings(void)
     
 void ImageEffect_Border::writeUserSettings(void)
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("border Tool Dialog");
 
     config->writeEntry("Border Type", m_borderType->currentItem());

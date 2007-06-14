@@ -191,7 +191,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     // Initialize ---------------------------------------------
 
-    AlbumSettings *settings = AlbumSettings::instance();
+    AlbumSettings *settings = AlbumSettings::componentData();
     if (settings)
     {
         d->collectionCombo->insertItem( QString() );
@@ -270,7 +270,7 @@ QString AlbumPropsEdit::collection() const
 QStringList AlbumPropsEdit::albumCollections() const
 {
     QStringList collections;
-    AlbumSettings *settings = AlbumSettings::instance();
+    AlbumSettings *settings = AlbumSettings::componentData();
     if (settings)
     {
         collections = settings->getAlbumCollectionNames();

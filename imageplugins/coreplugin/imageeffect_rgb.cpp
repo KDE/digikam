@@ -299,7 +299,7 @@ void ImageEffect_RGB::slotColorSelectedFromTarget( const Digikam::DColor &color 
 
 void ImageEffect_RGB::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("colorbalance Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
@@ -313,7 +313,7 @@ void ImageEffect_RGB::readUserSettings()
 
 void ImageEffect_RGB::writeUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("colorbalance Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());

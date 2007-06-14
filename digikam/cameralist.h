@@ -60,7 +60,7 @@ public:
     
     bool changeCameraAccessTime(const QString& cameraTitle, const QDateTime& newDate);
 
-    static CameraList* instance();
+    static CameraList* componentData();
 
 signals:
 
@@ -74,7 +74,7 @@ private:
 
 private:
 
-    static CameraList *m_instance;
+    static CameraList *m_componentData;
     CameraListPrivate *d;
 
 };

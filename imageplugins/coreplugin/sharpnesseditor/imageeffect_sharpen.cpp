@@ -364,7 +364,7 @@ void ImageEffect_Sharpen::slotSharpMethodActived(int w)
 
 void ImageEffect_Sharpen::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("sharpen Tool Dialog");
     m_radiusInput->blockSignals(true);
     m_radiusInput2->blockSignals(true);
@@ -401,7 +401,7 @@ void ImageEffect_Sharpen::readUserSettings()
 
 void ImageEffect_Sharpen::writeUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("sharpen Tool Dialog");
     config->writeEntry("SimpleSharpRadiusAjustment", m_radiusInput->value());
     config->writeEntry("UnsharpMaskRadiusAjustment", m_radiusInput2->value());

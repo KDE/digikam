@@ -41,7 +41,7 @@ extern "C"
 
 #include <kstandarddirs.h>
 #include <kaboutdata.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kglobal.h>
 
 // Local includes.
@@ -66,7 +66,7 @@ UndoCache::UndoCache()
 
     QString cacheDir;
     cacheDir = locateLocal("cache", 
-                           KGlobal::instance()->aboutData()->programName() + '/');
+                           KGlobal::mainComponent().aboutData()->programName() + '/');
 
     d->cachePrefix = QString("%1undocache-%2")
                              .arg(cacheDir)

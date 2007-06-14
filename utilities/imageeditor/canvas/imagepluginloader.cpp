@@ -79,17 +79,17 @@ public:
     PluginList    pluginList;
 };
 
-ImagePluginLoader* ImagePluginLoader::m_instance=0;
+ImagePluginLoader* ImagePluginLoader::m_componentData=0;
 
-ImagePluginLoader* ImagePluginLoader::instance()
+ImagePluginLoader* ImagePluginLoader::componentData()
 {
-    return m_instance;
+    return m_componentData;
 }
 
 ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
                  : QObject(parent)
 {
-    m_instance = this;
+    m_componentData = this;
     d = new ImagePluginLoaderPrivate;
     d->splash = splash;
  
@@ -111,7 +111,7 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
 ImagePluginLoader::~ImagePluginLoader()
 {
     delete d;
-    m_instance = 0;
+    m_componentData = 0;
 }
 
 void ImagePluginLoader::loadPluginsFromList(const QStringList& list)

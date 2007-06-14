@@ -281,7 +281,7 @@ void ImageResize::slotRestorationToggled(bool b)
 
 void ImageResize::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("resize Tool Dialog");
 
     GreycstorationSettings settings;
@@ -323,7 +323,7 @@ void ImageResize::readUserSettings()
 void ImageResize::writeUserSettings()
 {
     GreycstorationSettings settings = d->settingsWidget->getSettings();
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("resize Tool Dialog");
     config->writeEntry("FastApprox", settings.fastApprox);
     config->writeEntry("Interpolation", settings.interp);

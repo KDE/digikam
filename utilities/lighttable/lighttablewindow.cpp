@@ -71,26 +71,26 @@
 namespace Digikam
 {
 
-LightTableWindow* LightTableWindow::m_instance = 0;
+LightTableWindow* LightTableWindow::m_componentData = 0;
 
 LightTableWindow* LightTableWindow::lightTableWindow()
 {
-    if (!m_instance)
+    if (!m_componentData)
         new LightTableWindow();
 
-    return m_instance;
+    return m_componentData;
 }
 
 bool LightTableWindow::lightTableWindowCreated()
 {
-    return m_instance;
+    return m_componentData;
 }
 
 LightTableWindow::LightTableWindow()
                 : KMainWindow(0, "lighttable", Qt::WType_TopLevel)
 {
     d = new LightTableWindowPriv;
-    m_instance = this;
+    m_componentData = this;
 
     setCaption(i18n("Light Table"));
 
@@ -119,7 +119,7 @@ LightTableWindow::LightTableWindow()
 
 LightTableWindow::~LightTableWindow()
 {
-    m_instance = 0;
+    m_componentData = 0;
 
     delete d->barView;
     delete d->rightSidebar;
@@ -129,7 +129,7 @@ LightTableWindow::~LightTableWindow()
 
 void LightTableWindow::readSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("LightTable Settings");
 
     if(config->hasKey("Vertical Splitter Sizes"))
@@ -144,7 +144,7 @@ void LightTableWindow::readSettings()
 
 void LightTableWindow::writeSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("LightTable Settings");
     config->writeEntry("Vertical Splitter Sizes", d->vSplitter->sizes());
     config->writeEntry("Horizontal Splitter Sizes", d->hSplitter->sizes());
@@ -154,7 +154,7 @@ void LightTableWindow::writeSettings()
 
 void LightTableWindow::applySettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("LightTable Settings");
 
     d->autoLoadOnRightPanel  = config->readBoolEntry("Auto Load Right Panel",   true);
@@ -185,7 +185,7 @@ void LightTableWindow::setupUserArea()
     Q3VBoxLayout *vlay = new Q3VBoxLayout(centralW);
     d->vSplitter      = new QSplitter(Qt::Vertical, centralW);
     d->barView        = new LightTableBar(d->vSplitter, ThumbBarView::Horizontal, 
-                                          AlbumSettings::instance()->getExifRotate());
+                                          AlbumSettings::componentData().getExifRotate());
     d->previewView    = new LightTableView(d->vSplitter);
     vlay->addWidget(d->vSplitter);
 
@@ -513,14 +513,14 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
     if (!imageInfoCurrent) 
         imageInfoCurrent = l.first();
 
-    AlbumSettings *settings = AlbumSettings::instance();
+    AlbumSettings *settings = AlbumSettings::componentData();
 
     if (!settings) return;
 
     QString imagefilter = settings->getImageFileFilter().lower() +
                           settings->getImageFileFilter().upper();
 
-    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
+    if (KDcrawIface::DcrawBinary::componentData().versionIsRight())
     {
         // add raw files only if dcraw is available
         imagefilter += settings->getRawFileFilter().lower() +
@@ -814,7 +814,7 @@ void LightTableWindow::slotDeleteItem(ImageInfo* info)
     bool permanently = false;
 
     KUrl u = info->kurl();
-    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u.directory());
+    PAlbum *palbum = AlbumManager::componentData().findPAlbum(u.directory());
     if (!palbum)
         return;
 
@@ -926,7 +926,7 @@ void LightTableWindow::slotFitToWindow()
 
 void LightTableWindow::slotToggleSlideShow()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
 
@@ -979,7 +979,7 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
 
     if (!d->cancelSlideShow)
     {
-        settings.exifRotate = AlbumSettings::instance()->getExifRotate();
+        settings.exifRotate = AlbumSettings::componentData().getExifRotate();
     
         SlideShow *slide = new SlideShow(settings);
         if (startWithCurrent)

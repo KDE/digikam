@@ -92,13 +92,13 @@ FolderView::FolderView(QWidget *parent, const char *name)
     d->dragItem         = 0;
     d->oldHighlightItem = 0;
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
-    connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
+    connect(AlbumManager::componentData(), SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(slotAllAlbumsLoaded()));
 
-    connect(AlbumThumbnailLoader::instance(), SIGNAL(signalReloadThumbnails()),
+    connect(AlbumThumbnailLoader::componentData(), SIGNAL(signalReloadThumbnails()),
             this, SLOT(slotIconSizeChanged()));
 
     setColumnAlignment(0, Qt::AlignLeft|Qt::AlignVCenter);
@@ -166,14 +166,14 @@ void FolderView::fontChange(const QFont& oldFont)
 {
     // this is bad, since the settings value might not always be the _real_ height of the thumbnail.
     // (e.g. when it is blended, as for the tags)
-    d->itemHeight = qMax(AlbumThumbnailLoader::instance()->thumbnailSize() + 2*itemMargin(), fontMetrics().height());
+    d->itemHeight = qMax(AlbumThumbnailLoader::componentData().thumbnailSize() + 2*itemMargin(), fontMetrics().height());
     Q3ListView::fontChange(oldFont);
     slotThemeChanged();
 }
 
 void FolderView::slotIconSizeChanged()
 {
-    d->itemHeight = qMax(AlbumThumbnailLoader::instance()->thumbnailSize() + 2*itemMargin(), fontMetrics().height());
+    d->itemHeight = qMax(AlbumThumbnailLoader::componentData().thumbnailSize() + 2*itemMargin(), fontMetrics().height());
     slotThemeChanged();
 }
 
@@ -316,16 +316,16 @@ void FolderView::slotThemeChanged()
     int w = frameRect().width();
     int h = itemHeight();
 
-    d->itemRegPix = ThemeEngine::instance()->listRegPixmap(w, h);
-    d->itemSelPix = ThemeEngine::instance()->listSelPixmap(w, h);
+    d->itemRegPix = ThemeEngine::componentData().listRegPixmap(w, h);
+    d->itemSelPix = ThemeEngine::componentData().listSelPixmap(w, h);
 
     QPalette plt(palette());
     QColorGroup cg(plt.active());
-    cg.setColor(QColorGroup::Base, ThemeEngine::instance()->baseColor());
-    cg.setColor(QColorGroup::Text, ThemeEngine::instance()->textRegColor());
-    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::instance()->textSelColor());
-    cg.setColor(QColorGroup::Link, ThemeEngine::instance()->textSpecialRegColor());
-    cg.setColor(QColorGroup::LinkVisited, ThemeEngine::instance()->textSpecialSelColor());
+    cg.setColor(QColorGroup::Base, ThemeEngine::componentData().baseColor());
+    cg.setColor(QColorGroup::Text, ThemeEngine::componentData().textRegColor());
+    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::componentData().textSelColor());
+    cg.setColor(QColorGroup::Link, ThemeEngine::componentData().textSpecialRegColor());
+    cg.setColor(QColorGroup::LinkVisited, ThemeEngine::componentData().textSpecialSelColor());
     plt.setActive(cg);
     plt.setInactive(cg);
     setPalette(plt);
@@ -335,14 +335,14 @@ void FolderView::slotThemeChanged()
 
 void FolderView::slotAllAlbumsLoaded()
 {
-    disconnect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
+    disconnect(AlbumManager::componentData(), SIGNAL(signalAllAlbumsLoaded()),
                this, SLOT(slotAllAlbumsLoaded()));    
     loadViewState();
 }
 
 void FolderView::loadViewState()
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup(name());
     
     int selectedItem = config->readNumEntry("LastSelectedItem", 0);
@@ -375,7 +375,7 @@ void FolderView::loadViewState()
 
 void FolderView::saveViewState()
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup(name());
    
     FolderItem *item = dynamic_cast<FolderItem*>(selectedItem());

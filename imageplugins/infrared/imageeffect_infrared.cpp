@@ -153,7 +153,7 @@ void ImageEffect_Infrared::renderingFinished()
 
 void ImageEffect_Infrared::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("infrared Tool Dialog");
     m_sensibilitySlider->blockSignals(true);
     m_addFilmGrain->blockSignals(true);
@@ -166,7 +166,7 @@ void ImageEffect_Infrared::readUserSettings()
 
 void ImageEffect_Infrared::writeUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("infrared Tool Dialog");
     config->writeEntry("SensitivityAjustment", m_sensibilitySlider->value());
     config->writeEntry("AddFilmGrain", m_addFilmGrain->isChecked());

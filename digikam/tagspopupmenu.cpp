@@ -171,7 +171,7 @@ void TagsPopupMenu::clearPopup()
 
 Q3PopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
 {
-    AlbumManager* man = AlbumManager::instance();
+    AlbumManager* man = AlbumManager::componentData();
     TAlbum* album     = man->findTAlbum(tagid);
     if (!album)
         return 0;
@@ -221,7 +221,7 @@ void TagsPopupMenu::slotAboutToShow()
 {
     clearPopup();
 
-    AlbumManager* man = AlbumManager::instance();
+    AlbumManager* man = AlbumManager::componentData();
 
     if (d->mode == REMOVE)
     {
@@ -339,7 +339,7 @@ void TagsPopupMenu::slotActivated(int id)
     {
         int tagID = id - ADDTAGID;
 
-        AlbumManager* man = AlbumManager::instance();
+        AlbumManager* man = AlbumManager::componentData();
         TAlbum* parent    = man->findTAlbum(tagID);
         if (!parent)
         {

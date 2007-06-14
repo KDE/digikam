@@ -625,7 +625,7 @@ void EditorWindow::slotEditKeys()
     KKeyDialog dialog(true, this);
     dialog.insert( actionCollection(), i18n( "General" ) );
 
-    Q3PtrList<ImagePlugin> pluginList = ImagePluginLoader::instance()->pluginList();
+    Q3PtrList<ImagePlugin> pluginList = ImagePluginLoader::componentData().pluginList();
 
     for (ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
@@ -821,7 +821,7 @@ void EditorWindow::unLoadImagePlugins()
 
 void EditorWindow::readStandardSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
 
     // Restore full screen Mode ?
@@ -840,7 +840,7 @@ void EditorWindow::readStandardSettings()
 
 void EditorWindow::applyStandardSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
 
     // -- Settings for Color Management stuff ----------------------------------------------
 
@@ -939,7 +939,7 @@ void EditorWindow::applyStandardSettings()
 
 void EditorWindow::saveStandardSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     
     config->writeEntry("AutoZoom", d->zoomFitToWindowAction->isChecked());
@@ -1693,7 +1693,7 @@ void EditorWindow::slotToggleColorManagedView()
         // Save Color Managed View setting in config file. For performance 
         // reason, no need to flush file, it cached in memory and will be flushed 
         // to disk at end of session.  
-        KConfig* config = KGlobal::config();
+        KSharedConfig::Ptr config = KGlobal::config();
         config->setGroup("Color Management");
         config->writeEntry("ManagedView", cmv);
     }
@@ -1774,7 +1774,7 @@ void EditorWindow::slotDonateMoney()
 
 void EditorWindow::slotToggleSlideShow()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
 

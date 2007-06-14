@@ -134,7 +134,7 @@ void ImageEffect_FilmGrain::renderingFinished()
  
 void ImageEffect_FilmGrain::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("filmgrain Tool Dialog");
     m_sensibilitySlider->blockSignals(true);
     m_sensibilitySlider->setValue(config->readNumEntry("SensitivityAjustment", 12));
@@ -144,7 +144,7 @@ void ImageEffect_FilmGrain::readUserSettings()
 
 void ImageEffect_FilmGrain::writeUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("filmgrain Tool Dialog");
     config->writeEntry("SensitivityAjustment", m_sensibilitySlider->value());
     config->sync();

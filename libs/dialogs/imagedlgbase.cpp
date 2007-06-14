@@ -165,7 +165,7 @@ ImageDlgBase::~ImageDlgBase()
 
 void ImageDlgBase::readSettings(void)
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup(d->name + QString(" Tool Dialog"));
     if(config->hasKey("SplitterSizes"))
         d->splitter->setSizes(config->readIntListEntry("SplitterSizes"));
@@ -175,7 +175,7 @@ void ImageDlgBase::readSettings(void)
 
 void ImageDlgBase::writeSettings()
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup(d->name + QString(" Tool Dialog"));
     config->writeEntry("SplitterSizes", d->splitter->sizes());
     config->sync();

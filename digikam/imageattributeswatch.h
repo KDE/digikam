@@ -45,7 +45,7 @@ class ImageAttributesWatch : public QObject
 
 public:
 
-    static ImageAttributesWatch *instance();
+    static ImageAttributesWatch *componentData();
     static void cleanUp();
     static void shutDown();
 
@@ -96,7 +96,7 @@ private:
     ImageAttributesWatch();
     ~ImageAttributesWatch();
 
-    static ImageAttributesWatch *m_instance;
+    static ImageAttributesWatch *m_componentData;
 
 private slots:
 

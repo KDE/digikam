@@ -99,19 +99,19 @@ public:
     AlbumLister::MatchingCondition matchingCond;
 };
 
-AlbumLister* AlbumLister::m_instance = 0;
+AlbumLister* AlbumLister::m_componentData = 0;
 
-AlbumLister* AlbumLister::instance()
+AlbumLister* AlbumLister::componentData()
 {
-    if (!m_instance)
+    if (!m_componentData)
         new AlbumLister();
 
-    return m_instance;
+    return m_componentData;
 }
 
 AlbumLister::AlbumLister()
 {
-    m_instance = this;
+    m_componentData = this;
 
     d = new AlbumListerPriv;
     d->itemList.setAutoDelete(true);
@@ -126,7 +126,7 @@ AlbumLister::~AlbumLister()
 {
     delete d->filterTimer;
     delete d;
-    m_instance = 0;
+    m_componentData = 0;
 }
 
 void AlbumLister::openAlbum(Album *album)
@@ -149,7 +149,7 @@ void AlbumLister::openAlbum(Album *album)
     // Protocol = digikamalbums -> kio_digikamalbums
     d->job = ImageLister::startListJob(album->kurl(),
                                        d->filter,
-                                       AlbumSettings::instance()->getIconShowResolution());
+                                       AlbumSettings::componentData().getIconShowResolution());
 
     connect(d->job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotResult(KIO::Job*)));
@@ -178,7 +178,7 @@ void AlbumLister::refresh()
     }
 
     ImageLister lister;
-    d->job = lister.startListJob(d->currAlbum->kurl(), d->filter, AlbumSettings::instance()->getIconShowResolution());
+    d->job = lister.startListJob(d->currAlbum->kurl(), d->filter, AlbumSettings::componentData().getIconShowResolution());
 
     connect(d->job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotResult(KIO::Job*)));

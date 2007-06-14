@@ -214,7 +214,7 @@ void ImageEffect_AntiVignetting::renderingFinished()
 
 void ImageEffect_AntiVignetting::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("antivignettings Tool Dialog");
 
     m_densityInput->blockSignals(true);
@@ -243,7 +243,7 @@ void ImageEffect_AntiVignetting::readUserSettings()
 
 void ImageEffect_AntiVignetting::writeUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("antivignettings Tool Dialog");
     config->writeEntry("DensityAjustment", m_densityInput->value());
     config->writeEntry("PowerAjustment", m_powerInput->value());

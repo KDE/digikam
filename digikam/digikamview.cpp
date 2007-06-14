@@ -148,7 +148,7 @@ DigikamView::DigikamView(QWidget *parent)
 {
     d = new DigikamViewPriv;
     d->parent       = static_cast<DigikamApp *>(parent);
-    d->albumManager = AlbumManager::instance();
+    d->albumManager = AlbumManager::componentData();
     d->leftSideBar  = new Sidebar(this, "Digikam Left Sidebar", Sidebar::Left);
 
     d->splitter = new QSplitter(this);
@@ -364,7 +364,7 @@ void DigikamView::setupConnections()
 
 void DigikamView::loadViewState()
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("MainWindow");
 
     if(config->hasKey("SplitterSizes"))
@@ -375,11 +375,11 @@ void DigikamView::loadViewState()
 
 void DigikamView::saveViewState()
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("MainWindow");
     config->writeEntry("SplitterSizes", d->splitter->sizes());
 
-    Album *album = AlbumManager::instance()->currentAlbum();
+    Album *album = AlbumManager::componentData().currentAlbum();
     if(album)
     {
         config->writeEntry("InitialAlbumID", album->globalID());
@@ -466,7 +466,7 @@ void DigikamView::slotAllAlbumsLoaded()
 
 void DigikamView::slotSortAlbums(int order)
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::componentData();
     if (!settings) return;
     settings->setAlbumSortOrder( (AlbumSettings::AlbumSortOrder) order);
     d->folderView->resort();
@@ -770,7 +770,7 @@ void DigikamView::slotThumbSizeEffect()
     d->iconView->setThumbnailSize(d->thumbSize);
     toogleZoomActions();
 
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::componentData();
     if (!settings)
         return;
     settings->setDefaultIconSize(d->thumbSize);
@@ -891,7 +891,7 @@ void DigikamView::slotAlbumSyncPicturesMetadata()
 
 void DigikamView::slotAlbumSyncPicturesMetadataDone()
 {
-    applySettings(AlbumSettings::instance());
+    applySettings(AlbumSettings::componentData());
 }
 
 void DigikamView::slotAlbumAddImages()
@@ -923,7 +923,7 @@ void DigikamView::slotAlbumAddImages()
 
     DDebug () << "fileformats=" << fileformats << endl;   
 
-    KUrl::List urls = KFileDialog::getOpenURLs(CollectionManager::instance()->oneAlbumRootPath(),
+    KUrl::List urls = KFileDialog::getOpenURLs(CollectionManager::componentData().oneAlbumRootPath(),
                                                fileformats, this, i18n("Select Image to Add"));
 
     if (!urls.isEmpty())
@@ -1118,7 +1118,7 @@ void DigikamView::slotSelectInvert()
 
 void DigikamView::slotSortImages(int order)
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::componentData();
     if (!settings)
         return;
     settings->setImageSortOrder((AlbumSettings::ImageSortOrder) order);
@@ -1201,7 +1201,7 @@ void DigikamView::slotSlideShowSelection()
 
 void DigikamView::slotSlideShowRecursive()
 {
-    Album *album = AlbumManager::instance()->currentAlbum();
+    Album *album = AlbumManager::componentData().currentAlbum();
     if(album)
     {
         AlbumList albumList;
@@ -1228,7 +1228,7 @@ void DigikamView::slotItemsInfoFromAlbums(const ImageInfoList& infoList)
 
 void DigikamView::slideShow(ImageInfoList &infoList)
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
 
@@ -1240,7 +1240,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
 
     DMetadata         meta;
     SlideShowSettings settings;
-    settings.exifRotate           = AlbumSettings::instance()->getExifRotate();
+    settings.exifRotate           = AlbumSettings::componentData().getExifRotate();
     settings.delay                = config->readNumEntry("SlideShowDelay", 5) * 1000;
     settings.printName            = config->readBoolEntry("SlideShowPrintName", true);
     settings.printDate            = config->readBoolEntry("SlideShowPrintDate", false);

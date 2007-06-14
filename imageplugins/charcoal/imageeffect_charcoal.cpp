@@ -126,7 +126,7 @@ void ImageEffect_Charcoal::renderingFinished()
 
 void ImageEffect_Charcoal::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("charcoal Tool Dialog");
     m_pencilInput->blockSignals(true);
     m_smoothInput->blockSignals(true);
@@ -138,7 +138,7 @@ void ImageEffect_Charcoal::readUserSettings()
 
 void ImageEffect_Charcoal::writeUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("charcoal Tool Dialog");
     config->writeEntry("PencilAjustment", m_pencilInput->value());
     config->writeEntry("SmoothAjustment", m_smoothInput->value());

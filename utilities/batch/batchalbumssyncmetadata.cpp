@@ -58,7 +58,7 @@ public:
     {
         cancel       = false;
         imageInfoJob = 0;
-        palbumList   = AlbumManager::instance()->allPAlbums();
+        palbumList   = AlbumManager::componentData().allPAlbums();
         duration.start();
     }
 

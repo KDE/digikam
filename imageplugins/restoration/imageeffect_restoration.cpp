@@ -153,7 +153,7 @@ void ImageEffect_Restoration::renderingFinished()
 
 void ImageEffect_Restoration::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("restoration Tool Dialog");
 
     Digikam::GreycstorationSettings settings;
@@ -184,7 +184,7 @@ void ImageEffect_Restoration::readUserSettings()
 void ImageEffect_Restoration::writeUserSettings()
 {
     Digikam::GreycstorationSettings settings = m_settingsWidget->getSettings();
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("restoration Tool Dialog");
     config->writeEntry("Preset", m_restorationTypeCB->currentItem());
     config->writeEntry("FastApprox", settings.fastApprox);

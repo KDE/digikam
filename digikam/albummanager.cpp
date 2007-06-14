@@ -114,16 +114,16 @@ public:
 };
 
 
-AlbumManager* AlbumManager::m_instance = 0;
+AlbumManager* AlbumManager::m_componentData = 0;
 
-AlbumManager* AlbumManager::instance()
+AlbumManager* AlbumManager::componentData()
 {
-    return m_instance;
+    return m_componentData;
 }
 
 AlbumManager::AlbumManager()
 {
-    m_instance    = this;
+    m_componentData    = this;
 
     d = new AlbumManagerPriv;
 
@@ -159,7 +159,7 @@ AlbumManager::~AlbumManager()
 
     delete d;
 
-    m_instance = 0;
+    m_componentData = 0;
 }
 
 void AlbumManager::setAlbumRoot(const QString &albumRoot, bool priority)
@@ -233,7 +233,7 @@ void AlbumManager::setAlbumRoot(const QString &albumRoot, bool priority)
 
         // Copy an existing locale from the settings file (used < 0.8)
         // to the database.
-        KConfig* config = KGlobal::config();
+        KSharedConfig::Ptr config = KGlobal::config();
         config->setGroup("General Settings");
         if (config->hasKey("Locale"))
         {
@@ -292,7 +292,7 @@ void AlbumManager::setAlbumRoot(const QString &albumRoot, bool priority)
 
     // -- Check if we need to do scanning -------------------------------------
 
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("General Settings");
     if (config->readBoolEntry("Scan At Start", true) ||
         DatabaseAccess().db()->getSetting("Scanned").isEmpty())
@@ -312,7 +312,7 @@ void AlbumManager::startScan()
     connect(d->dirWatch, SIGNAL(dirty(const QString&)),
             SLOT(slotDirty(const QString&)));
 
-    QStringList albumRootPaths = CollectionManager::instance()->allAvailableAlbumRootPaths();
+    QStringList albumRootPaths = CollectionManager::componentData().allAvailableAlbumRootPaths();
     for (QStringList::iterator it = albumRootPaths.begin(); it != albumRootPaths.end(); ++it)
         d->dirWatch->addDir(*it);
 
@@ -609,7 +609,7 @@ void AlbumManager::scanDAlbums()
     DatabaseUrl u = DatabaseUrl::fromDate(QDate());
 
     d->dateListJob = ImageLister::startListJob(u,
-                                               AlbumSettings::instance()->getAllFileFilter(),
+                                               AlbumSettings::componentData().getAllFileFilter(),
                                                0);
     d->dateListJob->addMetaData("folders", "yes");
 
@@ -696,7 +696,7 @@ Album* AlbumManager::currentAlbum() const
 
 PAlbum* AlbumManager::findPAlbum(const KUrl& url) const
 {
-    return d->pAlbumDict.find(CollectionManager::instance()->album(url));
+    return d->pAlbumDict.find(CollectionManager::componentData().album(url));
 }
 
 PAlbum* AlbumManager::findPAlbum(int id) const
@@ -1423,7 +1423,7 @@ void AlbumManager::slotDirty(const QString& path)
     KUrl fileUrl;
     // we need to provide a trailing slash to DatabaseUrl to mark it as a directory
     fileUrl.setPath(QDir::cleanPath(path) + '/');
-    DatabaseUrl url = DatabaseUrl::fromFileUrl(fileUrl, CollectionManager::instance()->albumRoot(fileUrl));
+    DatabaseUrl url = DatabaseUrl::fromFileUrl(fileUrl, CollectionManager::componentData().albumRoot(fileUrl));
 
     if (d->dirtyAlbums.contains(url.url()))
         return;

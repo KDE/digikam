@@ -77,10 +77,10 @@ MainWindow::MainWindow()
 
     // Initialize theme engine ------------------------------------
 
-    ThemeEngine::instance()->scanThemes();
-    m_theme = new Theme(*(ThemeEngine::instance()->getCurrentTheme()));
+    ThemeEngine::componentData().scanThemes();
+    m_theme = new Theme(*(ThemeEngine::componentData().getCurrentTheme()));
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
         
     // Top Layout ------------------------------------------------
@@ -290,8 +290,8 @@ void MainWindow::slotLoad()
     m_theme->name = fi.fileName();
     m_theme->filePath = path;
 
-    ThemeEngine::instance()->setCurrentTheme(*m_theme, m_theme->name, true);
-    *m_theme = *(ThemeEngine::instance()->getCurrentTheme());
+    ThemeEngine::componentData().setCurrentTheme(*m_theme, m_theme->name, true);
+    *m_theme = *(ThemeEngine::componentData().getCurrentTheme());
     slotPropertyChanged();
 }
 
@@ -929,13 +929,13 @@ void MainWindow::slotUpdateTheme()
         }
     };
 
-    ThemeEngine::instance()->setCurrentTheme(*m_theme, "Digikam ThemeEditor Theme");
+    ThemeEngine::componentData().setCurrentTheme(*m_theme, "Digikam ThemeEditor Theme");
 }
 
 void MainWindow::slotThemeChanged()
 {
-    QColor backgroundColor(ThemeEngine::instance()->baseColor());
-    QColor foregroundColor(ThemeEngine::instance()->textRegColor());
+    QColor backgroundColor(ThemeEngine::componentData().baseColor());
+    QColor foregroundColor(ThemeEngine::componentData().textRegColor());
     m_propView->colorChanged(backgroundColor, foregroundColor);
 }
 

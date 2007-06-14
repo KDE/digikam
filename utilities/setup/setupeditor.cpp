@@ -146,7 +146,7 @@ void SetupEditor::slotThemeBackgroundColor(bool e)
 
 void SetupEditor::readSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     QColor Black(Qt::black);
     QColor White(Qt::white);
     config->setGroup("ImageViewer Settings");
@@ -159,7 +159,7 @@ void SetupEditor::readSettings()
 
 void SetupEditor::applySettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     config->writeEntry("UseThemeBackgroundColor", d->themebackgroundColor->isChecked());
     config->writeEntry("BackgroundColor", d->backgroundColor->color());

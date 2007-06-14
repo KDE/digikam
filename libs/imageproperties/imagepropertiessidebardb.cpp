@@ -100,7 +100,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     connect(d->desceditTab, SIGNAL(signalProgressBarMode(int, const QString&)),
@@ -109,7 +109,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *
     connect(d->desceditTab, SIGNAL(signalProgressValue(int)),
             this, SIGNAL(signalProgressValue(int)));
 
-    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
+    ImageAttributesWatch *watch = ImageAttributesWatch::componentData();
 
     connect(watch, SIGNAL(signalFileMetadataChanged(const KUrl &)),
             this, SLOT(slotFileMetadataChanged(const KUrl &)));
@@ -370,8 +370,8 @@ void ImagePropertiesSideBarDB::slotAssignRatingFiveStar()
 
 void ImagePropertiesSideBarDB::slotThemeChanged()
 {
-    QColor backgroundColor(ThemeEngine::instance()->baseColor());
-    QColor foregroundColor(ThemeEngine::instance()->textRegColor());
+    QColor backgroundColor(ThemeEngine::componentData().baseColor());
+    QColor foregroundColor(ThemeEngine::componentData().textRegColor());
     m_propertiesTab->colorChanged(backgroundColor, foregroundColor);
 }
 

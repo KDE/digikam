@@ -203,7 +203,7 @@ ImageEffect_Perspective::~ImageEffect_Perspective()
 void ImageEffect_Perspective::readUserSettings(void)
 {
     QColor defaultGuideColor(Qt::red);
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("perspective Tool Dialog");
     m_drawWhileMovingCheckBox->setChecked(config->readBoolEntry("Draw While Moving", true));
     m_drawGridCheckBox->setChecked(config->readBoolEntry("Draw Grid", false));
@@ -217,7 +217,7 @@ void ImageEffect_Perspective::readUserSettings(void)
 
 void ImageEffect_Perspective::writeUserSettings(void)
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("perspective Tool Dialog");
     config->writeEntry("Draw While Moving", m_drawWhileMovingCheckBox->isChecked());
     config->writeEntry("Draw Grid", m_drawGridCheckBox->isChecked());

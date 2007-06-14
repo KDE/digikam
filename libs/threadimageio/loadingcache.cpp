@@ -55,19 +55,19 @@ public:
 };
 
 
-LoadingCache *LoadingCache::m_instance = 0;
+LoadingCache *LoadingCache::m_componentData = 0;
 
 LoadingCache *LoadingCache::cache()
 {
-    if (!m_instance)
-        m_instance = new LoadingCache;
-    return m_instance;
+    if (!m_componentData)
+        m_componentData = new LoadingCache;
+    return m_componentData;
 }
 
 void LoadingCache::cleanUp()
 {
-    if (m_instance)
-        delete m_instance;
+    if (m_componentData)
+        delete m_componentData;
 }
 
 
@@ -89,7 +89,7 @@ LoadingCache::~LoadingCache()
 {
     delete d->watch;
     delete d;
-    m_instance = 0;
+    m_componentData = 0;
 }
 
 DImg *LoadingCache::retrieveImage(const QString &cacheKey)

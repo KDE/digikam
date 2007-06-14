@@ -60,7 +60,7 @@ DeleteWidget::DeleteWidget(QWidget *parent, const char *name)
 {
     ddCheckBoxStack->raiseWidget(ddShouldDelete);
 
-    bool deleteInstead = !AlbumSettings::instance()->getUseTrash();
+    bool deleteInstead = !AlbumSettings::componentData().getUseTrash();
     slotShouldDelete(deleteInstead);
     ddShouldDelete->setChecked(deleteInstead);
 }
@@ -208,7 +208,7 @@ bool DeleteDialog::confirmDeleteList(const KUrl::List& condemnedFiles,
 
     if (deleteMode == DeleteDialogMode::NoChoiceTrash)
     {
-        if (!AlbumSettings::instance()->getShowTrashDeleteDialog())
+        if (!AlbumSettings::componentData().getShowTrashDeleteDialog())
             return true;
     }
     return exec() == QDialog::Accepted;
@@ -222,7 +222,7 @@ void DeleteDialog::setURLs(const KUrl::List &files)
 void DeleteDialog::accept()
 {
     // Save user's preference
-    AlbumSettings *settings = AlbumSettings::instance();
+    AlbumSettings *settings = AlbumSettings::componentData();
 
     if (m_saveShouldDeleteUserPreference)
     {

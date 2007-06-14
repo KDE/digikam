@@ -169,7 +169,7 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
     connect(this, SIGNAL(signalLeftButtonClicked()),
             this, SIGNAL(signalBack2Album()));
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     // ------------------------------------------------------------
@@ -246,9 +246,9 @@ void ImagePreviewView::setImagePath(const QString& path)
     }
 
     if (d->loadFullImageSize)
-        d->previewThread->loadHighQuality(LoadingDescription(path, 0, AlbumSettings::instance()->getExifRotate()));
+        d->previewThread->loadHighQuality(LoadingDescription(path, 0, AlbumSettings::componentData().getExifRotate()));
     else
-        d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
+        d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::componentData().getExifRotate()));
 }
 
 void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description, const DImg& preview)
@@ -260,10 +260,10 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
     {
         d->parent->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         QPixmap pix(visibleWidth(), visibleHeight());
-        pix.fill(ThemeEngine::instance()->baseColor());
+        pix.fill(ThemeEngine::componentData().baseColor());
         QPainter p(&pix);
         QFileInfo info(d->path);
-        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
+        p.setPen(QPen(ThemeEngine::componentData().textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::TextWordWrap, 
                    i18n("Cannot display preview for\n\"%1\"")
@@ -277,7 +277,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
     else
     {
         DImg img(preview);
-        if (AlbumSettings::instance()->getExifRotate())
+        if (AlbumSettings::componentData().getExifRotate())
             d->previewThread->exifRotate(img, description.filePath);
         d->parent->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         setImage(img);
@@ -306,7 +306,7 @@ void ImagePreviewView::slotNextPreload()
         return;
 
     d->previewPreloadThread->load(LoadingDescription(loadPath, d->previewSize,
-                                  AlbumSettings::instance()->getExifRotate()));
+                                  AlbumSettings::componentData().getExifRotate()));
 }
 
 void ImagePreviewView::setImageInfo(ImageInfo* info, ImageInfo *previous, ImageInfo *next)
@@ -380,7 +380,7 @@ void ImagePreviewView::slotContextMenu()
 
     // Merge in the KIPI plugins actions ----------------------------
 
-    KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
+    KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::componentData();
     KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
     
     for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.begin();
@@ -551,7 +551,7 @@ void ImagePreviewView::slotAssignRating(int rating)
 
 void ImagePreviewView::slotThemeChanged()
 {
-    setBackgroundColor(ThemeEngine::instance()->baseColor());
+    setBackgroundColor(ThemeEngine::componentData().baseColor());
 }
 
 void ImagePreviewView::slotCornerButtonPressed()

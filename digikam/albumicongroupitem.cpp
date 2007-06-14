@@ -57,8 +57,8 @@ int AlbumIconGroupItem::compare(IconGroupItem* group)
 {
     AlbumIconGroupItem* agroup = (AlbumIconGroupItem*)group;
     
-    PAlbum* mine = AlbumManager::instance()->findPAlbum(m_albumID);
-    PAlbum* his = AlbumManager::instance()->findPAlbum(agroup->m_albumID);
+    PAlbum* mine = AlbumManager::componentData().findPAlbum(m_albumID);
+    PAlbum* his = AlbumManager::componentData().findPAlbum(agroup->m_albumID);
 
     if (!mine || !his)
         return 0;
@@ -90,7 +90,7 @@ int AlbumIconGroupItem::compare(IconGroupItem* group)
 
 void AlbumIconGroupItem::paintBanner()
 {
-    AlbumManager* man = AlbumManager::instance();
+    AlbumManager* man = AlbumManager::componentData();
     PAlbum* album     = man->findPAlbum(m_albumID);
 
     QString dateAndComments;
@@ -134,7 +134,7 @@ void AlbumIconGroupItem::paintBanner()
     }
 
     QPainter p(&pix);
-    p.setPen(ThemeEngine::instance()->textSelColor());
+    p.setPen(ThemeEngine::componentData().textSelColor());
     p.setFont(fn);
 
     QRect tr;

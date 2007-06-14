@@ -207,7 +207,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
         showPage((int) page);
     else 
     {
-        KConfig* config = KGlobal::config();
+        KSharedConfig::Ptr config = KGlobal::config();
         config->setGroup("General Settings");
         showPage(config->readNumEntry("Setup Page", General));
     }
@@ -217,7 +217,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 
 Setup::~Setup()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("General Settings");
     config->writeEntry("Setup Page", activePageIndex());
     config->sync();

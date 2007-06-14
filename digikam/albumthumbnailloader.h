@@ -51,7 +51,7 @@ class AlbumThumbnailLoader : public QObject
 
 public:
 
-    static AlbumThumbnailLoader *instance();
+    static AlbumThumbnailLoader *componentData();
     static void cleanUp();
 
     /**
@@ -166,7 +166,7 @@ private:
     AlbumThumbnailLoader();
     ~AlbumThumbnailLoader();
     AlbumThumbnailLoaderPrivate *d;
-    static AlbumThumbnailLoader *m_instance;
+    static AlbumThumbnailLoader *m_componentData;
 
     void addUrl(Album *album, const KUrl &url);
     QPixmap loadIcon(const QString &name, int size = 0);

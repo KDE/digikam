@@ -401,7 +401,7 @@ void SetupICC::processLCMSURL(const QString& url)
 
 void SetupICC::applySettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("Color Management");
 
     config->writeEntry("EnableCM", d->enableColorManagement->isChecked());
@@ -436,7 +436,7 @@ void SetupICC::applySettings()
 
 void SetupICC::readSettings(bool restore)
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("Color Management");
 
     if (!restore)
@@ -728,7 +728,7 @@ void SetupICC::slotToggleManagedView(bool b)
 
 bool SetupICC::iccRepositoryIsValid()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("Color Management");
 
     // If color management is disable, no need to check anymore.

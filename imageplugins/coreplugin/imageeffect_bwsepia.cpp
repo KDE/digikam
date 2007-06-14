@@ -634,7 +634,7 @@ void ImageEffect_BWSepia::slotColorSelectedFromTarget( const Digikam::DColor &co
 
 void ImageEffect_BWSepia::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("convertbw Tool Dialog");
 
     m_tab->setCurrentPage(config->readNumEntry("Settings Tab", BWFiltersTab));
@@ -676,7 +676,7 @@ void ImageEffect_BWSepia::readUserSettings()
 
 void ImageEffect_BWSepia::writeUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("convertbw Tool Dialog");
     config->writeEntry("Settings Tab", m_tab->currentPageIndex());
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());

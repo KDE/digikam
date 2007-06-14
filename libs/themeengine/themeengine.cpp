@@ -79,20 +79,20 @@ public:
     XrmDatabase     db;
 };
 
-ThemeEngine* ThemeEngine::m_instance = 0;
+ThemeEngine* ThemeEngine::m_componentData = 0;
 
-ThemeEngine* ThemeEngine::instance()
+ThemeEngine* ThemeEngine::componentData()
 {
-    if (!m_instance)
+    if (!m_componentData)
     { 
         new ThemeEngine();
     }
-    return m_instance;
+    return m_componentData;
 }
 
 ThemeEngine::ThemeEngine()
 {
-    m_instance = this;
+    m_componentData = this;
     KGlobal::dirs()->addResourceType("themes",
                                      KGlobal::dirs()->kde_default("data")
                                      + "digikam/themes");
@@ -120,7 +120,7 @@ ThemeEngine::~ThemeEngine()
     d->themeList.setAutoDelete(true);
     d->themeList.clear();
     delete d;
-    m_instance = 0;
+    m_componentData = 0;
 }
 
 void ThemeEngine::scanThemes()

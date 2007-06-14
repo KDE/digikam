@@ -62,7 +62,7 @@ class AlbumThumbnailLoaderPrivate
 public:
     AlbumThumbnailLoaderPrivate()
     {
-        iconSize           = AlbumSettings::instance()->getDefaultTreeIconSize();
+        iconSize           = AlbumSettings::componentData().getDefaultTreeIconSize();
         minBlendSize       = 20;
         iconAlbumThumbJob  = 0;
         iconTagThumbJob    = 0;
@@ -95,28 +95,28 @@ public:
     QPixmap thumbnail;
 };
 
-AlbumThumbnailLoader *AlbumThumbnailLoader::m_instance = 0;
+AlbumThumbnailLoader *AlbumThumbnailLoader::m_componentData = 0;
 
-AlbumThumbnailLoader *AlbumThumbnailLoader::instance()
+AlbumThumbnailLoader *AlbumThumbnailLoader::componentData()
 {
-    if (!m_instance)
-        m_instance = new AlbumThumbnailLoader;
-    return m_instance;
+    if (!m_componentData)
+        m_componentData = new AlbumThumbnailLoader;
+    return m_componentData;
 }
 
 void AlbumThumbnailLoader::cleanUp()
 {
-    delete m_instance;
+    delete m_componentData;
 }
 
 AlbumThumbnailLoader::AlbumThumbnailLoader()
 {
     d = new AlbumThumbnailLoaderPrivate;
 
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumIconChanged(Album*)),
+    connect(AlbumManager::componentData(), SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotIconChanged(Album*)));
 
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
+    connect(AlbumManager::componentData(), SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotIconChanged(Album*)));
 }
 
@@ -132,7 +132,7 @@ AlbumThumbnailLoader::~AlbumThumbnailLoader()
 
     delete d;
 
-    m_instance = 0;
+    m_componentData = 0;
 }
 
 QPixmap AlbumThumbnailLoader::getStandardTagIcon(RelativeSize relativeSize)
@@ -282,7 +282,7 @@ void AlbumThumbnailLoader::addUrl(Album *album, const KUrl &url)
                 d->iconTagThumbJob = new ThumbnailJob(url,
                         d->iconSize,
                         true,
-                        AlbumSettings::instance()->getExifRotate());
+                        AlbumSettings::componentData().getExifRotate());
                 connect(d->iconTagThumbJob,
                         SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
                         SLOT(slotGotThumbnailFromIcon(const KUrl&, const QPixmap&)));
@@ -302,7 +302,7 @@ void AlbumThumbnailLoader::addUrl(Album *album, const KUrl &url)
                 d->iconAlbumThumbJob = new ThumbnailJob(url,
                         d->iconSize,
                         true,
-                        AlbumSettings::instance()->getExifRotate());
+                        AlbumSettings::componentData().getExifRotate());
                 connect(d->iconAlbumThumbJob,
                         SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
                         SLOT(slotGotThumbnailFromIcon(const KUrl&, const QPixmap&)));
@@ -371,7 +371,7 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const KUrl &url, const QPixm
     {
         QPixmap tagThumbnail;
 
-        AlbumManager *manager = AlbumManager::instance();
+        AlbumManager *manager = AlbumManager::componentData();
         for (Q3ValueList<int>::iterator vit = (*it).begin(); vit != (*it).end(); ++vit)
         {
             // look up with global id
@@ -406,7 +406,7 @@ void AlbumThumbnailLoader::customEvent(QCustomEvent *e)
     // for cached thumbnails
 
     AlbumThumbnailLoaderEvent *atle = (AlbumThumbnailLoaderEvent *)e;
-    AlbumManager *manager = AlbumManager::instance();
+    AlbumManager *manager = AlbumManager::componentData();
     Album *album = manager->findAlbum(atle->albumID);
     if (album)
     {
@@ -458,7 +458,7 @@ void AlbumThumbnailLoader::slotThumbnailLost(const KUrl &url)
 
     if (it != d->urlAlbumMap.end())
     {
-        AlbumManager *manager = AlbumManager::instance();
+        AlbumManager *manager = AlbumManager::componentData();
         for (Q3ValueList<int>::iterator vit = (*it).begin(); vit != (*it).end(); ++vit)
         {
             Album *album = manager->findAlbum(*vit);

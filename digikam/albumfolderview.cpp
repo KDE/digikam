@@ -154,7 +154,7 @@ int AlbumFolderViewItem::id() const
         }
         else
         {
-            return ( - (AlbumSettings::instance()->getAlbumCollectionNames()
+            return ( - (AlbumSettings::componentData().getAlbumCollectionNames()
                         .findIndex(text(0)) ) );
         }
     }
@@ -217,7 +217,7 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
                : FolderView(parent, "AlbumFolderView")
 {
     d = new AlbumFolderViewPriv();
-    d->albumMan     = AlbumManager::instance();
+    d->albumMan     = AlbumManager::componentData();
     d->iconThumbJob = 0;
 
     addColumn(i18n("My Albums"));
@@ -243,7 +243,7 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     connect(d->albumMan, SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotAlbumRenamed(Album*)));
 
-    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
 
     connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
             this, SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
@@ -363,7 +363,7 @@ void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
     // Either, getThumbnail returns true and loads an icon asynchronously.
     // Then, for the time being, we set the standard icon.
     // Or, no icon is associated with the album, then we set the standard icon anyway.
-    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
     item->setPixmap(0, loader->getStandardAlbumIcon(album));
     loader->getAlbumThumbnail(album);
 }
@@ -389,7 +389,7 @@ void AlbumFolderView::slotThumbnailLost(Album *)
 
 void AlbumFolderView::slotReloadThumbnails()
 {
-    AlbumList tList = AlbumManager::instance()->allPAlbums();
+    AlbumList tList = AlbumManager::componentData().allPAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         PAlbum* album  = (PAlbum*)(*it);
@@ -521,7 +521,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
             popmenu.insertSeparator(-1);
         }
 
-        if(AlbumSettings::instance()->getUseTrash())
+        if(AlbumSettings::componentData().getUseTrash())
         {
             popmenu.insertItem(SmallIcon("edittrash"),
                                i18n("Move Album to Trash"), 12);
@@ -553,7 +553,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
         case 13:
         {
             QString err;
-            AlbumManager::instance()->updatePAlbumIcon(item->getAlbum(), 0, err);
+            AlbumManager::componentData().updatePAlbumIcon(item->getAlbum(), 0, err);
             break;
         }
         case 14:
@@ -582,7 +582,7 @@ void AlbumFolderView::albumNew()
 
 void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::componentData();
     if(!settings)
     {
         DWarning() << "AlbumFolderView: Couldn't get Album Settings" << endl;
@@ -617,7 +617,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     if (parent->isRoot())
     {
         //TODO: Let user choose an album root
-        albumRootPath = CollectionManager::instance()->oneAlbumRootPath();
+        albumRootPath = CollectionManager::componentData().oneAlbumRootPath();
     }
 
     QString     title;
@@ -630,10 +630,10 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
                                   albumCollections))
         return;
 
-    QStringList oldAlbumCollections(AlbumSettings::instance()->getAlbumCollectionNames());
+    QStringList oldAlbumCollections(AlbumSettings::componentData().getAlbumCollectionNames());
     if(albumCollections != oldAlbumCollections)
     {
-        AlbumSettings::instance()->setAlbumCollectionNames(albumCollections);
+        AlbumSettings::componentData().setAlbumCollectionNames(albumCollections);
         resort();
     }
 
@@ -784,7 +784,7 @@ void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)
     QString     oldComments(album->caption());
     QString     oldCollection(album->collection());
     QDate       oldDate(album->date());
-    QStringList oldAlbumCollections(AlbumSettings::instance()->getAlbumCollectionNames());
+    QStringList oldAlbumCollections(AlbumSettings::componentData().getAlbumCollectionNames());
 
     QString     title, comments, collection;
     QDate       date;
@@ -802,7 +802,7 @@ void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)
         if(collection != oldCollection)
             album->setCollection(collection);
 
-        AlbumSettings::instance()->setAlbumCollectionNames(albumCollections);
+        AlbumSettings::componentData().setAlbumCollectionNames(albumCollections);
         resort();
 
         // Do this last : so that if anything else changed we can
@@ -845,7 +845,7 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
 
     if(AlbumDrag::canDecode(e))
     {
-        switch(AlbumSettings::instance()->getAlbumSortOrder())
+        switch(AlbumSettings::componentData().getAlbumSortOrder())
         {
             case(AlbumSettings::ByFolder):
             {
@@ -922,7 +922,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         if(!itemDrag)
             return;
 
-        if (AlbumSettings::instance()->getAlbumSortOrder()
+        if (AlbumSettings::componentData().getAlbumSortOrder()
             == AlbumSettings::ByFolder)
         {
             // TODO: Copy?
@@ -953,7 +953,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
                         this, SLOT(slotDIOResult(KIO::Job*)));
             }
         }
-        else if (AlbumSettings::instance()->getAlbumSortOrder()
+        else if (AlbumSettings::componentData().getAlbumSortOrder()
                  == AlbumSettings::ByCollection)
         {
             if (!itemDrop)
@@ -1034,7 +1034,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             if(id == 12)
             {
                 QString errMsg;
-                AlbumManager::instance()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
+                AlbumManager::componentData().updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
             }
             return;
         }
@@ -1086,7 +1086,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             case 12:
             {
                 QString errMsg;
-                AlbumManager::instance()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
+                AlbumManager::componentData().updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
             }
             default:
                 break;
@@ -1175,7 +1175,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
 void AlbumFolderView::albumImportFolder()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::componentData();
     QDir libraryDir(settings->getAlbumLibraryPath());
     if(!libraryDir.exists())
     {
@@ -1238,7 +1238,7 @@ AlbumFolderViewItem* AlbumFolderView::findParent(PAlbum* album, bool& failed)
         return 0;
     }
 
-    switch(AlbumSettings::instance()->getAlbumSortOrder())
+    switch(AlbumSettings::componentData().getAlbumSortOrder())
     {
         case(AlbumSettings::ByFolder):
         {
@@ -1271,7 +1271,7 @@ AlbumFolderViewItem* AlbumFolderView::findParentByFolder(PAlbum* album, bool& fa
 
     if (album->parent()->isRoot())
     {
-        QStringList albumRoots = CollectionManager::instance()->allAvailableAlbumRootPaths();
+        QStringList albumRoots = CollectionManager::componentData().allAvailableAlbumRootPaths();
         if (albumRoots.count() > 1)
         {
             for (Q3ValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
@@ -1300,7 +1300,7 @@ AlbumFolderViewItem* AlbumFolderView::findParentByFolder(PAlbum* album, bool& fa
 
 AlbumFolderViewItem* AlbumFolderView::findParentByCollection(PAlbum* album, bool& failed)
 {
-    QStringList collectionList = AlbumSettings::instance()->getAlbumCollectionNames();
+    QStringList collectionList = AlbumSettings::componentData().getAlbumCollectionNames();
     QString collection = album->collection();
 
     if (collection.isEmpty() || !collectionList.contains(collection))
@@ -1368,7 +1368,7 @@ void AlbumFolderView::resort()
     if (prevSelectedItem && prevSelectedItem->isGroupItem())
         prevSelectedItem = 0;
 
-    AlbumList pList(AlbumManager::instance()->allPAlbums());
+    AlbumList pList(AlbumManager::componentData().allPAlbums());
     for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
     {
         PAlbum *album = (PAlbum*)(*it);

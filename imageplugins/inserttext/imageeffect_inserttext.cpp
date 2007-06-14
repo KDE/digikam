@@ -229,7 +229,7 @@ ImageEffect_InsertText::~ImageEffect_InsertText()
 
 void ImageEffect_InsertText::readUserSettings()
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("inserttext Tool Dialog");
     QColor black(0, 0, 0);
     QFont  defaultFont;
@@ -257,7 +257,7 @@ void ImageEffect_InsertText::readUserSettings()
 
 void ImageEffect_InsertText::writeUserSettings()
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("inserttext Tool Dialog");
 
     config->writeEntry( "Text Rotation", m_textRotation->currentItem() );

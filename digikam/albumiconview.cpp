@@ -197,7 +197,7 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 {
     d = new AlbumIconViewPrivate;
     d->init();
-    d->imageLister = AlbumLister::instance();
+    d->imageLister = AlbumLister::componentData();
     d->pixMan      = new PixmapManager(this);
     d->toolTip     = new AlbumFileTip(this);
 
@@ -214,7 +214,7 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     QPainter painter(&d->ratingPixmap);
     painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
-                     ThemeEngine::instance()->textSpecialRegColor());
+                     ThemeEngine::componentData().textSpecialRegColor());
     painter.end();
     
     // -- ImageLister connections -------------------------------------
@@ -250,7 +250,7 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     // -- ThemeEngine connections ---------------------------------------
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
             SLOT(slotThemeChanged()));
 
     // -- Pixmap manager connections ------------------------------------
@@ -260,7 +260,7 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     // -- ImageAttributesWatch connections ------------------------------
 
-    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
+    ImageAttributesWatch *watch = ImageAttributesWatch::componentData();
 
     connect(watch, SIGNAL(signalImageTagsChanged(qlonglong)),
             this, SLOT(slotImageAttributesChanged(qlonglong)));
@@ -400,7 +400,7 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
             d->albumDict.insert((*it)->albumId(), group);
         }
 
-        PAlbum *album = AlbumManager::instance()->findPAlbum((*it)->albumId());
+        PAlbum *album = AlbumManager::componentData().findPAlbum((*it)->albumId());
         if (!album)
         {
             DWarning() << "No album for item: " << (*it)->name()
@@ -550,7 +550,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // Merge in the KIPI plugins actions ----------------------------
 
-    KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
+    KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::componentData();
     KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
     
     for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.begin();
@@ -799,7 +799,7 @@ void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
         PAlbum *album = static_cast<PAlbum*>(d->currentAlbum);
 
         QString err;
-        AlbumManager::instance()->updatePAlbumIcon( album,
+        AlbumManager::componentData().updatePAlbumIcon( album,
                                                     iconItem->imageInfo()->id(),
                                                     err );
     }
@@ -808,7 +808,7 @@ void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
         TAlbum *album = static_cast<TAlbum*>(d->currentAlbum);
 
         QString err;
-        AlbumManager::instance()->updateTAlbumIcon( album,
+        AlbumManager::componentData().updateTAlbumIcon( album,
                                                     QString(),
                                                     iconItem->imageInfo()->id(),
                                                     err );
@@ -855,7 +855,7 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
             this, SLOT(slotRenamed(KIO::Job*, const KUrl &, const KUrl&)));
 
     // The AlbumManager KDirWatch will trigger a DIO::scan.
-    // When this is completed, DIO will call AlbumLister::instance()->refresh().
+    // When this is completed, DIO will call AlbumLister::componentData().refresh().
     // Usually the AlbumLister will ignore changes to already listed items.
     // So the renamed item need explicitly be invalidated.
     d->imageLister->invalidateItem(&renameInfo);
@@ -909,7 +909,7 @@ void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
             this, SLOT(slotDIOResult(KIO::Job*)));
 
     // The AlbumManager KDirWatch will trigger a DIO::scan.
-    // When this is completed, DIO will call AlbumLister::instance()->refresh().
+    // When this is completed, DIO will call AlbumLister::componentData().refresh().
 }
 
 void AlbumIconView::slotDeleteSelectedItemsDirectly(bool useTrash)
@@ -961,7 +961,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
 {
     if (!item) return;
 
-    AlbumSettings *settings = AlbumSettings::instance();
+    AlbumSettings *settings = AlbumSettings::componentData();
 
     if (!settings) return;
 
@@ -969,7 +969,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
     QString imagefilter = settings->getImageFileFilter().lower() +
                           settings->getImageFileFilter().upper();
 
-    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
+    if (KDcrawIface::DcrawBinary::componentData().versionIsRight())
     {
         // add raw files only if dcraw is available
         imagefilter += settings->getRawFileFilter().lower() +
@@ -1249,7 +1249,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         int tagID;
         ds >> tagID;
 
-        AlbumManager* man = AlbumManager::instance();
+        AlbumManager* man = AlbumManager::componentData();
         TAlbum* talbum    = man->findTAlbum(tagID);
 
         if (talbum)
@@ -1625,7 +1625,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
         }
         else
         {
-            ImageAttributesWatch::instance()->fileMetadataChanged((*it));
+            ImageAttributesWatch::componentData().fileMetadataChanged((*it));
         }
 
         emit signalProgressValue((int)((i++/cnt)*100.0));
@@ -1768,7 +1768,7 @@ void AlbumIconView::updateBannerRectPixmap()
     d->bannerRect.setHeight(d->bannerRect.height() + tr.height() + 10);
     d->bannerRect.setWidth(frameRect().width());
 
-    d->bannerPixmap = ThemeEngine::instance()->bannerPixmap(d->bannerRect.width(),
+    d->bannerPixmap = ThemeEngine::componentData().bannerPixmap(d->bannerRect.width(),
                                                             d->bannerRect.height());
 }
 
@@ -1875,10 +1875,10 @@ void AlbumIconView::updateItemRectsPixmap()
 
     d->itemRect = QRect(0, 0, w+2*margin, y+margin);
 
-    d->itemRegPixmap = ThemeEngine::instance()->thumbRegPixmap(d->itemRect.width(),
+    d->itemRegPixmap = ThemeEngine::componentData().thumbRegPixmap(d->itemRect.width(),
                                                                d->itemRect.height());
 
-    d->itemSelPixmap = ThemeEngine::instance()->thumbSelPixmap(d->itemRect.width(),
+    d->itemSelPixmap = ThemeEngine::componentData().thumbSelPixmap(d->itemRect.width(),
                                                                d->itemRect.height());
 }
 
@@ -1886,16 +1886,16 @@ void AlbumIconView::slotThemeChanged()
 {
     QPalette plt(palette());
     QColorGroup cg(plt.active());
-    cg.setColor(QColorGroup::Base, ThemeEngine::instance()->baseColor());
-    cg.setColor(QColorGroup::Text, ThemeEngine::instance()->textRegColor());
-    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::instance()->textSelColor());
+    cg.setColor(QColorGroup::Base, ThemeEngine::componentData().baseColor());
+    cg.setColor(QColorGroup::Text, ThemeEngine::componentData().textRegColor());
+    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::componentData().textSelColor());
     plt.setActive(cg);
     plt.setInactive(cg);
     setPalette(plt);
 
     QPainter painter(&d->ratingPixmap);
     painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
-                     ThemeEngine::instance()->textSpecialRegColor());
+                     ThemeEngine::componentData().textSpecialRegColor());
     painter.end();
     
     updateBannerRectPixmap();

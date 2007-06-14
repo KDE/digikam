@@ -40,8 +40,8 @@ void DatabaseAttributesWatch::cleanUp()
 
 void DatabaseAttributesWatch::shutDown()
 {
-    if (m_instance)
-        m_instance->disconnect(0, 0, 0);
+    if (m_componentData)
+        m_componentData.disconnect(0, 0, 0);
 }
 */
 

@@ -184,7 +184,7 @@ ImageEffect_ShearTool::~ImageEffect_ShearTool()
 
 void ImageEffect_ShearTool::readUserSettings(void)
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("sheartool Tool Dialog");
     m_mainHAngleInput->setValue(config->readNumEntry("Main HAngle", 0));
     m_mainVAngleInput->setValue(config->readNumEntry("Main VAngle", 0));
@@ -196,7 +196,7 @@ void ImageEffect_ShearTool::readUserSettings(void)
 
 void ImageEffect_ShearTool::writeUserSettings(void)
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("sheartool Tool Dialog");
     config->writeEntry("Main HAngle", m_mainHAngleInput->value());
     config->writeEntry("Main VAngle", m_mainVAngleInput->value());

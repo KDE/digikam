@@ -562,7 +562,7 @@ void AdjustCurveDialog::slotCurveTypeChanged(int type)
 
 void AdjustCurveDialog::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("adjustcurves Tool Dialog");
 
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
@@ -599,7 +599,7 @@ void AdjustCurveDialog::readUserSettings()
 
 void AdjustCurveDialog::writeUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("adjustcurves Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());

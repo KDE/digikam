@@ -118,7 +118,7 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool nav
 
     // -- read config ---------------------------------------------------------
 
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("Image Properties SideBar");
     d->tab->setCurrentPage(config->readNumEntry("ImagePropertiesMetaData Tab",
                            ImagePropertiesMetadataTabPriv::EXIF));
@@ -135,7 +135,7 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool nav
 
 ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("Image Properties SideBar");
     config->writeEntry("ImagePropertiesMetaData Tab", d->tab->currentPageIndex());
     config->writeEntry("EXIF Level", d->exifWidget->getMode());

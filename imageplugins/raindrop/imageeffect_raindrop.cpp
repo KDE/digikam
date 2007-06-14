@@ -156,7 +156,7 @@ void ImageEffect_RainDrop::renderingFinished()
 
 void ImageEffect_RainDrop::readUserSettings(void)
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("raindrops Tool Dialog");
 
     m_dropInput->blockSignals(true);
@@ -176,7 +176,7 @@ void ImageEffect_RainDrop::readUserSettings(void)
 
 void ImageEffect_RainDrop::writeUserSettings(void)
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("raindrops Tool Dialog");
     config->writeEntry("DropAdjustment", m_dropInput->value());
     config->writeEntry("AmountAdjustment", m_amountInput->value());

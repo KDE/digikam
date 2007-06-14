@@ -75,7 +75,7 @@ RatingWidget::RatingWidget(QWidget* parent)
 
     slotThemeChanged();
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 }
 
@@ -158,7 +158,7 @@ void RatingWidget::slotThemeChanged()
 
     QPainter painter2(&d->selPixmap);
     painter2.fillRect(0, 0, d->selPixmap.width(), d->selPixmap.height(),
-                      ThemeEngine::instance()->textSpecialRegColor());
+                      ThemeEngine::componentData().textSpecialRegColor());
     painter2.end();
     
     setFixedSize(QSize(d->regPixmap.width()*5, d->regPixmap.height()));

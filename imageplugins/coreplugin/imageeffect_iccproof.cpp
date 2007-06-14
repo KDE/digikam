@@ -533,7 +533,7 @@ ImageEffect_ICCProof::~ImageEffect_ICCProof()
 void ImageEffect_ICCProof::readUserSettings()
 {
     QString defaultICCPath = KGlobalSettings::documentPath();
-    KConfig* config        = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     
     // General settings of digiKam Color Management                            
     config->setGroup("Color Management");
@@ -609,7 +609,7 @@ void ImageEffect_ICCProof::readUserSettings()
 
 void ImageEffect_ICCProof::writeUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("colormanagement Tool Dialog");
     config->writeEntry("Settings Tab", m_toolBoxWidgets->currentIndex());
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());

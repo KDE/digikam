@@ -131,7 +131,7 @@ ImageEffect_HotPixels::~ImageEffect_HotPixels()
 
 void ImageEffect_HotPixels::readUserSettings(void)
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("hotpixels Tool Dialog");
     m_blackFrameURL = KUrl(config->readEntry("Last Black Frame File", QString()));
     m_filterMethodCombo->setCurrentItem(config->readNumEntry("Filter Method",
@@ -143,7 +143,7 @@ void ImageEffect_HotPixels::readUserSettings(void)
 
 void ImageEffect_HotPixels::writeUserSettings(void)
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("hotpixels Tool Dialog");
     config->writeEntry("Last Black Frame File", m_blackFrameURL.url());
     config->writeEntry("Filter Method", m_filterMethodCombo->currentItem());

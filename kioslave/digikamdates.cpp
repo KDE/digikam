@@ -40,7 +40,7 @@
 #include <kio/global.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kfilemetainfo.h>
 #include <kdebug.h>
 
@@ -142,7 +142,7 @@ extern "C"
     DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
         KLocale::setMainCatalog("digikam");
-        KInstance instance( "kio_digikamdates" );
+        KComponentData componentData( "kio_digikamdates" );
         KGlobal::locale();
 
         if (argc != 4) {

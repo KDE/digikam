@@ -239,7 +239,7 @@ void CameraIconViewItem::paintItem()
     else
         pix = *(view->itemBaseRegPixmap());
     
-    ThemeEngine* te = ThemeEngine::instance();
+    ThemeEngine* te = ThemeEngine::componentData();
 
     QPainter p(&pix);
 

@@ -124,13 +124,13 @@ DateFolderView::DateFolderView(QWidget* parent)
     d->listview->setResizeMode(Q3ListView::LastColumn);
     d->listview->setRootIsDecorated(true);
 
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
+    connect(AlbumManager::componentData(), SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotAlbumAdded(Album*)));
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
+    connect(AlbumManager::componentData(), SIGNAL(signalAlbumDeleted(Album*)),
             SLOT(slotAlbumDeleted(Album*)));
-    connect(AlbumManager::instance(), SIGNAL(signalAllDAlbumsLoaded()),
+    connect(AlbumManager::componentData(), SIGNAL(signalAllDAlbumsLoaded()),
             SLOT(slotAllDAlbumsLoaded()));    
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
+    connect(AlbumManager::componentData(), SIGNAL(signalAlbumsCleared()),
             d->listview, SLOT(clear()));
 
     connect(d->listview, SIGNAL(selectionChanged()),
@@ -161,7 +161,7 @@ void DateFolderView::setActive(bool val)
 
 void DateFolderView::slotAllDAlbumsLoaded()
 {
-    disconnect(AlbumManager::instance(), SIGNAL(signalAllDAlbumsLoaded()),
+    disconnect(AlbumManager::componentData(), SIGNAL(signalAllDAlbumsLoaded()),
                this, SLOT(slotAllDAlbumsLoaded()));
     loadViewState();
 }
@@ -187,11 +187,11 @@ void DateFolderView::slotAlbumAdded(Album* a)
     if (!parent)
     {
         parent = new DateFolderItem(d->listview, yr);
-        parent->setPixmap(0, SmallIcon("date", AlbumSettings::instance()->getDefaultTreeIconSize()));
+        parent->setPixmap(0, SmallIcon("date", AlbumSettings::componentData().getDefaultTreeIconSize()));
     }
 
     DateFolderItem* item = new DateFolderItem(parent, mo, album);
-    item->setPixmap(0, SmallIcon("date", AlbumSettings::instance()->getDefaultTreeIconSize()));
+    item->setPixmap(0, SmallIcon("date", AlbumSettings::componentData().getDefaultTreeIconSize()));
 
     album->setExtraData(this, item);
 }
@@ -233,7 +233,7 @@ void DateFolderView::slotSelectionChanged()
     
     if (!selItem)
     {
-        AlbumManager::instance()->setCurrentAlbum(0);
+        AlbumManager::componentData().setCurrentAlbum(0);
         return;
     }
 
@@ -241,12 +241,12 @@ void DateFolderView::slotSelectionChanged()
     
     if (!dateItem || !dateItem->m_album)
     {
-        AlbumManager::instance()->setCurrentAlbum(0);
+        AlbumManager::componentData().setCurrentAlbum(0);
         d->monthview->setActive(false);
     }
     else
     {
-        AlbumManager::instance()->setCurrentAlbum(dateItem->m_album);
+        AlbumManager::componentData().setCurrentAlbum(dateItem->m_album);
 
         QDate date = dateItem->m_album->date();        
         d->monthview->setActive(true);
@@ -256,7 +256,7 @@ void DateFolderView::slotSelectionChanged()
 
 void DateFolderView::loadViewState()
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup(name());
     
     QString selected;
@@ -290,7 +290,7 @@ void DateFolderView::loadViewState()
 
 void DateFolderView::saveViewState()
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup(name());
    
     DateFolderItem *item = dynamic_cast<DateFolderItem*>(d->listview->selectedItem());

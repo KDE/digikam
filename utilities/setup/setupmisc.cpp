@@ -104,7 +104,7 @@ SetupMisc::~SetupMisc()
 
 void SetupMisc::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::componentData();
 
     settings->setShowSplashScreen(d->showSplashCheck->isChecked());
     settings->setShowTrashDeleteDialog(d->showTrashDeleteDialogCheck->isChecked());
@@ -115,7 +115,7 @@ void SetupMisc::applySettings()
 
 void SetupMisc::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::componentData();
 
     d->showSplashCheck->setChecked(settings->getShowSplashScreen());
     d->showTrashDeleteDialogCheck->setChecked(settings->getShowTrashDeleteDialog());

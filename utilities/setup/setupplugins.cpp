@@ -84,7 +84,7 @@ SetupPlugins::SetupPlugins(QWidget* parent )
     hlay->addStretch(1);
     hlay->addWidget(KipiVersion, 1);
     
-    d->kipiConfig = KIPI::PluginLoader::instance()->configWidget( parent );
+    d->kipiConfig = KIPI::PluginLoader::componentData().configWidget( parent );
     QString pluginsListHelp = i18n("<p>A list of available Kipi plugins "
                                     "appears below.");
     d->kipiConfig->setWhatsThis( pluginsListHelp);

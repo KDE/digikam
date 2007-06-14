@@ -304,7 +304,7 @@ QString ImagePrint::minimizeString( QString text, const QFontMetrics& metrics,
 
 void ImagePrint::readSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
 
     config->setGroup("Color Management");
 
@@ -746,7 +746,7 @@ void ImageEditorPrintDialogPage::slotUnitChanged(const QString& string)
 
 void ImageEditorPrintDialogPage::readSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("Color Management");
     d->cmEnabled = config->readBoolEntry("EnableCM", false);
 }

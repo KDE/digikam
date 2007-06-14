@@ -154,26 +154,26 @@ public:
     ImagePropertiesSideBarDB *rightSidebar;
 };
 
-ImageWindow* ImageWindow::m_instance = 0;
+ImageWindow* ImageWindow::m_componentData = 0;
 
 ImageWindow* ImageWindow::imagewindow()
 {
-    if (!m_instance)
+    if (!m_componentData)
         new ImageWindow();
 
-    return m_instance;
+    return m_componentData;
 }
 
 bool ImageWindow::imagewindowCreated()
 {
-    return m_instance;
+    return m_componentData;
 }
 
 ImageWindow::ImageWindow()
            : EditorWindow( "Image Editor" )
 {
     d = new ImageWindowPriv;
-    m_instance = this;
+    m_componentData = this;
     setAcceptDrops(true); 
 
     // -- Build the GUI -------------------------------
@@ -184,7 +184,7 @@ ImageWindow::ImageWindow()
 
     // Load image plugins to GUI
 
-    m_imagePluginLoader = ImagePluginLoader::instance();
+    m_imagePluginLoader = ImagePluginLoader::componentData();
     loadImagePlugins();
 
     // Create context menu.
@@ -209,7 +209,7 @@ ImageWindow::ImageWindow()
 
 ImageWindow::~ImageWindow()
 {
-    m_instance = 0;
+    m_componentData = 0;
 
     unLoadImagePlugins();
 
@@ -267,12 +267,12 @@ void ImageWindow::setupConnections()
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSidebar, SLOT(slotNoCurrentItem()));
 
-    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
+    ImageAttributesWatch *watch = ImageAttributesWatch::componentData();
 
     connect(watch, SIGNAL(signalFileMetadataChanged(const KUrl &)),
             this, SLOT(slotFileMetadataChanged(const KUrl &)));
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 }
 
@@ -372,17 +372,17 @@ void ImageWindow::applySettings()
 {
     applyStandardSettings();
 
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
 
     if (!config->readBoolEntry("UseThemeBackgroundColor", true))
         m_bgColor = config->readColorEntry("BackgroundColor", &Qt::black);
     else
-        m_bgColor = ThemeEngine::instance()->baseColor();
+        m_bgColor = ThemeEngine::componentData().baseColor();
 
     m_canvas->setBackgroundColor(m_bgColor);
 
-    AlbumSettings *settings = AlbumSettings::instance();
+    AlbumSettings *settings = AlbumSettings::componentData();
     m_canvas->setExifOrient(settings->getExifRotate());
     m_setExifOrientationTag = settings->getExifSetOrientation();
 }
@@ -727,7 +727,7 @@ void ImageWindow::slotUpdateItemInfo()
     // This is necessary when ImageEditor is opened from cameraclient.
 
     KUrl u(d->urlCurrent.directory());
-    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
+    PAlbum *palbum = AlbumManager::componentData().findPAlbum(u);
 
     if (!palbum)
     {
@@ -792,10 +792,10 @@ void ImageWindow::saveAsIsComplete()
     // Find the src and dest albums ------------------------------------------
 
     KUrl srcDirURL(QDir::cleanPath(m_savingContext->srcURL.directory()));
-    PAlbum* srcAlbum = AlbumManager::instance()->findPAlbum(srcDirURL);
+    PAlbum* srcAlbum = AlbumManager::componentData().findPAlbum(srcDirURL);
 
     KUrl dstDirURL(QDir::cleanPath(m_savingContext->destinationURL.directory()));
-    PAlbum* dstAlbum = AlbumManager::instance()->findPAlbum(dstDirURL);
+    PAlbum* dstAlbum = AlbumManager::componentData().findPAlbum(dstDirURL);
 
     if (dstAlbum && srcAlbum)
     {
@@ -908,7 +908,7 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
 
     KUrl u;
     u.setPath(d->urlCurrent.directory());
-    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
+    PAlbum *palbum = AlbumManager::componentData().findPAlbum(u);
 
     // if available, provide a digikamalbums:// URL to KIO
     KUrl kioURL;
@@ -1012,7 +1012,7 @@ void ImageWindow::slotFileMetadataChanged(const KUrl &url)
 
 void ImageWindow::slotThemeChanged()
 {
-    m_canvas->setBackgroundColor(ThemeEngine::instance()->baseColor());
+    m_canvas->setBackgroundColor(ThemeEngine::componentData().baseColor());
 }
 
 void ImageWindow::slotFilePrint()
@@ -1084,7 +1084,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 
     if (!m_cancelSlideShow)
     {
-        settings.exifRotate = AlbumSettings::instance()->getExifRotate();
+        settings.exifRotate = AlbumSettings::componentData().getExifRotate();
         settings.fileList   = d->urlList;
     
         SlideShow *slide = new SlideShow(settings);
@@ -1140,7 +1140,7 @@ void ImageWindow::dropEvent(QDropEvent *e)
         }
 
         QString ATitle;
-        AlbumManager* man  = AlbumManager::instance();
+        AlbumManager* man  = AlbumManager::componentData();
         PAlbum* palbum     = man->findPAlbum(albumIDs.first());
         if (palbum) ATitle = palbum->title();  
 
@@ -1153,7 +1153,7 @@ void ImageWindow::dropEvent(QDropEvent *e)
     }
     else if (AlbumDrag::decode(e, urls, albumID))
     {
-        AlbumManager* man           = AlbumManager::instance();
+        AlbumManager* man           = AlbumManager::componentData();
         Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
         ImageInfoList imageInfoList;
 
@@ -1185,7 +1185,7 @@ void ImageWindow::dropEvent(QDropEvent *e)
         int tagID;
         ds >> tagID;
 
-        AlbumManager* man           = AlbumManager::instance();
+        AlbumManager* man           = AlbumManager::componentData();
         Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
         ImageInfoList imageInfoList;
 

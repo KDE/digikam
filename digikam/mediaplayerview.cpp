@@ -122,7 +122,7 @@ MediaPlayerView::MediaPlayerView(QWidget *parent)
 
     // --------------------------------------------------------------------------
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));  
 }
 
@@ -226,8 +226,8 @@ void MediaPlayerView::escapePreview()
 
 void MediaPlayerView::slotThemeChanged()
 {
-    d->errorView->setPaletteBackgroundColor(ThemeEngine::instance()->baseColor());
-    d->mediaPlayerView->setPaletteBackgroundColor(ThemeEngine::instance()->baseColor());
+    d->errorView->setPaletteBackgroundColor(ThemeEngine::componentData().baseColor());
+    d->mediaPlayerView->setPaletteBackgroundColor(ThemeEngine::componentData().baseColor());
 }
 
 int MediaPlayerView::previewMode(void)

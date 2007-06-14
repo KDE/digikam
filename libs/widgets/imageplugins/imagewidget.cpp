@@ -327,7 +327,7 @@ void ImageWidget::slotUpdateSpotInfo(const Digikam::DColor &col, const QPoint &p
 
 void ImageWidget::readSettings(void)
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup(d->settingsSection);
 
     d->underExposureButton->setOn(config->readBoolEntry("Under Exposure Indicator", false));
@@ -341,7 +341,7 @@ void ImageWidget::readSettings(void)
     
 void ImageWidget::writeSettings(void)
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup(d->settingsSection);
     config->writeEntry("Separate View", getRenderingPreviewMode());
     config->writeEntry("Under Exposure Indicator", d->underExposureButton->isOn());

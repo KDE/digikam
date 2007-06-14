@@ -211,7 +211,7 @@ SetupToolTip::~SetupToolTip()
 
 void SetupToolTip::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::componentData();
     if (!settings) return;
 
     settings->setShowToolTips(d->showToolTipsBox->isChecked());
@@ -240,7 +240,7 @@ void SetupToolTip::applySettings()
 
 void SetupToolTip::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::componentData();
 
     if (!settings) return;
 

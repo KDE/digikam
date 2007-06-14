@@ -181,7 +181,7 @@ SetupToolTip::~SetupToolTip()
 
 void SetupToolTip::readSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
 
     d->showToolTipsBox->setChecked(config->readBoolEntry("Show ToolTips", true));
@@ -206,7 +206,7 @@ void SetupToolTip::readSettings()
 
 void SetupToolTip::applySettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
 
     config->writeEntry("Show ToolTips", d->showToolTipsBox->isChecked());

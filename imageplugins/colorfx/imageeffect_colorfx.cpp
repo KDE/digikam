@@ -247,7 +247,7 @@ ImageEffect_ColorFX::~ImageEffect_ColorFX()
 
 void ImageEffect_ColorFX::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("coloreffect Tool Dialog");
     m_effectType->setCurrentItem(config->readNumEntry("EffectType", ColorFX));
     m_levelInput->setValue(config->readNumEntry("LevelAjustment", 0));
@@ -257,7 +257,7 @@ void ImageEffect_ColorFX::readUserSettings()
 
 void ImageEffect_ColorFX::writeUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("coloreffect Tool Dialog");
     config->writeEntry("EffectType", m_effectType->currentItem());
     config->writeEntry("LevelAjustment", m_levelInput->value());

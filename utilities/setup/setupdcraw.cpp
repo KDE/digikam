@@ -89,7 +89,7 @@ SetupDcraw::~SetupDcraw()
 
 void SetupDcraw::applySettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     config->writeEntry("SixteenBitsImage", d->dcrawSettings->sixteenBits());
     config->writeEntry("CameraColorBalance", d->dcrawSettings->useCameraWB());
@@ -106,7 +106,7 @@ void SetupDcraw::applySettings()
 
 void SetupDcraw::readSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     d->dcrawSettings->setSixteenBits(config->readBoolEntry("SixteenBitsImage", false));
     d->dcrawSettings->setNoiseReduction(config->readBoolEntry("EnableNoiseReduction", false));

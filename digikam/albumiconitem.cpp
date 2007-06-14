@@ -233,7 +233,7 @@ void AlbumIconItem::paintItem()
     else
         pix = *(d->view->itemBaseRegPixmap());
 
-    ThemeEngine* te = ThemeEngine::instance();
+    ThemeEngine* te = ThemeEngine::componentData();
     
     QPainter p(&pix);
     p.setPen(isSelected() ? te->textSelColor() : te->textRegColor());

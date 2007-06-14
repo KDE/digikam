@@ -60,7 +60,7 @@ namespace Digikam
 
 void CollectionScanner::scanForStaleAlbums()
 {
-    QStringList albumRootPaths = CollectionManager::instance()->allAvailableAlbumRootPaths();
+    QStringList albumRootPaths = CollectionManager::componentData().allAvailableAlbumRootPaths();
     for (QStringList::iterator it = albumRootPaths.begin(); it != albumRootPaths.end(); ++it)
         scanForStaleAlbums(*it);
 }
@@ -131,7 +131,7 @@ void CollectionScanner::removeStaleFiles()
 
 void CollectionScanner::scanAlbums()
 {
-    QStringList albumRootPaths = CollectionManager::instance()->allAvailableAlbumRootPaths();
+    QStringList albumRootPaths = CollectionManager::componentData().allAvailableAlbumRootPaths();
     int count = 0;
     for (QStringList::iterator it = albumRootPaths.begin(); it != albumRootPaths.end(); ++it)
         count += countItemsInFolder(*it);
@@ -156,7 +156,7 @@ void CollectionScanner::scanAlbums()
 
 void CollectionScanner::scan(const QString& folderPath)
 {
-    CollectionManager *manager = CollectionManager::instance();
+    CollectionManager *manager = CollectionManager::componentData();
     KUrl url;
     url.setPath(folderPath);
     QString albumRoot = manager->albumRootPath(url);
@@ -209,7 +209,7 @@ void CollectionScanner::scanAlbum(const QString& filePath)
 {
     KUrl url;
     url.setPath(filePath);
-    scanAlbum(CollectionManager::instance()->albumRootPath(url), CollectionManager::instance()->album(url));
+    scanAlbum(CollectionManager::componentData().albumRootPath(url), CollectionManager::componentData().album(url));
 }
 
 void CollectionScanner::scanAlbum(const QString &albumRoot, const QString& album)

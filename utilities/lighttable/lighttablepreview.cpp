@@ -164,7 +164,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     connect(this, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     // ------------------------------------------------------------
@@ -195,9 +195,9 @@ void LightTablePreview::setDragAndDropMessage()
     if (d->dragAndDropEnabled)
     {
         QPixmap pix(visibleWidth(), visibleHeight());
-        pix.fill(ThemeEngine::instance()->baseColor());
+        pix.fill(ThemeEngine::componentData().baseColor());
         QPainter p(&pix);
-        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
+        p.setPen(QPen(ThemeEngine::componentData().textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::TextWordWrap, 
                    i18n("Drag and drop an image here"));
@@ -267,9 +267,9 @@ void LightTablePreview::setImagePath(const QString& path)
     }
 
     if (d->loadFullImageSize)
-        d->previewThread->loadHighQuality(LoadingDescription(path, 0, AlbumSettings::instance()->getExifRotate()));
+        d->previewThread->loadHighQuality(LoadingDescription(path, 0, AlbumSettings::componentData().getExifRotate()));
     else
-        d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
+        d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::componentData().getExifRotate()));
 }
 
 void LightTablePreview::slotGotImagePreview(const LoadingDescription &description, const DImg& preview)
@@ -280,10 +280,10 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription &descriptio
     if (preview.isNull())
     {
         QPixmap pix(visibleWidth(), visibleHeight());
-        pix.fill(ThemeEngine::instance()->baseColor());
+        pix.fill(ThemeEngine::componentData().baseColor());
         QPainter p(&pix);
         QFileInfo info(d->path);
-        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
+        p.setPen(QPen(ThemeEngine::componentData().textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::TextWordWrap, 
                    i18n("Unable to display preview for\n\"%1\"")
@@ -296,7 +296,7 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription &descriptio
     else
     {
         DImg img(preview);
-        if (AlbumSettings::instance()->getExifRotate())
+        if (AlbumSettings::componentData().getExifRotate())
             d->previewThread->exifRotate(img, description.filePath);
         setImage(img);
         emit signalPreviewLoaded(true);
@@ -323,7 +323,7 @@ void LightTablePreview::slotNextPreload()
         return;
 
     d->previewPreloadThread->load(LoadingDescription(loadPath, d->previewSize,
-                                  AlbumSettings::instance()->getExifRotate()));
+                                  AlbumSettings::componentData().getExifRotate()));
 }
 
 void LightTablePreview::setImageInfo(ImageInfo* info, ImageInfo *previous, ImageInfo *next)
@@ -531,7 +531,7 @@ void LightTablePreview::slotAssignRating(int rating)
 
 void LightTablePreview::slotThemeChanged()
 {
-    setBackgroundColor(ThemeEngine::instance()->baseColor());
+    setBackgroundColor(ThemeEngine::componentData().baseColor());
     frameChanged();
 }
 
@@ -773,11 +773,11 @@ void LightTablePreview::drawFrame(QPainter *p)
 {
     if (d->selected)
     {
-        qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->thumbSelColor(), lineWidth());
-        qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->textSelColor(), 2);
+        qDrawPlainRect(p, frameRect(), ThemeEngine::componentData().thumbSelColor(), lineWidth());
+        qDrawPlainRect(p, frameRect(), ThemeEngine::componentData().textSelColor(), 2);
     }
     else 
-        qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->baseColor(), lineWidth());
+        qDrawPlainRect(p, frameRect(), ThemeEngine::componentData().baseColor(), lineWidth());
 }
 
 }  // NameSpace Digikam

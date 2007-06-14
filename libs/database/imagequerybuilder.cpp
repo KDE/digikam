@@ -39,7 +39,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmimetype.h>
 
 // Local includes.

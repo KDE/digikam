@@ -297,7 +297,7 @@ ImagePannelWidget::~ImagePannelWidget()
 
 void ImagePannelWidget::readSettings()
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup(d->settingsSection);
     int mode = config->readNumEntry("Separate View", ImageRegionWidget::SeparateViewDuplicateVert);
     mode     = qMax(ImageRegionWidget::SeparateViewHorizontal, mode);
@@ -316,7 +316,7 @@ void ImagePannelWidget::readSettings()
     
 void ImagePannelWidget::writeSettings()
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup(d->settingsSection);
     config->writeEntry( "Separate View", d->separateView->selectedId() );
     config->sync();

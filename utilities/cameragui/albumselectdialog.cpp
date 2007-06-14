@@ -117,9 +117,9 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     grid->setRowStretch(2, 10);
 
     QPixmap icon = iconLoader->loadIcon("folder", KIcon::NoGroup,
-                                        AlbumSettings::instance()->getDefaultTreeIconSize(), KIcon::DefaultState, 0, true);
+                                        AlbumSettings::componentData().getDefaultTreeIconSize(), KIcon::DefaultState, 0, true);
 
-    AlbumList aList = AlbumManager::instance()->allPAlbums();
+    AlbumList aList = AlbumManager::componentData().allPAlbums();
 
     for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
     {
@@ -163,13 +163,13 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 
     // -------------------------------------------------------------
 
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
+    connect(AlbumManager::componentData(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
 
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
+    connect(AlbumManager::componentData(), SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotAlbumDeleted(Album*)));
 
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
+    connect(AlbumManager::componentData(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotAlbumsCleared()));
 
     connect(d->folderView, SIGNAL(selectionChanged()),
@@ -205,7 +205,7 @@ void AlbumSelectDialog::slotAlbumAdded(Album* album)
 
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
     QPixmap icon = iconLoader->loadIcon("folder", KIcon::NoGroup,
-                                        AlbumSettings::instance()->getDefaultTreeIconSize(),
+                                        AlbumSettings::componentData().getDefaultTreeIconSize(),
                                         KIcon::DefaultState, 0, true);
     
     FolderItem* viewItem = new FolderItem(parentItem, album->title());
@@ -297,11 +297,11 @@ void AlbumSelectDialog::slotUser1()
     if (album->isRoot())
     {
         //TODO: Let user choose an album root
-        albumRootPath = CollectionManager::instance()->oneAlbumRootPath();
+        albumRootPath = CollectionManager::componentData().oneAlbumRootPath();
     }
 
     QString errMsg;
-    PAlbum* newAlbum = AlbumManager::instance()->createPAlbum(album, albumRootPath, newAlbumName,
+    PAlbum* newAlbum = AlbumManager::componentData().createPAlbum(album, albumRootPath, newAlbumName,
                                                               QString(), QDate::currentDate(),
                                                               QString(), errMsg);
     if (!newAlbum)

@@ -293,7 +293,7 @@ void ImageEffect_AutoCorrection::slotColorSelectedFromTarget( const Digikam::DCo
 
 void ImageEffect_AutoCorrection::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("autocorrection Tool Dialog");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
@@ -304,7 +304,7 @@ void ImageEffect_AutoCorrection::readUserSettings()
 
 void ImageEffect_AutoCorrection::writeUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("autocorrection Tool Dialog");
     config->writeEntry("Histogram Channel", m_channelCB->currentItem());
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());

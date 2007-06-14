@@ -122,7 +122,7 @@ private slots:
 
 private:
 
-    static LoadingCache *m_instance;
+    static LoadingCache *m_componentData;
 
     LoadingCache();
 

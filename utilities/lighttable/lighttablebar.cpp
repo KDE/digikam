@@ -104,7 +104,7 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
     readToolTipSettings();
     d->toolTip = new LightTableBarToolTip(this);
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotUpdate()));
 
     connect(this, SIGNAL(signalItemSelected(ThumbBarItem*)),
@@ -120,7 +120,7 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
 
     QPainter painter(&d->ratingPixmap);
     painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
-                     ThemeEngine::instance()->textSpecialRegColor());
+                     ThemeEngine::componentData().textSpecialRegColor());
     painter.end();    
 
     if (orientation == Qt::Vertical)
@@ -130,7 +130,7 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
 
     // ----------------------------------------------------------------
 
-    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
+    ImageAttributesWatch *watch = ImageAttributesWatch::componentData();
 
     connect(watch, SIGNAL(signalImageRatingChanged(qlonglong)),
             this, SLOT(slotImageRatingChanged(qlonglong)));
@@ -425,7 +425,7 @@ LightTableBarItem* LightTableBar::findItemByPos(const QPoint& pos) const
 
 void LightTableBar::readToolTipSettings()
 {
-    AlbumSettings* albumSettings = AlbumSettings::instance();
+    AlbumSettings* albumSettings = AlbumSettings::componentData();
     if (!albumSettings) return;
 
     Digikam::ThumbBarToolTipSettings settings;
@@ -447,7 +447,7 @@ void LightTableBar::readToolTipSettings()
 
 void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 {
-    ThemeEngine* te = ThemeEngine::instance();
+    ThemeEngine* te = ThemeEngine::componentData();
     QRect er(e->rect());
     QPixmap bgPix;
 
@@ -808,7 +808,7 @@ LightTableBarToolTip::LightTableBarToolTip(ThumbBarView* parent)
 QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
 {
     QString tip, str;
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::componentData();
     ImageInfo* info         = static_cast<LightTableBarItem *>(item)->info();
 
     if (settings)
@@ -822,7 +822,7 @@ QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
     
             if (settings->getToolTipsShowAlbumName())
             {
-                PAlbum* album = AlbumManager::instance()->findPAlbum(info->albumId());
+                PAlbum* album = AlbumManager::componentData().findPAlbum(info->albumId());
                 if (album)
                     tip += m_cellSpecBeg + i18n("Album:") + m_cellSpecMid + 
                            album->url().remove(0, 1) + m_cellSpecEnd;
@@ -837,7 +837,7 @@ QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
     
             if (settings->getToolTipsShowTags())
             {
-                QStringList tagPaths = AlbumManager::instance()->tagPaths(info->tagIds(), false);
+                QStringList tagPaths = AlbumManager::componentData().tagPaths(info->tagIds(), false);
     
                 str = tagPaths.join(", ");
                 if (str.isEmpty()) str = QString("---");

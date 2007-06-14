@@ -28,7 +28,7 @@
 
 // KDE includes.
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kurl.h>
 #include <klocale.h>
@@ -88,7 +88,7 @@ extern "C"
     DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
         KLocale::setMainCatalog("digikam");
-        KInstance instance( "kio_digikamtags" );
+        KComponentData componentData( "kio_digikamtags" );
         ( void ) KGlobal::locale();
 
         kDebug() << "*** kio_digikamtag started ***" << endl;

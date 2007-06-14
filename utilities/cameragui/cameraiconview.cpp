@@ -125,7 +125,7 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
     connect(this, SIGNAL(signalDoubleClicked(IconItem*)),
             this, SLOT(slotDoubleClicked(IconItem*)));
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     // ----------------------------------------------------------------
@@ -629,10 +629,10 @@ void CameraIconView::updateItemRectsPixmap()
 
     d->itemRect = r;
 
-    d->itemRegPixmap = ThemeEngine::instance()->thumbRegPixmap(d->itemRect.width(),
+    d->itemRegPixmap = ThemeEngine::componentData().thumbRegPixmap(d->itemRect.width(),
                                                                d->itemRect.height());
 
-    d->itemSelPixmap = ThemeEngine::instance()->thumbSelPixmap(d->itemRect.width(),
+    d->itemSelPixmap = ThemeEngine::componentData().thumbSelPixmap(d->itemRect.width(),
                                                                d->itemRect.height());
 }
 
@@ -640,9 +640,9 @@ void CameraIconView::slotThemeChanged()
 {
     QPalette plt(palette());
     QColorGroup cg(plt.active());
-    cg.setColor(QColorGroup::Base, ThemeEngine::instance()->baseColor());
-    cg.setColor(QColorGroup::Text, ThemeEngine::instance()->textRegColor());
-    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::instance()->textSelColor());
+    cg.setColor(QColorGroup::Base, ThemeEngine::componentData().baseColor());
+    cg.setColor(QColorGroup::Text, ThemeEngine::componentData().textRegColor());
+    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::componentData().textSelColor());
     plt.setActive(cg);
     plt.setInactive(cg);
     setPalette(plt);

@@ -211,29 +211,29 @@ TagFilterView::TagFilterView(QWidget* parent)
     viewport()->setAcceptDrops(true);
 
     TagFilterViewItem* notTaggedItem = new TagFilterViewItem(this, 0, true);
-    notTaggedItem->setPixmap(0, AlbumThumbnailLoader::instance()->getStandardTagIcon());
+    notTaggedItem->setPixmap(0, AlbumThumbnailLoader::componentData().getStandardTagIcon());
 
     // -- setup slots ---------------------------------------------------------
 
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
+    connect(AlbumManager::componentData(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotTagAdded(Album*)));
 
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
+    connect(AlbumManager::componentData(), SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotTagDeleted(Album*)));
 
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
+    connect(AlbumManager::componentData(), SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotTagRenamed(Album*)));
 
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
+    connect(AlbumManager::componentData(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotClear()));
 
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumIconChanged(Album*)),
+    connect(AlbumManager::componentData(), SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotAlbumIconChanged(Album*)));
 
-    connect(AlbumManager::instance(), SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
+    connect(AlbumManager::componentData(), SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
             this, SLOT(slotTagMoved(TAlbum*, TAlbum*)));
 
-    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
 
     connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
             this, SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
@@ -252,7 +252,7 @@ TagFilterView::TagFilterView(QWidget* parent)
 
     // -- read config ---------------------------------------------------------
 
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("Tag Filters View");
     d->matchingCond = (AlbumLister::MatchingCondition)(config->readNumEntry("Matching Condition", 
                                                        AlbumLister::OrCondition));
@@ -262,7 +262,7 @@ TagFilterView::TagFilterView(QWidget* parent)
 
 TagFilterView::~TagFilterView()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("Tag Filters View");
     config->writeEntry("Matching Condition", (int)(d->matchingCond));
     config->writeEntry("Toggle Auto Tags", (int)(d->toggleAutoTags));
@@ -450,7 +450,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
         int tagID;
         ds >> tagID;
 
-        AlbumManager* man = AlbumManager::instance();
+        AlbumManager* man = AlbumManager::componentData();
         TAlbum* talbum    = man->findTAlbum(tagID);
 
         if(!talbum)
@@ -474,7 +474,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
             if (!itemDrop)
             {
                 // move dragItem to the root
-                newParentTag = AlbumManager::instance()->findTAlbum(0);
+                newParentTag = AlbumManager::componentData().findTAlbum(0);
             }
             else
             {
@@ -483,7 +483,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
             }
 
             QString errMsg;
-            if (!AlbumManager::instance()->moveTAlbum(talbum, newParentTag, errMsg))
+            if (!AlbumManager::componentData().moveTAlbum(talbum, newParentTag, errMsg))
             {
                 KMessageBox::error(this, errMsg);
             }
@@ -568,7 +568,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
         else if(id == 11)
         {
             QString errMsg;
-            AlbumManager::instance()->updateTAlbumIcon(destAlbum, QString(),
+            AlbumManager::componentData().updateTAlbumIcon(destAlbum, QString(),
                                                        imageIDs.first(), errMsg);
         }
     }
@@ -679,7 +679,7 @@ void TagFilterView::setTagThumbnail(TAlbum *album)
     if(!item)
         return;
 
-    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
     QPixmap icon;
     if (!loader->getTagThumbnail(album, icon))
     {
@@ -710,7 +710,7 @@ void TagFilterView::slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbn
     if(!item)
         return;
 
-    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
     QPixmap blendedIcon = loader->blendIcons(loader->getStandardTagIcon(), thumbnail);
     item->setPixmap(0, blendedIcon);
 }
@@ -722,7 +722,7 @@ void TagFilterView::slotThumbnailLost(Album *)
 
 void TagFilterView::slotReloadThumbnails()
 {
-    AlbumList tList = AlbumManager::instance()->allTAlbums();
+    AlbumList tList = AlbumManager::componentData().allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         TAlbum* tag  = (TAlbum*)(*it);
@@ -743,7 +743,7 @@ void TagFilterView::slotClear()
     clear();
 
     TagFilterViewItem* notTaggedItem = new TagFilterViewItem(this, 0, true);
-    notTaggedItem->setPixmap(0, AlbumThumbnailLoader::instance()->getStandardTagIcon());
+    notTaggedItem->setPixmap(0, AlbumThumbnailLoader::componentData().getStandardTagIcon());
 }
 
 void TagFilterView::slotTimeOut()
@@ -763,7 +763,7 @@ void TagFilterView::slotTimeOut()
         ++it;
     }
 
-    AlbumLister::instance()->setTagFilter(filterTags, d->matchingCond, showUnTagged);
+    AlbumLister::componentData().setTagFilter(filterTags, d->matchingCond, showUnTagged);
 }
 
 void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
@@ -855,7 +855,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
         case 13:    // Reset Tag Icon.
         {
             QString errMsg;
-            AlbumManager::instance()->updateTAlbumIcon(item->m_tag, QString("tag"), 0, errMsg);
+            AlbumManager::componentData().updateTAlbumIcon(item->m_tag, QString("tag"), 0, errMsg);
             break;
         }        
         case 14:    // Select All Tags.
@@ -1026,7 +1026,7 @@ void TagFilterView::tagNew(TagFilterViewItem* item, const QString& _title, const
     TAlbum  *parent;
     QString  title    = _title;
     QString  icon     = _icon;
-    AlbumManager *man = AlbumManager::instance();
+    AlbumManager *man = AlbumManager::componentData();
 
     if (!item)
         parent = man->findTAlbum(0);
@@ -1074,7 +1074,7 @@ void TagFilterView::tagEdit(TagFilterViewItem* item)
         return;
     }
 
-    AlbumManager* man = AlbumManager::instance();
+    AlbumManager* man = AlbumManager::componentData();
 
     if (tag->title() != title)
     {
@@ -1113,7 +1113,7 @@ void TagFilterView::tagDelete(TagFilterViewItem* item)
         ++iter;
     }
 
-    AlbumManager* man = AlbumManager::instance();
+    AlbumManager* man = AlbumManager::componentData();
 
     if (children)
     {

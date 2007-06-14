@@ -127,25 +127,25 @@ public:
 };
 
 
-AlbumSettings* AlbumSettings::m_instance = 0;
+AlbumSettings* AlbumSettings::m_componentData = 0;
 
-AlbumSettings* AlbumSettings::instance()
+AlbumSettings* AlbumSettings::componentData()
 {
-    return m_instance;
+    return m_componentData;
 }
 
 AlbumSettings::AlbumSettings()
 {
     d = new AlbumSettingsPrivate;
     d->config  = KGlobal::config();
-    m_instance = this;
+    m_componentData = this;
     init();
 }
 
 AlbumSettings::~AlbumSettings()
 {
     delete d;
-    m_instance = 0;
+    m_componentData = 0;
 }
 
 void AlbumSettings::init()

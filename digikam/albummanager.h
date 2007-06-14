@@ -97,7 +97,7 @@ public:
     /**
      * A convenience function to get the instance of the AlbumManager
      */
-    static AlbumManager* instance();
+    static AlbumManager* componentData();
 
     /** @name Library path And Scanning
      */
@@ -394,7 +394,7 @@ public:
 
 private:
 
-    static AlbumManager* m_instance;
+    static AlbumManager* m_componentData;
     AlbumManagerPriv*    d;
 
     void insertPAlbum(PAlbum *album);

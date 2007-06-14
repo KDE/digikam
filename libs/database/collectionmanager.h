@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT CollectionManager
 {
 public:
 
-    static CollectionManager *instance();
+    static CollectionManager *componentData();
     static void cleanUp();
 
     //QList<CollectionLocation *> allLocations();
@@ -78,7 +78,7 @@ private:
 
     CollectionManager();
     ~CollectionManager();
-    static CollectionManager *m_instance;
+    static CollectionManager *m_componentData;
 
     CollectionManagerPrivate *d;
 };

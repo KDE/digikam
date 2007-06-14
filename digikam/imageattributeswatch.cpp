@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-ImageAttributesWatch *ImageAttributesWatch::m_instance = 0;
+ImageAttributesWatch *ImageAttributesWatch::m_componentData = 0;
 
 ImageAttributesWatch::ImageAttributesWatch()
 {
@@ -43,26 +43,26 @@ ImageAttributesWatch::ImageAttributesWatch()
 
 ImageAttributesWatch::~ImageAttributesWatch()
 {
-    m_instance = 0;
+    m_componentData = 0;
 }
 
 void ImageAttributesWatch::cleanUp()
 {
-    delete m_instance;
-    m_instance = 0;
+    delete m_componentData;
+    m_componentData = 0;
 }
 
 void ImageAttributesWatch::shutDown()
 {
-    if (m_instance)
-        m_instance->disconnect(0, 0, 0);
+    if (m_componentData)
+        m_componentData.disconnect(0, 0, 0);
 }
 
-ImageAttributesWatch *ImageAttributesWatch::instance()
+ImageAttributesWatch *ImageAttributesWatch::componentData()
 {
-    if (!m_instance)
-        m_instance = new ImageAttributesWatch;
-    return m_instance;
+    if (!m_componentData)
+        m_componentData = new ImageAttributesWatch;
+    return m_componentData;
 }
 
 void ImageAttributesWatch::slotImageFieldChanged(qlonglong imageId, int field)

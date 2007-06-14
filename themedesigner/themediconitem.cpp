@@ -128,7 +128,7 @@ void ThemedIconItem::paintItem()
     else
         pix = *(view->itemBaseRegPixmap());
 
-    ThemeEngine* te = ThemeEngine::instance();
+    ThemeEngine* te = ThemeEngine::componentData();
     
     QPainter p(&pix);
     p.setPen(isSelected() ? te->textSelColor() : te->textRegColor());

@@ -159,7 +159,7 @@ void FileSaveOptionsBox::toggleFormatOptions(const QString& format)
 
 void FileSaveOptionsBox::applySettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     config->writeEntry("JPEGCompression", d->JPEGOptions->getCompressionValue());
     config->writeEntry("PNGCompression", d->PNGOptions->getCompressionValue());
@@ -171,7 +171,7 @@ void FileSaveOptionsBox::applySettings()
 
 void FileSaveOptionsBox::readSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     d->JPEGOptions->setCompressionValue( config->readNumEntry("JPEGCompression", 75) );
     d->PNGOptions->setCompressionValue( config->readNumEntry("PNGCompression", 9) );

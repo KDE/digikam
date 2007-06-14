@@ -131,7 +131,7 @@ QPixmap* PixmapManager::find(const KUrl& url)
     
     if (d->thumbJob.isNull())
     {
-        d->thumbJob = new ThumbnailJob(url, d->size, true, AlbumSettings::instance()->getExifRotate());
+        d->thumbJob = new ThumbnailJob(url, d->size, true, AlbumSettings::componentData().getExifRotate());
         
         connect(d->thumbJob, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
                 this, SLOT(slotGotThumbnail(const KUrl&, const QPixmap&)));
@@ -191,7 +191,7 @@ void PixmapManager::slotFailedThumbnail(const KUrl& url)
 
     // Wrapper around mime type of item to get the right icon.
 
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::componentData();
     if (settings)
     {
         if (settings->getImageFileFilter().upper().contains(ext.upper()) ||

@@ -200,7 +200,7 @@ ImageEffect_LensDistortion::~ImageEffect_LensDistortion()
 
 void ImageEffect_LensDistortion::readUserSettings(void)
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("lensdistortion Tool Dialog");
 
     m_mainInput->blockSignals(true);
@@ -223,7 +223,7 @@ void ImageEffect_LensDistortion::readUserSettings(void)
 
 void ImageEffect_LensDistortion::writeUserSettings(void)
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("lensdistortion Tool Dialog");
     config->writeEntry("2nd Order Distortion", m_mainInput->value());
     config->writeEntry("4th Order Distortion", m_edgeInput->value());

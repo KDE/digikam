@@ -142,14 +142,14 @@ QString IccTransform::getProfileDescription(const QString& profile)
 
 int IccTransform::getRenderingIntent()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("Color Management");
     return config->readNumEntry("RenderingIntent", 0);
 }
 
 bool IccTransform::getUseBPC()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("Color Management");
     return config->readBoolEntry("BPCAlgorithm", false);
 }

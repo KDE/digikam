@@ -98,13 +98,13 @@ using KIO::UDSEntry;
 namespace Digikam
 {
 
-DigikamApp* DigikamApp::m_instance = 0;
+DigikamApp* DigikamApp::m_componentData = 0;
 
 DigikamApp::DigikamApp()
           : KMainWindow( 0, "Digikam" )
 {
     d = new DigikamAppPriv;
-    m_instance = this;
+    m_componentData = this;
     d->config  = KGlobal::config();
 
     if(d->config->readBoolEntry("Show Splash", true) &&
@@ -116,8 +116,8 @@ DigikamApp::DigikamApp()
     d->albumSettings = new AlbumSettings();
     d->albumSettings->readSettings();
 
-    d->albumManager = AlbumManager::instance();
-    AlbumLister::instance();
+    d->albumManager = AlbumManager::componentData();
+    AlbumLister::componentData();
 
     d->cameraMediaList = new KMenu;
 
@@ -151,7 +151,7 @@ DigikamApp::DigikamApp()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Checking dcraw version"), Qt::AlignLeft, white);
 
-    KDcrawIface::DcrawBinary::instance()->checkSystem();
+    KDcrawIface::DcrawBinary::componentData().checkSystem();
 
     // Actual file scanning is done in main() - is this necessary here?
     //d->albumManager->setLibraryPath(d->albumSettings->getAlbumLibraryPath());
@@ -200,21 +200,21 @@ DigikamApp::~DigikamApp()
     delete d->albumSettings;
 
     delete d->albumManager;
-    delete AlbumLister::instance();
+    delete AlbumLister::componentData();
 
     ImageAttributesWatch::cleanUp();
     LoadingCacheInterface::cleanUp();
     KDcrawIface::DcrawBinary::cleanUp();
     AlbumThumbnailLoader::cleanUp();
 
-    m_instance = 0;
+    m_componentData = 0;
 
     delete d;
 }
 
 DigikamApp* DigikamApp::getinstance()
 {
-    return m_instance;
+    return m_componentData;
 }
 
 void DigikamApp::show()
@@ -260,7 +260,7 @@ void DigikamApp::show()
 
     // Report errors from dcraw detection.
 
-    KDcrawIface::DcrawBinary::instance()->checkReport();
+    KDcrawIface::DcrawBinary::componentData().checkReport();
 
     // Init album icon view zoom factor. 
     slotThumbSizeChanged(d->albumSettings->getDefaultIconSize());
@@ -1541,7 +1541,7 @@ void DigikamApp::slotSetupChanged()
 
     d->view->applySettings(d->albumSettings);
 
-    AlbumThumbnailLoader::instance()->setThumbnailSize(d->albumSettings->getDefaultTreeIconSize());
+    AlbumThumbnailLoader::componentData().setThumbnailSize(d->albumSettings->getDefaultTreeIconSize());
 
     if (ImageWindow::imagewindowCreated())
         ImageWindow::imagewindow()->applySettings();
@@ -1609,7 +1609,7 @@ void DigikamApp::slotToggleFullScreen()
     }
     else
     {
-        KConfig* config = KGlobal::config();
+        KSharedConfig::Ptr config = KGlobal::config();
         config->setGroup("ImageViewer Settings");
         bool fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
 
@@ -1777,8 +1777,8 @@ void DigikamApp::populateThemes()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Loading themes"), Qt::AlignLeft, white);
 
-    ThemeEngine::instance()->scanThemes();
-    QStringList themes(ThemeEngine::instance()->themeNames());
+    ThemeEngine::componentData().scanThemes();
+    QStringList themes(ThemeEngine::componentData().themeNames());
 
     d->themeMenuAction->setItems(themes);
     int index = themes.findIndex(d->albumSettings->getCurrentTheme());
@@ -1787,13 +1787,13 @@ void DigikamApp::populateThemes()
         index = themes.findIndex(i18n("Default"));
         
     d->themeMenuAction->setCurrentItem(index);
-    ThemeEngine::instance()->slotChangeTheme(d->themeMenuAction->currentText());
+    ThemeEngine::componentData().slotChangeTheme(d->themeMenuAction->currentText());
 }
 
 void DigikamApp::slotChangeTheme(const QString& theme)
 {
     d->albumSettings->setCurrentTheme(theme);
-    ThemeEngine::instance()->slotChangeTheme(theme);
+    ThemeEngine::componentData().slotChangeTheme(theme);
 }
 
 void DigikamApp::slotDatabaseRescan()

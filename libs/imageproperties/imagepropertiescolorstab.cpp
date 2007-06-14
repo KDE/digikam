@@ -380,7 +380,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     // -- read config ---------------------------------------------------------
 
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("Image Properties SideBar");
     d->tab->setCurrentPage(config->readNumEntry("ImagePropertiesColors Tab",
                            ImagePropertiesColorsTabPriv::HISTOGRAM));
@@ -399,7 +399,7 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
     // stop it before the d->image data are deleted automatically!
     d->histogramWidget->stopHistogramComputation();
 
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("Image Properties SideBar");
     config->writeEntry("ImagePropertiesColors Tab", d->tab->currentPageIndex());
     config->writeEntry("Histogram Channel", d->channelCB->currentItem());

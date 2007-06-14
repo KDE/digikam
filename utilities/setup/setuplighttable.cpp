@@ -115,7 +115,7 @@ SetupLightTable::~SetupLightTable()
 
 void SetupLightTable::readSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     QColor Black(Qt::black);
     QColor White(Qt::white);
     config->setGroup("LightTable Settings");
@@ -127,7 +127,7 @@ void SetupLightTable::readSettings()
 
 void SetupLightTable::applySettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("LightTable Settings");
     config->writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
     config->writeEntry("Auto Sync Preview", d->autoSyncPreview->isChecked());

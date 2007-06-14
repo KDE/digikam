@@ -293,7 +293,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         int tagID;
         ds >> tagID;
 
-        AlbumManager* man = AlbumManager::instance();
+        AlbumManager* man = AlbumManager::componentData();
         TAlbum* talbum    = man->findTAlbum(tagID);
 
         if(!talbum)
@@ -317,7 +317,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             if (!itemDrop)
             {
                 // move dragItem to the root
-                newParentTag = AlbumManager::instance()->findTAlbum(0);
+                newParentTag = AlbumManager::componentData().findTAlbum(0);
             }
             else
             {
@@ -326,7 +326,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             }
 
             QString errMsg;
-            if (!AlbumManager::instance()->moveTAlbum(talbum, newParentTag, errMsg))
+            if (!AlbumManager::componentData().moveTAlbum(talbum, newParentTag, errMsg))
             {
                 KMessageBox::error(this, errMsg);
             }
@@ -356,7 +356,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
 
         // all the albumids will be the same
         int albumID = albumIDs.first();
-        srcAlbum    = AlbumManager::instance()->findTAlbum(albumID);
+        srcAlbum    = AlbumManager::componentData().findTAlbum(albumID);
         if (!srcAlbum)
         {
             DWarning() << "Could not find source album of drag"
@@ -395,7 +395,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             if(id == 12)
             {
                 QString errMsg;
-                AlbumManager::instance()->updateTAlbumIcon(destAlbum, QString(),
+                AlbumManager::componentData().updateTAlbumIcon(destAlbum, QString(),
                                                            imageIDs.first(), errMsg);
             }
             return;
@@ -447,7 +447,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
                 }
             }
 
-            //ImageAttributesWatch::instance()->imagesChanged(destAlbum->id());
+            //ImageAttributesWatch::componentData().imagesChanged(destAlbum->id());
 
             emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
         }

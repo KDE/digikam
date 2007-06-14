@@ -272,7 +272,7 @@ int main(int argc, char *argv[])
 
     KApplication app;
 
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("General Settings");
     QString version = config->readEntry("Version");
 

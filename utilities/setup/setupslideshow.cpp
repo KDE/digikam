@@ -133,7 +133,7 @@ SetupSlideShow::~SetupSlideShow()
 
 void SetupSlideShow::applySettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
 
     config->setGroup("ImageViewer Settings");
     config->writeEntry("SlideShowDelay", d->delayInput->value());
@@ -150,7 +150,7 @@ void SetupSlideShow::applySettings()
 
 void SetupSlideShow::readSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
  
     config->setGroup("ImageViewer Settings");
     d->delayInput->setValue(config->readNumEntry("SlideShowDelay", 5));

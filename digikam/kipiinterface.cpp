@@ -93,7 +93,7 @@ PAlbum* DigikamImageInfo::parentAlbum()
     if (!palbum_)
     {
         KUrl u(_url.directory());
-        palbum_ = AlbumManager::instance()->findPAlbum(u);
+        palbum_ = AlbumManager::componentData().findPAlbum(u);
     }
     return palbum_;
 }
@@ -140,14 +140,14 @@ void DigikamImageInfo::setDescription( const QString& description )
             access.db()->setItemCaption(imageId, description);
         }
 
-        AlbumSettings *settings = AlbumSettings::instance();
+        AlbumSettings *settings = AlbumSettings::componentData();
         if (settings->getSaveComments())
         {
             // Store comments in image as JFIF comments, Exif comments, and Iptc Comments.
             DMetadata metadata(_url.path());
             metadata.setImageComment(description);
             metadata.applyChanges();
-            ImageAttributesWatch::instance()->fileMetadataChanged(_url);
+            ImageAttributesWatch::componentData().fileMetadataChanged(_url);
         }
     }
 }
@@ -180,7 +180,7 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
             imageId = access.db()->getImageId(p->id(), _url.filename());
             access.db()->setItemDate(imageId, time);
         }
-        AlbumManager::instance()->refreshItemHandler( _url );
+        AlbumManager::componentData().refreshItemHandler( _url );
     }
 }
 
@@ -245,7 +245,7 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
 
     // To update sidebar content. Some kipi-plugins use this way to refresh sidebar 
     // using an empty QMap(). 
-    ImageAttributesWatch::instance()->fileMetadataChanged(_url);
+    ImageAttributesWatch::componentData().fileMetadataChanged(_url);
 }
 
 void DigikamImageInfo::clearAttributes()
@@ -255,7 +255,7 @@ void DigikamImageInfo::clearAttributes()
 
 int DigikamImageInfo::angle()
 {
-    AlbumSettings *settings = AlbumSettings::instance();
+    AlbumSettings *settings = AlbumSettings::componentData();
     if (settings->getExifRotate())
     {
         DMetadata metadata(_url.path());
@@ -364,7 +364,7 @@ KUrl::List DigikamImageCollection::images()
             else if (album_->type() == Album::DATE || 
                     album_->type() == Album::SEARCH)
             {
-                AlbumItemHandler* handler = AlbumManager::instance()->getItemHandler();
+                AlbumItemHandler* handler = AlbumManager::componentData().getItemHandler();
     
                 if (handler)
                 {
@@ -383,7 +383,7 @@ KUrl::List DigikamImageCollection::images()
         }
         case SelectedItems:
         {
-            AlbumItemHandler* handler = AlbumManager::instance()->getItemHandler();
+            AlbumItemHandler* handler = AlbumManager::componentData().getItemHandler();
     
             if (handler)
             {
@@ -409,7 +409,7 @@ KUrl::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
     // get the images from the database and return the items found
 
     AlbumDB::ItemSortOrder sortOrder = AlbumDB::NoItemSorting;
-    switch (AlbumSettings::instance()->getImageSortOrder())
+    switch (AlbumSettings::componentData().getImageSortOrder())
     {
         default:
         case AlbumSettings::ByIName:
@@ -496,7 +496,7 @@ KUrl DigikamImageCollection::uploadPath()
 
 KUrl DigikamImageCollection::uploadRoot()
 {
-    return KUrl(CollectionManager::instance()->oneAlbumRootPath() + '/');
+    return KUrl(CollectionManager::componentData().oneAlbumRootPath() + '/');
 }
 
 QString DigikamImageCollection::uploadRootName()
@@ -523,7 +523,7 @@ bool DigikamImageCollection::operator==(ImageCollectionShared& imgCollection)
 DigikamKipiInterface::DigikamKipiInterface( QObject *parent, const char *name)
                     : KIPI::Interface( parent, name )
 {
-    albumManager_ = AlbumManager::instance();
+    albumManager_ = AlbumManager::componentData();
 
     connect( albumManager_, SIGNAL( signalAlbumItemsSelected( bool ) ),
              this, SLOT( slotSelectionChanged( bool ) ) );
@@ -612,7 +612,7 @@ void DigikamKipiInterface::refreshImages( const KUrl::List& urls )
 
     // Re-scan metadata from pictures. This way will update Metadata sidebar and database.
     for ( KUrl::List::Iterator it = ulist.begin() ; it != ulist.end() ; ++it )
-        ImageAttributesWatch::instance()->fileMetadataChanged(*it);
+        ImageAttributesWatch::componentData().fileMetadataChanged(*it);
     
     // Refresh preview.
     albumManager_->refreshItemHandler(urls);
@@ -658,7 +658,7 @@ bool DigikamKipiInterface::addImage( const KUrl& url, QString& errmsg )
 
 void DigikamKipiInterface::delImage( const KUrl& url )
 {
-    KUrl rootURL(CollectionManager::instance()->albumRoot(url));
+    KUrl rootURL(CollectionManager::componentData().albumRoot(url));
     if ( !rootURL.isParentOf(url) )
     {
         DWarning() << k_funcinfo << "URL not in the album library" << endl;
@@ -694,7 +694,7 @@ QString DigikamKipiInterface::fileExtensions()
     // do not save this into a local variable, as this
     // might change in the main app
 
-    AlbumSettings* s = AlbumSettings::instance();
+    AlbumSettings* s = AlbumSettings::componentData();
     return (s->getImageFileFilter() + ' ' +
             s->getMovieFileFilter() + ' ' +
             s->getAudioFileFilter() + ' ' +

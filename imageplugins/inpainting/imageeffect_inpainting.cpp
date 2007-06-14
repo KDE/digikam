@@ -221,7 +221,7 @@ void ImageEffect_InPainting_Dialog::renderingFinished()
 
 void ImageEffect_InPainting_Dialog::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("inpainting Tool Dialog");
 
     Digikam::GreycstorationSettings settings;
@@ -252,7 +252,7 @@ void ImageEffect_InPainting_Dialog::readUserSettings()
 void ImageEffect_InPainting_Dialog::writeUserSettings()
 {
     Digikam::GreycstorationSettings settings = m_settingsWidget->getSettings();
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("inpainting Tool Dialog");
     config->writeEntry("Preset", m_inpaintingTypeCB->currentItem());
     config->writeEntry("FastApprox", settings.fastApprox);

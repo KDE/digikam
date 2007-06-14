@@ -320,7 +320,7 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
         m_valueCombo = new SqueezedComboBox( m_valueBox, "albumscombo" );
         m_valueCombo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 
-        AlbumManager* aManager = AlbumManager::instance();
+        AlbumManager* aManager = AlbumManager::componentData();
         AlbumList aList = aManager->allPAlbums();
 
         m_itemsIndexIDMap.clear();
@@ -347,7 +347,7 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
         m_valueCombo = new SqueezedComboBox( m_valueBox, "tagscombo" );
         m_valueCombo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 
-        AlbumManager* aManager = AlbumManager::instance();
+        AlbumManager* aManager = AlbumManager::componentData();
         AlbumList tList = aManager->allTAlbums();
 
         m_itemsIndexIDMap.clear();

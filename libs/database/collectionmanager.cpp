@@ -55,18 +55,18 @@ public:
     SimpleLocation *location;
 };
 
-CollectionManager *CollectionManager::m_instance = 0;
-CollectionManager *CollectionManager::instance()
+CollectionManager *CollectionManager::m_componentData = 0;
+CollectionManager *CollectionManager::componentData()
 {
-    if (!m_instance)
-        m_instance = new CollectionManager;
-    return m_instance;
+    if (!m_componentData)
+        m_componentData = new CollectionManager;
+    return m_componentData;
 }
 
 void CollectionManager::cleanUp()
 {
-    delete m_instance;
-    m_instance = 0;
+    delete m_componentData;
+    m_componentData = 0;
 }
 
 //QList<CollectionLocation *> allLocations();

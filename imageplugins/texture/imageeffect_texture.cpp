@@ -146,7 +146,7 @@ void ImageEffect_Texture::renderingFinished()
 
 void ImageEffect_Texture::readUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("texture Tool Dialog");
     m_textureType->blockSignals(true);
     m_blendGain->blockSignals(true);
@@ -158,7 +158,7 @@ void ImageEffect_Texture::readUserSettings()
 
 void ImageEffect_Texture::writeUserSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("texture Tool Dialog");
     config->writeEntry("TextureType", m_textureType->currentItem());
     config->writeEntry("BlendGain", m_blendGain->value());

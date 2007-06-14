@@ -160,7 +160,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // -- Show splash at start ----------------------------
     
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     KGlobal::dirs()->addResourceType("data", KGlobal::dirs()->kde_default("data") + "digikam");
     KIconLoader::global()->addAppDir("digikam");
@@ -182,7 +182,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     if(d->splash)
         d->splash->message(i18n("Checking dcraw version"), Qt::AlignLeft, white);
 
-    KDcrawIface::DcrawBinary::instance()->checkSystem();
+    KDcrawIface::DcrawBinary::componentData().checkSystem();
 
     // -- Build the GUI -----------------------------------
 
@@ -335,7 +335,7 @@ void ShowFoto::show()
 
     // Report errors from ICC repository path.
 
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     if(!d->validIccPath)
     {
         QString message = i18n("<qt><p>The ICC profile path seems to be invalid.</p>"
@@ -362,7 +362,7 @@ void ShowFoto::show()
 
     // Report errors from dcraw detection.
 
-    KDcrawIface::DcrawBinary::instance()->checkReport();  
+    KDcrawIface::DcrawBinary::componentData().checkReport();  
 }
 
 void ShowFoto::setupConnections()
@@ -384,7 +384,7 @@ void ShowFoto::setupConnections()
 
 void ShowFoto::setupUserArea()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
 
     QWidget* widget = new QWidget(this);
@@ -483,7 +483,7 @@ void ShowFoto::readSettings()
 {
     readStandardSettings();
     
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     
     d->showBarAction->setChecked(config->readBoolEntry("Show Thumbnails", true));
@@ -503,7 +503,7 @@ void ShowFoto::saveSettings()
 {
     saveStandardSettings();
     
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
     
     config->writeEntry("Last Opened Directory", d->lastOpenedDirectory.path() );
@@ -519,7 +519,7 @@ void ShowFoto::applySettings()
 {
     applyStandardSettings();
 
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
 
     m_bgColor = config->readColorEntry("BackgroundColor", &Qt::black);
@@ -576,7 +576,7 @@ void ShowFoto::slotOpenFile()
     QString allPictures = patternList[0];
     
     // Add other files format witch are missing to All Pictures" type mime provided by KDE and remplace current.
-    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
+    if (KDcrawIface::DcrawBinary::componentData().versionIsRight())
     {
         allPictures.insert(allPictures.find("|"), QString(raw_file_extentions) + QString(" *.JPE *.TIF"));
         patternList.remove(patternList[0]);
@@ -586,7 +586,7 @@ void ShowFoto::slotOpenFile()
     // Added RAW file formats supported by dcraw program like a type mime. 
     // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete 
     // or unavailable(dcraw_0)(see file #121242 in B.K.O).
-    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
+    if (KDcrawIface::DcrawBinary::componentData().versionIsRight())
     {
         patternList.append(i18n("\n%1|Camera RAW files").arg(QString(raw_file_extentions)));
     }
@@ -1152,7 +1152,7 @@ void ShowFoto::slotContextMenu()
 
 void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& settings)
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
 
     settings.exifRotate = config->readBoolEntry("EXIF Rotate", true);

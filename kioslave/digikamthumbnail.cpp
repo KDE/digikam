@@ -52,7 +52,7 @@
 
 #include <kdebug.h>
 #include <kurl.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kimageio.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -609,7 +609,7 @@ extern "C"
     DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
         KLocale::setMainCatalog("digikam");
-        KInstance instance( "kio_digikamthumbnail" );
+        KComponentData componentData( "kio_digikamthumbnail" );
         ( void ) KGlobal::locale();
 
         if (argc != 4) 

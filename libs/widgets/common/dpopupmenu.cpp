@@ -87,7 +87,7 @@ QRect DPopupMenu::sideImageRect() const
 
 QColor DPopupMenu::calcPixmapColor()
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("WM");
     QColor color = QApplication::palette().active().highlight();
 //     QColor activeTitle = QApplication::palette().active().background();

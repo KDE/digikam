@@ -444,7 +444,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     // -------------------------------------------------------------------------
 
     QPushButton *helpButton = actionButton( Help );
-    d->helpMenu = new KHelpMenu(this, kapp->aboutData(), false);
+    d->helpMenu = new KHelpMenu(this, KGlobal::mainComponent().aboutData(), false);
     d->helpMenu->menu()->insertItem(SmallIcon("camera"), i18n("Camera Information"), 
                                     this, SLOT(slotInformations()), 0, CAMERA_INFO_MENU_ID, 0);
     helpButton->setPopup( d->helpMenu->menu() );
@@ -578,7 +578,7 @@ CameraUI::~CameraUI()
 
 void CameraUI::readSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("Camera Settings");
     d->advBox->setCurrentIndex(config->readNumEntry("Settings Tab", CameraUIPriv::RENAMEFILEPAGE));
     d->autoRotateCheck->setChecked(config->readBoolEntry("AutoRotate", true));
@@ -610,7 +610,7 @@ void CameraUI::saveSettings()
 {
     saveDialogSize("Camera Settings");
 
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("Camera Settings");
     config->writeEntry("Settings Tab", d->advBox->currentIndex());
     config->writeEntry("AutoRotate", d->autoRotateCheck->isChecked());
@@ -719,7 +719,7 @@ void CameraUI::finishDialog()
 
     if (d->view->itemsDownloaded() > 0)
     {
-        CameraList* clist = CameraList::instance();
+        CameraList* clist = CameraList::componentData();
         if (clist) 
             clist->changeCameraAccessTime(d->cameraTitle, QDateTime::QDateTime::currentDateTime());
     }
@@ -993,7 +993,7 @@ void CameraUI::slotUpload()
 
     DDebug () << "fileformats=" << fileformats << endl;   
 
-    KUrl::List urls = KFileDialog::getOpenURLs(CollectionManager::instance()->oneAlbumRootPath(),
+    KUrl::List urls = KFileDialog::getOpenURLs(CollectionManager::componentData().oneAlbumRootPath(),
                                                fileformats, this, i18n("Select Image to Upload"));
     if (!urls.isEmpty())
         slotUploadItems(urls);
@@ -1069,7 +1069,7 @@ void CameraUI::slotDownload(bool onlySelected)
 {
     // -- Get the destination album from digiKam library ---------------
 
-    AlbumManager* man = AlbumManager::instance();
+    AlbumManager* man = AlbumManager::componentData();
 
     Album* album = man->currentAlbum();
     if (album && album->type() != Album::PHYSICAL)
@@ -1127,7 +1127,7 @@ void CameraUI::slotDownload(bool onlySelected)
     downloadSettings.convertJpeg       = convertLosslessJpegFiles();
     downloadSettings.losslessFormat    = losslessFormat();
     
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::componentData();
     if (settings)
     {
         downloadSettings.author      = settings->getIptcAuthor();
@@ -1581,7 +1581,7 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& name,
 
     // looks like the directory does not exist, try to create it
 
-    AlbumManager* aman = AlbumManager::instance();
+    AlbumManager* aman = AlbumManager::componentData();
     PAlbum* parent     = aman->findPAlbum(parentURL);
     if (!parent)
     {
@@ -1589,14 +1589,14 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& name,
                  .arg(parentURL.path());
         return false;
     }
-    QString albumRootPath = CollectionManager::instance()->albumRootPath(parentURL);
+    QString albumRootPath = CollectionManager::componentData().albumRootPath(parentURL);
 
     return aman->createPAlbum(parent, albumRootPath, name, QString(""), date, QString(""), errMsg);
 }
 
 void CameraUI::addFileExtension(const QString& ext)
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* settings = AlbumSettings::componentData();
     if (!settings)
         return;
 

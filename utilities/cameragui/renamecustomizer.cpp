@@ -469,7 +469,7 @@ void RenameCustomizer::slotDateTimeButtonClicked()
 
 void RenameCustomizer::readSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     
     config->setGroup("Camera Settings");
     bool def         = config->readBoolEntry("Rename Use Default", true);
@@ -512,7 +512,7 @@ void RenameCustomizer::readSettings()
 
 void RenameCustomizer::saveSettings()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
 
     config->setGroup("Camera Settings");
     config->writeEntry("Rename Use Default", d->renameDefault->isChecked());

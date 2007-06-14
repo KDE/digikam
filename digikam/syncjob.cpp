@@ -171,7 +171,7 @@ QPixmap SyncJob::getTagThumbnailPriv(TAlbum *album)
         delete thumbnail_;
     thumbnail_ = new QPixmap;
 
-    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
 
     if (!loader->getTagThumbnail(album, *thumbnail_))
     {
@@ -228,7 +228,7 @@ QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
         ThumbnailJob *job = new ThumbnailJob(name,
                                              ThumbnailSize::Tiny,
                                              false,
-                                             AlbumSettings::instance()->getExifRotate());
+                                             AlbumSettings::componentData().getExifRotate());
         connect(job,
                 SIGNAL(signalThumbnail(const KUrl&,
                                        const QPixmap&)),
