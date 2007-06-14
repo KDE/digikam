@@ -1,28 +1,16 @@
-ADD_SUBDIRECTORY( loaders ) 
-ADD_SUBDIRECTORY( filters ) 
 
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+add_subdirectory( loaders )
+add_subdirectory( filters )
+
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
 
-SET(dimg_STAT_SRCS
-   dimg.cpp
-   dimgscale.cpp
-   dcolor.cpp
-   dcolorcomposer.cpp
-   ddebug.cpp
-   fastscale.cpp
-   )
-
-KDE3_AUTOMOC(${dimg_STAT_SRCS})
-
-ADD_LIBRARY(dimg STATIC ${dimg_STAT_SRCS})
-
 
 ########### install files ###############
 
-INSTALL_FILES( /include/digikam FILES  dimg.h dcolor.h dcolorpixelaccess.h dcolorcomposer.h                           dcolorblend.h ddebug.h )
+install( FILES  dimg.h dcolor.h dcolorpixelaccess.h dcolorcomposer.h                           dcolorblend.h ddebug.h DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
 
 
 

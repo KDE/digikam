@@ -1,23 +1,8 @@
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/jpegutils ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/jpegutils ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
-
-SET(threadimageio_STAT_SRCS
-   loadsavethread.cpp
-   managedloadsavethread.cpp
-   sharedloadsavethread.cpp
-   previewloadthread.cpp
-   loadingdescription.cpp
-   loadsavetask.cpp
-   previewtask.cpp
-   loadingcache.cpp
-   loadingcacheinterface.cpp
-   )
-
-KDE3_AUTOMOC(${threadimageio_STAT_SRCS})
-
-ADD_LIBRARY(threadimageio STATIC ${threadimageio_STAT_SRCS})
 
 
 ########### install files ###############

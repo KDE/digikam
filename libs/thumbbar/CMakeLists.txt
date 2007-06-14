@@ -1,21 +1,13 @@
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
 
-SET(thumbbar_STAT_SRCS
-   thumbbar.cpp
-   thumbnailjob.cpp
-   )
-
-KDE3_AUTOMOC(${thumbbar_STAT_SRCS})
-
-ADD_LIBRARY(thumbbar STATIC ${thumbbar_STAT_SRCS})
-
 
 ########### install files ###############
 
-INSTALL_FILES( /include/digikam FILES  thumbbar.h  )
+install( FILES  thumbbar.h  DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
 
 
 

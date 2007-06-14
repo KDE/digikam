@@ -1,10 +1,11 @@
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### install files ###############
 
-INSTALL_FILES( /share/apps/konqueror/servicemenus FILES  digikam-download.desktop digikam-gphoto2-camera.desktop digikam-mount-and-download.desktop )
-INSTALL_FILES(  FILES  digikam-camera )
+install( FILES  digikam-download.desktop digikam-gphoto2-camera.desktop digikam-mount-and-download.desktop DESTINATION ${DATA_INSTALL_DIR}/konqueror/servicemenus )
+install( FILES  digikam-camera DESTINATION  )
 
 
 

@@ -1,46 +1,11 @@
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_SOURCE_DIR}/digikam/utilities/batch ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_SOURCE_DIR}/digikam/utilities/batch ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
 
-SET(setup_STAT_SRCS
-   gpiface.cpp
-   cameraselection.cpp
-   setupcamera.cpp
-   setupmime.cpp
-   setupplugins.cpp
-   setupidentity.cpp
-   setupgeneral.cpp
-   setup.cpp
-   setupcollections.cpp
-   setupmetadata.cpp
-   setupeditor.cpp
-   setupmisc.cpp
-   setupicc.cpp
-   setupiofiles.cpp
-   setupdcraw.cpp
-   setupslideshow.cpp
-   setuptooltip.cpp
-   setuplighttable.cpp
-   )
-
-KDE3_AUTOMOC(${setup_STAT_SRCS})
-
-ADD_LIBRARY(setup STATIC ${setup_STAT_SRCS})
-
 
 ########### next target ###############
-
-SET(showfotosetup_STAT_SRCS
-   setupiofiles.cpp
-   setupdcraw.cpp
-   setupicc.cpp
-   setupslideshow.cpp
-   )
-
-KDE3_AUTOMOC(${showfotosetup_STAT_SRCS})
-
-ADD_LIBRARY(showfotosetup STATIC ${showfotosetup_STAT_SRCS})
 
 
 ########### install files ###############

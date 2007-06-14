@@ -1,17 +1,8 @@
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_SOURCE_DIR}/digikam/ ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_SOURCE_DIR}/digikam/ ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
-
-SET(themeengine_STAT_SRCS
-   theme.cpp
-   themeengine.cpp
-   texture.cpp
-   )
-
-KDE3_AUTOMOC(${themeengine_STAT_SRCS})
-
-ADD_LIBRARY(themeengine STATIC ${themeengine_STAT_SRCS})
 
 
 ########### install files ###############

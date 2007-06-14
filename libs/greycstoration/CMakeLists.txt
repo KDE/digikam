@@ -1,21 +1,13 @@
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
 
-SET(greycstoration_STAT_SRCS
-   greycstorationiface.cpp
-   greycstorationwidget.cpp
-   )
-
-KDE3_AUTOMOC(${greycstoration_STAT_SRCS})
-
-ADD_LIBRARY(greycstoration STATIC ${greycstoration_STAT_SRCS})
-
 
 ########### install files ###############
 
-INSTALL_FILES( /include/digikam FILES  greycstorationiface.h greycstorationwidget.h greycstorationsettings.h  )
+install( FILES  greycstorationiface.h greycstorationwidget.h greycstorationsettings.h  DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
 
 
 

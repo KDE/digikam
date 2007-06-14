@@ -1,8 +1,9 @@
-ADD_SUBDIRECTORY( canvas ) 
-ADD_SUBDIRECTORY( tools ) 
-ADD_SUBDIRECTORY( editor ) 
 
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+add_subdirectory( canvas )
+add_subdirectory( tools )
+add_subdirectory( editor )
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### install files ###############

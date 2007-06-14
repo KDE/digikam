@@ -1,14 +1,15 @@
-ADD_SUBDIRECTORY( imageeditor ) 
-ADD_SUBDIRECTORY( splashscreen ) 
-ADD_SUBDIRECTORY( setup ) 
-ADD_SUBDIRECTORY( cameragui ) 
-ADD_SUBDIRECTORY( hotplug ) 
-ADD_SUBDIRECTORY( scripts ) 
-ADD_SUBDIRECTORY( batch ) 
-ADD_SUBDIRECTORY( slideshow ) 
-ADD_SUBDIRECTORY( lighttable ) 
 
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+add_subdirectory( imageeditor )
+add_subdirectory( splashscreen )
+add_subdirectory( setup )
+add_subdirectory( cameragui )
+add_subdirectory( hotplug )
+add_subdirectory( scripts )
+add_subdirectory( batch )
+add_subdirectory( slideshow )
+add_subdirectory( lighttable )
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### install files ###############

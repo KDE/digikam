@@ -1,20 +1,13 @@
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
 
-SET(splashscreen_STAT_SRCS
-   splashscreen.cpp
-   )
-
-KDE3_AUTOMOC(${splashscreen_STAT_SRCS})
-
-ADD_LIBRARY(splashscreen STATIC ${splashscreen_STAT_SRCS})
-
 
 ########### install files ###############
 
-INSTALL_FILES( /share/apps/digikam FILES  digikam-splash.png )
+install( FILES  digikam-splash.png DESTINATION ${DATA_INSTALL_DIR}/digikam )
 
 
 

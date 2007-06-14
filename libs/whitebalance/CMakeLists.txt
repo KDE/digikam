@@ -1,20 +1,13 @@
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
 
-SET(whitebalance_STAT_SRCS
-   whitebalance.cpp
-   )
-
-KDE3_AUTOMOC(${whitebalance_STAT_SRCS})
-
-ADD_LIBRARY(whitebalance STATIC ${whitebalance_STAT_SRCS})
-
 
 ########### install files ###############
 
-INSTALL_FILES( /include/digikam FILES  whitebalance.h  )
+install( FILES  whitebalance.h  DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
 
 
 

@@ -1,10 +1,11 @@
-ADD_SUBDIRECTORY( profiles ) 
-ADD_SUBDIRECTORY( themes ) 
-ADD_SUBDIRECTORY( icons ) 
-ADD_SUBDIRECTORY( pics ) 
-ADD_SUBDIRECTORY( about ) 
 
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+add_subdirectory( profiles )
+add_subdirectory( themes )
+add_subdirectory( icons )
+add_subdirectory( pics )
+add_subdirectory( about )
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### install files ###############

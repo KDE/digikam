@@ -1,11 +1,12 @@
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### install files ###############
 
-INSTALL_FILES( /share/apps/showfoto/icons FILES  )
+install( FILES  DESTINATION ${DATA_INSTALL_DIR}/showfoto/icons )
 
-KDE3_INSTALL_ICONS( hicolor )
+kde4_install_icons( ${ICON_INSTALL_DIR} )
 
 
 

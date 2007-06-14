@@ -1,29 +1,8 @@
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor ${CMAKE_SOURCE_DIR}/digikam/libs/jpegutils ${CMAKE_SOURCE_DIR}/digikam/libs/themeengine ${CMAKE_SOURCE_DIR}/digikam/libs/imageproperties ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/database ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor ${CMAKE_SOURCE_DIR}/digikam/libs/jpegutils ${CMAKE_SOURCE_DIR}/digikam/libs/themeengine ${CMAKE_SOURCE_DIR}/digikam/libs/imageproperties ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/database ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
-
-SET(cameragui_STAT_SRCS
-   gpcamera.cpp
-   cameraui.cpp
-   cameraiconview.cpp
-   cameraiconitem.cpp
-   cameracontroller.cpp
-   camerafolderview.cpp
-   camerafolderitem.cpp
-   animwidget.cpp
-   renamecustomizer.cpp
-   dkcamera.cpp
-   umscamera.cpp
-   gpiteminfo.cpp
-   camerainfodialog.cpp
-   albumselectdialog.cpp
-   camerafolderdialog.cpp
-   )
-
-KDE3_AUTOMOC(${cameragui_STAT_SRCS})
-
-ADD_LIBRARY(cameragui STATIC ${cameragui_STAT_SRCS})
 
 
 ########### install files ###############

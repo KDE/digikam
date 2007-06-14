@@ -1,40 +1,13 @@
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/debug ${CMAKE_SOURCE_DIR}/digikam/sqlite ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/debug ${CMAKE_SOURCE_DIR}/digikam/sqlite ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
 
-SET(database_STAT_SRCS
-   albumdb.cpp
-   albumdb_sqlite2.cpp
-   collectionscanner.cpp
-   collectionmanager.cpp
-   collectionlocation.cpp
-   databaseaccess.cpp
-   databaseattributeswatch.cpp
-   databasebackend.cpp
-   databaseparameters.cpp
-   databasetransaction.cpp
-   databaseurl.cpp
-   imageinfo.cpp
-   imageinfolist.cpp
-   imageinfocache.cpp
-   imagelister.cpp
-   imagelisterreceiver.cpp
-   imagequerybuilder.cpp
-   namefilter.cpp
-   schemaupdater.cpp
-   backendsqlite3.cpp
-   upgradedb_sqlite2tosqlite3.cpp
-   )
-
-KDE3_AUTOMOC(${database_STAT_SRCS})
-
-ADD_LIBRARY(database STATIC ${database_STAT_SRCS})
-
 
 ########### install files ###############
 
-INSTALL_FILES( /include/digikam FILES  albumdb.h )
+install( FILES  albumdb.h DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
 
 
 

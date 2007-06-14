@@ -1,42 +1,16 @@
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/metadata ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/iccprofiles ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/imageplugins ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/metadata ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/iccprofiles ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/imageplugins ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
 
-SET(dialog_STAT_SRCS
-   ctrlpaneldlg.cpp
-   imagedlgbase.cpp
-   imageguidedlg.cpp
-   iccprofileinfodlg.cpp
-   deletedialog.cpp
-   dprogressdlg.cpp
-   )
-
-KDE3_AUTOMOC(${dialog_STAT_SRCS})
-
-SET( dialog_UI
-   deletedialogbase.ui
-   )
-
-KDE3_ADD_UI_FILES(dialog_STAT_SRCS ${dialog_UI} )
-
-ADD_LIBRARY(dialog STATIC ${dialog_STAT_SRCS})
-
 
 ########### next target ###############
-
-SET(dialogshowfoto_STAT_SRCS
-   iccprofileinfodlg.cpp
-   )
-
-KDE3_AUTOMOC(${dialogshowfoto_STAT_SRCS})
-
-ADD_LIBRARY(dialogshowfoto STATIC ${dialogshowfoto_STAT_SRCS})
 
 
 ########### install files ###############
 
-INSTALL_FILES( /include/digikam FILES  ctrlpaneldlg.h imagedlgbase.h imageguidedlg.h  	                     iccprofileinfodlg.h dprogressdlg.h   )
+install( FILES  ctrlpaneldlg.h imagedlgbase.h imageguidedlg.h  	                     iccprofileinfodlg.h dprogressdlg.h   DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
 
 
 

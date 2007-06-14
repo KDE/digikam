@@ -1,25 +1,33 @@
-project( digikam )
 
-#FIND_PACKAGE( Kexiv2 REQUIRED )
-#FIND_PACKAGE( Kdcraw REQUIRED )
-#FIND_PACKAGE( Kipi REQUIRED )
-FIND_PACKAGE( JPEG REQUIRED )
-FIND_PACKAGE( PNG REQUIRED )
-FIND_PACKAGE( TIFF REQUIRED )
+find_package(KDE4 REQUIRED)
 
-SET( CMAKE_VERBOSE_MAKEFILE ON )
+set(CMAKE_VERBOSE_MAKEFILE ON)
 
-ADD_SUBDIRECTORY( sqlite ) 
-#ADD_SUBDIRECTORY( libs ) 
-#ADD_SUBDIRECTORY( utilities ) 
-#ADD_SUBDIRECTORY( digikam ) 
-#ADD_SUBDIRECTORY( data ) 
-#ADD_SUBDIRECTORY( kioslave ) 
-#ADD_SUBDIRECTORY( showfoto ) 
-#ADD_SUBDIRECTORY( imageplugins ) 
-#ADD_SUBDIRECTORY( themedesigner ) 
+add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
-INSTALL( FILES tips DESTINATION ${DATA_INSTALL_DIR}/digikam )
+
+include(ConvenienceLibs.cmake)
+
+include(ManualStuff.cmake)
+
+include(ConfigureChecks.cmake)
+
+add_subdirectory( sqlite )
+add_subdirectory( sqlite )
+add_subdirectory( libs )
+add_subdirectory( utilities )
+add_subdirectory( digikam )
+add_subdirectory( showfoto )
+add_subdirectory( data )
+add_subdirectory( kioslave )
+add_subdirectory( imageplugins )
+add_subdirectory( themedesigner )
+
+########### install files ###############
+
+install( FILES  tips DESTINATION ${DATA_INSTALL_DIR}/digikam )
+
+kde4_create_doxygen_docs(  )
 
 
 

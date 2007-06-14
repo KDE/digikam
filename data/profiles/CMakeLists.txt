@@ -1,9 +1,10 @@
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### install files ###############
 
-INSTALL_FILES( /share/apps/digikam/profiles FILES  adobergb.icm applergb.icm srgb.icm srgb-d65.icm widegamut.icm prophoto.icm  )
+install( FILES  adobergb.icm applergb.icm srgb.icm srgb-d65.icm widegamut.icm prophoto.icm  DESTINATION ${DATA_INSTALL_DIR}/digikam/profiles )
 
 
 

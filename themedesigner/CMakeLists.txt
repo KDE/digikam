@@ -1,28 +1,28 @@
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/themeengine ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/imageproperties ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/themeengine ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/imageproperties ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
 
-SET(digikamthemedesigner_SRCS
-   main.cpp
-   mainwindow.cpp
-   themedicongroupitem.cpp
-   themediconitem.cpp
-   themediconview.cpp
-   )
+set(digikamthemedesigner_SRCS 
+   main.cpp 
+   mainwindow.cpp 
+   themedicongroupitem.cpp 
+   themediconitem.cpp 
+   themediconview.cpp )
 
-KDE3_AUTOMOC(${digikamthemedesigner_SRCS})
+kde4_automoc(${digikamthemedesigner_SRCS})
 
-KDE3_ADD_EXECUTABLE(digikamthemedesigner ${digikamthemedesigner_SRCS})
+kde4_add_executable(digikamthemedesigner ${digikamthemedesigner_SRCS})
 
-TARGET_LINK_LIBRARIES(digikamthemedesigner  ${QT_AND_KDECORE_LIBS} kdeui digikam kutils )
+target_link_libraries(digikamthemedesigner  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} digikam ${KDE4_KUTILS_LIBS} )
 
-INSTALL( TARGETS digikamthemedesigner DESTINATION bin)
+install(TARGETS digikamthemedesigner DESTINATION ${BIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-INSTALL_FILES( /share/applications/kde FILES  digikamthemedesigner.desktop )
+install( FILES  digikamthemedesigner.desktop DESTINATION ${XDG_APPS_DIR} )
 
 
 

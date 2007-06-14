@@ -1,26 +1,8 @@
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
-
-SET(lprof_STAT_SRCS
-   cmshull.cpp
-   cmslm.cpp
-   cmslnr.cpp
-   cmsmatn.cpp
-   cmsmkmsh.cpp
-   cmsmntr.cpp
-   cmsoutl.cpp
-   cmspcoll.cpp
-   cmsprf.cpp
-   cmsreg.cpp
-   cmsscn.cpp
-   cmssheet.cpp
-   )
-
-KDE3_AUTOMOC(${lprof_STAT_SRCS})
-
-ADD_LIBRARY(lprof STATIC ${lprof_STAT_SRCS})
 
 
 ########### install files ###############

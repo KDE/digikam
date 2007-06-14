@@ -1,17 +1,8 @@
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/utilities/setup ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/utilities/setup ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
-
-SET(setup_STAT_SRCS
-   setup.cpp
-   setupeditor.cpp
-   setuptooltip.cpp
-   )
-
-KDE3_AUTOMOC(${setup_STAT_SRCS})
-
-ADD_LIBRARY(setup STATIC ${setup_STAT_SRCS})
 
 
 ########### install files ###############

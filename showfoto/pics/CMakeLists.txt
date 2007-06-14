@@ -1,9 +1,10 @@
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### install files ###############
 
-INSTALL_FILES( /share/apps/showfoto FILES  showfoto-splash.png menusidepixmap.png  )
+install( FILES  showfoto-splash.png menusidepixmap.png  DESTINATION ${DATA_INSTALL_DIR}/showfoto )
 
 
 

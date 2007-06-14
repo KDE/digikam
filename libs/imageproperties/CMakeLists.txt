@@ -1,51 +1,14 @@
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram ${CMAKE_SOURCE_DIR}/digikam/libs/dcraw ${CMAKE_SOURCE_DIR}/digikam/libs/themeengine ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/iccprofiles ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/metadata ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/threadimageio ${CMAKE_SOURCE_DIR}/digikam/libs/database ${CMAKE_SOURCE_DIR}/digikam/utilities/cameragui ${CMAKE_SOURCE_DIR}/digikam/utilities/batch ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR}  )
+
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram ${CMAKE_SOURCE_DIR}/digikam/libs/dcraw ${CMAKE_SOURCE_DIR}/digikam/libs/themeengine ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/iccprofiles ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/metadata ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/threadimageio ${CMAKE_SOURCE_DIR}/digikam/libs/database ${CMAKE_SOURCE_DIR}/digikam/utilities/cameragui ${CMAKE_SOURCE_DIR}/digikam/utilities/batch ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
 
-SET(imagepropertiesshowfoto_STAT_SRCS
-   imagepropertiessidebar.cpp
-   navigatebarwidget.cpp
-   imagepropertiesmetadatatab.cpp
-   imagepropertiescolorstab.cpp
-   imagepropertiestab.cpp
-   navigatebartab.cpp
-   )
-
-KDE3_AUTOMOC(${imagepropertiesshowfoto_STAT_SRCS})
-
-ADD_LIBRARY(imagepropertiesshowfoto STATIC ${imagepropertiesshowfoto_STAT_SRCS})
-
 
 ########### next target ###############
 
-SET(imagepropertiesdigikam_STAT_SRCS
-   imagedescedittab.cpp
-   imagepropertiessidebar.cpp
-   imagepropertiessidebardb.cpp
-   talbumlistview.cpp
-   imagepropertiesmetadatatab.cpp
-   imagepropertiescolorstab.cpp
-   navigatebarwidget.cpp
-   imagepropertiestab.cpp
-   navigatebartab.cpp
-   )
-
-KDE3_AUTOMOC(${imagepropertiesdigikam_STAT_SRCS})
-
-ADD_LIBRARY(imagepropertiesdigikam STATIC ${imagepropertiesdigikam_STAT_SRCS})
-
 
 ########### next target ###############
-
-SET(imagepropertiescamgui_STAT_SRCS
-   imagepropertiessidebarcamgui.cpp
-   cameraitempropertiestab.cpp
-   )
-
-KDE3_AUTOMOC(${imagepropertiescamgui_STAT_SRCS})
-
-ADD_LIBRARY(imagepropertiescamgui STATIC ${imagepropertiescamgui_STAT_SRCS})
 
 
 ########### install files ###############
