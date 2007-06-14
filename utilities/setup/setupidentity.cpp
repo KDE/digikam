@@ -27,7 +27,7 @@
 #include <q3hgroupbox.h>
 #include <q3groupbox.h>
 #include <qlabel.h>
-#include <q3whatsthis.h>
+
 #include <qvalidator.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
@@ -90,7 +90,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label1->setBuddy(d->authorEdit);
     grid->addMultiCellWidget(label1, 0, 0, 0, 0);
     grid->addMultiCellWidget(d->authorEdit, 0, 0, 1, 1);
-    Q3WhatsThis::add( d->authorEdit, i18n("<p>Set the photographer name. This field is limited "
+    d->authorEdit->setWhatsThis( i18n("<p>Set the photographer name. This field is limited "
                                          "to 32 ASCII characters."));
 
     QLabel *label2 = new QLabel(i18n("Author Title:"), photographerIdGroup);
@@ -100,7 +100,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label2->setBuddy(d->authorTitleEdit);
     grid->addMultiCellWidget(label2, 1, 1, 0, 0);
     grid->addMultiCellWidget(d->authorTitleEdit, 1, 1, 1, 1);
-    Q3WhatsThis::add( d->authorTitleEdit, i18n("<p>Set the photographer title. This field is limited "
+    d->authorTitleEdit->setWhatsThis( i18n("<p>Set the photographer title. This field is limited "
                                               "to 32 ASCII characters."));
         
     // --------------------------------------------------------
@@ -115,7 +115,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label3->setBuddy(d->creditEdit);
     grid2->addMultiCellWidget(label3, 0, 0, 0, 0);
     grid2->addMultiCellWidget(d->creditEdit, 0, 0, 1, 1);
-    Q3WhatsThis::add( d->creditEdit, i18n("<p>Set the default provider identification of the picture, "
+    d->creditEdit->setWhatsThis( i18n("<p>Set the default provider identification of the picture, "
                                          "not necessarily the owner/creator. This field is limited "
                                          "to 32 ASCII characters."));
 
@@ -126,7 +126,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label4->setBuddy(d->sourceEdit);
     grid2->addMultiCellWidget(label4, 1, 1, 0, 0);
     grid2->addMultiCellWidget(d->sourceEdit, 1, 1, 1, 1);
-    Q3WhatsThis::add( d->sourceEdit, i18n("<p>Set the default original owner identification of the intellectual "
+    d->sourceEdit->setWhatsThis( i18n("<p>Set the default original owner identification of the intellectual "
                                          "content of the picture. This could be an agency, a member of an agency or "
                                          "an individual photographer name. This field is limited "
                                          "to 32 ASCII characters."));
@@ -138,7 +138,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label5->setBuddy(d->copyrightEdit);
     grid2->addMultiCellWidget(label5, 2, 2, 0, 0);
     grid2->addMultiCellWidget(d->copyrightEdit, 2, 2, 1, 1);
-    Q3WhatsThis::add( d->copyrightEdit, i18n("<p>Set the default copyright notice of the pictures. "
+    d->copyrightEdit->setWhatsThis( i18n("<p>Set the default copyright notice of the pictures. "
                                             "This field is limited to 128 ASCII characters."));
 
     // --------------------------------------------------------

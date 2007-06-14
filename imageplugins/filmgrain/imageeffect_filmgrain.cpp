@@ -26,7 +26,7 @@
 // Qt includes.
 
 #include <qlabel.h>
-#include <q3whatsthis.h>
+
 #include <qlcdnumber.h>
 #include <qslider.h>
 #include <qlayout.h>
@@ -100,8 +100,8 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
     m_sensibilityLCDValue->display( QString::number(2400) );
     whatsThis = i18n("<p>Set here the film ISO-sensitivity to use for simulating the film graininess.");
 
-    Q3WhatsThis::add( m_sensibilityLCDValue, whatsThis);
-    Q3WhatsThis::add( m_sensibilitySlider, whatsThis);
+    m_sensibilityLCDValue->setWhatsThis( whatsThis);
+    m_sensibilitySlider->setWhatsThis( whatsThis);
 
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
     gridSettings->addMultiCellWidget(m_sensibilitySlider, 1, 1, 0, 0);

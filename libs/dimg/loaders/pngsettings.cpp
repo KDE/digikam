@@ -26,7 +26,7 @@
 #include <qstring.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <Q3GridLayout>
 
@@ -73,7 +73,7 @@ PNGSettings::PNGSettings(QWidget *parent)
     d->PNGcompression->setRange(1, 9, 1, true );
     d->labelPNGcompression = new QLabel(i18n("PNG compression:"), this);
 
-    Q3WhatsThis::add(d->PNGcompression, i18n("<p>The compression value for PNG images:<p>"
+    d->PNGcompression->setWhatsThis( i18n("<p>The compression value for PNG images:<p>"
                                             "<b>1</b>: low compression (large file size but "
                                             "short compression duration - default)<p>"
                                             "<b>5</b>: medium compression<p>"

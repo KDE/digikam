@@ -31,7 +31,7 @@
 #include <q3groupbox.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
-#include <q3whatsthis.h>
+
 #include <qtooltip.h>
 #include <q3hbox.h>
 //Added by qt3to4:
@@ -112,18 +112,18 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     d->saveTagsIptcBox = new QCheckBox(IptcGroup);
     d->saveTagsIptcBox->setText(i18n("&Save image tags as \"Keywords\" tag"));
-    Q3WhatsThis::add( d->saveTagsIptcBox, i18n("<p>Turn this option on to store the image tags "
+    d->saveTagsIptcBox->setWhatsThis( i18n("<p>Turn this option on to store the image tags "
                                               "in the IPTC <i>Keywords</i> tag."));
   
     d->savePhotographerIdIptcBox = new QCheckBox(IptcGroup);
     d->savePhotographerIdIptcBox->setText(i18n("&Save default photographer identity as tags"));
-    Q3WhatsThis::add( d->savePhotographerIdIptcBox, i18n("<p>Turn this option on to store the default "
+    d->savePhotographerIdIptcBox->setWhatsThis( i18n("<p>Turn this option on to store the default "
                                                         "photographer identity into the IPTC tags. You can set this "
                                                         "value in the Identity setup page."));
 
     d->saveCreditsIptcBox = new QCheckBox(IptcGroup);
     d->saveCreditsIptcBox->setText(i18n("&Save default credit and copyright identity as tags"));
-    Q3WhatsThis::add( d->saveCreditsIptcBox, i18n("<p>Turn this option on to store the default "
+    d->saveCreditsIptcBox->setWhatsThis( i18n("<p>Turn this option on to store the default "
                                                  "credit and copyright identity into the IPTC tags. "
                                                  "You can set this value in the Identity setup page."));
                                                            
@@ -135,17 +135,17 @@ SetupMetadata::SetupMetadata(QWidget* parent )
   
     d->saveCommentsBox = new QCheckBox(commonGroup);
     d->saveCommentsBox->setText(i18n("&Save image comments as embedded text"));
-    Q3WhatsThis::add( d->saveCommentsBox, i18n("<p>Turn this option on to store image comments "
+    d->saveCommentsBox->setWhatsThis( i18n("<p>Turn this option on to store image comments "
                                               "into the JFIF section, EXIF tag, and IPTC tag."));
 
     d->saveDateTimeBox = new QCheckBox(commonGroup);
     d->saveDateTimeBox->setText(i18n("&Save image timestamp as tags"));
-    Q3WhatsThis::add( d->saveDateTimeBox, i18n("<p>Turn this option on to store the image date and time "
+    d->saveDateTimeBox->setWhatsThis( i18n("<p>Turn this option on to store the image date and time "
                                               "into the EXIF and IPTC tags."));
 
     d->saveRatingBox = new QCheckBox(commonGroup);
     d->saveRatingBox->setText(i18n("&Save image rating as tags"));
-    Q3WhatsThis::add( d->saveRatingBox, i18n("<p>Turn this option on to store the image rating "
+    d->saveRatingBox->setWhatsThis( i18n("<p>Turn this option on to store the image rating "
                                             "into EXIF tag and IPTC <i>Urgency</i> tag."));
     
     mainLayout->addWidget(commonGroup);

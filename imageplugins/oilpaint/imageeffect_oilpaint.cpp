@@ -25,7 +25,7 @@
 // Qt includes.
 
 #include <qlabel.h>
-#include <q3whatsthis.h>
+
 #include <qimage.h>
 #include <qlayout.h>
 //Added by qt3to4:
@@ -93,7 +93,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     QLabel *label1   = new QLabel(i18n("Brush size:"), gboxSettings);
     m_brushSizeInput = new KIntNumInput(gboxSettings);
     m_brushSizeInput->setRange(1, 5, 1, true);
-    Q3WhatsThis::add( m_brushSizeInput, i18n("<p>Set here the brush size to use for "
+    m_brushSizeInput->setWhatsThis( i18n("<p>Set here the brush size to use for "
                                             "simulating the oil painting.") );
 
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
@@ -104,7 +104,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     QLabel *label2 = new QLabel(i18n("Smooth:"), gboxSettings);
     m_smoothInput  = new KIntNumInput(gboxSettings);
     m_smoothInput->setRange(10, 255, 1, true);
-    Q3WhatsThis::add( m_smoothInput, i18n("<p>This value controls the smoothing effect "
+    m_smoothInput->setWhatsThis( i18n("<p>This value controls the smoothing effect "
                                          "of the brush under the canvas.") );
 
     gridSettings->addMultiCellWidget(label2, 2, 2, 0, 1);

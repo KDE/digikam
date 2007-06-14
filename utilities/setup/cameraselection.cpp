@@ -33,7 +33,7 @@
 #include <qlayout.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3Frame>
@@ -119,7 +119,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->listView->setAllColumnsShowFocus(true);
     d->listView->setResizeMode(K3ListView::LastColumn);
     d->listView->setMinimumWidth(350);
-    Q3WhatsThis::add( d->listView, i18n("<p>Select here the camera name that you want to use. All "
+    d->listView->setWhatsThis( i18n("<p>Select here the camera name that you want to use. All "
                                        "default settings on the right panel "
                                        "will be set automatically.</p><p>This list has been generated "
                                        "using the gphoto2 library installed on your computer.</p>"));
@@ -128,7 +128,7 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     Q3VGroupBox* titleBox = new Q3VGroupBox( i18n("Camera Title"), plainPage() );
     d->titleEdit = new KLineEdit( titleBox );
-    Q3WhatsThis::add( d->titleEdit, i18n("<p>Set here the name used in digiKam interface to "
+    d->titleEdit->setWhatsThis( i18n("<p>Set here the name used in digiKam interface to "
                                         "identify this camera.</p>"));
     
     // --------------------------------------------------------------
@@ -138,12 +138,12 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     d->usbButton = new QRadioButton( d->portButtonGroup );
     d->usbButton->setText( i18n( "USB" ) );
-    Q3WhatsThis::add( d->usbButton, i18n("<p>Select this option if your camera is connected to your "
+    d->usbButton->setWhatsThis( i18n("<p>Select this option if your camera is connected to your "
                      "computer using an USB cable.</p>"));
 
     d->serialButton = new QRadioButton( d->portButtonGroup );
     d->serialButton->setText( i18n( "Serial" ) );
-    Q3WhatsThis::add( d->serialButton, i18n("<p>Select this option if your camera is connected to your "
+    d->serialButton->setWhatsThis( i18n("<p>Select this option if your camera is connected to your "
                      "computer using a serial cable.</p>"));
 
     // --------------------------------------------------------------
@@ -154,7 +154,7 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     d->portPathComboBox = new QComboBox( false, portPathBox );
     d->portPathComboBox->setDuplicatesEnabled( false );
-    Q3WhatsThis::add( d->portPathComboBox, i18n("<p>Select here the serial port to use on your computer. "
+    d->portPathComboBox->setWhatsThis( i18n("<p>Select here the serial port to use on your computer. "
                      "This option is only required if you use a serial camera.</p>"));
 
     // --------------------------------------------------------------
@@ -166,7 +166,7 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     d->umsMountURL = new KUrlRequester( QString("/mnt/camera"), umsMountBox);
     d->umsMountURL->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
-    Q3WhatsThis::add( d->umsMountURL, i18n("<p>Set here the mount path to use on your computer. This "
+    d->umsMountURL->setWhatsThis( i18n("<p>Set here the mount path to use on your computer. This "
                                           "option is only required if you use an <b>USB Mass Storage</b> "
                                           "camera.</p>"));
     

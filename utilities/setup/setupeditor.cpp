@@ -28,7 +28,7 @@
 #include <q3hbox.h>
 #include <q3vgroupbox.h>
 #include <qlabel.h>
-#include <q3whatsthis.h>
+
 #include <qcheckbox.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
@@ -89,7 +89,7 @@ SetupEditor::SetupEditor(QWidget* parent )
     d->themebackgroundColor = new QCheckBox(i18n("&Use theme background color"),
                                             interfaceOptionsGroup);
 
-    Q3WhatsThis::add( d->themebackgroundColor, i18n("<p>Enable this option to use the background theme "
+    d->themebackgroundColor->setWhatsThis( i18n("<p>Enable this option to use the background theme "
                                               "color in the image editor area") );
 
     d->colorBox = new Q3HBox(interfaceOptionsGroup);
@@ -98,7 +98,7 @@ SetupEditor::SetupEditor(QWidget* parent )
 
     d->backgroundColor = new KColorButton(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
-    Q3WhatsThis::add( d->backgroundColor, i18n("<p>Customize the background color to use "
+    d->backgroundColor->setWhatsThis( i18n("<p>Customize the background color to use "
                                               "in the image editor area.") );
 
     d->hideToolBar = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"),
@@ -112,14 +112,14 @@ SetupEditor::SetupEditor(QWidget* parent )
     QLabel *underExpoColorlabel = new QLabel( i18n("&Under-exposure color:"), underExpoBox);
     d->underExposureColor       = new KColorButton(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
-    Q3WhatsThis::add( d->underExposureColor, i18n("<p>Customize the color used in image editor to identify "
+    d->underExposureColor->setWhatsThis( i18n("<p>Customize the color used in image editor to identify "
                                                  "the under-exposed pixels.") );
 
     Q3HBox *overExpoBox         = new Q3HBox(exposureOptionsGroup);
     QLabel *overExpoColorlabel = new QLabel( i18n("&Over-exposure color:"), overExpoBox);
     d->overExposureColor       = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
-    Q3WhatsThis::add( d->overExposureColor, i18n("<p>Customize the color used in image editor to identify "
+    d->overExposureColor->setWhatsThis( i18n("<p>Customize the color used in image editor to identify "
                                                 "the over-exposed pixels.") );
 
     layout->addWidget(interfaceOptionsGroup);

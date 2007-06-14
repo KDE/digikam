@@ -27,7 +27,7 @@
 #include <q3vgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3whatsthis.h>
+
 #include <qtooltip.h>
 #include <qlayout.h>
 #include <q3frame.h>
@@ -225,13 +225,13 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     QLabel *label5  = new QLabel(i18n("Guide color:"), gboxGuideSettings);
     d->guideColorBt = new KColorButton( QColor( Qt::red ), gboxGuideSettings );
-    Q3WhatsThis::add( d->guideColorBt, i18n("<p>Set here the color used to draw guides dashed-lines."));
+    d->guideColorBt->setWhatsThis( i18n("<p>Set here the color used to draw guides dashed-lines."));
     grid->addMultiCellWidget(label5, 1, 1, 0, 0);
     grid->addMultiCellWidget(d->guideColorBt, 1, 1, 2, 2);
 
     QLabel *label6 = new QLabel(i18n("Guide width:"), gboxGuideSettings);
     d->guideSize   = new QSpinBox( 1, 5, 1, gboxGuideSettings);
-    Q3WhatsThis::add( d->guideSize, i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
+    d->guideSize->setWhatsThis( i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
     grid->addMultiCellWidget(label6, 2, 2, 0, 0);
     grid->addMultiCellWidget(d->guideSize, 2, 2, 2, 2);
     grid->setColStretch(1, 10);
@@ -246,7 +246,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     space1->setFixedWidth(spacingHint());    
     d->progressBar = new KProgress(100, hbox);
     d->progressBar->setMaximumHeight( fontMetrics().height() );
-    Q3WhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
+    d->progressBar ->setWhatsThis(i18n("<p>This is the current percentage of the task completed."));
     d->progressBar->setValue(0);
     setProgressVisible(false);
     QLabel *space2 = new QLabel(hbox);

@@ -28,7 +28,7 @@
 #include <qfile.h> 
 #include <qmime.h>
 #include <q3header.h>
-#include <q3whatsthis.h>
+
 #include <qpainter.h>
 #include <qhbuttongroup.h>
 #include <qpushbutton.h>
@@ -109,13 +109,13 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     QPushButton *simpleLevel = new QPushButton( d->levelButtons );
     simpleLevel->setPixmap( iconLoader->loadIcon( "ascii", (KIcon::Group)KIcon::Toolbar ) );
     simpleLevel->setToggleButton(true);
-    Q3WhatsThis::add( simpleLevel, i18n( "Toggle tags view to a simple human-readable list" ) );
+    simpleLevel->setWhatsThis( i18n( "Toggle tags view to a simple human-readable list" ) );
     d->levelButtons->insert(simpleLevel, SIMPLE);
 
     QPushButton *fullLevel = new QPushButton( d->levelButtons );
     fullLevel->setPixmap( iconLoader->loadIcon( "document", (KIcon::Group)KIcon::Toolbar ) );
     fullLevel->setToggleButton(true);
-    Q3WhatsThis::add( fullLevel, i18n( "Toggle tags view to a full list" ) );
+    fullLevel->setWhatsThis( i18n( "Toggle tags view to a full list" ) );
     d->levelButtons->insert(fullLevel, FULL);
 
     d->toolButtons = new Q3HButtonGroup(this);
@@ -124,17 +124,17 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
 
     QPushButton *saveMetadata = new QPushButton( d->toolButtons );
     saveMetadata->setPixmap( iconLoader->loadIcon( "filesave", (KIcon::Group)KIcon::Toolbar ) );
-    Q3WhatsThis::add( saveMetadata, i18n( "Save meta-data to a binary file" ) );
+    saveMetadata->setWhatsThis( i18n( "Save meta-data to a binary file" ) );
     d->toolButtons->insert(saveMetadata);
     
     QPushButton *printMetadata = new QPushButton( d->toolButtons );
     printMetadata->setPixmap( iconLoader->loadIcon( "fileprint", (KIcon::Group)KIcon::Toolbar ) );
-    Q3WhatsThis::add( printMetadata, i18n( "Print meta-data to printer" ) );
+    printMetadata->setWhatsThis( i18n( "Print meta-data to printer" ) );
     d->toolButtons->insert(printMetadata);
 
     QPushButton *copy2ClipBoard = new QPushButton( d->toolButtons );
     copy2ClipBoard->setPixmap( iconLoader->loadIcon( "editcopy", (KIcon::Group)KIcon::Toolbar ) );
-    Q3WhatsThis::add( copy2ClipBoard, i18n( "Copy meta-data to clipboard" ) );
+    copy2ClipBoard->setWhatsThis( i18n( "Copy meta-data to clipboard" ) );
     d->toolButtons->insert(copy2ClipBoard);
 
     d->mainLayout->addMultiCellWidget(d->levelButtons, 0, 0, 0, 1);

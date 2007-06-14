@@ -27,7 +27,7 @@
 #include <q3groupbox.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <q3whatsthis.h>
+
 #include <qtooltip.h>
 #include <qdatetime.h>
 //Added by qt3to4:
@@ -97,7 +97,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     d->listView->addColumn( "Last Access Date", 0 ); // No i18n here. Hidden column with the last access date.
     d->listView->setAllColumnsShowFocus(true);
     groupBoxLayout->addMultiCellWidget( d->listView, 0, 5, 0, 0 );
-    Q3WhatsThis::add( d->listView, i18n("<p>Here you can see the digital camera list used by digiKam "
+    d->listView->setWhatsThis( i18n("<p>Here you can see the digital camera list used by digiKam "
                                        "via the Gphoto interface."));
 
     // -------------------------------------------------------------

@@ -27,7 +27,7 @@
 
 #include <qlayout.h>
 #include <qpushbutton.h>
-#include <q3whatsthis.h>
+
 #include <qlabel.h>
 #include <qmap.h>
 #include <q3hbox.h>
@@ -162,7 +162,7 @@ ICCProfileWidget::ICCProfileWidget(QWidget* parent, const char* name, int w, int
     // Add CIE tongue graph to the widget area
         
     d->cieTongue = new CIETongueWidget(w, h, this);
-    Q3WhatsThis::add( d->cieTongue, i18n("<p>This area contains a CIE or chromaticity diagram. "
+    d->cieTongue->setWhatsThis( i18n("<p>This area contains a CIE or chromaticity diagram. "
                     "A CIE diagram is a representation of all the colors "
                     "that a person with normal vision can see. This is represented "
                     "by the colored sail-shaped area. In addition you will see a "

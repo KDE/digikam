@@ -38,7 +38,7 @@
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <q3whatsthis.h>
+
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
@@ -96,7 +96,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
     m_channelCB->insertItem( i18n("Blue") );
-    Q3WhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+    m_channelCB->setWhatsThis( i18n("<p>Select here the histogram channel to display:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
@@ -106,7 +106,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(Q3Frame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
-    Q3WhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
+    m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
@@ -139,7 +139,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
 
     Q3VBox *histoBox   = new Q3VBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
-    Q3WhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
+    m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
                                              "settings changes."));
     QLabel *space = new QLabel(histoBox);
@@ -156,7 +156,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     m_rSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_rSlider");
     m_rSlider->setTickmarks(QSlider::TicksBelow);
     m_rSlider->setTickInterval(20);
-    Q3WhatsThis::add( m_rSlider, i18n("<p>Set here the cyan/red color adjustment of the image."));
+    m_rSlider->setWhatsThis( i18n("<p>Set here the cyan/red color adjustment of the image."));
     QLabel *labelRight = new QLabel(i18n("Red"), gboxSettings);
     labelRight->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
     m_rInput = new QSpinBox(-100, 100, 1, gboxSettings, "m_rInput");
@@ -173,7 +173,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     m_gSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_gSlider");
     m_gSlider->setTickmarks(QSlider::TicksBelow);
     m_gSlider->setTickInterval(20);
-    Q3WhatsThis::add( m_gSlider, i18n("<p>Set here the magenta/green color adjustment of the image."));
+    m_gSlider->setWhatsThis( i18n("<p>Set here the magenta/green color adjustment of the image."));
     labelRight = new QLabel(i18n("Green"), gboxSettings);
     labelRight->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
     m_gInput = new QSpinBox(-100, 100, 1, gboxSettings, "m_gInput");
@@ -190,7 +190,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     m_bSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_bSlider");
     m_bSlider->setTickmarks(QSlider::TicksBelow);
     m_bSlider->setTickInterval(20);
-    Q3WhatsThis::add( m_bSlider, i18n("<p>Set here the yellow/blue color adjustment of the image."));
+    m_bSlider->setWhatsThis( i18n("<p>Set here the yellow/blue color adjustment of the image."));
     labelRight = new QLabel(i18n("Blue"), gboxSettings);
     labelRight->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
     m_bInput = new QSpinBox(-100, 100, 1, gboxSettings, "m_bInput");

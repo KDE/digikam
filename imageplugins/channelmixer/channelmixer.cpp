@@ -45,7 +45,7 @@
 #include <qcombobox.h>
 #include <qspinbox.h>
 #include <q3vbox.h>
-#include <q3whatsthis.h>
+
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <q3frame.h>
@@ -135,7 +135,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     m_channelCB->insertItem( i18n("Green") );
     m_channelCB->insertItem( i18n("Blue") );
     m_channelCB->setCurrentText( i18n("Red") );
-    Q3WhatsThis::add( m_channelCB, i18n("<p>Select here the color channel to mix:<p>"
+    m_channelCB->setWhatsThis( i18n("<p>Select here the color channel to mix:<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"));
@@ -144,7 +144,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(Q3Frame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
-    Q3WhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
+    m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
@@ -177,7 +177,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
 
     Q3VBox *histoBox   = new Q3VBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
-    Q3WhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
+    m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
                                              "mixer settings changes."));
     QLabel *space = new QLabel(histoBox);
@@ -193,22 +193,22 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     m_redGain = new KDoubleNumInput(gboxSettings);
     m_redGain->setPrecision(0);
     m_redGain->setRange(-200.0, 200.0, 1, true);
-    Q3WhatsThis::add( m_redGain, i18n("<p>Select here the red color gain in percent for the current channel."));
+    m_redGain->setWhatsThis( i18n("<p>Select here the red color gain in percent for the current channel."));
     
     QLabel *blueLabel = new QLabel(i18n("Blue:"), gboxSettings);
     m_greenGain = new KDoubleNumInput(gboxSettings);
     m_greenGain->setPrecision(0);
     m_greenGain->setRange(-200.0, 200.0, 1, true);
-    Q3WhatsThis::add( m_greenGain, i18n("<p>Select here the green color gain in percent for the current channel."));
+    m_greenGain->setWhatsThis( i18n("<p>Select here the green color gain in percent for the current channel."));
     
     QLabel *greenLabel = new QLabel(i18n("Green:"), gboxSettings);
     m_blueGain = new KDoubleNumInput(gboxSettings);
     m_blueGain->setPrecision(0);
     m_blueGain->setRange(-200.0, 200.0, 1, true);
-    Q3WhatsThis::add( m_blueGain, i18n("<p>Select here the blue color gain in percent for the current channel."));
+    m_blueGain->setWhatsThis( i18n("<p>Select here the blue color gain in percent for the current channel."));
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
-    Q3WhatsThis::add( m_resetButton, i18n("Reset color channels' gains settings from the currently selected channel."));
+    m_resetButton->setWhatsThis( i18n("Reset color channels' gains settings from the currently selected channel."));
 
     grid->addMultiCellWidget(redLabel, 3, 3, 0, 0);
     grid->addMultiCellWidget(greenLabel, 4, 4, 0, 0);
@@ -221,11 +221,11 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     // -------------------------------------------------------------
     
     m_monochrome = new QCheckBox( i18n("Monochrome"), gboxSettings);
-    Q3WhatsThis::add( m_monochrome, i18n("<p>Enable this option if you want the image rendered in monochrome mode. "
+    m_monochrome->setWhatsThis( i18n("<p>Enable this option if you want the image rendered in monochrome mode. "
                                         "In this mode, the histogram will display only luminosity values."));
     
     m_preserveLuminosity = new QCheckBox( i18n("Preserve luminosity"), gboxSettings);
-    Q3WhatsThis::add( m_preserveLuminosity, i18n("<p>Enable this option is you want preserve the image luminosity."));
+    m_preserveLuminosity->setWhatsThis( i18n("<p>Enable this option is you want preserve the image luminosity."));
     
     grid->addMultiCellWidget(m_monochrome, 7, 7, 0, 4);
     grid->addMultiCellWidget(m_preserveLuminosity, 8, 8, 0, 4);

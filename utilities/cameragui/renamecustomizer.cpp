@@ -34,7 +34,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
@@ -146,7 +146,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     // ----------------------------------------------------------------
 
     d->renameDefault = new QRadioButton(i18n("Camera filenames"), this);
-    Q3WhatsThis::add( d->renameDefault, i18n("<p>Turn on this option to use camera "
+    d->renameDefault->setWhatsThis( i18n("<p>Turn on this option to use camera "
                                             "provided image filenames without modifications."));
     mainLayout->addMultiCellWidget(d->renameDefault, 0, 0, 0, 1);
 
@@ -163,7 +163,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameDefaultCaseType->insertItem(i18n("Upper"), 1);
     d->renameDefaultCaseType->insertItem(i18n("Lower"), 2);
     d->renameDefaultCaseType->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    Q3WhatsThis::add( d->renameDefaultCaseType, i18n("<p>Set the method to use to change the case "
+    d->renameDefaultCaseType->setWhatsThis( i18n("<p>Set the method to use to change the case "
                                                     "of image filenames."));
                                            
     Q3HBoxLayout* boxLayout1 = new Q3HBoxLayout( d->renameDefaultBox->layout() );
@@ -177,7 +177,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     d->renameCustom = new QRadioButton(i18n("Customize"), this);
     mainLayout->addMultiCellWidget(d->renameCustom, 2, 2, 0, 1);
-    Q3WhatsThis::add( d->renameCustom, i18n("<p>Turn on this option to customize image filenames "
+    d->renameCustom->setWhatsThis( i18n("<p>Turn on this option to customize image filenames "
                                            "during download."));
 
     d->renameCustomBox = new Q3GroupBox(this);
@@ -194,19 +194,19 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameCustomPrefix = new KLineEdit(d->renameCustomBox);
     d->focusedWidget = d->renameCustomPrefix;
     renameCustomBoxLayout->addMultiCellWidget(d->renameCustomPrefix, 0, 0, 2, 2);
-    Q3WhatsThis::add( d->renameCustomPrefix, i18n("<p>Set the prefix which will be prepended to "
+    d->renameCustomPrefix->setWhatsThis( i18n("<p>Set the prefix which will be prepended to "
                                                  "image filenames."));
 
     QLabel* suffixLabel = new QLabel(i18n("Suffix:"), d->renameCustomBox);
     renameCustomBoxLayout->addMultiCellWidget(suffixLabel, 1, 1, 1, 1);
     d->renameCustomSuffix = new KLineEdit(d->renameCustomBox);
     renameCustomBoxLayout->addMultiCellWidget(d->renameCustomSuffix, 1, 1, 2, 2);
-    Q3WhatsThis::add( d->renameCustomSuffix, i18n("<p>Set the suffix which will be postpended to "
+    d->renameCustomSuffix->setWhatsThis( i18n("<p>Set the suffix which will be postpended to "
                                                   "image filenames."));
 
     d->addDateTimeBox = new QCheckBox( i18n("Add Date && Time"), d->renameCustomBox );
     renameCustomBoxLayout->addMultiCellWidget(d->addDateTimeBox, 2, 2, 1, 2);
-    Q3WhatsThis::add( d->addDateTimeBox, i18n("<p>Set this option to add the camera provided date and time."));
+    d->addDateTimeBox->setWhatsThis( i18n("<p>Set this option to add the camera provided date and time."));
 
     QWidget *dateTimeWidget = new QWidget(d->renameCustomBox);
     d->dateTimeLabel    = new QLabel(i18n("Date format:"), dateTimeWidget);
@@ -216,7 +216,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->dateTimeFormat->insertItem(i18n("Full Text"),      RenameCustomizerPriv::TextDateFormat);
     d->dateTimeFormat->insertItem(i18n("Local Settings"), RenameCustomizerPriv::LocalDateFormat);
     d->dateTimeFormat->insertItem(i18n("Advanced..."),    RenameCustomizerPriv::Advanced);
-    Q3WhatsThis::add( d->dateTimeFormat, i18n("<p>Select your preferred date format used to "
+    d->dateTimeFormat->setWhatsThis( i18n("<p>Select your preferred date format used to "
                     "create new albums. The options available are:</p>"
                     "<p><b>Standard</b>: the date format that has been used as a standard by digiKam. "
                     "E.g.: <i>20060824T142618</i></p>"
@@ -238,17 +238,17 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     d->addCameraNameBox = new QCheckBox( i18n("Add Camera Name"), d->renameCustomBox );
     renameCustomBoxLayout->addMultiCellWidget(d->addCameraNameBox, 4, 4, 1, 2);
-    Q3WhatsThis::add( d->addCameraNameBox, i18n("<p>Set this option to add the camera name."));
+    d->addCameraNameBox->setWhatsThis( i18n("<p>Set this option to add the camera name."));
 
     d->addSeqNumberBox = new QCheckBox( i18n("Add Sequence Number"), d->renameCustomBox );
     renameCustomBoxLayout->addMultiCellWidget(d->addSeqNumberBox, 5, 5, 1, 2);
-    Q3WhatsThis::add( d->addSeqNumberBox, i18n("<p>Set this option to add a sequence number "
+    d->addSeqNumberBox->setWhatsThis( i18n("<p>Set this option to add a sequence number "
                                               "starting with the index set below."));
 
     d->startIndexLabel = new QLabel( i18n("Start Index:"), d->renameCustomBox );
     d->startIndexInput = new KIntNumInput(1, d->renameCustomBox);
     d->startIndexInput->setRange(1, 900000, 1, false);
-    Q3WhatsThis::add( d->startIndexInput, i18n("<p>Set the starting index value used to rename picture "
+    d->startIndexInput->setWhatsThis( i18n("<p>Set the starting index value used to rename picture "
                                               "files with a sequence number."));
 
     renameCustomBoxLayout->addMultiCellWidget(d->startIndexLabel, 6, 6, 1, 1);

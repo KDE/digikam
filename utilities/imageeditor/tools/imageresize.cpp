@@ -31,7 +31,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 #include <qlayout.h>
 #include <q3frame.h>
 #include <qcheckbox.h>
@@ -175,28 +175,28 @@ ImageResize::ImageResize(QWidget* parent)
     d->wInput = new KIntNumInput(firstPage);
     d->wInput->setRange(1, qMax(d->orgWidth * 10, 9999), 1, true);
     d->wInput->setName("d->wInput");
-    Q3WhatsThis::add( d->wInput, i18n("<p>Set here the new image width in pixels."));
+    d->wInput->setWhatsThis( i18n("<p>Set here the new image width in pixels."));
 
     QLabel *label2 = new QLabel(i18n("Height:"), firstPage);
     d->hInput = new KIntNumInput(firstPage);
     d->hInput->setRange(1, qMax(d->orgHeight * 10, 9999), 1, true);
     d->hInput->setName("d->hInput");
-    Q3WhatsThis::add( d->hInput, i18n("<p>Set here the new image height in pixels."));
+    d->hInput->setWhatsThis( i18n("<p>Set here the new image height in pixels."));
 
     QLabel *label3 = new QLabel(i18n("Width (%):"), firstPage);
     d->wpInput = new KDoubleNumInput(firstPage);
     d->wpInput->setRange(1.0, 999.0, 1.0, true);
     d->wpInput->setName("d->wpInput");
-    Q3WhatsThis::add( d->wpInput, i18n("<p>Set here the new image width in percents."));
+    d->wpInput->setWhatsThis( i18n("<p>Set here the new image width in percents."));
 
     QLabel *label4 = new QLabel(i18n("Height (%):"), firstPage);
     d->hpInput = new KDoubleNumInput(firstPage);
     d->hpInput->setRange(1.0, 999.0, 1.0, true);
     d->hpInput->setName("d->hpInput");
-    Q3WhatsThis::add( d->hpInput, i18n("<p>Set here the new image height in percents."));
+    d->hpInput->setWhatsThis( i18n("<p>Set here the new image height in percents."));
 
     d->preserveRatioBox = new QCheckBox(i18n("Maintain aspect ratio"), firstPage);
-    Q3WhatsThis::add( d->preserveRatioBox, i18n("<p>Enable this option to maintain aspect "
+    d->preserveRatioBox->setWhatsThis( i18n("<p>Enable this option to maintain aspect "
                                               "ratio with new image sizes."));
 
     KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
@@ -209,12 +209,12 @@ ImageResize::ImageResize(QWidget* parent)
     QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
 
     d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
-    Q3WhatsThis::add( d->useGreycstorationBox, i18n("<p>Enable this option to restore photograph content. "
+    d->useGreycstorationBox->setWhatsThis( i18n("<p>Enable this option to restore photograph content. "
                                                   "Warning: this process can take a while."));
 
     d->progressBar = new KProgress(100, firstPage);
     d->progressBar->setValue(0);
-    Q3WhatsThis::add(d->progressBar, i18n("<p>This is the current progress when you use Restoration mode."));
+    d->progressBar->setWhatsThis( i18n("<p>This is the current progress when you use Restoration mode."));
 
     grid->addMultiCellWidget(d->preserveRatioBox, 0, 0, 0, 2);
     grid->addMultiCellWidget(label1, 1, 1, 0, 0);

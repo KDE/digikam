@@ -25,7 +25,7 @@
 // Qt includes.
 
 #include <qlabel.h>
-#include <q3whatsthis.h>
+
 #include <qlayout.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
@@ -85,7 +85,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     m_pencilInput = new KIntNumInput(gboxSettings);
     m_pencilInput->setRange(1, 100, 1, true);  
     m_pencilInput->setValue(5);
-    Q3WhatsThis::add( m_pencilInput, i18n("<p>Set here the charcoal pencil size used to simulate the drawing."));
+    m_pencilInput->setWhatsThis( i18n("<p>Set here the charcoal pencil size used to simulate the drawing."));
 
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
     gridSettings->addMultiCellWidget(m_pencilInput, 1, 1, 0, 1);
@@ -97,7 +97,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     m_smoothInput = new KIntNumInput(gboxSettings);
     m_smoothInput->setRange(1, 100, 1, true);  
     m_smoothInput->setValue(10);
-    Q3WhatsThis::add( m_smoothInput, i18n("<p>This value controls the smoothing effect of the pencil "
+    m_smoothInput->setWhatsThis( i18n("<p>This value controls the smoothing effect of the pencil "
                                          "under the canvas."));
 
     gridSettings->addMultiCellWidget(label2, 2, 2, 0, 1);

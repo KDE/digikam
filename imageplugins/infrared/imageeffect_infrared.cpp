@@ -27,7 +27,7 @@
 
 #include <qimage.h>
 #include <qlabel.h>
-#include <q3whatsthis.h>
+
 #include <qlcdnumber.h>
 #include <qslider.h>
 #include <qlayout.h>
@@ -107,8 +107,8 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
                      "A sensitivity over 800 simulates <b>Kodak HIE</b> high-speed infrared film. This last one creates a more "
                      "dramatic photographic style.</p>");
 
-    Q3WhatsThis::add( m_sensibilityLCDValue, whatsThis);
-    Q3WhatsThis::add( m_sensibilitySlider, whatsThis);
+    m_sensibilityLCDValue->setWhatsThis( whatsThis);
+    m_sensibilitySlider->setWhatsThis( whatsThis);
 
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
     gridSettings->addMultiCellWidget(m_sensibilitySlider, 1, 1, 0, 0);
@@ -118,7 +118,7 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
 
     m_addFilmGrain = new QCheckBox( i18n("Add film grain"), gboxSettings);
     m_addFilmGrain->setChecked( true );
-    Q3WhatsThis::add( m_addFilmGrain, i18n("<p>This option adds infrared film grain to "
+    m_addFilmGrain->setWhatsThis( i18n("<p>This option adds infrared film grain to "
                                           "the image depending on ISO-sensitivity."));
     gridSettings->addMultiCellWidget(m_addFilmGrain, 2, 2, 0, 1);
 

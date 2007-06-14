@@ -37,7 +37,7 @@
 #include <qpushbutton.h>
 #include <qtimer.h>
 #include <qcombobox.h>
-#include <q3whatsthis.h>
+
 #include <qtooltip.h>
 #include <q3intdict.h>
 #include <q3textstream.h>
@@ -200,7 +200,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
     m_channelCB->insertItem( i18n("Blue") );
-    Q3WhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+    m_channelCB->setWhatsThis( i18n("<p>Select here the histogram channel to display:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
@@ -210,7 +210,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(Q3Frame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
-    Q3WhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
+    m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
@@ -243,7 +243,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     Q3VBox *histoBox   = new Q3VBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
-    Q3WhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
+    m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
                                              "settings changes."));
     QLabel *space = new QLabel(histoBox);
@@ -390,7 +390,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_strengthInput->setLabel(i18n("Strength:"), Qt::AlignLeft | Qt::AlignVCenter);
     m_strengthInput->setRange(1, 5, 1, true);
     m_strengthInput->setValue(1);
-    Q3WhatsThis::add(m_strengthInput, i18n("<p>Set here the strength adjustment of lens filter."));
+    m_strengthInput->setWhatsThis( i18n("<p>Set here the strength adjustment of lens filter."));
 
     // -------------------------------------------------------------
 
@@ -454,7 +454,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_curvesWidget = new Digikam::CurvesWidget(256, 256, m_originalImage->bits(), m_originalImage->width(),
                                                m_originalImage->height(), m_originalImage->sixteenBit(),
                                                m_curves, curveBox);
-    Q3WhatsThis::add( m_curvesWidget, i18n("<p>This is the curve adjustment of the image luminosity"));
+    m_curvesWidget->setWhatsThis( i18n("<p>This is the curve adjustment of the image luminosity"));
 
     QLabel *spaceh = new QLabel(curveBox);
     spaceh->setFixedHeight(1);
@@ -468,7 +468,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_cInput->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
     m_cInput->setRange(-100, 100, 1, true);
     m_cInput->setValue(0);
-    Q3WhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
+    m_cInput->setWhatsThis( i18n("<p>Set here the contrast adjustment of the image."));
 
     gridTab2->addMultiCellWidget(vGradient, 0, 0, 0, 0);
     gridTab2->addMultiCellWidget(spacev, 0, 0, 1, 1);

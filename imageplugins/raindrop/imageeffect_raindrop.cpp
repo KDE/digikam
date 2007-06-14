@@ -25,7 +25,7 @@
 // Qt includes. 
  
 #include <qlabel.h>
-#include <q3whatsthis.h>
+
 #include <qlayout.h>
 #include <q3frame.h>
 #include <qimage.h>
@@ -84,7 +84,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
 
     setAboutData(about);
 
-    Q3WhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the preview of the Raindrop effect."
+    m_imagePreviewWidget->setWhatsThis( i18n("<p>This is the preview of the Raindrop effect."
                                            "<p>Note: if you have previously selected an area in the editor, "
                                            "this will be unaffected by the filter. You can use this method to "
                                            "disable the Raindrops effect on a human face, for example.") );
@@ -99,7 +99,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     m_dropInput = new KIntNumInput(gboxSettings);
     m_dropInput->setRange(0, 200, 1, true);
     m_dropInput->setValue(80);
-    Q3WhatsThis::add( m_dropInput, i18n("<p>Set here the raindrops' size."));
+    m_dropInput->setWhatsThis( i18n("<p>Set here the raindrops' size."));
     
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 2);
     gridSettings->addMultiCellWidget(m_dropInput, 1, 1, 0, 2);
@@ -111,7 +111,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     m_amountInput = new KIntNumInput(gboxSettings);
     m_amountInput->setRange(1, 500, 1, true);
     m_amountInput->setValue(150);
-    Q3WhatsThis::add( m_amountInput, i18n("<p>This value controls the maximum number of raindrops.")); 
+    m_amountInput->setWhatsThis( i18n("<p>This value controls the maximum number of raindrops.")); 
     
     gridSettings->addMultiCellWidget(label2, 2, 2, 0, 2);
     gridSettings->addMultiCellWidget(m_amountInput, 3, 3, 0, 2);
@@ -123,7 +123,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     m_coeffInput = new KIntNumInput(gboxSettings);
     m_coeffInput->setRange(1, 100, 1, true);
     m_coeffInput->setValue(30);
-    Q3WhatsThis::add( m_coeffInput, i18n("<p>This value is the fish-eye-effect optical "
+    m_coeffInput->setWhatsThis( i18n("<p>This value is the fish-eye-effect optical "
                                         "distortion coefficient."));     
     
     gridSettings->addMultiCellWidget(label3, 4, 4, 0, 2);

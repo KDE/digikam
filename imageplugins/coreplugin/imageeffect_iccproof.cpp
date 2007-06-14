@@ -39,7 +39,7 @@
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <q3whatsthis.h>
+
 #include <qtooltip.h>
 #include <qradiobutton.h>
 #include <qfile.h>
@@ -126,7 +126,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_channelCB->insertItem(i18n("Red"));
     m_channelCB->insertItem(i18n("Green"));
     m_channelCB->insertItem(i18n("Blue"));
-    Q3WhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+    m_channelCB->setWhatsThis( i18n("<p>Select here the histogram channel to display:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red channel values.<p>"
                                        "<b>Green</b>: display the green channel values.<p>"
@@ -136,7 +136,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(Q3Frame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
-    Q3WhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
+    m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal values are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal values are big; "
                                      "if it is used, all values (small and large) will be visible on the "
@@ -170,7 +170,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     Q3VBox *histoBox   = new Q3VBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
-    Q3WhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram "
+    m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram "
                                              "of the selected image channel. " 
                                              "This one is updated after setting changes."));
     QLabel *space = new QLabel(histoBox);
@@ -194,30 +194,30 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_toolBoxWidgets->insertItem(GENERALPAGE, generalOptions, 
                                  SmallIconSet("misc"), i18n("General Settings"));
-    Q3WhatsThis::add(generalOptions, i18n("<p>Here you can set general parameters.</p>"));
+    generalOptions->setWhatsThis( i18n("<p>Here you can set general parameters.</p>"));
 
     Q3GridLayout *zeroPageLayout = new Q3GridLayout(generalOptions, 5, 1, spacingHint());
 
     m_doSoftProofBox = new QCheckBox(generalOptions);
     m_doSoftProofBox->setText(i18n("Soft-proofing"));
-    Q3WhatsThis::add(m_doSoftProofBox, i18n("<p>Rendering emulation of the device described "
+    m_doSoftProofBox->setWhatsThis( i18n("<p>Rendering emulation of the device described "
                                            "by the \"Proofing\" profile. Useful to preview final "
                                            "result without rendering to physical medium.</p>"));
 
     m_checkGamutBox = new QCheckBox(generalOptions);
     m_checkGamutBox->setText(i18n("Check gamut"));
-    Q3WhatsThis::add(m_checkGamutBox, i18n("<p>You can use this option if you want to show "
+    m_checkGamutBox->setWhatsThis( i18n("<p>You can use this option if you want to show "
                                           "the colors that are outside the printer's gamut<p>"));
 
     m_embeddProfileBox = new QCheckBox(generalOptions);
     m_embeddProfileBox->setChecked(true);
     m_embeddProfileBox->setText(i18n("Assign profile"));
-    Q3WhatsThis::add(m_embeddProfileBox, i18n("<p>You can use this option to embed "
+    m_embeddProfileBox->setWhatsThis( i18n("<p>You can use this option to embed "
                                              "the selected work-space color profile into the image.</p>"));
 
     m_BPCBox = new QCheckBox(generalOptions);
     m_BPCBox->setText(i18n("Use BPC"));
-    Q3WhatsThis::add(m_BPCBox, i18n("<p>The Black Point Compensation (BPC) feature does work in conjunction "
+    m_BPCBox->setWhatsThis( i18n("<p>The Black Point Compensation (BPC) feature does work in conjunction "
                                    "with Relative Colorimetric Intent. Perceptual intent should make no "
                                    "difference, since BPC is always on, and in Absolute Colorimetric "
                    "Intent it is always turned off.</p>"
@@ -231,7 +231,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_renderingIntentsCB->insertItem("Absolute Colorimetric");
     m_renderingIntentsCB->insertItem("Relative Colorimetric");
     m_renderingIntentsCB->insertItem("Saturation");
-    Q3WhatsThis::add( m_renderingIntentsCB, i18n("<ul><li>Perceptual intent causes the full gamut "
+    m_renderingIntentsCB->setWhatsThis( i18n("<ul><li>Perceptual intent causes the full gamut "
                 "of the image to be compressed or expanded to fill the gamut of the destination media, "
                 "so that gray balance is preserved but colorimetric accuracy may not be preserved.<br>"
                 "In other words, if certain colors in an image fall outside of the range of colors that "
@@ -278,7 +278,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- "Input" Page Setup ----------------------------------
 
     m_toolBoxWidgets->insertItem(INPUTPAGE, inProfiles, SmallIconSet("camera"), i18n("Input Profile"));
-    Q3WhatsThis::add(inProfiles, i18n("<p>Set here all parameters relevant of Input Color "
+    inProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant of Input Color "
                     "Profiles.</p>"));
 
     Q3GridLayout *firstPageLayout = new Q3GridLayout(inProfiles, 4, 2, spacingHint());
@@ -328,7 +328,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_toolBoxWidgets->insertItem(WORKSPACEPAGE, spaceProfiles, 
                                  SmallIconSet("tablet"), i18n("Work-space Profile"));
-    Q3WhatsThis::add(spaceProfiles, i18n("<p>Set here all parameters relevant of Color Work-space "
+    spaceProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant of Color Work-space "
                     "Profiles.</p>"));
 
     Q3GridLayout *secondPageLayout = new Q3GridLayout(spaceProfiles, 3, 2, spacingHint());
@@ -362,7 +362,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_toolBoxWidgets->insertItem(PROOFINGPAGE, proofProfiles, 
                                  SmallIconSet("printer1"), i18n("Proofing Profile"));
-    Q3WhatsThis::add(proofProfiles, i18n("<p>Set here all parameters relevant to Proofing Color "
+    proofProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant to Proofing Color "
                     "Profiles.</p>"));
 
     Q3GridLayout *thirdPageLayout = new Q3GridLayout(proofProfiles, 3, 2, 
@@ -397,7 +397,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_toolBoxWidgets->insertItem(LIGHTNESSPAGE, lightnessadjust, 
                                  SmallIconSet("blend"), i18n("Lightness Adjustments"));
-    Q3WhatsThis::add(lightnessadjust, i18n("<p>Set here all lightness adjustments of target image.</p>"));
+    lightnessadjust->setWhatsThis( i18n("<p>Set here all lightness adjustments of target image.</p>"));
 
     Q3GridLayout *fourPageLayout = new Q3GridLayout( lightnessadjust, 5, 2, spacingHint(), 0);
 
@@ -412,7 +412,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_curvesWidget = new Digikam::CurvesWidget(256, 192, m_originalImage->bits(), m_originalImage->width(),
                                                m_originalImage->height(), m_originalImage->sixteenBit(),
                                                m_curves, lightnessadjust);
-    Q3WhatsThis::add( m_curvesWidget, i18n("<p>This is the curve adjustment of the image luminosity"));
+    m_curvesWidget->setWhatsThis( i18n("<p>This is the curve adjustment of the image luminosity"));
 
     QLabel *spaceh = new QLabel(lightnessadjust);
     spaceh->setFixedHeight(1);
@@ -426,7 +426,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_cInput->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
     m_cInput->setRange(-100, 100, 1, true);
     m_cInput->setValue(0);
-    Q3WhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
+    m_cInput->setWhatsThis( i18n("<p>Set here the contrast adjustment of the image."));
 
     fourPageLayout->addMultiCellWidget(vGradient, 0, 0, 0, 0);
     fourPageLayout->addMultiCellWidget(spacev, 0, 0, 1, 1);

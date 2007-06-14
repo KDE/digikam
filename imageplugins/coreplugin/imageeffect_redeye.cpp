@@ -36,7 +36,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
-#include <q3whatsthis.h>
+
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
@@ -97,7 +97,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
     m_channelCB->insertItem( i18n("Blue") );
-    Q3WhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+    m_channelCB->setWhatsThis( i18n("<p>Select here the histogram channel to display:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image channel values.<p>"
                                        "<b>Green</b>: display the green image channel values.<p>"
@@ -107,7 +107,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(Q3Frame::NoFrame);
     m_scaleBG->setInsideMargin(0);
-    Q3WhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
+    m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximum counts are small, you can use the linear scale.<p>"
                                      "The logarithmic scale can be used when the maximal counts are big "
                                      "to show all values (small and large) on the graph."));
@@ -140,7 +140,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
 
     Q3VBox *histoBox   = new Q3VBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
-    Q3WhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram "
+    m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram "
                                              "of the selected image channel. It is "
                                              "updated upon setting changes."));
     QLabel *space = new QLabel(histoBox);
@@ -156,7 +156,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_redThreshold   = new KIntNumInput(gboxSettings);
     m_redThreshold->setRange(10, 90, 1, true);
     m_redThreshold->setValue(20);
-    Q3WhatsThis::add(m_redThreshold, i18n("<p>Sets the red color pixels selection threshold. "
+    m_redThreshold->setWhatsThis( i18n("<p>Sets the red color pixels selection threshold. "
                                          "Low values will select more red color pixels, high "
                                          "values less."));
     gridSettings->addMultiCellWidget(m_thresholdLabel, 3, 3, 0, 4);
@@ -166,7 +166,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_smoothLevel = new KIntNumInput(gboxSettings);
     m_smoothLevel->setRange(0, 5, 1, true);
     m_smoothLevel->setValue(1);
-    Q3WhatsThis::add(m_smoothLevel, i18n("<p>Sets the smoothness value to blur red color "
+    m_smoothLevel->setWhatsThis( i18n("<p>Sets the smoothness value to blur red color "
                                         "pixels selection."));
     gridSettings->addMultiCellWidget(m_smoothLabel, 5, 5, 0, 4);
     gridSettings->addMultiCellWidget(m_smoothLevel, 6, 6, 0, 4);
@@ -184,7 +184,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_tintLevel    = new KIntNumInput(gboxSettings);
     m_tintLevel->setRange(1, 200, 1, true);
     m_tintLevel->setValue(128);
-    Q3WhatsThis::add( m_tintLevel, i18n("<p>Set here the tint level used to coloring red eye."));
+    m_tintLevel->setWhatsThis( i18n("<p>Set here the tint level used to coloring red eye."));
     gridSettings->addMultiCellWidget(label4, 9, 9, 0, 4);
     gridSettings->addMultiCellWidget(m_tintLevel, 10, 10, 0, 4);
 

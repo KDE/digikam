@@ -26,7 +26,7 @@
 #include <qstring.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <Q3Frame>
 #include <Q3GridLayout>
@@ -78,7 +78,7 @@ JPEGSettings::JPEGSettings(QWidget *parent)
     d->JPEGcompression->setRange(1, 100, 1, true );
     d->labelJPEGcompression = new QLabel(i18n("JPEG quality:"), this);
 
-    Q3WhatsThis::add(d->JPEGcompression, i18n("<p>The quality value for JPEG images:<p>"
+    d->JPEGcompression->setWhatsThis( i18n("<p>The quality value for JPEG images:<p>"
                                              "<b>1</b>: low quality (high compression and small "
                                              "file size)<p>"
                                              "<b>50</b>: medium quality<p>"

@@ -36,7 +36,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
-#include <q3whatsthis.h>
+
 #include <qtooltip.h>
 #include <qtimer.h>
 //Added by qt3to4:
@@ -98,7 +98,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
     m_channelCB->insertItem( i18n("Blue") );
-    Q3WhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+    m_channelCB->setWhatsThis( i18n("<p>Select here the histogram channel to display:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
@@ -108,7 +108,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(Q3Frame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
-    Q3WhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
+    m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
@@ -141,7 +141,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
 
     Q3VBox *histoBox   = new Q3VBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
-    Q3WhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
+    m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
                                              "settings changes."));
     QLabel *space = new QLabel(histoBox);
@@ -154,12 +154,12 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     // -------------------------------------------------------------
 
     m_HSSelector = new KHSSelector(gboxSettings);
-    Q3WhatsThis::add( m_HSSelector, i18n("<p>Select here the hue and saturation adjustments of the image."));
+    m_HSSelector->setWhatsThis( i18n("<p>Select here the hue and saturation adjustments of the image."));
     m_HSSelector->setMinimumSize(256, 142);
     gridSettings->addMultiCellWidget(m_HSSelector, 3, 3, 0, 4);
 
     m_HSPreview = new HSPreviewWidget(gboxSettings, spacingHint());
-    Q3WhatsThis::add( m_HSPreview, i18n("<p>You can see here the color preview of hue and "
+    m_HSPreview->setWhatsThis( i18n("<p>You can see here the color preview of hue and "
                                        "saturation adjustments."));
     m_HSPreview->setMinimumSize(256, 15);
     gridSettings->addMultiCellWidget(m_HSPreview, 4, 4, 0, 4);
@@ -169,7 +169,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     m_hInput->setPrecision(0);
     m_hInput->setRange(-180.0, 180.0, 1.0, true);
     m_hInput->setValue(0.0);
-    Q3WhatsThis::add( m_hInput, i18n("<p>Set here the hue adjustment of the image."));
+    m_hInput->setWhatsThis( i18n("<p>Set here the hue adjustment of the image."));
     gridSettings->addMultiCellWidget(label2, 5, 5, 0, 4);
     gridSettings->addMultiCellWidget(m_hInput, 6, 6, 0, 4);
 
@@ -178,7 +178,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     m_sInput->setPrecision(2);
     m_sInput->setRange(-100.0, 100.0, 0.01, true);
     m_sInput->setValue(0.0);
-    Q3WhatsThis::add( m_sInput, i18n("<p>Set here the saturation adjustment of the image."));
+    m_sInput->setWhatsThis( i18n("<p>Set here the saturation adjustment of the image."));
     gridSettings->addMultiCellWidget(label3, 7, 7, 0, 4);
     gridSettings->addMultiCellWidget(m_sInput, 8, 8, 0, 4);
 
@@ -187,7 +187,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     m_lInput->setPrecision(2);
     m_lInput->setRange(-100.0, 100.0, 0.01, true);
     m_lInput->setValue(0.0);
-    Q3WhatsThis::add( m_lInput, i18n("<p>Set here the lightness adjustment of the image."));    
+    m_lInput->setWhatsThis( i18n("<p>Set here the lightness adjustment of the image."));    
     gridSettings->addMultiCellWidget(label4, 9, 9, 0, 4);
     gridSettings->addMultiCellWidget(m_lInput, 10, 10, 0, 4);
 

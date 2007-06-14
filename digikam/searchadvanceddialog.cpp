@@ -35,7 +35,7 @@
 #include <q3vgroupbox.h>
 #include <qlabel.h>
 #include <qtimer.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <Q3Frame>
@@ -114,13 +114,13 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
     d->resultsView   = new SearchResultsView( page );
     d->resultsView->setMinimumSize( QSize(200, 200) );
     d->resultsView->setMaximumWidth(  130*2 + d->resultsView->spacing()*3 + 20 );
-    Q3WhatsThis::add( d->resultsView, i18n("<p>Here you can review the images found "
+    d->resultsView->setWhatsThis( i18n("<p>Here you can review the images found "
                                          "using the current search settings."));
     hbox->addWidget( d->resultsView );
 
     // Box for all the rules
     d->rulesBox = new Q3VGroupBox( i18n("Search Rules"), page);
-    Q3WhatsThis::add( d->rulesBox, i18n("<p>Here you can review the search rules used to filter images "
+    d->rulesBox->setWhatsThis( i18n("<p>Here you can review the search rules used to filter images "
                                       "searching in album library."));
     d->rulesBox->layout()->setSpacing( spacingHint() );
     d->rulesBox->layout()->setMargin( 5 );
@@ -135,7 +135,7 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
     Q3GroupBox* groupbox = 0;
     groupbox            = new Q3GroupBox( i18n("Add/Delete Option"),
                                          page, "groupbox" );
-    Q3WhatsThis::add( groupbox, i18n("<p>You can edit the search rules "
+    groupbox->setWhatsThis( i18n("<p>You can edit the search rules "
                                     "by adding/removing criteria."));
                                          
     groupbox->setColumnLayout(0, Qt::Vertical );
@@ -159,7 +159,7 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
     // Box for the group/ungroup
     groupbox            = new Q3GroupBox( i18n("Group/Ungroup Options"),
                                          page, "groupbox" );
-    Q3WhatsThis::add( groupbox, i18n("<p>You can group or ungroup any search criteria "
+    groupbox->setWhatsThis( i18n("<p>You can group or ungroup any search criteria "
                                     "from the Search Rule set."));
     groupbox->setColumnLayout(0, Qt::Vertical );
     groupbox->layout()->setSpacing( KDialog::spacingHint() );
@@ -179,7 +179,7 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
     groupbox->layout()->setSpacing( KDialog::spacingHint() );
     QLabel* label = new QLabel(i18n("&Save search as:"), groupbox);
     d->title = new KLineEdit(groupbox, "searchTitle");
-    Q3WhatsThis::add( d->title, i18n("<p>Enter the name used to save the current search in "
+    d->title->setWhatsThis( i18n("<p>Enter the name used to save the current search in "
                                    "\"My Searches\" view"));
     groupbox->setFrameStyle( Q3Frame::NoFrame );
 

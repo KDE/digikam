@@ -25,7 +25,7 @@
 // Qt includes. 
  
 #include <qlabel.h>
-#include <q3whatsthis.h>
+
 #include <qlayout.h>
 #include <qslider.h>
 #include <qimage.h>
@@ -103,7 +103,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     m_effectType->insertItem( i18n("Smart Blur") );
     m_effectType->insertItem( i18n("Frost Glass") );
     m_effectType->insertItem( i18n("Mosaic") );
-    Q3WhatsThis::add( m_effectType, i18n("<p>Select here the blurring effect to apply on image.<p>"
+    m_effectType->setWhatsThis( i18n("<p>Select here the blurring effect to apply on image.<p>"
                                         "<b>Zoom Blur</b>:  blurs the image along radial lines starting from "
                                         "a specified center point. This simulates the blur of a zooming camera.<p>"
                                         "<b>Radial Blur</b>: blurs the image by rotating the pixels around "
@@ -132,7 +132,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     m_distanceLabel = new QLabel(i18n("Distance:"), gboxSettings);
     m_distanceInput = new KIntNumInput(gboxSettings);
     m_distanceInput->setRange(0, 100, 1, true);    
-    Q3WhatsThis::add( m_distanceInput, i18n("<p>Set here the blur distance in pixels."));
+    m_distanceInput->setWhatsThis( i18n("<p>Set here the blur distance in pixels."));
     
     gridSettings->addMultiCellWidget(m_distanceLabel, 2, 2, 0, 1);
     gridSettings->addMultiCellWidget(m_distanceInput, 3, 3, 0, 1);
@@ -140,7 +140,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     m_levelLabel = new QLabel(i18n("Level:"), gboxSettings);
     m_levelInput = new KIntNumInput(gboxSettings);
     m_levelInput->setRange(0, 360, 1, true);
-    Q3WhatsThis::add( m_levelInput, i18n("<p>This value controls the level to use with the current effect."));  
+    m_levelInput->setWhatsThis( i18n("<p>This value controls the level to use with the current effect."));  
     
     gridSettings->addMultiCellWidget(m_levelLabel, 4, 4, 0, 1);
     gridSettings->addMultiCellWidget(m_levelInput, 5, 5, 0, 1);

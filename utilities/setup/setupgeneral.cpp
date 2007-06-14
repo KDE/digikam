@@ -35,7 +35,7 @@
 #include <qlabel.h>
 #include <qdir.h>
 #include <q3listbox.h>
-#include <q3whatsthis.h>
+
 #include <qtooltip.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
@@ -135,33 +135,33 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     Q3VGroupBox *iconTextGroup = new Q3VGroupBox(i18n("Thumbnail Information"), parent);
       
     d->iconShowNameBox = new QCheckBox(i18n("Show file &name"), iconTextGroup);
-    Q3WhatsThis::add( d->iconShowNameBox, i18n("<p>Set this option to show file name below image thumbnail."));
+    d->iconShowNameBox->setWhatsThis( i18n("<p>Set this option to show file name below image thumbnail."));
 
     d->iconShowSizeBox = new QCheckBox(i18n("Show file si&ze"), iconTextGroup);
-    Q3WhatsThis::add( d->iconShowSizeBox, i18n("<p>Set this option to show file size below image thumbnail."));
+    d->iconShowSizeBox->setWhatsThis( i18n("<p>Set this option to show file size below image thumbnail."));
 
     d->iconShowDateBox = new QCheckBox(i18n("Show file creation &date"), iconTextGroup);
-    Q3WhatsThis::add( d->iconShowDateBox, i18n("<p>Set this option to show file creation date "
+    d->iconShowDateBox->setWhatsThis( i18n("<p>Set this option to show file creation date "
                                               "below image thumbnail."));
 
     d->iconShowModDateBox = new QCheckBox(i18n("Show file &modification date"), iconTextGroup);
-    Q3WhatsThis::add( d->iconShowModDateBox, i18n("<p>Set this option to show file modification date "
+    d->iconShowModDateBox->setWhatsThis( i18n("<p>Set this option to show file modification date "
                                                  "below image thumbnail."));
 
     d->iconShowCommentsBox = new QCheckBox(i18n("Show digiKam &comments"), iconTextGroup);
-    Q3WhatsThis::add( d->iconShowCommentsBox, i18n("<p>Set this option to show digiKam comments "
+    d->iconShowCommentsBox->setWhatsThis( i18n("<p>Set this option to show digiKam comments "
                                                   "below image thumbnail."));
 
     d->iconShowTagsBox = new QCheckBox(i18n("Show digiKam &tags"), iconTextGroup);
-    Q3WhatsThis::add( d->iconShowTagsBox, i18n("<p>Set this option to show digiKam tags "
+    d->iconShowTagsBox->setWhatsThis( i18n("<p>Set this option to show digiKam tags "
                                               "below image thumbnail."));
 
     d->iconShowRatingBox = new QCheckBox(i18n("Show digiKam &rating"), iconTextGroup);
-    Q3WhatsThis::add( d->iconShowRatingBox, i18n("<p>Set this option to show digiKam rating "
+    d->iconShowRatingBox->setWhatsThis( i18n("<p>Set this option to show digiKam rating "
                                                 "below image thumbnail."));
 
     d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions (warning: slow)"), iconTextGroup);
-    Q3WhatsThis::add( d->iconShowResolutionBox, i18n("<p>Set this option to show picture size in pixels "
+    d->iconShowResolutionBox->setWhatsThis( i18n("<p>Set this option to show picture size in pixels "
                                                     "below image thumbnail."));
 
     layout->addWidget(iconTextGroup);
@@ -196,7 +196,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     ifaceSettingsLayout->addMultiCellWidget(d->rightClickActionComboBox, 1, 1, 1, 4);
 
     d->previewLoadFullImageSize = new QCheckBox(i18n("Embedded preview load full image size"), interfaceOptionsGroup);
-    Q3WhatsThis::add( d->previewLoadFullImageSize, i18n("<p>Set this option to load full image size "
+    d->previewLoadFullImageSize->setWhatsThis( i18n("<p>Set this option to load full image size "
                      "with embedded preview instead a reduced one. Because this option will take more time "
                      "to load image, use it only if you have a fast computer."));
     ifaceSettingsLayout->addMultiCellWidget(d->previewLoadFullImageSize, 2, 2, 0, 4);

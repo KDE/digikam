@@ -29,7 +29,7 @@
 #include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <q3whatsthis.h>
+
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 //Added by qt3to4:
@@ -98,7 +98,7 @@ SetupMime::SetupMime(QWidget* parent )
     
     Q3HBox *hbox1 = new Q3HBox(imageFileFilterBox);    
     d->imageFileFilterEdit = new QLineEdit(hbox1);
-    Q3WhatsThis::add( d->imageFileFilterEdit, i18n("<p>Here you can set the extensions of image files "
+    d->imageFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of image files "
                                                   "to be displayed in Albums (such as JPEG or TIFF); "
                                                   "when these files are clicked on "
                                                   "they will be opened with the digiKam Image Editor."));
@@ -129,7 +129,7 @@ SetupMime::SetupMime(QWidget* parent )
     
     Q3HBox *hbox2 = new Q3HBox(movieFileFilterBox);    
     d->movieFileFilterEdit = new QLineEdit(hbox2);
-    Q3WhatsThis::add( d->movieFileFilterEdit, i18n("<p>Here you can set the extensions of movie files "
+    d->movieFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of movie files "
                                                   "to be displayed in Albums (such as MPEG or AVI); "
                                                   "when these files are clicked on they will "
                                                   "be opened with the default KDE movie player."));
@@ -160,7 +160,7 @@ SetupMime::SetupMime(QWidget* parent )
     
     Q3HBox *hbox3 = new Q3HBox(audioFileFilterBox);  
     d->audioFileFilterEdit = new QLineEdit(hbox3);
-    Q3WhatsThis::add( d->audioFileFilterEdit, i18n("<p>Here you can set the extensions of audio files "
+    d->audioFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of audio files "
                                                   "to be displayed in Albums (such as MP3 or OGG); "
                                                   "when these files are clicked on they will "
                                                   "be opened with the default KDE audio player."));
@@ -191,7 +191,7 @@ SetupMime::SetupMime(QWidget* parent )
     
     Q3HBox *hbox4 = new Q3HBox(rawFileFilterBox);  
     d->rawFileFilterEdit = new QLineEdit(hbox4);
-    Q3WhatsThis::add( d->rawFileFilterEdit, i18n("<p>Here you can set the extensions of RAW image files "
+    d->rawFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of RAW image files "
                                                 "to be displayed in Albums (such as CRW, for Canon cameras, "
                                                 "or NEF, for Nikon cameras)."));
     rawFileFilterLabel->setBuddy(d->rawFileFilterEdit);

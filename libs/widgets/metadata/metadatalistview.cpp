@@ -28,7 +28,7 @@
 #include <q3ptrlist.h>
 #include <qpalette.h>
 #include <q3header.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <QResizeEvent>
 
@@ -125,7 +125,7 @@ void MetadataListView::slotSelectionChanged(Q3ListViewItem *item)
         tagValue.append("...");
     }
     
-    Q3WhatsThis::add(this, i18n("<b>Title: </b><p>%1<p>"
+    this->setWhatsThis( i18n("<b>Title: </b><p>%1<p>"
                                "<b>Value: </b><p>%2<p>"
                                "<b>Description: </b><p>%3")
                           .arg(tagTitle)

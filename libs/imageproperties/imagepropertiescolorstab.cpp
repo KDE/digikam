@@ -31,7 +31,7 @@
 #include <qspinbox.h>
 #include <qcombobox.h>
 #include <qlabel.h>
-#include <q3whatsthis.h>
+
 #include <q3groupbox.h>
 #include <qhbuttongroup.h> 
 #include <qpushbutton.h>
@@ -170,7 +170,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     d->channelCB->insertItem( i18n("Blue") );
     d->channelCB->insertItem( i18n("Alpha") );
     d->channelCB->insertItem( i18n("Colors") );
-    Q3WhatsThis::add( d->channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+    d->channelCB->setWhatsThis( i18n("<p>Select here the histogram channel to display:<p>"
                                         "<b>Luminosity</b>: Display luminosity (perceived brightness) values.<p>"
                                         "<b>Red</b>: Display the red image channel.<p>"
                                         "<b>Green</b>: Display the green image channel.<p>"
@@ -184,7 +184,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     d->scaleBG->setExclusive(true);
     d->scaleBG->setFrameShape(Q3Frame::NoFrame);
     d->scaleBG->setInsideMargin( 0 );
-    Q3WhatsThis::add( d->scaleBG, i18n("<p>Select here the histogram scale.<p>"
+    d->scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
                                       "If the image's maximal values are small, you can use the linear scale.<p>"
                                       "Logarithmic scale can be used when the maximal values are big; "
                                       "if it is used, all values (small and large) will be visible on the "
@@ -213,7 +213,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     d->colorsCB->insertItem( i18n("Green") );
     d->colorsCB->insertItem( i18n("Blue") );
     d->colorsCB->setEnabled( false );
-    Q3WhatsThis::add( d->colorsCB, i18n("<p>Select here the main color displayed with Colors Channel mode:<p>"
+    d->colorsCB->setWhatsThis( i18n("<p>Select here the main color displayed with Colors Channel mode:<p>"
                                        "<b>Red</b>: Draw the red image channel in the foreground.<p>"
                                        "<b>Green</b>: Draw the green image channel in the foreground.<p>"
                                        "<b>Blue</b>: Draw the blue image channel in the foreground.<p>"));
@@ -223,7 +223,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     d->regionBG->setFrameShape(Q3Frame::NoFrame);
     d->regionBG->setInsideMargin( 0 );
     d->regionBG->hide();
-    Q3WhatsThis::add( d->regionBG, i18n("<p>Select here from which region the histogram will be computed:<p>"
+    d->regionBG->setWhatsThis( i18n("<p>Select here from which region the histogram will be computed:<p>"
                                        "<b>Full Image</b>: Compute histogram using the full image.<p>"
                                        "<b>Selection</b>: Compute histogram using the current image "
                                        "selection."));
@@ -256,7 +256,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     Q3VBox *histoBox    = new Q3VBox(histogramPage);
     d->histogramWidget = new HistogramWidget(256, 140, histoBox);
-    Q3WhatsThis::add( d->histogramWidget, i18n("<p>This is the histogram drawing of the "
+    d->histogramWidget->setWhatsThis( i18n("<p>This is the histogram drawing of the "
                                               "selected image channel"));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
@@ -271,11 +271,11 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     label3->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->minInterv = new QSpinBox(0, 255, 1, histogramPage);
     d->minInterv->setValue(0);
-    Q3WhatsThis::add(d->minInterv, i18n("<p>Select here the minimal intensity "
+    d->minInterv->setWhatsThis( i18n("<p>Select here the minimal intensity "
                                        "value of the histogram selection."));
     d->maxInterv = new QSpinBox(0, 255, 1, histogramPage);
     d->maxInterv->setValue(255);
-    Q3WhatsThis::add(d->minInterv, i18n("<p>Select here the maximal intensity value "
+    d->minInterv->setWhatsThis( i18n("<p>Select here the maximal intensity value "
                                        "of the histogram selection."));
     hlay2->addWidget(label3);
     hlay2->addWidget(d->minInterv);
@@ -285,7 +285,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     // -------------------------------------------------------------
 
     Q3GroupBox *gbox = new Q3GroupBox(2, Qt::Horizontal, i18n("Statistics"), histogramPage);
-    Q3WhatsThis::add( gbox, i18n("<p>Here you can see the statistical results calculated from the "
+    gbox->setWhatsThis( i18n("<p>Here you can see the statistical results calculated from the "
                                 "selected histogram part. These values are available for all "
                                 "channels."));
 

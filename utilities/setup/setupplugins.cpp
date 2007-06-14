@@ -31,7 +31,7 @@
 #include <qstring.h>
 #include <q3groupbox.h>
 #include <qlabel.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
@@ -87,7 +87,7 @@ SetupPlugins::SetupPlugins(QWidget* parent )
     d->kipiConfig = KIPI::PluginLoader::instance()->configWidget( parent );
     QString pluginsListHelp = i18n("<p>A list of available Kipi plugins "
                                     "appears below.");
-    Q3WhatsThis::add( d->kipiConfig, pluginsListHelp);
+    d->kipiConfig->setWhatsThis( pluginsListHelp);
     layout->addWidget( d->kipiConfig );
 }
 

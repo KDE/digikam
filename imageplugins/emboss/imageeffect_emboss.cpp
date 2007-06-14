@@ -26,7 +26,7 @@
 // Qt includes.
 
 #include <qlabel.h>
-#include <q3whatsthis.h>
+
 #include <qlayout.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
@@ -89,7 +89,7 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     
     m_depthInput = new KIntNumInput(gboxSettings);
     m_depthInput->setRange(10, 300, 1, true);
-    Q3WhatsThis::add( m_depthInput, i18n("<p>Set here the depth of the embossing image effect.") );
+    m_depthInput->setWhatsThis( i18n("<p>Set here the depth of the embossing image effect.") );
                                             
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
     gridSettings->addMultiCellWidget(m_depthInput, 1, 1, 0, 1);

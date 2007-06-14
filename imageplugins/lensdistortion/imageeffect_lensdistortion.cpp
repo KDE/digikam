@@ -31,7 +31,7 @@
 // Qt includes. 
  
 #include <qlabel.h>
-#include <q3whatsthis.h>
+
 #include <qlayout.h>
 #include <qpixmap.h>
 #include <qpainter.h>
@@ -100,7 +100,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     
     m_maskPreviewLabel = new QLabel( gboxSettings );
     m_maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
-    Q3WhatsThis::add( m_maskPreviewLabel, i18n("<p>You can see here a thumbnail preview of the distortion correction "
+    m_maskPreviewLabel->setWhatsThis( i18n("<p>You can see here a thumbnail preview of the distortion correction "
                                               "applied to a cross pattern.") );
     gridSettings->addMultiCellWidget(m_maskPreviewLabel, 0, 0, 0, 1);
         
@@ -111,7 +111,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     m_mainInput = new KDoubleNumInput(gboxSettings);
     m_mainInput->setPrecision(1);
     m_mainInput->setRange(-100.0, 100.0, 0.1, true);
-    Q3WhatsThis::add( m_mainInput, i18n("<p>This value controls the amount of distortion. Negative values correct lens barrel "
+    m_mainInput->setWhatsThis( i18n("<p>This value controls the amount of distortion. Negative values correct lens barrel "
                                        "distortion, while positive values correct lens pincushion distortion."));
 
     gridSettings->addMultiCellWidget(label1, 1, 1, 0, 1);
@@ -124,7 +124,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     m_edgeInput = new KDoubleNumInput(gboxSettings);
     m_edgeInput->setPrecision(1);
     m_edgeInput->setRange(-100.0, 100.0, 0.1, true);
-    Q3WhatsThis::add( m_edgeInput, i18n("<p>This value controls in the same manner as the Main control, but has more effect "
+    m_edgeInput->setWhatsThis( i18n("<p>This value controls in the same manner as the Main control, but has more effect "
                                        "at the edges of the image than at the center."));
 
     gridSettings->addMultiCellWidget(label2, 3, 3, 0, 1);
@@ -137,7 +137,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     m_rescaleInput = new KDoubleNumInput(gboxSettings);
     m_rescaleInput->setPrecision(1);
     m_rescaleInput->setRange(-100.0, 100.0, 0.1, true);
-    Q3WhatsThis::add( m_rescaleInput, i18n("<p>This value rescales the overall image size."));
+    m_rescaleInput->setWhatsThis( i18n("<p>This value rescales the overall image size."));
     
     gridSettings->addMultiCellWidget(label3, 5, 5, 0, 1);
     gridSettings->addMultiCellWidget(m_rescaleInput, 6, 6, 0, 1);
@@ -149,7 +149,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     m_brightenInput = new KDoubleNumInput(gboxSettings);
     m_brightenInput->setPrecision(1);
     m_brightenInput->setRange(-100.0, 100.0, 0.1, true);
-    Q3WhatsThis::add( m_brightenInput, i18n("<p>This value adjusts the brightness in image corners."));
+    m_brightenInput->setWhatsThis( i18n("<p>This value adjusts the brightness in image corners."));
 
     gridSettings->addMultiCellWidget(label4, 7, 7, 0, 1);
     gridSettings->addMultiCellWidget(m_brightenInput, 8, 8, 0, 1);

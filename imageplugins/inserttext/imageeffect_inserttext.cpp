@@ -27,7 +27,7 @@
 #include <q3vgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3whatsthis.h>
+
 #include <qlayout.h>
 #include <q3frame.h>
 #include <qcombobox.h>
@@ -106,7 +106,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     Q3VBoxLayout* l  = new Q3VBoxLayout(frame, 5, 0);
     m_previewWidget = new InsertTextWidget(480, 320, frame);
     l->addWidget(m_previewWidget);
-    Q3WhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the text inserted to the image. "
+    m_previewWidget->setWhatsThis( i18n("<p>This is the preview of the text inserted to the image. "
                                            "You can use the mouse to move the text to the right location."));
     setPreviewAreaWidget(frame);                                           
     
@@ -118,13 +118,13 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     m_textEdit = new KTextEdit(gbox2);
     m_textEdit->setCheckSpellingEnabled(true);
     m_textEdit->setWordWrap(Q3TextEdit::NoWrap);
-    Q3WhatsThis::add( m_textEdit, i18n("<p>Here, enter the text you want to insert in your image."));
+    m_textEdit->setWhatsThis( i18n("<p>Here, enter the text you want to insert in your image."));
     gridBox2->addMultiCellWidget(m_textEdit, 0, 2, 0, 1);
     
     // -------------------------------------------------------------
     
     m_fontChooserWidget = new FontChooserWidget(gbox2);
-    Q3WhatsThis::add( m_textEdit, i18n("<p>Here you can choose the font to be used."));
+    m_textEdit->setWhatsThis( i18n("<p>Here you can choose the font to be used."));
     gridBox2->addMultiCellWidget(m_fontChooserWidget, 3, 3, 0, 1);
     
     // -------------------------------------------------------------
@@ -168,7 +168,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     m_textRotation->insertItem( i18n("90 Degrees") );
     m_textRotation->insertItem( i18n("180 Degrees") );
     m_textRotation->insertItem( i18n("270 Degrees") );
-    Q3WhatsThis::add( m_textRotation, i18n("<p>Select here the text rotation to use."));
+    m_textRotation->setWhatsThis( i18n("<p>Select here the text rotation to use."));
     gridBox2->addMultiCellWidget(label1, 5, 5, 0, 0);
     gridBox2->addMultiCellWidget(m_textRotation, 5, 5, 1, 1);
 
@@ -176,7 +176,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
         
     QLabel *label2    = new QLabel(i18n("Color:"), gbox2);
     m_fontColorButton = new KColorButton( Qt::black, gbox2 );
-    Q3WhatsThis::add( m_fontColorButton, i18n("<p>Set here the font color to use."));
+    m_fontColorButton->setWhatsThis( i18n("<p>Set here the font color to use."));
     gridBox2->addMultiCellWidget(label2, 6, 6, 0, 0);
     gridBox2->addMultiCellWidget(m_fontColorButton, 6, 6, 1, 1);
 

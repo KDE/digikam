@@ -28,7 +28,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qpixmap.h>
-#include <q3whatsthis.h>
+
 #include <qtooltip.h>
 #include <qlayout.h>
 #include <q3frame.h>
@@ -107,7 +107,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     m_previewWidget        = new SuperImposeWidget(400, 300, frame);
     gridFrame->addMultiCellWidget(m_previewWidget, 0, 0, 0, 2);
     gridFrame->setRowStretch(0, 10);
-    Q3WhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the template "
+    m_previewWidget->setWhatsThis( i18n("<p>This is the preview of the template "
                                            "superimposed onto the image.") );
     
     // -------------------------------------------------------------
@@ -150,7 +150,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     m_thumbnailsBar = new Digikam::ThumbBarView(gbox2);
     m_dirSelect     = new DirSelectWidget(gbox2);
     QPushButton *templateDirButton = new QPushButton( i18n("Root Directory..."), gbox2 );
-    Q3WhatsThis::add( templateDirButton, i18n("<p>Set here the current templates' root directory.") );
+    templateDirButton->setWhatsThis( i18n("<p>Set here the current templates' root directory.") );
 
     grid->addMultiCellWidget(m_thumbnailsBar, 0, 1, 0, 0);
     grid->addMultiCellWidget(m_dirSelect, 0, 0, 1, 1);    

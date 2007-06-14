@@ -28,7 +28,7 @@
 #include <qlabel.h>
 #include <qpixmap.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 #include <qtimer.h>
 #include <qhbuttongroup.h> 
 #include <qpushbutton.h>
@@ -131,7 +131,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     d->imageRegionWidget = new ImageRegionWidget(w, h, preview, false);
     d->imageRegionWidget->setFrameStyle(Q3Frame::NoFrame);
     preview->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
-    Q3WhatsThis::add( d->imageRegionWidget, i18n("<p>Here you can see the original clip image "
+    d->imageRegionWidget->setWhatsThis( i18n("<p>Here you can see the original clip image "
                                                 "which will be used for the preview computation."
                                                 "<p>Click and drag the mouse cursor in the "
                                                 "image to change the clip focus."));
@@ -143,7 +143,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     // -------------------------------------------------------------
     
     d->zoomBar = new StatusZoomBar(d->previewWidget);
-    Q3WhatsThis::add( d->zoomBar, i18n("<p>Set here the zoom factor used to render picture in the preview area.") );
+    d->zoomBar->setWhatsThis( i18n("<p>Set here the zoom factor used to render picture in the preview area.") );
 
     // -------------------------------------------------------------
     
@@ -162,7 +162,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
        directory = KGlobal::dirs()->findResourceDir("duplicatebothhorz", "duplicatebothhorz.png");
        duplicateHorButton->setPixmap( QPixmap( directory + "duplicatebothhorz.png" ) );
        duplicateHorButton->setToggleButton(true);
-       Q3WhatsThis::add( duplicateHorButton, i18n("<p>If you enable this option, you will separate the preview area "
+       duplicateHorButton->setWhatsThis( i18n("<p>If you enable this option, you will separate the preview area "
                                                  "horizontally, displaying the original and target image "
                                                  "at the same time. The target is duplicated from the original "
                                                  "below the red dashed line." ) );
@@ -173,7 +173,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
        directory = KGlobal::dirs()->findResourceDir("duplicatebothvert", "duplicatebothvert.png");
        duplicateVerButton->setPixmap( QPixmap( directory + "duplicatebothvert.png" ) );
        duplicateVerButton->setToggleButton(true);
-       Q3WhatsThis::add( duplicateVerButton, i18n("<p>If you enable this option, you will separate the preview area "
+       duplicateVerButton->setWhatsThis( i18n("<p>If you enable this option, you will separate the preview area "
                                                  "vertically, displaying the original and target image "
                                                  "at the same time. The target is duplicated from the original to "
                                                  "the right of the red dashed line." ) );
@@ -188,7 +188,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
        directory = KGlobal::dirs()->findResourceDir("bothhorz", "bothhorz.png");
        separateHorButton->setPixmap( QPixmap( directory + "bothhorz.png" ) );
        separateHorButton->setToggleButton(true);
-       Q3WhatsThis::add( separateHorButton, i18n( "<p>If you enable this option, you will separate the preview area "
+       separateHorButton->setWhatsThis( i18n( "<p>If you enable this option, you will separate the preview area "
                                                  "horizontally, displaying the original and target image "
                                                  "at the same time. The original is above the "
                                                  "red dashed line, the target below it." ) );
@@ -199,7 +199,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
        directory = KGlobal::dirs()->findResourceDir("bothvert", "bothvert.png");
        separateVerButton->setPixmap( QPixmap( directory + "bothvert.png" ) );
        separateVerButton->setToggleButton(true);
-       Q3WhatsThis::add( separateVerButton, i18n( "<p>If you enable this option, you will separate the preview area "
+       separateVerButton->setWhatsThis( i18n( "<p>If you enable this option, you will separate the preview area "
                                                  "vertically, displaying the original and target image "
                                                  "at the same time. The original is to the left of the "
                                                  "red dashed line, the target to the right of it." ) );
@@ -211,13 +211,13 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     directory = KGlobal::dirs()->findResourceDir("target", "target.png");
     noSeparateButton->setPixmap( QPixmap( directory + "target.png" ) );
     noSeparateButton->setToggleButton(true);
-    Q3WhatsThis::add( noSeparateButton, i18n( "<p>If you enable this option, the preview area will not "
+    noSeparateButton->setWhatsThis( i18n( "<p>If you enable this option, the preview area will not "
                                              "be separated." ) );
     
     // -------------------------------------------------------------
     
     d->progressBar = new KProgress(100, d->previewWidget);
-    Q3WhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
+    d->progressBar ->setWhatsThis(i18n("<p>This is the current percentage of the task completed."));
     d->progressBar->setProgress(0);
     d->progressBar->setMaximumHeight( fontMetrics().height() );
 
@@ -244,7 +244,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     frame3->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
     Q3VBoxLayout* l3 = new Q3VBoxLayout(frame3, 5, 0);
     d->imagePanIconWidget = new ImagePanIconWidget(360, 240, frame3);
-    Q3WhatsThis::add( d->imagePanIconWidget, i18n("<p>Here you can see the original image panel "
+    d->imagePanIconWidget->setWhatsThis( i18n("<p>Here you can see the original image panel "
                                                  "which can help you to select the clip preview."
                                                  "<p>Click and drag the mouse cursor in the "
                                                  "red rectangle to change the clip focus."));
@@ -431,7 +431,7 @@ void ImagePannelWidget::setProgressVisible(bool b)
 
 void ImagePannelWidget::setProgressWhatsThis(QString desc)
 {
-    Q3WhatsThis::add( d->progressBar, desc);
+    d->progressBar->setWhatsThis( desc);
 }
 
 void ImagePannelWidget::setPreviewImageWaitCursor(bool enable)

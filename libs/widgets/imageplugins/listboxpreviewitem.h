@@ -29,7 +29,7 @@
  // Qt includes.
 
 #include <q3listbox.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <QPixmap>
 

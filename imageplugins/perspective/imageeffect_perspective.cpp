@@ -28,7 +28,7 @@
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qpushbutton.h>
-#include <q3whatsthis.h>
+
 #include <qlayout.h>
 #include <q3frame.h>
 #include <qcheckbox.h>
@@ -97,7 +97,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     Q3VBoxLayout* l  = new Q3VBoxLayout(frame, 5, 0);
     m_previewWidget = new PerspectiveWidget(525, 350, frame);
     l->addWidget(m_previewWidget);
-    Q3WhatsThis::add( m_previewWidget, i18n("<p>This is the perspective transformation operation preview. "
+    m_previewWidget->setWhatsThis( i18n("<p>This is the perspective transformation operation preview. "
                                            "You can use the mouse for dragging the corner to adjust the "
                                            "perspective transformation area."));
     setPreviewAreaWidget(frame); 
@@ -163,13 +163,13 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
 
     QLabel *label7 = new QLabel(i18n("Guide color:"), gbox2);
     m_guideColorBt = new KColorButton( QColor( Qt::red ), gbox2 );
-    Q3WhatsThis::add( m_guideColorBt, i18n("<p>Set here the color used to draw guides dashed-lines."));
+    m_guideColorBt->setWhatsThis( i18n("<p>Set here the color used to draw guides dashed-lines."));
     gridLayout->addMultiCellWidget(label7, 11, 11, 0, 0);
     gridLayout->addMultiCellWidget(m_guideColorBt, 11, 11, 2, 2);
 
     QLabel *label8 = new QLabel(i18n("Guide width:"), gbox2);
     m_guideSize    = new QSpinBox( 1, 5, 1, gbox2);
-    Q3WhatsThis::add( m_guideSize, i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
+    m_guideSize->setWhatsThis( i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
     gridLayout->addMultiCellWidget(label8, 12, 12, 0, 0);
     gridLayout->addMultiCellWidget(m_guideSize, 12, 12, 2, 2);
 

@@ -31,7 +31,7 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3whatsthis.h>
+
 #include <qlayout.h>
 #include <q3frame.h>
 #include <q3vbox.h>
@@ -118,7 +118,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
     m_channelCB->insertItem( i18n("Blue") );
-    Q3WhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+    m_channelCB->setWhatsThis( i18n("<p>Select here the histogram channel to display:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
@@ -128,7 +128,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(Q3Frame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
-    Q3WhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
+    m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
@@ -161,7 +161,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
 
     Q3VBox *histoBox   = new Q3VBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
-    Q3WhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
+    m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
                                              "settings changes."));
     QLabel *space = new QLabel(histoBox);
@@ -180,7 +180,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     m_effectType->insertItem( i18n("Vivid") );
     m_effectType->insertItem( i18n("Neon") );    
     m_effectType->insertItem( i18n("Find Edges") );    
-    Q3WhatsThis::add( m_effectType, i18n("<p>Select here the effect type to apply on the image.<p>"
+    m_effectType->setWhatsThis( i18n("<p>Select here the effect type to apply on the image.<p>"
                                         "<b>Solarize</b>: simulates solarization of photograph.<p>"
                                         "<b>Vivid</b>: simulates the Velvia(tm) slide film colors.<p>"
                                         "<b>Neon</b>: coloring the edges in a photograph to "
@@ -194,7 +194,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     m_levelLabel = new QLabel(i18n("Level:"), gboxSettings);
     m_levelInput = new KIntNumInput(gboxSettings);
     m_levelInput->setRange(0, 100, 1, true);
-    Q3WhatsThis::add( m_levelInput, i18n("<p>Set here the level of the effect."));
+    m_levelInput->setWhatsThis( i18n("<p>Set here the level of the effect."));
     
     gridSettings->addMultiCellWidget(m_levelLabel, 5, 5, 0, 4);
     gridSettings->addMultiCellWidget(m_levelInput, 6, 6, 0, 4);
@@ -202,7 +202,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     m_iterationLabel = new QLabel(i18n("Iteration:"), gboxSettings);
     m_iterationInput = new KIntNumInput(gboxSettings);
     m_iterationInput->setRange(0, 100, 1, true);
-    Q3WhatsThis::add( m_iterationInput, i18n("<p>This value controls the number of iterations "
+    m_iterationInput->setWhatsThis( i18n("<p>This value controls the number of iterations "
                                             "to use with Neon and Find Edges effects."));
     
     gridSettings->addMultiCellWidget(m_iterationLabel, 7, 7, 0, 4);

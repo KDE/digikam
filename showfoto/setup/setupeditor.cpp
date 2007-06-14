@@ -28,7 +28,7 @@
 #include <q3hbox.h>
 #include <q3vgroupbox.h>
 #include <qlabel.h>
-#include <q3whatsthis.h>
+
 #include <qcheckbox.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
@@ -98,13 +98,13 @@ SetupEditor::SetupEditor(QWidget* parent )
     QLabel *backgroundColorlabel = new QLabel( i18n("&Background color:"), colorBox );
     d->backgroundColor           = new KColorButton(colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
-    Q3WhatsThis::add( d->backgroundColor, i18n("<p>Select the background color to use "
+    d->backgroundColor->setWhatsThis( i18n("<p>Select the background color to use "
                                               "for the image editor area.") );
     
     d->hideToolBar        = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
     d->hideThumbBar       = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
     d->horizontalThumbBar = new QCheckBox(i18n("Use &horizontal thumbbar (need to restart showFoto)"), interfaceOptionsGroup);
-    Q3WhatsThis::add( d->horizontalThumbBar, i18n("<p>If this option is enabled, thumbnails bar will be displayed horizontally behind "
+    d->horizontalThumbBar->setWhatsThis( i18n("<p>If this option is enabled, thumbnails bar will be displayed horizontally behind "
                                                  "image area. You need to restart showFoto for this option take effect.<p>"));
     d->useTrash   = new QCheckBox(i18n("&Deleting items should move them to trash"), interfaceOptionsGroup);
     d->showSplash = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
@@ -117,14 +117,14 @@ SetupEditor::SetupEditor(QWidget* parent )
     QLabel *underExpoColorlabel = new QLabel( i18n("&Under-exposure color:"), underExpoBox);
     d->underExposureColor       = new KColorButton(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
-    Q3WhatsThis::add( d->underExposureColor, i18n("<p>Customize the color used in image editor to identify "
+    d->underExposureColor->setWhatsThis( i18n("<p>Customize the color used in image editor to identify "
                                                  "the under-exposed pixels.") );
 
     Q3HBox *overExpoBox         = new Q3HBox(exposureOptionsGroup);
     QLabel *overExpoColorlabel = new QLabel( i18n("&Over-exposure color:"), overExpoBox);
     d->overExposureColor       = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
-    Q3WhatsThis::add( d->overExposureColor, i18n("<p>Customize the color used in image editor to identify "
+    d->overExposureColor->setWhatsThis( i18n("<p>Customize the color used in image editor to identify "
                                                 "the over-exposed pixels.") );
 
     // --------------------------------------------------------

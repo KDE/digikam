@@ -34,7 +34,7 @@
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qlabel.h>
-#include <q3whatsthis.h>
+
 #include <qicon.h>
 #include <qpixmap.h>
 #include <qpushbutton.h>
@@ -166,7 +166,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     
     d->enableColorManagement = new QCheckBox(colorPolicy);
     d->enableColorManagement->setText(i18n("Enable Color Management"));
-    Q3WhatsThis::add( d->enableColorManagement, i18n("<ul><li>Checked: Color Management is enabled</li>"
+    d->enableColorManagement->setWhatsThis( i18n("<ul><li>Checked: Color Management is enabled</li>"
                                                     "<li>Unchecked: Color Management is disabled</li></ul>"));
     
     KUrlLabel *lcmsLogoLabel = new KUrlLabel(colorPolicy);
@@ -184,13 +184,13 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     d->defaultApplyICC = new QRadioButton(behaviourOptions);
     d->defaultApplyICC->setText(i18n("Apply when opening an image in Image Editor"));
-    Q3WhatsThis::add( d->defaultApplyICC, i18n("<p>If this option is selected, digiKam applies the "
+    d->defaultApplyICC->setWhatsThis( i18n("<p>If this option is selected, digiKam applies the "
                      "Workspace default color profile to an image without asking when this has no "
                      "embedded profile, or the embedded profile is not the same as the workspace profile.</p>"));
     
     d->defaultAskICC = new QRadioButton(behaviourOptions);
     d->defaultAskICC->setText(i18n("Ask when opening an image in Image Editor"));
-    Q3WhatsThis::add( d->defaultAskICC, i18n("<p>If this option is selected, digiKam asks to the user "
+    d->defaultAskICC->setWhatsThis( i18n("<p>If this option is selected, digiKam asks to the user "
                      "before it applies the Workspace default color profile to an image which has no "
                      "embedded profile or, if the image has an embedded profile, this is not the same "
                      "as the workspace profile.</p>"));
@@ -200,7 +200,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     space->setFixedWidth(15);
     d->cmToolInRawLoading = new QCheckBox(hbox);
     d->cmToolInRawLoading->setText(i18n("Launch Color Management plugin with RAW files"));
-    Q3WhatsThis::add( d->cmToolInRawLoading, i18n("Enable this option if you want to launch the color "
+    d->cmToolInRawLoading->setWhatsThis( i18n("Enable this option if you want to launch the color "
                      "management image plugin when a RAW file is loaded in editor."));
 
     grid->addMultiCellWidget(d->enableColorManagement, 0, 0, 0, 0);
@@ -218,7 +218,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->defaultPathKU = new KUrlRequester(d->defaultPathGB);
     d->defaultPathKU->lineEdit()->setReadOnly(true);
     d->defaultPathKU->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);    
-    Q3WhatsThis::add( d->defaultPathKU, i18n("<p>Default path to the color profiles folder. "
+    d->defaultPathKU->setWhatsThis( i18n("<p>Default path to the color profiles folder. "
                      "You must store all your color profiles in this directory.</p>"));
     
     layout->addWidget(d->defaultPathGB);
@@ -231,7 +231,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     d->managedView = new QCheckBox(d->profilesGB);
     d->managedView->setText(i18n("Use color managed view (warning: slow)"));
-    Q3WhatsThis::add( d->managedView, i18n("<p>Turn on this option if " 
+    d->managedView->setWhatsThis( i18n("<p>Turn on this option if " 
                      "you want to use your <b>Monitor Color Profile</b> to show your pictures in "
                      "Image Editor window with a color correction adapted to your monitor. "
                      "Warning: this option can take a while to render "
@@ -242,10 +242,10 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->monitorProfiles   = new QLabel(i18n("Monitor:"), d->profilesGB);
     d->monitorProfilesKC = new SqueezedComboBox(d->profilesGB);
     d->monitorProfiles->setBuddy(d->monitorProfilesKC);
-    Q3WhatsThis::add( d->monitorProfilesKC, i18n("<p>Select here the color profile for your monitor. "
+    d->monitorProfilesKC->setWhatsThis( i18n("<p>Select here the color profile for your monitor. "
                      "You need to toggle on <b>Use color managed view</b> option to use this profile.</p>"));
     d->infoMonitorProfiles = new QPushButton(i18n("Info..."), d->profilesGB);
-    Q3WhatsThis::add( d->infoMonitorProfiles, i18n("<p>You can use this button to get more detailed "
+    d->infoMonitorProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected monitor profile.</p>"));
     
     grid2->addMultiCellWidget(d->managedView, 0, 0, 0, 3);
@@ -259,11 +259,11 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     QLabel *workProfiles = new QLabel(i18n("Workspace:"), d->profilesGB);
     d->workProfilesKC    = new SqueezedComboBox(d->profilesGB);
     workProfiles->setBuddy(d->workProfilesKC);
-    Q3WhatsThis::add( d->workProfilesKC, i18n("<p>All the images will be converted to the color "
+    d->workProfilesKC->setWhatsThis( i18n("<p>All the images will be converted to the color "
                      "space of this profile, so you must select a profile appropriate for editing.</p>"
                      "<p>These color profiles are device independent.</p>"));
     d->infoWorkProfiles = new QPushButton(i18n("Info..."), d->profilesGB);
-    Q3WhatsThis::add( d->infoWorkProfiles, i18n("<p>You can use this button to get more detailed "
+    d->infoWorkProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected workspace profile.</p>"));
 
     grid2->addMultiCellWidget(workIcon, 2, 2, 0, 0);
@@ -276,10 +276,10 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     QLabel *inProfiles = new QLabel(i18n("Input:"), d->profilesGB);
     d->inProfilesKC    = new SqueezedComboBox(d->profilesGB);
     inProfiles->setBuddy(d->inProfilesKC);
-    Q3WhatsThis::add( d->inProfilesKC, i18n("<p>You must select the profile for your input device "
+    d->inProfilesKC->setWhatsThis( i18n("<p>You must select the profile for your input device "
                      "(usually, your camera, scanner...)</p>"));
     d->infoInProfiles = new QPushButton(i18n("Info..."), d->profilesGB);
-    Q3WhatsThis::add( d->infoInProfiles, i18n("<p>You can use this button to get more detailed "
+    d->infoInProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected input profile.</p>"));
     
     grid2->addMultiCellWidget(inIcon, 3, 3, 0, 0);
@@ -292,11 +292,11 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     QLabel *proofProfiles = new QLabel(i18n("Soft proof:"), d->profilesGB);
     d->proofProfilesKC    = new SqueezedComboBox(d->profilesGB);
     proofProfiles->setBuddy(d->proofProfilesKC);
-    Q3WhatsThis::add( d->proofProfilesKC, i18n("<p>You must select the profile for your output device "
+    d->proofProfilesKC->setWhatsThis( i18n("<p>You must select the profile for your output device "
                      "(usually, your printer). This profile will be used to do a soft proof, so you will "
                      "be able to preview how an image will be rendered in an output device.</p>"));
     d->infoProofProfiles = new QPushButton(i18n("Info..."), d->profilesGB);
-    Q3WhatsThis::add( d->infoProofProfiles, i18n("<p>You can use this button to get more detailed "
+    d->infoProofProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected soft proof profile.</p>"));
     
     grid2->addMultiCellWidget(proofIcon, 4, 4, 0, 0);
@@ -312,7 +312,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     d->bpcAlgorithm = new QCheckBox(d->advancedSettingsGB);
     d->bpcAlgorithm->setText(i18n("Use black point compensation"));
-    Q3WhatsThis::add( d->bpcAlgorithm, i18n("<p><b>Black Point Compensation</b> is a way to make "
+    d->bpcAlgorithm->setWhatsThis( i18n("<p><b>Black Point Compensation</b> is a way to make "
                      "adjustments between the maximum "
                      "black levels of digital files and the black capabilities of various "
                      "digital devices.</p>"));
@@ -326,7 +326,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->renderingIntentKC->insertItem("Relative Colorimetric");
     d->renderingIntentKC->insertItem("Saturation");
     d->renderingIntentKC->insertItem("Absolute Colorimetric");
-    Q3WhatsThis::add( d->renderingIntentKC, i18n("<ul><li><p><b>Perceptual intent</b> causes the full gamut of the image to be "
+    d->renderingIntentKC->setWhatsThis( i18n("<ul><li><p><b>Perceptual intent</b> causes the full gamut of the image to be "
                      "compressed or expanded to fill the gamut of the destination device, so that gray balance is "
                      "preserved but colorimetric accuracy may not be preserved.</p>"
                      "<p>In other words, if certain colors in an image fall outside of the range of colors that the output "

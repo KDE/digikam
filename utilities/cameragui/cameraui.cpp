@@ -61,7 +61,7 @@ extern "C"
 #include <qlineedit.h>
 #include <qtooltip.h>
 #include <qtimer.h>
-#include <q3whatsthis.h>
+
 #include <qfile.h>
 #include <qfileinfo.h>
 
@@ -275,7 +275,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->renameCustomizer  = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->view->setRenameCustomizer(d->renameCustomizer);
 
-    Q3WhatsThis::add( d->advBox, i18n("<p>Set how digiKam will rename picture files as they are downloaded."));
+    d->advBox->setWhatsThis( i18n("<p>Set how digiKam will rename picture files as they are downloaded."));
 
     d->advBox->insertItem(CameraUIPriv::RENAMEFILEPAGE, d->renameCustomizer, 
                           SmallIconSet("fileimport"), i18n("File Renaming Options"));
@@ -297,14 +297,14 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     albumVlay->addWidget(hbox1);
     albumVlay->addStretch();
 
-    Q3WhatsThis::add( albumBox, i18n("<p>Set how digiKam creates albums automatically when downloading."));
-    Q3WhatsThis::add( d->autoAlbumExtCheck, i18n("<p>Toggle on this option if you want to download your "
+    albumBox->setWhatsThis( i18n("<p>Set how digiKam creates albums automatically when downloading."));
+    d->autoAlbumExtCheck->setWhatsThis( i18n("<p>Toggle on this option if you want to download your "
                      "pictures into automatically created file extension-based sub-albums of the destination "
                      "album. This way, you can separate JPEG and RAW files as they are downloaded from your camera."));
-    Q3WhatsThis::add( d->autoAlbumDateCheck, i18n("<p>Toggle on this option if you want to "
+    d->autoAlbumDateCheck->setWhatsThis( i18n("<p>Toggle on this option if you want to "
                      "download your pictures into automatically created file date-based sub-albums "
                      "of the destination album."));
-    Q3WhatsThis::add( d->folderDateFormat, i18n("<p>Select here your preferred date format used to "
+    d->folderDateFormat->setWhatsThis( i18n("<p>Select here your preferred date format used to "
                      "create new albums. The options available are:<p>"
                      "<b>ISO</b>: the date format is in accordance with ISO 8601 "
                      "(YYYY-MM-DD). E.g.: <i>2006-08-24</i><p>"
@@ -338,22 +338,22 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     onFlyVlay->addWidget(hbox2);
     onFlyVlay->addStretch();
 
-    Q3WhatsThis::add( onFlyBox, i18n("<p>Set here all options to fix/transform JPEG files automatically "
+    onFlyBox->setWhatsThis( i18n("<p>Set here all options to fix/transform JPEG files automatically "
                      "as they are downloaded."));
-    Q3WhatsThis::add( d->autoRotateCheck, i18n("<p>Toggle on this option if you want images automatically "
+    d->autoRotateCheck->setWhatsThis( i18n("<p>Toggle on this option if you want images automatically "
                      "rotated or flipped using EXIF information provided by the camera."));
-    Q3WhatsThis::add( d->setPhotographerId, i18n("<p>Toggle on this option to store the default "
+    d->setPhotographerId->setWhatsThis( i18n("<p>Toggle on this option to store the default "
                      "photographer identity into IPTC tags using digiKam's metadata settings."));
-    Q3WhatsThis::add( d->setCredits, i18n("<p>Toggle on this option to store the default credit "
+    d->setCredits->setWhatsThis( i18n("<p>Toggle on this option to store the default credit "
                      "and copyright information into IPTC tags using digiKam's metadata settings."));
-    Q3WhatsThis::add( d->fixDateTimeCheck, i18n("<p>Toggle on this option to set date and time metadata "
+    d->fixDateTimeCheck->setWhatsThis( i18n("<p>Toggle on this option to set date and time metadata "
                      "tags to the right values if your camera does not set "
                      "these tags correctly when pictures are taken. The values will "
                      "be saved in the DateTimeDigitized and DateTimeCreated EXIF/IPTC fields."));
-    Q3WhatsThis::add( d->convertJpegCheck, i18n("<p>Toggle on this option to automatically convert "
+    d->convertJpegCheck->setWhatsThis( i18n("<p>Toggle on this option to automatically convert "
                      "all JPEG files to a lossless image format. <b>Note:</b> Image conversion can take a "
                      "while on a slow computer."));
-    Q3WhatsThis::add( d->losslessFormat, i18n("<p>Select your preferred lossless image file format to "
+    d->losslessFormat->setWhatsThis( i18n("<p>Select your preferred lossless image file format to "
                      "convert to.  <b>Note:</b> All metadata will be preserved during the conversion."));
 
     d->advBox->insertItem(CameraUIPriv::ONFLYPAGE, onFlyBox, SmallIconSet("run"), 

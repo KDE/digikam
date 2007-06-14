@@ -35,7 +35,7 @@
 #include <qpushbutton.h>
 #include <qdir.h>
 #include <q3listbox.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3VBoxLayout>
@@ -94,7 +94,7 @@ SetupCollections::SetupCollections(QWidget* parent )
    // --------------------------------------------------------
 
    d->albumCollectionBox = new Q3ListBox(this);
-   Q3WhatsThis::add( d->albumCollectionBox, i18n("<p>You can add or remove Album "
+   d->albumCollectionBox->setWhatsThis( i18n("<p>You can add or remove Album "
                                               "collection types here to improve how "
                                               "your Albums are sorted in digiKam."));
 

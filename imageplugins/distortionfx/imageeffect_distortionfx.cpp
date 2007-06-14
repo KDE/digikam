@@ -28,7 +28,7 @@
 // Qt includes. 
  
 #include <qlabel.h>
-#include <q3whatsthis.h>
+
 #include <qlayout.h>
 #include <q3frame.h>
 #include <qimage.h>
@@ -92,7 +92,7 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
 
     setAboutData(about);
         
-    Q3WhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the preview of the distortion effect "
+    m_imagePreviewWidget->setWhatsThis( i18n("<p>This is the preview of the distortion effect "
                                                 "applied to the photograph.") );
                                            
     // -------------------------------------------------------------
@@ -119,7 +119,7 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
     m_effectType->insertItem( i18n("Polar Coordinates") );    
     m_effectType->insertItem( i18n("Unpolar Coordinates") );    
     m_effectType->insertItem( i18n("Tile") );    
-    Q3WhatsThis::add( m_effectType, i18n("<p>Select here the effect type to apply on image.<p>"
+    m_effectType->setWhatsThis( i18n("<p>Select here the effect type to apply on image.<p>"
                                         "<b>Fish Eyes</b>: warps the photograph around a 3D spherical shape to "
                                         "reproduce the common photograph 'Fish Eyes' effect.<p>"
                                         "<b>Twirl</b>: spins the photograph to produce a Twirl pattern.<p>"
@@ -149,7 +149,7 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
     m_levelLabel = new QLabel(i18n("Level:"), gboxSettings);
     m_levelInput = new KIntNumInput(gboxSettings);
     m_levelInput->setRange(0, 100, 1, true);
-    Q3WhatsThis::add( m_levelInput, i18n("<p>Set here the level of the effect."));
+    m_levelInput->setWhatsThis( i18n("<p>Set here the level of the effect."));
     
     gridSettings->addMultiCellWidget(m_levelLabel, 2, 2, 0, 2);
     gridSettings->addMultiCellWidget(m_levelInput, 3, 3, 0, 2);
@@ -157,7 +157,7 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
     m_iterationLabel = new QLabel(i18n("Iteration:"), gboxSettings);
     m_iterationInput = new KIntNumInput(gboxSettings);
     m_iterationInput->setRange(0, 100, 1, true);
-    Q3WhatsThis::add( m_iterationInput, i18n("<p>This value controls the iterations to use for Waves, "
+    m_iterationInput->setWhatsThis( i18n("<p>This value controls the iterations to use for Waves, "
                                             "Tile, and Neon effects."));
     
     gridSettings->addMultiCellWidget(m_iterationLabel, 4, 4, 0, 2);
