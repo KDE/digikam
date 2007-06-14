@@ -1,14 +1,15 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
+                     ${CMAKE_SOURCE_DIR}/digikam/digikam 
+                     ${KDE4_INCLUDE_DIR} 
+                     ${QT_INCLUDES}  
+                   )
 
+SET(histogram_STAT_SRCS imagehistogram.cpp )
 
-########### next target ###############
+KDE4_ADD_LIBRARY(histogram STATIC ${histogram_STAT_SRCS})
 
-
-########### install files ###############
-
-install( FILES  imagehistogram.h  DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
-
+INSTALL( FILES imagehistogram.h DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
 
 
 #original Makefile.am contents follow:
