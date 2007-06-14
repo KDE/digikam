@@ -43,13 +43,10 @@ extern "C"
 
 // Qt includes.
 
+#include <QImageReader>
 #include <QByteArray> 
 #include <QFile>
 #include <QFileInfo>
-
-// KDE includes.
-
-#include <kfilemetainfo.h>
 
 // Local includes.
 
@@ -111,10 +108,9 @@ static void jpegutils_jpeg_output_message(j_common_ptr cinfo)
 
 bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 {
-    QString format = QImageIO::imageFormat(path);
-    if (format !="JPEG") return false;
+    if (!isJpegImage(path)) return false;
 
-    FILE* inputFile=fopen(QFile::encodeName(path), "rb");
+    FILE* inputFile = fopen(QFile::encodeName(path), "rb");
     if(!inputFile)
         return false;
 
@@ -185,18 +181,20 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     {
         case 3:
         case 4:
-            img.create( cinfo.output_width, cinfo.output_height, 32 );
+            img = QImage( cinfo.output_width, cinfo.output_height, QImage::Format_ARGB32 );
             break;
         case 1: // B&W image
-            img.create( cinfo.output_width, cinfo.output_height, 8, 256 );
+            img = QImage( cinfo.output_width, cinfo.output_height, QImage::Format_Indexed8);
+            img.setNumColors(256);
             for (int i = 0 ; i < 256 ; i++)
                 img.setColor(i, qRgb(i, i, i));
             break;
     }
 
-    uchar** lines = img.jumpTable();
+    // TODO: KDE4PORT: QImage::jumpTable() do not exist with Qt4. 
+    //       Check later if this new loop work fine!
     while (cinfo.output_scanline < cinfo.output_height)
-        jpeg_read_scanlines(&cinfo, lines + cinfo.output_scanline, cinfo.output_height);
+        jpeg_read_scanlines(&cinfo, (JSAMPARRAY)img.scanLine(cinfo.output_scanline), cinfo.output_height);
 
     jpeg_finish_decompress(&cinfo);
 
@@ -262,11 +260,11 @@ bool exifRotate(const QString& file, const QString& documentName)
             return true;
         }
 
-        QString temp(fi.dirPath(true) + "/.digikam-exifrotate-");
+        QString temp(fi.absolutePath() + "/.digikam-exifrotate-");
         temp += QString::number(getpid());
         
-        Q3CString in  = QFile::encodeName(file);
-        Q3CString out = QFile::encodeName(temp);
+        QByteArray in  = QFile::encodeName(file);
+        QByteArray out = QFile::encodeName(temp);
         
         JCOPY_OPTION copyoption = JCOPYOPT_ALL;
         jpeg_transform_info transformoption;
@@ -425,7 +423,7 @@ bool exifRotate(const QString& file, const QString& documentName)
         metaData.setImageDimensions(img.size());
 
         // Update the image preview.
-        QImage preview = img.scale(800, 600, QImage::ScaleMin);
+        QImage preview = img.scaled(800, 600, Qt::KeepAspectRatio);
         
         // TODO: see B.K.O #130525. The a JPEG segment is limited to 64K. If IPTC byte array 
         // bigger than 64K duing of image preview tag size, the target JPEG image will be 
@@ -435,7 +433,7 @@ bool exifRotate(const QString& file, const QString& documentName)
         // metaData.setImagePreview(preview);
 
         // Update the image thumbnail.
-        QImage thumb = preview.scale(160, 120, QImage::ScaleMin);
+        QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio);
         metaData.setExifThumbnail(thumb);
 
         // Update Exif Document Name tag (the orinal file name from camera for example).
@@ -493,7 +491,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         meta.setIptc(image.getIptc());
     
         // Update Iptc preview.
-        QImage preview = image.smoothScale(800, 600, QSize::ScaleMin).copyQImage();
+        QImage preview = image.smoothScale(800, 600, Qt::KeepAspectRatio).copyQImage();
     
         // TODO: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
         // bigger than 64K duing of image preview tag size, the target JPEG image will be
@@ -502,12 +500,12 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         // will be found into Exiv2.
         // Note : There is no limitation with TIFF and PNG about IPTC byte array size.
     
-        if (format.upper() != QString("JPG") && format.upper() != QString("JPEG") && 
-            format.upper() != QString("JPE")) 
+        if (format.toUpper() != QString("JPG") && format.toUpper() != QString("JPEG") && 
+            format.toUpper() != QString("JPE")) 
             meta.setImagePreview(preview);
     
         // Update Exif thumbnail.
-        QImage thumb = preview.smoothScale(160, 120, QImage::ScaleMin);
+        QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio);
         meta.setExifThumbnail(thumb);
     
         // Update Exif Document Name tag (the orinal file name from camera for example).
@@ -519,10 +517,10 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
     
         // And now save the picture to a new file format.
 
-        if ( format.upper() == QString("PNG") ) 
+        if ( format.toUpper() == QString("PNG") ) 
             image.setAttribute("quality", 9);
     
-        if ( format.upper() == QString("TIFF") || format.upper() == QString("TIF") ) 
+        if ( format.toUpper() == QString("TIFF") || format.toUpper() == QString("TIF") ) 
             image.setAttribute("compress", true);
 
         return (image.save(dest, format));
@@ -534,15 +532,10 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
 bool isJpegImage(const QString& file)
 {
     // Check if the file is an JPEG image
-    KFileMetaInfo metaInfo(file, "image/jpeg", KFileMetaInfo::Fastest);
+    QString format = QString(QImageReader::imageFormat(file)).toUpper();
+    if (format !="JPEG") return false;
 
-    if (metaInfo.isValid())
-    {
-        if (metaInfo.mimeType() == "image/jpeg")
-            return true;
-    }
-
-    return false;
+    return true;
 }
 
 } // Namespace Digikam
