@@ -61,13 +61,13 @@ public:
 
     EventData() 
     {
-       starting = false;
-       success = false;
+       starting  = false;
+       success   = false;
        histogram = 0;
     }
 
-    bool starting;
-    bool success;
+    bool            starting;
+    bool            success;
     ImageHistogram *histogram;
 };
 
@@ -106,7 +106,6 @@ private:
 protected:
 
     virtual void run();
-
 };
 
 }  // NameSpace Digikam
