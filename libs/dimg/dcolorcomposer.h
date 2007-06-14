@@ -124,6 +124,8 @@ public:
         - DemultiplyDst     if dst will be written to non-premultiplied data (a DImg)
     */
     virtual void compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags);
+    
+    virtual ~DColorComposer();
 };
 
 }  // namespace Digikam

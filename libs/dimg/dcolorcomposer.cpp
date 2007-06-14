@@ -386,7 +386,7 @@ void DColorComposerPorterDuffXor::compose(DColor &dest, DColor src)
     }
 }
 
-
+// ----------------------------------------------------------
 
 void DColorComposer::compose(DColor &dest, DColor src, DColorComposer::MultiplicationFlags multiplicationFlags)
 {
@@ -433,5 +433,4 @@ DColorComposer *DColorComposer::getComposer(DColorComposer::CompositingOperation
     return 0;
 }
 
-
-}
+}  // namespace Digikam

@@ -27,11 +27,11 @@
 
 // QT includes.
 
-#include <q3shared.h>
-#include <qstring.h>
-#include <q3cstring.h>
-#include <qvariant.h>
-#include <qmap.h>
+#include <Q3Shared>
+#include <QString>
+#include <QByteArray>
+#include <QVariant>
+#include <QMap>
 
 // Local includes.
 
