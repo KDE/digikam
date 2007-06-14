@@ -1,5 +1,10 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
+		     ${CMAKE_SOURCE_DIR}/digikam/digikam 
+		     ${KDE4_INCLUDE_DIR} 
+		     ${QT_INCLUDES}
+                   )
 
 
 ########### next target ###############
