@@ -9,12 +9,13 @@ find_package(Jasper REQUIRED)
 find_package(Kdcraw REQUIRED)
 #find_package(Kexiv2 REQUIRED)
 #find_package(Kipi REQUIRED)
+#find_package(Sqlite REQUIRED)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
-#include(ConfigureChecks.cmake)
+include(ConfigureChecks.cmake)
 
 add_subdirectory( sqlite )
 #add_subdirectory( libs )
@@ -30,7 +31,7 @@ add_subdirectory( sqlite )
 
 install( FILES  tips DESTINATION ${DATA_INSTALL_DIR}/digikam )
 
-#kde4_create_doxygen_docs(  )
+kde4_create_doxygen_docs(  )
 
 
 
