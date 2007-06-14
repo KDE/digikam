@@ -1,3 +1,4 @@
+project(digikam)
 
 find_package(KDE4 REQUIRED)
 
@@ -6,22 +7,17 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
 
-include(ConvenienceLibs.cmake)
-
-include(ManualStuff.cmake)
-
 include(ConfigureChecks.cmake)
 
 add_subdirectory( sqlite )
-add_subdirectory( sqlite )
-add_subdirectory( libs )
-add_subdirectory( utilities )
-add_subdirectory( digikam )
-add_subdirectory( showfoto )
-add_subdirectory( data )
-add_subdirectory( kioslave )
-add_subdirectory( imageplugins )
-add_subdirectory( themedesigner )
+#add_subdirectory( libs )
+#add_subdirectory( utilities )
+#add_subdirectory( digikam )
+#add_subdirectory( showfoto )
+#add_subdirectory( data )
+#add_subdirectory( kioslave )
+#add_subdirectory( imageplugins )
+#add_subdirectory( themedesigner )
 
 ########### install files ###############
 

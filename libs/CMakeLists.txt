@@ -16,16 +16,3 @@ add_subdirectory( imageproperties )
 add_subdirectory( dialogs )
 add_subdirectory( database )
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
-
-
-########### install files ###############
-
-
-
-
-#original Makefile.am contents follow:
-
-#SUBDIRS = lprof histogram levels curves whitebalance dmetadata \
-#          dimg threadimageio themeengine widgets greycstoration \
-#          thumbbar jpegutils imageproperties dialogs database
