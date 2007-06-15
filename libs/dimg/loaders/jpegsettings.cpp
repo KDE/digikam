@@ -23,20 +23,17 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qlabel.h>
-#include <qlayout.h>
-
-//Added by qt3to4:
-#include <Q3Frame>
-#include <Q3GridLayout>
+#include <QString>
+#include <QLabel>
+#include <QLayout>
+#include <QFrame>
+#include <QGridLayout>
 
 // KDE includes.
 
 #include <klocale.h>
 #include <kdialog.h>
 #include <knuminput.h>
-#include <k3activelabel.h>
 
 // Local includes.
 
@@ -59,49 +56,52 @@ public:
         labelWarning         = 0;
     }
 
-    Q3GridLayout  *JPEGGrid;
+    QGridLayout   *JPEGGrid;
 
-    QLabel       *labelJPEGcompression;
+    QLabel        *labelJPEGcompression;
 
-    K3ActiveLabel *labelWarning;
+    QLabel        *labelWarning;
 
-    KIntNumInput *JPEGcompression;
+    KIntNumInput  *JPEGcompression;
 };
 
 JPEGSettings::JPEGSettings(QWidget *parent)
-            : QWidget(parent, 0, Qt::WDestructiveClose)
+            : QWidget(parent)
 {
     d = new JPEGSettingsPriv;
+    setAttribute(Qt::WA_DeleteOnClose);
 
-    d->JPEGGrid        = new Q3GridLayout(this, 1, 2, KDialog::spacingHint());
+    d->JPEGGrid        = new QGridLayout(this);
     d->JPEGcompression = new KIntNumInput(75, this);
     d->JPEGcompression->setRange(1, 100, 1, true );
     d->labelJPEGcompression = new QLabel(i18n("JPEG quality:"), this);
 
     d->JPEGcompression->setWhatsThis( i18n("<p>The quality value for JPEG images:<p>"
-                                             "<b>1</b>: low quality (high compression and small "
-                                             "file size)<p>"
-                                             "<b>50</b>: medium quality<p>"
-                                             "<b>75</b>: good quality (default)<p>"
-                                             "<b>100</b>: high quality (no compression and "
-                                             "large file size)<p>"
-                                             "<b>Note: JPEG use a lossy compression image algorithm.</b>"));
+                                           "<b>1</b>: low quality (high compression and small "
+                                           "file size)<p>"
+                                           "<b>50</b>: medium quality<p>"
+                                           "<b>75</b>: good quality (default)<p>"
+                                           "<b>100</b>: high quality (no compression and "
+                                           "large file size)<p>"
+                                           "<b>Note: JPEG use a lossy compression image algorithm.</b>"));
 
-    d->labelWarning = new K3ActiveLabel(i18n("<qt><font size=-1 color=\"red\"><i>"
+    d->labelWarning = new QLabel(i18n("<qt><font size=-1 color=\"red\"><i>"
                           "Warning: <a href='http://en.wikipedia.org/wiki/JPEG'>JPEG</a> is a<br>"
                           "lossy compression<br>"
                           "image format!</p>"
                           "</i></qt>"), this);
 
-    d->labelWarning->setFrameStyle(Q3Frame::Box | Q3Frame::Plain);
+    d->labelWarning->setOpenExternalLinks(true);
+    d->labelWarning->setFrameStyle(QFrame::Box | QFrame::Plain);
     d->labelWarning->setLineWidth(1);
-    d->labelWarning->setFrameShape(Q3Frame::Box);
+    d->labelWarning->setFrameShape(QFrame::Box);
 
-    d->JPEGGrid->addMultiCellWidget(d->labelJPEGcompression, 0, 0, 0, 0);
-    d->JPEGGrid->addMultiCellWidget(d->JPEGcompression, 0, 0, 1, 1);
-    d->JPEGGrid->addMultiCellWidget(d->labelWarning, 0, 0, 2, 2);    
-    d->JPEGGrid->setColStretch(1, 10);
+    d->JPEGGrid->addWidget(d->labelJPEGcompression, 0, 0, 0, 0);
+    d->JPEGGrid->addWidget(d->JPEGcompression, 0, 0, 1, 1);
+    d->JPEGGrid->addWidget(d->labelWarning, 0, 0, 2, 2);    
+    d->JPEGGrid->setColumnStretch(1, 10);
     d->JPEGGrid->setRowStretch(1, 10);
+    d->JPEGGrid->setSpacing(KDialog::spacingHint());
 }
 
 JPEGSettings::~JPEGSettings()

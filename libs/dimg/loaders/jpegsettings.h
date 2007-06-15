@@ -26,7 +26,7 @@
 
 // KDE includes.
 
-#include <qwidget.h>
+#include <QWidget>
 
 // Local includes
 
