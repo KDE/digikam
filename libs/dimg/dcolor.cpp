@@ -51,9 +51,9 @@ DColor::DColor(const DColor& color)
 DColor::DColor(const QColor& color, bool sixteenBit)
 {
     // initialize as eight bit
-    m_red        = color.Qt::red();
-    m_green      = color.Qt::green();
-    m_blue       = color.Qt::blue();
+    m_red        = color.red();
+    m_green      = color.green();
+    m_blue       = color.blue();
     m_alpha      = 255;
     m_sixteenBit = false;
 
@@ -115,42 +115,42 @@ void DColor::getHSL(int* h, int* s, int* l) const
 {
     double min;
     double max;
-    double Qt::red;
-    double Qt::green;
-    double Qt::blue;
+    double red;
+    double green;
+    double blue;
     double delta;
     double sum;
     double hue, sat, lig;
 
     double range = m_sixteenBit ? 65535.0 : 255.0;
 
-    Qt::red   = m_red   / range;
-    Qt::green = m_green / range;
-    Qt::blue  = m_blue  / range;
+    red   = m_red   / range;
+    green = m_green / range;
+    blue  = m_blue  / range;
 
-    if (Qt::red > Qt::green)
+    if (red > green)
     {
-        if (Qt::red > Qt::blue)
-            max = Qt::red;
+        if (red > blue)
+            max = red;
         else
-            max = Qt::blue;
+            max = blue;
 
-        if (Qt::green < Qt::blue)
-            min = Qt::green;
+        if (green < blue)
+            min = green;
         else
-            min = Qt::blue;
+            min = blue;
     }
     else
     {
-        if (Qt::green > Qt::blue)
-            max = Qt::green;
+        if (green > blue)
+            max = green;
         else
-            max = Qt::blue;
+            max = blue;
 
-        if (Qt::red < Qt::blue)
-            min = Qt::red;
+        if (red < blue)
+            min = red;
         else
-            min = Qt::blue;
+            min = blue;
     }
 
     sum = max + min;
@@ -168,12 +168,12 @@ void DColor::getHSL(int* h, int* s, int* l) const
         else
             sat = delta / (2 - sum);
 
-        if (Qt::red == max)
-            hue = (Qt::green - Qt::blue) / delta;
-        else if (Qt::green == max)
-            hue = 2 + (Qt::blue - Qt::red) / delta;
-        else if (Qt::blue == max)
-            hue = 4 + (Qt::red - Qt::green) / delta;
+        if (red == max)
+            hue = (green - blue) / delta;
+        else if (green == max)
+            hue = 2 + (blue - red) / delta;
+        else if (blue == max)
+            hue = 4 + (red - green) / delta;
 
         if (hue < 0)
             hue += 6;
