@@ -43,8 +43,9 @@ extern "C"
 
 // QT includes.
 
-#include <qfile.h>
-#include <q3cstring.h>
+#include <QFile>
+#include <QByteArray>
+#include <QSysInfo>
 
 // Local includes.
 
@@ -162,7 +163,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 #endif
                 m_hasAlpha = false;
 
-                if (QImage::systemByteOrder() == QImage::LittleEndian)       // Intel
+                if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
                     png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
                 else                                                         // PPC
                     png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
@@ -182,7 +183,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 #endif
                 png_set_gray_to_rgb(png_ptr);
 
-                if (QImage::systemByteOrder() == QImage::LittleEndian)       // Intel
+                if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
                     png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
                 else                                                         // PPC
                     png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
@@ -204,7 +205,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 #endif
                 png_set_palette_to_rgb(png_ptr);
 
-                if (QImage::systemByteOrder() == QImage::LittleEndian)       // Intel
+                if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
                     png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
                 else                                                         // PPC
                     png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
@@ -233,7 +234,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 #ifdef ENABLE_DEBUG_MESSAGES
                 DDebug() << "PNG in PNG_COLOR_TYPE_RGB" << endl;
 #endif
-                if (QImage::systemByteOrder() == QImage::LittleEndian)       // Intel
+                if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
                     png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
                 else                                                         // PPC
                     png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
@@ -255,7 +256,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 png_set_gray_1_2_4_to_8(png_ptr);
                 png_set_gray_to_rgb(png_ptr);
 
-                if (QImage::systemByteOrder() == QImage::LittleEndian)       // Intel
+                if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
                     png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
                 else                                                         // PPC
                     png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
@@ -278,7 +279,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 png_set_packing(png_ptr);
                 png_set_palette_to_rgb(png_ptr);
 
-                if (QImage::systemByteOrder() == QImage::LittleEndian)       // Intel
+                if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
                     png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
                 else                                                         // PPC
                     png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
@@ -297,7 +298,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if(png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
         png_set_tRNS_to_alpha(png_ptr);
 
-    if (QImage::systemByteOrder() == QImage::LittleEndian)  // Intel 
+    if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)      // Intel
         png_set_bgr(png_ptr);
     else                                                    // PPC
         png_set_bgr(png_ptr);
@@ -409,7 +410,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (profile_data != NULL) 
     {
-        QByteArray profile_rawdata(profile_size);
+        QByteArray profile_rawdata;
+        profile_rawdata.reserve(profile_size);
         memcpy(profile_rawdata.data(), profile_data, profile_size);
         metaData.insert(DImg::ICC, profile_rawdata);
     }
@@ -535,7 +537,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     png_init_io(png_ptr, f);
     
-    if (QImage::systemByteOrder() == QImage::LittleEndian)  // Intel 
+    if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
         png_set_bgr(png_ptr);
     else                                                    // PPC
         png_set_swap_alpha(png_ptr);
@@ -563,9 +565,9 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             data = new uchar[imageWidth() * 3 * sizeof(uchar)];        
     }
     
-    sig_bit.Qt::red   = imageBitsDepth();
-    sig_bit.Qt::green = imageBitsDepth();
-    sig_bit.Qt::blue  = imageBitsDepth();
+    sig_bit.red   = imageBitsDepth();
+    sig_bit.green = imageBitsDepth();
+    sig_bit.blue  = imageBitsDepth();
     sig_bit.alpha = imageBitsDepth();
     png_set_sBIT(png_ptr, info_ptr, &sig_bit);
         
@@ -611,8 +613,8 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         if (it.key() != QString("Software") && it.key() != QString("Comment"))
         {
             png_text text;
-            text.key  = (char*)it.key().ascii();
-            text.text = (char*)it.data().ascii();
+            text.key  = (char*)it.key().toAscii().data();
+            text.text = (char*)it.value().toAscii().data();
 #ifdef ENABLE_DEBUG_MESSAGES
             DDebug() << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text << endl;
 #endif
@@ -629,7 +631,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     software.append(QString(" (%1)").arg(libpngver));
     png_text text;
     text.key  = "Software";
-    text.text = (char *)software.ascii();
+    text.text = (char *)software.toAscii().data();
 #ifdef ENABLE_DEBUG_MESSAGES
     DDebug() << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text << endl;
 #endif
@@ -645,7 +647,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     
     for (MetaDataMap::iterator it = metaDataMap.begin(); it != metaDataMap.end(); ++it)
     {
-        QByteArray ba = it.data();
+        QByteArray ba = it.value();
         
         switch (it.key())
         {
@@ -679,7 +681,8 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                     memcmp(ba.data(), "iptc", 4) != 0 &&
                     memcmp(ba.data(), "profile", 7) != 0)
                 {
-                    profile = QByteArray(ba.size() + sizeof(ExifHeader));
+                    profile = QByteArray();
+                    profile.reserve(ba.size() + sizeof(ExifHeader));
                     memcpy(profile.data(), ExifHeader, sizeof(ExifHeader));
                     memcpy(profile.data()+sizeof(ExifHeader), ba.data(), ba.size());
                 }
