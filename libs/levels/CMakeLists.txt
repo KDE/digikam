@@ -1,7 +1,6 @@
 
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
+INCLUDE_DIRECTORIES( 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/histogram 
-                     ${CMAKE_SOURCE_DIR}/digikam/digikam 
                    )
 
 SET(liblevels_STAT_SRCS imagelevels.cpp )

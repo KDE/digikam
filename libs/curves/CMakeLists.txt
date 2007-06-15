@@ -1,7 +1,5 @@
 
 include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram 
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
-		     ${CMAKE_SOURCE_DIR}/digikam/digikam 
                    )
 
 SET(libcurves_STAT_SRCS imagecurves.cpp )

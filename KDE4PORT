@@ -42,9 +42,9 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
         |---cameragui
         |---hotplug                  Gilles                    CMake port only
         |---imageeditor
-        |-----canvas
-        |-----editor
-        |-----tools
+        |-----canvas                 Laurent			CMake port only
+        |-----editor                 Laurent			CMake port only
+        |-----tools		     Laurent 			CMake port only
         |---lighttable
         |---scripts                  Gilles                    CMake port only
         |---setup

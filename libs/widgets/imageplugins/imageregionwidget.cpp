@@ -47,6 +47,7 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <kapplication.h>
+#include <klocale.h>
 
 // Local includes
 

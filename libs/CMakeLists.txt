@@ -1,3 +1,9 @@
+include_directories(
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg
+                     ${CMAKE_SOURCE_DIR}/digikam/digikam
+                   )
+
+
 add_subdirectory( lprof )
 add_subdirectory( curves )
 add_subdirectory( levels )

@@ -1,3 +1,6 @@
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor/
+		${CMAKE_SOURCE_DIR}/libs/widgets/common/
+		${CMAKE_SOURCE_DIR}/libs/dmetadata/)
 
 add_subdirectory( metadata )
 add_subdirectory( imageplugins )
