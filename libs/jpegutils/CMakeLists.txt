@@ -6,8 +6,6 @@ KDE4_NO_ENABLE_FINAL(libjpegutils)
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
                      ${CMAKE_SOURCE_DIR}/digikam/digikam 
-                     ${KDE4_INCLUDE_DIR} 
-                     ${QT_INCLUDES}  
                    )
 
 SET(libjpegutils_STAT_SRCS jpegutils.cpp transupp.cpp)

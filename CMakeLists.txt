@@ -19,6 +19,11 @@ INCLUDE_DIRECTORIES(${KEXIV2_INCLUDE_DIR} ${KDCRAW_INCLUDE_DIR})
 
 INCLUDE(ConfigureChecks.cmake)
 
+include_directories( ${KDE4_INCLUDE_DIR}
+                     ${QT_INCLUDES}
+                   )
+
+
 ADD_SUBDIRECTORY( sqlite )
 ADD_SUBDIRECTORY( libs )
 #ADD_SUBDIRECTORY( utilities )
