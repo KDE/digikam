@@ -262,7 +262,7 @@ void GreycstorationIface::filterImage()
                 ptr[1] = static_cast<uchar>(d->img(x, y, 1));        // Green
                 ptr[2] = static_cast<uchar>(d->img(x, y, 2));        // Red
                 ptr[3] = static_cast<uchar>(d->img(x, y, 3));        // Alpha
-                ptr += 4;
+                ptr    += 4;
             }
         }
     }
@@ -279,7 +279,7 @@ void GreycstorationIface::filterImage()
                 ptr[1] = static_cast<unsigned short>(d->img(x, y, 1));        // Green
                 ptr[2] = static_cast<unsigned short>(d->img(x, y, 2));        // Red
                 ptr[3] = static_cast<unsigned short>(d->img(x, y, 3));        // Alpha
-                ptr += 4;
+                ptr    += 4;
             }
         }
     }
