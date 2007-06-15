@@ -39,15 +39,15 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
 
  3      |-utilities                                            Utilities components are used as "libs" by digiKam main interface.
         |---batch                    Laurent
-        |---cameragui
+        |---cameragui                
         |---hotplug                  Gilles                    CMake port only
         |---imageeditor
         |-----canvas                 Laurent                   CMake port only
         |-----editor                 Laurent                   CMake port only
         |-----tools                  Laurent                   CMake port only
-        |---lighttable
+        |---lighttable               
         |---scripts                  Gilles        DONE        CMake port only
-        |---setup
+        |---setup                    Gilles
         |---slideshow                Laurent                   CMake port only
         |---splashscreen             Laurent       DONE        CMake port only
  
