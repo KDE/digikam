@@ -23,13 +23,11 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <qlayout.h>
-
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QString>
+#include <QLabel>
+#include <QCheckBox>
+#include <QLayout>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -55,17 +53,18 @@ public:
         TIFFcompression = 0;
     }
 
-    Q3GridLayout *TIFFGrid;
-    
+    QGridLayout *TIFFGrid;
+
     QCheckBox   *TIFFcompression;
 };
 
 TIFFSettings::TIFFSettings(QWidget *parent)
-            : QWidget(parent, 0, Qt::WDestructiveClose)
+            : QWidget(parent)
 {
     d = new TIFFSettingsPriv;
+    setAttribute(Qt::WA_DeleteOnClose);
 
-    d->TIFFGrid        = new Q3GridLayout(this, 1, 1, KDialog::spacingHint());
+    d->TIFFGrid        = new QGridLayout(this);
     d->TIFFcompression = new QCheckBox(i18n("Compress TIFF files"), this);
 
     d->TIFFcompression->setWhatsThis( i18n("<p>Toggle compression for TIFF images.<p>"
@@ -73,8 +72,9 @@ TIFFSettings::TIFFSettings(QWidget *parent)
                                               "the final file size of the TIFF image.</p>"
                                               "<p>A lossless compression format (Deflate) "
                                               "is used to save the file.<p>"));
-    d->TIFFGrid->addMultiCellWidget(d->TIFFcompression, 0, 0, 0, 1);
-    d->TIFFGrid->setColStretch(1, 10);
+    d->TIFFGrid->addWidget(d->TIFFcompression, 0, 0, 0, 1);
+    d->TIFFGrid->setColumnStretch(1, 10);
+    d->TIFFGrid->setSpacing(KDialog::spacingHint());
 }
 
 TIFFSettings::~TIFFSettings()
