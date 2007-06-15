@@ -119,6 +119,8 @@ DigikamApp::DigikamApp()
     d->albumManager = AlbumManager::instance();
     AlbumLister::instance();
 
+    LoadingCache::cache();
+
     d->cameraMediaList = new KMenu;
 
     connect(d->cameraMediaList, SIGNAL( aboutToShow() ),
