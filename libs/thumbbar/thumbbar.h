@@ -201,10 +201,11 @@ private:
 
 class DIGIKAM_EXPORT ThumbBarToolTip : public QToolTip
 {
+
 public:
 
     ThumbBarToolTip(ThumbBarView *parent);
-    ~ThumbBarToolTip(){};
+    virtual ~ThumbBarToolTip(){};
 
 protected:
     
