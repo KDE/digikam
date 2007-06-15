@@ -1,12 +1,9 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/dcraw ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
-
-
-########### next target ###############
-
-
-########### install files ###############
-
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
+		     ${CMAKE_SOURCE_DIR}/digikam/digikam 
+		     ${KDE4_INCLUDE_DIR} 
+		     ${QT_INCLUDES}  )
 
 
 
