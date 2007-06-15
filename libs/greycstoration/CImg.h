@@ -992,7 +992,7 @@ namespace cimg_library {
 
 #elif cimg_display_type==2
     struct Win32info {
-      Qt::HANDLE wait_event;
+      HANDLE wait_event;
       Win32info() { wait_event = CreateEvent(0,FALSE,FALSE,0); }
     };
 #if defined(cimg_module)
@@ -4905,7 +4905,7 @@ namespace cimg_library {
       pthread_mutex_lock(cimg::X11attr().mutex);
       const char pix_data[8] = { 0 };
       XColor col;
-      col.Qt::red = col.Qt::green = col.Qt::blue = 0;
+      col.red = col.green = col.blue = 0;
       Pixmap pix = XCreateBitmapFromData(cimg::X11attr().display,window,pix_data,8,8);
       Cursor cur = XCreatePixmapCursor(cimg::X11attr().display,pix,pix,&col,&col,0,0);
       XFreePixmap(cimg::X11attr().display,pix);
@@ -5297,7 +5297,7 @@ namespace cimg_library {
       case 1:  // palette for greyscale images
         for (unsigned int index=0; index<256; index++) {
           palette[index].pixel = index;
-          palette[index].Qt::red = palette[index].Qt::green = palette[index].Qt::blue = index<<8;
+          palette[index].red = palette[index].green = palette[index].blue = index<<8;
           palette[index].flags = DoRed | DoGreen | DoBlue;
         }
         break;
@@ -5305,8 +5305,8 @@ namespace cimg_library {
         for (unsigned int index=0, r=8; r<256; r+=16)
           for (unsigned int g=8; g<256; g+=16) {
             palette[index].pixel = index;
-            palette[index].Qt::red   = palette[index].Qt::blue = r<<8;
-            palette[index].Qt::green = g<<8;
+            palette[index].red   = palette[index].blue = r<<8;
+            palette[index].green = g<<8;
             palette[index++].flags = DoRed | DoGreen | DoBlue;
           }
         break;
@@ -5315,9 +5315,9 @@ namespace cimg_library {
           for (unsigned int g=16; g<256; g+=32)
             for (unsigned int b=32; b<256; b+=64) {
               palette[index].pixel = index;
-              palette[index].Qt::red   = r<<8;
-              palette[index].Qt::green = g<<8;
-              palette[index].Qt::blue  = b<<8;
+              palette[index].red   = r<<8;
+              palette[index].green = g<<8;
+              palette[index].blue  = b<<8;
               palette[index++].flags = DoRed | DoGreen | DoBlue;
             }
         break;
@@ -5606,9 +5606,9 @@ namespace cimg_library {
     HWND window;
     HWND background_window;
     HDC hdc;
-    Qt::HANDLE thread;
-    Qt::HANDLE created;
-    Qt::HANDLE mutex;
+    HANDLE thread;
+    HANDLE created;
+    HANDLE mutex;
     bool visible_cursor;
 
     static int screen_dimx() {
@@ -12451,8 +12451,8 @@ namespace cimg_library {
                      const double ymin=0, const double ymax=0, const float opacity=1) {
       if (!is_empty()) {
         if (!color) throw CImgArgumentException("CImg<%s>::draw_graph() : Specified color is (null)",pixel_type());
-        T *Qt::color1 = new T[dim], *color2 = new T[dim];
-        cimg_forV(*this,k) { Qt::color1[k]=(T)(color[k]*0.6f); color2[k]=(T)(color[k]*0.3f); }
+        T *color1 = new T[dim], *color2 = new T[dim];
+        cimg_forV(*this,k) { color1[k]=(T)(color[k]*0.6f); color2[k]=(T)(color[k]*0.3f); }
         CImgStats st;
         if (ymin==ymax) { st = CImgStats(data,false); cimg::swap(st.min,st.max); } else { st.min = ymin; st.max = ymax; }
         if (st.min==st.max) { st.min--; st.max++; }
@@ -12467,7 +12467,7 @@ namespace cimg_library {
             break;
           case 1: { // plot with bars
             const unsigned int X = off*width/data.size(), nX = (off+1)*width/data.size()-1;
-            draw_rectangle(X,(int)Y0,nX,Y,Qt::color1,opacity);
+            draw_rectangle(X,(int)Y0,nX,Y,color1,opacity);
             draw_line(X,Y,X,(int)Y0,color2,~0L,opacity);
             draw_line(X,(int)Y0,nX,(int)Y0,Y<=Y0?color2:color,~0L,opacity);
             draw_line(nX,Y,nX,(int)Y0,color,~0L,opacity);
@@ -12484,7 +12484,7 @@ namespace cimg_library {
             pY=Y;
           }
         }
-        delete[] Qt::color1; delete[] color2;
+        delete[] color1; delete[] color2;
       }
       return *this;
     }
@@ -12978,12 +12978,12 @@ namespace cimg_library {
           static float olightx=0, olighty=0, olightz=0, oambiant_light=0;
           if (light_texture.is_empty() || lightx!=olightx || lighty!=olighty || lightz!=olightz || ambiant_light!=oambiant_light) {
             light_texture.assign(512,512);
-            const float Qt::white[1]={ 1.0f },
+            const float white[1]={ 1.0f },
               dlx = lightx-X, dly = lighty-Y, dlz = lightz-Z,
                 nl = (float)std::sqrt(dlx*dlx+dly*dly+dlz*dlz),
                 nlx = light_texture.width/2*(1+dlx/nl),
                 nly = light_texture.height/2*(1+dly/nl);
-              (light_texture.draw_gaussian(nlx,nly,light_texture.width/3.0f,Qt::white)+=ambiant_light).cut(0.0f,1.0f);
+              (light_texture.draw_gaussian(nlx,nly,light_texture.width/3.0f,white)+=ambiant_light).cut(0.0f,1.0f);
               olightx = lightx; olighty = lighty; olightz = lightz; oambiant_light = ambiant_light;
           }
         }
@@ -17582,9 +17582,9 @@ namespace cimg_library {
         T *rdata = dest.ptr(0,0,0,0), *gdata = dest.ptr(0,0,0,1), *bdata = dest.ptr(0,0,0,2), *adata = dest.ptr(0,0,0,3);
         Magick::PixelPacket *pixels = image.getPixels(0,0,width,height);
         for (unsigned int off = width*height; off; --off) {
-          *(rdata++) = (T)(pixels->Qt::red);
-          *(gdata++) = (T)(pixels->Qt::green);
-          *(bdata++) = (T)(pixels->Qt::blue);
+          *(rdata++) = (T)(pixels->red);
+          *(gdata++) = (T)(pixels->green);
+          *(bdata++) = (T)(pixels->blue);
           *(adata++) = (T)(pixels->opacity);
           pixels++;
         }
@@ -17595,9 +17595,9 @@ namespace cimg_library {
         T *rdata = dest.ptr(0,0,0,0), *gdata = dest.ptr(0,0,0,1), *bdata = dest.ptr(0,0,0,2);
         Magick::PixelPacket *pixels = image.getPixels(0,0,width,height);
         for (unsigned int off = width*height; off; --off) {
-          *(rdata++) = (T)(pixels->Qt::red);
-          *(gdata++) = (T)(pixels->Qt::green);
-          *(bdata++) = (T)(pixels->Qt::blue);
+          *(rdata++) = (T)(pixels->red);
+          *(gdata++) = (T)(pixels->green);
+          *(bdata++) = (T)(pixels->blue);
           pixels++;
         }
       } break;
@@ -17606,7 +17606,7 @@ namespace cimg_library {
         T *data = dest.ptr(0,0,0,0), *adata = dest.ptr(0,0,0,1);
         Magick::PixelPacket *pixels = image.getPixels(0,0,width,height);
         for (unsigned int off = width*height; off; --off) {
-          *(data++) = (T)(pixels->Qt::red);
+          *(data++) = (T)(pixels->red);
           *(adata++) = (T)(pixels->opacity);
           pixels++;
         }
@@ -17616,7 +17616,7 @@ namespace cimg_library {
         T *data = dest.ptr(0,0,0,0);
         Magick::PixelPacket *pixels = image.getPixels(0,0,width,height);
         for (unsigned int off = width*height; off; --off) {
-          *(data++) = (T)(pixels->Qt::red);
+          *(data++) = (T)(pixels->red);
           pixels++;
         }
       } break;
@@ -21678,16 +21678,16 @@ namespace cimg {
                     const CImg<t>& logo, const bool centering = false) {
 #if cimg_display_type!=0
     const unsigned char
-      Qt::black[3]={0,0,0}, Qt::white[3]={255,255,255}, Qt::gray[3]={200,200,200}, gray2[3]={150,150,150};
+      black[3]={0,0,0}, white[3]={255,255,255}, gray[3]={200,200,200}, gray2[3]={150,150,150};
 
       // Create buttons and canvas graphics
       CImgList<unsigned char> buttons, cbuttons, sbuttons;
-      if (button1_txt) { buttons.insert(CImg<unsigned char>().draw_text(button1_txt,0,0,Qt::black,Qt::gray,13));
-      if (button2_txt) { buttons.insert(CImg<unsigned char>().draw_text(button2_txt,0,0,Qt::black,Qt::gray,13));
-      if (button3_txt) { buttons.insert(CImg<unsigned char>().draw_text(button3_txt,0,0,Qt::black,Qt::gray,13));
-      if (button4_txt) { buttons.insert(CImg<unsigned char>().draw_text(button4_txt,0,0,Qt::black,Qt::gray,13));
-      if (button5_txt) { buttons.insert(CImg<unsigned char>().draw_text(button5_txt,0,0,Qt::black,Qt::gray,13));
-      if (button6_txt) { buttons.insert(CImg<unsigned char>().draw_text(button6_txt,0,0,Qt::black,Qt::gray,13));
+      if (button1_txt) { buttons.insert(CImg<unsigned char>().draw_text(button1_txt,0,0,black,gray,13));
+      if (button2_txt) { buttons.insert(CImg<unsigned char>().draw_text(button2_txt,0,0,black,gray,13));
+      if (button3_txt) { buttons.insert(CImg<unsigned char>().draw_text(button3_txt,0,0,black,gray,13));
+      if (button4_txt) { buttons.insert(CImg<unsigned char>().draw_text(button4_txt,0,0,black,gray,13));
+      if (button5_txt) { buttons.insert(CImg<unsigned char>().draw_text(button5_txt,0,0,black,gray,13));
+      if (button6_txt) { buttons.insert(CImg<unsigned char>().draw_text(button6_txt,0,0,black,gray,13));
       }}}}}}
       if (!buttons.size) throw CImgArgumentException("cimg::dialog() : No buttons have been defined. At least one is necessary");
 
@@ -21700,23 +21700,23 @@ namespace cimg {
       if (bh>48) bh=48;
 
       CImg<unsigned char> button = CImg<unsigned char>(bw,bh,1,3).
-        draw_rectangle(0,0,bw-1,bh-1,Qt::gray).
-        draw_line(0,0,bw-1,0,Qt::white).draw_line(0,bh-1,0,0,Qt::white).
-        draw_line(bw-1,0,bw-1,bh-1,Qt::black).draw_line(bw-1,bh-1,0,bh-1,Qt::black).
+        draw_rectangle(0,0,bw-1,bh-1,gray).
+        draw_line(0,0,bw-1,0,white).draw_line(0,bh-1,0,0,white).
+        draw_line(bw-1,0,bw-1,bh-1,black).draw_line(bw-1,bh-1,0,bh-1,black).
         draw_line(1,bh-2,bw-2,bh-2,gray2).draw_line(bw-2,bh-2,bw-2,1,gray2);
       CImg<unsigned char> sbutton = CImg<unsigned char>(bw,bh,1,3).
-        draw_rectangle(0,0,bw-1,bh-1,Qt::gray).
-        draw_line(0,0,bw-1,0,Qt::black).draw_line(bw-1,0,bw-1,bh-1,Qt::black).
-        draw_line(bw-1,bh-1,0,bh-1,Qt::black).draw_line(0,bh-1,0,0,Qt::black).
-        draw_line(1,1,bw-2,1,Qt::white).draw_line(1,bh-2,1,1,Qt::white).
-        draw_line(bw-2,1,bw-2,bh-2,Qt::black).draw_line(bw-2,bh-2,1,bh-2,Qt::black).
+        draw_rectangle(0,0,bw-1,bh-1,gray).
+        draw_line(0,0,bw-1,0,black).draw_line(bw-1,0,bw-1,bh-1,black).
+        draw_line(bw-1,bh-1,0,bh-1,black).draw_line(0,bh-1,0,0,black).
+        draw_line(1,1,bw-2,1,white).draw_line(1,bh-2,1,1,white).
+        draw_line(bw-2,1,bw-2,bh-2,black).draw_line(bw-2,bh-2,1,bh-2,black).
         draw_line(2,bh-3,bw-3,bh-3,gray2).draw_line(bw-3,bh-3,bw-3,2,gray2).
-        draw_line(4,4,bw-5,4,Qt::black,0xAAAAAAAA).draw_line(bw-5,4,bw-5,bh-5,Qt::black,0xAAAAAAAA).
-        draw_line(bw-5,bh-5,4,bh-5,Qt::black,0xAAAAAAAA).draw_line(4,bh-5,4,4,Qt::black,0xAAAAAAAA);
+        draw_line(4,4,bw-5,4,black,0xAAAAAAAA).draw_line(bw-5,4,bw-5,bh-5,black,0xAAAAAAAA).
+        draw_line(bw-5,bh-5,4,bh-5,black,0xAAAAAAAA).draw_line(4,bh-5,4,4,black,0xAAAAAAAA);
       CImg<unsigned char> cbutton = CImg<unsigned char>(bw,bh,1,3).
-        draw_rectangle(0,0,bw-1,bh-1,Qt::black).draw_rectangle(1,1,bw-2,bh-2,gray2).draw_rectangle(2,2,bw-3,bh-3,Qt::gray).
-        draw_line(4,4,bw-5,4,Qt::black,0xAAAAAAAA).draw_line(bw-5,4,bw-5,bh-5,Qt::black,0xAAAAAAAA).
-        draw_line(bw-5,bh-5,4,bh-5,Qt::black,0xAAAAAAAA).draw_line(4,bh-5,4,4,Qt::black,0xAAAAAAAA);
+        draw_rectangle(0,0,bw-1,bh-1,black).draw_rectangle(1,1,bw-2,bh-2,gray2).draw_rectangle(2,2,bw-3,bh-3,gray).
+        draw_line(4,4,bw-5,4,black,0xAAAAAAAA).draw_line(bw-5,4,bw-5,bh-5,black,0xAAAAAAAA).
+        draw_line(bw-5,bh-5,4,bh-5,black,0xAAAAAAAA).draw_line(4,bh-5,4,4,black,0xAAAAAAAA);
 
         cimglist_for(buttons,ll) {
           cbuttons.insert(CImg<unsigned char>(cbutton).draw_image(buttons[ll],1+(bw-buttons[ll].dimx())/2,1+(bh-buttons[ll].dimy())/2));
@@ -21725,7 +21725,7 @@ namespace cimg {
         }
 
         CImg<unsigned char> canvas;
-        if (msg) canvas = CImg<unsigned char>().draw_text(msg,0,0,Qt::black,Qt::gray,13);
+        if (msg) canvas = CImg<unsigned char>().draw_text(msg,0,0,black,gray,13);
         const unsigned int
           bwall = (buttons.size-1)*(12+bw) + bw,
           w = cimg::max(196U,36+logo.width+canvas.width, 24+bwall),
@@ -21739,15 +21739,15 @@ namespace cimg {
 
         if (canvas.data)
           canvas = CImg<unsigned char>(w,h,1,3).
-            draw_rectangle(0,0,w-1,h-1,Qt::gray).
-            draw_line(0,0,w-1,0,Qt::white).draw_line(0,h-1,0,0,Qt::white).
-            draw_line(w-1,0,w-1,h-1,Qt::black).draw_line(w-1,h-1,0,h-1,Qt::black).
+            draw_rectangle(0,0,w-1,h-1,gray).
+            draw_line(0,0,w-1,0,white).draw_line(0,h-1,0,0,white).
+            draw_line(w-1,0,w-1,h-1,black).draw_line(w-1,h-1,0,h-1,black).
             draw_image(canvas,tx,ty);
         else
           canvas = CImg<unsigned char>(w,h,1,3).
-            draw_rectangle(0,0,w-1,h-1,Qt::gray).
-            draw_line(0,0,w-1,0,Qt::white).draw_line(0,h-1,0,0,Qt::white).
-            draw_line(w-1,0,w-1,h-1,Qt::black).draw_line(w-1,h-1,0,h-1,Qt::black);
+            draw_rectangle(0,0,w-1,h-1,gray).
+            draw_line(0,0,w-1,0,white).draw_line(0,h-1,0,0,white).
+            draw_line(w-1,0,w-1,h-1,black).draw_line(w-1,h-1,0,h-1,black);
         if (logo.data) canvas.draw_image(logo,lx,ly);
 
         unsigned int xbuttons[6];
