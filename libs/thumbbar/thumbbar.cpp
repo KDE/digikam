@@ -1,8 +1,3 @@
-//Added by qt3to4:
-#include <Q3Frame>
-#include <QResizeEvent>
-#include <QMouseEvent>
-#include <QPaintEvent>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -40,16 +35,22 @@ extern "C"
 
 // Qt includes. 
 
-#include <qdir.h>
-#include <qpixmap.h>
-#include <qimage.h>
-#include <qtimer.h>
-#include <qpainter.h>
-#include <q3dict.h>
-#include <qpoint.h>
-#include <q3stylesheet.h>
-#include <qdatetime.h>
-#include <qpointer.h>
+#include <Q3Dict>
+#include <Q3StyleSheet>
+#include <QFrame>
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
+#include <QDir>
+#include <QPixmap>
+#include <QImage>
+#include <QPalette>
+#include <QTimer>
+#include <QPainter>
+#include <QPoint>
+#include <QDateTime>
+#include <QPointer>
+#include <QTextDocument>
 
 // KDE includes.
 
@@ -66,7 +67,6 @@ extern "C"
 // LibKDcraw includes. 
  
 #include <libkdcraw/rawfiles.h> 
-#include <QTextDocument>
 
 // Local includes.
 
@@ -116,8 +116,8 @@ public:
     ThumbBarItem              *lastItem;
     ThumbBarItem              *currItem;
 
-    Q3Dict<ThumbBarItem>        itemDict;
-    QPointer<ThumbnailJob>  thumbJob;
+    Q3Dict<ThumbBarItem>       itemDict;
+    QPointer<ThumbnailJob>     thumbJob;
 
     ThumbBarToolTipSettings    toolTipSettings;
 
@@ -167,11 +167,10 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotUpdate()));
 
-    viewport()->setBackgroundMode(Qt::NoBackground);
     viewport()->setMouseTracking(true);
     viewport()->setAcceptDrops(true);
 
-    setFrameStyle(Q3Frame::NoFrame);
+    setFrameStyle(QFrame::NoFrame);
     setAcceptDrops(true); 
 
     if (d->orientation == Qt::Vertical)
@@ -229,7 +228,7 @@ void ThumbBarView::setExifRotate(bool exifRotate)
     {
         // Remove all current album item thumbs from disk cache.
 
-        QString uri = "file://" + QDir::cleanPath(item->url().path(-1));
+        QString uri = "file://" + QDir::cleanPath(item->url().path(KUrl::RemoveTrailingSlash));
         KMD5 md5(QFile::encodeName(uri));
         uri = md5.hexDigest();
     
@@ -319,7 +318,8 @@ void ThumbBarView::clear(bool updateView)
 
 void ThumbBarView::triggerUpdate()
 {
-    d->timer->start(0, true);    
+    d->timer->setSingleShot(true);
+    d->timer->start(0);    
 }
 
 ThumbBarItem* ThumbBarView::currentItem() const
@@ -455,10 +455,10 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
     {
        cy = viewportToContents(er.topLeft()).y();
         
-       bgPix.resize(contentsRect().width(), er.height());
+       bgPix.scaled(contentsRect().width(), er.height());
     
        ts = d->tileSize + 2*d->margin;
-       tile.resize(visibleWidth(), ts);
+       tile.scaled(visibleWidth(), ts);
     
        y1 = (cy/ts)*ts;
        y2 = ((y1 + er.height())/ts +1)*ts;
@@ -467,16 +467,16 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
     {
        cx = viewportToContents(er.topLeft()).x();
         
-       bgPix.resize(er.width(), contentsRect().height());
+       bgPix.scaled(er.width(), contentsRect().height());
     
        ts = d->tileSize + 2*d->margin;
-       tile.resize(ts, visibleHeight());
+       tile.scaled(ts, visibleHeight());
     
        x1 = (cx/ts)*ts;
        x2 = ((x1 + er.width())/ts +1)*ts;
     }
-
-    bgPix.fill(colorGroup().background());
+        
+    bgPix.fill(palette().color(QPalette::Background));
     
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
@@ -485,9 +485,9 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
             if (y1 <= item->d->pos && item->d->pos <= y2)
             {
                 if (item == d->currItem)
-                    tile.fill(colorGroup().highlight());
+                    tile.fill(palette().highlight().color());
                 else
-                    tile.fill(colorGroup().background());
+                    tile.fill(palette().background().color());
     
                 QPainter p(&tile);
                 p.setPen(Qt::white);
@@ -497,14 +497,16 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 if (item->d->pixmap)
                 {
                     QPixmap pix; 
-                    pix.convertFromImage(QImage(item->d->pixmap->convertToImage()).
-                                         smoothScale(d->tileSize, d->tileSize, Qt::KeepAspectRatio));
+                    pix.fromImage(QImage(item->d->pixmap->toImage()).
+                                  scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio));
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
-                    bitBlt(&tile, x, y, &pix);
+                    QPainter p(&tile);
+                    p.drawPixmap(x, y, pix);
                 }
                 
-                bitBlt(&bgPix, 0, item->d->pos - cy, &tile);
+                QPainter p2(&bgPix);
+                p2.drawPixmap(0, item->d->pos - cy, tile);
             }
         }
         else
@@ -512,9 +514,9 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
             if (x1 <= item->d->pos && item->d->pos <= x2)
             {
                 if (item == d->currItem)
-                    tile.fill(colorGroup().highlight());
+                    tile.fill(palette().highlight().color());
                 else
-                    tile.fill(colorGroup().background());
+                    tile.fill(palette().background().color());
     
                 QPainter p(&tile);
                 p.setPen(Qt::white);
@@ -524,22 +526,25 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 if (item->d->pixmap)
                 {
                     QPixmap pix; 
-                    pix.convertFromImage(QImage(item->d->pixmap->convertToImage()).
-                                         smoothScale(d->tileSize, d->tileSize, Qt::KeepAspectRatio));
+                    pix.fromImage(QImage(item->d->pixmap->toImage()).
+                                  scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio));
                     int x = (tile.width() - pix.width())/2;
                     int y = (tile.height()- pix.height())/2;
-                    bitBlt(&tile, x, y, &pix);
+                    QPainter p(&tile);
+                    p.drawPixmap(x, y, pix);
                 }
-                
-                bitBlt(&bgPix, item->d->pos - cx, 0, &tile);
+
+                QPainter p2(&bgPix);
+                p2.drawPixmap(item->d->pos - cx, 0, tile);
             }
         }
     }
 
+    QPainter p(viewport());
     if (d->orientation == Qt::Vertical)
-       bitBlt(viewport(), 0, er.y(), &bgPix);
+       p.drawPixmap(0, er.y(), bgPix);
     else
-       bitBlt(viewport(), er.x(), 0, &bgPix);
+       p.drawPixmap(er.x(), 0, bgPix);
 }
 
 void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
@@ -566,7 +571,7 @@ void ThumbBarView::contentsMouseMoveEvent(QMouseEvent *e)
 {
     if (!e) return;
 
-    if (d->dragging && (e->state() & Qt::LeftButton))
+    if (d->dragging && (e->button() & Qt::LeftButton))
     {
         if ( findItem(d->dragStartPos) &&
              (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance() )

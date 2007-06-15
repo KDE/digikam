@@ -27,11 +27,9 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <q3scrollview.h>
-#include <qtooltip.h>
-//Added by qt3to4:
-#include <QPixmap>
+#include <Q3ScrollView>
+#include <QString>
+#include <QToolTip>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
@@ -98,10 +96,10 @@ class DIGIKAM_EXPORT ThumbBarView : public Q3ScrollView
 
 public:
     
-    enum Qt::Orientation
+    enum Orientation
     {
-        Qt::Horizontal=0,      
-        Qt::Vertical         
+        Horizontal=0,      
+        Vertical         
     };
 
 public:
@@ -206,10 +204,11 @@ private:
 
 class DIGIKAM_EXPORT ThumbBarToolTip : public QToolTip
 {
+
 public:
 
     ThumbBarToolTip(ThumbBarView *parent);
-    ~ThumbBarToolTip(){};
+    virtual ~ThumbBarToolTip(){};
 
 protected:
     
