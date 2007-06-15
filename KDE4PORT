@@ -97,12 +97,10 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
 
  8      |-themedesigner                                        The last one component. It completly independant. It will be the last one to port.
 
- 9      |-data                       Gilles                    CMake port only
-        |---about                    Gilles                    CMake port only
+ 9      |-data                       Gilles        DONE        CMake port only
+        |---about                    Gilles        DONE        CMake port only
         |---icons                    Gilles                    CMake port only
         |---pics                     Gilles                    CMake port only
         |---profiles                 Gilles                    CMake port only
         |---themes                   Gilles                    CMake port only
-
- 10     |-project                    -                         NOTHING TO DO
 
