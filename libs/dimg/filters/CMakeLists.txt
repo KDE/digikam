@@ -1,14 +1,21 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor ${CMAKE_SOURCE_DIR}/digikam/libs/levels ${CMAKE_SOURCE_DIR}/digikam/libs/histogram ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+INCLUDE_DIRECTORIES(
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/levels 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/histogram 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor
+                   )
 
+SET(libdimgfilters_STAT_SRCS bcgmodifier.cpp hslmodifier.cpp icctransform.cpp 
+                             dimgimagefilters.cpp dimgthreadedfilter.cpp 
+                             dimggaussianblur.cpp dimgsharpen.cpp colormodifier.cpp)
 
-########### next target ###############
+KDE4_AUTOMOC(${libdimgfilters_STAT_SRCS})
 
+KDE4_ADD_LIBRARY(libdimgfilters STATIC ${libdimgfilters_STAT_SRCS})
 
-########### install files ###############
-
-install( FILES  bcgmodifier.h hslmodifier.h dimgthreadedfilter.h dimgimagefilters.h  	                 icctransform.h colormodifier.h dimgsharpen.h dimggaussianblur.h  DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
-
+INSTALL( FILES  bcgmodifier.h hslmodifier.h dimgthreadedfilter.h dimgimagefilters.h 
+                icctransform.h colormodifier.h dimgsharpen.h dimggaussianblur.h  
+         DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
 
 
 #original Makefile.am contents follow:
