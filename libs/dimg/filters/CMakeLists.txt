@@ -3,6 +3,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_SOURCE_DIR}/digikam/libs/levels 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/histogram 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor
+                     ${LCMS_INCLUDE_DIR}
                    )
 
 SET(libdimgfilters_STAT_SRCS bcgmodifier.cpp hslmodifier.cpp icctransform.cpp 

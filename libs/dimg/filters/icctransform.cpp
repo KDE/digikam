@@ -22,13 +22,10 @@
  *
  * ============================================================ */
 
-#include <config.h>
-
 // QT includes
 
-#include <qstring.h>
-#include <q3cstring.h>
-#include <qfile.h>
+#include <QDataStream>
+#include <QFile>
 
 // KDE includes
 
@@ -38,7 +35,7 @@
 
 // Lcms includes.
 
-#include LCMS_HEADER
+#include <lcms.h>
 #if LCMS_VERSION < 114
 #define cmsTakeCopyright(profile) "Unknown"
 #endif // LCMS_VERSION < 114
@@ -143,15 +140,15 @@ QString IccTransform::getProfileDescription(const QString& profile)
 int IccTransform::getRenderingIntent()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("Color Management");
-    return config->readNumEntry("RenderingIntent", 0);
+    KConfigGroup group = config->group(QString("Color Management"));
+    return group.readEntry("RenderingIntent", 0);
 }
 
 bool IccTransform::getUseBPC()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("Color Management");
-    return config->readBoolEntry("BPCAlgorithm", false);
+    KConfigGroup group = config->group(QString("Color Management"));
+    return group.readEntry("BPCAlgorithm", false);
 }
 
 QByteArray IccTransform::loadICCProfilFile(const QString& filePath)
@@ -160,9 +157,10 @@ QByteArray IccTransform::loadICCProfilFile(const QString& filePath)
     if ( !file.open(QIODevice::ReadOnly) )
         return QByteArray();
 
-    QByteArray data(file.size());
+    QByteArray data;
+    data.reserve(file.size());
     QDataStream stream( &file );
-    stream.readRawBytes(data.data(), data.size());
+    stream.readRawData(data.data(), data.size());
     file.close();
     return data;
 }
