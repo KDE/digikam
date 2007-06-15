@@ -238,7 +238,7 @@ bool IccTransform::apply(DImg& image)
     cmsHPROFILE   inprofile=0, outprofile=0, proofprofile=0;
     cmsHTRANSFORM transform;
     int inputFormat = 0;
-    int intent;
+    int intent      = INTENT_PERCEPTUAL;
 
     switch (getRenderingIntent())
     {
