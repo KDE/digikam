@@ -183,9 +183,9 @@ void SplashScreen::drawContents( QPainter *painter )
         position = (d->currState+i)%(2*d->progressBarSize-1);
         if (position < 3)
         {
-            painter->setBrush(QColor(basecolor.Qt::red()-18*i,
-                              basecolor.Qt::green()-28*i,
-                              basecolor.Qt::blue()-10*i));
+            painter->setBrush(QColor(basecolor.red()-18*i,
+                              basecolor.green()-28*i,
+                              basecolor.blue()-10*i));
             painter->drawEllipse(21+position*11,7,9,9);
         }
     }

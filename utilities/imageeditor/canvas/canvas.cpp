@@ -634,7 +634,7 @@ void Canvas::drawRubber()
 
     QPainter p(viewport());
     p.setRasterOp(Qt::NotROP );
-    p.setPen(QPen(Qt::color0, 1));
+    p.setPen(QPen(color0, 1));
     p.setBrush(Qt::NoBrush);
 
     QRect r(d->rubber->normalize());

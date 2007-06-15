@@ -104,9 +104,9 @@ void ColorGradientWidget::drawContents(QPainter *p)
        color2 = d->color2;
     }
 
-    int redDiff   = color2.red()   - color1.Qt::red();
-    int greenDiff = color2.green() - color1.Qt::green();
-    int blueDiff  = color2.blue()  - color1.Qt::blue();
+    int redDiff   = color2.red()   - color1.red();
+    int greenDiff = color2.green() - color1.green();
+    int blueDiff  = color2.blue()  - color1.blue();
 
     if ( d->orientation == Qt::Vertical )
     {
