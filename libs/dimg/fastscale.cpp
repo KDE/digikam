@@ -31,8 +31,11 @@ namespace Digikam
 
 QImage FastScale::fastScaleQImage(const QImage &img, int width, int height)
 {
-    QImage tgt(width, height, 32);
-    tgt.setAlphaBuffer(img.hasAlphaBuffer());
+    QImage tgt(width, height, QImage::Format_ARGB32);
+
+    // NOTE: Qt4 do not provide anymore QImage::setAlphaChannel() because
+    // alpha channel is auto-detected during QImage->QPixmap conversion
+
     fastScaleRectAvg( (quint32 *)tgt.bits(), (quint32 *)img.bits(),
                       img.width(), img.height(), tgt.width(), tgt.height() );
     return tgt;
