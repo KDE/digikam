@@ -3,7 +3,6 @@ include_directories(
                      ${CMAKE_SOURCE_DIR}/digikam/digikam
                    )
 
-
 add_subdirectory( lprof )
 add_subdirectory( curves )
 add_subdirectory( levels )
@@ -12,11 +11,11 @@ add_subdirectory( histogram )
 add_subdirectory( dmetadata )
 add_subdirectory( jpegutils )
 add_subdirectory( dimg )
-#add_subdirectory( threadimageio )
-#add_subdirectory( themeengine )
-#add_subdirectory( widgets )
 #add_subdirectory( greycstoration )
+#add_subdirectory( themeengine )
 #add_subdirectory( thumbbar )
+#add_subdirectory( threadimageio )
+#add_subdirectory( widgets )
 #add_subdirectory( imageproperties )
 #add_subdirectory( dialogs )
 #add_subdirectory( database )
