@@ -48,8 +48,8 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
         |---lighttable
         |---scripts                  Gilles                    CMake port only
         |---setup
-        |---slideshow
-        |---splashscreen
+        |---slideshow                Laurent                    CMake port only
+        |---splashscreen             Laurent       DONE         CMake port only
  
  4      |-digikam                                              The most long to do certainly
 

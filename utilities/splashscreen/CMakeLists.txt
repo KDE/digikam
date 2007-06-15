@@ -1,28 +1,12 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/digikam/digikam  )
 
 
-########### next target ###############
+SET(libsplashscreen_STAT_SRCS splashscreen.cpp )
+
+KDE4_ADD_LIBRARY(libsplashscreen STATIC ${libsplashscreen_STAT_SRCS})
 
 
-########### install files ###############
 
 install( FILES  digikam-splash.png DESTINATION ${DATA_INSTALL_DIR}/digikam )
 
-
-
-#original Makefile.am contents follow:
-
-#METASOURCES = AUTO
-#
-#noinst_LTLIBRARIES = libsplashscreen.la
-#
-#libsplashscreen_la_SOURCES = splashscreen.cpp
-#
-#libsplashscreen_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-#
-#digikamsplashpicdir = $(kde_datadir)/digikam
-#digikamsplashpic_DATA = digikam-splash.png
-#
-#INCLUDES= -I$(top_srcdir)/digikam/digikam \
-#	  $(all_includes)
