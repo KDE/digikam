@@ -21,7 +21,7 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
         |-----filters                Gilles        DONE
         |-----loaders                Gilles        DONE
         |---dmetadata                Gilles        DONE
-        |---greycstoration           Gilles
+        |---greycstoration           Gilles        DONE
         |---histogram                Gilles        DONE
         |---imageproperties
         |---jpegutils                Gilles        DONE
