@@ -1,16 +1,4 @@
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+install( FILES digitaglinktree DESTINATION ${BIN_INSTALL_DIR} )
+install( FILES digitaglinktree.1 DESTINATION ${MAN_INSTALL_DIR} )
 
-
-########### install files ###############
-
-install( FILES  digitaglinktree DESTINATION  )
-
-
-
-#original Makefile.am contents follow:
-
-######## This script name should probably be more 'namespaced'. Think about distros putting everything in /usr/bin...
-#bin_SCRIPTS = digitaglinktree
-#man_MANS = digitaglinktree.1
-#
