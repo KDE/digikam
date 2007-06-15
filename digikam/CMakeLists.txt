@@ -76,15 +76,16 @@ install(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### next target ###############
 
-set(digikam_SRCS ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp )
+set(digikam_bin_SRCS main.cpp )
 
-kde4_automoc(${digikam_SRCS})
+kde4_automoc(${digikam_bin_SRCS})
 
-kde4_add_executable(digikam ${digikam_SRCS})
+kde4_add_executable(digikam_bin ${digikam_bin_SRCS})
 
-target_link_libraries(digikam  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(digikam_bin  ${KDE4_KDECORE_LIBS} )
+set_target_properties(digikam_bin PROPERTIES OUTPUT_NAME digikam)
 
-install(TARGETS digikam DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS digikam_bin DESTINATION ${BIN_INSTALL_DIR})
 
 
 ########### install files ###############
