@@ -40,6 +40,10 @@
 namespace Digikam
 {
 
+// TODO: KDE4PORT: QShared have been removed to Qt4. Check if QSharedData can be
+//                 used instead as well.
+//                 More details: http://doc.trolltech.com/4.3/porting4.html#qshared
+
 class DIGIKAM_EXPORT DImgPrivate : public Q3Shared
 {
 public:
