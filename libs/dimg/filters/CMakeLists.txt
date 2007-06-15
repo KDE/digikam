@@ -7,8 +7,9 @@ INCLUDE_DIRECTORIES(
                    )
 
 SET(libdimgfilters_STAT_SRCS bcgmodifier.cpp hslmodifier.cpp icctransform.cpp 
-                             dimgimagefilters.cpp dimgthreadedfilter.cpp 
-                             dimggaussianblur.cpp dimgsharpen.cpp colormodifier.cpp)
+                             dimgimagefilters.cpp colormodifier.cpp
+                             dimggaussianblur.cpp dimgsharpen.cpp
+                             dimgthreadedfilter.cpp )
 
 KDE4_AUTOMOC(${libdimgfilters_STAT_SRCS})
 
