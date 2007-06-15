@@ -11,26 +11,26 @@ List of directories ported by developpers:
 
 ORDER   DIRECTORIES                  WHO           STATUS      REMARK
 
- 1      |-sqlite                     Gilles        Done        CMake port only. Used by digiKam core. Must be ported in first.
+ 1      |-sqlite                     Gilles        DONE        CMake port only. Used by digiKam core. Must be ported in first.
 
  2      |-libs                                                 "libs" subfloders are used by all others parts of digiKam.
-        |---curves                   Gilles        Done
+        |---curves                   Gilles        DONE
         |---database                 Marcel
         |---dialogs
-        |---dimg                     Gilles
+        |---dimg                     Gilles        DONE
         |-----filters                Gilles
         |-----loaders                Gilles
-        |---dmetadata                Gilles        Done
+        |---dmetadata                Gilles        DONE
         |---greycstoration           Gilles
-        |---histogram                Gilles        Done
+        |---histogram                Gilles        DONE
         |---imageproperties
-        |---jpegutils                Gilles        Done
-        |---levels                   Gilles        Done
-        |---lprof                    Gilles        Done        CMake port only
+        |---jpegutils                Gilles        DONE
+        |---levels                   Gilles        DONE
+        |---lprof                    Gilles        DONE        CMake port only
         |---themeengine
         |---threadimageio            Marcel
         |---thumbbar                 Gilles
-        |---whitebalance             Gilles        Done
+        |---whitebalance             Gilles        DONE
         |---widgets                  Laurent
         |-----common                 Laurent
         |-----iccprofiles            Laurent
@@ -42,14 +42,14 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
         |---cameragui
         |---hotplug                  Gilles                    CMake port only
         |---imageeditor
-        |-----canvas                 Laurent			CMake port only
-        |-----editor                 Laurent			CMake port only
-        |-----tools		     Laurent 			CMake port only
+        |-----canvas                 Laurent                   CMake port only
+        |-----editor                 Laurent                   CMake port only
+        |-----tools                  Laurent                   CMake port only
         |---lighttable
         |---scripts                  Gilles                    CMake port only
         |---setup
-        |---slideshow                Laurent                    CMake port only
-        |---splashscreen             Laurent       DONE         CMake port only
+        |---slideshow                Laurent                   CMake port only
+        |---splashscreen             Laurent       DONE        CMake port only
  
  4      |-digikam                                              The most long to do certainly
 
