@@ -27,18 +27,3 @@ add_subdirectory( superimpose )
 add_subdirectory( texture )
 add_subdirectory( whitebalance )
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
-
-
-########### install files ###############
-
-
-
-
-#original Makefile.am contents follow:
-
-#SUBDIRS = coreplugin adjustcurves adjustlevels antivignetting blurfx border \
-#	      channelmixer charcoal colorfx distortionfx emboss filmgrain \
-#	      freerotation hotpixels infrared inpainting inserttext lensdistortion \
-#	      noisereduction oilpaint perspective raindrop restoration sheartool \
-#	      superimpose texture whitebalance 

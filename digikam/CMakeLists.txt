@@ -64,8 +64,7 @@ set(digikam_LIB_SRCS
 
 kde4_automoc(${digikam_LIB_SRCS})
 
-#kde4_add_dcop_skels(digikam_LIB_SRCS MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please.kde4_add_dcop_skels macro doesn't exist now. We keep it just to remember to port to dbus")
-dcopiface.h )
+#kde4_add_dcop_skels(digikam_LIB_SRCS MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please.kde4_add_dcop_skels macro doesn't exist now. We keep it just to remember to port to dbus")dcopiface.h )
 
 kde4_add_library(digikam SHARED ${digikam_LIB_SRCS})
 
@@ -94,7 +93,6 @@ install( FILES  digikam.desktop DESTINATION ${XDG_APPS_DIR} )
 install( FILES  digikamui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam )
 install( FILES  digikam_export.h DESTINATION ${INCLUDE_INSTALL_DIR} )
 
-kde4_create_doxygen_docs(  )
 
 
 
