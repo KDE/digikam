@@ -46,7 +46,7 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
         |-----editor                 Laurent                   CMake port only
         |-----tools                  Laurent                   CMake port only
         |---lighttable
-        |---scripts                  Gilles                    CMake port only
+        |---scripts                  Gilles        DONE        CMake port only
         |---setup
         |---slideshow                Laurent                   CMake port only
         |---splashscreen             Laurent       DONE        CMake port only
