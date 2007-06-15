@@ -1,6 +1,5 @@
----------------------------------------------------------------------------
-
 Native DIMG Loaders status (Gilles Caulier - 2006-11-29)
+--------------------------------------------------------
 
 Format  Read  Write  ICC   MetaData  Thumb  8bits    16bits  depency     Remarks
 
