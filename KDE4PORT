@@ -56,8 +56,8 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
  5      |-kioslave
 
  6      |-showfoto
-        |---icons                    Gilles                    CMake port only
-        |---pics                     Gilles                    CMake port only
+        |---icons                    Gilles        DONE        CMake port only
+        |---pics                     Gilles        DONE        CMake port only
         |---setup
 
  7      |-imageplugins                                         All image editor plugins can be ported after digiKam core
