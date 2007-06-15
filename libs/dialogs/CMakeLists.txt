@@ -2,8 +2,21 @@
 include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/metadata ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/iccprofiles ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/imageplugins ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
+set(libdialog_STAT_SRCS ctrlpaneldlg.cpp imagedlgbase.cpp imageguidedlg.cpp iccprofileinfodlg.cpp deletedialog.cpp dprogressdlg.cpp)
+
+kde4_add_ui3_files(libdialog_STAT_SRCS deletedialogbase.ui)
+
+kde4_automoc(${libdialog_STAT_SRCS})
+
+KDE4_ADD_LIBRARY(libdialog STATIC ${libdialog_STAT_SRCS})
+
 ########### next target ###############
 
+set(libdialogshowfoto_STAT_SRCS iccprofileinfodlg.cpp)
+
+kde4_automoc(${libdialogshowfoto_STAT_SRCS})
+
+KDE4_ADD_LIBRARY(libdialogshowfoto STATIC ${libdialogshowfoto_STAT_SRCS})
 
 ########### next target ###############
 
@@ -12,40 +25,3 @@ include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/d
 
 install( FILES  ctrlpaneldlg.h imagedlgbase.h imageguidedlg.h  	                     iccprofileinfodlg.h dprogressdlg.h   DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
 
-
-
-#original Makefile.am contents follow:
-
-#METASOURCES = AUTO
-#
-#noinst_LTLIBRARIES = libdialog.la libdialogshowfoto.la
-#
-## Dialogs collection used by Showfoto.
-#
-#libdialogshowfoto_la_SOURCES = iccprofileinfodlg.cpp  
-#
-#libdialogshowfoto_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-#
-## Dialogs collection used by digiKam.
-#
-#libdialog_la_SOURCES = deletedialogbase.ui \
-#	                   ctrlpaneldlg.cpp imagedlgbase.cpp imageguidedlg.cpp \
-#	                   iccprofileinfodlg.cpp deletedialog.cpp dprogressdlg.cpp 
-#
-#libdialog_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-#
-#INCLUDES = -I$(top_srcdir)/digikam/libs/dimg \
-#	       -I$(top_srcdir)/digikam/libs/dmetadata \
-#	       -I$(top_srcdir)/digikam/digikam \
-#	       -I$(top_srcdir)/digikam/libs/dimg/filters \
-#	       -I$(top_srcdir)/digikam/libs/widgets/common \
-#	       -I$(top_srcdir)/digikam/libs/widgets/metadata \
-#	       -I$(top_srcdir)/digikam/libs/widgets/iccprofiles \
-#	       -I$(top_srcdir)/digikam/libs/widgets/imageplugins \
-#	       -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
-#	       $(all_includes)
-#
-#digikaminclude_HEADERS = ctrlpaneldlg.h imagedlgbase.h imageguidedlg.h \
-#	                     iccprofileinfodlg.h dprogressdlg.h  
-#digikamincludedir = $(includedir)/digikam
-#

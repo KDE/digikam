@@ -54,6 +54,8 @@ set(libimagepluginswidgets_SRCS
 
 SET(libwidgets_STAT_SRCS ${libimagepluginswidgets_SRCS} ${libmetadatawidgets_SRCS} ${libiccprofileswidgets_SRCS} ${libcommonwidgets_SRCS})
 
+kde4_automoc(${libwidgets_STAT_SRCS})
+
 KDE4_ADD_LIBRARY(libwidgets STATIC ${libwidgets_STAT_SRCS})
 
 

@@ -38,7 +38,7 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
         |-----metadata               Laurent
 
  3      |-utilities                                            Utilities components are used as "libs" by digiKam main interface.
-        |---batch
+        |---batch                    Laurent
         |---cameragui
         |---hotplug                  Gilles                    CMake port only
         |---imageeditor
