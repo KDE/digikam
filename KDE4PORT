@@ -19,7 +19,7 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
         |---dialogs
         |---dimg                     Gilles        DONE
         |-----filters                Gilles
-        |-----loaders                Gilles
+        |-----loaders                Gilles        DONE
         |---dmetadata                Gilles        DONE
         |---greycstoration           Gilles
         |---histogram                Gilles        DONE
