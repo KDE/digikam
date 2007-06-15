@@ -1,1 +1,12 @@
-install( FILES  Dreary Marine Clean OrangeCrush Sandy Dark Dessert Digikasa Gray Blue DLR  DESTINATION ${DATA_INSTALL_DIR}/digikam/themes )
+install( FILES Dreary 
+               Marine 
+	       Clean 
+	       OrangeCrush 
+	       Sandy 
+	       Dark 
+	       Dessert 
+	       Digikasa 
+	       Gray 
+	       Blue 
+	       DLR  
+         DESTINATION ${DATA_INSTALL_DIR}/digikam/themes )
