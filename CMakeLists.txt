@@ -17,7 +17,6 @@ ADD_DEFINITIONS(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
 INCLUDE_DIRECTORIES(${KEXIV2_INCLUDE_DIR} ${KDCRAW_INCLUDE_DIR})
 
-INCLUDE(ConfigureChecks.cmake)
 
 include_directories( ${KDE4_INCLUDE_DIR}
                      ${QT_INCLUDES}
@@ -36,7 +35,7 @@ ADD_SUBDIRECTORY( libs )
 
 install( FILES  tips DESTINATION ${DATA_INSTALL_DIR}/digikam )
 
-kde4_create_doxygen_docs(  )
+#kde4_create_doxygen_docs(  )
 
 
 
