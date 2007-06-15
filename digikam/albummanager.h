@@ -394,7 +394,7 @@ public:
 
 private:
 
-    static AlbumManager* m_componentData;
+    static AlbumManager* m_instance;
     AlbumManagerPriv*    d;
 
     void insertPAlbum(PAlbum *album);

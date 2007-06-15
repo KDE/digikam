@@ -99,19 +99,19 @@ public:
     AlbumLister::MatchingCondition matchingCond;
 };
 
-AlbumLister* AlbumLister::m_componentData = 0;
+AlbumLister* AlbumLister::m_instance = 0;
 
 AlbumLister* AlbumLister::componentData()
 {
-    if (!m_componentData)
+    if (!m_instance)
         new AlbumLister();
 
-    return m_componentData;
+    return m_instance;
 }
 
 AlbumLister::AlbumLister()
 {
-    m_componentData = this;
+    m_instance = this;
 
     d = new AlbumListerPriv;
     d->itemList.setAutoDelete(true);
@@ -126,7 +126,7 @@ AlbumLister::~AlbumLister()
 {
     delete d->filterTimer;
     delete d;
-    m_componentData = 0;
+    m_instance = 0;
 }
 
 void AlbumLister::openAlbum(Album *album)

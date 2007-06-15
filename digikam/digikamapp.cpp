@@ -116,8 +116,8 @@ DigikamApp::DigikamApp()
     d->albumSettings = new AlbumSettings();
     d->albumSettings->readSettings();
 
-    d->albumManager = AlbumManager::componentData();
-    AlbumLister::componentData();
+    d->albumManager = AlbumManager::instance();
+    AlbumLister::instance();
 
     d->cameraMediaList = new KMenu;
 
@@ -151,7 +151,7 @@ DigikamApp::DigikamApp()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Checking dcraw version"), Qt::AlignLeft, white);
 
-    KDcrawIface::DcrawBinary::componentData().checkSystem();
+    KDcrawIface::DcrawBinary::instance().checkSystem();
 
     // Actual file scanning is done in main() - is this necessary here?
     //d->albumManager->setLibraryPath(d->albumSettings->getAlbumLibraryPath());
@@ -200,7 +200,7 @@ DigikamApp::~DigikamApp()
     delete d->albumSettings;
 
     delete d->albumManager;
-    delete AlbumLister::componentData();
+    delete AlbumLister::instance();
 
     ImageAttributesWatch::cleanUp();
     LoadingCacheInterface::cleanUp();
@@ -260,7 +260,7 @@ void DigikamApp::show()
 
     // Report errors from dcraw detection.
 
-    KDcrawIface::DcrawBinary::componentData().checkReport();
+    KDcrawIface::DcrawBinary::instance().checkReport();
 
     // Init album icon view zoom factor. 
     slotThumbSizeChanged(d->albumSettings->getDefaultIconSize());
@@ -1541,7 +1541,7 @@ void DigikamApp::slotSetupChanged()
 
     d->view->applySettings(d->albumSettings);
 
-    AlbumThumbnailLoader::componentData().setThumbnailSize(d->albumSettings->getDefaultTreeIconSize());
+    AlbumThumbnailLoader::instance().setThumbnailSize(d->albumSettings->getDefaultTreeIconSize());
 
     if (ImageWindow::imagewindowCreated())
         ImageWindow::imagewindow()->applySettings();
@@ -1777,8 +1777,8 @@ void DigikamApp::populateThemes()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Loading themes"), Qt::AlignLeft, white);
 
-    ThemeEngine::componentData().scanThemes();
-    QStringList themes(ThemeEngine::componentData().themeNames());
+    ThemeEngine::instance().scanThemes();
+    QStringList themes(ThemeEngine::instance().themeNames());
 
     d->themeMenuAction->setItems(themes);
     int index = themes.findIndex(d->albumSettings->getCurrentTheme());
@@ -1787,13 +1787,13 @@ void DigikamApp::populateThemes()
         index = themes.findIndex(i18n("Default"));
         
     d->themeMenuAction->setCurrentItem(index);
-    ThemeEngine::componentData().slotChangeTheme(d->themeMenuAction->currentText());
+    ThemeEngine::instance().slotChangeTheme(d->themeMenuAction->currentText());
 }
 
 void DigikamApp::slotChangeTheme(const QString& theme)
 {
     d->albumSettings->setCurrentTheme(theme);
-    ThemeEngine::componentData().slotChangeTheme(theme);
+    ThemeEngine::instance().slotChangeTheme(theme);
 }
 
 void DigikamApp::slotDatabaseRescan()

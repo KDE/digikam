@@ -114,16 +114,16 @@ public:
 };
 
 
-AlbumManager* AlbumManager::m_componentData = 0;
+AlbumManager* AlbumManager::m_instance = 0;
 
 AlbumManager* AlbumManager::componentData()
 {
-    return m_componentData;
+    return m_instance;
 }
 
 AlbumManager::AlbumManager()
 {
-    m_componentData    = this;
+    m_instance    = this;
 
     d = new AlbumManagerPriv;
 
@@ -159,7 +159,7 @@ AlbumManager::~AlbumManager()
 
     delete d;
 
-    m_componentData = 0;
+    m_instance = 0;
 }
 
 void AlbumManager::setAlbumRoot(const QString &albumRoot, bool priority)

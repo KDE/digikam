@@ -127,7 +127,7 @@ private:
 
     AlbumListerPriv    *d;
 
-    static AlbumLister *m_componentData; 
+    static AlbumLister *m_instance;
 
 };
 
