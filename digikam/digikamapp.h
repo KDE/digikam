@@ -165,7 +165,7 @@ private:
 
     DigikamAppPriv    *d;
 
-    static DigikamApp *m_componentData;
+    static DigikamApp *m_instance;
 };
 
 }  // namespace Digikam

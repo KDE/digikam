@@ -98,13 +98,13 @@ using KIO::UDSEntry;
 namespace Digikam
 {
 
-DigikamApp* DigikamApp::m_componentData = 0;
+DigikamApp* DigikamApp::m_instance = 0;
 
 DigikamApp::DigikamApp()
           : KMainWindow( 0, "Digikam" )
 {
     d = new DigikamAppPriv;
-    m_componentData = this;
+    m_instance = this;
     d->config  = KGlobal::config();
 
     if(d->config->readBoolEntry("Show Splash", true) &&
@@ -207,14 +207,14 @@ DigikamApp::~DigikamApp()
     KDcrawIface::DcrawBinary::cleanUp();
     AlbumThumbnailLoader::cleanUp();
 
-    m_componentData = 0;
+    m_instance = 0;
 
     delete d;
 }
 
 DigikamApp* DigikamApp::getinstance()
 {
-    return m_componentData;
+    return m_instance;
 }
 
 void DigikamApp::show()
