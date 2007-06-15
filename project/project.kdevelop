@@ -14,7 +14,7 @@
     <absoluteprojectpath>false</absoluteprojectpath>
     <description/>
     <ignoreparts/>
-    <projectname>digikam</projectname>
+    <projectname></projectname>
     <defaultencoding/>
   </general>
   <kdevfileview>
@@ -113,13 +113,13 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>/home/gilles/Documents/devel/SVN/trunk/graphics/digikam/digikam/digikam</mainprogram>
+      <mainprogram>/mnt/data/devel/SVN/trunk/graphics/digikam/project/../../</mainprogram>
       <programargs/>
       <terminal>false</terminal>
       <autocompile>false</autocompile>
       <envvars/>
       <globaldebugarguments/>
-      <globalcwd>../digikam</globalcwd>
+      <globalcwd>../digikam/digikam</globalcwd>
       <useglobalprogram>true</useglobalprogram>
       <autoinstall>false</autoinstall>
       <autokdesu>false</autokdesu>
