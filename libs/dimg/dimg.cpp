@@ -40,6 +40,7 @@ extern "C"
 #include <QFileInfo>
 #include <QMap>
 #include <QPixmap>
+#include <QSysInfo>
 
 // LibKDcraw includes.
 
@@ -1127,7 +1128,7 @@ QPixmap DImg::convertToPixmap()
         return QPixmap::fromImage(copyQImage(0, 0, width(), height()));
     }
 
-    if (QImage::systemByteOrder() == QImage::BigEndian)
+    if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
     {
         QImage img(width(), height(), QImage::Format_ARGB32);
 
