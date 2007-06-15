@@ -23,12 +23,10 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qlabel.h>
-#include <qlayout.h>
-
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QString>
+#include <QLabel>
+#include <QLayout>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -56,7 +54,7 @@ public:
         PNGcompression      = 0;
     }
 
-    Q3GridLayout  *PNGGrid;
+    QGridLayout  *PNGGrid;
 
     QLabel       *labelPNGcompression;
 
@@ -64,26 +62,28 @@ public:
 };
 
 PNGSettings::PNGSettings(QWidget *parent)
-           : QWidget(parent, 0, Qt::WDestructiveClose)
+           : QWidget(parent)
 {
     d = new PNGSettingsPriv;
+    setAttribute(Qt::WA_DeleteOnClose);
 
-    d->PNGGrid        = new Q3GridLayout(this, 1, 1, KDialog::spacingHint());
+    d->PNGGrid        = new QGridLayout(this);
     d->PNGcompression = new KIntNumInput(9, this);
     d->PNGcompression->setRange(1, 9, 1, true );
     d->labelPNGcompression = new QLabel(i18n("PNG compression:"), this);
 
     d->PNGcompression->setWhatsThis( i18n("<p>The compression value for PNG images:<p>"
-                                            "<b>1</b>: low compression (large file size but "
-                                            "short compression duration - default)<p>"
-                                            "<b>5</b>: medium compression<p>"
-                                            "<b>9</b>: high compression (small file size but "
-                                            "long compression duration)<p>"
-                                            "<b>Note: PNG is always a lossless image "
-                                            "compression format.</b>"));
-    d->PNGGrid->addMultiCellWidget(d->labelPNGcompression, 0, 0, 0, 0);
-    d->PNGGrid->addMultiCellWidget(d->PNGcompression, 0, 0, 1, 1);
-    d->PNGGrid->setColStretch(1, 10);
+                                          "<b>1</b>: low compression (large file size but "
+                                          "short compression duration - default)<p>"
+                                          "<b>5</b>: medium compression<p>"
+                                          "<b>9</b>: high compression (small file size but "
+                                          "long compression duration)<p>"
+                                          "<b>Note: PNG is always a lossless image "
+                                          "compression format.</b>"));
+    d->PNGGrid->addWidget(d->labelPNGcompression, 0, 0, 0, 0);
+    d->PNGGrid->addWidget(d->PNGcompression, 0, 0, 1, 1);
+    d->PNGGrid->setColumnStretch(1, 10);
+    d->PNGGrid->setSpacing(KDialog::spacingHint());
 }
 
 PNGSettings::~PNGSettings()
