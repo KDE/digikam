@@ -99,8 +99,8 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
 
  9      |-data                       Gilles        DONE        CMake port only
         |---about                    Gilles        DONE        CMake port only
-        |---icons                    Gilles                    CMake port only
-        |---pics                     Gilles                    CMake port only
-        |---profiles                 Gilles                    CMake port only
-        |---themes                   Gilles                    CMake port only
+        |---icons                    Gilles        DONE        CMake port only
+        |---pics                     Gilles        DONE        CMake port only
+        |---profiles                 Gilles        DONE        CMake port only
+        |---themes                   Gilles        DONE        CMake port only
 
