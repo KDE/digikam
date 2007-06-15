@@ -1,10 +1,24 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
+INCLUDE_DIRECTORIES(
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
-		     ${CMAKE_SOURCE_DIR}/digikam/digikam 
-		     ${KDE4_INCLUDE_DIR} 
-		     ${QT_INCLUDES}  )
+                   )
 
+SET(libdimgloaders_STAT_SRCS dimgloader.cpp pngloader.cpp jpegloader.cpp
+                             tiffloader.cpp rawloader.cpp ppmloader.cpp
+                             qimageloader.cpp iccjpeg.c jp2kloader.cpp
+                             jpegsettings.cpp pngsettings.cpp tiffsettings.cpp
+                             jp2ksettings.cpp )
+
+KDE4_ADD_LIBRARY(libdimgloaders STATIC ${libdimgloaders_STAT_SRCS})
+
+TARGET_LINK_LIBRARIES(libdimgloaders
+                      ${JPEG_LIBRARIES} 
+                      ${TIFF_LIBRARIES} 
+                      ${PNG_LIBRARIES} 
+                      ${JASPER_LIBRARIES}
+                     )
+
+INSTALL( FILES imagelevels.h DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
 
 
 #original Makefile.am contents follow:
