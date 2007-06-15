@@ -23,11 +23,7 @@
 
 // Qt includes.
 
-#include <qobject.h>
-#include <qevent.h>
-#include <q3deepcopy.h>
-//Added by qt3to4:
-#include <QCustomEvent>
+#include <QObject>
 
 // Local includes.
 
@@ -46,9 +42,9 @@ DImgThreadedFilter::DImgThreadedFilter(DImg *orgImage, QObject *parent,
     m_parent        = parent;
     m_cancel        = false;
 
-    // See B.K.O #133026: make a deep copy of Qstring to prevent crash 
+    // See B.K.O #133026: make a deep copy of QString to prevent crash 
     // on Hyperthreading computer.
-    m_name          = Q3DeepCopy<QString>(name);
+    m_name          = QString(name);
 
     m_master        = 0;
     m_slave         = 0;
@@ -65,9 +61,9 @@ DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter *master, const DImg &o
     m_parent        = 0;
     m_cancel        = false;
 
-    // See B.K.O #133026: make a deep copy of Qstring to prevent crash 
+    // See B.K.O #133026: make a deep copy of QString to prevent crash 
     // on Hyperthreading computer.
-    m_name          = Q3DeepCopy<QString>(name);
+    m_name          = QString(name);
 
     m_master        = master;
     m_slave         = 0;
@@ -86,7 +82,7 @@ DImgThreadedFilter::~DImgThreadedFilter()
 
 void DImgThreadedFilter::initFilter(void)
 {
-    m_destImage.reset();         
+    m_destImage.reset();
     m_destImage = DImg(m_orgImage.width(), m_orgImage.height(),
                        m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
     
@@ -133,7 +129,7 @@ void DImgThreadedFilter::postProgress(int progress, bool starting, bool success)
        eventData->progress  = progress;
        eventData->starting  = starting;
        eventData->success   = success;
-       QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, eventData));
+       QApplication::postEvent(m_parent, eventData);
     }
 }
 

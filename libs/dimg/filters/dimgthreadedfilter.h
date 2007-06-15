@@ -26,8 +26,9 @@
 
 // Qt includes.
 
-#include <qthread.h>
-#include <qstring.h>
+#include <QEvent>
+#include <QThread>
+#include <QString>
 
 // KDE includes.
 
@@ -49,17 +50,17 @@ class DIGIKAM_EXPORT DImgThreadedFilter : public QThread
 public:
 
 /** Class used to post status of computation to parent. */
-class EventData
+class EventData : public QEvent
 {
     public:
     
-    EventData() 
+    EventData() : QEvent(QEvent::User)
     {
        starting = false;
        success  = false; 
     }
     
-    bool starting;    
+    bool starting;
     bool success;
     int  progress;
 };
