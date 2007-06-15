@@ -496,7 +496,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     }
 
     QString rawFilesExt(raw_file_extentions);
-    QString ext = fileInfo.extension(false).upper();
+    QString ext = fileInfo.suffix().toUpper();
 
     if (!ext.isEmpty())
     {
@@ -506,7 +506,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
             return PNG;
         else if (ext == QString("TIFF") || ext == QString("TIF"))
             return TIFF;
-        else if (rawFilesExt.upper().contains(ext))
+        else if (rawFilesExt.toUpper().contains(ext))
             return RAW;
         if (ext == QString("JP2") || ext == QString("JPX") || // JPEG2000 file format
             ext == QString("JPC") ||                          // JPEG2000 code stream
@@ -653,9 +653,10 @@ bool DImg::getICCProfilFromFile(const QString& filePath)
     if ( !file.open(QIODevice::ReadOnly) ) 
         return false;
     
-    QByteArray data(file.size());
+    QByteArray data;
+    data.reserve(file.size());
     QDataStream stream( &file );
-    stream.readRawBytes(data.data(), data.size());
+    stream.readRawData(data.data(), data.size());
     setICCProfil(data);
     file.close();
     return true;
@@ -669,7 +670,7 @@ bool DImg::setICCProfilToFile(const QString& filePath)
     
     QByteArray data(getICCProfil());
     QDataStream stream( &file );
-    stream.writeRawBytes(data.data(), data.size());
+    stream.writeRawData(data.data(), data.size());
     file.close();
     return true;
 }
@@ -696,22 +697,22 @@ QByteArray DImg::getICCProfil() const
 
 void DImg::setComments(const QByteArray& commentsData)
 {
-    m_priv->metaData.replace(COM, commentsData);
+    m_priv->metaData.insert(COM, commentsData);
 }
 
 void DImg::setExif(const QByteArray& exifData)
 {
-    m_priv->metaData.replace(EXIF, exifData);
+    m_priv->metaData.insert(EXIF, exifData);
 }
 
 void DImg::setIptc(const QByteArray& iptcData)
 {
-    m_priv->metaData.replace(IPTC, iptcData);
+    m_priv->metaData.insert(IPTC, iptcData);
 }
 
 void DImg::setICCProfil(const QByteArray& profile)
 {
-    m_priv->metaData.replace(ICC, profile);
+    m_priv->metaData.insert(ICC, profile);
 }
 
 QByteArray DImg::metadata(DImg::METADATA key) const
@@ -721,7 +722,7 @@ QByteArray DImg::metadata(DImg::METADATA key) const
     for (MetaDataMap::iterator it = m_priv->metaData.begin(); it != m_priv->metaData.end(); ++it)
     {
         if (it.key() == key)
-            return it.data();
+            return it.value();
     }
 
     return QByteArray();
@@ -1214,20 +1215,20 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
             index = y*img.bytesPerLine() + x*4;
     
             if (expoSettings->underExposureIndicator && 
-                pix.Qt::red() == 0 && pix.Qt::green() == 0 && pix.Qt::blue() == 0)
+                pix.red() == 0 && pix.green() == 0 && pix.blue() == 0)
             {
-                bits[index    ] = expoSettings->underExposureColor.Qt::blue();
-                bits[index + 1] = expoSettings->underExposureColor.Qt::green();
-                bits[index + 2] = expoSettings->underExposureColor.Qt::red();
+                bits[index    ] = expoSettings->underExposureColor.blue();
+                bits[index + 1] = expoSettings->underExposureColor.green();
+                bits[index + 2] = expoSettings->underExposureColor.red();
                 bits[index + 3] = 0xFF;
             }
 
             if (expoSettings->overExposureIndicator && 
-                pix.Qt::red() == max && pix.Qt::green() == max && pix.Qt::blue() == max)
+                pix.red() == max && pix.green() == max && pix.blue() == max)
             {
-                bits[index    ] = expoSettings->overExposureColor.Qt::blue();
-                bits[index + 1] = expoSettings->overExposureColor.Qt::green();
-                bits[index + 2] = expoSettings->overExposureColor.Qt::red();
+                bits[index    ] = expoSettings->overExposureColor.blue();
+                bits[index + 1] = expoSettings->overExposureColor.green();
+                bits[index + 2] = expoSettings->overExposureColor.red();
                 bits[index + 3] = 0xFF;
             }
         }
@@ -1668,9 +1669,9 @@ void DImg::fill(DColor color)
 
         for (uint i = 0 ; i < width()*height()*4 ; i+=4)
         {
-            imgData16[ i ] = (unsigned short)color.Qt::blue();
-            imgData16[i+1] = (unsigned short)color.Qt::green();
-            imgData16[i+2] = (unsigned short)color.Qt::red();
+            imgData16[ i ] = (unsigned short)color.blue();
+            imgData16[i+1] = (unsigned short)color.green();
+            imgData16[i+2] = (unsigned short)color.red();
             imgData16[i+3] = (unsigned short)color.alpha();
         }
     }
@@ -1680,9 +1681,9 @@ void DImg::fill(DColor color)
         
         for (uint i = 0 ; i < width()*height()*4 ; i+=4)
         {
-            imgData[ i ] = (uchar)color.Qt::blue();
-            imgData[i+1] = (uchar)color.Qt::green();
-            imgData[i+2] = (uchar)color.Qt::red();
+            imgData[ i ] = (uchar)color.blue();
+            imgData[i+1] = (uchar)color.green();
+            imgData[i+2] = (uchar)color.red();
             imgData[i+3] = (uchar)color.alpha();
         }
     }
