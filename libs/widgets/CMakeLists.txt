@@ -2,27 +2,55 @@
 add_subdirectory( metadata )
 add_subdirectory( imageplugins )
 add_subdirectory( common )
-add_subdirectory( iccprofiles )
 
 ########### next target ###############
 
+SET(libcommonwidgets_SRCS 
+	common/histogramwidget.cpp 
+	common/colorgradientwidget.cpp 
+	common/curveswidget.cpp 
+	common/sidebar.cpp 
+	common/squeezedcombobox.cpp 
+	common/filesaveoptionsbox.cpp 
+	common/dpopupmenu.cpp 
+	common/statuszoombar.cpp 
+	common/statusnavigatebar.cpp 
+	common/statusprogressbar.cpp 
+	common/dcursortracker.cpp 
+	common/paniconwidget.cpp 
+	common/previewwidget.cpp )
 
-########### install files ###############
+
+set(libiccprofileswidgets_SRCS
+	iccprofiles/iccprofilewidget.cpp
+	iccprofiles/cietonguewidget.cpp
+	iccprofiles/iccpreviewwidget.cpp
+	)
+
+set(libmetadatawidgets_SRCS
+	metadata/metadatalistview.cpp
+	metadata/metadatalistviewitem.cpp
+	metadata/metadatawidget.cpp
+	metadata/iptcwidget.cpp
+	metadata/exifwidget.cpp
+	metadata/mdkeylistviewitem.cpp
+	metadata/makernotewidget.cpp
+	metadata/gpswidget.cpp
+	metadata/worldmapwidget.cpp
+	)
+
+set(libimagepluginswidgets_SRCS
+	imageplugins/imageregionwidget.cpp
+	imageplugins/imagepaniconwidget.cpp
+	imageplugins/imageguidewidget.cpp
+	imageplugins/imagepannelwidget.cpp
+	imageplugins/imagewidget.cpp
+	imageplugins/listboxpreviewitem.cpp
+	)
 
 
+SET(libwidgets_STAT_SRCS ${libimagepluginswidgets_SRCS} ${libmetadatawidgets_SRCS} ${libiccprofileswidgets_SRCS} ${libcommonwidgets_SRCS})
+
+KDE4_ADD_LIBRARY(libwidgets STATIC ${libwidgets_STAT_SRCS})
 
 
-#original Makefile.am contents follow:
-
-#SUBDIRS = metadata imageplugins common iccprofiles
-#
-#noinst_LTLIBRARIES = libwidgets.la
-#
-#libwidgets_la_SOURCES =
-#
-#libwidgets_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-#
-#libwidgets_la_LIBADD = $(top_builddir)/digikam/libs/widgets/metadata/libmetadatawidgets.la \
-#	               $(top_builddir)/digikam/libs/widgets/iccprofiles/libiccprofileswidgets.la \
-#	               $(top_builddir)/digikam/libs/widgets/imageplugins/libimagepluginswidgets.la \
-#	               $(top_builddir)/digikam/libs/widgets/common/libcommonwidgets.la 
