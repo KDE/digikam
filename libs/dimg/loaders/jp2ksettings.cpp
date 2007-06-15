@@ -23,13 +23,11 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <qlayout.h>
-
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QString>
+#include <QLabel>
+#include <QCheckBox>
+#include <QLayout>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -58,7 +56,7 @@ public:
         JPEG2000LossLess         = 0;
     }
 
-    Q3GridLayout  *JPEG2000Grid;
+    QGridLayout  *JPEG2000Grid;
 
     QLabel       *labelJPEG2000compression;
 
@@ -68,11 +66,12 @@ public:
 };
 
 JP2KSettings::JP2KSettings(QWidget *parent)
-            : QWidget(parent, 0, Qt::WDestructiveClose)
+            : QWidget(parent)
 {
     d = new JP2KSettingsPriv;
+    setAttribute(Qt::WA_DeleteOnClose);
 
-    d->JPEG2000Grid     = new Q3GridLayout(this, 1, 1, KDialog::spacingHint());
+    d->JPEG2000Grid     = new QGridLayout(this);
     d->JPEG2000LossLess = new QCheckBox(i18n("LossLess JPEG 2000 files"), this);
 
     d->JPEG2000LossLess->setWhatsThis( i18n("<p>Toggle lossless compression for JPEG 2000 images.<p>"
@@ -84,19 +83,20 @@ JP2KSettings::JP2KSettings(QWidget *parent)
     d->labelJPEG2000compression = new QLabel(i18n("JPEG 2000 quality:"), this);
 
     d->JPEG2000compression->setWhatsThis( i18n("<p>The quality value for JPEG 2000 images:<p>"
-                                                  "<b>1</b>: low quality (high compression and small "
-                                                  "file size)<p>"
-                                                  "<b>50</b>: medium quality<p>"
-                                                  "<b>75</b>: good quality (default)<p>"
-                                                  "<b>100</b>: high quality (no compression and "
-                                                  "large file size)<p>"
-                                                  "<b>Note: JPEG 2000 is not a lossless image "
-                                                  "compression format when you use this setting.</b>"));
+                                               "<b>1</b>: low quality (high compression and small "
+                                               "file size)<p>"
+                                               "<b>50</b>: medium quality<p>"
+                                               "<b>75</b>: good quality (default)<p>"
+                                               "<b>100</b>: high quality (no compression and "
+                                               "large file size)<p>"
+                                               "<b>Note: JPEG 2000 is not a lossless image "
+                                               "compression format when you use this setting.</b>"));
 
-    d->JPEG2000Grid->addMultiCellWidget(d->JPEG2000LossLess, 0, 0, 0, 1);
-    d->JPEG2000Grid->addMultiCellWidget(d->labelJPEG2000compression, 1, 1, 0, 0);
-    d->JPEG2000Grid->addMultiCellWidget(d->JPEG2000compression, 1, 1, 1, 1);
-    d->JPEG2000Grid->setColStretch(1, 10);
+    d->JPEG2000Grid->addWidget(d->JPEG2000LossLess, 0, 0, 0, 1);
+    d->JPEG2000Grid->addWidget(d->labelJPEG2000compression, 1, 1, 0, 0);
+    d->JPEG2000Grid->addWidget(d->JPEG2000compression, 1, 1, 1, 1);
+    d->JPEG2000Grid->setColumnStretch(1, 10);
+    d->JPEG2000Grid->setSpacing(KDialog::spacingHint());
 
     connect(d->JPEG2000LossLess, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleJPEG2000LossLess(bool)));
