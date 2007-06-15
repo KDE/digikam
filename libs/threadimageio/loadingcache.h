@@ -24,13 +24,6 @@
 #ifndef LOADING_CACHE_H
 #define LOADING_CACHE_H
 
-#include <q3ptrlist.h>
-#include <q3cache.h>
-#include <q3dict.h>
-#include <qmutex.h>
-//Added by qt3to4:
-#include <QCustomEvent>
-
 #include "dimg.h"
 #include "loadsavethread.h"
 
@@ -112,13 +105,14 @@ public:
 
     void setCacheSize(int megabytes);
 
-protected:
-
-    virtual void customEvent (QCustomEvent *event);
-
 private slots:
 
     void slotFileDirty(const QString &path);
+    void slotUpdateDirWatch();
+
+signals:
+
+    void signalUpdateDirWatch();
 
 private:
 

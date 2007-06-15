@@ -23,11 +23,10 @@
 
 // Qt includes.
 
-#include <qapplication.h>
-#include <qvariant.h>
-//Added by qt3to4:
 #include <QEvent>
 #include <QCustomEvent>
+#include <QCache>
+#include <QHash>
 
 // KDE includes.
 
@@ -46,8 +45,8 @@ class LoadingCachePriv
 {
 public:
 
-    Q3Cache<DImg> imageCache;
-    Q3Dict<LoadingProcess> loadingDict;
+    QCache<QString, DImg> imageCache;
+    QHash<QString, LoadingProcess *> loadingDict;
     QMutex mutex;
     QWaitCondition condVar;
     KDirWatch *watch;
@@ -55,19 +54,19 @@ public:
 };
 
 
-LoadingCache *LoadingCache::m_componentData = 0;
+LoadingCache *LoadingCache::m_instance = 0;
 
 LoadingCache *LoadingCache::cache()
 {
-    if (!m_componentData)
-        m_componentData = new LoadingCache;
-    return m_componentData;
+    if (!m_instance)
+        m_instance = new LoadingCache;
+    return m_instance;
 }
 
 void LoadingCache::cleanUp()
 {
-    if (m_componentData)
-        delete m_componentData;
+    if (m_instance)
+        delete m_instance;
 }
 
 
@@ -75,26 +74,27 @@ LoadingCache::LoadingCache()
 {
     d = new LoadingCachePriv;
 
-    d->imageCache.setAutoDelete(true);
-    // default value: 60 MB of cache
     setCacheSize(60);
 
     d->watch = new KDirWatch;
 
     connect(d->watch, SIGNAL(dirty(const QString &)),
             this, SLOT(slotFileDirty(const QString &)));
+
+    connect(this, SIGNAL(signalUpdateDirWatch()),
+            this, SLOT(slotUpdateDirWatch()));
 }
 
 LoadingCache::~LoadingCache()
 {
     delete d->watch;
     delete d;
-    m_componentData = 0;
+    m_instance = 0;
 }
 
 DImg *LoadingCache::retrieveImage(const QString &cacheKey)
 {
-    return d->imageCache.find(cacheKey);
+    return d->imageCache[cacheKey];
 }
 
 bool LoadingCache::putImage(const QString &cacheKey, DImg *img, const QString &filePath)
@@ -109,28 +109,17 @@ bool LoadingCache::putImage(const QString &cacheKey, DImg *img, const QString &f
         cost = attribute.toImage().numBytes();
     }
 
-    if ( d->imageCache.insert(cacheKey, img, cost) )
-    {
-        if (!filePath.isEmpty())
-        {
-            // store file path as attribute for our own use
-            img->setAttribute("loadingCacheFilePath", QVariant(filePath));
-        }
-        successfulyInserted = true;
-    }
-    else
-    {
-        // need to delete object if it was not successfuly inserted (too large)
-        delete img;
-        successfulyInserted = false;
-    }
+    successfulyInserted = d->imageCache.insert(cacheKey, img, cost)
 
-    if (!filePath.isEmpty())
+    if (successfulyInserted && !filePath.isEmpty())
     {
+        // store file path as attribute for our own use
+        img->setAttribute("loadingCacheFilePath", QVariant(filePath));
         // schedule update of file watch
         // KDirWatch can only be accessed from main thread!
-        QApplication::postEvent(this, new QCustomEvent(QEvent::User));
+        emit signalUpdateDirWatch();
     }
+
     return successfulyInserted;
 }
 
@@ -149,12 +138,13 @@ void LoadingCache::slotFileDirty(const QString &path)
     // Signal comes from main thread, we need to lock ourselves.
     CacheLock lock(this);
     //DDebug() << "LoadingCache slotFileDirty " << path << endl;
-    for (Q3CacheIterator<DImg> it(d->imageCache); it.current(); ++it)
+    QList<QString> keys = d->imageCache.keys();
+    foreach(QString cacheKey, keys)
     {
-        if (it.current()->attribute("loadingCacheFilePath").toString() == path)
+        if (d->imageCache[cacheKey]->attribute("loadingCacheFilePath").toString() == path)
         {
             //DDebug() << " removing watch and cache entry for " << path << endl;
-            d->imageCache.remove(it.currentKey());
+            d->imageCache.remove(cacheKey);
             d->watch->removeFile(path);
             d->watchedFiles.remove(path);
         }
@@ -169,9 +159,11 @@ void LoadingCache::customEvent(QCustomEvent *)
     // get a list of files in cache that need watch
     QStringList toBeAdded;
     QStringList toBeRemoved = d->watchedFiles;
-    for (Q3CacheIterator<DImg> it(d->imageCache); it.current(); ++it)
+
+    QList<QString> keys = d->imageCache.keys();
+    foreach(QString cacheKey, keys)
     {
-        QString watchPath = it.current()->attribute("loadingCacheFilePath").toString();
+        QString watchPath = d->imageCache[cacheKey]->attribute("loadingCacheFilePath").toString();
         if (!watchPath.isEmpty())
         {
             if (!d->watchedFiles.contains(watchPath))
@@ -204,12 +196,12 @@ bool LoadingCache::isCacheable(const DImg *img)
 
 void LoadingCache::addLoadingProcess(LoadingProcess *process)
 {
-    d->loadingDict.insert(process->cacheKey(), process);
+    d->loadingDict[process->cacheKey()] = process;
 }
 
 LoadingProcess *LoadingCache::retrieveLoadingProcess(const QString &cacheKey)
 {
-    return d->loadingDict.find(cacheKey);
+    return d->loadingDict.value(cacheKey);
 }
 
 void LoadingCache::removeLoadingProcess(LoadingProcess *process)
@@ -219,9 +211,10 @@ void LoadingCache::removeLoadingProcess(LoadingProcess *process)
 
 void LoadingCache::notifyNewLoadingProcess(LoadingProcess *process, LoadingDescription description)
 {
-    for (Q3DictIterator<LoadingProcess> it(d->loadingDict); it.current(); ++it)
+    for (QHash<QString, LoadingProcess *>::const_iterator it = d->loadingDict.const_begin();
+          it != d->loadingDict.constEnd(); ++it)
     {
-        it.current()->notifyNewLoadingProcess(process, description);
+        it.value()->notifyNewLoadingProcess(process, description);
     }
 }
 
