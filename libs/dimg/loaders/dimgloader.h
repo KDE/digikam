@@ -27,10 +27,10 @@
 
 // Qt includes.
 
-#include <qmap.h>
-#include <qstring.h>
-#include <q3cstring.h>
-#include <qvariant.h>
+#include <QMap>
+#include <QString>
+#include <QByteArray>
+#include <QVariant>
 
 // Local includes.
 

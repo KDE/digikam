@@ -33,10 +33,6 @@ extern "C"
 #include <jpeglib.h>
 }
 
-// Qt includes.
-
-#include <qstring.h>
-
 // Local includes.
 
 #include "dimgloader.h"
