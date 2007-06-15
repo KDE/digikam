@@ -42,8 +42,8 @@ extern "C"
 
 // QT includes.
 
-#include <qfile.h>
-#include <qimage.h>
+#include <QFile>
+#include <QImage>
 
 // Local includes.
 
