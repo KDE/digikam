@@ -1,31 +1,12 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( 
+                    ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata
+                   )
 
+SET(libthumbbar_STAT_SRCS thumbbar.cpp thumbnailjob.cpp )
 
-########### next target ###############
+KDE4_AUTOMOC(${libthumbbar_STAT_SRCS})
 
+KDE4_ADD_LIBRARY(libthumbbar STATIC ${libthumbbar_STAT_SRCS})
 
-########### install files ###############
-
-install( FILES  thumbbar.h  DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
-
-
-
-#original Makefile.am contents follow:
-
-#METASOURCES = AUTO
-#
-#noinst_LTLIBRARIES = libthumbbar.la
-#
-#libthumbbar_la_SOURCES = thumbbar.cpp thumbnailjob.cpp
-#
-#libthumbbar_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-#
-#INCLUDES = -I$(top_srcdir)/digikam/libs/dimg \
-#	       -I$(top_srcdir)/digikam/libs/dmetadata \
-#	       -I$(top_srcdir)/digikam/digikam \
-#	       $(all_includes)
-#
-#digikaminclude_HEADERS = thumbbar.h 
-#
-#digikamincludedir = $(includedir)/digikam
+INSTALL( FILES thumbbar.h DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
