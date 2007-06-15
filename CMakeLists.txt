@@ -25,12 +25,12 @@ INCLUDE_DIRECTORIES(${KEXIV2_INCLUDE_DIR}
                     ${QT_INCLUDES}
                    )
 
+ADD_SUBDIRECTORY( data )
 ADD_SUBDIRECTORY( sqlite )
 ADD_SUBDIRECTORY( libs )
 #ADD_SUBDIRECTORY( utilities )
 #ADD_SUBDIRECTORY( digikam )
 #ADD_SUBDIRECTORY( showfoto )
-#ADD_SUBDIRECTORY( data )
 #ADD_SUBDIRECTORY( kioslave )
 #ADD_SUBDIRECTORY( imageplugins )
 #ADD_SUBDIRECTORY( themedesigner )
