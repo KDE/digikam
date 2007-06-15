@@ -63,8 +63,8 @@ public:
      */
     enum Side
     {
-        Qt::DockLeft,
-        Qt::DockRight
+        DockLeft,
+        DockRight
     };    
     
     /**
@@ -74,7 +74,7 @@ public:
      * @param side where the sidebar should be displayed. At the left or right border.
      * @param minimizedDefault hide the sidebar when the program is started the first time?
      */
-    Sidebar(QWidget *parent, const char *name, Side side=Qt::DockLeft, bool mimimizedDefault=false);
+    Sidebar(QWidget *parent, const char *name, Side side=DockLeft, bool mimimizedDefault=false);
     virtual ~Sidebar();
 
     /**

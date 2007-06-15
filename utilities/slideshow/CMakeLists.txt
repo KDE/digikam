@@ -5,6 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_SOURCE_DIR}/dig
 ########### next target ###############
 
 SET(libslideshow_STAT_SRCS toolbar.cpp slideshow.cpp )
+kde4_automoc(${libslideshow_STAT_SRCS})
 
 KDE4_ADD_LIBRARY(libslideshow STATIC ${libslideshow_STAT_SRCS})
 

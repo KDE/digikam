@@ -5,7 +5,7 @@ include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 ########### install files ###############
 
 install( FILES  digikam-download.desktop digikam-gphoto2-camera.desktop digikam-mount-and-download.desktop DESTINATION ${DATA_INSTALL_DIR}/konqueror/servicemenus )
-install( FILES  digikam-camera DESTINATION  )
+install( FILES  digikam-camera DESTINATION ${BIN_INSTALL_DIR} )
 
 
 
