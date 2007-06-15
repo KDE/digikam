@@ -100,9 +100,9 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
     
     for(i = 0 ; i < histogram->getHistogramSegment() ; i++)
     {
-       intensity.Qt::red   += histogram->getValue(ImageHistogram::RedChannel, i);
-       intensity.Qt::green += histogram->getValue(ImageHistogram::GreenChannel, i);
-       intensity.Qt::blue  += histogram->getValue(ImageHistogram::BlueChannel, i);
+       intensity.red   += histogram->getValue(ImageHistogram::RedChannel, i);
+       intensity.green += histogram->getValue(ImageHistogram::GreenChannel, i);
+       intensity.blue  += histogram->getValue(ImageHistogram::BlueChannel, i);
        intensity.alpha += histogram->getValue(ImageHistogram::AlphaChannel, i);
        map[i]          = intensity;
     }
@@ -115,17 +115,17 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
     
     for(i = 0 ; i < histogram->getHistogramSegment() ; i++)
     {
-       if(high.Qt::red != low.Qt::red)
-          equalize_map[i].Qt::red = (uint)(((256*histogram->getHistogramSegment() -1) *
-                                (map[i].Qt::red-low.Qt::red))/(high.Qt::red-low.Qt::red));
+       if(high.red != low.red)
+          equalize_map[i].red = (uint)(((256*histogram->getHistogramSegment() -1) *
+                                (map[i].red-low.red))/(high.red-low.red));
        
-       if(high.Qt::green != low.Qt::green)
-          equalize_map[i].Qt::green = (uint)(((256*histogram->getHistogramSegment() -1) *
-                                  (map[i].Qt::green-low.Qt::green))/(high.Qt::green-low.Qt::green));
+       if(high.green != low.green)
+          equalize_map[i].green = (uint)(((256*histogram->getHistogramSegment() -1) *
+                                  (map[i].green-low.green))/(high.green-low.green));
        
-       if(high.Qt::blue != low.Qt::blue)
-          equalize_map[i].Qt::blue = (uint)(((256*histogram->getHistogramSegment() -1) *
-                                 (map[i].Qt::blue-low.Qt::blue))/(high.Qt::blue-low.Qt::blue));
+       if(high.blue != low.blue)
+          equalize_map[i].blue = (uint)(((256*histogram->getHistogramSegment() -1) *
+                                 (map[i].blue-low.blue))/(high.blue-low.blue));
        
        if(high.alpha != low.alpha)
           equalize_map[i].alpha = (uint)(((256*histogram->getHistogramSegment() -1) *
@@ -139,62 +139,62 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
 
     if (!sixteenBit)        // 8 bits image.
     {
-        uchar Qt::red, Qt::green, Qt::blue, alpha;
+        uchar red, green, blue, alpha;
         uchar *ptr = data;
         
         for (i = 0 ; i < w*h ; i++)
         {
-            Qt::blue  = ptr[0];
-            Qt::green = ptr[1];
-            Qt::red   = ptr[2];
+            blue  = ptr[0];
+            green = ptr[1];
+            red   = ptr[2];
             alpha = ptr[3];
         
-            if(low.Qt::red != high.Qt::red)
-                Qt::red = (equalize_map[Qt::red].Qt::red)/257;
+            if(low.red != high.red)
+                red = (equalize_map[red].red)/257;
                         
-            if(low.Qt::green != high.Qt::green)
-                Qt::green = (equalize_map[Qt::green].Qt::green)/257;
+            if(low.green != high.green)
+                green = (equalize_map[green].green)/257;
                     
-            if(low.Qt::blue != high.Qt::blue)
-                Qt::blue = (equalize_map[Qt::blue].Qt::blue)/257;
+            if(low.blue != high.blue)
+                blue = (equalize_map[blue].blue)/257;
                     
             if(low.alpha != high.alpha)
                 alpha = (equalize_map[alpha].alpha)/257;
                             
-            ptr[0] = Qt::blue;
-            ptr[1] = Qt::green;
-            ptr[2] = Qt::red;
+            ptr[0] = blue;
+            ptr[1] = green;
+            ptr[2] = red;
             ptr[3] = alpha;
             ptr += 4;
         }
     }
     else               // 16 bits image.
     {
-        unsigned short Qt::red, Qt::green, Qt::blue, alpha;
+        unsigned short red, green, blue, alpha;
         unsigned short *ptr = (unsigned short *)data;
         
         for (i = 0 ; i < w*h ; i++)
         {
-            Qt::blue  = ptr[0];
-            Qt::green = ptr[1];
-            Qt::red   = ptr[2];
+            blue  = ptr[0];
+            green = ptr[1];
+            red   = ptr[2];
             alpha = ptr[3];
         
-            if(low.Qt::red != high.Qt::red)
-                Qt::red = (equalize_map[Qt::red].Qt::red)/257;
+            if(low.red != high.red)
+                red = (equalize_map[red].red)/257;
                         
-            if(low.Qt::green != high.Qt::green)
-                Qt::green = (equalize_map[Qt::green].Qt::green)/257;
+            if(low.green != high.green)
+                green = (equalize_map[green].green)/257;
                     
-            if(low.Qt::blue != high.Qt::blue)
-                Qt::blue = (equalize_map[Qt::blue].Qt::blue)/257;
+            if(low.blue != high.blue)
+                blue = (equalize_map[blue].blue)/257;
                     
             if(low.alpha != high.alpha)
                 alpha = (equalize_map[alpha].alpha)/257;
                             
-            ptr[0] = Qt::blue;
-            ptr[1] = Qt::green;
-            ptr[2] = Qt::red;
+            ptr[0] = blue;
+            ptr[1] = green;
+            ptr[2] = red;
             ptr[3] = alpha;
             ptr += 4;
         }
@@ -250,34 +250,34 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
     
     memset(&intensity, 0, sizeof(struct double_packet));
     
-    for(high.Qt::red = histogram->getHistogramSegment()-1 ; high.Qt::red != 0 ; high.Qt::red--)
+    for(high.red = histogram->getHistogramSegment()-1 ; high.red != 0 ; high.red--)
     {
-       intensity.Qt::red += histogram->getValue(ImageHistogram::RedChannel, (int)high.Qt::red);
+       intensity.red += histogram->getValue(ImageHistogram::RedChannel, (int)high.red);
        
-       if( intensity.Qt::red > threshold_intensity )
+       if( intensity.red > threshold_intensity )
           break;
     }
     
-    if( low.Qt::red == high.Qt::red )
+    if( low.red == high.red )
     {
        threshold_intensity = 0;
        memset(&intensity, 0, sizeof(struct double_packet));
         
-       for(low.Qt::red = 0 ; low.Qt::red < histogram->getHistogramSegment()-1 ; low.Qt::red++)
+       for(low.red = 0 ; low.red < histogram->getHistogramSegment()-1 ; low.red++)
        {
-          intensity.Qt::red += histogram->getValue(ImageHistogram::RedChannel, (int)low.Qt::red);
+          intensity.red += histogram->getValue(ImageHistogram::RedChannel, (int)low.red);
           
-          if( intensity.Qt::red > threshold_intensity )
+          if( intensity.red > threshold_intensity )
               break;
        }
        
        memset(&intensity, 0, sizeof(struct double_packet));
        
-       for(high.Qt::red = histogram->getHistogramSegment()-1 ; high.Qt::red != 0 ; high.Qt::red--)
+       for(high.red = histogram->getHistogramSegment()-1 ; high.red != 0 ; high.red--)
        {
-          intensity.Qt::red += histogram->getValue(ImageHistogram::RedChannel, (int)high.Qt::red);
+          intensity.red += histogram->getValue(ImageHistogram::RedChannel, (int)high.red);
           
-          if( intensity.Qt::red > threshold_intensity )
+          if( intensity.red > threshold_intensity )
              break;
        }
     }
@@ -286,34 +286,34 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
     
     memset(&intensity, 0, sizeof(struct double_packet));
     
-    for(high.Qt::green = histogram->getHistogramSegment()-1 ; high.Qt::green != 0 ; high.Qt::green--)
+    for(high.green = histogram->getHistogramSegment()-1 ; high.green != 0 ; high.green--)
     {
-       intensity.Qt::green += histogram->getValue(ImageHistogram::GreenChannel, (int)high.Qt::green);
+       intensity.green += histogram->getValue(ImageHistogram::GreenChannel, (int)high.green);
        
-       if( intensity.Qt::green > threshold_intensity )
+       if( intensity.green > threshold_intensity )
           break;
     }
     
-    if( low.Qt::green == high.Qt::green )
+    if( low.green == high.green )
     {
        threshold_intensity = 0;
        memset(&intensity, 0, sizeof(struct double_packet));
        
-       for(low.Qt::green = 0 ; low.Qt::green < histogram->getHistogramSegment()-1 ; low.Qt::green++)
+       for(low.green = 0 ; low.green < histogram->getHistogramSegment()-1 ; low.green++)
        {
-          intensity.Qt::green += histogram->getValue(ImageHistogram::GreenChannel, (int)low.Qt::green);
+          intensity.green += histogram->getValue(ImageHistogram::GreenChannel, (int)low.green);
           
-          if( intensity.Qt::green > threshold_intensity )
+          if( intensity.green > threshold_intensity )
              break;
        }
        
        memset(&intensity, 0, sizeof(struct double_packet));
        
-       for(high.Qt::green = histogram->getHistogramSegment()-1 ; high.Qt::green != 0 ; high.Qt::green--)
+       for(high.green = histogram->getHistogramSegment()-1 ; high.green != 0 ; high.green--)
        {
-          intensity.Qt::green += histogram->getValue(ImageHistogram::GreenChannel, (int)high.Qt::green);
+          intensity.green += histogram->getValue(ImageHistogram::GreenChannel, (int)high.green);
           
-          if( intensity.Qt::green > threshold_intensity )
+          if( intensity.green > threshold_intensity )
              break;
        }
     }
@@ -322,34 +322,34 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
     
     memset(&intensity, 0, sizeof(struct double_packet));
     
-    for(high.Qt::blue = histogram->getHistogramSegment()-1 ; high.Qt::blue != 0 ; high.Qt::blue--)
+    for(high.blue = histogram->getHistogramSegment()-1 ; high.blue != 0 ; high.blue--)
     {
-       intensity.Qt::blue += histogram->getValue(ImageHistogram::BlueChannel, (int)high.Qt::blue);
+       intensity.blue += histogram->getValue(ImageHistogram::BlueChannel, (int)high.blue);
        
-       if( intensity.Qt::blue > threshold_intensity )
+       if( intensity.blue > threshold_intensity )
           break;
     }
        
-    if( low.Qt::blue == high.Qt::blue )
+    if( low.blue == high.blue )
     {
        threshold_intensity = 0;
        memset(&intensity, 0, sizeof(struct double_packet));
         
-       for(low.Qt::blue = 0 ; low.Qt::blue < histogram->getHistogramSegment()-1 ; low.Qt::blue++)
+       for(low.blue = 0 ; low.blue < histogram->getHistogramSegment()-1 ; low.blue++)
        {
-          intensity.Qt::blue += histogram->getValue(ImageHistogram::BlueChannel, (int)low.Qt::blue);
+          intensity.blue += histogram->getValue(ImageHistogram::BlueChannel, (int)low.blue);
           
-          if( intensity.Qt::blue > threshold_intensity )
+          if( intensity.blue > threshold_intensity )
               break;
        }
        
        memset(&intensity, 0, sizeof(struct double_packet));
        
-       for(high.Qt::blue = histogram->getHistogramSegment()-1 ; high.Qt::blue != 0 ; high.Qt::blue--)
+       for(high.blue = histogram->getHistogramSegment()-1 ; high.blue != 0 ; high.blue--)
        {
-          intensity.Qt::blue += histogram->getValue(ImageHistogram::BlueChannel, (int)high.Qt::blue);
+          intensity.blue += histogram->getValue(ImageHistogram::BlueChannel, (int)high.blue);
           
-          if( intensity.Qt::blue > threshold_intensity )
+          if( intensity.blue > threshold_intensity )
              break;
        }
     }
@@ -398,26 +398,26 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
     
     for(i = 0 ; i <= (long)histogram->getHistogramSegment()-1 ; i++)
     {
-       if(i < (long) low.Qt::red)
-          normalize_map[i].Qt::red = 0;
-       else if (i > (long) high.Qt::red)
-          normalize_map[i].Qt::red = (256*histogram->getHistogramSegment() -1);
-       else if (low.Qt::red != high.Qt::red)
-          normalize_map[i].Qt::red = (int)(((256*histogram->getHistogramSegment() -1)*(i-low.Qt::red))/(high.Qt::red-low.Qt::red));
+       if(i < (long) low.red)
+          normalize_map[i].red = 0;
+       else if (i > (long) high.red)
+          normalize_map[i].red = (256*histogram->getHistogramSegment() -1);
+       else if (low.red != high.red)
+          normalize_map[i].red = (int)(((256*histogram->getHistogramSegment() -1)*(i-low.red))/(high.red-low.red));
 
-       if(i < (long) low.Qt::green)
-          normalize_map[i].Qt::green = 0;
-       else if (i > (long) high.Qt::green)
-          normalize_map[i].Qt::green = (256*histogram->getHistogramSegment() -1);
-       else if (low.Qt::green != high.Qt::green)
-          normalize_map[i].Qt::green = (int)(((256*histogram->getHistogramSegment() -1)*(i-low.Qt::green))/(high.Qt::green-low.Qt::green));
+       if(i < (long) low.green)
+          normalize_map[i].green = 0;
+       else if (i > (long) high.green)
+          normalize_map[i].green = (256*histogram->getHistogramSegment() -1);
+       else if (low.green != high.green)
+          normalize_map[i].green = (int)(((256*histogram->getHistogramSegment() -1)*(i-low.green))/(high.green-low.green));
 
-       if(i < (long) low.Qt::blue)
-          normalize_map[i].Qt::blue = 0;
-       else if (i > (long) high.Qt::blue)
-          normalize_map[i].Qt::blue = (256*histogram->getHistogramSegment() -1);
-       else if (low.Qt::blue != high.Qt::blue)
-          normalize_map[i].Qt::blue = (int)(((256*histogram->getHistogramSegment() -1)*(i-low.Qt::blue))/(high.Qt::blue-low.Qt::blue));
+       if(i < (long) low.blue)
+          normalize_map[i].blue = 0;
+       else if (i > (long) high.blue)
+          normalize_map[i].blue = (256*histogram->getHistogramSegment() -1);
+       else if (low.blue != high.blue)
+          normalize_map[i].blue = (int)(((256*histogram->getHistogramSegment() -1)*(i-low.blue))/(high.blue-low.blue));
 
        if(i < (long) low.alpha)
           normalize_map[i].alpha = 0;
@@ -431,62 +431,62 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
     if (!sixteenBit)        // 8 bits image.
     {
-        uchar Qt::red, Qt::green, Qt::blue, alpha;
+        uchar red, green, blue, alpha;
         uchar *ptr = data;
         
         for (i = 0 ; i < w*h ; i++)
         {
-            Qt::blue  = ptr[0];
-            Qt::green = ptr[1];
-            Qt::red   = ptr[2];
+            blue  = ptr[0];
+            green = ptr[1];
+            red   = ptr[2];
             alpha = ptr[3];
         
-            if(low.Qt::red != high.Qt::red)
-                Qt::red = (normalize_map[Qt::red].Qt::red)/257;
+            if(low.red != high.red)
+                red = (normalize_map[red].red)/257;
                     
-            if(low.Qt::green != high.Qt::green)
-                Qt::green = (normalize_map[Qt::green].Qt::green)/257;
+            if(low.green != high.green)
+                green = (normalize_map[green].green)/257;
                 
-            if(low.Qt::blue != high.Qt::blue)
-                Qt::blue = (normalize_map[Qt::blue].Qt::blue)/257;
+            if(low.blue != high.blue)
+                blue = (normalize_map[blue].blue)/257;
                 
             if(low.alpha != high.alpha)
                 alpha = (normalize_map[alpha].alpha)/257;
                                 
-            ptr[0] = Qt::blue;
-            ptr[1] = Qt::green;
-            ptr[2] = Qt::red;
+            ptr[0] = blue;
+            ptr[1] = green;
+            ptr[2] = red;
             ptr[3] = alpha;
             ptr += 4;
         }
     }
     else               // 16 bits image.
     {
-        unsigned short Qt::red, Qt::green, Qt::blue, alpha;
+        unsigned short red, green, blue, alpha;
         unsigned short *ptr = (unsigned short *)data;
         
         for (i = 0 ; i < w*h ; i++)
         {
-            Qt::blue  = ptr[0];
-            Qt::green = ptr[1];
-            Qt::red   = ptr[2];
+            blue  = ptr[0];
+            green = ptr[1];
+            red   = ptr[2];
             alpha = ptr[3];
         
-            if(low.Qt::red != high.Qt::red)
-                Qt::red = (normalize_map[Qt::red].Qt::red)/257;
+            if(low.red != high.red)
+                red = (normalize_map[red].red)/257;
                     
-            if(low.Qt::green != high.Qt::green)
-                Qt::green = (normalize_map[Qt::green].Qt::green)/257;
+            if(low.green != high.green)
+                green = (normalize_map[green].green)/257;
                 
-            if(low.Qt::blue != high.Qt::blue)
-                Qt::blue = (normalize_map[Qt::blue].Qt::blue)/257;
+            if(low.blue != high.blue)
+                blue = (normalize_map[blue].blue)/257;
                 
             if(low.alpha != high.alpha)
                 alpha = (normalize_map[alpha].alpha)/257;
                             
-            ptr[0] = Qt::blue;
-            ptr[1] = Qt::green;
-            ptr[2] = Qt::red;
+            ptr[0] = blue;
+            ptr[1] = green;
+            ptr[2] = red;
             ptr[3] = alpha;
             ptr += 4;
         }
@@ -519,46 +519,46 @@ void DImgImageFilters::normalizeImage(uchar *data, int w, int h, bool sixteenBit
 
     if (!sixteenBit)        // 8 bits image.
     {
-        uchar Qt::red, Qt::green, Qt::blue;
+        uchar red, green, blue;
         uchar *ptr = data;
         
         for (i = 0 ; i < w*h ; i++)
         {
-            Qt::blue  = ptr[0];
-            Qt::green = ptr[1];
-            Qt::red   = ptr[2];
+            blue  = ptr[0];
+            green = ptr[1];
+            red   = ptr[2];
         
-            if (Qt::red < param.min) param.min = Qt::red;
-            if (Qt::red > param.max) param.max = Qt::red;
+            if (red < param.min) param.min = red;
+            if (red > param.max) param.max = red;
     
-            if (Qt::green < param.min) param.min = Qt::green;
-            if (Qt::green > param.max) param.max = Qt::green;
+            if (green < param.min) param.min = green;
+            if (green > param.max) param.max = green;
     
-            if (Qt::blue < param.min) param.min = Qt::blue;
-            if (Qt::blue > param.max) param.max = Qt::blue;
+            if (blue < param.min) param.min = blue;
+            if (blue > param.max) param.max = blue;
 
             ptr += 4;
         }
     }
     else               // 16 bits image.
     {
-        unsigned short Qt::red, Qt::green, Qt::blue;
+        unsigned short red, green, blue;
         unsigned short *ptr = (unsigned short *)data;
         
         for (i = 0 ; i < w*h ; i++)
         {
-            Qt::blue  = ptr[0];
-            Qt::green = ptr[1];
-            Qt::red   = ptr[2];
+            blue  = ptr[0];
+            green = ptr[1];
+            red   = ptr[2];
         
-            if (Qt::red < param.min) param.min = Qt::red;
-            if (Qt::red > param.max) param.max = Qt::red;
+            if (red < param.min) param.min = red;
+            if (red > param.max) param.max = red;
     
-            if (Qt::green < param.min) param.min = Qt::green;
-            if (Qt::green > param.max) param.max = Qt::green;
+            if (green < param.min) param.min = green;
+            if (green > param.max) param.max = green;
     
-            if (Qt::blue < param.min) param.min = Qt::blue;
-            if (Qt::blue > param.max) param.max = Qt::blue;
+            if (blue < param.min) param.min = blue;
+            if (blue > param.max) param.max = blue;
 
             ptr += 4;
         }
@@ -580,36 +580,36 @@ void DImgImageFilters::normalizeImage(uchar *data, int w, int h, bool sixteenBit
 
     if (!sixteenBit)        // 8 bits image.
     {
-        uchar Qt::red, Qt::green, Qt::blue;
+        uchar red, green, blue;
         uchar *ptr = data;
         
         for (i = 0 ; i < w*h ; i++)
         {
-            Qt::blue  = ptr[0];
-            Qt::green = ptr[1];
-            Qt::red   = ptr[2];
+            blue  = ptr[0];
+            green = ptr[1];
+            red   = ptr[2];
         
-            ptr[0] = param.lut[Qt::blue];
-            ptr[1] = param.lut[Qt::green];
-            ptr[2] = param.lut[Qt::red];
+            ptr[0] = param.lut[blue];
+            ptr[1] = param.lut[green];
+            ptr[2] = param.lut[red];
 
             ptr += 4;
         }
     }
     else               // 16 bits image.
     {
-        unsigned short Qt::red, Qt::green, Qt::blue;
+        unsigned short red, green, blue;
         unsigned short *ptr = (unsigned short *)data;
         
         for (i = 0 ; i < w*h ; i++)
         {
-            Qt::blue  = ptr[0];
-            Qt::green = ptr[1];
-            Qt::red   = ptr[2];
+            blue  = ptr[0];
+            green = ptr[1];
+            red   = ptr[2];
         
-            ptr[0] = param.lut[Qt::blue];
-            ptr[1] = param.lut[Qt::green];
-            ptr[2] = param.lut[Qt::red];
+            ptr[0] = param.lut[blue];
+            ptr[1] = param.lut[green];
+            ptr[2] = param.lut[red];
 
             ptr += 4;
         }
@@ -725,32 +725,32 @@ void DImgImageFilters::channelMixerImage(uchar *data, int Width, int Height, boo
 
     if (!sixteenBit)        // 8 bits image.
     {
-        uchar  nGray, Qt::red, Qt::green, Qt::blue;
+        uchar  nGray, red, green, blue;
         uchar *ptr = data;
 
         for (i = 0 ; i < Width*Height ; i++)
         {
-            Qt::blue  = ptr[0];
-            Qt::green = ptr[1];
-            Qt::red   = ptr[2];
+            blue  = ptr[0];
+            green = ptr[1];
+            red   = ptr[2];
         
             if (bMonochrome)
             {
                 nGray = MixPixel (rrGain, rgGain, rbGain, 
-                                  (unsigned short)Qt::red, (unsigned short)Qt::green, (unsigned short)Qt::blue,
+                                  (unsigned short)red, (unsigned short)green, (unsigned short)blue,
                                   sixteenBit, rnorm);
                 ptr[0] = ptr[1] = ptr[2] = nGray;
             }
             else
             {
                 ptr[0] = (uchar)MixPixel (brGain, bgGain, bbGain, 
-                                          (unsigned short)Qt::red, (unsigned short)Qt::green, (unsigned short)Qt::blue,
+                                          (unsigned short)red, (unsigned short)green, (unsigned short)blue,
                                           sixteenBit, bnorm);
                 ptr[1] = (uchar)MixPixel (grGain, ggGain, gbGain, 
-                                          (unsigned short)Qt::red, (unsigned short)Qt::green, (unsigned short)Qt::blue,
+                                          (unsigned short)red, (unsigned short)green, (unsigned short)blue,
                                           sixteenBit, gnorm);
                 ptr[2] = (uchar)MixPixel (rrGain, rgGain, rbGain, 
-                                          (unsigned short)Qt::red, (unsigned short)Qt::green, (unsigned short)Qt::blue,
+                                          (unsigned short)red, (unsigned short)green, (unsigned short)blue,
                                           sixteenBit, rnorm);
             }
                                 
@@ -759,25 +759,25 @@ void DImgImageFilters::channelMixerImage(uchar *data, int Width, int Height, boo
     }
     else               // 16 bits image.
     {
-        unsigned short  nGray, Qt::red, Qt::green, Qt::blue;
+        unsigned short  nGray, red, green, blue;
         unsigned short *ptr = (unsigned short *)data;
         
         for (i = 0 ; i < Width*Height ; i++)
         {
-            Qt::blue  = ptr[0];
-            Qt::green = ptr[1];
-            Qt::red   = ptr[2];
+            blue  = ptr[0];
+            green = ptr[1];
+            red   = ptr[2];
         
             if (bMonochrome)
             {
-                nGray = MixPixel (rrGain, rgGain, rbGain, Qt::red, Qt::green, Qt::blue, sixteenBit, rnorm);
+                nGray = MixPixel (rrGain, rgGain, rbGain, red, green, blue, sixteenBit, rnorm);
                 ptr[0] = ptr[1] = ptr[2] = nGray;
             }
             else
             {
-                ptr[0] = MixPixel (brGain, bgGain, bbGain, Qt::red, Qt::green, Qt::blue, sixteenBit, bnorm);
-                ptr[1] = MixPixel (grGain, ggGain, gbGain, Qt::red, Qt::green, Qt::blue, sixteenBit, gnorm);
-                ptr[2] = MixPixel (rrGain, rgGain, rbGain, Qt::red, Qt::green, Qt::blue, sixteenBit, rnorm);
+                ptr[0] = MixPixel (brGain, bgGain, bbGain, red, green, blue, sixteenBit, bnorm);
+                ptr[1] = MixPixel (grGain, ggGain, gbGain, red, green, blue, sixteenBit, gnorm);
+                ptr[2] = MixPixel (rrGain, rgGain, rbGain, red, green, blue, sixteenBit, rnorm);
             }
                             
             ptr += 4;
@@ -813,9 +813,9 @@ void DImgImageFilters::changeTonality(uchar *data, int width, int height, bool s
             
             mask.setRGB(hue, sat, lig, sixteenBit);
 
-            ptr[0] = (uchar)mask.Qt::blue();
-            ptr[1] = (uchar)mask.Qt::green();
-            ptr[2] = (uchar)mask.Qt::red();
+            ptr[0] = (uchar)mask.blue();
+            ptr[1] = (uchar)mask.green();
+            ptr[2] = (uchar)mask.red();
             ptr += 4;
         }
     }
@@ -831,9 +831,9 @@ void DImgImageFilters::changeTonality(uchar *data, int width, int height, bool s
             
             mask.setRGB(hue, sat, lig, sixteenBit);
                                 
-            ptr[0] = (unsigned short)mask.Qt::blue();
-            ptr[1] = (unsigned short)mask.Qt::green();
-            ptr[2] = (unsigned short)mask.Qt::red();
+            ptr[0] = (unsigned short)mask.blue();
+            ptr[1] = (unsigned short)mask.green();
+            ptr[2] = (unsigned short)mask.red();
             ptr += 4;
         }
     }
