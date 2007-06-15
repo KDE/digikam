@@ -1081,7 +1081,7 @@ QImage DImg::copyQImage()
         return img.copyQImage();
     }
 
-    QImage img(width(), height(), 32);
+    QImage img(width(), height(), QImage::Format_ARGB32);
 
     uchar* sptr = bits();
     uint*  dptr = (uint*)img.bits();
@@ -1092,10 +1092,8 @@ QImage DImg::copyQImage()
         sptr += 4;
     }
 
-    if (hasAlpha())
-    {
-        img.setAlphaBuffer(true);
-    }
+    // NOTE: Qt4 do not provide anymore QImage::setAlphaChannel() because
+    // alpha channel is auto-detected during QImage->QPixmap conversion
 
     return img;
 }
@@ -1125,13 +1123,13 @@ QPixmap DImg::convertToPixmap()
 
     if (sixteenBit())
     {
-        // make fastaaaa..
-        return QPixmap(copyQImage(0, 0, width(), height()));
+        // make fastaaaa...
+        return QPixmap::fromImage(copyQImage(0, 0, width(), height()));
     }
 
     if (QImage::systemByteOrder() == QImage::BigEndian)
     {
-        QImage img(width(), height(), 32);
+        QImage img(width(), height(), QImage::Format_ARGB32);
 
         uchar* sptr = bits();
         uint*  dptr = (uint*)img.bits();
@@ -1142,23 +1140,19 @@ QPixmap DImg::convertToPixmap()
             sptr += 4;
         }
 
-        if (hasAlpha())
-        {
-            img.setAlphaBuffer(true);
-        }
+        // NOTE: Qt4 do not provide anymore QImage::setAlphaChannel() because
+        // alpha channel is auto-detected during QImage->QPixmap conversion
 
-        return QPixmap(img);
+        return QPixmap::fromImage(img);
     }
     else
     {
-        QImage img(bits(), width(), height(), 32, 0, 0, QImage::IgnoreEndian);
+        QImage img(bits(), width(), height(), QImage::Format_ARGB32);
 
-        if (hasAlpha())
-        {
-            img.setAlphaBuffer(true);
-        }
+        // NOTE: Qt4 do not provide anymore QImage::setAlphaChannel() because
+        // alpha channel is auto-detected during QImage->QPixmap conversion
 
-        return QPixmap(img);
+        return QPixmap::fromImage(img);
     }
 }
 
@@ -1198,9 +1192,11 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
     if (isNull() || (!expoSettings->underExposureIndicator && !expoSettings->overExposureIndicator))
         return QImage();
 
-    QImage img(size(), 32);
+    QImage img(size(), QImage::Format_ARGB32);
     img.fill(0x00000000);      // Full transparent.
-    img.setAlphaBuffer(true);
+
+    // NOTE: Qt4 do not provide anymore QImage::setAlphaChannel() because
+    // alpha channel is auto-detected during QImage->QPixmap conversion
 
     uchar *bits = img.bits();
     int    max  = sixteenBit() ? 65535 : 255;
