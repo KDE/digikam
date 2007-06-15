@@ -24,9 +24,8 @@
 
 // Qt includes.
 
-#include <qimage.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QImage>
+#include <QByteArray>
 
 // Local includes.
 
@@ -58,8 +57,8 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         return false;
     }
 
-    m_hasAlpha    = image.hasAlphaBuffer();
-    QImage target = image.convertDepth(32);
+    m_hasAlpha    = image.hasAlphaChannel();
+    QImage target = image.convertToFormat(QImage::Format_ARGB32);
     
     uint w      = target.width();
     uint h      = target.height();
@@ -102,7 +101,7 @@ bool QImageLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         quality = 100;
 
     QVariant formatAttr = imageGetAttribute("format");
-    Q3CString format     = formatAttr.toCString();
+    QByteArray format   = formatAttr.toByteArray();
 
     QImage image = m_image->copyQImage();
 
@@ -111,11 +110,11 @@ bool QImageLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     // Saving is opaque to us. No support for stopping from observer,
     // progress info are only pseudo values
-    bool success = image.save(filePath, format.upper(), quality);
+    bool success = image.save(filePath, format.toUpper(), quality);
     if (observer && success)
         observer->progressInfo(m_image, 1.0);
 
-    imageSetAttribute("format", format.upper());
+    imageSetAttribute("format", format.toUpper());
 
     return success;
 }

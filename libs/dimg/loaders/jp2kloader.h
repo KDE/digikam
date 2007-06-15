@@ -31,10 +31,6 @@ extern "C"
 #include <jasper/jasper.h>
 }
 
-// Qt includes.
-
-#include <qstring.h>
-
 // Local includes.
 
 #include "dimgloader.h"

@@ -38,8 +38,9 @@
 
 // QT includes.
 
-#include <qfile.h>
-#include <q3cstring.h>
+#include <QFile>
+#include <QByteArray>
+#include <QTextStream>
 
 // Local includes.
 
@@ -226,7 +227,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     for (i = 0; i < (long)number_components; i++)
     {
-        maximum_component_depth = qMax(jas_image_cmptprec(jp2_image,components[i]),
+        maximum_component_depth = qMax((long)jas_image_cmptprec(jp2_image,components[i]),
                                        (long)maximum_component_depth);
         pixels[i] = jas_matrix_create(1, ((unsigned int)imageWidth())/x_step[i]);
         if (!pixels[i])
@@ -423,7 +424,8 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 {
                     QMap<int, QByteArray>& metaData = imageMetaData();
                     jas_stream_memobj_t *blob = (jas_stream_memobj_t *) icc_stream->obj_;
-                    QByteArray profile_rawdata(blob->len_);
+                    QByteArray profile_rawdata;
+                    profile_rawdata.reserve(blob->len_);
                     memcpy(profile_rawdata.data(), blob->buf_, blob->len_);
                     metaData.insert(DImg::ICC, profile_rawdata);
                     jas_stream_close(icc_stream);
@@ -638,7 +640,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         quality = 100;
 
     QString     rate;
-    Q3TextStream ts( &rate, QIODevice::WriteOnly );
+    QTextStream ts( &rate, QIODevice::WriteOnly );
         
     // NOTE: to have a lossless compression use quality=100.
     // jp2_encode()::optstr:
@@ -650,7 +652,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     DDebug() << "JPEG2000 quality: " << quality << endl;
     DDebug() << "JPEG2000 " << rate << endl;
 
-    int ret = jp2_encode(jp2_image, jp2_stream, rate.utf8().data());
+    int ret = jp2_encode(jp2_image, jp2_stream, rate.toUtf8().data());
     if (ret != 0)
     {
         DDebug() << "Unable to encode JPEG2000 image" << endl;

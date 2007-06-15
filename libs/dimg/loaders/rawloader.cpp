@@ -25,7 +25,7 @@
 
 // QT includes.
 
-#include <q3cstring.h>
+#include <QByteArray>
 
 // Local includes.
 

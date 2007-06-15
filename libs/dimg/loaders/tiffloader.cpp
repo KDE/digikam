@@ -1,5 +1,3 @@
-//Added by qt3to4:
-#include <Q3CString>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -59,7 +57,8 @@ extern "C"
 
 // Qt includes.
 
-#include <qfile.h>
+#include <QFile>
+#include <QByteArray>
 
 // Local includes.
 
@@ -197,7 +196,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     
     if (TIFFGetField (tif, TIFFTAG_ICCPROFILE, &profile_size, &profile_data))
     {
-        QByteArray profile_rawdata(profile_size);
+        QByteArray profile_rawdata;
+        profile_rawdata.reserve(profile_size);
         memcpy(profile_rawdata.data(), profile_data, profile_size);
         metaData.insert(DImg::ICC, profile_rawdata);
     }
@@ -508,7 +508,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     QString libtiffver(TIFFLIB_VERSION_STR);
     libtiffver.replace('\n', ' ');
     soft.append(QString(" ( %1 )").arg(libtiffver));
-    TIFFSetField(tif, TIFFTAG_SOFTWARE, (const char*)soft.ascii());
+    TIFFSetField(tif, TIFFTAG_SOFTWARE, (const char*)soft.toAscii().data());
 
     // Standard Exif.Photo tags (available with libtiff 3.8.2).  
 /*
@@ -903,7 +903,7 @@ void TIFFLoader::tiffSetExifAsciiTag(TIFF* tif, ttag_t tiffTag,
     QByteArray tag = metaData->getExifTagData(exifTagName);
     if (!tag.isEmpty()) 
     {
-        Q3CString str(tag.data(), tag.size());
+        QByteArray str(tag.data(), tag.size());
         TIFFSetField(tif, tiffTag, (const char*)str);
     }
 }
