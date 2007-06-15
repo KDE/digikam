@@ -845,19 +845,19 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        switch(m_channelType)
        {
           case HistogramWidget::RedChannelHistogram:
-             guidePos = d->colorGuide.Qt::red();
+             guidePos = d->colorGuide.red();
              break;
 
           case HistogramWidget::GreenChannelHistogram:    
-             guidePos = d->colorGuide.Qt::green();
+             guidePos = d->colorGuide.green();
              break;
 
           case HistogramWidget::BlueChannelHistogram:     
-             guidePos = d->colorGuide.Qt::blue();
+             guidePos = d->colorGuide.blue();
              break;
 
           case HistogramWidget::ValueHistogram:    
-             guidePos = qMax(qMax(d->colorGuide.Qt::red(), d->colorGuide.Qt::green()), d->colorGuide.Qt::blue());
+             guidePos = qMax(qMax(d->colorGuide.red(), d->colorGuide.green()), d->colorGuide.blue());
              break;
 
           default:                                     // Alpha.

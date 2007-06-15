@@ -111,12 +111,12 @@ Texture::Texture(int w, int h, const QColor& from, const QColor& to,
     if (bevel & Theme::SUNKEN)
     {
         d->Qt::color0 = to;
-        d->Qt::color1 = from;
+        d->color1 = from;
     }
     else
     {
         d->Qt::color0 = from;
-        d->Qt::color1 = to;
+        d->color1 = to;
     }
 
     if (gradient == Theme::SOLID)
@@ -202,16 +202,16 @@ void Texture::doSolid()
 void Texture::doHgradient()
 {
     float drx, dgx, dbx,
-        xr = (float) d->Qt::color0.Qt::red(),
-        xg = (float) d->Qt::color0.Qt::green(),
-        xb = (float) d->Qt::color0.Qt::blue();
+        xr = (float) d->Qt::color0.red(),
+        xg = (float) d->Qt::color0.green(),
+        xb = (float) d->Qt::color0.blue();
     unsigned char *pr = d->Qt::red, *pg = d->Qt::green, *pb = d->Qt::blue;
 
     register int x, y;
 
-    drx = (float) (d->Qt::color1.Qt::red()   - d->Qt::color0.Qt::red());
-    dgx = (float) (d->Qt::color1.Qt::green() - d->Qt::color0.Qt::green());
-    dbx = (float) (d->Qt::color1.Qt::blue()  - d->Qt::color0.Qt::blue());
+    drx = (float) (d->color1.red()   - d->Qt::color0.Qt::red());
+    dgx = (float) (d->color1.green() - d->Qt::color0.Qt::green());
+    dbx = (float) (d->color1.blue()  - d->Qt::color0.Qt::blue());
 
     drx /= d->width;
     dgx /= d->width;
@@ -239,13 +239,13 @@ void Texture::doHgradient()
 void Texture::doVgradient()
 {
     float dry, dgy, dby,
-        yr = (float) d->Qt::color0.Qt::red(),
-        yg = (float) d->Qt::color0.Qt::green(),
-        yb = (float) d->Qt::color0.Qt::blue();
+        yr = (float) d->Qt::color0.red(),
+        yg = (float) d->Qt::color0.green(),
+        yb = (float) d->Qt::color0.blue();
 
-    dry = (float) (d->Qt::color1.Qt::red()   - d->Qt::color0.Qt::red());
-    dgy = (float) (d->Qt::color1.Qt::green() - d->Qt::color0.Qt::green());
-    dby = (float) (d->Qt::color1.Qt::blue()  - d->Qt::color0.Qt::blue());
+    dry = (float) (d->color1.red()   - d->Qt::color0.Qt::red());
+    dgy = (float) (d->color1.green() - d->Qt::color0.Qt::green());
+    dby = (float) (d->color1.blue()  - d->Qt::color0.Qt::blue());
 
     dry /= d->height;
     dgy /= d->height;
@@ -271,9 +271,9 @@ void Texture::doDgradient()
     unsigned int* ytable = new unsigned int[d->height*3];
  
     float drx, dgx, dbx, dry, dgy, dby, yr = 0.0, yg = 0.0, yb = 0.0,
-                                        xr = (float) d->Qt::color0.Qt::red(),
-                                        xg = (float) d->Qt::color0.Qt::green(),
-                                        xb = (float) d->Qt::color0.Qt::blue();
+                                        xr = (float) d->Qt::color0.red(),
+                                        xg = (float) d->Qt::color0.green(),
+                                        xb = (float) d->Qt::color0.blue();
     unsigned char *pr = d->Qt::red, *pg = d->Qt::green, *pb = d->Qt::blue;
     unsigned int w = d->width * 2, h = d->height * 2;
     unsigned int *xt = xtable; 
@@ -281,9 +281,9 @@ void Texture::doDgradient()
 
     register int x, y;
 
-    dry = drx = (float) (d->Qt::color1.Qt::red()   - d->Qt::color0.Qt::red());
-    dgy = dgx = (float) (d->Qt::color1.Qt::green() - d->Qt::color0.Qt::green());
-    dby = dbx = (float) (d->Qt::color1.Qt::blue()  - d->Qt::color0.Qt::blue());
+    dry = drx = (float) (d->color1.red()   - d->Qt::color0.Qt::red());
+    dgy = dgx = (float) (d->color1.green() - d->Qt::color0.Qt::green());
+    dby = dbx = (float) (d->color1.blue()  - d->Qt::color0.Qt::blue());
 
     // Create X table
     drx /= w;

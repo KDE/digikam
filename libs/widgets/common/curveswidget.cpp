@@ -480,19 +480,19 @@ void CurvesWidget::paintEvent( QPaintEvent * )
       switch(m_channelType)
       {
          case CurvesWidget::RedChannelHistogram:      
-            guidePos = d->colorGuide.Qt::red();
+            guidePos = d->colorGuide.red();
             break;
          
          case CurvesWidget::GreenChannelHistogram:    
-            guidePos = d->colorGuide.Qt::green();
+            guidePos = d->colorGuide.green();
             break;
              
          case CurvesWidget::BlueChannelHistogram:     
-            guidePos = d->colorGuide.Qt::blue();
+            guidePos = d->colorGuide.blue();
             break;
              
          case CurvesWidget::ValueHistogram:    
-            guidePos = qMax(qMax(d->colorGuide.Qt::red(), d->colorGuide.Qt::green()), d->colorGuide.Qt::blue());
+            guidePos = qMax(qMax(d->colorGuide.red(), d->colorGuide.green()), d->colorGuide.blue());
             break;
 
          default:                                     // Alpha.

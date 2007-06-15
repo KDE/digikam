@@ -321,8 +321,8 @@ void ImageWidget::slotUpdateSpotInfo(const Digikam::DColor &col, const QPoint &p
     DColor color = col;
     d->spotInfoLabel->setText(i18n("(%1,%2) RGBA:%3,%4,%5,%6")
                              .arg(point.x()).arg(point.y())
-                             .arg(color.Qt::red()).arg(color.Qt::green())
-                             .arg(color.Qt::blue()).arg(color.alpha()) );
+                             .arg(color.red()).arg(color.green())
+                             .arg(color.blue()).arg(color.alpha()) );
 }
 
 void ImageWidget::readSettings(void)
