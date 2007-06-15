@@ -18,7 +18,7 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
         |---database                 Marcel
         |---dialogs
         |---dimg                     Gilles        DONE
-        |-----filters                Gilles
+        |-----filters                Gilles        DONE
         |-----loaders                Gilles        DONE
         |---dmetadata                Gilles        DONE
         |---greycstoration           Gilles
