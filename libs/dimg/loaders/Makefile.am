@@ -1,5 +1,4 @@
 METASOURCES = AUTO
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 noinst_LTLIBRARIES = libdimgloaders.la
 
