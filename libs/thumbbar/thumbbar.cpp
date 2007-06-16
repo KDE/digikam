@@ -788,8 +788,8 @@ void ThumbBarView::slotFailedPreview(const KFileItem* fileItem)
     if (!item)
         return;
 
-    KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
-    QPixmap pix = iconLoader->loadIcon("image", KIcon::NoGroup, ThumbnailSize::Huge);
+    KIconLoader* iconLoader = KIconLoader::global();
+    QPixmap pix = iconLoader->loadIcon("image", K3Icon::NoGroup, ThumbnailSize::Huge);
 
     if (item->d->pixmap)
     {
