@@ -10,7 +10,7 @@ set(libdimgeditor_STAT_SRCS editorwindow.cpp imageiface.cpp imagewindow.cpp)
 KDE4_AUTOMOC(${libdimgeditor_STAT_SRCS})
 KDE4_ADD_LIBRARY(libdimgeditor STATIC ${libdimgeditor_STAT_SRCS})
 
-set(libshowfoto_STAT_SRCS editorwindow.cpp imageiface.cpp
+set(libshowfoto_STAT_SRCS editorwindow.cpp imageiface.cpp)
 KDE4_AUTOMOC(${libshowfoto_STAT_SRCS})
 KDE4_ADD_LIBRARY(libshowfoto STATIC ${libshowfoto_STAT_SRCS})
 
