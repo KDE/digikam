@@ -2,10 +2,6 @@
 include_directories( ${CMAKE_SOURCE_DIR}/digikam/utilities/setup ${CMAKE_SOURCE_DIR}/digikam/digikam ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
-########### next target ###############
-
-
-########### install files ###############
 
 
 
