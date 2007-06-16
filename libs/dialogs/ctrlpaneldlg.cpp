@@ -100,13 +100,16 @@ public:
 CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
                            bool loadFileSettings, bool tryAction, bool progressBar,
                            int separateViewMode, Q3Frame* bannerFrame)
-            : KDialogBase(Plain, 0,
-                          Help|Default|User1|User2|User3|Try|Ok|Cancel, Ok,
-                          parent, 0, true, true,
-                          i18n("&Abort"),
-                          i18n("&Save As..."),
-                          i18n("&Load..."))
+            : KDialog(0)
 {
+    setModal( true );
+    setCaption( i18n( "Setup Blank Screen Saver" ) );
+    setButtons( Help|Default|User1|User2|User3|Try|Ok|Cancel );
+    setDefaultButton(Ok);
+    setButtonText(User1, i18n("&Abort"));
+    setButtonText(User2, i18n("&Save As..."));
+    setButtonText(User3, i18n("&Load..."));
+
     kapp->setOverrideCursor( Qt::WaitCursor );
     setCaption(DImgInterface::defaultInterface()->getImageFileName() + QString(" - ") + title);
     
@@ -151,14 +154,11 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
 
 CtrlPanelDlg::~CtrlPanelDlg()
 {
-    if (d->aboutData)
-       delete d->aboutData;
+    delete d->aboutData;
        
-    if (d->timer)
-       delete d->timer;
+    delete d->timer;
 
-    if (m_threadedFilter)
-       delete m_threadedFilter;
+    delete m_threadedFilter;
 
     delete d;
 }
@@ -276,7 +276,7 @@ void CtrlPanelDlg::slotHelp()
     if (d->aboutData)
         KToolInvocation::invokeHelp(d->name, "digikam");
     else
-        KDialogBase::slotHelp();
+        KDialog::slotHelp();
 }
 
 void CtrlPanelDlg::slotTimer()

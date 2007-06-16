@@ -36,7 +36,7 @@
 
 // KDE include.
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 // Local includes
 
@@ -51,7 +51,7 @@ namespace Digikam
 class CtrlPanelDlgPriv;
 class DImgThreadedFilter;
 
-class DIGIKAM_EXPORT CtrlPanelDlg : public KDialogBase
+class DIGIKAM_EXPORT CtrlPanelDlg : public KDialog
 {
     Q_OBJECT
 
