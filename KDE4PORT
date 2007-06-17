@@ -54,6 +54,12 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
  4      |-digikam                                              The most long to do certainly
 
  5      |-kioslave
+            digikamalbums.cpp        Marcel
+            digikamdates.cpp         Marcel
+            digikamsearch.cpp        Marcel
+            digikamtags.cpp          Marcel
+            digikamthumbnail.cpp     Gilles                
+            sqlitedb.cpp             Marcel
 
  6      |-showfoto
         |---icons                    Gilles        DONE        CMake port only
