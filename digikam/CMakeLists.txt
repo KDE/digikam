@@ -1,98 +1,145 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram ${CMAKE_SOURCE_DIR}/digikam/libs/levels ${CMAKE_SOURCE_DIR}/digikam/libs/curves ${CMAKE_SOURCE_DIR}/digikam/libs/themeengine ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common ${CMAKE_SOURCE_DIR}/digikam/libs/thumbbar ${CMAKE_SOURCE_DIR}/digikam/libs/jpegutils ${CMAKE_SOURCE_DIR}/digikam/libs/dcraw ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/imageproperties ${CMAKE_SOURCE_DIR}/digikam/libs/threadimageio ${CMAKE_SOURCE_DIR}/digikam/libs/database ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs ${CMAKE_SOURCE_DIR}/digikam/utilities/cameragui ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas ${CMAKE_SOURCE_DIR}/digikam/utilities/splashscreen ${CMAKE_SOURCE_DIR}/digikam/utilities/setup ${CMAKE_SOURCE_DIR}/digikam/utilities/slideshow ${CMAKE_SOURCE_DIR}/digikam/utilities/batch ${CMAKE_SOURCE_DIR}/digikam/utilities/lighttable  )
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/levels 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/curves 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/themeengine 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/thumbbar 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/jpegutils 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/imageproperties 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/threadimageio 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/database 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/cameragui 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/splashscreen 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/setup 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/slideshow 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/batch 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/lighttable  
+                   )
 
 
-########### next target ###############
+# Shared libdigikam ################################################################
 
-set(digikam_LIB_SRCS 
-   kdateedit.cpp 
-   metadatahub.cpp 
-   digikamapp.cpp 
-   album.cpp 
-   albumiconview.cpp 
-   albumicongroupitem.cpp 
-   albumiconitem.cpp 
-   albumitemhandler.cpp 
-   albumfiletip.cpp 
-   albumfolderview.cpp 
-   albumhistory.cpp 
-   albumlister.cpp 
-   albummanager.cpp 
-   albumpropsedit.cpp 
-   albumsettings.cpp 
-   albumthumbnailloader.cpp 
-   albumwidgetstack.cpp 
-   cameradragobject.cpp 
-   cameralist.cpp 
-   cameratype.cpp 
-   datefolderview.cpp 
-   dcopiface.cpp 
-   digikamfirstrun.cpp 
-   digikamview.cpp 
-   dio.cpp 
-   dragobjects.cpp 
-   firstrun.cpp 
-   folderitem.cpp 
-   folderview.cpp 
-   iconview.cpp 
-   icongroupitem.cpp 
-   iconitem.cpp 
-   imageattributeswatch.cpp 
-   imagepreviewview.cpp 
-   kdatetimeedit.cpp 
-   kdatepickerpopup.cpp 
-   kipiinterface.cpp 
-   mediaplayerview.cpp 
-   monthwidget.cpp 
-   pixmapmanager.cpp 
-   ratingpopupmenu.cpp 
-   ratingwidget.cpp 
-   scanlib.cpp 
-   searchadvanceddialog.cpp 
-   searchfolderview.cpp 
-   searchquickdialog.cpp 
-   searchresultsview.cpp 
-   searchresultsitem.cpp 
-   searchwidgets.cpp 
-   syncjob.cpp 
-   tagcreatedlg.cpp 
-   tagfilterview.cpp 
-   tagfolderview.cpp 
-   tagspopupmenu.cpp 
-   welcomepageview.cpp 
-   main.cpp )
+SET(libdigikam_LIB_SRCS kdateedit.cpp 
+                        metadatahub.cpp 
+                        digikamapp.cpp 
+                        album.cpp 
+                        albumiconview.cpp 
+                        albumicongroupitem.cpp 
+                        albumiconitem.cpp 
+                        albumitemhandler.cpp 
+                        albumfiletip.cpp 
+                        albumfolderview.cpp 
+                        albumhistory.cpp 
+                        albumlister.cpp 
+                        albummanager.cpp 
+                        albumpropsedit.cpp 
+                        albumsettings.cpp 
+                        albumthumbnailloader.cpp 
+                        albumwidgetstack.cpp 
+                        cameradragobject.cpp 
+                        cameralist.cpp 
+                        cameratype.cpp 
+                        datefolderview.cpp 
+                        dcopiface.cpp 
+                        digikamfirstrun.cpp 
+                        digikamview.cpp 
+                        dio.cpp 
+                        dragobjects.cpp 
+                        firstrun.cpp 
+                        folderitem.cpp 
+                        folderview.cpp 
+                        iconview.cpp 
+                        icongroupitem.cpp 
+                        iconitem.cpp 
+                        imageattributeswatch.cpp 
+                        imagepreviewview.cpp 
+                        kdatetimeedit.cpp 
+                        kdatepickerpopup.cpp 
+                        kipiinterface.cpp 
+                        mediaplayerview.cpp 
+                        monthwidget.cpp 
+                        pixmapmanager.cpp 
+                        ratingpopupmenu.cpp 
+                        ratingwidget.cpp 
+                        scanlib.cpp 
+                        searchadvanceddialog.cpp 
+                        searchfolderview.cpp 
+                        searchquickdialog.cpp 
+                        searchresultsview.cpp 
+                        searchresultsitem.cpp 
+                        searchwidgets.cpp 
+                        syncjob.cpp 
+                        tagcreatedlg.cpp 
+                        tagfilterview.cpp 
+                        tagfolderview.cpp 
+                        tagspopupmenu.cpp 
+                        welcomepageview.cpp 
+                        main.cpp 
+   )
 
-kde4_automoc(${digikam_LIB_SRCS})
+KDE4_AUTOMOC(${libdigikam_LIB_SRCS})
 
-#kde4_add_dcop_skels(digikam_LIB_SRCS MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please.kde4_add_dcop_skels macro doesn't exist now. We keep it just to remember to port to dbus")dcopiface.h )
+#kde4_add_dcop_skels(libdigikam_LIB_SRCS MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please. kde4_add_dcop_skels macro doesn't exist now. We keep it just to remember to port to dbus")dcopiface.h )
 
-kde4_add_library(digikam SHARED ${digikam_LIB_SRCS})
+KDE4_ADD_LIBRARY(libdigikam SHARED ${libdigikam_LIB_SRCS})
 
-target_link_libraries(digikam  ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KHTML_LIBS} ${KDE4_KUTILS_LIBS} sqlite thumbbar themeengine widgets dialog jpegutils dimg imagepropertiesdigikam threadimageio greycstoration database batch slideshow cameragui dimgcanvas dimgeditor splashscreen setup lighttable ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KUTILS_LIBS} digikam ${KDE4_KUTILS_LIBS} )
+TARGET_LINK_LIBRARIES(digikam libsqlite2 
+                              libthumbbar 
+                              libthemeengine 
+                              libwidgets 
+                              libdialog 
+                              libjpegutils 
+                              libdimg 
+                              libimagepropertiesdigikam 
+                              libthreadimageio 
+                              libgreycstoration 
+                              libdatabase 
+                              libbatch 
+                              libslideshow 
+                              libcameragui 
+                              libdimgcanvas 
+                              libdimgeditor 
+                              libsplashscreen 
+                              libsetup 
+                              liblighttable 
+                              ${KDE4_KDECORE_LIBS} 
+                              ${KDE4_KIO_LIBS} 
+                              ${KDE4_KHTML_LIBS} 
+                              ${KDE4_KDEUI_LIBS} 
+                              ${KDE4_KPARTS_LIBS} 
+                              ${KDE4_KUTILS_LIBS} 
+                      )
+                              
+SET_TARGET_PROPERTIES(libdigikam PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+INSTALL(TARGETS libdigikam DESTINATION ${LIB_INSTALL_DIR} )
 
-set_target_properties(digikam PROPERTIES VERSION 1.0.0 SOVERSION 1 )
-install(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )
+
+# digiKam binary progam #########################################################
+
+SET(digikam_bin_SRCS main.cpp )
+
+KDE4_AUTOMOC(${digikam_bin_SRCS})
+
+KDE4_ADD_EXECUTABLE(digikam_bin ${digikam_bin_SRCS})
+
+TARGET_LINK_LIBRARIES(digikam_bin ${KDE4_KDECORE_LIBS} )
+
+SET_TARGET_PROPERTIES(digikam_bin PROPERTIES OUTPUT_NAME digikam)
+
+INSTALL(TARGETS digikam_bin DESTINATION ${BIN_INSTALL_DIR})
 
 
-########### next target ###############
+# Others Files to install #######################################################
 
-set(digikam_bin_SRCS main.cpp )
-
-kde4_automoc(${digikam_bin_SRCS})
-
-kde4_add_executable(digikam_bin ${digikam_bin_SRCS})
-
-target_link_libraries(digikam_bin  ${KDE4_KDECORE_LIBS} )
-set_target_properties(digikam_bin PROPERTIES OUTPUT_NAME digikam)
-
-install(TARGETS digikam_bin DESTINATION ${BIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  digikam.desktop DESTINATION ${XDG_APPS_DIR} )
-install( FILES  digikamui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam )
-install( FILES  digikam_export.h DESTINATION ${INCLUDE_INSTALL_DIR} )
+INSTALL( FILES  digikam.desktop DESTINATION ${XDG_APPS_DIR} )
+INSTALL( FILES  digikamui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam )
+INSTALL( FILES  digikam_export.h DESTINATION ${INCLUDE_INSTALL_DIR} )
 
 
 
