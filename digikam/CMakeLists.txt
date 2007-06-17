@@ -89,8 +89,7 @@ KDE4_AUTOMOC(${libdigikam_LIB_SRCS})
 
 KDE4_ADD_LIBRARY(libdigikam SHARED ${libdigikam_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(digikam libsqlite2 
-                              libthumbbar 
+TARGET_LINK_LIBRARIES(digikam libthumbbar 
                               libthemeengine 
                               libwidgets 
                               libdialog 
