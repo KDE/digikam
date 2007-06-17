@@ -34,18 +34,18 @@ libimagepropertiesdigikam_la_SOURCES = imagedescedittab.cpp imagepropertiessideb
 libimagepropertiesdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 INCLUDES = -I$(top_srcdir)/digikam/libs/histogram \
-	       -I$(top_srcdir)/digikam/libs/dcraw \
-	       -I$(top_srcdir)/digikam/libs/themeengine \
-	       -I$(top_srcdir)/digikam/libs/dmetadata \
-	       -I$(top_srcdir)/digikam/libs/widgets/common \
-	       -I$(top_srcdir)/digikam/libs/widgets/iccprofiles \
-	       -I$(top_srcdir)/digikam/libs/widgets/metadata \
-	       -I$(top_srcdir)/digikam/libs/dialogs \
-	       -I$(top_srcdir)/digikam/libs/dimg \
-	       -I$(top_srcdir)/digikam/libs/threadimageio \
-	       -I$(top_srcdir)/digikam/utilities/cameragui \
-	       -I$(top_srcdir)/digikam/utilities/batch \
-	       -I$(top_srcdir)/digikam/digikam \
-	       $(LIBKEXIV2_CFLAGS) $(LIBKDCRAW_CFLAGS) \
-	       $(all_includes)
+	   -I$(top_srcdir)/digikam/libs/themeengine \
+	   -I$(top_srcdir)/digikam/libs/dmetadata \
+	   -I$(top_srcdir)/digikam/libs/widgets/common \
+	   -I$(top_srcdir)/digikam/libs/widgets/iccprofiles \
+	   -I$(top_srcdir)/digikam/libs/widgets/metadata \
+	   -I$(top_srcdir)/digikam/libs/dialogs \
+	   -I$(top_srcdir)/digikam/libs/dimg \
+	   -I$(top_srcdir)/digikam/libs/threadimageio \
+	   -I$(top_srcdir)/digikam/utilities/cameragui \
+	   -I$(top_srcdir)/digikam/utilities/batch \
+	   -I$(top_srcdir)/digikam/digikam \
+	   $(LIBKEXIV2_CFLAGS) \
+	   $(LIBKDCRAW_CFLAGS) \
+	   $(all_includes)
 
