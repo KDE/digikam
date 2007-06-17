@@ -99,12 +99,6 @@ JPEGLoader::JPEGLoader(DImg* image)
 
 bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
-    // Find out if we do the fast-track loading with reduced size. Jpeg specific.
-    int scaledLoadingSize = 0;
-    QVariant attribute = imageGetAttribute("jpegScaledLoadingSize");
-    if (attribute.isValid())
-        scaledLoadingSize = attribute.toInt();
-
     readMetadata(filePath, DImg::JPEG);
 
     FILE *file = fopen(QFile::encodeName(filePath), "rb");
@@ -149,6 +143,13 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         fclose(file);
         return false;
     }
+
+    // -------------------------------------------------------------------
+    // Find out if we do the fast-track loading with reduced size. Jpeg specific.
+    int scaledLoadingSize = 0;
+    QVariant attribute = imageGetAttribute("jpegScaledLoadingSize");
+    if (attribute.isValid())
+        scaledLoadingSize = attribute.toInt();
 
     // -------------------------------------------------------------------
     // Set JPEG decompressor instance
