@@ -9,7 +9,7 @@ Laurent Montel <montel at kde dot org>
 List of directories ported by developpers:
 ------------------------------------------
 
-ORDER   DIRECTORIES                  WHO           STATUS      REMARK
+ORDER   DIRECTORIES                  ASSIGNED      STATUS      REMARK
 
  1      |-sqlite                     Gilles        DONE        CMake port only. Used by digiKam core. Must be ported in first.
 
@@ -114,7 +114,7 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
             digikamdates.cpp         Marcel
             digikamsearch.cpp        Marcel
             digikamtags.cpp          Marcel
-            digikamthumbnail.cpp     Gilles                
+            digikamthumbnail.cpp     Gilles        DONE                
             sqlitedb.cpp             Marcel
 
  6      |-showfoto
