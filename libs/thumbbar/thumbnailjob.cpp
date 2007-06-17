@@ -35,14 +35,14 @@ extern "C"
 
 // QT includes.
 
-#include <qstring.h>
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qcolor.h>
-#include <qdatastream.h>
+#include <QString>
+#include <QDir>
+#include <QFileInfo>
+#include <QImage>
+#include <QPixmap>
+#include <QPainter>
+#include <QColor>
+#include <QDataStream>
 
 // KDE includes.
 
@@ -52,6 +52,7 @@ extern "C"
 
 #include "ddebug.h"
 #include "thumbnailjob.h"
+#include "thumbnailjob.moc"
 
 namespace Digikam
 {
@@ -80,7 +81,7 @@ public:
 
 ThumbnailJob::ThumbnailJob(const KUrl& url, int size,
                            bool highlight, bool exifRotate)
-            : KIO::Job(false)
+            : KIO::Job()
 {
     d = new ThumbnailJobPriv;
 
@@ -100,7 +101,7 @@ ThumbnailJob::ThumbnailJob(const KUrl& url, int size,
 
 ThumbnailJob::ThumbnailJob(const KUrl::List& urlList, int size,
                            bool highlight, bool exifRotate)
-            : KIO::Job(false)
+            : KIO::Job()
 {
     d = new ThumbnailJobPriv;
 
@@ -132,7 +133,7 @@ void ThumbnailJob::addItem(const KUrl& url)
 {
     d->urlList.append(url);
 
-    if (!d->running && subjobs.isEmpty())
+    if (!d->running && subjobs().isEmpty())
         processNext();
 }
 
@@ -144,16 +145,16 @@ void ThumbnailJob::addItems(const KUrl::List& urlList)
         d->urlList.append(*it);
     }
 
-    if (!d->running && subjobs.isEmpty())
+    if (!d->running && subjobs().isEmpty())
         processNext();
 }
 
 bool ThumbnailJob::setNextItemToLoad(const KUrl& url)
 {
-    KUrl::List::const_iterator it = d->urlList.find(url);
-    if (it != d->urlList.end())
+    int index = d->urlList.indexOf(url);
+    if (index != -1)
     {
-        d->next_url = *it;
+        d->next_url = d->urlList[index];
         return true;
     }
 
@@ -162,7 +163,7 @@ bool ThumbnailJob::setNextItemToLoad(const KUrl& url)
 
 void ThumbnailJob::removeItem(const KUrl& url)
 {
-    d->urlList.remove(url);
+    d->urlList.removeAll(url);
 }
 
 void ThumbnailJob::processNext()
@@ -174,14 +175,17 @@ void ThumbnailJob::processNext()
         return;
     }
 
-    KUrl::List::iterator it = d->urlList.find(d->next_url);
-    if (it == d->urlList.end())
+    KUrl::List::iterator it = d->urlList.begin();
+    while(*it != d->next_url)
     {
-        it = d->urlList.begin();
+        it++;        
     }
 
+    if (it == d->urlList.end())
+        it = d->urlList.begin();
+
     d->curr_url = *it;
-    it = d->urlList.remove(it);
+    it = d->urlList.erase(it);
     if (it != d->urlList.end())
     {
         d->next_url = *it;
@@ -214,8 +218,8 @@ void ThumbnailJob::processNext()
 
 void ThumbnailJob::slotResult(KIO::Job *job)
 {
-    subjobs.remove(job);
-    Q_ASSERT( subjobs.isEmpty() );
+    removeSubjob(job);
+    Q_ASSERT( subjobs().isEmpty() );
 
     if (job->error())
     {
@@ -258,13 +262,12 @@ void ThumbnailJob::slotThumbData(KIO::Job*, const QByteArray &data)
         return;
 
     QImage thumb;
-    QDataStream stream(data, QIODevice::ReadOnly);
+    QDataStream stream(data);
     if (d->shmaddr)
     {
-        int width, height, depth;
-        stream >> width >> height >> depth;
-        thumb = QImage(d->shmaddr, width, height, depth,
-                       0, 0, QImage::IgnoreEndian);
+        int width, height, format;
+        stream >> width >> height >> format;
+        thumb = QImage(d->shmaddr, width, height, (QImage::Format)format);
 
         // The buffer supplied to the QImage constructor above must remain valid
         // throughout the lifetime of the object.
@@ -290,11 +293,9 @@ void ThumbnailJob::slotThumbData(KIO::Job*, const QByteArray &data)
 void ThumbnailJob::emitThumbnail(QImage& thumb)
 {
     if (thumb.isNull())
-    {
         return;
-    }
 
-    QPixmap pix(thumb);
+    QPixmap pix = QPixmap::fromImage(thumb);
 
     int w = pix.width();
     int h = pix.height();
@@ -314,5 +315,4 @@ void ThumbnailJob::emitThumbnail(QImage& thumb)
 
 }  // namespace Digikam
 
-#include "thumbnailjob.moc"
 
