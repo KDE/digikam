@@ -5,4 +5,5 @@ NEW FEATURES:
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==> 120450: Strange helper lines behavior in ratio crop tool
+002 ==> 
