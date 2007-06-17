@@ -97,7 +97,7 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 
 libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) $(LIB_KHTML) \
 	               $(LIBKIPI_LIBS) $(LIB_KUTILS) \
-	               $(top_builddir)/digikam/sqlite/libsqlite.la \
+	               $(top_builddir)/digikam/sqlite/libsqlite2.la \
 	               $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 	               $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
 	               $(top_builddir)/digikam/libs/widgets/libwidgets.la \
