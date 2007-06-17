@@ -47,8 +47,8 @@ extern "C"
 #include <qpushbutton.h>
 #include <qtoolbutton.h>
 #include <q3iconview.h>
-#include <q3vbox.h>
-#include <q3hbox.h>
+
+
 #include <q3popupmenu.h>
 #include <qsplitter.h>
 #include <qpixmap.h>
@@ -93,6 +93,7 @@ extern "C"
 // LibKDcraw includes.
 
 #include <libkdcraw/rawfiles.h>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -255,7 +256,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     viewBoxLayout->setColStretch( 4, 0 );
     viewBoxLayout->setColStretch( 5, 0 );
 
-    Q3HBox* widget = new Q3HBox(plainPage());
+    KHBox* widget = new KHBox(plainPage());
     d->splitter   = new QSplitter(widget);
     d->view       = new CameraIconView(this, d->splitter);
     
@@ -286,7 +287,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     Q3VBoxLayout* albumVlay = new Q3VBoxLayout(albumBox, marginHint(), spacingHint());
     d->autoAlbumExtCheck   = new QCheckBox(i18n("Extension-based sub-albums"), albumBox);
     d->autoAlbumDateCheck  = new QCheckBox(i18n("Date-based sub-albums"), albumBox);
-    Q3HBox *hbox1           = new Q3HBox(albumBox);
+    KHBox *hbox1           = new KHBox(albumBox);
     d->folderDateLabel     = new QLabel(i18n("Date format:"), hbox1);
     d->folderDateFormat    = new QComboBox(hbox1);
     d->folderDateFormat->insertItem(i18n("ISO"),            CameraUIPriv::IsoDateFormat);
@@ -325,7 +326,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->dateTimeEdit        = new KDateTimeEdit(onFlyBox, "datepicker");
     d->autoRotateCheck     = new QCheckBox(i18n("Auto-rotate/flip image"), onFlyBox);
     d->convertJpegCheck    = new QCheckBox(i18n("Convert to lossless file format"), onFlyBox);
-    Q3HBox *hbox2           = new Q3HBox(onFlyBox);
+    KHBox *hbox2           = new KHBox(onFlyBox);
     d->formatLabel         = new QLabel(i18n("New image format:"), hbox2);
     d->losslessFormat      = new QComboBox(hbox2);
     d->losslessFormat->insertItem("PNG", 0);

@@ -25,8 +25,8 @@
 
 // Qt includes.
 
-#include <q3hbox.h>
-#include <q3vbox.h>
+
+
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtoolbutton.h>
@@ -57,6 +57,7 @@
 #include <klineedit.h>
 #include <kdialogbase.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -155,23 +156,23 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     // Comments/Date/Rating view -----------------------------------
     
-    Q3VBox *commentsBox = new Q3VBox(settingsArea);
+    KVBox *commentsBox = new KVBox(settingsArea);
     new QLabel(i18n("Comments:"), commentsBox);
     d->commentsEdit = new KTextEdit(commentsBox);
     d->commentsEdit->setTextFormat(Qt::PlainText);
     d->commentsEdit->setCheckSpellingEnabled(true);
 
-    Q3HBox *dateBox  = new Q3HBox(settingsArea);
+    KHBox *dateBox  = new KHBox(settingsArea);
     new QLabel(i18n("Date:"), dateBox);
     d->dateTimeEdit = new KDateTimeEdit(dateBox, "datepicker");
 
-    Q3HBox *ratingBox = new Q3HBox(settingsArea);
+    KHBox *ratingBox = new KHBox(settingsArea);
     new QLabel(i18n("Rating:"), ratingBox);
     d->ratingWidget  = new RatingWidget(ratingBox);
 
     // Tags view ---------------------------------------------------
 
-    Q3HBox *tagsSearch = new Q3HBox(settingsArea);
+    KHBox *tagsSearch = new KHBox(settingsArea);
     tagsSearch->setSpacing(KDialog::spacingHint());
 
     d->tagsSearchClearBtn = new QToolButton(tagsSearch);
@@ -204,7 +205,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     // Buttons -----------------------------------------
 
-    Q3HBox *buttonsBox = new Q3HBox(settingsArea);
+    KHBox *buttonsBox = new KHBox(settingsArea);
     buttonsBox->setSpacing(KDialog::spacingHint());
 
     d->revertBtn = new QToolButton(buttonsBox);

@@ -63,6 +63,7 @@
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 // lcms includes.
 
@@ -195,7 +196,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
                      "embedded profile or, if the image has an embedded profile, this is not the same "
                      "as the workspace profile.</p>"));
 
-    Q3HBox *hbox   = new Q3HBox(d->behaviourGB);
+    KHBox *hbox   = new KHBox(d->behaviourGB);
     QLabel *space = new QLabel(hbox);
     space->setFixedWidth(15);
     d->cmToolInRawLoading = new QCheckBox(hbox);
@@ -317,7 +318,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
                      "black levels of digital files and the black capabilities of various "
                      "digital devices.</p>"));
 
-    Q3HBox *hbox2 = new Q3HBox(d->advancedSettingsGB);
+    KHBox *hbox2 = new KHBox(d->advancedSettingsGB);
     QLabel *lablel = new QLabel(hbox2);
     lablel->setText(i18n("Rendering Intents:"));
 

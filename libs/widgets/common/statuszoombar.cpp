@@ -32,6 +32,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -68,7 +69,7 @@ public:
 };
 
 StatusZoomBar::StatusZoomBar(QWidget *parent)
-             : Q3HBox(parent, 0, Qt::WDestructiveClose)
+             : KHBox(parent, 0, Qt::WDestructiveClose)
 {
     d = new StatusZoomBarPriv;
 

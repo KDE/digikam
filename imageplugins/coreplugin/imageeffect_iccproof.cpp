@@ -27,14 +27,14 @@
 
 #include <qcolor.h>
 #include <q3groupbox.h>
-#include <q3hbox.h>
+
 #include <qhbuttongroup.h>
 #include <qvbuttongroup.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <q3frame.h>
 #include <qpoint.h>
-#include <q3vbox.h>
+
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
@@ -68,6 +68,7 @@
 #include <kiconloader.h>
 #include <ksqueezedtextlabel.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 // Digikam includes.
 
@@ -168,7 +169,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    Q3VBox *histoBox   = new Q3VBox(gboxSettings);
+    KVBox *histoBox   = new KVBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram "
                                              "of the selected image channel. " 

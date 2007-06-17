@@ -24,7 +24,7 @@
 // QT includes.
 
 #include <qlayout.h>
-#include <q3hbox.h>
+
 #include <q3hgroupbox.h>
 #include <q3groupbox.h>
 #include <qlabel.h>
@@ -42,6 +42,7 @@
 #include <kdialog.h>
 #include <klineeditdlg.h>
 #include <kiconloader.h>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -96,7 +97,7 @@ SetupMime::SetupMime(QWidget* parent )
     QLabel *imageFileFilterLabel = new QLabel(imageFileFilterBox);
     imageFileFilterLabel->setText(i18n("Show only &image files with extensions:"));
     
-    Q3HBox *hbox1 = new Q3HBox(imageFileFilterBox);    
+    KHBox *hbox1 = new KHBox(imageFileFilterBox);    
     d->imageFileFilterEdit = new QLineEdit(hbox1);
     d->imageFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of image files "
                                                   "to be displayed in Albums (such as JPEG or TIFF); "
@@ -127,7 +128,7 @@ SetupMime::SetupMime(QWidget* parent )
     QLabel *movieFileFilterLabel = new QLabel(movieFileFilterBox);
     movieFileFilterLabel->setText(i18n("Show only &movie files with extensions:"));
     
-    Q3HBox *hbox2 = new Q3HBox(movieFileFilterBox);    
+    KHBox *hbox2 = new KHBox(movieFileFilterBox);    
     d->movieFileFilterEdit = new QLineEdit(hbox2);
     d->movieFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of movie files "
                                                   "to be displayed in Albums (such as MPEG or AVI); "
@@ -158,7 +159,7 @@ SetupMime::SetupMime(QWidget* parent )
     QLabel *audioFileFilterLabel = new QLabel(audioFileFilterBox);
     audioFileFilterLabel->setText(i18n("Show only &audio files with extensions:"));
     
-    Q3HBox *hbox3 = new Q3HBox(audioFileFilterBox);  
+    KHBox *hbox3 = new KHBox(audioFileFilterBox);  
     d->audioFileFilterEdit = new QLineEdit(hbox3);
     d->audioFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of audio files "
                                                   "to be displayed in Albums (such as MP3 or OGG); "
@@ -189,7 +190,7 @@ SetupMime::SetupMime(QWidget* parent )
     QLabel *rawFileFilterLabel = new QLabel(rawFileFilterBox);
     rawFileFilterLabel->setText(i18n("Show only &RAW files with extensions:"));
     
-    Q3HBox *hbox4 = new Q3HBox(rawFileFilterBox);  
+    KHBox *hbox4 = new KHBox(rawFileFilterBox);  
     d->rawFileFilterEdit = new QLineEdit(hbox4);
     d->rawFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of RAW image files "
                                                 "to be displayed in Albums (such as CRW, for Canon cameras, "

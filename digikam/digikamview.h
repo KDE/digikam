@@ -27,11 +27,12 @@
 
 // Qt includes.
 
-#include <q3hbox.h>
+
 #include <qstringlist.h>
 #include <qmap.h>
 //Added by qt3to4:
 #include <Q3PtrList>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -51,7 +52,7 @@ class AlbumSettings;
 class Album;
 class DigikamViewPriv;
 
-class DigikamView : public Q3HBox
+class DigikamView : public KHBox
 {
     Q_OBJECT
 

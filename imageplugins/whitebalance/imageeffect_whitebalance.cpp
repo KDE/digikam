@@ -38,7 +38,7 @@
 #include <qpixmap.h>
 #include <qfile.h>
 #include <q3textstream.h>
-#include <q3vbox.h>
+
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
@@ -63,6 +63,7 @@
 #include <kconfig.h>
 #include <k3activelabel.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -175,7 +176,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    Q3VBox *histoBox   = new Q3VBox(gboxSettings);
+    KVBox *histoBox   = new KVBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram "
                                              "drawing of the selected image channel. This one is "

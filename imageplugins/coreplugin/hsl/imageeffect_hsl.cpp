@@ -28,7 +28,7 @@
 #include <q3groupbox.h>
 #include <q3hgroupbox.h>
 #include <q3vgroupbox.h>
-#include <q3vbox.h>
+
 #include <qhbuttongroup.h> 
 #include <qlabel.h>
 #include <qlayout.h>
@@ -54,6 +54,7 @@
 #include <kstandarddirs.h>
 #include <kcolordialog.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 // Digikam includes.
 
@@ -139,7 +140,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    Q3VBox *histoBox   = new Q3VBox(gboxSettings);
+    KVBox *histoBox   = new KVBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "

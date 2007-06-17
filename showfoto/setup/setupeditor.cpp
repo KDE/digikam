@@ -25,7 +25,7 @@
 
 #include <qlayout.h>
 #include <qcolor.h>
-#include <q3hbox.h>
+
 #include <q3vgroupbox.h>
 #include <qlabel.h>
 
@@ -44,6 +44,7 @@
 #include <k3listview.h>
 #include <ktrader.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -94,7 +95,7 @@ SetupEditor::SetupEditor(QWidget* parent )
     
     Q3VGroupBox *interfaceOptionsGroup = new Q3VGroupBox(i18n("Interface Options"), parent);
     
-    Q3HBox* colorBox              = new Q3HBox(interfaceOptionsGroup);    
+    KHBox* colorBox              = new KHBox(interfaceOptionsGroup);    
     QLabel *backgroundColorlabel = new QLabel( i18n("&Background color:"), colorBox );
     d->backgroundColor           = new KColorButton(colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
@@ -113,14 +114,14 @@ SetupEditor::SetupEditor(QWidget* parent )
 
     Q3VGroupBox *exposureOptionsGroup = new Q3VGroupBox(i18n("Exposure Indicators"), parent);
 
-    Q3HBox *underExpoBox         = new Q3HBox(exposureOptionsGroup);
+    KHBox *underExpoBox         = new KHBox(exposureOptionsGroup);
     QLabel *underExpoColorlabel = new QLabel( i18n("&Under-exposure color:"), underExpoBox);
     d->underExposureColor       = new KColorButton(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
     d->underExposureColor->setWhatsThis( i18n("<p>Customize the color used in image editor to identify "
                                                  "the under-exposed pixels.") );
 
-    Q3HBox *overExpoBox         = new Q3HBox(exposureOptionsGroup);
+    KHBox *overExpoBox         = new KHBox(exposureOptionsGroup);
     QLabel *overExpoColorlabel = new QLabel( i18n("&Over-exposure color:"), overExpoBox);
     d->overExposureColor       = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);

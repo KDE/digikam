@@ -28,7 +28,7 @@
 
 // Qt includes.
 
-#include <q3hbox.h>
+
 
 class Q3TimeEdit;
 
@@ -46,7 +46,7 @@ class KDateEdit;
  * @image html kdatetimeedit.png "This is how it looks"
  * @author Tom Albers
  */
-class KDateTimeEdit : public Q3HBox
+class KDateTimeEdit : public KHBox
 {
     Q_OBJECT
 

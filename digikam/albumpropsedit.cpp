@@ -36,7 +36,7 @@
 #include <q3listview.h>
 #include <q3frame.h>
 #include <q3header.h>
-#include <q3hbox.h>
+
 #include <qpushbutton.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
@@ -56,6 +56,7 @@
 #include <kinputdialog.h>
 #else
 #include <klineeditdlg.h>
+#include <kvbox.h>
 #endif
 
 // Local includes.
@@ -169,7 +170,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     topLayout->addWidget( d->datePicker, 5, 1 );
     dateLabel->setBuddy( d->datePicker );
 
-    Q3HBox *buttonRow = new Q3HBox( plainPage( ) );
+    KHBox *buttonRow = new KHBox( plainPage( ) );
     QPushButton *dateLowButton = new QPushButton( 
             i18n("Selects the date of the oldest image",
                  "&Oldest" ), buttonRow );

@@ -26,7 +26,7 @@
 
 // KDE includes.
 
-#include <q3hbox.h>
+
 #include <qstring.h>
 
 // Local includes
@@ -38,7 +38,7 @@ namespace Digikam
 
 class StatusZoomBarPriv;
 
-class DIGIKAM_EXPORT StatusZoomBar : public Q3HBox
+class DIGIKAM_EXPORT StatusZoomBar : public KHBox
 {
 
 Q_OBJECT

@@ -40,6 +40,7 @@
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,2,0)
 #include <kcalendarsystem.h>
+#include <kvbox.h>
 #endif
 
 // Local includes.
@@ -113,7 +114,7 @@ public:
 
 
 DateFolderView::DateFolderView(QWidget* parent)
-    : Q3VBox(parent, "DateFolderView")
+    : KVBox(parent, "DateFolderView")
 {
     d = new DateFolderViewPriv;
     d->active    = false;

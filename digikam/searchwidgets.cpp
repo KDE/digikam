@@ -26,8 +26,8 @@
 
 // Qt includes.
 
-#include <q3hbox.h>
-#include <q3vbox.h>
+
+
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -47,6 +47,7 @@
 #include <klocale.h>
 #include <kurl.h>
 #include <kdialog.h>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -130,7 +131,7 @@ void SearchRuleLabel::mouseDoubleClickEvent( QMouseEvent * e )
 SearchAdvancedRule::SearchAdvancedRule(QWidget* parent, SearchAdvancedRule::Option option)
                   : SearchAdvancedBase(SearchAdvancedBase::RULE)
 {
-    m_box = new Q3VBox(parent);
+    m_box = new KVBox(parent);
     m_box->layout()->setSpacing( KDialog::spacingHint() );
     m_box->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 
@@ -138,7 +139,7 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent, SearchAdvancedRule::Opti
     m_option       = option;
     if (option != NONE)
     {
-        m_optionsBox  = new Q3HBox( m_box );
+        m_optionsBox  = new KHBox( m_box );
         m_label = new SearchRuleLabel( option == AND ?
                                        i18n("As well as") : i18n("Or"),
                                        m_optionsBox);
@@ -163,7 +164,7 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent, SearchAdvancedRule::Opti
     m_operator = new QComboBox( m_hbox );
     m_operator->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 
-    m_valueBox = new Q3HBox( m_hbox );
+    m_valueBox = new KHBox( m_hbox );
     m_widgetType = NOWIDGET;
 
     slotKeyChanged( 0 );
@@ -439,7 +440,7 @@ void SearchAdvancedRule::addOption(Option option)
 
     m_box->layout()->remove(m_hbox);
 
-    m_optionsBox = new Q3HBox(m_box);
+    m_optionsBox = new KHBox(m_box);
     new QLabel(option == AND ? i18n("As well as") : i18n("Or"), m_optionsBox);
     Q3Frame* hline = new Q3Frame(m_optionsBox);
     hline->setFrameStyle(Q3Frame::HLine|Q3Frame::Sunken);
@@ -477,7 +478,7 @@ void SearchAdvancedRule::removeCheck()
 SearchAdvancedGroup::SearchAdvancedGroup(QWidget* parent)
                    : SearchAdvancedBase(SearchAdvancedBase::GROUP)
 {
-    m_box      = new Q3HBox(parent);
+    m_box      = new KHBox(parent);
     m_box->layout()->setSpacing(KDialog::spacingHint());
     m_groupbox = new Q3VGroupBox(m_box);
     m_check    = new QCheckBox(m_box);

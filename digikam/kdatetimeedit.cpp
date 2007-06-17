@@ -35,7 +35,7 @@ namespace Digikam
 {
 
 KDateTimeEdit::KDateTimeEdit(QWidget *parent, const char *name)
-             : Q3HBox(parent, name)
+             : KHBox(parent, name)
 {
     m_datePopUp = new KDateEdit(this, "datepopup");
     m_timePopUp = new Q3TimeEdit(QTime::currentTime(), this);

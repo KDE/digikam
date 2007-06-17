@@ -34,7 +34,7 @@
 
 #include <qlayout.h>
 #include <q3frame.h>
-#include <q3vbox.h>
+
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
@@ -54,6 +54,7 @@
 #include <kmenu.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -159,7 +160,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    Q3VBox *histoBox   = new Q3VBox(gboxSettings);
+    KVBox *histoBox   = new KVBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "

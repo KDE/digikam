@@ -34,7 +34,7 @@
 #include <qtimer.h>
 #include <qspinbox.h>
 #include <qsplitter.h>
-#include <q3hbox.h>
+
 //Added by qt3to4:
 #include <QCustomEvent>
 #include <QCloseEvent>
@@ -59,6 +59,7 @@
 #include <kseparator.h>
 #include <kglobal.h>
 #include <ktoolinvocation.h>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -119,7 +120,7 @@ public:
     
     QSpinBox     *guideSize;
 
-    Q3HBox        *hbox;
+    KHBox        *hbox;
 
     QSplitter    *splitter;
 
@@ -189,7 +190,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     else
         desc = i18n("<p>This is the image filter effect preview.");
 
-    d->hbox              = new Q3HBox(plainPage());
+    d->hbox              = new KHBox(plainPage());
     d->splitter          = new QSplitter(d->hbox);
     m_imagePreviewWidget = new ImageWidget(d->name, d->splitter, desc, prevModeOptions, 
                                            guideMode, guideVisible, useImageSelection);
@@ -241,7 +242,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     vLayout->addWidget(gboxGuideSettings);
 
-    Q3HBox *hbox    = new Q3HBox(d->settings);
+    KHBox *hbox    = new KHBox(d->settings);
     QLabel *space1 = new QLabel(hbox);
     space1->setFixedWidth(spacingHint());    
     d->progressBar = new KProgress(100, hbox);

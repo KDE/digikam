@@ -42,7 +42,7 @@
 #include <q3intdict.h>
 #include <q3textstream.h>
 #include <qfile.h>
-#include <q3vbox.h>
+
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
@@ -61,6 +61,7 @@
 #include <ktabwidget.h>
 #include <kconfig.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 // Digikam includes.
 
@@ -241,7 +242,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    Q3VBox *histoBox   = new Q3VBox(gboxSettings);
+    KVBox *histoBox   = new KVBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
@@ -342,7 +343,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    Q3VBox *vbox = new Q3VBox(m_tab);
+    KVBox *vbox = new KVBox(m_tab);
     vbox->setSpacing(spacingHint());
 
     m_bwFilters = new Q3ListBox(vbox);

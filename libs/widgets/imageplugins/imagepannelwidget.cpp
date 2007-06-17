@@ -52,6 +52,7 @@
 #include <kstandarddirs.h>
 #include <kseparator.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -111,7 +112,7 @@ public:
     
 ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSection, 
                                      QWidget *parent, int separateViewMode)
-                 : Q3HBox(parent, 0, Qt::WDestructiveClose)
+                 : KHBox(parent, 0, Qt::WDestructiveClose)
 {
     d = new ImagePannelWidgetPriv;
     d->settingsSection = settingsSection;

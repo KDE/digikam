@@ -39,7 +39,7 @@
 #include <qsize.h>
 #include <qcursor.h>
 #include <qlabel.h>
-#include <q3hbox.h>
+
 #include <qcheckbox.h>
 #include <qfont.h>
 #include <q3grid.h>
@@ -71,6 +71,7 @@
 #include <ktempfile.h>
 #include <kpropertiesdialog.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 // Local includes
 
@@ -415,7 +416,7 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
 
     // ------------------------------------------------------------------------
 
-    Q3HBox *cmbox = new Q3HBox(this);
+    KHBox *cmbox = new KHBox(this);
 
     d->colorManaged = new QCheckBox(i18n("Use Color Management for Printing"), cmbox);
     d->colorManaged->setChecked( false );
@@ -439,7 +440,7 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
 
     d->scale = new QRadioButton( i18n("Print e&xact size: "), group );
 
-    Q3HBox *hb = new Q3HBox( group );
+    KHBox *hb = new KHBox( group );
     hb->setSpacing( KDialog::spacingHint() );
     QWidget *w = new QWidget(hb);
     w->setFixedWidth(d->scale->style().subRect( QStyle::SR_RadioButtonIndicator, d->scale ).width());

@@ -36,7 +36,7 @@
 #include <qhbuttongroup.h> 
 #include <qpushbutton.h>
 #include <qtooltip.h>
-#include <q3vbox.h>
+
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
@@ -53,6 +53,7 @@
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -254,7 +255,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     // -------------------------------------------------------------
 
-    Q3VBox *histoBox    = new Q3VBox(histogramPage);
+    KVBox *histoBox    = new KVBox(histogramPage);
     d->histogramWidget = new HistogramWidget(256, 140, histoBox);
     d->histogramWidget->setWhatsThis( i18n("<p>This is the histogram drawing of the "
                                               "selected image channel"));

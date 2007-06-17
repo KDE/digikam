@@ -55,6 +55,7 @@
 
 #include <libkdcraw/rawfiles.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -144,7 +145,7 @@ public:
 };
 
 DigikamView::DigikamView(QWidget *parent)
-           : Q3HBox(parent)
+           : KHBox(parent)
 {
     d = new DigikamViewPriv;
     d->parent       = static_cast<DigikamApp *>(parent);

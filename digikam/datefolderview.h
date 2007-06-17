@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <q3vbox.h>
+
 
 namespace Digikam
 {
@@ -34,7 +34,7 @@ namespace Digikam
 class DateFolderViewPriv;
 class DAlbum;
 
-class DateFolderView : public Q3VBox
+class DateFolderView : public KVBox
 {
     Q_OBJECT
     

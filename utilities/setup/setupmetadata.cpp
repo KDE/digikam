@@ -33,7 +33,7 @@
 #include <qlabel.h>
 
 #include <qtooltip.h>
-#include <q3hbox.h>
+
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3VBoxLayout>
@@ -48,6 +48,7 @@
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
+#include <kvbox.h>
 
 // // Local includes.
 
@@ -153,7 +154,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     // --------------------------------------------------------
     
-    Q3HBox *hbox = new Q3HBox(parent);
+    KHBox *hbox = new KHBox(parent);
 
     KUrlLabel *exiv2LogoLabel = new KUrlLabel(hbox);
     exiv2LogoLabel->setText(QString());

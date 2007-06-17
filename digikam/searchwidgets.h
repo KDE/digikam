@@ -3,6 +3,7 @@
 #include <QMouseEvent>
 #include <QLabel>
 #include <Q3ValueList>
+#include <kvbox.h>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -32,8 +33,8 @@
 #ifndef SEARCHWIDGETS_H
 #define SEARCHWIDGETS_H
 
-class Q3HBox;
-class Q3VBox;
+class KHBox;
+class KVBox;
 class QCheckBox;
 class QComboBox;
 class QLineEdit;
@@ -300,11 +301,11 @@ private:
 
     QLabel*                 m_label;
 
-    Q3VBox*                  m_box;
+    KVBox*                  m_box;
     QWidget*                m_hbox;
     Q3HBoxLayout*            m_hboxLayout;
 
-    Q3HBox*                  m_valueBox;
+    KHBox*                  m_valueBox;
 
     QCheckBox*              m_check;
 
@@ -318,7 +319,7 @@ private:
 
     QMap<int, int>          m_itemsIndexIDMap;
 
-    Q3HBox*                  m_optionsBox;
+    KHBox*                  m_optionsBox;
 
     enum valueWidgetTypes   m_widgetType;
 };
@@ -384,7 +385,7 @@ public:
 
 private:
 
-    Q3HBox*                          m_box;
+    KHBox*                          m_box;
     Q3VGroupBox*                     m_groupbox;
     QCheckBox*                      m_check;
     Q3ValueList<SearchAdvancedRule*> m_childRules;

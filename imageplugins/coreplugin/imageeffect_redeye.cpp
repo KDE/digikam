@@ -25,11 +25,11 @@
 // Qt includes.
  
 #include <qcolor.h>
-#include <q3hbox.h>
+
 #include <q3hgroupbox.h>
 #include <q3vgroupbox.h>
 #include <qhbuttongroup.h> 
-#include <q3vbox.h>
+
 #include <qlabel.h>
 #include <qlayout.h>
 #include <q3frame.h>
@@ -53,6 +53,7 @@
 #include <kstandarddirs.h>
 #include <kcolordialog.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 // Digikam includes.
 
@@ -138,7 +139,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    Q3VBox *histoBox   = new Q3VBox(gboxSettings);
+    KVBox *histoBox   = new KVBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram "
                                              "of the selected image channel. It is "

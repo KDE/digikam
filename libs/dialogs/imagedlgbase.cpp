@@ -35,7 +35,7 @@
 #include <q3frame.h>
 #include <qtimer.h>
 #include <qsplitter.h>
-#include <q3hbox.h>
+
 //Added by qt3to4:
 #include <QCloseEvent>
 #include <Q3GridLayout>
@@ -54,6 +54,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <ktoolinvocation.h>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -91,7 +92,7 @@ public:
 
     QTimer         *timer;
 
-    Q3HBox          *hbox;
+    KHBox          *hbox;
 
     QSplitter      *splitter;
 
@@ -137,7 +138,7 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    d->hbox     = new Q3HBox(plainPage());
+    d->hbox     = new KHBox(plainPage());
     d->splitter = new QSplitter(d->hbox);
     d->splitter->setFrameStyle( Q3Frame::NoFrame );
     d->splitter->setFrameShadow( Q3Frame::Plain );
