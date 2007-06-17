@@ -319,31 +319,31 @@ void ThemeEngine::loadTheme()
     resource = resourceValue("banner.bevel", "Banner.Bevel");
     if (!resource.isEmpty())
     {
-        if (resource.contains("flat", false))
+        if (resource.contains("flat", Qt::CaseInsensitive))
             t->bannerBevel = Theme::FLAT;
-        else if (resource.contains("sunken", false))
+        else if (resource.contains("sunken", Qt::CaseInsensitive))
             t->bannerBevel = Theme::SUNKEN;
-        else if (resource.contains("raised", false))
+        else if (resource.contains("raised", Qt::CaseInsensitive))
             t->bannerBevel = Theme::RAISED;
     }
 
     resource = resourceValue("banner.gradient", "Banner.Gradient");
     if (!resource.isEmpty())
     {
-        if (resource.contains("solid", false))
+        if (resource.contains("solid", Qt::CaseInsensitive))
             t->bannerGrad = Theme::SOLID;
-        else if (resource.contains("horizontal", false))
+        else if (resource.contains("horizontal", Qt::CaseInsensitive))
             t->bannerGrad = Theme::HORIZONTAL;
-        else if (resource.contains("vertical", false))
+        else if (resource.contains("vertical", Qt::CaseInsensitive))
             t->bannerGrad = Theme::VERTICAL;
-        else if (resource.contains("diagonal", false))
+        else if (resource.contains("diagonal", Qt::CaseInsensitive))
             t->bannerGrad = Theme::DIAGONAL;
     }
 
     resource = resourceValue("banner.border", "Banner.Border");
     if (!resource.isEmpty())
     {
-        t->bannerBorder = resource.contains("true", false);
+        t->bannerBorder = resource.contains("true", Qt::CaseInsensitive);
     }
 
     resource = resourceValue("banner.borderColor", "Banner.BorderColor");
@@ -365,31 +365,31 @@ void ThemeEngine::loadTheme()
     resource = resourceValue("thumbnail.regular.bevel", "Thumbnail.Regular.Bevel");
     if (!resource.isEmpty())
     {
-        if (resource.contains("flat", false))
+        if (resource.contains("flat", Qt::CaseInsensitive))
             t->thumbRegBevel = Theme::FLAT;
-        else if (resource.contains("sunken", false))
+        else if (resource.contains("sunken", Qt::CaseInsensitive))
             t->thumbRegBevel = Theme::SUNKEN;
-        else if (resource.contains("raised", false))
+        else if (resource.contains("raised", Qt::CaseInsensitive))
             t->thumbRegBevel = Theme::RAISED;
     }
 
     resource = resourceValue("thumbnail.regular.gradient", "Thumbnail.Regular.Gradient");
     if (!resource.isEmpty())
     {
-        if (resource.contains("solid", false))
+        if (resource.contains("solid", Qt::CaseInsensitive))
             t->thumbRegGrad = Theme::SOLID;
-        else if (resource.contains("horizontal", false))
+        else if (resource.contains("horizontal", Qt::CaseInsensitive))
             t->thumbRegGrad = Theme::HORIZONTAL;
-        else if (resource.contains("vertical", false))
+        else if (resource.contains("vertical", Qt::CaseInsensitive))
             t->thumbRegGrad = Theme::VERTICAL;
-        else if (resource.contains("diagonal", false))
+        else if (resource.contains("diagonal", Qt::CaseInsensitive))
             t->thumbRegGrad = Theme::DIAGONAL;
     }
 
     resource = resourceValue("thumbnail.regular.border", "Thumbnail.Regular.Border");
     if (!resource.isEmpty())
     {
-        t->thumbRegBorder = resource.contains("true", false);
+        t->thumbRegBorder = resource.contains("true", Qt::CaseInsensitive);
     }
 
     resource = resourceValue("thumbnail.regular.borderColor", "Thumbnail.Regular.BorderColor");
@@ -409,31 +409,31 @@ void ThemeEngine::loadTheme()
     resource = resourceValue("thumbnail.selected.bevel", "Thumbnail.Selected.Bevel");
     if (!resource.isEmpty())
     {
-        if (resource.contains("flat", false))
+        if (resource.contains("flat", Qt::CaseInsensitive))
             t->thumbSelBevel = Theme::FLAT;
-        else if (resource.contains("sunken", false))
+        else if (resource.contains("sunken", Qt::CaseInsensitive))
             t->thumbSelBevel = Theme::SUNKEN;
-        else if (resource.contains("raised", false))
+        else if (resource.contains("raised", Qt::CaseInsensitive))
             t->thumbSelBevel = Theme::RAISED;
     }
 
     resource = resourceValue("thumbnail.selected.gradient", "Thumbnail.Selected.Gradient");
     if (!resource.isEmpty())
     {
-        if (resource.contains("solid", false))
+        if (resource.contains("solid", Qt::CaseInsensitive))
             t->thumbSelGrad = Theme::SOLID;
-        else if (resource.contains("horizontal", false))
+        else if (resource.contains("horizontal", Qt::CaseInsensitive))
             t->thumbSelGrad = Theme::HORIZONTAL;
-        else if (resource.contains("vertical", false))
+        else if (resource.contains("vertical", Qt::CaseInsensitive))
             t->thumbSelGrad = Theme::VERTICAL;
-        else if (resource.contains("diagonal", false))
+        else if (resource.contains("diagonal", Qt::CaseInsensitive))
             t->thumbSelGrad = Theme::DIAGONAL;
     }
     
     resource = resourceValue("thumbnail.selected.border", "Thumbnail.Selected.Border");
     if (!resource.isEmpty())
     {
-        t->thumbSelBorder = resource.contains("true", false);
+        t->thumbSelBorder = resource.contains("true", Qt::CaseInsensitive);
     }
 
     resource = resourceValue("thumbnail.selected.borderColor", "Thumbnail.Selected.BorderColor");
@@ -455,31 +455,31 @@ void ThemeEngine::loadTheme()
     resource = resourceValue("listview.regular.bevel", "Listview.Regular.Bevel");
     if (!resource.isEmpty())
     {
-        if (resource.contains("flat", false))
+        if (resource.contains("flat", Qt::CaseInsensitive))
             t->listRegBevel = Theme::FLAT;
-        else if (resource.contains("sunken", false))
+        else if (resource.contains("sunken", Qt::CaseInsensitive))
             t->listRegBevel = Theme::SUNKEN;
-        else if (resource.contains("raised", false))
+        else if (resource.contains("raised", Qt::CaseInsensitive))
             t->listRegBevel = Theme::RAISED;
     }
 
     resource = resourceValue("listview.regular.gradient", "Listview.Regular.Gradient");
     if (!resource.isEmpty())
     {
-        if (resource.contains("solid", false))
+        if (resource.contains("solid", Qt::CaseInsensitive))
             t->listRegGrad = Theme::SOLID;
-        else if (resource.contains("horizontal", false))
+        else if (resource.contains("horizontal", Qt::CaseInsensitive))
             t->listRegGrad = Theme::HORIZONTAL;
-        else if (resource.contains("vertical", false))
+        else if (resource.contains("vertical", Qt::CaseInsensitive))
             t->listRegGrad = Theme::VERTICAL;
-        else if (resource.contains("diagonal", false))
+        else if (resource.contains("diagonal", Qt::CaseInsensitive))
             t->listRegGrad = Theme::DIAGONAL;
     }
 
     resource = resourceValue("listview.regular.border", "Listview.Regular.Border");
     if (!resource.isEmpty())
     {
-        t->listRegBorder = resource.contains("true", false);
+        t->listRegBorder = resource.contains("true", Qt::CaseInsensitive);
     }
 
     resource = resourceValue("listview.regular.borderColor", "Listview.Regular.BorderColor");
@@ -499,31 +499,31 @@ void ThemeEngine::loadTheme()
     resource = resourceValue("listview.selected.bevel", "Listview.Selected.Bevel");
     if (!resource.isEmpty())
     {
-        if (resource.contains("flat", false))
+        if (resource.contains("flat", Qt::CaseInsensitive))
             t->listSelBevel = Theme::FLAT;
-        else if (resource.contains("sunken", false))
+        else if (resource.contains("sunken", Qt::CaseInsensitive))
             t->listSelBevel = Theme::SUNKEN;
-        else if (resource.contains("raised", false))
+        else if (resource.contains("raised", Qt::CaseInsensitive))
             t->listSelBevel = Theme::RAISED;
     }
 
     resource = resourceValue("listview.selected.gradient", "Listview.Selected.Gradient");
     if (!resource.isEmpty())
     {
-        if (resource.contains("solid", false))
+        if (resource.contains("solid", Qt::CaseInsensitive))
             t->listSelGrad = Theme::SOLID;
-        else if (resource.contains("horizontal", false))
+        else if (resource.contains("horizontal", Qt::CaseInsensitive))
             t->listSelGrad = Theme::HORIZONTAL;
-        else if (resource.contains("vertical", false))
+        else if (resource.contains("vertical", Qt::CaseInsensitive))
             t->listSelGrad = Theme::VERTICAL;
-        else if (resource.contains("diagonal", false))
+        else if (resource.contains("diagonal", Qt::CaseInsensitive))
             t->listSelGrad = Theme::DIAGONAL;
     }
 
     resource = resourceValue("listview.selected.border", "Listview.Selected.Border");
     if (!resource.isEmpty())
     {
-        t->listSelBorder = resource.contains("true", false);
+        t->listSelBorder = resource.contains("true", Qt::CaseInsensitive);
     }
 
     resource = resourceValue("listview.selected.borderColor", "Listview.Selected.BorderColor");
@@ -540,7 +540,7 @@ QString ThemeEngine::resourceValue(const QString& name, const QString& altName)
         XrmValue value;
         char     *value_type;
 
-        XrmGetResource(d->db, name.ascii(), altName.ascii(), &value_type, &value);
+        XrmGetResource(d->db, name.toAscii(), altName.toAscii(), &value_type, &value);
         if (value.addr)
             return QString(value.addr);
     }
