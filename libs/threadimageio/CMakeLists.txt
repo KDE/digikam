@@ -1,24 +1,18 @@
 
 include_directories( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata
                      ${CMAKE_SOURCE_DIR}/digikam/libs/jpegutils
                      ${CMAKE_SOURCE_DIR}/digikam/digikam
-                     ${KDE4_INCLUDE_DIR}
-                     ${QT_INCLUDES}
                    )
 
-SET(libthreadimageio_STAT_SRCS loadingcache.cpp )
+SET(libthreadimageio_STAT_SRCS loadsavethread.cpp managedloadsavethread.cpp sharedloadsavethread.cpp
+                               loadingdescription.cpp loadingcache.cpp loadingcacheinterface.cpp
+                               loadsavetask.cpp
+                               previewloadthread.cpp previewtask.cpp
+)
 
 kde4_automoc(${libthreadimageio_STAT_SRCS})
-
-#loadsavethread.cpp
-#                               managedloadsavethread.cpp
-#                               sharedloadsavethread.cpp
-#                               previewloadthread.cpp
-#                               loadingdescription.cpp
-#                               loadsavetask.cpp
-#                               previewtask.cpp
-#                               loadingcacheinterface.cpp
 
 #TARGET_LINK_LIBRARIES(libdimg
 #                      libdmetadata

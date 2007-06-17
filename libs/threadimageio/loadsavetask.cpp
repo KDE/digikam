@@ -222,8 +222,9 @@ void SharedLoadingTask::execute()
         // If image is too large for cache, the initial copy is still available.
         bool usedInitialCopy = isCached;
         // dispatch image to all listeners, including this
-        for (LoadingProcessListener *l = m_listeners.first(); l; l = m_listeners.next())
+        for (int i=0; i<m_listeners.count(); i++)
         {
+            LoadingProcessListener *l = m_listeners[i];
             // This code sends a copy only when ReadWrite access is requested.
             // Otherwise, the image from the cache is sent.
             // As the image in the cache will be deleted from any thread, the explicit sharing
@@ -296,8 +297,9 @@ void SharedLoadingTask::progressInfo(const DImg *, float progress)
         LoadingCache *cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
 
-        for (LoadingProcessListener *l = m_listeners.first(); l; l = m_listeners.next())
+        for (int i=0; i<m_listeners.size(); i++)
         {
+            LoadingProcessListener *l = m_listeners[i];
             if (l->querySendNotifyEvent())
                 QApplication::postEvent(l->eventReceiver(), new LoadingProgressEvent(m_loadingDescription, progress));
         }
@@ -347,12 +349,12 @@ QString SharedLoadingTask::cacheKey()
 
 void SharedLoadingTask::addListener(LoadingProcessListener *listener)
 {
-    m_listeners.append(listener);
+    m_listeners << listener;
 }
 
 void SharedLoadingTask::removeListener(LoadingProcessListener *listener)
 {
-    m_listeners.remove(listener);
+    m_listeners.removeAll(listener);
 }
 
 void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess *process, LoadingDescription description)
@@ -369,8 +371,9 @@ void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess *process, Loading
         !description.isReducedVersion()
        )
     {
-        for (LoadingProcessListener *l = m_listeners.first(); l; l = m_listeners.next())
+        for (int i=0; i<m_listeners.size(); i++)
         {
+            LoadingProcessListener *l = m_listeners[i];
             QApplication::postEvent(l->eventReceiver(), new MoreCompleteLoadingAvailableEvent(m_loadingDescription, description));
         }
     }

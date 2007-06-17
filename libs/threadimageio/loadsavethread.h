@@ -27,14 +27,12 @@
 
 // Qt includes.
 
-#include <qthread.h>
-#include <qobject.h>
-#include <qmutex.h>
-#include <q3ptrlist.h>
-#include <qdatetime.h>
-#include <qwaitcondition.h>
-//Added by qt3to4:
-#include <QCustomEvent>
+#include <QThread>
+#include <QMutex>
+#include <QList>
+#include <QDateTime>
+#include <QWaitCondition>
+#include <QEvent>
 
 // Digikam includes.
 
@@ -48,7 +46,7 @@ namespace Digikam
 class LoadSaveThreadPriv;
 class LoadSaveTask;
 
-class DIGIKAM_EXPORT LoadSaveThread : public QObject, public QThread
+class DIGIKAM_EXPORT LoadSaveThread : public QThread
 {
 
     Q_OBJECT
@@ -162,13 +160,13 @@ public:
 protected:
 
     virtual void run();
-    virtual void customEvent(QCustomEvent *event);
+    virtual void customEvent(QEvent *event);
 
     QMutex               m_mutex;
 
     QWaitCondition       m_condVar;
 
-    Q3PtrList<LoadSaveTask> m_todo;
+    QList<LoadSaveTask*> m_todo;
 
     LoadSaveTask        *m_currentTask;
 

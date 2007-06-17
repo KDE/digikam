@@ -90,8 +90,9 @@ LoadingTask *ManagedLoadSaveThread::findExistingTask(const LoadingDescription &l
                 return loadingTask;
         }
     }
-    for (LoadSaveTask *task = m_todo.first(); task; task = m_todo.next())
+    for (int i=0; i < m_todo.size(); i++)
     {
+        LoadSaveTask *task = m_todo[i];
         if (task->type() == LoadSaveTask::TaskTypeLoading)
         {
             loadingTask = (LoadingTask *)task;
@@ -136,13 +137,13 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
             //DDebug() << "LoadingPolicyFirstRemovePrevious, Existing task " << existingTask <<
              //", m_currentTask " << m_currentTask << ", loadingTask " << loadingTask << endl;
             // remove all loading tasks
-            for (LoadSaveTask *task = m_todo.first(); task; task = m_todo.next())
+            for (int i=0; i < m_todo.size(); i++)
             {
+                LoadSaveTask *task = m_todo[i];
                 if (task != existingTask && checkLoadingTask(task, LoadingTaskFilterAll))
                 {
                     //DDebug() << "Removing task " << task << " from list" << endl;
-                    m_todo.remove();
-                    m_todo.prev();
+                    delete m_todo.takeAt(i--);
                 }
             }
             // append new, exclusive loading task
@@ -188,9 +189,9 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
                 break;
             //DDebug() << "LoadingPolicyAppend, Existing task " << existingTask << ", m_currentTask " << m_currentTask << endl;
             // append new loading task, put it in front of preloading tasks
-            for (uint i = 0; i<m_todo.count(); i++)
+            for (int i = 0; i<m_todo.count(); i++)
             {
-                LoadSaveTask *task = m_todo.at(i);
+                LoadSaveTask *task = m_todo[i];
                 if ( (loadingTask = checkLoadingTask(task, LoadingTaskFilterPreloading)) )
                 {
                     m_todo.insert(i, createLoadingTask(description, false, loadingMode, accessMode));
@@ -231,12 +232,12 @@ void ManagedLoadSaveThread::loadPreview(LoadingDescription description)
             loadingTask->setStatus(LoadingTask::LoadingTaskStatusStopping);
     }
     // remove all loading tasks
-    for (LoadSaveTask *task = m_todo.first(); task; task = m_todo.next())
+    for (int i=0; i < m_todo.size(); i++)
     {
+        LoadSaveTask *task = m_todo[i];
         if (task != existingTask && checkLoadingTask(task, LoadingTaskFilterAll))
         {
-            m_todo.remove();
-            m_todo.prev();
+            delete m_todo.takeAt(i--);
         }
     }
     //DDebug()<<"loadPreview for " << description.filePath << " existingTask " << existingTask << " currentTask " << m_currentTask << endl;
@@ -288,15 +289,15 @@ void ManagedLoadSaveThread::stopSaving(const QString& filePath)
     }
 
     // remove relevant tasks from list
-    for (LoadSaveTask *task = m_todo.first(); task; task = m_todo.next())
+    for (int i=0; i < m_todo.size(); i++)
     {
+        LoadSaveTask *task = m_todo[i];
         if (task->type() ==  LoadSaveTask::TaskTypeSaving)
         {
             SavingTask *savingTask = (SavingTask *)m_currentTask;
             if (filePath.isNull() || savingTask->filePath() == filePath)
             {
-                m_todo.remove();
-                m_todo.prev();
+                delete m_todo.takeAt(i--);
             }
         }
     }
@@ -317,14 +318,14 @@ void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription &descrip
     }
 
     // remove relevant tasks from list
-    for (LoadSaveTask *task = m_todo.first(); task; task = m_todo.next())
+    for (int i=0; i < m_todo.size(); i++)
     {
+        LoadSaveTask *task = m_todo[i];
         if ( (loadingTask = checkLoadingTask(task, filter)) )
         {
             if (description.filePath.isNull() || loadingTask->loadingDescription() == description)
             {
-                m_todo.remove();
-                m_todo.prev();
+                delete m_todo.takeAt(i--);
             }
         }
     }
@@ -342,10 +343,10 @@ void ManagedLoadSaveThread::save(DImg &image, const QString& filePath, const QSt
         load(loadingTask->filePath(), LoadingPolicyPreload);
     }
     // append new loading task, put it in front of preloading tasks
-    uint i;
+    int i;
     for (i = 0; i<m_todo.count(); i++)
     {
-        LoadSaveTask *task = m_todo.at(i);
+        LoadSaveTask *task = m_todo[i];
         if ( (loadingTask = checkLoadingTask(task, LoadingTaskFilterPreloading)) )
             break;
     }

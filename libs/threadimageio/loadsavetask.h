@@ -28,10 +28,8 @@
 
 // Qt includes.
 
-#include <qevent.h>
-//Added by qt3to4:
-#include <QCustomEvent>
-#include <Q3PtrList>
+#include <QList>
+#include <QEvent>
 
 // Local includes.
 
@@ -71,14 +69,14 @@ protected:
 
 //---------------------------------------------------------------------------------------------------
 
-class NotifyEvent : public QCustomEvent
+class NotifyEvent : public QEvent
 {
 public:
 
     static QEvent::Type notifyEventId()
         { return QEvent::User; };
 
-    NotifyEvent() : QCustomEvent(notifyEventId()) {};
+    NotifyEvent() : QEvent(notifyEventId()) {};
 
     virtual void notify(LoadSaveThread *thread) = 0;
 };
@@ -295,7 +293,7 @@ protected:
     LoadSaveThread::AccessMode m_accessMode;
     bool m_completed;
     LoadingProcess *m_usedProcess;
-    Q3PtrList<LoadingProcessListener> m_listeners;
+    QList<LoadingProcessListener*> m_listeners;
 };
 
 //---------------------------------------------------------------------------------------------------

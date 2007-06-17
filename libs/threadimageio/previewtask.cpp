@@ -28,10 +28,10 @@
 
 // Qt includes
 
-#include <qapplication.h>
-#include <qimage.h>
-#include <qvariant.h>
-#include <qmatrix.h>
+#include <QApplication>
+#include <QImage>
+#include <QVariant>
+#include <QMatrix>
 
 // LibKDcraw includes.
 
@@ -161,7 +161,7 @@ void PreviewLoadingTask::execute()
         // convert from QImage
         img = DImg(qimage);
         // free memory
-        qimage.reset();
+        qimage = QImage();
     }
 
     if (img.isNull())
@@ -177,7 +177,7 @@ void PreviewLoadingTask::execute()
     QSize scaledSize = img.size();
     if (needToScale(scaledSize, size))
     {
-        scaledSize.scale(size, size, QSize::ScaleMin);
+        scaledSize.scale(size, size, Qt::KeepAspectRatio);
         //qimage = FastScale::fastScaleQImage(qimage, scaledSize.width(), scaledSize.height());
         //qimage = qimage.smoothScale(scaledSize);
         //TODO
@@ -207,8 +207,9 @@ void PreviewLoadingTask::execute()
         m_completed = true;
 
         // dispatch image to all listeners, including this
-        for (LoadingProcessListener *l = m_listeners.first(); l; l = m_listeners.next())
+        for (int i=0; i<m_listeners.count(); i++)
         {
+            LoadingProcessListener *l = m_listeners[i];
             QApplication::postEvent(l->eventReceiver(), new LoadedEvent(m_loadingDescription, img));
         }
 

@@ -24,7 +24,7 @@
 #ifndef LOADING_CACHE_INTERFACE_H
 #define LOADING_CACHE_INTERFACE_H
 
-#include <qstring.h>
+#include <QString>
 
 #include "digikam_export.h"
 #include "dimg.h"

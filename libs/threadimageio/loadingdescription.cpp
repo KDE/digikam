@@ -87,11 +87,11 @@ QStringList LoadingDescription::lookupCacheKeys() const
     QString suffix = rawDecodingSettings.sixteenBitsImage ? "-16" : "-8";
 
     QStringList keys;
-    keys.append(filePath + suffix);
+    keys << filePath + suffix;
     if (rawDecodingSettings.halfSizeColorImage)
-        keys.append(filePath + suffix + "-halfSizeColorImage");
+        keys << filePath + suffix + "-halfSizeColorImage";
     if (previewParameters.size)
-        keys.append(filePath + suffix + "-previewImage");
+        keys << filePath + suffix + "-previewImage";
     return keys;
 }
 
@@ -138,12 +138,12 @@ bool LoadingDescription::equalsOrBetterThan(const LoadingDescription &other) con
 QStringList LoadingDescription::possibleCacheKeys(const QString &filePath)
 {
     QStringList keys;
-    keys.append(filePath + "-16");
-    keys.append(filePath + "-16-halfSizeColorImage");
-    keys.append(filePath + "-16-previewImage");
-    keys.append(filePath + "-8");
-    keys.append(filePath + "-8-halfSizeColorImage");
-    keys.append(filePath + "-8-previewImage");
+    keys << filePath + "-16";
+    keys << filePath + "-16-halfSizeColorImage";
+    keys << filePath + "-16-previewImage";
+    keys << filePath + "-8";
+    keys << filePath + "-8-halfSizeColorImage";
+    keys << filePath + "-8-previewImage";
     return keys;
 }
 

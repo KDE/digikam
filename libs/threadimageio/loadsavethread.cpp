@@ -30,8 +30,6 @@
 #include "managedloadsavethread.h"
 #include "sharedloadsavethread.h"
 #include "loadsavetask.h"
-//Added by qt3to4:
-#include <QCustomEvent>
 
 namespace Digikam
 {
@@ -83,14 +81,14 @@ LoadSaveThread::~LoadSaveThread()
 void LoadSaveThread::load(LoadingDescription description)
 {
     QMutexLocker lock(&m_mutex);
-    m_todo.append(new LoadingTask(this, description));
+    m_todo << new LoadingTask(this, description);
     m_condVar.wakeAll();
 }
 
 void LoadSaveThread::save(DImg &image, const QString& filePath, const QString &format)
 {
     QMutexLocker lock(&m_mutex);
-    m_todo.append(new SavingTask(this, image, filePath, format));
+    m_todo << new SavingTask(this, image, filePath, format);
     m_condVar.wakeAll();
 }
 
@@ -105,7 +103,7 @@ void LoadSaveThread::run()
                 delete d->lastTask;
                 d->lastTask = 0;
             }
-            m_currentTask = m_todo.getFirst();
+            m_currentTask = m_todo.first();
             if (m_currentTask)
             {
                 m_todo.removeFirst();
@@ -137,7 +135,7 @@ void LoadSaveThread::taskHasFinished()
     m_currentTask = 0;
 }
 
-void LoadSaveThread::customEvent(QCustomEvent *event)
+void LoadSaveThread::customEvent(QEvent *event)
 {
     if (event->type() == NotifyEvent::notifyEventId())
     {
@@ -201,7 +199,7 @@ bool LoadSaveThread::querySendNotifyEvent()
 bool LoadSaveThread::isShuttingDown()
 {
     // the condition is met after d->running is set to false in the destructor
-    return running() && !d->running;
+    return isRunning() && !d->running;
 }
 
 bool LoadSaveThread::exifRotate(DImg &image, const QString& filePath)
