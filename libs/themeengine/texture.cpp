@@ -164,8 +164,8 @@ QPixmap Texture::renderPixmap() const
         return d->pixmap;
 
     QPixmap pix(d->width+2, d->height+2);
-    bitBlt(&pix, 1, 1, &d->pixmap, 0, 0);
     QPainter p(&pix);
+    p.drawPixmap(1, 1, d->pixmap, 0, 0, d->pixmap.width(), d->pixmap.height());
     p.setPen(d->borderColor);
     p.drawRect(0, 0, d->width+2, d->height+2);
     p.end();
@@ -175,7 +175,7 @@ QPixmap Texture::renderPixmap() const
 
 void Texture::doSolid()
 {
-    d->pixmap.resize(d->width, d->height);
+    d->pixmap.scaled(d->width, d->height);
     QPainter p(&d->pixmap);
     p.fillRect(0, 0, d->width, d->height, d->color0);
     if (d->bevel == Theme::RAISED)
@@ -475,7 +475,7 @@ void Texture::buildImage()
 {
     unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
 
-    QImage image(d->width, d->height, 32);
+    QImage image(d->width, d->height, QImage::Format_ARGB32);
 
     unsigned int* bits = (unsigned int*) image.bits();
     
@@ -489,7 +489,7 @@ void Texture::buildImage()
         pb++;
     }
 
-    d->pixmap = QPixmap(image);
+    d->pixmap = QPixmap::fromImage(image);
 }
 
 }  // NameSpace Digikam
