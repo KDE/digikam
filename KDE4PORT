@@ -136,7 +136,7 @@ ORDER   DIRECTORIES                  ASSIGNED      STATUS      REMARK
         |-----hsl
         |-----ratiocrop
         |-----sharpnesseditor
-        |-------clapack              Gilles                    CMake port only
+        |-------clapack              Gilles        DONE        CMake port only
         |---distortionfx
         |---emboss
         |---filmgrain
