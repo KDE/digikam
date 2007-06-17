@@ -30,7 +30,7 @@
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 // Local includes.
 
@@ -43,7 +43,7 @@ namespace Digikam
 
 class ICCProfileInfoDlgPriv;
 
-class DIGIKAM_EXPORT ICCProfileInfoDlg : public KDialogBase
+class DIGIKAM_EXPORT ICCProfileInfoDlg : public KDialog
 {
 
 public:

@@ -1,45 +1,83 @@
-/* ============================================================
- *
- * This file is a part of digiKam project
- * http://www.digikam.org
- *
- * Date        : 2007-31-01
- * Description : gcc export extension support
- * 
- * Copyright (c) 2005 Laurent Montel <montel@kde.org>
- *
- * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
- * Public License as published by the Free Software Foundation;
- * either version 2, or (at your option)
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * ============================================================ */
+/*  This file is part of the KDE project
+    Copyright (C) 2007 David Faure <faure@kde.org>
 
-#ifndef _DIGIKAM_EXPORT_H
-#define _DIGIKAM_EXPORT_H
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
+*/
+
+#ifndef DIGIKAM_EXPORT_H
+#define DIGIKAM_EXPORT_H
+
+/* needed for KDE_EXPORT and KDE_IMPORT macros */
+#include <kdemacros.h>
+
+#ifndef DIGIKAM_EXPORT
+# if defined(MAKE_DIGIKAM_LIB)
+   /* We are building this library */ 
+#  define DIGIKAM_EXPORT KDE_EXPORT
+# else
+   /* We are using this library */ 
+#  define DIGIKAM_EXPORT KDE_IMPORT
+# endif
 #endif
 
-#ifdef __KDE_HAVE_GCC_VISIBILITY
-#define DIGIKAM_EXPORT __attribute__ ((visibility("default")))
-#define DIGIKAMIMAGEPLUGINS_EXPORT DIGIKAM_EXPORT
-#define DIGIKAMIMAGEEDITOR_EXPORT  DIGIKAM_EXPORT
-#define DIGIKAMIMAGEFILTERS_EXPORT DIGIKAM_EXPORT
-#define DIGIKAMIMAGEWIDGET_EXPORT  DIGIKAM_EXPORT
-#else
-#define DIGIKAM_EXPORT
-#define DIGIKAMIMAGEPLUGINS_EXPORT 
-#define DIGIKAMIMAGEEDITOR_EXPORT 
-#define DIGIKAMIMAGEFILTERS_EXPORT
-#define DIGIKAMIMAGEWIDGET_EXPORT
-#endif
-#endif /* _DIGIKAM_EXPORT_H */
 
+#ifndef DIGIKAMIMAGEPLUGINS_EXPORT
+# if defined(MAKE_DIGIKAMIMAGEPLUGINS_LIB)
+   /* We are building this library */
+#  define DIGIKAMIMAGEPLUGINS_EXPORT KDE_EXPORT
+# else
+   /* We are using this library */
+#  define DIGIKAMIMAGEPLUGINS_EXPORT KDE_IMPORT
+# endif
+#endif
+
+
+#ifndef DIGIKAMIMAGEEDITOR_EXPORT
+# if defined(MAKE_DIGIKAMIMAGEEDITOR_LIB)
+   /* We are building this library */
+#  define DIGIKAMIMAGEEDITOR_EXPORT KDE_EXPORT
+# else
+   /* We are using this library */
+#  define DIGIKAMIMAGEEDITOR_EXPORT KDE_IMPORT
+# endif
+#endif
+
+#ifndef DIGIKAMIMAGEFILTERS_EXPORT
+# if defined(MAKE_DIGIKAMIMAGEFILTERS_LIB)
+   /* We are building this library */
+#  define DIGIKAMIMAGEFILTERS_EXPORT KDE_EXPORT
+# else
+   /* We are using this library */
+#  define DIGIKAMIMAGEFILTERS_EXPORT KDE_IMPORT
+# endif
+#endif
+
+#ifndef DIGIKAMIMAGEWIDGET_EXPORT
+# if defined(MAKE_DIGIKAMIMAGEWIDGET_LIB)
+   /* We are building this library */
+#  define DIGIKAMIMAGEWIDGET_EXPORT KDE_EXPORT
+# else
+   /* We are using this library */
+#  define DIGIKAMIMAGEWIDGET_EXPORT KDE_IMPORT
+# endif
+#endif
+
+
+# ifndef DIGIKAM_EXPORT_DEPRECATED
+#  define DIGIKAM_EXPORT_DEPRECATED KDE_DEPRECATED DIGIKAM_EXPORT
+# endif
+
+#endif

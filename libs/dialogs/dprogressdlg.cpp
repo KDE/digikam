@@ -131,13 +131,13 @@ void DProgressDlg::slotCancel()
 
     if (d->allowCancel)
     {
-        KDialogBase::slotCancel();
+        KDialog::slotCancel();
     }
 }
 
 void DProgressDlg::setButtonText(const QString &text)
 {
-    KDialogBase::setButtonText(Cancel, text);
+    KDialog::setButtonText(Cancel, text);
 }
 
 void DProgressDlg::addedAction(const QPixmap& pix, const QString &text)
