@@ -29,10 +29,10 @@
 
 #define MINRANGE 0
 
-// Fibanocci irrationel Golden Number.
-#define PHI      1.618033988
+// Golden number (1+sqrt(5))/2
+#define PHI      1.61803398874989479
 // 1/PHI
-#define INVPHI   0.61803398903633
+#define INVPHI   0.61803398874989479
 
 // C++ includes.
 
@@ -862,43 +862,53 @@ void ImageSelectionWidget::updatePixmap(void)
             if (d->flipHorGoldenGuide)
                 p.scale(-1, 1);
 
-            // Flip verical.
+            // Flip vertical.
             if (d->flipVerGoldenGuide)
                 p.scale(1, -1);
 
             int w = d->localRegionSelection.width();
             int h = d->localRegionSelection.height();
 
-            QRect R1(-w/2, -h/2, 
-                     (int)(w/PHI), h);
-            QRect R2((int)(w*(INVPHI - 0.5)), (int)(h*(0.5 - INVPHI)), 
-                     (int)(w*(1 - INVPHI)), (int)(h/PHI)); 
-            QRect R3((int)(w/2 - R2.width()/PHI), -h/2, 
-                     (int)(R2.width()/PHI), h - R2.height());
+            // lengths for the golden mean and half the sizes of the region:
+            int w_g = (int)(w*INVPHI);
+            int h_g = (int)(h*INVPHI);
+            int w_2 = w/2;
+            int h_2 = h/2;
+
+            QRect R1(-w_2, -h_2, w_g, h);
+            // w - 2*w_2 corrects for one-pixel difference
+            // so that R2.right() is really at the right end of the region
+            QRect R2(w_g-w_2, h_2-h_g, w-w_g+1-(w - 2*w_2), h_g); 
+
+            QRect R3((int)(w_2 - R2.width()*INVPHI), -h_2, 
+                     (int)(R2.width()*INVPHI), h - R2.height());
             QRect R4(R2.x(), R1.y(), R3.x() - R2.x(), 
-                     (int)(R3.height()/PHI));
-            QRect R5(R4.x(), R4.bottom(), (int)(R4.width()/PHI), 
+                     (int)(R3.height()*INVPHI));
+            QRect R5(R4.x(), R4.bottom(), (int)(R4.width()*INVPHI), 
                      R3.height() - R4.height());
-            QRect R6(R5.x() + R5.width(), R5.bottom() - (int)(R5.height()/PHI), 
-                     R3.x() - R5.right(), (int)(R5.height()/PHI));
-            QRect R7(R6.right() - (int)(R6.width()/PHI), R4.bottom(), 
-                     (int)(R6.width()/PHI), R5.height() - R6.height());
+            QRect R6(R5.x() + R5.width(), R5.bottom() - (int)(R5.height()*INVPHI), 
+                     R3.x() - R5.right(), (int)(R5.height()*INVPHI));
+            QRect R7(R6.right() - (int)(R6.width()*INVPHI), R4.bottom(), 
+                     (int)(R6.width()*INVPHI), R5.height() - R6.height());
 
             p.setPen(QPen(Qt::white, d->guideSize, Qt::SolidLine));
 
             // Drawing Golden sections.
             if (d->drawGoldenSection)
             {
+               // horizontal lines:
                p.drawLine( R1.left(), R2.top(),
                            R2.right(), R2.top());
 
                p.drawLine( R1.left(), R1.top() + R2.height(),
                            R2.right(), R1.top() + R2.height());
 
-               p.drawLine( R2.right() - R1.width(), R1.top(),
-                           R2.right() - R1.width(), R1.bottom() );
+               // vertical lines:
+               p.drawLine( R1.right(), R1.top(),
+                           R1.right(), R1.bottom() );
 
-               p.drawLine( R1.topRight(), R1.bottomRight() );
+               p.drawLine( R1.left()+R2.width(), R1.top(),
+                           R1.left()+R2.width(), R1.bottom() );               
             }
 
             // Drawing Golden triangle guides.
@@ -970,16 +980,19 @@ void ImageSelectionWidget::updatePixmap(void)
             // Drawing Golden sections.
             if (d->drawGoldenSection)
             {
+               // horizontal lines:
                p.drawLine( R1.left(), R2.top(),
                            R2.right(), R2.top());
 
                p.drawLine( R1.left(), R1.top() + R2.height(),
                            R2.right(), R1.top() + R2.height());
 
-               p.drawLine( R2.right() - R1.width(), R1.top(),
-                           R2.right() - R1.width(), R1.bottom() );
+               // vertical lines:
+               p.drawLine( R1.right(), R1.top(),
+                           R1.right(), R1.bottom() );
 
-               p.drawLine( R1.topRight(), R1.bottomRight() );
+               p.drawLine( R1.left()+R2.width(), R1.top(),
+                           R1.left()+R2.width(), R1.bottom() );               
             }
 
             // Drawing Golden triangle guides.
