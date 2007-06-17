@@ -37,19 +37,20 @@
 
 // Qt Includes.
 
-#include <q3cstring.h>
-#include <qstring.h>
-#include <qimage.h>
-#include <qdatastream.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qdir.h>
-#include <qmatrix.h>
-#include <qregexp.h>
-#include <qapplication.h>
+#include <QByteArray>
+#include <QString>
+#include <QImage>
+#include <QDataStream>
+#include <QFile>
+#include <QFileInfo>
+#include <QDir>
+#include <QMatrix>
+#include <QRegExp>
+#include <QApplication>
 
 // KDE includes.
 
+#include <k3process.h>
 #include <kdebug.h>
 #include <kurl.h>
 #include <kcomponentdata.h>
@@ -62,7 +63,6 @@
 #include <ktrader.h>
 #include <klibloader.h>
 #include <kmimetype.h>
-#include <k3process.h>
 #include <kio/global.h>
 #include <kio/thumbcreator.h>
 #include <kfilemetainfo.h>
@@ -125,7 +125,7 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
     }
 
     // generate the thumbnail path
-    QString uri = "file://" + QDir::cleanPath(url.path(-1));
+    QString uri = "file://" + QDir::cleanPath(url.path(KUrl::RemoveTrailingSlash));
     KMD5 md5( QFile::encodeName(uri) );
     QString thumbPath = (cachedSize_ == 128) ? smallThumbPath_ : bigThumbPath_;
     thumbPath += QFile::encodeName( md5.hexDigest() ) + ".png";
@@ -135,7 +135,7 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
 
     // stat the original file
     struct stat st;
-    if (::stat(QFile::encodeName(url.path(-1)), &st) != 0)
+    if (::stat(QFile::encodeName(url.path(KUrl::RemoveTrailingSlash)), &st) != 0)
     {
         error(KIO::ERR_INTERNAL, i18n("File does not exist"));
         return;
@@ -182,17 +182,17 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
         }
 
         if (qMax(img.width(),img.height()) != cachedSize_)
-            img = img.smoothScale(cachedSize_, cachedSize_, QImage::ScaleMin);
+            img = img.scaled(cachedSize_, cachedSize_, Qt::KeepAspectRatio);
 
-        if (img.depth() != 32)
-            img = img.convertDepth(32);
+        if (img.format() != QImage::Format_ARGB32)
+            img = img.convertToFormat(QImage::Format_ARGB32);
 
         if (exif)
             exifRotate(url.path(), img);
 
-        img.setText(QString("Thumb::URI").latin1(),   0, uri);
-        img.setText(QString("Thumb::MTime").latin1(), 0, QString::number(st.st_mtime));
-        img.setText(QString("Software").latin1(),     0, QString(DigiKamFingerPrint));
+        img.setText(QString("Thumb::URI").toLatin1(),   0, uri);
+        img.setText(QString("Thumb::MTime").toLatin1(), 0, QString::number(st.st_mtime));
+        img.setText(QString("Software").toLatin1(),     0, QString(DigiKamFingerPrint));
 
         KTempFile temp(thumbPath + "-digikam-", ".png");
         if (temp.status() == 0)
@@ -203,7 +203,7 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
         }
     }
 
-    img = img.smoothScale(size, size, QImage::ScaleMin);
+    img = img.scaled(size, size, Qt::KeepAspectRatio);
 
     if (img.isNull())
     {
@@ -212,7 +212,7 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
     }
 
     QByteArray imgData;
-    QDataStream stream( imgData, QIODevice::WriteOnly );
+    QDataStream stream(imgData);
 
     QString shmid = metaData("shmid");
 
@@ -239,7 +239,7 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
             return;
         }
 
-	// NOTE: KDE4PORT: Qt4::QImage API has change. We will use "format" instead "depth".
+	    // NOTE: KDE4PORT: Qt4::QImage API has change. We will use "format" instead "depth".
         stream << img.width() << img.height() << (int)img.format();
         memcpy(shmaddr, img.bits(), img.numBytes());
         shmdt((char*)shmaddr);
@@ -265,7 +265,7 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
     }
         
     // Else, use the right way depending of image file extension.
-    QString ext = fileInfo.extension(false).upper();
+    QString ext = fileInfo.suffix().toUpper();
     QString rawFilesExt(raw_file_extentions);
 
     if (!ext.isEmpty())
@@ -276,7 +276,7 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
             return (loadDImg(image, path));
         else if (ext == QString("TIFF") || ext == QString("TIF"))
             return (loadDImg(image, path));
-        else if (rawFilesExt.upper().contains(ext))
+        else if (rawFilesExt.toUpper().contains(ext))
             return (KDcrawIface::KDcraw::loadDcrawPreview(image, path));
     }
 
@@ -339,7 +339,7 @@ void kio_digikamthumbnailProtocol::exifRotate(const QString& filePath, QImage& t
     }
 
     // transform accordingly
-    thumb = thumb.xForm( matrix );
+    thumb = thumb.transformed( matrix );
 }
 
 QImage kio_digikamthumbnailProtocol::loadPNG(const QString& path)
@@ -358,7 +358,7 @@ QImage kio_digikamthumbnailProtocol::loadPNG(const QString& path)
 
     QImage qimage;
 
-    f = fopen(path.latin1(), "rb");
+    f = fopen(path.toLatin1(), "rb");
     if (!f)
         return qimage;
 
@@ -403,7 +403,7 @@ QImage kio_digikamthumbnailProtocol::loadPNG(const QString& path)
     w = w32;
     h = h32;
 
-    qimage.create(w, h, 32);
+    qimage = QImage(w, h, QImage::Format_ARGB32);
 
     if (color_type == PNG_COLOR_TYPE_PALETTE)
         png_set_expand(png_ptr);
@@ -426,12 +426,12 @@ QImage kio_digikamthumbnailProtocol::loadPNG(const QString& path)
     if (has_alpha)
         png_set_expand(png_ptr);
 
-    if (QImage::systemByteOrder() == QImage::LittleEndian)
+    if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
     {
         png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
         png_set_bgr(png_ptr);
     }
-    else
+    else                                                         // PPC
     {
         png_set_swap_alpha(png_ptr);
         png_set_filler(png_ptr, 0xff, PNG_FILLER_BEFORE);
@@ -507,14 +507,12 @@ bool kio_digikamthumbnailProtocol::loadDImg(QImage& image, const QString& path)
     if ( qMax(org_width_, org_height_) != cachedSize_ )
     {
         QSize sz(dimg_im.width(), dimg_im.height());
-        sz.scale(cachedSize_, cachedSize_, QSize::ScaleMin);
-        image.scale(sz.width(), sz.height());
+        sz.scale(cachedSize_, cachedSize_, Qt::KeepAspectRatio);
+        image.scaled(sz.width(), sz.height());
     }
 
     new_width_  = image.width();
     new_height_ = image.height();
-
-    image.setAlphaBuffer(true) ;
 
     return true;
 }
@@ -529,7 +527,7 @@ bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QStr
     if (!app_)
         app_ = new QApplication(argc_, argv_);
 
-    QString mimeType = KMimeType::findByURL(path)->name();
+    QString mimeType = KMimeType::findByUrl(path)->name();
     if (mimeType.isEmpty())
     {
         kDebug() << "Mimetype not found" << endl;
