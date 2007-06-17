@@ -3,7 +3,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}
 
 ADD_DEFINITIONS("-w")
 
-SET(libsqlite_STAT_SRCS
+SET(libsqlite2_STAT_SRCS
     attach.c
     auth.c
     btree.c
@@ -38,6 +38,6 @@ SET(libsqlite_STAT_SRCS
     where.c
    )
 
-TARGET_LINK_LIBRARIES(libsqlite ${LIBPTHREAD})
+TARGET_LINK_LIBRARIES(libsqlite2 ${LIBPTHREAD})
 
-KDE4_ADD_LIBRARY(libsqlite STATIC ${libsqlite_STAT_SRCS})
+KDE4_ADD_LIBRARY(libsqlite2 STATIC ${libsqlite2_STAT_SRCS})
