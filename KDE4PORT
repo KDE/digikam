@@ -27,7 +27,7 @@ ORDER   DIRECTORIES                  ASSIGNED      STATUS      REMARK
         |---jpegutils                Gilles        DONE
         |---levels                   Gilles        DONE
         |---lprof                    Gilles        DONE        CMake port only
-        |---themeengine              Gilles
+        |---themeengine              Gilles        DONE
         |---threadimageio            Marcel        DONE
         |---thumbbar                 Gilles        DONE
         |---whitebalance             Gilles        DONE
