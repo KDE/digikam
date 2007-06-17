@@ -239,7 +239,8 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
             return;
         }
 
-        stream << img.width() << img.height() << img.depth();
+	// NOTE: KDE4PORT: Qt4::QImage API has change. We will use "format" instead "depth".
+        stream << img.width() << img.height() << (int)img.format();
         memcpy(shmaddr, img.bits(), img.numBytes());
         shmdt((char*)shmaddr);
     }
