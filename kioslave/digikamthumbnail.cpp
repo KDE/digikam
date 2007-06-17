@@ -59,7 +59,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kcodecs.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kservicetypetrader.h>
 #include <klibloader.h>
 #include <kmimetype.h>
@@ -194,11 +194,13 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
         img.setText(QString("Thumb::MTime").toLatin1(), 0, QString::number(st.st_mtime));
         img.setText(QString("Software").toLatin1(),     0, QString(DigiKamFingerPrint));
 
-        KTempFile temp(thumbPath + "-digikam-", ".png");
-        if (temp.status() == 0)
+        KTemporaryFile temp;
+        temp.setPrefix(thumbPath + "-digikam-");
+        temp.setSuffix(".png");
+        if (temp.open())
         {
-            img.save(temp.name(), "PNG", 0);
-            ::rename(QFile::encodeName(temp.name()),
+            img.save(temp.fileName(), "PNG", 0);
+            ::rename(QFile::encodeName(temp.fileName()),
                      QFile::encodeName(thumbPath));
         }
     }

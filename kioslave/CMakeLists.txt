@@ -17,7 +17,7 @@ KDE4_AUTOMOC(${kio_digikamthumbnail_PART_SRCS})
 
 KDE4_ADD_PLUGIN(kio_digikamthumbnail ${kio_digikamthumbnail_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kio_digikamthumbnail ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} ${KEXIV2_LIBRARIES} libjpegutils libdimg )
+TARGET_LINK_LIBRARIES(kio_digikamthumbnail ${KDE4_KIO_LIBS} ${KEXIV2_LIBRARIES} libjpegutils libdimg )
 
 
 # # digiKam Tags kio slave ###########################################################
