@@ -38,6 +38,7 @@ extern "C"
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qdatetime.h>
+#include <QPointer>
 
 // KDE includes.
 

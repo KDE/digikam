@@ -38,7 +38,7 @@
 // KDE includes.
 
 #include <klocale.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 #include <kapplication.h>
 #include <kdialogbase.h>
 #include <kiconloader.h>
@@ -77,22 +77,26 @@ public:
     
     K3ListView *actionsList;
    
-    KProgress *progress;
+    KProgressBar *progress;
 };
 
 DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
-            : KDialogBase(parent, 0, true, caption, Cancel)
+            : KDialog(parent)
 {
+    setCaption(caption);
+    setButton(Cancel);
+    setModal(true);
     d = new DProgressDlgPriv;
     
-    QFrame *page      = makeMainWidget();
+    QWidget *page      = new QWidget(this);
+    setMainWidget(page);
     Q3GridLayout* grid = new Q3GridLayout(page, 1, 1, 0, spacingHint());
     Q3VBoxLayout *vlay = new Q3VBoxLayout();
     d->actionsList    = new K3ListView(page);
     d->label          = new QLabel(page);
     d->title          = new QLabel(page);
     d->logo           = new QLabel(page);
-    d->progress       = new KProgress(page);
+    d->progress       = new KProgressBar(page);
     vlay->addWidget(d->logo);
     vlay->addWidget(d->progress);
     vlay->addWidget(d->title);
@@ -212,7 +216,7 @@ bool DProgressDlg::wasCancelled() const
     return d->cancelled;
 }
 
-KProgress *DProgressDlg::progressBar() const
+KProgressBar *DProgressDlg::progressBar() const
 {
     return d->progress;
 }
