@@ -36,7 +36,7 @@ public:
 
     virtual ~LoadingProcessListener() {}
     virtual bool querySendNotifyEvent() = 0;
-    virtual QObject *eventReceiver() = 0;
+    virtual LoadSaveNotifier *loadSaveNotifier() = 0;
     virtual LoadSaveThread::AccessMode accessMode() = 0;
 
 };

@@ -83,7 +83,7 @@ void PreviewLoadingTask::execute()
                 LoadSaveThread::exifRotate(img, m_loadingDescription.filePath);
             }
 
-            QApplication::postEvent(m_thread, new LoadedEvent(m_loadingDescription.filePath, img));
+            m_thread->imageLoaded(m_loadingDescription.filePath, img);
             return;
         }
         else
@@ -209,8 +209,7 @@ void PreviewLoadingTask::execute()
         // dispatch image to all listeners, including this
         for (int i=0; i<m_listeners.count(); i++)
         {
-            LoadingProcessListener *l = m_listeners[i];
-            QApplication::postEvent(l->eventReceiver(), new LoadedEvent(m_loadingDescription, img));
+            m_listeners[i]->loadSaveNotifier()->imageLoaded(m_loadingDescription, img);
         }
 
         // remove myself from list of listeners

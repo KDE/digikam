@@ -135,19 +135,58 @@ void LoadSaveThread::taskHasFinished()
     m_currentTask = 0;
 }
 
-void LoadSaveThread::customEvent(QEvent *event)
+void LoadSaveThread::imageStartedLoading(const LoadingDescription &loadingDescription)
 {
-    if (event->type() == NotifyEvent::notifyEventId())
+    notificationReceived();
+    emit signalImageStartedLoading(loadingDescription);
+}
+
+void LoadSaveThread::loadingProgress(const LoadingDescription &loadingDescription, float progress)
+{
+    notificationReceived();
+    emit signalLoadingProgress(loadingDescription, progress);
+}
+
+void LoadSaveThread::imageLoaded(const LoadingDescription &loadingDescription, const DImg& img)
+{
+    notificationReceived();
+    emit signalImageLoaded(loadingDescription, img);
+}
+
+void LoadSaveThread::moreCompleteLoadingAvailable(const LoadingDescription &oldLoadingDescription,
+                          const LoadingDescription &newLoadingDescription)
+{
+    notificationReceived();
+    emit signalMoreCompleteLoadingAvailable(oldLoadingDescription, newLoadingDescription);
+}
+
+void LoadSaveThread::imageStartedSaving(const QString& filePath)
+{
+    notificationReceived();
+    emit signalImageStartedSaving(filePath);
+}
+
+void LoadSaveThread::savingProgress(const QString& filePath, float progress)
+{
+    notificationReceived();
+    emit signalSavingProgress(filePath, progress);
+}
+
+void LoadSaveThread::imageSaved(const QString& filePath, bool success)
+{
+    notificationReceived();
+    emit signalImageSaved(filePath, success);
+}
+
+void LoadSaveThread::notificationReceived()
+{
+    switch (m_notificationPolicy)
     {
-        switch (m_notificationPolicy)
-        {
-            case NotificationPolicyDirect:
-                d->blockNotification = false;
-                break;
-            case NotificationPolicyTimeLimited:
-                break;
-        }
-        ((NotifyEvent *)event)->notify(this);
+        case NotificationPolicyDirect:
+            d->blockNotification = false;
+            break;
+        case NotificationPolicyTimeLimited:
+            break;
     }
 }
 

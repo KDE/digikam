@@ -39,50 +39,13 @@
 namespace Digikam
 {
 
-void LoadingProgressEvent::notify(LoadSaveThread *thread)
-{
-    thread->loadingProgress(m_loadingDescription, m_progress);
-}
-
-void SavingProgressEvent::notify(LoadSaveThread *thread)
-{
-    thread->savingProgress(m_filePath, m_progress);
-}
-
-void StartedLoadingEvent::notify(LoadSaveThread *thread)
-{
-    thread->imageStartedLoading(m_loadingDescription);
-}
-
-void StartedSavingEvent::notify(LoadSaveThread *thread)
-{
-    thread->imageStartedSaving(m_filePath);
-}
-
-void LoadedEvent::notify(LoadSaveThread *thread)
-{
-    thread->imageLoaded(m_loadingDescription, m_img);
-}
-
-void MoreCompleteLoadingAvailableEvent::notify(LoadSaveThread *thread)
-{
-    thread->moreCompleteLoadingAvailable(m_oldDescription, m_newDescription);
-}
-
-void SavedEvent::notify(LoadSaveThread *thread)
-{
-    thread->imageSaved(m_filePath, m_success);
-}
-
-//---------------------------------------------------------------------------------------------------
-
 void LoadingTask::execute()
 {
     if (m_loadingTaskStatus == LoadingTaskStatusStopping)
         return;
     DImg img(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
     m_thread->taskHasFinished();
-    QApplication::postEvent(m_thread, new LoadedEvent(m_loadingDescription.filePath, img));
+    m_thread->imageLoaded(m_loadingDescription.filePath, img);
 }
 
 LoadingTask::TaskType LoadingTask::type()
@@ -95,7 +58,7 @@ void LoadingTask::progressInfo(const DImg *, float progress)
     if (m_loadingTaskStatus == LoadingTaskStatusLoading)
     {
         if (m_thread->querySendNotifyEvent())
-            QApplication::postEvent(m_thread, new LoadingProgressEvent(m_loadingDescription.filePath, progress));
+            m_thread->loadingProgress(m_loadingDescription.filePath, progress);
     }
 }
 
@@ -126,7 +89,7 @@ void SharedLoadingTask::execute()
     if (m_loadingTaskStatus == LoadingTaskStatusStopping)
         return;
     // send StartedLoadingEvent from each single Task, not via LoadingProcess list
-    QApplication::postEvent(m_thread, new StartedLoadingEvent(m_loadingDescription.filePath));
+    m_thread->imageStartedLoading(m_loadingDescription.filePath);
 
     LoadingCache *cache = LoadingCache::cache();
     {
@@ -146,7 +109,7 @@ void SharedLoadingTask::execute()
             DImg img(*cachedImg);
             if (accessMode() == LoadSaveThread::AccessModeReadWrite)
                 img = img.copy();
-            QApplication::postEvent(m_thread, new LoadedEvent(m_loadingDescription.filePath, img));
+            m_thread->imageLoaded(m_loadingDescription.filePath, img);
             return;
         }
         else
@@ -258,7 +221,7 @@ void SharedLoadingTask::execute()
                     copy = img;
                     usedInitialCopy = true;
                 }
-                QApplication::postEvent(l->eventReceiver(), new LoadedEvent(m_loadingDescription, copy));
+                l->loadSaveNotifier()->imageLoaded(m_loadingDescription, copy);
             }
             else
             {
@@ -274,7 +237,7 @@ void SharedLoadingTask::execute()
                         usedInitialCopy = true;
                     }
                 }
-                QApplication::postEvent(l->eventReceiver(), new LoadedEvent(m_loadingDescription, readerCopy));
+                l->loadSaveNotifier()->imageLoaded(m_loadingDescription, readerCopy);
             }
         }
 
@@ -301,7 +264,7 @@ void SharedLoadingTask::progressInfo(const DImg *, float progress)
         {
             LoadingProcessListener *l = m_listeners[i];
             if (l->querySendNotifyEvent())
-                QApplication::postEvent(l->eventReceiver(), new LoadingProgressEvent(m_loadingDescription, progress));
+                l->loadSaveNotifier()->loadingProgress(m_loadingDescription, progress);
         }
     }
 }
@@ -373,8 +336,7 @@ void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess *process, Loading
     {
         for (int i=0; i<m_listeners.size(); i++)
         {
-            LoadingProcessListener *l = m_listeners[i];
-            QApplication::postEvent(l->eventReceiver(), new MoreCompleteLoadingAvailableEvent(m_loadingDescription, description));
+            m_listeners[i]->loadSaveNotifier()->moreCompleteLoadingAvailable(m_loadingDescription, description);
         }
     }
 }
@@ -384,7 +346,7 @@ bool SharedLoadingTask::querySendNotifyEvent()
     return m_thread->querySendNotifyEvent();
 }
 
-QObject *SharedLoadingTask::eventReceiver()
+LoadSaveNotifier *SharedLoadingTask::loadSaveNotifier()
 {
     return m_thread;
 }
@@ -398,9 +360,10 @@ LoadSaveThread::AccessMode SharedLoadingTask::accessMode()
 
 void SavingTask::execute()
 {
+    m_thread->imageStartedSaving(m_filePath);
     bool success = m_img.save(m_filePath, m_format, this);
     m_thread->taskHasFinished();
-    QApplication::postEvent(m_thread, new SavedEvent(m_filePath, success));
+    m_thread->imageSaved(m_filePath, success);
 };
 
 LoadingTask::TaskType SavingTask::type()
@@ -411,7 +374,7 @@ LoadingTask::TaskType SavingTask::type()
 void SavingTask::progressInfo(const DImg *, float progress)
 {
     if (m_thread->querySendNotifyEvent())
-        QApplication::postEvent(m_thread, new SavingProgressEvent(m_filePath, progress));
+        m_thread->savingProgress(m_filePath, progress);
 }
 
 bool SavingTask::continueQuery(const DImg *)

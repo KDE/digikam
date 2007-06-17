@@ -69,142 +69,6 @@ protected:
 
 //---------------------------------------------------------------------------------------------------
 
-class NotifyEvent : public QEvent
-{
-public:
-
-    static QEvent::Type notifyEventId()
-        { return QEvent::User; };
-
-    NotifyEvent() : QEvent(notifyEventId()) {};
-
-    virtual void notify(LoadSaveThread *thread) = 0;
-};
-
-//---------------------------------------------------------------------------------------------------
-
-class ProgressEvent : public NotifyEvent
-{
-public:
-
-    ProgressEvent(float progress)
-        : m_progress(progress)
-        {};
-
-protected:
-
-    float m_progress;
-};
-
-//---------------------------------------------------------------------------------------------------
-
-class LoadingProgressEvent : public ProgressEvent
-{
-public:
-
-    LoadingProgressEvent(const LoadingDescription &loadingDescription, float progress)
-        : ProgressEvent(progress),
-          m_loadingDescription(loadingDescription)
-        {};
-
-    virtual void notify(LoadSaveThread *thread);
-
-private:
-
-    LoadingDescription m_loadingDescription;
-};
-
-//---------------------------------------------------------------------------------------------------
-
-class SavingProgressEvent : public ProgressEvent
-{
-public:
-
-    SavingProgressEvent(const QString& filePath, float progress)
-        : ProgressEvent(progress),
-          m_filePath(filePath)
-        {};
-
-    virtual void notify(LoadSaveThread *thread);
-
-private:
-
-    QString m_filePath;
-};
-
-//---------------------------------------------------------------------------------------------------
-
-class StartedLoadingEvent : public NotifyEvent
-{
-public:
-
-    StartedLoadingEvent(const LoadingDescription &loadingDescription)
-        : m_loadingDescription(loadingDescription)
-        {};
-
-    virtual void notify(LoadSaveThread *thread);
-
-private:
-
-    LoadingDescription m_loadingDescription;
-};
-
-//---------------------------------------------------------------------------------------------------
-
-class StartedSavingEvent : public NotifyEvent
-{
-public:
-
-    StartedSavingEvent(const QString& filePath)
-    : m_filePath(filePath)
-    {};
-
-    virtual void notify(LoadSaveThread *thread);
-
-private:
-
-    QString m_filePath;
-};
-
-//---------------------------------------------------------------------------------------------------
-
-class LoadedEvent : public NotifyEvent
-{
-public:
-
-    LoadedEvent(const LoadingDescription &loadingDescription, DImg &img)
-        : m_loadingDescription(loadingDescription), m_img(img)
-        {};
-
-    virtual void notify(LoadSaveThread *thread);
-
-private:
-
-    LoadingDescription m_loadingDescription;
-    DImg    m_img;
-};
-
-//---------------------------------------------------------------------------------------------------
-
-class MoreCompleteLoadingAvailableEvent : public NotifyEvent
-{
-public:
-
-    MoreCompleteLoadingAvailableEvent(const LoadingDescription &oldLoadingDescription,
-                                      const LoadingDescription &newLoadingDescription)
-        : m_oldDescription(oldLoadingDescription), m_newDescription(newLoadingDescription)
-        {};
-
-    virtual void notify(LoadSaveThread *thread);
-
-private:
-
-    LoadingDescription m_oldDescription;
-    LoadingDescription m_newDescription;
-};
-
-//---------------------------------------------------------------------------------------------------
-
 class LoadingTask : public LoadSaveTask, public DImgLoaderObserver
 {
 public:
@@ -285,7 +149,7 @@ public:
     // LoadingProcessListener
 
     virtual bool querySendNotifyEvent();
-    virtual QObject *eventReceiver();
+    virtual LoadSaveNotifier *loadSaveNotifier();
     virtual LoadSaveThread::AccessMode accessMode();
 
 protected:
@@ -294,24 +158,6 @@ protected:
     bool m_completed;
     LoadingProcess *m_usedProcess;
     QList<LoadingProcessListener*> m_listeners;
-};
-
-//---------------------------------------------------------------------------------------------------
-
-class SavedEvent : public NotifyEvent
-{
-public:
-
-    SavedEvent(const QString &filePath, bool success)
-        : m_filePath(filePath), m_success(success)
-        {};
-
-    virtual void notify(LoadSaveThread *thread);
-
-private:
-
-    QString m_filePath;
-    bool m_success;
 };
 
 //---------------------------------------------------------------------------------------------------

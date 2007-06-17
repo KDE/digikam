@@ -46,7 +46,21 @@ namespace Digikam
 class LoadSaveThreadPriv;
 class LoadSaveTask;
 
-class DIGIKAM_EXPORT LoadSaveThread : public QThread
+class LoadSaveNotifier
+{
+public:
+    virtual ~LoadSaveNotifier() {};
+    virtual void imageStartedLoading(const LoadingDescription &loadingDescription);
+    virtual void loadingProgress(const LoadingDescription &loadingDescription, float progress);
+    virtual void imageLoaded(const LoadingDescription &loadingDescription, const DImg& img);
+    virtual void moreCompleteLoadingAvailable(const LoadingDescription &oldLoadingDescription,
+                                              const LoadingDescription &newLoadingDescription);
+    virtual void imageStartedSaving(const QString& filePath);
+    virtual void savingProgress(const QString& filePath, float progress);
+    virtual void imageSaved(const QString& filePath, bool success);
+};
+
+class DIGIKAM_EXPORT LoadSaveThread : public QThread, public LoadSaveNotifier
 {
 
     Q_OBJECT
@@ -102,6 +116,11 @@ public:
 
 signals:
 
+    /** All signals are delivered to the thread from where the LoadSaveThread object
+     *  has been created. This thread must use its event loop to get the signals.
+     *  You must connect to these signals with Qt::AutoConnection (default) or Qt::QueuedConnection.
+     */
+
     /** This signal is emitted when the loading process begins. */
     void signalImageStartedLoading(const LoadingDescription &loadingDescription);
     /**
@@ -132,27 +151,14 @@ signals:
 
 public:
 
-    void imageStartedLoading(const LoadingDescription &loadingDescription)
-            { emit signalImageStartedLoading(loadingDescription); };
-
-    void loadingProgress(const LoadingDescription &loadingDescription, float progress)
-            { emit signalLoadingProgress(loadingDescription, progress); };
-
-    void imageLoaded(const LoadingDescription &loadingDescription, const DImg& img)
-            { emit signalImageLoaded(loadingDescription, img); };
-
-    void moreCompleteLoadingAvailable(const LoadingDescription &oldLoadingDescription,
-                                      const LoadingDescription &newLoadingDescription)
-            { emit signalMoreCompleteLoadingAvailable(oldLoadingDescription, newLoadingDescription); }
-
-    void imageStartedSaving(const QString& filePath)
-            { emit signalImageStartedSaving(filePath); };
-
-    void savingProgress(const QString& filePath, float progress)
-            { emit signalSavingProgress(filePath, progress); };
-
-    void imageSaved(const QString& filePath, bool success)
-            { emit signalImageSaved(filePath, success); };
+    virtual void imageStartedLoading(const LoadingDescription &loadingDescription);
+    virtual void loadingProgress(const LoadingDescription &loadingDescription, float progress);
+    virtual void imageLoaded(const LoadingDescription &loadingDescription, const DImg& img);
+    virtual void moreCompleteLoadingAvailable(const LoadingDescription &oldLoadingDescription,
+                                      const LoadingDescription &newLoadingDescription);
+    virtual void imageStartedSaving(const QString& filePath);
+    virtual void savingProgress(const QString& filePath, float progress);
+    virtual void imageSaved(const QString& filePath, bool success);
 
     virtual bool querySendNotifyEvent();
     virtual void taskHasFinished();
@@ -160,7 +166,7 @@ public:
 protected:
 
     virtual void run();
-    virtual void customEvent(QEvent *event);
+    void notificationReceived();
 
     QMutex               m_mutex;
 

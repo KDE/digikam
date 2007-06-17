@@ -83,6 +83,9 @@ LoadingCache::LoadingCache()
 
     connect(this, SIGNAL(signalUpdateDirWatch()),
             this, SLOT(slotUpdateDirWatch()));
+
+    // good place to call it here as LoadingCache is a singleton
+    qRegisterMetaType<LoadingDescription>("LoadingDescription");
 }
 
 LoadingCache::~LoadingCache()
