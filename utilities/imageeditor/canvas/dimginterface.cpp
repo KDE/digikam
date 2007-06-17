@@ -548,21 +548,21 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
              << mimeType << ")" << endl;
 
     // JPEG file format.
-    if ( mimeType.upper() == QString("JPG") || mimeType.upper() == QString("JPEG") || 
-         mimeType.upper() == QString("JPE")) 
+    if ( mimeType.toUpper() == QString("JPG") || mimeType.toUpper() == QString("JPEG") || 
+         mimeType.toUpper() == QString("JPE")) 
        d->image.setAttribute("quality", iofileSettings->JPEGCompression);
 
     // PNG file format.
-    if ( mimeType.upper() == QString("PNG") ) 
+    if ( mimeType.toUpper() == QString("PNG") ) 
        d->image.setAttribute("quality", iofileSettings->PNGCompression);
 
     // TIFF file format.
-    if ( mimeType.upper() == QString("TIFF") || mimeType.upper() == QString("TIF") ) 
+    if ( mimeType.toUpper() == QString("TIFF") || mimeType.toUpper() == QString("TIF") ) 
        d->image.setAttribute("compress", iofileSettings->TIFFCompression);
 
     // JPEG 2000 file format.
-    if ( mimeType.upper() == QString("JP2") || mimeType.upper() == QString("JPX") || 
-         mimeType.upper() == QString("JPC") || mimeType.upper() == QString("PGX"))
+    if ( mimeType.toUpper() == QString("JP2") || mimeType.toUpper() == QString("JPX") || 
+         mimeType.toUpper() == QString("JPC") || mimeType.toUpper() == QString("PGX"))
     { 
         if (iofileSettings->JPEG2000LossLess)
             d->image.setAttribute("quality", 100);    // LossLess compression
@@ -587,8 +587,8 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     // will be found into Exiv2.
     // Note : There is no limitation with TIFF and PNG about IPTC byte array size.
 
-    if ( mimeType.upper() != QString("JPG") && mimeType.upper() != QString("JPEG") && 
-         mimeType.upper() != QString("JPE")) 
+    if ( mimeType.toUpper() != QString("JPG") && mimeType.toUpper() != QString("JPEG") && 
+         mimeType.toUpper() != QString("JPE")) 
         meta.setImagePreview(preview);
 
     // Update Exif thumbnail.

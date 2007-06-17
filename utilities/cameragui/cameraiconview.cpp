@@ -302,7 +302,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
             if (convertLossLessJpeg && !downloadName.isEmpty())
             {
                 QFileInfo fi(downloadName);
-                QString ext = fi.extension(false).upper();
+                QString ext = fi.extension(false).toUpper();
                 if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
                 {
                     downloadName.truncate(downloadName.length() - ext.length());
@@ -330,7 +330,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
             if (convertLossLessJpeg)
             {
                 QFileInfo fi(downloadName);
-                QString ext = fi.extension(false).upper();
+                QString ext = fi.extension(false).toUpper();
                 if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
                 {
                     downloadName.truncate(downloadName.length() - ext.length());
@@ -380,7 +380,7 @@ QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase,
     {
         case(RenameCustomizer::UPPER):
         {
-            dname = itemInfo->name.upper();
+            dname = itemInfo->name.toUpper();
             break;
         }
         case(RenameCustomizer::LOWER):

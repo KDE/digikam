@@ -967,13 +967,13 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
 
     QString currentFileExtension = item->imageInfo()->name().section( '.', -1 );
     QString imagefilter = settings->getImageFileFilter().lower() +
-                          settings->getImageFileFilter().upper();
+                          settings->getImageFileFilter().toUpper();
 
     if (KDcrawIface::DcrawBinary::componentData().versionIsRight())
     {
         // add raw files only if dcraw is available
         imagefilter += settings->getRawFileFilter().lower() +
-                       settings->getRawFileFilter().upper();
+                       settings->getRawFileFilter().toUpper();
     }
 
     // If the current item is not an image file.

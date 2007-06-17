@@ -147,9 +147,9 @@ void AlbumWidgetStack::setPreviewItem(ImageInfo* info, ImageInfo *previous, Imag
         AlbumSettings *settings      = AlbumSettings::componentData();
         QString currentFileExtension = QFileInfo(info->kurl().path()).extension(false);
         QString mediaplayerfilter    = settings->getMovieFileFilter().lower() +
-                                       settings->getMovieFileFilter().upper() +
+                                       settings->getMovieFileFilter().toUpper() +
                                        settings->getAudioFileFilter().lower() +
-                                       settings->getAudioFileFilter().upper();
+                                       settings->getAudioFileFilter().toUpper();
         if (mediaplayerfilter.contains(currentFileExtension) )
         {
             setPreviewMode(AlbumWidgetStack::MediaPlayerMode);

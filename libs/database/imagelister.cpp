@@ -109,9 +109,9 @@ QSize ImageLister::retrieveDimension(const QString &filePath)
 {
     QFileInfo fileInfo(filePath);
     QString rawFilesExt(raw_file_extentions);
-    QString ext = fileInfo.extension(false).upper();
+    QString ext = fileInfo.extension(false).toUpper();
 
-    if (!ext.isEmpty() && rawFilesExt.upper().contains(ext))
+    if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))
     {
         Digikam::DMetadata metaData(filePath);
         return metaData.getImageDimensions();

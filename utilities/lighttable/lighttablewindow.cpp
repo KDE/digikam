@@ -518,13 +518,13 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
     if (!settings) return;
 
     QString imagefilter = settings->getImageFileFilter().lower() +
-                          settings->getImageFileFilter().upper();
+                          settings->getImageFileFilter().toUpper();
 
     if (KDcrawIface::DcrawBinary::componentData().versionIsRight())
     {
         // add raw files only if dcraw is available
         imagefilter += settings->getRawFileFilter().lower() +
-                       settings->getRawFileFilter().upper();
+                       settings->getRawFileFilter().toUpper();
     }
 
     d->barView->blockSignals(true);

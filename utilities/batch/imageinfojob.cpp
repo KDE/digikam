@@ -54,9 +54,9 @@ public:
 
         AlbumSettings *settings = AlbumSettings::componentData();
         imagefilter = settings->getImageFileFilter().lower() +
-                      settings->getImageFileFilter().upper() +
+                      settings->getImageFileFilter().toUpper() +
                       settings->getRawFileFilter().lower()   +
-                      settings->getRawFileFilter().upper();
+                      settings->getRawFileFilter().toUpper();
     }
 
     QString            imagefilter; 

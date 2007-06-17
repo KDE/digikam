@@ -31,7 +31,7 @@
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <KDialog>
 
 // Local includes
 
@@ -43,7 +43,7 @@ namespace Digikam
 class IccTransform;
 class DImg;
 
-class DIGIKAM_EXPORT ColorCorrectionDlg : public KDialogBase
+class DIGIKAM_EXPORT ColorCorrectionDlg : public KDialog
 {
     Q_OBJECT
 

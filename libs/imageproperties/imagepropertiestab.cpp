@@ -427,9 +427,9 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
     QSize   dims;
     QString compression, bitDepth, colorMode;
     QString rawFilesExt(raw_file_extentions);
-    QString ext = fileInfo.extension(false).upper();
+    QString ext = fileInfo.extension(false).toUpper();
 
-    if (!ext.isEmpty() && rawFilesExt.upper().contains(ext))
+    if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))
     {
         d->labelImageMime->setText(i18n("RAW Image"));
         compression = i18n("None");

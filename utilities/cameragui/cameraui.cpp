@@ -1198,15 +1198,15 @@ void CameraUI::slotDownload(bool onlySelected)
             // convertion on the fly option.
             QFileInfo fi(downloadName);
 
-            QString subAlbum = fi.extension(false).upper();
-	        if (fi.extension(false).upper() == QString("JPEG") || 
-                fi.extension(false).upper() == QString("JPE")) 
+            QString subAlbum = fi.extension(false).toUpper();
+	        if (fi.extension(false).toUpper() == QString("JPEG") || 
+                fi.extension(false).toUpper() == QString("JPE")) 
                 subAlbum = QString("JPG");
-            if (fi.extension(false).upper() == QString("TIFF")) 
+            if (fi.extension(false).toUpper() == QString("TIFF")) 
                 subAlbum = QString("TIF");
-            if (fi.extension(false).upper() == QString("MPEG") || 
-                fi.extension(false).upper() == QString("MPE") ||
-                fi.extension(false).upper() == QString("MPO"))
+            if (fi.extension(false).toUpper() == QString("MPEG") || 
+                fi.extension(false).toUpper() == QString("MPE") ||
+                fi.extension(false).toUpper() == QString("MPO"))
                 subAlbum = QString("MPG");
 
             if (!createAutoAlbum(u, subAlbum, dateTime.date(), errMsg))
@@ -1600,10 +1600,10 @@ void CameraUI::addFileExtension(const QString& ext)
     if (!settings)
         return;
 
-    if (settings->getImageFileFilter().upper().contains(ext.upper()) ||
-        settings->getMovieFileFilter().upper().contains(ext.upper()) ||
-        settings->getAudioFileFilter().upper().contains(ext.upper()) ||
-        settings->getRawFileFilter().upper().contains(ext.upper()))
+    if (settings->getImageFileFilter().toUpper().contains(ext.toUpper()) ||
+        settings->getMovieFileFilter().toUpper().contains(ext.toUpper()) ||
+        settings->getAudioFileFilter().toUpper().contains(ext.toUpper()) ||
+        settings->getRawFileFilter().toUpper().contains(ext.toUpper()))
         return;
 
     settings->setImageFileFilter(settings->getImageFileFilter() + QString(" *.") + ext);

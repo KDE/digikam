@@ -57,9 +57,11 @@ namespace Digikam
 
 ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview, 
                                        IccTransform *iccTrans, const QString& file)
-                  : KDialogBase(parent, "", true, QString(),
-                                Help|Ok|Apply|Cancel, Ok, true)
+                  : KDialog(parent)
 {
+    setButtons(Help|Ok|Apply|Cancel);
+    setDefaultButton(Ok);
+    setModal(true);
     m_iccTrans = iccTrans;
     m_parent   = parent;
     setHelp("iccprofile.anchor", "digikam");
@@ -74,6 +76,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     setCaption(fi.fileName());
     
     QWidget *page     = new QWidget(this);
+    setMainWidget(page);
     Q3GridLayout* grid = new Q3GridLayout(page, 3, 2, 0, KDialog::spacingHint());
         
     QLabel *originalTitle         = new QLabel(i18n("Original Picture:"), page);

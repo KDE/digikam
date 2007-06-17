@@ -139,7 +139,7 @@ void FileSaveOptionsBox::slotImageFileSelected(const QString& file)
 
 void FileSaveOptionsBox::slotImageFileFormatChanged(const QString& filter)
 {
-    QString format = KImageIO::typeForMime(filter).upper();
+    QString format = KImageIO::typeForMime(filter).toUpper();
     toggleFormatOptions(format);
 }
 

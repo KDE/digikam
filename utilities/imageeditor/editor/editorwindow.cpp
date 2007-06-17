@@ -1534,7 +1534,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
             QStringList imgExtList = QStringList::split(" ", mimetypes);
             for (QStringList::ConstIterator it = imgExtList.begin() ; it != imgExtList.end() ; ++it)
             {    
-                imgExtPattern.append (KImageIO::typeForMime(*it).upper());
+                imgExtPattern.append (KImageIO::typeForMime(*it).toUpper());
                 imgExtPattern.append (" ");
             }    
             imgExtPattern.append (" TIF TIFF");
@@ -1544,7 +1544,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
                 imgExtPattern.append (" JPE");
             }
     
-            if ( !imgExtPattern.contains( m_savingContext->format.upper() ) )
+            if ( !imgExtPattern.contains( m_savingContext->format.toUpper() ) )
             {
                 KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported.")
                         .arg(m_savingContext->format));

@@ -854,7 +854,7 @@ void ShowFoto::openFolder(const KUrl& url)
 
     QString patterns = filter.lower();
     patterns.append (" ");
-    patterns.append (filter.upper());
+    patterns.append (filter.toUpper());
 
     DDebug() << "patterns=" << patterns << endl;    
 
