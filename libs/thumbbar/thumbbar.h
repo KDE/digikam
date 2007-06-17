@@ -29,7 +29,7 @@
 
 #include <Q3ScrollView>
 #include <QString>
-#include <QToolTip>
+#include <QEvent>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
@@ -140,11 +140,11 @@ protected:
     int  getTileSize();
     int  getMargin();
 
+    bool event(QEvent *event);
     void resizeEvent(QResizeEvent*);
     void contentsMousePressEvent(QMouseEvent*);
     void contentsMouseMoveEvent(QMouseEvent*);
     void contentsMouseReleaseEvent(QMouseEvent*);
-
 
     void insertItem(ThumbBarItem* item);
     void rearrangeItems();
@@ -202,7 +202,7 @@ private:
 
 // -------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT ThumbBarToolTip : public QToolTip
+class DIGIKAM_EXPORT ThumbBarToolTip
 {
 
 public:
@@ -210,9 +210,11 @@ public:
     ThumbBarToolTip(ThumbBarView *parent);
     virtual ~ThumbBarToolTip(){};
 
+    bool maybeTip(const QPoint& pos, QString &tipText);
+
 protected:
     
-    const uint    m_maxStringLen;
+    const int    m_maxStringLen;
 
     QString       m_headBeg;
     QString       m_headEnd;
@@ -233,7 +235,6 @@ protected:
 
 private:
      
-    void maybeTip(const QPoint& pos);
     QString tipContent(ThumbBarItem* item);
 };
 

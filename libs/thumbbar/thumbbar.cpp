@@ -37,6 +37,7 @@ extern "C"
 
 #include <Q3Dict>
 #include <Q3StyleSheet>
+#include <QToolTip>
 #include <QFrame>
 #include <QResizeEvent>
 #include <QMouseEvent>
@@ -447,7 +448,7 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* item)
 
 void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
 {
-    int cy, cx, ts, y1, y2, x1, x2;
+    int cy=0, cx=0, ts=0, y1=0, y2=0, x1=0, x2=0;
     QPixmap bgPix, tile;
     QRect er(e->rect());
     
@@ -801,6 +802,25 @@ void ThumbBarView::slotFailedPreview(const KFileItem* fileItem)
     item->repaint();
 }
 
+// TODO: KDE4PORT: QToolTip api has changed with QT4 (QToolTip::mayBeTip() has diseapears). 
+//                 Check if this way is correct to display tooltip properlly.
+//                 More info at http://doc.trolltech.com/4.3/widgets-tooltips.html
+bool ThumbBarView::event(QEvent *event)
+{
+    if (event->type() == QEvent::ToolTip) 
+    {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+        QString tipText;
+
+        if (d->toolTip->maybeTip(helpEvent->pos(), tipText))
+            QToolTip::showText(helpEvent->globalPos(), tipText);
+        else
+            QToolTip::hideText();
+    }
+
+    return QWidget::event(event);
+}
+
 // -------------------------------------------------------------------------
 
 ThumbBarItem::ThumbBarItem(ThumbBarView* view, const KUrl& url)
@@ -869,9 +889,9 @@ void ThumbBarItem::repaint()
 
 // -------------------------------------------------------------------------
 
-ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent)
-               : QToolTip(parent->viewport()), m_maxStringLen(30), m_view(parent)
-{
+ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent) :
+    m_maxStringLen(30), m_view(parent)
+{    
     m_headBeg = QString("<tr bgcolor=\"orange\"><td colspan=\"2\">"
                         "<nobr><font size=\"-1\" color=\"black\"><b>");
     m_headEnd = QString("</b></font></nobr></td></tr>");
@@ -887,23 +907,20 @@ ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent)
     m_cellSpecEnd = QString("</i></font></nobr></td></tr>");
 }
 
-void ThumbBarToolTip::maybeTip(const QPoint& pos)
+bool ThumbBarToolTip::maybeTip(const QPoint& pos, QString& tipText)
 {
-    if ( !parentWidget() || !m_view) return;
+    if ( !m_view) return false;
 
     ThumbBarItem* item = m_view->findItem( m_view->viewportToContents(pos) );
-    if (!item) return;
+    if (!item) return false;
 
-    if (!m_view->getToolTipSettings().showToolTips) return;
+    if (!m_view->getToolTipSettings().showToolTips) return false;
 
-    QString tipText = tipContent(item);
+    tipText = tipContent(item);
     tipText.append(tipContentExtraData(item));
     tipText.append("</table>");
-
-    QRect r(item->rect());
-    r = QRect( m_view->contentsToViewport(r.topLeft()), r.size() );
     
-    tip(r, tipText);
+    return true;
 }
 
 QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
@@ -939,7 +956,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
         if (settings.showFileDate)
         {
             QDateTime modifiedDate = fileInfo.lastModified();
-            str = KGlobal::locale()->formatDateTime(modifiedDate, true, true);
+            str = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
             tipText += m_cellBeg + i18n("Modified:") + m_cellMid + str + m_cellEnd;
         }
 
@@ -953,9 +970,9 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
 
         QSize   dims;
         QString rawFilesExt(raw_file_extentions);
-        QString ext = fileInfo.extension(false).upper();
+        QString ext = fileInfo.suffix().toUpper();
 
-        if (!ext.isEmpty() && rawFilesExt.upper().contains(ext))
+        if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))
         {
             str = i18n("RAW Image");
             dims = metaData.getImageDimensions();
@@ -965,6 +982,10 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
             str = fi.mimeComment();
 
             KFileMetaInfo meta = fi.metaInfo();
+    
+/*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
+                            Check if new method to search "Dimensions" infromation is enough.
+
             if (meta.isValid())
             {
                 if (meta.containsGroup("Jpeg EXIF Data"))
@@ -973,6 +994,11 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
                     dims = meta.group("General").item("Dimensions").value().toSize();
                 else if (meta.containsGroup("Technical"))
                     dims = meta.group("Technical").item("Dimensions").value().toSize();
+            }*/
+
+            if (meta.isValid() && meta.item("Dimensions").isValid())
+            {
+                dims = meta.item("Dimensions").value().toSize();
             }
         }
 
@@ -1020,7 +1046,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
             {
                 if (photoInfo.dateTime.isValid())
                 {
-                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
+                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime,  KLocale::ShortDate, true);
                     if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                     metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
                 }
@@ -1089,15 +1115,15 @@ QString ThumbBarToolTip::breakString(const QString& input)
 {
     QString str = input.simplified();
     str = Qt::escape(str);
-    const uint maxLen = m_maxStringLen;
+    const int maxLen = m_maxStringLen;
 
     if (str.length() <= maxLen)
         return str;
 
     QString br;
 
-    uint i = 0;
-    uint count = 0;
+    int i = 0;
+    int count = 0;
 
     while (i < str.length())
     {
