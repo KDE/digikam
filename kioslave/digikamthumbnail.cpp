@@ -60,7 +60,7 @@
 #include <kstandarddirs.h>
 #include <kcodecs.h>
 #include <ktempfile.h>
-#include <ktrader.h>
+#include <kservicetypetrader.h>
 #include <klibloader.h>
 #include <kmimetype.h>
 #include <kio/global.h>
@@ -538,15 +538,15 @@ bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QStr
 
     QString plugin;
 
-    KTrader::OfferList plugins = KTrader::self()->query("ThumbCreator");
-    for (KTrader::OfferList::ConstIterator it = plugins.begin(); it != plugins.end(); ++it)
+    KService::List plugins = KServiceTypeTrader::self()->query("ThumbCreator");
+    for (KService::List::ConstIterator it = plugins.begin(); it != plugins.end(); ++it)
     {
         QStringList mimeTypes = (*it)->property("MimeTypes").toStringList();
         for (QStringList::ConstIterator mt = mimeTypes.begin(); mt != mimeTypes.end(); ++mt)
         {
             if  ((*mt) == mimeType || (*mt) == mimeTypeAlt)
             {
-                plugin=(*it)->library();
+                plugin = (*it)->library();
                 break;
             }
         }
@@ -569,7 +569,7 @@ bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QStr
     }
 
     ThumbCreator *creator = 0;
-    newCreator create = (newCreator)library->symbol("new_creator");
+    newCreator create = (newCreator)library->resolveSymbol("new_creator");
     if (create)
         creator = create();
 
