@@ -216,44 +216,44 @@ void ThemeEngine::buildDefaultTheme()
 {
     Theme* t = d->defaultTheme;
 
-    QColorGroup cg = QApplication::palette().active();
+    QPalette pa = QApplication::palette();
     
-    t->baseColor           = cg.base();
-    t->textRegColor        = cg.text();
-    t->textSelColor        = cg.highlightedText();
+    t->baseColor           = pa.color(QPalette::Base);
+    t->textRegColor        = pa.color(QPalette::Text);
+    t->textSelColor        = pa.color(QPalette::HighlightedText);
     t->textSpecialRegColor = QColor("#0000EF");
-    t->textSpecialSelColor = cg.highlightedText();
+    t->textSpecialSelColor = pa.color(QPalette::HighlightedText);
 
-    t->bannerColor         = cg.highlight();
-    t->bannerColorTo       = cg.highlight().dark(120);
+    t->bannerColor         = pa.color(QPalette::Highlight);
+    t->bannerColorTo       = pa.color(QPalette::Highlight).dark(120);
     t->bannerBevel         = Theme::FLAT;
     t->bannerGrad          = Theme::SOLID;
     t->bannerBorder        = false;
     t->bannerBorderColor   = Qt::black;
     
-    t->thumbRegColor       = cg.base();
-    t->thumbRegColorTo     = cg.base();
+    t->thumbRegColor       = pa.color(QPalette::Base);
+    t->thumbRegColorTo     = pa.color(QPalette::Base);
     t->thumbRegBevel       = Theme::FLAT;
     t->thumbRegGrad        = Theme::SOLID;
     t->thumbRegBorder      = true;
     t->thumbRegBorderColor = QColor("#E0E0EF");
 
-    t->thumbSelColor       = cg.highlight();
-    t->thumbSelColorTo     = cg.highlight();
+    t->thumbSelColor       = pa.color(QPalette::Highlight);
+    t->thumbSelColorTo     = pa.color(QPalette::Highlight);
     t->thumbSelBevel       = Theme::FLAT;
     t->thumbSelGrad        = Theme::SOLID;
     t->thumbSelBorder      = true;
     t->thumbSelBorderColor = QColor("#E0E0EF");
 
-    t->listRegColor        = cg.base();
-    t->listRegColorTo      = cg.base();
+    t->listRegColor        = pa.color(QPalette::Base);
+    t->listRegColorTo      = pa.color(QPalette::Base);
     t->listRegBevel        = Theme::FLAT;
     t->listRegGrad         = Theme::SOLID;
     t->listRegBorder       = false;
     t->listRegBorderColor  = Qt::black;
                         
-    t->listSelColor        = cg.highlight();
-    t->listSelColorTo      = cg.highlight();
+    t->listSelColor        = pa.color(QPalette::Highlight);
+    t->listSelColorTo      = pa.color(QPalette::Highlight);
     t->listSelBevel        = Theme::FLAT;
     t->listSelGrad         = Theme::SOLID;
     t->listSelBorder       = true;
