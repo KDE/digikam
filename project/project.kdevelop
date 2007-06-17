@@ -14,8 +14,14 @@
     <absoluteprojectpath>false</absoluteprojectpath>
     <description/>
     <ignoreparts/>
-    <projectname></projectname>
+    <projectname/>
     <defaultencoding/>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
   </general>
   <kdevfileview>
     <groups>
