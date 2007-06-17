@@ -29,7 +29,7 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
         |---lprof                    Gilles        DONE        CMake port only
         |---themeengine
         |---threadimageio            Marcel
-        |---thumbbar                 Gilles
+        |---thumbbar                 Gilles        DONE
         |---whitebalance             Gilles        DONE
         |---widgets                  Laurent
         |-----common                 Laurent
