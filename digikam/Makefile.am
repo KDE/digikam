@@ -8,13 +8,12 @@ INCLUDES = -I$(top_srcdir)/digikam/sqlite \
 	   -I$(top_srcdir)/digikam/libs/widgets/common \
 	   -I$(top_srcdir)/digikam/libs/thumbbar \
 	   -I$(top_srcdir)/digikam/libs/jpegutils \
-	   -I$(top_srcdir)/digikam/libs/dcraw \
 	   -I$(top_srcdir)/digikam/libs/dimg \
 	   -I$(top_srcdir)/digikam/libs/dmetadata \
 	   -I$(top_srcdir)/digikam/libs/imageproperties \
 	   -I$(top_srcdir)/digikam/libs/threadimageio \
-	   -I$(top_builddir)/digikam/libs/dialogs \
 	   -I$(top_srcdir)/digikam/libs/dialogs \
+	   -I$(top_builddir)/digikam/libs/dialogs \
 	   -I$(top_srcdir)/digikam/utilities/cameragui \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
@@ -24,7 +23,10 @@ INCLUDES = -I$(top_srcdir)/digikam/sqlite \
 	   -I$(top_srcdir)/digikam/utilities/batch \
 	   -I$(top_srcdir)/digikam/utilities/lighttable \
 	   $(LIBKEXIV2_CFLAGS) \
-	   $(LIBKIPI_CFLAGS) $(LIBKDCRAW_CFLAGS) $(GPHOTO_CFLAGS) $(all_includes) 
+	   $(LIBKIPI_CFLAGS) \
+	   $(LIBKDCRAW_CFLAGS) \
+	   $(GPHOTO_CFLAGS) \
+	   $(all_includes) 
 
 
 # -- shared digiKam library rules -----------------------------------------------
@@ -95,8 +97,12 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                upgradedb_sqlite2tosqlite3.cpp \
 	                welcomepageview.cpp 
 
-libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) $(LIB_KHTML) \
-	               $(LIBKIPI_LIBS) $(LIB_KUTILS) \
+libdigikam_la_LIBADD = $(LIB_KIO) \
+	               $(LIB_SQLITE3) \
+		       $(LIB_KABC) \
+		       $(LIB_KHTML) \
+	               $(LIBKIPI_LIBS) \
+		       $(LIB_KUTILS) \
 	               $(top_builddir)/digikam/sqlite/libsqlite2.la \
 	               $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 	               $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
@@ -123,9 +129,15 @@ libdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
 bin_PROGRAMS = digikam
 
 digikam_SOURCES = main.cpp
-digikam_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) \
-		          $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS) $(LIB_KUTILS) \
-		          libdigikam.la
+
+digikam_LDADD   = $(LIB_QT) \
+		  $(LIB_KDECORE) \
+		  $(LIB_KDEUI) \
+		  $(LIBSOCKET) \
+		  $(LIB_KFILE) \
+		  $(LIB_KPARTS) \
+		  $(LIB_KUTILS) \
+		  libdigikam.la
 
 digikam_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_KUTILS) 
 
