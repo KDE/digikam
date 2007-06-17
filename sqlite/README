@@ -1,0 +1,2 @@
+This folder contents sqlite version 2 source code used to backport old 
+digiKam database < 0.8.0 to new database based on sqlite version 3
