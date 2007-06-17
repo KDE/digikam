@@ -167,7 +167,7 @@ Q3CString WelcomePageView::fileToString(const QString &aFileName)
         return Q3CString();
     
     result.resize(len + 2);
-    readLen = file.readBlock(result.data(), len);
+    readLen = file.read(result.data(), len);
     if (1 && result[len-1]!='\n')
     {
         result[len++] = '\n';

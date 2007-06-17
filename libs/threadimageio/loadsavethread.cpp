@@ -357,7 +357,7 @@ bool LoadSaveThread::exifRotate(DImg &image, const QString& filePath)
     }
 
     // transform accordingly
-    thumb = thumb.xForm( matrix );
+    thumb = thumb.transformed( matrix );
     */
 }
 

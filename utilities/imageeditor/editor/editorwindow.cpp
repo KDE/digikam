@@ -371,7 +371,7 @@ void EditorWindow::setupStandardActions()
     d->zoomCombo = new KComboBox(true);
     d->zoomCombo->setDuplicatesEnabled(false);
     d->zoomCombo->setFocusPolicy(Qt::ClickFocus);
-    d->zoomCombo->setInsertionPolicy(QComboBox::NoInsert);
+    d->zoomCombo->setInsertPolicy(QComboBox::NoInsert);
     d->zoomComboAction = new K3WidgetAction(d->zoomCombo, i18n("Zoom"), 0, 0, 0, 
                                            actionCollection(), "editorwindow_zoomto");
 
@@ -1612,7 +1612,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     m_canvas->saveAs(m_savingContext->saveTempFile->name(), m_IOFileSettings,
                      m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()),
-                     m_savingContext->format.lower());
+                     m_savingContext->format.toLower());
 
     return true;
 }

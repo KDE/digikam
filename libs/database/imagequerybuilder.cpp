@@ -59,8 +59,8 @@ ImageQueryBuilder::ImageQueryBuilder()
     const KCalendarSystem* cal = KGlobal::locale()->calendar();
     for (int i=1; i<=12; ++i)
     {
-        m_shortMonths[i-1] = cal->monthName(i, 2000, true).lower();
-        m_longMonths[i-1]  = cal->monthName(i, 2000, false).lower();
+        m_shortMonths[i-1] = cal->monthName(i, 2000, true).toLower();
+        m_longMonths[i-1]  = cal->monthName(i, 2000, false).toLower();
     }
 }
 
@@ -76,8 +76,8 @@ QString ImageQueryBuilder::buildQuery(const KUrl& url) const
     {
         RuleType rule;
 
-        QString key = url.queryItem(QString::number(i) + ".key").lower();
-        QString op  = url.queryItem(QString::number(i) + ".op").lower();
+        QString key = url.queryItem(QString::number(i) + ".key").toLower();
+        QString op  = url.queryItem(QString::number(i) + ".op").toLower();
 
         if (key == "album")
         {
@@ -430,8 +430,8 @@ QString ImageQueryBuilder::possibleDate(const QString& str, bool& exact) const
         // hmm... not a year. is it a particular month?
         for (int i=1; i<=12; i++)
         {
-            if (str.lower() == m_shortMonths[i-1] ||
-                str.lower() == m_longMonths[i-1])
+            if (str.toLower() == m_shortMonths[i-1] ||
+                str.toLower() == m_longMonths[i-1])
             {
                 QString monGlob;
                 monGlob.sprintf("%.2d", i);

@@ -122,7 +122,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
         topLabel->setText( i18n( "<qt><b>\"<i>%1</i>\" Album Properties</b></qt>")
                            .arg(album->title()));
     }
-    topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::TextSingleLine);
+    topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine);
     topLayout->addMultiCellWidget( topLabel, 0, 0, 0, 1  );
 
     // --------------------------------------------------------
@@ -153,7 +153,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     QLabel *commentsLabel = new QLabel( plainPage( ) );
     commentsLabel->setText( i18n( "Co&mments:" ) );
-    topLayout->addWidget( commentsLabel, 4, 0, Qt::AlignAuto|Qt::AlignTop );
+    topLayout->addWidget( commentsLabel, 4, 0, Qt::AlignLeft|Qt::AlignTop );
 
     d->commentsEdit = new KTextEdit( plainPage( ) );
     topLayout->addWidget( d->commentsEdit, 4, 1 );
@@ -164,7 +164,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     QLabel *dateLabel = new QLabel( plainPage( ) );
     dateLabel->setText( i18n( "Album &date:" ) );
-    topLayout->addWidget( dateLabel, 5, 0, Qt::AlignAuto|Qt::AlignTop );
+    topLayout->addWidget( dateLabel, 5, 0, Qt::AlignLeft|Qt::AlignTop );
 
     d->datePicker = new KDatePicker( plainPage( ) );
     topLayout->addWidget( d->datePicker, 5, 1 );

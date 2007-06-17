@@ -62,7 +62,7 @@ class DateValidator : public QValidator
       if ( length <= 0 )
         return Intermediate;
 
-      if ( mKeywords.contains( str.lower() ) )
+      if ( mKeywords.contains( str.toLower() ) )
         return Acceptable;
 
       bool ok = false;
@@ -233,9 +233,9 @@ QDate KDateEdit::parseDate( bool *replaced ) const
 
   if ( text.isEmpty() )
     result = QDate();
-  else if ( mKeywordMap.contains( text.lower() ) ) {
+  else if ( mKeywordMap.contains( text.toLower() ) ) {
     QDate today = QDate::currentDate();
-    int i = mKeywordMap[ text.lower() ];
+    int i = mKeywordMap[ text.toLower() ];
     if ( i >= 100 ) {
       /* A day name has been entered. Convert to offset from today.
        * This uses some math tricks to figure out the offset in days
@@ -352,7 +352,7 @@ void KDateEdit::setupKeywords()
 
   QString dayName;
   for ( int i = 1; i <= 7; ++i ) {
-    dayName = KGlobal::locale()->calendar()->weekDayName( i ).lower();
+    dayName = KGlobal::locale()->calendar()->weekDayName( i ).toLower();
     mKeywordMap.insert( dayName, i + 100 );
   }
 }

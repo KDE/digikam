@@ -108,7 +108,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
     {
         ++it;
 
-        QString mime = mimeType(fi->extension(false).lower());
+        QString mime = mimeType(fi->extension(false).toLower());
 
         if (!mime.isEmpty())
         {
@@ -242,9 +242,9 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
     char buffer[MAX_IPC_SIZE];
 
     Q_LONG len;
-    while ((len = sFile.readBlock(buffer, MAX_IPC_SIZE)) != 0 && !m_cancel)
+    while ((len = sFile.read(buffer, MAX_IPC_SIZE)) != 0 && !m_cancel)
     {
-        if (len == -1 || dFile.writeBlock(buffer, (Q_ULONG)len) != len)
+        if (len == -1 || dFile.write(buffer, (Q_ULONG)len) != len)
         {
             sFile.close();
             dFile.close();
@@ -341,9 +341,9 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
     char buffer[MAX_IPC_SIZE];
 
     Q_LONG len;
-    while ((len = sFile.readBlock(buffer, MAX_IPC_SIZE)) != 0 && !m_cancel)
+    while ((len = sFile.read(buffer, MAX_IPC_SIZE)) != 0 && !m_cancel)
     {
-        if (len == -1 || dFile.writeBlock(buffer, (Q_ULONG)len) == -1)
+        if (len == -1 || dFile.write(buffer, (Q_ULONG)len) == -1)
         {
             sFile.close();
             dFile.close();
@@ -368,7 +368,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
     // Get new camera item information.
 
     QFileInfo fi(dest);
-    QString mime = mimeType(fi.extension(false).lower());
+    QString mime = mimeType(fi.extension(false).toLower());
 
     if (!mime.isEmpty())
     {

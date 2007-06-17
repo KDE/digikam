@@ -53,9 +53,9 @@ public:
         job         = 0;
 
         AlbumSettings *settings = AlbumSettings::componentData();
-        imagefilter = settings->getImageFileFilter().lower() +
+        imagefilter = settings->getImageFileFilter().toLower() +
                       settings->getImageFileFilter().toUpper() +
-                      settings->getRawFileFilter().lower()   +
+                      settings->getRawFileFilter().toLower()   +
                       settings->getRawFileFilter().toUpper();
     }
 

@@ -194,16 +194,16 @@ void PixmapManager::slotFailedThumbnail(const KUrl& url)
     AlbumSettings* settings = AlbumSettings::componentData();
     if (settings)
     {
-        if (settings->getImageFileFilter().upper().contains(ext.upper()) ||
-            settings->getRawFileFilter().upper().contains(ext.upper()))
+        if (settings->getImageFileFilter().toUpper().contains(ext.toUpper()) ||
+            settings->getRawFileFilter().toUpper().contains(ext.toUpper()))
         { 
             img = DesktopIcon("image", KIcon::SizeEnormous).convertToImage();
         }
-        else if (settings->getMovieFileFilter().upper().contains(ext.upper()))
+        else if (settings->getMovieFileFilter().toUpper().contains(ext.toUpper()))
         {
             img = DesktopIcon("video", KIcon::SizeEnormous).convertToImage();
         }
-        else if (settings->getAudioFileFilter().upper().contains(ext.upper()))
+        else if (settings->getAudioFileFilter().toUpper().contains(ext.toUpper()))
         {
             img = DesktopIcon("sound", KIcon::SizeEnormous).convertToImage();
         }

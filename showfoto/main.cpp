@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     KAboutData aboutData( "showfoto",
                           I18N_NOOP("showFoto"),
                           "0.7.0",
-                          Description.latin1(),
+                          Description.toLatin1(),
                           KAboutData::License_GPL,
                           I18N_NOOP("(c) 2004-2007, digiKam developers team"),
                           0,

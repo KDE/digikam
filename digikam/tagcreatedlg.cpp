@@ -87,7 +87,7 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
     QString tagName  = album->prettyUrl();
     if (tagName.endsWith("/")) tagName.truncate(tagName.length()-1);
     topLabel->setText( i18n("<qt><b>Create New Tag in <i>\"%1\"</i></b></qt>").arg(tagName));
-    topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::TextSingleLine);
+    topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine);
     topLayout->addWidget(topLabel);
 
     // --------------------------------------------------------
@@ -240,7 +240,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
     QString tagName  = album->prettyUrl();
     if (tagName.endsWith("/")) tagName.truncate(tagName.length()-1);
     topLabel->setText( i18n("<qt><b>Tag <i>\"%1\"</i> Properties </b></qt>").arg(tagName));
-    topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::TextSingleLine);
+    topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine);
     topLayout->addWidget(topLabel);
 
     // --------------------------------------------------------

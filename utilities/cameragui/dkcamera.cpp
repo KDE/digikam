@@ -47,10 +47,10 @@ DKCamera::DKCamera(const QString& title, const QString& model, const QString& po
     m_audioFilter = Q3DeepCopy<QString>(settings->getAudioFileFilter());
     m_rawFilter   = Q3DeepCopy<QString>(settings->getRawFileFilter());
 
-    m_imageFilter = m_imageFilter.lower();
-    m_movieFilter = m_movieFilter.lower();
-    m_audioFilter = m_audioFilter.lower();
-    m_rawFilter   = m_rawFilter.lower();
+    m_imageFilter = m_imageFilter.toLower();
+    m_movieFilter = m_movieFilter.toLower();
+    m_audioFilter = m_audioFilter.toLower();
+    m_rawFilter   = m_rawFilter.toLower();
 }
 
 DKCamera::~DKCamera()

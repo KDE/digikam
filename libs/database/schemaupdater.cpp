@@ -126,7 +126,7 @@ bool SchemaUpdater::makeUpdates()
             }
             else if (digikamDB.exists())
             {
-                return updateV2toV4(digikamDB.dirPath());
+                return updateV2toV4(digikamDB.path());
             }
         }
         */

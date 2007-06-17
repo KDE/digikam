@@ -1236,9 +1236,9 @@ void ImageSelectionWidget::mousePressEvent ( QMouseEvent * e )
         QPoint pm = QPoint(e->x(), e->y());
         d->moving = false;
 
-        if ( (e->state() & Qt::ShiftModifier) == Qt::ShiftButton )
+        if ( (e->state() & Qt::ShiftModifier) == Qt::ShiftModifier )
         {
-            bool symetric = (e->state() & Qt::ControlModifier ) == Qt::ControlButton;
+            bool symetric = (e->state() & Qt::ControlModifier ) == Qt::ControlModifier;
             QPoint center = d->localRegionSelection.center();
 
             // Find the closest corner
@@ -1348,7 +1348,7 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
             }
 
             QPoint center = d->localRegionSelection.center();
-            bool symetric = (e->state() & Qt::ControlModifier ) == Qt::ControlButton;
+            bool symetric = (e->state() & Qt::ControlModifier ) == Qt::ControlModifier;
 
             // Change resizing mode
 

@@ -313,7 +313,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         tag.icon = QDir::cleanPath(tag.icon);
         fi.setFile(tag.icon.remove(libraryPath));
 
-        QString url  = fi.dirPath(true);
+        QString url  = fi.absolutePath();
         QString name = fi.fileName();
 
         AlbumMap::iterator it1 = albumMap.find(url);
@@ -564,7 +564,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
             icon = QDir::cleanPath(icon);
             QFileInfo fi(icon.remove(libraryPath));
 
-            QString url  = fi.dirPath(true);
+            QString url  = fi.absolutePath();
             QString name = fi.fileName();
 
             QStringList list;

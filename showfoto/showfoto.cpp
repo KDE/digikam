@@ -852,7 +852,7 @@ void ShowFoto::openFolder(const KUrl& url)
     filter.append ( QString(raw_file_extentions) );  
     filter.append (" ");
 
-    QString patterns = filter.lower();
+    QString patterns = filter.toLower();
     patterns.append (" ");
     patterns.append (filter.toUpper());
 

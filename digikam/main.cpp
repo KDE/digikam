@@ -114,13 +114,13 @@ int main(int argc, char *argv[])
     KAboutData aboutData( "digikam", 
                           I18N_NOOP("digiKam"),
                           digikam_version,        
-                          description.latin1(),
+                          description.toLatin1(),
                           KAboutData::License_GPL,
                           I18N_NOOP("(c) 2002-2007, digiKam developers team"),
                           0,
                           "http://www.digikam.org");
 
-    aboutData.setOtherText(libInfo.latin1());
+    aboutData.setOtherText(libInfo.toLatin1());
 
     aboutData.addAuthor ( "Caulier Gilles",
                           I18N_NOOP("Main developer and coordinator"),

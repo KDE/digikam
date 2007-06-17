@@ -306,7 +306,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
                 if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
                 {
                     downloadName.truncate(downloadName.length() - ext.length());
-                    downloadName.append(losslessFormat.lower());
+                    downloadName.append(losslessFormat.toLower());
                 }
             }
 
@@ -334,7 +334,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
                 if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
                 {
                     downloadName.truncate(downloadName.length() - ext.length());
-                    downloadName.append(losslessFormat.lower());
+                    downloadName.append(losslessFormat.toLower());
                 }
             }
     
@@ -385,7 +385,7 @@ QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase,
         }
         case(RenameCustomizer::LOWER):
         {
-            dname = itemInfo->name.lower();
+            dname = itemInfo->name.toLower();
             break;
         }
         default:

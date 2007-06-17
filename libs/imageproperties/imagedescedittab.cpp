@@ -1483,7 +1483,7 @@ void ImageDescEditTab::slotTagsSearchChanged()
 {
     //TODO: this will destroy assigned-tags filtering. Unify in one method.
     QString search(d->tagsSearchEdit->text());
-    search = search.lower();
+    search = search.toLower();
 
     bool atleastOneMatch = false;
 
@@ -1496,14 +1496,14 @@ void ImageDescEditTab::slotTagsSearchChanged()
         if (tag->isRoot())
             continue;
 
-        bool match = tag->title().lower().contains(search);
+        bool match = tag->title().toLower().contains(search);
         if (!match)
         {
             // check if any of the parents match the search
             Album* parent = tag->parent();
             while (parent && !parent->isRoot())
             {
-                if (parent->title().lower().contains(search))
+                if (parent->title().toLower().contains(search))
                 {
                     match = true;
                     break;
@@ -1519,7 +1519,7 @@ void ImageDescEditTab::slotTagsSearchChanged()
             AlbumIterator it(tag);
             while (it.current())
             {
-                if ((*it)->title().lower().contains(search))
+                if ((*it)->title().toLower().contains(search))
                 {
                     match = true;
                     break;

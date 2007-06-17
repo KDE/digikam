@@ -575,7 +575,7 @@ void FontChooserWidget::setupDisplay()
 {
     // Calling familyListBox->setCurrentItem() causes the value of selFont
     // to change, so we save the family, style and size beforehand.
-    QString family = selFont.family().lower();
+    QString family = selFont.family().toLower();
     int style = (selFont.bold() ? 2 : 0) + (selFont.italic() ? 1 : 0);
     int size = selFont.pointSize();
     if (size == -1)
@@ -587,7 +587,7 @@ void FontChooserWidget::setupDisplay()
     numEntries = familyListBox->count();
     for (i = 0; i < numEntries; i++) 
     {
-        if (family == familyListBox->text(i).lower()) 
+        if (family == familyListBox->text(i).toLower()) 
         {
             familyListBox->setCurrentItem(i);
             break;
@@ -602,7 +602,7 @@ void FontChooserWidget::setupDisplay()
             family = family.left(family.find('[')).trimmed();
             for (i = 0; i < numEntries; i++) 
             {
-                if (family == familyListBox->text(i).lower()) 
+                if (family == familyListBox->text(i).toLower()) 
                 {
                     familyListBox->setCurrentItem(i);
                     break;
@@ -617,7 +617,7 @@ void FontChooserWidget::setupDisplay()
         QString fallback = family+" [";
         for (i = 0; i < numEntries; i++) 
         {
-            if (familyListBox->text(i).lower().startsWith(fallback)) 
+            if (familyListBox->text(i).toLower().startsWith(fallback)) 
             {
                 familyListBox->setCurrentItem(i);
                 break;
@@ -630,7 +630,7 @@ void FontChooserWidget::setupDisplay()
     {
         for (i = 0; i < numEntries; i++) 
         {
-            if (familyListBox->text(i).lower().startsWith(family)) 
+            if (familyListBox->text(i).toLower().startsWith(family)) 
             {
                 familyListBox->setCurrentItem(i);
                 break;

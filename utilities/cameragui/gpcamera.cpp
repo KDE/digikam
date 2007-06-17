@@ -214,8 +214,8 @@ bool GPCamera::doConnect()
     m_status = 0;
 
     int modelNum = -1, portNum = -1;
-    modelNum = gp_abilities_list_lookup_model(abilList, d->model.latin1());
-    portNum  = gp_port_info_list_lookup_path (infoList, d->port.latin1());
+    modelNum = gp_abilities_list_lookup_model(abilList, d->model.toLatin1());
+    portNum  = gp_port_info_list_lookup_path (infoList, d->port.toLatin1());
 
     gp_abilities_list_get_abilities(abilList, modelNum, &d->cameraAbilities);
     
@@ -481,7 +481,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bo
         if (info.file.fields & GP_FILE_INFO_TYPE)
             itemInfo.mime = info.file.type;*/
 
-        itemInfo.mime = mimeType(itemInfo.name.section('.', -1).lower());
+        itemInfo.mime = mimeType(itemInfo.name.section('.', -1).toLower());
 
         if (info.file.fields & GP_FILE_INFO_MTIME)
             itemInfo.mtime = info.file.mtime;      
@@ -891,7 +891,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     if (info.file.fields & GP_FILE_INFO_TYPE)
         itemInfo.mime = info.file.type;*/
 
-    itemInfo.mime = mimeType(itemInfo.name.section('.', -1).lower());
+    itemInfo.mime = mimeType(itemInfo.name.section('.', -1).toLower());
 
     if (info.file.fields & GP_FILE_INFO_MTIME)
         itemInfo.mtime = info.file.mtime;      

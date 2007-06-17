@@ -319,7 +319,7 @@ void CollectionScanner::updateItemsWithoutDate()
             emit scanningFile(*it);
 
             QFileInfo fi(*it);
-            QString albumURL = fi.dirPath();
+            QString albumURL = fi.path();
             albumURL = QDir::cleanPath(albumURL.remove(albumRoot));
 
             int albumID = DatabaseAccess().db()->getAlbumForPath(albumRoot, albumURL);

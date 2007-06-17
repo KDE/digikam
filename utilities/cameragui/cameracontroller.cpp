@@ -652,7 +652,7 @@ CameraController::CameraController(QWidget* parent, const QString& title, const 
 
     if (!d->camera)
     {
-        if (model.lower() == "directory browse")
+        if (model.toLower() == "directory browse")
             d->camera = new UMSCamera(title, model, port, path);
         else
             d->camera = new GPCamera(title, model, port, path);

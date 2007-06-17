@@ -1343,7 +1343,7 @@ void DigikamApp::slotDownloadImages()
                  this,
                  SLOT(slotDownloadImages()),
                  actionCollection(),
-                 d->cameraGuiPath.latin1() );
+                 d->cameraGuiPath.toLatin1() );
 
         d->cameraMenuAction->insert(cAction, 0);
     }
