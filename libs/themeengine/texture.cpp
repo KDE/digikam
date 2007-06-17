@@ -41,9 +41,9 @@
 
 // Qt includes.
 
-#include <qpainter.h>
-#include <qimage.h>
-#include <qpixmap.h>
+#include <QPainter>
+#include <QImage>
+#include <QPixmap>
 
 // Local includes.
 
@@ -125,9 +125,9 @@ Texture::Texture(int w, int h, const QColor& from, const QColor& to,
     }
     else
     {
-        d->Qt::red   = new unsigned char[w*h];
-        d->Qt::green = new unsigned char[w*h];
-        d->Qt::blue  = new unsigned char[w*h];
+        d->red   = new unsigned char[w*h];
+        d->green = new unsigned char[w*h];
+        d->blue  = new unsigned char[w*h];
 
         if (gradient == Theme::HORIZONTAL)
             doHgradient();
@@ -145,12 +145,12 @@ Texture::Texture(int w, int h, const QColor& from, const QColor& to,
 
 Texture::~Texture()
 {
-    if (d->Qt::red)
-        delete [] d->Qt::red;
-    if (d->Qt::green)
-        delete [] d->Qt::green;
-    if (d->Qt::blue)
-        delete [] d->Qt::blue;
+    if (d->red)
+        delete [] d->red;
+    if (d->green)
+        delete [] d->green;
+    if (d->blue)
+        delete [] d->blue;
 
     delete d;    
 }
@@ -205,7 +205,7 @@ void Texture::doHgradient()
         xr = (float) d->color0.red(),
         xg = (float) d->color0.green(),
         xb = (float) d->color0.blue();
-    unsigned char *pr = d->Qt::red, *pg = d->Qt::green, *pb = d->Qt::blue;
+    unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
 
     register int x, y;
 
@@ -230,9 +230,9 @@ void Texture::doHgradient()
 
     for (y = 1; y < d->height; y++, pr += d->width, pg += d->width, pb += d->width)
     {
-        memcpy(pr, d->Qt::red, d->width);
-        memcpy(pg, d->Qt::green, d->width);
-        memcpy(pb, d->Qt::blue, d->width);
+        memcpy(pr, d->red, d->width);
+        memcpy(pg, d->green, d->width);
+        memcpy(pb, d->blue, d->width);
     }
 }
 
@@ -251,7 +251,7 @@ void Texture::doVgradient()
     dgy /= d->height;
     dby /= d->height;
 
-    unsigned char *pr = d->Qt::red, *pg = d->Qt::green, *pb = d->Qt::blue;
+    unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
     register int y;
     
     for (y = 0; y < d->height; y++, pr += d->width, pg += d->width, pb += d->width) {
@@ -274,7 +274,7 @@ void Texture::doDgradient()
                                         xr = (float) d->color0.red(),
                                         xg = (float) d->color0.green(),
                                         xb = (float) d->color0.blue();
-    unsigned char *pr = d->Qt::red, *pg = d->Qt::green, *pb = d->Qt::blue;
+    unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
     unsigned int w = d->width * 2, h = d->height * 2;
     unsigned int *xt = xtable; 
     unsigned int *yt = ytable; 
@@ -335,7 +335,7 @@ void Texture::doDgradient()
 
 void Texture::doBevel()
 {
-    unsigned char *pr = d->Qt::red, *pg = d->Qt::green, *pb = d->Qt::blue;
+    unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
 
     register unsigned char r, g, b, rr ,gg ,bb;
     register unsigned int w = d->width, h = d->height - 1, wh = w * h;
@@ -399,9 +399,9 @@ void Texture::doBevel()
     *(pg + wh) = gg;
     *(pb + wh) = bb;
 
-    pr = d->Qt::red   + d->width;
-    pg = d->Qt::green + d->width;
-    pb = d->Qt::blue  + d->width;
+    pr = d->red   + d->width;
+    pg = d->green + d->width;
+    pb = d->blue  + d->width;
 
     while (--h)
     {
@@ -473,7 +473,7 @@ void Texture::doBevel()
 
 void Texture::buildImage()
 {
-    unsigned char *pr = d->Qt::red, *pg = d->Qt::green, *pb = d->Qt::blue;
+    unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
 
     QImage image(d->width, d->height, 32);
 

@@ -24,14 +24,13 @@
 
 // Qt includes.
 
-#include <q3dict.h>
-#include <q3ptrlist.h>
-#include <qfileinfo.h>
-#include <qfile.h>
-#include <qapplication.h>
-#include <qpalette.h>
-#include <qtimer.h>
-//Added by qt3to4:
+#include <Q3Dict>
+#include <Q3PtrList>
+#include <QFileInfo>
+#include <QFile>
+#include <QApplication>
+#include <QPalette>
+#include <QTimer>
 #include <QPixmap>
 
 // KDE includes.
@@ -64,19 +63,19 @@ public:
 
     ThemeEnginePriv()
     {
-        currTheme = 0;
-        db        = 0;
+        currTheme         = 0;
+        db                = 0;
         themeInitiallySet = false;
     }
 
     Q3PtrList<Theme> themeList;
     Q3Dict<Theme>    themeDict;
     
-    Theme*          currTheme;
-    Theme*          defaultTheme;
-    bool            themeInitiallySet;
+    Theme*           currTheme;
+    Theme*           defaultTheme;
+    bool             themeInitiallySet;
 
-    XrmDatabase     db;
+    XrmDatabase      db;
 };
 
 ThemeEngine* ThemeEngine::m_componentData = 0;
@@ -131,9 +130,8 @@ void ThemeEngine::scanThemes()
     d->themeDict.clear();
     d->currTheme = 0;
 
-    QStringList themes =
-        KGlobal::dirs()->findAllResources( "themes", QString(),
-                                           false, true );
+    QStringList themes = KGlobal::dirs()->findAllResources("themes", QString(), 
+                                          KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
 
     for (QStringList::iterator it=themes.begin(); it != themes.end();
          ++it)

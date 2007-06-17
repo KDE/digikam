@@ -38,8 +38,7 @@
 
 // Qt includes.
 
-#include <qcolor.h>
-//Added by qt3to4:
+#include <QColor>
 #include <QPixmap>
 
 // Local includes.

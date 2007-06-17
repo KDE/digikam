@@ -27,10 +27,10 @@
 
 // Qt includes.
 
-#include <qstringlist.h>
-#include <qobject.h>
-#include <qcolor.h>
-#include <qpixmap.h>
+#include <QStringList>
+#include <QObject>
+#include <QColor>
+#include <QPixmap>
 
 // Digikam includes.
 

@@ -26,8 +26,8 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qcolor.h>
+#include <QString>
+#include <QColor>
 
 // Digikam includes.
 
