@@ -52,6 +52,62 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
         |---splashscreen             Laurent       DONE        CMake port only
  
  4      |-digikam                                              The most long to do certainly
+            album.cpp
+            albumfiletip.cpp
+            albumfolderview.cpp
+            albumhistory.cpp
+            albumicongroupitem.cpp
+            albumiconitem.cpp
+            albumiconview.cpp
+            albumitemhandler.cpp
+            albumlister.cpp
+            albummanager.cpp
+            albumpropsedit.cpp
+            albumsettings.cpp
+            albumthumbnailloader.cpp
+            albumwidgetstack.cpp
+            cameradragobject.cpp
+            cameralist.cpp
+            cameratype.cpp
+            datefolderview.cpp
+            dcopiface.cpp
+            digikamapp.cpp
+            digikamfirstrun.cpp
+            digikamview.cpp
+            dio.cpp
+            dragobjects.cpp
+            firstrun.cpp
+            folderitem.cpp
+            folderview.cpp
+            icongroupitem.cpp
+            iconitem.cpp
+            iconview.cpp
+            imageattributeswatch.cpp
+            imagepreviewview.cpp
+            kdateedit.cpp
+            kdatepickerpopup.cpp
+            kdatetimeedit.cpp
+            kipiinterface.cpp        Gilles       
+            main.cpp
+            mediaplayerview.cpp
+            metadatahub.cpp
+            monthwidget.cpp
+            pixmapmanager.cpp
+            ratingpopupmenu.cpp
+            ratingwidget.cpp
+            scanlib.cpp
+            searchadvanceddialog.cpp
+            searchfolderview.cpp
+            searchquickdialog.cpp
+            searchresultsitem.cpp
+            searchresultsview.cpp
+            searchwidgets.cpp
+            syncjob.cpp
+            tagcreatedlg.cpp
+            tagfilterview.cpp
+            tagfolderview.cpp
+            tagspopupmenu.cpp
+            welcomepageview.cpp
 
  5      |-kioslave
             digikamalbums.cpp        Marcel
