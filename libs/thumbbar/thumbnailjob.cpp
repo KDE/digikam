@@ -52,6 +52,7 @@ extern "C"
 
 #include "ddebug.h"
 #include "thumbnailjob.h"
+#include "thumbnailjob.moc"
 
 namespace Digikam
 {
@@ -314,5 +315,4 @@ void ThumbnailJob::emitThumbnail(QImage& thumb)
 
 }  // namespace Digikam
 
-#include "thumbnailjob.moc"
 
