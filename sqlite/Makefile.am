@@ -1,14 +1,14 @@
 #stolen Makefile.am from amarok
 
-noinst_LTLIBRARIES = libsqlite.la
+noinst_LTLIBRARIES = libsqlite2.la
 
 INCLUDES = $(all_includes)
     
-libsqlite_la_CFLAGS = -w
+libsqlite2_la_CFLAGS = -w
 
-libsqlite_la_LDFLAGS = $(LIBPTHREAD)
+libsqlite2_la_LDFLAGS = $(LIBPTHREAD)
   
-libsqlite_la_SOURCES = \
+libsqlite2_la_SOURCES = \
     attach.c \
     auth.c \
     btree.c \
