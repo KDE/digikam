@@ -28,7 +28,7 @@ ORDER   DIRECTORIES                  WHO           STATUS      REMARK
         |---levels                   Gilles        DONE
         |---lprof                    Gilles        DONE        CMake port only
         |---themeengine
-        |---threadimageio            Marcel
+        |---threadimageio            Marcel        DONE
         |---thumbbar                 Gilles        DONE
         |---whitebalance             Gilles        DONE
         |---widgets                  Laurent
