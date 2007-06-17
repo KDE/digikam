@@ -34,6 +34,7 @@ class LoadingProcessListener
 {
 public:
 
+    virtual ~LoadingProcessListener() {}
     virtual bool querySendNotifyEvent() = 0;
     virtual QObject *eventReceiver() = 0;
     virtual LoadSaveThread::AccessMode accessMode() = 0;
@@ -44,6 +45,7 @@ class LoadingProcess
 {
 public:
 
+    virtual ~LoadingProcess() {};
     virtual bool completed() = 0;
     virtual QString filePath() = 0;
     virtual QString cacheKey() = 0;
@@ -64,7 +66,7 @@ public:
 
     static LoadingCache *cache();
     static void cleanUp();
-    ~LoadingCache();
+    virtual ~LoadingCache();
 
     // all functions shall only be called when a CacheLock is held
     class CacheLock
@@ -116,7 +118,7 @@ signals:
 
 private:
 
-    static LoadingCache *m_componentData;
+    static LoadingCache *m_instance;
 
     LoadingCache();
 

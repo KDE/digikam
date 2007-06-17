@@ -106,10 +106,10 @@ bool LoadingCache::putImage(const QString &cacheKey, DImg *img, const QString &f
     QVariant attribute(img->attribute("previewQImage"));
     if (attribute.isValid())
     {
-        cost = attribute.toImage().numBytes();
+        cost = attribute.value<QImage>().numBytes();
     }
 
-    successfulyInserted = d->imageCache.insert(cacheKey, img, cost)
+    successfulyInserted = d->imageCache.insert(cacheKey, img, cost);
 
     if (successfulyInserted && !filePath.isEmpty())
     {
@@ -146,12 +146,12 @@ void LoadingCache::slotFileDirty(const QString &path)
             //DDebug() << " removing watch and cache entry for " << path << endl;
             d->imageCache.remove(cacheKey);
             d->watch->removeFile(path);
-            d->watchedFiles.remove(path);
+            d->watchedFiles.removeAll(path);
         }
     }
 }
 
-void LoadingCache::customEvent(QCustomEvent *)
+void LoadingCache::slotUpdateDirWatch()
 {
     // Event comes from main thread, we need to lock ourselves.
     CacheLock lock(this);
@@ -168,7 +168,7 @@ void LoadingCache::customEvent(QCustomEvent *)
         {
             if (!d->watchedFiles.contains(watchPath))
                 toBeAdded.append(watchPath);
-            toBeRemoved.remove(watchPath);
+            toBeRemoved.removeAll(watchPath);
         }
     }
 
@@ -176,7 +176,7 @@ void LoadingCache::customEvent(QCustomEvent *)
     {
         //DDebug() << "removing watch for " << *it << endl;
         d->watch->removeFile(*it);
-        d->watchedFiles.remove(*it);
+        d->watchedFiles.removeAll(*it);
     }
 
     for (QStringList::iterator it = toBeAdded.begin(); it != toBeAdded.end(); ++it)
@@ -211,7 +211,7 @@ void LoadingCache::removeLoadingProcess(LoadingProcess *process)
 
 void LoadingCache::notifyNewLoadingProcess(LoadingProcess *process, LoadingDescription description)
 {
-    for (QHash<QString, LoadingProcess *>::const_iterator it = d->loadingDict.const_begin();
+    for (QHash<QString, LoadingProcess *>::const_iterator it = d->loadingDict.constBegin();
           it != d->loadingDict.constEnd(); ++it)
     {
         it.value()->notifyNewLoadingProcess(process, description);
