@@ -15,3 +15,8 @@ icons_DATA = tag.png tag-new.png tag-properties.png tag-delete.png tag-reset.png
 	         albumfolder-importimages.png albumfolder-properties.png \
 	         albumfolder-new.png albumfolder-importdir.png \
 	         underexposure.png overexposure.png 
+
+digikamsplashpicdir = $(kde_datadir)/digikam
+digikamsplashpic_DATA = digikam-splash.png
+		 
+		 
