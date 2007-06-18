@@ -28,10 +28,6 @@
 
 #include <qwidget.h>
 
-class QCheckBox;
-
-class KColorButton;
-
 namespace Digikam
 {
 
