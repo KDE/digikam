@@ -24,12 +24,13 @@
 
 // Qt includes. 
  
-#include <qpixmap.h>
-#include <qapplication.h>
-#include <qtimer.h>
-#include <qpainter.h>
-//Added by qt3to4:
+#include <QPixmap>
+#include <QApplication>
+#include <QTimer>
+#include <QPainter>
 #include <QMouseEvent>
+#include <QPalette>
+#include <QDesktopWidget>
 
 // KDE includes.
 
@@ -77,15 +78,19 @@ public:
 };
 
 SplashScreen::SplashScreen(const QString& splash)
-            : QWidget(0, 0, Qt::WStyle_Customize|Qt::WStyle_Splash)
+            : QWidget(0)
 {
     d = new SplashScreenPriv;
-    
-    QString file = locate( "appdata", splash );
+
+    QString file = KStandardDirs::locate( "appdata", splash );
 
     d->pix = new QPixmap(file);
 
-    setErasePixmap( *d->pix );
+    // Code to remplace Qt3::QWidget::setErasePixmap()
+    QPalette palette;
+    palette.setBrush(backgroundRole(), QBrush(*d->pix));
+    setPalette(palette);
+
     resize( d->pix->size() );
     QRect scr = QApplication::desktop()->screenGeometry();
     move( scr.center() - rect().center() );
@@ -93,11 +98,12 @@ SplashScreen::SplashScreen(const QString& splash)
     animate();
 
     d->close = false;
-    
+
     d->timer = new QTimer;
     connect(d->timer, SIGNAL(timeout()),
             this,   SLOT(slotClose()));
-    d->timer->start(1000, true);
+    d->timer->setSingleShot(true);
+    d->timer->start(1000);
 }
 
 SplashScreen::~SplashScreen()
@@ -132,10 +138,11 @@ void SplashScreen::slotClose()
 {
     if (!d->close) 
     {
-        d->timer->start(500, true);
+        d->timer->setSingleShot(true);
+        d->timer->start(500);
         return;
     }
-    
+
     if (d->timer->isActive()) return;
     delete this;
 }
@@ -158,15 +165,20 @@ void SplashScreen::animate()
 void SplashScreen::drawContents()
 {
     QPixmap textPix = *d->pix;
-    QPainter painter(&textPix, this);
+    QPainter painter(&textPix);
+    painter.initFrom(this);
     drawContents(&painter);
-    setErasePixmap(textPix);
+
+    // Code to remplace Qt3::QWidget::setErasePixmap()
+    QPalette palette;
+    palette.setBrush(backgroundRole(), QBrush(textPix));
+    setPalette(palette);
 }
 
 void SplashScreen::drawContents( QPainter *painter )
 {
     int position;
-    QColor basecolor (155, 192, 231);
+    QColor basecolor(155, 192, 231);
 
     // Draw background circles
     painter->setPen(Qt::NoPen);
@@ -174,7 +186,7 @@ void SplashScreen::drawContents( QPainter *painter )
     painter->drawEllipse(21,7,9,9);
     painter->drawEllipse(32,7,9,9);
     painter->drawEllipse(43,7,9,9);
-    
+
     // Draw animated circles, increments are chosen
     // to get close to background's color
     // (didn't work well with QColor::light function)

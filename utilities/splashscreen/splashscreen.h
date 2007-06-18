@@ -27,14 +27,16 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qstring.h>
-//Added by qt3to4:
-#include <QMouseEvent>
+#include <QWidget>
+#include <QString>
+#include <QColor>
 
 // Local Includes.
 
 #include "digikam_export.h"
+
+class QMouseEvent;
+class QPainter;
 
 namespace Digikam
 {
@@ -57,11 +59,11 @@ public:
 
 protected:
 
-    void mousePressEvent( QMouseEvent * );
+    void mousePressEvent(QMouseEvent*);
     void drawContents();
-    void drawContents(QPainter *painter);
+    void drawContents(QPainter *);
     void animate();
-        
+
 private slots:
 
     void slotClose();
