@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <qwidget.h>
+#include <QWidget>
 
 namespace Digikam
 {
@@ -50,7 +50,6 @@ private:
 private:
 
     SetupMiscPriv* d;
-
 };
 
 }  // namespace Digikam

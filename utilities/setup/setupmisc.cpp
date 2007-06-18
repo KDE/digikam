@@ -24,11 +24,9 @@
 
 // Qt includes.
 
-#include <qlayout.h>
-#include <q3vgroupbox.h>
-#include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -66,35 +64,36 @@ SetupMisc::SetupMisc(QWidget* parent)
 {
     d = new SetupMiscPriv;
 
-    Q3VBoxLayout *mainLayout = new Q3VBoxLayout(parent);
-    Q3VBoxLayout *layout = new Q3VBoxLayout( this, 0, KDialog::spacingHint() );
+    QVBoxLayout *mainLayout = new QVBoxLayout(parent);
+    QVBoxLayout *layout     = new QVBoxLayout(this);
+    layout->setSpacing( KDialog::spacingHint() );
 
-   // --------------------------------------------------------
-
-   d->showTrashDeleteDialogCheck = new QCheckBox(i18n("Show confirmation dialog when moving items to the &trash"), this);
-   layout->addWidget(d->showTrashDeleteDialogCheck);
-
-   // --------------------------------------------------------
-
-   d->sidebarApplyDirectlyCheck = new QCheckBox(i18n("Apply changes in the &right sidebar without confirmation"), this);
-   layout->addWidget(d->sidebarApplyDirectlyCheck);
-
-   // --------------------------------------------------------
-
-   d->showSplashCheck = new QCheckBox(i18n("&Show splash screen at startup"), this);
-   layout->addWidget(d->showSplashCheck);
-
-   // --------------------------------------------------------
-
-   d->scanAtStart = new QCheckBox(i18n("&Scan for new items on startup (slows down startup)"), this);
-   layout->addWidget(d->scanAtStart);
-
-   // --------------------------------------------------------
-
-   layout->addStretch();
-   readSettings();
-   adjustSize();
-   mainLayout->addWidget(this);
+    // --------------------------------------------------------
+    
+    d->showTrashDeleteDialogCheck = new QCheckBox(i18n("Show confirmation dialog when moving items to the &trash"), this);
+    layout->addWidget(d->showTrashDeleteDialogCheck);
+    
+    // --------------------------------------------------------
+    
+    d->sidebarApplyDirectlyCheck = new QCheckBox(i18n("Apply changes in the &right sidebar without confirmation"), this);
+    layout->addWidget(d->sidebarApplyDirectlyCheck);
+    
+    // --------------------------------------------------------
+    
+    d->showSplashCheck = new QCheckBox(i18n("&Show splash screen at startup"), this);
+    layout->addWidget(d->showSplashCheck);
+    
+    // --------------------------------------------------------
+    
+    d->scanAtStart = new QCheckBox(i18n("&Scan for new items on startup (slows down startup)"), this);
+    layout->addWidget(d->scanAtStart);
+    
+    // --------------------------------------------------------
+    
+    layout->addStretch();
+    readSettings();
+    adjustSize();
+    mainLayout->addWidget(this);
 }
 
 SetupMisc::~SetupMisc()
