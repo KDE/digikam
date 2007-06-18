@@ -17,7 +17,8 @@ install( FILES tag.png
 	       albumfolder-importdir.png  	         
 	       underexposure.png 
 	       overexposure.png  
-         DESTINATION ${DATA_INSTALL_DIR}/digikam/icons/hicolor/32x32/actions )
+         DESTINATION ${DATA_INSTALL_DIR}/digikam/icons/hicolor/32x32/actions 
+       )
 
 install( FILES image-full.png 
                image-selection.png  	              
@@ -45,4 +46,7 @@ install( FILES image-full.png
 	       rating.png 
 	       worldmap.jpg 
 	       menusidepixmap.png  
-         DESTINATION ${DATA_INSTALL_DIR}/digikam/data )
+         DESTINATION ${DATA_INSTALL_DIR}/digikam/data 
+       )
+
+install( FILES digikam-splash.png DESTINATION ${DATA_INSTALL_DIR}/digikam )
