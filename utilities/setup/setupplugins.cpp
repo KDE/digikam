@@ -38,8 +38,9 @@
 #include <klocale.h>
 #include <kdialog.h>
 
-// KIPI Includes.
+// libkipi includes.
 
+#include <libkipi/pluginloader.h>
 #include <libkipi/version.h>
 
 // Local includes.

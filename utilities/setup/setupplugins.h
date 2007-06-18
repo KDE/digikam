@@ -28,10 +28,6 @@
 
 #include <qwidget.h>
 
-// libkipi includes.
-
-#include <libkipi/pluginloader.h>
-
 namespace Digikam
 {
 
