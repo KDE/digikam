@@ -13,7 +13,8 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/digikam
 
 # Static library for digiKam ############################################
 
-SET(libsetup_STAT_SRCS setupiofiles.cpp 
+SET(libsetup_STAT_SRCS setuplighttable.cpp
+                       setupiofiles.cpp 
                        setupplugins.cpp 
                        setupdcraw.cpp 
                        gpiface.cpp 
@@ -30,7 +31,6 @@ SET(libsetup_STAT_SRCS setupiofiles.cpp
                        setupicc.cpp 
                        setupslideshow.cpp 
                        setuptooltip.cpp 
-                       setuplighttable.cpp
    )
 
 KDE4_AUTOMOC(${libsetup_STAT_SRCS})

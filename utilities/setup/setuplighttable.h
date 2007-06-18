@@ -26,9 +26,7 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-
-class QCheckBox;
+#include <QWidget>
 
 namespace Digikam
 {

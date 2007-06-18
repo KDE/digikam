@@ -23,26 +23,17 @@
 
 // QT includes.
 
-#include <qlayout.h>
-#include <qcolor.h>
-#include <q3hbox.h>
-#include <q3vgroupbox.h>
-#include <qlabel.h>
-
-#include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QColor>
+#include <QLabel>
+#include <QGroupBox>
+#include <QVBoxLayout>
+#include <QCheckBox>
 
 // KDE includes.
 
 #include <klocale.h>
 #include <kdialog.h>
-#include <kcolorbutton.h>
-#include <knuminput.h>
 #include <kconfig.h>
-#include <kapplication.h>
-#include <k3listview.h>
-#include <ktrader.h>
 #include <kglobal.h>
 
 // Local includes.
@@ -74,12 +65,12 @@ SetupLightTable::SetupLightTable(QWidget* parent )
                : QWidget(parent)
 {
     d = new SetupLightTablePriv;
-    Q3VBoxLayout *layout = new Q3VBoxLayout( parent, 0, KDialog::spacingHint() );
+    QVBoxLayout *layout = new QVBoxLayout( parent );
 
     // --------------------------------------------------------
 
-    Q3VGroupBox *interfaceOptionsGroup = new Q3VGroupBox(i18n("Interface Options"), parent);
-
+    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), parent);
+    QVBoxLayout *gLayout             = new QVBoxLayout();
 
     d->autoSyncPreview = new QCheckBox(i18n("Synchronize panels automatically"), interfaceOptionsGroup);
     d->autoSyncPreview->setWhatsThis( i18n("<p>Set this option to automatically synchronize "
@@ -97,10 +88,17 @@ SetupLightTable::SetupLightTable(QWidget* parent )
                      "to load image, use it only if you have a fast computer."));
 
     d->hideToolBar = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
+    
+    gLayout->addWidget(d->autoSyncPreview);
+    gLayout->addWidget(d->autoLoadOnRightPanel);
+    gLayout->addWidget(d->loadFullImageSize);
+    gLayout->addWidget(d->hideToolBar);
+    interfaceOptionsGroup->setLayout(gLayout);
 
     // --------------------------------------------------------
 
     layout->addWidget(interfaceOptionsGroup);
+    layout->setSpacing( KDialog::spacingHint() );
     layout->addStretch();
 
     // --------------------------------------------------------
@@ -116,23 +114,23 @@ SetupLightTable::~SetupLightTable()
 void SetupLightTable::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group = config->group(QString("LightTable Settings"));
     QColor Black(Qt::black);
     QColor White(Qt::white);
-    config->setGroup("LightTable Settings");
-    d->hideToolBar->setChecked(config->readBoolEntry("FullScreen Hide ToolBar", false));
-    d->autoSyncPreview->setChecked(config->readBoolEntry("Auto Sync Preview", true));
-    d->autoLoadOnRightPanel->setChecked(config->readBoolEntry("Auto Load Right Panel", true));
-    d->loadFullImageSize->setChecked(config->readBoolEntry("Load Full Image size", false));
+    d->hideToolBar->setChecked(group.readEntry("FullScreen Hide ToolBar", false));
+    d->autoSyncPreview->setChecked(group.readEntry("Auto Sync Preview", true));
+    d->autoLoadOnRightPanel->setChecked(group.readEntry("Auto Load Right Panel", true));
+    d->loadFullImageSize->setChecked(group.readEntry("Load Full Image size", false));
 }
 
 void SetupLightTable::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("LightTable Settings");
-    config->writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
-    config->writeEntry("Auto Sync Preview", d->autoSyncPreview->isChecked());
-    config->writeEntry("Auto Load Right Panel", d->autoLoadOnRightPanel->isChecked());
-    config->writeEntry("Load Full Image size", d->loadFullImageSize->isChecked());
+    KConfigGroup group = config->group(QString("LightTable Settings"));
+    group.writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
+    group.writeEntry("Auto Sync Preview", d->autoSyncPreview->isChecked());
+    group.writeEntry("Auto Load Right Panel", d->autoLoadOnRightPanel->isChecked());
+    group.writeEntry("Load Full Image size", d->loadFullImageSize->isChecked());
     config->sync();
 }
 
