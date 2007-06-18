@@ -1,16 +1,56 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_SOURCE_DIR}/digikam/utilities/batch ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common   )
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/digikam
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/batch
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common
+                     ${KIPI_INCLUDE_DIR}
+                     ${KDCRAW_INCLUDE_DIR}
+                     ${GPHOTO_INCLUDE_DIR}
+                   )
+
+# Static library for digiKam ############################################
+
+SET(libsetup_STAT_SRCS gpiface.cpp 
+                       cameraselection.cpp 
+                       setupcamera.cpp 
+                       setupmime.cpp 
+                       setupplugins.cpp 
+                       setupidentity.cpp 
+                       setupgeneral.cpp 
+                       setup.cpp 
+                       setupcollections.cpp 
+                       setupmetadata.cpp 
+                       setupeditor.cpp 
+                       setupmisc.cpp 
+                       setupicc.cpp 
+                       setupiofiles.cpp 
+                       setupdcraw.cpp 
+                       setupslideshow.cpp 
+                       setuptooltip.cpp 
+                       setuplighttable.cpp
+   )
+
+KDE4_AUTOMOC(${libsetup_STAT_SRCS})
+
+KDE4_ADD_LIBRARY(libsetup STATIC ${libsetup_STAT_SRCS})
+
+TARGET_LINK_LIBRARIES(libsetup ${GPHOTO_LIBRARIES})
 
 
-########### next target ###############
+# Static library for Showfoto ##########################################
 
+SET(libshowfotosetup_STAT_SRCS setupiofiles.cpp 
+                               setupdcraw.cpp 
+                               setupicc.cpp 
+                               setupslideshow.cpp
+   )
 
-########### next target ###############
+KDE4_AUTOMOC(${libshowfotosetup_STAT_SRCS})
 
-
-########### install files ###############
-
-
+KDE4_ADD_LIBRARY(libshowfotosetup STATIC ${libshowfotosetup_STAT_SRCS})
 
 
 #original Makefile.am contents follow:
