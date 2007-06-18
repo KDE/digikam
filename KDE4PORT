@@ -120,7 +120,7 @@ ORDER   DIRECTORIES                  ASSIGNED      STATUS      REMARK
  5      |-showfoto
         |---icons                    Gilles        DONE        CMake port only
         |---pics                     Gilles        DONE        CMake port only
-        |---setup
+        |---setup                    Gilles
 
  6      |-imageplugins                                         All image editor plugins can be ported after digiKam core
         |---adjustcurves
