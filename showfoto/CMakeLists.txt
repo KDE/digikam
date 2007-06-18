@@ -14,7 +14,7 @@ kde4_automoc(${showfoto_SRCS})
 
 kde4_add_executable(showfoto ${showfoto_SRCS})
 
-target_link_libraries(showfoto  ${KDE4_KDECORE_LIBS} setup dialogshowfoto imagepropertiesshowfoto thumbbar showfoto splashscreen slideshow threadimageio jpegutils ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} )
+target_link_libraries(showfoto setup dialogshowfoto imagepropertiesshowfoto thumbbar showfoto splashscreen slideshow threadimageio jpegutils ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} )
 
 install(TARGETS showfoto DESTINATION ${BIN_INSTALL_DIR})
 
