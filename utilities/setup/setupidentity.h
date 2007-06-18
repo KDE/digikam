@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <qwidget.h>
+#include <QWidget>
 
 namespace Digikam
 {
@@ -51,7 +51,6 @@ private:
 private:
 
     SetupIdentityPriv* d;
-
 };
 
 }  // namespace Digikam

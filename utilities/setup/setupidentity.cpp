@@ -23,15 +23,11 @@
 
 // QT includes.
 
-#include <qlayout.h>
-#include <q3hgroupbox.h>
-#include <q3groupbox.h>
-#include <qlabel.h>
-
-#include <qvalidator.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3VBoxLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QValidator>
+#include <QGridLayout>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -72,7 +68,8 @@ SetupIdentity::SetupIdentity(QWidget* parent )
              : QWidget(parent)
 {
     d = new SetupIdentityPriv;
-    Q3VBoxLayout *layout = new Q3VBoxLayout( parent, 0, KDialog::spacingHint() );
+    QVBoxLayout *layout = new QVBoxLayout( parent );
+    layout->setSpacing( KDialog::spacingHint() );
     
     // --------------------------------------------------------
 
@@ -80,66 +77,72 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     QRegExp asciiRx("[\x20-\x7F]+$");
     QValidator *asciiValidator = new QRegExpValidator(asciiRx, this);
 
-    Q3GroupBox *photographerIdGroup = new Q3GroupBox(0, Qt::Horizontal, i18n("Photographer Information"), parent);
-    Q3GridLayout* grid = new Q3GridLayout( photographerIdGroup->layout(), 1, 1, KDialog::spacingHint());
+    QGroupBox *photographerIdGroup = new QGroupBox(i18n("Photographer Information"), parent);
+    QGridLayout* grid              = new QGridLayout();
+    grid->setSpacing(KDialog::spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Author:"), photographerIdGroup);
     d->authorEdit  = new KLineEdit(photographerIdGroup);
     d->authorEdit->setValidator(asciiValidator);
     d->authorEdit->setMaxLength(32);
     label1->setBuddy(d->authorEdit);
-    grid->addMultiCellWidget(label1, 0, 0, 0, 0);
-    grid->addMultiCellWidget(d->authorEdit, 0, 0, 1, 1);
+    grid->addWidget(label1, 0, 0, 0, 0);
+    grid->addWidget(d->authorEdit, 0, 0, 1, 1);
     d->authorEdit->setWhatsThis( i18n("<p>Set the photographer name. This field is limited "
-                                         "to 32 ASCII characters."));
+                                      "to 32 ASCII characters."));
 
-    QLabel *label2 = new QLabel(i18n("Author Title:"), photographerIdGroup);
+    QLabel *label2     = new QLabel(i18n("Author Title:"), photographerIdGroup);
     d->authorTitleEdit = new KLineEdit(photographerIdGroup);
     d->authorTitleEdit->setValidator(asciiValidator);
     d->authorTitleEdit->setMaxLength(32);
     label2->setBuddy(d->authorTitleEdit);
-    grid->addMultiCellWidget(label2, 1, 1, 0, 0);
-    grid->addMultiCellWidget(d->authorTitleEdit, 1, 1, 1, 1);
+    grid->addWidget(label2, 1, 1, 0, 0);
+    grid->addWidget(d->authorTitleEdit, 1, 1, 1, 1);
     d->authorTitleEdit->setWhatsThis( i18n("<p>Set the photographer title. This field is limited "
-                                              "to 32 ASCII characters."));
+                                           "to 32 ASCII characters."));
         
+    photographerIdGroup->setLayout(grid);
+
     // --------------------------------------------------------
 
-    Q3GroupBox *creditsGroup = new Q3GroupBox(0, Qt::Horizontal, i18n("Credit and Copyright"), parent);
-    Q3GridLayout* grid2 = new Q3GridLayout( creditsGroup->layout(), 2, 1, KDialog::spacingHint());
+    QGroupBox *creditsGroup = new QGroupBox(i18n("Credit and Copyright"), parent);
+    QGridLayout* grid2      = new QGridLayout();
+    grid2->setSpacing(KDialog::spacingHint());
 
     QLabel *label3 = new QLabel(i18n("Credit:"), creditsGroup);
     d->creditEdit = new KLineEdit(creditsGroup);
     d->creditEdit->setValidator(asciiValidator);
     d->creditEdit->setMaxLength(32);
     label3->setBuddy(d->creditEdit);
-    grid2->addMultiCellWidget(label3, 0, 0, 0, 0);
-    grid2->addMultiCellWidget(d->creditEdit, 0, 0, 1, 1);
+    grid2->addWidget(label3, 0, 0, 0, 0);
+    grid2->addWidget(d->creditEdit, 0, 0, 1, 1);
     d->creditEdit->setWhatsThis( i18n("<p>Set the default provider identification of the picture, "
-                                         "not necessarily the owner/creator. This field is limited "
-                                         "to 32 ASCII characters."));
+                                      "not necessarily the owner/creator. This field is limited "
+                                      "to 32 ASCII characters."));
 
     QLabel *label4 = new QLabel(i18n("Source:"), creditsGroup);
-    d->sourceEdit = new KLineEdit(creditsGroup);
+    d->sourceEdit  = new KLineEdit(creditsGroup);
     d->sourceEdit->setValidator(asciiValidator);
     d->sourceEdit->setMaxLength(32);
     label4->setBuddy(d->sourceEdit);
-    grid2->addMultiCellWidget(label4, 1, 1, 0, 0);
-    grid2->addMultiCellWidget(d->sourceEdit, 1, 1, 1, 1);
+    grid2->addWidget(label4, 1, 1, 0, 0);
+    grid2->addWidget(d->sourceEdit, 1, 1, 1, 1);
     d->sourceEdit->setWhatsThis( i18n("<p>Set the default original owner identification of the intellectual "
-                                         "content of the picture. This could be an agency, a member of an agency or "
-                                         "an individual photographer name. This field is limited "
-                                         "to 32 ASCII characters."));
+                                      "content of the picture. This could be an agency, a member of an agency or "
+                                      "an individual photographer name. This field is limited "
+                                      "to 32 ASCII characters."));
 
-    QLabel *label5 = new QLabel(i18n("Copyright:"), creditsGroup);
+    QLabel *label5   = new QLabel(i18n("Copyright:"), creditsGroup);
     d->copyrightEdit = new KLineEdit(creditsGroup);
     d->copyrightEdit->setValidator(asciiValidator);
     d->copyrightEdit->setMaxLength(128);
     label5->setBuddy(d->copyrightEdit);
-    grid2->addMultiCellWidget(label5, 2, 2, 0, 0);
-    grid2->addMultiCellWidget(d->copyrightEdit, 2, 2, 1, 1);
+    grid2->addWidget(label5, 2, 2, 0, 0);
+    grid2->addWidget(d->copyrightEdit, 2, 2, 1, 1);
     d->copyrightEdit->setWhatsThis( i18n("<p>Set the default copyright notice of the pictures. "
-                                            "This field is limited to 128 ASCII characters."));
+                                         "This field is limited to 128 ASCII characters."));
+
+    creditsGroup->setLayout(grid2);
 
     // --------------------------------------------------------
 
