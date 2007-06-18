@@ -123,12 +123,12 @@ ORDER   DIRECTORIES                  ASSIGNED      STATUS      REMARK
         |---setup                    Gilles
 
  6      |-imageplugins                                         All image editor plugins can be ported after digiKam core
-        |---adjustcurves
-        |---adjustlevels
+        |---adjustcurves             Laurent                   CMake port only
+        |---adjustlevels              Laurent                   CMake port only
         |---antivignetting
         |---blurfx
-        |---border
-        |-----patterns               Gilles                    CMake port only
+        |---border                   Laurent                   CMake port only
+        |-----patterns               Gilles                    CMake port only 
         |---channelmixer
         |---charcoal
         |---colorfx
@@ -138,24 +138,24 @@ ORDER   DIRECTORIES                  ASSIGNED      STATUS      REMARK
         |-----sharpnesseditor
         |-------clapack              Gilles        DONE        CMake port only
         |---distortionfx
-        |---emboss
-        |---filmgrain
+        |---emboss                   Laurent                   CMake port only
+        |---filmgrain                Laurent                   CMake port only
         |---freerotation
-        |---hotpixels
+        |---hotpixels                Laurent                   CMake port only
         |---infrared
-        |---inpainting
-        |---inserttext
-        |---lensdistortion
-        |---noisereduction
-        |---oilpaint
-        |---perspective
-        |---raindrop
-        |---restoration
+        |---inpainting              Laurent                   CMake port only
+        |---inserttext              Laurent                   CMake port only
+        |---lensdistortion          Laurent                   CMake port only
+        |---noisereduction          Laurent                   CMake port only
+        |---oilpaint                Laurent                   CMake port only
+        |---perspective             Laurent                   CMake port only
+        |---raindrop                Laurent                   CMake port only
+        |---restoration             Laurent                   CMake port only
         |---sheartool
         |---superimpose
         |---texture
         |-----patterns               Gilles                    CMake port only
-        |---whitebalance
+        |---whitebalance             Laurent                   CMake port only
 
  7      |-themedesigner                                        The last one component. It completly independant. It will be the last one to port.
 
