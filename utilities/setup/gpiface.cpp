@@ -6,7 +6,8 @@
  * Date        : 2003-02-19
  * Description : Gphoto2 interface
  * 
- * Copyright (C) 2003 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,8 +31,8 @@ extern "C"
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 
 // Local includes
 
@@ -51,7 +52,7 @@ int GPIface::autoDetect(QString& model, QString& port)
 
     context = gp_context_new ();
     gp_list_new (&camList);
-    
+
     gp_abilities_list_new(&abilList);
     gp_abilities_list_load(abilList, context);
     gp_port_info_list_new(&infoList);
@@ -171,7 +172,7 @@ void GPIface::getCameraSupportedPorts(const QString& model, QStringList& plist)
 
     gp_abilities_list_new(&abilList);
     gp_abilities_list_load(abilList, context);
-    i = gp_abilities_list_lookup_model(abilList, model.local8Bit().data());
+    i = gp_abilities_list_lookup_model(abilList, model.toLocal8Bit().data());
     gp_abilities_list_get_abilities(abilList, i, &abilities);
     gp_abilities_list_free(abilList);
 
