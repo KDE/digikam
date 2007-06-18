@@ -13,7 +13,8 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/digikam
 
 # Static library for digiKam ############################################
 
-SET(libsetup_STAT_SRCS setupslideshow.cpp 
+SET(libsetup_STAT_SRCS setupmime.cpp 
+                       setupslideshow.cpp 
                        setupmetadata.cpp 
                        setupeditor.cpp
                        setupmisc.cpp 
@@ -24,7 +25,6 @@ SET(libsetup_STAT_SRCS setupslideshow.cpp
                        gpiface.cpp 
                        cameraselection.cpp 
                        setupcamera.cpp 
-                       setupmime.cpp 
                        setupidentity.cpp 
                        setupgeneral.cpp 
                        setup.cpp 

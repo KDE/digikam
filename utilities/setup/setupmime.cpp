@@ -23,24 +23,17 @@
 
 // QT includes.
 
-#include <qlayout.h>
-
-#include <q3hgroupbox.h>
-#include <q3groupbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-
-#include <qtoolbutton.h>
-#include <qtooltip.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3VBoxLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QToolButton>
+#include <QGridLayout>
+#include <QVBoxLayout>
 
 // KDE includes.
 
 #include <klocale.h>
 #include <kdialog.h>
-#include <klineeditdlg.h>
 #include <kiconloader.h>
 #include <kvbox.h>
 
@@ -84,12 +77,15 @@ SetupMime::SetupMime(QWidget* parent )
          : QWidget(parent)
 {
     d = new SetupMimePriv;
-    Q3VBoxLayout *layout = new Q3VBoxLayout(parent, 0, KDialog::spacingHint());
-    
+    QVBoxLayout *layout = new QVBoxLayout(parent);
+    layout->setSpacing(KDialog::spacingHint());
+
     // --------------------------------------------------------
     
-    Q3GroupBox *imageFileFilterBox = new Q3GroupBox(0, Qt::Horizontal, i18n("Image Files"), parent);
-    Q3GridLayout* grid1            = new Q3GridLayout(imageFileFilterBox->layout(), 1, 1, KDialog::spacingHint());
+    QGroupBox *imageFileFilterBox = new QGroupBox(i18n("Image Files"), parent);
+    QGridLayout* grid1            = new QGridLayout();
+    grid1->setSpacing(KDialog::spacingHint());
+    imageFileFilterBox->setLayout(grid1);
 
     QLabel *logoLabel1 = new QLabel(imageFileFilterBox);
     logoLabel1->setPixmap(DesktopIcon("image"));
@@ -100,27 +96,29 @@ SetupMime::SetupMime(QWidget* parent )
     KHBox *hbox1 = new KHBox(imageFileFilterBox);    
     d->imageFileFilterEdit = new QLineEdit(hbox1);
     d->imageFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of image files "
-                                                  "to be displayed in Albums (such as JPEG or TIFF); "
-                                                  "when these files are clicked on "
-                                                  "they will be opened with the digiKam Image Editor."));
+                                               "to be displayed in Albums (such as JPEG or TIFF); "
+                                               "when these files are clicked on "
+                                               "they will be opened with the digiKam Image Editor."));
     imageFileFilterLabel->setBuddy(d->imageFileFilterEdit);
     hbox1->setStretchFactor(d->imageFileFilterEdit, 10);
 
     d->revertImageFileFilterBtn = new QToolButton(hbox1);
-    d->revertImageFileFilterBtn->setIconSet(SmallIcon("reload_page"));
-    QToolTip::add(d->revertImageFileFilterBtn, i18n("Revert to default settings"));
+    d->revertImageFileFilterBtn->setIcon(SmallIcon("reload_page"));
+    d->revertImageFileFilterBtn->setToolTip(i18n("Revert to default settings"));
  
-    grid1->addMultiCellWidget(logoLabel1, 0, 1, 0, 0);
-    grid1->addMultiCellWidget(imageFileFilterLabel, 0, 0, 1, 1);
-    grid1->addMultiCellWidget(hbox1, 1, 1, 1, 1);
-    grid1->setColStretch(1, 10);
+    grid1->addWidget(logoLabel1, 0, 1, 0, 0);
+    grid1->addWidget(imageFileFilterLabel, 0, 0, 1, 1);
+    grid1->addWidget(hbox1, 1, 1, 1, 1);
+    grid1->setColumnStretch(1, 10);
 
     layout->addWidget(imageFileFilterBox);
     
     // --------------------------------------------------------
     
-    Q3GroupBox *movieFileFilterBox = new Q3GroupBox(0, Qt::Horizontal, i18n("Movie Files"), parent);
-    Q3GridLayout* grid2            = new Q3GridLayout(movieFileFilterBox->layout(), 1, 1, KDialog::spacingHint());
+    QGroupBox *movieFileFilterBox = new QGroupBox(i18n("Movie Files"), parent);
+    QGridLayout* grid2            = new QGridLayout();
+    grid2->setSpacing(KDialog::spacingHint());
+    movieFileFilterBox->setLayout(grid2);
 
     QLabel *logoLabel2 = new QLabel(movieFileFilterBox);
     logoLabel2->setPixmap(DesktopIcon("video"));
@@ -131,27 +129,28 @@ SetupMime::SetupMime(QWidget* parent )
     KHBox *hbox2 = new KHBox(movieFileFilterBox);    
     d->movieFileFilterEdit = new QLineEdit(hbox2);
     d->movieFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of movie files "
-                                                  "to be displayed in Albums (such as MPEG or AVI); "
-                                                  "when these files are clicked on they will "
-                                                  "be opened with the default KDE movie player."));
+                                               "to be displayed in Albums (such as MPEG or AVI); "
+                                               "when these files are clicked on they will "
+                                               "be opened with the default KDE movie player."));
     movieFileFilterLabel->setBuddy(d->movieFileFilterEdit);
     hbox2->setStretchFactor(d->movieFileFilterEdit, 10);
 
     d->revertMovieFileFilterBtn = new QToolButton(hbox2);
-    d->revertMovieFileFilterBtn->setIconSet(SmallIcon("reload_page"));
-    QToolTip::add(d->revertMovieFileFilterBtn, i18n("Revert to default settings"));
+    d->revertMovieFileFilterBtn->setIcon(SmallIcon("reload_page"));
+    d->revertMovieFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
-    grid2->addMultiCellWidget(logoLabel2, 0, 1, 0, 0);
-    grid2->addMultiCellWidget(movieFileFilterLabel, 0, 0, 1, 1);
-    grid2->addMultiCellWidget(hbox2, 1, 1, 1, 1);
-    grid2->setColStretch(1, 10);
+    grid2->addWidget(logoLabel2, 0, 1, 0, 0);
+    grid2->addWidget(movieFileFilterLabel, 0, 0, 1, 1);
+    grid2->addWidget(hbox2, 1, 1, 1, 1);
+    grid2->setColumnStretch(1, 10);
 
     layout->addWidget(movieFileFilterBox);
     
     // --------------------------------------------------------
     
-    Q3GroupBox *audioFileFilterBox = new Q3GroupBox(0, Qt::Horizontal, i18n("Audio Files"), parent);
-    Q3GridLayout* grid3            = new Q3GridLayout(audioFileFilterBox->layout(), 1, 1, KDialog::spacingHint());
+    QGroupBox *audioFileFilterBox = new QGroupBox(i18n("Audio Files"), parent);
+    QGridLayout* grid3            = new QGridLayout();
+    grid3->setSpacing(KDialog::spacingHint());
 
     QLabel *logoLabel3 = new QLabel(audioFileFilterBox);
     logoLabel3->setPixmap(DesktopIcon("sound"));
@@ -162,27 +161,28 @@ SetupMime::SetupMime(QWidget* parent )
     KHBox *hbox3 = new KHBox(audioFileFilterBox);  
     d->audioFileFilterEdit = new QLineEdit(hbox3);
     d->audioFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of audio files "
-                                                  "to be displayed in Albums (such as MP3 or OGG); "
-                                                  "when these files are clicked on they will "
-                                                  "be opened with the default KDE audio player."));
+                                               "to be displayed in Albums (such as MP3 or OGG); "
+                                               "when these files are clicked on they will "
+                                               "be opened with the default KDE audio player."));
     audioFileFilterLabel->setBuddy(d->audioFileFilterEdit);
     hbox3->setStretchFactor(d->audioFileFilterEdit, 10);
 
     d->revertAudioFileFilterBtn = new QToolButton(hbox3);
-    d->revertAudioFileFilterBtn->setIconSet(SmallIcon("reload_page"));
-    QToolTip::add(d->revertAudioFileFilterBtn, i18n("Revert to default settings"));
+    d->revertAudioFileFilterBtn->setIcon(SmallIcon("reload_page"));
+    d->revertAudioFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
-    grid3->addMultiCellWidget(logoLabel3, 0, 1, 0, 0);
-    grid3->addMultiCellWidget(audioFileFilterLabel, 0, 0, 1, 1);
-    grid3->addMultiCellWidget(hbox3, 1, 1, 1, 1);
-    grid3->setColStretch(1, 10);
+    grid3->addWidget(logoLabel3, 0, 1, 0, 0);
+    grid3->addWidget(audioFileFilterLabel, 0, 0, 1, 1);
+    grid3->addWidget(hbox3, 1, 1, 1, 1);
+    grid3->setColumnStretch(1, 10);
 
     layout->addWidget(audioFileFilterBox);
     
     // --------------------------------------------------------
     
-    Q3GroupBox *rawFileFilterBox = new Q3GroupBox(0, Qt::Horizontal, i18n("RAW Files"), parent);
-    Q3GridLayout* grid4          = new Q3GridLayout(rawFileFilterBox->layout(), 1, 1, KDialog::spacingHint());
+    QGroupBox *rawFileFilterBox = new QGroupBox(i18n("RAW Files"), parent);
+    QGridLayout* grid4          = new QGridLayout();
+    grid4->setSpacing(KDialog::spacingHint());
 
     QLabel *logoLabel4 = new QLabel(rawFileFilterBox);
     logoLabel4->setPixmap(DesktopIcon("kdcraw"));
@@ -193,19 +193,19 @@ SetupMime::SetupMime(QWidget* parent )
     KHBox *hbox4 = new KHBox(rawFileFilterBox);  
     d->rawFileFilterEdit = new QLineEdit(hbox4);
     d->rawFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of RAW image files "
-                                                "to be displayed in Albums (such as CRW, for Canon cameras, "
-                                                "or NEF, for Nikon cameras)."));
+                                             "to be displayed in Albums (such as CRW, for Canon cameras, "
+                                             "or NEF, for Nikon cameras)."));
     rawFileFilterLabel->setBuddy(d->rawFileFilterEdit);
     hbox4->setStretchFactor(d->rawFileFilterEdit, 10);
 
     d->revertRawFileFilterBtn = new QToolButton(hbox4);
-    d->revertRawFileFilterBtn->setIconSet(SmallIcon("reload_page"));
-    QToolTip::add(d->revertRawFileFilterBtn, i18n("Revert to default settings"));
+    d->revertRawFileFilterBtn->setIcon(SmallIcon("reload_page"));
+    d->revertRawFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
-    grid4->addMultiCellWidget(logoLabel4, 0, 1, 0, 0);
-    grid4->addMultiCellWidget(rawFileFilterLabel, 0, 0, 1, 1);
-    grid4->addMultiCellWidget(hbox4, 1, 1, 1, 1);
-    grid4->setColStretch(1, 10);
+    grid4->addWidget(logoLabel4, 0, 1, 0, 0);
+    grid4->addWidget(rawFileFilterLabel, 0, 0, 1, 1);
+    grid4->addWidget(hbox4, 1, 1, 1, 1);
+    grid4->setColumnStretch(1, 10);
 
     layout->addWidget(rawFileFilterBox);
     layout->addStretch();
@@ -262,22 +262,22 @@ void SetupMime::readSettings()
 
 void SetupMime::slotRevertImageFileFilter()
 {
-    d->imageFileFilterEdit->setText(AlbumSettings::componentData().getDefaultImageFileFilter());
+    d->imageFileFilterEdit->setText(AlbumSettings::componentData()->getDefaultImageFileFilter());
 }
 
 void SetupMime::slotRevertMovieFileFilter()
 {
-    d->movieFileFilterEdit->setText(AlbumSettings::componentData().getDefaultMovieFileFilter());
+    d->movieFileFilterEdit->setText(AlbumSettings::componentData()->getDefaultMovieFileFilter());
 }
 
 void SetupMime::slotRevertAudioFileFilter()
 {
-    d->audioFileFilterEdit->setText(AlbumSettings::componentData().getDefaultAudioFileFilter());
+    d->audioFileFilterEdit->setText(AlbumSettings::componentData()->getDefaultAudioFileFilter());
 }
 
 void SetupMime::slotRevertRawFileFilter()
 {
-    d->rawFileFilterEdit->setText(AlbumSettings::componentData().getDefaultRawFileFilter());
+    d->rawFileFilterEdit->setText(AlbumSettings::componentData()->getDefaultRawFileFilter());
 }
 
 }  // namespace Digikam
