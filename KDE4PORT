@@ -11,11 +11,11 @@ List of directories ported by developpers:
 
 ORDER   DIRECTORIES                  ASSIGNED      STATUS      REMARK
 
- 1      |-sqlite                     Gilles        DONE        CMake port only. Used by digiKam core. Must be ported in first.
 
- 2      |-libs                                                 "libs" subfloders are used by all others parts of digiKam.
+ 1      |-libs                                                 "libs" subfloders are used by all others parts of digiKam. Must be ported in first.
         |---curves                   Gilles        DONE
         |---database                 Marcel
+        |-----sqlite2                Gilles        DONE        CMake port only. 
         |---dialogs
         |---dimg                     Gilles        DONE
         |-----filters                Gilles        DONE
@@ -37,7 +37,7 @@ ORDER   DIRECTORIES                  ASSIGNED      STATUS      REMARK
         |-----imageplugins           Laurent
         |-----metadata               Laurent
 
- 3      |-utilities                                            Utilities components are used as "libs" by digiKam main interface.
+ 2      |-utilities                                            Utilities components are used as "libs" by digiKam main interface.
         |---batch                    Laurent
         |---cameragui                
         |---hotplug                  Gilles                    CMake port only
@@ -51,7 +51,7 @@ ORDER   DIRECTORIES                  ASSIGNED      STATUS      REMARK
         |---slideshow                Laurent                   CMake port only
         |---splashscreen             Laurent       DONE        CMake port only
  
- 4      |-digikam                                              The most long to do certainly
+ 3      |-digikam                                              The most long to do certainly
             album.cpp
             albumfiletip.cpp
             albumfolderview.cpp
@@ -109,7 +109,7 @@ ORDER   DIRECTORIES                  ASSIGNED      STATUS      REMARK
             tagspopupmenu.cpp
             welcomepageview.cpp
 
- 5      |-kioslave
+ 4      |-kioslave
             digikamalbums.cpp        Marcel
             digikamdates.cpp         Marcel
             digikamsearch.cpp        Marcel
@@ -117,12 +117,12 @@ ORDER   DIRECTORIES                  ASSIGNED      STATUS      REMARK
             digikamthumbnail.cpp     Gilles        DONE                
             sqlitedb.cpp             Marcel
 
- 6      |-showfoto
+ 5      |-showfoto
         |---icons                    Gilles        DONE        CMake port only
         |---pics                     Gilles        DONE        CMake port only
         |---setup
 
- 7      |-imageplugins                                         All image editor plugins can be ported after digiKam core
+ 6      |-imageplugins                                         All image editor plugins can be ported after digiKam core
         |---adjustcurves
         |---adjustlevels
         |---antivignetting
@@ -157,9 +157,9 @@ ORDER   DIRECTORIES                  ASSIGNED      STATUS      REMARK
         |-----patterns               Gilles                    CMake port only
         |---whitebalance
 
- 8      |-themedesigner                                        The last one component. It completly independant. It will be the last one to port.
+ 7      |-themedesigner                                        The last one component. It completly independant. It will be the last one to port.
 
- 9      |-data                       Gilles        DONE        CMake port only
+ 8      |-data                       Gilles        DONE        CMake port only
         |---about                    Gilles        DONE        CMake port only
         |---icons                    Gilles        DONE        CMake port only
         |---pics                     Gilles        DONE        CMake port only
