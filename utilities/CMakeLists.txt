@@ -1,7 +1,7 @@
 
 add_subdirectory( scripts )
 add_subdirectory( splashscreen )
-#add_subdirectory( setup )
+add_subdirectory( setup )
 #add_subdirectory( imageeditor )
 #add_subdirectory( cameragui )
 #add_subdirectory( hotplug )
