@@ -4,7 +4,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor ${
 
 ########### next target ###############
 
-set(digikamimageplugin_colorfx_PART_SRCS ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp )
+set(digikamimageplugin_colorfx_PART_SRCS imageplugin_colorfx.cpp imageeffect_colorfx.cpp )
+
 
 kde4_automoc(${digikamimageplugin_colorfx_PART_SRCS})
 
@@ -21,39 +22,3 @@ install( FILES  digikamimageplugin_colorfx_ui.rc DESTINATION ${DATA_INSTALL_DIR}
 install( FILES  digikamimageplugin_colorfx.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
 
-
-#original Makefile.am contents follow:
-
-#METASOURCES = AUTO
-#
-#INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
-#	       -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
-#	       -I$(top_srcdir)/digikam/libs/histogram \
-#	       -I$(top_srcdir)/digikam/libs/levels \
-#	       -I$(top_srcdir)/digikam/libs/curves \
-#	       -I$(top_srcdir)/digikam/libs/whitebalance \
-#	       -I$(top_srcdir)/digikam/libs/widgets/common \
-#	       -I$(top_srcdir)/digikam/libs/widgets/iccprofiles \
-#	       -I$(top_srcdir)/digikam/libs/widgets/imageplugins \
-#	       -I$(top_srcdir)/digikam/libs/dialogs \
-#	       -I$(top_srcdir)/digikam/libs/dimg \
-#	       -I$(top_srcdir)/digikam/libs/dmetadata \
-#	       -I$(top_srcdir)/digikam/libs/dimg/filters \
-#	       -I$(top_srcdir)/digikam/digikam \
-#	       $(all_includes) 
-#
-#digikamimageplugin_colorfx_la_SOURCES = imageplugin_colorfx.cpp \
-#	                                    imageeffect_colorfx.cpp 
-#
-#digikamimageplugin_colorfx_la_LIBADD = $(LIB_KPARTS) \
-#	                                   $(top_builddir)/digikam/digikam/libdigikam.la 
-#
-#digikamimageplugin_colorfx_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
-#
-#kde_services_DATA = digikamimageplugin_colorfx.desktop
-#
-#kde_module_LTLIBRARIES = digikamimageplugin_colorfx.la
-#
-#rcdir = $(kde_datadir)/digikam
-#rc_DATA = digikamimageplugin_colorfx_ui.rc
-#       
