@@ -36,6 +36,7 @@
 #include <klocale.h>
 #include <kdialog.h>
 #include <kconfig.h>
+#include <kapplication.h>
 
 // Local includes.
 
