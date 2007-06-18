@@ -1,11 +1,9 @@
 
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/digikam 
+INCLUDE_DIRECTORIES(  
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/themeengine 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/threadimageio 
-                     ${KDE4_INCLUDE_DIR} 
-                     ${QT_INCLUDES}  
                    )
 
 SET(libslideshow_STAT_SRCS toolbar.cpp slideshow.cpp )

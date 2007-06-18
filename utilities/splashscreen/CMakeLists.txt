@@ -1,5 +1,5 @@
 
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/digikam  )
+INCLUDE_DIRECTORIES(   )
 
 SET(libsplashscreen_STAT_SRCS splashscreen.cpp )
 
