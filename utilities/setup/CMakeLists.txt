@@ -8,7 +8,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/digikam
                      ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common
                      ${KIPI_INCLUDE_DIR}
                      ${KDCRAW_INCLUDE_DIR}
-                     ${GPHOTO_INCLUDE_DIR}
+                     ${GPHOTO2_INCLUDE_DIR}
                    )
 
 # Static library for digiKam ############################################
@@ -37,7 +37,7 @@ KDE4_AUTOMOC(${libsetup_STAT_SRCS})
 
 KDE4_ADD_LIBRARY(libsetup STATIC ${libsetup_STAT_SRCS})
 
-TARGET_LINK_LIBRARIES(libsetup ${GPHOTO_LIBRARIES})
+TARGET_LINK_LIBRARIES(libsetup ${GPHOTO2_LIBRARIES})
 
 
 # Static library for Showfoto ##########################################
