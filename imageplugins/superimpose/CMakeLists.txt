@@ -4,7 +4,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor ${
 
 ########### next target ###############
 
-set(digikamimageplugin_superimpose_PART_SRCS ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp )
+set(digikamimageplugin_superimpose_PART_SRCS superimposewidget.cpp superimpose.cpp dirselectwidget.cpp imageplugin_superimpose.cpp imageeffect_superimpose.cpp )
+
 
 kde4_automoc(${digikamimageplugin_superimpose_PART_SRCS})
 
@@ -22,40 +23,3 @@ install( FILES  digikamimageplugin_superimpose.desktop DESTINATION ${SERVICES_IN
 
 
 
-#original Makefile.am contents follow:
-
-#METASOURCES = AUTO
-#
-#INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
-#	       -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
-#	       -I$(top_srcdir)/digikam/libs/histogram \
-#	       -I$(top_srcdir)/digikam/libs/levels \
-#	       -I$(top_srcdir)/digikam/libs/curves \
-#	       -I$(top_srcdir)/digikam/libs/whitebalance \
-#	       -I$(top_srcdir)/digikam/libs/widgets/common \
-#	       -I$(top_srcdir)/digikam/libs/widgets/iccprofiles \
-#	       -I$(top_srcdir)/digikam/libs/widgets/imageplugins \
-#	       -I$(top_srcdir)/digikam/libs/dialogs \
-#	       -I$(top_srcdir)/digikam/libs/dimg \
-#	       -I$(top_srcdir)/digikam/libs/dmetadata \
-#	       -I$(top_srcdir)/digikam/libs/dimg/filters \
-#	       -I$(top_srcdir)/digikam/libs/thumbbar \
-#	       -I$(top_srcdir)/digikam/digikam \
-#	       $(all_includes) 
-#
-#digikamimageplugin_superimpose_la_SOURCES = superimposewidget.cpp superimpose.cpp dirselectwidget.cpp \
-#	                                        imageplugin_superimpose.cpp imageeffect_superimpose.cpp 
-#	                                        
-#
-#digikamimageplugin_superimpose_la_LIBADD = $(LIB_KPARTS) \
-#	                                       $(top_builddir)/digikam/digikam/libdigikam.la 
-#
-#digikamimageplugin_superimpose_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
-#
-#kde_services_DATA = digikamimageplugin_superimpose.desktop
-#
-#kde_module_LTLIBRARIES = digikamimageplugin_superimpose.la
-#
-#rcdir = $(kde_datadir)/digikam
-#rc_DATA = digikamimageplugin_superimpose_ui.rc
-#
