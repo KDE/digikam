@@ -2,6 +2,7 @@ ADD_SUBDIRECTORY( sqlite2 )
 
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/database/sqlite2
+		     ${SQLITE_INCLUDE_DIR}		     
                    )
 
 SET(libdatabase_STAT_SRCS albumdb.cpp 
