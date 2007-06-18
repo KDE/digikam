@@ -15,7 +15,7 @@ ORDER   DIRECTORIES                  ASSIGNED      STATUS      REMARK
  1      |-libs                                                 "libs" subfloders are used by all others parts of digiKam. Must be ported in first.
         |---curves                   Gilles        DONE
         |---database                 Marcel
-        |-----sqlite2                Gilles        DONE        CMake port only. 
+        |-----sqlite2                Gilles        DONE        CMake port only is require. 
         |---dialogs
         |---dimg                     Gilles        DONE
         |-----filters                Gilles        DONE
@@ -26,7 +26,7 @@ ORDER   DIRECTORIES                  ASSIGNED      STATUS      REMARK
         |---imageproperties
         |---jpegutils                Gilles        DONE
         |---levels                   Gilles        DONE
-        |---lprof                    Gilles        DONE        CMake port only
+        |---lprof                    Gilles        DONE        CMake port only is require.
         |---themeengine              Gilles        DONE
         |---threadimageio            Marcel        DONE
         |---thumbbar                 Gilles        DONE
@@ -40,16 +40,16 @@ ORDER   DIRECTORIES                  ASSIGNED      STATUS      REMARK
  2      |-utilities                                            Utilities components are used as "libs" by digiKam main interface.
         |---batch                    Laurent
         |---cameragui                
-        |---hotplug                  Gilles                    CMake port only
+        |---hotplug                  Gilles                    CMake port only is require.
         |---imageeditor
         |-----canvas                 Laurent                   CMake port only
         |-----editor                 Laurent                   CMake port only
         |-----tools                  Laurent                   CMake port only
         |---lighttable               
-        |---scripts                  Gilles        DONE        CMake port only
+        |---scripts                  Gilles        DONE        CMake port only is require.
         |---setup                    Gilles
         |---slideshow                Laurent                   CMake port only
-        |---splashscreen             Laurent       DONE        CMake port only
+        |---splashscreen             Laurent       DONE        
  
  3      |-digikam                                              The most long to do certainly
             album.cpp
@@ -118,17 +118,17 @@ ORDER   DIRECTORIES                  ASSIGNED      STATUS      REMARK
             sqlitedb.cpp             Marcel
 
  5      |-showfoto
-        |---icons                    Gilles        DONE        CMake port only
-        |---pics                     Gilles        DONE        CMake port only
+        |---icons                    Gilles        DONE        CMake port only is require.
+        |---pics                     Gilles        DONE        CMake port only is require.
         |---setup                    Gilles
 
  6      |-imageplugins                                         All image editor plugins can be ported after digiKam core
         |---adjustcurves             Laurent                   CMake port only
-        |---adjustlevels              Laurent                   CMake port only
+        |---adjustlevels             Laurent                   CMake port only
         |---antivignetting
         |---blurfx
         |---border                   Laurent                   CMake port only
-        |-----patterns               Gilles                    CMake port only 
+        |-----patterns               Gilles                    CMake port only is require. 
         |---channelmixer
         |---charcoal
         |---colorfx
@@ -136,33 +136,33 @@ ORDER   DIRECTORIES                  ASSIGNED      STATUS      REMARK
         |-----hsl
         |-----ratiocrop
         |-----sharpnesseditor
-        |-------clapack              Gilles        DONE        CMake port only
+        |-------clapack              Gilles        DONE        CMake port only is require.
         |---distortionfx
         |---emboss                   Laurent                   CMake port only
         |---filmgrain                Laurent                   CMake port only
         |---freerotation
         |---hotpixels                Laurent                   CMake port only
         |---infrared
-        |---inpainting              Laurent                   CMake port only
-        |---inserttext              Laurent                   CMake port only
-        |---lensdistortion          Laurent                   CMake port only
-        |---noisereduction          Laurent                   CMake port only
-        |---oilpaint                Laurent                   CMake port only
-        |---perspective             Laurent                   CMake port only
-        |---raindrop                Laurent                   CMake port only
-        |---restoration             Laurent                   CMake port only
+        |---inpainting               Laurent                   CMake port only
+        |---inserttext               Laurent                   CMake port only
+        |---lensdistortion           Laurent                   CMake port only
+        |---noisereduction           Laurent                   CMake port only
+        |---oilpaint                 Laurent                   CMake port only
+        |---perspective              Laurent                   CMake port only
+        |---raindrop                 Laurent                   CMake port only
+        |---restoration              Laurent                   CMake port only
         |---sheartool
         |---superimpose
         |---texture
-        |-----patterns               Gilles                    CMake port only
+        |-----patterns               Gilles                    CMake port only is require.
         |---whitebalance             Laurent                   CMake port only
 
  7      |-themedesigner                                        The last one component. It completly independant. It will be the last one to port.
 
- 8      |-data                       Gilles        DONE        CMake port only
-        |---about                    Gilles        DONE        CMake port only
-        |---icons                    Gilles        DONE        CMake port only
-        |---pics                     Gilles        DONE        CMake port only
-        |---profiles                 Gilles        DONE        CMake port only
-        |---themes                   Gilles        DONE        CMake port only
+ 8      |-data                       Gilles        DONE        CMake port only is require.
+        |---about                    Gilles        DONE        CMake port only is require.
+        |---icons                    Gilles        DONE        CMake port only is require.
+        |---pics                     Gilles        DONE        CMake port only is require.
+        |---profiles                 Gilles        DONE        CMake port only is require.
+        |---themes                   Gilles        DONE        CMake port only is require.
 
