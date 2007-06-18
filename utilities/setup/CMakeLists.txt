@@ -1,19 +1,20 @@
 
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/digikam
-                     ${CMAKE_SOURCE_DIR}/digikam/utilities/batch
-                     ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common
-                     ${KIPI_INCLUDE_DIR}
-                     ${KDCRAW_INCLUDE_DIR}
-                     ${GPHOTO2_INCLUDE_DIR}
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/digikam 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/batch 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common 
+                     ${KIPI_INCLUDE_DIR} 
+                     ${GPHOTO2_INCLUDE_DIR} 
+                     ${KDCRAW_INCLUDE_DIR} 
                    )
 
 # Static library for digiKam ############################################
 
-SET(libsetup_STAT_SRCS gpiface.cpp 
+SET(libsetup_STAT_SRCS setupdcraw.cpp 
+                       gpiface.cpp 
                        cameraselection.cpp 
                        setupcamera.cpp 
                        setupmime.cpp 
@@ -27,7 +28,6 @@ SET(libsetup_STAT_SRCS gpiface.cpp
                        setupmisc.cpp 
                        setupicc.cpp 
                        setupiofiles.cpp 
-                       setupdcraw.cpp 
                        setupslideshow.cpp 
                        setuptooltip.cpp 
                        setuplighttable.cpp

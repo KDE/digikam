@@ -23,17 +23,7 @@
 
 // QT includes.
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qcolor.h>
-#include <q3hbox.h>
-#include <q3vgroupbox.h>
-#include <qlabel.h>
-#include <q3whatsthis.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -43,11 +33,12 @@
 #include <knuminput.h>
 #include <kconfig.h>
 #include <kapplication.h>
+#include <kglobal.h>
 
 // LibKDcraw includes.
 
 #include <libkdcraw/dcrawsettingswidget.h>
-#include <kglobal.h>
+
 
 // Local includes.
 
@@ -74,7 +65,8 @@ SetupDcraw::SetupDcraw(QWidget* parent )
           : QWidget(parent)
 {
     d = new SetupDcrawPriv;
-    Q3VBoxLayout *layout = new Q3VBoxLayout(parent, 0, KDialog::spacingHint());
+    QVBoxLayout *layout = new QVBoxLayout(parent);
+    layout->setSpacing(KDialog::spacingHint());
     d->dcrawSettings    = new KDcrawIface::DcrawSettingsWidget(parent, true, false);
     layout->addWidget(d->dcrawSettings);
     layout->addStretch();
@@ -90,36 +82,36 @@ SetupDcraw::~SetupDcraw()
 void SetupDcraw::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
-    config->writeEntry("SixteenBitsImage", d->dcrawSettings->sixteenBits());
-    config->writeEntry("CameraColorBalance", d->dcrawSettings->useCameraWB());
-    config->writeEntry("AutomaticColorBalance", d->dcrawSettings->useAutoColorBalance());
-    config->writeEntry("RGBInterpolate4Colors", d->dcrawSettings->useFourColor());
-    config->writeEntry("DontStretchPixels", d->dcrawSettings->useDontStretchPixels());
-    config->writeEntry("EnableNoiseReduction", d->dcrawSettings->useNoiseReduction());
-    config->writeEntry("NRThreshold", d->dcrawSettings->NRThreshold());
-    config->writeEntry("UnclipColors", d->dcrawSettings->unclipColor());
-    config->writeEntry("RAWBrightness", d->dcrawSettings->brightness());
-    config->writeEntry("RAWQuality", d->dcrawSettings->quality());
-    config->sync();
+    KConfigGroup group = config->group(QString("ImageViewer Settings"));
+    group.writeEntry("SixteenBitsImage", d->dcrawSettings->sixteenBits());
+    group.writeEntry("CameraColorBalance", d->dcrawSettings->useCameraWB());
+    group.writeEntry("AutomaticColorBalance", d->dcrawSettings->useAutoColorBalance());
+    group.writeEntry("RGBInterpolate4Colors", d->dcrawSettings->useFourColor());
+    group.writeEntry("DontStretchPixels", d->dcrawSettings->useDontStretchPixels());
+    group.writeEntry("EnableNoiseReduction", d->dcrawSettings->useNoiseReduction());
+    group.writeEntry("NRThreshold", d->dcrawSettings->NRThreshold());
+    group.writeEntry("UnclipColors", d->dcrawSettings->unclipColor());
+    group.writeEntry("RAWBrightness", d->dcrawSettings->brightness());
+    group.writeEntry("RAWQuality", (int)d->dcrawSettings->quality());
+    group.sync();
 }
 
 void SetupDcraw::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
-    d->dcrawSettings->setSixteenBits(config->readBoolEntry("SixteenBitsImage", false));
-    d->dcrawSettings->setNoiseReduction(config->readBoolEntry("EnableNoiseReduction", false));
-    d->dcrawSettings->setNRThreshold(config->readNumEntry("NRThreshold", 100));
-    d->dcrawSettings->setDontStretchPixels(config->readBoolEntry("DontStretchPixels", false));
-    d->dcrawSettings->setUnclipColor(config->readNumEntry("UnclipColors", 0));
-    d->dcrawSettings->setCameraWB(config->readBoolEntry("CameraColorBalance", true));
-    d->dcrawSettings->setAutoColorBalance(config->readBoolEntry("AutomaticColorBalance", true));
-    d->dcrawSettings->setFourColor(config->readBoolEntry("RGBInterpolate4Colors", false));
+    KConfigGroup group = config->group(QString("ImageViewer Settings"));
+    d->dcrawSettings->setSixteenBits(group.readEntry("SixteenBitsImage", false));
+    d->dcrawSettings->setNoiseReduction(group.readEntry("EnableNoiseReduction", false));
+    d->dcrawSettings->setNRThreshold(group.readEntry("NRThreshold", 100));
+    d->dcrawSettings->setDontStretchPixels(group.readEntry("DontStretchPixels", false));
+    d->dcrawSettings->setUnclipColor(group.readEntry("UnclipColors", 0));
+    d->dcrawSettings->setCameraWB(group.readEntry("CameraColorBalance", true));
+    d->dcrawSettings->setAutoColorBalance(group.readEntry("AutomaticColorBalance", true));
+    d->dcrawSettings->setFourColor(group.readEntry("RGBInterpolate4Colors", false));
     d->dcrawSettings->setQuality((KDcrawIface::RawDecodingSettings::DecodingQuality)
-                                  config->readNumEntry("RAWQuality",
-                                  KDcrawIface::RawDecodingSettings::BILINEAR));
-    d->dcrawSettings->setBrightness(config->readDoubleNumEntry("RAWBrightness", 1.0));
+                                  group.readEntry("RAWQuality",
+                                  (int)KDcrawIface::RawDecodingSettings::BILINEAR));
+    d->dcrawSettings->setBrightness(group.readEntry("RAWBrightness", 1.0));
 }
 
 }  // namespace Digikam
