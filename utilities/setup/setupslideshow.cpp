@@ -23,12 +23,9 @@
 
 // QT includes.
 
-#include <qlayout.h>
-#include <qlabel.h>
-
-#include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QLabel>
+#include <QCheckBox>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -80,7 +77,7 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
               : QWidget(parent)
 {
     d = new SetupSlideShowPriv;
-    Q3VBoxLayout *layout = new Q3VBoxLayout( parent );
+    QVBoxLayout *layout = new QVBoxLayout( parent );
     
     d->delayInput = new KIntNumInput(5, parent);
     d->delayInput->setRange(1, 3600, 1, true );
@@ -89,7 +86,7 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     
     d->startWithCurrent = new QCheckBox(i18n("Start with current image"), parent);
     d->startWithCurrent->setWhatsThis( i18n("<p>If this option is enabled, Slideshow will be started "
-                                               "with current image selected from the images list."));
+                                            "with current image selected from the images list."));
     
     d->loopMode = new QCheckBox(i18n("Display in loop"), parent);
     d->loopMode->setWhatsThis( i18n("<p>Run the slideshow in a loop."));
@@ -134,34 +131,34 @@ SetupSlideShow::~SetupSlideShow()
 void SetupSlideShow::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group = config->group(QString("ImageViewer Settings"));
 
-    config->setGroup("ImageViewer Settings");
-    config->writeEntry("SlideShowDelay", d->delayInput->value());
-    config->writeEntry("SlideShowStartCurrent", d->startWithCurrent->isChecked());
-    config->writeEntry("SlideShowLoop", d->loopMode->isChecked());
-    config->writeEntry("SlideShowPrintName", d->printName->isChecked());
-    config->writeEntry("SlideShowPrintDate", d->printDate->isChecked());
-    config->writeEntry("SlideShowPrintApertureFocal", d->printApertureFocal->isChecked());
-    config->writeEntry("SlideShowPrintExpoSensitivity", d->printExpoSensitivity->isChecked());
-    config->writeEntry("SlideShowPrintMakeModel", d->printMakeModel->isChecked());
-    config->writeEntry("SlideShowPrintComment", d->printComment->isChecked());
+    group.writeEntry("SlideShowDelay", d->delayInput->value());
+    group.writeEntry("SlideShowStartCurrent", d->startWithCurrent->isChecked());
+    group.writeEntry("SlideShowLoop", d->loopMode->isChecked());
+    group.writeEntry("SlideShowPrintName", d->printName->isChecked());
+    group.writeEntry("SlideShowPrintDate", d->printDate->isChecked());
+    group.writeEntry("SlideShowPrintApertureFocal", d->printApertureFocal->isChecked());
+    group.writeEntry("SlideShowPrintExpoSensitivity", d->printExpoSensitivity->isChecked());
+    group.writeEntry("SlideShowPrintMakeModel", d->printMakeModel->isChecked());
+    group.writeEntry("SlideShowPrintComment", d->printComment->isChecked());
     config->sync();
 }
 
 void SetupSlideShow::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
- 
-    config->setGroup("ImageViewer Settings");
-    d->delayInput->setValue(config->readNumEntry("SlideShowDelay", 5));
-    d->startWithCurrent->setChecked(config->readBoolEntry("SlideShowStartCurrent", false));
-    d->loopMode->setChecked(config->readBoolEntry("SlideShowLoop", false));
-    d->printName->setChecked(config->readBoolEntry("SlideShowPrintName", true));
-    d->printDate->setChecked(config->readBoolEntry("SlideShowPrintDate", false));
-    d->printApertureFocal->setChecked(config->readBoolEntry("SlideShowPrintApertureFocal", false));
-    d->printExpoSensitivity->setChecked(config->readBoolEntry("SlideShowPrintExpoSensitivity", false));
-    d->printMakeModel->setChecked(config->readBoolEntry("SlideShowPrintMakeModel", false));
-    d->printComment->setChecked(config->readBoolEntry("SlideShowPrintComment", false));
+    KConfigGroup group = config->group(QString("ImageViewer Settings"));
+
+    d->delayInput->setValue(group.readEntry("SlideShowDelay", 5));
+    d->startWithCurrent->setChecked(group.readEntry("SlideShowStartCurrent", false));
+    d->loopMode->setChecked(group.readEntry("SlideShowLoop", false));
+    d->printName->setChecked(group.readEntry("SlideShowPrintName", true));
+    d->printDate->setChecked(group.readEntry("SlideShowPrintDate", false));
+    d->printApertureFocal->setChecked(group.readEntry("SlideShowPrintApertureFocal", false));
+    d->printExpoSensitivity->setChecked(group.readEntry("SlideShowPrintExpoSensitivity", false));
+    d->printMakeModel->setChecked(group.readEntry("SlideShowPrintMakeModel", false));
+    d->printComment->setChecked(group.readEntry("SlideShowPrintComment", false));
 }
 
 }   // namespace Digikam
