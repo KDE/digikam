@@ -93,7 +93,7 @@ void SetupDcraw::applySettings()
     group.writeEntry("UnclipColors", d->dcrawSettings->unclipColor());
     group.writeEntry("RAWBrightness", d->dcrawSettings->brightness());
     group.writeEntry("RAWQuality", (int)d->dcrawSettings->quality());
-    group.sync();
+    config->sync();
 }
 
 void SetupDcraw::readSettings()

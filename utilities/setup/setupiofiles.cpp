@@ -23,9 +23,7 @@
 
 // QT includes.
 
-#include <qlayout.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -75,7 +73,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
 {
     d = new SetupIOFilesPriv;
 
-    Q3VBoxLayout* vbox = new Q3VBoxLayout(parent);
+    QVBoxLayout* vbox = new QVBoxLayout(parent);
 
     //-- JPEG Settings ------------------------------------------------------
 
@@ -115,24 +113,24 @@ SetupIOFiles::~SetupIOFiles()
 void SetupIOFiles::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
-    config->writeEntry("JPEGCompression", d->JPEGOptions->getCompressionValue());
-    config->writeEntry("PNGCompression", d->PNGOptions->getCompressionValue());
-    config->writeEntry("TIFFCompression", d->TIFFOptions->getCompression());
-    config->writeEntry("JPEG2000Compression", d->JPEG2000Options->getCompressionValue());
-    config->writeEntry("JPEG2000LossLess", d->JPEG2000Options->getLossLessCompression());
+    KConfigGroup group = config->group(QString("ImageViewer Settings"));
+    group.writeEntry("JPEGCompression", d->JPEGOptions->getCompressionValue());
+    group.writeEntry("PNGCompression", d->PNGOptions->getCompressionValue());
+    group.writeEntry("TIFFCompression", d->TIFFOptions->getCompression());
+    group.writeEntry("JPEG2000Compression", d->JPEG2000Options->getCompressionValue());
+    group.writeEntry("JPEG2000LossLess", d->JPEG2000Options->getLossLessCompression());
     config->sync();
 }
 
 void SetupIOFiles::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
-    d->JPEGOptions->setCompressionValue(config->readNumEntry("JPEGCompression", 75) );
-    d->PNGOptions->setCompressionValue(config->readNumEntry("PNGCompression", 9) );
-    d->TIFFOptions->setCompression(config->readBoolEntry("TIFFCompression", false));
-    d->JPEG2000Options->setCompressionValue( config->readNumEntry("JPEG2000Compression", 75) );
-    d->JPEG2000Options->setLossLessCompression( config->readBoolEntry("JPEG2000LossLess", true) );
+    KConfigGroup group = config->group(QString("ImageViewer Settings"));
+    d->JPEGOptions->setCompressionValue(group.readEntry("JPEGCompression", 75) );
+    d->PNGOptions->setCompressionValue(group.readEntry("PNGCompression", 9) );
+    d->TIFFOptions->setCompression(group.readEntry("TIFFCompression", false));
+    d->JPEG2000Options->setCompressionValue( group.readEntry("JPEG2000Compression", 75) );
+    d->JPEG2000Options->setLossLessCompression( group.readEntry("JPEG2000LossLess", true) );
 }
 
 }  // namespace Digikam

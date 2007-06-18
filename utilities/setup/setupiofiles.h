@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <qwidget.h>
+#include <QWidget>
 
 // Local Includes.
 
@@ -40,7 +40,7 @@ class SetupIOFilesPriv;
 class DIGIKAM_EXPORT SetupIOFiles : public QWidget
 {
     Q_OBJECT
-    
+
 public:
 
     SetupIOFiles(QWidget* parent = 0);
@@ -54,7 +54,7 @@ private:
 
 private:
 
-    SetupIOFilesPriv* d;    
+    SetupIOFilesPriv* d;
 };
 
 }  // namespace Digikam
