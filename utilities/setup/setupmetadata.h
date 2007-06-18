@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <qwidget.h>
+#include <QWidget>
 
 namespace Digikam
 {

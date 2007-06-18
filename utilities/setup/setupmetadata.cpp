@@ -24,31 +24,23 @@
 
 // QT includes.
 
-#include <qlayout.h>
-#include <qvbuttongroup.h>
-#include <q3vgroupbox.h>
-#include <q3hgroupbox.h>
-#include <q3groupbox.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
-
-#include <qtooltip.h>
-
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3VBoxLayout>
+#include <QButtonGroup>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QLabel>
+#include <QVBoxLayout>
 
 // KDE includes.
 
-#include <klocale.h>
 #include <k3activelabel.h>
+#include <klocale.h>
 #include <kdialog.h>
 #include <kurllabel.h>
 #include <kiconloader.h>
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>
-#include <kapplication.h>
 #include <kvbox.h>
+#include <ktoolinvocation.h>
 
 // // Local includes.
 
@@ -93,23 +85,30 @@ SetupMetadata::SetupMetadata(QWidget* parent )
              : QWidget(parent)
 {
     d = new SetupMetadataPriv;
-    Q3VBoxLayout *mainLayout = new Q3VBoxLayout(parent, 0, KDialog::spacingHint());
+    QVBoxLayout *mainLayout = new QVBoxLayout(parent);
+    mainLayout->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
   
-    Q3GroupBox *ExifGroup = new Q3GroupBox(1, Qt::Horizontal, i18n("EXIF Actions"), parent);
-  
+    QGroupBox *ExifGroup  = new QGroupBox(i18n("EXIF Actions"), parent);
+    QVBoxLayout *gLayout1 = new QVBoxLayout();
+
     d->ExifRotateBox = new QCheckBox(ExifGroup);
     d->ExifRotateBox->setText(i18n("Show images/thumbs &rotated according to orientation tag"));
     
     d->ExifSetOrientationBox = new QCheckBox(ExifGroup);
     d->ExifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip"));
     
+    gLayout1->addWidget(d->ExifRotateBox);
+    gLayout1->addWidget(d->ExifSetOrientationBox);
+    ExifGroup->setLayout(gLayout1);
+
     mainLayout->addWidget(ExifGroup);
   
     // --------------------------------------------------------
   
-    Q3GroupBox *IptcGroup = new Q3GroupBox(1, Qt::Horizontal, i18n("IPTC Actions"), parent);
+    QGroupBox *IptcGroup  = new QGroupBox(i18n("IPTC Actions"), parent);
+    QVBoxLayout *gLayout2 = new QVBoxLayout();
 
     d->saveTagsIptcBox = new QCheckBox(IptcGroup);
     d->saveTagsIptcBox->setText(i18n("&Save image tags as \"Keywords\" tag"));
@@ -127,13 +126,19 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     d->saveCreditsIptcBox->setWhatsThis( i18n("<p>Turn this option on to store the default "
                                                  "credit and copyright identity into the IPTC tags. "
                                                  "You can set this value in the Identity setup page."));
+
+    gLayout2->addWidget(d->saveTagsIptcBox);
+    gLayout2->addWidget(d->savePhotographerIdIptcBox);
+    gLayout2->addWidget(d->saveCreditsIptcBox);
+    IptcGroup->setLayout(gLayout2);
                                                            
     mainLayout->addWidget(IptcGroup);
 
     // --------------------------------------------------------
   
-    Q3GroupBox *commonGroup = new Q3GroupBox(1, Qt::Horizontal, i18n("Common Metadata Actions"), parent);
-  
+    QGroupBox *commonGroup = new QGroupBox(i18n("Common Metadata Actions"), parent);
+    QVBoxLayout *gLayout3  = new QVBoxLayout();
+
     d->saveCommentsBox = new QCheckBox(commonGroup);
     d->saveCommentsBox->setText(i18n("&Save image comments as embedded text"));
     d->saveCommentsBox->setWhatsThis( i18n("<p>Turn this option on to store image comments "
@@ -149,6 +154,11 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     d->saveRatingBox->setWhatsThis( i18n("<p>Turn this option on to store the image rating "
                                             "into EXIF tag and IPTC <i>Urgency</i> tag."));
     
+    gLayout3->addWidget(d->saveCommentsBox);
+    gLayout3->addWidget(d->saveDateTimeBox);
+    gLayout3->addWidget(d->saveRatingBox);
+    commonGroup->setLayout(gLayout3);
+
     mainLayout->addWidget(commonGroup);
     mainLayout->addSpacing(KDialog::spacingHint());
 
@@ -158,11 +168,11 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     KUrlLabel *exiv2LogoLabel = new KUrlLabel(hbox);
     exiv2LogoLabel->setText(QString());
-    exiv2LogoLabel->setURL("http://www.exiv2.org");
+    exiv2LogoLabel->setUrl("http://www.exiv2.org");
     KGlobal::dirs()->addResourceType("logo-exiv2", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("logo-exiv2", "logo-exiv2.png");
     exiv2LogoLabel->setPixmap( QPixmap( directory + "logo-exiv2.png" ) );
-    QToolTip::add(exiv2LogoLabel, i18n("Visit Exiv2 project website"));
+    exiv2LogoLabel->setWhatsThis(i18n("Visit Exiv2 project website"));
 
     K3ActiveLabel* explanation = new K3ActiveLabel(hbox);
     explanation->setText(i18n("<p><b>EXIF</b> is a standard used by most digital cameras today to store "
@@ -195,7 +205,7 @@ SetupMetadata::~SetupMetadata()
 
 void SetupMetadata::processExiv2URL(const QString& url)
 {
-    KApplication::kApplication()->invokeBrowser(url);
+    KToolInvocation::self()->invokeBrowser(url);
 }
 
 void SetupMetadata::applySettings()
