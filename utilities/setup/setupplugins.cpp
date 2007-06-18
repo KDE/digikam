@@ -27,22 +27,20 @@
 
 // QT includes.
 
-#include <qlayout.h>
-#include <qstring.h>
-#include <q3groupbox.h>
-#include <qlabel.h>
-
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLayout>
+#include <QString>
+#include <QLabel>
 
 // KDE includes.
 
 #include <klocale.h>
 #include <kdialog.h>
 
-// KIPI Includes.
+// libkipi includes.
 
+#include <libkipi/pluginloader.h>
 #include <libkipi/version.h>
 
 // Local includes.
@@ -72,19 +70,20 @@ SetupPlugins::SetupPlugins(QWidget* parent )
             : QWidget(parent)
 {
     d = new SetupPluginsPriv;
-    Q3VBoxLayout *layout = new Q3VBoxLayout( parent );
-    
-    Q3HBoxLayout *hlay = new Q3HBoxLayout(layout);
-    d->pluginsNumber = new QLabel(parent);
-    
+    QVBoxLayout *layout = new QVBoxLayout(parent);
+    QHBoxLayout *hlay   = new QHBoxLayout();
+    layout->addLayout(hlay);
+
+    d->pluginsNumber    = new QLabel(parent);
+
     QLabel *KipiVersion = new QLabel(i18n("Kipi library version: %1").arg(kipi_version), parent);
     KipiVersion->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    
+
     hlay->addWidget(d->pluginsNumber, 1);
     hlay->addStretch(1);
     hlay->addWidget(KipiVersion, 1);
-    
-    d->kipiConfig = KIPI::PluginLoader::componentData().configWidget( parent );
+
+    d->kipiConfig = KIPI::PluginLoader::instance()->configWidget( parent );
     QString pluginsListHelp = i18n("<p>A list of available Kipi plugins "
                                     "appears below.");
     d->kipiConfig->setWhatsThis( pluginsListHelp);
@@ -98,9 +97,9 @@ SetupPlugins::~SetupPlugins()
 
 void SetupPlugins::initPlugins(int kipiPluginsNumber)
 {
-    d->pluginsNumber->setText(i18n("1 Kipi plugin found",
-                                   "%n Kipi plugins found",
-                                   kipiPluginsNumber));
+    d->pluginsNumber->setText(i18np("1 Kipi plugin found",
+                                    "%1 Kipi plugins found",
+                                    kipiPluginsNumber));
 }
 
 void SetupPlugins::applyPlugins()

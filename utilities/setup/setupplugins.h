@@ -26,11 +26,7 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-
-// libkipi includes.
-
-#include <libkipi/pluginloader.h>
+#include <QWidget>
 
 namespace Digikam
 {
