@@ -23,15 +23,11 @@
 
 // QT includes.
 
-#include <qlayout.h>
-#include <qcolor.h>
-
-#include <q3vgroupbox.h>
-#include <qlabel.h>
-
-#include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QColor>
+#include <QGroupBox>
+#include <QLabel>
+#include <QCheckBox>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -41,8 +37,6 @@
 #include <knuminput.h>
 #include <kconfig.h>
 #include <kapplication.h>
-#include <k3listview.h>
-#include <ktrader.h>
 #include <kglobal.h>
 #include <kvbox.h>
 
@@ -81,11 +75,12 @@ SetupEditor::SetupEditor(QWidget* parent )
            : QWidget(parent)
 {
     d = new SetupEditorPriv;
-    Q3VBoxLayout *layout = new Q3VBoxLayout( parent, 0, KDialog::spacingHint() );
+    QVBoxLayout *layout = new QVBoxLayout(parent);
 
     // --------------------------------------------------------
 
-    Q3VGroupBox *interfaceOptionsGroup = new Q3VGroupBox(i18n("Interface Options"), parent);
+    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), parent);
+    QVBoxLayout *gLayout1            = new QVBoxLayout();
 
     d->themebackgroundColor = new QCheckBox(i18n("&Use theme background color"),
                                             interfaceOptionsGroup);
@@ -100,14 +95,20 @@ SetupEditor::SetupEditor(QWidget* parent )
     d->backgroundColor = new KColorButton(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
     d->backgroundColor->setWhatsThis( i18n("<p>Customize the background color to use "
-                                              "in the image editor area.") );
+                                           "in the image editor area.") );
 
     d->hideToolBar = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"),
                                    interfaceOptionsGroup);
 
+    gLayout1->addWidget(d->themebackgroundColor);
+    gLayout1->addWidget(d->colorBox);
+    gLayout1->addWidget(d->hideToolBar);
+    interfaceOptionsGroup->setLayout(gLayout1);
+
     // --------------------------------------------------------
 
-    Q3VGroupBox *exposureOptionsGroup = new Q3VGroupBox(i18n("Exposure Indicators"), parent);
+    QGroupBox *exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), parent);
+    QVBoxLayout *gLayout2           = new QVBoxLayout();
 
     KHBox *underExpoBox         = new KHBox(exposureOptionsGroup);
     QLabel *underExpoColorlabel = new QLabel( i18n("&Under-exposure color:"), underExpoBox);
@@ -123,6 +124,13 @@ SetupEditor::SetupEditor(QWidget* parent )
     d->overExposureColor->setWhatsThis( i18n("<p>Customize the color used in image editor to identify "
                                                 "the over-exposed pixels.") );
 
+    gLayout2->addWidget(underExpoBox);
+    gLayout2->addWidget(overExpoBox);
+    exposureOptionsGroup->setLayout(gLayout2);
+
+    // --------------------------------------------------------
+
+    layout->setSpacing(KDialog::spacingHint());
     layout->addWidget(interfaceOptionsGroup);
     layout->addWidget(exposureOptionsGroup);
     layout->addStretch();
@@ -148,26 +156,26 @@ void SetupEditor::slotThemeBackgroundColor(bool e)
 void SetupEditor::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group = config->group(QString("ImageViewer Settings"));
     QColor Black(Qt::black);
     QColor White(Qt::white);
-    config->setGroup("ImageViewer Settings");
-    d->themebackgroundColor->setChecked(config->readBoolEntry("UseThemeBackgroundColor", true));
-    d->backgroundColor->setColor(config->readColorEntry("BackgroundColor", &Black));
-    d->hideToolBar->setChecked(config->readBoolEntry("FullScreen Hide ToolBar", false));
-    d->underExposureColor->setColor(config->readColorEntry("UnderExposureColor", &White));
-    d->overExposureColor->setColor(config->readColorEntry("OverExposureColor", &Black));
+    d->themebackgroundColor->setChecked(group.readEntry("UseThemeBackgroundColor", true));
+    d->backgroundColor->setColor(group.readEntry("BackgroundColor", Black));
+    d->hideToolBar->setChecked(group.readEntry("FullScreen Hide ToolBar", false));
+    d->underExposureColor->setColor(group.readEntry("UnderExposureColor", White));
+    d->overExposureColor->setColor(group.readEntry("OverExposureColor", Black));
 }
 
 void SetupEditor::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
-    config->writeEntry("UseThemeBackgroundColor", d->themebackgroundColor->isChecked());
-    config->writeEntry("BackgroundColor", d->backgroundColor->color());
-    config->writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
-    config->writeEntry("UnderExposureColor", d->underExposureColor->color());
-    config->writeEntry("OverExposureColor", d->overExposureColor->color());
-    config->sync();
+    KConfigGroup group = config->group(QString("ImageViewer Settings"));
+    group.writeEntry("UseThemeBackgroundColor", d->themebackgroundColor->isChecked());
+    group.writeEntry("BackgroundColor", d->backgroundColor->color());
+    group.writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
+    group.writeEntry("UnderExposureColor", d->underExposureColor->color());
+    group.writeEntry("OverExposureColor", d->overExposureColor->color());
+    group.sync();
 }
 
 }  // namespace Digikam
