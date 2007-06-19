@@ -30,9 +30,8 @@
 
 // Qt includes.
 
-#include <qcombobox.h>
-#include <qtooltip.h>
-//Added by qt3to4:
+#include <QComboBox>
+#include <QToolTip>
 #include <QResizeEvent>
 
 namespace Digikam
