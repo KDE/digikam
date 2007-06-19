@@ -57,7 +57,7 @@ public:
         slideshowPage   = 0;
         iccPage         = 0;
         page_editor     = 0;
-        page_toolTip    = 0;
+        page_tooltip    = 0;
         page_dcraw      = 0;
         page_iofiles    = 0;
         page_slideshow  = 0;
@@ -65,7 +65,7 @@ public:
     }
 
     KPageWidgetItem          *page_editor;
-    KPageWidgetItem          *page_toolTip;
+    KPageWidgetItem          *page_tooltip;
     KPageWidgetItem          *page_dcraw;
     KPageWidgetItem          *page_iofiles;
     KPageWidgetItem          *page_slideshow;
@@ -98,10 +98,10 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_editor->setIcon( KIcon("showfoto") );
     d->editorPage = new SetupEditor(d->page_editor->widget());
 
-    d->page_toolTip = addPage( vbox, i18n("Tool Tip") );
-    d->page_toolTip->setHeader( i18n("Thumbbar Items Tool Tip Settings") );
-    d->page_toolTip->setIcon( KIcon("filetypes") );
-    d->toolTipPage = new SetupToolTip(d->page_toolTip->widget());
+    d->page_tooltip = addPage( vbox, i18n("Tool Tip") );
+    d->page_tooltip->setHeader( i18n("Thumbbar Items Tool Tip Settings") );
+    d->page_tooltip->setIcon( KIcon("filetypes") );
+    d->toolTipPage = new SetupToolTip(d->page_tooltip->widget());
 
     d->page_dcraw = addPage( vbox, i18n("RAW decoding") );
     d->page_dcraw->setHeader( i18n("RAW Files Decoding Settings") );
@@ -163,7 +163,7 @@ void Setup::showPage(Setup::Page page)
     switch(page)
     {
         case ToolTipPage:
-            setCurrentPage(d->page_toolTip); 
+            setCurrentPage(d->page_tooltip); 
             break;
         case DcrawPage:
             setCurrentPage(d->page_dcraw); 
@@ -186,7 +186,7 @@ void Setup::showPage(Setup::Page page)
 Setup::Page Setup::activePageIndex()
 {
     KPageWidgetItem *cur = currentPage();
-    if (cur == d->page_toolTip)   return ToolTipPage;
+    if (cur == d->page_tooltip)   return ToolTipPage;
     if (cur == d->page_dcraw)     return DcrawPage;
     if (cur == d->page_iofiles)   return IOFilesPage;
     if (cur == d->page_slideshow) return SlideshowPage; 
