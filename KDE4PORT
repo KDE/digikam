@@ -16,7 +16,7 @@ ORDER   DIRECTORIES                       ASSIGNED      STATUS      REMARK
         |---curves                        Gilles        DONE
         |---database                      Marcel
         |-----sqlite2                     Gilles        DONE        CMake port only is require. 
-        |---dialogs
+        |---dialogs                       Gilles
         |---dimg                          Gilles        DONE
         |-----filters                     Gilles        DONE
         |-----loaders                     Gilles        DONE
@@ -47,7 +47,7 @@ ORDER   DIRECTORIES                       ASSIGNED      STATUS      REMARK
         |-----tools                       Laurent                   CMake port only
         |---lighttable                    
         |---scripts                       Gilles        DONE        CMake port only is require.
-        |---setup                         Gilles
+        |---setup                         Gilles        DONE
         |---slideshow                     Laurent                   CMake port only
         |---splashscreen                  Laurent       DONE        
       
