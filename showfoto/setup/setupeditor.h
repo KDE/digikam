@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <qwidget.h>
+#include <QWidget>
 
 namespace ShowFoto
 {
@@ -36,7 +36,7 @@ class SetupEditorPriv;
 class SetupEditor : public QWidget
 {
     Q_OBJECT
-    
+
 public:
 
     SetupEditor(QWidget* parent = 0);
@@ -51,7 +51,6 @@ private:
 private:
 
     SetupEditorPriv* d;
-
 };
 
 }   // namespace ShowFoto

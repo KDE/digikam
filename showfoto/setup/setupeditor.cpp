@@ -23,15 +23,11 @@
 
 // QT includes.
 
-#include <qlayout.h>
-#include <qcolor.h>
-
-#include <q3vgroupbox.h>
-#include <qlabel.h>
-
-#include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QColor>
+#include <QGroupBox>
+#include <QLabel>
+#include <QCheckBox>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -41,8 +37,6 @@
 #include <knuminput.h>
 #include <kconfig.h>
 #include <kapplication.h>
-#include <k3listview.h>
-#include <ktrader.h>
 #include <kglobal.h>
 #include <kvbox.h>
 
@@ -79,7 +73,7 @@ public:
     QCheckBox    *useTrash;
     QCheckBox    *exifRotateBox;
     QCheckBox    *exifSetOrientationBox;
-    
+
     KColorButton *backgroundColor;
     KColorButton *underExposureColor;
     KColorButton *overExposureColor;
@@ -89,62 +83,83 @@ SetupEditor::SetupEditor(QWidget* parent )
            : QWidget(parent)
 {
     d = new SetupEditorPriv;
-    Q3VBoxLayout *layout = new Q3VBoxLayout( parent, 0, KDialog::spacingHint() );
-    
+    QVBoxLayout *layout = new QVBoxLayout( parent );
+    layout->setSpacing( KDialog::spacingHint() );
+
     // --------------------------------------------------------
-    
-    Q3VGroupBox *interfaceOptionsGroup = new Q3VGroupBox(i18n("Interface Options"), parent);
-    
-    KHBox* colorBox              = new KHBox(interfaceOptionsGroup);    
+
+    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), parent);
+    QVBoxLayout *gLayout1            = new QVBoxLayout();
+
+    KHBox* colorBox              = new KHBox(interfaceOptionsGroup);
     QLabel *backgroundColorlabel = new QLabel( i18n("&Background color:"), colorBox );
     d->backgroundColor           = new KColorButton(colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
     d->backgroundColor->setWhatsThis( i18n("<p>Select the background color to use "
-                                              "for the image editor area.") );
-    
+                                           "for the image editor area.") );
+
     d->hideToolBar        = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
     d->hideThumbBar       = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
     d->horizontalThumbBar = new QCheckBox(i18n("Use &horizontal thumbbar (need to restart showFoto)"), interfaceOptionsGroup);
-    d->horizontalThumbBar->setWhatsThis( i18n("<p>If this option is enabled, thumbnails bar will be displayed horizontally behind "
-                                                 "image area. You need to restart showFoto for this option take effect.<p>"));
+    d->horizontalThumbBar->setWhatsThis( i18n("<p>If this option is enabled, thumbnails bar will be displayed "
+                                              " horizontally behind image area. You need to restart showFoto "
+                                              "for this option take effect.<p>"));
     d->useTrash   = new QCheckBox(i18n("&Deleting items should move them to trash"), interfaceOptionsGroup);
     d->showSplash = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
-    
+
+    gLayout1->addWidget(colorBox);
+    gLayout1->addWidget(d->hideToolBar);
+    gLayout1->addWidget(d->hideThumbBar);
+    gLayout1->addWidget(d->horizontalThumbBar);
+    gLayout1->addWidget(d->useTrash);
+    gLayout1->addWidget(d->showSplash);
+    interfaceOptionsGroup->setLayout(gLayout1);
+
     // --------------------------------------------------------
 
-    Q3VGroupBox *exposureOptionsGroup = new Q3VGroupBox(i18n("Exposure Indicators"), parent);
+    QGroupBox *exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), parent);
+    QVBoxLayout *gLayout2           = new QVBoxLayout();
 
     KHBox *underExpoBox         = new KHBox(exposureOptionsGroup);
     QLabel *underExpoColorlabel = new QLabel( i18n("&Under-exposure color:"), underExpoBox);
     d->underExposureColor       = new KColorButton(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
     d->underExposureColor->setWhatsThis( i18n("<p>Customize the color used in image editor to identify "
-                                                 "the under-exposed pixels.") );
+                                              "the under-exposed pixels.") );
 
     KHBox *overExpoBox         = new KHBox(exposureOptionsGroup);
     QLabel *overExpoColorlabel = new QLabel( i18n("&Over-exposure color:"), overExpoBox);
     d->overExposureColor       = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
     d->overExposureColor->setWhatsThis( i18n("<p>Customize the color used in image editor to identify "
-                                                "the over-exposed pixels.") );
+                                             "the over-exposed pixels.") );
+
+    gLayout2->addWidget(underExpoBox);
+    gLayout2->addWidget(overExpoBox);
+    exposureOptionsGroup->setLayout(gLayout2);
 
     // --------------------------------------------------------
-    
-    Q3VGroupBox *ExifGroupOptions = new Q3VGroupBox(i18n("EXIF Actions"), parent);
-    
+
+    QGroupBox *ExifGroupOptions = new QGroupBox(i18n("EXIF Actions"), parent);
+    QVBoxLayout *gLayout3       = new QVBoxLayout();
+
     d->exifRotateBox = new QCheckBox(ExifGroupOptions);
     d->exifRotateBox->setText(i18n("Show images/thumbs &rotated according to orientation tag"));
-  
+
     d->exifSetOrientationBox = new QCheckBox(ExifGroupOptions);
     d->exifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip"));
-        
+
+    gLayout3->addWidget(d->exifRotateBox);
+    gLayout3->addWidget(d->exifSetOrientationBox);
+    ExifGroupOptions->setLayout(gLayout3);
+
     layout->addWidget(interfaceOptionsGroup);
     layout->addWidget(exposureOptionsGroup);
     layout->addWidget(ExifGroupOptions);
-    layout->addStretch();    
-    
+    layout->addStretch();
+
     // --------------------------------------------------------
-    
+
     readSettings();
 }
 
@@ -156,35 +171,35 @@ SetupEditor::~SetupEditor()
 void SetupEditor::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group = config->group(QString("ImageViewer Settings"));
     QColor Black(Qt::black);
     QColor White(Qt::white);
-    config->setGroup("ImageViewer Settings");
-    d->backgroundColor->setColor( config->readColorEntry("BackgroundColor", &Black ) );
-    d->hideToolBar->setChecked(config->readBoolEntry("FullScreen Hide ToolBar", false));
-    d->hideThumbBar->setChecked(config->readBoolEntry("FullScreenHideThumbBar", true));
-    d->horizontalThumbBar->setChecked(config->readBoolEntry("HorizontalThumbbar", false));
-    d->useTrash->setChecked(config->readBoolEntry("DeleteItem2Trash", false));
-    d->showSplash->setChecked(config->readBoolEntry("ShowSplash", true));
-    d->exifRotateBox->setChecked(config->readBoolEntry("EXIF Rotate", true));
-    d->exifSetOrientationBox->setChecked(config->readBoolEntry("EXIF Set Orientation", true));
-    d->underExposureColor->setColor(config->readColorEntry("UnderExposureColor", &White));
-    d->overExposureColor->setColor(config->readColorEntry("OverExposureColor", &Black));
+    d->backgroundColor->setColor(group.readEntry("BackgroundColor", Black ));
+    d->hideToolBar->setChecked(group.readEntry("FullScreen Hide ToolBar", false));
+    d->hideThumbBar->setChecked(group.readEntry("FullScreenHideThumbBar", true));
+    d->horizontalThumbBar->setChecked(group.readEntry("HorizontalThumbbar", false));
+    d->useTrash->setChecked(group.readEntry("DeleteItem2Trash", false));
+    d->showSplash->setChecked(group.readEntry("ShowSplash", true));
+    d->exifRotateBox->setChecked(group.readEntry("EXIF Rotate", true));
+    d->exifSetOrientationBox->setChecked(group.readEntry("EXIF Set Orientation", true));
+    d->underExposureColor->setColor(group.readEntry("UnderExposureColor", White));
+    d->overExposureColor->setColor(group.readEntry("OverExposureColor", Black));
 }
 
 void SetupEditor::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
-    config->writeEntry("BackgroundColor", d->backgroundColor->color());
-    config->writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
-    config->writeEntry("FullScreenHideThumbBar", d->hideThumbBar->isChecked());
-    config->writeEntry("HorizontalThumbbar", d->horizontalThumbBar->isChecked());
-    config->writeEntry("DeleteItem2Trash", d->useTrash->isChecked());
-    config->writeEntry("ShowSplash", d->showSplash->isChecked());
-    config->writeEntry("EXIF Rotate", d->exifRotateBox->isChecked());
-    config->writeEntry("EXIF Set Orientation", d->exifSetOrientationBox->isChecked());
-    config->writeEntry("UnderExposureColor", d->underExposureColor->color());
-    config->writeEntry("OverExposureColor", d->overExposureColor->color());
+    KConfigGroup group = config->group(QString("ImageViewer Settings"));
+    group.writeEntry("BackgroundColor", d->backgroundColor->color());
+    group.writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
+    group.writeEntry("FullScreenHideThumbBar", d->hideThumbBar->isChecked());
+    group.writeEntry("HorizontalThumbbar", d->horizontalThumbBar->isChecked());
+    group.writeEntry("DeleteItem2Trash", d->useTrash->isChecked());
+    group.writeEntry("ShowSplash", d->showSplash->isChecked());
+    group.writeEntry("EXIF Rotate", d->exifRotateBox->isChecked());
+    group.writeEntry("EXIF Set Orientation", d->exifSetOrientationBox->isChecked());
+    group.writeEntry("UnderExposureColor", d->underExposureColor->color());
+    group.writeEntry("OverExposureColor", d->overExposureColor->color());
     config->sync();
 }
 

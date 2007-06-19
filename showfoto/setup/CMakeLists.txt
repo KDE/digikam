@@ -1,11 +1,11 @@
 
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/utilities/setup 
                      ${CMAKE_SOURCE_DIR}/digikam/digikam 
-		   )
+                   )
 
 SET(libshowfotosetup_STAT_SRCS setuptooltip.cpp
-                               setup.cpp 
                                setupeditor.cpp
+                               setup.cpp 
    )
 
 KDE4_AUTOMOC(${libshowfotosetup_STAT_SRCS})
