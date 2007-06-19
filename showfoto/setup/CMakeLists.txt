@@ -11,5 +11,3 @@ SET(libshowfotosetup_STAT_SRCS setuptooltip.cpp
 KDE4_AUTOMOC(${libshowfotosetup_STAT_SRCS})
 
 KDE4_ADD_LIBRARY(libshowfotosetup STATIC ${libshowfotosetup_STAT_SRCS})
-
-TARGET_LINK_LIBRARIES(libshowfotosetup libsetupshowfoto)
