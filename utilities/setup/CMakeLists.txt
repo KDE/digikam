@@ -10,6 +10,18 @@ INCLUDE_DIRECTORIES( ${KIPI_INCLUDE_DIR}
                      ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common 
                    )
 
+# Static library for Showfoto ##########################################
+
+SET(libsetupshowfoto_STAT_SRCS setupiofiles.cpp 
+                               setupdcraw.cpp 
+                               setupicc.cpp 
+                               setupslideshow.cpp
+   )
+
+KDE4_AUTOMOC(${libsetupshowfoto_STAT_SRCS})
+
+KDE4_ADD_LIBRARY(libsetupshowfoto STATIC ${libsetupshowfoto_STAT_SRCS})
+
 # Static library for digiKam ############################################
 
 SET(libsetup_STAT_SRCS setupicc.cpp 
@@ -39,15 +51,4 @@ KDE4_ADD_LIBRARY(libsetup STATIC ${libsetup_STAT_SRCS})
 TARGET_LINK_LIBRARIES(libsetup ${GPHOTO2_LIBRARIES})
 
 
-# Static library for Showfoto ##########################################
-
-SET(libsetupshowfoto_STAT_SRCS setupiofiles.cpp 
-                               setupdcraw.cpp 
-                               setupicc.cpp 
-                               setupslideshow.cpp
-   )
-
-KDE4_AUTOMOC(${libsetupshowfoto_STAT_SRCS})
-
-KDE4_ADD_LIBRARY(libsetupshowfoto STATIC ${libsetupshowfoto_STAT_SRCS})
 
