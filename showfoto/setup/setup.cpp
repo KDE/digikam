@@ -90,6 +90,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     setDefaultButton(KDialog::Ok);
     setHelp("setupdialog.anchor", "showfoto");
     setFaceType(KPageDialog::List);
+    setModal(true);
 
     KVBox *vbox = new KVBox();
     setMainWidget( vbox );
