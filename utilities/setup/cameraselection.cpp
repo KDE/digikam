@@ -189,14 +189,14 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     // --------------------------------------------------------------
     
-    QWidget* box2 = new QWidget(vbox);
-    QGridLayout* boxLayout = new QGridLayout();
+    QWidget* box2         = new QWidget(vbox);
+    QGridLayout* gLayout5 = new QGridLayout();
 
     QLabel* logo = new QLabel( box2 );
 
-    KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
-    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 64, 
-                    KIcon::DefaultState, 0, true));
+    KIconLoader* iconLoader = KIconLoader::global();
+    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 64, 
+                    K3Icon::DefaultState, 0, true));
 
     K3ActiveLabel* link = new K3ActiveLabel(box2);
     link->setText(i18n("<p>To set an <b>USB Mass Storage</b> camera<br>"
@@ -215,11 +215,11 @@ CameraSelection::CameraSelection( QWidget* parent )
                               "available at <a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>"
                               "this url</a>.</p>"));
 
-    box2Layout->addWidget( logo, 0, 0, 0, 0 );
-    box2Layout->addWidget( link, 0, 1, 1, 1 );
-    box2Layout->addWidget( link2, 2, 3, 1, 1 );
-    box2Layout->addWidget( explanation, 4, 5, 1, 1 );
-    box2->setLayout(boxLayout);
+    gLayout5->addWidget( logo, 0, 0, 0, 0 );
+    gLayout5->addWidget( link, 0, 1, 1, 1 );
+    gLayout5->addWidget( link2, 2, 3, 1, 1 );
+    gLayout5->addWidget( explanation, 4, 5, 1, 1 );
+    box2->setLayout(gLayout5);
 
     // --------------------------------------------------------------
 
@@ -302,22 +302,24 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
     d->titleEdit->setText(title);
 
     if (port.contains("usb"))
+    {
         d->usbButton->setChecked(true);
+    }
     else if (port.contains("serial")) 
     {
         d->serialButton->setChecked(true);
 
-        for (int i=0; i<d->portPathComboBox->count(); i++) 
+        for (int i=0 ; i < d->portPathComboBox->count() ; i++) 
         {
-            if (port == d->portPathComboBox->text(i)) 
+            if (port == d->portPathComboBox->itemText(i)) 
             {
-                d->portPathComboBox->setCurrentItem(i);
+                d->portPathComboBox->setCurrentIndex(i);
                 break;
             }
         }
     }
 
-    d->umsMountURL->setURL(path);
+    d->umsMountURL->setUrl(path);
 }
 
 void CameraSelection::getCameraList()
@@ -346,7 +348,7 @@ void CameraSelection::getSerialPortList()
 
     d->serialPortList.clear();
     
-    for (unsigned int i=0; i<plist.count(); i++) 
+    for (int i = 0; i < plist.count() ; i++) 
     {
         if ((plist[i]).startsWith("serial:"))
             d->serialPortList.append(plist[i]);
@@ -372,19 +374,19 @@ void CameraSelection::slotSelectionChanged(Q3ListViewItem *item)
         d->usbButton->setChecked(false);
         d->usbButton->setEnabled(false);
         d->portPathComboBox->setEnabled(true);
-        d->portPathComboBox->insertItem(QString("NONE"), 0);
+        d->portPathComboBox->insertItem(0, QString("NONE"));
         d->portPathComboBox->setEnabled(false);
 
         d->umsMountURL->setEnabled(true);
         d->umsMountURL->clear();
-        d->umsMountURL->setURL(QString("/mnt/camera"));
+        d->umsMountURL->setUrl(QString("/mnt/camera"));
         return;
     }
     else 
     {
         d->umsMountURL->setEnabled(true);
         d->umsMountURL->clear();
-        d->umsMountURL->setURL(QString("/"));
+        d->umsMountURL->setUrl(QString("/"));
         d->umsMountURL->setEnabled(false);
     }
 
@@ -426,7 +428,7 @@ void CameraSelection::slotPortChanged()
     {
         d->portPathComboBox->setEnabled(true);
         d->portPathComboBox->clear();
-        d->portPathComboBox->insertItem( QString("usb:"), 0 );
+        d->portPathComboBox->insertItem( 0, QString("usb:"));
         d->portPathComboBox->setEnabled(false);
         return;
     }
@@ -435,7 +437,7 @@ void CameraSelection::slotPortChanged()
     {
         d->portPathComboBox->setEnabled(true);
         d->portPathComboBox->clear();
-        d->portPathComboBox->insertStringList(d->serialPortList);
+        d->portPathComboBox->insertItems(0, d->serialPortList);
     }
 }
 
@@ -464,7 +466,7 @@ QString CameraSelection::currentPortPath()
 
 QString CameraSelection::currentCameraPath()
 {
-    return d->umsMountURL->url();
+    return d->umsMountURL->url().path();
 }
 
 void CameraSelection::slotOkClicked()
