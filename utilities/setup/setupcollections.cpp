@@ -23,7 +23,6 @@
  
 // QT includes.
 
-#include <QListWidget>
 #include <QButtonGroup>
 #include <QGroupBox>
 #include <QRadioButton>
@@ -42,6 +41,7 @@
 #include <kurl.h>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
+#include <klistwidget.h>
 
 // // Local includes.
 
@@ -64,7 +64,7 @@ public:
         delCollectionButton = 0;
     }
 
-    QListWidget *albumCollectionBox;
+    KListWidget *albumCollectionBox;
 
     QPushButton *addCollectionButton;
     QPushButton *delCollectionButton;
@@ -81,7 +81,7 @@ SetupCollections::SetupCollections(QWidget* parent )
 
    // --------------------------------------------------------
 
-   d->albumCollectionBox = new QListWidget(this);
+   d->albumCollectionBox = new KListWidget(this);
    d->albumCollectionBox->setWhatsThis( i18n("<p>You can add or remove Album "
                                              "collection types here to improve how "
                                              "your Albums are sorted in digiKam."));

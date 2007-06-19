@@ -24,17 +24,13 @@
 
 // Qt includes.
 
-#include <q3groupbox.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-
-#include <qtooltip.h>
-#include <qdatetime.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <QPixmap>
 #include <Q3PtrList>
-#include <Q3VBoxLayout>
+#include <QGroupBox>
+#include <QPushButton>
+#include <QDateTime>
+#include <QGridLayout>
+#include <QPixmap>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -67,7 +63,7 @@ public:
     {
         listView         = 0;
         addButton        = 0;
-        removeButton     = 0;        
+        removeButton     = 0;
         editButton       = 0;
         autoDetectButton = 0;
     }
@@ -76,8 +72,8 @@ public:
     QPushButton *removeButton;
     QPushButton *editButton;
     QPushButton *autoDetectButton;
-    
-    K3ListView   *listView;
+
+    KListWidget *listView;
 };
 
 SetupCamera::SetupCamera( QWidget* parent )
@@ -162,7 +158,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     // Add cameras --------------------------------------
 
     CameraList* clist = CameraList::componentData();
-    
+
     if (clist) 
     {
         Q3PtrList<CameraType>* cl = clist->cameraList();
@@ -241,11 +237,11 @@ void SetupCamera::slotEditCamera()
 void SetupCamera::slotAutoDetectCamera()
 {
     QString model, port;
-    
+
     kapp->setOverrideCursor( Qt::WaitCursor );
     int ret = GPIface::autoDetect(model, port);
     kapp->restoreOverrideCursor();
-    
+
     if (ret != 0) 
     {
         KMessageBox::error(this,i18n("Failed to auto-detect camera.\n"
@@ -257,7 +253,7 @@ void SetupCamera::slotAutoDetectCamera()
     // NOTE: See note in digikam/digikam/cameralist.cpp
     if (port.startsWith("usb:"))
     port = "usb:";
-    
+
     if (d->listView->findItem(model, 1))
     {
         KMessageBox::information(this, i18n("Camera '%1' (%2) is already in list.").arg(model).arg(port));
@@ -307,7 +303,7 @@ void SetupCamera::applySettings()
 
             if (!item->text(4).isEmpty())
                 lastAccess = QDateTime::fromString(item->text(4), Qt::ISODate);
-                            
+
             CameraType *ctype = new CameraType(item->text(0), item->text(1), item->text(2), 
                                                item->text(3), lastAccess);
             clist->insert(ctype);
