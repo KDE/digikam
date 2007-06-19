@@ -27,15 +27,17 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qmap.h>
-#include <qdir.h>
+#include <QWidget>
+#include <QMap>
+#include <QDir>
 
 // Local Includes.
 
 #include "digikam_export.h"
 
-class KDialogBase;
+class QFileInfoList
+
+class KDialog
 
 namespace Digikam
 {
@@ -48,7 +50,7 @@ class DIGIKAM_EXPORT SetupICC : public QWidget
 
 public:
 
-    SetupICC(QWidget* parent = 0, KDialogBase* dialog = 0);
+    SetupICC(QWidget* parent = 0, KDialog* dialog = 0);
     ~SetupICC();
 
     void applySettings();
