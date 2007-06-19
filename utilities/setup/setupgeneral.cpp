@@ -46,9 +46,7 @@
 #include <kfiledialog.h>
 #include <kurl.h>
 #include <kmessagebox.h>
-#include <klineeditdlg.h>
 #include <kurlrequester.h>
-#include <knuminput.h>
 
 // // Local includes.
 
