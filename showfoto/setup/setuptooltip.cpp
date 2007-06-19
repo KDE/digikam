@@ -226,7 +226,7 @@ void SetupToolTip::applySettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(QString("ImageViewer Settings"));
 
-    config->writeEntry("Show ToolTips", d->showToolTipsBox->isChecked());
+    group.writeEntry("Show ToolTips", d->showToolTipsBox->isChecked());
 
     group.writeEntry("ToolTips Show File Name", d->showFileNameBox->isChecked());
     group.writeEntry("ToolTips Show File Date", d->showFileDateBox->isChecked());
