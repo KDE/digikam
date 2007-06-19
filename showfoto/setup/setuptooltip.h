@@ -28,8 +28,6 @@
 
 #include <qwidget.h>
 
-class KDialogBase;
-
 namespace ShowFoto
 {
 
