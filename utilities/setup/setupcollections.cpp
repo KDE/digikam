@@ -23,37 +23,25 @@
  
 // QT includes.
 
-#include <qlayout.h>
-#include <qvbuttongroup.h>
-#include <q3vgroupbox.h>
-#include <q3hgroupbox.h>
-#include <q3groupbox.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qdir.h>
-#include <q3listbox.h>
-
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3VBoxLayout>
+#include <QListWidget>
+#include <QButtonGroup>
+#include <QGroupBox>
+#include <QRadioButton>
+#include <QCheckBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QDir>
+#include <QGridLayout>
+#include <QVBoxLayout>
 
 // KDE includes.
 
 #include <klocale.h>
-#include <kdialog.h>
-#include <kfiledialog.h>
+#include <kpagedialog.h>
 #include <kurl.h>
 #include <kmessagebox.h>
-
-#include <kdeversion.h>
-#if KDE_IS_VERSION(3,2,0)
 #include <kinputdialog.h>
-#else
-#include <klineeditdlg.h>
-#endif
 
 // // Local includes.
 
@@ -75,33 +63,32 @@ public:
         addCollectionButton = 0;
         delCollectionButton = 0;
     }
-   
-    Q3ListBox     *albumCollectionBox;
 
-    QPushButton  *addCollectionButton;
-    QPushButton  *delCollectionButton;
+    QListWidget *albumCollectionBox;
+
+    QPushButton *addCollectionButton;
+    QPushButton *delCollectionButton;
 };
 
 SetupCollections::SetupCollections(QWidget* parent )
                 : QWidget(parent)
 {
     d = new SetupCollectionsPriv;
-    Q3VBoxLayout *mainLayout = new Q3VBoxLayout(parent);
-
-    Q3GridLayout *collectionGroupLayout = new Q3GridLayout( this, 2, 5, 0, KDialog::spacingHint() );
+    QVBoxLayout *mainLayout            = new QVBoxLayout(parent);
+    QGridLayout *collectionGroupLayout = new QGridLayout( this );
+    collectionGroupLayout->setSpacing( KDialog::spacingHint() );
     collectionGroupLayout->setAlignment( Qt::AlignTop );
 
    // --------------------------------------------------------
 
-   d->albumCollectionBox = new Q3ListBox(this);
+   d->albumCollectionBox = new QListWidget(this);
    d->albumCollectionBox->setWhatsThis( i18n("<p>You can add or remove Album "
-                                              "collection types here to improve how "
-                                              "your Albums are sorted in digiKam."));
+                                             "collection types here to improve how "
+                                             "your Albums are sorted in digiKam."));
 
-   d->albumCollectionBox->setVScrollBarMode(Q3ScrollView::AlwaysOn);
+   d->albumCollectionBox->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
-   collectionGroupLayout->addMultiCellWidget( d->albumCollectionBox,
-                                              0, 4, 0, 0 );
+   collectionGroupLayout->addWidget( d->albumCollectionBox, 0, 4, 0, 0 );
 
    d->addCollectionButton = new QPushButton( i18n("&Add..."), this);
    collectionGroupLayout->addWidget( d->addCollectionButton, 0, 1);
@@ -123,11 +110,12 @@ SetupCollections::SetupCollections(QWidget* parent )
                                           QSizePolicy::Expanding );
    collectionGroupLayout->addItem( spacer, 4, 1 );
 
+   mainLayout->addWidget(this);
+
    // --------------------------------------------------------
 
    readSettings();
    adjustSize();
-   mainLayout->addWidget(this);
 }
 
 SetupCollections::~SetupCollections()
@@ -143,29 +131,27 @@ void SetupCollections::applySettings()
 
     QStringList collectionList;
 
-    for (Q3ListBoxItem *item = d->albumCollectionBox->firstItem();
-         item; item = item->next())
+    for (int i = 0 ; i < d->albumCollectionBox->count(); i++)
     {
+        QListWidgetItem *item = d->albumCollectionBox->item(i);
         collectionList.append(item->text());
     }
 
     settings->setAlbumCollectionNames(collectionList);
-
     settings->saveSettings();
 }
 
 void SetupCollections::readSettings()
 {
     AlbumSettings* settings = AlbumSettings::componentData();
-
     if (!settings) return;
 
-    d->albumCollectionBox->insertStringList(settings->getAlbumCollectionNames());
+    d->albumCollectionBox->insertItems(0, settings->getAlbumCollectionNames());
 }
 
 void SetupCollections::slotCollectionSelectionChanged()
 {
-    if (d->albumCollectionBox->currentItem() != -1)
+    if (d->albumCollectionBox->currentItem())
         d->delCollectionButton->setEnabled(true);
     else
         d->delCollectionButton->setEnabled(false);
@@ -175,24 +161,16 @@ void SetupCollections::slotAddCollection()
 {
     bool ok;
 
-#if KDE_IS_VERSION(3,2,0)
-    QString newCollection =
-        KInputDialog::getText(i18n("New Collection Name"),
-                              i18n("Enter new collection name:"),
-                              QString(), &ok, this);
-#else
-    QString newCollection =
-        KLineEditDlg::getText(i18n("New Collection Name"),
-                              i18n("Enter new collection name:"),
-                              QString(), &ok, this);
-#endif
+    QString newCollection = KInputDialog::getText(i18n("New Collection Name"),
+                                                  i18n("Enter new collection name:"),
+                                                  QString(), &ok, this);
 
     if (!ok) return;
 
     bool found = false;
-    for (Q3ListBoxItem *item = d->albumCollectionBox->firstItem();
-         item; item = item->next()) 
+    for (int i = 0 ; i < d->albumCollectionBox->count(); i++)
     {
+        QListWidgetItem *item = d->albumCollectionBox->item(i);
         if (newCollection == item->text()) 
         {
             found = true;
@@ -201,17 +179,14 @@ void SetupCollections::slotAddCollection()
     }
 
     if (!found)
-        d->albumCollectionBox->insertItem(newCollection);
+        d->albumCollectionBox->insertItem(d->albumCollectionBox->count(), newCollection);
 }
 
 void SetupCollections::slotDelCollection()
 {
-    int index = d->albumCollectionBox->currentItem();
-    if (index == -1)
-        return;
-
-    Q3ListBoxItem* item = d->albumCollectionBox->item(index);
+    QListWidgetItem *item = d->albumCollectionBox->currentItem();
     if (!item) return;
+    d->albumCollectionBox->takeItem(d->albumCollectionBox->row(item));
     delete item;
 }
 
