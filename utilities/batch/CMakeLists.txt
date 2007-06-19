@@ -1,7 +1,6 @@
 
 INCLUDE_DIRECTORIES(  
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs 
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/thumbbar 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common 

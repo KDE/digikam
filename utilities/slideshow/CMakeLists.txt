@@ -1,6 +1,5 @@
 
 INCLUDE_DIRECTORIES(  
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/themeengine 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/threadimageio 
