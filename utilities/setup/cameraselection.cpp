@@ -130,7 +130,7 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     QGroupBox* titleBox   = new QGroupBox( i18n("Camera Title"), vbox );
     QVBoxLayout *gLayout1 = new QVBoxLayout();
-    d->titleEdit = new KLineEdit( titleBox );
+    d->titleEdit          = new KLineEdit( titleBox );
     d->titleEdit->setWhatsThis( i18n("<p>Set here the name used in digiKam interface to "
                                      "identify this camera.</p>"));
 
@@ -153,6 +153,7 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     d->portButtonGroup->addButton(d->usbButton);
     d->portButtonGroup->addButton(d->serialButton);
+
     // --------------------------------------------------------------
 
     QGroupBox* portPathBox = new QGroupBox( i18n("Camera Port Path"), vbox );
@@ -181,8 +182,8 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->umsMountURL = new KUrlRequester( QString("/mnt/camera"), umsMountBox);
     d->umsMountURL->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
     d->umsMountURL->setWhatsThis( i18n("<p>Set here the mount path to use on your computer. This "
-                                          "option is only required if you use an <b>USB Mass Storage</b> "
-                                          "camera.</p>"));
+                                       "option is only required if you use an <b>USB Mass Storage</b> "
+                                       "camera.</p>"));
 
     gLayout4->addWidget(umsMountLabel);
     gLayout4->addWidget(d->umsMountURL);
