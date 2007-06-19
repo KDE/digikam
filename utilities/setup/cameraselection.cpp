@@ -31,8 +31,6 @@
 #include <qradiobutton.h>
 #include <qvbuttongroup.h>
 #include <qlayout.h>
-#include <qstring.h>
-#include <qstringlist.h>
 #include <qwhatsthis.h>
 
 // KDE includes.
@@ -98,8 +96,8 @@ CameraSelection::CameraSelection( QWidget* parent )
                : KDialogBase(Plain, i18n("Camera Configuration"),
                              Help|Ok|Cancel, Ok, parent, 0, true, true)
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
     d = new CameraSelectionPriv;
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     setHelp("cameraselection.anchor", "digikam");
     d->UMSCameraNameActual = QString("Directory Browse");   // Don't be i18n!
     d->UMSCameraNameShown  = i18n("Mounted Camera");
