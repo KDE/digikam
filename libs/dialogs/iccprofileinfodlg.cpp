@@ -44,7 +44,7 @@ ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath
     setModal(true);
     setHelp("iccprofile.anchor", "digikam");
     setCaption(profilePath);
-    QWidget *page=new QWidget(this);
+    QWidget *page = new QWidget(this);
     setMainWidget(page); 
     ICCProfileWidget *profileWidget = new ICCProfileWidget(page, 0, 340, 256);
     
