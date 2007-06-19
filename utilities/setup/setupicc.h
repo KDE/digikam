@@ -35,9 +35,7 @@
 
 #include "digikam_export.h"
 
-class QFileInfoList
-
-class KPageDialog
+class KPageDialog;
 
 namespace Digikam
 {
