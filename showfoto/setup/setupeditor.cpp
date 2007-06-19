@@ -39,8 +39,6 @@
 #include <knuminput.h>
 #include <kconfig.h>
 #include <kapplication.h>
-#include <klistview.h>
-#include <ktrader.h>
 
 // Local includes.
 
