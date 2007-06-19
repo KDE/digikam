@@ -21,12 +21,6 @@
  *
  * ============================================================ */
 
-// Qt includes.
-
-#include <QTabWidget>
-#include <QApplication>
-#include <QFrame>
-
 // KDE includes.
 
 #include <klocale.h>
