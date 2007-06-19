@@ -24,7 +24,6 @@
 
 // Qt includes.
 
-#include <Q3PtrList>
 #include <QGroupBox>
 #include <QPushButton>
 #include <QDateTime>
@@ -43,6 +42,7 @@
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <ktoolinvocation.h>
 
 // Local includes.
 
@@ -73,16 +73,17 @@ public:
     QPushButton *editButton;
     QPushButton *autoDetectButton;
 
-    KListWidget *listView;
+    K3ListView  *listView;
 };
 
 SetupCamera::SetupCamera( QWidget* parent )
            : QWidget( parent )
 {
     d = new SetupCameraPriv;
-    Q3VBoxLayout *mainLayout = new Q3VBoxLayout(parent);
+    QVBoxLayout *mainLayout = new QVBoxLayout(parent);
 
-    Q3GridLayout* groupBoxLayout = new Q3GridLayout( this, 2, 5, 0, KDialog::spacingHint() );
+    QGridLayout* groupBoxLayout = new QGridLayout( this );
+    groupBoxLayout->setSpacing( KDialog::spacingHint() );
     groupBoxLayout->setAlignment( Qt::AlignTop );
 
     d->listView = new K3ListView( this );
@@ -92,9 +93,9 @@ SetupCamera::SetupCamera( QWidget* parent )
     d->listView->addColumn( i18n("Path") );
     d->listView->addColumn( "Last Access Date", 0 ); // No i18n here. Hidden column with the last access date.
     d->listView->setAllColumnsShowFocus(true);
-    groupBoxLayout->addMultiCellWidget( d->listView, 0, 5, 0, 0 );
+    groupBoxLayout->addWidget( d->listView, 0, 5, 0, 0 );
     d->listView->setWhatsThis( i18n("<p>Here you can see the digital camera list used by digiKam "
-                                       "via the Gphoto interface."));
+                                    "via the Gphoto interface."));
 
     // -------------------------------------------------------------
 
@@ -115,25 +116,27 @@ SetupCamera::SetupCamera( QWidget* parent )
     d->editButton->setText( i18n( "&Edit..." ) );
     d->autoDetectButton->setText( i18n( "Auto-&Detect" ) );
 
+    d->removeButton->setEnabled(false);
+    d->editButton->setEnabled(false);
+
+    // -------------------------------------------------------------
+
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
     groupBoxLayout->addItem( spacer, 4, 1 );
 
     KUrlLabel *gphotoLogoLabel = new KUrlLabel(this);
     gphotoLogoLabel->setText(QString());
-    gphotoLogoLabel->setURL("http://www.gphoto.org");
+    gphotoLogoLabel->setUrl("http://www.gphoto.org");
     KGlobal::dirs()->addResourceType("logo-gphoto", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("logo-gphoto", "logo-gphoto.png");
     gphotoLogoLabel->setPixmap( QPixmap( directory + "logo-gphoto.png" ) );
-    QToolTip::add(gphotoLogoLabel, i18n("Visit Gphoto project website"));
+    gphotoLogoLabel->setToolTip(i18n("Visit Gphoto project website"));
     groupBoxLayout->addWidget( gphotoLogoLabel, 5, 1 );
+
+    // -------------------------------------------------------------
 
     adjustSize();
     mainLayout->addWidget(this);
-
-   // Initialize buttons
-
-    d->removeButton->setEnabled(false);
-    d->editButton->setEnabled(false);
 
     // -------------------------------------------------------------
 
@@ -180,7 +183,7 @@ SetupCamera::~SetupCamera()
 
 void SetupCamera::processGphotoURL(const QString& url)
 {
-    KApplication::kApplication()->invokeBrowser(url);
+    KToolInvocation::self()->invokeBrowser(url);
 }
 
 void SetupCamera::slotSelectionChanged()
