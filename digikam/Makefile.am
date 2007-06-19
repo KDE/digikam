@@ -1,6 +1,6 @@
 METASOURCES = AUTO  
 
-INCLUDES = -I$(top_srcdir)/digikam/sqlite \
+INCLUDES = -I$(top_srcdir)/digikam/libs/sqlite2 \
 	   -I$(top_srcdir)/digikam/libs/histogram \
 	   -I$(top_srcdir)/digikam/libs/levels \
 	   -I$(top_srcdir)/digikam/libs/curves \
@@ -103,7 +103,7 @@ libdigikam_la_LIBADD = $(LIB_KIO) \
 		       $(LIB_KHTML) \
 	               $(LIBKIPI_LIBS) \
 		       $(LIB_KUTILS) \
-	               $(top_builddir)/digikam/sqlite/libsqlite2.la \
+	               $(top_builddir)/digikam/libs/sqlite2/libsqlite2.la \
 	               $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 	               $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
 	               $(top_builddir)/digikam/libs/widgets/libwidgets.la \
