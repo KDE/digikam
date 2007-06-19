@@ -564,7 +564,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
                 {
                     DDebug() << "Error: Parsed profile  is NULL (invalid profile); " << QFile::encodeName(fileName) << endl;
                     cmsCloseProfile(tmpProfile);
-                    it+=1;
+                    ++it;
                     QString message = i18n("<p>The following profile is invalid:</p><p><b>");
                     message.append(QFile::encodeName(fileName));
                     message.append("</b></p><p>To avoid this message remove it from color profiles repository</p>");
