@@ -37,7 +37,6 @@
 
 // // Local includes.
 
-#include "albumsettings.h"
 #include "setuptooltip.h"
 #include "setuptooltip.moc"
 
