@@ -27,30 +27,32 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <kdialog.h>
+
+class QListWidgetItem;
 
 namespace Digikam
 {
 
 class CameraSelectionPriv;
 
-class CameraSelection : public KDialogBase
+class CameraSelection : public KDialog
 {
     Q_OBJECT
 
 public:
-    
+
     CameraSelection( QWidget* parent = 0 );
     ~CameraSelection();
 
     void setCamera(const QString& title, const QString& model,
                    const QString& port, const QString& path);
-    
+
     QString currentTitle();
     QString currentModel();
     QString currentPortPath();
@@ -60,15 +62,15 @@ private:
 
     void getCameraList();
     void getSerialPortList();
-    
+
 private slots:
 
     void slotPTPCameraLinkUsed();
     void slotUMSCameraLinkUsed();
-    void slotSelectionChanged(Q3ListViewItem *item);
+    void slotSelectionChanged(QListWidgetItem *item);
     void slotPortChanged();
     void slotOkClicked();
-    
+
 signals:
 
     void signalOkClicked(const QString& title, const QString& model,
@@ -76,7 +78,7 @@ signals:
 
 private:
 
-    CameraSelectionPriv* d;        
+    CameraSelectionPriv* d;
 };
 
 }  // namespace Digikam
