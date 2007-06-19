@@ -37,7 +37,7 @@
 
 class QFileInfoList
 
-class KDialog
+class KPageDialog
 
 namespace Digikam
 {
@@ -50,7 +50,7 @@ class DIGIKAM_EXPORT SetupICC : public QWidget
 
 public:
 
-    SetupICC(QWidget* parent = 0, KDialog* dialog = 0);
+    SetupICC(QWidget* parent = 0, KPageDialog* dialog = 0);
     ~SetupICC();
 
     void applySettings();
