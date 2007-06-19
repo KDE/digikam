@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <qwidget.h>
+#include <QWidget>
 
 namespace Digikam
 {
@@ -36,7 +36,7 @@ class SetupMimePriv;
 class SetupMime : public QWidget
 {
     Q_OBJECT
-    
+
 public:
 
     SetupMime(QWidget* parent = 0);

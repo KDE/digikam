@@ -27,7 +27,7 @@
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 
 namespace Digikam
 {
@@ -35,7 +35,7 @@ namespace Digikam
 class SetupPlugins;
 class SetupPrivate;
 
-class Setup : public KDialogBase 
+class Setup : public KPageDialog 
 {
     Q_OBJECT
 
@@ -44,31 +44,36 @@ public:
     enum Page 
     {
         LastPageUsed = -1,
-        General = 0,
-        ToolTip,
-        Metadata,
-        Identify,
-        Collections,
-        Mime,
-        LightTable,
-        Editor,
-	    Dcraw,
-        IOFiles,
-        Slideshow,
-        IccProfiles,
-        KipiPlugins,
-        Camera,
-        Miscellaneous
+        GeneralPage = 0,
+        ToolTipPage,
+        MetadataPage,
+        IdentifyPage,
+        CollectionsPage,
+        MimePage,
+        LightTablePage,
+        EditorPage,
+	    DcrawPage,
+        IOFilesPage,
+        SlideshowPage,
+        ICCPage,
+        KipiPluginsPage,
+        CameraPage,
+        MiscellaneousPage
     };
 
     Setup(QWidget* parent=0, const char* name=0, Page page=LastPageUsed);
     ~Setup();
 
-    SetupPlugins    *kipiPluginsPage();
+    SetupPlugins *kipiPluginsPage();
 
 private slots:
 
     void slotOkClicked();
+
+private:
+
+    Setup::Page activePageIndex();
+    void showPage(Setup::Page page);
 
 private:
 

@@ -27,9 +27,9 @@
 
 // Qt includes.
 
-#include <qwidget.h>
+#include <QWidget>
 
-class KDialogBase;
+class KPageDialog;
 
 namespace Digikam
 {
@@ -51,7 +51,7 @@ public:
         HugeThumb 
     };
 
-    SetupGeneral(QWidget* parent = 0, KDialogBase* dialog = 0);
+    SetupGeneral(QWidget* parent = 0, KPageDialog* dialog = 0);
     ~SetupGeneral();
 
     void applySettings();
@@ -68,7 +68,6 @@ private slots:
 private:
 
     SetupGeneralPriv* d;
-
 };
 
 }  // namespace Digikam

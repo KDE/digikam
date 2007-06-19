@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <qwidget.h>
+#include <QWidget>
 
 namespace Digikam
 {
@@ -36,7 +36,7 @@ class SetupCollectionsPriv;
 class SetupCollections : public QWidget
 {
     Q_OBJECT
-    
+
 public:
 
     SetupCollections(QWidget* parent = 0);
@@ -57,7 +57,6 @@ private slots:
 private:
 
     SetupCollectionsPriv* d;
-
 };
 
 }  // namespace Digikam

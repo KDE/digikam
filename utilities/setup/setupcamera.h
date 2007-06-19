@@ -27,7 +27,7 @@
 
 // QT includes.
 
-#include <qwidget.h>
+#include <QWidget>
 
 namespace Digikam
 {
@@ -44,7 +44,7 @@ public:
     ~SetupCamera();
 
     void applySettings();
-    
+
 private slots:
 
     void processGphotoURL(const QString& url);
@@ -64,7 +64,6 @@ private slots:
 private:
 
     SetupCameraPriv* d;
-    
 };
 
 }  // namespace Digikam

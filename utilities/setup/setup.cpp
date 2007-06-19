@@ -21,21 +21,16 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
- 
-// Qt includes.
-
-#include <qtabwidget.h>
-#include <qapplication.h>
-#include <q3frame.h>
 
 // KDE includes.
 
+#include <kmessagebox.h>
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kmessagebox.h>
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -100,21 +95,21 @@ public:
         pluginsPage      = 0;
     }
 
-    Q3Frame           *page_general;
-    Q3Frame           *page_tooltip;
-    Q3Frame           *page_metadata;
-    Q3Frame           *page_identity;
-    Q3Frame           *page_collections;
-    Q3Frame           *page_mime;
-    Q3Frame           *page_lighttable;
-    Q3Frame           *page_editor;
-    Q3Frame           *page_dcraw;
-    Q3Frame           *page_iofiles;
-    Q3Frame           *page_slideshow;
-    Q3Frame           *page_icc;
-    Q3Frame           *page_plugins;
-    Q3Frame           *page_camera;
-    Q3Frame           *page_misc;
+    KPageWidgetItem  *page_general;
+    KPageWidgetItem  *page_tooltip;
+    KPageWidgetItem  *page_metadata;
+    KPageWidgetItem  *page_identity;
+    KPageWidgetItem  *page_collections;
+    KPageWidgetItem  *page_mime;
+    KPageWidgetItem  *page_lighttable;
+    KPageWidgetItem  *page_editor;
+    KPageWidgetItem  *page_dcraw;
+    KPageWidgetItem  *page_iofiles;
+    KPageWidgetItem  *page_slideshow;
+    KPageWidgetItem  *page_icc;
+    KPageWidgetItem  *page_plugins;
+    KPageWidgetItem  *page_camera;
+    KPageWidgetItem  *page_misc;
 
     SetupGeneral     *generalPage;
     SetupToolTip     *tooltipPage;
@@ -134,82 +129,103 @@ public:
 };
 
 Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
-     : KDialogBase(IconList, i18n("Configure"), Help|Ok|Cancel, Ok, parent,
-                   name, true, true )
+     : KPageDialog(parent)
 {
     d = new SetupPrivate;
+    setObjectName(name);
+    setCaption(i18n("Configure"));
+    setButtons( KDialog::Help|KDialog::Ok|KDialog::Cancel );
+    setDefaultButton(KDialog::Ok);
     setHelp("setupdialog.anchor", "digikam");
+    setFaceType(KPageDialog::List);
 
-    d->page_general = addPage(i18n("Albums"), i18n("Album Settings"),
-                              BarIcon("folder_image", KIcon::SizeMedium));
-    d->generalPage = new SetupGeneral(d->page_general, this);
+    KVBox *vbox = new KVBox();
 
-    d->page_collections = addPage(i18n("Collections"), i18n("Album Collections"),
-                                  BarIcon("fileopen", KIcon::SizeMedium));
-    d->collectionsPage = new SetupCollections(d->page_collections);
+    d->page_general = addPage( vbox, i18n("Albums") );
+    d->page_general->setHeader( i18n("Album Settings") );
+    d->page_general->setIcon( KIcon("folder_image") );
+    d->generalPage = new SetupGeneral(d->page_general->widget());
 
-    d->page_identity = addPage(i18n("Identity"), i18n("Default IPTC identity information"),
-                               BarIcon("identity", KIcon::SizeMedium));
-    d->identityPage = new SetupIdentity(d->page_identity);
+    d->page_collections = addPage( vbox, i18n("Collections") );
+    d->page_collections->setHeader( i18n("Album Collections") );
+    d->page_collections->setIcon( KIcon("fileopen") );
+    d->collectionsPage = new SetupCollections(d->page_collections->widget());
 
-    d->page_metadata = addPage(i18n("Metadata"), i18n("Embedded Image Information Management"),
-                               BarIcon("exifinfo", KIcon::SizeMedium));
-    d->metadataPage = new SetupMetadata(d->page_metadata);
+    d->page_misc = addPage( vbox, i18n("Identity") );
+    d->page_misc->setHeader( i18n("Default IPTC identity information") );
+    d->page_misc->setIcon( KIcon("identity") );
+    d->identityPage = new SetupIdentity(d->page_identity->widget());
 
-    d->page_tooltip = addPage(i18n("Tool Tip"), i18n("Album Items Tool Tip Settings"),
-                              BarIcon("filetypes", KIcon::SizeMedium));
-    d->tooltipPage = new SetupToolTip(d->page_tooltip);
+    d->page_metadata = addPage( vbox, i18n("Metadata") );
+    d->page_metadata->setHeader( i18n("Embedded Image Information Management") );
+    d->page_metadata->setIcon( KIcon("exifinfo") );
+    d->metadataPage = new SetupMetadata(d->page_metadata->widget());
 
-    d->page_mime = addPage(i18n("Mime Types"), i18n("File (MIME) Types Settings"),
-                           BarIcon("kcmsystem", KIcon::SizeMedium));
-    d->mimePage = new SetupMime(d->page_mime);
+    d->page_tooltip = addPage( vbox, i18n("Tool Tip") );
+    d->page_tooltip->setHeader( i18n("Album Items Tool Tip Settings") );
+    d->page_tooltip->setIcon( KIcon("filetypes") );
+    d->tooltipPage = new SetupToolTip(d->page_tooltip->widget());
 
-    d->page_lighttable = addPage(i18n("Light Table"), i18n("Light Table Settings"),
-                                 BarIcon("idea", KIcon::SizeMedium));
-    d->lighttablePage = new SetupLightTable(d->page_lighttable);
+    d->page_mime = addPage( vbox, i18n("Mime Types") );
+    d->page_mime->setHeader( i18n("File (MIME) Types Settings") );
+    d->page_mime->setIcon( KIcon("kcmsystem") );
+    d->mimePage = new SetupMime(d->page_mime->widget());
 
-    d->page_editor = addPage(i18n("Image Editor"), i18n("Image Editor General Settings"),
-                             BarIcon("image", KIcon::SizeMedium));
-    d->editorPage = new SetupEditor(d->page_editor);
+    d->page_lighttable = addPage( vbox, i18n("Light Table") );
+    d->page_lighttable->setHeader( i18n("Light Table Settings") );
+    d->page_lighttable->setIcon( KIcon("idea") );
+    d->lighttablePage = new SetupLightTable(d->page_lighttable->widget());
 
-    d->page_iofiles = addPage(i18n("Save Images"), i18n("Image Editor Save Images Files Settings"),
-                              BarIcon("filesave", KIcon::SizeMedium));
-    d->iofilesPage = new SetupIOFiles(d->page_iofiles);
+    d->page_editor = addPage( vbox, i18n("Image Editor") );
+    d->page_editor->setHeader( i18n("Image Editor General Settings") );
+    d->page_editor->setIcon( KIcon("image") );
+    d->editorPage = new SetupEditor(d->page_editor->widget());
 
-    d->page_dcraw = addPage(i18n("RAW decoding"), i18n("RAW Files Decoding Settings"),
-                              BarIcon("kdcraw", KIcon::SizeMedium));
-    d->dcrawPage = new SetupDcraw(d->page_dcraw);
+    d->page_iofiles = addPage( vbox, i18n("Save Images") );
+    d->page_iofiles->setHeader( i18n("Image Editor Save Images Files Settings") );
+    d->page_iofiles->setIcon( KIcon("filesave") );
+    d->iofilesPage = new SetupIOFiles(d->page_iofiles->widget());
 
-    d->page_icc = addPage(i18n("Color Management"), i18n("Image Editor Color Management Settings"),
-                          BarIcon("colorize", KIcon::SizeMedium));
-    d->iccPage = new SetupICC(d->page_icc, this);
+    d->page_dcraw = addPage( vbox, i18n("RAW decoding") );
+    d->page_dcraw->setHeader( i18n("RAW Files Decoding Settings") );
+    d->page_dcraw->setIcon( KIcon("kdcraw") );
+    d->dcrawPage = new SetupDcraw(d->page_dcraw->widget());
 
-    d->page_plugins = addPage(i18n("Kipi Plugins"), i18n("Main Interface Plug-in Settings"),
-                              BarIcon("kipi", KIcon::SizeMedium));
-    d->pluginsPage = new SetupPlugins(d->page_plugins);
+    d->page_icc = addPage( vbox, i18n("Color Management") );
+    d->page_icc->setHeader( i18n("Image Editor Color Management Settings") );
+    d->page_icc->setIcon( KIcon("colorize") );
+    d->iccPage = new SetupICC(d->page_icc->widget(), this);
 
-    d->page_slideshow = addPage(i18n("Slide Show"), i18n("Slide Show Settings"),
-                                BarIcon("slideshow", KIcon::SizeMedium));
-    d->slideshowPage = new SetupSlideShow(d->page_slideshow);
+    d->page_plugins = addPage( vbox, i18n("Kipi Plugins") );
+    d->page_plugins->setHeader( i18n("Main Interface Plug-in Settings") );
+    d->page_plugins->setIcon( KIcon("kipi") );
+    d->pluginsPage = new SetupPlugins(d->page_plugins->widget());
 
-    d->page_camera = addPage(i18n("Cameras"), i18n("Camera Settings"),
-                             BarIcon("digitalcam", KIcon::SizeMedium));
-    d->cameraPage = new SetupCamera(d->page_camera);
+    d->page_slideshow = addPage( vbox, i18n("Slide Show") );
+    d->page_slideshow->setHeader( i18n("Slide Show Settings") );
+    d->page_slideshow->setIcon( KIcon("slideshow") );
+    d->slideshowPage = new SetupSlideShow(d->page_slideshow->widget());
 
-    d->page_misc = addPage(i18n("Miscellaneous"), i18n("Miscellaneous Settings"),
-                           BarIcon("misc", KIcon::SizeMedium));
-    d->miscPage = new SetupMisc(d->page_misc);
+    d->page_camera = addPage( vbox, i18n("Cameras") );
+    d->page_camera->setHeader( i18n("Camera Settings") );
+    d->page_camera->setIcon( KIcon("digitalcam") );
+    d->cameraPage = new SetupCamera(d->page_camera->widget());
+
+    d->page_misc = addPage( vbox, i18n("Miscellaneous") );
+    d->page_misc->setHeader( i18n("Miscellaneous Settings") );
+    d->page_misc->setIcon( KIcon("misc") );
+    d->miscPage = new SetupMisc(d->page_misc->widget());
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
 
     if (page != LastPageUsed)
-        showPage((int) page);
+        showPage(page);
     else 
     {
         KSharedConfig::Ptr config = KGlobal::config();
-        config->setGroup("General Settings");
-        showPage(config->readNumEntry("Setup Page", General));
+        KConfigGroup group = config->group(QString("General Settings"));
+        showPage((Page)group.readEntry("Setup Page", (int)GeneralPage));
     }
 
     show();
@@ -218,8 +234,8 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 Setup::~Setup()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("General Settings");
-    config->writeEntry("Setup Page", activePageIndex());
+    KConfigGroup group = config->group(QString("General Settings"));
+    group.writeEntry("Setup Page", (int)activePageIndex());
     config->sync();
     delete d;
 }
@@ -263,5 +279,78 @@ SetupPlugins* Setup::kipiPluginsPage()
     return d->pluginsPage;
 }
 
+void Setup::showPage(Setup::Page page)
+{
+    switch(page)
+    {
+        case ToolTipPage:
+            setCurrentPage(d->page_tooltip); 
+            break;
+        case MetadataPage:
+            setCurrentPage(d->page_metadata); 
+            break;
+        case IdentifyPage:
+            setCurrentPage(d->page_identity); 
+            break;
+        case CollectionsPage:
+            setCurrentPage(d->page_collections); 
+            break;
+        case MimePage:
+            setCurrentPage(d->page_mime); 
+            break;
+        case LightTablePage:
+            setCurrentPage(d->page_lighttable); 
+            break;
+        case EditorPage:
+            setCurrentPage(d->page_editor); 
+            break;
+        case DcrawPage:
+            setCurrentPage(d->page_dcraw); 
+            break;
+        case IOFilesPage:
+            setCurrentPage(d->page_iofiles); 
+            break;
+        case SlideshowPage:
+            setCurrentPage(d->page_slideshow); 
+            break;
+        case ICCPage:
+            setCurrentPage(d->page_icc); 
+            break;
+        case KipiPluginsPage:
+            setCurrentPage(d->page_plugins); 
+            break;
+        case CameraPage:
+            setCurrentPage(d->page_camera); 
+            break;
+        case MiscellaneousPage:
+            setCurrentPage(d->page_misc); 
+            break;
+        default: 
+            setCurrentPage(d->page_general); 
+            break;
+    }
+}
+
+Setup::Page Setup::activePageIndex()
+{
+    KPageWidgetItem *cur = currentPage();
+
+    if (cur == d->page_tooltip)     return ToolTipPage;
+    if (cur == d->page_metadata)    return MetadataPage;
+    if (cur == d->page_identity)    return IdentifyPage;
+    if (cur == d->page_collections) return CollectionsPage;
+    if (cur == d->page_mime)        return MimePage;
+    if (cur == d->page_lighttable)  return LightTablePage;
+    if (cur == d->page_editor)      return EditorPage;
+    if (cur == d->page_dcraw)       return DcrawPage;
+    if (cur == d->page_iofiles)     return IOFilesPage;
+    if (cur == d->page_slideshow)   return SlideshowPage; 
+    if (cur == d->page_icc)         return ICCPage; 
+    if (cur == d->page_plugins)     return KipiPluginsPage; 
+    if (cur == d->page_camera)      return CameraPage; 
+    if (cur == d->page_misc)        return MiscellaneousPage; 
+
+    return GeneralPage;
+}
 }  // namespace Digikam
 
