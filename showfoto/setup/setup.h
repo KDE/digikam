@@ -26,11 +26,7 @@
 
 // KDE includes.
 
-#include <kdialogbase.h>
-//Added by qt3to4:
-#include <Q3Frame>
-
-class Q3Frame;
+#include <kpagedialog.h>
 
 namespace Digikam
 {
@@ -45,7 +41,7 @@ namespace ShowFoto
 class SetupEditor;
 class SetupPrivate;
 
-class Setup : public KDialogBase 
+class Setup : public KPageDialog 
 {
     Q_OBJECT
 
@@ -61,17 +57,22 @@ public:
         SlideshowPage,
         ICCPage
     };
-    
+
     Setup(QWidget* parent=0, const char* name=0, Page page=LastPageUsed);
     ~Setup();
 
 private slots:
 
     void slotOkClicked();
-        
+
 private:
 
-    SetupPrivate* d;        
+    Setup::Page activePageIndex();
+    void showPage(Setup::Page page);
+
+private:
+
+    SetupPrivate* d;
 };
 
 }   // namespace ShowFoto

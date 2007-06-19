@@ -23,9 +23,9 @@
 
 // Qt includes.
 
-#include <qtabwidget.h>
-#include <qapplication.h>
-#include <q3frame.h>
+#include <QTabWidget>
+#include <QApplication>
+#include <QFrame>
 
 // KDE includes.
 
@@ -34,6 +34,7 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -69,13 +70,13 @@ public:
         page_icc        = 0;
     }
 
-    Q3Frame                   *page_editor;
-    Q3Frame                   *page_toolTip;
-    Q3Frame                   *page_dcraw;
-    Q3Frame                   *page_iofiles;
-    Q3Frame                   *page_slideshow;
-    Q3Frame                   *page_icc;
-    
+    KPageWidgetItem          *page_editor;
+    KPageWidgetItem          *page_toolTip;
+    KPageWidgetItem          *page_dcraw;
+    KPageWidgetItem          *page_iofiles;
+    KPageWidgetItem          *page_slideshow;
+    KPageWidgetItem          *page_icc;
+
     SetupEditor              *editorPage;
     SetupToolTip             *toolTipPage;
 
@@ -86,57 +87,69 @@ public:
 };
 
 Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
-     : KDialogBase(IconList, i18n("Configure"), Help|Ok|Cancel, Ok, parent,
-                   name, true, true )
+     : KPageDialog(parent)
 {
     d = new SetupPrivate;
+    setObjectName(name);
+    setCaption(i18n("Configure"));
+    setButtons( KDialog::Help|KDialog::Ok|KDialog::Cancel );
+    setDefaultButton(KDialog::Ok);
     setHelp("setupdialog.anchor", "showfoto");
+    setFaceType(KPageDialog::List);
 
-    d->page_editor = addPage(i18n("General"), i18n("General Settings"),
-                             BarIcon("showfoto", KIcon::SizeMedium));
-    d->editorPage = new SetupEditor(d->page_editor);
+    KVBox *vbox = new KVBox();
 
-    d->page_toolTip = addPage(i18n("Tool Tip"), i18n("Thumbbar Items Tool Tip Settings"),
-                             BarIcon("filetypes", KIcon::SizeMedium));
-    d->toolTipPage = new SetupToolTip(d->page_toolTip);
+    d->page_editor = addPage( vbox, i18n("General") );
+    d->page_editor->setHeader( i18n("General Settings") );
+    d->page_editor->setIcon( KIcon("showfoto") );
+    d->editorPage = new SetupEditor(d->page_editor->widget());
 
-    d->page_dcraw = addPage(i18n("RAW decoding"), i18n("RAW Files Decoding Settings"),
-                              BarIcon("kdcraw", KIcon::SizeMedium));
-    d->dcrawPage = new Digikam::SetupDcraw(d->page_dcraw);
+    d->page_toolTip = addPage( vbox, i18n("Tool Tip") );
+    d->page_toolTip->setHeader( i18n("Thumbbar Items Tool Tip Settings") );
+    d->page_toolTip->setIcon( KIcon("filetypes") );
+    d->toolTipPage = new SetupToolTip(d->page_toolTip->widget());
 
-    d->page_icc = addPage(i18n("Color Management"), i18n("Color Management Settings"),
-                          BarIcon("colorize", KIcon::SizeMedium));
-    d->iccPage = new Digikam::SetupICC(d->page_icc, this);
+    d->page_dcraw = addPage( vbox, i18n("RAW decoding") );
+    d->page_dcraw->setHeader( i18n("RAW Files Decoding Settings") );
+    d->page_dcraw->setIcon( KIcon("kdcraw") );
+    d->dcrawPage = new Digikam::SetupDcraw(d->page_dcraw->widget());
 
-    d->page_iofiles = addPage(i18n("Save Images"), i18n("Image Editor Save Images Files Settings"),
-                              BarIcon("filesave", KIcon::SizeMedium));
-    d->iofilesPage = new Digikam::SetupIOFiles(d->page_iofiles);
-    
-    d->page_slideshow = addPage(i18n("Slide Show"), i18n("Slide Show Settings"),
-                                BarIcon("slideshow", KIcon::SizeMedium));
-    d->slideshowPage = new Digikam::SetupSlideShow(d->page_slideshow);
+    d->page_icc = addPage( vbox, i18n("Color Management") );
+    d->page_icc->setHeader( i18n("Color Management Settings") );
+    d->page_icc->setIcon( KIcon("colorize") );
+    d->iccPage = new Digikam::SetupICC(d->page_icc->widget(), this);
+
+    d->page_iofiles = addPage( vbox, i18n("Save Images") );
+    d->page_iofiles->setHeader( i18n("Image Editor Save Images Files Settings") );
+    d->page_iofiles->setIcon( KIcon("filesave") );
+    d->iofilesPage = new Digikam::SetupIOFiles(d->page_iofiles->widget());
+
+    d->page_slideshow = addPage( vbox, i18n("Slide Show") );
+    d->page_slideshow->setHeader( i18n("Slide Show Settings") );
+    d->page_slideshow->setIcon( KIcon("slideshow") );
+    d->slideshowPage = new Digikam::SetupSlideShow(d->page_slideshow->widget());
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
 
     if (page != LastPageUsed)
-        showPage((int) page);
+        showPage(page);
     else 
     {
         KSharedConfig::Ptr config = KGlobal::config();
-        config->setGroup("General Settings");
-        showPage(config->readNumEntry("Setup Page", EditorPage));        
+        KConfigGroup group = config->group(QString("General Settings"));
+        showPage((Page)group.readEntry("Setup Page", (int)EditorPage));
     }
-    
+
     show();
 }
 
 Setup::~Setup()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("General Settings");
-    config->writeEntry("Setup Page", activePageIndex());
-    config->sync();    
+    KConfigGroup group = config->group(QString("General Settings"));
+    group.writeEntry("Setup Page", (int)activePageIndex());
+    config->sync();
     delete d;
 }
 
@@ -149,6 +162,43 @@ void Setup::slotOkClicked()
     d->slideshowPage->applySettings();
     d->iccPage->applySettings();
     close();
+}
+
+void Setup::showPage(Setup::Page page)
+{
+    switch(page)
+    {
+        case ToolTipPage:
+            setCurrentPage(d->page_toolTip); 
+            break;
+        case DcrawPage:
+            setCurrentPage(d->page_dcraw); 
+            break;
+        case IOFilesPage:
+            setCurrentPage(d->page_iofiles); 
+            break;
+        case SlideshowPage:
+            setCurrentPage(d->page_slideshow); 
+            break;
+        case ICCPage:
+            setCurrentPage(d->page_icc); 
+            break;
+        default: 
+            setCurrentPage(d->page_editor); 
+            break;
+    }
+}
+
+Setup::Page Setup::activePageIndex()
+{
+    KPageWidgetItem *cur = currentPage();
+    if (cur == d->page_toolTip)   return ToolTipPage;
+    if (cur == d->page_dcraw)     return DcrawPage;
+    if (cur == d->page_iofiles)   return IOFilesPage;
+    if (cur == d->page_slideshow) return SlideshowPage; 
+    if (cur == d->page_icc)       return ICCPage; 
+
+    return EditorPage;
 }
 
 }   // namespace ShowFoto
