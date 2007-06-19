@@ -1,26 +1,44 @@
 
-add_subdirectory( pics )
-add_subdirectory( icons )
-add_subdirectory( setup )
+ADD_SUBDIRECTORY( pics )
+ADD_SUBDIRECTORY( icons )
+ADD_SUBDIRECTORY( setup )
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/showfoto/setup ${CMAKE_SOURCE_DIR}/digikam/utilities/setup ${CMAKE_SOURCE_DIR}/digikam/libs/thumbbar ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common ${CMAKE_SOURCE_DIR}/digikam/libs/imageproperties ${CMAKE_SOURCE_DIR}/digikam/libs/histogram ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/threadimageio ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_SOURCE_DIR}/digikam/utilities/slideshow ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/tools ${CMAKE_SOURCE_DIR}/digikam/utilities/splashscreen   )
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/showfoto/setup 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/setup 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/thumbbar 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/imageproperties 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/histogram 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/threadimageio 
+                     ${CMAKE_SOURCE_DIR}/digikam/digikam 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/slideshow 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/tools 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/splashscreen   
+                   )
 
+SET(showfoto_SRCS main.cpp showfoto.cpp)
 
-########### next target ###############
+KDE4_AUTOMOC(${showfoto_SRCS})
 
-set(showfoto_SRCS main.cpp showfoto.cpp )
+KDE4_ADD_EXECUTABLE(showfoto ${showfoto_SRCS})
 
-kde4_automoc(${showfoto_SRCS})
+TARGET_LINK_LIBRARIES(showfoto libshowfotosetup
+                               libdialogshowfoto 
+                               libimagepropertiesshowfoto 
+                               libthumbbar 
+                               libsplashscreen 
+                               libslideshow 
+                               libthreadimageio 
+                               libjpegutils 
+                               ${KDE4_KUTILS_LIBS} 
+                               ${KDE4_KPARTS_LIBS} 
+                     )
 
-kde4_add_executable(showfoto ${showfoto_SRCS})
+INSTALL(TARGETS showfoto DESTINATION ${BIN_INSTALL_DIR})
 
-target_link_libraries(showfoto setup dialogshowfoto imagepropertiesshowfoto thumbbar showfoto splashscreen slideshow threadimageio jpegutils ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} )
-
-install(TARGETS showfoto DESTINATION ${BIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  showfoto.desktop DESTINATION ${XDG_APPS_DIR} )
-install( FILES  showfotoui.rc DESTINATION ${DATA_INSTALL_DIR}/showfoto )
-
+INSTALL( FILES  showfoto.desktop DESTINATION ${XDG_APPS_DIR} )
+INSTALL( FILES  showfotoui.rc DESTINATION ${DATA_INSTALL_DIR}/showfoto )
