@@ -26,9 +26,7 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-
-class KDialogBase;
+#include <QWidget>
 
 namespace ShowFoto
 {

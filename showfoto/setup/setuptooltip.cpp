@@ -23,24 +23,20 @@
 
 // QT includes.
 
-#include <qlayout.h>
-#include <q3vgroupbox.h>
-#include <qcheckbox.h>
-
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QVBoxLayout>
 
 // KDE includes.
 
 #include <klocale.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kglobal.h>
 
 // // Local includes.
 
-#include "albumsettings.h"
 #include "setuptooltip.h"
 #include "setuptooltip.moc"
 
@@ -73,41 +69,44 @@ public:
         photoSettingBox   = 0;
     }
 
-    QCheckBox  *showToolTipsBox;
+    QCheckBox *showToolTipsBox;
 
-    QCheckBox  *showFileNameBox;
-    QCheckBox  *showFileDateBox;
-    QCheckBox  *showFileSizeBox;
-    QCheckBox  *showImageTypeBox;
-    QCheckBox  *showImageDimBox;
+    QCheckBox *showFileNameBox;
+    QCheckBox *showFileDateBox;
+    QCheckBox *showFileSizeBox;
+    QCheckBox *showImageTypeBox;
+    QCheckBox *showImageDimBox;
 
-    QCheckBox  *showPhotoMakeBox;
-    QCheckBox  *showPhotoDateBox;
-    QCheckBox  *showPhotoFocalBox;
-    QCheckBox  *showPhotoExpoBox;
-    QCheckBox  *showPhotoModeBox;
-    QCheckBox  *showPhotoFlashBox;
-    QCheckBox  *showPhotoWbBox;
+    QCheckBox *showPhotoMakeBox;
+    QCheckBox *showPhotoDateBox;
+    QCheckBox *showPhotoFocalBox;
+    QCheckBox *showPhotoExpoBox;
+    QCheckBox *showPhotoModeBox;
+    QCheckBox *showPhotoFlashBox;
+    QCheckBox *showPhotoWbBox;
 
-    Q3VGroupBox *fileSettingBox;
-    Q3VGroupBox *photoSettingBox;
+    QGroupBox *fileSettingBox;
+    QGroupBox *photoSettingBox;
 };
 
 SetupToolTip::SetupToolTip(QWidget* parent)
             : QWidget(parent)
 {
     d = new SetupToolTipPriv;
-    Q3VBoxLayout *layout = new Q3VBoxLayout( parent, 0, KDialog::spacingHint() );
+    QVBoxLayout *layout = new QVBoxLayout( parent );
+    layout->setSpacing( KDialog::spacingHint() );
 
     d->showToolTipsBox = new QCheckBox(i18n("Show Thumbbar items toolti&ps"), parent);
     d->showToolTipsBox->setWhatsThis( i18n("<p>Set this option to display image information when "
-                                              "the mouse is hovered over a thumbbar item."));
+                                           "the mouse is hovered over a thumbbar item."));
 
     layout->addWidget(d->showToolTipsBox);
 
     // --------------------------------------------------------
 
-    d->fileSettingBox = new Q3VGroupBox(i18n("File/Image Information"), parent);
+    d->fileSettingBox     = new QGroupBox(i18n("File/Image Information"), parent);
+    QVBoxLayout *gLayout1 = new QVBoxLayout();
+    gLayout1->setSpacing( KDialog::spacingHint() );
 
     d->showFileNameBox = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
     d->showFileNameBox->setWhatsThis( i18n("<p>Set this option to display image file name."));
@@ -124,11 +123,20 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     d->showImageDimBox = new QCheckBox(i18n("Show image dimensions"), d->fileSettingBox);
     d->showImageDimBox->setWhatsThis( i18n("<p>Set this option to display image dimensions in pixels."));
 
+    gLayout1->addWidget(d->showFileNameBox);
+    gLayout1->addWidget(d->showFileDateBox);
+    gLayout1->addWidget(d->showFileSizeBox);
+    gLayout1->addWidget(d->showImageTypeBox);
+    gLayout1->addWidget(d->showImageDimBox);
+    d->fileSettingBox->setLayout(gLayout1);
+
     layout->addWidget(d->fileSettingBox);
 
     // --------------------------------------------------------
 
-    d->photoSettingBox = new Q3VGroupBox(i18n("Photograph Information"), parent);
+    d->photoSettingBox    = new QGroupBox(i18n("Photograph Information"), parent);
+    QVBoxLayout *gLayout2 = new QVBoxLayout();
+    gLayout2->setSpacing( KDialog::spacingHint() );
 
     d->showPhotoMakeBox = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
     d->showPhotoMakeBox->setWhatsThis( i18n("<p>Set this option to display the camera make and model "
@@ -157,6 +165,15 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     d->showPhotoWbBox->setWhatsThis( i18n("<p>Set this option to display camera white balance settings "
                      "used to take the picture."));
 
+    gLayout2->addWidget(d->showPhotoMakeBox);
+    gLayout2->addWidget(d->showPhotoDateBox);
+    gLayout2->addWidget(d->showPhotoFocalBox);
+    gLayout2->addWidget(d->showPhotoExpoBox);
+    gLayout2->addWidget(d->showPhotoModeBox);
+    gLayout2->addWidget(d->showPhotoFlashBox);
+    gLayout2->addWidget(d->showPhotoWbBox);
+    d->photoSettingBox->setLayout(gLayout2);
+
     layout->addWidget(d->photoSettingBox);
     layout->addStretch();
 
@@ -182,23 +199,23 @@ SetupToolTip::~SetupToolTip()
 void SetupToolTip::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
+    KConfigGroup group = config->group(QString("ImageViewer Settings"));
 
-    d->showToolTipsBox->setChecked(config->readBoolEntry("Show ToolTips", true));
+    d->showToolTipsBox->setChecked(group.readEntry("Show ToolTips", true));
 
-    d->showFileNameBox->setChecked(config->readBoolEntry("ToolTips Show File Name", true));
-    d->showFileDateBox->setChecked(config->readBoolEntry("ToolTips Show File Date", false));
-    d->showFileSizeBox->setChecked(config->readBoolEntry("ToolTips Show File Size", false));
-    d->showImageTypeBox->setChecked(config->readBoolEntry("ToolTips Show Image Type", false));
-    d->showImageDimBox->setChecked(config->readBoolEntry("ToolTips Show Image Dim", true));
+    d->showFileNameBox->setChecked(group.readEntry("ToolTips Show File Name", true));
+    d->showFileDateBox->setChecked(group.readEntry("ToolTips Show File Date", false));
+    d->showFileSizeBox->setChecked(group.readEntry("ToolTips Show File Size", false));
+    d->showImageTypeBox->setChecked(group.readEntry("ToolTips Show Image Type", false));
+    d->showImageDimBox->setChecked(group.readEntry("ToolTips Show Image Dim", true));
 
-    d->showPhotoMakeBox->setChecked(config->readBoolEntry("ToolTips Show Photo Make", true));
-    d->showPhotoDateBox->setChecked(config->readBoolEntry("ToolTips Show Photo Date", true));
-    d->showPhotoFocalBox->setChecked(config->readBoolEntry("ToolTips Show Photo Focal", true));
-    d->showPhotoExpoBox->setChecked(config->readBoolEntry("ToolTips Show Photo Expo", true));
-    d->showPhotoModeBox->setChecked(config->readBoolEntry("ToolTips Show Photo Mode", true));
-    d->showPhotoFlashBox->setChecked(config->readBoolEntry("ToolTips Show Photo Flash", false));
-    d->showPhotoWbBox->setChecked(config->readBoolEntry("ToolTips Show Photo WB", false));
+    d->showPhotoMakeBox->setChecked(group.readEntry("ToolTips Show Photo Make", true));
+    d->showPhotoDateBox->setChecked(group.readEntry("ToolTips Show Photo Date", true));
+    d->showPhotoFocalBox->setChecked(group.readEntry("ToolTips Show Photo Focal", true));
+    d->showPhotoExpoBox->setChecked(group.readEntry("ToolTips Show Photo Expo", true));
+    d->showPhotoModeBox->setChecked(group.readEntry("ToolTips Show Photo Mode", true));
+    d->showPhotoFlashBox->setChecked(group.readEntry("ToolTips Show Photo Flash", false));
+    d->showPhotoWbBox->setChecked(group.readEntry("ToolTips Show Photo WB", false));
 
     d->fileSettingBox->setEnabled(d->showToolTipsBox->isChecked());
     d->photoSettingBox->setEnabled(d->showToolTipsBox->isChecked());
@@ -207,23 +224,23 @@ void SetupToolTip::readSettings()
 void SetupToolTip::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
+    KConfigGroup group = config->group(QString("ImageViewer Settings"));
 
     config->writeEntry("Show ToolTips", d->showToolTipsBox->isChecked());
 
-    config->writeEntry("ToolTips Show File Name", d->showFileNameBox->isChecked());
-    config->writeEntry("ToolTips Show File Date", d->showFileDateBox->isChecked());
-    config->writeEntry("ToolTips Show File Size", d->showFileSizeBox->isChecked());
-    config->writeEntry("ToolTips Show Image Type", d->showImageTypeBox->isChecked());
-    config->writeEntry("ToolTips Show Image Dim", d->showImageDimBox->isChecked());
+    group.writeEntry("ToolTips Show File Name", d->showFileNameBox->isChecked());
+    group.writeEntry("ToolTips Show File Date", d->showFileDateBox->isChecked());
+    group.writeEntry("ToolTips Show File Size", d->showFileSizeBox->isChecked());
+    group.writeEntry("ToolTips Show Image Type", d->showImageTypeBox->isChecked());
+    group.writeEntry("ToolTips Show Image Dim", d->showImageDimBox->isChecked());
 
-    config->writeEntry("ToolTips Show Photo Make", d->showPhotoMakeBox->isChecked());
-    config->writeEntry("ToolTips Show Photo Date", d->showPhotoDateBox->isChecked());
-    config->writeEntry("ToolTips Show Photo Focal", d->showPhotoFocalBox->isChecked());
-    config->writeEntry("ToolTips Show Photo Expo", d->showPhotoExpoBox->isChecked());
-    config->writeEntry("ToolTips Show Photo Mode", d->showPhotoModeBox->isChecked());
-    config->writeEntry("ToolTips Show Photo Flash", d->showPhotoFlashBox->isChecked());
-    config->writeEntry("ToolTips Show Photo WB", d->showPhotoWbBox->isChecked());
+    group.writeEntry("ToolTips Show Photo Make", d->showPhotoMakeBox->isChecked());
+    group.writeEntry("ToolTips Show Photo Date", d->showPhotoDateBox->isChecked());
+    group.writeEntry("ToolTips Show Photo Focal", d->showPhotoFocalBox->isChecked());
+    group.writeEntry("ToolTips Show Photo Expo", d->showPhotoExpoBox->isChecked());
+    group.writeEntry("ToolTips Show Photo Mode", d->showPhotoModeBox->isChecked());
+    group.writeEntry("ToolTips Show Photo Flash", d->showPhotoFlashBox->isChecked());
+    group.writeEntry("ToolTips Show Photo WB", d->showPhotoWbBox->isChecked());
 
     config->sync();
 }
