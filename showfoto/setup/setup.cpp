@@ -92,6 +92,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     setFaceType(KPageDialog::List);
 
     KVBox *vbox = new KVBox();
+    setMainWidget( vbox );
 
     d->page_editor = addPage( vbox, i18n("General") );
     d->page_editor->setHeader( i18n("General Settings") );
