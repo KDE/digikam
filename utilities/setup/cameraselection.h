@@ -34,7 +34,7 @@
 
 #include <kdialog.h>
 
-class QListWidgetItem;
+class Q3ListViewItem;
 
 namespace Digikam
 {
@@ -67,7 +67,7 @@ private slots:
 
     void slotPTPCameraLinkUsed();
     void slotUMSCameraLinkUsed();
-    void slotSelectionChanged(QListWidgetItem *item);
+    void slotSelectionChanged(Q3ListViewItem *item);
     void slotPortChanged();
     void slotOkClicked();
 

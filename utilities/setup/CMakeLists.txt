@@ -12,7 +12,8 @@ INCLUDE_DIRECTORIES( ${KIPI_INCLUDE_DIR}
 
 # Static library for digiKam ############################################
 
-SET(libsetup_STAT_SRCS setupcamera.cpp 
+SET(libsetup_STAT_SRCS cameraselection.cpp 
+                       setupcamera.cpp 
                        setupcollections.cpp 
                        setupgeneral.cpp 
                        setup.cpp
@@ -28,7 +29,6 @@ SET(libsetup_STAT_SRCS setupcamera.cpp
                        setupplugins.cpp 
                        setupdcraw.cpp 
                        gpiface.cpp 
-                       cameraselection.cpp 
                        setupicc.cpp 
    )
 
