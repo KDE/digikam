@@ -34,6 +34,6 @@ ADD_SUBDIRECTORY( utilities )
 #ADD_SUBDIRECTORY( imageplugins )
 #ADD_SUBDIRECTORY( themedesigner )
 
-install( FILES  tips DESTINATION ${DATA_INSTALL_DIR}/digikam )
+install( FILES tips DESTINATION ${DATA_INSTALL_DIR}/digikam )
 
-#
+
