@@ -34,11 +34,11 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qdir.h>
-#include <qlistbox.h>
 #include <qwhatsthis.h>
 
 // KDE includes.
 
+#include <klistbox.h>
 #include <klocale.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
@@ -90,7 +90,7 @@ SetupCollections::SetupCollections(QWidget* parent )
 
    // --------------------------------------------------------
 
-   d->albumCollectionBox = new QListBox(this);
+   d->albumCollectionBox = new KListBox(this);
    QWhatsThis::add( d->albumCollectionBox, i18n("<p>You can add or remove Album "
                                               "collection types here to improve how "
                                               "your Albums are sorted in digiKam."));
