@@ -101,6 +101,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     setCaption(i18n("Camera Configuration"));
     setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
+    setModal(true);
     d->UMSCameraNameActual = QString("Directory Browse");   // Don't be i18n!
     d->UMSCameraNameShown  = i18n("Mounted Camera");
     d->PTPCameraNameShown  = QString("USB PTP Class Camera");

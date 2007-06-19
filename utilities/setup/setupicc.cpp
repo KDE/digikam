@@ -22,30 +22,21 @@
  * 
  * ============================================================ */
 
-#include <config.h>
-
 // QT includes.
 
-#include <qlayout.h>
-#include <qvbuttongroup.h>
-#include <q3vgroupbox.h>
-#include <q3hgroupbox.h>
-#include <q3groupbox.h>
-#include <qcheckbox.h>
-#include <qradiobutton.h>
-#include <qlabel.h>
-
-#include <qicon.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qstringlist.h>
-#include <qmap.h>
-#include <qdir.h>
-#include <qtooltip.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3Frame>
-#include <Q3VBoxLayout>
+#include <QButtonGroup>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QRadioButton>
+#include <QLabel>
+#include <QIcon>
+#include <QPixmap>
+#include <QPushButton>
+#include <QStringList>
+#include <QMap>
+#include <QDir>
+#include <QGridLayout>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -67,7 +58,7 @@
 
 // lcms includes.
 
-#include LCMS_HEADER
+#include <lcms.h>
 #if LCMS_VERSION < 114
 #define cmsTakeCopyright(profile) "Unknown"
 #endif // LCMS_VERSION < 114
