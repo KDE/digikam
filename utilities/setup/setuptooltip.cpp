@@ -23,17 +23,14 @@
 
 // QT includes.
 
-#include <qlayout.h>
-#include <q3vgroupbox.h>
-#include <qcheckbox.h>
-
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QVBoxLayout>
 
 // KDE includes.
 
 #include <klocale.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 // // Local includes.
 
@@ -76,47 +73,50 @@ public:
         digikamSettingBox = 0;
     }
 
-    QCheckBox  *showToolTipsBox;
+    QCheckBox *showToolTipsBox;
 
-    QCheckBox  *showFileNameBox;
-    QCheckBox  *showFileDateBox;
-    QCheckBox  *showFileSizeBox;
-    QCheckBox  *showImageTypeBox;
-    QCheckBox  *showImageDimBox;
+    QCheckBox *showFileNameBox;
+    QCheckBox *showFileDateBox;
+    QCheckBox *showFileSizeBox;
+    QCheckBox *showImageTypeBox;
+    QCheckBox *showImageDimBox;
 
-    QCheckBox  *showPhotoMakeBox;
-    QCheckBox  *showPhotoDateBox;
-    QCheckBox  *showPhotoFocalBox;
-    QCheckBox  *showPhotoExpoBox;
-    QCheckBox  *showPhotoModeBox;
-    QCheckBox  *showPhotoFlashBox;
-    QCheckBox  *showPhotoWbBox;
+    QCheckBox *showPhotoMakeBox;
+    QCheckBox *showPhotoDateBox;
+    QCheckBox *showPhotoFocalBox;
+    QCheckBox *showPhotoExpoBox;
+    QCheckBox *showPhotoModeBox;
+    QCheckBox *showPhotoFlashBox;
+    QCheckBox *showPhotoWbBox;
 
-    QCheckBox  *showAlbumNameBox;
-    QCheckBox  *showCommentsBox;
-    QCheckBox  *showTagsBox;
-    QCheckBox  *showRatingBox;
+    QCheckBox *showAlbumNameBox;
+    QCheckBox *showCommentsBox;
+    QCheckBox *showTagsBox;
+    QCheckBox *showRatingBox;
 
-    Q3VGroupBox *fileSettingBox;
-    Q3VGroupBox *photoSettingBox;
-    Q3VGroupBox *digikamSettingBox;
+    QGroupBox *fileSettingBox;
+    QGroupBox *photoSettingBox;
+    QGroupBox *digikamSettingBox;
 };
 
 SetupToolTip::SetupToolTip(QWidget* parent)
             : QWidget(parent)
 {
     d = new SetupToolTipPriv;
-    Q3VBoxLayout *layout = new Q3VBoxLayout( parent, 0, KDialog::spacingHint() );
+    QVBoxLayout *layout = new QVBoxLayout( parent );
+    layout->setSpacing( KDialog::spacingHint() );
 
     d->showToolTipsBox = new QCheckBox(i18n("Show album items toolti&ps"), parent);
     d->showToolTipsBox->setWhatsThis( i18n("<p>Set this option to display image information when "
-                                              "the mouse is hovered over an album item."));
+                                           "the mouse is hovered over an album item."));
 
     layout->addWidget(d->showToolTipsBox);
 
     // --------------------------------------------------------
 
-    d->fileSettingBox = new Q3VGroupBox(i18n("File/Image Information"), parent);
+    d->fileSettingBox     = new QGroupBox(i18n("File/Image Information"), parent);
+    QVBoxLayout *gLayout1 = new QVBoxLayout();
+    gLayout1->setSpacing( KDialog::spacingHint() );
 
     d->showFileNameBox = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
     d->showFileNameBox->setWhatsThis( i18n("<p>Set this option to display image file name."));
@@ -133,15 +133,24 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     d->showImageDimBox = new QCheckBox(i18n("Show image dimensions"), d->fileSettingBox);
     d->showImageDimBox->setWhatsThis( i18n("<p>Set this option to display image dimensions in pixels."));
 
+    gLayout1->addWidget(d->showFileNameBox);
+    gLayout1->addWidget(d->showFileDateBox);
+    gLayout1->addWidget(d->showFileSizeBox);
+    gLayout1->addWidget(d->showImageTypeBox);
+    gLayout1->addWidget(d->showImageDimBox);
+    d->fileSettingBox->setLayout(gLayout1);
+
     layout->addWidget(d->fileSettingBox);
 
     // --------------------------------------------------------
 
-    d->photoSettingBox = new Q3VGroupBox(i18n("Photograph Information"), parent);
+    d->photoSettingBox    = new QGroupBox(i18n("Photograph Information"), parent);
+    QVBoxLayout *gLayout2 = new QVBoxLayout();
+    gLayout2->setSpacing( KDialog::spacingHint() );
 
     d->showPhotoMakeBox = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
     d->showPhotoMakeBox->setWhatsThis( i18n("<p>Set this option to display the camera make and model "
-                                               "with which the picture has been taken."));
+                                            "with which the picture has been taken."));
 
     d->showPhotoDateBox = new QCheckBox(i18n("Show camera date"), d->photoSettingBox);
     d->showPhotoDateBox->setWhatsThis( i18n("<p>Set this option to display the date when the picture was taken."));
@@ -166,11 +175,22 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     d->showPhotoWbBox->setWhatsThis( i18n("<p>Set this option to display camera white balance settings "
                      "used to take the picture."));
 
+    gLayout2->addWidget(d->showPhotoMakeBox);
+    gLayout2->addWidget(d->showPhotoDateBox);
+    gLayout2->addWidget(d->showPhotoFocalBox);
+    gLayout2->addWidget(d->showPhotoExpoBox);
+    gLayout2->addWidget(d->showPhotoModeBox);
+    gLayout2->addWidget(d->showPhotoFlashBox);
+    gLayout2->addWidget(d->showPhotoWbBox);
+    d->photoSettingBox->setLayout(gLayout2);
+
     layout->addWidget(d->photoSettingBox);
 
     // --------------------------------------------------------
 
-    d->digikamSettingBox = new Q3VGroupBox(i18n("digiKam Information"), parent);
+    d->digikamSettingBox  = new QGroupBox(i18n("digiKam Information"), parent);
+    QVBoxLayout *gLayout3 = new QVBoxLayout();
+    gLayout3->setSpacing( KDialog::spacingHint() );
 
     d->showAlbumNameBox = new QCheckBox(i18n("Show album name"), d->digikamSettingBox);
     d->showAlbumNameBox->setWhatsThis( i18n("<p>Set this option to display the album name."));
@@ -183,6 +203,12 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     d->showRatingBox = new QCheckBox(i18n("Show picture rating"), d->digikamSettingBox);
     d->showRatingBox->setWhatsThis( i18n("<p>Set this option to display the picture rating."));
+
+    gLayout3->addWidget(d->showAlbumNameBox);
+    gLayout3->addWidget(d->showCommentsBox);
+    gLayout3->addWidget(d->showTagsBox);
+    gLayout3->addWidget(d->showRatingBox);
+    d->digikamSettingBox->setLayout(gLayout3);
 
     layout->addWidget(d->digikamSettingBox);
     layout->addStretch();

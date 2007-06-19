@@ -13,7 +13,8 @@ INCLUDE_DIRECTORIES(
 
 # Static library for digiKam ############################################
 
-SET(libsetup_STAT_SRCS setupidentity.cpp 
+SET(libsetup_STAT_SRCS setuptooltip.cpp 
+                       setupidentity.cpp 
                        setupmime.cpp 
                        setupslideshow.cpp 
                        setupmetadata.cpp 
@@ -30,7 +31,6 @@ SET(libsetup_STAT_SRCS setupidentity.cpp
                        setup.cpp 
                        setupcollections.cpp 
                        setupicc.cpp 
-                       setuptooltip.cpp 
    )
 
 KDE4_AUTOMOC(${libsetup_STAT_SRCS})
