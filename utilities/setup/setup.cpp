@@ -140,6 +140,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     setFaceType(KPageDialog::List);
 
     KVBox *vbox = new KVBox();
+    setMainWidget( vbox );
 
     d->page_general = addPage( vbox, i18n("Albums") );
     d->page_general->setHeader( i18n("Album Settings") );
