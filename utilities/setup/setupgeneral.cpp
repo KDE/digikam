@@ -24,34 +24,25 @@
 
 // QT includes.
 
-#include <qlayout.h>
-#include <qcombobox.h>
-#include <qvbuttongroup.h>
-#include <q3vgroupbox.h>
-#include <q3hgroupbox.h>
-#include <q3groupbox.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qdir.h>
-#include <q3listbox.h>
-
-#include <qtooltip.h>
-#include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3VBoxLayout>
+#include <QComboBox>
+#include <QButtonGroup>
+#include <QGroupBox>
+#include <QRadioButton>
+#include <QCheckBox>
+#include <QLabel>
+#include <QDir>
+#include <QFileInfo>
+#include <QGridLayout>
+#include <QVBoxLayout>
 
 // KDE includes.
 
 #include <klocale.h>
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 #include <kfiledialog.h>
 #include <kurl.h>
 #include <kmessagebox.h>
-#include <klineeditdlg.h>
 #include <kurlrequester.h>
-#include <knuminput.h>
 
 // // Local includes.
 
@@ -100,27 +91,28 @@ public:
 
     KUrlRequester *albumPathEdit;
 
-    KDialogBase   *mainDialog;
+    KPageDialog   *mainDialog;
 };
 
-SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
+SetupGeneral::SetupGeneral(QWidget* parent, KPageDialog* dialog )
             : QWidget(parent)
 {
     d = new SetupGeneralPriv;
     d->mainDialog       = dialog;
-    Q3VBoxLayout *layout = new Q3VBoxLayout( parent, 0, KDialog::spacingHint() );
+    QVBoxLayout *layout = new QVBoxLayout( parent );
+    layout->setSpacing( KDialog::spacingHint() );
 
     // --------------------------------------------------------
 
-    Q3HGroupBox *albumPathBox = new Q3HGroupBox(parent);
-    albumPathBox->setTitle(i18n("Album &Library Path"));
+    QGroupBox *albumPathBox = new QGroupBox(i18n("Album &Library Path"), parent);
+    QVBoxLayout *gLayout1   = new QVBoxLayout();
 
     d->albumPathEdit = new KUrlRequester(albumPathBox);
     d->albumPathEdit->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);    
-    QToolTip::add( d->albumPathEdit, i18n("<p>Here you can set the main path to the digiKam album "
-                                          "library in your computer."
-                                          "<p>Write access is required for this path and do not use a "
-                                          "remote path here, like an NFS mounted file system."));
+    d->albumPathEdit->setToolTip(i18n("<p>Here you can set the main path to the digiKam album "
+                                      "library in your computer."
+                                      "<p>Write access is required for this path and do not use a "
+                                      "remote path here, like an NFS mounted file system."));
 
     connect(d->albumPathEdit, SIGNAL(urlSelected(const QString &)),
             this, SLOT(slotChangeAlbumPath(const QString &)));
@@ -128,12 +120,16 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     connect(d->albumPathEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotPathEdited(const QString&)) );
 
+    gLayout1->addWidget(d->albumPathEdit);
+    albumPathBox->setLayout(gLayout1);
+
     layout->addWidget(albumPathBox);
 
     // --------------------------------------------------------
 
-    Q3VGroupBox *iconTextGroup = new Q3VGroupBox(i18n("Thumbnail Information"), parent);
-      
+    QGroupBox *iconTextGroup = new QGroupBox(i18n("Thumbnail Information"), parent);
+    QVBoxLayout *gLayout2    = new QVBoxLayout();
+
     d->iconShowNameBox = new QCheckBox(i18n("Show file &name"), iconTextGroup);
     d->iconShowNameBox->setWhatsThis( i18n("<p>Set this option to show file name below image thumbnail."));
 
@@ -142,70 +138,81 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
 
     d->iconShowDateBox = new QCheckBox(i18n("Show file creation &date"), iconTextGroup);
     d->iconShowDateBox->setWhatsThis( i18n("<p>Set this option to show file creation date "
-                                              "below image thumbnail."));
+                                           "below image thumbnail."));
 
     d->iconShowModDateBox = new QCheckBox(i18n("Show file &modification date"), iconTextGroup);
     d->iconShowModDateBox->setWhatsThis( i18n("<p>Set this option to show file modification date "
-                                                 "below image thumbnail."));
+                                              "below image thumbnail."));
 
     d->iconShowCommentsBox = new QCheckBox(i18n("Show digiKam &comments"), iconTextGroup);
     d->iconShowCommentsBox->setWhatsThis( i18n("<p>Set this option to show digiKam comments "
-                                                  "below image thumbnail."));
+                                               "below image thumbnail."));
 
     d->iconShowTagsBox = new QCheckBox(i18n("Show digiKam &tags"), iconTextGroup);
     d->iconShowTagsBox->setWhatsThis( i18n("<p>Set this option to show digiKam tags "
-                                              "below image thumbnail."));
+                                           "below image thumbnail."));
 
     d->iconShowRatingBox = new QCheckBox(i18n("Show digiKam &rating"), iconTextGroup);
     d->iconShowRatingBox->setWhatsThis( i18n("<p>Set this option to show digiKam rating "
-                                                "below image thumbnail."));
+                                             "below image thumbnail."));
 
     d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions (warning: slow)"), iconTextGroup);
     d->iconShowResolutionBox->setWhatsThis( i18n("<p>Set this option to show picture size in pixels "
-                                                    "below image thumbnail."));
+                                                 "below image thumbnail."));
+
+    gLayout2->addWidget(d->iconShowNameBox);
+    gLayout2->addWidget(d->iconShowSizeBox);
+    gLayout2->addWidget(d->iconShowDateBox);
+    gLayout2->addWidget(d->iconShowModDateBox);
+    gLayout2->addWidget(d->iconShowCommentsBox);
+    gLayout2->addWidget(d->iconShowTagsBox);
+    gLayout2->addWidget(d->iconShowRatingBox);
+    gLayout2->addWidget(d->iconShowResolutionBox);
+    iconTextGroup->setLayout(gLayout2);
 
     layout->addWidget(iconTextGroup);
 
     // --------------------------------------------------------
 
-    Q3VGroupBox *interfaceOptionsGroup = new Q3VGroupBox(i18n("Interface Options"), parent);
-    interfaceOptionsGroup->setColumnLayout(0, Qt::Vertical );
-    interfaceOptionsGroup->layout()->setMargin(KDialog::marginHint());
-    Q3GridLayout* ifaceSettingsLayout = new Q3GridLayout(interfaceOptionsGroup->layout(), 2, 4, KDialog::spacingHint());
+    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), parent);
+    QGridLayout* ifaceSettingsLayout = new QGridLayout();
+    ifaceSettingsLayout->setSpacing(KDialog::spacingHint());
+    ifaceSettingsLayout->setMargin(KDialog::marginHint());
 
     d->iconTreeThumbLabel = new QLabel(i18n("Sidebar thumbnail size:"), interfaceOptionsGroup);
-    d->iconTreeThumbSize = new QComboBox(false, interfaceOptionsGroup);
-    d->iconTreeThumbSize->insertItem("16");
-    d->iconTreeThumbSize->insertItem("22");
-    d->iconTreeThumbSize->insertItem("32");
-    d->iconTreeThumbSize->insertItem("48");
-    QToolTip::add( d->iconTreeThumbSize, i18n("<p>Set this option to configure the size "
-                                              "in pixels of the thumbnails in digiKam's sidebars. "
-                                              "This option will take effect when you restart "
-                                              "digiKam."));
-    ifaceSettingsLayout->addMultiCellWidget(d->iconTreeThumbLabel, 0, 0, 0, 0);
-    ifaceSettingsLayout->addMultiCellWidget(d->iconTreeThumbSize, 0, 0, 1, 1);
+    d->iconTreeThumbSize  = new QComboBox(interfaceOptionsGroup);
+    d->iconTreeThumbSize->addItem(QString("16"));
+    d->iconTreeThumbSize->addItem(QString("22"));
+    d->iconTreeThumbSize->addItem(QString("32"));
+    d->iconTreeThumbSize->addItem(QString("48"));
+    d->iconTreeThumbSize->setToolTip(i18n("<p>Set this option to configure the size "
+                                          "in pixels of the thumbnails in digiKam's sidebars. "
+                                          "This option will take effect when you restart "
+                                          "digiKam."));
+    ifaceSettingsLayout->addWidget(d->iconTreeThumbLabel, 0, 0, 0, 0);
+    ifaceSettingsLayout->addWidget(d->iconTreeThumbSize, 0, 0, 1, 1);
 
     QLabel *rightClickLabel     = new QLabel(i18n("Thumbnail click action:"), interfaceOptionsGroup);
-    d->rightClickActionComboBox = new QComboBox(false, interfaceOptionsGroup);
-    d->rightClickActionComboBox->insertItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
-    d->rightClickActionComboBox->insertItem(i18n("Start image editor"), AlbumSettings::StartEditor);
-    QToolTip::add( d->rightClickActionComboBox, i18n("<p>Select here the right action to do when you "
-                                                     "right click with mouse button on thumbnail."));
-    ifaceSettingsLayout->addMultiCellWidget(rightClickLabel, 1 ,1, 0, 0);
-    ifaceSettingsLayout->addMultiCellWidget(d->rightClickActionComboBox, 1, 1, 1, 4);
+    d->rightClickActionComboBox = new QComboBox(interfaceOptionsGroup);
+    d->rightClickActionComboBox->addItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
+    d->rightClickActionComboBox->addItem(i18n("Start image editor"), AlbumSettings::StartEditor);
+    d->rightClickActionComboBox->setToolTip(i18n("<p>Select here the right action to do when you "
+                                                 "right click with mouse button on thumbnail."));
+    ifaceSettingsLayout->addWidget(rightClickLabel, 1 ,1, 0, 0);
+    ifaceSettingsLayout->addWidget(d->rightClickActionComboBox, 1, 1, 1, 4);
 
     d->previewLoadFullImageSize = new QCheckBox(i18n("Embedded preview load full image size"), interfaceOptionsGroup);
     d->previewLoadFullImageSize->setWhatsThis( i18n("<p>Set this option to load full image size "
                      "with embedded preview instead a reduced one. Because this option will take more time "
                      "to load image, use it only if you have a fast computer."));
-    ifaceSettingsLayout->addMultiCellWidget(d->previewLoadFullImageSize, 2, 2, 0, 4);
+    ifaceSettingsLayout->addWidget(d->previewLoadFullImageSize, 2, 2, 0, 4);
+
+    interfaceOptionsGroup->setLayout(ifaceSettingsLayout);
 
     layout->addWidget(interfaceOptionsGroup);
+    layout->addStretch();
 
     // --------------------------------------------------------
-
-    layout->addStretch();
 
     readSettings();
     adjustSize();
@@ -221,7 +228,7 @@ void SetupGeneral::applySettings()
     AlbumSettings* settings = AlbumSettings::componentData();
     if (!settings) return;
 
-    settings->setAlbumLibraryPath(d->albumPathEdit->url());
+    settings->setAlbumLibraryPath(d->albumPathEdit->url().path());
 
     settings->setDefaultTreeIconSize(d->iconTreeThumbSize->currentText().toInt());
     settings->setIconShowName(d->iconShowNameBox->isChecked());
@@ -234,7 +241,7 @@ void SetupGeneral::applySettings()
     settings->setIconShowRating(d->iconShowRatingBox->isChecked());
 
     settings->setItemRightClickAction((AlbumSettings::ItemRightClickAction)
-                                      d->rightClickActionComboBox->currentItem());
+                                      d->rightClickActionComboBox->currentIndex());
 
     settings->setPreviewLoadFullImageSize(d->previewLoadFullImageSize->isChecked());
     settings->saveSettings();
@@ -246,16 +253,16 @@ void SetupGeneral::readSettings()
 
     if (!settings) return;
 
-    d->albumPathEdit->setURL(settings->getAlbumLibraryPath());
+    d->albumPathEdit->setUrl(settings->getAlbumLibraryPath());
 
     if (settings->getDefaultTreeIconSize() == 16)
-        d->iconTreeThumbSize->setCurrentItem(0);
+        d->iconTreeThumbSize->setCurrentIndex(0);
     else if (settings->getDefaultTreeIconSize() == 22)
-        d->iconTreeThumbSize->setCurrentItem(1);
+        d->iconTreeThumbSize->setCurrentIndex(1);
     else if (settings->getDefaultTreeIconSize() == 32)
-        d->iconTreeThumbSize->setCurrentItem(2);
+        d->iconTreeThumbSize->setCurrentIndex(2);
     else 
-        d->iconTreeThumbSize->setCurrentItem(3);
+        d->iconTreeThumbSize->setCurrentIndex(3);
     
     d->iconShowNameBox->setChecked(settings->getIconShowName());
     d->iconShowTagsBox->setChecked(settings->getIconShowTags());
@@ -266,14 +273,14 @@ void SetupGeneral::readSettings()
     d->iconShowCommentsBox->setChecked(settings->getIconShowComments());
     d->iconShowRatingBox->setChecked(settings->getIconShowRating());
 
-    d->rightClickActionComboBox->setCurrentItem((int)settings->getItemRightClickAction());
+    d->rightClickActionComboBox->setCurrentIndex((int)settings->getItemRightClickAction());
 
     d->previewLoadFullImageSize->setChecked(settings->getPreviewLoadFullImageSize());
 }
 
 void SetupGeneral::slotChangeAlbumPath(const QString &result)
 {
-    if (KUrl(result).equals(KUrl(QDir::homePath()), true)) 
+    if (KUrl(result).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutTrailingSlash)) 
     {
         KMessageBox::sorry(0, i18n("Sorry; cannot use home directory as album library."));
         return;
@@ -298,7 +305,7 @@ void SetupGeneral::slotPathEdited(const QString& newPath)
 
     if (!newPath.startsWith("/")) 
     {
-        d->albumPathEdit->setURL(QDir::homePath() + '/' + newPath);
+        d->albumPathEdit->setUrl(QDir::homePath() + '/' + newPath);
     }
 
     QFileInfo targetPath(newPath);

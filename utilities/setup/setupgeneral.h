@@ -42,15 +42,6 @@ class SetupGeneral : public QWidget
 
 public:
 
-    enum ThumbnailSizes 
-    { 
-        /*TinyThumb, */
-        SmallThumb = 0, 
-        MediumThumb, 
-        LargeThumb, 
-        HugeThumb 
-    };
-
     SetupGeneral(QWidget* parent = 0, KPageDialog* dialog = 0);
     ~SetupGeneral();
 
