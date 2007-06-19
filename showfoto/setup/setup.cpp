@@ -114,7 +114,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->iccPage = new Digikam::SetupICC(d->page_icc->widget(), this);
 
     d->page_iofiles = addPage( vbox, i18n("Save Images") );
-    d->page_iofiles->setHeader( i18n("Image Editor Save Images Files Settings") );
+    d->page_iofiles->setHeader( i18n("Save Images Files Settings") );
     d->page_iofiles->setIcon( KIcon("filesave") );
     d->iofilesPage = new Digikam::SetupIOFiles(d->page_iofiles->widget());
 
