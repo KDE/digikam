@@ -86,7 +86,7 @@ SetupEditor::SetupEditor(QWidget* parent )
                                             interfaceOptionsGroup);
 
     d->themebackgroundColor->setWhatsThis( i18n("<p>Enable this option to use the background theme "
-                                              "color in the image editor area") );
+                                                "color in the image editor area") );
 
     d->colorBox = new KHBox(interfaceOptionsGroup);
 
@@ -115,14 +115,14 @@ SetupEditor::SetupEditor(QWidget* parent )
     d->underExposureColor       = new KColorButton(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
     d->underExposureColor->setWhatsThis( i18n("<p>Customize the color used in image editor to identify "
-                                                 "the under-exposed pixels.") );
+                                              "the under-exposed pixels.") );
 
     KHBox *overExpoBox         = new KHBox(exposureOptionsGroup);
     QLabel *overExpoColorlabel = new QLabel( i18n("&Over-exposure color:"), overExpoBox);
     d->overExposureColor       = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
     d->overExposureColor->setWhatsThis( i18n("<p>Customize the color used in image editor to identify "
-                                                "the over-exposed pixels.") );
+                                             "the over-exposed pixels.") );
 
     gLayout2->addWidget(underExpoBox);
     gLayout2->addWidget(overExpoBox);
