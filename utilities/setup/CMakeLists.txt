@@ -1,3 +1,4 @@
+#message(${GPHOTO2_INCLUDE_DIR})
 
 INCLUDE_DIRECTORIES( ${KIPI_INCLUDE_DIR} 
                      ${GPHOTO2_INCLUDE_DIR} 
@@ -5,7 +6,6 @@ INCLUDE_DIRECTORIES( ${KIPI_INCLUDE_DIR}
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/batch 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs 
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common 
                    )
