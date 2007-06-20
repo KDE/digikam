@@ -182,14 +182,14 @@ void DeleteWidget::updateText()
 
 DeleteDialog::DeleteDialog(QWidget *parent, const char *name) 
             : KDialog(Swallow, Qt::WStyle_DialogBorder, parent, name,
-                true, // modal
-                i18n("About to delete selected files"), // caption
-                Ok | Cancel, // available buttons
-                Ok,  // default button
-                true // use separator between buttons and the main widget
-               ),
-             m_trashGuiItem(i18n("&Send to Trash"), "trashcan_full"),
-             m_saveShouldDeleteUserPreference(true)
+                      true, // modal
+                      i18n("About to delete selected files"), // caption
+                      Ok | Cancel, // available buttons
+                      Ok,  // default button
+                      true // use separator between buttons and the main widget
+                     ),
+             m_saveShouldDeleteUserPreference(true),
+             m_trashGuiItem(i18n("&Send to Trash"), "trashcan_full")
 {
     m_widget = new DeleteWidget(this, "delete_dialog_widget");
     setMainWidget(m_widget);
