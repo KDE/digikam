@@ -18,7 +18,7 @@ SET(libdialog_STAT_SRCS iccprofileinfodlg.cpp
                         ctrlpaneldlg.cpp 
    )
 
-KDE4_ADD_UI3_FILES(libdialog_STAT_SRCS deletedialogbase.ui)
+KDE4_ADD_UI_FILES(libdialog_STAT_SRCS deletedialogbase.ui)
 
 KDE4_AUTOMOC(${libdialog_STAT_SRCS})
 
