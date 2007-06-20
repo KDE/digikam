@@ -25,8 +25,6 @@
 
 // Qt includes.
 
-#include <Q3Hbox>
-#include <Q3Hbox>
 #include <Q3WidgetStack>
 #include <QStringList>
 #include <QLayout>
@@ -36,15 +34,13 @@
 
 // KDE includes.
 
+//#include <khbox.h>
 #include <kconfig.h>
-#include <kdeversion.h>
-#include <kdialogbase.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <klocale.h>
 #include <kstdguiitem.h>
-#include <kurl.h>
 
 // Local includes.
 
@@ -60,7 +56,7 @@ namespace Digikam
 //////////////////////////////////////////////////////////////////////////////
 
 DeleteWidget::DeleteWidget(QWidget *parent, const char *name)
-            : DeleteDialogBase(parent, name),
+            : Ui_DeleteDialogBase(parent, name),
               m_listMode(DeleteDialogMode::Files),
               m_deleteMode(DeleteDialogMode::UseTrash)
 {

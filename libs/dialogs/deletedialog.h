@@ -39,7 +39,7 @@
 // Local includes.
 
 #include "digikam_export.h"
-#include "deletedialogbase.h"
+#include "ui_deletedialogbase.h"
 
 class QStringList;
 class K3ListBox;
@@ -69,7 +69,7 @@ namespace DeleteDialogMode
     };
 }
 
-class DeleteWidget : public DeleteDialogBase
+class DeleteWidget : public Ui_DeleteDialogBase
 {
     Q_OBJECT
 
