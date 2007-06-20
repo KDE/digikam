@@ -34,14 +34,14 @@
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 namespace Digikam
 {
 
 class AlbumPropsEditPriv;
 
-class AlbumPropsEdit : public KDialogBase
+class AlbumPropsEdit : public KDialog
 {
     Q_OBJECT
     

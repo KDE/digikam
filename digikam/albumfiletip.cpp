@@ -163,12 +163,7 @@ void AlbumFileTip::reposition()
     d->corner = 0;
     // should the tooltip be shown to the left or to the right of the ivi ?
 
-#if KDE_IS_VERSION(3,2,0)
     QRect desk = KGlobalSettings::desktopGeometry(rect.center());
-#else
-    QRect desk = QApplication::desktop()->screenGeometry(
-                               QApplication::desktop()->screenNumber(rect.center()) );
-#endif
 
     if (rect.center().x() + width() > desk.right())
     {

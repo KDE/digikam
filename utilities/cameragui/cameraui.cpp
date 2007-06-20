@@ -84,11 +84,7 @@ extern "C"
 #include <kurllabel.h>
 #include <ksqueezedtextlabel.h>
 
-#if KDE_IS_VERSION(3,2,0)
 #include <kinputdialog.h>
-#else
-#include <klineeditdlg.h>
-#endif
 
 // LibKDcraw includes.
 
@@ -1033,12 +1029,8 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
             QString msg(i18n("Camera Folder <b>%1</b> already contains item <b>%2</b><br>"
                              "Please enter a new file name (without extension):")
                              .arg(cameraFolder).arg(fi.fileName()));
-#if KDE_IS_VERSION(3,2,0)
             name = KInputDialog::getText(i18n("File already exists"), msg, name, &ok, this);
 
-#else
-            name = KLineEditDlg::getText(i18n("File already exists"), msg, name, &ok, this);
-#endif
             if (!ok) 
                 return;
         }

@@ -215,14 +215,9 @@ void MonthWidget::drawContents(QPainter *)
         rsmall = r;
         rsmall.setWidth(r.width() - 2);
         rsmall.setHeight(r.height() - 2);
-#if KDE_IS_VERSION(3,2,0)
         p.drawText(rsmall, Qt::AlignVCenter|Qt::AlignHCenter,
                           KGlobal::locale()->calendar()->weekDayName(i, true)
                           .remove(2,1));
-#else
-        p.drawText(rsmall, Qt::AlignVCenter|Qt::AlignHCenter,
-                          KGlobal::locale()->weekDayName(i, true).remove(2,1));
-#endif
         index++;                                             
     }
     
@@ -231,18 +226,11 @@ void MonthWidget::drawContents(QPainter *)
     fnBold.setPointSize(fnBold.pointSize()+2);
     p.setFont(fnBold);
 
-#if KDE_IS_VERSION(3,2,0)
     p.drawText(r, Qt::AlignCenter,
                QString("%1 %2")
                 .arg(KGlobal::locale()->calendar()->monthName(m_month, false))
                 .arg(KGlobal::locale()->calendar()->
                        year(QDate(m_year,m_month,1))));
-#else
-    p.drawText(r, Qt::AlignCenter,
-               QString("%1 %2")
-                .arg(KGlobal::locale()->monthName(m_month))
-                .arg(QString::number(m_year)));
-#endif
 
     p.end();
 

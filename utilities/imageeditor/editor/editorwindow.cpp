@@ -395,15 +395,8 @@ void EditorWindow::setupStandardActions()
             this, SLOT(slotZoomTextChanged(const QString &)) );
 
 
-#if KDE_IS_VERSION(3,2,0)
     m_fullScreenAction = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()),
                                                 actionCollection(), this, "editorwindow_fullscreen");
-#else
-    m_fullScreenAction = new KToggleAction(i18n("Fullscreen"), "window_fullscreen",
-                                           Qt::CTRL+Qt::SHIFT+Qt::Key_F, this,
-                                           SLOT(slotToggleFullScreen()),
-                                           actionCollection(), "editorwindow_fullscreen");
-#endif
 
     d->slideShowAction = new KAction(i18n("Slide Show"), "slideshow", Qt::Key_F9,
                                      this, SLOT(slotToggleSlideShow()),
@@ -598,19 +591,17 @@ void EditorWindow::printImage(KUrl url)
     QString appName = KApplication::kApplication()->aboutData()->appName();
     printer.setDocName( url.filename() );
     printer.setCreator( appName );
-#if KDE_IS_VERSION(3,2,0)
     printer.setUsePrinterResolution(true);
-#endif
 
     KPrinter::addDialogPage( new ImageEditorPrintDialogPage(image, this, (appName.append(" page")).ascii() ));
 
-    if ( printer.setup( this, i18n("Print %1").arg(printer.docName().section('/', -1)) ) )
+    if ( printer.setup( this, i18n("Print %1",printer.docName().section('/', -1)) ) )
     {
         ImagePrint printOperations(image, printer, url.filename());
         if (!printOperations.printImageWithQt())
         {
-            KMessageBox::error(this, i18n("Failed to print file: '%1'")
-                               .arg(url.filename()));
+            KMessageBox::error(this, i18n("Failed to print file: '%1'",
+                               url.filename()));
         }
     }
 }

@@ -49,12 +49,7 @@
 #include <klineedit.h>
 #include <knuminput.h>
 #include <kdialogbase.h>
-#if KDE_IS_VERSION(3,2,0)
 #include <kinputdialog.h>
-#else
-#include <klineeditdlg.h>
-#include <kglobal.h>
-#endif
 
 // Local includes.
 
@@ -450,16 +445,9 @@ void RenameCustomizer::slotDateTimeButtonClicked()
                            "<i>yyyy-MM-dd hh:mm:ss</i> "
                            "for 2006-08-24 14:24:18.</p></qt>");
 
-#if KDE_IS_VERSION(3,2,0)
     QString newFormat = KInputDialog::getText(i18n("Change Date and Time Format"),
                                               message,
                                               d->dateTimeFormatString, &ok, this);
-#else
-    QString newFormat = KLineEditDlg::getText(i18n("Change Date and Time Format"),
-                                              message,
-                                              d->dateTimeFormatString, &ok, this);
-#endif
-
     if (!ok)
         return;
 

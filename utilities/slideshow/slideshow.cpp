@@ -108,19 +108,11 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
 
-#if KDE_IS_VERSION(3,2,0)
     QRect deskRect = KGlobalSettings::desktopGeometry(this);
     d->deskX       = deskRect.x();
     d->deskY       = deskRect.y();
     d->deskWidth   = deskRect.width();
     d->deskHeight  = deskRect.height();
-#else
-    QRect deskRect = QApplication::desktop()->screenGeometry(this);
-    d->deskX       = deskRect.x();
-    d->deskY       = deskRect.y();
-    d->deskWidth   = deskRect.width();
-    d->deskHeight  = deskRect.height();
-#endif    
     
     move(d->deskX, d->deskY);
     resize(d->deskWidth, d->deskHeight);

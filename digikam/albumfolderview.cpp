@@ -47,11 +47,7 @@
 #include <kfiledialog.h>
 
 #include <kdeversion.h>
-#if KDE_IS_VERSION(3,2,0)
 #include <kinputdialog.h>
-#else
-#include <klineeditdlg.h>
-#endif
 
 // Local includes.
 
@@ -741,16 +737,9 @@ void AlbumFolderView::albumRename(AlbumFolderViewItem* item)
     QString oldTitle(album->title());
     bool    ok;
 
-#if KDE_IS_VERSION(3,2,0)
     QString title = KInputDialog::getText(i18n("Rename Album (%1)").arg(oldTitle), 
                                           i18n("Enter new album name:"),
                                           oldTitle, &ok, this);
-#else
-    QString title = KLineEditDlg::getText(i18n("Rename Item (%1)").arg(oldTitle), 
-                                          i18n("Enter new album name:"),
-                                          oldTitle, &ok, this);
-#endif
-
     if (!ok)
         return;
 

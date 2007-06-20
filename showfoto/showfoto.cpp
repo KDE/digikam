@@ -627,11 +627,7 @@ void ShowFoto::slotOpenURL(const KUrl& url)
         return;
 
     QString localFile;
-#if KDE_IS_VERSION(3,2,0)
     KIO::NetAccess::download(url, localFile, this);
-#else
-    KIO::NetAccess::download(url, localFile);
-#endif
     
     m_canvas->load(localFile, m_IOFileSettings);
 

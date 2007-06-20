@@ -101,12 +101,7 @@ Sidebar::~Sidebar()
 
 void Sidebar::setSplitter(QSplitter *sp)
 {
-#if KDE_IS_VERSION(3,3,0)
     setStyle(KMultiTabBar::VSNET);
-#else
-    setStyle(KMultiTabBar::KDEV3);
-#endif
-
     d->stack = new Q3WidgetStack(sp);
             
     if(d->side == Qt::DockLeft)

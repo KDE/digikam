@@ -320,7 +320,6 @@ int main(int argc, char *argv[])
     else if (args && args->isSet("download-from"))
         digikam->downloadFrom(args->getOption("download-from"));
 
-#if KDE_IS_VERSION(3,2,0)
     QStringList tipsFiles;
     tipsFiles.append("digikam/tips");
     tipsFiles.append("kipi/tips");
@@ -328,9 +327,6 @@ int main(int argc, char *argv[])
     KGlobal::locale()->insertCatalog("kipiplugins");
 
     KTipDialog::showMultiTip(0, tipsFiles, false);
-#else
-    KTipDialog::showTip(0, "digikam/tips", false);
-#endif
 
     return app.exec();
 }

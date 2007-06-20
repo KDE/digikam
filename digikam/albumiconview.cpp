@@ -86,13 +86,8 @@ extern "C"
 #include <kiconeffect.h>
                             #include <kdebug.h>
 #include <kdeversion.h>
-#if KDE_IS_VERSION(3,2,0)
 #include <kcalendarsystem.h>
 #include <kinputdialog.h>
-#else
-#include <klineeditdlg.h>
-#endif
-
 // LibKipi includes.
 
 #include <libkipi/pluginloader.h>
@@ -831,16 +826,9 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
 
     bool ok;
 
-#if KDE_IS_VERSION(3,2,0)
     QString newName = KInputDialog::getText(i18n("Rename Item (%1)").arg(fi.fileName()), 
                                             i18n("Enter new name (without extension):"),
                                             name, &ok, this);
-#else
-    QString newName = KLineEditDlg::getText(i18n("Rename Item (%1)").arg(fi.fileName()), 
-                                            i18n("Enter new name (without extension):"),
-                                            name, &ok, this);
-#endif
-
     if (!ok)
         return;
 

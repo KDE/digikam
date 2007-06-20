@@ -557,11 +557,6 @@ bool kio_digikamalbums::createUDSEntry(const QString& path, KIO::UDSEntry& entry
     // copying the database entry:
     // Disabling this as a temporary solution for bug #137282
     // This code is intended as a fix for bug #122653.
-#if KDE_IS_VERSION(3,4,0)
-    atom.m_uds = KIO::UDS_LOCAL_PATH;
-    atom.m_str = path;
-    entry.append(atom);
-#endif
     */
 
     return true;

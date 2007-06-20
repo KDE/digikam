@@ -52,12 +52,7 @@
 #include <kcursor.h>
 
 #include <kdeversion.h>
-#if KDE_IS_VERSION(3,2,0)
 #include <kinputdialog.h>
-#else
-#include <klineeditdlg.h>
-#include <kvbox.h>
-#endif
 
 // Local includes.
 
@@ -100,18 +95,25 @@ public:
 };
 
 AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
-              : KDialogBase( Plain, create ? i18n("New Album") : i18n("Edit Album"),
+              : KDialog( Plain, create ? i18n("New Album") : i18n("Edit Album"),
                              Help|Ok|Cancel, Ok,
                              0, 0, true, true )
 {
+    setCaption(create ? i18n("New Album") : i18n("Edit Album"));
+    setButtons(Help|Ok|Cancel);
+    setDefaultButton(Ok);
+    setModal(true);
+    QWidget *page = new QWidget(this);
+    setMainWidget(page);
+
     d = new AlbumPropsEditPriv;
     d->album = album;
     setHelp("albumpropsedit.anchor", "digikam");
 
-    Q3GridLayout *topLayout = new Q3GridLayout( plainPage(), 2, 6,
+    Q3GridLayout *topLayout = new Q3GridLayout( page, 2, 6,
                                               0, spacingHint() );
 
-    QLabel *topLabel = new QLabel( plainPage() );
+    QLabel *topLabel = new QLabel( page );
     if (create)
     {
         topLabel->setText( i18n( "<qt><b>Create new Album in \"<i>%1</i>\"</b></qt>")
@@ -127,50 +129,50 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     // --------------------------------------------------------
 
-    QFrame *topLine = new Q3Frame( plainPage() );
+    QFrame *topLine = new QFrame( page );
     topLine->setFrameShape( Q3Frame::HLine );
     topLine->setFrameShadow( Q3Frame::Sunken );
     topLayout->addMultiCellWidget( topLine, 1, 1, 0, 1  );
 
     // --------------------------------------------------------
 
-    QLabel *titleLabel = new QLabel( plainPage( ) );
+    QLabel *titleLabel = new QLabel( page);
     titleLabel->setText( i18n( "&Title:" ) );
     topLayout->addWidget( titleLabel, 2, 0 );
 
-    d->titleEdit = new KLineEdit( plainPage( ) );
+    d->titleEdit = new KLineEdit( page );
     topLayout->addWidget( d->titleEdit, 2, 1 );
     titleLabel->setBuddy( d->titleEdit );
 
-    QLabel *collectionLabel = new QLabel( plainPage( ) );
+    QLabel *collectionLabel = new QLabel( page );
     collectionLabel->setText( i18n( "Co&llection:" ) );
     topLayout->addWidget( collectionLabel, 3, 0 );
 
-    d->collectionCombo = new QComboBox( plainPage( ) );
+    d->collectionCombo = new QComboBox( page );
     d->collectionCombo->setEditable(true);
     topLayout->addWidget( d->collectionCombo, 3, 1 );
     collectionLabel->setBuddy( d->collectionCombo );
 
-    QLabel *commentsLabel = new QLabel( plainPage( ) );
+    QLabel *commentsLabel = new QLabel( page );
     commentsLabel->setText( i18n( "Co&mments:" ) );
     topLayout->addWidget( commentsLabel, 4, 0, Qt::AlignLeft|Qt::AlignTop );
 
-    d->commentsEdit = new KTextEdit( plainPage( ) );
+    d->commentsEdit = new KTextEdit( page );
     topLayout->addWidget( d->commentsEdit, 4, 1 );
     commentsLabel->setBuddy( d->commentsEdit );
     d->commentsEdit->setCheckSpellingEnabled(true);
     d->commentsEdit->setWordWrap(Q3TextEdit::WidgetWidth);
     d->commentsEdit->setWrapPolicy(Q3TextEdit::AtWhiteSpace);
 
-    QLabel *dateLabel = new QLabel( plainPage( ) );
+    QLabel *dateLabel = new QLabel( page );
     dateLabel->setText( i18n( "Album &date:" ) );
     topLayout->addWidget( dateLabel, 5, 0, Qt::AlignLeft|Qt::AlignTop );
 
-    d->datePicker = new KDatePicker( plainPage( ) );
+    d->datePicker = new KDatePicker( page );
     topLayout->addWidget( d->datePicker, 5, 1 );
     dateLabel->setBuddy( d->datePicker );
 
-    KHBox *buttonRow = new KHBox( plainPage( ) );
+    KHBox *buttonRow = new KHBox( page );
     QPushButton *dateLowButton = new QPushButton( 
             i18n("Selects the date of the oldest image",
                  "&Oldest" ), buttonRow );

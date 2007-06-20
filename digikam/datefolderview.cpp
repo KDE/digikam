@@ -38,10 +38,8 @@
 #include <kconfig.h>
 
 #include <kdeversion.h>
-#if KDE_IS_VERSION(3,2,0)
 #include <kcalendarsystem.h>
 #include <kvbox.h>
-#endif
 
 // Local includes.
 
@@ -178,12 +176,7 @@ void DateFolderView::slotAlbumAdded(Album* a)
 
     QString yr = QString::number(date.year());
     
-#if KDE_IS_VERSION(3,2,0)
     QString mo = KGlobal::locale()->calendar()->monthName(date, false);
-#else
-    QString mo = KGlobal::locale()->monthName(date, false);
-#endif
-    
     Q3ListViewItem* parent = d->listview->findItem(yr, 0);
     if (!parent)
     {

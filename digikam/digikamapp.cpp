@@ -825,19 +825,8 @@ void DigikamApp::setupActions()
                                    actionCollection(), 
                                    "album_zoomfit2window");
 
-#if KDE_IS_VERSION(3,2,0)
     d->fullScreenAction = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()),
                                                  actionCollection(), this, "full_screen");
-#else
-    d->fullScreenAction = new KToggleAction(i18n("FullScreen Mode"),
-                                   "window_fullscreen",
-                                   CTRL+SHIFT+Qt::Key_F,
-                                   this,
-                                   SLOT(slotToggleFullScreen()),
-                                   actionCollection(),
-                                   "full_screen");
-    d->fullScreenAction->setWhatsThis(i18n("Toggle the main window to full screen mode"));
-#endif
 
     d->slideShowAction = new KActionMenu(i18n("Slide Show"), "slideshow",
                                          actionCollection(), "slideshow");
@@ -1223,7 +1212,6 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
     KUrl url( folder );
     if( !url.isLocalFile() )
     {
-#if KDE_IS_VERSION(3,4,91)
         // Support for system:/ and media:/ (c) Stephan Kulow
         KUrl mlu = KIO::NetAccess::mostLocalURL( url, 0 );
         if (mlu.isLocalFile())
@@ -1255,23 +1243,6 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
         }
 
         return path;
-#else
-#ifndef UDS_LOCAL_PATH
-#define UDS_LOCAL_PATH (72 | KIO::UDS_STRING)
-#else
-        using namespace KIO;
-#endif
-        KIO::UDSEntry e;
-        if( KIO::NetAccess::stat( url, e, 0 ) )
-        {
-            const KIO::UDSEntry::ConstIterator end = e.end();
-            for( KIO::UDSEntry::ConstIterator it = e.begin(); it != end; ++it )
-            {
-                if( (*it).m_uds == UDS_LOCAL_PATH && !(*it).m_str.isEmpty() )
-                    return KUrl::fromPathOrUrl( (*it).m_str ).path();
-            }
-        }
-#endif
     }
 
     return url.path();
@@ -1632,16 +1603,12 @@ void DigikamApp::slotToggleFullScreen()
 
 void DigikamApp::slotShowTip()
 {
-#if KDE_IS_VERSION(3,2,0)
     QStringList tipsFiles;
     tipsFiles.append("digikam/tips");
 
     tipsFiles.append("kipi/tips");
 
     KTipDialog::showMultiTip(this, tipsFiles, true);
-#else
-    KTipDialog::showTip(this, "digikam/tips", true);
-#endif
 }
 
 void DigikamApp::slotShowKipiHelp()

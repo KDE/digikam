@@ -400,16 +400,8 @@ void LightTableWindow::setupActions()
                                            CTRL+SHIFT+Qt::Key_E, this, SLOT(slotFitToWindow()),
                                            actionCollection(), "lighttable_zoomfit2window");
 
-#if KDE_IS_VERSION(3,2,0)
     d->fullScreenAction = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()),
                                                  actionCollection(), this, "lighttable_fullscreen");
-#else
-    d->fullScreenAction = new KToggleAction(i18n("Fullscreen"), "window_fullscreen",
-                                            CTRL+SHIFT+Qt::Key_F, this,
-                                            SLOT(slotToggleFullScreen()),
-                                            actionCollection(), "lighttable_fullscreen");
-#endif
-
     d->slideShowAction = new KAction(i18n("Slide Show"), "slideshow", Qt::Key_F9,
                                      this, SLOT(slotToggleSlideShow()),
                                      actionCollection(),"lighttable_slideshow");

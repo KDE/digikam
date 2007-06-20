@@ -36,11 +36,7 @@
 #include <kiconloader.h>
 #include <kdeversion.h>
 
-#if KDE_IS_VERSION(3,2,0)
 #include <kinputdialog.h>
-#else
-#include <klineeditdlg.h>
-#endif
 
 // Local includes.
 
@@ -129,7 +125,7 @@ void SearchFolderView::quickSearchNew()
     KUrl url;
     SearchQuickDialog dlg(this, url);
 
-    if (dlg.exec() != KDialogBase::Accepted)
+    if (!dlg.exec())
         return;
 
     // Check if there is not already an album with that namespace
@@ -156,7 +152,7 @@ void SearchFolderView::extendedSearchNew()
     KUrl url;
     SearchAdvancedDialog dlg(this, url);
 
-    if (dlg.exec() != KDialogBase::Accepted)
+    if (!dlg.exec())
         return;
 
     // Check if there is not already an album with that name
@@ -190,13 +186,8 @@ bool SearchFolderView::checkName( KUrl& url )
         QString label = i18n( "Search name already exists."
                               "\nPlease enter a new name:" );
         bool ok;
-#if KDE_IS_VERSION(3,2,0)
         QString newTitle = KInputDialog::getText( i18n("Name exists"), label,
                                                   albumTitle, &ok, this );
-#else
-        QString newTitle = KLineEditDlg::getText( i18n("Name exists"), label,
-                                                  albumTitle, ok, this );
-#endif
         if (!ok)
             return( false );
 
