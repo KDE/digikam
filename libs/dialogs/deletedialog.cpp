@@ -23,15 +23,7 @@
  * 
  * ============================================================ */
 
-#include <kconfig.h>
-#include <kdeversion.h>
-#include <kdialogbase.h>
-#include <kglobal.h>
-#include <kiconloader.h>
-#include <kio/job.h>
-#include <klocale.h>
-#include <kstdguiitem.h>
-#include <kurl.h>
+// Qt includes.
 
 #include <qstringlist.h>
 #include <qcheckbox.h>
@@ -43,8 +35,23 @@
 #include <qhbox.h>
 #include <qwidgetstack.h>
 
+// KDE includes.
+
+#include <kconfig.h>
+#include <kdeversion.h>
+#include <kdialogbase.h>
+#include <kglobal.h>
+#include <kiconloader.h>
+#include <kio/job.h>
+#include <klocale.h>
+#include <kstdguiitem.h>
+#include <kurl.h>
+
+// Local includes.
+
 #include "deletedialog.h"
 #include "albumsettings.h"
+#include "deletedialog.moc"
 
 namespace Digikam
 {
@@ -284,12 +291,9 @@ void DeleteDialog::setListMode(DeleteDialogMode::ListMode mode)
         case DeleteDialogMode::Subalbums:
             setCaption(i18n("About to delete selected albums"));
             break;
-
     }
 }
 
-}
+} // namespace Digikam
 
-#include "deletedialog.moc"
 
-// vim: set et ts=4 sw=4:

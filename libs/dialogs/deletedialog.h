@@ -26,10 +26,6 @@
 #ifndef _DELETEDIALOG_H
 #define _DELETEDIALOG_H
 
-// Qt includes.
-
-#include <qcheckbox.h>
-
 // KDE includes.
 
 #include <kdialogbase.h>
@@ -96,12 +92,15 @@ class DIGIKAM_EXPORT DeleteDialog : public KDialogBase
     Q_OBJECT
 
 public:
+
     enum Mode
     {
         ModeFiles,
         ModeAlbums,
         ModeSubalbums
     };
+
+public:
 
     DeleteDialog(QWidget *parent, const char *name = "delete_dialog");
 
@@ -115,17 +114,20 @@ public:
     void setListMode(DeleteDialogMode::ListMode mode);
 
 protected slots:
+
     virtual void accept();
     void slotShouldDelete(bool shouldDelete);
 
 private:
+
+    bool          m_saveShouldDeleteUserPreference;
+
+    KGuiItem      m_trashGuiItem;
+
     DeleteWidget *m_widget;
-    KGuiItem m_trashGuiItem;
-    bool m_saveShouldDeleteUserPreference;
 };
 
-}
+} // namespace Digikam
 
-#endif
+#endif // _DELETEDIALOG_H
 
-// vim: set et ts=4 sw=4:
