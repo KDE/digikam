@@ -10,12 +10,12 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata
 
 # Static library for digiKam ####################################################
 
-SET(libdialog_STAT_SRCS ctrlpaneldlg.cpp 
-                        imagedlgbase.cpp 
-                        imageguidedlg.cpp 
-                        iccprofileinfodlg.cpp 
-                        deletedialog.cpp 
+SET(libdialog_STAT_SRCS iccprofileinfodlg.cpp 
                         dprogressdlg.cpp
+			deletedialog.cpp 
+			imagedlgbase.cpp 
+			imageguidedlg.cpp 
+                        ctrlpaneldlg.cpp 
    )
 
 KDE4_ADD_UI3_FILES(libdialog_STAT_SRCS deletedialogbase.ui)
