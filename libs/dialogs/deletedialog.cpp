@@ -26,7 +26,6 @@
 // Qt includes.
 
 #include <qstringlist.h>
-#include <qcheckbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -45,7 +44,6 @@
 #include <kio/job.h>
 #include <klocale.h>
 #include <kstdguiitem.h>
-#include <kurl.h>
 
 // Local includes.
 

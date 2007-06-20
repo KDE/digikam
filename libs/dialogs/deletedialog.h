@@ -26,6 +26,10 @@
 #ifndef _DELETEDIALOG_H
 #define _DELETEDIALOG_H
 
+// QT includes
+
+#include <qcheckbox.h>
+
 // KDE includes.
 
 #include <kdialogbase.h>
