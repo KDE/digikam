@@ -103,7 +103,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
     int error;
     
     //compile SQL program to virtual machine
-    error = sqlite_compile( m_db, sql.local8Bit(), &tail, &vm, &errorStr );
+    error = sqlite_compile( m_db, QFile::encodeName(sql), &tail, &vm, &errorStr );
 
     if ( error != SQLITE_OK ) {
         DWarning() << k_funcinfo << "sqlite_compile error: "

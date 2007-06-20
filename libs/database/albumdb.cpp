@@ -72,7 +72,7 @@ public:
     }
 
     DatabaseBackend *sql;
-    IntList  recentlyAssignedTags;
+    QList<int>  recentlyAssignedTags;
 };
 
 AlbumDB::AlbumDB(DatabaseBackend *backend)
@@ -178,7 +178,7 @@ TagInfo::List AlbumDB::scanTags()
 
 SearchInfo::List AlbumDB::scanSearches()
 {
-    SearchInfo::List searchList;    
+    SearchInfo::List searchList;
 
     QStringList values;
     execSql( "SELECT id, name, url FROM Searches;", &values);
@@ -194,19 +194,19 @@ SearchInfo::List AlbumDB::scanSearches()
         info.url  = (*it);
         ++it;
 
-        searchList.append(info);        
+        searchList.append(info);
     }
 
     return searchList;
 }
 
-Q3ValueList<AlbumShortInfo> AlbumDB::getAlbumShortInfos()
+QList<AlbumShortInfo> AlbumDB::getAlbumShortInfos()
 {
     QStringList values;
     execSql( QString("SELECT id, url from Albums;"),
              &values);
 
-    Q3ValueList<AlbumShortInfo> albumList;
+    QList<AlbumShortInfo> albumList;
 
     for (QStringList::iterator it = values.begin(); it != values.end();)
     {
@@ -581,7 +581,7 @@ QStringList AlbumDB::getItemTagNames(qlonglong imageID)
     return values;
 }
 
-IntList AlbumDB::getItemTagIDs(qlonglong imageID)
+QList<int> AlbumDB::getItemTagIDs(qlonglong imageID)
 {
     QStringList values;
 
@@ -590,7 +590,7 @@ IntList AlbumDB::getItemTagIDs(qlonglong imageID)
              .arg(imageID),
              &values );
 
-    IntList ids;
+    QList<int> ids;
 
     if (values.isEmpty())
         return ids;
@@ -628,9 +628,9 @@ ItemShortInfo AlbumDB::getItemShortInfo(qlonglong imageID)
     return info;
 }
 
-bool AlbumDB::hasTags(const LLongList& imageIDList)
+bool AlbumDB::hasTags(const QList<qlonglong>& imageIDList)
 {
-    IntList ids;
+    QList<int> ids;
 
     if (imageIDList.isEmpty())
         return false;
@@ -641,7 +641,7 @@ bool AlbumDB::hasTags(const LLongList& imageIDList)
             "WHERE imageid=%1 ")
             .arg(imageIDList.first());
 
-    LLongList::const_iterator iter = imageIDList.begin();
+    QList<qlonglong>::const_iterator iter = imageIDList.begin();
     ++iter;
 
     while (iter != imageIDList.end())
@@ -660,9 +660,9 @@ bool AlbumDB::hasTags(const LLongList& imageIDList)
         return true;
 }
 
-IntList AlbumDB::getItemCommonTagIDs(const LLongList& imageIDList)
+QList<int> AlbumDB::getItemCommonTagIDs(const QList<qlonglong>& imageIDList)
 {
-    IntList ids;
+    QList<int> ids;
 
     if (imageIDList.isEmpty())
         return ids;
@@ -673,7 +673,7 @@ IntList AlbumDB::getItemCommonTagIDs(const LLongList& imageIDList)
                           "WHERE imageid=%1 ")
                   .arg(imageIDList.first());
 
-    LLongList::const_iterator iter = imageIDList.begin();
+    QList<qlonglong>::const_iterator iter = imageIDList.begin();
     ++iter;
 
     while (iter != imageIDList.end())
@@ -758,7 +758,7 @@ void AlbumDB::addItemTag(int albumID, const QString& name, int tagID)
     return addItemTag(getImageId(albumID, name), tagID);
 }
 
-IntList AlbumDB::getRecentlyAssignedTags() const
+QList<int> AlbumDB::getRecentlyAssignedTags() const
 {
     return d->recentlyAssignedTags;    
 }
@@ -806,8 +806,7 @@ QStringList AlbumDB::getAllItemURLsWithoutDate()
              &values );
 
     QString libraryPath = DatabaseAccess::albumRoot() + '/';
-    for (QStringList::iterator it = values.begin(); it != values.end();
-         ++it)
+    for (QStringList::iterator it = values.begin(); it != values.end();++it)
     {
         *it = libraryPath + *it;
     }
@@ -815,12 +814,12 @@ QStringList AlbumDB::getAllItemURLsWithoutDate()
     return values;
 }
 
-Q3ValueList<QPair<QString, QDateTime> > AlbumDB::getItemsAndDate()
+QList<QPair<QString, QDateTime> > AlbumDB::getItemsAndDate()
 {
     QStringList values;
     execSql( "SELECT name, datetime FROM Images;", &values );
 
-    Q3ValueList<QPair<QString, QDateTime> > data;
+    QList<QPair<QString, QDateTime> > data;
     for ( QStringList::iterator it = values.begin(); it != values.end(); )
     {
         QPair<QString, QDateTime> pair;
@@ -880,8 +879,8 @@ qlonglong AlbumDB::addItem(int albumID,
 
     if ( item != -1 && !keywordsList.isEmpty() )
     {
-        IntList tagIDs = getTagsFromTagPaths(keywordsList);
-        for (IntList::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
+        QList<int> tagIDs = getTagsFromTagPaths(keywordsList, true);
+        for (QList<int>::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
         {
             addItemTag(item, *it);
         }
@@ -890,12 +889,12 @@ qlonglong AlbumDB::addItem(int albumID,
     return item;
 }
 
-IntList AlbumDB::getTagsFromTagPaths(const QStringList &keywordsList, bool create)
+QList<int> AlbumDB::getTagsFromTagPaths(const QStringList &keywordsList, bool create)
 {
     if (keywordsList.isEmpty())
-        return IntList();
+        return QList<int>();
 
-    IntList tagIDs;
+    QList<int> tagIDs;
 
     QStringList keywordsList2Create;
 
@@ -925,7 +924,7 @@ IntList AlbumDB::getTagsFromTagPaths(const QStringList &keywordsList, bool creat
         kwd != keywordsList.end(); ++kwd )
     {
         // split full tag "url" into list of single tag names
-        QStringList tagHierarchy = QStringList::split('/', *kwd);
+        QStringList tagHierarchy = (*kwd).split('/', QString::SkipEmptyParts);
         if (tagHierarchy.isEmpty())
             continue;
 
@@ -995,7 +994,7 @@ IntList AlbumDB::getTagsFromTagPaths(const QStringList &keywordsList, bool creat
             kwd != keywordsList2Create.end(); ++kwd )
         {
             // split full tag "url" into list of single tag names
-            QStringList tagHierarchy = QStringList::split('/', *kwd);
+            QStringList tagHierarchy = (*kwd).split('/', QString::SkipEmptyParts);
 
             if (tagHierarchy.isEmpty())
                 continue;
@@ -1205,9 +1204,9 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
     return values;
 }
 
-LLongList AlbumDB::getItemIDsInAlbum(int albumID)
+QList<qlonglong> AlbumDB::getItemIDsInAlbum(int albumID)
 {
-    LLongList itemIDs;
+    QList<qlonglong> itemIDs;
     QStringList values;
 
     execSql( QString("SELECT id FROM Images WHERE dirid=%1;")
@@ -1249,9 +1248,9 @@ QStringList AlbumDB::getItemURLsInTag(int tagID, bool recursive)
     return values;
 }
 
-LLongList AlbumDB::getItemIDsInTag(int tagID, bool recursive)
+QList<qlonglong> AlbumDB::getItemIDsInTag(int tagID, bool recursive)
 {
-    LLongList itemIDs;
+    QList<qlonglong> itemIDs;
     QStringList values;
 
     if (recursive)

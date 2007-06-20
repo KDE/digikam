@@ -30,11 +30,11 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <q3valuelist.h>
-#include <qstringlist.h>
-#include <qdatetime.h>
-#include <qpair.h>
+#include <QString>
+#include <QList>
+#include <QStringList>
+#include <QDateTime>
+#include <QPair>
 
 // KDE includes.
 
@@ -48,9 +48,6 @@
 
 namespace Digikam
 {
-
-typedef Q3ValueList<int>     IntList;
-typedef Q3ValueList<qlonglong> LLongList;
 
 class DatabaseBackend;
 class AlbumDBPriv;
@@ -98,7 +95,7 @@ public:
     /**
      * Returns all albums in the database with their albumRoot and ID.
      */
-    Q3ValueList<AlbumShortInfo> getAlbumShortInfos();
+    QList<AlbumShortInfo> getAlbumShortInfos();
 
     // ----------- Operations on PAlbums -----------
 
@@ -236,14 +233,14 @@ public:
      * @param create create new tags if necessary
      * @returns a list of albumIDs of the tags in tagPaths
      */
-    IntList getTagsFromTagPaths(const QStringList &tagPaths, bool create = true);
+    QList<int> getTagsFromTagPaths(const QStringList &tagPaths, bool create);
 
     /**
      * Get a list of recently assigned tags (only last 6 tags are listed)
      * @return the list of recently assigned tags
      */
     //TODO move to other place (AlbumManager)
-    IntList getRecentlyAssignedTags() const;
+    QList<int> getRecentlyAssignedTags() const;
 
     /**
      * Deletes a tag from the database. This will not delete the
@@ -378,7 +375,7 @@ public:
       * @param  albumID the id of the album
       * @return a list of Ids for the items in the album.
       */
-    LLongList getItemIDsInAlbum(int albumID);
+    QList<qlonglong> getItemIDsInAlbum(int albumID);
 
     /**
      * Given a tagid, get a list of the url of all items in the tag
@@ -393,7 +390,7 @@ public:
      * @param  tagID the id of the tag
      * @return a list of Ids for the items in the tag.
      */
-    LLongList getItemIDsInTag(int tagID, bool recursive = false);
+    QList<qlonglong> getItemIDsInTag(int tagID, bool recursive = false);
 
     /**
      * Returns all items in the database without a date. This is used
@@ -409,7 +406,7 @@ public:
      * Returns all item in the database and their dates.
      * Items that do not have a valid date set are excluded.
      */
-    Q3ValueList<QPair<QString, QDateTime> > getItemsAndDate();
+    QList<QPair<QString, QDateTime> > getItemsAndDate();
 
     // ----------- Item properties -----------
 
@@ -556,7 +553,7 @@ public:
      * @param imageID the ID of the item
      * @return the list of IDs of all tags for the item
      */
-    IntList getItemTagIDs(qlonglong imageID);
+    QList<int> getItemTagIDs(qlonglong imageID);
 
     /**
      * Given a set of items (identified by their IDs),
@@ -564,7 +561,7 @@ public:
      * @param imageIDList a list of IDs of the items
      * @return true if at least one of the items has a tag
      */
-    bool hasTags(const LLongList& imageIDList);
+    bool hasTags(const QList<qlonglong>& imageIDList);
 
     /**
      * Given a set of items (identified by their IDs),
@@ -572,7 +569,7 @@ public:
      * @param imageIDList a list of IDs of the items
      * @return the list of common IDs of the given items
      */
-    IntList getItemCommonTagIDs(const LLongList& imageIDList);
+    QList<int> getItemCommonTagIDs(const QList<qlonglong>& imageIDList);
 
     // ----------- Moving and Copying Items -----------
 

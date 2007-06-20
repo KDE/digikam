@@ -28,10 +28,9 @@
 
 // Qt includes
 
-#include <qstring.h>
-#include <qobject.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QString>
+#include <QObject>
+#include <QList>
 
 // Local includes
 
@@ -162,8 +161,8 @@ protected:
 
     int countItemsInFolder(const QString& directory);
 
-    Q3ValueList< QPair<QString,int> >  m_filesToBeDeleted;
-    Q3ValueList<AlbumShortInfo> m_foldersToBeDeleted;
+    QList< QPair<QString,int> >  m_filesToBeDeleted;
+    QList<AlbumShortInfo> m_foldersToBeDeleted;
 
 };
 

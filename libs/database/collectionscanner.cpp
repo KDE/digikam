@@ -31,11 +31,10 @@
 
 // Qt includes
 
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QDir>
+#include <QFileInfo>
+#include <QStringList>
+#include <QSet>
 
 // LibKDcraw includes.
 
@@ -60,7 +59,7 @@ namespace Digikam
 
 void CollectionScanner::scanForStaleAlbums()
 {
-    QStringList albumRootPaths = CollectionManager::componentData().allAvailableAlbumRootPaths();
+    QStringList albumRootPaths = CollectionManager::instance()->allAvailableAlbumRootPaths();
     for (QStringList::iterator it = albumRootPaths.begin(); it != albumRootPaths.end(); ++it)
         scanForStaleAlbums(*it);
 }
@@ -68,10 +67,11 @@ void CollectionScanner::scanForStaleAlbums()
 void CollectionScanner::scanForStaleAlbums(const QString &albumRoot)
 {
     Q_UNUSED(albumRoot);
-    Q3ValueList<AlbumShortInfo> albumList = DatabaseAccess().db()->getAlbumShortInfos();
-    Q3ValueList<AlbumShortInfo> toBeDeleted;
+    QList<AlbumShortInfo> albumList = DatabaseAccess().db()->getAlbumShortInfos();
+    QList<AlbumShortInfo> toBeDeleted;
 
-    for (Q3ValueList<AlbumShortInfo>::iterator it = albumList.begin(); it != albumList.end(); ++it)
+    QList<AlbumShortInfo>::const_iterator it;
+    for (it = albumList.constBegin(); it != albumList.constEnd(); ++it)
     {
         QFileInfo fileInfo((*it).albumRoot + (*it).url);
         if (!fileInfo.exists() || !fileInfo.isDir())
@@ -82,7 +82,8 @@ void CollectionScanner::scanForStaleAlbums(const QString &albumRoot)
 QStringList CollectionScanner::formattedListOfStaleAlbums()
 {
     QStringList list;
-    for (Q3ValueList<AlbumShortInfo>::iterator it = m_foldersToBeDeleted.begin(); it != m_foldersToBeDeleted.end(); ++it)
+    QList<AlbumShortInfo>::const_iterator it;
+    for (it = m_foldersToBeDeleted.constBegin(); it != m_foldersToBeDeleted.constEnd(); ++it)
     {
         list << (*it).url;
     }
@@ -93,7 +94,8 @@ void CollectionScanner::removeStaleAlbums()
 {
     DatabaseAccess access;
     DatabaseTransaction transaction(&access);
-    for (Q3ValueList<AlbumShortInfo>::iterator it = m_foldersToBeDeleted.begin(); it != m_foldersToBeDeleted.end(); ++it)
+    QList<AlbumShortInfo>::const_iterator it;
+    for (it = m_foldersToBeDeleted.constBegin(); it != m_foldersToBeDeleted.constEnd(); ++it)
     {
         DDebug() << "Removing album " << (*it).albumRoot + '/' + (*it).url << endl;
         access.db()->deleteAlbum((*it).id);
@@ -105,8 +107,8 @@ QStringList CollectionScanner::formattedListOfStaleFiles()
     QStringList listToBeDeleted;
 
     DatabaseAccess access;
-    for (Q3ValueList< QPair<QString,int> >::iterator it = m_filesToBeDeleted.begin();
-        it != m_filesToBeDeleted.end(); ++it)
+    QList< QPair<QString,int> >::const_iterator it;
+    for (it = m_filesToBeDeleted.constBegin(); it != m_filesToBeDeleted.constEnd(); ++it)
     {
         QString location = " (" + access.db()->getAlbumURL((*it).second) + ')';
 
@@ -120,8 +122,8 @@ void CollectionScanner::removeStaleFiles()
 {
     DatabaseAccess access;
     DatabaseTransaction transaction(&access);
-    for (Q3ValueList< QPair<QString,int> >::iterator it = m_filesToBeDeleted.begin();
-         it != m_filesToBeDeleted.end(); ++it)
+    QList< QPair<QString,int> >::const_iterator it;
+    for (it = m_filesToBeDeleted.constBegin(); it != m_filesToBeDeleted.constEnd(); ++it)
     {
         DDebug() << "Removing: " << (*it).first << " in "
                 << (*it).second << endl;
@@ -131,7 +133,7 @@ void CollectionScanner::removeStaleFiles()
 
 void CollectionScanner::scanAlbums()
 {
-    QStringList albumRootPaths = CollectionManager::componentData().allAvailableAlbumRootPaths();
+    QStringList albumRootPaths = CollectionManager::instance()->allAvailableAlbumRootPaths();
     int count = 0;
     for (QStringList::iterator it = albumRootPaths.begin(); it != albumRootPaths.end(); ++it)
         count += countItemsInFolder(*it);
@@ -156,7 +158,7 @@ void CollectionScanner::scanAlbums()
 
 void CollectionScanner::scan(const QString& folderPath)
 {
-    CollectionManager *manager = CollectionManager::componentData();
+    CollectionManager *manager = CollectionManager::instance();
     KUrl url;
     url.setPath(folderPath);
     QString albumRoot = manager->albumRootPath(url);
@@ -209,7 +211,7 @@ void CollectionScanner::scanAlbum(const QString& filePath)
 {
     KUrl url;
     url.setPath(filePath);
-    scanAlbum(CollectionManager::componentData().albumRootPath(url), CollectionManager::componentData().album(url));
+    scanAlbum(CollectionManager::instance()->albumRootPath(url), CollectionManager::instance()->album(url));
 }
 
 void CollectionScanner::scanAlbum(const QString &albumRoot, const QString& album)
@@ -241,36 +243,27 @@ void CollectionScanner::scanAlbum(const QString &albumRoot, const QString& album
 
     QStringList filesInAlbum = DatabaseAccess().db()->getItemNamesInAlbum( albumID );
 
-    // Qt4: use QSet<QString>
-    QMap<QString, bool> filesFoundInDB;
+    QSet<QString> filesFoundInDB;
 
     for (QStringList::iterator it = filesInAlbum.begin();
          it != filesInAlbum.end(); ++it)
     {
-        filesFoundInDB.insert(*it, true);
+        filesFoundInDB << *it;
     }
 
-    const QFileInfoList *list = dir.entryInfoList();
-    // Qt4: remove if-clause
-    if (!list)
-    {
-        emit finishedScanningAlbum(albumRoot, album, 0);
-        return;
-    }
+    const QFileInfoList list = dir.entryInfoList();
+    QFileInfoList::const_iterator fi;
 
-    QFileInfoListIterator it( *list );
-    QFileInfo *fi;
-
-    while ( (fi = it.current()) != 0 )
+    for (fi = list.constBegin(); fi != list.constEnd(); ++fi)
     {
         if ( fi->isFile())
         {
             if (filesFoundInDB.contains(fi->fileName()) )
             {
-                filesFoundInDB.erase(fi->fileName());
+                filesFoundInDB.remove(fi->fileName());
             }
             // ignore temp files we created ourselves
-            else if (fi->extension(true) == "digikamtempfile.tmp")
+            else if (fi->completeSuffix() == "digikamtempfile.tmp")
             {
                 continue;
             }
@@ -284,24 +277,23 @@ void CollectionScanner::scanAlbum(const QString &albumRoot, const QString& album
         {
             scanAlbum( albumRoot, album + '/' + fi->fileName() );
         }
-
-        ++it;
     }
 
     // Removing items from the db which we did not see on disk.
     if (!filesFoundInDB.isEmpty())
     {
-        QMapIterator<QString,bool> it;
-        for (it = filesFoundInDB.begin(); it != filesFoundInDB.end(); ++it)
+        QSetIterator<QString> it(filesFoundInDB);
+        while (it.hasNext())
         {
-            if (m_filesToBeDeleted.findIndex(qMakePair(it.key(),albumID)) == -1)
+            QPair<QString,int> pair(it.next(),albumID);
+            if (m_filesToBeDeleted.indexOf(pair) == -1)
             {
-                m_filesToBeDeleted.append(qMakePair(it.key(),albumID));
+                m_filesToBeDeleted << pair;
             }
         }
     }
 
-    emit finishedScanningAlbum(albumRoot, album, list->count());
+    emit finishedScanningAlbum(albumRoot, album, list.count());
 }
 
 void CollectionScanner::updateItemsWithoutDate()
@@ -335,11 +327,11 @@ void CollectionScanner::updateItemsWithoutDate()
             }
             else
             {
-                QPair<QString, int> fileID = qMakePair(fi.fileName(), albumID);
+                QPair<QString, int> pair(fi.fileName(), albumID);
 
-                if (m_filesToBeDeleted.findIndex(fileID) == -1)
+                if (m_filesToBeDeleted.indexOf(pair) == -1)
                 {
-                    m_filesToBeDeleted.append(fileID);
+                    m_filesToBeDeleted << pair;
                 }
             }
         }
@@ -354,13 +346,12 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
     if ( !dir.exists() or !dir.isReadable() )
         return 0;
 
-    const QFileInfoList *list = dir.entryInfoList();
-    QFileInfoListIterator it( *list );
-    QFileInfo *fi;
+    QFileInfoList list = dir.entryInfoList();
 
-    items += list->count();
+    items += list.count();
 
-    while ( (fi = it.current()) != 0 )
+    QFileInfoList::const_iterator fi;
+    for (fi = list.constBegin(); fi != list.constEnd(); ++fi)
     {
         if ( fi->isDir() &&
              fi->fileName() != "." &&
@@ -368,8 +359,6 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
         {
             items += countItemsInFolder( fi->filePath() );
         }
-
-        ++it;
     }
 
     return items;

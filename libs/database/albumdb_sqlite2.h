@@ -26,17 +26,15 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <q3valuelist.h>
-#include <qstringlist.h>
-#include <qdatetime.h>
+#include <QString>
+#include <QStringList>
+#include <QDateTime>
 
 namespace Digikam
 {
 
 typedef struct sqlite sqleet2; // hehe.
 
-typedef Q3ValueList<int> IntList;
 /**
  * This class is responsible for the communication
  * with the sqlite database.
