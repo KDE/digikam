@@ -1,7 +1,7 @@
-ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS} "-w")
+ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
+ADD_DEFINITIONS("-w")
 
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters
-                   )
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters )
 
 SET(libgreycstoration_STAT_SRCS greycstorationiface.cpp greycstorationwidget.cpp )
 
