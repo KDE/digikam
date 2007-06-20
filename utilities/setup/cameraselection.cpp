@@ -232,6 +232,8 @@ CameraSelection::CameraSelection( QWidget* parent )
     mainBoxLayout->addWidget( umsMountBox, 3, 3, 1, 1 );
     mainBoxLayout->addWidget( box2, 4, 5, 1, 1 );
 
+    vbox->setLayout(mainBoxLayout);
+
     // Connections --------------------------------------------------
 
     disconnect(link, SIGNAL(linkClicked(const QString &)),
