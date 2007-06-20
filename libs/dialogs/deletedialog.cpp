@@ -61,9 +61,9 @@ namespace Digikam
 //////////////////////////////////////////////////////////////////////////////
 
 DeleteWidget::DeleteWidget(QWidget *parent, const char *name)
-    : DeleteDialogBase(parent, name),
-    m_listMode(DeleteDialogMode::Files),
-    m_deleteMode(DeleteDialogMode::UseTrash)
+            : DeleteDialogBase(parent, name),
+              m_listMode(DeleteDialogMode::Files),
+              m_deleteMode(DeleteDialogMode::UseTrash)
 {
     ddCheckBoxStack->raiseWidget(ddShouldDelete);
 
@@ -181,16 +181,16 @@ void DeleteWidget::updateText()
 // DeleteDialog implementation
 //////////////////////////////////////////////////////////////////////////////
 
-DeleteDialog::DeleteDialog(QWidget *parent, const char *name) :
-    KDialogBase(Swallow, WStyle_DialogBorder, parent, name,
-                true, // modal
-                i18n("About to delete selected files"), // caption
-                Ok | Cancel, // available buttons
-                Ok,  // default button
-                true // use separator between buttons and the main widget
-               ),
-    m_trashGuiItem(i18n("&Send to Trash"), "trashcan_full"),
-    m_saveShouldDeleteUserPreference(true)
+DeleteDialog::DeleteDialog(QWidget *parent, const char *name) 
+            : KDialogBase(Swallow, WStyle_DialogBorder, parent, name,
+                          true, // modal
+                          i18n("About to delete selected files"), // caption
+                          Ok | Cancel, // available buttons
+                          Ok,  // default button
+                          true // use separator between buttons and the main widget
+                         ),
+              m_saveShouldDeleteUserPreference(true),
+              m_trashGuiItem(i18n("&Send to Trash"), "trashcan_full")
 {
     m_widget = new DeleteWidget(this, "delete_dialog_widget");
     setMainWidget(m_widget);
