@@ -23,32 +23,27 @@
 
 // Qt includes.
 
-#include <qlayout.h>
-#include <q3whatsthis.h>
-#include <q3header.h>
-#include <qlabel.h>
-#include <qimage.h>
-#include <qpushbutton.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3GridLayout>
-#include <Q3VBoxLayout>
-#include <Q3Frame>
+#include <Q3Header>
+#include <QLabel>
+#include <QImage>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QProgressBar>
 
 // KDE includes.
 
-#include <klocale.h>
-#include <kprogressbar.h>
-#include <kapplication.h>
-#include <kdialogbase.h>
-#include <kiconloader.h>
 #include <k3listview.h>
+#include <klocale.h>
+#include <kapplication.h>
+#include <kiconloader.h>
 #include <kstandarddirs.h>
 
 // Local includes
 
 #include "ddebug.h"
 #include "dprogressdlg.h"
+#include "dprogressdlg.moc"
 
 namespace Digikam
 {
@@ -67,44 +62,48 @@ public:
         allowCancel = true;
         cancelled   = false;
     }
-    
+
     bool       allowCancel;
     bool       cancelled;
 
     QLabel    *logo;
     QLabel    *title;
     QLabel    *label;
-    
+
     K3ListView *actionsList;
-   
-    KProgressBar *progress;
+
+    QProgressBar *progress;
 };
 
 DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
             : KDialog(parent)
 {
-    setCaption(caption);
-    setButton(Cancel);
-    setModal(true);
     d = new DProgressDlgPriv;
-    
+    setCaption(caption);
+    setButtons(Cancel);
+    setDefaultButton(Cancel);
+    setModal(true);
+
     QWidget *page      = new QWidget(this);
     setMainWidget(page);
-    Q3GridLayout* grid = new Q3GridLayout(page, 1, 1, 0, spacingHint());
-    Q3VBoxLayout *vlay = new Q3VBoxLayout();
+
+    QGridLayout* grid = new QGridLayout(page);
+    grid->setSpacing(spacingHint());
+
+    QVBoxLayout *vlay = new QVBoxLayout();
     d->actionsList    = new K3ListView(page);
     d->label          = new QLabel(page);
     d->title          = new QLabel(page);
     d->logo           = new QLabel(page);
-    d->progress       = new KProgressBar(page);
+    d->progress       = new QProgressBar(page);
     vlay->addWidget(d->logo);
     vlay->addWidget(d->progress);
     vlay->addWidget(d->title);
     vlay->addStretch();
 
-    KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
-    d->logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 128, KIcon::DefaultState, 0, true));
-     
+    KIconLoader* iconLoader = KIconLoader::global();
+    d->logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 128, K3Icon::DefaultState, 0, true));
+
     d->actionsList->addColumn("Thumb");   // no i18n here: hiden column
     d->actionsList->addColumn("Status");  // no i18n here: hiden column
     d->actionsList->setSorting(-1);
@@ -113,11 +112,14 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
     d->actionsList->header()->hide();
     d->actionsList->setResizeMode(Q3ListView::LastColumn);
 
-    grid->addMultiCellLayout(vlay, 0, 1, 0, 0);
-    grid->addMultiCellWidget(d->label, 0, 0, 1, 1);
-    grid->addMultiCellWidget(d->actionsList, 1, 1, 1, 1);
+    grid->addLayout(vlay, 0, 1, 0, 0);
+    grid->addWidget(d->label, 0, 0, 1, 1);
+    grid->addWidget(d->actionsList, 1, 1, 1, 1);
     grid->setRowStretch(1, 10);
-    grid->setColStretch(1, 10);
+    grid->setColumnStretch(1, 10);
+
+    connect(this, SIGNAL(cancelClicked()),
+            this, SLOT(slotCancel()));
 }
 
 DProgressDlg::~DProgressDlg()
@@ -131,7 +133,7 @@ void DProgressDlg::slotCancel()
 
     if (d->allowCancel)
     {
-        KDialog::slotCancel();
+        close();
     }
 }
 
@@ -144,7 +146,7 @@ void DProgressDlg::addedAction(const QPixmap& pix, const QString &text)
 {
     QImage img;
     K3ListViewItem *item = new K3ListViewItem(d->actionsList,
-                          d->actionsList->lastItem(), QString(), text);
+                           d->actionsList->lastItem(), QString(), text);
 
     if (pix.isNull())
     {
@@ -152,14 +154,14 @@ void DProgressDlg::addedAction(const QPixmap& pix, const QString &text)
                                                        "image-broken.png");
         dir = dir + "/image-broken.png";
         QPixmap pixbi(dir);
-        img = pixbi.convertToImage().scale(32, 32, Qt::KeepAspectRatio);
+        img = pixbi.toImage().scaled(32, 32, Qt::KeepAspectRatio);
     }
     else
     {
-        img = pix.convertToImage().scale(32, 32, Qt::KeepAspectRatio);
+        img = pix.toImage().scaled(32, 32, Qt::KeepAspectRatio);
     }
 
-    QPixmap pixmap(img);
+    QPixmap pixmap = QPixmap::fromImage(img);
     item->setPixmap(0, pixmap);
     d->actionsList->ensureItemVisible(item);
 }
@@ -172,17 +174,17 @@ void DProgressDlg::reset()
 
 void DProgressDlg::setTotalSteps(int total)
 {
-    d->progress->setTotalSteps(total);
+    d->progress->setMaximum(total);
 }
-    
+
 void DProgressDlg::setValue(int value)
 {
     d->progress->setValue(value);
 }
 
-void DProgressDlg::advance(int value)
+void DProgressDlg::advance(int offset)
 {
-    d->progress->advance(value);
+    d->progress->setValue(d->progress->value() + offset);
 }
 
 void DProgressDlg::setLabel(const QString &text)
@@ -197,13 +199,13 @@ void DProgressDlg::setTitle(const QString &text)
 
 void DProgressDlg::showCancelButton(bool show)
 {
-    showButtonCancel(show);
+    showButton(Cancel, show);
 }
 
 void DProgressDlg::setAllowCancel(bool allowCancel)
 {
     d->allowCancel = allowCancel;
-    showCancelButton(allowCancel);
+    showButton(Cancel, allowCancel);
 }
 
 bool DProgressDlg::allowCancel() const
@@ -216,7 +218,7 @@ bool DProgressDlg::wasCancelled() const
     return d->cancelled;
 }
 
-KProgressBar *DProgressDlg::progressBar() const
+QProgressBar *DProgressDlg::progressBar() const
 {
     return d->progress;
 }
@@ -231,4 +233,3 @@ void DProgressDlg::setActionListVSBarVisible(bool visible)
 
 }  // NameSpace Digikam
 
-#include "dprogressdlg.moc"

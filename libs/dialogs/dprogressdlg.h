@@ -24,6 +24,10 @@
 #ifndef DPROGRESSDLG_H
 #define DPROGRESSDLG_H
 
+// Qt includes.
+
+#include <QPixmap>
+
 // KDE includes.
 
 #include <kdialog.h>
@@ -31,10 +35,8 @@
 // Local includes.
 
 #include "digikam_export.h"
-//Added by qt3to4:
-#include <QPixmap>
 
-class KProgress;
+class QProgressBar;
 
 namespace Digikam
 {
@@ -55,7 +57,7 @@ Q_OBJECT
     void reset();
     void setTotalSteps(int total);
     void setValue(int value);
-    void advance(int value);
+    void advance(int offset);
     void setLabel(const QString &text);
     void setTitle(const QString &text);
     void setActionListVSBarVisible(bool visible);
@@ -64,7 +66,7 @@ Q_OBJECT
     bool wasCancelled() const;
     bool allowCancel() const;
 
-    KProgress *progressBar() const;
+    QProgressBar *progressBar() const;
  
  protected slots:
 
