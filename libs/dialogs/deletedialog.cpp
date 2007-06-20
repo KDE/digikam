@@ -23,6 +23,19 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
+#include <Q3Hbox>
+#include <Q3Hbox>
+#include <Q3WidgetStack>
+#include <QStringList>
+#include <QLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QTimer>
+
+// KDE includes.
+
 #include <kconfig.h>
 #include <kdeversion.h>
 #include <kdialogbase.h>
@@ -33,18 +46,11 @@
 #include <kstdguiitem.h>
 #include <kurl.h>
 
-#include <qstringlist.h>
-#include <qcheckbox.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qtimer.h>
-#include <q3vbox.h>
-#include <q3hbox.h>
-#include <q3widgetstack.h>
+// Local includes.
 
 #include "deletedialog.h"
 #include "albumsettings.h"
+#include "deletedialog.moc"
 
 namespace Digikam
 {
@@ -54,9 +60,9 @@ namespace Digikam
 //////////////////////////////////////////////////////////////////////////////
 
 DeleteWidget::DeleteWidget(QWidget *parent, const char *name)
-    : DeleteDialogBase(parent, name),
-    m_listMode(DeleteDialogMode::Files),
-    m_deleteMode(DeleteDialogMode::UseTrash)
+            : DeleteDialogBase(parent, name),
+              m_listMode(DeleteDialogMode::Files),
+              m_deleteMode(DeleteDialogMode::UseTrash)
 {
     ddCheckBoxStack->raiseWidget(ddShouldDelete);
 
@@ -174,16 +180,16 @@ void DeleteWidget::updateText()
 // DeleteDialog implementation
 //////////////////////////////////////////////////////////////////////////////
 
-DeleteDialog::DeleteDialog(QWidget *parent, const char *name) :
-    KDialogBase(Swallow, Qt::WStyle_DialogBorder, parent, name,
+DeleteDialog::DeleteDialog(QWidget *parent, const char *name) 
+            : KDialog(Swallow, Qt::WStyle_DialogBorder, parent, name,
                 true, // modal
                 i18n("About to delete selected files"), // caption
                 Ok | Cancel, // available buttons
                 Ok,  // default button
                 true // use separator between buttons and the main widget
                ),
-    m_trashGuiItem(i18n("&Send to Trash"), "trashcan_full"),
-    m_saveShouldDeleteUserPreference(true)
+             m_trashGuiItem(i18n("&Send to Trash"), "trashcan_full"),
+             m_saveShouldDeleteUserPreference(true)
 {
     m_widget = new DeleteWidget(this, "delete_dialog_widget");
     setMainWidget(m_widget);
@@ -284,12 +290,8 @@ void DeleteDialog::setListMode(DeleteDialogMode::ListMode mode)
         case DeleteDialogMode::Subalbums:
             setCaption(i18n("About to delete selected albums"));
             break;
-
     }
 }
 
-}
+} // namespace Digikam
 
-#include "deletedialog.moc"
-
-// vim: set et ts=4 sw=4:

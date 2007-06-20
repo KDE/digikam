@@ -28,13 +28,12 @@
 
 // Qt includes.
 
-#include <qcheckbox.h>
-//Added by qt3to4:
+#include <QCheckBox>
 #include <QLabel>
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kurl.h>
 
 // Local includes.
@@ -62,11 +61,11 @@ namespace DeleteDialogMode
 
     enum DeleteMode
     {
-        NoChoiceTrash, // "Do not show again" checkbox, does not show if config entry is set
+        NoChoiceTrash,             // "Do not show again" checkbox, does not show if config entry is set
         NoChoiceDeletePermanently, // No checkbox
-        UserPreference, // Checkbox to toggle trash/permanent, preset to user's last preference
-        UseTrash, // same beckbox as above, preset to trash
-        DeletePermanently // same checkbox as above, preset to permanent
+        UserPreference,            // Checkbox to toggle trash/permanent, preset to user's last preference
+        UseTrash,                  // same beckbox as above, preset to trash
+        DeletePermanently          // same checkbox as above, preset to permanent
     };
 }
 
@@ -89,21 +88,29 @@ protected slots:
 protected:
 
     void updateText();
-    DeleteDialogMode::ListMode m_listMode;
+
+protected:
+
+    DeleteDialogMode::ListMode   m_listMode;
     DeleteDialogMode::DeleteMode m_deleteMode;
 };
 
-class DIGIKAM_EXPORT DeleteDialog : public KDialogBase
+// -----------------------------------------------------------
+
+class DIGIKAM_EXPORT DeleteDialog : public KDialog
 {
     Q_OBJECT
 
 public:
+
     enum Mode
     {
         ModeFiles,
         ModeAlbums,
         ModeSubalbums
     };
+
+public:
 
     DeleteDialog(QWidget *parent, const char *name = "delete_dialog");
 
@@ -117,17 +124,20 @@ public:
     void setListMode(DeleteDialogMode::ListMode mode);
 
 protected slots:
+
     virtual void accept();
     void slotShouldDelete(bool shouldDelete);
 
 private:
+
+    bool          m_saveShouldDeleteUserPreference;
+
+    KGuiItem      m_trashGuiItem;
+
     DeleteWidget *m_widget;
-    KGuiItem m_trashGuiItem;
-    bool m_saveShouldDeleteUserPreference;
 };
 
-}
+} // namespace Digikam
 
-#endif
+#endif // _DELETEDIALOG_H
 
-// vim: set et ts=4 sw=4:
