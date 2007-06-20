@@ -47,6 +47,14 @@ class KGuiItem;
 class QLabel;
 class Q3WidgetStack;
 
+class DeleteDialogBase : public QWidget, public Ui::DeleteDialogBase
+{
+public:
+  DeleteDialogBase( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 namespace Digikam
 {
 
@@ -69,13 +77,13 @@ namespace DeleteDialogMode
     };
 }
 
-class DeleteWidget : public Ui_DeleteDialogBase
+class DeleteWidget : public DeleteDialogBase
 {
     Q_OBJECT
 
 public:
 
-    DeleteWidget(QWidget *parent = 0, const char *name = 0);
+    DeleteWidget(QWidget *parent = 0);
     virtual ~DeleteWidget(){};
 
     void setFiles(const KUrl::List &files);
@@ -113,7 +121,7 @@ public:
 
 public:
 
-    DeleteDialog(QWidget *parent, const char *name = "delete_dialog");
+    DeleteDialog(QWidget *parent);
     virtual ~DeleteDialog(){};
 
     bool confirmDeleteList(const KUrl::List &condemnedURLs,

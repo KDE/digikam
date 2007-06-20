@@ -55,8 +55,8 @@ namespace Digikam
 // DeleteWidget implementation
 //////////////////////////////////////////////////////////////////////////////
 
-DeleteWidget::DeleteWidget(QWidget *parent, const char *name)
-            : Ui_DeleteDialogBase(parent, name),
+DeleteWidget::DeleteWidget(QWidget *parent)
+            : DeleteDialogBase(parent),
               m_listMode(DeleteDialogMode::Files),
               m_deleteMode(DeleteDialogMode::UseTrash)
 {
@@ -112,15 +112,15 @@ void DeleteWidget::updateText()
             ddDeleteText->setText(i18n("<qt>These items will be <b>permanently "
                                        "deleted</b> from your hard disk.</qt>"));
             ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("messagebox_warning",
-                KIcon::Desktop, KIcon::SizeLarge));
+                K3Icon::Desktop, K3Icon::SizeLarge));
         }
         else
         {
             ddDeleteText->setText(i18n("<qt>These items will be moved to the Trash Bin.</qt>"));
             ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("trashcan_full",
-                KIcon::Desktop, KIcon::SizeLarge));
+                K3Icon::Desktop, K3Icon::SizeLarge));
         }
-        ddNumFiles->setText(i18n("<b>1</b> file selected.", "<b>%n</b> files selected.", ddFileList->count()));
+        ddNumFiles->setText(i18np("<b>1</b> file selected.", "<b>%n</b> files selected.", ddFileList->count()));
         break;
 
         case DeleteDialogMode::Albums:
@@ -132,15 +132,15 @@ void DeleteWidget::updateText()
             ddDeleteText->setText(i18n("<qt>These albums will be <b>permanently "
                                        "deleted</b> from your hard disk.</qt>"));
             ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("messagebox_warning",
-                                     KIcon::Desktop, KIcon::SizeLarge));
+                                     K3Icon::Desktop, K3Icon::SizeLarge));
         }
         else
         {
             ddDeleteText->setText(i18n("<qt>These albums will be moved to the Trash Bin.</qt>"));
             ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("trashcan_full",
-                                     KIcon::Desktop, KIcon::SizeLarge));
+                                     K3Icon::Desktop, K3Icon::SizeLarge));
         }
-        ddNumFiles->setText(i18n("<b>1</b> album selected.", "<b>%n</b> albums selected.", ddFileList->count()));
+        ddNumFiles->setText(i18np("<b>1</b> album selected.", "<b>%n</b> albums selected.", ddFileList->count()));
         break;
 
         case DeleteDialogMode::Subalbums:
@@ -155,7 +155,7 @@ void DeleteWidget::updateText()
                                        "are included in this list and will "
                                        "be deleted permanently as well.</qt>"));
             ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("messagebox_warning",
-                                     KIcon::Desktop, KIcon::SizeLarge));
+                                     K3Icon::Desktop, K3Icon::SizeLarge));
         }
         else
         {
@@ -164,9 +164,9 @@ void DeleteWidget::updateText()
                                        "are included in this list and will "
                                        "be moved to the Trash Bin as well.</qt>"));
             ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("trashcan_full",
-                                     KIcon::Desktop, KIcon::SizeLarge));
+                                     K3Icon::Desktop, K3Icon::SizeLarge));
         }
-        ddNumFiles->setText(i18n("<b>1</b> album selected.", "<b>%n</b> albums selected.", ddFileList->count()));
+        ddNumFiles->setText(i18np("<b>1</b> album selected.", "<b>%n</b> albums selected.", ddFileList->count()));
         break;
 
     }
@@ -176,18 +176,15 @@ void DeleteWidget::updateText()
 // DeleteDialog implementation
 //////////////////////////////////////////////////////////////////////////////
 
-DeleteDialog::DeleteDialog(QWidget *parent, const char *name) 
-            : KDialog(Swallow, Qt::WStyle_DialogBorder, parent, name,
-                      true, // modal
-                      i18n("About to delete selected files"), // caption
-                      Ok | Cancel, // available buttons
-                      Ok,  // default button
-                      true // use separator between buttons and the main widget
-                     ),
+DeleteDialog::DeleteDialog(QWidget *parent) 
+            : KDialog(parent),
              m_saveShouldDeleteUserPreference(true),
              m_trashGuiItem(i18n("&Send to Trash"), "trashcan_full")
 {
-    m_widget = new DeleteWidget(this, "delete_dialog_widget");
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
+    setModal(true);
+    m_widget = new DeleteWidget(this);
     setMainWidget(m_widget);
 
     m_widget->setMinimumSize(400, 300);
@@ -197,7 +194,6 @@ DeleteDialog::DeleteDialog(QWidget *parent, const char *name)
     slotShouldDelete(shouldDelete());
     connect(m_widget->ddShouldDelete, SIGNAL(toggled(bool)), SLOT(slotShouldDelete(bool)));
 
-    actionButton(Ok)->setFocus();
 }
 
 bool DeleteDialog::confirmDeleteList(const KUrl::List& condemnedFiles,
@@ -234,7 +230,7 @@ void DeleteDialog::accept()
 
     settings->saveSettings();
 
-    KDialogBase::accept();
+    KDialog::accept();
 }
 
 void DeleteDialog::slotShouldDelete(bool shouldDelete)
