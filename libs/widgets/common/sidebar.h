@@ -22,15 +22,15 @@
  *
  * ============================================================ */
 
-
 /** @file sidebar.h */
 
 #ifndef _SIDEBAR_H_
 #define _SIDEBAR_H_
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+// Qt includes.
+
+#include <QPixmap>
+
 
 // KDE includes.
 
@@ -39,8 +39,6 @@
 // Local includes.
 
 #include "digikam_export.h"
-//Added by qt3to4:
-#include <QPixmap>
 
 class QSplitter;
 
