@@ -1,6 +1,6 @@
-#message(${GPHOTO2_INCLUDE_DIR})
 
-INCLUDE_DIRECTORIES( ${KIPI_INCLUDE_DIR} 
+INCLUDE_DIRECTORIES(
+                     ${KIPI_INCLUDE_DIR} 
                      ${GPHOTO2_INCLUDE_DIR} 
                      ${KDCRAW_INCLUDE_DIR} 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/batch 
@@ -23,6 +23,10 @@ KDE4_AUTOMOC(${libsetupshowfoto_STAT_SRCS})
 KDE4_ADD_LIBRARY(libsetupshowfoto STATIC ${libsetupshowfoto_STAT_SRCS})
 
 # Static library for digiKam ############################################
+
+message(${GPHOTO2_INCLUDE_DIR})
+
+INCLUDE_DIRECTORIES( ${GPHOTO2_INCLUDE_DIR} )
 
 SET(libsetup_STAT_SRCS setupicc.cpp 
                        setupcollections.cpp 
