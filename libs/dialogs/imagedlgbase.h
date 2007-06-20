@@ -1,5 +1,8 @@
 /* ============================================================
- * Authors     : Gilles Caulier
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
  * Date        : 2005-07-23
  * Description : simple plugins dialog without threadable 
  *               filter interface. The dialog layout is 
@@ -26,8 +29,7 @@
 
 // Qt includes
 
-#include <qstring.h>
-//Added by qt3to4:
+#include <QString>
 #include <Q3Frame>
 #include <QCloseEvent>
 
