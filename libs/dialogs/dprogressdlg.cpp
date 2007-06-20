@@ -44,6 +44,7 @@
 
 #include "ddebug.h"
 #include "dprogressdlg.h"
+#include "dprogressdlg.moc"
 
 namespace Digikam
 {
@@ -222,4 +223,3 @@ void DProgressDlg::setActionListVSBarVisible(bool visible)
 
 }  // NameSpace Digikam
 
-#include "dprogressdlg.moc"
