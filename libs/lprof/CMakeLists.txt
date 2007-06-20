@@ -2,7 +2,8 @@
 ## support 'nofinal' compilation option.
 KDE4_NO_ENABLE_FINAL(liblprof)
 
-ADD_DEFINITIONS("-w -fomit-frame-pointer")
+ADD_DEFINITIONS("-w")
+ADD_DEFINITIONS("-fomit-frame-pointer")
 
 SET(liblprof_STAT_SRCS
     cmshull.cpp 
