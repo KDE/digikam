@@ -76,6 +76,7 @@ class DeleteWidget : public Ui_DeleteDialogBase
 public:
 
     DeleteWidget(QWidget *parent = 0, const char *name = 0);
+    virtual ~DeleteWidget(){};
 
     void setFiles(const KUrl::List &files);
     void setListMode(DeleteDialogMode::ListMode mode);
@@ -113,6 +114,7 @@ public:
 public:
 
     DeleteDialog(QWidget *parent, const char *name = "delete_dialog");
+    virtual ~DeleteDialog(){};
 
     bool confirmDeleteList(const KUrl::List &condemnedURLs,
                            DeleteDialogMode::ListMode listMode,
