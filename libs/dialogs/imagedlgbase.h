@@ -30,12 +30,11 @@
 // Qt includes
 
 #include <QString>
-#include <Q3Frame>
 #include <QCloseEvent>
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 // Local includes.
 
@@ -50,14 +49,14 @@ namespace Digikam
 
 class ImageDlgBasePriv;
 
-class DIGIKAM_EXPORT ImageDlgBase : public KDialogBase
+class DIGIKAM_EXPORT ImageDlgBase : public KDialog
 {
     Q_OBJECT
 
 public:
 
     ImageDlgBase(QWidget *parent, QString title, QString name, 
-                 bool loadFileSettings=true, bool tryAction=false, Q3Frame* bannerFrame=0);
+                 bool loadFileSettings=true, bool tryAction=false);
     ~ImageDlgBase();
 
     void setAboutData(KAboutData *about);

@@ -26,22 +26,18 @@
 
 // Qt includes.
 
-#include <q3groupbox.h>
-#include <qlabel.h>
-#include <q3whatsthis.h>
-#include <qpushbutton.h>
-#include <qtimer.h>
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qtimer.h>
-#include <qsplitter.h>
-
-//Added by qt3to4:
-#include <QCloseEvent>
-#include <Q3GridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QTimer>
+#include <QLayout>
+#include <QFrame>
+#include <QTimer>
+#include <QSplitter>
+#include <QGridLayout>
 
 // KDE includes.
 
+#include <kpushbutton.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <kglobalsettings.h>
@@ -84,7 +80,7 @@ public:
 
     bool            tryAction;
 
-    Q3GridLayout    *mainLayout;
+    QGridLayout    *mainLayout;
     
     QWidget        *parent;
     
@@ -102,13 +98,16 @@ public:
 };
 
 ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name, 
-                           bool loadFileSettings, bool tryAction, Q3Frame* bannerFrame)
-            : KDialogBase(Plain, 0, Help|Default|User1|User2|User3|Try|Ok|Cancel, Ok,
-                          parent, 0, true, true,
-                          QString(),
-                          i18n("&Save As..."),
-                          i18n("&Load..."))
+                           bool loadFileSettings, bool tryAction)
+            : KDialog(parent)
 {
+    setButtons(Help|Default|User1|User2|User3|Try|Ok|Cancel);
+    setDefaultButton(Ok);
+    setModal(true);
+    setButtonText(User1, QString());
+    setButtonText(User2, i18n("&Save As..."));
+    setButtonText(User3, i18n("&Load..."));
+
     kapp->setOverrideCursor( Qt::WaitCursor );
     setCaption(DImgInterface::defaultInterface()->getImageFileName() + QString(" - ") + title);
     showButton(User1, false);
@@ -118,36 +117,40 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
     d->name      = name;
     d->tryAction = tryAction;
 
-    setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
-    setButtonWhatsThis ( User3, i18n("<p>Load all filter parameters from settings text file.") );
-    setButtonWhatsThis ( User2, i18n("<p>Save all filter parameters to settings text file.") );
+    setButtonWhatsThis( Default, i18n("<p>Reset all filter parameters to their default values.") );
+    setButtonWhatsThis( User3, i18n("<p>Load all filter parameters from settings text file.") );
+    setButtonWhatsThis( User2, i18n("<p>Save all filter parameters to settings text file.") );
     showButton(User2, loadFileSettings);
     showButton(User3, loadFileSettings);
     showButton(Try, tryAction);
 
-    resize(configDialogSize(name + QString(" Tool Dialog")));
+    KSharedConfig::Ptr config = KGlobal::config();
+    restoreDialogSize(config->group(name + QString(" Tool Dialog")));
 
     // -------------------------------------------------------------
 
-    d->mainLayout = new Q3GridLayout( plainPage(), 2, 1);
-    if (bannerFrame)
-    {
-        bannerFrame->reparent( plainPage(), QPoint(0, 0) );
-        d->mainLayout->addMultiCellWidget(bannerFrame, 0, 0, 0, 1);
-    }
+    KVBox *vbox = new KVBox( this );
+    setMainWidget( vbox );
+
+    d->mainLayout = new QGridLayout( vbox);
 
     // -------------------------------------------------------------
 
-    d->hbox     = new KHBox(plainPage());
+    d->hbox     = new KHBox(vbox);
     d->splitter = new QSplitter(d->hbox);
-    d->splitter->setFrameStyle( Q3Frame::NoFrame );
-    d->splitter->setFrameShadow( Q3Frame::Plain );
-    d->splitter->setFrameShape( Q3Frame::NoFrame );    
+    d->splitter->setFrameStyle( QFrame::NoFrame );
+    d->splitter->setFrameShadow( QFrame::Plain );
+    d->splitter->setFrameShape( QFrame::NoFrame );    
     d->splitter->setOpaqueResize(false);
     
-    d->mainLayout->addMultiCellWidget(d->hbox, 1, 2, 0, 1);
-    d->mainLayout->setColStretch(0, 10);
+    d->mainLayout->addWidget(d->hbox, 1, 2, 0, 1);
+    d->mainLayout->setColumnStretch(0, 10);
     d->mainLayout->setRowStretch(2, 10);
+
+    vbox->setLayout(d->mainLayout);
+
+    connect(this, SIGNAL(helpClicked()),
+            this, SLOT(slotHelp()));
 
     kapp->restoreOverrideCursor();
 }
@@ -166,10 +169,11 @@ ImageDlgBase::~ImageDlgBase()
 
 void ImageDlgBase::readSettings(void)
 {
+    QList<int> list;
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup(d->name + QString(" Tool Dialog"));
-    if(config->hasKey("SplitterSizes"))
-        d->splitter->setSizes(config->readIntListEntry("SplitterSizes"));
+    KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
+    if(group.hasKey("SplitterSizes"))
+        d->splitter->setSizes(group.readEntry("SplitterSizes", list));
 
     readUserSettings();
 }
@@ -177,10 +181,10 @@ void ImageDlgBase::readSettings(void)
 void ImageDlgBase::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup(d->name + QString(" Tool Dialog"));
-    config->writeEntry("SplitterSizes", d->splitter->sizes());
+    KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
+    group.writeEntry("SplitterSizes", d->splitter->sizes());
+    saveDialogSize(group);
     config->sync();
-    saveDialogSize(d->name + QString(" Tool Dialog"));
 }
 
 void ImageDlgBase::closeEvent(QCloseEvent *e)
@@ -215,33 +219,34 @@ void ImageDlgBase::slotHelp()
 
     if (d->aboutData)
         KToolInvocation::invokeHelp(d->name, "digikam");
-    else
-        KDialogBase::slotHelp();
 }
 
 void ImageDlgBase::setAboutData(KAboutData *about)
 {
     d->aboutData = about;
-    QPushButton *helpButton = actionButton( Help );
+    KPushButton *helpButton = button( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, d->aboutData, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("digiKam Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    helpButton->setPopup( helpMenu->menu() );
+    helpMenu->menu()->removeAction(helpMenu->menu()->actions().first());
+    QAction *handbook = new QAction(i18n("digiKam Handbook"), this);
+    connect(handbook, SIGNAL(triggered(bool)),
+            this, SLOT(slotHelp()));
+    helpMenu->menu()->insertAction(helpMenu->menu()->actions().first(), handbook);
+    helpButton->setDelayedMenu( helpMenu->menu() );
 }
 
 void ImageDlgBase::setPreviewAreaWidget(QWidget *w)
 {
-    w->reparent( d->splitter, QPoint(0, 0) );
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred,
-                              QSizePolicy::Expanding,
-                              2, 1);
+    w->setParent( d->splitter );
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    rightSzPolicy.setHorizontalStretch(2);
+    rightSzPolicy.setVerticalStretch(1);
     w->setSizePolicy(rightSzPolicy);
 }
 
 void ImageDlgBase::setUserAreaWidget(QWidget *w)
 {
     QString sbName(d->name + QString(" Image Plugin Sidebar"));
-    d->settingsSideBar = new Sidebar(d->hbox, sbName.ascii(), Sidebar::Right);
+    d->settingsSideBar = new Sidebar(d->hbox, sbName.toAscii().data(), Sidebar::DockRight);
     d->settingsSideBar->setSplitter(d->splitter);
     d->settingsSideBar->appendTab(w, SmallIcon("configure"), i18n("Settings"));    
     d->settingsSideBar->loadViewState();
@@ -260,7 +265,8 @@ void ImageDlgBase::slotTimer()
     d->timer = new QTimer( this );
     connect( d->timer, SIGNAL(timeout()),
              this, SLOT(slotEffect()) );
-    d->timer->start(500, true);
+    d->timer->setSingleShot(true);
+    d->timer->start(500);
 }
 
 }  // NameSpace Digikam
