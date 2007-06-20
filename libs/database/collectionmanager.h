@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 
 // KDE includes
 
@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT CollectionManager
 {
 public:
 
-    static CollectionManager *componentData();
+    static CollectionManager *instance();
     static void cleanUp();
 
     //QList<CollectionLocation *> allLocations();
@@ -78,7 +78,7 @@ private:
 
     CollectionManager();
     ~CollectionManager();
-    static CollectionManager *m_componentData;
+    static CollectionManager *m_instance;
 
     CollectionManagerPrivate *d;
 };

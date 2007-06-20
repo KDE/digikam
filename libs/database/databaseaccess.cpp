@@ -46,7 +46,7 @@ class DatabaseAccessStaticPriv
 {
 public:
     DatabaseAccessStaticPriv()
-    : backend(0), db(0), infoCache(0), attributesWatch(0), mutex(true) // create a recursive mutex
+    : backend(0), db(0), infoCache(0), attributesWatch(0), mutex(QMutex::Recursive) // create a recursive mutex
     {
     };
     ~DatabaseAccessStaticPriv() {};
@@ -143,7 +143,9 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
     {
         KUrl url;
         url.setPath(d->parameters.databaseName);
-        d->albumRoot = url.directory(true);
+        d->albumRoot = url.directory();
+        if (d->albumRoot.endsWith('/'))
+            d->albumRoot.chop(1);
     }
 }
 
