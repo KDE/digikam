@@ -26,8 +26,8 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qstring.h>
+#include <QWidget>
+#include <QString>
 
 // Local includes.
 
@@ -46,22 +46,22 @@ public:
 
     NavigateBarWidget(QWidget *parent=0, bool show=true);
     ~NavigateBarWidget();
-    
+
     void    setFileName(QString filename=QString());
     QString getFileName();
     void    setButtonsState(int itemType);
     int     getButtonsState();
 
 signals:
-    
-    void signalFirstItem(void);    
-    void signalPrevItem(void);    
-    void signalNextItem(void);    
-    void signalLastItem(void);    
-        
+
+    void signalFirstItem(void);
+    void signalPrevItem(void);
+    void signalNextItem(void);
+    void signalLastItem(void);
+
 private :
 
-    NavigateBarWidgetPriv* d;    
+    NavigateBarWidgetPriv* d;
 };
 
 }  // namespace Digikam

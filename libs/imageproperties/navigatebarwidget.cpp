@@ -23,14 +23,12 @@
 
 // Qt includes.
  
-#include <qlayout.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 // KDE includes.
 
 #include <ksqueezedtextlabel.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <klocale.h>
  
 // Local includes
@@ -51,39 +49,40 @@ public:
         filename = 0;
         navBar   = 0;
     }
-    
+
     KSqueezedTextLabel *filename;
 
     StatusNavigateBar  *navBar;
 };
 
 NavigateBarWidget::NavigateBarWidget(QWidget *parent, bool show)
-                 : QWidget(parent, 0, Qt::WDestructiveClose)
+                 : QWidget(parent)
 {
     d = new NavigateBarWidgetPriv;
-    
-    Q3HBoxLayout *lay = new Q3HBoxLayout(this);
-    d->navBar   = new StatusNavigateBar(this);    
-    d->filename = new KSqueezedTextLabel(this);
-    
+    setAttribute(Qt::WA_DeleteOnClose);
+
+    QHBoxLayout *lay = new QHBoxLayout(this);
+    d->navBar        = new StatusNavigateBar(this);
+    d->filename      = new KSqueezedTextLabel(this);
+
     lay->addWidget(d->navBar);
     lay->addSpacing( KDialog::spacingHint() );
     lay->addWidget(d->filename);
 
     if (!show) hide();
-    
+
     connect(d->navBar, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
-    
+
     connect(d->navBar, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
-    
+
     connect(d->navBar, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
-    
+
     connect(d->navBar, SIGNAL(signalLastItem()),
             this, SIGNAL(signalLastItem()));
-}      
+}
 
 NavigateBarWidget::~NavigateBarWidget()
 {
