@@ -299,16 +299,10 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
 ImageGuideDlg::~ImageGuideDlg()
 {
-    if (d->timer)
-       delete d->timer;
-
-    if (m_threadedFilter)
-       delete m_threadedFilter;
-
-    if (d->aboutData)
-       delete d->aboutData;
-
+    delete d->aboutData;
+    delete d->timer;
     delete d->settingsSideBar;
+    delete m_threadedFilter;
     delete d;
 }
 
@@ -364,6 +358,9 @@ void ImageGuideDlg::setUserAreaWidget(QWidget *w)
 
 void ImageGuideDlg::setAboutData(KAboutData *about)
 {
+    disconnect(this, SIGNAL(helpClicked()),
+               this, SLOT(slotHelp()));
+
     d->aboutData            = about;
     KPushButton *helpButton = button( Help );
     KHelpMenu* helpMenu     = new KHelpMenu(this, d->aboutData, false);
@@ -440,7 +437,7 @@ void ImageGuideDlg::slotCancel()
 
        kapp->restoreOverrideCursor();
     }
-    
+
     writeSettings();
     done(Cancel);
 }

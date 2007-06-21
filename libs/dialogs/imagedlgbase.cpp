@@ -98,7 +98,8 @@ public:
 };
 
 ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name, 
-                           bool loadFileSettings, bool tryAction)
+                           bool loadFileSettings, 
+                           bool tryAction)
             : KDialog(parent)
 {
     setButtons(Help|Default|User1|User2|User3|Try|Ok|Cancel);
@@ -238,6 +239,9 @@ void ImageDlgBase::slotHelp()
 
 void ImageDlgBase::setAboutData(KAboutData *about)
 {
+    disconnect(this, SIGNAL(helpClicked()),
+               this, SLOT(slotHelp()));
+
     d->aboutData = about;
     KPushButton *helpButton = button( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, d->aboutData, false);

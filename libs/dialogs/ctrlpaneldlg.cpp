@@ -100,8 +100,10 @@ public:
 };
 
 CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
-                           bool loadFileSettings, bool tryAction, bool progressBar,
-                           int separateViewMode, Q3Frame* bannerFrame)
+                           bool loadFileSettings, 
+                           bool tryAction, 
+                           bool progressBar,
+                           int separateViewMode)
             : KDialog(parent)
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
@@ -198,12 +200,18 @@ void CtrlPanelDlg::slotInit()
 
 void CtrlPanelDlg::setAboutData(KAboutData *about)
 {
+    disconnect(this, SIGNAL(helpClicked()),
+               this, SLOT(slotHelp()));
+
     d->aboutData            = about;
-    QPushButton *helpButton = actionButton( Help );
+    KPushButton *helpButton = button( Help );
     KHelpMenu* helpMenu     = new KHelpMenu(this, d->aboutData, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("digiKam Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    helpButton->setPopup( helpMenu->menu() );
+    helpMenu->menu()->removeAction(helpMenu->menu()->actions().first());
+    QAction *handbook       = new QAction(i18n("digiKam Handbook"), this);
+    connect(handbook, SIGNAL(triggered(bool)),
+            this, SLOT(slotHelp()));
+    helpMenu->menu()->insertAction(helpMenu->menu()->actions().first(), handbook);
+    helpButton->setDelayedMenu( helpMenu->menu() );
 }
 
 void CtrlPanelDlg::abortPreview()
@@ -249,8 +257,10 @@ void CtrlPanelDlg::slotCancel()
 
        kapp->restoreOverrideCursor();
     }
-    
-    saveDialogSize(d->name + QString(" Tool Dialog"));
+
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
+    saveDialogSize(group);
     done(Cancel);
 }
 
@@ -264,7 +274,9 @@ void CtrlPanelDlg::closeEvent(QCloseEvent *e)
        kapp->restoreOverrideCursor();
     }
 
-    saveDialogSize(d->name + QString(" Tool Dialog"));
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
+    saveDialogSize(group);
     e->accept();
 }
 
@@ -291,8 +303,6 @@ void CtrlPanelDlg::slotHelp()
 
     if (d->aboutData)
         KToolInvocation::invokeHelp(d->name, "digikam");
-    else
-        KDialog::slotHelp();
 }
 
 void CtrlPanelDlg::slotTimer()
@@ -306,7 +316,8 @@ void CtrlPanelDlg::slotTimer()
     d->timer = new QTimer( this );
     connect( d->timer, SIGNAL(timeout()),
              this, SLOT(slotEffect()) );
-    d->timer->start(500, true);
+    d->timer->setSingleShot(true);
+    d->timer->start(500);
 }
 
 void CtrlPanelDlg::slotEffect()
@@ -342,7 +353,10 @@ void CtrlPanelDlg::slotOk()
 {
     d->currentRenderingMode = CtrlPanelDlgPriv::FinalRendering;
     DDebug() << "Final " << d->name << " started..." << endl;
-    saveDialogSize(d->name + QString(" Tool Dialog"));
+
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
+    saveDialogSize(group);
     writeUserSettings();
 
     m_imagePreviewWidget->setEnable(false);
@@ -365,11 +379,11 @@ void CtrlPanelDlg::slotOk()
     prepareFinal();
 }
 
-void CtrlPanelDlg::customEvent(QCustomEvent *event)
+void CtrlPanelDlg::customEvent(QEvent *event)
 {
     if (!event) return;
 
-    DImgThreadedFilter::EventData *ed = (DImgThreadedFilter::EventData*) event->data();
+    DImgThreadedFilter::EventData *ed = (DImgThreadedFilter::EventData*) event;
 
     if (!ed) return;
 
@@ -425,29 +439,31 @@ void CtrlPanelDlg::customEvent(QCustomEvent *event)
 // Backport KDialog::keyPressEvent() implementation from KDELibs to ignore Enter/Return Key events 
 // to prevent any conflicts between dialog keys events and SpinBox keys events.
 
+// TODO: KDE4PORT: Check if this code work fine with KDE4::KDialog()
+
 void CtrlPanelDlg::keyPressEvent(QKeyEvent *e)
 {
-    if ( e->state() == 0 )
+    if ( e->modifiers() == 0 )
     {
         switch ( e->key() )
         {
-        case Qt::Key_Escape:
-            e->accept();
-            reject();
-        break;
-        case Qt::Key_Enter:            
-        case Qt::Key_Return:     
-            e->ignore();              
-        break;
-        default:
-            e->ignore();
-            return;
+            case Qt::Key_Escape:
+                e->accept();
+                reject();
+            break;
+            case Qt::Key_Enter:
+            case Qt::Key_Return:
+                e->ignore();
+            break;
+            default:
+                e->ignore();
+                return;
         }
     }
     else
     {
         // accept the dialog when Ctrl-Return is pressed
-        if ( e->state() == Qt::ControlModifier &&
+        if ( e->modifiers() == Qt::ControlModifier &&
             (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) )
         {
             e->accept();
