@@ -56,7 +56,8 @@ class DIGIKAM_EXPORT ImageDlgBase : public KDialog
 public:
 
     ImageDlgBase(QWidget *parent, QString title, QString name, 
-                 bool loadFileSettings=true, bool tryAction=false);
+                 bool loadFileSettings=true, 
+                 bool tryAction=false);
     ~ImageDlgBase();
 
     void setAboutData(KAboutData *about);
@@ -66,10 +67,10 @@ public:
 protected slots:
 
     virtual void slotDefault();
-    virtual void slotTimer();       
-    
+    virtual void slotTimer();
+
 protected:
-    
+
     void closeEvent(QCloseEvent *e);
     virtual void finalRendering(){};
     virtual void writeUserSettings(void){};
@@ -77,17 +78,17 @@ protected:
     virtual void resetValues(void){};
 
 private slots:
-    
+
     void slotHelp();
     void slotCancel();
-    void slotOk();        
+    void slotOk();
     virtual void slotEffect(){};
 
 private:
 
     void readSettings(void);
     void writeSettings(void);
- 
+
 private:
 
     ImageDlgBasePriv* d;
