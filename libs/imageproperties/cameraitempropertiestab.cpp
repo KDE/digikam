@@ -23,23 +23,18 @@
 
 // Qt includes.
 
-#include <qlayout.h>
-#include <qstyle.h>
-#include <qfile.h>
-#include <qlabel.h>
-#include <qpixmap.h>
-#include <qcombobox.h>
-#include <q3whatsthis.h>
-#include <q3frame.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QStyle>
+#include <QFile>
+#include <QLabel>
+#include <QFrame>
+#include <QGridLayout>
 
 // KDE includes.
 
 #include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kfileitem.h>
 #include <kmimetype.h>
 #include <kseparator.h>
@@ -132,7 +127,7 @@ public:
     QLabel             *flash;
     QLabel             *whiteBalance;
 
-    Q3Frame             *settingsArea;
+    QFrame             *settingsArea;
 
     KSqueezedTextLabel *labelFile;
     KSqueezedTextLabel *labelFolder;
@@ -163,11 +158,14 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     d = new CameraItemPropertiesTabPriv;
 
     setupNavigateBar(navBar);
-    d->settingsArea = new Q3Frame(this);
-    d->settingsArea->setFrameStyle( Q3Frame::StyledPanel | Q3Frame::Sunken );
-    d->settingsArea->setLineWidth( style().pixelMetric(QStyle::PM_DefaultFrameWidth, this) );
-    
-    Q3GridLayout *settingsLayout = new Q3GridLayout(d->settingsArea, 27, 1, KDialog::spacingHint(), 0);
+    d->settingsArea = new QFrame(this);
+    d->settingsArea->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+    d->settingsArea->setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
+
+    QGridLayout *settingsLayout = new QGridLayout(d->settingsArea);
+    settingsLayout->setSpacing(KDialog::spacingHint());
+    settingsLayout->setMargin(0);
+    d->settingsArea->setLayout(settingsLayout);
 
     // --------------------------------------------------
 
@@ -265,61 +263,61 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
 
     // --------------------------------------------------
 
-    settingsLayout->addMultiCellWidget(d->title, 0, 0, 0, 1);
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 1, 0, 1);
-    settingsLayout->addMultiCellWidget(d->file, 2, 2, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelFile, 2, 2, 1, 1);
-    settingsLayout->addMultiCellWidget(d->folder, 3, 3, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelFolder, 3, 3, 1, 1);
-    settingsLayout->addMultiCellWidget(d->date, 4, 4, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelFileDate, 4, 4, 1, 1);
-    settingsLayout->addMultiCellWidget(d->size, 5, 5, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelFileSize, 5, 5, 1, 1);
-    settingsLayout->addMultiCellWidget(d->isReadable, 6, 6, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelFileIsReadable, 6, 6, 1, 1);
-    settingsLayout->addMultiCellWidget(d->isWritable, 7, 7, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelFileIsWritable, 7, 7, 1, 1);
-    settingsLayout->addMultiCellWidget(d->mime, 8, 8, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelImageMime, 8, 8, 1, 1);
-    settingsLayout->addMultiCellWidget(d->dimensions, 9, 9, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelImageDimensions, 9, 9, 1, 1);
-    settingsLayout->addMultiCellWidget(d->newFileName, 10, 10, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelNewFileName, 10, 10, 1, 1);
-    settingsLayout->addMultiCellWidget(d->downloaded, 11, 11, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelAlreadyDownloaded, 11, 11, 1, 1);
+    settingsLayout->addWidget(d->title, 0, 0, 0, 1);
+    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 1, 0, 1);
+    settingsLayout->addWidget(d->file, 2, 2, 0, 0);
+    settingsLayout->addWidget(d->labelFile, 2, 2, 1, 1);
+    settingsLayout->addWidget(d->folder, 3, 3, 0, 0);
+    settingsLayout->addWidget(d->labelFolder, 3, 3, 1, 1);
+    settingsLayout->addWidget(d->date, 4, 4, 0, 0);
+    settingsLayout->addWidget(d->labelFileDate, 4, 4, 1, 1);
+    settingsLayout->addWidget(d->size, 5, 5, 0, 0);
+    settingsLayout->addWidget(d->labelFileSize, 5, 5, 1, 1);
+    settingsLayout->addWidget(d->isReadable, 6, 6, 0, 0);
+    settingsLayout->addWidget(d->labelFileIsReadable, 6, 6, 1, 1);
+    settingsLayout->addWidget(d->isWritable, 7, 7, 0, 0);
+    settingsLayout->addWidget(d->labelFileIsWritable, 7, 7, 1, 1);
+    settingsLayout->addWidget(d->mime, 8, 8, 0, 0);
+    settingsLayout->addWidget(d->labelImageMime, 8, 8, 1, 1);
+    settingsLayout->addWidget(d->dimensions, 9, 9, 0, 0);
+    settingsLayout->addWidget(d->labelImageDimensions, 9, 9, 1, 1);
+    settingsLayout->addWidget(d->newFileName, 10, 10, 0, 0);
+    settingsLayout->addWidget(d->labelNewFileName, 10, 10, 1, 1);
+    settingsLayout->addWidget(d->downloaded, 11, 11, 0, 0);
+    settingsLayout->addWidget(d->labelAlreadyDownloaded, 11, 11, 1, 1);
 
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 12, 12, 0, 1);
-    settingsLayout->addMultiCellWidget(line, 13, 13, 0, 1);
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 14, 14, 0, 1);
+    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 12, 12, 0, 1);
+    settingsLayout->addWidget(line, 13, 13, 0, 1);
+    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 14, 14, 0, 1);
 
-    settingsLayout->addMultiCellWidget(d->title2, 15, 15, 0, 1);
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 16, 16, 0, 1);
-    settingsLayout->addMultiCellWidget(d->make, 17, 17, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoMake, 17, 17, 1, 1);
-    settingsLayout->addMultiCellWidget(d->model, 18, 18, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoModel, 18, 18, 1, 1);
-    settingsLayout->addMultiCellWidget(d->photoDate, 19, 19, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoDateTime, 19, 19, 1, 1);
-    settingsLayout->addMultiCellWidget(d->aperture, 20, 20, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoAperture, 20, 20, 1, 1);
-    settingsLayout->addMultiCellWidget(d->focalLength, 21, 21, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoFocalLenght, 21, 21, 1, 1);
-    settingsLayout->addMultiCellWidget(d->exposureTime, 22, 22, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoExposureTime, 22, 22, 1, 1);
-    settingsLayout->addMultiCellWidget(d->sensitivity, 23, 23, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoSensitivity, 23, 23, 1, 1);
-    settingsLayout->addMultiCellWidget(d->exposureMode, 24, 24, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoExposureMode, 24, 24, 1, 1);
-    settingsLayout->addMultiCellWidget(d->flash, 25, 25, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoFlash, 25, 25, 1, 1);
-    settingsLayout->addMultiCellWidget(d->whiteBalance, 26, 26, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoWhiteBalance, 26, 26, 1, 1);
+    settingsLayout->addWidget(d->title2, 15, 15, 0, 1);
+    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 16, 16, 0, 1);
+    settingsLayout->addWidget(d->make, 17, 17, 0, 0);
+    settingsLayout->addWidget(d->labelPhotoMake, 17, 17, 1, 1);
+    settingsLayout->addWidget(d->model, 18, 18, 0, 0);
+    settingsLayout->addWidget(d->labelPhotoModel, 18, 18, 1, 1);
+    settingsLayout->addWidget(d->photoDate, 19, 19, 0, 0);
+    settingsLayout->addWidget(d->labelPhotoDateTime, 19, 19, 1, 1);
+    settingsLayout->addWidget(d->aperture, 20, 20, 0, 0);
+    settingsLayout->addWidget(d->labelPhotoAperture, 20, 20, 1, 1);
+    settingsLayout->addWidget(d->focalLength, 21, 21, 0, 0);
+    settingsLayout->addWidget(d->labelPhotoFocalLenght, 21, 21, 1, 1);
+    settingsLayout->addWidget(d->exposureTime, 22, 22, 0, 0);
+    settingsLayout->addWidget(d->labelPhotoExposureTime, 22, 22, 1, 1);
+    settingsLayout->addWidget(d->sensitivity, 23, 23, 0, 0);
+    settingsLayout->addWidget(d->labelPhotoSensitivity, 23, 23, 1, 1);
+    settingsLayout->addWidget(d->exposureMode, 24, 24, 0, 0);
+    settingsLayout->addWidget(d->labelPhotoExposureMode, 24, 24, 1, 1);
+    settingsLayout->addWidget(d->flash, 25, 25, 0, 0);
+    settingsLayout->addWidget(d->labelPhotoFlash, 25, 25, 1, 1);
+    settingsLayout->addWidget(d->whiteBalance, 26, 26, 0, 0);
+    settingsLayout->addWidget(d->labelPhotoWhiteBalance, 26, 26, 1, 1);
     settingsLayout->setRowStretch(27, 10);
-    settingsLayout->setColStretch(1, 10);
+    settingsLayout->setColumnStretch(1, 10);
 
     // --------------------------------------------------
 
@@ -393,7 +391,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
 
     QDateTime date;
     date.setTime_t(itemInfo->mtime);
-    d->labelFileDate->setText(KGlobal::locale()->formatDateTime(date, true, true));
+    d->labelFileDate->setText(KGlobal::locale()->formatDateTime(date, KLocale::ShortDate, true));
 
     str = i18n("%1 (%2)").arg(KIO::convertSize(itemInfo->size))
                          .arg(KGlobal::locale()->formatNumber(itemInfo->size, 0));
@@ -417,6 +415,10 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
         else
         {
             KFileMetaInfo meta(currentURL.path());
+
+/*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
+                            Check if new method to search "Dimensions" information is enough.
+
             if (meta.isValid())
             {
                 if (meta.containsGroup("Jpeg EXIF Data"))
@@ -425,6 +427,11 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
                     dims = meta.group("General").item("Dimensions").value().toSize();
                 else if (meta.containsGroup("Technical"))
                     dims = meta.group("Technical").item("Dimensions").value().toSize();
+            }*/
+
+            if (meta.isValid() && meta.item("Dimensions").isValid())
+            {
+                dims = meta.item("Dimensions").value().toSize();
             }
         }
     }
@@ -513,7 +520,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
 
     if (photoInfo.dateTime.isValid())
     {
-        str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
+        str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
         d->labelPhotoDateTime->setText(str);
     }
     else
@@ -550,99 +557,57 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
 
 void CameraItemPropertiesTab::colorChanged(const QColor& back, const QColor& fore)
 {
-    d->settingsArea->setPaletteBackgroundColor(back);
+    QPalette palette;
+    palette.setColor(d->settingsArea->backgroundRole(), back);
+    palette.setColor(d->settingsArea->foregroundRole(), fore);
 
-    d->title->setPaletteBackgroundColor(back);
-    d->file->setPaletteBackgroundColor(back);
-    d->folder->setPaletteBackgroundColor(back);
-    d->date->setPaletteBackgroundColor(back);
-    d->size->setPaletteBackgroundColor(back);
-    d->isReadable->setPaletteBackgroundColor(back);
-    d->isWritable->setPaletteBackgroundColor(back);
-    d->mime->setPaletteBackgroundColor(back);
-    d->dimensions->setPaletteBackgroundColor(back);
-    d->newFileName->setPaletteBackgroundColor(back);
-    d->downloaded->setPaletteBackgroundColor(back);
+    d->settingsArea->setPalette(palette);
 
-    d->title2->setPaletteBackgroundColor(back);
-    d->make->setPaletteBackgroundColor(back);
-    d->model->setPaletteBackgroundColor(back);
-    d->photoDate->setPaletteBackgroundColor(back);
-    d->aperture->setPaletteBackgroundColor(back);
-    d->focalLength->setPaletteBackgroundColor(back);
-    d->exposureTime->setPaletteBackgroundColor(back);
-    d->sensitivity->setPaletteBackgroundColor(back);
-    d->exposureMode->setPaletteBackgroundColor(back);
-    d->flash->setPaletteBackgroundColor(back);
-    d->whiteBalance->setPaletteBackgroundColor(back);
+    d->title->setPalette(palette);
+    d->file->setPalette(palette);
+    d->folder->setPalette(palette);
+    d->date->setPalette(palette);
+    d->size->setPalette(palette);
+    d->isReadable->setPalette(palette);
+    d->isWritable->setPalette(palette);
+    d->mime->setPalette(palette);
+    d->dimensions->setPalette(palette);
+    d->newFileName->setPalette(palette);
+    d->downloaded->setPalette(palette);
 
-    d->labelFile->setPaletteBackgroundColor(back);
-    d->labelFolder->setPaletteBackgroundColor(back);
-    d->labelFileIsReadable->setPaletteBackgroundColor(back);
-    d->labelFileIsWritable->setPaletteBackgroundColor(back);
-    d->labelFileDate->setPaletteBackgroundColor(back);
-    d->labelFileSize->setPaletteBackgroundColor(back);
-    d->labelImageMime->setPaletteBackgroundColor(back);
-    d->labelImageDimensions->setPaletteBackgroundColor(back);
-    d->labelNewFileName->setPaletteBackgroundColor(back);
-    d->labelAlreadyDownloaded->setPaletteBackgroundColor(back);
+    d->title2->setPalette(palette);
+    d->make->setPalette(palette);
+    d->model->setPalette(palette);
+    d->photoDate->setPalette(palette);
+    d->aperture->setPalette(palette);
+    d->focalLength->setPalette(palette);
+    d->exposureTime->setPalette(palette);
+    d->sensitivity->setPalette(palette);
+    d->exposureMode->setPalette(palette);
+    d->flash->setPalette(palette);
+    d->whiteBalance->setPalette(palette);
 
-    d->labelPhotoMake->setPaletteBackgroundColor(back);
-    d->labelPhotoModel->setPaletteBackgroundColor(back);
-    d->labelPhotoDateTime->setPaletteBackgroundColor(back);
-    d->labelPhotoAperture->setPaletteBackgroundColor(back);
-    d->labelPhotoFocalLenght->setPaletteBackgroundColor(back);
-    d->labelPhotoExposureTime->setPaletteBackgroundColor(back);
-    d->labelPhotoSensitivity->setPaletteBackgroundColor(back);
-    d->labelPhotoExposureMode->setPaletteBackgroundColor(back);
-    d->labelPhotoFlash->setPaletteBackgroundColor(back);
-    d->labelPhotoWhiteBalance->setPaletteBackgroundColor(back);
+    d->labelFile->setPalette(palette);
+    d->labelFolder->setPalette(palette);
+    d->labelFileIsReadable->setPalette(palette);
+    d->labelFileIsWritable->setPalette(palette);
+    d->labelFileDate->setPalette(palette);
+    d->labelFileSize->setPalette(palette);
+    d->labelImageMime->setPalette(palette);
+    d->labelImageDimensions->setPalette(palette);
+    d->labelNewFileName->setPalette(palette);
+    d->labelAlreadyDownloaded->setPalette(palette);
 
-    d->title->setPaletteForegroundColor(fore);
-    d->file->setPaletteForegroundColor(fore);
-    d->folder->setPaletteForegroundColor(fore);
-    d->date->setPaletteForegroundColor(fore);
-    d->size->setPaletteForegroundColor(fore);
-    d->isReadable->setPaletteForegroundColor(fore);
-    d->isWritable->setPaletteForegroundColor(fore);
-    d->mime->setPaletteForegroundColor(fore);
-    d->dimensions->setPaletteForegroundColor(fore);
-    d->newFileName->setPaletteForegroundColor(fore);
-    d->downloaded->setPaletteForegroundColor(fore);
-
-    d->title2->setPaletteForegroundColor(fore);
-    d->make->setPaletteForegroundColor(fore);
-    d->model->setPaletteForegroundColor(fore);
-    d->photoDate->setPaletteForegroundColor(fore);
-    d->aperture->setPaletteForegroundColor(fore);
-    d->focalLength->setPaletteForegroundColor(fore);
-    d->exposureTime->setPaletteForegroundColor(fore);
-    d->sensitivity->setPaletteForegroundColor(fore);
-    d->exposureMode->setPaletteForegroundColor(fore);
-    d->flash->setPaletteForegroundColor(fore);
-    d->whiteBalance->setPaletteForegroundColor(fore);
-
-    d->labelFile->setPaletteForegroundColor(fore);
-    d->labelFolder->setPaletteForegroundColor(fore);
-    d->labelFileIsReadable->setPaletteForegroundColor(fore);
-    d->labelFileIsWritable->setPaletteForegroundColor(fore);
-    d->labelFileDate->setPaletteForegroundColor(fore);
-    d->labelFileSize->setPaletteForegroundColor(fore);
-    d->labelImageMime->setPaletteForegroundColor(fore);
-    d->labelImageDimensions->setPaletteForegroundColor(fore);
-    d->labelNewFileName->setPaletteForegroundColor(fore);
-    d->labelAlreadyDownloaded->setPaletteForegroundColor(fore);
-
-    d->labelPhotoMake->setPaletteForegroundColor(fore);
-    d->labelPhotoModel->setPaletteForegroundColor(fore);
-    d->labelPhotoDateTime->setPaletteForegroundColor(fore);
-    d->labelPhotoAperture->setPaletteForegroundColor(fore);
-    d->labelPhotoFocalLenght->setPaletteForegroundColor(fore);
-    d->labelPhotoExposureTime->setPaletteForegroundColor(fore);
-    d->labelPhotoSensitivity->setPaletteForegroundColor(fore);
-    d->labelPhotoExposureMode->setPaletteForegroundColor(fore);
-    d->labelPhotoFlash->setPaletteForegroundColor(fore);
-    d->labelPhotoWhiteBalance->setPaletteForegroundColor(fore);
+    d->labelPhotoMake->setPalette(palette);
+    d->labelPhotoModel->setPalette(palette);
+    d->labelPhotoDateTime->setPalette(palette);
+    d->labelPhotoAperture->setPalette(palette);
+    d->labelPhotoFocalLenght->setPalette(palette);
+    d->labelPhotoExposureTime->setPalette(palette);
+    d->labelPhotoSensitivity->setPalette(palette);
+    d->labelPhotoExposureMode->setPalette(palette);
+    d->labelPhotoFlash->setPalette(palette);
+    d->labelPhotoWhiteBalance->setPalette(palette);
 }
 
 }  // NameSpace Digikam
