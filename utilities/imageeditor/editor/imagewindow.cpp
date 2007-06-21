@@ -446,7 +446,7 @@ void ImageWindow::loadCurrentList(const QString& caption, bool allowSaving)
     }
 
     if (!caption.isEmpty())
-        setCaption(i18n("Image Editor - %1").arg(caption));
+        setCaption(i18n("Image Editor - %1",caption));
     else
         setCaption(i18n("Image Editor"));
 
@@ -613,7 +613,7 @@ void ImageWindow::slotChanged()
     QSize dims(m_canvas->imageWidth(), m_canvas->imageHeight());
     mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
     QString str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)")
-                  .arg(dims.width()).arg(dims.height()).arg(mpixels);
+                  ,dims.width(),dims.height(),mpixels);
     m_resLabel->setText(str);
 
     if (d->urlCurrent.isValid())
@@ -691,8 +691,8 @@ void ImageWindow::slotUpdateItemInfo()
     m_rotatedOrFlipped = false;
     
     QString text = d->urlCurrent.filename() + i18n(" (%2 of %3)")
-                                             .arg(QString::number(index+1))
-                                             .arg(QString::number(d->urlList.count()));
+                                             ,QString::number(index+1),
+                                             ,QString::number(d->urlList.count());
     m_nameLabel->setText(text);
 
     if (d->urlList.count() == 1) 
@@ -1148,7 +1148,7 @@ void ImageWindow::dropEvent(QDropEvent *e)
         if (talbum) ATitle = talbum->title();  
 
         loadImageInfos(imageInfoList, imageInfoList.first(), 
-                       i18n("Album \"%1\"").arg(ATitle), true);
+                       i18n("Album \"%1\"",ATitle), true);
         e->accept();
     }
     else if (AlbumDrag::decode(e, urls, albumID))
@@ -1175,7 +1175,7 @@ void ImageWindow::dropEvent(QDropEvent *e)
         if (palbum) ATitle = palbum->title();  
 
         loadImageInfos(imageInfoList, imageInfoList.first(), 
-                       i18n("Album \"%1\"").arg(ATitle), true);
+                       i18n("Album \"%1\"",ATitle), true);
         e->accept();
     }
     else if(TagDrag::canDecode(e))
@@ -1207,7 +1207,7 @@ void ImageWindow::dropEvent(QDropEvent *e)
         if (talbum) ATitle = talbum->title();  
 
         loadImageInfos(imageInfoList, imageInfoList.first(), 
-                       i18n("Album \"%1\"").arg(ATitle), true);
+                       i18n("Album \"%1\"",ATitle), true);
         e->accept();
     }   
     else 

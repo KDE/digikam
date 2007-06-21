@@ -128,7 +128,7 @@ void BatchThumbsGenerator::slotRebuildAllThumbComplete()
     QTime t;
     t = t.addMSecs(d->duration.elapsed());
     setLabel(i18n("<b>Update of thumbnails database done</b>"));
-    setTitle(i18n("Duration: %1").arg(t.toString()));
+    setTitle(i18n("Duration: %1",t.toString()));
     setButtonText(i18n("&Close"));
 }
 

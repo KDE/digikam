@@ -870,7 +870,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
           int xGuide = (guidePos * wWidth) / histogram->getHistogramSegment();
           p1.drawLine(xGuide, 0, xGuide, wHeight);  
 
-          QString string = i18n("x:%1").arg(guidePos);
+          QString string = i18n("x:%1",guidePos);
           QFontMetrics fontMt( string );       
           QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string); 
           p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));

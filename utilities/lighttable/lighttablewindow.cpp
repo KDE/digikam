@@ -560,7 +560,7 @@ void LightTableWindow::refreshStatusBar()
         default:
             d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, 
                                                   i18n("%1 items on Light Table")
-                                                  .arg(d->barView->countItems()));   
+                                                  ,d->barView->countItems());   
             break;
     }  
 }
@@ -1198,7 +1198,7 @@ void LightTableWindow::slotLeftZoomFactorChanged(double zoom)
     int size    = (int)((zoom - b) /a); 
 
     d->leftZoomBar->setZoomSliderValue(size);
-    d->leftZoomBar->setZoomTrackerText(i18n("zoom: %1%").arg((int)(zoom*100.0)));
+    d->leftZoomBar->setZoomTrackerText(i18n("zoom: %1%",(int)(zoom*100.0)));
 
     d->leftZoomBar->setEnableZoomPlus(true);
     d->leftZoomBar->setEnableZoomMinus(true);
@@ -1221,7 +1221,7 @@ void LightTableWindow::slotRightZoomFactorChanged(double zoom)
     int size    = (int)((zoom - b) /a); 
 
     d->rightZoomBar->setZoomSliderValue(size);
-    d->rightZoomBar->setZoomTrackerText(i18n("zoom: %1%").arg((int)(zoom*100.0)));
+    d->rightZoomBar->setZoomTrackerText(i18n("zoom: %1%",(int)(zoom*100.0)));
 
     d->rightZoomBar->setEnableZoomPlus(true);
     d->rightZoomBar->setEnableZoomMinus(true);

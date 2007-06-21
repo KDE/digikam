@@ -51,7 +51,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
                                        const QStringList& cameraFolderList,
                                        const QString& cameraName, const QString& rootPath)
                   : KDialogBase(parent, 0, true,
-                                i18n("%1 - Select Camera Folder").arg(cameraName), 
+                                i18n("%1 - Select Camera Folder",cameraName), 
                                 Help|Ok|Cancel, Ok, true)
 {
     setHelp("camerainterface.anchor", "digikam");

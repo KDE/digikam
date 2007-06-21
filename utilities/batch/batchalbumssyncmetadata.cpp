@@ -112,7 +112,7 @@ void BatchAlbumsSyncMetadata::parseAlbum()
         QTime t;
         t = t.addMSecs(d->duration.elapsed());
         setLabel(i18n("<b>Sync all pictures metadata with digiKam database done</b>"));
-        setTitle(i18n("Duration: %1").arg(t.toString()));
+        setTitle(i18n("Duration: %1",t.toString()));
         setButtonText(i18n("&Close"));
         advance(1);
         abort();

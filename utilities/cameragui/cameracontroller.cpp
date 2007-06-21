@@ -272,13 +272,13 @@ void CameraThread::run()
             {
                 QString folder = cmd->map["folder"].asString();
                 
-                sendInfo(i18n("Listing files in %1...").arg(folder));
+                sendInfo(i18n("Listing files in %1...",folder));
     
                 GPItemInfoList itemsList;
                 // setting getImageDimensions to false is a huge speedup for UMSCamera
                 if (!d->camera->getItemsInfoList(folder, itemsList, false))
                 {
-                    sendError(i18n("Failed to list files in %1").arg(folder));
+                    sendError(i18n("Failed to list files in %1",folder));
                 }
     
                 if (!itemsList.isEmpty())
@@ -294,7 +294,7 @@ void CameraThread::run()
                     QApplication::postEvent(parent, event);
                 }
     
-                sendInfo(i18n("Listing files in %1 is complete").arg(folder));
+                sendInfo(i18n("Listing files in %1 is complete",folder));
                 
                 break;
             }
@@ -303,7 +303,7 @@ void CameraThread::run()
                 QString folder = cmd->map["folder"].asString();
                 QString file   = cmd->map["file"].asString();
     
-                sendInfo(i18n("Getting thumbnail for %1/%2...").arg(folder).arg(file));
+                sendInfo(i18n("Getting thumbnail for %1/%2...",folder,file));
     
                 QImage thumbnail;
                 d->camera->getThumbnail(folder, file, thumbnail);
@@ -326,7 +326,7 @@ void CameraThread::run()
                 QString folder = cmd->map["folder"].asString();
                 QString file   = cmd->map["file"].asString();
     
-                sendInfo(i18n("Getting EXIF information for %1/%2...").arg(folder).arg(file));
+                sendInfo(i18n("Getting EXIF information for %1/%2...",folder,file));
     
                 char* edata = 0;
                 int   esize = 0;
@@ -365,7 +365,7 @@ void CameraThread::run()
                 QString   copyright         = cmd->map["copyright"].asString();
                 bool      convertJpeg       = cmd->map["convertJpeg"].asBool();
                 QString   losslessFormat    = cmd->map["losslessFormat"].asString();
-                sendInfo(i18n("Downloading file %1...").arg(file));
+                sendInfo(i18n("Downloading file %1...",file));
     
                 // download to a temp file
 
@@ -377,7 +377,7 @@ void CameraThread::run()
 
                 KUrl tempURL(dest);
                 tempURL = tempURL.upUrl();
-                tempURL.addPath( QString(".digikam-camera-tmp1-%1").arg(getpid()));
+                tempURL.addPath( QString(".digikam-camera-tmp1-%1",getpid()));
     
                 bool result = d->camera->downloadItem(folder, file, tempURL.path());
     
@@ -386,13 +386,13 @@ void CameraThread::run()
                     if (autoRotate)
                     {
                         DDebug() << "Exif autorotate: " << file << " using (" << tempURL.path() << ")" << endl;
-                        sendInfo(i18n("EXIF rotating file %1...").arg(file));
+                        sendInfo(i18n("EXIF rotating file %1...",file));
                         exifRotate(tempURL.path(), file);
                     }
     
                     if (fixDateTime || setPhotographerId || setCredits)
                     {
-                        sendInfo(i18n("Setting Metadata tags to file %1...").arg(file));
+                        sendInfo(i18n("Setting Metadata tags to file %1...",file));
                         DMetadata metadata(tempURL.path());
                         
                         if (fixDateTime)
@@ -412,11 +412,11 @@ void CameraThread::run()
 
                     if (convertJpeg && isJpegImage(tempURL.path()))
                     {
-                        sendInfo(i18n("Converting %1 to lossless file format...").arg(file));
+                        sendInfo(i18n("Converting %1 to lossless file format...",file));
 
                         KUrl tempURL2(dest);
                         tempURL2 = tempURL2.upUrl();
-                        tempURL2.addPath( QString(".digikam-camera-tmp2-%1").arg(getpid()));
+                        tempURL2.addPath( QString(".digikam-camera-tmp2-%1",getpid()));
 
                         if (!jpegConvert(tempURL.path(), tempURL2.path(), file, losslessFormat))
                         {
@@ -473,7 +473,7 @@ void CameraThread::run()
                 QString file   = cmd->map["file"].asString();
                 QString dest   = cmd->map["dest"].asString();
     
-                sendInfo(i18n("Retrieving file %1 from camera...").arg(file));
+                sendInfo(i18n("Retrieving file %1 from camera...",file));
     
                 bool result = d->camera->downloadItem(folder, file, dest);
     
@@ -487,7 +487,7 @@ void CameraThread::run()
                 }
                 else
                 {
-                    sendError(i18n("Failed to retrieve file %1 from camera").arg(file));
+                    sendError(i18n("Failed to retrieve file %1 from camera",file));
                 }                
                 break;
             }
@@ -502,7 +502,7 @@ void CameraThread::run()
                 // The source file path to download in camera.
                 QString src    = cmd->map["srcFilePath"].asString();
     
-                sendInfo(i18n("Uploading file %1 to camera...").arg(file));
+                sendInfo(i18n("Uploading file %1 to camera...",file));
     
                 GPItemInfo itemsInfo;
 
@@ -533,7 +533,7 @@ void CameraThread::run()
                 QString folder = cmd->map["folder"].asString();
                 QString file   = cmd->map["file"].asString();
     
-                sendInfo(i18n("Deleting file %1...").arg(file));
+                sendInfo(i18n("Deleting file %1...",file));
     
                 bool result = d->camera->deleteItem(folder, file);
     
@@ -559,7 +559,7 @@ void CameraThread::run()
                 QString file   = cmd->map["file"].asString();
                 bool    lock   = cmd->map["lock"].asBool();
     
-                sendInfo(i18n("Toggle lock file %1...").arg(file));
+                sendInfo(i18n("Toggle lock file %1...",file));
     
                 bool result = d->camera->setLockItem(folder, file, lock);
     
@@ -935,7 +935,7 @@ void CameraController::customEvent(QCustomEvent* e)
     
             d->timer->stop();
     
-            QString msg = i18n("Failed to download file \"%1\".").arg(file);
+            QString msg = i18n("Failed to download file \"%1\".",file);
             
             if (!d->canceled)
             {
@@ -974,7 +974,7 @@ void CameraController::customEvent(QCustomEvent* e)
 
             d->timer->stop();
     
-            QString msg = i18n("Failed to upload file \"%1\".").arg(file);
+            QString msg = i18n("Failed to upload file \"%1\".",file);
             
             if (!d->canceled)
             {
@@ -1009,7 +1009,7 @@ void CameraController::customEvent(QCustomEvent* e)
             d->timer->stop();
             emit signalDeleted(folder, file, false);
 
-            QString msg = i18n("Failed to delete file \"%1\".").arg(file);
+            QString msg = i18n("Failed to delete file \"%1\".",file);
             
             if (!d->canceled)
             {
@@ -1044,7 +1044,7 @@ void CameraController::customEvent(QCustomEvent* e)
             d->timer->stop();
             emit signalLocked(folder, file, false);
 
-            QString msg = i18n("Failed to toggle lock file \"%1\".").arg(file);
+            QString msg = i18n("Failed to toggle lock file \"%1\".",file);
             
             if (!d->canceled)
             {
@@ -1074,7 +1074,7 @@ void CameraController::customEvent(QCustomEvent* e)
             urlList << url;
     
             ImageWindow *im = ImageWindow::imagewindow();
-            im->loadURL(urlList, url, i18n("Camera \"%1\"").arg(d->camera->model()), false);
+            im->loadURL(urlList, url, i18n("Camera \"%1\"",d->camera->model()), false);
     
             if (im->isHidden())
                 im->show();
@@ -1203,7 +1203,7 @@ void CameraController::slotProcessNext()
     else if (skip)
     {
         d->cmdQueue.dequeue();
-        emit signalInfoMsg(i18n("Skipped file %1").arg(file));
+        emit signalInfoMsg(i18n("Skipped file %1",file));
         emit signalSkipped(folder, file);        
         d->timer->start(50, false);
         return;

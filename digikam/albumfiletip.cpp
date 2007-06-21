@@ -363,8 +363,8 @@ void AlbumFileTip::updateText()
         if (settings->getToolTipsShowFileSize())
         {
             tip += cellBeg + i18n("Size:") + cellMid;
-            str = i18n("%1 (%2)").arg(KIO::convertSize(fi.size()))
-                                .arg(KGlobal::locale()->formatNumber(fi.size(), 0));
+            str = i18n("%1 (%2)",KIO::convertSize(fi.size())
+                                ,KGlobal::locale()->formatNumber(fi.size(), 0));
             tip += str + cellEnd;
         }
 
@@ -402,8 +402,8 @@ void AlbumFileTip::updateText()
         {
             QString mpixels;
             mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
-            str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)")
-                .arg(dims.width()).arg(dims.height()).arg(mpixels);
+            str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
+                dims.width(),dims.height(),mpixels);
             tip += cellBeg + i18n("Dimensions:") + cellMid + str + cellEnd;
         }
     }

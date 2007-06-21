@@ -963,8 +963,8 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
         if (settings.showFileSize)
         {
             tipText += m_cellBeg + i18n("Size:") + m_cellMid;
-            str = i18n("%1 (%2)").arg(KIO::convertSize(fi.size()))
-                                .arg(KGlobal::locale()->formatNumber(fi.size(), 0));
+            str = i18n("%1 (%2)",KIO::convertSize(fi.size())
+                                ,KGlobal::locale()->formatNumber(fi.size(), 0));
             tipText += str + m_cellEnd;
         }
 
@@ -1011,8 +1011,8 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
         {
             QString mpixels;
             mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
-            str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)")
-                .arg(dims.width()).arg(dims.height()).arg(mpixels);
+            str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)"
+                ,dims.width(),dims.height(),mpixels);
             tipText += m_cellBeg + i18n("Dimensions:") + m_cellMid + str + m_cellEnd;
         }
     }
@@ -1036,8 +1036,8 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
 
             if (settings.showPhotoMake)
             {
-                str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? unavailable : photoInfo.make)
-                                        .arg(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
+                str = QString("%1 / %2",photoInfo.make.isEmpty() ? unavailable : photoInfo.make,
+                                        photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 metaStr += m_cellBeg + i18n("Make/Model:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
@@ -1061,7 +1061,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
                 if (photoInfo.focalLength35mm.isEmpty())
                     str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
                 else 
-                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm));
+                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)",photoInfo.focalLength,photoInfo.focalLength35mm));
 
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 metaStr += m_cellBeg + i18n("Aperture/Focal:") + m_cellMid + Qt::escape( str ) + m_cellEnd;

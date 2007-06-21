@@ -359,7 +359,7 @@ void SlideShow::updatePixmap()
                     if (!photoInfo.exposureTime.isEmpty())
                         str += QString(" / ");
 
-                    str += i18n("%1 ISO").arg(photoInfo.sensitivity);
+                    str += i18n("%1 ISO",photoInfo.sensitivity);
                 }
 
                 printInfoText(p, offset, str);

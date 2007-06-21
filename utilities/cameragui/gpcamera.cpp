@@ -963,15 +963,15 @@ bool GPCamera::cameraSummary(QString& summary)
                    "Upload items support: %7\n"
                    "Directory creation support: %8\n"
                    "Directory deletion support: %9\n\n")
-                   .arg(title())
-                   .arg(model())
-                   .arg(port())
-                   .arg(path())
-                   .arg(thumbnailSupport() ? i18n("yes") : i18n("no"))
-                   .arg(deleteSupport() ? i18n("yes") : i18n("no"))
-                   .arg(uploadSupport() ? i18n("yes") : i18n("no"))
-                   .arg(mkDirSupport() ? i18n("yes") : i18n("no"))
-                   .arg(delDirSupport() ? i18n("yes") : i18n("no"));
+                   ,title(),
+                   ,model(),
+                   ,port(),
+                   ,path(),
+                   ,thumbnailSupport() ? i18n("yes") : i18n("no"),
+                   ,deleteSupport() ? i18n("yes") : i18n("no"),
+                   ,uploadSupport() ? i18n("yes") : i18n("no"),
+                   ,mkDirSupport() ? i18n("yes") : i18n("no"),
+                   ,delDirSupport() ? i18n("yes") : i18n("no");
 
     summary.append(QString(sum.text));
 
