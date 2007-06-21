@@ -76,7 +76,7 @@ SetupPlugins::SetupPlugins(QWidget* parent )
 
     d->pluginsNumber    = new QLabel(parent);
 
-    QLabel *KipiVersion = new QLabel(i18n("Kipi library version: %1",kipi_version), parent);
+    QLabel *KipiVersion = new QLabel(i18n("Kipi library version: %1",QString(kipi_version)), parent);
     KipiVersion->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
 
     hlay->addWidget(d->pluginsNumber, 1);
