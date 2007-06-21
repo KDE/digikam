@@ -8,17 +8,17 @@ ADD_SUBDIRECTORY( imageplugins )
 ADD_SUBDIRECTORY( common )
 
 
-SET(libcommonwidgets_SRCS common/histogramwidget.cpp 
-                          common/colorgradientwidget.cpp 
-                          common/curveswidget.cpp 
-                          common/sidebar.cpp 
-                          common/squeezedcombobox.cpp 
+SET(libcommonwidgets_SRCS common/colorgradientwidget.cpp 
                           common/filesaveoptionsbox.cpp 
-                          common/dpopupmenu.cpp 
                           common/statuszoombar.cpp 
                           common/statusnavigatebar.cpp 
                           common/statusprogressbar.cpp 
                           common/dcursortracker.cpp 
+                          common/sidebar.cpp 
+                          common/dpopupmenu.cpp 
+                          common/squeezedcombobox.cpp 
+                          common/histogramwidget.cpp 
+                          common/curveswidget.cpp 
                           common/paniconwidget.cpp 
                           common/previewwidget.cpp 
    )
