@@ -33,7 +33,7 @@
 
 // KDE includes.
 
-#include <kurldrag.h>
+#include <k3urldrag.h>
 
 class QWidget;
 
@@ -52,7 +52,7 @@ namespace Digikam
  * The kioURLs are internally used with the digikamalbums kioslave.
  * The "normal" KURLDrag urls are used for external drops (k3b, gimp, ...)
  */
-class ItemDrag : public KURLDrag
+class ItemDrag : public K3URLDrag
 {
 public:
 
@@ -109,7 +109,7 @@ private:
  * When an album is moved through drag'n'drop an object of this class 
  * is created.
  */
-class AlbumDrag : public KURLDrag
+class AlbumDrag : public K3URLDrag
 {
 public:
     AlbumDrag(const KUrl &url, int albumid, 

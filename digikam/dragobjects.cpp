@@ -40,7 +40,7 @@ ItemDrag::ItemDrag(const KUrl::List &urls,
                    const Q3ValueList<int>& albumIDs,
                    const Q3ValueList<int>& imageIDs,
                    QWidget* dragSource, const char* name)
-    : KURLDrag(urls, dragSource, name),
+    : K3URLDrag(urls, dragSource, name),
       m_kioURLs(kioURLs),
       m_albumIDs(albumIDs), m_imageIDs(imageIDs)
 {
@@ -62,7 +62,7 @@ bool ItemDrag::decode(const QMimeSource* e, KUrl::List &urls, KUrl::List &kioURL
     albumIDs.clear();
     imageIDs.clear();
     
-    if (KURLDrag::decode(e, urls))
+    if (K3URLDrag::decode(e, urls))
     {
         QByteArray albumarray = e->encodedData("digikam/album-ids");
         QByteArray imagearray = e->encodedData("digikam/image-ids");
@@ -146,7 +146,7 @@ QByteArray ItemDrag::encodedData(const char* mime) const
     }
     else
     {
-        return KURLDrag::encodedData(mime);
+        return K3URLDrag::encodedData(mime);
     }
 }
 
@@ -197,7 +197,7 @@ QByteArray TagDrag::encodedData( const char* ) const
 AlbumDrag::AlbumDrag(const KUrl &url, int albumid, 
                      QWidget *dragSource, 
                      const char *name) :
-    KURLDrag(url, dragSource, name)
+    K3URLDrag(url, dragSource, name)
 {
     mAlbumID = albumid;
 }
@@ -229,7 +229,7 @@ QByteArray AlbumDrag::encodedData(const char *mime) const
     }
     else
     {
-        return KURLDrag::encodedData(mime);
+        return K3URLDrag::encodedData(mime);
     }
 }
 
@@ -239,7 +239,7 @@ bool AlbumDrag::decode(const QMimeSource* e, KUrl::List &urls,
     urls.clear();
     albumID = -1;
     
-    if(KURLDrag::decode(e, urls))
+    if(K3URLDrag::decode(e, urls))
     {
         QByteArray ba = e->encodedData("digikam/album-id");
         if (ba.size())
