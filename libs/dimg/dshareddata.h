@@ -32,6 +32,8 @@
 
 #include "digikam_export.h"
 
+namespace Digikam
+{
 
 template <class T> class DSharedDataPointer;
 
@@ -153,6 +155,7 @@ private:
     T *d;
 };
 
+}  // NameSpace Digikam
 
 #endif // DSHAREDDATA_H
 
