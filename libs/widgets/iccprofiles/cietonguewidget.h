@@ -28,13 +28,10 @@
 #ifndef CIETONGUEWIDGET_H
 #define CIETONGUEWIDGET_H
 
-#include <config.h>
-
 // Qt includes.
 
-#include <qwidget.h>
-#include <qcolor.h>
-//Added by qt3to4:
+#include <QWidget>
+#include <QColor>
 #include <QPaintEvent>
 
 // KDE includes.
@@ -43,7 +40,7 @@
 
 // lcms includes
 
-#include LCMS_HEADER
+#include <lcms.h>
 #if LCMS_VERSION < 114
 #define cmsTakeCopyright(profile) "Unknown"
 #endif // LCMS_VERSION < 114
@@ -68,7 +65,7 @@ public:
 
     bool setProfileData(const QByteArray& profileData=QByteArray());
     bool setProfileFromFile(const KUrl& file=KUrl());
-    
+
     void loadingStarted();
     void loadingFailed();
 
@@ -92,7 +89,7 @@ private:
     void drawColorantTriangle(void);
     void drawWhitePoint(void);
     void drawPatches(void);
-    
+
     void mapPoint(int& icx, int& icy, LPcmsCIExyY xyY);
     void biasedLine(int x1, int y1, int x2, int y2);
     void biasedText(int x, int y, QString Txt);
@@ -108,7 +105,6 @@ private slots:
 private :
 
     CIETongueWidgetPriv* d;
-
 };
 
 }  // namespace Digikam
