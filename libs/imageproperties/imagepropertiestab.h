@@ -26,9 +26,9 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qstring.h>
-#include <qcolor.h>
+#include <QWidget>
+#include <QString>
+#include <QColor>
 
 // KDE includes.
 

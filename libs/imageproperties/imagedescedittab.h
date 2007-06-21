@@ -28,10 +28,9 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qpixmap.h>
-#include <q3ptrlist.h>
-//Added by qt3to4:
+#include <QWidget>
+#include <QPixmap>
+#include <Q3PtrList>
 #include <QEvent>
 
 // Local includes.
