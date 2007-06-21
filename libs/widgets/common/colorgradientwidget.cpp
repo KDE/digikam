@@ -22,14 +22,12 @@
  * ============================================================ */
 
 // Qt includes. 
- 
-#include <qimage.h>
-#include <qpainter.h>
-#include <qdrawutil.h>
-//Added by qt3to4:
+
+#include <QImage>
+#include <QPainter>
+#include <QDrawUtil>
 #include <QPixmap>
-#include <Q3Frame>
- 
+
 // KDE includes.
 
 #include <kimageeffect.h>
@@ -44,40 +42,41 @@ namespace Digikam
 
 class ColorGradientWidgetPriv
 {
-    
+
 public:
 
     ColorGradientWidgetPriv(){}
 
     int    orientation;
-    
+
     QColor color1;
     QColor color2;
 };
 
 ColorGradientWidget::ColorGradientWidget(int o, int size, QWidget *parent)
-                   : Q3Frame(parent, 0, Qt::WDestructiveClose)
+                   : QFrame(parent)
 {
     d = new ColorGradientWidgetPriv;
     d->orientation = o;
 
     setFrameStyle(Q3Frame::Box|Q3Frame::Plain);
     setLineWidth(1);
-    
+    setAttribute(Qt::WA_DeleteOnClose);
+
     if ( d->orientation == Qt::Horizontal )
         setFixedHeight( size );
     else
-        setFixedWidth( size );    
-    
+        setFixedWidth( size );
+
     d->color1.setRgb( 0, 0, 0 );
     d->color2.setRgb( 255, 255, 255 );
-}      
+}
 
 ColorGradientWidget::~ColorGradientWidget()
 {
     delete d;
 }
-    
+
 void ColorGradientWidget::setColors( const QColor &col1, const QColor &col2 )
 {
     d->color1 = col1;
@@ -91,7 +90,7 @@ void ColorGradientWidget::drawContents(QPainter *p)
 
     QColor col, color1, color2;
     float scale;
-    
+
     // Widget is disable : drawing grayed frame.
     if ( !isEnabled() )
     {
@@ -118,7 +117,7 @@ void ColorGradientWidget::drawContents(QPainter *p)
                         color1.blue()  + int(blueDiff  * scale) );
 
             unsigned int *p = (uint *) image.scanLine( y );
-            
+
             for ( int x = 0; x < image.width(); x++ )
                 *p++ = col.rgb();
         }

@@ -26,8 +26,8 @@
 
 // KDE includes.
 
-#include <q3frame.h>
-#include <qcolor.h>
+#include <QFrame>
+#include <QColor>
 
 // Local includes
 
@@ -38,30 +38,30 @@ namespace Digikam
 
 class ColorGradientWidgetPriv;
 
-class DIGIKAM_EXPORT ColorGradientWidget : public Q3Frame
+class DIGIKAM_EXPORT ColorGradientWidget : public QFrame
 {
 Q_OBJECT
 
 public:
-    
-    enum Qt::Orientation
+
+    enum Orientation
     {
-        Qt::Horizontal=0,      
-        Qt::Vertical         
+        Horizontal=0,
+        Vertical
     };
-      
+
 public:
-    
+
     ColorGradientWidget( int o, int size, QWidget *parent=0 );
-  
+
     ~ColorGradientWidget();
-  
+
     void setColors( const QColor &col1, const QColor &col2 );
 
 protected:
 
     void drawContents(QPainter *);
-    
+
 private:
 
     ColorGradientWidgetPriv* d;
