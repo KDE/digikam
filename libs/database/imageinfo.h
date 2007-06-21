@@ -29,12 +29,10 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qdatetime.h>
-#include <q3ptrlist.h>
-#include <qsize.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QString>
+#include <QDateTime>
+#include <QList>
+#include <QSize>
 
 // KDE includes.
 
@@ -43,6 +41,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dshareddata.h"
 #include "databaseurl.h"
 #include "imagelister.h"
 #include "imagelisterrecord.h"
@@ -193,7 +192,7 @@ public:
      * @see tagPaths
      * @see Album::id()
      */
-    Q3ValueList<int> tagIds() const;
+    QList<int> tagIds() const;
 
 
 
@@ -256,7 +255,7 @@ public:
 
 private:
 
-    ImageInfoData        *m_data;
+    DSharedDataPointer<ImageInfoData> m_data;
 };
 
 }  // namespace Digikam

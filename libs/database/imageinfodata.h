@@ -27,24 +27,27 @@
 
 // Qt includes
 
-#include <q3shared.h>
-#include <qdatetime.h>
-#include <qsize.h>
+#include <QDateTime>
+#include <QSize>
+#include <Q3Shared>
 
 // Local includes
 
 #include "databaseurl.h"
+#include "dshareddata.h"
 
 namespace Digikam
 {
 
-class ImageInfoData : public Q3Shared
+class ImageInfoData : public DSharedData
 {
 public:
 
     ImageInfoData();
 
-    qlonglong       id;
+    QAtomic       ref;
+
+    qlonglong     id;
     int           albumId;
     DatabaseUrl   url;
 

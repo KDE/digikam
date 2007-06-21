@@ -26,10 +26,8 @@
 
 // Qt includes.
 
-#include <qfile.h>
-#include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QFile>
+#include <QFileInfo>
 
 // Local includes.
 
@@ -68,7 +66,6 @@ ImageInfo::ImageInfo(qlonglong Id, int albumId,
 {
     DatabaseAccess access;
     m_data = access.imageInfoCache()->infoForId(Id);
-    m_data->ref();
 
     m_data->albumId        = albumId;
     m_data->url            = DatabaseUrl::fromAlbumAndName(name, albumName, albumRoot);
@@ -81,7 +78,6 @@ ImageInfo::ImageInfo(const ImageListerRecord &record)
 {
     DatabaseAccess access;
     m_data = access.imageInfoCache()->infoForId(record.imageID);
-    m_data->ref();
 
     m_data->albumId        = record.albumID;
     m_data->url            = DatabaseUrl::fromAlbumAndName(record.name, record.albumName, record.albumRoot);
@@ -102,16 +98,14 @@ ImageInfo::ImageInfo(qlonglong ID)
 
 ImageInfo::~ImageInfo()
 {
-    m_data->deref();
-    if (m_data->count == 1)
-        DatabaseAccess().imageInfoCache()->dropInfo(m_data);
+    ImageInfoData *olddata = m_data.unassign();
+    if (olddata)
+        DatabaseAccess().imageInfoCache()->dropInfo(olddata);
 }
 
 ImageInfo::ImageInfo(const ImageInfo &info)
 {
     m_data = info.m_data;
-    if (m_data)
-        m_data->ref();
 }
 
 ImageInfo &ImageInfo::operator=(const ImageInfo &info)
@@ -119,16 +113,9 @@ ImageInfo &ImageInfo::operator=(const ImageInfo &info)
     if (m_data == info.m_data)
         return *this;
 
-    if (m_data)
-    {
-        m_data->deref();
-        if (m_data->count == 1)
-            DatabaseAccess().imageInfoCache()->dropInfo(m_data);
-    }
-
-    m_data = info.m_data;
-    if (m_data)
-        m_data->ref();
+    ImageInfoData *olddata = m_data.assign(info.m_data);
+    if (olddata)
+        DatabaseAccess().imageInfoCache()->dropInfo(olddata);
 
     return *this;
 }
@@ -173,7 +160,7 @@ uint ImageInfo::fileSize() const
     if (m_data->fileSize == (uint)-1)
     {
         QFileInfo info(filePath());
-        m_data->fileSize = info.size();
+        m_data.constCastData()->fileSize = info.size();
     }
 
     return m_data->fileSize;
@@ -187,8 +174,8 @@ QString ImageInfo::comment() const
     DatabaseAccess access;
     if (!m_data->commentValid)
     {
-        m_data->comment = access.db()->getItemCaption(m_data->id);
-        m_data->commentValid = true;
+        m_data.constCastData()->comment = access.db()->getItemCaption(m_data->id);
+        m_data.constCastData()->commentValid = true;
     }
     return m_data->comment;
 }
@@ -200,7 +187,7 @@ int ImageInfo::rating() const
 
     DatabaseAccess access;
     if (m_data->rating == -1)
-        m_data->rating = access.db()->getItemRating(m_data->id);
+        m_data.constCastData()->rating = access.db()->getItemRating(m_data->id);
     return m_data->rating;
 }
 
@@ -212,7 +199,7 @@ QDateTime ImageInfo::dateTime() const
     DatabaseAccess access;
     if (!m_data->dateTime.isValid())
     {
-        m_data->dateTime = access.db()->getItemDate(m_data->id);
+        m_data.constCastData()->dateTime = access.db()->getItemDate(m_data->id);
     }
     return m_data->dateTime;
 }
@@ -226,7 +213,7 @@ QDateTime ImageInfo::modDateTime() const
     if (!m_data->modDateTime.isValid())
     {
         QFileInfo fileInfo(filePath());
-        m_data->modDateTime = fileInfo.lastModified();
+        m_data.constCastData()->modDateTime = fileInfo.lastModified();
     }
     return m_data->modDateTime;
 }
@@ -310,11 +297,11 @@ QStringList ImageInfo::tagNames() const
     return access.db()->getItemTagNames(m_data->id);
 }
 
-Q3ValueList<int> ImageInfo::tagIds() const
+QList<int> ImageInfo::tagIds() const
 {
     // Cache tags?
     if (!m_data)
-        return Q3ValueList<int>();
+        return QList<int>();
     DatabaseAccess access;
     return access.db()->getItemTagIDs(m_data->id);
 }
@@ -340,9 +327,9 @@ void ImageInfo::removeAllTags()
 void ImageInfo::addTagPaths(const QStringList &tagPaths)
 {
     DatabaseAccess access;
-    IntList list = access.db()->getTagsFromTagPaths(tagPaths);
-    for (IntList::iterator it = list.begin(); it != list.end(); ++it)
-        access.db()->addItemTag(m_data->id, (*it));
+    QList<int> list = access.db()->getTagsFromTagPaths(tagPaths, false);
+    for (int i=0; i<list.count(); i++)
+        access.db()->addItemTag(m_data->id, list[i]);
 }
 
 ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString &dstFileName)
