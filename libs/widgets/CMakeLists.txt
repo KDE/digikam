@@ -10,11 +10,11 @@ ADD_SUBDIRECTORY( imageplugins )
 
 
 SET(libcommonwidgets_SRCS common/colorgradientwidget.cpp 
+                          common/dcursortracker.cpp 
                           common/filesaveoptionsbox.cpp 
                           common/statuszoombar.cpp 
                           common/statusnavigatebar.cpp 
                           common/statusprogressbar.cpp 
-                          common/dcursortracker.cpp 
                           common/sidebar.cpp 
                           common/dpopupmenu.cpp 
                           common/squeezedcombobox.cpp 
