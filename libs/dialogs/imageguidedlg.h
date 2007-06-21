@@ -27,24 +27,20 @@
 
 // Qt includes
 
-#include <qstring.h>
-//Added by qt3to4:
-#include <QCustomEvent>
-#include <Q3Frame>
+#include <QString>
+#include <QEvent>
 #include <QKeyEvent>
 #include <QCloseEvent>
 
 // KDE include.
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 // Local includes.
 
 #include "imagewidget.h"
 #include "imageguidewidget.h"
 #include "digikam_export.h"
-
-class Q3Frame;
 
 class KAboutData;
 
@@ -54,17 +50,17 @@ namespace Digikam
 class ImageGuideDlgPriv;
 class DImgThreadedFilter;
 
-class DIGIKAM_EXPORT ImageGuideDlg : public KDialogBase
+class DIGIKAM_EXPORT ImageGuideDlg : public KDialog
 {
     Q_OBJECT
 
 public:
 
     ImageGuideDlg(QWidget* parent, QString title, QString name,
-                  bool loadFileSettings=false, bool progress=true,
+                  bool loadFileSettings=false, 
+                  bool progress=true,
                   bool guideVisible=true,
-                  int guideMode=ImageGuideWidget::HVGuideMode,
-                  Q3Frame* bannerFrame=0,
+                  int  guideMode=ImageGuideWidget::HVGuideMode,
                   bool prevModeOptions=false,
                   bool useImageSelection=false,
                   bool tryAction=false);
@@ -73,22 +69,22 @@ public:
     void setAboutData(KAboutData *about);
     void setUserAreaWidget(QWidget *w);
     void setProgressVisible(bool v);
-    
+
 public:
-        
+
     DImgThreadedFilter *m_threadedFilter;
-    
+
     ImageWidget        *m_imagePreviewWidget;
 
 public slots: 
 
-    void slotTimer();       
+    void slotTimer();
     void slotEffect();
     void slotOk();
     void slotTry();
 
 protected slots:
-    
+
     virtual void slotCancel();
     virtual void slotUser1();
     virtual void slotDefault();
@@ -96,19 +92,19 @@ protected slots:
     virtual void readUserSettings(void){ slotDefault(); };
 
 private slots:
-    
-    void slotResized();           
+
+    void slotResized();
     void slotHelp();
-    
+
 protected:
 
     void closeEvent(QCloseEvent *e);
-    void customEvent(QCustomEvent *event);
+    void customEvent(QEvent *event);
     void abortPreview(void);
     void readSettings(void);
     void writeSettings(void);
     void keyPressEvent(QKeyEvent *e);
-            
+
     virtual void writeUserSettings(void){};
     virtual void resetValues(void){};
     virtual void prepareEffect(void){};
@@ -118,7 +114,7 @@ protected:
     virtual void renderingFinished(void){};
 
 private:
-    
+
     ImageGuideDlgPriv* d;
 };
 

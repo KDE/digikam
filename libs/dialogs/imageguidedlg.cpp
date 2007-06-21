@@ -24,26 +24,19 @@
 
 // Qt includes.
 
-#include <q3vgroupbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-
-#include <qtooltip.h>
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qtimer.h>
-#include <qspinbox.h>
-#include <qsplitter.h>
-
-//Added by qt3to4:
-#include <QCustomEvent>
-#include <QCloseEvent>
-#include <Q3GridLayout>
-#include <QKeyEvent>
-#include <Q3VBoxLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QTimer>
+#include <QFrame>
+#include <QSpinBox>
+#include <QSplitter>
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QProgressBar>
 
 // KDE includes.
 
+#include <kpushbutton.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <kaboutdata.h>
@@ -53,7 +46,6 @@
 #include <kmenu.h>
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
-#include <kprogress.h>
 #include <kcolorbutton.h>
 #include <kconfig.h>
 #include <kseparator.h>
@@ -83,7 +75,7 @@ public:
         PreviewRendering,
         FinalRendering
     };
-    
+
     ImageGuideDlgPriv()
     {
         tryAction            = false;
@@ -105,27 +97,27 @@ public:
 
     bool          tryAction;
     bool          progress;
-    
+
     int           currentRenderingMode;
 
     QWidget      *parent;
     QWidget      *settings;
-    
+
     QTimer       *timer;
-    
+
     QString       name;
 
-    Q3GridLayout  *mainLayout;
-    Q3GridLayout  *settingsLayout;
-    
+    QGridLayout  *mainLayout;
+    QGridLayout  *settingsLayout;
+
     QSpinBox     *guideSize;
 
     KHBox        *hbox;
 
     QSplitter    *splitter;
 
-    KProgress    *progressBar;
-        
+    QProgressBar *progressBar;
+
     KColorButton *guideColorBt;
 
     KAboutData   *aboutData;
@@ -135,19 +127,20 @@ public:
 
 ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
                              bool loadFileSettings, bool progress,
-                             bool guideVisible, int guideMode, Q3Frame* bannerFrame,
+                             bool guideVisible, int guideMode,
                              bool prevModeOptions, bool useImageSelection,
                              bool tryAction)
-             : KDialogBase(Plain, 0,
-                           Help|Default|User1|User2|User3|Try|Ok|Cancel, Ok,
-                           parent, 0, true, true,
-                           i18n("&Abort"),
-                           i18n("&Save As..."),
-                           i18n("&Load..."))
+             : KDialog(parent)
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
+    setButtons(Help|Default|User1|User2|User3|Try|Ok|Cancel);
+    setDefaultButton(Ok);
+    setModal(true);
+    setButtonText(User1, i18n("&Abort"));
+    setButtonText(User2, i18n("&Save As..."));
+    setButtonText(User3, i18n("&Load..."));
     setCaption(DImgInterface::defaultInterface()->getImageFileName() + QString(" - ") + title);
-    
+
     d = new ImageGuideDlgPriv;
     d->parent        = parent;
     d->name          = name;
@@ -164,17 +157,14 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     showButton(User3, loadFileSettings);
     showButton(Try, tryAction);
 
-    resize(configDialogSize(name + QString(" Tool Dialog")));
+    restoreDialogSize(KGlobal::config()->group(name + QString(" Tool Dialog")));
 
     // -------------------------------------------------------------
 
-    d->mainLayout = new Q3GridLayout( plainPage(), 2, 1);
+    KVBox *vbox = new KVBox( this );
+    setMainWidget( vbox );
 
-    if (bannerFrame)
-    {
-        bannerFrame->reparent( plainPage(), QPoint(0, 0) );
-        d->mainLayout->addMultiCellWidget(bannerFrame, 0, 0, 0, 1);
-    }
+    d->mainLayout = new QGridLayout( vbox);
 
     // -------------------------------------------------------------
 
@@ -190,52 +180,63 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     else
         desc = i18n("<p>This is the image filter effect preview.");
 
-    d->hbox              = new KHBox(plainPage());
+    d->hbox              = new KHBox(vbox);
     d->splitter          = new QSplitter(d->hbox);
     m_imagePreviewWidget = new ImageWidget(d->name, d->splitter, desc, prevModeOptions, 
                                            guideMode, guideVisible, useImageSelection);
-    
-    d->splitter->setFrameStyle( Q3Frame::NoFrame );
-    d->splitter->setFrameShadow( Q3Frame::Plain );
-    d->splitter->setFrameShape( Q3Frame::NoFrame );    
+
+    d->splitter->setFrameStyle( QFrame::NoFrame );
+    d->splitter->setFrameShadow( QFrame::Plain );
+    d->splitter->setFrameShape( QFrame::NoFrame );
     d->splitter->setOpaqueResize(false);
-    
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    rightSzPolicy.setHorizontalStretch(2);
+    rightSzPolicy.setVerticalStretch(1);
     m_imagePreviewWidget->setSizePolicy(rightSzPolicy);
 
     QString sbName(d->name + QString(" Image Plugin Sidebar"));
-    d->settingsSideBar = new Sidebar(d->hbox, sbName.ascii(), Sidebar::Right);
+    d->settingsSideBar = new Sidebar(d->hbox, sbName.toAscii().data(), Sidebar::DockRight);
     d->settingsSideBar->setSplitter(d->splitter);
 
-    d->mainLayout->addMultiCellWidget(d->hbox, 1, 2, 0, 1);
-    d->mainLayout->setColStretch(0, 10);
+    d->mainLayout->addWidget(d->hbox, 1, 2, 0, 1);
+    d->mainLayout->setColumnStretch(0, 10);
     d->mainLayout->setRowStretch(2, 10);
 
     // -------------------------------------------------------------
 
-    d->settings          = new QWidget(plainPage());
-    d->settingsLayout    = new Q3GridLayout( d->settings, 1, 0);
-    Q3VBoxLayout *vLayout = new Q3VBoxLayout( spacingHint() );
-    
+    d->settings          = new QWidget(vbox);
+    d->settingsLayout    = new QGridLayout( d->settings );
+    QVBoxLayout *vLayout = new QVBoxLayout();
+    vLayout->setSpacing(spacingHint());
+
+    d->settings->setLayout(d->settingsLayout);
+    vbox->setLayout(d->mainLayout);
+
     // -------------------------------------------------------------
 
     QWidget *gboxGuideSettings = new QWidget(d->settings);
-    Q3GridLayout* grid          = new Q3GridLayout( gboxGuideSettings, 2, 2, marginHint(), spacingHint());
+    QGridLayout* grid          = new QGridLayout( gboxGuideSettings );
     KSeparator *line           = new KSeparator (Qt::Horizontal, gboxGuideSettings);
-    grid->addMultiCellWidget(line, 0, 0, 0, 2);
+    grid->setMargin(marginHint());
+    grid->setSpacing(spacingHint());
+    grid->addWidget(line, 0, 0, 0, 2);
+    gboxGuideSettings->setLayout(grid);
 
     QLabel *label5  = new QLabel(i18n("Guide color:"), gboxGuideSettings);
     d->guideColorBt = new KColorButton( QColor( Qt::red ), gboxGuideSettings );
     d->guideColorBt->setWhatsThis( i18n("<p>Set here the color used to draw guides dashed-lines."));
-    grid->addMultiCellWidget(label5, 1, 1, 0, 0);
-    grid->addMultiCellWidget(d->guideColorBt, 1, 1, 2, 2);
+    grid->addWidget(label5, 1, 1, 0, 0);
+    grid->addWidget(d->guideColorBt, 1, 1, 2, 2);
 
     QLabel *label6 = new QLabel(i18n("Guide width:"), gboxGuideSettings);
-    d->guideSize   = new QSpinBox( 1, 5, 1, gboxGuideSettings);
+    d->guideSize   = new QSpinBox(gboxGuideSettings);
+    d->guideSize->setRange(1, 5);
+    d->guideSize->setSingleStep(1);
     d->guideSize->setWhatsThis( i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
-    grid->addMultiCellWidget(label6, 2, 2, 0, 0);
-    grid->addMultiCellWidget(d->guideSize, 2, 2, 2, 2);
-    grid->setColStretch(1, 10);
+    grid->addWidget(label6, 2, 2, 0, 0);
+    grid->addWidget(d->guideSize, 2, 2, 2, 2);
+    grid->setColumnStretch(1, 10);
 
     if (guideVisible) gboxGuideSettings->show();
     else gboxGuideSettings->hide();
@@ -244,30 +245,36 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     KHBox *hbox    = new KHBox(d->settings);
     QLabel *space1 = new QLabel(hbox);
-    space1->setFixedWidth(spacingHint());    
-    d->progressBar = new KProgress(100, hbox);
+    space1->setFixedWidth(spacingHint());
+    d->progressBar = new QProgressBar(hbox);
+    d->progressBar->setMaximum(100);
     d->progressBar->setMaximumHeight( fontMetrics().height() );
-    d->progressBar ->setWhatsThis(i18n("<p>This is the current percentage of the task completed."));
+    d->progressBar->setWhatsThis(i18n("<p>This is the current percentage of the task completed."));
     d->progressBar->setValue(0);
     setProgressVisible(false);
     QLabel *space2 = new QLabel(hbox);
     space2->setFixedWidth(spacingHint());
-    
+
     vLayout->addWidget(hbox);
     vLayout->addStretch(10);
 
-    d->settingsLayout->addMultiCellLayout(vLayout, 1, 1, 0, 0);
+    d->settingsLayout->addLayout(vLayout, 1, 1, 0, 0);
 
-    d->settingsSideBar->appendTab(d->settings, SmallIcon("configure"), i18n("Settings"));    
+    d->settingsSideBar->appendTab(d->settings, SmallIcon("configure"), i18n("Settings"));
     d->settingsSideBar->loadViewState();
-    
+
     // Reading splitter sizes here prevent flicker effect in dialog.
+
+    QList<int> list;
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup(d->name + QString(" Tool Dialog"));
-    if(config->hasKey("SplitterSizes"))
-        d->splitter->setSizes(config->readIntListEntry("SplitterSizes"));
+    KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
+    if(group.hasKey("SplitterSizes"))
+        d->splitter->setSizes(group.readEntry("SplitterSizes", list));
 
     // -------------------------------------------------------------
+
+    connect(this, SIGNAL(helpClicked()),
+            this, SLOT(slotHelp()));
 
     QTimer::singleShot(0, this, SLOT(slotInit()));
     kapp->restoreOverrideCursor();
@@ -283,18 +290,18 @@ ImageGuideDlg::~ImageGuideDlg()
 
     if (d->aboutData)
        delete d->aboutData;
-    
-    delete d->settingsSideBar;            
-    delete d;            
+
+    delete d->settingsSideBar;
+    delete d;
 }
 
 void ImageGuideDlg::readSettings(void)
 {
     QColor defaultGuideColor(Qt::red);
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup(d->name + QString(" Tool Dialog"));
-    d->guideColorBt->setColor(config->readColorEntry("Guide Color", &defaultGuideColor));
-    d->guideSize->setValue(config->readNumEntry("Guide Width", 1));
+    KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
+    d->guideColorBt->setColor(group.readEntry("Guide Color", defaultGuideColor));
+    d->guideSize->setValue(group.readEntry("Guide Width", 1));
     m_imagePreviewWidget->slotChangeGuideSize(d->guideSize->value());
     m_imagePreviewWidget->slotChangeGuideColor(d->guideColorBt->color());
 }
@@ -302,12 +309,12 @@ void ImageGuideDlg::readSettings(void)
 void ImageGuideDlg::writeSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup(d->name + QString(" Tool Dialog"));
-    config->writeEntry( "Guide Color", d->guideColorBt->color() );
-    config->writeEntry( "Guide Width", d->guideSize->value() );
-    config->writeEntry( "SplitterSizes", d->splitter->sizes() );
+    KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
+    group.writeEntry( "Guide Color", d->guideColorBt->color() );
+    group.writeEntry( "Guide Width", d->guideSize->value() );
+    group.writeEntry( "SplitterSizes", d->splitter->sizes() );
+    saveDialogSize(group);
     config->sync();
-    saveDialogSize(d->name + QString(" Tool Dialog"));
 }
 
 void ImageGuideDlg::slotInit()
@@ -331,20 +338,24 @@ void ImageGuideDlg::slotInit()
 
 void ImageGuideDlg::setUserAreaWidget(QWidget *w)
 {
-    w->reparent( d->settings, QPoint(0, 0) );
-    Q3VBoxLayout *vLayout = new Q3VBoxLayout( spacingHint() );
+    w->setParent( d->splitter );
+    QVBoxLayout *vLayout = new QVBoxLayout();
+    vLayout->setSpacing(spacingHint());
     vLayout->addWidget(w);
-    d->settingsLayout->addMultiCellLayout(vLayout, 0, 0, 0, 0);
+    d->settingsLayout->addLayout(vLayout, 0, 0, 0, 0);
 }
 
 void ImageGuideDlg::setAboutData(KAboutData *about)
 {
-    d->aboutData = about;
-    QPushButton *helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, d->aboutData, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("digiKam Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    helpButton->setPopup( helpMenu->menu() );
+    d->aboutData            = about;
+    KPushButton *helpButton = button( Help );
+    KHelpMenu* helpMenu     = new KHelpMenu(this, d->aboutData, false);
+    helpMenu->menu()->removeAction(helpMenu->menu()->actions().first());
+    QAction *handbook       = new QAction(i18n("digiKam Handbook"), this);
+    connect(handbook, SIGNAL(triggered(bool)),
+            this, SLOT(slotHelp()));
+    helpMenu->menu()->insertAction(helpMenu->menu()->actions().first(), handbook);
+    helpButton->setDelayedMenu( helpMenu->menu() );
 }
 
 void ImageGuideDlg::setProgressVisible(bool v)
@@ -438,8 +449,6 @@ void ImageGuideDlg::slotHelp()
 
     if (d->aboutData)
         KToolInvocation::invokeHelp(d->name, "digikam");
-    else
-        KDialogBase::slotHelp();
 }
 
 void ImageGuideDlg::slotTimer()
@@ -453,7 +462,8 @@ void ImageGuideDlg::slotTimer()
     d->timer = new QTimer( this );
     connect( d->timer, SIGNAL(timeout()),
              this, SLOT(slotEffect()) );
-    d->timer->start(500, true);
+    d->timer->setSingleShot(true);
+    d->timer->start(500);
 }
 
 void ImageGuideDlg::slotEffect()
@@ -508,11 +518,11 @@ void ImageGuideDlg::slotOk()
     prepareFinal();
 }
 
-void ImageGuideDlg::customEvent(QCustomEvent *event)
+void ImageGuideDlg::customEvent(QEvent *event)
 {
     if (!event) return;
 
-    DImgThreadedFilter::EventData *ed = (DImgThreadedFilter::EventData*) event->data();
+    DImgThreadedFilter::EventData *ed = (DImgThreadedFilter::EventData*) event;
 
     if (!ed) return;
 
@@ -568,29 +578,31 @@ void ImageGuideDlg::customEvent(QCustomEvent *event)
 // Backport KDialog::keyPressEvent() implementation from KDELibs to ignore Enter/Return Key events 
 // to prevent any conflicts between dialog keys events and SpinBox keys events.
 
+// TODO: KDE4PORT: Check if this code work fine with KDE4::KDialog()
+
 void ImageGuideDlg::keyPressEvent(QKeyEvent *e)
 {
-    if ( e->state() == 0 )
+    if ( e->modifiers() == 0 )
     {
         switch ( e->key() )
         {
-        case Qt::Key_Escape:
-            e->accept();
-            reject();
-        break;
-        case Qt::Key_Enter:            
-        case Qt::Key_Return:     
-            e->ignore();              
-        break;
-        default:
-            e->ignore();
-            return;
+            case Qt::Key_Escape:
+                e->accept();
+                reject();
+            break;
+            case Qt::Key_Enter:
+            case Qt::Key_Return:
+                e->ignore();
+            break;
+            default:
+                e->ignore();
+                return;
         }
     }
     else
     {
         // accept the dialog when Ctrl-Return is pressed
-        if ( e->state() == Qt::ControlModifier &&
+        if ( e->modifiers() == Qt::ControlModifier &&
             (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) )
         {
             e->accept();

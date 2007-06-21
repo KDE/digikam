@@ -81,9 +81,9 @@ public:
     bool            tryAction;
 
     QGridLayout    *mainLayout;
-    
+
     QWidget        *parent;
-    
+
     QString         name;
 
     QTimer         *timer;
@@ -124,8 +124,7 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
     showButton(User3, loadFileSettings);
     showButton(Try, tryAction);
 
-    KSharedConfig::Ptr config = KGlobal::config();
-    restoreDialogSize(config->group(name + QString(" Tool Dialog")));
+    restoreDialogSize(KGlobal::config()->group(name + QString(" Tool Dialog")));
 
     // -------------------------------------------------------------
 
@@ -140,9 +139,9 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
     d->splitter = new QSplitter(d->hbox);
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
-    d->splitter->setFrameShape( QFrame::NoFrame );    
+    d->splitter->setFrameShape( QFrame::NoFrame );
     d->splitter->setOpaqueResize(false);
-    
+
     d->mainLayout->addWidget(d->hbox, 1, 2, 0, 1);
     d->mainLayout->setColumnStretch(0, 10);
     d->mainLayout->setRowStretch(2, 10);
@@ -248,10 +247,10 @@ void ImageDlgBase::setUserAreaWidget(QWidget *w)
     QString sbName(d->name + QString(" Image Plugin Sidebar"));
     d->settingsSideBar = new Sidebar(d->hbox, sbName.toAscii().data(), Sidebar::DockRight);
     d->settingsSideBar->setSplitter(d->splitter);
-    d->settingsSideBar->appendTab(w, SmallIcon("configure"), i18n("Settings"));    
+    d->settingsSideBar->appendTab(w, SmallIcon("configure"), i18n("Settings"));
     d->settingsSideBar->loadViewState();
 
-    readSettings();   
+    readSettings();
 }
 
 void ImageDlgBase::slotTimer()
