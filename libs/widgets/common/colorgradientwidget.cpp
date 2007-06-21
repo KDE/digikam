@@ -25,7 +25,6 @@
 
 #include <QImage>
 #include <QPainter>
-#include <QDrawUtil>
 #include <QPixmap>
 
 // KDE includes.
@@ -59,7 +58,7 @@ ColorGradientWidget::ColorGradientWidget(int o, int size, QWidget *parent)
     d = new ColorGradientWidgetPriv;
     d->orientation = o;
 
-    setFrameStyle(Q3Frame::Box|Q3Frame::Plain);
+    setFrameStyle(QFrame::Box|QFrame::Plain);
     setLineWidth(1);
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -86,7 +85,7 @@ void ColorGradientWidget::setColors( const QColor &col1, const QColor &col2 )
 
 void ColorGradientWidget::drawContents(QPainter *p)
 {
-    QImage image(contentsRect().width(), contentsRect().height(), 32);
+    QImage image(contentsRect().width(), contentsRect().height(), QImage::Format_ARGB32);
 
     QColor col, color1, color2;
     float scale;
@@ -94,8 +93,8 @@ void ColorGradientWidget::drawContents(QPainter *p)
     // Widget is disable : drawing grayed frame.
     if ( !isEnabled() )
     {
-       color1 = palette().disabled().foreground();
-       color2 = palette().disabled().background();
+       color1 = palette().color(QPalette::Disabled, QPalette::Foreground);
+       color2 = palette().color(QPalette::Disabled, QPalette::Background);
     }
     else 
     {
@@ -154,8 +153,7 @@ void ColorGradientWidget::drawContents(QPainter *p)
 
     KImageEffect::dither(image, ditherPalette, psize);
 
-    QPixmap pm;
-    pm.convertFromImage(image);
+    QPixmap pm = QPixmap::fromImage(image);
     p->drawPixmap(contentsRect(), pm);
 }
 
