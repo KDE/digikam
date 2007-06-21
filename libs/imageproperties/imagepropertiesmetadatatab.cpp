@@ -22,20 +22,18 @@
  * ============================================================ */
 
 // Qt includes.
- 
-#include <qlayout.h>
-#include <qfile.h>
-#include <qlabel.h>
-#include <qpixmap.h>
-#include <qfileinfo.h>
-#include <q3whatsthis.h>
+
+#include <QFile>
+#include <QLabel>
+#include <QPixmap>
+#include <QFileInfo>
 
 // KDE includes.
 
 #include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kfileitem.h>
 #include <ktabwidget.h>
 #include <kglobal.h>
@@ -76,15 +74,15 @@ public:
         tab             = 0;
     }
 
-    KTabWidget        *tab;
+    KTabWidget      *tab;
 
-    ExifWidget        *exifWidget;
+    ExifWidget      *exifWidget;
 
-    MakerNoteWidget   *makernoteWidget;
+    MakerNoteWidget *makernoteWidget;
 
-    IptcWidget        *iptcWidget;
+    IptcWidget      *iptcWidget;
 
-    GPSWidget         *gpsWidget;
+    GPSWidget       *gpsWidget;
 };
 
 ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool navBar)
@@ -99,56 +97,56 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool nav
     // Exif tab area -----------------------------------------------------
 
     d->exifWidget = new ExifWidget(d->tab);
-    d->tab->insertTab(d->exifWidget, i18n("EXIF"), ImagePropertiesMetadataTabPriv::EXIF);
+    d->tab->insertTab(ImagePropertiesMetadataTabPriv::EXIF, d->exifWidget, i18n("EXIF"));
 
     // Makernote tab area -----------------------------------------------------
 
     d->makernoteWidget = new MakerNoteWidget(d->tab);
-    d->tab->insertTab(d->makernoteWidget, i18n("Makernote"), ImagePropertiesMetadataTabPriv::MAKERNOTE);
+    d->tab->insertTab(ImagePropertiesMetadataTabPriv::MAKERNOTE, d->makernoteWidget, i18n("Makernote"));
 
     // IPTC tab area ---------------------------------------
-    
+
     d->iptcWidget = new IptcWidget(d->tab);
-    d->tab->insertTab(d->iptcWidget, i18n("IPTC"), ImagePropertiesMetadataTabPriv::IPTC);
+    d->tab->insertTab(ImagePropertiesMetadataTabPriv::IPTC, d->iptcWidget, i18n("IPTC"));
 
     // GPS tab area ---------------------------------------
-    
+
     d->gpsWidget = new GPSWidget(d->tab);
-    d->tab->insertTab(d->gpsWidget, i18n("GPS"), ImagePropertiesMetadataTabPriv::GPS);
+    d->tab->insertTab(ImagePropertiesMetadataTabPriv::GPS, d->gpsWidget, i18n("GPS"));
 
     // -- read config ---------------------------------------------------------
 
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("Image Properties SideBar");
-    d->tab->setCurrentPage(config->readNumEntry("ImagePropertiesMetaData Tab",
-                           ImagePropertiesMetadataTabPriv::EXIF));
-    d->exifWidget->setMode(config->readNumEntry("EXIF Level", ExifWidget::SIMPLE));
-    d->makernoteWidget->setMode(config->readNumEntry("MAKERNOTE Level", MakerNoteWidget::SIMPLE));
-    d->iptcWidget->setMode(config->readNumEntry("IPTC Level", IptcWidget::SIMPLE));
-    d->gpsWidget->setMode(config->readNumEntry("GPS Level", GPSWidget::SIMPLE));
-    d->exifWidget->setCurrentItemByKey(config->readEntry("Current EXIF Item", QString()));
-    d->makernoteWidget->setCurrentItemByKey(config->readEntry("Current MAKERNOTE Item", QString()));
-    d->iptcWidget->setCurrentItemByKey(config->readEntry("Current IPTC Item", QString()));
-    d->gpsWidget->setCurrentItemByKey(config->readEntry("Current GPS Item", QString()));
-    d->gpsWidget->setWebGPSLocator(config->readNumEntry("Current Web GPS Locator", GPSWidget::MapQuest));
+    KConfigGroup group = config->group("Image Properties SideBar");
+    d->tab->setCurrentIndex(group.readEntry("ImagePropertiesMetaData Tab",
+                            (int)ImagePropertiesMetadataTabPriv::EXIF));
+    d->exifWidget->setMode(group.readEntry("EXIF Level", (int)ExifWidget::SIMPLE));
+    d->makernoteWidget->setMode(group.readEntry("MAKERNOTE Level", (int)MakerNoteWidget::SIMPLE));
+    d->iptcWidget->setMode(group.readEntry("IPTC Level", (int)IptcWidget::SIMPLE));
+    d->gpsWidget->setMode(group.readEntry("GPS Level", (int)GPSWidget::SIMPLE));
+    d->exifWidget->setCurrentItemByKey(group.readEntry("Current EXIF Item", QString()));
+    d->makernoteWidget->setCurrentItemByKey(group.readEntry("Current MAKERNOTE Item", QString()));
+    d->iptcWidget->setCurrentItemByKey(group.readEntry("Current IPTC Item", QString()));
+    d->gpsWidget->setCurrentItemByKey(group.readEntry("Current GPS Item", QString()));
+    d->gpsWidget->setWebGPSLocator(group.readEntry("Current Web GPS Locator", (int)GPSWidget::MapQuest));
 }
 
 ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("Image Properties SideBar");
-    config->writeEntry("ImagePropertiesMetaData Tab", d->tab->currentPageIndex());
-    config->writeEntry("EXIF Level", d->exifWidget->getMode());
-    config->writeEntry("MAKERNOTE Level", d->makernoteWidget->getMode());
-    config->writeEntry("IPTC Level", d->iptcWidget->getMode());
-    config->writeEntry("GPS Level", d->gpsWidget->getMode());
-    config->writeEntry("Current EXIF Item", d->exifWidget->getCurrentItemKey());
-    config->writeEntry("Current MAKERNOTE Item", d->makernoteWidget->getCurrentItemKey());
-    config->writeEntry("Current IPTC Item", d->iptcWidget->getCurrentItemKey());
-    config->writeEntry("Current GPS Item", d->gpsWidget->getCurrentItemKey());
-    config->writeEntry("Current Web GPS Locator", d->gpsWidget->getWebGPSLocator());
+    KConfigGroup group = config->group("Image Properties SideBar");
+    group.writeEntry("ImagePropertiesMetaData Tab", d->tab->currentIndex());
+    group.writeEntry("EXIF Level", d->exifWidget->getMode());
+    group.writeEntry("MAKERNOTE Level", d->makernoteWidget->getMode());
+    group.writeEntry("IPTC Level", d->iptcWidget->getMode());
+    group.writeEntry("GPS Level", d->gpsWidget->getMode());
+    group.writeEntry("Current EXIF Item", d->exifWidget->getCurrentItemKey());
+    group.writeEntry("Current MAKERNOTE Item", d->makernoteWidget->getCurrentItemKey());
+    group.writeEntry("Current IPTC Item", d->iptcWidget->getCurrentItemKey());
+    group.writeEntry("Current GPS Item", d->gpsWidget->getCurrentItemKey());
+    group.writeEntry("Current Web GPS Locator", d->gpsWidget->getWebGPSLocator());
     config->sync();
-    
+
     delete d;
 }
 
@@ -170,12 +168,12 @@ void ImagePropertiesMetaDataTab::setCurrentURL(const KUrl& url)
     QByteArray exifData = metadata.getExif(); 
     QByteArray iptcData = metadata.getIptc();
 
-    d->exifWidget->loadFromData(url.filename(), exifData);
-    d->makernoteWidget->loadFromData(url.filename(), exifData);
-    d->iptcWidget->loadFromData(url.filename(), iptcData);
-    d->gpsWidget->loadFromData(url.filename(), exifData);
+    d->exifWidget->loadFromData(url.fileName(), exifData);
+    d->makernoteWidget->loadFromData(url.fileName(), exifData);
+    d->iptcWidget->loadFromData(url.fileName(), iptcData);
+    d->gpsWidget->loadFromData(url.fileName(), exifData);
 }
-    
+
 void ImagePropertiesMetaDataTab::setCurrentData(const QByteArray& exifData, 
                                                 const QByteArray& iptcData, 
                                                 const QString& filename)
@@ -191,7 +189,7 @@ void ImagePropertiesMetaDataTab::setCurrentData(const QByteArray& exifData,
     }
 
     setEnabled(true);
-    
+
     d->exifWidget->loadFromData(filename, exifData);
     d->makernoteWidget->loadFromData(filename, exifData);
     d->iptcWidget->loadFromData(filename, iptcData);
@@ -199,4 +197,3 @@ void ImagePropertiesMetaDataTab::setCurrentData(const QByteArray& exifData,
 }
 
 }  // NameSpace Digikam
-
