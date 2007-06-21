@@ -15,13 +15,13 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
 
 # Static library for Camera GUI #############################################
 
-# SET(libimagepropertiescamgui_STAT_SRCS imagepropertiessidebarcamgui.cpp 
-#                                        cameraitempropertiestab.cpp
-#    )
-# 
-# KDE4_AUTOMOC(${libimagepropertiescamgui_STAT_SRCS})
-# 
-# KDE4_ADD_LIBRARY(libimagepropertiescamgui ${libimagepropertiescamgui_STAT_SRCS})
+SET(libimagepropertiescamgui_STAT_SRCS imagepropertiessidebarcamgui.cpp 
+                                       cameraitempropertiestab.cpp
+   )
+
+KDE4_AUTOMOC(${libimagepropertiescamgui_STAT_SRCS})
+
+KDE4_ADD_LIBRARY(libimagepropertiescamgui ${libimagepropertiescamgui_STAT_SRCS})
 
 
 # Static library for Showfoto ###############################################

@@ -24,7 +24,7 @@
 
 // Qt includes. 
  
-#include <qsplitter.h>
+#include <QSplitter>
 
 // KDE includes.
 
@@ -78,13 +78,13 @@ public:
     KUrl                        currentURL;
 
     GPItemInfo                 *itemInfo;
-    
+
     ImagePropertiesMetaDataTab *metadataTab;
-    
+
     CameraIconView             *cameraView;
 
     CameraIconViewItem         *cameraItem;
-    
+
     CameraItemPropertiesTab    *cameraItemTab;
 };
 
@@ -96,9 +96,9 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent, cons
     d = new ImagePropertiesSideBarCamGuiPriv;
     d->cameraItemTab = new CameraItemPropertiesTab(parent, true);
     d->metadataTab   = new ImagePropertiesMetaDataTab(parent, true);
-    
+
     setSplitter(splitter);
-         
+
     appendTab(d->cameraItemTab, SmallIcon("info"), i18n("Properties"));
     appendTab(d->metadataTab, SmallIcon("exifinfo"), i18n("Metadata"));
 
@@ -142,7 +142,7 @@ void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KUrl&
 {
     if (!itemInfo)
         return;
-    
+
     d->exifData           = exifData;
     d->itemInfo           = itemInfo;
     d->currentURL         = url;
@@ -214,11 +214,9 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
 
 void ImagePropertiesSideBarCamGui::slotThemeChanged()
 {
-    QColor backgroundColor(ThemeEngine::componentData().baseColor());
-    QColor foregroundColor(ThemeEngine::componentData().textRegColor());
+    QColor backgroundColor(ThemeEngine::componentData()->baseColor());
+    QColor foregroundColor(ThemeEngine::componentData()->textRegColor());
     d->cameraItemTab->colorChanged(backgroundColor, foregroundColor);
 }
 
 }  // NameSpace Digikam
-
-
