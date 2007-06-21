@@ -149,10 +149,10 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     m_threadedFilter = 0;
     QString whatsThis;
 
-    setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
-    setButtonWhatsThis ( User1, i18n("<p>Abort the current image rendering.") );
-    setButtonWhatsThis ( User3, i18n("<p>Load all filter parameters from settings text file.") );
-    setButtonWhatsThis ( User2, i18n("<p>Save all filter parameters to settings text file.") );
+    setButtonWhatsThis( Default, i18n("<p>Reset all filter parameters to their default values.") );
+    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
+    setButtonWhatsThis( User3, i18n("<p>Load all filter parameters from settings text file.") );
+    setButtonWhatsThis( User2, i18n("<p>Save all filter parameters to settings text file.") );
     showButton(User2, loadFileSettings);
     showButton(User3, loadFileSettings);
     showButton(Try, tryAction);
@@ -273,8 +273,25 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
+    connect(this, SIGNAL(okClicked()),
+            this, SLOT(slotOk()));
+
+    connect(this, SIGNAL(cancelClicked()),
+            this, SLOT(slotCancel()));
+
+    connect(this, SIGNAL(tryClicked()),
+            this, SLOT(slotTry()));
+
+    connect(this, SIGNAL(defaultClicked()),
+            this, SLOT(slotDefault()));
+
+    connect(this, SIGNAL(user1Clicked()),
+            this, SLOT(slotUser1()));
+
     connect(this, SIGNAL(helpClicked()),
             this, SLOT(slotHelp()));
+
+    // -------------------------------------------------------------
 
     QTimer::singleShot(0, this, SLOT(slotInit()));
     kapp->restoreOverrideCursor();

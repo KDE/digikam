@@ -27,10 +27,8 @@
 
 // Qt includes
 
-#include <qstring.h>
-//Added by qt3to4:
-#include <QCustomEvent>
-#include <Q3Frame>
+#include <QString>
+#include <QEvent>
 #include <QKeyEvent>
 #include <QCloseEvent>
 
@@ -42,8 +40,6 @@
 
 #include "imagepannelwidget.h"
 #include "digikam_export.h"
-
-class Q3Frame;
 
 namespace Digikam
 {
@@ -58,45 +54,46 @@ class DIGIKAM_EXPORT CtrlPanelDlg : public KDialog
 public:
 
     CtrlPanelDlg(QWidget* parent, QString title, QString name,
-                 bool loadFileSettings=false, bool tryAction=false, bool progressBar=true,
-                 int separateViewMode=ImagePannelWidget::SeparateViewAll,
-                 Q3Frame* bannerFrame=0);
+                 bool loadFileSettings=false, 
+                 bool tryAction=false, 
+                 bool progressBar=true,
+                 int separateViewMode=ImagePannelWidget::SeparateViewAll);
     ~CtrlPanelDlg();
 
     void setAboutData(KAboutData *about);
 
 public:
-        
+
     ImagePannelWidget  *m_imagePreviewWidget;
 
     DImgThreadedFilter *m_threadedFilter;
-            
+
 public slots: 
 
-    void slotTimer();       
+    void slotTimer();
     void slotEffect();
     void slotOk();
     void slotTry();
 
 private slots:
-    
+
     virtual void slotDefault();
     virtual void slotCancel();
     virtual void slotUser1();
     virtual void slotInit();
     virtual void readUserSettings(void){ slotDefault(); };
-     
+
     void slotHelp();
-    void slotFocusChanged(void);    
-    
+    void slotFocusChanged(void);
+
 protected:
 
     void closeEvent(QCloseEvent *e);
-    void customEvent(QCustomEvent *event);
+    void customEvent(QEvent *event);
     void abortPreview(void);
     void keyPressEvent(QKeyEvent *e);
 
-    virtual void writeUserSettings(void){};            
+    virtual void writeUserSettings(void){};
     virtual void resetValues(void){};
     virtual void prepareEffect(void){};
     virtual void prepareFinal(void){};
@@ -105,7 +102,7 @@ protected:
     virtual void renderingFinished(void){};
 
 private:
-    
+
     CtrlPanelDlgPriv* d;
 };
 

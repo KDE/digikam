@@ -148,8 +148,24 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
 
     vbox->setLayout(d->mainLayout);
 
+    // -------------------------------------------------------------
+
+    connect(this, SIGNAL(okClicked()),
+            this, SLOT(slotOk()));
+
+    connect(this, SIGNAL(cancelClicked()),
+            this, SLOT(slotCancel()));
+
+    connect(this, SIGNAL(tryClicked()),
+            this, SLOT(slotTry()));
+
+    connect(this, SIGNAL(defaultClicked()),
+            this, SLOT(slotDefault()));
+
     connect(this, SIGNAL(helpClicked()),
             this, SLOT(slotHelp()));
+
+    // -------------------------------------------------------------
 
     kapp->restoreOverrideCursor();
 }

@@ -24,22 +24,19 @@
 
 // Qt includes.
 
-#include <q3vgroupbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <q3whatsthis.h>
-#include <qtooltip.h>
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qtimer.h>
-//Added by qt3to4:
-#include <QCustomEvent>
-#include <QCloseEvent>
-#include <QKeyEvent>
-#include <Q3VBoxLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QTimer>
+#include <QFrame>
+#include <QSpinBox>
+#include <QSplitter>
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QProgressBar>
 
 // KDE includes.
 
+#include <kpushbutton.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <kaboutdata.h>
@@ -49,7 +46,12 @@
 #include <kmenu.h>
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
+#include <kcolorbutton.h>
+#include <kconfig.h>
+#include <kseparator.h>
+#include <kglobal.h>
 #include <ktoolinvocation.h>
+#include <kvbox.h>
 
 // Local includes.
 
@@ -72,7 +74,7 @@ public:
         PreviewRendering,
         FinalRendering
     };
-    
+
     CtrlPanelDlgPriv()
     {
         parent               = 0;
@@ -100,51 +102,68 @@ public:
 CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
                            bool loadFileSettings, bool tryAction, bool progressBar,
                            int separateViewMode, Q3Frame* bannerFrame)
-            : KDialog(0)
+            : KDialog(parent)
 {
-    setModal( true );
-    setCaption( i18n( "Setup Blank Screen Saver" ) );
-    setButtons( Help|Default|User1|User2|User3|Try|Ok|Cancel );
+    kapp->setOverrideCursor( Qt::WaitCursor );
+    setButtons(Help|Default|User1|User2|User3|Try|Ok|Cancel);
     setDefaultButton(Ok);
+    setModal(true);
     setButtonText(User1, i18n("&Abort"));
     setButtonText(User2, i18n("&Save As..."));
     setButtonText(User3, i18n("&Load..."));
-
-    kapp->setOverrideCursor( Qt::WaitCursor );
     setCaption(DImgInterface::defaultInterface()->getImageFileName() + QString(" - ") + title);
-    
+
     d = new CtrlPanelDlgPriv;
-    d->parent               = parent;
-    d->name                 = name;
-    d->tryAction            = tryAction;
-    d->progressBar          = progressBar;
-    m_threadedFilter        = 0;
+    d->parent        = parent;
+    d->name          = name;
+    d->tryAction     = tryAction;
+    d->progressBar   = progressBar;
+    m_threadedFilter = 0;
     QString whatsThis;
 
-    setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
-    setButtonWhatsThis ( User1, i18n("<p>Abort the current image rendering.") );
-    setButtonWhatsThis ( User3, i18n("<p>Load all filter parameters from settings text file.") );
-    setButtonWhatsThis ( User2, i18n("<p>Save all filter parameters to settings text file.") );
+    setButtonWhatsThis( Default, i18n("<p>Reset all filter parameters to their default values.") );
+    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
+    setButtonWhatsThis( User3, i18n("<p>Load all filter parameters from settings text file.") );
+    setButtonWhatsThis( User2, i18n("<p>Save all filter parameters to settings text file.") );
     showButton(User2, loadFileSettings);
     showButton(User3, loadFileSettings);
     showButton(Try, tryAction);
 
-    resize(configDialogSize(name + QString(" Tool Dialog")));
-    Q3VBoxLayout *topLayout = new Q3VBoxLayout( plainPage(), 0, spacingHint());
-    
+    restoreDialogSize(KGlobal::config()->group(name + QString(" Tool Dialog")));
+
     // -------------------------------------------------------------
 
-    if (bannerFrame)
-    {
-        bannerFrame->reparent( plainPage(), QPoint(0, 0) );
-        topLayout->addWidget(bannerFrame);
-    }
+    KVBox *vbox = new KVBox( this );
+    setMainWidget( vbox );
+
+    QVBoxLayout *topLayout = new QVBoxLayout( vbox );
+    topLayout->setSpacing(spacingHint());
 
     // -------------------------------------------------------------
 
     m_imagePreviewWidget = new ImagePannelWidget(470, 350, name + QString(" Tool Dialog"),
-                               plainPage(), separateViewMode);
+                               vbox, separateViewMode);
     topLayout->addWidget(m_imagePreviewWidget);
+
+    // -------------------------------------------------------------
+
+    connect(this, SIGNAL(okClicked()),
+            this, SLOT(slotOk()));
+
+    connect(this, SIGNAL(cancelClicked()),
+            this, SLOT(slotCancel()));
+
+    connect(this, SIGNAL(tryClicked()),
+            this, SLOT(slotTry()));
+
+    connect(this, SIGNAL(defaultClicked()),
+            this, SLOT(slotDefault()));
+
+    connect(this, SIGNAL(user1Clicked()),
+            this, SLOT(slotUser1()));
+
+    connect(this, SIGNAL(helpClicked()),
+            this, SLOT(slotHelp()));
 
     // -------------------------------------------------------------
 
@@ -155,11 +174,8 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
 CtrlPanelDlg::~CtrlPanelDlg()
 {
     delete d->aboutData;
-       
     delete d->timer;
-
     delete m_threadedFilter;
-
     delete d;
 }
 
