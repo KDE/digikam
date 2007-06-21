@@ -27,21 +27,16 @@
 
 // Qt Includes.
 
-#include <qlayout.h>
-#include <qspinbox.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-
-#include <q3groupbox.h>
-#include <qhbuttongroup.h> 
-#include <qpushbutton.h>
-#include <qtooltip.h>
-
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
+#include <QSpinBox>
+#include <QComboBox>
+#include <QLabel>
+#include <QGroupBox>
+#include <QButtonGroup> 
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QPixmap>
-#include <Q3Frame>
+#include <QFrame>
 
 // KDE includes.
 
@@ -49,7 +44,7 @@
 #include <ksqueezedtextlabel.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
 #include <kglobal.h>
@@ -84,6 +79,7 @@ public:
 
     ImagePropertiesColorsTabPriv()
     {
+        regionBox            = 0;
         imageLoaderThread    = 0;
         tab                  = 0;
         channelCB            = 0;
@@ -101,7 +97,6 @@ public:
         labelPercentileValue = 0;
         labelColorDepth      = 0;
         labelAlphaChannel    = 0;
-
         iccProfileWidget     = 0;
         hGradient            = 0;
         histogramWidget      = 0;
@@ -110,12 +105,14 @@ public:
 
     bool                   blinkFlag;
 
+    QWidget               *regionBox;
+
     QComboBox             *channelCB;
     QComboBox             *colorsCB;
     QComboBox             *renderingCB;
 
-    Q3HButtonGroup         *scaleBG;
-    Q3HButtonGroup         *regionBG;
+    QButtonGroup          *scaleBG;
+    QButtonGroup          *regionBG;
 
     QSpinBox              *minInterv;
     QSpinBox              *maxInterv;
@@ -159,136 +156,142 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     // Histogram tab area -----------------------------------------------------
 
     QWidget* histogramPage = new QWidget( d->tab );
-    Q3GridLayout *topLayout = new Q3GridLayout(histogramPage, 8, 3, 
-                                 KDialog::spacingHint(), KDialog::spacingHint());
+    QGridLayout *topLayout = new QGridLayout(histogramPage);
+    topLayout->setSpacing(KDialog::spacingHint());
+    topLayout->setMargin(KDialog::spacingHint());
+    histogramPage->setLayout(topLayout);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), histogramPage);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    d->channelCB = new QComboBox( false, histogramPage );
-    d->channelCB->insertItem( i18n("Luminosity") );
-    d->channelCB->insertItem( i18n("Red") );
-    d->channelCB->insertItem( i18n("Green") );
-    d->channelCB->insertItem( i18n("Blue") );
-    d->channelCB->insertItem( i18n("Alpha") );
-    d->channelCB->insertItem( i18n("Colors") );
+    d->channelCB = new QComboBox(histogramPage );
+    d->channelCB->insertItem( LuminosityChannel, i18n("Luminosity") );
+    d->channelCB->insertItem( RedChannel,        i18n("Red") );
+    d->channelCB->insertItem( GreenChannel,      i18n("Green") );
+    d->channelCB->insertItem( BlueChannel,       i18n("Blue") );
+    d->channelCB->insertItem( AlphaChannel,      i18n("Alpha") );
+    d->channelCB->insertItem( ColorChannels,     i18n("Colors") );
     d->channelCB->setWhatsThis( i18n("<p>Select here the histogram channel to display:<p>"
-                                        "<b>Luminosity</b>: Display luminosity (perceived brightness) values.<p>"
-                                        "<b>Red</b>: Display the red image channel.<p>"
-                                        "<b>Green</b>: Display the green image channel.<p>"
-                                        "<b>Blue</b>: Display the blue image channel.<p>"
-                                        "<b>Alpha</b>: Display the alpha image channel. "
-                                        "This channel corresponds to the transparency value and "
-                                        "is supported by some image formats such as PNG or TIFF.<p>"
-                                        "<b>Colors</b>: Display all color channel values at the same time."));
+                                     "<b>Luminosity</b>: Display luminosity (perceived brightness) values.<p>"
+                                     "<b>Red</b>: Display the red image channel.<p>"
+                                     "<b>Green</b>: Display the green image channel.<p>"
+                                     "<b>Blue</b>: Display the blue image channel.<p>"
+                                     "<b>Alpha</b>: Display the alpha image channel. "
+                                     "This channel corresponds to the transparency value and "
+                                     "is supported by some image formats such as PNG or TIFF.<p>"
+                                     "<b>Colors</b>: Display all color channel values at the same time."));
 
-    d->scaleBG = new Q3HButtonGroup(histogramPage);
+    QWidget *scaleBox = new QWidget(histogramPage);
+    scaleBox->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
+                                 "If the image's maximal values are small, you can use the linear scale.<p>"
+                                 "Logarithmic scale can be used when the maximal values are big; "
+                                 "if it is used, all values (small and large) will be visible on the "
+                                 "graph."));
+
+    d->scaleBG = new QButtonGroup(scaleBox);
     d->scaleBG->setExclusive(true);
-    d->scaleBG->setFrameShape(Q3Frame::NoFrame);
-    d->scaleBG->setInsideMargin( 0 );
-    d->scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
-                                      "If the image's maximal values are small, you can use the linear scale.<p>"
-                                      "Logarithmic scale can be used when the maximal values are big; "
-                                      "if it is used, all values (small and large) will be visible on the "
-                                      "graph."));
 
-    QPushButton *linHistoButton = new QPushButton( d->scaleBG );
+    QPushButton *linHistoButton = new QPushButton(scaleBox);
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
-    d->scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
-    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
-    linHistoButton->setToggleButton(true);
+    linHistoButton->setIcon( QPixmap( directory + "histogram-lin.png" ) );
+    linHistoButton->setCheckable(true);
+    d->scaleBG->addButton(linHistoButton, HistogramWidget::LinScaleHistogram);
 
-    QPushButton *logHistoButton = new QPushButton( d->scaleBG );
+    QPushButton *logHistoButton = new QPushButton(scaleBox);
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
-    d->scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
-    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
-    logHistoButton->setToggleButton(true);
+    logHistoButton->setIcon( QPixmap( directory + "histogram-log.png" ) );
+    logHistoButton->setCheckable(true);
+    d->scaleBG->addButton(logHistoButton, HistogramWidget::LogScaleHistogram);
 
     QLabel *label10 = new QLabel(i18n("Colors:"), histogramPage);
     label10->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    d->colorsCB = new QComboBox( false, histogramPage );
-    d->colorsCB->insertItem( i18n("Red") );
-    d->colorsCB->insertItem( i18n("Green") );
-    d->colorsCB->insertItem( i18n("Blue") );
+    d->colorsCB = new QComboBox( histogramPage );
+    d->colorsCB->insertItem( AllColorsRed,   i18n("Red") );
+    d->colorsCB->insertItem( AllColorsGreen, i18n("Green") );
+    d->colorsCB->insertItem( AllColorsBlue,  i18n("Blue") );
     d->colorsCB->setEnabled( false );
     d->colorsCB->setWhatsThis( i18n("<p>Select here the main color displayed with Colors Channel mode:<p>"
-                                       "<b>Red</b>: Draw the red image channel in the foreground.<p>"
-                                       "<b>Green</b>: Draw the green image channel in the foreground.<p>"
-                                       "<b>Blue</b>: Draw the blue image channel in the foreground.<p>"));
+                                    "<b>Red</b>: Draw the red image channel in the foreground.<p>"
+                                    "<b>Green</b>: Draw the green image channel in the foreground.<p>"
+                                    "<b>Blue</b>: Draw the blue image channel in the foreground.<p>"));
 
-    d->regionBG = new Q3HButtonGroup(histogramPage);
+    d->regionBox = new QWidget(histogramPage);
+    d->regionBox->hide();
+    d->regionBox->setWhatsThis( i18n("<p>Select here from which region the histogram will be computed:<p>"
+                                     "<b>Full Image</b>: Compute histogram using the full image.<p>"
+                                     "<b>Selection</b>: Compute histogram using the current image "
+                                     "selection."));
+    d->regionBG = new QButtonGroup(d->regionBox);
     d->regionBG->setExclusive(true);
-    d->regionBG->setFrameShape(Q3Frame::NoFrame);
-    d->regionBG->setInsideMargin( 0 );
-    d->regionBG->hide();
-    d->regionBG->setWhatsThis( i18n("<p>Select here from which region the histogram will be computed:<p>"
-                                       "<b>Full Image</b>: Compute histogram using the full image.<p>"
-                                       "<b>Selection</b>: Compute histogram using the current image "
-                                       "selection."));
 
-    QPushButton *fullImageButton = new QPushButton( d->regionBG );
+    QPushButton *fullImageButton = new QPushButton(d->regionBox);
     fullImageButton->setToolTip( i18n( "<p>Full Image" ) );
-    d->regionBG->insert(fullImageButton, HistogramWidget::FullImageHistogram);
     KGlobal::dirs()->addResourceType("image-full", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("image-full", "image-full.png");
-    fullImageButton->setPixmap( QPixmap( directory + "image-full.png" ) );
-    fullImageButton->setToggleButton(true);
+    fullImageButton->setIcon( QPixmap( directory + "image-full.png" ) );
+    fullImageButton->setCheckable(true);
+    d->regionBG->addButton(fullImageButton, HistogramWidget::FullImageHistogram);
 
-    QPushButton *SelectionImageButton = new QPushButton( d->regionBG );
+    QPushButton *SelectionImageButton = new QPushButton(d->regionBox);
     SelectionImageButton->setToolTip( i18n( "<p>Selection" ) );
-    d->regionBG->insert(SelectionImageButton, HistogramWidget::ImageSelectionHistogram);
     KGlobal::dirs()->addResourceType("image-selection", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("image-selection", "image-selection.png");
-    SelectionImageButton->setPixmap( QPixmap( directory + "image-selection.png" ) );
-    SelectionImageButton->setToggleButton(true);
+    SelectionImageButton->setIcon( QPixmap( directory + "image-selection.png" ) );
+    SelectionImageButton->setCheckable(true);
+    d->regionBG->addButton(SelectionImageButton, HistogramWidget::ImageSelectionHistogram);
 
-    topLayout->addMultiCellWidget(label1, 1, 1, 0, 0);
-    topLayout->addMultiCellWidget(d->channelCB, 1, 1, 1, 1);
-    topLayout->addMultiCellWidget(d->scaleBG, 1, 1, 3, 3);
-    topLayout->addMultiCellWidget(label10, 2, 2, 0, 0);
-    topLayout->addMultiCellWidget(d->colorsCB, 2, 2, 1, 1);
-    topLayout->addMultiCellWidget(d->regionBG, 2, 2, 3, 3);
-    topLayout->setColStretch(2, 10);
+    topLayout->addWidget(label1, 1, 1, 0, 0);
+    topLayout->addWidget(d->channelCB, 1, 1, 1, 1);
+    topLayout->addWidget(scaleBox, 1, 1, 3, 3);
+    topLayout->addWidget(label10, 2, 2, 0, 0);
+    topLayout->addWidget(d->colorsCB, 2, 2, 1, 1);
+    topLayout->addWidget(d->regionBox, 2, 2, 3, 3);
+    topLayout->setColumnStretch(2, 10);
 
     // -------------------------------------------------------------
 
     KVBox *histoBox    = new KVBox(histogramPage);
     d->histogramWidget = new HistogramWidget(256, 140, histoBox);
     d->histogramWidget->setWhatsThis( i18n("<p>This is the histogram drawing of the "
-                                              "selected image channel"));
+                                           "selected image channel"));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
     d->hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, histoBox);
     d->hGradient->setColors(QColor("black"), QColor("white"));
-    topLayout->addMultiCellWidget(histoBox, 3, 4, 0, 3);
+    topLayout->addWidget(histoBox, 3, 4, 0, 3);
 
     // -------------------------------------------------------------
 
-    Q3HBoxLayout *hlay2 = new Q3HBoxLayout(KDialog::spacingHint());
+    QHBoxLayout *hlay2 = new QHBoxLayout();
+    hlay2->setSpacing(KDialog::spacingHint());
     QLabel *label3     = new QLabel(i18n("Range:"), histogramPage);
     label3->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    d->minInterv = new QSpinBox(0, 255, 1, histogramPage);
+    d->minInterv = new QSpinBox(histogramPage);
+    d->minInterv->setRange(0, 255);
+    d->minInterv->setSingleStep(1);
     d->minInterv->setValue(0);
     d->minInterv->setWhatsThis( i18n("<p>Select here the minimal intensity "
-                                       "value of the histogram selection."));
-    d->maxInterv = new QSpinBox(0, 255, 1, histogramPage);
+                                     "value of the histogram selection."));
+    d->maxInterv = new QSpinBox(histogramPage);
+    d->minInterv->setRange(0, 255);
+    d->minInterv->setSingleStep(1);
     d->maxInterv->setValue(255);
     d->minInterv->setWhatsThis( i18n("<p>Select here the maximal intensity value "
-                                       "of the histogram selection."));
+                                     "of the histogram selection."));
     hlay2->addWidget(label3);
     hlay2->addWidget(d->minInterv);
     hlay2->addWidget(d->maxInterv);
-    topLayout->addMultiCellLayout(hlay2, 5, 5, 0, 3);
+    topLayout->addLayout(hlay2, 5, 5, 0, 3);
 
     // -------------------------------------------------------------
 
     Q3GroupBox *gbox = new Q3GroupBox(2, Qt::Horizontal, i18n("Statistics"), histogramPage);
     gbox->setWhatsThis( i18n("<p>Here you can see the statistical results calculated from the "
-                                "selected histogram part. These values are available for all "
-                                "channels."));
+                             "selected histogram part. These values are available for all "
+                             "channels."));
 
     QLabel *label4 = new QLabel(i18n("Mean:"), gbox);
     label4->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
@@ -320,7 +323,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     d->labelPercentileValue = new QLabel(gbox);
     d->labelPercentileValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
 
-    topLayout->addMultiCellWidget(gbox, 6, 6, 0, 3);
+    topLayout->addWidget(gbox, 6, 6, 0, 3);
 
     // -------------------------------------------------------------
 
@@ -337,7 +340,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     d->labelAlphaChannel = new QLabel(gbox2);
     d->labelAlphaChannel->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
 
-    topLayout->addMultiCellWidget(gbox2, 7, 7, 0, 3);
+    topLayout->addWidget(gbox2, 7, 7, 0, 3);
 
     topLayout->setRowStretch(8, 10);
     d->tab->insertTab(histogramPage, i18n("Histogram"), ImagePropertiesColorsTabPriv::HISTOGRAM );
@@ -482,14 +485,14 @@ void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect &selectionAr
                 d->histogramWidget->updateData(d->image.bits(), d->image.width(), d->image.height(),
                                                d->image.sixteenBit(), d->imageSelection.bits(),
                                                d->imageSelection.width(), d->imageSelection.height());
-                d->regionBG->show();
+                d->regionBox->show();
                 updateInformations();
             }
             else 
             {
                 d->histogramWidget->updateData(d->image.bits(), d->image.width(), 
                                                d->image.height(), d->image.sixteenBit());
-                d->regionBG->hide();
+                d->regionBox->hide();
                 updateInformations();
             }
         }
@@ -554,7 +557,7 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescrip
         // As a safety precaution, this must be changed only after updateData is called,
         // which stops computation because d->image.bits() is currently used by threaded histogram algorithm.
         d->image = img;
-        d->regionBG->hide();
+        d->regionBox->hide();
         updateInformations();
         getICCData();
     }
@@ -595,11 +598,11 @@ void ImagePropertiesColorsTab::setSelection(const QRect &selectionArea)
         d->imageSelection = d->image.copy(d->selectionArea);
         d->histogramWidget->updateSelectionData(d->imageSelection.bits(), d->imageSelection.width(),
                                                 d->imageSelection.height(), d->imageSelection.sixteenBit());
-        d->regionBG->show();
+        d->regionBox->show();
     }
     else 
     {
-        d->regionBG->hide();
+        d->regionBox->hide();
         slotRenderingChanged(HistogramWidget::FullImageHistogram);
     }
 }
