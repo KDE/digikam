@@ -27,6 +27,7 @@
 
 // Qt includes.
 
+#include <QString>
 #include <QLabel>
 #include <QEvent>
 
