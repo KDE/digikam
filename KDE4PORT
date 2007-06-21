@@ -140,7 +140,7 @@ ORDER   DIRECTORIES                       ASSIGNED      STATUS      REMARK
         |---distortionfx
         |---emboss                        Laurent                   CMake port only
         |---filmgrain                     Laurent                   CMake port only
-        |---freerotation
+        |---freerotation                  Gilles
         |---hotpixels                     Laurent                   CMake port only
         |---infrared
         |---inpainting                    Laurent                   CMake port only
@@ -150,12 +150,12 @@ ORDER   DIRECTORIES                       ASSIGNED      STATUS      REMARK
         |---oilpaint                      Laurent                   CMake port only
         |---perspective                   Laurent                   CMake port only
         |---raindrop                      Laurent                   CMake port only
-        |---restoration                   Laurent                   CMake port only
+        |---restoration                   Gilles                    CMake port only
         |---sheartool
         |---superimpose
         |---texture
         |-----patterns                    Gilles                    CMake port only is require.
-        |---whitebalance                  Laurent                   CMake port only
+        |---whitebalance                  Gilles                    CMake port only
 
  7      |-themedesigner                                             The last one component. It completly independant. It will be the last one to port.
 
