@@ -1,0 +1,158 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2007-06-21
+ * Description : Shared data with reference counting and explicit sharing
+ *
+ * Copyright (C) 1992-2006 Trolltech ASA.
+ * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ *
+ * This file may be used under the terms of the GNU General Public
+ * License version 2.0 as published by the Free Software Foundation
+ * and appearing in the file LICENSE.GPL included in the packaging of
+ * this file.  Please review the following information to ensure GNU
+ * General Public Licensing requirements will be met:
+ * http://www.trolltech.com/products/qt/opensource.html
+ *
+ * This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+ * WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * ============================================================ */
+
+#ifndef DSHAREDDATA_H
+#define DSHAREDDATA_H
+
+// Qt includes
+
+#include <QAtomic>
+
+// Local includes
+
+#include "digikam_export.h"
+
+
+template <class T> class DSharedDataPointer;
+
+class DIGIKAM_EXPORT DSharedData
+{
+    /**
+     * Classes that are used with a DSharedDataPointer shall inherit from
+     * this class.
+     */
+public:
+    QAtomic ref;
+
+    inline DSharedData() : ref(0) { }
+    inline DSharedData(const DSharedData &) : ref(0) { }
+
+private:
+    // using the assignment operator would lead to corruption in the ref-counting
+    DSharedData &operator=(const DSharedData &);
+};
+
+template <class T> class DSharedDataPointer
+{
+public:
+    /**
+     * Use this class to store pointers to a shared data object, which
+     * inherits DSharedData.
+     * This class is inspired by QSharedDataPointer, but differs in two points:
+     * - it provides "explicit sharing": A change to the data affects all classes
+     *   keeping a pointer to the shared data. No automatic copying is done.
+     * - no method "detach()" is provided, ackknowledging the fact that the
+     *   copy constructor of class T may not be used.
+     */
+
+    /** Various pperators for accessing the pointer const and non-const */
+    inline T &operator*() { return *d; }
+    inline const T &operator*() const { return *d; }
+    inline T *operator->() { return d; }
+    inline const T *operator->() const { return d; }
+    inline operator T *() { return d; }
+    inline operator const T *() const { return d; }
+    inline T *data() { return d; }
+
+    inline const T *data() const { return d; }
+    inline const T *constData() const { return d; }
+
+    /** This method carries out a const_cast to keep you from writing this out.
+     *  Typically, this should only be used to implement the lazy loading
+     *  caching technique or similar.
+     */
+    inline T* constCastData() const { return const_cast<T*>(d); }
+
+    inline bool operator==(const DSharedDataPointer<T> &other) const { return d == other.d; }
+    inline bool operator!=(const DSharedDataPointer<T> &other) const { return d != other.d; }
+
+    inline DSharedDataPointer() { d = 0; }
+
+    explicit inline DSharedDataPointer(T *data) : d(data)
+        { if (d) d->ref.ref(); }
+
+    inline ~DSharedDataPointer()
+        { if (d && !d->ref.deref()) delete d; }
+
+    inline DSharedDataPointer(const DSharedDataPointer<T> &o) : d(o.d) { if (d) d->ref.ref(); }
+
+    inline DSharedDataPointer<T> & operator=(const DSharedDataPointer<T> &o) {
+        delete assign(o);
+        return *this;
+    }
+
+    inline DSharedDataPointer &operator=(T *o) {
+        delete assign(o);
+        return *this;
+    }
+
+    /**
+     * The assign operator is like operator=,
+     * with the difference that the old pointer is not deleted
+     * if its reference count is 0, but returned.
+     * Use this if you need to do your own deleting, if e.g.
+     * the object need to be removed from a list or a cache.
+     * @returns A T object with reference count 0, which may be deleted;
+     *          or 0 if no object need to be dropped.
+     */
+    inline T *assign(const DSharedDataPointer<T> &o)
+    {
+        if (o.d != d) {
+            T *x = o.d;
+            if (x) x->ref.ref();
+            x = qAtomicSetPtr(&d, x);
+            if (x && !x->ref.deref())
+                return x;
+        }
+        return 0;
+    }
+
+    inline T *assign(T *o)
+    {
+        if (o != d) {
+            T *x = o;
+            if (x) x->ref.ref();
+            x = qAtomicSetPtr(&d, x);
+            if (x && !x->ref.deref())
+                return x;
+        }
+        return 0;
+    }
+
+    /**
+     * Semantics like assign, but no new pointer is assigned to this.
+     */
+    inline T *unassign()
+    {
+        return assign(0);
+    }
+
+    inline bool operator!() const { return !d; }
+
+private:
+    T *d;
+};
+
+
+#endif // DSHAREDDATA_H
+
