@@ -3,9 +3,10 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor/
                      ${CMAKE_SOURCE_DIR}/libs/dmetadata/
                    )
 
+ADD_SUBDIRECTORY( common )
+ADD_SUBDIRECTORY( iccprofiles )
 ADD_SUBDIRECTORY( metadata )
 ADD_SUBDIRECTORY( imageplugins )
-ADD_SUBDIRECTORY( common )
 
 
 SET(libcommonwidgets_SRCS common/colorgradientwidget.cpp 
@@ -49,10 +50,11 @@ SET(libimagepluginswidgets_SRCS imageplugins/imageregionwidget.cpp
    )
 
 
-SET(libwidgets_STAT_SRCS ${libimagepluginswidgets_SRCS} 
-                         ${libmetadatawidgets_SRCS} 
+SET(libwidgets_STAT_SRCS ${libcommonwidgets_SRCS}
                          ${libiccprofileswidgets_SRCS} 
-                         ${libcommonwidgets_SRCS})
+                         ${libmetadatawidgets_SRCS} 
+                         ${libimagepluginswidgets_SRCS} 
+   )
 
 KDE4_AUTOMOC(${libwidgets_STAT_SRCS})
 
