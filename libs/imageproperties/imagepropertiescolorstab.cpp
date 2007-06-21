@@ -288,10 +288,13 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     // -------------------------------------------------------------
 
-    Q3GroupBox *gbox = new Q3GroupBox(2, Qt::Horizontal, i18n("Statistics"), histogramPage);
+    QGroupBox *gbox = new QGroupBox(i18n("Statistics"), histogramPage);
     gbox->setWhatsThis( i18n("<p>Here you can see the statistical results calculated from the "
                              "selected histogram part. These values are available for all "
                              "channels."));
+    QGridLayout* grid = new QGridLayout();
+    grid->setSpacing(KDialog::spacingHint());
+    gbox->setLayout(grid);
 
     QLabel *label4 = new QLabel(i18n("Mean:"), gbox);
     label4->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
@@ -323,32 +326,54 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     d->labelPercentileValue = new QLabel(gbox);
     d->labelPercentileValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
 
+    grid->addWidget(label4,                  0, 0, 0, 0);
+    grid->addWidget(d->labelMeanValue,       0, 0, 1, 1);
+    grid->addWidget(label5,                  1, 1, 0, 0);
+    grid->addWidget(d->labelPixelsValue,     1, 1, 1, 1);
+    grid->addWidget(label6,                  2, 2, 0, 0);
+    grid->addWidget(d->labelStdDevValue,     2, 2, 1, 1);
+    grid->addWidget(label7,                  3, 3, 0, 0);
+    grid->addWidget(d->labelCountValue,      3, 3, 1, 1);
+    grid->addWidget(label8,                  4, 4, 0, 0);
+    grid->addWidget(d->labelMedianValue,     4, 4, 1, 1);
+    grid->addWidget(label9,                  5, 5, 0, 0);
+    grid->addWidget(d->labelPercentileValue, 5, 5, 1, 1);
+
     topLayout->addWidget(gbox, 6, 6, 0, 3);
 
     // -------------------------------------------------------------
 
-    Q3GroupBox *gbox2 = new Q3GroupBox(2, Qt::Horizontal, histogramPage);
-    gbox2->setFrameStyle( Q3Frame::NoFrame );
-    gbox2->setInsideMargin(0);
+    QWidget *gbox2 = new QWidget(histogramPage);
+    QGridLayout* grid2 = new QGridLayout();
+    grid->setSpacing(KDialog::spacingHint());
+    gbox2->setLayout(grid2);
 
     QLabel *label11     = new QLabel(i18n("Color depth:"), gbox2);
     label11->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     d->labelColorDepth  = new QLabel(gbox2);
     d->labelColorDepth->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+
     QLabel *label12     = new QLabel(i18n("Alpha Channel:"), gbox2);
     label12->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     d->labelAlphaChannel = new QLabel(gbox2);
     d->labelAlphaChannel->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
 
+    grid2->addWidget(label11,              0, 0, 0, 0);
+    grid2->addWidget(d->labelColorDepth,   0, 0, 1, 1);
+    grid2->addWidget(label12,              1, 1, 0, 0);
+    grid2->addWidget(d->labelAlphaChannel, 1, 1, 1, 1);
+
     topLayout->addWidget(gbox2, 7, 7, 0, 3);
 
     topLayout->setRowStretch(8, 10);
-    d->tab->insertTab(histogramPage, i18n("Histogram"), ImagePropertiesColorsTabPriv::HISTOGRAM );
+
+    d->tab->insertTab(ImagePropertiesColorsTabPriv::HISTOGRAM, histogramPage, i18n("Histogram"));
 
     // ICC Profiles tab area ---------------------------------------
 
+
     d->iccProfileWidget = new ICCProfileWidget(d->tab);
-    d->tab->insertTab(d->iccProfileWidget, i18n("ICC profile"), ImagePropertiesColorsTabPriv::ICCPROFILE);
+    d->tab->insertTab(ImagePropertiesColorsTabPriv::ICCPROFILE, d->iccProfileWidget, i18n("ICC profile"));
 
     // -------------------------------------------------------------
 
@@ -385,16 +410,19 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     // -- read config ---------------------------------------------------------
 
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("Image Properties SideBar");
-    d->tab->setCurrentPage(config->readNumEntry("ImagePropertiesColors Tab",
-                           ImagePropertiesColorsTabPriv::HISTOGRAM));
-    d->iccProfileWidget->setMode(config->readNumEntry("ICC Level", ICCProfileWidget::SIMPLE));
-    d->iccProfileWidget->setCurrentItemByKey(config->readEntry("Current ICC Item", QString()));
+    KConfigGroup group = config->group(QString("Image Properties SideBar"));
 
-    d->channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    d->scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
-    d->colorsCB->setCurrentItem(config->readNumEntry("Histogram Color", 0));       // Red.
-    d->regionBG->setButton(config->readNumEntry("Histogram Rendering", HistogramWidget::FullImageHistogram));
+    d->tab->setCurrentIndex(group.readEntry("ImagePropertiesColors Tab",
+                            (int)ImagePropertiesColorsTabPriv::HISTOGRAM));
+    d->iccProfileWidget->setMode(group.readEntry("ICC Level", (int)ICCProfileWidget::SIMPLE));
+    d->iccProfileWidget->setCurrentItemByKey(group.readEntry("Current ICC Item", QString()));
+
+    d->channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
+    d->scaleBG->button(group.readEntry("Histogram Scale",
+                                       (int)HistogramWidget::LogScaleHistogram))->setChecked(true);
+    d->colorsCB->setCurrentIndex(group.readEntry("Histogram Color", 0));       // Red.
+    d->regionBG->button(group.readEntry("Histogram Rendering", 
+                                        (int)HistogramWidget::FullImageHistogram))->setChecked(true);
 }
 
 ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
