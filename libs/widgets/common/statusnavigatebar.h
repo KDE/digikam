@@ -27,8 +27,8 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qstring.h>
+#include <QWidget>
+#include <QString>
 
 // Local includes.
 

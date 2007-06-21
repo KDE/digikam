@@ -27,10 +27,9 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qrect.h>
-#include <qimage.h>
-//Added by qt3to4:
+#include <QWidget>
+#include <QRect>
+#include <QImage>
 #include <QPixmap>
 #include <QHideEvent>
 #include <QMouseEvent>

@@ -26,8 +26,7 @@
 
 // KDE includes.
 
-
-#include <qstring.h>
+#include <QString>
 
 // Local includes
 

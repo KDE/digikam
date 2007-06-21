@@ -27,8 +27,8 @@
 
 // KDE includes.
 
-#include <q3widgetstack.h>
-#include <qstring.h>
+#include <Q3WidgetStack>
+#include <QString>
 
 // Local includes
 

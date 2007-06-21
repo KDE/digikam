@@ -26,10 +26,8 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-//Added by qt3to4:
+#include <QWidget>
 #include <QEvent>
-#include <QCustomEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
 
@@ -37,8 +35,6 @@
 
 #include "dcolor.h"
 #include "digikam_export.h"
-
-class QCustomEvent;
 
 namespace Digikam
 {
@@ -115,12 +111,11 @@ protected:
     
 private:
         
-    void customEvent(QCustomEvent *event);
+    void customEvent(QEvent *event);
 
 private:
 
-    CurvesWidgetPriv* d;
-    
+    CurvesWidgetPriv* d;    
 };
 
 }  // NameSpace Digikam

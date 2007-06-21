@@ -26,9 +26,8 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-//Added by qt3to4:
-#include <QCustomEvent>
+#include <QWidget>
+#include <QEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
 
@@ -36,8 +35,6 @@
 
 #include "dcolor.h"
 #include "digikam_export.h"
-
-class QCustomEvent;
 
 namespace Digikam
 {
@@ -167,13 +164,12 @@ protected:
 
 private :
 
-    void customEvent(QCustomEvent *event);
+    void customEvent(QEvent *event);
     void notifyValuesChanged();
 
 private:
 
     HistogramWidgetPriv* d;
-
 };
 
 }  // namespace Digikam
