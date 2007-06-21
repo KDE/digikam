@@ -146,7 +146,7 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
     m_imagePreviewWidget = new ImagePannelWidget(470, 350, name + QString(" Tool Dialog"),
                                vbox, separateViewMode);
     topLayout->addWidget(m_imagePreviewWidget);
-    vbox->setLayout(d->mainLayout);
+    vbox->setLayout(topLayout);
 
     // -------------------------------------------------------------
 
