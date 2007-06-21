@@ -26,12 +26,12 @@ KDE4_ADD_LIBRARY(libimagepropertiescamgui ${libimagepropertiescamgui_STAT_SRCS})
 
 # Static library for Showfoto ###############################################
 
-SET(libimagepropertiesshowfoto_STAT_SRCS imagepropertiessidebar.cpp 
-                                         navigatebarwidget.cpp 
+SET(libimagepropertiesshowfoto_STAT_SRCS navigatebarwidget.cpp 
+                                         navigatebartab.cpp
+					                     imagepropertiessidebar.cpp 
+                                         imagepropertiestab.cpp 
                                          imagepropertiesmetadatatab.cpp 
                                          imagepropertiescolorstab.cpp 
-                                         imagepropertiestab.cpp 
-                                         navigatebartab.cpp
    )
 
 KDE4_AUTOMOC(${libimagepropertiesshowfoto_STAT_SRCS})
@@ -41,15 +41,15 @@ KDE4_ADD_LIBRARY(libimagepropertiesshowfoto ${libimagepropertiesshowfoto_STAT_SR
 
 # Static library for digiKam ################################################
 
-SET(libimagepropertiesdigikam_STAT_SRCS imagedescedittab.cpp 
+SET(libimagepropertiesdigikam_STAT_SRCS navigatebarwidget.cpp 
+                                        navigatebartab.cpp
+                                        talbumlistview.cpp 
                                         imagepropertiessidebar.cpp 
                                         imagepropertiessidebardb.cpp 
-                                        talbumlistview.cpp 
+                                        imagepropertiestab.cpp 
+                                        imagedescedittab.cpp 
                                         imagepropertiesmetadatatab.cpp 
                                         imagepropertiescolorstab.cpp 
-                                        navigatebarwidget.cpp 
-                                        imagepropertiestab.cpp 
-                                        navigatebartab.cpp
    )
 
 KDE4_AUTOMOC(${libimagepropertiesdigikam_STAT_SRCS})
