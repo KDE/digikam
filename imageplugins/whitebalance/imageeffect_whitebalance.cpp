@@ -151,7 +151,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
                                      "graph."));
 
     QPushButton *linHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
@@ -159,7 +159,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     linHistoButton->setToggleButton(true);
 
     QPushButton *logHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
@@ -238,7 +238,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     directory = KGlobal::dirs()->findResourceDir("color-picker-grey", "color-picker-grey.png");
     m_pickTemperature->setPixmap( QPixmap( directory + "color-picker-grey.png" ) );
     m_pickTemperature->setToggleButton(true);
-    QToolTip::add( m_pickTemperature, i18n( "Temperature tone color picker." ) );
+    m_pickTemperature->setToolTip( i18n( "Temperature tone color picker." ) );
     m_pickTemperature->setWhatsThis( i18n("<p>With this button, you can pick the color from original "
                                              "image used to set white color balance temperature and "
                                              "green component."));
@@ -287,7 +287,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_mainExposureLabel  = new QLabel(i18n("Main:"), gboxSettings);
     m_autoAdjustExposure = new QPushButton(gboxSettings);
     m_autoAdjustExposure->setPixmap(kapp->iconLoader()->loadIcon("run", (KIcon::Group)KIcon::Toolbar));
-    QToolTip::add( m_autoAdjustExposure, i18n( "Auto exposure adjustments" ) );
+    m_autoAdjustExposure->setToolTip( i18n( "Auto exposure adjustments" ) );
     m_autoAdjustExposure->setWhatsThis( i18n("<p>With this button, you can automatically adjust Exposure "
                                                 "and Black Point values."));
     m_mainExposureInput = new KDoubleNumInput(gboxSettings);

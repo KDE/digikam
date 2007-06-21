@@ -192,7 +192,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
                                       "graph."));
 
     QPushButton *linHistoButton = new QPushButton( d->scaleBG );
-    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     d->scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
@@ -200,7 +200,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     linHistoButton->setToggleButton(true);
 
     QPushButton *logHistoButton = new QPushButton( d->scaleBG );
-    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     d->scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
@@ -230,7 +230,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
                                        "selection."));
 
     QPushButton *fullImageButton = new QPushButton( d->regionBG );
-    QToolTip::add( fullImageButton, i18n( "<p>Full Image" ) );
+    fullImageButton->setToolTip( i18n( "<p>Full Image" ) );
     d->regionBG->insert(fullImageButton, HistogramWidget::FullImageHistogram);
     KGlobal::dirs()->addResourceType("image-full", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("image-full", "image-full.png");
@@ -238,7 +238,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     fullImageButton->setToggleButton(true);
 
     QPushButton *SelectionImageButton = new QPushButton( d->regionBG );
-    QToolTip::add( SelectionImageButton, i18n( "<p>Selection" ) );
+    SelectionImageButton->setToolTip( i18n( "<p>Selection" ) );
     d->regionBG->insert(SelectionImageButton, HistogramWidget::ImageSelectionHistogram);
     KGlobal::dirs()->addResourceType("image-selection", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("image-selection", "image-selection.png");

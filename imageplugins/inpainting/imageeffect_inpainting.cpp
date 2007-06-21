@@ -173,7 +173,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     KGlobal::dirs()->addResourceType("logo-cimg", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("logo-cimg", "logo-cimg.png");
     cimgLogoLabel->setPixmap( QPixmap( directory + "logo-cimg.png" ) );
-    QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
+    cimgLogoLabel->setToolTip( i18n("Visit CImg library website"));
 
     QLabel *typeLabel = new QLabel(i18n("Filtering type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);

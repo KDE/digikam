@@ -150,7 +150,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     d->cornerButton = new QToolButton(this);
     d->cornerButton->setIconSet(SmallIcon("move"));
     d->cornerButton->hide();
-    QToolTip::add(d->cornerButton, i18n("Pan the image"));
+    d->cornerButton->setToolTip( i18n("Pan the image"));
     setCornerWidget(d->cornerButton);
 
     setLineWidth(5);

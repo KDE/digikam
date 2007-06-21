@@ -541,13 +541,13 @@ void EditorWindow::setupStatusBar()
     d->selectLabel->setAlignment(Qt::AlignCenter);
     d->selectLabel->setMaximumHeight(fontMetrics().height()+2);   
     statusBar()->addWidget(d->selectLabel, 100);
-    QToolTip::add(d->selectLabel, i18n("Information about current selection area"));
+    d->selectLabel->setToolTip( i18n("Information about current selection area"));
 
     m_resLabel  = new QLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
     m_resLabel->setMaximumHeight(fontMetrics().height()+2);   
     statusBar()->addWidget(m_resLabel, 100);
-    QToolTip::add(m_resLabel, i18n("Information about image size"));
+    m_resLabel->setToolTip( i18n("Information about image size"));
 
     d->underExposureIndicator = new QToolButton(statusBar());
     d->underExposureIndicator->setIconSet(SmallIcon("underexposure"));
@@ -1711,7 +1711,7 @@ void EditorWindow::setColorManagedViewIndicatorToolTip(bool available, bool cmv)
     {
         tooltip = i18n("Color Management is not configured, so the Color Managed View is not available");
     }
-    QToolTip::add(d->cmViewIndicator, tooltip);
+    d->cmViewIndicator->setToolTip( tooltip);
 }
 
 void EditorWindow::slotToggleUnderExposureIndicator()
@@ -1731,7 +1731,7 @@ void EditorWindow::slotToggleUnderExposureIndicator()
 void EditorWindow::setUnderExposureToolTip(bool uei)
 {
     QToolTip::remove(d->underExposureIndicator); 
-    QToolTip::add(d->underExposureIndicator, 
+    d->underExposureIndicator->setToolTip( 
                   uei ? i18n("Under-Exposure indicator is enabled") 
                       : i18n("Under-Exposure indicator is disabled"));
 }
@@ -1753,7 +1753,7 @@ void EditorWindow::slotToggleOverExposureIndicator()
 void EditorWindow::setOverExposureToolTip(bool oei)
 {
     QToolTip::remove(d->overExposureIndicator); 
-    QToolTip::add(d->overExposureIndicator, 
+    d->overExposureIndicator->setToolTip( 
                   oei ? i18n("Over-Exposure indicator is enabled") 
                       : i18n("Over-Exposure indicator is disabled"));
 }

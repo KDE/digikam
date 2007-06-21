@@ -388,7 +388,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     pixmapLogo->setScaledContents( false );
     pixmapLogo->setPaletteBackgroundColor( QColor(201, 208, 255) );
     pixmapLogo->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
-    QToolTip::add(pixmapLogo, i18n("Visit digiKam project website"));
+    pixmapLogo->setToolTip( i18n("Visit digiKam project website"));
     KGlobal::dirs()->addResourceType("logo-digikam", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("logo-digikam", "logo-digikam.png");
     pixmapLogo->setPixmap( QPixmap( directory + "logo-digikam.png" ) );

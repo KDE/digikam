@@ -144,7 +144,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                      "graph."));
 
     QPushButton *linHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
@@ -152,7 +152,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     linHistoButton->setToggleButton(true);
 
     QPushButton *logHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
@@ -265,7 +265,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     KGlobal::dirs()->addResourceType("logo-lcms", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("logo-lcms", "logo-lcms.png");
     lcmsLogoLabel->setPixmap( QPixmap( directory + "logo-lcms.png" ) );
-    QToolTip::add(lcmsLogoLabel, i18n("Visit Little CMS project website"));
+    lcmsLogoLabel->setToolTip( i18n("Visit Little CMS project website"));
 
     zeroPageLayout->addMultiCellWidget(m_doSoftProofBox, 0, 0, 0, 0);
     zeroPageLayout->addMultiCellWidget(m_checkGamutBox, 1, 1, 0, 0);

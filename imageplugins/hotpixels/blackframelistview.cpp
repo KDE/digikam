@@ -70,7 +70,7 @@ BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, KUrl 
 
 void BlackFrameListViewItem::activate()
 {
-    QToolTip::add( m_parent, m_blackFrameDesc);
+    m_parent->setToolTip( m_blackFrameDesc);
     emit parsed(m_hotPixels, m_blackFrameURL);
 }
 

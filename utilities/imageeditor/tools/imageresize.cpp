@@ -206,7 +206,7 @@ ImageResize::ImageResize(QWidget* parent)
                                      "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("logo-cimg", "logo-cimg.png");
     cimgLogoLabel->setPixmap( QPixmap( directory + "logo-cimg.png" ) );
-    QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
+    cimgLogoLabel->setToolTip( i18n("Visit CImg library website"));
 
     d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
     d->useGreycstorationBox->setWhatsThis( i18n("<p>Enable this option to restore photograph content. "

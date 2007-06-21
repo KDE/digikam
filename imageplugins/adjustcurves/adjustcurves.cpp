@@ -155,7 +155,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
                                      "if it is used, all values (small and large) will be visible on the graph."));
     
     QPushButton *linHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     m_scaleBG->insert(linHistoButton, Digikam::CurvesWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
@@ -163,7 +163,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     linHistoButton->setToggleButton(true);
     
     QPushButton *logHistoButton = new QPushButton( m_scaleBG );
-    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     m_scaleBG->insert(logHistoButton, Digikam::CurvesWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
@@ -231,7 +231,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     directory = KGlobal::dirs()->findResourceDir("curvefree", "curvefree.png");
     m_curveFree->setPixmap( QPixmap( directory + "curvefree.png" ) );
     m_curveFree->setToggleButton(true);
-    QToolTip::add( m_curveFree, i18n( "Curve free mode" ) );
+    m_curveFree->setToolTip( i18n( "Curve free mode" ) );
     m_curveFree->setWhatsThis( i18n("<p>With this button, you can draw your curve free-hand with the mouse."));
     m_curveSmooth = new QPushButton(m_curveType);
     m_curveType->insert(m_curveSmooth, SmoothDrawing);
@@ -240,7 +240,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     directory = KGlobal::dirs()->findResourceDir("curvemooth", "curvemooth.png");
     m_curveSmooth->setPixmap( QPixmap( directory + "curvemooth.png" ) );
     m_curveSmooth->setToggleButton(true);
-    QToolTip::add( m_curveSmooth, i18n( "Curve smooth mode" ) );
+    m_curveSmooth->setToolTip( i18n( "Curve smooth mode" ) );
     m_curveSmooth->setWhatsThis( i18n("<p>With this button, you constrains the curve type to a smooth line with tension."));
     m_curveType->setExclusive(true);
     m_curveType->setButton(SmoothDrawing);
@@ -256,7 +256,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     directory = KGlobal::dirs()->findResourceDir("color-picker-black", "color-picker-black.png");
     m_pickBlack->setPixmap( QPixmap( directory + "color-picker-black.png" ) );
     m_pickBlack->setToggleButton(true);
-    QToolTip::add( m_pickBlack, i18n( "All channels shadow tone color picker" ) );
+    m_pickBlack->setToolTip( i18n( "All channels shadow tone color picker" ) );
     m_pickBlack->setWhatsThis( i18n("<p>With this button, you can pick the color from original image used to set <b>Shadow Tone</b> "
                                        "smooth curves point on Red, Green, Blue, and Luminosity channels."));
     m_pickGray  = new QPushButton(m_pickerColorButtonGroup);
@@ -266,7 +266,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     directory = KGlobal::dirs()->findResourceDir("color-picker-grey", "color-picker-grey.png");
     m_pickGray->setPixmap( QPixmap( directory + "color-picker-grey.png" ) );
     m_pickGray->setToggleButton(true);
-    QToolTip::add( m_pickGray, i18n( "All channels middle tone color picker" ) );
+    m_pickGray->setToolTip( i18n( "All channels middle tone color picker" ) );
     m_pickGray->setWhatsThis( i18n("<p>With this button, you can pick the color from original image used to set <b>Middle Tone</b> "
                                       "smooth curves point on Red, Green, Blue, and Luminosity channels."));
     m_pickWhite = new QPushButton(m_pickerColorButtonGroup);
@@ -276,7 +276,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     directory = KGlobal::dirs()->findResourceDir("color-picker-white", "color-picker-white.png");
     m_pickWhite->setPixmap( QPixmap( directory + "color-picker-white.png" ) );
     m_pickWhite->setToggleButton(true);
-    QToolTip::add( m_pickWhite, i18n( "All channels highlight tone color picker" ) );
+    m_pickWhite->setToolTip( i18n( "All channels highlight tone color picker" ) );
     m_pickWhite->setWhatsThis( i18n("<p>With this button, you can pick the color from original image used to set <b>Highlight Tone</b> "
                                        "smooth curves point on Red, Green, Blue, and Luminosity channels."));
     m_pickerColorButtonGroup->setExclusive(true);
@@ -286,7 +286,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
     m_resetButton->setPixmap( SmallIcon("reload_page", 18) );
-    QToolTip::add( m_resetButton, i18n( "Reset current channel curves' values." ) );
+    m_resetButton->setToolTip( i18n( "Reset current channel curves' values." ) );
     m_resetButton->setWhatsThis( i18n("<p>If you press this button, all curves' values "
                                          "from the current selected channel "
                                          "will be reset to the default values."));

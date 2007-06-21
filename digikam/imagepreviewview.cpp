@@ -149,7 +149,7 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
     d->cornerButton = new QToolButton(this);
     d->cornerButton->setIconSet(SmallIcon("move"));
     d->cornerButton->hide();
-    QToolTip::add(d->cornerButton, i18n("Pan the image to a region"));
+    d->cornerButton->setToolTip( i18n("Pan the image to a region"));
     setCornerWidget(d->cornerButton);
 
     // ------------------------------------------------------------

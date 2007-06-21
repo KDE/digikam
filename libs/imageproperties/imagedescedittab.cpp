@@ -32,7 +32,7 @@
 #include <qtoolbutton.h>
 #include <qpushbutton.h>
 #include <qicon.h>
-#include <q3whatsthis.h>
+
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <QKeyEvent>
@@ -185,7 +185,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->tagsSearchEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
 
     d->assignedTagsBtn = new QToolButton(tagsSearch);
-    QToolTip::add(d->assignedTagsBtn, i18n("Already assigned tags"));
+    d->assignedTagsBtn->setToolTip( i18n("Already assigned tags"));
     d->assignedTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-assigned",
                                    KIcon::NoGroup, KIcon::SizeSmall, 
                                    KIcon::DefaultState, 0, true));
@@ -193,7 +193,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     d->recentTagsBtn      = new QToolButton(tagsSearch);
     Q3PopupMenu *popupMenu = new Q3PopupMenu(d->recentTagsBtn);
-    QToolTip::add(d->recentTagsBtn, i18n("Recent Tags"));
+    d->recentTagsBtn->setToolTip( i18n("Recent Tags"));
     d->recentTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-recents", 
                                  KIcon::NoGroup, KIcon::SizeSmall, 
                                  KIcon::DefaultState, 0, true));
@@ -210,13 +210,13 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     d->revertBtn = new QToolButton(buttonsBox);
     d->revertBtn->setIconSet(SmallIcon("reload_page"));
-    QToolTip::add(d->revertBtn, i18n("Revert all changes"));
+    d->revertBtn->setToolTip( i18n("Revert all changes"));
     d->revertBtn->setEnabled(false);
     
     d->applyBtn = new QPushButton(i18n("Apply"), buttonsBox);
     d->applyBtn->setIconSet(SmallIcon("button_ok"));
     d->applyBtn->setEnabled(false);
-    QToolTip::add(d->applyBtn, i18n("Apply all changes to pictures"));
+    d->applyBtn->setToolTip( i18n("Apply all changes to pictures"));
     buttonsBox->setStretchFactor(d->applyBtn, 10);
 
     d->moreButton = new QPushButton(i18n("More"), buttonsBox);

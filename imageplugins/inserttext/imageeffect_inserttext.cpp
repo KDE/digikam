@@ -136,25 +136,25 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     m_alignButtonGroup->insert(alignLeft, ALIGN_LEFT);
     alignLeft->setPixmap( icon.loadIcon( "text_left", (KIcon::Group)KIcon::Small ) );
     alignLeft->setToggleButton(true);
-    QToolTip::add( alignLeft, i18n( "Align text to the left" ) );
+    alignLeft->setToolTip( i18n( "Align text to the left" ) );
     
     QPushButton *alignRight = new QPushButton( m_alignButtonGroup );
     m_alignButtonGroup->insert(alignRight, ALIGN_RIGHT);
     alignRight->setPixmap( icon.loadIcon( "text_right", (KIcon::Group)KIcon::Small ) );
     alignRight->setToggleButton(true);
-    QToolTip::add( alignRight, i18n( "Align text to the right" ) );
+    alignRight->setToolTip( i18n( "Align text to the right" ) );
     
     QPushButton *alignCenter = new QPushButton( m_alignButtonGroup );
     m_alignButtonGroup->insert(alignCenter, ALIGN_CENTER);
     alignCenter->setPixmap( icon.loadIcon( "text_center", (KIcon::Group)KIcon::Small ) );
     alignCenter->setToggleButton(true);
-    QToolTip::add( alignCenter, i18n( "Align text to center" ) );
+    alignCenter->setToolTip( i18n( "Align text to center" ) );
     
     QPushButton *alignBlock = new QPushButton( m_alignButtonGroup );
     m_alignButtonGroup->insert(alignBlock, ALIGN_BLOCK);
     alignBlock->setPixmap( icon.loadIcon( "text_block", (KIcon::Group)KIcon::Small ) );
     alignBlock->setToggleButton(true);
-    QToolTip::add( alignBlock, i18n( "Align text to a block" ) );
+    alignBlock->setToolTip( i18n( "Align text to a block" ) );
     
     m_alignButtonGroup->setExclusive(true);
     m_alignButtonGroup->setFrameShape(Q3Frame::NoFrame);
@@ -183,10 +183,10 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     // -------------------------------------------------------------
         
     m_borderText = new QCheckBox( i18n( "Add border"), gbox2 );
-    QToolTip::add( m_borderText, i18n( "Add a solid border around text using current text color" ) );
+    m_borderText->setToolTip( i18n( "Add a solid border around text using current text color" ) );
 
     m_transparentText = new QCheckBox( i18n( "Semi-transparent"), gbox2 );
-    QToolTip::add( m_transparentText, i18n( "Use semi-transparent text background under image" ) );
+    m_transparentText->setToolTip( i18n( "Use semi-transparent text background under image" ) );
 
     gridBox2->addMultiCellWidget(m_borderText, 7, 7, 0, 1);                            
     gridBox2->addMultiCellWidget(m_transparentText, 8, 8, 0, 1);                            
