@@ -24,11 +24,9 @@
 
 // Qt includes.
 
-#include <qlayout.h>
-#include <q3widgetstack.h>
-#include <qlabel.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <Q3WidgetStack>
+#include <QLabel>
+#include <QVBoxLayout>
 
 // Local includes.
 
@@ -51,7 +49,7 @@ public:
         label       = 0;
     }
 
-    Q3WidgetStack      *stack;
+    Q3WidgetStack     *stack;
 
     QLabel            *label;
 
@@ -59,10 +57,11 @@ public:
 };
 
 NavigateBarTab::NavigateBarTab(QWidget* parent)
-              : QWidget(parent, 0, Qt::WDestructiveClose)
+              : QWidget(parent)
 {
     d = new NavigateBarTabPriv;
     m_navigateBarLayout = 0;
+    setAttribute(Qt::WA_DeleteOnClose);
 }
 
 NavigateBarTab::~NavigateBarTab()
@@ -72,7 +71,8 @@ NavigateBarTab::~NavigateBarTab()
 
 void NavigateBarTab::setupNavigateBar(bool withBar)
 {
-    m_navigateBarLayout = new Q3VBoxLayout(this);
+    m_navigateBarLayout = new QVBoxLayout(this);
+    setLayout(m_navigateBarLayout);
 
     if (withBar)
     {

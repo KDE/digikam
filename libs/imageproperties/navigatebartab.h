@@ -27,10 +27,8 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qstring.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QWidget>
+#include <QString>
 
 // KDE includes.
 
@@ -41,7 +39,7 @@
 #include "digikam_export.h"
 #include "imagepropertiessidebar.h"
 
-class Q3VBoxLayout;
+class QVBoxLayout;
 
 namespace Digikam
 {
@@ -76,9 +74,8 @@ protected:
 
 protected:
 
-    Q3VBoxLayout        *m_navigateBarLayout;
+    QVBoxLayout        *m_navigateBarLayout;
     NavigateBarTabPriv *d;
-
 };
 
 }  // NameSpace Digikam

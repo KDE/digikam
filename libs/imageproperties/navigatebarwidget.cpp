@@ -68,6 +68,7 @@ NavigateBarWidget::NavigateBarWidget(QWidget *parent, bool show)
     lay->addWidget(d->navBar);
     lay->addSpacing( KDialog::spacingHint() );
     lay->addWidget(d->filename);
+    setLayout(lay);
 
     if (!show) hide();
 
