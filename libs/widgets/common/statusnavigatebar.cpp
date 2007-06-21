@@ -74,22 +74,22 @@ StatusNavigateBar::StatusNavigateBar(QWidget *parent)
     d->firstButton = new QToolButton(this);
     d->firstButton->setAutoRaise(true);
     d->firstButton->setIconSet(SmallIconSet("start"));
-    QToolTip::add(d->firstButton, i18n("Go to the first item"));
+    d->firstButton->setToolTip( i18n("Go to the first item"));
 
     d->prevButton = new QToolButton(this);
     d->prevButton->setAutoRaise(true);
     d->prevButton->setIconSet(SmallIconSet("back"));
-    QToolTip::add(d->prevButton, i18n("Go to the previous item"));
+    d->prevButton->setToolTip( i18n("Go to the previous item"));
 
     d->nextButton = new QToolButton(this);
     d->nextButton->setAutoRaise(true);
     d->nextButton->setIconSet(SmallIconSet("forward"));
-    QToolTip::add(d->nextButton, i18n("Go to the next item"));
+    d->nextButton->setToolTip( i18n("Go to the next item"));
 
     d->lastButton = new QToolButton(this);
     d->lastButton->setAutoRaise(true);
     d->lastButton->setIconSet(SmallIconSet("finish"));
-    QToolTip::add(d->lastButton, i18n("Go to the last item"));
+    d->lastButton->setToolTip( i18n("Go to the last item"));
 
     lay->addWidget(d->firstButton);
     lay->addWidget(d->prevButton);

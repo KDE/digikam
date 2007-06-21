@@ -929,7 +929,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 
        tipText += "</table>";
 
-       QToolTip::add( this, tipText);
+       this->setToolTip( tipText);
     }
 
     // Drawing frame.

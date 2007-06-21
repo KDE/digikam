@@ -348,7 +348,7 @@ void ImagePannelWidget::slotZoomFactorChanged(double zoom)
     int size    = (int)((zoom - b) /a); 
 
     d->zoomBar->setZoomSliderValue(size);
-    d->zoomBar->setZoomTrackerText(i18n("zoom: %1%").arg((int)(zoom*100.0)));
+    d->zoomBar->setZoomTrackerText(i18n("zoom: %1%",(int)(zoom*100.0)));
 
     d->zoomBar->setEnableZoomPlus(true);
     d->zoomBar->setEnableZoomMinus(true);
@@ -475,10 +475,10 @@ void ImagePannelWidget::slotSetImageRegionPosition(QRect rect, bool targetDone)
 
 void ImagePannelWidget::updateSelectionInfo(QRect rect)
 {
-    QToolTip::add( d->imagePanIconWidget,
-                   i18n("<nobr>(%1,%2)(%3x%4)</nobr>")
-                        .arg(rect.left()).arg(rect.top())
-                        .arg(rect.width()).arg(rect.height()));
+    d->imagePanIconWidget->setToolTip(
+                   i18n("<nobr>(%1,%2)(%3x%4)</nobr>"
+                        ,rect.left(),rect.top()
+                        ,rect.width(),rect.height()));
 }
 
 }  // NameSpace Digikam
