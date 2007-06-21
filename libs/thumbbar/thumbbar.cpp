@@ -1036,8 +1036,8 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
 
             if (settings.showPhotoMake)
             {
-                str = QString("%1 / %2",photoInfo.make.isEmpty() ? unavailable : photoInfo.make,
-                                        photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
+                str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? unavailable : photoInfo.make)
+                                        .arg(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 metaStr += m_cellBeg + i18n("Make/Model:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
             }
