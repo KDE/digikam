@@ -984,7 +984,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
             KFileMetaInfo meta = fi.metaInfo();
     
 /*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
-                            Check if new method to search "Dimensions" infromation is enough.
+                            Check if new method to search "Dimensions" information is enough.
 
             if (meta.isValid())
             {
@@ -1046,7 +1046,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
             {
                 if (photoInfo.dateTime.isValid())
                 {
-                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime,  KLocale::ShortDate, true);
+                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
                     if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                     metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
                 }
