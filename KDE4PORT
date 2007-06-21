@@ -16,14 +16,14 @@ ORDER   DIRECTORIES                       ASSIGNED      STATUS      REMARK
         |---curves                        Gilles        DONE
         |---database                      Marcel
         |-----sqlite2                     Gilles        DONE        CMake port only is require. 
-        |---dialogs                       Gilles
+        |---dialogs                       Gilles        DONE
         |---dimg                          Gilles        DONE
         |-----filters                     Gilles        DONE
         |-----loaders                     Gilles        DONE
         |---dmetadata                     Gilles        DONE
         |---greycstoration                Gilles        DONE
         |---histogram                     Gilles        DONE
-        |---imageproperties
+        |---imageproperties               Gilles        
         |---jpegutils                     Gilles        DONE
         |---levels                        Gilles        DONE
         |---lprof                         Gilles        DONE        CMake port only is require.
