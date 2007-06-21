@@ -55,7 +55,6 @@ extern "C"
 #include <qcombobox.h>
 #include <qtoolbox.h>
 #include <q3frame.h>
-#include <qvbuttongroup.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>

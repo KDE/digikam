@@ -962,16 +962,16 @@ bool GPCamera::cameraSummary(QString& summary)
                    "Delete items support: %6\n"
                    "Upload items support: %7\n"
                    "Directory creation support: %8\n"
-                   "Directory deletion support: %9\n\n")
-                   ,title(),
-                   ,model(),
-                   ,port(),
-                   ,path(),
-                   ,thumbnailSupport() ? i18n("yes") : i18n("no"),
-                   ,deleteSupport() ? i18n("yes") : i18n("no"),
-                   ,uploadSupport() ? i18n("yes") : i18n("no"),
-                   ,mkDirSupport() ? i18n("yes") : i18n("no"),
-                   ,delDirSupport() ? i18n("yes") : i18n("no");
+                   "Directory deletion support: %9\n\n"
+                   ,title()
+                   ,model()
+                   ,port()
+                   ,path()
+                   ,thumbnailSupport() ? i18n("yes") : i18n("no")
+                   ,deleteSupport() ? i18n("yes") : i18n("no")
+                   ,uploadSupport() ? i18n("yes") : i18n("no")
+                   ,mkDirSupport() ? i18n("yes") : i18n("no")
+                   ,delDirSupport() ? i18n("yes") : i18n("no"));
 
     summary.append(QString(sum.text));
 
@@ -1132,7 +1132,7 @@ void GPCamera::getCameraSupportedPorts(const QString& model, QStringList& plist)
 
     gp_abilities_list_new (&abilList);
     gp_abilities_list_load (abilList, context);
-    i = gp_abilities_list_lookup_model (abilList, model.local8Bit().data());
+    i = gp_abilities_list_lookup_model (abilList, model.toLocal8Bit().data());
     gp_abilities_list_get_abilities (abilList, i, &abilities);
     gp_abilities_list_free (abilList);
 
