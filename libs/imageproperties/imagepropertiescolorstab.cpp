@@ -432,14 +432,14 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
     d->histogramWidget->stopHistogramComputation();
 
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("Image Properties SideBar");
-    config->writeEntry("ImagePropertiesColors Tab", d->tab->currentPageIndex());
-    config->writeEntry("Histogram Channel", d->channelCB->currentItem());
-    config->writeEntry("Histogram Scale", d->scaleBG->selectedId());
-    config->writeEntry("Histogram Color", d->colorsCB->currentItem());
-    config->writeEntry("Histogram Rendering", d->regionBG->selectedId());
-    config->writeEntry("ICC Level", d->iccProfileWidget->getMode());
-    config->writeEntry("Current ICC Item", d->iccProfileWidget->getCurrentItemKey());
+    KConfigGroup group = config->group(QString("Image Properties SideBar"));
+    group.writeEntry("ImagePropertiesColors Tab", d->tab->currentIndex());
+    group.writeEntry("Histogram Channel", d->channelCB->currentIndex());
+    group.writeEntry("Histogram Scale", d->scaleBG->checkedId());
+    group.writeEntry("Histogram Color", d->colorsCB->currentIndex());
+    group.writeEntry("Histogram Rendering", d->regionBG->checkedId());
+    group.writeEntry("ICC Level", d->iccProfileWidget->getMode());
+    group.writeEntry("Current ICC Item", d->iccProfileWidget->getCurrentItemKey());
     config->sync();
 
     if (d->imageLoaderThread)
@@ -637,12 +637,12 @@ void ImagePropertiesColorsTab::setSelection(const QRect &selectionArea)
 
 void ImagePropertiesColorsTab::slotRefreshOptions(bool /*sixteenBit*/)
 {
-    slotChannelChanged(d->channelCB->currentItem());
-    slotScaleChanged(d->scaleBG->selectedId());
-    slotColorsChanged(d->colorsCB->currentItem());
+    slotChannelChanged(d->channelCB->currentIndex());
+    slotScaleChanged(d->scaleBG->checkedId());
+    slotColorsChanged(d->colorsCB->currentIndex());
 
     if (d->selectionArea.isValid())
-       slotRenderingChanged(d->regionBG->selectedId());
+       slotRenderingChanged(d->regionBG->checkedId());
 }
 
 void ImagePropertiesColorsTab::slotHistogramComputationFailed()
@@ -692,14 +692,14 @@ void ImagePropertiesColorsTab::slotChannelChanged(int channel)
         break;
     }
 
-    d->histogramWidget->repaint(false);
+    d->histogramWidget->repaint();
     updateStatistiques();
 }
 
 void ImagePropertiesColorsTab::slotScaleChanged(int scale)
 {
     d->histogramWidget->m_scaleType = scale;
-    d->histogramWidget->repaint(false);
+    d->histogramWidget->repaint();
 }
 
 void ImagePropertiesColorsTab::slotColorsChanged(int color)
@@ -719,14 +719,14 @@ void ImagePropertiesColorsTab::slotColorsChanged(int color)
         break;
     }
 
-    d->histogramWidget->repaint(false);
+    d->histogramWidget->repaint();
     updateStatistiques();
 }
 
 void ImagePropertiesColorsTab::slotRenderingChanged(int rendering)
 {
     d->histogramWidget->m_renderingType = rendering;
-    d->histogramWidget->repaint(false);
+    d->histogramWidget->repaint();
     updateStatistiques();
 }
 
@@ -738,7 +738,7 @@ void ImagePropertiesColorsTab::slotMinValueChanged(int min)
     // make the one control "push" the other
     if (min == d->maxInterv->value()+1)
         d->maxInterv->setValue(min);
-    d->maxInterv->setMinValue(min-1);
+    d->maxInterv->setMinimum(min-1);
     d->histogramWidget->slotMinValueChanged(min);
     updateStatistiques();
 }
@@ -747,7 +747,7 @@ void ImagePropertiesColorsTab::slotMaxValueChanged(int max)
 {
     if (max == d->minInterv->value()-1)
         d->minInterv->setValue(max);
-    d->minInterv->setMaxValue(max+1);
+    d->minInterv->setMaximum(max+1);
     d->histogramWidget->slotMaxValueChanged(max);
     updateStatistiques();
 }
@@ -758,12 +758,12 @@ void ImagePropertiesColorsTab::slotUpdateInterval(int min, int max)
     // Block signals to prevent slotMinValueChanged and
     // slotMaxValueChanged being called. 
     d->minInterv->blockSignals(true);
-    d->minInterv->setMaxValue(max+1);
+    d->minInterv->setMaximum(max+1);
     d->minInterv->setValue(min);
     d->minInterv->blockSignals(false);
 
     d->maxInterv->blockSignals(true);
-    d->maxInterv->setMinValue(min-1);
+    d->maxInterv->setMinimum(min-1);
     d->maxInterv->setValue(max);
     d->maxInterv->blockSignals(false);
 
@@ -772,7 +772,7 @@ void ImagePropertiesColorsTab::slotUpdateInterval(int min, int max)
 
 void ImagePropertiesColorsTab::slotUpdateIntervRange(int range)
 {
-    d->maxInterv->setMaxValue( range );
+    d->maxInterv->setMaximum( range );
 }
 
 void ImagePropertiesColorsTab::updateInformations()
@@ -786,10 +786,10 @@ void ImagePropertiesColorsTab::updateStatistiques()
     QString value;
     int min = d->minInterv->value();
     int max = d->maxInterv->value();
-    int channel = d->channelCB->currentItem();
+    int channel = d->channelCB->currentIndex();
 
     if ( channel == HistogramWidget::ColorChannelsHistogram )
-        channel = d->colorsCB->currentItem()+1;
+        channel = d->colorsCB->currentIndex()+1;
 
     double mean = d->histogramWidget->m_imageHistogram->getMean(channel, min, max);
     d->labelMeanValue->setText(value.setNum(mean, 'f', 1));
