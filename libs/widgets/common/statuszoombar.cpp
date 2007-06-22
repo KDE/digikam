@@ -23,10 +23,9 @@
 
 // Qt includes.
 
-#include <qtoolbutton.h>
-#include <qtimer.h>
-#include <qslider.h>
-#include <qtooltip.h>
+#include <QToolButton>
+#include <QTimer>
+#include <QSlider>
 
 // KDE includes.
 
@@ -69,25 +68,26 @@ public:
 };
 
 StatusZoomBar::StatusZoomBar(QWidget *parent)
-             : KHBox(parent, 0, Qt::WDestructiveClose)
+             : KHBox(parent)
 {
     d = new StatusZoomBarPriv;
+    setAttribute(Qt::WA_DeleteOnClose);
 
     d->zoomMinusButton = new QToolButton(this);
     d->zoomMinusButton->setAutoRaise(true);
-    d->zoomMinusButton->setIconSet(SmallIconSet("viewmag-"));
+    d->zoomMinusButton->setIcon(SmallIcon("viewmag-"));
     d->zoomMinusButton->setToolTip( i18n("Zoom Out"));
 
-    d->zoomSlider = new QSlider(ThumbnailSize::Small, ThumbnailSize::Huge,
-                                ThumbnailSize::Step, ThumbnailSize::Medium, 
-                                Qt::Horizontal, this);
-    d->zoomSlider->setLineStep(ThumbnailSize::Step);
-    d->zoomSlider->setMaximumHeight(fontMetrics().height()+2);    
+    d->zoomSlider = new QSlider(Qt::Horizontal, this);
+    d->zoomSlider->setRange(ThumbnailSize::Small, ThumbnailSize::Huge);
+    d->zoomSlider->setSingleStep(ThumbnailSize::Step);
+    d->zoomSlider->setValue(ThumbnailSize::Medium);
+    d->zoomSlider->setMaximumHeight(fontMetrics().height()+2);
     d->zoomSlider->setFixedWidth(120);
 
     d->zoomPlusButton = new QToolButton(this);
     d->zoomPlusButton->setAutoRaise(true);
-    d->zoomPlusButton->setIconSet(SmallIconSet("viewmag+"));
+    d->zoomPlusButton->setIcon(SmallIcon("viewmag+"));
     d->zoomPlusButton->setToolTip( i18n("Zoom In"));
 
     d->zoomTracker = new DTipTracker("", d->zoomSlider);
@@ -130,7 +130,8 @@ void StatusZoomBar::slotZoomSliderChanged(int)
     d->zoomTimer = new QTimer( this );
     connect(d->zoomTimer, SIGNAL(timeout()),
             this, SLOT(slotDelayedZoomSliderChanged()) );
-    d->zoomTimer->start(300, true);    
+    d->zoomTimer->setSingleShot(true);
+    d->zoomTimer->start(300);
 }
 
 void StatusZoomBar::slotDelayedZoomSliderChanged()
