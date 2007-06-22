@@ -56,7 +56,7 @@ public:
 
     DPopupMenu(QWidget *parent = 0, const char *name = 0);
 
-    int sidePixmapWidth() const { return _dpopupmenu_sidePixmap_.width(); }
+    int sidePixmapWidth() const { return s_dpopupmenu_sidePixmap.width(); }
 
 private:
 
@@ -81,8 +81,8 @@ private:
 
 private:
 
-    static QImage _dpopupmenu_sidePixmap_;
-    static QColor _dpopupmenu_sidePixmapColor_;
+    static QImage s_dpopupmenu_sidePixmap;
+    static QColor s_dpopupmenu_sidePixmapColor;
 };
 
 }  // namespace Digikam
