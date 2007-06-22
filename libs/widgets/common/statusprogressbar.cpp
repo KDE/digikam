@@ -24,16 +24,14 @@
 
 // Qt includes.
 
-#include <qlayout.h>
-#include <qwidget.h>
-#include <qpushbutton.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QWidget>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QProgressBar>
 
 // KDE includes.
 
 #include <ksqueezedtextlabel.h>
-#include <kprogress.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcursor.h>
@@ -65,29 +63,30 @@ public:
         cancelButton   = 0;
     }
 
-
     QWidget            *progressWidget;
 
     QPushButton        *cancelButton;
 
-    KSqueezedTextLabel *textLabel;
+    QProgressBar       *progressBar;
 
-    KProgress          *progressBar;
+    KSqueezedTextLabel *textLabel;
 };
 
 StatusProgressBar::StatusProgressBar(QWidget *parent)
-                 : Q3WidgetStack(parent, 0, Qt::WDestructiveClose)
+                 : QStackedWidget(parent)
 {
     d = new StatusProgressBarPriv;
+    setAttribute(Qt::WA_DeleteOnClose);
 
     d->textLabel      = new KSqueezedTextLabel(this);
     d->progressWidget = new QWidget(this);
-    Q3HBoxLayout *hBox = new Q3HBoxLayout(d->progressWidget);
-    d->progressBar    = new KProgress(d->progressWidget);
-    d->progressBar->setTotalSteps(100);
-    d->cancelButton = new QPushButton(d->progressWidget);
+    QHBoxLayout *hBox = new QHBoxLayout(d->progressWidget);
+    d->progressWidget->setLayout(hBox);
+    d->progressBar    = new QProgressBar(d->progressWidget);
+    d->progressBar->setMaximum(100);
+    d->cancelButton   = new QPushButton(d->progressWidget);
     d->cancelButton->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
-    d->cancelButton->setPixmap(SmallIcon("cancel"));
+    d->cancelButton->setIcon(SmallIcon("cancel"));
 
     // Parent widget will probably have the wait cursor set.
     // Set arrow cursor to indicate the button can be clicked
@@ -96,8 +95,8 @@ StatusProgressBar::StatusProgressBar(QWidget *parent)
     hBox->addWidget(d->progressBar);
     hBox->addWidget(d->cancelButton);
 
-    addWidget(d->textLabel, StatusProgressBarPriv::TextLabel);
-    addWidget(d->progressWidget, StatusProgressBarPriv::ProgressBar);
+    insertWidget(StatusProgressBarPriv::TextLabel,   d->textLabel);
+    insertWidget(StatusProgressBarPriv::ProgressBar, d->progressWidget);
 
     connect( d->cancelButton, SIGNAL( clicked() ),
              this, SIGNAL( signalCancelButtonPressed() ) );
@@ -115,14 +114,14 @@ void StatusProgressBar::setText( const QString& text )
     d->textLabel->setText(text);
 }
 
-void StatusProgressBar::setAlignment(int a)
+void StatusProgressBar::setAlignment(Qt::Alignment a)
 {
     d->textLabel->setAlignment(a);
 }
 
 void StatusProgressBar::setProgressValue( int v )
 {
-    d->progressBar->setProgress(v);
+    d->progressBar->setValue(v);
 }
 
 void StatusProgressBar::setProgressText( const QString& text )
@@ -134,23 +133,22 @@ void StatusProgressBar::progressBarMode( int mode, const QString& text )
 {
     if ( mode == TextMode)
     {
-        raiseWidget(StatusProgressBarPriv::TextLabel);
+        setCurrentIndex(StatusProgressBarPriv::TextLabel);
         setProgressValue(0);
         setText( text );
     }
     else if ( mode == ProgressBarMode )
     {
         d->cancelButton->hide();
-        raiseWidget(StatusProgressBarPriv::ProgressBar);
+        setCurrentIndex(StatusProgressBarPriv::ProgressBar);
         setProgressText( text );
     }
     else  // CancelProgressBarMode
     {
         d->cancelButton->show();
-        raiseWidget(StatusProgressBarPriv::ProgressBar);
+        setCurrentIndex(StatusProgressBarPriv::ProgressBar);
         setProgressText( text );
     }
 }
 
 }  // namespace Digikam
-

@@ -27,7 +27,7 @@
 
 // KDE includes.
 
-#include <Q3WidgetStack>
+#include <QStackedWidget>
 #include <QString>
 
 // Local includes
@@ -39,7 +39,7 @@ namespace Digikam
 
 class StatusProgressBarPriv;
 
-class DIGIKAM_EXPORT StatusProgressBar : public Q3WidgetStack
+class DIGIKAM_EXPORT StatusProgressBar : public QStackedWidget
 {
 Q_OBJECT
 
@@ -58,7 +58,7 @@ public:
     ~StatusProgressBar();
 
     void setText(const QString& text);
-    void setAlignment(int a);
+    void setAlignment(Qt::Alignment a);
 
     void progressBarMode(int mode, const QString& text=QString());
     void setProgressValue(int v);

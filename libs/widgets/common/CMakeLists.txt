@@ -6,8 +6,8 @@ SET(libcommonwidgets_STAT_SRCS colorgradientwidget.cpp
                                dcursortracker.cpp 
                                filesaveoptionsbox.cpp 
                                statuszoombar.cpp 
-                               statusnavigatebar.cpp 
                                statusprogressbar.cpp 
+                               statusnavigatebar.cpp 
                                sidebar.cpp 
                                dpopupmenu.cpp 
                                squeezedcombobox.cpp 
