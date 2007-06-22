@@ -52,7 +52,7 @@ Q_OBJECT
 
 public:
 
-    PanIconWidget(QWidget *parent=0, Qt::WFlags flags=Qt::WDestructiveClose);
+    PanIconWidget(QWidget *parent=0, Qt::WidgetAttribute attribute=Qt::WA_DeleteOnClose);
     ~PanIconWidget();
 
     void setImage(int previewWidth, int previewHeight, const QImage& image);
@@ -64,14 +64,14 @@ public:
 
     void  setCursorToLocalRegionSelectionCenter(void);
     void  setMouseFocus(void);
-       
+
 signals:
 
     // Used with ImagePreview widget. 
     // Emit when selection have been moved with mouse. 'targetDone' booleen 
     // value is used for indicate if the mouse have been released.
-    void signalSelectionMoved( QRect rect, bool targetDone );     
-    
+    void signalSelectionMoved( QRect rect, bool targetDone );
+
     void signalSelectionTakeFocus(void);
 
     void signalHiden(void);
@@ -79,7 +79,7 @@ signals:
 public slots:
 
     void slotZoomFactorChanged( double );
-            
+
 protected:
 
     void hideEvent(QHideEvent *);
@@ -88,7 +88,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
     void timerEvent(QTimerEvent *);
-        
+
     /** Recalculate the target selection position and emit 'signalSelectionMoved'.*/
     void regionSelectionMoved( bool targetDone );
 
@@ -103,9 +103,9 @@ protected:
     int      m_height;
     int      m_zoomedOrgWidth;
     int      m_zoomedOrgHeight;
-    int      m_orgWidth;    
-    int      m_orgHeight;   
-    
+    int      m_orgWidth;
+    int      m_orgHeight;
+
     double   m_zoomFactor;
 
     QRect    m_rect;
@@ -113,10 +113,9 @@ protected:
 
     QPixmap *m_pixmap;
 
-
 private:
 
-    PanIconWidgetPriv* d;        
+    PanIconWidgetPriv* d;
 };
 
 }  // NameSpace Digikam

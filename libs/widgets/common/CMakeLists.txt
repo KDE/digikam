@@ -11,9 +11,9 @@ SET(libcommonwidgets_STAT_SRCS colorgradientwidget.cpp
                                sidebar.cpp 
                                dpopupmenu.cpp 
                                squeezedcombobox.cpp 
+                               paniconwidget.cpp
                                histogramwidget.cpp 
                                curveswidget.cpp 
-                               paniconwidget.cpp 
                                previewwidget.cpp 
    )
 
