@@ -1,4 +1,6 @@
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/lprof
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/metadata
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata
                    )
 
 SET(libiccprofileswidgets_STAT_SRCS iccpreviewwidget.cpp

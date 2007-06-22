@@ -62,7 +62,6 @@ protected:
 private :
 
     ICCProfileWidget *m_iccProfileWidget;
-
 };
 
 } // namespace Digikam

@@ -24,12 +24,10 @@
 
 // Qt includes. 
 
-#include <qfileinfo.h>
-#include <qlayout.h>
-#include <q3vgroupbox.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3Frame>
+#include <QFileInfo>
+#include <QGroupBox>
+#include <QVBoxLayout>
+#include <QFrame>
 
 // KDE includes
 
@@ -48,12 +46,10 @@ namespace Digikam
 ICCPreviewWidget::ICCPreviewWidget(QWidget *parent)
                 : KPreviewWidgetBase( parent )
 {
-    Q3VBoxLayout *layout = new Q3VBoxLayout( this );
-    Q3VGroupBox *box     = new Q3VGroupBox( this );
-    box->setInsideMargin(0);
-    box->setFrameStyle(Q3Frame::NoFrame|Q3Frame::Plain);
-    m_iccProfileWidget = new ICCProfileWidget(box);
-    layout->addWidget( box );
+    QVBoxLayout *layout = new QVBoxLayout();
+    m_iccProfileWidget  = new ICCProfileWidget(this);
+    layout->addWidget( m_iccProfileWidget );
+    setLayout(layout);
 }
 
 ICCPreviewWidget::~ICCPreviewWidget()
@@ -82,5 +78,3 @@ void ICCPreviewWidget::clearPreview()
 }
 
 } // namespace Digikam
-
-
