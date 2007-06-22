@@ -63,8 +63,8 @@ public:
     {
         DockLeft,
         DockRight
-    };    
-    
+    };
+
     /**
      * Creates a new sidebar
      * @param parent sidebar's parent
@@ -82,7 +82,7 @@ public:
      */
     void setSplitter(QSplitter *sp);
     void setSplitterSizePolicy(QSizePolicy p);
-    
+
     /**
      * Appends a new tab to the sidebar
      * @param w widget which is activated by this tab
@@ -90,27 +90,27 @@ public:
      * @param title text which is shown it this tab
      */
     void appendTab(QWidget *w, const QPixmap &pic, const QString &title);
-    
+
     /**
      * Deletes a tab from the tabbar
      */
     void deleteTab(QWidget *w);
-    
+
     /**
      * Activates a tab
      */
     void setActiveTab(QWidget *w);
-    
+
     /**
      * Returns the currently activated tab, or 0 if no tab is active
     */
     QWidget* getActiveTab();
-    
+
     /**
      * Hides the sidebar (display only the activation buttons)
      */
     void shrink();
-    
+
     /**
      * redisplays the whole sidebar
      */
@@ -137,22 +137,21 @@ public:
     bool isExpanded();
 
 private:
-    
-    
+
     /**
      * save the view state to disk
      */
     void saveViewState();
-    
+
 private slots:
-    
+
     /**
      * Activates a tab
      */
     void clicked(int tab);
-    
+
 signals:
-    
+
     /**
      * is emitted, when another tab is activated
      */
@@ -164,7 +163,7 @@ signals:
     void signalViewChanged();
 
 private:
-    
+
     SidebarPriv* d;
 };
 

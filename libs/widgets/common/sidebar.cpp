@@ -26,10 +26,9 @@
 
 // QT includes.
 
-#include <qsplitter.h>
-#include <q3widgetstack.h>
-#include <qdatastream.h>
-//Added by qt3to4:
+#include <QSplitter>
+#include <QStackedWidget>
+#include <QDataStream>
 #include <QPixmap>
 
 // KDE includes.
@@ -49,7 +48,7 @@
 
 namespace Digikam
 {
-    
+
 class SidebarPriv
 {
 public:
@@ -69,28 +68,29 @@ public:
         splitter         = 0;
     }
 
-    bool           minimizedDefault;
-    bool           minimized;
-    bool           isMinimized;      // Backup of minimized status (used with Fullscreen)
+    bool            minimizedDefault;
+    bool            minimized;
+    bool            isMinimized;      // Backup of minimized status (used with Fullscreen)
 
-    int            tabs;
-    int            activeTab;
-    int            minSize;
-    int            maxSize;
+    int             tabs;
+    int             activeTab;
+    int             minSize;
+    int             maxSize;
 
-    Q3WidgetStack  *stack;
-    QSplitter     *splitter;
-    QSize          bigSize;
+    QStackedWidget *stack;
+    QSplitter      *splitter;
+    QSize           bigSize;
 
-    Sidebar::Side  side;
+    Sidebar::Side   side;
 };
 
 Sidebar::Sidebar(QWidget *parent, const char *name, Side side, bool minimizedDefault)
-       : KMultiTabBar(KMultiTabBar::Vertical, parent, name)
+       : KMultiTabBar(KMultiTabBar::Vertical, parent)
 {
     d = new SidebarPriv;
     d->minimizedDefault = minimizedDefault;
     d->side             = side;
+    setObjectName(name);
 }
 
 Sidebar::~Sidebar()
@@ -102,9 +102,9 @@ Sidebar::~Sidebar()
 void Sidebar::setSplitter(QSplitter *sp)
 {
     setStyle(KMultiTabBar::VSNET);
-    d->stack = new Q3WidgetStack(sp);
-            
-    if(d->side == Qt::DockLeft)
+    d->stack = new QStackedWidget(sp);
+
+    if(d->side == DockLeft)
         setPosition(KMultiTabBar::Left);
     else
         setPosition(KMultiTabBar::Right);
@@ -113,17 +113,17 @@ void Sidebar::setSplitter(QSplitter *sp)
 void Sidebar::loadViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup(QString("%1").arg(name()));
+    KConfigGroup group = config->group(QString("%1").arg(objectName()));
 
-    int tab        = config->readNumEntry("ActiveTab", 0);
-    bool minimized = config->readBoolEntry("Minimized", d->minimizedDefault);
-        
+    int tab        = group.readEntry("ActiveTab", 0);
+    bool minimized = group.readEntry("Minimized", d->minimizedDefault);
+
     if (minimized)
     {
         d->activeTab = tab;
         //setTab(d->activeTab, true);
-        d->stack->raiseWidget(d->activeTab);
-        emit signalChangedTab(d->stack->visibleWidget());
+        d->stack->setCurrentIndex(d->activeTab);
+        emit signalChangedTab(d->stack->currentWidget());
     }
     else
         d->activeTab = -1;
@@ -134,9 +134,9 @@ void Sidebar::loadViewState()
 void Sidebar::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup(QString("%1").arg(name()));
-    config->writeEntry("ActiveTab", d->activeTab);
-    config->writeEntry("Minimized", d->minimized);
+    KConfigGroup group = config->group(QString("%1").arg(objectName()));
+    group.writeEntry("ActiveTab", d->activeTab);
+    group.writeEntry("Minimized", d->minimized);
     config->sync();
 }
 
@@ -160,34 +160,34 @@ void Sidebar::restore()
 
 void Sidebar::appendTab(QWidget *w, const QPixmap &pic, const QString &title)
 {
-    w->reparent(d->stack, QPoint(0, 0));
+    w->setParent(d->stack);
     KMultiTabBar::appendTab(pic, d->tabs, title);
-    d->stack->addWidget(w, d->tabs);
+    d->stack->insertWidget(d->tabs, w);
 
     connect(tab(d->tabs), SIGNAL(clicked(int)),
             this, SLOT(clicked(int)));
-    
+
     d->tabs++;
 }
 
 void Sidebar::deleteTab(QWidget *w)
 {
-    int tab = d->stack->id(w);
+    int tab = d->stack->indexOf(w);
     if(tab < 0)
         return;
-    
+
     if(tab == d->activeTab)
         d->activeTab = -1;
-    
+
     removeTab(tab);
     //TODO show another widget
 }
- 
+
 void Sidebar::clicked(int tab)
 {
     if(tab >= d->tabs || tab < 0)
         return;
-    
+
     if(tab == d->activeTab)
     {
         d->stack->isHidden() ? expand() : shrink();
@@ -196,40 +196,40 @@ void Sidebar::clicked(int tab)
     {
         if(d->activeTab >= 0)
             setTab(d->activeTab, false);
-    
+
         d->activeTab = tab;
         setTab(d->activeTab, true);
-        d->stack->raiseWidget(d->activeTab);
-        
+        d->stack->setCurrentIndex(d->activeTab);
+
         if(d->minimized)
             expand();
 
-        emit signalChangedTab(d->stack->visibleWidget());
+        emit signalChangedTab(d->stack->currentWidget());
     }
 }
 
 void Sidebar::setActiveTab(QWidget *w)
 {
-    int tab = d->stack->id(w);
+    int tab = d->stack->indexOf(w);
     if(tab < 0)
         return;
-    
+
     if(d->activeTab >= 0)
         setTab(d->activeTab, false);
-    
+
     d->activeTab = tab;
     setTab(d->activeTab, true);
-    d->stack->raiseWidget(d->activeTab);
-        
-    if(d->minimized)
-        expand();    
+    d->stack->setCurrentIndex(d->activeTab);
 
-    emit signalChangedTab(d->stack->visibleWidget());
+    if(d->minimized)
+        expand();
+
+    emit signalChangedTab(d->stack->currentWidget());
 }
 
 QWidget* Sidebar::getActiveTab()
 {
-    return d->stack->visibleWidget();
+    return d->stack->currentWidget();
 }
 
 void Sidebar::shrink()
@@ -238,10 +238,10 @@ void Sidebar::shrink()
     d->bigSize   = size();
     d->minSize   = minimumWidth();
     d->maxSize   = maximumWidth();
-            
+
     d->stack->hide();
 
-    KMultiTabBarTab* tab = tabs()->first();
+    KMultiTabBarTab* tab = tabs().first();
     if (tab)
         setFixedWidth(tab->width());
     else
