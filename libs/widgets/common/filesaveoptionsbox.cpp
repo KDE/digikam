@@ -24,14 +24,11 @@
 
 // Qt includes.
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qwidget.h>
-#include <qlabel.h>
-#include <q3whatsthis.h>
-#include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QWidget>
+#include <QCheckBox>
+#include <QGridLayout>
+#include <QImageReader>
 
 // KDE includes.
 
@@ -72,7 +69,7 @@ public:
 
     QWidget      *noneOptions;
 
-    Q3GridLayout  *noneGrid;
+    QGridLayout  *noneGrid;
 
     QLabel       *labelNone;
 
@@ -86,16 +83,19 @@ public:
 };
 
 FileSaveOptionsBox::FileSaveOptionsBox(QWidget *parent)
-                  : Q3WidgetStack(parent, 0, Qt::WDestructiveClose)
+                  : QStackedWidget(parent)
 {
     d = new FileSaveOptionsBoxPriv;
+    setAttribute(Qt::WA_DeleteOnClose);
 
     //-- NONE Settings ------------------------------------------------------
 
     d->noneOptions = new QWidget(this);
-    d->noneGrid    = new Q3GridLayout(d->noneOptions, 1, 1, KDialog::spacingHint());
+    d->noneGrid    = new QGridLayout(d->noneOptions);
+    d->noneGrid->setSpacing(KDialog::spacingHint());
+    d->noneOptions->setLayout(d->noneGrid);
     d->labelNone   = new QLabel(i18n("None options available"), d->noneOptions);
-    d->noneGrid->addMultiCellWidget(d->labelNone, 0, 0, 0, 1);
+    d->noneGrid->addWidget(d->labelNone, 0, 0, 0, 1);
 
     //-- JPEG Settings ------------------------------------------------------
 
@@ -115,11 +115,11 @@ FileSaveOptionsBox::FileSaveOptionsBox(QWidget *parent)
 
     //-----------------------------------------------------------------------
 
-    addWidget(d->noneOptions,     DImg::NONE);
-    addWidget(d->JPEGOptions,     DImg::JPEG);
-    addWidget(d->PNGOptions,      DImg::PNG);
-    addWidget(d->TIFFOptions,     DImg::TIFF);
-    addWidget(d->JPEG2000Options, DImg::JP2K);
+    insertWidget(DImg::NONE, d->noneOptions);
+    insertWidget(DImg::JPEG, d->JPEGOptions);
+    insertWidget(DImg::PNG,  d->PNGOptions);
+    insertWidget(DImg::TIFF, d->TIFFOptions);
+    insertWidget(DImg::JP2K, d->JPEG2000Options);
 
     //-----------------------------------------------------------------------
 
@@ -133,51 +133,53 @@ FileSaveOptionsBox::~FileSaveOptionsBox()
 
 void FileSaveOptionsBox::slotImageFileSelected(const QString& file)
 {
-    QString format = QImageIO::imageFormat(file);
+    QString format = QImageReader::imageFormat(file);
     toggleFormatOptions(format);
 }
 
 void FileSaveOptionsBox::slotImageFileFormatChanged(const QString& filter)
 {
-    QString format = KImageIO::typeForMime(filter).toUpper();
+    // TODO: KDE4PORT: KImageIO::typeForMime return a StringList now. 
+    //                 Check if we use 1st item of list is enough.
+    QString format = KImageIO::typeForMime(filter)[0].toUpper();
     toggleFormatOptions(format);
 }
 
 void FileSaveOptionsBox::toggleFormatOptions(const QString& format)
 {
     if (format == QString("JPEG"))
-        raiseWidget(DImg::JPEG);
+        setCurrentIndex(DImg::JPEG);
     else if (format == QString("PNG"))
-        raiseWidget(DImg::PNG);
+        setCurrentIndex(DImg::PNG);
     else if (format == QString("TIFF"))
-        raiseWidget(DImg::TIFF);
+        setCurrentIndex(DImg::TIFF);
     else if (format == QString("JP2"))
-        raiseWidget(DImg::JP2K);
+        setCurrentIndex(DImg::JP2K);
     else
-        raiseWidget(DImg::NONE);
+        setCurrentIndex(DImg::NONE);
 }
 
 void FileSaveOptionsBox::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
-    config->writeEntry("JPEGCompression", d->JPEGOptions->getCompressionValue());
-    config->writeEntry("PNGCompression", d->PNGOptions->getCompressionValue());
-    config->writeEntry("TIFFCompression", d->TIFFOptions->getCompression());
-    config->writeEntry("JPEG2000Compression", d->JPEG2000Options->getCompressionValue());
-    config->writeEntry("JPEG2000LossLess", d->JPEG2000Options->getLossLessCompression());
+    KConfigGroup group = config->group("ImageViewer Settings");
+    group.writeEntry("JPEGCompression", d->JPEGOptions->getCompressionValue());
+    group.writeEntry("PNGCompression", d->PNGOptions->getCompressionValue());
+    group.writeEntry("TIFFCompression", d->TIFFOptions->getCompression());
+    group.writeEntry("JPEG2000Compression", d->JPEG2000Options->getCompressionValue());
+    group.writeEntry("JPEG2000LossLess", d->JPEG2000Options->getLossLessCompression());
     config->sync();
 }
 
 void FileSaveOptionsBox::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
-    d->JPEGOptions->setCompressionValue( config->readNumEntry("JPEGCompression", 75) );
-    d->PNGOptions->setCompressionValue( config->readNumEntry("PNGCompression", 9) );
-    d->TIFFOptions->setCompression(config->readBoolEntry("TIFFCompression", false));
-    d->JPEG2000Options->setCompressionValue( config->readNumEntry("JPEG2000Compression", 75) );
-    d->JPEG2000Options->setLossLessCompression( config->readBoolEntry("JPEG2000LossLess", true) );
+    KConfigGroup group = config->group("ImageViewer Settings");
+    d->JPEGOptions->setCompressionValue( group.readEntry("JPEGCompression", 75) );
+    d->PNGOptions->setCompressionValue( group.readEntry("PNGCompression", 9) );
+    d->TIFFOptions->setCompression( group.readEntry("TIFFCompression", false) );
+    d->JPEG2000Options->setCompressionValue( group.readEntry("JPEG2000Compression", 75) );
+    d->JPEG2000Options->setLossLessCompression( group.readEntry("JPEG2000LossLess", true) );
 }
 
 }  // namespace Digikam

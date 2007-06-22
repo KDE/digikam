@@ -91,7 +91,10 @@ KDE4_ADD_LIBRARY(libdigikam SHARED ${libdigikam_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(digikam libthumbbar 
                               libthemeengine 
-                              libwidgets 
+                              libcommonwidgets
+                              libiccprofileswidgets
+                              libmetadatawidgets
+                              libimagepluginswidgets
                               libdialog 
                               libjpegutils 
                               libdimg 
@@ -114,7 +117,7 @@ TARGET_LINK_LIBRARIES(digikam libthumbbar
                               ${KDE4_KPARTS_LIBS} 
                               ${KDE4_KUTILS_LIBS} 
                       )
-                              
+
 SET_TARGET_PROPERTIES(libdigikam PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 INSTALL(TARGETS libdigikam DESTINATION ${LIB_INSTALL_DIR} )
 

@@ -4,7 +4,6 @@ ADD_SUBDIRECTORY( icons )
 ADD_SUBDIRECTORY( setup )
 
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/showfoto/setup 
-                     ${CMAKE_SOURCE_DIR}/digikam/utilities/setup 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/thumbbar 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/imageproperties 
@@ -13,6 +12,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/showfoto/setup
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/threadimageio 
                      ${CMAKE_SOURCE_DIR}/digikam/digikam 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/setup 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/slideshow 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor 
@@ -35,7 +35,10 @@ TARGET_LINK_LIBRARIES(showfoto libshowfotosetup
                                libslideshow 
                                libthreadimageio 
                                libjpegutils 
-                               ${KDE4_KUTILS_LIBS} 
+                               libcommonwidgets
+                               libiccprofileswidgets
+                               libmetadatawidgets
+                               libimagepluginswidgets                               ${KDE4_KUTILS_LIBS} 
                                ${KDE4_KPARTS_LIBS} 
                      )
 

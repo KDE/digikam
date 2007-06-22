@@ -1,3 +1,15 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/lprof
+                   )
+
+SET(libiccprofileswidgets_STAT_SRCS iccprofilewidget.cpp
+                                    cietonguewidget.cpp
+                                    iccpreviewwidget.cpp
+   )
+
+KDE4_AUTOMOC(${libiccprofileswidgets_STAT_SRCS})
+
+KDE4_ADD_LIBRARY(libiccprofileswidgets STATIC ${libiccprofileswidgets_STAT_SRCS})
+
 install( FILES cietonguewidget.h 
                iccprofilewidget.h 
                iccpreviewwidget.h  
