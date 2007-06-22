@@ -30,17 +30,16 @@
 
 // Qt includes.
 
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qpoint.h>
-#include <qpen.h>
-#include <qevent.h>
-#include <qtimer.h>
-#include <qrect.h> 
-#include <qcolor.h>
-#include <qfont.h> 
-#include <qfontmetrics.h> 
-//Added by qt3to4:
+#include <QPixmap>
+#include <QPainter>
+#include <QPoint>
+#include <QPen>
+#include <QEvent>
+#include <QTimer>
+#include <QRect> 
+#include <QColor>
+#include <QFont> 
+#include <QFontMetrics> 
 #include <QCustomEvent>
 #include <QPaintEvent>
 #include <QMouseEvent>
@@ -115,7 +114,7 @@ CurvesWidget::CurvesWidget(int w, int h,
                            uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits,
                            ImageCurves *curves, QWidget *parent, 
                            bool readOnly)
-            : QWidget(parent, 0, Qt::WDestructiveClose)
+            : QWidget(parent)
 {
     d = new CurvesWidgetPriv;
     d->curves       = curves;
@@ -125,8 +124,8 @@ CurvesWidget::CurvesWidget(int w, int h,
     m_scaleType     = LogScaleHistogram;
    
     setMouseTracking(true);
-    setPaletteBackgroundColor(colorGroup().background());
     setMinimumSize(w, h);
+    setAttribute(Qt::WA_DeleteOnClose);
     
     d->blinkTimer = new QTimer( this );
         
@@ -148,16 +147,16 @@ CurvesWidget::~CurvesWidget()
 
 void CurvesWidget::reset(void)
 {
-    d->grabPoint   = -1;
+    d->grabPoint    = -1;
     d->guideVisible = false;
-    repaint(false);
+    repaint();
 }
 
 void CurvesWidget::setCurveGuide(DColor color)
 {
     d->guideVisible = true;
     d->colorGuide   = color;
-    repaint(false);
+    repaint();
 }
 
 void CurvesWidget::curveTypeChanged(void)
@@ -186,15 +185,15 @@ void CurvesWidget::curveTypeChanged(void)
           break;
        }
                        
-    repaint(false);             
+    repaint();             
     emit signalCurvesChanged();        
 }
 
-void CurvesWidget::customEvent(QCustomEvent *event)
+void CurvesWidget::customEvent(QEvent *event)
 {
     if (!event) return;
 
-    ImageHistogram::EventData *ed = (ImageHistogram::EventData*) event->data();
+    ImageHistogram::EventData *ed = (ImageHistogram::EventData*) event;
 
     if (!ed) return;
 
@@ -203,7 +202,7 @@ void CurvesWidget::customEvent(QCustomEvent *event)
         setCursor( Qt::WaitCursor );
         d->clearFlag = CurvesWidgetPriv::HistogramStarted;
         d->blinkTimer->start( 200 );
-        repaint(false);
+        repaint();
     }  
     else 
     {
@@ -212,14 +211,14 @@ void CurvesWidget::customEvent(QCustomEvent *event)
             // Repaint histogram 
             d->clearFlag = CurvesWidgetPriv::HistogramCompleted;
             d->blinkTimer->stop();
-            repaint(false);
+            repaint();
             setCursor( Qt::ArrowCursor );    
         }
         else
         {
             d->clearFlag = CurvesWidgetPriv::HistogramFailed;
             d->blinkTimer->stop();
-            repaint(false);
+            repaint();
             setCursor( Qt::ArrowCursor );    
             emit signalHistogramComputationFailed();
         }
@@ -239,7 +238,7 @@ void CurvesWidget::stopHistogramComputation(void)
 void CurvesWidget::slotBlinkTimerDone( void )
 {
     d->blinkFlag = !d->blinkFlag;
-    repaint(false);
+    repaint();
     d->blinkTimer->start( 200 );
 }
 
@@ -626,7 +625,7 @@ void CurvesWidget::mousePressEvent ( QMouseEvent * e )
    }
 
    d->curves->curvesCalculateCurve(m_channelType);
-   repaint(false);
+   repaint();
 }
 
 void CurvesWidget::mouseReleaseEvent ( QMouseEvent * e )
@@ -639,7 +638,7 @@ void CurvesWidget::mouseReleaseEvent ( QMouseEvent * e )
    setCursor( Qt::ArrowCursor );    
    d->grabPoint = -1;
    d->curves->curvesCalculateCurve(m_channelType);
-   repaint(false);
+   repaint();
    emit signalCurvesChanged();
 }
 
@@ -754,7 +753,7 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
    d->xMouseOver = x;
    d->yMouseOver = m_imageHistogram->getHistogramSegment()-1 - y;
    emit signalMouseMoved(d->xMouseOver, d->yMouseOver);
-   repaint(false);
+   repaint();
 }
 
 void CurvesWidget::leaveEvent( QEvent * )
@@ -762,7 +761,7 @@ void CurvesWidget::leaveEvent( QEvent * )
    d->xMouseOver = -1;
    d->yMouseOver = -1;
    emit signalMouseMoved(d->xMouseOver, d->yMouseOver);
-   repaint(false);
+   repaint();
 }
 
 }  // NameSpace Digikam
