@@ -49,6 +49,12 @@ public:
     inline DSharedData() : ref(0) { }
     inline DSharedData(const DSharedData &) : ref(0) { }
 
+    /** Returns true if the reference count is not 0.
+     *  For the normal use case, you do not need this method.
+     */
+    inline bool isReferenced() const
+        { return (int)ref > 0; }
+
 private:
     // using the assignment operator would lead to corruption in the ref-counting
     DSharedData &operator=(const DSharedData &);
@@ -79,9 +85,10 @@ public:
     inline const T *data() const { return d; }
     inline const T *constData() const { return d; }
 
-    /** This method carries out a const_cast to keep you from writing this out.
-     *  Typically, this should only be used to implement the lazy loading
-     *  caching technique or similar.
+    /** This method carries out a const_cast, so it returns a non-const pointer
+     *  from a const DSharedDataPointer.
+     *  Typically, this should only be used if you know it should be used
+     *  (to implement a lazy loading caching technique or similar)
      */
     inline T* constCastData() const { return const_cast<T*>(d); }
 
