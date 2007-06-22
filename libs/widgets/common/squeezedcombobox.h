@@ -33,6 +33,10 @@
 #include <qcombobox.h>
 #include <qtooltip.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
@@ -49,7 +53,7 @@ class SqueezedComboBoxPriv;
  * @image html squeezedcombobox.png "This is how it looks"
  * @author Tom Albers
  */
-class SqueezedComboBox : public QComboBox
+class DIGIKAM_EXPORT SqueezedComboBox : public QComboBox
 {
     Q_OBJECT
 
@@ -140,7 +144,7 @@ protected:
     void maybeTip(const QPoint& pos);
 
 private:
-    
+
     SqueezedComboBox *m_originalWidget;
 };
 

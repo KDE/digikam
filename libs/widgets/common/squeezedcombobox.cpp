@@ -56,9 +56,9 @@ public:
     }
 
     QMap<int, QString>   originalItems;
-    
+
     QTimer              *timer;
-    
+
     SqueezedComboBoxTip *tooltip;
 };
 
@@ -77,7 +77,7 @@ SqueezedComboBox::SqueezedComboBox(QWidget *parent, const char *name)
 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotTimeOut()));
-            
+
     connect(this, SIGNAL(activated( int )),
             this, SLOT(slotUpdateToolTip( int )));
 }
@@ -187,4 +187,3 @@ void SqueezedComboBoxTip::maybeTip(const QPoint &pos)
 }
 
 }  // namespace Digikam
-
