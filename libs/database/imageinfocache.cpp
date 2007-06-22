@@ -63,15 +63,11 @@ bool ImageInfoCache::hasInfoForId(qlonglong id) const
 void ImageInfoCache::dropInfo(ImageInfoData *infodata)
 {
     // check again ref count, now in mutex-protected context
-    if (infodata->count > 1)
+    if (infodata->isReferenced())
         return;
 
-    QMap<qlonglong, ImageInfoData *>::iterator it = m_map.find(infodata->id);
-    if (it != m_map.end() && (*it) == infodata)
-    {
-        m_map.remove(it);
+    if (m_map.remove(infodata->id))
         delete infodata;
-    }
 }
 
 void ImageInfoCache::slotImageFieldChanged(qlonglong imageId, int field)

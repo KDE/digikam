@@ -27,8 +27,8 @@
 
 // Qt includes
 
-#include <qobject.h>
-#include <qmap.h>
+#include <QObject>
+#include <QMap>
 
 // Local includes
 
