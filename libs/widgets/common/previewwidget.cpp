@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <QCache>
+#include <Q3Cache>
 #include <QString>
 #include <QPainter>
 #include <QImage>
@@ -77,29 +77,29 @@ public:
         tileCache.setAutoDelete(true);
     }
 
-    bool            autoZoom;
-    bool            fullScreen;
+    bool             autoZoom;
+    bool             fullScreen;
 
-    const int       tileSize;
-    int             midButtonX;
-    int             midButtonY;
-    int             zoomWidth;
-    int             zoomHeight;
+    const int        tileSize;
+    int              midButtonX;
+    int              midButtonY;
+    int              zoomWidth;
+    int              zoomHeight;
 
-    double          zoom;
-    double          minZoom;
-    double          maxZoom;
-    const double    zoomMultiplier;
+    double           zoom;
+    double           minZoom;
+    double           maxZoom;
+    const double     zoomMultiplier;
 
-    QPoint          centerZoomPoint;
+    QPoint           centerZoomPoint;
 
-    QRect           pixmapRect;
+    QRect            pixmapRect;
 
-    QCache<QPixmap> tileCache;
+    Q3Cache<QPixmap> tileCache;
 
-    QPixmap*        tileTmpPix;
+    QPixmap*         tileTmpPix;
 
-    QColor          bgColor;
+    QColor           bgColor;
 };
 
 PreviewWidget::PreviewWidget(QWidget *parent)
@@ -112,9 +112,9 @@ PreviewWidget::PreviewWidget(QWidget *parent)
 
     viewport()->setMouseTracking(false);
 
-    horizontalScrollBar()->setLineStep( 1 );
+    horizontalScrollBar()->setSingleStep( 1 );
     horizontalScrollBar()->setPageStep( 1 );
-    verticalScrollBar()->setLineStep( 1 );
+    verticalScrollBar()->setSingleStep( 1 );
     verticalScrollBar()->setPageStep( 1 );
 
     setFrameStyle(QFrame::StyledPanel|QFrame::Plain); 
@@ -237,10 +237,10 @@ void PreviewWidget::setZoomFactor(double zoom)
     updateContentsSize();
 
     // adapt step size to zoom factor. Overall, using a finer step size than scrollbar default.
-    int step = qMax(2, 2*lround(d->zoom));
-    horizontalScrollBar()->setLineStep( step );
+    int step = qMax(2, (int)(2*lround(d->zoom)));
+    horizontalScrollBar()->setSingleStep( step );
     horizontalScrollBar()->setPageStep( step * 10 );
-    verticalScrollBar()->setLineStep( step );
+    verticalScrollBar()->setSingleStep( step );
     verticalScrollBar()->setPageStep( step * 10 );
 
     viewport()->setUpdatesEnabled(false);
@@ -379,6 +379,7 @@ void PreviewWidget::resizeEvent(QResizeEvent* e)
 
 void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
 {
+    QPainter p(viewport());
     QRect er(e->rect());
     er = QRect(qMax(er.x()      - 1, 0),
                qMax(er.y()      - 1, 0),
@@ -443,15 +444,14 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
                 QPoint pt(contentsToViewport(QPoint(ir.x() + d->pixmapRect.x(),
                                                     ir.y() + d->pixmapRect.y())));
 
-                bitBlt(viewport(), pt.x(), pt.y(),
-                       pix,
-                       ir.x()-r.x(), ir.y()-r.y(),
-                       ir.width(), ir.height());
+                p.drawPixmap(pt.x(), pt.y(),
+                             *pix,
+                             ir.x()-r.x(), ir.y()-r.y(),
+                             ir.width(), ir.height());
             }
         }
     }
 
-    QPainter p(viewport());
     p.setClipRegion(clipRegion);
     p.fillRect(er, d->bgColor);
     p.end();
@@ -478,7 +478,7 @@ void PreviewWidget::contentsMousePressEvent(QMouseEvent *e)
             m_movingInProgress = true;
             d->midButtonX      = e->x();
             d->midButtonY      = e->y();
-            viewport()->repaint(false);
+            viewport()->repaint();
             viewport()->setCursor(Qt::SizeAllCursor);
         }
         return;
@@ -491,7 +491,7 @@ void PreviewWidget::contentsMouseMoveEvent(QMouseEvent *e)
 {
     if (!e) return;
 
-    if (e->state() & Qt::MidButton)
+    if (e->buttons() & Qt::MidButton)
     {
         if (m_movingInProgress)
         {
@@ -512,7 +512,7 @@ void PreviewWidget::contentsMouseReleaseEvent(QMouseEvent *e)
     {
         emit signalContentsMovedEvent(true);
         viewport()->unsetCursor();
-        viewport()->repaint(false);
+        viewport()->repaint();
     }
 
     if (e->button() == Qt::RightButton)
@@ -525,7 +525,7 @@ void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
 {
     e->accept();
 
-    if (e->state() & Qt::ShiftModifier)
+    if (e->modifiers() & Qt::ShiftModifier)
     {
         if (e->delta() < 0)
             emit signalShowNextImage();
@@ -533,7 +533,7 @@ void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
             emit signalShowPrevImage();
         return;
     }
-    else if (e->state() & Qt::ControlModifier)
+    else if (e->modifiers() & Qt::ControlModifier)
     {
         d->centerZoomPoint = e->pos();
         if (e->delta() < 0 && !minZoom())
