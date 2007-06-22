@@ -25,11 +25,7 @@
 #ifndef IMAGELISTER_H
 #define IMAGELISTER_H
 
-#include <stddef.h>
-
-#include <qstring.h>
-#include <qdatastream.h>
-#include <q3valuelist.h>
+#include <QString>
 
 #include <kio/job.h>
 

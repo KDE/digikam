@@ -24,8 +24,8 @@
 #ifndef DATABASEURL_H
 #define DATABASEURL_H
 
-#include <qdatetime.h>
-#include <q3valuelist.h>
+#include <QDateTime>
+#include <QList>
 
 #include <kurl.h>
 
@@ -76,7 +76,7 @@ public:
      * of the referenced tag, with the topmost parent first, and the tag last in the list.
      * An empty list references the root tag.
      */
-    static DatabaseUrl fromTagIds(const Q3ValueList<int> tagIds,
+    static DatabaseUrl fromTagIds(const QList<int> &tagIds,
                                   const DatabaseParameters &parameters = DatabaseAccess::parameters());
 
     /**
@@ -165,7 +165,7 @@ public:
      * Returns the tag ids of all tags in the tag path of this tag,
      * the topmost tag in the hierarchy first.
      */
-    Q3ValueList<int> tagIds() const;
+    QList<int> tagIds() const;
 
 
     /// Date URL
