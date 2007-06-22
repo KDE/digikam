@@ -116,10 +116,11 @@ public:
 HistogramWidget::HistogramWidget(int w, int h, 
                                  QWidget *parent, bool selectMode,
                                  bool blinkComputation, bool statisticsVisible)
-               : QWidget(parent, 0, Qt::WDestructiveClose)
+               : QWidget(parent)
 {
     d = new HistogramWidgetPriv;
     setup(w, h, selectMode, blinkComputation, statisticsVisible);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     m_imageHistogram     = 0L;
     m_selectionHistogram = 0L;
@@ -132,11 +133,12 @@ HistogramWidget::HistogramWidget(int w, int h,
                                  bool i_sixteenBits,
                                  QWidget *parent, bool selectMode,
                                  bool blinkComputation, bool statisticsVisible)
-               : QWidget(parent, 0, Qt::WDestructiveClose)
+               : QWidget(parent)
 {
     d = new HistogramWidgetPriv;
     d->sixteenBits = i_sixteenBits;
     setup(w, h, selectMode, blinkComputation, statisticsVisible);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
     m_selectionHistogram = 0L;
@@ -150,11 +152,12 @@ HistogramWidget::HistogramWidget(int w, int h,
                                  bool i_sixteenBits,
                                  QWidget *parent, bool selectMode,
                                  bool blinkComputation, bool statisticsVisible)
-               : QWidget(parent, 0, Qt::WDestructiveClose)
+               : QWidget(parent)
 {
     d = new HistogramWidgetPriv;
     d->sixteenBits = i_sixteenBits;
     setup(w, h, selectMode, blinkComputation, statisticsVisible);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
     m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits, this);
@@ -196,20 +199,20 @@ void HistogramWidget::setHistogramGuideByColor(DColor color)
 {
     d->guideVisible = true;
     d->colorGuide   = color;
-    repaint(false);
+    repaint();
 }
 
 void HistogramWidget::reset(void)
 {
     d->guideVisible = false;
-    repaint(false);
+    repaint();
 }
 
-void HistogramWidget::customEvent(QCustomEvent *event)
+void HistogramWidget::customEvent(QEvent *event)
 {
     if (!event) return;
 
-    ImageHistogram::EventData *ed = (ImageHistogram::EventData*) event->data();
+    ImageHistogram::EventData *ed = (ImageHistogram::EventData*) event;
 
     if (!ed) return;
 
@@ -232,7 +235,7 @@ void HistogramWidget::customEvent(QCustomEvent *event)
             else
             {
                 // after the initial repaint, we can repaint immediately
-                repaint(false);
+                repaint();
                 d->blinkTimer->start( 200 );
             }
         }
@@ -256,14 +259,14 @@ void HistogramWidget::customEvent(QCustomEvent *event)
             emit signalHistogramComputationDone(d->sixteenBits);
 
             setUpdatesEnabled(true);
-            repaint(false);
+            repaint();
         }
         else
         {
             d->clearFlag = HistogramWidgetPriv::HistogramFailed;
             d->blinkTimer->stop();
             d->inInitialRepaintWait = false;
-            repaint(false);
+            repaint();
             setCursor( Qt::ArrowCursor );    
             // Remove old histogram data from memory.
             if (m_imageHistogram)
@@ -293,7 +296,7 @@ void HistogramWidget::setDataLoading()
         // a short time so that very fast computation does not create flicker
         d->inInitialRepaintWait = true;
         d->blinkTimer->start( 100 );
-        //repaint(false);
+        //repaint();
     }
 }
 
@@ -302,7 +305,7 @@ void HistogramWidget::setLoadingFailed()
     d->clearFlag = HistogramWidgetPriv::HistogramFailed;
     d->blinkTimer->stop();
     d->inInitialRepaintWait = false;
-    repaint(false);
+    repaint();
     setCursor( Qt::ArrowCursor );
 }
 
@@ -369,7 +372,7 @@ void HistogramWidget::slotBlinkTimerDone( void )
 {
     d->blinkFlag = !d->blinkFlag;
     d->inInitialRepaintWait = false;
-    repaint(false);
+    repaint();
     d->blinkTimer->start( 200 );
 }
 
@@ -386,12 +389,22 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     {
        QPixmap pm(size());
        QPainter p1;
-       p1.begin(&pm, this);
-       p1.fillRect(0, 0, size().width(), size().height(),  palette().disabled().background());
-       p1.setPen(QPen(palette().disabled().foreground(), 1, Qt::SolidLine));
+       p1.begin(&pm);
+       p1.initFrom(this);
+       p1.fillRect(0, 0, size().width(), size().height(),  
+                   palette().color(QPalette::Disabled, QPalette::Background));
+
+       QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
+       pen.setStyle(Qt::SolidLine);
+       pen.setWidth(1);
+
+       p1.setPen(pen);
        p1.drawRect(0, 0, width(), height());
        p1.end();
-       bitBlt(this, 0, 0, &pm);
+
+       QPainter p2(this);
+       p2.drawPixmap(0, 0, pm);
+       p2.end();
        return;
     }
     // Image data is loading or histogram is being computed:
@@ -403,7 +416,8 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     {
        QPixmap pm(size());
        QPainter p1;
-       p1.begin(&pm, this);
+       p1.begin(&pm);
+       p1.initFrom(this);
        p1.fillRect(0, 0, size().width(), size().height(), Qt::white);
 
        if (d->blinkFlag)
@@ -418,7 +432,10 @@ void HistogramWidget::paintEvent( QPaintEvent * )
            p1.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
                   i18n("Histogram\ncalculation\nin progress..."));
        p1.end();
-       bitBlt(this, 0, 0, &pm);
+
+       QPainter p2(this);
+       p2.drawPixmap(0, 0, pm);
+       p2.end();
        return;
     }
     // Histogram computation failed:
@@ -427,13 +444,17 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     {
        QPixmap pm(size());
        QPainter p1;
-       p1.begin(&pm, this);
+       p1.begin(&pm);
+       p1.initFrom(this);
        p1.fillRect(0, 0, size().width(), size().height(), Qt::white);
        p1.setPen(Qt::red);
        p1.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
                   i18n("Histogram\ncalculation\nfailed."));
        p1.end();
-       bitBlt(this, 0, 0, &pm);
+
+       QPainter p2(this);
+       p2.drawPixmap(0, 0, pm);
+       p2.end();
        return;
     }
 
@@ -502,7 +523,8 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 
     QPixmap pm(size());
     QPainter p1;
-    p1.begin(&pm, this);
+    p1.begin(&pm);
+    p1.initFrom(this);
 
     // Drawing selection or all histogram values.
 
@@ -937,7 +959,10 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     p1.setPen(QPen(Qt::black, 1, Qt::SolidLine));
     p1.drawRect(0, 0, width(), height());
     p1.end();
-    bitBlt(this, 0, 0, &pm);
+
+    QPainter p2(this);
+    p2.drawPixmap(0, 0, pm);
+    p2.end();
 }
 
 void HistogramWidget::mousePressEvent ( QMouseEvent * e )
@@ -947,7 +972,7 @@ void HistogramWidget::mousePressEvent ( QMouseEvent * e )
        if (!d->inSelected)
        {
           d->inSelected = true;
-          repaint(false);
+          repaint();
        }
 
        d->xmin = ((double)e->pos().x()) / ((double)width());
@@ -970,7 +995,7 @@ void HistogramWidget::mouseReleaseEvent ( QMouseEvent * )
             //emit signalMinValueChanged( 0 );
             //emit signalMaxValueChanged( d->range );
             notifyValuesChanged();
-            repaint(false);
+            repaint();
         }
     }
 }
@@ -1001,7 +1026,7 @@ void HistogramWidget::mouseMoveEvent ( QMouseEvent * e )
           notifyValuesChanged();
           //emit signalMaxValueChanged( d->xmax == 0.0 ? d->range : (int)(d->xmax * d->range) );
 
-          repaint(false);
+          repaint();
        }
     }
 }
@@ -1025,7 +1050,7 @@ void HistogramWidget::slotMinValueChanged( int min )
         {
            d->xmin = ((double)min)/d->range;
         }
-        repaint(false);
+        repaint();
     }
 }
 
@@ -1043,7 +1068,7 @@ void HistogramWidget::slotMaxValueChanged( int max )
         {
             d->xmax = ((double)max)/d->range;
         }
-        repaint(false);
+        repaint();
     }
 }
 
