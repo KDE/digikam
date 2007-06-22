@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <Q3Scrollview>
+#include <Q3ScrollView>
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QWheelEvent>

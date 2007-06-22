@@ -27,19 +27,18 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <q3cache.h>
-#include <qpainter.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qrect.h>
-#include <qtimer.h>
-#include <qpointer.h>
-//Added by qt3to4:
+#include <QCache>
+#include <QString>
+#include <QPainter>
+#include <QImage>
+#include <QPixmap>
+#include <QRect>
+#include <QTimer>
+#include <QPointer>
 #include <QWheelEvent>
 #include <QPaintEvent>
 #include <QResizeEvent>
-#include <Q3Frame>
+#include <QFrame>
 #include <QMouseEvent>
 
 // KDE include.
@@ -86,7 +85,7 @@ public:
     int             midButtonY;
     int             zoomWidth;
     int             zoomHeight;
-    
+
     double          zoom;
     double          minZoom;
     double          maxZoom;
@@ -95,8 +94,8 @@ public:
     QPoint          centerZoomPoint;
 
     QRect           pixmapRect;
-    
-    Q3Cache<QPixmap> tileCache;
+
+    QCache<QPixmap> tileCache;
 
     QPixmap*        tileTmpPix;
 
@@ -104,13 +103,13 @@ public:
 };
 
 PreviewWidget::PreviewWidget(QWidget *parent)
-             : Q3ScrollView(parent, 0, Qt::WDestructiveClose)
+             : Q3ScrollView(parent)
 {
     d = new PreviewWidgetPriv;
     d->bgColor.setRgb(0, 0, 0);
     m_movingInProgress = false;
-    
-    viewport()->setBackgroundMode(Qt::NoBackground);
+    setAttribute(Qt::WA_DeleteOnClose);
+
     viewport()->setMouseTracking(false);
 
     horizontalScrollBar()->setLineStep( 1 );
@@ -118,8 +117,8 @@ PreviewWidget::PreviewWidget(QWidget *parent)
     verticalScrollBar()->setLineStep( 1 );
     verticalScrollBar()->setPageStep( 1 );
 
-    setFrameStyle(Q3Frame::StyledPanel|Q3Frame::Plain); 
-    setMargin(0); 
+    setFrameStyle(QFrame::StyledPanel|QFrame::Plain); 
+    setMargin(0);
     setLineWidth(1);
 }
 
@@ -133,7 +132,7 @@ void PreviewWidget::setBackgroundColor(const QColor& color)
 {
     if (d->bgColor == color)
         return;
-    
+
     d->bgColor = color;
     viewport()->update();
 }
@@ -331,7 +330,7 @@ double PreviewWidget::calcAutoZoomFactor(AutoZoomMode mode)
 void PreviewWidget::updateContentsSize()
 {
     viewport()->setUpdatesEnabled(false);
-    
+
     if (visibleWidth() > d->zoomWidth || visibleHeight() > d->zoomHeight)
     {
         // Center the image
@@ -385,7 +384,7 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
                qMax(er.y()      - 1, 0),
                qMin(er.width()  + 2, contentsRect().width()),
                qMin(er.height() + 2, contentsRect().height()));
-    
+
     bool antialias = (d->zoom <= 1.0) ? true : false;
 
     QRect o_cr(viewportToContents(er.topLeft()), viewportToContents(er.bottomRight()));
@@ -416,7 +415,7 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
             {
                 QString key  = QString("%1,%2").arg(i).arg(j);
                 QPixmap *pix = d->tileCache.find(key);
-                
+
                 if (!pix)
                 {
                     if (antialias)
@@ -480,11 +479,11 @@ void PreviewWidget::contentsMousePressEvent(QMouseEvent *e)
             d->midButtonX      = e->x();
             d->midButtonY      = e->y();
             viewport()->repaint(false);
-            viewport()->setCursor(Qt::SizeAllCursor);            
+            viewport()->setCursor(Qt::SizeAllCursor);
         }
         return;
     }
-    
+
     viewport()->setMouseTracking(false);
 }
 
@@ -502,7 +501,7 @@ void PreviewWidget::contentsMouseMoveEvent(QMouseEvent *e)
         }
     }
 }
-    
+
 void PreviewWidget::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     if (!e) return;
