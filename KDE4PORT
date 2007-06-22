@@ -1,134 +1,147 @@
-Developpers witch work on digiKam KDE4 port:
---------------------------------------------
+DEVELOPPERS WHO WORKS ON DIGIKAM KDE4 PORT:
+-------------------------------------------
 
 Gilles Caulier <caulier dot gilles at gmail dot com>
 Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
 Laurent Montel <montel at kde dot org>
 
 
-List of directories ported by developpers:
+LIST OF DIRECTORIES PORTED BY DEVELOPPERS:
 ------------------------------------------
+                                                                DEPENCIES              SUPPORT LAYER
+                                                                +-------+                 +----+
+                                                               /         \                /    \
+ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  STATUS    QT3  KDE3   REMARK
 
-ORDER   DIRECTORIES                       ASSIGNED      STATUS      REMARK
 
+ 1      |-libs                                                                                       "libs" subfloders are used by all others parts of digiKam. Must be ported in first.
+        |---curves                              Gilles          X       X       DONE
+        |---database                            Marcel                  X
+        |-----sqlite2                           Gilles                  X       DONE                 CMake port only is require.
+        |---dialogs                             Gilles          X       X       DONE
+        |---dimg                                Gilles          X       X       DONE
+        |-----filters                           Gilles          X       X       DONE
+        |-----loaders                           Gilles          X       X       DONE
+        |---dmetadata                           Gilles          X       X       DONE
+        |---greycstoration                      Gilles          X       X       DONE
+        |---histogram                           Gilles          X       X       DONE
+        |---imageproperties 
+            navigatebartab.cpp                  Gilles          X       X       DONE
+            imagepropertiessidebar.cpp          Gilles          X       X       DONE
+            navigatebarwidget.cpp               Gilles          X       X       DONE
+            imagepropertiescolorstab.cpp        Gilles          X       X       DONE
+            imagepropertiesmetadatatab.cpp      Gilles          X       X       DONE
+            imagepropertiestab.cpp              Gilles          X       X       DONE
+            cameraitempropertiestab.cpp         Gilles                  X       DONE
+            imagepropertiessidebarcamgui.cpp    Gilles                  X       DONE
+            imagepropertiessidebardb.cpp                                X
+            imagedescedittab.cpp                                        X
+            talbumlistview.cpp                                          X
+        |---jpegutils                           Gilles                  X       DONE
+        |---levels                              Gilles          X       X       DONE
+        |---lprof                               Gilles          X       X       DONE      -    -     CMake port only is require.
+        |---themeengine                         Gilles                  X       DONE
+        |---threadimageio                       Marcel          X       X       DONE
+        |---thumbbar                            Gilles          X       X       DONE
+        |---whitebalance                        Gilles          X       X       DONE
+        |---widgets
+        |-----common                            Gilles          X       X
+        |-----iccprofiles                       Gilles          X       X
+        |-----imageplugins                      Laurent         X       X
+        |-----metadata                          Laurent         X       X
 
- 1      |-libs                                                      "libs" subfloders are used by all others parts of digiKam. Must be ported in first.
-        |---curves                        Gilles        DONE
-        |---database                      Marcel
-        |-----sqlite2                     Gilles        DONE        CMake port only is require. 
-        |---dialogs                       Gilles        DONE
-        |---dimg                          Gilles        DONE
-        |-----filters                     Gilles        DONE
-        |-----loaders                     Gilles        DONE
-        |---dmetadata                     Gilles        DONE
-        |---greycstoration                Gilles        DONE
-        |---histogram                     Gilles        DONE
-        |---imageproperties               Gilles        
-        |---jpegutils                     Gilles        DONE
-        |---levels                        Gilles        DONE
-        |---lprof                         Gilles        DONE        CMake port only is require.
-        |---themeengine                   Gilles        DONE
-        |---threadimageio                 Marcel        DONE
-        |---thumbbar                      Gilles        DONE
-        |---whitebalance                  Gilles        DONE
-        |---widgets                       Laurent
-        |-----common                      Gilles
-        |-----iccprofiles                 Gilles
-        |-----imageplugins                Laurent
-        |-----metadata                    Laurent
-     
- 2      |-utilities                                                 Utilities components are used as "libs" by digiKam main interface.
-        |---batch                         Laurent
-        |---cameragui                     
-        |---hotplug                       Gilles                    CMake port only is require.
+ 2      |-utilities                                                                                  Utilities components are used as "libs" by digiKam main interface.
+        |---batch                               Laurent                 X
+        |---cameragui                                                   X
+        |---hotplug                                                                                  CMake port only is require.
         |---imageeditor
-        |-----canvas                      Laurent                   CMake port only
-        |-----editor                      Laurent                   CMake port only
-        |-----tools                       Laurent                   CMake port only
-        |---lighttable                    
-        |---scripts                       Gilles        DONE        CMake port only is require.
-        |---setup                         Gilles        DONE
-        |---slideshow                     Laurent                   CMake port only
-        |---splashscreen                  Laurent       DONE        
-      
- 3      |-digikam                                                   The most long to do certainly
-            album.cpp     
-            albumfiletip.cpp
-            albumfolderview.cpp
-            albumhistory.cpp
-            albumicongroupitem.cpp
-            albumiconitem.cpp
-            albumiconview.cpp
-            albumitemhandler.cpp
-            albumlister.cpp
-            albummanager.cpp
-            albumpropsedit.cpp
-            albumsettings.cpp             Gilles  
-            albumthumbnailloader.cpp
-            albumwidgetstack.cpp
-            cameradragobject.cpp
-            cameralist.cpp
-            cameratype.cpp
-            datefolderview.cpp
-            dcopiface.cpp
-            digikamapp.cpp
-            digikamfirstrun.cpp
-            digikamview.cpp
-            dio.cpp
-            dragobjects.cpp
-            firstrun.cpp
-            folderitem.cpp
-            folderview.cpp
-            icongroupitem.cpp
-            iconitem.cpp
-            iconview.cpp
-            imageattributeswatch.cpp
-            imagepreviewview.cpp
-            kdateedit.cpp
-            kdatepickerpopup.cpp
-            kdatetimeedit.cpp
-            kipiinterface.cpp             Gilles       
-            main.cpp
-            mediaplayerview.cpp
-            metadatahub.cpp
-            monthwidget.cpp
-            pixmapmanager.cpp
-            ratingpopupmenu.cpp
-            ratingwidget.cpp
-            scanlib.cpp
-            searchadvanceddialog.cpp
-            searchfolderview.cpp
-            searchquickdialog.cpp
-            searchresultsitem.cpp
-            searchresultsview.cpp
-            searchwidgets.cpp
-            syncjob.cpp
-            tagcreatedlg.cpp
-            tagfilterview.cpp
-            tagfolderview.cpp
-            tagspopupmenu.cpp
-            welcomepageview.cpp
+        |-----canvas                            Laurent         X       X                            CMake port only
+        |-----editor                            Laurent         X       X                            CMake port only
+        |-----tools                             Laurent         X       X                            CMake port only
+        |---lighttable                                                  X
+        |---scripts                             Gilles                          DONE                 CMake port only is require.
+        |---setup                               Gilles          X       X       DONE
+        |---slideshow                           Laurent         X       X                            CMake port only
+        |---splashscreen                        Laurent         X       X       DONE
 
- 4      |-kioslave
-            digikamalbums.cpp             Marcel
-            digikamdates.cpp              Marcel
-            digikamsearch.cpp             Marcel
-            digikamtags.cpp               Marcel
-            digikamthumbnail.cpp          Gilles        DONE                
-            sqlitedb.cpp                  Marcel
-     
- 5      |-showfoto
-        |---icons                         Gilles        DONE        CMake port only is require.
-        |---pics                          Gilles        DONE        CMake port only is require.
-        |---setup                         Gilles        DONE
+ 3      |-kioslave
+            digikamalbums.cpp                   Marcel                  X
+            digikamdates.cpp                    Marcel                  X
+            digikamsearch.cpp                   Marcel                  X
+            digikamtags.cpp                     Marcel                  X
+            digikamthumbnail.cpp                Gilles          X       X       DONE
+            sqlitedb.cpp                        Marcel                  X
 
- 6      |-imageplugins                                         All image editor plugins can be ported after digiKam core
-        |---adjustcurves                  Laurent                   CMake port only
-        |---adjustlevels                  Laurent                   CMake port only
+ 4      |-showfoto                                              X
+        |---icons                               Gilles                          DONE                 CMake port only is require.
+        |---pics                                Gilles                          DONE                 CMake port only is require.
+        |---setup                               Gilles          X               DONE
+
+ 5      |-digikam                                                       X                            The most long to do certainly
+            album.cpp                                                   X
+            albumfiletip.cpp                                            X
+            albumfolderview.cpp                                         X
+            albumhistory.cpp                                            X
+            albumicongroupitem.cpp                                      X
+            albumiconitem.cpp                                           X
+            albumiconview.cpp                                           X
+            albumitemhandler.cpp                                        X
+            albumlister.cpp                                             X
+            albummanager.cpp                                            X
+            albumpropsedit.cpp                                          X
+            albumsettings.cpp                   Gilles                  X
+            albumthumbnailloader.cpp                                    X
+            albumwidgetstack.cpp                                        X
+            cameradragobject.cpp                                        X
+            cameralist.cpp                                              X
+            cameratype.cpp                                              X
+            datefolderview.cpp                                          X
+            dcopiface.cpp                                               X
+            digikamapp.cpp                                              X
+            digikamfirstrun.cpp                                         X
+            digikamview.cpp                                             X
+            dio.cpp                                                     X
+            dragobjects.cpp                                             X
+            firstrun.cpp                                                X
+            folderitem.cpp                                              X
+            folderview.cpp                                              X
+            icongroupitem.cpp                                           X
+            iconitem.cpp                                                X
+            iconview.cpp                                                X
+            imageattributeswatch.cpp                                    X
+            imagepreviewview.cpp                                        X
+            kdateedit.cpp                                               X
+            kdatepickerpopup.cpp                                        X
+            kdatetimeedit.cpp                                           X
+            kipiinterface.cpp                   Gilles                  X
+            main.cpp                                                    X
+            mediaplayerview.cpp                                         X
+            metadatahub.cpp                                             X
+            monthwidget.cpp                                             X
+            pixmapmanager.cpp                                           X
+            ratingpopupmenu.cpp                                         X
+            ratingwidget.cpp                                            X
+            scanlib.cpp                                                 X
+            searchadvanceddialog.cpp                                    X
+            searchfolderview.cpp                                        X
+            searchquickdialog.cpp                                       X
+            searchresultsitem.cpp                                       X
+            searchresultsview.cpp                                       X
+            searchwidgets.cpp                                           X
+            syncjob.cpp                                                 X
+            tagcreatedlg.cpp                                            X
+            tagfilterview.cpp                                           X
+            tagfolderview.cpp                                           X
+            tagspopupmenu.cpp                                           X
+            welcomepageview.cpp                                         X
+
+ 6      |-imageplugins                                                                               All image editor plugins can be ported after digiKam core
+        |---adjustcurves                        Laurent                                              CMake port only
+        |---adjustlevels                        Laurent                                              CMake port only
         |---antivignetting
         |---blurfx
-        |---border                        Laurent                   CMake port only
-        |-----patterns                    Gilles                    CMake port only is require. 
+        |---border                              Laurent                                              CMake port only
+        |-----patterns                                                                               CMake port only is require.
         |---channelmixer
         |---charcoal
         |---colorfx
@@ -136,33 +149,33 @@ ORDER   DIRECTORIES                       ASSIGNED      STATUS      REMARK
         |-----hsl
         |-----ratiocrop
         |-----sharpnesseditor
-        |-------clapack                   Gilles        DONE        CMake port only is require.
+        |-------clapack                         Gilles                          DONE                 CMake port only is require.
         |---distortionfx
-        |---emboss                        Laurent                   CMake port only
-        |---filmgrain                     Laurent                   CMake port only
-        |---freerotation                  Gilles
-        |---hotpixels                     Laurent                   CMake port only
+        |---emboss                              Laurent                                              CMake port only
+        |---filmgrain                           Laurent                                              CMake port only
+        |---freerotation                        Gilles
+        |---hotpixels                           Laurent                                              CMake port only
         |---infrared
-        |---inpainting                    Laurent                   CMake port only
-        |---inserttext                    Laurent                   CMake port only
-        |---lensdistortion                Laurent                   CMake port only
-        |---noisereduction                Laurent                   CMake port only
-        |---oilpaint                      Laurent                   CMake port only
-        |---perspective                   Laurent                   CMake port only
-        |---raindrop                      Laurent                   CMake port only
-        |---restoration                   Gilles                    CMake port only
+        |---inpainting                          Laurent                                              CMake port only
+        |---inserttext                          Laurent                                              CMake port only
+        |---lensdistortion                      Laurent                                              CMake port only
+        |---noisereduction                      Laurent                                              CMake port only
+        |---oilpaint                            Laurent                                              CMake port only
+        |---perspective                         Laurent                                              CMake port only
+        |---raindrop                            Laurent                                              CMake port only
+        |---restoration                         Gilles                                               CMake port only
         |---sheartool
         |---superimpose
         |---texture
-        |-----patterns                    Gilles                    CMake port only is require.
-        |---whitebalance                  Gilles                    CMake port only
+        |-----patterns                                                                               CMake port only is require.
+        |---whitebalance                        Gilles                                               CMake port only
 
- 7      |-themedesigner                                             The last one component. It completly independant. It will be the last one to port.
+ 7      |-themedesigner                                                                              The last one component. It completly independant. It will be the last one to port.
 
- 8      |-data                            Gilles        DONE        CMake port only is require.
-        |---about                         Gilles        DONE        CMake port only is require.
-        |---icons                         Gilles        DONE        CMake port only is require.
-        |---pics                          Gilles        DONE        CMake port only is require.
-        |---profiles                      Gilles        DONE        CMake port only is require.
-        |---themes                        Gilles        DONE        CMake port only is require.
+ 8      |-data                                  Gilles                          DONE                 CMake port only is require.
+        |---about                               Gilles                          DONE                 CMake port only is require.
+        |---icons                               Gilles                          DONE                 CMake port only is require.
+        |---pics                                Gilles                          DONE                 CMake port only is require.
+        |---profiles                            Gilles                          DONE                 CMake port only is require.
+        |---themes                              Gilles                          DONE                 CMake port only is require.
 
