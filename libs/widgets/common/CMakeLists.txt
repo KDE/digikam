@@ -1,5 +1,7 @@
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/curves
                    )
 
 SET(libcommonwidgets_STAT_SRCS colorgradientwidget.cpp 
