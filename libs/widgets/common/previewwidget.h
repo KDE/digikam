@@ -26,8 +26,7 @@
 
 // Qt includes.
 
-#include <q3scrollview.h>
-//Added by qt3to4:
+#include <Q3Scrollview>
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QWheelEvent>
@@ -75,7 +74,7 @@ public:
 signals:
 
     void signalRightButtonClicked();
-    void signalLeftButtonClicked();    
+    void signalLeftButtonClicked();
     void signalShowNextImage();
     void signalShowPrevImage();
     void signalZoomFactorChanged(double);
@@ -119,7 +118,7 @@ protected:
     virtual void resetPreview()=0;
     virtual void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)=0;
     virtual void zoomFactorChanged(double zoom);
-   
+
 private:
 
     PreviewWidgetPriv* d;

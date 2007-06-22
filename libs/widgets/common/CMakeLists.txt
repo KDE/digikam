@@ -12,9 +12,9 @@ SET(libcommonwidgets_STAT_SRCS colorgradientwidget.cpp
                                dpopupmenu.cpp 
                                squeezedcombobox.cpp 
                                paniconwidget.cpp
-                               histogramwidget.cpp 
+                               previewwidget.cpp
                                curveswidget.cpp 
-                               previewwidget.cpp 
+                               histogramwidget.cpp 
    )
 
 KDE4_AUTOMOC(${libcommonwidgets_STAT_SRCS})

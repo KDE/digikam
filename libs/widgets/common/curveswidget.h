@@ -63,7 +63,7 @@ public:
         LinScaleHistogram=0,      // Linear scale.
         LogScaleHistogram         // Logarithmic scale.
     };
-    
+
 public:
 
     CurvesWidget(int w, int h,                         // Widget size.
@@ -73,34 +73,34 @@ public:
                  QWidget *parent=0,                    // Parent widget instance.
                  bool readOnly=false);                 // If true : widget with full edition mode capabilities.
                                                        // If false : display curve data only without edition.
-                 
+
     ~CurvesWidget();
 
     // Stop current histogram computations.
     void stopHistogramComputation(void);
-    
+
     void reset(void);
     void curveTypeChanged(void);
     void setCurveGuide(DColor color);
-    
+
 public:
-    
+
     int             m_channelType;     // Channel type to draw.
     int             m_scaleType;       // Scale to use for drawing.
 
     ImageHistogram *m_imageHistogram;
 
 signals:
-    
+
     void signalMouseMoved( int x, int y );
     void signalCurvesChanged(void);
     void signalHistogramComputationDone(void);
     void signalHistogramComputationFailed(void);
 
 protected slots:
-    
+
     void slotBlinkTimerDone( void );
-            
+
 protected:
 
     void paintEvent( QPaintEvent * );
@@ -108,14 +108,14 @@ protected:
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );
     void leaveEvent ( QEvent * );
-    
+
 private:
-        
+
     void customEvent(QEvent *event);
 
 private:
 
-    CurvesWidgetPriv* d;    
+    CurvesWidgetPriv* d;
 };
 
 }  // NameSpace Digikam
