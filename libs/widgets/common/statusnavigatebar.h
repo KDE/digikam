@@ -57,21 +57,21 @@ public:
 
     StatusNavigateBar(QWidget *parent=0);
     ~StatusNavigateBar();
-    
+
     void setNavigateBarState(bool hasPrev, bool hasNext);
     void setButtonsState(int itemType);
     int  getButtonsState();
 
 signals:
-    
-    void signalFirstItem(void);    
-    void signalPrevItem(void);    
-    void signalNextItem(void);    
-    void signalLastItem(void);    
-        
+
+    void signalFirstItem();
+    void signalPrevItem();
+    void signalNextItem();
+    void signalLastItem();
+
 private :
 
-    StatusNavigateBarPriv* d;    
+    StatusNavigateBarPriv* d;
 };
 
 }  // namespace Digikam

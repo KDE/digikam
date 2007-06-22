@@ -24,11 +24,8 @@
 
 // Qt includes.
 
-#include <qlayout.h>
-#include <qtoolbutton.h>
-#include <qtooltip.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QToolButton>
+#include <QHBoxLayout>
 
 // KDE includes.
 
@@ -65,30 +62,32 @@ public:
 };
 
 StatusNavigateBar::StatusNavigateBar(QWidget *parent)
-                 : QWidget(parent, 0, Qt::WDestructiveClose)
+                 : QWidget(parent)
 {
     d = new StatusNavigateBarPriv;
+    setAttribute(Qt::WA_DeleteOnClose);
 
-    Q3HBoxLayout *lay = new Q3HBoxLayout(this);
+    QHBoxLayout *lay = new QHBoxLayout(this);
+    setLayout(lay);
 
     d->firstButton = new QToolButton(this);
     d->firstButton->setAutoRaise(true);
-    d->firstButton->setIconSet(SmallIconSet("start"));
+    d->firstButton->setIcon(SmallIcon("start"));
     d->firstButton->setToolTip( i18n("Go to the first item"));
 
     d->prevButton = new QToolButton(this);
     d->prevButton->setAutoRaise(true);
-    d->prevButton->setIconSet(SmallIconSet("back"));
+    d->prevButton->setIcon(SmallIcon("back"));
     d->prevButton->setToolTip( i18n("Go to the previous item"));
 
     d->nextButton = new QToolButton(this);
     d->nextButton->setAutoRaise(true);
-    d->nextButton->setIconSet(SmallIconSet("forward"));
+    d->nextButton->setIcon(SmallIcon("forward"));
     d->nextButton->setToolTip( i18n("Go to the next item"));
 
     d->lastButton = new QToolButton(this);
     d->lastButton->setAutoRaise(true);
-    d->lastButton->setIconSet(SmallIconSet("finish"));
+    d->lastButton->setIcon(SmallIcon("finish"));
     d->lastButton->setToolTip( i18n("Go to the last item"));
 
     lay->addWidget(d->firstButton);
@@ -166,4 +165,3 @@ int StatusNavigateBar::getButtonsState()
 }
 
 }  // namespace Digikam
-
