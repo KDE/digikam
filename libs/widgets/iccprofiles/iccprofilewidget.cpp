@@ -55,6 +55,7 @@
 #include "metadatalistview.h"
 #include "cietonguewidget.h"
 #include "iccprofilewidget.h"
+#include "iccprofilewidget.moc"
 
 namespace Digikam
 {
@@ -444,4 +445,3 @@ QString ICCProfileWidget::getTagDescription(const QString& key)
 
 }  // namespace Digikam
 
-#include "iccprofilewidget.moc"
