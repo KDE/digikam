@@ -1,5 +1,5 @@
 
 ADD_SUBDIRECTORY( common )
-#ADD_SUBDIRECTORY( iccprofiles )
+ADD_SUBDIRECTORY( iccprofiles )
 #ADD_SUBDIRECTORY( metadata )
 #ADD_SUBDIRECTORY( imageplugins )
