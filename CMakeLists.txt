@@ -17,7 +17,7 @@ ADD_SUBDIRECTORY( libs )
 ADD_SUBDIRECTORY( utilities )
 #ADD_SUBDIRECTORY( digikam )
 #ADD_SUBDIRECTORY( showfoto )
-#ADD_SUBDIRECTORY( kioslave )
+ADD_SUBDIRECTORY( kioslave )
 #ADD_SUBDIRECTORY( imageplugins )
 #ADD_SUBDIRECTORY( themedesigner )
 
