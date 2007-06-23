@@ -287,7 +287,7 @@ void ImageRegionWidget::viewportPaintExtraData()
             QPoint pt;
             QRect  hpArea;
             
-            for (uint i = 0 ; i < d->hightlightPoints.count() ; i++)
+            for (int i = 0 ; i < d->hightlightPoints.count() ; i++)
             {
                 pt = d->hightlightPoints.point(i);
                 
