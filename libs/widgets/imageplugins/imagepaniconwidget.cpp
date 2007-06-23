@@ -28,12 +28,10 @@
 
 // Qt includes.
 
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpen.h>
-#include <qtimer.h>
-//Added by qt3to4:
-#include <Q3PointArray>
+#include <QPainter>
+#include <QPixmap>
+#include <QPen>
+#include <QTimer>
 
 // Local includes.
 
@@ -57,17 +55,18 @@ public:
         separateView = ImageRegionWidget::SeparateViewNone;
     }
 
-    uchar       *data;
+    uchar        *data;
 
-    int          separateView;
+    int           separateView;
     
     Q3PointArray  hightlightPoints;
     
-    ImageIface  *iface;
+    ImageIface   *iface;
 };
 
-ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent, Qt::WFlags flags)
-                  : PanIconWidget(parent, flags)
+ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent, 
+                                       Qt::WidgetAttribute attribute)
+                  : PanIconWidget(parent, attribute)
 {
     d = new ImagePanIconWidgetPriv;
 
@@ -99,13 +98,13 @@ void ImagePanIconWidget::setHighLightPoints(Q3PointArray pointsList)
 {
     d->hightlightPoints = pointsList;
     updatePixmap();
-    repaint(false);
+    repaint();
 }
 
 void ImagePanIconWidget::updatePixmap()
 {
     // Drawing background and image.
-    m_pixmap->fill(colorGroup().background());
+    m_pixmap->fill(palette().color(QPalette::Background));
     d->iface->paint(m_pixmap, m_rect.x(), m_rect.y(), m_rect.width(), m_rect.height());
     
     QPainter p(m_pixmap);
@@ -194,7 +193,7 @@ void ImagePanIconWidget::slotSeparateViewToggled(int t)
 {
     d->separateView = t;
     updatePixmap();
-    repaint(false);
+    repaint();
 }
 
 }  // NameSpace Digikam
