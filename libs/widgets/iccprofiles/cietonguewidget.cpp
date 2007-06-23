@@ -31,12 +31,11 @@
 
 // Qt includes.
 
-#include <qimage.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qfile.h>
-#include <qtimer.h>
-//Added by qt3to4:
+#include <QImage>
+#include <QPainter>
+#include <QPixmap>
+#include <QFile>
+#include <QTimer>
 #include <QPaintEvent>
 
 // KDE includes.
@@ -53,20 +52,21 @@
 namespace Digikam
 {
 
-    // The  following  table  gives  the  CIE  colour  matching  functions
-    // \bar{x}(\lambda),  \bar{y}(\lambda),  and   \bar{z}(\lambda),   for
-    // wavelengths  \lambda  at 5 nanometre increments from 380 nm through
-    // 780 nm.  This table is used in conjunction with  Planck's  law  for
-    // the  energy spectrum of a black body at a given temperature to plot
-    // the black body curve on the CIE chart. 
+    /**
+    The  following  table  gives  the  CIE  colour  matching  functions
+    \bar{x}(\lambda),  \bar{y}(\lambda),  and   \bar{z}(\lambda),   for
+    wavelengths  \lambda  at 5 nanometre increments from 380 nm through
+    780 nm.  This table is used in conjunction with  Planck's  law  for
+    the  energy spectrum of a black body at a given temperature to plot
+    the black body curve on the CIE chart. 
 
-    // The following table gives the  spectral  chromaticity  co-ordinates
-    // x(\lambda) and y(\lambda) for wavelengths in 5 nanometre increments
-    // from 380 nm through  780  nm.   These  co-ordinates  represent  the
-    // position in the CIE x-y space of pure spectral colours of the given
-    // wavelength, and  thus  define  the  outline  of  the  CIE  "tongue"
-    // diagram.
-
+    The following table gives the  spectral  chromaticity  co-ordinates
+    x(\lambda) and y(\lambda) for wavelengths in 5 nanometre increments
+    from 380 nm through  780  nm.   These  co-ordinates  represent  the
+    position in the CIE x-y space of pure spectral colours of the given
+    wavelength, and  thus  define  the  outline  of  the  CIE  "tongue"
+    diagram.
+    */
     static const double spectral_chromaticity[81][3] =
     {
         { 0.1741, 0.0050 },               // 380 nm 
@@ -198,11 +198,12 @@ public:
 };
 
 CIETongueWidget::CIETongueWidget(int w, int h, QWidget *parent, cmsHPROFILE hMonitor)
-               : QWidget(parent, 0, Qt::WDestructiveClose)
+               : QWidget(parent)
 {
     d = new CIETongueWidgetPriv;
     d->blinkTimer = new QTimer( this );
     setMinimumSize(w, h);
+    setAttribute(Qt::WA_DeleteOnClose);
     cmsErrorAction(LCMS_ERROR_SHOW);    
 
     if (hMonitor)
@@ -242,7 +243,7 @@ bool CIETongueWidget::setProfileData(const QByteArray &profileData)
 {    
     if (!profileData.isEmpty())
     {
-        cmsHPROFILE hProfile = cmsOpenProfileFromMem(profileData.data(),
+        cmsHPROFILE hProfile = cmsOpenProfileFromMem((void*)profileData.data(),
                                                     (DWORD)profileData.size());
 
         if (!hProfile)
@@ -267,7 +268,7 @@ bool CIETongueWidget::setProfileData(const QByteArray &profileData)
     d->loadingImageMode = false;
     
     d->blinkTimer->stop();
-    repaint(false);
+    repaint();
     return (d->profileDataAvailable);
 }
 
@@ -297,7 +298,7 @@ bool CIETongueWidget::setProfileFromFile(const KUrl& file)
     }
 
     d->blinkTimer->stop();
-    repaint(false);
+    repaint();
     return (d->profileDataAvailable);
 }
 
@@ -440,7 +441,7 @@ void CIETongueWidget::outlineTongue()
 void CIETongueWidget::fillTongue()
 {
 
-    QImage Img = d->pixmap.convertToImage();
+    QImage Img = d->pixmap.toImage();
 
     int x;
 
@@ -476,7 +477,7 @@ void CIETongueWidget::fillTongue()
         }
     }
 
-    d->pixmap.convertFromImage(Img, Qt::AvoidDither );
+    d->pixmap.fromImage(Img, Qt::AvoidDither );
 }
 
 void CIETongueWidget::drawTongueAxis()
@@ -685,7 +686,7 @@ void CIETongueWidget::loadingStarted()
 {
     d->loadingImageMode   = true;
     d->loadingImageSucess = false;
-    repaint(false);
+    repaint();
     d->blinkTimer->start(200);
 }
 
@@ -694,24 +695,32 @@ void CIETongueWidget::loadingFailed()
     d->blinkTimer->stop();
     d->loadingImageMode   = false;
     d->loadingImageSucess = false;
-    repaint(false);
+    repaint();
 }
 
 void CIETongueWidget::paintEvent( QPaintEvent * )
 {
     d->pixmap = QPixmap(size());
-    d->pixmap.setOptimization(QPixmap::BestOptim);
 
     // Widget is disable : drawing grayed frame.
 
     if ( !isEnabled() )
     {
         d->painter.begin(&d->pixmap);
-        d->painter.fillRect(0, 0, size().width(), size().height(), palette().disabled().background());
-        d->painter.setPen(QPen(palette().disabled().foreground(), 1, Qt::SolidLine));
+        d->painter.fillRect(0, 0, size().width(), size().height(), 
+                            palette().color(QPalette::Disabled, QPalette::Background));
+
+        QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
+        pen.setStyle(Qt::SolidLine);
+        pen.setWidth(1);
+
+        d->painter.setPen(pen);
         d->painter.drawRect(0, 0, width(), height());
         d->painter.end();
-        bitBlt(this, 0, 0, &d->pixmap);
+
+        QPainter p2(this);
+        p2.drawPixmap(0, 0, d->pixmap);
+        p2.end();
         return;
     }
 
@@ -720,8 +729,14 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
     if (d->loadingImageMode && !d->loadingImageSucess)
     {
         d->painter.begin(&d->pixmap);
-        d->painter.fillRect(0, 0, size().width(), size().height(), palette().disabled().background());
-        d->painter.setPen(QPen(palette().disabled().foreground(), 1, Qt::SolidLine));
+        d->painter.fillRect(0, 0, size().width(), size().height(),
+                            palette().color(QPalette::Disabled, QPalette::Background));
+
+        QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
+        pen.setStyle(Qt::SolidLine);
+        pen.setWidth(1);
+
+        d->painter.setPen(pen);
         d->painter.drawRect(0, 0, width(), height());
 
         if (d->blinkFlag)
@@ -733,7 +748,10 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
                             i18n("Loading image..."));
 
         d->painter.end();
-        bitBlt(this, 0, 0, &d->pixmap);
+
+        QPainter p2(this);
+        p2.drawPixmap(0, 0, d->pixmap);
+        p2.end();
         return;
     }
 
@@ -742,15 +760,24 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
     if (!d->profileDataAvailable || (!d->loadingImageMode && !d->loadingImageSucess))
     {
         d->painter.begin(&d->pixmap);
-        d->painter.fillRect(0, 0, size().width(), size().height(), palette().disabled().background());
-        d->painter.setPen(QPen(palette().disabled().foreground(), 1, Qt::SolidLine));
+        d->painter.fillRect(0, 0, size().width(), size().height(),
+                            palette().color(QPalette::Disabled, QPalette::Background));
+
+        QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
+        pen.setStyle(Qt::SolidLine);
+        pen.setWidth(1);
+
+        d->painter.setPen(pen);
         d->painter.drawRect(0, 0, width(), height());
         d->painter.setPen(Qt::red);
         d->painter.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
                             i18n("No profile available..."));
 
         d->painter.end();
-        bitBlt(this, 0, 0, &d->pixmap);
+
+        QPainter p2(this);
+        p2.drawPixmap(0, 0, d->pixmap);
+        p2.end();
         return;
     }
 
@@ -768,7 +795,7 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
     d->pxcols = pixcols - d->xBias;
     d->pxrows = pixrows - d->yBias;
 
-    d->painter.setBackgroundColor(qRgb(0, 0, 0));
+    d->painter.setBackground(QBrush(qRgb(0, 0, 0)));
     d->painter.setPen(qRgb(255, 255, 255));
 
     outlineTongue();
@@ -789,12 +816,14 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
 
     d->painter.end();
 
-    bitBlt(this, 0, 0, &d->pixmap);
+    QPainter p2(this);
+    p2.drawPixmap(0, 0, d->pixmap);
+    p2.end();
 }
 
 void CIETongueWidget::slotBlinkTimerDone(void)
 {
-    repaint(false);     
+    repaint();     
     d->blinkFlag = !d->blinkFlag;
     d->blinkTimer->start( 200 );
 }
