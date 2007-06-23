@@ -23,17 +23,15 @@
 
 // Qt includes.
 
-#include <qregion.h>
-#include <qpainter.h>
-#include <qpen.h>
-#include <qpixmap.h>
-#include <qtooltip.h>
-#include <qtimer.h>
-#include <qrect.h>
-#include <qbrush.h>
-#include <qfont.h> 
-#include <qfontmetrics.h> 
-//Added by qt3to4:
+#include <QRegion>
+#include <QPainter>
+#include <QPen>
+#include <QPixmap>
+#include <QTimer>
+#include <QRect>
+#include <QBrush>
+#include <QFont> 
+#include <QFontMetrics> 
 #include <QTimerEvent>
 #include <QPaintEvent>
 #include <QResizeEvent>
@@ -107,7 +105,7 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
                                    bool spotVisible, int guideMode, 
                                    QColor guideColor, int guideSize, 
                                    bool blink, bool useImageSelection)
-                : QWidget(parent, 0, Qt::WDestructiveClose)
+                : QWidget(parent)
 {
     d = new ImageGuideWidgetPriv;
     d->spotVisible = spotVisible;
@@ -115,9 +113,9 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     d->guideColor  = guideColor;
     d->guideSize   = guideSize;
     
-    setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
     setMouseTracking(true);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     d->iface        = new ImageIface(w, h);
     d->iface->setPreviewType(useImageSelection);
@@ -239,7 +237,7 @@ void ImageGuideWidget::updatePixmap( void )
     QFontMetrics fontMt = p.fontMetrics();
     p.setPen(QPen(Qt::red, 1)) ;
     
-    d->pixmap->fill(colorGroup().background());
+    d->pixmap->fill(palette().color(QPalette::Background));
 
     if (d->renderingPreviewMode == PreviewOriginalImage ||
         (d->renderingPreviewMode == PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled == false ))
@@ -307,7 +305,7 @@ void ImageGuideWidget::updatePixmap( void )
         }
 
         // Drawing the information and others stuff.
-        p.fillRect(d->rect.right(), 0, width(), height(), colorGroup().background());
+        p.fillRect(d->rect.right(), 0, width(), height(), palette().color(QPalette::Background));
 
         p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
         p.drawLine(d->rect.x()+d->rect.width()/2-1,
@@ -372,7 +370,7 @@ void ImageGuideWidget::updatePixmap( void )
                          0, 0, d->rect.width(), d->rect.height()/2);
         }
 
-        p.fillRect(0, d->rect.bottom(), width(), height(), colorGroup().background());
+        p.fillRect(0, d->rect.bottom(), width(), height(), palette().color(QPalette::Background));
 
         p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
         p.drawLine(d->rect.x(),
@@ -448,13 +446,15 @@ void ImageGuideWidget::updatePixmap( void )
 
 void ImageGuideWidget::paintEvent( QPaintEvent * )
 {
-    bitBlt(this, 0, 0, d->pixmap);
+    QPainter p(this);
+    p.drawPixmap(0, 0, *d->pixmap);
+    p.end();
 }
 
 void ImageGuideWidget::updatePreview( void )
 {
     updatePixmap();
-    repaint(false);
+    repaint();
 }
 
 void ImageGuideWidget::timerEvent(QTimerEvent * e)
@@ -610,7 +610,7 @@ void ImageGuideWidget::enterEvent( QEvent * )
     {
         d->onMouseMovePreviewToggled = false;
         updatePixmap();
-        repaint(false);
+        repaint();
     }
 }
 
@@ -620,7 +620,7 @@ void ImageGuideWidget::leaveEvent( QEvent * )
     {
         d->onMouseMovePreviewToggled = true;
         updatePixmap();
-        repaint(false);
+        repaint();
     }
 }
 

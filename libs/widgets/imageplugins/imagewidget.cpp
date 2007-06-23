@@ -25,14 +25,13 @@
 // Qt includes.
  
 
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qhbuttongroup.h>
-#include <qpushbutton.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLayout>
+#include <QFrame>
+#include <QButtonGroup>
+#include <QPushButton>
+#include <QGridLayout>
 #include <QPixmap>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -69,7 +68,7 @@ public:
 
     QString             settingsSection;
 
-    Q3HButtonGroup      *previewButtons;
+    QButtonGroup       *previewButtons;
 
     QPushButton        *underExposureButton;
     QPushButton        *overExposureButton;

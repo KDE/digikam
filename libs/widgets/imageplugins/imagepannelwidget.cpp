@@ -23,22 +23,18 @@
 
 // Qt includes.
 
-#include <q3frame.h>
-#include <q3vgroupbox.h>
-#include <qlabel.h>
-#include <qpixmap.h>
-#include <qtooltip.h>
-
-#include <qtimer.h>
-#include <qhbuttongroup.h> 
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qpixmap.h>
-//Added by qt3to4:
 #include <Q3PointArray>
+#include <QFrame>
+#include <QGroupBox>
+#include <QLabel>
+#include <QPixmap>
+#include <QTimer>
+#include <QButtonGroup> 
+#include <QPushButton>
+#include <QPixmap>
 #include <QResizeEvent>
-#include <Q3GridLayout>
-#include <Q3VBoxLayout>
+#include <QGridLayout>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -52,7 +48,6 @@
 #include <kstandarddirs.h>
 #include <kseparator.h>
 #include <kglobal.h>
-#include <kvbox.h>
 
 // Local includes.
 
@@ -87,16 +82,16 @@ public:
         zoomBar            = 0;
     }
 
-    Q3GridLayout        *mainLayout;
+    QGridLayout        *mainLayout;
     
-    Q3HButtonGroup      *separateView;
+    QButtonGroup       *separateView;
     
     QString             settingsSection;
     
     QWidget            *settings;
     QWidget            *previewWidget;
     
-    Q3VBoxLayout        *settingsLayout;
+    QVBoxLayout        *settingsLayout;
         
     QSplitter          *splitter;
     
