@@ -24,15 +24,9 @@
 
 // Qt includes.
 
-#include <qfile.h>
-#include <qdatastream.h>
-#include <q3textstream.h>
-#include <qregexp.h>
-#include <qdir.h>
-#include <qvariant.h>
-#include <qmap.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QFile>
+#include <QDir>
+#include <QMap>
 
 // KDE includes.
 
@@ -160,7 +154,7 @@ QString ImageQueryBuilder::buildQuery(const KUrl& url) const
 
     QString sqlQuery;
 
-    QStringList strList = QStringList::split(" ", url.path());
+    QStringList strList = url.path().split(' ', QString::SkipEmptyParts);
     for ( QStringList::Iterator it = strList.begin(); it != strList.end(); ++it )
     {
         bool ok;
@@ -189,7 +183,7 @@ QString ImageQueryBuilder::buildQuery(const KUrl& url) const
                 }
                 else
                 {
-                    Q3ValueList<SKey> todo;
+                    QList<SKey> todo;
                     todo.append( ALBUMNAME );
                     todo.append( IMAGENAME );
                     todo.append( TAGNAME );
@@ -199,9 +193,8 @@ QString ImageQueryBuilder::buildQuery(const KUrl& url) const
                     todo.append( RATING );
 
                     sqlQuery += '(';
-                    Q3ValueListIterator<SKey> it;
-                    it = todo.begin();
-                    while ( it != todo.end() )
+                    QList<SKey>::const_iterator it = todo.constBegin();
+                    while ( it != todo.constEnd() )
                     {
                         sqlQuery += subQuery(*it, rule.op, rule.val);
                         ++it;

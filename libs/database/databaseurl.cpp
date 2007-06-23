@@ -41,7 +41,7 @@ DatabaseUrl DatabaseUrl::fromFileUrl(const KUrl &fileUrl,
     DatabaseUrl url;
     url.setProtocol("digikamalbums");
     // get album root path without trailing slash
-    QString albumRootPath = albumRoot.path(-1);
+    QString albumRootPath = albumRoot.path(KUrl::RemoveTrailingSlash);
     // get the hierarchy below the album root
     QString pathUnderRoot = fileUrl.path().remove(albumRootPath);
     url.setPath(pathUnderRoot);
@@ -62,18 +62,18 @@ DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString &name,
     url.addPath(album + '/');
     url.addPath(name);
 
-    url.addQueryItem("albumRoot", albumRoot.path(-1));
+    url.addQueryItem("albumRoot", albumRoot.path(KUrl::RemoveTrailingSlash));
     url.setParameters(parameters);
     return url;
 }
 
-DatabaseUrl DatabaseUrl::fromTagIds(const Q3ValueList<int> tagIds,
+DatabaseUrl DatabaseUrl::fromTagIds(const QList<int> &tagIds,
                                    const DatabaseParameters &parameters)
 {
     DatabaseUrl url;
     url.setProtocol("digikamtags");
 
-    for (Q3ValueList<int>::const_iterator it = tagIds.begin(); it != tagIds.end(); ++it)
+    for (QList<int>::const_iterator it = tagIds.constBegin(); it != tagIds.constEnd(); ++it)
     {
         url.addPath('/' + QString::number(*it));
     }
@@ -200,9 +200,9 @@ QString DatabaseUrl::albumRootPath() const
 
 QString DatabaseUrl::album() const
 {
-    // strip the trailing slash from result
-    // do not ignore trailing slash in the path - albums have a trailing slash
-    return directory(true, false);
+    // obey trailing slash in the path - albums have a trailing slash
+    // get result without trailing slash
+    return directory(KUrl::ObeyTrailingSlash);
 }
 
 QString DatabaseUrl::name() const
@@ -228,13 +228,13 @@ int DatabaseUrl::tagId() const
     return fileName().toInt();
 }
 
-Q3ValueList<int> DatabaseUrl::tagIds() const
+QList<int> DatabaseUrl::tagIds() const
 {
-    Q3ValueList<int> ids;
-    QStringList stringIds = QStringList::split('/', path());
-    for (QStringList::iterator it = stringIds.begin(); it != stringIds.end(); ++it)
+    QList<int> ids;
+    QStringList stringIds = path().split('/', QString::SkipEmptyParts);
+    for (int i=0; i<stringIds.count(); i++)
     {
-        ids << (*it).toInt();
+        ids << stringIds[i].toInt();
     }
     return ids;
 }

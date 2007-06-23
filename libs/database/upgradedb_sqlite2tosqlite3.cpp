@@ -23,13 +23,12 @@
 
 // Qt includes.
 
-#include <qmap.h>
-#include <qpair.h>
-#include <qdir.h>
-#include <qstringlist.h>
-#include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QMap>
+#include <QPair>
+#include <QDir>
+#include <QStringList>
+#include <QFileInfo>
+#include <QList>
 
 // KDE includes.
 
@@ -67,24 +66,24 @@ struct _Tag
 };
 
 qlonglong findOrAddImage(DatabaseAccess &access, int dirid, const QString& name,
-               const QString& caption)
+                         const QString& caption)
 {
     QStringList values;
 
     access.backend()->execSql(QString("SELECT id FROM Images WHERE dirid=%1 AND name='%2'")
-        .arg(dirid)
-        .arg(access.backend()->escapeString(name)), &values);
+            .arg(dirid)
+            .arg(access.backend()->escapeString(name)), &values);
 
     if (!values.isEmpty())
     {
-    return values.first().toLongLong();
+        return values.first().toLongLong();
     }
 
     access.backend()->execSql(QString("INSERT INTO Images (dirid, name, caption) \n "
             "VALUES(%1, '%2', '%3');")
-        .arg(dirid)
-        .arg(access.backend()->escapeString(name))
-        .arg(access.backend()->escapeString(caption)), &values);
+            .arg(dirid)
+            .arg(access.backend()->escapeString(name))
+            .arg(access.backend()->escapeString(caption)), &values);
 
     return access.backend()->lastInsertedRow();
 }
@@ -158,7 +157,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     db2.execSql("SELECT id, url, date, caption, collection, icon FROM Albums;",
                 &values);
 
-    typedef Q3ValueList<_Album> AlbumList;
+    typedef QList<_Album> AlbumList;
     AlbumList albumList;
 
     typedef QMap<QString, int> AlbumMap;
@@ -201,7 +200,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     db2.execSql("SELECT id, pid, name, icon FROM Tags;",
                 &values);
 
-    typedef Q3ValueList<_Tag> TagList;
+    typedef QList<_Tag> TagList;
     TagList tagList;
 
     access.backend()->beginTransaction();
@@ -324,7 +323,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
             continue;
         }
 
-        int dirid = it1.data();
+        int dirid = it1.value();
 
         qlonglong imageid = findOrAddImage(access, dirid, name, QString());;
 

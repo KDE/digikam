@@ -22,9 +22,13 @@
  * 
  * ============================================================ */
 
+// Qt includes
+
+#include <QStringList>
+
+// Local includes
+
 #include "namefilter.h"
-//Added by qt3to4:
-#include <Q3ValueList>
 
 namespace Digikam
 {
@@ -35,22 +39,22 @@ NameFilter::NameFilter(const QString &filter)
         return;
 
     QChar sep( ';' );
-    int i = filter.find( sep, 0 );
-    if ( i == -1 && filter.find( ' ', 0 ) != -1 )
+    int i = filter.indexOf( sep );
+    if ( i == -1 && filter.indexOf( ' ') != -1 )
         sep = QChar( ' ' );
 
-    QStringList list = QStringList::split( sep, filter );
-    QStringList::Iterator it = list.begin();
-    while ( it != list.end() ) {
-        m_filterList << QRegExp( (*it).trimmed(), false, true );
+    QStringList list = filter.split(sep, QString::SkipEmptyParts);
+    QStringList::const_iterator it = list.constBegin();
+    while ( it != list.constEnd() ) {
+        m_filterList << QRegExp( (*it).trimmed() );
         ++it;
     }
 }
 
 bool NameFilter::matches(const QString &name)
 {
-    Q3ValueList<QRegExp>::ConstIterator rit = m_filterList.begin();
-    while ( rit != m_filterList.end() ) {
+    QList<QRegExp>::const_iterator rit = m_filterList.constBegin();
+    while ( rit != m_filterList.constEnd() ) {
         if ( (*rit).exactMatch(name) )
             return true;
         ++rit;

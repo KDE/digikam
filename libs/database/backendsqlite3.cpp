@@ -152,7 +152,7 @@ bool BackendSQLite3::execSql(const QString& sql, QStringList* const values,
     int           error;
 
     //compile SQL program to virtual machine
-    error = sqlite3_prepare(d->dataBase, sql.utf8(), -1, &stmt, &tail);
+    error = sqlite3_prepare(d->dataBase, sql.toUtf8(), -1, &stmt, &tail);
     if ( error != SQLITE_OK )
     {
         DWarning() << k_funcinfo

@@ -23,12 +23,13 @@
 
 // Qt includes
 
-#include <qfileinfo.h>
-#include <qfile.h>
-#include <qdir.h>
+#include <QFileInfo>
+#include <QFile>
+#include <QDir>
 
 // KDE includes
 
+#include <kio/job.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
 
@@ -312,7 +313,14 @@ bool SchemaUpdater::copyV3toV4(const QString &digikam3DBPath, const QString &cur
     digikam3DBUrl.setPath(digikam3DBPath);
     currentDBUrl.setPath(currentDBPath);
 
-    KIO::NetAccess::file_copy(digikam3DBUrl, currentDBUrl, -1, true);
+    KIO::Job *job = KIO::file_copy(digikam3DBUrl, currentDBUrl, -1, true);
+    if (!KIO::NetAccess::synchronousRun(job, 0))
+    {
+        m_access->setLastError(i18n("Failed to copy the old database file (\"%1\")"
+                                    "to its new location (\"%2\")."
+                                    "Please make sure that the file can be copied.")
+                               .arg(digikam3DBPath).arg(currentDBPath));
+    }
 
     if (!m_access->backend()->open(m_access->parameters()))
     {

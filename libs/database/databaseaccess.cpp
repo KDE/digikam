@@ -144,8 +144,6 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
         KUrl url;
         url.setPath(d->parameters.databaseName);
         d->albumRoot = url.directory();
-        if (d->albumRoot.endsWith('/'))
-            d->albumRoot.chop(1);
     }
 }
 

@@ -31,11 +31,11 @@
 
 // Qt includes.
 
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qdatastream.h>
-#include <qregexp.h>
-#include <qdir.h>
+#include <QFile>
+#include <QFileInfo>
+#include <QDataStream>
+#include <QRegExp>
+#include <QDir>
 
 // KDE includes.
 
@@ -45,7 +45,6 @@
 #include <kfilemetainfo.h>
 #include <kmimetype.h>
 #include <kdebug.h>
-#include <klargefile.h>
 
 // LibKDcraw includes.
 
@@ -94,7 +93,7 @@ KIO::TransferJob *ImageLister::startListJob(const DatabaseUrl &url, const QStrin
                                             int getDimension, int extraValue)
 {
     QByteArray ba;
-    QDataStream ds(ba, QIODevice::WriteOnly);
+    QDataStream ds(&ba, QIODevice::WriteOnly);
     ds << url;
     ds << filter;
     ds << getDimension;
@@ -102,14 +101,14 @@ KIO::TransferJob *ImageLister::startListJob(const DatabaseUrl &url, const QStrin
         ds << extraValue;
 
     return new KIO::TransferJob(url, KIO::CMD_SPECIAL,
-                                ba, QByteArray(), false);
+                                ba, QByteArray());
 }
 
 QSize ImageLister::retrieveDimension(const QString &filePath)
 {
     QFileInfo fileInfo(filePath);
     QString rawFilesExt(raw_file_extentions);
-    QString ext = fileInfo.extension(false).toUpper();
+    QString ext = fileInfo.suffix().toUpper();
 
     if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))
     {
@@ -118,23 +117,16 @@ QSize ImageLister::retrieveDimension(const QString &filePath)
     }
     else
     {
-        KFileMetaInfo metaInfo(filePath);
+        KFileMetaInfo metaInfo(filePath, QString(), KFileMetaInfo::TechnicalInfo);
         if (metaInfo.isValid())
         {
-            if (metaInfo.containsGroup("Jpeg EXIF Data"))
+            //TODO: KDE4PORT: Find out the correct key values. Strigi analyzers are used.
+            // If necessary, use exiv2 and/or strigi directly.
+            KFileMetaInfoItem itemWidth = metaInfo.item("image.width");
+            KFileMetaInfoItem itemHeight = metaInfo.item("image.height");
+            if (itemWidth.isValid() && itemHeight.isValid())
             {
-                return metaInfo.group("Jpeg EXIF Data").
-                         item("Dimensions").value().toSize();
-            }
-            else if (metaInfo.containsGroup("General"))
-            {
-                return metaInfo.group("General").
-                         item("Dimensions").value().toSize();
-            }
-            else if (metaInfo.containsGroup("Technical"))
-            {
-                return metaInfo.group("Technical").
-                         item("Dimensions").value().toSize();
+                return QSize(itemWidth.value().toInt(), itemHeight.value().toInt());
             }
         }
     }
