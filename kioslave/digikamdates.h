@@ -27,18 +27,14 @@
 // KDE includes.
 
 #include <kio/slavebase.h>
-//Added by qt3to4:
-#include <Q3CString>
-
-class QStringList;
 
 class kio_digikamdates : public KIO::SlaveBase
 {
 
 public:
 
-    kio_digikamdates(const Q3CString &pool_socket,
-                     const Q3CString &app_socket);
+    kio_digikamdates(const QByteArray &pool_socket,
+                     const QByteArray &app_socket);
     ~kio_digikamdates();
 
     void special(const QByteArray& data);

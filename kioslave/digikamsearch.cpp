@@ -1,5 +1,3 @@
-//Added by qt3to4:
-#include <Q3CString>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -9,6 +7,7 @@
  * Description : a kio-slave to process search on digiKam albums
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,47 +22,17 @@
  *
  * ============================================================ */
 
-// C Ansi includes.
-
-extern "C"
-{
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/time.h>
-#include <utime.h>
-}
-
 // C++ includes.
 
-#include <cerrno>
 #include <cstdlib>
-#include <cstdio>
-#include <ctime>
 
 // Qt includes.
 
-#include <qfile.h>
-#include <qdatastream.h>
-#include <q3textstream.h>
-#include <qregexp.h>
-#include <qdir.h>
-#include <qvariant.h>
-#include <qmap.h>
-
 // KDE includes.
 
-#include <kglobal.h>
 #include <klocale.h>
-#include <kcalendarsystem.h>
 #include <kcomponentdata.h>
-#include <kfilemetainfo.h>
-#include <kmimetype.h>
 #include <kdebug.h>
-#include <kio/global.h>
-#include <kio/ioslave_defaults.h>
-#include <klargefile.h>
 
 // Local includes.
 
@@ -74,8 +43,8 @@ extern "C"
 #include "databaseurl.h"
 #include "digikamsearch.h"
 
-kio_digikamsearch::kio_digikamsearch(const Q3CString &pool_socket,
-                                     const Q3CString &app_socket)
+kio_digikamsearch::kio_digikamsearch(const QByteArray &pool_socket,
+                                     const QByteArray &app_socket)
                  : SlaveBase("kio_digikamsearch", pool_socket, app_socket)
 {
 }
@@ -91,7 +60,7 @@ void kio_digikamsearch::special(const QByteArray& data)
     int     getDimensions;
     int     listingType = 0;
 
-    QDataStream ds(data, QIODevice::ReadOnly);
+    QDataStream ds(data);
     ds >> kurl;
     ds >> filter;
     ds >> getDimensions;

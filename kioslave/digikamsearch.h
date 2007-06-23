@@ -26,15 +26,13 @@
 // KDE includes.
 
 #include <kio/slavebase.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 class kio_digikamsearch : public KIO::SlaveBase
 {
 
 public:
 
-    kio_digikamsearch(const Q3CString &pool_socket, const Q3CString &app_socket);
+    kio_digikamsearch(const QByteArray &pool_socket, const QByteArray &app_socket);
     ~kio_digikamsearch();
 
     void special(const QByteArray& data);

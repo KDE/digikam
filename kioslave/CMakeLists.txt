@@ -21,62 +21,62 @@ TARGET_LINK_LIBRARIES(kio_digikamthumbnail ${KDE4_KIO_LIBS} ${KEXIV2_LIBRARIES} 
 
 
 # # digiKam Tags kio slave ###########################################################
-# 
-# SET(kio_digikamtags_PART_SRCS digikamtags.cpp sqlitedb.cpp )
-# 
-# KDE4_AUTOMOC(${kio_digikamtags_PART_SRCS})
-# 
-# KDE4_ADD_PLUGIN(kio_digikamtags ${kio_digikamtags_PART_SRCS})
-# 
-# TARGET_LINK_LIBRARIES(kio_digikamtags ${KDE4_KIO_LIBS} sqlite libdatabase libdimg )
-# 
-# 
+
+SET(kio_digikamtags_PART_SRCS digikamtags.cpp)
+
+KDE4_AUTOMOC(${kio_digikamtags_PART_SRCS})
+
+KDE4_ADD_PLUGIN(kio_digikamtags ${kio_digikamtags_PART_SRCS})
+
+TARGET_LINK_LIBRARIES(kio_digikamtags ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS} libdatabase libdimg )
+
+
 # # digiKam Albums kio slave #########################################################
-# 
-# SET(kio_digikamalbums_PART_SRCS digikamalbums.cpp sqlitedb.cpp )
-# 
-# KDE4_AUTOMOC(${kio_digikamalbums_PART_SRCS})
-# 
-# KDE4_ADD_PLUGIN(kio_digikamalbums ${kio_digikamalbums_PART_SRCS})
-# 
-# TARGET_LINK_LIBRARIES(kio_digikamalbums jpegutils ${KDE4_KIO_LIBS} sqlite libdatabase libdimg )
-# 
-# 
+
+SET(kio_digikamalbums_PART_SRCS digikamalbums.cpp)
+
+KDE4_AUTOMOC(${kio_digikamalbums_PART_SRCS})
+
+KDE4_ADD_PLUGIN(kio_digikamalbums ${kio_digikamalbums_PART_SRCS})
+
+TARGET_LINK_LIBRARIES(kio_digikamalbums jpegutils ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS} sqlite libdatabase libdimg )
+
+
 # # digiKam Date kio slave ###########################################################
-# 
-# SET(kio_digikamdates_PART_SRCS digikamdates.cpp sqlitedb.cpp )
-# 
-# KDE4_AUTOMOC(${kio_digikamdates_PART_SRCS})
-# 
-# KDE4_ADD_PLUGIN(kio_digikamdates ${kio_digikamdates_PART_SRCS})
-# 
-# TARGET_LINK_LIBRARIES(kio_digikamdates ${KDE4_KIO_LIBS} sqlite libdatabase libdimg )
-# 
-# 
+
+SET(kio_digikamdates_PART_SRCS digikamdates.cpp)
+
+KDE4_AUTOMOC(${kio_digikamdates_PART_SRCS})
+
+KDE4_ADD_PLUGIN(kio_digikamdates ${kio_digikamdates_PART_SRCS})
+
+TARGET_LINK_LIBRARIES(kio_digikamdates ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS} libdatabase libdimg )
+
+
 # # digiKam Search kio slave #########################################################
-# 
-# SET(kio_digikamsearch_PART_SRCS digikamsearch.cpp sqlitedb.cpp )
-# 
-# KDE4_AUTOMOC(${kio_digikamsearch_PART_SRCS})
-# 
-# KDE4_ADD_PLUGIN(kio_digikamsearch ${kio_digikamsearch_PART_SRCS})
-# 
-# TARGET_LINK_LIBRARIES(kio_digikamsearch ${KDE4_KIO_LIBS} sqlite libdatabase libdimg )
+
+SET(kio_digikamsearch_PART_SRCS digikamsearch.cpp)
+
+KDE4_AUTOMOC(${kio_digikamsearch_PART_SRCS})
+
+KDE4_ADD_PLUGIN(kio_digikamsearch ${kio_digikamsearch_PART_SRCS})
+
+TARGET_LINK_LIBRARIES(kio_digikamsearch ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS} libdatabase libdimg )
 
 
 # Files to install #################################################################
 
 INSTALL( TARGETS kio_digikamthumbnail DESTINATION ${PLUGIN_INSTALL_DIR} )
-#INSTALL( TARGETS kio_digikamtags DESTINATION ${PLUGIN_INSTALL_DIR} )
+INSTALL( TARGETS kio_digikamtags DESTINATION ${PLUGIN_INSTALL_DIR} )
 #INSTALL( TARGETS kio_digikamalbums DESTINATION ${PLUGIN_INSTALL_DIR} )
-#INSTALL( TARGETS kio_digikamdates DESTINATION ${PLUGIN_INSTALL_DIR} )
-#INSTALL( TARGETS kio_digikamsearch DESTINATION ${PLUGIN_INSTALL_DIR} )
+INSTALL( TARGETS kio_digikamdates DESTINATION ${PLUGIN_INSTALL_DIR} )
+INSTALL( TARGETS kio_digikamsearch DESTINATION ${PLUGIN_INSTALL_DIR} )
 
-INSTALL( FILES digikamthumbnail.protocol 
+INSTALL( FILES digikamthumbnail.protocol
                digikamtags.protocol
-               digikamalbums.protocol 
-               digikamdates.protocol  		        
-               digikamsearch.protocol 
-         DESTINATION ${SERVICES_INSTALL_DIR} 
+               digikamalbums.protocol
+               digikamdates.protocol
+               digikamsearch.protocol
+         DESTINATION ${SERVICES_INSTALL_DIR}
        )
 

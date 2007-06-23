@@ -44,11 +44,9 @@
 #include "imagelister.h"
 #include "imagelisterreceiver.h"
 #include "digikamtags.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-kio_digikamtagsProtocol::kio_digikamtagsProtocol(const Q3CString &pool_socket,
-                                                 const Q3CString &app_socket)
+kio_digikamtagsProtocol::kio_digikamtagsProtocol(const QByteArray &pool_socket,
+                                                 const QByteArray &app_socket)
                        : SlaveBase("kio_digikamtags", pool_socket, app_socket)
 {
 }
@@ -63,7 +61,7 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     QString filter;
     int     getDimensions;
 
-    QDataStream ds(data, QIODevice::ReadOnly);
+    QDataStream ds(data);
     ds >> kurl;
     ds >> filter;
     ds >> getDimensions;
