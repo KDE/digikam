@@ -27,9 +27,8 @@
 
 // Qt includes.
 
-#include <qglobal.h>
-#include <qstring.h>
-//Added by qt3to4:
+#include <QGlobal>
+#include <QString>
 #include <QPixmap>
 
 // KDE includes.
@@ -195,6 +194,6 @@ private:
     ImageIfacePriv* d;
 };
 
-}
+} // namespace Digikam
 
 #endif /* IMAGEIFACE_H */
