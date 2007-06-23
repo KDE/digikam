@@ -46,7 +46,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  S
         |---whitebalance                        Gilles          X       X       DONE
         |---widgets
         |-----common                            Gilles          X       X       DONE
-        |-----iccprofiles                       Gilles          X       X
+        |-----iccprofiles                       Gilles          X       X       DONE
         |-----imageplugins                      Laurent         X       X
         |-----metadata                          Laurent         X       X
 
