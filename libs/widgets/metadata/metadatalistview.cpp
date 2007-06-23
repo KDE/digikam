@@ -168,7 +168,7 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, const QStringList
                 if (tagsfilter.contains(it.key().section('.', 2, 2)))
                 {
                     QString tagTitle = m_parent->getTagTitle(it.key());
-                    new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.data());
+                    new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
                     subItems++;
                 }
             }
@@ -177,7 +177,7 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, const QStringList
                 // We don't filter the output (Complete Mode)
             
                 QString tagTitle = m_parent->getTagTitle(it.key());
-                new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.data());
+                new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
                 subItems++;
             }
         }
@@ -222,7 +222,7 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, QStringList keysF
                         if (tagsFilter.contains(it.key().section('.', 2, 2)))
                         {
                             QString tagTitle = m_parent->getTagTitle(it.key());
-                            new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.data());
+                            new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
                             subItems++;
                         }
                     }
@@ -231,7 +231,7 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, QStringList keysF
                         // We don't filter the output (Complete Mode)
                     
                         QString tagTitle = m_parent->getTagTitle(it.key());
-                        new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.data());
+                        new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
                         subItems++;
                     }
                 }

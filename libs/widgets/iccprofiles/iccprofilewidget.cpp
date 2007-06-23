@@ -114,8 +114,8 @@ public:
 };    
 
 
-ICCProfileWidget::ICCProfileWidget(QWidget* parent, const char* name, int w, int h)
-                : MetadataWidget(parent, name)
+ICCProfileWidget::ICCProfileWidget(QWidget* parent, int w, int h)
+                : MetadataWidget(parent)
 {
     cmsErrorAction(LCMS_ERROR_SHOW);    
     

@@ -30,7 +30,6 @@
 #include <q3header.h>
 
 #include <qpainter.h>
-#include <qhbuttongroup.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <q3dragobject.h> 
@@ -42,10 +41,9 @@
 #include <Q3GridLayout>
 #include <Q3Frame>
 #include <Q3VBoxLayout>
-
+#include <Q3HButtonGroup>
 // KDE includes.
 
-#include <kdialogbase.h>
 #include <k3listview.h>
 #include <klocale.h>
 #include <kfiledialog.h>
@@ -93,8 +91,8 @@ public:
     DMetadata::MetaDataMap  metaDataMap;
 };
 
-MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
-              : QWidget(parent, name)
+MetadataWidget::MetadataWidget(QWidget* parent)
+              : QWidget(parent)
 {
     d = new MetadataWidgetPriv;
 
@@ -355,10 +353,9 @@ void MetadataWidget::slotPrintMetadata(void)
 
 KUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& fileFilter)
 {
-    KFileDialog fileSaveDialog(KGlobalSettings::documentPath(),
+    KFileDialog fileSaveDialog(KUrl(KGlobalSettings::documentPath()),
                                QString(),
                                this,
-                               "MetadataFileSaveDialog",
                                false);
 
     fileSaveDialog.setOperationMode(KFileDialog::Saving);
@@ -369,7 +366,7 @@ KUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& f
 
     // Check for cancel.
     if ( fileSaveDialog.exec() == KFileDialog::Accepted )
-        return fileSaveDialog.selectedURL().path();
+        return fileSaveDialog.selectedUrl().path();
     
     return KUrl();
 }
