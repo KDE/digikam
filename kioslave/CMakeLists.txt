@@ -33,13 +33,13 @@ TARGET_LINK_LIBRARIES(kio_digikamtags ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS} 
 
 # # digiKam Albums kio slave #########################################################
 
-SET(kio_digikamalbums_PART_SRCS digikamalbums.cpp)
+#SET(kio_digikamalbums_PART_SRCS digikamalbums.cpp)
 
-KDE4_AUTOMOC(${kio_digikamalbums_PART_SRCS})
+#KDE4_AUTOMOC(${kio_digikamalbums_PART_SRCS})
 
-KDE4_ADD_PLUGIN(kio_digikamalbums ${kio_digikamalbums_PART_SRCS})
+#KDE4_ADD_PLUGIN(kio_digikamalbums ${kio_digikamalbums_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kio_digikamalbums jpegutils ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS} sqlite libdatabase libdimg )
+#TARGET_LINK_LIBRARIES(kio_digikamalbums jpegutils ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS} sqlite libdatabase libdimg )
 
 
 # # digiKam Date kio slave ###########################################################
