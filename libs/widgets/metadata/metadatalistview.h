@@ -27,10 +27,8 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <q3ptrlist.h>
-#include <qmap.h>
-//Added by qt3to4:
+#include <QString>
+#include <QMap>
 #include <QResizeEvent>
 
 // KDE includes.

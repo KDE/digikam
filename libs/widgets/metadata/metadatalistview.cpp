@@ -24,13 +24,9 @@
 
 // Qt includes.
 
-#include <qtimer.h>
-#include <q3ptrlist.h>
-#include <qpalette.h>
-#include <q3header.h>
-
-//Added by qt3to4:
-#include <QResizeEvent>
+#include <Q3Header>
+#include <QTimer>
+#include <QPalette>
 
 // KDE includes.
 
@@ -126,8 +122,8 @@ void MetadataListView::slotSelectionChanged(Q3ListViewItem *item)
     }
     
     this->setWhatsThis( i18n("<b>Title: </b><p>%1<p>"
-                               "<b>Value: </b><p>%2<p>"
-                               "<b>Description: </b><p>%3")
+                             "<b>Value: </b><p>%2<p>"
+                             "<b>Description: </b><p>%3")
                           .arg(tagTitle)
                           .arg(tagValue)
                           .arg(tagDesc));
@@ -257,4 +253,3 @@ void MetadataListView::viewportResizeEvent(QResizeEvent* e)
 }
 
 }  // namespace Digikam
-
