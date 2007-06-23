@@ -70,7 +70,6 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  S
             digikamsearch.cpp                   Marcel                  X
             digikamtags.cpp                     Marcel                  X
             digikamthumbnail.cpp                Gilles          X       X       DONE
-            sqlitedb.cpp                        Marcel                  X
 
  4      |-showfoto                                              X
         |---icons                               Gilles                          DONE                 CMake port only is require.
