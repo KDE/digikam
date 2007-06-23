@@ -23,13 +23,11 @@
 
 // Qt includes.
 
-#include <qpainter.h>
-#include <qstring.h>
-#include <qpixmap.h>
-#include <qlabel.h>
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <Q3Frame>
+#include <QPainter>
+#include <QString>
+#include <QPixmap>
+#include <QLabel>
+#include <QFrame>
 
 // KDE includes.
 
@@ -59,32 +57,32 @@ public:
         latLonPos = 0;
     }
     
-    int      xPos;
-    int      yPos;
-    int      xMousePos;
-    int      yMousePos;
+    int             xPos;
+    int             yPos;
+    int             xMousePos;
+    int             yMousePos;
     
-    double   latitude;
-    double   longitude;
+    double          latitude;
+    double          longitude;
 
-    QLabel  *latLonPos;
+    QLabel         *latLonPos;
 
     static QPixmap *worldMap;
 };
 
 static KStaticDeleter<QPixmap> pixmapDeleter;
 
-QPixmap *WorldMapWidgetPriv::worldMap         = 0;
+QPixmap *WorldMapWidgetPriv::worldMap = 0;
 
 WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
-              : Q3ScrollView(parent, 0, Qt::WDestructiveClose)
+              : Q3ScrollView(parent)
 {
     d = new WorldMapWidgetPriv;
 
+    setAttribute(Qt::WA_DeleteOnClose);
     setVScrollBarMode(Q3ScrollView::AlwaysOff);
     setHScrollBarMode(Q3ScrollView::AlwaysOff);
     viewport()->setMouseTracking(true);
-    viewport()->setPaletteBackgroundColor(colorGroup().background());
     setMinimumWidth(w);
     setMaximumHeight(h);
     resizeContents(worldMapPixmap().width(), worldMapPixmap().height());
@@ -173,7 +171,7 @@ void WorldMapWidget::drawContents(QPainter *p, int x, int y, int w, int h)
     }
     else
     {
-        p->fillRect(x, y, w, h, palette().disabled().background());
+        p->fillRect(x, y, w, h, palette().color(QPalette::Disabled, QPalette::Background));
     }
 }
 
@@ -194,7 +192,7 @@ void WorldMapWidget::contentsMouseReleaseEvent ( QMouseEvent *  )
 
 void WorldMapWidget::contentsMouseMoveEvent( QMouseEvent * e )
 {
-    if ( e->state() == Qt::LeftButton )
+    if ( e->button() == Qt::LeftButton )
     {
        uint newxpos = e->x();
        uint newypos = e->y();

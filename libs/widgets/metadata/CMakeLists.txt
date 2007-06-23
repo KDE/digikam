@@ -4,12 +4,12 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata
 SET(libmetadatawidgets_STAT_SRCS mdkeylistviewitem.cpp
                                  metadatalistview.cpp
                                  metadatalistviewitem.cpp
+                                 worldmapwidget.cpp
 #                                  metadatawidget.cpp
 #                                  iptcwidget.cpp
 #                                  exifwidget.cpp
 #                                  makernotewidget.cpp
 #                                  gpswidget.cpp
-#                                  worldmapwidget.cpp
    )
 
 KDE4_AUTOMOC(${libmetadatawidgets_STAT_SRCS})
