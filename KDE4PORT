@@ -47,8 +47,8 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  S
         |---widgets
         |-----common                            Gilles          X       X       DONE
         |-----iccprofiles                       Gilles          X       X       DONE
-        |-----imageplugins                      Gilles          X       X
-        |-----metadata                          Laurent         X       X
+        |-----imageplugins                      Gilles          X       X       DONE
+        |-----metadata                          Gilles          X       X
 
  2      |-utilities                                                                                  Utilities components are used as "libs" by digiKam main interface.
         |---batch                               Laurent                 X
