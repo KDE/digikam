@@ -30,11 +30,11 @@
 
 // KDE includes.
 
-#include "ddebug.h"
 #include <klocale.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "mdkeylistviewitem.h"
 
 namespace Digikam

@@ -37,6 +37,8 @@
 
 #include "digikam_export.h"
 
+class QPainter;
+
 namespace Digikam
 {
 
@@ -57,7 +59,6 @@ protected:
 private:
 
     QString m_decryptedKey;
-
 };
 
 }  // namespace Digikam
