@@ -27,7 +27,6 @@
 
 // Qt includes.
 
-#include <QGlobal>
 #include <QString>
 #include <QPixmap>
 
