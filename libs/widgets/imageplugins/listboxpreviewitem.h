@@ -31,6 +31,7 @@
 #include <qmap.h>
 #include <qlistbox.h>
 #include <qwhatsthis.h>
+#include <qpixmap.h>
 
 // Local includes.
 
@@ -43,6 +44,7 @@ class DIGIKAM_EXPORT ListBoxPreviewItem : public QListBoxPixmap
 {
 
 public:
+
     ListBoxPreviewItem(QListBox *listbox, const QPixmap &pix, const QString &text)
         : QListBoxPixmap(listbox, pix, text) {};
 
