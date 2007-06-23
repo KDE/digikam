@@ -23,10 +23,9 @@
 
 // Qt includes.
 
-#include <q3header.h>
-//Added by qt3to4:
-#include <QDropEvent>
+#include <Q3Header>
 #include <Q3ValueList>
+#include <QDropEvent>
 #include <QMouseEvent>
 
 // KDE includes.
@@ -40,7 +39,7 @@
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <kglobalsettings.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 // Local includes.
 

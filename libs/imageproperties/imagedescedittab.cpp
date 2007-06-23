@@ -25,21 +25,15 @@
 
 // Qt includes.
 
-
-
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qtoolbutton.h>
-#include <qpushbutton.h>
-#include <qicon.h>
-
-#include <qtooltip.h>
-//Added by qt3to4:
-#include <QKeyEvent>
-#include <Q3GridLayout>
 #include <Q3PtrList>
-#include <QPixmap>
 #include <Q3PopupMenu>
+#include <QLabel>
+#include <QToolButton>
+#include <QPushButton>
+#include <QIcon>
+#include <QKeyEvent>
+#include <QGridLayout>
+#include <QPixmap>
 #include <QEvent>
 
 // KDE includes.
@@ -55,7 +49,7 @@
 #include <ktextedit.h>
 #include <kconfig.h>
 #include <klineedit.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kglobal.h>
 #include <kvbox.h>
 
@@ -117,12 +111,12 @@ public:
     QToolButton                   *assignedTagsBtn;
     QToolButton                   *revertBtn;
 
-    Q3PopupMenu                    *ABCMenu;
+    Q3PopupMenu                   *ABCMenu;
+    Q3PopupMenu                   *moreMenu;
 
     QPushButton                   *applyBtn;
 
     QPushButton                   *moreButton;
-    Q3PopupMenu                    *moreMenu;
 
     KTextEdit                     *commentsEdit;
 
@@ -130,7 +124,7 @@ public:
 
     KDateTimeEdit                 *dateTimeEdit;
 
-    Q3PtrList<ImageInfo>            currInfos;
+    Q3PtrList<ImageInfo>           currInfos;
 
     TAlbumListView                *tagsView;
 
