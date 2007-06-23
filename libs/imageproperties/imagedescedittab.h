@@ -28,9 +28,9 @@
 
 // Qt includes.
 
+#include <Q3PtrList>
 #include <QWidget>
 #include <QPixmap>
-#include <QList>
 #include <QEvent>
 
 // Local includes.
@@ -60,7 +60,7 @@ public:
 
     void assignRating(int rating);
     void setItem(ImageInfo *info=0);
-    void setItems(QList<ImageInfo> infos);
+    void setItems(Q3PtrList<ImageInfo> infos);
     void populateTags();
 
 signals:
@@ -74,7 +74,7 @@ protected:
 
 private:
 
-    void setInfos(QList<ImageInfo> infos);
+    void setInfos(Q3PtrList<ImageInfo> infos);
 
     void updateTagsView();
     void updateComments();

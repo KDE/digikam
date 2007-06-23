@@ -47,7 +47,7 @@ SET(libimagepropertiesdigikam_STAT_SRCS navigatebarwidget.cpp
                                         imagepropertiestab.cpp 
                                         imagepropertiesmetadatatab.cpp 
                                         imagepropertiescolorstab.cpp 
-#                                        imagepropertiessidebardb.cpp 
+                                        imagepropertiessidebardb.cpp 
 #                                        imagedescedittab.cpp 
 #                                        talbumlistview.cpp 
    )

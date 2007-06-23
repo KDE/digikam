@@ -28,7 +28,7 @@
 
 // Qt includes.
 
-#include <QList>
+#include <Q3PtrList>
 
 // KDE includes.
 
@@ -67,7 +67,7 @@ public:
     virtual void itemChanged(const KUrl& url, const QRect &rect = QRect(), DImg *img = 0);
 
     virtual void itemChanged(ImageInfo *info, const QRect &rect = QRect(), DImg *img = 0);
-    virtual void itemChanged(QList<ImageInfo> infos);
+    virtual void itemChanged(Q3PtrList<ImageInfo> infos);
 
     void takeImageInfoOwnership(bool takeOwnership);
 
@@ -104,7 +104,7 @@ private:
 
     void itemChanged(const KUrl& url, ImageInfo *info,
                      const QRect &rect, DImg *img);
-    void itemChanged(QList<ImageInfo> infos, const QRect &rect, DImg *img);
+    void itemChanged(Q3PtrList<ImageInfo> infos, const QRect &rect, DImg *img);
 
 private:
 

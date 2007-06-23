@@ -25,11 +25,9 @@
 
 // Qt includes. 
 
-#include <qrect.h>
-#include <qcolor.h>
-#include <qsplitter.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QRect>
+#include <QColor>
+#include <QSplitter>
 
 // KDE includes.
 
@@ -70,16 +68,16 @@ public:
         hasImageInfoOwnership = false;
     }
 
-    bool                 dirtyDesceditTab;
+    bool                  dirtyDesceditTab;
 
     Q3PtrList<ImageInfo>  currentInfos;
 
-    ImageDescEditTab    *desceditTab;
+    ImageDescEditTab     *desceditTab;
 
-    bool                 hasPrevious;
-    bool                 hasNext;
+    bool                  hasPrevious;
+    bool                  hasNext;
 
-    bool                 hasImageInfoOwnership;
+    bool                  hasImageInfoOwnership;
 };
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *name, QSplitter *splitter, 
@@ -123,7 +121,7 @@ ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
 void ImagePropertiesSideBarDB::itemChanged(ImageInfo *info,
                                            const QRect &rect, DImg *img)
 {
-    itemChanged(info->kurl(), info, rect, img);
+    itemChanged(info->fileUrl(), info, rect, img);
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const QRect &rect, DImg *img)
@@ -137,7 +135,7 @@ void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, ImageInfo *info,
     if ( !url.isValid() )
         return;
 
-    m_currentURL         = url;
+    m_currentURL = url;
 
     Q3PtrList<ImageInfo> list;
     if (info)
@@ -151,7 +149,7 @@ void ImagePropertiesSideBarDB::itemChanged(Q3PtrList<ImageInfo> infos)
     if (infos.isEmpty())
         return;
 
-    m_currentURL         = infos.first()->kurl();
+    m_currentURL = infos.first()->fileUrl();
 
     itemChanged(infos, QRect(), 0);
 }
@@ -159,8 +157,8 @@ void ImagePropertiesSideBarDB::itemChanged(Q3PtrList<ImageInfo> infos)
 void ImagePropertiesSideBarDB::itemChanged(Q3PtrList<ImageInfo> infos,
                                            const QRect &rect, DImg *img)
 {
-    m_currentRect        = rect;
-    m_image              = img;
+    m_currentRect = rect;
+    m_image       = img;
 
     // The list _may_ have autoDelete set to true.
     // Keep old ImageInfo objects from being deleted
@@ -173,7 +171,6 @@ void ImagePropertiesSideBarDB::itemChanged(Q3PtrList<ImageInfo> infos,
     }
 
     d->currentInfos      = infos;
-
     m_dirtyPropertiesTab = false;
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
@@ -196,7 +193,6 @@ void ImagePropertiesSideBarDB::takeImageInfoOwnership(bool takeOwnership)
 {
     d->hasImageInfoOwnership = takeOwnership;
 }
-
 
 void ImagePropertiesSideBarDB::slotNoCurrentItem(void)
 {
@@ -370,8 +366,8 @@ void ImagePropertiesSideBarDB::slotAssignRatingFiveStar()
 
 void ImagePropertiesSideBarDB::slotThemeChanged()
 {
-    QColor backgroundColor(ThemeEngine::componentData().baseColor());
-    QColor foregroundColor(ThemeEngine::componentData().textRegColor());
+    QColor backgroundColor(ThemeEngine::componentData()->baseColor());
+    QColor foregroundColor(ThemeEngine::componentData()->textRegColor());
     m_propertiesTab->colorChanged(backgroundColor, foregroundColor);
 }
 
