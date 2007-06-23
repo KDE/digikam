@@ -26,12 +26,11 @@
 
 // Qt includes.
 
-#include <qrect.h>
-//Added by qt3to4:
+#include <Q3PointArray>
+#include <QRect>
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QWheelEvent>
-#include <Q3PointArray>
 
 // Local includes
 

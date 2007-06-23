@@ -91,7 +91,7 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
     d->image = d->iface->getOriginalImg()->copy(); 
 
     setMinimumSize(wp, hp);
-    setBackgroundColor(colorGroup().background());
+    setBackgroundColor(palette().color(QPalette::Background));
 
     if( !scrollBar ) 
     {
@@ -150,9 +150,11 @@ void ImageRegionWidget::resetPreview()
 
 void ImageRegionWidget::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 {
-    DImg img = d->image.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());    
+    DImg img     = d->image.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());    
     QPixmap pix2 = d->iface->convertToPixmap(img);
-    bitBlt(pix, 0, 0, &pix2, 0, 0);
+    QPainter p(pix);
+    p.drawPixmap(0, 0, pix2, 0, 0, pix2.width(), pix2.height());
+    p.end();
 }
 
 void ImageRegionWidget::setHighLightPoints(Q3PointArray pointsList)
@@ -206,7 +208,7 @@ void ImageRegionWidget::viewportPaintExtraData()
         region = getLocalImageRegionToRender();
         QRect ro(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight())); 
 
-        bitBlt(viewport(), rt.x(), rt.y(), &d->pixmapRegion, 0, 0, rt.width(), rt.height());
+        p.drawPixmap(rt.x(), rt.y(), d->pixmapRegion, 0, 0, rt.width(), rt.height());
 
         // Drawing separate view.
         
@@ -238,7 +240,7 @@ void ImageRegionWidget::viewportPaintExtraData()
                 fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text); 
 
                 if (d->separateView == SeparateViewVertical)
-                    ro.moveBy(-ro.width(), 0);
+                    ro.translate(-ro.width(), 0);
 
                 textRect.setTopLeft(QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20));
                 textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );       
@@ -273,7 +275,7 @@ void ImageRegionWidget::viewportPaintExtraData()
                 fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
 
                 if (d->separateView == SeparateViewHorizontal)
-                    ro.moveBy(0, -ro.height());
+                    ro.translate(0, -ro.height());
 
                 textRect.setTopLeft(QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20));
                 textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );       
@@ -291,7 +293,7 @@ void ImageRegionWidget::viewportPaintExtraData()
             QPoint pt;
             QRect  hpArea;
             
-            for (uint i = 0 ; i < d->hightlightPoints.count() ; i++)
+            for (int i = 0 ; i < d->hightlightPoints.count() ; i++)
             {
                 pt = d->hightlightPoints.point(i);
                 
@@ -355,7 +357,7 @@ void ImageRegionWidget::backupPixmapRegion()
 void ImageRegionWidget::restorePixmapRegion()
 {
     m_movingInProgress = true;
-    viewport()->repaint(false);
+    viewport()->repaint();
 }
 
 void ImageRegionWidget::updatePreviewImage(DImg *img)
@@ -427,9 +429,9 @@ QRect ImageRegionWidget::getLocalTargetImageRegion()
     QRect region = getLocalImageRegionToRender();
     
     if (d->separateView == SeparateViewDuplicateVert)
-        region.moveBy(region.width(), 0);
+        region.translate(region.width(), 0);
     else if (d->separateView == SeparateViewDuplicateHorz)
-        region.moveBy(0, region.height());
+        region.translate(0, region.height());
     
     return region;
 }
@@ -464,7 +466,7 @@ void ImageRegionWidget::contentsWheelEvent(QWheelEvent *e)
 {
     e->accept();
 
-    if (e->state() & Qt::ControlModifier)
+    if (e->modifiers() & Qt::ControlModifier)
     {
         if (e->delta() < 0 && !maxZoom())
             slotIncreaseZoom();
