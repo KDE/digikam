@@ -16,7 +16,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  S
 
  1      |-libs                                                                                       "libs" subfloders are used by all others parts of digiKam. Must be ported in first.
         |---curves                              Gilles          X       X       DONE
-        |---database                            Marcel                  X
+        |---database                            Marcel                  X       DONE
         |-----sqlite2                           Gilles                  X       DONE                 CMake port only is require.
         |---dialogs                             Gilles          X       X       DONE
         |---dimg                                Gilles          X       X       DONE
