@@ -1,12 +1,12 @@
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata
                    )
 
-SET(libimagepluginswidgets_STAT_SRCS imageregionwidget.cpp
+SET(libimagepluginswidgets_STAT_SRCS listboxpreviewitem.cpp
                                      imagepaniconwidget.cpp
-                                     imageguidewidget.cpp
-                                     imagepannelwidget.cpp
+                                     imageregionwidget.cpp
                                      imagewidget.cpp
-                                     listboxpreviewitem.cpp
+                                     imagepannelwidget.cpp
+                                     imageguidewidget.cpp
    )
 
 KDE4_AUTOMOC(${libimagepluginswidgets_STAT_SRCS})
