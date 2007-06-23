@@ -9,14 +9,14 @@ SET(libmetadatawidgets_STAT_SRCS mdkeylistviewitem.cpp
                                  exifwidget.cpp
                                  makernotewidget.cpp
                                  gpswidget.cpp
-#                                 metadatawidget.cpp
+                                 metadatawidget.cpp
    )
 
 KDE4_AUTOMOC(${libmetadatawidgets_STAT_SRCS})
 
 KDE4_ADD_LIBRARY(libmetadatawidgets STATIC ${libmetadatawidgets_STAT_SRCS})
 
-install( FILES exifwidget.h  
+INSTALL( FILES exifwidget.h  
                iptcwidget.h 
                mdkeylistviewitem.h  
                metadatalistviewitem.h  

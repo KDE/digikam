@@ -25,25 +25,25 @@
 
 #include <Q3SimpleRichText>
 #include <Q3PaintDeviceMetrics>
-#include <Q3StyleSheet>
-#include <Q3DragObject> 
-#include <Q3Header>
+#include <QColorGroup>
+#include <QMimeData>
+#include <QClipboard>
 #include <QMap>
 #include <QFile> 
-#include <QMime>
 #include <QPainter>
 #include <QPushButton>
 #include <QLabel>
-#include <QClipBoard>
 #include <QGridLayout>
 #include <QFrame>
 #include <QVBoxLayout>
 #include <QButtonGroup>
+#include <QDataStream>
 
 // KDE includes.
 
 #include <k3listview.h>
 #include <klocale.h>
+#include <kglobal.h>
 #include <kfiledialog.h>
 #include <kglobalsettings.h>
 #include <kprinter.h>
@@ -73,7 +73,12 @@ public:
         levelButtons = 0;
         view         = 0;
         mainLayout   = 0;
+        toolsGBox    = 0;
+        levelGBox    = 0;
     }
+
+    QWidget                *levelGBox;
+    QWidget                *toolsGBox;
 
     QGridLayout            *mainLayout;
 
@@ -95,51 +100,57 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     d = new MetadataWidgetPriv;
     setObjectName(name);
 
-    d->mainLayout = new Q3GridLayout(this, 2, 4, KDialog::spacingHint(), KDialog::spacingHint());
-    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+    d->mainLayout = new QGridLayout(this);
+    d->mainLayout->setSpacing(KDialog::spacingHint());
+    d->mainLayout->setMargin(KDialog::spacingHint());
+    setLayout(d->mainLayout);
 
-    d->levelButtons = new Q3HButtonGroup(this);
-    d->levelButtons->setInsideMargin( 0 );
+    KIconLoader* iconLoader = KIconLoader::global();
+
+    // -----------------------------------------------------------------
+
+    d->levelGBox = new QWidget(this);
+    d->levelButtons    = new QButtonGroup(d->levelGBox);
     d->levelButtons->setExclusive(true);
-    d->levelButtons->setFrameShape(Q3Frame::NoFrame);
 
-    QPushButton *simpleLevel = new QPushButton( d->levelButtons );
-    simpleLevel->setPixmap( iconLoader->loadIcon( "ascii", (KIcon::Group)KIcon::Toolbar ) );
-    simpleLevel->setToggleButton(true);
+    QPushButton *simpleLevel = new QPushButton( d->levelGBox );
+    simpleLevel->setIcon( iconLoader->loadIcon( "ascii", (K3Icon::Group)K3Icon::Toolbar ) );
+    simpleLevel->setCheckable(true);
     simpleLevel->setWhatsThis( i18n( "Toggle tags view to a simple human-readable list" ) );
-    d->levelButtons->insert(simpleLevel, SIMPLE);
+    d->levelButtons->addButton(simpleLevel, SIMPLE);
 
-    QPushButton *fullLevel = new QPushButton( d->levelButtons );
-    fullLevel->setPixmap( iconLoader->loadIcon( "document", (KIcon::Group)KIcon::Toolbar ) );
-    fullLevel->setToggleButton(true);
+    QPushButton *fullLevel = new QPushButton( d->levelGBox );
+    fullLevel->setIcon( iconLoader->loadIcon( "document", (K3Icon::Group)K3Icon::Toolbar ) );
+    fullLevel->setCheckable(true);
     fullLevel->setWhatsThis( i18n( "Toggle tags view to a full list" ) );
-    d->levelButtons->insert(fullLevel, FULL);
+    d->levelButtons->addButton(fullLevel, FULL);
 
-    d->toolButtons = new Q3HButtonGroup(this);
-    d->toolButtons->setInsideMargin( 0 );
-    d->toolButtons->setFrameShape(Q3Frame::NoFrame);
+    // -----------------------------------------------------------------
 
-    QPushButton *saveMetadata = new QPushButton( d->toolButtons );
-    saveMetadata->setPixmap( iconLoader->loadIcon( "filesave", (KIcon::Group)KIcon::Toolbar ) );
+    d->toolsGBox = new QWidget(this);
+    d->toolButtons     = new QButtonGroup(d->toolsGBox);
+
+    QPushButton *saveMetadata = new QPushButton( d->toolsGBox );
+    saveMetadata->setIcon( iconLoader->loadIcon( "filesave", (K3Icon::Group)K3Icon::Toolbar ) );
     saveMetadata->setWhatsThis( i18n( "Save meta-data to a binary file" ) );
-    d->toolButtons->insert(saveMetadata);
+    d->toolButtons->addButton(saveMetadata);
     
-    QPushButton *printMetadata = new QPushButton( d->toolButtons );
-    printMetadata->setPixmap( iconLoader->loadIcon( "fileprint", (KIcon::Group)KIcon::Toolbar ) );
+    QPushButton *printMetadata = new QPushButton( d->toolsGBox );
+    printMetadata->setIcon( iconLoader->loadIcon( "fileprint", (K3Icon::Group)K3Icon::Toolbar ) );
     printMetadata->setWhatsThis( i18n( "Print meta-data to printer" ) );
-    d->toolButtons->insert(printMetadata);
+    d->toolButtons->addButton(printMetadata);
 
-    QPushButton *copy2ClipBoard = new QPushButton( d->toolButtons );
-    copy2ClipBoard->setPixmap( iconLoader->loadIcon( "editcopy", (KIcon::Group)KIcon::Toolbar ) );
+    QPushButton *copy2ClipBoard = new QPushButton( d->toolsGBox );
+    copy2ClipBoard->setIcon( iconLoader->loadIcon( "editcopy", (K3Icon::Group)K3Icon::Toolbar ) );
     copy2ClipBoard->setWhatsThis( i18n( "Copy meta-data to clipboard" ) );
-    d->toolButtons->insert(copy2ClipBoard);
+    d->toolButtons->addButton(copy2ClipBoard);
 
-    d->mainLayout->addMultiCellWidget(d->levelButtons, 0, 0, 0, 1);
-    d->mainLayout->setColStretch(3, 10);
-    d->mainLayout->addMultiCellWidget(d->toolButtons, 0, 0, 4, 4);
+    d->mainLayout->addWidget(d->levelGBox, 0, 0, 0, 1);
+    d->mainLayout->setColumnStretch(3, 10);
+    d->mainLayout->addWidget(d->toolsGBox, 0, 0, 4, 4);
 
     d->view = new MetadataListView(this);
-    d->mainLayout->addMultiCellWidget(d->view, 1, 1, 0, 4);
+    d->mainLayout->addWidget(d->view, 1, 1, 0, 4);
 
     // -----------------------------------------------------------------
     
@@ -168,7 +179,7 @@ MetadataListView* MetadataWidget::view(void)
 
 void MetadataWidget::enabledToolButtons(bool b)
 {
-    d->toolButtons->setEnabled(b);
+    d->toolsGBox->setEnabled(b);
 }
 
 bool MetadataWidget::setMetadata(const QByteArray& data)
@@ -217,7 +228,7 @@ bool MetadataWidget::storeMetadataToFile(const KUrl& url)
         return false;
     
     QDataStream stream( &file );
-    stream.writeRawBytes(d->metadata.data(), d->metadata.size());
+    stream.writeRawData(d->metadata.data(), d->metadata.size());
     file.close();
     return true;
 }
@@ -274,14 +285,15 @@ void MetadataWidget::slotCopy2Clipboard(void)
         ++it;
     }
 
-    QApplication::clipboard()->setData(new Q3TextDrag(textmetadata), QClipboard::Clipboard);
+    QMimeData *mimeData = new QMimeData();
+    mimeData->setText(textmetadata);
+    QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
 }
 
 void MetadataWidget::slotPrintMetadata(void)
 {
     QString textmetadata = i18n("<p><big><big><b>File name: %1 (%2)</b></big></big>")
-                           ,d->fileName,
-                           getMetadataTitle();
+                           .arg(d->fileName).arg(getMetadataTitle());
     Q3ListViewItemIterator it( d->view );
 
     while ( it.current() )
@@ -333,8 +345,8 @@ void MetadataWidget::slotPrintMetadata(void)
 
         do
         {
-            richText.draw( &p, margin, margin, view, colorGroup() );
-            view.moveBy( 0, view.height() );
+            richText.draw( &p, margin, margin, view, QColorGroup(palette()) );
+            view.translate( 0, view.height() );
             p.translate( 0 , -view.height() );
             p.setFont( font );
             p.drawText( view.right() - p.fontMetrics().width( QString::number( page ) ),
@@ -372,16 +384,16 @@ KUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& f
 
 void MetadataWidget::setMode(int mode)
 {
-    if (d->levelButtons->selectedId() == mode)
+    if (d->levelButtons->checkedId() == mode)
         return;
 
-    d->levelButtons->setButton(mode);
+    d->levelButtons->button(mode)->setChecked(true);
     buildView();
 }
 
 int MetadataWidget::getMode(void)
 {
-    int level = d->levelButtons->selectedId();
+    int level = d->levelButtons->checkedId();
     return level;
 }
 
@@ -418,10 +430,11 @@ void MetadataWidget::setFileName(QString fileName)
 
 void MetadataWidget::setUserAreaWidget(QWidget *w)
 {
-    Q3VBoxLayout *vLayout = new Q3VBoxLayout( KDialog::spacingHint() ); 
+    QVBoxLayout *vLayout = new QVBoxLayout();
+    vLayout->setSpacing( KDialog::spacingHint() ); 
     vLayout->addWidget(w);
     vLayout->addStretch();
-    d->mainLayout->addMultiCellLayout(vLayout, 2, 2, 0, 4);
+    d->mainLayout->addLayout(vLayout, 2, 2, 0, 4);
 }
 
 }  // namespace Digikam
