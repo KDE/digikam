@@ -24,8 +24,8 @@
 
 // Qt includes.
 
-#include <qmap.h>
-#include <qfile.h>
+#include <QMap>
+#include <QFile>
 
 // KDE includes.
 
@@ -177,7 +177,7 @@ void MakerNoteWidget::buildView(void)
 
 QString MakerNoteWidget::getTagTitle(const QString& key)
 {
-    QString title = DMetadata::getExifTagTitle(key.ascii());
+    QString title = DMetadata::getExifTagTitle(key.toAscii());
 
     if (title.isEmpty())
         return i18n("Unknown");
@@ -187,7 +187,7 @@ QString MakerNoteWidget::getTagTitle(const QString& key)
 
 QString MakerNoteWidget::getTagDescription(const QString& key)
 {
-    QString desc = DMetadata::getExifTagDescription(key.ascii());
+    QString desc = DMetadata::getExifTagDescription(key.toAscii());
 
     if (desc.isEmpty())
         return i18n("No description available");

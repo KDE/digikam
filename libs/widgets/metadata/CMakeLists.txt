@@ -8,7 +8,7 @@ SET(libmetadatawidgets_STAT_SRCS mdkeylistviewitem.cpp
 #                                 metadatawidget.cpp
 #                                 iptcwidget.cpp
 #                                 exifwidget.cpp
-#                                 makernotewidget.cpp
+                                 makernotewidget.cpp
                                  gpswidget.cpp
    )
 
