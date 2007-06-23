@@ -26,8 +26,7 @@
 
 // Qt includes.
 
-#include <q3listview.h>
-//Added by qt3to4:
+#include <Q3ListView>
 #include <QMouseEvent>
 #include <QDropEvent>
 
@@ -39,6 +38,7 @@
 class Q3ListViewItem;
 class QDropEvent;
 class QMouseEvent;
+class Q3DragObject;
 
 namespace Digikam
 {

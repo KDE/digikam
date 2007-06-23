@@ -41,18 +41,18 @@ KDE4_ADD_LIBRARY(libimagepropertiesshowfoto ${libimagepropertiesshowfoto_STAT_SR
 
 # Static library for digiKam ################################################
 
-# SET(libimagepropertiesdigikam_STAT_SRCS navigatebarwidget.cpp 
-#                                         navigatebartab.cpp
-#                                         talbumlistview.cpp 
-#                                         imagepropertiessidebar.cpp 
-#                                         imagepropertiessidebardb.cpp 
-#                                         imagepropertiestab.cpp 
-#                                         imagedescedittab.cpp 
-#                                         imagepropertiesmetadatatab.cpp 
-#                                         imagepropertiescolorstab.cpp 
-#    )
-# 
-# KDE4_AUTOMOC(${libimagepropertiesdigikam_STAT_SRCS})
-# 
-# KDE4_ADD_LIBRARY(libimagepropertiesdigikam_STAT_SRCS ${libimagepropertiesdigikam_STAT_SRCS})
+SET(libimagepropertiesdigikam_STAT_SRCS navigatebarwidget.cpp 
+                                        navigatebartab.cpp
+                                        imagepropertiessidebar.cpp 
+                                        imagepropertiestab.cpp 
+                                        imagepropertiesmetadatatab.cpp 
+                                        imagepropertiescolorstab.cpp 
+#                                        imagepropertiessidebardb.cpp 
+#                                        imagedescedittab.cpp 
+#                                        talbumlistview.cpp 
+   )
+
+KDE4_AUTOMOC(${libimagepropertiesdigikam_STAT_SRCS})
+
+KDE4_ADD_LIBRARY(libimagepropertiesdigikam_STAT_SRCS ${libimagepropertiesdigikam_STAT_SRCS})
 
