@@ -21,30 +21,26 @@
  * 
  * ============================================================ */
 
-#include <config.h>
- 
 // Qt includes.
 
-#include <qlayout.h>
-#include <qpushbutton.h>
-
-#include <qlabel.h>
-#include <qmap.h>
-#include <q3hbox.h>
-#include <qfile.h>
-#include <qcombobox.h>
-#include <q3groupbox.h>
-#include <qmap.h>
+#include <QPushButton>
+#include <QLabel>
+#include <QMap>
+#include <QFile>
+#include <QComboBox>
+#include <QGroupBox>
+#include <QMap>
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <khbox.h>
+#include <kdialog.h>
 #include <klocale.h>
 #include <kapplication.h>
 
 // Lcms includes.
 
-#include LCMS_HEADER
+#include <lcms.h>
 #if LCMS_VERSION < 114
 #define cmsTakeCopyright(profile) "Unknown"
 #endif // LCMS_VERSION < 114
@@ -55,6 +51,7 @@
 #include "metadatalistview.h"
 #include "cietonguewidget.h"
 #include "iccprofilewidget.h"
+#include "iccprofilewidget.moc"
 
 namespace Digikam
 {
@@ -220,9 +217,10 @@ bool ICCProfileWidget::loadFromURL(const KUrl& url)
             return false;
         }
             
-        QByteArray iccData(file.size());
+        QByteArray iccData;
+        iccData.reserve(file.size());
         QDataStream stream( &file );
-        stream.readRawBytes(iccData.data(), iccData.size());
+        stream.readRawData(iccData.data(), iccData.size());
         file.close();
         
         if (iccData.isEmpty())
@@ -421,7 +419,7 @@ QString ICCProfileWidget::getTagTitle(const QString& key)
 {
     ICCTagInfoMap::Iterator it = d->iccTagsDescription.find(key);
     if (it != d->iccTagsDescription.end())
-        return(it.data().title());
+        return(it.value().title());
     
     return key.section('.', 2, 2);
 }
@@ -437,11 +435,10 @@ QString ICCProfileWidget::getTagDescription(const QString& key)
 {
     ICCTagInfoMap::Iterator it = d->iccTagsDescription.find(key);
     if (it != d->iccTagsDescription.end())
-        return(it.data().description());
+        return(it.value().description());
     
     return key.section('.', 2, 2);
 }
 
 }  // namespace Digikam
 
-#include "iccprofilewidget.moc"
