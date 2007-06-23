@@ -24,9 +24,13 @@
 #ifndef STATUSSTATUSBAR_H
 #define STATUSSTATUSBAR_H
 
-// KDE includes.
+// QT includes.
 
 #include <QString>
+
+// KDE includes.
+
+#include <khbox.h>
 
 // Local includes
 
