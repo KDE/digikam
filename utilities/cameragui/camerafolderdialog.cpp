@@ -50,16 +50,21 @@ namespace Digikam
 CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraView, 
                                        const QStringList& cameraFolderList,
                                        const QString& cameraName, const QString& rootPath)
-                  : KDialogBase(parent, 0, true,
-                                i18n("%1 - Select Camera Folder",cameraName), 
-                                Help|Ok|Cancel, Ok, true)
+                  : KDialog(parent)
 {
     setHelp("camerainterface.anchor", "digikam");
     enableButtonOk(false);
+    setCaption(i18n("%1 - Select Camera Folder",cameraName));
+    setButtons(Help|Ok|Cancel);
+    setDefaultButton(Ok);
+    setModal(true);
+
+
 
     m_rootPath = rootPath;
 
-    QFrame *page      = makeMainWidget();
+    QFrame *page      = new QFrame(this);
+    setMainWidget(page);
     Q3GridLayout* grid = new Q3GridLayout(page, 2, 1, 0, spacingHint());
     
     m_folderView    = new CameraFolderView(page);
@@ -107,7 +112,7 @@ CameraFolderDialog::~CameraFolderDialog()
 {
 }
 
-QString CameraFolderDialog::selectedFolderPath()
+QString CameraFolderDialog::selectedFolderPath() const
 {
     Q3ListViewItem *item = m_folderView->currentItem();
     if (!item) return QString();

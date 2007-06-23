@@ -70,7 +70,6 @@ extern "C"
 #include <kimageio.h>
 #include <kaboutdata.h>
 #include <kmessagebox.h>
-#include <kprogress.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kconfig.h>
@@ -204,7 +203,7 @@ public:
 
     QDateTime                     lastAccess;
 
-    KProgress                    *progress;
+    KProgressBar                    *progress;
 
     KSqueezedTextLabel           *status;
 
@@ -371,7 +370,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->cancelBtn->setEnabled(false);
     
     d->status   = new KSqueezedTextLabel(plainPage());
-    d->progress = new KProgress(plainPage());
+    d->progress = new KProgressBar(plainPage());
     d->progress->setMaximumHeight( fontMetrics().height() );
     d->progress->hide();
 

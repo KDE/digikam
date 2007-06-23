@@ -30,7 +30,7 @@
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 namespace Digikam
 {
@@ -39,7 +39,7 @@ class CameraIconView;
 class CameraFolderView;
 class CameraFolderItem;
 
-class CameraFolderDialog : public KDialogBase
+class CameraFolderDialog : public KDialog
 {
     Q_OBJECT
 
@@ -49,7 +49,7 @@ public:
                        const QString& cameraName, const QString& rootPath);
     ~CameraFolderDialog();
 
-    QString selectedFolderPath();
+    QString selectedFolderPath() const;
 
 private slots:
 

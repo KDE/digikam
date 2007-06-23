@@ -83,29 +83,32 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
                                      const QString& header,
                                      const QString& newAlbumString,
                                      bool allowRootSelection )
-             : KDialogBase(Plain, i18n("Select Album"),
-                           Help|User1|Ok|Cancel, Ok,
-                           parent, 0, true, true,
-                           i18n("&New Album"))
+             : KDialog(parent)
 {
+    setCaption(i18n("Select Album"));
+    setButtons(Help|User1|Ok|Cancel);
+    setButtonText(User1,i18n("&New Album"));
+    setDefaultButton(Ok);
+
     d = new AlbumSelectDialogPrivate;
     setHelp("targetalbumdialog.anchor", "digikam");
     enableButtonOk(false);
 
     d->allowRootSelection = allowRootSelection;
     d->newAlbumString     = newAlbumString;
-    
-    Q3GridLayout* grid = new Q3GridLayout(plainPage(), 2, 1, 0, spacingHint());
+    QWidget *page = new QWidget(this);
+    setMainWidget(page);   
+    Q3GridLayout* grid = new Q3GridLayout(page, 2, 1, 0, spacingHint());
 
-    QLabel *logo = new QLabel(plainPage());
+    QLabel *logo = new QLabel(page);
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
     logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 128, KIcon::DefaultState, 0, true));    
 
-    QLabel *message = new QLabel(plainPage());
+    QLabel *message = new QLabel(page);
     if (!header.isEmpty())
         message->setText(header);
 
-    d->folderView = new FolderView(plainPage());
+    d->folderView = new FolderView(page);
     d->folderView->addColumn(i18n("digiKam Albums"));
     d->folderView->setColumnWidthMode( 0, Q3ListView::Maximum );
     d->folderView->setResizeMode( Q3ListView::AllColumns );
@@ -179,7 +182,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
             this, SLOT(slotContextMenu(Q3ListViewItem*, const QPoint&, int)));
 
     // -------------------------------------------------------------
-
+    connect(this,SIGNAL(user1Clicked()),this,SLOT(slotUser1()));
     resize(500, 500);
     slotSelectionChanged();
 }

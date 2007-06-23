@@ -38,7 +38,8 @@ TARGET_LINK_LIBRARIES(showfoto libshowfotosetup
                                libcommonwidgets
                                libiccprofileswidgets
                                libmetadatawidgets
-                               libimagepluginswidgets                               ${KDE4_KUTILS_LIBS} 
+                               libimagepluginswidgets                               
+			       ${KDE4_KUTILS_LIBS} 
                                ${KDE4_KPARTS_LIBS} 
                      )
 

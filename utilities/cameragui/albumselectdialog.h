@@ -30,7 +30,7 @@
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class FolderView;
 class FolderItem;
@@ -41,7 +41,7 @@ namespace Digikam
 
 class AlbumSelectDialogPrivate;
 
-class AlbumSelectDialog : public KDialogBase
+class AlbumSelectDialog : public KDialog
 {
     Q_OBJECT
 

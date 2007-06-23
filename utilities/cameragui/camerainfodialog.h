@@ -31,12 +31,12 @@
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 namespace Digikam
 {
 
-class CameraInfoDialog : public KDialogBase
+class CameraInfoDialog : public KDialog
 {
 public:
 
