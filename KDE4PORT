@@ -66,9 +66,9 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  S
 
  3      |-kioslave
             digikamalbums.cpp                   Marcel                  X
-            digikamdates.cpp                    Marcel                  X
-            digikamsearch.cpp                   Marcel                  X
-            digikamtags.cpp                     Marcel                  X
+            digikamdates.cpp                    Marcel                  X       DONE
+            digikamsearch.cpp                   Marcel                  X       DONE
+            digikamtags.cpp                     Marcel                  X       DONE
             digikamthumbnail.cpp                Gilles          X       X       DONE
 
  4      |-showfoto                                              X
