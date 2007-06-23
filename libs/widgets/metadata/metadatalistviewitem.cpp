@@ -24,9 +24,9 @@
 
 // Qt include.
 
-#include <qpalette.h>
-#include <qfont.h>
-#include <qpainter.h>
+#include <QPalette>
+#include <QFont>
+#include <QPainter>
 
 // Local includes.
 
@@ -90,4 +90,3 @@ void MetadataListViewItem::paintCell(QPainter* p, const QColorGroup& cg,
 }
 
 }  // namespace Digikam
-

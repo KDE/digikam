@@ -27,7 +27,8 @@
 
 // Qt includes.
 
-#include <qstring.h>
+#include <QString>
+#include <QColorGroup>
 
 // KDE includes.
 
@@ -36,6 +37,8 @@
 // Local includes.
 
 #include "digikam_export.h"
+
+class QPainter;
 
 namespace Digikam
 {
