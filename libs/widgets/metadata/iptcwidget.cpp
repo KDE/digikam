@@ -23,8 +23,8 @@
 
 // Qt includes.
 
-#include <qmap.h>
-#include <qfile.h>
+#include <QMap>
+#include <QFile>
 
 // KDE includes.
 
@@ -85,7 +85,7 @@ QString IptcWidget::getMetadataTitle(void)
 
 bool IptcWidget::loadFromURL(const KUrl& url)
 {
-    setFileName(url.filename());
+    setFileName(url.fileName());
 
     if (url.isEmpty())
     {
@@ -135,7 +135,7 @@ void IptcWidget::buildView(void)
 
 QString IptcWidget::getTagTitle(const QString& key)
 {
-    QString title = DMetadata::getIptcTagTitle(key.ascii());
+    QString title = DMetadata::getIptcTagTitle(key.toAscii());
 
     if (title.isEmpty())
         return i18n("Unknown");
@@ -145,7 +145,7 @@ QString IptcWidget::getTagTitle(const QString& key)
 
 QString IptcWidget::getTagDescription(const QString& key)
 {
-    QString desc = DMetadata::getIptcTagDescription(key.ascii());
+    QString desc = DMetadata::getIptcTagDescription(key.toAscii());
 
     if (desc.isEmpty())
         return i18n("No description available");
