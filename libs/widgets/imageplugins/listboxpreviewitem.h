@@ -28,10 +28,10 @@
 
  // Qt includes.
 
-#include <q3listbox.h>
-
-//Added by qt3to4:
+#include <Q3ListBox>
+#include <QMap>
 #include <QPixmap>
+#include <Q3WhatsThis>
 
 // Local includes.
 
@@ -44,6 +44,7 @@ class DIGIKAM_EXPORT ListBoxPreviewItem : public Q3ListBoxPixmap
 {
 
 public:
+
     ListBoxPreviewItem(Q3ListBox *listbox, const QPixmap &pix, const QString &text)
         : Q3ListBoxPixmap(listbox, pix, text) {};
 
