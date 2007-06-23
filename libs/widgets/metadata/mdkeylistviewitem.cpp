@@ -24,17 +24,17 @@
 
 // Qt include.
 
-#include <qpalette.h>
-#include <qfont.h>
-#include <qpainter.h>
+#include <QPalette>
+#include <QFont>
+#include <QPainter>
 
 // KDE includes.
 
-#include "ddebug.h"
 #include <klocale.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "mdkeylistviewitem.h"
 
 namespace Digikam
@@ -91,4 +91,3 @@ void MdKeyListViewItem::paintCell(QPainter* p, const QColorGroup&,
 }
 
 }  // namespace Digikam
-

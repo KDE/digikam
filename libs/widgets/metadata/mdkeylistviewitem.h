@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <qstring.h>
+#include <QString>
 
 // KDE includes.
 
@@ -57,7 +57,6 @@ protected:
 private:
 
     QString m_decryptedKey;
-
 };
 
 }  // namespace Digikam

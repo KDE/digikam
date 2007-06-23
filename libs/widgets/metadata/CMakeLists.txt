@@ -1,12 +1,12 @@
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata
                    )
 
-SET(libmetadatawidgets_STAT_SRCS metadatalistview.cpp
+SET(libmetadatawidgets_STAT_SRCS mdkeylistviewitem.cpp
                                  metadatalistviewitem.cpp
+                                 metadatalistview.cpp
                                  metadatawidget.cpp
                                  iptcwidget.cpp
                                  exifwidget.cpp
-                                 mdkeylistviewitem.cpp
                                  makernotewidget.cpp
                                  gpswidget.cpp
                                  worldmapwidget.cpp
