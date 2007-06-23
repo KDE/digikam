@@ -41,7 +41,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <khbox.h>
 #include <kdialog.h>
 #include <klocale.h>
-#include <kapplication.h>
+#include <ktoolinvocation.h>
 
 // Local includes.
 
@@ -119,10 +119,10 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
 
     d->detailsCombo  = new QComboBox( box2 );
     d->detailsButton = new QPushButton(i18n("More Info..."), box2);
-    d->detailsCombo->insertItem(QString("MapQuest"),    MapQuest);
-    d->detailsCombo->insertItem(QString("Google Maps"), GoogleMaps);
-    d->detailsCombo->insertItem(QString("MSN Maps"),    MsnMaps);
-    d->detailsCombo->insertItem(QString("MultiMap"),    MultiMap);
+    d->detailsCombo->insertItem(MapQuest,   QString("MapQuest"));
+    d->detailsCombo->insertItem(GoogleMaps, QString("Google Maps"));
+    d->detailsCombo->insertItem(MsnMaps,    QString("MSN Maps"));
+    d->detailsCombo->insertItem(MultiMap,   QString("MultiMap"));
     
     box2Layout->addWidget( d->detailsCombo, 0, 0, 0, 0 );
     box2Layout->addWidget( d->detailsButton, 0, 0, 1, 1 );
@@ -153,12 +153,12 @@ GPSWidget::~GPSWidget()
 
 int GPSWidget::getWebGPSLocator(void)
 {
-    return ( d->detailsCombo->currentItem() );
+    return ( d->detailsCombo->currentIndex() );
 }
     
 void GPSWidget::setWebGPSLocator(int locator)
 {
-    d->detailsCombo->setCurrentItem(locator);
+    d->detailsCombo->setCurrentIndex(locator);
 }
     
 void GPSWidget::slotGPSDetails(void)
@@ -213,7 +213,7 @@ void GPSWidget::slotGPSDetails(void)
         }
     }
     
-    KApplication::kApplication()->invokeBrowser(url);
+    KToolInvocation::self()->invokeBrowser(url);
 }
 
 QString GPSWidget::getMetadataTitle(void)
@@ -295,7 +295,7 @@ void GPSWidget::buildView(void)
 
 QString GPSWidget::getTagTitle(const QString& key)
 {
-    QString title = DMetadata::getExifTagTitle(key.ascii());
+    QString title = DMetadata::getExifTagTitle(key.toAscii());
 
     if (title.isEmpty())
         return i18n("Unknown");
@@ -305,7 +305,7 @@ QString GPSWidget::getTagTitle(const QString& key)
 
 QString GPSWidget::getTagDescription(const QString& key)
 {
-    QString desc = DMetadata::getExifTagDescription(key.ascii());
+    QString desc = DMetadata::getExifTagDescription(key.toAscii());
 
     if (desc.isEmpty())
         return i18n("No description available");
