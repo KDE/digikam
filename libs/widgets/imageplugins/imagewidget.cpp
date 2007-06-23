@@ -88,119 +88,118 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
 
     // -------------------------------------------------------------
     
-    Q3GridLayout* grid = new Q3GridLayout(this, 2, 3);
+    QGridLayout* grid = new QGridLayout(this);
+    setLayout(grid);
 
     d->spotInfoLabel = new KSqueezedTextLabel(this);
     d->spotInfoLabel->setAlignment(Qt::AlignRight);
 
     // -------------------------------------------------------------
     
-    d->previewButtons = new Q3HButtonGroup(this);
+    d->previewButtons = new QButtonGroup(this);
     d->previewButtons->setExclusive(true);
-    d->previewButtons->setInsideMargin(0);
-    d->previewButtons->setFrameShape(Q3Frame::NoFrame);
 
-    QPushButton *previewOriginalButton = new QPushButton( d->previewButtons );
-    d->previewButtons->insert(previewOriginalButton, ImageGuideWidget::PreviewOriginalImage);
+    QPushButton *previewOriginalButton = new QPushButton( this );
+    d->previewButtons->addButton(previewOriginalButton, ImageGuideWidget::PreviewOriginalImage);
     KGlobal::dirs()->addResourceType("original", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("original", "original.png");
-    previewOriginalButton->setPixmap( QPixmap( directory + "original.png" ) );
-    previewOriginalButton->setToggleButton(true);
+    previewOriginalButton->setIcon( QPixmap( directory + "original.png" ) );
+    previewOriginalButton->setCheckable(true);
     previewOriginalButton->setWhatsThis( i18n( "<p>If you enable this option, you will see "
-                                                  "the original image." ) );
+                                               "the original image." ) );
 
-    QPushButton *previewBothButtonVert = new QPushButton( d->previewButtons );
-    d->previewButtons->insert(previewBothButtonVert, ImageGuideWidget::PreviewBothImagesVertCont);
+    QPushButton *previewBothButtonVert = new QPushButton( this );
+    d->previewButtons->addButton(previewBothButtonVert, ImageGuideWidget::PreviewBothImagesVertCont);
     KGlobal::dirs()->addResourceType("bothvert", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("bothvert", "bothvert.png");
-    previewBothButtonVert->setPixmap( QPixmap( directory + "bothvert.png" ) );
-    previewBothButtonVert->setToggleButton(true);
+    previewBothButtonVert->setIcon( QPixmap( directory + "bothvert.png" ) );
+    previewBothButtonVert->setCheckable(true);
     previewBothButtonVert->setWhatsThis( i18n( "<p>If you enable this option, the preview area will "
-                                                  "be separated vertically. "
-                                                  "A contiguous area of the image will be shown, "
-                                                  "with one half from the original image, "
-                                                  "the other half from the target image.") );
+                                               "be separated vertically. "
+                                               "A contiguous area of the image will be shown, "
+                                               "with one half from the original image, "
+                                               "the other half from the target image.") );
 
-    QPushButton *previewBothButtonHorz = new QPushButton( d->previewButtons );
-    d->previewButtons->insert(previewBothButtonHorz, ImageGuideWidget::PreviewBothImagesHorzCont);
+    QPushButton *previewBothButtonHorz = new QPushButton( this );
+    d->previewButtons->addButton(previewBothButtonHorz, ImageGuideWidget::PreviewBothImagesHorzCont);
     KGlobal::dirs()->addResourceType("bothhorz", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("bothhorz", "bothhorz.png");
-    previewBothButtonHorz->setPixmap( QPixmap( directory + "bothhorz.png" ) );
-    previewBothButtonHorz->setToggleButton(true);
+    previewBothButtonHorz->setIcon( QPixmap( directory + "bothhorz.png" ) );
+    previewBothButtonHorz->setCheckable(true);
     previewBothButtonHorz->setWhatsThis( i18n( "<p>If you enable this option, the preview area will "
-                                                  "be separated horizontally. "
-                                                  "A contiguous area of the image will be shown, "
-                                                  "with one half from the original image, "
-                                                  "the other half from the target image.") );
+                                               "be separated horizontally. "
+                                               "A contiguous area of the image will be shown, "
+                                               "with one half from the original image, "
+                                               "the other half from the target image.") );
 
-    QPushButton *previewDuplicateBothButtonVert = new QPushButton( d->previewButtons );
-    d->previewButtons->insert(previewDuplicateBothButtonVert, ImageGuideWidget::PreviewBothImagesVert);
+    QPushButton *previewDuplicateBothButtonVert = new QPushButton( this );
+    d->previewButtons->addButton(previewDuplicateBothButtonVert, ImageGuideWidget::PreviewBothImagesVert);
     KGlobal::dirs()->addResourceType("duplicatebothvert", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("duplicatebothvert", "duplicatebothvert.png");
-    previewDuplicateBothButtonVert->setPixmap( QPixmap( directory + "duplicatebothvert.png" ) );
-    previewDuplicateBothButtonVert->setToggleButton(true);
+    previewDuplicateBothButtonVert->setIcon( QPixmap( directory + "duplicatebothvert.png" ) );
+    previewDuplicateBothButtonVert->setCheckable(true);
     previewDuplicateBothButtonVert->setWhatsThis( i18n( "<p>If you enable this option, the preview area will "
-                                                           "be separated vertically. "
-                                                           "The same part of the original and the target image "
-                                                           "will be shown side by side.") );
+                                                        "be separated vertically. "
+                                                        "The same part of the original and the target image "
+                                                        "will be shown side by side.") );
 
-    QPushButton *previewDupplicateBothButtonHorz = new QPushButton( d->previewButtons );
-    d->previewButtons->insert(previewDupplicateBothButtonHorz, ImageGuideWidget::PreviewBothImagesHorz);
+    QPushButton *previewDupplicateBothButtonHorz = new QPushButton( this );
+    d->previewButtons->addButton(previewDupplicateBothButtonHorz, ImageGuideWidget::PreviewBothImagesHorz);
     KGlobal::dirs()->addResourceType("duplicatebothhorz", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("duplicatebothhorz", "duplicatebothhorz.png");
-    previewDupplicateBothButtonHorz->setPixmap( QPixmap( directory + "duplicatebothhorz.png" ) );
-    previewDupplicateBothButtonHorz->setToggleButton(true);
+    previewDupplicateBothButtonHorz->setIcon( QPixmap( directory + "duplicatebothhorz.png" ) );
+    previewDupplicateBothButtonHorz->setCheckable(true);
     previewDupplicateBothButtonHorz->setWhatsThis( i18n( "<p>If you enable this option, the preview area will "
-                                                            "be separated horizontally. "
-                                                            "The same part of the original and the target image "
-                                                            "will be shown side by side.") );
+                                                         "be separated horizontally. "
+                                                         "The same part of the original and the target image "
+                                                         "will be shown side by side.") );
 
-    QPushButton *previewtargetButton = new QPushButton( d->previewButtons );
-    d->previewButtons->insert(previewtargetButton, ImageGuideWidget::PreviewTargetImage);
+    QPushButton *previewtargetButton = new QPushButton( this );
+    d->previewButtons->addButton(previewtargetButton, ImageGuideWidget::PreviewTargetImage);
     KGlobal::dirs()->addResourceType("target", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("target", "target.png");
-    previewtargetButton->setPixmap( QPixmap( directory + "target.png" ) );
-    previewtargetButton->setToggleButton(true);
+    previewtargetButton->setIcon( QPixmap( directory + "target.png" ) );
+    previewtargetButton->setCheckable(true);
     previewtargetButton->setWhatsThis( i18n( "<p>If you enable this option, you will see "
-                                                "the target image." ) );
+                                             "the target image." ) );
 
-    QPushButton *previewToggleMouseOverButton = new QPushButton( d->previewButtons );
-    d->previewButtons->insert(previewToggleMouseOverButton, ImageGuideWidget::PreviewToggleOnMouseOver);
+    QPushButton *previewToggleMouseOverButton = new QPushButton( this );
+    d->previewButtons->addButton(previewToggleMouseOverButton, ImageGuideWidget::PreviewToggleOnMouseOver);
     KGlobal::dirs()->addResourceType("togglemouseover", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("togglemouseover", "togglemouseover.png");
-    previewToggleMouseOverButton->setPixmap( QPixmap( directory + "togglemouseover.png" ) );
-    previewToggleMouseOverButton->setToggleButton(true);
+    previewToggleMouseOverButton->setIcon( QPixmap( directory + "togglemouseover.png" ) );
+    previewToggleMouseOverButton->setCheckable(true);
     previewToggleMouseOverButton->setWhatsThis( i18n( "<p>If you enable this option, you will see "
-                                                         "the original image when the mouse is over image area, "
-                                                         "else the target image." ) );
+                                                      "the original image when the mouse is over image area, "
+                                                      "else the target image." ) );
 
     // -------------------------------------------------------------
     
-    Q3HButtonGroup *exposureButtons = new Q3HButtonGroup(this);
-    exposureButtons->setInsideMargin(0);
-    exposureButtons->setFrameShape(Q3Frame::NoFrame);
+    QButtonGroup *exposureButtons = new QButtonGroup(this);
 
-    d->underExposureButton = new QPushButton(exposureButtons);
-    exposureButtons->insert(d->underExposureButton, UnderExposure);
-    d->underExposureButton->setPixmap(SmallIcon("underexposure"));
-    d->underExposureButton->setToggleButton(true);
+    d->underExposureButton = new QPushButton(this);
+    exposureButtons->addButton(d->underExposureButton, UnderExposure);
+    d->underExposureButton->setIcon(SmallIcon("underexposure"));
+    d->underExposureButton->setCheckable(true);
     d->underExposureButton->setWhatsThis( i18n("<p>Set this option on to display pure black "
-                                                 "over-colored on preview. This will help you to avoid "
-                                                 "under-exposing the image." ) );
+                                               "over-colored on preview. This will help you to avoid "
+                                               "under-exposing the image." ) );
 
-    d->overExposureButton = new QPushButton(exposureButtons);
-    exposureButtons->insert(d->overExposureButton, OverExposure);
-    d->overExposureButton->setPixmap(SmallIcon("overexposure"));
-    d->overExposureButton->setToggleButton(true);
+    d->overExposureButton = new QPushButton(this);
+    exposureButtons->addButton(d->overExposureButton, OverExposure);
+    d->overExposureButton->setIcon(SmallIcon("overexposure"));
+    d->overExposureButton->setCheckable(true);
     d->overExposureButton->setWhatsThis( i18n("<p>Set this option on to display pure white "
-                                                "over-colored on preview. This will help you to avoid "
-                                                "over-exposing the image." ) );
+                                              "over-colored on preview. This will help you to avoid "
+                                              "over-exposing the image." ) );
 
     // -------------------------------------------------------------
     
-    Q3Frame *frame    = new Q3Frame(this);
-    frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
-    Q3VBoxLayout* l   = new Q3VBoxLayout(frame, 5, 0);
+    QFrame *frame    = new QFrame(this);
+    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QVBoxLayout* l   = new QVBoxLayout(frame);
+    l->setMargin(5);
+    l->setSpacing(0);
     d->previewWidget = new ImageGuideWidget(480, 320, frame, guideVisible, 
                                             guideMode, Qt::red, 1, false, 
                                             useImageSelection);
@@ -209,15 +208,15 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
 
     // -------------------------------------------------------------
     
-    grid->addMultiCellWidget(d->previewButtons, 1, 1, 0, 0);
-    grid->addMultiCellWidget(d->spotInfoLabel, 1, 1, 1, 1);
-    grid->addMultiCellWidget(exposureButtons, 1, 1, 2, 2);
-    grid->addMultiCellWidget(frame, 3, 3, 0, 2);
-    grid->setColSpacing(1, KDialog::spacingHint());
+    grid->addWidget(d->previewButtons, 1, 1, 0, 0);
+    grid->addWidget(d->spotInfoLabel, 1, 1, 1, 1);
+    grid->addWidget(exposureButtons, 1, 1, 2, 2);
+    grid->addWidget(frame, 3, 3, 0, 2);
+    grid->setColumnSpacing(1, KDialog::spacingHint());
     grid->setRowSpacing(0, KDialog::spacingHint());
     grid->setRowSpacing(2, KDialog::spacingHint());
     grid->setRowStretch(3, 10);
-    grid->setColStretch(1, 10);
+    grid->setColumnStretch(1, 10);
 
     // -------------------------------------------------------------
     
