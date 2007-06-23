@@ -5,11 +5,11 @@ SET(libmetadatawidgets_STAT_SRCS mdkeylistviewitem.cpp
                                  metadatalistview.cpp
                                  metadatalistviewitem.cpp
                                  worldmapwidget.cpp
-#                                  metadatawidget.cpp
-#                                  iptcwidget.cpp
-#                                  exifwidget.cpp
-#                                  makernotewidget.cpp
-#                                  gpswidget.cpp
+#                                 metadatawidget.cpp
+#                                 iptcwidget.cpp
+#                                 exifwidget.cpp
+#                                 makernotewidget.cpp
+                                 gpswidget.cpp
    )
 
 KDE4_AUTOMOC(${libmetadatawidgets_STAT_SRCS})

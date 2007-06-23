@@ -22,26 +22,24 @@
  * ============================================================ */
 
 /*
-Any good explainations about GPS (in French) can be found at this url :
+Good explainations about GPS (in French) can be found at this url :
 http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 */
 
 // Qt includes.
 
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qmap.h>
-#include <q3hbox.h>
-#include <qfile.h>
-#include <qcombobox.h>
-#include <q3groupbox.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3Frame>
+#include <QPushButton>
+#include <QMap>
+#include <QFile>
+#include <QComboBox>
+#include <QGroupBox>
+#include <QGridLayout>
+#include <QFrame>
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <khbox.h>
+#include <kdialog.h>
 #include <klocale.h>
 #include <kapplication.h>
 
@@ -98,7 +96,7 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
          : MetadataWidget(parent, name)
 {
     d = new GPSWidgetPriv;
-    
+
     for (int i=0 ; QString(StandardExifGPSEntryList[i]) != QString("-1") ; i++)
         d->keysFilter << StandardExifGPSEntryList[i];
 
@@ -108,35 +106,35 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
     // --------------------------------------------------------
             
     QWidget *gpsInfo    = new QWidget(this);
-    Q3GridLayout *layout = new Q3GridLayout(gpsInfo, 3, 2);
+    QGridLayout *layout = new QGridLayout(gpsInfo);
     d->map              = new WorldMapWidget(256, 256, gpsInfo);
+    gpsInfo->setLayout(layout);
 
     // --------------------------------------------------------
     
-    Q3GroupBox* box2 = new Q3GroupBox( 0, Qt::Vertical, gpsInfo );
-    box2->setInsideMargin(0);
-    box2->setInsideSpacing(0);    
-    box2->setFrameStyle( Q3Frame::NoFrame );
-    Q3GridLayout* box2Layout = new Q3GridLayout( box2->layout(), 0, 2, KDialog::spacingHint() );
+    QGroupBox* box2         = new QGroupBox(gpsInfo);
+    QGridLayout* box2Layout = new QGridLayout( box2 );
+    box2Layout->setSpacing(KDialog::spacingHint());
+    box2->setLayout(box2Layout);
 
-    d->detailsCombo  = new QComboBox( false, box2 );
+    d->detailsCombo  = new QComboBox( box2 );
     d->detailsButton = new QPushButton(i18n("More Info..."), box2);
-    d->detailsCombo->insertItem(QString("MapQuest"), MapQuest);
+    d->detailsCombo->insertItem(QString("MapQuest"),    MapQuest);
     d->detailsCombo->insertItem(QString("Google Maps"), GoogleMaps);
-    d->detailsCombo->insertItem(QString("MSN Maps"), MsnMaps);
-    d->detailsCombo->insertItem(QString("MultiMap"), MultiMap);
+    d->detailsCombo->insertItem(QString("MSN Maps"),    MsnMaps);
+    d->detailsCombo->insertItem(QString("MultiMap"),    MultiMap);
     
-    box2Layout->addMultiCellWidget( d->detailsCombo, 0, 0, 0, 0 );
-    box2Layout->addMultiCellWidget( d->detailsButton, 0, 0, 1, 1 );
-    box2Layout->setColStretch(2, 10);
+    box2Layout->addWidget( d->detailsCombo, 0, 0, 0, 0 );
+    box2Layout->addWidget( d->detailsButton, 0, 0, 1, 1 );
+    box2Layout->setColumnStretch(2, 10);
 
     // --------------------------------------------------------
     
-    layout->addMultiCellWidget(d->map, 0, 0, 0, 2);
-    layout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                         QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 1, 0, 2);
-    layout->addMultiCellWidget(box2, 2, 2, 0, 0);
-    layout->setColStretch(2, 10);
+    layout->addWidget(d->map, 0, 0, 0, 2);
+    layout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+                    QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 1, 0, 2);
+    layout->addWidget(box2, 2, 2, 0, 0);
+    layout->setColumnStretch(2, 10);
     layout->setRowStretch(3, 10);
 
     // --------------------------------------------------------

@@ -23,25 +23,23 @@
 
 // Qt includes.
 
-#include <qlayout.h>
-#include <qmap.h>
-#include <qfile.h> 
-#include <qmime.h>
-#include <q3header.h>
+#include <Q3SimpleRichText>
+#include <Q3PaintDeviceMetrics>
+#include <Q3StyleSheet>
+#include <Q3DragObject> 
+#include <Q3Header>
+#include <QMap>
+#include <QFile> 
+#include <QMime>
+#include <QPainter>
+#include <QPushButton>
+#include <QLabel>
+#include <QClipBoard>
+#include <QGridLayout>
+#include <QFrame>
+#include <QVBoxLayout>
+#include <QButtonGroup>
 
-#include <qpainter.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <q3dragobject.h> 
-#include <qclipboard.h>
-#include <q3simplerichtext.h>
-#include <q3paintdevicemetrics.h>
-#include <q3stylesheet.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3Frame>
-#include <Q3VBoxLayout>
-#include <Q3HButtonGroup>
 // KDE includes.
 
 #include <k3listview.h>
@@ -77,10 +75,10 @@ public:
         mainLayout   = 0;
     }
 
-    Q3GridLayout            *mainLayout;
+    QGridLayout            *mainLayout;
 
-    Q3HButtonGroup          *toolButtons;
-    Q3HButtonGroup          *levelButtons;
+    QButtonGroup           *toolButtons;
+    QButtonGroup           *levelButtons;
 
     QByteArray              metadata;
 
@@ -91,10 +89,11 @@ public:
     DMetadata::MetaDataMap  metaDataMap;
 };
 
-MetadataWidget::MetadataWidget(QWidget* parent)
+MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
               : QWidget(parent)
 {
     d = new MetadataWidgetPriv;
+    setObjectName(name);
 
     d->mainLayout = new Q3GridLayout(this, 2, 4, KDialog::spacingHint(), KDialog::spacingHint());
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();

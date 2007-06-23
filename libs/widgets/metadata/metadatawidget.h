@@ -26,8 +26,8 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qstring.h>
+#include <QWidget>
+#include <QString>
 
 // KDE includes.
 
@@ -58,7 +58,7 @@ public:
 
 public:
 
-    MetadataWidget(QWidget* parent);
+    MetadataWidget(QWidget* parent, const char* name=0);
     ~MetadataWidget();
 
     int     getMode(void);
