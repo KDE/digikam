@@ -34,7 +34,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  S
             imagepropertiestab.cpp              Gilles          X       X       DONE
             cameraitempropertiestab.cpp         Gilles                  X       DONE
             imagepropertiessidebarcamgui.cpp    Gilles                  X       DONE
-            imagepropertiessidebardb.cpp                                X
+            imagepropertiessidebardb.cpp        Gilles                  X       DONE
             imagedescedittab.cpp                                        X
             talbumlistview.cpp                                          X
         |---jpegutils                           Gilles                  X       DONE
