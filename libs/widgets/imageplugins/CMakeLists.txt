@@ -1,4 +1,6 @@
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor
                    )
 
 SET(libimagepluginswidgets_STAT_SRCS listboxpreviewitem.cpp
