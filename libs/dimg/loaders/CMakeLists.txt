@@ -24,4 +24,3 @@ TARGET_LINK_LIBRARIES(libdimgloaders
                       ${JASPER_LIBRARIES}
                      )
 
-INSTALL( FILES imagelevels.h DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
