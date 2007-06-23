@@ -34,14 +34,15 @@
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QGridLayout>
+#include <QProgressBar>
 #include <QVBoxLayout>
+#include <QSplitter>
 
 // KDE includes.
 
 #include <kdialog.h>
 #include <klocale.h>
 #include <kcursor.h>
-#include <kprogress.h>
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kconfig.h>
@@ -80,6 +81,7 @@ public:
         settings           = 0;
         previewWidget      = 0;
         zoomBar            = 0;
+        sepaBBox           = 0;
     }
 
     QGridLayout        *mainLayout;
@@ -90,12 +92,13 @@ public:
     
     QWidget            *settings;
     QWidget            *previewWidget;
+    QWidget            *sepaBBox;
     
     QVBoxLayout        *settingsLayout;
         
     QSplitter          *splitter;
     
-    KProgress          *progressBar;
+    QProgressBar       *progressBar;
     
     ImageRegionWidget  *imageRegionWidget;
     ImagePanIconWidget *imagePanIconWidget;
@@ -107,33 +110,42 @@ public:
     
 ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSection, 
                                      QWidget *parent, int separateViewMode)
-                 : KHBox(parent, 0, Qt::WDestructiveClose)
+                 : KHBox(parent)
 {
     d = new ImagePannelWidgetPriv;
+    setAttribute(Qt::WA_DeleteOnClose);
     d->settingsSection = settingsSection;
     d->splitter        = new QSplitter(this);
     d->previewWidget   = new QWidget(d->splitter);
-    d->mainLayout      = new Q3GridLayout( d->previewWidget, 2, 3, 0, KDialog::spacingHint());
-    
-    d->splitter->setFrameStyle( Q3Frame::NoFrame );
-    d->splitter->setFrameShadow( Q3Frame::Plain );
-    d->splitter->setFrameShape( Q3Frame::NoFrame );    
+    d->mainLayout      = new QGridLayout(d->previewWidget);
+    d->mainLayout->setMargin(0);
+    d->mainLayout->setSpacing(KDialog::spacingHint());
+    d->previewWidget->setLayout(d->mainLayout);
+
+    d->splitter->setFrameStyle( QFrame::NoFrame );
+    d->splitter->setFrameShadow( QFrame::Plain );
+    d->splitter->setFrameShape( QFrame::NoFrame );    
     d->splitter->setOpaqueResize(false);
 
     // -------------------------------------------------------------
 
-    Q3Frame *preview      = new Q3Frame(d->previewWidget);
-    Q3VBoxLayout* l1      = new Q3VBoxLayout(preview, 5, 0);
+    QFrame *preview = new QFrame(d->previewWidget);
+    QVBoxLayout* l1 = new QVBoxLayout(preview);
+    l1->setSpacing(5);
+    l1->setMargin(0);
+    preview->setLayout(l1);
     d->imageRegionWidget = new ImageRegionWidget(w, h, preview, false);
-    d->imageRegionWidget->setFrameStyle(Q3Frame::NoFrame);
-    preview->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
+    d->imageRegionWidget->setFrameStyle(QFrame::NoFrame);
+    preview->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     d->imageRegionWidget->setWhatsThis( i18n("<p>Here you can see the original clip image "
-                                                "which will be used for the preview computation."
-                                                "<p>Click and drag the mouse cursor in the "
-                                                "image to change the clip focus."));
+                                             "which will be used for the preview computation."
+                                             "<p>Click and drag the mouse cursor in the "
+                                             "image to change the clip focus."));
     l1->addWidget(d->imageRegionWidget, 0);
 
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    rightSzPolicy.setHorizontalStretch(2);
+    rightSzPolicy.setVerticalStretch(1);
     d->previewWidget->setSizePolicy(rightSzPolicy);
 
     // -------------------------------------------------------------
@@ -144,106 +156,110 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     // -------------------------------------------------------------
     
     QString directory;
-    d->separateView = new Q3HButtonGroup(d->previewWidget);
+    d->sepaBBox     = new QWidget(d->previewWidget);
+    d->separateView = new QButtonGroup(d->sepaBBox);
     d->separateView->setExclusive(true);
-    d->separateView->setInsideMargin( 0 );
-    d->separateView->setFrameShape(Q3Frame::NoFrame);
     
     if (separateViewMode == SeparateViewDuplicate ||
         separateViewMode == SeparateViewAll)
     {
-       QPushButton *duplicateHorButton = new QPushButton( d->separateView );
-       d->separateView->insert(duplicateHorButton, ImageRegionWidget::SeparateViewDuplicateHorz);
+       QPushButton *duplicateHorButton = new QPushButton( d->sepaBBox );
+       d->separateView->addButton(duplicateHorButton, ImageRegionWidget::SeparateViewDuplicateHorz);
        KGlobal::dirs()->addResourceType("duplicatebothhorz", KGlobal::dirs()->kde_default("data") + "digikam/data");
        directory = KGlobal::dirs()->findResourceDir("duplicatebothhorz", "duplicatebothhorz.png");
-       duplicateHorButton->setPixmap( QPixmap( directory + "duplicatebothhorz.png" ) );
-       duplicateHorButton->setToggleButton(true);
+       duplicateHorButton->setIcon( QPixmap( directory + "duplicatebothhorz.png" ) );
+       duplicateHorButton->setCheckable(true);
        duplicateHorButton->setWhatsThis( i18n("<p>If you enable this option, you will separate the preview area "
-                                                 "horizontally, displaying the original and target image "
-                                                 "at the same time. The target is duplicated from the original "
-                                                 "below the red dashed line." ) );
+                                              "horizontally, displaying the original and target image "
+                                              "at the same time. The target is duplicated from the original "
+                                              "below the red dashed line." ) );
         
-       QPushButton *duplicateVerButton = new QPushButton( d->separateView );
-       d->separateView->insert(duplicateVerButton, ImageRegionWidget::SeparateViewDuplicateVert);
+       QPushButton *duplicateVerButton = new QPushButton( d->sepaBBox );
+       d->separateView->addButton(duplicateVerButton, ImageRegionWidget::SeparateViewDuplicateVert);
        KGlobal::dirs()->addResourceType("duplicatebothvert", KGlobal::dirs()->kde_default("data") + "digikam/data");
        directory = KGlobal::dirs()->findResourceDir("duplicatebothvert", "duplicatebothvert.png");
-       duplicateVerButton->setPixmap( QPixmap( directory + "duplicatebothvert.png" ) );
-       duplicateVerButton->setToggleButton(true);
+       duplicateVerButton->setIcon( QPixmap( directory + "duplicatebothvert.png" ) );
+       duplicateVerButton->setCheckable(true);
        duplicateVerButton->setWhatsThis( i18n("<p>If you enable this option, you will separate the preview area "
-                                                 "vertically, displaying the original and target image "
-                                                 "at the same time. The target is duplicated from the original to "
-                                                 "the right of the red dashed line." ) );
+                                              "vertically, displaying the original and target image "
+                                              "at the same time. The target is duplicated from the original to "
+                                              "the right of the red dashed line." ) );
     }
         
     if (separateViewMode == SeparateViewNormal ||
         separateViewMode == SeparateViewAll)
     {
-       QPushButton *separateHorButton = new QPushButton( d->separateView );
-       d->separateView->insert(separateHorButton, ImageRegionWidget::SeparateViewHorizontal);
+       QPushButton *separateHorButton = new QPushButton( d->sepaBBox );
+       d->separateView->addButton(separateHorButton, ImageRegionWidget::SeparateViewHorizontal);
        KGlobal::dirs()->addResourceType("bothhorz", KGlobal::dirs()->kde_default("data") + "digikam/data");
        directory = KGlobal::dirs()->findResourceDir("bothhorz", "bothhorz.png");
-       separateHorButton->setPixmap( QPixmap( directory + "bothhorz.png" ) );
-       separateHorButton->setToggleButton(true);
+       separateHorButton->setIcon( QPixmap( directory + "bothhorz.png" ) );
+       separateHorButton->setCheckable(true);
        separateHorButton->setWhatsThis( i18n( "<p>If you enable this option, you will separate the preview area "
-                                                 "horizontally, displaying the original and target image "
-                                                 "at the same time. The original is above the "
-                                                 "red dashed line, the target below it." ) );
+                                              "horizontally, displaying the original and target image "
+                                              "at the same time. The original is above the "
+                                              "red dashed line, the target below it." ) );
         
-       QPushButton *separateVerButton = new QPushButton( d->separateView );
-       d->separateView->insert(separateVerButton, ImageRegionWidget::SeparateViewVertical);
+       QPushButton *separateVerButton = new QPushButton( d->sepaBBox );
+       d->separateView->addButton(separateVerButton, ImageRegionWidget::SeparateViewVertical);
        KGlobal::dirs()->addResourceType("bothvert", KGlobal::dirs()->kde_default("data") + "digikam/data");
        directory = KGlobal::dirs()->findResourceDir("bothvert", "bothvert.png");
-       separateVerButton->setPixmap( QPixmap( directory + "bothvert.png" ) );
-       separateVerButton->setToggleButton(true);
+       separateVerButton->setIcon( QPixmap( directory + "bothvert.png" ) );
+       separateVerButton->setCheckable(true);
        separateVerButton->setWhatsThis( i18n( "<p>If you enable this option, you will separate the preview area "
-                                                 "vertically, displaying the original and target image "
-                                                 "at the same time. The original is to the left of the "
-                                                 "red dashed line, the target to the right of it." ) );
+                                              "vertically, displaying the original and target image "
+                                              "at the same time. The original is to the left of the "
+                                              "red dashed line, the target to the right of it." ) );
     }
        
-    QPushButton *noSeparateButton = new QPushButton( d->separateView );
-    d->separateView->insert(noSeparateButton, ImageRegionWidget::SeparateViewNone);
+    QPushButton *noSeparateButton = new QPushButton( d->sepaBBox );
+    d->separateView->addButton(noSeparateButton, ImageRegionWidget::SeparateViewNone);
     KGlobal::dirs()->addResourceType("target", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("target", "target.png");
-    noSeparateButton->setPixmap( QPixmap( directory + "target.png" ) );
-    noSeparateButton->setToggleButton(true);
+    noSeparateButton->setIcon( QPixmap( directory + "target.png" ) );
+    noSeparateButton->setCheckable(true);
     noSeparateButton->setWhatsThis( i18n( "<p>If you enable this option, the preview area will not "
-                                             "be separated." ) );
+                                          "be separated." ) );
     
     // -------------------------------------------------------------
     
-    d->progressBar = new KProgress(100, d->previewWidget);
-    d->progressBar ->setWhatsThis(i18n("<p>This is the current percentage of the task completed."));
-    d->progressBar->setProgress(0);
+    d->progressBar = new QProgressBar(d->previewWidget);
+    d->progressBar->setWhatsThis(i18n("<p>This is the current percentage of the task completed."));
+    d->progressBar->setValue(0);
+    d->progressBar->setMaximum(100);
     d->progressBar->setMaximumHeight( fontMetrics().height() );
 
     // -------------------------------------------------------------
         
-    d->mainLayout->addMultiCellWidget(preview, 0, 1, 0, 3);
-    d->mainLayout->addMultiCellWidget(d->zoomBar, 2, 2, 0, 0);
-    d->mainLayout->addMultiCellWidget(d->progressBar, 2, 2, 2, 2);
-    d->mainLayout->addMultiCellWidget(d->separateView, 2, 2, 3, 3);
+    d->mainLayout->addWidget(preview, 0, 1, 0, 3);
+    d->mainLayout->addWidget(d->zoomBar, 2, 2, 0, 0);
+    d->mainLayout->addWidget(d->progressBar, 2, 2, 2, 2);
+    d->mainLayout->addWidget(d->sepaBBox, 2, 2, 3, 3);
     
     d->mainLayout->setRowStretch(1, 10);
-    d->mainLayout->setColStretch(1, 10);
+    d->mainLayout->setColumnStretch(1, 10);
         
     // -------------------------------------------------------------
 
     QString sbName(d->settingsSection + QString(" Image Plugin Sidebar"));
-    d->settingsSideBar = new Sidebar(this, sbName.ascii(), Sidebar::Right);
+    d->settingsSideBar = new Sidebar(this, sbName.toAscii(), Sidebar::DockRight);
     d->settingsSideBar->setSplitter(d->splitter);
     
     d->settings       = new QWidget(d->settingsSideBar);
-    d->settingsLayout = new Q3VBoxLayout(d->settings);    
-    
-    Q3Frame *frame3 = new Q3Frame(d->settings);
+    d->settingsLayout = new QVBoxLayout(d->settings);    
+    d->settings->setLayout(d->settingsLayout);
+
+    QFrame *frame3 = new QFrame(d->settings);
     frame3->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
-    Q3VBoxLayout* l3 = new Q3VBoxLayout(frame3, 5, 0);
+    QVBoxLayout* l3 = new QVBoxLayout(frame3);
+    l3->setSpacing(5);
+    l3->setMargin(0);
+    frame3->setLayout(l3);
     d->imagePanIconWidget = new ImagePanIconWidget(360, 240, frame3);
     d->imagePanIconWidget->setWhatsThis( i18n("<p>Here you can see the original image panel "
-                                                 "which can help you to select the clip preview."
-                                                 "<p>Click and drag the mouse cursor in the "
-                                                 "red rectangle to change the clip focus."));
+                                              "which can help you to select the clip preview."
+                                              "<p>Click and drag the mouse cursor in the "
+                                              "red rectangle to change the clip focus."));
     l3->addWidget(d->imagePanIconWidget, 0, Qt::AlignCenter);
 
     d->settingsLayout->addWidget(frame3, 0, Qt::AlignHCenter);
@@ -294,17 +310,17 @@ ImagePannelWidget::~ImagePannelWidget()
 void ImagePannelWidget::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup(d->settingsSection);
-    int mode = config->readNumEntry("Separate View", ImageRegionWidget::SeparateViewDuplicateVert);
-    mode     = qMax(ImageRegionWidget::SeparateViewHorizontal, mode);
-    mode     = qMin(ImageRegionWidget::SeparateViewDuplicateHorz, mode);
+    KConfigGroup group = config->group(d->settingsSection);
+    int mode = group.readEntry("Separate View", (int)ImageRegionWidget::SeparateViewDuplicateVert);
+    mode     = qMax((int)ImageRegionWidget::SeparateViewHorizontal, mode);
+    mode     = qMin((int)ImageRegionWidget::SeparateViewDuplicateHorz, mode);
     
     d->imageRegionWidget->blockSignals(true);
     d->imagePanIconWidget->blockSignals(true);
     d->separateView->blockSignals(true);
     d->imageRegionWidget->slotSeparateViewToggled( mode );
     d->imagePanIconWidget->slotSeparateViewToggled( mode );
-    d->separateView->setButton( mode );
+    d->separateView->button(mode)->setChecked(true);
     d->imageRegionWidget->blockSignals(false);
     d->imagePanIconWidget->blockSignals(false);
     d->separateView->blockSignals(false);
@@ -313,8 +329,8 @@ void ImagePannelWidget::readSettings()
 void ImagePannelWidget::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup(d->settingsSection);
-    config->writeEntry( "Separate View", d->separateView->selectedId() );
+    KConfigGroup group = config->group(d->settingsSection);
+    group.writeEntry( "Separate View", d->separateView->checkedId() );
     config->sync();
 }
 
@@ -370,7 +386,7 @@ void ImagePannelWidget::slotZoomSliderChanged(int size)
     d->imageRegionWidget->setZoomFactor(z);
 }
 
-KProgress *ImagePannelWidget::progressBar()
+QProgressBar *ImagePannelWidget::progressBar()
 {
     return d->progressBar;
 }
@@ -400,7 +416,7 @@ void ImagePannelWidget::slotPanIconTakeFocus()
 
 void ImagePannelWidget::setUserAreaWidget(QWidget *w)
 {
-    w->reparent( d->settings, QPoint(0, 0) );
+    w->setParent(d->settings);
     d->settingsLayout->addSpacing(KDialog::spacingHint());
     d->settingsLayout->addWidget(w);
     d->settingsLayout->addStretch();
@@ -410,7 +426,7 @@ void ImagePannelWidget::setEnable(bool b)
 {
     d->imageRegionWidget->setEnabled(b);
     d->imagePanIconWidget->setEnabled(b);
-    d->separateView->setEnabled(b);
+    d->sepaBBox->setEnabled(b);
     d->zoomBar->setEnabled(b);
 }
 
