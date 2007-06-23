@@ -193,6 +193,6 @@ private:
     ImageIfacePriv* d;
 };
 
-}
+} // namespace Digikam
 
 #endif /* IMAGEIFACE_H */
