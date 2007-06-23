@@ -28,6 +28,7 @@
 
  // Qt includes.
 
+#include <qmap.h>
 #include <qlistbox.h>
 #include <qwhatsthis.h>
 

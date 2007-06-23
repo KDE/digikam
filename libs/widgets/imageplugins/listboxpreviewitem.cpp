@@ -23,10 +23,6 @@
  * 
  * ============================================================ */
 
- // Qt includes.
-
-#include <qlistbox.h>
-
 // Local includes.
 
 #include "listboxpreviewitem.h"
