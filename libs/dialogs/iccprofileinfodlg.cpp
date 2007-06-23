@@ -46,7 +46,7 @@ ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath
     setCaption(profilePath);
     QWidget *page = new QWidget(this);
     setMainWidget(page); 
-    ICCProfileWidget *profileWidget = new ICCProfileWidget(page, 0, 340, 256);
+    ICCProfileWidget *profileWidget = new ICCProfileWidget(page, 340, 256);
     
     if (profileData.isEmpty())
         profileWidget->loadFromURL(KUrl(profilePath));
