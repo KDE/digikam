@@ -27,10 +27,10 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qpoint.h>
-#include <qcolor.h>
-#include <qstring.h>
+#include <QWidget>
+#include <QPoint>
+#include <QColor>
+#include <QString>
 
 // Local includes
 

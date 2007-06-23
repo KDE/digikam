@@ -26,10 +26,9 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qpoint.h>
-#include <qcolor.h>
-//Added by qt3to4:
+#include <QWidget>
+#include <QPoint>
+#include <QColor>
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QEvent>

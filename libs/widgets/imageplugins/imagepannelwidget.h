@@ -26,21 +26,22 @@
 
 // Qt includes.
 
-
-#include <qimage.h>
-#include <qrect.h>
-#include <qstring.h>
-//Added by qt3to4:
-#include <QResizeEvent>
 #include <Q3PointArray>
-#include <kvbox.h>
+#include <QImage>
+#include <QRect>
+#include <QString>
+#include <QResizeEvent>
+
+// KDE includes.
+
+#include <khbox.h>
 
 // Local includes
 
 #include "dimg.h"
 #include "digikam_export.h"
 
-class KProgress;
+class QProgressBar;
 
 namespace Digikam
 {
@@ -84,7 +85,7 @@ public:
     
     void   setPanIconHighLightPoints(Q3PointArray pt);
     
-    KProgress *progressBar();
+    QProgressBar *progressBar();
 
 signals:
 
