@@ -44,10 +44,10 @@ ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent, const char*,
                                                    const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_ChannelMixer")
 {
-    m_channelMixerAction = new KAction(i18n("Channel Mixer..."), "channelmixer", 
-                               Qt::CTRL+Qt::Key_H, 
-                               this, SLOT(slotChannelMixer()),
-                               actionCollection(), "imageplugin_channelmixer");
+    m_channelMixerAction  = new KAction(KIcon("channelmixer"), i18n("Channel Mixer..."), this);
+    actionCollection()->addAction("imageplugin_channelmixer", m_channelMixerAction );
+    connect(m_channelMixerAction, SIGNAL(triggered(bool) ), SLOT(slotChannelMixer()));
+    m_channelMixerAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
 
     setXMLFile("digikamimageplugin_channelmixer_ui.rc");
     

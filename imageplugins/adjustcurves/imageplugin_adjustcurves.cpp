@@ -44,11 +44,10 @@ ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent,
                                                    const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustCurves")
 {
-    m_curvesAction = new KAction(i18n("Curves Adjust..."), "adjustcurves", 
-			                     Qt::CTRL+Qt::Key_M,         // NOTE: Photoshop 7 use CTRL+M.
-                                 this, SLOT(slotCurvesAdjust()),
-                                 actionCollection(), "imageplugin_adjustcurves");
-
+    m_curvesAction  = new KAction(KIcon("adjustcurves"), i18n("urves Adjust..."), this);
+    actionCollection()->addAction("imageplugin_adjustcurves", m_curvesAction );
+    connect(m_curvesAction, SIGNAL(triggered(bool) ), SLOT(slotCurvesAdjust()));
+    m_curvesAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_M));
     setXMLFile("digikamimageplugin_adjustcurves_ui.rc");
 
     DDebug() << "ImagePlugin_AdjustCurves plugin loaded" << endl;

@@ -44,10 +44,9 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_border,
 ImagePlugin_Border::ImagePlugin_Border(QObject *parent, const QStringList &)
                   : Digikam::ImagePlugin(parent, "ImagePlugin_Border")
 {
-    m_borderAction = new KAction(i18n("Add Border..."), "bordertool", 
-                         0, 
-                         this, SLOT(slotBorder()),
-                         actionCollection(), "imageplugin_border");
+    m_borderAction  = new KAction(KIcon("bordertool"), i18n("Add Border..."), this);
+    actionCollection()->addAction("imageplugin_border", m_borderAction );
+    connect(m_borderAction, SIGNAL(triggered(bool) ), SLOT(slotBorder()));
 
     setXMLFile("digikamimageplugin_border_ui.rc");
     
