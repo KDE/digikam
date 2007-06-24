@@ -80,7 +80,8 @@ SET(libdigikam_LIB_SRCS kdateedit.cpp
                         tagfolderview.cpp 
                         tagspopupmenu.cpp 
                         welcomepageview.cpp 
-                        main.cpp 
+                        main.cpp
+		       ${libsplashscreen_SRCS}	
    )
 
 KDE4_AUTOMOC(${libdigikam_LIB_SRCS})
@@ -107,7 +108,6 @@ TARGET_LINK_LIBRARIES(digikam libthumbbar
                               libcameragui 
                               libdimgcanvas 
                               libdimgeditor 
-                              libsplashscreen 
                               libsetup 
                               liblighttable 
                               ${KDE4_KDECORE_LIBS} 

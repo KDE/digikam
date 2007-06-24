@@ -218,6 +218,9 @@ SET(libmetadatawidgets_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/md
                                  ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/gpswidget.cpp
                                  ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadatawidget.cpp
    )
+
+SET(libsplashscreen_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/utilities/splashscreen/splashscreen.cpp )
+
 ADD_SUBDIRECTORY( data )
 ADD_SUBDIRECTORY( libs )
 ADD_SUBDIRECTORY( utilities )
