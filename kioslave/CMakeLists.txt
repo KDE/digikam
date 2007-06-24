@@ -8,6 +8,9 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/jpegutils
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata
+		     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata
+		     ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
+		     ${CMAKE_SOURCE_DIR}/digikam/libs/levels
                      ${JPEG_INCLUDE_DIR}
                      ${TIFF_INCLUDE_DIR}
                      ${PNG_INCLUDE_DIR}
@@ -50,24 +53,24 @@ TARGET_LINK_LIBRARIES(kio_digikamtags ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS} 
 
 # # digiKam Date kio slave ###########################################################
 
-SET(kio_digikamdates_PART_SRCS digikamdates.cpp ${libdatabase_SRCS} ${libdimg_SRCS} ${libsqlite2_SRCS})
+SET(kio_digikamdates_PART_SRCS digikamdates.cpp ${libdatabase_SRCS} ${libdimg_SRCS} ${libdimgloaders_SRCS} ${libsqlite2_SRCS} ${libdmetadata_SRCS} ${libdimgfilters_SRCS} ${libhistogram_SRCS} ${liblevels_SRCS})
 
 KDE4_AUTOMOC(${kio_digikamdates_PART_SRCS})
 
 KDE4_ADD_PLUGIN(kio_digikamdates ${kio_digikamdates_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kio_digikamdates ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS} )
+TARGET_LINK_LIBRARIES(kio_digikamdates ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS} ${KEXIV2_LIBRARIES} ${JPEG_LIBRARIES} ${TIFF_LIBRARIES} ${PNG_LIBRARIES} ${JASPER_LIBRARIES} ${KDCRAW_LIBRARIES} ${LCMS_LIBRARIES} ${SQLITE_LIBRARIES})
 
 
 # # digiKam Search kio slave #########################################################
 
-SET(kio_digikamsearch_PART_SRCS digikamsearch.cpp ${libdatabase_SRCS} ${libdimg_SRCS} ${libsqlite2_SRCS} )
+SET(kio_digikamsearch_PART_SRCS digikamsearch.cpp ${libdatabase_SRCS} ${libdimg_SRCS} ${libsqlite2_SRCS} ${libiccprofileswidgets_SRCS} ${libmetadatawidgets_SRCS} )
 
 KDE4_AUTOMOC(${kio_digikamsearch_PART_SRCS})
 
 KDE4_ADD_PLUGIN(kio_digikamsearch ${kio_digikamsearch_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kio_digikamsearch ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS})
+TARGET_LINK_LIBRARIES(kio_digikamsearch ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS} ${KEXIV2_LIBRARIES})
 
 
 # Files to install #################################################################

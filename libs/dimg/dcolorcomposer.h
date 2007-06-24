@@ -125,7 +125,7 @@ public:
     */
     virtual void compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags);
     
-    virtual ~DColorComposer();
+    virtual ~DColorComposer(){};
 };
 
 }  // namespace Digikam
