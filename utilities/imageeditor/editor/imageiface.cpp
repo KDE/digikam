@@ -405,8 +405,8 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
         {
             pixImage = d->targetPreviewImage.convertToPixmap();
         }
-        
-        bitBlt(&d->qpix, 0, 0, &pixImage, 0, 0, w, h, Qt::CopyROP, false);
+#warning "kde4 port it";
+        //bitBlt(&d->qpix, 0, 0, &pixImage, 0, 0, w, h, Qt::CopyROP, false);
 
         // Show the Over/Under exposure pixels indicators 
     
@@ -420,11 +420,12 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
 
             QImage pureColorMask = d->targetPreviewImage.pureColorMask(&expoSettings);
             QPixmap pixMask(pureColorMask); 
-            bitBlt(&d->qpix, 0, 0, &pixMask, 0, 0, w, h, Qt::CopyROP, false);
+#warning "kde4 port it";
+            //bitBlt(&d->qpix, 0, 0, &pixMask, 0, 0, w, h, Qt::CopyROP, false);
         }
     }
-
-    bitBlt(device, x, y, &d->qpix, 0, 0, -1, -1, Qt::CopyROP, false);
+#warning "kde4 port it";
+    //bitBlt(device, x, y, &d->qpix, 0, 0, -1, -1, Qt::CopyROP, false);
 }
 
 }   // namespace Digikam
