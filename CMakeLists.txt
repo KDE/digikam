@@ -221,7 +221,7 @@ SET(libmetadatawidgets_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/md
 
 SET(libsplashscreen_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/utilities/splashscreen/splashscreen.cpp )
 
-SET(libslideshow_SRCS  ${CMAKE_CURRENT_SOURCE_DIR}/utilities/utilities/toolbar.cpp ${CMAKE_CURRENT_SOURCE_DIR}/utilities/utilities/slideshow.cpp )
+SET(libslideshow_SRCS  ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/toolbar.cpp ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideshow.cpp )
 
 ADD_SUBDIRECTORY( data )
 ADD_SUBDIRECTORY( libs )
