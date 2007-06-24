@@ -30,7 +30,6 @@
 // Qt includes.
 
 #include <Q3ValueList>
-#include <QStringList>
 
 // Local includes.
 

@@ -25,11 +25,13 @@
 #ifndef UNDOMANAGER_H
 #define UNDOMANAGER_H
 
+//Qt includes.
+
+#include <QStringList>
+
 // Local includes.
 
 #include "digikam_export.h"
-
-class QStringList;
 
 namespace Digikam
 {
