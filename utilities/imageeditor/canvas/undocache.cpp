@@ -31,11 +31,11 @@ extern "C"
 
 // QT includes.
 
-#include <q3cstring.h>
-#include <qstring.h>
-#include <qfile.h>
-#include <qdatastream.h>
-#include <qstringlist.h>
+#include <QByteArray>
+#include <QString>
+#include <QFile>
+#include <QDataStream>
+#include <QStringList>
 
 // KDE includes.
 
@@ -64,9 +64,8 @@ UndoCache::UndoCache()
 {
     d = new UndoCachePriv;
 
-    QString cacheDir;
-    cacheDir = locateLocal("cache", 
-                           KGlobal::mainComponent().aboutData()->programName() + '/');
+    QString cacheDir = KStandardDirs::locateLocal("cache", 
+                                 KGlobal::mainComponent().aboutData()->programName() + '/');
 
     d->cachePrefix = QString("%1undocache-%2")
                              .arg(cacheDir)
@@ -112,7 +111,8 @@ bool UndoCache::putData(int level, int w, int h, int bytesDepth, uchar* data)
     ds << h;
     ds << bytesDepth;
 
-    QByteArray ba(w*h*bytesDepth);
+    QByteArray ba;
+    ba.reserve(w*h*bytesDepth);
     memcpy (ba.data(), data, w*h*bytesDepth);
     ds << ba;
 
@@ -145,7 +145,8 @@ uchar* UndoCache::getData(int level, int& w, int& h, int& bytesDepth, bool del)
     if (!data)
         return 0;
 
-    QByteArray ba(w*h*bytesDepth);
+    QByteArray ba;
+    ba.reserve(w*h*bytesDepth);
     ds >> ba;
     memcpy (data, ba.data(), w*h*bytesDepth);
     
@@ -154,7 +155,7 @@ uchar* UndoCache::getData(int level, int& w, int& h, int& bytesDepth, bool del)
     if(del)
     {
         ::unlink(QFile::encodeName(cacheFile));
-        d->cacheFilenames.remove(cacheFile);
+        d->cacheFilenames.removeAll(cacheFile);
     }
 
     return data;
@@ -169,7 +170,9 @@ void UndoCache::erase(int level)
                         .arg(d->cachePrefix)
                         .arg(level);
 
-    if(d->cacheFilenames.find(cacheFile) == d->cacheFilenames.end())
+//    if(d->cacheFilenames.find(cacheFile) == d->cacheFilenames.end())
+
+    if(d->cacheFilenames.indexOf(cacheFile) == d->cacheFilenames.indexOf(d->cacheFilenames.last()))
         return;
     
     ::unlink(QFile::encodeName(cacheFile));

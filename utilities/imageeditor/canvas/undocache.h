@@ -25,10 +25,6 @@
 #ifndef UNDOCACHE_H
 #define UNDOCACHE_H
 
-// QT includes.
-
-#include <QGlobal>
-
 // Local includes.
 
 #include "digikam_export.h"
