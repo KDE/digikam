@@ -178,12 +178,11 @@ protected:
 
 private:
 
-    QRect  calcSeletedArea();
+    QRect  calcSelectedArea();
     double calcAutoZoomFactor();
     void   updateAutoZoom();
     void   updateContentsSize(bool deleteRubber);
 
-    void drawRubber();
     void paintViewport(const QRect& er, bool antialias);
 
     void reset();

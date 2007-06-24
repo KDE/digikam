@@ -51,6 +51,7 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
+#include <QRubberBand>
 #include <QWheelEvent>
 
 // KDE includes.
@@ -131,7 +132,7 @@ public:
 
     QToolButton         *cornerButton;
 
-    QRect               *rubber;
+    QRubberBand         *rubber;
     QRect                pixmapRect;
 
     Q3Cache<QPixmap>      tileCache;
@@ -177,6 +178,9 @@ Canvas::Canvas(QWidget *parent)
     viewport()->setPalette(palette);
     viewport()->setMouseTracking(false);
     setFrameStyle( QFrame::NoFrame );
+
+    d->rubber = new QRubberBand(QRubberBand::Rectangle, this);
+    d->rubber->hide();
 
     // ------------------------------------------------------------
 
@@ -231,10 +235,9 @@ void Canvas::resetImage()
 
 void Canvas::reset()
 {
-    if (d->rubber)
+    if (d->rubber->isVisible())
     {
-        delete d->rubber;
-        d->rubber = 0;
+        d->rubber->hide();
         if (d->im->imageValid())
             emit signalSelected(false);
     }
@@ -407,10 +410,9 @@ void Canvas::updateContentsSize(bool deleteRubber)
 {
     viewport()->setUpdatesEnabled(false);
 
-    if (deleteRubber && d->rubber)
+    if (deleteRubber && d->rubber->isVisible())
     {
-        delete d->rubber;
-        d->rubber       = 0;
+        d->rubber->hide();
         d->ltActive     = false;
         d->rtActive     = false;
         d->lbActive     = false;
@@ -442,7 +444,7 @@ void Canvas::updateContentsSize(bool deleteRubber)
         d->pixmapRect = QRect(0, 0, wZ, hZ);
     }
 
-    if (!deleteRubber && d->rubber)
+    if (!deleteRubber && d->rubber->isVisible())
     {
         int xSel, ySel, wSel, hSel;
         d->im->getSelectedArea(xSel, ySel, wSel, hSel);
@@ -450,11 +452,9 @@ void Canvas::updateContentsSize(bool deleteRubber)
         ySel = (int)((ySel * d->tileSize) / floor(d->tileSize / d->zoom));
         wSel = (int)((wSel * d->tileSize) / floor(d->tileSize / d->zoom));
         hSel = (int)((hSel * d->tileSize) / floor(d->tileSize / d->zoom));
-        d->rubber->setX(xSel);
-        d->rubber->setY(ySel);
-        d->rubber->setWidth(wSel);
-        d->rubber->setHeight(hSel);
-        d->rubber->translate(d->pixmapRect.x(), d->pixmapRect.y());
+        QRect rubberRect(xSel, ySel, wSel, hSel);
+        rubberRect.translate(d->pixmapRect.x(), d->pixmapRect.y());
+        d->rubber->setGeometry(rubberRect);
     }
     
     d->tileCache.clear();    
@@ -518,12 +518,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
         int sx, sy, sw, sh;
         int step = (int)floor(d->tileSize / d->zoom);
 
-        bool hasRubber = (d->rubber && d->pressedMoved && d->pressedMoving && d->rubber->intersects(pr));
-        if (hasRubber)
-        {
-            // remove rubber
-            drawRubber();
-        }
+        //bool hasRubber = (d->rubber->isVisible() && d->pressedMoved && d->pressedMoving && d->rubber->geometry().intersects(pr));
 
         for (int j = y1 ; j < y2 ; j += d->tileSize)
         {
@@ -569,9 +564,9 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                     sw = step;
                     sh = step;
 
-                    if (d->rubber && d->pressedMoved && !d->pressedMoving)
+                    if (d->rubber->isVisible() && d->pressedMoved && !d->pressedMoving)
                     {
-                        QRect rr(d->rubber->normalized());
+                        QRect rr(d->rubber->geometry().normalized());
                         QRect  r(i, j, d->tileSize, d->tileSize);
 
                         d->im->paintOnDevice(pix, sx, sy, sw, sh,
@@ -614,42 +609,11 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                                    ir.width(), ir.height());
             }
         }
-
-        if (hasRubber)
-        {
-            // restore rubber
-            drawRubber();
-        }
     }
 
     painter.setClipRegion(clipRegion);
     painter.fillRect(er, d->bgColor);
     painter.end();
-}
-
-void Canvas::drawRubber()
-{
-    if (!d->rubber || !d->im->imageValid())
-        return;
-
-/* TODO: KDE4PORT : How to do it with Qt4 ???
-
-    QPainter p(viewport());
-    p.setRasterOp(Qt::NotROP );
-    p.setPen(QPen(Qt::color0, 1));
-    p.setBrush(Qt::NoBrush);
-
-    QRect r(d->rubber->normalized());
-    r = QRect(contentsToViewport(QPoint(r.x(), r.y())), r.size());
-
-    QPoint pnt(r.x(), r.y());
-
-    style().drawPrimitive(QStyle::PE_FocusRect, &p,
-                          QRect(pnt.x(), pnt.y(), r.width(), r.height()),
-                          QColorGroup(palette()), QStyle::State_None,
-                          QStyleOption(palette().color(QPalette::Base)));
-    p.end();
-*/
 }
 
 void Canvas::contentsMousePressEvent(QMouseEvent *e)
@@ -664,34 +628,35 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
         if (d->ltActive || d->rtActive ||
             d->lbActive || d->rbActive)
         {
-            Q_ASSERT( d->rubber );
-            if (!d->rubber)
+            if (!d->rubber->isVisible())
                 return;
 
             // Set diagonally opposite corner as anchor
-        
-            QRect r(d->rubber->normalized());
+
+            QRect r(d->rubber->geometry().normalized());
+            QRect newRect(r);
 
             if (d->ltActive)
             {
-                d->rubber->setTopLeft(r.bottomRight());
-                d->rubber->setBottomRight(r.topLeft());
+                newRect.setTopLeft(r.bottomRight());
+                newRect.setBottomRight(r.topLeft());
             }
             else if (d->rtActive)
             {
-                d->rubber->setTopLeft(r.bottomLeft());
-                d->rubber->setBottomRight(r.topRight());
+                newRect.setTopLeft(r.bottomLeft());
+                newRect.setBottomRight(r.topRight());
             }
             else if (d->lbActive)
             {
-                d->rubber->setTopLeft(r.topRight());
-                d->rubber->setBottomRight(r.bottomLeft());
+                newRect.setTopLeft(r.topRight());
+                newRect.setBottomRight(r.bottomLeft());
             }
             else if (d->rbActive)
             {
-                d->rubber->setTopLeft(r.topLeft());
-                d->rubber->setBottomRight(r.bottomLeft());
+                newRect.setTopLeft(r.topLeft());
+                newRect.setBottomRight(r.bottomLeft());
             }
+            d->rubber->setGeometry(newRect);
         
             viewport()->setMouseTracking(false);
             d->pressedMoved  = false;
@@ -715,21 +680,16 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
         }
         return;
     }
-    
-    if (d->rubber)
-    {
-        delete d->rubber;
-        d->rubber = 0;        
-    }
 
-    d->rubber = new QRect(e->x(), e->y(), 0, 0);
+    d->rubber->setGeometry(QRect(e->pos(), QSize()));
+    d->rubber->show();
 
     if (d->pressedMoved)
     {
         d->tileCache.clear();
         viewport()->update();
     }
-    
+
     d->pressedMoved  = false;
     d->pressedMoving = true;
 
@@ -751,17 +711,13 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
     }
     else if (!viewport()->hasMouseTracking())
     {
-        if (!d->rubber)
+        if (!d->rubber->isVisible())
             return;
         
         if (e->buttons() != Qt::LeftButton &&
             !(d->ltActive || d->rtActive ||
               d->lbActive || d->rbActive))
             return;
-
-        // Clear old rubber.
-        if (d->pressedMoved)
-            drawRubber();
 
         // Move content if necessary.
         blockSignals(true);
@@ -771,28 +727,30 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
         blockSignals(false);
 
         // draw the new rubber position.
+        QRect rubberRect = d->rubber->geometry();
         int r, b;
         r = (e->x() > d->pixmapRect.left()) ? e->x() : d->pixmapRect.left();
         r = (r < d->pixmapRect.right())     ? r      : d->pixmapRect.right();
         b = (e->y() > d->pixmapRect.top())  ? e->y() : d->pixmapRect.top();
         b = (b < d->pixmapRect.bottom())    ? b      : d->pixmapRect.bottom();
-        d->rubber->setRight(r);
-        d->rubber->setBottom(b);
-        drawRubber();
+        rubberRect.setRight(r);
+        rubberRect.setBottom(b);
+        d->rubber->setGeometry(rubberRect);
+        d->rubber->show();
 
         d->pressedMoved  = true;
         d->pressedMoving = true;
 
         // To refresh editor status bar with current selection.
-        emit signalSelectionChanged(calcSeletedArea());
+        emit signalSelectionChanged(calcSelectedArea());
     }
     else
     {
-        if (!d->rubber)
+        if (!d->rubber->isVisible())
             return;
-        
-        QRect r(d->rubber->normalized());
-        
+
+        QRect r(d->rubber->geometry().normalized());
+
         QRect lt(r.x()-5,           r.y()-5,            10, 10);
         QRect rt(r.x()+r.width()-5, r.y()-5,            10, 10);
         QRect lb(r.x()-5,           r.y()+r.height()-5, 10, 10);
@@ -841,20 +799,17 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
         viewport()->update();
     }
 
-    if (d->pressedMoved && d->rubber)
+    if (d->pressedMoved && d->rubber->isVisible())
     {
         // Normalize rubber rectangle to always have the selection into the image 
-        QRect rec = d->rubber->normalized();        
+        QRect rec = d->rubber->geometry().normalized();
 
         if (rec.left()   < d->pixmapRect.left())   rec.setLeft(d->pixmapRect.left()); 
         if (rec.right()  > d->pixmapRect.right())  rec.setRight(d->pixmapRect.right()); 
         if (rec.top()    < d->pixmapRect.top())    rec.setTop(d->pixmapRect.top()); 
         if (rec.bottom() > d->pixmapRect.bottom()) rec.setBottom(d->pixmapRect.bottom()); 
 
-        d->rubber->setLeft(rec.left());
-        d->rubber->setRight(rec.right());
-        d->rubber->setTop(rec.top());
-        d->rubber->setBottom(rec.bottom());
+        d->rubber->setGeometry(rec);
 
         d->tileCache.clear();
         viewport()->setMouseTracking(true);
@@ -1194,10 +1149,10 @@ void Canvas::slotCopy()
 void Canvas::slotSelected()
 {
     int x=0, y=0, w=0, h=0;
-    
-    if (d->rubber && d->pressedMoved) 
+
+    if (d->rubber->isVisible() && d->pressedMoved)
     {
-        QRect sel = calcSeletedArea();
+        QRect sel = calcSelectedArea();
         x = sel.x();
         y = sel.y();
         w = sel.width();
@@ -1207,11 +1162,11 @@ void Canvas::slotSelected()
     d->im->setSelectedArea(x, y, w, h);
 }
 
-QRect Canvas::calcSeletedArea()
+QRect Canvas::calcSelectedArea()
 {
     int x=0, y=0, w=0, h=0;
-    QRect r(d->rubber->normalized());
-    
+    QRect r(d->rubber->geometry().normalized());
+
     if (r.isValid()) 
     {
         r.translate(- d->pixmapRect.x(), - d->pixmapRect.y());
@@ -1221,7 +1176,7 @@ QRect Canvas::calcSeletedArea()
         w = (int)(((double)r.width()  / d->tileSize) * floor(d->tileSize / d->zoom));   
         h = (int)(((double)r.height() / d->tileSize) * floor(d->tileSize / d->zoom));
 
-        x = qMin(imageWidth(),  qMax(x, 0));   
+        x = qMin(imageWidth(),  qMax(x, 0));
         y = qMin(imageHeight(), qMax(y, 0));
         w = qMin(imageWidth(),  qMax(w, 0));
         h = qMin(imageHeight(), qMax(h, 0));
@@ -1233,7 +1188,7 @@ QRect Canvas::calcSeletedArea()
         if (h == 0)
             h = 1;
     }
-    
+
     return QRect(x, y, w, h); 
 }
 
@@ -1318,13 +1273,8 @@ void Canvas::slotZoomChanged(double /*zoom*/)
 
 void Canvas::slotSelectAll()
 {
-    if (d->rubber)
-    {
-        delete d->rubber;
-        d->rubber = 0;        
-    }
-
-    d->rubber       = new QRect(d->pixmapRect);
+    d->rubber->setGeometry(d->pixmapRect);
+    d->rubber->show();
     d->pressedMoved = true;
     d->tileCache.clear();
     viewport()->setMouseTracking(true);
