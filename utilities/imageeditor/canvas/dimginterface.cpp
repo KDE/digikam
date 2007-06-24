@@ -36,13 +36,15 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qbitmap.h>
-#include <qcolor.h>
-#include <qfile.h>
-#include <qvariant.h>
+#include <QWidget>
+#include <QImage>
+#include <QPixmap>
+#include <QBitmap>
+#include <QColor>
+#include <QFile>
+#include <QVariant>
+#include <QImageReader>
+#include <QPainter>
 
 // KDE includes.
 
@@ -592,7 +594,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
         meta.setImagePreview(preview);
 
     // Update Exif thumbnail.
-    QImage thumb = preview.smoothScale(160, 120, Qt::KeepAspectRatio);
+    QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio);
     meta.setExifThumbnail(thumb);
 
     // Update Exif Image dimensions.
@@ -762,16 +764,17 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     DImg img = d->image.smoothScaleSection(sx, sy, sw, sh, dw, dh);
     d->cmod.applyBCG(img);
     img.convertDepth(32);
+    QPainter painter(p);
     
     if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
     {
         QPixmap pix(img.convertToPixmap(&d->monitorICCtrans));
-        bitBlt(p, dx, dy, &pix, 0, 0);
+        painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
     }
     else
     {
         QPixmap pix(img.convertToPixmap());
-        bitBlt(p, dx, dy, &pix, 0, 0);
+        painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
     }
 
     // Show the Over/Under exposure pixels indicators 
@@ -779,9 +782,11 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     if (d->expoSettings->underExposureIndicator || d->expoSettings->overExposureIndicator)
     {
         QImage pureColorMask = d->image.copy(sx, sy, sw, sh).pureColorMask(d->expoSettings);
-        QPixmap pixMask(pureColorMask.scale(dw, dh)); 
-        bitBlt(p, dx, dy, &pixMask, 0, 0);
+        QPixmap pixMask = QPixmap::fromImage(pureColorMask.scaled(dw, dh)); 
+        painter.drawPixmap(dx, dy, pixMask, 0, 0, pixMask.width(), pixMask.height());
     }
+
+    painter.end();
 }
 
 void DImgInterface::paintOnDevice(QPaintDevice* p,
@@ -796,6 +801,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     DImg img = d->image.smoothScaleSection(sx, sy, sw, sh, dw, dh);
     d->cmod.applyBCG(img);
     img.convertDepth(32);
+    QPainter painter(p);
 
     uint* data  = (uint*)img.bits();
     uchar r, g, b, a;
@@ -826,12 +832,12 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
     {
         QPixmap pix(img.convertToPixmap(&d->monitorICCtrans));
-        bitBlt(p, dx, dy, &pix, 0, 0);
+        painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
     }
     else
     {
         QPixmap pix(img.convertToPixmap());
-        bitBlt(p, dx, dy, &pix, 0, 0);
+        painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
     }
 
     // Show the Over/Under exposure pixels indicators 
@@ -839,9 +845,11 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     if (d->expoSettings->underExposureIndicator || d->expoSettings->overExposureIndicator)
     {
         QImage pureColorMask = d->image.copy(sx, sy, sw, sh).pureColorMask(d->expoSettings);
-        QPixmap pixMask(pureColorMask.scale(dw, dh)); 
-        bitBlt(p, dx, dy, &pixMask, 0, 0);
+        QPixmap pixMask = QPixmap::fromImage(pureColorMask.scaled(dw, dh)); 
+        painter.drawPixmap(dx, dy, pixMask, 0, 0, pixMask.width(), pixMask.height());
     }
+
+    painter.end();
 }
 
 void DImgInterface::zoom(double val)
@@ -1193,7 +1201,7 @@ QString DImgInterface::getImageFormat()
     if (mimeType.isEmpty())
     {
         DWarning() << "DImg object does not contain attribute \"format\"" << endl;
-        mimeType = QImageIO::imageFormat(d->filename);
+        mimeType = QImageReader::imageFormat(d->filename);
     }
     return mimeType;
 }

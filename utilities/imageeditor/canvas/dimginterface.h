@@ -29,7 +29,7 @@
 
 #include <QObject>
 #include <QString>
-#include <QPixmap>
+#include <QByteArray>
 
 // Locale includes.
 
