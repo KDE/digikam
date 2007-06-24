@@ -27,12 +27,12 @@
 
 // QT includes.
 
-#include <qstring.h>
+#include <QString>
 
 // KDE includes
 
 #include <kurl.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 
 // Local includes.
 
@@ -81,7 +81,7 @@ public:
     KUrl                srcURL;
     KUrl                destinationURL;
 
-    KTempFile          *saveTempFile;
+    KTemporaryFile     *saveTempFile;
 };
 
 } // namespace Digikam

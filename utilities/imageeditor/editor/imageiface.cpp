@@ -24,11 +24,11 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qsize.h>
-#include <qpixmap.h>
-#include <qbitmap.h>
-#include <qpainter.h>
+#include <QWidget>
+#include <QSize>
+#include <QPixmap>
+#include <QBitmap>
+#include <QPainter>
 
 // Local includes.
 
@@ -87,7 +87,7 @@ ImageIface::ImageIface(int w, int h)
     d->originalBytesDepth = DImgInterface::defaultInterface()->bytesDepth();
 
     d->qpix.setMask(d->qmask);
-    d->qcheck.resize(8, 8);
+    d->qcheck = QPixmap(8, 8);
 
     QPainter p;
     p.begin(&d->qcheck);
@@ -189,8 +189,8 @@ uchar* ImageIface::getPreviewImage()
         // only create another copy if needed, in putPreviewImage
         d->targetPreviewImage = d->previewImage;
 
-        d->qmask.resize(d->previewWidth, d->previewHeight);
-        d->qpix.resize(d->previewWidth, d->previewHeight);
+        d->qmask = QPixmap(d->previewWidth, d->previewHeight);
+        d->qpix  = QPixmap(d->previewWidth, d->previewHeight);
     }
 
     DImg previewData = d->previewImage.copyImageData();
@@ -375,13 +375,13 @@ PhotoInfoContainer ImageIface::getPhotographInformations() const
 void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
                        bool underExposure, bool overExposure)
 {
+    QPainter p(&d->qpix);
+
     if ( !d->targetPreviewImage.isNull() )
     {
         if (d->targetPreviewImage.hasAlpha())
         {
-            QPainter p(&d->qpix);
             p.drawTiledPixmap(0, 0, d->qpix.width(), d->qpix.height(), d->qcheck);
-            p.end();
         }
         
         QPixmap pixImage;
@@ -405,9 +405,9 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
         {
             pixImage = d->targetPreviewImage.convertToPixmap();
         }
-#warning "kde4 port it";
-        //bitBlt(&d->qpix, 0, 0, &pixImage, 0, 0, w, h, Qt::CopyROP, false);
-
+        
+        p.drawPixmap(0, 0, pixImage, 0, 0, w, h);
+        
         // Show the Over/Under exposure pixels indicators 
     
         if (underExposure || overExposure)
@@ -419,13 +419,16 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
             expoSettings.overExposureColor      = DImgInterface::defaultInterface()->overExposureColor();
 
             QImage pureColorMask = d->targetPreviewImage.pureColorMask(&expoSettings);
-            QPixmap pixMask(pureColorMask); 
-#warning "kde4 port it";
-            //bitBlt(&d->qpix, 0, 0, &pixMask, 0, 0, w, h, Qt::CopyROP, false);
+            QPixmap pixMask = QPixmap::fromImage(pureColorMask); 
+            p.drawPixmap(0, 0, pixMask, 0, 0, w, h);
         }
     }
-#warning "kde4 port it";
-    //bitBlt(device, x, y, &d->qpix, 0, 0, -1, -1, Qt::CopyROP, false);
+
+    p.end();
+
+    QPainter p2(device);
+    p2.drawPixmap(x, y, d->qpix, 0, 0, d->qpix.width(), d->qpix.height());
+    p2.end();    
 }
 
 }   // namespace Digikam
