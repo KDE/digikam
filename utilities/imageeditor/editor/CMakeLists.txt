@@ -15,24 +15,24 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common
 
 # Static library for showfoto #################################################
 
-set(libshowfoto_STAT_SRCS editorwindow.cpp imageiface.cpp)
+set(libshowfoto_STAT_SRCS imageiface.cpp editorwindow.cpp)
 
 KDE4_AUTOMOC(${libshowfoto_STAT_SRCS})
 
 KDE4_ADD_LIBRARY(libshowfoto STATIC ${libshowfoto_STAT_SRCS})
 
+
 # Static library for digiKam ##################################################
 
-SET(libdimgeditor_STAT_SRCS editorwindow.cpp imageiface.cpp imagewindow.cpp)
+#SET(libdimgeditor_STAT_SRCS editorwindow.cpp imageiface.cpp imagewindow.cpp)
 
-KDE4_AUTOMOC(${libdimgeditor_STAT_SRCS})
+#KDE4_AUTOMOC(${libdimgeditor_STAT_SRCS})
 
-KDE4_ADD_LIBRARY(libdimgeditor STATIC ${libdimgeditor_STAT_SRCS})
+#KDE4_ADD_LIBRARY(libdimgeditor STATIC ${libdimgeditor_STAT_SRCS})
+
 
 # Files to install ############################################################
 
 INSTALL( FILES imageiface.h DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
-
 INSTALL( FILES digikamimageplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
-
 INSTALL( FILES digikamimagewindowui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam )
