@@ -55,7 +55,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  S
         |---cameragui                                                   X
         |---hotplug                                                                                  CMake port only is require.
         |---imageeditor
-        |-----canvas                            Gilles          X       X                            CMake port only
+        |-----canvas                            Gilles          X       X       DONE                 Canvas::drawRubber() implementation is temporally commented.
         |-----editor                            Gilles          X       X                            CMake port only
         |-----tools                             Gilles          X       X                            CMake port only
         |---lighttable                                                  X
