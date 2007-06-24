@@ -53,7 +53,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  S
  2      |-utilities                                                                                  Utilities components are used as "libs" by digiKam main interface.
         |---batch                               Laurent                 X
         |---cameragui                                                   X
-        |---hotplug                                                                                  CMake port only is require.
+        |---hotplug                             Laurent                         DONE                 CMake port only is require.
         |---imageeditor
         |-----canvas                            Gilles          X       X       DONE                 Canvas::drawRubber() implementation is temporally commented.
         |-----editor                            Gilles          X       X                            CMake port only
