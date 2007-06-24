@@ -71,7 +71,7 @@ QDataStream &operator<<(QDataStream &os, const ImageListerRecord &record)
     os << record.albumName;
     os << record.albumRoot;
     os << record.dateTime;
-    os << record.size;
+    //os << record.size;
     os << record.dims;
     return os;
 }
@@ -84,7 +84,7 @@ QDataStream &operator>>(QDataStream &ds, ImageListerRecord &record)
     ds >> record.albumName;
     ds >> record.albumRoot;
     ds >> record.dateTime;
-    ds >> record.size;
+    //ds >> record.size;
     ds >> record.dims;
     return ds;
 }

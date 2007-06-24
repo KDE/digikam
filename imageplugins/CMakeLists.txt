@@ -1,4 +1,15 @@
 
+INCLUDE_DIRECTORIES(
+		${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders
+		${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters
+		${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata
+                ${JPEG_INCLUDE_DIR}
+                ${TIFF_INCLUDE_DIR}
+                ${PNG_INCLUDE_DIR}
+                ${JASPER_INCLUDE_DIR}
+                   )
+
+
 add_subdirectory( coreplugin )
 add_subdirectory( adjustcurves )
 add_subdirectory( adjustlevels )

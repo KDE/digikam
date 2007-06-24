@@ -4,14 +4,15 @@ include_directories( ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor ${
 
 ########### next target ###############
 
-set(digikamimageplugin_distortionfx_PART_SRCS imageplugin_distortionfx.cpp imageeffect_distortionfx.cpp distortionfx.cpp )
+set(digikamimageplugin_distortionfx_PART_SRCS imageplugin_distortionfx.cpp imageeffect_distortionfx.cpp distortionfx.cpp ${libdimg_SRCS} ${libdimgloaders_SRCS} )
 
 
 kde4_automoc(${digikamimageplugin_distortionfx_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_distortionfx ${digikamimageplugin_distortionfx_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_distortionfx ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} libdimg )
+target_link_libraries(digikamimageplugin_distortionfx ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${JPEG_LIBRARIES} ${TIFF_LIBRARIES} ${PNG_LIBRARIES} ${JASPER_LIBRARIES}
+)
 
 install(TARGETS digikamimageplugin_distortionfx DESTINATION ${PLUGIN_INSTALL_DIR} )
 
