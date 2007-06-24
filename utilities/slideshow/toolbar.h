@@ -25,8 +25,7 @@
 #ifndef TOOL_BAR_H
 #define TOOL_BAR_H
 
-#include <qwidget.h>
-//Added by qt3to4:
+#include <QWidget>
 #include <QKeyEvent>
 
 // Local includes.
