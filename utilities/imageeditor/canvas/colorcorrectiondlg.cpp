@@ -24,17 +24,14 @@
 
 // Qt includes.
 
-#include <qlabel.h>
-#include <q3whatsthis.h>
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qstring.h>
-#include <qfileinfo.h>
-#include <qpushbutton.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QLabel>
+#include <QFrame>
+#include <QString>
+#include <QFileInfo>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -65,20 +62,24 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     m_iccTrans = iccTrans;
     m_parent   = parent;
     setHelp("iccprofile.anchor", "digikam");
-    setButtonText(Ok,     i18n("Convert"));
-    setButtonTip(Ok,      i18n("Apply the default color workspace profile to the image"));
-    setButtonText(Cancel, i18n("Do Nothing"));
-    setButtonTip(Cancel,  i18n("Do not change the image"));
-    setButtonText(Apply,  i18n("Assign"));
-    setButtonTip(Apply,   i18n("Embed only the color workspace profile to the image without changing the image"));
+    setButtonText(Ok,        i18n("Convert"));
+    setButtonToolTip(Ok,     i18n("Apply the default color workspace profile to the image"));
+    setButtonText(Cancel,    i18n("Do Nothing"));
+    setButtonToolTip(Cancel, i18n("Do not change the image"));
+    setButtonText(Apply,     i18n("Assign"));
+    setButtonToolTip(Apply,  i18n("Embed only the color workspace profile to the image "
+                                  "without changing the image"));
 
     QFileInfo fi(file);
     setCaption(fi.fileName());
     
     QWidget *page     = new QWidget(this);
     setMainWidget(page);
-    Q3GridLayout* grid = new Q3GridLayout(page, 3, 2, 0, KDialog::spacingHint());
-        
+    QGridLayout* grid = new QGridLayout(page);
+    grid->setMargin(0);
+    grid->setSpacing(KDialog::spacingHint());
+    page->setLayout(grid);        
+
     QLabel *originalTitle         = new QLabel(i18n("Original Picture:"), page);
     QLabel *previewOriginal       = new QLabel(page);
     QLabel *targetTitle           = new QLabel(i18n("Corrected Picture:"), page);
@@ -112,15 +113,16 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     
     previewOriginal->setPixmap(preview->convertToPixmap());
     previewTarget->setPixmap(preview->convertToPixmap(m_iccTrans));
-    KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
-    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 128, KIcon::DefaultState, 0, true));    
+    KIconLoader* iconLoader = KIconLoader::global();
+    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 128, K3Icon::DefaultState, 0, true));    
     
-    grid->addMultiCellWidget(originalTitle, 0, 0, 0, 0);
-    grid->addMultiCellWidget(previewOriginal, 1, 1, 0, 0);
-    grid->addMultiCellWidget(targetTitle, 2, 2, 0, 0);
-    grid->addMultiCellWidget(previewTarget, 3, 3, 0, 0);
+    grid->addWidget(originalTitle, 0, 0, 0, 0);
+    grid->addWidget(previewOriginal, 1, 1, 0, 0);
+    grid->addWidget(targetTitle, 2, 2, 0, 0);
+    grid->addWidget(previewTarget, 3, 3, 0, 0);
     
-    Q3VBoxLayout *vlay = new Q3VBoxLayout( KDialog::spacingHint() );
+    QVBoxLayout *vlay = new QVBoxLayout();
+    vlay->setSpacing( KDialog::spacingHint() );
     vlay->addWidget(logo);
     vlay->addWidget(message);
     
@@ -128,7 +130,8 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     vlay->addWidget(currentProfileTitle);
     vlay->addWidget(currentProfileDesc);
     
-    Q3HBoxLayout *hlay1 = new Q3HBoxLayout( KDialog::spacingHint() );
+    QHBoxLayout *hlay1 = new QHBoxLayout();
+    hlay1->setSpacing( KDialog::spacingHint() );
     hlay1->addWidget(currentProfInfo);
     hlay1->addStretch();
     vlay->addLayout(hlay1);
@@ -137,15 +140,16 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     vlay->addWidget(embeddedProfileTitle);
     vlay->addWidget(embeddedProfileDesc);    
     
-    Q3HBoxLayout *hlay2 = new Q3HBoxLayout( KDialog::spacingHint() );
+    QHBoxLayout *hlay2 = new QHBoxLayout();
+    hlay2->setSpacing( KDialog::spacingHint() );
     hlay2->addWidget(embeddedProfInfo);
     hlay2->addStretch();
     vlay->addLayout(hlay2);
     vlay->addStretch();
     
-    grid->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                       QSizePolicy::Minimum, QSizePolicy::Expanding), 0, 3, 1, 1);
-    grid->addMultiCellLayout(vlay, 0, 3, 2, 2);
+    grid->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+                      QSizePolicy::Minimum, QSizePolicy::Expanding), 0, 3, 1, 1);
+    grid->addLayout(vlay, 0, 3, 2, 2);
     
     setMainWidget(page);
     

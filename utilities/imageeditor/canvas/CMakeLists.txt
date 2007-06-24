@@ -14,8 +14,8 @@ SET(libdimgcanvas_STAT_SRCS imageplugin.cpp
                             undocache.cpp 
                             undoaction.cpp
                             undomanager.cpp 
-                            dimginterface.cpp 
                             colorcorrectiondlg.cpp 
+                            dimginterface.cpp 
                             canvas.cpp 
    )
 
