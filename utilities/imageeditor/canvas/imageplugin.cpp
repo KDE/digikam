@@ -29,9 +29,10 @@ namespace Digikam
 {
 
 ImagePlugin::ImagePlugin(QObject *parent, const char* name)
-           : QObject(parent, name)
+           : QObject(parent)
 {
     m_parentWidget = 0;
+    setObjectName(name);
 }
 
 ImagePlugin::~ImagePlugin()
