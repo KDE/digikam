@@ -32,7 +32,7 @@ namespace Digikam
 {
 
 UndoAction::UndoAction(DImgInterface* iface)
-    : m_iface(iface)
+          : m_iface(iface)
 {
     m_title = i18n("unknown");
 }

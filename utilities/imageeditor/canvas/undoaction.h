@@ -85,13 +85,13 @@ class DIGIKAM_EXPORT UndoActionFlip : public UndoAction
 
 public:
 
-    enum Orientation
+    enum Direction
     {
         Horizontal,
         Vertical
     };
     
-    UndoActionFlip(DImgInterface* iface, Qt::Orientation dir);
+    UndoActionFlip(DImgInterface* iface, Direction dir);
     ~UndoActionFlip();
 
     void rollBack();

@@ -170,8 +170,6 @@ void UndoCache::erase(int level)
                         .arg(d->cachePrefix)
                         .arg(level);
 
-//    if(d->cacheFilenames.find(cacheFile) == d->cacheFilenames.end())
-
     if(d->cacheFilenames.indexOf(cacheFile) == d->cacheFilenames.indexOf(d->cacheFilenames.last()))
         return;
     
