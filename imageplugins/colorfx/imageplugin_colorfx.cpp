@@ -45,9 +45,9 @@ K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_colorfx,
 ImagePlugin_ColorFX::ImagePlugin_ColorFX(QObject *parent, const QStringList &)
                    : Digikam::ImagePlugin(parent, "ImagePlugin_ColorFX")
 {
-    m_solarizeAction = new KAction(i18n("Color Effects..."), "colorfx", 0, 
-                           this, SLOT(slotColorFX()),
-                           actionCollection(), "imageplugin_colorfx");
+    m_solarizeAction  = new KAction(KIcon("colorfx"), i18n("Color Effects..."), this);
+    actionCollection()->addAction("imageplugin_colorfx", m_solarizeAction );
+    connect(m_solarizeAction, SIGNAL(triggered(bool) ), SLOT(slotColorFX()));
                 
     setXMLFile( "digikamimageplugin_colorfx_ui.rc" );    
         
