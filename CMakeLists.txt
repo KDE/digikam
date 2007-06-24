@@ -11,6 +11,7 @@ INCLUDE_DIRECTORIES(${KEXIV2_INCLUDE_DIR}
                     ${KDE4_INCLUDE_DIR}
                     ${QT_INCLUDES}
                    )
+add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 ADD_SUBDIRECTORY( data )
 ADD_SUBDIRECTORY( libs )

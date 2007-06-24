@@ -38,7 +38,9 @@
 #include <QVBoxLayout>
 #include <QButtonGroup>
 #include <QDataStream>
-
+#include <Q3StyleSheet>
+#include <Q3MimeSourceFactory>
+#include <QColorGroup>
 // KDE includes.
 
 #include <k3listview.h>
