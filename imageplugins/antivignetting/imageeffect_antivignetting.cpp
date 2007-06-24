@@ -88,7 +88,8 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QWidget *gboxSettings     = new QWidget(plainPage());
+    QWidget *gboxSettings     = new QWidget(this);
+    setMainWidget(gboxSettings);
     Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 13, 2, spacingHint());
 
     m_maskPreviewLabel = new QLabel( gboxSettings );
@@ -137,7 +138,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     gridSettings->addMultiCellWidget(label3, 5, 5, 0, 2);
     gridSettings->addMultiCellWidget(m_radiusInput, 6, 6, 0, 2);
     
-    KSeparator *line = new KSeparator (Horizontal, gboxSettings);
+    KSeparator *line = new KSeparator (Qt::Horizontal, gboxSettings);
     gridSettings->addMultiCellWidget(line, 7, 7, 0, 2);
 
     // -------------------------------------------------------------

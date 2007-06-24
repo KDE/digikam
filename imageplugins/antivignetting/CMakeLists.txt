@@ -11,7 +11,7 @@ kde4_automoc(${digikamimageplugin_antivignetting_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_antivignetting ${digikamimageplugin_antivignetting_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_antivignetting  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(digikamimageplugin_antivignetting  ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} )
 
 install(TARGETS digikamimageplugin_antivignetting DESTINATION ${PLUGIN_INSTALL_DIR} )
 
