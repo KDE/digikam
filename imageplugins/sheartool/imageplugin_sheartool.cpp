@@ -43,10 +43,9 @@ K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_sheartool,
 ImagePlugin_ShearTool::ImagePlugin_ShearTool(QObject *parent, const QStringList &)
                      : Digikam::ImagePlugin(parent, "ImagePlugin_ShearTool")
 {
-    m_sheartoolAction = new KAction(i18n("Shear..."), "shear", 0, 
-                            this, SLOT(slotShearTool()),
-                            actionCollection(), "imageplugin_sheartool");
-    
+    m_sheartoolAction  = new KAction(KIcon("shear"), i18n("Shear..."), this);
+    actionCollection()->addAction("imageplugin_sheartool", m_sheartoolAction );
+    connect(m_sheartoolAction, SIGNAL(triggered(bool) ), SLOT(slotShearTool()));    
     setXMLFile("digikamimageplugin_sheartool_ui.rc");         
                                     
     DDebug() << "ImagePlugin_ShearTool plugin loaded" << endl;

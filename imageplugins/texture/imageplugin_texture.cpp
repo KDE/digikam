@@ -47,6 +47,9 @@ ImagePlugin_Texture::ImagePlugin_Texture(QObject *parent, const QStringList &)
                           this, SLOT(slotTexture()),
                           actionCollection(), "imageplugin_texture");
                 
+    m_textureAction  = new KAction(KIcon("texture"), i18n("Apply Texture..."), this);
+    actionCollection()->addAction("", m_textureAction );
+    connect(m_textureAction, SIGNAL(triggered(bool) ), SLOT(slotTexture()));
     setXMLFile( "digikamimageplugin_texture_ui.rc" );                                
     
     DDebug() << "ImagePlugin_Texture plugin loaded" << endl;

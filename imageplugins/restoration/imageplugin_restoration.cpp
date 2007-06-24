@@ -44,9 +44,9 @@ K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_restoration,
 ImagePlugin_Restoration::ImagePlugin_Restoration(QObject *parent, const QStringList &)
                        : Digikam::ImagePlugin(parent, "ImagePlugin_Restoration")
 {
-    m_restorationAction = new KAction(i18n("Restoration..."), "restoration", 0, 
-                              this, SLOT(slotRestoration()),
-                              actionCollection(), "imageplugin_restoration");
+    m_restorationAction  = new KAction(KIcon("restoration"), i18n("Restoration..."), this);
+    actionCollection()->addAction("imageplugin_restoration", m_restorationAction );
+    connect(m_restorationAction, SIGNAL(triggered(bool) ), SLOT(slotRestoration()));
                 
     setXMLFile( "digikamimageplugin_restoration_ui.rc" );                                
     
