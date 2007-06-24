@@ -78,11 +78,11 @@ ToolBar::ToolBar(QWidget* parent)
     d->stopBtn = new QToolButton(this);
     d->playBtn->setToggleButton(true);
 
-    KIconLoader* loader = kapp->iconLoader();
-    d->playBtn->setIconSet(loader->loadIcon("player_pause", KIcon::NoGroup, 22));
-    d->prevBtn->setIconSet(loader->loadIcon("back", KIcon::NoGroup, 22));
-    d->nextBtn->setIconSet(loader->loadIcon("forward", KIcon::NoGroup, 22));
-    d->stopBtn->setIconSet(loader->loadIcon("stop", KIcon::NoGroup, 22));
+    KIconLoader* loader = KIconLoader::global();
+    d->playBtn->setIconSet(loader->loadIcon("player_pause", K3Icon::NoGroup, 22));
+    d->prevBtn->setIconSet(loader->loadIcon("back", K3Icon::NoGroup, 22));
+    d->nextBtn->setIconSet(loader->loadIcon("forward", K3Icon::NoGroup, 22));
+    d->stopBtn->setIconSet(loader->loadIcon("stop", K3Icon::NoGroup, 22));
 
     lay->addWidget(d->playBtn);
     lay->addWidget(d->prevBtn);
@@ -153,18 +153,17 @@ void ToolBar::setEnabledPrev(bool val)
 
 void ToolBar::slotPlayBtnToggled()
 {
+    KIconLoader* loader = KIconLoader::global();
     if (d->playBtn->isOn())
     {
         d->canHide = false;
-        KIconLoader* loader = kapp->iconLoader();
-        d->playBtn->setIconSet(loader->loadIcon("player_play", KIcon::NoGroup, 22));
+        d->playBtn->setIconSet(loader->loadIcon("player_play", K3Icon::NoGroup, 22));
         emit signalPause();
     }
     else
     {
         d->canHide = true;
-        KIconLoader* loader = kapp->iconLoader();
-        d->playBtn->setIconSet(loader->loadIcon("player_pause", KIcon::NoGroup, 22));
+        d->playBtn->setIconSet(loader->loadIcon("player_pause", K3Icon::NoGroup, 22));
         emit signalPlay();
     }
 }
@@ -175,8 +174,8 @@ void ToolBar::slotNexPrevClicked()
     {
         d->playBtn->setOn(true);
         d->canHide = false;
-        KIconLoader* loader = kapp->iconLoader();
-        d->playBtn->setIconSet(loader->loadIcon("player_play", KIcon::NoGroup, 22));
+	KIconLoader* loader = KIconLoader::global();
+        d->playBtn->setIconSet(loader->loadIcon("player_play", K3Icon::NoGroup, 22));
         emit signalPause();
     }
 }

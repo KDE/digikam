@@ -413,7 +413,7 @@ void SlideShow::updatePixmap()
 
             if (d->settings.printName)
             {
-                str = QString("%1 (%2/%3)").arg(d->currentImage.filename())
+                str = QString("%1 (%2/%3)").arg(d->currentImage.fileName())
                                            .arg(QString::number(d->fileIndex + 1))
                                            .arg(QString::number(d->settings.fileList.count()));
             
@@ -435,8 +435,8 @@ void SlideShow::updatePixmap()
     {
         // End of Slide Show.
 
-        QPixmap logo = kapp->iconLoader()->loadIcon("digikam", KIcon::NoGroup, 128,
-                                                    KIcon::DefaultState, 0, true);
+        QPixmap logo = kapp->iconLoader()->loadIcon("digikam", K3Icon::NoGroup, 128,
+                                                    K3Icon::DefaultState, 0, true);
 
         QFont fn(font());
         fn.setPointSize(fn.pointSize()+10);
