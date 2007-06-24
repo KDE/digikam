@@ -1,5 +1,5 @@
 [Desktop Action digiKam Detect and Download]
-Exec=@digikamhelper_dir@/digikam-camera detect %u
+Exec=@digikamhelperdir@/digikam-camera detect %u
 Icon=digikam
 Name=digiKam Detect and Download
 Name[de]=Bilder mit digiKam herunterladen

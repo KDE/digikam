@@ -1,5 +1,5 @@
 [Desktop Action digiKam Download]
-Exec=@digikamhelper_dir@/digikam-camera storage %u
+Exec=@digikamhelperdir@/digikam-camera storage %u
 Icon=digikam
 Name=Download Photos with digiKam
 Name[de]=Bilder mit digiKam herunterladen
