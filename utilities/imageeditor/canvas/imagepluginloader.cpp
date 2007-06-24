@@ -22,10 +22,16 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
+#include <Q3ValueList>
+#include <Q3PtrList>
+
 // KDE includes.
 
-#include <ktrader.h>
+#include <kservicetypetrader.h>
 #include <kparts/componentfactory.h>
+#include <klibloader.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kxmlguiclient.h>
@@ -35,9 +41,6 @@
 #include "ddebug.h"
 #include "splashscreen.h"
 #include "imagepluginloader.h"
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3PtrList>
 
 namespace Digikam
 {
@@ -95,10 +98,10 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
  
     QStringList imagePluginsList2Load;
     
-    KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
-    KTrader::OfferList::ConstIterator iter;
+    const KService::List offers = KServiceTypeTrader::self()->query("Digikam/ImagePlugin");
+    KService::List::ConstIterator iter;
     
-    for (iter = offers.begin() ; iter != offers.end() ; ++iter) 
+    for(iter = offers.begin(); iter != offers.end(); ++iter) 
     {
         KService::Ptr service = *iter;
         if (!d->obsoleteImagePluginsList.contains(service->library()))
@@ -119,8 +122,8 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
     if (d->splash)
         d->splash->message(i18n("Loading Image Plugins"));
 
-    KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
-    KTrader::OfferList::ConstIterator iter;
+    const KService::List offers = KServiceTypeTrader::self()->query("Digikam/ImagePlugin");
+    KService::List::ConstIterator iter;
 
     int cpt = 0;
 
@@ -135,9 +138,11 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
         {
             if (!pluginIsLoaded(service->name()) )
             {
-                int error;
-                plugin = KParts::ComponentFactory::createInstanceFromService<ImagePlugin>(
-                                 service, this, service->name().local8Bit(), 0, &error);
+                int error = -1;
+
+                plugin =  KParts::ComponentFactory::createPartInstanceFromLibrary<ImagePlugin>(
+                                                    service->name().toLocal8Bit(), 
+                                                    0, this, QStringList(), &error);
 
                 if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
                 {
@@ -157,7 +162,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                                 << " (" << service->library() << ")"
                                 << " with error number "
                                 << error << endl;
-                    if (error == KParts::ComponentFactory::ErrNoLibrary)
+                    if (error == KLibLoader::ErrNoLibrary)
                         DWarning() << "KLibLoader says: "
                                     << KLibLoader::self()->lastErrorMessage() << endl;
                 }
@@ -184,8 +189,9 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 continue;
             else
             {
-                plugin = KParts::ComponentFactory::createInstanceFromService<ImagePlugin>(
-                                 service, this, service->name().local8Bit(), 0);
+                plugin =  KParts::ComponentFactory::createPartInstanceFromLibrary<ImagePlugin>(
+                                                    service->name().toLocal8Bit(), 
+                                                    0, this);
 
                 if (plugin)
                 {
@@ -231,9 +237,9 @@ ImagePlugin* ImagePluginLoader::pluginIsLoaded(const QString& name)
 
 ImagePlugin* ImagePluginLoader::pluginInstance(const QString& libraryName)
 {
-    KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
-    KTrader::OfferList::ConstIterator iter;
-    
+    const KService::List offers = KServiceTypeTrader::self()->query("Digikam/ImagePlugin");
+    KService::List::ConstIterator iter;
+
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {
         KService::Ptr service = *iter;
@@ -249,8 +255,8 @@ ImagePlugin* ImagePluginLoader::pluginInstance(const QString& libraryName)
 
 bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName)
 {
-    KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
-    KTrader::OfferList::ConstIterator iter;
+    const KService::List offers = KServiceTypeTrader::self()->query("Digikam/ImagePlugin");
+    KService::List::ConstIterator iter;
     
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {

@@ -10,12 +10,12 @@ INCLUDE_DIRECTORIES(  ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters
                    )
 
 SET(libdimgcanvas_STAT_SRCS imageplugin.cpp 
-                            canvas.cpp 
+                            imagepluginloader.cpp 
                             dimginterface.cpp 
                             undocache.cpp 
                             undoaction.cpp
                             undomanager.cpp 
-                            imagepluginloader.cpp 
+                            canvas.cpp 
                             colorcorrectiondlg.cpp 
    )
 
