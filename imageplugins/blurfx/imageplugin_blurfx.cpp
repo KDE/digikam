@@ -39,7 +39,7 @@
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_blurfx,
                            KGenericFactory<ImagePlugin_BlurFX>("digikamimageplugin_blurfx"));
 
-ImagePlugin_BlurFX::ImagePlugin_BlurFX(QObject *parent, const char*, const QStringList &)
+ImagePlugin_BlurFX::ImagePlugin_BlurFX(QObject *parent, const QStringList &)
                   : Digikam::ImagePlugin(parent, "ImagePlugin_BlurFX")
 {
     m_blurfxAction = new KAction(i18n("Blur Effects..."), "blurfx", 0, 

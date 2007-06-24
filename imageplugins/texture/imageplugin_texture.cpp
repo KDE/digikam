@@ -39,7 +39,7 @@
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_texture,
                            KGenericFactory<ImagePlugin_Texture>("digikamimageplugin_texture"));
 
-ImagePlugin_Texture::ImagePlugin_Texture(QObject *parent, const char*, const QStringList &)
+ImagePlugin_Texture::ImagePlugin_Texture(QObject *parent, const QStringList &)
                    : Digikam::ImagePlugin(parent, "ImagePlugin_Texture")
 {
     m_textureAction = new KAction(i18n("Apply Texture..."), "texture", 0, 

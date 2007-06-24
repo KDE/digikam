@@ -37,7 +37,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_LensDistortion : public Digikam::Im
     
 public:
 
-    ImagePlugin_LensDistortion(QObject *parent, const char* name,
+    ImagePlugin_LensDistortion(QObject *parent,
                                  const QStringList &args);
     ~ImagePlugin_LensDistortion();
 

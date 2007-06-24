@@ -37,7 +37,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_NoiseReduction : public Digikam::Im
     
 public:
 
-    ImagePlugin_NoiseReduction(QObject *parent, const char* name,
+    ImagePlugin_NoiseReduction(QObject *parent,
                                const QStringList &args);
     ~ImagePlugin_NoiseReduction();
 

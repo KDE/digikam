@@ -39,7 +39,7 @@
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_perspective,
                            KGenericFactory<ImagePlugin_Perspective>("digikamimageplugin_perspective"));
 
-ImagePlugin_Perspective::ImagePlugin_Perspective(QObject *parent, const char*, const QStringList &)
+ImagePlugin_Perspective::ImagePlugin_Perspective(QObject *parent, const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_Perspective")
 {
     m_perspectiveAction = new KAction(i18n("Perspective Adjustment..."), "perspective", 0, 

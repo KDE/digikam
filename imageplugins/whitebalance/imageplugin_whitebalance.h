@@ -38,7 +38,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_WhiteBalance : public Digikam::Imag
     
 public:
 
-    ImagePlugin_WhiteBalance(QObject *parent, const char* name,
+    ImagePlugin_WhiteBalance(QObject *parent,
                              const QStringList &args);
     ~ImagePlugin_WhiteBalance();
 

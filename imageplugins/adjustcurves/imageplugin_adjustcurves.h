@@ -37,7 +37,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_AdjustCurves : public Digikam::Imag
     
 public:
 
-    ImagePlugin_AdjustCurves(QObject *parent, const char* name,
+    ImagePlugin_AdjustCurves(QObject *parent,
                              const QStringList &args);
     ~ImagePlugin_AdjustCurves();
     

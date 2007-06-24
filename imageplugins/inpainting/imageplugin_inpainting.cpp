@@ -40,7 +40,7 @@
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_inpainting,
                            KGenericFactory<ImagePlugin_InPainting>("digikamimageplugin_inpainting"));
 
-ImagePlugin_InPainting::ImagePlugin_InPainting(QObject *parent, const char*, const QStringList &)
+ImagePlugin_InPainting::ImagePlugin_InPainting(QObject *parent, const QStringList &)
                       : Digikam::ImagePlugin(parent, "ImagePlugin_InPainting")
 {
     m_inPaintingAction = new KAction(i18n("Inpainting..."), "inpainting",

@@ -39,7 +39,7 @@
 class Q3HButtonGroup;
 class QComboBox;
 class Q3ButtonGroup;
-
+class Q3ListBox;
 class KIntNumInput;
 class KTabWidget;
 

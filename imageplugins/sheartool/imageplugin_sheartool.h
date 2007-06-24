@@ -37,7 +37,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_ShearTool : public Digikam::ImagePl
     
 public:
 
-    ImagePlugin_ShearTool(QObject *parent, const char* name,
+    ImagePlugin_ShearTool(QObject *parent,
                           const QStringList &args);
     ~ImagePlugin_ShearTool();
 

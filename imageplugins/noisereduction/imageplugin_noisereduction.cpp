@@ -39,7 +39,7 @@
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_noisereduction,
                            KGenericFactory<ImagePlugin_NoiseReduction>("digikamimageplugin_noisereduction"));
 
-ImagePlugin_NoiseReduction::ImagePlugin_NoiseReduction(QObject *parent, const char*, const QStringList &)
+ImagePlugin_NoiseReduction::ImagePlugin_NoiseReduction(QObject *parent, const QStringList &)
                           : Digikam::ImagePlugin(parent, "ImagePlugin_NoiseReduction")
 {
     m_noiseReductionAction = new KAction(i18n("Noise Reduction..."), "noisereduction", 0,

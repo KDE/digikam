@@ -39,7 +39,7 @@
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_adjustlevels,
                             KGenericFactory<ImagePlugin_AdjustLevels>("digikamimageplugin_adjustlevels"))
 
-ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const char*,
+ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent,
                                                    const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustLevels")
 {

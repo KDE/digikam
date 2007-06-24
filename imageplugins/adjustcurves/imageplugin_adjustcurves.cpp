@@ -39,7 +39,7 @@
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_adjustcurves,
                             KGenericFactory<ImagePlugin_AdjustCurves>("digikamimageplugin_adjustcurves"));
 
-ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent, const char*,
+ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent,
                                                    const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustCurves")
 {

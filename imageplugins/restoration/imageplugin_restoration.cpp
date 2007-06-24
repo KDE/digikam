@@ -40,7 +40,7 @@
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_restoration,
                            KGenericFactory<ImagePlugin_Restoration>("digikamimageplugin_restoration"));
 
-ImagePlugin_Restoration::ImagePlugin_Restoration(QObject *parent, const char*, const QStringList &)
+ImagePlugin_Restoration::ImagePlugin_Restoration(QObject *parent, const QStringList &)
                        : Digikam::ImagePlugin(parent, "ImagePlugin_Restoration")
 {
     m_restorationAction = new KAction(i18n("Restoration..."), "restoration", 0, 

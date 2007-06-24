@@ -39,7 +39,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Border : public Digikam::ImagePlugi
     
 public:
 
-    ImagePlugin_Border(QObject *parent, const char* name,
+    ImagePlugin_Border(QObject *parent,
                        const QStringList &args);
     ~ImagePlugin_Border();
     

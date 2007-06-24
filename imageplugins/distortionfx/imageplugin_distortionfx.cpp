@@ -42,7 +42,7 @@
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_distortionfx,
                            KGenericFactory<ImagePlugin_DistortionFX>("digikamimageplugin_distortionfx"));
 
-ImagePlugin_DistortionFX::ImagePlugin_DistortionFX(QObject *parent, const char*, const QStringList &)
+ImagePlugin_DistortionFX::ImagePlugin_DistortionFX(QObject *parent, const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_DistortionFX")
 {
     m_distortionfxAction = new KAction(i18n("Distortion Effects..."), "distortionfx", 0, 

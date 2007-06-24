@@ -40,7 +40,7 @@
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_infrared,
                            KGenericFactory<ImagePlugin_Infrared>("digikamimageplugin_infrared"));
 
-ImagePlugin_Infrared::ImagePlugin_Infrared(QObject *parent, const char*, const QStringList &)
+ImagePlugin_Infrared::ImagePlugin_Infrared(QObject *parent, const QStringList &)
                     : Digikam::ImagePlugin(parent, "ImagePlugin_Infrared")
 {
     m_infraredAction = new KAction(i18n("Infrared Film..."), "infrared", 0, 

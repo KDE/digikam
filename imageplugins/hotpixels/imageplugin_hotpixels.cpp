@@ -41,7 +41,7 @@
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_hotpixels,
                            KGenericFactory<ImagePlugin_HotPixels>("digikamimageplugin_hotpixels"));
 
-ImagePlugin_HotPixels::ImagePlugin_HotPixels(QObject *parent, const char*, const QStringList &)
+ImagePlugin_HotPixels::ImagePlugin_HotPixels(QObject *parent, const QStringList &)
                      : Digikam::ImagePlugin(parent, "ImagePlugin_HotPixels")
 {
     m_hotpixelsAction = new KAction(i18n("Hot Pixels..."), "hotpixels", 0, 

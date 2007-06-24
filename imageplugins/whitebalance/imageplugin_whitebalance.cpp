@@ -40,7 +40,7 @@
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_whitebalance,
                            KGenericFactory<ImagePlugin_WhiteBalance>("digikamimageplugin_whitebalance"));
 
-ImagePlugin_WhiteBalance::ImagePlugin_WhiteBalance(QObject *parent, const char*, const QStringList &)
+ImagePlugin_WhiteBalance::ImagePlugin_WhiteBalance(QObject *parent, const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_WhiteBalance")
 {
     m_whitebalanceAction = new KAction(i18n("White Balance..."), "whitebalance", 
