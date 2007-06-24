@@ -435,29 +435,29 @@ void DigikamApp::setupAccelerators()
                            Qt::Key_Next, this, SIGNAL(signalNextItem()),
                            false, true);
 
-    d->accelerators->insert("Previous Image Qt::Key_Prior", i18n("Previous Image"),
+    d->accelerators->insert("Previous Image Prior", i18n("Previous Image"),
                            i18n("Previous Image"),
                            Qt::Key_Prior, this, SIGNAL(signalPrevItem()),
                            false, true);
 
-    d->accelerators->insert("First Image Qt::Key_Home", i18n("First Image"),
+    d->accelerators->insert("First Image Home", i18n("First Image"),
                            i18n("First Image"),
                            Qt::Key_Home, this, SIGNAL(signalFirstItem()),
                            false, true);
 
-    d->accelerators->insert("Last Image Qt::Key_End", i18n("Last Image"),
+    d->accelerators->insert("Last Image End", i18n("Last Image"),
                            i18n("Last Image"),
                            Qt::Key_End, this, SIGNAL(signalLastItem()),
                            false, true);
 
-    d->accelerators->insert("Copy Album Items Selection CTRL+Qt::Key_C", i18n("Copy Album Items Selection"),
+    d->accelerators->insert("Copy Album Items Selection CTRL+Key_C", i18n("Copy Album Items Selection"),
                            i18n("Copy Album Items Selection"),
-                           CTRL+Qt::Key_C, this, SIGNAL(signalCopyAlbumItemsSelection()),
+                           Qt::CTRL+Qt::Key_C, this, SIGNAL(signalCopyAlbumItemsSelection()),
                            false, true);
 
-    d->accelerators->insert("Paste Album Items Selection CTRL+Qt::Key_V", i18n("Paste Album Items Selection"),
+    d->accelerators->insert("Paste Album Items Selection CTRL+Key_V", i18n("Paste Album Items Selection"),
                            i18n("Paste Album Items Selection"),
-                           CTRL+Qt::Key_V, this, SIGNAL(signalPasteAlbumItemsSelection()),
+                           Qt::CTRL+Qt::Key_V, this, SIGNAL(signalPasteAlbumItemsSelection()),
                            false, true);
 }
 
@@ -481,7 +481,7 @@ void DigikamApp::setupActions()
 
     d->backwardActionMenu = new KToolBarPopupAction(i18n("&Back"),
                                     "back",
-                                    ALT+Qt::Key_Left,
+                                    Qt::ALT+Qt::Key_Left,
                                     d->view,
                                     SLOT(slotAlbumHistoryBack()),
                                     actionCollection(),
@@ -496,7 +496,7 @@ void DigikamApp::setupActions()
 
     d->forwardActionMenu = new  KToolBarPopupAction(i18n("Forward"),
                                     "forward",
-                                    ALT+Qt::Key_Right,
+                                    Qt::ALT+Qt::Key_Right,
                                     d->view,
                                     SLOT(slotAlbumHistoryForward()),
                                     actionCollection(),
@@ -544,7 +544,7 @@ void DigikamApp::setupActions()
 
     d->addImagesAction = new KAction( i18n("Add Images..."),
                                     "albumfolder-importimages",
-                                    CTRL+Qt::Key_I,
+                                    Qt::CTRL+Qt::Key_I,
                                     d->view,
                                     SLOT(slotAlbumAddImages()),
                                     actionCollection(),
@@ -763,7 +763,7 @@ void DigikamApp::setupActions()
 
     d->selectAllAction = new KAction(i18n("Select All"),
                                      0,
-                                     CTRL+Qt::Key_A,
+                                     Qt::CTRL+Qt::Key_A,
                                      d->view,
                                      SLOT(slotSelectAll()),
                                      actionCollection(),
@@ -771,7 +771,7 @@ void DigikamApp::setupActions()
 
     d->selectNoneAction = new KAction(i18n("Select None"),
                                      0,
-                                     CTRL+SHIFT+Qt::Key_A,
+                                     Qt::CTRL+Qt::SHIFT+Qt::Key_A,
                                      d->view,
                                      SLOT(slotSelectNone()),
                                      actionCollection(),
@@ -779,7 +779,7 @@ void DigikamApp::setupActions()
 
     d->selectInvertAction = new KAction(i18n("Invert Selection"),
                                         0,
-                                        CTRL+Qt::Key_Asterisk,
+                                        Qt::CTRL+Qt::Key_Asterisk,
                                         d->view,
                                         SLOT(slotSelectInvert()),
                                         actionCollection(),
@@ -795,7 +795,7 @@ void DigikamApp::setupActions()
 
     d->zoomPlusAction = new KAction(i18n("Zoom in"),
                                    "viewmag+",
-                                   CTRL+Qt::Key_Plus,
+                                   Qt::CTRL+Qt::Key_Plus,
                                    d->view,
                                    SLOT(slotZoomIn()),
                                    actionCollection(),
@@ -803,7 +803,7 @@ void DigikamApp::setupActions()
 
     d->zoomMinusAction = new KAction(i18n("Zoom out"),
                                    "viewmag-",
-                                   CTRL+Qt::Key_Minus,
+                                   Qt::CTRL+Qt::Key_Minus,
                                    d->view,
                                    SLOT(slotZoomOut()),
                                    actionCollection(),
@@ -811,7 +811,7 @@ void DigikamApp::setupActions()
 
     d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), 
                                    "viewmag1",
-                                   ALT+CTRL+Qt::Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0.
+                                   Qt::ALT+Qt::CTRL+Qt::Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0.
                                    d->view, 
                                    SLOT(slotZoomTo100Percents()),
                                    actionCollection(), 
@@ -819,7 +819,7 @@ void DigikamApp::setupActions()
 
     d->zoomFitToWindowAction = new KAction(i18n("Fit to &Window"), 
                                    "view_fit_window",
-                                   CTRL+SHIFT+Qt::Key_E, 
+                                   Qt::CTRL+Qt::SHIFT+Qt::Key_E, 
                                    d->view, 
                                    SLOT(slotFitToWindow()),
                                    actionCollection(), 
@@ -838,14 +838,14 @@ void DigikamApp::setupActions()
                                 actionCollection(), "slideshow_all");
     d->slideShowAction->insert(d->slideShowAllAction);
 
-    d->slideShowSelectionAction = new KAction(i18n("Selection"), 0, ALT+Qt::Key_F9,
+    d->slideShowSelectionAction = new KAction(i18n("Selection"), 0, Qt::ALT+Qt::Key_F9,
                                               d->view, 
                                               SLOT(slotSlideShowSelection()),
                                               actionCollection(), 
                                               "slideshow_selected");
     d->slideShowAction->insert(d->slideShowSelectionAction);
 
-    d->slideShowRecursiveAction = new KAction(i18n("With all sub-albums"), 0, SHIFT+Qt::Key_F9,
+    d->slideShowRecursiveAction = new KAction(i18n("With all sub-albums"), 0, Qt::SHIFT+Qt::Key_F9,
                                               d->view, 
                                               SLOT(slotSlideShowRecursive()),
                                               actionCollection(), 
@@ -880,22 +880,22 @@ void DigikamApp::setupActions()
 
     // -- Rating actions ---------------------------------------------------------------
 
-    d->rating0Star = new KAction(i18n("Assign Rating \"No Star\""), CTRL+Qt::Key_0,
+    d->rating0Star = new KAction(i18n("Assign Rating \"No Star\""), Qt:CTRL+Qt::Key_0,
                           d->view, SLOT(slotAssignRatingNoStar()),
                           actionCollection(), "imageview_ratenostar");
-    d->rating1Star = new KAction(i18n("Assign Rating \"One Star\""), CTRL+Qt::Key_1,
+    d->rating1Star = new KAction(i18n("Assign Rating \"One Star\""), Qt::CTRL+Qt::Key_1,
                           d->view, SLOT(slotAssignRatingOneStar()),
                           actionCollection(), "imageview_rateonestar");
-    d->rating2Star = new KAction(i18n("Assign Rating \"Two Stars\""), CTRL+Qt::Key_2, 
+    d->rating2Star = new KAction(i18n("Assign Rating \"Two Stars\""), Qt::CTRL+Qt::Key_2, 
                           d->view, SLOT(slotAssignRatingTwoStar()),
                           actionCollection(), "imageview_ratetwostar");
-    d->rating3Star = new KAction(i18n("Assign Rating \"Three Stars\""), CTRL+Qt::Key_3, 
+    d->rating3Star = new KAction(i18n("Assign Rating \"Three Stars\""), Qt::CTRL+Qt::Key_3, 
                           d->view, SLOT(slotAssignRatingThreeStar()),
                           actionCollection(), "imageview_ratethreestar");
-    d->rating4Star = new KAction(i18n("Assign Rating \"Four Stars\""), CTRL+Qt::Key_4, 
+    d->rating4Star = new KAction(i18n("Assign Rating \"Four Stars\""), Qt::CTRL+Qt::Key_4, 
                           d->view, SLOT(slotAssignRatingFourStar()),
                           actionCollection(), "imageview_ratefourstar");
-    d->rating5Star = new KAction(i18n("Assign Rating \"Five Stars\""), CTRL+Qt::Key_5, 
+    d->rating5Star = new KAction(i18n("Assign Rating \"Five Stars\""), Qt::CTRL+Qt::Key_5, 
                           d->view, SLOT(slotAssignRatingFiveStar()),
                           actionCollection(), "imageview_ratefivestar");
 
@@ -911,7 +911,7 @@ void DigikamApp::setupActions()
     advFindAction->setText(i18n("Advanced Search..."));
     advFindAction->setShortcut("Ctrl+Alt+F");
 
-    new KAction(i18n("Light Table"), "idea", ALT+Qt::Key_F6,
+    new KAction(i18n("Light Table"), "idea", Qt::ALT+Qt::Key_F6,
                 d->view, SLOT(slotLightTable()), actionCollection(), 
                 "light_table");
 
