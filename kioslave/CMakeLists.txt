@@ -21,24 +21,24 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/jpegutils
 
 # digiKam Thumbnails kio slave #####################################################
 
-SET(kio_digikamthumbnail_PART_SRCS digikamthumbnail.cpp ${libjpegutils_SRCS} ${libdimg_SRCS})
+SET(kio_digikamthumbnail_PART_SRCS digikamthumbnail.cpp ${libjpegutils_SRCS} ${libdimg_SRCS} ${libdatabase_SRCS} ${libdimg_SRCS} ${libdimgloaders_SRCS} ${libsqlite2_SRCS} ${libdmetadata_SRCS} ${libdimgfilters_SRCS} ${libhistogram_SRCS} ${liblevels_SRCS})
 
 KDE4_AUTOMOC(${kio_digikamthumbnail_PART_SRCS})
 
 KDE4_ADD_PLUGIN(kio_digikamthumbnail ${kio_digikamthumbnail_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kio_digikamthumbnail ${KDE4_KIO_LIBS} ${KEXIV2_LIBRARIES} )
+TARGET_LINK_LIBRARIES(kio_digikamthumbnail ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KIO_LIBS} ${KEXIV2_LIBRARIES} ${JPEG_LIBRARIES} ${TIFF_LIBRARIES} ${PNG_LIBRARIES} ${JASPER_LIBRARIES} ${KDCRAW_LIBRARIES} ${LCMS_LIBRARIES} ${KEXIV2_LIBRARIES} ${SQLITE_LIBRARIES})
 
 
 # # digiKam Tags kio slave ###########################################################
 
-SET(kio_digikamtags_PART_SRCS digikamtags.cpp ${libdatabase_SRCS} ${libdimg_SRCS} ${libdimgloaders_SRCS} ${libsqlite2_SRCS} ${libdmetadata_SRCS} ${libdimgfilters_SRCS})
+SET(kio_digikamtags_PART_SRCS digikamtags.cpp ${libdatabase_SRCS} ${libdimg_SRCS} ${libdimgloaders_SRCS} ${libsqlite2_SRCS} ${libdmetadata_SRCS} ${libdimgfilters_SRCS} ${libhistogram_SRCS} ${liblevels_SRCS})
 
 KDE4_AUTOMOC(${kio_digikamtags_PART_SRCS})
 
 KDE4_ADD_PLUGIN(kio_digikamtags ${kio_digikamtags_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kio_digikamtags ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS} ${JPEG_LIBRARIES} ${TIFF_LIBRARIES} ${PNG_LIBRARIES} ${JASPER_LIBRARIES} ${KDCRAW_LIBRARIES} ${LCMS_LIBRARIES})
+TARGET_LINK_LIBRARIES(kio_digikamtags ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS} ${JPEG_LIBRARIES} ${TIFF_LIBRARIES} ${PNG_LIBRARIES} ${JASPER_LIBRARIES} ${KDCRAW_LIBRARIES} ${LCMS_LIBRARIES} ${KEXIV2_LIBRARIES} ${SQLITE_LIBRARIES})
 
 
 # # digiKam Albums kio slave #########################################################
