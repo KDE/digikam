@@ -1,4 +1,4 @@
 
-add_subdirectory( canvas )
-add_subdirectory( tools )
-add_subdirectory( editor )
+ADD_SUBDIRECTORY( canvas )
+ADD_SUBDIRECTORY( tools )
+ADD_SUBDIRECTORY( editor )
