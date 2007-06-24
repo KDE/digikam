@@ -296,7 +296,7 @@ void ImageEffect_AntiVignetting::prepareEffect()
     int orgWidth  = iface->originalWidth();
     int orgHeight = iface->originalHeight();
     QSize ps(orgWidth, orgHeight);
-    ps.scale( QSize(120, 120), QSize::ScaleMin );    
+    ps.scale( QSize(120, 120), Qt::ScaleMin );    
 
     // Calc mask preview.    
     Digikam::DImg preview(ps.width(), ps.height(), false);

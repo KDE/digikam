@@ -284,7 +284,7 @@ void ImageEffect_ShearTool::putPreviewData(void)
     int w = iface->previewWidth();
     int h = iface->previewHeight();
         
-    Digikam::DImg imTemp = m_threadedFilter->getTargetImage().smoothScale(w, h, QSize::ScaleMin);
+    Digikam::DImg imTemp = m_threadedFilter->getTargetImage().smoothScale(w, h, Qt::ScaleMin);
     Digikam::DImg imDest( w, h, m_threadedFilter->getTargetImage().sixteenBit(),
                                 m_threadedFilter->getTargetImage().hasAlpha() );
     

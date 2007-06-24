@@ -178,7 +178,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     Digikam::ImageIface iface(0, 0);
     m_originalImage  = iface.getOriginalImg();
-    m_thumbnailImage = m_originalImage->smoothScale(128, 128, QSize::ScaleMin);
+    m_thumbnailImage = m_originalImage->smoothScale(128, 128, Qt::ScaleMin);
     m_curves         = new Digikam::ImageCurves(m_originalImage->sixteenBit());
 
     // -------------------------------------------------------------
