@@ -30,6 +30,7 @@
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <kaction.h>
+#include <kactioncollection.h>
 #include <kcursor.h>
 #include <kmessagebox.h>
 
