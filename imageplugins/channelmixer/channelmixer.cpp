@@ -118,7 +118,9 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new Digikam::ImageWidget("channelmixer Tool Dialog", plainPage(),
+    QWidget *widget = new QWidget(this);
+    setMainWidget(widget);
+    m_previewWidget = new Digikam::ImageWidget("channelmixer Tool Dialog", widget,
                           i18n("<p>You can see here the image's color channels' "
                                "gains adjustments preview. You can pick color on image "
                                "to see the color level corresponding on histogram."));
@@ -126,7 +128,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings = new QWidget(plainPage());
+    QWidget *gboxSettings = new QWidget(widget);
     Q3GridLayout* grid = new Q3GridLayout( gboxSettings, 9, 4, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
@@ -632,7 +634,7 @@ void ChannelMixerDialog::slotUser3()
     int currentOutputChannel;
     bool monochrome;
     
-    loadGainsFileUrl = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    loadGainsFileUrl = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Select Gimp Gains Mixer File to Load")) );
     if( loadGainsFileUrl.isEmpty() )
@@ -717,7 +719,7 @@ void ChannelMixerDialog::slotUser2()
     KUrl saveGainsFileUrl;
     FILE *fp = 0L;
     
-    saveGainsFileUrl = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    saveGainsFileUrl = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                                QString( "*" ), this,
                                                QString( i18n("Gimp Gains Mixer File to Save")) );
     if( saveGainsFileUrl.isEmpty() )

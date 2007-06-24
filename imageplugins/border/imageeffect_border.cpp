@@ -67,7 +67,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     // No need Abort button action.
     showButton(User1, false); 
     
-    QString whatsThis;
+   QString whatsThis;
     
     KAboutData* about = new KAboutData("digikam",
                                        I18N_NOOP("Add Border"), 
@@ -89,7 +89,8 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QWidget *gboxSettings     = new QWidget(plainPage());
+    QWidget *gboxSettings     = new QWidget(this);
+    setMainWidget(gboxSettings);
     Q3GridLayout* gridSettings = new Q3GridLayout(gboxSettings, 10, 2, spacingHint());
                                                   
     QLabel *label1 = new QLabel(i18n("Type:"), gboxSettings);
@@ -117,7 +118,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     m_borderType->insertItem( i18n("Decorative Wall") );
     m_borderType->setWhatsThis( i18n("<p>Select here the border type to add around the image."));
 
-    KSeparator *line1 = new KSeparator(Horizontal, gboxSettings);
+    KSeparator *line1 = new KSeparator(Qt::Horizontal, gboxSettings);
 
     // -------------------------------------------------------------------
     
@@ -146,7 +147,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     else 
        m_borderWidth->setRange(1, w/2, 1, true);
 
-    KSeparator *line2 = new KSeparator(Horizontal, gboxSettings);
+    KSeparator *line2 = new KSeparator(Qt::Horizontal, gboxSettings);
 
     // -------------------------------------------------------------------
 
@@ -208,25 +209,25 @@ void ImageEffect_Border::readUserSettings(void)
     m_preserveAspectRatio->blockSignals(true);
 
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("border Tool Dialog");
+    KConfigGroup group =  config->group("border Tool Dialog");
     
-    m_borderType->setCurrentItem(config->readNumEntry("Border Type", Border::SolidBorder));
-    m_borderPercent->setValue(config->readNumEntry("Border Percent", 10) );
-    m_borderWidth->setValue(config->readNumEntry("Border Width", 100) );
-    m_preserveAspectRatio->setChecked(config->readBoolEntry("Preserve Aspect Ratio", true) );
+    m_borderType->setCurrentItem(group.readEntry("Border Type",(int)Border::SolidBorder));
+    m_borderPercent->setValue(group.readEntry("Border Percent", 10) );
+    m_borderWidth->setValue(group.readEntry("Border Width", 100) );
+    m_preserveAspectRatio->setChecked(group.readEntry("Preserve Aspect Ratio", true) );
     
     QColor black(0, 0, 0);
     QColor white(255, 255, 255);
     QColor gray1(192, 192, 192);
     QColor gray2(128, 128, 128);
     
-    m_solidColor = config->readColorEntry("Solid Color", &black);
-    m_niepceBorderColor = config->readColorEntry("Niepce Border Color", &white);
-    m_niepceLineColor = config->readColorEntry("Niepce Line Color", &black);
-    m_bevelUpperLeftColor = config->readColorEntry("Bevel Upper Left Color", &gray1);
-    m_bevelLowerRightColor = config->readColorEntry("Bevel Lower Right Color", &gray2);
-    m_decorativeFirstColor = config->readColorEntry("Decorative First Color", &black); 
-    m_decorativeSecondColor = config->readColorEntry("Decorative Second Color", &black);
+    m_solidColor = group.readEntry("Solid Color", black);
+    m_niepceBorderColor = group.readEntry("Niepce Border Color", white);
+    m_niepceLineColor = group.readEntry("Niepce Line Color", black);
+    m_bevelUpperLeftColor = group.readEntry("Bevel Upper Left Color", gray1);
+    m_bevelLowerRightColor = group.readEntry("Bevel Lower Right Color", gray2);
+    m_decorativeFirstColor = group.readEntry("Decorative First Color", black); 
+    m_decorativeSecondColor = group.readEntry("Decorative Second Color", black);
     
     m_borderType->blockSignals(false);
     m_borderPercent->blockSignals(false);
@@ -241,22 +242,22 @@ void ImageEffect_Border::readUserSettings(void)
 void ImageEffect_Border::writeUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("border Tool Dialog");
+    KConfigGroup group = config->group("border Tool Dialog");
 
-    config->writeEntry("Border Type", m_borderType->currentItem());
-    config->writeEntry("Border Percent", m_borderPercent->value());
-    config->writeEntry("Border Width", m_borderWidth->value());
-    config->writeEntry("Preserve Aspect Ratio", m_preserveAspectRatio->isChecked());
+    group.writeEntry("Border Type", m_borderType->currentItem());
+    group.writeEntry("Border Percent", m_borderPercent->value());
+    group.writeEntry("Border Width", m_borderWidth->value());
+    group.writeEntry("Preserve Aspect Ratio", m_preserveAspectRatio->isChecked());
     
-    config->writeEntry("Solid Color", m_solidColor);
-    config->writeEntry("Niepce Border Color", m_niepceBorderColor);
-    config->writeEntry("Niepce Line Color", m_niepceLineColor);
-    config->writeEntry("Bevel Upper Left Color", m_bevelUpperLeftColor);
-    config->writeEntry("Bevel Lower Right Color", m_bevelLowerRightColor);
-    config->writeEntry("Decorative First Color", m_decorativeFirstColor);
-    config->writeEntry("Decorative Second Color", m_decorativeSecondColor);
+    group.writeEntry("Solid Color", m_solidColor);
+    group.writeEntry("Niepce Border Color", m_niepceBorderColor);
+    group.writeEntry("Niepce Line Color", m_niepceLineColor);
+    group.writeEntry("Bevel Upper Left Color", m_bevelUpperLeftColor);
+    group.writeEntry("Bevel Lower Right Color", m_bevelLowerRightColor);
+    group.writeEntry("Decorative First Color", m_decorativeFirstColor);
+    group.writeEntry("Decorative Second Color", m_decorativeSecondColor);
     
-    config->sync();
+    group.sync();
 }
 
 void ImageEffect_Border::resetValues()
@@ -550,7 +551,7 @@ void ImageEffect_Border::putPreviewData(void)
     int w = iface->previewWidth();
     int h = iface->previewHeight();
 
-    Digikam::DImg imTemp = m_threadedFilter->getTargetImage().smoothScale(w, h, QSize::ScaleMin);
+    Digikam::DImg imTemp = m_threadedFilter->getTargetImage().smoothScale(w, h, Qt::ScaleMin);
     Digikam::DImg imDest( w, h, m_threadedFilter->getTargetImage().sixteenBit(),
                           m_threadedFilter->getTargetImage().hasAlpha() );
 

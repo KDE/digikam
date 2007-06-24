@@ -10,7 +10,7 @@ kde4_automoc(${digikamimageplugin_blurfx_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_blurfx ${digikamimageplugin_blurfx_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_blurfx  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(digikamimageplugin_blurfx  ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} libdimg )
 
 install(TARGETS digikamimageplugin_blurfx DESTINATION ${PLUGIN_INSTALL_DIR} )
 

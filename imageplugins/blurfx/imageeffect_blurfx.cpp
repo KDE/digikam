@@ -254,7 +254,7 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
           
        case BlurFX::FarBlur:
           m_distanceInput->setRange(0, 20, 1, true);
-          m_distanceInput->setMaxValue(20);
+          m_distanceInput->setMaximum(20);
           m_distanceInput->setValue(10);
           break;
        
