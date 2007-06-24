@@ -27,13 +27,11 @@
 
 // QT includes.
 
-#include <qvaluelist.h>
+#include <qstringlist.h>
 
 // Local includes.
 
 #include "digikam_export.h"
-
-class QStringList;
 
 namespace Digikam
 {

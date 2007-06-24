@@ -27,10 +27,6 @@
 #include <typeinfo>
 #include <climits>
 
-// Qt includes.
-
-#include <qstringlist.h>
-
 // Local includes.
 
 #include "ddebug.h"
