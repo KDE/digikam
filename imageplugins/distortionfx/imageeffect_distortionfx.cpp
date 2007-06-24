@@ -47,7 +47,6 @@
 #include <kapplication.h>
 #include <knuminput.h>
 #include <kstandarddirs.h>
-#include <kprogress.h>
 #include <kglobal.h>
 
 // Local includes.
@@ -97,7 +96,8 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
                                            
     // -------------------------------------------------------------
     
-    QWidget *gboxSettings = new QWidget(plainPage());
+    QWidget *gboxSettings = new QWidget(this);
+    setMainWidget(gboxSettings);
     Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 5, 2, spacingHint());
     
     m_effectTypeLabel = new QLabel(i18n("Type:"), gboxSettings);

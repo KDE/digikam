@@ -450,7 +450,7 @@ void ImageEffect_ColorFX::solarize(int factor, uchar *data, int w, int h, bool s
     if (!sb)        // 8 bits image.
     {
         uint threshold = (uint)((100-factor)*(255+1)/100);
-        threshold      = qMax(1, threshold);
+        threshold      = qMax((uint)1, threshold);
         uchar *ptr = data;
         uchar  a, r, g, b;
 
@@ -488,7 +488,7 @@ void ImageEffect_ColorFX::solarize(int factor, uchar *data, int w, int h, bool s
     else                            // 16 bits image.
     {
         uint threshold = (uint)((100-factor)*(65535+1)/100);
-        threshold      = qMax(1, threshold);
+        threshold      = qMax((uint)1, threshold);
         unsigned short *ptr = (unsigned short *)data;
         unsigned short  a, r, g, b;
 
