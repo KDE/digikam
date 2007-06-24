@@ -41,7 +41,7 @@
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_charcoal,
                            KGenericFactory<ImagePlugin_Charcoal>("digikamimageplugin_charcoal"));
 
-ImagePlugin_Charcoal::ImagePlugin_Charcoal(QObject *parent, const char*,
+ImagePlugin_Charcoal::ImagePlugin_Charcoal(QObject *parent,
                                            const QStringList &)
                     : Digikam::ImagePlugin(parent, "ImagePlugin_Charcoal")
 {

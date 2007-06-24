@@ -41,13 +41,14 @@
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_emboss,
                            KGenericFactory<ImagePlugin_Emboss>("digikamimageplugin_emboss"));
 
-ImagePlugin_Emboss::ImagePlugin_Emboss(QObject *parent, const char*,
+ImagePlugin_Emboss::ImagePlugin_Emboss(QObject *parent,
                                        const QStringList &)
                   : Digikam::ImagePlugin(parent, "ImagePlugin_Emboss")
 {
     m_embossAction = new KAction(i18n("Emboss..."), "embosstool", 0, 
                          this, SLOT(slotEmboss()),
                          actionCollection(), "imageplugin_emboss");
+
                 
     setXMLFile( "digikamimageplugin_emboss_ui.rc" );                
     

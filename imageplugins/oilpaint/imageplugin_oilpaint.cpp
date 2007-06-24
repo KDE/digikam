@@ -40,7 +40,7 @@
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_oilpaint,
                            KGenericFactory<ImagePlugin_OilPaint>("digikamimageplugin_oilpaint"));
 
-ImagePlugin_OilPaint::ImagePlugin_OilPaint(QObject *parent, const char*,
+ImagePlugin_OilPaint::ImagePlugin_OilPaint(QObject *parent,
                                            const QStringList &)
                     : Digikam::ImagePlugin(parent, "ImagePlugin_OilPaint")
 {

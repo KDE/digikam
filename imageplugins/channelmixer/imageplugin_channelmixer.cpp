@@ -40,7 +40,7 @@
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_channelmixer,
                            KGenericFactory<ImagePlugin_ChannelMixer>("digikamimageplugin_channelmixer"))
 
-ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent, const char*,
+ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent,
                                                    const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_ChannelMixer")
 {

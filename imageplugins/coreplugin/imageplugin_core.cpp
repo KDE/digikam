@@ -56,7 +56,7 @@
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_core,
                             KGenericFactory<ImagePlugin_Core>("digikam"));
 
-ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
+ImagePlugin_Core::ImagePlugin_Core(QObject *parent,
                                    const QStringList &)
                 : Digikam::ImagePlugin(parent, "ImagePlugin_Core")
 {
