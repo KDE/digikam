@@ -632,6 +632,8 @@ void Canvas::drawRubber()
     if (!d->rubber || !d->im->imageValid())
         return;
 
+/* TODO: KDE4PORT : How to do it with Qt4 ???
+
     QPainter p(viewport());
     p.setRasterOp(Qt::NotROP );
     p.setPen(QPen(Qt::color0, 1));
@@ -647,6 +649,7 @@ void Canvas::drawRubber()
                           QColorGroup(palette()), QStyle::State_None,
                           QStyleOption(palette().color(QPalette::Base)));
     p.end();
+*/
 }
 
 void Canvas::contentsMousePressEvent(QMouseEvent *e)
