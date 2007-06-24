@@ -3,6 +3,8 @@
 #include <Q3PtrList>
 #include <Q3Frame>
 #include <Q3VBoxLayout>
+#include <KToggleAction>
+#include <KActionMenu>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -74,7 +76,7 @@ extern "C"
 #include <kglobalsettings.h>
 #include <ktoolbar.h>
 #include <kstatusbar.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 
 // LibKDcraw includes.
 
@@ -202,22 +204,22 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
         d->BCGAction = new KActionMenu(i18n("Brightness/Contrast/Gamma"), 0, 0, "showfoto_bcg");
         d->BCGAction->setDelayed(false);
     
-        KAction *incGammaAction = new KAction(i18n("Increase Gamma"), 0, ALT+Qt::Key_G,
+        KAction *incGammaAction = new KAction(i18n("Increase Gamma"), 0, Qt::ALT+Qt::Key_G,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "gamma_plus");
-        KAction *decGammaAction = new KAction(i18n("Decrease Gamma"), 0, ALT+SHIFT+Qt::Key_G,
+        KAction *decGammaAction = new KAction(i18n("Decrease Gamma"), 0, Qt::ALT+Qt::SHIFT+Qt::Key_G,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "gamma_minus");
-        KAction *incBrightAction = new KAction(i18n("Increase Brightness"), 0, ALT+Qt::Key_B,
+        KAction *incBrightAction = new KAction(i18n("Increase Brightness"), 0, Qt::ALT+Qt::Key_B,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "brightness_plus");
-        KAction *decBrightAction = new KAction(i18n("Decrease Brightness"), 0, ALT+SHIFT+Qt::Key_B,
+        KAction *decBrightAction = new KAction(i18n("Decrease Brightness"), 0, Qt::ALT+Qt::SHIFT+Qt::Key_B,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "brightness_minus");
-        KAction *incContrastAction = new KAction(i18n("Increase Contrast"), 0, ALT+Qt::Key_C,
+        KAction *incContrastAction = new KAction(i18n("Increase Contrast"), 0, Qt::ALT+Qt::Key_C,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "contrast_plus");
-        KAction *decContrastAction = new KAction(i18n("Decrease Contrast"), 0, ALT+SHIFT+Qt::Key_C,
+        KAction *decContrastAction = new KAction(i18n("Decrease Contrast"), 0, Qt::ALT+Qt::SHIFT+Qt::Key_C,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "contrast_minus");
     
@@ -457,7 +459,7 @@ void ShowFoto::setupActions()
 
     d->openFilesInFolderAction = new KAction(i18n("Open folder"),
                                              "folder_image",
-                                             CTRL+SHIFT+Qt::Key_O,
+                                             Qt::CTRL+Qt::SHIFT+Qt::Key_O,
                                              this,
                                              SLOT(slotOpenFilesInFolder()),
                                              actionCollection(),
@@ -468,7 +470,7 @@ void ShowFoto::setupActions()
     // Extra 'View' menu actions ---------------------------------------------
 
     d->showBarAction = new KToggleAction(i18n("Show Thumbnails"), 0, 
-                                         CTRL+Qt::Key_T,
+                                         Qt::CTRL+Qt::Key_T,
                                          this, SLOT(slotToggleShowBar()),
                                          actionCollection(), "shofoto_showthumbs");
 
@@ -484,17 +486,17 @@ void ShowFoto::readSettings()
     readStandardSettings();
     
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
+    KConfigGroup group = config->group("ImageViewer Settings");
     
-    d->showBarAction->setChecked(config->readBoolEntry("Show Thumbnails", true));
+    d->showBarAction->setChecked(group.readEntry("Show Thumbnails", true));
     slotToggleShowBar();
 
-    d->lastOpenedDirectory.setPath( config->readEntry("Last Opened Directory",
+    d->lastOpenedDirectory.setPath( group.readEntry("Last Opened Directory",
                                     KGlobalSettings::documentPath()) );
 
     QSizePolicy szPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
-    if(config->hasKey("Vertical Splitter Sizes") && d->vSplitter)
-        d->vSplitter->setSizes(config->readIntListEntry("Vertical Splitter Sizes"));
+    if(group.hasKey("Vertical Splitter Sizes") && d->vSplitter)
+        d->vSplitter->setSizes(group·readEntry("Vertical Splitter Sizes",QList<int>()));
     else 
         m_canvas->setSizePolicy(szPolicy);    
 }
@@ -504,15 +506,15 @@ void ShowFoto::saveSettings()
     saveStandardSettings();
     
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
+    KConfigGroup group = config->group("ImageViewer Settings");
     
-    config->writeEntry("Last Opened Directory", d->lastOpenedDirectory.path() );
-    config->writeEntry("Show Thumbnails", d->showBarAction->isChecked());
+    group.writeEntry("Last Opened Directory", d->lastOpenedDirectory.path() );
+    group.writeEntry("Show Thumbnails", d->showBarAction->isChecked());
 
     if (d->vSplitter)
-        config->writeEntry("Vertical Splitter Sizes", d->vSplitter->sizes());
+        group.writeEntry("Vertical Splitter Sizes", d->vSplitter->sizes());
 
-    config->sync();    
+    group.sync();    
 }
 
 void ShowFoto::applySettings()
@@ -520,13 +522,13 @@ void ShowFoto::applySettings()
     applyStandardSettings();
 
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
+    KConfigGroup group = config->group("ImageViewer Settings");
 
-    m_bgColor = config->readColorEntry("BackgroundColor", &Qt::black);
+    m_bgColor = group.readEntry("BackgroundColor", &Qt::black);
     m_canvas->setBackgroundColor(m_bgColor);
 
     // Current image deleted go to trash ?
-    d->deleteItem2Trash = config->readBoolEntry("DeleteItem2Trash", true);
+    d->deleteItem2Trash = group.readEntry("DeleteItem2Trash", true);
     if (d->deleteItem2Trash)
     {
         m_fileDeleteAction->setIcon("edittrash");
@@ -538,28 +540,28 @@ void ShowFoto::applySettings()
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
 
-    bool exifRotate = config->readBoolEntry("EXIF Rotate", true);
+    bool exifRotate = group.readEntry("EXIF Rotate", true);
     m_canvas->setExifOrient(exifRotate);
     d->thumbBar->setExifRotate(exifRotate);
 
-    m_setExifOrientationTag   = config->readBoolEntry("EXIF Set Orientation", true);
+    m_setExifOrientationTag   = group.readEntry("EXIF Set Orientation", true);
     
-    d->fullScreenHideThumbBar = config->readBoolEntry("FullScreenHideThumbBar", true);
+    d->fullScreenHideThumbBar = group.readEntry("FullScreenHideThumbBar", true);
 
     Digikam::ThumbBarToolTipSettings settings;
-    settings.showToolTips   = config->readBoolEntry("Show ToolTips", true);
-    settings.showFileName   = config->readBoolEntry("ToolTips Show File Name", true);
-    settings.showFileDate   = config->readBoolEntry("ToolTips Show File Date", false);
-    settings.showFileSize   = config->readBoolEntry("ToolTips Show File Size", false);
-    settings.showImageType  = config->readBoolEntry("ToolTips Show Image Type", false);
-    settings.showImageDim   = config->readBoolEntry("ToolTips Show Image Dim", true);
-    settings.showPhotoMake  = config->readBoolEntry("ToolTips Show Photo Make", true);
-    settings.showPhotoDate  = config->readBoolEntry("ToolTips Show Photo Date", true);
-    settings.showPhotoFocal = config->readBoolEntry("ToolTips Show Photo Focal", true);
-    settings.showPhotoExpo  = config->readBoolEntry("ToolTips Show Photo Expo", true);
-    settings.showPhotoMode  = config->readBoolEntry("ToolTips Show Photo Mode", true);
-    settings.showPhotoFlash = config->readBoolEntry("ToolTips Show Photo Flash", false);
-    settings.showPhotoWB    = config->readBoolEntry("ToolTips Show Photo WB", false);
+    settings.showToolTips   = group.readEntry("Show ToolTips", true);
+    settings.showFileName   = group.readEntry("ToolTips Show File Name", true);
+    settings.showFileDate   = group.readEntry("ToolTips Show File Date", false);
+    settings.showFileSize   = group.readEntry("ToolTips Show File Size", false);
+    settings.showImageType  = group.readEntry("ToolTips Show Image Type", false);
+    settings.showImageDim   = group.readEntry("ToolTips Show Image Dim", true);
+    settings.showPhotoMake  = group.readEntry("ToolTips Show Photo Make", true);
+    settings.showPhotoDate  = group.readEntry("ToolTips Show Photo Date", true);
+    settings.showPhotoFocal = group.readEntry("ToolTips Show Photo Focal", true);
+    settings.showPhotoExpo  = group.readEntry("ToolTips Show Photo Expo", true);
+    settings.showPhotoMode  = group.readEntry("ToolTips Show Photo Mode", true);
+    settings.showPhotoFlash = group.readEntry("ToolTips Show Photo Flash", false);
+    settings.showPhotoWB    = group.readEntry("ToolTips Show Photo WB", false);
     d->thumbBar->setToolTipSettings(settings);
 }
 
@@ -588,7 +590,7 @@ void ShowFoto::slotOpenFile()
     // or unavailable(dcraw_0)(see file #121242 in B.K.O).
     if (KDcrawIface::DcrawBinary::componentData().versionIsRight())
     {
-        patternList.append(i18n("\n%1|Camera RAW files").arg(QString(raw_file_extentions)));
+        patternList.append(i18n("\n%1|Camera RAW files",QString(raw_file_extentions)));
     }
     
     fileformats = patternList.join("\n");
@@ -702,8 +704,7 @@ void ShowFoto::slotChanged()
     QString mpixels;
     QSize dims(m_canvas->imageWidth(), m_canvas->imageHeight());
     mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
-    QString str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)")
-                  .arg(dims.width()).arg(dims.height()).arg(mpixels);
+    QString str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",dims.width(),dims.height(),mpixels);
     m_resLabel->setText(str);
 
     if (d->currentItem)
@@ -783,7 +784,7 @@ void ShowFoto::slotUpdateItemInfo(void)
             index++;
         }
 
-        text = d->currentItem->url().filename() +
+        text = d->currentItem->url().fileName() +
                    i18n(" (%2 of %3)")
                    .arg(QString::number(index))
                    .arg(QString::number(d->itemsNb));
@@ -1068,8 +1069,8 @@ void ShowFoto::slotDeleteCurrentItem()
 
     if (!d->deleteItem2Trash)
     {
-        QString warnMsg(i18n("About to delete file \"%1\"\nAre you sure?")
-                        .arg(urlCurrent.filename()));
+        QString warnMsg(i18n("About to delete file \"%1\"\nAre you sure?"
+                        ,urlCurrent.fileName()));
         if (KMessageBox::warningContinueCancel(this,
                                                warnMsg,
                                                i18n("Warning"),
@@ -1149,9 +1150,9 @@ void ShowFoto::slotContextMenu()
 void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& settings)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
+    KConfigGroup group = config->group("ImageViewer Settings");
 
-    settings.exifRotate = config->readBoolEntry("EXIF Rotate", true);
+    settings.exifRotate = group.readEntry("EXIF Rotate", true);
     settings.fileList   = d->thumbBar->itemsURLs();
 
     int       i   = 0;
