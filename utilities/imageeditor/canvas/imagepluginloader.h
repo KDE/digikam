@@ -27,11 +27,11 @@
 
 // Qt includes.
 
-#include <qobject.h>
-#include <q3ptrlist.h>
-#include <qstring.h>
-#include <q3valuelist.h>
-#include <qpair.h>
+#include <Q3PtrList>
+#include <Q3ValueList>
+#include <QObject>
+#include <QString>
+#include <QPair>
 
 // Local includes.
 

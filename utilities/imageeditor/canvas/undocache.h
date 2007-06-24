@@ -27,7 +27,7 @@
 
 // QT includes.
 
-#include <qglobal.h>
+#include <QGlobal>
 
 // Local includes.
 

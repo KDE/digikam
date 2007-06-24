@@ -27,9 +27,8 @@
 
 // Qt includes.
 
-#include <qobject.h>
-#include <qstring.h>
-//Added by qt3to4:
+#include <QObject>
+#include <QString>
 #include <QPixmap>
 
 // Locale includes.
