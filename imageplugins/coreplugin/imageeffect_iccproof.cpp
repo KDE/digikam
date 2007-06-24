@@ -28,7 +28,7 @@
 #include <qcolor.h>
 #include <q3groupbox.h>
 
-#include <qhbuttongroup.h>
+#include <Q3HButtonGroup>
 #include <qvbuttongroup.h>
 #include <qlabel.h>
 #include <qlayout.h>

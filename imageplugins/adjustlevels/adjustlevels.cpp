@@ -42,7 +42,7 @@
 #include <qlayout.h>
 #include <q3frame.h>
 #include <qtimer.h>
-#include <qhbuttongroup.h> 
+#include <Q3HButtonGroup> 
 #include <qpixmap.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>

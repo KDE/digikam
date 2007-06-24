@@ -29,7 +29,7 @@
 #include <q3groupbox.h>
 #include <q3hgroupbox.h>
 #include <q3vgroupbox.h>
-#include <qhbuttongroup.h> 
+#include <Q3HButtonGroup> 
 #include <qlabel.h>
 #include <qlayout.h>
 #include <q3frame.h>

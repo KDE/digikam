@@ -27,7 +27,7 @@
 
 #include <q3vgroupbox.h>
 #include <q3hgroupbox.h>
-#include <qhbuttongroup.h> 
+#include <Q3HButtonGroup> 
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>

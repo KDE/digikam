@@ -38,7 +38,7 @@
 #include <qpen.h>
 #include <qfont.h>
 #include <qtimer.h> 
-#include <qhbuttongroup.h> 
+#include <Q3HButtonGroup> 
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <Q3GridLayout>

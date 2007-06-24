@@ -34,7 +34,7 @@
 #include <q3frame.h>
 #include <qdir.h>
 #include <qfile.h>
-#include <qhbuttongroup.h> 
+#include <Q3HButtonGroup> 
 //Added by qt3to4:
 #include <Q3GridLayout>
 
