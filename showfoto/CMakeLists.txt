@@ -20,7 +20,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/showfoto/setup
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/splashscreen 
                    )
 
-SET(showfoto_SRCS main.cpp showfoto.cpp)
+SET(showfoto_SRCS main.cpp showfoto.cpp ${libslideshow_SRCS} ${libsplashscreen_SRCS} ${libthumbbar_SRCS} ${libjpegutils_SRCS} ${libcommonwidgets_SRCS} ${libthreadimageio_SRCS} ${libimagepluginswidgets_SRCS} )
 
 KDE4_AUTOMOC(${showfoto_SRCS})
 
@@ -30,15 +30,8 @@ TARGET_LINK_LIBRARIES(showfoto libshowfotosetup
                                libsetupshowfoto
                                libdialogshowfoto 
                                libimagepropertiesshowfoto 
-                               libthumbbar 
-                               libsplashscreen 
-                               libslideshow 
-                               libthreadimageio 
-                               libjpegutils 
-                               libcommonwidgets
                                libiccprofileswidgets
                                libmetadatawidgets
-                               libimagepluginswidgets                               
 			       ${KDE4_KUTILS_LIBS} 
                                ${KDE4_KPARTS_LIBS} 
                      )

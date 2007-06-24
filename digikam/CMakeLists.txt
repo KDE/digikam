@@ -82,7 +82,8 @@ SET(libdigikam_LIB_SRCS kdateedit.cpp
                         welcomepageview.cpp 
                         main.cpp
 		       ${libsplashscreen_SRCS}	
-   )
+   			${libslideshow_SRCS}
+		       )
 
 KDE4_AUTOMOC(${libdigikam_LIB_SRCS})
 
@@ -104,7 +105,6 @@ TARGET_LINK_LIBRARIES(digikam libthumbbar
                               libgreycstoration 
                               libdatabase 
                               libbatch 
-                              libslideshow 
                               libcameragui 
                               libdimgcanvas 
                               libdimgeditor 

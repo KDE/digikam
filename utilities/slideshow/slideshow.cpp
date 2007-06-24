@@ -404,7 +404,7 @@ void SlideShow::updatePixmap()
             {
                 if (photoInfo.dateTime.isValid())
                 {
-                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
+                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
                     printInfoText(p, offset, str);
                 }
             }
@@ -427,15 +427,15 @@ void SlideShow::updatePixmap()
             p.setPen(Qt::white);
             p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
                        Qt::AlignCenter|Qt::TextWordWrap, 
-                       i18n("Cannot display picture\n\"%1\"")
-                       .arg(d->currentImage.fileName()));
+                       i18n("Cannot display picture\n\"%1\"",
+                       d->currentImage.fileName()));
         }
     }
     else
     {
         // End of Slide Show.
 
-        QPixmap logo = kapp->iconLoader()->loadIcon("digikam", K3Icon::NoGroup, 128,
+        QPixmap logo = KIconLoader::global()->loadIcon("digikam", K3Icon::NoGroup, 128,
                                                     K3Icon::DefaultState, 0, true);
 
         QFont fn(font());
@@ -531,9 +531,12 @@ void SlideShow::printComments(QPainter &p, int &offset, const QString& comments)
 
 void SlideShow::paintEvent(QPaintEvent *)
 {
+#warning "kde4 port it"	
+#if 0	
     bitBlt(this, 0, 0, &d->pixmap,
            0, 0, d->pixmap.width(),
            d->pixmap.height(), Qt::CopyROP, true);
+#endif
 }
 
 void SlideShow::slotPause()
