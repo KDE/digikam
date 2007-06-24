@@ -25,10 +25,6 @@
 #ifndef UNDOMANAGER_H
 #define UNDOMANAGER_H
 
-// QT includes.
-
-#include <Q3ValueList>
-
 // Local includes.
 
 #include "digikam_export.h"

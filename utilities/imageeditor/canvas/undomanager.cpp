@@ -25,12 +25,12 @@
 // C++ includes.
 
 #include <typeinfo>
+#include <climits>
 
 // Qt includes.
 
-#include <qstringlist.h>
-//Added by qt3to4:
 #include <Q3ValueList>
+#include <QStringList>
 
 // Local includes.
 
@@ -57,11 +57,11 @@ public:
 
     Q3ValueList<UndoAction*>  undoActions;
     Q3ValueList<UndoAction*>  redoActions;
-    int                      origin;
+    int                       origin;
     
-    UndoCache               *undoCache;
+    UndoCache                *undoCache;
     
-    DImgInterface           *dimgiface;
+    DImgInterface            *dimgiface;
 };
 
 UndoManager::UndoManager(DImgInterface* iface)
