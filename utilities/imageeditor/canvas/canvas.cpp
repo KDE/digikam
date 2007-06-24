@@ -29,27 +29,25 @@
 
 // Qt includes.
  
-#include <qtooltip.h>
-#include <qfile.h>
-#include <qstring.h>
-#include <qevent.h>
-#include <qpoint.h>
-#include <qpainter.h>
-#include <qpen.h>
-#include <qpixmap.h>
-#include <qstyle.h>
-#include <qapplication.h>
-#include <qcursor.h>
-#include <qimage.h>
-#include <qregion.h>
-#include <qtimer.h>
-#include <q3cache.h>
-#include <qcolor.h>
-#include <q3dragobject.h> 
-#include <qclipboard.h>
-#include <qtoolbutton.h>
-//Added by qt3to4:
-#include <Q3Frame>
+#include <Q3DragObject> 
+#include <Q3Cache>
+#include <QFile>
+#include <QString>
+#include <QEvent>
+#include <QPoint>
+#include <QPainter>
+#include <QPen>
+#include <QPixmap>
+#include <QStyle>
+#include <QApplication>
+#include <QCursor>
+#include <QImage>
+#include <QRegion>
+#include <QTimer>
+#include <QColor>
+#include <QClipboard>
+#include <QToolButton>
+#include <QFrame>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
@@ -160,7 +158,7 @@ Canvas::Canvas(QWidget *parent)
     d->parent = parent;
     d->bgColor.setRgb(0, 0, 0);
     
-    d->qcheck.resize(16, 16);
+    d->qcheck = QPixmap(16, 16);
     QPainter p(&d->qcheck);
     p.fillRect(0, 0, 8, 8, QColor(144, 144, 144));
     p.fillRect(8, 8, 8, 8, QColor(144, 144, 144));
@@ -169,14 +167,16 @@ Canvas::Canvas(QWidget *parent)
     p.end();
 
     d->cornerButton = new QToolButton(this);
-    d->cornerButton->setIconSet(SmallIcon("move"));
+    d->cornerButton->setIcon(SmallIcon("move"));
     d->cornerButton->hide();
     d->cornerButton->setToolTip( i18n("Pan the image to a region"));
     setCornerWidget(d->cornerButton);
 
-    viewport()->setBackgroundMode(Qt::NoBackground);
+    QPalette palette;
+    palette.setColor(viewport()->backgroundRole(), Qt::NoBackground);
+    viewport()->setPalette(palette);
     viewport()->setMouseTracking(false);
-    setFrameStyle( Q3Frame::NoFrame );
+    setFrameStyle( QFrame::NoFrame );
 
     // ------------------------------------------------------------
 
@@ -454,7 +454,7 @@ void Canvas::updateContentsSize(bool deleteRubber)
         d->rubber->setY(ySel);
         d->rubber->setWidth(wSel);
         d->rubber->setHeight(hSel);
-        d->rubber->moveBy(d->pixmapRect.x(), d->pixmapRect.y());
+        d->rubber->translate(d->pixmapRect.x(), d->pixmapRect.y());
     }
     
     d->tileCache.clear();    
@@ -500,6 +500,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
 
     QRegion clipRegion(er);
     cr = d->pixmapRect.intersect(cr);
+    QPainter painter(viewport());
 
     if (!cr.isEmpty() && d->im->imageValid())
     {
@@ -570,7 +571,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
 
                     if (d->rubber && d->pressedMoved && !d->pressedMoving)
                     {
-                        QRect rr(d->rubber->normalize());
+                        QRect rr(d->rubber->normalized());
                         QRect  r(i, j, d->tileSize, d->tileSize);
 
                         d->im->paintOnDevice(pix, sx, sy, sw, sh,
@@ -580,7 +581,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                                              rr.width(), rr.height(),
                                              antialias);
 
-                        rr.moveBy(-i -d->pixmapRect.x(), -j -d->pixmapRect.y());
+                        rr.translate(-i -d->pixmapRect.x(), -j -d->pixmapRect.y());
  
                         QPainter p(pix);
                         p.setPen(QPen(QColor(250, 250, 255), 1));
@@ -607,10 +608,10 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                 QPoint pt(contentsToViewport(QPoint(ir.x() + d->pixmapRect.x(),
                                                     ir.y() + d->pixmapRect.y())));
 
-                bitBlt(viewport(), pt.x(), pt.y(),
-                       pix,
-                       ir.x()-r.x(), ir.y()-r.y(),
-                       ir.width(), ir.height());
+                painter.drawPixmap(pt.x(), pt.y(),
+                                   *pix,
+                                   ir.x()-r.x(), ir.y()-r.y(),
+                                   ir.width(), ir.height());
             }
         }
 
@@ -621,7 +622,6 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
         }
     }
 
-    QPainter painter(viewport());
     painter.setClipRegion(clipRegion);
     painter.fillRect(er, d->bgColor);
     painter.end();
@@ -637,15 +637,15 @@ void Canvas::drawRubber()
     p.setPen(QPen(color0, 1));
     p.setBrush(Qt::NoBrush);
 
-    QRect r(d->rubber->normalize());
+    QRect r(d->rubber->normalized());
     r = QRect(contentsToViewport(QPoint(r.x(), r.y())), r.size());
 
     QPoint pnt(r.x(), r.y());
 
     style().drawPrimitive(QStyle::PE_FocusRect, &p,
                           QRect(pnt.x(), pnt.y(), r.width(), r.height()),
-                          colorGroup(), QStyle::State_None,
-                          QStyleOption(colorGroup().base()));
+                          QColorGroup(palette()), QStyle::State_None,
+                          QStyleOption(palette().color(QPalette::Base)));
     p.end();
 }
 
@@ -667,7 +667,7 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
 
             // Set diagonally opposite corner as anchor
         
-            QRect r(d->rubber->normalize());
+            QRect r(d->rubber->normalized());
 
             if (d->ltActive)
             {
@@ -695,7 +695,7 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
             d->pressedMoving = true;
 
             d->tileCache.clear();
-            viewport()->repaint(false);
+            viewport()->repaint();
 
             return;
         }
@@ -738,7 +738,7 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
     if (!e)
         return;
 
-    if (e->state() & Qt::MidButton)
+    if (e->buttons() & Qt::MidButton)
     {
         if (d->midButtonPressed)
         {
@@ -751,7 +751,7 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
         if (!d->rubber)
             return;
         
-        if (e->state() != Qt::LeftButton &&
+        if (e->buttons() != Qt::LeftButton &&
             !(d->ltActive || d->rtActive ||
               d->lbActive || d->rbActive))
             return;
@@ -788,7 +788,7 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
         if (!d->rubber)
             return;
         
-        QRect r(d->rubber->normalize());
+        QRect r(d->rubber->normalized());
         
         QRect lt(r.x()-5,           r.y()-5,            10, 10);
         QRect rt(r.x()+r.width()-5, r.y()-5,            10, 10);
@@ -841,7 +841,7 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
     if (d->pressedMoved && d->rubber)
     {
         // Normalize rubber rectangle to always have the selection into the image 
-        QRect rec = d->rubber->normalize();        
+        QRect rec = d->rubber->normalized();        
 
         if (rec.left()   < d->pixmapRect.left())   rec.setLeft(d->pixmapRect.left()); 
         if (rec.right()  > d->pixmapRect.right())  rec.setRight(d->pixmapRect.right()); 
@@ -885,7 +885,7 @@ void Canvas::contentsWheelEvent(QWheelEvent *e)
 {
     e->accept();
 
-    if (e->state() & Qt::ShiftModifier)
+    if (e->modifiers() & Qt::ShiftModifier)
     {
         if (e->delta() < 0)
             emit signalShowNextImage();
@@ -893,7 +893,7 @@ void Canvas::contentsWheelEvent(QWheelEvent *e)
             emit signalShowPrevImage();
         return;
     }
-    else if (e->state() & Qt::ControlModifier)
+    else if (e->modifiers() & Qt::ControlModifier)
     {
         if (e->delta() < 0)
             slotDecreaseZoom();
@@ -1181,8 +1181,10 @@ void Canvas::slotCopy()
     DImg selDImg = DImg(w, h, d->im->sixteenBit(), d->im->hasAlpha(), data);
     delete [] data;
 
-    QImage selImg = selDImg.copyQImage();
-    QApplication::clipboard()->setData(new Q3ImageDrag(selImg), QClipboard::Clipboard);
+    QImage selImg       = selDImg.copyQImage();
+    QMimeData *mimeData = new QMimeData();
+    mimeData->setImageData(selImg);
+    QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
     QApplication::restoreOverrideCursor ();
 }
 
@@ -1205,11 +1207,11 @@ void Canvas::slotSelected()
 QRect Canvas::calcSeletedArea()
 {
     int x=0, y=0, w=0, h=0;
-    QRect r(d->rubber->normalize());
+    QRect r(d->rubber->normalized());
     
     if (r.isValid()) 
     {
-        r.moveBy(- d->pixmapRect.x(), - d->pixmapRect.y());
+        r.translate(- d->pixmapRect.x(), - d->pixmapRect.y());
 
         x = (int)(((double)r.x()      / d->tileSize) * floor(d->tileSize / d->zoom));
         y = (int)(((double)r.y()      / d->tileSize) * floor(d->tileSize / d->zoom));
