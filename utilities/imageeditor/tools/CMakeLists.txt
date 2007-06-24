@@ -6,9 +6,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor   
                    )
 
-SET(libdimgeditortools_STAT_SRCS imageresize.cpp 
-                                 imageprint.cpp
-   )
+SET(libdimgeditortools_STAT_SRCS imageprint.cpp imageresize.cpp)
 
 KDE4_AUTOMOC(${libdimgeditortools_STAT_SRCS})
 

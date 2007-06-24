@@ -27,8 +27,8 @@
 
 // Qt lib includes
 
-#include <qwidget.h>
-#include <qstring.h>
+#include <QWidget>
+#include <QString>
 
 // KDE lib includes
 

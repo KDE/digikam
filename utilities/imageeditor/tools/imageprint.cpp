@@ -30,31 +30,26 @@
 
 // Qt lib includes
 
-#include <qobject.h>
-#include <qpixmap.h>
-#include <qlayout.h>
-#include <q3groupbox.h>
-#include <q3buttongroup.h>
-#include <qstring.h>
-#include <qsize.h>
-#include <qcursor.h>
-#include <qlabel.h>
-
-#include <qcheckbox.h>
-#include <qfont.h>
-#include <q3grid.h>
-#include <qimage.h>
-#include <q3paintdevicemetrics.h>
-#include <qpainter.h>
-#include <qradiobutton.h>
-#include <qvbuttongroup.h>
-#include <qcolor.h>
-#include <qcombobox.h>
-#include <qstyle.h>
-#include <qpushbutton.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <Q3PaintDeviceMetrics>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QObject>
+#include <QPixmap>
+#include <QGroupBox>
+#include <QButtonGroup>
+#include <QString>
+#include <QSize>
+#include <QCursor>
+#include <QLabel>
+#include <QCheckBox>
+#include <QFont>
+#include <QImage>
+#include <QPainter>
+#include <QRadioButton>
+#include <QColor>
+#include <QComboBox>
+#include <QStyle>
+#include <QPushButton>
 
 // KDE lib includes
 
@@ -145,9 +140,8 @@ bool ImagePrint::printImageWithQt()
     // Black & white print ?
     if ( m_printer.option( "app-imageeditor-blackwhite" ) != f)
     {
-        image2Print = image2Print.convertDepth( 1, Qt::MonoOnly |
-                                                Qt::ThresholdDither |
-                                                Qt::AvoidDither );
+        image2Print = image2Print.convertToFormat(QImage::Format_Mono,
+                                                  Qt::MonoOnly | Qt::ThresholdDither | Qt::AvoidDither );
     }
 
     QPainter p;
@@ -209,7 +203,7 @@ bool ImagePrint::printImageWithQt()
     
         if (size.width() > w || size.height() > h) 
         {
-            int resp = KMessageBox::warningYesNoCancel(KApplication::kApplication()->mainWidget(),
+            int resp = KMessageBox::warningYesNoCancel(kapp->activeWindow(),
                 i18n("The image will not fit on the page, what do you want to do?"),
                 QString(),KStandardGuiItem::cont(),
                 i18n("Shrink") );
