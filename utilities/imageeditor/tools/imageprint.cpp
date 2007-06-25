@@ -30,7 +30,6 @@
 
 // Qt lib includes
 
-#include <Q3PaintDeviceMetrics>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QObject>
@@ -63,7 +62,6 @@
 #include <kglobalsettings.h>
 #include <knuminput.h>
 #include <kprinter.h>
-#include <ktempfile.h>
 #include <kpropertiesdialog.h>
 #include <kglobal.h>
 #include <kvbox.h>
@@ -147,14 +145,13 @@ bool ImagePrint::printImageWithQt()
     QPainter p;
     p.begin( &m_printer );
 
-    Q3PaintDeviceMetrics metrics( &m_printer );
     p.setFont( KGlobalSettings::generalFont() );
     QFontMetrics fm = p.fontMetrics();
 
     int w, h; // will be set to the width and height of the printer
               // when the orientation is decided.
-    w = metrics.width();
-    h = metrics.height();
+    w = m_printer.width();
+    h = m_printer.height();
     int filenameOffset = 0;
 
     QSize size = image2Print.size();
@@ -206,7 +203,7 @@ bool ImagePrint::printImageWithQt()
             int resp = KMessageBox::warningYesNoCancel(kapp->activeWindow(),
                 i18n("The image will not fit on the page, what do you want to do?"),
                 QString(),KStandardGuiItem::cont(),
-                i18n("Shrink") );
+                KGuiItem(i18n("Shrink")) );
     
             if (resp==KMessageBox::Cancel) 
             {
@@ -255,7 +252,7 @@ bool ImagePrint::printImageWithQt()
         {
             int fw = fm.width( fname );
             int x = (w - fw)/2;
-            int y = metrics.height() - filenameOffset/2;
+            int y = m_printer.height() - filenameOffset/2;
             p.drawText( x, y, fname );
         }
     }
@@ -299,12 +296,10 @@ QString ImagePrint::minimizeString( QString text, const QFontMetrics& metrics,
 
 void ImagePrint::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group = KGlobal::config()->group("Color Management");
 
-    config->setGroup("Color Management");
-
-    d->inProfilePath     = config->readPathEntry("WorkSpaceProfile");
-    d->outputProfilePath = config->readPathEntry("ProofProfileFile");
+    d->inProfilePath     = group.readPathEntry("WorkSpaceProfile");
+    d->outputProfilePath = group.readPathEntry("ProofProfileFile");
 }
 
 // Image print dialog class -------------------------------------------------------------
@@ -358,8 +353,8 @@ public:
     ImageEditorPrintDialogPage::Unit  previousUnit;
 };
 
-ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *parent, const char *name )
-                          : KPrintDialogPage( parent, name )
+ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *parent)
+                          : KPrintDialogPage( parent )
 {
     d = new ImageEditorPrintDialogPagePrivate;
     d->image  = image;
@@ -368,30 +363,35 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
 
     readSettings();
 
-    Q3VBoxLayout *layout = new Q3VBoxLayout( this );
+    QVBoxLayout *layout = new QVBoxLayout( this );
     layout->setMargin( KDialog::marginHint() );
     layout->setSpacing( KDialog::spacingHint() );
 
     // ------------------------------------------------------------------------
 
-    Q3HBoxLayout *layout2 = new Q3HBoxLayout( layout ); 
+    QHBoxLayout *layout2 = new QHBoxLayout();
     layout2->setSpacing(3);
 
-    QLabel* textLabel = new QLabel( this, "Image position:" );
+    layout->addLayout(layout2);
+
+    QLabel* textLabel = new QLabel( this );
+    textLabel->setObjectName( "Image position:" );
     textLabel->setText( i18n( "Image position:" ) );
     layout2->addWidget( textLabel );
     d->position = new KComboBox( false, this );
     d->position->setObjectName( "Print position" );
     d->position->clear();
-    d->position->insertItem( i18n( "Top-Left" ) );
-    d->position->insertItem( i18n( "Top-Central" ) );
-    d->position->insertItem( i18n( "Top-Right" ) );
-    d->position->insertItem( i18n( "Central-Left" ) );
-    d->position->insertItem( i18n( "Central" ) );
-    d->position->insertItem( i18n( "Central-Right" ) );
-    d->position->insertItem( i18n( "Bottom-Left" ) );
-    d->position->insertItem( i18n( "Bottom-Central" ) );
-    d->position->insertItem( i18n( "Bottom-Right" ) );
+    d->position->insertItems(0,
+            QStringList() << i18n( "Top-Left" )
+                          << i18n( "Top-Central" )
+                          << i18n( "Top-Right" )
+                          << i18n( "Central-Left" )
+                          << i18n( "Central" )
+                          << i18n( "Central-Right" )
+                          << i18n( "Bottom-Left" )
+                          << i18n( "Bottom-Central" )
+                          << i18n( "Bottom-Right" )
+                            );
     layout2->addWidget( d->position );
     QSpacerItem *spacer1 = new QSpacerItem( 101, 21, QSizePolicy::Expanding, QSizePolicy::Minimum );
     layout2->addItem( spacer1 );
@@ -425,8 +425,7 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
    
     // ------------------------------------------------------------------------
 
-    Q3VButtonGroup *group = new Q3VButtonGroup( i18n("Scaling"), this );
-    group->setRadioButtonExclusive( true );
+    QGroupBox *group = new QGroupBox( i18n("Scaling"), this );
     layout->addWidget( group );
 
     d->scaleToFit = new QRadioButton( i18n("Scale image to &fit"), group );
@@ -437,27 +436,39 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage(DImg& image, QWidget *par
     KHBox *hb = new KHBox( group );
     hb->setSpacing( KDialog::spacingHint() );
     QWidget *w = new QWidget(hb);
-    w->setFixedWidth(d->scale->style().subRect( QStyle::SR_RadioButtonIndicator, d->scale ).width());
+    QStyleOption option;
+    option.initFrom(d->scale);
+    w->setFixedWidth(d->scale->style()->subElementRect( QStyle::SE_RadioButtonIndicator, &option, d->scale ).width());
 
-    d->width = new KDoubleNumInput( hb, "exact width" );
-    d->width->setMinValue( 1 );
+    d->width = new KDoubleNumInput( hb );
+    d->width->setObjectName( "exact width" );
+    d->width->setMinimum( 1 );
 
     new QLabel( "x", hb );
 
-    d->height = new KDoubleNumInput( hb, "exact height" );
-    d->height->setMinValue( 1 );
+    d->height = new KDoubleNumInput( hb );
+    d->width->setObjectName( "exact height" );
+    d->height->setMinimum( 1 );
 
     d->units = new KComboBox( false, hb );
     d->units->setObjectName( "unit combobox" );
-    d->units->insertItem( i18n("Millimeters") );
-    d->units->insertItem( i18n("Centimeters") );
-    d->units->insertItem( i18n("Inches") );
+    d->units->insertItems( 0,
+                QStringList() << i18n("Millimeters")
+                              << i18n("Centimeters")
+                              << i18n("Inches")
+                         );
 
     d->keepRatio = new QCheckBox( i18n("Keep ratio"), hb);
 
     w = new QWidget(hb);
     hb->setStretchFactor( w, 1 );
     d->previousUnit = DK_MILLIMETERS;
+
+    QVBoxLayout *grouplayout = new QVBoxLayout();
+    grouplayout->addWidget(d->scaleToFit);
+    grouplayout->addWidget(d->scale);
+    grouplayout->addWidget(hb);
+    group->setLayout(grouplayout);
 
     // ------------------------------------------------------------------------
 
@@ -741,9 +752,8 @@ void ImageEditorPrintDialogPage::slotUnitChanged(const QString& string)
 
 void ImageEditorPrintDialogPage::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("Color Management");
-    d->cmEnabled = config->readBoolEntry("EnableCM", false);
+    KConfigGroup group = KGlobal::config()->group("Color Management");
+    d->cmEnabled = group.readEntry<bool>("EnableCM", false);
 }
 
 void ImageEditorPrintDialogPage::slotSetupDlg()

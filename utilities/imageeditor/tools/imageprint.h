@@ -89,7 +89,7 @@ public:
 
 public:
 
-    ImageEditorPrintDialogPage(DImg& image, QWidget *parent=0L, const char *name=0);
+    ImageEditorPrintDialogPage(DImg& image, QWidget *parent=0L);
     ~ImageEditorPrintDialogPage();
 
     virtual void getOptions(QMap<QString,QString>& opts, bool incldef = false);
