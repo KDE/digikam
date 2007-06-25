@@ -298,6 +298,16 @@ SET(libsetup_STAT_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/gpiface.cpp 
    )
 
+SET(libdimgcanvas_STAT_SRCS 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/imageplugin.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/imagepluginloader.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undocache.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undoaction.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undomanager.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/colorcorrectiondlg.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/dimginterface.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/canvas.cpp 
+   )
 
 ADD_SUBDIRECTORY( data )
 ADD_SUBDIRECTORY( libs )
