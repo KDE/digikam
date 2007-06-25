@@ -46,6 +46,7 @@ class QAction;
 
 class KToolBarPopupAction;
 class KToggleAction;
+class KAction;
 
 namespace Digikam
 {
@@ -95,8 +96,9 @@ protected:
     QAction                 *m_fileDeleteAction;
     QAction                 *m_forwardAction;
     QAction                 *m_backwardAction;
-    QAction                 *m_firstAction;
     QAction                 *m_lastAction;
+
+    KAction                 *m_firstAction;
 
     KToggleAction           *m_fullScreenAction;
 

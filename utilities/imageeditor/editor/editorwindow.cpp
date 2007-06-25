@@ -65,6 +65,7 @@ extern "C"
 #include <kaboutdata.h>
 #include <kcursor.h>
 #include <kstandardaction.h>
+#include <kstandardshortcut.h>
 #include <kfiledialog.h>
 #include <kmenubar.h>
 #include <kimageio.h>
@@ -266,13 +267,13 @@ void EditorWindow::setupStandardActions()
     m_forwardAction = actionCollection()->addAction(KStandardAction::Forward, "editorwindow_forward", 
                                                     this, SLOT(slotForward()));
 
-    m_firstAction = new KAction(i18n("&First"), "start",
-                                KStandardShortcut::shortcut( KStandardShortcut::Home),
-                                this, SLOT(slotFirst()),
-                                actionCollection(), "editorwindow_first");
+    m_firstAction = new KAction(KIcon("start"), i18n("&First"), this);
+    m_firstAction->setShortcut(KStandardShortcut::Home);
+    connect(m_firstAction, SIGNAL(triggered()), this, SLOT(slotFirst()));
+    actionCollection()->addAction("editorwindow_first", m_firstAction);
 
     m_lastAction = new KAction(i18n("&Last"), "finish",
-                               KStandardShortcut::shortcut( KStandardShortcut::End),
+                               KStandardShortcut::End,
                                this, SLOT(slotLast()),
                                actionCollection(), "editorwindow_last");
 
