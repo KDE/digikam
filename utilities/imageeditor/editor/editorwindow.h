@@ -26,12 +26,9 @@
 
 // Qt includes.
 
-#include <qcolor.h>
-#include <qstring.h>
-#include <qrect.h>
-//Added by qt3to4:
-#include <QLabel>
-#include <Q3PopupMenu>
+#include <QColor>
+#include <QString>
+#include <QRect>
 
 // KDE includes.
 

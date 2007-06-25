@@ -1,6 +1,3 @@
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3PtrList>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -38,18 +35,18 @@ extern "C"
 
 // Qt includes.
 
-#include <qlabel.h>
-#include <q3dockarea.h>
-#include <qlayout.h>
-#include <qtooltip.h>
-#include <qtoolbutton.h>
-#include <qsplitter.h>
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qfile.h>
-#include <qcursor.h>
-#include <qtimer.h>
-#include <qfileinfo.h>
+#include <Q3PtrList>
+#include <Q3DockArea>
+#include <QLabel>
+#include <QLayout>
+#include <QToolButton>
+#include <QSplitter>
+#include <QDir>
+#include <QFileInfo>
+#include <QFile>
+#include <QCursor>
+#include <QTimer>
+#include <QByteArray>
 
 // KDE includes.
 
@@ -136,7 +133,7 @@ EditorWindow::EditorWindow(const char *name)
     m_rotatedOrFlipped       = false;
     m_setExifOrientationTag  = true;
     m_cancelSlideShow        = false;
-    
+
     // Settings containers instance.
 
     d->ICCSettings      = new ICCSettingsContainer();
@@ -179,16 +176,16 @@ void EditorWindow::setupStandardConnections()
 
     connect(m_canvas, SIGNAL(signalShowNextImage()),
             this, SLOT(slotForward()));
-            
+
     connect(m_canvas, SIGNAL(signalShowPrevImage()),
             this, SLOT(slotBackward()));
 
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
-            
+
     connect(m_canvas, SIGNAL(signalZoomChanged(double)),
             this, SLOT(slotZoomChanged(double)));
-            
+
     connect(m_canvas, SIGNAL(signalChanged()),
             this, SLOT(slotChanged()));
 
@@ -226,10 +223,10 @@ void EditorWindow::setupStandardConnections()
 
     connect(d->rotateRightAction, SIGNAL(activated()),
             this, SLOT(slotRotatedOrFlipped()));
-            
+
     connect(d->flipHorizAction, SIGNAL(activated()),
             this, SLOT(slotRotatedOrFlipped()));
-            
+
     connect(d->flipVertAction, SIGNAL(activated()),
             this, SLOT(slotRotatedOrFlipped()));
 
@@ -239,13 +236,13 @@ void EditorWindow::setupStandardConnections()
             this, SLOT(slotNameLabelCancelButtonPressed()));
 
     // -- Core plugin connections -------------------------------------
-    
+
     ImagePlugin *corePlugin = m_imagePluginLoader->pluginInstance("digikamimageplugin_core");
     if ( corePlugin )
-    {                        
+    {
         connect(m_canvas, SIGNAL(signalColorManagementTool()),
-                corePlugin, SLOT(slotColorManagement()));    
-    }        
+                corePlugin, SLOT(slotColorManagement()));
+    }
 }
 
 void EditorWindow::setupStandardActions()
@@ -297,7 +294,7 @@ void EditorWindow::setupStandardActions()
 
     d->copyAction = KStandardAction::copy(m_canvas, SLOT(slotCopy()),
                                      actionCollection(), "editorwindow_copy");
-    
+
     d->copyAction->setEnabled(false);
 
     m_undoAction = new KToolBarPopupAction(i18n("Undo"), "undo",
@@ -307,7 +304,7 @@ void EditorWindow::setupStandardActions()
 
     connect(m_undoAction->popupMenu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowUndoMenu()));
-            
+
     connect(m_undoAction->popupMenu(), SIGNAL(activated(int)),
             m_canvas, SLOT(slotUndo(int)));
 
@@ -320,7 +317,7 @@ void EditorWindow::setupStandardActions()
 
     connect(m_redoAction->popupMenu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowRedoMenu()));
-            
+
     connect(m_redoAction->popupMenu(), SIGNAL(activated(int)),
             m_canvas, SLOT(slotRedo(int)));
 
@@ -433,7 +430,7 @@ void EditorWindow::setupStandardActions()
                                      "Select a region of the image to enable this action."));
 
     // -- Standard 'Flip' menu actions ---------------------------------------------
-    
+
     d->flipHorizAction = new KAction(i18n("Flip Horizontally"), "mirror", Qt::CTRL+Qt::Key_Asterisk,
                                    m_canvas, SLOT(slotFlipHoriz()),
                                    actionCollection(), "editorwindow_flip_horiz");
@@ -443,7 +440,7 @@ void EditorWindow::setupStandardActions()
                                    m_canvas, SLOT(slotFlipVert()),
                                    actionCollection(), "editorwindow_flip_vert");
     d->flipVertAction->setEnabled(false);
-                                   
+
     // -- Standard 'Rotate' menu actions ----------------------------------------
 
     d->rotateLeftAction = new KAction(i18n("Rotate Left"),
