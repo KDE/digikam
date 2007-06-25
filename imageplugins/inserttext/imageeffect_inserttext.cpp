@@ -230,7 +230,7 @@ ImageEffect_InsertText::~ImageEffect_InsertText()
 void ImageEffect_InsertText::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("inserttext Tool Dialog");
+    KConfigGroup group =  config->group("inserttext Tool Dialog");
     QColor black(0, 0, 0);
     QFont  defaultFont;
 
@@ -241,15 +241,15 @@ void ImageEffect_InsertText::readUserSettings()
     else m_defaultSizeFont = (int)(orgW / 8.0);
 
     defaultFont.setPointSize(m_defaultSizeFont);
-    m_textRotation->setCurrentItem( config->readNumEntry("Text Rotation", 0) );
-    m_fontColorButton->setColor(config->readColorEntry("Font Color", &black));
-    m_textEdit->setText(config->readEntry("Text String", i18n("Enter your text here!")));
-    m_textFont = config->readFontEntry("Font Properties", &defaultFont);
+    m_textRotation->setCurrentItem( group.readEntry("Text Rotation", 0) );
+    m_fontColorButton->setColor(group.readEntry("Font Color", black));
+    m_textEdit->setText(group.readEntry("Text String", i18n("Enter your text here!")));
+    m_textFont = group.readEntry("Font Properties", defaultFont);
     m_fontChooserWidget->setFont(m_textFont);
-    m_alignTextMode = config->readNumEntry("Text Alignment", ALIGN_LEFT);
-    m_borderText->setChecked( config->readBoolEntry("Border Text", false) );
-    m_transparentText->setChecked( config->readBoolEntry("Transparent Text", false) );
-    m_previewWidget->setPositionHint( config->readRectEntry("Position Hint") );
+    m_alignTextMode = group.readEntry("Text Alignment", ALIGN_LEFT);
+    m_borderText->setChecked( group.readEntry("Border Text", false) );
+    m_transparentText->setChecked( group.readEntry("Transparent Text", false) );
+    m_previewWidget->setPositionHint( group.readEntry("Position Hint",QRect()) );
 
     static_cast<QPushButton*>(m_alignButtonGroup->find(m_alignTextMode))->setOn(true);
     slotAlignModeChanged(m_alignTextMode);

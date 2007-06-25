@@ -213,22 +213,23 @@ void ImageEffect_SuperImpose::populateTemplates(void)
 void ImageEffect_SuperImpose::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("Album Settings");
-    KUrl albumDBUrl( config->readPathEntry("Album Path", KGlobalSettings::documentPath()) );
+    KConfigGroup group = config->group("Album Settings");
+    KUrl albumDBUrl( group.readEntry("Album Path", KGlobalSettings::documentPath()) );
     config->setGroup("superimpose Tool Dialog");
     config->setGroup("Template Superimpose Tool Settings");
-    m_templatesRootUrl.setPath( config->readEntry("Templates Root URL", albumDBUrl.path()) );
-    m_templatesUrl.setPath( config->readEntry("Templates URL", albumDBUrl.path()) );
+    m_templatesRootUrl.setPath( group.readEntry("Templates Root URL", albumDBUrl.path()) );
+    m_templatesUrl.setPath( group.readEntry("Templates URL", albumDBUrl.path()) );
     m_dirSelect->setRootPath(m_templatesRootUrl, m_templatesUrl);
 }
 
 void ImageEffect_SuperImpose::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("superimpose Tool Dialog");
-    config->writeEntry( "Templates Root URL", m_dirSelect->rootPath().path() );
-    config->writeEntry( "Templates URL", m_templatesUrl.path() );
-    config->sync();}
+    KConfigGroup group = config->group("superimpose Tool Dialog");
+    group.writeEntry( "Templates Root URL", m_dirSelect->rootPath().path() );
+    group.writeEntry( "Templates URL", m_templatesUrl.path() );
+    group.sync();
+}
 
 void ImageEffect_SuperImpose::resetValues()
 {

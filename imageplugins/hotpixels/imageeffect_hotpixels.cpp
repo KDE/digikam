@@ -132,10 +132,10 @@ ImageEffect_HotPixels::~ImageEffect_HotPixels()
 void ImageEffect_HotPixels::readUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("hotpixels Tool Dialog");
-    m_blackFrameURL = KUrl(config->readEntry("Last Black Frame File", QString()));
-    m_filterMethodCombo->setCurrentItem(config->readNumEntry("Filter Method",
-                                        HotPixelFixer::QUADRATIC_INTERPOLATION));
+    KConfigGroup group = config.group("hotpixels Tool Dialog");
+    m_blackFrameURL = KUrl(group.readEntry("Last Black Frame File", QString()));
+    m_filterMethodCombo->setCurrentItem(group.readEntry("Filter Method",
+                                        (int)HotPixelFixer::QUADRATIC_INTERPOLATION));
     
     if (m_blackFrameURL.isValid())
         new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
@@ -144,10 +144,11 @@ void ImageEffect_HotPixels::readUserSettings(void)
 void ImageEffect_HotPixels::writeUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("hotpixels Tool Dialog");
-    config->writeEntry("Last Black Frame File", m_blackFrameURL.url());
-    config->writeEntry("Filter Method", m_filterMethodCombo->currentItem());
-    config->sync();
+    
+    KConfigGroup group = config->group("hotpixels Tool Dialog");
+    group.writeEntry("Last Black Frame File", m_blackFrameURL.url());
+    group.writeEntry("Filter Method", m_filterMethodCombo->currentItem());
+    group.sync();
 }
 
 void ImageEffect_HotPixels::resetValues(void)
