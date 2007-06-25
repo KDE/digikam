@@ -1,5 +1,3 @@
-//Added by qt3to4:
-#include <QLabel>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -29,9 +27,9 @@
 
 class QToolButton;
 class QLabel;
+class QAction;
 
 class KComboBox;
-class KAction;
 class KToggleAction;
 class K3WidgetAction;
 class KSelectAction;
@@ -101,23 +99,23 @@ public:
     QToolButton               *underExposureIndicator; 
     QToolButton               *overExposureIndicator; 
 
-    KAction                   *imagePluginsHelpAction;
-    KAction                   *donateMoneyAction;
-    KAction                   *filePrintAction;
-    KAction                   *copyAction;
-    KAction                   *resizeAction;
-    KAction                   *cropAction;
-    KAction                   *zoomPlusAction;
-    KAction                   *zoomMinusAction;
-    KAction                   *zoomTo100percents;
-    KAction                   *zoomFitToSelectAction;
-    KAction                   *rotateLeftAction;
-    KAction                   *rotateRightAction;
-    KAction                   *flipHorizAction;
-    KAction                   *flipVertAction;
-    KAction                   *slideShowAction;
-    KAction                   *selectAllAction;
-    KAction                   *selectNoneAction;
+    QAction                   *imagePluginsHelpAction;
+    QAction                   *donateMoneyAction;
+    QAction                   *filePrintAction;
+    QAction                   *copyAction;
+    QAction                   *resizeAction;
+    QAction                   *cropAction;
+    QAction                   *zoomPlusAction;
+    QAction                   *zoomMinusAction;
+    QAction                   *zoomTo100percents;
+    QAction                   *zoomFitToSelectAction;
+    QAction                   *rotateLeftAction;
+    QAction                   *rotateRightAction;
+    QAction                   *flipHorizAction;
+    QAction                   *flipVertAction;
+    QAction                   *slideShowAction;
+    QAction                   *selectAllAction;
+    QAction                   *selectNoneAction;
 
     KToggleAction             *zoomFitToWindowAction;
     KToggleAction             *viewCMViewAction;
