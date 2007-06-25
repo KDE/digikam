@@ -60,7 +60,6 @@ extern "C"
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kprinter.h>
-#include <kkeydialog.h>
 #include <kedittoolbar.h>
 #include <kaboutdata.h>
 #include <kcursor.h>
@@ -68,7 +67,6 @@ extern "C"
 #include <kfiledialog.h>
 #include <kmenubar.h>
 #include <kimageio.h>
-#include <kaccel.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>
@@ -78,7 +76,8 @@ extern "C"
 #include <kstatusbar.h>
 #include <kwindowsystem.h>
 #include <kcombobox.h>
-#include <KToggleAction>
+#include <ktoggleaction.h>
+#include <kshortcutsdialog.h>
 
 // Local includes.
 
@@ -109,9 +108,12 @@ namespace Digikam
 {
 
 EditorWindow::EditorWindow(const char *name)
-            : KMainWindow(0, name, Qt::WType_TopLevel)
+            : KMainWindow(0)
 {
     d = new EditorWindowPriv;
+
+    setObjectName(name);
+    setWindowFlags(Qt::Window);
 
     m_contextMenu            = 0;
     m_canvas                 = 0;
