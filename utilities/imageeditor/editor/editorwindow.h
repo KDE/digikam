@@ -96,8 +96,8 @@ protected:
     QAction                 *m_fileDeleteAction;
     QAction                 *m_forwardAction;
     QAction                 *m_backwardAction;
-    QAction                 *m_lastAction;
 
+    KAction                 *m_lastAction;
     KAction                 *m_firstAction;
 
     KToggleAction           *m_fullScreenAction;

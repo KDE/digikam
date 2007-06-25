@@ -272,35 +272,37 @@ void EditorWindow::setupStandardActions()
     connect(m_firstAction, SIGNAL(triggered()), this, SLOT(slotFirst()));
     actionCollection()->addAction("editorwindow_first", m_firstAction);
 
-    m_lastAction = new KAction(i18n("&Last"), "finish",
-                               KStandardShortcut::End,
-                               this, SLOT(slotLast()),
-                               actionCollection(), "editorwindow_last");
+    m_lastAction = new KAction(KIcon("finish"), i18n("&Last"), this);
+    m_lastAction->setShortcut(KStandardShortcut::End);
+    connect(m_lastAction, SIGNAL(triggered()), this, SLOT(slotLast()));
+    actionCollection()->addAction("editorwindow_last", m_lastAction);
 
-    m_saveAction   = KStandardAction::save(this, SLOT(slotSave()),
-                                      actionCollection(), "editorwindow_save");
+    m_saveAction = actionCollection()->addAction(KStandardAction::Save, "editorwindow_save", 
+                                                 this, SLOT(slotSave()));
 
-    m_saveAsAction = KStandardAction::saveAs(this, SLOT(slotSaveAs()),
-                                        actionCollection(), "editorwindow_saveas");
+    m_saveAsAction = actionCollection()->addAction(KStandardAction::SaveAs, "editorwindow_saveas", 
+                                                   this, SLOT(slotSaveAs()));
 
-    m_revertAction = KStandardAction::revert(m_canvas, SLOT(slotRestore()),
-                                        actionCollection(), "editorwindow_revert");
+    m_revertAction = actionCollection()->addAction(KStandardAction::Revert, "editorwindow_revert", 
+                                                   this, SLOT(slotRestore()));
 
     m_saveAction->setEnabled(false);
     m_saveAsAction->setEnabled(false);
     m_revertAction->setEnabled(false);
 
-    d->filePrintAction = new KAction(i18n("Print Image..."), "fileprint",
-                                     Qt::CTRL+Qt::Key_P,
-                                     this, SLOT(slotFilePrint()),
-                                     actionCollection(), "editorwindow_print");
+    d->filePrintAction = new KAction(KIcon("fileprint"), i18n("Print Image..."), this);
+    d->filePrintAction->setShortcut(Qt::CTRL+Qt::Key_P);
+    connect(d->filePrintAction, SIGNAL(triggered()), this, SLOT(slotFilePrint()));
+    actionCollection()->addAction("editorwindow_print", d->filePrintAction);
 
-    m_fileDeleteAction = new KAction(i18n("Move to Trash"), "edittrash",
-                                     Qt::Key_Delete,
-                                     this, SLOT(slotDeleteCurrentItem()),
-                                     actionCollection(), "editorwindow_delete");
+    m_fileDeleteAction = new KAction(KIcon("edittrash"), i18n("Move to Trash"), this);
+    m_fileDeleteAction->setShortcut(Qt::Key_Delete);
+    connect(m_fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteCurrentItem()));
+    actionCollection()->addAction("editorwindow_delete", m_fileDeleteAction);
 
-    KStandardAction::close(this, SLOT(close()), actionCollection(), "editorwindow_close");
+
+    actionCollection()->addAction(KStandardAction::Close, "editorwindow_close", 
+                                                   this, SLOT(close()));
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
 
