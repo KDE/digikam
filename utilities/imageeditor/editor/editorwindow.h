@@ -42,10 +42,10 @@
 class Q3PopupMenu;
 class QSplitter;
 class QLabel;
+class QAction;
 
 class KToolBarPopupAction;
 class KToggleAction;
-class KAction;
 
 namespace Digikam
 {
@@ -89,14 +89,14 @@ protected:
 
     QSplitter               *m_splitter;
 
-    KAction                 *m_saveAction;
-    KAction                 *m_saveAsAction;
-    KAction                 *m_revertAction;
-    KAction                 *m_fileDeleteAction;
-    KAction                 *m_forwardAction;
-    KAction                 *m_backwardAction;
-    KAction                 *m_firstAction;
-    KAction                 *m_lastAction;
+    QAction                 *m_saveAction;
+    QAction                 *m_saveAsAction;
+    QAction                 *m_revertAction;
+    QAction                 *m_fileDeleteAction;
+    QAction                 *m_forwardAction;
+    QAction                 *m_backwardAction;
+    QAction                 *m_firstAction;
+    QAction                 *m_lastAction;
 
     KToggleAction           *m_fullScreenAction;
 
