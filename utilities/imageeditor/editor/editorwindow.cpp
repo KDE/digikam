@@ -159,15 +159,22 @@ void EditorWindow::setupContextMenu()
 {
     m_contextMenu         = new DPopupMenu(this);
     KActionCollection *ac = actionCollection();
-    if( ac->action("editorwindow_backward") ) ac->action("editorwindow_backward")->plug(m_contextMenu);
-    if( ac->action("editorwindow_forward") ) ac->action("editorwindow_forward")->plug(m_contextMenu);
-    m_contextMenu->insertSeparator();
-    if( ac->action("editorwindow_slideshow") ) ac->action("editorwindow_slideshow")->plug(m_contextMenu);
-    if( ac->action("editorwindow_rotate_left") ) ac->action("editorwindow_rotate_left")->plug(m_contextMenu);
-    if( ac->action("editorwindow_rotate_right") ) ac->action("editorwindow_rotate_right")->plug(m_contextMenu);
-    if( ac->action("editorwindow_crop") ) ac->action("editorwindow_crop")->plug(m_contextMenu);
-    m_contextMenu->insertSeparator();
-    if( ac->action("editorwindow_delete") ) ac->action("editorwindow_delete")->plug(m_contextMenu);
+    if (ac->action("editorwindow_backward")) 
+        m_contextMenu->addAction(ac->action("editorwindow_backward"));
+    if (ac->action("editorwindow_forward")) 
+        m_contextMenu->addAction(ac->action("editorwindow_forward"));
+    m_contextMenu->addSeparator();
+    if (ac->action("editorwindow_slideshow")) 
+        m_contextMenu->addAction(ac->action("editorwindow_slideshow"));
+    if (ac->action("editorwindow_rotate_left"))
+        m_contextMenu->addAction(ac->action("editorwindow_rotate_left"));
+    if (ac->action("editorwindow_rotate_right"))
+        m_contextMenu->addAction(ac->action("editorwindow_rotate_right"));
+    if (ac->action("editorwindow_crop")) 
+        m_contextMenu->addAction(ac->action("editorwindow_crop"));
+    m_contextMenu->addSeparator();
+    if (ac->action("editorwindow_delete")) 
+        m_contextMenu->addAction(ac->action("editorwindow_delete"));
 }
 
 void EditorWindow::setupStandardConnections()
@@ -252,11 +259,12 @@ void EditorWindow::setupStandardActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
-    m_backwardAction = KStandardAction::back(this, SLOT(slotBackward()),
-                                   actionCollection(), "editorwindow_backward");
+    m_backwardAction = actionCollection()->addAction(KStandardAction::Back, "editorwindow_backward", 
+                                                     this, SLOT(slotBackward()));
 
-    m_forwardAction = KStandardAction::forward(this, SLOT(slotForward()),
-                                  actionCollection(), "editorwindow_forward");
+
+    m_forwardAction = actionCollection()->addAction(KStandardAction::Forward, "editorwindow_forward", 
+                                                    this, SLOT(slotForward()));
 
     m_firstAction = new KAction(i18n("&First"), "start",
                                 KStandardShortcut::shortcut( KStandardShortcut::Home),
