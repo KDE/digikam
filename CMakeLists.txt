@@ -14,7 +14,9 @@ INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR}
                     ${GPHOTO2_INCLUDE_DIR}
                    )
 
-ADD_DEFINITIONS(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+ADD_DEFINITIONS(-DQT3_SUPPORT 
+                -DQT3_SUPPORT_WARNINGS
+               )
 
 SET(libcurves_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/curves/imagecurves.cpp 
@@ -88,7 +90,7 @@ SET(libdialog_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/ctrlpaneldlg.cpp
    )
 
-SET(libdialogshowfoto_STAT_SRCS
+SET(libdialogshowfoto_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/iccprofileinfodlg.cpp
    )
 
@@ -270,14 +272,14 @@ SET(libslideshow_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideshow.cpp
    )
 
-SET(libsetupshowfoto_STAT_SRCS 
+SET(libsetupshowfoto_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupiofiles.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdcraw.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupicc.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupslideshow.cpp
    )
 
-SET(libsetup_STAT_SRCS 
+SET(libsetup_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupicc.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcollections.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupgeneral.cpp 
@@ -298,7 +300,7 @@ SET(libsetup_STAT_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/gpiface.cpp 
    )
 
-SET(libdimgcanvas_STAT_SRCS 
+SET(libdimgcanvas_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/imageplugin.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/imagepluginloader.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undocache.cpp 
@@ -309,18 +311,18 @@ SET(libdimgcanvas_STAT_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/canvas.cpp 
    )
 
-SET(libshowfoto_STAT_SRCS 
+SET(libshowfoto_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp
    )
 
-SET(libdimgeditor_STAT_SRCS 
+SET(libdimgeditor_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imagewindow.cpp
    )
 
-SET(libdimgeditortools_STAT_SRCS 
+SET(libdimgeditortools_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageprint.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageresize.cpp
    )
