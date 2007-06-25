@@ -311,35 +311,36 @@ SET(libdimgcanvas_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/canvas.cpp 
    )
 
-SET(libshowfoto_SRCS 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp
-   )
-
-SET(libdimgeditor_SRCS 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imagewindow.cpp
-   )
-
-SET(libdimgeditortools_SRCS 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageprint.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageresize.cpp
-   )
-
 SET(libshowfotosetup_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setuptooltip.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setupeditor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setup.cpp 
    )
 
+# SET(libshowfoto_SRCS 
+#     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp
+#     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp
+#    )
+
+# SET(libdimgeditor_SRCS 
+#     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp 
+#     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp 
+#     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imagewindow.cpp
+#    )
+
+# SET(libdimgeditortools_SRCS 
+#     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageprint.cpp
+#     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageresize.cpp
+#    )
+
+
 ADD_SUBDIRECTORY( data )
 ADD_SUBDIRECTORY( libs )
 ADD_SUBDIRECTORY( utilities )
-ADD_SUBDIRECTORY( showfoto )
 ADD_SUBDIRECTORY( kioslave )
-ADD_SUBDIRECTORY( imageplugins )
-ADD_SUBDIRECTORY( themedesigner )
+ADD_SUBDIRECTORY( showfoto )
+#ADD_SUBDIRECTORY( imageplugins )
 #ADD_SUBDIRECTORY( digikam )
+#ADD_SUBDIRECTORY( themedesigner )
 
 INSTALL( FILES tips DESTINATION ${DATA_INSTALL_DIR}/digikam )
