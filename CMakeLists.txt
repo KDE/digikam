@@ -327,6 +327,12 @@ SET(libdimgeditortools_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageresize.cpp
    )
 
+SET(libshowfotosetup_SRCS 
+    ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setuptooltip.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setupeditor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setup.cpp 
+   )
+
 ADD_SUBDIRECTORY( data )
 ADD_SUBDIRECTORY( libs )
 ADD_SUBDIRECTORY( utilities )
