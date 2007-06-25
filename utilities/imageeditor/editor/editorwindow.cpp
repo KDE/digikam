@@ -47,38 +47,37 @@ extern "C"
 #include <QCursor>
 #include <QTimer>
 #include <QByteArray>
+#include <QProgressBar>
 
 // KDE includes.
 
+#include <ktoolinvocation.h>
+#include <kaction.h>
+#include <kapplication.h>
+#include <kconfig.h>
+#include <klocale.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kiconloader.h>
 #include <kprinter.h>
 #include <kkeydialog.h>
-#include <kdeversion.h>
-#include <kaction.h>
 #include <kedittoolbar.h>
 #include <kaboutdata.h>
 #include <kcursor.h>
 #include <kstandardaction.h>
-#include <kapplication.h>
-#include <kconfig.h>
-#include <klocale.h>
 #include <kfiledialog.h>
 #include <kmenubar.h>
 #include <kimageio.h>
 #include <kaccel.h>
 #include <kmessagebox.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
-#include <kiconloader.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>
 #include <kprotocolinfo.h>
 #include <kglobalsettings.h>
 #include <ktoolbar.h>
 #include <kstatusbar.h>
-#include <kprogress.h>
 #include <kwindowsystem.h>
 #include <kcombobox.h>
-#include <ktoolinvocation.h>
 
 // Local includes.
 
@@ -194,7 +193,7 @@ void EditorWindow::setupStandardConnections()
 
     connect(m_canvas, SIGNAL(signalSelected(bool)),
             this, SLOT(slotSelected(bool)));
-    
+
     connect(m_canvas, SIGNAL(signalLoadingStarted(const QString &)),
             this, SLOT(slotLoadingStarted(const QString &)));
 
@@ -515,7 +514,7 @@ void EditorWindow::setupStandardAccelerators()
                     i18n("Zoom in on Image"),
                     Qt::Key_Plus, this, SLOT(slotIncreaseZoom()),
                     false, true);
-    
+
     d->accelerators->insert("Zoom Plus Qt::Key_Minus", i18n("Zoom Out"),
                     i18n("Zoom out of Image"),
                     Qt::Key_Minus, this, SLOT(slotDecreaseZoom()),
@@ -898,13 +897,13 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.brightness              = config->readDoubleNumEntry("RAWBrightness", 1.0);
 
     // -- GUI Settings -------------------------------------------------------
-    
+
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     if(config->hasKey("Splitter Sizes"))
         m_splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
     else 
         m_canvas->setSizePolicy(rightSzPolicy);
-    
+
     d->fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
 
     // -- Exposure Indicators Settings --------------------------------------- 
@@ -929,7 +928,7 @@ void EditorWindow::saveStandardSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("ImageViewer Settings");
-    
+
     config->writeEntry("AutoZoom", d->zoomFitToWindowAction->isChecked());
     config->writeEntry("Splitter Sizes", m_splitter->sizes());
 
@@ -971,7 +970,7 @@ void EditorWindow::toggleStandardActions(bool val)
     }
 
     Q3PtrList<ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
-    
+
     for (ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
     {
@@ -988,27 +987,23 @@ void EditorWindow::slotToggleFullScreen()
     {
         m_canvas->setBackgroundColor(m_bgColor);
 
-#if QT_VERSION >= 0x030300
         setWindowState( windowState() & ~Qt::WindowFullScreen );
-#else
-        showNormal();
-#endif
         menuBar()->show();
         statusBar()->show();
         leftDock()->show();
         rightDock()->show();
         topDock()->show();
         bottomDock()->show();
-        
+
         QObject* obj = child("ToolBar","KToolBar");
-        
+
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            
+
             if (m_fullScreenAction->isPlugged(toolBar) && d->removeFullScreenButton)
                 m_fullScreenAction->unplug(toolBar);
-                
+
             if (toolBar->isHidden())
                 showToolBars();
         }
@@ -1037,7 +1032,7 @@ void EditorWindow::slotToggleFullScreen()
     else  // go to fullscreen
     {
         m_canvas->setBackgroundColor(QColor(Qt::black));
-        
+
         // hide the menubar and the statusbar
         menuBar()->hide();
         statusBar()->hide();
@@ -1045,13 +1040,13 @@ void EditorWindow::slotToggleFullScreen()
         leftDock()->hide();
         rightDock()->hide();
         bottomDock()->hide();
-        
+
         QObject* obj = child("ToolBar","KToolBar");
-        
+
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            
+
             if (d->fullScreenHideToolBar)
             {
                 hideToolBars();
@@ -1233,7 +1228,7 @@ void EditorWindow::hideToolBars()
     for(;it.current()!=0L; ++it)
     {
         bar=it.current();
-        
+
         if (bar->area()) 
             bar->area()->hide();
         else 
@@ -1249,7 +1244,7 @@ void EditorWindow::showToolBars()
     for( ; it.current()!=0L ; ++it)
     {
         bar=it.current();
-        
+
         if (bar->area())
             bar->area()->show();
         else
@@ -1312,7 +1307,7 @@ void EditorWindow::slotSave()
 void EditorWindow::slotSavingStarted(const QString& /*filename*/)
 {
     setCursor( Qt::WaitCursor );
-    
+
     // Disable actions as appropriate during saving
     emit signalNoCurrentItem();
     toggleActions(false);
@@ -1508,7 +1503,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
         QFileInfo fi(newURL.path());
         m_savingContext->format = fi.extension(false);
-        
+
         if ( m_savingContext->format.isEmpty() )
         {
             // If format is empty then file format is same as that of the original file.
@@ -1541,7 +1536,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
             }
         }
     }
-    
+
     if (!newURL.isValid())
     {
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to\n\"%2\".")
@@ -1552,7 +1547,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     }
 
     // if new and original url are equal use slotSave() ------------------------------
-    
+
     KUrl currURL(m_savingContext->srcURL);
     currURL.cleanPath();
     newURL.cleanPath();
@@ -1564,7 +1559,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     }
 
     // Check for overwrite ----------------------------------------------------------
-    
+
     QFileInfo fi(newURL.path());
     m_savingContext->destinationExisted = fi.exists();
     if ( m_savingContext->destinationExisted )
@@ -1677,7 +1672,7 @@ void EditorWindow::slotToggleColorManagedView()
         cmv = !d->ICCSettings->managedViewSetting;
         d->ICCSettings->managedViewSetting = cmv;
         m_canvas->setICCSettings(d->ICCSettings);
-    
+
         // Save Color Managed View setting in config file. For performance 
         // reason, no need to flush file, it cached in memory and will be flushed 
         // to disk at end of session.  
@@ -1691,7 +1686,7 @@ void EditorWindow::slotToggleColorManagedView()
     setColorManagedViewIndicatorToolTip(d->ICCSettings->enableCMSetting, cmv);
     d->cmViewIndicator->blockSignals(false);
     d->viewCMViewAction->blockSignals(false);
-}    
+}
 
 void EditorWindow::setColorManagedViewIndicatorToolTip(bool available, bool cmv)
 {
@@ -1723,7 +1718,7 @@ void EditorWindow::slotToggleUnderExposureIndicator()
     setUnderExposureToolTip(uei);
     d->underExposureIndicator->blockSignals(false);
     d->viewUnderExpoAction->blockSignals(false);
-}    
+}
 
 void EditorWindow::setUnderExposureToolTip(bool uei)
 {
@@ -1745,7 +1740,7 @@ void EditorWindow::slotToggleOverExposureIndicator()
     setOverExposureToolTip(oei);
     d->overExposureIndicator->blockSignals(false);
     d->viewOverExpoAction->blockSignals(false);
-}    
+}
 
 void EditorWindow::setOverExposureToolTip(bool oei)
 {
@@ -1785,4 +1780,3 @@ void EditorWindow::slotSelectionChanged(const QRect& sel)
 }
 
 }  // namespace Digikam
-

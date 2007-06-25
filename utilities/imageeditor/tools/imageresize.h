@@ -33,7 +33,7 @@
 
 // KDE include.
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 // Local includes.
 

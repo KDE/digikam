@@ -31,7 +31,7 @@
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class KUrl;
 
@@ -48,7 +48,7 @@ class SearchAdvancedDialogPriv;
  * @author Gilles Caulier
  * 
  */
-class SearchAdvancedDialog : public KDialogBase
+class SearchAdvancedDialog : public KDialog
 {
     Q_OBJECT
     

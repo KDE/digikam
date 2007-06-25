@@ -27,7 +27,7 @@
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 // Local includes.
 
@@ -41,7 +41,7 @@ namespace Digikam
 
 class FirstRunWidget;
 
-class DIGIKAM_EXPORT DigikamFirstRun : public KDialogBase
+class DIGIKAM_EXPORT DigikamFirstRun : public KDialog
 {
     Q_OBJECT
 

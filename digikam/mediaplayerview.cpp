@@ -35,7 +35,7 @@
 #include <kparts/componentfactory.h>
 #include <kmimetype.h>
 #include <kuserprofile.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <klocale.h>
 
 // Local includes.

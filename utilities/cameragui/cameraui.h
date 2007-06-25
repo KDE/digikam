@@ -36,7 +36,7 @@
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kurl.h>
 
 // Local includes.
@@ -49,7 +49,7 @@ namespace Digikam
 class CameraIconViewItem;
 class CameraUIPriv;
 
-class CameraUI : public KDialogBase
+class CameraUI : public KDialog
 {
     Q_OBJECT
 

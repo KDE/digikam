@@ -31,7 +31,7 @@
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class QComboBox;
 class QLineEdit;
@@ -44,7 +44,7 @@ namespace Digikam
 class TagCreateDlgPriv;
 class TagEditDlgPriv;
 
-class TagCreateDlg : public KDialogBase
+class TagCreateDlg : public KDialog
 {
     Q_OBJECT
 

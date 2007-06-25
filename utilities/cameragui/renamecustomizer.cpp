@@ -48,7 +48,7 @@
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <knuminput.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kinputdialog.h>
 
 // Local includes.

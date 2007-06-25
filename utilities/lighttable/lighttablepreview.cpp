@@ -41,7 +41,7 @@
 
 // KDE includes.
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <klocale.h>
 #include <kservice.h>
 #include <krun.h>
