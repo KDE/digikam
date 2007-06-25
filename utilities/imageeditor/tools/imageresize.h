@@ -26,8 +26,7 @@
 
 // Qt include.
 
-#include <qstring.h>
-//Added by qt3to4:
+#include <QString>
 #include <QCloseEvent>
 #include <QCustomEvent>
 
@@ -44,7 +43,7 @@ namespace Digikam
 
 class ImageResizePriv;
 
-class DIGIKAM_EXPORT ImageResize : public KDialogBase
+class DIGIKAM_EXPORT ImageResize : public KDialog
 {
     Q_OBJECT
 
@@ -52,11 +51,11 @@ public:
 
     ImageResize(QWidget* parent);
     ~ImageResize();
-       
+
 protected:
 
     void closeEvent(QCloseEvent *e);
-    
+
 private:
 
     void customEvent(QCustomEvent *event);
@@ -71,14 +70,14 @@ private slots:
     void slotUser3();
     void processCImgURL(const QString&);
     void slotValuesChanged();
-    void readUserSettings();        
-    void slotRestorationToggled(bool);    
+    void readUserSettings();
+    void slotRestorationToggled(bool);
 
 private:
 
     ImageResizePriv *d;
 };
-    
+
 }  // NameSpace Digikam
 
 #endif /* IMAGE_RESIZE_H */
