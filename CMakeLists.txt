@@ -309,6 +309,11 @@ SET(libdimgcanvas_STAT_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/canvas.cpp 
    )
 
+SET(libdimgeditortools_STAT_SRCS 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageprint.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageresize.cpp
+   )
+
 ADD_SUBDIRECTORY( data )
 ADD_SUBDIRECTORY( libs )
 ADD_SUBDIRECTORY( utilities )
