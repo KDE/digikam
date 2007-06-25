@@ -317,10 +317,10 @@ SET(libshowfotosetup_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setup.cpp 
    )
 
-# SET(libshowfoto_SRCS 
-#     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp
-#     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp
-#    )
+SET(libshowfoto_SRCS 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp
+   )
 
 # SET(libdimgeditor_SRCS 
 #     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp 

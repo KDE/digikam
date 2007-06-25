@@ -24,14 +24,17 @@ SET(showfoto_SRCS
     main.cpp 
     showfoto.cpp 
     ${libshowfotosetup_SRCS} 
+    ${libdimgcanvas_SRCS}
     ${libsetupshowfoto_SRCS} 
-    ${libslideshow_SRCS} 
     ${libsplashscreen_SRCS} 
     ${libthumbbar_SRCS} 
     ${libjpegutils_SRCS} 
     ${libcommonwidgets_SRCS} 
     ${libthreadimageio_SRCS} 
     ${libimagepluginswidgets_SRCS} 
+    ${libshowfoto_SRCS} 
+    ${libdimgeditortools_SRCS}
+    ${libslideshow_SRCS} 
    )
 
 KDE4_AUTOMOC(${showfoto_SRCS})
@@ -44,6 +47,10 @@ TARGET_LINK_LIBRARIES(showfoto libshowfotosetup
                                libimagepropertiesshowfoto 
                                libiccprofileswidgets
                                libmetadatawidgets
+                               libdimgcanvas
+                               libshowfoto
+                               libdimgeditortools
+                               libslideshow
                                ${KDE4_KUTILS_LIBS} 
                                ${KDE4_KPARTS_LIBS} 
                      )
