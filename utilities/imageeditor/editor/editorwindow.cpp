@@ -78,6 +78,7 @@ extern "C"
 #include <kstatusbar.h>
 #include <kwindowsystem.h>
 #include <kcombobox.h>
+#include <KToggleAction>
 
 // Local includes.
 
