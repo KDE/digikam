@@ -9,12 +9,18 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/showfoto/setup
                      ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/imageplugins 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/metadata 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/iccprofiles 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/jpegutils 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/greycstoration 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/imageproperties 
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/histogram 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/curves 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/levels 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/lprof 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/whitebalance 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/histogram 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/threadimageio 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/setup 
