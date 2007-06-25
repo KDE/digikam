@@ -6,10 +6,12 @@ ADD_DEFINITIONS(${QT_DEFINITIONS}
                 ${KEXIV2_DEFINITIONS}
                )
 
-INCLUDE_DIRECTORIES(${KEXIV2_INCLUDE_DIR} 
+INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR}
+                    ${KEXIV2_INCLUDE_DIR} 
                     ${KDCRAW_INCLUDE_DIR}
                     ${KDE4_INCLUDE_DIR}
                     ${QT_INCLUDES}
+                    ${GPHOTO2_INCLUDE_DIR}
                    )
 
 ADD_DEFINITIONS(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
@@ -195,7 +197,6 @@ SET(libthemeengine_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/themeengine.cpp
    )
 
-
 SET(libthreadimageio_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/loadsavethread.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/managedloadsavethread.cpp
@@ -268,6 +269,35 @@ SET(libslideshow_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/toolbar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideshow.cpp
    )
+
+SET(libsetupshowfoto_STAT_SRCS 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupiofiles.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdcraw.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupicc.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupslideshow.cpp
+   )
+
+SET(libsetup_STAT_SRCS 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupicc.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcollections.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupgeneral.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setup.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setuptooltip.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupidentity.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupmime.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupslideshow.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupmetadata.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupeditor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupmisc.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setuplighttable.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupiofiles.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupplugins.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdcraw.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcamera.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameraselection.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/gpiface.cpp 
+   )
+
 
 ADD_SUBDIRECTORY( data )
 ADD_SUBDIRECTORY( libs )
