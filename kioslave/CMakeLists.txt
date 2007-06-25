@@ -21,7 +21,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/jpegutils
 
 # digiKam Thumbnails kio slave #####################################################
 
-SET(kio_digikamthumbnail_PART_SRCS digikamthumbnail.cpp ${libjpegutils_SRCS} ${libdimg_SRCS} ${libdatabase_SRCS} ${libdimg_SRCS} ${libdimgloaders_SRCS} ${libsqlite2_SRCS} ${libdmetadata_SRCS} ${libdimgfilters_SRCS} ${libhistogram_SRCS} ${liblevels_SRCS})
+SET(kio_digikamthumbnail_PART_SRCS digikamthumbnail.cpp ${libjpegutils_SRCS} ${libdatabase_SRCS} ${libdimg_SRCS} ${libdimgloaders_SRCS} ${libsqlite2_SRCS} ${libdmetadata_SRCS} ${libdimgfilters_SRCS} ${libhistogram_SRCS} ${liblevels_SRCS})
 
 KDE4_AUTOMOC(${kio_digikamthumbnail_PART_SRCS})
 
@@ -65,7 +65,7 @@ TARGET_LINK_LIBRARIES(kio_digikamdates ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS}
 
 # # digiKam Search kio slave #########################################################
 
-SET(kio_digikamsearch_PART_SRCS digikamsearch.cpp ${libdatabase_SRCS} ${libdimg_SRCS} ${libsqlite2_SRCS} ${libiccprofileswidgets_SRCS} ${libmetadatawidgets_SRCS} ${liblprof_SRCS} ${libdimg_SRCS} ${libdimgloaders_SRCS} ${libsqlite2_SRCS} ${libdmetadata_SRCS} ${libdimgfilters_SRCS} ${libhistogram_SRCS} ${liblevels_SRCS} )
+SET(kio_digikamsearch_PART_SRCS digikamsearch.cpp ${libdatabase_SRCS} ${libiccprofileswidgets_SRCS} ${libmetadatawidgets_SRCS} ${liblprof_SRCS} ${libdimg_SRCS} ${libdimgloaders_SRCS} ${libsqlite2_SRCS} ${libdmetadata_SRCS} ${libdimgfilters_SRCS} ${libhistogram_SRCS} ${liblevels_SRCS} )
 
 KDE4_AUTOMOC(${kio_digikamsearch_PART_SRCS})
 
