@@ -1,7 +1,8 @@
-digiKam 0.9.3 - Release date: 2007-xx-xx
+digiKam 0.10.0 - Release date: 2007-xx-xx
 
 NEW FEATURES:
 
+Port to CMake/Qt4/KDE4
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
