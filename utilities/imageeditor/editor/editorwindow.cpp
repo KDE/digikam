@@ -53,6 +53,7 @@ extern "C"
 
 #include <ktoolinvocation.h>
 #include <kaction.h>
+#include <kactioncollection.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <klocale.h>
@@ -108,7 +109,7 @@ namespace Digikam
 {
 
 EditorWindow::EditorWindow(const char *name)
-            : KMainWindow(0)
+            : KXmlGuiWindow(0)
 {
     d = new EditorWindowPriv;
 

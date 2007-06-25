@@ -32,15 +32,15 @@
 
 // KDE includes.
 
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 #include <kurl.h>
 
 // Local includes.
 
 #include "digikam_export.h"
 
-class QSplitter;
 class Q3PopupMenu;
+class QSplitter;
 class QLabel;
 
 class KToolBarPopupAction;
@@ -59,7 +59,7 @@ class StatusProgressBar;
 class SlideShowSettings;
 class EditorWindowPriv;
 
-class DIGIKAM_EXPORT EditorWindow : public KMainWindow
+class DIGIKAM_EXPORT EditorWindow : public KXmlGuiWindow
 {
     Q_OBJECT
 
