@@ -49,6 +49,7 @@ extern "C"
 #include <QByteArray>
 #include <QProgressBar>
 #include <QWidgetAction>
+#include <QImageReader>
 
 // KDE includes.
 
@@ -911,7 +912,7 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.unclipColors            = group.readEntry("UnclipColors", 0);
     m_IOFileSettings->rawDecodingSettings.RAWQuality = (KDcrawIface::RawDecodingSettings::DecodingQuality)
                                                        group.readEntry("RAWQuality",
-                                                       KDcrawIface::RawDecodingSettings::BILINEAR);
+                                                       (int)KDcrawIface::RawDecodingSettings::BILINEAR);
     m_IOFileSettings->rawDecodingSettings.NRThreshold             = group.readEntry("NRThreshold", 100);
     m_IOFileSettings->rawDecodingSettings.brightness              = group.readEntry("RAWBrightness", 1.0);
 
@@ -1255,6 +1256,8 @@ void EditorWindow::slotSelected(bool val)
 
 void EditorWindow::hideToolBars()
 {
+#warning "TODO: kde4 port it";
+/*
     Q3PtrListIterator<KToolBar> it = toolBarIterator();
     KToolBar* bar;
 
@@ -1267,10 +1270,13 @@ void EditorWindow::hideToolBars()
         else 
             bar->hide();
     }
+*/
 }
 
 void EditorWindow::showToolBars()
 {
+#warning "TODO: kde4 port it";
+/*
     Q3PtrListIterator<KToolBar> it = toolBarIterator();
     KToolBar* bar;
 
@@ -1283,6 +1289,7 @@ void EditorWindow::showToolBars()
         else
             bar->show();
     }
+*/
 }
 
 void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
@@ -1360,7 +1367,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
             if (!m_savingContext->abortingSaving)
             {
                 KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".")
-                                .arg(m_savingContext->destinationURL.filename())
+                                .arg(m_savingContext->destinationURL.fileName())
                                 .arg(m_savingContext->destinationURL.path()));
             }
             finishSaving(false);
@@ -1401,7 +1408,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
             if (!m_savingContext->abortingSaving)
             {
                 KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".")
-                                .arg(m_savingContext->destinationURL.filename())
+                                .arg(m_savingContext->destinationURL.fileName())
                                 .arg(m_savingContext->destinationURL.path()));
             }
             finishSaving(false);
@@ -1475,11 +1482,12 @@ void EditorWindow::startingSave(const KUrl& url)
     m_savingContext->abortingSaving     = false;
     m_savingContext->savingState        = SavingContextContainer::SavingStateSave;
     // use magic file extension which tells the digikamalbums ioslave to ignore the file
-    m_savingContext->saveTempFile       = new KTempFile(m_savingContext->srcURL.directory(false),
-                                                        ".digikamtempfile.tmp");
-    m_savingContext->saveTempFile->setAutoDelete(true);
+    m_savingContext->saveTempFile       = new KTemporaryFile();
+    m_savingContext->saveTempFile->setPrefix(m_savingContext->srcURL.directory(false));
+    m_savingContext->saveTempFile->setSuffix(".digikamtempfile.tmp");
+    m_savingContext->saveTempFile->setAutoRemove(true);
 
-    m_canvas->saveAs(m_savingContext->saveTempFile->name(), m_IOFileSettings,
+    m_canvas->saveAs(m_savingContext->saveTempFile->fileName(), m_IOFileSettings,
                      m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()));
 }
 
@@ -1490,19 +1498,18 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     QString mimetypes = KImageIO::mimeTypes(KImageIO::Writing).join(" ");
     mimetypes.append(" image/tiff");
-    DDebug () << "mimetypes=" << mimetypes << endl;    
+    DDebug () << "mimetypes=" << mimetypes << endl;
 
     m_savingContext->srcURL = url;
 
     FileSaveOptionsBox *options = new FileSaveOptionsBox();
     KFileDialog imageFileSaveDialog(m_savingContext->srcURL.isLocalFile() ? 
-                                    m_savingContext->srcURL.directory() : QDir::homePath(),
+                                    m_savingContext->srcURL : KUrl(QDir::homePath()),
                                     QString(),
                                     this,
-                                    "imageFileSaveDialog",
-                                    false,
                                     options);
 
+    imageFileSaveDialog.setModal(false);
     imageFileSaveDialog.setOperationMode(KFileDialog::Saving);
     imageFileSaveDialog.setMode(KFile::File);
     imageFileSaveDialog.setSelection(m_savingContext->srcURL.fileName());
@@ -1525,41 +1532,46 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     options->applySettings();
     applyStandardSettings();
 
-    KUrl newURL = imageFileSaveDialog.selectedURL();
+    KUrl newURL = imageFileSaveDialog.selectedUrl();
 
     // Check if target image format have been selected from Combo List of SaveAs dialog.
-    m_savingContext->format = KImageIO::typeForMime(imageFileSaveDialog.currentMimeFilter());
+
+    // TODO: KDE4PORT: KImageIO::typeForMime return a StringList now. 
+    //                 Check if we use 1st item of list is enough.
+    m_savingContext->format = KImageIO::typeForMime(imageFileSaveDialog.currentMimeFilter())[0];
 
     if ( m_savingContext->format.isEmpty() )
     {
         // Else, check if target image format have been add to target image file name using extension.
 
         QFileInfo fi(newURL.path());
-        m_savingContext->format = fi.extension(false);
+        m_savingContext->format = fi.suffix();
 
         if ( m_savingContext->format.isEmpty() )
         {
             // If format is empty then file format is same as that of the original file.
-            m_savingContext->format = QImageIO::imageFormat(m_savingContext->srcURL.path());
+            m_savingContext->format = QImageReader::imageFormat(m_savingContext->srcURL.path());
         }
         else
         {
             // Else, check if format from file name extension is include on file mime type list.
 
             QString imgExtPattern;
-            QStringList imgExtList = QStringList::split(" ", mimetypes);
+            QStringList imgExtList = mimetypes.split(" ", QString::SkipEmptyParts);
             for (QStringList::ConstIterator it = imgExtList.begin() ; it != imgExtList.end() ; ++it)
-            {    
-                imgExtPattern.append (KImageIO::typeForMime(*it).toUpper());
+            {
+                // TODO: KDE4PORT: KImageIO::typeForMime return a StringList now. 
+                //                 Check if we use 1st item of list is enough.
+                imgExtPattern.append (KImageIO::typeForMime(*it)[0].toUpper());
                 imgExtPattern.append (" ");
-            }    
+            }
             imgExtPattern.append (" TIF TIFF");
             if ( imgExtPattern.contains("JPEG") ) 
             {
                 imgExtPattern.append (" JPG");
                 imgExtPattern.append (" JPE");
             }
-    
+
             if ( !imgExtPattern.contains( m_savingContext->format.toUpper() ) )
             {
                 KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported.")
@@ -1573,7 +1585,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     if (!newURL.isValid())
     {
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to\n\"%2\".")
-                           .arg(newURL.filename())
+                           .arg(newURL.fileName())
                            .arg(newURL.path().section('/', -2, -2)));
         DWarning() << k_funcinfo << "target URL is not valid !" << endl;
         return false;
@@ -1602,9 +1614,9 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
             KMessageBox::warningYesNo( this, i18n("A file named \"%1\" already "
                                                   "exists. Are you sure you want "
                                                   "to overwrite it?")
-                                       .arg(newURL.filename()),
+                                       .arg(newURL.fileName()),
                                        i18n("Overwrite File?"),
-                                       i18n("Overwrite"),
+                                       KStandardGuiItem::overwrite(),
                                        KStandardGuiItem::cancel() );
 
         if (result != KMessageBox::Yes)
@@ -1619,14 +1631,17 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     // Now do the actual saving -----------------------------------------------------
 
     // use magic file extension which tells the digikamalbums ioslave to ignore the file
-    m_savingContext->saveTempFile   = new KTempFile(newURL.directory(false), ".digikamtempfile.tmp");
+
     m_savingContext->destinationURL = newURL;
     m_savingContext->originalFormat = m_canvas->currentImageFileFormat();
     m_savingContext->savingState    = SavingContextContainer::SavingStateSaveAs;
-    m_savingContext->saveTempFile->setAutoDelete(true);
     m_savingContext->abortingSaving = false;
+    m_savingContext->saveTempFile   = new KTemporaryFile();
+    m_savingContext->saveTempFile->setPrefix(newURL.directory(false));
+    m_savingContext->saveTempFile->setSuffix(".digikamtempfile.tmp");
+    m_savingContext->saveTempFile->setAutoRemove(true);
 
-    m_canvas->saveAs(m_savingContext->saveTempFile->name(), m_IOFileSettings,
+    m_canvas->saveAs(m_savingContext->saveTempFile->fileName(), m_IOFileSettings,
                      m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()),
                      m_savingContext->format.toLower());
 
@@ -1648,9 +1663,9 @@ bool EditorWindow::checkPermissions(const KUrl& url)
                                                   "for the file named \"%1\". "
                                                   "Are you sure you want "
                                                   "to overwrite it?")
-                                       .arg(url.filename()),
+                                       .arg(url.fileName()),
                                        i18n("Overwrite File?"),
-                                       i18n("Overwrite"),
+                                       KStandardGuiItem::overwrite(),
                                        KStandardGuiItem::cancel() );
 
         if (result != KMessageBox::Yes)
@@ -1662,7 +1677,7 @@ bool EditorWindow::checkPermissions(const KUrl& url)
 
 bool EditorWindow::moveFile()
 {
-    Q3CString dstFileName = QFile::encodeName(m_savingContext->destinationURL.path());
+    QByteArray dstFileName = QFile::encodeName(m_savingContext->destinationURL.path());
 
     // store old permissions
     mode_t filePermissions = S_IREAD | S_IWRITE;
@@ -1676,7 +1691,7 @@ bool EditorWindow::moveFile()
     }
 
     // rename tmp file to dest
-    if (::rename(QFile::encodeName(m_savingContext->saveTempFile->name()), dstFileName) != 0)
+    if (::rename(QFile::encodeName(m_savingContext->saveTempFile->fileName()), dstFileName) != 0)
     {
         KMessageBox::error(this, i18n("Failed to overwrite original file"),
                            i18n("Error Saving File"));
@@ -1701,7 +1716,7 @@ void EditorWindow::slotToggleColorManagedView()
     d->viewCMViewAction->blockSignals(true);
     bool cmv = false;
     if (d->ICCSettings->enableCMSetting)
-    {    
+    {
         cmv = !d->ICCSettings->managedViewSetting;
         d->ICCSettings->managedViewSetting = cmv;
         m_canvas->setICCSettings(d->ICCSettings);
@@ -1710,11 +1725,11 @@ void EditorWindow::slotToggleColorManagedView()
         // reason, no need to flush file, it cached in memory and will be flushed 
         // to disk at end of session.  
         KSharedConfig::Ptr config = KGlobal::config();
-        config->setGroup("Color Management");
-        config->writeEntry("ManagedView", cmv);
+        KConfigGroup group = config->group("Color Management");
+        group.writeEntry("ManagedView", cmv);
     }
 
-    d->cmViewIndicator->setOn(cmv);
+    d->cmViewIndicator->setChecked(cmv);
     d->viewCMViewAction->setChecked(cmv);
     setColorManagedViewIndicatorToolTip(d->ICCSettings->enableCMSetting, cmv);
     d->cmViewIndicator->blockSignals(false);
@@ -1723,7 +1738,6 @@ void EditorWindow::slotToggleColorManagedView()
 
 void EditorWindow::setColorManagedViewIndicatorToolTip(bool available, bool cmv)
 {
-    QToolTip::remove(d->cmViewIndicator);
     QString tooltip;
     if (available)
     {
@@ -1736,7 +1750,7 @@ void EditorWindow::setColorManagedViewIndicatorToolTip(bool available, bool cmv)
     {
         tooltip = i18n("Color Management is not configured, so the Color Managed View is not available");
     }
-    d->cmViewIndicator->setToolTip( tooltip);
+    d->cmViewIndicator->setToolTip(tooltip);
 }
 
 void EditorWindow::slotToggleUnderExposureIndicator()
@@ -1744,7 +1758,7 @@ void EditorWindow::slotToggleUnderExposureIndicator()
     d->underExposureIndicator->blockSignals(true);
     d->viewUnderExpoAction->blockSignals(true);
     bool uei = !d->exposureSettings->underExposureIndicator;
-    d->underExposureIndicator->setOn(uei);
+    d->underExposureIndicator->setChecked(uei);
     d->viewUnderExpoAction->setChecked(uei);
     d->exposureSettings->underExposureIndicator = uei;
     m_canvas->setExposureSettings(d->exposureSettings);
@@ -1755,7 +1769,6 @@ void EditorWindow::slotToggleUnderExposureIndicator()
 
 void EditorWindow::setUnderExposureToolTip(bool uei)
 {
-    QToolTip::remove(d->underExposureIndicator); 
     d->underExposureIndicator->setToolTip( 
                   uei ? i18n("Under-Exposure indicator is enabled") 
                       : i18n("Under-Exposure indicator is disabled"));
@@ -1766,7 +1779,7 @@ void EditorWindow::slotToggleOverExposureIndicator()
     d->overExposureIndicator->blockSignals(true);
     d->viewOverExpoAction->blockSignals(true);
     bool oei = !d->exposureSettings->overExposureIndicator;
-    d->overExposureIndicator->setOn(oei);
+    d->overExposureIndicator->setChecked(oei);
     d->viewOverExpoAction->setChecked(oei);
     d->exposureSettings->overExposureIndicator = oei;
     m_canvas->setExposureSettings(d->exposureSettings);
@@ -1777,7 +1790,6 @@ void EditorWindow::slotToggleOverExposureIndicator()
 
 void EditorWindow::setOverExposureToolTip(bool oei)
 {
-    QToolTip::remove(d->overExposureIndicator); 
     d->overExposureIndicator->setToolTip( 
                   oei ? i18n("Over-Exposure indicator is enabled") 
                       : i18n("Over-Exposure indicator is disabled"));
@@ -1785,24 +1797,24 @@ void EditorWindow::setOverExposureToolTip(bool oei)
 
 void EditorWindow::slotDonateMoney()
 {
-    KApplication::kApplication()->invokeBrowser("http://www.digikam.org/?q=donation");
+    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
 }
 
 void EditorWindow::slotToggleSlideShow()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
-    bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
+    KConfigGroup group = config->group("ImageViewer Settings");
+    bool startWithCurrent = group.readEntry("SlideShowStartCurrent", false);
 
     SlideShowSettings settings;
-    settings.delay                = config->readNumEntry("SlideShowDelay", 5) * 1000;
-    settings.printName            = config->readBoolEntry("SlideShowPrintName", true);
-    settings.printDate            = config->readBoolEntry("SlideShowPrintDate", false);
-    settings.printApertureFocal   = config->readBoolEntry("SlideShowPrintApertureFocal", false);
-    settings.printExpoSensitivity = config->readBoolEntry("SlideShowPrintExpoSensitivity", false);
-    settings.printMakeModel       = config->readBoolEntry("SlideShowPrintMakeModel", false);
-    settings.printComment         = config->readBoolEntry("SlideShowPrintComment", false);
-    settings.loop                 = config->readBoolEntry("SlideShowLoop", false);
+    settings.delay                = group.readEntry("SlideShowDelay", 5) * 1000;
+    settings.printName            = group.readEntry("SlideShowPrintName", true);
+    settings.printDate            = group.readEntry("SlideShowPrintDate", false);
+    settings.printApertureFocal   = group.readEntry("SlideShowPrintApertureFocal", false);
+    settings.printExpoSensitivity = group.readEntry("SlideShowPrintExpoSensitivity", false);
+    settings.printMakeModel       = group.readEntry("SlideShowPrintMakeModel", false);
+    settings.printComment         = group.readEntry("SlideShowPrintComment", false);
+    settings.loop                 = group.readEntry("SlideShowLoop", false);
     slideShow(startWithCurrent, settings);
 }
 
