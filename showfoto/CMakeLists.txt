@@ -1,3 +1,4 @@
+message(${KDCRAW_INCLUDE_DIR})
 
 ADD_SUBDIRECTORY( pics )
 ADD_SUBDIRECTORY( icons )

@@ -44,14 +44,14 @@ extern "C"
 
 // Qt includes.
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qsplitter.h>
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qfile.h>
-#include <qcursor.h>
-#include <qfileinfo.h>
+#include <QLabel>
+#include <QLayout>
+#include <QSplitter>
+#include <QDir>
+#include <QFileInfo>
+#include <QFile>
+#include <QCursor>
+#include <QProgressBar>
 
 // KDE includes.
 
@@ -65,7 +65,6 @@ extern "C"
 #include <kmenubar.h>
 #include <kimageio.h>
 #include <kaccel.h>
-#include <kdeversion.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -76,7 +75,6 @@ extern "C"
 #include <kglobalsettings.h>
 #include <ktoolbar.h>
 #include <kstatusbar.h>
-#include <kprogressbar.h>
 
 // LibKDcraw includes.
 
@@ -135,18 +133,18 @@ public:
     bool                             fullScreenHideThumbBar;
     bool                             deleteItem2Trash;
     bool                             validIccPath;
-    
+
     int                              itemsNb;
 
     QSplitter                       *vSplitter;
 
     KUrl                             lastOpenedDirectory;
-    
+
     KToggleAction                   *showBarAction;
 
     KAction                         *openFilesInFolderAction;
     KAction                         *fileOpenAction;
-    
+
     KActionMenu                     *BCGAction;
 
     Digikam::ThumbBarView           *thumbBar;
@@ -161,13 +159,13 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     d = new ShowFotoPriv();
 
     // -- Show splash at start ----------------------------
-    
+
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
+    KConfigGroup group = config->group("ImageViewer Settings");
     KGlobal::dirs()->addResourceType("data", KGlobal::dirs()->kde_default("data") + "digikam");
     KIconLoader::global()->addAppDir("digikam");
-    
-    if(config->readBoolEntry("ShowSplash", true) && !kapp->isSessionRestored())
+
+    if(group.readEntry("ShowSplash", true) && !kapp->isSessionRestored())
     {
         d->splash = new Digikam::SplashScreen("showfoto-splash.png");
     }
@@ -175,35 +173,35 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     // Check ICC profiles repository availability
 
     if(d->splash)
-        d->splash->message(i18n("Checking ICC repository"), Qt::AlignLeft, white);
+        d->splash->message(i18n("Checking ICC repository"), Qt::AlignLeft, Qt::white);
 
     d->validIccPath = Digikam::SetupICC::iccRepositoryIsValid();
 
     // Check witch dcraw version available
 
     if(d->splash)
-        d->splash->message(i18n("Checking dcraw version"), Qt::AlignLeft, white);
+        d->splash->message(i18n("Checking dcraw version"), Qt::AlignLeft, Qt::white);
 
-    KDcrawIface::DcrawBinary::componentData().checkSystem();
+    KDcrawIface::DcrawBinary::componentData()->checkSystem();
 
     // -- Build the GUI -----------------------------------
 
     setupUserArea();
     setupStatusBar();
     setupActions();
-    
+
     // Load image plugins to GUI
 
     m_imagePluginLoader = new Digikam::ImagePluginLoader(this, d->splash);
     loadImagePlugins();
 
     // If plugin core is not available, plug BCG actions to collection instead.
-    
+
     if ( !m_imagePluginLoader->pluginLibraryIsLoaded("digikamimageplugin_core") )
     {
         d->BCGAction = new KActionMenu(i18n("Brightness/Contrast/Gamma"), 0, 0, "showfoto_bcg");
         d->BCGAction->setDelayed(false);
-    
+
         KAction *incGammaAction = new KAction(i18n("Increase Gamma"), 0, Qt::ALT+Qt::Key_G,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "gamma_plus");
@@ -222,7 +220,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
         KAction *decContrastAction = new KAction(i18n("Decrease Contrast"), 0, Qt::ALT+Qt::SHIFT+Qt::Key_C,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "contrast_minus");
-    
+
         d->BCGAction->insert(incBrightAction);
         d->BCGAction->insert(decBrightAction);
         d->BCGAction->insert(incContrastAction);
@@ -241,11 +239,11 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     setupContextMenu();
 
     // Make signals/slots connections
-    
+
     setupConnections();
-    
+
     // -- Read settings --------------------------------
-        
+
     readSettings();
     applySettings();
     setAutoSaveSettings("ImageViewer Settings");
@@ -262,7 +260,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
             if (fi.isDir())
             {
                 // Local Dir
-                openFolder(url);                 
+                openFolder(url);
             }
             else
             {
@@ -364,7 +362,7 @@ void ShowFoto::show()
 
     // Report errors from dcraw detection.
 
-    KDcrawIface::DcrawBinary::componentData().checkReport();  
+    KDcrawIface::DcrawBinary::componentData().checkReport();
 }
 
 void ShowFoto::setupConnections()
@@ -387,14 +385,15 @@ void ShowFoto::setupConnections()
 void ShowFoto::setupUserArea()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
+    KConfigGroup group = config->group("ImageViewer Settings");
 
     QWidget* widget = new QWidget(this);
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
 
-    if(!config->readBoolEntry("HorizontalThumbbar", false)) // Vertical thumbbar layout
+    if(!group.readEntry("HorizontalThumbbar", false)) // Vertical thumbbar layout
     {
-        Q3HBoxLayout *hlay = new Q3HBoxLayout(widget);
+        QHBoxLayout *hlay = new QHBoxLayout(widget);
+        widget->setLayout(hlay);
         m_splitter        = new QSplitter(widget);
         d->thumbBar       = new Digikam::ThumbBarView(m_splitter, Digikam::ThumbBarView::Vertical);
         m_canvas          = new Digikam::Canvas(m_splitter);
@@ -412,7 +411,8 @@ void ShowFoto::setupUserArea()
     {
         m_splitter        = new QSplitter(Qt::Horizontal, widget);
         QWidget* widget2  = new QWidget(m_splitter);
-        Q3VBoxLayout *vlay = new Q3VBoxLayout(widget2);
+        QVBoxLayout *vlay = new QVBoxLayout(widget2);
+        widget2->setLAyout(vlay);
         d->vSplitter      = new QSplitter(Qt::Vertical, widget2);
         m_canvas          = new Digikam::Canvas(d->vSplitter);
         d->thumbBar       = new Digikam::ThumbBarView(d->vSplitter, Digikam::ThumbBarView::Horizontal);
@@ -427,19 +427,20 @@ void ShowFoto::setupUserArea()
 
         vlay->addWidget(d->vSplitter);
 
-        Q3HBoxLayout *hlay = new Q3HBoxLayout(widget);
+        QHBoxLayout *hlay = new QHBoxLayout(widget);
+        widget->setLayout(hlay);
         d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
                                                                 Digikam::Sidebar::Right);
         hlay->addWidget(m_splitter);
         hlay->addWidget(d->rightSidebar);
     }
 
-    m_splitter->setFrameStyle( Q3Frame::NoFrame );
-    m_splitter->setFrameShadow( Q3Frame::Plain );
-    m_splitter->setFrameShape( Q3Frame::NoFrame );
+    m_splitter->setFrameStyle( QFrame::NoFrame );
+    m_splitter->setFrameShadow( QFrame::Plain );
+    m_splitter->setFrameShape( QFrame::NoFrame );
     m_splitter->setOpaqueResize(false);
     setCentralWidget(widget);
-    d->rightSidebar->loadViewState();    
+    d->rightSidebar->loadViewState();
 }
 
 void ShowFoto::setupActions()
@@ -484,27 +485,30 @@ void ShowFoto::setupActions()
 void ShowFoto::readSettings()
 {
     readStandardSettings();
-    
+
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("ImageViewer Settings");
-    
+
     d->showBarAction->setChecked(group.readEntry("Show Thumbnails", true));
     slotToggleShowBar();
 
     d->lastOpenedDirectory.setPath( group.readEntry("Last Opened Directory",
                                     KGlobalSettings::documentPath()) );
 
+    QList<int> list;
     QSizePolicy szPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    szPolicy.setHorizontalStretch(2);
+    szPolicy.setVerticalStretch(1);
     if(group.hasKey("Vertical Splitter Sizes") && d->vSplitter)
-        d->vSplitter->setSizes(group·readEntry("Vertical Splitter Sizes",QList<int>()));
+        d->vSplitter->setSizes(group.readEntry("Vertical Splitter Sizes", list));
     else 
-        m_canvas->setSizePolicy(szPolicy);    
+        m_canvas->setSizePolicy(szPolicy);
 }
 
 void ShowFoto::saveSettings()
 {
     saveStandardSettings();
-    
+
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("ImageViewer Settings");
     
