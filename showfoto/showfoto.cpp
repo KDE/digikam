@@ -49,14 +49,15 @@ extern "C"
 #include <QHBoxLayout>
 #include <QFrame>
 #include <QVBoxLayout>
-#include <KToggleAction>
-#include <KActionMenu>
 
 // KDE includes.
 
 #include <kcursor.h>
 #include <kaction.h>
 #include <kactioncollection.h>
+#include <ktoggleaction.h>
+#include <kactionmenu.h>
+#include <ktoolbarpopupaction.h>
 #include <kstandardaction.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -68,7 +69,8 @@ extern "C"
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kio/netaccess.h>
-#include <kio/job.h>
+#include <kio/copyjob.h>
+#include <kio/deletejob.h>
 #include <kprotocolinfo.h>
 #include <kglobalsettings.h>
 #include <ktoolbar.h>
@@ -137,12 +139,13 @@ public:
 
     QSplitter                       *vSplitter;
 
+    QAction                         *fileOpenAction;
+
     KUrl                             lastOpenedDirectory;
 
     KToggleAction                   *showBarAction;
 
     KAction                         *openFilesInFolderAction;
-    KAction                         *fileOpenAction;
 
     KActionMenu                     *BCGAction;
 
@@ -239,7 +242,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
         d->BCGAction->addAction(incGammaAction);
         d->BCGAction->addAction(decGammaAction);
 
-        QList<KAction> bcg_actions;
+        QList<QAction*> bcg_actions;
         bcg_actions.append( d->BCGAction );
         unplugActionList( "showfoto_bcg" );
         plugActionList( "showfoto_bcg", bcg_actions );
@@ -358,22 +361,22 @@ void ShowFoto::show()
         {
             if (!setup(true))
             {
-                config->setGroup("Color Management");
-                config->writeEntry("EnableCM", false);
+                KConfigGroup group = config->group("Color Management");
+                group.writeEntry("EnableCM", false);
                 config->sync();
             }
         }
         else
         {
-            config->setGroup("Color Management");
-            config->writeEntry("EnableCM", false);
+            KConfigGroup group = config->group("Color Management");
+            group.writeEntry("EnableCM", false);
             config->sync();
         }
     }
 
     // Report errors from dcraw detection.
 
-    KDcrawIface::DcrawBinary::componentData().checkReport();
+    KDcrawIface::DcrawBinary::componentData()->checkReport();
 }
 
 void ShowFoto::setupConnections()
@@ -399,7 +402,9 @@ void ShowFoto::setupUserArea()
     KConfigGroup group = config->group("ImageViewer Settings");
 
     QWidget* widget = new QWidget(this);
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    rightSzPolicy.setHorizontalStretch(2);
+    rightSzPolicy.setVerticalStretch(1);
 
     if(!group.readEntry("HorizontalThumbbar", false)) // Vertical thumbbar layout
     {
@@ -413,7 +418,7 @@ void ShowFoto::setupUserArea()
         m_canvas->makeDefaultEditingCanvas();
 
         d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
-                                                                Digikam::Sidebar::Right);
+                                                                Digikam::Sidebar::DockRight);
 
         hlay->addWidget(m_splitter);
         hlay->addWidget(d->rightSidebar);
@@ -423,7 +428,7 @@ void ShowFoto::setupUserArea()
         m_splitter        = new QSplitter(Qt::Horizontal, widget);
         QWidget* widget2  = new QWidget(m_splitter);
         QVBoxLayout *vlay = new QVBoxLayout(widget2);
-        widget2->setLAyout(vlay);
+        widget2->setLayout(vlay);
         d->vSplitter      = new QSplitter(Qt::Vertical, widget2);
         m_canvas          = new Digikam::Canvas(d->vSplitter);
         d->thumbBar       = new Digikam::ThumbBarView(d->vSplitter, Digikam::ThumbBarView::Horizontal);
@@ -441,7 +446,7 @@ void ShowFoto::setupUserArea()
         QHBoxLayout *hlay = new QHBoxLayout(widget);
         widget->setLayout(hlay);
         d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
-                                                                Digikam::Sidebar::Right);
+                                                                Digikam::Sidebar::DockRight);
         hlay->addWidget(m_splitter);
         hlay->addWidget(d->rightSidebar);
     }
@@ -466,29 +471,26 @@ void ShowFoto::setupActions()
 
     // Extra 'File' menu actions ---------------------------------------------
 
-    d->fileOpenAction = KStandardAction::open(this, SLOT(slotOpenFile()),
-                        actionCollection(), "showfoto_open_file");
+    d->fileOpenAction = actionCollection()->addAction(KStandardAction::Open, "showfoto_open_file", 
+                                                      this, SLOT(slotOpenFile()));
 
-    d->openFilesInFolderAction = new KAction(i18n("Open folder"),
-                                             "folder_image",
-                                             Qt::CTRL+Qt::SHIFT+Qt::Key_O,
-                                             this,
-                                             SLOT(slotOpenFilesInFolder()),
-                                             actionCollection(),
-                                             "showfoto_open_folder");
+    d->openFilesInFolderAction = new KAction(i18n("Open folder"), this);
+    d->openFilesInFolderAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_O);
+    connect(d->openFilesInFolderAction, SIGNAL(triggered()), this, SLOT(slotOpenFilesInFolder()));
+    actionCollection()->addAction("folder_image", d->openFilesInFolderAction);
 
-    KStandardAction::quit(this, SLOT(close()), actionCollection(), "showfoto_quit");
+    actionCollection()->addAction(KStandardAction::Quit, "showfoto_quit", this, SLOT(close()));
 
     // Extra 'View' menu actions ---------------------------------------------
 
-    d->showBarAction = new KToggleAction(i18n("Show Thumbnails"), 0, 
-                                         Qt::CTRL+Qt::Key_T,
-                                         this, SLOT(slotToggleShowBar()),
-                                         actionCollection(), "shofoto_showthumbs");
+    d->showBarAction = new KToggleAction(i18n("Show Thumbnails"), this);
+    d->showBarAction->setShortcut(Qt::CTRL+Qt::Key_T);
+    connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
+    actionCollection()->addAction("shofoto_showthumbs", d->showBarAction);
 
     // --- Create the gui --------------------------------------------------------------
 
-    createGUI("showfotoui.rc", false);
+    createGUI("showfotoui.rc");
 
     setupStandardAccelerators();
 }
@@ -506,10 +508,10 @@ void ShowFoto::readSettings()
     d->lastOpenedDirectory.setPath( group.readEntry("Last Opened Directory",
                                     KGlobalSettings::documentPath()) );
 
-    QList<int> list;
-    QSizePolicy szPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    QSizePolicy szPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     szPolicy.setHorizontalStretch(2);
     szPolicy.setVerticalStretch(1);
+    QList<int> list;
     if(group.hasKey("Vertical Splitter Sizes") && d->vSplitter)
         d->vSplitter->setSizes(group.readEntry("Vertical Splitter Sizes", list));
     else 
@@ -539,19 +541,19 @@ void ShowFoto::applySettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("ImageViewer Settings");
 
-    m_bgColor = group.readEntry("BackgroundColor", &Qt::black);
+    m_bgColor = group.readEntry("BackgroundColor", Qt::black);
     m_canvas->setBackgroundColor(m_bgColor);
 
     // Current image deleted go to trash ?
     d->deleteItem2Trash = group.readEntry("DeleteItem2Trash", true);
     if (d->deleteItem2Trash)
     {
-        m_fileDeleteAction->setIcon("edittrash");
+        m_fileDeleteAction->setIcon(KIcon("edittrash"));
         m_fileDeleteAction->setText(i18n("Move to Trash"));
     }
     else
     {
-        m_fileDeleteAction->setIcon("editdelete");
+        m_fileDeleteAction->setIcon(KIcon("editdelete"));
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
 
@@ -593,7 +595,7 @@ void ShowFoto::slotOpenFile()
     QString allPictures = patternList[0];
     
     // Add other files format witch are missing to All Pictures" type mime provided by KDE and remplace current.
-    if (KDcrawIface::DcrawBinary::componentData().versionIsRight())
+    if (KDcrawIface::DcrawBinary::componentData()->versionIsRight())
     {
         allPictures.insert(allPictures.find("|"), QString(raw_file_extentions) + QString(" *.JPE *.TIF"));
         patternList.remove(patternList[0]);
@@ -603,7 +605,7 @@ void ShowFoto::slotOpenFile()
     // Added RAW file formats supported by dcraw program like a type mime. 
     // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete 
     // or unavailable(dcraw_0)(see file #121242 in B.K.O).
-    if (KDcrawIface::DcrawBinary::componentData().versionIsRight())
+    if (KDcrawIface::DcrawBinary::componentData()->versionIsRight())
     {
         patternList.append(i18n("\n%1|Camera RAW files",QString(raw_file_extentions)));
     }
@@ -612,7 +614,7 @@ void ShowFoto::slotOpenFile()
 
     DDebug() << "fileformats=" << fileformats << endl;   
     
-    KUrl::List urls =  KFileDialog::getOpenURLs(d->lastOpenedDirectory.path(), fileformats, this, i18n("Open Images"));
+    KUrl::List urls =  KFileDialog::getOpenUrls(d->lastOpenedDirectory.path(), fileformats, this, i18n("Open Images"));
 
     if (!urls.isEmpty())
     {
@@ -686,7 +688,7 @@ void ShowFoto::slotChangeBCG()
 {
     QString name;
     if (sender())
-        name = sender()->name();
+        name = sender()->objectName();
 
     if (name == "gamma_plus")
     {
@@ -843,7 +845,9 @@ void ShowFoto::openFolder(const KUrl& url)
 
     for (QStringList::ConstIterator it = mimeTypes.begin() ; it != mimeTypes.end() ; ++it)
     {    
-        QString format = KImageIO::typeForMime(*it);
+        // TODO: KDE4PORT: KImageIO::typeForMime return a StringList now. 
+        //                 Check if we use 1st item of list is enough.
+        QString format = KImageIO::typeForMime(*it)[0];
         filter.append ("*.");
         filter.append (format);
         filter.append (" ");
@@ -881,22 +885,21 @@ void ShowFoto::openFolder(const KUrl& url)
     dir.setFilter ( QDir::Files | QDir::NoSymLinks );
     dir.setSorting ( QDir::Time );
 
-    const QFileInfoList* fileinfolist = dir.entryInfoList();
-    if (!fileinfolist || fileinfolist->isEmpty())
+    QFileInfoList fileinfolist = dir.entryInfoList();
+
+    if (fileinfolist.isEmpty())
     {
         KMessageBox::sorry(this, i18n("There are no pictures in this folder."));
         return;
     }
     
-    QFileInfoListIterator it(*fileinfolist);
-    QFileInfo* fi;
+    QFileInfoList::const_iterator fi;
 
     // And open all items in image editor.
 
-    while( (fi = it.current() ) )
+    for (fi = fileinfolist.constBegin(); fi != fileinfolist.constEnd(); ++fi)
     {
         new Digikam::ThumbBarItem( d->thumbBar, KUrl(fi->filePath()) );
-        ++it;
     }
 }
     
@@ -1084,12 +1087,12 @@ void ShowFoto::slotDeleteCurrentItem()
 
     if (!d->deleteItem2Trash)
     {
-        QString warnMsg(i18n("About to delete file \"%1\"\nAre you sure?"
-                        ,urlCurrent.fileName()));
+        QString warnMsg(i18n("About to delete file \"%1\"\nAre you sure?", 
+                        urlCurrent.fileName()));
         if (KMessageBox::warningContinueCancel(this,
                                                warnMsg,
                                                i18n("Warning"),
-                                               i18n("Delete"))
+                                               KStandardGuiItem::del())
             !=  KMessageBox::Continue)
         {
             return;
