@@ -485,6 +485,8 @@ void EditorWindow::setupStandardActions()
 
 void EditorWindow::setupStandardAccelerators()
 {
+/*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
+
     d->accelerators = new KAccel(this);
 
     d->accelerators->insert("Exit fullscreen", i18n("Exit Fullscreen mode"),
@@ -531,6 +533,7 @@ void EditorWindow::setupStandardAccelerators()
                     i18n("Redo Last action"),
                     Qt::CTRL+Qt::Key_Y, m_canvas, SLOT(slotRedo()),
                     false, true);
+*/
 }
 
 void EditorWindow::setupStatusBar()
@@ -761,17 +764,21 @@ void EditorWindow::plugActionAccel(KAction* action)
     if (!action)
         return;
 
+/*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
+
     d->accelerators->insert(action->text(),
                     action->text(),
                     action->whatsThis(),
                     action->shortcut(),
                     action,
-                    SLOT(activate()));
+                    SLOT(activate()));*/
 }
 
 void EditorWindow::unplugActionAccel(KAction* action)
 {
-    d->accelerators->remove(action->text());
+/*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
+
+    d->accelerators->remove(action->text());*/
 }
 
 void EditorWindow::loadImagePlugins()

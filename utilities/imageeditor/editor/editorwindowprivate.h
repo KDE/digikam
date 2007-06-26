@@ -34,7 +34,6 @@ class KComboBox;
 class KToggleAction;
 class KSelectAction;
 class KActionMenu;
-class KAccel;
 
 namespace Digikam
 {
@@ -54,7 +53,6 @@ public:
 
         selectLabel            = 0;
         donateMoneyAction      = 0;
-        accelerators           = 0;
         viewCMViewAction       = 0;
         filePrintAction        = 0;
         copyAction             = 0;
@@ -121,8 +119,6 @@ public:
     KToggleAction             *viewOverExpoAction;
 
     KComboBox                 *zoomCombo;
-
-    KAccel                    *accelerators;
 
     ICCSettingsContainer      *ICCSettings;
 
