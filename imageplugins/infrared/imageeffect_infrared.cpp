@@ -154,11 +154,11 @@ void ImageEffect_Infrared::renderingFinished()
 void ImageEffect_Infrared::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("infrared Tool Dialog");
+    KConfigGroup group = config->group("infrared Tool Dialog");
     m_sensibilitySlider->blockSignals(true);
     m_addFilmGrain->blockSignals(true);
-    m_sensibilitySlider->setValue(config->readNumEntry("SensitivityAjustment", 1));
-    m_addFilmGrain->setChecked(config->readBoolEntry("AddFilmGrain", false));
+    m_sensibilitySlider->setValue(group.readEntry("SensitivityAjustment", 1));
+    m_addFilmGrain->setChecked(group.readEntry("AddFilmGrain", false));
     m_sensibilitySlider->blockSignals(false);
     m_addFilmGrain->blockSignals(false);
     slotSliderMoved(m_sensibilitySlider->value());
@@ -167,10 +167,10 @@ void ImageEffect_Infrared::readUserSettings()
 void ImageEffect_Infrared::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("infrared Tool Dialog");
-    config->writeEntry("SensitivityAjustment", m_sensibilitySlider->value());
-    config->writeEntry("AddFilmGrain", m_addFilmGrain->isChecked());
-    config->sync();
+    KConfigGroup group = config->group("infrared Tool Dialog");
+    group.writeEntry("SensitivityAjustment", m_sensibilitySlider->value());
+    group.writeEntry("AddFilmGrain", m_addFilmGrain->isChecked());
+    group.sync();
 }
 
 void ImageEffect_Infrared::resetValues()

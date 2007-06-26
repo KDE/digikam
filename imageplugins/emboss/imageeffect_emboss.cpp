@@ -114,18 +114,18 @@ void ImageEffect_Emboss::renderingFinished()
 void ImageEffect_Emboss::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("emboss Tool Dialog");
+    KConfigGroup group = config->group("emboss Tool Dialog");
     m_depthInput->blockSignals(true);
-    m_depthInput->setValue(config->readNumEntry("DepthAjustment", 30));
+    m_depthInput->setValue(group.readEntry("DepthAjustment", 30));
     m_depthInput->blockSignals(false);
 }
 
 void ImageEffect_Emboss::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("emboss Tool Dialog");
-    config->writeEntry("DepthAjustment", m_depthInput->value());
-    config->sync();
+    KConfigGroup group = config->group("emboss Tool Dialog");
+    group.writeEntry("DepthAjustment", m_depthInput->value());
+    group.sync();
 }
 
 void ImageEffect_Emboss::resetValues()

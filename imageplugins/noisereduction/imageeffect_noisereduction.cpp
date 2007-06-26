@@ -320,7 +320,7 @@ void ImageEffect_NoiseReduction::renderingFinished()
 void ImageEffect_NoiseReduction::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("noisereduction Tool Dialog");
+    KConfigGroup group = config->group("noisereduction Tool Dialog");
     m_radiusInput->setEnabled(true);
     m_lumToleranceInput->setEnabled(true);
     m_thresholdInput->setEnabled(true);
@@ -332,16 +332,16 @@ void ImageEffect_NoiseReduction::readUserSettings()
     m_dampingInput->setEnabled(true);
     m_phaseInput->setEnabled(true);
 
-    m_radiusInput->setValue(config->readDoubleNumEntry("RadiusAjustment", 1.0));
-    m_lumToleranceInput->setValue(config->readDoubleNumEntry("LumToleranceAjustment", 1.0));
-    m_thresholdInput->setValue(config->readDoubleNumEntry("ThresholdAjustment", 0.08));
-    m_textureInput->setValue(config->readDoubleNumEntry("TextureAjustment", 0.0));
-    m_sharpnessInput->setValue(config->readDoubleNumEntry("SharpnessAjustment", 0.25));
-    m_csmoothInput->setValue(config->readDoubleNumEntry("CsmoothAjustment", 1.0));
-    m_lookaheadInput->setValue(config->readDoubleNumEntry("LookAheadAjustment", 2.0));
-    m_gammaInput->setValue(config->readDoubleNumEntry("GammaAjustment", 1.4));
-    m_dampingInput->setValue(config->readDoubleNumEntry("DampingAjustment", 5.0));
-    m_phaseInput->setValue(config->readDoubleNumEntry("PhaseAjustment", 1.0));
+    m_radiusInput->setValue(group.readEntry("RadiusAjustment", 1.0));
+    m_lumToleranceInput->setValue(group.readEntry("LumToleranceAjustment", 1.0));
+    m_thresholdInput->setValue(group.readEntry("ThresholdAjustment", 0.08));
+    m_textureInput->setValue(group.readEntry("TextureAjustment", 0.0));
+    m_sharpnessInput->setValue(group.readEntry("SharpnessAjustment", 0.25));
+    m_csmoothInput->setValue(group.readEntry("CsmoothAjustment", 1.0));
+    m_lookaheadInput->setValue(group.readEntry("LookAheadAjustment", 2.0));
+    m_gammaInput->setValue(group.readEntry("GammaAjustment", 1.4));
+    m_dampingInput->setValue(group.readEntry("DampingAjustment", 5.0));
+    m_phaseInput->setValue(group.readEntry("PhaseAjustment", 1.0));
 
     m_radiusInput->setEnabled(false);
     m_lumToleranceInput->setEnabled(false);
@@ -358,18 +358,18 @@ void ImageEffect_NoiseReduction::readUserSettings()
 void ImageEffect_NoiseReduction::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("noisereduction Tool Dialog");
-    config->writeEntry("RadiusAjustment", m_radiusInput->value());
-    config->writeEntry("LumToleranceAjustment", m_lumToleranceInput->value());
-    config->writeEntry("ThresholdAjustment", m_thresholdInput->value());
-    config->writeEntry("TextureAjustment", m_textureInput->value());
-    config->writeEntry("SharpnessAjustment", m_sharpnessInput->value());
-    config->writeEntry("CsmoothAjustment", m_csmoothInput->value());
-    config->writeEntry("LookAheadAjustment", m_lookaheadInput->value());
-    config->writeEntry("GammaAjustment", m_gammaInput->value());
-    config->writeEntry("DampingAjustment", m_dampingInput->value());
-    config->writeEntry("PhaseAjustment", m_phaseInput->value());
-    config->sync();
+    KConfigGroup group = config->group("noisereduction Tool Dialog");
+    group.writeEntry("RadiusAjustment", m_radiusInput->value());
+    group.writeEntry("LumToleranceAjustment", m_lumToleranceInput->value());
+    group.writeEntry("ThresholdAjustment", m_thresholdInput->value());
+    group.writeEntry("TextureAjustment", m_textureInput->value());
+    group.writeEntry("SharpnessAjustment", m_sharpnessInput->value());
+    group.writeEntry("CsmoothAjustment", m_csmoothInput->value());
+    group.writeEntry("LookAheadAjustment", m_lookaheadInput->value());
+    group.writeEntry("GammaAjustment", m_gammaInput->value());
+    group.writeEntry("DampingAjustment", m_dampingInput->value());
+    group.writeEntry("PhaseAjustment", m_phaseInput->value());
+    group.sync();
 }
 
 void ImageEffect_NoiseReduction::resetValues()

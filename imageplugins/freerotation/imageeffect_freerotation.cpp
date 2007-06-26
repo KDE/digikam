@@ -179,23 +179,23 @@ ImageEffect_FreeRotation::~ImageEffect_FreeRotation()
 void ImageEffect_FreeRotation::readUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("freerotation Tool Dialog");
-    m_angleInput->setValue(config->readNumEntry("Main Angle", 0));
-    m_fineAngleInput->setValue(config->readDoubleNumEntry("Fine Angle", 0.0));
-    m_autoCropCB->setCurrentItem(config->readNumEntry("Auto Crop Type", FreeRotation::NoAutoCrop));
-    m_antialiasInput->setChecked(config->readBoolEntry("Anti Aliasing", true));
+    KConfigGroup group = config->group("freerotation Tool Dialog");
+    m_angleInput->setValue(group.readEntry("Main Angle", 0));
+    m_fineAngleInput->setValue(group.readEntry("Fine Angle", 0.0));
+    m_autoCropCB->setCurrentItem(group.readEntry("Auto Crop Type", FreeRotation::NoAutoCrop));
+    m_antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
     slotEffect();
 }
 
 void ImageEffect_FreeRotation::writeUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("freerotation Tool Dialog");
-    config->writeEntry("Main Angle", m_angleInput->value());
-    config->writeEntry("Fine Angle", m_fineAngleInput->value());
-    config->writeEntry( "Auto Crop Type", m_autoCropCB->currentItem() );
-    config->writeEntry( "Anti Aliasing", m_antialiasInput->isChecked() );
-    config->sync();
+    KConfigGroup group = config->group("freerotation Tool Dialog");
+    group.writeEntry("Main Angle", m_angleInput->value());
+    group.writeEntry("Fine Angle", m_fineAngleInput->value());
+    group.writeEntry( "Auto Crop Type", m_autoCropCB->currentItem() );
+    group.writeEntry( "Anti Aliasing", m_antialiasInput->isChecked() );
+    group.sync();
 }
 
 void ImageEffect_FreeRotation::resetValues()
