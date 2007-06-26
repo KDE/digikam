@@ -37,7 +37,7 @@ extern "C"
 
 // Qt includes.
 
-#include <Q3PtrList>
+#include <QList>
 #include <QLabel>
 #include <QLayout>
 #include <QSplitter>
@@ -56,6 +56,7 @@ extern "C"
 
 #include <kcursor.h>
 #include <kaction.h>
+#include <kactioncollection.h>
 #include <kstandardaction.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -197,36 +198,48 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     if ( !m_imagePluginLoader->pluginLibraryIsLoaded("digikamimageplugin_core") )
     {
-        d->BCGAction = new KActionMenu(i18n("Brightness/Contrast/Gamma"), 0, 0, "showfoto_bcg");
+        d->BCGAction = new KActionMenu(i18n("Brightness/Contrast/Gamma"), 0);
+        d->BCGAction->setObjectName("showfoto_bcg");
         d->BCGAction->setDelayed(false);
 
-        KAction *incGammaAction = new KAction(i18n("Increase Gamma"), 0, Qt::ALT+Qt::Key_G,
-                                            this, SLOT(slotChangeBCG()),
-                                            actionCollection(), "gamma_plus");
-        KAction *decGammaAction = new KAction(i18n("Decrease Gamma"), 0, Qt::ALT+Qt::SHIFT+Qt::Key_G,
-                                            this, SLOT(slotChangeBCG()),
-                                            actionCollection(), "gamma_minus");
-        KAction *incBrightAction = new KAction(i18n("Increase Brightness"), 0, Qt::ALT+Qt::Key_B,
-                                            this, SLOT(slotChangeBCG()),
-                                            actionCollection(), "brightness_plus");
-        KAction *decBrightAction = new KAction(i18n("Decrease Brightness"), 0, Qt::ALT+Qt::SHIFT+Qt::Key_B,
-                                            this, SLOT(slotChangeBCG()),
-                                            actionCollection(), "brightness_minus");
-        KAction *incContrastAction = new KAction(i18n("Increase Contrast"), 0, Qt::ALT+Qt::Key_C,
-                                            this, SLOT(slotChangeBCG()),
-                                            actionCollection(), "contrast_plus");
-        KAction *decContrastAction = new KAction(i18n("Decrease Contrast"), 0, Qt::ALT+Qt::SHIFT+Qt::Key_C,
-                                            this, SLOT(slotChangeBCG()),
-                                            actionCollection(), "contrast_minus");
+        KAction *incGammaAction = new KAction(i18n("Increase Gamma"), this);
+        incGammaAction->setShortcut(Qt::ALT+Qt::Key_G);
+        connect(incGammaAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
+        actionCollection()->addAction("gamma_plus", incGammaAction);
 
-        d->BCGAction->insert(incBrightAction);
-        d->BCGAction->insert(decBrightAction);
-        d->BCGAction->insert(incContrastAction);
-        d->BCGAction->insert(decContrastAction);
-        d->BCGAction->insert(incGammaAction);
-        d->BCGAction->insert(decGammaAction);
+        KAction *decGammaAction = new KAction(i18n("Decrease Gamma"), this);
+        decGammaAction->setShortcut(Qt::ALT+Qt::SHIFT+Qt::Key_G);
+        connect(decGammaAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
+        actionCollection()->addAction("gamma_minus", decGammaAction);
 
-        Q3PtrList<KAction> bcg_actions;
+        KAction *incBrightAction = new KAction(i18n("Increase Brightness"), this);
+        incBrightAction->setShortcut(Qt::ALT+Qt::Key_B);
+        connect(incBrightAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
+        actionCollection()->addAction("brightness_plus", incBrightAction);
+
+        KAction *decBrightAction = new KAction(i18n("Decrease Brightness"), this);
+        decBrightAction->setShortcut(Qt::ALT+Qt::SHIFT+Qt::Key_B);
+        connect(decBrightAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
+        actionCollection()->addAction("brightness_minus", decBrightAction);
+
+        KAction *incContrastAction = new KAction(i18n("Increase Contrast"), this);
+        incContrastAction->setShortcut(Qt::ALT+Qt::Key_C);
+        connect(incContrastAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
+        actionCollection()->addAction("contrast_plus", incContrastAction);
+
+        KAction *decContrastAction = new KAction(i18n("Decrease Contrast"), this);
+        decContrastAction->setShortcut(Qt::ALT+Qt::SHIFT+Qt::Key_C);
+        connect(decContrastAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
+        actionCollection()->addAction("contrast_minus", decContrastAction);
+
+        d->BCGAction->addAction(incBrightAction);
+        d->BCGAction->addAction(decBrightAction);
+        d->BCGAction->addAction(incContrastAction);
+        d->BCGAction->addAction(decContrastAction);
+        d->BCGAction->addAction(incGammaAction);
+        d->BCGAction->addAction(decGammaAction);
+
+        QList<KAction> bcg_actions;
         bcg_actions.append( d->BCGAction );
         unplugActionList( "showfoto_bcg" );
         plugActionList( "showfoto_bcg", bcg_actions );
