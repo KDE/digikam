@@ -249,21 +249,21 @@ ImageEffect_ColorFX::~ImageEffect_ColorFX()
 void ImageEffect_ColorFX::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("coloreffect Tool Dialog");
-    m_effectType->setCurrentItem(config->readNumEntry("EffectType", ColorFX));
-    m_levelInput->setValue(config->readNumEntry("LevelAjustment", 0));
-    m_iterationInput->setValue(config->readNumEntry("IterationAjustment", 3));
+    KConfigGroup group = config.group("coloreffect Tool Dialog");
+    m_effectType->setCurrentItem(group.readEntry("EffectType", (int)ColorFX));
+    m_levelInput->setValue(group.readEntry("LevelAjustment", 0));
+    m_iterationInput->setValue(group.readEntry("IterationAjustment", 3));
     slotEffectTypeChanged(m_effectType->currentItem());  //check for enable/disable of iteration
 }
 
 void ImageEffect_ColorFX::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("coloreffect Tool Dialog");
-    config->writeEntry("EffectType", m_effectType->currentItem());
-    config->writeEntry("LevelAjustment", m_levelInput->value());
-    config->writeEntry("IterationAjustment", m_iterationInput->value());
-    config->sync();
+    KConfigGroup group = config->group("coloreffect Tool Dialog");
+    group.writeEntry("EffectType", m_effectType->currentItem());
+    group.writeEntry("LevelAjustment", m_levelInput->value());
+    group.writeEntry("IterationAjustment", m_iterationInput->value());
+    group.sync();
 }
 
 void ImageEffect_ColorFX::resetValues()

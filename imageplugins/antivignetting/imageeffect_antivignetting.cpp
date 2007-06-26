@@ -216,7 +216,7 @@ void ImageEffect_AntiVignetting::renderingFinished()
 void ImageEffect_AntiVignetting::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("antivignettings Tool Dialog");
+    KConfigGroup group = config->group("antivignettings Tool Dialog");
 
     m_densityInput->blockSignals(true);
     m_powerInput->blockSignals(true);
@@ -225,12 +225,12 @@ void ImageEffect_AntiVignetting::readUserSettings()
     m_contrastInput->blockSignals(true);
     m_gammaInput->blockSignals(true);
 
-    m_densityInput->setValue(config->readDoubleNumEntry("DensityAjustment", 2.0));
-    m_powerInput->setValue(config->readDoubleNumEntry("PowerAjustment", 1.0));
-    m_radiusInput->setValue(config->readDoubleNumEntry("RadiusAjustment", 1.0));
-    m_brightnessInput->setValue(config->readNumEntry("BrightnessAjustment", 0));
-    m_contrastInput->setValue(config->readNumEntry("ContrastAjustment", 0));
-    m_gammaInput->setValue(config->readDoubleNumEntry("GammaAjustment", 1.0));
+    m_densityInput->setValue(group.readEntry("DensityAjustment", 2.0));
+    m_powerInput->setValue(group.readEntry("PowerAjustment", 1.0));
+    m_radiusInput->setValue(group.readEntry("RadiusAjustment", 1.0));
+    m_brightnessInput->setValue(group.readEntry("BrightnessAjustment", 0));
+    m_contrastInput->setValue(group.readEntry("ContrastAjustment", 0));
+    m_gammaInput->setValue(group.readEntry("GammaAjustment", 1.0));
 
     m_densityInput->blockSignals(false);
     m_powerInput->blockSignals(false);
@@ -245,14 +245,14 @@ void ImageEffect_AntiVignetting::readUserSettings()
 void ImageEffect_AntiVignetting::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("antivignettings Tool Dialog");
-    config->writeEntry("DensityAjustment", m_densityInput->value());
-    config->writeEntry("PowerAjustment", m_powerInput->value());
-    config->writeEntry("RadiusAjustment", m_radiusInput->value());
-    config->writeEntry("BrightnessAjustment", m_brightnessInput->value());
-    config->writeEntry("ContrastAjustment", m_contrastInput->value());
-    config->writeEntry("GammaAjustment", m_gammaInput->value());
-    config->sync();
+    KConfigGroup group = config->group("antivignettings Tool Dialog");
+    group.writeEntry("DensityAjustment", m_densityInput->value());
+    group.writeEntry("PowerAjustment", m_powerInput->value());
+    group.writeEntry("RadiusAjustment", m_radiusInput->value());
+    group.writeEntry("BrightnessAjustment", m_brightnessInput->value());
+    group.writeEntry("ContrastAjustment", m_contrastInput->value());
+    group.writeEntry("GammaAjustment", m_gammaInput->value());
+    group.sync();
 }
 
 void ImageEffect_AntiVignetting::resetValues()

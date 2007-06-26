@@ -198,13 +198,13 @@ void ImageEffect_BlurFX::renderingFinished(void)
 void ImageEffect_BlurFX::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("blurfx Tool Dialog");
+    KconfigGroup group = config->group("blurfx Tool Dialog");
     m_effectType->blockSignals(true);
     m_distanceInput->blockSignals(true);
     m_levelInput->blockSignals(true);
-    m_effectType->setCurrentItem(config->readNumEntry("EffectType", BlurFX::ZoomBlur));
-    m_distanceInput->setValue(config->readNumEntry("DistanceAjustment", 3));
-    m_levelInput->setValue(config->readNumEntry("LevelAjustment", 128));
+    m_effectType->setCurrentItem(group.readEntry("EffectType", (int)BlurFX::ZoomBlur));
+    m_distanceInput->setValue(group.readEntry("DistanceAjustment", 3));
+    m_levelInput->setValue(group.readEntry("LevelAjustment", 128));
     m_effectType->blockSignals(false);
     m_distanceInput->blockSignals(false);
     m_levelInput->blockSignals(false);
@@ -213,11 +213,11 @@ void ImageEffect_BlurFX::readUserSettings()
 void ImageEffect_BlurFX::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("blurfx Tool Dialog");
-    config->writeEntry("EffectType", m_effectType->currentItem());
-    config->writeEntry("DistanceAjustment", m_distanceInput->value());
-    config->writeEntry("LevelAjustment", m_levelInput->value());
-    config->sync();
+    KconfigGroup group = config->group("blurfx Tool Dialog");
+    group.writeEntry("EffectType", m_effectType->currentItem());
+    group.writeEntry("DistanceAjustment", m_distanceInput->value());
+    group.writeEntry("LevelAjustment", m_levelInput->value());
+    group.sync();
 }
 
 void ImageEffect_BlurFX::resetValues()
