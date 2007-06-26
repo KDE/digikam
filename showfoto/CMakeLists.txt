@@ -38,14 +38,27 @@ SET(showfoto_SRCS
     ${libdimgcanvas_SRCS}
     ${libsetupshowfoto_SRCS} 
     ${libsplashscreen_SRCS} 
+    ${libshowfoto_SRCS} 
+    ${libdimgeditortools_SRCS}
+    ${libslideshow_SRCS} 
+
+    ${libdimg_SRCS}
     ${libthumbbar_SRCS} 
     ${libjpegutils_SRCS} 
     ${libcommonwidgets_SRCS} 
     ${libthreadimageio_SRCS} 
     ${libimagepluginswidgets_SRCS} 
-    ${libshowfoto_SRCS} 
-    ${libdimgeditortools_SRCS}
-    ${libslideshow_SRCS} 
+    ${libdimgloaders_SRCS}
+    ${libdimgfilters_SRCS}
+    ${libdmetadata_SRCS}
+    ${libgreycstoration_SRCS}
+    ${libhistogram_SRCS}
+    ${libimagepropertiesshowfoto_SRCS}
+    ${liblevels_SRCS}
+    ${liblprof_SRCS}
+    ${libwhitebalance_SRCS}
+    ${libiccprofileswidgets_SRCS}
+    ${libmetadatawidgets_SRCS}
     main.cpp 
     showfoto.cpp 
    )
@@ -54,18 +67,29 @@ KDE4_AUTOMOC(${showfoto_SRCS})
 
 KDE4_ADD_EXECUTABLE(showfoto ${showfoto_SRCS})
 
-TARGET_LINK_LIBRARIES(showfoto libshowfotosetup
-                               libsetupshowfoto
-                               libdialogshowfoto 
-                               libimagepropertiesshowfoto 
-                               libiccprofileswidgets
-                               libmetadatawidgets
-                               libdimgcanvas
-                               libshowfoto
-                               libdimgeditortools
-                               libslideshow
+TARGET_LINK_LIBRARIES(showfoto 
+#                                libshowfotosetup
+#                                libsetupshowfoto
+#                                libdialogshowfoto 
+#                                libimagepropertiesshowfoto 
+#                                libiccprofileswidgets
+#                                libmetadatawidgets
+#                                libdimgcanvas
+#                                libshowfoto
+#                                libdimgeditortools
+#                                libslideshow
                                ${KDE4_KUTILS_LIBS} 
                                ${KDE4_KPARTS_LIBS} 
+                               ${KDE4_KDE3SUPPORT_LIBS} 
+                               ${KDE4_KIO_LIBS} 
+                               ${KEXIV2_LIBRARIES} 
+                               ${JPEG_LIBRARIES} 
+                               ${TIFF_LIBRARIES} 
+                               ${PNG_LIBRARIES} 
+                               ${JASPER_LIBRARIES} 
+                               ${KDCRAW_LIBRARIES} 
+                               ${LCMS_LIBRARIES} 
+                               ${KEXIV2_LIBRARIES} 
                      )
 
 INSTALL(TARGETS showfoto DESTINATION ${BIN_INSTALL_DIR})
