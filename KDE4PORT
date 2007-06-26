@@ -55,16 +55,16 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  S
         |---cameragui                                                   X
         |---hotplug                             Laurent                         DONE                 CMake port only is require.
         |---imageeditor
-        |-----canvas                            Gilles          X       X       DONE                 
-        |-----editor                            
-	    editorwindow.cpp                    Gilles          X       X 
-	    imageiface.cpp                      Gilles          X       X       DONE
-	    imagewindow.cpp                                             X
+        |-----canvas                            Gilles          X       X       DONE
+        |-----editor
+            editorwindow.cpp                    Gilles          X       X       DONE                 Compile, but port yet fully complete
+            imageiface.cpp                      Gilles          X       X       DONE
+            imagewindow.cpp                                             X
         |-----tools                             Gilles          X       X                            CMake port only
         |---lighttable                                                  X
         |---scripts                             Gilles                          DONE                 CMake port only is require.
         |---setup                               Gilles          X       X       DONE
-        |---slideshow                           Laurent         X       X                            CMake port only
+        |---slideshow                           Laurent         X       X       DONE                 Compile, but port yet fully complete
         |---splashscreen                        Laurent         X       X       DONE
 
  3      |-kioslave
