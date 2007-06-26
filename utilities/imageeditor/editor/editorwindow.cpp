@@ -470,12 +470,6 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    d->imagePluginsHelpAction = new KAction(i18n("Image Plugins Handbooks"),
-                                            "digikamimageplugins", 0,
-                                            this, SLOT(slotImagePluginsHelp()),
-                                            actionCollection(), 
-                                            "editorwindow_imagepluginshelp");
-
     d->donateMoneyAction = new KAction(i18n("Donate Money..."),
                                        0, 0, 
                                        this, SLOT(slotDonateMoney()),
@@ -609,11 +603,6 @@ void EditorWindow::printImage(KURL url)
                                .arg(url.filename()));
         }
     }
-}
-
-void EditorWindow::slotImagePluginsHelp()
-{
-    KApplication::kApplication()->invokeHelp( QString(), "digikamimageplugins" );
 }
 
 void EditorWindow::slotEditKeys()

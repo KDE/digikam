@@ -53,7 +53,6 @@ public:
         fullScreenHideToolBar  = false;
 
         selectLabel            = 0;
-        imagePluginsHelpAction = 0;
         donateMoneyAction      = 0;
         accelerators           = 0;
         viewCMViewAction       = 0;
@@ -91,15 +90,12 @@ public:
     bool                       removeFullScreenButton;
     bool                       fullScreenHideToolBar;
 
-    KComboBox                 *zoomCombo;
-
     QLabel                    *selectLabel;
 
     QToolButton               *cmViewIndicator;
     QToolButton               *underExposureIndicator; 
     QToolButton               *overExposureIndicator; 
 
-    KAction                   *imagePluginsHelpAction;
     KAction                   *donateMoneyAction;
     KAction                   *filePrintAction;
     KAction                   *copyAction;
@@ -123,6 +119,8 @@ public:
     KToggleAction             *viewOverExpoAction;
 
     KWidgetAction             *zoomComboAction;
+
+    KComboBox                 *zoomCombo;
 
     KAccel                    *accelerators;
 

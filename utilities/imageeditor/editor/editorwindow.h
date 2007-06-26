@@ -161,7 +161,6 @@ protected slots:
     void slotSave();
     void slotSaveAs() { saveAs(); };
 
-    void slotImagePluginsHelp();
     void slotEditKeys();
     void slotResize();
 
