@@ -1,4 +1,5 @@
-message(${KDCRAW_INCLUDE_DIR})
+#Require by Greycstoration algorithm (CImg.h)
+ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
 ADD_SUBDIRECTORY( pics )
 ADD_SUBDIRECTORY( icons )
@@ -43,6 +44,7 @@ SET(showfoto_SRCS
     ${libslideshow_SRCS} 
 
     ${libdimg_SRCS}
+    ${libdialogshowfoto_SRCS}
     ${libthumbbar_SRCS} 
     ${libjpegutils_SRCS} 
     ${libcommonwidgets_SRCS} 
@@ -53,6 +55,7 @@ SET(showfoto_SRCS
     ${libdmetadata_SRCS}
     ${libgreycstoration_SRCS}
     ${libhistogram_SRCS}
+    ${libcurves_SRCS}
     ${libimagepropertiesshowfoto_SRCS}
     ${liblevels_SRCS}
     ${liblprof_SRCS}
@@ -67,21 +70,12 @@ KDE4_AUTOMOC(${showfoto_SRCS})
 
 KDE4_ADD_EXECUTABLE(showfoto ${showfoto_SRCS})
 
-TARGET_LINK_LIBRARIES(showfoto 
-#                                libshowfotosetup
-#                                libsetupshowfoto
-#                                libdialogshowfoto 
-#                                libimagepropertiesshowfoto 
-#                                libiccprofileswidgets
-#                                libmetadatawidgets
-#                                libdimgcanvas
-#                                libshowfoto
-#                                libdimgeditortools
-#                                libslideshow
-                               ${KDE4_KUTILS_LIBS} 
+TARGET_LINK_LIBRARIES(showfoto ${KDE4_KUTILS_LIBS}
+                               ${KDE4_KDEPRINT_LIBS}  
                                ${KDE4_KPARTS_LIBS} 
                                ${KDE4_KDE3SUPPORT_LIBS} 
                                ${KDE4_KIO_LIBS} 
+                               ${QT_QT3SUPPORT_LIBRARY} 
                                ${KEXIV2_LIBRARIES} 
                                ${JPEG_LIBRARIES} 
                                ${TIFF_LIBRARIES} 
