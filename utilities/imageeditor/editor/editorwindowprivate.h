@@ -28,10 +28,10 @@
 class QToolButton;
 class QLabel;
 class QAction;
+class QWidgetAction;
 
 class KComboBox;
 class KToggleAction;
-class K3WidgetAction;
 class KSelectAction;
 class KActionMenu;
 class KAccel;
@@ -91,7 +91,7 @@ public:
     bool                       removeFullScreenButton;
     bool                       fullScreenHideToolBar;
 
-    KComboBox                 *zoomCombo;
+    QWidgetAction             *zoomComboAction;
 
     QLabel                    *selectLabel;
 
@@ -122,7 +122,7 @@ public:
     KToggleAction             *viewUnderExpoAction;
     KToggleAction             *viewOverExpoAction;
 
-    K3WidgetAction             *zoomComboAction;
+    KComboBox                 *zoomCombo;
 
     KAccel                    *accelerators;
 

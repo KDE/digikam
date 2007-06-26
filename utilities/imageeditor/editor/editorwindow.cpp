@@ -48,6 +48,7 @@ extern "C"
 #include <QTimer>
 #include <QByteArray>
 #include <QProgressBar>
+#include <QWidgetAction>
 
 // KDE includes.
 
@@ -349,26 +350,26 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->zoomPlusAction = KStandardAction::zoomIn(this, SLOT(slotIncreaseZoom()),
-                                          actionCollection(), "editorwindow_zoomplus");
+    d->zoomPlusAction = actionCollection()->addAction(KStandardAction::ZoomIn, "editorwindow_zoomplus", 
+                                                 this, SLOT(slotIncreaseZoom()));
 
-    d->zoomMinusAction = KStandardAction::zoomOut(this, SLOT(slotDecreaseZoom()),
-                                             actionCollection(), "editorwindow_zoomminus");
+    d->zoomMinusAction = actionCollection()->addAction(KStandardAction::ZoomOut, "editorwindow_zoomminus", 
+                                                 this, SLOT(slotDecreaseZoom()));
 
-    d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), "viewmag1",
-                                       Qt::ALT+Qt::CTRL+Qt::Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0. 
-                                       this, SLOT(slotZoomTo100Percents()),
-                                       actionCollection(), "editorwindow_zoomto100percents");
+    d->zoomTo100percents = new KAction(KIcon("viewmag1"), i18n("Zoom to 1:1"), this);
+    d->zoomTo100percents->setShortcut(Qt::ALT+Qt::CTRL+Qt::Key_0);       // NOTE: Photoshop 7 use ALT+CTRL+0
+    connect(d->zoomTo100percents, SIGNAL(triggered()), this, SLOT(slotZoomTo100Percents()));
+    actionCollection()->addAction("editorwindow_zoomto100percents", d->zoomTo100percents);
 
+    d->zoomFitToWindowAction = new KToggleAction(KIcon("view_fit_window"), i18n("Fit to &Window"), this);
+    d->zoomFitToWindowAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E); // NOTE: Gimp 2 use CTRL+SHIFT+E.
+    connect(d->zoomFitToWindowAction, SIGNAL(triggered()), this, SLOT(slotToggleFitToWindow()));
+    actionCollection()->addAction("editorwindow_zoomfit2window", d->zoomFitToWindowAction);
 
-    d->zoomFitToWindowAction = new KToggleAction(i18n("Fit to &Window"), "view_fit_window",
-                                       Qt::CTRL+Qt::SHIFT+Qt::Key_E,    // NOTE: Gimp 2 use CTRL+SHIFT+E.
-                                       this, SLOT(slotToggleFitToWindow()),
-                                       actionCollection(), "editorwindow_zoomfit2window");
-
-    d->zoomFitToSelectAction = new KAction(i18n("Fit to &Selection"), "viewmagfit",
-                                         Qt::ALT+Qt::CTRL+Qt::Key_S, this, SLOT(slotFitToSelect()),
-                                         actionCollection(), "editorwindow_zoomfit2select");
+    d->zoomFitToSelectAction = new KAction(KIcon("viewmagfit"), i18n("Fit to &Selection"), this);
+    d->zoomFitToSelectAction->setShortcut(Qt::ALT+Qt::CTRL+Qt::Key_S);   // NOTE: Photoshop 7 use ALT+CTRL+0
+    connect(d->zoomFitToSelectAction, SIGNAL(triggered()), this, SLOT(slotFitToSelect()));
+    actionCollection()->addAction("editorwindow_zoomfit2select", d->zoomFitToSelectAction);
     d->zoomFitToSelectAction->setEnabled(false);
     d->zoomFitToSelectAction->setWhatsThis(i18n("This option can be used to zoom the image to the "
                                                 "current selection area."));
@@ -377,21 +378,18 @@ void EditorWindow::setupStandardActions()
     d->zoomCombo->setDuplicatesEnabled(false);
     d->zoomCombo->setFocusPolicy(Qt::ClickFocus);
     d->zoomCombo->setInsertPolicy(QComboBox::NoInsert);
-    d->zoomComboAction = new K3WidgetAction(d->zoomCombo, i18n("Zoom"), 0, 0, 0, 
-                                           actionCollection(), "editorwindow_zoomto");
-
-    d->zoomCombo->insertItem(QString("10%"));
-    d->zoomCombo->insertItem(QString("25%"));
-    d->zoomCombo->insertItem(QString("50%"));
-    d->zoomCombo->insertItem(QString("75%"));
-    d->zoomCombo->insertItem(QString("100%"));
-    d->zoomCombo->insertItem(QString("150%"));
-    d->zoomCombo->insertItem(QString("200%"));
-    d->zoomCombo->insertItem(QString("300%"));
-    d->zoomCombo->insertItem(QString("450%"));
-    d->zoomCombo->insertItem(QString("600%"));
-    d->zoomCombo->insertItem(QString("800%"));
-    d->zoomCombo->insertItem(QString("1200%"));
+    d->zoomCombo->insertItem(-1, QString("10%"));
+    d->zoomCombo->insertItem(-1, QString("25%"));
+    d->zoomCombo->insertItem(-1, QString("50%"));
+    d->zoomCombo->insertItem(-1, QString("75%"));
+    d->zoomCombo->insertItem(-1, QString("100%"));
+    d->zoomCombo->insertItem(-1, QString("150%"));
+    d->zoomCombo->insertItem(-1, QString("200%"));
+    d->zoomCombo->insertItem(-1, QString("300%"));
+    d->zoomCombo->insertItem(-1, QString("450%"));
+    d->zoomCombo->insertItem(-1, QString("600%"));
+    d->zoomCombo->insertItem(-1, QString("800%"));
+    d->zoomCombo->insertItem(-1, QString("1200%"));
 
     connect(d->zoomCombo, SIGNAL(activated(int)),
             this, SLOT(slotZoomSelected()) );
@@ -399,28 +397,36 @@ void EditorWindow::setupStandardActions()
     connect(d->zoomCombo, SIGNAL(returnPressed(const QString&)),
             this, SLOT(slotZoomTextChanged(const QString &)) );
 
+    d->zoomComboAction = new QWidgetAction(this);
+    d->zoomComboAction->setDefaultWidget(d->zoomCombo);
+    d->zoomComboAction->setText(i18n("Zoom"));
+    actionCollection()->addAction("editorwindow_zoomto", d->zoomComboAction);
 
-    m_fullScreenAction = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()),
-                                                actionCollection(), this, "editorwindow_fullscreen");
+    m_fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
+                         "editorwindow_fullscreen", this, SLOT(slotToggleFullScreen()));
 
-    d->slideShowAction = new KAction(i18n("Slide Show"), "slideshow", Qt::Key_F9,
-                                     this, SLOT(slotToggleSlideShow()),
-                                     actionCollection(),"editorwindow_slideshow");
+    d->slideShowAction = new KAction(KIcon("slideshow"), i18n("Slide Show"), this);
+    d->slideShowAction->setShortcut(Qt::Key_F9);
+    connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
+    actionCollection()->addAction("editorwindow_slideshow", d->slideShowAction);
 
-    d->viewUnderExpoAction = new KToggleAction(i18n("Under-Exposure Indicator"), "underexposure", 
-                                            Qt::Key_F10, this, 
-                                            SLOT(slotToggleUnderExposureIndicator()),
-                                            actionCollection(),"editorwindow_underexposure");
+    d->viewUnderExpoAction = new KToggleAction(KIcon("underexposure"), 
+                                               i18n("Under-Exposure Indicator"), this);
+    d->viewUnderExpoAction->setShortcut(Qt::Key_F10); 
+    connect(d->viewUnderExpoAction, SIGNAL(triggered()), this, SLOT(slotToggleUnderExposureIndicator()));
+    actionCollection()->addAction("editorwindow_underexposure", d->viewUnderExpoAction);
 
-    d->viewOverExpoAction = new KToggleAction(i18n("Over-Exposure Indicator"), "overexposure", 
-                                            Qt::Key_F11, this, 
-                                            SLOT(slotToggleOverExposureIndicator()),
-                                            actionCollection(),"editorwindow_overexposure");
 
-    d->viewCMViewAction = new KToggleAction(i18n("Color Managed View"), "tv", 
-                                            Qt::Key_F12, this, 
-                                            SLOT(slotToggleColorManagedView()),
-                                            actionCollection(),"editorwindow_cmview");
+    d->viewOverExpoAction = new KToggleAction(KIcon("overexposure"), 
+                                               i18n("Over-Exposure Indicator"), this);
+    d->viewOverExpoAction->setShortcut(Qt::Key_F11); 
+    connect(d->viewOverExpoAction, SIGNAL(triggered()), this, SLOT(slotToggleOverExposureIndicator()));
+    actionCollection()->addAction("editorwindow_overexposure", d->viewOverExpoAction);
+
+    d->viewCMViewAction = new KToggleAction(KIcon("tv"), i18n("Color Managed View"), this);
+    d->viewCMViewAction->setShortcut(Qt::Key_F12); 
+    connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
+    actionCollection()->addAction("editorwindow_cmview", d->viewCMViewAction);
 
     // -- Standard 'Transform' menu actions ---------------------------------------------
 

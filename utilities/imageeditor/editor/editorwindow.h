@@ -96,11 +96,10 @@ protected:
     QAction                 *m_fileDeleteAction;
     QAction                 *m_forwardAction;
     QAction                 *m_backwardAction;
+    QAction                 *m_fullScreenAction;
 
     KAction                 *m_lastAction;
     KAction                 *m_firstAction;
-
-    KToggleAction           *m_fullScreenAction;
 
     KToolBarPopupAction     *m_undoAction;
     KToolBarPopupAction     *m_redoAction;
