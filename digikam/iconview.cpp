@@ -1194,6 +1194,9 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
     p.end();
 
     d->pressedMoved = true;
+
+    if (changed)
+        emit signalSelectionChanged();
 }
 
 void IconView::contentsMouseReleaseEvent(QMouseEvent* e)
