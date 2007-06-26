@@ -540,7 +540,7 @@ void ImageWindow::slotLast()
         return;
 
     d->urlCurrent = d->urlList.last();
-    d->imageInfoCurrent = d->imageInfoList.first();
+    d->imageInfoCurrent = d->imageInfoList.last();
     slotLoadCurrent();
 }
 
