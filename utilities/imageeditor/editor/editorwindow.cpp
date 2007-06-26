@@ -80,6 +80,7 @@ extern "C"
 #include <kcombobox.h>
 #include <ktoggleaction.h>
 #include <kshortcutsdialog.h>
+#include <ktoolbarpopupaction.h>
 
 // Local includes.
 
@@ -302,56 +303,49 @@ void EditorWindow::setupStandardActions()
 
 
     actionCollection()->addAction(KStandardAction::Close, "editorwindow_close", 
-                                                   this, SLOT(close()));
+                                  this, SLOT(close()));
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
 
-    d->copyAction = KStandardAction::copy(m_canvas, SLOT(slotCopy()),
-                                     actionCollection(), "editorwindow_copy");
-
+    d->copyAction = actionCollection()->addAction(KStandardAction::Copy, "editorwindow_copy", 
+                                                  m_canvas, SLOT(slotCopy()));
     d->copyAction->setEnabled(false);
 
-    m_undoAction = new KToolBarPopupAction(i18n("Undo"), "undo",
-                                           KStandardShortcut::shortcut(KStandardShortcut::Undo),
-                                           m_canvas, SLOT(slotUndo()),
-                                           actionCollection(), "editorwindow_undo");
+    m_undoAction = new KToolBarPopupAction(KIcon("undo"), i18n("Undo"), this);
+    m_undoAction->setShortcut(KStandardShortcut::Undo);
+    connect(m_undoAction, SIGNAL(triggered()), m_canvas, SLOT(slotUndo()));
+    actionCollection()->addAction("editorwindow_undo", m_undoAction);
 
-    connect(m_undoAction->popupMenu(), SIGNAL(aboutToShow()),
+    connect(m_undoAction->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowUndoMenu()));
 
-    connect(m_undoAction->popupMenu(), SIGNAL(activated(int)),
+    connect(m_undoAction->menu(), SIGNAL(activated(int)),
             m_canvas, SLOT(slotUndo(int)));
 
     m_undoAction->setEnabled(false);
 
-    m_redoAction = new KToolBarPopupAction(i18n("Redo"), "redo",
-                                           KStandardShortcut::shortcut(KStandardShortcut::Redo),
-                                           m_canvas, SLOT(slotRedo()),
-                                           actionCollection(), "editorwindow_redo");
+    m_redoAction = new KToolBarPopupAction(KIcon("redo"), i18n("Redo"), this);
+    m_redoAction->setShortcut(KStandardShortcut::Redo);
+    connect(m_redoAction, SIGNAL(triggered()), m_canvas, SLOT(slotRedo()));
+    actionCollection()->addAction("editorwindow_redo", m_redoAction);
 
-    connect(m_redoAction->popupMenu(), SIGNAL(aboutToShow()),
+    connect(m_redoAction->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowRedoMenu()));
 
-    connect(m_redoAction->popupMenu(), SIGNAL(activated(int)),
+    connect(m_redoAction->menu(), SIGNAL(activated(int)),
             m_canvas, SLOT(slotRedo(int)));
 
     m_redoAction->setEnabled(false);
 
-    d->selectAllAction = new KAction(i18n("Select All"),
-                                     0,
-                                     Qt::CTRL+Qt::Key_A,
-                                     m_canvas,
-                                     SLOT(slotSelectAll()),
-                                     actionCollection(),
-                                     "editorwindow_selectAll");
+    d->selectAllAction = new KAction(i18n("Select All"), this);
+    d->selectAllAction->setShortcut(Qt::CTRL+Qt::Key_A);
+    connect(d->selectAllAction, SIGNAL(triggered()), m_canvas, SLOT(slotSelectAll()));
+    actionCollection()->addAction("editorwindow_selectAll", d->selectAllAction);
 
-    d->selectNoneAction = new KAction(i18n("Select None"),
-                                     0,
-                                     Qt::CTRL+Qt::SHIFT+Qt::Key_A,
-                                     m_canvas,
-                                     SLOT(slotSelectNone()),
-                                     actionCollection(),
-                                     "editorwindow_selectNone");
+    d->selectNoneAction = new KAction(i18n("Select None"), this);
+    d->selectNoneAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_A);
+    connect(d->selectNoneAction, SIGNAL(triggered()), m_canvas, SLOT(slotSelectNone()));
+    actionCollection()->addAction("editorwindow_selectNone", d->selectNoneAction);
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
