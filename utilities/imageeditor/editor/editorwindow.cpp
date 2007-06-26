@@ -320,6 +320,7 @@ void EditorWindow::setupStandardActions()
     connect(m_undoAction->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowUndoMenu()));
 
+    // TODO: KDE4PORT: this activated(int) have been replaced by triggered(QAction *)
     connect(m_undoAction->menu(), SIGNAL(activated(int)),
             m_canvas, SLOT(slotUndo(int)));
 
@@ -333,6 +334,7 @@ void EditorWindow::setupStandardActions()
     connect(m_redoAction->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowRedoMenu()));
 
+    // TODO: KDE4PORT: this activated(int) have been replaced by triggered(QAction *)
     connect(m_redoAction->menu(), SIGNAL(activated(int)),
             m_canvas, SLOT(slotRedo(int)));
 
@@ -556,18 +558,18 @@ void EditorWindow::setupStatusBar()
     m_resLabel->setToolTip( i18n("Information about image size"));
 
     d->underExposureIndicator = new QToolButton(statusBar());
-    d->underExposureIndicator->setIconSet(SmallIcon("underexposure"));
-    d->underExposureIndicator->setToggleButton(true);
+    d->underExposureIndicator->setIcon(SmallIcon("underexposure"));
+    d->underExposureIndicator->setCheckable(true);
     statusBar()->addWidget(d->underExposureIndicator, 1);
 
     d->overExposureIndicator = new QToolButton(statusBar());
-    d->overExposureIndicator->setIconSet(SmallIcon("overexposure"));
-    d->overExposureIndicator->setToggleButton(true);
+    d->overExposureIndicator->setIcon(SmallIcon("overexposure"));
+    d->overExposureIndicator->setCheckable(true);
     statusBar()->addWidget(d->overExposureIndicator, 1);
 
     d->cmViewIndicator = new QToolButton(statusBar());
-    d->cmViewIndicator->setIconSet(SmallIcon("tv"));
-    d->cmViewIndicator->setToggleButton(true);
+    d->cmViewIndicator->setIcon(SmallIcon("tv"));
+    d->cmViewIndicator->setCheckable(true);
     statusBar()->addWidget(d->cmViewIndicator, 1);
 
     connect(d->underExposureIndicator, SIGNAL(toggled(bool)),
@@ -580,8 +582,10 @@ void EditorWindow::setupStatusBar()
             this, SLOT(slotToggleColorManagedView()));
 }
 
-void EditorWindow::printImage(KUrl url)
+void EditorWindow::printImage(KUrl /*url*/)
 {
+/* TODO: KDE4PORT : enable this code when utilities/imageeditor/tools/imageprint.cpp will be ported
+
     uchar* ptr      = m_canvas->interface()->getImage();
     int w           = m_canvas->interface()->origWidth();
     int h           = m_canvas->interface()->origHeight();
@@ -594,12 +598,12 @@ void EditorWindow::printImage(KUrl url)
     DImg image(w, h, sixteenBit, hasAlpha, ptr);
 
     KPrinter printer;
-    QString appName = KApplication::kApplication()->aboutData()->appName();
-    printer.setDocName( url.filename() );
+    QString appName = KGlobal::mainComponent().aboutData()->appName();
+    printer.setDocName( url.fileName() );
     printer.setCreator( appName );
     printer.setUsePrinterResolution(true);
 
-    KPrinter::addDialogPage( new ImageEditorPrintDialogPage(image, this, (appName.append(" page")).ascii() ));
+    KPrinter::addDialogPage( new ImageEditorPrintDialogPage(image, this, (appName.append(" page")).toAscii() ));
 
     if ( printer.setup( this, i18n("Print %1",printer.docName().section('/', -1)) ) )
     {
@@ -609,22 +613,23 @@ void EditorWindow::printImage(KUrl url)
             KMessageBox::error(this, i18n("Failed to print file: '%1'",
                                url.filename()));
         }
-    }
+    }*/
 }
 
 void EditorWindow::slotEditKeys()
 {
-    KKeyDialog dialog(true, this);
-    dialog.insert( actionCollection(), i18n( "General" ) );
+    KShortcutsDialog dialog(KShortcutsEditor::AllActions,
+                            KShortcutsEditor::LetterShortcutsAllowed, this);
+    dialog.addCollection( actionCollection(), i18n( "General" ) );
 
-    Q3PtrList<ImagePlugin> pluginList = ImagePluginLoader::componentData().pluginList();
+    Q3PtrList<ImagePlugin> pluginList = ImagePluginLoader::componentData()->pluginList();
 
     for (ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
     {
         if (plugin)
         {
-            dialog.insert( plugin->actionCollection(), plugin->name() );
+            dialog.addCollection(plugin->actionCollection(), plugin->objectName());
         }
     }
 
@@ -639,41 +644,39 @@ void EditorWindow::slotResize()
 
 void EditorWindow::slotAboutToShowUndoMenu()
 {
-    m_undoAction->popupMenu()->clear();
+    m_undoAction->menu()->clear();
     QStringList titles;
     m_canvas->getUndoHistory(titles);
 
     if(!titles.isEmpty())
     {
-        int id = 1;
         QStringList::Iterator iter = titles.begin();
-        for(; iter != titles.end(); ++iter,++id)
+        for(; iter != titles.end(); ++iter)
         {
-            m_undoAction->popupMenu()->insertItem(*iter, id);
+            m_undoAction->menu()->addAction(*iter);
         }
     }
 }
 
 void EditorWindow::slotAboutToShowRedoMenu()
 {
-    m_redoAction->popupMenu()->clear();
+    m_redoAction->menu()->clear();
     QStringList titles;
     m_canvas->getRedoHistory(titles);
 
     if(!titles.isEmpty())
     {
-        int id = 1;
-        QStringList::Iterator iter = titles.begin();        
-        for(; iter != titles.end(); ++iter,++id)
+        QStringList::Iterator iter = titles.begin();
+        for(; iter != titles.end(); ++iter)
         {
-            m_redoAction->popupMenu()->insertItem(*iter, id);
+            m_redoAction->menu()->addAction(*iter);
         }
     }
 }
 
 void EditorWindow::slotConfToolbars()
 {
-    saveMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
+    saveMainWindowSettings(KGlobal::config()->group("ImageViewer Settings"));
     KEditToolBar dlg(factory(), this);
 
     connect(&dlg, SIGNAL(newToolbarConfig()),
@@ -684,7 +687,7 @@ void EditorWindow::slotConfToolbars()
 
 void EditorWindow::slotNewToolbarConfig()
 {
-    applyMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
+    applyMainWindowSettings(KGlobal::config()->group("ImageViewer Settings"));
 }
 
 void EditorWindow::slotIncreaseZoom()
@@ -724,7 +727,7 @@ void EditorWindow::slotZoomTo100Percents()
 void EditorWindow::slotZoomSelected()
 {
     QString txt = d->zoomCombo->currentText();
-    txt = txt.left(txt.find('%'));
+    txt = txt.left(txt.indexOf('%'));
     slotZoomTextChanged(txt);
 }
 
@@ -742,7 +745,8 @@ void EditorWindow::slotZoomChanged(double zoom)
     d->zoomMinusAction->setEnabled(!m_canvas->minZoom());
 
     d->zoomCombo->blockSignals(true);
-    d->zoomCombo->setCurrentText(QString::number(lround(zoom*100.0)) + QString("%"));
+    d->zoomCombo->setItemText(d->zoomCombo->currentIndex(), 
+                              QString::number(lround(zoom*100.0)) + QString("%"));
     d->zoomCombo->blockSignals(false);
 }
 
@@ -756,7 +760,7 @@ void EditorWindow::slotToggleOffFitToWindow()
 void EditorWindow::slotEscapePressed()
 {
     if (m_fullScreen)
-        m_fullScreenAction->activate();
+        m_fullScreenAction->activate(QAction::Trigger);
 }
 
 void EditorWindow::plugActionAccel(KAction* action)
@@ -774,7 +778,7 @@ void EditorWindow::plugActionAccel(KAction* action)
                     SLOT(activate()));*/
 }
 
-void EditorWindow::unplugActionAccel(KAction* action)
+void EditorWindow::unplugActionAccel(KAction* /*action*/)
 {
 /*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
 
