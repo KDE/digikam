@@ -1,10 +1,3 @@
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3PtrList>
-#include <Q3Frame>
-#include <Q3VBoxLayout>
-#include <KToggleAction>
-#include <KActionMenu>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -52,6 +45,12 @@ extern "C"
 #include <QFile>
 #include <QCursor>
 #include <QProgressBar>
+#include <Q3HBoxLayout>
+#include <Q3PtrList>
+#include <Q3Frame>
+#include <Q3VBoxLayout>
+#include <KToggleAction>
+#include <KActionMenu>
 
 // KDE includes.
 
