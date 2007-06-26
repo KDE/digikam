@@ -52,6 +52,7 @@ extern "C"
 
 // KDE includes.
 
+#include <kxmlguifactory.h>
 #include <ktoolinvocation.h>
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -487,6 +488,7 @@ void EditorWindow::setupStandardActions()
 
 void EditorWindow::setupStandardAccelerators()
 {
+#warning "TODO: kde4 port it";
 /*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
 
     d->accelerators = new KAccel(this);
@@ -584,6 +586,7 @@ void EditorWindow::setupStatusBar()
 
 void EditorWindow::printImage(KUrl /*url*/)
 {
+#warning "TODO: kde4 port it";
 /* TODO: KDE4PORT : enable this code when utilities/imageeditor/tools/imageprint.cpp will be ported
 
     uchar* ptr      = m_canvas->interface()->getImage();
@@ -768,6 +771,7 @@ void EditorWindow::plugActionAccel(KAction* action)
     if (!action)
         return;
 
+#warning "TODO: kde4 port it";
 /*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
 
     d->accelerators->insert(action->text(),
@@ -780,6 +784,7 @@ void EditorWindow::plugActionAccel(KAction* action)
 
 void EditorWindow::unplugActionAccel(KAction* /*action*/)
 {
+#warning "TODO: kde4 port it";
 /*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
 
     d->accelerators->remove(action->text());*/
@@ -822,20 +827,20 @@ void EditorWindow::unLoadImagePlugins()
 void EditorWindow::readStandardSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
+    KConfigGroup group = config->group("ImageViewer Settings");
 
     // Restore full screen Mode ?
 
-    if (config->readBoolEntry("FullScreen", false))
+    if (group.readEntry("FullScreen", false))
     {
-        m_fullScreenAction->activate();
+        m_fullScreenAction->activate(QAction::Trigger);
         m_fullScreen = true;
     }
 
     // Restore Auto zoom action ?
-    bool autoZoom = config->readBoolEntry("AutoZoom", true);
+    bool autoZoom = group.readEntry("AutoZoom", true);
     if (autoZoom)
-        d->zoomFitToWindowAction->activate();
+        d->zoomFitToWindowAction->activate(QAction::Trigger);
 }
 
 void EditorWindow::applyStandardSettings()
@@ -844,48 +849,48 @@ void EditorWindow::applyStandardSettings()
 
     // -- Settings for Color Management stuff ----------------------------------------------
 
-    config->setGroup("Color Management");
+    KConfigGroup group = config->group("Color Management");
 
-    d->ICCSettings->enableCMSetting       = config->readBoolEntry("EnableCM", false);
-    d->ICCSettings->askOrApplySetting     = config->readBoolEntry("BehaviourICC", false);
-    d->ICCSettings->BPCSetting            = config->readBoolEntry("BPCAlgorithm",false);
-    d->ICCSettings->managedViewSetting    = config->readBoolEntry("ManagedView", false);
-    d->ICCSettings->renderingSetting      = config->readNumEntry("RenderingIntent");
-    d->ICCSettings->inputSetting          = config->readPathEntry("InProfileFile", QString());
-    d->ICCSettings->workspaceSetting      = config->readPathEntry("WorkProfileFile", QString());
-    d->ICCSettings->monitorSetting        = config->readPathEntry("MonitorProfileFile", QString());
-    d->ICCSettings->proofSetting          = config->readPathEntry("ProofProfileFile", QString());
-    d->ICCSettings->CMInRawLoadingSetting = config->readBoolEntry("CMInRawLoading", false);
+    d->ICCSettings->enableCMSetting       = group.readEntry("EnableCM", false);
+    d->ICCSettings->askOrApplySetting     = group.readEntry("BehaviourICC", false);
+    d->ICCSettings->BPCSetting            = group.readEntry("BPCAlgorithm",false);
+    d->ICCSettings->managedViewSetting    = group.readEntry("ManagedView", false);
+    d->ICCSettings->renderingSetting      = group.readEntry("RenderingIntent", 0);
+    d->ICCSettings->inputSetting          = group.readEntry("InProfileFile", QString());
+    d->ICCSettings->workspaceSetting      = group.readEntry("WorkProfileFile", QString());
+    d->ICCSettings->monitorSetting        = group.readEntry("MonitorProfileFile", QString());
+    d->ICCSettings->proofSetting          = group.readEntry("ProofProfileFile", QString());
+    d->ICCSettings->CMInRawLoadingSetting = group.readEntry("CMInRawLoading", false);
 
     d->viewCMViewAction->setEnabled(d->ICCSettings->enableCMSetting);
     d->viewCMViewAction->setChecked(d->ICCSettings->managedViewSetting);
     d->cmViewIndicator->setEnabled(d->ICCSettings->enableCMSetting);
-    d->cmViewIndicator->setOn(d->ICCSettings->managedViewSetting);
+    d->cmViewIndicator->setChecked(d->ICCSettings->managedViewSetting);
     setColorManagedViewIndicatorToolTip(d->ICCSettings->enableCMSetting, d->ICCSettings->managedViewSetting);
     m_canvas->setICCSettings(d->ICCSettings);
 
     // -- JPEG, PNG, TIFF JPEG2000 files format settings --------------------------------------
 
-    config->setGroup("ImageViewer Settings");
+    group = config->group("ImageViewer Settings");
 
     // JPEG quality slider settings : 1 - 100 ==> libjpeg settings : 25 - 100.
     m_IOFileSettings->JPEGCompression     = (int)((75.0/100.0)*
-                                                 (float)config->readNumEntry("JPEGCompression", 75)
+                                                 (float)group.readEntry("JPEGCompression", 75)
                                                  + 26.0 - (75.0/100.0));
 
     // PNG compression slider settings : 1 - 9 ==> libpng settings : 100 - 1.
     m_IOFileSettings->PNGCompression      = (int)(((1.0-100.0)/8.0)*
-                                                 (float)config->readNumEntry("PNGCompression", 1)
+                                                 (float)group.readEntry("PNGCompression", 1)
                                                  + 100.0 - ((1.0-100.0)/8.0));
 
     // TIFF compression setting.
-    m_IOFileSettings->TIFFCompression     = config->readBoolEntry("TIFFCompression", false);
+    m_IOFileSettings->TIFFCompression     = group.readEntry("TIFFCompression", false);
 
     // JPEG2000 quality slider settings : 1 - 100
-    m_IOFileSettings->JPEG2000Compression = config->readNumEntry("JPEG2000Compression", 100);
+    m_IOFileSettings->JPEG2000Compression = group.readEntry("JPEG2000Compression", 100);
 
     // JPEG2000 LossLess setting.
-    m_IOFileSettings->JPEG2000LossLess    = config->readBoolEntry("JPEG2000LossLess", true);
+    m_IOFileSettings->JPEG2000LossLess    = group.readEntry("JPEG2000LossLess", true);
 
     // -- RAW pictures decoding settings ------------------------------------------------------
 
@@ -897,41 +902,45 @@ void EditorWindow::applyStandardSettings()
     else
         m_IOFileSettings->rawDecodingSettings.outputColorSpace = KDcrawIface::RawDecodingSettings::SRGB;
 
-    m_IOFileSettings->rawDecodingSettings.sixteenBitsImage        = config->readBoolEntry("SixteenBitsImage", false);
-    m_IOFileSettings->rawDecodingSettings.automaticColorBalance   = config->readBoolEntry("AutomaticColorBalance", true);
-    m_IOFileSettings->rawDecodingSettings.cameraColorBalance      = config->readBoolEntry("CameraColorBalance", true);
-    m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors   = config->readBoolEntry("RGBInterpolate4Colors", false);
-    m_IOFileSettings->rawDecodingSettings.DontStretchPixels = config->readBoolEntry("DontStretchPixels", false);
-    m_IOFileSettings->rawDecodingSettings.enableNoiseReduction    = config->readBoolEntry("EnableNoiseReduction", false);
-    m_IOFileSettings->rawDecodingSettings.unclipColors            = config->readNumEntry("UnclipColors", 0);
-    m_IOFileSettings->rawDecodingSettings.RAWQuality              = (KDcrawIface::RawDecodingSettings::DecodingQuality)config->readNumEntry("RAWQuality",
-                                                                    KDcrawIface::RawDecodingSettings::BILINEAR);
-    m_IOFileSettings->rawDecodingSettings.NRThreshold             = config->readNumEntry("NRThreshold", 100);
-    m_IOFileSettings->rawDecodingSettings.brightness              = config->readDoubleNumEntry("RAWBrightness", 1.0);
+    m_IOFileSettings->rawDecodingSettings.sixteenBitsImage        = group.readEntry("SixteenBitsImage", false);
+    m_IOFileSettings->rawDecodingSettings.automaticColorBalance   = group.readEntry("AutomaticColorBalance", true);
+    m_IOFileSettings->rawDecodingSettings.cameraColorBalance      = group.readEntry("CameraColorBalance", true);
+    m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors   = group.readEntry("RGBInterpolate4Colors", false);
+    m_IOFileSettings->rawDecodingSettings.DontStretchPixels       = group.readEntry("DontStretchPixels", false);
+    m_IOFileSettings->rawDecodingSettings.enableNoiseReduction    = group.readEntry("EnableNoiseReduction", false);
+    m_IOFileSettings->rawDecodingSettings.unclipColors            = group.readEntry("UnclipColors", 0);
+    m_IOFileSettings->rawDecodingSettings.RAWQuality = (KDcrawIface::RawDecodingSettings::DecodingQuality)
+                                                       group.readEntry("RAWQuality",
+                                                       KDcrawIface::RawDecodingSettings::BILINEAR);
+    m_IOFileSettings->rawDecodingSettings.NRThreshold             = group.readEntry("NRThreshold", 100);
+    m_IOFileSettings->rawDecodingSettings.brightness              = group.readEntry("RAWBrightness", 1.0);
 
     // -- GUI Settings -------------------------------------------------------
 
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    rightSzPolicy.setHorizontalStretch(2);
+    rightSzPolicy.setVerticalStretch(1);
+    QList<int> list;
     if(config->hasKey("Splitter Sizes"))
-        m_splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
+        m_splitter->setSizes(group.readEntry("Splitter Sizes", list));
     else 
         m_canvas->setSizePolicy(rightSzPolicy);
 
-    d->fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
+    d->fullScreenHideToolBar = group.readEntry("FullScreen Hide ToolBar", false);
 
     // -- Exposure Indicators Settings --------------------------------------- 
 
-    QColor Qt::black(Qt::black);
-    QColor Qt::white(Qt::white);
-    d->exposureSettings->underExposureIndicator = config->readBoolEntry("UnderExposureIndicator", false);
-    d->exposureSettings->overExposureIndicator  = config->readBoolEntry("OverExposureIndicator", false);
-    d->exposureSettings->underExposureColor     = config->readColorEntry("UnderExposureColor", &Qt::white);
-    d->exposureSettings->overExposureColor      = config->readColorEntry("OverExposureColor", &Qt::black);
+    QColor black(Qt::black);
+    QColor white(Qt::white);
+    d->exposureSettings->underExposureIndicator = group.readEntry("UnderExposureIndicator", false);
+    d->exposureSettings->overExposureIndicator  = group.readEntry("OverExposureIndicator", false);
+    d->exposureSettings->underExposureColor     = group.readEntry("UnderExposureColor", white);
+    d->exposureSettings->overExposureColor      = group.readEntry("OverExposureColor", black);
 
     d->viewUnderExpoAction->setChecked(d->exposureSettings->underExposureIndicator);
     d->viewOverExpoAction->setChecked(d->exposureSettings->overExposureIndicator);
-    d->underExposureIndicator->setOn(d->exposureSettings->underExposureIndicator);
-    d->overExposureIndicator->setOn(d->exposureSettings->overExposureIndicator);
+    d->underExposureIndicator->setChecked(d->exposureSettings->underExposureIndicator);
+    d->overExposureIndicator->setChecked(d->exposureSettings->overExposureIndicator);
     setUnderExposureToolTip(d->exposureSettings->underExposureIndicator);
     setOverExposureToolTip(d->exposureSettings->overExposureIndicator);
     m_canvas->setExposureSettings(d->exposureSettings);
@@ -940,14 +949,14 @@ void EditorWindow::applyStandardSettings()
 void EditorWindow::saveStandardSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
+    KConfigGroup group = config->group("ImageViewer Settings");
 
-    config->writeEntry("AutoZoom", d->zoomFitToWindowAction->isChecked());
-    config->writeEntry("Splitter Sizes", m_splitter->sizes());
+    group.writeEntry("AutoZoom", d->zoomFitToWindowAction->isChecked());
+    group.writeEntry("Splitter Sizes", m_splitter->sizes());
 
-    config->writeEntry("FullScreen", m_fullScreenAction->isChecked());
-    config->writeEntry("UnderExposureIndicator", d->exposureSettings->underExposureIndicator);
-    config->writeEntry("OverExposureIndicator", d->exposureSettings->overExposureIndicator);
+    group.writeEntry("FullScreen", m_fullScreenAction->isChecked());
+    group.writeEntry("UnderExposureIndicator", d->exposureSettings->underExposureIndicator);
+    group.writeEntry("OverExposureIndicator", d->exposureSettings->overExposureIndicator);
 
     config->sync();
 }
@@ -1003,11 +1012,16 @@ void EditorWindow::slotToggleFullScreen()
         setWindowState( windowState() & ~Qt::WindowFullScreen );
         menuBar()->show();
         statusBar()->show();
+
+#warning "TODO: kde4 port it";
+/* TODO: KDE4PORT: Check these methods
         leftDock()->show();
         rightDock()->show();
         topDock()->show();
-        bottomDock()->show();
+        bottomDock()->show();*/
 
+#warning "TODO: kde4 port it";
+/*
         QObject* obj = child("ToolBar","KToolBar");
 
         if (obj)
@@ -1038,7 +1052,7 @@ void EditorWindow::slotToggleFullScreen()
         unplugActionAccel(m_fileDeleteAction);
         unplugActionAccel(d->selectAllAction);
         unplugActionAccel(d->selectNoneAction);
-
+*/
         toggleGUI2FullScreen();
         m_fullScreen = false;
     }
@@ -1049,11 +1063,16 @@ void EditorWindow::slotToggleFullScreen()
         // hide the menubar and the statusbar
         menuBar()->hide();
         statusBar()->hide();
+
+#warning "TODO: kde4 port it";
+/* TODO: KDE4PORT: Check these methods
         topDock()->hide();
         leftDock()->hide();
         rightDock()->hide();
-        bottomDock()->hide();
+        bottomDock()->hide();*/
 
+#warning "TODO: kde4 port it";
+/*
         QObject* obj = child("ToolBar","KToolBar");
 
         if (obj)
@@ -1099,7 +1118,7 @@ void EditorWindow::slotToggleFullScreen()
         plugActionAccel(m_fileDeleteAction);
         plugActionAccel(d->selectAllAction);
         plugActionAccel(d->selectNoneAction);
-
+*/
         toggleGUI2FullScreen();
         showFullScreen();
         m_fullScreen = true;
@@ -1128,13 +1147,13 @@ bool EditorWindow::promptUserSave(const KUrl& url)
         // if window is iconified, show it
         if (isMinimized())
         {
-            KWindowSystem::deIconifyWindow(winId());
+            KWindowSystem::unminimizeWindow(winId());
         }
 
         int result = KMessageBox::warningYesNoCancel(this,
                                   i18n("The image '%1' has been modified.\n"
                                        "Do you want to save it?")
-                                       .arg(url.filename()),
+                                       .arg(url.fileName()),
                                   QString(),
                                   KStandardGuiItem::save(),
                                   KStandardGuiItem::discard());
@@ -1198,7 +1217,8 @@ bool EditorWindow::waitForSavingToComplete()
 
 void EditorWindow::enter_loop()
 {
-    QWidget dummy(0, 0, Qt::WType_Dialog | Qt::WShowModal);
+    QWidget dummy;
+    dummy.setWindowFlags(Qt::WType_Dialog | Qt::WShowModal);
     dummy.setFocusPolicy( Qt::NoFocus );
     qt_enter_modal(&dummy);
     qApp->enter_loop();
