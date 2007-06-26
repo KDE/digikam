@@ -154,26 +154,26 @@ void ImageEffect_Restoration::renderingFinished()
 void ImageEffect_Restoration::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("restoration Tool Dialog");
+    KConfigGroup group = config->group("restoration Tool Dialog");
 
     Digikam::GreycstorationSettings settings;
-    settings.fastApprox = config->readBoolEntry("FastApprox", true);
-    settings.interp     = config->readNumEntry("Interpolation",
-                          Digikam::GreycstorationSettings::NearestNeighbor);
-    settings.amplitude  = config->readDoubleNumEntry("Amplitude", 60.0);
-    settings.sharpness  = config->readDoubleNumEntry("Sharpness", 0.7);
-    settings.anisotropy = config->readDoubleNumEntry("Anisotropy", 0.3);
-    settings.alpha      = config->readDoubleNumEntry("Alpha", 0.6);
-    settings.sigma      = config->readDoubleNumEntry("Sigma", 1.1);
-    settings.gaussPrec  = config->readDoubleNumEntry("GaussPrec", 2.0);
-    settings.dl         = config->readDoubleNumEntry("Dl", 0.8);
-    settings.da         = config->readDoubleNumEntry("Da", 30.0);
-    settings.nbIter     = config->readNumEntry("Iteration", 1);
-    settings.tile       = config->readNumEntry("Tile", 512);
-    settings.btile      = config->readNumEntry("BTile", 4);
+    settings.fastApprox = group.readEntry("FastApprox", true);
+    settings.interp     = group.readEntry("Interpolation",
+                          (int)Digikam::GreycstorationSettings::NearestNeighbor);
+    settings.amplitude  = group.readEntry("Amplitude", 60.0);
+    settings.sharpness  = group.readEntry("Sharpness", 0.7);
+    settings.anisotropy = group.readEntry("Anisotropy", 0.3);
+    settings.alpha      = group.readEntry("Alpha", 0.6);
+    settings.sigma      = group.readEntry("Sigma", 1.1);
+    settings.gaussPrec  = group.readEntry("GaussPrec", 2.0);
+    settings.dl         = group.readEntry("Dl", 0.8);
+    settings.da         = group.readEntry("Da", 30.0);
+    settings.nbIter     = group.readEntry("Iteration", 1);
+    settings.tile       = group.readEntry("Tile", 512);
+    settings.btile      = group.readEntry("BTile", 4);
     m_settingsWidget->setSettings(settings);
 
-    int p = config->readNumEntry("Preset", NoPreset);
+    int p = group.readEntry("Preset", NoPreset);
     m_restorationTypeCB->setCurrentItem(p);
     if (p == NoPreset)
         m_settingsWidget->setEnabled(true);
@@ -185,22 +185,22 @@ void ImageEffect_Restoration::writeUserSettings()
 {
     Digikam::GreycstorationSettings settings = m_settingsWidget->getSettings();
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("restoration Tool Dialog");
-    config->writeEntry("Preset", m_restorationTypeCB->currentItem());
-    config->writeEntry("FastApprox", settings.fastApprox);
-    config->writeEntry("Interpolation", settings.interp);
-    config->writeEntry("Amplitude", settings.amplitude);
-    config->writeEntry("Sharpness", settings.sharpness);
-    config->writeEntry("Anisotropy", settings.anisotropy);
-    config->writeEntry("Alpha", settings.alpha);
-    config->writeEntry("Sigma", settings.sigma);
-    config->writeEntry("GaussPrec", settings.gaussPrec);
-    config->writeEntry("Dl", settings.dl);
-    config->writeEntry("Da", settings.da);
-    config->writeEntry("Iteration", settings.nbIter);
-    config->writeEntry("Tile", settings.tile);
-    config->writeEntry("BTile", settings.btile);
-    config->sync();
+    KConfigGroup group = config->group("restoration Tool Dialog");
+    group.writeEntry("Preset", m_restorationTypeCB->currentItem());
+    group.writeEntry("FastApprox", settings.fastApprox);
+    group.writeEntry("Interpolation", settings.interp);
+    group.writeEntry("Amplitude", settings.amplitude);
+    group.writeEntry("Sharpness", settings.sharpness);
+    group.writeEntry("Anisotropy", settings.anisotropy);
+    group.writeEntry("Alpha", settings.alpha);
+    group.writeEntry("Sigma", settings.sigma);
+    group.writeEntry("GaussPrec", settings.gaussPrec);
+    group.writeEntry("Dl", settings.dl);
+    group.writeEntry("Da", settings.da);
+    group.writeEntry("Iteration", settings.nbIter);
+    group.writeEntry("Tile", settings.tile);
+    group.writeEntry("BTile", settings.btile);
+    group.sync();
 }
 
 void ImageEffect_Restoration::slotResetValues(int i)

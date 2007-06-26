@@ -134,11 +134,11 @@ void ImageEffect_OilPaint::renderingFinished()
 void ImageEffect_OilPaint::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("oilpaint Tool Dialog");
+    KConfigGroup group = config->group("oilpaint Tool Dialog");
     m_brushSizeInput->blockSignals(true);
     m_smoothInput->blockSignals(true);
-    m_brushSizeInput->setValue(config->readNumEntry("BrushSize", 1));
-    m_smoothInput->setValue(config->readNumEntry("SmoothAjustment", 30));
+    m_brushSizeInput->setValue(group.readEntry("BrushSize", 1));
+    m_smoothInput->setValue(group.readEntry("SmoothAjustment", 30));
     m_brushSizeInput->blockSignals(false);
     m_smoothInput->blockSignals(false);
 }
@@ -146,10 +146,10 @@ void ImageEffect_OilPaint::readUserSettings()
 void ImageEffect_OilPaint::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("oilpaint Tool Dialog");
-    config->writeEntry("BrushSize", m_brushSizeInput->value());
-    config->writeEntry("SmoothAjustment", m_smoothInput->value());
-    config->sync();
+    KConfigGroup group = config->group("oilpaint Tool Dialog");
+    group.writeEntry("BrushSize", m_brushSizeInput->value());
+    group.writeEntry("SmoothAjustment", m_smoothInput->value());
+    group.sync();
 }
 
 void ImageEffect_OilPaint::resetValues()

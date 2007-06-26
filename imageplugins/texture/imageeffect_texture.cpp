@@ -147,11 +147,11 @@ void ImageEffect_Texture::renderingFinished()
 void ImageEffect_Texture::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("texture Tool Dialog");
+    KConfigGroup group = config->group("texture Tool Dialog");
     m_textureType->blockSignals(true);
     m_blendGain->blockSignals(true);
-    m_textureType->setCurrentItem(config->readNumEntry("TextureType", PaperTexture));
-    m_blendGain->setValue(config->readNumEntry("BlendGain", 200));
+    m_textureType->setCurrentItem(group.readEntry("TextureType", PaperTexture));
+    m_blendGain->setValue(group.readEntry("BlendGain", 200));
     m_textureType->blockSignals(false);
     m_blendGain->blockSignals(false);
 }
@@ -159,10 +159,10 @@ void ImageEffect_Texture::readUserSettings()
 void ImageEffect_Texture::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("texture Tool Dialog");
-    config->writeEntry("TextureType", m_textureType->currentItem());
-    config->writeEntry("BlendGain", m_blendGain->value());
-    config->sync();
+    KConfigGroup group = config->group("texture Tool Dialog");
+    group.riteEntry("TextureType", m_textureType->currentItem());
+    group.writeEntry("BlendGain", m_blendGain->value());
+    group.sync();
 }
 
 void ImageEffect_Texture::resetValues()

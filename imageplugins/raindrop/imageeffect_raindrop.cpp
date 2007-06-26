@@ -157,15 +157,15 @@ void ImageEffect_RainDrop::renderingFinished()
 void ImageEffect_RainDrop::readUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("raindrops Tool Dialog");
+    KConfigGroup group = config->group("raindrops Tool Dialog");
 
     m_dropInput->blockSignals(true);
     m_amountInput->blockSignals(true);
     m_coeffInput->blockSignals(true);
     
-    m_dropInput->setValue(config->readNumEntry("DropAdjustment", 80));
-    m_amountInput->setValue(config->readNumEntry("AmountAdjustment", 150));
-    m_coeffInput->setValue(config->readNumEntry("CoeffAdjustment", 30));
+    m_dropInput->setValue(group.readEntry("DropAdjustment", 80));
+    m_amountInput->setValue(group.readEntry("AmountAdjustment", 150));
+    m_coeffInput->setValue(group.readEntry("CoeffAdjustment", 30));
     
     m_dropInput->blockSignals(false);
     m_amountInput->blockSignals(false);
@@ -177,11 +177,11 @@ void ImageEffect_RainDrop::readUserSettings(void)
 void ImageEffect_RainDrop::writeUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("raindrops Tool Dialog");
-    config->writeEntry("DropAdjustment", m_dropInput->value());
-    config->writeEntry("AmountAdjustment", m_amountInput->value());
-    config->writeEntry("CoeffAdjustment", m_coeffInput->value());
-    config->sync();
+    KConfigGroup group = config->group("raindrops Tool Dialog");
+    group.writeEntry("DropAdjustment", m_dropInput->value());
+    group.writeEntry("AmountAdjustment", m_amountInput->value());
+    group.writeEntry("CoeffAdjustment", m_coeffInput->value());
+    group.sync();
 }
 
 void ImageEffect_RainDrop::resetValues()
