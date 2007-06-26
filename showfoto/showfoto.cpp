@@ -44,7 +44,6 @@ extern "C"
 #include <qfileinfo.h>
 #include <qfile.h>
 #include <qcursor.h>
-#include <qfileinfo.h>
 
 // KDE includes.
 
