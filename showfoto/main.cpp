@@ -23,10 +23,6 @@
  *
  * ============================================================ */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 // KDE includes
 
 #include <kapplication.h>
@@ -79,7 +75,7 @@ int main(int argc, char *argv[])
                           I18N_NOOP("Developer"),
                           "renchi at pooh dot tam dot uiuc dot edu",
                           0);
-    
+
     aboutData.addAuthor ( "Ralf Holzer",
                           I18N_NOOP("Developer"),
                           "kde at ralfhoelzer dot com",
@@ -89,7 +85,7 @@ int main(int argc, char *argv[])
                           I18N_NOOP("Developer"),
                           "joern dot ahrens at kdemail dot net",
                           "http://www.digikam.org/?q=blog/1");
-    
+
     aboutData.addAuthor ( "Tom Albers",
                           I18N_NOOP("Developer"),
                           "tomalbers at kde dot nl",
@@ -121,7 +117,6 @@ int main(int argc, char *argv[])
     KGlobal::locale()->setMainCatalog( "digikam" );
 
     KApplication app;
-    
 
     KUrl::List urlList;
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -132,9 +127,9 @@ int main(int argc, char *argv[])
     args->clear();
 
     ShowFoto::ShowFoto *w = new ShowFoto::ShowFoto(urlList);
-    app.setMainWidget(w);
+    app.setTopWidget(w);
     w->show();
-    
+
     return app.exec();
 
     delete w;
