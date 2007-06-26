@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date   : 2004-11-22
+ * Date        : 2004-11-22
  * Description : stand alone digiKam image editor GUI
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
@@ -37,6 +37,7 @@ extern "C"
 
 // Qt includes.
 
+#include <Q3PtrList>
 #include <QLabel>
 #include <QLayout>
 #include <QSplitter>
@@ -45,10 +46,9 @@ extern "C"
 #include <QFile>
 #include <QCursor>
 #include <QProgressBar>
-#include <Q3HBoxLayout>
-#include <Q3PtrList>
-#include <Q3Frame>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QFrame>
+#include <QVBoxLayout>
 #include <KToggleAction>
 #include <KActionMenu>
 
@@ -60,10 +60,8 @@ extern "C"
 #include <kapplication.h>
 #include <kconfig.h>
 #include <klocale.h>
-#include <kfiledialog.h>
 #include <kmenubar.h>
 #include <kimageio.h>
-#include <kaccel.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -74,6 +72,7 @@ extern "C"
 #include <kglobalsettings.h>
 #include <ktoolbar.h>
 #include <kstatusbar.h>
+#include <kfiledialog.h>
 
 // LibKDcraw includes.
 
