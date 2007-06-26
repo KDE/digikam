@@ -541,7 +541,7 @@ void ShowFoto::applySettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("ImageViewer Settings");
 
-    m_bgColor = group.readEntry("BackgroundColor", Qt::black);
+    m_bgColor = group.readEntry("BackgroundColor", QColor(Qt::black));
     m_canvas->setBackgroundColor(m_bgColor);
 
     // Current image deleted go to trash ?
@@ -1106,14 +1106,7 @@ void ShowFoto::slotDeleteCurrentItem()
     }
     else
     {
-        KUrl dest("trash:/");
-
-        if (!KProtocolInfo::isKnownProtocol(dest))
-        {
-            dest = KGlobalSettings::trashPath();
-        }
-
-        KIO::Job* job = KIO::move( urlCurrent, dest );
+        KIO::Job* job = KIO::trash( urlCurrent );
         connect( job, SIGNAL(result( KIO::Job* )),
                  this, SLOT(slotDeleteCurrentItemResult( KIO::Job*)) );
     }
