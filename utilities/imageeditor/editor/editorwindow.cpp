@@ -430,44 +430,44 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Transform' menu actions ---------------------------------------------
 
-    d->resizeAction = new KAction(i18n("&Resize..."), "resize_image", 0,
-                                  this, SLOT(slotResize()),
-                                  actionCollection(), "editorwindow_resize");
+    d->resizeAction = new KAction(KIcon("resize_image"), i18n("&Resize..."), this);
+    connect(d->resizeAction, SIGNAL(triggered()), this, SLOT(slotResize()));
+    actionCollection()->addAction("editorwindow_resize", d->resizeAction);
 
-    d->cropAction = new KAction(i18n("Crop"), "crop",
-                                Qt::CTRL+Qt::Key_X,
-                                m_canvas, SLOT(slotCrop()),
-                                actionCollection(), "editorwindow_crop");
-    
+    d->cropAction = new KAction(KIcon("crop"), i18n("Crop"), this);
+    d->cropAction->setShortcut(Qt::CTRL+Qt::Key_X);
+    connect(d->cropAction, SIGNAL(triggered()), m_canvas, SLOT(slotCrop()));
+    actionCollection()->addAction("editorwindow_crop", d->cropAction);
     d->cropAction->setEnabled(false);
     d->cropAction->setWhatsThis(i18n("This option can be used to crop the image. "
                                      "Select a region of the image to enable this action."));
 
     // -- Standard 'Flip' menu actions ---------------------------------------------
 
-    d->flipHorizAction = new KAction(i18n("Flip Horizontally"), "mirror", Qt::CTRL+Qt::Key_Asterisk,
-                                   m_canvas, SLOT(slotFlipHoriz()),
-                                   actionCollection(), "editorwindow_flip_horiz");
+    d->flipHorizAction = new KAction(KIcon("mirror"), i18n("Flip Horizontally"), this);
+    d->flipHorizAction->setShortcut(Qt::CTRL+Qt::Key_Asterisk);
+    connect(d->flipHorizAction, SIGNAL(triggered()), m_canvas, SLOT(slotFlipHoriz()));
+    actionCollection()->addAction("editorwindow_flip_horiz", d->flipHorizAction);
     d->flipHorizAction->setEnabled(false);
 
-    d->flipVertAction = new KAction(i18n("Flip Vertically"), "flip", Qt::CTRL+Qt::Key_Slash,
-                                   m_canvas, SLOT(slotFlipVert()),
-                                   actionCollection(), "editorwindow_flip_vert");
+    d->flipVertAction = new KAction(KIcon("flip"), i18n("Flip Vertically"), this);
+    d->flipVertAction->setShortcut(Qt::CTRL+Qt::Key_Slash);
+    connect(d->flipVertAction, SIGNAL(triggered()), m_canvas, SLOT(slotFlipVert()));
+    actionCollection()->addAction("editorwindow_flip_vert", d->flipVertAction);
     d->flipVertAction->setEnabled(false);
 
     // -- Standard 'Rotate' menu actions ----------------------------------------
 
-    d->rotateLeftAction = new KAction(i18n("Rotate Left"),
-                                     "rotate_ccw", Qt::SHIFT+Qt::CTRL+Qt::Key_Left, 
-                                     m_canvas, SLOT(slotRotate270()),
-                                     actionCollection(),
-                                     "editorwindow_rotate_left");
+    d->rotateLeftAction = new KAction(KIcon("rotate_ccw"), i18n("Rotate Left"), this);
+    d->rotateLeftAction->setShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_Left);
+    connect(d->rotateLeftAction, SIGNAL(triggered()), m_canvas, SLOT(slotRotate270()));
+    actionCollection()->addAction("editorwindow_rotate_left", d->rotateLeftAction);
     d->rotateLeftAction->setEnabled(false);
-    d->rotateRightAction  = new KAction(i18n("Rotate Right"),
-                                     "rotate_cw", Qt::SHIFT+Qt::CTRL+Qt::Key_Right, 
-                                     m_canvas, SLOT(slotRotate90()),
-                                     actionCollection(),
-                                     "editorwindow_rotate_right");
+
+    d->rotateRightAction = new KAction(KIcon("rotate_cw"), i18n("Rotate Right"), this);
+    d->rotateRightAction->setShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_Right);
+    connect(d->rotateRightAction, SIGNAL(triggered()), m_canvas, SLOT(slotRotate90()));
+    actionCollection()->addAction("editorwindow_rotate_right", d->rotateRightAction);
     d->rotateRightAction->setEnabled(false);
 
     // -- Standard 'Configure' menu actions ----------------------------------------
@@ -478,17 +478,9 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    d->imagePluginsHelpAction = new KAction(i18n("Image Plugins Handbooks"),
-                                            "digikamimageplugins", 0,
-                                            this, SLOT(slotImagePluginsHelp()),
-                                            actionCollection(), 
-                                            "editorwindow_imagepluginshelp");
-
-    d->donateMoneyAction = new KAction(i18n("Donate Money..."),
-                                       0, 0, 
-                                       this, SLOT(slotDonateMoney()),
-                                       actionCollection(),
-                                       "editorwindow_donatemoney");
+    d->donateMoneyAction = new KAction(i18n("Donate Money..."), this);
+    connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
+    actionCollection()->addAction("editorwindow_donatemoney", d->donateMoneyAction);
 }
 
 void EditorWindow::setupStandardAccelerators()
@@ -615,11 +607,6 @@ void EditorWindow::printImage(KUrl url)
                                url.filename()));
         }
     }
-}
-
-void EditorWindow::slotImagePluginsHelp()
-{
-    KToolInvocation::invokeHelp( QString(), "digikamimageplugins" );
 }
 
 void EditorWindow::slotEditKeys()

@@ -53,7 +53,6 @@ public:
         fullScreenHideToolBar  = false;
 
         selectLabel            = 0;
-        imagePluginsHelpAction = 0;
         donateMoneyAction      = 0;
         accelerators           = 0;
         viewCMViewAction       = 0;
@@ -99,7 +98,6 @@ public:
     QToolButton               *underExposureIndicator; 
     QToolButton               *overExposureIndicator; 
 
-    QAction                   *imagePluginsHelpAction;
     QAction                   *donateMoneyAction;
     QAction                   *filePrintAction;
     QAction                   *copyAction;
