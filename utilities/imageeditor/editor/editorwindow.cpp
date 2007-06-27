@@ -639,8 +639,10 @@ void EditorWindow::slotEditKeys()
 
 void EditorWindow::slotResize()
 {
+#warning "TODO: kde4 port it";
+/*  // TODO: KDE4PORT: uncomment this code when imageresize will be ported to KDE4
     ImageResize dlg(this);
-    dlg.exec();
+    dlg.exec();*/
 }
 
 void EditorWindow::slotAboutToShowUndoMenu()
