@@ -29,6 +29,7 @@ class QToolButton;
 class QLabel;
 class QAction;
 class QWidgetAction;
+class QEventLoop;
 
 class KComboBox;
 class KToggleAction;
@@ -79,6 +80,7 @@ public:
         zoomComboAction        = 0;
         selectAllAction        = 0;
         selectNoneAction       = 0;
+        waitingLoop            = 0;
     }
 
     ~EditorWindowPriv()
@@ -123,6 +125,8 @@ public:
     ICCSettingsContainer      *ICCSettings;
 
     ExposureSettingsContainer *exposureSettings;
+
+    QEventLoop                *waitingLoop;
 };
 
 }  // NameSpace Digikam

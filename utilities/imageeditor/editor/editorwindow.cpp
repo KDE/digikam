@@ -107,9 +107,6 @@ extern "C"
 #include "editorwindow.h"
 #include "editorwindow.moc"
 
-void qt_enter_modal( QWidget *widget );
-void qt_leave_modal( QWidget *widget );
-
 namespace Digikam
 {
 
@@ -148,6 +145,8 @@ EditorWindow::EditorWindow(const char *name)
     d->exposureSettings = new ExposureSettingsContainer();
     m_IOFileSettings    = new IOFileSettingsContainer();
     m_savingContext     = new SavingContextContainer();
+
+    d->waitingLoop      = new QEventLoop(this);
 }
 
 EditorWindow::~EditorWindow()
@@ -1166,12 +1165,12 @@ bool EditorWindow::promptUserSave(const KUrl& url)
                 saving = save();
 
             // save and saveAs return false if they were cancelled and did not enter saving at all
-            // In this case, do not call enter_loop because exit_loop will not be called.
+            // In this case, do not call enterWaitingLoop because quitWaitingloop will not be called.
             if (saving)
             {
                 // Waiting for asynchronous image file saving operation runing in separate thread.
                 m_savingContext->synchronizingState = SavingContextContainer::SynchronousSaving;
-                enter_loop();
+                enterWaitingLoop();
                 m_savingContext->synchronizingState = SavingContextContainer::NormalSaving;
                 return m_savingContext->synchronousSavingResult;
             }
@@ -1207,20 +1206,20 @@ bool EditorWindow::waitForSavingToComplete()
         KMessageBox::queuedMessageBox(this,
                                       KMessageBox::Information,
                                       i18n("Please wait while the image is being saved..."));
-        enter_loop();
+        enterWaitingLoop();
         m_savingContext->synchronizingState = SavingContextContainer::NormalSaving;
     }
     return true;
 }
 
-void EditorWindow::enter_loop()
+void EditorWindow::enterWaitingLoop()
 {
-    QWidget dummy;
-    dummy.setWindowFlags(Qt::WType_Dialog | Qt::WShowModal);
-    dummy.setFocusPolicy( Qt::NoFocus );
-    qt_enter_modal(&dummy);
-    qApp->enter_loop();
-    qt_leave_modal(&dummy);
+    d->waitingLoop->exec(QEventLoop::ExcludeUserInputEvents);
+}
+
+void EditorWindow::quitWaitingLoop()
+{
+    d->waitingLoop->quit();
 }
 
 void EditorWindow::slotSelected(bool val)
@@ -1447,7 +1446,7 @@ void EditorWindow::finishSaving(bool success)
 
     // Exit of internal Qt event loop to unlock promptUserSave() method.
     if (m_savingContext->synchronizingState == SavingContextContainer::SynchronousSaving)
-        qApp->exit_loop();
+        quitWaitingLoop();
 
     // Enable actions as appropriate after saving
     toggleActions(true);

@@ -219,7 +219,8 @@ private slots:
 
 private:
 
-    void enter_loop();
+    void enterWaitingLoop();
+    void quitWaitingLoop();
     void hideToolBars();
     void showToolBars();
     void setColorManagedViewIndicatorToolTip(bool available, bool cmv);
