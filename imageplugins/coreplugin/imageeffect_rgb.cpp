@@ -301,12 +301,12 @@ void ImageEffect_RGB::slotColorSelectedFromTarget( const Digikam::DColor &color 
 void ImageEffect_RGB::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("colorbalance Tool Dialog");
-    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
-    int r = config->readNumEntry("RedAjustment", 0);
-    int g = config->readNumEntry("GreenAjustment", 0);
-    int b = config->readNumEntry("BlueAjustment", 0);
+    KConfigGroup group = config->group("colorbalance Tool Dialog");
+    m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(group.readEntry("Histogram Scale", (int)Digikam::HistogramWidget::LogScaleHistogram));
+    int r = group.readEntry("RedAjustment", 0);
+    int g = group.readEntry("GreenAjustment", 0);
+    int b = group.readEntry("BlueAjustment", 0);
     adjustSliders(r, g, b);
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
@@ -315,13 +315,13 @@ void ImageEffect_RGB::readUserSettings()
 void ImageEffect_RGB::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("colorbalance Tool Dialog");
-    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
-    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
-    config->writeEntry("RedAjustment", m_rSlider->value());
-    config->writeEntry("GreenAjustment", m_gInput->value());
-    config->writeEntry("BlueAjustment", m_bInput->value());
-    config->sync();
+    KConfigGroup group = config->group("colorbalance Tool Dialog");
+    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
+    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    group.writeEntry("RedAjustment", m_rSlider->value());
+    group.writeEntry("GreenAjustment", m_gInput->value());
+    group.writeEntry("BlueAjustment", m_bInput->value());
+    group.sync();
 }
 
 void ImageEffect_RGB::resetValues()

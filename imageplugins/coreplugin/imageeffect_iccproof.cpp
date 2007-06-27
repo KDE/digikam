@@ -537,22 +537,22 @@ void ImageEffect_ICCProof::readUserSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     
     // General settings of digiKam Color Management                            
-    config->setGroup("Color Management");
+    KConfigGroup group = config->group("Color Management");
 
-    if (!config->readBoolEntry("EnableCM", false))
+    if (!group.readBoolEntry("EnableCM", false))
     {
         m_cmEnabled = false;
         slotToggledWidgets(false);
     }
     else
     {
-        m_inPath      = config->readPathEntry("InProfileFile");
-        m_spacePath   = config->readPathEntry("WorkProfileFile");
-        m_proofPath   = config->readPathEntry("ProofProfileFile");
+        m_inPath      = group.readEntry("InProfileFile");
+        m_spacePath   = group.readEntry("WorkProfileFile");
+        m_proofPath   = group.readEntry("ProofProfileFile");
         
-        if (QFile::exists(config->readPathEntry("DefaultPath")))
+        if (QFile::exists(group.readPathEntry("DefaultPath")))
         {
-            defaultICCPath = config->readPathEntry("DefaultPath");
+            defaultICCPath = group.readPathEntry("DefaultPath");
         }
         else
         {
@@ -564,22 +564,22 @@ void ImageEffect_ICCProof::readUserSettings()
     }
     
     // Plugin settings.
-    config->setGroup("colormanagement Tool Dialog");
-    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
-    m_toolBoxWidgets->setCurrentIndex(config->readNumEntry("Settings Tab", GENERALPAGE));        
-    m_inProfilesPath->setURL(config->readPathEntry("InputProfilePath", defaultICCPath)); 
-    m_proofProfilePath->setURL(config->readPathEntry("ProofProfilePath", defaultICCPath)); 
-    m_spaceProfilePath->setURL(config->readPathEntry("SpaceProfilePath", defaultICCPath));
-    m_renderingIntentsCB->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
-    m_doSoftProofBox->setChecked(config->readBoolEntry("DoSoftProof", false));
-    m_checkGamutBox->setChecked(config->readBoolEntry("CheckGamut", false));
-    m_embeddProfileBox->setChecked(config->readBoolEntry("EmbeddProfile", true));
-    m_BPCBox->setChecked(config->readBoolEntry("BPC", true));
-    m_inProfileBG->setButton(config->readNumEntry("InputProfileMethod", 0));
-    m_spaceProfileBG->setButton(config->readNumEntry("SpaceProfileMethod", 0));
-    m_proofProfileBG->setButton(config->readNumEntry("ProofProfileMethod", 0));
-    m_cInput->setValue(config->readNumEntry("ContrastAjustment", 0));
+    group = config->group("colormanagement Tool Dialog");
+    m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(group.readEntry("Histogram Scale", (int)Digikam::HistogramWidget::LogScaleHistogram));
+    m_toolBoxWidgets->setCurrentIndex(group.readEntry("Settings Tab", GENERALPAGE));        
+    m_inProfilesPath->setUrl(group.readPathEntry("InputProfilePath", defaultICCPath)); 
+    m_proofProfilePath->setUrl(group.readPathEntry("ProofProfilePath", defaultICCPath)); 
+    m_spaceProfilePath->setUrl(group.readPathEntry("SpaceProfilePath", defaultICCPath));
+    m_renderingIntentsCB->setCurrentItem(group.readEntry("RenderingIntent", 0));
+    m_doSoftProofBox->setChecked(group.readEntry("DoSoftProof", false));
+    m_checkGamutBox->setChecked(group.readEntry("CheckGamut", false));
+    m_embeddProfileBox->setChecked(group.readEntry("EmbeddProfile", true));
+    m_BPCBox->setChecked(group.readEntry("BPC", true));
+    m_inProfileBG->setButton(group.readEntry("InputProfileMethod", 0));
+    m_spaceProfileBG->setButton(group.readEntry("SpaceProfileMethod", 0));
+    m_proofProfileBG->setButton(group.readEntry("ProofProfileMethod", 0));
+    m_cInput->setValue(group.readEntry("ContrastAjustment", 0));
 
     for (int i = 0 ; i < 5 ; i++)
         m_curves->curvesChannelReset(i);
@@ -590,7 +590,7 @@ void ImageEffect_ICCProof::readUserSettings()
     for (int j = 0 ; j < 17 ; j++)
     {
         QPoint disable(-1, -1);
-        QPoint p = config->readPointEntry(QString("CurveAjustmentPoint%1").arg(j), &disable);
+        QPoint p = group.readEntry(QString("CurveAjustmentPoint%1").arg(j), disable);
 
         if (m_originalImage->sixteenBit() && p.x() != -1)
         {
@@ -611,22 +611,22 @@ void ImageEffect_ICCProof::readUserSettings()
 void ImageEffect_ICCProof::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("colormanagement Tool Dialog");
-    config->writeEntry("Settings Tab", m_toolBoxWidgets->currentIndex());
-    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
-    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
-    config->writePathEntry("InputProfilePath", m_inProfilesPath->url());
-    config->writePathEntry("ProofProfilePath", m_proofProfilePath->url());
-    config->writePathEntry("SpaceProfilePath", m_spaceProfilePath->url());
-    config->writeEntry("RenderingIntent", m_renderingIntentsCB->currentItem());
-    config->writeEntry("DoSoftProof", m_doSoftProofBox->isChecked());
-    config->writeEntry("CheckGamut", m_checkGamutBox->isChecked());
-    config->writeEntry("EmbeddProfile", m_embeddProfileBox->isChecked());
-    config->writeEntry("BPC", m_BPCBox->isChecked());
-    config->writeEntry("InputProfileMethod", m_inProfileBG->selectedId());
-    config->writeEntry("SpaceProfileMethod", m_spaceProfileBG->selectedId());
-    config->writeEntry("ProofProfileMethod", m_proofProfileBG->selectedId());
-    config->writeEntry("ContrastAjustment", m_cInput->value());
+    KConfigGroup group = config->group("colormanagement Tool Dialog");
+    group.writeEntry("Settings Tab", m_toolBoxWidgets->currentIndex());
+    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
+    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    group.writePathEntry("InputProfilePath", m_inProfilesPath->url());
+    group.writePathEntry("ProofProfilePath", m_proofProfilePath->url());
+    group.writePathEntry("SpaceProfilePath", m_spaceProfilePath->url());
+    group.writeEntry("RenderingIntent", m_renderingIntentsCB->currentItem());
+    group.writeEntry("DoSoftProof", m_doSoftProofBox->isChecked());
+    group.writeEntry("CheckGamut", m_checkGamutBox->isChecked());
+    group.writeEntry("EmbeddProfile", m_embeddProfileBox->isChecked());
+    group.writeEntry("BPC", m_BPCBox->isChecked());
+    group.writeEntry("InputProfileMethod", m_inProfileBG->selectedId());
+    group.writeEntry("SpaceProfileMethod", m_spaceProfileBG->selectedId());
+    group.writeEntry("ProofProfileMethod", m_proofProfileBG->selectedId());
+    group.writeEntry("ContrastAjustment", m_cInput->value());
 
     for (int j = 0 ; j < 17 ; j++)
     {
@@ -638,10 +638,10 @@ void ImageEffect_ICCProof::writeUserSettings()
             p.setY(p.y()/255);
         }
 
-        config->writeEntry(QString("CurveAjustmentPoint%1").arg(j), p);
+        group.writeEntry(QString("CurveAjustmentPoint%1").arg(j), p);
     }
 
-    config->sync();
+    group.sync();
 }
 
 void ImageEffect_ICCProof::processLCMSURL(const QString& url)

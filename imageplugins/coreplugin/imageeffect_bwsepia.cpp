@@ -636,16 +636,16 @@ void ImageEffect_BWSepia::slotColorSelectedFromTarget( const Digikam::DColor &co
 void ImageEffect_BWSepia::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("convertbw Tool Dialog");
+    KConfigGroup group = config->group("convertbw Tool Dialog");
 
-    m_tab->setCurrentPage(config->readNumEntry("Settings Tab", BWFiltersTab));
-    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
-    m_bwFilters->setCurrentItem(config->readNumEntry("BW Filter", 0));
-    m_bwFilm->setCurrentItem(config->readNumEntry("BW Film", 0));
-    m_bwTone->setCurrentItem(config->readNumEntry("BW Tone", 0));
-    m_cInput->setValue(config->readNumEntry("ContrastAjustment", 0));
-    m_strengthInput->setValue(config->readNumEntry("StrengthAjustment", 1));
+    m_tab->setCurrentPage(grouo.readEntry("Settings Tab", (int)BWFiltersTab));
+    m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(group.readEntry("Histogram Scale", (int)Digikam::HistogramWidget::LogScaleHistogram));
+    m_bwFilters->setCurrentItem(group.readEntry("BW Filter", 0));
+    m_bwFilm->setCurrentItem(group.readEntry("BW Film", 0));
+    m_bwTone->setCurrentItem(group.readEntry("BW Tone", 0));
+    m_cInput->setValue(group.readEntry("ContrastAjustment", 0));
+    m_strengthInput->setValue(group.readEntry("StrengthAjustment", 1));
 
     for (int i = 0 ; i < 5 ; i++)
         m_curves->curvesChannelReset(i);
@@ -656,7 +656,7 @@ void ImageEffect_BWSepia::readUserSettings()
     for (int j = 0 ; j < 17 ; j++)
     {
         QPoint disable(-1, -1);
-        QPoint p = config->readPointEntry(QString("CurveAjustmentPoint%1").arg(j), &disable);
+        QPoint p = group.readEntry(QString("CurveAjustmentPoint%1").arg(j), disable);
 
         if (m_originalImage->sixteenBit() && p.x() != -1)
         {
@@ -678,15 +678,15 @@ void ImageEffect_BWSepia::readUserSettings()
 void ImageEffect_BWSepia::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("convertbw Tool Dialog");
-    config->writeEntry("Settings Tab", m_tab->currentPageIndex());
-    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
-    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
-    config->writeEntry("BW Filter", m_bwFilters->currentItem());
-    config->writeEntry("BW Film", m_bwFilm->currentItem());
-    config->writeEntry("BW Tone", m_bwTone->currentItem());
-    config->writeEntry("ContrastAjustment", m_cInput->value());
-    config->writeEntry("StrengthAjustment", m_strengthInput->value());
+    KConfigGroup group = config->group("convertbw Tool Dialog");
+    group.writeEntry("Settings Tab", m_tab->currentPageIndex());
+    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
+    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    group.writeEntry("BW Filter", m_bwFilters->currentItem());
+    group.writeEntry("BW Film", m_bwFilm->currentItem());
+    group.writeEntry("BW Tone", m_bwTone->currentItem());
+    group.writeEntry("ContrastAjustment", m_cInput->value());
+    group.writeEntry("StrengthAjustment", m_strengthInput->value());
 
     for (int j = 0 ; j < 17 ; j++)
     {
@@ -698,10 +698,10 @@ void ImageEffect_BWSepia::writeUserSettings()
             p.setY(p.y()/255);
         }
 
-        config->writeEntry(QString("CurveAjustmentPoint%1").arg(j), p);
+        group.writeEntry(QString("CurveAjustmentPoint%1").arg(j), p);
     }
 
-    config->sync();
+    group.sync();
 }
 
 void ImageEffect_BWSepia::resetValues()
