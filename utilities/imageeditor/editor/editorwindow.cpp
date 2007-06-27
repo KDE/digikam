@@ -585,11 +585,8 @@ void EditorWindow::setupStatusBar()
             this, SLOT(slotToggleColorManagedView()));
 }
 
-void EditorWindow::printImage(KUrl /*url*/)
+void EditorWindow::printImage(KUrl url)
 {
-#warning "TODO: kde4 port it";
-/* TODO: KDE4PORT : enable this code when utilities/imageeditor/tools/imageprint.cpp will be ported
-
     uchar* ptr      = m_canvas->interface()->getImage();
     int w           = m_canvas->interface()->origWidth();
     int h           = m_canvas->interface()->origHeight();
@@ -611,13 +608,13 @@ void EditorWindow::printImage(KUrl /*url*/)
 
     if ( printer.setup( this, i18n("Print %1",printer.docName().section('/', -1)) ) )
     {
-        ImagePrint printOperations(image, printer, url.filename());
+        ImagePrint printOperations(image, printer, url.fileName());
         if (!printOperations.printImageWithQt())
         {
             KMessageBox::error(this, i18n("Failed to print file: '%1'",
-                               url.filename()));
+                               url.fileName()));
         }
-    }*/
+    }
 }
 
 void EditorWindow::slotEditKeys()

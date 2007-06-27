@@ -58,7 +58,7 @@ private:
 
     QString minimizeString(QString text, const QFontMetrics& metrics, int maxWidth);
     void readSettings();
-    
+
 private:
 
     KPrinter&          m_printer;
@@ -84,12 +84,12 @@ public:
     };
 
     static inline double unitToMM(Unit unit);
-    static inline Unit stringToUnit(const QString& unit);  
-    static inline QString unitToString(Unit unit); 
+    static inline Unit stringToUnit(const QString& unit);
+    static inline QString unitToString(Unit unit);
 
 public:
 
-    ImageEditorPrintDialogPage(DImg& image, QWidget *parent=0L);
+    ImageEditorPrintDialogPage(DImg& image, QWidget *parent=0L, const char *name=0);
     ~ImageEditorPrintDialogPage();
 
     virtual void getOptions(QMap<QString,QString>& opts, bool incldef = false);
