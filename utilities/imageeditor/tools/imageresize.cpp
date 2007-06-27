@@ -48,6 +48,7 @@
 #include <QCloseEvent>
 #include <Q3GridLayout>
 #include <Q3VBoxLayout>
+#include <QProgressBar>
 
 // KDE includes.
 
@@ -63,6 +64,7 @@
 #include <knuminput.h>
 #include <kglobalsettings.h>
 #include <kglobal.h>
+#include <KToolInvocation>
 
 // Digikam includes.
 
@@ -130,20 +132,21 @@ public:
     KDoubleNumInput      *wpInput;
     KDoubleNumInput      *hpInput;
     
-    KProgress            *progressBar;
+    QProgressBar            *progressBar;
     
     GreycstorationIface  *greycstorationIface;
     GreycstorationWidget *settingsWidget;
 };
 
 ImageResize::ImageResize(QWidget* parent)
-           : KDialogBase(Plain, i18n("Resize Image"),
-                         Help|Default|User2|User3|Ok|Cancel, Ok,
-                         parent, 0, true, false,
-                         QString(),
-                         i18n("&Save As..."),
-                         i18n("&Load..."))             
+           : KDialog(parent)
 {
+    setDefaultButton(Ok);
+    setButton(Help|Default|User2|User3|Ok|Cancel);
+    setCaption(i18n("Resize Image"));
+    setModal(true);
+    setTextButton(User2,i18n("&Save As..."));
+    setTextButton(User3,i18n("&Load..."));
     d = new ImageResizePriv;
     d->parent = parent;
     setHelp("resizetool.anchor", "digikam");
@@ -163,8 +166,10 @@ ImageResize::ImageResize(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    Q3VBoxLayout *vlay  = new Q3VBoxLayout(plainPage(), 0, spacingHint());
-    d->mainTab          = new QTabWidget( plainPage() );
+    QWidget *page = new QWidget(this);
+    setMainWidget(page);
+    Q3VBoxLayout *vlay  = new Q3VBoxLayout(page, 0, spacingHint());
+    d->mainTab          = new QTabWidget( page );
 
     QWidget* firstPage = new QWidget( d->mainTab );
     Q3GridLayout* grid  = new Q3GridLayout( firstPage, 8, 2, spacingHint());
@@ -211,8 +216,9 @@ ImageResize::ImageResize(QWidget* parent)
     d->useGreycstorationBox->setWhatsThis( i18n("<p>Enable this option to restore photograph content. "
                                                   "Warning: this process can take a while."));
 
-    d->progressBar = new KProgress(100, firstPage);
+    d->progressBar = new QProgressBar(firstPage);
     d->progressBar->setValue(0);
+    d->progressBar->setMaximum(100);
     d->progressBar->setWhatsThis( i18n("<p>This is the current progress when you use Restoration mode."));
 
     grid->addMultiCellWidget(d->preserveRatioBox, 0, 0, 0, 2);
@@ -327,14 +333,14 @@ void ImageResize::writeUserSettings()
     group.writeEntry("FastApprox", settings.fastApprox);
     group.writeEntry("Interpolation", settings.interp);
     group.writeEntry("Amplitude", (int)settings.amplitude);
-    group.writeEntry("Sharpness", settings.sharpness);
-    group.writeEntry("Anisotropy", settings.anisotropy);
-    group.writeEntry("Alpha", settings.alpha);
-    group.writeEntry("Sigma", settings.sigma);
-    group.writeEntry("GaussPrec", settings.gaussPrec);
-    group.writeEntry("Dl", settings.dl);
-    group.writeEntry("Da", settings.da);
-    group.writeEntry("Iteration", settings.nbIter);
+    group.writeEntry("Sharpness", (int)settings.sharpness);
+    group.writeEntry("Anisotropy", (int)settings.anisotropy);
+    group.writeEntry("Alpha", (int)settings.alpha);
+    group.writeEntry("Sigma", (int)settings.sigma);
+    group.writeEntry("GaussPrec", (int)settings.gaussPrec);
+    group.writeEntry("Dl", (int)settings.dl);
+    group.writeEntry("Da", (int)settings.da);
+    group.writeEntry("Iteration", (int)settings.nbIter);
     group.writeEntry("Tile", settings.tile);
     group.writeEntry("BTile", settings.btile);
     group.writeEntry("RestorePhotograph", d->useGreycstorationBox->isChecked());
@@ -453,7 +459,7 @@ void ImageResize::slotCancel()
 
 void ImageResize::processCImgUrl(const KUrl& url)
 {
-    KApplication::kApplication()->invokeBrowser(url);
+    KToolInvocation::invokeBrowser(url.path());
 }
 
 void ImageResize::closeEvent(QCloseEvent *e)
