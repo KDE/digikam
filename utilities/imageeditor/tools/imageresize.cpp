@@ -59,7 +59,6 @@
 #include <kapplication.h>
 #include <kfiledialog.h>
 #include <kstandarddirs.h>
-#include <kprogress.h>
 #include <kmessagebox.h>
 #include <knuminput.h>
 #include <kglobalsettings.h>
@@ -201,7 +200,7 @@ ImageResize::ImageResize(QWidget* parent)
 
     KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
     cimgLogoLabel->setText(QString());
-    cimgLogoLabel->setURL("http://cimg.sourceforge.net");
+    cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
     KGlobal::dirs()->addResourceType("logo-cimg", KGlobal::dirs()->kde_default("data") +
                                      "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("logo-cimg", "logo-cimg.png");
@@ -244,8 +243,8 @@ ImageResize::ImageResize(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    connect(cimgLogoLabel, SIGNAL(leftClickedURL(const QString&)),
-            this, SLOT(processCImgURL(const QString&)));
+    connect(cimgLogoLabel, SIGNAL(leftClickedUrl(const KUrl&)),
+            this, SLOT(processCImgUrl(const KUrl&)));
 
     connect(d->wInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotValuesChanged()));
@@ -287,7 +286,7 @@ void ImageResize::readUserSettings()
     GreycstorationSettings settings;
     settings.fastApprox = group.readEntry("FastApprox", true);
     settings.interp     = group.readEntry("Interpolation",
-                          GreycstorationSettings::NearestNeighbor);
+                          (int)GreycstorationSettings::NearestNeighbor);
     settings.amplitude  = group.readEntry("Amplitude", 20.0);
     settings.sharpness  = group.readEntry("Sharpness", 0.2);
     settings.anisotropy = group.readEntry("Anisotropy", 0.9);
@@ -327,7 +326,7 @@ void ImageResize::writeUserSettings()
     KConfigGroup group = config->group("resize Tool Dialog");
     group.writeEntry("FastApprox", settings.fastApprox);
     group.writeEntry("Interpolation", settings.interp);
-    group.writeEntry("Amplitude", settings.amplitude);
+    group.writeEntry("Amplitude", (int)settings.amplitude);
     group.writeEntry("Sharpness", settings.sharpness);
     group.writeEntry("Anisotropy", settings.anisotropy);
     group.writeEntry("Alpha", settings.alpha);
@@ -452,7 +451,7 @@ void ImageResize::slotCancel()
     done(Cancel);
 }
 
-void ImageResize::processCImgURL(const QString& url)
+void ImageResize::processCImgUrl(const KUrl& url)
 {
     KApplication::kApplication()->invokeBrowser(url);
 }
@@ -567,7 +566,7 @@ void ImageResize::customEvent(QCustomEvent *event)
 
 void ImageResize::slotUser3()
 {
-    KUrl loadBlowupFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    KUrl loadBlowupFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                        QString( "*" ), this,
                                        QString( i18n("Photograph Resizing Settings File to Load")) );
     if( loadBlowupFile.isEmpty() )
@@ -580,8 +579,8 @@ void ImageResize::slotUser3()
         if (!d->settingsWidget->loadSettings(file, QString("# Photograph Resizing Configuration File")))
         {
            KMessageBox::error(this, 
-                        i18n("\"%1\" is not a Photograph Resizing settings text file.")
-                        .arg(loadBlowupFile.fileName()));
+                        i18n("\"%1\" is not a Photograph Resizing settings text file.",
+                        loadBlowupFile.fileName()));
            file.close();            
            return;
         }
@@ -594,7 +593,7 @@ void ImageResize::slotUser3()
 
 void ImageResize::slotUser2()
 {
-    KUrl saveBlowupFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    KUrl saveBlowupFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                        QString( "*" ), this,
                                        QString( i18n("Photograph Resizing Settings File to Save")) );
     if( saveBlowupFile.isEmpty() )
