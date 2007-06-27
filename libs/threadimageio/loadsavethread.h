@@ -50,6 +50,8 @@ class LoadSaveNotifier
 {
 public:
 
+    virtual ~LoadSaveNotifier();
+
     virtual void imageStartedLoading(const LoadingDescription &loadingDescription);
     virtual void loadingProgress(const LoadingDescription &loadingDescription, float progress);
     virtual void imageLoaded(const LoadingDescription &loadingDescription, const DImg& img);
