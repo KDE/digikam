@@ -639,10 +639,8 @@ void EditorWindow::slotEditKeys()
 
 void EditorWindow::slotResize()
 {
-#warning "TODO: kde4 port it";
-/*  // TODO: KDE4PORT: uncomment this code when imageresize will be ported to KDE4
     ImageResize dlg(this);
-    dlg.exec();*/
+    dlg.exec();
 }
 
 void EditorWindow::slotAboutToShowUndoMenu()
@@ -1393,7 +1391,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         finishSaving(true);
 
         saveIsComplete();
-        
+
         // Take all actions necessary to update information and re-enable sidebar
         slotChanged();
     }
