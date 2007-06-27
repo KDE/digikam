@@ -189,7 +189,7 @@ void ImageEffect_Restoration::writeUserSettings()
     group.writeEntry("Preset", m_restorationTypeCB->currentItem());
     group.writeEntry("FastApprox", settings.fastApprox);
     group.writeEntry("Interpolation", settings.interp);
-    group.writeEntry("Amplitude", settings.amplitude);
+    group.writeEntry("Amplitude", (int)settings.amplitude);
     group.writeEntry("Sharpness", settings.sharpness);
     group.writeEntry("Anisotropy", settings.anisotropy);
     group.writeEntry("Alpha", settings.alpha);
@@ -250,7 +250,7 @@ void ImageEffect_Restoration::resetValues()
 
 void ImageEffect_Restoration::processCImgURL(const QString& url)
 {
-    KApplication::kApplication()->invokeBrowser(url);
+    KToolInvocation::invokeBrowser(url);
 }
 
 void ImageEffect_Restoration::prepareEffect()

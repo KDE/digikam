@@ -312,7 +312,7 @@ void ImageEffect_InPainting_Dialog::resetValues()
 
 void ImageEffect_InPainting_Dialog::processCImgURL(const QString& url)
 {
-    KApplication::kApplication()->invokeBrowser(url);
+    KToolInvocation::invokeBrowser(url);
 }
 
 void ImageEffect_InPainting_Dialog::prepareEffect()

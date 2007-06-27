@@ -646,7 +646,7 @@ void ImageEffect_ICCProof::writeUserSettings()
 
 void ImageEffect_ICCProof::processLCMSURL(const QString& url)
 {
-    KApplication::kApplication()->invokeBrowser(url);
+    KToolInvocation::invokeBrowser(url);
 }
 
 void ImageEffect_ICCProof::slotSpotColorChanged(const Digikam::DColor &color)
