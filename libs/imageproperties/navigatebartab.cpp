@@ -24,7 +24,7 @@
 
 // Qt includes.
 
-#include <Q3WidgetStack>
+#include <QStackedWidget>
 #include <QLabel>
 #include <QVBoxLayout>
 
@@ -49,7 +49,7 @@ public:
         label       = 0;
     }
 
-    Q3WidgetStack     *stack;
+    QStackedWidget    *stack;
 
     QLabel            *label;
 
@@ -76,7 +76,7 @@ void NavigateBarTab::setupNavigateBar(bool withBar)
 
     if (withBar)
     {
-        d->stack = new Q3WidgetStack(this);
+        d->stack = new QStackedWidget(this);
         m_navigateBarLayout->addWidget(d->stack);
 
         d->navigateBar  = new NavigateBarWidget(d->stack, withBar);
@@ -105,7 +105,7 @@ void NavigateBarTab::setNavigateBarState(bool hasPrevious, bool hasNext)
     if (!d->navigateBar)
         return;
 
-    d->stack->raiseWidget(d->navigateBar);
+    d->stack->setCurrentWidget(d->navigateBar);
 
     if (hasPrevious && hasNext)
         d->navigateBar->setButtonsState(StatusNavigateBar::ItemCurrent);
@@ -122,7 +122,7 @@ void NavigateBarTab::setNavigateBarState(int itemType)
     if (!d->navigateBar)
         return;
 
-    d->stack->raiseWidget(d->navigateBar);
+    d->stack->setCurrentWidget(d->navigateBar);
     d->navigateBar->setButtonsState(itemType);
 }
 
@@ -131,7 +131,7 @@ void NavigateBarTab::setNavigateBarFileName(const QString &name)
     if (!d->navigateBar)
         return;
 
-    d->stack->raiseWidget(d->navigateBar);
+    d->stack->setCurrentWidget(d->navigateBar);
     d->navigateBar->setFileName(name);
 }
 
@@ -140,9 +140,8 @@ void NavigateBarTab::setLabelText(const QString &text)
     if (!d->label)
         return;
 
-    d->stack->raiseWidget(d->label);
+    d->stack->setCurrentWidget(d->label);
     d->label->setText(text);
 }
 
 }  // NameSpace Digikam
-
