@@ -35,33 +35,34 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/showfoto/setup
                    )
 
 SET(showfoto_SRCS 
-    ${libshowfotosetup_SRCS} 
-    ${libdimgcanvas_SRCS}
-    ${libsetupshowfoto_SRCS} 
     ${libsplashscreen_SRCS} 
-    ${libshowfoto_SRCS} 
-    ${libdimgeditortools_SRCS}
     ${libslideshow_SRCS} 
+    ${libshowfotosetup_SRCS} 
+    ${libsetupshowfoto_SRCS} 
+    ${libdimgcanvas_SRCS}
+    ${libdimgeditortools_SRCS}
+    ${libshowfoto_SRCS} 
 
     ${libdimg_SRCS}
-    ${libdialogshowfoto_SRCS}
-    ${libthumbbar_SRCS} 
-    ${libjpegutils_SRCS} 
-    ${libcommonwidgets_SRCS} 
-    ${libthreadimageio_SRCS} 
-    ${libimagepluginswidgets_SRCS} 
     ${libdimgloaders_SRCS}
     ${libdimgfilters_SRCS}
     ${libdmetadata_SRCS}
-    ${libgreycstoration_SRCS}
+    ${libthumbbar_SRCS} 
     ${libhistogram_SRCS}
+    ${libwhitebalance_SRCS}
     ${libcurves_SRCS}
-    ${libimagepropertiesshowfoto_SRCS}
     ${liblevels_SRCS}
     ${liblprof_SRCS}
-    ${libwhitebalance_SRCS}
+    ${libjpegutils_SRCS} 
+    ${libgreycstoration_SRCS}
+    ${libthreadimageio_SRCS} 
+    ${libcommonwidgets_SRCS} 
+    ${libimagepluginswidgets_SRCS} 
+    ${libimagepropertiesshowfoto_SRCS}
     ${libiccprofileswidgets_SRCS}
     ${libmetadatawidgets_SRCS}
+    ${libdialogshowfoto_SRCS}
+
     main.cpp 
     showfoto.cpp 
    )
