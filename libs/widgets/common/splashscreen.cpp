@@ -64,7 +64,7 @@ public:
 };
 
 SplashScreen::SplashScreen(const QString& splash, WFlags f)
-            : QSplashScreen(QPixmap(locate("appdata", splash)), f)
+            : KSplashScreen(QPixmap(locate("appdata", splash)), f)
 {
     d = new SplashScreenPriv;
     

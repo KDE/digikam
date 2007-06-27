@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <qsplashscreen.h>
+#include <ksplashscreen.h>
 #include <qpainter.h>
 
 // Local Includes.
@@ -39,7 +39,7 @@ namespace Digikam
 
 class SplashScreenPriv;
 
-class DIGIKAM_EXPORT SplashScreen : public QSplashScreen
+class DIGIKAM_EXPORT SplashScreen : public KSplashScreen
 {
 Q_OBJECT
 
