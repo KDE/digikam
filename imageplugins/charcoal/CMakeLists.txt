@@ -4,13 +4,13 @@ include_directories( ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor ${
 
 ########### next target ###############
 
-set(digikamimageplugin_charcoal_PART_SRCS  imageplugin_charcoal.cpp imageeffect_charcoal.cpp charcoal.cpp)
+set(digikamimageplugin_charcoal_PART_SRCS  imageplugin_charcoal.cpp imageeffect_charcoal.cpp charcoal.cpp ${libdimg_SRCS})
 
 kde4_automoc(${digikamimageplugin_charcoal_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_charcoal ${digikamimageplugin_charcoal_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_charcoal ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} libdimg )
+target_link_libraries(digikamimageplugin_charcoal ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS})
 
 install(TARGETS digikamimageplugin_charcoal DESTINATION ${PLUGIN_INSTALL_DIR} )
 

@@ -48,7 +48,7 @@
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
-
+#include <KToolInvocation>
 // Local includes.
 
 #include "version.h"
@@ -173,7 +173,7 @@ void ImageEffect_Restoration::readUserSettings()
     settings.btile      = group.readEntry("BTile", 4);
     m_settingsWidget->setSettings(settings);
 
-    int p = group.readEntry("Preset", NoPreset);
+    int p = group.readEntry("Preset", (int)NoPreset);
     m_restorationTypeCB->setCurrentItem(p);
     if (p == NoPreset)
         m_settingsWidget->setEnabled(true);
@@ -190,11 +190,11 @@ void ImageEffect_Restoration::writeUserSettings()
     group.writeEntry("FastApprox", settings.fastApprox);
     group.writeEntry("Interpolation", settings.interp);
     group.writeEntry("Amplitude", (int)settings.amplitude);
-    group.writeEntry("Sharpness", settings.sharpness);
-    group.writeEntry("Anisotropy", settings.anisotropy);
-    group.writeEntry("Alpha", settings.alpha);
-    group.writeEntry("Sigma", settings.sigma);
-    group.writeEntry("GaussPrec", settings.gaussPrec);
+    group.writeEntry("Sharpness", (int)settings.sharpness);
+    group.writeEntry("Anisotropy", (int)settings.anisotropy);
+    group.writeEntry("Alpha", (int)settings.alpha);
+    group.writeEntry("Sigma", (int)settings.sigma);
+    group.writeEntry("GaussPrec", (int)settings.gaussPrec);
     group.writeEntry("Dl", settings.dl);
     group.writeEntry("Da", settings.da);
     group.writeEntry("Iteration", settings.nbIter);
@@ -326,7 +326,7 @@ void ImageEffect_Restoration::slotUser3()
 
     file.close();
     m_restorationTypeCB->blockSignals(true);
-    m_restorationTypeCB->setCurrentItem(NoPreset);
+    m_restorationTypeCB->setCurrentItem((int)NoPreset);
     m_restorationTypeCB->blockSignals(false);
     m_settingsWidget->setEnabled(true);
 }

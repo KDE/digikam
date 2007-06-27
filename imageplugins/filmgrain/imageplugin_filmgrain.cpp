@@ -44,9 +44,9 @@ K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_filmgrain,
 ImagePlugin_FilmGrain::ImagePlugin_FilmGrain(QObject *parent, const QStringList &)
                      : Digikam::ImagePlugin(parent, "ImagePlugin_FilmGrain")
 {
-    m_filmgrainAction = new KAction(i18n("Add Film Grain..."), "filmgrain", 0, 
-                            this, SLOT(slotFilmGrain()),
-                            actionCollection(), "imageplugin_filmgrain");
+    m_filmgrainAction  = new KAction(KIcon("filmgrain"), i18n("Add Film Grain..."), this);
+    actionCollection()->addAction("imageplugin_filmgrain", m_filmgrainAction );
+    connect(m_filmgrainAction, SIGNAL(triggered(bool) ), SLOT(slotFilmGrain()));
                 
     setXMLFile( "digikamimageplugin_filmgrain_ui.rc" );                                
     
