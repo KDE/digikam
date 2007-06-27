@@ -2,10 +2,10 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2005-04-21
  * Description : slide show tool using preview of pictures.
- * 
+ *
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,26 +13,25 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #define MAXSTRINGLEN 80 
 
 // Qt includes.
 
-#include <qtimer.h>
-#include <qpixmap.h>
-#include <qdesktopwidget.h>
-#include <qevent.h>
-#include <qcursor.h>
-#include <qpainter.h>
-#include <qfont.h>
-//Added by qt3to4:
+#include <QTimer>
+#include <QPixmap>
+#include <QDesktopWidget>
+#include <QEvent>
+#include <QCursor>
+#include <QPainter>
+#include <QFont>
 #include <QWheelEvent>
 #include <QPaintEvent>
 #include <QMouseEvent>
@@ -97,14 +96,16 @@ public:
     ToolBar           *toolBar;
 
     SlideShowSettings  settings;
-};  
+};
 
 SlideShow::SlideShow(const SlideShowSettings& settings)
-         : QWidget(0, 0, Qt::WStyle_StaysOnTop | Qt::WType_Popup | 
-                         Qt::WX11BypassWM | Qt::WDestructiveClose)
+         : QWidget(0)
 {
     d = new SlideShowPriv;
     d->settings = settings;
+    setAttribute(Qt::WA_DeleteOnClose);
+    setWindowFlags(Qt::X11BypassWindowManagerHint | 
+                   Qt::WindowStaysOnTopHint | Qt::Popup);
 
     // ---------------------------------------------------------------
 
@@ -113,10 +114,13 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     d->deskY       = deskRect.y();
     d->deskWidth   = deskRect.width();
     d->deskHeight  = deskRect.height();
-    
+
     move(d->deskX, d->deskY);
     resize(d->deskWidth, d->deskHeight);
-    setPaletteBackgroundColor(Qt::black);
+
+    QPalette palette;
+    palette.setColor(backgroundRole(), Qt::black);
+    setPalette(palette);
 
     // ---------------------------------------------------------------
 
@@ -141,7 +145,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
             this, SLOT(slotClose()));
 
     // ---------------------------------------------------------------
-    
+
     d->previewThread        = new PreviewLoadThread();
     d->previewPreloadThread = new PreviewLoadThread();
     d->timer                = new QTimer();
@@ -156,8 +160,9 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     connect(d->timer, SIGNAL(timeout()), 
             this, SLOT(slotTimeOut()));
 
-    d->timer->start(10, true);
-    
+    d->timer->setSingleShot(true);
+    d->timer->start(10);
+
     // ---------------------------------------------------------------
 
     setMouseTracking(true);
@@ -178,12 +183,12 @@ SlideShow::~SlideShow()
 
 void SlideShow::setCurrent(const KUrl& url)
 {
-    int index = d->settings.fileList.findIndex(url);
+    int index = d->settings.fileList.indexOf(url);
     if (index != -1)
     {
         d->currentImage = url;
         d->fileIndex    = index-1;
-    }        
+    }
 }
 
 void SlideShow::slotTimeOut()
@@ -271,7 +276,10 @@ void SlideShow::slotGotImagePreview(const LoadingDescription&, const DImg& previ
     if (!d->endOfShow)
     {
         if (!d->pause)
-            d->timer->start(d->settings.delay, true);
+        {
+            d->timer->setSingleShot(true);
+            d->timer->start(d->settings.delay);
+        }
         preloadNextImage();
     }
 }
@@ -323,7 +331,7 @@ void SlideShow::updatePixmap()
             {
                 str = d->settings.pictInfoMap[d->currentImage].comment;
                 printComments(p, offset, str);
-            }   
+            }
 
             // Display the Make and Model.
 
@@ -416,7 +424,7 @@ void SlideShow::updatePixmap()
                 str = QString("%1 (%2/%3)").arg(d->currentImage.fileName())
                                            .arg(QString::number(d->fileIndex + 1))
                                            .arg(QString::number(d->settings.fileList.count()));
-            
+
                 printInfoText(p, offset, str);
             }
         }
@@ -441,7 +449,7 @@ void SlideShow::updatePixmap()
         QFont fn(font());
         fn.setPointSize(fn.pointSize()+10);
         fn.setBold(true);
-    
+
         p.setFont(fn);
         p.setPen(Qt::white);
         p.drawPixmap(50, 100, logo);
@@ -464,7 +472,7 @@ void SlideShow::printInfoText(QPainter &p, int &offset, const QString& str)
         for (int x=9; x<=11; x++)
             for (int y=offset+1; y>=offset-1; y--)
                 p.drawText(x, height()-y, str);
-    
+
         p.setPen(Qt::white);
         p.drawText(10, height()-offset, str);
     }
@@ -476,7 +484,7 @@ void SlideShow::printComments(QPainter &p, int &offset, const QString& comments)
 
     uint commentsIndex = 0;     // Comments QString index
 
-    while (commentsIndex < comments.length())
+    while (commentsIndex < (uint)comments.length())
     {
         QString newLine; 
         bool breakLine = false; // End Of Line found
@@ -486,7 +494,8 @@ void SlideShow::printComments(QPainter &p, int &offset, const QString& comments)
 
         uint commentsLinesLengthLocal = MAXSTRINGLEN;
 
-        for (currIndex = commentsIndex; currIndex < comments.length() && !breakLine; currIndex++ )
+        for (currIndex = commentsIndex ; 
+             currIndex < (uint)comments.length() && !breakLine ; currIndex++ )
         {
             if( comments[currIndex] == QChar('\n') || comments[currIndex].isSpace() ) 
                 breakLine = true;
@@ -497,8 +506,9 @@ void SlideShow::printComments(QPainter &p, int &offset, const QString& comments)
 
         breakLine = false;
 
-        for (currIndex = commentsIndex ; currIndex <= commentsIndex + commentsLinesLengthLocal && 
-                                         currIndex < comments.length() && !breakLine ; 
+        for (currIndex = commentsIndex ; 
+             currIndex <= commentsIndex + commentsLinesLengthLocal &&
+             currIndex < (uint)comments.length() && !breakLine ; 
              currIndex++ )
             {
                 breakLine = (comments[currIndex] == QChar('\n')) ? true : false;
@@ -511,7 +521,7 @@ void SlideShow::printComments(QPainter &p, int &offset, const QString& comments)
 
             commentsIndex = currIndex; // The line is ended
 
-        if (commentsIndex != comments.length())
+        if (commentsIndex != (uint)comments.length())
         {
             while (!newLine.endsWith(" "))
             {
@@ -519,7 +529,7 @@ void SlideShow::printComments(QPainter &p, int &offset, const QString& comments)
                 commentsIndex--;
             }
         }
-    
+
         commentsByLines.prepend(newLine.trimmed());
     }
 
@@ -531,12 +541,10 @@ void SlideShow::printComments(QPainter &p, int &offset, const QString& comments)
 
 void SlideShow::paintEvent(QPaintEvent *)
 {
-#warning "kde4 port it"	
-#if 0	
-    bitBlt(this, 0, 0, &d->pixmap,
-           0, 0, d->pixmap.width(),
-           d->pixmap.height(), Qt::CopyROP, true);
-#endif
+    QPainter p(this);
+    p.drawPixmap(0, 0, d->pixmap,
+                 0, 0, d->pixmap.width(), d->pixmap.height());
+    p.end();
 }
 
 void SlideShow::slotPause()
@@ -571,7 +579,7 @@ void SlideShow::slotNext()
 
 void SlideShow::slotClose()
 {
-    close();    
+    close();
 }
 
 void SlideShow::wheelEvent(QWheelEvent * e)
@@ -625,13 +633,14 @@ void SlideShow::keyPressEvent(QKeyEvent *event)
 void SlideShow::mouseMoveEvent(QMouseEvent *e)
 {
     setCursor(QCursor(Qt::ArrowCursor));
-    d->mouseMoveTimer->start(1000, true);
+    d->mouseMoveTimer->setSingleShot(true);
+    d->mouseMoveTimer->start(1000);
 
     if (!d->toolBar->canHide())
         return;
-    
+
     QPoint pos(e->pos());
-    
+
     if ((pos.y() > (d->deskY+20)) &&
         (pos.y() < (d->deskY+d->deskHeight-20-1)))
     {
@@ -644,7 +653,7 @@ void SlideShow::mouseMoveEvent(QMouseEvent *e)
 
     int w = d->toolBar->width();
     int h = d->toolBar->height();
-    
+
     if (pos.y() < (d->deskY+20))
     {
         if (pos.x() <= (d->deskX+d->deskWidth/2))
@@ -672,7 +681,7 @@ void SlideShow::slotMouseMoveTimeOut()
     if ((pos.y() < (d->deskY+20)) ||
         (pos.y() > (d->deskY+d->deskHeight-20-1)))
         return;
-    
+
     setCursor(QCursor(Qt::BlankCursor));
 }
 

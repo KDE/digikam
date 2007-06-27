@@ -45,9 +45,8 @@ class DIGIKAM_EXPORT SlidePictureInfo
 {
 
 public:
-    
+
     SlidePictureInfo(){};
-    
     ~SlidePictureInfo(){};
 
 public:
@@ -66,7 +65,7 @@ class DIGIKAM_EXPORT SlideShowSettings
 {
 
 public:
-    
+
     SlideShowSettings()
     {
         exifRotate           = true;
@@ -79,7 +78,7 @@ public:
         loop                 = false;
         delay                = 5;
     };
-    
+
     ~SlideShowSettings(){};
 
 public:
@@ -109,7 +108,7 @@ public:
 
     /** Slide pictures in loop */
     bool loop;
-    
+
     /** Delay in seconds */
     int delay;
 
