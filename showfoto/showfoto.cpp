@@ -93,6 +93,7 @@ extern "C"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
 #include "dimginterface.h"
+#include "loadingcache.h"
 #include "splashscreen.h"
 #include "slideshow.h"
 #include "setup.h"
@@ -171,6 +172,10 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     {
         d->splash = new Digikam::SplashScreen("showfoto-splash.png");
     }
+
+    // Setup loading cache
+
+    Digikam::LoadingCache::cache();
 
     // Check ICC profiles repository availability
 
