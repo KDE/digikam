@@ -60,11 +60,11 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  S
             editorwindow.cpp                    Gilles          X       X       DONE                 Compile, but port yet fully complete
             imageiface.cpp                      Gilles          X       X       DONE
             imagewindow.cpp                                             X
-        |-----tools                             Gilles          X       X                            CMake port only
+        |-----tools                             Laurent         X       X       DONE
         |---lighttable                                                  X
         |---scripts                             Gilles                          DONE                 CMake port only is require.
         |---setup                               Gilles          X       X       DONE
-        |---slideshow                           Laurent         X       X       DONE                 Compile, but port yet fully complete
+        |---slideshow                           Laurent         X       X       DONE                 
         |---splashscreen                        Laurent         X       X       DONE
 
  3      |-kioslave
