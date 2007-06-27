@@ -146,7 +146,6 @@ ImageResize::ImageResize(QWidget* parent)
     d = new ImageResizePriv;
     d->parent = parent;
     setHelp("resizetool.anchor", "digikam");
-    QString whatsThis;
     setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
     setButtonWhatsThis ( User3, i18n("<p>Load all filter parameters from settings text file.") );
     setButtonWhatsThis ( User2, i18n("<p>Save all filter parameters to settings text file.") );
@@ -211,6 +210,7 @@ ImageResize::ImageResize(QWidget* parent)
                                      "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("logo-cimg", "logo-cimg.png");
     cimgLogoLabel->setPixmap( QPixmap( directory + "logo-cimg.png" ) );
+    //Fix warnings like that? cimgLogoLabel->setPixmap( QPixmap( KStandardDirs::locate("appdata", "logo-cimg.png" ) ));
     cimgLogoLabel->setToolTip( i18n("Visit CImg library website"));
 
     d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
@@ -329,23 +329,22 @@ void ImageResize::readUserSettings()
 void ImageResize::writeUserSettings()
 {
     GreycstorationSettings settings = d->settingsWidget->getSettings();
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("resize Tool Dialog");
+    KConfigGroup group = KGlobal::config()->group("resize Tool Dialog");
     group.writeEntry("FastApprox", settings.fastApprox);
     group.writeEntry("Interpolation", settings.interp);
-    group.writeEntry("Amplitude", (int)settings.amplitude);
-    group.writeEntry("Sharpness", (int)settings.sharpness);
-    group.writeEntry("Anisotropy", (int)settings.anisotropy);
-    group.writeEntry("Alpha", (int)settings.alpha);
-    group.writeEntry("Sigma", (int)settings.sigma);
-    group.writeEntry("GaussPrec", (int)settings.gaussPrec);
-    group.writeEntry("Dl", (int)settings.dl);
-    group.writeEntry("Da", (int)settings.da);
-    group.writeEntry("Iteration", (int)settings.nbIter);
+    group.writeEntry("Amplitude", (double)settings.amplitude);
+    group.writeEntry("Sharpness", (double)settings.sharpness);
+    group.writeEntry("Anisotropy", (double)settings.anisotropy);
+    group.writeEntry("Alpha", (double)settings.alpha);
+    group.writeEntry("Sigma", (double)settings.sigma);
+    group.writeEntry("GaussPrec", (double)settings.gaussPrec);
+    group.writeEntry("Dl", (double)settings.dl);
+    group.writeEntry("Da", (double)settings.da);
+    group.writeEntry("Iteration", settings.nbIter);
     group.writeEntry("Tile", settings.tile);
     group.writeEntry("BTile", settings.btile);
     group.writeEntry("RestorePhotograph", d->useGreycstorationBox->isChecked());
-    config->sync();
+    group.sync();
 }
 
 void ImageResize::slotDefault()
