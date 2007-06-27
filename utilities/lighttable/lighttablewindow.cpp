@@ -130,37 +130,37 @@ LightTableWindow::~LightTableWindow()
 void LightTableWindow::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("LightTable Settings");
+    KConfigGroup group = config->group("LightTable Settings");
 
     if(config->hasKey("Vertical Splitter Sizes"))
-        d->vSplitter->setSizes(config->readIntListEntry("Vertical Splitter Sizes"));
+        d->vSplitter->setSizes(group.readIntListEntry("Vertical Splitter Sizes"));
 
     if(config->hasKey("Horizontal Splitter Sizes"))
-        d->hSplitter->setSizes(config->readIntListEntry("Horizontal Splitter Sizes"));
+        d->hSplitter->setSizes(group.readIntListEntry("Horizontal Splitter Sizes"));
 
-    d->navigateByPairAction->setChecked(config->readBoolEntry("Navigate By Pair", false));
+    d->navigateByPairAction->setChecked(group.readEntry("Navigate By Pair", false));
     slotToggleNavigateByPair();
 }
 
 void LightTableWindow::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("LightTable Settings");
-    config->writeEntry("Vertical Splitter Sizes", d->vSplitter->sizes());
-    config->writeEntry("Horizontal Splitter Sizes", d->hSplitter->sizes());
-    config->writeEntry("Navigate By Pair", d->navigateByPairAction->isChecked());
+    KConfigGroup group = config->group("LightTable Settings");
+    group.writeEntry("Vertical Splitter Sizes", d->vSplitter->sizes());
+    group.writeEntry("Horizontal Splitter Sizes", d->hSplitter->sizes());
+    group.writeEntry("Navigate By Pair", d->navigateByPairAction->isChecked());
     config->sync();
 }
 
 void LightTableWindow::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("LightTable Settings");
+    KConfigGroup group = config->group("LightTable Settings");
 
-    d->autoLoadOnRightPanel  = config->readBoolEntry("Auto Load Right Panel",   true);
-    d->autoSyncPreview       = config->readBoolEntry("Auto Sync Preview",       true);
-    d->fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
-    d->previewView->setLoadFullImageSize(config->readBoolEntry("Load Full Image size", false));
+    d->autoLoadOnRightPanel  = group.readEntry("Auto Load Right Panel",   true);
+    d->autoSyncPreview       = group.readEntry("Auto Sync Preview",       true);
+    d->fullScreenHideToolBar = group.readEntry("FullScreen Hide ToolBar", false);
+    d->previewView->setLoadFullImageSize(group.readEntry("Load Full Image size", false));
 }
 
 void LightTableWindow::closeEvent(QCloseEvent* e)
@@ -919,18 +919,18 @@ void LightTableWindow::slotFitToWindow()
 void LightTableWindow::slotToggleSlideShow()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
-    bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
+    KConfigGroup group = config->group("ImageViewer Settings");
+    bool startWithCurrent = group.readEntry("SlideShowStartCurrent", false);
 
     SlideShowSettings settings;
-    settings.delay                = config->readNumEntry("SlideShowDelay", 5) * 1000;
-    settings.printName            = config->readBoolEntry("SlideShowPrintName", true);
-    settings.printDate            = config->readBoolEntry("SlideShowPrintDate", false);
-    settings.printApertureFocal   = config->readBoolEntry("SlideShowPrintApertureFocal", false);
-    settings.printExpoSensitivity = config->readBoolEntry("SlideShowPrintExpoSensitivity", false);
-    settings.printMakeModel       = config->readBoolEntry("SlideShowPrintMakeModel", false);
-    settings.printComment         = config->readBoolEntry("SlideShowPrintComment", false);
-    settings.loop                 = config->readBoolEntry("SlideShowLoop", false);
+    settings.delay                = group.readEntry("SlideShowDelay", 5) * 1000;
+    settings.printName            = group.readEntry("SlideShowPrintName", true);
+    settings.printDate            = group.readEntry("SlideShowPrintDate", false);
+    settings.printApertureFocal   = group.readEntry("SlideShowPrintApertureFocal", false);
+    settings.printExpoSensitivity = group.readEntry("SlideShowPrintExpoSensitivity", false);
+    settings.printMakeModel       = group.readEntry("SlideShowPrintMakeModel", false);
+    settings.printComment         = group.readEntry("SlideShowPrintComment", false);
+    settings.loop                 = group.readEntry("SlideShowLoop", false);
     slideShow(startWithCurrent, settings);
 }
 

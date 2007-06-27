@@ -459,17 +459,17 @@ void RenameCustomizer::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     
-    config->setGroup("Camera Settings");
-    bool def         = config->readBoolEntry("Rename Use Default", true);
-    bool addSeqNumb  = config->readBoolEntry("Add Sequence Number", true);
-    bool adddateTime = config->readBoolEntry("Add Date Time", false);
-    bool addCamName  = config->readBoolEntry("Add Camera Name", false);
-    int chcaseT      = config->readNumEntry("Case Type", NONE);
-    QString prefix   = config->readEntry("Rename Prefix", i18n("photo"));
-    QString suffix   = config->readEntry("Rename Postfix", QString());
-    int startIndex   = config->readNumEntry("Rename Start Index", 1);
-    int dateTime     = config->readNumEntry("Date Time Format", RenameCustomizerPriv::IsoDateFormat);
-    QString format   = config->readEntry("Date Time Format String", "yyyyMMddThhmmss");
+    KConfigGroup group = config->group("Camera Settings");
+    bool def         = group.readEntry("Rename Use Default", true);
+    bool addSeqNumb  = group.readEntry("Add Sequence Number", true);
+    bool adddateTime = group.readEntry("Add Date Time", false);
+    bool addCamName  = group.readEntry("Add Camera Name", false);
+    int chcaseT      = group.readEntry("Case Type", NONE);
+    QString prefix   = group.readEntry("Rename Prefix", i18n("photo"));
+    QString suffix   = group.readEntry("Rename Postfix", QString());
+    int startIndex   = group.readEntry("Rename Start Index", 1);
+    int dateTime     = group.readEntry("Date Time Format", RenameCustomizerPriv::IsoDateFormat);
+    QString format   = group.readEntry("Date Time Format String", "yyyyMMddThhmmss");
 
     if (def)
     {
@@ -502,17 +502,17 @@ void RenameCustomizer::saveSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
 
-    config->setGroup("Camera Settings");
-    config->writeEntry("Rename Use Default", d->renameDefault->isChecked());
-    config->writeEntry("Add Camera Name", d->addCameraNameBox->isChecked());
-    config->writeEntry("Add Date Time", d->addDateTimeBox->isChecked());
-    config->writeEntry("Add Sequence Number", d->addSeqNumberBox->isChecked());
-    config->writeEntry("Case Type", d->renameDefaultCaseType->currentItem());
-    config->writeEntry("Rename Prefix", d->renameCustomPrefix->text());
-    config->writeEntry("Rename Suffix", d->renameCustomSuffix->text());
-    config->writeEntry("Rename Start Index", d->startIndexInput->value());
-    config->writeEntry("Date Time Format", d->dateTimeFormat->currentItem());
-    config->writeEntry("Date Time Format String", d->dateTimeFormatString);
+    KConfigGroup group = config->group("Camera Settings");
+    group.writeEntry("Rename Use Default", d->renameDefault->isChecked());
+    group.writeEntry("Add Camera Name", d->addCameraNameBox->isChecked());
+    group.writeEntry("Add Date Time", d->addDateTimeBox->isChecked());
+    group.writeEntry("Add Sequence Number", d->addSeqNumberBox->isChecked());
+    group.writeEntry("Case Type", d->renameDefaultCaseType->currentItem());
+    group.writeEntry("Rename Prefix", d->renameCustomPrefix->text());
+    group.writeEntry("Rename Suffix", d->renameCustomSuffix->text());
+    group.writeEntry("Rename Start Index", d->startIndexInput->value());
+    group.writeEntry("Date Time Format", d->dateTimeFormat->currentItem());
+    group.writeEntry("Date Time Format String", d->dateTimeFormatString);
     config->sync();
 }
 

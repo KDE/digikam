@@ -373,10 +373,10 @@ void ImageWindow::applySettings()
     applyStandardSettings();
 
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
+    KConfigGroup group = config->group("ImageViewer Settings");
 
-    if (!config->readBoolEntry("UseThemeBackgroundColor", true))
-        m_bgColor = config->readColorEntry("BackgroundColor", &Qt::black);
+    if (!group.readEntry("UseThemeBackgroundColor", true))
+        m_bgColor = group.readColorEntry("BackgroundColor", &Qt::black);
     else
         m_bgColor = ThemeEngine::componentData().baseColor();
 

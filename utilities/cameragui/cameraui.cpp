@@ -574,23 +574,23 @@ CameraUI::~CameraUI()
 void CameraUI::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("Camera Settings");
-    d->advBox->setCurrentIndex(config->readNumEntry("Settings Tab", CameraUIPriv::RENAMEFILEPAGE));
-    d->autoRotateCheck->setChecked(config->readBoolEntry("AutoRotate", true));
-    d->autoAlbumDateCheck->setChecked(config->readBoolEntry("AutoAlbumDate", false));
-    d->autoAlbumExtCheck->setChecked(config->readBoolEntry("AutoAlbumExt", false));
-    d->fixDateTimeCheck->setChecked(config->readBoolEntry("FixDateTime", false));
-    d->setPhotographerId->setChecked(config->readBoolEntry("SetPhotographerId", false));
-    d->setCredits->setChecked(config->readBoolEntry("SetCredits", false));
-    d->convertJpegCheck->setChecked(config->readBoolEntry("ConvertJpeg", false));
-    d->losslessFormat->setCurrentItem(config->readNumEntry("LossLessFormat", 0));   // PNG by default
-    d->folderDateFormat->setCurrentItem(config->readNumEntry("FolderDateFormat", CameraUIPriv::IsoDateFormat));
+    KConfigGroup group = config->group("Camera Settings");
+    d->advBox->setCurrentIndex(group.readEntry("Settings Tab", CameraUIPriv::RENAMEFILEPAGE));
+    d->autoRotateCheck->setChecked(group.readEntry("AutoRotate", true));
+    d->autoAlbumDateCheck->setChecked(group.readEntry("AutoAlbumDate", false));
+    d->autoAlbumExtCheck->setChecked(group.readEntry("AutoAlbumExt", false));
+    d->fixDateTimeCheck->setChecked(group.readEntry("FixDateTime", false));
+    d->setPhotographerId->setChecked(group.readEntry("SetPhotographerId", false));
+    d->setCredits->setChecked(group.readEntry("SetCredits", false));
+    d->convertJpegCheck->setChecked(group.readEntry("ConvertJpeg", false));
+    d->losslessFormat->setCurrentItem(group.readEntry("LossLessFormat", 0));   // PNG by default
+    d->folderDateFormat->setCurrentItem(group.readEntry("FolderDateFormat", CameraUIPriv::IsoDateFormat));
 
-    d->view->setThumbnailSize(ThumbnailSize((ThumbnailSize::Size)config->readNumEntry("ThumbnailSize", 
+    d->view->setThumbnailSize(ThumbnailSize((ThumbnailSize::Size)group.readEntry("ThumbnailSize", 
                               ThumbnailSize::Large)));
     
     if(config->hasKey("Splitter Sizes"))
-        d->splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
+        d->splitter->setSizes(group.readIntListEntry("Splitter Sizes"));
 
     d->dateTimeEdit->setEnabled(d->fixDateTimeCheck->isChecked());
     d->losslessFormat->setEnabled(convertLosslessJpegFiles());
@@ -606,19 +606,19 @@ void CameraUI::saveSettings()
     saveDialogSize("Camera Settings");
 
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("Camera Settings");
-    config->writeEntry("Settings Tab", d->advBox->currentIndex());
-    config->writeEntry("AutoRotate", d->autoRotateCheck->isChecked());
-    config->writeEntry("AutoAlbumDate", d->autoAlbumDateCheck->isChecked());
-    config->writeEntry("AutoAlbumExt", d->autoAlbumExtCheck->isChecked());
-    config->writeEntry("FixDateTime", d->fixDateTimeCheck->isChecked());
-    config->writeEntry("SetPhotographerId", d->setPhotographerId->isChecked());
-    config->writeEntry("SetCredits", d->setCredits->isChecked());
-    config->writeEntry("ConvertJpeg", convertLosslessJpegFiles());
-    config->writeEntry("LossLessFormat", d->losslessFormat->currentItem());
-    config->writeEntry("ThumbnailSize", d->view->thumbnailSize().size());
-    config->writeEntry("Splitter Sizes", d->splitter->sizes());
-    config->writeEntry("FolderDateFormat", d->folderDateFormat->currentItem());
+    KConfigGroup group = config->group("Camera Settings");
+    group.writeEntry("Settings Tab", d->advBox->currentIndex());
+    group.writeEntry("AutoRotate", d->autoRotateCheck->isChecked());
+    group.writeEntry("AutoAlbumDate", d->autoAlbumDateCheck->isChecked());
+    group.writeEntry("AutoAlbumExt", d->autoAlbumExtCheck->isChecked());
+    group.writeEntry("FixDateTime", d->fixDateTimeCheck->isChecked());
+    group.writeEntry("SetPhotographerId", d->setPhotographerId->isChecked());
+    group.writeEntry("SetCredits", d->setCredits->isChecked());
+    group.writeEntry("ConvertJpeg", convertLosslessJpegFiles());
+    group.writeEntry("LossLessFormat", d->losslessFormat->currentItem());
+    group.writeEntry("ThumbnailSize", d->view->thumbnailSize().size());
+    group.writeEntry("Splitter Sizes", d->splitter->sizes());
+    group.writeEntry("FolderDateFormat", d->folderDateFormat->currentItem());
     config->sync();
 }
 

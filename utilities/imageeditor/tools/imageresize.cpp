@@ -282,25 +282,25 @@ void ImageResize::slotRestorationToggled(bool b)
 void ImageResize::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("resize Tool Dialog");
+    KConfigGroup group = config->group("resize Tool Dialog");
 
     GreycstorationSettings settings;
-    settings.fastApprox = config->readBoolEntry("FastApprox", true);
-    settings.interp     = config->readNumEntry("Interpolation",
+    settings.fastApprox = group.readEntry("FastApprox", true);
+    settings.interp     = group.readEntry("Interpolation",
                           GreycstorationSettings::NearestNeighbor);
-    settings.amplitude  = config->readDoubleNumEntry("Amplitude", 20.0);
-    settings.sharpness  = config->readDoubleNumEntry("Sharpness", 0.2);
-    settings.anisotropy = config->readDoubleNumEntry("Anisotropy", 0.9);
-    settings.alpha      = config->readDoubleNumEntry("Alpha", 0.1);
-    settings.sigma      = config->readDoubleNumEntry("Sigma", 1.5);
-    settings.gaussPrec  = config->readDoubleNumEntry("GaussPrec", 2.0);
-    settings.dl         = config->readDoubleNumEntry("Dl", 0.8);
-    settings.da         = config->readDoubleNumEntry("Da", 30.0);
-    settings.nbIter     = config->readNumEntry("Iteration", 3);
-    settings.tile       = config->readNumEntry("Tile", 512);
-    settings.btile      = config->readNumEntry("BTile", 4);
+    settings.amplitude  = group.readEntry("Amplitude", 20.0);
+    settings.sharpness  = group.readEntry("Sharpness", 0.2);
+    settings.anisotropy = group.readEntry("Anisotropy", 0.9);
+    settings.alpha      = group.readEntry("Alpha", 0.1);
+    settings.sigma      = group.readEntry("Sigma", 1.5);
+    settings.gaussPrec  = group.readEntry("GaussPrec", 2.0);
+    settings.dl         = group.readEntry("Dl", 0.8);
+    settings.da         = group.readEntry("Da", 30.0);
+    settings.nbIter     = group.readEntry("Iteration", 3);
+    settings.tile       = group.readEntry("Tile", 512);
+    settings.btile      = group.readEntry("BTile", 4);
     d->settingsWidget->setSettings(settings);
-    d->useGreycstorationBox->setChecked(config->readBoolEntry("RestorePhotograph", false));
+    d->useGreycstorationBox->setChecked(group.readEntry("RestorePhotograph", false));
     slotRestorationToggled(d->useGreycstorationBox->isChecked());
 
     d->preserveRatioBox->blockSignals(true);
@@ -324,21 +324,21 @@ void ImageResize::writeUserSettings()
 {
     GreycstorationSettings settings = d->settingsWidget->getSettings();
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("resize Tool Dialog");
-    config->writeEntry("FastApprox", settings.fastApprox);
-    config->writeEntry("Interpolation", settings.interp);
-    config->writeEntry("Amplitude", settings.amplitude);
-    config->writeEntry("Sharpness", settings.sharpness);
-    config->writeEntry("Anisotropy", settings.anisotropy);
-    config->writeEntry("Alpha", settings.alpha);
-    config->writeEntry("Sigma", settings.sigma);
-    config->writeEntry("GaussPrec", settings.gaussPrec);
-    config->writeEntry("Dl", settings.dl);
-    config->writeEntry("Da", settings.da);
-    config->writeEntry("Iteration", settings.nbIter);
-    config->writeEntry("Tile", settings.tile);
-    config->writeEntry("BTile", settings.btile);
-    config->writeEntry("RestorePhotograph", d->useGreycstorationBox->isChecked());
+    KConfigGroup group = config->group("resize Tool Dialog");
+    group.writeEntry("FastApprox", settings.fastApprox);
+    group.writeEntry("Interpolation", settings.interp);
+    group.writeEntry("Amplitude", settings.amplitude);
+    group.writeEntry("Sharpness", settings.sharpness);
+    group.writeEntry("Anisotropy", settings.anisotropy);
+    group.writeEntry("Alpha", settings.alpha);
+    group.writeEntry("Sigma", settings.sigma);
+    group.writeEntry("GaussPrec", settings.gaussPrec);
+    group.writeEntry("Dl", settings.dl);
+    group.writeEntry("Da", settings.da);
+    group.writeEntry("Iteration", settings.nbIter);
+    group.writeEntry("Tile", settings.tile);
+    group.writeEntry("BTile", settings.btile);
+    group.writeEntry("RestorePhotograph", d->useGreycstorationBox->isChecked());
     config->sync();
 }
 
