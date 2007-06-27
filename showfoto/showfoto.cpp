@@ -162,6 +162,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     if(config->readBoolEntry("ShowSplash", true) && !kapp->isRestored())
     {
         d->splash = new Digikam::SplashScreen("showfoto-splash.png");
+        d->splash->show();
     }
 
     // Check ICC profiles repository availability

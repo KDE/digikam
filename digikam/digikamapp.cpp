@@ -107,6 +107,7 @@ DigikamApp::DigikamApp()
        !kapp->isRestored())
     {
         d->splashScreen = new SplashScreen("digikam-splash.png");
+        d->splashScreen->show();
     }
 
     d->albumSettings = new AlbumSettings();
