@@ -63,8 +63,8 @@ public:
     QColor  color;
 };
 
-SplashScreen::SplashScreen(const QString& splash, WFlags f)
-            : KSplashScreen(QPixmap(locate("appdata", splash)), f)
+SplashScreen::SplashScreen(const QString& splash, Qt::WFlags f)
+            : KSplashScreen(QPixmap(KStandardDirs::locate("appdata", splash)), f)
 {
     d = new SplashScreenPriv;
 
@@ -92,7 +92,7 @@ void SplashScreen::message( const QString &message, int alignment, const QColor 
     d->string    = message;
     d->color     = color;
     d->alignment = alignment;
-    QSplashScreen::message(d->string, d->alignment, d->color);
+    QSplashScreen::showMessage(d->string, d->alignment, d->color);
     animate();
 }
 
@@ -102,7 +102,7 @@ void SplashScreen::drawContents(QPainter* painter)
     QColor basecolor (155, 192, 231);
 
     // Draw background circles
-    painter->setPen(NoPen);
+    painter->setPen(Qt::NoPen);
     painter->setBrush(QColor(225, 234, 231));
     painter->drawEllipse(21, 7, 9, 9);
     painter->drawEllipse(32, 7, 9, 9);
