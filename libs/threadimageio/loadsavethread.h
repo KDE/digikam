@@ -49,17 +49,16 @@ class LoadSaveTask;
 class DIGIKAM_EXPORT LoadSaveNotifier
 {
 public:
-    LoadSaveNotifier(){;}
-    virtual ~LoadSaveNotifier(){;}
+    virtual ~LoadSaveNotifier() {};
 
-    virtual void imageStartedLoading(const LoadingDescription &loadingDescription){;}
-    virtual void loadingProgress(const LoadingDescription &loadingDescription, float progress){;}
-    virtual void imageLoaded(const LoadingDescription &loadingDescription, const DImg& img){;}
+    virtual void imageStartedLoading(const LoadingDescription &loadingDescription) = 0;
+    virtual void loadingProgress(const LoadingDescription &loadingDescription, float progress) = 0;
+    virtual void imageLoaded(const LoadingDescription &loadingDescription, const DImg& img) = 0;
     virtual void moreCompleteLoadingAvailable(const LoadingDescription &oldLoadingDescription,
-                                              const LoadingDescription &newLoadingDescription){;}
-    virtual void imageStartedSaving(const QString& filePath){ ;}
-    virtual void savingProgress(const QString& filePath, float progress){;}
-    virtual void imageSaved(const QString& filePath, bool success){;}
+                                              const LoadingDescription &newLoadingDescription) = 0;
+    virtual void imageStartedSaving(const QString& filePath) = 0;
+    virtual void savingProgress(const QString& filePath, float progress) = 0;
+    virtual void imageSaved(const QString& filePath, bool success) = 0;
 };
 
 class DIGIKAM_EXPORT LoadSaveThread : public QThread, public LoadSaveNotifier
