@@ -18,7 +18,6 @@ INCLUDES = -I$(top_srcdir)/digikam/showfoto/setup \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/tools \
-	   -I$(top_srcdir)/digikam/utilities/splashscreen \
 	   $(LIBKEXIV2_CFLAGS) $(LIBKDCRAW_CFLAGS) $(all_includes)
 
 showfoto_SOURCES = main.cpp showfoto.cpp 
@@ -28,7 +27,6 @@ showfoto_LDADD   = $(top_builddir)/digikam/showfoto/setup/libsetup.la \
 	           $(top_builddir)/digikam/libs/imageproperties/libimagepropertiesshowfoto.la \
 	           $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 	           $(top_builddir)/digikam/utilities/imageeditor/editor/libshowfoto.la \
-	           $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \
 	           $(top_builddir)/digikam/utilities/slideshow/libslideshow.la \
 	           $(top_builddir)/digikam/libs/threadimageio/libthreadimageio.la \
 	           $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \

@@ -17,7 +17,6 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/sqlite2 \
 	   -I$(top_srcdir)/digikam/utilities/cameragui \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
-	   -I$(top_srcdir)/digikam/utilities/splashscreen \
 	   -I$(top_srcdir)/digikam/utilities/setup \
 	   -I$(top_srcdir)/digikam/utilities/slideshow \
 	   -I$(top_srcdir)/digikam/utilities/batch \
@@ -118,7 +117,6 @@ libdigikam_la_LIBADD = $(LIB_KIO) \
 	               $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
 	               $(top_builddir)/digikam/utilities/imageeditor/canvas/libdimgcanvas.la \
 	               $(top_builddir)/digikam/utilities/imageeditor/editor/libdimgeditor.la \
-	               $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \
 	               $(top_builddir)/digikam/utilities/setup/libsetup.la \
 	               $(top_builddir)/digikam/utilities/lighttable/liblighttable.la
 

@@ -5,7 +5,7 @@ noinst_LTLIBRARIES = libcommonwidgets.la
 libcommonwidgets_la_SOURCES = histogramwidget.cpp colorgradientwidget.cpp curveswidget.cpp \
                               sidebar.cpp squeezedcombobox.cpp filesaveoptionsbox.cpp dpopupmenu.cpp \
                               statuszoombar.cpp statusnavigatebar.cpp statusprogressbar.cpp \
-                              dcursortracker.cpp paniconwidget.cpp previewwidget.cpp
+                              dcursortracker.cpp paniconwidget.cpp previewwidget.cpp splashscreen.cpp 
 
 libcommonwidgets_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 

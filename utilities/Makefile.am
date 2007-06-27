@@ -1,1 +1,1 @@
-SUBDIRS = imageeditor splashscreen setup cameragui hotplug scripts batch slideshow lighttable 
+SUBDIRS = imageeditor setup cameragui hotplug scripts batch slideshow lighttable 
