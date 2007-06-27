@@ -234,6 +234,7 @@ SET(libcommonwidgets_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/previewwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/curveswidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogramwidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/splashscreen.cpp
    )
 
 SET(libiccprofileswidgets_SRCS
@@ -261,10 +262,6 @@ SET(libmetadatawidgets_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/makernotewidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/gpswidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadatawidget.cpp
-   )
-
-SET(libsplashscreen_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/splashscreen/splashscreen.cpp
    )
 
 SET(libslideshow_SRCS
@@ -338,8 +335,8 @@ SET(libdimgeditortools_SRCS
 ADD_SUBDIRECTORY( libs )
 ADD_SUBDIRECTORY( utilities )
 ADD_SUBDIRECTORY( showfoto )
-#ADD_SUBDIRECTORY( kioslave )
-#ADD_SUBDIRECTORY( imageplugins )
+ADD_SUBDIRECTORY( kioslave )
+ADD_SUBDIRECTORY( imageplugins )
 #ADD_SUBDIRECTORY( digikam )
 #ADD_SUBDIRECTORY( themedesigner )
 ADD_SUBDIRECTORY( data )

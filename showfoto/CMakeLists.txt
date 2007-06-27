@@ -30,12 +30,10 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/showfoto/setup
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/tools 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/slideshow 
-                     ${CMAKE_SOURCE_DIR}/digikam/utilities/splashscreen 
                      ${CMAKE_SOURCE_DIR}/digikam/digikam 
                    )
 
 SET(showfoto_SRCS 
-    ${libsplashscreen_SRCS} 
     ${libslideshow_SRCS} 
     ${libshowfotosetup_SRCS} 
     ${libsetupshowfoto_SRCS} 

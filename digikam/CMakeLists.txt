@@ -15,7 +15,6 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/cameragui 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas 
-                     ${CMAKE_SOURCE_DIR}/digikam/utilities/splashscreen 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/setup 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/slideshow 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/batch 
@@ -81,7 +80,6 @@ SET(libdigikam_LIB_SRCS kdateedit.cpp
                         tagspopupmenu.cpp 
                         welcomepageview.cpp 
                         main.cpp
-		       ${libsplashscreen_SRCS}	
    			${libslideshow_SRCS}
 		       )
 
