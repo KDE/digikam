@@ -65,7 +65,6 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  S
         |---scripts                             Gilles                          DONE                 CMake port only is require.
         |---setup                               Gilles          X       X       DONE
         |---slideshow                           Laurent         X       X       DONE                 
-        |---splashscreen                        Laurent         X       X       DONE
 
  3      |-kioslave
             digikamalbums.cpp                   Marcel                  X
