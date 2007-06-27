@@ -324,7 +324,7 @@ SET(libshowfoto_SRCS
 
 SET(libdimgeditortools_SRCS 
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageprint.cpp
-#     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageresize.cpp
+     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageresize.cpp
     )
 
 # SET(libdimgeditor_SRCS 

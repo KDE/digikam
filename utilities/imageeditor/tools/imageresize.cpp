@@ -142,11 +142,11 @@ ImageResize::ImageResize(QWidget* parent)
            : KDialog(parent)
 {
     setDefaultButton(Ok);
-    setButton(Help|Default|User2|User3|Ok|Cancel);
+    setButtons(Help|Default|User2|User3|Ok|Cancel);
     setCaption(i18n("Resize Image"));
     setModal(true);
-    setTextButton(User2,i18n("&Save As..."));
-    setTextButton(User3,i18n("&Load..."));
+    setButtonText(User2,i18n("&Save As..."));
+    setButtonText(User3,i18n("&Load..."));
     d = new ImageResizePriv;
     d->parent = parent;
     setHelp("resizetool.anchor", "digikam");
@@ -244,7 +244,7 @@ ImageResize::ImageResize(QWidget* parent)
     // -------------------------------------------------------------
 
     adjustSize();
-    disableResize();
+    //disableResize();
     QTimer::singleShot(0, this, SLOT(readUserSettings()));
 
     // -------------------------------------------------------------
@@ -515,13 +515,14 @@ void ImageResize::slotOk()
 
     int mode = d->useGreycstorationBox->isChecked() ? GreycstorationIface::Resize
                                                    : GreycstorationIface::SimpleResize;
-
+#if 0 //PORT ME
     d->greycstorationIface = new GreycstorationIface(
                           &originalImage, d->settingsWidget->getSettings(),
                           mode, 
                           d->wInput->value(),
                           d->hInput->value(),
                           0, this);
+#endif
 }
 
 void ImageResize::customEvent(QCustomEvent *event)
