@@ -688,20 +688,20 @@ void AdjustLevelDialog::slotScaleChanged(int scale)
 void AdjustLevelDialog::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("adjustlevels Tool Dialog");
+    KConfigGroup group = config->group("adjustlevels Tool Dialog");
 
-    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(group.readEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
 
     for (int i = 0 ; i < 5 ; i++)
     {
         bool sb        = m_originalImage.sixteenBit();
         int max        = sb ? 65535 : 255;
-        double gamma   = config->readDoubleNumEntry(QString("GammaChannel%1").arg(i), 1.0);
-        int lowInput   = config->readNumEntry(QString("LowInputChannel%1").arg(i), 0);
-        int lowOutput  = config->readNumEntry(QString("LowOutputChannel%1").arg(i), 0);
-        int highInput  = config->readNumEntry(QString("HighInputChannel%1").arg(i), max);
-        int highOutput = config->readNumEntry(QString("HighOutputChannel%1").arg(i), max);
+        double gamma   = group.readEntry(QString("GammaChannel%1").arg(i), 1.0);
+        int lowInput   = group.readEntry(QString("LowInputChannel%1").arg(i), 0);
+        int lowOutput  = group.readEntry(QString("LowOutputChannel%1").arg(i), 0);
+        int highInput  = group.readEntry(QString("HighInputChannel%1").arg(i), max);
+        int highOutput = group.readEntry(QString("HighOutputChannel%1").arg(i), max);
     
         m_levels->setLevelGammaValue(i, gamma);
         m_levels->setLevelLowInputValue(i, sb ? lowInput*255 : lowInput);
@@ -726,9 +726,9 @@ void AdjustLevelDialog::readUserSettings()
 void AdjustLevelDialog::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("adjustlevels Tool Dialog");
-    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
-    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    KConfigGroup group = config->group("adjustlevels Tool Dialog");
+    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
+    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
 
     for (int i = 0 ; i < 5 ; i++)
     {
@@ -739,11 +739,11 @@ void AdjustLevelDialog::writeUserSettings()
         int highInput  = m_levels->getLevelHighInputValue(i);
         int highOutput = m_levels->getLevelHighOutputValue(i);
 
-        config->writeEntry(QString("GammaChannel%1").arg(i), gamma);
-        config->writeEntry(QString("LowInputChannel%1").arg(i), sb ? lowInput/255 : lowInput);
-        config->writeEntry(QString("LowOutputChannel%1").arg(i), sb ? lowOutput/255 : lowOutput);
-        config->writeEntry(QString("HighInputChannel%1").arg(i), sb ? highInput/255 : highInput);
-        config->writeEntry(QString("HighOutputChannel%1").arg(i), sb ? highOutput/255 : highOutput);
+        group.writeEntry(QString("GammaChannel%1").arg(i), gamma);
+        group.writeEntry(QString("LowInputChannel%1").arg(i), sb ? lowInput/255 : lowInput);
+        group.writeEntry(QString("LowOutputChannel%1").arg(i), sb ? lowOutput/255 : lowOutput);
+        group.writeEntry(QString("HighInputChannel%1").arg(i), sb ? highInput/255 : highInput);
+        group.writeEntry(QString("HighOutputChannel%1").arg(i), sb ? highOutput/255 : highOutput);
     }
 
     config->sync();

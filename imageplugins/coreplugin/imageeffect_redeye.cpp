@@ -287,15 +287,15 @@ void ImageEffect_RedEye::slotColorSelectedFromTarget( const Digikam::DColor &col
 void ImageEffect_RedEye::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("redeye Tool Dialog");
-    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0)); // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
-    m_redThreshold->setValue(config->readNumEntry("RedThreshold", 20));
-    m_smoothLevel->setValue(config->readNumEntry("SmoothLevel", 1));
-    m_HSSelector->setXValue(config->readNumEntry("HueColoringTint", 0));
-    m_HSSelector->setYValue(config->readNumEntry("SatColoringTint", 0));
-    m_VSelector->setValue(config->readNumEntry("ValColoringTint", 0));
-    m_tintLevel->setValue(config->readNumEntry("TintLevel", 128));
+    KConfigGroup group = config->group("redeye Tool Dialog");
+    m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0)); // Luminosity.
+    m_scaleBG->setButton(group.readEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_redThreshold->setValue(group.readEntry("RedThreshold", 20));
+    m_smoothLevel->setValue(group.readEntry("SmoothLevel", 1));
+    m_HSSelector->setXValue(group.readEntry("HueColoringTint", 0));
+    m_HSSelector->setYValue(group.readEntry("SatColoringTint", 0));
+    m_VSelector->setValue(group.readEntry("ValColoringTint", 0));
+    m_tintLevel->setValue(group.readEntry("TintLevel", 128));
     
     slotHSChanged(m_HSSelector->xValue(), m_HSSelector->yValue());
     slotChannelChanged(m_channelCB->currentItem());
@@ -305,15 +305,15 @@ void ImageEffect_RedEye::readUserSettings()
 void ImageEffect_RedEye::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("redeye Tool Dialog");
-    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
-    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
-    config->writeEntry("RedThreshold", m_redThreshold->value());
-    config->writeEntry("SmoothLevel", m_smoothLevel->value());
-    config->writeEntry("HueColoringTint", m_HSSelector->xValue());
-    config->writeEntry("SatColoringTint", m_HSSelector->yValue());
-    config->writeEntry("ValColoringTint", m_VSelector->value());
-    config->writeEntry("TintLevel", m_tintLevel->value());
+    KConfigGroup group = config->group("redeye Tool Dialog");
+    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
+    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    group.writeEntry("RedThreshold", m_redThreshold->value());
+    group.writeEntry("SmoothLevel", m_smoothLevel->value());
+    group.writeEntry("HueColoringTint", m_HSSelector->xValue());
+    group.writeEntry("SatColoringTint", m_HSSelector->yValue());
+    group.writeEntry("ValColoringTint", m_VSelector->value());
+    group.writeEntry("TintLevel", m_tintLevel->value());
     config->sync();
 }
 

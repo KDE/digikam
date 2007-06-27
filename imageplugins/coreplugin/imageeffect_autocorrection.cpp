@@ -295,10 +295,10 @@ void ImageEffect_AutoCorrection::slotColorSelectedFromTarget( const Digikam::DCo
 void ImageEffect_AutoCorrection::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("autocorrection Tool Dialog");
-    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
-    m_correctionTools->setCurrentItem(config->readNumEntry("Auto Correction Filter", AutoLevelsCorrection));
+    KConfigGroup group = config->group("autocorrection Tool Dialog");
+    m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(group.readEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_correctionTools->setCurrentItem(group.readEntry("Auto Correction Filter", AutoLevelsCorrection));
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
 }
@@ -306,10 +306,10 @@ void ImageEffect_AutoCorrection::readUserSettings()
 void ImageEffect_AutoCorrection::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("autocorrection Tool Dialog");
-    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
-    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
-    config->writeEntry("Auto Correction Filter", m_correctionTools->currentItem());
+    KConfigGroup group = config->group("autocorrection Tool Dialog");
+    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
+    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    group.writeEntry("Auto Correction Filter", m_correctionTools->currentItem());
     config->sync();
 }
 

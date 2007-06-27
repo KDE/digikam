@@ -204,11 +204,11 @@ void ImageEffect_Perspective::readUserSettings(void)
 {
     QColor defaultGuideColor(Qt::red);
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("perspective Tool Dialog");
-    m_drawWhileMovingCheckBox->setChecked(config->readBoolEntry("Draw While Moving", true));
-    m_drawGridCheckBox->setChecked(config->readBoolEntry("Draw Grid", false));
-    m_guideColorBt->setColor(config->readColorEntry("Guide Color", &defaultGuideColor));
-    m_guideSize->setValue(config->readNumEntry("Guide Width", 1));
+    KConfigGroup group = config->group("perspective Tool Dialog");
+    m_drawWhileMovingCheckBox->setChecked(group.readEntry("Draw While Moving", true));
+    m_drawGridCheckBox->setChecked(group.readEntry("Draw Grid", false));
+    m_guideColorBt->setColor(group.readColorEntry("Guide Color", &defaultGuideColor));
+    m_guideSize->setValue(group.readEntry("Guide Width", 1));
     m_previewWidget->slotToggleDrawWhileMoving(m_drawWhileMovingCheckBox->isChecked());
     m_previewWidget->slotToggleDrawGrid(m_drawGridCheckBox->isChecked());
     m_previewWidget->slotChangeGuideColor(m_guideColorBt->color());
@@ -218,11 +218,11 @@ void ImageEffect_Perspective::readUserSettings(void)
 void ImageEffect_Perspective::writeUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("perspective Tool Dialog");
-    config->writeEntry("Draw While Moving", m_drawWhileMovingCheckBox->isChecked());
-    config->writeEntry("Draw Grid", m_drawGridCheckBox->isChecked());
-    config->writeEntry("Guide Color", m_guideColorBt->color());
-    config->writeEntry("Guide Width", m_guideSize->value());
+    KConfigGroup group = config->group("perspective Tool Dialog");
+    group.writeEntry("Draw While Moving", m_drawWhileMovingCheckBox->isChecked());
+    group.writeEntry("Draw Grid", m_drawGridCheckBox->isChecked());
+    group.writeEntry("Guide Color", m_guideColorBt->color());
+    group.writeEntry("Guide Width", m_guideSize->value());
     config->sync();
 }
 

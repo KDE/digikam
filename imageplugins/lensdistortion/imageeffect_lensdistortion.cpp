@@ -201,17 +201,17 @@ ImageEffect_LensDistortion::~ImageEffect_LensDistortion()
 void ImageEffect_LensDistortion::readUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("lensdistortion Tool Dialog");
+    KConfigGroup group = config->group("lensdistortion Tool Dialog");
 
     m_mainInput->blockSignals(true);
     m_edgeInput->blockSignals(true);
     m_rescaleInput->blockSignals(true);
     m_brightenInput->blockSignals(true);
     
-    m_mainInput->setValue(config->readDoubleNumEntry("2nd Order Distortion", 0.0));
-    m_edgeInput->setValue(config->readDoubleNumEntry("4th Order Distortion",0.0));
-    m_rescaleInput->setValue(config->readDoubleNumEntry("Zoom Factor", 0.0));
-    m_brightenInput->setValue(config->readDoubleNumEntry("Brighten", 0.0));
+    m_mainInput->setValue(group.readEntry("2nd Order Distortion", 0.0));
+    m_edgeInput->setValue(group.readEntry("4th Order Distortion",0.0));
+    m_rescaleInput->setValue(group.readEntry("Zoom Factor", 0.0));
+    m_brightenInput->setValue(group.readEntry("Brighten", 0.0));
     
     m_mainInput->blockSignals(false);
     m_edgeInput->blockSignals(false);
@@ -224,11 +224,11 @@ void ImageEffect_LensDistortion::readUserSettings(void)
 void ImageEffect_LensDistortion::writeUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("lensdistortion Tool Dialog");
-    config->writeEntry("2nd Order Distortion", m_mainInput->value());
-    config->writeEntry("4th Order Distortion", m_edgeInput->value());
-    config->writeEntry("Zoom Factor", m_rescaleInput->value());
-    config->writeEntry("Brighten", m_brightenInput->value());
+    KConfigGroup group = config->group("lensdistortion Tool Dialog");
+    group.writeEntry("2nd Order Distortion", m_mainInput->value());
+    group.writeEntry("4th Order Distortion", m_edgeInput->value());
+    group.writeEntry("Zoom Factor", m_rescaleInput->value());
+    group.writeEntry("Brighten", m_brightenInput->value());
     config->sync();
 }
 

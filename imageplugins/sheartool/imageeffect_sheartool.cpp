@@ -185,24 +185,24 @@ ImageEffect_ShearTool::~ImageEffect_ShearTool()
 void ImageEffect_ShearTool::readUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("sheartool Tool Dialog");
-    m_mainHAngleInput->setValue(config->readNumEntry("Main HAngle", 0));
-    m_mainVAngleInput->setValue(config->readNumEntry("Main VAngle", 0));
-    m_fineHAngleInput->setValue(config->readDoubleNumEntry("Fine HAngle", 0.0));
-    m_fineVAngleInput->setValue(config->readDoubleNumEntry("Fine VAngle", 0.0));
-    m_antialiasInput->setChecked(config->readBoolEntry("Anti Aliasing", true));
+    KConfigGroup group = config->group("sheartool Tool Dialog");
+    m_mainHAngleInput->setValue(group.readEntry("Main HAngle", 0));
+    m_mainVAngleInput->setValue(group.readEntry("Main VAngle", 0));
+    m_fineHAngleInput->setValue(group.readEntry("Fine HAngle", 0.0));
+    m_fineVAngleInput->setValue(group.readEntry("Fine VAngle", 0.0));
+    m_antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
     slotEffect();
 }
 
 void ImageEffect_ShearTool::writeUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("sheartool Tool Dialog");
-    config->writeEntry("Main HAngle", m_mainHAngleInput->value());
-    config->writeEntry("Main VAngle", m_mainVAngleInput->value());
-    config->writeEntry("Fine HAngle", m_fineHAngleInput->value());
-    config->writeEntry("Fine VAngle", m_fineVAngleInput->value());
-    config->writeEntry("Anti Aliasing", m_antialiasInput->isChecked());
+    KConfigGroup group = config->group("sheartool Tool Dialog");
+    group.writeEntry("Main HAngle", m_mainHAngleInput->value());
+    group.writeEntry("Main VAngle", m_mainVAngleInput->value());
+    group.writeEntry("Fine HAngle", m_fineHAngleInput->value());
+    group.writeEntry("Fine VAngle", m_fineVAngleInput->value());
+    group.writeEntry("Anti Aliasing", m_antialiasInput->isChecked());
     config->sync();
 }
 

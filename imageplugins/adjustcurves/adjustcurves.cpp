@@ -563,23 +563,23 @@ void AdjustCurveDialog::slotCurveTypeChanged(int type)
 void AdjustCurveDialog::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("adjustcurves Tool Dialog");
+    KConfigGroup group = config->group("adjustcurves Tool Dialog");
 
-    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(group.readEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
 
     m_curvesWidget->reset();
 
     for (int i = 0 ; i < 5 ; i++)
     {
         m_curves->curvesChannelReset(i);
-        m_curves->setCurveType(i, (Digikam::ImageCurves::CurveType)config->readNumEntry(QString("CurveTypeChannel%1").arg(i),
+        m_curves->setCurveType(i, (Digikam::ImageCurves::CurveType)group.readEntry(QString("CurveTypeChannel%1").arg(i),
                                                                                         Digikam::ImageCurves::CURVE_SMOOTH));
 
         for (int j = 0 ; j < 17 ; j++)
         {
             QPoint disable(-1, -1);
-            QPoint p = config->readPointEntry(QString("CurveAjustmentChannel%1Point%2").arg(i).arg(j), &disable);
+            QPoint p = group.readPointEntry(QString("CurveAjustmentChannel%1Point%2").arg(i).arg(j), &disable);
     
             if (m_originalImage.sixteenBit() && p.x() != -1)
             {
@@ -600,13 +600,13 @@ void AdjustCurveDialog::readUserSettings()
 void AdjustCurveDialog::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("adjustcurves Tool Dialog");
-    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
-    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    KConfigGroup group = config->group("adjustcurves Tool Dialog");
+    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
+    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
 
     for (int i = 0 ; i < 5 ; i++)
     {
-        config->writeEntry(QString("CurveTypeChannel%1").arg(i), m_curves->getCurveType(i));
+        group.writeEntry(QString("CurveTypeChannel%1").arg(i), m_curves->getCurveType(i));
         
         for (int j = 0 ; j < 17 ; j++)
         {
@@ -618,7 +618,7 @@ void AdjustCurveDialog::writeUserSettings()
                 p.setY(p.y()/255);
             }
     
-            config->writeEntry(QString("CurveAjustmentChannel%1Point%2").arg(i).arg(j), p);
+            group.writeEntry(QString("CurveAjustmentChannel%1Point%2").arg(i).arg(j), p);
         }
     }
 

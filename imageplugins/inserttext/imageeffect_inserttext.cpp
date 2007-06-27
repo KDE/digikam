@@ -258,16 +258,16 @@ void ImageEffect_InsertText::readUserSettings()
 void ImageEffect_InsertText::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("inserttext Tool Dialog");
+    KConfigGroup group = config->group("inserttext Tool Dialog");
 
-    config->writeEntry( "Text Rotation", m_textRotation->currentItem() );
-    config->writeEntry( "Font Color", m_fontColorButton->color() );
-    config->writeEntry( "Text String", m_textEdit->text() );
-    config->writeEntry( "Font Properties", m_textFont );
-    config->writeEntry( "Text Alignment", m_alignTextMode );
-    config->writeEntry( "Border Text", m_borderText->isChecked() );
-    config->writeEntry( "Transparent Text", m_transparentText->isChecked() );
-    config->writeEntry( "Position Hint", m_previewWidget->getPositionHint() );
+    group.writeEntry( "Text Rotation", m_textRotation->currentItem() );
+    group.writeEntry( "Font Color", m_fontColorButton->color() );
+    group.writeEntry( "Text String", m_textEdit->text() );
+    group.writeEntry( "Font Properties", m_textFont );
+    group.writeEntry( "Text Alignment", m_alignTextMode );
+    group.writeEntry( "Border Text", m_borderText->isChecked() );
+    group.writeEntry( "Transparent Text", m_transparentText->isChecked() );
+    group.writeEntry( "Position Hint", m_previewWidget->getPositionHint() );
 
     config->sync();
 }

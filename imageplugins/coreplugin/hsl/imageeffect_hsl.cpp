@@ -322,12 +322,12 @@ void ImageEffect_HSL::slotSChanged(double s)
 void ImageEffect_HSL::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("hsladjust Tool Dialog");
-    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
-    m_hInput->setValue(config->readDoubleNumEntry("HueAjustment", 0.0));
-    m_sInput->setValue(config->readDoubleNumEntry("SaturationAjustment", 0.0));
-    m_lInput->setValue(config->readDoubleNumEntry("LighnessAjustment", 0.0));
+    KConfigGroup group = config->group("hsladjust Tool Dialog");
+    m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(group.readEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_hInput->setValue(group.readEntry("HueAjustment", 0.0));
+    m_sInput->setValue(group.readEntry("SaturationAjustment", 0.0));
+    m_lInput->setValue(group.readEntry("LighnessAjustment", 0.0));
     slotHChanged(m_hInput->value());
     slotSChanged(m_sInput->value());
     slotChannelChanged(m_channelCB->currentItem());
@@ -337,12 +337,12 @@ void ImageEffect_HSL::readUserSettings()
 void ImageEffect_HSL::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("hsladjust Tool Dialog");
-    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
-    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
-    config->writeEntry("HueAjustment", m_hInput->value());
-    config->writeEntry("SaturationAjustment", m_sInput->value());
-    config->writeEntry("LighnessAjustment", m_lInput->value());
+    KConfigGroup group = config->group("hsladjust Tool Dialog");
+    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
+    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    group.writeEntry("HueAjustment", m_hInput->value());
+    group.writeEntry("SaturationAjustment", m_sInput->value());
+    group.writeEntry("LighnessAjustment", m_lInput->value());
     config->sync();
 }
 

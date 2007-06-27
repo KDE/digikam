@@ -534,29 +534,29 @@ void ChannelMixerDialog::slotScaleChanged(int scale)
 void ChannelMixerDialog::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("channelmixer Tool Dialog");
+    KConfigGroup group = config->group("channelmixer Tool Dialog");
 
-    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(group.readEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
 
-    m_monochrome->setChecked(config->readBoolEntry("Monochrome", false));
-    m_preserveLuminosity->setChecked(config->readNumEntry("PreserveLuminosity", false));
+    m_monochrome->setChecked(group.readEntry("Monochrome", false));
+    m_preserveLuminosity->setChecked(group.readEntry("PreserveLuminosity", false));
 
-    m_redRedGain     = config->readDoubleNumEntry("RedRedGain", 1.0); 
-    m_redGreenGain   = config->readDoubleNumEntry("RedGreenGain", 0.0); 
-    m_redBlueGain    = config->readDoubleNumEntry("RedBlueGain", 0.0); 
+    m_redRedGain     = group.readEntry("RedRedGain", 1.0); 
+    m_redGreenGain   = group.readEntry("RedGreenGain", 0.0); 
+    m_redBlueGain    = group.readEntry("RedBlueGain", 0.0); 
     
-    m_greenRedGain   = config->readDoubleNumEntry("GreenRedGain", 0.0);
-    m_greenGreenGain = config->readDoubleNumEntry("GreenGreenGain", 1.0); 
-    m_greenBlueGain  = config->readDoubleNumEntry("GreenBlueGain", 0.0);
+    m_greenRedGain   = group.readEntry("GreenRedGain", 0.0);
+    m_greenGreenGain = group.readEntry("GreenGreenGain", 1.0); 
+    m_greenBlueGain  = group.readEntry("GreenBlueGain", 0.0);
     
-    m_blueRedGain    = config->readDoubleNumEntry("BlueRedGain", 0.0);
-    m_blueGreenGain  = config->readDoubleNumEntry("BlueGreenGain", 0.0);
-    m_blueBlueGain   = config->readDoubleNumEntry("BlueBlueGain", 1.0);
+    m_blueRedGain    = group.readEntry("BlueRedGain", 0.0);
+    m_blueGreenGain  = group.readEntry("BlueGreenGain", 0.0);
+    m_blueBlueGain   = group.readEntry("BlueBlueGain", 1.0);
 
-    m_blackRedGain   = config->readDoubleNumEntry("BlackRedGain", 1.0); 
-    m_blackGreenGain = config->readDoubleNumEntry("BlackGreenGain", 0.0); 
-    m_blackBlueGain  = config->readDoubleNumEntry("BlackBlueGain", 0.0); 
+    m_blackRedGain   = group.readEntry("BlackRedGain", 1.0); 
+    m_blackGreenGain = group.readEntry("BlackGreenGain", 0.0); 
+    m_blackBlueGain  = group.readEntry("BlackBlueGain", 0.0); 
 
     adjustSliders();
     m_histogramWidget->reset();
@@ -568,28 +568,28 @@ void ChannelMixerDialog::readUserSettings()
 void ChannelMixerDialog::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("channelmixer Tool Dialog");
-    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
-    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    KConfigGroup group = config->group("channelmixer Tool Dialog");
+    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
+    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
 
-    config->writeEntry("Monochrome", m_monochrome->isChecked());
-    config->writeEntry("PreserveLuminosity", m_preserveLuminosity->isChecked());
+    group.writeEntry("Monochrome", m_monochrome->isChecked());
+    group.writeEntry("PreserveLuminosity", m_preserveLuminosity->isChecked());
 
-    config->writeEntry("RedRedGain", m_redRedGain);
-    config->writeEntry("RedGreenGain", m_redGreenGain);
-    config->writeEntry("RedBlueGain", m_redBlueGain);
+    group.writeEntry("RedRedGain", m_redRedGain);
+    group.writeEntry("RedGreenGain", m_redGreenGain);
+    group.writeEntry("RedBlueGain", m_redBlueGain);
 
-    config->writeEntry("GreenRedGain", m_greenRedGain);
-    config->writeEntry("GreenGreenGain", m_greenGreenGain);
-    config->writeEntry("GreenBlueGain", m_greenBlueGain);
+    group.writeEntry("GreenRedGain", m_greenRedGain);
+    group.writeEntry("GreenGreenGain", m_greenGreenGain);
+    group.writeEntry("GreenBlueGain", m_greenBlueGain);
 
-    config->writeEntry("BlueRedGain", m_blueRedGain);
-    config->writeEntry("BlueGreenGain", m_blueGreenGain);
-    config->writeEntry("BlueBlueGain", m_blueBlueGain);
+    group.writeEntry("BlueRedGain", m_blueRedGain);
+    group.writeEntry("BlueGreenGain", m_blueGreenGain);
+    group.writeEntry("BlueBlueGain", m_blueBlueGain);
 
-    config->writeEntry("BlackRedGain", m_blackRedGain);
-    config->writeEntry("BlackGreenGain", m_blackGreenGain);
-    config->writeEntry("BlackBlueGain", m_blackBlueGain);
+    group.writeEntry("BlackRedGain", m_blackRedGain);
+    group.writeEntry("BlackGreenGain", m_blackGreenGain);
+    group.writeEntry("BlackBlueGain", m_blackBlueGain);
 
     config->sync();
 }

@@ -539,7 +539,7 @@ void ImageEffect_ICCProof::readUserSettings()
     // General settings of digiKam Color Management                            
     KConfigGroup group = config->group("Color Management");
 
-    if (!group.readBoolEntry("EnableCM", false))
+    if (!group.readEntry("EnableCM", false))
     {
         m_cmEnabled = false;
         slotToggledWidgets(false);

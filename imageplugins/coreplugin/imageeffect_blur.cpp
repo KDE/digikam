@@ -88,15 +88,15 @@ ImageEffect_Blur::~ImageEffect_Blur()
 void ImageEffect_Blur::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("gaussianblur Tool Dialog");
-    m_radiusInput->setValue(config->readNumEntry("RadiusAjustment", 0));
+    KConfigGroup group = config->group("gaussianblur Tool Dialog");
+    m_radiusInput->setValue(group.readEntry("RadiusAjustment", 0));
 }
 
 void ImageEffect_Blur::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("gaussianblur Tool Dialog");
-    config->writeEntry("RadiusAjustment", m_radiusInput->value());
+    KConfigGroup group = config->group("gaussianblur Tool Dialog");
+    group.writeEntry("RadiusAjustment", m_radiusInput->value());
     config->sync();
 }
 

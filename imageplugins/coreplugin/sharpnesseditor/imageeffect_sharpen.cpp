@@ -365,7 +365,7 @@ void ImageEffect_Sharpen::slotSharpMethodActived(int w)
 void ImageEffect_Sharpen::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("sharpen Tool Dialog");
+    KConfigGroup group = config->group("sharpen Tool Dialog");
     m_radiusInput->blockSignals(true);
     m_radiusInput2->blockSignals(true);
     m_amountInput->blockSignals(true);
@@ -376,16 +376,16 @@ void ImageEffect_Sharpen::readUserSettings()
     m_correlation->blockSignals(true);
     m_noise->blockSignals(true);
     m_sharpMethod->blockSignals(true);
-    m_radiusInput->setValue(config->readNumEntry("SimpleSharpRadiusAjustment", 0));
-    m_radiusInput2->setValue(config->readNumEntry("UnsharpMaskRadiusAjustment", 1));
-    m_amountInput->setValue(config->readDoubleNumEntry("UnsharpMaskAmountAjustment", 1.0));
-    m_thresholdInput->setValue(config->readDoubleNumEntry("UnsharpMaskThresholdAjustment", 0.05));
-    m_matrixSize->setValue(config->readNumEntry("RefocusMatrixSize", 5));
-    m_radius->setValue(config->readDoubleNumEntry("RefocusRadiusAjustment", 1.0));
-    m_gauss->setValue(config->readDoubleNumEntry("RefocusGaussAjustment", 0.0));
-    m_correlation->setValue(config->readDoubleNumEntry("RefocusCorrelationAjustment", 0.5));
-    m_noise->setValue(config->readDoubleNumEntry("RefocusNoiseAjustment", 0.03));
-    m_sharpMethod->setCurrentItem(config->readNumEntry("SharpenMethod", SimpleSharp));
+    m_radiusInput->setValue(group.readEntry("SimpleSharpRadiusAjustment", 0));
+    m_radiusInput2->setValue(group.readEntry("UnsharpMaskRadiusAjustment", 1));
+    m_amountInput->setValue(group.readEntry("UnsharpMaskAmountAjustment", 1.0));
+    m_thresholdInput->setValue(group.readEntry("UnsharpMaskThresholdAjustment", 0.05));
+    m_matrixSize->setValue(group.readEntry("RefocusMatrixSize", 5));
+    m_radius->setValue(group.readEntry("RefocusRadiusAjustment", 1.0));
+    m_gauss->setValue(group.readEntry("RefocusGaussAjustment", 0.0));
+    m_correlation->setValue(group.readEntry("RefocusCorrelationAjustment", 0.5));
+    m_noise->setValue(group.readEntry("RefocusNoiseAjustment", 0.03));
+    m_sharpMethod->setCurrentItem(group.readEntry("SharpenMethod", SimpleSharp));
     m_radiusInput->blockSignals(false);
     m_radiusInput2->blockSignals(false);
     m_amountInput->blockSignals(false);
@@ -402,17 +402,17 @@ void ImageEffect_Sharpen::readUserSettings()
 void ImageEffect_Sharpen::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("sharpen Tool Dialog");
-    config->writeEntry("SimpleSharpRadiusAjustment", m_radiusInput->value());
-    config->writeEntry("UnsharpMaskRadiusAjustment", m_radiusInput2->value());
-    config->writeEntry("UnsharpMaskAmountAjustment", m_amountInput->value());
-    config->writeEntry("UnsharpMaskThresholdAjustment", m_thresholdInput->value());
-    config->writeEntry("RefocusMatrixSize", m_matrixSize->value());
-    config->writeEntry("RefocusRadiusAjustment", m_radius->value());
-    config->writeEntry("RefocusGaussAjustment", m_gauss->value());
-    config->writeEntry("RefocusCorrelationAjustment", m_correlation->value());
-    config->writeEntry("RefocusNoiseAjustment", m_noise->value());
-    config->writeEntry("SharpenMethod", m_sharpMethod->currentItem());
+    KConfigGroup group = config->group("sharpen Tool Dialog");
+    group.writeEntry("SimpleSharpRadiusAjustment", m_radiusInput->value());
+    group.writeEntry("UnsharpMaskRadiusAjustment", m_radiusInput2->value());
+    group.writeEntry("UnsharpMaskAmountAjustment", m_amountInput->value());
+    group.writeEntry("UnsharpMaskThresholdAjustment", m_thresholdInput->value());
+    group.writeEntry("RefocusMatrixSize", m_matrixSize->value());
+    group.writeEntry("RefocusRadiusAjustment", m_radius->value());
+    group.writeEntry("RefocusGaussAjustment", m_gauss->value());
+    group.writeEntry("RefocusCorrelationAjustment", m_correlation->value());
+    group.writeEntry("RefocusNoiseAjustment", m_noise->value());
+    group.writeEntry("SharpenMethod", m_sharpMethod->currentItem());
     config->sync();
 }
 

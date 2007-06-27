@@ -263,12 +263,12 @@ void ImageEffect_BCG::slotColorSelectedFromTarget( const Digikam::DColor &color 
 void ImageEffect_BCG::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("bcgadjust Tool Dialog");
-    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
-    m_bInput->setValue(config->readNumEntry("BrightnessAjustment", 0));
-    m_cInput->setValue(config->readNumEntry("ContrastAjustment", 0));
-    m_gInput->setValue(config->readDoubleNumEntry("GammaAjustment", 1.0));
+    KConfigGroup group = config->group("bcgadjust Tool Dialog");
+    m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(group.readEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_bInput->setValue(group.readEntry("BrightnessAjustment", 0));
+    m_cInput->setValue(group.readEntry("ContrastAjustment", 0));
+    m_gInput->setValue(group.readEntry("GammaAjustment", 1.0));
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
 }
@@ -276,12 +276,12 @@ void ImageEffect_BCG::readUserSettings()
 void ImageEffect_BCG::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("bcgadjust Tool Dialog");
-    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
-    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
-    config->writeEntry("BrightnessAjustment", m_bInput->value());
-    config->writeEntry("ContrastAjustment", m_cInput->value());
-    config->writeEntry("GammaAjustment", m_gInput->value());
+    KConfigGroup group = config->group("bcgadjust Tool Dialog");
+    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
+    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    group.writeEntry("BrightnessAjustment", m_bInput->value());
+    group.writeEntry("ContrastAjustment", m_cInput->value());
+    group.writeEntry("GammaAjustment", m_gInput->value());
     config->sync();
 }
 

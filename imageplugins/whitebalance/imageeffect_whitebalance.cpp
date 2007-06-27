@@ -735,18 +735,18 @@ void ImageEffect_WhiteBalance::resetValues()
 void ImageEffect_WhiteBalance::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("whitebalance Tool Dialog");
-    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    KConfigGroup group = config->group("whitebalance Tool Dialog");
+    m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(group.readEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
 
-    m_darkInput->setValue(config->readDoubleNumEntry("Dark", 0.5));
-    m_blackInput->setValue(config->readDoubleNumEntry("Black", 0.0));
-    m_mainExposureInput->setValue(config->readDoubleNumEntry("MainExposure", 0.0));
-    m_fineExposureInput->setValue(config->readDoubleNumEntry("FineExposure", 0.0));
-    m_gammaInput->setValue(config->readDoubleNumEntry("Gamma", 1.0));  
-    m_saturationInput->setValue(config->readDoubleNumEntry("Saturation", 1.0));  
-    m_greenInput->setValue(config->readDoubleNumEntry("Green", 1.2));  
-    m_temperatureInput->setValue(config->readDoubleNumEntry("Temperature", 4750.0));
+    m_darkInput->setValue(group.readEntry("Dark", 0.5));
+    m_blackInput->setValue(group.readEntry("Black", 0.0));
+    m_mainExposureInput->setValue(group.readEntry("MainExposure", 0.0));
+    m_fineExposureInput->setValue(group.readEntry("FineExposure", 0.0));
+    m_gammaInput->setValue(group.readEntry("Gamma", 1.0));  
+    m_saturationInput->setValue(group.readEntry("Saturation", 1.0));  
+    m_greenInput->setValue(group.readEntry("Green", 1.2));  
+    m_temperatureInput->setValue(group.readEntry("Temperature", 4750.0));
     slotTemperatureChanged(m_temperatureInput->value());
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
@@ -755,18 +755,18 @@ void ImageEffect_WhiteBalance::readUserSettings()
 void ImageEffect_WhiteBalance::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("whitebalance Tool Dialog");
-    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
-    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    KConfigGroup group = config->group("whitebalance Tool Dialog");
+    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
+    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
 
-    config->writeEntry("Dark", m_darkInput->value());
-    config->writeEntry("Black", m_blackInput->value());
-    config->writeEntry("MainExposure", m_mainExposureInput->value());
-    config->writeEntry("FineExposure", m_fineExposureInput->value());
-    config->writeEntry("Gamma", m_gammaInput->value());
-    config->writeEntry("Saturation", m_saturationInput->value());
-    config->writeEntry("Green", m_greenInput->value());
-    config->writeEntry("Temperature", m_temperatureInput->value()); 
+    group.writeEntry("Dark", m_darkInput->value());
+    group.writeEntry("Black", m_blackInput->value());
+    group.writeEntry("MainExposure", m_mainExposureInput->value());
+    group.writeEntry("FineExposure", m_fineExposureInput->value());
+    group.writeEntry("Gamma", m_gammaInput->value());
+    group.writeEntry("Saturation", m_saturationInput->value());
+    group.writeEntry("Green", m_greenInput->value());
+    group.writeEntry("Temperature", m_temperatureInput->value()); 
     config->sync();
 }
 

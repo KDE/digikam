@@ -215,8 +215,8 @@ void ImageEffect_SuperImpose::readUserSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("Album Settings");
     KUrl albumDBUrl( group.readEntry("Album Path", KGlobalSettings::documentPath()) );
-    config->setGroup("superimpose Tool Dialog");
-    config->setGroup("Template Superimpose Tool Settings");
+    KConfigGroup group = config->group("superimpose Tool Dialog");
+    KConfigGroup group = config->group("Template Superimpose Tool Settings");
     m_templatesRootUrl.setPath( group.readEntry("Templates Root URL", albumDBUrl.path()) );
     m_templatesUrl.setPath( group.readEntry("Templates URL", albumDBUrl.path()) );
     m_dirSelect->setRootPath(m_templatesRootUrl, m_templatesUrl);

@@ -307,7 +307,7 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
     
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroupSaver saver(config, QString::fromLatin1("General"));
-    showXLFDArea(config->readBoolEntry(QString::fromLatin1("fontSelectorShowXLFD"), false));
+    showXLFDArea(group.readEntry(QString::fromLatin1("fontSelectorShowXLFD"), false));
 }
 
 FontChooserWidget::~FontChooserWidget()

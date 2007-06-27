@@ -357,80 +357,80 @@ void ImageEffect_RatioCrop::readSettings(void)
 
     QColor defaultGuideColor(250, 250, 255);
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("aspectratiocrop Tool Dialog");
+    KConfigGroup group = config->group("aspectratiocrop Tool Dialog");
 
     // No guide lines per default.
-    m_guideLinesCB->setCurrentItem( config->readNumEntry("Guide Lines Type",
+    m_guideLinesCB->setCurrentItem( group.readEntry("Guide Lines Type",
                                     ImageSelectionWidget::GuideNone) );
-    m_goldenSectionBox->setChecked( config->readBoolEntry("Golden Section", true) );
-    m_goldenSpiralSectionBox->setChecked( config->readBoolEntry("Golden Spiral Section", false) );
-    m_goldenSpiralBox->setChecked( config->readBoolEntry("Golden Spiral", false) );
-    m_goldenTriangleBox->setChecked( config->readBoolEntry("Golden Triangle", false) );
-    m_flipHorBox->setChecked( config->readBoolEntry("Golden Flip Horizontal", false) );
-    m_flipVerBox->setChecked( config->readBoolEntry("Golden Flip Vertical", false) );
-    m_guideColorBt->setColor(config->readColorEntry("Guide Color", &defaultGuideColor));
-    m_guideSize->setValue(config->readNumEntry("Guide Width", 1));
+    m_goldenSectionBox->setChecked( group.readEntry("Golden Section", true) );
+    m_goldenSpiralSectionBox->setChecked( group.readEntry("Golden Spiral Section", false) );
+    m_goldenSpiralBox->setChecked( group.readEntry("Golden Spiral", false) );
+    m_goldenTriangleBox->setChecked( group.readEntry("Golden Triangle", false) );
+    m_flipHorBox->setChecked( group.readEntry("Golden Flip Horizontal", false) );
+    m_flipVerBox->setChecked( group.readEntry("Golden Flip Vertical", false) );
+    m_guideColorBt->setColor(group.readColorEntry("Guide Color", &defaultGuideColor));
+    m_guideSize->setValue(group.readEntry("Guide Width", 1));
     m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentItem());
     m_imageSelectionWidget->slotChangeGuideColor(m_guideColorBt->color());
 
     if (w > h)
     {
-        m_xInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Xpos", 50) );
-        m_yInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Ypos", 50) );
+        m_xInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Xpos", 50) );
+        m_yInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Ypos", 50) );
 
-        m_ratioCB->setCurrentItem( config->readNumEntry("Hor.Oriented Aspect Ratio",
+        m_ratioCB->setCurrentItem( group.readEntry("Hor.Oriented Aspect Ratio",
                                    ImageSelectionWidget::RATIO03X04) );
-        m_customRatioNInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Num", 1) );
-        m_customRatioDInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Den", 1) );
+        m_customRatioNInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Num", 1) );
+        m_customRatioDInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Den", 1) );
 
         applyRatioChanges(m_ratioCB->currentItem());
 
-        m_orientCB->setCurrentItem( config->readNumEntry("Hor.Oriented Aspect Ratio Orientation",
+        m_orientCB->setCurrentItem( group.readEntry("Hor.Oriented Aspect Ratio Orientation",
                                                          ImageSelectionWidget::Landscape) );
 
         if ( m_ratioCB->currentItem() == ImageSelectionWidget::RATIONONE )
         {
-            m_widthInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Width", 800) );
-            m_heightInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Height", 600) );
+            m_widthInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Width", 800) );
+            m_heightInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Height", 600) );
         }
         else
         {
             m_widthInput->setValue( 1 ); // It will be recalculed automatically with the ratio.
-            m_heightInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Height", 600) );
+            m_heightInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Height", 600) );
         }
 
         m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentItem());
     }
     else
     {
-        m_xInput->setValue( config->readNumEntry("Ver.Oriented  Custom Aspect Ratio Xpos", 50) );
-        m_yInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Ypos", 50) );
+        m_xInput->setValue( group.readEntry("Ver.Oriented  Custom Aspect Ratio Xpos", 50) );
+        m_yInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Ypos", 50) );
 
-        m_ratioCB->setCurrentItem( config->readNumEntry("Ver.Oriented Aspect Ratio",
+        m_ratioCB->setCurrentItem( group.readEntry("Ver.Oriented Aspect Ratio",
                                    ImageSelectionWidget::RATIO03X04) );
-        m_customRatioNInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Num", 1) );
-        m_customRatioDInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Den", 1) );
+        m_customRatioNInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Num", 1) );
+        m_customRatioDInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Den", 1) );
 
         applyRatioChanges(m_ratioCB->currentItem());
 
-        m_orientCB->setCurrentItem( config->readNumEntry("Ver.Oriented Aspect Ratio Orientation",
+        m_orientCB->setCurrentItem( group.readEntry("Ver.Oriented Aspect Ratio Orientation",
                                                          ImageSelectionWidget::Portrait) );
 
         if ( m_ratioCB->currentItem() == ImageSelectionWidget::RATIONONE )
         {
-            m_widthInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Width", 800) );
-            m_heightInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Height", 600) );
+            m_widthInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Width", 800) );
+            m_heightInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Height", 600) );
         }
         else
         {
             m_widthInput->setValue( 1 ); // It will be recalculed automatically with the ratio.
-            m_heightInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Height", 600) );
+            m_heightInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Height", 600) );
         }
 
         m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentItem());
     }
 
-    m_autoOrientation->setChecked( config->readBoolEntry("Auto Orientation", false) );
+    m_autoOrientation->setChecked( group.readEntry("Auto Orientation", false) );
     slotAutoOrientChanged( m_autoOrientation->isChecked() );
 }
 
@@ -441,43 +441,43 @@ void ImageEffect_RatioCrop::writeSettings(void)
     int h = iface.originalHeight();
 
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("aspectratiocrop Tool Dialog");
+    KConfigGroup group = config->group("aspectratiocrop Tool Dialog");
 
     if (w > h)
     {
-       config->writeEntry( "Hor.Oriented Aspect Ratio", m_ratioCB->currentItem() );
-       config->writeEntry( "Hor.Oriented Aspect Ratio Orientation", m_orientCB->currentItem() );
-       config->writeEntry( "Hor.Oriented Custom Aspect Ratio Num", m_customRatioNInput->value() );
-       config->writeEntry( "Hor.Oriented Custom Aspect Ratio Den", m_customRatioDInput->value() );
+       group.writeEntry( "Hor.Oriented Aspect Ratio", m_ratioCB->currentItem() );
+       group.writeEntry( "Hor.Oriented Aspect Ratio Orientation", m_orientCB->currentItem() );
+       group.writeEntry( "Hor.Oriented Custom Aspect Ratio Num", m_customRatioNInput->value() );
+       group.writeEntry( "Hor.Oriented Custom Aspect Ratio Den", m_customRatioDInput->value() );
 
-       config->writeEntry( "Hor.Oriented Custom Aspect Ratio Xpos", m_xInput->value() );
-       config->writeEntry( "Hor.Oriented Custom Aspect Ratio Ypos", m_yInput->value() );
-       config->writeEntry( "Hor.Oriented Custom Aspect Ratio Width", m_widthInput->value() );
-       config->writeEntry( "Hor.Oriented Custom Aspect Ratio Height", m_heightInput->value() );
+       group.writeEntry( "Hor.Oriented Custom Aspect Ratio Xpos", m_xInput->value() );
+       group.writeEntry( "Hor.Oriented Custom Aspect Ratio Ypos", m_yInput->value() );
+       group.writeEntry( "Hor.Oriented Custom Aspect Ratio Width", m_widthInput->value() );
+       group.writeEntry( "Hor.Oriented Custom Aspect Ratio Height", m_heightInput->value() );
     }
     else
     {
-       config->writeEntry( "Ver.Oriented Aspect Ratio", m_ratioCB->currentItem() );
-       config->writeEntry( "Ver.Oriented Aspect Ratio Orientation", m_orientCB->currentItem() );
-       config->writeEntry( "Ver.Oriented Custom Aspect Ratio Num", m_customRatioNInput->value() );
-       config->writeEntry( "Ver.Oriented Custom Aspect Ratio Den", m_customRatioDInput->value() );
+       group.writeEntry( "Ver.Oriented Aspect Ratio", m_ratioCB->currentItem() );
+       group.writeEntry( "Ver.Oriented Aspect Ratio Orientation", m_orientCB->currentItem() );
+       group.writeEntry( "Ver.Oriented Custom Aspect Ratio Num", m_customRatioNInput->value() );
+       group.writeEntry( "Ver.Oriented Custom Aspect Ratio Den", m_customRatioDInput->value() );
 
-       config->writeEntry( "Ver.Oriented Custom Aspect Ratio Xpos", m_xInput->value() );
-       config->writeEntry( "Ver.Oriented Custom Aspect Ratio Ypos", m_yInput->value() );
-       config->writeEntry( "Ver.Oriented Custom Aspect Ratio Width", m_widthInput->value() );
-       config->writeEntry( "Ver.Oriented Custom Aspect Ratio Height", m_heightInput->value() );
+       group.writeEntry( "Ver.Oriented Custom Aspect Ratio Xpos", m_xInput->value() );
+       group.writeEntry( "Ver.Oriented Custom Aspect Ratio Ypos", m_yInput->value() );
+       group.writeEntry( "Ver.Oriented Custom Aspect Ratio Width", m_widthInput->value() );
+       group.writeEntry( "Ver.Oriented Custom Aspect Ratio Height", m_heightInput->value() );
     }
 
-    config->writeEntry( "Auto Orientation", m_autoOrientation->isChecked() );
-    config->writeEntry( "Guide Lines Type", m_guideLinesCB->currentItem() );
-    config->writeEntry( "Golden Section", m_goldenSectionBox->isChecked() );
-    config->writeEntry( "Golden Spiral Section", m_goldenSpiralSectionBox->isChecked() );
-    config->writeEntry( "Golden Spiral", m_goldenSpiralBox->isChecked() );
-    config->writeEntry( "Golden Triangle", m_goldenTriangleBox->isChecked() );
-    config->writeEntry( "Golden Flip Horizontal", m_flipHorBox->isChecked() );
-    config->writeEntry( "Golden Flip Vertical", m_flipVerBox->isChecked() );
-    config->writeEntry( "Guide Color", m_guideColorBt->color() );
-    config->writeEntry( "Guide Width", m_guideSize->value() );
+    group.writeEntry( "Auto Orientation", m_autoOrientation->isChecked() );
+    group.writeEntry( "Guide Lines Type", m_guideLinesCB->currentItem() );
+    group.writeEntry( "Golden Section", m_goldenSectionBox->isChecked() );
+    group.writeEntry( "Golden Spiral Section", m_goldenSpiralSectionBox->isChecked() );
+    group.writeEntry( "Golden Spiral", m_goldenSpiralBox->isChecked() );
+    group.writeEntry( "Golden Triangle", m_goldenTriangleBox->isChecked() );
+    group.writeEntry( "Golden Flip Horizontal", m_flipHorBox->isChecked() );
+    group.writeEntry( "Golden Flip Vertical", m_flipVerBox->isChecked() );
+    group.writeEntry( "Guide Color", m_guideColorBt->color() );
+    group.writeEntry( "Guide Width", m_guideSize->value() );
     config->sync();
 }
 

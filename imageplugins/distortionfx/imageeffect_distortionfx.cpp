@@ -223,15 +223,15 @@ void ImageEffect_DistortionFX::renderingFinished()
 void ImageEffect_DistortionFX::readUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("distortionfx Tool Dialog");
+    KConfigGroup group = config->group("distortionfx Tool Dialog");
 
     m_effectType->blockSignals(true);
     m_iterationInput->blockSignals(true);
     m_levelInput->blockSignals(true);
 
-    m_effectType->setCurrentItem(config->readNumEntry("EffectType", DistortionFX::FishEye));
-    m_iterationInput->setValue(config->readNumEntry("IterationAjustment", 10));
-    m_levelInput->setValue(config->readNumEntry("LevelAjustment", 50));
+    m_effectType->setCurrentItem(group.readEntry("EffectType", DistortionFX::FishEye));
+    m_iterationInput->setValue(group.readEntry("IterationAjustment", 10));
+    m_levelInput->setValue(group.readEntry("LevelAjustment", 50));
 
     m_effectType->blockSignals(false);
     m_iterationInput->blockSignals(false);
@@ -243,10 +243,10 @@ void ImageEffect_DistortionFX::readUserSettings(void)
 void ImageEffect_DistortionFX::writeUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("distortionfx Tool Dialog");
-    config->writeEntry("EffectType", m_effectType->currentItem());
-    config->writeEntry("IterationAjustment", m_iterationInput->value());
-    config->writeEntry("LevelAjustment", m_levelInput->value());
+    KConfigGroup group = config->group("distortionfx Tool Dialog");
+    group.writeEntry("EffectType", m_effectType->currentItem());
+    group.writeEntry("IterationAjustment", m_iterationInput->value());
+    group.writeEntry("LevelAjustment", m_levelInput->value());
     config->sync();
 }
 
