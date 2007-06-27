@@ -175,7 +175,10 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     // Check ICC profiles repository availability
 
     if(d->splash)
+    {
         d->splash->message(i18n("Checking ICC repository"), Qt::AlignLeft, Qt::white);
+        d->splash->show();
+    }
 
     d->validIccPath = Digikam::SetupICC::iccRepositoryIsValid();
 

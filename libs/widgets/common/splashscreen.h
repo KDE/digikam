@@ -21,52 +21,45 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
+ 
 #ifndef SPLASHSCREEN_H
 #define SPLASHSCREEN_H
 
 // Qt includes.
 
-#include <QWidget>
-#include <QString>
-#include <QColor>
+#include <qpainter.h>
+
+// KDE includes.
+
+#include <ksplashscreen.h>
 
 // Local Includes.
 
 #include "digikam_export.h"
-
-class QMouseEvent;
-class QPainter;
 
 namespace Digikam
 {
 
 class SplashScreenPriv;
 
-class DIGIKAM_EXPORT SplashScreen : public QWidget
+class DIGIKAM_EXPORT SplashScreen : public KSplashScreen
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
 
-    SplashScreen(const QString& splash);
-    ~SplashScreen();
-
-    void finish( QWidget *mainWin );
-    void repaint();
-    void message(const QString &message, int alignment = Qt::AlignLeft,
-                 const QColor &color = Qt::white );
+    SplashScreen(const QString& splash, Qt::WFlags f = 0);
+    virtual ~SplashScreen();
 
 protected:
 
-    void mousePressEvent(QMouseEvent*);
-    void drawContents();
-    void drawContents(QPainter *);
+    void drawContents (QPainter *);
+
+public slots:
+
     void animate();
-
-private slots:
-
-    void slotClose();
+    void message(const QString &message, int alignment = Qt::AlignLeft,
+                 const QColor &color = Qt::white );
 
 private:
 
