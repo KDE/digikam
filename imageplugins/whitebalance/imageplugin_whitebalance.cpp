@@ -31,6 +31,7 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kactioncollection.h>
+
 // Local includes.
 
 #include "ddebug.h"
@@ -44,9 +45,12 @@ K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_whitebalance,
 ImagePlugin_WhiteBalance::ImagePlugin_WhiteBalance(QObject *parent, const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_WhiteBalance")
 {
-    m_whitebalanceAction  = new KAction(KIcon("whitebalance"), i18n("White Balance..."), this);
+    m_whitebalanceAction = new KAction(KIcon("whitebalance"), i18n("White Balance..."), this);
     actionCollection()->addAction("imageplugin_whitebalance", m_whitebalanceAction );
-    connect(m_whitebalanceAction, SIGNAL(triggered(bool) ), SLOT(slotWhiteBalance()));
+
+    connect(m_whitebalanceAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotWhiteBalance()));
+
     m_whitebalanceAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
     
     setXMLFile("digikamimageplugin_whitebalance_ui.rc");         

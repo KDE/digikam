@@ -22,14 +22,12 @@
  * 
  * ============================================================ */
 
-
 #ifndef IMAGEEFFECT_WHITEBALANCE_H
 #define IMAGEEFFECT_WHITEBALANCE_H
 
 // Qt include.
 
-#include <qcolor.h>
-//Added by qt3to4:
+#include <QColor>
 #include <QLabel>
 
 // Digikam includes.
