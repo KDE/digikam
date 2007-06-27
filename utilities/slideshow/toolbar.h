@@ -42,7 +42,7 @@ class ToolBarPriv;
 class DIGIKAM_EXPORT ToolBar : public QWidget
 {
     Q_OBJECT
-    
+
 public:
 
     ToolBar(QWidget* parent);
@@ -59,7 +59,7 @@ public:
 protected:
 
     void keyPressEvent(QKeyEvent *event);
-    
+
 signals:
 
     void signalNext();

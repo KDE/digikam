@@ -24,11 +24,9 @@
 
 // Qt includes.
 
-#include <qtoolbutton.h>
-#include <qlayout.h>
-#include <qpixmap.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QToolButton>
+#include <QPixmap>
+#include <QHBoxLayout>
 #include <QKeyEvent>
 
 // KDE includes.
@@ -64,35 +62,35 @@ public:
     QToolButton *stopBtn;
     QToolButton *nextBtn;
     QToolButton *prevBtn;
-};  
+};
 
 ToolBar::ToolBar(QWidget* parent)
        : QWidget(parent)
 {
     d = new ToolBarPriv;
 
-    Q3HBoxLayout* lay = new Q3HBoxLayout(this);
+    QHBoxLayout* lay = new QHBoxLayout();
+    setLayout(lay);
     d->playBtn = new QToolButton(this);
     d->prevBtn = new QToolButton(this);
     d->nextBtn = new QToolButton(this);
     d->stopBtn = new QToolButton(this);
-    d->playBtn->setToggleButton(true);
+    d->playBtn->setCheckable(true);
 
     KIconLoader* loader = KIconLoader::global();
-    d->playBtn->setIconSet(loader->loadIcon("player_pause", K3Icon::NoGroup, 22));
-    d->prevBtn->setIconSet(loader->loadIcon("back", K3Icon::NoGroup, 22));
-    d->nextBtn->setIconSet(loader->loadIcon("forward", K3Icon::NoGroup, 22));
-    d->stopBtn->setIconSet(loader->loadIcon("stop", K3Icon::NoGroup, 22));
+    d->playBtn->setIcon(loader->loadIcon("player_pause", K3Icon::NoGroup, 22));
+    d->prevBtn->setIcon(loader->loadIcon("back", K3Icon::NoGroup, 22));
+    d->nextBtn->setIcon(loader->loadIcon("forward", K3Icon::NoGroup, 22));
+    d->stopBtn->setIcon(loader->loadIcon("stop", K3Icon::NoGroup, 22));
 
     lay->addWidget(d->playBtn);
     lay->addWidget(d->prevBtn);
     lay->addWidget(d->nextBtn);
     lay->addWidget(d->stopBtn);
 
-    setBackgroundMode(Qt::NoBackground);
     adjustSize();
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    
+
     connect(d->playBtn, SIGNAL(toggled(bool)),
             this, SLOT(slotPlayBtnToggled()));
 
@@ -114,17 +112,17 @@ ToolBar::ToolBar(QWidget* parent)
 
 ToolBar::~ToolBar()
 {
-    delete d;    
+    delete d;
 }
 
 bool ToolBar::canHide() const
 {
-    return d->canHide;    
+    return d->canHide;
 }
 
 bool ToolBar::isPaused() const
 {
-    return d->playBtn->isOn();
+    return d->playBtn->isChecked();
 }
 
 void ToolBar::setPaused(bool val)
@@ -132,50 +130,50 @@ void ToolBar::setPaused(bool val)
     if (val == isPaused())
         return;
 
-    d->playBtn->setOn(val);
+    d->playBtn->setChecked(val);
     slotPlayBtnToggled();
 }
 
 void ToolBar::setEnabledPlay(bool val)
 {
-    d->playBtn->setEnabled(val);    
+    d->playBtn->setEnabled(val);
 }
 
 void ToolBar::setEnabledNext(bool val)
 {
-    d->nextBtn->setEnabled(val);    
+    d->nextBtn->setEnabled(val);
 }
 
 void ToolBar::setEnabledPrev(bool val)
 {
-    d->prevBtn->setEnabled(val);    
+    d->prevBtn->setEnabled(val);
 }
 
 void ToolBar::slotPlayBtnToggled()
 {
     KIconLoader* loader = KIconLoader::global();
-    if (d->playBtn->isOn())
+    if (d->playBtn->isChecked())
     {
         d->canHide = false;
-        d->playBtn->setIconSet(loader->loadIcon("player_play", K3Icon::NoGroup, 22));
+        d->playBtn->setIcon(loader->loadIcon("player_play", K3Icon::NoGroup, 22));
         emit signalPause();
     }
     else
     {
         d->canHide = true;
-        d->playBtn->setIconSet(loader->loadIcon("player_pause", K3Icon::NoGroup, 22));
+        d->playBtn->setIcon(loader->loadIcon("player_pause", K3Icon::NoGroup, 22));
         emit signalPlay();
     }
 }
 
 void ToolBar::slotNexPrevClicked()
 {
-    if (!d->playBtn->isOn())
+    if (!d->playBtn->isChecked())
     {
-        d->playBtn->setOn(true);
+        d->playBtn->setChecked(true);
         d->canHide = false;
-	KIconLoader* loader = KIconLoader::global();
-        d->playBtn->setIconSet(loader->loadIcon("player_play", K3Icon::NoGroup, 22));
+        KIconLoader* loader = KIconLoader::global();
+        d->playBtn->setIcon(loader->loadIcon("player_play", K3Icon::NoGroup, 22));
         emit signalPause();
     }
 }
@@ -216,4 +214,3 @@ void ToolBar::keyPressEvent(QKeyEvent *event)
 }
 
 }   // Namespace Digikam
-
