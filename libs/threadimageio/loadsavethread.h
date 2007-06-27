@@ -49,7 +49,7 @@ class LoadSaveTask;
 class DIGIKAM_EXPORT LoadSaveNotifier
 {
 public:
-    virtual LoadSaveNotifier(){;}
+    LoadSaveNotifier(){;}
     virtual ~LoadSaveNotifier(){;}
 
     virtual void imageStartedLoading(const LoadingDescription &loadingDescription){;}
