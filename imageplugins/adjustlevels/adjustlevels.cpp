@@ -765,7 +765,7 @@ void AdjustLevelDialog::slotUser3()
 {
     KUrl loadLevelsFile;
 
-    loadLevelsFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    loadLevelsFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,
                                              QString( i18n("Select Gimp Levels File to Load")) );
     if( loadLevelsFile.isEmpty() )
@@ -786,7 +786,7 @@ void AdjustLevelDialog::slotUser2()
 {
     KUrl saveLevelsFile;
 
-    saveLevelsFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    saveLevelsFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,
                                              QString( i18n("Gimp Levels File to Save")) );
     if( saveLevelsFile.isEmpty() )

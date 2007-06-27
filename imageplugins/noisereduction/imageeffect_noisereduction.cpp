@@ -480,7 +480,7 @@ void ImageEffect_NoiseReduction::putFinalData(void)
 
 void ImageEffect_NoiseReduction::slotUser3()
 {
-    KUrl loadRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    KUrl loadRestorationFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Photograph Noise Reduction Settings File to Load")) );
     if( loadRestorationFile.isEmpty() )
@@ -522,7 +522,7 @@ void ImageEffect_NoiseReduction::slotUser3()
 
 void ImageEffect_NoiseReduction::slotUser2()
 {
-    KUrl saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Photograph Noise Reduction Settings File to Save")) );
     if( saveRestorationFile.isEmpty() )

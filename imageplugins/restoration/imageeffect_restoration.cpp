@@ -102,7 +102,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
 
     KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
     cimgLogoLabel->setText(QString());
-    cimgLogoLabel->setURL("http://cimg.sourceforge.net");
+    cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
     KGlobal::dirs()->addResourceType("logo-cimg", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("logo-cimg", "logo-cimg.png");
     cimgLogoLabel->setPixmap( QPixmap( directory + "logo-cimg.png" ) );
@@ -300,7 +300,7 @@ void ImageEffect_Restoration::putFinalData(void)
 
 void ImageEffect_Restoration::slotUser3()
 {
-    KUrl loadRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    KUrl loadRestorationFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Photograph Restoration Settings File to Load")) );
     if( loadRestorationFile.isEmpty() )
@@ -333,7 +333,7 @@ void ImageEffect_Restoration::slotUser3()
 
 void ImageEffect_Restoration::slotUser2()
 {
-    KUrl saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Photograph Restoration Settings File to Save")) );
     if( saveRestorationFile.isEmpty() )

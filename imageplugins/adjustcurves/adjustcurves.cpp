@@ -639,7 +639,7 @@ void AdjustCurveDialog::slotUser3()
 {
     KUrl loadCurvesFile;
 
-    loadCurvesFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    loadCurvesFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,
                                              QString( i18n("Select Gimp Curves File to Load")) );
     if( loadCurvesFile.isEmpty() )
@@ -661,7 +661,7 @@ void AdjustCurveDialog::slotUser2()
 {
     KUrl saveCurvesFile;
 
-    saveCurvesFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    saveCurvesFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,
                                              QString( i18n("Gimp Curves File to Save")) );
     if( saveCurvesFile.isEmpty() )

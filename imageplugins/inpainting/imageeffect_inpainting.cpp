@@ -169,7 +169,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
 
     KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
     cimgLogoLabel->setText(QString());
-    cimgLogoLabel->setURL("http://cimg.sourceforge.net");
+    cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
     KGlobal::dirs()->addResourceType("logo-cimg", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("logo-cimg", "logo-cimg.png");
     cimgLogoLabel->setPixmap( QPixmap( directory + "logo-cimg.png" ) );
@@ -418,7 +418,7 @@ void ImageEffect_InPainting_Dialog::putFinalData(void)
 
 void ImageEffect_InPainting_Dialog::slotUser3()
 {
-    KUrl loadInpaintingFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    KUrl loadInpaintingFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Photograph Inpainting Settings File to Load")) );
     if( loadInpaintingFile.isEmpty() )
@@ -449,7 +449,7 @@ void ImageEffect_InPainting_Dialog::slotUser3()
 
 void ImageEffect_InPainting_Dialog::slotUser2()
 {
-    KUrl saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Photograph Inpainting Settings File to Save")) );
     if( saveRestorationFile.isEmpty() )

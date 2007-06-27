@@ -1065,7 +1065,7 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
 
 void ImageEffect_BWSepia::slotUser3()
 {
-    KUrl loadFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    KUrl loadFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Black & White Settings File to Load")) );
     if( loadFile.isEmpty() )
@@ -1140,7 +1140,7 @@ void ImageEffect_BWSepia::slotUser3()
 
 void ImageEffect_BWSepia::slotUser2()
 {
-    KUrl saveFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    KUrl saveFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Black & White Settings File to Save")) );
     if( saveFile.isEmpty() )

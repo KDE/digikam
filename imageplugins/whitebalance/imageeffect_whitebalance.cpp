@@ -773,7 +773,7 @@ void ImageEffect_WhiteBalance::writeUserSettings()
 // Load all settings.
 void ImageEffect_WhiteBalance::slotUser3()
 {
-    KUrl loadWhiteBalanceFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    KUrl loadWhiteBalanceFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,
                                              QString( i18n("White Color Balance Settings File to Load")) );
     if( loadWhiteBalanceFile.isEmpty() )
@@ -816,7 +816,7 @@ void ImageEffect_WhiteBalance::slotUser3()
 // Save all settings.
 void ImageEffect_WhiteBalance::slotUser2()
 {
-    KUrl saveWhiteBalanceFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    KUrl saveWhiteBalanceFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                              QString( "*" ), this,
                                              QString( i18n("White Color Balance Settings File to Save")) );
     if( saveWhiteBalanceFile.isEmpty() )

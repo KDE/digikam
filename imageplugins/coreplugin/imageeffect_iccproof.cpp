@@ -261,7 +261,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     KUrlLabel *lcmsLogoLabel = new KUrlLabel(generalOptions);
     lcmsLogoLabel->setAlignment( Qt::AlignTop | Qt::AlignRight );
     lcmsLogoLabel->setText(QString());
-    lcmsLogoLabel->setURL("http://www.littlecms.com");
+    lcmsLogoLabel->setUrl("http://www.littlecms.com");
     KGlobal::dirs()->addResourceType("logo-lcms", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("logo-lcms", "logo-lcms.png");
     lcmsLogoLabel->setPixmap( QPixmap( directory + "logo-lcms.png" ) );
@@ -1168,7 +1168,7 @@ bool ImageEffect_ICCProof::useDefaultProofProfile()
 
 void ImageEffect_ICCProof::slotUser3()
 {
-    KUrl loadColorManagementFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    KUrl loadColorManagementFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                                 QString( "*" ), this,
                                                 QString( i18n("Color Management Settings File to Load")) );
     if( loadColorManagementFile.isEmpty() )
@@ -1199,9 +1199,9 @@ void ImageEffect_ICCProof::slotUser3()
         m_inProfileBG->setButton( stream.readLine().toInt() );
         m_spaceProfileBG->setButton( stream.readLine().toInt() );
         m_proofProfileBG->setButton( stream.readLine().toInt() );
-        m_inProfilesPath->setURL( stream.readLine() );
-        m_proofProfilePath->setURL( stream.readLine() );
-        m_spaceProfilePath->setURL( stream.readLine() );
+        m_inProfilesPath->setUrl( stream.readLine() );
+        m_proofProfilePath->setUrl( stream.readLine() );
+        m_spaceProfilePath->setUrl( stream.readLine() );
         m_cInput->setValue( stream.readLine().toInt() );
 
         for (int i = 0 ; i < 5 ; i++)
@@ -1244,7 +1244,7 @@ void ImageEffect_ICCProof::slotUser3()
 
 void ImageEffect_ICCProof::slotUser2()
 {
-    KUrl saveColorManagementFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    KUrl saveColorManagementFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                                 QString( "*" ), this,
                                                 QString( i18n("Color Management Settings File to Save")) );
     if( saveColorManagementFile.isEmpty() )

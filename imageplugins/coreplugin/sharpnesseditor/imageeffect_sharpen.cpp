@@ -665,7 +665,7 @@ void ImageEffect_Sharpen::putFinalData(void)
 
 void ImageEffect_Sharpen::slotUser3()
 {
-    KUrl loadRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+    KUrl loadRestorationFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Photograph Refocus Settings File to Load")) );
     if( loadRestorationFile.isEmpty() )
@@ -702,7 +702,7 @@ void ImageEffect_Sharpen::slotUser3()
 
 void ImageEffect_Sharpen::slotUser2()
 {
-    KUrl saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), this,
                                             QString( i18n("Photograph Refocus Settings File to Save")) );
     if( saveRestorationFile.isEmpty() )
