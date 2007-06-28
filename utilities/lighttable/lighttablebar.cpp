@@ -447,22 +447,24 @@ void LightTableBar::readToolTipSettings()
 void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 {
     ThemeEngine* te = ThemeEngine::componentData();
-    QRect er(e->rect());
-    QPixmap bgPix;
+    QRect    er(e->rect());
+    QPixmap  bgPix;
+    QPainter p2(&bgPix);
 
     if (countItems() > 0)
     {
-        int cy, cx, ts, y1, y2, x1, x2;
-        QPixmap tile;
+        int cy=0, cx=0, ts=0, y1=0, y2=0, x1=0, x2=0;
+        QPixmap  tile;
+        QPainter p(&tile);
 
         if (getOrientation() == Qt::Vertical)
         {
             cy = viewportToContents(er.topLeft()).y();
 
-            bgPix.resize(contentsRect().width(), er.height());
+            bgPix = QPixmap(contentsRect().width(), er.height());
 
             ts = getTileSize() + 2*getMargin();
-            tile.resize(visibleWidth(), ts);
+            tile = QPixmap(visibleWidth(), ts);
 
             y1 = (cy/ts)*ts;
             y2 = ((y1 + er.height())/ts +1)*ts;
@@ -471,10 +473,10 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
         {
             cx = viewportToContents(er.topLeft()).x();
 
-            bgPix.resize(er.width(), contentsRect().height());
+            bgPix = QPixmap(er.width(), contentsRect().height());
 
-            ts = getTileSize() + 2*getMargin();
-            tile.resize(ts, visibleHeight());
+            ts   = getTileSize() + 2*getMargin();
+            tile = QPixmap(ts, visibleHeight());
 
             x1 = (cx/ts)*ts;
             x2 = ((x1 + er.width())/ts +1)*ts;
@@ -493,7 +495,6 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                     else
                         tile = te->thumbRegPixmap(tile.width(), tile.height());
 
-                    QPainter p(&tile);
                     if (item == currentItem())
                     {
                         p.setPen(QPen(te->textSelColor(), 3));
@@ -504,40 +505,39 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         p.setPen(QPen(te->textRegColor(), 1));
                         p.drawRect(0, 0, tile.width(), tile.height());
                     }
-                    p.end();
 
                     if (item->pixmap())
                     {
                         QPixmap pix; 
-                        pix.convertFromImage(QImage(item->pixmap()->convertToImage()).
-                                             smoothScale(getTileSize(), getTileSize(), Qt::KeepAspectRatio));
+                        pix.fromImage(QImage(item->pixmap()->toImage()).
+                                             scaled(getTileSize(), getTileSize(), Qt::KeepAspectRatio));
                         int x = (tile.width()  - pix.width())/2;
                         int y = (tile.height() - pix.height())/2;
-                        bitBlt(&tile, x, y, &pix);
+
+                        p.drawPixmap(x, y, pix);
 
                         LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
 
                         if (ltItem->isOnLeftPanel())
                         {
                             QPixmap lPix = SmallIcon("previous"); 
-                            bitBlt(&tile, getMargin(), getMargin(), &lPix);
+                            p.drawPixmap(getMargin(), getMargin(), lPix);
                         }
                         if (ltItem->isOnRightPanel())
                         {
                             QPixmap rPix = SmallIcon("next"); 
-                            bitBlt(&tile, tile.width() - getMargin() - rPix.width(), getMargin(), &rPix);
+                            p.drawPixmap(tile.width() - getMargin() - rPix.width(), getMargin(), rPix);
                         }
 
                         QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height(), 
                                 tile.width(), d->ratingPixmap.height());
                         int rating = ltItem->info()->rating();
-                        int xr = (r.width() - rating * d->ratingPixmap.width())/2;
-                        int wr = rating * d->ratingPixmap.width();
-                        QPainter p(&tile);
+                        int xr     = (r.width() - rating * d->ratingPixmap.width())/2;
+                        int wr     = rating * d->ratingPixmap.width();
                         p.drawTiledPixmap(xr, r.y(), wr, r.height(), d->ratingPixmap);
                     }
 
-                    bitBlt(&bgPix, 0, item->position() - cy, &tile);
+                    p2.drawPixmap(0, item->position() - cy, tile);
                 }
             }
             else
@@ -549,7 +549,6 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                     else
                         tile = te->thumbRegPixmap(tile.width(), tile.height());
 
-                    QPainter p(&tile);
                     if (item == currentItem())
                     {
                         p.setPen(QPen(te->textSelColor(), 2));
@@ -560,76 +559,83 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         p.setPen(QPen(te->textRegColor(), 1));
                         p.drawRect(0, 0, tile.width(), tile.height());
                     }
-                    p.end();
 
                     if (item->pixmap())
                     {
                         QPixmap pix; 
-                        pix.convertFromImage(QImage(item->pixmap()->convertToImage()).
-                                             smoothScale(getTileSize(), getTileSize(), Qt::KeepAspectRatio));
+                        pix.fromImage(QImage(item->pixmap()->toImage()).
+                                      scaled(getTileSize(), getTileSize(),
+                                      Qt::KeepAspectRatio));
                         int x = (tile.width() - pix.width())/2;
                         int y = (tile.height()- pix.height())/2;
-                        bitBlt(&tile, x, y, &pix);
-    
+                        p.drawPixmap(x, y, pix);
+
                         LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
 
                         if (ltItem->isOnLeftPanel())
                         {
                             QPixmap lPix = SmallIcon("previous"); 
-                            bitBlt(&tile, getMargin(), getMargin(), &lPix);
+                            p.drawPixmap(getMargin(), getMargin(), lPix);
                         }
                         if (ltItem->isOnRightPanel())
                         {
                             QPixmap rPix = SmallIcon("next"); 
-                            bitBlt(&tile, tile.width() - getMargin() - rPix.width(), getMargin(), &rPix);
+                            p.drawPixmap(tile.width() - getMargin() - rPix.width(), getMargin(), rPix);
                         }
 
                         QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height(), 
                                 tile.width(), d->ratingPixmap.height());
                         int rating = ltItem->info()->rating();
-                        int xr = (r.width() - rating * d->ratingPixmap.width())/2;
-                        int wr = rating * d->ratingPixmap.width();
-                        QPainter p(&tile);
+                        int xr     = (r.width() - rating * d->ratingPixmap.width())/2;
+                        int wr     = rating * d->ratingPixmap.width();
                         p.drawTiledPixmap(xr, r.y(), wr, r.height(), d->ratingPixmap);
                     }
 
-                    bitBlt(&bgPix, item->position() - cx, 0, &tile);
+                    p2.drawPixmap(item->position() - cx, 0, tile);
                 }
             }
         }
 
+        p.end();
+
+        QPainter p3(viewport());
+
         if (getOrientation() == Qt::Vertical)
-            bitBlt(viewport(), 0, er.y(), &bgPix);
+            p3.drawPixmap(0, er.y(), bgPix);
         else
-            bitBlt(viewport(), er.x(), 0, &bgPix);
+            p3.drawPixmap(er.x(), 0, bgPix);
+
+        p3.end();
     }
     else
     {
-        bgPix.resize(contentsRect().width(), contentsRect().height());
+        bgPix = QPixmap(contentsRect().width(), contentsRect().height());
         bgPix.fill(te->baseColor());
-        QPainter p(&bgPix);
-        p.setPen(QPen(te->textRegColor()));
-        p.drawText(0, 0, bgPix.width(), bgPix.height(),
+        p2.setPen(QPen(te->textRegColor()));
+        p2.drawText(0, 0, bgPix.width(), bgPix.height(),
                     Qt::AlignCenter|Qt::TextWordWrap, 
                     i18n("Drag and drop images here"));
-        p.end();
-        bitBlt(viewport(), 0, 0, &bgPix);
+        QPainter p3(viewport());
+        p3.drawPixmap(0, 0, bgPix);
+        p3.end();
     }
+
+    p2.end();
 }
 
 void LightTableBar::startDrag()
 {
     if (!currentItem()) return;
 
-    KUrl::List      urls;
-    KUrl::List      kioURLs;
+    KUrl::List       urls;
+    KUrl::List       kioURLs;
     Q3ValueList<int> albumIDs;
     Q3ValueList<int> imageIDs;
 
     LightTableBarItem *item = dynamic_cast<LightTableBarItem*>(currentItem());
 
-    urls.append(item->info()->kurl());
-    kioURLs.append(item->info()->kurlForKIO());
+    urls.append(item->info()->fileUrl());
+    kioURLs.append(item->info()->databaseUrl());
     imageIDs.append(item->info()->id());
     albumIDs.append(item->info()->albumId());
 
@@ -657,11 +663,11 @@ void LightTableBar::startDrag()
 
 void LightTableBar::contentsDragMoveEvent(QDragMoveEvent *e)
 {
-    int             albumID;
+    int              albumID;
     Q3ValueList<int> albumIDs;
     Q3ValueList<int> imageIDs;
-    KUrl::List      urls;
-    KUrl::List      kioURLs;
+    KUrl::List       urls;
+    KUrl::List       kioURLs;
 
     if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs) ||
         AlbumDrag::decode(e, urls, albumID) ||
@@ -676,11 +682,11 @@ void LightTableBar::contentsDragMoveEvent(QDragMoveEvent *e)
 
 void LightTableBar::contentsDropEvent(QDropEvent *e)
 {
-    int             albumID;
+    int              albumID;
     Q3ValueList<int> albumIDs;
     Q3ValueList<int> imageIDs;
-    KUrl::List      urls;
-    KUrl::List      kioURLs;
+    KUrl::List       urls;
+    KUrl::List       kioURLs;
 
     if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
     {
@@ -727,8 +733,8 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
     }
     else if(TagDrag::canDecode(e))
     {
-        QByteArray ba = e->encodedData("digikam/tag-id");
-        QDataStream ds(ba, QIODevice::ReadOnly);
+        QByteArray  ba = e->encodedData("digikam/tag-id");
+        QDataStream ds(ba);
         int tagID;
         ds >> tagID;
 
@@ -751,7 +757,7 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
 
         emit signalDroppedItems(imageInfoList);
         e->accept();
-    }   
+    }
     else 
     {
         e->ignore();
@@ -761,7 +767,7 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
 // -------------------------------------------------------------------------
 
 LightTableBarItem::LightTableBarItem(LightTableBar *view, ImageInfo *info)
-                 : ThumbBarItem(view, info->kurl())
+                 : ThumbBarItem(view, info->fileUrl())
 {
     d = new LightTableBarItemPriv;
     d->info = info;
@@ -821,10 +827,10 @@ QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
 
             if (settings->getToolTipsShowAlbumName())
             {
-                PAlbum* album = AlbumManager::componentData().findPAlbum(info->albumId());
+                PAlbum* album = AlbumManager::componentData()->findPAlbum(info->albumId());
                 if (album)
                     tip += m_cellSpecBeg + i18n("Album:") + m_cellSpecMid + 
-                           album->url().remove(0, 1) + m_cellSpecEnd;
+                           album->albumPath().remove(0, 1) + m_cellSpecEnd;
             }
 
             if (settings->getToolTipsShowComments())
@@ -836,7 +842,7 @@ QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
 
             if (settings->getToolTipsShowTags())
             {
-                QStringList tagPaths = AlbumManager::componentData().tagPaths(info->tagIds(), false);
+                QStringList tagPaths = AlbumManager::componentData()->tagPaths(info->tagIds(), false);
 
                 str = tagPaths.join(", ");
                 if (str.isEmpty()) str = QString("---");
