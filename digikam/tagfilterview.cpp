@@ -253,19 +253,19 @@ TagFilterView::TagFilterView(QWidget* parent)
     // -- read config ---------------------------------------------------------
 
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("Tag Filters View");
-    d->matchingCond = (AlbumLister::MatchingCondition)(config->readNumEntry("Matching Condition", 
+    KConfigGroup group = config->group("Tag Filters View");
+    d->matchingCond = (AlbumLister::MatchingCondition)(group.readEntry("Matching Condition", 
                                                        AlbumLister::OrCondition));
 
-    d->toggleAutoTags = (ToggleAutoTags)(config->readNumEntry("Toggle Auto Tags", NoToggleAuto));
+    d->toggleAutoTags = (ToggleAutoTags)(group.readEntry("Toggle Auto Tags", NoToggleAuto));
 }
 
 TagFilterView::~TagFilterView()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("Tag Filters View");
-    config->writeEntry("Matching Condition", (int)(d->matchingCond));
-    config->writeEntry("Toggle Auto Tags", (int)(d->toggleAutoTags));
+    KConfigGroup group = config->group("Tag Filters View");
+    group.writeEntry("Matching Condition", (int)(d->matchingCond));
+    group.writeEntry("Toggle Auto Tags", (int)(d->toggleAutoTags));
     config->sync();
 
     delete d->timer;

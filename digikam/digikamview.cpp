@@ -366,28 +366,28 @@ void DigikamView::setupConnections()
 void DigikamView::loadViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("MainWindow");
+    KConfigGroup group = config->group("MainWindow");
 
     if(config->hasKey("SplitterSizes"))
-        d->splitter->setSizes(config->readIntListEntry("SplitterSizes"));
+        d->splitter->setSizes(group.readEntry("SplitterSizes",QList<int>()));
 
-    d->initialAlbumID = config->readNumEntry("InitialAlbumID", 0);
+    d->initialAlbumID = group.readEntry("InitialAlbumID", 0);
 }
 
 void DigikamView::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("MainWindow");
-    config->writeEntry("SplitterSizes", d->splitter->sizes());
+    KConfigGroup group = config->group("MainWindow");
+    group.writeEntry("SplitterSizes", d->splitter->sizes());
 
     Album *album = AlbumManager::componentData().currentAlbum();
     if(album)
     {
-        config->writeEntry("InitialAlbumID", album->globalID());
+        group.writeEntry("InitialAlbumID", album->globalID());
     }
     else
     {
-        config->writeEntry("InitialAlbumID", 0);
+        group.writeEntry("InitialAlbumID", 0);
     }
 }
 
@@ -1230,8 +1230,8 @@ void DigikamView::slotItemsInfoFromAlbums(const ImageInfoList& infoList)
 void DigikamView::slideShow(ImageInfoList &infoList)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("ImageViewer Settings");
-    bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
+    KConfigGroup group = config->group("ImageViewer Settings");
+    bool startWithCurrent = group.readEntry("SlideShowStartCurrent", false);
 
     int     i = 0;
     float cnt = (float)infoList.count();
@@ -1242,14 +1242,14 @@ void DigikamView::slideShow(ImageInfoList &infoList)
     DMetadata         meta;
     SlideShowSettings settings;
     settings.exifRotate           = AlbumSettings::componentData().getExifRotate();
-    settings.delay                = config->readNumEntry("SlideShowDelay", 5) * 1000;
-    settings.printName            = config->readBoolEntry("SlideShowPrintName", true);
-    settings.printDate            = config->readBoolEntry("SlideShowPrintDate", false);
-    settings.printApertureFocal   = config->readBoolEntry("SlideShowPrintApertureFocal", false);
-    settings.printExpoSensitivity = config->readBoolEntry("SlideShowPrintExpoSensitivity", false);
-    settings.printMakeModel       = config->readBoolEntry("SlideShowPrintMakeModel", false);
-    settings.printComment         = config->readBoolEntry("SlideShowPrintComment", false);
-    settings.loop                 = config->readBoolEntry("SlideShowLoop", false);
+    settings.delay                = group.readEntry("SlideShowDelay", 5) * 1000;
+    settings.printName            = group.readEntry("SlideShowPrintName", true);
+    settings.printDate            = group.readEntry("SlideShowPrintDate", false);
+    settings.printApertureFocal   = group.readEntry("SlideShowPrintApertureFocal", false);
+    settings.printExpoSensitivity = group.readEntry("SlideShowPrintExpoSensitivity", false);
+    settings.printMakeModel       = group.readEntry("SlideShowPrintMakeModel", false);
+    settings.printComment         = group.readEntry("SlideShowPrintComment", false);
+    settings.loop                 = group.readEntry("SlideShowLoop", false);
 
     d->cancelSlideShow = false;
     for (ImageInfoList::iterator it = infoList.begin() ; 

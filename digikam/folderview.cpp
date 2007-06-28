@@ -343,14 +343,14 @@ void FolderView::slotAllAlbumsLoaded()
 void FolderView::loadViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup(name());
+    KConfigGroup group = config->group(name());
     
-    int selectedItem = config->readNumEntry("LastSelectedItem", 0);
+    int selectedItem = group.readEntry("LastSelectedItem", 0);
     
     Q3ValueList<int> openFolders;
     if(config->hasKey("OpenFolders"))
     {
-        openFolders = config->readIntListEntry("OpenFolders");
+        openFolders = group.readEntry("OpenFolders",QList<int>());
     }
     
     FolderItem *item;    
@@ -376,13 +376,13 @@ void FolderView::loadViewState()
 void FolderView::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup(name());
+    KConfigGroup group = config->group(name());
    
     FolderItem *item = dynamic_cast<FolderItem*>(selectedItem());
     if(item)
-        config->writeEntry("LastSelectedItem", item->id());
+        group.writeEntry("LastSelectedItem", item->id());
     else
-        config->writeEntry("LastSelectedItem", 0);
+        group.writeEntry("LastSelectedItem", 0);
     
     Q3ValueList<int> openFolders;
     Q3ListViewItemIterator it(this);
@@ -392,7 +392,7 @@ void FolderView::saveViewState()
         if(item && isOpen(item))
             openFolders.push_back(item->id());
     }
-    config->writeEntry("OpenFolders", openFolders);
+    group.writeEntry("OpenFolders", openFolders);
 }
 
 void FolderView::slotSelectionChanged()

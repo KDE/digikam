@@ -239,98 +239,98 @@ void AlbumSettings::readSettings()
 
     // ---------------------------------------------------------------------
 
-    config->setGroup("Album Settings");
+    KConfigGroup group = config->group("Album Settings");
 
-    d->albumLibraryPath = config->readPathEntry("Album Path", QString());
+    d->albumLibraryPath = group.readEntry("Album Path", QString());
 
-    QStringList collectionList = config->readListEntry("Album Collections");
+    QStringList collectionList = group.readEntry("Album Collections",QStringList());
     if (!collectionList.isEmpty())
     {
         collectionList.sort();
         d->albumCollectionNames = collectionList;
     }
 
-    d->albumSortOrder = AlbumSettings::AlbumSortOrder(config->readNumEntry("Album Sort Order",
+    d->albumSortOrder = AlbumSettings::AlbumSortOrder(group.readEntry("Album Sort Order",
                                                       (int)AlbumSettings::ByFolder));
 
-    d->imageSortOrder = AlbumSettings::ImageSortOrder(config->readNumEntry("Image Sort Order",
+    d->imageSortOrder = AlbumSettings::ImageSortOrder(group.readEntry("Image Sort Order",
                                                       (int)AlbumSettings::ByIName));
 
-    d->itemRightClickAction = AlbumSettings::ItemRightClickAction(config->readNumEntry(
+    d->itemRightClickAction = AlbumSettings::ItemRightClickAction(group.readEntry(
                                                                   "Item Right Click Action",
                                                                   (int)AlbumSettings::ShowPreview));
 
-    d->imageFilefilter   = config->readEntry("File Filter", d->imageFilefilter);
-    d->movieFilefilter   = config->readEntry("Movie File Filter", d->movieFilefilter);
-    d->audioFilefilter   = config->readEntry("Audio File Filter", d->audioFilefilter);
-    d->rawFilefilter     = config->readEntry("Raw File Filter", d->rawFilefilter);
-    d->thumbnailSize     = config->readNumEntry("Default Icon Size", ThumbnailSize::Medium);
-    d->treeThumbnailSize = config->readNumEntry("Default Tree Icon Size", ThumbnailSize::Tiny);
-    d->currentTheme      = config->readEntry("Theme", i18n("Default"));
+    d->imageFilefilter   = group.readEntry("File Filter", d->imageFilefilter);
+    d->movieFilefilter   = group.readEntry("Movie File Filter", d->movieFilefilter);
+    d->audioFilefilter   = group.readEntry("Audio File Filter", d->audioFilefilter);
+    d->rawFilefilter     = group.readEntry("Raw File Filter", d->rawFilefilter);
+    d->thumbnailSize     = group.readEntry("Default Icon Size", ThumbnailSize::Medium);
+    d->treeThumbnailSize = group.readEntry("Default Tree Icon Size", ThumbnailSize::Tiny);
+    d->currentTheme      = group.readEntry("Theme", i18n("Default"));
 
-    d->iconShowName       = config->readBoolEntry("Icon Show Name", false); 
-    d->iconShowResolution = config->readBoolEntry("Icon Show Resolution", false);
-    d->iconShowSize       = config->readBoolEntry("Icon Show Size", false);
-    d->iconShowDate       = config->readBoolEntry("Icon Show Date", true);
-    d->iconShowModDate    = config->readBoolEntry("Icon Show Modification Date", true);
-    d->iconShowComments   = config->readBoolEntry("Icon Show Comments", true);
-    d->iconShowTags       = config->readBoolEntry("Icon Show Tags", true);
-    d->iconShowRating     = config->readBoolEntry("Icon Show Rating", true);
+    d->iconShowName       = group.readEntry("Icon Show Name", false); 
+    d->iconShowResolution = group.readEntry("Icon Show Resolution", false);
+    d->iconShowSize       = group.readEntry("Icon Show Size", false);
+    d->iconShowDate       = group.readEntry("Icon Show Date", true);
+    d->iconShowModDate    = group.readEntry("Icon Show Modification Date", true);
+    d->iconShowComments   = group.readEntry("Icon Show Comments", true);
+    d->iconShowTags       = group.readEntry("Icon Show Tags", true);
+    d->iconShowRating     = group.readEntry("Icon Show Rating", true);
 
-    d->showToolTips          = config->readBoolEntry("Show ToolTips", false);
-    d->tooltipShowFileName   = config->readBoolEntry("ToolTips Show File Name", true);
-    d->tooltipShowFileDate   = config->readBoolEntry("ToolTips Show File Date", false);
-    d->tooltipShowFileSize   = config->readBoolEntry("ToolTips Show File Size", false);
-    d->tooltipShowImageType  = config->readBoolEntry("ToolTips Show Image Type", false);
-    d->tooltipShowImageDim   = config->readBoolEntry("ToolTips Show Image Dim", true);
-    d->tooltipShowPhotoMake  = config->readBoolEntry("ToolTips Show Photo Make", true);
-    d->tooltipShowPhotoDate  = config->readBoolEntry("ToolTips Show Photo Date", true);
-    d->tooltipShowPhotoFocal = config->readBoolEntry("ToolTips Show Photo Focal", true);
-    d->tooltipShowPhotoExpo  = config->readBoolEntry("ToolTips Show Photo Expo", true);
-    d->tooltipShowPhotoMode  = config->readBoolEntry("ToolTips Show Photo Mode", true);
-    d->tooltipShowPhotoFlash = config->readBoolEntry("ToolTips Show Photo Flash", false);
-    d->tooltipShowPhotoWb    = config->readBoolEntry("ToolTips Show Photo WB", false);
-    d->tooltipShowAlbumName  = config->readBoolEntry("ToolTips Show Album Name", false);
-    d->tooltipShowComments   = config->readBoolEntry("ToolTips Show Comments", true);
-    d->tooltipShowTags       = config->readBoolEntry("ToolTips Show Tags", true);
-    d->tooltipShowRating     = config->readBoolEntry("ToolTips Show Rating", true);
+    d->showToolTips          = group.readEntry("Show ToolTips", false);
+    d->tooltipShowFileName   = group.readEntry("ToolTips Show File Name", true);
+    d->tooltipShowFileDate   = group.readEntry("ToolTips Show File Date", false);
+    d->tooltipShowFileSize   = group.readEntry("ToolTips Show File Size", false);
+    d->tooltipShowImageType  = group.readEntry("ToolTips Show Image Type", false);
+    d->tooltipShowImageDim   = group.readEntry("ToolTips Show Image Dim", true);
+    d->tooltipShowPhotoMake  = group.readEntry("ToolTips Show Photo Make", true);
+    d->tooltipShowPhotoDate  = group.readEntry("ToolTips Show Photo Date", true);
+    d->tooltipShowPhotoFocal = group.readEntry("ToolTips Show Photo Focal", true);
+    d->tooltipShowPhotoExpo  = group.readEntry("ToolTips Show Photo Expo", true);
+    d->tooltipShowPhotoMode  = group.readEntry("ToolTips Show Photo Mode", true);
+    d->tooltipShowPhotoFlash = group.readEntry("ToolTips Show Photo Flash", false);
+    d->tooltipShowPhotoWb    = group.readEntry("ToolTips Show Photo WB", false);
+    d->tooltipShowAlbumName  = group.readEntry("ToolTips Show Album Name", false);
+    d->tooltipShowComments   = group.readEntry("ToolTips Show Comments", true);
+    d->tooltipShowTags       = group.readEntry("ToolTips Show Tags", true);
+    d->tooltipShowRating     = group.readEntry("ToolTips Show Rating", true);
 
-    d->previewLoadFullImageSize = config->readBoolEntry("Preview Load Full Image Size", false);
+    d->previewLoadFullImageSize = group.readEntry("Preview Load Full Image Size", false);
     
     // ---------------------------------------------------------------------
 
-    config->setGroup("EXIF Settings");
+    group = config->group("EXIF Settings");
 
-    d->exifRotate = config->readBoolEntry("EXIF Rotate", true);
-    d->exifSetOrientation = config->readBoolEntry("EXIF Set Orientation", true);
-
-    // ---------------------------------------------------------------------
-
-    config->setGroup("Metadata Settings");
-
-    d->saveIptcTags           = config->readBoolEntry("Save IPTC Tags", false);
-    d->saveIptcPhotographerId = config->readBoolEntry("Save IPTC Photographer ID", false);
-    d->saveIptcCredits        = config->readBoolEntry("Save IPTC Credits", false);
-
-    d->saveComments           = config->readBoolEntry("Save EXIF Comments", false);
-    d->saveDateTime           = config->readBoolEntry("Save Date Time", false);
-    d->saveRating             = config->readBoolEntry("Save Rating", false);
-
-    d->author                 = config->readEntry("IPTC Author", QString());
-    d->authorTitle            = config->readEntry("IPTC Author Title", QString());
-    d->credit                 = config->readEntry("IPTC Credit", QString());
-    d->source                 = config->readEntry("IPTC Source", QString());
-    d->copyright              = config->readEntry("IPTC Copyright", QString());
+    d->exifRotate = group.readEntry("EXIF Rotate", true);
+    d->exifSetOrientation = group.readEntry("EXIF Set Orientation", true);
 
     // ---------------------------------------------------------------------
 
-    config->setGroup("General Settings");
+    group = config->group("Metadata Settings");
 
-    d->showSplash            = config->readBoolEntry("Show Splash", true);
-    d->useTrash              = config->readBoolEntry("Use Trash", true);
-    d->showTrashDeleteDialog = config->readBoolEntry("Show Trash Delete Dialog", true);
-    d->sidebarApplyDirectly  = config->readBoolEntry("Apply Sidebar Changes Directly", false);
-    d->scanAtStart           = config->readBoolEntry("Scan At Start", true);
+    d->saveIptcTags           = group.readEntry("Save IPTC Tags", false);
+    d->saveIptcPhotographerId = group.readEntry("Save IPTC Photographer ID", false);
+    d->saveIptcCredits        = group.readEntry("Save IPTC Credits", false);
+
+    d->saveComments           = group.readEntry("Save EXIF Comments", false);
+    d->saveDateTime           = group.readEntry("Save Date Time", false);
+    d->saveRating             = group.readEntry("Save Rating", false);
+
+    d->author                 = group.readEntry("IPTC Author", QString());
+    d->authorTitle            = group.readEntry("IPTC Author Title", QString());
+    d->credit                 = group.readEntry("IPTC Credit", QString());
+    d->source                 = group.readEntry("IPTC Source", QString());
+    d->copyright              = group.readEntry("IPTC Copyright", QString());
+
+    // ---------------------------------------------------------------------
+
+    group = config->group("General Settings");
+
+    d->showSplash            = group.readEntry("Show Splash", true);
+    d->useTrash              = group.readEntry("Use Trash", true);
+    d->showTrashDeleteDialog = group.readEntry("Show Trash Delete Dialog", true);
+    d->sidebarApplyDirectly  = group.readEntry("Apply Sidebar Changes Directly", false);
+    d->scanAtStart           = group.readEntry("Scan At Start", true);
 }
 
 void AlbumSettings::saveSettings()
@@ -339,84 +339,84 @@ void AlbumSettings::saveSettings()
 
     // ---------------------------------------------------------------------
 
-    config->setGroup("Album Settings");
+    KConfigGroup group = config->group("Album Settings");
 
     config->writePathEntry("Album Path", d->albumLibraryPath);
-    config->writeEntry("Album Collections", d->albumCollectionNames);
-    config->writeEntry("Album Sort Order", (int)d->albumSortOrder);
-    config->writeEntry("Image Sort Order", (int)d->imageSortOrder);
-    config->writeEntry("Item Right Click Action", (int)d->itemRightClickAction);
-    config->writeEntry("File Filter", d->imageFilefilter);
-    config->writeEntry("Movie File Filter", d->movieFilefilter);
-    config->writeEntry("Audio File Filter", d->audioFilefilter);
-    config->writeEntry("Raw File Filter", d->rawFilefilter);
-    config->writeEntry("Default Icon Size", QString::number(d->thumbnailSize));
-    config->writeEntry("Default Tree Icon Size", QString::number(d->treeThumbnailSize));
-    config->writeEntry("Theme", d->currentTheme);
+    group.writeEntry("Album Collections", d->albumCollectionNames);
+    group.writeEntry("Album Sort Order", (int)d->albumSortOrder);
+    group.writeEntry("Image Sort Order", (int)d->imageSortOrder);
+    group.writeEntry("Item Right Click Action", (int)d->itemRightClickAction);
+    group.writeEntry("File Filter", d->imageFilefilter);
+    group.writeEntry("Movie File Filter", d->movieFilefilter);
+    group.writeEntry("Audio File Filter", d->audioFilefilter);
+    group.writeEntry("Raw File Filter", d->rawFilefilter);
+    group.writeEntry("Default Icon Size", QString::number(d->thumbnailSize));
+    group.writeEntry("Default Tree Icon Size", QString::number(d->treeThumbnailSize));
+    group.writeEntry("Theme", d->currentTheme);
 
-    config->writeEntry("Icon Show Name", d->iconShowName);
-    config->writeEntry("Icon Show Resolution", d->iconShowResolution);
-    config->writeEntry("Icon Show Size", d->iconShowSize);
-    config->writeEntry("Icon Show Date", d->iconShowDate);
-    config->writeEntry("Icon Show Modification Date", d->iconShowModDate);
-    config->writeEntry("Icon Show Comments", d->iconShowComments);
-    config->writeEntry("Icon Show Tags", d->iconShowTags);
-    config->writeEntry("Icon Show Rating", d->iconShowRating);
+    group.writeEntry("Icon Show Name", d->iconShowName);
+    group.writeEntry("Icon Show Resolution", d->iconShowResolution);
+    group.writeEntry("Icon Show Size", d->iconShowSize);
+    group.writeEntry("Icon Show Date", d->iconShowDate);
+    group.writeEntry("Icon Show Modification Date", d->iconShowModDate);
+    group.writeEntry("Icon Show Comments", d->iconShowComments);
+    group.writeEntry("Icon Show Tags", d->iconShowTags);
+    group.writeEntry("Icon Show Rating", d->iconShowRating);
 
-    config->writeEntry("Show ToolTips", d->showToolTips);
-    config->writeEntry("ToolTips Show File Name", d->tooltipShowFileName);
-    config->writeEntry("ToolTips Show File Date", d->tooltipShowFileDate);
-    config->writeEntry("ToolTips Show File Size", d->tooltipShowFileSize);
-    config->writeEntry("ToolTips Show Image Type", d->tooltipShowImageType);
-    config->writeEntry("ToolTips Show Image Dim", d->tooltipShowImageDim);
-    config->writeEntry("ToolTips Show Photo Make", d->tooltipShowPhotoMake);
-    config->writeEntry("ToolTips Show Photo Date", d->tooltipShowPhotoDate);
-    config->writeEntry("ToolTips Show Photo Focal", d->tooltipShowPhotoFocal);
-    config->writeEntry("ToolTips Show Photo Expo", d->tooltipShowPhotoExpo);
-    config->writeEntry("ToolTips Show Photo Mode", d->tooltipShowPhotoMode);
-    config->writeEntry("ToolTips Show Photo Flash", d->tooltipShowPhotoFlash);
-    config->writeEntry("ToolTips Show Photo WB", d->tooltipShowPhotoWb);
-    config->writeEntry("ToolTips Show Album Name", d->tooltipShowAlbumName);
-    config->writeEntry("ToolTips Show Comments", d->tooltipShowComments);
-    config->writeEntry("ToolTips Show Tags", d->tooltipShowTags);
-    config->writeEntry("ToolTips Show Rating", d->tooltipShowRating);
+    group.writeEntry("Show ToolTips", d->showToolTips);
+    group.writeEntry("ToolTips Show File Name", d->tooltipShowFileName);
+    group.writeEntry("ToolTips Show File Date", d->tooltipShowFileDate);
+    group.writeEntry("ToolTips Show File Size", d->tooltipShowFileSize);
+    group.writeEntry("ToolTips Show Image Type", d->tooltipShowImageType);
+    group.writeEntry("ToolTips Show Image Dim", d->tooltipShowImageDim);
+    group.writeEntry("ToolTips Show Photo Make", d->tooltipShowPhotoMake);
+    group.writeEntry("ToolTips Show Photo Date", d->tooltipShowPhotoDate);
+    group.writeEntry("ToolTips Show Photo Focal", d->tooltipShowPhotoFocal);
+    group.writeEntry("ToolTips Show Photo Expo", d->tooltipShowPhotoExpo);
+    group.writeEntry("ToolTips Show Photo Mode", d->tooltipShowPhotoMode);
+    group.writeEntry("ToolTips Show Photo Flash", d->tooltipShowPhotoFlash);
+    group.writeEntry("ToolTips Show Photo WB", d->tooltipShowPhotoWb);
+    group.writeEntry("ToolTips Show Album Name", d->tooltipShowAlbumName);
+    group.writeEntry("ToolTips Show Comments", d->tooltipShowComments);
+    group.writeEntry("ToolTips Show Tags", d->tooltipShowTags);
+    group.writeEntry("ToolTips Show Rating", d->tooltipShowRating);
 
-    config->writeEntry("Preview Load Full Image Size", d->previewLoadFullImageSize);
-
-    // ---------------------------------------------------------------------
-
-    config->setGroup("EXIF Settings");
-
-    config->writeEntry("EXIF Rotate", d->exifRotate);
-    config->writeEntry("EXIF Set Orientation", d->exifSetOrientation);
+    group.writeEntry("Preview Load Full Image Size", d->previewLoadFullImageSize);
 
     // ---------------------------------------------------------------------
 
-    config->setGroup("Metadata Settings");
+    group = config->group("EXIF Settings");
 
-    config->writeEntry("Save IPTC Tags", d->saveIptcTags);
-    config->writeEntry("Save IPTC Photographer ID", d->saveIptcPhotographerId);
-    config->writeEntry("Save IPTC Credits", d->saveIptcCredits);
-
-    config->writeEntry("Save EXIF Comments", d->saveComments);
-    config->writeEntry("Save Date Time", d->saveDateTime);
-    config->writeEntry("Save Rating", d->saveRating);
-
-    config->writeEntry("IPTC Author", d->author);
-    config->writeEntry("IPTC Author Title", d->authorTitle);
-    config->writeEntry("IPTC Credit", d->credit);
-    config->writeEntry("IPTC Source", d->source);
-    config->writeEntry("IPTC Copyright", d->copyright);
+    group.writeEntry("EXIF Rotate", d->exifRotate);
+    group.writeEntry("EXIF Set Orientation", d->exifSetOrientation);
 
     // ---------------------------------------------------------------------
 
-    config->setGroup("General Settings");
+    group = config->group("Metadata Settings");
 
-    config->writeEntry("Show Splash", d->showSplash);
-    config->writeEntry("Use Trash", d->useTrash);
-    config->writeEntry("Show Trash Delete Dialog", d->showTrashDeleteDialog);
-    config->writeEntry("Apply Sidebar Changes Directly", d->sidebarApplyDirectly);
-    config->writeEntry("Scan At Start", d->scanAtStart);
+    group.writeEntry("Save IPTC Tags", d->saveIptcTags);
+    group.writeEntry("Save IPTC Photographer ID", d->saveIptcPhotographerId);
+    group.writeEntry("Save IPTC Credits", d->saveIptcCredits);
+
+    group.writeEntry("Save EXIF Comments", d->saveComments);
+    group.writeEntry("Save Date Time", d->saveDateTime);
+    group.writeEntry("Save Rating", d->saveRating);
+
+    group.writeEntry("IPTC Author", d->author);
+    group.writeEntry("IPTC Author Title", d->authorTitle);
+    group.writeEntry("IPTC Credit", d->credit);
+    group.writeEntry("IPTC Source", d->source);
+    group.writeEntry("IPTC Copyright", d->copyright);
+
+    // ---------------------------------------------------------------------
+
+    group = config->group("General Settings");
+
+    group.writeEntry("Show Splash", d->showSplash);
+    group.writeEntry("Use Trash", d->useTrash);
+    group.writeEntry("Show Trash Delete Dialog", d->showTrashDeleteDialog);
+    group.writeEntry("Apply Sidebar Changes Directly", d->sidebarApplyDirectly);
+    group.writeEntry("Scan At Start", d->scanAtStart);
 
     config->sync();
 }

@@ -251,18 +251,18 @@ void DateFolderView::slotSelectionChanged()
 void DateFolderView::loadViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup(name());
+    KConfigGroup group = config->group(name());
     
     QString selected;
     if(config->hasKey("LastSelectedItem"))
     {
-        selected = config->readEntry("LastSelectedItem");
+        selected = group.readEntry("LastSelectedItem");
     }
 
     QStringList openFolders;
     if(config->hasKey("OpenFolders"))
     {
-        openFolders = config->readListEntry("OpenFolders");
+        openFolders = group.readListEntry("OpenFolders");
     }
     
     DateFolderItem *item;
@@ -285,11 +285,11 @@ void DateFolderView::loadViewState()
 void DateFolderView::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup(name());
+    KConfigGroup group = config->group(name());
    
     DateFolderItem *item = dynamic_cast<DateFolderItem*>(d->listview->selectedItem());
     if(item)
-        config->writeEntry("LastSelectedItem", item->date());
+        group.writeEntry("LastSelectedItem", item->date());
     
     QStringList openFolders;
     Q3ListViewItemIterator it(d->listview);
@@ -301,7 +301,7 @@ void DateFolderView::saveViewState()
             openFolders.push_back(item->date());
         item = dynamic_cast<DateFolderItem*>(item->nextSibling());
     }
-    config->writeEntry("OpenFolders", openFolders);
+    group.writeEntry("OpenFolders", openFolders);
 }
 
 void DateFolderView::setSelected(Q3ListViewItem *item)

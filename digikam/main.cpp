@@ -273,11 +273,11 @@ int main(int argc, char *argv[])
     KApplication app;
 
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("General Settings");
-    QString version = config->readEntry("Version");
+    KConfigGroup group = config->group("General Settings");
+    QString version = group.readEntry("Version");
 
-    config->setGroup("Album Settings");
-    QString albumPath = config->readPathEntry("Album Path");
+    group = config->group("Album Settings");
+    QString albumPath = group.readEntry("Album Path");
 
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     // TEMPORARY SOLUTION

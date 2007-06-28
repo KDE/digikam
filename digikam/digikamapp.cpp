@@ -107,7 +107,7 @@ DigikamApp::DigikamApp()
     m_instance = this;
     d->config  = KGlobal::config();
 
-    if(d->config->readBoolEntry("Show Splash", true) &&
+    if(d->config->readEntry("Show Splash", true) &&
        !kapp->isSessionRestored())
     {
         d->splashScreen = new SplashScreen("digikam-splash.png");
@@ -248,15 +248,15 @@ void DigikamApp::show()
         {
             if (!setup(true))
             {
-                d->config->setGroup("Color Management");
-                d->config->writeEntry("EnableCM", false);
+                d->KConfigGroup group = config->group("Color Management");
+                d->group.writeEntry("EnableCM", false);
                 d->config->sync();
             }
         }
         else
         {
-            d->config->setGroup("Color Management");
-            d->config->writeEntry("EnableCM", false);
+            d->KConfigGroup group = config->group("Color Management");
+            d->group.writeEntry("EnableCM", false);
             d->config->sync();
         }
     }
@@ -1584,8 +1584,8 @@ void DigikamApp::slotToggleFullScreen()
     else
     {
         KSharedConfig::Ptr config = KGlobal::config();
-        config->setGroup("ImageViewer Settings");
-        bool fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
+        KConfigGroup group = config->group("ImageViewer Settings");
+        bool fullScreenHideToolBar = group.readEntry("FullScreen Hide ToolBar", false);
 
         menuBar()->hide();
         statusBar()->hide();

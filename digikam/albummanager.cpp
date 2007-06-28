@@ -234,11 +234,11 @@ void AlbumManager::setAlbumRoot(const QString &albumRoot, bool priority)
         // Copy an existing locale from the settings file (used < 0.8)
         // to the database.
         KSharedConfig::Ptr config = KGlobal::config();
-        config->setGroup("General Settings");
+        KConfigGroup group = config->group("General Settings");
         if (config->hasKey("Locale"))
         {
             DDebug() << "Locale found in configfile" << endl;
-            dbLocale = config->readEntry("Locale");
+            dbLocale = group.readEntry("Locale");
 
             // this hack is necessary, as we used to store the entire
             // locale info LC_ALL (for eg: en_US.UTF-8) earlier, 
@@ -293,8 +293,8 @@ void AlbumManager::setAlbumRoot(const QString &albumRoot, bool priority)
     // -- Check if we need to do scanning -------------------------------------
 
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("General Settings");
-    if (config->readBoolEntry("Scan At Start", true) ||
+    KConfigGroup group = config->group("General Settings");
+    if (group.readEntry("Scan At Start", true) ||
         DatabaseAccess().db()->getSetting("Scanned").isEmpty())
     {
         ScanLib sLib;
