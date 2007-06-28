@@ -1,12 +1,17 @@
+#Require by Greycstoration algorithm (CImg.h)
+ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/levels 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/curves 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/whitebalance 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/themeengine 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/thumbbar 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/jpegutils 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/imageproperties 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/threadimageio 
