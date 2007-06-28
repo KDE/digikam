@@ -1,6 +1,3 @@
-//Added by qt3to4:
-#include <QPixmap>
-#include <QCloseEvent>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -33,12 +30,14 @@ extern "C"
 
 // QT includes.
 
-#include <qstring.h>
-#include <qtimer.h>
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qdatetime.h>
+#include <QString>
+#include <QTimer>
+#include <QDir>
+#include <QFileInfo>
+#include <QDateTime>
 #include <QPointer>
+#include <QPixmap>
+#include <QCloseEvent>
 
 // KDE includes.
 
@@ -72,11 +71,11 @@ public:
         duration.start();
     }
 
-    bool                       cancel;
-    
-    QTime                      duration;
-    
-    QPointer<ThumbnailJob>  thumbJob;
+    bool                   cancel;
+
+    QTime                  duration;
+
+    QPointer<ThumbnailJob> thumbJob;
 };
 
 BatchThumbsGenerator::BatchThumbsGenerator(QWidget* parent)
@@ -136,12 +135,12 @@ void BatchThumbsGenerator::rebuildAllThumbs(int size)
 {
     QStringList allPicturesPath;
     QString thumbCacheDir = QDir::homePath() + "/.thumbnails/";
-    QString filesFilter   = AlbumSettings::componentData().getAllFileFilter();
-    bool exifRotate       = AlbumSettings::componentData().getExifRotate();
-    AlbumList palbumList  = AlbumManager::componentData().allPAlbums();
+    QString filesFilter   = AlbumSettings::componentData()->getAllFileFilter();
+    bool exifRotate       = AlbumSettings::componentData()->getExifRotate();
+    AlbumList palbumList  = AlbumManager::componentData()->allPAlbums();
 
     // Get all digiKam albums collection pictures path.
-    
+
     for (AlbumList::Iterator it = palbumList.begin();
          !d->cancel && (it != palbumList.end()); ++it )
     {
@@ -160,10 +159,10 @@ void BatchThumbsGenerator::rebuildAllThumbs(int size)
              !d->cancel && (it2 != albumItemsPath.end()); ++it2)
         {
             QFileInfo fi(*it2);
-            if (filesFilter.contains(fi.extension(false)))
+            if (filesFilter.contains(fi.suffix()))
                 pathSorted.append(*it2);
         }
-        
+
         allPicturesPath += pathSorted;
     }
 
@@ -177,7 +176,7 @@ void BatchThumbsGenerator::rebuildAllThumbs(int size)
         QString uri = "file://" + QDir::cleanPath(*it);
         KMD5 md5(QFile::encodeName(uri));
         uri = md5.hexDigest();
-    
+
         QString smallThumbPath = thumbCacheDir + "normal/" + uri + ".png";
         QString bigThumbPath   = thumbCacheDir + "large/"  + uri + ".png";
 
@@ -192,12 +191,12 @@ void BatchThumbsGenerator::rebuildAllThumbs(int size)
         d->thumbJob->kill();
         d->thumbJob = 0;
     }
-    
+
     d->thumbJob = new ThumbnailJob(KUrl::List(allPicturesPath), size, true, exifRotate);
-       
+
     connect(d->thumbJob, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
             this, SLOT(slotRebuildThumbDone(const KUrl&, const QPixmap&)));
-    
+
     connect(d->thumbJob, SIGNAL(signalFailed(const KUrl&)),
             this, SLOT(slotRebuildThumbDone(const KUrl&)));
 
@@ -237,5 +236,3 @@ void BatchThumbsGenerator::abort()
 }
 
 }  // namespace Digikam
-
-

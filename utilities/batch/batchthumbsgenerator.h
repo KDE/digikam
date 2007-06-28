@@ -24,12 +24,14 @@
 #ifndef BATCHTHUMBSGENERATOR_H
 #define BATCHTHUMBSGENERATOR_H
 
+// Qt includes.
+
+#include <QPixmap>
+#include <QCloseEvent>
+
 // Local includes.
 
 #include "dprogressdlg.h"
-//Added by qt3to4:
-#include <QPixmap>
-#include <QCloseEvent>
 
 class QWidget;
 class QPixmap;
@@ -61,13 +63,13 @@ private:
     void abort();
 
 protected:
-    
+
     void closeEvent(QCloseEvent *e);
 
 protected slots:
 
     void slotCancel();
-    
+
 private slots:
 
     void slotRebuildThumbs128();
