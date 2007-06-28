@@ -24,6 +24,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/cameragui 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas 
+                     ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/tools 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/setup 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/slideshow 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/batch 
@@ -52,6 +53,9 @@ SET(digikam_LIB_SRCS ${libslideshow_SRCS}
                      ${libgreycstoration_SRCS}
                      ${libdatabase_SRCS}
                      ${libsqlite2_SRCS}
+
+#                      ${liblighttable_SRCS}
+#                      ${libcameragui_SRCS}
 
 #                      kdateedit.cpp 
 #                      metadatahub.cpp 
@@ -137,8 +141,8 @@ TARGET_LINK_LIBRARIES(digikam
                       libdimgcanvas 
                       libdimgeditor 
                       libsetup 
-#                       libcameragui 
 #                       liblighttable 
+#                       libcameragui 
 
                       ${KDE4_KDECORE_LIBS} 
                       ${KDE4_KIO_LIBS} 
