@@ -175,7 +175,6 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     QGridLayout *settingsLayout = new QGridLayout(d->settingsArea);
     settingsLayout->setSpacing(KDialog::spacingHint());
     settingsLayout->setMargin(0);
-    d->settingsArea->setLayout(settingsLayout);
 
     // --------------------------------------------------
 

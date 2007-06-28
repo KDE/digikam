@@ -159,7 +159,6 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     QGridLayout *topLayout = new QGridLayout(histogramPage);
     topLayout->setSpacing(KDialog::spacingHint());
     topLayout->setMargin(KDialog::spacingHint());
-    histogramPage->setLayout(topLayout);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), histogramPage);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -269,6 +268,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     hlay2->setSpacing(KDialog::spacingHint());
     QLabel *label3     = new QLabel(i18n("Range:"), histogramPage);
     label3->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+
     d->minInterv = new QSpinBox(histogramPage);
     d->minInterv->setRange(0, 255);
     d->minInterv->setSingleStep(1);
@@ -292,9 +292,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     gbox->setWhatsThis( i18n("<p>Here you can see the statistical results calculated from the "
                              "selected histogram part. These values are available for all "
                              "channels."));
-    QGridLayout* grid = new QGridLayout();
+    QGridLayout* grid = new QGridLayout(gbox);
     grid->setSpacing(KDialog::spacingHint());
-    gbox->setLayout(grid);
 
     QLabel *label4 = new QLabel(i18n("Mean:"), gbox);
     label4->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
@@ -344,9 +343,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     // -------------------------------------------------------------
 
     QWidget *gbox2 = new QWidget(histogramPage);
-    QGridLayout* grid2 = new QGridLayout();
+    QGridLayout* grid2 = new QGridLayout(gbox2);
     grid->setSpacing(KDialog::spacingHint());
-    gbox2->setLayout(grid2);
 
     QLabel *label11     = new QLabel(i18n("Color depth:"), gbox2);
     label11->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
@@ -432,7 +430,7 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
     d->histogramWidget->stopHistogramComputation();
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("Image Properties SideBar"));
+    KConfigGroup group        = config->group(QString("Image Properties SideBar"));
     group.writeEntry("ImagePropertiesColors Tab", d->tab->currentIndex());
     group.writeEntry("Histogram Channel", d->channelCB->currentIndex());
     group.writeEntry("Histogram Scale", d->scaleBG->checkedId());

@@ -43,6 +43,12 @@
     <projectname>project</projectname>
     <projectname>project</projectname>
     <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
   </general>
   <kdevfileview>
     <groups>
@@ -100,7 +106,7 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell>libtool</dbgshell>
+      <dbgshell/>
       <programargs/>
       <gdbpath/>
       <configGdbScript/>
@@ -140,13 +146,13 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>/mnt/data/devel/SVN/trunk/graphics/digikam/project/../../</mainprogram>
+      <mainprogram>/home/gilles/Documents/devel/SVN/trunk/graphics/digikam/showfoto/showfoto</mainprogram>
       <programargs/>
       <terminal>false</terminal>
       <autocompile>false</autocompile>
       <envvars/>
       <globaldebugarguments/>
-      <globalcwd>../digikam/digikam</globalcwd>
+      <globalcwd>/home/gilles/Documents/devel/SVN/trunk/graphics/digikam/project/../..</globalcwd>
       <useglobalprogram>true</useglobalprogram>
       <autoinstall>false</autoinstall>
       <autokdesu>false</autokdesu>

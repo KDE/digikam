@@ -72,7 +72,6 @@ NavigateBarTab::~NavigateBarTab()
 void NavigateBarTab::setupNavigateBar(bool withBar)
 {
     m_navigateBarLayout = new QVBoxLayout(this);
-    setLayout(m_navigateBarLayout);
 
     if (withBar)
     {
