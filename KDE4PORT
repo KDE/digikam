@@ -57,15 +57,15 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  S
         |---imageeditor
         |-----canvas                            Gilles          X       X       DONE
         |-----editor
-            editorwindow.cpp                    Gilles          X       X       DONE                 Compile, but port yet fully complete
+            editorwindow.cpp                    Gilles          X       X       UNCOMPLETE           Compile, but port not yet fully complete
             imageiface.cpp                      Gilles          X       X       DONE
             imagewindow.cpp                                             X
         |-----tools                             Laurent         X       X       DONE
         |---lighttable                                                  
 	    lighttablepreview.cpp               Gilles                  X       DONE
 	    lighttableview.cpp                  Gilles                  X       DONE
-	    lighttablebar.cpp  
-	    lighttablewindow.cpp
+	    lighttablebar.cpp                   Gilles                  X       DONE
+	    lighttablewindow.cpp                                        X
         |---scripts                             Gilles                          DONE                 CMake port only is require.
         |---setup                               Gilles          X       X       DONE
         |---slideshow                           Laurent         X       X       DONE                 
