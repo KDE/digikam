@@ -227,6 +227,10 @@ SET(libdialog_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/ctrlpaneldlg.cpp
    )
 
+# KDE4_ADD_UI_FILES(libdialog_SRCS
+#                   ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/deletedialogbase.ui
+#                  )
+
 SET(libthemeengine_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/theme.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/texture.cpp 
@@ -271,11 +275,11 @@ SET(libimagepropertiesdigikam_SRCS
 #    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/talbumlistview.cpp
    )
 
-# SET(libdimgeditor_SRCS 
-#     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp 
-#     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp 
+ SET(libdimgeditor_SRCS 
+     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp 
+     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp 
 #     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imagewindow.cpp
-#    )
+    )
 
 SET(libbatch_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfojob.cpp 
