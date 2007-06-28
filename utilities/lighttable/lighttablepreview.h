@@ -26,10 +26,9 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qimage.h>
-#include <qsize.h>
-//Added by qt3to4:
+#include <QString>
+#include <QImage>
+#include <QSize>
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QDropEvent>
@@ -107,7 +106,7 @@ private slots:
     void slotPanIconHiden();
 
 private:
-    
+
     int  previewWidth();
     int  previewHeight();
     bool previewIsNull();

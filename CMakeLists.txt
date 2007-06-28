@@ -348,6 +348,13 @@ SET(libsqlite2_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/where.c
    )
 
+SET(liblighttable_SRCS 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablepreview.cpp 
+#    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablebar.cpp 
+#    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttableview.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablewindow.cpp 
+   )
+
 ADD_SUBDIRECTORY( libs )
 ADD_SUBDIRECTORY( utilities )
 ADD_SUBDIRECTORY( showfoto )

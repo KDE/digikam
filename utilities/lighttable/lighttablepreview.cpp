@@ -23,35 +23,32 @@
 
 // Qt includes.
 
-#include <qpainter.h>
-#include <qcursor.h>
-#include <qstring.h>
-#include <q3valuevector.h>
-#include <qfileinfo.h>
-#include <qtoolbutton.h>
-#include <qtooltip.h>
-#include <qpixmap.h>
-#include <qdrawutil.h>
-//Added by qt3to4:
 #include <Q3ValueList>
+#include <Q3ValueVector>
+#include <Q3PopupMenu>
+#include <QPainter>
+#include <QCursor>
+#include <QString>
+#include <QFileInfo>
+#include <QToolButton>
+#include <QPixmap>
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QResizeEvent>
-#include <Q3PopupMenu>
+#include <QDesktopWidget>
 
 // KDE includes.
 
+#include <k3process.h>
+#include <kservicetypetrader.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <kservice.h>
 #include <krun.h>
-#include <ktrader.h>
 #include <kmimetype.h>
-#include <kiconloader.h>
 #include <kcursor.h>
 #include <kdatetable.h>
 #include <kiconloader.h>
-#include <k3process.h>
 #include <kapplication.h>
 
 // Local includes.
@@ -63,7 +60,6 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "dragobjects.h"
-#include "fastscale.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
 #include "metadatahub.h"
@@ -127,7 +123,7 @@ public:
     PreviewLoadThread *previewThread;
     PreviewLoadThread *previewPreloadThread;
 };
-    
+
 LightTablePreview::LightTablePreview(QWidget *parent)
                  : PreviewWidget(parent)
 {
@@ -140,7 +136,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
         d->previewSize = 640;
     if (d->previewSize > 2560)
         d->previewSize = 2560;
-    
+
     viewport()->setAcceptDrops(true);
     setAcceptDrops(true); 
 
@@ -148,7 +144,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     d->cornerButton = new QToolButton(this);
-    d->cornerButton->setIconSet(SmallIcon("move"));
+    d->cornerButton->setIcon(SmallIcon("move"));
     d->cornerButton->hide();
     d->cornerButton->setToolTip( i18n("Pan the image"));
     setCornerWidget(d->cornerButton);
@@ -195,19 +191,19 @@ void LightTablePreview::setDragAndDropMessage()
     if (d->dragAndDropEnabled)
     {
         QPixmap pix(visibleWidth(), visibleHeight());
-        pix.fill(ThemeEngine::componentData().baseColor());
+        pix.fill(ThemeEngine::componentData()->baseColor());
         QPainter p(&pix);
-        p.setPen(QPen(ThemeEngine::componentData().textRegColor()));
+        p.setPen(QPen(ThemeEngine::componentData()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
-                   Qt::AlignCenter|Qt::TextWordWrap, 
+                   Qt::AlignCenter|Qt::TextWordWrap,
                    i18n("Drag and drop an image here"));
         p.end();
-        setImage(pix.convertToImage());
+        setImage(pix.toImage());
     }
 }
 
 void LightTablePreview::setImage(const DImg& image)
-{   
+{
     d->preview = image;
 
     updateZoomAndSize(true);
@@ -267,36 +263,38 @@ void LightTablePreview::setImagePath(const QString& path)
     }
 
     if (d->loadFullImageSize)
-        d->previewThread->loadHighQuality(LoadingDescription(path, 0, AlbumSettings::componentData().getExifRotate()));
+        d->previewThread->loadHighQuality(LoadingDescription(path, 0,
+                          AlbumSettings::componentData()->getExifRotate()));
     else
-        d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::componentData().getExifRotate()));
+        d->previewThread->load(LoadingDescription(path, d->previewSize,
+                          AlbumSettings::componentData()->getExifRotate()));
 }
 
 void LightTablePreview::slotGotImagePreview(const LoadingDescription &description, const DImg& preview)
 {
     if (description.filePath != d->path)
-        return;   
+        return;
 
     if (preview.isNull())
     {
         QPixmap pix(visibleWidth(), visibleHeight());
-        pix.fill(ThemeEngine::componentData().baseColor());
+        pix.fill(ThemeEngine::componentData()->baseColor());
         QPainter p(&pix);
         QFileInfo info(d->path);
-        p.setPen(QPen(ThemeEngine::componentData().textRegColor()));
+        p.setPen(QPen(ThemeEngine::componentData()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::TextWordWrap, 
                    i18n("Unable to display preview for\n\"%1\"")
                    .arg(info.fileName()));
         p.end();
-        setImage(DImg(pix.convertToImage()));
+        setImage(DImg(pix.toImage()));
 
         emit signalPreviewLoaded(false);
     }
     else
     {
         DImg img(preview);
-        if (AlbumSettings::componentData().getExifRotate())
+        if (AlbumSettings::componentData()->getExifRotate())
             d->previewThread->exifRotate(img, description.filePath);
         setImage(img);
         emit signalPreviewLoaded(true);
@@ -323,7 +321,7 @@ void LightTablePreview::slotNextPreload()
         return;
 
     d->previewPreloadThread->load(LoadingDescription(loadPath, d->previewSize,
-                                  AlbumSettings::componentData().getExifRotate()));
+                                  AlbumSettings::componentData()->getExifRotate()));
 }
 
 void LightTablePreview::setImageInfo(ImageInfo* info, ImageInfo *previous, ImageInfo *next)
@@ -360,27 +358,28 @@ void LightTablePreview::slotContextMenu()
 
     //-- Open With Actions ------------------------------------
 
-    KUrl url(d->imageInfo->kurl().path());
-    KMimeType::Ptr mimePtr = KMimeType::findByURL(url, 0, true, true);
+    KUrl url(d->imageInfo->fileUrl().path());
+    KMimeType::Ptr mimePtr = KMimeType::findByUrl(url, 0, true, true);
 
     Q3ValueVector<KService::Ptr> serviceVector;
-    KTrader::OfferList offers = KTrader::self()->query(mimePtr->name(), "Type == 'Application'");
+
+    const KService::List offers = KServiceTypeTrader::self()->query(mimePtr->name(), "Type == 'Application'");
+    KService::List::ConstIterator iter;
+    KService::Ptr ptr;
 
     Q3PopupMenu openWithMenu;
 
-    KTrader::OfferList::Iterator iter;
-    KService::Ptr ptr;
     int index = 100;
 
     for( iter = offers.begin(); iter != offers.end(); ++iter )
     {
         ptr = *iter;
-        openWithMenu.insertItem( ptr->pixmap(KIcon::Small), ptr->name(), index++);
+        openWithMenu.insertItem(SmallIcon(ptr->icon()), ptr->name(), index++);
         serviceVector.push_back(ptr);
     }
 
     DPopupMenu popmenu(this);
-    
+
     //-- Zoom actions -----------------------------------------------
 
     popmenu.insertItem(SmallIcon("viewmag"), i18n("Zoom in"), 17);
@@ -427,7 +426,7 @@ void LightTablePreview::slotContextMenu()
     // Assign Star Rating -------------------------------------------
 
     ratingMenu = new RatingPopupMenu();
-    
+
     connect(ratingMenu, SIGNAL(activated(int)),
             this, SLOT(slotAssignRating(int)));
 
@@ -483,7 +482,7 @@ void LightTablePreview::slotContextMenu()
     if (idm >= 100 && idm < 1000) 
     {
         KService::Ptr imageServicePtr = serviceVector[idm-100];
-        KRun::run(*imageServicePtr, url);
+        KRun::run(*imageServicePtr, url, this);
     }
 
     serviceVector.clear();
@@ -531,12 +530,12 @@ void LightTablePreview::slotAssignRating(int rating)
 
 void LightTablePreview::slotThemeChanged()
 {
-    setBackgroundColor(ThemeEngine::componentData().baseColor());
+    setBackgroundColor(ThemeEngine::componentData()->baseColor());
     frameChanged();
 }
 
 void LightTablePreview::slotCornerButtonPressed()
-{    
+{
     if (d->panIconPopup)
     {
         d->panIconPopup->hide();
@@ -556,10 +555,10 @@ void LightTablePreview::slotCornerButtonPressed()
 
     connect(pan, SIGNAL(signalSelectionMoved(QRect, bool)),
             this, SLOT(slotPanIconSelectionMoved(QRect, bool)));
-    
+
     connect(pan, SIGNAL(signalHiden()),
             this, SLOT(slotPanIconHiden()));
-    
+
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
     g.setY(g.y()+ viewport()->size().height());
@@ -666,9 +665,11 @@ void LightTablePreview::resetPreview()
 
 void LightTablePreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 {
-    DImg img     = d->preview.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());    
+    DImg img     = d->preview.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());
     QPixmap pix2 = img.convertToPixmap();
-    bitBlt(pix, 0, 0, &pix2, 0, 0);
+    QPainter p(pix);
+    p.drawPixmap(0, 0, pix2, 0, 0, pix2.width(), pix2.height());
+    p.end();
 }
 
 void LightTablePreview::contentsDragMoveEvent(QDragMoveEvent *e)
@@ -679,8 +680,8 @@ void LightTablePreview::contentsDragMoveEvent(QDragMoveEvent *e)
         Q3ValueList<int> albumIDs;
         Q3ValueList<int> imageIDs;
         KUrl::List      urls;
-        KUrl::List      kioURLs;        
-    
+        KUrl::List      kioURLs;
+
         if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs) ||
             AlbumDrag::decode(e, urls, albumID) ||
             TagDrag::canDecode(e))
@@ -703,7 +704,7 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
         KUrl::List      urls;
         KUrl::List      kioURLs;  
         ImageInfoList   list;
-    
+
         if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
         {
             for (Q3ValueList<int>::const_iterator it = imageIDs.begin();
@@ -719,7 +720,7 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
         else if (AlbumDrag::decode(e, urls, albumID))
         {
             Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
-    
+
             for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
                 it != itemIDs.end(); ++it)
             {
@@ -732,24 +733,24 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
         }
         else if(TagDrag::canDecode(e))
         {
-            QByteArray ba = e->encodedData("digikam/tag-id");
-            QDataStream ds(ba, QIODevice::ReadOnly);
+            QByteArray  ba = e->encodedData("digikam/tag-id");
+            QDataStream ds(ba);
             int tagID;
             ds >> tagID;
-    
+
             Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
             ImageInfoList imageInfoList;
-    
+
             for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
                 it != itemIDs.end(); ++it)
             {
                 list.append(new ImageInfo(*it));
             }
-        
+
             emit signalDroppedItems(list);
             e->accept();
             return;
-        }   
+        }
     }
 
     e->ignore();
@@ -773,11 +774,11 @@ void LightTablePreview::drawFrame(QPainter *p)
 {
     if (d->selected)
     {
-        qDrawPlainRect(p, frameRect(), ThemeEngine::componentData().thumbSelColor(), lineWidth());
-        qDrawPlainRect(p, frameRect(), ThemeEngine::componentData().textSelColor(), 2);
+        qDrawPlainRect(p, frameRect(), ThemeEngine::componentData()->thumbSelColor(), lineWidth());
+        qDrawPlainRect(p, frameRect(), ThemeEngine::componentData()->textSelColor(), 2);
     }
     else 
-        qDrawPlainRect(p, frameRect(), ThemeEngine::componentData().baseColor(), lineWidth());
+        qDrawPlainRect(p, frameRect(), ThemeEngine::componentData()->baseColor(), lineWidth());
 }
 
 }  // NameSpace Digikam

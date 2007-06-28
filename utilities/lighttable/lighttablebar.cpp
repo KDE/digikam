@@ -23,12 +23,11 @@
 
 // Qt includes.
 
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qimage.h>
-#include <qcursor.h>
-//Added by qt3to4:
 #include <Q3ValueList>
+#include <QPixmap>
+#include <QPainter>
+#include <QImage>
+#include <QCursor>
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QMouseEvent>
@@ -70,7 +69,7 @@ public:
         navigateByPair = false;
         toolTip        = 0;
     }
-    
+
     bool                  navigateByPair;
 
     QPixmap               ratingPixmap;
@@ -92,7 +91,7 @@ public:
 
     bool       onLeftPanel;
     bool       onRightPanel;
- 
+
     ImageInfo *info;
 };
 
@@ -120,8 +119,8 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
 
     QPainter painter(&d->ratingPixmap);
     painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
-                     ThemeEngine::componentData().textSpecialRegColor());
-    painter.end();    
+                     ThemeEngine::componentData()->textSpecialRegColor());
+    painter.end();
 
     if (orientation == Qt::Vertical)
         setMinimumWidth(d->ratingPixmap.width()*5 + 6 + 2*getMargin());
@@ -168,7 +167,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
 
     QPoint pos = QCursor::pos();
     LightTableBarItem *item = findItemByPos(e->pos());
-    if (!item) return;        
+    if (!item) return;
 
     RatingPopupMenu *ratingMenu = 0;
 
@@ -178,11 +177,11 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
         popmenu.insertItem(SmallIcon("previous"), i18n("Show on left panel"), 10);
         popmenu.insertItem(SmallIcon("next"), i18n("Show on right panel"), 11);
         popmenu.insertItem(SmallIcon("editimage"), i18n("Edit"), 12);
-        
+
         if (d->navigateByPair)
         {
-            popmenu.setItemEnabled(10, false);    
-            popmenu.setItemEnabled(11, false);    
+            popmenu.setItemEnabled(10, false);
+            popmenu.setItemEnabled(11, false);
         }
 
         popmenu.insertSeparator();
@@ -191,12 +190,12 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
         popmenu.insertSeparator();
 
         // Assign Star Rating -------------------------------------------
-    
+
         ratingMenu = new RatingPopupMenu();
-        
+
         connect(ratingMenu, SIGNAL(activated(int)),
                 this, SLOT(slotAssignRating(int)));
-    
+
         popmenu.insertItem(i18n("Assign Rating"), ratingMenu);
 
         switch(popmenu.exec(pos))
@@ -372,7 +371,7 @@ ImageInfoList LightTableBar::itemsImageInfoList()
         if (ltItem) 
         {
             ImageInfo *info = new ImageInfo(*(ltItem->info()));
-            list.append(info);            
+            list.append(info);
         }
     }
 
@@ -400,7 +399,7 @@ LightTableBarItem* LightTableBar::findItemByInfo(const ImageInfo* info) const
     {
         for (ThumbBarItem *item = firstItem(); item; item = item->next())
         {
-            LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);  
+            LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
             if (ltItem)
             {
                 if (ltItem->info()->id() == info->id())
@@ -419,7 +418,7 @@ LightTableBarItem* LightTableBar::findItemByPos(const QPoint& pos) const
         LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
         return ltItem;
     }
-    
+
     return 0;
 }
 
@@ -452,37 +451,37 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
     QPixmap bgPix;
 
     if (countItems() > 0)
-    {    
+    {
         int cy, cx, ts, y1, y2, x1, x2;
         QPixmap tile;
-    
+
         if (getOrientation() == Qt::Vertical)
         {
             cy = viewportToContents(er.topLeft()).y();
-                
+
             bgPix.resize(contentsRect().width(), er.height());
-            
+
             ts = getTileSize() + 2*getMargin();
             tile.resize(visibleWidth(), ts);
-            
+
             y1 = (cy/ts)*ts;
             y2 = ((y1 + er.height())/ts +1)*ts;
         }
         else
         {
             cx = viewportToContents(er.topLeft()).x();
-                
+
             bgPix.resize(er.width(), contentsRect().height());
-            
+
             ts = getTileSize() + 2*getMargin();
             tile.resize(ts, visibleHeight());
-            
+
             x1 = (cx/ts)*ts;
             x2 = ((x1 + er.width())/ts +1)*ts;
         }
-    
+
         bgPix.fill(te->baseColor());
-    
+
         for (ThumbBarItem *item = firstItem(); item; item = item->next())
         {
             if (getOrientation() == Qt::Vertical)
@@ -493,7 +492,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         tile = te->thumbSelPixmap(tile.width(), tile.height());
                     else
                         tile = te->thumbRegPixmap(tile.width(), tile.height());
-        
+
                     QPainter p(&tile);
                     if (item == currentItem())
                     {
@@ -506,7 +505,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         p.drawRect(0, 0, tile.width(), tile.height());
                     }
                     p.end();
-                    
+
                     if (item->pixmap())
                     {
                         QPixmap pix; 
@@ -515,9 +514,9 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         int x = (tile.width()  - pix.width())/2;
                         int y = (tile.height() - pix.height())/2;
                         bitBlt(&tile, x, y, &pix);
-    
+
                         LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
-        
+
                         if (ltItem->isOnLeftPanel())
                         {
                             QPixmap lPix = SmallIcon("previous"); 
@@ -528,7 +527,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                             QPixmap rPix = SmallIcon("next"); 
                             bitBlt(&tile, tile.width() - getMargin() - rPix.width(), getMargin(), &rPix);
                         }
-    
+
                         QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height(), 
                                 tile.width(), d->ratingPixmap.height());
                         int rating = ltItem->info()->rating();
@@ -537,7 +536,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         QPainter p(&tile);
                         p.drawTiledPixmap(xr, r.y(), wr, r.height(), d->ratingPixmap);
                     }
-                    
+
                     bitBlt(&bgPix, 0, item->position() - cy, &tile);
                 }
             }
@@ -549,7 +548,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         tile = te->thumbSelPixmap(tile.width(), tile.height());
                     else
                         tile = te->thumbRegPixmap(tile.width(), tile.height());
-        
+
                     QPainter p(&tile);
                     if (item == currentItem())
                     {
@@ -562,7 +561,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         p.drawRect(0, 0, tile.width(), tile.height());
                     }
                     p.end();
-                    
+
                     if (item->pixmap())
                     {
                         QPixmap pix; 
@@ -573,7 +572,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         bitBlt(&tile, x, y, &pix);
     
                         LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
-        
+
                         if (ltItem->isOnLeftPanel())
                         {
                             QPixmap lPix = SmallIcon("previous"); 
@@ -584,7 +583,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                             QPixmap rPix = SmallIcon("next"); 
                             bitBlt(&tile, tile.width() - getMargin() - rPix.width(), getMargin(), &rPix);
                         }
-    
+
                         QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height(), 
                                 tile.width(), d->ratingPixmap.height());
                         int rating = ltItem->info()->rating();
@@ -593,7 +592,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         QPainter p(&tile);
                         p.drawTiledPixmap(xr, r.y(), wr, r.height(), d->ratingPixmap);
                     }
-                    
+
                     bitBlt(&bgPix, item->position() - cx, 0, &tile);
                 }
             }
@@ -662,7 +661,7 @@ void LightTableBar::contentsDragMoveEvent(QDragMoveEvent *e)
     Q3ValueList<int> albumIDs;
     Q3ValueList<int> imageIDs;
     KUrl::List      urls;
-    KUrl::List      kioURLs;        
+    KUrl::List      kioURLs;
 
     if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs) ||
         AlbumDrag::decode(e, urls, albumID) ||
@@ -681,7 +680,7 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
     Q3ValueList<int> albumIDs;
     Q3ValueList<int> imageIDs;
     KUrl::List      urls;
-    KUrl::List      kioURLs;        
+    KUrl::List      kioURLs;
 
     if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
     {
@@ -700,7 +699,7 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
                 delete info;
             }
         }
-        
+
         emit signalDroppedItems(imageInfoList);
         e->accept();
     }
@@ -749,7 +748,7 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
                 delete info;
             }
         }
-       
+
         emit signalDroppedItems(imageInfoList);
         e->accept();
     }   
@@ -762,7 +761,7 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
 // -------------------------------------------------------------------------
 
 LightTableBarItem::LightTableBarItem(LightTableBar *view, ImageInfo *info)
-                 : ThumbBarItem(view, info->kurl())                      
+                 : ThumbBarItem(view, info->kurl())
 {
     d = new LightTableBarItemPriv;
     d->info = info;
@@ -819,7 +818,7 @@ QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
             settings->getToolTipsShowRating())
         {
             tip += m_headBeg + i18n("digiKam Properties") + m_headEnd;
-    
+
             if (settings->getToolTipsShowAlbumName())
             {
                 PAlbum* album = AlbumManager::componentData().findPAlbum(info->albumId());
@@ -827,24 +826,24 @@ QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
                     tip += m_cellSpecBeg + i18n("Album:") + m_cellSpecMid + 
                            album->url().remove(0, 1) + m_cellSpecEnd;
             }
-    
+
             if (settings->getToolTipsShowComments())
             {
                 str = info->comment();
                 if (str.isEmpty()) str = QString("---");
                 tip += m_cellSpecBeg + i18n("Comments:") + m_cellSpecMid + breakString(str) + m_cellSpecEnd;
             }
-    
+
             if (settings->getToolTipsShowTags())
             {
                 QStringList tagPaths = AlbumManager::componentData().tagPaths(info->tagIds(), false);
-    
+
                 str = tagPaths.join(", ");
                 if (str.isEmpty()) str = QString("---");
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 tip += m_cellSpecBeg + i18n("Tags:") + m_cellSpecMid + str + m_cellSpecEnd;
             }
-    
+
             if (settings->getToolTipsShowRating())
             {
                 str.fill( '*', info->rating() );

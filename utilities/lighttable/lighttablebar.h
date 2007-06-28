@@ -29,11 +29,6 @@
 #include "thumbbar.h"
 #include "imageinfo.h"
 #include "digikam_export.h"
-//Added by qt3to4:
-#include <QDropEvent>
-#include <QMouseEvent>
-#include <QDragMoveEvent>
-#include <QPaintEvent>
 
 class QDragMoveEvent;
 class QDropEvent;
@@ -55,7 +50,8 @@ class DIGIKAM_EXPORT LightTableBar : public ThumbBarView
 
 public:
 
-    LightTableBar(QWidget* parent, int orientation=Qt::Vertical, bool exifRotate=false);
+    LightTableBar(QWidget* parent, int orientation=Qt::Vertical, 
+                  bool exifRotate=false);
     ~LightTableBar();
 
     ImageInfo*    currentItemImageInfo() const;
@@ -129,7 +125,7 @@ public:
     void setOnRightPanel(bool on);
     bool isOnLeftPanel() const;
     bool isOnRightPanel() const;
-    
+
 private:
 
     LightTableBarItemPriv *d;

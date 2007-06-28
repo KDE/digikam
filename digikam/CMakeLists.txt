@@ -37,9 +37,9 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
 # Shared libdigikam ################################################################
 
 SET(digikam_LIB_SRCS 
-#                      ${liblighttable_SRCS}
 #                      ${libcameragui_SRCS}
 
+                     ${liblighttable_SRCS}
                      ${libslideshow_SRCS}
                      ${libbatch_SRCS}
                      ${libdimgcanvas_SRCS}
@@ -148,7 +148,7 @@ TARGET_LINK_LIBRARIES(digikam
                       libdimgcanvas 
                       libdimgeditor 
                       libsetup 
-#                       liblighttable 
+                      liblighttable 
 #                       libcameragui 
 
                       ${KDE4_KDECORE_LIBS} 
