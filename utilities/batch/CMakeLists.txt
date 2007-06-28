@@ -13,7 +13,7 @@ SET(libbatch_STAT_SRCS imageinfojob.cpp
                        imageinfoalbumsjob.cpp
                        batchthumbsgenerator.cpp 
                        batchalbumssyncmetadata.cpp 
-#                       batchsyncmetadata.cpp
+                       batchsyncmetadata.cpp
    )
 
 KDE4_AUTOMOC(${libbatch_STAT_SRCS})

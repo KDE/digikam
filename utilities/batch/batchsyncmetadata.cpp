@@ -24,7 +24,7 @@
 
 // QT includes.
 
-#include <qstring.h>
+#include <QString>
 
 // KDE includes.
 
@@ -62,11 +62,11 @@ public:
     int                    count;
 
     Album                 *album;
-    
+
     ImageInfoJob          *imageInfoJob;
 
     ImageInfoList          imageInfoList;
- 
+
     ImageInfo             *imageInfo;
 };
 
@@ -139,7 +139,7 @@ void BatchSyncMetadata::parsePicture()
         fileHub.load(d->imageInfo);
         // write out to file DMetadata
         fileHub.write(d->imageInfo->filePath());
-   
+
         emit signalProgressValue((int)((d->count++/(float)d->imageInfoList.count())*100.0));
 
         d->imageInfo = d->imageInfoList.next();
@@ -152,7 +152,7 @@ void BatchSyncMetadata::parsePicture()
 void BatchSyncMetadata::slotAbort()
 {
     d->cancel = true;
-    d->imageInfoJob->stop();    
+    d->imageInfoJob->stop();
 }
 
 void BatchSyncMetadata::complete()
@@ -162,5 +162,3 @@ void BatchSyncMetadata::complete()
 }
 
 }  // namespace Digikam
-
-
