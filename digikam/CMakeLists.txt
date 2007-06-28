@@ -22,6 +22,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
                      ${CMAKE_SOURCE_DIR}/digikam/libs/threadimageio 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/database
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/database/sqlite2
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/cameragui 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor 
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas 
@@ -179,11 +180,9 @@ INSTALL(TARGETS digikam_bin DESTINATION ${BIN_INSTALL_DIR})
 
 # Others Files to install #######################################################
 
-INSTALL( FILES  digikam.desktop DESTINATION ${XDG_APPS_DIR} )
-INSTALL( FILES  digikamui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam )
-INSTALL( FILES  digikam_export.h DESTINATION ${INCLUDE_INSTALL_DIR} )
-
-
+INSTALL( FILES digikam.desktop DESTINATION ${XDG_APPS_DIR} )
+INSTALL( FILES digikamui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam )
+INSTALL( FILES digikam_export.h DESTINATION ${INCLUDE_INSTALL_DIR} )
 
 
 #original Makefile.am contents follow:
