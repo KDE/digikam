@@ -51,7 +51,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  S
         |-----metadata                          Gilles          X       X       DONE
 
  2      |-utilities                                                                                  Utilities components are used as "libs" by digiKam main interface.
-        |---batch                               Laurent                 X
+        |---batch                               Gilles                  X       DONE
         |---cameragui                                                   X
         |---hotplug                             Laurent                         DONE                 CMake port only is require.
         |---imageeditor
