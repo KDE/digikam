@@ -41,7 +41,6 @@
 #include <krun.h>
 #include <ktrader.h>
 #include <kmimetype.h>
-#include <kiconloader.h>
 #include <kcursor.h>
 #include <kdatetbl.h>
 #include <kiconloader.h>
@@ -57,7 +56,6 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "dragobjects.h"
-#include "fastscale.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
 #include "metadatahub.h"
