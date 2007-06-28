@@ -55,7 +55,7 @@ QImage DPopupMenu::s_dpopupmenu_sidePixmap;
 QColor DPopupMenu::s_dpopupmenu_sidePixmapColor;
 
 DPopupMenu::DPopupMenu( QWidget* parent, const char* name )
-          : KMenu(parent)
+          : Q3PopupMenu(parent)
 {
     setObjectName(name);
 
@@ -133,27 +133,27 @@ QColor DPopupMenu::calcPixmapColor()
 
 void DPopupMenu::setMinimumSize(const QSize & s)
 {
-    KMenu::setMinimumSize(s.width() + s_dpopupmenu_sidePixmap.width(), s.height());
+    Q3PopupMenu::setMinimumSize(s.width() + s_dpopupmenu_sidePixmap.width(), s.height());
 }
 
 void DPopupMenu::setMaximumSize(const QSize & s)
 {
-    KMenu::setMaximumSize(s.width() + s_dpopupmenu_sidePixmap.width(), s.height());
+    Q3PopupMenu::setMaximumSize(s.width() + s_dpopupmenu_sidePixmap.width(), s.height());
 }
 
 void DPopupMenu::setMinimumSize(int w, int h)
 {
-    KMenu::setMinimumSize(w + s_dpopupmenu_sidePixmap.width(), h);
+    Q3PopupMenu::setMinimumSize(w + s_dpopupmenu_sidePixmap.width(), h);
 }
 
 void DPopupMenu::setMaximumSize(int w, int h)
 {
-  KMenu::setMaximumSize(w + s_dpopupmenu_sidePixmap.width(), h);
+    Q3PopupMenu::setMaximumSize(w + s_dpopupmenu_sidePixmap.width(), h);
 }
 
 void DPopupMenu::resizeEvent(QResizeEvent * e)
 {
-    KMenu::resizeEvent( e );
+    Q3PopupMenu::resizeEvent( e );
 
 #if 0
     setFrameRect( QStyle::visualRect( QRect( s_dpopupmenu_sidePixmap.width(), 0,
@@ -165,7 +165,7 @@ void DPopupMenu::resizeEvent(QResizeEvent * e)
 void DPopupMenu::resize( int width, int height )
 {
     width = qMax(width, maximumSize().width());
-    KMenu::resize(width, height);
+    Q3PopupMenu::resize(width, height);
 }
 
 void DPopupMenu::paintEvent( QPaintEvent* e )
@@ -191,10 +191,9 @@ void DPopupMenu::paintEvent( QPaintEvent* e )
         p.drawImage( drawRect.topLeft(), s_dpopupmenu_sidePixmap, pixRect );
     }
 
-    KMenu::paintEvent( e );
+    Q3PopupMenu::paintEvent( e );
 
     p.setClipRegion( e->region() );
-
 }
 
 }  // namespace Digikam
