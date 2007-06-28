@@ -3,6 +3,7 @@ ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/levels 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/lprof 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/curves 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/whitebalance 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/greycstoration 
@@ -34,7 +35,11 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
 
 # Shared libdigikam ################################################################
 
-SET(digikam_LIB_SRCS ${libslideshow_SRCS}
+SET(digikam_LIB_SRCS 
+#                      ${liblighttable_SRCS}
+#                      ${libcameragui_SRCS}
+
+                     ${libslideshow_SRCS}
                      ${libbatch_SRCS}
                      ${libdimgcanvas_SRCS}
                      ${libdimgeditor_SRCS}
@@ -45,17 +50,16 @@ SET(digikam_LIB_SRCS ${libslideshow_SRCS}
                      ${libiccprofileswidgets_SRCS}
                      ${libmetadatawidgets_SRCS}
                      ${libimagepluginswidgets_SRCS}
-                     ${libdialog_SRCS}
                      ${libjpegutils_SRCS}
                      ${libdimg_SRCS}
+                     ${libdimgloaders_SRCS}
+                     ${libdimgfilters_SRCS}
                      ${libimagepropertiesdigikam_SRCS}
                      ${libthreadimageio_SRCS}
                      ${libgreycstoration_SRCS}
                      ${libdatabase_SRCS}
                      ${libsqlite2_SRCS}
-
-#                      ${liblighttable_SRCS}
-#                      ${libcameragui_SRCS}
+                     ${libdialog_SRCS}
 
 #                      kdateedit.cpp 
 #                      metadatahub.cpp 
@@ -133,6 +137,8 @@ TARGET_LINK_LIBRARIES(digikam
                       libdialog 
                       libjpegutils 
                       libdimg 
+                      libdimgloaders 
+                      libdimgfilters 
                       libimagepropertiesdigikam 
                       libthreadimageio 
                       libgreycstoration 
