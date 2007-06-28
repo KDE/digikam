@@ -375,7 +375,7 @@ void LightTablePreview::slotContextMenu()
     {
         ptr = *iter;
         openWithMenu.insertItem(SmallIcon(ptr->icon()), ptr->name(), index++);
-        serviceVector.push_back(ptr);
+        serviceVector.push_back(ptr); 
     }
 
     DPopupMenu popmenu(this);

@@ -27,8 +27,8 @@
 
 // Qt includes.
 
-#include <q3frame.h>
-#include <qstring.h>
+#include <QFrame>
+#include <QString>
 
 // Local includes.
 
@@ -40,7 +40,7 @@ namespace Digikam
 
 class LightTableViewPriv;
 
-class DIGIKAM_EXPORT LightTableView : public Q3Frame
+class DIGIKAM_EXPORT LightTableView : public QFrame
 {
 
 Q_OBJECT
@@ -106,11 +106,11 @@ public slots:
 
     void slotDecreaseZoom();
     void slotIncreaseZoom();
-    void slotDecreaseLeftZoom();   
+    void slotDecreaseLeftZoom();
     void slotIncreaseLeftZoom();
     void slotLeftZoomSliderChanged(int);
 
-    void slotDecreaseRightZoom();   
+    void slotDecreaseRightZoom();
     void slotIncreaseRightZoom();
     void slotRightZoomSliderChanged(int);
 
@@ -127,7 +127,7 @@ private :
 
 private :
 
-    LightTableViewPriv* d;    
+    LightTableViewPriv* d;
 };
 
 }  // namespace Digikam

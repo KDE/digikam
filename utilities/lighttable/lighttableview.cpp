@@ -24,10 +24,7 @@
 
 // Qt includes.
 
-#include <qlayout.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3Frame>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -61,30 +58,31 @@ public:
     bool               leftLoading;     // To not sync right panel during left loading.
     bool               rightLoading;    // To not sync left panel during right loading.
 
-    Q3GridLayout       *grid;
+    QGridLayout       *grid;
 
     LightTablePreview *leftPreview;
     LightTablePreview *rightPreview;
 };
 
 LightTableView::LightTableView(QWidget *parent)
-              : Q3Frame(parent, 0, Qt::WDestructiveClose)
+              : QFrame(parent)
 {
     d = new LightTableViewPriv;
 
-    setFrameStyle(Q3Frame::NoFrame);
-    setMargin(0);
+    setAttribute(Qt::WA_DeleteOnClose);
+    setFrameStyle(QFrame::NoFrame);
     setLineWidth(0);
 
-    d->grid         = new Q3GridLayout(this, 1, 1, 0, 1);
+    d->grid         = new QGridLayout();
+    setLayout(d->grid);
     d->leftPreview  = new LightTablePreview(this);
     d->rightPreview = new LightTablePreview(this);
 
-    d->grid->addMultiCellWidget(d->leftPreview,  0, 0, 0, 0);
-    d->grid->addMultiCellWidget(d->rightPreview, 0, 0, 1, 1);
+    d->grid->addWidget(d->leftPreview,  0, 0, 0, 0);
+    d->grid->addWidget(d->rightPreview, 0, 0, 1, 1);
 
-    d->grid->setColStretch(0, 10),
-    d->grid->setColStretch(1, 10),
+    d->grid->setColumnStretch(0, 10),
+    d->grid->setColumnStretch(1, 10),
     d->grid->setRowStretch(0, 10),
 
     // Left panel connections ------------------------------------------------
@@ -114,16 +112,16 @@ LightTableView::LightTableView(QWidget *parent)
             this, SIGNAL(signalLeftPanelLeftButtonClicked()));
 
     // Right panel connections ------------------------------------------------
-    
+
     connect(d->rightPreview, SIGNAL(signalZoomFactorChanged(double)),
             this, SIGNAL(signalRightZoomFactorChanged(double)));
 
     connect(d->rightPreview, SIGNAL(contentsMoving(int, int)),
             this, SLOT(slotRightContentsMoved(int, int)));
-    
+
     connect(d->rightPreview, SIGNAL(signalDeleteItem(ImageInfo*)),
             this, SIGNAL(signalDeleteItem(ImageInfo*)));
-    
+
     connect(d->rightPreview, SIGNAL(signalEditItem(ImageInfo*)),
             this, SIGNAL(signalEditItem(ImageInfo*)));
 
@@ -178,7 +176,7 @@ void LightTableView::slotDecreaseZoom()
         slotDecreaseLeftZoom();
     else if (d->rightPreview->isSelected())
         slotDecreaseRightZoom();
-}   
+}
 
 void LightTableView::slotIncreaseZoom()
 {
@@ -192,27 +190,27 @@ void LightTableView::slotIncreaseZoom()
         slotIncreaseLeftZoom();
     else if (d->rightPreview->isSelected())
         slotIncreaseRightZoom();
-}   
+}
 
 void LightTableView::slotDecreaseLeftZoom()
 {
     d->leftPreview->slotDecreaseZoom(); 
-}   
+}
 
 void LightTableView::slotIncreaseLeftZoom()
 {
     d->leftPreview->slotIncreaseZoom(); 
-}   
+}
 
 void LightTableView::slotDecreaseRightZoom()
 {
     d->rightPreview->slotDecreaseZoom(); 
-}   
+}
 
 void LightTableView::slotIncreaseRightZoom()
 {
     d->rightPreview->slotIncreaseZoom(); 
-}   
+}
 
 void LightTableView::setLeftZoomFactor(double z)
 {
@@ -312,7 +310,7 @@ void LightTableView::slotLeftContentsMoved(int x, int y)
     {
         disconnect(d->rightPreview, SIGNAL(signalZoomFactorChanged(double)),
                    this, SIGNAL(signalRightZoomFactorChanged(double)));
-    
+
         disconnect(d->rightPreview, SIGNAL(contentsMoving(int, int)),
                    this, SLOT(slotRightContentsMoved(int, int)));
 
@@ -322,7 +320,7 @@ void LightTableView::slotLeftContentsMoved(int x, int y)
 
         connect(d->rightPreview, SIGNAL(signalZoomFactorChanged(double)),
                 this, SIGNAL(signalRightZoomFactorChanged(double)));
-    
+
         connect(d->rightPreview, SIGNAL(contentsMoving(int, int)),
                 this, SLOT(slotRightContentsMoved(int, int)));
     }
@@ -334,7 +332,7 @@ void LightTableView::slotRightContentsMoved(int x, int y)
     {
         disconnect(d->leftPreview, SIGNAL(signalZoomFactorChanged(double)),
                    this, SIGNAL(signalLeftZoomFactorChanged(double)));
-    
+
         disconnect(d->leftPreview, SIGNAL(contentsMoving(int, int)),
                    this, SLOT(slotLeftContentsMoved(int, int)));
 
@@ -345,7 +343,7 @@ void LightTableView::slotRightContentsMoved(int x, int y)
 
         connect(d->leftPreview, SIGNAL(signalZoomFactorChanged(double)),
                 this, SIGNAL(signalLeftZoomFactorChanged(double)));
-    
+
         connect(d->leftPreview, SIGNAL(contentsMoving(int, int)),
                 this, SLOT(slotLeftContentsMoved(int, int)));
     }
@@ -364,13 +362,13 @@ ImageInfo* LightTableView::rightImageInfo() const
 void LightTableView::setLeftImageInfo(ImageInfo* info)
 {
     d->leftLoading = true;
-    d->leftPreview->setImageInfo(info);    
+    d->leftPreview->setImageInfo(info);
 }
 
 void LightTableView::setRightImageInfo(ImageInfo* info)
 {
     d->rightLoading = true;
-    d->rightPreview->setImageInfo(info);    
+    d->rightPreview->setImageInfo(info);
 }
 
 void LightTableView::slotLeftPreviewLoaded(bool success)
@@ -429,4 +427,3 @@ void LightTableView::checkForSelection(ImageInfo* info)
 }
 
 }  // namespace Digikam
-
