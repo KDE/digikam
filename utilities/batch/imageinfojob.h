@@ -27,8 +27,8 @@
 
 // Qt includes.
 
-#include <qobject.h>
-#include <q3cstring.h>
+#include <QObject>
+#include <QByteArray>
 
 // Local includes.
 
@@ -56,7 +56,7 @@ public:
 
     void allItemsFromAlbum(Album *album);
     void stop();
-    
+
 signals:
 
     void signalItemsInfo(const ImageInfoList& items);

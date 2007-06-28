@@ -24,8 +24,8 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qdatastream.h>
+#include <QString>
+#include <QDataStream>
 
 // KDE includes.
 
@@ -123,7 +123,7 @@ void ImageInfoJob::slotData(KIO::Job*, const QByteArray& data)
         return;
 
     ImageInfoList itemsList;
-    QDataStream   ds(data, QIODevice::ReadOnly);
+    QDataStream   ds(data);
 
     while (!ds.atEnd())
     {

@@ -1,19 +1,20 @@
 
-INCLUDE_DIRECTORIES(  
+INCLUDE_DIRECTORIES(
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/thumbbar 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common 
                      ${CMAKE_SOURCE_DIR}/digikam/libs/database 
                      ${KDE4_INCLUDE_DIR} 
-                     ${QT_INCLUDES}  
+                     ${QT_INCLUDES}
                    )
 
-SET(libbatch_STAT_SRCS batchthumbsgenerator.cpp 
+SET(libbatch_STAT_SRCS imageinfojob.cpp 
+                       batchthumbsgenerator.cpp 
                        batchalbumssyncmetadata.cpp 
-                       imageinfojob.cpp 
                        imageinfoalbumsjob.cpp 
-                       batchsyncmetadata.cpp)
+                       batchsyncmetadata.cpp
+   )
 
 KDE4_AUTOMOC(${libbatch_STAT_SRCS})
 
