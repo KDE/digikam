@@ -10,10 +10,10 @@ INCLUDE_DIRECTORIES(
                    )
 
 SET(libbatch_STAT_SRCS imageinfojob.cpp 
-                       batchthumbsgenerator.cpp 
-                       batchalbumssyncmetadata.cpp 
-                       imageinfoalbumsjob.cpp 
-                       batchsyncmetadata.cpp
+                       imageinfoalbumsjob.cpp
+#                       batchthumbsgenerator.cpp 
+#                       batchalbumssyncmetadata.cpp 
+#                       batchsyncmetadata.cpp
    )
 
 KDE4_AUTOMOC(${libbatch_STAT_SRCS})

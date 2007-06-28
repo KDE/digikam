@@ -23,7 +23,7 @@
 
 // Qt includes.
 
-#include <qstring.h>
+#include <QString>
 
 // KDE includes.
 
@@ -61,7 +61,7 @@ ImageInfoAlbumsJob::ImageInfoAlbumsJob()
 
     connect(&d->imageInfoJob, SIGNAL(signalItemsInfo(const ImageInfoList&)),
             this, SLOT(slotItemsInfo(const ImageInfoList&)));
-    
+
     connect(&d->imageInfoJob, SIGNAL(signalCompleted()),
             this, SLOT(slotComplete()));
 }
@@ -75,7 +75,7 @@ void ImageInfoAlbumsJob::allItemsFromAlbums(const AlbumList& albumsList)
 {
     if (albumsList.isEmpty())
         return;
-    
+
     d->albumsList = albumsList;
     d->albumIt    = d->albumsList.begin();
     parseAlbum();
@@ -104,7 +104,7 @@ void ImageInfoAlbumsJob::slotItemsInfo(const ImageInfoList& items)
         emit signalCompleted(d->itemsList);
         return;
     }
- 
+
     parseAlbum();
 }
 
@@ -117,7 +117,7 @@ void ImageInfoAlbumsJob::slotComplete()
         emit signalCompleted(d->itemsList);
         return;
     }
- 
+
     parseAlbum();
 }
 
