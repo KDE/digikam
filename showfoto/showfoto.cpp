@@ -163,14 +163,18 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // -- Show splash at start ----------------------------
 
+ /* TODO : These line are really mandatory with KDE4 ?
+
+    KGlobal::dirs()->addResourceType("data", KGlobal::dirs()->kde_default("data") + "digikam");
+    KIconLoader::global()->addAppDir("digikam");*/
+
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("ImageViewer Settings");
-    KGlobal::dirs()->addResourceType("data", KGlobal::dirs()->kde_default("data") + "digikam");
-    KIconLoader::global()->addAppDir("digikam");
 
     if(group.readEntry("ShowSplash", true) && !kapp->isSessionRestored())
     {
         d->splash = new Digikam::SplashScreen("showfoto-splash.png");
+        d->splash->show();
     }
 
     // Setup loading cache
@@ -182,7 +186,6 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     if(d->splash)
     {
         d->splash->message(i18n("Checking ICC repository"), Qt::AlignLeft, Qt::white);
-        d->splash->show();
     }
 
     d->validIccPath = Digikam::SetupICC::iccRepositoryIsValid();
@@ -417,7 +420,6 @@ void ShowFoto::setupUserArea()
     if(!group.readEntry("HorizontalThumbbar", false)) // Vertical thumbbar layout
     {
         QHBoxLayout *hlay = new QHBoxLayout(widget);
-        widget->setLayout(hlay);
         m_splitter        = new QSplitter(widget);
         d->thumbBar       = new Digikam::ThumbBarView(m_splitter, Digikam::ThumbBarView::Vertical);
         m_canvas          = new Digikam::Canvas(m_splitter);
@@ -436,7 +438,6 @@ void ShowFoto::setupUserArea()
         m_splitter        = new QSplitter(Qt::Horizontal, widget);
         QWidget* widget2  = new QWidget(m_splitter);
         QVBoxLayout *vlay = new QVBoxLayout(widget2);
-        widget2->setLayout(vlay);
         d->vSplitter      = new QSplitter(Qt::Vertical, widget2);
         m_canvas          = new Digikam::Canvas(d->vSplitter);
         d->thumbBar       = new Digikam::ThumbBarView(d->vSplitter, Digikam::ThumbBarView::Horizontal);
@@ -444,15 +445,14 @@ void ShowFoto::setupUserArea()
         m_canvas->setSizePolicy(rightSzPolicy);
         m_canvas->makeDefaultEditingCanvas();
 
-        d->vSplitter->setFrameStyle( Q3Frame::NoFrame );
-        d->vSplitter->setFrameShadow( Q3Frame::Plain );
-        d->vSplitter->setFrameShape( Q3Frame::NoFrame );
+        d->vSplitter->setFrameStyle( QFrame::NoFrame );
+        d->vSplitter->setFrameShadow( QFrame::Plain );
+        d->vSplitter->setFrameShape( QFrame::NoFrame );
         d->vSplitter->setOpaqueResize(false);
 
         vlay->addWidget(d->vSplitter);
 
         QHBoxLayout *hlay = new QHBoxLayout(widget);
-        widget->setLayout(hlay);
         d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
                                                                 Digikam::Sidebar::DockRight);
         hlay->addWidget(m_splitter);
