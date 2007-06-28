@@ -18,80 +18,10 @@ ADD_DEFINITIONS(-DQT3_SUPPORT
                 -DQT3_SUPPORT_WARNINGS
                )
 
+# Common targets parts ##########################################################
+
 SET(libcurves_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/curves/imagecurves.cpp 
-   )
-
-SET(libdatabase_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionscanner.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionmanager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionlocation.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseaccess.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseattributeswatch.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasebackend.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseparameters.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasetransaction.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseurl.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfo.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfolist.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfocache.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagelister.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagelisterreceiver.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagequerybuilder.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/namefilter.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/backendsqlite3.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
-   )
-
-SET(libsqlite2_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/attach.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/auth.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/btree.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/btree_rb.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/build.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/copy.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/date.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/delete.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/encode.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/expr.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/func.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/hash.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/insert.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/main.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/opcodes.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/os.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/pager.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/parse.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/pragma.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/printf.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/random.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/select.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/shell.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/table.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/tokenize.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/trigger.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/update.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/util.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/vacuum.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/vdbe.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/vdbeaux.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/where.c
-   )
-
-SET(libdialog_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/iccprofileinfodlg.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dprogressdlg.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/deletedialog.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imagedlgbase.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imageguidedlg.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/ctrlpaneldlg.cpp
-   )
-
-SET(libdialogshowfoto_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/iccprofileinfodlg.cpp
    )
 
 SET(libdimg_SRCS
@@ -143,11 +73,6 @@ SET(libhistogram_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/histogram/imagehistogram.cpp
    )
 
-SET(libimagepropertiescamgui_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebarcamgui.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/cameraitempropertiestab.cpp
-   )
-
 SET(libimagepropertiesshowfoto_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/navigatebarwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/navigatebartab.cpp
@@ -155,18 +80,6 @@ SET(libimagepropertiesshowfoto_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiestab.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesmetadatatab.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiescolorstab.cpp
-   )
-
-SET(libimagepropertiesdigikam_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/navigatebarwidget.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/navigatebartab.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebar.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiestab.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesmetadatatab.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiescolorstab.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebardb.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagedescedittab.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/talbumlistview.cpp
    )
 
 SET(libjpegutils_SRCS
@@ -191,12 +104,6 @@ SET(liblprof_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmsreg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmsscn.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmssheet.cpp
-   )
-
-SET(libthemeengine_SRCS 
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/theme.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/texture.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/themeengine.cpp
    )
 
 SET(libthreadimageio_SRCS 
@@ -276,6 +183,56 @@ SET(libsetupshowfoto_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupslideshow.cpp
    )
 
+SET(libdimgcanvas_SRCS 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/imageplugin.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/imagepluginloader.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undocache.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undoaction.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undomanager.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/colorcorrectiondlg.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/dimginterface.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/canvas.cpp 
+   )
+
+SET(libdimgeditortools_SRCS 
+     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageprint.cpp
+     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageresize.cpp
+   )
+
+# Showfoto target parts ##########################################################
+
+SET(libshowfotosetup_SRCS 
+    ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setuptooltip.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setupeditor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setup.cpp 
+   )
+
+SET(libshowfoto_SRCS 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp
+   )
+
+SET(libdialogshowfoto_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/iccprofileinfodlg.cpp
+   )
+
+# digiKam target parts ##########################################################
+
+SET(libdialog_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/iccprofileinfodlg.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dprogressdlg.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/deletedialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imagedlgbase.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imageguidedlg.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/ctrlpaneldlg.cpp
+   )
+
+SET(libthemeengine_SRCS 
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/theme.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/texture.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/themeengine.cpp
+   )
+
 SET(libsetup_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupicc.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcollections.cpp 
@@ -297,32 +254,22 @@ SET(libsetup_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/gpiface.cpp 
    )
 
-SET(libdimgcanvas_SRCS 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/imageplugin.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/imagepluginloader.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undocache.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undoaction.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undomanager.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/colorcorrectiondlg.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/dimginterface.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/canvas.cpp 
+SET(libimagepropertiescamgui_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebarcamgui.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/cameraitempropertiestab.cpp
    )
 
-SET(libshowfotosetup_SRCS 
-    ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setuptooltip.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setupeditor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setup.cpp 
+SET(libimagepropertiesdigikam_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/navigatebarwidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/navigatebartab.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebar.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiestab.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesmetadatatab.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiescolorstab.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebardb.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagedescedittab.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/talbumlistview.cpp
    )
-
-SET(libshowfoto_SRCS 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp
-   )
-
-SET(libdimgeditortools_SRCS 
-     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageprint.cpp
-     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageresize.cpp
-    )
 
 # SET(libdimgeditor_SRCS 
 #     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp 
@@ -330,14 +277,79 @@ SET(libdimgeditortools_SRCS
 #     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imagewindow.cpp
 #    )
 
+SET(libbatch_SRCS 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfojob.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfoalbumsjob.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchthumbsgenerator.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchalbumssyncmetadata.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchsyncmetadata.cpp
+   )
 
+SET(libdatabase_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionscanner.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionmanager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionlocation.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseaccess.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseattributeswatch.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasebackend.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseparameters.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasetransaction.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseurl.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfo.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfolist.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfocache.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagelister.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagelisterreceiver.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagequerybuilder.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/namefilter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/backendsqlite3.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
+   )
+
+SET(libsqlite2_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/attach.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/auth.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/btree.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/btree_rb.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/build.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/copy.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/date.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/delete.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/encode.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/expr.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/func.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/hash.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/insert.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/main.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/opcodes.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/os.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/pager.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/parse.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/pragma.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/printf.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/random.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/select.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/shell.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/table.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/tokenize.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/trigger.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/update.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/util.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/vacuum.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/vdbe.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/vdbeaux.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/where.c
+   )
 
 ADD_SUBDIRECTORY( libs )
 ADD_SUBDIRECTORY( utilities )
 ADD_SUBDIRECTORY( showfoto )
+ADD_SUBDIRECTORY( digikam )
 ADD_SUBDIRECTORY( kioslave )
-ADD_SUBDIRECTORY( imageplugins )
-#ADD_SUBDIRECTORY( digikam )
+#ADD_SUBDIRECTORY( imageplugins )
 #ADD_SUBDIRECTORY( themedesigner )
 ADD_SUBDIRECTORY( data )
 
