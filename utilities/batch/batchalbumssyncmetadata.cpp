@@ -24,10 +24,9 @@
 
 // QT includes.
 
-#include <qstring.h>
-#include <qtimer.h>
-#include <qdatetime.h>
-//Added by qt3to4:
+#include <QString>
+#include <QTimer>
+#include <QDateTime>
 #include <QPixmap>
 #include <QCloseEvent>
 
@@ -58,14 +57,14 @@ public:
     {
         cancel       = false;
         imageInfoJob = 0;
-        palbumList   = AlbumManager::componentData().allPAlbums();
+        palbumList   = AlbumManager::componentData()->allPAlbums();
         duration.start();
     }
 
     bool                 cancel;
 
     QTime                duration;
-    
+
     ImageInfoJob        *imageInfoJob;
 
     AlbumList            palbumList;
@@ -100,7 +99,7 @@ void BatchAlbumsSyncMetadata::slotStart()
 
     connect(d->imageInfoJob, SIGNAL(signalCompleted()),
             this, SLOT(slotComplete()));
-    
+
     d->albumsIt = d->palbumList.begin();
     parseAlbum();
 }
@@ -131,15 +130,15 @@ void BatchAlbumsSyncMetadata::parseAlbum()
 
 void BatchAlbumsSyncMetadata::slotAlbumParsed(const ImageInfoList& list)
 {
-    QPixmap pix = KApplication::kApplication()->iconLoader()->loadIcon(
+    QPixmap pix = KIconLoader::global()->loadIcon(
                   "folder_image", K3Icon::NoGroup, 32);
 
     ImageInfoList imageInfoList = list;
 
     if (!imageInfoList.isEmpty())
     {
-        addedAction(pix, imageInfoList.first()->kurl().directory());
-    
+        addedAction(pix, imageInfoList.first()->fileUrl().directory());
+
         for (ImageInfo *info = imageInfoList.first(); info; info = imageInfoList.next())
         {
             MetadataHub fileHub;
@@ -182,5 +181,3 @@ void BatchAlbumsSyncMetadata::abort()
 }
 
 }  // namespace Digikam
-
-

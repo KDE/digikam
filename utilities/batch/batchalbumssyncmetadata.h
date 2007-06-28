@@ -25,12 +25,14 @@
 #ifndef BATCHALBUMSSYNCMETADATA_H
 #define BATCHALBUMSSYNCMETADATA_H
 
+// Qt includes.
+
+#include <QCloseEvent>
+
 // Local includes.
 
 #include "imageinfo.h"
 #include "dprogressdlg.h"
-//Added by qt3to4:
-#include <QCloseEvent>
 
 class QWidget;
 

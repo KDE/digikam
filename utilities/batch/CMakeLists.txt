@@ -12,7 +12,7 @@ INCLUDE_DIRECTORIES(
 SET(libbatch_STAT_SRCS imageinfojob.cpp 
                        imageinfoalbumsjob.cpp
                        batchthumbsgenerator.cpp 
-#                       batchalbumssyncmetadata.cpp 
+                       batchalbumssyncmetadata.cpp 
 #                       batchsyncmetadata.cpp
    )
 
