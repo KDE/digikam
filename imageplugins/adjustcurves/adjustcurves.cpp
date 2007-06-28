@@ -119,7 +119,9 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    m_previewWidget = new Digikam::ImageWidget("adjustcurves Tool Dialog", plainPage(),
+    QWidget *plain = new QWidget(this);
+    setMainWidget(plain);
+    m_previewWidget = new Digikam::ImageWidget("adjustcurves Tool Dialog", plain,
                                                i18n("<p>You can see here the image's "
                                                     "curve-adjustments preview. You can pick color on image "
                                                     "to see the color level corresponding on histogram."));
@@ -127,7 +129,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings = new QWidget(plainPage());
+    QWidget *gboxSettings = new QWidget(plain);
     Q3GridLayout* grid     = new Q3GridLayout( gboxSettings, 5, 5, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
@@ -172,7 +174,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     
     m_scaleBG->setExclusive(true);
     m_scaleBG->setButton(Digikam::CurvesWidget::LogScaleHistogram);
-    m_scaleBG->setFrameShape(Q3Frame::NoFrame);
+    //m_scaleBG->setFrameShape(Q3Frame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
 
     Q3HBoxLayout* l1 = new Q3HBoxLayout();
@@ -244,7 +246,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     m_curveSmooth->setWhatsThis( i18n("<p>With this button, you constrains the curve type to a smooth line with tension."));
     m_curveType->setExclusive(true);
     m_curveType->setButton(SmoothDrawing);
-    m_curveType->setFrameShape(Q3Frame::NoFrame);
+    //m_curveType->setFrameShape(Q3Frame::NoFrame);
     
     // -------------------------------------------------------------
     
@@ -280,7 +282,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     m_pickWhite->setWhatsThis( i18n("<p>With this button, you can pick the color from original image used to set <b>Highlight Tone</b> "
                                        "smooth curves point on Red, Green, Blue, and Luminosity channels."));
     m_pickerColorButtonGroup->setExclusive(true);
-    m_pickerColorButtonGroup->setFrameShape(Q3Frame::NoFrame);
+    //m_pickerColorButtonGroup->setFrameShape(Q3Frame::NoFrame);
     
     // -------------------------------------------------------------
 
@@ -566,7 +568,7 @@ void AdjustCurveDialog::readUserSettings()
     KConfigGroup group = config->group("adjustcurves Tool Dialog");
 
     m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(group.readEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_scaleBG->setButton(group.readEntry("Histogram Scale", (int)Digikam::HistogramWidget::LogScaleHistogram));
 
     m_curvesWidget->reset();
 
@@ -574,12 +576,12 @@ void AdjustCurveDialog::readUserSettings()
     {
         m_curves->curvesChannelReset(i);
         m_curves->setCurveType(i, (Digikam::ImageCurves::CurveType)group.readEntry(QString("CurveTypeChannel%1").arg(i),
-                                                                                        Digikam::ImageCurves::CURVE_SMOOTH));
+                                                                                        (int)Digikam::ImageCurves::CURVE_SMOOTH));
 
         for (int j = 0 ; j < 17 ; j++)
         {
             QPoint disable(-1, -1);
-            QPoint p = group.readPointEntry(QString("CurveAjustmentChannel%1Point%2").arg(i).arg(j), &disable);
+            QPoint p = group.readEntry(QString("CurveAjustmentChannel%1Point%2").arg(i).arg(j), disable);
     
             if (m_originalImage.sixteenBit() && p.x() != -1)
             {

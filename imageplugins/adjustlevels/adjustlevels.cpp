@@ -149,7 +149,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     m_scaleBG = new Q3HButtonGroup(gboxSettings);
     m_scaleBG->setExclusive(true);
-    m_scaleBG->setFrameShape(Q3Frame::NoFrame);
+    //m_scaleBG->setFrameShape(Q3Frame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
     m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
@@ -282,15 +282,15 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_pickWhite->setWhatsThis( i18n("<p>With this button, you can pick the color from original image used to set <b>Highlight Tone</b> "
                                        "levels input on Red, Green, Blue, and Luminosity channels."));
     m_pickerColorButtonGroup->setExclusive(true);
-    m_pickerColorButtonGroup->setFrameShape(Q3Frame::NoFrame);    
+    //m_pickerColorButtonGroup->setFrameShape(Q3Frame::NoFrame);    
 
     m_autoButton = new QPushButton(gboxSettings);
-    m_autoButton->setPixmap(kapp->iconLoader()->loadIcon("run", (KIcon::Group)KIcon::Toolbar));    m_autoButton->setToolTip( i18n( "Adjust all levels automatically." ) );
+    m_autoButton->setPixmap(KIconLoader::iconLoader()->loadIcon("run", (KIcon::Group)KIcon::Toolbar));    m_autoButton->setToolTip( i18n( "Adjust all levels automatically." ) );
     m_autoButton->setWhatsThis( i18n("<p>If you press this button, all channel levels will be adjusted "
                                         "automatically."));
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
-    m_resetButton->setPixmap(kapp->iconLoader()->loadIcon("reload_page", (KIcon::Group)KIcon::Toolbar));     
+    m_resetButton->setPixmap(KIconLoader::iconLoader()->loadIcon("reload_page", (KIcon::Group)KIcon::Toolbar));     
     m_resetButton->setToolTip( i18n( "Reset current channel levels' values." ) );
     m_resetButton->setWhatsThis( i18n("<p>If you press this button, all levels' values "
                                          "from the current selected channel "
@@ -691,7 +691,7 @@ void AdjustLevelDialog::readUserSettings()
     KConfigGroup group = config->group("adjustlevels Tool Dialog");
 
     m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(group.readEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_scaleBG->setButton(group.readEntry("Histogram Scale", (int)Digikam::HistogramWidget::LogScaleHistogram));
 
     for (int i = 0 ; i < 5 ; i++)
     {
