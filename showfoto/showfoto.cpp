@@ -356,7 +356,7 @@ void ShowFoto::show()
 
     // Display application window.
 
-    KMainWindow::show();
+    KXmlGuiWindow::show();
 
     // Report errors from ICC repository path.
 
