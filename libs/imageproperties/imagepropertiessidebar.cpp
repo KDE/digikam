@@ -24,8 +24,8 @@
 
 // Qt includes. 
  
-#include <qrect.h>
-#include <qsplitter.h>
+#include <QRect>
+#include <QSplitter>
 
 // KDE includes.
 
