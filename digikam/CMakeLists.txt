@@ -24,64 +24,66 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
 
 # Shared libdigikam ################################################################
 
-SET(libdigikam_LIB_SRCS kdateedit.cpp 
-                        metadatahub.cpp 
-                        digikamapp.cpp 
-                        album.cpp 
-                        albumiconview.cpp 
-                        albumicongroupitem.cpp 
-                        albumiconitem.cpp 
-                        albumitemhandler.cpp 
-                        albumfiletip.cpp 
-                        albumfolderview.cpp 
-                        albumhistory.cpp 
-                        albumlister.cpp 
-                        albummanager.cpp 
-                        albumpropsedit.cpp 
-                        albumsettings.cpp 
-                        albumthumbnailloader.cpp 
-                        albumwidgetstack.cpp 
-                        cameradragobject.cpp 
-                        cameralist.cpp 
-                        cameratype.cpp 
-                        datefolderview.cpp 
-                        dcopiface.cpp 
-                        digikamfirstrun.cpp 
-                        digikamview.cpp 
-                        dio.cpp 
-                        dragobjects.cpp 
-                        firstrun.cpp 
-                        folderitem.cpp 
-                        folderview.cpp 
-                        iconview.cpp 
-                        icongroupitem.cpp 
-                        iconitem.cpp 
-                        imageattributeswatch.cpp 
-                        imagepreviewview.cpp 
-                        kdatetimeedit.cpp 
-                        kdatepickerpopup.cpp 
-                        kipiinterface.cpp 
-                        mediaplayerview.cpp 
-                        monthwidget.cpp 
-                        pixmapmanager.cpp 
-                        ratingpopupmenu.cpp 
-                        ratingwidget.cpp 
-                        scanlib.cpp 
-                        searchadvanceddialog.cpp 
-                        searchfolderview.cpp 
-                        searchquickdialog.cpp 
-                        searchresultsview.cpp 
-                        searchresultsitem.cpp 
-                        searchwidgets.cpp 
-                        syncjob.cpp 
-                        tagcreatedlg.cpp 
-                        tagfilterview.cpp 
-                        tagfolderview.cpp 
-                        tagspopupmenu.cpp 
-                        welcomepageview.cpp 
-                        main.cpp
-   			${libslideshow_SRCS}
-		       )
+SET(libdigikam_LIB_SRCS ${libslideshow_SRCS}
+                        ${libbatch_SRCS}
+
+#                         kdateedit.cpp 
+#                         metadatahub.cpp 
+#                         digikamapp.cpp 
+#                         album.cpp 
+#                         albumiconview.cpp 
+#                         albumicongroupitem.cpp 
+#                         albumiconitem.cpp 
+#                         albumitemhandler.cpp 
+#                         albumfiletip.cpp 
+#                         albumfolderview.cpp 
+#                         albumhistory.cpp 
+#                         albumlister.cpp 
+#                         albummanager.cpp 
+#                         albumpropsedit.cpp 
+#                         albumsettings.cpp 
+#                         albumthumbnailloader.cpp 
+#                         albumwidgetstack.cpp 
+#                         cameradragobject.cpp 
+#                         cameralist.cpp 
+#                         cameratype.cpp 
+#                         datefolderview.cpp 
+#                         dcopiface.cpp 
+#                         digikamfirstrun.cpp 
+#                         digikamview.cpp 
+#                         dio.cpp 
+#                         dragobjects.cpp 
+#                         firstrun.cpp 
+#                         folderitem.cpp 
+#                         folderview.cpp 
+#                         iconview.cpp 
+#                         icongroupitem.cpp 
+#                         iconitem.cpp 
+#                         imageattributeswatch.cpp 
+#                         imagepreviewview.cpp 
+#                         kdatetimeedit.cpp 
+#                         kdatepickerpopup.cpp 
+#                         kipiinterface.cpp 
+#                         mediaplayerview.cpp 
+#                         monthwidget.cpp 
+#                         pixmapmanager.cpp 
+#                         ratingpopupmenu.cpp 
+#                         ratingwidget.cpp 
+#                         scanlib.cpp 
+#                         searchadvanceddialog.cpp 
+#                         searchfolderview.cpp 
+#                         searchquickdialog.cpp 
+#                         searchresultsview.cpp 
+#                         searchresultsitem.cpp 
+#                         searchwidgets.cpp 
+#                         syncjob.cpp 
+#                         tagcreatedlg.cpp 
+#                         tagfilterview.cpp 
+#                         tagfolderview.cpp 
+#                         tagspopupmenu.cpp 
+#                         welcomepageview.cpp 
+#                         main.cpp
+   )
 
 KDE4_AUTOMOC(${libdigikam_LIB_SRCS})
 
@@ -103,11 +105,12 @@ TARGET_LINK_LIBRARIES(digikam libthumbbar
                               libgreycstoration 
                               libdatabase 
                               libbatch 
-                              libcameragui 
                               libdimgcanvas 
                               libdimgeditor 
                               libsetup 
-                              liblighttable 
+#                              libcameragui 
+#                              liblighttable 
+
                               ${KDE4_KDECORE_LIBS} 
                               ${KDE4_KIO_LIBS} 
                               ${KDE4_KHTML_LIBS} 
