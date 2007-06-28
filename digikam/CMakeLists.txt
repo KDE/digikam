@@ -24,7 +24,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
 
 # Shared libdigikam ################################################################
 
-SET(libdigikam_LIB_SRCS ${libslideshow_SRCS}
+SET(digikam_LIB_SRCS ${libslideshow_SRCS}
                         ${libbatch_SRCS}
 
 #                         kdateedit.cpp 
@@ -85,11 +85,11 @@ SET(libdigikam_LIB_SRCS ${libslideshow_SRCS}
 #                         main.cpp
    )
 
-KDE4_AUTOMOC(${libdigikam_LIB_SRCS})
+KDE4_AUTOMOC(${digikam_LIB_SRCS})
 
 #kde4_add_dcop_skels(libdigikam_LIB_SRCS MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please. kde4_add_dcop_skels macro doesn't exist now. We keep it just to remember to port to dbus")dcopiface.h )
 
-KDE4_ADD_LIBRARY(libdigikam SHARED ${libdigikam_LIB_SRCS})
+KDE4_ADD_LIBRARY(digikam SHARED ${digikam_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(digikam libthumbbar 
                               libthemeengine 
@@ -119,8 +119,8 @@ TARGET_LINK_LIBRARIES(digikam libthumbbar
                               ${KDE4_KUTILS_LIBS} 
                       )
 
-SET_TARGET_PROPERTIES(libdigikam PROPERTIES VERSION 1.0.0 SOVERSION 1 )
-INSTALL(TARGETS libdigikam DESTINATION ${LIB_INSTALL_DIR} )
+SET_TARGET_PROPERTIES(digikam PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+INSTALL(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )
 
 
 # digiKam binary progam #########################################################
