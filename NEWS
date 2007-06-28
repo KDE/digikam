@@ -7,5 +7,6 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 120450 : Strange helper lines behavior in ratio crop tool.
 002 ==> 147248 : Image info doesn't follow image in the editor.
-003 ==> 147147 : digikam does not apply tags to some selected images.
-004 ==> 
+003 ==> 147147 : digiKam does not apply tags to some selected images.
+004 ==> 143200 : Renaming like crasy with F2 crash digiKam.
+005 ==> 
