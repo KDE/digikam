@@ -92,7 +92,7 @@ MainWindow::MainWindow()
     // Actual views ------------------------------------------------
     
     QSplitter* splitter = new QSplitter( this );
-    splitter->setOrientation( QSplitter::Horizontal );
+    splitter->setOrientation( Qt::Horizontal );
     splitter->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
     m_folderView = new FolderView( splitter );
@@ -257,12 +257,12 @@ MainWindow::MainWindow()
     m_folderView->setResizeMode(Q3ListView::LastColumn);
     m_folderView->setRootIsDecorated(true);
 
-    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();    
+    KIconLoader *iconLoader = KIconLoader::iconLoader();    
     for (int i=0; i<10; i++)
     {
         FolderItem* folderItem = new FolderItem(m_folderView, QString("Album %1").arg(i));
-        folderItem->setPixmap(0, iconLoader->loadIcon("folder", KIcon::NoGroup,
-                                                      32, KIcon::DefaultState, 0, true));
+        folderItem->setPixmap(0, iconLoader->loadIcon("folder", K3Icon::NoGroup,
+                                                      32, K3Icon::DefaultState, 0, true));
         if (i == 2)
         {
             m_folderView->setSelected(folderItem, true);
