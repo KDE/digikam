@@ -23,19 +23,17 @@
 
 // Qt includes.
 
-#include <q3dockarea.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <Q3DockArea>
 #include <Q3PtrList>
-#include <Q3Frame>
-#include <Q3VBoxLayout>
-#include <QCloseEvent>
+#include <QHBoxLayout>
+#include <QFrame>
+#include <QVBoxLayout>
 
 // KDE includes.
 
+#include <kxmlguifactory.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
-#include <kdeversion.h>
 #include <klocale.h>
 #include <kwindowsystem.h>
 #include <kmessagebox.h>
@@ -43,11 +41,11 @@
 #include <kconfig.h>
 #include <kstatusbar.h>
 #include <kmenubar.h>
+#include <kglobal.h>
 
 // LibKDcraw includes.
 
 #include <libkdcraw/dcrawbinary.h>
-#include <kglobal.h>
 
 // Local includes.
 
@@ -87,11 +85,12 @@ bool LightTableWindow::lightTableWindowCreated()
 }
 
 LightTableWindow::LightTableWindow()
-                : KMainWindow(0, "lighttable", Qt::WType_TopLevel)
+                : KXmlGuiWindow(0)
 {
     d = new LightTableWindowPriv;
     m_componentData = this;
 
+    setWindowFlags(Qt::Window);
     setCaption(i18n("Light Table"));
 
     // -- Build the GUI -------------------------------
@@ -176,13 +175,15 @@ void LightTableWindow::setupUserArea()
 {
     QWidget* mainW    = new QWidget(this);
     d->hSplitter      = new QSplitter(Qt::Horizontal, mainW);
-    Q3HBoxLayout *hlay = new Q3HBoxLayout(mainW);
+    QHBoxLayout *hlay = new QHBoxLayout();
+    mainW->setLayout(hlay);
     d->leftSidebar    = new ImagePropertiesSideBarDB(mainW, 
                             "LightTable Left Sidebar", d->hSplitter,
                             Sidebar::Left, true);
 
     QWidget* centralW = new QWidget(d->hSplitter);
-    Q3VBoxLayout *vlay = new Q3VBoxLayout(centralW);
+    QVBoxLayout *vlay = new QVBoxLayout();
+    centralW->setLayout(vlay);
     d->vSplitter      = new QSplitter(Qt::Vertical, centralW);
     d->barView        = new LightTableBar(d->vSplitter, ThumbBarView::Horizontal, 
                                           AlbumSettings::componentData().getExifRotate());
@@ -197,13 +198,13 @@ void LightTableWindow::setupUserArea()
     hlay->addWidget(d->hSplitter);
     hlay->addWidget(d->rightSidebar);
 
-    d->hSplitter->setFrameStyle( Q3Frame::NoFrame );
-    d->hSplitter->setFrameShadow( Q3Frame::Plain );
-    d->hSplitter->setFrameShape( Q3Frame::NoFrame );
+    d->hSplitter->setFrameStyle( QFrame::NoFrame );
+    d->hSplitter->setFrameShadow( QFrame::Plain );
+    d->hSplitter->setFrameShape( QFrame::NoFrame );
     d->hSplitter->setOpaqueResize(false);
-    d->vSplitter->setFrameStyle( Q3Frame::NoFrame );
-    d->vSplitter->setFrameShadow( Q3Frame::Plain );
-    d->vSplitter->setFrameShape( Q3Frame::NoFrame );
+    d->vSplitter->setFrameStyle( QFrame::NoFrame );
+    d->vSplitter->setFrameShadow( QFrame::Plain );
+    d->vSplitter->setFrameShape( QFrame::NoFrame );
     d->vSplitter->setOpaqueResize(false);
 
     setCentralWidget(mainW);
@@ -217,9 +218,9 @@ void LightTableWindow::setupStatusBar()
 
     d->statusProgressBar = new StatusProgressBar(statusBar());
     d->statusProgressBar->setAlignment(Qt::AlignCenter);
-    d->statusProgressBar->setMaximumHeight(fontMetrics().height()+2);    
+    d->statusProgressBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->statusProgressBar, 100);
- 
+
     d->rightZoomBar = new StatusZoomBar(statusBar());
     statusBar()->addWidget(d->rightZoomBar, 1);
     d->rightZoomBar->setEnabled(false);
@@ -295,7 +296,7 @@ void LightTableWindow::setupConnections()
 
     connect(d->previewView, SIGNAL(signalRightDroppedItems(const ImageInfoList&)),
            this, SLOT(slotRightDroppedItems(const ImageInfoList&)));
-                                  
+
     connect(d->previewView, SIGNAL(signalToggleOnSyncPreview(bool)),
            this, SLOT(slotToggleOnSyncPreview(bool)));
 
@@ -486,7 +487,7 @@ void LightTableWindow::setupAccelerators()
                     i18n("Zoom in on image"),
                     Qt::Key_Plus, d->previewView, SLOT(slotIncreaseZoom()),
                     false, true);
-    
+
     d->accelerators->insert("Zoom Plus Qt::Key_Minus", i18n("Zoom out"),
                     i18n("Zoom out of image"),
                     Qt::Key_Minus, d->previewView, SLOT(slotDecreaseZoom()),
@@ -529,7 +530,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
         {
             new LightTableBarItem(d->barView, *it);
         }
-    }   
+    }
     d->barView->blockSignals(false);
 
     LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(imageInfoCurrent));
@@ -543,7 +544,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
     }
 
     refreshStatusBar();
-}   
+}
 
 void LightTableWindow::refreshStatusBar()
 {
@@ -562,7 +563,7 @@ void LightTableWindow::refreshStatusBar()
                                                   i18n("%1 items on Light Table")
                                                   ,d->barView->countItems());   
             break;
-    }  
+    }
 }
 
 void LightTableWindow::slotItemsUpdated(const KUrl::List& urls)
@@ -579,7 +580,7 @@ void LightTableWindow::slotItemsUpdated(const KUrl::List& urls)
                 d->leftSidebar->itemChanged(d->previewView->leftImageInfo());
             }
         }
-    
+
         if (d->previewView->rightImageInfo())
         {
             if (d->previewView->rightImageInfo()->kurl() == *it)
@@ -614,10 +615,10 @@ void LightTableWindow::slotLeftPreviewLoaded(bool b)
     {
         d->previewView->checkForSelection(d->barView->currentItemImageInfo());
         d->barView->setOnLeftPanel(d->previewView->leftImageInfo());
-    
+
         LightTableBarItem *item = d->barView->findItemByInfo(d->previewView->leftImageInfo());
         if (item) item->setOnLeftPanel(true);
-    
+
         if (d->navigateByPairAction->isChecked() && item)
         {
             LightTableBarItem* next = dynamic_cast<LightTableBarItem*>(item->next());
@@ -642,7 +643,7 @@ void LightTableWindow::slotRightPreviewLoaded(bool b)
     {
         d->previewView->checkForSelection(d->barView->currentItemImageInfo());
         d->barView->setOnRightPanel(d->previewView->rightImageInfo());
-    
+
         LightTableBarItem *item = d->barView->findItemByInfo(d->previewView->rightImageInfo());
         if (item) item->setOnRightPanel(true);
     }
@@ -675,7 +676,7 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
                 d->backwardAction->setEnabled(false);
                 d->firstAction->setEnabled(false);
             }
-    
+
             if (!curr->next())
             {
                 d->forwardAction->setEnabled(false);
@@ -686,7 +687,7 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
             {
                 d->setItemLeftAction->setEnabled(false);
                 d->setItemRightAction->setEnabled(false);
-  
+
                 d->barView->setOnLeftPanel(info);
                 slotSetItemOnLeftPanel(info);
             }
@@ -716,7 +717,7 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
     }
 
     d->previewView->checkForSelection(info);
-}    
+}
 
 void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
 {
@@ -896,12 +897,12 @@ void LightTableWindow::slotEditItem(ImageInfo* info)
     ImageInfoList list = d->barView->itemsImageInfoList();
 
     im->loadImageInfos(list, info, i18n("Light Table"), true);
-    
+
     if (im->isHidden())
         im->show();
     else
         im->raise();
-        
+
     im->setFocus();
 }
 
@@ -972,11 +973,11 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
     if (!d->cancelSlideShow)
     {
         settings.exifRotate = AlbumSettings::componentData().getExifRotate();
-    
+
         SlideShow *slide = new SlideShow(settings);
         if (startWithCurrent)
             slide->setCurrent(d->barView->currentItemImageInfo()->kurl());
-    
+
         slide->show();
     }
 }
@@ -990,28 +991,23 @@ void LightTableWindow::slotToggleFullScreen()
 {
     if (d->fullScreen) // out of fullscreen
     {
-
-#if QT_VERSION >= 0x030300
         setWindowState( windowState() & ~Qt::WindowFullScreen );
-#else
-        showNormal();
-#endif
         menuBar()->show();
         statusBar()->show();
         leftDock()->show();
         rightDock()->show();
         topDock()->show();
         bottomDock()->show();
-        
+
         QObject* obj = child("ToolBar","KToolBar");
-        
+
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            
+
             if (d->fullScreenAction->isPlugged(toolBar) && d->removeFullScreenButton)
                 d->fullScreenAction->unplug(toolBar);
-                
+
             if (toolBar->isHidden())
                 showToolBars();
         }
@@ -1025,12 +1021,12 @@ void LightTableWindow::slotToggleFullScreen()
             d->leftSidebar->restore();
             d->rightSidebar->restore();
         }
-        else       
+        else
         {
-            d->leftSidebar->backup();        
-            d->rightSidebar->backup();        
+            d->leftSidebar->backup();
+            d->rightSidebar->backup();
         }
-        
+
         d->fullScreen = false;
     }
     else  // go to fullscreen
@@ -1042,19 +1038,19 @@ void LightTableWindow::slotToggleFullScreen()
         leftDock()->hide();
         rightDock()->hide();
         bottomDock()->hide();
-        
+
         QObject* obj = child("ToolBar","KToolBar");
-        
+
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            
+
             if (d->fullScreenHideToolBar)
             {
                 hideToolBars();
             }
             else
-            {   
+            {
                 showToolBars();
 
                 if ( !d->fullScreenAction->isPlugged(toolBar) )
@@ -1062,7 +1058,7 @@ void LightTableWindow::slotToggleFullScreen()
                     d->fullScreenAction->plug(toolBar);
                     d->removeFullScreenButton=true;
                 }
-                else    
+                else
                 {
                     // If FullScreen button is enable in toolbar settings
                     // We don't remove it when we out of fullscreen mode.
@@ -1082,8 +1078,8 @@ void LightTableWindow::slotToggleFullScreen()
         }
         else
         {
-            d->leftSidebar->backup();        
-            d->rightSidebar->backup();        
+            d->leftSidebar->backup();
+            d->rightSidebar->backup();
         }
 
         showFullScreen();
@@ -1105,7 +1101,7 @@ void LightTableWindow::showToolBars()
     for( ; it.current()!=0L ; ++it)
     {
         bar=it.current();
-        
+
         if (bar->area())
             bar->area()->show();
         else
@@ -1121,7 +1117,7 @@ void LightTableWindow::hideToolBars()
     for( ; it.current()!=0L ; ++it)
     {
         bar=it.current();
-        
+
         if (bar->area()) 
             bar->area()->hide();
         else 
@@ -1177,13 +1173,13 @@ void LightTableWindow::slotNewToolbarConfig()
 
 void LightTableWindow::slotSetup()
 {
-    Setup setup(this, 0);    
-        
+    Setup setup(this, 0);
+
     if (setup.exec() != QDialog::Accepted)
         return;
 
     KGlobal::config()->sync();
-    
+
     applySettings();
 }
 
@@ -1285,4 +1281,3 @@ void LightTableWindow::slotToggleNavigateByPair()
 }
 
 }  // namespace Digikam
-

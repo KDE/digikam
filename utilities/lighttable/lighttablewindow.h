@@ -26,14 +26,13 @@
 
 // Qt includes.
 
-#include <qstring.h>
-//Added by qt3to4:
+#include <QString>
 #include <QCloseEvent>
 
 // KDE includes.
 
 #include <kurl.h>
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 
 // Local includes.
 
@@ -48,7 +47,7 @@ class SlideShowSettings;
 class ThumbBarItem;
 class LightTableWindowPriv;
 
-class LightTableWindow : public KMainWindow
+class LightTableWindow : public KXmlGuiWindow
 {
     Q_OBJECT
 
