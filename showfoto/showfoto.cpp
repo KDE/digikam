@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date   : 2004-11-22
+ * Date        : 2004-11-22
  * Description : stand alone digiKam image editor GUI
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
@@ -594,6 +594,7 @@ void ShowFoto::slotOpenFile()
 
     if (!urls.isEmpty())
     {
+        d->currentItem = 0;
         d->thumbBar->clear();
 
         for (KURL::List::const_iterator it = urls.begin();
