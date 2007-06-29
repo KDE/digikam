@@ -22,8 +22,6 @@
  *
  * ============================================================ */
 
-#include <config.h>
-
 // KDE includes.
 
 #include <klocale.h>

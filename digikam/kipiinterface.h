@@ -26,9 +26,6 @@
 #ifndef DIGIKAM_KIPIINTERFACE_H
 #define DIGIKAM_KIPIINTERFACE_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 // Qt includes.
 
