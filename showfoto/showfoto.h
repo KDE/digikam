@@ -40,10 +40,6 @@ namespace KIO
 class Job;
 }
 
-namespace Digikam
-{
-class SlideshowSettings;
-}
 
 namespace ShowFoto
 {

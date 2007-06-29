@@ -28,17 +28,10 @@
 
 #include <kpagedialog.h>
 
-namespace Digikam
-{
-class SetupIOFiles;
-class SetupSlideShow;
-class SetupICC;
-}
 
 namespace ShowFoto
 {
 
-class SetupEditor;
 class SetupPrivate;
 
 class Setup : public KPageDialog 
