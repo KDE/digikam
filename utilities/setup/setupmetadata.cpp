@@ -191,8 +191,8 @@ SetupMetadata::SetupMetadata(QWidget* parent )
   
     // --------------------------------------------------------
 
-    connect(exiv2LogoLabel, SIGNAL(leftClickedURL(const QString&)),
-            this, SLOT(processExiv2URL(const QString&)));
+    connect(exiv2LogoLabel, SIGNAL(leftClickedUrl(const QString&)),
+            this, SLOT(processExiv2Url(const QString&)));
 
     connect(d->ExifRotateBox, SIGNAL(toggled(bool)),
             this, SLOT(slotExifAutoRotateToggled(bool)));
@@ -203,7 +203,7 @@ SetupMetadata::~SetupMetadata()
     delete d;
 }
 
-void SetupMetadata::processExiv2URL(const QString& url)
+void SetupMetadata::processExiv2Url(const QString& url)
 {
     KToolInvocation::self()->invokeBrowser(url);
 }
