@@ -24,6 +24,7 @@
 // Qt includes.
 
 #include <q3datetimeedit.h>
+#include <khbox.h>
 
 // KDE includes.
 
@@ -35,7 +36,7 @@ namespace Digikam
 {
 
 KDateTimeEdit::KDateTimeEdit(QWidget *parent, const char *name)
-             : KHBox(parent, name)
+             : KHBox(parent)
 {
     m_datePopUp = new KDateEdit(this, "datepopup");
     m_timePopUp = new Q3TimeEdit(QTime::currentTime(), this);

@@ -35,6 +35,7 @@
 #include <Q3ValueList>
 #include <QResizeEvent>
 #include <Q3PopupMenu>
+#include <QDesktopWidget>
 
 // KDE includes.
 
@@ -503,7 +504,7 @@ void ImagePreviewView::slotContextMenu()
     if (idm >= 100 && idm < 1000) 
     {
         KService::Ptr imageServicePtr = serviceVector[idm-100];
-        KRun::run(*imageServicePtr, url);
+        KRun::run(*imageServicePtr, url,this);
     }
 
     serviceVector.clear();

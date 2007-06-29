@@ -109,7 +109,7 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
     KUrl::List ulist;
 
     QString path;
-    QDataStream ds(data, QIODevice::ReadOnly);
+    QDataStream ds(data);
     while (!ds.atEnd())
     {
         ImageListerRecord record;

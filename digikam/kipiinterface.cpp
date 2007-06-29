@@ -136,7 +136,7 @@ void DigikamImageInfo::setDescription( const QString& description )
         qlonglong imageId;
         {
             DatabaseAccess access;
-            imageId = access.db()->getImageId(p->id(), _url.filename());
+            imageId = access.db()->getImageId(p->id(), _url.fileName());
             access.db()->setItemCaption(imageId, description);
         }
 
@@ -177,7 +177,7 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
         qlonglong imageId;
         {
             DatabaseAccess access;
-            imageId = access.db()->getImageId(p->id(), _url.filename());
+            imageId = access.db()->getImageId(p->id(), _url.fileName());
             access.db()->setItemDate(imageId, time);
         }
         AlbumManager::componentData().refreshItemHandler( _url );
@@ -201,7 +201,7 @@ QMap<QString, QVariant> DigikamImageInfo::attributes()
     if (p)
     {
         DatabaseAccess access;
-        qlonglong imageId  = access.db()->getImageId(p->id(), _url.filename());
+        qlonglong imageId  = access.db()->getImageId(p->id(), _url.fileName());
 
         // Get digiKam Tags list of picture.
         QStringList tags         = access.db()->getItemTagNames(imageId);
@@ -222,7 +222,7 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
     if (p)
     {
         DatabaseAccess access;
-        qlonglong imageId                    = access.db()->getImageId(p->id(), _url.filename());
+        qlonglong imageId                    = access.db()->getImageId(p->id(), _url.fileName());
         QMap<QString, QVariant> attributes = res;
 
         // Set digiKam Tags list of picture.

@@ -31,6 +31,7 @@
 
 
 class Q3TimeEdit;
+class KHBox;
 
 namespace Digikam
 {

@@ -96,10 +96,10 @@ SET(digikam_LIB_SRCS
 #                      iconitem.cpp 
 #                      imageattributeswatch.cpp 
 #                      imagepreviewview.cpp 
-#                      kdatetimeedit.cpp 
-#                      kdatepickerpopup.cpp 
-#                      kipiinterface.cpp 
-#                      mediaplayerview.cpp 
+                      kdatetimeedit.cpp 
+		      #                      kdatepickerpopup.cpp 
+		      #kipiinterface.cpp 
+                      mediaplayerview.cpp 
 #                      monthwidget.cpp 
 #                      pixmapmanager.cpp 
 #                      ratingpopupmenu.cpp 
@@ -107,10 +107,10 @@ SET(digikam_LIB_SRCS
 #                      scanlib.cpp 
 #                      searchadvanceddialog.cpp 
 #                      searchfolderview.cpp 
-#                      searchquickdialog.cpp 
-#                      searchresultsview.cpp 
-#                      searchresultsitem.cpp 
-#                      searchwidgets.cpp 
+                      searchquickdialog.cpp 
+		      #                      searchresultsview.cpp 
+                      searchresultsitem.cpp 
+                      searchwidgets.cpp 
 #                      syncjob.cpp 
 #                      tagcreatedlg.cpp 
 #                      tagfilterview.cpp 
