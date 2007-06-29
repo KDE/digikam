@@ -61,7 +61,7 @@ SET(digikam_LIB_SRCS
                      ${libdatabase_SRCS}
                      ${libsqlite2_SRCS}
                      ${libdialog_SRCS}
-
+		     ${libhistogram_SRCS}
 #                      kdateedit.cpp 
 #                      metadatahub.cpp 
 #                      digikamapp.cpp 
@@ -139,7 +139,15 @@ TARGET_LINK_LIBRARIES(digikam
                       ${KDE4_KDEUI_LIBS} 
                       ${KDE4_KPARTS_LIBS} 
                       ${KDE4_KUTILS_LIBS} 
-                      )
+                      ${SQLITE_LIBRARIES}
+                      ${JPEG_LIBRARIES}
+                      ${TIFF_LIBRARIES}
+                      ${PNG_LIBRARIES}
+                      ${JASPER_LIBRARIES}
+                      ${KDCRAW_LIBRARIES}
+                      ${LCMS_LIBRARIES}
+                      ${KEXIV2_LIBRARIES}
+	      )
 
 SET_TARGET_PROPERTIES(digikam PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 INSTALL(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )
