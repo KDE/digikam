@@ -73,26 +73,33 @@ public:
 };
 
 SearchQuickDialog::SearchQuickDialog(QWidget* parent, KUrl& url)
-                 : KDialogBase(Plain, i18n("Quick Search"), Help|Ok|Cancel, Ok, 
-                               parent, 0, true, true), m_url(url)
+                 : KDialog(parent)
+		 , m_url(url)
 {
+    setDefaultButton(Ok);
+    setbuttons(Help|Ok|Cancel);
+    setModal(true);
+    setCaption(i18n("Quick Search"));
+
+    QWidget *w = new QWidget(this);
+    setMainWidget(w);
     d = new SearchQuickDialogPriv;
     d->timer = new QTimer(this);
     setHelp("quicksearchtool.anchor", "digikam");
     
-    Q3GridLayout* grid = new Q3GridLayout(plainPage(), 2, 2, 0, spacingHint());
+    Q3GridLayout* grid = new Q3GridLayout(w, 2, 2, 0, spacingHint());
     
-    QLabel *label1 = new QLabel("<b>" + i18n("Search:") + "</b>", plainPage());
-    d->searchEdit  = new KLineEdit(plainPage());
+    QLabel *label1 = new QLabel("<b>" + i18n("Search:") + "</b>", w);
+    d->searchEdit  = new KLineEdit(w);
     d->searchEdit->setWhatsThis( i18n("<p>Enter your search criteria to find items in the album library"));
     
-    d->resultsView = new SearchResultsView(plainPage());
+    d->resultsView = new SearchResultsView(w);
     d->resultsView->setMinimumSize(320, 200);
     d->resultsView->setWhatsThis( i18n("<p>Here you can see the items found in album library "
                                           "using the current search criteria"));
     
-    QLabel *label2 = new QLabel(i18n("Save search as:"), plainPage());
-    d->nameEdit    = new KLineEdit(plainPage());
+    QLabel *label2 = new QLabel(i18n("Save search as:"), w);
+    d->nameEdit    = new KLineEdit(w);
     d->nameEdit->setText(i18n("Last Search"));
     d->nameEdit->setWhatsThis( i18n("<p>Enter the name of the current search to save in the "
                                        "\"My Searches\" view"));
@@ -192,7 +199,7 @@ void SearchQuickDialog::hideEvent(QHideEvent* e)
     m_url.removeQueryItem("name");
     m_url.addQueryItem("name", d->nameEdit->text().isEmpty() ?
                        i18n("Last Search") : d->nameEdit->text());
-    KDialogBase::hideEvent(e);
+    KDialog::hideEvent(e);
 }
 
 }  // namespace Digikam

@@ -50,7 +50,7 @@ class SearchQuickDialogPriv;
  * @author Renchi Raju
  * 
  */
-class SearchQuickDialog : public KDialogBase
+class SearchQuickDialog : public KDialog
 {
     Q_OBJECT
 

@@ -226,7 +226,7 @@ void SearchFolderView::quickSearchEdit(SAlbum* album)
     KUrl url = album->kurl();
     SearchQuickDialog dlg(this, url);
 
-    if (dlg.exec() != KDialogBase::Accepted)
+    if (dlg.exec() != KDialog::Accepted)
         return;
 
     AlbumManager::componentData().updateSAlbum(album, url);
@@ -245,7 +245,7 @@ void SearchFolderView::extendedSearchEdit(SAlbum* album)
     KUrl url = album->kurl();
     SearchAdvancedDialog dlg(this, url);
 
-    if (dlg.exec() != KDialogBase::Accepted)
+    if (dlg.exec() != KDialog::Accepted)
         return;
 
     AlbumManager::componentData().updateSAlbum(album, url);
