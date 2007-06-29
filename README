@@ -111,11 +111,15 @@ just use something like that:
 # cmake .
 # make
 
-Common CMake options :
+Usual CMake options :
 
--DCMAKE_INSTALL_PREFIX : cmake . -DCMAKE_INSTALL_PREFIX=/usr is the equivalent to ./configure --prefix=/usr 
--DCMAKE_BUILD_TYPE     : decide which type of build you want. You can chose between "debugfull", "debug", "profile", "relwithdebinfo" and "release". 
-The default is "relwithdebinfo" (-O2 -g). 
+-DCMAKE_INSTALL_PREFIX : decide where the program will be install on your computer.
+-DCMAKE_BUILD_TYPE     : decide which type of build you want. You can chose between "debugfull", "debug", "profile", "relwithdebinfo" and "release". The default is "relwithdebinfo" (-O2 -g).
+
+Compared to old KDE3 autoconf options:
+
+"cmake . -DCMAKE_BUILD_TYPE=debugfull" is equivalent to "./configure --enable-debug=full"
+"cmake . -DCMAKE_INSTALL_PREFIX=/usr"  is equivalent to "./configure --prefix=/usr"
 
 More details can be found ata this url: http://techbase.kde.org/Development/Tutorials/CMake#Environment_Variables
 
