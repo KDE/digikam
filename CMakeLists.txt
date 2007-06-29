@@ -227,10 +227,6 @@ SET(libdialog_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/ctrlpaneldlg.cpp
    )
 
-# KDE4_ADD_UI_FILES(libdialog_SRCS
-#                   ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/deletedialogbase.ui
-#                  )
-
 SET(libthemeengine_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/theme.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/texture.cpp 
