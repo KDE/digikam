@@ -194,6 +194,7 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, QStringList keysF
     
     uint               subItems = 0;
     MdKeyListViewItem *parentifDItem = 0;
+    if (ifds.count() == 0) return;
 
     for (QStringList::iterator itKeysFilter = keysFilter.begin();
          itKeysFilter != keysFilter.end();
