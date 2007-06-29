@@ -626,6 +626,7 @@ void ShowFoto::slotOpenFile()
 
     if (!urls.isEmpty())
     {
+	d->currentItem = 0;
         d->thumbBar->clear();
 
         for (KUrl::List::const_iterator it = urls.begin();
