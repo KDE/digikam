@@ -106,58 +106,66 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     d->mainLayout = new QGridLayout(this);
     d->mainLayout->setSpacing(KDialog::spacingHint());
     d->mainLayout->setMargin(KDialog::spacingHint());
-    setLayout(d->mainLayout);
 
     KIconLoader* iconLoader = KIconLoader::global();
 
     // -----------------------------------------------------------------
 
-    d->levelGBox = new QWidget(this);
+    d->levelGBox       = new QWidget(this);
     d->levelButtons    = new QButtonGroup(d->levelGBox);
+    QHBoxLayout *hlay1 = new QHBoxLayout();
     d->levelButtons->setExclusive(true);
+    d->levelGBox->setLayout(hlay1);
 
     QPushButton *simpleLevel = new QPushButton( d->levelGBox );
     simpleLevel->setIcon( iconLoader->loadIcon( "ascii", (K3Icon::Group)K3Icon::Toolbar ) );
     simpleLevel->setCheckable(true);
     simpleLevel->setWhatsThis( i18n( "Toggle tags view to a simple human-readable list" ) );
     d->levelButtons->addButton(simpleLevel, SIMPLE);
+    hlay1->addWidget(simpleLevel);
 
     QPushButton *fullLevel = new QPushButton( d->levelGBox );
     fullLevel->setIcon( iconLoader->loadIcon( "document", (K3Icon::Group)K3Icon::Toolbar ) );
     fullLevel->setCheckable(true);
     fullLevel->setWhatsThis( i18n( "Toggle tags view to a full list" ) );
     d->levelButtons->addButton(fullLevel, FULL);
+    hlay1->addWidget(fullLevel);
 
     // -----------------------------------------------------------------
 
-    d->toolsGBox = new QWidget(this);
+    d->toolsGBox       = new QWidget(this);
     d->toolButtons     = new QButtonGroup(d->toolsGBox);
+    QHBoxLayout *hlay2 = new QHBoxLayout();
+    d->toolsGBox->setLayout(hlay2);
 
     QPushButton *saveMetadata = new QPushButton( d->toolsGBox );
     saveMetadata->setIcon( iconLoader->loadIcon( "filesave", (K3Icon::Group)K3Icon::Toolbar ) );
     saveMetadata->setWhatsThis( i18n( "Save meta-data to a binary file" ) );
     d->toolButtons->addButton(saveMetadata);
-    
+    hlay2->addWidget(saveMetadata);
+
     QPushButton *printMetadata = new QPushButton( d->toolsGBox );
     printMetadata->setIcon( iconLoader->loadIcon( "fileprint", (K3Icon::Group)K3Icon::Toolbar ) );
     printMetadata->setWhatsThis( i18n( "Print meta-data to printer" ) );
     d->toolButtons->addButton(printMetadata);
+    hlay2->addWidget(printMetadata);
 
     QPushButton *copy2ClipBoard = new QPushButton( d->toolsGBox );
     copy2ClipBoard->setIcon( iconLoader->loadIcon( "editcopy", (K3Icon::Group)K3Icon::Toolbar ) );
     copy2ClipBoard->setWhatsThis( i18n( "Copy meta-data to clipboard" ) );
     d->toolButtons->addButton(copy2ClipBoard);
+    hlay2->addWidget(copy2ClipBoard);
 
-    d->mainLayout->addWidget(d->levelGBox, 0, 0, 0, 1);
+    d->mainLayout->addMultiCellWidget(d->levelGBox, 0, 0, 0, 1);
     d->mainLayout->setColumnStretch(3, 10);
-    d->mainLayout->addWidget(d->toolsGBox, 0, 0, 4, 4);
+    d->mainLayout->addMultiCellWidget(d->toolsGBox, 0, 0, 4, 4);
 
     d->view = new MetadataListView(this);
-    d->mainLayout->addWidget(d->view, 1, 1, 0, 4);
+    d->mainLayout->addMultiCellWidget(d->view, 1, 1, 0, 4);
 
     // -----------------------------------------------------------------
-    
-    connect(d->levelButtons, SIGNAL(released(int)),
+
+    connect(d->levelButtons, SIGNAL(buttonReleased(int)),
             this, SLOT(slotModeChanged(int)));
 
     connect(copy2ClipBoard, SIGNAL(clicked()),
@@ -167,7 +175,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
             this, SLOT(slotPrintMetadata()));
 
     connect(saveMetadata, SIGNAL(clicked()),
-            this, SLOT(slotSaveMetadataToFile()));                        
+            this, SLOT(slotSaveMetadataToFile()));
 }
 
 MetadataWidget::~MetadataWidget()
@@ -188,7 +196,7 @@ void MetadataWidget::enabledToolButtons(bool b)
 bool MetadataWidget::setMetadata(const QByteArray& data)
 {
     d->metadata = data;
-    
+
     // Cleanup all metadata contents.
     setMetadataMap();
 
@@ -203,7 +211,7 @@ bool MetadataWidget::setMetadata(const QByteArray& data)
         enabledToolButtons(true);
     else
         enabledToolButtons(false);
-    
+
     // Refresh view using decoded metadata.
     buildView();
 
@@ -229,7 +237,7 @@ bool MetadataWidget::storeMetadataToFile(const KUrl& url)
     QFile file(url.path());
     if ( !file.open(QIODevice::WriteOnly) ) 
         return false;
-    
+
     QDataStream stream( &file );
     stream.writeRawData(d->metadata.data(), d->metadata.size());
     file.close();
@@ -381,7 +389,7 @@ KUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& f
     // Check for cancel.
     if ( fileSaveDialog.exec() == KFileDialog::Accepted )
         return fileSaveDialog.selectedUrl().path();
-    
+
     return KUrl();
 }
 
@@ -441,4 +449,3 @@ void MetadataWidget::setUserAreaWidget(QWidget *w)
 }
 
 }  // namespace Digikam
-
