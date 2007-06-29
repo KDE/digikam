@@ -131,28 +131,14 @@ KDE4_AUTOMOC(${digikam_LIB_SRCS})
 KDE4_ADD_LIBRARY(digikam SHARED ${digikam_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(digikam
-                      libslideshow
-                      libbatch 
                       libthumbbar 
                       libthemeengine 
-                      libcommonwidgets
                       libiccprofileswidgets
-                      libmetadatawidgets
                       libimagepluginswidgets
-                      libdialog 
-                      libjpegutils 
-                      libdimg 
-                      libdimgloaders 
-                      libdimgfilters 
                       libimagepropertiesdigikam 
                       libthreadimageio 
                       libgreycstoration 
-                      libdatabase 
-                      libsqlite2
-                      libdimgcanvas 
-                      libdimgeditor 
                       libsetup 
-                      liblighttable 
 #                       libcameragui 
 
                       ${KDE4_KDECORE_LIBS} 
