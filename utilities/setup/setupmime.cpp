@@ -73,16 +73,16 @@ public:
     QLineEdit   *rawFileFilterEdit;
 };
 
-SetupMime::SetupMime(QWidget* parent )
+SetupMime::SetupMime(QWidget* parent)
          : QWidget(parent)
 {
     d = new SetupMimePriv;
-    QVBoxLayout *layout = new QVBoxLayout(parent);
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
     
-    QGroupBox *imageFileFilterBox = new QGroupBox(i18n("Image Files"), parent);
+    QGroupBox *imageFileFilterBox = new QGroupBox(i18n("Image Files"), this);
     QGridLayout* grid1            = new QGridLayout();
     grid1->setSpacing(KDialog::spacingHint());
     imageFileFilterBox->setLayout(grid1);
@@ -115,7 +115,7 @@ SetupMime::SetupMime(QWidget* parent )
     
     // --------------------------------------------------------
     
-    QGroupBox *movieFileFilterBox = new QGroupBox(i18n("Movie Files"), parent);
+    QGroupBox *movieFileFilterBox = new QGroupBox(i18n("Movie Files"), this);
     QGridLayout* grid2            = new QGridLayout();
     grid2->setSpacing(KDialog::spacingHint());
     movieFileFilterBox->setLayout(grid2);
@@ -148,7 +148,7 @@ SetupMime::SetupMime(QWidget* parent )
     
     // --------------------------------------------------------
     
-    QGroupBox *audioFileFilterBox = new QGroupBox(i18n("Audio Files"), parent);
+    QGroupBox *audioFileFilterBox = new QGroupBox(i18n("Audio Files"), this);
     QGridLayout* grid3            = new QGridLayout();
     grid3->setSpacing(KDialog::spacingHint());
 
@@ -180,7 +180,7 @@ SetupMime::SetupMime(QWidget* parent )
     
     // --------------------------------------------------------
     
-    QGroupBox *rawFileFilterBox = new QGroupBox(i18n("RAW Files"), parent);
+    QGroupBox *rawFileFilterBox = new QGroupBox(i18n("RAW Files"), this);
     QGridLayout* grid4          = new QGridLayout();
     grid4->setSpacing(KDialog::spacingHint());
 

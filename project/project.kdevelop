@@ -12,10 +12,14 @@
     </keywords>
     <projectdirectory>./</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <ignoreparts/>
     <projectname/>
-    <defaultencoding/>
+    <defaultencoding></defaultencoding>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
     <projectname>project</projectname>
     <projectname>project</projectname>
     <projectname>project</projectname>
@@ -106,12 +110,12 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell/>
+      <dbgshell></dbgshell>
       <programargs/>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -147,11 +151,11 @@
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <mainprogram>/home/gilles/Documents/devel/SVN/trunk/graphics/digikam/showfoto/showfoto</mainprogram>
-      <programargs/>
+      <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>false</autocompile>
       <envvars/>
-      <globaldebugarguments/>
+      <globaldebugarguments></globaldebugarguments>
       <globalcwd>/home/gilles/Documents/devel/SVN/trunk/graphics/digikam/project/../..</globalcwd>
       <useglobalprogram>true</useglobalprogram>
       <autoinstall>false</autoinstall>
@@ -223,9 +227,11 @@
       <usePermanentCaching>true</usePermanentCaching>
       <alwaysIncludeNamespaces>false</alwaysIncludeNamespaces>
       <includePaths>.;</includePaths>
+      <parseMissingHeadersExperimental>false</parseMissingHeadersExperimental>
+      <resolveIncludePathsUsingMakeExperimental>false</resolveIncludePathsUsingMakeExperimental>
     </codecompletion>
     <creategettersetter>
-      <prefixGet/>
+      <prefixGet></prefixGet>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>

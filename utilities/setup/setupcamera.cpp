@@ -80,8 +80,8 @@ SetupCamera::SetupCamera( QWidget* parent )
            : QWidget( parent )
 {
     d = new SetupCameraPriv;
-    QVBoxLayout *mainLayout = new QVBoxLayout(parent);
 
+    QVBoxLayout *mainLayout     = new QVBoxLayout(this);
     QGridLayout* groupBoxLayout = new QGridLayout( this );
     groupBoxLayout->setSpacing( KDialog::spacingHint() );
     groupBoxLayout->setAlignment( Qt::AlignTop );

@@ -93,10 +93,10 @@ SetupToolTip::SetupToolTip(QWidget* parent)
             : QWidget(parent)
 {
     d = new SetupToolTipPriv;
-    QVBoxLayout *layout = new QVBoxLayout( parent );
+    QVBoxLayout *layout = new QVBoxLayout( this );
     layout->setSpacing( KDialog::spacingHint() );
 
-    d->showToolTipsBox = new QCheckBox(i18n("Show Thumbbar items toolti&ps"), parent);
+    d->showToolTipsBox = new QCheckBox(i18n("Show Thumbbar items toolti&ps"), this);
     d->showToolTipsBox->setWhatsThis( i18n("<p>Set this option to display image information when "
                                            "the mouse is hovered over a thumbbar item."));
 
@@ -104,7 +104,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     // --------------------------------------------------------
 
-    d->fileSettingBox     = new QGroupBox(i18n("File/Image Information"), parent);
+    d->fileSettingBox     = new QGroupBox(i18n("File/Image Information"), this);
     QVBoxLayout *gLayout1 = new QVBoxLayout();
     gLayout1->setSpacing( KDialog::spacingHint() );
 
@@ -134,7 +134,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     // --------------------------------------------------------
 
-    d->photoSettingBox    = new QGroupBox(i18n("Photograph Information"), parent);
+    d->photoSettingBox    = new QGroupBox(i18n("Photograph Information"), this);
     QVBoxLayout *gLayout2 = new QVBoxLayout();
     gLayout2->setSpacing( KDialog::spacingHint() );
 

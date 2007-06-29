@@ -66,20 +66,20 @@ SetupPlugins::SetupPlugins(QWidget* parent )
             : QWidget(parent)
 {
     d = new SetupPluginsPriv;
-    QVBoxLayout *layout = new QVBoxLayout(parent);
+    QVBoxLayout *layout = new QVBoxLayout(this);
     QHBoxLayout *hlay   = new QHBoxLayout();
     layout->addLayout(hlay);
 
-    d->pluginsNumber    = new QLabel(parent);
+    d->pluginsNumber    = new QLabel(this);
 
-    QLabel *KipiVersion = new QLabel(i18n("Kipi library version: %1",QString(kipi_version)), parent);
+    QLabel *KipiVersion = new QLabel(i18n("Kipi library version: %1",QString(kipi_version)), this);
     KipiVersion->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
 
     hlay->addWidget(d->pluginsNumber, 1);
     hlay->addStretch(1);
     hlay->addWidget(KipiVersion, 1);
 
-    d->kipiConfig = KIPI::PluginLoader::componentData()->configWidget( parent );
+    d->kipiConfig = KIPI::PluginLoader::componentData()->configWidget( this );
     QString pluginsListHelp = i18n("<p>A list of available Kipi plugins "
                                     "appears below.");
     d->kipiConfig->setWhatsThis( pluginsListHelp);

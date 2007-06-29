@@ -73,32 +73,32 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
 {
     d = new SetupIOFilesPriv;
 
-    QVBoxLayout* vbox = new QVBoxLayout(parent);
+    QVBoxLayout* vbox = new QVBoxLayout(this);
 
     //-- JPEG Settings ------------------------------------------------------
 
-    d->JPEGOptions    = new JPEGSettings(parent);
-    KSeparator *line1 = new KSeparator(Qt::Horizontal, parent);
+    d->JPEGOptions    = new JPEGSettings(this);
+    KSeparator *line1 = new KSeparator(Qt::Horizontal, this);
     vbox->addWidget(d->JPEGOptions);
     vbox->addWidget(line1);
 
     //-- PNG Settings -------------------------------------------------------
 
-    d->PNGOptions     = new PNGSettings(parent);
-    KSeparator *line2 = new KSeparator(Qt::Horizontal, parent);
+    d->PNGOptions     = new PNGSettings(this);
+    KSeparator *line2 = new KSeparator(Qt::Horizontal, this);
     vbox->addWidget(d->PNGOptions);
     vbox->addWidget(line2);
 
     //-- TIFF Settings ------------------------------------------------------
 
-    d->TIFFOptions    = new TIFFSettings(parent);
-    KSeparator *line3 = new KSeparator(Qt::Horizontal, parent);
+    d->TIFFOptions    = new TIFFSettings(this);
+    KSeparator *line3 = new KSeparator(Qt::Horizontal, this);
     vbox->addWidget(d->TIFFOptions);
     vbox->addWidget(line3);
 
     //-- JPEG 2000 Settings -------------------------------------------------
 
-    d->JPEG2000Options = new JP2KSettings(parent);
+    d->JPEG2000Options = new JP2KSettings(this);
     vbox->addWidget(d->JPEG2000Options);
 
     vbox->addStretch(10);

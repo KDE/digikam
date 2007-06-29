@@ -85,12 +85,12 @@ SetupMetadata::SetupMetadata(QWidget* parent )
              : QWidget(parent)
 {
     d = new SetupMetadataPriv;
-    QVBoxLayout *mainLayout = new QVBoxLayout(parent);
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
   
-    QGroupBox *ExifGroup  = new QGroupBox(i18n("EXIF Actions"), parent);
+    QGroupBox *ExifGroup  = new QGroupBox(i18n("EXIF Actions"), this);
     QVBoxLayout *gLayout1 = new QVBoxLayout();
 
     d->ExifRotateBox = new QCheckBox(ExifGroup);
@@ -107,7 +107,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
   
     // --------------------------------------------------------
   
-    QGroupBox *IptcGroup  = new QGroupBox(i18n("IPTC Actions"), parent);
+    QGroupBox *IptcGroup  = new QGroupBox(i18n("IPTC Actions"), this);
     QVBoxLayout *gLayout2 = new QVBoxLayout();
 
     d->saveTagsIptcBox = new QCheckBox(IptcGroup);
@@ -136,7 +136,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     // --------------------------------------------------------
   
-    QGroupBox *commonGroup = new QGroupBox(i18n("Common Metadata Actions"), parent);
+    QGroupBox *commonGroup = new QGroupBox(i18n("Common Metadata Actions"), this);
     QVBoxLayout *gLayout3  = new QVBoxLayout();
 
     d->saveCommentsBox = new QCheckBox(commonGroup);
@@ -164,7 +164,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     // --------------------------------------------------------
     
-    KHBox *hbox = new KHBox(parent);
+    KHBox *hbox = new KHBox(this);
 
     KUrlLabel *exiv2LogoLabel = new KUrlLabel(hbox);
     exiv2LogoLabel->setText(QString());

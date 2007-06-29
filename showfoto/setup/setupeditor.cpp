@@ -83,12 +83,12 @@ SetupEditor::SetupEditor(QWidget* parent )
            : QWidget(parent)
 {
     d = new SetupEditorPriv;
-    QVBoxLayout *layout = new QVBoxLayout( parent );
+    QVBoxLayout *layout = new QVBoxLayout( this );
     layout->setSpacing( KDialog::spacingHint() );
 
     // --------------------------------------------------------
 
-    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), parent);
+    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), this);
     QVBoxLayout *gLayout1            = new QVBoxLayout();
 
     KHBox* colorBox              = new KHBox(interfaceOptionsGroup);
@@ -117,7 +117,7 @@ SetupEditor::SetupEditor(QWidget* parent )
 
     // --------------------------------------------------------
 
-    QGroupBox *exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), parent);
+    QGroupBox *exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), this);
     QVBoxLayout *gLayout2           = new QVBoxLayout();
 
     KHBox *underExpoBox         = new KHBox(exposureOptionsGroup);
@@ -140,7 +140,7 @@ SetupEditor::SetupEditor(QWidget* parent )
 
     // --------------------------------------------------------
 
-    QGroupBox *ExifGroupOptions = new QGroupBox(i18n("EXIF Actions"), parent);
+    QGroupBox *ExifGroupOptions = new QGroupBox(i18n("EXIF Actions"), this);
     QVBoxLayout *gLayout3       = new QVBoxLayout();
 
     d->exifRotateBox = new QCheckBox(ExifGroupOptions);

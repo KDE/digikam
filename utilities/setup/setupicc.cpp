@@ -148,12 +148,12 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 {
     d = new SetupICCPriv();
     d->mainDialog = dialog;
-    QVBoxLayout *layout = new QVBoxLayout( parent );
+    QVBoxLayout *layout = new QVBoxLayout( this );
     layout->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
     
-    QGroupBox *colorPolicy = new QGroupBox(i18n("Color Management Policy"), parent);
+    QGroupBox *colorPolicy = new QGroupBox(i18n("Color Management Policy"), this);
     QGridLayout* grid      = new QGridLayout();
     grid->setSpacing(KDialog::spacingHint());
     
@@ -208,7 +208,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     
     // --------------------------------------------------------
     
-    d->defaultPathGB  = new QGroupBox(parent);
+    d->defaultPathGB  = new QGroupBox(this);
     QVBoxLayout *vlay = new QVBoxLayout();
     
     d->defaultPathGB->setTitle(i18n("Color Profiles Directory"));
@@ -227,7 +227,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     // --------------------------------------------------------
     
-    d->profilesGB      = new QGroupBox(i18n("ICC Profiles Settings"), parent);
+    d->profilesGB      = new QGroupBox(i18n("ICC Profiles Settings"), this);
     QGridLayout* grid2 = new QGridLayout();
     grid2->setSpacing(KDialog::spacingHint());
     grid2->setColumnStretch(2, 10);
@@ -312,7 +312,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
      // --------------------------------------------------------
     
-    d->advancedSettingsGB = new QGroupBox(i18n("Advanced Settings"), parent);
+    d->advancedSettingsGB = new QGroupBox(i18n("Advanced Settings"), this);
     QVBoxLayout *vlay2    = new QVBoxLayout();
 
     d->bpcAlgorithm = new QCheckBox(d->advancedSettingsGB);

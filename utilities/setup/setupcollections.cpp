@@ -74,7 +74,7 @@ SetupCollections::SetupCollections(QWidget* parent )
                 : QWidget(parent)
 {
     d = new SetupCollectionsPriv;
-    QVBoxLayout *mainLayout            = new QVBoxLayout(parent);
+    QVBoxLayout *mainLayout            = new QVBoxLayout(this);
     QGridLayout *collectionGroupLayout = new QGridLayout( this );
     collectionGroupLayout->setSpacing( KDialog::spacingHint() );
     collectionGroupLayout->setAlignment( Qt::AlignTop );

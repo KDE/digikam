@@ -65,11 +65,11 @@ SetupLightTable::SetupLightTable(QWidget* parent )
                : QWidget(parent)
 {
     d = new SetupLightTablePriv;
-    QVBoxLayout *layout = new QVBoxLayout( parent );
+    QVBoxLayout *layout = new QVBoxLayout( this );
 
     // --------------------------------------------------------
 
-    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), parent);
+    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), this);
     QVBoxLayout *gLayout             = new QVBoxLayout();
 
     d->autoSyncPreview = new QCheckBox(i18n("Synchronize panels automatically"), interfaceOptionsGroup);

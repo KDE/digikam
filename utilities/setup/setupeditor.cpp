@@ -75,11 +75,11 @@ SetupEditor::SetupEditor(QWidget* parent )
            : QWidget(parent)
 {
     d = new SetupEditorPriv;
-    QVBoxLayout *layout = new QVBoxLayout(parent);
+    QVBoxLayout *layout = new QVBoxLayout(this);
 
     // --------------------------------------------------------
 
-    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), parent);
+    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), this);
     QVBoxLayout *gLayout1            = new QVBoxLayout();
 
     d->themebackgroundColor = new QCheckBox(i18n("&Use theme background color"),
@@ -107,7 +107,7 @@ SetupEditor::SetupEditor(QWidget* parent )
 
     // --------------------------------------------------------
 
-    QGroupBox *exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), parent);
+    QGroupBox *exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), this);
     QVBoxLayout *gLayout2           = new QVBoxLayout();
 
     KHBox *underExpoBox         = new KHBox(exposureOptionsGroup);

@@ -68,7 +68,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
              : QWidget(parent)
 {
     d = new SetupIdentityPriv;
-    QVBoxLayout *layout = new QVBoxLayout( parent );
+    QVBoxLayout *layout = new QVBoxLayout( this );
     layout->setSpacing( KDialog::spacingHint() );
     
     // --------------------------------------------------------
@@ -77,7 +77,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     QRegExp asciiRx("[\x20-\x7F]+$");
     QValidator *asciiValidator = new QRegExpValidator(asciiRx, this);
 
-    QGroupBox *photographerIdGroup = new QGroupBox(i18n("Photographer Information"), parent);
+    QGroupBox *photographerIdGroup = new QGroupBox(i18n("Photographer Information"), this);
     QGridLayout* grid              = new QGridLayout();
     grid->setSpacing(KDialog::spacingHint());
 
@@ -105,7 +105,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     // --------------------------------------------------------
 
-    QGroupBox *creditsGroup = new QGroupBox(i18n("Credit and Copyright"), parent);
+    QGroupBox *creditsGroup = new QGroupBox(i18n("Credit and Copyright"), this);
     QGridLayout* grid2      = new QGridLayout();
     grid2->setSpacing(KDialog::spacingHint());
 
@@ -147,7 +147,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     // --------------------------------------------------------
 
     QLabel *iptcNote = new QLabel(i18n("<b>Note: IPTC text tags only support the printable "
-                                       "ASCII characters set.</b>"), parent);
+                                       "ASCII characters set.</b>"), this);
                                          
     // --------------------------------------------------------
     

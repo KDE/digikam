@@ -77,36 +77,36 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
               : QWidget(parent)
 {
     d = new SetupSlideShowPriv;
-    QVBoxLayout *layout = new QVBoxLayout( parent );
+    QVBoxLayout *layout = new QVBoxLayout( this );
     
-    d->delayInput = new KIntNumInput(5, parent);
+    d->delayInput = new KIntNumInput(5, this);
     d->delayInput->setRange(1, 3600, 1, true );
     d->delayInput->setLabel( i18n("&Delay between images:"), Qt::AlignLeft|Qt::AlignTop );
     d->delayInput->setWhatsThis( i18n("<p>The delay, in seconds, between images."));
     
-    d->startWithCurrent = new QCheckBox(i18n("Start with current image"), parent);
+    d->startWithCurrent = new QCheckBox(i18n("Start with current image"), this);
     d->startWithCurrent->setWhatsThis( i18n("<p>If this option is enabled, Slideshow will be started "
                                             "with current image selected from the images list."));
     
-    d->loopMode = new QCheckBox(i18n("Display in loop"), parent);
+    d->loopMode = new QCheckBox(i18n("Display in loop"), this);
     d->loopMode->setWhatsThis( i18n("<p>Run the slideshow in a loop."));
     
-    d->printName = new QCheckBox(i18n("Print image file name"), parent);
+    d->printName = new QCheckBox(i18n("Print image file name"), this);
     d->printName->setWhatsThis( i18n("<p>Print image file name to the screen bottom."));
 
-    d->printDate = new QCheckBox(i18n("Print image creation date"), parent);
+    d->printDate = new QCheckBox(i18n("Print image creation date"), this);
     d->printDate->setWhatsThis( i18n("<p>Print image creation to the screen bottom."));
 
-    d->printApertureFocal = new QCheckBox(i18n("Print camera aperture and focal length"), parent);
+    d->printApertureFocal = new QCheckBox(i18n("Print camera aperture and focal length"), this);
     d->printApertureFocal->setWhatsThis( i18n("<p>Print camera aperture and focal length to the screen bottom."));
 
-    d->printExpoSensitivity = new QCheckBox(i18n("Print camera exposure and sensitivity"), parent);
+    d->printExpoSensitivity = new QCheckBox(i18n("Print camera exposure and sensitivity"), this);
     d->printExpoSensitivity->setWhatsThis( i18n("<p>Print camera exposure and sensitivity to the screen  bottom."));
 
-    d->printMakeModel = new QCheckBox(i18n("Print camera make and model"), parent);
+    d->printMakeModel = new QCheckBox(i18n("Print camera make and model"), this);
     d->printMakeModel->setWhatsThis( i18n("<p>Print camera make and model to the screen bottom."));
 
-    d->printComment = new QCheckBox(i18n("Print image comment"), parent);
+    d->printComment = new QCheckBox(i18n("Print image comment"), this);
     d->printComment->setWhatsThis( i18n("<p>Print image comment on bottom of screen."));
     
     layout->addWidget(d->delayInput);

@@ -99,12 +99,12 @@ SetupGeneral::SetupGeneral(QWidget* parent, KPageDialog* dialog )
 {
     d = new SetupGeneralPriv;
     d->mainDialog       = dialog;
-    QVBoxLayout *layout = new QVBoxLayout( parent );
+    QVBoxLayout *layout = new QVBoxLayout( this );
     layout->setSpacing( KDialog::spacingHint() );
 
     // --------------------------------------------------------
 
-    QGroupBox *albumPathBox = new QGroupBox(i18n("Album &Library Path"), parent);
+    QGroupBox *albumPathBox = new QGroupBox(i18n("Album &Library Path"), this);
     QVBoxLayout *gLayout1   = new QVBoxLayout();
 
     d->albumPathEdit = new KUrlRequester(albumPathBox);
@@ -127,7 +127,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KPageDialog* dialog )
 
     // --------------------------------------------------------
 
-    QGroupBox *iconTextGroup = new QGroupBox(i18n("Thumbnail Information"), parent);
+    QGroupBox *iconTextGroup = new QGroupBox(i18n("Thumbnail Information"), this);
     QVBoxLayout *gLayout2    = new QVBoxLayout();
 
     d->iconShowNameBox = new QCheckBox(i18n("Show file &name"), iconTextGroup);
@@ -174,7 +174,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KPageDialog* dialog )
 
     // --------------------------------------------------------
 
-    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), parent);
+    QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), this);
     QGridLayout* ifaceSettingsLayout = new QGridLayout();
     ifaceSettingsLayout->setSpacing(KDialog::spacingHint());
     ifaceSettingsLayout->setMargin(KDialog::marginHint());

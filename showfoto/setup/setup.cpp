@@ -92,39 +92,39 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     setFaceType(KPageDialog::List);
     setModal(true);
 
-    KVBox *vbox = new KVBox();
-    setMainWidget( vbox );
-
-    d->page_editor = addPage( vbox, i18n("General") );
+    d->editorPage  = new SetupEditor();
+    d->page_editor = addPage( d->editorPage, i18n("General") );
     d->page_editor->setHeader( i18n("General Settings") );
     d->page_editor->setIcon( KIcon("showfoto") );
-    d->editorPage = new SetupEditor(d->page_editor->widget());
 
-    d->page_tooltip = addPage( vbox, i18n("Tool Tip") );
+    d->toolTipPage = new SetupToolTip();
+    d->page_tooltip = addPage( d->toolTipPage, i18n("Tool Tip") );
     d->page_tooltip->setHeader( i18n("Thumbbar Items Tool Tip Settings") );
     d->page_tooltip->setIcon( KIcon("filetypes") );
-    d->toolTipPage = new SetupToolTip(d->page_tooltip->widget());
-
-    d->page_dcraw = addPage( vbox, i18n("RAW decoding") );
+    
+    d->dcrawPage = new Digikam::SetupDcraw();
+    d->page_dcraw = addPage( d->dcrawPage, i18n("RAW decoding") );
     d->page_dcraw->setHeader( i18n("RAW Files Decoding Settings") );
-    d->page_dcraw->setIcon( KIcon("kdcraw") );
-    d->dcrawPage = new Digikam::SetupDcraw(d->page_dcraw->widget());
+    d->page_dcraw->setIcon( KIcon("kdcraw") );    
+/*
+    TODO: KDE4PORT: something is wrong in this page and cause crash
 
-    d->page_icc = addPage( vbox, i18n("Color Management") );
+    d->iccPage = new Digikam::SetupICC(0, this);
+    d->page_icc = addPage( d->iccPage, i18n("Color Management") );
     d->page_icc->setHeader( i18n("Color Management Settings") );
     d->page_icc->setIcon( KIcon("colorize") );
-    d->iccPage = new Digikam::SetupICC(d->page_icc->widget(), this);
+*/
 
-    d->page_iofiles = addPage( vbox, i18n("Save Images") );
+    d->iofilesPage = new Digikam::SetupIOFiles();
+    d->page_iofiles = addPage( d->iofilesPage, i18n("Save Images") );
     d->page_iofiles->setHeader( i18n("Save Images Files Settings") );
     d->page_iofiles->setIcon( KIcon("filesave") );
-    d->iofilesPage = new Digikam::SetupIOFiles(d->page_iofiles->widget());
 
-    d->page_slideshow = addPage( vbox, i18n("Slide Show") );
+    d->slideshowPage = new Digikam::SetupSlideShow();
+    d->page_slideshow = addPage( d->slideshowPage, i18n("Slide Show") );
     d->page_slideshow->setHeader( i18n("Slide Show Settings") );
     d->page_slideshow->setIcon( KIcon("slideshow") );
-    d->slideshowPage = new Digikam::SetupSlideShow(d->page_slideshow->widget());
-
+    
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
 

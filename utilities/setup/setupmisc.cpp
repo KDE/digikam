@@ -64,8 +64,7 @@ SetupMisc::SetupMisc(QWidget* parent)
 {
     d = new SetupMiscPriv;
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(parent);
-    QVBoxLayout *layout     = new QVBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setSpacing( KDialog::spacingHint() );
 
     // --------------------------------------------------------
@@ -93,7 +92,6 @@ SetupMisc::SetupMisc(QWidget* parent)
     layout->addStretch();
     readSettings();
     adjustSize();
-    mainLayout->addWidget(this);
 }
 
 SetupMisc::~SetupMisc()

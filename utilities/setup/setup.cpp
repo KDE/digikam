@@ -140,83 +140,80 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     setFaceType(KPageDialog::List);
     setModal(true);
 
-    KVBox *vbox = new KVBox();
-    setMainWidget( vbox );
-
-    d->page_general = addPage( vbox, i18n("Albums") );
+    d->generalPage  = new SetupGeneral();
+    d->page_general = addPage( d->generalPage, i18n("Albums") );
     d->page_general->setHeader( i18n("Album Settings") );
     d->page_general->setIcon( KIcon("folder_image") );
-    d->generalPage = new SetupGeneral(d->page_general->widget());
 
-    d->page_collections = addPage( vbox, i18n("Collections") );
+    d->collectionsPage  = new SetupCollections();
+    d->page_collections = addPage( d->collectionsPage, i18n("Collections") );
     d->page_collections->setHeader( i18n("Album Collections") );
     d->page_collections->setIcon( KIcon("fileopen") );
-    d->collectionsPage = new SetupCollections(d->page_collections->widget());
 
-    d->page_misc = addPage( vbox, i18n("Identity") );
-    d->page_misc->setHeader( i18n("Default IPTC identity information") );
-    d->page_misc->setIcon( KIcon("identity") );
-    d->identityPage = new SetupIdentity(d->page_identity->widget());
+    d->identityPage  = new SetupIdentity();
+    d->page_identity = addPage( d->identityPage, i18n("Identity") );
+    d->page_identity->setHeader( i18n("Default IPTC identity information") );
+    d->page_identity->setIcon( KIcon("identity") );
 
-    d->page_metadata = addPage( vbox, i18n("Metadata") );
+    d->metadataPage  = new SetupMetadata();
+    d->page_metadata = addPage( d->metadataPage, i18n("Metadata") );
     d->page_metadata->setHeader( i18n("Embedded Image Information Management") );
     d->page_metadata->setIcon( KIcon("exifinfo") );
-    d->metadataPage = new SetupMetadata(d->page_metadata->widget());
 
-    d->page_tooltip = addPage( vbox, i18n("Tool Tip") );
+    d->tooltipPage  = new SetupToolTip();
+    d->page_tooltip = addPage( d->tooltipPage, i18n("Tool Tip") );
     d->page_tooltip->setHeader( i18n("Album Items Tool Tip Settings") );
     d->page_tooltip->setIcon( KIcon("filetypes") );
-    d->tooltipPage = new SetupToolTip(d->page_tooltip->widget());
 
-    d->page_mime = addPage( vbox, i18n("Mime Types") );
+    d->mimePage  = new SetupMime();
+    d->page_mime = addPage( d->mimePage, i18n("Mime Types") );
     d->page_mime->setHeader( i18n("File (MIME) Types Settings") );
     d->page_mime->setIcon( KIcon("kcmsystem") );
-    d->mimePage = new SetupMime(d->page_mime->widget());
 
-    d->page_lighttable = addPage( vbox, i18n("Light Table") );
+    d->lighttablePage  = new SetupLightTable();
+    d->page_lighttable = addPage( d->lighttablePage, i18n("Light Table") );
     d->page_lighttable->setHeader( i18n("Light Table Settings") );
     d->page_lighttable->setIcon( KIcon("idea") );
-    d->lighttablePage = new SetupLightTable(d->page_lighttable->widget());
-
-    d->page_editor = addPage( vbox, i18n("Image Editor") );
+    
+    d->editorPage  = new SetupEditor();
+    d->page_editor = addPage( d->editorPage, i18n("Image Editor") );
     d->page_editor->setHeader( i18n("Image Editor General Settings") );
     d->page_editor->setIcon( KIcon("image") );
-    d->editorPage = new SetupEditor(d->page_editor->widget());
 
-    d->page_iofiles = addPage( vbox, i18n("Save Images") );
+    d->iofilesPage  = new SetupIOFiles();
+    d->page_iofiles = addPage( d->iofilesPage, i18n("Save Images") );
     d->page_iofiles->setHeader( i18n("Image Editor Save Images Files Settings") );
     d->page_iofiles->setIcon( KIcon("filesave") );
-    d->iofilesPage = new SetupIOFiles(d->page_iofiles->widget());
 
-    d->page_dcraw = addPage( vbox, i18n("RAW decoding") );
+    d->dcrawPage = new SetupDcraw();
+    d->page_dcraw = addPage( d->dcrawPage, i18n("RAW decoding") );
     d->page_dcraw->setHeader( i18n("RAW Files Decoding Settings") );
     d->page_dcraw->setIcon( KIcon("kdcraw") );
-    d->dcrawPage = new SetupDcraw(d->page_dcraw->widget());
 
-    d->page_icc = addPage( vbox, i18n("Color Management") );
+    d->iccPage  = new SetupICC(0, this);
+    d->page_icc = addPage( d->iccPage, i18n("Color Management") );
     d->page_icc->setHeader( i18n("Image Editor Color Management Settings") );
     d->page_icc->setIcon( KIcon("colorize") );
-    d->iccPage = new SetupICC(d->page_icc->widget(), this);
 
-    d->page_plugins = addPage( vbox, i18n("Kipi Plugins") );
+    d->pluginsPage  = new SetupPlugins();
+    d->page_plugins = addPage( d->pluginsPage, i18n("Kipi Plugins") );
     d->page_plugins->setHeader( i18n("Main Interface Plug-in Settings") );
     d->page_plugins->setIcon( KIcon("kipi") );
-    d->pluginsPage = new SetupPlugins(d->page_plugins->widget());
 
-    d->page_slideshow = addPage( vbox, i18n("Slide Show") );
+    d->slideshowPage  = new SetupSlideShow();
+    d->page_slideshow = addPage( d->slideshowPage, i18n("Slide Show") );
     d->page_slideshow->setHeader( i18n("Slide Show Settings") );
     d->page_slideshow->setIcon( KIcon("slideshow") );
-    d->slideshowPage = new SetupSlideShow(d->page_slideshow->widget());
 
-    d->page_camera = addPage( vbox, i18n("Cameras") );
+    d->cameraPage  = new SetupCamera();
+    d->page_camera = addPage( d->cameraPage, i18n("Cameras") );
     d->page_camera->setHeader( i18n("Camera Settings") );
     d->page_camera->setIcon( KIcon("digitalcam") );
-    d->cameraPage = new SetupCamera(d->page_camera->widget());
 
-    d->page_misc = addPage( vbox, i18n("Miscellaneous") );
+    d->miscPage  = new SetupMisc();
+    d->page_misc = addPage( d->miscPage, i18n("Miscellaneous") );
     d->page_misc->setHeader( i18n("Miscellaneous Settings") );
     d->page_misc->setIcon( KIcon("misc") );
-    d->miscPage = new SetupMisc(d->page_misc->widget());
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
