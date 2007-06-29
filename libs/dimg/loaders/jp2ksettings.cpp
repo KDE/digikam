@@ -92,9 +92,9 @@ JP2KSettings::JP2KSettings(QWidget *parent)
                                                "<b>Note: JPEG 2000 is not a lossless image "
                                                "compression format when you use this setting.</b>"));
 
-    d->JPEG2000Grid->addWidget(d->JPEG2000LossLess, 0, 0, 0, 1);
-    d->JPEG2000Grid->addWidget(d->labelJPEG2000compression, 1, 1, 0, 0);
-    d->JPEG2000Grid->addWidget(d->JPEG2000compression, 1, 1, 1, 1);
+    d->JPEG2000Grid->addMultiCellWidget(d->JPEG2000LossLess, 0, 0, 0, 1);
+    d->JPEG2000Grid->addMultiCellWidget(d->labelJPEG2000compression, 1, 1, 0, 0);
+    d->JPEG2000Grid->addMultiCellWidget(d->JPEG2000compression, 1, 1, 1, 1);
     d->JPEG2000Grid->setColumnStretch(1, 10);
     d->JPEG2000Grid->setSpacing(KDialog::spacingHint());
 
