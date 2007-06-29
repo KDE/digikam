@@ -25,6 +25,8 @@
 
 #include <Q3SimpleRichText>
 #include <Q3PaintDeviceMetrics>
+#include <Q3StyleSheet>
+#include <Q3MimeSourceFactory>
 #include <QColorGroup>
 #include <QMimeData>
 #include <QClipboard>
@@ -38,9 +40,8 @@
 #include <QVBoxLayout>
 #include <QButtonGroup>
 #include <QDataStream>
-#include <Q3StyleSheet>
-#include <Q3MimeSourceFactory>
 #include <QColorGroup>
+
 // KDE includes.
 
 #include <k3listview.h>
