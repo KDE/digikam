@@ -42,7 +42,6 @@ class Q3ListViewItem;
 
 namespace Digikam
 {
-class AlbumIconItem;
 class Album;
 class TAlbum;
 class TAlbumCheckListItem;

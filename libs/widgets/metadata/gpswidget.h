@@ -38,7 +38,6 @@ namespace Digikam
 {
 
 class GPSWidgetPriv;
-class WorldMapWidget;
 
 class DIGIKAM_EXPORT GPSWidget : public MetadataWidget
 {

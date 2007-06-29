@@ -47,7 +47,6 @@ namespace Digikam
 {
 
 class ImagePannelWidgetPriv;
-class ImageRegionWidget;
 
 class DIGIKAM_EXPORT ImagePannelWidget : public KHBox
 {

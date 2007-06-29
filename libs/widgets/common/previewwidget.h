@@ -37,7 +37,6 @@
 
 #include "digikam_export.h"
 
-class QPainter;
 class QPixmap;
 class QColor;
 

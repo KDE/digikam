@@ -43,7 +43,6 @@
 namespace Digikam
 {
 
-class ImagePanIconWidget;
 class PanIconWidgetPriv;
 
 class PanIconWidget : public QWidget

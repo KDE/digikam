@@ -42,7 +42,6 @@ class QWidget;
 namespace Digikam
 {
 
-class ICCProfileInfoDlgPriv;
 
 class DIGIKAM_EXPORT ICCProfileInfoDlg : public KDialog
 {

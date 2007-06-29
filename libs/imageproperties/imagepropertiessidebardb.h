@@ -47,10 +47,7 @@ namespace Digikam
 {
 
 class DImg;
-class AlbumIconView;
-class AlbumIconItem;
 class ImageInfo;
-class NavigateBarTab;
 class ImagePropertiesSideBarDBPriv;
 
 class DIGIKAM_EXPORT ImagePropertiesSideBarDB : public ImagePropertiesSideBar

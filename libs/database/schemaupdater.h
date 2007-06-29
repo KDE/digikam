@@ -31,9 +31,7 @@
 namespace Digikam
 {
 
-class DatabaseBackend;
 class DatabaseAccess;
-class AlbumDB;
 
 class SchemaUpdater
 {

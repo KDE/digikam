@@ -41,11 +41,8 @@
 #include "digikam_export.h"
 #include "ui_deletedialogbase.h"
 
-class QStringList;
-class K3ListBox;
 class KGuiItem;
 class QLabel;
-class Q3WidgetStack;
 
 class DeleteDialogBase : public QWidget, public Ui::DeleteDialogBase
 {

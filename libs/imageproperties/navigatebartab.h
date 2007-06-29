@@ -44,7 +44,6 @@ class QVBoxLayout;
 namespace Digikam
 {
 
-class NavigateBarWidget;
 class NavigateBarTabPriv;
 
 class DIGIKAM_EXPORT NavigateBarTab : public QWidget
