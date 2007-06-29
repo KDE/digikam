@@ -113,9 +113,8 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
 
     d->levelGBox       = new QWidget(this);
     d->levelButtons    = new QButtonGroup(d->levelGBox);
-    QHBoxLayout *hlay1 = new QHBoxLayout();
+    QHBoxLayout *hlay1 = new QHBoxLayout(d->levelGBox);
     d->levelButtons->setExclusive(true);
-    d->levelGBox->setLayout(hlay1);
 
     QPushButton *simpleLevel = new QPushButton( d->levelGBox );
     simpleLevel->setIcon( iconLoader->loadIcon( "ascii", (K3Icon::Group)K3Icon::Toolbar ) );
@@ -135,8 +134,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
 
     d->toolsGBox       = new QWidget(this);
     d->toolButtons     = new QButtonGroup(d->toolsGBox);
-    QHBoxLayout *hlay2 = new QHBoxLayout();
-    d->toolsGBox->setLayout(hlay2);
+    QHBoxLayout *hlay2 = new QHBoxLayout(d->toolsGBox);
 
     QPushButton *saveMetadata = new QPushButton( d->toolsGBox );
     saveMetadata->setIcon( iconLoader->loadIcon( "filesave", (K3Icon::Group)K3Icon::Toolbar ) );
@@ -442,10 +440,10 @@ void MetadataWidget::setFileName(QString fileName)
 void MetadataWidget::setUserAreaWidget(QWidget *w)
 {
     QVBoxLayout *vLayout = new QVBoxLayout();
-    vLayout->setSpacing( KDialog::spacingHint() ); 
+    vLayout->setSpacing( KDialog::spacingHint() );
     vLayout->addWidget(w);
     vLayout->addStretch();
-    d->mainLayout->addLayout(vLayout, 2, 2, 0, 4);
+    d->mainLayout->addMultiCellLayout(vLayout, 2, 2, 0, 4);
 }
 
 }  // namespace Digikam

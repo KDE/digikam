@@ -84,11 +84,11 @@ public:
 
     QStringList     tagsfilter;
     QStringList     keysFilter;
-    
+
     QPushButton    *detailsButton;
 
     QComboBox      *detailsCombo;
-    
+
     WorldMapWidget *map;
 };
 
@@ -104,18 +104,19 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
         d->tagsfilter << ExifGPSHumanList[i];
 
     // --------------------------------------------------------
-            
+
     QWidget *gpsInfo    = new QWidget(this);
     QGridLayout *layout = new QGridLayout(gpsInfo);
     d->map              = new WorldMapWidget(256, 256, gpsInfo);
-    gpsInfo->setLayout(layout);
+    layout->setSpacing(0);
+    layout->setMargin(0);
 
     // --------------------------------------------------------
-    
-    QGroupBox* box2         = new QGroupBox(gpsInfo);
+
+    QWidget* box2           = new QWidget(gpsInfo);
     QGridLayout* box2Layout = new QGridLayout( box2 );
-    box2Layout->setSpacing(KDialog::spacingHint());
-    box2->setLayout(box2Layout);
+    box2Layout->setSpacing(0);
+    box2Layout->setMargin(0);
 
     d->detailsCombo  = new QComboBox( box2 );
     d->detailsButton = new QPushButton(i18n("More Info..."), box2);
@@ -123,25 +124,26 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
     d->detailsCombo->insertItem(GoogleMaps, QString("Google Maps"));
     d->detailsCombo->insertItem(MsnMaps,    QString("MSN Maps"));
     d->detailsCombo->insertItem(MultiMap,   QString("MultiMap"));
-    
-    box2Layout->addWidget( d->detailsCombo, 0, 0, 0, 0 );
-    box2Layout->addWidget( d->detailsButton, 0, 0, 1, 1 );
-    box2Layout->setColumnStretch(2, 10);
+
+    box2Layout->addMultiCellWidget( d->detailsCombo, 0, 0, 0, 0 );
+    box2Layout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+                             QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 0, 1, 1);
+    box2Layout->addMultiCellWidget( d->detailsButton, 0, 0, 2, 2 );
+    box2Layout->setColumnStretch(3, 10);
 
     // --------------------------------------------------------
-    
-    layout->addWidget(d->map, 0, 0, 0, 2);
-    layout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                    QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 1, 0, 2);
-    layout->addWidget(box2, 2, 2, 0, 0);
+
+    layout->addMultiCellWidget(d->map, 0, 0, 0, 2);
+    layout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+                        QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 1, 0, 2);
+    layout->addMultiCellWidget(box2, 2, 2, 0, 0);
     layout->setColumnStretch(2, 10);
-    layout->setRowStretch(3, 10);
 
     // --------------------------------------------------------
-    
+
     connect(d->detailsButton, SIGNAL(clicked()),
             this, SLOT(slotGPSDetails()));
-            
+
     setUserAreaWidget(gpsInfo);
     decodeMetadata();
 }
@@ -155,12 +157,12 @@ int GPSWidget::getWebGPSLocator(void)
 {
     return ( d->detailsCombo->currentIndex() );
 }
-    
+
 void GPSWidget::setWebGPSLocator(int locator)
 {
     d->detailsCombo->setCurrentIndex(locator);
 }
-    
+
 void GPSWidget::slotGPSDetails(void)
 {
     QString val, url;
@@ -195,8 +197,8 @@ void GPSWidget::slotGPSDetails(void)
             url.append(val.setNum(d->map->getLatitude(), 'g', 12));
             url.append("&lons1=");
             url.append(val.setNum(d->map->getLongitude(), 'g', 12));
-            url.append("&name=HERE");            
-            url.append("&alts1=7");            
+            url.append("&name=HERE");
+            url.append("&alts1=7");
             break;
         }
 
@@ -207,12 +209,12 @@ void GPSWidget::slotGPSDetails(void)
             url.append(val.setNum(d->map->getLatitude(), 'g', 12));
             url.append("&lon=");
             url.append(val.setNum(d->map->getLongitude(), 'g', 12));
-            url.append("&scale=10000");            
-            url.append("&icon=x");            
+            url.append("&scale=10000");
+            url.append("&icon=x");
             break;
         }
     }
-    
+
     KToolInvocation::self()->invokeBrowser(url);
 }
 
@@ -224,14 +226,14 @@ QString GPSWidget::getMetadataTitle(void)
 bool GPSWidget::loadFromURL(const KUrl& url)
 {
     setFileName(url.path());
-    
+
     if (url.isEmpty())
     {
         setMetadata();
         return false;
     }
     else
-    {    
+    {
         DMetadata metadata(url.path());
         QByteArray exifData = metadata.getExif();
 
@@ -282,7 +284,7 @@ void GPSWidget::setMetadataEmpty()
 
 void GPSWidget::buildView(void)
 {
-    
+
     if (getMode() == SIMPLE)
     {
         setIfdList(getMetadataMap(), d->keysFilter, d->tagsfilter);
@@ -316,7 +318,7 @@ QString GPSWidget::getTagDescription(const QString& key)
 bool GPSWidget::decodeGPSPosition(void)
 {
     double latitude=0.0, longitude=0.0, altitude=0.0;
-    
+
     DMetadata meta;
     meta.setExif(getMetadata());
 
@@ -336,4 +338,3 @@ void GPSWidget::slotSaveMetadataToFile(void)
 }
 
 }  // namespace Digikam
-

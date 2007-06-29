@@ -80,20 +80,20 @@ class ICCTagInfo
 public:
 
     ICCTagInfo(){}
-        
+
     ICCTagInfo(const QString& title, const QString& description)
         : m_title(title), m_description(description){}
 
-    QString title()       const { return m_title;       }          
-    QString description() const { return m_description; }          
-    
+    QString title()       const { return m_title;       }
+    QString description() const { return m_description; }
+
 private:
-    
-    QString m_title;    
+
+    QString m_title;
     QString m_description; 
 };
 
-typedef QMap<QString, ICCTagInfo> ICCTagInfoMap;    
+typedef QMap<QString, ICCTagInfo> ICCTagInfoMap;
 
 class ICCProfileWidgetPriv
 {
@@ -104,25 +104,25 @@ public:
     {
         cieTongue = 0;
     }
-    
+
     QStringList      tagsfilter;
     QStringList      keysFilter;
-    
+
     CIETongueWidget *cieTongue;
-    
+
     ICCTagInfoMap    iccTagsDescription;
-};    
+};
 
 
 ICCProfileWidget::ICCProfileWidget(QWidget* parent, int w, int h)
                 : MetadataWidget(parent)
 {
-    cmsErrorAction(LCMS_ERROR_SHOW);    
-    
+    cmsErrorAction(LCMS_ERROR_SHOW);
+
     d = new ICCProfileWidgetPriv;
 
     // Set the translated ICC tags titles/descriptions list 
-    d->iccTagsDescription["Icc.Header.Name"]            = ICCTagInfo(i18n("Name"),         
+    d->iccTagsDescription["Icc.Header.Name"]            = ICCTagInfo(i18n("Name"),
                                                           i18n("The ICC profile product name"));
     d->iccTagsDescription["Icc.Header.Description"]     = ICCTagInfo(i18n("Description"),  
                                                           i18n("The ICC profile product description"));
@@ -152,12 +152,12 @@ ICCProfileWidget::ICCProfileWidget(QWidget* parent, int w, int h)
     // Set the list of keys and tags filters.
     for (int i=0 ; QString(ICCEntryList[i]) != QString("-1") ; i++)
         d->keysFilter << ICCEntryList[i];
-    
+
     for (int i=0 ; QString(ICCHumanList[i]) != QString("-1") ; i++)
         d->tagsfilter << ICCHumanList[i];
 
     // Add CIE tongue graph to the widget area
-        
+
     d->cieTongue = new CIETongueWidget(w, h, this);
     d->cieTongue->setWhatsThis( i18n("<p>This area contains a CIE or chromaticity diagram. "
                     "A CIE diagram is a representation of all the colors "
@@ -172,7 +172,7 @@ ICCProfileWidget::ICCProfileWidget(QWidget* parent, int w, int h)
                     "used to create this profile. The yellow line represents the "
                     "amount that each point is corrected by the profile, and the "
                     "direction of this correction."));
-                    
+
     setUserAreaWidget(d->cieTongue);
     decodeMetadata();
 }
@@ -200,7 +200,7 @@ QString ICCProfileWidget::getMetadataTitle(void)
 bool ICCProfileWidget::loadFromURL(const KUrl& url)
 {
     setFileName(url.path());
-    
+
     if (url.isEmpty())
     {
         setMetadata();
@@ -208,7 +208,7 @@ bool ICCProfileWidget::loadFromURL(const KUrl& url)
         return false;
     }
     else
-    {   
+    {
         QFile file(url.path());
         if ( !file.open(QIODevice::ReadOnly) ) 
         {
@@ -216,13 +216,13 @@ bool ICCProfileWidget::loadFromURL(const KUrl& url)
             d->cieTongue->setProfileData();
             return false;
         }
-            
+
         QByteArray iccData;
         iccData.reserve(file.size());
         QDataStream stream( &file );
         stream.readRawData(iccData.data(), iccData.size());
         file.close();
-        
+
         if (iccData.isEmpty())
         {
             setMetadata();
@@ -233,7 +233,7 @@ bool ICCProfileWidget::loadFromURL(const KUrl& url)
         {
             setMetadata(iccData);
             d->cieTongue->setProfileData(iccData);
-        }        
+        }
     }
 
     return true;
@@ -246,7 +246,7 @@ bool ICCProfileWidget::decodeMetadata()
         return false;
 
     d->cieTongue->setProfileData(iccData);
-    
+
     cmsHPROFILE hProfile = cmsOpenProfileFromMem(iccData.data(), (DWORD)iccData.size());
 
     if (!hProfile)
@@ -278,8 +278,8 @@ bool ICCProfileWidget::decodeMetadata()
     metaDataMap.insert("Icc.Header.ProfileID",      QString::number((uint)*cmsTakeProfileID(hProfile)));
     metaDataMap.insert("Icc.Header.ProfileVersion", QString::number((uint)cmsGetProfileICCversion(hProfile)));
     metaDataMap.insert("Icc.Header.CMMFlags",       QString::number((uint)cmsTakeHeaderFlags(hProfile)));
-    
-    QString colorSpace;        
+
+    QString colorSpace;
     switch (cmsGetColorSpace(hProfile))
     {
         case icSigLabData:
@@ -312,7 +312,7 @@ bool ICCProfileWidget::decodeMetadata()
     }
     metaDataMap.insert("Icc.Header.ColorSpace", colorSpace);
 
-    QString connectionSpace;        
+    QString connectionSpace;
     switch (cmsGetPCS(hProfile))
     {
         case icSigLabData:
@@ -344,8 +344,8 @@ bool ICCProfileWidget::decodeMetadata()
             break;
     }
     metaDataMap.insert("Icc.Header.ConnectionSpace", connectionSpace);
-    
-    QString device;        
+
+    QString device;
     switch ((int)cmsGetDeviceClass(hProfile))
     {
         case icSigInputClass:
@@ -375,7 +375,7 @@ bool ICCProfileWidget::decodeMetadata()
     }
     metaDataMap.insert("Icc.Header.DeviceClass", device);
 
-    QString intent;        
+    QString intent;
     switch (cmsTakeRenderingIntent(hProfile))
     {
         case 0:
@@ -393,18 +393,18 @@ bool ICCProfileWidget::decodeMetadata()
         default:
             intent = i18n("Unknown");
             break;
-    }    
+    }
     metaDataMap.insert("Icc.Header.RenderingIntent", intent);
-   
-    cmsCloseProfile(hProfile);    
-    
+
+    cmsCloseProfile(hProfile);
+
     // Update all metadata contents.
     setMetadataMap(metaDataMap);
     return true;
 }
 
 void ICCProfileWidget::buildView(void)
-{    
+{
     if (getMode() == SIMPLE)
     {
         setIfdList(getMetadataMap(), d->keysFilter, d->tagsfilter);
@@ -420,7 +420,7 @@ QString ICCProfileWidget::getTagTitle(const QString& key)
     ICCTagInfoMap::Iterator it = d->iccTagsDescription.find(key);
     if (it != d->iccTagsDescription.end())
         return(it.value().title());
-    
+
     return key.section('.', 2, 2);
 }
 
@@ -436,7 +436,7 @@ QString ICCProfileWidget::getTagDescription(const QString& key)
     ICCTagInfoMap::Iterator it = d->iccTagsDescription.find(key);
     if (it != d->iccTagsDescription.end())
         return(it.value().description());
-    
+
     return key.section('.', 2, 2);
 }
 

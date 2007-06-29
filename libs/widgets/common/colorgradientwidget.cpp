@@ -158,4 +158,3 @@ void ColorGradientWidget::drawContents(QPainter *p)
 }
 
 }  // namespace Digikam
-
