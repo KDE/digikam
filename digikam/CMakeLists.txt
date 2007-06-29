@@ -114,10 +114,10 @@ SET(digikam_LIB_SRCS
 #                      syncjob.cpp 
 #                      tagcreatedlg.cpp 
 #                      tagfilterview.cpp 
-#                      tagfolderview.cpp 
+                      tagfolderview.cpp 
 #                      tagspopupmenu.cpp 
-#                      welcomepageview.cpp 
-#                      main.cpp
+                      welcomepageview.cpp 
+                      main.cpp
    )
 
 KDE4_ADD_UI_FILES(digikam_LIB_SRCS

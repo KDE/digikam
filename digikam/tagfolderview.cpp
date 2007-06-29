@@ -601,7 +601,7 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
                             "Deleting this will also delete "
                             "the subtags. "
                             "Do you want to continue?",
-                            children).arg(tag->title()),
+                            children,tag->title()),
                             i18n("Delete Tag"), KGuiItem(i18n("Delete"),
                             "editdelete"));
 
@@ -615,8 +615,8 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
     else
     {
         int result =
-            KMessageBox::warningContinueCancel(0, i18n("Delete '%1' tag?")
-                                               .arg(tag->title()), i18n("Delete Tag"),
+            KMessageBox::warningContinueCancel(0, i18n("Delete '%1' tag?",
+                                               tag->title()), i18n("Delete Tag"),
                                                KGuiItem(i18n("Delete"), "editdelete"));
 
         if(result == KMessageBox::Continue)

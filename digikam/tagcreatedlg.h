@@ -70,7 +70,7 @@ private:
 
 // -------------------------------------------------------------------------------------
 
-class TagEditDlg : public KDialogBase
+class TagEditDlg : public KDialog
 {
     Q_OBJECT
 

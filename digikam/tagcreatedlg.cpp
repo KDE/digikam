@@ -70,29 +70,34 @@ public:
 };
 
 TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
-            : KDialogBase( Plain, i18n("New Tag"), Help|Ok|Cancel, Ok,
-                           parent, 0, true, true )
+            : KDialog( parent)
 {
+    setButtons(Help|Ok|Cancel);
+    setDefaultButton(Ok);
+    setCaption(i18n("New Tag"));
+    setModal(true);
+    QWidget *widget = new QWidget(this);
+    setMainWidget(widget);
     d = new TagCreateDlgPriv;
     setHelp("tagscreation.anchor", "digikam");
 
-    Q3GridLayout* grid = new Q3GridLayout(plainPage(), 1, 1, 0, spacingHint());
+    Q3GridLayout* grid = new Q3GridLayout(widget, 1, 1, 0, spacingHint());
     QLabel *logo = new QLabel(plainPage());
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
-    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 96, KIcon::DefaultState, 0, true));    
+    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 96, K3Icon::DefaultState, 0, true));    
 
     Q3VBoxLayout *topLayout = new Q3VBoxLayout(spacingHint());
 
-    QLabel *topLabel = new QLabel(plainPage());
+    QLabel *topLabel = new QLabel(widget);
     QString tagName  = album->prettyUrl();
     if (tagName.endsWith("/")) tagName.truncate(tagName.length()-1);
-    topLabel->setText( i18n("<qt><b>Create New Tag in <i>\"%1\"</i></b></qt>").arg(tagName));
+    topLabel->setText( i18n("<qt><b>Create New Tag in <i>\"%1\"</i></b></qt>",tagName));
     topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine);
     topLayout->addWidget(topLabel);
 
     // --------------------------------------------------------
 
-    QFrame *topLine = new Q3Frame( plainPage() );
+    QFrame *topLine = new Q3Frame( widget );
     topLine->setFrameShape( Q3Frame::HLine );
     topLine->setFrameShadow( Q3Frame::Sunken );
     topLayout->addWidget( topLine );
@@ -101,21 +106,21 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
 
     Q3GridLayout *gl = new Q3GridLayout(topLayout, spacingHint());
 
-    QLabel *titleLabel = new QLabel(plainPage());
+    QLabel *titleLabel = new QLabel(widget);
     titleLabel->setText(i18n("&Title:"));
     gl->addWidget(titleLabel, 0, 0);
 
-    d->titleEdit = new KLineEdit(plainPage());
+    d->titleEdit = new KLineEdit(widget);
     titleLabel->setBuddy(d->titleEdit);
     gl->addWidget(d->titleEdit, 0, 1);
 
     setFocusProxy(d->titleEdit);
 
-    QLabel *iconTextLabel = new QLabel(plainPage());
+    QLabel *iconTextLabel = new QLabel(widget);
     iconTextLabel->setText(i18n("&Icon:"));
     gl->addWidget(iconTextLabel, 1, 0);
 
-    d->iconButton = new QPushButton(plainPage());
+    d->iconButton = new QPushButton(widget);
     d->iconButton->setFixedSize(40, 40);
     iconTextLabel->setBuddy(d->iconButton);
     gl->addWidget(d->iconButton, 1, 1);

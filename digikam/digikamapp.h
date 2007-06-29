@@ -26,10 +26,6 @@
 #ifndef DIGIKAMAPP_H
 #define DIGIKAMAPP_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 // Qt includes.
 
 #include <qstring.h>
@@ -45,6 +41,7 @@
 // Local includes.
 
 #include "digikam_export.h"
+class KAction;
 
 namespace Digikam
 {

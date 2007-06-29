@@ -39,6 +39,7 @@
 #include <kapplication.h>
 #include <kurl.h>
 #include <kstandarddirs.h>
+#include <KToolInvocation>
 
 // Local includes.
 
@@ -52,7 +53,7 @@ namespace Digikam
 WelcomePageView::WelcomePageView(QWidget* parent)
                : KHTMLPart(parent)
 {
-    widget()->setFocusPolicy(QWidget::WheelFocus);
+    widget()->setFocusPolicy(Qt::WheelFocus);
     // Let's better be paranoid and disable plugins (it defaults to enabled):
     setPluginsEnabled(false);
     setJScriptEnabled(false); // just make this explicit.
@@ -60,9 +61,9 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     setMetaRefreshEnabled(false);
     setURLCursor(Qt::PointingHandCursor);
 
-    QString location = locate("data", "digikam/about/main.html");
+    QString location = KStandardDirs::locate("data", "digikam/about/main.html");
     QString content  = fileToString(location);
-    content          = content.arg( locate( "data", "digikam/about/kde_infopage.css" ) );
+    content          = content.arg( KStandardDirs::locate( "data", "digikam/about/kde_infopage.css" ) );
     content          = content.arg( "" );
     
     begin(KUrl( location ));
@@ -86,13 +87,32 @@ WelcomePageView::~WelcomePageView()
 
 void WelcomePageView::slotUrlOpen(const KUrl &url)
 {
-    KApplication::kApplication()->invokeBrowser(url.url());
+   KToolInvocation::invokeBrowser(url.url());
 }
 
 QString WelcomePageView::infoPage()
 {
+    QStringList newFeatures;
+    newFeatures << i18n("16-bit/color/pixels image support");
+    newFeatures << i18n("Full color management support");
+    newFeatures << i18n("Native JPEG-2000 support");
+    newFeatures << i18n("Makernote and IPTC metadata support");
+    newFeatures << i18n("Photograph geolocalization");
+    newFeatures << i18n("Extensive Sidebars");
+    newFeatures << i18n("Advanced RAW pictures decoding settings");
+    newFeatures << i18n("Fast RAW preview");
+    newFeatures << i18n("RAW Metadata support");
+    newFeatures << i18n("New advanced camera download options");
+    newFeatures << i18n("New advanced picture Tag management");
+    newFeatures << i18n("New zooming/panning support in preview mode");
+    newFeatures << i18n("New Light Table provides easy comparison for similar pictures");
+
+    QString featureItems;
+    for ( uint i = 0 ; i < newFeatures.count() ; i++ )
+        featureItems += i18n("<li>%1</li>\n", newFeatures[i] );
+
     QString info =
-        i18n(
+        i18nc(
         "%1: digiKam version; " 
         "%2: help:// URL; "
         "%3: homepage URL; "
@@ -117,38 +137,14 @@ QString WelcomePageView::infoPage()
         "%6\n"
         "<p>We hope that you will enjoy digiKam.</p>\n"
         "<p>Thank you,</p>\n"
-        "<p style='margin-bottom: 0px'>&nbsp; &nbsp; The digiKam Team</p>")
-        .arg(digikam_version)            // current digiKam version
-        .arg("help:/digikam/index.html") // digiKam help:// URL
-        .arg("http://www.digikam.org")   // digiKam homepage URL
-        .arg("0.8.2");                   // previous digiKam release.
-    
-    QStringList newFeatures;
-    newFeatures << i18n("16-bit/color/pixels image support");
-    newFeatures << i18n("Full color management support");
-    newFeatures << i18n("Native JPEG-2000 support");
-    newFeatures << i18n("Makernote and IPTC metadata support");
-    newFeatures << i18n("Photograph geolocalization");
-    newFeatures << i18n("Extensive Sidebars");
-    newFeatures << i18n("Advanced RAW pictures decoding settings");
-    newFeatures << i18n("Fast RAW preview");
-    newFeatures << i18n("RAW Metadata support");
-    newFeatures << i18n("New advanced camera download options");
-    newFeatures << i18n("New advanced picture Tag management");
-    newFeatures << i18n("New zooming/panning support in preview mode");
-    newFeatures << i18n("New Light Table provides easy comparison for similar pictures");
-
-    QString featureItems;
-    for ( uint i = 0 ; i < newFeatures.count() ; i++ )
-        featureItems += i18n("<li>%1</li>\n").arg( newFeatures[i] );
-    
-    info = info.arg( featureItems );
-    
-    // Add first-time user text (only shown on first start).
-    info = info.arg( QString() ); 
-
-    // Generated list of important changes    
-    info = info.arg( QString() ); 
+        "<p style='margin-bottom: 0px'>&nbsp; &nbsp; The digiKam Team</p>"
+        ,QString(digikam_version)            // current digiKam version
+        ,"help:/digikam/index.html" // digiKam help:// URL
+        ,"http://www.digikam.org"   // digiKam homepage URL
+        ,"0.8.2"
+	,featureItems
+	,QString()
+	,QString(), QString());                   // previous digiKam release.
     
     return info;
 }
