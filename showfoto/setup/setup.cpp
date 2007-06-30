@@ -156,7 +156,10 @@ void Setup::slotOkClicked()
     d->dcrawPage->applySettings();
     d->iofilesPage->applySettings();
     d->slideshowPage->applySettings();
-    d->iccPage->applySettings();
+/*
+    TODO: KDE4PORT: something is wrong in this page and cause crash
+
+    d->iccPage->applySettings();*/
     close();
 }
 
