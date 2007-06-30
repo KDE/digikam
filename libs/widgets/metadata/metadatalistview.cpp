@@ -202,11 +202,11 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, QStringList keysF
     {
         subItems = 0;
         parentifDItem = new MdKeyListViewItem(this, *itKeysFilter);
-        
-        DMetadata::MetaDataMap::iterator it = ifds.end(); 
 
-        while(1)   
+        DMetadata::MetaDataMap::const_iterator it = ifds.constEnd();
+        while (it != ifds.constBegin())
         {
+            --it;
             if ( *itKeysFilter == it.key().section('.', 1, 1) )
             {
                 // We ignore all unknown tags if necessary.
@@ -215,7 +215,7 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, QStringList keysF
                     if (!tagsFilter.isEmpty())
                     {
                         // We using the filter to make a more user friendly output (Simple Mode)
-        
+
                         if (tagsFilter.contains(it.key().section('.', 2, 2)))
                         {
                             QString tagTitle = m_parent->getTagTitle(it.key());
@@ -226,16 +226,13 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, QStringList keysF
                     else
                     {
                         // We don't filter the output (Complete Mode)
-                    
+
                         QString tagTitle = m_parent->getTagTitle(it.key());
                         new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
                         subItems++;
                     }
                 }
             }
-            
-            if (it == ifds.begin()) break;
-            --it;
         }
 
         // We checking if the last IfD have any items. If no, we remove it.
