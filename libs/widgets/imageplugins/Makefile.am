@@ -13,7 +13,8 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       -I$(top_srcdir)/digikam/libs/dmetadata \
 	       -I$(top_srcdir)/digikam/libs/widgets/common \
 	       -I$(top_srcdir)/digikam/digikam \
-	       $(all_includes)
+		$(LIBKDCRAW_CFLAGS) \
+		$(all_includes)
 
 digikaminclude_HEADERS = imageregionwidget.h imagepaniconwidget.h \
 	                     imagepannelwidget.h imageguidewidget.h \

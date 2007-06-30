@@ -25,7 +25,9 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/dimg \
 	       -I$(top_srcdir)/digikam/libs/widgets/iccprofiles \
 	       -I$(top_srcdir)/digikam/libs/widgets/imageplugins \
 	       -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
-	       $(all_includes)
+		$(LIBKDCRAW_CFLAGS) \
+		$(LIBKEXIV2_CFLAGS) \
+		$(all_includes)
 
 digikaminclude_HEADERS = ctrlpaneldlg.h imagedlgbase.h imageguidedlg.h \
 	                     iccprofileinfodlg.h dprogressdlg.h  

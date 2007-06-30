@@ -15,6 +15,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       -I$(top_srcdir)/digikam/libs/dmetadata \
 	       -I$(top_srcdir)/digikam/libs/dimg/filters \
 	       -I$(top_srcdir)/digikam/digikam \
+	       $(LIBKDCRAW_CFLAGS) \
 	       $(all_includes) 
 
 digikamimageplugin_border_la_SOURCES = imageplugin_border.cpp \

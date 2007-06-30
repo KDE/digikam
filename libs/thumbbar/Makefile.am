@@ -9,7 +9,9 @@ libthumbbar_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 INCLUDES = -I$(top_srcdir)/digikam/libs/dimg \
 	       -I$(top_srcdir)/digikam/libs/dmetadata \
 	       -I$(top_srcdir)/digikam/digikam \
-	       $(all_includes)
+		$(LIBKDCRAW_CFLAGS) \
+		$(LIBKEXIV2_CFLAGS) \
+		$(all_includes)
 
 digikaminclude_HEADERS = thumbbar.h 
 

@@ -5,6 +5,7 @@ INCLUDES = -I$(top_srcdir)/digikam/digikam \
 	   -I$(top_srcdir)/digikam/libs/dmetadata \
 	   -I$(top_srcdir)/digikam/libs/themeengine \
 	   -I$(top_srcdir)/digikam/libs/threadimageio \
+	   $(LIBKDCRAW_CFLAGS) \
 	   $(all_includes)
 
 noinst_LTLIBRARIES = libslideshow.la 

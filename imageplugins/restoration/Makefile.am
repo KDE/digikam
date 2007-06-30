@@ -15,6 +15,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       -I$(top_srcdir)/digikam/libs/dimg/filters \
 	       -I$(top_srcdir)/digikam/digikam \
 	       -I$(top_srcdir)/digikam/libs/greycstoration \
+	       $(LIBKDCRAW_CFLAGS) \
 	       $(all_includes) 
 
 digikamimageplugin_restoration_la_SOURCES = imageplugin_restoration.cpp \

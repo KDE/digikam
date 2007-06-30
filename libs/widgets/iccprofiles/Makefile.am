@@ -14,7 +14,9 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/widgets/metadata \
 	       -I$(top_srcdir)/digikam/libs/dimg \
 	       -I$(top_srcdir)/digikam/libs/dmetadata \
 	       -I$(top_srcdir)/digikam/digikam \
-	       $(all_includes)
+		$(LIBKDCRAW_CFLAGS) \
+		$(LIBKEXIV2_CFLAGS) \
+		$(all_includes)
            
 digikaminclude_HEADERS = cietonguewidget.h iccprofilewidget.h iccpreviewwidget.h 
 

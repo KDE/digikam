@@ -12,7 +12,8 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/dimg \
 	       -I$(top_srcdir)/digikam/libs/levels \
 	       -I$(top_srcdir)/digikam/libs/histogram \
 	       -I$(top_srcdir)/digikam/digikam \
-	       $(all_includes) 
+		$(LIBKDCRAW_CFLAGS) \
+		$(all_includes) 
 	   
 
 digikaminclude_HEADERS = bcgmodifier.h hslmodifier.h dimgthreadedfilter.h dimgimagefilters.h \

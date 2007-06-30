@@ -14,7 +14,9 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/histogram \
 	       -I$(top_srcdir)/digikam/libs/dimg \
 	       -I$(top_srcdir)/digikam/libs/dimg/loaders \
 	       -I$(top_srcdir)/digikam/digikam \
-	       $(all_includes)
+		$(LIBKDCRAW_CFLAGS) \
+		$(all_includes)
+
 
 digikaminclude_HEADERS = histogramwidget.h colorgradientwidget.h curveswidget.h sidebar.h \
                          squeezedcombobox.h dpopupmenu.h statuszoombar.h statusnavigatebar.h \

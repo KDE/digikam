@@ -1,4 +1,7 @@
-noinst_LTLIBRARIES = libratiocrop.la
+SUBDIRS = clapack 
+COMPILE_FIRST = clapack 
+
+noinst_LTLIBRARIES = libsharpnesseditor.la
 METASOURCES = AUTO
 
 INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
@@ -15,12 +18,15 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	   -I$(top_srcdir)/digikam/libs/dmetadata \
 	   -I$(top_srcdir)/digikam/libs/dimg/filters \
 	   -I$(top_srcdir)/digikam/digikam \
+	   -I$(top_srcdir)/digikam/imageplugins/coreplugin/sharpnesseditor/clapack \
 	   $(LIBKDCRAW_CFLAGS) \
 	   $(all_includes) 
 
-libratiocrop_la_SOURCES = imageeffect_ratiocrop.cpp imageselectionwidget.cpp 
+libsharpnesseditor_la_LIBADD = $(top_builddir)/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/liblapack.la 
 
-libratiocrop_la_LDFLAGS = $(all_libraries)
+libsharpnesseditor_la_SOURCES = imageeffect_sharpen.cpp unsharp.cpp matrix.cpp refocus.cpp 
 
-noinst_HEADERS = imageeffect_ratiocrop.h imageselectionwidget.h 
+libsharpnesseditor_la_LDFLAGS = $(all_libraries)
+
+noinst_HEADERS = imageeffect_sharpen.h unsharp.h matrix.h refocus.h 
 

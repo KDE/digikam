@@ -13,5 +13,6 @@ INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	  -I$(top_srcdir)/digikam/libs/greycstoration \
 	  -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
 	  -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
+	  $(LIBKDCRAW_CFLAGS) \
 	  $(all_includes) 
 

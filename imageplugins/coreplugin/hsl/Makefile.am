@@ -1,4 +1,4 @@
-noinst_LTLIBRARIES = libratiocrop.la
+noinst_LTLIBRARIES = libhsl.la
 METASOURCES = AUTO
 
 INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
@@ -18,9 +18,9 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	   $(LIBKDCRAW_CFLAGS) \
 	   $(all_includes) 
 
-libratiocrop_la_SOURCES = imageeffect_ratiocrop.cpp imageselectionwidget.cpp 
+libhsl_la_SOURCES = imageeffect_hsl.cpp hspreviewwidget.cpp 
 
-libratiocrop_la_LDFLAGS = $(all_libraries)
+libhsl_la_LDFLAGS = $(all_libraries)
 
-noinst_HEADERS = imageeffect_ratiocrop.h imageselectionwidget.h 
+noinst_HEADERS = imageeffect_hsl.h hspreviewwidget.h 
 

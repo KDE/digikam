@@ -19,6 +19,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       -I$(top_srcdir)/digikam/imageplugins/coreplugin/sharpnesseditor \
 	       -I$(top_srcdir)/digikam/imageplugins/coreplugin/hsl \
 	       -I$(top_srcdir)/digikam/imageplugins/coreplugin/ratiocrop \
+	       $(LIBKDCRAW_CFLAGS) \
 	       $(all_includes) 
 
 digikamimageplugin_core_la_SOURCES = imageplugin_core.cpp imageeffect_bwsepia.cpp \
