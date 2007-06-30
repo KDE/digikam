@@ -482,10 +482,10 @@ void ShowFoto::setupActions()
     d->fileOpenAction = actionCollection()->addAction(KStandardAction::Open, "showfoto_open_file", 
                                                       this, SLOT(slotOpenFile()));
 
-    d->openFilesInFolderAction = new KAction(i18n("Open folder"), this);
+    d->openFilesInFolderAction = new KAction(KIcon("folder_image"), i18n("Open folder"), this);
     d->openFilesInFolderAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_O);
     connect(d->openFilesInFolderAction, SIGNAL(triggered()), this, SLOT(slotOpenFilesInFolder()));
-    actionCollection()->addAction("folder_image", d->openFilesInFolderAction);
+    actionCollection()->addAction("showfoto_open_folder", d->openFilesInFolderAction);
 
     actionCollection()->addAction(KStandardAction::Quit, "showfoto_quit", this, SLOT(close()));
 
