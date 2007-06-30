@@ -100,6 +100,8 @@ signals:
 protected slots:
 
     void slotBlinkTimerDone( void );
+    void slotCalculationProgress(const ImageHistogram *histogram);
+    void slotCalculationFinished(const ImageHistogram *histogram, bool success);
 
 protected:
 
@@ -108,10 +110,6 @@ protected:
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );
     void leaveEvent ( QEvent * );
-
-private:
-
-    void customEvent(QEvent *event);
 
 private:
 

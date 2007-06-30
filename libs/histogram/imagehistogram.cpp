@@ -43,6 +43,7 @@
 #include "ddebug.h"
 #include "dimg.h"
 #include "imagehistogram.h"
+#include "imagehistogram.moc"
 
 namespace Digikam
 {
@@ -123,7 +124,7 @@ void ImageHistogram::setup(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits
     else
     {
        if (d->parent)
-          postProgress(false, false);
+           emit calculationFinished(this, false);
     }
 }
 
@@ -140,15 +141,6 @@ ImageHistogram::~ImageHistogram()
 int ImageHistogram::getHistogramSegment(void)
 {
     return d->histoSegments;
-}
-
-void ImageHistogram::postProgress(bool starting, bool success)
-{
-    EventData *eventData = new EventData();
-    eventData->starting  = starting;
-    eventData->success   = success;
-    eventData->histogram = this;
-    QApplication::postEvent(d->parent, eventData);
 }
 
 void ImageHistogram::stopCalcHistogramValues(void)
@@ -170,7 +162,7 @@ void ImageHistogram::calcHistogramValues()
     int            max;
 
     if (d->parent)
-       postProgress(true, false);
+        emit calculationStarted(this);
 
     d->histogram = new ImageHistogramPriv::double_packet[d->histoSegments];
     memset(d->histogram, 0, d->histoSegments*sizeof(ImageHistogramPriv::double_packet));
@@ -180,7 +172,7 @@ void ImageHistogram::calcHistogramValues()
        DWarning() << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!") << endl;
 
        if (d->parent)
-          postProgress(false, false);
+           emit calculationFinished(this, false);
 
        return;
     }
@@ -239,7 +231,7 @@ void ImageHistogram::calcHistogramValues()
     }
 
     if (d->parent && d->runningFlag)
-       postProgress(false, true);
+        emit calculationFinished(this, true);
 }
 
 double ImageHistogram::getCount(int channel, int start, int end)

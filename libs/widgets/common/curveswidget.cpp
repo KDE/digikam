@@ -133,6 +133,12 @@ CurvesWidget::CurvesWidget(int w, int h,
              this, SLOT(slotBlinkTimerDone()) );
     
     m_imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
+
+    connect(m_imageHistogram, SIGNAL(calculationStarted(const ImageHistogram *)),
+            this, SLOT(slotCalculationStarted(const ImageHistogram *)));
+
+    connect(m_imageHistogram, SIGNAL(calculationFinished(const ImageHistogram *, bool)),
+            this, SLOT(slotCalculationFinished(const ImageHistogram *, bool)));
 }
 
 CurvesWidget::~CurvesWidget()
@@ -189,42 +195,34 @@ void CurvesWidget::curveTypeChanged(void)
     emit signalCurvesChanged();        
 }
 
-void CurvesWidget::customEvent(QEvent *event)
+void CurvesWidget::slotCalculationProgress(const ImageHistogram *histogram)
 {
-    if (!event) return;
+    Q_UNUSED(histogram);
+    setCursor( Qt::WaitCursor );
+    d->clearFlag = CurvesWidgetPriv::HistogramStarted;
+    d->blinkTimer->start( 200 );
+    repaint();
+}
 
-    ImageHistogram::EventData *ed = (ImageHistogram::EventData*) event;
-
-    if (!ed) return;
-
-    if (ed->starting)
+void CurvesWidget::slotCalculationFinished(const ImageHistogram *histogram, bool success)
+{
+    Q_UNUSED(histogram);
+    if (success)
     {
-        setCursor( Qt::WaitCursor );
-        d->clearFlag = CurvesWidgetPriv::HistogramStarted;
-        d->blinkTimer->start( 200 );
+        // Repaint histogram
+        d->clearFlag = CurvesWidgetPriv::HistogramCompleted;
+        d->blinkTimer->stop();
         repaint();
-    }  
-    else 
-    {
-        if (ed->success)
-        {
-            // Repaint histogram 
-            d->clearFlag = CurvesWidgetPriv::HistogramCompleted;
-            d->blinkTimer->stop();
-            repaint();
-            setCursor( Qt::ArrowCursor );    
-        }
-        else
-        {
-            d->clearFlag = CurvesWidgetPriv::HistogramFailed;
-            d->blinkTimer->stop();
-            repaint();
-            setCursor( Qt::ArrowCursor );    
-            emit signalHistogramComputationFailed();
-        }
+        setCursor( Qt::ArrowCursor );
     }
-    
-    delete ed;
+    else
+    {
+        d->clearFlag = CurvesWidgetPriv::HistogramFailed;
+        d->blinkTimer->stop();
+        repaint();
+        setCursor( Qt::ArrowCursor );
+        emit signalHistogramComputationFailed();
+    }
 }
 
 void CurvesWidget::stopHistogramComputation(void)

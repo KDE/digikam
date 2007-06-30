@@ -41,8 +41,6 @@
 #include <qfont.h> 
 #include <qfontmetrics.h> 
 #include <qtooltip.h>
-//Added by qt3to4:
-#include <QCustomEvent>
 #include <QPaintEvent>
 #include <QMouseEvent>
 
@@ -142,6 +140,8 @@ HistogramWidget::HistogramWidget(int w, int h,
 
     m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
     m_selectionHistogram = 0L;
+
+    connectHistogram(m_imageHistogram);
 }
 
 // Constructor with image selection.
@@ -161,6 +161,9 @@ HistogramWidget::HistogramWidget(int w, int h,
 
     m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
     m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits, this);
+
+    connectHistogram(m_imageHistogram);
+    connectHistogram(m_selectionHistogram);
 }
 
 HistogramWidget::~HistogramWidget()
@@ -195,6 +198,15 @@ void HistogramWidget::setup(int w, int h, bool selectMode, bool blinkComputation
              this, SLOT(slotBlinkTimerDone()) );
 }
 
+void HistogramWidget::connectHistogram(const ImageHistogram *histogram)
+{
+    connect(histogram, SIGNAL(calculationStarted(const ImageHistogram *)),
+            this, SLOT(slotCalculationStarted(const ImageHistogram *)));
+
+    connect(histogram, SIGNAL(calculationFinished(const ImageHistogram *, bool)),
+            this, SLOT(slotCalculationFinished(const ImageHistogram *, bool)));
+}
+
 void HistogramWidget::setHistogramGuideByColor(DColor color)
 {
     d->guideVisible = true;
@@ -208,82 +220,75 @@ void HistogramWidget::reset(void)
     repaint();
 }
 
-void HistogramWidget::customEvent(QEvent *event)
+void HistogramWidget::slotCalculationStarted(const ImageHistogram *histogram)
 {
-    if (!event) return;
-
-    ImageHistogram::EventData *ed = (ImageHistogram::EventData*) event;
-
-    if (!ed) return;
-
-    if (ed->histogram != m_imageHistogram && ed->histogram != m_selectionHistogram)
+    if (histogram != m_imageHistogram && histogram != m_selectionHistogram)
         return;
 
-    if (ed->starting)
+    setCursor( Qt::WaitCursor );
+    d->clearFlag = HistogramWidgetPriv::HistogramStarted;
+    if (!d->inInitialRepaintWait)
     {
-        setCursor( Qt::WaitCursor );
-        d->clearFlag = HistogramWidgetPriv::HistogramStarted;
-        if (!d->inInitialRepaintWait)
+        if (d->clearFlag != HistogramWidgetPriv::HistogramDataLoading)
         {
-            if (d->clearFlag != HistogramWidgetPriv::HistogramDataLoading)
-            {
                 // enter initial repaint wait, repaint only after waiting
                 // a short time so that very fast computation does not create flicker
-                d->inInitialRepaintWait = true;
-                d->blinkTimer->start( 100 );
-            }
-            else
-            {
+            d->inInitialRepaintWait = true;
+            d->blinkTimer->start( 100 );
+        }
+        else
+        {
                 // after the initial repaint, we can repaint immediately
-                repaint();
-                d->blinkTimer->start( 200 );
-            }
+            repaint();
+            d->blinkTimer->start( 200 );
         }
     }
-    else 
+}
+
+void HistogramWidget::slotCalculationFinished(const ImageHistogram *histogram, bool success)
+{
+    if (histogram != m_imageHistogram && histogram != m_selectionHistogram)
+        return;
+
+    if (success)
     {
-        if (ed->success)
-        {
             // Repaint histogram 
-            d->clearFlag = HistogramWidgetPriv::HistogramCompleted;
-            d->blinkTimer->stop();
-            d->inInitialRepaintWait = false;
-            setCursor( Qt::ArrowCursor );
+        d->clearFlag = HistogramWidgetPriv::HistogramCompleted;
+        d->blinkTimer->stop();
+        d->inInitialRepaintWait = false;
+        setCursor( Qt::ArrowCursor );
 
             // Send signals to refresh information if necessary.
             // The signals may trigger multiple repaints, avoid this,
             // we repaint once afterwards.
-            setUpdatesEnabled(false);
+        setUpdatesEnabled(false);
 
-            notifyValuesChanged();
-            emit signalHistogramComputationDone(d->sixteenBits);
+        notifyValuesChanged();
+        emit signalHistogramComputationDone(d->sixteenBits);
 
-            setUpdatesEnabled(true);
-            repaint();
-        }
-        else
-        {
-            d->clearFlag = HistogramWidgetPriv::HistogramFailed;
-            d->blinkTimer->stop();
-            d->inInitialRepaintWait = false;
-            repaint();
-            setCursor( Qt::ArrowCursor );    
-            // Remove old histogram data from memory.
-            if (m_imageHistogram)
-            {
-                delete m_imageHistogram;
-                m_imageHistogram = 0;
-            }
-            if (m_selectionHistogram)
-            {
-                delete m_selectionHistogram;
-                m_selectionHistogram = 0;
-            }
-            emit signalHistogramComputationFailed();
-        }
+        setUpdatesEnabled(true);
+        repaint();
     }
-
-    delete ed;
+    else
+    {
+        d->clearFlag = HistogramWidgetPriv::HistogramFailed;
+        d->blinkTimer->stop();
+        d->inInitialRepaintWait = false;
+        repaint();
+        setCursor( Qt::ArrowCursor );
+            // Remove old histogram data from memory.
+        if (m_imageHistogram)
+        {
+            delete m_imageHistogram;
+            m_imageHistogram = 0;
+        }
+        if (m_selectionHistogram)
+        {
+            delete m_selectionHistogram;
+            m_selectionHistogram = 0;
+        }
+        emit signalHistogramComputationFailed();
+    }
 }
 
 void HistogramWidget::setDataLoading()
@@ -346,10 +351,14 @@ void HistogramWidget::updateData(uchar *i_data, uint i_w, uint i_h,
 
     // Calc new histogram data
     m_imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
+    connectHistogram(m_imageHistogram);
 
     if (s_data && s_w && s_h)
+    {
         m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits, this);
-    else 
+        connectHistogram(m_selectionHistogram);
+    }
+    else
         m_selectionHistogram = 0L;
 }
 
@@ -366,6 +375,7 @@ void HistogramWidget::updateSelectionData(uchar *s_data, uint s_w, uint s_h,
 
     // Calc new histogram data
     m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits, this);
+    connectHistogram(m_selectionHistogram);
 }
 
 void HistogramWidget::slotBlinkTimerDone( void )

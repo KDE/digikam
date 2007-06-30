@@ -154,6 +154,8 @@ public slots:
 protected slots:
 
     void slotBlinkTimerDone( void );
+    void slotCalculationStarted(const ImageHistogram *histogram);
+    void slotCalculationFinished(const ImageHistogram *histogram, bool success);
 
 protected:
 
@@ -162,10 +164,10 @@ protected:
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );
 
-private :
+private:
 
-    void customEvent(QEvent *event);
     void notifyValuesChanged();
+    void connectHistogram(const ImageHistogram *histogram);
 
 private:
 

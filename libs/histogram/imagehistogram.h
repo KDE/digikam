@@ -45,6 +45,8 @@ class DImg;
 class DIGIKAM_EXPORT ImageHistogram : public QThread
 {
 
+    Q_OBJECT
+
 public:
 
 enum HistogramChannelType
@@ -54,24 +56,6 @@ enum HistogramChannelType
     GreenChannel,
     BlueChannel,
     AlphaChannel
-};
-
-class EventData : public QEvent
-{
-public:
-
-    EventData() : QEvent(QEvent::User)
-    {
-       starting  = false;
-       success   = false;
-       histogram = 0;
-    }
-
-    bool            starting;
-    bool            success;
-    ImageHistogram *histogram;
-
-    virtual ~EventData(){};
 };
 
 public:
@@ -96,6 +80,11 @@ public:
 
     int    getHistogramSegment(void);
     int    getMedian(int channel, int start, int end);
+
+signals:
+
+    void calculationFinished(const ImageHistogram *histogram, bool success);
+    void calculationStarted(const ImageHistogram *histogram);
 
 protected:
 
