@@ -165,9 +165,9 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     KUrlLabel *lcmsLogoLabel = new KUrlLabel(colorPolicy);
     lcmsLogoLabel->setText(QString());
     lcmsLogoLabel->setUrl("http://www.littlecms.com");
-    KGlobal::dirs()->addResourceType("logo-lcms", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("logo-lcms", "logo-lcms.png");
-    lcmsLogoLabel->setPixmap( QPixmap( directory + "logo-lcms.png" ) );
+/*    KGlobal::dirs()->addResourceType("logo-lcms", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("logo-lcms", "logo-lcms.png");*/
+    lcmsLogoLabel->setPixmap( QPixmap( KStandardDirs::locate("data", "digikam/data/logo-lcms.png" ) ));
     lcmsLogoLabel->setToolTip(i18n("Visit Little CMS project website"));
 
     d->behaviourGB                 = new QGroupBox(i18n("Behavior"), colorPolicy);

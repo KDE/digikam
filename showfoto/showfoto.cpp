@@ -482,7 +482,7 @@ void ShowFoto::setupActions()
     d->fileOpenAction = actionCollection()->addAction(KStandardAction::Open, "showfoto_open_file", 
                                                       this, SLOT(slotOpenFile()));
 
-    d->openFilesInFolderAction = new KAction(KIcon("folder_image"), i18n("Open folder"), this);
+    d->openFilesInFolderAction = new KAction(KIcon("folder-image"), i18n("Open folder"), this);
     d->openFilesInFolderAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_O);
     connect(d->openFilesInFolderAction, SIGNAL(triggered()), this, SLOT(slotOpenFilesInFolder()));
     actionCollection()->addAction("showfoto_open_folder", d->openFilesInFolderAction);
@@ -491,7 +491,7 @@ void ShowFoto::setupActions()
 
     // Extra 'View' menu actions ---------------------------------------------
 
-    d->showBarAction = new KToggleAction(i18n("Show Thumbnails"), this);
+    d->showBarAction = new KToggleAction(KIcon("view-choose"), i18n("Show Thumbnails"), this);
     d->showBarAction->setShortcut(Qt::CTRL+Qt::Key_T);
     connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
     actionCollection()->addAction("shofoto_showthumbs", d->showBarAction);

@@ -270,12 +270,12 @@ void EditorWindow::setupStandardActions()
     m_forwardAction = actionCollection()->addAction(KStandardAction::Forward, "editorwindow_forward", 
                                                     this, SLOT(slotForward()));
 
-    m_firstAction = new KAction(KIcon("start"), i18n("&First"), this);
+    m_firstAction = new KAction(KIcon("go-first"), i18n("&First"), this);
     m_firstAction->setShortcut(KStandardShortcut::Home);
     connect(m_firstAction, SIGNAL(triggered()), this, SLOT(slotFirst()));
     actionCollection()->addAction("editorwindow_first", m_firstAction);
 
-    m_lastAction = new KAction(KIcon("finish"), i18n("&Last"), this);
+    m_lastAction = new KAction(KIcon("go-last"), i18n("&Last"), this);
     m_lastAction->setShortcut(KStandardShortcut::End);
     connect(m_lastAction, SIGNAL(triggered()), this, SLOT(slotLast()));
     actionCollection()->addAction("editorwindow_last", m_lastAction);
@@ -293,12 +293,12 @@ void EditorWindow::setupStandardActions()
     m_saveAsAction->setEnabled(false);
     m_revertAction->setEnabled(false);
 
-    d->filePrintAction = new KAction(KIcon("fileprint"), i18n("Print Image..."), this);
+    d->filePrintAction = new KAction(KIcon("print-frame"), i18n("Print Image..."), this);
     d->filePrintAction->setShortcut(Qt::CTRL+Qt::Key_P);
     connect(d->filePrintAction, SIGNAL(triggered()), this, SLOT(slotFilePrint()));
     actionCollection()->addAction("editorwindow_print", d->filePrintAction);
 
-    m_fileDeleteAction = new KAction(KIcon("edittrash"), i18n("Move to Trash"), this);
+    m_fileDeleteAction = new KAction(KIcon("edit-trash"), i18n("Move to Trash"), this);
     m_fileDeleteAction->setShortcut(Qt::Key_Delete);
     connect(m_fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteCurrentItem()));
     actionCollection()->addAction("editorwindow_delete", m_fileDeleteAction);
@@ -313,7 +313,7 @@ void EditorWindow::setupStandardActions()
                                                   m_canvas, SLOT(slotCopy()));
     d->copyAction->setEnabled(false);
 
-    m_undoAction = new KToolBarPopupAction(KIcon("undo"), i18n("Undo"), this);
+    m_undoAction = new KToolBarPopupAction(KIcon("edit-undo"), i18n("Undo"), this);
     m_undoAction->setShortcut(KStandardShortcut::Undo);
     connect(m_undoAction, SIGNAL(triggered()), m_canvas, SLOT(slotUndo()));
     actionCollection()->addAction("editorwindow_undo", m_undoAction);
@@ -327,7 +327,7 @@ void EditorWindow::setupStandardActions()
 
     m_undoAction->setEnabled(false);
 
-    m_redoAction = new KToolBarPopupAction(KIcon("redo"), i18n("Redo"), this);
+    m_redoAction = new KToolBarPopupAction(KIcon("edit-redo"), i18n("Redo"), this);
     m_redoAction->setShortcut(KStandardShortcut::Redo);
     connect(m_redoAction, SIGNAL(triggered()), m_canvas, SLOT(slotRedo()));
     actionCollection()->addAction("editorwindow_redo", m_redoAction);
@@ -364,7 +364,7 @@ void EditorWindow::setupStandardActions()
     connect(d->zoomTo100percents, SIGNAL(triggered()), this, SLOT(slotZoomTo100Percents()));
     actionCollection()->addAction("editorwindow_zoomto100percents", d->zoomTo100percents);
 
-    d->zoomFitToWindowAction = new KToggleAction(KIcon("view_fit_window"), i18n("Fit to &Window"), this);
+    d->zoomFitToWindowAction = new KToggleAction(KIcon("zoom-best-fit"), i18n("Fit to &Window"), this);
     d->zoomFitToWindowAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E); // NOTE: Gimp 2 use CTRL+SHIFT+E.
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), this, SLOT(slotToggleFitToWindow()));
     actionCollection()->addAction("editorwindow_zoomfit2window", d->zoomFitToWindowAction);
@@ -408,7 +408,7 @@ void EditorWindow::setupStandardActions()
     m_fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
                          "editorwindow_fullscreen", this, SLOT(slotToggleFullScreen()));
 
-    d->slideShowAction = new KAction(KIcon("slideshow"), i18n("Slide Show"), this);
+    d->slideShowAction = new KAction(KIcon("datashow"), i18n("Slide Show"), this);
     d->slideShowAction->setShortcut(Qt::Key_F9);
     connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
     actionCollection()->addAction("editorwindow_slideshow", d->slideShowAction);
