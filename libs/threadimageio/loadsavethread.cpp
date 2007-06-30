@@ -103,10 +103,9 @@ void LoadSaveThread::run()
                 delete d->lastTask;
                 d->lastTask = 0;
             }
-            m_currentTask = m_todo.first();
-            if (m_currentTask)
+            if (!m_todo.isEmpty())
             {
-                m_todo.removeFirst();
+                m_currentTask = m_todo.takeFirst();
                 if (m_notificationPolicy == NotificationPolicyTimeLimited)
                 {
                     // set timing values so that first event is sent only
