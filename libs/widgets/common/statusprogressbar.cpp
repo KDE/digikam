@@ -79,6 +79,7 @@ StatusProgressBar::StatusProgressBar(QWidget *parent)
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->textLabel      = new KSqueezedTextLabel(this);
+    //TODO: KDE4PORT: Progress widget is not visible, text label is. Dont know why.
     d->progressWidget = new QWidget(this);
     QHBoxLayout *hBox = new QHBoxLayout(d->progressWidget);
     d->progressWidget->setLayout(hBox);
