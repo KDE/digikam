@@ -66,7 +66,8 @@ SetupDcraw::SetupDcraw(QWidget* parent )
 {
     d = new SetupDcrawPriv;
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setSpacing(KDialog::spacingHint());
+    layout->setSpacing(0);
+    layout->setMargin(0);
     d->dcrawSettings    = new KDcrawIface::DcrawSettingsWidget(this, true, false);
     layout->addWidget(d->dcrawSettings);
     layout->addStretch();
