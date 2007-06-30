@@ -829,7 +829,7 @@ void DigikamApp::setupActions()
     d->fullScreenAction = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()),
                                                  actionCollection(), this, "full_screen");
 
-    d->slideShowAction = new KActionMenu(i18n("Slide Show"), "slideshow",
+    d->slideShowAction = new KActionMenu(i18n("Slide Show"), "datashow",
                                          actionCollection(), "slideshow");
 
     d->slideShowAction->setDelayed(false);

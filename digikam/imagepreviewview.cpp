@@ -374,7 +374,7 @@ void ImagePreviewView::slotContextMenu()
     //-- Edit actions -----------------------------------------------
 
     popmenu.insertSeparator();
-    popmenu.insertItem(SmallIcon("slideshow"), i18n("SlideShow"), 16);
+    popmenu.insertItem(SmallIcon("datashow"), i18n("SlideShow"), 16);
     popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 12);
     popmenu.insertItem(SmallIcon("idea"), i18n("Add to Light Table"), 17);
     popmenu.insertItem(i18n("Open With"), &openWithMenu, 13);
