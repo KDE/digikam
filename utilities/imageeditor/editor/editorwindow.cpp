@@ -1149,8 +1149,8 @@ bool EditorWindow::promptUserSave(const KUrl& url)
 
         int result = KMessageBox::warningYesNoCancel(this,
                                   i18n("The image '%1' has been modified.\n"
-                                       "Do you want to save it?")
-                                       .arg(url.fileName()),
+                                       "Do you want to save it?",
+                                       url.fileName()),
                                   QString(),
                                   KStandardGuiItem::save(),
                                   KStandardGuiItem::discard());
@@ -1314,7 +1314,7 @@ void EditorWindow::slotLoadingFinished(const QString& filename, bool success)
     if (!success && filename != QString())
     {
         QFileInfo fi(filename);
-        QString message = i18n("Failed to load image \"%1\"").arg(fi.fileName());
+        QString message = i18n("Failed to load image \"%1\"",fi.fileName());
         KMessageBox::error(this, message);
         DWarning() << "Failed to load image " << fi.fileName() << endl;
     }
@@ -1362,9 +1362,9 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         {
             if (!m_savingContext->abortingSaving)
             {
-                KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".")
-                                .arg(m_savingContext->destinationURL.fileName())
-                                .arg(m_savingContext->destinationURL.path()));
+                KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
+                                              m_savingContext->destinationURL.fileName(),
+                                              m_savingContext->destinationURL.path()));
             }
             finishSaving(false);
             return;
@@ -1403,9 +1403,9 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         {
             if (!m_savingContext->abortingSaving)
             {
-                KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".")
-                                .arg(m_savingContext->destinationURL.fileName())
-                                .arg(m_savingContext->destinationURL.path()));
+                KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
+                                              m_savingContext->destinationURL.fileName(),
+                                              m_savingContext->destinationURL.path()));
             }
             finishSaving(false);
             return;
@@ -1570,8 +1570,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
             if ( !imgExtPattern.contains( m_savingContext->format.toUpper() ) )
             {
-                KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported.")
-                        .arg(m_savingContext->format));
+                KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported.", m_savingContext->format));
                 DWarning() << k_funcinfo << "target image file format " << m_savingContext->format << " unsupported!" << endl;
                 return false;
             }
@@ -1580,9 +1579,9 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     if (!newURL.isValid())
     {
-        KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to\n\"%2\".")
-                           .arg(newURL.fileName())
-                           .arg(newURL.path().section('/', -2, -2)));
+        KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to\n\"%2\".",
+                                      newURL.fileName(),
+                                      newURL.path().section('/', -2, -2)));
         DWarning() << k_funcinfo << "target URL is not valid !" << endl;
         return false;
     }
@@ -1609,8 +1608,8 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
             KMessageBox::warningYesNo( this, i18n("A file named \"%1\" already "
                                                   "exists. Are you sure you want "
-                                                  "to overwrite it?")
-                                       .arg(newURL.fileName()),
+                                                  "to overwrite it?",
+                                                  newURL.fileName()),
                                        i18n("Overwrite File?"),
                                        KStandardGuiItem::overwrite(),
                                        KStandardGuiItem::cancel() );
@@ -1658,8 +1657,8 @@ bool EditorWindow::checkPermissions(const KUrl& url)
             KMessageBox::warningYesNo( this, i18n("You do not have write permissions "
                                                   "for the file named \"%1\". "
                                                   "Are you sure you want "
-                                                  "to overwrite it?")
-                                       .arg(url.fileName()),
+                                                  "to overwrite it?",
+                                                  url.fileName()),
                                        i18n("Overwrite File?"),
                                        KStandardGuiItem::overwrite(),
                                        KStandardGuiItem::cancel() );

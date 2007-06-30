@@ -811,9 +811,7 @@ void ShowFoto::slotUpdateItemInfo(void)
         }
 
         text = d->currentItem->url().fileName() +
-                   i18n(" (%2 of %3)")
-                   .arg(QString::number(index))
-                   .arg(QString::number(d->itemsNb));
+                   i18nc("(<Image number> of <Images in album>", " (%1 of %2)", index, d->itemsNb);
     
         setCaption(d->currentItem->url().directory());
     }
