@@ -86,6 +86,7 @@ LoadingCache::LoadingCache()
 
     // good place to call it here as LoadingCache is a singleton
     qRegisterMetaType<LoadingDescription>("LoadingDescription");
+    qRegisterMetaType<DImg>("DImg");
 }
 
 LoadingCache::~LoadingCache()
