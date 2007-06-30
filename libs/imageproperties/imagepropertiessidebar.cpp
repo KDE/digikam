@@ -65,7 +65,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent, const char *name
     
     setSplitter(splitter);
          
-    appendTab(m_propertiesTab, SmallIcon("info"), i18n("Properties"));
+    appendTab(m_propertiesTab, SmallIcon("document-properties"), i18n("Properties"));
     appendTab(m_metadataTab, SmallIcon("exifinfo"), i18n("Metadata"));
     appendTab(m_colorTab, SmallIcon("blend"), i18n("Colors"));
     

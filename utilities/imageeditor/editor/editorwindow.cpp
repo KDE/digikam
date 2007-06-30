@@ -421,12 +421,12 @@ void EditorWindow::setupStandardActions()
 
 
     d->viewOverExpoAction = new KToggleAction(KIcon("overexposure"), 
-                                               i18n("Over-Exposure Indicator"), this);
+                                              i18n("Over-Exposure Indicator"), this);
     d->viewOverExpoAction->setShortcut(Qt::Key_F11); 
     connect(d->viewOverExpoAction, SIGNAL(triggered()), this, SLOT(slotToggleOverExposureIndicator()));
     actionCollection()->addAction("editorwindow_overexposure", d->viewOverExpoAction);
 
-    d->viewCMViewAction = new KToggleAction(KIcon("tv"), i18n("Color Managed View"), this);
+    d->viewCMViewAction = new KToggleAction(KIcon("video-display"), i18n("Color Managed View"), this);
     d->viewCMViewAction->setShortcut(Qt::Key_F12); 
     connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
     actionCollection()->addAction("editorwindow_cmview", d->viewCMViewAction);
@@ -461,13 +461,13 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Rotate' menu actions ----------------------------------------
 
-    d->rotateLeftAction = new KAction(KIcon("rotate_ccw"), i18n("Rotate Left"), this);
+    d->rotateLeftAction = new KAction(KIcon("object-rotate-left"), i18n("Rotate Left"), this);
     d->rotateLeftAction->setShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_Left);
     connect(d->rotateLeftAction, SIGNAL(triggered()), m_canvas, SLOT(slotRotate270()));
     actionCollection()->addAction("editorwindow_rotate_left", d->rotateLeftAction);
     d->rotateLeftAction->setEnabled(false);
 
-    d->rotateRightAction = new KAction(KIcon("rotate_cw"), i18n("Rotate Right"), this);
+    d->rotateRightAction = new KAction(KIcon("object-rotate-right"), i18n("Rotate Right"), this);
     d->rotateRightAction->setShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_Right);
     connect(d->rotateRightAction, SIGNAL(triggered()), m_canvas, SLOT(slotRotate90()));
     actionCollection()->addAction("editorwindow_rotate_right", d->rotateRightAction);
