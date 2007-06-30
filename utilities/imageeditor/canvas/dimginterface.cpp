@@ -160,7 +160,7 @@ DImgInterface::DImgInterface()
     d = new DImgInterfacePrivate;
 
     d->undoMan = new UndoManager(this);
-    /*d->thread  = new SharedLoadSaveThread;
+    d->thread  = new SharedLoadSaveThread;
 
     connect( d->thread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg&)),
              this, SLOT(slotImageLoaded(const LoadingDescription &, const DImg&)) );
@@ -172,13 +172,13 @@ DImgInterface::DImgInterface()
              this, SLOT(slotLoadingProgress(const LoadingDescription &, float)) );
 
     connect( d->thread, SIGNAL(signalSavingProgress(const QString&, float)),
-             this, SLOT(slotSavingProgress(const QString&, float)) );*/
+             this, SLOT(slotSavingProgress(const QString&, float)) );
 }
 
 DImgInterface::~DImgInterface()
 {
     delete d->undoMan;
-//    delete d->thread;
+    delete d->thread;
     delete d;
     if (m_defaultInterface == this)
         m_defaultInterface = 0;
@@ -196,9 +196,9 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
     d->iofileSettings = iofileSettings;
     d->parent         = parent;
 
-/*    d->thread->load( LoadingDescription(d->filename, iofileSettings->rawDecodingSettings),
+    d->thread->load( LoadingDescription(d->filename, iofileSettings->rawDecodingSettings),
                      SharedLoadSaveThread::AccessModeReadWrite,
-                     SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);*/
+                     SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
 }
 
 void DImgInterface::resetImage()
@@ -611,7 +611,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     d->image.setExif(meta.getExif());
     d->image.setIptc(meta.getIptc());
 
-//    d->thread->save(d->image, fileName, mimeType);
+    d->thread->save(d->image, fileName, mimeType);
 }
 
 void DImgInterface::slotImageSaved(const QString& filePath, bool success)
@@ -635,7 +635,7 @@ void DImgInterface::slotSavingProgress(const QString& filePath, float progress)
 void DImgInterface::abortSaving()
 {
     // failure will be reported by a signal
-    //d->thread->stopSaving(d->savingFilename);
+    d->thread->stopSaving(d->savingFilename);
 }
 
 void DImgInterface::switchToLastSaved(const QString& newFilename)
