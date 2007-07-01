@@ -137,14 +137,15 @@ public:
 ImageResize::ImageResize(QWidget* parent)
            : KDialog(parent)
 {
+    d = new ImageResizePriv;
+    d->parent = parent;
+
     setDefaultButton(Ok);
     setButtons(Help|Default|User2|User3|Ok|Cancel);
     setCaption(i18n("Resize Image"));
     setModal(true);
     setButtonText(User2,i18n("&Save As..."));
     setButtonText(User3,i18n("&Load..."));
-    d = new ImageResizePriv;
-    d->parent = parent;
     setHelp("resizetool.anchor", "digikam");
     setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
     setButtonWhatsThis ( User3, i18n("<p>Load all filter parameters from settings text file.") );
@@ -201,40 +202,37 @@ ImageResize::ImageResize(QWidget* parent)
 
     d->preserveRatioBox = new QCheckBox(i18n("Maintain aspect ratio"), firstPage);
     d->preserveRatioBox->setWhatsThis( i18n("<p>Enable this option to maintain aspect "
-                                              "ratio with new image sizes."));
+                                            "ratio with new image sizes."));
 
     KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
-    KGlobal::dirs()->addResourceType("logo-cimg", KGlobal::dirs()->kde_default("data") +
-                                     "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("logo-cimg", "logo-cimg.png");
-    cimgLogoLabel->setPixmap( QPixmap( directory + "logo-cimg.png" ) );
-    //Fix warnings like that? cimgLogoLabel->setPixmap( QPixmap( KStandardDirs::locate("appdata", "logo-cimg.png" ) ));
+    // TODO: KDE4PORT: why the logo is not loaded properlly ?
+    cimgLogoLabel->setPixmap( QPixmap( KStandardDirs::locate("appdata", "logo-cimg.png" ) ));
     cimgLogoLabel->setToolTip( i18n("Visit CImg library website"));
 
     d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
     d->useGreycstorationBox->setWhatsThis( i18n("<p>Enable this option to restore photograph content. "
-                                                  "Warning: this process can take a while."));
+                                                "Warning: this process can take a while."));
 
     d->progressBar = new QProgressBar(firstPage);
     d->progressBar->setValue(0);
     d->progressBar->setMaximum(100);
     d->progressBar->setWhatsThis( i18n("<p>This is the current progress when you use Restoration mode."));
 
-    grid->addWidget(d->preserveRatioBox, 0, 0, 0, 2);
-    grid->addWidget(label1, 1, 1, 0, 0);
-    grid->addWidget(d->wInput, 1, 1, 1, 2);
-    grid->addWidget(label2, 2, 2, 0, 0);
-    grid->addWidget(d->hInput, 2, 2, 1, 2);
-    grid->addWidget(label3, 3, 3, 0, 0);
-    grid->addWidget(d->wpInput, 3, 3, 1, 2);
-    grid->addWidget(label4, 4, 4, 0, 0);
-    grid->addWidget(d->hpInput, 4, 4, 1, 2);
-    grid->addWidget(new KSeparator(firstPage), 5, 5, 0, 2);
-    grid->addWidget(cimgLogoLabel, 6, 7, 0, 0);
-    grid->addWidget(d->useGreycstorationBox, 6, 6, 1, 2);
-    grid->addWidget(d->progressBar, 7, 7, 1, 2);
+    grid->addMultiCellWidget(d->preserveRatioBox, 0, 0, 0, 2);
+    grid->addMultiCellWidget(label1, 1, 1, 0, 0);
+    grid->addMultiCellWidget(d->wInput, 1, 1, 1, 2);
+    grid->addMultiCellWidget(label2, 2, 2, 0, 0);
+    grid->addMultiCellWidget(d->hInput, 2, 2, 1, 2);
+    grid->addMultiCellWidget(label3, 3, 3, 0, 0);
+    grid->addMultiCellWidget(d->wpInput, 3, 3, 1, 2);
+    grid->addMultiCellWidget(label4, 4, 4, 0, 0);
+    grid->addMultiCellWidget(d->hpInput, 4, 4, 1, 2);
+    grid->addMultiCellWidget(new KSeparator(firstPage), 5, 5, 0, 2);
+    grid->addMultiCellWidget(cimgLogoLabel, 6, 7, 0, 0);
+    grid->addMultiCellWidget(d->useGreycstorationBox, 6, 6, 1, 2);
+    grid->addMultiCellWidget(d->progressBar, 7, 7, 1, 2);
     grid->setRowStretch(8, 10);
 
     // -------------------------------------------------------------
