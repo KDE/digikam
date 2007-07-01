@@ -250,7 +250,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_pickBlack = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickBlack, BlackTonal);
     KGlobal::dirs()->addResourceType("color-picker-black", KGlobal::dirs()->kde_default("data") +
-                                     "digikamimageplugins/data");
+                                     "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("color-picker-black", "color-picker-black.png");
     m_pickBlack->setPixmap( QPixmap( directory + "color-picker-black.png" ) );
     m_pickBlack->setToggleButton(true);
@@ -260,7 +260,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_pickGray  = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickGray, GrayTonal);
     KGlobal::dirs()->addResourceType("color-picker-gray", KGlobal::dirs()->kde_default("data") +
-                                     "digikamimageplugins/data");
+                                     "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("color-picker-gray", "color-picker-gray.png");
     m_pickGray->setPixmap( QPixmap( directory + "color-picker-gray.png" ) );
     m_pickGray->setToggleButton(true);
@@ -270,7 +270,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_pickWhite = new QPushButton(m_pickerColorButtonGroup);
     m_pickerColorButtonGroup->insert(m_pickWhite, WhiteTonal);
     KGlobal::dirs()->addResourceType("color-picker-white", KGlobal::dirs()->kde_default("data") +
-                                     "digikamimageplugins/data");
+                                     "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("color-picker-white", "color-picker-white.png");
     m_pickWhite->setPixmap( QPixmap( directory + "color-picker-white.png" ) );
     m_pickWhite->setToggleButton(true);

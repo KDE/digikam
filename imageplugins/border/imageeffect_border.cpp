@@ -645,7 +645,7 @@ QString ImageEffect_Border::getBorderPath(int border)
        }
     
     KGlobal::dirs()->addResourceType(pattern.ascii(), KGlobal::dirs()->kde_default("data") +
-                                     "digikamimageplugins/data");
+                                     "digikam/data");
     return (KGlobal::dirs()->findResourceDir(pattern.ascii(), pattern + ".png") + pattern + ".png" );
 }
 
