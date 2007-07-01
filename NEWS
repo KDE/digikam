@@ -11,4 +11,5 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 143200 : Renaming like crasy with F2 crash digiKam.
 005 ==> 147347 : Showfoto crashes when opening twice multiple files.
 006 ==> 147269 : digiKam finds but fails to use libkdcraw.
-007 ==> 
+007 ==> 147263 : Some icons are missing.
+008 ==> 
