@@ -36,7 +36,6 @@ extern "C"
 // Qt includes.
 
 #include <Q3PtrList>
-#include <Q3DockArea>
 #include <QLabel>
 #include <QLayout>
 #include <QToolButton>
@@ -145,7 +144,6 @@ EditorWindow::EditorWindow(const char *name)
     d->exposureSettings = new ExposureSettingsContainer();
     m_IOFileSettings    = new IOFileSettingsContainer();
     m_savingContext     = new SavingContextContainer();
-
     d->waitingLoop      = new QEventLoop(this);
 }
 

@@ -258,16 +258,18 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     // -------------------------------------------------------------
 
-    KVBox *histoBox    = new KVBox(histogramPage);
+    QWidget *histoBox  = new QWidget(histogramPage);
+    QVBoxLayout *vlay1 = new QVBoxLayout(histoBox);
+    vlay1->setSpacing(1);
     d->histogramWidget = new HistogramWidget(256, 140, histoBox);
     d->histogramWidget->setWhatsThis( i18n("<p>This is the histogram drawing of the "
                                            "selected image channel"));
-    QLabel *space = new QLabel(histoBox);
-    space->setFixedHeight(1);
 
     d->hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, histoBox);
     d->hGradient->setColors(QColor("black"), QColor("white"));
 
+    vlay1->addWidget(d->histogramWidget);
+    vlay1->addWidget(d->hGradient);
     topLayout->addMultiCellWidget(histoBox, 3, 4, 0, 3);
 
     // -------------------------------------------------------------
@@ -302,7 +304,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
                              "selected histogram part. These values are available for all "
                              "channels."));
     QGridLayout* grid = new QGridLayout(gbox);
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setSpacing(0);
+    grid->setMargin(KDialog::spacingHint());
 
     QLabel *label4 = new QLabel(i18n("Mean:"), gbox);
     label4->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
@@ -353,7 +356,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     QWidget *gbox2     = new QWidget(histogramPage);
     QGridLayout* grid2 = new QGridLayout(gbox2);
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setSpacing(0);
+    grid->setMargin(KDialog::spacingHint());
 
     QLabel *label11     = new QLabel(i18n("Color depth:"), gbox2);
     label11->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);

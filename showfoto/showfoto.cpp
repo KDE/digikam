@@ -407,7 +407,7 @@ void ShowFoto::setupConnections()
 void ShowFoto::setupUserArea()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group("ImageViewer Settings");
 
     QWidget* widget = new QWidget(this);
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
