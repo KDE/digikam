@@ -37,14 +37,21 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
 # Shared libdigikam ################################################################
 
 SET(digikam_LIB_SRCS 
-#                      ${libcameragui_SRCS}
+#                     ${libcameragui_SRCS}
+#                     ${liblighttable_SRCS}
+#                     ${libimagepropertiesdigikam_SRCS}
+#                     ${libdatabase_SRCS}
+#                     ${libsqlite2_SRCS}
+#                     ${libsetup_SRCS}
+#                     ${libbatch_SRCS}
+#                     ${libdialog_SRCS}
 
-                     ${liblighttable_SRCS}
+                     ${libdialogshowfoto_SRCS}
+
                      ${libslideshow_SRCS}
-                     ${libbatch_SRCS}
                      ${libdimgcanvas_SRCS}
                      ${libdimgeditor_SRCS}
-                     ${libsetup_SRCS}
+                     ${libdimgeditortools_SRCS}
                      ${libthumbbar_SRCS}
                      ${libthemeengine_SRCS}
                      ${libcommonwidgets_SRCS}
@@ -55,13 +62,15 @@ SET(digikam_LIB_SRCS
                      ${libdimg_SRCS}
                      ${libdimgloaders_SRCS}
                      ${libdimgfilters_SRCS}
-                     ${libimagepropertiesdigikam_SRCS}
+                     ${liblprof_SRCS}
                      ${libthreadimageio_SRCS}
-                     ${libgreycstoration_SRCS}
-                     ${libdatabase_SRCS}
-                     ${libsqlite2_SRCS}
-                     ${libdialog_SRCS}
 		     ${libhistogram_SRCS}
+		     ${liblevels_SRCS}
+		     ${libcurves_SRCS}
+		     ${libwhitebalance_SRCS}
+                     ${libgreycstoration_SRCS}
+                     ${libdmetadata_SRCS}
+
 #                      kdateedit.cpp 
 #                      metadatahub.cpp 
 #                      digikamapp.cpp 
@@ -96,10 +105,10 @@ SET(digikam_LIB_SRCS
 #                      iconitem.cpp 
 #                      imageattributeswatch.cpp 
 #                      imagepreviewview.cpp 
-                      kdatetimeedit.cpp 
-		      #                      kdatepickerpopup.cpp 
-		      #kipiinterface.cpp 
-                      mediaplayerview.cpp 
+#                      kdatetimeedit.cpp 
+#                      kdatepickerpopup.cpp 
+#                      kipiinterface.cpp 
+#                      mediaplayerview.cpp 
 #                      monthwidget.cpp 
 #                      pixmapmanager.cpp 
 #                      ratingpopupmenu.cpp 
@@ -107,22 +116,20 @@ SET(digikam_LIB_SRCS
 #                      scanlib.cpp 
 #                      searchadvanceddialog.cpp 
 #                      searchfolderview.cpp 
-                      searchquickdialog.cpp 
-		      #                      searchresultsview.cpp 
-                      searchresultsitem.cpp 
-                      searchwidgets.cpp 
+#                      searchquickdialog.cpp 
+#                      searchresultsview.cpp 
+#                      searchresultsitem.cpp 
+#                      searchwidgets.cpp 
 #                      syncjob.cpp 
 #                      tagcreatedlg.cpp 
 #                      tagfilterview.cpp 
-                      tagfolderview.cpp 
+#                      tagfolderview.cpp 
 #                      tagspopupmenu.cpp 
-                      welcomepageview.cpp 
-                      main.cpp
+#                      welcomepageview.cpp 
+#                      main.cpp
    )
 
-KDE4_ADD_UI_FILES(digikam_LIB_SRCS
-	          ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs/deletedialogbase.ui
-			                     )
+KDE4_ADD_UI_FILES(digikam_LIB_SRCS ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs/deletedialogbase.ui)
 
 KDE4_AUTOMOC(${digikam_LIB_SRCS})
 
@@ -131,8 +138,6 @@ KDE4_AUTOMOC(${digikam_LIB_SRCS})
 KDE4_ADD_LIBRARY(digikam SHARED ${digikam_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(digikam
-#                       libcameragui 
-
                       ${KDE4_KDECORE_LIBS} 
                       ${KDE4_KIO_LIBS} 
                       ${KDE4_KHTML_LIBS} 
@@ -140,13 +145,16 @@ TARGET_LINK_LIBRARIES(digikam
                       ${KDE4_KPARTS_LIBS} 
                       ${KDE4_KUTILS_LIBS} 
                       ${SQLITE_LIBRARIES}
+                      ${GPHOTO2_LIBRARIES}
                       ${JPEG_LIBRARIES}
                       ${TIFF_LIBRARIES}
                       ${PNG_LIBRARIES}
+                      ${LCMS_LIBRARIES}
                       ${JASPER_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
                       ${LCMS_LIBRARIES}
                       ${KEXIV2_LIBRARIES}
+                      ${KIPI_LIBRARIES}
 	      )
 
 SET_TARGET_PROPERTIES(digikam PROPERTIES VERSION 1.0.0 SOVERSION 1 )
@@ -155,17 +163,17 @@ INSTALL(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )
 
 # digiKam binary progam #########################################################
 
-SET(digikam_bin_SRCS main.cpp )
+#SET(digikam_bin_SRCS main.cpp )
 
-KDE4_AUTOMOC(${digikam_bin_SRCS})
+#KDE4_AUTOMOC(${digikam_bin_SRCS})
 
-KDE4_ADD_EXECUTABLE(digikam_bin ${digikam_bin_SRCS})
+#KDE4_ADD_EXECUTABLE(digikam_bin ${digikam_bin_SRCS})
 
-TARGET_LINK_LIBRARIES(digikam_bin ${KDE4_KDECORE_LIBS} )
+#TARGET_LINK_LIBRARIES(digikam_bin ${KDE4_KDECORE_LIBS} )
 
-SET_TARGET_PROPERTIES(digikam_bin PROPERTIES OUTPUT_NAME digikam)
+#SET_TARGET_PROPERTIES(digikam_bin PROPERTIES OUTPUT_NAME digikam)
 
-INSTALL(TARGETS digikam_bin DESTINATION ${BIN_INSTALL_DIR})
+#INSTALL(TARGETS digikam_bin DESTINATION ${BIN_INSTALL_DIR})
 
 
 # Others Files to install #######################################################
