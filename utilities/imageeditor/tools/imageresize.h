@@ -68,7 +68,7 @@ private slots:
     void slotDefault();
     void slotUser2();
     void slotUser3();
-    void processCImgUrl(const KUrl&);
+    void processCImgUrl(const QString&);
     void slotValuesChanged();
     void readUserSettings();
     void slotRestorationToggled(bool);

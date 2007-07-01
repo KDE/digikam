@@ -207,8 +207,7 @@ ImageResize::ImageResize(QWidget* parent)
     KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
-    // TODO: KDE4PORT: why the logo is not loaded properlly ?
-    cimgLogoLabel->setPixmap( QPixmap( KStandardDirs::locate("appdata", "logo-cimg.png" ) ));
+    cimgLogoLabel->setPixmap( QPixmap( KStandardDirs::locate("data", "digikam/data/logo-cimg.png" ) ));
     cimgLogoLabel->setToolTip( i18n("Visit CImg library website"));
 
     d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
@@ -248,8 +247,8 @@ ImageResize::ImageResize(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    connect(cimgLogoLabel, SIGNAL(leftClickedUrl(const KUrl&)),
-            this, SLOT(processCImgUrl(const KUrl&)));
+    connect(cimgLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
+            this, SLOT(processCImgUrl(const QString&)));
 
     connect(d->wInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotValuesChanged()));
@@ -455,9 +454,9 @@ void ImageResize::slotCancel()
     done(Cancel);
 }
 
-void ImageResize::processCImgUrl(const KUrl& url)
+void ImageResize::processCImgUrl(const QString& url)
 {
-    KToolInvocation::invokeBrowser(url.path());
+    KToolInvocation::invokeBrowser(url);
 }
 
 void ImageResize::closeEvent(QCloseEvent *e)
