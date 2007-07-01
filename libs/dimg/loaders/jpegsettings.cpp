@@ -102,6 +102,7 @@ JPEGSettings::JPEGSettings(QWidget *parent)
     d->JPEGGrid->setColumnStretch(1, 10);
     d->JPEGGrid->setRowStretch(1, 10);
     d->JPEGGrid->setSpacing(KDialog::spacingHint());
+    d->JPEGGrid->setAlignment(d->JPEGcompression, Qt::AlignCenter);
 }
 
 JPEGSettings::~JPEGSettings()
