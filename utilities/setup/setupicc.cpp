@@ -160,13 +160,12 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->enableColorManagement = new QCheckBox(colorPolicy);
     d->enableColorManagement->setText(i18n("Enable Color Management"));
     d->enableColorManagement->setWhatsThis( i18n("<ul><li>Checked: Color Management is enabled</li>"
-                                                 "<li>Unchecked: Color Management is disabled</li></ul>"));
+                                                 "<li>Unchecked: Color Management is "
+                                                 "disabled</li></ul>"));
     
     KUrlLabel *lcmsLogoLabel = new KUrlLabel(colorPolicy);
     lcmsLogoLabel->setText(QString());
     lcmsLogoLabel->setUrl("http://www.littlecms.com");
-/*    KGlobal::dirs()->addResourceType("logo-lcms", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("logo-lcms", "logo-lcms.png");*/
     lcmsLogoLabel->setPixmap( QPixmap( KStandardDirs::locate("data", "digikam/data/logo-lcms.png" ) ));
     lcmsLogoLabel->setToolTip(i18n("Visit Little CMS project website"));
 
@@ -246,7 +245,8 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->monitorProfilesKC = new SqueezedComboBox(d->profilesGB);
     d->monitorProfiles->setBuddy(d->monitorProfilesKC);
     d->monitorProfilesKC->setWhatsThis( i18n("<p>Select here the color profile for your monitor. "
-                     "You need to toggle on <b>Use color managed view</b> option to use this profile.</p>"));
+                     "You need to toggle on <b>Use color managed view</b> option to use this "
+                     "profile.</p>"));
     d->infoMonitorProfiles = new QPushButton(i18n("Info..."), d->profilesGB);
     d->infoMonitorProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected monitor profile.</p>"));
@@ -367,8 +367,8 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     connect(d->managedView, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleManagedView(bool)));
                     
-    connect(lcmsLogoLabel, SIGNAL(leftClickedURL(const QString&)),
-            this, SLOT(processLCMSURL(const QString&)));
+    connect(lcmsLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
+            this, SLOT(processLcmsUrl(const QString&)));
 
     connect(d->enableColorManagement, SIGNAL(toggled(bool)),
             this, SLOT(slotToggledWidgets(bool)));
@@ -404,7 +404,7 @@ SetupICC::~SetupICC()
     delete d;
 }
 
-void SetupICC::processLCMSURL(const QString& url)
+void SetupICC::processLcmsUrl(const QString& url)
 {
     KToolInvocation::self()->invokeBrowser(url);
 }
