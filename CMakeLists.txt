@@ -351,13 +351,13 @@ SET(liblighttable_SRCS
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablewindow.cpp 
    )
 
+ADD_SUBDIRECTORY( data )
 ADD_SUBDIRECTORY( libs )
 ADD_SUBDIRECTORY( utilities )
 ADD_SUBDIRECTORY( showfoto )
 ADD_SUBDIRECTORY( kioslave )
-#ADD_SUBDIRECTORY( digikam )
-#ADD_SUBDIRECTORY( imageplugins )
+ADD_SUBDIRECTORY( digikam )
+ADD_SUBDIRECTORY( imageplugins )
 #ADD_SUBDIRECTORY( themedesigner )
-ADD_SUBDIRECTORY( data )
 
 INSTALL( FILES tips DESTINATION ${DATA_INSTALL_DIR}/digikam )
