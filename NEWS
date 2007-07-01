@@ -10,4 +10,5 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 147147 : digiKam does not apply tags to some selected images.
 004 ==> 143200 : Renaming like crasy with F2 crash digiKam.
 005 ==> 147347 : Showfoto crashes when opening twice multiple files.
-006 ==> 
+006 ==> 147269 : digiKam finds but fails to use libkdcraw.
+007 ==> 
