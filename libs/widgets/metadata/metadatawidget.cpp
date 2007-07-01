@@ -104,8 +104,8 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     setObjectName(name);
 
     d->mainLayout = new QGridLayout(this);
-    d->mainLayout->setSpacing(KDialog::spacingHint());
-    d->mainLayout->setMargin(KDialog::spacingHint());
+    d->mainLayout->setSpacing(0);
+    d->mainLayout->setMargin(0);
 
     KIconLoader* iconLoader = KIconLoader::global();
 
