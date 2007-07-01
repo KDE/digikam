@@ -38,7 +38,7 @@ class SetupMisc : public QWidget
 {
 public:
 
-    SetupMisc(QWidget* parent);
+    SetupMisc(QWidget* parent=0);
     ~SetupMisc();
 
     void applySettings();
