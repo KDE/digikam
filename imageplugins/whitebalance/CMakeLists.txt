@@ -11,14 +11,15 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor
                     ${CMAKE_SOURCE_DIR}/digikam/digikam   
                    )
 
-SET(digikamimageplugin_whitebalance_PART_SRCS imageplugin_whitebalance.cpp )
-#mageeffect_whitebalance.cpp)
+SET(digikamimageplugin_whitebalance_PART_SRCS imageplugin_whitebalance.cpp 
+#                                              imageeffect_whitebalance.cpp
+   )
 
 KDE4_AUTOMOC(${digikamimageplugin_whitebalance_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_whitebalance ${digikamimageplugin_whitebalance_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(digikamimageplugin_whitebalance  ${KDE4_KDECORE_LIBS})
+TARGET_LINK_LIBRARIES(digikamimageplugin_whitebalance ${digikam})
 
 INSTALL(TARGETS digikamimageplugin_whitebalance DESTINATION ${PLUGIN_INSTALL_DIR})
 
