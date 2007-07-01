@@ -163,10 +163,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // -- Show splash at start ----------------------------
 
- /* TODO : These line are really mandatory with KDE4 ?
-
-    KGlobal::dirs()->addResourceType("data", KGlobal::dirs()->kde_default("data") + "digikam");
-    KIconLoader::global()->addAppDir("digikam");*/
+    KIconLoader::global()->addAppDir("digikam");
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("ImageViewer Settings");

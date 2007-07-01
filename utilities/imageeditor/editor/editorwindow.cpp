@@ -560,7 +560,7 @@ void EditorWindow::setupStatusBar()
     m_resLabel->setToolTip( i18n("Information about image size"));
 
     d->underExposureIndicator = new QToolButton(statusBar());
-    d->underExposureIndicator->setIcon(SmallIcon("underexposure"));
+    d->underExposureIndicator->setIcon( SmallIcon("underexposure"));
     d->underExposureIndicator->setCheckable(true);
     statusBar()->addWidget(d->underExposureIndicator, 1);
 
@@ -570,7 +570,7 @@ void EditorWindow::setupStatusBar()
     statusBar()->addWidget(d->overExposureIndicator, 1);
 
     d->cmViewIndicator = new QToolButton(statusBar());
-    d->cmViewIndicator->setIcon(SmallIcon("tv"));
+    d->cmViewIndicator->setIcon(SmallIcon("video-display"));
     d->cmViewIndicator->setCheckable(true);
     statusBar()->addWidget(d->cmViewIndicator, 1);
 
