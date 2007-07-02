@@ -129,22 +129,19 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    KVBox *page = new KVBox(this);
-    setMainWidget(page);
-
-    d->mainLayout = new QGridLayout();
-    page->setLayout(d->mainLayout);
+    setMainWidget(new QWidget(this));
+    d->mainLayout = new QGridLayout(mainWidget());
 
     // -------------------------------------------------------------
 
-    d->hbox     = new KHBox(page);
+    d->hbox     = new KHBox(mainWidget());
     d->splitter = new QSplitter(d->hbox);
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
     d->splitter->setFrameShape( QFrame::NoFrame );
     d->splitter->setOpaqueResize(false);
 
-    d->mainLayout->addWidget(d->hbox, 1, 2, 0, 1);
+    d->mainLayout->addMultiCellWidget(d->hbox, 1, 2, 0, 1);
     d->mainLayout->setColumnStretch(0, 10);
     d->mainLayout->setRowStretch(2, 10);
 
