@@ -138,30 +138,44 @@ void PreviewLoadingTask::execute()
 
     DImg img;
     QImage qimage;
+    bool fromEmbeddedPreview = false;
 
     // -- Get the image preview --------------------------------
 
     // First the QImage-dependent loading methods
     // Trying to load with dcraw: RAW files.
-    if ( !KDcrawIface::KDcraw::loadDcrawPreview(qimage, m_loadingDescription.filePath) )
+    if (KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath))
+        fromEmbeddedPreview = true;
+
+    if (qimage.isNull())
     {
-        // Try to extract Exif/Iptc preview.
+        //TODO: Use DImg based loader instead?
+        KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath);
+    }
+
+    // Try to extract Exif/Iptc preview.
+    if (qimage.isNull())
+    {
         loadImagePreview(qimage, m_loadingDescription.filePath);
     }
 
+    if (!qimage.isNull())
+    {
+        // convert from QImage
+        img = DImg(qimage);
+        // mark as embedded preview (for exif rotation)
+        if (fromEmbeddedPreview)
+            img.setAttribute("fromRawEmbeddedPreview", true);
+        // free memory
+        qimage = QImage();
+    }
+
     // DImg-dependent loading methods
-    if (qimage.isNull())
+    if (img.isNull())
     {
         // Set a hint to try to load a JPEG with the fast scale-before-decoding method
         img.setAttribute("jpegScaledLoadingSize", size);
         img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
-    }
-    else
-    {
-        // convert from QImage
-        img = DImg(qimage);
-        // free memory
-        qimage.reset();
     }
 
     if (img.isNull())
