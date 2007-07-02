@@ -77,7 +77,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  S
             digikamtags.cpp                     Marcel                  X       DONE
             digikamthumbnail.cpp                Gilles          X       X       DONE
 
- 4      |-showfoto                                              X
+ 4      |-showfoto                              Gilles          X               DONE
         |---icons                               Gilles                          DONE                 CMake port only is require.
         |---pics                                Gilles                          DONE                 CMake port only is require.
         |---setup                               Gilles          X               DONE
