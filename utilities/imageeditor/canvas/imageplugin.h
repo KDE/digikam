@@ -43,6 +43,8 @@ namespace Digikam
 
 class DIGIKAM_EXPORT ImagePlugin : public QObject, public KXMLGUIClient
 {
+    Q_OBJECT
+
 public:
     
     ImagePlugin(QObject *parent, const char* name=0);

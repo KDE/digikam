@@ -24,6 +24,7 @@
 // Local includes.
  
 #include "imageplugin.h"
+#include "imageplugin.moc"
 
 namespace Digikam
 {

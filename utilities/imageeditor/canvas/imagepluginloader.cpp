@@ -140,8 +140,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
             {
                 int error = -1;
 
-                plugin =  KParts::ComponentFactory::createPartInstanceFromService<ImagePlugin>(
-                                                    service, 0, this, QStringList(), &error);
+                plugin = KService::createInstance<ImagePlugin>(service, this, QStringList(), &error);
 
                 if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
                 {
@@ -153,14 +152,13 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 }
                 else
                 {
-                    DWarning() << "ImagePluginLoader: createInstanceFromLibrary returned 0 for "
+                    DWarning() << "ImagePluginLoader: createInstance returned 0 for "
                                << service->name()
                                << " (" << service->library() << ")"
                                << " with error number "
-                               << error << endl;
-                    if (error == KLibLoader::ErrNoLibrary)
-                        DWarning() << "KLibLoader says: "
-                                   << KLibLoader::self()->lastErrorMessage() << endl;
+                               << error
+                               << "\n KLibLoader says: "
+                               << KLibLoader::self()->lastErrorMessage() << endl;
                 }
             }
             break;
@@ -187,8 +185,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
             {
                 int error = -1;
 
-                plugin =  KParts::ComponentFactory::createPartInstanceFromService<ImagePlugin>(
-                                                    service, 0, this, QStringList(), &error);
+                plugin = KService::createInstance<ImagePlugin>(service, this, QStringList(), &error);
 
                 if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
                 {
@@ -200,14 +197,13 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 }
                 else
                 {
-                    DWarning() << "ImagePluginLoader: createInstanceFromLibrary returned 0 for "
+                    DWarning() << "ImagePluginLoader: createInstance returned 0 for "
                                << service->name()
                                << " (" << service->library() << ")"
                                << " with error number "
-                               << error << endl;
-                    if (error == KLibLoader::ErrNoLibrary)
-                        DWarning() << "KLibLoader says: "
-                                   << KLibLoader::self()->lastErrorMessage() << endl;
+                               << error
+                               << "\n KLibLoader says: "
+                               << KLibLoader::self()->lastErrorMessage() << endl;
                 }
             }
         }
