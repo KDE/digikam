@@ -103,6 +103,8 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     QHBoxLayout *hlay = new QHBoxLayout(d->prevBBox);
     d->previewButtons = new QButtonGroup(d->prevBBox);
     d->previewButtons->setExclusive(true);
+    hlay->setSpacing(0);
+    hlay->setMargin(0);
 
     QPushButton *previewOriginalButton = new QPushButton( d->prevBBox );
     d->previewButtons->addButton(previewOriginalButton, ImageGuideWidget::PreviewOriginalImage);
@@ -176,6 +178,8 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     d->expoBBox                   = new QWidget(this);
     QHBoxLayout *hlay2            = new QHBoxLayout(d->expoBBox);
     QButtonGroup *exposureButtons = new QButtonGroup(d->expoBBox);
+    hlay2->setSpacing(0);
+    hlay2->setMargin(0);
 
     d->underExposureButton = new QPushButton(d->expoBBox);
     exposureButtons->addButton(d->underExposureButton, UnderExposure);
@@ -210,15 +214,17 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
 
     // -------------------------------------------------------------
     
-    grid->addWidget(d->prevBBox, 1, 1, 0, 0);
-    grid->addWidget(d->spotInfoLabel, 1, 1, 1, 1);
-    grid->addWidget(d->expoBBox, 1, 1, 2, 2);
-    grid->addWidget(frame, 3, 3, 0, 2);
+    grid->addMultiCellWidget(d->prevBBox, 1, 1, 0, 0);
+    grid->addMultiCellWidget(d->spotInfoLabel, 1, 1, 1, 1);
+    grid->addMultiCellWidget(d->expoBBox, 1, 1, 2, 2);
+    grid->addMultiCellWidget(frame, 3, 3, 0, 2);
     grid->setColumnMinimumWidth(1, KDialog::spacingHint());
     grid->setRowMinimumHeight(0, KDialog::spacingHint());
     grid->setRowMinimumHeight(2, KDialog::spacingHint());
     grid->setRowStretch(3, 10);
     grid->setColumnStretch(1, 10);
+    grid->setSpacing(0);
+    grid->setMargin(0);
 
     // -------------------------------------------------------------
     
