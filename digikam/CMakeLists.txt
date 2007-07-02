@@ -142,7 +142,6 @@ TARGET_LINK_LIBRARIES(digikam
                       ${KDE4_KIO_LIBS} 
                       ${KDE4_KHTML_LIBS} 
                       ${KDE4_KDEUI_LIBS} 
-                      ${KDE4_KPARTS_LIBS} 
                       ${KDE4_KUTILS_LIBS} 
                       ${SQLITE_LIBRARIES}
                       ${GPHOTO2_LIBRARIES}
@@ -169,7 +168,10 @@ INSTALL(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )
 
 #KDE4_ADD_EXECUTABLE(digikam_bin ${digikam_bin_SRCS})
 
-#TARGET_LINK_LIBRARIES(digikam_bin ${KDE4_KDECORE_LIBS} )
+#TARGET_LINK_LIBRARIES(digikam_bin 
+                       ${KDE4_KDECORE_LIBS} 
+                       ${KDE4_KPARTS_LIBS} 
+                      )
 
 #SET_TARGET_PROPERTIES(digikam_bin PROPERTIES OUTPUT_NAME digikam)
 
