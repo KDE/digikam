@@ -129,14 +129,15 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    KVBox *vbox = new KVBox( this );
-    setMainWidget( vbox );
+    KVBox *page = new KVBox(this);
+    setMainWidget(page);
 
-    d->mainLayout = new QGridLayout( vbox);
+    d->mainLayout = new QGridLayout();
+    page->setLayout(d->mainLayout);
 
     // -------------------------------------------------------------
 
-    d->hbox     = new KHBox(vbox);
+    d->hbox     = new KHBox(page);
     d->splitter = new QSplitter(d->hbox);
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
@@ -146,8 +147,6 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
     d->mainLayout->addWidget(d->hbox, 1, 2, 0, 1);
     d->mainLayout->setColumnStretch(0, 10);
     d->mainLayout->setRowStretch(2, 10);
-
-    vbox->setLayout(d->mainLayout);
 
     // -------------------------------------------------------------
 
@@ -242,11 +241,11 @@ void ImageDlgBase::setAboutData(KAboutData *about)
     disconnect(this, SIGNAL(helpClicked()),
                this, SLOT(slotHelp()));
 
-    d->aboutData = about;
+    d->aboutData            = about;
     KPushButton *helpButton = button( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, d->aboutData, false);
+    KHelpMenu* helpMenu     = new KHelpMenu(this, d->aboutData, false);
     helpMenu->menu()->removeAction(helpMenu->menu()->actions().first());
-    QAction *handbook = new QAction(i18n("digiKam Handbook"), this);
+    QAction *handbook       = new QAction(i18n("digiKam Handbook"), this);
     connect(handbook, SIGNAL(triggered(bool)),
             this, SLOT(slotHelp()));
     helpMenu->menu()->insertAction(helpMenu->menu()->actions().first(), handbook);
@@ -289,4 +288,3 @@ void ImageDlgBase::slotTimer()
 }
 
 }  // NameSpace Digikam
-
