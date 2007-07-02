@@ -38,7 +38,7 @@ class QPushButton;
 class QLabel;
 class QComboBox;
 class QPushButton;
-class Q3HButtonGroup;
+class QButtonGroup;
 
 class KDoubleNumInput;
 class K3ActiveLabel;
@@ -131,7 +131,7 @@ private:
     QComboBox                    *m_temperaturePresetCB;    
     QComboBox                    *m_channelCB;    
     
-    Q3HButtonGroup                *m_scaleBG;  
+    QButtonGroup                 *m_scaleBG;  
         
     QLabel                       *m_adjTemperatureLabel;
     QLabel                       *m_temperaturePresetLabel;
@@ -143,8 +143,8 @@ private:
     QLabel                       *m_saturationLabel;
     QLabel                       *m_greenLabel;
     
-    K3ActiveLabel                 *m_exposureLabel;
-    K3ActiveLabel                 *m_temperatureLabel;
+    K3ActiveLabel                *m_exposureLabel;
+    K3ActiveLabel                *m_temperatureLabel;
 
     KDoubleNumInput              *m_temperatureInput;
     KDoubleNumInput              *m_darkInput;
