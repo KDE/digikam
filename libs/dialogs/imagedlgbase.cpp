@@ -154,7 +154,7 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
             this, SLOT(slotCancel()));
 
     connect(this, SIGNAL(tryClicked()),
-            this, SLOT(slotTry()));
+            this, SLOT(slotEffect()));
 
     connect(this, SIGNAL(defaultClicked()),
             this, SLOT(slotDefault()));
