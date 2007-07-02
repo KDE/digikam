@@ -132,7 +132,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
         {
             if (!pluginIsLoaded(service->name()) )
             {
-                int error;
+                int error=-1;
                 plugin = KParts::ComponentFactory::createInstanceFromService<ImagePlugin>(
                                  service, this, service->name().local8Bit(), 0, &error);
 
@@ -149,14 +149,14 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 }
                 else
                 {
-                    DWarning() << "KIPI::PluginLoader:: createInstanceFromLibrary returned 0 for "
-                                << service->name()
-                                << " (" << service->library() << ")"
-                                << " with error number "
-                                << error << endl;
+                    DWarning() << "ImagePluginLoader:: createInstanceFromLibrary returned 0 for "
+                               << service->name()
+                               << " (" << service->library() << ")"
+                               << " with error code "
+                               << error << endl;
                     if (error == KParts::ComponentFactory::ErrNoLibrary)
                         DWarning() << "KLibLoader says: "
-                                    << KLibLoader::self()->lastErrorMessage() << endl;
+                                   << KLibLoader::self()->lastErrorMessage() << endl;
                 }
             }
             break;
@@ -181,6 +181,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 continue;
             else
             {
+                int error=-1;
                 plugin = KParts::ComponentFactory::createInstanceFromService<ImagePlugin>(
                                  service, this, service->name().local8Bit(), 0);
 
@@ -197,7 +198,14 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 }
                 else
                 {
-                    DError() << "ImagePluginLoader: Failed to load plugin " << service->name() << endl;
+                    DWarning() << "ImagePluginLoader:: createInstanceFromLibrary returned 0 for "
+                               << service->name()
+                               << " (" << service->library() << ")"
+                               << " with error code "
+                               << error << endl;
+                    if (error == KParts::ComponentFactory::ErrNoLibrary)
+                        DWarning() << "KLibLoader says: "
+                                   << KLibLoader::self()->lastErrorMessage() << endl;
                 }
             }
         }
