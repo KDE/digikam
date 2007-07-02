@@ -284,10 +284,10 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     connect(d->imagePanIconWidget, SIGNAL(signalSelectionTakeFocus()),
             this, SLOT(slotPanIconTakeFocus()));
             
-    connect(d->separateView, SIGNAL(released(int)),
+    connect(d->separateView, SIGNAL(buttonReleased(int)),
             d->imageRegionWidget, SLOT(slotSeparateViewToggled(int)));
     
-    connect(d->separateView, SIGNAL(released(int)),
+    connect(d->separateView, SIGNAL(buttonReleased(int)),
             d->imagePanIconWidget, SLOT(slotSeparateViewToggled(int)));
 
     connect(d->zoomBar, SIGNAL(signalZoomMinusClicked()),

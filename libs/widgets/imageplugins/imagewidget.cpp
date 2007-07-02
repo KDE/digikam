@@ -243,7 +243,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotUpdateSpotInfo( const Digikam::DColor &, const QPoint & )));
 
-    connect(d->previewButtons, SIGNAL(released(int)),
+    connect(d->previewButtons, SIGNAL(buttonReleased(int)),
             d->previewWidget, SLOT(slotChangeRenderingPreviewMode(int)));
 
     connect(d->underExposureButton, SIGNAL(toggled(bool)),
