@@ -63,7 +63,7 @@ class ImagePluginLoaderPrivate
 public:
 
     typedef QPair<QString, ImagePlugin*> PluginType;
-    typedef Q3ValueList< PluginType >     PluginList;
+    typedef Q3ValueList< PluginType >    PluginList;
 
 public:
 
@@ -140,9 +140,8 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
             {
                 int error = -1;
 
-                plugin =  KParts::ComponentFactory::createPartInstanceFromLibrary<ImagePlugin>(
-                                                    service->name().toLocal8Bit(), 
-                                                    0, this, QStringList(), &error);
+                plugin =  KParts::ComponentFactory::createPartInstanceFromService<ImagePlugin>(
+                                                    service, 0, this, QStringList(), &error);
 
                 if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
                 {
@@ -189,9 +188,10 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 continue;
             else
             {
-                plugin =  KParts::ComponentFactory::createPartInstanceFromLibrary<ImagePlugin>(
-                                                    service->name().toLocal8Bit(), 
-                                                    0, this);
+                int error = -1;
+
+                plugin =  KParts::ComponentFactory::createPartInstanceFromService<ImagePlugin>(
+                                                    service, 0, this, QStringList(), &error);
 
                 if (plugin)
                 {
