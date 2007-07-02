@@ -90,19 +90,19 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
     // About data and help button.
 
-    KAboutData* about = new KAboutData("digikam", 0,
-                                       ki18n("White Color Balance Correction"), 
+    KAboutData* about = new KAboutData("digikam",
+                                       I18N_NOOP("White Color Balance Correction"), 
                                        digikam_version,
-                                       ki18n("A digiKam image plugin to correct white color balance."),
+                                       I18N_NOOP("A digiKam image plugin to correct white color balance."),
                                        KAboutData::License_GPL,
-                                       ki18n("(c) 2005-2007, Gilles Caulier"), 
-                                       KLocalizedString(),
+                                       "(c) 2005-2007, Gilles Caulier", 
+                                       0,
                                        "http://wwww.digikam.org");
 
-    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
+    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
 
-    about->addAuthor(ki18n("Pawel T. Jochym"), ki18n("White color balance correction algorithm"),
+    about->addAuthor("Pawel T. Jochym", I18N_NOOP("White color balance correction algorithm"),
                      "jochym at ifj edu pl");
 
     setAboutData(about);
@@ -161,6 +161,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     logHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-log.png")));
     logHistoButton->setCheckable(true);
     hlay1->addWidget(logHistoButton);
+    hlay1->setMargin(0);
 
     QHBoxLayout* l1 = new QHBoxLayout();
     l1->addWidget(label1);
@@ -188,7 +189,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
     QGridLayout *grid2    = new QGridLayout();
     grid2->setSpacing(spacingHint());
-    layout2->addLayout(grid);
+    layout2->addLayout(grid2);
+
     m_temperatureLabel    = new K3ActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Color_temperature'>Color Temperature</a> "
                                                   " (K): </qt>"), gboxSettings);
     m_adjTemperatureLabel = new QLabel(i18n("Adjustment:"), gboxSettings);
@@ -281,7 +283,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
                                                  " (E.V): </qt>"), gboxSettings);
     m_mainExposureLabel  = new QLabel(i18n("Main:"), gboxSettings);
     m_autoAdjustExposure = new QPushButton(gboxSettings);
-    m_autoAdjustExposure->setIcon(KIconLoader::global()->loadIcon("run", (K3Icon::Group)K3Icon::Toolbar));
+    m_autoAdjustExposure->setIcon(KIconLoader::global()->loadIcon("gear", (K3Icon::Group)K3Icon::Toolbar));
     m_autoAdjustExposure->setToolTip( i18n( "Auto exposure adjustments" ) );
     m_autoAdjustExposure->setWhatsThis( i18n("<p>With this button, you can automatically adjust Exposure "
                                              "and Black Point values."));
@@ -336,7 +338,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
     
-    connect(m_scaleBG, SIGNAL(released(int)),
+    connect(m_scaleBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotScaleChanged(int)));
 
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
