@@ -153,7 +153,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 }
                 else
                 {
-                    DWarning() << "KIPI::PluginLoader:: createInstanceFromLibrary returned 0 for "
+                    DWarning() << "ImagePluginLoader: createInstanceFromLibrary returned 0 for "
                                << service->name()
                                << " (" << service->library() << ")"
                                << " with error number "
@@ -190,7 +190,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 plugin =  KParts::ComponentFactory::createPartInstanceFromService<ImagePlugin>(
                                                     service, 0, this, QStringList(), &error);
 
-                if (plugin)
+                if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
                 {
                     d->pluginList.append(ImagePluginLoaderPrivate::PluginType(service->name(), plugin));
 
@@ -200,7 +200,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 }
                 else
                 {
-                    DWarning() << "KIPI::PluginLoader:: createInstanceFromLibrary returned 0 for "
+                    DWarning() << "ImagePluginLoader: createInstanceFromLibrary returned 0 for "
                                << service->name()
                                << " (" << service->library() << ")"
                                << " with error number "
@@ -213,7 +213,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
         }
     }
 
-    d->splash = 0;       // Splashcreen is only lanched at the first time.
+    d->splash = 0;       // Splashcreen is only displayed at the first time.
                          // If user change plugins list to use in setup, don't try to 
                          // use the old splashscreen instance.
 }
