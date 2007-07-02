@@ -142,9 +142,6 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
 
                     DDebug() << "ImagePluginLoader: Loaded plugin " << service->name() << endl;
 
-                    //if (d->splash)
-                      //  d->splash->message(i18n("Loading: %1").arg(service->name()));
-
                     ++cpt;
                 }
                 else
@@ -185,14 +182,11 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 plugin = KParts::ComponentFactory::createInstanceFromService<ImagePlugin>(
                                  service, this, service->name().local8Bit(), 0);
 
-                if (plugin)
+                if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
                 {
                     d->pluginList.append(ImagePluginLoaderPrivate::PluginType(service->name(), plugin));
 
                     DDebug() << "ImagePluginLoader: Loaded plugin " << service->name() << endl;
-
-                    //if (d->splash)
-                      //  d->splash->message(i18n("Loading: %1").arg(service->name()));
 
                     ++cpt;
                 }
@@ -210,9 +204,6 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
             }
         }
     }
-
-    //if (d->splash)
-      //  d->splash->message(i18n("1 Image Plugin Loaded", "%n Image Plugins Loaded", cpt));
 
     d->splash = 0;       // Splashcreen is only lanched at the first time.
                          // If user change plugins list to use in setup, don't try to 
