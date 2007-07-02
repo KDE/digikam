@@ -149,21 +149,18 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
 
                     DDebug() << "ImagePluginLoader: Loaded plugin " << service->name() << endl;
 
-                    //if (d->splash)
-                      //  d->splash->message(i18n("Loading: %1").arg(service->name()));
-
                     ++cpt;
                 }
                 else
                 {
                     DWarning() << "KIPI::PluginLoader:: createInstanceFromLibrary returned 0 for "
-                                << service->name()
-                                << " (" << service->library() << ")"
-                                << " with error number "
-                                << error << endl;
+                               << service->name()
+                               << " (" << service->library() << ")"
+                               << " with error number "
+                               << error << endl;
                     if (error == KLibLoader::ErrNoLibrary)
                         DWarning() << "KLibLoader says: "
-                                    << KLibLoader::self()->lastErrorMessage() << endl;
+                                   << KLibLoader::self()->lastErrorMessage() << endl;
                 }
             }
             break;
@@ -199,21 +196,22 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
 
                     DDebug() << "ImagePluginLoader: Loaded plugin " << service->name() << endl;
 
-                    //if (d->splash)
-                      //  d->splash->message(i18n("Loading: %1").arg(service->name()));
-
                     ++cpt;
                 }
                 else
                 {
-                    DError() << "ImagePluginLoader: Failed to load plugin " << service->name() << endl;
+                    DWarning() << "KIPI::PluginLoader:: createInstanceFromLibrary returned 0 for "
+                               << service->name()
+                               << " (" << service->library() << ")"
+                               << " with error number "
+                               << error << endl;
+                    if (error == KLibLoader::ErrNoLibrary)
+                        DWarning() << "KLibLoader says: "
+                                   << KLibLoader::self()->lastErrorMessage() << endl;
                 }
             }
         }
     }
-
-    //if (d->splash)
-      //  d->splash->message(i18n("1 Image Plugin Loaded", "%n Image Plugins Loaded", cpt));
 
     d->splash = 0;       // Splashcreen is only lanched at the first time.
                          // If user change plugins list to use in setup, don't try to 
