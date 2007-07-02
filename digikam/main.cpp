@@ -76,14 +76,6 @@ extern "C"
 #include "digikamapp.h"
 #include "digikamfirstrun.h"
 
-static KCmdLineOptions options[] =
-{
-    { "detect-camera", I18N_NOOP("Automatically detect and open camera"), 0 },
-    { "download-from <path>", I18N_NOOP("Open camera dialog at <path>"), 0 },
-    { "album-root <path>", I18N_NOOP("Start digikam with the album root <path>"), 0 }, // TEMPORARY SOLUTION
-    KCmdLineLastOption
-};
-
 int main(int argc, char *argv[])
 {
     QString DcrawVer    = KDcrawIface::DcrawBinary::internalVersion();
@@ -108,163 +100,144 @@ int main(int argc, char *argv[])
 
     QString description = QString(I18N_NOOP("A Photo-Management Application for KDE"));
     
-    KAboutData aboutData( "digikam", 
-                          I18N_NOOP("digiKam"),
+    KAboutData aboutData( "digikam", 0, 
+                          ki18n("digiKam"),
                           digikam_version,        
-                          description.toLatin1(),
+                          ki18n(description.toLatin1()),
                           KAboutData::License_GPL,
-                          I18N_NOOP("(c) 2002-2007, digiKam developers team"),
-                          0,
+                          ki18n("(c) 2002-2007, digiKam developers team"),
+                          KLocalizedString(),
                           "http://www.digikam.org");
 
     aboutData.setOtherText(libInfo.toLatin1());
 
-    aboutData.addAuthor ( "Caulier Gilles",
-                          I18N_NOOP("Main developer and coordinator"),
+    aboutData.addAuthor ( ki18n("Caulier Gilles"),
+                          ki18n("Main developer and coordinator"),
                           "caulier dot gilles at gmail dot com",
                           "http://www.digikam.org/?q=blog/3");
 
-    aboutData.addAuthor ( "Marcel Wiesweg",
-                          I18N_NOOP("Developer"),
+    aboutData.addAuthor ( ki18n("Marcel Wiesweg"),
+                          ki18n("Developer"),
                           "marcel dot wiesweg at gmx dot de",
                           "http://www.digikam.org/?q=blog/8");
 
-    aboutData.addAuthor ( "Francisco J. Cruz",
-                          I18N_NOOP("Developer"),
+    aboutData.addAuthor ( ki18n("Francisco J. Cruz"),
+                          ki18n("Developer"),
                           "fj dot cruz at supercable dot es",
                           "http://www.digikam.org/?q=blog/5");
 
-    aboutData.addAuthor ( "Renchi Raju",
-                          I18N_NOOP("Developer"),
-                          "renchi at pooh.tam.uiuc.edu",
-                          0);
+    aboutData.addAuthor ( ki18n("Renchi Raju"),
+                          ki18n("Developer"),
+                          "renchi at pooh.tam.uiuc.edu");
 
-    aboutData.addAuthor ( "Ralf Holzer",
-                          I18N_NOOP("Developer"),
-                          "kde at ralfhoelzer dot com",
-                          0);
+    aboutData.addAuthor ( ki18n("Ralf Holzer"),
+                          ki18n("Developer"),
+                          "kde at ralfhoelzer dot com");
 
-    aboutData.addAuthor ( "Joern Ahrens",
-                          I18N_NOOP("Developer"),
+    aboutData.addAuthor ( ki18n("Joern Ahrens"),
+                          ki18n("Developer"),
                           "kde at jokele dot de",
                           "http://www.digikam.org/?q=blog/1");
 
-    aboutData.addAuthor ( "Tom Albers",
-                          I18N_NOOP("Developer"),
+    aboutData.addAuthor ( ki18n("Tom Albers"),
+                          ki18n("Developer"),
                           "tomalbers at kde dot nl",
                           "http://www.omat.nl/drupal/?q=blog/1");
 
-    aboutData.addCredit ( "Achim Bohnet",
-                          I18N_NOOP("Bug reports and patches"),
-                          "ach at mpe dot mpg dot de",
-                          0);
+    aboutData.addCredit ( ki18n("Achim Bohnet"),
+                          ki18n("Bug reports and patches"),
+                          "ach at mpe dot mpg dot de");
 
-    aboutData.addCredit ( "Luka Renko",
-                          I18N_NOOP("Developer"),
-                          "lure at kubuntu dot org",
-                          0);
+    aboutData.addCredit ( ki18n("Luka Renko"),
+                          ki18n("Developer"),
+                          "lure at kubuntu dot org");
 
-    aboutData.addCredit ( "Angelo Naselli",
-                          I18N_NOOP("Developer"),
-                          "a dot naselli at libero dot it",
-                          0);
+    aboutData.addCredit ( ki18n("Angelo Naselli"),
+                          ki18n("Developer"),
+                          "a dot naselli at libero dot it");
 
-    aboutData.addCredit ( "Fabien Salvi",
-                          I18N_NOOP("Webmaster"),
-                          "fabien dot ubuntu at gmail dot com",
-                          0);
+    aboutData.addCredit ( ki18n("Fabien Salvi"),
+                          ki18n("Webmaster"),
+                          "fabien dot ubuntu at gmail dot com");
 
-    aboutData.addCredit ( "Todd Shoemaker",
-                          I18N_NOOP("Developer"),
-                          "todd at theshoemakers dot net",
-                          0);
+    aboutData.addCredit ( ki18n("Todd Shoemaker"),
+                          ki18n("Developer"),
+                          "todd at theshoemakers dot net");
 
-    aboutData.addCredit ( "Gregory Kokanosky",
-                          I18N_NOOP("Developer"),
-                          "gregory dot kokanosky at free.fr",
-                          0);
+    aboutData.addCredit ( ki18n("Gregory Kokanosky"),
+                          ki18n("Developer"),
+                          "gregory dot kokanosky at free.fr");
 
-    aboutData.addCredit ( "Rune Laursen",
-                          I18N_NOOP("Danish translations"),
-                          "runerl at skjoldhoej dot dk",
-                          0);
+    aboutData.addCredit ( ki18n("Rune Laursen"),
+                          ki18n("Danish translations"),
+                          "runerl at skjoldhoej dot dk");
 
-    aboutData.addCredit ( "Stefano Rivoir",
-                          I18N_NOOP("Italian translations"),
-                          "s dot rivoir at gts dot it",
-                          0);
+    aboutData.addCredit ( ki18n("Stefano Rivoir"),
+                          ki18n("Italian translations"),
+                          "s dot rivoir at gts dot it");
 
-    aboutData.addCredit ( "Jan Toenjes",
-                          I18N_NOOP("German translations"),
-                          "jan dot toenjes at web dot de",
-                          0);
+    aboutData.addCredit ( ki18n("Jan Toenjes"),
+                          ki18n("German translations"),
+                          "jan dot toenjes at web dot de");
 
-    aboutData.addCredit ( "Oliver Doerr",
-                          I18N_NOOP("German translations and beta tester"),
-                          "oliver at doerr-privat dot de",
-                          0);
+    aboutData.addCredit ( ki18n("Oliver Doerr"),
+                          ki18n("German translations and beta tester"),
+                          "oliver at doerr-privat dot de");
 
-    aboutData.addCredit ( "Quique",
-                          I18N_NOOP("Spanish translations"),
-                          "quique at sindominio dot net",
-                          0);
+    aboutData.addCredit ( ki18n("Quique"),
+                          ki18n("Spanish translations"),
+                          "quique at sindominio dot net");
 
-    aboutData.addCredit ( "Marcus Meissner",
-                          I18N_NOOP("Czech translations"),
-                          "marcus at jet dot franken dot de",
-                          0);
+    aboutData.addCredit ( ki18n("Marcus Meissner"),
+                          ki18n("Czech translations"),
+                          "marcus at jet dot franken dot de");
 
-    aboutData.addCredit ( "Janos Tamasi",
-                          I18N_NOOP("Hungarian translations"),
-                          "janusz at vnet dot hu",
-                          0);
+    aboutData.addCredit ( ki18n("Janos Tamasi"),
+                          ki18n("Hungarian translations"),
+                          "janusz at vnet dot hu");
 
-    aboutData.addCredit ( "Jasper van der Marel",
-                          I18N_NOOP("Dutch translations"),
-                          "jasper dot van dot der dot marel at wanadoo dot nl",
-                          0);
+    aboutData.addCredit ( ki18n("Jasper van der Marel"),
+                          ki18n("Dutch translations"),
+                          "jasper dot van dot der dot marel at wanadoo dot nl");
 
-    aboutData.addCredit ( "Anna Sawicka",
-                          I18N_NOOP("Polish translations"),
-                          "ania at kajak dot org dot pl",
-                          0);
+    aboutData.addCredit ( ki18n("Anna Sawicka"),
+                          ki18n("Polish translations"),
+                          "ania at kajak dot org dot pl");
 
-    aboutData.addCredit ( "Charles Bouveyron",
-                          I18N_NOOP("Beta tester"),
-                          "c dot bouveyron at tuxfamily dot org",
-                          0);
+    aboutData.addCredit ( ki18n("Charles Bouveyron"),
+                          ki18n("Beta tester"),
+                          "c dot bouveyron at tuxfamily dot org");
 
-    aboutData.addCredit ( "Richard Groult",
-                          I18N_NOOP("Plugin contributor and beta tester"),
-                          "Richard dot Groult at jalix dot org",
-                          0);
+    aboutData.addCredit ( ki18n("Richard Groult"),
+                          ki18n("Plugin contributor and beta tester"),
+                          "Richard dot Groult at jalix dot org");
                                                     
-    aboutData.addCredit ( "Richard Taylor",
-                          I18N_NOOP("Feedback and patches. Handbook writer"),
-                          "rjt-digicam at thegrindstone dot me dot uk",
-                          0);
+    aboutData.addCredit ( ki18n("Richard Taylor"),
+                          ki18n("Feedback and patches. Handbook writer"),
+                          "rjt-digicam at thegrindstone dot me dot uk");
 
-    aboutData.addCredit ( "Hans Karlsson",
-                          I18N_NOOP("digiKam website banner and application icons"),
-                          "karlsson dot h at home dot se",
-                          0);
+    aboutData.addCredit ( ki18n("Hans Karlsson"),
+                          ki18n("digiKam website banner and application icons"),
+                          "karlsson dot h at home dot se");
     
-    aboutData.addCredit ( "Aaron Seigo",
-                          I18N_NOOP("Various usability fixes and general application polishing"),
-                          "aseigo at kde.org",
-                          0);
+    aboutData.addCredit ( ki18n("Aaron Seigo"),
+                          ki18n("Various usability fixes and general application polishing"),
+                          "aseigo at kde.org");
 
-    aboutData.addCredit ( "Yves Chaufour",
-                          I18N_NOOP("digiKam website, Feedback"),
-                          "yves dot chaufour at wanadoo dot fr",
-                          0);
+    aboutData.addCredit ( ki18n("Yves Chaufour"),
+                          ki18n("digiKam website, Feedback"),
+                          "yves dot chaufour at wanadoo dot fr");
 
-    aboutData.addCredit ( "Tung Nguyen",
-                          I18N_NOOP("Bug reports, feedback and icons"),
-                          "ntung at free dot fr",
-                          0);
+    aboutData.addCredit ( ki18n("Tung Nguyen"),
+                          ki18n("Bug reports, feedback and icons"),
+                          "ntung at free dot fr");
 
     KCmdLineArgs::init( argc, argv, &aboutData );
+
+    KCmdLineOptions options;
+    options.add("detect-camera", ki18n("Automatically detect and open camera"));
+    options.add("download-from <path>", ki18n("Open camera dialog at <path>"));
+    options.add("album-root <path>", ki18n("Start digikam with the album root <path>"));
     KCmdLineArgs::addCmdLineOptions( options ); 
 
     KApplication app;

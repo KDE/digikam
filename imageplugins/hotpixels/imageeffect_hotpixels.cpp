@@ -70,20 +70,20 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     
     QString whatsThis;
 
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Hot Pixels Correction"), 
+    KAboutData* about = new KAboutData("digikam", 0,
+                                       ki18n("Hot Pixels Correction"), 
                                        digikam_version,
-                                       I18N_NOOP("A digiKam image plugin for fixing dots produced by "
+                                       ki18n("A digiKam image plugin for fixing dots produced by "
                                                  "hot/stuck/dead pixels from a CCD."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005-2007, Unai Garro and Gilles Caulier", 
-                                       0,
+                                       ki18n("(c) 2005-2007, Unai Garro and Gilles Caulier"), 
+                                       KLocalizedString(),
                                        "http://www.digikam.org");
                 
-    about->addAuthor("Unai Garro", I18N_NOOP("Author and maintainer"),
+    about->addAuthor(ki18n("Unai Garro"), ki18n("Author and maintainer"),
                      "ugarro at sourceforge dot net");
     
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Developer"),
+    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Developer"),
                      "caulier dot gilles at gmail dot com");
         
     setAboutData(about);

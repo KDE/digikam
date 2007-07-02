@@ -41,39 +41,35 @@
 
 static const char *description = I18N_NOOP("A Color Theme Designer for digiKam");
 
-static KCmdLineOptions options[] =
-{
-    { "+[URL]", I18N_NOOP( "Document to open." ), 0 },
-    KCmdLineLastOption
-};
-
 int main(int argc, char** argv) {
 
-    KAboutData aboutData("digikamthemedesigner", 
-                     I18N_NOOP("digiKam Theme Designer"),
+    KAboutData aboutData("digikamthemedesigner", 0, 
+                     ki18n("digiKam Theme Designer"),
                      digikam_version,        
-                     description,
+                     ki18n(description),
                      KAboutData::License_GPL,
-                     I18N_NOOP("(c) 2002-2007, digiKam developers team"),
-                     0,
+                     ki18n("(c) 2002-2007, digiKam developers team"),
+                     KLocalizedString(),
                      "http://www.digikam.org");
 
-    aboutData.addAuthor ( "Caulier Gilles",
-                          I18N_NOOP("Main developer and coordinator"),
+    aboutData.addAuthor ( ki18n("Caulier Gilles"),
+                          ki18n("Main developer and coordinator"),
                           "caulier dot gilles at gmail dot com",
                           "http://www.digikam.org/?q=blog/3");
 
-    aboutData.addAuthor ( "Marcel Wiesweg",
-                          I18N_NOOP("Developer"),
+    aboutData.addAuthor ( ki18n("Marcel Wiesweg"),
+                          ki18n("Developer"),
                           "marcel dot wiesweg at gmx dot de",
                           "http://www.digikam.org/?q=blog/8");
 
-    aboutData.addAuthor ( "Renchi Raju",
-                          I18N_NOOP("Developer"),
-                          "renchi at pooh.tam.uiuc.edu",
-                          0);
+    aboutData.addAuthor ( ki18n("Renchi Raju"),
+                          ki18n("Developer"),
+                          "renchi at pooh.tam.uiuc.edu");
 
     KCmdLineArgs::init(argc, argv, &aboutData);
+
+    KCmdLineOptions options;
+    options.add("+[URL]", ki18n( "Document to open." ));
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app; 
 

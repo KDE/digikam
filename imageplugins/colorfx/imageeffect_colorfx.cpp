@@ -83,19 +83,19 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
 
     // About data and help button.
 
-    KAboutData *about = new KAboutData("digikam",
-                            I18N_NOOP("Color Effects"),
+    KAboutData *about = new KAboutData("digikam", 0,
+                            ki18n("Color Effects"),
                             digikam_version,
-                            I18N_NOOP("A digiKam plugin to apply special color effects on a picture."),
+                            ki18n("A digiKam plugin to apply special color effects on a picture."),
                             KAboutData::License_GPL,
-                            "(c) 2004-2005, Renchi Raju\n(c) 2006-2007, Gilles Caulier",
-                            0,
+                            ki18n("(c) 2004-2005, Renchi Raju\n(c) 2006-2007, Gilles Caulier"),
+                            KLocalizedString(),
                             "http://www.digikam.org");
 
-    about->addAuthor("Renchi Raju", I18N_NOOP("Original Author"),
+    about->addAuthor(ki18n("Renchi Raju"), ki18n("Original Author"),
                      "renchi@pooh.tam.uiuc.edu");
     
-    about->addAuthor("Caulier Gilles", I18N_NOOP("Maintainer"),
+    about->addAuthor(ki18n("Caulier Gilles"), ki18n("Maintainer"),
                      "caulier dot gilles at gmail dot com");
 
     setAboutData(about);

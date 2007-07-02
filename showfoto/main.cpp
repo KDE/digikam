@@ -37,81 +37,72 @@
 
 #include "showfoto.h"
 
-static KCmdLineOptions options[] =
-{
-    { "+[file(s) or folder(s)]", I18N_NOOP("File(s) or folder(s) to open"), 0 },
-    KCmdLineLastOption
-};
-
 int main(int argc, char *argv[])
 {
     QString Description = i18n("KDE Photo Viewer and Editor");
 
-    KAboutData aboutData( "showfoto",
-                          I18N_NOOP("showFoto"),
+    KAboutData aboutData( "showfoto", 0,
+                          ki18n("showFoto"),
                           "0.8.0",
-                          Description.toLatin1(),
+                          ki18n(Description.toLatin1()),
                           KAboutData::License_GPL,
-                          I18N_NOOP("(c) 2004-2007, digiKam developers team"),
-                          0,
+                          ki18n("(c) 2004-2007, digiKam developers team"),
+                          KLocalizedString(),
                           "http://www.digikam.org");
 
-    aboutData.addAuthor ( "Caulier Gilles",
-                          I18N_NOOP("Main developer and coordinator"),
+    aboutData.addAuthor ( ki18n("Caulier Gilles"),
+                          ki18n("Main developer and coordinator"),
                           "caulier dot gilles at gmail dot com",
                           "http://www.digikam.org/?q=blog/3");
 
-    aboutData.addAuthor ( "Marcel Wiesweg",
-                          I18N_NOOP("Developer"),
+    aboutData.addAuthor ( ki18n("Marcel Wiesweg"),
+                          ki18n("Developer"),
                           "marcel dot wiesweg at gmx dot de",
                           "http://www.digikam.org/?q=blog/8");
 
-    aboutData.addAuthor ( "Francisco J. Cruz",
-                          I18N_NOOP("Developer"),
+    aboutData.addAuthor ( ki18n("Francisco J. Cruz"),
+                          ki18n("Developer"),
                           "fj dot cruz at supercable dot es",
                           "http://www.digikam.org/?q=blog/5");
 
-    aboutData.addAuthor ( "Renchi Raju",
-                          I18N_NOOP("Developer"),
-                          "renchi at pooh dot tam dot uiuc dot edu",
-                          0);
+    aboutData.addAuthor ( ki18n("Renchi Raju"),
+                          ki18n("Developer"),
+                          "renchi at pooh dot tam dot uiuc dot edu");
 
-    aboutData.addAuthor ( "Ralf Holzer",
-                          I18N_NOOP("Developer"),
-                          "kde at ralfhoelzer dot com",
-                          0);
+    aboutData.addAuthor ( ki18n("Ralf Holzer"),
+                          ki18n("Developer"),
+                          "kde at ralfhoelzer dot com");
 
-    aboutData.addAuthor ( "Joern Ahrens",
-                          I18N_NOOP("Developer"),
+    aboutData.addAuthor ( ki18n("Joern Ahrens"),
+                          ki18n("Developer"),
                           "joern dot ahrens at kdemail dot net",
                           "http://www.digikam.org/?q=blog/1");
 
-    aboutData.addAuthor ( "Tom Albers",
-                          I18N_NOOP("Developer"),
+    aboutData.addAuthor ( ki18n("Tom Albers"),
+                          ki18n("Developer"),
                           "tomalbers at kde dot nl",
                           "http://www.omat.nl/drupal/?q=blog/1");
 
-    aboutData.addCredit ( "Achim Bohnet",
-                          I18N_NOOP("Bug reports and patches"),
-                          "ach at mpe dot mpg dot de",
-                          0);
+    aboutData.addCredit ( ki18n("Achim Bohnet"),
+                          ki18n("Bug reports and patches"),
+                          "ach at mpe dot mpg dot de");
 
-    aboutData.addCredit ( "Luka Renko",
-                          I18N_NOOP("Developer"),
-                          "lure at kubuntu dot org",
-                          0);
+    aboutData.addCredit ( ki18n("Luka Renko"),
+                          ki18n("Developer"),
+                          "lure at kubuntu dot org");
 
-    aboutData.addCredit ( "Angelo Naselli",
-                          I18N_NOOP("Developer"),
-                          "a dot naselli at libero dot it",
-                          0);
+    aboutData.addCredit ( ki18n("Angelo Naselli"),
+                          ki18n("Developer"),
+                          "a dot naselli at libero dot it");
 
-    aboutData.addCredit ( "Fabien Salvi",
-                          I18N_NOOP("Webmaster"),
-                          "fabien dot ubuntu at gmail dot com",
-                          0);
+    aboutData.addCredit ( ki18n("Fabien Salvi"),
+                          ki18n("Webmaster"),
+                          "fabien dot ubuntu at gmail dot com");
 
     KCmdLineArgs::init( argc, argv, &aboutData );
+
+    KCmdLineOptions options;
+    options.add("+[file(s) or folder(s)]", ki18n("File(s) or folder(s) to open"));
     KCmdLineArgs::addCmdLineOptions( options );
 
     KGlobal::locale()->setMainCatalog( "digikam" );

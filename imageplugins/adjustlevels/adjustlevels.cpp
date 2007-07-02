@@ -102,16 +102,16 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     // About data and help button.
 
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Adjust Color Levels"),
+    KAboutData* about = new KAboutData("digikam", 0,
+                                       ki18n("Adjust Color Levels"),
                                        digikam_version,
-                                       I18N_NOOP("An image-histogram-levels adjustment plugin for digiKam."),
+                                       ki18n("An image-histogram-levels adjustment plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2007, Gilles Caulier",
-                                       0,
+                                       ki18n("(c) 2004-2007, Gilles Caulier"),
+                                       KLocalizedString(),
                                        "http://www.digikam.org");
 
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
+    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
 
     setAboutData(about);

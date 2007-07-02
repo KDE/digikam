@@ -70,19 +70,19 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     
     // About data and help button.
     
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Shear Tool"), 
+    KAboutData* about = new KAboutData("digikam", 0,
+                                       ki18n("Shear Tool"), 
                                        digikam_version,
-                                       I18N_NOOP("A digiKam image plugin to shear an image."),
+                                       ki18n("A digiKam image plugin to shear an image."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2007, Gilles Caulier",
-                                       0,
+                                       ki18n("(c) 2004-2007, Gilles Caulier"),
+                                       KLocalizedString(),
                                        "http://www.digikam.org");
     
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
+    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
     
-    about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Shear algorithm"), 
+    about->addAuthor(ki18n("Pieter Z. Voloshyn"), ki18n("Shear algorithm"), 
                      "pieter dot voloshyn at gmail dot com"); 
 
     setAboutData(about);

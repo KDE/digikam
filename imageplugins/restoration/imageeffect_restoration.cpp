@@ -72,22 +72,22 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
 
     // About data and help button.
     
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Photograph Restoration"), 
+    KAboutData* about = new KAboutData("digikam", 0,
+                                       ki18n("Photograph Restoration"), 
                                        digikam_version,
-                                       I18N_NOOP("A digiKam image plugin to restore a photograph."),
+                                       ki18n("A digiKam image plugin to restore a photograph."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005-2007, Gilles Caulier", 
-                                       0,
+                                       ki18n("(c) 2005-2007, Gilles Caulier"), 
+                                       KLocalizedString(),
                                        "http://www.digikam.org");
     
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
+    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
                      
-    about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
+    about->addAuthor(ki18n("David Tschumperle"), ki18n("CImg library"), 0,
                      "http://cimg.sourceforge.net");
                         
-    about->addAuthor("Gerhard Kulzer", I18N_NOOP("Feedback and plugin polishing"), 
+    about->addAuthor(ki18n("Gerhard Kulzer"), ki18n("Feedback and plugin polishing"), 
                      "gerhard at kulzer.net");
     
     setAboutData(about);

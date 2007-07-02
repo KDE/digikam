@@ -102,16 +102,16 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
 
     // About data and help button.
 
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Color Channel Mixer"),
+    KAboutData* about = new KAboutData("digikam", 0,
+                                       ki18n("Color Channel Mixer"),
                                        digikam_version,
-                                       I18N_NOOP("An image color channel mixer plugin for digiKam."),
+                                       ki18n("An image color channel mixer plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005-2007, Gilles Caulier",
-                                       0,
+                                       ki18n("(c) 2005-2007, Gilles Caulier"),
+                                       KLocalizedString(),
                                        "http://www.digikam.org");
 
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
+    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
 
     setAboutData(about);

@@ -71,19 +71,19 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
 {
     QString whatsThis;
     
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Noise Reduction"), 
+    KAboutData* about = new KAboutData("digikam", 0,
+                                       ki18n("Noise Reduction"), 
                                        digikam_version,
-                                       I18N_NOOP("A noise reduction image filter plugin for digiKam."),
+                                       ki18n("A noise reduction image filter plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2007, Gilles Caulier", 
-                                       0,
+                                       ki18n("(c) 2004-2007, Gilles Caulier"), 
+                                       KLocalizedString(),
                                        "http://www.digikam.org");
     
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
+    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
 
-    about->addAuthor("Peter Heckert", I18N_NOOP("Noise Reduction algorithm. Developer"),
+    about->addAuthor(ki18n("Peter Heckert"), ki18n("Noise Reduction algorithm. Developer"),
                      "peter dot heckert at arcor dot de");
                      
     setAboutData(about);

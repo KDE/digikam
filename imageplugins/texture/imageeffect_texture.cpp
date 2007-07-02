@@ -64,21 +64,21 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
 {
     QString whatsThis;
 
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Apply Texture"), 
+    KAboutData* about = new KAboutData("digikam", 0,
+                                       ki18n("Apply Texture"), 
                                        digikam_version,
-                                       I18N_NOOP("A digiKam image plugin to apply a decorative "
+                                       ki18n("A digiKam image plugin to apply a decorative "
                                        "texture to an image."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005, Gilles Caulier\n"
-                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg",
-                                       0,
+                                       ki18n("(c) 2005, Gilles Caulier\n"
+                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg"),
+                                       KLocalizedString(),
                                        "http://www.digikam.org");
 
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
+    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
 
-    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
+    about->addAuthor(ki18n("Marcel Wiesweg"), ki18n("Developer"),
                      "marcel dot wiesweg at gmx dot de");
 
     setAboutData(about);

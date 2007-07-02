@@ -69,19 +69,19 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
 {
     QString whatsThis;
     
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Vignetting Correction"), 
+    KAboutData* about = new KAboutData("digikam", 0,
+                                       ki18n("Vignetting Correction"), 
                                        digikam_version,
-                                       I18N_NOOP("A digiKam image plugin to reduce image vignetting."),
+                                       ki18n("A digiKam image plugin to reduce image vignetting."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2007, Gilles Caulier",
-                                       0,
+                                       ki18n("(c) 2004-2007, Gilles Caulier"),
+                                       KLocalizedString(),
                                        "http://www.digikam.org");
                                        
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
+    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
 
-    about->addAuthor("John Walker", I18N_NOOP("Anti Vignetting algorithm"), 0,
+    about->addAuthor(ki18n("John Walker"), ki18n("Anti Vignetting algorithm"), 0,
                      "http://www.fourmilab.ch/netpbm/pnmctrfilt"); 
         
     setAboutData(about);

@@ -69,20 +69,20 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
 
     QString whatsThis;
 
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Free Rotation"),
+    KAboutData* about = new KAboutData("digikam", 0,
+                                       ki18n("Free Rotation"),
                                        digikam_version,
-                                       I18N_NOOP("A digiKam image plugin to process free image "
+                                       ki18n("A digiKam image plugin to process free image "
                                        "rotation."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2007, Gilles Caulier",
-                                       0,
+                                       ki18n("(c) 2004-2007, Gilles Caulier"),
+                                       KLocalizedString(),
                                        "http://www.digikam.org");
 
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
+    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
 
-    about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Free Rotation algorithm"),
+    about->addAuthor(ki18n("Pieter Z. Voloshyn"), ki18n("Free Rotation algorithm"),
                      "pieter dot voloshyn at gmail dot com");
 
     setAboutData(about);

@@ -90,19 +90,19 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
     // About data and help button.
 
-    KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("White Color Balance Correction"), 
+    KAboutData* about = new KAboutData("digikam", 0,
+                                       ki18n("White Color Balance Correction"), 
                                        digikam_version,
-                                       I18N_NOOP("A digiKam image plugin to correct white color balance."),
+                                       ki18n("A digiKam image plugin to correct white color balance."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005-2007, Gilles Caulier", 
-                                       0,
+                                       ki18n("(c) 2005-2007, Gilles Caulier"), 
+                                       KLocalizedString(),
                                        "http://wwww.digikam.org");
 
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
+    about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
 
-    about->addAuthor("Pawel T. Jochym", I18N_NOOP("White color balance correction algorithm"),
+    about->addAuthor(ki18n("Pawel T. Jochym"), ki18n("White color balance correction algorithm"),
                      "jochym at ifj edu pl");
 
     setAboutData(about);
