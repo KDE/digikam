@@ -129,6 +129,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     fullLevel->setWhatsThis( i18n( "Toggle tags view to a full list" ) );
     d->levelButtons->addButton(fullLevel, FULL);
     hlay1->addWidget(fullLevel);
+    hlay1->setMargin(0);
 
     // -----------------------------------------------------------------
 
@@ -153,6 +154,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     copy2ClipBoard->setWhatsThis( i18n( "Copy meta-data to clipboard" ) );
     d->toolButtons->addButton(copy2ClipBoard);
     hlay2->addWidget(copy2ClipBoard);
+    hlay2->setMargin(0);
 
     d->mainLayout->addMultiCellWidget(d->levelGBox, 0, 0, 0, 1);
     d->mainLayout->setColumnStretch(3, 10);
