@@ -192,18 +192,14 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     QPushButton *linHistoButton = new QPushButton(scaleBox);
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
-    KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
-    linHistoButton->setIcon( QPixmap( directory + "histogram-lin.png" ) );
+    linHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-lin.png")));
     linHistoButton->setCheckable(true);
     d->scaleBG->addButton(linHistoButton, HistogramWidget::LinScaleHistogram);
     hlay1->addWidget(linHistoButton);
 
     QPushButton *logHistoButton = new QPushButton(scaleBox);
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
-    KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
-    logHistoButton->setIcon( QPixmap( directory + "histogram-log.png" ) );
+    logHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-log.png")));
     logHistoButton->setCheckable(true);
     d->scaleBG->addButton(logHistoButton, HistogramWidget::LogScaleHistogram);
     hlay1->addWidget(logHistoButton);
@@ -232,18 +228,14 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     QPushButton *fullImageButton = new QPushButton(d->regionBox);
     fullImageButton->setToolTip( i18n( "<p>Full Image" ) );
-    KGlobal::dirs()->addResourceType("image-full", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("image-full", "image-full.png");
-    fullImageButton->setIcon( QPixmap( directory + "image-full.png" ) );
+    fullImageButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/image-full.png")));
     fullImageButton->setCheckable(true);
     d->regionBG->addButton(fullImageButton, HistogramWidget::FullImageHistogram);
     hlay2->addWidget(fullImageButton);
 
     QPushButton *SelectionImageButton = new QPushButton(d->regionBox);
     SelectionImageButton->setToolTip( i18n( "<p>Selection" ) );
-    KGlobal::dirs()->addResourceType("image-selection", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("image-selection", "image-selection.png");
-    SelectionImageButton->setIcon( QPixmap( directory + "image-selection.png" ) );
+    SelectionImageButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/image-selection.png")));
     SelectionImageButton->setCheckable(true);
     d->regionBG->addButton(SelectionImageButton, HistogramWidget::ImageSelectionHistogram);
     hlay2->addWidget(SelectionImageButton);
