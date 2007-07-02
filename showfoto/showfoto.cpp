@@ -430,6 +430,7 @@ void ShowFoto::setupUserArea()
         hlay->addWidget(m_splitter);
         hlay->addWidget(d->rightSidebar);
         hlay->setSpacing(0);
+        hlay->setMargin(0);
     }
     else                                                     // Horizontal thumbbar layout
     {
@@ -450,6 +451,7 @@ void ShowFoto::setupUserArea()
 
         vlay->addWidget(d->vSplitter);
         vlay->setSpacing(0);
+        vlay->setMargin(0);
 
         QHBoxLayout *hlay = new QHBoxLayout(widget);
         d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
@@ -457,6 +459,7 @@ void ShowFoto::setupUserArea()
         hlay->addWidget(m_splitter);
         hlay->addWidget(d->rightSidebar);
         hlay->setSpacing(0);
+        hlay->setMargin(0);
     }
 
     m_splitter->setFrameStyle( QFrame::NoFrame );
