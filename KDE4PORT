@@ -173,8 +173,8 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  S
         |---superimpose
         |---texture
         |-----patterns                                                                               CMake port only is require.
-        |---whitebalance                        Gilles                                               CMake port only
-
+        |---whitebalance                        Gilles                          DONE
+	
  7      |-themedesigner                                                                              The last one component. It completly independant. It will be the last one to port.
 
  8      |-data                                  Gilles                          DONE                 CMake port only is require.
