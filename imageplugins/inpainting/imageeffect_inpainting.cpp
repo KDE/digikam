@@ -61,13 +61,13 @@
 #include <kmenu.h>
 #include <kfiledialog.h>
 #include <kstandarddirs.h>
-#include <kprogress.h>
+#include <qprogress.h>
 #include <kmessagebox.h>
 #include <knuminput.h>
 #include <kglobalsettings.h>
 #include <kpassivepopup.h>
 #include <kglobal.h>
-
+#include <KToolInvocation>
 // Local includes.
 
 #include "version.h"
@@ -227,7 +227,7 @@ void ImageEffect_InPainting_Dialog::readUserSettings()
     Digikam::GreycstorationSettings settings;
     settings.fastApprox = group.readEntry("FastApprox", true);
     settings.interp     = group.readEntry("Interpolation",
-                          Digikam::GreycstorationSettings::NearestNeighbor);
+                          (int)Digikam::GreycstorationSettings::NearestNeighbor);
     settings.amplitude  = group.readEntry("Amplitude", 20.0);
     settings.sharpness  = group.readEntry("Sharpness", 0.3);
     settings.anisotropy = group.readEntry("Anisotropy", 1.0);
@@ -241,7 +241,7 @@ void ImageEffect_InPainting_Dialog::readUserSettings()
     settings.btile      = group.readEntry("BTile", 4);
     m_settingsWidget->setSettings(settings);
 
-    int p = group.readEntry("Preset", NoPreset);
+    int p = group.readEntry("Preset", (int)NoPreset);
     m_inpaintingTypeCB->setCurrentItem(p);
     if (p == NoPreset)
         m_settingsWidget->setEnabled(true);
