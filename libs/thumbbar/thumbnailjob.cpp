@@ -175,6 +175,8 @@ void ThumbnailJob::processNext()
         return;
     }
 
+    // TODO: KDE4PORT: code below have be re-written. To be tested indeep.
+
     KUrl::List::iterator it = d->urlList.begin();
     while(*it != d->next_url)
     {
