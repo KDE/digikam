@@ -70,6 +70,6 @@ void ImagePlugin_InPainting::setEnabledActions(bool enable)
 
 void ImagePlugin_InPainting::slotInPainting()
 {
-//    DigikamInPaintingImagesPlugin::ImageEffect_InPainting::inPainting(parentWidget());
+    DigikamInPaintingImagesPlugin::ImageEffect_InPainting::inPainting(parentWidget());
 }
 
