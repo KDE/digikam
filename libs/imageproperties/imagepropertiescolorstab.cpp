@@ -253,21 +253,15 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     // -------------------------------------------------------------
 
-    QWidget *histoBox  = new QWidget(histogramPage);
-    QVBoxLayout *vlay1 = new QVBoxLayout(histoBox);
-
+    KVBox *histoBox    = new KVBox(histogramPage);
     d->histogramWidget = new HistogramWidget(256, 140, histoBox);
     d->histogramWidget->setWhatsThis( i18n("<p>This is the histogram drawing of the "
                                            "selected image channel"));
 
+    QLabel *space = new QLabel(histoBox);
+    space->setFixedHeight(1);
     d->hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, histoBox);
     d->hGradient->setColors(QColor("black"), QColor("white"));
-
-    vlay1->addWidget(d->histogramWidget);
-    vlay1->addWidget(d->hGradient);
-    vlay1->setSpacing(1);
-    vlay1->setMargin(0);
-
     topLayout->addMultiCellWidget(histoBox, 3, 4, 0, 3);
 
     // -------------------------------------------------------------
