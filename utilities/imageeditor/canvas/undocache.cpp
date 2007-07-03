@@ -111,9 +111,7 @@ bool UndoCache::putData(int level, int w, int h, int bytesDepth, uchar* data)
     ds << h;
     ds << bytesDepth;
 
-    QByteArray ba;
-    ba.reserve(w*h*bytesDepth);
-    memcpy (ba.data(), data, w*h*bytesDepth);
+    QByteArray ba((char*)data, w*h*bytesDepth);
     ds << ba;
 
     file.close();
@@ -146,10 +144,9 @@ uchar* UndoCache::getData(int level, int& w, int& h, int& bytesDepth, bool del)
         return 0;
 
     QByteArray ba;
-    ba.reserve(w*h*bytesDepth);
     ds >> ba;
-    memcpy (data, ba.data(), w*h*bytesDepth);
-    
+    memcpy (data, ba.data(), ba.size());
+
     file.close();
 
     if(del)
@@ -170,7 +167,8 @@ void UndoCache::erase(int level)
                         .arg(d->cachePrefix)
                         .arg(level);
 
-    if(d->cacheFilenames.indexOf(cacheFile) == d->cacheFilenames.indexOf(d->cacheFilenames.last()))
+    if (!d->cacheFilenames.isEmpty() &&
+        d->cacheFilenames.indexOf(cacheFile) == d->cacheFilenames.indexOf(d->cacheFilenames.last()))
         return;
     
     ::unlink(QFile::encodeName(cacheFile));
