@@ -75,7 +75,7 @@ StatusZoomBar::StatusZoomBar(QWidget *parent)
 
     d->zoomMinusButton = new QToolButton(this);
     d->zoomMinusButton->setAutoRaise(true);
-    d->zoomMinusButton->setIcon(SmallIcon("viewmag-"));
+    d->zoomMinusButton->setIcon(SmallIcon("zoom-out"));
     d->zoomMinusButton->setToolTip( i18n("Zoom Out"));
 
     d->zoomSlider = new QSlider(Qt::Horizontal, this);
@@ -87,7 +87,7 @@ StatusZoomBar::StatusZoomBar(QWidget *parent)
 
     d->zoomPlusButton = new QToolButton(this);
     d->zoomPlusButton->setAutoRaise(true);
-    d->zoomPlusButton->setIcon(SmallIcon("viewmag+"));
+    d->zoomPlusButton->setIcon(SmallIcon("zoom-in"));
     d->zoomPlusButton->setToolTip( i18n("Zoom In"));
 
     d->zoomTracker = new DTipTracker("", d->zoomSlider);
@@ -167,4 +167,3 @@ void StatusZoomBar::setEnableZoomMinus(bool e)
 }
 
 }  // namespace Digikam
-
