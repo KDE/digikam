@@ -26,7 +26,7 @@
 
 // KDE includes.
 
-#include <QFrame>
+#include <Q3Frame>
 #include <QColor>
 
 // Local includes
@@ -38,7 +38,7 @@ namespace Digikam
 
 class ColorGradientWidgetPriv;
 
-class DIGIKAM_EXPORT ColorGradientWidget : public QFrame
+class DIGIKAM_EXPORT ColorGradientWidget : public Q3Frame
 {
 Q_OBJECT
 

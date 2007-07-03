@@ -53,12 +53,12 @@ public:
 };
 
 ColorGradientWidget::ColorGradientWidget(int o, int size, QWidget *parent)
-                   : QFrame(parent)
+                   : Q3Frame(parent)
 {
     d = new ColorGradientWidgetPriv;
     d->orientation = o;
 
-    setFrameStyle(QFrame::Box|QFrame::Plain);
+    setFrameStyle(Q3Frame::Box|Q3Frame::Plain);
     setLineWidth(1);
     setAttribute(Qt::WA_DeleteOnClose);
 
