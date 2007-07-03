@@ -43,9 +43,9 @@ K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_noisereduction,
 ImagePlugin_NoiseReduction::ImagePlugin_NoiseReduction(QObject *parent, const QStringList &)
                           : Digikam::ImagePlugin(parent, "ImagePlugin_NoiseReduction")
 {
-    m_noiseReductionAction = new KAction(i18n("Noise Reduction..."), "noisereduction", 0,
-                             this, SLOT(slotNoiseReduction()),
-                             actionCollection(), "imageplugin_noisereduction");
+    m_noiseReductionAction  = new KAction(KIcon("noisereduction"), i18n("Noise Reduction..."), this);
+    actionCollection()->addAction("imageplugin_noisereduction", m_noiseReductionAction );
+    connect(m_noiseReductionAction, SIGNAL(triggered(bool) ), SLOT(slotFilmGrain()));
                 
     setXMLFile("digikamimageplugin_noisereduction_ui.rc");                
 

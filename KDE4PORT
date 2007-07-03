@@ -164,8 +164,8 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---inpainting                          Gilles                          DONE                 
         |---inserttext                          Laurent                                              CMake port only
         |---lensdistortion                      Laurent                                              CMake port only
-        |---noisereduction                      Laurent                                              CMake port only
-        |---oilpaint                            Laurent                                              CMake port only
+        |---noisereduction                      Laurent                         DONE                     CMake port only
+        |---oilpaint                            Laurent                         DONE                     CMake port only
         |---perspective                         Laurent                                              CMake port only
         |---raindrop                            Laurent                                              CMake port only
         |---restoration                         Gilles                          DONE

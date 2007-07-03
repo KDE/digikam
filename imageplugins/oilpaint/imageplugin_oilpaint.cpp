@@ -44,10 +44,10 @@ ImagePlugin_OilPaint::ImagePlugin_OilPaint(QObject *parent,
                                            const QStringList &)
                     : Digikam::ImagePlugin(parent, "ImagePlugin_OilPaint")
 {
-    m_oilpaintAction = new KAction(i18n("Oil Paint..."), "oilpaint", 0, 
-                       this, SLOT(slotOilPaint()),
-                       actionCollection(), "imageplugin_oilpaint");
-                    
+    m_oilpaintAction  = new KAction(KIcon("oilpaint"), i18n("Oil Paint..."), this);
+    actionCollection()->addAction("imageplugin_oilpaint", m_oilpaintAction );
+    connect(m_oilpaintAction, SIGNAL(triggered(bool) ), SLOT(slotOilPaint()));
+ 
     setXMLFile( "digikamimageplugin_oilpaint_ui.rc" );          
     
     DDebug() << "ImagePlugin_OilPaint plugin loaded" << endl;

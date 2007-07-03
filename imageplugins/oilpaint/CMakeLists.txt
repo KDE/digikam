@@ -11,7 +11,7 @@ kde4_automoc(${digikamimageplugin_oilpaint_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_oilpaint ${digikamimageplugin_oilpaint_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_oilpaint  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(digikamimageplugin_oilpaint  digikam )
 
 install(TARGETS digikamimageplugin_oilpaint DESTINATION ${PLUGIN_INSTALL_DIR} )
 
