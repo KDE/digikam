@@ -44,14 +44,16 @@ K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_inpainting,
 ImagePlugin_InPainting::ImagePlugin_InPainting(QObject *parent, const QStringList &)
                       : Digikam::ImagePlugin(parent, "ImagePlugin_InPainting")
 {
-    m_inPaintingAction = new KAction(i18n("Inpainting..."), "inpainting",
-                             Qt::CTRL+Qt::Key_E, 
-                             this, SLOT(slotInPainting()),
-                             actionCollection(), "imageplugin_inpainting");
-    
+    m_inPaintingAction = new KAction(KIcon("inpainting"), i18n("Inpainting..."), this);
+    m_inPaintingAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_E));
     m_inPaintingAction->setWhatsThis( i18n( "This filter can be used to inpaint a part in a photo. "
                                             "Select a region to inpaint to use this option.") );                
-                
+
+    connect(m_inPaintingAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotInPainting()));
+
+    actionCollection()->addAction("imageplugin_inpainting", m_inPaintingAction );
+
     setXMLFile( "digikamimageplugin_inpainting_ui.rc" );                                
     
     DDebug() << "ImagePlugin_InPainting plugin loaded" << endl;
@@ -68,6 +70,6 @@ void ImagePlugin_InPainting::setEnabledActions(bool enable)
 
 void ImagePlugin_InPainting::slotInPainting()
 {
-    DigikamInPaintingImagesPlugin::ImageEffect_InPainting::inPainting(parentWidget());
+//    DigikamInPaintingImagesPlugin::ImageEffect_InPainting::inPainting(parentWidget());
 }
 

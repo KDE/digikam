@@ -30,24 +30,20 @@
 
 // Qt includes.
 
-#include <q3vgroupbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qtooltip.h>
-
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qtabwidget.h>
-#include <qtimer.h>
-#include <qevent.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qbrush.h>
-#include <qfile.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QFrame>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QTabWidget>
+#include <QTimer>
+#include <QEvent>
+#include <QPixmap>
+#include <QPainter>
+#include <QBrush>
+#include <QFile>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -61,13 +57,13 @@
 #include <kmenu.h>
 #include <kfiledialog.h>
 #include <kstandarddirs.h>
-#include <qprogress.h>
 #include <kmessagebox.h>
 #include <knuminput.h>
 #include <kglobalsettings.h>
 #include <kpassivepopup.h>
 #include <kglobal.h>
-#include <KToolInvocation>
+#include <ktoolinvocation.h>
+
 // Local includes.
 
 #include "version.h"
@@ -132,7 +128,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
                              : Digikam::ImageGuideDlg(parent, i18n("Photograph Inpainting"), 
                                                       "inpainting", true, true, false, 
                                                       Digikam::ImageGuideWidget::HVGuideMode, 
-                                                      0, true, true, true)
+                                                      true, true, true)
 {
     m_isComputed = false;
     QString whatsThis;
@@ -159,34 +155,36 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(plainPage());
-    Q3GridLayout* gridSettings = new Q3GridLayout(gboxSettings, 2, 1, spacingHint());
+    QWidget *gboxSettings     = new QWidget(mainWidget());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings);
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(0);
     m_mainTab = new QTabWidget( gboxSettings );
 
     QWidget* firstPage = new QWidget( m_mainTab );
-    Q3GridLayout* grid  = new Q3GridLayout( firstPage, 2, 2, marginHint(), spacingHint());
+    QGridLayout* grid  = new QGridLayout(firstPage);
+    grid->setMargin(spacingHint());
+    grid->setSpacing(0);
     m_mainTab->addTab( firstPage, i18n("Preset") );
 
     KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
-    KGlobal::dirs()->addResourceType("logo-cimg", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("logo-cimg", "logo-cimg.png");
-    cimgLogoLabel->setPixmap( QPixmap( directory + "logo-cimg.png" ) );
+    cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
     cimgLogoLabel->setToolTip( i18n("Visit CImg library website"));
 
     QLabel *typeLabel = new QLabel(i18n("Filtering type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_inpaintingTypeCB = new QComboBox( false, firstPage );
-    m_inpaintingTypeCB->insertItem( i18n("None") );
-    m_inpaintingTypeCB->insertItem( i18n("Remove Small Artefact") );
-    m_inpaintingTypeCB->insertItem( i18n("Remove Medium Artefact") );
-    m_inpaintingTypeCB->insertItem( i18n("Remove Large Artefact") );
+    m_inpaintingTypeCB = new QComboBox( firstPage );
+    m_inpaintingTypeCB->addItem( i18n("None") );
+    m_inpaintingTypeCB->addItem( i18n("Remove Small Artefact") );
+    m_inpaintingTypeCB->addItem( i18n("Remove Medium Artefact") );
+    m_inpaintingTypeCB->addItem( i18n("Remove Large Artefact") );
     m_inpaintingTypeCB->setWhatsThis( i18n("<p>Select here the filter preset to use for photograph restoration:<p>"
-                                               "<b>None</b>: Most common values. Puts settings to default.<p>"
-                                               "<b>Remove Small Artefact</b>: inpaint small image artefact like image glitch.<p>"
-                                               "<b>Remove Medium Artefact</b>: inpaint medium image artefact.<p>"
-                                               "<b>Remove Large Artefact</b>: inpaint image artefact like unwanted object.<p>"));
+                                           "<b>None</b>: Most common values. Puts settings to default.<p>"
+                                           "<b>Remove Small Artefact</b>: inpaint small image artefact like image glitch.<p>"
+                                           "<b>Remove Medium Artefact</b>: inpaint medium image artefact.<p>"
+                                           "<b>Remove Large Artefact</b>: inpaint image artefact like unwanted object.<p>"));
 
     grid->addMultiCellWidget(cimgLogoLabel, 0, 0, 1, 1);
     grid->addMultiCellWidget(typeLabel, 1, 1, 0, 0);
@@ -203,8 +201,8 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    connect(cimgLogoLabel, SIGNAL(leftClickedURL(const QString&)),
-            this, SLOT(processCImgURL(const QString&)));
+    connect(cimgLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
+            this, SLOT(processCImgUrl(const QString&)));
 
     connect(m_inpaintingTypeCB, SIGNAL(activated(int)),
             this, SLOT(slotResetValues(int)));
@@ -222,7 +220,7 @@ void ImageEffect_InPainting_Dialog::renderingFinished()
 void ImageEffect_InPainting_Dialog::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("inpainting Tool Dialog");
+    KConfigGroup group        = config->group("inpainting Tool Dialog");
 
     Digikam::GreycstorationSettings settings;
     settings.fastApprox = group.readEntry("FastApprox", true);
@@ -242,7 +240,7 @@ void ImageEffect_InPainting_Dialog::readUserSettings()
     m_settingsWidget->setSettings(settings);
 
     int p = group.readEntry("Preset", (int)NoPreset);
-    m_inpaintingTypeCB->setCurrentItem(p);
+    m_inpaintingTypeCB->setCurrentIndex(p);
     if (p == NoPreset)
         m_settingsWidget->setEnabled(true);
     else        
@@ -253,8 +251,8 @@ void ImageEffect_InPainting_Dialog::writeUserSettings()
 {
     Digikam::GreycstorationSettings settings = m_settingsWidget->getSettings();
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("inpainting Tool Dialog");
-    group.writeEntry("Preset", m_inpaintingTypeCB->currentItem());
+    KConfigGroup group        = config->group("inpainting Tool Dialog");
+    group.writeEntry("Preset", m_inpaintingTypeCB->currentIndex());
     group.writeEntry("FastApprox", settings.fastApprox);
     group.writeEntry("Interpolation", settings.interp);
     group.writeEntry("Amplitude", (double)settings.amplitude);
@@ -286,7 +284,7 @@ void ImageEffect_InPainting_Dialog::resetValues()
     Digikam::GreycstorationSettings settings;
     settings.setInpaintingDefaultSettings();    
 
-    switch(m_inpaintingTypeCB->currentItem())
+    switch(m_inpaintingTypeCB->currentIndex())
     {
         case RemoveSmallArtefact:
             // We use default settings here.
@@ -310,7 +308,7 @@ void ImageEffect_InPainting_Dialog::resetValues()
     m_settingsWidget->setSettings(settings);
 }
 
-void ImageEffect_InPainting_Dialog::processCImgURL(const QString& url)
+void ImageEffect_InPainting_Dialog::processCImgUrl(const QString& url)
 {
     KToolInvocation::invokeBrowser(url);
 }
@@ -361,7 +359,7 @@ void ImageEffect_InPainting_Dialog::prepareEffect()
     if (m_maskRect.right()  > iface.originalWidth())  m_maskRect.setRight(iface.originalWidth());
     if (m_maskRect.bottom() > iface.originalHeight()) m_maskRect.setBottom(iface.originalHeight());
 
-    m_maskImage = inPaintingMask.convertToImage().copy(m_maskRect);
+    m_maskImage = inPaintingMask.toImage().copy(m_maskRect);
     m_cropImage = m_originalImage.copy(m_maskRect);
 
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
@@ -442,7 +440,7 @@ void ImageEffect_InPainting_Dialog::slotUser3()
 
     file.close();
     m_inpaintingTypeCB->blockSignals(true);
-    m_inpaintingTypeCB->setCurrentItem(NoPreset);
+    m_inpaintingTypeCB->setCurrentIndex(NoPreset);
     m_inpaintingTypeCB->blockSignals(false);
     m_settingsWidget->setEnabled(true);             
 }

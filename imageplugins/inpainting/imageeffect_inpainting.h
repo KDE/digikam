@@ -28,9 +28,9 @@
 
 // Qt include.
 
-#include <qimage.h>
-#include <qrect.h>
-#include <qstring.h>
+#include <QImage>
+#include <QRect>
+#include <QString>
 
 // Digikam includes.
 
@@ -71,7 +71,7 @@ private slots:
     void slotUser2();
     void slotUser3();
     void readUserSettings();
-    void processCImgURL(const QString&);
+    void processCImgUrl(const QString&);
     void slotResetValues(int);
 
 private:
