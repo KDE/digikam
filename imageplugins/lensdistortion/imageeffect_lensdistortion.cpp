@@ -94,8 +94,9 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     setAboutData(about);
 
     // -------------------------------------------------------------
-        
-    QWidget *gboxSettings = new QWidget(plainPage());
+    QWidget *widget = new QWidget(this);
+    setMainWidget(widget); 
+    QWidget *gboxSettings = new QWidget(widget);
     Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 8, 1, spacingHint());
     
     m_maskPreviewLabel = new QLabel( gboxSettings );

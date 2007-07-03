@@ -246,7 +246,7 @@ void ImageEffect_InsertText::readUserSettings()
     m_textEdit->setText(group.readEntry("Text String", i18n("Enter your text here!")));
     m_textFont = group.readEntry("Font Properties", defaultFont);
     m_fontChooserWidget->setFont(m_textFont);
-    m_alignTextMode = group.readEntry("Text Alignment", ALIGN_LEFT);
+    m_alignTextMode = group.readEntry("Text Alignment", (int)ALIGN_LEFT);
     m_borderText->setChecked( group.readEntry("Border Text", false) );
     m_transparentText->setChecked( group.readEntry("Transparent Text", false) );
     m_previewWidget->setPositionHint( group.readEntry("Position Hint",QRect()) );

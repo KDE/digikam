@@ -43,10 +43,11 @@ K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_lensdistortion,
 ImagePlugin_LensDistortion::ImagePlugin_LensDistortion(QObject *parent, const QStringList &)
                           : Digikam::ImagePlugin(parent, "ImagePlugin_LensDistortion")
 {
-    m_lensdistortionAction = new KAction(i18n("Lens Distortion..."), "lensdistortion", 0, 
-                                 this, SLOT(slotLensDistortion()),
-                                 actionCollection(), "imageplugin_lensdistortion");
-    
+    m_lensdistortionAction  = new KAction(KIcon("embosstool"), i18n("Lens Distortion..."), this);
+    actionCollection()->addAction("imageplugin_lensdistortion", m_lensdistortionAction );
+    connect(m_lensdistortionAction, SIGNAL(triggered(bool) ), SLOT(slotLensDistortion()));
+
+ 
     setXMLFile("digikamimageplugin_lensdistortion_ui.rc");            
         
     DDebug() << "ImagePlugin_LensDistortion plugin loaded" << endl;

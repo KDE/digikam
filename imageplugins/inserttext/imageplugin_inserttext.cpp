@@ -43,10 +43,14 @@ K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_inserttext,
 ImagePlugin_InsertText::ImagePlugin_InsertText(QObject *parent, const QStringList &)
                       : Digikam::ImagePlugin(parent, "ImagePlugin_InsertText")
 {
-    m_insertTextAction = new KAction(i18n("Insert Text..."), "inserttext", 
-                         Qt::CTRL+Qt::Key_T, 
-                         this, SLOT(slotInsertText()),
-                         actionCollection(), "imageplugin_inserttext");
+    m_insertTextAction = new KAction(KIcon("inserttext"), i18n("Insert Text..."), this);
+    m_insertTextAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_T));
+    connect(m_insertTextAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotInsertText()));
+
+    actionCollection()->addAction("imageplugin_inserttext", m_insertTextAction );
+
+
 
     setXMLFile("digikamimageplugin_inserttext_ui.rc");
     

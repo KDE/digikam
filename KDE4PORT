@@ -163,7 +163,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---infrared
         |---inpainting                          Gilles                          DONE                 
         |---inserttext                          Laurent                                              CMake port only
-        |---lensdistortion                      Laurent                                              CMake port only
+        |---lensdistortion                      Laurent                         DONE                     CMake port only
         |---noisereduction                      Laurent                         DONE                     CMake port only
         |---oilpaint                            Laurent                         DONE                     CMake port only
         |---perspective                         Laurent                         DONE                     CMake port only
