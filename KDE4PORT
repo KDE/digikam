@@ -8,10 +8,10 @@ Laurent Montel <montel at kde dot org>
 
 LIST OF DIRECTORIES PORTED BY DEVELOPPERS:
 ------------------------------------------
-                                                                DEPENCIES              SUPPORT LAYER
-                                                                +-------+                 +----+
-                                                               /         \                /    \
-ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  STATUS    QT3  KDE3   REMARK
+                                                                DEPENCIES              
+                                                                +-------+               
+                                                               /         \      CODE    REGRESSION    
+ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   PORT      TESTS      REMARK
 
 
  1      |-libs                                                                                       "libs" subfloders are used by all others parts of digiKam. Must be ported in first.
@@ -39,7 +39,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  S
             talbumlistview.cpp                                          X                            Too depencies with digiKam implementation. Must be ported later
         |---jpegutils                           Gilles                  X       DONE
         |---levels                              Gilles          X       X       DONE
-        |---lprof                               Gilles          X       X       DONE      -    -     CMake port only is require.
+        |---lprof                               Gilles          X       X       DONE                 CMake port only is require.
         |---themeengine                         Gilles                  X       DONE
         |---threadimageio                       Marcel          X       X       DONE
         |---thumbbar                            Gilles          X       X       DONE
@@ -62,10 +62,10 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM  S
             imagewindow.cpp                                             X
         |-----tools                             Laurent         X       X       DONE
         |---lighttable                                                  
-	    lighttablepreview.cpp               Gilles                  X       DONE
-	    lighttableview.cpp                  Gilles                  X       DONE
-	    lighttablebar.cpp                   Gilles                  X       DONE
-	    lighttablewindow.cpp                                        X
+            lighttablepreview.cpp               Gilles                  X       DONE
+            lighttableview.cpp                  Gilles                  X       DONE
+            lighttablebar.cpp                   Gilles                  X       DONE
+            lighttablewindow.cpp                                        X
         |---scripts                             Gilles                          DONE                 CMake port only is require.
         |---setup                               Gilles          X       X       DONE
         |---slideshow                           Laurent         X       X       DONE                 
