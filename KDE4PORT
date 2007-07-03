@@ -158,7 +158,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---distortionfx
         |---emboss                              Laurent                                              CMake port only
         |---filmgrain                           Laurent                                              CMake port only
-        |---freerotation                        Gilles
+        |---freerotation                        Gilles                          DONE
         |---hotpixels                           Laurent                                              CMake port only
         |---infrared
         |---inpainting                          Laurent                                              CMake port only
