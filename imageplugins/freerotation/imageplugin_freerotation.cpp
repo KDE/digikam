@@ -67,6 +67,6 @@ void ImagePlugin_FreeRotation::setEnabledActions(bool enable)
 
 void ImagePlugin_FreeRotation::slotFreeRotation()
 {
-/*    DigikamFreeRotationImagesPlugin::ImageEffect_FreeRotation dlg(parentWidget());
-    dlg.exec();*/
+    DigikamFreeRotationImagesPlugin::ImageEffect_FreeRotation dlg(parentWidget());
+    dlg.exec();
 }

@@ -24,14 +24,12 @@
 
 // Qt includes.
 
-#include <qlabel.h>
-#include <qcheckbox.h>
-
-#include <qlayout.h>
-#include <qimage.h>
-#include <qcombobox.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QCheckBox>
+#include <QLayout>
+#include <QImage>
+#include <QComboBox>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -99,14 +97,16 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     QString temp;
     Digikam::ImageIface iface(0, 0);
 
-    QWidget *gboxSettings     = new QWidget(plainPage());
-    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 9, 2, spacingHint());
+    QWidget *gboxSettings     = new QWidget(mainWidget());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings);
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(0);
 
-    QLabel *label1 = new QLabel(i18n("New width:"), gboxSettings);
+    QLabel *label1  = new QLabel(i18n("New width:"), gboxSettings);
     m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), gboxSettings);
     m_newWidthLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
-    QLabel *label2 = new QLabel(i18n("New height:"), gboxSettings);
+    QLabel *label2   = new QLabel(i18n("New height:"), gboxSettings);
     m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"), gboxSettings);
     m_newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
@@ -115,7 +115,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
     gridSettings->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 2);
 
-    KSeparator *line = new KSeparator (Horizontal, gboxSettings);
+    KSeparator *line = new KSeparator(Qt::Horizontal, gboxSettings);
     gridSettings->addMultiCellWidget(line, 2, 2, 0, 2);
 
     QLabel *label3 = new QLabel(i18n("Main angle:"), gboxSettings);
@@ -123,8 +123,8 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     m_angleInput->setRange(-180, 180, 1, true);
     m_angleInput->setValue(0);
     m_angleInput->setWhatsThis( i18n("<p>An angle in degrees by which to rotate the image. "
-                                        "A positive angle rotates the image clockwise; "
-                                        "a negative angle rotates it counter-clockwise."));
+                                     "A positive angle rotates the image clockwise; "
+                                     "a negative angle rotates it counter-clockwise."));
 
     gridSettings->addMultiCellWidget(label3, 3, 3, 0, 2);
     gridSettings->addMultiCellWidget(m_angleInput, 4, 4, 0, 2);
@@ -134,15 +134,15 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     m_fineAngleInput->setRange(-5.0, 5.0, 0.01, true);
     m_fineAngleInput->setValue(0);
     m_fineAngleInput->setWhatsThis( i18n("<p>This value in degrees will be added to main angle value "
-                                            "to set fine target angle."));
+                                         "to set fine target angle."));
 
     gridSettings->addMultiCellWidget(label4, 5, 5, 0, 2);
     gridSettings->addMultiCellWidget(m_fineAngleInput, 6, 6, 0, 2);
 
     m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), gboxSettings);
     m_antialiasInput->setWhatsThis( i18n("<p>Enable this option to process anti-aliasing filter "
-                                            "to the rotated image. "
-                                            "In order to smooth the target image, it will be blurred a little."));
+                                         "to the rotated image. "
+                                         "In order to smooth the target image, it will be blurred a little."));
     gridSettings->addMultiCellWidget(m_antialiasInput, 7, 7, 0, 2);
 
     QLabel *label5 = new QLabel(i18n("Auto-crop:"), gboxSettings);
@@ -151,7 +151,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     m_autoCropCB->insertItem( i18n("Widest Area") );
     m_autoCropCB->insertItem( i18n("Largest Area") );
     m_autoCropCB->setWhatsThis( i18n("<p>Select here the method to process image auto-cropping "
-                                            "to remove black frames around a rotated image."));
+                                     "to remove black frames around a rotated image."));
     gridSettings->addMultiCellWidget(label5, 8, 8, 0, 0);
     gridSettings->addMultiCellWidget(m_autoCropCB, 8, 8, 1, 2);
 
@@ -182,7 +182,7 @@ void ImageEffect_FreeRotation::readUserSettings(void)
     KConfigGroup group = config->group("freerotation Tool Dialog");
     m_angleInput->setValue(group.readEntry("Main Angle", 0));
     m_fineAngleInput->setValue(group.readEntry("Fine Angle", 0.0));
-    m_autoCropCB->setCurrentItem(group.readEntry("Auto Crop Type", FreeRotation::NoAutoCrop));
+    m_autoCropCB->setCurrentItem(group.readEntry("Auto Crop Type", (int)FreeRotation::NoAutoCrop));
     m_antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
     slotEffect();
 }
@@ -308,4 +308,3 @@ void ImageEffect_FreeRotation::renderingFinished()
 }
 
 }  // NameSpace DigikamFreeRotationImagesPlugin
-
