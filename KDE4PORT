@@ -161,7 +161,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---freerotation                        Gilles                          DONE
         |---hotpixels                           Laurent                                              CMake port only
         |---infrared
-        |---inpainting                          Gilles                                               CMake port only
+        |---inpainting                          Gilles                          DONE                 
         |---inserttext                          Laurent                                              CMake port only
         |---lensdistortion                      Laurent                                              CMake port only
         |---noisereduction                      Laurent                                              CMake port only
