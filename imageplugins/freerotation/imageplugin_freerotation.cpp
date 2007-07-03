@@ -44,9 +44,12 @@ K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_freerotation,
 ImagePlugin_FreeRotation::ImagePlugin_FreeRotation(QObject *parent, const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_FreeRotation")
 {
-    m_freerotationAction = new KAction(i18n("Free Rotation..."), "freerotation", 0, 
-                             this, SLOT(slotFreeRotation()),
-                             actionCollection(), "imageplugin_freerotation");
+    m_freerotationAction = new KAction(KIcon("freerotation"), i18n("Free Rotation..."), this);
+
+    connect(m_freerotationAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotFreeRotation()));
+
+    actionCollection()->addAction("imageplugin_freerotation", m_freerotationAction );
     
     setXMLFile("digikamimageplugin_freerotation_ui.rc");         
                                     
@@ -64,6 +67,6 @@ void ImagePlugin_FreeRotation::setEnabledActions(bool enable)
 
 void ImagePlugin_FreeRotation::slotFreeRotation()
 {
-    DigikamFreeRotationImagesPlugin::ImageEffect_FreeRotation dlg(parentWidget());
-    dlg.exec();
+/*    DigikamFreeRotationImagesPlugin::ImageEffect_FreeRotation dlg(parentWidget());
+    dlg.exec();*/
 }

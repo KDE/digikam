@@ -1,6 +1,6 @@
 
 set(digikamimageplugin_freerotation_PART_SRCS freerotation.cpp 
-#                                              imageplugin_freerotation.cpp
+                                              imageplugin_freerotation.cpp
 #                                              imageeffect_freerotation.cpp
    )
 

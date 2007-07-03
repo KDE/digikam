@@ -46,13 +46,13 @@ ImagePlugin_WhiteBalance::ImagePlugin_WhiteBalance(QObject *parent, const QStrin
                         : Digikam::ImagePlugin(parent, "ImagePlugin_WhiteBalance")
 {
     m_whitebalanceAction = new KAction(KIcon("whitebalance"), i18n("White Balance..."), this);
-    actionCollection()->addAction("imageplugin_whitebalance", m_whitebalanceAction );
+    m_whitebalanceAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
 
     connect(m_whitebalanceAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotWhiteBalance()));
 
-    m_whitebalanceAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
-    
+    actionCollection()->addAction("imageplugin_whitebalance", m_whitebalanceAction );
+
     setXMLFile("digikamimageplugin_whitebalance_ui.rc");         
                                     
     DDebug() << "ImagePlugin_WhiteBalance plugin loaded" << endl;
@@ -69,7 +69,6 @@ void ImagePlugin_WhiteBalance::setEnabledActions(bool enable)
 
 void ImagePlugin_WhiteBalance::slotWhiteBalance()
 {
-    QString title = i18n("White Color Balance Correction");
     DigikamWhiteBalanceImagesPlugin::ImageEffect_WhiteBalance dlg(parentWidget());
     dlg.exec();
 }
