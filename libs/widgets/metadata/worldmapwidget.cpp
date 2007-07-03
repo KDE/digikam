@@ -103,9 +103,8 @@ QPixmap &WorldMapWidget::worldMapPixmap()
 {
     if (!d->worldMap)
     {
-        KGlobal::dirs()->addResourceType("worldmap", KGlobal::dirs()->kde_default("data") + "digikam/data");
-        QString directory = KGlobal::dirs()->findResourceDir("worldmap", "worldmap.jpg");
-        pixmapDeleter.setObject(d->worldMap, new QPixmap(directory + "worldmap.jpg"));
+        QString directory = KStandardDirs::locate("data", "digikam/data/worldmap.jpg");
+        pixmapDeleter.setObject(d->worldMap, new QPixmap(directory));
     }
     return *d->worldMap;
 }
