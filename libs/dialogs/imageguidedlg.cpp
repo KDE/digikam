@@ -288,6 +288,12 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     connect(this, SIGNAL(user1Clicked()),
             this, SLOT(slotUser1()));
 
+    connect(this, SIGNAL(user2Clicked()),
+            this, SLOT(slotUser2()));
+
+    connect(this, SIGNAL(user3Clicked()),
+            this, SLOT(slotUser3()));
+
     connect(this, SIGNAL(helpClicked()),
             this, SLOT(slotHelp()));
 

@@ -80,6 +80,8 @@ private slots:
     virtual void slotDefault();
     virtual void slotCancel();
     virtual void slotUser1();
+    virtual void slotUser2(){};
+    virtual void slotUser3(){};
     virtual void slotInit();
     virtual void readUserSettings(void){ slotDefault(); };
 
