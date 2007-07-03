@@ -163,7 +163,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->tooltipPage  = new SetupToolTip();
     d->page_tooltip = addPage( d->tooltipPage, i18n("Tool Tip") );
     d->page_tooltip->setHeader( i18n("Album Items Tool Tip Settings") );
-    d->page_tooltip->setIcon( KIcon("filetypes") );
+    d->page_tooltip->setIcon( KIcon("dialog-information") );
 
     d->mimePage  = new SetupMime();
     d->page_mime = addPage( d->mimePage, i18n("Mime Types") );
@@ -183,7 +183,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->iofilesPage  = new SetupIOFiles();
     d->page_iofiles = addPage( d->iofilesPage, i18n("Save Images") );
     d->page_iofiles->setHeader( i18n("Image Editor Save Images Files Settings") );
-    d->page_iofiles->setIcon( KIcon("filesave") );
+    d->page_iofiles->setIcon( KIcon("save-all") );
 
     d->dcrawPage = new SetupDcraw();
     d->page_dcraw = addPage( d->dcrawPage, i18n("RAW decoding") );
