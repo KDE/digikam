@@ -525,8 +525,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
     }
 
     // Look the ICC color-space profile path include with digiKam dist.
-    KGlobal::dirs()->addResourceType("profiles", KGlobal::dirs()->kde_default("data") + "digikam/profiles");
-    QString digiKamProfilesPath = KGlobal::dirs()->findResourceDir("profiles", "srgb.icm");
+    QString digiKamProfilesPath = KStandardDirs::locate("data", "digikam/profiles/srgb.icm");
     QDir digiKamProfilesDir(QFile::encodeName(digiKamProfilesPath));
     digiKamProfilesDir.setNameFilters(filters);
     digiKamProfilesDir.setFilter(QDir::Files);
