@@ -32,7 +32,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor
 ADD_SUBDIRECTORY( freerotation )
 # ADD_SUBDIRECTORY( hotpixels )
 # ADD_SUBDIRECTORY( infrared )
-# ADD_SUBDIRECTORY( inpainting )
+ADD_SUBDIRECTORY( inpainting )
 # ADD_SUBDIRECTORY( inserttext )
 # ADD_SUBDIRECTORY( lensdistortion )
 # ADD_SUBDIRECTORY( noisereduction )
