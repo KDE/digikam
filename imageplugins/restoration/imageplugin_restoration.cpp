@@ -66,7 +66,6 @@ void ImagePlugin_Restoration::setEnabledActions(bool enable)
 
 void ImagePlugin_Restoration::slotRestoration()
 {
-/*    DigikamRestorationImagesPlugin::ImageEffect_Restoration dlg(parentWidget());
-    dlg.exec();*/
+    DigikamRestorationImagesPlugin::ImageEffect_Restoration dlg(parentWidget());
+    dlg.exec();
 }
-

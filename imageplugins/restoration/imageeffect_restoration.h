@@ -27,7 +27,7 @@
 
 // Qt include.
 
-#include <qstring.h>
+#include <QString>
 
 // Digikam includes.
 
@@ -57,7 +57,7 @@ private slots:
 
     void slotUser2();
     void slotUser3();
-    void processCImgURL(const QString&);
+    void processCImgUrl(const QString&);
     void readUserSettings();
     void slotResetValues(int);
 

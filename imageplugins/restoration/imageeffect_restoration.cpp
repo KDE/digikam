@@ -24,16 +24,12 @@
  
 // Qt includes.
 
-#include <qlabel.h>
-#include <qtooltip.h>
-
-#include <qlayout.h>
-#include <qcombobox.h>
-#include <qtabwidget.h>
-#include <qfile.h>
-#include <qimage.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QComboBox>
+#include <QTabWidget>
+#include <QFile>
+#include <QImage>
+#include <QGridLayout>
 #include <QPixmap>
 
 // KDE includes.
@@ -48,7 +44,8 @@
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
-#include <KToolInvocation>
+#include <ktoolinvocation.h>
+
 // Local includes.
 
 #include "version.h"
@@ -97,30 +94,30 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_mainTab = new QTabWidget( m_imagePreviewWidget );
     
     QWidget* firstPage = new QWidget( m_mainTab );
-    Q3GridLayout* grid  = new Q3GridLayout( firstPage, 2, 2, spacingHint());
+    QGridLayout* grid  = new QGridLayout(firstPage);
+    grid->setMargin(spacingHint());
+    grid->setSpacing(0);
     m_mainTab->addTab( firstPage, i18n("Preset") );
 
     KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
-    KGlobal::dirs()->addResourceType("logo-cimg", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("logo-cimg", "logo-cimg.png");
-    cimgLogoLabel->setPixmap( QPixmap( directory + "logo-cimg.png" ) );
+    cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
     cimgLogoLabel->setToolTip( i18n("Visit CImg library website"));
     
     QLabel *typeLabel   = new QLabel(i18n("Filtering type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_restorationTypeCB = new QComboBox( false, firstPage ); 
-    m_restorationTypeCB->insertItem( i18n("None") );
-    m_restorationTypeCB->insertItem( i18n("Reduce Uniform Noise") );
-    m_restorationTypeCB->insertItem( i18n("Reduce JPEG Artefacts") );
-    m_restorationTypeCB->insertItem( i18n("Reduce Texturing") );
+    m_restorationTypeCB = new QComboBox(firstPage); 
+    m_restorationTypeCB->addItem( i18n("None") );
+    m_restorationTypeCB->addItem( i18n("Reduce Uniform Noise") );
+    m_restorationTypeCB->addItem( i18n("Reduce JPEG Artefacts") );
+    m_restorationTypeCB->addItem( i18n("Reduce Texturing") );
     m_restorationTypeCB->setWhatsThis( i18n("<p>Select here the filter preset to use for photograph restoration:<p>"
-                                               "<b>None</b>: Most common values. Puts settings to default.<p>"
-                                               "<b>Reduce Uniform Noise</b>: reduce small image artifacts like sensor noise.<p>"
-                                               "<b>Reduce JPEG Artefacts</b>: reduce large image artifacts like JPEG compression mosaic.<p>"
-                                               "<b>Reduce Texturing</b>: reduce image artifacts like paper texture or Moire patterns "
-                                               "of a scanned image.<p>"));
+                                            "<b>None</b>: Most common values. Puts settings to default.<p>"
+                                            "<b>Reduce Uniform Noise</b>: reduce small image artifacts like sensor noise.<p>"
+                                            "<b>Reduce JPEG Artefacts</b>: reduce large image artifacts like JPEG compression mosaic.<p>"
+                                            "<b>Reduce Texturing</b>: reduce image artifacts like paper texture or Moire patterns "
+                                            "of a scanned image.<p>"));
 
     grid->addMultiCellWidget(cimgLogoLabel, 0, 0, 1, 1);
     grid->addMultiCellWidget(typeLabel, 1, 1, 0, 0);
@@ -134,8 +131,8 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    connect(cimgLogoLabel, SIGNAL(leftClickedURL(const QString&)),
-            this, SLOT(processCImgURL(const QString&)));
+    connect(cimgLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
+            this, SLOT(processCImgUrl(const QString&)));
 
     connect(m_restorationTypeCB, SIGNAL(activated(int)),
             this, SLOT(slotResetValues(int)));
@@ -174,7 +171,7 @@ void ImageEffect_Restoration::readUserSettings()
     m_settingsWidget->setSettings(settings);
 
     int p = group.readEntry("Preset", (int)NoPreset);
-    m_restorationTypeCB->setCurrentItem(p);
+    m_restorationTypeCB->setCurrentIndex(p);
     if (p == NoPreset)
         m_settingsWidget->setEnabled(true);
     else        
@@ -186,17 +183,17 @@ void ImageEffect_Restoration::writeUserSettings()
     Digikam::GreycstorationSettings settings = m_settingsWidget->getSettings();
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("restoration Tool Dialog");
-    group.writeEntry("Preset", m_restorationTypeCB->currentItem());
+    group.writeEntry("Preset", m_restorationTypeCB->currentIndex());
     group.writeEntry("FastApprox", settings.fastApprox);
     group.writeEntry("Interpolation", settings.interp);
-    group.writeEntry("Amplitude", (int)settings.amplitude);
-    group.writeEntry("Sharpness", (int)settings.sharpness);
-    group.writeEntry("Anisotropy", (int)settings.anisotropy);
-    group.writeEntry("Alpha", (int)settings.alpha);
-    group.writeEntry("Sigma", (int)settings.sigma);
-    group.writeEntry("GaussPrec", (int)settings.gaussPrec);
-    group.writeEntry("Dl", settings.dl);
-    group.writeEntry("Da", settings.da);
+    group.writeEntry("Amplitude", (double)settings.amplitude);
+    group.writeEntry("Sharpness", (double)settings.sharpness);
+    group.writeEntry("Anisotropy", (double)settings.anisotropy);
+    group.writeEntry("Alpha", (double)settings.alpha);
+    group.writeEntry("Sigma", (double)settings.sigma);
+    group.writeEntry("GaussPrec", (double)settings.gaussPrec);
+    group.writeEntry("Dl", (double)settings.dl);
+    group.writeEntry("Da", (double)settings.da);
     group.writeEntry("Iteration", settings.nbIter);
     group.writeEntry("Tile", settings.tile);
     group.writeEntry("BTile", settings.btile);
@@ -218,7 +215,7 @@ void ImageEffect_Restoration::resetValues()
     Digikam::GreycstorationSettings settings;
     settings.setRestorationDefaultSettings();    
 
-    switch(m_restorationTypeCB->currentItem())
+    switch(m_restorationTypeCB->currentIndex())
     {
         case ReduceUniformNoise:
         {
@@ -248,7 +245,7 @@ void ImageEffect_Restoration::resetValues()
     m_settingsWidget->setSettings(settings);
 } 
 
-void ImageEffect_Restoration::processCImgURL(const QString& url)
+void ImageEffect_Restoration::processCImgUrl(const QString& url)
 {
     KToolInvocation::invokeBrowser(url);
 }
@@ -263,7 +260,7 @@ void ImageEffect_Restoration::prepareEffect()
                        new Digikam::GreycstorationIface(
                                     &previewImage, m_settingsWidget->getSettings(),
                                     Digikam::GreycstorationIface::Restore, 
-                                    0, 0, 0, this));
+                                    0, 0, QImage(), this));
 }
 
 void ImageEffect_Restoration::prepareFinal()
@@ -279,7 +276,7 @@ void ImageEffect_Restoration::prepareFinal()
                        new Digikam::GreycstorationIface(
                                     &originalImage, m_settingsWidget->getSettings(),
                                     Digikam::GreycstorationIface::Restore, 
-                                    0, 0, 0, this));
+                                    0, 0, QImage(), this));
 
     delete [] data;                                    
 }
@@ -326,7 +323,7 @@ void ImageEffect_Restoration::slotUser3()
 
     file.close();
     m_restorationTypeCB->blockSignals(true);
-    m_restorationTypeCB->setCurrentItem((int)NoPreset);
+    m_restorationTypeCB->setCurrentIndex((int)NoPreset);
     m_restorationTypeCB->blockSignals(false);
     m_settingsWidget->setEnabled(true);
 }
@@ -350,4 +347,3 @@ void ImageEffect_Restoration::slotUser2()
 }
 
 }  // NameSpace DigikamRestorationImagesPlugin
-
