@@ -169,7 +169,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---perspective                         Laurent                         DONE                     CMake port only
         |---raindrop                            Laurent                         DONE                     CMake port only
         |---restoration                         Gilles                          DONE
-        |---sheartool
+        |---sheartool                           Laurent                         DONE
         |---superimpose
         |---texture
         |-----patterns                                                                               CMake port only is require.

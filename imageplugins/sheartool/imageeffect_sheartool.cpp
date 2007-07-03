@@ -99,7 +99,9 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     QString temp;
     Digikam::ImageIface iface(0, 0);
 
-    QWidget *gboxSettings     = new QWidget(plainPage());
+    QWidget *widget = new QWidget(this);
+    setMainWidget(widget);
+    QWidget *gboxSettings     = new QWidget(widget);
     Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 11, 2, spacingHint());
     
     QLabel *label1 = new QLabel(i18n("New width:"), gboxSettings);
@@ -115,7 +117,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
     gridSettings->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 2);
     
-    KSeparator *line = new KSeparator (Horizontal, gboxSettings);
+    KSeparator *line = new KSeparator (Qt::Horizontal, gboxSettings);
     gridSettings->addMultiCellWidget(line, 2, 2, 0, 2);
     
     QLabel *label3 = new QLabel(i18n("Main horizontal angle:"), gboxSettings);
