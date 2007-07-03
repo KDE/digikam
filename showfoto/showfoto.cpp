@@ -162,7 +162,8 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     d = new ShowFotoPriv();
 
     // -- Show splash at start ----------------------------
-
+    
+    KGlobal::dirs()->addResourceDir("data", KStandardDirs::installPath("data") + QString("digikam")); 
     KIconLoader::global()->addAppDir("digikam");
 
     KSharedConfig::Ptr config = KGlobal::config();
