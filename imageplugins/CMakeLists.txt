@@ -24,7 +24,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor
 # ADD_SUBDIRECTORY( border )
 # ADD_SUBDIRECTORY( channelmixer )
 # ADD_SUBDIRECTORY( charcoal )
-# ADD_SUBDIRECTORY( colorfx )
+ADD_SUBDIRECTORY( colorfx )
 # ADD_SUBDIRECTORY( coreplugin )
 # ADD_SUBDIRECTORY( distortionfx )
 ADD_SUBDIRECTORY( emboss )

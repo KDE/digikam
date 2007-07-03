@@ -10,7 +10,7 @@ kde4_automoc(${digikamimageplugin_lensdistortion_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_lensdistortion ${digikamimageplugin_lensdistortion_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_lensdistortion  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(digikamimageplugin_lensdistortion  digikam )
 
 install(TARGETS digikamimageplugin_lensdistortion DESTINATION ${PLUGIN_INSTALL_DIR} )
 

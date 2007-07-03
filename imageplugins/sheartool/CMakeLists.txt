@@ -11,7 +11,7 @@ kde4_automoc(${digikamimageplugin_sheartool_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_sheartool ${digikamimageplugin_sheartool_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_sheartool  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(digikamimageplugin_sheartool  digikam )
 
 install(TARGETS digikamimageplugin_sheartool DESTINATION ${PLUGIN_INSTALL_DIR} )
 

@@ -11,7 +11,7 @@ kde4_automoc(${digikamimageplugin_inserttext_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_inserttext ${digikamimageplugin_inserttext_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_inserttext  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(digikamimageplugin_inserttext  digikam )
 
 install(TARGETS digikamimageplugin_inserttext DESTINATION ${PLUGIN_INSTALL_DIR} )
 

@@ -11,7 +11,7 @@ kde4_automoc(${digikamimageplugin_colorfx_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_colorfx ${digikamimageplugin_colorfx_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_colorfx  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(digikamimageplugin_colorfx  digikam )
 
 install(TARGETS digikamimageplugin_colorfx DESTINATION ${PLUGIN_INSTALL_DIR} )
 

@@ -11,7 +11,7 @@ kde4_automoc(${digikamimageplugin_adjustcurves_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_adjustcurves ${digikamimageplugin_adjustcurves_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_adjustcurves  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(digikamimageplugin_adjustcurves  digikam )
 
 install(TARGETS digikamimageplugin_adjustcurves DESTINATION ${PLUGIN_INSTALL_DIR} )
 

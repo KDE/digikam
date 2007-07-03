@@ -10,7 +10,7 @@ kde4_automoc(${digikamimageplugin_raindrop_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_raindrop ${digikamimageplugin_raindrop_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_raindrop  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(digikamimageplugin_raindrop  digikam )
 
 install(TARGETS digikamimageplugin_raindrop DESTINATION ${PLUGIN_INSTALL_DIR} )
 

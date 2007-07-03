@@ -10,7 +10,7 @@ kde4_automoc(${digikamimageplugin_infrared_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_infrared ${digikamimageplugin_infrared_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_infrared  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(digikamimageplugin_infrared  digikam )
 
 install(TARGETS digikamimageplugin_infrared DESTINATION ${PLUGIN_INSTALL_DIR} )
 

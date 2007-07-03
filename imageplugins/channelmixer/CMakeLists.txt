@@ -10,7 +10,7 @@ kde4_automoc(${digikamimageplugin_channelmixer_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_channelmixer ${digikamimageplugin_channelmixer_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_channelmixer  ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS} )
+target_link_libraries(digikamimageplugin_channelmixer  digikam ${KDE4_KDE3SUPPORT_LIBS} )
 
 install(TARGETS digikamimageplugin_channelmixer DESTINATION ${PLUGIN_INSTALL_DIR} )
 

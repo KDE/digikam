@@ -11,7 +11,7 @@ kde4_automoc(${digikamimageplugin_superimpose_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_superimpose ${digikamimageplugin_superimpose_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_superimpose  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(digikamimageplugin_superimpose  digikam )
 
 install(TARGETS digikamimageplugin_superimpose DESTINATION ${PLUGIN_INSTALL_DIR} )
 

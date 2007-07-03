@@ -11,7 +11,7 @@ kde4_automoc(${digikamimageplugin_adjustlevels_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_adjustlevels ${digikamimageplugin_adjustlevels_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_adjustlevels  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(digikamimageplugin_adjustlevels  digikam )
 
 install(TARGETS digikamimageplugin_adjustlevels DESTINATION ${PLUGIN_INSTALL_DIR} )
 
