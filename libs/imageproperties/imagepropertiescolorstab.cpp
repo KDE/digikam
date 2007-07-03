@@ -177,12 +177,12 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
                                      "is supported by some image formats such as PNG or TIFF.<p>"
                                      "<b>Colors</b>: Display all color channel values at the same time."));
 
+    // -------------------------------------------------------------
+
     QWidget *scaleBox  = new QWidget(histogramPage);
     QHBoxLayout *hlay1 = new QHBoxLayout(scaleBox);
     d->scaleBG         = new QButtonGroup(scaleBox);
     d->scaleBG->setExclusive(true);
-    hlay1->setMargin(0);
-    hlay1->setSpacing(KDialog::spacingHint());
     scaleBox->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
                                  "If the image's maximal values are small, you can use the linear scale.<p>"
                                  "Logarithmic scale can be used when the maximal values are big; "
@@ -194,14 +194,19 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     linHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-lin.png")));
     linHistoButton->setCheckable(true);
     d->scaleBG->addButton(linHistoButton, HistogramWidget::LinScaleHistogram);
-    hlay1->addWidget(linHistoButton);
 
     QPushButton *logHistoButton = new QPushButton(scaleBox);
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     logHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-log.png")));
     logHistoButton->setCheckable(true);
     d->scaleBG->addButton(logHistoButton, HistogramWidget::LogScaleHistogram);
+
+    hlay1->setMargin(0);
+    hlay1->setSpacing(0);
+    hlay1->addWidget(linHistoButton);
     hlay1->addWidget(logHistoButton);
+
+    // -------------------------------------------------------------
 
     QLabel *label10 = new QLabel(i18n("Colors:"), histogramPage);
     label10->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -215,13 +220,13 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
                                     "<b>Green</b>: Draw the green image channel in the foreground.<p>"
                                     "<b>Blue</b>: Draw the blue image channel in the foreground.<p>"));
 
+    // -------------------------------------------------------------
+
     d->regionBox       = new QWidget(histogramPage);
     QHBoxLayout *hlay2 = new QHBoxLayout(d->regionBox);
     d->regionBG        = new QButtonGroup(d->regionBox);
     d->regionBG->setExclusive(true);
     d->regionBox->hide();
-    hlay2->setMargin(0);
-    hlay2->setSpacing(KDialog::spacingHint());
     d->regionBox->setWhatsThis( i18n("<p>Select here from which region the histogram will be computed:<p>"
                                      "<b>Full Image</b>: Compute histogram using the full image.<p>"
                                      "<b>Selection</b>: Compute histogram using the current image "
@@ -232,13 +237,16 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     fullImageButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/image-full.png")));
     fullImageButton->setCheckable(true);
     d->regionBG->addButton(fullImageButton, HistogramWidget::FullImageHistogram);
-    hlay2->addWidget(fullImageButton);
 
     QPushButton *SelectionImageButton = new QPushButton(d->regionBox);
     SelectionImageButton->setToolTip( i18n( "<p>Selection" ) );
     SelectionImageButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/image-selection.png")));
     SelectionImageButton->setCheckable(true);
     d->regionBG->addButton(SelectionImageButton, HistogramWidget::ImageSelectionHistogram);
+
+    hlay2->setMargin(0);
+    hlay2->setSpacing(0);
+    hlay2->addWidget(fullImageButton);
     hlay2->addWidget(SelectionImageButton);
 
     topLayout->addMultiCellWidget(label1, 1, 1, 0, 0);
