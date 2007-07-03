@@ -128,8 +128,10 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     fullLevel->setCheckable(true);
     fullLevel->setWhatsThis( i18n( "Toggle tags view to a full list" ) );
     d->levelButtons->addButton(fullLevel, FULL);
+
     hlay1->addWidget(fullLevel);
-    hlay1->setMargin(0);
+    hlay1->setSpacing(0);
+    hlay1->setMargin(KDialog::spacingHint());
 
     // -----------------------------------------------------------------
 
@@ -141,20 +143,22 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     saveMetadata->setIcon( iconLoader->loadIcon( "document-save", (K3Icon::Group)K3Icon::Toolbar ) );
     saveMetadata->setWhatsThis( i18n( "Save meta-data to a binary file" ) );
     d->toolButtons->addButton(saveMetadata);
-    hlay2->addWidget(saveMetadata);
 
     QPushButton *printMetadata = new QPushButton( d->toolsGBox );
     printMetadata->setIcon( iconLoader->loadIcon( "document-print", (K3Icon::Group)K3Icon::Toolbar ) );
     printMetadata->setWhatsThis( i18n( "Print meta-data to printer" ) );
     d->toolButtons->addButton(printMetadata);
-    hlay2->addWidget(printMetadata);
 
     QPushButton *copy2ClipBoard = new QPushButton( d->toolsGBox );
     copy2ClipBoard->setIcon( iconLoader->loadIcon( "edit-copy", (K3Icon::Group)K3Icon::Toolbar ) );
     copy2ClipBoard->setWhatsThis( i18n( "Copy meta-data to clipboard" ) );
     d->toolButtons->addButton(copy2ClipBoard);
+
+    hlay2->addWidget(saveMetadata);
+    hlay2->addWidget(printMetadata);
     hlay2->addWidget(copy2ClipBoard);
-    hlay2->setMargin(0);
+    hlay2->setSpacing(0);
+    hlay1->setMargin(KDialog::spacingHint());
 
     d->mainLayout->addMultiCellWidget(d->levelGBox, 0, 0, 0, 1);
     d->mainLayout->setColumnStretch(3, 10);
