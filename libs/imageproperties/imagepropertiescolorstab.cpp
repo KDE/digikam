@@ -157,10 +157,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     QWidget* histogramPage = new QWidget( d->tab );
     QGridLayout *topLayout = new QGridLayout(histogramPage);
-    topLayout->setSpacing(KDialog::spacingHint());
-    topLayout->setMargin(KDialog::spacingHint());
-
-    QLabel *label1 = new QLabel(i18n("Channel:"), histogramPage);
+    QLabel *label1         = new QLabel(i18n("Channel:"), histogramPage);
     label1->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
 
     d->channelCB = new QComboBox(histogramPage );
@@ -184,6 +181,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     QHBoxLayout *hlay1 = new QHBoxLayout(scaleBox);
     d->scaleBG         = new QButtonGroup(scaleBox);
     d->scaleBG->setExclusive(true);
+    hlay1->setMargin(0);
+    hlay1->setSpacing(KDialog::spacingHint());
     scaleBox->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
                                  "If the image's maximal values are small, you can use the linear scale.<p>"
                                  "Logarithmic scale can be used when the maximal values are big; "
@@ -221,6 +220,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     d->regionBG        = new QButtonGroup(d->regionBox);
     d->regionBG->setExclusive(true);
     d->regionBox->hide();
+    hlay2->setMargin(0);
+    hlay2->setSpacing(KDialog::spacingHint());
     d->regionBox->setWhatsThis( i18n("<p>Select here from which region the histogram will be computed:<p>"
                                      "<b>Full Image</b>: Compute histogram using the full image.<p>"
                                      "<b>Selection</b>: Compute histogram using the current image "
@@ -247,12 +248,14 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     topLayout->addMultiCellWidget(d->colorsCB, 2, 2, 1, 1);
     topLayout->addMultiCellWidget(d->regionBox, 2, 2, 3, 3);
     topLayout->setColumnStretch(2, 10);
+    topLayout->setMargin(KDialog::spacingHint());
+    topLayout->setSpacing(KDialog::spacingHint());
 
     // -------------------------------------------------------------
 
     QWidget *histoBox  = new QWidget(histogramPage);
     QVBoxLayout *vlay1 = new QVBoxLayout(histoBox);
-    vlay1->setSpacing(1);
+
     d->histogramWidget = new HistogramWidget(256, 140, histoBox);
     d->histogramWidget->setWhatsThis( i18n("<p>This is the histogram drawing of the "
                                            "selected image channel"));
@@ -262,12 +265,14 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     vlay1->addWidget(d->histogramWidget);
     vlay1->addWidget(d->hGradient);
+    vlay1->setSpacing(1);
+    vlay1->setMargin(0);
+
     topLayout->addMultiCellWidget(histoBox, 3, 4, 0, 3);
 
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay3 = new QHBoxLayout();
-    hlay2->setSpacing(KDialog::spacingHint());
     QLabel *label3     = new QLabel(i18n("Range:"), histogramPage);
     label3->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
@@ -286,7 +291,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     hlay3->addWidget(label3);
     hlay3->addWidget(d->minInterv);
     hlay3->addWidget(d->maxInterv);
-
+    hlay2->setSpacing(KDialog::spacingHint());
+    hlay2->setMargin(0);
     topLayout->addMultiCell(hlay3, 5, 5, 0, 3);
 
     // -------------------------------------------------------------
@@ -296,8 +302,6 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
                              "selected histogram part. These values are available for all "
                              "channels."));
     QGridLayout* grid = new QGridLayout(gbox);
-    grid->setSpacing(0);
-    grid->setMargin(KDialog::spacingHint());
 
     QLabel *label4 = new QLabel(i18n("Mean:"), gbox);
     label4->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
@@ -341,6 +345,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     grid->addMultiCellWidget(d->labelMedianValue,     4, 4, 1, 1);
     grid->addMultiCellWidget(label9,                  5, 5, 0, 0);
     grid->addMultiCellWidget(d->labelPercentileValue, 5, 5, 1, 1);
+    grid->setMargin(KDialog::spacingHint());
+    grid->setSpacing(0);
 
     topLayout->addMultiCellWidget(gbox, 6, 6, 0, 3);
 
@@ -348,8 +354,6 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     QWidget *gbox2     = new QWidget(histogramPage);
     QGridLayout* grid2 = new QGridLayout(gbox2);
-    grid->setSpacing(0);
-    grid->setMargin(KDialog::spacingHint());
 
     QLabel *label11     = new QLabel(i18n("Color depth:"), gbox2);
     label11->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
@@ -365,6 +369,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     grid2->addMultiCellWidget(d->labelColorDepth,   0, 0, 1, 1);
     grid2->addMultiCellWidget(label12,              1, 1, 0, 0);
     grid2->addMultiCellWidget(d->labelAlphaChannel, 1, 1, 1, 1);
+    grid2->setMargin(0);
+    grid2->setSpacing(0);
 
     topLayout->addMultiCellWidget(gbox2, 7, 7, 0, 3);
     topLayout->setRowStretch(8, 10);
