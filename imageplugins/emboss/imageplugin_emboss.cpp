@@ -45,10 +45,10 @@ ImagePlugin_Emboss::ImagePlugin_Emboss(QObject *parent,
                                        const QStringList &)
                   : Digikam::ImagePlugin(parent, "ImagePlugin_Emboss")
 {
-    m_embossAction = new KAction(i18n("Emboss..."), "embosstool", 0, 
-                         this, SLOT(slotEmboss()),
-                         actionCollection(), "imageplugin_emboss");
 
+    m_embossAction  = new KAction(KIcon("embosstool"), i18n("Emboss..."), this);
+    actionCollection()->addAction("imageplugin_emboss", m_embossAction );
+    connect(m_embossAction, SIGNAL(triggered(bool) ), SLOT(slotEmboss()));
                 
     setXMLFile( "digikamimageplugin_emboss_ui.rc" );                
     

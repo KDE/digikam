@@ -10,7 +10,7 @@ kde4_automoc(${digikamimageplugin_emboss_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_emboss ${digikamimageplugin_emboss_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_emboss  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(digikamimageplugin_emboss  digikam ${KDE4_KDECORE_LIBS} )
 
 install(TARGETS digikamimageplugin_emboss DESTINATION ${PLUGIN_INSTALL_DIR} )
 

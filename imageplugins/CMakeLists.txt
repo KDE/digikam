@@ -27,7 +27,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor
 # ADD_SUBDIRECTORY( colorfx )
 # ADD_SUBDIRECTORY( coreplugin )
 # ADD_SUBDIRECTORY( distortionfx )
-# ADD_SUBDIRECTORY( emboss )
+ADD_SUBDIRECTORY( emboss )
 # ADD_SUBDIRECTORY( filmgrain )
 ADD_SUBDIRECTORY( freerotation )
 # ADD_SUBDIRECTORY( hotpixels )
