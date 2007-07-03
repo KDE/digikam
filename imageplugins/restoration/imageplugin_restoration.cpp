@@ -46,8 +46,10 @@ ImagePlugin_Restoration::ImagePlugin_Restoration(QObject *parent, const QStringL
 {
     m_restorationAction  = new KAction(KIcon("restoration"), i18n("Restoration..."), this);
     actionCollection()->addAction("imageplugin_restoration", m_restorationAction );
-    connect(m_restorationAction, SIGNAL(triggered(bool) ), SLOT(slotRestoration()));
-                
+
+    connect(m_restorationAction, SIGNAL(triggered(bool)), 
+            this, SLOT(slotRestoration()));
+               
     setXMLFile( "digikamimageplugin_restoration_ui.rc" );                                
     
     DDebug() << "ImagePlugin_Restoration plugin loaded" << endl;
@@ -64,7 +66,7 @@ void ImagePlugin_Restoration::setEnabledActions(bool enable)
 
 void ImagePlugin_Restoration::slotRestoration()
 {
-    DigikamRestorationImagesPlugin::ImageEffect_Restoration dlg(parentWidget());
-    dlg.exec();
+/*    DigikamRestorationImagesPlugin::ImageEffect_Restoration dlg(parentWidget());
+    dlg.exec();*/
 }
 
