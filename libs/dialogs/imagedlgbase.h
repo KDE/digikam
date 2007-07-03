@@ -68,6 +68,9 @@ protected slots:
 
     virtual void slotDefault();
     virtual void slotTimer();
+    virtual void slotUser1(){};
+    virtual void slotUser2(){};
+    virtual void slotUser3(){};
 
 protected:
 
