@@ -64,7 +64,6 @@ void ImagePlugin_WhiteBalance::setEnabledActions(bool enable)
 
 void ImagePlugin_WhiteBalance::slotWhiteBalance()
 {
-    QString title = i18n("White Color Balance Correction");
     DigikamWhiteBalanceImagesPlugin::ImageEffect_WhiteBalance dlg(parentWidget());
     dlg.exec();
 }
