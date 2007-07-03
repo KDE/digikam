@@ -299,7 +299,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    //QTimer::singleShot(0, this, SLOT(slotInit()));
+    QTimer::singleShot(0, this, SLOT(slotInit()));
     kapp->restoreOverrideCursor();
 }
 
