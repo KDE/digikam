@@ -197,14 +197,14 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     d->settingsSideBar = new Sidebar(d->hbox, sbName.toAscii().data(), Sidebar::DockRight);
     d->settingsSideBar->setSplitter(d->splitter);
 
-    d->mainLayout->addWidget(d->hbox, 1, 2, 0, 1);
+    d->mainLayout->addMultiCellWidget(d->hbox, 1, 2, 0, 1);
     d->mainLayout->setColumnStretch(0, 10);
     d->mainLayout->setRowStretch(2, 10);
 
     // -------------------------------------------------------------
 
     d->settings          = new QWidget(mainWidget());
-    d->settingsLayout    = new QGridLayout( d->settings );
+    d->settingsLayout    = new QGridLayout(d->settings);
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setSpacing(spacingHint());
 
@@ -212,31 +212,32 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     QWidget *gboxGuideSettings = new QWidget(d->settings);
     QGridLayout* grid          = new QGridLayout( gboxGuideSettings );
-    KSeparator *line           = new KSeparator (Qt::Horizontal, gboxGuideSettings);
+    KSeparator *line           = new KSeparator(Qt::Horizontal, gboxGuideSettings);
     grid->setMargin(marginHint());
     grid->setSpacing(spacingHint());
-    grid->addWidget(line, 0, 0, 0, 2);
-    gboxGuideSettings->setLayout(grid);
 
     QLabel *label5  = new QLabel(i18n("Guide color:"), gboxGuideSettings);
     d->guideColorBt = new KColorButton( QColor( Qt::red ), gboxGuideSettings );
     d->guideColorBt->setWhatsThis( i18n("<p>Set here the color used to draw guides dashed-lines."));
-    grid->addWidget(label5, 1, 1, 0, 0);
-    grid->addWidget(d->guideColorBt, 1, 1, 2, 2);
 
     QLabel *label6 = new QLabel(i18n("Guide width:"), gboxGuideSettings);
     d->guideSize   = new QSpinBox(gboxGuideSettings);
     d->guideSize->setRange(1, 5);
     d->guideSize->setSingleStep(1);
     d->guideSize->setWhatsThis( i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
-    grid->addWidget(label6, 2, 2, 0, 0);
-    grid->addWidget(d->guideSize, 2, 2, 2, 2);
+
+    grid->addMultiCellWidget(line, 0, 0, 0, 2);
+    grid->addMultiCellWidget(label5, 1, 1, 0, 0);
+    grid->addMultiCellWidget(d->guideColorBt, 1, 1, 2, 2);
+    grid->addMultiCellWidget(label6, 2, 2, 0, 0);
+    grid->addMultiCellWidget(d->guideSize, 2, 2, 2, 2);
     grid->setColumnStretch(1, 10);
 
     if (guideVisible) gboxGuideSettings->show();
     else gboxGuideSettings->hide();
 
-    vLayout->addWidget(gboxGuideSettings);
+
+    // -------------------------------------------------------------
 
     KHBox *hbox    = new KHBox(d->settings);
     QLabel *space1 = new QLabel(hbox);
@@ -247,13 +248,17 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     d->progressBar->setWhatsThis(i18n("<p>This is the current percentage of the task completed."));
     d->progressBar->setValue(0);
     setProgressVisible(false);
+
     QLabel *space2 = new QLabel(hbox);
     space2->setFixedWidth(spacingHint());
 
+    // -------------------------------------------------------------
+
+    vLayout->addWidget(gboxGuideSettings);
     vLayout->addWidget(hbox);
     vLayout->addStretch(10);
 
-    d->settingsLayout->addLayout(vLayout, 1, 1, 0, 0);
+    d->settingsLayout->addMultiCellLayout(vLayout, 1, 1, 0, 0);
 
     d->settingsSideBar->appendTab(d->settings, SmallIcon("configure"), i18n("Settings"));
     d->settingsSideBar->loadViewState();
@@ -294,7 +299,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    QTimer::singleShot(0, this, SLOT(slotInit()));
+    //QTimer::singleShot(0, this, SLOT(slotInit()));
     kapp->restoreOverrideCursor();
 }
 
@@ -354,7 +359,7 @@ void ImageGuideDlg::setUserAreaWidget(QWidget *w)
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setSpacing(spacingHint());
     vLayout->addWidget(w);
-    d->settingsLayout->addLayout(vLayout, 0, 0, 0, 0);
+    d->settingsLayout->addMultiCellLayout(vLayout, 0, 0, 0, 0);
 }
 
 void ImageGuideDlg::setAboutData(KAboutData *about)

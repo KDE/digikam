@@ -22,8 +22,7 @@
  * 
  * ============================================================ */
 
-// Qt includes.
- 
+// Qt includes. 
 
 #include <QLayout>
 #include <QFrame>
@@ -231,17 +230,17 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SIGNAL(signalResized()));
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
-            this, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )));
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
+            this, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor &, const QPoint &)));
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotUpdateSpotInfo( const Digikam::DColor &, const QPoint & )));
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotUpdateSpotInfo(const Digikam::DColor&, const QPoint&)));
     
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )));
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+            this, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)));
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotUpdateSpotInfo( const Digikam::DColor &, const QPoint & )));
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotUpdateSpotInfo(const Digikam::DColor&, const QPoint&)));
 
     connect(d->previewButtons, SIGNAL(buttonReleased(int)),
             d->previewWidget, SLOT(slotChangeRenderingPreviewMode(int)));
@@ -318,7 +317,9 @@ int ImageWidget::getRenderingPreviewMode()
     
 void ImageWidget::setRenderingPreviewMode(int mode)
 {
-    d->previewButtons->button(mode)->setChecked(true);
+    if (d->previewButtons->button(mode))
+        d->previewButtons->button(mode)->setChecked(true);
+    
     d->previewWidget->slotChangeRenderingPreviewMode(mode);
 }
 
