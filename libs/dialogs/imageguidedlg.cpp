@@ -161,10 +161,8 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    KVBox *vbox = new KVBox( this );
-    setMainWidget( vbox );
-
-    d->mainLayout = new QGridLayout( vbox);
+    setMainWidget(new QWidget(this));
+    d->mainLayout = new QGridLayout(mainWidget());
 
     // -------------------------------------------------------------
 
@@ -180,7 +178,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     else
         desc = i18n("<p>This is the image filter effect preview.");
 
-    d->hbox              = new KHBox(vbox);
+    d->hbox              = new KHBox(mainWidget());
     d->splitter          = new QSplitter(d->hbox);
     m_imagePreviewWidget = new ImageWidget(d->name, d->splitter, desc, prevModeOptions, 
                                            guideMode, guideVisible, useImageSelection);
@@ -205,13 +203,10 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    d->settings          = new QWidget(vbox);
+    d->settings          = new QWidget(mainWidget());
     d->settingsLayout    = new QGridLayout( d->settings );
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setSpacing(spacingHint());
-
-    d->settings->setLayout(d->settingsLayout);
-    vbox->setLayout(d->mainLayout);
 
     // -------------------------------------------------------------
 
