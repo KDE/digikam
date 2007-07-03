@@ -91,8 +91,10 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     setAboutData(about);
     
     // -------------------------------------------------------------
-    
-    QFrame *frame = new Q3Frame(plainPage());
+   
+    QWidget * plain = new QWidget(this);
+   setMainWidget(plain); 
+    QFrame *frame = new Q3Frame(plain);
     frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
     Q3VBoxLayout* l  = new Q3VBoxLayout(frame, 5, 0);
     m_previewWidget = new PerspectiveWidget(525, 350, frame);
@@ -107,7 +109,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     QString temp;
     Digikam::ImageIface iface(0, 0);
 
-    QWidget *gbox2          = new QWidget(plainPage());
+    QWidget *gbox2          = new QWidget(plain);
     Q3GridLayout *gridLayout = new Q3GridLayout( gbox2, 13, 2, spacingHint());
 
     QLabel *label1  = new QLabel(i18n("New width:"), gbox2);
@@ -125,7 +127,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    KSeparator *line = new KSeparator (Horizontal, gbox2);
+    KSeparator *line = new KSeparator (Qt::Horizontal, gbox2);
     
     QLabel *angleLabel = new QLabel(i18n("Angles (in degrees):"), gbox2);
     QLabel *label3 = new QLabel(i18n("  Top left:"), gbox2);
@@ -150,7 +152,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    KSeparator *line2 = new KSeparator (Horizontal, gbox2);
+    KSeparator *line2 = new KSeparator (Qt::Horizontal, gbox2);
 
     m_drawWhileMovingCheckBox = new QCheckBox(i18n("Draw preview while moving"), gbox2);
     gridLayout->addMultiCellWidget(line2, 8, 8, 0, 2);
@@ -207,7 +209,7 @@ void ImageEffect_Perspective::readUserSettings(void)
     KConfigGroup group = config->group("perspective Tool Dialog");
     m_drawWhileMovingCheckBox->setChecked(group.readEntry("Draw While Moving", true));
     m_drawGridCheckBox->setChecked(group.readEntry("Draw Grid", false));
-    m_guideColorBt->setColor(group.readColorEntry("Guide Color", &defaultGuideColor));
+    m_guideColorBt->setColor(group.readEntry("Guide Color", defaultGuideColor));
     m_guideSize->setValue(group.readEntry("Guide Width", 1));
     m_previewWidget->slotToggleDrawWhileMoving(m_drawWhileMovingCheckBox->isChecked());
     m_previewWidget->slotToggleDrawGrid(m_drawGridCheckBox->isChecked());

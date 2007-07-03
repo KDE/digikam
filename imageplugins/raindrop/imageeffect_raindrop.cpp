@@ -90,8 +90,10 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
                                            "disable the Raindrops effect on a human face, for example.") );
     
     // -------------------------------------------------------------
-    
-    QWidget *gboxSettings = new QWidget(plainPage());
+   
+    QWidget *widget = new QWidget(this);
+    setMainWidget(widget); 
+    QWidget *gboxSettings = new QWidget(widget);
     Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 5, 2, spacingHint());
                                                   
     QLabel *label1 = new QLabel(i18n("Drop size:"), gboxSettings);
