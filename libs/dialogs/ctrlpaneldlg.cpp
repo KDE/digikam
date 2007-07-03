@@ -135,18 +135,15 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    KVBox *vbox = new KVBox( this );
-    setMainWidget( vbox );
-
-    QVBoxLayout *topLayout = new QVBoxLayout( vbox );
+    setMainWidget(new QWidget(this));
+    QVBoxLayout *topLayout = new QVBoxLayout(mainWidget());
     topLayout->setSpacing(spacingHint());
 
     // -------------------------------------------------------------
 
     m_imagePreviewWidget = new ImagePannelWidget(470, 350, name + QString(" Tool Dialog"),
-                               vbox, separateViewMode);
+                               mainWidget(), separateViewMode);
     topLayout->addWidget(m_imagePreviewWidget);
-    vbox->setLayout(topLayout);
 
     // -------------------------------------------------------------
 
@@ -484,4 +481,3 @@ void CtrlPanelDlg::keyPressEvent(QKeyEvent *e)
 }
 
 }  // NameSpace Digikam
-
