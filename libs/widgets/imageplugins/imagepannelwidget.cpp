@@ -23,7 +23,6 @@
 
 // Qt includes.
 
-#include <Q3PointArray>
 #include <QFrame>
 #include <QGroupBox>
 #include <QLabel>
@@ -120,7 +119,6 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     d->mainLayout      = new QGridLayout(d->previewWidget);
     d->mainLayout->setMargin(0);
     d->mainLayout->setSpacing(KDialog::spacingHint());
-    d->previewWidget->setLayout(d->mainLayout);
 
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
@@ -133,7 +131,6 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     QVBoxLayout* l1 = new QVBoxLayout(preview);
     l1->setSpacing(5);
     l1->setMargin(0);
-    preview->setLayout(l1);
     d->imageRegionWidget = new ImageRegionWidget(w, h, preview, false);
     d->imageRegionWidget->setFrameStyle(QFrame::NoFrame);
     preview->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -151,19 +148,23 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     // -------------------------------------------------------------
     
     d->zoomBar = new StatusZoomBar(d->previewWidget);
-    d->zoomBar->setWhatsThis( i18n("<p>Set here the zoom factor used to render picture in the preview area.") );
+    d->zoomBar->setWhatsThis(i18n("<p>Set here the zoom factor used to render picture in the preview area."));
 
     // -------------------------------------------------------------
     
-    d->sepaBBox     = new QWidget(d->previewWidget);
-    d->separateView = new QButtonGroup(d->sepaBBox);
+    d->sepaBBox       = new QWidget(d->previewWidget);
+    QHBoxLayout *hlay = new QHBoxLayout(d->sepaBBox);
+    d->separateView   = new QButtonGroup(d->sepaBBox);
     d->separateView->setExclusive(true);
+    hlay->setSpacing(0);
+    hlay->setMargin(0);
     
     if (separateViewMode == SeparateViewDuplicate ||
         separateViewMode == SeparateViewAll)
     {
        QPushButton *duplicateHorButton = new QPushButton( d->sepaBBox );
        d->separateView->addButton(duplicateHorButton, ImageRegionWidget::SeparateViewDuplicateHorz);
+       hlay->addWidget(duplicateHorButton);
        duplicateHorButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothhorz.png")));
        duplicateHorButton->setCheckable(true);
        duplicateHorButton->setWhatsThis( i18n("<p>If you enable this option, you will separate the preview area "
@@ -173,6 +174,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
         
        QPushButton *duplicateVerButton = new QPushButton( d->sepaBBox );
        d->separateView->addButton(duplicateVerButton, ImageRegionWidget::SeparateViewDuplicateVert);
+       hlay->addWidget(duplicateVerButton);
        duplicateVerButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothvert.png")));
        duplicateVerButton->setCheckable(true);
        duplicateVerButton->setWhatsThis( i18n("<p>If you enable this option, you will separate the preview area "
@@ -186,6 +188,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     {
        QPushButton *separateHorButton = new QPushButton( d->sepaBBox );
        d->separateView->addButton(separateHorButton, ImageRegionWidget::SeparateViewHorizontal);
+       hlay->addWidget(separateHorButton);
        separateHorButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothhorz.png")));
        separateHorButton->setCheckable(true);
        separateHorButton->setWhatsThis( i18n( "<p>If you enable this option, you will separate the preview area "
@@ -195,6 +198,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
         
        QPushButton *separateVerButton = new QPushButton( d->sepaBBox );
        d->separateView->addButton(separateVerButton, ImageRegionWidget::SeparateViewVertical);
+       hlay->addWidget(separateVerButton);
        separateVerButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothvert.png")));
        separateVerButton->setCheckable(true);
        separateVerButton->setWhatsThis( i18n( "<p>If you enable this option, you will separate the preview area "
@@ -205,6 +209,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
        
     QPushButton *noSeparateButton = new QPushButton( d->sepaBBox );
     d->separateView->addButton(noSeparateButton, ImageRegionWidget::SeparateViewNone);
+    hlay->addWidget(noSeparateButton);
     noSeparateButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/target.png")));
     noSeparateButton->setCheckable(true);
     noSeparateButton->setWhatsThis( i18n( "<p>If you enable this option, the preview area will not "
@@ -220,13 +225,14 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
 
     // -------------------------------------------------------------
         
-    d->mainLayout->addWidget(preview, 0, 1, 0, 3);
-    d->mainLayout->addWidget(d->zoomBar, 2, 2, 0, 0);
-    d->mainLayout->addWidget(d->progressBar, 2, 2, 2, 2);
-    d->mainLayout->addWidget(d->sepaBBox, 2, 2, 3, 3);
-    
+    d->mainLayout->addMultiCellWidget(preview, 0, 1, 0, 3);
+    d->mainLayout->addMultiCellWidget(d->zoomBar, 2, 2, 0, 0);
+    d->mainLayout->addMultiCellWidget(d->progressBar, 2, 2, 2, 2);
+    d->mainLayout->addMultiCellWidget(d->sepaBBox, 2, 2, 3, 3);
     d->mainLayout->setRowStretch(1, 10);
     d->mainLayout->setColumnStretch(1, 10);
+    d->mainLayout->setSpacing(0);
+    d->mainLayout->setMargin(0);
         
     // -------------------------------------------------------------
 
@@ -236,14 +242,12 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     
     d->settings       = new QWidget(d->settingsSideBar);
     d->settingsLayout = new QVBoxLayout(d->settings);    
-    d->settings->setLayout(d->settingsLayout);
 
     QFrame *frame3 = new QFrame(d->settings);
     frame3->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
     QVBoxLayout* l3 = new QVBoxLayout(frame3);
     l3->setSpacing(5);
     l3->setMargin(0);
-    frame3->setLayout(l3);
     d->imagePanIconWidget = new ImagePanIconWidget(360, 240, frame3);
     d->imagePanIconWidget->setWhatsThis( i18n("<p>Here you can see the original image panel "
                                               "which can help you to select the clip preview."
@@ -253,6 +257,8 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
 
     d->settingsLayout->addWidget(frame3, 0, Qt::AlignHCenter);
     d->settingsLayout->addSpacing(KDialog::spacingHint());
+    d->settingsLayout->setSpacing(0);
+    d->settingsLayout->setMargin(0);
 
     d->settingsSideBar->appendTab(d->settings, SmallIcon("configure"), i18n("Settings"));    
     d->settingsSideBar->loadViewState();
@@ -482,4 +488,3 @@ void ImagePannelWidget::updateSelectionInfo(QRect rect)
 }
 
 }  // NameSpace Digikam
-
