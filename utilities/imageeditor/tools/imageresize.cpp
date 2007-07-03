@@ -447,7 +447,7 @@ void ImageResize::slotCancel()
 {
     if (d->currentRenderingMode != ImageResizePriv::NoneRendering)
     {
-        d->greycstorationIface->stopComputation();
+        d->greycstorationIface->cancelFilter();
         d->parent->unsetCursor();
     }
 
@@ -463,7 +463,7 @@ void ImageResize::closeEvent(QCloseEvent *e)
 {
     if (d->currentRenderingMode != ImageResizePriv::NoneRendering)
     {
-        d->greycstorationIface->stopComputation();
+        d->greycstorationIface->cancelFilter();
         d->parent->unsetCursor();
     }
 
@@ -529,6 +529,7 @@ void ImageResize::slotOk()
     connect(d->greycstorationIface, SIGNAL(progress(int)),
             this, SLOT(slotFilterProgress(int)));
 
+    d->greycstorationIface->startFilter();
 }
 
 void ImageResize::slotFilterStarted()

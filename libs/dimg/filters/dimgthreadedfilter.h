@@ -50,37 +50,51 @@ class DIGIKAM_EXPORT DImgThreadedFilter : public QThread
 
 public:
 
-    DImgThreadedFilter(DImg *orgImage, QObject *parent=0, 
-                       const QString& name=QString());
+    /** Constructs a filter.
+        You need to call startFilter() to start the threaded computation.
+    */
+    DImgThreadedFilter(DImg *orgImage, QObject *parent,
+                       const QString& name = QString());
 
     ~DImgThreadedFilter();
 
     DImg getTargetImage(void) { return m_destImage; };
-
-    virtual void startComputation(void);
-    virtual void stopComputation(void);
-
     const QString &filterName() { return m_name; };
+
+    /** Start the threaded computation */
+    virtual void startFilter();
+    /** Cancel the threaded computation. */
+    virtual void cancelFilter();
+    /** Start computation of this filter, directly in this thread. */
+    virtual void startFilterDirectly();
 
 signals:
 
+    /** This signal is emitted when image data is available and the computation has started. */
     void started();
+    /** Emitted when progress info from the calculation is available */
     void progress(int progress);
+    /** Emitted when the computation has completed.
+        @param success True if computation finished without interruption on valid data
+                       False if the thread was cancelled, or no data is available.
+    */
     void finished(bool success);
 
 protected:
 
-    /** Start filter operation before threaded method. Must be calls by your constructor. */
+    /** Start filter operation before threaded method. Must be called by your constructor. */
     virtual void initFilter(void);
 
     /** List of threaded operations by filter. */
-    virtual void run(){ startComputation(); };
+    virtual void run();
 
-    /** Main image filter method. */
-    virtual void filterImage(void){};
+    /** Main image filter method. Override in subclass. */
+    virtual void filterImage(void) = 0;
 
-    /** Clean up filter data if necessary. Call by stopComputation() method. */
-    virtual void cleanupFilter(void){};
+    /** Clean up filter data if necessary, called by stopComputation() method.
+        Override in subclass.
+     */
+    virtual void cleanupFilter(void) {};
 
     /** Emit progress info */
     void postProgress(int progress);
@@ -89,6 +103,10 @@ protected:
 
     /**
       Support for chaining two filters as master and thread.
+
+      Do not call startFilter() or startFilterDirectly() on this.
+      The computation will be started from initFilter() which you must
+      call from the derived class constructor.
 
       Constructor for slave mode:
       Constructs a new slave filter with the specified master.

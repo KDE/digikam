@@ -72,35 +72,57 @@ DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter *master, const DImg &o
 
 DImgThreadedFilter::~DImgThreadedFilter()
 {
-    stopComputation();
+    cancelFilter();
     if (m_master)
         m_master->setSlave(0);
 }
 
-void DImgThreadedFilter::initFilter(void)
+void DImgThreadedFilter::initFilter()
 {
     m_destImage.reset();
     m_destImage = DImg(m_orgImage.width(), m_orgImage.height(),
                        m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
 
+    if (m_master)
+        startFilterDirectly();
+}
+
+void DImgThreadedFilter::startFilter(void)
+{
     if (m_orgImage.width() && m_orgImage.height())
     {
-       if (m_parent)
-          start();             // m_parent is valide, start thread ==> run()
-       else
-          startComputation();  // no parent : no using thread.
+        start();
     }
-    else  // No image data 
+    else  // No image data
     {
-       if (m_parent)           // If parent then send event about a problem.
-       {
-           emit finished(false);
-           DDebug() << m_name << "::No valid image data !!! ..." << endl;
-       }
+        emit finished(false);
+        DDebug() << m_name << "::No valid image data !!! ..." << endl;
     }
 }
 
-void DImgThreadedFilter::stopComputation(void)
+void DImgThreadedFilter::startFilterDirectly()
+{
+    if (m_orgImage.width() && m_orgImage.height())
+    {
+        emit started();
+
+        filterImage();
+
+        emit finished(!m_cancel);
+    }
+    else  // No image data
+    {
+        emit finished(false);
+        DDebug() << m_name << "::No valid image data !!! ..." << endl;
+    }
+}
+
+void DImgThreadedFilter::run()
+{
+    startFilterDirectly();
+}
+
+void DImgThreadedFilter::cancelFilter(void)
 {
     m_cancel = true;
     if (m_slave)
@@ -124,15 +146,6 @@ void DImgThreadedFilter::postProgress(int progr)
     {
         emit progress(progr);
     }
-}
-
-void DImgThreadedFilter::startComputation()
-{
-    emit started();
-
-    filterImage();
-
-    emit finished(!m_cancel);
 }
 
 void DImgThreadedFilter::setSlave(DImgThreadedFilter *slave)

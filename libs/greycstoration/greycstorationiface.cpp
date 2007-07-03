@@ -123,24 +123,13 @@ GreycstorationIface::~GreycstorationIface()
 
 void GreycstorationIface::initFilter()
 {
-    if (m_orgImage.width() && m_orgImage.height())
-    {
-        if (m_parent)
-            start();             // m_parent is valide, start thread ==> run()
-        else
-            startComputation();  // no parent : no using thread.
-    }
-    else  // No image data
-    {
-        if (m_parent)           // If parent then send event about a problem.
-        {
-            emit finished(false);
-            DDebug() << m_name << "::No valid image data !!! ..." << endl;
-        }
-    }
+    // (left out here: creation of m_destImage)
+
+    if (m_master)
+        startFilterDirectly();
 }
 
-void GreycstorationIface::stopComputation()
+void GreycstorationIface::cancelFilter()
 {
     // Because Greycstoration algorithm run in a child thread, we need
     // to stop it before to stop this thread.
@@ -152,7 +141,7 @@ void GreycstorationIface::stopComputation()
     }
 
     // And now when stop main loop and clean up all
-    Digikam::DImgThreadedFilter::stopComputation();
+    Digikam::DImgThreadedFilter::cancelFilter();
 }
 
 void GreycstorationIface::filterImage()

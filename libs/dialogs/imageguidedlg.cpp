@@ -415,7 +415,7 @@ void ImageGuideDlg::slotResized(void)
     else if (d->currentRenderingMode == ImageGuideDlgPriv::PreviewRendering)
     {
        if (m_threadedFilter)
-          m_threadedFilter->stopComputation();
+          m_threadedFilter->cancelFilter();
     }
 
     QTimer::singleShot(0, this, SLOT(slotEffect()));
@@ -425,7 +425,7 @@ void ImageGuideDlg::slotUser1()
 {
     if (d->currentRenderingMode != ImageGuideDlgPriv::NoneRendering)
         if (m_threadedFilter)
-            m_threadedFilter->stopComputation();
+            m_threadedFilter->cancelFilter();
 }
 
 void ImageGuideDlg::slotDefault()
@@ -439,7 +439,7 @@ void ImageGuideDlg::slotCancel()
     if (d->currentRenderingMode != ImageGuideDlgPriv::NoneRendering)
     {
        if (m_threadedFilter)
-          m_threadedFilter->stopComputation();
+          m_threadedFilter->cancelFilter();
 
        kapp->restoreOverrideCursor();
     }
@@ -453,7 +453,7 @@ void ImageGuideDlg::closeEvent(QCloseEvent *e)
     if (d->currentRenderingMode != ImageGuideDlgPriv::NoneRendering)
     {
        if (m_threadedFilter)
-          m_threadedFilter->stopComputation();
+          m_threadedFilter->cancelFilter();
 
        kapp->restoreOverrideCursor();
     }
@@ -518,6 +518,8 @@ void ImageGuideDlg::slotEffect()
             this, SLOT(slotFilterFinished(bool)));
     connect(m_threadedFilter, SIGNAL(progress(int)),
             this, SLOT(slotFilterProgress(int)));
+
+    m_threadedFilter->startFilter();
 }
 
 void ImageGuideDlg::slotOk()
@@ -550,6 +552,8 @@ void ImageGuideDlg::slotOk()
             this, SLOT(slotFilterFinished(bool)));
     connect(m_threadedFilter, SIGNAL(progress(int)),
             this, SLOT(slotFilterProgress(int)));
+
+    m_threadedFilter->startFilter();
 }
 
 void ImageGuideDlg::slotFilterStarted()

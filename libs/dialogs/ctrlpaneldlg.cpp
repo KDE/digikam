@@ -243,7 +243,7 @@ void CtrlPanelDlg::slotUser1()
 {
     if (d->currentRenderingMode != CtrlPanelDlgPriv::NoneRendering)
         if (m_threadedFilter)
-           m_threadedFilter->stopComputation();
+           m_threadedFilter->cancelFilter();
 }
 
 void CtrlPanelDlg::slotDefault()
@@ -257,7 +257,7 @@ void CtrlPanelDlg::slotCancel()
     if (d->currentRenderingMode != CtrlPanelDlgPriv::NoneRendering)
     {
        if (m_threadedFilter)
-          m_threadedFilter->stopComputation();
+          m_threadedFilter->cancelFilter();
 
        kapp->restoreOverrideCursor();
     }
@@ -273,7 +273,7 @@ void CtrlPanelDlg::closeEvent(QCloseEvent *e)
     if (d->currentRenderingMode != CtrlPanelDlgPriv::NoneRendering)
     {
        if (m_threadedFilter)
-          m_threadedFilter->stopComputation();
+          m_threadedFilter->cancelFilter();
 
        kapp->restoreOverrideCursor();
     }
@@ -294,7 +294,7 @@ void CtrlPanelDlg::slotFocusChanged(void)
     else if (d->currentRenderingMode == CtrlPanelDlgPriv::PreviewRendering)
     {
        if (m_threadedFilter)
-          m_threadedFilter->stopComputation();
+          m_threadedFilter->cancelFilter();
     }
 
     QTimer::singleShot(0, this, SLOT(slotEffect()));
@@ -358,6 +358,8 @@ void CtrlPanelDlg::slotEffect()
             this, SLOT(slotFilterFinished(bool)));
     connect(m_threadedFilter, SIGNAL(progress(int)),
             this, SLOT(slotFilterProgress(int)));
+
+    m_threadedFilter->startFilter();
 }
 
 void CtrlPanelDlg::slotOk()
@@ -395,6 +397,8 @@ void CtrlPanelDlg::slotOk()
             this, SLOT(slotFilterFinished(bool)));
     connect(m_threadedFilter, SIGNAL(progress(int)),
             this, SLOT(slotFilterProgress(int)));
+
+    m_threadedFilter->startFilter();
 }
 
 void CtrlPanelDlg::slotFilterStarted()

@@ -63,26 +63,26 @@ public:
                         int newWidth=0, int newHeight=0,
                         const QImage& inPaintingMask=QImage(), 
                         QObject *parent=0);
-    
+
     ~GreycstorationIface();
 
-    void stopComputation();
+    virtual void cancelFilter();
 
-private:  
+private:
 
-    void initFilter();
-    void filterImage();
+    virtual void initFilter();
+    virtual void filterImage();
 
     void restoration();
     void inpainting();
     void resize();
     void simpleResize();
     void iterationLoop(uint iter);
-    
+
 private:
 
     GreycstorationIfacePriv *d;
-};    
+};
 
 }  // NameSpace Digikam
 
