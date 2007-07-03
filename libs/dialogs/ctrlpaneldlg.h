@@ -75,6 +75,12 @@ public slots:
     void slotOk();
     void slotTry();
 
+protected slots:
+
+    void slotFilterStarted();
+    void slotFilterFinished(bool success);
+    void slotFilterProgress(int progress);
+
 private slots:
 
     virtual void slotDefault();
@@ -91,7 +97,6 @@ private slots:
 protected:
 
     void closeEvent(QCloseEvent *e);
-    void customEvent(QEvent *event);
     void abortPreview(void);
     void keyPressEvent(QKeyEvent *e);
 

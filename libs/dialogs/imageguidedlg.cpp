@@ -511,6 +511,13 @@ void ImageGuideDlg::slotEffect()
     }
 
     prepareEffect();
+
+    connect(m_threadedFilter, SIGNAL(started()),
+            this, SLOT(slotFilterStarted()));
+    connect(m_threadedFilter, SIGNAL(finished(bool)),
+            this, SLOT(slotFilterFinished(bool)));
+    connect(m_threadedFilter, SIGNAL(progress(int)),
+            this, SLOT(slotFilterProgress(int)));
 }
 
 void ImageGuideDlg::slotOk()
@@ -536,66 +543,68 @@ void ImageGuideDlg::slotOk()
     }
 
     prepareFinal();
+
+    connect(m_threadedFilter, SIGNAL(started()),
+            this, SLOT(slotFilterStarted()));
+    connect(m_threadedFilter, SIGNAL(finished(bool)),
+            this, SLOT(slotFilterFinished(bool)));
+    connect(m_threadedFilter, SIGNAL(progress(int)),
+            this, SLOT(slotFilterProgress(int)));
 }
 
-void ImageGuideDlg::customEvent(QEvent *event)
+void ImageGuideDlg::slotFilterStarted()
 {
-    if (!event) return;
-
-    DImgThreadedFilter::EventData *ed = (DImgThreadedFilter::EventData*) event;
-
-    if (!ed) return;
-
-    if (ed->starting)           // Computation in progress !
-    {
-        d->progressBar->setValue(ed->progress);
-    }
-    else
-    {
-        if (ed->success)        // Computation Completed !
-        {
-            switch (d->currentRenderingMode)
-            {
-                case ImageGuideDlgPriv::PreviewRendering:
-                {
-                    DDebug() << "Preview " << d->name << " completed..." << endl;
-                    putPreviewData();
-                    abortPreview();
-                    break;
-                }
-
-                case ImageGuideDlgPriv::FinalRendering:
-                {
-                    DDebug() << "Final" << d->name << " completed..." << endl;
-                    putFinalData();
-                    kapp->restoreOverrideCursor();
-                    accept();
-                    break;
-                }
-            }
-        }
-        else                   // Computation Failed !
-        {
-            switch (d->currentRenderingMode)
-            {
-                case ImageGuideDlgPriv::PreviewRendering:
-                {
-                    DDebug() << "Preview " << d->name << " failed..." << endl;
-                    // abortPreview() must be call here for set progress bar to 0 properly.
-                    abortPreview();
-                    break;
-                }
-
-                case ImageGuideDlgPriv::FinalRendering:
-                    break;
-            }
-        }
-    }
-
-    delete ed;
+    d->progressBar->setValue(0);
 }
 
-// Backport KDialog::keyPressEvent() implementation from KDELibs to ignore Enter/Return Key events 
+void ImageGuideDlg::slotFilterFinished(bool success)
+{
+    if (success)        // Computation Completed !
+    {
+        switch (d->currentRenderingMode)
+        {
+            case ImageGuideDlgPriv::PreviewRendering:
+            {
+                DDebug() << "Preview " << d->name << " completed..." << endl;
+                putPreviewData();
+                abortPreview();
+                break;
+            }
+
+            case ImageGuideDlgPriv::FinalRendering:
+            {
+                DDebug() << "Final" << d->name << " completed..." << endl;
+                putFinalData();
+                kapp->restoreOverrideCursor();
+                accept();
+                break;
+            }
+        }
+    }
+    else                   // Computation Failed !
+    {
+        switch (d->currentRenderingMode)
+        {
+            case ImageGuideDlgPriv::PreviewRendering:
+            {
+                DDebug() << "Preview " << d->name << " failed..." << endl;
+                    // abortPreview() must be call here for set progress bar to 0 properly.
+                abortPreview();
+                break;
+            }
+
+            case ImageGuideDlgPriv::FinalRendering:
+                break;
+        }
+    }
+}
+
+void ImageGuideDlg::slotFilterProgress(int progress)
+{
+    d->progressBar->setValue(progress);
+}
+
+// Backport KDialog::keyPressEvent() implementation from KDELibs to ignore Enter/Return Key events
 // to prevent any conflicts between dialog keys events and SpinBox keys events.
 
 // TODO: KDE4PORT: Check if this code work fine with KDE4::KDialog()

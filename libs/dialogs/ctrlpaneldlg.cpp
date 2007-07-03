@@ -351,6 +351,13 @@ void CtrlPanelDlg::slotEffect()
     }
 
     prepareEffect();
+
+    connect(m_threadedFilter, SIGNAL(started()),
+            this, SLOT(slotFilterStarted()));
+    connect(m_threadedFilter, SIGNAL(finished(bool)),
+            this, SLOT(slotFilterFinished(bool)));
+    connect(m_threadedFilter, SIGNAL(progress(int)),
+            this, SLOT(slotFilterProgress(int)));
 }
 
 void CtrlPanelDlg::slotOk()
@@ -381,66 +388,68 @@ void CtrlPanelDlg::slotOk()
     }
 
     prepareFinal();
+
+    connect(m_threadedFilter, SIGNAL(started()),
+            this, SLOT(slotFilterStarted()));
+    connect(m_threadedFilter, SIGNAL(finished(bool)),
+            this, SLOT(slotFilterFinished(bool)));
+    connect(m_threadedFilter, SIGNAL(progress(int)),
+            this, SLOT(slotFilterProgress(int)));
 }
 
-void CtrlPanelDlg::customEvent(QEvent *event)
+void CtrlPanelDlg::slotFilterStarted()
 {
-    if (!event) return;
-
-    DImgThreadedFilter::EventData *ed = (DImgThreadedFilter::EventData*) event;
-
-    if (!ed) return;
-
-    if (ed->starting)           // Computation in progress !
-    {
-        m_imagePreviewWidget->setProgress(ed->progress);
-    }
-    else
-    {
-        if (ed->success)        // Computation Completed !
-        {
-            switch (d->currentRenderingMode)
-            {
-              case CtrlPanelDlgPriv::PreviewRendering:
-              {
-                 DDebug() << "Preview " << d->name << " completed..." << endl;
-                 putPreviewData();
-                 abortPreview();
-                 break;
-              }
-
-              case CtrlPanelDlgPriv::FinalRendering:
-              {
-                 DDebug() << "Final" << d->name << " completed..." << endl;
-                 putFinalData();
-                 kapp->restoreOverrideCursor();
-                 accept();
-                 break;
-              }
-            }
-        }
-        else                   // Computation Failed !
-        {
-            switch (d->currentRenderingMode)
-            {
-                case CtrlPanelDlgPriv::PreviewRendering:
-                {
-                    DDebug() << "Preview " << d->name << " failed..." << endl;
-                    // abortPreview() must be call here for set progress bar to 0 properly.
-                    abortPreview();
-                    break;
-                }
-
-                case CtrlPanelDlgPriv::FinalRendering:
-                    break;
-            }
-        }
-    }
-
-    delete ed;
+    m_imagePreviewWidget->setProgress(0);
 }
 
-// Backport KDialog::keyPressEvent() implementation from KDELibs to ignore Enter/Return Key events 
+void CtrlPanelDlg::slotFilterFinished(bool success)
+{
+    if (success)        // Computation Completed !
+    {
+        switch (d->currentRenderingMode)
+        {
+            case CtrlPanelDlgPriv::PreviewRendering:
+            {
+                DDebug() << "Preview " << d->name << " completed..." << endl;
+                putPreviewData();
+                abortPreview();
+                break;
+            }
+
+            case CtrlPanelDlgPriv::FinalRendering:
+            {
+                DDebug() << "Final" << d->name << " completed..." << endl;
+                putFinalData();
+                kapp->restoreOverrideCursor();
+                accept();
+                break;
+            }
+        }
+    }
+    else                   // Computation Failed !
+    {
+        switch (d->currentRenderingMode)
+        {
+            case CtrlPanelDlgPriv::PreviewRendering:
+            {
+                DDebug() << "Preview " << d->name << " failed..." << endl;
+                    // abortPreview() must be call here for set progress bar to 0 properly.
+                abortPreview();
+                break;
+            }
+
+            case CtrlPanelDlgPriv::FinalRendering:
+                break;
+        }
+    }
+}
+
+void CtrlPanelDlg::slotFilterProgress(int progress)
+{
+    m_imagePreviewWidget->setProgress(progress);
+}
+
+// Backport KDialog::keyPressEvent() implementation from KDELibs to ignore Enter/Return Key events
 // to prevent any conflicts between dialog keys events and SpinBox keys events.
 
 // TODO: KDE4PORT: Check if this code work fine with KDE4::KDialog()

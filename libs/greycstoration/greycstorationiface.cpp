@@ -134,7 +134,7 @@ void GreycstorationIface::initFilter()
     {
         if (m_parent)           // If parent then send event about a problem.
         {
-            postProgress(0, false, false);
+            emit finished(false);
             DDebug() << m_name << "::No valid image data !!! ..." << endl;
         }
     }
@@ -229,7 +229,7 @@ void GreycstorationIface::filterImage()
        DDebug() << "GreycstorationIface::Error during Greycstoration filter computation!" << endl;
 
        if (m_parent)
-          postProgress( 0, false, false );
+           emit finished(false);
 
        return;
     }

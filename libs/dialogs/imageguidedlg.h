@@ -93,6 +93,10 @@ protected slots:
     virtual void slotInit();
     virtual void readUserSettings(void){ slotDefault(); };
 
+    void slotFilterStarted();
+    void slotFilterFinished(bool success);
+    void slotFilterProgress(int progress);
+
 private slots:
 
     void slotResized();
@@ -101,7 +105,6 @@ private slots:
 protected:
 
     void closeEvent(QCloseEvent *e);
-    void customEvent(QEvent *event);
     void abortPreview(void);
     void readSettings(void);
     void writeSettings(void);

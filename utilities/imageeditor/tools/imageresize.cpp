@@ -521,52 +521,55 @@ void ImageResize::slotOk()
                                     d->hInput->value(),
                                     QImage(),
                                     this);
+
+    connect(d->greycstorationIface, SIGNAL(started()),
+            this, SLOT(slotFilterStarted()));
+    connect(d->greycstorationIface, SIGNAL(finished(bool)),
+            this, SLOT(slotFilterFinished(bool)));
+    connect(d->greycstorationIface, SIGNAL(progress(int)),
+            this, SLOT(slotFilterProgress(int)));
+
 }
 
-void ImageResize::customEvent(QCustomEvent *event)
+void ImageResize::slotFilterStarted()
 {
-    if (!event) return;
+    d->progressBar->setValue(0);
+}
 
-    GreycstorationIface::EventData *data = (GreycstorationIface::EventData*) event;
-
-    if (!data) return;
-
-    if (data->starting)           // Computation in progress !
+void ImageResize::slotFilterFinished(bool success)
+{
+    if (success)        // Computation Completed !
     {
-        d->progressBar->setValue(data->progress);
-    }
-    else
-    {
-        if (data->success)        // Computation Completed !
+        switch (d->currentRenderingMode)
         {
-            switch (d->currentRenderingMode)
+            case ImageResizePriv::FinalRendering:
             {
-                case ImageResizePriv::FinalRendering:
-                {
-                    DDebug() << "Final resizing completed..." << endl;
+                DDebug() << "Final resizing completed..." << endl;
 
-                    ImageIface iface(0, 0);
-                    DImg resizedImage = d->greycstorationIface->getTargetImage();
+                ImageIface iface(0, 0);
+                DImg resizedImage = d->greycstorationIface->getTargetImage();
 
-                    iface.putOriginalImage(i18n("Resize"), resizedImage.bits(),
-                                           resizedImage.width(), resizedImage.height());
-                    d->parent->unsetCursor();
-                    accept();
-                    break;
-                }
-            }
-        }
-        else                   // Computation Failed !
-        {
-            switch (d->currentRenderingMode)
-            {
-                case ImageResizePriv::FinalRendering:
-                    break;
+                iface.putOriginalImage(i18n("Resize"), resizedImage.bits(),
+                                       resizedImage.width(), resizedImage.height());
+                d->parent->unsetCursor();
+                accept();
+                break;
             }
         }
     }
+    else                   // Computation Failed !
+    {
+        switch (d->currentRenderingMode)
+        {
+            case ImageResizePriv::FinalRendering:
+                break;
+        }
+    }
+}
 
-    delete data;
+void ImageResize::slotFilterProgress(int progress)
+{
+    d->progressBar->setValue(progress);
 }
 
 void ImageResize::slotUser3()

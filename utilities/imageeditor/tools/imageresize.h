@@ -73,6 +73,10 @@ private slots:
     void readUserSettings();
     void slotRestorationToggled(bool);
 
+    void slotFilterStarted();
+    void slotFilterFinished(bool);
+    void slotFilterProgress(int);
+
 private:
 
     ImageResizePriv *d;

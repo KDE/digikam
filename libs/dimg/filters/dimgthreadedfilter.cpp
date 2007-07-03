@@ -29,6 +29,7 @@
 
 #include "ddebug.h"
 #include "dimgthreadedfilter.h"
+#include "dimgthreadedfilter.moc"
 
 namespace Digikam
 {
@@ -42,9 +43,7 @@ DImgThreadedFilter::DImgThreadedFilter(DImg *orgImage, QObject *parent,
     m_parent        = parent;
     m_cancel        = false;
 
-    // See B.K.O #133026: make a deep copy of QString to prevent crash 
-    // on Hyperthreading computer.
-    m_name          = QString(name);
+    m_name          = name;
 
     m_master        = 0;
     m_slave         = 0;
@@ -61,8 +60,6 @@ DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter *master, const DImg &o
     m_parent        = 0;
     m_cancel        = false;
 
-    // See B.K.O #133026: make a deep copy of QString to prevent crash 
-    // on Hyperthreading computer.
     m_name          = QString(name);
 
     m_master        = master;
@@ -85,7 +82,7 @@ void DImgThreadedFilter::initFilter(void)
     m_destImage.reset();
     m_destImage = DImg(m_orgImage.width(), m_orgImage.height(),
                        m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
-    
+
     if (m_orgImage.width() && m_orgImage.height())
     {
        if (m_parent)
@@ -97,8 +94,8 @@ void DImgThreadedFilter::initFilter(void)
     {
        if (m_parent)           // If parent then send event about a problem.
        {
-          postProgress(0, false, false);
-          DDebug() << m_name << "::No valid image data !!! ..." << endl;
+           emit finished(false);
+           DDebug() << m_name << "::No valid image data !!! ..." << endl;
        }
     }
 }
@@ -116,43 +113,26 @@ void DImgThreadedFilter::stopComputation(void)
     cleanupFilter();
 }
 
-void DImgThreadedFilter::postProgress(int progress, bool starting, bool success)
+void DImgThreadedFilter::postProgress(int progr)
 {
     if (m_master)
     {
-        progress = modulateProgress(progress);
-        m_master->postProgress(progress, starting, success);
+        progr = modulateProgress(progr);
+        m_master->postProgress(progr);
     }
-    else if (m_parent)
+    else
     {
-       EventData *eventData = new EventData();
-       eventData->progress  = progress;
-       eventData->starting  = starting;
-       eventData->success   = success;
-       QApplication::postEvent(m_parent, eventData);
+        emit progress(progr);
     }
 }
 
 void DImgThreadedFilter::startComputation()
 {
-    // See B.K.O #133026: do not use kDebug() statements in threaded implementation
-    // to prevent crash under Hyperthreaded CPU.
-
-    if (m_parent)
-       postProgress(0, true, false);
+    emit started();
 
     filterImage();
-    
-    if (!m_cancel)
-    {
-       if (m_parent)
-          postProgress(0, false, true);
-    }
-    else
-    {
-       if (m_parent)
-          postProgress(0, false, false);
-    }
+
+    emit finished(!m_cancel);
 }
 
 void DImgThreadedFilter::setSlave(DImgThreadedFilter *slave)

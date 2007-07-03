@@ -46,56 +46,44 @@ namespace Digikam
 
 class DIGIKAM_EXPORT DImgThreadedFilter : public QThread
 {
+    Q_OBJECT
 
 public:
 
-/** Class used to post status of computation to parent. */
-class EventData : public QEvent
-{
-    public:
-    
-    EventData() : QEvent(QEvent::User)
-    {
-       starting = false;
-       success  = false; 
-    }
-    
-    bool starting;
-    bool success;
-    int  progress;
-};
-
-public:
-    
     DImgThreadedFilter(DImg *orgImage, QObject *parent=0, 
                        const QString& name=QString());
-    
+
     ~DImgThreadedFilter();
-    
+
     DImg getTargetImage(void) { return m_destImage; };
-    
+
     virtual void startComputation(void);
     virtual void stopComputation(void);
-    
+
     const QString &filterName() { return m_name; };
-    
+
+signals:
+
+    void started();
+    void progress(int progress);
+    void finished(bool success);
+
 protected:
 
     /** Start filter operation before threaded method. Must be calls by your constructor. */
     virtual void initFilter(void);
-        
+
     /** List of threaded operations by filter. */
     virtual void run(){ startComputation(); };
-    
+
     /** Main image filter method. */
     virtual void filterImage(void){};
-    
+
     /** Clean up filter data if necessary. Call by stopComputation() method. */
     virtual void cleanupFilter(void){};
-    
-    /** Post Event to parent about progress. Warning: you need to delete 
-        'EventData' instance to 'customEvent' parent implementation. */
-    void postProgress(int progress=0, bool starting=true, bool success=false);
+
+    /** Emit progress info */
+    void postProgress(int progress);
 
 protected:
 
