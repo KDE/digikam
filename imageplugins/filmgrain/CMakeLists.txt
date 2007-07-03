@@ -10,7 +10,7 @@ kde4_automoc(${digikamimageplugin_filmgrain_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_filmgrain ${digikamimageplugin_filmgrain_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_filmgrain  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(digikamimageplugin_filmgrain digikam )
 
 install(TARGETS digikamimageplugin_filmgrain DESTINATION ${PLUGIN_INSTALL_DIR} )
 

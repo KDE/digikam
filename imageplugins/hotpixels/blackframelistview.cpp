@@ -45,7 +45,7 @@ BlackFrameListView::BlackFrameListView(QWidget* parent)
 {
     addColumn(i18n("Preview"));
     addColumn(i18n("Size"));
-    addColumn(i18n("This is a column which will contain the amount of HotPixels "
+    addColumn(i18nc("This is a column which will contain the amount of HotPixels "
                    "found in the black frame file", "HP"));
     setAllColumnsShowFocus(true);
     setResizeMode(Q3ListView::LastColumn);
@@ -128,7 +128,7 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
     QPixmap thumb;
     
     //First scale it down to the size
-    thumb = m_image.smoothScale(size, QImage::ScaleMin);
+    thumb = m_image.smoothScale(size, Qt::ScaleMin);
     
     //And draw the hot pixel positions on the thumb
     QPainter p(&thumb);

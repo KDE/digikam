@@ -10,7 +10,7 @@ kde4_automoc(${digikamimageplugin_hotpixels_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_hotpixels ${digikamimageplugin_hotpixels_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_hotpixels  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(digikamimageplugin_hotpixels  digikam )
 
 install(TARGETS digikamimageplugin_hotpixels DESTINATION ${PLUGIN_INSTALL_DIR} )
 
