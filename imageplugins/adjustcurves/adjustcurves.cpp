@@ -235,7 +235,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     m_curveSmooth->setToolTip( i18n( "Curve smooth mode" ) );
     m_curveSmooth->setWhatsThis( i18n("<p>With this button, you constrains the curve type "
                                       "to a smooth line with tension."));
-    m_curveType->addButton(m_curveFree, SmoothDrawing);
+    m_curveType->addButton(m_curveSmooth, SmoothDrawing);
 
     hlay2->setMargin(0);
     hlay2->setSpacing(0);
