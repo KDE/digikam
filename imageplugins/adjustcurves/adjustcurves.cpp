@@ -334,10 +334,10 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
 
-    connect(m_scaleBG, SIGNAL(released(int)),
+    connect(m_scaleBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotScaleChanged(int)));
             
-    connect(m_curveType, SIGNAL(clicked(int)),
+    connect(m_curveType, SIGNAL(buttonClicked(int)),
             this, SLOT(slotCurveTypeChanged(int)));
     
     // -------------------------------------------------------------
@@ -346,7 +346,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     connect(m_resetButton, SIGNAL(clicked()),
             this, SLOT(slotResetCurrentChannel()));
 
-    connect(m_pickerColorButtonGroup, SIGNAL(released(int)),
+    connect(m_pickerColorButtonGroup, SIGNAL(buttonReleased(int)),
             this, SLOT(slotPickerColorButtonActived()));
 }
 
