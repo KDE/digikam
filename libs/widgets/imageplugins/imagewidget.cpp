@@ -215,8 +215,9 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     
     grid->addMultiCellWidget(d->prevBBox, 1, 1, 0, 0);
     grid->addMultiCellWidget(d->spotInfoLabel, 1, 1, 1, 1);
-    grid->addMultiCellWidget(d->expoBBox, 1, 1, 2, 2);
-    grid->addMultiCellWidget(frame, 3, 3, 0, 2);
+    grid->addMultiCellWidget(d->expoBBox, 1, 1, 3, 3);
+    grid->addMultiCellWidget(frame, 3, 3, 0, 3);
+    grid->setColumnMinimumWidth(2, KDialog::spacingHint());
     grid->setColumnMinimumWidth(1, KDialog::spacingHint());
     grid->setRowMinimumHeight(0, KDialog::spacingHint());
     grid->setRowMinimumHeight(2, KDialog::spacingHint());
