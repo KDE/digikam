@@ -1,24 +1,15 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas ${CMAKE_SOURCE_DIR}/digikam/libs/histogram ${CMAKE_SOURCE_DIR}/digikam/libs/levels ${CMAKE_SOURCE_DIR}/digikam/libs/curves ${CMAKE_SOURCE_DIR}/digikam/libs/whitebalance ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/iccprofiles ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/imageplugins ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters ${CMAKE_SOURCE_DIR}/digikam/digikam   )
+SET(digikamimageplugin_colorfx_PART_SRCS imageplugin_colorfx.cpp 
+                                         imageeffect_colorfx.cpp 
+   )
 
+KDE4_AUTOMOC(${digikamimageplugin_colorfx_PART_SRCS})
 
-########### next target ###############
+KDE4_ADD_PLUGIN(digikamimageplugin_colorfx ${digikamimageplugin_colorfx_PART_SRCS})
 
-set(digikamimageplugin_colorfx_PART_SRCS imageplugin_colorfx.cpp imageeffect_colorfx.cpp )
+TARGET_LINK_LIBRARIES(digikamimageplugin_colorfx digikam)
 
+INSTALL(TARGETS digikamimageplugin_colorfx DESTINATION ${PLUGIN_INSTALL_DIR})
 
-kde4_automoc(${digikamimageplugin_colorfx_PART_SRCS})
-
-kde4_add_plugin(digikamimageplugin_colorfx ${digikamimageplugin_colorfx_PART_SRCS})
-
-target_link_libraries(digikamimageplugin_colorfx  digikam )
-
-install(TARGETS digikamimageplugin_colorfx DESTINATION ${PLUGIN_INSTALL_DIR} )
-
-
-########### install files ###############
-
-install( FILES  digikamimageplugin_colorfx_ui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam )
-install( FILES  digikamimageplugin_colorfx.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-
-
+INSTALL(FILES digikamimageplugin_colorfx_ui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(FILES digikamimageplugin_colorfx.desktop DESTINATION ${SERVICES_INSTALL_DIR})

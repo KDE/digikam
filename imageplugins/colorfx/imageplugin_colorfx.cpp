@@ -47,7 +47,9 @@ ImagePlugin_ColorFX::ImagePlugin_ColorFX(QObject *parent, const QStringList &)
 {
     m_solarizeAction  = new KAction(KIcon("colorfx"), i18n("Color Effects..."), this);
     actionCollection()->addAction("imageplugin_colorfx", m_solarizeAction );
-    connect(m_solarizeAction, SIGNAL(triggered(bool) ), SLOT(slotColorFX()));
+
+    connect(m_solarizeAction, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotColorFX()));
                 
     setXMLFile( "digikamimageplugin_colorfx_ui.rc" );    
         
@@ -68,4 +70,3 @@ void ImagePlugin_ColorFX::slotColorFX()
     DigikamColorFXImagesPlugin::ImageEffect_ColorFX dlg(parentWidget());
     dlg.exec();
 }
-
