@@ -214,7 +214,7 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
     }
 
     QByteArray imgData;
-    QDataStream stream(imgData);
+    QDataStream stream(&imgData, QIODevice::WriteOnly);
 
     QString shmid = metaData("shmid");
 
