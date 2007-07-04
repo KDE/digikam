@@ -24,13 +24,10 @@
 
 // Qt includes. 
  
-#include <qlabel.h>
-
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qimage.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QFrame>
+#include <QImage>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -91,10 +88,8 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     
     // -------------------------------------------------------------
    
-    QWidget *widget = new QWidget(this);
-    setMainWidget(widget); 
-    QWidget *gboxSettings = new QWidget(widget);
-    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 5, 2, spacingHint());
+    QWidget *gboxSettings     = new QWidget(mainWidget());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings);
                                                   
     QLabel *label1 = new QLabel(i18n("Drop size:"), gboxSettings);
     
@@ -102,10 +97,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     m_dropInput->setRange(0, 200, 1, true);
     m_dropInput->setValue(80);
     m_dropInput->setWhatsThis( i18n("<p>Set here the raindrops' size."));
-    
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 2);
-    gridSettings->addMultiCellWidget(m_dropInput, 1, 1, 0, 2);
-    
+   
     // -------------------------------------------------------------
 
     QLabel *label2 = new QLabel(i18n("Number:"), gboxSettings);
@@ -115,9 +107,6 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     m_amountInput->setValue(150);
     m_amountInput->setWhatsThis( i18n("<p>This value controls the maximum number of raindrops.")); 
     
-    gridSettings->addMultiCellWidget(label2, 2, 2, 0, 2);
-    gridSettings->addMultiCellWidget(m_amountInput, 3, 3, 0, 2);
-    
     // -------------------------------------------------------------
 
     QLabel *label3 = new QLabel(i18n("Fish eyes:"), gboxSettings);
@@ -126,10 +115,16 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     m_coeffInput->setRange(1, 100, 1, true);
     m_coeffInput->setValue(30);
     m_coeffInput->setWhatsThis( i18n("<p>This value is the fish-eye-effect optical "
-                                        "distortion coefficient."));     
+                                     "distortion coefficient."));     
     
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 2);
+    gridSettings->addMultiCellWidget(m_dropInput, 1, 1, 0, 2);
+    gridSettings->addMultiCellWidget(label2, 2, 2, 0, 2);
+    gridSettings->addMultiCellWidget(m_amountInput, 3, 3, 0, 2);
     gridSettings->addMultiCellWidget(label3, 4, 4, 0, 2);
     gridSettings->addMultiCellWidget(m_coeffInput, 5, 5, 0, 2);
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(0);
     
     setUserAreaWidget(gboxSettings);
 
@@ -261,4 +256,3 @@ void ImageEffect_RainDrop::putFinalData(void)
 }
 
 }  // NameSpace DigikamRainDropImagesPlugin
-

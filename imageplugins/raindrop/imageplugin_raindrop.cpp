@@ -45,7 +45,9 @@ ImagePlugin_RainDrop::ImagePlugin_RainDrop(QObject *parent, const QStringList &)
 {
     m_raindropAction  = new KAction(KIcon("raindrop"), i18n("Raindrops..."), this);
     actionCollection()->addAction("imageplugin_raindrop", m_raindropAction );
-    connect(m_raindropAction, SIGNAL(triggered(bool) ), SLOT(slotRainDrop()));
+    
+    connect(m_raindropAction, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotRainDrop()));
                 
     setXMLFile( "digikamimageplugin_raindrop_ui.rc" );    
         

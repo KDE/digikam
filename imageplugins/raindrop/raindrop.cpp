@@ -32,9 +32,8 @@
 
 // Qt includes.
 
-#include <q3deepcopy.h>
-#include <qdatetime.h> 
-#include <qrect.h>
+#include <QDateTime> 
+#include <QRect>
 
 // Local includes.
 
@@ -46,7 +45,7 @@ namespace DigikamRainDropImagesPlugin
 {
 
 RainDrop::RainDrop(Digikam::DImg *orgImage, QObject *parent, int drop, 
-          int amount, int coeff, QRect *selection)
+                   int amount, int coeff, QRect *selection)
         : Digikam::DImgThreadedFilter(orgImage, parent, "RainDrop")
 {
     m_drop   = drop;
