@@ -24,12 +24,9 @@
 
 // Qt includes.
 
-#include <qlabel.h>
-
-#include <qimage.h>
-#include <qlayout.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QImage>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -88,16 +85,13 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 3, 1, 0, spacingHint());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings);
 
     QLabel *label1   = new QLabel(i18n("Brush size:"), gboxSettings);
     m_brushSizeInput = new KIntNumInput(gboxSettings);
     m_brushSizeInput->setRange(1, 5, 1, true);
     m_brushSizeInput->setWhatsThis( i18n("<p>Set here the brush size to use for "
-                                            "simulating the oil painting.") );
-
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(m_brushSizeInput, 1, 1, 0, 1);
+                                         "simulating the oil painting.") );
 
     // -------------------------------------------------------------
 
@@ -105,8 +99,12 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
     m_smoothInput  = new KIntNumInput(gboxSettings);
     m_smoothInput->setRange(10, 255, 1, true);
     m_smoothInput->setWhatsThis( i18n("<p>This value controls the smoothing effect "
-                                         "of the brush under the canvas.") );
+                                      "of the brush under the canvas.") );
 
+    gridSettings->setMargin(0);
+    gridSettings->setSpacing(spacingHint());
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
+    gridSettings->addMultiCellWidget(m_brushSizeInput, 1, 1, 0, 1);
     gridSettings->addMultiCellWidget(label2, 2, 2, 0, 1);
     gridSettings->addMultiCellWidget(m_smoothInput, 3, 3, 0, 1);
 
@@ -201,4 +199,3 @@ void ImageEffect_OilPaint::putFinalData(void)
 }
 
 }  // NameSpace DigikamOilPaintImagesPlugin
-
