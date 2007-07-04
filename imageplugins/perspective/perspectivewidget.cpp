@@ -66,7 +66,6 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget *parent)
                  : QWidget(parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
-    setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
     setMouseTracking(true);
 
@@ -273,7 +272,7 @@ void PerspectiveWidget::updatePixmap(void)
 
     // Draw background
 
-    m_pixmap->fill(colorGroup().background());
+    m_pixmap->fill(palette().color(QPalette::Background));
 
     // if we are resizing with the mouse, compute and draw only if drawWhileMoving is set
     if (m_currentResizing == ResizingNone || m_drawWhileMoving)
@@ -283,7 +282,7 @@ void PerspectiveWidget::updatePixmap(void)
         Digikam::DImg destImage(m_previewImage.width(), m_previewImage.height(),
                                 m_previewImage.sixteenBit(), m_previewImage.hasAlpha());
 
-        Digikam::DColor background(colorGroup().background());
+        Digikam::DColor background(palette().color(QPalette::Background));
 
         m_transformedCenter = buildPerspective(QPoint(0, 0), QPoint(m_w, m_h),
                                                m_topLeftPoint, m_topRightPoint,
@@ -325,7 +324,7 @@ void PerspectiveWidget::updatePixmap(void)
 
     if (m_drawGrid)
     {
-        for (uint i = 0 ; i < m_grid.size() ; i += 4)
+        for (int i = 0 ; i < m_grid.size() ; i += 4)
         {
             // Horizontal line.
             p.drawLine(m_grid.point(i)+m_rect.topLeft(), m_grid.point(i+1)+m_rect.topLeft());
@@ -461,7 +460,7 @@ QPoint PerspectiveWidget::buildPerspective(QPoint orignTopLeft, QPoint orignBott
 
     // Calculate the grid array points.
     double newX, newY;
-    for (uint i = 0 ; i < m_grid.size() ; i++)
+    for (int i = 0 ; i < m_grid.size() ; i++)
     {
         transform.transformPoint(m_grid.point(i).x(), m_grid.point(i).y(), &newX, &newY);
         m_grid.setPoint(i, lround(newX), lround(newY));
@@ -636,7 +635,9 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
 
 void PerspectiveWidget::paintEvent( QPaintEvent * )
 {
-    bitBlt(this, 0, 0, m_pixmap);
+    QPainter p(this);
+    p.drawPixmap(0, 0, *m_pixmap);
+    p.end();
 }
 
 void PerspectiveWidget::resizeEvent(QResizeEvent * e)
@@ -722,7 +723,7 @@ void PerspectiveWidget::mouseReleaseEvent ( QMouseEvent * e )
 
 void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-    if ( e->state() == Qt::LeftButton )
+    if ( e->buttons() == Qt::LeftButton )
     {
         if ( m_currentResizing != ResizingNone )
         {
