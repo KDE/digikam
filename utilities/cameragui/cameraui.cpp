@@ -227,22 +227,26 @@ public:
 CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle, 
                    const QString& model, const QString& port,
                    const QString& path, const QDateTime lastAccess)
-        : KDialogBase(Plain, cameraTitle,
-                      Help|User1|User2|User3|Close, Close,
-                      0, // B.K.O # 116485: no parent for this modal dialog.
-                      0, false, true,
-                      i18n("D&elete"),
-                      i18n("&Download"),
-                      i18n("&Images"))
+        : KDialog(0)
 {
+    
+    setButtons(Help|User1|User2|User3|Close);
+    setDefaultButton(Close);
+    setModal(true);
+    setCaption(cameraTitle);
+    setButtonText(User1, i18n("D&elete"));
+    setButtonText(User2,  i18n("&Download"));
+    setButtonText(User3, i18n("&Images"));
+
     d = new CameraUIPriv;
     d->lastAccess  = lastAccess;
     d->cameraTitle = cameraTitle;
     setHelp("camerainterface.anchor", "digikam");
 
     // -------------------------------------------------------------------------
-    
-    Q3GridLayout* viewBoxLayout = new Q3GridLayout(plainPage(), 2, 5);
+    QWidget *plain = new QWidget(this);
+    setMainWidget(plain);    
+    Q3GridLayout* viewBoxLayout = new Q3GridLayout(plain, 2, 5);
     viewBoxLayout->setColStretch( 0, 0 );
     viewBoxLayout->setColStretch( 1, 0 );
     viewBoxLayout->setColStretch( 2, 3 );
@@ -250,7 +254,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     viewBoxLayout->setColStretch( 4, 0 );
     viewBoxLayout->setColStretch( 5, 0 );
 
-    KHBox* widget = new KHBox(plainPage());
+    KHBox* widget = new KHBox(plain);
     d->splitter   = new QSplitter(widget);
     d->view       = new CameraIconView(this, d->splitter);
     
@@ -364,17 +368,17 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
         
     // -------------------------------------------------------------------------
 
-    d->cancelBtn = new QToolButton(plainPage());
+    d->cancelBtn = new QToolButton(plain);
     d->cancelBtn->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
     d->cancelBtn->setPixmap( SmallIcon( "cancel" ) );
     d->cancelBtn->setEnabled(false);
     
-    d->status   = new KSqueezedTextLabel(plainPage());
-    d->progress = new KProgressBar(plainPage());
+    d->status   = new KSqueezedTextLabel(plain);
+    d->progress = new KProgressBar(plain);
     d->progress->setMaximumHeight( fontMetrics().height() );
     d->progress->hide();
 
-    QFrame *frame = new Q3Frame(plainPage());
+    QFrame *frame = new Q3Frame(plain);
     frame->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
     frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
     Q3HBoxLayout* layout = new Q3HBoxLayout( frame );
@@ -575,7 +579,7 @@ void CameraUI::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("Camera Settings");
-    d->advBox->setCurrentIndex(group.readEntry("Settings Tab", CameraUIPriv::RENAMEFILEPAGE));
+    d->advBox->setCurrentIndex(group.readEntry("Settings Tab", (int)CameraUIPriv::RENAMEFILEPAGE));
     d->autoRotateCheck->setChecked(group.readEntry("AutoRotate", true));
     d->autoAlbumDateCheck->setChecked(group.readEntry("AutoAlbumDate", false));
     d->autoAlbumExtCheck->setChecked(group.readEntry("AutoAlbumExt", false));
@@ -584,10 +588,10 @@ void CameraUI::readSettings()
     d->setCredits->setChecked(group.readEntry("SetCredits", false));
     d->convertJpegCheck->setChecked(group.readEntry("ConvertJpeg", false));
     d->losslessFormat->setCurrentItem(group.readEntry("LossLessFormat", 0));   // PNG by default
-    d->folderDateFormat->setCurrentItem(group.readEntry("FolderDateFormat", CameraUIPriv::IsoDateFormat));
+    d->folderDateFormat->setCurrentItem(group.readEntry("FolderDateFormat", (int)CameraUIPriv::IsoDateFormat));
 
     d->view->setThumbnailSize(ThumbnailSize((ThumbnailSize::Size)group.readEntry("ThumbnailSize", 
-                              ThumbnailSize::Large)));
+                              (int)ThumbnailSize::Large)));
     
     if(config->hasKey("Splitter Sizes"))
         d->splitter->setSizes(group.readIntListEntry("Splitter Sizes"));
@@ -988,7 +992,7 @@ void CameraUI::slotUpload()
 
     DDebug () << "fileformats=" << fileformats << endl;   
 
-    KUrl::List urls = KFileDialog::getOpenURLs(CollectionManager::componentData().oneAlbumRootPath(),
+    KUrl::List urls = KFileDialog::getOpenUrls(CollectionManager::componentData().oneAlbumRootPath(),
                                                fileformats, this, i18n("Select Image to Upload"));
     if (!urls.isEmpty())
         slotUploadItems(urls);
@@ -1352,10 +1356,10 @@ void CameraUI::slotDeleteSelected()
     QString warnMsg(i18n("About to delete this image. "
                          "Deleted files are unrecoverable. "
                          "Are you sure?",
-                         "About to delete these %n images. "
+                         "About to delete these %1 images. "
                          "Deleted files are unrecoverable. "
                          "Are you sure?",
-                         deleteList.count()));
+                         QString::number(deleteList.count())));
     if (KMessageBox::warningContinueCancelList(this, warnMsg,
                                                deleteList,
                                                i18n("Warning"),
@@ -1662,7 +1666,7 @@ void CameraUI::keyPressEvent(QKeyEvent *e)
     else
     {
         // accept the dialog when Ctrl-Return is pressed
-        if ( e->state() == ControlButton &&
+        if ( e->state() == Qt::ControlButton &&
             (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) )
         {
             e->accept();
