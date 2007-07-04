@@ -26,8 +26,8 @@
 
 // Qt includes.
 
-#include <qsize.h>
-#include <qcolor.h>
+#include <QSize>
+#include <QColor>
 
 // Digikam includes.
 
@@ -43,7 +43,6 @@ public:
     
     ShearTool(Digikam::DImg *orgImage, QObject *parent=0, float hAngle=0.0, float vAngle=0.0,
               bool antialiasing=true, QColor backgroundColor=Qt::black, int orgW=0, int orgH=0);
-    
     ~ShearTool(){};
     
     QSize getNewSize(void){ return m_newSize; };
