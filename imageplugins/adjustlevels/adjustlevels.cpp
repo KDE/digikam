@@ -192,7 +192,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    m_hGradientMinInput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
+    m_hGradientMinInput = new KGradientSelector( Qt::Horizontal, gboxSettings );
     m_hGradientMinInput->setFixedHeight( 20 );
     m_hGradientMinInput->setMinValue(0);
     m_hGradientMinInput->setMaxValue(m_histoSegments);
@@ -200,7 +200,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMinInput->setToolTip( i18n( "Minimal intensity input." ) );
     m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
 
-    m_hGradientMaxInput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
+    m_hGradientMaxInput = new KGradientSelector( Qt::Horizontal, gboxSettings );
     m_hGradientMaxInput->setFixedHeight( 20 );
     m_hGradientMaxInput->setMinValue(0);
     m_hGradientMaxInput->setMaxValue(m_histoSegments);
@@ -223,7 +223,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_maxInput->setToolTip( i18n( "Maximal intensity input." ) );
     m_maxInput->setWhatsThis( i18n("<p>Select here the maximal intensity input value of the histogram."));
 
-    m_hGradientMinOutput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
+    m_hGradientMinOutput = new KGradientSelector( Qt::Horizontal, gboxSettings );
     m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
     m_hGradientMinOutput->setWhatsThis( i18n("<p>Select here the minimal intensity output value of the histogram."));    
     m_hGradientMinOutput->setToolTip( i18n( "Minimal intensity output." ) );
@@ -231,7 +231,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMinOutput->setMinValue(0);
     m_hGradientMinOutput->setMaxValue(m_histoSegments);
 
-    m_hGradientMaxOutput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
+    m_hGradientMaxOutput = new KGradientSelector( Qt::Horizontal, gboxSettings );
     m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "white" ) );
     m_hGradientMaxOutput->setWhatsThis( i18n("<p>Select here the maximal intensity output value of the histogram."));
     m_hGradientMaxOutput->setToolTip( i18n( "Maximal intensity output." ) );
@@ -285,12 +285,13 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     //m_pickerColorButtonGroup->setFrameShape(Q3Frame::NoFrame);    
 
     m_autoButton = new QPushButton(gboxSettings);
-    m_autoButton->setPixmap(KIconLoader::iconLoader()->loadIcon("run", (KIcon::Group)KIcon::Toolbar));    m_autoButton->setToolTip( i18n( "Adjust all levels automatically." ) );
+    m_autoButton->setPixmap(KIconLoader::global()->loadIcon("run", K3Icon::Toolbar));    
+    m_autoButton->setToolTip( i18n( "Adjust all levels automatically." ) );
     m_autoButton->setWhatsThis( i18n("<p>If you press this button, all channel levels will be adjusted "
                                         "automatically."));
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
-    m_resetButton->setPixmap(KIconLoader::iconLoader()->loadIcon("reload_page", (KIcon::Group)KIcon::Toolbar));     
+    m_resetButton->setPixmap(KIconLoader::global()->loadIcon("reload_page", K3Icon::Toolbar));     
     m_resetButton->setToolTip( i18n( "Reset current channel levels' values." ) );
     m_resetButton->setWhatsThis( i18n("<p>If you press this button, all levels' values "
                                          "from the current selected channel "
