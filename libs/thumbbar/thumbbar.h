@@ -154,11 +154,11 @@ signals:
 private slots:
 
     void slotUpdate();
-    void slotGotPreview(const KFileItem *, const QPixmap &);
-    void slotFailedPreview(const KFileItem *);
+    void slotGotPreview(const KFileItem &, const QPixmap &);
+    void slotFailedPreview(const KFileItem &);
     void slotGotThumbnail(const KUrl&, const QPixmap&);
     void slotFailedThumbnail(const KUrl&);
-    
+
 private:
 
     ThumbBarViewPriv* d;

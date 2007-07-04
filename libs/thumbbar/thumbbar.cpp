@@ -445,43 +445,32 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* item)
 
 void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
 {
-    int cy=0, cx=0, ts=0, y1=0, y2=0, x1=0, x2=0;
+    int ts;
     QRect tile;
-    QRect er(e->rect());
+    QRect contentsPaintRect(viewportToContents(e->rect().topLeft()), viewportToContents(e->rect().bottomRight()));
 
     if (d->orientation == Qt::Vertical)
     {
-       cy = viewportToContents(er.topLeft()).y();
-
        ts = d->tileSize + 2*d->margin;
        tile = QRect(0, 0, visibleWidth(), ts);
-
-       y1 = (cy/ts)*ts;
-       y2 = ((y1 + er.height())/ts +1)*ts;
     }
     else
     {
-       cx = viewportToContents(er.topLeft()).x();
-
        ts = d->tileSize + 2*d->margin;
        tile = QRect(0, 0, ts, visibleHeight());
-
-       x1 = (cx/ts)*ts;
-       x2 = ((x1 + er.width())/ts +1)*ts;
     }
 
-    DDebug() << "viewportPaintEvent: Drawing tile " << tile << endl;
     QPainter p(viewport());
-
-    p.fillRect(er, palette().color(QPalette::Background));
+    p.fillRect(e->rect(), palette().color(QPalette::Background));
 
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
         if (d->orientation == Qt::Vertical)
         {
-            if (y1 <= item->d->pos && item->d->pos <= y2)
+            if (item->rect().intersects(contentsPaintRect))
             {
-                p.translate(0, item->d->pos - cy);
+                int translate = item->d->pos - contentsY();
+                p.translate(0, translate);
 
                 p.setPen(Qt::white);
                 if (item == d->currItem)
@@ -497,17 +486,17 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
                     p.drawPixmap(x, y, pix);
-                    DDebug() << "Drawing pixmap size " << pix.size() << " at " << x << " x " << y << endl;
                 }
 
-                p.translate(0, - (item->d->pos - cy));
+                p.translate(0, - translate);
             }
         }
         else
         {
-            if (x1 <= item->d->pos && item->d->pos <= x2)
+            if (item->rect().intersects(contentsPaintRect))
             {
-                p.translate(item->d->pos - cx, 0);
+                int translate = item->d->pos - contentsX();
+                p.translate(translate, 0);
 
                 p.setPen(Qt::white);
                 if (item == d->currItem)
@@ -525,7 +514,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                     p.drawPixmap(x, y, pix);
                 }
 
-                p.translate(- (item->d->pos - cx), 0);
+                p.translate(- translate, 0);
             }
         }
     }
@@ -737,16 +726,16 @@ void ThumbBarView::slotFailedThumbnail(const KUrl& url)
 {
     KIO::PreviewJob* job = KIO::filePreview(url, ThumbnailSize::Huge, 0, 0, 70, true, false);
     
-    connect(job, SIGNAL(gotPreview(const KFileItem *, const QPixmap &)),
-            this, SLOT(slotGotPreview(const KFileItem *, const QPixmap &)));
+    connect(job, SIGNAL(gotPreview(const KFileItem&, const QPixmap &)),
+            this, SLOT(slotGotPreview(const KFileItem&, const QPixmap &)));
 
-    connect(job, SIGNAL(failed(const KFileItem *)),
-            this, SLOT(slotFailedPreview(const KFileItem *)));
+    connect(job, SIGNAL(failed(const KFileItem&)),
+            this, SLOT(slotFailedPreview(const KFileItem&)));
 }
 
-void ThumbBarView::slotGotPreview(const KFileItem *fileItem, const QPixmap& pix)
+void ThumbBarView::slotGotPreview(const KFileItem &fileItem, const QPixmap& pix)
 {
-    ThumbBarItem* item = d->itemDict.find(fileItem->url().url());
+    ThumbBarItem* item = d->itemDict.find(fileItem.url().url());
     if (!item)
         return;
 
@@ -754,9 +743,9 @@ void ThumbBarView::slotGotPreview(const KFileItem *fileItem, const QPixmap& pix)
     item->repaint();
 }
 
-void ThumbBarView::slotFailedPreview(const KFileItem* fileItem)
+void ThumbBarView::slotFailedPreview(const KFileItem &fileItem)
 {
-    ThumbBarItem* item = d->itemDict.find(fileItem->url().url());
+    ThumbBarItem* item = d->itemDict.find(fileItem.url().url());
     if (!item)
         return;
 
