@@ -45,7 +45,10 @@ ImagePlugin_ShearTool::ImagePlugin_ShearTool(QObject *parent, const QStringList 
 {
     m_sheartoolAction  = new KAction(KIcon("shear"), i18n("Shear..."), this);
     actionCollection()->addAction("imageplugin_sheartool", m_sheartoolAction );
-    connect(m_sheartoolAction, SIGNAL(triggered(bool) ), SLOT(slotShearTool()));    
+
+    connect(m_sheartoolAction, SIGNAL(triggered(bool)), 
+            this, SLOT(slotShearTool()));    
+
     setXMLFile("digikamimageplugin_sheartool_ui.rc");         
                                     
     DDebug() << "ImagePlugin_ShearTool plugin loaded" << endl;

@@ -27,12 +27,7 @@
 // Local includes.
 
 #include "imageguidedlg.h"
-//Added by qt3to4:
-#include <Q3Frame>
-#include <QLabel>
 
-class Q3Frame;
-class QPushButton;
 class QCheckBox;
 class QLabel;
 

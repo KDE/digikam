@@ -23,13 +23,10 @@
  
 // Qt includes. 
  
-#include <qlabel.h>
-#include <qcheckbox.h>
-
-#include <qlayout.h>
-#include <qimage.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QCheckBox>
+#include <QImage>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -99,81 +96,80 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
     QString temp;
     Digikam::ImageIface iface(0, 0);
 
-    QWidget *widget = new QWidget(this);
-    setMainWidget(widget);
-    QWidget *gboxSettings     = new QWidget(widget);
-    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 11, 2, spacingHint());
+    QWidget *gboxSettings     = new QWidget(mainWidget());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings);
     
-    QLabel *label1 = new QLabel(i18n("New width:"), gboxSettings);
+    QLabel *label1  = new QLabel(i18n("New width:"), gboxSettings);
     m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), gboxSettings);
     m_newWidthLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
     
-    QLabel *label2 = new QLabel(i18n("New height:"), gboxSettings);
+    QLabel *label2   = new QLabel(i18n("New height:"), gboxSettings);
     m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"), gboxSettings);
     m_newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
-    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 2);
-    
     KSeparator *line = new KSeparator (Qt::Horizontal, gboxSettings);
-    gridSettings->addMultiCellWidget(line, 2, 2, 0, 2);
-    
-    QLabel *label3 = new QLabel(i18n("Main horizontal angle:"), gboxSettings);
+
+    QLabel *label3    = new QLabel(i18n("Main horizontal angle:"), gboxSettings);
     m_mainHAngleInput = new KIntNumInput(gboxSettings);
     m_mainHAngleInput->setRange(-45, 45, 1, true);
     m_mainHAngleInput->setValue(0);
     m_mainHAngleInput->setWhatsThis( i18n("<p>The main horizontal shearing angle, in degrees."));
-    gridSettings->addMultiCellWidget(label3, 3, 3, 0, 2);
-    gridSettings->addMultiCellWidget(m_mainHAngleInput, 4, 4, 0, 2);
             
     QLabel *label4 = new QLabel(i18n("Fine horizontal angle:"), gboxSettings);
     m_fineHAngleInput = new KDoubleNumInput(gboxSettings);
     m_fineHAngleInput->setRange(-5.0, 5.0, 0.01, true);
     m_fineHAngleInput->setValue(0);
-    m_fineHAngleInput->setWhatsThis( i18n("<p>This value in degrees will be added to main horizontal angle value "
-                                             "to set fine adjustments."));
-    gridSettings->addMultiCellWidget(label4, 5, 5, 0, 2);
-    gridSettings->addMultiCellWidget(m_fineHAngleInput, 6, 6, 0, 2);
-                
+    m_fineHAngleInput->setWhatsThis( i18n("<p>This value in degrees will be added to main "
+                                          "horizontal angle value to set fine adjustments."));
     QLabel *label5 = new QLabel(i18n("Main vertical angle:"), gboxSettings);
     m_mainVAngleInput = new KIntNumInput(gboxSettings);
     m_mainVAngleInput->setRange(-45, 45, 1, true);
     m_mainVAngleInput->setValue(0);
     m_mainVAngleInput->setWhatsThis( i18n("<p>The main vertical shearing angle, in degrees."));
-    gridSettings->addMultiCellWidget(label5, 7, 7, 0, 0);
-    gridSettings->addMultiCellWidget(m_mainVAngleInput, 8, 8, 0, 2);
 
     QLabel *label6 = new QLabel(i18n("Fine vertical angle:"), gboxSettings);
     m_fineVAngleInput = new KDoubleNumInput(gboxSettings);
     m_fineVAngleInput->setRange(-5.0, 5.0, 0.01, true);
     m_fineVAngleInput->setValue(0);
-    m_fineVAngleInput->setWhatsThis( i18n("<p>This value in degrees will be added to main vertical angle value "
-                                             "to set fine adjustments."));
-    gridSettings->addMultiCellWidget(label6, 9, 9, 0, 2);
-    gridSettings->addMultiCellWidget(m_fineVAngleInput, 10, 10, 0, 2);
+    m_fineVAngleInput->setWhatsThis( i18n("<p>This value in degrees will be added to main vertical "
+                                          "angle value to set fine adjustments."));
                                              
     m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), gboxSettings);
     m_antialiasInput->setWhatsThis( i18n("<p>Enable this option to process anti-aliasing filter "
-                                            "to the sheared image. "
-                                            "To smooth the target image, it will be blurred a little."));
+                                         "to the sheared image. "
+                                         "To smooth the target image, it will be blurred a little."));
+
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(0);
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
+    gridSettings->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
+    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
+    gridSettings->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 2);
+    gridSettings->addMultiCellWidget(line, 2, 2, 0, 2);
+    gridSettings->addMultiCellWidget(label3, 3, 3, 0, 2);
+    gridSettings->addMultiCellWidget(m_mainHAngleInput, 4, 4, 0, 2);
+    gridSettings->addMultiCellWidget(label4, 5, 5, 0, 2);
+    gridSettings->addMultiCellWidget(m_fineHAngleInput, 6, 6, 0, 2);
+    gridSettings->addMultiCellWidget(label5, 7, 7, 0, 0);
+    gridSettings->addMultiCellWidget(m_mainVAngleInput, 8, 8, 0, 2);
+    gridSettings->addMultiCellWidget(label6, 9, 9, 0, 2);
+    gridSettings->addMultiCellWidget(m_fineVAngleInput, 10, 10, 0, 2);
     gridSettings->addMultiCellWidget(m_antialiasInput, 11, 11, 0, 2);
             
     setUserAreaWidget(gboxSettings); 
 
     // -------------------------------------------------------------
     
-    connect(m_mainHAngleInput, SIGNAL(valueChanged (int)),
+    connect(m_mainHAngleInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(m_fineHAngleInput, SIGNAL(valueChanged (double)),
+    connect(m_fineHAngleInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
                 
-    connect(m_mainVAngleInput, SIGNAL(valueChanged (int)),
+    connect(m_mainVAngleInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
     
-    connect(m_fineVAngleInput, SIGNAL(valueChanged (double)),
+    connect(m_fineVAngleInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
     
     connect(m_antialiasInput, SIGNAL(toggled (bool)),
@@ -239,7 +235,7 @@ void ImageEffect_ShearTool::prepareEffect()
     float hAngle      = m_mainHAngleInput->value() + m_fineHAngleInput->value();
     float vAngle      = m_mainVAngleInput->value() + m_fineVAngleInput->value();
     bool antialiasing = m_antialiasInput->isChecked();    
-    QColor background = paletteBackgroundColor().rgb();
+    QColor background = palette().color(QPalette::Background);
 
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
     int orgW = iface->originalWidth();
@@ -290,7 +286,7 @@ void ImageEffect_ShearTool::putPreviewData(void)
     Digikam::DImg imDest( w, h, m_threadedFilter->getTargetImage().sixteenBit(),
                                 m_threadedFilter->getTargetImage().hasAlpha() );
     
-    imDest.fill( Digikam::DColor(paletteBackgroundColor().rgb(),
+    imDest.fill( Digikam::DColor(palette().color(QPalette::Background),
                                  m_threadedFilter->getTargetImage().sixteenBit()) );
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
@@ -324,4 +320,3 @@ void ImageEffect_ShearTool::renderingFinished()
 }
 
 }  // NameSpace DigikamShearToolImagesPlugin
-
