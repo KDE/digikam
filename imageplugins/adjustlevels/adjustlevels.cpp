@@ -117,8 +117,9 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     setAboutData(about);
 
     // -------------------------------------------------------------
-
-    m_previewWidget = new Digikam::ImageWidget("adjustlevels Tool Dialog", plainPage(),
+    QWidget *widget = new QWidget(this);
+    setMainWidget(widget);
+    m_previewWidget = new Digikam::ImageWidget("adjustlevels Tool Dialog", widget,
                                                i18n("<p>Here you can see the image's "
                                                     "level-adjustments preview. You can pick color on image "
                                                     "to see the color level corresponding on histogram."));
@@ -126,7 +127,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings = new QWidget(plainPage());
+    QWidget *gboxSettings = new QWidget(widget);
     Q3GridLayout* grid     = new Q3GridLayout(gboxSettings, 16, 8, spacingHint(), 0);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);

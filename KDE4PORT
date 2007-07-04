@@ -141,9 +141,9 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             welcomepageview.cpp                                         X
 
  6      |-imageplugins                                                                               All image editor plugins can be ported after digiKam core
-        |---adjustcurves                        Laurent                                              CMake port only
-        |---adjustlevels                        Laurent                                              CMake port only
-        |---antivignetting
+        |---adjustcurves                        Laurent                         DONE                     CMake port only
+        |---adjustlevels                        Laurent                         DONE                     CMake port only
+        |---antivignetting                      Laurent                         DONE
         |---blurfx
         |---border                              Laurent                                              CMake port only
         |-----patterns                                                                               CMake port only is require.
@@ -155,7 +155,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |-----ratiocrop
         |-----sharpnesseditor
         |-------clapack                         Gilles                          DONE                 CMake port only is require.
-        |---distortionfx
+        |---distortionfx                        Laurent 			DONE
         |---emboss                              Laurent                         DONE                     CMake port only
         |---filmgrain                           Laurent                         DONE                     CMake port only
         |---freerotation                        Gilles                          DONE

@@ -229,7 +229,7 @@ void ImageEffect_DistortionFX::readUserSettings(void)
     m_iterationInput->blockSignals(true);
     m_levelInput->blockSignals(true);
 
-    m_effectType->setCurrentItem(group.readEntry("EffectType", DistortionFX::FishEye));
+    m_effectType->setCurrentItem(group.readEntry("EffectType", (int)DistortionFX::FishEye));
     m_iterationInput->setValue(group.readEntry("IterationAjustment", 10));
     m_levelInput->setValue(group.readEntry("LevelAjustment", 50));
 

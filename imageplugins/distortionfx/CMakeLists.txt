@@ -11,8 +11,7 @@ kde4_automoc(${digikamimageplugin_distortionfx_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_distortionfx ${digikamimageplugin_distortionfx_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_distortionfx ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${JPEG_LIBRARIES} ${TIFF_LIBRARIES} ${PNG_LIBRARIES} ${JASPER_LIBRARIES}
-)
+target_link_libraries(digikamimageplugin_distortionfx digikam )
 
 install(TARGETS digikamimageplugin_distortionfx DESTINATION ${PLUGIN_INSTALL_DIR} )
 
