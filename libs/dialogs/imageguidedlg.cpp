@@ -200,21 +200,20 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     d->mainLayout->addMultiCellWidget(d->hbox, 1, 2, 0, 1);
     d->mainLayout->setColumnStretch(0, 10);
     d->mainLayout->setRowStretch(2, 10);
+    d->mainLayout->setMargin(0);
+    d->mainLayout->setSpacing(spacingHint());
 
     // -------------------------------------------------------------
 
     d->settings          = new QWidget(mainWidget());
     d->settingsLayout    = new QGridLayout(d->settings);
     QVBoxLayout *vLayout = new QVBoxLayout();
-    vLayout->setSpacing(spacingHint());
 
     // -------------------------------------------------------------
 
     QWidget *gboxGuideSettings = new QWidget(d->settings);
     QGridLayout* grid          = new QGridLayout( gboxGuideSettings );
     KSeparator *line           = new KSeparator(Qt::Horizontal, gboxGuideSettings);
-    grid->setMargin(spacingHint());
-    grid->setSpacing(spacingHint());
 
     QLabel *label5  = new QLabel(i18n("Guide color:"), gboxGuideSettings);
     d->guideColorBt = new KColorButton( QColor( Qt::red ), gboxGuideSettings );
@@ -232,10 +231,11 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     grid->addMultiCellWidget(label6, 2, 2, 0, 0);
     grid->addMultiCellWidget(d->guideSize, 2, 2, 2, 2);
     grid->setColumnStretch(1, 10);
+    grid->setMargin(spacingHint());
+    grid->setSpacing(spacingHint());
 
     if (guideVisible) gboxGuideSettings->show();
     else gboxGuideSettings->hide();
-
 
     // -------------------------------------------------------------
 
@@ -257,6 +257,8 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     vLayout->addWidget(gboxGuideSettings);
     vLayout->addWidget(hbox);
     vLayout->addStretch(10);
+    vLayout->setMargin(0);
+    vLayout->setSpacing(spacingHint());
 
     d->settingsLayout->addMultiCellLayout(vLayout, 1, 1, 0, 0);
 

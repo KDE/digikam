@@ -137,13 +137,15 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
 
     setMainWidget(new QWidget(this));
     QVBoxLayout *topLayout = new QVBoxLayout(mainWidget());
-    topLayout->setSpacing(spacingHint());
 
     // -------------------------------------------------------------
 
-    m_imagePreviewWidget = new ImagePannelWidget(470, 350, name + QString(" Tool Dialog"),
-                               mainWidget(), separateViewMode);
+    m_imagePreviewWidget = new ImagePannelWidget(470, 350, 
+                                                 name + QString(" Tool Dialog"),
+                                                 mainWidget(), separateViewMode);
     topLayout->addWidget(m_imagePreviewWidget);
+    topLayout->setMargin(0);
+    topLayout->setSpacing(spacingHint());
 
     // -------------------------------------------------------------
 

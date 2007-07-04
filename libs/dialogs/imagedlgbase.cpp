@@ -144,6 +144,8 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
     d->mainLayout->addMultiCellWidget(d->hbox, 1, 2, 0, 1);
     d->mainLayout->setColumnStretch(0, 10);
     d->mainLayout->setRowStretch(2, 10);
+    d->mainLayout->setMargin(0);
+    d->mainLayout->setSpacing(spacingHint());
 
     // -------------------------------------------------------------
 
