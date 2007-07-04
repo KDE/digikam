@@ -101,8 +101,8 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     // -------------------------------------------------------------
     QWidget *widget = new QWidget(this);
     setMainWidget(widget);
-    QFrame *frame = new Q3Frame(widget);
-    frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
+    QFrame *frame = new QFrame(widget);
+    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
     Q3GridLayout* gridFrame = new Q3GridLayout( frame, 1, 2, spacingHint());
     m_previewWidget        = new SuperImposeWidget(400, 300, frame);
@@ -136,7 +136,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     moveButton->setToolTip( i18n( "Move" ) );
     bGroup->addSpace(20);
     bGroup->setExclusive(true);
-    //bGroup->setFrameShape(Q3Frame::NoFrame);
+    //bGroup->setFrameShape(QFrame::NoFrame);
     gridFrame->addMultiCellWidget(bGroup, 1, 1, 1, 1);
     gridFrame->setColStretch(0, 10);
     gridFrame->setColStretch(2, 10);

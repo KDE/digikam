@@ -101,8 +101,8 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QFrame *frame = new Q3Frame(plainPage());
-    frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
+    QFrame *frame = new QFrame(plainPage());
+    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     Q3VBoxLayout* l  = new Q3VBoxLayout(frame, 5, 0);
     m_previewWidget = new InsertTextWidget(480, 320, frame);
     l->addWidget(m_previewWidget);
@@ -157,7 +157,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     alignBlock->setToolTip( i18n( "Align text to a block" ) );
     
     m_alignButtonGroup->setExclusive(true);
-    m_alignButtonGroup->setFrameShape(Q3Frame::NoFrame);
+    m_alignButtonGroup->setFrameShape(QFrame::NoFrame);
     gridBox2->addMultiCellWidget(m_alignButtonGroup, 4, 4, 0, 1);
     
     // -------------------------------------------------------------

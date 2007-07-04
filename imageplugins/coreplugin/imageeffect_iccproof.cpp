@@ -135,7 +135,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_scaleBG = new Q3HButtonGroup(gboxSettings);
     m_scaleBG->setExclusive(true);
-    m_scaleBG->setFrameShape(Q3Frame::NoFrame);
+    m_scaleBG->setFrameShape(QFrame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
     m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal values are small, you can use the linear scale.<p>"
@@ -285,7 +285,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     Q3GridLayout *firstPageLayout = new Q3GridLayout(inProfiles, 4, 2, spacingHint());
 
     m_inProfileBG = new Q3ButtonGroup(4, Qt::Vertical, inProfiles);
-    m_inProfileBG->setFrameStyle(Q3Frame::NoFrame);
+    m_inProfileBG->setFrameStyle(QFrame::NoFrame);
     m_inProfileBG->setInsideMargin(0);
 
     m_useEmbeddedProfile = new QRadioButton(m_inProfileBG);
@@ -335,7 +335,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     Q3GridLayout *secondPageLayout = new Q3GridLayout(spaceProfiles, 3, 2, spacingHint());
 
     m_spaceProfileBG = new Q3ButtonGroup(2, Qt::Vertical, spaceProfiles);
-    m_spaceProfileBG->setFrameStyle(Q3Frame::NoFrame);
+    m_spaceProfileBG->setFrameStyle(QFrame::NoFrame);
     m_spaceProfileBG->setInsideMargin(0);
 
     m_useSpaceDefaultProfile = new QRadioButton(m_spaceProfileBG);
@@ -370,7 +370,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                    spacingHint(), spacingHint());
 
     m_proofProfileBG = new Q3ButtonGroup(2, Qt::Vertical, proofProfiles);
-    m_proofProfileBG->setFrameStyle(Q3Frame::NoFrame);
+    m_proofProfileBG->setFrameStyle(QFrame::NoFrame);
     m_proofProfileBG->setInsideMargin(0);
 
     m_useProofDefaultProfile = new QRadioButton(m_proofProfileBG);

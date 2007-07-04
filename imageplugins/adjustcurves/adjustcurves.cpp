@@ -174,7 +174,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     
     m_scaleBG->setExclusive(true);
     m_scaleBG->setButton(Digikam::CurvesWidget::LogScaleHistogram);
-    //m_scaleBG->setFrameShape(Q3Frame::NoFrame);
+    //m_scaleBG->setFrameShape(QFrame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
 
     Q3HBoxLayout* l1 = new Q3HBoxLayout();
@@ -246,7 +246,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     m_curveSmooth->setWhatsThis( i18n("<p>With this button, you constrains the curve type to a smooth line with tension."));
     m_curveType->setExclusive(true);
     m_curveType->setButton(SmoothDrawing);
-    //m_curveType->setFrameShape(Q3Frame::NoFrame);
+    //m_curveType->setFrameShape(QFrame::NoFrame);
     
     // -------------------------------------------------------------
     
@@ -282,7 +282,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     m_pickWhite->setWhatsThis( i18n("<p>With this button, you can pick the color from original image used to set <b>Highlight Tone</b> "
                                        "smooth curves point on Red, Green, Blue, and Luminosity channels."));
     m_pickerColorButtonGroup->setExclusive(true);
-    //m_pickerColorButtonGroup->setFrameShape(Q3Frame::NoFrame);
+    //m_pickerColorButtonGroup->setFrameShape(QFrame::NoFrame);
     
     // -------------------------------------------------------------
 

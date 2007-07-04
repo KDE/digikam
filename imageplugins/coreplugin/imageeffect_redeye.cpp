@@ -106,7 +106,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
 
     m_scaleBG = new Q3HButtonGroup(gboxSettings);
     m_scaleBG->setExclusive(true);
-    m_scaleBG->setFrameShape(Q3Frame::NoFrame);
+    m_scaleBG->setFrameShape(QFrame::NoFrame);
     m_scaleBG->setInsideMargin(0);
     m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximum counts are small, you can use the linear scale.<p>"

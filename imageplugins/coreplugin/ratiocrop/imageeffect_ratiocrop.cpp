@@ -77,8 +77,8 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QFrame *frame = new Q3Frame(plainPage());
-    frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
+    QFrame *frame = new QFrame(plainPage());
+    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     Q3VBoxLayout* l = new Q3VBoxLayout(frame, 5, 0);
     m_imageSelectionWidget = new ImageSelectionWidget(480, 320, frame);
     l->addWidget(m_imageSelectionWidget);
@@ -95,8 +95,8 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     QWidget *gbox2        = new QWidget(plainPage());
     Q3GridLayout *gridBox2 = new Q3GridLayout( gbox2, 2, 0);
 
-    Q3Frame *cropSelection = new Q3Frame( gbox2 );
-    cropSelection->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
+    QFrame *cropSelection = new QFrame( gbox2 );
+    cropSelection->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     Q3GridLayout* grid = new Q3GridLayout( cropSelection, 6, 4, spacingHint());
 
     QLabel *label = new QLabel(i18n("Aspect ratio:"), cropSelection);
@@ -207,9 +207,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    Q3Frame* compositionGuide = new Q3Frame( gbox2 );
+    QFrame* compositionGuide = new QFrame( gbox2 );
     Q3GridLayout* grid2       = new Q3GridLayout( compositionGuide, 7, 2, spacingHint());
-    compositionGuide->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
+    compositionGuide->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
     QLabel *labelGuideLines = new QLabel(i18n("Composition guide:"), compositionGuide);
     m_guideLinesCB = new QComboBox( false, compositionGuide );

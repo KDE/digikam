@@ -150,7 +150,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     m_scaleBG = new Q3HButtonGroup(gboxSettings);
     m_scaleBG->setExclusive(true);
-    //m_scaleBG->setFrameShape(Q3Frame::NoFrame);
+    //m_scaleBG->setFrameShape(QFrame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
     m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
@@ -283,7 +283,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_pickWhite->setWhatsThis( i18n("<p>With this button, you can pick the color from original image used to set <b>Highlight Tone</b> "
                                        "levels input on Red, Green, Blue, and Luminosity channels."));
     m_pickerColorButtonGroup->setExclusive(true);
-    //m_pickerColorButtonGroup->setFrameShape(Q3Frame::NoFrame);    
+    //m_pickerColorButtonGroup->setFrameShape(QFrame::NoFrame);    
 
     m_autoButton = new QPushButton(gboxSettings);
     m_autoButton->setPixmap(KIconLoader::global()->loadIcon("run", K3Icon::Toolbar));    
