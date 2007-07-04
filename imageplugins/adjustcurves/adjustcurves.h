@@ -33,7 +33,7 @@
 
 class QComboBox;
 class QPushButton;
-class Q3HButtonGroup;
+class QButtonGroup;
 
 namespace Digikam
 {   
@@ -120,9 +120,9 @@ private:
     QPushButton                  *m_curveFree;
     QPushButton                  *m_curveSmooth;
     
-    Q3HButtonGroup                *m_pickerColorButtonGroup;
-    Q3HButtonGroup                *m_scaleBG;  
-    Q3HButtonGroup                *m_curveType;
+    QButtonGroup                 *m_pickerColorButtonGroup;
+    QButtonGroup                 *m_scaleBG;  
+    QButtonGroup                 *m_curveType;
     
     Digikam::CurvesWidget        *m_curvesWidget;
 

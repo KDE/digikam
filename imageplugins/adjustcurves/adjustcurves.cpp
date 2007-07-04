@@ -27,26 +27,19 @@
 
 // Qt includes.
 
-#include <qlayout.h>
-#include <qcolor.h>
-#include <q3groupbox.h>
-#include <q3hgroupbox.h>
-#include <q3vgroupbox.h>
-#include <qlabel.h>
-#include <qpainter.h>
-#include <qcombobox.h>
-#include <qspinbox.h>
-
-#include <qtooltip.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qtimer.h>
-#include <Q3HButtonGroup> 
-#include <qpixmap.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
+#include <QColor>
+#include <QGroupBox>
+#include <QLabel>
+#include <QPainter>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QPushButton>
+#include <QFrame>
+#include <QTimer>
+#include <QButtonGroup> 
+#include <QPixmap>
+#include <QHBoxLayout>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -119,9 +112,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    QWidget *plain = new QWidget(this);
-    setMainWidget(plain);
-    m_previewWidget = new Digikam::ImageWidget("adjustcurves Tool Dialog", plain,
+    m_previewWidget = new Digikam::ImageWidget("adjustcurves Tool Dialog", mainWidget(),
                                                i18n("<p>You can see here the image's "
                                                     "curve-adjustments preview. You can pick color on image "
                                                     "to see the color level corresponding on histogram."));
@@ -129,71 +120,72 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings = new QWidget(plain);
-    Q3GridLayout* grid     = new Q3GridLayout( gboxSettings, 5, 5, spacingHint());
+    QWidget *gboxSettings = new QWidget(mainWidget());
+    QGridLayout* grid     = new QGridLayout( gboxSettings ) ;
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gboxSettings );
-    m_channelCB->insertItem( i18n("Luminosity") );
-    m_channelCB->insertItem( i18n("Red") );
-    m_channelCB->insertItem( i18n("Green") );
-    m_channelCB->insertItem( i18n("Blue") );
-    m_channelCB->insertItem( i18n("Alpha") );
-    m_channelCB->setCurrentText( i18n("Luminosity") );
+    m_channelCB    = new QComboBox(gboxSettings );
+    m_channelCB->addItem( i18n("Luminosity") );
+    m_channelCB->addItem( i18n("Red") );
+    m_channelCB->addItem( i18n("Green") );
+    m_channelCB->addItem( i18n("Blue") );
+    m_channelCB->addItem( i18n("Alpha") );
+    m_channelCB->setCurrentItem(0);
     m_channelCB->setWhatsThis( i18n("<p>Select here the histogram channel to display:<p>"
-                                       "<b>Luminosity</b>: display the image's luminosity values.<p>"
-                                       "<b>Red</b>: display the red image-channel values.<p>"
-                                       "<b>Green</b>: display the green image-channel values.<p>"
-                                       "<b>Blue</b>: display the blue image-channel values.<p>"
-                                       "<b>Alpha</b>: display the alpha image-channel values. "
-                                       "This channel corresponds to the transparency value and "
-                                       "is supported by some image formats, such as PNG or TIF."));
+                                    "<b>Luminosity</b>: display the image's luminosity values.<p>"
+                                    "<b>Red</b>: display the red image-channel values.<p>"
+                                    "<b>Green</b>: display the green image-channel values.<p>"
+                                    "<b>Blue</b>: display the blue image-channel values.<p>"
+                                    "<b>Alpha</b>: display the alpha image-channel values. "
+                                    "This channel corresponds to the transparency value and "
+                                    "is supported by some image formats, such as PNG or TIF."));
 
-    m_scaleBG = new Q3HButtonGroup(gboxSettings);
-    m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
-                                     "If the image's maximal counts are small, you can use the linear scale.<p>"
-                                     "Logarithmic scale can be used when the maximal counts are big; "
-                                     "if it is used, all values (small and large) will be visible on the graph."));
+    // -------------------------------------------------------------
+
+    QWidget *scaleBox = new QWidget(gboxSettings);
+    QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
+    m_scaleBG         = new QButtonGroup(scaleBox);
+    scaleBox->setWhatsThis(i18n("<p>Select here the histogram scale.<p>"
+                                "If the image's maximal counts are small, you can use the linear scale.<p>"
+                                "Logarithmic scale can be used when the maximal counts are big; "
+                                "if it is used, all values (small and large) will be visible on the graph."));
     
-    QPushButton *linHistoButton = new QPushButton( m_scaleBG );
+    QPushButton *linHistoButton = new QPushButton( scaleBox );
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
-    m_scaleBG->insert(linHistoButton, Digikam::CurvesWidget::LinScaleHistogram);
-    KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
-    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
-    linHistoButton->setToggleButton(true);
+    linHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-lin.png")));
+    linHistoButton->setCheckable(true);
+    m_scaleBG->addButton(linHistoButton, Digikam::CurvesWidget::LinScaleHistogram);
     
-    QPushButton *logHistoButton = new QPushButton( m_scaleBG );
+    QPushButton *logHistoButton = new QPushButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
-    m_scaleBG->insert(logHistoButton, Digikam::CurvesWidget::LogScaleHistogram);
-    KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
-    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
-    logHistoButton->setToggleButton(true);
+    logHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-log.png")));
+    logHistoButton->setCheckable(true);
+    m_scaleBG->addButton(logHistoButton, Digikam::CurvesWidget::LogScaleHistogram);
     
-    m_scaleBG->setExclusive(true);
-    m_scaleBG->setButton(Digikam::CurvesWidget::LogScaleHistogram);
-    //m_scaleBG->setFrameShape(QFrame::NoFrame);
-    m_scaleBG->setInsideMargin( 0 );
+    hlay->setMargin(0);
+    hlay->setSpacing(0);
+    hlay->addWidget(linHistoButton);
+    hlay->addWidget(logHistoButton);
 
-    Q3HBoxLayout* l1 = new Q3HBoxLayout();
+    m_scaleBG->setExclusive(true);
+    logHistoButton->setChecked(true);
+
+    // -------------------------------------------------------------
+
+    QHBoxLayout* l1 = new QHBoxLayout();
     l1->addStretch(10);
-    l1->addWidget(m_scaleBG);
-    
-    grid->addMultiCellWidget(label1, 0, 0, 1, 1);
-    grid->addMultiCellWidget(m_channelCB, 0, 0, 2, 2);
-    grid->addMultiCellLayout(l1, 0, 0, 4, 5);
+    l1->addWidget(scaleBox);
     
     // -------------------------------------------------------------
 
     QWidget *curveBox = new QWidget(gboxSettings);
-    Q3GridLayout* gl   = new Q3GridLayout(curveBox, 4, 2, 0);
+    QGridLayout* gl   = new QGridLayout(curveBox);
 
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, curveBox, false, true, true);
     m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram drawing "
-                                             "of the selected image channel. This one is re-computed at any "
-                                             "curves settings changes."));
+                                          "of the selected image channel. This one is re-computed at any "
+                                          "curves settings changes."));
     
     m_vGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Vertical, 10, curveBox );
     m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
@@ -205,7 +197,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
                                                m_originalImage.height(), m_originalImage.sixteenBit(),
                                                m_curves, curveBox);
     m_curvesWidget->setWhatsThis( i18n("<p>This is the curve drawing of the selected channel from "
-                                          "original image"));
+                                       "original image"));
     
     QLabel *spaceh = new QLabel(curveBox);
     spaceh->setFixedHeight(1);
@@ -220,69 +212,79 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     gl->addMultiCellWidget(spaceh, 3, 3, 2, 2);
     gl->addMultiCellWidget(m_hGradient, 4, 4, 2, 2);
     gl->setRowSpacing(1, spacingHint());
+    gl->setMargin(0);
+    gl->setSpacing(0);
 
-    grid->addMultiCellWidget(curveBox, 2, 3, 0, 5);
-    
     // -------------------------------------------------------------
     
-    m_curveType = new Q3HButtonGroup(gboxSettings);
-    m_curveFree = new QPushButton(m_curveType);
-    m_curveType->insert(m_curveFree, FreeDrawing);
-    KGlobal::dirs()->addResourceType("curvefree", KGlobal::dirs()->kde_default("data") +
-                                     "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("curvefree", "curvefree.png");
-    m_curveFree->setPixmap( QPixmap( directory + "curvefree.png" ) );
-    m_curveFree->setToggleButton(true);
+    QWidget *typeBox   = new QWidget(gboxSettings);
+    QHBoxLayout *hlay2 = new QHBoxLayout(typeBox);
+    m_curveType        = new QButtonGroup(typeBox);
+
+    m_curveFree = new QPushButton(typeBox);
+    m_curveFree->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/curvefree.png")));
+    m_curveFree->setCheckable(true);
     m_curveFree->setToolTip( i18n( "Curve free mode" ) );
-    m_curveFree->setWhatsThis( i18n("<p>With this button, you can draw your curve free-hand with the mouse."));
-    m_curveSmooth = new QPushButton(m_curveType);
-    m_curveType->insert(m_curveSmooth, SmoothDrawing);
-    KGlobal::dirs()->addResourceType("curvemooth", KGlobal::dirs()->kde_default("data") +
-                                     "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("curvemooth", "curvemooth.png");
-    m_curveSmooth->setPixmap( QPixmap( directory + "curvemooth.png" ) );
-    m_curveSmooth->setToggleButton(true);
+    m_curveFree->setWhatsThis( i18n("<p>With this button, you can draw your curve free-hand "
+                                    "with the mouse."));
+    m_curveType->addButton(m_curveFree, FreeDrawing);
+
+    m_curveSmooth = new QPushButton(typeBox);
+    m_curveSmooth->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/curvemooth.png")));
+    m_curveSmooth->setCheckable(true);
     m_curveSmooth->setToolTip( i18n( "Curve smooth mode" ) );
-    m_curveSmooth->setWhatsThis( i18n("<p>With this button, you constrains the curve type to a smooth line with tension."));
+    m_curveSmooth->setWhatsThis( i18n("<p>With this button, you constrains the curve type "
+                                      "to a smooth line with tension."));
+    m_curveType->addButton(m_curveFree, SmoothDrawing);
+
+    hlay2->setMargin(0);
+    hlay2->setSpacing(0);
+    hlay2->addWidget(m_curveFree);
+    hlay2->addWidget(m_curveSmooth);
+
     m_curveType->setExclusive(true);
-    m_curveType->setButton(SmoothDrawing);
-    //m_curveType->setFrameShape(QFrame::NoFrame);
+    m_curveSmooth->setChecked(true);
     
     // -------------------------------------------------------------
     
-    m_pickerColorButtonGroup = new Q3HButtonGroup(gboxSettings);
-    m_pickBlack = new QPushButton(m_pickerColorButtonGroup);
-    m_pickerColorButtonGroup->insert(m_pickBlack, BlackTonal);
-    KGlobal::dirs()->addResourceType("color-picker-black", KGlobal::dirs()->kde_default("data") +
-                                     "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("color-picker-black", "color-picker-black.png");
-    m_pickBlack->setPixmap( QPixmap( directory + "color-picker-black.png" ) );
-    m_pickBlack->setToggleButton(true);
+    QWidget *pickerBox       = new QWidget(gboxSettings);
+    QHBoxLayout *hlay3       = new QHBoxLayout(pickerBox);
+    m_pickerColorButtonGroup = new QButtonGroup(pickerBox);
+
+    m_pickBlack = new QPushButton(pickerBox);
+    m_pickerColorButtonGroup->addButton(m_pickBlack, BlackTonal);
+    m_pickBlack->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/color-picker-black.png")));
+    m_pickBlack->setCheckable(true);
     m_pickBlack->setToolTip( i18n( "All channels shadow tone color picker" ) );
-    m_pickBlack->setWhatsThis( i18n("<p>With this button, you can pick the color from original image used to set <b>Shadow Tone</b> "
-                                       "smooth curves point on Red, Green, Blue, and Luminosity channels."));
-    m_pickGray  = new QPushButton(m_pickerColorButtonGroup);
-    m_pickerColorButtonGroup->insert(m_pickGray, GrayTonal);
-    KGlobal::dirs()->addResourceType("color-picker-grey", KGlobal::dirs()->kde_default("data") +
-                                     "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("color-picker-grey", "color-picker-grey.png");
-    m_pickGray->setPixmap( QPixmap( directory + "color-picker-grey.png" ) );
-    m_pickGray->setToggleButton(true);
+    m_pickBlack->setWhatsThis( i18n("<p>With this button, you can pick the color from original "
+                                    "image used to set <b>Shadow Tone</b> "
+                                    "smooth curves point on Red, Green, Blue, and Luminosity channels."));
+
+    m_pickGray  = new QPushButton(pickerBox);
+    m_pickerColorButtonGroup->addButton(m_pickGray, GrayTonal);
+    m_pickGray->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/color-picker-grey.png")));
+    m_pickGray->setCheckable(true);
     m_pickGray->setToolTip( i18n( "All channels middle tone color picker" ) );
-    m_pickGray->setWhatsThis( i18n("<p>With this button, you can pick the color from original image used to set <b>Middle Tone</b> "
-                                      "smooth curves point on Red, Green, Blue, and Luminosity channels."));
-    m_pickWhite = new QPushButton(m_pickerColorButtonGroup);
-    m_pickerColorButtonGroup->insert(m_pickWhite, WhiteTonal);
-    KGlobal::dirs()->addResourceType("color-picker-white", KGlobal::dirs()->kde_default("data") +
-                                     "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("color-picker-white", "color-picker-white.png");
-    m_pickWhite->setPixmap( QPixmap( directory + "color-picker-white.png" ) );
-    m_pickWhite->setToggleButton(true);
+    m_pickGray->setWhatsThis( i18n("<p>With this button, you can pick the color from original "
+                                   "image used to set <b>Middle Tone</b> "
+                                   "smooth curves point on Red, Green, Blue, and Luminosity channels."));
+
+    m_pickWhite = new QPushButton(pickerBox);
+    m_pickerColorButtonGroup->addButton(m_pickWhite, WhiteTonal);
+    m_pickWhite->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/color-picker-white.png")));
+    m_pickWhite->setCheckable(true);
     m_pickWhite->setToolTip( i18n( "All channels highlight tone color picker" ) );
-    m_pickWhite->setWhatsThis( i18n("<p>With this button, you can pick the color from original image used to set <b>Highlight Tone</b> "
-                                       "smooth curves point on Red, Green, Blue, and Luminosity channels."));
+    m_pickWhite->setWhatsThis( i18n("<p>With this button, you can pick the color from original "
+                                    "image used to set <b>Highlight Tone</b> "
+                                    "smooth curves point on Red, Green, Blue, and Luminosity channels."));
+
+    hlay3->setMargin(0);
+    hlay3->setSpacing(0);
+    hlay3->addWidget(m_pickBlack);
+    hlay3->addWidget(m_pickGray);
+    hlay3->addWidget(m_pickWhite);
+
     m_pickerColorButtonGroup->setExclusive(true);
-    //m_pickerColorButtonGroup->setFrameShape(QFrame::NoFrame);
     
     // -------------------------------------------------------------
 
@@ -290,21 +292,26 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     m_resetButton->setPixmap( SmallIcon("reload_page", 18) );
     m_resetButton->setToolTip( i18n( "Reset current channel curves' values." ) );
     m_resetButton->setWhatsThis( i18n("<p>If you press this button, all curves' values "
-                                         "from the current selected channel "
-                                         "will be reset to the default values."));
+                                      "from the current selected channel "
+                                      "will be reset to the default values."));
 
-    Q3HBoxLayout* l3 = new Q3HBoxLayout();
-    l3->addWidget(m_curveType);
-    l3->addWidget(m_pickerColorButtonGroup);
+    QHBoxLayout* l3 = new QHBoxLayout();
+    l3->addWidget(curveBox);
+    l3->addWidget(pickerBox);
     l3->addWidget(m_resetButton);
     l3->addStretch(10);
-    
-    grid->addMultiCellLayout(l3, 4, 4, 1, 5);
-    
+
     // -------------------------------------------------------------
             
-
+    grid->setMargin(spacingHint());
+    grid->setSpacing(spacingHint());
+    grid->addMultiCellWidget(label1, 0, 0, 1, 1);
+    grid->addMultiCellWidget(m_channelCB, 0, 0, 2, 2);
+    grid->addMultiCellLayout(l1, 0, 0, 4, 5);
+    grid->addMultiCellWidget(curveBox, 2, 3, 0, 5);
+    grid->addMultiCellLayout(l3, 4, 4, 1, 5);
     grid->setRowStretch(5, 10);
+
     setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
@@ -526,7 +533,9 @@ void AdjustCurveDialog::slotChannelChanged(int channel)
           break;
     }
 
-    m_curveType->setButton(m_curves->getCurveType(channel));
+
+    
+    //TODO m_curveType->setButton(m_curves->getCurveType(channel));
                 
     m_curvesWidget->repaint(false);
     m_histogramWidget->repaint(false);
@@ -546,15 +555,15 @@ void AdjustCurveDialog::slotCurveTypeChanged(int type)
     {
        case SmoothDrawing:          
        {
-          m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
-          m_pickerColorButtonGroup->setEnabled(true);
+          // TODO m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
+          // TODO m_pickerColorButtonGroup->setEnabled(true);
           break;
        }
        
        case FreeDrawing:          
        {
-          m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_FREE);
-          m_pickerColorButtonGroup->setEnabled(false);
+          // TODO m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_FREE);
+          // TODO m_pickerColorButtonGroup->setEnabled(false);
           break;
        }
     }
@@ -568,7 +577,7 @@ void AdjustCurveDialog::readUserSettings()
     KConfigGroup group = config->group("adjustcurves Tool Dialog");
 
     m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(group.readEntry("Histogram Scale", (int)Digikam::HistogramWidget::LogScaleHistogram));
+//TODO    m_scaleBG->setButton(group.readEntry("Histogram Scale", (int)Digikam::HistogramWidget::LogScaleHistogram));
 
     m_curvesWidget->reset();
 
@@ -596,7 +605,7 @@ void AdjustCurveDialog::readUserSettings()
     }
 
     slotChannelChanged(m_channelCB->currentItem());
-    slotScaleChanged(m_scaleBG->selectedId());
+//TODO    slotScaleChanged(m_scaleBG->selectedId());
 }
 
 void AdjustCurveDialog::writeUserSettings()
@@ -604,7 +613,7 @@ void AdjustCurveDialog::writeUserSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("adjustcurves Tool Dialog");
     group.writeEntry("Histogram Channel", m_channelCB->currentItem());
-    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
+//TODO    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
 
     for (int i = 0 ; i < 5 ; i++)
     {
