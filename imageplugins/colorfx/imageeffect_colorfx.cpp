@@ -95,9 +95,8 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     setAboutData(about);
 
     // -------------------------------------------------------------
-    QWidget * widget = new QWidget(this);
-    setMainWidget(widget);
-    m_previewWidget = new Digikam::ImageWidget("coloreffect Tool Dialog", widget,
+
+    m_previewWidget = new Digikam::ImageWidget("coloreffect Tool Dialog", mainWidget(),
                           i18n("<p>This is the color effect preview"));
 
     setPreviewAreaWidget(m_previewWidget); 
