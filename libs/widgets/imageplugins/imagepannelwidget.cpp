@@ -248,7 +248,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     d->settingsLayout = new QVBoxLayout(d->settings);    
 
     QFrame *frame3 = new QFrame(d->settings);
-    frame3->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
+    frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3 = new QVBoxLayout(frame3);
     l3->setSpacing(5);
     l3->setMargin(0);

@@ -90,7 +90,7 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
     d->latLonPos = new QLabel(viewport());
     d->latLonPos->setMaximumHeight(fontMetrics().height());
     d->latLonPos->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    d->latLonPos->setFrameStyle(Q3Frame::Panel | Q3Frame::Sunken);
+    d->latLonPos->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     addChild(d->latLonPos);
 }
 
