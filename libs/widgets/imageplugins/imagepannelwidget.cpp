@@ -222,13 +222,17 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     d->progressBar->setValue(0);
     d->progressBar->setMaximum(100);
     d->progressBar->setMaximumHeight( fontMetrics().height() );
+    
+    QLabel *space = new QLabel(d->previewWidget);
+    space->setFixedWidth(KDialog::spacingHint());
 
     // -------------------------------------------------------------
         
-    d->mainLayout->addMultiCellWidget(preview, 0, 1, 0, 3);
+    d->mainLayout->addMultiCellWidget(preview, 0, 1, 0, 4);
     d->mainLayout->addMultiCellWidget(d->zoomBar, 2, 2, 0, 0);
     d->mainLayout->addMultiCellWidget(d->progressBar, 2, 2, 2, 2);
-    d->mainLayout->addMultiCellWidget(d->sepaBBox, 2, 2, 3, 3);
+    d->mainLayout->addMultiCellWidget(space, 2, 2, 3, 3);
+    d->mainLayout->addMultiCellWidget(d->sepaBBox, 2, 2, 4, 4);
     d->mainLayout->setRowStretch(1, 10);
     d->mainLayout->setColumnStretch(1, 10);
     d->mainLayout->setSpacing(0);

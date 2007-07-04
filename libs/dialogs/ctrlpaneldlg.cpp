@@ -32,7 +32,6 @@
 #include <QSplitter>
 #include <QGridLayout>
 #include <QVBoxLayout>
-#include <QProgressBar>
 
 // KDE includes.
 
@@ -281,7 +280,7 @@ void CtrlPanelDlg::closeEvent(QCloseEvent *e)
     }
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
+    KConfigGroup group        = config->group(d->name + QString(" Tool Dialog"));
     saveDialogSize(group);
     e->accept();
 }

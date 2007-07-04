@@ -76,7 +76,7 @@ public:
 
     QPixmap      pixmapRegion;          // Pixmap of current region to render.
     
-    Q3PointArray  hightlightPoints;
+    Q3PointArray hightlightPoints;
     
     DImg         image;                 // Entire content image to render pixmap.
     
