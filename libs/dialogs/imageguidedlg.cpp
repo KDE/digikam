@@ -213,7 +213,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     QWidget *gboxGuideSettings = new QWidget(d->settings);
     QGridLayout* grid          = new QGridLayout( gboxGuideSettings );
     KSeparator *line           = new KSeparator(Qt::Horizontal, gboxGuideSettings);
-    grid->setMargin(marginHint());
+    grid->setMargin(spacingHint());
     grid->setSpacing(spacingHint());
 
     QLabel *label5  = new QLabel(i18n("Guide color:"), gboxGuideSettings);
