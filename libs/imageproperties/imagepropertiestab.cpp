@@ -447,7 +447,7 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
                 dims = meta.item("Dimensions").value().toSize();
 
             if (meta.item("JPEG quality").isValid())
-                compression = i18n("JPEG quality %1").arg(meta.item("JPEG quality").value().toString());
+                compression = i18n("JPEG quality %1", meta.item("JPEG quality").value().toString());
 
             if (meta.item("Compression").isValid())
                 compression =  meta.item("Compression").value().toString();
@@ -503,11 +503,11 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
 
     QString mpixels;
     mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
-    str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)")
-          .arg(dims.width()).arg(dims.height()).arg(mpixels);
+    str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
+           dims.width(), dims.height(), mpixels);
     d->labelImageDimensions->setText(str);
     d->labelImageCompression->setText(compression.isEmpty() ? unavailable : compression);
-    d->labelImageBitDepth->setText(bitDepth.isEmpty() ? unavailable : i18n("%1 bpp").arg(bitDepth));
+    d->labelImageBitDepth->setText(bitDepth.isEmpty() ? unavailable : i18n("%1 bpp", bitDepth));
     d->labelImageColorMode->setText(colorMode.isEmpty() ? unavailable : colorMode);
 
     // -- Photograph information ------------------------------------------
@@ -581,12 +581,12 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
         d->labelPhotoFocalLenght->setText(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
     else 
     {
-        str = i18n("%1 (35mm: %2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm);
+        str = i18n("%1 (35mm: %2)", photoInfo.focalLength, photoInfo.focalLength35mm);
         d->labelPhotoFocalLenght->setText(str);
     }
 
     d->labelPhotoExposureTime->setText(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime);
-    d->labelPhotoSensitivity->setText(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO").arg(photoInfo.sensitivity));
+    d->labelPhotoSensitivity->setText(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO", photoInfo.sensitivity));
 
     if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
         d->labelPhotoExposureMode->setText(unavailable);
