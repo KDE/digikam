@@ -150,7 +150,7 @@ void ImageEffect_Texture::readUserSettings()
     KConfigGroup group = config->group("texture Tool Dialog");
     m_textureType->blockSignals(true);
     m_blendGain->blockSignals(true);
-    m_textureType->setCurrentItem(group.readEntry("TextureType", PaperTexture));
+    m_textureType->setCurrentItem(group.readEntry("TextureType", (int)PaperTexture));
     m_blendGain->setValue(group.readEntry("BlendGain", 200));
     m_textureType->blockSignals(false);
     m_blendGain->blockSignals(false);
@@ -160,7 +160,7 @@ void ImageEffect_Texture::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("texture Tool Dialog");
-    group.riteEntry("TextureType", m_textureType->currentItem());
+    group.writeEntry("TextureType", m_textureType->currentItem());
     group.writeEntry("BlendGain", m_blendGain->value());
     group.sync();
 }

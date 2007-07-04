@@ -43,12 +43,9 @@ K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_texture,
 ImagePlugin_Texture::ImagePlugin_Texture(QObject *parent, const QStringList &)
                    : Digikam::ImagePlugin(parent, "ImagePlugin_Texture")
 {
-    m_textureAction = new KAction(i18n("Apply Texture..."), "texture", 0, 
-                          this, SLOT(slotTexture()),
-                          actionCollection(), "imageplugin_texture");
                 
     m_textureAction  = new KAction(KIcon("texture"), i18n("Apply Texture..."), this);
-    actionCollection()->addAction("", m_textureAction );
+    actionCollection()->addAction("imageplugin_texture", m_textureAction );
     connect(m_textureAction, SIGNAL(triggered(bool) ), SLOT(slotTexture()));
     setXMLFile( "digikamimageplugin_texture_ui.rc" );                                
     

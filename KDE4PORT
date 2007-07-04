@@ -171,7 +171,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---restoration                         Gilles                          DONE
         |---sheartool                           Laurent                         DONE
         |---superimpose
-        |---texture
+        |---texture                             Laurent                         DONE
         |-----patterns                                                                               CMake port only is require.
         |---whitebalance                        Gilles                          DONE
 	
