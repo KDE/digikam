@@ -29,7 +29,6 @@
 
 #include "imageguidedlg.h"
 
-class QFrame;
 class QLabel;
 class QCheckBox;
 class QComboBox;

@@ -30,7 +30,6 @@
 
 #include "imagedlgbase.h"
 
-class QCheckBox;
 class QComboBox;
 class Q3HButtonGroup;
 

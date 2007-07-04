@@ -37,7 +37,6 @@
 class Q3HButtonGroup;
 class QComboBox;
 class Q3ListBox;
-class Q3ButtonGroup;
 
 namespace Digikam
 {

@@ -30,7 +30,6 @@
 
 #include "imagedlgbase.h"
 
-class QPushButton;
 
 namespace Digikam
 {

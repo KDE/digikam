@@ -37,7 +37,6 @@ class Q3VButtonGroup;
 class Q3ButtonGroup;
 class Q3HButtonGroup;
 class QRadioButton;
-class QPushButton;
 class QToolBox;
 
 class KUrlRequester;
@@ -45,7 +44,6 @@ class KIntNumInput;
 
 namespace Digikam
 {
-class ICCTransform;
 class ImageWidget;
 class HistogramWidget;
 class ColorGradientWidget;

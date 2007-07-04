@@ -46,11 +46,6 @@
 
 class QPixmap;
 
-namespace Digikam
-{
-class ImageIface;
-}
-
 namespace DigikamSuperImposeImagesPlugin
 {
 

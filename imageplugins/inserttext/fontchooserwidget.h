@@ -35,7 +35,6 @@
 class QComboBox;
 class QCheckBox;
 class QFont;
-class Q3GroupBox;
 class QLabel;
 class QStringList;
 

@@ -34,7 +34,6 @@ class QSpinBox;
 class QPushButton;
 class Q3HButtonGroup;
 
-class KDoubleSpinBox;
 class KGradientSelector;
 class KDoubleNumInput;
 
