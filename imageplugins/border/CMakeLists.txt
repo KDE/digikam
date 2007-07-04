@@ -13,7 +13,7 @@ kde4_automoc(${digikamimageplugin_border_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_border ${digikamimageplugin_border_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_border  ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} libdimg )
+target_link_libraries(digikamimageplugin_border  digikam )
 
 install(TARGETS digikamimageplugin_border DESTINATION ${PLUGIN_INSTALL_DIR} )
 

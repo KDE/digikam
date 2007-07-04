@@ -198,7 +198,7 @@ void ImageEffect_BlurFX::renderingFinished(void)
 void ImageEffect_BlurFX::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KconfigGroup group = config->group("blurfx Tool Dialog");
+    KConfigGroup group = config->group("blurfx Tool Dialog");
     m_effectType->blockSignals(true);
     m_distanceInput->blockSignals(true);
     m_levelInput->blockSignals(true);
@@ -213,7 +213,7 @@ void ImageEffect_BlurFX::readUserSettings()
 void ImageEffect_BlurFX::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KconfigGroup group = config->group("blurfx Tool Dialog");
+    KConfigGroup group = config->group("blurfx Tool Dialog");
     group.writeEntry("EffectType", m_effectType->currentItem());
     group.writeEntry("DistanceAjustment", m_distanceInput->value());
     group.writeEntry("LevelAjustment", m_levelInput->value());

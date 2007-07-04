@@ -144,8 +144,8 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---adjustcurves                        Laurent                         DONE                     CMake port only
         |---adjustlevels                        Laurent                         DONE                     CMake port only
         |---antivignetting                      Laurent                         DONE
-        |---blurfx
-        |---border                              Laurent                                              CMake port only
+        |---blurfx                              Laurent				DONE
+        |---border                              Laurent                         DONE                     CMake port only
         |-----patterns                                                                               CMake port only is require.
         |---channelmixer                        Laurent 			DONE
         |---charcoal                            Laurent                         DONE
