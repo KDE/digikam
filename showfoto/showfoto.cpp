@@ -417,7 +417,6 @@ void ShowFoto::setupUserArea()
 
     if(!group.readEntry("HorizontalThumbbar", false)) // Vertical thumbbar layout
     {
-        DDebug() << "Vertical splitter" << endl;
         QHBoxLayout *hlay = new QHBoxLayout(widget);
         m_splitter        = new QSplitter(widget);
         d->thumbBar       = new Digikam::ThumbBarView(m_splitter, Qt::Vertical);
@@ -436,7 +435,6 @@ void ShowFoto::setupUserArea()
     }
     else                                                     // Horizontal thumbbar layout
     {
-        DDebug() << "Horizontal splitter" << endl;
         m_splitter        = new QSplitter(Qt::Horizontal, widget);
         QWidget* widget2  = new QWidget(m_splitter);
         QVBoxLayout *vlay = new QVBoxLayout(widget2);
