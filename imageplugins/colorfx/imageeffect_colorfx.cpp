@@ -202,7 +202,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     gridSettings->addMultiCellWidget(m_iterationLabel, 7, 7, 0, 4);
     gridSettings->addMultiCellWidget(m_iterationInput, 8, 8, 0, 4);
     gridSettings->setRowStretch(9, 10);
-    gridSettings->setMargin(0);
+    gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
 
     setUserAreaWidget(gboxSettings);
