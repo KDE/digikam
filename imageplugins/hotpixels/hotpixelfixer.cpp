@@ -265,9 +265,9 @@ void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, 
                                 weight=w[i][y][x];
                             }
                                     
-                            if (iComp==0) v += weight * img.getPixelColor(xx, yy).Qt::red();
-                            else if (iComp==1) v += weight * img.getPixelColor(xx, yy).Qt::green();
-                            else v += weight * img.getPixelColor(xx, yy).Qt::blue();
+                            if (iComp==0) v += weight * img.getPixelColor(xx, yy).red();
+                            else if (iComp==1) v += weight * img.getPixelColor(xx, yy).green();
+                            else v += weight * img.getPixelColor(xx, yy).blue();
                             
                             sum_weight += weight;
                         }

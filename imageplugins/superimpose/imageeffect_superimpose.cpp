@@ -48,7 +48,7 @@
 #include <kapplication.h>
 #include <kmenu.h>
 #include <kstandarddirs.h>
-#include <kprogress.h>
+#include <qprogressbar.h>
 #include <knuminput.h>
 #include <kiconloader.h>
 #include <kfiledialog.h> 
@@ -99,8 +99,9 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     setAboutData(about);    
     
     // -------------------------------------------------------------
-    
-    QFrame *frame = new Q3Frame(plainPage());
+    QWidget *widget = new QWidget(this);
+    setMainWidget(widget);
+    QFrame *frame = new Q3Frame(widget);
     frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
 
     Q3GridLayout* gridFrame = new Q3GridLayout( frame, 1, 2, spacingHint());
@@ -117,25 +118,25 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     bGroup->addSpace(0);
     QPushButton *zoomInButton = new QPushButton( bGroup );
     bGroup->insert(zoomInButton, ZOOMIN);
-    zoomInButton->setPixmap( icon.loadIcon( "viewmag+", (KIcon::Group)KIcon::Toolbar ) );
+    zoomInButton->setPixmap( icon.loadIcon( "viewmag+", K3Icon::Toolbar ) );
     zoomInButton->setToggleButton(true);
     zoomInButton->setToolTip( i18n( "Zoom in" ) );
     bGroup->addSpace(20);
     QPushButton *zoomOutButton = new QPushButton( bGroup );
     bGroup->insert(zoomOutButton, ZOOMOUT);
-    zoomOutButton->setPixmap( icon.loadIcon( "viewmag-", (KIcon::Group)KIcon::Toolbar ) );
+    zoomOutButton->setPixmap( icon.loadIcon( "viewmag-", K3Icon::Toolbar ) );
     zoomOutButton->setToggleButton(true);
     zoomOutButton->setToolTip( i18n( "Zoom out" ) );
     bGroup->addSpace(20);
     QPushButton *moveButton = new QPushButton( bGroup );
     bGroup->insert(moveButton, MOVE);
-    moveButton->setPixmap( icon.loadIcon( "move", (KIcon::Group)KIcon::Toolbar ) );
+    moveButton->setPixmap( icon.loadIcon( "move", K3Icon::Toolbar ) );
     moveButton->setToggleButton(true);
     moveButton->setOn(true);
     moveButton->setToolTip( i18n( "Move" ) );
     bGroup->addSpace(20);
     bGroup->setExclusive(true);
-    bGroup->setFrameShape(Q3Frame::NoFrame);
+    //bGroup->setFrameShape(Q3Frame::NoFrame);
     gridFrame->addMultiCellWidget(bGroup, 1, 1, 1, 1);
     gridFrame->setColStretch(0, 10);
     gridFrame->setColStretch(2, 10);
@@ -144,7 +145,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QWidget *gbox2    = new QWidget(plainPage());
+    QWidget *gbox2    = new QWidget(widget);
     Q3GridLayout* grid = new Q3GridLayout( gbox2, 1, 1, marginHint(), spacingHint());
     
     m_thumbnailsBar = new Digikam::ThumbBarView(gbox2);
@@ -195,7 +196,8 @@ void ImageEffect_SuperImpose::populateTemplates(void)
        return;
        
     dir.setFilter ( QDir::Files | QDir::NoSymLinks );
-
+//TODO port me
+#if 0
     const QFileInfoList* fileinfolist = dir.entryInfoList();
     if (!fileinfolist)
        return;
@@ -208,6 +210,7 @@ void ImageEffect_SuperImpose::populateTemplates(void)
         new Digikam::ThumbBarItem( m_thumbnailsBar, KUrl(fi->filePath()) );
         ++it;
     }
+#endif    
 }
 
 void ImageEffect_SuperImpose::readUserSettings()
@@ -215,8 +218,8 @@ void ImageEffect_SuperImpose::readUserSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("Album Settings");
     KUrl albumDBUrl( group.readEntry("Album Path", KGlobalSettings::documentPath()) );
-    KConfigGroup group = config->group("superimpose Tool Dialog");
-    KConfigGroup group = config->group("Template Superimpose Tool Settings");
+    group = config->group("superimpose Tool Dialog");
+    group = config->group("Template Superimpose Tool Settings");
     m_templatesRootUrl.setPath( group.readEntry("Templates Root URL", albumDBUrl.path()) );
     m_templatesUrl.setPath( group.readEntry("Templates URL", albumDBUrl.path()) );
     m_dirSelect->setRootPath(m_templatesRootUrl, m_templatesUrl);

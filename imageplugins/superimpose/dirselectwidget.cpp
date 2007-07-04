@@ -28,7 +28,7 @@
 // KDE includes
 
 #include <klocale.h>
-
+#include <KFileTreeBranch>
 // Local includes.
 
 #include "ddebug.h"
@@ -47,7 +47,7 @@ struct DirSelectWidget::Private
 };
 
 DirSelectWidget::DirSelectWidget(QWidget* parent, const char* name, QString headerLabel)
-               : KFileTreeView( parent, name)
+               : K3FileTreeView( parent)
 {
     d = new Private;
     
@@ -61,7 +61,7 @@ DirSelectWidget::DirSelectWidget(QWidget* parent, const char* name, QString head
 
 DirSelectWidget::DirSelectWidget(KUrl rootUrl, KUrl currentUrl, 
                                  QWidget* parent, const char* name, QString headerLabel)
-               : KFileTreeView( parent, name)
+               : K3FileTreeView( parent)
 {
     d = new Private;
     
@@ -81,24 +81,24 @@ DirSelectWidget::~DirSelectWidget()
 
 KUrl DirSelectWidget::path() const
 {
-    return currentURL();
+    return currentUrl();
 }
 
 void DirSelectWidget::load()
 {
     if ( d->m_pendingPath.isEmpty() ) 
     {
-        disconnect( d->m_item, SIGNAL( populateFinished(KFileTreeViewItem *) ), 
+        disconnect( d->m_item, SIGNAL( populateFinished(K3FileTreeViewItem *) ), 
                     this, SLOT( load() ) );
         
-        emit folderItemSelected(currentURL());
+        emit folderItemSelected(currentUrl());
         return;
     }
 
     QString item = d->m_pendingPath.front();
     d->m_pendingPath.pop_front();
     d->m_handled += item;    
-    KFileTreeViewItem* branch = findItem( d->m_item, d->m_handled );
+    K3FileTreeViewItem* branch = findItem( d->m_item, d->m_handled );
     
     if ( !branch ) 
     {
@@ -130,7 +130,7 @@ void DirSelectWidget::setCurrentPath(KUrl currentUrl)
     if ( !d->m_pendingPath[0].isEmpty() )
         d->m_pendingPath.prepend( "" ); // ensure we open the root first.        
         
-    connect( d->m_item, SIGNAL( populateFinished(KFileTreeViewItem *) ),
+    connect( d->m_item, SIGNAL( populateFinished(K3FileTreeViewItem *) ),
              this, SLOT( load() ) );
     load();
 }
@@ -154,7 +154,7 @@ void DirSelectWidget::setRootPath(KUrl rootUrl, KUrl currentUrl)
     if ( !d->m_pendingPath[0].isEmpty() )
         d->m_pendingPath.prepend( "" ); // ensure we open the root first.
                     
-    connect( d->m_item, SIGNAL( populateFinished(KFileTreeViewItem *) ),
+    connect( d->m_item, SIGNAL( populateFinished(K3FileTreeViewItem *) ),
              this, SLOT( load() ) );
     
     load();
@@ -170,7 +170,7 @@ KUrl DirSelectWidget::rootPath(void)
 
 void DirSelectWidget::slotFolderSelected(Q3ListViewItem *)
 {
-    emit folderItemSelected(currentURL());
+    emit folderItemSelected(currentUrl());
 }
 
 }   // NameSpace DigikamSuperImposeImagesPlugin

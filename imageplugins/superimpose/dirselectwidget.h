@@ -28,13 +28,13 @@
 
 // KDE includes.
 
-#include <kfiletreeview.h>
+#include <k3filetreeview.h>
 #include <kurl.h>
 
 namespace DigikamSuperImposeImagesPlugin
 {
 
-class DirSelectWidget : public KFileTreeView 
+class DirSelectWidget : public K3FileTreeView 
 {
 Q_OBJECT
 
