@@ -218,7 +218,7 @@ void ThumbnailJob::processNext()
     d->running = true;
 }
 
-void ThumbnailJob::slotResult(KIO::Job *job)
+void ThumbnailJob::slotResult(KJob *job)
 {
     removeSubjob(job);
     Q_ASSERT( subjobs().isEmpty() );

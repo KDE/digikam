@@ -75,7 +75,7 @@ private:
 
 protected slots:
 
-    void slotResult(KIO::Job *job);
+    void slotResult(KJob *job);
     void slotThumbData(KIO::Job *job, const QByteArray &data);
 
 private:
