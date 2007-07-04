@@ -763,13 +763,16 @@ bool ThumbBarView::event(QEvent *event)
 {
     if (event->type() == QEvent::ToolTip) 
     {
-        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
-        QString tipText;
-
-        if (d->toolTip->maybeTip(helpEvent->pos(), tipText))
-            QToolTip::showText(helpEvent->globalPos(), tipText);
-        else
-            QToolTip::hideText();
+        QHelpEvent *helpEvent = dynamic_cast<QHelpEvent *>(event);
+        if (helpEvent)
+        {
+            QString tipText;
+    
+            if (d->toolTip->maybeTip(helpEvent->pos(), tipText))
+                QToolTip::showText(helpEvent->globalPos(), tipText);
+            else
+                QToolTip::hideText();
+        }
     }
 
     return QWidget::event(event);
