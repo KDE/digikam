@@ -101,15 +101,16 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     setAboutData(about);
 
     // -------------------------------------------------------------
-
-    m_previewWidget = new Digikam::ImageWidget("coloreffect Tool Dialog", plainPage(),
+    QWidget * widget = new QWidget(this);
+    setMainWidget(widget);
+    m_previewWidget = new Digikam::ImageWidget("coloreffect Tool Dialog", widget,
                           i18n("<p>This is the color effect preview"));
 
     setPreviewAreaWidget(m_previewWidget); 
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(plainPage());
+    QWidget *gboxSettings     = new QWidget(widget);
     Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 9, 4, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
@@ -127,7 +128,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
 
     m_scaleBG = new Q3HButtonGroup(gboxSettings);
     m_scaleBG->setExclusive(true);
-    m_scaleBG->setFrameShape(Q3Frame::NoFrame);
+    //m_scaleBG->setFrameShape(Q3Frame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
     m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
@@ -249,7 +250,7 @@ ImageEffect_ColorFX::~ImageEffect_ColorFX()
 void ImageEffect_ColorFX::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config.group("coloreffect Tool Dialog");
+    KConfigGroup group = config->group("coloreffect Tool Dialog");
     m_effectType->setCurrentItem(group.readEntry("EffectType", (int)ColorFX));
     m_levelInput->setValue(group.readEntry("LevelAjustment", 0));
     m_iterationInput->setValue(group.readEntry("IterationAjustment", 3));

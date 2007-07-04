@@ -4,7 +4,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor ${
 
 ########### next target ###############
 
-set(digikamimageplugin_channelmixer_PART_SRCS imageplugin_channelmixer.cpp channelmixer.cpp ${libimagepluginswidgets_SRCS} ${libhistogram_SRCS} )
+set(digikamimageplugin_channelmixer_PART_SRCS imageplugin_channelmixer.cpp channelmixer.cpp ${libcommonwidgets_SRCS} ${libimagepluginswidgets_SRCS} ${libhistogram_SRCS} )
 
 kde4_automoc(${digikamimageplugin_channelmixer_PART_SRCS})
 

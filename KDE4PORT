@@ -147,9 +147,9 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---blurfx
         |---border                              Laurent                                              CMake port only
         |-----patterns                                                                               CMake port only is require.
-        |---channelmixer
-        |---charcoal
-        |---colorfx
+        |---channelmixer                        Laurent 			DONE
+        |---charcoal                            Laurent                         DONE
+        |---colorfx                             Laurent                         DONE
         |---coreplugin
         |-----hsl
         |-----ratiocrop

@@ -10,7 +10,7 @@ kde4_automoc(${digikamimageplugin_charcoal_PART_SRCS})
 
 kde4_add_plugin(digikamimageplugin_charcoal ${digikamimageplugin_charcoal_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_charcoal ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS})
+target_link_libraries(digikamimageplugin_charcoal digikam)
 
 install(TARGETS digikamimageplugin_charcoal DESTINATION ${PLUGIN_INSTALL_DIR} )
 

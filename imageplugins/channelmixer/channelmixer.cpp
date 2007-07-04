@@ -537,7 +537,7 @@ void ChannelMixerDialog::readUserSettings()
     KConfigGroup group = config->group("channelmixer Tool Dialog");
 
     m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(group.readEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    m_scaleBG->setButton(group.readEntry("Histogram Scale", (int)Digikam::HistogramWidget::LogScaleHistogram));
 
     m_monochrome->setChecked(group.readEntry("Monochrome", false));
     m_preserveLuminosity->setChecked(group.readEntry("PreserveLuminosity", false));
