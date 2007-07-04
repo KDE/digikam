@@ -37,8 +37,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Perspective : public Digikam::Image
     
 public:
 
-    ImagePlugin_Perspective(QObject *parent,
-                         const QStringList &args);
+    ImagePlugin_Perspective(QObject *parent, const QStringList &args);
     ~ImagePlugin_Perspective();
 
     void setEnabledActions(bool enable);

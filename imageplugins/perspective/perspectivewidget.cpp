@@ -25,7 +25,6 @@
  * 
  * ============================================================ */
 
-
 // C++ includes.
 
 #include <cstdio>
@@ -34,14 +33,12 @@
 
 // Qt includes.
 
-#include <qregion.h>
-#include <qpainter.h>
-#include <qpen.h>
-#include <qbrush.h>
-#include <qpixmap.h>
-#include <qimage.h>
-#include <q3pointarray.h>
-//Added by qt3to4:
+#include <QRegion>
+#include <QPainter>
+#include <QPen>
+#include <QBrush>
+#include <QPixmap>
+#include <QImage>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
@@ -66,8 +63,9 @@ namespace DigikamPerspectiveImagesPlugin
 {
 
 PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget *parent)
-                 : QWidget(parent, 0, Qt::WDestructiveClose)
+                 : QWidget(parent)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
     setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
     setMouseTracking(true);
@@ -185,7 +183,7 @@ void PerspectiveWidget::reset(void)
 
     m_antiAlias = true;
     updatePixmap();
-    repaint(false);
+    repaint();
 }
 
 void PerspectiveWidget::applyPerspectiveAdjustment(void)
@@ -215,7 +213,7 @@ void PerspectiveWidget::slotToggleAntiAliasing(bool a)
 {
     m_antiAlias = a; 
     updatePixmap();
-    repaint(false);
+    repaint();
 }
 
 void PerspectiveWidget::slotToggleDrawWhileMoving(bool draw)
@@ -227,21 +225,21 @@ void PerspectiveWidget::slotToggleDrawGrid(bool grid)
 {
     m_drawGrid = grid;
     updatePixmap();
-    repaint(false);
+    repaint();
 }
 
 void PerspectiveWidget::slotChangeGuideColor(const QColor &color)
 {
     m_guideColor = color;
     updatePixmap();
-    repaint(false);
+    repaint();
 }
 
 void PerspectiveWidget::slotChangeGuideSize(int size)
 {
     m_guideSize = size;
     updatePixmap();
-    repaint(false);
+    repaint();
 }
 
 void PerspectiveWidget::updatePixmap(void)
@@ -587,7 +585,7 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
                 int u = iu - u1;
                 int v = iv - v1;
 
-                //TODO: Check why antialiasing shows no effect
+                //TODO: Check why antialiasing doesn't work
                 /*if (m_antiAlias)
                 {
                     if (sixteenBit)
@@ -710,7 +708,7 @@ void PerspectiveWidget::mouseReleaseEvent ( QMouseEvent * e )
         if (!m_drawWhileMoving)
         {
             updatePixmap();
-            repaint(false);
+            repaint();
         }
     }
     else
@@ -718,7 +716,7 @@ void PerspectiveWidget::mouseReleaseEvent ( QMouseEvent * e )
         m_spot.setX(e->x()-m_rect.x());
         m_spot.setY(e->y()-m_rect.y());
         updatePixmap();
-        repaint(false);
+        repaint();
     }
 }
 
@@ -823,7 +821,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
             }
 
             updatePixmap();
-            repaint(false);
+            repaint();
         }
     }
     else
@@ -841,4 +839,3 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
 }
 
 }  // NameSpace DigikamPerspectiveImagesPlugin
-

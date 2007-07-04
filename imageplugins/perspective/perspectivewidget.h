@@ -27,12 +27,11 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qpoint.h>
-#include <q3pointarray.h>
-#include <qcolor.h>
-#include <qrect.h>
-//Added by qt3to4:
+#include <QWidget>
+#include <QPoint>
+#include <Q3PointArray>
+#include <QColor>
+#include <QRect>
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QMouseEvent>
@@ -92,8 +91,8 @@ public slots:
 
 signals:
 
-    void signalPerspectiveChanged( QRect newSize, float topLeftAngle, float topRightAngle,
-                                   float bottomLeftAngle, float bottomRightAngle );   
+    void signalPerspectiveChanged(QRect newSize, float topLeftAngle, float topRightAngle,
+                                   float bottomLeftAngle, float bottomRightAngle);   
 
 protected:
 
@@ -163,7 +162,7 @@ private:
     QColor               m_guideColor;
 
     // 60 points will be stored to compute a grid of 15x15 lines.
-    Q3PointArray          m_grid;
+    Q3PointArray         m_grid;
 
     QPixmap             *m_pixmap;
 

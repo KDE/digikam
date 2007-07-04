@@ -24,17 +24,14 @@
 
 // Qt includes. 
  
-#include <q3vgroupbox.h>
-#include <qlabel.h>
-#include <qspinbox.h>
-#include <qpushbutton.h>
-
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3VBoxLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QSpinBox>
+#include <QPushButton>
+#include <QFrame>
+#include <QCheckBox>
+#include <QGridLayout>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -92,16 +89,17 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     
     // -------------------------------------------------------------
    
-    QWidget * plain = new QWidget(this);
-   setMainWidget(plain); 
-    QFrame *frame = new Q3Frame(plain);
-    frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
-    Q3VBoxLayout* l  = new Q3VBoxLayout(frame, 5, 0);
+    QFrame *frame = new QFrame(mainWidget());
+    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QVBoxLayout* l  = new QVBoxLayout(frame);
     m_previewWidget = new PerspectiveWidget(525, 350, frame);
-    l->addWidget(m_previewWidget);
     m_previewWidget->setWhatsThis( i18n("<p>This is the perspective transformation operation preview. "
-                                           "You can use the mouse for dragging the corner to adjust the "
-                                           "perspective transformation area."));
+                                        "You can use the mouse for dragging the corner to adjust the "
+                                        "perspective transformation area."));
+
+    l->setMargin(5);
+    l->setSpacing(0);
+    l->addWidget(m_previewWidget);
     setPreviewAreaWidget(frame); 
     
     // -------------------------------------------------------------
@@ -109,8 +107,8 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     QString temp;
     Digikam::ImageIface iface(0, 0);
 
-    QWidget *gbox2          = new QWidget(plain);
-    Q3GridLayout *gridLayout = new Q3GridLayout( gbox2, 13, 2, spacingHint());
+    QWidget *gbox2          = new QWidget(mainWidget());
+    QGridLayout *gridLayout = new QGridLayout(gbox2);
 
     QLabel *label1  = new QLabel(i18n("New width:"), gbox2);
     m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), gbox2);
@@ -119,11 +117,6 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     QLabel *label2   = new QLabel(i18n("New height:"), gbox2);
     m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"), gbox2);
     m_newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
-    
-    gridLayout->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridLayout->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
-    gridLayout->addMultiCellWidget(label2, 1, 1, 0, 0);
-    gridLayout->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 2);
     
     // -------------------------------------------------------------
     
@@ -139,6 +132,33 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     QLabel *label6 = new QLabel(i18n("  Bottom right:"), gbox2);
     m_bottomRightAngleLabel = new QLabel(gbox2);
     
+    // -------------------------------------------------------------
+
+    KSeparator *line2         = new KSeparator (Qt::Horizontal, gbox2);
+    m_drawWhileMovingCheckBox = new QCheckBox(i18n("Draw preview while moving"), gbox2);
+    m_drawGridCheckBox        = new QCheckBox(i18n("Draw grid"), gbox2);
+
+    // -------------------------------------------------------------
+
+    QLabel *label7 = new QLabel(i18n("Guide color:"), gbox2);
+    m_guideColorBt = new KColorButton( QColor( Qt::red ), gbox2 );
+    m_guideColorBt->setWhatsThis( i18n("<p>Set here the color used to draw guides dashed-lines."));
+
+    QLabel *space  = new QLabel(gbox2);
+    space->setFixedHeight(spacingHint());
+
+    QLabel *label8 = new QLabel(i18n("Guide width:"), gbox2);
+    m_guideSize    = new QSpinBox(gbox2);
+    m_guideSize->setRange(1, 5);
+    m_guideSize->setSingleStep(1);
+    m_guideSize->setWhatsThis( i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
+
+    gridLayout->setMargin(spacingHint());
+    gridLayout->setSpacing(0);
+    gridLayout->addMultiCellWidget(label1, 0, 0, 0, 0);
+    gridLayout->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
+    gridLayout->addMultiCellWidget(label2, 1, 1, 0, 0);
+    gridLayout->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 2);
     gridLayout->addMultiCellWidget(line, 2, 2, 0, 2);
     gridLayout->addMultiCellWidget(angleLabel, 3, 3, 0, 2);
     gridLayout->addMultiCellWidget(label3, 4, 4, 0, 0);
@@ -149,34 +169,16 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     gridLayout->addMultiCellWidget(m_bottomLeftAngleLabel, 6, 6, 1, 2);
     gridLayout->addMultiCellWidget(label6, 7, 7, 0, 0);
     gridLayout->addMultiCellWidget(m_bottomRightAngleLabel, 7, 7, 1, 2);
-
-    // -------------------------------------------------------------
-
-    KSeparator *line2 = new KSeparator (Qt::Horizontal, gbox2);
-
-    m_drawWhileMovingCheckBox = new QCheckBox(i18n("Draw preview while moving"), gbox2);
     gridLayout->addMultiCellWidget(line2, 8, 8, 0, 2);
     gridLayout->addMultiCellWidget(m_drawWhileMovingCheckBox, 9, 9, 0, 2);
-
-    m_drawGridCheckBox = new QCheckBox(i18n("Draw grid"), gbox2);
     gridLayout->addMultiCellWidget(m_drawGridCheckBox, 10, 10, 0, 2);
-
-    // -------------------------------------------------------------
-
-    QLabel *label7 = new QLabel(i18n("Guide color:"), gbox2);
-    m_guideColorBt = new KColorButton( QColor( Qt::red ), gbox2 );
-    m_guideColorBt->setWhatsThis( i18n("<p>Set here the color used to draw guides dashed-lines."));
     gridLayout->addMultiCellWidget(label7, 11, 11, 0, 0);
     gridLayout->addMultiCellWidget(m_guideColorBt, 11, 11, 2, 2);
-
-    QLabel *label8 = new QLabel(i18n("Guide width:"), gbox2);
-    m_guideSize    = new QSpinBox( 1, 5, 1, gbox2);
-    m_guideSize->setWhatsThis( i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
-    gridLayout->addMultiCellWidget(label8, 12, 12, 0, 0);
-    gridLayout->addMultiCellWidget(m_guideSize, 12, 12, 2, 2);
-
-    gridLayout->setColStretch(1, 10);
-    gridLayout->setRowStretch(13, 10);
+    gridLayout->addMultiCellWidget(space, 12, 12, 0, 2);
+    gridLayout->addMultiCellWidget(label8, 13, 13, 0, 0);
+    gridLayout->addMultiCellWidget(m_guideSize, 13, 13, 2, 2);
+    gridLayout->setColumnStretch(1, 10);
+    gridLayout->setRowStretch(14, 10);
 
     setUserAreaWidget(gbox2);
 
@@ -255,4 +257,3 @@ void ImageEffect_Perspective::slotUpdateInfo(QRect newSize, float topLeftAngle, 
 }
 
 }  // NameSpace DigikamPerspectiveImagesPlugin
-

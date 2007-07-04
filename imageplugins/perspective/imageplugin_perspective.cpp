@@ -45,7 +45,9 @@ ImagePlugin_Perspective::ImagePlugin_Perspective(QObject *parent, const QStringL
 {
     m_perspectiveAction  = new KAction(KIcon("perspective"), i18n("Perspective Adjustment..."), this);
     actionCollection()->addAction("imageplugin_perspective", m_perspectiveAction );
-    connect(m_perspectiveAction, SIGNAL(triggered(bool) ), SLOT(slotPerspective()));
+
+    connect(m_perspectiveAction, SIGNAL(triggered(bool)), 
+            this, SLOT(slotPerspective()));
     
     setXMLFile("digikamimageplugin_perspective_ui.rc");      
                                     
@@ -66,4 +68,3 @@ void ImagePlugin_Perspective::slotPerspective()
     DigikamPerspectiveImagesPlugin::ImageEffect_Perspective dlg(parentWidget());
     dlg.exec();
 }
-

@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <qpoint.h>
+#include <QPoint>
 
 namespace DigikamPerspectiveImagesPlugin
 {
