@@ -289,14 +289,14 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
-    m_resetButton->setPixmap( SmallIcon("reload_page", 18) );
+    m_resetButton->setPixmap( SmallIcon("document-revert", 18) );
     m_resetButton->setToolTip( i18n( "Reset current channel curves' values." ) );
     m_resetButton->setWhatsThis( i18n("<p>If you press this button, all curves' values "
                                       "from the current selected channel "
                                       "will be reset to the default values."));
 
     QHBoxLayout* l3 = new QHBoxLayout();
-    l3->addWidget(curveBox);
+    l3->addWidget(typeBox);
     l3->addWidget(pickerBox);
     l3->addWidget(m_resetButton);
     l3->addStretch(10);
