@@ -417,9 +417,10 @@ void ShowFoto::setupUserArea()
 
     if(!group.readEntry("HorizontalThumbbar", false)) // Vertical thumbbar layout
     {
+        DDebug() << "Vertical splitter" << endl;
         QHBoxLayout *hlay = new QHBoxLayout(widget);
         m_splitter        = new QSplitter(widget);
-        d->thumbBar       = new Digikam::ThumbBarView(m_splitter, Digikam::ThumbBarView::Vertical);
+        d->thumbBar       = new Digikam::ThumbBarView(m_splitter, Qt::Vertical);
         m_canvas          = new Digikam::Canvas(m_splitter);
 
         m_canvas->setSizePolicy(rightSzPolicy);
@@ -435,12 +436,13 @@ void ShowFoto::setupUserArea()
     }
     else                                                     // Horizontal thumbbar layout
     {
+        DDebug() << "Horizontal splitter" << endl;
         m_splitter        = new QSplitter(Qt::Horizontal, widget);
         QWidget* widget2  = new QWidget(m_splitter);
         QVBoxLayout *vlay = new QVBoxLayout(widget2);
         d->vSplitter      = new QSplitter(Qt::Vertical, widget2);
         m_canvas          = new Digikam::Canvas(d->vSplitter);
-        d->thumbBar       = new Digikam::ThumbBarView(d->vSplitter, Digikam::ThumbBarView::Horizontal);
+        d->thumbBar       = new Digikam::ThumbBarView(d->vSplitter, Qt::Horizontal);
 
         m_canvas->setSizePolicy(rightSzPolicy);
         m_canvas->makeDefaultEditingCanvas();

@@ -95,14 +95,6 @@ class DIGIKAM_EXPORT ThumbBarView : public Q3ScrollView
     Q_OBJECT
 
 public:
-    
-    enum Orientation
-    {
-        Horizontal=0,      
-        Vertical         
-    };
-
-public:
 
     ThumbBarView(QWidget* parent, int orientation=Qt::Vertical, bool exifRotate=false,
                  ThumbBarToolTipSettings settings=ThumbBarToolTipSettings());
@@ -189,7 +181,10 @@ public:
     ThumbBarItem* prev() const;
     int           position() const;
     QRect         rect() const;
-    QPixmap*      pixmap() const;
+    bool          hasPixmap() const;
+    QPixmap       pixmap() const;
+
+    void          setPixmap(const QPixmap& pixmap);
 
     void          repaint();
 

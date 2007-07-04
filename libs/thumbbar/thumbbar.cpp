@@ -71,6 +71,7 @@ extern "C"
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dmetadata.h"
 #include "thumbnailjob.h"
 #include "thumbnailsize.h"
@@ -139,16 +140,16 @@ public:
         prev   = 0;
         view   = 0;
     }
-    
+
     int           pos;
-        
-    QPixmap      *pixmap;
+
+    QPixmap       pixmap;
 
     KUrl          url;
-    
+
     ThumbBarItem *next;
     ThumbBarItem *prev;
-    
+
     ThumbBarView *view;
 };
 
@@ -164,7 +165,7 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     d->toolTipSettings = settings;
     d->toolTip         = new ThumbBarToolTip(this);
     d->timer           = new QTimer(this);
-    
+
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotUpdate()));
 
@@ -425,127 +426,109 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* item)
 {
     if (!item) return;
 
-    if (item->d->pixmap)
-    {
-        delete item->d->pixmap;
-        item->d->pixmap = 0;
-    }
-    
+    item->d->pixmap = QPixmap();
+
     if (!d->thumbJob.isNull())
     {
        d->thumbJob->kill();
        d->thumbJob = 0;
     }
-       
+
     d->thumbJob = new ThumbnailJob(item->url(), ThumbnailSize::Huge, true, d->exifRotate);
-    
+
     connect(d->thumbJob, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
             this, SLOT(slotGotThumbnail(const KUrl&, const QPixmap&)));
-   
+
     connect(d->thumbJob, SIGNAL(signalFailed(const KUrl&)),
-            this, SLOT(slotFailedThumbnail(const KUrl&)));     
+            this, SLOT(slotFailedThumbnail(const KUrl&)));
 }
 
 void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
 {
     int cy=0, cx=0, ts=0, y1=0, y2=0, x1=0, x2=0;
-    QPixmap bgPix, tile;
+    QRect tile;
     QRect er(e->rect());
-    
+
     if (d->orientation == Qt::Vertical)
     {
        cy = viewportToContents(er.topLeft()).y();
-        
-       bgPix.scaled(contentsRect().width(), er.height());
-    
+
        ts = d->tileSize + 2*d->margin;
-       tile.scaled(visibleWidth(), ts);
-    
+       tile = QRect(0, 0, visibleWidth(), ts);
+
        y1 = (cy/ts)*ts;
        y2 = ((y1 + er.height())/ts +1)*ts;
     }
     else
     {
        cx = viewportToContents(er.topLeft()).x();
-        
-       bgPix.scaled(er.width(), contentsRect().height());
-    
+
        ts = d->tileSize + 2*d->margin;
-       tile.scaled(ts, visibleHeight());
-    
+       tile = QRect(0, 0, ts, visibleHeight());
+
        x1 = (cx/ts)*ts;
        x2 = ((x1 + er.width())/ts +1)*ts;
     }
-        
-    bgPix.fill(palette().color(QPalette::Background));
-    
+
+    DDebug() << "viewportPaintEvent: Drawing tile " << tile << endl;
+    QPainter p(viewport());
+
+    p.fillRect(er, palette().color(QPalette::Background));
+
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
         if (d->orientation == Qt::Vertical)
         {
             if (y1 <= item->d->pos && item->d->pos <= y2)
             {
-                if (item == d->currItem)
-                    tile.fill(palette().highlight().color());
-                else
-                    tile.fill(palette().background().color());
-    
-                QPainter p(&tile);
+                p.translate(0, item->d->pos - cy);
+
                 p.setPen(Qt::white);
-                p.drawRect(0, 0, tile.width(), tile.height());
-                p.end();
-                
-                if (item->d->pixmap)
+                if (item == d->currItem)
+                    p.setBrush(palette().highlight().color());
+                else
+                    p.setBrush(palette().background().color());
+
+                p.drawRect(tile);
+
+                if (item->hasPixmap())
                 {
-                    QPixmap pix; 
-                    pix.fromImage(QImage(item->d->pixmap->toImage()).
-                                  scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio));
+                    QPixmap pix = item->pixmap().scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio);
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
-                    QPainter p(&tile);
                     p.drawPixmap(x, y, pix);
+                    DDebug() << "Drawing pixmap size " << pix.size() << " at " << x << " x " << y << endl;
                 }
-                
-                QPainter p2(&bgPix);
-                p2.drawPixmap(0, item->d->pos - cy, tile);
+
+                p.translate(0, - (item->d->pos - cy));
             }
         }
         else
         {
             if (x1 <= item->d->pos && item->d->pos <= x2)
             {
-                if (item == d->currItem)
-                    tile.fill(palette().highlight().color());
-                else
-                    tile.fill(palette().background().color());
-    
-                QPainter p(&tile);
+                p.translate(item->d->pos - cx, 0);
+
                 p.setPen(Qt::white);
-                p.drawRect(0, 0, tile.width(), tile.height());
-                p.end();
-                
-                if (item->d->pixmap)
+                if (item == d->currItem)
+                    p.setBrush(palette().highlight().color());
+                else
+                    p.setBrush(palette().background().color());
+
+                p.drawRect(tile);
+
+                if (item->hasPixmap())
                 {
-                    QPixmap pix; 
-                    pix.fromImage(QImage(item->d->pixmap->toImage()).
-                                  scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio));
-                    int x = (tile.width() - pix.width())/2;
-                    int y = (tile.height()- pix.height())/2;
-                    QPainter p(&tile);
+                    QPixmap pix = item->pixmap().scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio);
+                    int x = (tile.width()  - pix.width())/2;
+                    int y = (tile.height() - pix.height())/2;
                     p.drawPixmap(x, y, pix);
                 }
 
-                QPainter p2(&bgPix);
-                p2.drawPixmap(item->d->pos - cx, 0, tile);
+                p.translate(- (item->d->pos - cx), 0);
             }
         }
     }
-
-    QPainter p(viewport());
-    if (d->orientation == Qt::Vertical)
-       p.drawPixmap(0, er.y(), bgPix);
-    else
-       p.drawPixmap(er.x(), 0, bgPix);
 }
 
 void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
@@ -687,7 +670,7 @@ void ThumbBarView::rearrangeItems()
 
     int pos = 0;
     ThumbBarItem *item = d->firstItem;
-    
+
     while (item)
     {
         item->d->pos = pos;
@@ -698,10 +681,10 @@ void ThumbBarView::rearrangeItems()
     }
 
     if (d->orientation == Qt::Vertical)
-       resizeContents(width(), d->count*(d->tileSize+2*d->margin));
-    else    
-       resizeContents(d->count*(d->tileSize+2*d->margin), height());
-       
+        resizeContents(width(), d->count*(d->tileSize+2*d->margin));
+    else
+        resizeContents(d->count*(d->tileSize+2*d->margin), height());
+
     if (!urlList.isEmpty())
     {
         if (!d->thumbJob.isNull())
@@ -711,10 +694,10 @@ void ThumbBarView::rearrangeItems()
         }
 
         d->thumbJob = new ThumbnailJob(urlList, ThumbnailSize::Huge, true, d->exifRotate);
-        
+
         connect(d->thumbJob, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
                 this, SLOT(slotGotThumbnail(const KUrl&, const QPixmap&)));
-    
+
         connect(d->thumbJob, SIGNAL(signalFailed(const KUrl&)),
                 this, SLOT(slotFailedThumbnail(const KUrl&)));     
     }
@@ -744,14 +727,8 @@ void ThumbBarView::slotGotThumbnail(const KUrl& url, const QPixmap& pix)
         ThumbBarItem* item = d->itemDict.find(url.url());
         if (!item)
             return;
-    
-        if (item->d->pixmap)
-        {
-            delete item->d->pixmap;
-            item->d->pixmap = 0;
-        }
-        
-        item->d->pixmap = new QPixmap(pix);
+
+        item->d->pixmap = pix;
         item->repaint();
     }
 }
@@ -773,13 +750,7 @@ void ThumbBarView::slotGotPreview(const KFileItem *fileItem, const QPixmap& pix)
     if (!item)
         return;
 
-    if (item->d->pixmap)
-    {
-        delete item->d->pixmap;
-        item->d->pixmap = 0;
-    }
-    
-    item->d->pixmap = new QPixmap(pix);
+    item->setPixmap(pix);
     item->repaint();
 }
 
@@ -792,13 +763,7 @@ void ThumbBarView::slotFailedPreview(const KFileItem* fileItem)
     KIconLoader* iconLoader = KIconLoader::global();
     QPixmap pix = iconLoader->loadIcon("image", K3Icon::NoGroup, ThumbnailSize::Huge);
 
-    if (item->d->pixmap)
-    {
-        delete item->d->pixmap;
-        item->d->pixmap = 0;
-    }
-    
-    item->d->pixmap = new QPixmap(pix);
+    item->setPixmap(pix);
     item->repaint();
 }
 
@@ -835,9 +800,6 @@ ThumbBarItem::~ThumbBarItem()
 {
     d->view->removeItem(this);
 
-    if (d->pixmap)
-        delete d->pixmap;
-
     delete d;
 }
 
@@ -858,7 +820,7 @@ ThumbBarItem* ThumbBarItem::prev() const
 
 QRect ThumbBarItem::rect() const
 {
-    if (d->view->d->orientation == ThumbBarView::Vertical)
+    if (d->view->d->orientation == Qt::Vertical)
     {
         return QRect(0, d->pos,
                      d->view->visibleWidth(),
@@ -877,14 +839,24 @@ int ThumbBarItem::position() const
     return d->pos;
 }
 
-QPixmap* ThumbBarItem::pixmap() const
+bool ThumbBarItem::hasPixmap() const
+{
+    return !d->pixmap.isNull();
+}
+
+QPixmap ThumbBarItem::pixmap() const
 {
     return d->pixmap;
 }
 
+void ThumbBarItem::setPixmap(const QPixmap &pixmap)
+{
+    d->pixmap = pixmap;
+}
+
 void ThumbBarItem::repaint()
 {
-    d->view->repaintItem(this);   
+    d->view->repaintItem(this);
 }
 
 // -------------------------------------------------------------------------
