@@ -45,7 +45,9 @@ ImagePlugin_NoiseReduction::ImagePlugin_NoiseReduction(QObject *parent, const QS
 {
     m_noiseReductionAction  = new KAction(KIcon("noisereduction"), i18n("Noise Reduction..."), this);
     actionCollection()->addAction("imageplugin_noisereduction", m_noiseReductionAction );
-    connect(m_noiseReductionAction, SIGNAL(triggered(bool) ), SLOT(slotFilmGrain()));
+
+    connect(m_noiseReductionAction, SIGNAL(triggered(bool)), 
+            this, SLOT(slotNoiseReduction()));
                 
     setXMLFile("digikamimageplugin_noisereduction_ui.rc");                
 
@@ -66,5 +68,3 @@ void ImagePlugin_NoiseReduction::slotNoiseReduction()
     DigikamNoiseReductionImagesPlugin::ImageEffect_NoiseReduction dlg(parentWidget());
     dlg.exec();
 }
-
-
