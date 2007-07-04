@@ -31,6 +31,7 @@
 
 // Local includes.
 
+class QWidget;
 class QComboBox;
 class QPushButton;
 class QButtonGroup;
@@ -111,6 +112,8 @@ private:
     int                           m_histoSegments;
     int                           m_currentPreviewMode;
         
+    QWidget                      *m_pickerBox;
+
     QComboBox                    *m_channelCB;    
     
     QPushButton                  *m_resetButton;
