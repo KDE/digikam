@@ -1,22 +1,16 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas ${CMAKE_SOURCE_DIR}/digikam/libs/histogram ${CMAKE_SOURCE_DIR}/digikam/libs/levels ${CMAKE_SOURCE_DIR}/digikam/libs/curves ${CMAKE_SOURCE_DIR}/digikam/libs/whitebalance ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/iccprofiles ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/imageplugins ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters ${CMAKE_SOURCE_DIR}/digikam/digikam   )
+SET(digikamimageplugin_filmgrain_PART_SRCS imageplugin_filmgrain.cpp
+                                           imageeffect_filmgrain.cpp
+                                           filmgrain.cpp
+   )
 
+KDE4_AUTOMOC(${digikamimageplugin_filmgrain_PART_SRCS})
 
-########### next target ###############
+KDE4_ADD_PLUGIN(digikamimageplugin_filmgrain ${digikamimageplugin_filmgrain_PART_SRCS})
 
-set(digikamimageplugin_filmgrain_PART_SRCS imageplugin_filmgrain.cpp imageeffect_filmgrain.cpp filmgrain.cpp)
+TARGET_LINK_LIBRARIES(digikamimageplugin_filmgrain digikam)
 
-kde4_automoc(${digikamimageplugin_filmgrain_PART_SRCS})
+INSTALL(TARGETS digikamimageplugin_filmgrain DESTINATION ${PLUGIN_INSTALL_DIR})
 
-kde4_add_plugin(digikamimageplugin_filmgrain ${digikamimageplugin_filmgrain_PART_SRCS})
-
-target_link_libraries(digikamimageplugin_filmgrain digikam )
-
-install(TARGETS digikamimageplugin_filmgrain DESTINATION ${PLUGIN_INSTALL_DIR} )
-
-
-########### install files ###############
-
-install( FILES  digikamimageplugin_filmgrain_ui.rc         DESTINATION ${DATA_INSTALL_DIR}/digikam )
-install( FILES  digikamimageplugin_filmgrain.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-
+INSTALL(FILES digikamimageplugin_filmgrain_ui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(FILES digikamimageplugin_filmgrain.desktop DESTINATION ${SERVICES_INSTALL_DIR})

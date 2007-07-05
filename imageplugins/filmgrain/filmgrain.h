@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
   
 #ifndef FILMGRAIN_H
 #define FILMGRAIN_H

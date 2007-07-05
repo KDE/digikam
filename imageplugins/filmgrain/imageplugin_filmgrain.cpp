@@ -46,7 +46,9 @@ ImagePlugin_FilmGrain::ImagePlugin_FilmGrain(QObject *parent, const QStringList 
 {
     m_filmgrainAction  = new KAction(KIcon("filmgrain"), i18n("Add Film Grain..."), this);
     actionCollection()->addAction("imageplugin_filmgrain", m_filmgrainAction );
-    connect(m_filmgrainAction, SIGNAL(triggered(bool) ), SLOT(slotFilmGrain()));
+
+    connect(m_filmgrainAction, SIGNAL(triggered(bool)), 
+            this, SLOT(slotFilmGrain()));
                 
     setXMLFile( "digikamimageplugin_filmgrain_ui.rc" );                                
     

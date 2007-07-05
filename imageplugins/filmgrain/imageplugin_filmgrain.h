@@ -38,8 +38,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_FilmGrain : public Digikam::ImagePl
     
 public:
 
-    ImagePlugin_FilmGrain(QObject *parent,
-                          const QStringList &args);
+    ImagePlugin_FilmGrain(QObject *parent, const QStringList &args);
     ~ImagePlugin_FilmGrain();
 
     void setEnabledActions(bool enable);

@@ -25,14 +25,11 @@
 
 // Qt includes.
 
-#include <qlabel.h>
-
-#include <qlcdnumber.h>
-#include <qslider.h>
-#include <qlayout.h>
-#include <qimage.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QLCDNumber>
+#include <QSlider>
+#include <QImage>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -86,26 +83,36 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 1, 1, 0, spacingHint());
-    QLabel *label1 = new QLabel(i18n("Sensitivity (ISO):"), gboxSettings);
+    QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings );
 
-    m_sensibilitySlider = new QSlider(2, 30, 1, 12, Qt::Horizontal, gboxSettings);
+    QLabel *label1      = new QLabel(i18n("Sensitivity (ISO):"), gboxSettings);
+
+    m_sensibilitySlider = new QSlider(Qt::Horizontal, gboxSettings);
+    m_sensibilitySlider->setMinimum(2);
+    m_sensibilitySlider->setMaximum(30);
+    m_sensibilitySlider->setPageStep(1);
+    m_sensibilitySlider->setValue(12);
     m_sensibilitySlider->setTracking ( false );
     m_sensibilitySlider->setTickInterval(1);
-    m_sensibilitySlider->setTickmarks(QSlider::TicksBelow);
+    m_sensibilitySlider->setTickPosition(QSlider::TicksBelow);
 
-    m_sensibilityLCDValue = new QLCDNumber (4, gboxSettings);
-    m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
+    m_sensibilityLCDValue = new QLCDNumber(4, gboxSettings);
+    m_sensibilityLCDValue->setSegmentStyle( QLCDNumber::Flat );
     m_sensibilityLCDValue->display( QString::number(2400) );
-    whatsThis = i18n("<p>Set here the film ISO-sensitivity to use for simulating the film graininess.");
+    whatsThis = i18n("<p>Set here the film ISO-sensitivity to use for "
+                     "simulating the film graininess.");
 
     m_sensibilityLCDValue->setWhatsThis( whatsThis);
     m_sensibilitySlider->setWhatsThis( whatsThis);
 
+    // -------------------------------------------------------------
+
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
     gridSettings->addMultiCellWidget(m_sensibilitySlider, 1, 1, 0, 0);
     gridSettings->addMultiCellWidget(m_sensibilityLCDValue, 1, 1, 1, 1);
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(spacingHint());
 
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
 
@@ -169,7 +176,8 @@ void ImageEffect_FilmGrain::prepareEffect()
     Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
     int s = 400 + 200 * m_sensibilitySlider->value();
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new FilmGrain(&image, this, s));
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
+                                   (new FilmGrain(&image, this, s));
 }
 
 void ImageEffect_FilmGrain::prepareFinal()
@@ -180,7 +188,8 @@ void ImageEffect_FilmGrain::prepareFinal()
 
     Digikam::ImageIface iface(0, 0);
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new FilmGrain(iface.getOriginalImg(), this, s));
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
+                                   (new FilmGrain(iface.getOriginalImg(), this, s));
 }
 
 void ImageEffect_FilmGrain::putPreviewData(void)
@@ -195,4 +204,3 @@ void ImageEffect_FilmGrain::putFinalData(void)
 }
 
 }  // NameSpace DigikamFilmGrainImagesPlugin
-

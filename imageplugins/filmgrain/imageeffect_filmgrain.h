@@ -23,7 +23,6 @@
  * 
  * ============================================================ */
 
-
 #ifndef IMAGEEFFECT_FILMGRAIN_H
 #define IMAGEEFFECT_FILMGRAIN_H
 
