@@ -48,8 +48,9 @@ namespace DigikamSuperImposeImagesPlugin
 {
 
 SuperImposeWidget::SuperImposeWidget(int w, int h, QWidget *parent)
-                 : QWidget(parent, 0, Qt::WDestructiveClose)
+                 : QWidget(parent)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
     m_pixmap   = new QPixmap(w, h);
     m_editMode = MOVE;
 
@@ -57,7 +58,6 @@ SuperImposeWidget::SuperImposeWidget(int w, int h, QWidget *parent)
     m_w = iface.originalWidth();
     m_h = iface.originalHeight();
 
-    setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
     setMouseTracking(true);
 
@@ -83,7 +83,7 @@ void SuperImposeWidget::resetEdit(void)
     m_currentSelection = QRect(m_w/2 - m_rect.width()/2, m_h/2 - m_rect.height()/2, 
                                m_rect.width(), m_rect.height());
     makePixmap();
-    repaint(false);
+    repaint();
 }
 
 void SuperImposeWidget::makePixmap(void)
@@ -92,7 +92,7 @@ void SuperImposeWidget::makePixmap(void)
     SuperImpose superimpose(iface.getOriginalImg(), &m_templateScaled, m_currentSelection);
     Digikam::DImg image = superimpose.getTargetImage();
 
-    m_pixmap->fill(colorGroup().background());
+    m_pixmap->fill(palette().color(QPalette::Background));
     QPainter p(m_pixmap);
     QPixmap imagePix = image.convertToPixmap();
     p.drawPixmap(m_rect.x(), m_rect.y(), imagePix, 0, 0, m_rect.width(), m_rect.height());
@@ -129,7 +129,7 @@ void SuperImposeWidget::resizeEvent(QResizeEvent * e)
     else
     {
         m_rect = QRect();
-        m_pixmap->fill(colorGroup().background());
+        m_pixmap->fill(palette().color(QPalette::Background));
     }
 
     blockSignals(false);
@@ -137,7 +137,9 @@ void SuperImposeWidget::resizeEvent(QResizeEvent * e)
 
 void SuperImposeWidget::paintEvent( QPaintEvent * )
 {
-    bitBlt(this, 0, 0, m_pixmap);
+    QPainter p(this);
+    p.drawPixmap(0, 0, *m_pixmap);
+    p.end();
 }
 
 void SuperImposeWidget::slotEditModeChanged(int mode)
@@ -181,7 +183,7 @@ void SuperImposeWidget::moveSelection(int dx, int dy)
     float wf = (float)selection.width() / (float)m_rect.width();
     float hf = (float)selection.height() / (float)m_rect.height();
 
-    selection.moveBy( -(int)(wf*(float)dx), -(int)(hf*(float)dy) );
+    selection.translate( -(int)(wf*(float)dx), -(int)(hf*(float)dy) );
 
     if (selection.left() < 0)
         selection.moveLeft(0);
@@ -237,7 +239,7 @@ bool SuperImposeWidget::zoomSelection(float deltaZoomFactor)
     m_currentSelection = selection;
 
     makePixmap();
-    repaint(false);
+    repaint();
 
     return true;
 }
@@ -275,7 +277,7 @@ void SuperImposeWidget::mouseMoveEvent ( QMouseEvent * e )
 {
     if ( isEnabled() )
     {
-        if ( e->state() == Qt::LeftButton )
+        if ( e->buttons() == Qt::LeftButton )
         {
             switch (m_editMode)
             {
@@ -298,7 +300,7 @@ void SuperImposeWidget::mouseMoveEvent ( QMouseEvent * e )
 
                     moveSelection(newxpos - m_xpos, newypos - m_ypos);
                     makePixmap();
-                    repaint(false);
+                    repaint();
 
                     m_xpos = newxpos;
                     m_ypos = newypos;

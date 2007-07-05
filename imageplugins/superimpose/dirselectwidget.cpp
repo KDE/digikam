@@ -52,6 +52,7 @@ DirSelectWidget::DirSelectWidget(QWidget* parent, const char* name, QString head
 {
     d = new Private;
     
+    setObjectName(name);
     addColumn( headerLabel );
     
     if ( headerLabel.isNull() )
@@ -65,7 +66,8 @@ DirSelectWidget::DirSelectWidget(KUrl rootUrl, KUrl currentUrl,
                : K3FileTreeView( parent)
 {
     d = new Private;
-    
+        
+    setObjectName(name);
     addColumn( headerLabel );
     
     if ( headerLabel.isNull() )
