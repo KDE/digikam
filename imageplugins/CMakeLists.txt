@@ -6,6 +6,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor
                     ${CMAKE_SOURCE_DIR}/digikam/libs/curves 
                     ${CMAKE_SOURCE_DIR}/digikam/libs/greycstoration
                     ${CMAKE_SOURCE_DIR}/digikam/libs/whitebalance
+                    ${CMAKE_SOURCE_DIR}/digikam/libs/thumbbar 
                     ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common
                     ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/iccprofiles
                     ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/imageplugins
