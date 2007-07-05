@@ -154,8 +154,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     // --------------------------------------------------------
     
     QGroupBox *colorPolicy = new QGroupBox(i18n("Color Management Policy"), this);
-    QGridLayout* grid      = new QGridLayout();
-    grid->setSpacing(KDialog::spacingHint());
+    QGridLayout* grid      = new QGridLayout(colorPolicy);
     
     d->enableColorManagement = new QCheckBox(colorPolicy);
     d->enableColorManagement->setText(i18n("Enable Color Management"));
@@ -201,14 +200,14 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     grid->addWidget(lcmsLogoLabel, 0, 0, 2, 2);
     grid->addWidget(d->behaviourGB, 1, 1, 0, 2);
     grid->setColumnStretch(1, 10);
-    colorPolicy->setLayout(grid);
+    grid->setSpacing(KDialog::spacingHint());
 
     layout->addWidget(colorPolicy);
     
     // --------------------------------------------------------
     
     d->defaultPathGB  = new QGroupBox(this);
-    QVBoxLayout *vlay = new QVBoxLayout();
+    QVBoxLayout *vlay = new QVBoxLayout(d->defaultPathGB);
     
     d->defaultPathGB->setTitle(i18n("Color Profiles Directory"));
     
@@ -218,18 +217,14 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->defaultPathKU->setWhatsThis( i18n("<p>Default path to the color profiles folder. "
                      "You must store all your color profiles in this directory.</p>"));
 
-    vlay->addWidget(d->defaultPathGB);
     vlay->addWidget(d->defaultPathKU);
-    d->defaultPathGB->setLayout(vlay);
 
     layout->addWidget(d->defaultPathGB);
 
     // --------------------------------------------------------
     
     d->profilesGB      = new QGroupBox(i18n("ICC Profiles Settings"), this);
-    QGridLayout* grid2 = new QGridLayout();
-    grid2->setSpacing(KDialog::spacingHint());
-    grid2->setColumnStretch(2, 10);
+    QGridLayout* grid2 = new QGridLayout(d->profilesGB);
 
     d->managedView = new QCheckBox(d->profilesGB);
     d->managedView->setText(i18n("Use color managed view (warning: slow)"));
@@ -251,12 +246,6 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->infoMonitorProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected monitor profile.</p>"));
     
-    grid2->addWidget(d->managedView, 0, 0, 0, 3);
-    grid2->addWidget(d->monitorIcon, 1, 1, 0, 0);
-    grid2->addWidget(d->monitorProfiles, 1, 1, 1, 1);
-    grid2->addWidget(d->monitorProfilesKC, 1, 1, 2, 2);
-    grid2->addWidget(d->infoMonitorProfiles, 1, 1, 3, 3);
-
     QLabel *workIcon     = new QLabel(d->profilesGB);
     workIcon->setPixmap(SmallIcon("tablet"));
     QLabel *workProfiles = new QLabel(i18n("Workspace:"), d->profilesGB);
@@ -269,11 +258,6 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->infoWorkProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected workspace profile.</p>"));
 
-    grid2->addWidget(workIcon, 2, 2, 0, 0);
-    grid2->addWidget(workProfiles, 2, 2, 1, 1);
-    grid2->addWidget(d->workProfilesKC, 2, 2, 2, 2);
-    grid2->addWidget(d->infoWorkProfiles, 2, 2, 3, 3);
-
     QLabel *inIcon     = new QLabel(d->profilesGB);
     inIcon->setPixmap(SmallIcon("camera"));
     QLabel *inProfiles = new QLabel(i18n("Input:"), d->profilesGB);
@@ -285,11 +269,6 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->infoInProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected input profile.</p>"));
     
-    grid2->addWidget(inIcon, 3, 3, 0, 0);
-    grid2->addWidget(inProfiles, 3, 3, 1, 1);
-    grid2->addWidget(d->inProfilesKC, 3, 3, 2, 2);
-    grid2->addWidget(d->infoInProfiles, 3, 3, 3, 3);
-
     QLabel *proofIcon     = new QLabel(d->profilesGB);
     proofIcon->setPixmap(SmallIcon("printer1"));
     QLabel *proofProfiles = new QLabel(i18n("Soft proof:"), d->profilesGB);
@@ -302,18 +281,32 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->infoProofProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected soft proof profile.</p>"));
     
+    grid2->addWidget(d->managedView, 0, 0, 0, 3);
+    grid2->addWidget(d->monitorIcon, 1, 1, 0, 0);
+    grid2->addWidget(d->monitorProfiles, 1, 1, 1, 1);
+    grid2->addWidget(d->monitorProfilesKC, 1, 1, 2, 2);
+    grid2->addWidget(d->infoMonitorProfiles, 1, 1, 3, 3);
+    grid2->addWidget(workIcon, 2, 2, 0, 0);
+    grid2->addWidget(workProfiles, 2, 2, 1, 1);
+    grid2->addWidget(d->workProfilesKC, 2, 2, 2, 2);
+    grid2->addWidget(d->infoWorkProfiles, 2, 2, 3, 3);
+    grid2->addWidget(inIcon, 3, 3, 0, 0);
+    grid2->addWidget(inProfiles, 3, 3, 1, 1);
+    grid2->addWidget(d->inProfilesKC, 3, 3, 2, 2);
+    grid2->addWidget(d->infoInProfiles, 3, 3, 3, 3);
     grid2->addWidget(proofIcon, 4, 4, 0, 0);
     grid2->addWidget(proofProfiles, 4, 4, 1, 1);
     grid2->addWidget(d->proofProfilesKC, 4, 4, 2, 2);
     grid2->addWidget(d->infoProofProfiles, 4, 4, 3, 3);
-    d->profilesGB->setLayout(grid2);
+    grid2->setSpacing(KDialog::spacingHint());
+    grid2->setColumnStretch(2, 10);
 
     layout->addWidget(d->profilesGB);
 
      // --------------------------------------------------------
     
     d->advancedSettingsGB = new QGroupBox(i18n("Advanced Settings"), this);
-    QVBoxLayout *vlay2    = new QVBoxLayout();
+    QVBoxLayout *vlay2    = new QVBoxLayout(d->advancedSettingsGB);
 
     d->bpcAlgorithm = new QCheckBox(d->advancedSettingsGB);
     d->bpcAlgorithm->setText(i18n("Use black point compensation"));
@@ -357,8 +350,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     vlay2->addWidget(d->bpcAlgorithm);
     vlay2->addWidget(hbox2);
     vlay2->addWidget(d->renderingIntentKC);
-    d->advancedSettingsGB->setLayout(vlay2);
-
+    
     layout->addWidget(d->advancedSettingsGB);
     layout->addStretch();
     
