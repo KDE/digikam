@@ -244,49 +244,57 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                      "pictures on the screen, especially with a slow computer.</p>"));
 
     d->monitorIcon       = new QLabel(d->profilesGB);
-    d->monitorIcon->setPixmap(SmallIcon("tv"));
+    d->monitorIcon->setPixmap(SmallIcon("video-display"));
     d->monitorProfiles   = new QLabel(i18n("Monitor:"), d->profilesGB);
     d->monitorProfilesKC = new KComboBox(d->profilesGB);
     d->monitorProfiles->setBuddy(d->monitorProfilesKC);
     d->monitorProfilesKC->setWhatsThis( i18n("<p>Select here the color profile for your monitor. "
                      "You need to toggle on <b>Use color managed view</b> option to use this "
                      "profile.</p>"));
-    d->infoMonitorProfiles = new QPushButton(i18n("Info..."), d->profilesGB);
+
+    d->infoMonitorProfiles = new QPushButton(d->profilesGB);
+    d->infoMonitorProfiles->setIcon(SmallIcon("document-properties"));
     d->infoMonitorProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected monitor profile.</p>"));
     
     QLabel *workIcon     = new QLabel(d->profilesGB);
-    workIcon->setPixmap(SmallIcon("tablet"));
+    workIcon->setPixmap(SmallIcon("input-tablet"));
     QLabel *workProfiles = new QLabel(i18n("Workspace:"), d->profilesGB);
     d->workProfilesKC    = new KComboBox(d->profilesGB);
     workProfiles->setBuddy(d->workProfilesKC);
     d->workProfilesKC->setWhatsThis( i18n("<p>All the images will be converted to the color "
                      "space of this profile, so you must select a profile appropriate for editing.</p>"
                      "<p>These color profiles are device independent.</p>"));
-    d->infoWorkProfiles = new QPushButton(i18n("Info..."), d->profilesGB);
+
+    d->infoWorkProfiles = new QPushButton(d->profilesGB);
+    d->infoWorkProfiles->setIcon(SmallIcon("document-properties"));
     d->infoWorkProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected workspace profile.</p>"));
 
     QLabel *inIcon     = new QLabel(d->profilesGB);
-    inIcon->setPixmap(SmallIcon("camera"));
+    inIcon->setPixmap(SmallIcon("camera-photo"));
     QLabel *inProfiles = new QLabel(i18n("Input:"), d->profilesGB);
     d->inProfilesKC    = new KComboBox(d->profilesGB);
     inProfiles->setBuddy(d->inProfilesKC);
     d->inProfilesKC->setWhatsThis( i18n("<p>You must select the profile for your input device "
                      "(usually, your camera, scanner...)</p>"));
-    d->infoInProfiles = new QPushButton(i18n("Info..."), d->profilesGB);
+
+    d->infoInProfiles = new QPushButton(d->profilesGB);
+    d->infoInProfiles->setIcon(SmallIcon("document-properties"));
     d->infoInProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected input profile.</p>"));
     
     QLabel *proofIcon     = new QLabel(d->profilesGB);
-    proofIcon->setPixmap(SmallIcon("printer1"));
+    proofIcon->setPixmap(SmallIcon("printer"));
     QLabel *proofProfiles = new QLabel(i18n("Soft proof:"), d->profilesGB);
     d->proofProfilesKC    = new KComboBox(d->profilesGB);
     proofProfiles->setBuddy(d->proofProfilesKC);
     d->proofProfilesKC->setWhatsThis( i18n("<p>You must select the profile for your output device "
                      "(usually, your printer). This profile will be used to do a soft proof, so you will "
                      "be able to preview how an image will be rendered in an output device.</p>"));
-    d->infoProofProfiles = new QPushButton(i18n("Info..."), d->profilesGB);
+
+    d->infoProofProfiles = new QPushButton(d->profilesGB);
+    d->infoProofProfiles->setIcon(SmallIcon("document-properties"));
     d->infoProofProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected soft proof profile.</p>"));
     
