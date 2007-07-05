@@ -289,7 +289,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
-    m_resetButton->setIcon( SmallIcon("document-revert", 18) );
+    m_resetButton->setIcon( SmallIcon("document-revert", K3Icon::Toolbar) );
     m_resetButton->setToolTip( i18n( "Reset current channel curves' values." ) );
     m_resetButton->setWhatsThis( i18n("<p>If you press this button, all curves' values "
                                       "from the current selected channel "
@@ -576,7 +576,7 @@ void AdjustCurveDialog::readUserSettings()
 
     m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->button(group.readEntry("Histogram Scale", 
-                      (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
+                      (int)Digikam::CurvesWidget::LogScaleHistogram))->setChecked(true);
 
     m_curvesWidget->reset();
 
