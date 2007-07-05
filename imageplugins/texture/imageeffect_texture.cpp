@@ -24,13 +24,10 @@
 
 // Qt includes.
 
-#include <qlabel.h>
-
-#include <qlayout.h>
-#include <qcombobox.h>
-#include <qimage.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QComboBox>
+#include <QImage>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -86,40 +83,45 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 2, 1, 0, spacingHint());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings);
+
     QLabel *label1 = new QLabel(i18n("Type:"), gboxSettings);
 
-    m_textureType = new QComboBox( false, gboxSettings );
-    m_textureType->insertItem( i18n("Paper") );
-    m_textureType->insertItem( i18n("Paper 2") );
-    m_textureType->insertItem( i18n("Fabric") );
-    m_textureType->insertItem( i18n("Burlap") );
-    m_textureType->insertItem( i18n("Bricks") );
-    m_textureType->insertItem( i18n("Bricks 2") );
-    m_textureType->insertItem( i18n("Canvas") );
-    m_textureType->insertItem( i18n("Marble") );
-    m_textureType->insertItem( i18n("Marble 2") );
-    m_textureType->insertItem( i18n("Blue Jean") );
-    m_textureType->insertItem( i18n("Cell Wood") );
-    m_textureType->insertItem( i18n("Metal Wire") );
-    m_textureType->insertItem( i18n("Modern") );
-    m_textureType->insertItem( i18n("Wall") );
-    m_textureType->insertItem( i18n("Moss") );
-    m_textureType->insertItem( i18n("Stone") );
+    m_textureType = new QComboBox( gboxSettings );
+    m_textureType->addItem( i18n("Paper") );
+    m_textureType->addItem( i18n("Paper 2") );
+    m_textureType->addItem( i18n("Fabric") );
+    m_textureType->addItem( i18n("Burlap") );
+    m_textureType->addItem( i18n("Bricks") );
+    m_textureType->addItem( i18n("Bricks 2") );
+    m_textureType->addItem( i18n("Canvas") );
+    m_textureType->addItem( i18n("Marble") );
+    m_textureType->addItem( i18n("Marble 2") );
+    m_textureType->addItem( i18n("Blue Jean") );
+    m_textureType->addItem( i18n("Cell Wood") );
+    m_textureType->addItem( i18n("Metal Wire") );
+    m_textureType->addItem( i18n("Modern") );
+    m_textureType->addItem( i18n("Wall") );
+    m_textureType->addItem( i18n("Moss") );
+    m_textureType->addItem( i18n("Stone") );
     m_textureType->setWhatsThis( i18n("<p>Set here the texture type to apply on image."));
-    
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_textureType, 0, 0, 1, 1);
     
     // -------------------------------------------------------------
     
     QLabel *label2 = new QLabel(i18n("Relief:"), gboxSettings);
     
-    m_blendGain = new KIntNumInput(gboxSettings);
+    m_blendGain    = new KIntNumInput(gboxSettings);
     m_blendGain->setRange(1, 255, 1, true);  
     m_blendGain->setValue(200);
-    m_blendGain->setWhatsThis( i18n("<p>Set here the relief gain used to merge texture and image."));
+    m_blendGain->setWhatsThis( i18n("<p>Set here the relief gain used to merge "
+                                    "texture and image."));
 
+    // -------------------------------------------------------------
+
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(spacingHint());
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
+    gridSettings->addMultiCellWidget(m_textureType, 0, 0, 1, 1);
     gridSettings->addMultiCellWidget(label2, 1, 1, 0, 1);
     gridSettings->addMultiCellWidget(m_blendGain, 2, 2, 0, 1);
     
@@ -150,7 +152,7 @@ void ImageEffect_Texture::readUserSettings()
     KConfigGroup group = config->group("texture Tool Dialog");
     m_textureType->blockSignals(true);
     m_blendGain->blockSignals(true);
-    m_textureType->setCurrentItem(group.readEntry("TextureType", (int)PaperTexture));
+    m_textureType->setCurrentIndex(group.readEntry("TextureType", (int)PaperTexture));
     m_blendGain->setValue(group.readEntry("BlendGain", 200));
     m_textureType->blockSignals(false);
     m_blendGain->blockSignals(false);
@@ -160,7 +162,7 @@ void ImageEffect_Texture::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("texture Tool Dialog");
-    group.writeEntry("TextureType", m_textureType->currentItem());
+    group.writeEntry("TextureType", m_textureType->currentIndex());
     group.writeEntry("BlendGain", m_blendGain->value());
     group.sync();
 }
@@ -169,7 +171,7 @@ void ImageEffect_Texture::resetValues()
 {
     m_textureType->blockSignals(true);
     m_blendGain->blockSignals(true);
-    m_textureType->setCurrentItem(PaperTexture);    
+    m_textureType->setCurrentIndex(PaperTexture);    
     m_blendGain->setValue(200);
     m_textureType->blockSignals(false);
     m_blendGain->blockSignals(false);
@@ -181,7 +183,7 @@ void ImageEffect_Texture::prepareEffect()
     m_blendGain->setEnabled(false);
 
     Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
-    QString texture = getTexturePath( m_textureType->currentItem() );
+    QString texture = getTexturePath( m_textureType->currentIndex() );
 
     int b = 255 - m_blendGain->value();
 
@@ -197,18 +199,18 @@ void ImageEffect_Texture::prepareFinal()
     int b = 255 - m_blendGain->value();
 
     Digikam::ImageIface iface(0, 0);
-    QString texture = getTexturePath( m_textureType->currentItem() );
+    QString texture = getTexturePath( m_textureType->currentIndex() );
 
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
                        new Texture(iface.getOriginalImg(), this, b, texture));
 }
 
-void ImageEffect_Texture::putPreviewData(void)
+void ImageEffect_Texture::putPreviewData()
 {
     m_imagePreviewWidget->setPreviewImage(m_threadedFilter->getTargetImage());
 }
 
-void ImageEffect_Texture::putFinalData(void)
+void ImageEffect_Texture::putFinalData()
 {
     Digikam::ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Texture"), m_threadedFilter->getTargetImage().bits());
@@ -219,7 +221,7 @@ QString ImageEffect_Texture::getTexturePath(int texture)
     QString pattern;
     
     switch (texture)
-       {
+    {
        case PaperTexture: 
           pattern = "paper-texture";
           break;
@@ -283,12 +285,9 @@ QString ImageEffect_Texture::getTexturePath(int texture)
        case StoneTexture:
           pattern = "stone-texture";
           break;
-       }
+    }
     
-    KGlobal::dirs()->addResourceType(pattern.ascii(), KGlobal::dirs()->kde_default("data") +
-                                     "digikam/data");
-    return (KGlobal::dirs()->findResourceDir(pattern.ascii(), pattern + ".png") + pattern + ".png" );
+    return (KStandardDirs::locate("data", QString("digikam/data/") + pattern + QString(".png")));
 }
     
 }  // NameSpace DigikamTextureImagesPlugin
-
