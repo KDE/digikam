@@ -160,7 +160,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---filmgrain                           Laurent                         DONE                 Final render failed
         |---freerotation                        Gilles                          DONE        -        Final render failed
         |---hotpixels                           Laurent                                              CMake port only
-        |---infrared
+        |---infrared                            Laurent                         DONE                 Final render failed
         |---inpainting                          Gilles                          DONE                 Final Render crash    
         |---inserttext                          Laurent                                              CMake port only
         |---lensdistortion                      Laurent                         DONE                 
