@@ -193,7 +193,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->iccPage  = new SetupICC(0, this);
     d->page_icc = addPage( d->iccPage, i18n("Color Management") );
     d->page_icc->setHeader( i18n("Image Editor Color Management Settings") );
-    d->page_icc->setIcon( KIcon("colorize") );
+    d->page_icc->setIcon( KIcon("colormanagement") );
 
     d->pluginsPage  = new SetupPlugins();
     d->page_plugins = addPage( d->pluginsPage, i18n("Kipi Plugins") );
