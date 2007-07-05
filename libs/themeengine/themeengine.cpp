@@ -92,9 +92,8 @@ ThemeEngine* ThemeEngine::componentData()
 ThemeEngine::ThemeEngine()
 {
     m_componentData = this;
-    KGlobal::dirs()->addResourceType("themes",
-                                     KGlobal::dirs()->kde_default("data")
-                                     + "digikam/themes");
+    KGlobal::dirs()->addResourceDir("themes", KStandardDirs::installPath("data") + QString("digikam/themes")); 
+
     XrmInitialize();
     
     d = new ThemeEnginePriv;
