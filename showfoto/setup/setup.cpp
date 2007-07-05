@@ -107,11 +107,11 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_dcraw->setHeader( i18n("RAW Files Decoding Settings") );
     d->page_dcraw->setIcon( KIcon("kdcraw") );    
 
-/*    d->iccPage = new Digikam::SetupICC(0, this);
+    d->iccPage = new Digikam::SetupICC(0, this);
     d->page_icc = addPage( d->iccPage, i18n("Color Management") );
     d->page_icc->setHeader( i18n("Color Management Settings") );
-    d->page_icc->setIcon( KIcon("colorize") );
-*/
+    d->page_icc->setIcon( KIcon("colormanagement") );
+
     d->iofilesPage = new Digikam::SetupIOFiles();
     d->page_iofiles = addPage( d->iofilesPage, i18n("Save Images") );
     d->page_iofiles->setHeader( i18n("Save Images Files Settings") );
@@ -153,10 +153,7 @@ void Setup::slotOkClicked()
     d->dcrawPage->applySettings();
     d->iofilesPage->applySettings();
     d->slideshowPage->applySettings();
-/*
-    TODO: KDE4PORT: something is wrong in this page and cause crash
-
-    d->iccPage->applySettings();*/
+    d->iccPage->applySettings();
     close();
 }
 
