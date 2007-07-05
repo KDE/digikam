@@ -45,8 +45,9 @@ ImagePlugin_LensDistortion::ImagePlugin_LensDistortion(QObject *parent, const QS
 {
     m_lensdistortionAction  = new KAction(KIcon("embosstool"), i18n("Lens Distortion..."), this);
     actionCollection()->addAction("imageplugin_lensdistortion", m_lensdistortionAction );
-    connect(m_lensdistortionAction, SIGNAL(triggered(bool) ), SLOT(slotLensDistortion()));
 
+    connect(m_lensdistortionAction, SIGNAL(triggered(bool)), 
+            this, SLOT(slotLensDistortion()));
  
     setXMLFile("digikamimageplugin_lensdistortion_ui.rc");            
         

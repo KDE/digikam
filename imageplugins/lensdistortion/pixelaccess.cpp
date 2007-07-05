@@ -22,7 +22,6 @@
  * 
  * ============================================================ */
 
-
 // C++ include.
 
 #include <cstring>
@@ -312,4 +311,3 @@ void PixelAccess::cubicInterpolate(uchar* src, int rowStride, uchar* dst,
 }
 
 }  // NameSpace DigikamLensDistortionImagesPlugin
-
