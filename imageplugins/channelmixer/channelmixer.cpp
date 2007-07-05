@@ -206,6 +206,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
                                    "the current channel."));
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
+    m_resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", K3Icon::Toolbar));     
     m_resetButton->setWhatsThis( i18n("Reset color channels' gains settings from "
                                       "the currently selected channel."));
 
@@ -235,7 +236,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     grid->addMultiCellWidget(m_preserveLuminosity, 8, 8, 0, 4);
     grid->setRowStretch(9, 10);
     grid->setMargin(spacingHint());
-    grid->setSpacing(0);
+    grid->setSpacing(spacingHint());
     
     setUserAreaWidget(gboxSettings);
     
