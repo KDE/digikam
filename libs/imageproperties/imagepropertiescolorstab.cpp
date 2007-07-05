@@ -323,18 +323,18 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     d->labelPercentileValue = new QLabel(gbox);
     d->labelPercentileValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
 
-    grid->addMultiCellWidget(label4,                  0, 0, 0, 0);
-    grid->addMultiCellWidget(d->labelMeanValue,       0, 0, 1, 1);
-    grid->addMultiCellWidget(label5,                  1, 1, 0, 0);
-    grid->addMultiCellWidget(d->labelPixelsValue,     1, 1, 1, 1);
-    grid->addMultiCellWidget(label6,                  2, 2, 0, 0);
-    grid->addMultiCellWidget(d->labelStdDevValue,     2, 2, 1, 1);
-    grid->addMultiCellWidget(label7,                  3, 3, 0, 0);
-    grid->addMultiCellWidget(d->labelCountValue,      3, 3, 1, 1);
-    grid->addMultiCellWidget(label8,                  4, 4, 0, 0);
-    grid->addMultiCellWidget(d->labelMedianValue,     4, 4, 1, 1);
-    grid->addMultiCellWidget(label9,                  5, 5, 0, 0);
-    grid->addMultiCellWidget(d->labelPercentileValue, 5, 5, 1, 1);
+    grid->addWidget(label4,                  0, 0, 1, 1);
+    grid->addWidget(d->labelMeanValue,       0, 1, 1, 1);
+    grid->addWidget(label5,                  1, 0, 1, 1);
+    grid->addWidget(d->labelPixelsValue,     1, 1, 1, 1);
+    grid->addWidget(label6,                  2, 0, 1, 1);
+    grid->addWidget(d->labelStdDevValue,     2, 1, 1, 1);
+    grid->addWidget(label7,                  3, 0, 1, 1);
+    grid->addWidget(d->labelCountValue,      3, 1, 1, 1);
+    grid->addWidget(label8,                  4, 0, 1, 1);
+    grid->addWidget(d->labelMedianValue,     4, 1, 1, 1);
+    grid->addWidget(label9,                  5, 0, 1, 1);
+    grid->addWidget(d->labelPercentileValue, 5, 1, 1, 1);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(0);
 
@@ -353,25 +353,25 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     d->labelAlphaChannel = new QLabel(gbox2);
     d->labelAlphaChannel->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
 
-    grid2->addMultiCellWidget(label11,              0, 0, 0, 0);
-    grid2->addMultiCellWidget(d->labelColorDepth,   0, 0, 1, 1);
-    grid2->addMultiCellWidget(label12,              1, 1, 0, 0);
-    grid2->addMultiCellWidget(d->labelAlphaChannel, 1, 1, 1, 1);
+    grid2->addWidget(label11,              0, 0, 1, 1);
+    grid2->addWidget(d->labelColorDepth,   0, 1, 1, 1);
+    grid2->addWidget(label12,              1, 0, 1, 1);
+    grid2->addWidget(d->labelAlphaChannel, 1, 1, 1, 1);
     grid2->setMargin(0);
     grid2->setSpacing(0);
 
     // -------------------------------------------------------------
 
-    topLayout->addMultiCellWidget(label1, 1, 1, 0, 0);
-    topLayout->addMultiCellWidget(d->channelCB, 1, 1, 1, 1);
-    topLayout->addMultiCellWidget(scaleBox, 1, 1, 3, 3);
-    topLayout->addMultiCellWidget(label10, 2, 2, 0, 0);
-    topLayout->addMultiCellWidget(d->colorsCB, 2, 2, 1, 1);
-    topLayout->addMultiCellWidget(d->regionBox, 2, 2, 3, 3);
-    topLayout->addMultiCellWidget(histoBox, 3, 4, 0, 3);
-    topLayout->addMultiCell(hlay3, 5, 5, 0, 3);
-    topLayout->addMultiCellWidget(gbox, 6, 6, 0, 3);
-    topLayout->addMultiCellWidget(gbox2, 7, 7, 0, 3);
+    topLayout->addWidget(label1, 1, 0, 1, 1);
+    topLayout->addWidget(d->channelCB, 1, 1, 1, 1);
+    topLayout->addWidget(scaleBox, 1, 3, 1, 1);
+    topLayout->addWidget(label10, 2, 0, 1, 1);
+    topLayout->addWidget(d->colorsCB, 2, 1, 1, 1);
+    topLayout->addWidget(d->regionBox, 2, 3, 1, 1);
+    topLayout->addWidget(histoBox, 3, 0, 4- 3+1, 4 );
+    topLayout->addLayout(hlay3, 5, 0, 1, 4 );
+    topLayout->addWidget(gbox, 6, 0, 1, 4 );
+    topLayout->addWidget(gbox2, 7, 0, 1, 4 );
     topLayout->setRowStretch(8, 10);
     topLayout->setColumnStretch(2, 10);
     topLayout->setMargin(KDialog::spacingHint());
@@ -380,7 +380,6 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     d->tab->insertTab(ImagePropertiesColorsTabPriv::HISTOGRAM, histogramPage, i18n("Histogram"));
 
     // ICC Profiles tab area ---------------------------------------
-
 
     d->iccProfileWidget = new ICCProfileWidget(d->tab);
     d->tab->insertTab(ImagePropertiesColorsTabPriv::ICCPROFILE, d->iccProfileWidget, i18n("ICC profile"));
