@@ -324,7 +324,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
      // --------------------------------------------------------
     
     d->advancedSettingsGB = new QGroupBox(i18n("Advanced Settings"), this);
-    QVBoxLayout *vlay2    = new QVBoxLayout(d->advancedSettingsGB);
+    QGridLayout* grid3    = new QGridLayout(d->advancedSettingsGB);
 
     d->bpcAlgorithm = new QCheckBox(d->advancedSettingsGB);
     d->bpcAlgorithm->setText(i18n("Use black point compensation"));
@@ -333,11 +333,10 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                      "black levels of digital files and the black capabilities of various "
                      "digital devices.</p>"));
 
-    KHBox *hbox2   = new KHBox(d->advancedSettingsGB);
-    QLabel *lablel = new QLabel(hbox2);
+    QLabel *lablel = new QLabel(d->advancedSettingsGB);
     lablel->setText(i18n("Rendering Intents:"));
 
-    d->renderingIntentKC = new KComboBox(false, hbox2);
+    d->renderingIntentKC = new KComboBox(false, d->advancedSettingsGB);
     d->renderingIntentKC->insertItem(0, "Perceptual");
     d->renderingIntentKC->insertItem(1, "Relative Colorimetric");
     d->renderingIntentKC->insertItem(2, "Saturation");
@@ -365,11 +364,11 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                      "<p>This intent is most suitable for business graphics such as charts, where it is more important that the "
                      "colors be vivid and contrast well with each other rather than a specific color.</p></li></ul>"));
 
-    vlay2->addWidget(d->bpcAlgorithm);
-    vlay2->addWidget(hbox2);
-    vlay2->addWidget(d->renderingIntentKC);
-    vlay2->setMargin(KDialog::spacingHint());
-    vlay2->setSpacing(0);    
+    grid3->addMultiCellWidget(d->bpcAlgorithm, 0, 0, 0, 1);
+    grid3->addMultiCellWidget(lablel, 1, 1, 0, 0);
+    grid3->addMultiCellWidget(d->renderingIntentKC, 1, 1, 1, 1);
+    grid3->setMargin(KDialog::spacingHint());
+    grid3->setSpacing(0);    
 
     layout->addWidget(d->advancedSettingsGB);
     layout->addStretch();
