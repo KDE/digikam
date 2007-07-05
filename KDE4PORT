@@ -163,7 +163,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---infrared                            Laurent                         DONE                 Final render failed
         |---inpainting                          Gilles                          DONE                 Final Render crash    
         |---inserttext                          Laurent                                              CMake port only
-        |---lensdistortion                      Laurent                         DONE                 Final render failed
+        |---lensdistortion                      Laurent                         DONE                 Final render failed, lens distorsion grid preview don't work
         |---noisereduction                      Laurent                         DONE                 Final render failed 
         |---oilpaint                            Laurent                         DONE                 Final render failed
         |---perspective                         Laurent                         DONE       DONE
