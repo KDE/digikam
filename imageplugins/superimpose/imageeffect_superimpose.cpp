@@ -111,21 +111,21 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
 
     QPushButton *zoomInButton = new QPushButton( toolBox );
     bGroup->addButton(zoomInButton, ZOOMIN);
-    zoomInButton->setPixmap(KIconLoader::global()->loadIcon("viewmag+", K3Icon::Toolbar));
-    zoomInButton->setToggleButton(true);
+    zoomInButton->setIcon(KIconLoader::global()->loadIcon("viewmag+", K3Icon::Toolbar));
+    zoomInButton->setCheckable(true);
     zoomInButton->setToolTip( i18n( "Zoom in" ) );
 
     QPushButton *zoomOutButton = new QPushButton( toolBox );
     bGroup->addButton(zoomOutButton, ZOOMOUT);
-    zoomOutButton->setPixmap(KIconLoader::global()->loadIcon("viewmag-", K3Icon::Toolbar));
-    zoomOutButton->setToggleButton(true);
+    zoomOutButton->setIcon(KIconLoader::global()->loadIcon("viewmag-", K3Icon::Toolbar));
+    zoomOutButton->setCheckable(true);
     zoomOutButton->setToolTip( i18n( "Zoom out" ) );
 
     QPushButton *moveButton = new QPushButton( toolBox );
     bGroup->addButton(moveButton, MOVE);
-    moveButton->setPixmap(KIconLoader::global()->loadIcon("move", K3Icon::Toolbar));
-    moveButton->setToggleButton(true);
-    moveButton->setOn(true);
+    moveButton->setIcon(KIconLoader::global()->loadIcon("move", K3Icon::Toolbar));
+    moveButton->setCheckable(true);
+    moveButton->setChecked(true);
     moveButton->setToolTip( i18n( "Move" ) );
 
     bGroup->setExclusive(true);
@@ -144,8 +144,8 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
 
     gridFrame->addMultiCellWidget(m_previewWidget, 0, 0, 0, 2);
     gridFrame->addMultiCellWidget(toolBox, 1, 1, 1, 1);
-    gridFrame->setColStretch(0, 10);
-    gridFrame->setColStretch(2, 10);
+    gridFrame->setColumnStretch(0, 10);
+    gridFrame->setColumnStretch(2, 10);
     gridFrame->setRowStretch(0, 10);
     gridFrame->setMargin(spacingHint());
     gridFrame->setSpacing(spacingHint());
@@ -210,21 +210,16 @@ void ImageEffect_SuperImpose::populateTemplates(void)
        
     dir.setFilter ( QDir::Files | QDir::NoSymLinks );
 
-#warning "TODO: kde4 port it";
-/*  TODO: KDE4PORT: not yet ported!
-
-    const QFileInfoList* fileinfolist = dir.entryInfoList();
-    if (!fileinfolist)
+    QFileInfoList fileinfolist = dir.entryInfoList();
+    if (fileinfolist.isEmpty())
        return;
     
-    QFileInfoListIterator it(*fileinfolist);
-    QFileInfo* fi;
+    QFileInfoList::const_iterator fi;
 
-    while( (fi = it.current() ) )
+    for (fi = fileinfolist.constBegin(); fi != fileinfolist.constEnd(); ++fi)
     {
         new Digikam::ThumbBarItem( m_thumbnailsBar, KUrl(fi->filePath()) );
-        ++it;
-    }*/
+    }
 }
 
 void ImageEffect_SuperImpose::readUserSettings()
