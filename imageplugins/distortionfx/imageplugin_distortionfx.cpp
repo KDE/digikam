@@ -48,7 +48,9 @@ ImagePlugin_DistortionFX::ImagePlugin_DistortionFX(QObject *parent, const QStrin
 {
     m_distortionfxAction  = new KAction(KIcon("distortionfx"), i18n("Distortion Effects..."), this);
     actionCollection()->addAction("imageplugin_distortionfx", m_distortionfxAction );
-    connect(m_distortionfxAction, SIGNAL(triggered(bool) ), SLOT(slotDistortionFX()));
+
+    connect(m_distortionfxAction, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotDistortionFX()));
                 
     setXMLFile( "digikamimageplugin_distortionfx_ui.rc" );    
         
@@ -69,4 +71,3 @@ void ImagePlugin_DistortionFX::slotDistortionFX()
     DigikamDistortionFXImagesPlugin::ImageEffect_DistortionFX dlg(parentWidget());
     dlg.exec();
 }
-

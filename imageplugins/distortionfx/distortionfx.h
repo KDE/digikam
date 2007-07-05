@@ -30,7 +30,7 @@
 
 // Qt includes.
 
-#include <qsize.h>
+#include <QSize>
 
 // Digikam includes.
 

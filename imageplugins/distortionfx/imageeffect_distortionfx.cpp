@@ -27,15 +27,12 @@
 
 // Qt includes. 
  
-#include <qlabel.h>
-
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qimage.h>
-#include <qspinbox.h>
-#include <qcombobox.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QFrame>
+#include <QImage>
+#include <QSpinBox>
+#include <QComboBox>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -92,76 +89,78 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
     setAboutData(about);
         
     m_imagePreviewWidget->setWhatsThis( i18n("<p>This is the preview of the distortion effect "
-                                                "applied to the photograph.") );
+                                             "applied to the photograph.") );
                                            
     // -------------------------------------------------------------
     
-    QWidget *gboxSettings = new QWidget(this);
-    setMainWidget(gboxSettings);
-    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 5, 2, spacingHint());
+    QWidget *gboxSettings     = new QWidget(mainWidget());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings );
     
     m_effectTypeLabel = new QLabel(i18n("Type:"), gboxSettings);
     
-    m_effectType = new QComboBox( false, gboxSettings );
-    m_effectType->insertItem( i18n("Fish Eyes") );
-    m_effectType->insertItem( i18n("Twirl") );
-    m_effectType->insertItem( i18n("Cylindrical Hor.") );
-    m_effectType->insertItem( i18n("Cylindrical Vert.") );
-    m_effectType->insertItem( i18n("Cylindrical H/V.") );
-    m_effectType->insertItem( i18n("Caricature") );
-    m_effectType->insertItem( i18n("Multiple Corners") );
-    m_effectType->insertItem( i18n("Waves Hor.") );
-    m_effectType->insertItem( i18n("Waves Vert.") );
-    m_effectType->insertItem( i18n("Block Waves 1") );
-    m_effectType->insertItem( i18n("Block Waves 2") );
-    m_effectType->insertItem( i18n("Circular Waves 1") );
-    m_effectType->insertItem( i18n("Circular Waves 2") );
-    m_effectType->insertItem( i18n("Polar Coordinates") );    
-    m_effectType->insertItem( i18n("Unpolar Coordinates") );    
-    m_effectType->insertItem( i18n("Tile") );    
+    m_effectType      = new QComboBox( gboxSettings );
+    m_effectType->addItem( i18n("Fish Eyes") );
+    m_effectType->addItem( i18n("Twirl") );
+    m_effectType->addItem( i18n("Cylindrical Hor.") );
+    m_effectType->addItem( i18n("Cylindrical Vert.") );
+    m_effectType->addItem( i18n("Cylindrical H/V.") );
+    m_effectType->addItem( i18n("Caricature") );
+    m_effectType->addItem( i18n("Multiple Corners") );
+    m_effectType->addItem( i18n("Waves Hor.") );
+    m_effectType->addItem( i18n("Waves Vert.") );
+    m_effectType->addItem( i18n("Block Waves 1") );
+    m_effectType->addItem( i18n("Block Waves 2") );
+    m_effectType->addItem( i18n("Circular Waves 1") );
+    m_effectType->addItem( i18n("Circular Waves 2") );
+    m_effectType->addItem( i18n("Polar Coordinates") );    
+    m_effectType->addItem( i18n("Unpolar Coordinates") );    
+    m_effectType->addItem( i18n("Tile") );    
     m_effectType->setWhatsThis( i18n("<p>Select here the effect type to apply on image.<p>"
-                                        "<b>Fish Eyes</b>: warps the photograph around a 3D spherical shape to "
-                                        "reproduce the common photograph 'Fish Eyes' effect.<p>"
-                                        "<b>Twirl</b>: spins the photograph to produce a Twirl pattern.<p>"
-                                        "<b>Cylinder Hor.</b>: warps the photograph around a horizontal cylinder.<p>"
-                                        "<b>Cylinder Vert.</b>: warps the photograph around a vertical cylinder.<p>"
-                                        "<b>Cylinder H/V.</b>: warps the photograph around 2 cylinders, vertical "
-                                        "and horizontal.<p>"
-                                        "<b>Caricature</b>: distorts the photograph with the 'Fish Eyes' effect inverted.<p>"
-                                        "<b>Multiple Corners</b>: splits the photograph like a multiple corners pattern.<p>"
-                                        "<b>Waves Horizontal</b>: distorts the photograph with horizontal waves.<p>"
-                                        "<b>Waves Vertical</b>: distorts the photograph with verticals waves.<p>"
-                                        "<b>Block Waves 1</b>: divides the image into cells and makes it look as "
-                                        "if it is being viewed through glass blocks.<p>"
-                                        "<b>Block Waves 2</b>: like Block Waves 1 but with another version "
-                                        "of glass blocks distortion.<p>"
-                                        "<b>Circular Waves 1</b>: distorts the photograph with circular waves.<p>"
-                                        "<b>Circular Waves 2</b>: another variation of Circular Waves effect.<p>"
-                                        "<b>Polar Coordinates</b>: converts the photograph from rectangular "
-                                        "to polar coordinates.<p>"
-                                        "<b>Unpolar Coordinates</b>: Polar Coordinate effect inverted.<p>"
-                                        "<b>Tile</b>: splits the photograph into square blocks and move "
-                                        "them randomly inside the image.<p>"
-                                        ));
-    gridSettings->addMultiCellWidget(m_effectTypeLabel, 0, 0, 0, 2);
-    gridSettings->addMultiCellWidget(m_effectType, 1, 1, 0, 2);
+                                     "<b>Fish Eyes</b>: warps the photograph around a 3D spherical shape to "
+                                     "reproduce the common photograph 'Fish Eyes' effect.<p>"
+                                     "<b>Twirl</b>: spins the photograph to produce a Twirl pattern.<p>"
+                                     "<b>Cylinder Hor.</b>: warps the photograph around a horizontal cylinder.<p>"
+                                     "<b>Cylinder Vert.</b>: warps the photograph around a vertical cylinder.<p>"
+                                     "<b>Cylinder H/V.</b>: warps the photograph around 2 cylinders, vertical "
+                                     "and horizontal.<p>"
+                                     "<b>Caricature</b>: distorts the photograph with the 'Fish Eyes' effect inverted.<p>"
+                                     "<b>Multiple Corners</b>: splits the photograph like a multiple corners pattern.<p>"
+                                     "<b>Waves Horizontal</b>: distorts the photograph with horizontal waves.<p>"
+                                     "<b>Waves Vertical</b>: distorts the photograph with verticals waves.<p>"
+                                     "<b>Block Waves 1</b>: divides the image into cells and makes it look as "
+                                     "if it is being viewed through glass blocks.<p>"
+                                     "<b>Block Waves 2</b>: like Block Waves 1 but with another version "
+                                     "of glass blocks distortion.<p>"
+                                     "<b>Circular Waves 1</b>: distorts the photograph with circular waves.<p>"
+                                     "<b>Circular Waves 2</b>: another variation of Circular Waves effect.<p>"
+                                     "<b>Polar Coordinates</b>: converts the photograph from rectangular "
+                                     "to polar coordinates.<p>"
+                                     "<b>Unpolar Coordinates</b>: Polar Coordinate effect inverted.<p>"
+                                     "<b>Tile</b>: splits the photograph into square blocks and move "
+                                     "them randomly inside the image.<p>"
+                                     ));
                                                   
     m_levelLabel = new QLabel(i18n("Level:"), gboxSettings);
     m_levelInput = new KIntNumInput(gboxSettings);
     m_levelInput->setRange(0, 100, 1, true);
     m_levelInput->setWhatsThis( i18n("<p>Set here the level of the effect."));
     
-    gridSettings->addMultiCellWidget(m_levelLabel, 2, 2, 0, 2);
-    gridSettings->addMultiCellWidget(m_levelInput, 3, 3, 0, 2);
-        
     m_iterationLabel = new QLabel(i18n("Iteration:"), gboxSettings);
     m_iterationInput = new KIntNumInput(gboxSettings);
     m_iterationInput->setRange(0, 100, 1, true);
     m_iterationInput->setWhatsThis( i18n("<p>This value controls the iterations to use for Waves, "
-                                            "Tile, and Neon effects."));
+                                         "Tile, and Neon effects."));
     
+    // -------------------------------------------------------------
+
+    gridSettings->addMultiCellWidget(m_effectTypeLabel, 0, 0, 0, 2);
+    gridSettings->addMultiCellWidget(m_effectType, 1, 1, 0, 2);
+    gridSettings->addMultiCellWidget(m_levelLabel, 2, 2, 0, 2);
+    gridSettings->addMultiCellWidget(m_levelInput, 3, 3, 0, 2);
     gridSettings->addMultiCellWidget(m_iterationLabel, 4, 4, 0, 2);
     gridSettings->addMultiCellWidget(m_iterationInput, 5, 5, 0, 2);
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(spacingHint());
     
     setUserAreaWidget(gboxSettings); 
 
@@ -190,8 +189,8 @@ void ImageEffect_DistortionFX::renderingFinished()
     m_iterationInput->setEnabled(true);
     m_iterationLabel->setEnabled(true);
 
-    switch (m_effectType->currentItem())
-       {
+    switch (m_effectType->currentIndex())
+    {
        case DistortionFX::FishEye:
        case DistortionFX::Twirl: 
        case DistortionFX::CilindricalHor:  
@@ -217,7 +216,7 @@ void ImageEffect_DistortionFX::renderingFinished()
           m_iterationInput->setEnabled(true);
           m_iterationLabel->setEnabled(true);
           break;
-       }
+    }
 }
 
 void ImageEffect_DistortionFX::readUserSettings(void)
@@ -229,7 +228,7 @@ void ImageEffect_DistortionFX::readUserSettings(void)
     m_iterationInput->blockSignals(true);
     m_levelInput->blockSignals(true);
 
-    m_effectType->setCurrentItem(group.readEntry("EffectType", (int)DistortionFX::FishEye));
+    m_effectType->setCurrentIndex(group.readEntry("EffectType", (int)DistortionFX::FishEye));
     m_iterationInput->setValue(group.readEntry("IterationAjustment", 10));
     m_levelInput->setValue(group.readEntry("LevelAjustment", 50));
 
@@ -244,7 +243,7 @@ void ImageEffect_DistortionFX::writeUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("distortionfx Tool Dialog");
-    group.writeEntry("EffectType", m_effectType->currentItem());
+    group.writeEntry("EffectType", m_effectType->currentIndex());
     group.writeEntry("IterationAjustment", m_iterationInput->value());
     group.writeEntry("LevelAjustment", m_levelInput->value());
     config->sync();
@@ -253,7 +252,7 @@ void ImageEffect_DistortionFX::writeUserSettings(void)
 void ImageEffect_DistortionFX::resetValues()
 {
     m_effectType->blockSignals(true);
-    m_effectType->setCurrentItem(DistortionFX::FishEye);
+    m_effectType->setCurrentIndex(DistortionFX::FishEye);
     slotEffectTypeChanged(DistortionFX::FishEye);
     m_effectType->blockSignals(false);
 } 
@@ -269,7 +268,7 @@ void ImageEffect_DistortionFX::slotEffectTypeChanged(int type)
     m_levelInput->setValue(25);
           
     switch (type)
-       {
+    {
        case DistortionFX::Twirl: 
           m_levelInput->setRange(-50, 50, 1, true);
           m_levelInput->setValue(10);
@@ -307,7 +306,7 @@ void ImageEffect_DistortionFX::slotEffectTypeChanged(int type)
           m_levelInput->setEnabled(false);
           m_levelLabel->setEnabled(false);
           break;
-       }
+    }
 
     m_levelInput->blockSignals(false);
     m_iterationInput->blockSignals(false);
@@ -326,7 +325,7 @@ void ImageEffect_DistortionFX::prepareEffect()
 
     int l = m_levelInput->value();
     int f = m_iterationInput->value();
-    int e = m_effectType->currentItem();
+    int e = m_effectType->currentIndex();
 
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
 
@@ -350,7 +349,7 @@ void ImageEffect_DistortionFX::prepareFinal()
 
     int l = m_levelInput->value();
     int f = m_iterationInput->value();
-    int e = m_effectType->currentItem();
+    int e = m_effectType->currentIndex();
 
     Digikam::ImageIface iface(0, 0);
 
@@ -378,4 +377,3 @@ void ImageEffect_DistortionFX::putFinalData(void)
 }
 
 }  // NameSpace DigikamDistortionFXImagesPlugin
-

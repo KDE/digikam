@@ -31,8 +31,6 @@
 // Digikam includes.
 
 #include "imageguidedlg.h"
-//Added by qt3to4:
-#include <QLabel>
 
 class QComboBox;
 class QLabel;
@@ -68,14 +66,14 @@ private:
 
 private:
     
-    QComboBox            *m_effectType;
+    QComboBox    *m_effectType;
 
-    QLabel               *m_effectTypeLabel;
-    QLabel               *m_levelLabel;
-    QLabel               *m_iterationLabel;
+    QLabel       *m_effectTypeLabel;
+    QLabel       *m_levelLabel;
+    QLabel       *m_iterationLabel;
     
-    KIntNumInput         *m_levelInput;
-    KIntNumInput         *m_iterationInput;
+    KIntNumInput *m_levelInput;
+    KIntNumInput *m_iterationInput;
 };
 
 }  // NameSpace DigikamDistortionFXImagesPlugin
