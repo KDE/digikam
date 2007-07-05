@@ -120,11 +120,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     QWidget *gboxSettings = new QWidget(mainWidget());
     QVBoxLayout* layout2  = new QVBoxLayout(gboxSettings);
     QGridLayout *grid     = new QGridLayout();
-    layout2->addLayout(grid);
-    layout2->setSpacing(spacingHint());
-    grid->setMargin(spacingHint());
-    grid->setSpacing(spacingHint());
-
+    
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     m_channelCB = new QComboBox( gboxSettings );
@@ -169,8 +165,6 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     l1->addStretch(10);
     l1->addWidget(scaleBox);
 
-    grid->addMultiCellLayout(l1, 0, 0, 0, 4);
-
     // -------------------------------------------------------------
 
     KVBox *histoBox   = new KVBox(gboxSettings);
@@ -183,13 +177,14 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
+    grid->setMargin(spacingHint());
+    grid->setSpacing(spacingHint());
+    grid->addMultiCellLayout(l1, 0, 0, 0, 4);
     grid->addMultiCellWidget(histoBox, 1, 2, 0, 4);
-    
+
     // -------------------------------------------------------------
 
-    QGridLayout *grid2    = new QGridLayout();
-    grid2->setSpacing(spacingHint());
-    layout2->addLayout(grid2);
+    QGridLayout *grid2 = new QGridLayout();
 
     m_temperatureLabel    = new K3ActiveLabel(i18n("<qt><a href='http://en.wikipedia.org/wiki/Color_temperature'>Color Temperature</a> "
                                                   " (K): </qt>"), gboxSettings);
@@ -301,15 +296,20 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
     // -------------------------------------------------------------
 
+    layout2->setMargin(0);
+    layout2->setSpacing(spacingHint());
+    layout2->addLayout(grid);
+    layout2->addLayout(grid2);
+
+    grid2->setMargin(spacingHint());
+    grid2->setSpacing(spacingHint());
     grid2->addMultiCellWidget(m_temperatureLabel, 0, 0, 0, 5);
     grid2->addMultiCellWidget(m_adjTemperatureLabel, 1, 1, 0, 0);
     grid2->addMultiCellWidget(m_pickTemperature, 1, 1, 1, 1);
     grid2->addMultiCellWidget(m_temperatureInput, 1, 1, 2, 5);
     grid2->addMultiCellWidget(m_temperaturePresetLabel, 2, 2, 0, 0);
     grid2->addMultiCellWidget(m_temperaturePresetCB, 2, 2, 2, 5);
-    
     grid2->addMultiCellWidget(line, 3, 3, 0, 5);
-    
     grid2->addMultiCellWidget(m_blackLabel, 4, 4, 0, 0);
     grid2->addMultiCellWidget(m_blackInput, 4, 4, 1, 5);
     grid2->addMultiCellWidget(m_darkLabel, 5, 5, 0, 0);
@@ -320,9 +320,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     grid2->addMultiCellWidget(m_gammaInput, 7, 7, 1, 5);
     grid2->addMultiCellWidget(m_greenLabel, 8, 8, 0, 0);
     grid2->addMultiCellWidget(m_greenInput, 8, 8, 1, 5);
-
     grid2->addMultiCellWidget(line2, 9, 9, 0, 5);
-
     grid2->addMultiCellWidget(m_exposureLabel, 10, 10, 0, 5);
     grid2->addMultiCellWidget(m_mainExposureLabel, 11, 11, 0, 0);
     grid2->addMultiCellWidget(m_autoAdjustExposure, 11, 11, 1, 1);
