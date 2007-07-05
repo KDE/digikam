@@ -169,6 +169,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     lcmsLogoLabel->setToolTip(i18n("Visit Little CMS project website"));
 
     d->behaviourGB                 = new QGroupBox(i18n("Behavior"), colorPolicy);
+    QVBoxLayout *vlay3             = new QVBoxLayout(d->behaviourGB);
     QButtonGroup *behaviourOptions = new QButtonGroup(d->behaviourGB);
 
     d->defaultApplyICC = new QRadioButton(d->behaviourGB);
@@ -177,6 +178,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                      "Workspace default color profile to an image without asking when this has no "
                      "embedded profile, or the embedded profile is not the same as the workspace "
                      "profile.</p>"));
+    behaviourOptions->addButton(d->defaultApplyICC);
     
     d->defaultAskICC = new QRadioButton(d->behaviourGB);
     d->defaultAskICC->setText(i18n("Ask when opening an image in Image Editor"));
@@ -184,8 +186,6 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                      "before it applies the Workspace default color profile to an image which has no "
                      "embedded profile or, if the image has an embedded profile, this is not the same "
                      "as the workspace profile.</p>"));
-
-    behaviourOptions->addButton(d->defaultApplyICC);
     behaviourOptions->addButton(d->defaultAskICC);
 
     KHBox *hbox   = new KHBox(d->behaviourGB);
@@ -196,11 +196,18 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->cmToolInRawLoading->setWhatsThis( i18n("Enable this option if you want to launch the color "
                      "management image plugin when a RAW file is loaded in editor."));
 
+    vlay3->addWidget(d->defaultApplyICC);
+    vlay3->addWidget(d->defaultAskICC);
+    vlay3->addWidget(hbox);
+    vlay3->setMargin(KDialog::spacingHint());
+    vlay3->setSpacing(0);
+
     grid->addMultiCellWidget(d->enableColorManagement, 0, 0, 0, 0);
     grid->addMultiCellWidget(lcmsLogoLabel, 0, 0, 2, 2);
     grid->addMultiCellWidget(d->behaviourGB, 1, 1, 0, 2);
     grid->setColumnStretch(1, 10);
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(KDialog::spacingHint());
+    grid->setSpacing(0);
 
     layout->addWidget(colorPolicy);
     
@@ -218,6 +225,8 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                      "You must store all your color profiles in this directory.</p>"));
 
     vlay->addWidget(d->defaultPathKU);
+    vlay->setMargin(KDialog::spacingHint());
+    vlay->setSpacing(0);
 
     layout->addWidget(d->defaultPathGB);
 
@@ -298,7 +307,8 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     grid2->addMultiCellWidget(proofProfiles, 4, 4, 1, 1);
     grid2->addMultiCellWidget(d->proofProfilesKC, 4, 4, 2, 2);
     grid2->addMultiCellWidget(d->infoProofProfiles, 4, 4, 3, 3);
-    grid2->setSpacing(KDialog::spacingHint());
+    grid2->setMargin(KDialog::spacingHint());
+    grid2->setSpacing(0);
     grid2->setColumnStretch(2, 10);
 
     layout->addWidget(d->profilesGB);
@@ -350,7 +360,9 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     vlay2->addWidget(d->bpcAlgorithm);
     vlay2->addWidget(hbox2);
     vlay2->addWidget(d->renderingIntentKC);
-    
+    vlay2->setMargin(KDialog::spacingHint());
+    vlay2->setSpacing(0);    
+
     layout->addWidget(d->advancedSettingsGB);
     layout->addStretch();
     
