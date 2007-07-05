@@ -202,9 +202,9 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     vlay3->setMargin(KDialog::spacingHint());
     vlay3->setSpacing(0);
 
-    grid->addMultiCellWidget(d->enableColorManagement, 0, 0, 0, 0);
-    grid->addMultiCellWidget(lcmsLogoLabel, 0, 0, 2, 2);
-    grid->addMultiCellWidget(d->behaviourGB, 1, 1, 0, 2);
+    grid->addWidget(d->enableColorManagement, 0, 0, 1, 1);
+    grid->addWidget(lcmsLogoLabel, 0, 2, 1, 1);
+    grid->addWidget(d->behaviourGB, 1, 0, 1, 3 );
     grid->setColumnStretch(1, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(0);
@@ -298,23 +298,23 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->infoProofProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected soft proof profile.</p>"));
     
-    grid2->addMultiCellWidget(d->managedView, 0, 0, 0, 3);
-    grid2->addMultiCellWidget(d->monitorIcon, 1, 1, 0, 0);
-    grid2->addMultiCellWidget(d->monitorProfiles, 1, 1, 1, 1);
-    grid2->addMultiCellWidget(d->monitorProfilesKC, 1, 1, 2, 2);
-    grid2->addMultiCellWidget(d->infoMonitorProfiles, 1, 1, 3, 3);
-    grid2->addMultiCellWidget(workIcon, 2, 2, 0, 0);
-    grid2->addMultiCellWidget(workProfiles, 2, 2, 1, 1);
-    grid2->addMultiCellWidget(d->workProfilesKC, 2, 2, 2, 2);
-    grid2->addMultiCellWidget(d->infoWorkProfiles, 2, 2, 3, 3);
-    grid2->addMultiCellWidget(inIcon, 3, 3, 0, 0);
-    grid2->addMultiCellWidget(inProfiles, 3, 3, 1, 1);
-    grid2->addMultiCellWidget(d->inProfilesKC, 3, 3, 2, 2);
-    grid2->addMultiCellWidget(d->infoInProfiles, 3, 3, 3, 3);
-    grid2->addMultiCellWidget(proofIcon, 4, 4, 0, 0);
-    grid2->addMultiCellWidget(proofProfiles, 4, 4, 1, 1);
-    grid2->addMultiCellWidget(d->proofProfilesKC, 4, 4, 2, 2);
-    grid2->addMultiCellWidget(d->infoProofProfiles, 4, 4, 3, 3);
+    grid2->addWidget(d->managedView, 0, 0, 1, 4 );
+    grid2->addWidget(d->monitorIcon, 1, 0, 1, 1);
+    grid2->addWidget(d->monitorProfiles, 1, 1, 1, 1);
+    grid2->addWidget(d->monitorProfilesKC, 1, 2, 1, 1);
+    grid2->addWidget(d->infoMonitorProfiles, 1, 3, 1, 1);
+    grid2->addWidget(workIcon, 2, 0, 1, 1);
+    grid2->addWidget(workProfiles, 2, 1, 1, 1);
+    grid2->addWidget(d->workProfilesKC, 2, 2, 1, 1);
+    grid2->addWidget(d->infoWorkProfiles, 2, 3, 1, 1);
+    grid2->addWidget(inIcon, 3, 0, 1, 1);
+    grid2->addWidget(inProfiles, 3, 1, 1, 1);
+    grid2->addWidget(d->inProfilesKC, 3, 2, 1, 1);
+    grid2->addWidget(d->infoInProfiles, 3, 3, 1, 1);
+    grid2->addWidget(proofIcon, 4, 0, 1, 1);
+    grid2->addWidget(proofProfiles, 4, 1, 1, 1);
+    grid2->addWidget(d->proofProfilesKC, 4, 2, 1, 1);
+    grid2->addWidget(d->infoProofProfiles, 4, 3, 1, 1);
     grid2->setMargin(KDialog::spacingHint());
     grid2->setSpacing(0);
     grid2->setColumnStretch(2, 10);
@@ -364,9 +364,9 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                      "<p>This intent is most suitable for business graphics such as charts, where it is more important that the "
                      "colors be vivid and contrast well with each other rather than a specific color.</p></li></ul>"));
 
-    grid3->addMultiCellWidget(d->bpcAlgorithm, 0, 0, 0, 1);
-    grid3->addMultiCellWidget(lablel, 1, 1, 0, 0);
-    grid3->addMultiCellWidget(d->renderingIntentKC, 1, 1, 1, 1);
+    grid3->addWidget(d->bpcAlgorithm, 0, 0, 1, 2 );
+    grid3->addWidget(lablel, 1, 0, 1, 1);
+    grid3->addWidget(d->renderingIntentKC, 1, 1, 1, 1);
     grid3->setMargin(KDialog::spacingHint());
     grid3->setSpacing(0);    
 
