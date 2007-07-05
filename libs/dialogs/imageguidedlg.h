@@ -85,6 +85,7 @@ public slots:
 
 protected slots:
 
+    virtual void slotButtonClicked(int button);
     virtual void slotCancel();
     virtual void slotUser1();
     virtual void slotUser2(){};

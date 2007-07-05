@@ -275,9 +275,6 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    connect(this, SIGNAL(okClicked()),
-            this, SLOT(slotOk()));
-
     connect(this, SIGNAL(cancelClicked()),
             this, SLOT(slotCancel()));
 
@@ -400,6 +397,17 @@ void ImageGuideDlg::abortPreview()
     enableButton(Try,     true);
     enableButton(Default, true);
     renderingFinished();
+}
+
+void ImageGuideDlg::slotButtonClicked(int button)
+{
+    // KDialog calls QDialog::accept() for Ok.
+    // We need to override this, we can only accept() when the thread has finished.
+
+    if (button == Ok)
+        slotOk();
+    else
+        KDialog::slotButtonClicked(button);
 }
 
 void ImageGuideDlg::slotTry()
@@ -539,6 +547,8 @@ void ImageGuideDlg::slotOk()
     enableButton(Try,     false);
     kapp->setOverrideCursor( Qt::WaitCursor );
     d->progressBar->setValue(0);
+    if (d->progress)
+        setProgressVisible(true);
 
     if (m_threadedFilter)
     {
@@ -560,7 +570,6 @@ void ImageGuideDlg::slotOk()
 
 void ImageGuideDlg::slotFilterStarted()
 {
-    d->progressBar->setValue(0);
 }
 
 void ImageGuideDlg::slotFilterFinished(bool success)

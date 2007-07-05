@@ -77,6 +77,7 @@ public slots:
 
 protected slots:
 
+    virtual void slotButtonClicked(int button);
     void slotFilterStarted();
     void slotFilterFinished(bool success);
     void slotFilterProgress(int progress);

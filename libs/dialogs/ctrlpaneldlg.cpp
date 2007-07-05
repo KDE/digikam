@@ -148,9 +148,6 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    connect(this, SIGNAL(okClicked()),
-            this, SLOT(slotOk()));
-
     connect(this, SIGNAL(cancelClicked()),
             this, SLOT(slotCancel()));
 
@@ -233,6 +230,17 @@ void CtrlPanelDlg::abortPreview()
     enableButton(Try,     true);
     enableButton(Default, true);
     renderingFinished();
+}
+
+void CtrlPanelDlg::slotButtonClicked(int button)
+{
+    // KDialog calls QDialog::accept() for Ok.
+    // We need to override this, we can only accept() when the thread has finished.
+
+    if (button == Ok)
+        slotOk();
+    else
+        KDialog::slotButtonClicked(button);
 }
 
 void CtrlPanelDlg::slotTry()
@@ -404,7 +412,6 @@ void CtrlPanelDlg::slotOk()
 
 void CtrlPanelDlg::slotFilterStarted()
 {
-    m_imagePreviewWidget->setProgress(0);
 }
 
 void CtrlPanelDlg::slotFilterFinished(bool success)
