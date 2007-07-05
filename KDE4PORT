@@ -156,7 +156,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |-----sharpnesseditor
         |-------clapack                         Gilles                          DONE        -        CMake port only is require.
         |---distortionfx                        Laurent                         DONE                 Final render failed
-        |---emboss                              Laurent                         DONE                 
+        |---emboss                              Laurent                         DONE                 Final render failed
         |---filmgrain                           Laurent                         DONE                 
         |---freerotation                        Gilles                          DONE        -        Final render failed
         |---hotpixels                           Laurent                                              CMake port only
