@@ -46,7 +46,10 @@ ImagePlugin_AntiVignetting::ImagePlugin_AntiVignetting(QObject *parent, const QS
 {
     m_antivignettingAction  = new KAction(KIcon("antivignetting"), i18n("Vignetting..."), this);
     actionCollection()->addAction("imageplugin_antivignetting", m_antivignettingAction );
-    connect(m_antivignettingAction, SIGNAL(triggered(bool) ), SLOT(slotAntiVignetting()));
+
+    connect(m_antivignettingAction, SIGNAL(triggered(bool)), 
+            this, SLOT(slotAntiVignetting()));
+
     setXMLFile("digikamimageplugin_antivignetting_ui.rc");                
     
     DDebug() << "ImagePlugin_AntiVignetting plugin loaded" << endl;
@@ -66,4 +69,3 @@ void ImagePlugin_AntiVignetting::slotAntiVignetting()
     DigikamAntiVignettingImagesPlugin::ImageEffect_AntiVignetting dlg(parentWidget());
     dlg.exec();
 }
-

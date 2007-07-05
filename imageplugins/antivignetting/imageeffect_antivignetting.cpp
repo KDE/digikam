@@ -24,16 +24,13 @@
  
 // Qt includes. 
  
-#include <qlabel.h>
-
-#include <qlayout.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qpen.h>
-#include <qtabwidget.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QImage>
+#include <QPixmap>
+#include <QPainter>
+#include <QPen>
+#include <QTabWidget>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -88,15 +85,13 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QWidget *gboxSettings     = new QWidget(this);
-    setMainWidget(gboxSettings);
-    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 13, 2, spacingHint());
+    QWidget *gboxSettings     = new QWidget(mainWidget());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings);
 
     m_maskPreviewLabel = new QLabel( gboxSettings );
     m_maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
     m_maskPreviewLabel->setWhatsThis( i18n("<p>You can see here a thumbnail preview of the anti-vignetting "
-                                              "mask applied to the image.") );
-    gridSettings->addMultiCellWidget(m_maskPreviewLabel, 0, 0, 0, 2);
+                                           "mask applied to the image.") );
         
     // -------------------------------------------------------------
 
@@ -105,12 +100,9 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     m_densityInput = new KDoubleNumInput(gboxSettings);
     m_densityInput->setPrecision(1);
     m_densityInput->setRange(1.0, 20.0, 0.1, true);
-    m_densityInput->setWhatsThis( i18n("<p>This value controls the degree of intensity attenuation by the filter "
-                                          "at its point of maximum density."));
+    m_densityInput->setWhatsThis( i18n("<p>This value controls the degree of intensity attenuation "
+                                       "by the filter at its point of maximum density."));
 
-    gridSettings->addMultiCellWidget(label1, 1, 1, 0, 2);
-    gridSettings->addMultiCellWidget(m_densityInput, 2, 2, 0, 2);
-                          
     // -------------------------------------------------------------
     
     QLabel *label2 = new QLabel(i18n("Power:"), gboxSettings);
@@ -118,12 +110,9 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     m_powerInput = new KDoubleNumInput(gboxSettings);
     m_powerInput->setPrecision(1);
     m_powerInput->setRange(0.1, 2.0, 0.1, true);
-    m_powerInput->setWhatsThis( i18n("<p>This value is used as the exponent controlling the fall-off in density "
-                                        "from the center of the filter to the periphery."));
+    m_powerInput->setWhatsThis( i18n("<p>This value is used as the exponent controlling the "
+                                     "fall-off in density from the center of the filter to the periphery."));
 
-    gridSettings->addMultiCellWidget(label2, 3, 3, 0, 2);
-    gridSettings->addMultiCellWidget(m_powerInput, 4, 4, 0, 2);
-    
     // -------------------------------------------------------------
     
     QLabel *label3 = new QLabel(i18n("Radius:"), gboxSettings);
@@ -131,15 +120,11 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     m_radiusInput = new KDoubleNumInput(gboxSettings);
     m_radiusInput->setPrecision(1);
     m_radiusInput->setRange(-100.0, 100.0, 0.1, true);
-    m_radiusInput->setWhatsThis( i18n("<p>This value is the radius of the center filter. It is a multiple of the "
-                                          "half-diagonal measure of the image, at which the density of the filter falls "
-                                          "to zero."));
-    
-    gridSettings->addMultiCellWidget(label3, 5, 5, 0, 2);
-    gridSettings->addMultiCellWidget(m_radiusInput, 6, 6, 0, 2);
+    m_radiusInput->setWhatsThis( i18n("<p>This value is the radius of the center filter. It is a "
+                                      "multiple of the half-diagonal measure of the image, at which "
+                                      "the density of the filter falls to zero."));
     
     KSeparator *line = new KSeparator (Qt::Horizontal, gboxSettings);
-    gridSettings->addMultiCellWidget(line, 7, 7, 0, 2);
 
     // -------------------------------------------------------------
 
@@ -149,9 +134,6 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     m_brightnessInput->setRange(0, 100, 1, true);  
     m_brightnessInput->setWhatsThis( i18n("<p>Set here the brightness re-adjustment of the target image."));
 
-    gridSettings->addMultiCellWidget(label4, 8, 8, 0, 2);
-    gridSettings->addMultiCellWidget(m_brightnessInput, 9, 9, 0, 2);
-        
     // -------------------------------------------------------------
     
     QLabel *label5 = new QLabel(i18n("Contrast:"), gboxSettings);
@@ -160,9 +142,6 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     m_contrastInput->setRange(0, 100, 1, true);  
     m_contrastInput->setWhatsThis( i18n("<p>Set here the contrast re-adjustment of the target image."));
 
-    gridSettings->addMultiCellWidget(label5, 10, 10, 0, 2);
-    gridSettings->addMultiCellWidget(m_contrastInput, 11, 11, 0, 2);
-    
     // -------------------------------------------------------------
 
     QLabel *label6 = new QLabel(i18n("Gamma:"), gboxSettings);
@@ -173,8 +152,24 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     m_gammaInput->setValue(1.0);
     m_gammaInput->setWhatsThis( i18n("<p>Set here the gamma re-adjustment of the target image."));
 
+    // -------------------------------------------------------------
+
+    gridSettings->addMultiCellWidget(m_maskPreviewLabel, 0, 0, 0, 2);
+    gridSettings->addMultiCellWidget(label1, 1, 1, 0, 2);
+    gridSettings->addMultiCellWidget(m_densityInput, 2, 2, 0, 2);
+    gridSettings->addMultiCellWidget(label2, 3, 3, 0, 2);
+    gridSettings->addMultiCellWidget(m_powerInput, 4, 4, 0, 2);
+    gridSettings->addMultiCellWidget(label3, 5, 5, 0, 2);
+    gridSettings->addMultiCellWidget(m_radiusInput, 6, 6, 0, 2);
+    gridSettings->addMultiCellWidget(line, 7, 7, 0, 2);
+    gridSettings->addMultiCellWidget(label4, 8, 8, 0, 2);
+    gridSettings->addMultiCellWidget(m_brightnessInput, 9, 9, 0, 2);
+    gridSettings->addMultiCellWidget(label5, 10, 10, 0, 2);
+    gridSettings->addMultiCellWidget(m_contrastInput, 11, 11, 0, 2);
     gridSettings->addMultiCellWidget(label6, 12, 12, 0, 2);
     gridSettings->addMultiCellWidget(m_gammaInput, 13, 13, 0, 2);
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(spacingHint());
 
     setUserAreaWidget(gboxSettings);
     
@@ -381,4 +376,3 @@ void ImageEffect_AntiVignetting::putFinalData(void)
 }
 
 }  // NameSpace DigikamAntiVignettingImagesPlugin
-

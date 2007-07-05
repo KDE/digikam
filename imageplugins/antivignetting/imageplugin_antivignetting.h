@@ -38,8 +38,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_AntiVignetting : public Digikam::Im
     
 public:
 
-    ImagePlugin_AntiVignetting(QObject *parent,
-                               const QStringList &args);
+    ImagePlugin_AntiVignetting(QObject *parent, const QStringList &args);
     ~ImagePlugin_AntiVignetting();
     
     void setEnabledActions(bool enable);
