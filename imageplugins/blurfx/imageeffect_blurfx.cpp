@@ -24,15 +24,12 @@
 
 // Qt includes. 
  
-#include <qlabel.h>
-
-#include <qlayout.h>
-#include <qslider.h>
-#include <qimage.h>
-#include <qcombobox.h>
-#include <qdatetime.h> 
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QSlider>
+#include <QImage>
+#include <QComboBox>
+#include <QDateTime> 
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -88,63 +85,66 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 5, 1, 0, spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings );
     
     m_effectTypeLabel = new QLabel(i18n("Type:"), gboxSettings);
     
-    m_effectType = new QComboBox( false, gboxSettings );
-    m_effectType->insertItem( i18n("Zoom Blur") );
-    m_effectType->insertItem( i18n("Radial Blur") );
-    m_effectType->insertItem( i18n("Far Blur") );
-    m_effectType->insertItem( i18n("Motion Blur") );
-    m_effectType->insertItem( i18n("Softener Blur") );
-    m_effectType->insertItem( i18n("Skake Blur") );
-    m_effectType->insertItem( i18n("Focus Blur") );
-    m_effectType->insertItem( i18n("Smart Blur") );
-    m_effectType->insertItem( i18n("Frost Glass") );
-    m_effectType->insertItem( i18n("Mosaic") );
+    m_effectType      = new QComboBox( gboxSettings );
+    m_effectType->addItem( i18n("Zoom Blur") );
+    m_effectType->addItem( i18n("Radial Blur") );
+    m_effectType->addItem( i18n("Far Blur") );
+    m_effectType->addItem( i18n("Motion Blur") );
+    m_effectType->addItem( i18n("Softener Blur") );
+    m_effectType->addItem( i18n("Skake Blur") );
+    m_effectType->addItem( i18n("Focus Blur") );
+    m_effectType->addItem( i18n("Smart Blur") );
+    m_effectType->addItem( i18n("Frost Glass") );
+    m_effectType->addItem( i18n("Mosaic") );
     m_effectType->setWhatsThis( i18n("<p>Select here the blurring effect to apply on image.<p>"
-                                        "<b>Zoom Blur</b>:  blurs the image along radial lines starting from "
-                                        "a specified center point. This simulates the blur of a zooming camera.<p>"
-                                        "<b>Radial Blur</b>: blurs the image by rotating the pixels around "
-                                        "the specified center point. This simulates the blur of a rotating camera.<p>"
-                                        "<b>Far Blur</b>: blurs the image by using far pixels. This simulates the blur "
-                                        "of an unfocalized camera lens.<p>"
-                                        "<b>Motion Blur</b>: blurs the image by moving the pixels horizontally. "
-                                        "This simulates the blur of a linear moving camera.<p>"
-                                        "<b>Softener Blur</b>: blurs the image softly in dark tones and hardly in light "
-                                        "tones. This gives images a dreamy and glossy soft focus effect. It's ideal "
-                                        "for creating romantic portraits, glamour photographs, or giving images a warm "
-                                        "and subtle glow.<p>"
-                                        "<b>Skake Blur</b>: blurs the image by skaking randomly the pixels. "
-                                        "This simulates the blur of a random moving camera.<p>"
-                                        "<b>Focus Blur</b>: blurs the image corners to reproduce the astigmatism distortion "
-                                        "of a lens.<p>"
-                                        "<b>Smart Blur</b>: finds the edges of color in your image and blurs them without "
-                                        "muddying the rest of the image.<p>"
-                                        "<b>Frost Glass</b>: blurs the image by randomly disperse light coming through "
-                                        "a frosted glass.<p>"
-                                        "<b>Mosaic</b>: divides the photograph into rectangular cells and then "
-                                        "recreates it by filling those cells with average pixel value."));
-    gridSettings->addMultiCellWidget(m_effectTypeLabel, 0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(m_effectType, 1, 1, 0, 1);
+                                     "<b>Zoom Blur</b>:  blurs the image along radial lines starting from "
+                                     "a specified center point. This simulates the blur of a zooming camera.<p>"
+                                     "<b>Radial Blur</b>: blurs the image by rotating the pixels around "
+                                     "the specified center point. This simulates the blur of a rotating camera.<p>"
+                                     "<b>Far Blur</b>: blurs the image by using far pixels. This simulates the blur "
+                                     "of an unfocalized camera lens.<p>"
+                                     "<b>Motion Blur</b>: blurs the image by moving the pixels horizontally. "
+                                     "This simulates the blur of a linear moving camera.<p>"
+                                     "<b>Softener Blur</b>: blurs the image softly in dark tones and hardly in light "
+                                     "tones. This gives images a dreamy and glossy soft focus effect. It's ideal "
+                                     "for creating romantic portraits, glamour photographs, or giving images a warm "
+                                     "and subtle glow.<p>"
+                                     "<b>Skake Blur</b>: blurs the image by skaking randomly the pixels. "
+                                     "This simulates the blur of a random moving camera.<p>"
+                                     "<b>Focus Blur</b>: blurs the image corners to reproduce the astigmatism distortion "
+                                     "of a lens.<p>"
+                                     "<b>Smart Blur</b>: finds the edges of color in your image and blurs them without "
+                                     "muddying the rest of the image.<p>"
+                                     "<b>Frost Glass</b>: blurs the image by randomly disperse light coming through "
+                                     "a frosted glass.<p>"
+                                     "<b>Mosaic</b>: divides the photograph into rectangular cells and then "
+                                     "recreates it by filling those cells with average pixel value."));
                                                   
     m_distanceLabel = new QLabel(i18n("Distance:"), gboxSettings);
     m_distanceInput = new KIntNumInput(gboxSettings);
     m_distanceInput->setRange(0, 100, 1, true);    
     m_distanceInput->setWhatsThis( i18n("<p>Set here the blur distance in pixels."));
     
-    gridSettings->addMultiCellWidget(m_distanceLabel, 2, 2, 0, 1);
-    gridSettings->addMultiCellWidget(m_distanceInput, 3, 3, 0, 1);
-        
     m_levelLabel = new QLabel(i18n("Level:"), gboxSettings);
     m_levelInput = new KIntNumInput(gboxSettings);
     m_levelInput->setRange(0, 360, 1, true);
     m_levelInput->setWhatsThis( i18n("<p>This value controls the level to use with the current effect."));  
+
+    // -------------------------------------------------------------
     
+    gridSettings->addMultiCellWidget(m_effectTypeLabel, 0, 0, 0, 1);
+    gridSettings->addMultiCellWidget(m_effectType, 1, 1, 0, 1);
+    gridSettings->addMultiCellWidget(m_distanceLabel, 2, 2, 0, 1);
+    gridSettings->addMultiCellWidget(m_distanceInput, 3, 3, 0, 1);
     gridSettings->addMultiCellWidget(m_levelLabel, 4, 4, 0, 1);
     gridSettings->addMultiCellWidget(m_levelInput, 5, 5, 0, 1);
-    
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(spacingHint());
+
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
         
     // -------------------------------------------------------------
@@ -171,8 +171,8 @@ void ImageEffect_BlurFX::renderingFinished(void)
     m_distanceInput->setEnabled(true);
     m_distanceLabel->setEnabled(true);
     
-    switch (m_effectType->currentItem())
-       {
+    switch (m_effectType->currentIndex())
+    {
        case BlurFX::ZoomBlur:
        case BlurFX::RadialBlur:
        case BlurFX::FarBlur:
@@ -192,7 +192,7 @@ void ImageEffect_BlurFX::renderingFinished(void)
           m_distanceInput->setEnabled(false);
           m_distanceLabel->setEnabled(false);
           break;
-       }
+    }
 }
 
 void ImageEffect_BlurFX::readUserSettings()
@@ -202,7 +202,7 @@ void ImageEffect_BlurFX::readUserSettings()
     m_effectType->blockSignals(true);
     m_distanceInput->blockSignals(true);
     m_levelInput->blockSignals(true);
-    m_effectType->setCurrentItem(group.readEntry("EffectType", (int)BlurFX::ZoomBlur));
+    m_effectType->setCurrentIndex(group.readEntry("EffectType", (int)BlurFX::ZoomBlur));
     m_distanceInput->setValue(group.readEntry("DistanceAjustment", 3));
     m_levelInput->setValue(group.readEntry("LevelAjustment", 128));
     m_effectType->blockSignals(false);
@@ -214,7 +214,7 @@ void ImageEffect_BlurFX::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("blurfx Tool Dialog");
-    group.writeEntry("EffectType", m_effectType->currentItem());
+    group.writeEntry("EffectType", m_effectType->currentIndex());
     group.writeEntry("DistanceAjustment", m_distanceInput->value());
     group.writeEntry("LevelAjustment", m_levelInput->value());
     group.sync();
@@ -222,8 +222,8 @@ void ImageEffect_BlurFX::writeUserSettings()
 
 void ImageEffect_BlurFX::resetValues()
 {
-       m_effectType->setCurrentItem(BlurFX::ZoomBlur);
-       slotEffectTypeChanged(BlurFX::ZoomBlur);
+    m_effectType->setCurrentIndex(BlurFX::ZoomBlur);
+    slotEffectTypeChanged(BlurFX::ZoomBlur);
 } 
 
 void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
@@ -242,7 +242,7 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
     m_levelLabel->setEnabled(false);
           
     switch (type)
-       {
+    {
        case BlurFX::ZoomBlur:
           break;
        
@@ -289,7 +289,7 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
           m_distanceInput->setRange(0, 50, 1, true);
           m_distanceInput->setValue(3);
           break;
-       }
+    }
 
     m_distanceInput->blockSignals(false);
     m_levelInput->blockSignals(false);
@@ -308,16 +308,16 @@ void ImageEffect_BlurFX::prepareEffect()
 
     Digikam::DImg image;
 
-    switch (m_effectType->currentItem())
-       {
+    switch (m_effectType->currentIndex())
+    {
        case BlurFX::ZoomBlur:
        case BlurFX::RadialBlur:
        case BlurFX::FocusBlur:
-            {
+       {
             Digikam::ImageIface iface(0, 0);
             image = *iface.getOriginalImg();
             break;
-            }
+       }
 
        case BlurFX::FarBlur:
        case BlurFX::MotionBlur:
@@ -328,9 +328,9 @@ void ImageEffect_BlurFX::prepareEffect()
        case BlurFX::Mosaic: 
            image = m_imagePreviewWidget->getOriginalRegionImage();
            break;
-       }
+    }
 
-    int t = m_effectType->currentItem();
+    int t = m_effectType->currentIndex();
     int d = m_distanceInput->value();
     int l = m_levelInput->value();
 
@@ -346,7 +346,7 @@ void ImageEffect_BlurFX::prepareFinal()
     m_levelInput->setEnabled(false);
     m_levelLabel->setEnabled(false);
 
-    int t = m_effectType->currentItem();
+    int t = m_effectType->currentIndex();
     int d = m_distanceInput->value();
     int l = m_levelInput->value();
 
@@ -356,17 +356,17 @@ void ImageEffect_BlurFX::prepareFinal()
 
 void ImageEffect_BlurFX::putPreviewData(void)
 {
-    switch (m_effectType->currentItem())
-        {
+    switch (m_effectType->currentIndex())
+    {
         case BlurFX::ZoomBlur:
         case BlurFX::RadialBlur:
         case BlurFX::FocusBlur:
-            {
+        {
             QRect pRect    = m_imagePreviewWidget->getOriginalImageRegionToRender();
             Digikam::DImg destImg = m_threadedFilter->getTargetImage().copy(pRect);
             m_imagePreviewWidget->setPreviewImage(destImg);
             break;
-            }
+        }
         case BlurFX::FarBlur:
         case BlurFX::MotionBlur:
         case BlurFX::SoftenerBlur:
@@ -376,7 +376,7 @@ void ImageEffect_BlurFX::putPreviewData(void)
         case BlurFX::Mosaic: 
             m_imagePreviewWidget->setPreviewImage(m_threadedFilter->getTargetImage());
             break;
-        }
+    }
 }
 
 void ImageEffect_BlurFX::putFinalData(void)
@@ -388,4 +388,3 @@ void ImageEffect_BlurFX::putFinalData(void)
 }
 
 }  // NameSpace DigikamBlurFXImagesPlugin
-

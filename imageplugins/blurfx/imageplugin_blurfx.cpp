@@ -45,7 +45,9 @@ ImagePlugin_BlurFX::ImagePlugin_BlurFX(QObject *parent, const QStringList &)
 {
     m_blurfxAction  = new KAction(KIcon("blurfx"), i18n("Blur Effects..."), this);
     actionCollection()->addAction("imageplugin_blurfx", m_blurfxAction );
-    connect(m_blurfxAction, SIGNAL(triggered(bool) ), SLOT(slotBlurFX()));
+
+    connect(m_blurfxAction, SIGNAL(triggered(bool)), 
+            this, SLOT(slotBlurFX()));
                 
     setXMLFile( "digikamimageplugin_blurfx_ui.rc" );    
         

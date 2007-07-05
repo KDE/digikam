@@ -49,16 +49,16 @@ public:
 
     enum BlurFXTypes 
     {
-    ZoomBlur=0,
-    RadialBlur,
-    FarBlur,
-    MotionBlur,
-    SoftenerBlur,
-    ShakeBlur,
-    FocusBlur,
-    SmartBlur,
-    FrostGlass,
-    Mosaic
+        ZoomBlur=0,
+        RadialBlur,
+        FarBlur,
+        MotionBlur,
+        SoftenerBlur,
+        ShakeBlur,
+        FocusBlur,
+        SmartBlur,
+        FrostGlass,
+        Mosaic
     };
 
 private:  // BlurFX filter data.
