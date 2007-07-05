@@ -193,8 +193,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     
     m_hGradientMinInput = new KGradientSelector( Qt::Horizontal, gboxSettings );
     m_hGradientMinInput->setFixedHeight( 20 );
-    m_hGradientMinInput->setMinValue(0);
-    m_hGradientMinInput->setMaxValue(m_histoSegments);
+    m_hGradientMinInput->setMinimum(0);
+    m_hGradientMinInput->setMaximum(m_histoSegments);
     m_hGradientMinInput->setWhatsThis( i18n("<p>Select here the minimal intensity "
                                             "input value of the histogram."));
     m_hGradientMinInput->setToolTip( i18n( "Minimal intensity input." ) );
@@ -202,8 +202,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     m_hGradientMaxInput = new KGradientSelector( Qt::Horizontal, gboxSettings );
     m_hGradientMaxInput->setFixedHeight( 20 );
-    m_hGradientMaxInput->setMinValue(0);
-    m_hGradientMaxInput->setMaxValue(m_histoSegments);
+    m_hGradientMaxInput->setMinimum(0);
+    m_hGradientMaxInput->setMaximum(m_histoSegments);
     m_hGradientMaxInput->setWhatsThis( i18n("<p>Select here the maximal intensity input "
                                             "value of the histogram."));
     m_hGradientMaxInput->setToolTip( i18n( "Maximal intensity input." ) );
@@ -237,8 +237,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
                                              "value of the histogram."));    
     m_hGradientMinOutput->setToolTip( i18n( "Minimal intensity output." ) );
     m_hGradientMinOutput->setFixedHeight( 20 );
-    m_hGradientMinOutput->setMinValue(0);
-    m_hGradientMinOutput->setMaxValue(m_histoSegments);
+    m_hGradientMinOutput->setMinimum(0);
+    m_hGradientMinOutput->setMaximum(m_histoSegments);
 
     m_hGradientMaxOutput = new KGradientSelector( Qt::Horizontal, gboxSettings );
     m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "white" ) );
@@ -246,8 +246,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
                                             "value of the histogram."));
     m_hGradientMaxOutput->setToolTip( i18n( "Maximal intensity output." ) );
     m_hGradientMaxOutput->setFixedHeight( 20 );
-    m_hGradientMaxOutput->setMinValue(0);
-    m_hGradientMaxOutput->setMaxValue(m_histoSegments);
+    m_hGradientMaxOutput->setMinimum(0);
+    m_hGradientMaxOutput->setMaximum(m_histoSegments);
 
     m_minOutput = new QSpinBox(gboxSettings);
     m_minOutput->setRange(0, m_histoSegments);
