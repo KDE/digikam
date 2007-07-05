@@ -40,14 +40,15 @@
 K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_channelmixer,
                            KGenericFactory<ImagePlugin_ChannelMixer>("digikamimageplugin_channelmixer"))
 
-ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent,
-                                                   const QStringList &)
+ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent, const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_ChannelMixer")
 {
     m_channelMixerAction  = new KAction(KIcon("channelmixer"), i18n("Channel Mixer..."), this);
-    actionCollection()->addAction("imageplugin_channelmixer", m_channelMixerAction );
-    connect(m_channelMixerAction, SIGNAL(triggered(bool) ), SLOT(slotChannelMixer()));
     m_channelMixerAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
+    actionCollection()->addAction("imageplugin_channelmixer", m_channelMixerAction );
+
+    connect(m_channelMixerAction, SIGNAL(triggered(bool)), 
+            this, SLOT(slotChannelMixer()));
 
     setXMLFile("digikamimageplugin_channelmixer_ui.rc");
     
@@ -68,4 +69,3 @@ void ImagePlugin_ChannelMixer::slotChannelMixer()
     DigikamChannelMixerImagesPlugin::ChannelMixerDialog dlg(parentWidget());
     dlg.exec();
 }
-

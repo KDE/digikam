@@ -35,27 +35,20 @@
 
 // Qt includes.
 
-#include <qcolor.h>
-#include <q3groupbox.h>
-#include <q3hgroupbox.h>
-#include <q3vgroupbox.h>
-#include <Q3HButtonGroup> 
-#include <qlabel.h>
-#include <qpainter.h>
-#include <qcombobox.h>
-#include <qspinbox.h>
-
-
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qtimer.h>
-#include <qcheckbox.h>
-#include <qfile.h>
-#include <qtooltip.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
+#include <QColor>
+#include <QGroupBox>
+#include <QButtonGroup> 
+#include <QLabel>
+#include <QPainter>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QPushButton>
+#include <QFrame>
+#include <QTimer>
+#include <QCheckBox>
+#include <QFile>
+#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QPixmap>
 
 // KDE includes.
@@ -118,9 +111,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *widget = new QWidget(this);
-    setMainWidget(widget);
-    m_previewWidget = new Digikam::ImageWidget("channelmixer Tool Dialog", widget,
+    m_previewWidget = new Digikam::ImageWidget("channelmixer Tool Dialog", mainWidget(),
                           i18n("<p>You can see here the image's color channels' "
                                "gains adjustments preview. You can pick color on image "
                                "to see the color level corresponding on histogram."));
@@ -128,67 +119,68 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings = new QWidget(widget);
-    Q3GridLayout* grid = new Q3GridLayout( gboxSettings, 9, 4, spacingHint());
+    QWidget *gboxSettings = new QWidget(mainWidget());
+    QGridLayout* grid     = new QGridLayout(gboxSettings);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gboxSettings );
-    m_channelCB->insertItem( i18n("Red") );
-    m_channelCB->insertItem( i18n("Green") );
-    m_channelCB->insertItem( i18n("Blue") );
-    m_channelCB->setCurrentText( i18n("Red") );
+    m_channelCB = new QComboBox( gboxSettings );
+    m_channelCB->addItem( i18n("Red") );
+    m_channelCB->addItem( i18n("Green") );
+    m_channelCB->addItem( i18n("Blue") );
+    m_channelCB->setCurrentIndex( 0 );
     m_channelCB->setWhatsThis( i18n("<p>Select here the color channel to mix:<p>"
-                                       "<b>Red</b>: display the red image-channel values.<p>"
-                                       "<b>Green</b>: display the green image-channel values.<p>"
-                                       "<b>Blue</b>: display the blue image-channel values.<p>"));
+                                    "<b>Red</b>: display the red image-channel values.<p>"
+                                    "<b>Green</b>: display the green image-channel values.<p>"
+                                    "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    m_scaleBG = new Q3HButtonGroup(gboxSettings);
-    m_scaleBG->setExclusive(true);
-    //m_scaleBG->setFrameShape(QFrame::NoFrame);
-    m_scaleBG->setInsideMargin( 0 );
-    m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
-                                     "If the image's maximal counts are small, you can use the linear scale.<p>"
-                                     "Logarithmic scale can be used when the maximal counts are big; "
-                                     "if it is used, all values (small and large) will be visible on the graph."));
+    // -------------------------------------------------------------
 
-    QPushButton *linHistoButton = new QPushButton( m_scaleBG );
+    QWidget *scaleBox = new QWidget(gboxSettings);
+    QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
+    m_scaleBG         = new QButtonGroup(scaleBox);
+    scaleBox->setWhatsThis(i18n("<p>Select here the histogram scale.<p>"
+                                "If the image's maximal counts are small, you can use the linear scale.<p>"
+                                "Logarithmic scale can be used when the maximal counts are big; "
+                                "if it is used, all values (small and large) will be visible on the graph."));
+    
+    QPushButton *linHistoButton = new QPushButton( scaleBox );
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
-    m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
-    KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
-    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
-    linHistoButton->setToggleButton(true);
-
-    QPushButton *logHistoButton = new QPushButton( m_scaleBG );
+    linHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-lin.png")));
+    linHistoButton->setCheckable(true);
+    m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    
+    QPushButton *logHistoButton = new QPushButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
-    m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
-    KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
-    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
-    logHistoButton->setToggleButton(true);
+    logHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-log.png")));
+    logHistoButton->setCheckable(true);
+    m_scaleBG->addButton(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    
+    hlay->setMargin(0);
+    hlay->setSpacing(0);
+    hlay->addWidget(linHistoButton);
+    hlay->addWidget(logHistoButton);
 
-    Q3HBoxLayout* l1 = new Q3HBoxLayout();
+    m_scaleBG->setExclusive(true);
+    logHistoButton->setChecked(true);
+
+    QHBoxLayout* l1 = new QHBoxLayout();
     l1->addWidget(label1);
     l1->addWidget(m_channelCB);
     l1->addStretch(10);
-    l1->addWidget(m_scaleBG);
-
-    grid->addMultiCellLayout(l1, 0, 0, 0, 4);
+    l1->addWidget(scaleBox);
 
     // -------------------------------------------------------------
 
     KVBox *histoBox   = new KVBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram drawing "
-                                             "of the selected image channel. This one is re-computed at any "
-                                             "mixer settings changes."));
+                                          "of the selected image channel. This one is re-computed at any "
+                                          "mixer settings changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);    
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
-    
-    grid->addMultiCellWidget(histoBox, 1, 2, 0, 4);
     
     // -------------------------------------------------------------
         
@@ -196,23 +188,42 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     m_redGain = new KDoubleNumInput(gboxSettings);
     m_redGain->setPrecision(0);
     m_redGain->setRange(-200.0, 200.0, 1, true);
-    m_redGain->setWhatsThis( i18n("<p>Select here the red color gain in percent for the current channel."));
+    m_redGain->setWhatsThis( i18n("<p>Select here the red color gain in percent for "
+                                  "the current channel."));
     
     QLabel *blueLabel = new QLabel(i18n("Blue:"), gboxSettings);
     m_greenGain = new KDoubleNumInput(gboxSettings);
     m_greenGain->setPrecision(0);
     m_greenGain->setRange(-200.0, 200.0, 1, true);
-    m_greenGain->setWhatsThis( i18n("<p>Select here the green color gain in percent for the current channel."));
+    m_greenGain->setWhatsThis( i18n("<p>Select here the green color gain in percent "
+                                    "for the current channel."));
     
     QLabel *greenLabel = new QLabel(i18n("Green:"), gboxSettings);
     m_blueGain = new KDoubleNumInput(gboxSettings);
     m_blueGain->setPrecision(0);
     m_blueGain->setRange(-200.0, 200.0, 1, true);
-    m_blueGain->setWhatsThis( i18n("<p>Select here the blue color gain in percent for the current channel."));
+    m_blueGain->setWhatsThis( i18n("<p>Select here the blue color gain in percent for "
+                                   "the current channel."));
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
-    m_resetButton->setWhatsThis( i18n("Reset color channels' gains settings from the currently selected channel."));
+    m_resetButton->setWhatsThis( i18n("Reset color channels' gains settings from "
+                                      "the currently selected channel."));
 
+    // -------------------------------------------------------------
+    
+    m_monochrome = new QCheckBox( i18n("Monochrome"), gboxSettings);
+    m_monochrome->setWhatsThis( i18n("<p>Enable this option if you want the image rendered "
+                                     "in monochrome mode. "
+                                     "In this mode, the histogram will display only luminosity values."));
+    
+    m_preserveLuminosity = new QCheckBox( i18n("Preserve luminosity"), gboxSettings);
+    m_preserveLuminosity->setWhatsThis( i18n("<p>Enable this option is you want preserve "
+                                             "the image luminosity."));
+
+    // -------------------------------------------------------------
+    
+    grid->addMultiCellLayout(l1, 0, 0, 0, 4);
+    grid->addMultiCellWidget(histoBox, 1, 2, 0, 4);
     grid->addMultiCellWidget(redLabel, 3, 3, 0, 0);
     grid->addMultiCellWidget(greenLabel, 4, 4, 0, 0);
     grid->addMultiCellWidget(blueLabel, 5, 5, 0, 0);
@@ -220,19 +231,11 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     grid->addMultiCellWidget(m_greenGain, 4, 4, 1, 4);
     grid->addMultiCellWidget(m_blueGain, 5, 5, 1, 4);
     grid->addMultiCellWidget(m_resetButton, 6, 6, 0, 1);
-
-    // -------------------------------------------------------------
-    
-    m_monochrome = new QCheckBox( i18n("Monochrome"), gboxSettings);
-    m_monochrome->setWhatsThis( i18n("<p>Enable this option if you want the image rendered in monochrome mode. "
-                                        "In this mode, the histogram will display only luminosity values."));
-    
-    m_preserveLuminosity = new QCheckBox( i18n("Preserve luminosity"), gboxSettings);
-    m_preserveLuminosity->setWhatsThis( i18n("<p>Enable this option is you want preserve the image luminosity."));
-    
     grid->addMultiCellWidget(m_monochrome, 7, 7, 0, 4);
     grid->addMultiCellWidget(m_preserveLuminosity, 8, 8, 0, 4);
     grid->setRowStretch(9, 10);
+    grid->setMargin(spacingHint());
+    grid->setSpacing(0);
     
     setUserAreaWidget(gboxSettings);
     
@@ -242,7 +245,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
 
-    connect(m_scaleBG, SIGNAL(released(int)),
+    connect(m_scaleBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotScaleChanged(int)));
 
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
@@ -288,7 +291,7 @@ ChannelMixerDialog::~ChannelMixerDialog()
 
 void ChannelMixerDialog::slotResetCurrentChannel()
 {
-    switch( m_channelCB->currentItem() )
+    switch( m_channelCB->currentIndex() )
     {
        case GreenChannelGains:           // Green.
           m_greenRedGain   = 0.0;
@@ -330,7 +333,7 @@ void ChannelMixerDialog::slotColorSelectedFromTarget( const Digikam::DColor &col
 
 void ChannelMixerDialog::slotGainsChanged()
 {
-    switch( m_channelCB->currentItem() )
+    switch( m_channelCB->currentIndex() )
     {
        case GreenChannelGains:           // Green.
           m_greenRedGain   = m_redGain->value()   / 100.0;
@@ -369,7 +372,7 @@ void ChannelMixerDialog::adjustSliders(void)
     m_greenGain->blockSignals(true);
     m_blueGain->blockSignals(true);
 
-    switch( m_channelCB->currentItem() )
+    switch( m_channelCB->currentIndex() )
     {
        case GreenChannelGains:           // Green.
           m_redGain->setValue(m_greenRedGain     * 100.0);
@@ -407,7 +410,7 @@ void ChannelMixerDialog::adjustSliders(void)
 void ChannelMixerDialog::slotMonochromeActived(bool mono)
 {
     m_channelCB->setEnabled(!mono);
-    m_channelCB->setCurrentItem(RedChannelGains); // Red for monochrome.
+    m_channelCB->setCurrentIndex(RedChannelGains); // Red for monochrome.
     slotChannelChanged(RedChannelGains);          // Monochrome => display luminosity histogram value.
 }
 
@@ -520,7 +523,7 @@ void ChannelMixerDialog::slotChannelChanged(int channel)
           break;
     }
 
-    m_histogramWidget->repaint(false);
+    m_histogramWidget->repaint();
     adjustSliders();
     slotEffect();
 }
@@ -528,7 +531,7 @@ void ChannelMixerDialog::slotChannelChanged(int channel)
 void ChannelMixerDialog::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
-    m_histogramWidget->repaint(false);
+    m_histogramWidget->repaint();
 }
 
 void ChannelMixerDialog::readUserSettings()
@@ -536,8 +539,9 @@ void ChannelMixerDialog::readUserSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("channelmixer Tool Dialog");
 
-    m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(group.readEntry("Histogram Scale", (int)Digikam::HistogramWidget::LogScaleHistogram));
+    m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->button(group.readEntry("Histogram Scale", 
+                      (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
 
     m_monochrome->setChecked(group.readEntry("Monochrome", false));
     m_preserveLuminosity->setChecked(group.readEntry("PreserveLuminosity", false));
@@ -561,16 +565,16 @@ void ChannelMixerDialog::readUserSettings()
     adjustSliders();
     m_histogramWidget->reset();
 
-    slotChannelChanged(m_channelCB->currentItem());
-    slotScaleChanged(m_scaleBG->selectedId());
+    slotChannelChanged(m_channelCB->currentIndex());
+    slotScaleChanged(m_scaleBG->checkedId());
 }
 
 void ChannelMixerDialog::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("channelmixer Tool Dialog");
-    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
-    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
+    group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
 
     group.writeEntry("Monochrome", m_monochrome->isChecked());
     group.writeEntry("PreserveLuminosity", m_preserveLuminosity->isChecked());
@@ -703,7 +707,7 @@ void ChannelMixerDialog::slotUser3()
 
         // Refresh settings.
         m_monochrome->setChecked(monochrome);
-        m_channelCB->setCurrentItem(currentOutputChannel);
+        m_channelCB->setCurrentIndex(currentOutputChannel);
         slotChannelChanged(currentOutputChannel);
     }
     else
@@ -734,7 +738,7 @@ void ChannelMixerDialog::slotUser2()
         char        buf2[256];
         char        buf3[256];
 
-        switch ( m_channelCB->currentItem() )
+        switch ( m_channelCB->currentIndex() )
         {
            case RedChannelGains:
               str = "RED";
@@ -789,4 +793,3 @@ void ChannelMixerDialog::slotUser2()
 }
 
 }  // NameSpace DigikamChannelMixerImagesPlugin
-
