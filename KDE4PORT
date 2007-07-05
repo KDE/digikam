@@ -170,7 +170,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---raindrop                            Laurent                         DONE                 Final render failed
         |---restoration                         Gilles                          DONE                 Final Render crash    
         |---sheartool                           Laurent                         DONE                 Final render failed
-        |---superimpose                         Laurent                         DONE
+        |---superimpose                         Laurent                         DONE                 Crash with thumbbar (same tooltip problem than showfoto)
         |---texture                             Laurent                         DONE                 Final render failed
         |-----patterns                          Laurent                         DONE        -        CMake port only is require.
         |---whitebalance                        Gilles                          DONE       DONE
