@@ -29,10 +29,11 @@
 #include "imagedlgbase.h"
 #include "dimg.h"
 
+class QWidget;
 class QComboBox;
 class QSpinBox;
 class QPushButton;
-class Q3HButtonGroup;
+class QButtonGroup;
 
 class KGradientSelector;
 class KDoubleNumInput;
@@ -112,6 +113,8 @@ private:
     int                        m_histoSegments;
     int                        m_currentPreviewMode;
     
+    QWidget                   *m_pickerBox;
+
     QComboBox                 *m_channelCB;    
     
     QSpinBox                  *m_minInput;
@@ -125,8 +128,8 @@ private:
     QPushButton               *m_pickGray;
     QPushButton               *m_pickWhite;
     
-    Q3HButtonGroup             *m_pickerColorButtonGroup;
-    Q3HButtonGroup             *m_scaleBG;
+    QButtonGroup              *m_pickerColorButtonGroup;
+    QButtonGroup              *m_scaleBG;
 
     KDoubleNumInput           *m_gammaInput;
     

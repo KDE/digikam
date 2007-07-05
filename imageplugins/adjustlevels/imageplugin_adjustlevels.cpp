@@ -40,14 +40,16 @@
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_adjustlevels,
                             KGenericFactory<ImagePlugin_AdjustLevels>("digikamimageplugin_adjustlevels"))
 
-ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent,
-                                                   const QStringList &)
+ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustLevels")
 {
     m_levelsAction  = new KAction(KIcon("adjustlevels"), i18n("Levels Adjust..."), this);
-    actionCollection()->addAction("imageplugin_adjustlevels", m_levelsAction );
-    connect(m_levelsAction, SIGNAL(triggered(bool) ), SLOT(slotLevelsAdjust()));
     m_levelsAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_L));
+    actionCollection()->addAction("imageplugin_adjustlevels", m_levelsAction );
+
+    connect(m_levelsAction, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotLevelsAdjust()));
+
     setXMLFile("digikamimageplugin_adjustlevels_ui.rc");
     
     DDebug() << "ImagePlugin_AdjustLevels plugin loaded" << endl;
@@ -67,4 +69,3 @@ void ImagePlugin_AdjustLevels::slotLevelsAdjust()
     DigikamAdjustLevelsImagesPlugin::AdjustLevelDialog dlg(parentWidget());
     dlg.exec();
 }
-
