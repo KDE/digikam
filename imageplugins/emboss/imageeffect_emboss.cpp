@@ -25,11 +25,8 @@
 
 // Qt includes.
 
-#include <qlabel.h>
-
-#include <qlayout.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -55,7 +52,8 @@ namespace DigikamEmbossImagesPlugin
 {
 
 ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
-                  : Digikam::CtrlPanelDlg(parent, i18n("Emboss Image"), "emboss", false, false, true,
+                  : Digikam::CtrlPanelDlg(parent, i18n("Emboss Image"), "emboss", 
+                                          false, false, true,
                                           Digikam::ImagePannelWidget::SeparateViewAll)
 {
     QString whatsThis;
@@ -83,17 +81,22 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 1, 1, 0, spacingHint());
+    QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings );
+
     QLabel *label1 = new QLabel(i18n("Depth:"), gboxSettings);
     
-    m_depthInput = new KIntNumInput(gboxSettings);
+    m_depthInput   = new KIntNumInput(gboxSettings);
     m_depthInput->setRange(10, 300, 1, true);
     m_depthInput->setWhatsThis( i18n("<p>Set here the depth of the embossing image effect.") );
+
+    // -------------------------------------------------------------
                                             
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
     gridSettings->addMultiCellWidget(m_depthInput, 1, 1, 0, 1);
-    
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(spacingHint());
+
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------
@@ -170,4 +173,3 @@ void ImageEffect_Emboss::putFinalData(void)
 }
 
 }  // NameSpace DigikamEmbossImagesPlugin
-
