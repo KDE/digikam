@@ -179,8 +179,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
     grid->setMargin(spacingHint());
     grid->setSpacing(spacingHint());
-    grid->addMultiCellLayout(l1, 0, 0, 0, 4);
-    grid->addMultiCellWidget(histoBox, 1, 2, 0, 4);
+    grid->addLayout(l1, 0, 0, 1, 5 );
+    grid->addWidget(histoBox, 1, 0, 2, 5 );
 
     // -------------------------------------------------------------
 
@@ -303,30 +303,30 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
     grid2->setMargin(spacingHint());
     grid2->setSpacing(spacingHint());
-    grid2->addMultiCellWidget(m_temperatureLabel, 0, 0, 0, 5);
-    grid2->addMultiCellWidget(m_adjTemperatureLabel, 1, 1, 0, 0);
-    grid2->addMultiCellWidget(m_pickTemperature, 1, 1, 1, 1);
-    grid2->addMultiCellWidget(m_temperatureInput, 1, 1, 2, 5);
-    grid2->addMultiCellWidget(m_temperaturePresetLabel, 2, 2, 0, 0);
-    grid2->addMultiCellWidget(m_temperaturePresetCB, 2, 2, 2, 5);
-    grid2->addMultiCellWidget(line, 3, 3, 0, 5);
-    grid2->addMultiCellWidget(m_blackLabel, 4, 4, 0, 0);
-    grid2->addMultiCellWidget(m_blackInput, 4, 4, 1, 5);
-    grid2->addMultiCellWidget(m_darkLabel, 5, 5, 0, 0);
-    grid2->addMultiCellWidget(m_darkInput, 5, 5, 1, 5);
-    grid2->addMultiCellWidget(m_saturationLabel, 6, 6, 0, 0);
-    grid2->addMultiCellWidget(m_saturationInput, 6, 6, 1, 5);
-    grid2->addMultiCellWidget(m_gammaLabel, 7, 7, 0, 0);
-    grid2->addMultiCellWidget(m_gammaInput, 7, 7, 1, 5);
-    grid2->addMultiCellWidget(m_greenLabel, 8, 8, 0, 0);
-    grid2->addMultiCellWidget(m_greenInput, 8, 8, 1, 5);
-    grid2->addMultiCellWidget(line2, 9, 9, 0, 5);
-    grid2->addMultiCellWidget(m_exposureLabel, 10, 10, 0, 5);
-    grid2->addMultiCellWidget(m_mainExposureLabel, 11, 11, 0, 0);
-    grid2->addMultiCellWidget(m_autoAdjustExposure, 11, 11, 1, 1);
-    grid2->addMultiCellWidget(m_mainExposureInput, 11, 11, 2, 5);
-    grid2->addMultiCellWidget(m_fineExposureLabel, 12, 12, 0, 1);
-    grid2->addMultiCellWidget(m_fineExposureInput, 12, 12, 2, 5);
+    grid2->addWidget(m_temperatureLabel, 0, 0, 1, 5+1);
+    grid2->addWidget(m_adjTemperatureLabel, 1, 0, 1, 1);
+    grid2->addWidget(m_pickTemperature, 1, 1, 1, 1);
+    grid2->addWidget(m_temperatureInput, 1, 2, 1, 5-2+1);
+    grid2->addWidget(m_temperaturePresetLabel, 2, 0, 1, 1);
+    grid2->addWidget(m_temperaturePresetCB, 2, 2, 1, 5-2+1);
+    grid2->addWidget(line, 3, 0, 1, 5+1);
+    grid2->addWidget(m_blackLabel, 4, 0, 1, 1);
+    grid2->addWidget(m_blackInput, 4, 1, 1, 5);
+    grid2->addWidget(m_darkLabel, 5, 0, 1, 1);
+    grid2->addWidget(m_darkInput, 5, 1, 1, 5);
+    grid2->addWidget(m_saturationLabel, 6, 0, 1, 1);
+    grid2->addWidget(m_saturationInput, 6, 1, 1, 5);
+    grid2->addWidget(m_gammaLabel, 7, 0, 1, 1);
+    grid2->addWidget(m_gammaInput, 7, 1, 1, 5);
+    grid2->addWidget(m_greenLabel, 8, 0, 1, 1);
+    grid2->addWidget(m_greenInput, 8, 1, 1, 5);
+    grid2->addWidget(line2, 9, 0, 1, 5+1);
+    grid2->addWidget(m_exposureLabel, 10, 0, 1, 5+1);
+    grid2->addWidget(m_mainExposureLabel, 11, 0, 1, 1);
+    grid2->addWidget(m_autoAdjustExposure, 11, 1, 1, 1);
+    grid2->addWidget(m_mainExposureInput, 11, 2, 1, 5- 2+1);
+    grid2->addWidget(m_fineExposureLabel, 12, 0, 1, 2 );
+    grid2->addWidget(m_fineExposureInput, 12, 2, 1, 5- 2+1);
     grid2->setRowStretch(13, 10);
             
     setUserAreaWidget(gboxSettings);
