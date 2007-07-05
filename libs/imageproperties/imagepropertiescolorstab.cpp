@@ -249,16 +249,6 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     hlay2->addWidget(fullImageButton);
     hlay2->addWidget(SelectionImageButton);
 
-    topLayout->addMultiCellWidget(label1, 1, 1, 0, 0);
-    topLayout->addMultiCellWidget(d->channelCB, 1, 1, 1, 1);
-    topLayout->addMultiCellWidget(scaleBox, 1, 1, 3, 3);
-    topLayout->addMultiCellWidget(label10, 2, 2, 0, 0);
-    topLayout->addMultiCellWidget(d->colorsCB, 2, 2, 1, 1);
-    topLayout->addMultiCellWidget(d->regionBox, 2, 2, 3, 3);
-    topLayout->setColumnStretch(2, 10);
-    topLayout->setMargin(KDialog::spacingHint());
-    topLayout->setSpacing(KDialog::spacingHint());
-
     // -------------------------------------------------------------
 
     KVBox *histoBox    = new KVBox(histogramPage);
@@ -270,7 +260,6 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     space->setFixedHeight(1);
     d->hGradient = new ColorGradientWidget(ColorGradientWidget::Horizontal, 10, histoBox);
     d->hGradient->setColors(QColor("black"), QColor("white"));
-    topLayout->addMultiCellWidget(histoBox, 3, 4, 0, 3);
 
     // -------------------------------------------------------------
 
@@ -295,7 +284,6 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     hlay3->addWidget(d->maxInterv);
     hlay2->setSpacing(KDialog::spacingHint());
     hlay2->setMargin(0);
-    topLayout->addMultiCell(hlay3, 5, 5, 0, 3);
 
     // -------------------------------------------------------------
 
@@ -350,8 +338,6 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(0);
 
-    topLayout->addMultiCellWidget(gbox, 6, 6, 0, 3);
-
     // -------------------------------------------------------------
 
     QWidget *gbox2     = new QWidget(histogramPage);
@@ -374,8 +360,22 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     grid2->setMargin(0);
     grid2->setSpacing(0);
 
+    // -------------------------------------------------------------
+
+    topLayout->addMultiCellWidget(label1, 1, 1, 0, 0);
+    topLayout->addMultiCellWidget(d->channelCB, 1, 1, 1, 1);
+    topLayout->addMultiCellWidget(scaleBox, 1, 1, 3, 3);
+    topLayout->addMultiCellWidget(label10, 2, 2, 0, 0);
+    topLayout->addMultiCellWidget(d->colorsCB, 2, 2, 1, 1);
+    topLayout->addMultiCellWidget(d->regionBox, 2, 2, 3, 3);
+    topLayout->addMultiCellWidget(histoBox, 3, 4, 0, 3);
+    topLayout->addMultiCell(hlay3, 5, 5, 0, 3);
+    topLayout->addMultiCellWidget(gbox, 6, 6, 0, 3);
     topLayout->addMultiCellWidget(gbox2, 7, 7, 0, 3);
     topLayout->setRowStretch(8, 10);
+    topLayout->setColumnStretch(2, 10);
+    topLayout->setMargin(KDialog::spacingHint());
+    topLayout->setSpacing(KDialog::spacingHint());
 
     d->tab->insertTab(ImagePropertiesColorsTabPriv::HISTOGRAM, histogramPage, i18n("Histogram"));
 
