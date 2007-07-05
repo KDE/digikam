@@ -141,15 +141,15 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             welcomepageview.cpp                                         X
 
  6      |-imageplugins                                                                               All image editor plugins can be ported after digiKam core
-        |---adjustcurves                        Laurent                         DONE                 CMake port only
-        |---adjustlevels                        Laurent                         DONE                 CMake port only
+        |---adjustcurves                        Laurent                         DONE       DONE
+        |---adjustlevels                        Laurent                         DONE       DONE      KGradientSelector widget is not properly displayed (kdelib4 bug?)
         |---antivignetting                      Laurent                         DONE
         |---blurfx                              Laurent                         DONE
         |---border                              Laurent                         DONE                 CMake port only
         |-----patterns                                                                               CMake port only is require.
-        |---channelmixer                        Laurent                         DONE
+        |---channelmixer                        Laurent                         DONE       DONE
         |---charcoal                            Laurent                         DONE
-        |---colorfx                             Laurent                         DONE
+        |---colorfx                             Laurent                         DONE       DONE
         |---coreplugin
         |-----hsl
         |-----ratiocrop
@@ -158,22 +158,22 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---distortionfx                        Laurent                         DONE
         |---emboss                              Laurent                         DONE                 CMake port only
         |---filmgrain                           Laurent                         DONE                 CMake port only
-        |---freerotation                        Gilles                          DONE
+        |---freerotation                        Gilles                          DONE       DONE
         |---hotpixels                           Laurent                                              CMake port only
         |---infrared
-        |---inpainting                          Gilles                          DONE                 
+        |---inpainting                          Gilles                          DONE       DONE          
         |---inserttext                          Laurent                                              CMake port only
         |---lensdistortion                      Laurent                         DONE                 CMake port only
-        |---noisereduction                      Laurent                         DONE                 CMake port only
-        |---oilpaint                            Laurent                         DONE                 CMake port only
-        |---perspective                         Laurent                         DONE                 CMake port only
-        |---raindrop                            Laurent                         DONE                 CMake port only
-        |---restoration                         Gilles                          DONE
-        |---sheartool                           Laurent                         DONE
+        |---noisereduction                      Laurent                         DONE       DONE
+        |---oilpaint                            Laurent                         DONE       DONE
+        |---perspective                         Laurent                         DONE       DONE
+        |---raindrop                            Laurent                         DONE       DONE
+        |---restoration                         Gilles                          DONE       DONE
+        |---sheartool                           Laurent                         DONE       DONE
         |---superimpose
         |---texture                             Laurent                         DONE
         |-----patterns                                                                               CMake port only is require.
-        |---whitebalance                        Gilles                          DONE
+        |---whitebalance                        Gilles                          DONE       DONE
 	
  7      |-themedesigner                                                                              The last one component. It completly independant. It will be the last one to port.
 
