@@ -143,36 +143,36 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
  6      |-imageplugins                                                                               All image editor plugins can be ported after digiKam core
         |---adjustcurves                        Laurent                         DONE       DONE
         |---adjustlevels                        Laurent                         DONE       DONE      KGradientSelector widget is not properly displayed (kdelib4 bug?)
-        |---antivignetting                      Laurent                         DONE
-        |---blurfx                              Laurent                         DONE
-        |---border                              Laurent                         DONE                 CMake port only
-        |-----patterns                                                                               CMake port only is require.
+        |---antivignetting                      Laurent                         DONE                 Crash! 
+        |---blurfx                              Laurent                         DONE                 Final render failed
+        |---border                              Laurent                         DONE                 Final render failed
+        |-----patterns                          Laurent                         DONE        -        CMake port only is require.
         |---channelmixer                        Laurent                         DONE       DONE
-        |---charcoal                            Laurent                         DONE
+        |---charcoal                            Laurent                         DONE                 Final render failed
         |---colorfx                             Laurent                         DONE       DONE
         |---coreplugin
         |-----hsl
         |-----ratiocrop
         |-----sharpnesseditor
-        |-------clapack                         Gilles                          DONE                 CMake port only is require.
+        |-------clapack                         Gilles                          DONE        -        CMake port only is require.
         |---distortionfx                        Laurent                         DONE
-        |---emboss                              Laurent                         DONE                 CMake port only
-        |---filmgrain                           Laurent                         DONE                 CMake port only
-        |---freerotation                        Gilles                          DONE       DONE
+        |---emboss                              Laurent                         DONE                 
+        |---filmgrain                           Laurent                         DONE                 
+        |---freerotation                        Gilles                          DONE        -        Final render failed
         |---hotpixels                           Laurent                                              CMake port only
         |---infrared
-        |---inpainting                          Gilles                          DONE       DONE          
+        |---inpainting                          Gilles                          DONE                 Final Render crash    
         |---inserttext                          Laurent                                              CMake port only
-        |---lensdistortion                      Laurent                         DONE                 CMake port only
-        |---noisereduction                      Laurent                         DONE       DONE
-        |---oilpaint                            Laurent                         DONE       DONE
+        |---lensdistortion                      Laurent                         DONE                 
+        |---noisereduction                      Laurent                         DONE                 Final render failed 
+        |---oilpaint                            Laurent                         DONE                 Final render failed
         |---perspective                         Laurent                         DONE       DONE
-        |---raindrop                            Laurent                         DONE       DONE
-        |---restoration                         Gilles                          DONE       DONE
-        |---sheartool                           Laurent                         DONE       DONE
+        |---raindrop                            Laurent                         DONE                 Final render failed
+        |---restoration                         Gilles                          DONE                 Final Render crash    
+        |---sheartool                           Laurent                         DONE                 Final render failed
         |---superimpose
-        |---texture                             Laurent                         DONE
-        |-----patterns                                                                               CMake port only is require.
+        |---texture                             Laurent                         DONE                 Final render failed
+        |-----patterns                          Laurent                         DONE        -        CMake port only is require.
         |---whitebalance                        Gilles                          DONE       DONE
 	
  7      |-themedesigner                                                                              The last one component. It completly independant. It will be the last one to port.
