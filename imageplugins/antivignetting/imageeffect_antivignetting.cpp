@@ -90,6 +90,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
 
     m_maskPreviewLabel = new QLabel( gboxSettings );
     m_maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
+    m_maskPreviewLabel->setPixmap( QPixmap(120, 120) );
     m_maskPreviewLabel->setWhatsThis( i18n("<p>You can see here a thumbnail preview of the anti-vignetting "
                                            "mask applied to the image.") );
         
