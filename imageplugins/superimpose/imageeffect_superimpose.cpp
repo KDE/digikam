@@ -23,20 +23,15 @@
 
 // Qt includes. 
  
-#include <q3vgroupbox.h>
-#include <q3groupbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qpixmap.h>
-
-#include <qtooltip.h>
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qdir.h>
-#include <qfile.h>
-#include <Q3HButtonGroup> 
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QPixmap>
+#include <QFrame>
+#include <QDir>
+#include <QFile>
+#include <QButtonGroup> 
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -99,64 +94,82 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     setAboutData(about);    
     
     // -------------------------------------------------------------
-    QWidget *widget = new QWidget(this);
-    setMainWidget(widget);
-    QFrame *frame = new QFrame(widget);
+
+    QFrame *frame = new QFrame(mainWidget());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
-    Q3GridLayout* gridFrame = new Q3GridLayout( frame, 1, 2, spacingHint());
+    QGridLayout* gridFrame = new QGridLayout( frame );
     m_previewWidget        = new SuperImposeWidget(400, 300, frame);
-    gridFrame->addMultiCellWidget(m_previewWidget, 0, 0, 0, 2);
-    gridFrame->setRowStretch(0, 10);
     m_previewWidget->setWhatsThis( i18n("<p>This is the preview of the template "
-                                           "superimposed onto the image.") );
-    
+                                        "superimposed onto the image.") );
+
     // -------------------------------------------------------------
 
-    Q3HButtonGroup *bGroup = new Q3HButtonGroup(frame);
-    KIconLoader icon;
-    bGroup->addSpace(0);
-    QPushButton *zoomInButton = new QPushButton( bGroup );
-    bGroup->insert(zoomInButton, ZOOMIN);
-    zoomInButton->setPixmap( icon.loadIcon( "viewmag+", K3Icon::Toolbar ) );
+    QWidget *toolBox     = new QWidget(frame);
+    QHBoxLayout *hlay    = new QHBoxLayout(toolBox);
+    QButtonGroup *bGroup = new QButtonGroup(frame);
+
+    QPushButton *zoomInButton = new QPushButton( toolBox );
+    bGroup->addButton(zoomInButton, ZOOMIN);
+    zoomInButton->setPixmap(KIconLoader::global()->loadIcon("viewmag+", K3Icon::Toolbar));
     zoomInButton->setToggleButton(true);
     zoomInButton->setToolTip( i18n( "Zoom in" ) );
-    bGroup->addSpace(20);
-    QPushButton *zoomOutButton = new QPushButton( bGroup );
-    bGroup->insert(zoomOutButton, ZOOMOUT);
-    zoomOutButton->setPixmap( icon.loadIcon( "viewmag-", K3Icon::Toolbar ) );
+
+    QPushButton *zoomOutButton = new QPushButton( toolBox );
+    bGroup->addButton(zoomOutButton, ZOOMOUT);
+    zoomOutButton->setPixmap(KIconLoader::global()->loadIcon("viewmag-", K3Icon::Toolbar));
     zoomOutButton->setToggleButton(true);
     zoomOutButton->setToolTip( i18n( "Zoom out" ) );
-    bGroup->addSpace(20);
-    QPushButton *moveButton = new QPushButton( bGroup );
-    bGroup->insert(moveButton, MOVE);
-    moveButton->setPixmap( icon.loadIcon( "move", K3Icon::Toolbar ) );
+
+    QPushButton *moveButton = new QPushButton( toolBox );
+    bGroup->addButton(moveButton, MOVE);
+    moveButton->setPixmap(KIconLoader::global()->loadIcon("move", K3Icon::Toolbar));
     moveButton->setToggleButton(true);
     moveButton->setOn(true);
     moveButton->setToolTip( i18n( "Move" ) );
-    bGroup->addSpace(20);
+
     bGroup->setExclusive(true);
-    //bGroup->setFrameShape(QFrame::NoFrame);
-    gridFrame->addMultiCellWidget(bGroup, 1, 1, 1, 1);
+
+    hlay->setMargin(0);
+    hlay->setSpacing(0);
+    hlay->addSpacing(20);
+    hlay->addWidget(zoomInButton);
+    hlay->addSpacing(20);
+    hlay->addWidget(zoomOutButton);
+    hlay->addSpacing(20);
+    hlay->addWidget(moveButton);
+    hlay->addSpacing(20);
+
+    // -------------------------------------------------------------
+
+    gridFrame->addMultiCellWidget(m_previewWidget, 0, 0, 0, 2);
+    gridFrame->addMultiCellWidget(toolBox, 1, 1, 1, 1);
     gridFrame->setColStretch(0, 10);
     gridFrame->setColStretch(2, 10);
+    gridFrame->setRowStretch(0, 10);
+    gridFrame->setMargin(spacingHint());
+    gridFrame->setSpacing(spacingHint());
     
     setPreviewAreaWidget(frame);     
     
     // -------------------------------------------------------------
     
-    QWidget *gbox2    = new QWidget(widget);
-    Q3GridLayout* grid = new Q3GridLayout( gbox2, 1, 1, marginHint(), spacingHint());
+    QWidget *gbox2    = new QWidget(mainWidget());
+    QGridLayout* grid = new QGridLayout( gbox2 );
     
     m_thumbnailsBar = new Digikam::ThumbBarView(gbox2);
     m_dirSelect     = new DirSelectWidget(gbox2);
     QPushButton *templateDirButton = new QPushButton( i18n("Root Directory..."), gbox2 );
     templateDirButton->setWhatsThis( i18n("<p>Set here the current templates' root directory.") );
 
+    // -------------------------------------------------------------
+
     grid->addMultiCellWidget(m_thumbnailsBar, 0, 1, 0, 0);
     grid->addMultiCellWidget(m_dirSelect, 0, 0, 1, 1);    
     grid->addMultiCellWidget(templateDirButton, 1, 1, 1, 1);    
-    grid->setColStretch(1, 10);
+    grid->setColumnStretch(1, 10);
+    grid->setMargin(spacingHint());
+    grid->setSpacing(spacingHint());
 
     setUserAreaWidget(gbox2);
     
@@ -196,8 +209,10 @@ void ImageEffect_SuperImpose::populateTemplates(void)
        return;
        
     dir.setFilter ( QDir::Files | QDir::NoSymLinks );
-//TODO port me
-#if 0
+
+#warning "TODO: kde4 port it";
+/*  TODO: KDE4PORT: not yet ported!
+
     const QFileInfoList* fileinfolist = dir.entryInfoList();
     if (!fileinfolist)
        return;
@@ -209,8 +224,7 @@ void ImageEffect_SuperImpose::populateTemplates(void)
     {
         new Digikam::ThumbBarItem( m_thumbnailsBar, KUrl(fi->filePath()) );
         ++it;
-    }
-#endif    
+    }*/
 }
 
 void ImageEffect_SuperImpose::readUserSettings()
@@ -282,4 +296,3 @@ void ImageEffect_SuperImpose::finalRendering()
 }
 
 }  // NameSpace DigikamSuperImposeImagesPlugin
-

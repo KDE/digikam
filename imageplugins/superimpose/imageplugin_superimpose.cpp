@@ -42,7 +42,9 @@ ImagePlugin_SuperImpose::ImagePlugin_SuperImpose(QObject *parent, const QStringL
 {
     m_superimposeAction  = new KAction(KIcon("superimpose"), i18n("Template Superimpose..."), this);
     actionCollection()->addAction("imageplugin_superimpose", m_superimposeAction );
-    connect(m_superimposeAction, SIGNAL(triggered(bool) ), SLOT(slotSuperImpose()));
+ 
+    connect(m_superimposeAction, SIGNAL(triggered(bool)), 
+            this, SLOT(slotSuperImpose()));
 
     setXMLFile("digikamimageplugin_superimpose_ui.rc");        
                                     
@@ -63,4 +65,3 @@ void ImagePlugin_SuperImpose::slotSuperImpose()
     DigikamSuperImposeImagesPlugin::ImageEffect_SuperImpose dlg(parentWidget());
     dlg.exec();
 }
-

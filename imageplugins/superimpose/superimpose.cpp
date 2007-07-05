@@ -65,4 +65,3 @@ void SuperImpose::filterImage(void)
 }
 
 } // namespace DigikamSuperImposeImagesPlugin
-

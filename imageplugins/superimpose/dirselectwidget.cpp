@@ -19,16 +19,17 @@
  * ============================================================ */
 
 // Qt includes. 
-  
-#include <qlayout.h>
-#include <q3header.h>
-#include <q3listview.h>
-#include <qdir.h>
+
+#include <Q3Header>
+#include <Q3ListView>
+#include <QLayout>
+#include <QDir>
 
 // KDE includes
 
 #include <klocale.h>
 #include <KFileTreeBranch>
+
 // Local includes.
 
 #include "ddebug.h"
@@ -174,4 +175,3 @@ void DirSelectWidget::slotFolderSelected(Q3ListViewItem *)
 }
 
 }   // NameSpace DigikamSuperImposeImagesPlugin
-

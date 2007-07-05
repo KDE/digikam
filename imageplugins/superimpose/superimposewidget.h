@@ -25,12 +25,10 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qimage.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qpixmap.h>
-//Added by qt3to4:
+#include <QWidget>
+#include <QImage>
+#include <QRect>
+#include <QSize>
 #include <QPaintEvent>
 #include <QResizeEvent>
 #include <QMouseEvent>

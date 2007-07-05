@@ -23,7 +23,7 @@
 
 // Qt includes
 
-#include <qrect.h>
+#include <QRect>
 
 // Digikam includes.
 
