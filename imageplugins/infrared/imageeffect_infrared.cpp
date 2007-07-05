@@ -25,16 +25,13 @@
 
 // Qt includes.
 
-#include <qimage.h>
-#include <qlabel.h>
-
-#include <qlcdnumber.h>
-#include <qslider.h>
-#include <qlayout.h>
-#include <qdatetime.h> 
-#include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QImage>
+#include <QLabel>
+#include <QLCDNumber>
+#include <QSlider>
+#include <QDateTime> 
+#include <QCheckBox>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -88,13 +85,18 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 2, 1, 0, spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings );
+
     QLabel *label1            = new QLabel(i18n("Sensitivity (ISO):"), gboxSettings);
 
-    m_sensibilitySlider = new QSlider(1, 25, 1, 1, Qt::Horizontal, gboxSettings);
+    m_sensibilitySlider = new QSlider(Qt::Horizontal, gboxSettings);
+    m_sensibilitySlider->setMinimum(2);
+    m_sensibilitySlider->setMaximum(30);
+    m_sensibilitySlider->setPageStep(1);
+    m_sensibilitySlider->setValue(12);
     m_sensibilitySlider->setTracking ( false );
     m_sensibilitySlider->setTickInterval(1);
-    m_sensibilitySlider->setTickmarks(QSlider::TicksBelow);
+    m_sensibilitySlider->setTickPosition(QSlider::TicksBelow);
 
     m_sensibilityLCDValue = new QLCDNumber (4, gboxSettings);
     m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
@@ -103,23 +105,29 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
                      "Increasing this value will increase the portion of green color in the mix. " 
                      "It will also increase the halo effect on the hightlights, and the film "
                      "graininess (if that box is checked).</p>"
-                     "<p>Note: to simulate an <b>Ilford SFX200</b> infrared film, use a sensitivity excursion of 200 to 800. "
-                     "A sensitivity over 800 simulates <b>Kodak HIE</b> high-speed infrared film. This last one creates a more "
+                     "<p>Note: to simulate an <b>Ilford SFX200</b> infrared film, use a sensitivity "
+                     "excursion of 200 to 800. "
+                     "A sensitivity over 800 simulates <b>Kodak HIE</b> high-speed infrared film. "
+                     "This last one creates a more "
                      "dramatic photographic style.</p>");
 
     m_sensibilityLCDValue->setWhatsThis( whatsThis);
     m_sensibilitySlider->setWhatsThis( whatsThis);
-
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(m_sensibilitySlider, 1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(m_sensibilityLCDValue, 1, 1, 1, 1);
 
     // -------------------------------------------------------------
 
     m_addFilmGrain = new QCheckBox( i18n("Add film grain"), gboxSettings);
     m_addFilmGrain->setChecked( true );
     m_addFilmGrain->setWhatsThis( i18n("<p>This option adds infrared film grain to "
-                                          "the image depending on ISO-sensitivity."));
+                                       "the image depending on ISO-sensitivity."));
+
+    // -------------------------------------------------------------
+
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(spacingHint());
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
+    gridSettings->addMultiCellWidget(m_sensibilitySlider, 1, 1, 0, 0);
+    gridSettings->addMultiCellWidget(m_sensibilityLCDValue, 1, 1, 1, 1);
     gridSettings->addMultiCellWidget(m_addFilmGrain, 2, 2, 0, 1);
 
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
@@ -227,4 +235,3 @@ void ImageEffect_Infrared::putFinalData(void)
 }
 
 }  // NameSpace DigikamInfraredImagesPlugin
-

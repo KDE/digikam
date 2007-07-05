@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date   : 2005-05-25
+ * Date        : 2005-05-25
  * Description : Infrared threaded image filter.
  * 
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -29,7 +29,7 @@
 
 // Qt includes.
 
-#include <qdatetime.h>
+#include <QDateTime>
 
 // Local includes.
 
