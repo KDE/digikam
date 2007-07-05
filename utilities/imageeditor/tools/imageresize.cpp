@@ -170,9 +170,7 @@ ImageResize::ImageResize(QWidget* parent)
 
     d->mainTab         = new QTabWidget( page );
     QWidget* firstPage = new QWidget( d->mainTab );
-    QGridLayout* grid  = new QGridLayout();
-    grid->setMargin(spacingHint());
-    firstPage->setLayout(grid);
+    QGridLayout* grid  = new QGridLayout(firstPage);
 
     d->mainTab->addTab( firstPage, i18n("New Size") );
 
@@ -219,21 +217,23 @@ ImageResize::ImageResize(QWidget* parent)
     d->progressBar->setMaximum(100);
     d->progressBar->setWhatsThis( i18n("<p>This is the current progress when you use Restoration mode."));
 
-    grid->addMultiCellWidget(d->preserveRatioBox, 0, 0, 0, 2);
-    grid->addMultiCellWidget(label1, 1, 1, 0, 0);
-    grid->addMultiCellWidget(d->wInput, 1, 1, 1, 2);
-    grid->addMultiCellWidget(label2, 2, 2, 0, 0);
-    grid->addMultiCellWidget(d->hInput, 2, 2, 1, 2);
-    grid->addMultiCellWidget(label3, 3, 3, 0, 0);
-    grid->addMultiCellWidget(d->wpInput, 3, 3, 1, 2);
-    grid->addMultiCellWidget(label4, 4, 4, 0, 0);
-    grid->addMultiCellWidget(d->hpInput, 4, 4, 1, 2);
-    grid->addMultiCellWidget(new KSeparator(firstPage), 5, 5, 0, 2);
-    grid->addMultiCellWidget(cimgLogoLabel, 6, 7, 0, 0);
-    grid->addMultiCellWidget(d->useGreycstorationBox, 6, 6, 1, 2);
-    grid->addMultiCellWidget(d->progressBar, 7, 7, 1, 2);
+    grid->addWidget(d->preserveRatioBox, 0, 0, 1, 3 );
+    grid->addWidget(label1, 1, 0, 1, 1);
+    grid->addWidget(d->wInput, 1, 1, 1, 2);
+    grid->addWidget(label2, 2, 0, 1, 1);
+    grid->addWidget(d->hInput, 2, 1, 1, 2);
+    grid->addWidget(label3, 3, 0, 1, 1);
+    grid->addWidget(d->wpInput, 3, 1, 1, 2);
+    grid->addWidget(label4, 4, 0, 1, 1);
+    grid->addWidget(d->hpInput, 4, 1, 1, 2);
+    grid->addWidget(new KSeparator(firstPage), 5, 0, 1, 3 );
+    grid->addWidget(cimgLogoLabel, 6, 0, 7- 6+1, 1);
+    grid->addWidget(d->useGreycstorationBox, 6, 1, 1, 2);
+    grid->addWidget(d->progressBar, 7, 1, 1, 2);
     grid->setRowStretch(8, 10);
-
+    grid->setMargin(spacingHint());
+    grid->setSpacing(0);
+    
     // -------------------------------------------------------------
 
     d->settingsWidget = new GreycstorationWidget(d->mainTab);
@@ -242,7 +242,6 @@ ImageResize::ImageResize(QWidget* parent)
     // -------------------------------------------------------------
 
     adjustSize();
-    //disableResize();
     QTimer::singleShot(0, this, SLOT(readUserSettings()));
 
     // -------------------------------------------------------------
