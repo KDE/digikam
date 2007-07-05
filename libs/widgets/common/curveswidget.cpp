@@ -195,18 +195,16 @@ void CurvesWidget::curveTypeChanged(void)
     emit signalCurvesChanged();        
 }
 
-void CurvesWidget::slotCalculationProgress(const ImageHistogram *histogram)
+void CurvesWidget::slotCalculationStarted(const ImageHistogram *)
 {
-    Q_UNUSED(histogram);
     setCursor( Qt::WaitCursor );
     d->clearFlag = CurvesWidgetPriv::HistogramStarted;
     d->blinkTimer->start( 200 );
     repaint();
 }
 
-void CurvesWidget::slotCalculationFinished(const ImageHistogram *histogram, bool success)
+void CurvesWidget::slotCalculationFinished(const ImageHistogram *, bool success)
 {
-    Q_UNUSED(histogram);
     if (success)
     {
         // Repaint histogram

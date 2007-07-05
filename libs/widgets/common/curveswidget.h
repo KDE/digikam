@@ -100,7 +100,7 @@ signals:
 protected slots:
 
     void slotBlinkTimerDone( void );
-    void slotCalculationProgress(const ImageHistogram *histogram);
+    void slotCalculationStarted(const ImageHistogram *histogram);
     void slotCalculationFinished(const ImageHistogram *histogram, bool success);
 
 protected:
