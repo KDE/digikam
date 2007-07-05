@@ -127,8 +127,8 @@ void DirSelectWidget::setCurrentPath(KUrl currentUrl)
     QString currentPath = QDir::cleanPath(currentUrl.path());
     currentPath = currentPath.mid( d->m_rootUrl.path().length() );
     d->m_pendingPath.clear();    
-    d->m_handled = QString("");
-    d->m_pendingPath = QStringList::split( "/", currentPath, true );
+    d->m_handled     = QString("");
+    d->m_pendingPath = currentPath.split( "/", QString::KeepEmptyParts);
     
     if ( !d->m_pendingPath[0].isEmpty() )
         d->m_pendingPath.prepend( "" ); // ensure we open the root first.        
@@ -152,7 +152,7 @@ void DirSelectWidget::setRootPath(KUrl rootUrl, KUrl currentUrl)
     d->m_item = addBranch( rootUrl, rootUrl.fileName() );    
     setDirOnlyMode( d->m_item, true );
     currentPath = currentPath.mid( root.length() );
-    d->m_pendingPath = QStringList::split( "/", currentPath, true );
+    d->m_pendingPath = currentPath.split( "/", QString::KeepEmptyParts);
 
     if ( !d->m_pendingPath[0].isEmpty() )
         d->m_pendingPath.prepend( "" ); // ensure we open the root first.
