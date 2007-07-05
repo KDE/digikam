@@ -29,9 +29,9 @@
 
 // Qt includes.
 
-#include <qpoint.h>
-#include <qregion.h>
-#include <q3pointarray.h>
+#include <Q3PointArray>
+#include <QPoint>
+#include <QRegion>
 
 // Local includes.
 

@@ -25,13 +25,10 @@
 
 // Qt includes. 
  
-#include <qlabel.h>
-
-#include <qlayout.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -89,33 +86,32 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QWidget *gboxSettings     = new QWidget(this);
-    setMainWidget(gboxSettings);
-    Q3GridLayout* gridSettings = new Q3GridLayout(gboxSettings, 10, 2, spacingHint());
+    QWidget *gboxSettings     = new QWidget(mainWidget());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings);
                                                   
     QLabel *label1 = new QLabel(i18n("Type:"), gboxSettings);
     
-    m_borderType = new QComboBox( false, gboxSettings );
-    m_borderType->insertItem( i18n("Solid") );
-    // Niepce is Real name. This is the first guy in the world to have built a camera.
-    m_borderType->insertItem( "Niepce" );     
-    m_borderType->insertItem( i18n("Beveled") );
-    m_borderType->insertItem( i18n("Decorative Pine") );
-    m_borderType->insertItem( i18n("Decorative Wood") );
-    m_borderType->insertItem( i18n("Decorative Paper") );
-    m_borderType->insertItem( i18n("Decorative Parquet") );
-    m_borderType->insertItem( i18n("Decorative Ice") );
-    m_borderType->insertItem( i18n("Decorative Leaf") );
-    m_borderType->insertItem( i18n("Decorative Marble") );
-    m_borderType->insertItem( i18n("Decorative Rain") );
-    m_borderType->insertItem( i18n("Decorative Craters") );
-    m_borderType->insertItem( i18n("Decorative Dried") );
-    m_borderType->insertItem( i18n("Decorative Pink") );
-    m_borderType->insertItem( i18n("Decorative Stone") );
-    m_borderType->insertItem( i18n("Decorative Chalk") );
-    m_borderType->insertItem( i18n("Decorative Granite") );
-    m_borderType->insertItem( i18n("Decorative Rock") );
-    m_borderType->insertItem( i18n("Decorative Wall") );
+    m_borderType   = new QComboBox( gboxSettings );
+    m_borderType->addItem( i18n("Solid") );
+    // NOTE: Niepce is Real name. This is the first guy in the world to have built a camera.
+    m_borderType->addItem( "Niepce" );     
+    m_borderType->addItem( i18n("Beveled") );
+    m_borderType->addItem( i18n("Decorative Pine") );
+    m_borderType->addItem( i18n("Decorative Wood") );
+    m_borderType->addItem( i18n("Decorative Paper") );
+    m_borderType->addItem( i18n("Decorative Parquet") );
+    m_borderType->addItem( i18n("Decorative Ice") );
+    m_borderType->addItem( i18n("Decorative Leaf") );
+    m_borderType->addItem( i18n("Decorative Marble") );
+    m_borderType->addItem( i18n("Decorative Rain") );
+    m_borderType->addItem( i18n("Decorative Craters") );
+    m_borderType->addItem( i18n("Decorative Dried") );
+    m_borderType->addItem( i18n("Decorative Pink") );
+    m_borderType->addItem( i18n("Decorative Stone") );
+    m_borderType->addItem( i18n("Decorative Chalk") );
+    m_borderType->addItem( i18n("Decorative Granite") );
+    m_borderType->addItem( i18n("Decorative Rock") );
+    m_borderType->addItem( i18n("Decorative Wall") );
     m_borderType->setWhatsThis( i18n("<p>Select here the border type to add around the image."));
 
     KSeparator *line1 = new KSeparator(Qt::Horizontal, gboxSettings);
@@ -125,9 +121,9 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     m_preserveAspectRatio = new QCheckBox(gboxSettings);
     m_preserveAspectRatio->setText(i18n("Preserve Aspect Ratio"));
     m_preserveAspectRatio->setWhatsThis( i18n("Enable this option if you want to preserve aspect "
-                                                "ratio of image. If enabled, the border width will be "
-                                                "in percent of image size, else the border width will "
-                                                "in pixels."));
+                                              "ratio of image. If enabled, the border width will be "
+                                              "in percent of image size, else the border width will "
+                                              "in pixels."));
 
     m_labelBorderPercent  = new QLabel(i18n("Width (%):"), gboxSettings);
     m_borderPercent       = new KIntNumInput(gboxSettings);
@@ -171,6 +167,8 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     gridSettings->addMultiCellWidget(m_firstColorButton, 9, 9, 1, 2);
     gridSettings->addMultiCellWidget(m_labelBackground, 10, 10, 0, 0);
     gridSettings->addMultiCellWidget(m_secondColorButton, 10, 10, 1, 2);    
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(spacingHint());
 
     setUserAreaWidget(gboxSettings);
     
@@ -211,7 +209,7 @@ void ImageEffect_Border::readUserSettings(void)
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group =  config->group("border Tool Dialog");
     
-    m_borderType->setCurrentItem(group.readEntry("Border Type",(int)Border::SolidBorder));
+    m_borderType->setCurrentIndex(group.readEntry("Border Type",(int)Border::SolidBorder));
     m_borderPercent->setValue(group.readEntry("Border Percent", 10) );
     m_borderWidth->setValue(group.readEntry("Border Width", 100) );
     m_preserveAspectRatio->setChecked(group.readEntry("Preserve Aspect Ratio", true) );
@@ -236,7 +234,7 @@ void ImageEffect_Border::readUserSettings(void)
     m_secondColorButton->blockSignals(false);
     m_preserveAspectRatio->blockSignals(false);
               
-    slotBorderTypeChanged(m_borderType->currentItem());
+    slotBorderTypeChanged(m_borderType->currentIndex());
 }
     
 void ImageEffect_Border::writeUserSettings(void)
@@ -244,7 +242,7 @@ void ImageEffect_Border::writeUserSettings(void)
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("border Tool Dialog");
 
-    group.writeEntry("Border Type", m_borderType->currentItem());
+    group.writeEntry("Border Type", m_borderType->currentIndex());
     group.writeEntry("Border Percent", m_borderPercent->value());
     group.writeEntry("Border Width", m_borderWidth->value());
     group.writeEntry("Preserve Aspect Ratio", m_preserveAspectRatio->isChecked());
@@ -269,7 +267,7 @@ void ImageEffect_Border::resetValues()
     m_secondColorButton->blockSignals(true);
     m_preserveAspectRatio->blockSignals(true);
         
-    m_borderType->setCurrentItem(Border::SolidBorder); 
+    m_borderType->setCurrentIndex(Border::SolidBorder); 
     m_borderPercent->setValue(10);
     m_borderWidth->setValue(100);
     m_preserveAspectRatio->setChecked(true);
@@ -305,7 +303,7 @@ void ImageEffect_Border::renderingFinished()
 
 void ImageEffect_Border::slotColorForegroundChanged(const QColor &color)
 {
-    switch (m_borderType->currentItem())
+    switch (m_borderType->currentIndex())
        {
        case Border::SolidBorder:
           m_solidColor = color;
@@ -344,7 +342,7 @@ void ImageEffect_Border::slotColorForegroundChanged(const QColor &color)
 
 void ImageEffect_Border::slotColorBackgroundChanged(const QColor &color)
 {
-    switch (m_borderType->currentItem())
+    switch (m_borderType->currentIndex())
        {
        case Border::SolidBorder:
           m_solidColor = color;
@@ -461,10 +459,10 @@ void ImageEffect_Border::prepareEffect()
                                iface->previewHasAlpha(), data);
     delete [] data;
 
-    int borderType  = m_borderType->currentItem();
+    int borderType  = m_borderType->currentIndex();
     float ratio     = (float)w/(float)orgWidth;
     int borderWidth = (int)((float)m_borderWidth->value()*ratio);
-    QString border  = getBorderPath( m_borderType->currentItem() );
+    QString border  = getBorderPath( m_borderType->currentIndex() );
 
     if (m_preserveAspectRatio->isChecked())
     {
@@ -503,10 +501,10 @@ void ImageEffect_Border::prepareFinal()
     m_firstColorButton->setEnabled(false);
     m_secondColorButton->setEnabled(false);
 
-    int borderType    = m_borderType->currentItem();
+    int borderType    = m_borderType->currentIndex();
     int borderWidth   = m_borderWidth->value();  
     float borderRatio = m_borderPercent->value()/100.0;  
-    QString border    = getBorderPath( m_borderType->currentItem() );
+    QString border    = getBorderPath( m_borderType->currentIndex() );
 
     Digikam::ImageIface iface(0, 0);
     int orgWidth    = iface.originalWidth();
@@ -555,7 +553,7 @@ void ImageEffect_Border::putPreviewData(void)
     Digikam::DImg imDest( w, h, m_threadedFilter->getTargetImage().sixteenBit(),
                           m_threadedFilter->getTargetImage().hasAlpha() );
 
-    imDest.fill( Digikam::DColor(paletteBackgroundColor().rgb(),
+    imDest.fill( Digikam::DColor(palette().color(QPalette::Background),
                                  m_threadedFilter->getTargetImage().sixteenBit()) );
 
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
@@ -648,9 +646,7 @@ QString ImageEffect_Border::getBorderPath(int border)
           return QString();
        }
     
-    KGlobal::dirs()->addResourceType(pattern.ascii(), KGlobal::dirs()->kde_default("data") +
-                                     "digikam/data");
-    return (KGlobal::dirs()->findResourceDir(pattern.ascii(), pattern + ".png") + pattern + ".png" );
+    return (KStandardDirs::locate("data", QString("digikam/data/") + pattern + QString(".png")));
 }
 
 void ImageEffect_Border::slotPreserveAspectRatioToggled(bool b)
@@ -668,4 +664,3 @@ void ImageEffect_Border::toggleBorderSlider(bool b)
 }
 
 }  // NameSpace DigikamBorderImagesPlugin
-

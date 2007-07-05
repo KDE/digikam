@@ -22,7 +22,6 @@
  * 
  * ============================================================ */
 
-
 #ifndef IMAGEPLUGIN_BORDER_H
 #define IMAGEPLUGIN_BORDER_H
 
@@ -39,8 +38,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Border : public Digikam::ImagePlugi
     
 public:
 
-    ImagePlugin_Border(QObject *parent,
-                       const QStringList &args);
+    ImagePlugin_Border(QObject *parent, const QStringList &args);
     ~ImagePlugin_Border();
     
     void setEnabledActions(bool enable);

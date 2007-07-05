@@ -28,9 +28,7 @@
 
 // Qt includes.
 
-#include <qstring.h>
-//Added by qt3to4:
-#include <QLabel>
+#include <QString>
 
 // Digikam includes.
 

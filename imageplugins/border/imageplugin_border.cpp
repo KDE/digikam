@@ -46,7 +46,9 @@ ImagePlugin_Border::ImagePlugin_Border(QObject *parent, const QStringList &)
 {
     m_borderAction  = new KAction(KIcon("bordertool"), i18n("Add Border..."), this);
     actionCollection()->addAction("imageplugin_border", m_borderAction );
-    connect(m_borderAction, SIGNAL(triggered(bool) ), SLOT(slotBorder()));
+
+    connect(m_borderAction, SIGNAL(triggered(bool)), 
+            this, SLOT(slotBorder()));
 
     setXMLFile("digikamimageplugin_border_ui.rc");
     
@@ -67,4 +69,3 @@ void ImagePlugin_Border::slotBorder()
     DigikamBorderImagesPlugin::ImageEffect_Border dlg(parentWidget());
     dlg.exec();
 }
-
