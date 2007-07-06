@@ -193,14 +193,14 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     m_iterationInput->setWhatsThis( i18n("<p>This value controls the number of iterations "
                                          "to use with Neon and Find Edges effects."));
     
-    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
-    gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
-    gridSettings->addMultiCellWidget(m_effectTypeLabel, 3, 3, 0, 4);
-    gridSettings->addMultiCellWidget(m_effectType, 4, 4, 0, 4);
-    gridSettings->addMultiCellWidget(m_levelLabel, 5, 5, 0, 4);
-    gridSettings->addMultiCellWidget(m_levelInput, 6, 6, 0, 4);
-    gridSettings->addMultiCellWidget(m_iterationLabel, 7, 7, 0, 4);
-    gridSettings->addMultiCellWidget(m_iterationInput, 8, 8, 0, 4);
+    gridSettings->addLayout(l1, 0, 0, 1, 5 );
+    gridSettings->addWidget(histoBox, 1, 0, 2, 5 );
+    gridSettings->addWidget(m_effectTypeLabel, 3, 0, 1, 5 );
+    gridSettings->addWidget(m_effectType, 4, 0, 1, 5 );
+    gridSettings->addWidget(m_levelLabel, 5, 0, 1, 5 );
+    gridSettings->addWidget(m_levelInput, 6, 0, 1, 5 );
+    gridSettings->addWidget(m_iterationLabel, 7, 0, 1, 5 );
+    gridSettings->addWidget(m_iterationInput, 8, 0, 1, 5 );
     gridSettings->setRowStretch(9, 10);
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
