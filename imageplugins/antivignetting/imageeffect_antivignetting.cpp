@@ -155,20 +155,20 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addMultiCellWidget(m_maskPreviewLabel, 0, 0, 0, 2);
-    gridSettings->addMultiCellWidget(label1, 1, 1, 0, 2);
-    gridSettings->addMultiCellWidget(m_densityInput, 2, 2, 0, 2);
-    gridSettings->addMultiCellWidget(label2, 3, 3, 0, 2);
-    gridSettings->addMultiCellWidget(m_powerInput, 4, 4, 0, 2);
-    gridSettings->addMultiCellWidget(label3, 5, 5, 0, 2);
-    gridSettings->addMultiCellWidget(m_radiusInput, 6, 6, 0, 2);
-    gridSettings->addMultiCellWidget(line, 7, 7, 0, 2);
-    gridSettings->addMultiCellWidget(label4, 8, 8, 0, 2);
-    gridSettings->addMultiCellWidget(m_brightnessInput, 9, 9, 0, 2);
-    gridSettings->addMultiCellWidget(label5, 10, 10, 0, 2);
-    gridSettings->addMultiCellWidget(m_contrastInput, 11, 11, 0, 2);
-    gridSettings->addMultiCellWidget(label6, 12, 12, 0, 2);
-    gridSettings->addMultiCellWidget(m_gammaInput, 13, 13, 0, 2);
+    gridSettings->addWidget(m_maskPreviewLabel, 0, 0, 1, 3 );
+    gridSettings->addWidget(label1, 1, 0, 1, 3 );
+    gridSettings->addWidget(m_densityInput, 2, 0, 1, 3 );
+    gridSettings->addWidget(label2, 3, 0, 1, 3 );
+    gridSettings->addWidget(m_powerInput, 4, 0, 1, 3 );
+    gridSettings->addWidget(label3, 5, 0, 1, 3 );
+    gridSettings->addWidget(m_radiusInput, 6, 0, 1, 3 );
+    gridSettings->addWidget(line, 7, 0, 1, 3 );
+    gridSettings->addWidget(label4, 8, 0, 1, 3 );
+    gridSettings->addWidget(m_brightnessInput, 9, 0, 1, 3 );
+    gridSettings->addWidget(label5, 10, 0, 1, 3 );
+    gridSettings->addWidget(m_contrastInput, 11, 0, 1, 3 );
+    gridSettings->addWidget(label6, 12, 0, 1, 3 );
+    gridSettings->addWidget(m_gammaInput, 13, 0, 1, 3 );
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
 
