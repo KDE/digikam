@@ -166,14 +166,14 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
-    gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
-    gridSettings->addMultiCellWidget(label2, 3, 3, 0, 4);
-    gridSettings->addMultiCellWidget(m_bInput, 4, 4, 0, 4);
-    gridSettings->addMultiCellWidget(label3, 5, 5, 0, 4);
-    gridSettings->addMultiCellWidget(m_cInput, 6, 6, 0, 4);
-    gridSettings->addMultiCellWidget(label4, 7, 7, 0, 4);
-    gridSettings->addMultiCellWidget(m_gInput, 8, 8, 0, 4);
+    gridSettings->addLayout(l1, 0, 0, 1, 5 );
+    gridSettings->addWidget(histoBox, 1, 0, 2, 5 );
+    gridSettings->addWidget(label2, 3, 0, 1, 5 );
+    gridSettings->addWidget(m_bInput, 4, 0, 1, 5 );
+    gridSettings->addWidget(label3, 5, 0, 1, 5 );
+    gridSettings->addWidget(m_cInput, 6, 0, 1, 5 );
+    gridSettings->addWidget(label4, 7, 0, 1, 5 );
+    gridSettings->addWidget(m_gInput, 8, 0, 1, 5 );
     gridSettings->setRowStretch(9, 10);    
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
