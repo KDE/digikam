@@ -26,17 +26,16 @@
 
 // Qt Includes.
 
-#include <qstring.h>
-//Added by qt3to4:
+#include <QString>
 #include <QPixmap>
 
 // Digikam include.
 
 #include "imagedlgbase.h"
 
-class Q3HButtonGroup;
-class QComboBox;
 class Q3ListBox;
+class QButtonGroup;
+class QComboBox;
 
 namespace Digikam
 {
@@ -110,9 +109,9 @@ private:
     
     QComboBox                    *m_channelCB;
     
-    Q3HButtonGroup                *m_scaleBG;
+    QButtonGroup                 *m_scaleBG;
 
-    Q3ListBox                     *m_correctionTools;
+    Q3ListBox                    *m_correctionTools;
 
     Digikam::ImageWidget         *m_previewWidget;
 

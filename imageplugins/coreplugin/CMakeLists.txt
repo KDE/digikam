@@ -45,7 +45,7 @@ SET(digikamimageplugin_core_PART_SRCS
     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_bcg.cpp 
     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_rgb.cpp 
     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_blur.cpp 
-#    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_autocorrection.cpp 
+    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_autocorrection.cpp 
 #    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_redeye.cpp 
 #    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_iccproof.cpp 
 #    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_bwsepia.cpp 

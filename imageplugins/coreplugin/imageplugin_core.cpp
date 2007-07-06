@@ -60,7 +60,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QStringList &)
     //-------------------------------
     // Fix and Colors menu actions
 
-    m_blurAction  = new KAction(KIcon("blurimage"), i18n("Blur..."), this);
+    m_blurAction = new KAction(KIcon("blurimage"), i18n("Blur..."), this);
     actionCollection()->addAction("implugcore_blur", m_blurAction );
     connect(m_blurAction, SIGNAL(triggered(bool) ), 
             this, SLOT(slotBlur()));
@@ -77,7 +77,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QStringList &)
                                         "Select a region including the eyes to use this option.") );
 */
 
-    m_BCGAction  = new KAction(KIcon("contrast"), i18n("Brightness/Contrast/Gamma..."), this);
+    m_BCGAction = new KAction(KIcon("contrast"), i18n("Brightness/Contrast/Gamma..."), this);
     actionCollection()->addAction("implugcore_bcg", m_BCGAction );
     connect(m_BCGAction, SIGNAL(triggered(bool) ), 
             this, SLOT(slotBCG()));
@@ -89,31 +89,33 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QStringList &)
                       actionCollection(), "implugcore_hsl");
 */
 
-    m_RGBAction  = new KAction(KIcon("adjustrgb"), i18n("Color Balance..."), this);
-    m_RGBAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));      // NOTE: Photoshop 7 use CTRL+B.
+    // NOTE: Photoshop 7 use CTRL+B.
+    m_RGBAction = new KAction(KIcon("adjustrgb"), i18n("Color Balance..."), this);
+    m_RGBAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));      
     actionCollection()->addAction("implugcore_rgb", m_RGBAction );
     connect(m_RGBAction, SIGNAL(triggered(bool) ), 
             this, SLOT(slotRGB()));
 
-/*
-    m_autoCorrectionAction = new KAction(i18n("Auto-Correction..."), "autocorrection", 
-                                 Qt::CTRL+Qt::SHIFT+Qt::Key_B, // NOTE: Photoshop 7 use CTRL+SHIFT+B with 'Auto-Color' option.
-                                 this, SLOT(slotAutoCorrection()),
-                                 actionCollection(), "implugcore_autocorrection");
-*/
+    // NOTE: Photoshop 7 use CTRL+SHIFT+B with
+    m_autoCorrectionAction = new KAction(KIcon("autocorrection"), i18n("Auto-Correction..."), this);
+    m_autoCorrectionAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
+    actionCollection()->addAction("implugcore_autocorrection", m_autoCorrectionAction );
+    connect(m_autoCorrectionAction, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotAutoCorrection()));
 
-    m_invertAction  = new KAction(KIcon("invertimage"), i18n("Invert"), this);
-    m_invertAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_I));      // NOTE: Photoshop 7 use CTRL+I.
+    // NOTE: Photoshop 7 use CTRL+I.
+    m_invertAction = new KAction(KIcon("invertimage"), i18n("Invert"), this);
+    m_invertAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_I));      
     actionCollection()->addAction("implugcore_invert", m_invertAction );
     connect(m_invertAction, SIGNAL(triggered(bool) ), 
             this, SLOT(slotInvert()));
 
-    m_convertTo8Bits  = new KAction(KIcon("depth16to8"), i18n("8 bits"), this);
+    m_convertTo8Bits = new KAction(KIcon("depth16to8"), i18n("8 bits"), this);
     actionCollection()->addAction("implugcore_convertto8bits", m_convertTo8Bits );
     connect(m_convertTo8Bits, SIGNAL(triggered(bool) ), 
             this, SLOT(slotConvertTo8Bits()));
     
-    m_convertTo16Bits  = new KAction(KIcon("depth8to16"), i18n("16 bits"), this);
+    m_convertTo16Bits = new KAction(KIcon("depth8to16"), i18n("16 bits"), this);
     actionCollection()->addAction("implugcore_convertto16bits", m_convertTo16Bits );
     connect(m_convertTo16Bits, SIGNAL(triggered(bool) ), 
             this, SLOT(slotConvertTo16Bits()));
@@ -244,6 +246,12 @@ void ImagePlugin_Core::slotBlur()
     dlg.exec();
 }
 
+void ImagePlugin_Core::slotAutoCorrection()
+{
+    DigikamImagesPluginCore::ImageEffect_AutoCorrection dlg(parentWidget());
+    dlg.exec();
+}
+
 void ImagePlugin_Core::slotSharpen()
 {
 /*    DigikamImagesPluginCore::ImageEffect_Sharpen dlg(parentWidget());
@@ -253,12 +261,6 @@ void ImagePlugin_Core::slotSharpen()
 void ImagePlugin_Core::slotHSL()
 {
 /*    DigikamImagesPluginCore::ImageEffect_HSL dlg(parentWidget());
-    dlg.exec();*/
-}
-
-void ImagePlugin_Core::slotAutoCorrection()
-{
-/*    DigikamImagesPluginCore::ImageEffect_AutoCorrection dlg(parentWidget());
     dlg.exec();*/
 }
 

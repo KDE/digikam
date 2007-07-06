@@ -97,6 +97,8 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
                                     "<b>Green</b>: display the green image-channel values.<p>"
                                     "<b>Blue</b>: display the blue image-channel values.<p>"));
 
+    // -------------------------------------------------------------
+
     QWidget *scaleBox = new QWidget(gboxSettings);
     QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
     m_scaleBG         = new QButtonGroup(scaleBox);
