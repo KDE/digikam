@@ -505,12 +505,12 @@ void AdjustLevelDialog::slotAdjustMinInputSpinBox(int val)
 {
     blockSignals(true);
 
-    if ( val < m_hGradientMaxInput->value() )
+    if ( val > m_hGradientMaxInput->value() )
        val = m_hGradientMaxInput->value();
 
-    m_minInput->setValue(m_histoSegments - val);
+    m_minInput->setValue(val);
     m_hGradientMinInput->setValue( val );
-    m_levels->setLevelLowInputValue(m_channelCB->currentIndex(), m_histoSegments - val);
+    m_levels->setLevelLowInputValue(m_channelCB->currentIndex(), val);
     blockSignals(false);
     slotTimer();
 }
@@ -519,12 +519,12 @@ void AdjustLevelDialog::slotAdjustMaxInputSpinBox(int val)
 {
     blockSignals(true);
 
-    if ( val > m_hGradientMinInput->value() )
+    if ( val < m_hGradientMinInput->value() )
        val = m_hGradientMinInput->value();
 
-    m_maxInput->setValue(m_histoSegments - val);
+    m_maxInput->setValue(val);
     m_hGradientMaxInput->setValue( val );
-    m_levels->setLevelHighInputValue(m_channelCB->currentIndex(), m_histoSegments - val);
+    m_levels->setLevelHighInputValue(m_channelCB->currentIndex(), val);
     blockSignals(false);
     slotTimer();
 }
@@ -533,12 +533,12 @@ void AdjustLevelDialog::slotAdjustMinOutputSpinBox(int val)
 {
     blockSignals(true);
 
-    if ( val < m_hGradientMaxOutput->value() )
+    if ( val > m_hGradientMaxOutput->value() )
        val = m_hGradientMaxOutput->value();
 
-    m_minOutput->setValue(m_histoSegments - val);
+    m_minOutput->setValue(val);
     m_hGradientMinOutput->setValue( val );
-    m_levels->setLevelLowOutputValue(m_channelCB->currentIndex(), m_histoSegments - val);
+    m_levels->setLevelLowOutputValue(m_channelCB->currentIndex(), val);
     blockSignals(false);
     slotTimer();
 }
@@ -547,12 +547,12 @@ void AdjustLevelDialog::slotAdjustMaxOutputSpinBox(int val)
 {
     blockSignals(true);
 
-    if ( val > m_hGradientMinOutput->value() )
+    if ( val < m_hGradientMinOutput->value() )
        val = m_hGradientMinOutput->value();
 
-    m_maxOutput->setValue(m_histoSegments - val);
+    m_maxOutput->setValue(val);
     m_hGradientMaxOutput->setValue( val );
-    m_levels->setLevelHighOutputValue(m_channelCB->currentIndex(), m_histoSegments - val);
+    m_levels->setLevelHighOutputValue(m_channelCB->currentIndex(), val);
     blockSignals(false);
     slotTimer();
 }
@@ -566,11 +566,11 @@ void AdjustLevelDialog::slotAdjustSliders()
 
 void AdjustLevelDialog::adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut)
 {
-    m_hGradientMinInput->setValue(m_histoSegments - minIn);
-    m_hGradientMaxInput->setValue(m_histoSegments - maxIn);
+    m_hGradientMinInput->setValue(minIn);
+    m_hGradientMaxInput->setValue(maxIn);
     m_gammaInput->setValue(gamIn);
-    m_hGradientMinOutput->setValue(m_histoSegments - minOut);
-    m_hGradientMaxOutput->setValue(m_histoSegments - maxOut);
+    m_hGradientMinOutput->setValue(minOut);
+    m_hGradientMaxOutput->setValue(maxOut);
 }
 
 void AdjustLevelDialog::slotResetCurrentChannel()
