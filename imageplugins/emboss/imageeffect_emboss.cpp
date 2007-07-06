@@ -92,8 +92,8 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
 
     // -------------------------------------------------------------
                                             
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(m_depthInput, 1, 1, 0, 1);
+    gridSettings->addWidget(label1, 0, 0, 1, 2 );
+    gridSettings->addWidget(m_depthInput, 1, 0, 1, 2 );
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
 
