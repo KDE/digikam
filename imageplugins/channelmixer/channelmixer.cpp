@@ -223,17 +223,17 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    grid->addMultiCellLayout(l1, 0, 0, 0, 4);
-    grid->addMultiCellWidget(histoBox, 1, 2, 0, 4);
-    grid->addMultiCellWidget(redLabel, 3, 3, 0, 0);
-    grid->addMultiCellWidget(greenLabel, 4, 4, 0, 0);
-    grid->addMultiCellWidget(blueLabel, 5, 5, 0, 0);
-    grid->addMultiCellWidget(m_redGain, 3, 3, 1, 4);
-    grid->addMultiCellWidget(m_greenGain, 4, 4, 1, 4);
-    grid->addMultiCellWidget(m_blueGain, 5, 5, 1, 4);
-    grid->addMultiCellWidget(m_resetButton, 6, 6, 0, 1);
-    grid->addMultiCellWidget(m_monochrome, 7, 7, 0, 4);
-    grid->addMultiCellWidget(m_preserveLuminosity, 8, 8, 0, 4);
+    grid->addLayout(l1, 0, 0, 1, 5 );
+    grid->addWidget(histoBox, 1, 0, 2, 5 );
+    grid->addWidget(redLabel, 3, 0, 1, 1);
+    grid->addWidget(greenLabel, 4, 0, 1, 1);
+    grid->addWidget(blueLabel, 5, 0, 1, 1);
+    grid->addWidget(m_redGain, 3, 1, 1, 4);
+    grid->addWidget(m_greenGain, 4, 1, 1, 4);
+    grid->addWidget(m_blueGain, 5, 1, 1, 4);
+    grid->addWidget(m_resetButton, 6, 0, 1, 2 );
+    grid->addWidget(m_monochrome, 7, 0, 1, 5 );
+    grid->addWidget(m_preserveLuminosity, 8, 0, 1, 5 );
     grid->setRowStretch(9, 10);
     grid->setMargin(spacingHint());
     grid->setSpacing(spacingHint());
