@@ -171,18 +171,18 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
                 "Use this to increase edge noise erosion and spike noise erosion "
                 "(noise is removed by erosion)."));
     
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_radiusInput, 0, 0, 1, 1);
-    gridSettings->addMultiCellWidget(label3, 1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(m_thresholdInput, 1, 1, 1, 1);
-    gridSettings->addMultiCellWidget(label4, 2, 2, 0, 0);
-    gridSettings->addMultiCellWidget(m_textureInput, 2, 2, 1, 1);
-    gridSettings->addMultiCellWidget(label7, 3, 3, 0, 0);
-    gridSettings->addMultiCellWidget(m_sharpnessInput, 3, 3, 1, 1);
-    gridSettings->addMultiCellWidget(label5, 4, 4, 0, 0);
-    gridSettings->addMultiCellWidget(m_lookaheadInput, 4, 4, 1, 1);
-    gridSettings->addMultiCellWidget(label10, 5, 5, 0, 0);
-    gridSettings->addMultiCellWidget(m_phaseInput, 5, 5, 1, 1);
+    gridSettings->addWidget(label1, 0, 0, 1, 1);
+    gridSettings->addWidget(m_radiusInput, 0, 1, 1, 1);
+    gridSettings->addWidget(label3, 1, 0, 1, 1);
+    gridSettings->addWidget(m_thresholdInput, 1, 1, 1, 1);
+    gridSettings->addWidget(label4, 2, 0, 1, 1);
+    gridSettings->addWidget(m_textureInput, 2, 1, 1, 1);
+    gridSettings->addWidget(label7, 3, 0, 1, 1);
+    gridSettings->addWidget(m_sharpnessInput, 3, 1, 1, 1);
+    gridSettings->addWidget(label5, 4, 0, 1, 1);
+    gridSettings->addWidget(m_lookaheadInput, 4, 1, 1, 1);
+    gridSettings->addWidget(label10, 5, 0, 1, 1);
+    gridSettings->addWidget(m_phaseInput, 5, 1, 1, 1);
     gridSettings->setColumnStretch(1, 10);
     gridSettings->setRowStretch(6, 10);
     gridSettings->setMargin(spacingHint());    
@@ -243,14 +243,14 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
                 "can suppress spike noise when increased, and this is the preferred method to "
                 "remove it."));
     
-    gridSettings2->addMultiCellWidget(label2, 0, 0, 0, 0);
-    gridSettings2->addMultiCellWidget(m_lumToleranceInput, 0, 0, 1, 1);                         
-    gridSettings2->addMultiCellWidget(label6, 1, 1, 0, 0);
-    gridSettings2->addMultiCellWidget(m_csmoothInput, 1, 1, 1, 1);
-    gridSettings2->addMultiCellWidget(label8, 2, 2, 0, 0);
-    gridSettings2->addMultiCellWidget(m_gammaInput, 2, 2, 1, 1);
-    gridSettings2->addMultiCellWidget(label9, 3, 3, 0, 0);
-    gridSettings2->addMultiCellWidget(m_dampingInput, 3, 3, 1, 1);
+    gridSettings2->addWidget(label2, 0, 0, 1, 1);
+    gridSettings2->addWidget(m_lumToleranceInput, 0, 1, 1, 1);                         
+    gridSettings2->addWidget(label6, 1, 0, 1, 1);
+    gridSettings2->addWidget(m_csmoothInput, 1, 1, 1, 1);
+    gridSettings2->addWidget(label8, 2, 0, 1, 1);
+    gridSettings2->addWidget(m_gammaInput, 2, 1, 1, 1);
+    gridSettings2->addWidget(label9, 3, 0, 1, 1);
+    gridSettings2->addWidget(m_dampingInput, 3, 1, 1, 1);
     gridSettings2->setColumnStretch(1, 10);
     gridSettings2->setRowStretch(4, 10);
     gridSettings2->setMargin(spacingHint());    
