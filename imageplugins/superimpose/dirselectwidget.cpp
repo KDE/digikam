@@ -151,7 +151,7 @@ void DirSelectWidget::setRootPath(KUrl rootUrl, KUrl currentUrl)
     
     d->m_item = addBranch( rootUrl, rootUrl.fileName() );    
     setDirOnlyMode( d->m_item, true );
-    currentPath = currentPath.mid( root.length() );
+    currentPath      = currentPath.mid( root.length() );
     d->m_pendingPath = currentPath.split( "/", QString::KeepEmptyParts);
 
     if ( !d->m_pendingPath[0].isEmpty() )

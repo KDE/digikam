@@ -142,8 +142,8 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    gridFrame->addMultiCellWidget(m_previewWidget, 0, 0, 0, 2);
-    gridFrame->addMultiCellWidget(toolBox, 1, 1, 1, 1);
+    gridFrame->addWidget(m_previewWidget, 0, 0, 1, 3 );
+    gridFrame->addWidget(toolBox, 1, 1, 1, 1);
     gridFrame->setColumnStretch(0, 10);
     gridFrame->setColumnStretch(2, 10);
     gridFrame->setRowStretch(0, 10);
@@ -164,9 +164,9 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    grid->addMultiCellWidget(m_thumbnailsBar, 0, 1, 0, 0);
-    grid->addMultiCellWidget(m_dirSelect, 0, 0, 1, 1);    
-    grid->addMultiCellWidget(templateDirButton, 1, 1, 1, 1);    
+    grid->addWidget(m_thumbnailsBar, 0, 0, 2, 1);
+    grid->addWidget(m_dirSelect, 0, 1, 1, 1);    
+    grid->addWidget(templateDirButton, 1, 1, 1, 1);    
     grid->setColumnStretch(1, 10);
     grid->setMargin(spacingHint());
     grid->setSpacing(spacingHint());
