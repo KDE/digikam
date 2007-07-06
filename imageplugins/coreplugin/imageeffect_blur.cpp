@@ -54,7 +54,7 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
                 : Digikam::CtrlPanelDlg(parent, i18n("Apply Gaussian Blur on Photograph"), 
                                         "gaussianblur")
 {
-    setHelp("blursharpentool.anchor", KApplication::kApplication()->aboutData()->appName());
+    setHelp("blursharpentool.anchor", "digikam");
     
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 1, 0, spacingHint());
