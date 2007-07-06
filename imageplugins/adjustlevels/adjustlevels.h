@@ -64,6 +64,7 @@ private:
     void resetValues();
     void finalRendering(); 
     void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
+    bool eventFilter(QObject *o, QEvent *e);
     
 private slots:
 
@@ -83,6 +84,7 @@ private slots:
     void slotSpotColorChanged(const Digikam::DColor &color);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
     void slotPickerColorButtonActived();    
+    void slotShowHistogramGuide(int v);
 
 private:
     

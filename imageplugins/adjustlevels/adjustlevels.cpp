@@ -195,6 +195,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     QWhatsThis::add( m_hGradientMinInput, i18n("<p>Select here the minimal intensity input value of the histogram."));
     QToolTip::add( m_hGradientMinInput, i18n( "Minimal intensity input." ) );
     m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
+    m_hGradientMinInput->installEventFilter(this);
 
     m_hGradientMaxInput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
     m_hGradientMaxInput->setFixedHeight( 20 );
@@ -203,17 +204,20 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     QWhatsThis::add( m_hGradientMaxInput, i18n("<p>Select here the maximal intensity input value of the histogram."));
     QToolTip::add( m_hGradientMaxInput, i18n( "Maximal intensity input." ) );
     m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
+    m_hGradientMaxInput->installEventFilter(this);
 
     m_minInput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
     m_minInput->setValue(0);
     QWhatsThis::add( m_minInput, i18n("<p>Select here the minimal intensity input value of the histogram."));
     QToolTip::add( m_minInput, i18n( "Minimal intensity input." ) );
+    
     m_gammaInput = new KDoubleNumInput(gboxSettings);
     m_gammaInput->setPrecision(2);
     m_gammaInput->setRange(0.1, 3.0, 0.01);
     m_gammaInput->setValue(1.0);
     QToolTip::add( m_gammaInput, i18n( "Gamma input value." ) );
     QWhatsThis::add( m_gammaInput, i18n("<p>Select here the gamma input value."));
+    
     m_maxInput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
     m_maxInput->setValue(m_histoSegments);
     QToolTip::add( m_maxInput, i18n( "Maximal intensity input." ) );
@@ -226,7 +230,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMinOutput->setFixedHeight( 20 );
     m_hGradientMinOutput->setMinValue(0);
     m_hGradientMinOutput->setMaxValue(m_histoSegments);
-
+    m_hGradientMinOutput->installEventFilter(this);
+    
     m_hGradientMaxOutput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
     m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "white" ) );
     QWhatsThis::add( m_hGradientMaxOutput, i18n("<p>Select here the maximal intensity output value of the histogram."));
@@ -234,11 +239,13 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMaxOutput->setFixedHeight( 20 );
     m_hGradientMaxOutput->setMinValue(0);
     m_hGradientMaxOutput->setMaxValue(m_histoSegments);
-
+    m_hGradientMaxOutput->installEventFilter(this);
+    
     m_minOutput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
     m_minOutput->setValue(0);
     QToolTip::add( m_minOutput, i18n( "Minimal intensity output." ) );
     QWhatsThis::add( m_minOutput, i18n("<p>Select here the minimal intensity output value of the histogram."));
+    
     m_maxOutput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
     m_maxOutput->setValue(m_histoSegments);
     QToolTip::add( m_maxOutput, i18n( "Maximal intensity output." ) );
@@ -796,6 +803,111 @@ void AdjustLevelDialog::slotUser2()
 
     // Refresh the current levels config.
     slotChannelChanged(m_channelCB->currentItem());
+}
+
+// See B.K.O #146636: use event filter with all level slider to display a
+// guide over level histogram.
+bool AdjustLevelDialog::eventFilter(QObject *obj, QEvent *ev)
+{
+    if ( obj == m_hGradientMinInput )
+    {
+        if ( ev->type() == QEvent::MouseButtonPress)
+        {
+            connect(m_minInput, SIGNAL(valueChanged(int)),
+                    this, SLOT(slotShowHistogramGuide(int)));
+            
+            return false;
+        }
+        if ( ev->type() == QEvent::MouseButtonRelease)
+        {
+            disconnect(m_minInput, SIGNAL(valueChanged(int)),
+                       this, SLOT(slotShowHistogramGuide(int)));
+
+            m_levelsHistogramWidget->reset();
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    if ( obj == m_hGradientMaxInput )
+    {
+        if ( ev->type() == QEvent::MouseButtonPress)
+        {
+            connect(m_maxInput, SIGNAL(valueChanged(int)),
+                    this, SLOT(slotShowHistogramGuide(int)));
+            
+            return false;
+        }
+        if ( ev->type() == QEvent::MouseButtonRelease)
+        {
+            disconnect(m_maxInput, SIGNAL(valueChanged(int)),
+                       this, SLOT(slotShowHistogramGuide(int)));
+
+            m_levelsHistogramWidget->reset();
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    if ( obj == m_hGradientMinOutput )
+    {
+        if ( ev->type() == QEvent::MouseButtonPress)
+        {
+            connect(m_minOutput, SIGNAL(valueChanged(int)),
+                    this, SLOT(slotShowHistogramGuide(int)));
+            
+            return false;
+        }
+        if ( ev->type() == QEvent::MouseButtonRelease)
+        {
+            disconnect(m_minOutput, SIGNAL(valueChanged(int)),
+                       this, SLOT(slotShowHistogramGuide(int)));
+
+            m_levelsHistogramWidget->reset();
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    if ( obj == m_hGradientMaxOutput )
+    {
+        if ( ev->type() == QEvent::MouseButtonPress)
+        {
+            connect(m_maxOutput, SIGNAL(valueChanged(int)),
+                    this, SLOT(slotShowHistogramGuide(int)));
+            
+            return false;
+        }
+        if ( ev->type() == QEvent::MouseButtonRelease)
+        {
+            disconnect(m_maxOutput, SIGNAL(valueChanged(int)),
+                       this, SLOT(slotShowHistogramGuide(int)));
+
+            m_levelsHistogramWidget->reset();
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        // pass the event on to the parent class
+        return KDialogBase::eventFilter(obj, ev);
+    }
+}
+
+void AdjustLevelDialog::slotShowHistogramGuide(int v)
+{
+    Digikam::DColor color(v, v, v, v, m_originalImage.sixteenBit());
+    m_levelsHistogramWidget->setHistogramGuideByColor(color);
 }
 
 }  // NameSpace DigikamAdjustLevelsImagesPlugin
