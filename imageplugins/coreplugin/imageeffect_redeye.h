@@ -33,12 +33,10 @@
 // Digikam include.
 
 #include "imagedlgbase.h"
-//Added by qt3to4:
-#include <QLabel>
 
+class Q3HButtonGroup;
 class QLabel;
 class QComboBox;
-class Q3HButtonGroup;
 
 class KHSSelector;
 class KValueSelector;

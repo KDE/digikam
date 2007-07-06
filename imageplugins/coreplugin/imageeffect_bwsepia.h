@@ -28,17 +28,16 @@
 
 // Qt Includes.
 
-#include <qstring.h>
-//Added by qt3to4:
-#include <QPixmap>
+#include <QString>
 
 // Digikam include.
 
 #include "imagedlgbase.h"
 
-class Q3HButtonGroup;
-class QComboBox;
 class Q3ListBox;
+class QButtonGroup;
+class QComboBox;
+
 class KIntNumInput;
 class KTabWidget;
 

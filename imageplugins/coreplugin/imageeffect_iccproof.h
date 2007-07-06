@@ -31,11 +31,11 @@
 
 #include "imagedlgbase.h"
 
-class QCheckBox;
-class QComboBox;
 class Q3VButtonGroup;
 class Q3ButtonGroup;
 class Q3HButtonGroup;
+class QCheckBox;
+class QComboBox;
 class QRadioButton;
 class QToolBox;
 

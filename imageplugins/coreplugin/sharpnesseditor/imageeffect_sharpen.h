@@ -28,8 +28,8 @@
 
 #include "ctrlpaneldlg.h"
 
-class QComboBox;
 class Q3WidgetStack;
+class QComboBox;
 
 class KIntNumInput;
 class KDoubleNumInput;

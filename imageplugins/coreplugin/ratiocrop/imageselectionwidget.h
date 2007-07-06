@@ -22,16 +22,14 @@
  *
  * ============================================================ */
 
-
 #ifndef IMAGESELECTIONWIDGET_H
 #define IMAGESELECTIONWIDGET_H
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qrect.h>
-#include <qcolor.h>
-//Added by qt3to4:
+#include <QWidget>
+#include <QRect>
+#include <QColor>
 #include <QPaintEvent>
 #include <QResizeEvent>
 #include <QMouseEvent>

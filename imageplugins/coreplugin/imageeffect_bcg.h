@@ -31,7 +31,7 @@
 #include "imagedlgbase.h"
 
 class QComboBox;
-class Q3HButtonGroup;
+class QButtonGroup;
 
 class KIntNumInput;
 class KDoubleNumInput;
@@ -90,7 +90,7 @@ private:
 
     QComboBox                    *m_channelCB;    
     
-    Q3HButtonGroup                *m_scaleBG;  
+    QButtonGroup                 *m_scaleBG;  
 
     KIntNumInput                 *m_bInput;
     KIntNumInput                 *m_cInput;

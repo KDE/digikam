@@ -28,9 +28,8 @@
 
 #include "imagedlgbase.h"
 
-class QComboBox;
 class Q3HButtonGroup;
-
+class QComboBox;
 class QSpinBox;
 class QSlider;
 
