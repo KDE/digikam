@@ -117,12 +117,12 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     m_coeffInput->setWhatsThis( i18n("<p>This value is the fish-eye-effect optical "
                                      "distortion coefficient."));     
     
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 2);
-    gridSettings->addMultiCellWidget(m_dropInput, 1, 1, 0, 2);
-    gridSettings->addMultiCellWidget(label2, 2, 2, 0, 2);
-    gridSettings->addMultiCellWidget(m_amountInput, 3, 3, 0, 2);
-    gridSettings->addMultiCellWidget(label3, 4, 4, 0, 2);
-    gridSettings->addMultiCellWidget(m_coeffInput, 5, 5, 0, 2);
+    gridSettings->addWidget(label1, 0, 0, 1, 3 );
+    gridSettings->addWidget(m_dropInput, 1, 0, 1, 3 );
+    gridSettings->addWidget(label2, 2, 0, 1, 3 );
+    gridSettings->addWidget(m_amountInput, 3, 0, 1, 3 );
+    gridSettings->addWidget(label3, 4, 0, 1, 3 );
+    gridSettings->addWidget(m_coeffInput, 5, 0, 1, 3 );
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(0);
     
