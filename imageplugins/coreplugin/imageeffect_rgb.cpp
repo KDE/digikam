@@ -23,26 +23,18 @@
 
 // Qt includes.
 
-#include <qspinbox.h>
-#include <qslider.h>
-#include <qcolor.h>
-#include <q3groupbox.h>
-#include <q3hgroupbox.h>
-#include <q3vgroupbox.h>
-#include <Q3HButtonGroup> 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <q3frame.h>
-
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-
-#include <qtooltip.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
+#include <QSpinBox>
+#include <QSlider>
+#include <QColor>
+#include <QGroupBox>
+#include <QButtonGroup> 
+#include <QLabel>
+#include <QFrame>
+#include <QPushButton>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QPixmap>
 
 // KDE includes.
@@ -78,7 +70,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     m_destinationPreviewData = 0L;
     setHelp("colorbalancetool.anchor", "digikam");
 
-    m_previewWidget = new Digikam::ImageWidget("colorbalance Tool Dialog", plainPage(),
+    m_previewWidget = new Digikam::ImageWidget("colorbalance Tool Dialog", mainWidget(),
                                                i18n("<p>Here you can see the image "
                                                     "color-balance adjustments preview. "
                                                     "You can pick color on image "
@@ -87,125 +79,154 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     
     // -------------------------------------------------------------
                 
-    QWidget *gboxSettings     = new QWidget(plainPage());
-    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 7, 4, spacingHint());
+    QWidget *gboxSettings     = new QWidget(mainWidget());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings );
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gboxSettings );
-    m_channelCB->insertItem( i18n("Luminosity") );
-    m_channelCB->insertItem( i18n("Red") );
-    m_channelCB->insertItem( i18n("Green") );
-    m_channelCB->insertItem( i18n("Blue") );
+    m_channelCB = new QComboBox( gboxSettings );
+    m_channelCB->addItem( i18n("Luminosity") );
+    m_channelCB->addItem( i18n("Red") );
+    m_channelCB->addItem( i18n("Green") );
+    m_channelCB->addItem( i18n("Blue") );
     m_channelCB->setWhatsThis( i18n("<p>Select here the histogram channel to display:<p>"
-                                       "<b>Luminosity</b>: display the image's luminosity values.<p>"
-                                       "<b>Red</b>: display the red image-channel values.<p>"
-                                       "<b>Green</b>: display the green image-channel values.<p>"
-                                       "<b>Blue</b>: display the blue image-channel values.<p>"));
+                                    "<b>Luminosity</b>: display the image's luminosity values.<p>"
+                                    "<b>Red</b>: display the red image-channel values.<p>"
+                                    "<b>Green</b>: display the green image-channel values.<p>"
+                                    "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    m_scaleBG = new Q3HButtonGroup(gboxSettings);
-    m_scaleBG->setExclusive(true);
-    m_scaleBG->setFrameShape(QFrame::NoFrame);
-    m_scaleBG->setInsideMargin( 0 );
-    m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
-                                     "If the image's maximal counts are small, you can use the linear scale.<p>"
-                                     "Logarithmic scale can be used when the maximal counts are big; "
-                                     "if it is used, all values (small and large) will be visible on the graph."));
+    QWidget *scaleBox = new QWidget(gboxSettings);
+    QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
+    m_scaleBG         = new QButtonGroup(scaleBox);
+    scaleBox->setWhatsThis(i18n("<p>Select here the histogram scale.<p>"
+                                "If the image's maximal counts are small, you can use the linear scale.<p>"
+                                "Logarithmic scale can be used when the maximal counts are big; "
+                                "if it is used, all values (small and large) will be visible on the graph."));
     
-    QPushButton *linHistoButton = new QPushButton( m_scaleBG );
+    QPushButton *linHistoButton = new QPushButton( scaleBox );
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
-    m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
-    KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
-    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
-    linHistoButton->setToggleButton(true);
+    linHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-lin.png")));
+    linHistoButton->setCheckable(true);
+    m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
     
-    QPushButton *logHistoButton = new QPushButton( m_scaleBG );
+    QPushButton *logHistoButton = new QPushButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
-    m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
-    KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
-    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
-    logHistoButton->setToggleButton(true);       
+    logHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-log.png")));
+    logHistoButton->setCheckable(true);
+    m_scaleBG->addButton(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    
+    hlay->setMargin(0);
+    hlay->setSpacing(0);
+    hlay->addWidget(linHistoButton);
+    hlay->addWidget(logHistoButton);
 
-    Q3HBoxLayout* l1 = new Q3HBoxLayout();
+    m_scaleBG->setExclusive(true);
+    logHistoButton->setChecked(true);       
+
+    QHBoxLayout* l1 = new QHBoxLayout();
     l1->addWidget(label1);
     l1->addWidget(m_channelCB);
     l1->addStretch(10);
-    l1->addWidget(m_scaleBG);
+    l1->addWidget(scaleBox);
     
-    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
-
     // -------------------------------------------------------------
 
     KVBox *histoBox   = new KVBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram drawing "
-                                             "of the selected image channel. This one is re-computed at any "
-                                             "settings changes."));
+                                          "of the selected image channel. This one is re-computed at any "
+                                          "settings changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);    
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     
-    gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
-
     // -------------------------------------------------------------
     
-    QLabel *labelLeft = new QLabel(i18n("Cyan"), gboxSettings);
-    labelLeft->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_rSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_rSlider");
-    m_rSlider->setTickmarks(QSlider::TicksBelow);
+    QLabel *labelCyan = new QLabel(i18n("Cyan"), gboxSettings);
+    labelCyan->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
+
+    m_rSlider = new QSlider(Qt::Horizontal, gboxSettings);
+    m_rSlider->setValue(0);
+    m_rSlider->setRange(-100, 100);
+    m_rSlider->setPageStep(1);
+    m_rSlider->setTickPosition(QSlider::TicksBelow);
     m_rSlider->setTickInterval(20);
     m_rSlider->setWhatsThis( i18n("<p>Set here the cyan/red color adjustment of the image."));
-    QLabel *labelRight = new QLabel(i18n("Red"), gboxSettings);
-    labelRight->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
-    m_rInput = new QSpinBox(-100, 100, 1, gboxSettings, "m_rInput");
-    
-    gridSettings->addMultiCellWidget(labelLeft, 3, 3, 0, 0);
-    gridSettings->addMultiCellWidget(m_rSlider, 3, 3, 1, 1);
-    gridSettings->addMultiCellWidget(labelRight, 3, 3, 2, 2);
-    gridSettings->addMultiCellWidget(m_rInput, 3, 3, 3, 3);
+
+    QLabel *labelRed = new QLabel(i18n("Red"), gboxSettings);
+    labelRed->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
+
+    m_rInput = new QSpinBox(gboxSettings);
+    m_rInput->setMinimum(-100); 
+    m_rInput->setMaximum(100); 
+    m_rInput->setSingleStep(1);
+    m_rInput->setValue(0);
     
     // -------------------------------------------------------------
         
-    labelLeft = new QLabel(i18n("Magenta"), gboxSettings);
-    labelLeft->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_gSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_gSlider");
-    m_gSlider->setTickmarks(QSlider::TicksBelow);
+    QLabel *labelMagenta = new QLabel(i18n("Magenta"), gboxSettings);
+    labelMagenta->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
+
+    m_gSlider = new QSlider(Qt::Horizontal, gboxSettings);
+    m_gSlider->setValue(0);
+    m_gSlider->setRange(-100, 100);
+    m_gSlider->setPageStep(1);
+    m_gSlider->setTickPosition(QSlider::TicksBelow);
     m_gSlider->setTickInterval(20);
     m_gSlider->setWhatsThis( i18n("<p>Set here the magenta/green color adjustment of the image."));
-    labelRight = new QLabel(i18n("Green"), gboxSettings);
-    labelRight->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
-    m_gInput = new QSpinBox(-100, 100, 1, gboxSettings, "m_gInput");
 
-    gridSettings->addMultiCellWidget(labelLeft, 4, 4, 0, 0);
-    gridSettings->addMultiCellWidget(m_gSlider, 4, 4, 1, 1);
-    gridSettings->addMultiCellWidget(labelRight, 4, 4, 2, 2);
-    gridSettings->addMultiCellWidget(m_gInput, 4, 4, 3, 3);
-    
+    QLabel *labelGreen = new QLabel(i18n("Green"), gboxSettings);
+    labelGreen->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
+
+    m_gInput = new QSpinBox(gboxSettings);
+    m_gInput->setMinimum(-100); 
+    m_gInput->setMaximum(100); 
+    m_gInput->setSingleStep(1);
+    m_gInput->setValue(0);
+
     // -------------------------------------------------------------
         
-    labelLeft = new QLabel(i18n("Yellow"), gboxSettings);
-    labelLeft->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_bSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_bSlider");
-    m_bSlider->setTickmarks(QSlider::TicksBelow);
+    QLabel *labelYellow = new QLabel(i18n("Yellow"), gboxSettings);
+    labelYellow->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
+
+    m_bSlider = new QSlider(Qt::Horizontal, gboxSettings);
+    m_bSlider->setValue(0);
+    m_bSlider->setRange(-100, 100);
+    m_bSlider->setPageStep(1);
+    m_bSlider->setTickPosition(QSlider::TicksBelow);
     m_bSlider->setTickInterval(20);
     m_bSlider->setWhatsThis( i18n("<p>Set here the yellow/blue color adjustment of the image."));
-    labelRight = new QLabel(i18n("Blue"), gboxSettings);
-    labelRight->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
-    m_bInput = new QSpinBox(-100, 100, 1, gboxSettings, "m_bInput");
-    
-    gridSettings->addMultiCellWidget(labelLeft, 5, 5, 0, 0);
-    gridSettings->addMultiCellWidget(m_bSlider, 5, 5, 1, 1);
-    gridSettings->addMultiCellWidget(labelRight, 5, 5, 2, 2);
-    gridSettings->addMultiCellWidget(m_bInput, 5, 5, 3, 3);
 
-    m_rInput->setValue(0);
-    m_gInput->setValue(0);
+    QLabel *labelBlue = new QLabel(i18n("Blue"), gboxSettings);
+    labelBlue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
+
+    m_bInput = new QSpinBox(gboxSettings);
+    m_bInput->setMinimum(-100); 
+    m_bInput->setMaximum(100); 
+    m_bInput->setSingleStep(1);
     m_bInput->setValue(0);
-    
+
+    // -------------------------------------------------------------
+
+    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
+    gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
+    gridSettings->addMultiCellWidget(labelCyan, 3, 3, 0, 0);
+    gridSettings->addMultiCellWidget(m_rSlider, 3, 3, 1, 1);
+    gridSettings->addMultiCellWidget(labelRed, 3, 3, 2, 2);
+    gridSettings->addMultiCellWidget(m_rInput, 3, 3, 3, 3);
+    gridSettings->addMultiCellWidget(labelMagenta, 4, 4, 0, 0);
+    gridSettings->addMultiCellWidget(m_gSlider, 4, 4, 1, 1);
+    gridSettings->addMultiCellWidget(labelGreen, 4, 4, 2, 2);
+    gridSettings->addMultiCellWidget(m_gInput, 4, 4, 3, 3);
+    gridSettings->addMultiCellWidget(labelYellow, 5, 5, 0, 0);
+    gridSettings->addMultiCellWidget(m_bSlider, 5, 5, 1, 1);
+    gridSettings->addMultiCellWidget(labelBlue, 5, 5, 2, 2);
+    gridSettings->addMultiCellWidget(m_bInput, 5, 5, 3, 3);
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(spacingHint());
     gridSettings->setRowStretch(6, 10);
+
     setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
@@ -213,7 +234,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
 
-    connect(m_scaleBG, SIGNAL(released(int)),
+    connect(m_scaleBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotScaleChanged(int)));
 
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
@@ -284,13 +305,13 @@ void ImageEffect_RGB::slotChannelChanged(int channel)
             break;
     }
 
-    m_histogramWidget->repaint(false);
+    m_histogramWidget->repaint();
 }
 
 void ImageEffect_RGB::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
-    m_histogramWidget->repaint(false);
+    m_histogramWidget->repaint();
 }
 
 void ImageEffect_RGB::slotColorSelectedFromTarget( const Digikam::DColor &color )
@@ -301,23 +322,26 @@ void ImageEffect_RGB::slotColorSelectedFromTarget( const Digikam::DColor &color 
 void ImageEffect_RGB::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("colorbalance Tool Dialog");
-    m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(group.readEntry("Histogram Scale", (int)Digikam::HistogramWidget::LogScaleHistogram));
+    KConfigGroup group        = config->group("colorbalance Tool Dialog");
+
+    m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->button(group.readEntry("Histogram Scale", 
+                      (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
+
     int r = group.readEntry("RedAjustment", 0);
     int g = group.readEntry("GreenAjustment", 0);
     int b = group.readEntry("BlueAjustment", 0);
     adjustSliders(r, g, b);
-    slotChannelChanged(m_channelCB->currentItem());
-    slotScaleChanged(m_scaleBG->selectedId());
+    slotChannelChanged(m_channelCB->currentIndex());
+    slotScaleChanged(m_scaleBG->checkedId());
 }
 
 void ImageEffect_RGB::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("colorbalance Tool Dialog");
-    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
-    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    KConfigGroup group        = config->group("colorbalance Tool Dialog");
+    group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
+    group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
     group.writeEntry("RedAjustment", m_rSlider->value());
     group.writeEntry("GreenAjustment", m_gInput->value());
     group.writeEntry("BlueAjustment", m_bInput->value());

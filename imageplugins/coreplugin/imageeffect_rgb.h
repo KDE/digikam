@@ -28,7 +28,7 @@
 
 #include "imagedlgbase.h"
 
-class Q3HButtonGroup;
+class QButtonGroup;
 class QComboBox;
 class QSpinBox;
 class QSlider;
@@ -88,7 +88,7 @@ private:
 
     QComboBox                    *m_channelCB;    
     
-    Q3HButtonGroup                *m_scaleBG;  
+    QButtonGroup                 *m_scaleBG;  
 
     QSpinBox                     *m_rInput;
     QSpinBox                     *m_gInput;
@@ -102,8 +102,7 @@ private:
 
     Digikam::ColorGradientWidget *m_hGradient;
     
-    Digikam::HistogramWidget     *m_histogramWidget;
-    
+    Digikam::HistogramWidget     *m_histogramWidget;    
 };
 
 }  // NameSpace DigikamImagesPluginCore

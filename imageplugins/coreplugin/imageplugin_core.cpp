@@ -85,12 +85,15 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QStringList &)
                       Qt::CTRL+Qt::Key_U,      // NOTE: Photoshop 7 use CTRL+U.
                       this, SLOT(slotHSL()),
                       actionCollection(), "implugcore_hsl");
+*/
 
-    m_RGBAction = new KAction(i18n("Color Balance..."), "adjustrgb", 
-                      Qt::CTRL+Qt::Key_B,      // NOTE: Photoshop 7 use CTRL+B.
-                      this, SLOT(slotRGB()),
-                      actionCollection(), "implugcore_rgb");
+    m_RGBAction  = new KAction(KIcon("adjustrgb"), i18n("Color Balance..."), this);
+    m_RGBAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));      // NOTE: Photoshop 7 use CTRL+B.
+    actionCollection()->addAction("implugcore_rgb", m_RGBAction );
+    connect(m_RGBAction, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotRGB()));
 
+/*
     m_autoCorrectionAction = new KAction(i18n("Auto-Correction..."), "autocorrection", 
                                  Qt::CTRL+Qt::SHIFT+Qt::Key_B, // NOTE: Photoshop 7 use CTRL+SHIFT+B with 'Auto-Color' option.
                                  this, SLOT(slotAutoCorrection()),
@@ -153,10 +156,10 @@ void ImagePlugin_Core::setEnabledActions(bool enable)
     m_convertTo16Bits->setEnabled(enable);
     m_invertAction->setEnabled(enable);
     m_BCGAction->setEnabled(enable);
+    m_RGBAction->setEnabled(enable);
 
 /*    m_redeyeAction->setEnabled(enable);
     m_HSLAction->setEnabled(enable);
-    m_RGBAction->setEnabled(enable);
     m_autoCorrectionAction->setEnabled(enable);
     m_BWAction->setEnabled(enable);
     m_aspectRatioCropAction->setEnabled(enable);
@@ -227,6 +230,12 @@ void ImagePlugin_Core::slotBCG()
     dlg.exec();
 }
 
+void ImagePlugin_Core::slotRGB()
+{
+    DigikamImagesPluginCore::ImageEffect_RGB dlg(parentWidget());
+    dlg.exec();
+}
+
 void ImagePlugin_Core::slotBlur()
 {
 /*    DigikamImagesPluginCore::ImageEffect_Blur dlg(parentWidget());
@@ -236,12 +245,6 @@ void ImagePlugin_Core::slotBlur()
 void ImagePlugin_Core::slotSharpen()
 {
 /*    DigikamImagesPluginCore::ImageEffect_Sharpen dlg(parentWidget());
-    dlg.exec();*/
-}
-
-void ImagePlugin_Core::slotRGB()
-{
-/*    DigikamImagesPluginCore::ImageEffect_RGB dlg(parentWidget());
     dlg.exec();*/
 }
 

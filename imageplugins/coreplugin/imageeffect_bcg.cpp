@@ -261,7 +261,7 @@ void ImageEffect_BCG::slotColorSelectedFromTarget( const Digikam::DColor &color 
 void ImageEffect_BCG::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("bcgadjust Tool Dialog");
+    KConfigGroup group        = config->group("bcgadjust Tool Dialog");
 
     m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->button(group.readEntry("Histogram Scale", 
@@ -277,7 +277,7 @@ void ImageEffect_BCG::readUserSettings()
 void ImageEffect_BCG::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("bcgadjust Tool Dialog");
+    KConfigGroup group        = config->group("bcgadjust Tool Dialog");
     group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
     group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
     group.writeEntry("BrightnessAjustment", m_bInput->value());
