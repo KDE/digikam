@@ -73,11 +73,14 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QStringList &)
                                  actionCollection(), "implugcore_redeye");
     m_redeyeAction->setWhatsThis( i18n( "This filter can be used to correct red eyes in a photo. "
                                         "Select a region including the eyes to use this option.") );
+*/
 
-    m_BCGAction = new KAction(i18n("Brightness/Contrast/Gamma..."), "contrast", 0,
-                      this, SLOT(slotBCG()),
-                      actionCollection(), "implugcore_bcg");
+    m_BCGAction  = new KAction(KIcon("contrast"), i18n("Brightness/Contrast/Gamma..."), this);
+    actionCollection()->addAction("implugcore_bcg", m_BCGAction );
+    connect(m_BCGAction, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotBCG()));
 
+/*
     m_HSLAction = new KAction(i18n("Hue/Saturation/Lightness..."), "adjusthsl", 
                       Qt::CTRL+Qt::Key_U,      // NOTE: Photoshop 7 use CTRL+U.
                       this, SLOT(slotHSL()),
@@ -97,20 +100,16 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QStringList &)
     m_invertAction  = new KAction(KIcon("invertimage"), i18n("Invert"), this);
     m_invertAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_I));      // NOTE: Photoshop 7 use CTRL+I.
     actionCollection()->addAction("implugcore_invert", m_invertAction );
-
     connect(m_invertAction, SIGNAL(triggered(bool) ), 
             this, SLOT(slotInvert()));
 
-
     m_convertTo8Bits  = new KAction(KIcon("depth16to8"), i18n("8 bits"), this);
     actionCollection()->addAction("implugcore_convertto8bits", m_convertTo8Bits );
-
     connect(m_convertTo8Bits, SIGNAL(triggered(bool) ), 
             this, SLOT(slotConvertTo8Bits()));
     
     m_convertTo16Bits  = new KAction(KIcon("depth8to16"), i18n("16 bits"), this);
     actionCollection()->addAction("implugcore_convertto16bits", m_convertTo16Bits );
-
     connect(m_convertTo16Bits, SIGNAL(triggered(bool) ), 
             this, SLOT(slotConvertTo16Bits()));
     
@@ -153,9 +152,9 @@ void ImagePlugin_Core::setEnabledActions(bool enable)
     m_convertTo8Bits->setEnabled(enable);
     m_convertTo16Bits->setEnabled(enable);
     m_invertAction->setEnabled(enable);
+    m_BCGAction->setEnabled(enable);
 
 /*    m_redeyeAction->setEnabled(enable);
-    m_BCGAction->setEnabled(enable);
     m_HSLAction->setEnabled(enable);
     m_RGBAction->setEnabled(enable);
     m_autoCorrectionAction->setEnabled(enable);
@@ -224,8 +223,8 @@ void ImagePlugin_Core::slotConvertTo16Bits()
 
 void ImagePlugin_Core::slotBCG()
 {
-/*    DigikamImagesPluginCore::ImageEffect_BCG dlg(parentWidget());
-    dlg.exec();*/
+    DigikamImagesPluginCore::ImageEffect_BCG dlg(parentWidget());
+    dlg.exec();
 }
 
 void ImagePlugin_Core::slotBlur()

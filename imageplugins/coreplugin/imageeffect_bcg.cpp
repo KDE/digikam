@@ -25,24 +25,16 @@
 
 // Qt includes.
  
-#include <qcolor.h>
-#include <q3groupbox.h>
-#include <q3hgroupbox.h>
-#include <q3vgroupbox.h>
-#include <Q3HButtonGroup> 
-#include <qlabel.h>
-
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-
-#include <qtooltip.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
+#include <QColor>
+#include <QGroupBox>
+#include <QButtonGroup> 
+#include <QLabel>
+#include <QFrame>
+#include <QPushButton>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QPixmap>
 
 // KDE includes.
@@ -80,7 +72,7 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     m_destinationPreviewData = 0L;
     setHelp("bcgadjusttool.anchor", "digikam");
 
-    m_previewWidget = new Digikam::ImageWidget("bcgadjust Tool Dialog", plainPage(),
+    m_previewWidget = new Digikam::ImageWidget("bcgadjust Tool Dialog", mainWidget(),
                                                i18n("<p>Here you can see the image "
                                                "brightness-contrast-gamma adjustments preview. "
                                                "You can pick color on image "
@@ -89,55 +81,56 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
 
     // -------------------------------------------------------------
                 
-    QWidget *gboxSettings     = new QWidget(plainPage());
-    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 9, 4, spacingHint());
+    QWidget *gboxSettings     = new QWidget(mainWidget());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings );
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gboxSettings );
-    m_channelCB->insertItem( i18n("Luminosity") );
-    m_channelCB->insertItem( i18n("Red") );
-    m_channelCB->insertItem( i18n("Green") );
-    m_channelCB->insertItem( i18n("Blue") );
+    m_channelCB = new QComboBox( gboxSettings );
+    m_channelCB->addItem( i18n("Luminosity") );
+    m_channelCB->addItem( i18n("Red") );
+    m_channelCB->addItem( i18n("Green") );
+    m_channelCB->addItem( i18n("Blue") );
     m_channelCB->setWhatsThis( i18n("<p>Select here the histogram channel to display:<p>"
-                                       "<b>Luminosity</b>: display the image's luminosity values.<p>"
-                                       "<b>Red</b>: display the red image-channel values.<p>"
-                                       "<b>Green</b>: display the green image-channel values.<p>"
-                                       "<b>Blue</b>: display the blue image-channel values.<p>"));
+                                    "<b>Luminosity</b>: display the image's luminosity values.<p>"
+                                    "<b>Red</b>: display the red image-channel values.<p>"
+                                    "<b>Green</b>: display the green image-channel values.<p>"
+                                    "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    m_scaleBG = new Q3HButtonGroup(gboxSettings);
-    m_scaleBG->setExclusive(true);
-    m_scaleBG->setFrameShape(QFrame::NoFrame);
-    m_scaleBG->setInsideMargin( 0 );
-    m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
-                                     "If the image's maximal counts are small, you can use the linear scale.<p>"
-                                     "Logarithmic scale can be used when the maximal counts are big; "
-                                     "if it is used, all values (small and large) will be visible on the graph."));
+    QWidget *scaleBox = new QWidget(gboxSettings);
+    QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
+    m_scaleBG         = new QButtonGroup(scaleBox);
+    scaleBox->setWhatsThis(i18n("<p>Select here the histogram scale.<p>"
+                                "If the image's maximal counts are small, you can use the linear scale.<p>"
+                                "Logarithmic scale can be used when the maximal counts are big; "
+                                "if it is used, all values (small and large) will be visible on the graph."));
     
-    QPushButton *linHistoButton = new QPushButton( m_scaleBG );
+    QPushButton *linHistoButton = new QPushButton( scaleBox );
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
-    m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
-    KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
-    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
-    linHistoButton->setToggleButton(true);
+    linHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-lin.png")));
+    linHistoButton->setCheckable(true);
+    m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
     
-    QPushButton *logHistoButton = new QPushButton( m_scaleBG );
+    QPushButton *logHistoButton = new QPushButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
-    m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
-    KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
-    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
-    logHistoButton->setToggleButton(true);       
+    logHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-log.png")));
+    logHistoButton->setCheckable(true);
+    m_scaleBG->addButton(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    
+    hlay->setMargin(0);
+    hlay->setSpacing(0);
+    hlay->addWidget(linHistoButton);
+    hlay->addWidget(logHistoButton);
 
-    Q3HBoxLayout* l1 = new Q3HBoxLayout();
+    m_scaleBG->setExclusive(true);
+    logHistoButton->setChecked(true);
+
+    QHBoxLayout* l1 = new QHBoxLayout();
     l1->addWidget(label1);
     l1->addWidget(m_channelCB);
     l1->addStretch(10);
-    l1->addWidget(m_scaleBG);
+    l1->addWidget(scaleBox);
     
-    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
-
     // -------------------------------------------------------------
 
     KVBox *histoBox   = new KVBox(gboxSettings);
@@ -150,8 +143,6 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     
-    gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
-
     // -------------------------------------------------------------
 
     QLabel *label2 = new QLabel(i18n("Brightness:"), gboxSettings);
@@ -159,16 +150,12 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     m_bInput->setRange(-100, 100, 1, true);
     m_bInput->setValue(0);
     m_bInput->setWhatsThis( i18n("<p>Set here the brightness adjustment of the image."));
-    gridSettings->addMultiCellWidget(label2, 3, 3, 0, 4);
-    gridSettings->addMultiCellWidget(m_bInput, 4, 4, 0, 4);
 
     QLabel *label3 = new QLabel(i18n("Contrast:"), gboxSettings);
     m_cInput       = new KIntNumInput(gboxSettings);
     m_cInput->setRange(-100, 100, 1, true);
     m_cInput->setValue(0);
     m_cInput->setWhatsThis( i18n("<p>Set here the contrast adjustment of the image."));
-    gridSettings->addMultiCellWidget(label3, 5, 5, 0, 4);
-    gridSettings->addMultiCellWidget(m_cInput, 6, 6, 0, 4);
 
     QLabel *label4 = new QLabel(i18n("Gamma:"), gboxSettings);
     m_gInput = new KDoubleNumInput(gboxSettings);
@@ -176,10 +163,21 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     m_gInput->setRange(0.1, 3.0, 0.01, true);
     m_gInput->setValue(1.0);
     m_gInput->setWhatsThis( i18n("<p>Set here the gamma adjustment of the image."));
+
+    // -------------------------------------------------------------
+
+    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
+    gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
+    gridSettings->addMultiCellWidget(label2, 3, 3, 0, 4);
+    gridSettings->addMultiCellWidget(m_bInput, 4, 4, 0, 4);
+    gridSettings->addMultiCellWidget(label3, 5, 5, 0, 4);
+    gridSettings->addMultiCellWidget(m_cInput, 6, 6, 0, 4);
     gridSettings->addMultiCellWidget(label4, 7, 7, 0, 4);
     gridSettings->addMultiCellWidget(m_gInput, 8, 8, 0, 4);
-
     gridSettings->setRowStretch(9, 10);    
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(spacingHint());
+
     setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------
@@ -187,7 +185,7 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
 
-    connect(m_scaleBG, SIGNAL(released(int)),
+    connect(m_scaleBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotScaleChanged(int)));
 
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
@@ -246,13 +244,13 @@ void ImageEffect_BCG::slotChannelChanged(int channel)
             break;
     }
 
-    m_histogramWidget->repaint(false);
+    m_histogramWidget->repaint();
 }
 
 void ImageEffect_BCG::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
-    m_histogramWidget->repaint(false);
+    m_histogramWidget->repaint();
 }
 
 void ImageEffect_BCG::slotColorSelectedFromTarget( const Digikam::DColor &color )
@@ -264,21 +262,24 @@ void ImageEffect_BCG::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("bcgadjust Tool Dialog");
-    m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(group.readEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+
+    m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->button(group.readEntry("Histogram Scale", 
+                      (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
+
     m_bInput->setValue(group.readEntry("BrightnessAjustment", 0));
     m_cInput->setValue(group.readEntry("ContrastAjustment", 0));
     m_gInput->setValue(group.readEntry("GammaAjustment", 1.0));
-    slotChannelChanged(m_channelCB->currentItem());
-    slotScaleChanged(m_scaleBG->selectedId());
+    slotChannelChanged(m_channelCB->currentIndex());
+    slotScaleChanged(m_scaleBG->checkedId());
 }
 
 void ImageEffect_BCG::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("bcgadjust Tool Dialog");
-    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
-    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
+    group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
     group.writeEntry("BrightnessAjustment", m_bInput->value());
     group.writeEntry("ContrastAjustment", m_cInput->value());
     group.writeEntry("GammaAjustment", m_gInput->value());
@@ -353,4 +354,3 @@ void ImageEffect_BCG::finalRendering()
 }
 
 }  // NameSpace DigikamImagesPluginCore
-
