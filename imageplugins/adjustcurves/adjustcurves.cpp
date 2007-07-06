@@ -205,12 +205,12 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, curveBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
-    gl->addMultiCellWidget(m_histogramWidget, 0, 0, 2, 2);
-    gl->addMultiCellWidget(m_vGradient, 2, 2, 0, 0);
-    gl->addMultiCellWidget(spacev, 2, 2, 1, 1);
-    gl->addMultiCellWidget(m_curvesWidget, 2, 2, 2, 2);
-    gl->addMultiCellWidget(spaceh, 3, 3, 2, 2);
-    gl->addMultiCellWidget(m_hGradient, 4, 4, 2, 2);
+    gl->addWidget(m_histogramWidget, 0, 2, 1, 1);
+    gl->addWidget(m_vGradient, 2, 0, 1, 1);
+    gl->addWidget(spacev, 2, 1, 1, 1);
+    gl->addWidget(m_curvesWidget, 2, 2, 1, 1);
+    gl->addWidget(spaceh, 3, 2, 1, 1);
+    gl->addWidget(m_hGradient, 4, 2, 1, 1);
     gl->setRowMinimumHeight(1, spacingHint());
     gl->setMargin(0);
     gl->setSpacing(0);
@@ -305,11 +305,11 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
             
     grid->setMargin(spacingHint());
     grid->setSpacing(spacingHint());
-    grid->addMultiCellWidget(label1, 0, 0, 1, 1);
-    grid->addMultiCellWidget(m_channelCB, 0, 0, 2, 2);
-    grid->addMultiCellLayout(l1, 0, 0, 4, 5);
-    grid->addMultiCellWidget(curveBox, 1, 3, 0, 5);
-    grid->addMultiCellLayout(l3, 4, 4, 1, 5);
+    grid->addWidget(label1, 0, 1, 1, 1);
+    grid->addWidget(m_channelCB, 0, 2, 1, 1);
+    grid->addLayout(l1, 0, 4, 1, 5- 4+1);
+    grid->addWidget(curveBox, 1, 0, 3, 5+1);
+    grid->addLayout(l3, 4, 1, 1, 5);
     grid->setRowStretch(5, 10);
 
     setUserAreaWidget(gboxSettings);
