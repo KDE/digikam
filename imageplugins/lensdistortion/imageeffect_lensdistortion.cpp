@@ -141,15 +141,15 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addMultiCellWidget(m_maskPreviewLabel, 0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(label1, 1, 1, 0, 1);
-    gridSettings->addMultiCellWidget(m_mainInput, 2, 2, 0, 1);
-    gridSettings->addMultiCellWidget(label2, 3, 3, 0, 1);
-    gridSettings->addMultiCellWidget(m_edgeInput, 4, 4, 0, 1);
-    gridSettings->addMultiCellWidget(label3, 5, 5, 0, 1);
-    gridSettings->addMultiCellWidget(m_rescaleInput, 6, 6, 0, 1);
-    gridSettings->addMultiCellWidget(label4, 7, 7, 0, 1);
-    gridSettings->addMultiCellWidget(m_brightenInput, 8, 8, 0, 1);
+    gridSettings->addWidget(m_maskPreviewLabel, 0, 0, 1, 2 );
+    gridSettings->addWidget(label1, 1, 0, 1, 2 );
+    gridSettings->addWidget(m_mainInput, 2, 0, 1, 2 );
+    gridSettings->addWidget(label2, 3, 0, 1, 2 );
+    gridSettings->addWidget(m_edgeInput, 4, 0, 1, 2 );
+    gridSettings->addWidget(label3, 5, 0, 1, 2 );
+    gridSettings->addWidget(m_rescaleInput, 6, 0, 1, 2 );
+    gridSettings->addWidget(label4, 7, 0, 1, 2 );
+    gridSettings->addWidget(m_brightenInput, 8, 0, 1, 2 );
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
 
