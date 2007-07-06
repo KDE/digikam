@@ -209,20 +209,20 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
-    gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
-    gridSettings->addMultiCellWidget(labelCyan, 3, 3, 0, 0);
-    gridSettings->addMultiCellWidget(m_rSlider, 3, 3, 1, 1);
-    gridSettings->addMultiCellWidget(labelRed, 3, 3, 2, 2);
-    gridSettings->addMultiCellWidget(m_rInput, 3, 3, 3, 3);
-    gridSettings->addMultiCellWidget(labelMagenta, 4, 4, 0, 0);
-    gridSettings->addMultiCellWidget(m_gSlider, 4, 4, 1, 1);
-    gridSettings->addMultiCellWidget(labelGreen, 4, 4, 2, 2);
-    gridSettings->addMultiCellWidget(m_gInput, 4, 4, 3, 3);
-    gridSettings->addMultiCellWidget(labelYellow, 5, 5, 0, 0);
-    gridSettings->addMultiCellWidget(m_bSlider, 5, 5, 1, 1);
-    gridSettings->addMultiCellWidget(labelBlue, 5, 5, 2, 2);
-    gridSettings->addMultiCellWidget(m_bInput, 5, 5, 3, 3);
+    gridSettings->addLayout(l1, 0, 0, 1, 5 );
+    gridSettings->addWidget(histoBox, 1, 0, 2, 5 );
+    gridSettings->addWidget(labelCyan, 3, 0, 1, 1);
+    gridSettings->addWidget(m_rSlider, 3, 1, 1, 1);
+    gridSettings->addWidget(labelRed, 3, 2, 1, 1);
+    gridSettings->addWidget(m_rInput, 3, 3, 1, 1);
+    gridSettings->addWidget(labelMagenta, 4, 0, 1, 1);
+    gridSettings->addWidget(m_gSlider, 4, 1, 1, 1);
+    gridSettings->addWidget(labelGreen, 4, 2, 1, 1);
+    gridSettings->addWidget(m_gInput, 4, 3, 1, 1);
+    gridSettings->addWidget(labelYellow, 5, 0, 1, 1);
+    gridSettings->addWidget(m_bSlider, 5, 1, 1, 1);
+    gridSettings->addWidget(labelBlue, 5, 2, 1, 1);
+    gridSettings->addWidget(m_bInput, 5, 3, 1, 1);
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
     gridSettings->setRowStretch(6, 10);
