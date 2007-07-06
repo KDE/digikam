@@ -99,8 +99,6 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
 
     QWidget *gboxSettings     = new QWidget(mainWidget());
     QGridLayout* gridSettings = new QGridLayout(gboxSettings);
-    gridSettings->setMargin(spacingHint());
-    gridSettings->setSpacing(0);
 
     QLabel *label1  = new QLabel(i18n("New width:"), gboxSettings);
     m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), gboxSettings);
@@ -110,50 +108,52 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"), gboxSettings);
     m_newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
-    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 2);
-
     KSeparator *line = new KSeparator(Qt::Horizontal, gboxSettings);
-    gridSettings->addMultiCellWidget(line, 2, 2, 0, 2);
 
     QLabel *label3 = new QLabel(i18n("Main angle:"), gboxSettings);
-    m_angleInput = new KIntNumInput(gboxSettings);
+    m_angleInput   = new KIntNumInput(gboxSettings);
     m_angleInput->setRange(-180, 180, 1, true);
     m_angleInput->setValue(0);
     m_angleInput->setWhatsThis( i18n("<p>An angle in degrees by which to rotate the image. "
                                      "A positive angle rotates the image clockwise; "
                                      "a negative angle rotates it counter-clockwise."));
 
-    gridSettings->addMultiCellWidget(label3, 3, 3, 0, 2);
-    gridSettings->addMultiCellWidget(m_angleInput, 4, 4, 0, 2);
-
-    QLabel *label4 = new QLabel(i18n("Fine angle:"), gboxSettings);
+    QLabel *label4   = new QLabel(i18n("Fine angle:"), gboxSettings);
     m_fineAngleInput = new KDoubleNumInput(gboxSettings);
     m_fineAngleInput->setRange(-5.0, 5.0, 0.01, true);
     m_fineAngleInput->setValue(0);
     m_fineAngleInput->setWhatsThis( i18n("<p>This value in degrees will be added to main angle value "
                                          "to set fine target angle."));
 
-    gridSettings->addMultiCellWidget(label4, 5, 5, 0, 2);
-    gridSettings->addMultiCellWidget(m_fineAngleInput, 6, 6, 0, 2);
-
     m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), gboxSettings);
     m_antialiasInput->setWhatsThis( i18n("<p>Enable this option to process anti-aliasing filter "
                                          "to the rotated image. "
                                          "In order to smooth the target image, it will be blurred a little."));
-    gridSettings->addMultiCellWidget(m_antialiasInput, 7, 7, 0, 2);
 
     QLabel *label5 = new QLabel(i18n("Auto-crop:"), gboxSettings);
-    m_autoCropCB = new QComboBox(false, gboxSettings);
+    m_autoCropCB   = new QComboBox(false, gboxSettings);
     m_autoCropCB->insertItem( i18n("None") );
     m_autoCropCB->insertItem( i18n("Widest Area") );
     m_autoCropCB->insertItem( i18n("Largest Area") );
     m_autoCropCB->setWhatsThis( i18n("<p>Select here the method to process image auto-cropping "
                                      "to remove black frames around a rotated image."));
-    gridSettings->addMultiCellWidget(label5, 8, 8, 0, 0);
-    gridSettings->addMultiCellWidget(m_autoCropCB, 8, 8, 1, 2);
+
+    // -------------------------------------------------------------
+
+    gridSettings->addWidget(label1, 0, 0, 1, 1);
+    gridSettings->addWidget(m_newWidthLabel, 0, 1, 1, 2);
+    gridSettings->addWidget(label2, 1, 0, 1, 1);
+    gridSettings->addWidget(m_newHeightLabel, 1, 1, 1, 2);
+    gridSettings->addWidget(line, 2, 0, 1, 3 );
+    gridSettings->addWidget(label3, 3, 0, 1, 3 );
+    gridSettings->addWidget(m_angleInput, 4, 0, 1, 3 );
+    gridSettings->addWidget(label4, 5, 0, 1, 3 );
+    gridSettings->addWidget(m_fineAngleInput, 6, 0, 1, 3 );
+    gridSettings->addWidget(m_antialiasInput, 7, 0, 1, 3 );
+    gridSettings->addWidget(label5, 8, 0, 1, 1);
+    gridSettings->addWidget(m_autoCropCB, 8, 1, 1, 2);
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(0);
 
     setUserAreaWidget(gboxSettings);
 
