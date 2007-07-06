@@ -103,10 +103,10 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
 
     gridSettings->setMargin(0);
     gridSettings->setSpacing(spacingHint());
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(m_brushSizeInput, 1, 1, 0, 1);
-    gridSettings->addMultiCellWidget(label2, 2, 2, 0, 1);
-    gridSettings->addMultiCellWidget(m_smoothInput, 3, 3, 0, 1);
+    gridSettings->addWidget(label1, 0, 0, 1, 2 );
+    gridSettings->addWidget(m_brushSizeInput, 1, 0, 1, 2 );
+    gridSettings->addWidget(label2, 2, 0, 1, 2 );
+    gridSettings->addWidget(m_smoothInput, 3, 0, 1, 2 );
 
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
 
