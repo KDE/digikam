@@ -125,10 +125,10 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
 
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(m_sensibilitySlider, 1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(m_sensibilityLCDValue, 1, 1, 1, 1);
-    gridSettings->addMultiCellWidget(m_addFilmGrain, 2, 2, 0, 1);
+    gridSettings->addWidget(label1, 0, 0, 1, 2 );
+    gridSettings->addWidget(m_sensibilitySlider, 1, 0, 1, 1);
+    gridSettings->addWidget(m_sensibilityLCDValue, 1, 1, 1, 1);
+    gridSettings->addWidget(m_addFilmGrain, 2, 0, 1, 2 );
 
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
 
