@@ -120,10 +120,10 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
 
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_textureType, 0, 0, 1, 1);
-    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 1);
-    gridSettings->addMultiCellWidget(m_blendGain, 2, 2, 0, 1);
+    gridSettings->addWidget(label1, 0, 0, 1, 1);
+    gridSettings->addWidget(m_textureType, 0, 1, 1, 1);
+    gridSettings->addWidget(label2, 1, 0, 1, 2 );
+    gridSettings->addWidget(m_blendGain, 2, 0, 1, 2 );
     
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
     
