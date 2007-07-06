@@ -23,11 +23,8 @@
 
 // Qt includes.
 
-#include <qlayout.h>
-#include <qlabel.h>
-
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -57,27 +54,30 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
                 : Digikam::CtrlPanelDlg(parent, i18n("Apply Gaussian Blur on Photograph"), 
                                         "gaussianblur")
 {
-    setHelp("blursharpentool.anchor", KApplication::kApplication()->aboutData()->appName());
+    setHelp("blursharpentool.anchor", "digikam");
     
-    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 1, 1, 0, spacingHint());
+    QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings );
+
     QLabel *label = new QLabel(i18n("Smoothness:"), gboxSettings);
     
     m_radiusInput = new KIntNumInput(gboxSettings);
     m_radiusInput->setRange(0, 100, 1, true);
     m_radiusInput->setValue(0);
     m_radiusInput->setWhatsThis( i18n("<p>A smoothness of 0 has no effect, "
-                                         "1 and above determine the Gaussian blur matrix radius "
-                                         "that determines how much to blur the image."));
+                                      "1 and above determine the Gaussian blur matrix radius "
+                                      "that determines how much to blur the image."));
 
-    gridSettings->addMultiCellWidget(label, 0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(m_radiusInput, 1, 1, 0, 1);
-    
+    gridSettings->addWidget(label, 0, 0, 1, 2 );
+    gridSettings->addWidget(m_radiusInput, 1, 0, 1, 2 );
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(spacingHint());
+
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
         
     // -------------------------------------------------------------
     
-    connect(m_radiusInput, SIGNAL(valueChanged (int)),
+    connect(m_radiusInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 }
 
@@ -152,4 +152,3 @@ void ImageEffect_Blur::renderingFinished(void)
 }
 
 }  // NameSpace DigikamImagesPluginCore
-

@@ -60,10 +60,12 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QStringList &)
     //-------------------------------
     // Fix and Colors menu actions
 
-/*    m_blurAction = new KAction(i18n("Blur..."), "blurimage", 0,
-                       this, SLOT(slotBlur()),
-                       actionCollection(), "implugcore_blur");
+    m_blurAction  = new KAction(KIcon("blurimage"), i18n("Blur..."), this);
+    actionCollection()->addAction("implugcore_blur", m_blurAction );
+    connect(m_blurAction, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotBlur()));
 
+/*
     m_sharpenAction = new KAction(i18n("Sharpen..."), "sharpenimage", 0,
                           this, SLOT(slotSharpen()),
                           actionCollection(), "implugcore_sharpen");
@@ -157,6 +159,7 @@ void ImagePlugin_Core::setEnabledActions(bool enable)
     m_invertAction->setEnabled(enable);
     m_BCGAction->setEnabled(enable);
     m_RGBAction->setEnabled(enable);
+    m_blurAction->setEnabled(enable);
 
 /*    m_redeyeAction->setEnabled(enable);
     m_HSLAction->setEnabled(enable);
@@ -164,7 +167,6 @@ void ImagePlugin_Core::setEnabledActions(bool enable)
     m_BWAction->setEnabled(enable);
     m_aspectRatioCropAction->setEnabled(enable);
     m_sharpenAction->setEnabled(enable);
-    m_blurAction->setEnabled(enable);
     m_colorManagementAction->setEnabled(enable);*/
 }
 
@@ -238,8 +240,8 @@ void ImagePlugin_Core::slotRGB()
 
 void ImagePlugin_Core::slotBlur()
 {
-/*    DigikamImagesPluginCore::ImageEffect_Blur dlg(parentWidget());
-    dlg.exec();*/
+    DigikamImagesPluginCore::ImageEffect_Blur dlg(parentWidget());
+    dlg.exec();
 }
 
 void ImagePlugin_Core::slotSharpen()
