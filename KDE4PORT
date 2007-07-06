@@ -142,7 +142,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
 
  6      |-imageplugins                                                                               All image editor plugins can be ported after digiKam core
         |---adjustcurves                        Laurent                         DONE       DONE
-        |---adjustlevels                        Laurent                         DONE       DONE      KGradientSelector widget is not properly displayed (kdelib4 bug?)
+        |---adjustlevels                        Laurent                         DONE       DONE      
         |---antivignetting                      Laurent                         DONE                 Do not work yet.
         |---blurfx                              Laurent                         DONE       DONE
         |---border                              Laurent                         DONE       DONE
