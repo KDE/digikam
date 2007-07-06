@@ -157,14 +157,10 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
 
     QWidget *gboxSettings     = new QWidget(mainWidget());
     QGridLayout* gridSettings = new QGridLayout(gboxSettings);
-    gridSettings->setMargin(spacingHint());
-    gridSettings->setSpacing(0);
-    m_mainTab = new QTabWidget( gboxSettings );
+    m_mainTab                 = new QTabWidget( gboxSettings );
 
     QWidget* firstPage = new QWidget( m_mainTab );
     QGridLayout* grid  = new QGridLayout(firstPage);
-    grid->setMargin(spacingHint());
-    grid->setSpacing(0);
     m_mainTab->addTab( firstPage, i18n("Preset") );
 
     KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
@@ -173,7 +169,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
     cimgLogoLabel->setToolTip( i18n("Visit CImg library website"));
 
-    QLabel *typeLabel = new QLabel(i18n("Filtering type:"), firstPage);
+    QLabel *typeLabel  = new QLabel(i18n("Filtering type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
     m_inpaintingTypeCB = new QComboBox( firstPage );
     m_inpaintingTypeCB->addItem( i18n("None") );
@@ -186,17 +182,22 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
                                            "<b>Remove Medium Artefact</b>: inpaint medium image artefact.<p>"
                                            "<b>Remove Large Artefact</b>: inpaint image artefact like unwanted object.<p>"));
 
-    grid->addMultiCellWidget(cimgLogoLabel, 0, 0, 1, 1);
-    grid->addMultiCellWidget(typeLabel, 1, 1, 0, 0);
-    grid->addMultiCellWidget(m_inpaintingTypeCB, 1, 1, 1, 1);
+    grid->addWidget(cimgLogoLabel, 0, 1, 1, 1);
+    grid->addWidget(typeLabel, 1, 0, 1, 1);
+    grid->addWidget(m_inpaintingTypeCB, 1, 1, 1, 1);
     grid->setRowStretch(1, 10);
+    grid->setMargin(spacingHint());
+    grid->setSpacing(0);
 
     // -------------------------------------------------------------
 
     m_settingsWidget = new Digikam::GreycstorationWidget(m_mainTab);
 
-    gridSettings->addMultiCellWidget(m_mainTab, 0, 0, 1, 1);
-    gridSettings->addMultiCellWidget(new QLabel(gboxSettings), 1, 1, 1, 1);
+    gridSettings->addWidget(m_mainTab, 0, 1, 1, 1);
+    gridSettings->addWidget(new QLabel(gboxSettings), 1, 1, 1, 1);
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(0);
+
     setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
