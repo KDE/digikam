@@ -150,10 +150,10 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---channelmixer                        Laurent                         DONE       DONE
         |---charcoal                            Laurent                         DONE       DONE
         |---colorfx                             Laurent                         DONE       DONE
-        |---coreplugin
-        |-----hsl
-        |-----ratiocrop
-        |-----sharpnesseditor
+        |---coreplugin                          Gilles
+        |-----hsl                               Gilles
+        |-----ratiocrop                         Gilles
+        |-----sharpnesseditor                   Gilles
         |-------clapack                         Gilles                          DONE        - 
         |---distortionfx                        Laurent                         DONE       DONE
         |---emboss                              Laurent                         DONE       DONE
