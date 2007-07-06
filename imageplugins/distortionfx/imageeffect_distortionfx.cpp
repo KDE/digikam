@@ -153,12 +153,12 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    gridSettings->addMultiCellWidget(m_effectTypeLabel, 0, 0, 0, 2);
-    gridSettings->addMultiCellWidget(m_effectType, 1, 1, 0, 2);
-    gridSettings->addMultiCellWidget(m_levelLabel, 2, 2, 0, 2);
-    gridSettings->addMultiCellWidget(m_levelInput, 3, 3, 0, 2);
-    gridSettings->addMultiCellWidget(m_iterationLabel, 4, 4, 0, 2);
-    gridSettings->addMultiCellWidget(m_iterationInput, 5, 5, 0, 2);
+    gridSettings->addWidget(m_effectTypeLabel, 0, 0, 1, 3 );
+    gridSettings->addWidget(m_effectType, 1, 0, 1, 3 );
+    gridSettings->addWidget(m_levelLabel, 2, 0, 1, 3 );
+    gridSettings->addWidget(m_levelInput, 3, 0, 1, 3 );
+    gridSettings->addWidget(m_iterationLabel, 4, 0, 1, 3 );
+    gridSettings->addWidget(m_iterationInput, 5, 0, 1, 3 );
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
     
