@@ -97,10 +97,10 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(m_pencilInput, 1, 1, 0, 1);
-    gridSettings->addMultiCellWidget(label2, 2, 2, 0, 1);
-    gridSettings->addMultiCellWidget(m_smoothInput, 3, 3, 0, 1);
+    gridSettings->addWidget(label1, 0, 0, 1, 2 );
+    gridSettings->addWidget(m_pencilInput, 1, 0, 1, 2 );
+    gridSettings->addWidget(label2, 2, 0, 1, 2 );
+    gridSettings->addWidget(m_smoothInput, 3, 0, 1, 2 );
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
 
