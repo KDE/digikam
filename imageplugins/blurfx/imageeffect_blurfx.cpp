@@ -136,12 +136,12 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    gridSettings->addMultiCellWidget(m_effectTypeLabel, 0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(m_effectType, 1, 1, 0, 1);
-    gridSettings->addMultiCellWidget(m_distanceLabel, 2, 2, 0, 1);
-    gridSettings->addMultiCellWidget(m_distanceInput, 3, 3, 0, 1);
-    gridSettings->addMultiCellWidget(m_levelLabel, 4, 4, 0, 1);
-    gridSettings->addMultiCellWidget(m_levelInput, 5, 5, 0, 1);
+    gridSettings->addWidget(m_effectTypeLabel, 0, 0, 1, 2 );
+    gridSettings->addWidget(m_effectType, 1, 0, 1, 2 );
+    gridSettings->addWidget(m_distanceLabel, 2, 0, 1, 2 );
+    gridSettings->addWidget(m_distanceInput, 3, 0, 1, 2 );
+    gridSettings->addWidget(m_levelLabel, 4, 0, 1, 2 );
+    gridSettings->addWidget(m_levelInput, 5, 0, 1, 2 );
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
 
