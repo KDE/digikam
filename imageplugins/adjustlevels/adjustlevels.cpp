@@ -194,8 +194,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMinInput = new KGradientSelector( Qt::Horizontal, gboxSettings );
     m_hGradientMinInput->setIndent(false);
     m_hGradientMinInput->setFixedHeight( 16 );
-    m_hGradientMinInput->setMinValue(0);
-    m_hGradientMinInput->setMaxValue(m_histoSegments);
+    m_hGradientMinInput->setMinimum(0);
+    m_hGradientMinInput->setMaximum(m_histoSegments);
     m_hGradientMinInput->setWhatsThis( i18n("<p>Select here the minimal intensity "
                                             "input value of the histogram."));
     m_hGradientMinInput->setToolTip( i18n( "Minimal intensity input." ) );
@@ -342,26 +342,26 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    grid->addMultiCellLayout(l1, 0, 0, 0, 6);
+    grid->addLayout(l1, 0, 0, 1, 6+1);
     grid->setRowMinimumHeight(1, spacingHint());
-    grid->addMultiCellWidget(m_histogramWidget, 2, 2, 1, 5);
+    grid->addWidget(m_histogramWidget, 2, 1, 1, 5);
     grid->setRowMinimumHeight(3, spacingHint());
-    grid->addMultiCellWidget(m_levelsHistogramWidget, 4, 4, 1, 5);
-    grid->addMultiCellWidget(m_hGradientMinInput, 5, 5, 0, 6);
-    grid->addMultiCellWidget(m_minInput, 5, 5, 8, 8);
+    grid->addWidget(m_levelsHistogramWidget, 4, 1, 1, 5);
+    grid->addWidget(m_hGradientMinInput, 5, 0, 1, 6+1);
+    grid->addWidget(m_minInput, 5, 8, 1, 1);
     grid->setRowMinimumHeight(6, spacingHint());
-    grid->addMultiCellWidget(m_hGradientMaxInput, 7, 7, 0, 6);
-    grid->addMultiCellWidget(m_maxInput, 7, 7, 8, 8);
+    grid->addWidget(m_hGradientMaxInput, 7, 0, 1, 6+1);
+    grid->addWidget(m_maxInput, 7, 8, 1, 1);
     grid->setRowMinimumHeight(8, spacingHint());
-    grid->addMultiCellWidget(m_gammaInput, 9, 9, 0, 8);
+    grid->addWidget(m_gammaInput, 9, 0, 1, 8+1);
     grid->setRowMinimumHeight(10, spacingHint());
-    grid->addMultiCellWidget(m_hGradientMinOutput, 11, 11, 0, 6);
-    grid->addMultiCellWidget(m_minOutput, 11, 11, 8, 8);
+    grid->addWidget(m_hGradientMinOutput, 11, 0, 1, 6+1);
+    grid->addWidget(m_minOutput, 11, 8, 1, 1);
     grid->setRowMinimumHeight(12, spacingHint());
-    grid->addMultiCellWidget(m_hGradientMaxOutput, 13, 13, 0, 6);
-    grid->addMultiCellWidget(m_maxOutput, 13, 13, 8, 8);
+    grid->addWidget(m_hGradientMaxOutput, 13, 0, 1, 6+1);
+    grid->addWidget(m_maxOutput, 13, 8, 1, 1);
     grid->setRowMinimumHeight(14, spacingHint());
-    grid->addMultiCellLayout(l3, 15, 15, 0, 8);
+    grid->addLayout(l3, 15, 0, 1, 8+1);
     grid->setRowStretch(16, 10);
     grid->setColumnStretch(2, 10);
     grid->setColumnMinimumWidth(0, 5);
