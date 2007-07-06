@@ -154,19 +154,19 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
 
     // -------------------------------------------------------------------
 
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 2);
-    gridSettings->addMultiCellWidget(m_borderType, 1, 1, 0, 2);
-    gridSettings->addMultiCellWidget(line1, 2, 2, 0, 2);
-    gridSettings->addMultiCellWidget(m_preserveAspectRatio, 3, 3, 0, 2);
-    gridSettings->addMultiCellWidget(m_labelBorderPercent, 4, 4, 0, 2);
-    gridSettings->addMultiCellWidget(m_borderPercent, 5, 5, 0, 2);
-    gridSettings->addMultiCellWidget(m_labelBorderWidth, 6, 6, 0, 2);
-    gridSettings->addMultiCellWidget(m_borderWidth, 7, 7, 0, 2);
-    gridSettings->addMultiCellWidget(line2, 8, 8, 0, 2);
-    gridSettings->addMultiCellWidget(m_labelForeground, 9, 9, 0, 0);
-    gridSettings->addMultiCellWidget(m_firstColorButton, 9, 9, 1, 2);
-    gridSettings->addMultiCellWidget(m_labelBackground, 10, 10, 0, 0);
-    gridSettings->addMultiCellWidget(m_secondColorButton, 10, 10, 1, 2);    
+    gridSettings->addWidget(label1, 0, 0, 1, 3 );
+    gridSettings->addWidget(m_borderType, 1, 0, 1, 3 );
+    gridSettings->addWidget(line1, 2, 0, 1, 3 );
+    gridSettings->addWidget(m_preserveAspectRatio, 3, 0, 1, 3 );
+    gridSettings->addWidget(m_labelBorderPercent, 4, 0, 1, 3 );
+    gridSettings->addWidget(m_borderPercent, 5, 0, 1, 3 );
+    gridSettings->addWidget(m_labelBorderWidth, 6, 0, 1, 3 );
+    gridSettings->addWidget(m_borderWidth, 7, 0, 1, 3 );
+    gridSettings->addWidget(line2, 8, 0, 1, 3 );
+    gridSettings->addWidget(m_labelForeground, 9, 0, 1, 1);
+    gridSettings->addWidget(m_firstColorButton, 9, 1, 1, 2);
+    gridSettings->addWidget(m_labelBackground, 10, 0, 1, 1);
+    gridSettings->addWidget(m_secondColorButton, 10, 1, 1, 2);    
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
 
