@@ -95,8 +95,6 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     
     QWidget* firstPage = new QWidget( m_mainTab );
     QGridLayout* grid  = new QGridLayout(firstPage);
-    grid->setMargin(spacingHint());
-    grid->setSpacing(0);
     m_mainTab->addTab( firstPage, i18n("Preset") );
 
     KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
@@ -119,9 +117,11 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
                                             "<b>Reduce Texturing</b>: reduce image artifacts like paper texture or Moire patterns "
                                             "of a scanned image.<p>"));
 
-    grid->addMultiCellWidget(cimgLogoLabel, 0, 0, 1, 1);
-    grid->addMultiCellWidget(typeLabel, 1, 1, 0, 0);
-    grid->addMultiCellWidget(m_restorationTypeCB, 1, 1, 1, 1);
+    grid->setMargin(spacingHint());
+    grid->setSpacing(0);
+    grid->addWidget(cimgLogoLabel, 0, 1, 1, 1);
+    grid->addWidget(typeLabel, 1, 0, 1, 1);
+    grid->addWidget(m_restorationTypeCB, 1, 1, 1, 1);
     grid->setRowStretch(1, 10);
     
     // -------------------------------------------------------------
