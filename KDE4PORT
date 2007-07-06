@@ -17,7 +17,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
  1      |-libs                                                                                       "libs" subfloders are used by all others parts of digiKam. Must be ported in first.
         |---curves                              Gilles          X       X       DONE
         |---database                            Marcel                  X       DONE
-        |-----sqlite2                           Gilles                  X       DONE                 CMake port only is require.
+        |-----sqlite2                           Gilles                  X       DONE        -
         |---dialogs                             Gilles          X       X       DONE
         |---dimg                                Gilles          X       X       DONE
         |-----filters                           Gilles          X       X       DONE
@@ -35,11 +35,11 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             cameraitempropertiestab.cpp         Gilles                  X       DONE
             imagepropertiessidebarcamgui.cpp    Gilles                  X       DONE
             imagepropertiessidebardb.cpp        Gilles                  X       DONE
-            imagedescedittab.cpp                                        X                            Too depencies with digiKam implementation. Must be ported later
-            talbumlistview.cpp                                          X                            Too depencies with digiKam implementation. Must be ported later
+            imagedescedittab.cpp                                        X                            Too much depencies with digiKam implementation. Must be ported later
+            talbumlistview.cpp                                          X                            Too much depencies with digiKam implementation. Must be ported later
         |---jpegutils                           Gilles                  X       DONE
         |---levels                              Gilles          X       X       DONE
-        |---lprof                               Gilles          X       X       DONE                 CMake port only is require.
+        |---lprof                               Gilles          X       X       DONE        -
         |---themeengine                         Gilles                  X       DONE
         |---threadimageio                       Marcel          X       X       DONE
         |---thumbbar                            Gilles          X       X       DONE
@@ -53,7 +53,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
  2      |-utilities                                                                                  Utilities components are used as "libs" by digiKam main interface.
         |---batch                               Gilles                  X       DONE
         |---cameragui                                                   X
-        |---hotplug                             Laurent                         DONE                 CMake port only is require.
+        |---hotplug                             Laurent                         DONE        -
         |---imageeditor
         |-----canvas                            Gilles          X       X       DONE
         |-----editor
@@ -66,7 +66,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             lighttableview.cpp                  Gilles                  X       DONE
             lighttablebar.cpp                   Gilles                  X       DONE
             lighttablewindow.cpp                                        X
-        |---scripts                             Gilles                          DONE                 CMake port only is require.
+        |---scripts                             Gilles                          DONE        -
         |---setup                               Gilles          X       X       DONE
         |---slideshow                           Laurent         X       X       DONE                 
 
@@ -78,8 +78,8 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             digikamthumbnail.cpp                Gilles          X       X       DONE
 
  4      |-showfoto                              Gilles          X               DONE
-        |---icons                               Gilles                          DONE                 CMake port only is require.
-        |---pics                                Gilles                          DONE                 CMake port only is require.
+        |---icons                               Gilles                          DONE        -
+        |---pics                                Gilles                          DONE        -
         |---setup                               Gilles          X               DONE
 
  5      |-digikam                                                       X                            The most long to do certainly
@@ -143,43 +143,43 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
  6      |-imageplugins                                                                               All image editor plugins can be ported after digiKam core
         |---adjustcurves                        Laurent                         DONE       DONE
         |---adjustlevels                        Laurent                         DONE       DONE      KGradientSelector widget is not properly displayed (kdelib4 bug?)
-        |---antivignetting                      Laurent                         DONE                 Crash! 
-        |---blurfx                              Laurent                         DONE                 Final render failed
-        |---border                              Laurent                         DONE                 Final render failed
-        |-----patterns                          Laurent                         DONE        -        CMake port only is require.
+        |---antivignetting                      Laurent                         DONE                 Do not work yet.
+        |---blurfx                              Laurent                         DONE       DONE
+        |---border                              Laurent                         DONE       DONE
+        |-----patterns                          Laurent                         DONE        - 
         |---channelmixer                        Laurent                         DONE       DONE
-        |---charcoal                            Laurent                         DONE                 Final render failed
+        |---charcoal                            Laurent                         DONE       DONE
         |---colorfx                             Laurent                         DONE       DONE
         |---coreplugin
         |-----hsl
         |-----ratiocrop
         |-----sharpnesseditor
-        |-------clapack                         Gilles                          DONE        -        CMake port only is require.
-        |---distortionfx                        Laurent                         DONE                 Final render failed
-        |---emboss                              Laurent                         DONE                 Final render failed
-        |---filmgrain                           Laurent                         DONE                 Final render failed
-        |---freerotation                        Gilles                          DONE        -        Final render failed
+        |-------clapack                         Gilles                          DONE        - 
+        |---distortionfx                        Laurent                         DONE       DONE
+        |---emboss                              Laurent                         DONE       DONE
+        |---filmgrain                           Laurent                         DONE       DONE
+        |---freerotation                        Gilles                          DONE       DONE
         |---hotpixels                           Laurent                                              CMake port only
-        |---infrared                            Laurent                         DONE                 Final render failed
+        |---infrared                            Laurent                         DONE       DONE
         |---inpainting                          Gilles                          DONE                 Final Render crash    
         |---inserttext                          Laurent                                              CMake port only
         |---lensdistortion                      Laurent                         DONE                 Final render failed, lens distorsion grid preview don't work
-        |---noisereduction                      Laurent                         DONE                 Final render failed 
-        |---oilpaint                            Laurent                         DONE                 Final render failed
+        |---noisereduction                      Laurent                         DONE       DONE
+        |---oilpaint                            Laurent                         DONE       DONE
         |---perspective                         Laurent                         DONE       DONE
-        |---raindrop                            Laurent                         DONE                 Final render failed
-        |---restoration                         Gilles                          DONE                 Final Render crash    
-        |---sheartool                           Laurent                         DONE                 Final render failed
+        |---raindrop                            Laurent                         DONE       DONE
+        |---restoration                         Gilles                          DONE       DONE          
+        |---sheartool                           Laurent                         DONE       DONE
         |---superimpose                         Laurent                         DONE                 Crash with thumbbar (same tooltip problem than showfoto)
-        |---texture                             Laurent                         DONE                 Final render failed
-        |-----patterns                          Laurent                         DONE        -        CMake port only is require.
+        |---texture                             Laurent                         DONE       DONE
+        |-----patterns                          Laurent                         DONE        -        
         |---whitebalance                        Gilles                          DONE       DONE
 	
  7      |-themedesigner                                                                              The last one component. It completly independant. It will be the last one to port.
 
- 8      |-data                                  Gilles                          DONE                 CMake port only is require.
-        |---about                               Gilles                          DONE                 CMake port only is require.
-        |---icons                               Gilles                          DONE                 CMake port only is require.
-        |---pics                                Gilles                          DONE                 CMake port only is require.
-        |---profiles                            Gilles                          DONE                 CMake port only is require.
-        |---themes                              Gilles                          DONE                 CMake port only is require.
+ 8      |-data                                  Gilles                          DONE        -         
+        |---about                               Gilles                          DONE        -         
+        |---icons                               Gilles                          DONE        -         
+        |---pics                                Gilles                          DONE        -         
+        |---profiles                            Gilles                          DONE        -         
+        |---themes                              Gilles                          DONE        -         
