@@ -40,8 +40,9 @@ SET(liblapack_SRCS
    )
 
 SET(digikamimageplugin_core_PART_SRCS 
+    ${liblapack_SRCS} 
     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageplugin_core.cpp 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_bcg.cpp 
+#    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_bcg.cpp 
 #    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_rgb.cpp 
 #    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_blur.cpp 
 #    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_autocorrection.cpp 
@@ -62,7 +63,7 @@ KDE4_AUTOMOC(${digikamimageplugin_core_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_core ${digikamimageplugin_core_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(digikamimageplugin_core digikam liblapack)
+TARGET_LINK_LIBRARIES(digikamimageplugin_core digikam)
 
 INSTALL(TARGETS digikamimageplugin_core DESTINATION ${PLUGIN_INSTALL_DIR})
 

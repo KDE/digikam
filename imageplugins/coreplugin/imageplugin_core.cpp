@@ -54,14 +54,13 @@
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_core,
                             KGenericFactory<ImagePlugin_Core>("digikam"));
 
-ImagePlugin_Core::ImagePlugin_Core(QObject *parent,
-                                   const QStringList &)
+ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QStringList &)
                 : Digikam::ImagePlugin(parent, "ImagePlugin_Core")
 {
     //-------------------------------
     // Fix and Colors menu actions
 
-    m_blurAction = new KAction(i18n("Blur..."), "blurimage", 0,
+/*    m_blurAction = new KAction(i18n("Blur..."), "blurimage", 0,
                        this, SLOT(slotBlur()),
                        actionCollection(), "implugcore_blur");
 
@@ -93,20 +92,29 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent,
                                  Qt::CTRL+Qt::SHIFT+Qt::Key_B, // NOTE: Photoshop 7 use CTRL+SHIFT+B with 'Auto-Color' option.
                                  this, SLOT(slotAutoCorrection()),
                                  actionCollection(), "implugcore_autocorrection");
+*/
 
-    m_invertAction = new KAction(i18n("Invert"), "invertimage", 
-                         Qt::CTRL+Qt::Key_I,      // NOTE: Photoshop 7 use CTRL+I.
-                         this, SLOT(slotInvert()),
-                         actionCollection(), "implugcore_invert");
+    m_invertAction  = new KAction(KIcon("invertimage"), i18n("Invert"), this);
+    m_invertAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_I));      // NOTE: Photoshop 7 use CTRL+I.
+    actionCollection()->addAction("implugcore_invert", m_invertAction );
+
+    connect(m_invertAction, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotInvert()));
+
+
+    m_convertTo8Bits  = new KAction(KIcon("depth16to8"), i18n("8 bits"), this);
+    actionCollection()->addAction("implugcore_convertto8bits", m_convertTo8Bits );
+
+    connect(m_convertTo8Bits, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotConvertTo8Bits()));
     
-    m_convertTo8Bits = new KAction(i18n("8 bits"), "depth16to8", 0,
-                           this, SLOT(slotConvertTo8Bits()),
-                           actionCollection(), "implugcore_convertto8bits");
+    m_convertTo16Bits  = new KAction(KIcon("depth8to16"), i18n("16 bits"), this);
+    actionCollection()->addAction("implugcore_convertto16bits", m_convertTo16Bits );
 
-    m_convertTo16Bits = new KAction(i18n("16 bits"), "depth8to16", 0,
-                            this, SLOT(slotConvertTo16Bits()),
-                            actionCollection(), "implugcore_convertto16bits");
-
+    connect(m_convertTo16Bits, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotConvertTo16Bits()));
+    
+/*
     m_colorManagementAction = new KAction(i18n("Color Management..."), "colormanagement", 0,
                                           this, SLOT(slotColorManagement()),
                                           actionCollection(), "implugcore_colormanagement");
@@ -123,7 +131,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent,
     m_aspectRatioCropAction = new KAction(i18n("Aspect Ratio Crop..."), "ratiocrop", 0,
                                   this, SLOT(slotRatioCrop()),
                                   actionCollection(), "implugcore_ratiocrop");
-
+*/
     //-------------------------------
     // Init. menu actions.
 
@@ -142,55 +150,20 @@ void ImagePlugin_Core::setEnabledSelectionActions(bool)
 
 void ImagePlugin_Core::setEnabledActions(bool enable)
 {
-    m_redeyeAction->setEnabled(enable);
+    m_convertTo8Bits->setEnabled(enable);
+    m_convertTo16Bits->setEnabled(enable);
+    m_invertAction->setEnabled(enable);
+
+/*    m_redeyeAction->setEnabled(enable);
     m_BCGAction->setEnabled(enable);
     m_HSLAction->setEnabled(enable);
     m_RGBAction->setEnabled(enable);
     m_autoCorrectionAction->setEnabled(enable);
-    m_invertAction->setEnabled(enable);
     m_BWAction->setEnabled(enable);
     m_aspectRatioCropAction->setEnabled(enable);
     m_sharpenAction->setEnabled(enable);
     m_blurAction->setEnabled(enable);
-    m_colorManagementAction->setEnabled(enable);
-    m_convertTo8Bits->setEnabled(enable);
-    m_convertTo16Bits->setEnabled(enable);
-}
-
-void ImagePlugin_Core::slotBlur()
-{
-    DigikamImagesPluginCore::ImageEffect_Blur dlg(parentWidget());
-    dlg.exec();
-}
-
-void ImagePlugin_Core::slotSharpen()
-{
-    DigikamImagesPluginCore::ImageEffect_Sharpen dlg(parentWidget());
-    dlg.exec();
-}
-
-void ImagePlugin_Core::slotBCG()
-{
-    DigikamImagesPluginCore::ImageEffect_BCG dlg(parentWidget());
-    dlg.exec();
-}
-
-void ImagePlugin_Core::slotRGB()
-{
-    DigikamImagesPluginCore::ImageEffect_RGB dlg(parentWidget());
-    dlg.exec();
-}
-
-void ImagePlugin_Core::slotHSL()
-{
-    DigikamImagesPluginCore::ImageEffect_HSL dlg(parentWidget());
-    dlg.exec();
-}
-
-void ImagePlugin_Core::slotAutoCorrection()
-{
-    DigikamImagesPluginCore::ImageEffect_AutoCorrection dlg(parentWidget());
-    dlg.exec();
+    m_colorManagementAction->setEnabled(enable);*/
 }
 
 void ImagePlugin_Core::slotInvert()
@@ -210,45 +183,6 @@ void ImagePlugin_Core::slotInvert()
     delete [] data;
 
     parentWidget()->unsetCursor();
-}
-
-void ImagePlugin_Core::slotBW()
-{
-    DigikamImagesPluginCore::ImageEffect_BWSepia dlg(parentWidget());
-    dlg.exec();
-}
-
-void ImagePlugin_Core::slotRedEye()
-{
-    Digikam::ImageIface iface(0, 0);
-
-    if (!iface.selectedWidth() || !iface.selectedHeight())
-    {
-        DigikamImagesPluginCore::RedEyePassivePopup* popup = new
-                                 DigikamImagesPluginCore::RedEyePassivePopup(parentWidget());
-        popup->setView(i18n("Red-Eye Correction Tool"),
-                       i18n("You need to select a region including the eyes to use "
-                            "the red-eye correction tool"));
-        popup->setAutoDelete(true);
-        popup->setTimeout(2500);
-        popup->show();
-        return;
-    }
-
-    DigikamImagesPluginCore::ImageEffect_RedEye dlg(parentWidget());
-    dlg.exec();
-}
-
-void ImagePlugin_Core::slotRatioCrop()
-{
-    DigikamImagesPluginCore::ImageEffect_RatioCrop dlg(parentWidget());
-    dlg.exec();
-}
-
-void ImagePlugin_Core::slotColorManagement()
-{
-    DigikamImagesPluginCore::ImageEffect_ICCProof dlg(parentWidget());
-    dlg.exec();
 }
 
 void ImagePlugin_Core::slotConvertTo8Bits()
@@ -286,4 +220,79 @@ void ImagePlugin_Core::slotConvertTo16Bits()
     parentWidget()->setCursor( Qt::WaitCursor );
     iface.convertOriginalColorDepth(64);
     parentWidget()->unsetCursor();
+}
+
+void ImagePlugin_Core::slotBCG()
+{
+/*    DigikamImagesPluginCore::ImageEffect_BCG dlg(parentWidget());
+    dlg.exec();*/
+}
+
+void ImagePlugin_Core::slotBlur()
+{
+/*    DigikamImagesPluginCore::ImageEffect_Blur dlg(parentWidget());
+    dlg.exec();*/
+}
+
+void ImagePlugin_Core::slotSharpen()
+{
+/*    DigikamImagesPluginCore::ImageEffect_Sharpen dlg(parentWidget());
+    dlg.exec();*/
+}
+
+void ImagePlugin_Core::slotRGB()
+{
+/*    DigikamImagesPluginCore::ImageEffect_RGB dlg(parentWidget());
+    dlg.exec();*/
+}
+
+void ImagePlugin_Core::slotHSL()
+{
+/*    DigikamImagesPluginCore::ImageEffect_HSL dlg(parentWidget());
+    dlg.exec();*/
+}
+
+void ImagePlugin_Core::slotAutoCorrection()
+{
+/*    DigikamImagesPluginCore::ImageEffect_AutoCorrection dlg(parentWidget());
+    dlg.exec();*/
+}
+
+void ImagePlugin_Core::slotBW()
+{
+/*    DigikamImagesPluginCore::ImageEffect_BWSepia dlg(parentWidget());
+    dlg.exec();*/
+}
+
+void ImagePlugin_Core::slotRedEye()
+{
+/*    Digikam::ImageIface iface(0, 0);
+
+    if (!iface.selectedWidth() || !iface.selectedHeight())
+    {
+        DigikamImagesPluginCore::RedEyePassivePopup* popup = new
+                                 DigikamImagesPluginCore::RedEyePassivePopup(parentWidget());
+        popup->setView(i18n("Red-Eye Correction Tool"),
+                       i18n("You need to select a region including the eyes to use "
+                            "the red-eye correction tool"));
+        popup->setAutoDelete(true);
+        popup->setTimeout(2500);
+        popup->show();
+        return;
+    }
+
+    DigikamImagesPluginCore::ImageEffect_RedEye dlg(parentWidget());
+    dlg.exec();*/
+}
+
+void ImagePlugin_Core::slotRatioCrop()
+{
+/*    DigikamImagesPluginCore::ImageEffect_RatioCrop dlg(parentWidget());
+    dlg.exec();*/
+}
+
+void ImagePlugin_Core::slotColorManagement()
+{
+/*    DigikamImagesPluginCore::ImageEffect_ICCProof dlg(parentWidget());
+    dlg.exec();*/
 }
