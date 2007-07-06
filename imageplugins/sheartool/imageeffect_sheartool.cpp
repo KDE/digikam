@@ -139,22 +139,24 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
                                          "to the sheared image. "
                                          "To smooth the target image, it will be blurred a little."));
 
+    // -------------------------------------------------------------
+
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(0);
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
-    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 2);
-    gridSettings->addMultiCellWidget(line, 2, 2, 0, 2);
-    gridSettings->addMultiCellWidget(label3, 3, 3, 0, 2);
-    gridSettings->addMultiCellWidget(m_mainHAngleInput, 4, 4, 0, 2);
-    gridSettings->addMultiCellWidget(label4, 5, 5, 0, 2);
-    gridSettings->addMultiCellWidget(m_fineHAngleInput, 6, 6, 0, 2);
-    gridSettings->addMultiCellWidget(label5, 7, 7, 0, 0);
-    gridSettings->addMultiCellWidget(m_mainVAngleInput, 8, 8, 0, 2);
-    gridSettings->addMultiCellWidget(label6, 9, 9, 0, 2);
-    gridSettings->addMultiCellWidget(m_fineVAngleInput, 10, 10, 0, 2);
-    gridSettings->addMultiCellWidget(m_antialiasInput, 11, 11, 0, 2);
+    gridSettings->addWidget(label1, 0, 0, 1, 1);
+    gridSettings->addWidget(m_newWidthLabel, 0, 1, 1, 2);
+    gridSettings->addWidget(label2, 1, 0, 1, 1);
+    gridSettings->addWidget(m_newHeightLabel, 1, 1, 1, 2);
+    gridSettings->addWidget(line, 2, 0, 1, 3 );
+    gridSettings->addWidget(label3, 3, 0, 1, 3 );
+    gridSettings->addWidget(m_mainHAngleInput, 4, 0, 1, 3 );
+    gridSettings->addWidget(label4, 5, 0, 1, 3 );
+    gridSettings->addWidget(m_fineHAngleInput, 6, 0, 1, 3 );
+    gridSettings->addWidget(label5, 7, 0, 1, 1);
+    gridSettings->addWidget(m_mainVAngleInput, 8, 0, 1, 3 );
+    gridSettings->addWidget(label6, 9, 0, 1, 3 );
+    gridSettings->addWidget(m_fineVAngleInput, 10, 0, 1, 3 );
+    gridSettings->addWidget(m_antialiasInput, 11, 0, 1, 3 );
             
     setUserAreaWidget(gboxSettings); 
 
