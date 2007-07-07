@@ -83,6 +83,9 @@ extern "C"
 #include <ktoggleaction.h>
 #include <kshortcutsdialog.h>
 #include <ktoolbarpopupaction.h>
+#include <kservice.h>
+#include <kservicetype.h>
+#include <kservicetypetrader.h>
 
 // Local includes.
 
@@ -1490,9 +1493,36 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
         return false;
 
-    QString mimetypes = KImageIO::mimeTypes(KImageIO::Writing).join(" ");
-    mimetypes.append(" image/tiff");
-    DDebug () << "mimetypes=" << mimetypes << endl;
+    QStringList writableMimetypes = KImageIO::mimeTypes(KImageIO::Writing);
+    // Put first class citizens at first place
+    writableMimetypes.removeAll("image/jpeg");
+    writableMimetypes.removeAll("image/tiff");
+    writableMimetypes.removeAll("image/png");
+    writableMimetypes.removeAll("image/jpeg2000");
+    writableMimetypes.insert(0, "image/png");
+    writableMimetypes.insert(1, "image/jpeg");
+    writableMimetypes.insert(2, "image/tiff");
+    writableMimetypes.insert(3, "image/jpeg2000");
+
+    DDebug () << "startingSaveAs: Offered mimetypes: " << writableMimetypes << endl;
+
+    // Determine the default mime type.
+    // Determine mime type from image format of the src image
+    QString defaultMimeType;
+    QString originalFormat = m_canvas->currentImageFileFormat().toLower();
+    // inspired by kimageio.cpp, typeForMime(). This here is "mimeForType".
+    KService::List services = KServiceTypeTrader::self()->query("QImageIOPlugins");
+    KService::Ptr service;
+    foreach(service, services) {
+        if (service->property("X-KDE-ImageFormat").toStringList().contains(originalFormat))
+        {
+            defaultMimeType = service->property("X-KDE-MimeType").toString();
+            break;
+        }
+    }
+    // default to PNG
+    if (defaultMimeType.isEmpty())
+        defaultMimeType = "image/png";
 
     m_savingContext->srcURL = url;
 
@@ -1508,7 +1538,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     imageFileSaveDialog.setMode(KFile::File);
     imageFileSaveDialog.setSelection(m_savingContext->srcURL.fileName());
     imageFileSaveDialog.setCaption(i18n("New Image File Name"));
-    imageFileSaveDialog.setFilter(mimetypes);
+    imageFileSaveDialog.setMimeFilter(writableMimetypes, defaultMimeType);
 
     connect(&imageFileSaveDialog, SIGNAL(filterChanged(const QString &)),
             options, SLOT(slotImageFileFormatChanged(const QString &)));
@@ -1530,11 +1560,12 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     // Check if target image format have been selected from Combo List of SaveAs dialog.
 
-    // TODO: KDE4PORT: KImageIO::typeForMime return a StringList now. 
-    //                 Check if we use 1st item of list is enough.
-    m_savingContext->format = KImageIO::typeForMime(imageFileSaveDialog.currentMimeFilter())[0];
-
-    if ( m_savingContext->format.isEmpty() )
+    QStringList mimes =KImageIO::typeForMime(imageFileSaveDialog.currentMimeFilter());
+    if (!mimes.isEmpty())
+    {
+        m_savingContext->format = mimes.first();
+    }
+    else
     {
         // Else, check if target image format have been add to target image file name using extension.
 
@@ -1550,23 +1581,13 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
         {
             // Else, check if format from file name extension is include on file mime type list.
 
-            QString imgExtPattern;
-            QStringList imgExtList = mimetypes.split(" ", QString::SkipEmptyParts);
-            for (QStringList::ConstIterator it = imgExtList.begin() ; it != imgExtList.end() ; ++it)
-            {
-                // TODO: KDE4PORT: KImageIO::typeForMime return a StringList now. 
-                //                 Check if we use 1st item of list is enough.
-                imgExtPattern.append (KImageIO::typeForMime(*it)[0].toUpper());
-                imgExtPattern.append (" ");
-            }
-            imgExtPattern.append (" TIF TIFF");
-            if ( imgExtPattern.contains("JPEG") ) 
-            {
-                imgExtPattern.append (" JPG");
-                imgExtPattern.append (" JPE");
-            }
+            QStringList imgExtList = KImageIO::types(KImageIO::Writing);
+            imgExtList << "TIF";
+            imgExtList << "TIFF";
+            imgExtList << "JPG";
+            imgExtList << "JPE";
 
-            if ( !imgExtPattern.contains( m_savingContext->format.toUpper() ) )
+            if ( !imgExtList.contains( m_savingContext->format.toUpper() ) )
             {
                 KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported.", m_savingContext->format));
                 DWarning() << k_funcinfo << "target image file format " << m_savingContext->format << " unsupported!" << endl;
