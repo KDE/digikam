@@ -161,7 +161,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---freerotation                        Gilles                          DONE       DONE
         |---hotpixels                           Laurent                                              CMake port only
         |---infrared                            Laurent                         DONE       DONE
-        |---inpainting                          Gilles                          DONE                 Final Render crash    
+        |---inpainting                          Gilles                          DONE       DONE
         |---inserttext                          Laurent                                              CMake port only
         |---lensdistortion                      Laurent                         DONE                 Final render failed, lens distorsion grid preview don't work
         |---noisereduction                      Laurent                         DONE       DONE
