@@ -137,10 +137,10 @@ public:
 
     KPageDialog            *mainDialog;
 
-    KComboBox       *inProfilesKC;
-    KComboBox       *workProfilesKC;
-    KComboBox       *proofProfilesKC;
-    KComboBox       *monitorProfilesKC;
+    KComboBox              *inProfilesKC;
+    KComboBox              *workProfilesKC;
+    KComboBox              *proofProfilesKC;
+    KComboBox              *monitorProfilesKC;
 };
 
 SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
