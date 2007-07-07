@@ -253,27 +253,9 @@ void ImagePlugin_Core::slotAutoCorrection()
     dlg.exec();
 }
 
-void ImagePlugin_Core::slotSharpen()
-{
-/*    DigikamImagesPluginCore::ImageEffect_Sharpen dlg(parentWidget());
-    dlg.exec();*/
-}
-
-void ImagePlugin_Core::slotHSL()
-{
-/*    DigikamImagesPluginCore::ImageEffect_HSL dlg(parentWidget());
-    dlg.exec();*/
-}
-
-void ImagePlugin_Core::slotBW()
-{
-/*    DigikamImagesPluginCore::ImageEffect_BWSepia dlg(parentWidget());
-    dlg.exec();*/
-}
-
 void ImagePlugin_Core::slotRedEye()
 {
-/*    Digikam::ImageIface iface(0, 0);
+    Digikam::ImageIface iface(0, 0);
 
     if (!iface.selectedWidth() || !iface.selectedHeight())
     {
@@ -289,6 +271,24 @@ void ImagePlugin_Core::slotRedEye()
     }
 
     DigikamImagesPluginCore::ImageEffect_RedEye dlg(parentWidget());
+    dlg.exec();
+}
+
+void ImagePlugin_Core::slotSharpen()
+{
+/*    DigikamImagesPluginCore::ImageEffect_Sharpen dlg(parentWidget());
+    dlg.exec();*/
+}
+
+void ImagePlugin_Core::slotHSL()
+{
+/*    DigikamImagesPluginCore::ImageEffect_HSL dlg(parentWidget());
+    dlg.exec();*/
+}
+
+void ImagePlugin_Core::slotBW()
+{
+/*    DigikamImagesPluginCore::ImageEffect_BWSepia dlg(parentWidget());
     dlg.exec();*/
 }
 
