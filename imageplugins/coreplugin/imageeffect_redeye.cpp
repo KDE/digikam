@@ -177,17 +177,17 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
-    gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
-    gridSettings->addMultiCellWidget(m_thresholdLabel, 3, 3, 0, 4);
-    gridSettings->addMultiCellWidget(m_redThreshold, 4, 4, 0, 4);
-    gridSettings->addMultiCellWidget(m_smoothLabel, 5, 5, 0, 4);
-    gridSettings->addMultiCellWidget(m_smoothLevel, 6, 6, 0, 4);
-    gridSettings->addMultiCellWidget(label3, 7, 7, 0, 4);
-    gridSettings->addMultiCellWidget(m_HSSelector, 8, 8, 0, 3);
-    gridSettings->addMultiCellWidget(m_VSelector, 8, 8, 4, 4);
-    gridSettings->addMultiCellWidget(label4, 9, 9, 0, 4);
-    gridSettings->addMultiCellWidget(m_tintLevel, 10, 10, 0, 4);
+    gridSettings->addLayout(l1, 0, 0, 1, 5 );
+    gridSettings->addWidget(histoBox, 1, 0, 2, 5 );
+    gridSettings->addWidget(m_thresholdLabel, 3, 0, 1, 5 );
+    gridSettings->addWidget(m_redThreshold, 4, 0, 1, 5 );
+    gridSettings->addWidget(m_smoothLabel, 5, 0, 1, 5 );
+    gridSettings->addWidget(m_smoothLevel, 6, 0, 1, 5 );
+    gridSettings->addWidget(label3, 7, 0, 1, 5 );
+    gridSettings->addWidget(m_HSSelector, 8, 0, 1, 4 );
+    gridSettings->addWidget(m_VSelector, 8, 4, 1, 1);
+    gridSettings->addWidget(label4, 9, 0, 1, 5 );
+    gridSettings->addWidget(m_tintLevel, 10, 0, 1, 5 );
     gridSettings->setRowStretch(11, 10);    
     gridSettings->setColumnStretch(3, 10);   
     gridSettings->setMargin(spacingHint());
