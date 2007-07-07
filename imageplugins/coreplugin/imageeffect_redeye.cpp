@@ -24,23 +24,15 @@
 
 // Qt includes.
  
-#include <qcolor.h>
-
-#include <q3hgroupbox.h>
-#include <q3vgroupbox.h>
-#include <Q3HButtonGroup> 
-
-#include <qlabel.h>
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qcombobox.h>
-
-#include <qtooltip.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
+#include <QColor>
+#include <QGroupBox>
+#include <QButtonGroup> 
+#include <QLabel>
+#include <QFrame>
+#include <QPushButton>
+#include <QComboBox>
+#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QPixmap>
 
 // KDE includes.
@@ -54,6 +46,8 @@
 #include <kcolordialog.h>
 #include <kglobal.h>
 #include <kvbox.h>
+#include <khuesaturationselect.h>
+#include <kcolorvalueselector.h>
 
 // Digikam includes.
 
@@ -80,7 +74,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_destinationPreviewData = 0L;
     setHelp("redeyecorrectiontool.anchor", "digikam");
 
-    m_previewWidget = new Digikam::ImageWidget("redeye Tool Dialog", plainPage(),
+    m_previewWidget = new Digikam::ImageWidget("redeye Tool Dialog", mainWidget(),
                                                i18n("<p>Here you can see the image selection preview with "
                                                     "red eye reduction applied."), 
                                                true, Digikam::ImageGuideWidget::PickColorMode, true, true);
@@ -88,69 +82,70 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
 
     // -------------------------------------------------------------
                 
-    QWidget *gboxSettings     = new QWidget(plainPage());
-    Q3GridLayout* gridSettings = new Q3GridLayout(gboxSettings, 11, 4, spacingHint());
+    QWidget *gboxSettings     = new QWidget(mainWidget());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, gboxSettings );
-    m_channelCB->insertItem( i18n("Luminosity") );
-    m_channelCB->insertItem( i18n("Red") );
-    m_channelCB->insertItem( i18n("Green") );
-    m_channelCB->insertItem( i18n("Blue") );
+    m_channelCB = new QComboBox( gboxSettings );
+    m_channelCB->addItem( i18n("Luminosity") );
+    m_channelCB->addItem( i18n("Red") );
+    m_channelCB->addItem( i18n("Green") );
+    m_channelCB->addItem( i18n("Blue") );
     m_channelCB->setWhatsThis( i18n("<p>Select here the histogram channel to display:<p>"
-                                       "<b>Luminosity</b>: display the image's luminosity values.<p>"
-                                       "<b>Red</b>: display the red image channel values.<p>"
-                                       "<b>Green</b>: display the green image channel values.<p>"
-                                       "<b>Blue</b>: display the blue image channel values.<p>"));
+                                    "<b>Luminosity</b>: display the image's luminosity values.<p>"
+                                    "<b>Red</b>: display the red image channel values.<p>"
+                                    "<b>Green</b>: display the green image channel values.<p>"
+                                    "<b>Blue</b>: display the blue image channel values.<p>"));
 
-    m_scaleBG = new Q3HButtonGroup(gboxSettings);
-    m_scaleBG->setExclusive(true);
-    m_scaleBG->setFrameShape(QFrame::NoFrame);
-    m_scaleBG->setInsideMargin(0);
-    m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
-                                     "If the image's maximum counts are small, you can use the linear scale.<p>"
-                                     "The logarithmic scale can be used when the maximal counts are big "
-                                     "to show all values (small and large) on the graph."));
+    // -------------------------------------------------------------
+
+    QWidget *scaleBox = new QWidget(gboxSettings);
+    QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
+    m_scaleBG         = new QButtonGroup(scaleBox);
+    scaleBox->setWhatsThis(i18n("<p>Select here the histogram scale.<p>"
+                                "If the image's maximal counts are small, you can use the linear scale.<p>"
+                                "Logarithmic scale can be used when the maximal counts are big; "
+                                "if it is used, all values (small and large) will be visible on the graph."));
     
-    QPushButton *linHistoButton = new QPushButton( m_scaleBG );
+    QPushButton *linHistoButton = new QPushButton( scaleBox );
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
-    m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
-    KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
-    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
-    linHistoButton->setToggleButton(true);
+    linHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-lin.png")));
+    linHistoButton->setCheckable(true);
+    m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
     
-    QPushButton *logHistoButton = new QPushButton( m_scaleBG );
+    QPushButton *logHistoButton = new QPushButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
-    m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
-    KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
-    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
-    logHistoButton->setToggleButton(true);       
+    logHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-log.png")));
+    logHistoButton->setCheckable(true);
+    m_scaleBG->addButton(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    
+    hlay->setMargin(0);
+    hlay->setSpacing(0);
+    hlay->addWidget(linHistoButton);
+    hlay->addWidget(logHistoButton);
 
-    Q3HBoxLayout* l1 = new Q3HBoxLayout();
+    m_scaleBG->setExclusive(true);
+    logHistoButton->setChecked(true);    
+
+    QHBoxLayout* l1 = new QHBoxLayout();
     l1->addWidget(label1);
     l1->addWidget(m_channelCB);
     l1->addStretch(10);
-    l1->addWidget(m_scaleBG);
+    l1->addWidget(scaleBox);
     
-    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
-
     // -------------------------------------------------------------
 
     KVBox *histoBox   = new KVBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram "
-                                             "of the selected image channel. It is "
-                                             "updated upon setting changes."));
+                                          "of the selected image channel. It is "
+                                          "updated upon setting changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);    
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     
-    gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
-
     // -------------------------------------------------------------
 
     m_thresholdLabel = new QLabel(i18n("Sensitivity:"), gboxSettings);
@@ -158,39 +153,46 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_redThreshold->setRange(10, 90, 1, true);
     m_redThreshold->setValue(20);
     m_redThreshold->setWhatsThis( i18n("<p>Sets the red color pixels selection threshold. "
-                                         "Low values will select more red color pixels, high "
-                                         "values less."));
-    gridSettings->addMultiCellWidget(m_thresholdLabel, 3, 3, 0, 4);
-    gridSettings->addMultiCellWidget(m_redThreshold, 4, 4, 0, 4);
+                                       "Low values will select more red color pixels, high "
+                                       "values less."));
 
     m_smoothLabel = new QLabel(i18n("Smooth:"), gboxSettings);
     m_smoothLevel = new KIntNumInput(gboxSettings);
     m_smoothLevel->setRange(0, 5, 1, true);
     m_smoothLevel->setValue(1);
     m_smoothLevel->setWhatsThis( i18n("<p>Sets the smoothness value to blur red color "
-                                        "pixels selection."));
-    gridSettings->addMultiCellWidget(m_smoothLabel, 5, 5, 0, 4);
-    gridSettings->addMultiCellWidget(m_smoothLevel, 6, 6, 0, 4);
+                                      "pixels selection."));
 
     QLabel *label3 = new QLabel(i18n("Coloring Tint:"), gboxSettings);
-    m_HSSelector   = new KHSSelector(gboxSettings);
-    m_VSelector    = new KValueSelector(gboxSettings);
+    m_HSSelector   = new KHueSaturationSelector(gboxSettings);
+    m_VSelector    = new KColorValueSelector(gboxSettings);
     m_HSSelector->setMinimumSize(200, 142);
     m_VSelector->setMinimumSize(26, 142);
-    gridSettings->addMultiCellWidget(label3, 7, 7, 0, 4);
-    gridSettings->addMultiCellWidget(m_HSSelector, 8, 8, 0, 3);
-    gridSettings->addMultiCellWidget(m_VSelector, 8, 8, 4, 4);
 
     QLabel *label4 = new QLabel(i18n("Tint Level:"), gboxSettings);
     m_tintLevel    = new KIntNumInput(gboxSettings);
     m_tintLevel->setRange(1, 200, 1, true);
     m_tintLevel->setValue(128);
     m_tintLevel->setWhatsThis( i18n("<p>Set here the tint level used to coloring red eye."));
+
+    // -------------------------------------------------------------
+
+    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
+    gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
+    gridSettings->addMultiCellWidget(m_thresholdLabel, 3, 3, 0, 4);
+    gridSettings->addMultiCellWidget(m_redThreshold, 4, 4, 0, 4);
+    gridSettings->addMultiCellWidget(m_smoothLabel, 5, 5, 0, 4);
+    gridSettings->addMultiCellWidget(m_smoothLevel, 6, 6, 0, 4);
+    gridSettings->addMultiCellWidget(label3, 7, 7, 0, 4);
+    gridSettings->addMultiCellWidget(m_HSSelector, 8, 8, 0, 3);
+    gridSettings->addMultiCellWidget(m_VSelector, 8, 8, 4, 4);
     gridSettings->addMultiCellWidget(label4, 9, 9, 0, 4);
     gridSettings->addMultiCellWidget(m_tintLevel, 10, 10, 0, 4);
-
     gridSettings->setRowStretch(11, 10);    
-    gridSettings->setColStretch(3, 10);    
+    gridSettings->setColumnStretch(3, 10);   
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(spacingHint()); 
+
     setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------
@@ -198,7 +200,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
 
-    connect(m_scaleBG, SIGNAL(released(int)),
+    connect(m_scaleBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotScaleChanged(int)));
 
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
@@ -240,7 +242,7 @@ void ImageEffect_RedEye::slotHSChanged(int h, int s)
     m_VSelector->setHue(h);
     m_VSelector->setSaturation(s);
     m_VSelector->updateContents();
-    m_VSelector->repaint(false);
+    m_VSelector->repaint();
     m_VSelector->blockSignals(false);  
     slotTimer();
 }
@@ -270,13 +272,13 @@ void ImageEffect_RedEye::slotChannelChanged(int channel)
             break;
     }
 
-    m_histogramWidget->repaint(false);
+    m_histogramWidget->repaint();
 }
 
 void ImageEffect_RedEye::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
-    m_histogramWidget->repaint(false);
+    m_histogramWidget->repaint();
 }
 
 void ImageEffect_RedEye::slotColorSelectedFromTarget( const Digikam::DColor &color )
@@ -287,9 +289,12 @@ void ImageEffect_RedEye::slotColorSelectedFromTarget( const Digikam::DColor &col
 void ImageEffect_RedEye::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("redeye Tool Dialog");
-    m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0)); // Luminosity.
-    m_scaleBG->setButton(group.readEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    KConfigGroup group        = config->group("redeye Tool Dialog");
+
+    m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0)); // Luminosity.
+    m_scaleBG->button(group.readEntry("Histogram Scale", 
+                      (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
+
     m_redThreshold->setValue(group.readEntry("RedThreshold", 20));
     m_smoothLevel->setValue(group.readEntry("SmoothLevel", 1));
     m_HSSelector->setXValue(group.readEntry("HueColoringTint", 0));
@@ -298,16 +303,16 @@ void ImageEffect_RedEye::readUserSettings()
     m_tintLevel->setValue(group.readEntry("TintLevel", 128));
     
     slotHSChanged(m_HSSelector->xValue(), m_HSSelector->yValue());
-    slotChannelChanged(m_channelCB->currentItem());
-    slotScaleChanged(m_scaleBG->selectedId());
+    slotChannelChanged(m_channelCB->currentIndex());
+    slotScaleChanged(m_scaleBG->checkedId());
 }
 
 void ImageEffect_RedEye::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("redeye Tool Dialog");
-    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
-    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    KConfigGroup group        = config->group("redeye Tool Dialog");
+    group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
+    group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
     group.writeEntry("RedThreshold", m_redThreshold->value());
     group.writeEntry("SmoothLevel", m_smoothLevel->value());
     group.writeEntry("HueColoringTint", m_HSSelector->xValue());
@@ -406,7 +411,7 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
     int hue            = m_HSSelector->xValue();
     int sat            = m_HSSelector->yValue();
     int val            = m_VSelector->value();
-    QColor coloring(hue, sat, val, QColor::Hsv);
+    QColor coloring    = QColor::fromHsv(hue, sat, val);
 
     struct channel
     {

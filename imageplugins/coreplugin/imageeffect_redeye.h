@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #ifndef IMAGEEFFECT_REDEYE_H
 #define IMAGEEFFECT_REDEYE_H
 
@@ -34,12 +33,12 @@
 
 #include "imagedlgbase.h"
 
-class Q3HButtonGroup;
+class QButtonGroup;
 class QLabel;
 class QComboBox;
 
-class KHSSelector;
-class KValueSelector;
+class KHueSaturationSelector;
+class KColorValueSelector;
 class KIntNumInput;
 
 namespace Digikam
@@ -129,14 +128,14 @@ private:
 
     QComboBox                    *m_channelCB;   
 
-    Q3HButtonGroup                *m_scaleBG;  
+    QButtonGroup                 *m_scaleBG;  
 
     KIntNumInput                 *m_tintLevel;
     KIntNumInput                 *m_redThreshold; 
     KIntNumInput                 *m_smoothLevel;
 
-    KHSSelector                  *m_HSSelector;
-    KValueSelector               *m_VSelector;
+    KHueSaturationSelector       *m_HSSelector;
+    KColorValueSelector          *m_VSelector;
     
     Digikam::ImageWidget         *m_previewWidget;
 

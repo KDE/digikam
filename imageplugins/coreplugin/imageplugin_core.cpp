@@ -69,13 +69,14 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QStringList &)
     m_sharpenAction = new KAction(i18n("Sharpen..."), "sharpenimage", 0,
                           this, SLOT(slotSharpen()),
                           actionCollection(), "implugcore_sharpen");
+*/
 
-    m_redeyeAction = new KAction(i18n("Red Eye..."), "redeyes", 0,
-                                 this, SLOT(slotRedEye()),
-                                 actionCollection(), "implugcore_redeye");
+    m_redeyeAction = new KAction(KIcon("redeyes"), i18n("Red Eye..."), this);
     m_redeyeAction->setWhatsThis( i18n( "This filter can be used to correct red eyes in a photo. "
                                         "Select a region including the eyes to use this option.") );
-*/
+    actionCollection()->addAction("implugcore_redeye", m_redeyeAction );
+    connect(m_redeyeAction, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotRedEye()));
 
     m_BCGAction = new KAction(KIcon("contrast"), i18n("Brightness/Contrast/Gamma..."), this);
     actionCollection()->addAction("implugcore_bcg", m_BCGAction );
