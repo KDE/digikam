@@ -23,7 +23,6 @@
  * 
  * ============================================================ */
 
-
 #ifndef IMAGEEFFECT_ICCPROOF_H
 #define IMAGEEFFECT_ICCPROOF_H
 
@@ -31,9 +30,7 @@
 
 #include "imagedlgbase.h"
 
-class Q3VButtonGroup;
-class Q3ButtonGroup;
-class Q3HButtonGroup;
+class QButtonGroup;
 class QCheckBox;
 class QComboBox;
 class QRadioButton;
@@ -161,14 +158,13 @@ private:
     QString                         m_spacePath;
     QString                         m_proofPath;
 
-    Q3ButtonGroup                   *m_optionsBG;
-    Q3ButtonGroup                   *m_inProfileBG;
-    Q3ButtonGroup                   *m_spaceProfileBG;
-    Q3ButtonGroup                   *m_proofProfileBG;
-
-    Q3HButtonGroup                  *m_scaleBG;
-    Q3VButtonGroup                  *m_renderingIntentBG;
-    Q3VButtonGroup                  *m_profilesBG;
+    QButtonGroup                   *m_optionsBG;
+    QButtonGroup                   *m_inProfileBG;
+    QButtonGroup                   *m_spaceProfileBG;
+    QButtonGroup                   *m_proofProfileBG;
+    QButtonGroup                   *m_scaleBG;
+    QButtonGroup                   *m_renderingIntentBG;
+    QButtonGroup                   *m_profilesBG;
     
     QByteArray                      m_embeddedICC;
 

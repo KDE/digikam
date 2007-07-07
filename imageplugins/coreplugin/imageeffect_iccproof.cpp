@@ -25,29 +25,22 @@
 
 // Qt includes.
 
-#include <qcolor.h>
-#include <q3groupbox.h>
-
-#include <Q3HButtonGroup>
-#include <qvbuttongroup.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qpoint.h>
-
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-
-#include <qtooltip.h>
-#include <qradiobutton.h>
-#include <qfile.h>
-#include <qtoolbox.h>
-#include <q3textstream.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
+#include <QColor>
+#include <QGroupBox>
+#include <QButtonGroup>
+#include <QLabel>
+#include <QFrame>
+#include <QPoint>
+#include <QPushButton>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QRadioButton>
+#include <QFile>
+#include <QToolBox>
+#include <QTextStream>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QPixmap>
 
 // KDE includes.
@@ -110,77 +103,77 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_embeddedICC   = iface.getEmbeddedICCFromOriginalImage();
     m_curves        = new Digikam::ImageCurves(m_originalImage->sixteenBit());
 
-    m_previewWidget = new Digikam::ImageWidget("colormanagement Tool Dialog", plainPage(),
+    m_previewWidget = new Digikam::ImageWidget("colormanagement Tool Dialog", mainWidget(),
                                                i18n("<p>Here you can see the image preview after "
                                                     "applying a color profile</p>"));
     setPreviewAreaWidget(m_previewWidget); 
 
     // -------------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(plainPage());
-    Q3GridLayout *gridSettings = new Q3GridLayout( gboxSettings, 3, 2, spacingHint());
+    QWidget *gboxSettings     = new QWidget(mainWidget());
+    QGridLayout *gridSettings = new QGridLayout( gboxSettings );
 
     QLabel *label1 = new QLabel(i18n("Channel: "), gboxSettings);
     label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_channelCB = new QComboBox(false, gboxSettings);
-    m_channelCB->insertItem(i18n("Luminosity"));
-    m_channelCB->insertItem(i18n("Red"));
-    m_channelCB->insertItem(i18n("Green"));
-    m_channelCB->insertItem(i18n("Blue"));
+    m_channelCB = new QComboBox( gboxSettings );
+    m_channelCB->addItem( i18n("Luminosity") );
+    m_channelCB->addItem( i18n("Red") );
+    m_channelCB->addItem( i18n("Green") );
+    m_channelCB->addItem( i18n("Blue") );
     m_channelCB->setWhatsThis( i18n("<p>Select here the histogram channel to display:<p>"
-                                       "<b>Luminosity</b>: display the image's luminosity values.<p>"
-                                       "<b>Red</b>: display the red channel values.<p>"
-                                       "<b>Green</b>: display the green channel values.<p>"
-                                       "<b>Blue</b>: display the blue channel values.<p>"));
+                                    "<b>Luminosity</b>: display the image's luminosity values.<p>"
+                                    "<b>Red</b>: display the red image-channel values.<p>"
+                                    "<b>Green</b>: display the green image-channel values.<p>"
+                                    "<b>Blue</b>: display the blue image-channel values.<p>"));
 
-    m_scaleBG = new Q3HButtonGroup(gboxSettings);
-    m_scaleBG->setExclusive(true);
-    m_scaleBG->setFrameShape(QFrame::NoFrame);
-    m_scaleBG->setInsideMargin( 0 );
-    m_scaleBG->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
-                                     "If the image's maximal values are small, you can use the linear scale.<p>"
-                                     "Logarithmic scale can be used when the maximal values are big; "
-                                     "if it is used, all values (small and large) will be visible on the "
-                                     "graph."));
+    // -------------------------------------------------------------
 
-    QPushButton *linHistoButton = new QPushButton( m_scaleBG );
+    QWidget *scaleBox = new QWidget(gboxSettings);
+    QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
+    m_scaleBG         = new QButtonGroup(scaleBox);
+    scaleBox->setWhatsThis(i18n("<p>Select here the histogram scale.<p>"
+                                "If the image's maximal counts are small, you can use the linear scale.<p>"
+                                "Logarithmic scale can be used when the maximal counts are big; "
+                                "if it is used, all values (small and large) will be visible on the graph."));
+    
+    QPushButton *linHistoButton = new QPushButton( scaleBox );
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
-    m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
-    KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
-    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
-    linHistoButton->setToggleButton(true);
-
-    QPushButton *logHistoButton = new QPushButton( m_scaleBG );
+    linHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-lin.png")));
+    linHistoButton->setCheckable(true);
+    m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    
+    QPushButton *logHistoButton = new QPushButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
-    m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
-    KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
-    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
-    logHistoButton->setToggleButton(true);
+    logHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-log.png")));
+    logHistoButton->setCheckable(true);
+    m_scaleBG->addButton(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    
+    hlay->setMargin(0);
+    hlay->setSpacing(0);
+    hlay->addWidget(linHistoButton);
+    hlay->addWidget(logHistoButton);
 
-    Q3HBoxLayout* l1 = new Q3HBoxLayout();
+    m_scaleBG->setExclusive(true);
+    logHistoButton->setChecked(true);
+
+    QHBoxLayout* l1 = new QHBoxLayout();
     l1->addWidget(label1);
     l1->addWidget(m_channelCB);
     l1->addStretch(10);
-    l1->addWidget(m_scaleBG);
-
-    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 2);
+    l1->addWidget(scaleBox);
 
     // -------------------------------------------------------------
 
     KVBox *histoBox   = new KVBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram "
-                                             "of the selected image channel. " 
-                                             "This one is updated after setting changes."));
+                                          "of the selected image channel. " 
+                                          "This one is updated after setting changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, 
                                                     histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-
-    gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 2);
 
     // -------------------------------------------------------------
 
@@ -197,36 +190,36 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                  SmallIconSet("misc"), i18n("General Settings"));
     generalOptions->setWhatsThis( i18n("<p>Here you can set general parameters.</p>"));
 
-    Q3GridLayout *zeroPageLayout = new Q3GridLayout(generalOptions, 5, 1, spacingHint());
+    QGridLayout *zeroPageLayout = new QGridLayout(generalOptions);
 
     m_doSoftProofBox = new QCheckBox(generalOptions);
     m_doSoftProofBox->setText(i18n("Soft-proofing"));
     m_doSoftProofBox->setWhatsThis( i18n("<p>Rendering emulation of the device described "
-                                           "by the \"Proofing\" profile. Useful to preview final "
-                                           "result without rendering to physical medium.</p>"));
+                                         "by the \"Proofing\" profile. Useful to preview final "
+                                         "result without rendering to physical medium.</p>"));
 
     m_checkGamutBox = new QCheckBox(generalOptions);
     m_checkGamutBox->setText(i18n("Check gamut"));
     m_checkGamutBox->setWhatsThis( i18n("<p>You can use this option if you want to show "
-                                          "the colors that are outside the printer's gamut<p>"));
+                                        "the colors that are outside the printer's gamut<p>"));
 
     m_embeddProfileBox = new QCheckBox(generalOptions);
     m_embeddProfileBox->setChecked(true);
     m_embeddProfileBox->setText(i18n("Assign profile"));
     m_embeddProfileBox->setWhatsThis( i18n("<p>You can use this option to embed "
-                                             "the selected work-space color profile into the image.</p>"));
+                                           "the selected work-space color profile into the image.</p>"));
 
     m_BPCBox = new QCheckBox(generalOptions);
     m_BPCBox->setText(i18n("Use BPC"));
     m_BPCBox->setWhatsThis( i18n("<p>The Black Point Compensation (BPC) feature does work in conjunction "
-                                   "with Relative Colorimetric Intent. Perceptual intent should make no "
-                                   "difference, since BPC is always on, and in Absolute Colorimetric "
-                   "Intent it is always turned off.</p>"
-                                   "<p>BPC does compensate a lack of ICC profiles in the dark tone rendering."
-                                   "With BPC the dark tones are optimally mapped (no clipping) from original media "
-                                   "to the destination media can render, e.g. the combination paper/ink.</p>"));
+                                 "with Relative Colorimetric Intent. Perceptual intent should make no "
+                                 "difference, since BPC is always on, and in Absolute Colorimetric "
+                                 "Intent it is always turned off.</p>"
+                                 "<p>BPC does compensate a lack of ICC profiles in the dark tone rendering."
+                                 "With BPC the dark tones are optimally mapped (no clipping) from original media "
+                                 "to the destination media can render, e.g. the combination paper/ink.</p>"));
 
-    QLabel *intent = new QLabel(i18n("Rendering Intent:"), generalOptions);
+    QLabel *intent       = new QLabel(i18n("Rendering Intent:"), generalOptions);
     m_renderingIntentsCB = new QComboBox(false, generalOptions);
     m_renderingIntentsCB->insertItem("Perceptual");
     m_renderingIntentsCB->insertItem("Absolute Colorimetric");
@@ -259,13 +252,10 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                 "specific color.</li></ul>"));
 
     KUrlLabel *lcmsLogoLabel = new KUrlLabel(generalOptions);
-    lcmsLogoLabel->setAlignment( Qt::AlignTop | Qt::AlignRight );
     lcmsLogoLabel->setText(QString());
     lcmsLogoLabel->setUrl("http://www.littlecms.com");
-    KGlobal::dirs()->addResourceType("logo-lcms", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("logo-lcms", "logo-lcms.png");
-    lcmsLogoLabel->setPixmap( QPixmap( directory + "logo-lcms.png" ) );
-    lcmsLogoLabel->setToolTip( i18n("Visit Little CMS project website"));
+    lcmsLogoLabel->setPixmap( QPixmap( KStandardDirs::locate("data", "digikam/data/logo-lcms.png" ) ));
+    lcmsLogoLabel->setToolTip(i18n("Visit Little CMS project website"));
 
     zeroPageLayout->addMultiCellWidget(m_doSoftProofBox, 0, 0, 0, 0);
     zeroPageLayout->addMultiCellWidget(m_checkGamutBox, 1, 1, 0, 0);
@@ -275,31 +265,44 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     zeroPageLayout->addMultiCellWidget(intent, 4, 4, 0, 0);
     zeroPageLayout->addMultiCellWidget(m_renderingIntentsCB, 4, 4, 1, 1);
     zeroPageLayout->setRowStretch(5, 10);
+    zeroPageLayout->setMargin(spacingHint());
+    zeroPageLayout->setSpacing(spacingHint());
 
     //---------- "Input" Page Setup ----------------------------------
 
     m_toolBoxWidgets->insertItem(INPUTPAGE, inProfiles, SmallIconSet("camera"), i18n("Input Profile"));
     inProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant of Input Color "
-                    "Profiles.</p>"));
+                                   "Profiles.</p>"));
 
-    Q3GridLayout *firstPageLayout = new Q3GridLayout(inProfiles, 4, 2, spacingHint());
+    QGridLayout *firstPageLayout = new QGridLayout(inProfiles);
 
-    m_inProfileBG = new Q3ButtonGroup(4, Qt::Vertical, inProfiles);
-    m_inProfileBG->setFrameStyle(QFrame::NoFrame);
-    m_inProfileBG->setInsideMargin(0);
+    QWidget *box1      = new QWidget(inProfiles);
+    QVBoxLayout *hlay1 = new QVBoxLayout(box1);
+    m_inProfileBG      = new QButtonGroup(inProfiles);
 
-    m_useEmbeddedProfile = new QRadioButton(m_inProfileBG);
+    m_useEmbeddedProfile = new QRadioButton(box1);
     m_useEmbeddedProfile->setText(i18n("Use embedded profile"));
 
-    m_useSRGBDefaultProfile = new QRadioButton(m_inProfileBG);
+    m_useSRGBDefaultProfile = new QRadioButton(box1);
     m_useSRGBDefaultProfile->setText(i18n("Use builtin sRGB profile"));
-    m_useSRGBDefaultProfile->setChecked(true);
+    m_useSRGBDefaultProfile->setCheckable(true);
+    m_inProfileBG->addButton(m_useSRGBDefaultProfile);
 
-    m_useInDefaultProfile = new QRadioButton(m_inProfileBG);
+    m_useInDefaultProfile = new QRadioButton(box1);
     m_useInDefaultProfile->setText(i18n("Use default profile"));
+    m_inProfileBG->addButton(m_useInDefaultProfile);
 
-    m_useInSelectedProfile = new QRadioButton(m_inProfileBG);
+    m_useInSelectedProfile = new QRadioButton(box1);
     m_useInSelectedProfile->setText(i18n("Use selected profile"));
+    m_inProfileBG->addButton(m_useInSelectedProfile);
+
+    hlay1->addWidget(m_useEmbeddedProfile);
+    hlay1->addWidget(m_useSRGBDefaultProfile);
+    hlay1->addWidget(m_useInDefaultProfile);
+    hlay1->addWidget(m_useInSelectedProfile);
+    hlay1->addWidget(m_useEmbeddedProfile);
+    hlay1->setMargin(0);
+    hlay1->setSpacing(0);
 
     m_inProfilesPath = new KUrlRequester(inProfiles);
     m_inProfilesPath->setMode(KFile::File|KFile::ExistingOnly);
@@ -310,31 +313,41 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QPushButton *inProfilesInfo = new QPushButton(i18n("Info..."), inProfiles);
 
-    Q3GroupBox *pictureInfo = new Q3GroupBox(2, Qt::Horizontal, i18n("Picture Information"), inProfiles);
-    new QLabel(i18n("Make:"), pictureInfo);
-    KSqueezedTextLabel *make  = new KSqueezedTextLabel(0, pictureInfo);
-    new QLabel(i18n("Model:"), pictureInfo);
-    KSqueezedTextLabel *model = new KSqueezedTextLabel(0, pictureInfo);
-    make->setText(iface.getPhotographInformations().make);
-    model->setText(iface.getPhotographInformations().model);
+    QGroupBox *pictureInfo = new QGroupBox(i18n("Picture Information"), inProfiles);
+    QGridLayout *infoGrid  = new QGridLayout(pictureInfo);
 
-    firstPageLayout->addMultiCellWidget(m_inProfileBG, 0, 1, 0, 0);
+    QLabel *make1              = new QLabel(i18n("Make:"), pictureInfo);
+    KSqueezedTextLabel *make2  = new KSqueezedTextLabel(0, pictureInfo);
+    QLabel *model1             = new QLabel(i18n("Model:"), pictureInfo);
+    KSqueezedTextLabel *model2 = new KSqueezedTextLabel(0, pictureInfo);
+    make2->setText(iface.getPhotographInformations().make);
+    model2->setText(iface.getPhotographInformations().model);
+    infoGrid->addMultiCellWidget(make1,  0, 0, 0, 0);
+    infoGrid->addMultiCellWidget(make2,  0, 0, 1, 1);
+    infoGrid->addMultiCellWidget(model1, 1, 1, 0, 0);
+    infoGrid->addMultiCellWidget(model2, 1, 1, 1, 1);
+    infoGrid->setMargin(spacingHint());
+    infoGrid->setSpacing(0);
+
+    firstPageLayout->addMultiCellWidget(box1, 0, 1, 0, 0);
     firstPageLayout->addMultiCellWidget(inProfilesInfo, 0, 0, 2, 2);
     firstPageLayout->addMultiCellWidget(m_inProfilesPath, 2, 2, 0, 2);
     firstPageLayout->addMultiCellWidget(pictureInfo, 3, 3, 0, 2);
     firstPageLayout->setColStretch(1, 10);
     firstPageLayout->setRowStretch(4, 10);
+    firstPageLayout->setMargin(spacingHint());
+    firstPageLayout->setSpacing(spacingHint());
 
     //---------- "Workspace" Page Setup ---------------------------------
 
     m_toolBoxWidgets->insertItem(WORKSPACEPAGE, spaceProfiles, 
                                  SmallIconSet("tablet"), i18n("Work-space Profile"));
     spaceProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant of Color Work-space "
-                    "Profiles.</p>"));
+                                      "Profiles.</p>"));
 
-    Q3GridLayout *secondPageLayout = new Q3GridLayout(spaceProfiles, 3, 2, spacingHint());
+    QGridLayout *secondPageLayout = new QGridLayout(spaceProfiles);
 
-    m_spaceProfileBG = new Q3ButtonGroup(2, Qt::Vertical, spaceProfiles);
+    m_spaceProfileBG = new QButtonGroup(spaceProfiles);
     m_spaceProfileBG->setFrameStyle(QFrame::NoFrame);
     m_spaceProfileBG->setInsideMargin(0);
 
@@ -358,16 +371,17 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     secondPageLayout->addMultiCellWidget(m_spaceProfilePath, 2, 2, 0, 2);    
     secondPageLayout->setColStretch(1, 10);
     secondPageLayout->setRowStretch(3, 10);
+    secondPageLayout->setMargin(spacingHint());
+    secondPageLayout->setSpacing(spacingHint());
 
     //---------- "Proofing" Page Setup ---------------------------------
 
     m_toolBoxWidgets->insertItem(PROOFINGPAGE, proofProfiles, 
                                  SmallIconSet("printer1"), i18n("Proofing Profile"));
     proofProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant to Proofing Color "
-                    "Profiles.</p>"));
+                                      "Profiles.</p>"));
 
-    Q3GridLayout *thirdPageLayout = new Q3GridLayout(proofProfiles, 3, 2, 
-                                   spacingHint(), spacingHint());
+    QGridLayout *thirdPageLayout = new QGridLayout(proofProfiles);
 
     m_proofProfileBG = new Q3ButtonGroup(2, Qt::Vertical, proofProfiles);
     m_proofProfileBG->setFrameStyle(QFrame::NoFrame);
@@ -393,6 +407,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     thirdPageLayout->addMultiCellWidget(m_proofProfilePath, 2, 2, 0, 2);    
     thirdPageLayout->setColStretch(1, 10);
     thirdPageLayout->setRowStretch(3, 10);
+    thirdPageLayout->setMargin(spacingHint());
+    thirdPageLayout->setSpacing(spacingHint());
 
     //---------- "Lightness" Page Setup ----------------------------------
 
@@ -400,7 +416,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                  SmallIconSet("blend"), i18n("Lightness Adjustments"));
     lightnessadjust->setWhatsThis( i18n("<p>Set here all lightness adjustments of target image.</p>"));
 
-    Q3GridLayout *fourPageLayout = new Q3GridLayout( lightnessadjust, 5, 2, spacingHint(), 0);
+    QGridLayout *fourPageLayout = new QGridLayout( lightnessadjust );
 
     Digikam::ColorGradientWidget* vGradient = new Digikam::ColorGradientWidget(
                                                   Digikam::ColorGradientWidget::Vertical,
@@ -437,10 +453,17 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     fourPageLayout->addMultiCellWidget(m_cInput, 4, 4, 0, 2);
     fourPageLayout->setRowSpacing(3, spacingHint());
     fourPageLayout->setRowStretch(5, 10);
+    fourPageLayout->setMargin(spacingHint());
+    fourPageLayout->setSpacing(0);
 
     // -------------------------------------------------------------
 
+    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 2);
+    gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 2);
     gridSettings->addMultiCellWidget(m_toolBoxWidgets, 3, 3, 0, 2);
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(spacingHint());
+
     setUserAreaWidget(gboxSettings);
     enableButtonOk(false);
 
@@ -452,7 +475,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
 
-    connect(m_scaleBG, SIGNAL(released(int)),
+    connect(m_scaleBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotScaleChanged(int)));
 
     connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
@@ -466,24 +489,24 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //-- Check box options connections -------------------------------------------
 
-    connect(m_doSoftProofBox, SIGNAL(toggled (bool)),
+    connect(m_doSoftProofBox, SIGNAL(toggled(bool)),
             this, SLOT(slotEffect()));      
 
-    connect(m_checkGamutBox, SIGNAL(toggled (bool)),
+    connect(m_checkGamutBox, SIGNAL(toggled(bool)),
             this, SLOT(slotEffect()));      
 
-    connect(m_BPCBox, SIGNAL(toggled (bool)),
+    connect(m_BPCBox, SIGNAL(toggled(bool)),
             this, SLOT(slotEffect()));      
 
     //-- Button Group ICC profile options connections ----------------------------
 
-    connect(m_inProfileBG, SIGNAL(released (int)),
+    connect(m_inProfileBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotEffect())); 
 
-    connect(m_spaceProfileBG, SIGNAL(released (int)),
+    connect(m_spaceProfileBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotEffect())); 
 
-    connect(m_proofProfileBG, SIGNAL(released (int)),
+    connect(m_proofProfileBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotEffect())); 
 
     //-- url requester ICC profile connections -----------------------------------
