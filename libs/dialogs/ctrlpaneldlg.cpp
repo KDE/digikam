@@ -361,14 +361,17 @@ void CtrlPanelDlg::slotEffect()
 
     prepareEffect();
 
-    connect(m_threadedFilter, SIGNAL(started()),
-            this, SLOT(slotFilterStarted()));
-    connect(m_threadedFilter, SIGNAL(finished(bool)),
-            this, SLOT(slotFilterFinished(bool)));
-    connect(m_threadedFilter, SIGNAL(progress(int)),
-            this, SLOT(slotFilterProgress(int)));
+    if (m_threadedFilter)
+    {
+        connect(m_threadedFilter, SIGNAL(started()),
+                this, SLOT(slotFilterStarted()));
+        connect(m_threadedFilter, SIGNAL(finished(bool)),
+                this, SLOT(slotFilterFinished(bool)));
+        connect(m_threadedFilter, SIGNAL(progress(int)),
+                this, SLOT(slotFilterProgress(int)));
 
-    m_threadedFilter->startFilter();
+        m_threadedFilter->startFilter();
+    }
 }
 
 void CtrlPanelDlg::slotOk()
@@ -400,14 +403,17 @@ void CtrlPanelDlg::slotOk()
 
     prepareFinal();
 
-    connect(m_threadedFilter, SIGNAL(started()),
-            this, SLOT(slotFilterStarted()));
-    connect(m_threadedFilter, SIGNAL(finished(bool)),
-            this, SLOT(slotFilterFinished(bool)));
-    connect(m_threadedFilter, SIGNAL(progress(int)),
-            this, SLOT(slotFilterProgress(int)));
+    if (m_threadedFilter)
+    {
+        connect(m_threadedFilter, SIGNAL(started()),
+                this, SLOT(slotFilterStarted()));
+        connect(m_threadedFilter, SIGNAL(finished(bool)),
+                this, SLOT(slotFilterFinished(bool)));
+        connect(m_threadedFilter, SIGNAL(progress(int)),
+                this, SLOT(slotFilterProgress(int)));
 
-    m_threadedFilter->startFilter();
+        m_threadedFilter->startFilter();
+    }
 }
 
 void CtrlPanelDlg::slotFilterStarted()
