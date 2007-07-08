@@ -29,11 +29,11 @@
 
 #include "imagedlgbase.h"
 
-class Q3HButtonGroup;
+class QButtonGroup;
 class QComboBox;
 
 class KDoubleNumInput;
-class KHSSelector;
+class KHueSaturationSelector;
 
 namespace Digikam
 {
@@ -93,13 +93,13 @@ private:
 
     QComboBox                    *m_channelCB;    
     
-    Q3HButtonGroup                *m_scaleBG;  
+    QButtonGroup                 *m_scaleBG;  
     
     KDoubleNumInput              *m_hInput;
     KDoubleNumInput              *m_sInput;
     KDoubleNumInput              *m_lInput;
 
-    KHSSelector                  *m_HSSelector;
+    KHueSaturationSelector       *m_HSSelector;
 
     HSPreviewWidget              *m_HSPreview;    
 
