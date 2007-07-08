@@ -24,22 +24,19 @@
 
 // Qt includes.
 
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qrect.h>
-#include <q3vgroupbox.h>
-#include <qlabel.h>
-
-#include <qcombobox.h>
-#include <qspinbox.h>
-#include <qimage.h>
-#include <qpushbutton.h>
-#include <qtimer.h>
-#include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QFrame>
+#include <QRect>
+#include <QGroupBox>
+#include <QLabel>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QImage>
+#include <QPushButton>
+#include <QTimer>
+#include <QCheckBox>
+#include <QGridLayout>
 #include <QPixmap>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -77,87 +74,87 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QFrame *frame = new QFrame(plainPage());
+    QFrame *frame          = new QFrame(mainWidget());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    Q3VBoxLayout* l = new Q3VBoxLayout(frame, 5, 0);
+    QVBoxLayout* l         = new QVBoxLayout(frame);
+    l->setMargin(5);
+    l->setSpacing(0);
     m_imageSelectionWidget = new ImageSelectionWidget(480, 320, frame);
     l->addWidget(m_imageSelectionWidget);
     m_imageSelectionWidget->setWhatsThis( i18n("<p>Here you can see the aspect ratio selection preview "
-                                                  "used for cropping. You can use the mouse for moving and "
-                                                  "resizing the crop area. "
-                                                  "Hold CTRL to move the opposite corner too. "
-                                                  "Hold SHIFT to move the closest corner to the "
-                                                  "mouse pointer."));
+                                               "used for cropping. You can use the mouse for moving and "
+                                               "resizing the crop area. "
+                                               "Hold CTRL to move the opposite corner too. "
+                                               "Hold SHIFT to move the closest corner to the "
+                                               "mouse pointer."));
     setPreviewAreaWidget(frame);  
 
     // -------------------------------------------------------------
 
-    QWidget *gbox2        = new QWidget(plainPage());
-    Q3GridLayout *gridBox2 = new Q3GridLayout( gbox2, 2, 0);
+    QWidget *gbox2        = new QWidget(mainWidget());
+    QGridLayout *gridBox2 = new QGridLayout(gbox2);
 
-    QFrame *cropSelection = new QFrame( gbox2 );
+    QFrame *cropSelection = new QFrame(gbox2);
+    QGridLayout* grid     = new QGridLayout(cropSelection);
     cropSelection->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    Q3GridLayout* grid = new Q3GridLayout( cropSelection, 6, 4, spacingHint());
 
     QLabel *label = new QLabel(i18n("Aspect ratio:"), cropSelection);
-    m_ratioCB     = new QComboBox( false, cropSelection );
-    m_ratioCB->insertItem( i18n("Custom") );
-    m_ratioCB->insertItem( "1:1" );
-    m_ratioCB->insertItem( "2:3" );
-    m_ratioCB->insertItem( "3:4" );
-    m_ratioCB->insertItem( "4:5" );
-    m_ratioCB->insertItem( "5:7" );
-    m_ratioCB->insertItem( "7:10" );
-    m_ratioCB->insertItem( i18n("Golden Ratio") );
-    m_ratioCB->insertItem( i18n("None") );
-    m_ratioCB->setCurrentText( "1:1" );
+    m_ratioCB     = new QComboBox(cropSelection);
+    m_ratioCB->addItem( i18n("Custom") );
+    m_ratioCB->addItem( "1:1" );
+    m_ratioCB->addItem( "2:3" );
+    m_ratioCB->addItem( "3:4" );
+    m_ratioCB->addItem( "4:5" );
+    m_ratioCB->addItem( "5:7" );
+    m_ratioCB->addItem( "7:10" );
+    m_ratioCB->addItem( i18n("Golden Ratio") );
+    m_ratioCB->addItem( i18n("None") );
+    m_ratioCB->setCurrentIndex(1);
     m_ratioCB->setWhatsThis( i18n("<p>Select here your constrained aspect ratio for cropping. "
-                                     "Aspect Ratio Crop tool uses a relative ratio. That means it "
-                                     "is the same if you use centimeters or inches and it doesn't "
-                                     "specify the physical size.<p>"
-                                     "You can see below a correspondence list of traditional photographic "
-                                     "paper sizes and aspect ratio crop:<p>"
-                                     "<b>2:3</b>: 10x15cm, 20x30cm, 30x45cm, 3.5x5\", 4x6\", 8x12\", "
-                                     "12x18\", 16x24\", 20x30\"<p>"
-                                     "<b>3:4</b>: 6x8cm, 15x20cm, 18x24cm, 30x40cm, 3.75x5\", 4.5x6\", "
-                                     "6x8\", 7.5x10\", 9x12\"<p>"
-                                     "<b>4:5</b>: 20x25cm, 40x50cm, 8x10\", 16x20\"<p>"
-                                     "<b>5:7</b>: 15x21cm, 30x42cm, 5x7\"<p>"
-                                     "<b>7:10</b>: 21x30cm, 42x60cm<p>"
-                                     "The <b>Golden Ratio</b> is 1:1.618. A composition following this rule "
-                                     "is considered visually harmonious but can be unadapted to print on "
-                                     "standard photographic paper."));
+                                  "Aspect Ratio Crop tool uses a relative ratio. That means it "
+                                  "is the same if you use centimeters or inches and it doesn't "
+                                  "specify the physical size.<p>"
+                                  "You can see below a correspondence list of traditional photographic "
+                                  "paper sizes and aspect ratio crop:<p>"
+                                  "<b>2:3</b>: 10x15cm, 20x30cm, 30x45cm, 3.5x5\", 4x6\", 8x12\", "
+                                  "12x18\", 16x24\", 20x30\"<p>"
+                                  "<b>3:4</b>: 6x8cm, 15x20cm, 18x24cm, 30x40cm, 3.75x5\", 4.5x6\", "
+                                  "6x8\", 7.5x10\", 9x12\"<p>"
+                                  "<b>4:5</b>: 20x25cm, 40x50cm, 8x10\", 16x20\"<p>"
+                                  "<b>5:7</b>: 15x21cm, 30x42cm, 5x7\"<p>"
+                                  "<b>7:10</b>: 21x30cm, 42x60cm<p>"
+                                  "The <b>Golden Ratio</b> is 1:1.618. A composition following this rule "
+                                  "is considered visually harmonious but can be unadapted to print on "
+                                  "standard photographic paper."));
 
     m_orientLabel = new QLabel(i18n("Orientation:"), cropSelection);
-    m_orientCB    = new QComboBox( false, cropSelection );
-    m_orientCB->insertItem( i18n("Landscape") );
-    m_orientCB->insertItem( i18n("Portrait") );
+    m_orientCB    = new QComboBox(cropSelection);
+    m_orientCB->addItem( i18n("Landscape") );
+    m_orientCB->addItem( i18n("Portrait") );
     m_orientCB->setWhatsThis( i18n("<p>Select here constrained aspect ratio orientation."));
 
     m_autoOrientation = new QCheckBox(i18n("Auto"), cropSelection);
     m_autoOrientation->setWhatsThis( i18n("<p>Enable this option to automatic setting of orientation."));
 
-    grid->addMultiCellWidget(label, 0, 0, 0, 0);
-    grid->addMultiCellWidget(m_ratioCB, 0, 0, 1, 3);
-    grid->addMultiCellWidget(m_orientLabel, 2, 2, 0, 0);
-    grid->addMultiCellWidget(m_orientCB, 2, 2, 1, 3);
-    grid->addMultiCellWidget(m_autoOrientation, 2, 2, 4, 4);
-
     // -------------------------------------------------------------
 
-    m_customLabel1 = new QLabel(i18n("Custom ratio:"), cropSelection);
+    m_customLabel1      = new QLabel(i18n("Custom ratio:"), cropSelection);
     m_customLabel1->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
-    m_customRatioNInput = new KIntSpinBox(1, 10000, 1, 1, 10, cropSelection);
+    m_customRatioNInput = new KIntSpinBox(cropSelection);
+    m_customRatioNInput->setRange(1, 10000);
+    m_customRatioNInput->setSingleStep(1);
+    m_customRatioNInput->setValue(1);
+    m_customRatioNInput->setBase(10);
     m_customRatioNInput->setWhatsThis( i18n("<p>Set here the desired custom aspect numerator value."));
-    m_customLabel2 = new QLabel(" : ", cropSelection);
-    m_customLabel2->setAlignment(Qt::AlignCenter|Qt::AlignVCenter);
-    m_customRatioDInput = new KIntSpinBox(1, 10000, 1, 1, 10, cropSelection);
-    m_customRatioDInput->setWhatsThis( i18n("<p>Set here the desired custom aspect denominator value."));
 
-    grid->addMultiCellWidget(m_customLabel1, 1, 1, 0, 0);
-    grid->addMultiCellWidget(m_customRatioNInput, 1, 1, 1, 1);
-    grid->addMultiCellWidget(m_customLabel2, 1, 1, 2, 2);
-    grid->addMultiCellWidget(m_customRatioDInput, 1, 1, 3, 3);
+    m_customLabel2      = new QLabel(" : ", cropSelection);
+    m_customLabel2->setAlignment(Qt::AlignCenter|Qt::AlignVCenter);
+    m_customRatioDInput = new KIntSpinBox(cropSelection);
+    m_customRatioDInput->setRange(1, 10000);
+    m_customRatioDInput->setSingleStep(1);
+    m_customRatioDInput->setValue(1);
+    m_customRatioDInput->setBase(10);
+    m_customRatioDInput->setWhatsThis( i18n("<p>Set here the desired custom aspect denominator value."));
 
     // -------------------------------------------------------------
 
@@ -172,14 +169,8 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_widthInput->setRange(10, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
 
     m_centerWidth = new QPushButton(cropSelection);
-    KGlobal::dirs()->addResourceType("centerwidth", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("centerwidth", "centerwidth.png");
-    m_centerWidth->setPixmap( QPixmap( directory + "centerwidth.png" ) );
+    m_centerWidth->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/centerwidth.png")));
     m_centerWidth->setWhatsThis( i18n("<p>Set width position to center."));
-
-    grid->addMultiCellWidget(m_xInput, 3, 3, 0, 3);
-    grid->addMultiCellWidget(m_widthInput, 4, 4, 0, 3);
-    grid->addMultiCellWidget(m_centerWidth, 4, 4, 4, 4);
 
     // -------------------------------------------------------------
 
@@ -194,32 +185,24 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_heightInput->setRange(10, m_imageSelectionWidget->getOriginalImageHeight(), 1, true);
 
     m_centerHeight = new QPushButton(cropSelection);
-    KGlobal::dirs()->addResourceType("centerheight", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("centerheight", "centerheight.png");
-    m_centerHeight->setPixmap( QPixmap( directory + "centerheight.png" ) );
+    m_centerHeight->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/centerheight.png")));
     m_centerHeight->setWhatsThis( i18n("<p>Set height position to center."));
-
-    grid->addMultiCellWidget(m_yInput, 5, 5, 0, 3);
-    grid->addMultiCellWidget(m_heightInput, 6, 6, 0, 3);
-    grid->addMultiCellWidget(m_centerHeight, 6, 6, 4, 4);
-
-    gridBox2->addMultiCellWidget(cropSelection, 0, 0, 0, 0);
 
     // -------------------------------------------------------------
 
     QFrame* compositionGuide = new QFrame( gbox2 );
-    Q3GridLayout* grid2       = new Q3GridLayout( compositionGuide, 7, 2, spacingHint());
+    QGridLayout* grid2       = new QGridLayout(compositionGuide);
     compositionGuide->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
     QLabel *labelGuideLines = new QLabel(i18n("Composition guide:"), compositionGuide);
-    m_guideLinesCB = new QComboBox( false, compositionGuide );
-    m_guideLinesCB->insertItem( i18n("Rules of Thirds") );
-    m_guideLinesCB->insertItem( i18n("Harmonious Triangles") );
-    m_guideLinesCB->insertItem( i18n("Golden Mean") );
-    m_guideLinesCB->insertItem( i18n("None") );
-    m_guideLinesCB->setCurrentText( i18n("None") );
+    m_guideLinesCB = new QComboBox(compositionGuide);
+    m_guideLinesCB->addItem( i18n("Rules of Thirds") );
+    m_guideLinesCB->addItem( i18n("Harmonious Triangles") );
+    m_guideLinesCB->addItem( i18n("Golden Mean") );
+    m_guideLinesCB->addItem( i18n("None") );
+    m_guideLinesCB->setCurrentItem(3);
     m_guideLinesCB->setWhatsThis( i18n("<p>With this option, you can display guide lines "
-                                          "which help you to compose your photograph."));
+                                       "which help you to compose your photograph."));
 
     m_goldenSectionBox = new QCheckBox(i18n("Golden sections"), compositionGuide);
     m_goldenSectionBox->setWhatsThis( i18n("<p>Enable this option to show golden sections."));
@@ -240,10 +223,30 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_flipVerBox->setWhatsThis( i18n("<p>Enable this option to flip vertically guidelines."));
 
     m_colorGuideLabel = new QLabel(i18n("Color and width:"), compositionGuide);
-    m_guideColorBt = new KColorButton( QColor( 250, 250, 255 ), compositionGuide );
-    m_guideSize = new QSpinBox( 1, 5, 1, compositionGuide);
+    m_guideColorBt    = new KColorButton( QColor( 250, 250, 255 ), compositionGuide );
+    m_guideSize       = new QSpinBox( 1, 5, 1, compositionGuide);
     m_guideColorBt->setWhatsThis( i18n("<p>Set here the color used to draw composition guides."));
     m_guideSize->setWhatsThis( i18n("<p>Set here the width in pixels used to draw composition guides."));
+
+    // -------------------------------------------------------------
+
+    grid->addMultiCellWidget(label, 0, 0, 0, 0);
+    grid->addMultiCellWidget(m_ratioCB, 0, 0, 1, 3);
+    grid->addMultiCellWidget(m_orientLabel, 2, 2, 0, 0);
+    grid->addMultiCellWidget(m_orientCB, 2, 2, 1, 3);
+    grid->addMultiCellWidget(m_autoOrientation, 2, 2, 4, 4);
+    grid->addMultiCellWidget(m_customLabel1, 1, 1, 0, 0);
+    grid->addMultiCellWidget(m_customRatioNInput, 1, 1, 1, 1);
+    grid->addMultiCellWidget(m_customLabel2, 1, 1, 2, 2);
+    grid->addMultiCellWidget(m_customRatioDInput, 1, 1, 3, 3);
+    grid->addMultiCellWidget(m_xInput, 3, 3, 0, 3);
+    grid->addMultiCellWidget(m_widthInput, 4, 4, 0, 3);
+    grid->addMultiCellWidget(m_centerWidth, 4, 4, 4, 4);
+    grid->addMultiCellWidget(m_yInput, 5, 5, 0, 3);
+    grid->addMultiCellWidget(m_heightInput, 6, 6, 0, 3);
+    grid->addMultiCellWidget(m_centerHeight, 6, 6, 4, 4);
+    grid->setMargin(spacingHint());
+    grid->setSpacing(spacingHint());
 
     grid2->addMultiCellWidget(labelGuideLines, 0, 0, 0, 0);
     grid2->addMultiCellWidget(m_guideLinesCB, 0, 0, 1, 2);
@@ -256,9 +259,14 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     grid2->addMultiCellWidget(m_colorGuideLabel, 7, 7, 0, 0);
     grid2->addMultiCellWidget(m_guideColorBt, 7, 7, 1, 1);
     grid2->addMultiCellWidget(m_guideSize, 7, 7, 2, 2);
+    grid2->setMargin(spacingHint());
+    grid2->setSpacing(spacingHint());
 
+    gridBox2->addMultiCellWidget(cropSelection, 0, 0, 0, 0);
     gridBox2->addMultiCellWidget(compositionGuide, 1, 1, 0, 0);
     gridBox2->setRowStretch(2, 10);    
+    gridBox2->setMargin(spacingHint());
+    gridBox2->setSpacing(spacingHint());
 
     setUserAreaWidget(gbox2);
 
@@ -361,14 +369,14 @@ void ImageEffect_RatioCrop::readSettings(void)
 
     // No guide lines per default.
     m_guideLinesCB->setCurrentItem( group.readEntry("Guide Lines Type",
-                                    ImageSelectionWidget::GuideNone) );
+                                    (int)ImageSelectionWidget::GuideNone) );
     m_goldenSectionBox->setChecked( group.readEntry("Golden Section", true) );
     m_goldenSpiralSectionBox->setChecked( group.readEntry("Golden Spiral Section", false) );
     m_goldenSpiralBox->setChecked( group.readEntry("Golden Spiral", false) );
     m_goldenTriangleBox->setChecked( group.readEntry("Golden Triangle", false) );
     m_flipHorBox->setChecked( group.readEntry("Golden Flip Horizontal", false) );
     m_flipVerBox->setChecked( group.readEntry("Golden Flip Vertical", false) );
-    m_guideColorBt->setColor(group.readColorEntry("Guide Color", &defaultGuideColor));
+    m_guideColorBt->setColor(group.readEntry("Guide Color", defaultGuideColor));
     m_guideSize->setValue(group.readEntry("Guide Width", 1));
     m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentItem());
     m_imageSelectionWidget->slotChangeGuideColor(m_guideColorBt->color());
@@ -379,14 +387,14 @@ void ImageEffect_RatioCrop::readSettings(void)
         m_yInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Ypos", 50) );
 
         m_ratioCB->setCurrentItem( group.readEntry("Hor.Oriented Aspect Ratio",
-                                   ImageSelectionWidget::RATIO03X04) );
+                                   (int)ImageSelectionWidget::RATIO03X04) );
         m_customRatioNInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Num", 1) );
         m_customRatioDInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Den", 1) );
 
         applyRatioChanges(m_ratioCB->currentItem());
 
         m_orientCB->setCurrentItem( group.readEntry("Hor.Oriented Aspect Ratio Orientation",
-                                                         ImageSelectionWidget::Landscape) );
+                                    (int)ImageSelectionWidget::Landscape) );
 
         if ( m_ratioCB->currentItem() == ImageSelectionWidget::RATIONONE )
         {
@@ -407,14 +415,14 @@ void ImageEffect_RatioCrop::readSettings(void)
         m_yInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Ypos", 50) );
 
         m_ratioCB->setCurrentItem( group.readEntry("Ver.Oriented Aspect Ratio",
-                                   ImageSelectionWidget::RATIO03X04) );
+                                   (int)ImageSelectionWidget::RATIO03X04) );
         m_customRatioNInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Num", 1) );
         m_customRatioDInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Den", 1) );
 
         applyRatioChanges(m_ratioCB->currentItem());
 
         m_orientCB->setCurrentItem( group.readEntry("Ver.Oriented Aspect Ratio Orientation",
-                                                         ImageSelectionWidget::Portrait) );
+                                    (int)ImageSelectionWidget::Portrait) );
 
         if ( m_ratioCB->currentItem() == ImageSelectionWidget::RATIONONE )
         {
