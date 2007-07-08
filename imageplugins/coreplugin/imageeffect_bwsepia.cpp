@@ -636,11 +636,13 @@ void ImageEffect_BWSepia::slotColorSelectedFromTarget( const Digikam::DColor &co
 void ImageEffect_BWSepia::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("convertbw Tool Dialog");
+    KConfigGroup group        = config->group("convertbw Tool Dialog");
 
-    m_tab->setCurrentPage(grouo.readEntry("Settings Tab", (int)BWFiltersTab));
+    m_tab->setCurrentPage(group.readEntry("Settings Tab", (int)BWFiltersTab));
     m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(group.readEntry("Histogram Scale", (int)Digikam::HistogramWidget::LogScaleHistogram));
+    m_scaleBG->button(group.readEntry("Histogram Scale", 
+                      (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
+
     m_bwFilters->setCurrentItem(group.readEntry("BW Filter", 0));
     m_bwFilm->setCurrentItem(group.readEntry("BW Film", 0));
     m_bwTone->setCurrentItem(group.readEntry("BW Tone", 0));
@@ -671,17 +673,17 @@ void ImageEffect_BWSepia::readUserSettings()
         m_curves->curvesCalculateCurve(i);
 
     slotChannelChanged(m_channelCB->currentItem());
-    slotScaleChanged(m_scaleBG->selectedId());
+    slotScaleChanged(m_scaleBG->checkedId());
     slotFilterSelected(m_bwFilters->currentItem());
 }
 
 void ImageEffect_BWSepia::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("convertbw Tool Dialog");
+    KConfigGroup group        = config->group("convertbw Tool Dialog");
     group.writeEntry("Settings Tab", m_tab->currentPageIndex());
     group.writeEntry("Histogram Channel", m_channelCB->currentItem());
-    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
     group.writeEntry("BW Filter", m_bwFilters->currentItem());
     group.writeEntry("BW Film", m_bwFilm->currentItem());
     group.writeEntry("BW Tone", m_bwTone->currentItem());
@@ -1075,7 +1077,7 @@ void ImageEffect_BWSepia::slotUser3()
     
     if ( file.open(QIODevice::ReadOnly) )   
     {
-        Q3TextStream stream( &file );
+        QTextStream stream( &file );
 
         if ( stream.readLine() != "# Black & White Configuration File" )
         {
@@ -1150,7 +1152,7 @@ void ImageEffect_BWSepia::slotUser2()
     
     if ( file.open(QIODevice::WriteOnly) )   
     {
-        Q3TextStream stream( &file );        
+        QTextStream stream( &file );        
         stream << "# Black & White Configuration File\n";
         stream << m_bwFilters->currentItem() << "\n";    
         stream << m_bwTone->currentItem() << "\n";    
