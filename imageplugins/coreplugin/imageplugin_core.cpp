@@ -65,11 +65,10 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QStringList &)
     connect(m_blurAction, SIGNAL(triggered(bool) ), 
             this, SLOT(slotBlur()));
 
-/*
-    m_sharpenAction = new KAction(i18n("Sharpen..."), "sharpenimage", 0,
-                          this, SLOT(slotSharpen()),
-                          actionCollection(), "implugcore_sharpen");
-*/
+    m_sharpenAction = new KAction(KIcon("sharpenimage"), i18n("Sharpen..."), this);
+    actionCollection()->addAction("implugcore_sharpen", m_sharpenAction );
+    connect(m_sharpenAction, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotSharpen()));
 
     m_redeyeAction = new KAction(KIcon("redeyes"), i18n("Red Eye..."), this);
     m_redeyeAction->setWhatsThis( i18n( "This filter can be used to correct red eyes in a photo. "
@@ -172,10 +171,10 @@ void ImagePlugin_Core::setEnabledActions(bool enable)
     m_BWAction->setEnabled(enable);
     m_colorManagementAction->setEnabled(enable);
     m_HSLAction->setEnabled(enable);
+    m_sharpenAction->setEnabled(enable);
     
 /*    
     m_aspectRatioCropAction->setEnabled(enable);
-    m_sharpenAction->setEnabled(enable);
     */
 }
 
@@ -300,8 +299,8 @@ void ImagePlugin_Core::slotHSL()
 
 void ImagePlugin_Core::slotSharpen()
 {
-/*    DigikamImagesPluginCore::ImageEffect_Sharpen dlg(parentWidget());
-    dlg.exec();*/
+    DigikamImagesPluginCore::ImageEffect_Sharpen dlg(parentWidget());
+    dlg.exec();
 }
 
 void ImagePlugin_Core::slotRatioCrop()

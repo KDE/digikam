@@ -393,7 +393,7 @@ void ImageEffect_Sharpen::readUserSettings()
     m_gauss->setValue(group.readEntry("RefocusGaussAjustment", 0.0));
     m_correlation->setValue(group.readEntry("RefocusCorrelationAjustment", 0.5));
     m_noise->setValue(group.readEntry("RefocusNoiseAjustment", 0.03));
-    m_sharpMethod->setCurrentItem(group.readEntry("SharpenMethod", (int)SimpleSharp));
+    m_sharpMethod->setCurrentIndex(group.readEntry("SharpenMethod", (int)SimpleSharp));
     m_radiusInput->blockSignals(false);
     m_radiusInput2->blockSignals(false);
     m_amountInput->blockSignals(false);
@@ -404,7 +404,7 @@ void ImageEffect_Sharpen::readUserSettings()
     m_correlation->blockSignals(false);
     m_noise->blockSignals(false);
     m_sharpMethod->blockSignals(false);
-    slotSharpMethodActived(m_sharpMethod->currentItem());
+    slotSharpMethodActived(m_sharpMethod->currentIndex());
 }
 
 void ImageEffect_Sharpen::writeUserSettings()
@@ -420,7 +420,7 @@ void ImageEffect_Sharpen::writeUserSettings()
     group.writeEntry("RefocusGaussAjustment", m_gauss->value());
     group.writeEntry("RefocusCorrelationAjustment", m_correlation->value());
     group.writeEntry("RefocusNoiseAjustment", m_noise->value());
-    group.writeEntry("SharpenMethod", m_sharpMethod->currentItem());
+    group.writeEntry("SharpenMethod", m_sharpMethod->currentIndex());
     config->sync();
 }
 
@@ -530,7 +530,7 @@ void ImageEffect_Sharpen::prepareEffect()
             tmpRect.setRight(area.right()+2*ms);
             tmpRect.setTop(area.top()-2*ms);
             tmpRect.setBottom(area.bottom()+2*ms);
-            tmpRect.moveBy(2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+            tmpRect.translate(2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
             Digikam::DImg imTemp = m_img.copy(tmpRect);
                 
             m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
