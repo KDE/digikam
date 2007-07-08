@@ -28,7 +28,7 @@
 
 #include "ctrlpaneldlg.h"
 
-class Q3WidgetStack;
+class QStackedWidget;
 class QComboBox;
 
 class KIntNumInput;
@@ -78,7 +78,7 @@ private:
         Refocus
     };
 
-    Q3WidgetStack    *m_stack;
+    QStackedWidget  *m_stack;
     
     QComboBox       *m_sharpMethod;
 

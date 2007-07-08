@@ -29,13 +29,10 @@
 
 // Qt includes.
 
-#include <qlayout.h>
-#include <qlabel.h>
-
-#include <qcombobox.h>
-#include <q3widgetstack.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QComboBox>
+#include <QStackedWidget>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -69,56 +66,61 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
                    : Digikam::CtrlPanelDlg(parent, i18n("Sharpening Photograph"), "sharpen",
                                            true, false, true)
  {
-    setHelp("blursharpentool.anchor", KApplication::kApplication()->aboutData()->appName());
+    setHelp("blursharpentool.anchor", "digikam");
 
     // -------------------------------------------------------------
 
     QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 2, 1, 0, spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings );
 
     QLabel *label1 = new QLabel(i18n("Method:"), gboxSettings);
 
-    m_sharpMethod = new QComboBox( false, gboxSettings );
-    m_sharpMethod->insertItem( i18n("Simple sharp") );
-    m_sharpMethod->insertItem( i18n("Unsharp mask") );
-    m_sharpMethod->insertItem( i18n("Refocus") );
+    m_sharpMethod = new QComboBox(gboxSettings);
+    m_sharpMethod->addItem( i18n("Simple sharp") );
+    m_sharpMethod->addItem( i18n("Unsharp mask") );
+    m_sharpMethod->addItem( i18n("Refocus") );
     m_sharpMethod->setWhatsThis( i18n("<p>Select here the sharping method to apply on image."));
     
-    m_stack = new Q3WidgetStack(gboxSettings);
+    m_stack = new QStackedWidget(gboxSettings);
 
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
     gridSettings->addMultiCellWidget(m_sharpMethod, 0, 0, 1, 1);
     gridSettings->addMultiCellWidget(new KSeparator(gboxSettings), 1, 1, 0, 1);
     gridSettings->addMultiCellWidget(m_stack, 2, 2, 0, 1);
+    gridSettings->setMargin(spacingHint());
+    gridSettings->setSpacing(spacingHint());
 
     // -------------------------------------------------------------
     
     QWidget *simpleSharpSettings = new QWidget(m_stack);
-    Q3GridLayout* grid1           = new Q3GridLayout( simpleSharpSettings, 2, 1, 0, spacingHint());
+    QGridLayout* grid1           = new QGridLayout(simpleSharpSettings);
 
     QLabel *label = new QLabel(i18n("Sharpness:"), simpleSharpSettings);
     m_radiusInput = new KIntNumInput(simpleSharpSettings);
     m_radiusInput->setRange(0, 100, 1, true);
     m_radiusInput->setValue(0);
     m_radiusInput->setWhatsThis( i18n("<p>A sharpness of 0 has no effect, "
-                                         "1 and above determine the sharpen matrix radius "
-                                         "that determines how much to sharpen the image."));
+                                      "1 and above determine the sharpen matrix radius "
+                                      "that determines how much to sharpen the image."));
 
     grid1->addMultiCellWidget(label, 0, 0, 0, 1);
     grid1->addMultiCellWidget(m_radiusInput, 1, 1, 0, 1);
     grid1->setRowStretch(2, 10);
-    m_stack->addWidget(simpleSharpSettings, SimpleSharp);
+    grid1->setMargin(spacingHint());
+    grid1->setSpacing(spacingHint());
+
+    m_stack->insertWidget(SimpleSharp, simpleSharpSettings);
 
     // -------------------------------------------------------------
 
     QWidget *unsharpMaskSettings = new QWidget(m_stack);
-    Q3GridLayout* grid2           = new Q3GridLayout( unsharpMaskSettings, 6, 1, 0, spacingHint());
+    QGridLayout* grid2           = new QGridLayout(unsharpMaskSettings);
 
     QLabel *label2 = new QLabel(i18n("Radius:"), unsharpMaskSettings);
     m_radiusInput2 = new KIntNumInput(unsharpMaskSettings);
     m_radiusInput2->setRange(1, 120, 1, true);
     m_radiusInput2->setWhatsThis( i18n("<p>Radius value is the gaussian blur matrix radius value "
-                                         "used to determines how much to blur the image.") );
+                                       "used to determines how much to blur the image.") );
     
     QLabel *label3 = new QLabel(i18n("Amount:"), unsharpMaskSettings);
     m_amountInput  = new KDoubleNumInput(unsharpMaskSettings);
@@ -141,55 +143,58 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     grid2->addMultiCellWidget(label4, 4, 4, 0, 1);
     grid2->addMultiCellWidget(m_thresholdInput, 5, 5, 0, 1);
     grid2->setRowStretch(6, 10);
-    m_stack->addWidget(unsharpMaskSettings, UnsharpMask);
+    grid2->setMargin(spacingHint());
+    grid2->setSpacing(spacingHint());
+
+    m_stack->insertWidget(UnsharpMask, unsharpMaskSettings);
 
     // -------------------------------------------------------------
 
     QWidget *refocusSettings = new QWidget(m_stack);
-    Q3GridLayout* grid3       = new Q3GridLayout(refocusSettings, 10, 1, 0, spacingHint());
+    QGridLayout* grid3       = new QGridLayout(refocusSettings);
     
     QLabel *label5 = new QLabel(i18n("Circular sharpness:"), refocusSettings);
     m_radius       = new KDoubleNumInput(refocusSettings);
     m_radius->setPrecision(2);
     m_radius->setRange(0.0, 5.0, 0.01, true);
     m_radius->setWhatsThis( i18n("<p>This is the radius of the circular convolution. It is the most important "
-                                    "parameter for using the plugin. For most images the default value of 1.0 "
-                                    "should give good results. Select a higher value when your image is very blurred."));
+                                 "parameter for using the plugin. For most images the default value of 1.0 "
+                                 "should give good results. Select a higher value when your image is very blurred."));
     
     QLabel *label6 = new QLabel(i18n("Correlation:"), refocusSettings);
     m_correlation  = new KDoubleNumInput(refocusSettings);
     m_correlation->setPrecision(2);
     m_correlation->setRange(0.0, 1.0, 0.01, true);
     m_correlation->setWhatsThis( i18n("<p>Increasing the correlation may help to reduce artifacts. The correlation can "
-                                         "range from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. "
-                                         "Using a high value for the correlation will reduce the sharpening effect of the "
-                                         "plugin."));
+                                      "range from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. "
+                                      "Using a high value for the correlation will reduce the sharpening effect of the "
+                                      "plugin."));
 
     QLabel *label7 = new QLabel(i18n("Noise filter:"), refocusSettings);
     m_noise        = new KDoubleNumInput(refocusSettings);
     m_noise->setPrecision(3);
     m_noise->setRange(0.0, 1.0, 0.001, true);
     m_noise->setWhatsThis( i18n("<p>Increasing the noise filter parameter may help to reduce artifacts. The noise filter "
-                                   "can range from 0-1 but values higher than 0.1 are rarely helpful. When the noise filter "
-                                   "value is too low, e.g. 0.0 the image quality will be very poor. A useful value is 0.01. "
-                                   "Using a high value for the noise filter will reduce the sharpening "
-                                   "effect of the plugin."));
+                                "can range from 0-1 but values higher than 0.1 are rarely helpful. When the noise filter "
+                                "value is too low, e.g. 0.0 the image quality will be very poor. A useful value is 0.01. "
+                                "Using a high value for the noise filter will reduce the sharpening "
+                                "effect of the plugin."));
 
     QLabel *label8 = new QLabel(i18n("Gaussian sharpness:"), refocusSettings);
     m_gauss        = new KDoubleNumInput(refocusSettings);
     m_gauss->setPrecision(2);
     m_gauss->setRange(0.0, 1.0, 0.01, true);
     m_gauss->setWhatsThis( i18n("<p>This is the sharpness for the gaussian convolution. Use this parameter when your "
-                                   "blurring is of gaussian type. In most cases you should set this parameter to 0, because "
-                                   "it causes nasty artifacts. When you use non-zero values you will probably have to "
-                                   "increase the correlation and/or noise filter parameters too."));
+                                "blurring is of gaussian type. In most cases you should set this parameter to 0, because "
+                                "it causes nasty artifacts. When you use non-zero values you will probably have to "
+                                "increase the correlation and/or noise filter parameters too."));
 
     QLabel *label9 = new QLabel(i18n("Matrix size:"), refocusSettings);
     m_matrixSize   = new KIntNumInput(refocusSettings);
     m_matrixSize->setRange(0, MAX_MATRIX_SIZE, 1, true);  
     m_matrixSize->setWhatsThis( i18n("<p>This parameter determines the size of the transformation matrix. "
-                                        "Increasing the matrix width may give better results, especially when you have "
-                                        "chosen large values for circular or gaussian sharpness."));
+                                     "Increasing the matrix width may give better results, especially when you have "
+                                     "chosen large values for circular or gaussian sharpness."));
 
     grid3->addMultiCellWidget(label5, 0, 0, 0, 1);
     grid3->addMultiCellWidget(m_radius, 1, 1, 0, 1);
@@ -202,7 +207,10 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     grid3->addMultiCellWidget(label9, 8, 8, 0, 1);
     grid3->addMultiCellWidget(m_matrixSize, 9, 9, 0, 1);
     grid3->setRowStretch(10, 10);
-    m_stack->addWidget(refocusSettings, Refocus);
+    grid3->setMargin(spacingHint());
+    grid3->setSpacing(spacingHint());
+
+    m_stack->insertWidget(Refocus, refocusSettings);
     
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
         
@@ -313,7 +321,7 @@ ImageEffect_Sharpen::~ImageEffect_Sharpen()
 
 void ImageEffect_Sharpen::renderingFinished(void)
 {
-    switch (m_stack->id(m_stack->visibleWidget()))
+    switch (m_stack->indexOf(m_stack->currentWidget()))
     {
         case SimpleSharp:
         {
@@ -347,7 +355,7 @@ void ImageEffect_Sharpen::renderingFinished(void)
 
 void ImageEffect_Sharpen::slotSharpMethodActived(int w)
 {
-    m_stack->raiseWidget(w);
+    m_stack->setCurrentWidget(m_stack->widget(w));
     if (w == Refocus)
     {
         enableButton(User2, true);
@@ -385,7 +393,7 @@ void ImageEffect_Sharpen::readUserSettings()
     m_gauss->setValue(group.readEntry("RefocusGaussAjustment", 0.0));
     m_correlation->setValue(group.readEntry("RefocusCorrelationAjustment", 0.5));
     m_noise->setValue(group.readEntry("RefocusNoiseAjustment", 0.03));
-    m_sharpMethod->setCurrentItem(group.readEntry("SharpenMethod", SimpleSharp));
+    m_sharpMethod->setCurrentItem(group.readEntry("SharpenMethod", (int)SimpleSharp));
     m_radiusInput->blockSignals(false);
     m_radiusInput2->blockSignals(false);
     m_amountInput->blockSignals(false);
@@ -418,7 +426,7 @@ void ImageEffect_Sharpen::writeUserSettings()
 
 void ImageEffect_Sharpen::resetValues(void)
 {
-    switch (m_stack->id(m_stack->visibleWidget()))
+    switch (m_stack->indexOf(m_stack->currentWidget()))
     {
         case SimpleSharp:
         {    
@@ -466,7 +474,7 @@ void ImageEffect_Sharpen::resetValues(void)
 
 void ImageEffect_Sharpen::prepareEffect()
 {
-    switch (m_stack->id(m_stack->visibleWidget()))
+    switch (m_stack->indexOf(m_stack->currentWidget()))
     {
         case SimpleSharp:
         {    
@@ -534,7 +542,7 @@ void ImageEffect_Sharpen::prepareEffect()
 
 void ImageEffect_Sharpen::prepareFinal()
 {
-    switch (m_stack->id(m_stack->visibleWidget()))
+    switch (m_stack->indexOf(m_stack->currentWidget()))
     {
         case SimpleSharp:
         {    
@@ -606,7 +614,7 @@ void ImageEffect_Sharpen::prepareFinal()
 
 void ImageEffect_Sharpen::putPreviewData(void)
 {
-    switch (m_stack->id(m_stack->visibleWidget()))
+    switch (m_stack->indexOf(m_stack->currentWidget()))
     {
         case SimpleSharp:
         case UnsharpMask:
@@ -634,7 +642,7 @@ void ImageEffect_Sharpen::putFinalData(void)
     Digikam::ImageIface iface(0, 0);
     Digikam::DImg imDest = m_threadedFilter->getTargetImage();
 
-    switch (m_stack->id(m_stack->visibleWidget()))
+    switch (m_stack->indexOf(m_stack->currentWidget()))
     {
         case SimpleSharp:
         {
@@ -675,7 +683,7 @@ void ImageEffect_Sharpen::slotUser3()
     
     if ( file.open(QIODevice::ReadOnly) )   
     {
-        Q3TextStream stream( &file );
+        QTextStream stream( &file );
         if ( stream.readLine() != "# Photograph Refocus Configuration File" )
         {
            KMessageBox::error(this, 
@@ -712,7 +720,7 @@ void ImageEffect_Sharpen::slotUser2()
     
     if ( file.open(QIODevice::WriteOnly) )   
     {
-        Q3TextStream stream( &file );        
+        QTextStream stream( &file );        
         stream << "# Photograph Refocus Configuration File\n";    
         stream << m_matrixSize->value() << "\n";    
         stream << m_radius->value() << "\n";    
