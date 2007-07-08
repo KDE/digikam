@@ -55,8 +55,8 @@ SET(digikamimageplugin_core_PART_SRCS
     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/refocus.cpp
     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/unsharp.cpp
     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp 
-#    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp
-#    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp 
+    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp
+    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp 
    )
 
 KDE4_AUTOMOC(${digikamimageplugin_core_PART_SRCS})

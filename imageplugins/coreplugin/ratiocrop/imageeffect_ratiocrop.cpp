@@ -200,7 +200,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_guideLinesCB->addItem( i18n("Harmonious Triangles") );
     m_guideLinesCB->addItem( i18n("Golden Mean") );
     m_guideLinesCB->addItem( i18n("None") );
-    m_guideLinesCB->setCurrentItem(3);
+    m_guideLinesCB->setCurrentIndex(3);
     m_guideLinesCB->setWhatsThis( i18n("<p>With this option, you can display guide lines "
                                        "which help you to compose your photograph."));
 
@@ -224,7 +224,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     m_colorGuideLabel = new QLabel(i18n("Color and width:"), compositionGuide);
     m_guideColorBt    = new KColorButton( QColor( 250, 250, 255 ), compositionGuide );
-    m_guideSize       = new QSpinBox( 1, 5, 1, compositionGuide);
+    m_guideSize       = new QSpinBox(compositionGuide);
+    m_guideSize->setRange(1, 5);
+    m_guideSize->setSingleStep(1);
     m_guideColorBt->setWhatsThis( i18n("<p>Set here the color used to draw composition guides."));
     m_guideSize->setWhatsThis( i18n("<p>Set here the width in pixels used to draw composition guides."));
 
@@ -368,7 +370,7 @@ void ImageEffect_RatioCrop::readSettings(void)
     KConfigGroup group = config->group("aspectratiocrop Tool Dialog");
 
     // No guide lines per default.
-    m_guideLinesCB->setCurrentItem( group.readEntry("Guide Lines Type",
+    m_guideLinesCB->setCurrentIndex( group.readEntry("Guide Lines Type",
                                     (int)ImageSelectionWidget::GuideNone) );
     m_goldenSectionBox->setChecked( group.readEntry("Golden Section", true) );
     m_goldenSpiralSectionBox->setChecked( group.readEntry("Golden Spiral Section", false) );
@@ -378,7 +380,7 @@ void ImageEffect_RatioCrop::readSettings(void)
     m_flipVerBox->setChecked( group.readEntry("Golden Flip Vertical", false) );
     m_guideColorBt->setColor(group.readEntry("Guide Color", defaultGuideColor));
     m_guideSize->setValue(group.readEntry("Guide Width", 1));
-    m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentItem());
+    m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentIndex());
     m_imageSelectionWidget->slotChangeGuideColor(m_guideColorBt->color());
 
     if (w > h)
@@ -386,17 +388,17 @@ void ImageEffect_RatioCrop::readSettings(void)
         m_xInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Xpos", 50) );
         m_yInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Ypos", 50) );
 
-        m_ratioCB->setCurrentItem( group.readEntry("Hor.Oriented Aspect Ratio",
+        m_ratioCB->setCurrentIndex( group.readEntry("Hor.Oriented Aspect Ratio",
                                    (int)ImageSelectionWidget::RATIO03X04) );
         m_customRatioNInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Num", 1) );
         m_customRatioDInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Den", 1) );
 
-        applyRatioChanges(m_ratioCB->currentItem());
+        applyRatioChanges(m_ratioCB->currentIndex());
 
-        m_orientCB->setCurrentItem( group.readEntry("Hor.Oriented Aspect Ratio Orientation",
+        m_orientCB->setCurrentIndex( group.readEntry("Hor.Oriented Aspect Ratio Orientation",
                                     (int)ImageSelectionWidget::Landscape) );
 
-        if ( m_ratioCB->currentItem() == ImageSelectionWidget::RATIONONE )
+        if ( m_ratioCB->currentIndex() == ImageSelectionWidget::RATIONONE )
         {
             m_widthInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Width", 800) );
             m_heightInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Height", 600) );
@@ -407,24 +409,24 @@ void ImageEffect_RatioCrop::readSettings(void)
             m_heightInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Height", 600) );
         }
 
-        m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentItem());
+        m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentIndex());
     }
     else
     {
         m_xInput->setValue( group.readEntry("Ver.Oriented  Custom Aspect Ratio Xpos", 50) );
         m_yInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Ypos", 50) );
 
-        m_ratioCB->setCurrentItem( group.readEntry("Ver.Oriented Aspect Ratio",
+        m_ratioCB->setCurrentIndex( group.readEntry("Ver.Oriented Aspect Ratio",
                                    (int)ImageSelectionWidget::RATIO03X04) );
         m_customRatioNInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Num", 1) );
         m_customRatioDInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Den", 1) );
 
-        applyRatioChanges(m_ratioCB->currentItem());
+        applyRatioChanges(m_ratioCB->currentIndex());
 
-        m_orientCB->setCurrentItem( group.readEntry("Ver.Oriented Aspect Ratio Orientation",
+        m_orientCB->setCurrentIndex( group.readEntry("Ver.Oriented Aspect Ratio Orientation",
                                     (int)ImageSelectionWidget::Portrait) );
 
-        if ( m_ratioCB->currentItem() == ImageSelectionWidget::RATIONONE )
+        if ( m_ratioCB->currentIndex() == ImageSelectionWidget::RATIONONE )
         {
             m_widthInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Width", 800) );
             m_heightInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Height", 600) );
@@ -435,7 +437,7 @@ void ImageEffect_RatioCrop::readSettings(void)
             m_heightInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Height", 600) );
         }
 
-        m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentItem());
+        m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentIndex());
     }
 
     m_autoOrientation->setChecked( group.readEntry("Auto Orientation", false) );
@@ -453,8 +455,8 @@ void ImageEffect_RatioCrop::writeSettings(void)
 
     if (w > h)
     {
-       group.writeEntry( "Hor.Oriented Aspect Ratio", m_ratioCB->currentItem() );
-       group.writeEntry( "Hor.Oriented Aspect Ratio Orientation", m_orientCB->currentItem() );
+       group.writeEntry( "Hor.Oriented Aspect Ratio", m_ratioCB->currentIndex() );
+       group.writeEntry( "Hor.Oriented Aspect Ratio Orientation", m_orientCB->currentIndex() );
        group.writeEntry( "Hor.Oriented Custom Aspect Ratio Num", m_customRatioNInput->value() );
        group.writeEntry( "Hor.Oriented Custom Aspect Ratio Den", m_customRatioDInput->value() );
 
@@ -465,8 +467,8 @@ void ImageEffect_RatioCrop::writeSettings(void)
     }
     else
     {
-       group.writeEntry( "Ver.Oriented Aspect Ratio", m_ratioCB->currentItem() );
-       group.writeEntry( "Ver.Oriented Aspect Ratio Orientation", m_orientCB->currentItem() );
+       group.writeEntry( "Ver.Oriented Aspect Ratio", m_ratioCB->currentIndex() );
+       group.writeEntry( "Ver.Oriented Aspect Ratio Orientation", m_orientCB->currentIndex() );
        group.writeEntry( "Ver.Oriented Custom Aspect Ratio Num", m_customRatioNInput->value() );
        group.writeEntry( "Ver.Oriented Custom Aspect Ratio Den", m_customRatioDInput->value() );
 
@@ -477,7 +479,7 @@ void ImageEffect_RatioCrop::writeSettings(void)
     }
 
     group.writeEntry( "Auto Orientation", m_autoOrientation->isChecked() );
-    group.writeEntry( "Guide Lines Type", m_guideLinesCB->currentItem() );
+    group.writeEntry( "Guide Lines Type", m_guideLinesCB->currentIndex() );
     group.writeEntry( "Golden Section", m_goldenSectionBox->isChecked() );
     group.writeEntry( "Golden Spiral Section", m_goldenSpiralSectionBox->isChecked() );
     group.writeEntry( "Golden Spiral", m_goldenSpiralBox->isChecked() );
@@ -556,7 +558,7 @@ void ImageEffect_RatioCrop::slotSelectionHeightChanged(int newHeight)
 
 void ImageEffect_RatioCrop::slotSelectionOrientationChanged(int newOrientation)
 {
-    m_orientCB->setCurrentItem(newOrientation);
+    m_orientCB->setCurrentIndex(newOrientation);
 }
 
 void ImageEffect_RatioCrop::slotXChanged(int x)
@@ -700,7 +702,7 @@ void ImageEffect_RatioCrop::slotGuideTypeChanged(int t)
 
 void ImageEffect_RatioCrop::slotGoldenGuideTypeChanged(void)
 {
-    slotGuideTypeChanged(m_guideLinesCB->currentItem());
+    slotGuideTypeChanged(m_guideLinesCB->currentIndex());
 }
 
 void ImageEffect_RatioCrop::slotCustomRatioChanged(void)
@@ -724,7 +726,7 @@ void ImageEffect_RatioCrop::slotOk()
     bool a                     = iface->originalHasAlpha();
     bool sb                    = iface->originalSixteenBit();
     
-    QRect normalizedRegion = currentRegion.normalize();
+    QRect normalizedRegion = currentRegion.normalized();
     if (normalizedRegion.right() > w) normalizedRegion.setRight(w);
     if (normalizedRegion.bottom() > h) normalizedRegion.setBottom(h);
 

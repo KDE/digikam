@@ -89,7 +89,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QStringList &)
     connect(m_HSLAction, SIGNAL(triggered(bool) ), 
             this, SLOT(slotHSL()));
 
-
     // NOTE: Photoshop 7 use CTRL+B.
     m_RGBAction = new KAction(KIcon("adjustrgb"), i18n("Color Balance..."), this);
     m_RGBAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));      
@@ -126,7 +125,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QStringList &)
     connect(m_colorManagementAction, SIGNAL(triggered(bool) ), 
             this, SLOT(slotColorManagement()));
 
-
     //-------------------------------
     // Filters menu actions.
 
@@ -137,11 +135,12 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QStringList &)
 
     //-------------------------------
     // Transform menu actions.
-/*    
-    m_aspectRatioCropAction = new KAction(i18n("Aspect Ratio Crop..."), "ratiocrop", 0,
-                                  this, SLOT(slotRatioCrop()),
-                                  actionCollection(), "implugcore_ratiocrop");
-*/
+
+    m_aspectRatioCropAction = new KAction(KIcon("ratiocrop"), i18n("Aspect Ratio Crop..."), this);
+    actionCollection()->addAction("implugcore_ratiocrop", m_aspectRatioCropAction );
+    connect(m_aspectRatioCropAction, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotRatioCrop()));
+
     //-------------------------------
     // Init. menu actions.
 
@@ -172,10 +171,7 @@ void ImagePlugin_Core::setEnabledActions(bool enable)
     m_colorManagementAction->setEnabled(enable);
     m_HSLAction->setEnabled(enable);
     m_sharpenAction->setEnabled(enable);
-    
-/*    
     m_aspectRatioCropAction->setEnabled(enable);
-    */
 }
 
 void ImagePlugin_Core::slotInvert()
@@ -305,6 +301,6 @@ void ImagePlugin_Core::slotSharpen()
 
 void ImagePlugin_Core::slotRatioCrop()
 {
-/*    DigikamImagesPluginCore::ImageEffect_RatioCrop dlg(parentWidget());
-    dlg.exec();*/
+    DigikamImagesPluginCore::ImageEffect_RatioCrop dlg(parentWidget());
+    dlg.exec();
 }
