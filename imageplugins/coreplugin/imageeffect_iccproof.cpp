@@ -62,6 +62,7 @@
 #include <ksqueezedtextlabel.h>
 #include <kglobal.h>
 #include <kvbox.h>
+#include <ktoolinvocation.h>
 
 // Digikam includes.
 
@@ -187,7 +188,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- "General" Page Setup ----------------------------------
 
     m_toolBoxWidgets->insertItem(GENERALPAGE, generalOptions, 
-                                 SmallIconSet("misc"), i18n("General Settings"));
+                                 SmallIconSet("exec"), i18n("General Settings"));
     generalOptions->setWhatsThis( i18n("<p>Here you can set general parameters.</p>"));
 
     QGridLayout *zeroPageLayout = new QGridLayout(generalOptions);
@@ -270,7 +271,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- "Input" Page Setup ----------------------------------
 
-    m_toolBoxWidgets->insertItem(INPUTPAGE, inProfiles, SmallIconSet("camera"), i18n("Input Profile"));
+    m_toolBoxWidgets->insertItem(INPUTPAGE, inProfiles, SmallIconSet("camera-photo"), i18n("Input Profile"));
     inProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant of Input Color "
                                    "Profiles.</p>"));
 
@@ -282,6 +283,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_useEmbeddedProfile = new QRadioButton(box1);
     m_useEmbeddedProfile->setText(i18n("Use embedded profile"));
+    m_inProfileBG->addButton(m_useEmbeddedProfile);
 
     m_useSRGBDefaultProfile = new QRadioButton(box1);
     m_useSRGBDefaultProfile->setText(i18n("Use builtin sRGB profile"));
@@ -322,6 +324,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     KSqueezedTextLabel *model2 = new KSqueezedTextLabel(0, pictureInfo);
     make2->setText(iface.getPhotographInformations().make);
     model2->setText(iface.getPhotographInformations().model);
+
     infoGrid->addMultiCellWidget(make1,  0, 0, 0, 0);
     infoGrid->addMultiCellWidget(make2,  0, 0, 1, 1);
     infoGrid->addMultiCellWidget(model1, 1, 1, 0, 0);
@@ -341,32 +344,39 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- "Workspace" Page Setup ---------------------------------
 
     m_toolBoxWidgets->insertItem(WORKSPACEPAGE, spaceProfiles, 
-                                 SmallIconSet("tablet"), i18n("Work-space Profile"));
+                                 SmallIconSet("input-tablet"), i18n("Work-space Profile"));
     spaceProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant of Color Work-space "
                                       "Profiles.</p>"));
 
     QGridLayout *secondPageLayout = new QGridLayout(spaceProfiles);
 
-    m_spaceProfileBG = new QButtonGroup(spaceProfiles);
-    m_spaceProfileBG->setFrameStyle(QFrame::NoFrame);
-    m_spaceProfileBG->setInsideMargin(0);
+    QWidget *box2      = new QWidget(spaceProfiles);
+    QVBoxLayout *hlay2 = new QVBoxLayout(box2);
+    m_spaceProfileBG   = new QButtonGroup(box2);
 
-    m_useSpaceDefaultProfile = new QRadioButton(m_spaceProfileBG);
+    m_useSpaceDefaultProfile = new QRadioButton(box2);
     m_useSpaceDefaultProfile->setText(i18n("Use default workspace profile"));
+    m_spaceProfileBG->addButton(m_useSpaceDefaultProfile);
 
-    m_useSpaceSelectedProfile = new QRadioButton(m_spaceProfileBG);
+    m_useSpaceSelectedProfile = new QRadioButton(box2);
     m_useSpaceSelectedProfile->setText(i18n("Use selected profile"));
+    m_spaceProfileBG->addButton(m_useSpaceSelectedProfile);
 
-    m_spaceProfilePath = new KUrlRequester(spaceProfiles);
+    hlay2->addWidget(m_useSpaceDefaultProfile);
+    hlay2->addWidget(m_useSpaceSelectedProfile);
+    hlay2->setMargin(0);
+    hlay2->setSpacing(0);
+
+    m_spaceProfilePath = new KUrlRequester(box2);
     m_spaceProfilePath->setMode(KFile::File|KFile::ExistingOnly);
     m_spaceProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
     KFileDialog *spaceProfiles_dialog = m_spaceProfilePath->fileDialog();
     m_iccSpacePreviewWidget = new Digikam::ICCPreviewWidget(spaceProfiles_dialog);
     spaceProfiles_dialog->setPreviewWidget(m_iccSpacePreviewWidget);
 
-    QPushButton *spaceProfilesInfo = new QPushButton(i18n("Info..."), spaceProfiles);
+    QPushButton *spaceProfilesInfo = new QPushButton(i18n("Info..."), box2);
 
-    secondPageLayout->addMultiCellWidget(m_spaceProfileBG, 0, 1, 0, 0);    
+    secondPageLayout->addMultiCellWidget(box2, 0, 1, 0, 0);    
     secondPageLayout->addMultiCellWidget(spaceProfilesInfo, 0, 0, 2, 2);    
     secondPageLayout->addMultiCellWidget(m_spaceProfilePath, 2, 2, 0, 2);    
     secondPageLayout->setColStretch(1, 10);
@@ -377,32 +387,39 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- "Proofing" Page Setup ---------------------------------
 
     m_toolBoxWidgets->insertItem(PROOFINGPAGE, proofProfiles, 
-                                 SmallIconSet("printer1"), i18n("Proofing Profile"));
+                                 SmallIconSet("printer"), i18n("Proofing Profile"));
     proofProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant to Proofing Color "
                                       "Profiles.</p>"));
 
     QGridLayout *thirdPageLayout = new QGridLayout(proofProfiles);
 
-    m_proofProfileBG = new Q3ButtonGroup(2, Qt::Vertical, proofProfiles);
-    m_proofProfileBG->setFrameStyle(QFrame::NoFrame);
-    m_proofProfileBG->setInsideMargin(0);
+    QWidget *box3      = new QWidget(proofProfiles);
+    QVBoxLayout *hlay3 = new QVBoxLayout(box3);
+    m_proofProfileBG   = new QButtonGroup(box3);
 
-    m_useProofDefaultProfile = new QRadioButton(m_proofProfileBG);
+    m_useProofDefaultProfile = new QRadioButton(box3);
     m_useProofDefaultProfile->setText(i18n("Use default proof profile"));
+    m_proofProfileBG->addButton(m_useProofDefaultProfile);
 
-    m_useProofSelectedProfile = new QRadioButton(m_proofProfileBG);
+    m_useProofSelectedProfile = new QRadioButton(box3);
     m_useProofSelectedProfile->setText(i18n("Use selected profile"));
+    m_proofProfileBG->addButton(m_useProofSelectedProfile);
 
-    m_proofProfilePath = new KUrlRequester(proofProfiles);
+    hlay3->addWidget(m_useProofDefaultProfile);
+    hlay3->addWidget(m_useProofSelectedProfile);
+    hlay3->setMargin(0);
+    hlay3->setSpacing(0);
+
+    m_proofProfilePath = new KUrlRequester(box3);
     m_proofProfilePath->setMode(KFile::File|KFile::ExistingOnly);
     m_proofProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
     KFileDialog *proofProfiles_dialog = m_proofProfilePath->fileDialog();
     m_iccProofPreviewWidget = new Digikam::ICCPreviewWidget(proofProfiles_dialog);
     proofProfiles_dialog->setPreviewWidget(m_iccProofPreviewWidget);
 
-    QPushButton *proofProfilesInfo = new QPushButton(i18n("Info..."), proofProfiles);
+    QPushButton *proofProfilesInfo = new QPushButton(i18n("Info..."), box3);
 
-    thirdPageLayout->addMultiCellWidget(m_proofProfileBG, 0, 1, 0, 0);    
+    thirdPageLayout->addMultiCellWidget(box3, 0, 1, 0, 0);    
     thirdPageLayout->addMultiCellWidget(proofProfilesInfo, 0, 0, 2, 2);    
     thirdPageLayout->addMultiCellWidget(m_proofProfilePath, 2, 2, 0, 2);    
     thirdPageLayout->setColStretch(1, 10);
@@ -413,7 +430,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- "Lightness" Page Setup ----------------------------------
 
     m_toolBoxWidgets->insertItem(LIGHTNESSPAGE, lightnessadjust, 
-                                 SmallIconSet("blend"), i18n("Lightness Adjustments"));
+                                 SmallIconSet("color-line"), i18n("Lightness Adjustments"));
     lightnessadjust->setWhatsThis( i18n("<p>Set here all lightness adjustments of target image.</p>"));
 
     QGridLayout *fourPageLayout = new QGridLayout( lightnessadjust );
@@ -589,8 +606,7 @@ void ImageEffect_ICCProof::readUserSettings()
     // Plugin settings.
     group = config->group("colormanagement Tool Dialog");
     m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(group.readEntry("Histogram Scale", (int)Digikam::HistogramWidget::LogScaleHistogram));
-    m_toolBoxWidgets->setCurrentIndex(group.readEntry("Settings Tab", GENERALPAGE));        
+    m_toolBoxWidgets->setCurrentIndex(group.readEntry("Settings Tab", (int)GENERALPAGE));        
     m_inProfilesPath->setUrl(group.readPathEntry("InputProfilePath", defaultICCPath)); 
     m_proofProfilePath->setUrl(group.readPathEntry("ProofProfilePath", defaultICCPath)); 
     m_spaceProfilePath->setUrl(group.readPathEntry("SpaceProfilePath", defaultICCPath));
@@ -599,9 +615,9 @@ void ImageEffect_ICCProof::readUserSettings()
     m_checkGamutBox->setChecked(group.readEntry("CheckGamut", false));
     m_embeddProfileBox->setChecked(group.readEntry("EmbeddProfile", true));
     m_BPCBox->setChecked(group.readEntry("BPC", true));
-    m_inProfileBG->setButton(group.readEntry("InputProfileMethod", 0));
-    m_spaceProfileBG->setButton(group.readEntry("SpaceProfileMethod", 0));
-    m_proofProfileBG->setButton(group.readEntry("ProofProfileMethod", 0));
+    m_inProfileBG->button(group.readEntry("InputProfileMethod", 0))->setChecked(true);
+    m_spaceProfileBG->button(group.readEntry("SpaceProfileMethod", 0))->setChecked(true);
+    m_proofProfileBG->button(group.readEntry("ProofProfileMethod", 0))->setChecked(true);
     m_cInput->setValue(group.readEntry("ContrastAjustment", 0));
 
     for (int i = 0 ; i < 5 ; i++)
@@ -627,8 +643,8 @@ void ImageEffect_ICCProof::readUserSettings()
     for (int i = 0 ; i < 5 ; i++)
         m_curves->curvesCalculateCurve(i);
 
-    slotChannelChanged(m_channelCB->currentItem());
-    slotScaleChanged(m_scaleBG->selectedId());
+    slotChannelChanged(m_channelCB->currentIndex());
+    slotScaleChanged(m_scaleBG->checkedId());
 }
 
 void ImageEffect_ICCProof::writeUserSettings()
@@ -636,19 +652,19 @@ void ImageEffect_ICCProof::writeUserSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("colormanagement Tool Dialog");
     group.writeEntry("Settings Tab", m_toolBoxWidgets->currentIndex());
-    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
-    group.writeEntry("Histogram Scale", m_scaleBG->selectedId());
-    group.writePathEntry("InputProfilePath", m_inProfilesPath->url());
-    group.writePathEntry("ProofProfilePath", m_proofProfilePath->url());
-    group.writePathEntry("SpaceProfilePath", m_spaceProfilePath->url());
-    group.writeEntry("RenderingIntent", m_renderingIntentsCB->currentItem());
+    group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
+    group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
+    group.writeEntry("InputProfilePath", m_inProfilesPath->url());
+    group.writeEntry("ProofProfilePath", m_proofProfilePath->url());
+    group.writeEntry("SpaceProfilePath", m_spaceProfilePath->url());
+    group.writeEntry("RenderingIntent", m_renderingIntentsCB->currentIndex());
     group.writeEntry("DoSoftProof", m_doSoftProofBox->isChecked());
     group.writeEntry("CheckGamut", m_checkGamutBox->isChecked());
     group.writeEntry("EmbeddProfile", m_embeddProfileBox->isChecked());
     group.writeEntry("BPC", m_BPCBox->isChecked());
-    group.writeEntry("InputProfileMethod", m_inProfileBG->selectedId());
-    group.writeEntry("SpaceProfileMethod", m_spaceProfileBG->selectedId());
-    group.writeEntry("ProofProfileMethod", m_proofProfileBG->selectedId());
+    group.writeEntry("InputProfileMethod", m_inProfileBG->checkedId());
+    group.writeEntry("SpaceProfileMethod", m_spaceProfileBG->checkedId());
+    group.writeEntry("ProofProfileMethod", m_proofProfileBG->checkedId());
     group.writeEntry("ContrastAjustment", m_cInput->value());
 
     for (int j = 0 ; j < 17 ; j++)
@@ -763,7 +779,7 @@ void ImageEffect_ICCProof::slotEffect()
     }
     else if (useSelectedInProfile())
     {
-        tmpInPath = m_inProfilesPath->url();
+        tmpInPath = m_inProfilesPath->url().path();
         QFileInfo info(tmpInPath);
         if (!info.exists() || !info.isReadable() || !info.isFile() )
         {
@@ -781,7 +797,7 @@ void ImageEffect_ICCProof::slotEffect()
     }
     else
     {
-        tmpProofPath = m_proofProfilePath->url();
+        tmpProofPath = m_proofProfilePath->url().path();
         QFileInfo info(tmpProofPath);
         if (!info.exists() || !info.isReadable() || !info.isFile() )
         {
@@ -802,7 +818,7 @@ void ImageEffect_ICCProof::slotEffect()
     }
     else
     {
-        tmpSpacePath = m_spaceProfilePath->url();
+        tmpSpacePath = m_spaceProfilePath->url().path();
         QFileInfo info(tmpSpacePath);
         if (!info.exists() || !info.isReadable() || !info.isFile() )
         {
@@ -922,7 +938,7 @@ void ImageEffect_ICCProof::finalRendering()
             }
             else if (useSelectedInProfile())
             {
-                tmpInPath = m_inProfilesPath->url();
+                tmpInPath = m_inProfilesPath->url().path();
                 QFileInfo info(tmpInPath);
                 if (!info.exists() || !info.isReadable() || !info.isFile() )
                 {
@@ -940,7 +956,7 @@ void ImageEffect_ICCProof::finalRendering()
             }
             else
             {
-                tmpProofPath = m_proofProfilePath->url();
+                tmpProofPath = m_proofProfilePath->url().path();
                 QFileInfo info(tmpProofPath);
                 if (!info.exists() || !info.isReadable() || !info.isFile() )
                 {
@@ -961,7 +977,7 @@ void ImageEffect_ICCProof::finalRendering()
             }
             else
             {
-                tmpSpacePath = m_spaceProfilePath->url();
+                tmpSpacePath = m_spaceProfilePath->url().path();
                 QFileInfo info(tmpSpacePath);
                 if (!info.exists() || !info.isReadable() || !info.isFile() )
                 {
@@ -1066,7 +1082,7 @@ void ImageEffect_ICCProof::slotInICCInfo()
     }
     else if (useSelectedInProfile())
     {
-        getICCInfo(m_inProfilesPath->url());
+        getICCInfo(m_inProfilesPath->url().path());
     }
 }
 
@@ -1078,7 +1094,7 @@ void ImageEffect_ICCProof::slotProofICCInfo()
     }
     else
     {
-        getICCInfo(m_proofProfilePath->url());
+        getICCInfo(m_proofProfilePath->url().path());
     }
 }
 
@@ -1090,7 +1106,7 @@ void ImageEffect_ICCProof::slotSpaceICCInfo()
     }
     else
     {
-        getICCInfo(m_spaceProfilePath->url());
+        getICCInfo(m_spaceProfilePath->url().path());
     }
 }
 
@@ -1201,7 +1217,7 @@ void ImageEffect_ICCProof::slotUser3()
     
     if ( file.open(QIODevice::ReadOnly) )   
     {
-        Q3TextStream stream( &file );
+        QTextStream stream( &file );
 
         if ( stream.readLine() != "# Color Management Configuration File" )
         {
@@ -1219,9 +1235,9 @@ void ImageEffect_ICCProof::slotUser3()
         m_checkGamutBox->setChecked( (bool)(stream.readLine().toUInt()) );
         m_embeddProfileBox->setChecked( (bool)(stream.readLine().toUInt()) );
         m_BPCBox->setChecked( (bool)(stream.readLine().toUInt()) );
-        m_inProfileBG->setButton( stream.readLine().toInt() );
-        m_spaceProfileBG->setButton( stream.readLine().toInt() );
-        m_proofProfileBG->setButton( stream.readLine().toInt() );
+        m_inProfileBG->button( stream.readLine().toInt() )->setChecked(true);
+        m_spaceProfileBG->button( stream.readLine().toInt() )->setChecked(true);
+        m_proofProfileBG->button( stream.readLine().toInt() )->setChecked(true);
         m_inProfilesPath->setUrl( stream.readLine() );
         m_proofProfilePath->setUrl( stream.readLine() );
         m_spaceProfilePath->setUrl( stream.readLine() );
@@ -1277,19 +1293,19 @@ void ImageEffect_ICCProof::slotUser2()
     
     if ( file.open(QIODevice::WriteOnly) )   
     {
-        Q3TextStream stream( &file );        
+        QTextStream stream( &file );        
         stream << "# Color Management Configuration File\n";    
         stream << m_renderingIntentsCB->currentItem() << "\n";    
         stream << m_doSoftProofBox->isChecked() << "\n";    
         stream << m_checkGamutBox->isChecked() << "\n";    
         stream << m_embeddProfileBox->isChecked() << "\n";    
         stream << m_BPCBox->isChecked() << "\n";    
-        stream << m_inProfileBG->selectedId() << "\n";    
-        stream << m_spaceProfileBG->selectedId() << "\n";    
-        stream << m_proofProfileBG->selectedId() << "\n";    
-        stream << m_inProfilesPath->url() << "\n";    
-        stream << m_proofProfilePath->url() << "\n";    
-        stream << m_spaceProfilePath->url() << "\n";    
+        stream << m_inProfileBG->checkedId() << "\n";    
+        stream << m_spaceProfileBG->checkedId() << "\n";    
+        stream << m_proofProfileBG->checkedId() << "\n";    
+        stream << m_inProfilesPath->url().path() << "\n";    
+        stream << m_proofProfilePath->url().path() << "\n";    
+        stream << m_spaceProfilePath->url().path() << "\n";    
         stream << m_cInput->value() << "\n";    
 
         for (int j = 0 ; j < 17 ; j++)
