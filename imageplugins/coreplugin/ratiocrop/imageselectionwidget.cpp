@@ -43,17 +43,16 @@
 
 // Qt includes.
 
-#include <qregion.h>
-#include <qcolor.h>
-#include <qpainter.h>
-#include <qbrush.h>
-#include <qpixmap.h>
-#include <qimage.h>
-#include <qpen.h>
-#include <qpoint.h>
-#include <qtimer.h>
-#include <qsizepolicy.h>
-//Added by qt3to4:
+#include <QRegion>
+#include <QColor>
+#include <QPainter>
+#include <QBrush>
+#include <QPixmap>
+#include <QImage>
+#include <QPen>
+#include <QPoint>
+#include <QTimer>
+#include <QSizePolicy>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
@@ -151,7 +150,7 @@ public:
 ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent, 
                                            float aspectRatioValue, int aspectRatioType, 
                                            int orient, int guideLinesType)
-                    : QWidget(parent, 0, Qt::WDestructiveClose)
+                    : QWidget(parent)
 {
     d = new ImageSelectionWidgetPriv;
     d->currentAspectRatioType  = aspectRatioType;
@@ -161,9 +160,9 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent,
     d->autoOrientation         = false;
     d->moving                  = true;
 
-    setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
     setMouseTracking(true);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     d->iface        = new Digikam::ImageIface(w, h);
     uchar *data     = d->iface->getPreviewImage();
@@ -258,8 +257,8 @@ void ImageSelectionWidget::resetSelection(void)
     realToLocalRegion();
     applyAspectRatio(false, false);
 
-    d->localRegionSelection.moveBy(d->rect.width()/2 - d->localRegionSelection.width()/2,
-                                   d->rect.height()/2 - d->localRegionSelection.height()/2);
+    d->localRegionSelection.translate(d->rect.width()/2 - d->localRegionSelection.width()/2,
+                                      d->rect.height()/2 - d->localRegionSelection.height()/2);
 
     applyAspectRatio(false, true, false);
     regionSelectionChanged(true);
@@ -288,19 +287,19 @@ void ImageSelectionWidget::setCenterSelection(int centerType)
     switch (centerType)
     {
        case CenterWidth:
-          d->localRegionSelection.moveBy(
+          d->localRegionSelection.translate(
             d->rect.width()/2 - d->localRegionSelection.width()/2,
             0);
           break;
 
        case CenterHeight:
-          d->localRegionSelection.moveBy(
+          d->localRegionSelection.translate(
             0, 
             d->rect.height()/2 - d->localRegionSelection.height()/2);
           break;
 
        case CenterImage:
-          d->localRegionSelection.moveBy(
+          d->localRegionSelection.translate(
             d->rect.width()/2 - d->localRegionSelection.width()/2,
             d->rect.height()/2 - d->localRegionSelection.height()/2);
           break;
@@ -356,21 +355,21 @@ void ImageSelectionWidget::slotGuideLines(int guideLinesType)
 {
     d->guideLinesType = guideLinesType;
     updatePixmap();
-    repaint(false);
+    repaint();
 }
 
 void ImageSelectionWidget::slotChangeGuideColor(const QColor &color)
 {
     d->guideColor = color;
     updatePixmap();
-    repaint(false);
+    repaint();
 }
 
 void ImageSelectionWidget::slotChangeGuideSize(int size)
 {
     d->guideSize = size;
     updatePixmap();
-    repaint(false);
+    repaint();
 }
 
 void ImageSelectionWidget::setSelectionOrientation(int orient)
@@ -434,7 +433,7 @@ void ImageSelectionWidget::setSelectionX(int x)
     d->regionSelection.moveLeft(x);
     realToLocalRegion();
     updatePixmap();
-    repaint(false);
+    repaint();
 }
 
 void ImageSelectionWidget::setSelectionY(int y)
@@ -442,7 +441,7 @@ void ImageSelectionWidget::setSelectionY(int y)
     d->regionSelection.moveTop(y);
     realToLocalRegion();
     updatePixmap();
-    repaint(false);
+    repaint();
 }
 
 void ImageSelectionWidget::setSelectionWidth(int w)
@@ -469,7 +468,8 @@ void ImageSelectionWidget::setSelectionWidth(int w)
     d->timerW = new QTimer( this );
     connect( d->timerW, SIGNAL(timeout()),
              this, SLOT(slotTimerDone()) );
-    d->timerW->start(500, true);
+    d->timerW->setSingleShot(true);
+    d->timerW->start(500);
 }
 
 void ImageSelectionWidget::setSelectionHeight(int h)
@@ -496,7 +496,8 @@ void ImageSelectionWidget::setSelectionHeight(int h)
     d->timerH = new QTimer( this );
     connect( d->timerH, SIGNAL(timeout()),
              this, SLOT(slotTimerDone()) );
-    d->timerH->start(500, true);
+    d->timerH->setSingleShot(true);
+    d->timerH->start(500);
 }
 
 void ImageSelectionWidget::slotTimerDone(void)
@@ -614,7 +615,7 @@ void ImageSelectionWidget::applyAspectRatio(bool WOrH, bool repaintWidget, bool 
     if (repaintWidget)
     {
        updatePixmap();
-       repaint(false);
+       repaint();
     }
 }
 
@@ -663,7 +664,7 @@ void ImageSelectionWidget::regionSelectionMoved( bool targetDone )
        normalizeRegion();
 
        updatePixmap();
-       repaint(false);
+       repaint();
     }
 
     localToRealRegion();
@@ -719,7 +720,7 @@ void ImageSelectionWidget::updatePixmap(void)
 
     // Drawing background and image.
 
-    d->pixmap->fill(colorGroup().background());
+    d->pixmap->fill(palette().color(QPalette::Background));
 
     if (d->preview.isNull())
         return;
@@ -760,9 +761,9 @@ void ImageSelectionWidget::updatePixmap(void)
     }
 
     QPixmap pix = d->iface->convertToPixmap(image);
-    bitBlt(d->pixmap, d->rect.x(), d->rect.y(), &pix);
     QPainter p(d->pixmap);
-
+    p.drawPixmap(d->rect.x(), d->rect.y(), pix);
+    
     // Drawing selection borders.
 
     p.setPen(QPen(QColor(250, 250, 255), 1, Qt::SolidLine));
@@ -1070,7 +1071,9 @@ void ImageSelectionWidget::updatePixmap(void)
 
 void ImageSelectionWidget::paintEvent( QPaintEvent * )
 {
-    bitBlt(this, 0, 0, d->pixmap);
+    QPainter p(this);
+    p.drawPixmap(0, 0, *d->pixmap);
+    p.end();
 }
 
 QPoint ImageSelectionWidget::opposite(void)
@@ -1224,7 +1227,7 @@ void ImageSelectionWidget::placeSelection(QPoint pm, bool symetric, QPoint cente
     {
         regionSelectionChanged(false);
         updatePixmap();
-        repaint(false);
+        repaint();
     }
 
 }
@@ -1236,9 +1239,9 @@ void ImageSelectionWidget::mousePressEvent ( QMouseEvent * e )
         QPoint pm = QPoint(e->x(), e->y());
         d->moving = false;
 
-        if ( (e->state() & Qt::ShiftModifier) == Qt::ShiftModifier )
+        if ( (e->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier )
         {
-            bool symetric = (e->state() & Qt::ControlModifier ) == Qt::ControlModifier;
+            bool symetric = (e->modifiers() & Qt::ControlModifier ) == Qt::ControlModifier;
             QPoint center = d->localRegionSelection.center();
 
             // Find the closest corner
@@ -1290,7 +1293,7 @@ void ImageSelectionWidget::mousePressEvent ( QMouseEvent * e )
                 normalizeRegion();
 
                 updatePixmap();
-                repaint(false);
+                repaint();
                 regionSelectionMoved(false);
             }
         }
@@ -1319,21 +1322,21 @@ void ImageSelectionWidget::mouseReleaseEvent ( QMouseEvent * )
 
 void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-    if ( ( e->state() & Qt::LeftButton ) == Qt::LeftButton )
+    if ( ( e->buttons() & Qt::LeftButton ) == Qt::LeftButton )
     {
         if ( d->moving )
         {
             setCursor( Qt::SizeAllCursor );
             QPoint newPos = QPoint(e->x(), e->y());
 
-            d->localRegionSelection.moveBy (newPos.x() - d->lastPos.x(), newPos.y() - d->lastPos.y());
+            d->localRegionSelection.translate(newPos.x() - d->lastPos.x(), newPos.y() - d->lastPos.y());
 
             d->lastPos = newPos;
 
             normalizeRegion();
 
             updatePixmap();
-            repaint(false);
+            repaint();
             regionSelectionMoved(false);
         }
         else
@@ -1348,7 +1351,7 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
             }
 
             QPoint center = d->localRegionSelection.center();
-            bool symetric = (e->state() & Qt::ControlModifier ) == Qt::ControlModifier;
+            bool symetric = (e->modifiers() & Qt::ControlModifier ) == Qt::ControlModifier;
 
             // Change resizing mode
 
