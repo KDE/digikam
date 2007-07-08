@@ -188,7 +188,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- "General" Page Setup ----------------------------------
 
     m_toolBoxWidgets->insertItem(GENERALPAGE, generalOptions, 
-                                 SmallIconSet("exec"), i18n("General Settings"));
+                                 SmallIcon("exec"), i18n("General Settings"));
     generalOptions->setWhatsThis( i18n("<p>Here you can set general parameters.</p>"));
 
     QGridLayout *zeroPageLayout = new QGridLayout(generalOptions);
@@ -222,10 +222,10 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QLabel *intent       = new QLabel(i18n("Rendering Intent:"), generalOptions);
     m_renderingIntentsCB = new QComboBox(generalOptions);
-    m_renderingIntentsCB->insertItem("Perceptual");
-    m_renderingIntentsCB->insertItem("Absolute Colorimetric");
-    m_renderingIntentsCB->insertItem("Relative Colorimetric");
-    m_renderingIntentsCB->insertItem("Saturation");
+    m_renderingIntentsCB->addItem("Perceptual");
+    m_renderingIntentsCB->addItem("Absolute Colorimetric");
+    m_renderingIntentsCB->addItem("Relative Colorimetric");
+    m_renderingIntentsCB->addItem("Saturation");
     m_renderingIntentsCB->setWhatsThis( i18n("<ul><li>Perceptual intent causes the full gamut "
                 "of the image to be compressed or expanded to fill the gamut of the destination media, "
                 "so that gray balance is preserved but colorimetric accuracy may not be preserved.<br>"
@@ -271,7 +271,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- "Input" Page Setup ----------------------------------
 
-    m_toolBoxWidgets->insertItem(INPUTPAGE, inProfiles, SmallIconSet("camera-photo"), i18n("Input Profile"));
+    m_toolBoxWidgets->insertItem(INPUTPAGE, inProfiles, SmallIcon("camera-photo"), i18n("Input Profile"));
     inProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant of Input Color "
                                    "Profiles.</p>"));
 
@@ -336,7 +336,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     firstPageLayout->addMultiCellWidget(inProfilesInfo, 0, 0, 2, 2);
     firstPageLayout->addMultiCellWidget(m_inProfilesPath, 2, 2, 0, 2);
     firstPageLayout->addMultiCellWidget(pictureInfo, 3, 3, 0, 2);
-    firstPageLayout->setColStretch(1, 10);
+    firstPageLayout->setColumnStretch(1, 10);
     firstPageLayout->setRowStretch(4, 10);
     firstPageLayout->setMargin(spacingHint());
     firstPageLayout->setSpacing(spacingHint());
@@ -344,7 +344,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- "Workspace" Page Setup ---------------------------------
 
     m_toolBoxWidgets->insertItem(WORKSPACEPAGE, spaceProfiles, 
-                                 SmallIconSet("input-tablet"), i18n("Work-space Profile"));
+                                 SmallIcon("input-tablet"), i18n("Work-space Profile"));
     spaceProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant of Color Work-space "
                                       "Profiles.</p>"));
 
@@ -387,7 +387,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- "Proofing" Page Setup ---------------------------------
 
     m_toolBoxWidgets->insertItem(PROOFINGPAGE, proofProfiles, 
-                                 SmallIconSet("printer"), i18n("Proofing Profile"));
+                                 SmallIcon("printer"), i18n("Proofing Profile"));
     proofProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant to Proofing Color "
                                       "Profiles.</p>"));
 
@@ -430,7 +430,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- "Lightness" Page Setup ----------------------------------
 
     m_toolBoxWidgets->insertItem(LIGHTNESSPAGE, lightnessadjust, 
-                                 SmallIconSet("color-line"), i18n("Lightness Adjustments"));
+                                 SmallIcon("color-line"), i18n("Lightness Adjustments"));
     lightnessadjust->setWhatsThis( i18n("<p>Set here all lightness adjustments of target image.</p>"));
 
     QGridLayout *fourPageLayout = new QGridLayout( lightnessadjust );
@@ -468,7 +468,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     fourPageLayout->addMultiCellWidget(spaceh, 1, 1, 2, 2);
     fourPageLayout->addMultiCellWidget(hGradient, 2, 2, 2, 2);
     fourPageLayout->addMultiCellWidget(m_cInput, 4, 4, 0, 2);
-    fourPageLayout->setRowSpacing(3, spacingHint());
+    fourPageLayout->setRowMinimumHeight(3, spacingHint());
     fourPageLayout->setRowStretch(5, 10);
     fourPageLayout->setMargin(spacingHint());
     fourPageLayout->setSpacing(0);
