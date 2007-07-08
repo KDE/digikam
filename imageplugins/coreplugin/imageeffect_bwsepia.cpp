@@ -464,12 +464,12 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_cInput->setValue(0);
     m_cInput->setWhatsThis( i18n("<p>Set here the contrast adjustment of the image."));
 
-    gridTab2->addMultiCellWidget(vGradient, 0, 0, 0, 0);
-    gridTab2->addMultiCellWidget(spacev, 0, 0, 1, 1);
-    gridTab2->addMultiCellWidget(m_curvesWidget, 0, 0, 2, 2);
-    gridTab2->addMultiCellWidget(spaceh, 1, 1, 2, 2);
-    gridTab2->addMultiCellWidget(hGradient, 2, 2, 2, 2);
-    gridTab2->addMultiCellWidget(m_cInput, 4, 4, 0, 2);
+    gridTab2->addWidget(vGradient, 0, 0, 1, 1);
+    gridTab2->addWidget(spacev, 0, 1, 1, 1);
+    gridTab2->addWidget(m_curvesWidget, 0, 2, 1, 1);
+    gridTab2->addWidget(spaceh, 1, 2, 1, 1);
+    gridTab2->addWidget(hGradient, 2, 2, 1, 1);
+    gridTab2->addWidget(m_cInput, 4, 0, 1, 3 );
     gridTab2->setRowMinimumHeight(3, spacingHint());
     gridTab2->setRowStretch(5, 10);
     gridTab2->setMargin(spacingHint());
@@ -482,9 +482,9 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_tab->insertTab(ToneTab,       m_bwTone, i18n("Tone"));
     m_tab->insertTab(LuminosityTab, curveBox, i18n("Lightness"));
 
-    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
-    gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
-    gridSettings->addMultiCellWidget(m_tab, 3, 3, 0, 4);
+    gridSettings->addLayout(l1, 0, 0, 1, 5 );
+    gridSettings->addWidget(histoBox, 1, 0, 2, 5 );
+    gridSettings->addWidget(m_tab, 3, 0, 1, 5 );
     gridSettings->setRowStretch(3, 10);
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
