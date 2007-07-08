@@ -325,7 +325,7 @@ void ImageEffect_HSL::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("hsladjust Tool Dialog");
-    m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
+    m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->button(group.readEntry("Histogram Scale", 
                       (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
 
@@ -334,7 +334,7 @@ void ImageEffect_HSL::readUserSettings()
     m_lInput->setValue(group.readEntry("LighnessAjustment", 0.0));
     slotHChanged(m_hInput->value());
     slotSChanged(m_sInput->value());
-    slotChannelChanged(m_channelCB->currentItem());
+    slotChannelChanged(m_channelCB->currentIndex());
     slotScaleChanged(m_scaleBG->checkedId());
 }
 
@@ -342,7 +342,7 @@ void ImageEffect_HSL::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("hsladjust Tool Dialog");
-    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
+    group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
     group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
     group.writeEntry("HueAjustment", m_hInput->value());
     group.writeEntry("SaturationAjustment", m_sInput->value());

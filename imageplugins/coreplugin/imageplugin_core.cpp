@@ -83,12 +83,13 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QStringList &)
     connect(m_BCGAction, SIGNAL(triggered(bool) ), 
             this, SLOT(slotBCG()));
 
-/*
-    m_HSLAction = new KAction(i18n("Hue/Saturation/Lightness..."), "adjusthsl", 
-                      Qt::CTRL+Qt::Key_U,      // NOTE: Photoshop 7 use CTRL+U.
-                      this, SLOT(slotHSL()),
-                      actionCollection(), "implugcore_hsl");
-*/
+    // NOTE: Photoshop 7 use CTRL+U.
+    m_HSLAction = new KAction(KIcon("adjusthsl"), i18n("Hue/Saturation/Lightness..."), this);
+    m_HSLAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_U));      
+    actionCollection()->addAction("implugcore_hsl", m_HSLAction );
+    connect(m_HSLAction, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotHSL()));
+
 
     // NOTE: Photoshop 7 use CTRL+B.
     m_RGBAction = new KAction(KIcon("adjustrgb"), i18n("Color Balance..."), this);
@@ -170,9 +171,9 @@ void ImagePlugin_Core::setEnabledActions(bool enable)
     m_autoCorrectionAction->setEnabled(enable);
     m_BWAction->setEnabled(enable);
     m_colorManagementAction->setEnabled(enable);
+    m_HSLAction->setEnabled(enable);
     
 /*    
-    m_HSLAction->setEnabled(enable);
     m_aspectRatioCropAction->setEnabled(enable);
     m_sharpenAction->setEnabled(enable);
     */
@@ -291,15 +292,15 @@ void ImagePlugin_Core::slotBW()
     dlg.exec();
 }
 
+void ImagePlugin_Core::slotHSL()
+{
+    DigikamImagesPluginCore::ImageEffect_HSL dlg(parentWidget());
+    dlg.exec();
+}
+
 void ImagePlugin_Core::slotSharpen()
 {
 /*    DigikamImagesPluginCore::ImageEffect_Sharpen dlg(parentWidget());
-    dlg.exec();*/
-}
-
-void ImagePlugin_Core::slotHSL()
-{
-/*    DigikamImagesPluginCore::ImageEffect_HSL dlg(parentWidget());
     dlg.exec();*/
 }
 

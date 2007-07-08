@@ -5,7 +5,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnes
                     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/ratiocrop
                    )
 
-SET(liblapack_SRCS 
+SET(libclapack_SRCS 
     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/abort_.c
     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/dgesv.c 
     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/dlaswp.c
@@ -40,7 +40,7 @@ SET(liblapack_SRCS
    )
 
 SET(digikamimageplugin_core_PART_SRCS 
-    ${liblapack_SRCS} 
+    ${libclapack_SRCS} 
     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageplugin_core.cpp 
     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_bcg.cpp 
     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_rgb.cpp 
@@ -49,8 +49,8 @@ SET(digikamimageplugin_core_PART_SRCS
     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_redeye.cpp 
     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_iccproof.cpp 
     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_bwsepia.cpp 
-#    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/hsl/hspreviewwidget.cpp
-#    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/hsl/imageeffect_hsl.cpp 
+    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/hsl/hspreviewwidget.cpp
+    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/hsl/imageeffect_hsl.cpp 
 #    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp 
 #    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/matrix.cpp
 #    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/refocus.cpp
