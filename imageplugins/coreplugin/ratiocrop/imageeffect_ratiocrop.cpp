@@ -232,40 +232,40 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    grid->addMultiCellWidget(label, 0, 0, 0, 0);
-    grid->addMultiCellWidget(m_ratioCB, 0, 0, 1, 3);
-    grid->addMultiCellWidget(m_orientLabel, 2, 2, 0, 0);
-    grid->addMultiCellWidget(m_orientCB, 2, 2, 1, 3);
-    grid->addMultiCellWidget(m_autoOrientation, 2, 2, 4, 4);
-    grid->addMultiCellWidget(m_customLabel1, 1, 1, 0, 0);
-    grid->addMultiCellWidget(m_customRatioNInput, 1, 1, 1, 1);
-    grid->addMultiCellWidget(m_customLabel2, 1, 1, 2, 2);
-    grid->addMultiCellWidget(m_customRatioDInput, 1, 1, 3, 3);
-    grid->addMultiCellWidget(m_xInput, 3, 3, 0, 3);
-    grid->addMultiCellWidget(m_widthInput, 4, 4, 0, 3);
-    grid->addMultiCellWidget(m_centerWidth, 4, 4, 4, 4);
-    grid->addMultiCellWidget(m_yInput, 5, 5, 0, 3);
-    grid->addMultiCellWidget(m_heightInput, 6, 6, 0, 3);
-    grid->addMultiCellWidget(m_centerHeight, 6, 6, 4, 4);
+    grid->addWidget(label, 0, 0, 1, 1);
+    grid->addWidget(m_ratioCB, 0, 1, 1, 3);
+    grid->addWidget(m_orientLabel, 2, 0, 1, 1);
+    grid->addWidget(m_orientCB, 2, 1, 1, 3);
+    grid->addWidget(m_autoOrientation, 2, 4, 1, 1);
+    grid->addWidget(m_customLabel1, 1, 0, 1, 1);
+    grid->addWidget(m_customRatioNInput, 1, 1, 1, 1);
+    grid->addWidget(m_customLabel2, 1, 2, 1, 1);
+    grid->addWidget(m_customRatioDInput, 1, 3, 1, 1);
+    grid->addWidget(m_xInput, 3, 0, 1, 4 );
+    grid->addWidget(m_widthInput, 4, 0, 1, 4 );
+    grid->addWidget(m_centerWidth, 4, 4, 1, 1);
+    grid->addWidget(m_yInput, 5, 0, 1, 4 );
+    grid->addWidget(m_heightInput, 6, 0, 1, 4 );
+    grid->addWidget(m_centerHeight, 6, 4, 1, 1);
     grid->setMargin(spacingHint());
     grid->setSpacing(spacingHint());
 
-    grid2->addMultiCellWidget(labelGuideLines, 0, 0, 0, 0);
-    grid2->addMultiCellWidget(m_guideLinesCB, 0, 0, 1, 2);
-    grid2->addMultiCellWidget(m_goldenSectionBox, 1, 1, 0, 2);
-    grid2->addMultiCellWidget(m_goldenSpiralSectionBox, 2, 2, 0, 2);
-    grid2->addMultiCellWidget(m_goldenSpiralBox, 3, 3, 0, 2);
-    grid2->addMultiCellWidget(m_goldenTriangleBox, 4, 4, 0, 2);
-    grid2->addMultiCellWidget(m_flipHorBox, 5, 5, 0, 2);
-    grid2->addMultiCellWidget(m_flipVerBox, 6, 6, 0, 2);
-    grid2->addMultiCellWidget(m_colorGuideLabel, 7, 7, 0, 0);
-    grid2->addMultiCellWidget(m_guideColorBt, 7, 7, 1, 1);
-    grid2->addMultiCellWidget(m_guideSize, 7, 7, 2, 2);
+    grid2->addWidget(labelGuideLines, 0, 0, 1, 1);
+    grid2->addWidget(m_guideLinesCB, 0, 1, 1, 2);
+    grid2->addWidget(m_goldenSectionBox, 1, 0, 1, 3 );
+    grid2->addWidget(m_goldenSpiralSectionBox, 2, 0, 1, 3 );
+    grid2->addWidget(m_goldenSpiralBox, 3, 0, 1, 3 );
+    grid2->addWidget(m_goldenTriangleBox, 4, 0, 1, 3 );
+    grid2->addWidget(m_flipHorBox, 5, 0, 1, 3 );
+    grid2->addWidget(m_flipVerBox, 6, 0, 1, 3 );
+    grid2->addWidget(m_colorGuideLabel, 7, 0, 1, 1);
+    grid2->addWidget(m_guideColorBt, 7, 1, 1, 1);
+    grid2->addWidget(m_guideSize, 7, 2, 1, 1);
     grid2->setMargin(spacingHint());
     grid2->setSpacing(spacingHint());
 
-    gridBox2->addMultiCellWidget(cropSelection, 0, 0, 0, 0);
-    gridBox2->addMultiCellWidget(compositionGuide, 1, 1, 0, 0);
+    gridBox2->addWidget(cropSelection, 0, 0, 1, 1);
+    gridBox2->addWidget(compositionGuide, 1, 0, 1, 1);
     gridBox2->setRowStretch(2, 10);    
     gridBox2->setMargin(spacingHint());
     gridBox2->setSpacing(spacingHint());
