@@ -121,10 +121,12 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QStringList &)
     connect(m_convertTo16Bits, SIGNAL(triggered(bool) ), 
             this, SLOT(slotConvertTo16Bits()));
     
+    m_colorManagementAction = new KAction(KIcon("colormanagement"), i18n("Color Management..."), this);
+    actionCollection()->addAction("implugcore_colormanagement", m_colorManagementAction );
+    connect(m_colorManagementAction, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotColorManagement()));
+
 /*
-    m_colorManagementAction = new KAction(i18n("Color Management..."), "colormanagement", 0,
-                                          this, SLOT(slotColorManagement()),
-                                          actionCollection(), "implugcore_colormanagement");
     //-------------------------------
     // Filters menu actions.
 
@@ -274,6 +276,12 @@ void ImagePlugin_Core::slotRedEye()
     dlg.exec();
 }
 
+void ImagePlugin_Core::slotColorManagement()
+{
+    DigikamImagesPluginCore::ImageEffect_ICCProof dlg(parentWidget());
+    dlg.exec();
+}
+
 void ImagePlugin_Core::slotSharpen()
 {
 /*    DigikamImagesPluginCore::ImageEffect_Sharpen dlg(parentWidget());
@@ -295,11 +303,5 @@ void ImagePlugin_Core::slotBW()
 void ImagePlugin_Core::slotRatioCrop()
 {
 /*    DigikamImagesPluginCore::ImageEffect_RatioCrop dlg(parentWidget());
-    dlg.exec();*/
-}
-
-void ImagePlugin_Core::slotColorManagement()
-{
-/*    DigikamImagesPluginCore::ImageEffect_ICCProof dlg(parentWidget());
     dlg.exec();*/
 }

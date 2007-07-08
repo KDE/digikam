@@ -258,13 +258,13 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     lcmsLogoLabel->setPixmap( QPixmap( KStandardDirs::locate("data", "digikam/data/logo-lcms.png" ) ));
     lcmsLogoLabel->setToolTip(i18n("Visit Little CMS project website"));
 
-    zeroPageLayout->addMultiCellWidget(m_doSoftProofBox, 0, 0, 0, 0);
-    zeroPageLayout->addMultiCellWidget(m_checkGamutBox, 1, 1, 0, 0);
-    zeroPageLayout->addMultiCellWidget(m_embeddProfileBox, 2, 2, 0, 0);
-    zeroPageLayout->addMultiCellWidget(lcmsLogoLabel, 0, 2, 1, 1);
-    zeroPageLayout->addMultiCellWidget(m_BPCBox, 3, 3, 0, 0);
-    zeroPageLayout->addMultiCellWidget(intent, 4, 4, 0, 0);
-    zeroPageLayout->addMultiCellWidget(m_renderingIntentsCB, 4, 4, 1, 1);
+    zeroPageLayout->addWidget(m_doSoftProofBox, 0, 0, 1, 1);
+    zeroPageLayout->addWidget(m_checkGamutBox, 1, 0, 1, 1);
+    zeroPageLayout->addWidget(m_embeddProfileBox, 2, 0, 1, 1);
+    zeroPageLayout->addWidget(lcmsLogoLabel, 0, 1, 3, 1);
+    zeroPageLayout->addWidget(m_BPCBox, 3, 0, 1, 1);
+    zeroPageLayout->addWidget(intent, 4, 0, 1, 1);
+    zeroPageLayout->addWidget(m_renderingIntentsCB, 4, 1, 1, 1);
     zeroPageLayout->setRowStretch(5, 10);
     zeroPageLayout->setMargin(spacingHint());
     zeroPageLayout->setSpacing(spacingHint());
@@ -325,17 +325,17 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     make2->setText(iface.getPhotographInformations().make);
     model2->setText(iface.getPhotographInformations().model);
 
-    infoGrid->addMultiCellWidget(make1,  0, 0, 0, 0);
-    infoGrid->addMultiCellWidget(make2,  0, 0, 1, 1);
-    infoGrid->addMultiCellWidget(model1, 1, 1, 0, 0);
-    infoGrid->addMultiCellWidget(model2, 1, 1, 1, 1);
+    infoGrid->addWidget(make1,  0, 0, 1, 1);
+    infoGrid->addWidget(make2,  0, 1, 1, 1);
+    infoGrid->addWidget(model1, 1, 0, 1, 1);
+    infoGrid->addWidget(model2, 1, 1, 1, 1);
     infoGrid->setMargin(spacingHint());
     infoGrid->setSpacing(0);
 
-    firstPageLayout->addMultiCellWidget(box1, 0, 1, 0, 0);
-    firstPageLayout->addMultiCellWidget(inProfilesInfo, 0, 0, 2, 2);
-    firstPageLayout->addMultiCellWidget(m_inProfilesPath, 2, 2, 0, 2);
-    firstPageLayout->addMultiCellWidget(pictureInfo, 3, 3, 0, 2);
+    firstPageLayout->addWidget(box1, 0, 0, 2, 1);
+    firstPageLayout->addWidget(inProfilesInfo, 0, 2, 1, 1);
+    firstPageLayout->addWidget(m_inProfilesPath, 2, 0, 1, 3 );
+    firstPageLayout->addWidget(pictureInfo, 3, 0, 1, 3 );
     firstPageLayout->setColumnStretch(1, 10);
     firstPageLayout->setRowStretch(4, 10);
     firstPageLayout->setMargin(spacingHint());
@@ -376,9 +376,9 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QPushButton *spaceProfilesInfo = new QPushButton(i18n("Info..."), box2);
 
-    secondPageLayout->addMultiCellWidget(box2, 0, 1, 0, 0);    
-    secondPageLayout->addMultiCellWidget(spaceProfilesInfo, 0, 0, 2, 2);    
-    secondPageLayout->addMultiCellWidget(m_spaceProfilePath, 2, 2, 0, 2);    
+    secondPageLayout->addWidget(box2, 0, 0, 2, 1);    
+    secondPageLayout->addWidget(spaceProfilesInfo, 0, 2, 1, 1);    
+    secondPageLayout->addWidget(m_spaceProfilePath, 2, 0, 1, 3 );    
     secondPageLayout->setColumnStretch(1, 10);
     secondPageLayout->setRowStretch(3, 10);
     secondPageLayout->setMargin(spacingHint());
@@ -419,9 +419,9 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QPushButton *proofProfilesInfo = new QPushButton(i18n("Info..."), box3);
 
-    thirdPageLayout->addMultiCellWidget(box3, 0, 1, 0, 0);    
-    thirdPageLayout->addMultiCellWidget(proofProfilesInfo, 0, 0, 2, 2);    
-    thirdPageLayout->addMultiCellWidget(m_proofProfilePath, 2, 2, 0, 2);    
+    thirdPageLayout->addWidget(box3, 0, 0, 2, 1);    
+    thirdPageLayout->addWidget(proofProfilesInfo, 0, 2, 1, 1);    
+    thirdPageLayout->addWidget(m_proofProfilePath, 2, 0, 1, 3 );    
     thirdPageLayout->setColumnStretch(1, 10);
     thirdPageLayout->setRowStretch(3, 10);
     thirdPageLayout->setMargin(spacingHint());
@@ -462,12 +462,12 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_cInput->setValue(0);
     m_cInput->setWhatsThis( i18n("<p>Set here the contrast adjustment of the image."));
 
-    fourPageLayout->addMultiCellWidget(vGradient, 0, 0, 0, 0);
-    fourPageLayout->addMultiCellWidget(spacev, 0, 0, 1, 1);
-    fourPageLayout->addMultiCellWidget(m_curvesWidget, 0, 0, 2, 2);
-    fourPageLayout->addMultiCellWidget(spaceh, 1, 1, 2, 2);
-    fourPageLayout->addMultiCellWidget(hGradient, 2, 2, 2, 2);
-    fourPageLayout->addMultiCellWidget(m_cInput, 4, 4, 0, 2);
+    fourPageLayout->addWidget(vGradient, 0, 0, 1, 1);
+    fourPageLayout->addWidget(spacev, 0, 1, 1, 1);
+    fourPageLayout->addWidget(m_curvesWidget, 0, 2, 1, 1);
+    fourPageLayout->addWidget(spaceh, 1, 2, 1, 1);
+    fourPageLayout->addWidget(hGradient, 2, 2, 1, 1);
+    fourPageLayout->addWidget(m_cInput, 4, 0, 1, 3 );
     fourPageLayout->setRowMinimumHeight(3, spacingHint());
     fourPageLayout->setRowStretch(5, 10);
     fourPageLayout->setMargin(spacingHint());
@@ -475,9 +475,9 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 2);
-    gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 2);
-    gridSettings->addMultiCellWidget(m_toolBoxWidgets, 3, 3, 0, 2);
+    gridSettings->addLayout(l1, 0, 0, 1, 3 );
+    gridSettings->addWidget(histoBox, 1, 0, 2, 3 );
+    gridSettings->addWidget(m_toolBoxWidgets, 3, 0, 1, 3 );
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
 
