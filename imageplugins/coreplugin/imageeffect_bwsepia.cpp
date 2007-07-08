@@ -24,28 +24,20 @@
 
  // Qt includes.
  
-#include <qcolor.h>
-#include <q3groupbox.h>
-#include <q3hgroupbox.h>
-#include <q3vgroupbox.h>
-#include <Q3HButtonGroup> 
-#include <q3listbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qtimer.h>
-#include <qcombobox.h>
-
-#include <qtooltip.h>
-#include <q3intdict.h>
-#include <q3textstream.h>
-#include <qfile.h>
-
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
+#include <Q3ListBox>
+#include <Q3IntDict>
+#include <QColor>
+#include <QGroupBox>
+#include <QButtonGroup> 
+#include <QLabel>
+#include <QFrame>
+#include <QPushButton>
+#include <QTimer>
+#include <QComboBox>
+#include <QTextStream>
+#include <QFile>
+#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QPixmap>
 
 // KDE includes.
