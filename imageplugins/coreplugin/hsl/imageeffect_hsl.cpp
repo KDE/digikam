@@ -181,16 +181,16 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
-    gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
-    gridSettings->addMultiCellWidget(m_HSSelector, 3, 3, 0, 4);
-    gridSettings->addMultiCellWidget(m_HSPreview, 4, 4, 0, 4);
-    gridSettings->addMultiCellWidget(label2, 5, 5, 0, 4);
-    gridSettings->addMultiCellWidget(m_hInput, 6, 6, 0, 4);
-    gridSettings->addMultiCellWidget(label3, 7, 7, 0, 4);
-    gridSettings->addMultiCellWidget(m_sInput, 8, 8, 0, 4);
-    gridSettings->addMultiCellWidget(label4, 9, 9, 0, 4);
-    gridSettings->addMultiCellWidget(m_lInput, 10, 10, 0, 4);
+    gridSettings->addLayout(l1, 0, 0, 1, 5 );
+    gridSettings->addWidget(histoBox, 1, 0, 2, 5 );
+    gridSettings->addWidget(m_HSSelector, 3, 0, 1, 5 );
+    gridSettings->addWidget(m_HSPreview, 4, 0, 1, 5 );
+    gridSettings->addWidget(label2, 5, 0, 1, 5 );
+    gridSettings->addWidget(m_hInput, 6, 0, 1, 5 );
+    gridSettings->addWidget(label3, 7, 0, 1, 5 );
+    gridSettings->addWidget(m_sInput, 8, 0, 1, 5 );
+    gridSettings->addWidget(label4, 9, 0, 1, 5 );
+    gridSettings->addWidget(m_lInput, 10, 0, 1, 5 );
     gridSettings->setRowStretch(11, 10);
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
