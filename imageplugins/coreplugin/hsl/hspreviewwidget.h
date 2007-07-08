@@ -48,8 +48,8 @@ public:
 
 protected:
 
-    void resizeEvent( QResizeEvent * );
-    void paintEvent( QPaintEvent * );
+    void resizeEvent(QResizeEvent *);
+    void paintEvent(QPaintEvent *);
 
 private:
 

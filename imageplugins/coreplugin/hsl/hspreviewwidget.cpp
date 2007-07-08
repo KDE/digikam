@@ -23,11 +23,9 @@
 
 // Qt includes.
 
-#include <qdrawutil.h>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-//Added by qt3to4:
+#include <QImage>
+#include <QPainter>
+#include <QPixmap>
 #include <QPaintEvent>
 #include <QResizeEvent>
 
@@ -39,9 +37,10 @@
 
 // Local includes.
 
-#include "hslmodifier.h"
 #include "dimg.h"
+#include "hslmodifier.h"
 #include "hspreviewwidget.h"
+#include "hspreviewwidget.moc"
 
 namespace DigikamImagesPluginCore
 {
@@ -66,10 +65,11 @@ public:
 };
 
 HSPreviewWidget::HSPreviewWidget(QWidget *parent, int xBorder)
-	       : QWidget(parent, 0, Qt::WDestructiveClose)
+	           : QWidget(parent)
 {
     d = new HSPreviewWidgetPrivate;
     d->xBorder = xBorder;
+    setAttribute(Qt::WA_DeleteOnClose);
 }
 
 HSPreviewWidget::~HSPreviewWidget()
@@ -85,14 +85,16 @@ void HSPreviewWidget::setHS(double hue, double sat)
     update();
 }
 
-void HSPreviewWidget::resizeEvent( QResizeEvent * )
+void HSPreviewWidget::resizeEvent(QResizeEvent *)
 {
     updatePixmap();
 }
 
-void HSPreviewWidget::paintEvent( QPaintEvent * )
+void HSPreviewWidget::paintEvent(QPaintEvent *)
 {
-    bitBlt(this, 0+d->xBorder, 0, &d->pixmap);
+    QPainter p(this);
+    p.drawPixmap(d->xBorder, 0, d->pixmap);
+    p.end();
 }
 
 void HSPreviewWidget::updatePixmap()
@@ -101,10 +103,10 @@ void HSPreviewWidget::updatePixmap()
     int ySize = height();
 
     Digikam::DImg image(xSize, ySize, false, false, 0, false);
-    QColor col;
+    QColor  col;
     uint   *p;
 
-    for ( int s = ySize-1; s >= 0; s-- )
+    for ( int s = ySize-1 ; s >= 0 ; s-- )
     {
         p = (uint *)image.scanLine(ySize - s - 1);
 
@@ -126,5 +128,3 @@ void HSPreviewWidget::updatePixmap()
 }
 
 }  // NameSpace DigikamImagesPluginCore
-
-
