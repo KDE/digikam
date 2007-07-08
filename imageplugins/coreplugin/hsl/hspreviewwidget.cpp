@@ -39,6 +39,7 @@
 #include "hslmodifier.h"
 #include "dimg.h"
 #include "hspreviewwidget.h"
+#include "hspreviewwidget.moc"
 
 namespace DigikamImagesPluginCore
 {
@@ -123,5 +124,3 @@ void HSPreviewWidget::updatePixmap()
 }
 
 }  // NameSpace DigikamImagesPluginCore
-
-
