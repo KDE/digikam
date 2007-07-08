@@ -126,17 +126,18 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QStringList &)
     connect(m_colorManagementAction, SIGNAL(triggered(bool) ), 
             this, SLOT(slotColorManagement()));
 
-/*
+
     //-------------------------------
     // Filters menu actions.
 
-    m_BWAction = new KAction(i18n("Black && White..."), "bwtonal", 0,
-                     this, SLOT(slotBW()),
-                     actionCollection(), "implugcore_blackwhite");
+    m_BWAction = new KAction(KIcon("bwtonal"), i18n("Black && White..."), this);
+    actionCollection()->addAction("implugcore_blackwhite", m_BWAction );
+    connect(m_BWAction, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotBW()));
 
     //-------------------------------
     // Transform menu actions.
-    
+/*    
     m_aspectRatioCropAction = new KAction(i18n("Aspect Ratio Crop..."), "ratiocrop", 0,
                                   this, SLOT(slotRatioCrop()),
                                   actionCollection(), "implugcore_ratiocrop");
@@ -165,14 +166,16 @@ void ImagePlugin_Core::setEnabledActions(bool enable)
     m_BCGAction->setEnabled(enable);
     m_RGBAction->setEnabled(enable);
     m_blurAction->setEnabled(enable);
-
-/*    m_redeyeAction->setEnabled(enable);
-    m_HSLAction->setEnabled(enable);
+    m_redeyeAction->setEnabled(enable);
     m_autoCorrectionAction->setEnabled(enable);
     m_BWAction->setEnabled(enable);
+    m_colorManagementAction->setEnabled(enable);
+    
+/*    
+    m_HSLAction->setEnabled(enable);
     m_aspectRatioCropAction->setEnabled(enable);
     m_sharpenAction->setEnabled(enable);
-    m_colorManagementAction->setEnabled(enable);*/
+    */
 }
 
 void ImagePlugin_Core::slotInvert()
@@ -282,6 +285,12 @@ void ImagePlugin_Core::slotColorManagement()
     dlg.exec();
 }
 
+void ImagePlugin_Core::slotBW()
+{
+    DigikamImagesPluginCore::ImageEffect_BWSepia dlg(parentWidget());
+    dlg.exec();
+}
+
 void ImagePlugin_Core::slotSharpen()
 {
 /*    DigikamImagesPluginCore::ImageEffect_Sharpen dlg(parentWidget());
@@ -291,12 +300,6 @@ void ImagePlugin_Core::slotSharpen()
 void ImagePlugin_Core::slotHSL()
 {
 /*    DigikamImagesPluginCore::ImageEffect_HSL dlg(parentWidget());
-    dlg.exec();*/
-}
-
-void ImagePlugin_Core::slotBW()
-{
-/*    DigikamImagesPluginCore::ImageEffect_BWSepia dlg(parentWidget());
     dlg.exec();*/
 }
 

@@ -470,17 +470,17 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     gridTab2->addMultiCellWidget(spaceh, 1, 1, 2, 2);
     gridTab2->addMultiCellWidget(hGradient, 2, 2, 2, 2);
     gridTab2->addMultiCellWidget(m_cInput, 4, 4, 0, 2);
-    gridTab2->setRowSpacing(3, spacingHint());
+    gridTab2->setRowMinimumHeight(3, spacingHint());
     gridTab2->setRowStretch(5, 10);
     gridTab2->setMargin(spacingHint());
     gridTab2->setSpacing(0);
     
     // -------------------------------------------------------------
 
-    m_tab->insertTab(m_bwFilm, i18n("Film"),         FilmTab);
-    m_tab->insertTab(vbox,     i18n("Lens Filters"), BWFiltersTab);
-    m_tab->insertTab(m_bwTone, i18n("Tone"),         ToneTab);
-    m_tab->insertTab(curveBox, i18n("Lightness"),    LuminosityTab);
+    m_tab->insertTab(FilmTab,       m_bwFilm, i18n("Film"));
+    m_tab->insertTab(BWFiltersTab,  vbox,     i18n("Lens Filters"));
+    m_tab->insertTab(ToneTab,       m_bwTone, i18n("Tone"));
+    m_tab->insertTab(LuminosityTab, curveBox, i18n("Lightness"));
 
     gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
     gridSettings->addMultiCellWidget(histoBox, 1, 2, 0, 4);
@@ -612,15 +612,15 @@ void ImageEffect_BWSepia::slotChannelChanged(int channel)
             break;
     }
 
-    m_histogramWidget->repaint(false);
+    m_histogramWidget->repaint();
 }
 
 void ImageEffect_BWSepia::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
-    m_histogramWidget->repaint(false);
+    m_histogramWidget->repaint();
     m_curvesWidget->m_scaleType = scale;
-    m_curvesWidget->repaint(false);
+    m_curvesWidget->repaint();
 }
 
 void ImageEffect_BWSepia::slotSpotColorChanged(const Digikam::DColor &color)
@@ -638,8 +638,8 @@ void ImageEffect_BWSepia::readUserSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("convertbw Tool Dialog");
 
-    m_tab->setCurrentPage(group.readEntry("Settings Tab", (int)BWFiltersTab));
-    m_channelCB->setCurrentItem(group.readEntry("Histogram Channel", 0));    // Luminosity.
+    m_tab->setCurrentIndex(group.readEntry("Settings Tab", (int)BWFiltersTab));
+    m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->button(group.readEntry("Histogram Scale", 
                       (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
 
@@ -672,7 +672,7 @@ void ImageEffect_BWSepia::readUserSettings()
     for (int i = 0 ; i < 5 ; i++)
         m_curves->curvesCalculateCurve(i);
 
-    slotChannelChanged(m_channelCB->currentItem());
+    slotChannelChanged(m_channelCB->currentIndex());
     slotScaleChanged(m_scaleBG->checkedId());
     slotFilterSelected(m_bwFilters->currentItem());
 }
@@ -681,8 +681,8 @@ void ImageEffect_BWSepia::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("convertbw Tool Dialog");
-    group.writeEntry("Settings Tab", m_tab->currentPageIndex());
-    group.writeEntry("Histogram Channel", m_channelCB->currentItem());
+    group.writeEntry("Settings Tab", m_tab->currentIndex());
+    group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
     group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
     group.writeEntry("BW Filter", m_bwFilters->currentItem());
     group.writeEntry("BW Film", m_bwFilm->currentItem());

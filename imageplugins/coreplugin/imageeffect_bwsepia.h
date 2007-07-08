@@ -161,11 +161,11 @@ private:
     
     QComboBox                    *m_channelCB;
     
-    Q3HButtonGroup                *m_scaleBG;
+    QButtonGroup                 *m_scaleBG;
     
-    Q3ListBox                     *m_bwFilters;
-    Q3ListBox                     *m_bwFilm;
-    Q3ListBox                     *m_bwTone;
+    Q3ListBox                    *m_bwFilters;
+    Q3ListBox                    *m_bwFilm;
+    Q3ListBox                    *m_bwTone;
 
     KIntNumInput                 *m_cInput;
     KIntNumInput                 *m_strengthInput;

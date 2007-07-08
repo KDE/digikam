@@ -1327,4 +1327,3 @@ void ImageEffect_ICCProof::slotUser2()
 }
 
 } // NameSpace DigikamImagesPluginCore
-
