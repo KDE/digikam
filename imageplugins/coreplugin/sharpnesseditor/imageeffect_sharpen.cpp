@@ -66,7 +66,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
                    : Digikam::CtrlPanelDlg(parent, i18n("Sharpening Photograph"), "sharpen",
                                            true, false, true)
  {
-    setHelp("blursharpentool.anchor", KApplication::kApplication()->aboutData()->appName());
+    setHelp("blursharpentool.anchor", "digikam");
 
     // -------------------------------------------------------------
 
@@ -724,4 +724,3 @@ void ImageEffect_Sharpen::slotUser2()
 }
 
 }  // NameSpace DigikamImagesPluginCore
-
