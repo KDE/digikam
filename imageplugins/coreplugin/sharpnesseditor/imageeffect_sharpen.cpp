@@ -83,10 +83,10 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     
     m_stack = new QStackedWidget(gboxSettings);
 
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_sharpMethod, 0, 0, 1, 1);
-    gridSettings->addMultiCellWidget(new KSeparator(gboxSettings), 1, 1, 0, 1);
-    gridSettings->addMultiCellWidget(m_stack, 2, 2, 0, 1);
+    gridSettings->addWidget(label1, 0, 0, 1, 1);
+    gridSettings->addWidget(m_sharpMethod, 0, 1, 1, 1);
+    gridSettings->addWidget(new KSeparator(gboxSettings), 1, 0, 1, 2 );
+    gridSettings->addWidget(m_stack, 2, 0, 1, 2 );
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
 
@@ -103,8 +103,8 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
                                       "1 and above determine the sharpen matrix radius "
                                       "that determines how much to sharpen the image."));
 
-    grid1->addMultiCellWidget(label, 0, 0, 0, 1);
-    grid1->addMultiCellWidget(m_radiusInput, 1, 1, 0, 1);
+    grid1->addWidget(label, 0, 0, 1, 2 );
+    grid1->addWidget(m_radiusInput, 1, 0, 1, 2 );
     grid1->setRowStretch(2, 10);
     grid1->setMargin(spacingHint());
     grid1->setSpacing(spacingHint());
@@ -136,12 +136,12 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     m_thresholdInput->setWhatsThis( i18n("<p>The threshold, as a fraction of the maximum "
                      "luminosity value, needed to apply the difference amount.") );
 
-    grid2->addMultiCellWidget(label2, 0, 0, 0, 1);
-    grid2->addMultiCellWidget(m_radiusInput2, 1, 1, 0, 1);
-    grid2->addMultiCellWidget(label3, 2, 2, 0, 1);
-    grid2->addMultiCellWidget(m_amountInput, 3, 3, 0, 1);
-    grid2->addMultiCellWidget(label4, 4, 4, 0, 1);
-    grid2->addMultiCellWidget(m_thresholdInput, 5, 5, 0, 1);
+    grid2->addWidget(label2, 0, 0, 1, 2 );
+    grid2->addWidget(m_radiusInput2, 1, 0, 1, 2 );
+    grid2->addWidget(label3, 2, 0, 1, 2 );
+    grid2->addWidget(m_amountInput, 3, 0, 1, 2 );
+    grid2->addWidget(label4, 4, 0, 1, 2 );
+    grid2->addWidget(m_thresholdInput, 5, 0, 1, 2 );
     grid2->setRowStretch(6, 10);
     grid2->setMargin(spacingHint());
     grid2->setSpacing(spacingHint());
@@ -196,16 +196,16 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
                                      "Increasing the matrix width may give better results, especially when you have "
                                      "chosen large values for circular or gaussian sharpness."));
 
-    grid3->addMultiCellWidget(label5, 0, 0, 0, 1);
-    grid3->addMultiCellWidget(m_radius, 1, 1, 0, 1);
-    grid3->addMultiCellWidget(label6, 2, 2, 0, 1);
-    grid3->addMultiCellWidget(m_correlation, 3, 3, 0, 1);
-    grid3->addMultiCellWidget(label7, 4, 4, 0, 1);
-    grid3->addMultiCellWidget(m_noise, 5, 5, 0, 1);
-    grid3->addMultiCellWidget(label8, 6, 6, 0, 1);
-    grid3->addMultiCellWidget(m_gauss, 7, 7, 0, 1);
-    grid3->addMultiCellWidget(label9, 8, 8, 0, 1);
-    grid3->addMultiCellWidget(m_matrixSize, 9, 9, 0, 1);
+    grid3->addWidget(label5, 0, 0, 1, 2 );
+    grid3->addWidget(m_radius, 1, 0, 1, 2 );
+    grid3->addWidget(label6, 2, 0, 1, 2 );
+    grid3->addWidget(m_correlation, 3, 0, 1, 2 );
+    grid3->addWidget(label7, 4, 0, 1, 2 );
+    grid3->addWidget(m_noise, 5, 0, 1, 2 );
+    grid3->addWidget(label8, 6, 0, 1, 2 );
+    grid3->addWidget(m_gauss, 7, 0, 1, 2 );
+    grid3->addWidget(label9, 8, 0, 1, 2 );
+    grid3->addWidget(m_matrixSize, 9, 0, 1, 2 );
     grid3->setRowStretch(10, 10);
     grid3->setMargin(spacingHint());
     grid3->setSpacing(spacingHint());
