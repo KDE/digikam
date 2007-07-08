@@ -42,8 +42,8 @@ extern "C"
 
 // Qt includes. 
  
-#include <qglobal.h>
-#include <qstring.h>
+#include <QtCore>   
+#include <QString>
 
 // Local includes.
 
