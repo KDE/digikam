@@ -117,8 +117,6 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     d->splitter        = new QSplitter(this);
     d->previewWidget   = new QWidget(d->splitter);
     d->mainLayout      = new QGridLayout(d->previewWidget);
-    d->mainLayout->setMargin(0);
-    d->mainLayout->setSpacing(KDialog::spacingHint());
 
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
@@ -228,16 +226,16 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
 
     // -------------------------------------------------------------
         
-    d->mainLayout->addMultiCellWidget(preview, 0, 1, 0, 4);
-    d->mainLayout->addMultiCellWidget(d->zoomBar, 2, 2, 0, 0);
-    d->mainLayout->addMultiCellWidget(d->progressBar, 2, 2, 2, 2);
-    d->mainLayout->addMultiCellWidget(space, 2, 2, 3, 3);
-    d->mainLayout->addMultiCellWidget(d->sepaBBox, 2, 2, 4, 4);
+    d->mainLayout->addWidget(preview, 0, 0, 2, 5 );
+    d->mainLayout->addWidget(d->zoomBar, 2, 0, 1, 1);
+    d->mainLayout->addWidget(d->progressBar, 2, 2, 1, 1);
+    d->mainLayout->addWidget(space, 2, 3, 1, 1);
+    d->mainLayout->addWidget(d->sepaBBox, 2, 4, 1, 1);
     d->mainLayout->setRowStretch(1, 10);
     d->mainLayout->setColumnStretch(1, 10);
     d->mainLayout->setSpacing(0);
     d->mainLayout->setMargin(0);
-        
+
     // -------------------------------------------------------------
 
     QString sbName(d->settingsSection + QString(" Image Plugin Sidebar"));
