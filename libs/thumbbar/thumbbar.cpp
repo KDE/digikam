@@ -756,9 +756,6 @@ void ThumbBarView::slotFailedPreview(const KFileItem &fileItem)
     item->repaint();
 }
 
-// TODO: KDE4PORT: QToolTip api has changed with QT4 (QToolTip::mayBeTip() has diseapears). 
-//                 Check if this way is correct to display tooltip properlly.
-//                 More info at http://doc.trolltech.com/4.3/widgets-tooltips.html
 bool ThumbBarView::event(QEvent *event)
 {
     if (event->type() == QEvent::ToolTip) 
@@ -769,7 +766,7 @@ bool ThumbBarView::event(QEvent *event)
             QString tipText;
     
             if (d->toolTip->maybeTip(helpEvent->pos(), tipText))
-                QToolTip::showText(helpEvent->globalPos(), tipText);
+                QToolTip::showText(helpEvent->globalPos(), tipText, this);
             else
                 QToolTip::hideText();
         }
