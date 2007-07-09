@@ -163,8 +163,6 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     d->settingsArea->setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
 
     QGridLayout *settingsLayout = new QGridLayout(d->settingsArea);
-    settingsLayout->setSpacing(0);
-    settingsLayout->setMargin(KDialog::spacingHint());
 
     // --------------------------------------------------
 
@@ -315,8 +313,11 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     settingsLayout->addWidget(d->labelPhotoFlash, 25, 25, 1, 1);
     settingsLayout->addWidget(d->whiteBalance, 26, 26, 0, 0);
     settingsLayout->addWidget(d->labelPhotoWhiteBalance, 26, 26, 1, 1);
+
     settingsLayout->setRowStretch(27, 10);
     settingsLayout->setColumnStretch(1, 10);
+    settingsLayout->setSpacing(0);
+    settingsLayout->setMargin(KDialog::spacingHint());
 
     // --------------------------------------------------
 

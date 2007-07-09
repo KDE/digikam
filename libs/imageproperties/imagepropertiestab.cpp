@@ -173,8 +173,6 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     d->settingsArea->setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
 
     QGridLayout *settingsLayout = new QGridLayout(d->settingsArea);
-    settingsLayout->setSpacing(0);
-    settingsLayout->setMargin(KDialog::spacingHint());
 
     // --------------------------------------------------
 
@@ -282,74 +280,76 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
 
     // --------------------------------------------------
 
-    settingsLayout->addMultiCellWidget(d->title, 0, 0, 0, 1);
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+    settingsLayout->addWidget(d->title, 0, 0, 1, 2 );
+    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 1, 0, 1);
-    settingsLayout->addMultiCellWidget(d->file, 2, 2, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelFile, 2, 2, 1, 1);
-    settingsLayout->addMultiCellWidget(d->folder, 3, 3, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelFolder, 3, 3, 1, 1);
-    settingsLayout->addMultiCellWidget(d->modifiedDate, 4, 4, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelFileModifiedDate, 4, 4, 1, 1);
-    settingsLayout->addMultiCellWidget(d->size, 5, 5, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelFileSize, 5, 5, 1, 1);
-    settingsLayout->addMultiCellWidget(d->owner, 6, 6, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelFileOwner, 6, 6, 1, 1);
-    settingsLayout->addMultiCellWidget(d->permissions, 7, 7, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelFilePermissions, 7, 7, 1, 1);
+    settingsLayout->addWidget(d->file, 2, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFile, 2, 1, 1, 1);
+    settingsLayout->addWidget(d->folder, 3, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFolder, 3, 1, 1, 1);
+    settingsLayout->addWidget(d->modifiedDate, 4, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFileModifiedDate, 4, 1, 1, 1);
+    settingsLayout->addWidget(d->size, 5, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFileSize, 5, 1, 1, 1);
+    settingsLayout->addWidget(d->owner, 6, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFileOwner, 6, 1, 1, 1);
+    settingsLayout->addWidget(d->permissions, 7, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFilePermissions, 7, 1, 1, 1);
 
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
+    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 8, 8, 0, 1);
-    settingsLayout->addMultiCellWidget(line, 9, 9, 0, 1);
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
+    settingsLayout->addWidget(line, 9, 0, 1, 2 );
+    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 10, 10, 0, 1);
 
-    settingsLayout->addMultiCellWidget(d->title2, 11, 11, 0, 1);
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
+    settingsLayout->addWidget(d->title2, 11, 0, 1, 2 );
+    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 12, 12, 0, 1);
-    settingsLayout->addMultiCellWidget(d->mime, 13, 13, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelImageMime, 13, 13, 1, 1);
-    settingsLayout->addMultiCellWidget(d->dimensions, 14, 14, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelImageDimensions, 14, 14, 1, 1);
-    settingsLayout->addMultiCellWidget(d->compression, 15, 15, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelImageCompression, 15, 15, 1, 1);
-    settingsLayout->addMultiCellWidget(d->bitDepth, 16, 16, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelImageBitDepth, 16, 16, 1, 1);
-    settingsLayout->addMultiCellWidget(d->colorMode, 17, 17, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelImageColorMode, 17, 17, 1, 1);
+    settingsLayout->addWidget(d->mime, 13, 0, 1, 1);
+    settingsLayout->addWidget(d->labelImageMime, 13, 1, 1, 1);
+    settingsLayout->addWidget(d->dimensions, 14, 0, 1, 1);
+    settingsLayout->addWidget(d->labelImageDimensions, 14, 1, 1, 1);
+    settingsLayout->addWidget(d->compression, 15, 0, 1, 1);
+    settingsLayout->addWidget(d->labelImageCompression, 15, 1, 1, 1);
+    settingsLayout->addWidget(d->bitDepth, 16, 0, 1, 1);
+    settingsLayout->addWidget(d->labelImageBitDepth, 16, 1, 1, 1);
+    settingsLayout->addWidget(d->colorMode, 17, 0, 1, 1);
+    settingsLayout->addWidget(d->labelImageColorMode, 17, 1, 1, 1);
 
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 18, 18, 0, 1);
-    settingsLayout->addMultiCellWidget(line2, 19, 19, 0, 1);
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+    settingsLayout->addWidget(line2, 19, 0, 1, 2 );
+    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 20, 20, 0, 1);
 
-    settingsLayout->addMultiCellWidget(d->title3, 21, 21, 0, 1);
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+    settingsLayout->addWidget(d->title3, 21, 0, 1, 2 );
+    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 22, 22, 0, 1);
-    settingsLayout->addMultiCellWidget(d->make, 23, 23, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoMake, 23, 23, 1, 1);
-    settingsLayout->addMultiCellWidget(d->model, 24, 24, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoModel, 24, 24, 1, 1);
-    settingsLayout->addMultiCellWidget(d->photoDate, 25, 25, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoDateTime, 25, 25, 1, 1);
-    settingsLayout->addMultiCellWidget(d->aperture, 26, 26, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoAperture, 26, 26, 1, 1);
-    settingsLayout->addMultiCellWidget(d->focalLength, 27, 27, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoFocalLenght, 27, 27, 1, 1);
-    settingsLayout->addMultiCellWidget(d->exposureTime, 28, 28, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoExposureTime, 28, 28, 1, 1);
-    settingsLayout->addMultiCellWidget(d->sensitivity, 29, 29, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoSensitivity, 29, 29, 1, 1);
-    settingsLayout->addMultiCellWidget(d->exposureMode, 30, 30, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoExposureMode, 30, 30, 1, 1);
-    settingsLayout->addMultiCellWidget(d->flash, 31, 31, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoFlash, 31, 31, 1, 1);
-    settingsLayout->addMultiCellWidget(d->whiteBalance, 32, 32, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoWhiteBalance, 32, 32, 1, 1);
+    settingsLayout->addWidget(d->make, 23, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoMake, 23, 1, 1, 1);
+    settingsLayout->addWidget(d->model, 24, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoModel, 24, 1, 1, 1);
+    settingsLayout->addWidget(d->photoDate, 25, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoDateTime, 25, 1, 1, 1);
+    settingsLayout->addWidget(d->aperture, 26, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoAperture, 26, 1, 1, 1);
+    settingsLayout->addWidget(d->focalLength, 27, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoFocalLenght, 27, 1, 1, 1);
+    settingsLayout->addWidget(d->exposureTime, 28, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoExposureTime, 28, 1, 1, 1);
+    settingsLayout->addWidget(d->sensitivity, 29, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoSensitivity, 29, 1, 1, 1);
+    settingsLayout->addWidget(d->exposureMode, 30, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoExposureMode, 30, 1, 1, 1);
+    settingsLayout->addWidget(d->flash, 31, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoFlash, 31, 1, 1, 1);
+    settingsLayout->addWidget(d->whiteBalance, 32, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoWhiteBalance, 32, 1, 1, 1);
 
     settingsLayout->setRowStretch(33, 10);
     settingsLayout->setColumnStretch(1, 10);
+    settingsLayout->setSpacing(0);
+    settingsLayout->setMargin(KDialog::spacingHint());
 
     // --------------------------------------------------
 
