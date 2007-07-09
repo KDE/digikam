@@ -26,10 +26,8 @@
 
 // Qt includes.
 
-#include <qcolor.h>
-#include <qimage.h>
-//Added by qt3to4:
-#include <QLabel>
+#include <QColor>
+#include <QImage>
 
 // Digikam includes.
 
@@ -37,18 +35,18 @@
 
 class QLabel;
 class QFont;
-class Q3HButtonGroup;
+class QButtonGroup;
 class QComboBox;
 class QCheckBox;
 
-class KTextEdit;
+class K3TextEdit;
 class KColorButton;
+class KFontChooser;
 
 namespace DigikamInsertTextImagesPlugin
 {
 
 class InsertTextWidget;
-class FontChooserWidget;
 
 class ImageEffect_InsertText : public Digikam::ImageDlgBase
 {
@@ -86,15 +84,15 @@ private:
     QCheckBox         *m_borderText;    
     QCheckBox         *m_transparentText;
     
-    Q3HButtonGroup     *m_alignButtonGroup;
+    QButtonGroup      *m_alignButtonGroup;
         
     QFont              m_textFont;
     
     KColorButton      *m_fontColorButton;
     
-    FontChooserWidget *m_fontChooserWidget;
+    KFontChooser      *m_fontChooserWidget;
     
-    KTextEdit         *m_textEdit;
+    K3TextEdit        *m_textEdit;
     
     InsertTextWidget  *m_previewWidget;
 };

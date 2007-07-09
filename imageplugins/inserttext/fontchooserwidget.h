@@ -27,10 +27,8 @@
 #ifndef FONT_CHOOSER_WIDGET_H
 #define FONT_CHOOSER_WIDGET_H
 
-#include <qlineedit.h>
-#include <qbutton.h>
-//Added by qt3to4:
-#include <QLabel>
+#include <Q3Button>
+#include <QLineEdit>
 
 class QComboBox;
 class QCheckBox;
@@ -92,7 +90,7 @@ public:
     QColor color() const;
     QColor backgroundColor() const;
     static void getFontList( QStringList &list, uint fontListCriteria);
-    QButton::ToggleState sizeIsRelative() const;
+    Q3Button::ToggleState sizeIsRelative() const;
     static QString getXLFD( const QFont &theFont ) { return theFont.rawName(); };
         
     int fontDiffFlags();

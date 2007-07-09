@@ -1,8 +1,8 @@
 
 SET(digikamimageplugin_inserttext_PART_SRCS inserttextwidget.cpp
 #                                            fontchooserwidget.cpp 
-#                                            imageplugin_inserttext.cpp
-#                                            imageeffect_inserttext.cpp
+                                            imageplugin_inserttext.cpp
+                                            imageeffect_inserttext.cpp
    )
 
 KDE4_AUTOMOC(${digikamimageplugin_inserttext_PART_SRCS})

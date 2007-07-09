@@ -26,23 +26,19 @@
 
 // Qt includes.
 
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qfile.h>
-#include <qfont.h>
-#include <q3groupbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qscrollbar.h>
-#include <qstringlist.h>
-#include <qfontdatabase.h>
-
-#include <qtooltip.h>
-//Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <Q3ValueList>
 #include <Q3GridLayout>
 #include <Q3VBoxLayout>
+#include <Q3GroupBox>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QFile>
+#include <QFont>
+#include <QLabel>
+#include <QScrollBar>
+#include <QStringList>
+#include <QFontDatabase>
 
 // KDE includes.
 
@@ -740,4 +736,3 @@ void FontChooserWidget::showXLFDArea(bool show)
 }
 
 }  // NameSpace DigikamInsertTextImagesPlugin
-

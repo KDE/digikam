@@ -24,25 +24,21 @@
  
 // Qt includes. 
  
-#include <q3vgroupbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-
-#include <qlayout.h>
-#include <q3frame.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qbrush.h>
-#include <qpen.h>
-#include <qfont.h>
-#include <qtimer.h> 
-#include <Q3HButtonGroup> 
-#include <qtooltip.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3VBoxLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QFrame>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QPixmap>
+#include <QPainter>
+#include <QBrush>
+#include <QPen>
+#include <QFont>
+#include <QTimer> 
+#include <QButtonGroup> 
+#include <QGridLayout>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -51,12 +47,13 @@
 #include <kaboutdata.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
+#include <kfontchooser.h>
 #include <kapplication.h>
 #include <kmenu.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kcolorbutton.h>
-#include <ktextedit.h> 
+#include <k3textedit.h> 
 #include <kglobal.h>
 
 // Local includes.
@@ -66,7 +63,6 @@
 #include "dimg.h"
 #include "imageiface.h"
 #include "inserttextwidget.h"
-#include "fontchooserwidget.h"
 #include "imageeffect_inserttext.h"
 #include "imageeffect_inserttext.moc"
 
@@ -101,9 +97,11 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QFrame *frame = new QFrame(plainPage());
+    QFrame *frame   = new QFrame(mainWidget());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    Q3VBoxLayout* l  = new Q3VBoxLayout(frame, 5, 0);
+    QVBoxLayout* l  = new QVBoxLayout(frame);
+    l->setMargin(5);
+    l->setSpacing(0);
     m_previewWidget = new InsertTextWidget(480, 320, frame);
     l->addWidget(m_previewWidget);
     m_previewWidget->setWhatsThis( i18n("<p>This is the preview of the text inserted to the image. "
@@ -112,73 +110,74 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    QWidget *gbox2        = new QWidget(plainPage());
-    Q3GridLayout *gridBox2 = new Q3GridLayout( gbox2, 9, 1, spacingHint());
+    QWidget *gbox2        = new QWidget(mainWidget());
+    QGridLayout *gridBox2 = new QGridLayout( gbox2 );
     
-    m_textEdit = new KTextEdit(gbox2);
+    m_textEdit = new K3TextEdit(gbox2);
     m_textEdit->setCheckSpellingEnabled(true);
     m_textEdit->setWordWrap(Q3TextEdit::NoWrap);
     m_textEdit->setWhatsThis( i18n("<p>Here, enter the text you want to insert in your image."));
-    gridBox2->addMultiCellWidget(m_textEdit, 0, 2, 0, 1);
     
     // -------------------------------------------------------------
     
-    m_fontChooserWidget = new FontChooserWidget(gbox2);
+    m_fontChooserWidget = new KFontChooser(gbox2, KFontChooser::NoDisplayFlags);
+    m_fontChooserWidget->setSampleBoxVisible(false);
     m_textEdit->setWhatsThis( i18n("<p>Here you can choose the font to be used."));
-    gridBox2->addMultiCellWidget(m_fontChooserWidget, 3, 3, 0, 1);
     
     // -------------------------------------------------------------
     
     KIconLoader icon;
-    m_alignButtonGroup = new Q3HButtonGroup(gbox2);
+    QWidget *alignBox  = new QWidget(gbox2);
+    QHBoxLayout *hlay  = new QHBoxLayout(alignBox);    
+    m_alignButtonGroup = new QButtonGroup(alignBox);
+    m_alignButtonGroup->setExclusive(true);
     
-    QPushButton *alignLeft = new QPushButton( m_alignButtonGroup );
-    m_alignButtonGroup->insert(alignLeft, ALIGN_LEFT);
-    alignLeft->setPixmap( icon.loadIcon( "text_left", (KIcon::Group)KIcon::Small ) );
-    alignLeft->setToggleButton(true);
+    QPushButton *alignLeft = new QPushButton( alignBox );
+    m_alignButtonGroup->addButton(alignLeft, ALIGN_LEFT);
+    alignLeft->setIcon(SmallIcon("leftjust"));
+    alignLeft->setCheckable(true);
     alignLeft->setToolTip( i18n( "Align text to the left" ) );
     
-    QPushButton *alignRight = new QPushButton( m_alignButtonGroup );
-    m_alignButtonGroup->insert(alignRight, ALIGN_RIGHT);
-    alignRight->setPixmap( icon.loadIcon( "text_right", (KIcon::Group)KIcon::Small ) );
-    alignRight->setToggleButton(true);
+    QPushButton *alignRight = new QPushButton( alignBox );
+    m_alignButtonGroup->addButton(alignRight, ALIGN_RIGHT);
+    alignRight->setIcon(SmallIcon("rightjust"));
+    alignRight->setCheckable(true);
     alignRight->setToolTip( i18n( "Align text to the right" ) );
     
-    QPushButton *alignCenter = new QPushButton( m_alignButtonGroup );
-    m_alignButtonGroup->insert(alignCenter, ALIGN_CENTER);
-    alignCenter->setPixmap( icon.loadIcon( "text_center", (KIcon::Group)KIcon::Small ) );
-    alignCenter->setToggleButton(true);
+    QPushButton *alignCenter = new QPushButton( alignBox );
+    m_alignButtonGroup->addButton(alignCenter, ALIGN_CENTER);
+    alignCenter->setIcon(SmallIcon("centrejust"));
+    alignCenter->setCheckable(true);
     alignCenter->setToolTip( i18n( "Align text to center" ) );
     
-    QPushButton *alignBlock = new QPushButton( m_alignButtonGroup );
-    m_alignButtonGroup->insert(alignBlock, ALIGN_BLOCK);
-    alignBlock->setPixmap( icon.loadIcon( "text_block", (KIcon::Group)KIcon::Small ) );
-    alignBlock->setToggleButton(true);
+    QPushButton *alignBlock = new QPushButton( alignBox );
+    m_alignButtonGroup->addButton(alignBlock, ALIGN_BLOCK);
+    alignBlock->setIcon(SmallIcon("format-justify-fill"));
+    alignBlock->setCheckable(true);
     alignBlock->setToolTip( i18n( "Align text to a block" ) );
-    
-    m_alignButtonGroup->setExclusive(true);
-    m_alignButtonGroup->setFrameShape(QFrame::NoFrame);
-    gridBox2->addMultiCellWidget(m_alignButtonGroup, 4, 4, 0, 1);
-    
+  
+    hlay->setMargin(0);
+    hlay->setSpacing(0);
+    hlay->addWidget(alignLeft);
+    hlay->addWidget(alignRight);
+    hlay->addWidget(alignCenter);
+    hlay->addWidget(alignBlock);
+
     // -------------------------------------------------------------
     
     QLabel *label1 = new QLabel(i18n("Rotation:"), gbox2);
-    m_textRotation = new QComboBox( false, gbox2 );
-    m_textRotation->insertItem( i18n("None") );
-    m_textRotation->insertItem( i18n("90 Degrees") );
-    m_textRotation->insertItem( i18n("180 Degrees") );
-    m_textRotation->insertItem( i18n("270 Degrees") );
+    m_textRotation = new QComboBox( gbox2 );
+    m_textRotation->addItem( i18n("None") );
+    m_textRotation->addItem( i18n("90 Degrees") );
+    m_textRotation->addItem( i18n("180 Degrees") );
+    m_textRotation->addItem( i18n("270 Degrees") );
     m_textRotation->setWhatsThis( i18n("<p>Select here the text rotation to use."));
-    gridBox2->addMultiCellWidget(label1, 5, 5, 0, 0);
-    gridBox2->addMultiCellWidget(m_textRotation, 5, 5, 1, 1);
 
     // -------------------------------------------------------------
         
     QLabel *label2    = new QLabel(i18n("Color:"), gbox2);
     m_fontColorButton = new KColorButton( Qt::black, gbox2 );
     m_fontColorButton->setWhatsThis( i18n("<p>Set here the font color to use."));
-    gridBox2->addMultiCellWidget(label2, 6, 6, 0, 0);
-    gridBox2->addMultiCellWidget(m_fontColorButton, 6, 6, 1, 1);
 
     // -------------------------------------------------------------
         
@@ -188,24 +187,35 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     m_transparentText = new QCheckBox( i18n( "Semi-transparent"), gbox2 );
     m_transparentText->setToolTip( i18n( "Use semi-transparent text background under image" ) );
 
+    // -------------------------------------------------------------
+
+    gridBox2->addMultiCellWidget(m_textEdit, 0, 2, 0, 1);
+    gridBox2->addMultiCellWidget(m_fontChooserWidget, 3, 3, 0, 1);
+    gridBox2->addMultiCellWidget(alignBox, 4, 4, 0, 1);
+    gridBox2->addMultiCellWidget(label1, 5, 5, 0, 0);
+    gridBox2->addMultiCellWidget(m_textRotation, 5, 5, 1, 1);
+    gridBox2->addMultiCellWidget(label2, 6, 6, 0, 0);
+    gridBox2->addMultiCellWidget(m_fontColorButton, 6, 6, 1, 1);
     gridBox2->addMultiCellWidget(m_borderText, 7, 7, 0, 1);                            
     gridBox2->addMultiCellWidget(m_transparentText, 8, 8, 0, 1);                            
     gridBox2->setRowStretch(9, 10);    
+    gridBox2->setMargin(spacingHint());
+    gridBox2->setSpacing(spacingHint());
     
     setUserAreaWidget(gbox2);
 
     // -------------------------------------------------------------
     
-    connect(m_fontChooserWidget, SIGNAL(fontSelected (const QFont &)),
-            this, SLOT(slotFontPropertiesChanged(const QFont &)));       
+    connect(m_fontChooserWidget, SIGNAL(fontSelected(const QFont&)),
+            this, SLOT(slotFontPropertiesChanged(const QFont&)));       
             
-    connect(m_fontColorButton, SIGNAL(changed(const QColor &)),
+    connect(m_fontColorButton, SIGNAL(changed(const QColor&)),
             this, SLOT(slotUpdatePreview()));         
     
     connect(m_textEdit, SIGNAL(textChanged()),
             this, SLOT(slotUpdatePreview()));           
             
-    connect(m_alignButtonGroup, SIGNAL(released(int)),
+    connect(m_alignButtonGroup, SIGNAL(buttonReleased(int)),
             this, SLOT(slotAlignModeChanged(int)));                        
     
     connect(m_borderText, SIGNAL(toggled(bool)),
@@ -217,7 +227,9 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     connect(m_textRotation, SIGNAL(activated(int)),
             this, SLOT(slotUpdatePreview()));
 
-    connect(this, SIGNAL(signalUpdatePreview()), SLOT(slotUpdatePreview()));
+    connect(this, SIGNAL(signalUpdatePreview()), 
+            this, SLOT(slotUpdatePreview()));
+
     // -------------------------------------------------------------
 
     slotUpdatePreview();
@@ -241,7 +253,7 @@ void ImageEffect_InsertText::readUserSettings()
     else m_defaultSizeFont = (int)(orgW / 8.0);
 
     defaultFont.setPointSize(m_defaultSizeFont);
-    m_textRotation->setCurrentItem( group.readEntry("Text Rotation", 0) );
+    m_textRotation->setCurrentIndex( group.readEntry("Text Rotation", 0) );
     m_fontColorButton->setColor(group.readEntry("Font Color", black));
     m_textEdit->setText(group.readEntry("Text String", i18n("Enter your text here!")));
     m_textFont = group.readEntry("Font Properties", defaultFont);
@@ -251,7 +263,7 @@ void ImageEffect_InsertText::readUserSettings()
     m_transparentText->setChecked( group.readEntry("Transparent Text", false) );
     m_previewWidget->setPositionHint( group.readEntry("Position Hint",QRect()) );
 
-    static_cast<QPushButton*>(m_alignButtonGroup->find(m_alignTextMode))->setOn(true);
+    m_alignButtonGroup->button(m_alignTextMode)->setChecked(true);
     slotAlignModeChanged(m_alignTextMode);
 }
 
@@ -260,7 +272,7 @@ void ImageEffect_InsertText::writeUserSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("inserttext Tool Dialog");
 
-    group.writeEntry( "Text Rotation", m_textRotation->currentItem() );
+    group.writeEntry( "Text Rotation", m_textRotation->currentIndex() );
     group.writeEntry( "Font Color", m_fontColorButton->color() );
     group.writeEntry( "Text String", m_textEdit->text() );
     group.writeEntry( "Font Properties", m_textFont );
@@ -278,7 +290,7 @@ void ImageEffect_InsertText::resetValues()
     m_alignButtonGroup->blockSignals(true);
     m_fontChooserWidget->blockSignals(true);
     
-    m_textRotation->setCurrentItem(0);    // No rotation.
+    m_textRotation->setCurrentIndex(0);    // No rotation.
     m_fontColorButton->setColor(Qt::black);      
     QFont defaultFont;  
     m_textFont = defaultFont; // Reset to default KDE font.
@@ -287,7 +299,7 @@ void ImageEffect_InsertText::resetValues()
     m_borderText->setChecked( false ); 
     m_transparentText->setChecked( false ); 
     m_previewWidget->resetEdit();
-    static_cast<QPushButton*>(m_alignButtonGroup->find(ALIGN_LEFT))->setOn(true);
+    m_alignButtonGroup->button(ALIGN_LEFT)->setChecked(true);
     
     m_fontChooserWidget->blockSignals(false);
     m_fontColorButton->blockSignals(false);
@@ -333,7 +345,7 @@ void ImageEffect_InsertText::slotUpdatePreview()
 {
     m_previewWidget->setText(m_textEdit->text(), m_textFont, m_fontColorButton->color(), m_alignTextMode, 
                              m_borderText->isChecked(), m_transparentText->isChecked(),
-                             m_textRotation->currentItem());
+                             m_textRotation->currentIndex());
 }
 
 void ImageEffect_InsertText::finalRendering()
@@ -349,4 +361,3 @@ void ImageEffect_InsertText::finalRendering()
 }
 
 }  // NameSpace DigikamInsertTextImagesPlugin
-
