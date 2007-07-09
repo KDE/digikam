@@ -45,12 +45,11 @@ ImagePlugin_InsertText::ImagePlugin_InsertText(QObject *parent, const QStringLis
 {
     m_insertTextAction = new KAction(KIcon("inserttext"), i18n("Insert Text..."), this);
     m_insertTextAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_T));
+
     connect(m_insertTextAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotInsertText()));
 
     actionCollection()->addAction("imageplugin_inserttext", m_insertTextAction );
-
-
 
     setXMLFile("digikamimageplugin_inserttext_ui.rc");
     
@@ -71,4 +70,3 @@ void ImagePlugin_InsertText::slotInsertText()
     DigikamInsertTextImagesPlugin::ImageEffect_InsertText dlg(parentWidget());
     dlg.exec();
 }
-
