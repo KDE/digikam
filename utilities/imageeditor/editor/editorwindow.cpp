@@ -545,35 +545,39 @@ void EditorWindow::setupStatusBar()
 {
     m_nameLabel = new StatusProgressBar(statusBar());
     m_nameLabel->setAlignment(Qt::AlignCenter);
-    m_nameLabel->setMaximumHeight(fontMetrics().height()+2);    
+    m_nameLabel->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(m_nameLabel, 100);
 
     d->selectLabel = new QLabel(i18n("No selection"), statusBar());
     d->selectLabel->setAlignment(Qt::AlignCenter);
-    d->selectLabel->setMaximumHeight(fontMetrics().height()+2);   
+    d->selectLabel->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->selectLabel, 100);
     d->selectLabel->setToolTip( i18n("Information about current selection area"));
 
     m_resLabel  = new QLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
-    m_resLabel->setMaximumHeight(fontMetrics().height()+2);   
+    m_resLabel->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(m_resLabel, 100);
     m_resLabel->setToolTip( i18n("Information about image size"));
 
+    QSize iconSize(fontMetrics().height()+2, fontMetrics().height()+2);
     d->underExposureIndicator = new QToolButton(statusBar());
     d->underExposureIndicator->setIcon( SmallIcon("underexposure"));
     d->underExposureIndicator->setCheckable(true);
-    statusBar()->addWidget(d->underExposureIndicator, 1);
+    d->underExposureIndicator->setMaximumSize(iconSize);
+    statusBar()->addPermanentWidget(d->underExposureIndicator);
 
     d->overExposureIndicator = new QToolButton(statusBar());
     d->overExposureIndicator->setIcon(SmallIcon("overexposure"));
     d->overExposureIndicator->setCheckable(true);
-    statusBar()->addWidget(d->overExposureIndicator, 1);
+    d->overExposureIndicator->setMaximumSize(iconSize);
+    statusBar()->addPermanentWidget(d->overExposureIndicator);
 
     d->cmViewIndicator = new QToolButton(statusBar());
     d->cmViewIndicator->setIcon(SmallIcon("video-display"));
     d->cmViewIndicator->setCheckable(true);
-    statusBar()->addWidget(d->cmViewIndicator, 1);
+    d->cmViewIndicator->setMaximumSize(iconSize);
+    statusBar()->addPermanentWidget(d->cmViewIndicator);
 
     connect(d->underExposureIndicator, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleUnderExposureIndicator()));
