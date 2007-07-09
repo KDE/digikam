@@ -114,8 +114,8 @@ SetupGeneral::SetupGeneral(QWidget* parent, KPageDialog* dialog )
                                       "<p>Write access is required for this path and do not use a "
                                       "remote path here, like an NFS mounted file system."));
 
-    connect(d->albumPathEdit, SIGNAL(urlSelected(const QString &)),
-            this, SLOT(slotChangeAlbumPath(const QString &)));
+    connect(d->albumPathEdit, SIGNAL(urlSelected(const KUrl &)),
+            this, SLOT(slotChangeAlbumPath(const KUrl &)));
 
     connect(d->albumPathEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotPathEdited(const QString&)) );
@@ -263,7 +263,7 @@ void SetupGeneral::readSettings()
         d->iconTreeThumbSize->setCurrentIndex(2);
     else 
         d->iconTreeThumbSize->setCurrentIndex(3);
-    
+
     d->iconShowNameBox->setChecked(settings->getIconShowName());
     d->iconShowTagsBox->setChecked(settings->getIconShowTags());
     d->iconShowSizeBox->setChecked(settings->getIconShowSize());
@@ -278,7 +278,7 @@ void SetupGeneral::readSettings()
     d->previewLoadFullImageSize->setChecked(settings->getPreviewLoadFullImageSize());
 }
 
-void SetupGeneral::slotChangeAlbumPath(const QString &result)
+void SetupGeneral::slotChangeAlbumPath(const KUrl &result)
 {
     if (KUrl(result).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutTrailingSlash)) 
     {

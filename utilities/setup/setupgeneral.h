@@ -53,7 +53,7 @@ private:
 
 private slots:
 
-    void slotChangeAlbumPath(const QString &);
+    void slotChangeAlbumPath(const KUrl&);
     void slotPathEdited(const QString&);
 
 private:
