@@ -39,7 +39,7 @@ class QButtonGroup;
 class QComboBox;
 class QCheckBox;
 
-class K3TextEdit;
+class KTextEdit;
 class KColorButton;
 class KFontChooser;
 
@@ -76,25 +76,25 @@ private:
 
 private:
     
-    int                m_alignTextMode;
-    int                m_defaultSizeFont;
+    int               m_alignTextMode;
+    int               m_defaultSizeFont;
         
-    QComboBox         *m_textRotation;
+    QComboBox        *m_textRotation;
     
-    QCheckBox         *m_borderText;    
-    QCheckBox         *m_transparentText;
+    QCheckBox        *m_borderText;    
+    QCheckBox        *m_transparentText;
     
-    QButtonGroup      *m_alignButtonGroup;
+    QButtonGroup     *m_alignButtonGroup;
         
-    QFont              m_textFont;
+    QFont             m_textFont;
     
-    KColorButton      *m_fontColorButton;
+    KColorButton     *m_fontColorButton;
     
-    KFontChooser      *m_fontChooserWidget;
+    KFontChooser     *m_fontChooserWidget;
     
-    K3TextEdit        *m_textEdit;
+    KTextEdit        *m_textEdit;
     
-    InsertTextWidget  *m_previewWidget;
+    InsertTextWidget *m_previewWidget;
 };
 
 }  // NameSpace DigikamInsertTextImagesPlugin

@@ -53,7 +53,7 @@
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kcolorbutton.h>
-#include <k3textedit.h> 
+#include <ktextedit.h> 
 #include <kglobal.h>
 
 // Local includes.
@@ -113,9 +113,9 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     QWidget *gbox2        = new QWidget(mainWidget());
     QGridLayout *gridBox2 = new QGridLayout( gbox2 );
     
-    m_textEdit = new K3TextEdit(gbox2);
+    m_textEdit = new KTextEdit(gbox2);
     m_textEdit->setCheckSpellingEnabled(true);
-    m_textEdit->setWordWrap(Q3TextEdit::NoWrap);
+    m_textEdit->setWordWrapMode(QTextOption::NoWrap);
     m_textEdit->setWhatsThis( i18n("<p>Here, enter the text you want to insert in your image."));
     
     // -------------------------------------------------------------
@@ -274,7 +274,7 @@ void ImageEffect_InsertText::writeUserSettings()
 
     group.writeEntry( "Text Rotation", m_textRotation->currentIndex() );
     group.writeEntry( "Font Color", m_fontColorButton->color() );
-    group.writeEntry( "Text String", m_textEdit->text() );
+    group.writeEntry( "Text String", m_textEdit->document()->toPlainText() );
     group.writeEntry( "Font Properties", m_textFont );
     group.writeEntry( "Text Alignment", m_alignTextMode );
     group.writeEntry( "Border Text", m_borderText->isChecked() );
@@ -310,7 +310,7 @@ void ImageEffect_InsertText::resetValues()
 void ImageEffect_InsertText::slotAlignModeChanged(int mode)
 {
     m_alignTextMode = mode;
-    m_textEdit->selectAll(true);     
+    m_textEdit->selectAll();     
     
     switch (m_alignTextMode)
         {
@@ -331,7 +331,7 @@ void ImageEffect_InsertText::slotAlignModeChanged(int mode)
            break;
         }
         
-    m_textEdit->selectAll(false);        
+    m_textEdit->textCursor().clearSelection();        
     emit signalUpdatePreview();
 }
 
@@ -343,7 +343,7 @@ void ImageEffect_InsertText::slotFontPropertiesChanged(const QFont &font)
 
 void ImageEffect_InsertText::slotUpdatePreview()
 {
-    m_previewWidget->setText(m_textEdit->text(), m_textFont, m_fontColorButton->color(), m_alignTextMode, 
+    m_previewWidget->setText(m_textEdit->document()->toPlainText(), m_textFont, m_fontColorButton->color(), m_alignTextMode, 
                              m_borderText->isChecked(), m_transparentText->isChecked(),
                              m_textRotation->currentIndex());
 }
