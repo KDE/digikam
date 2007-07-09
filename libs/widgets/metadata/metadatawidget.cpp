@@ -103,10 +103,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     d = new MetadataWidgetPriv;
     setObjectName(name);
 
-    d->mainLayout = new QGridLayout(this);
-    d->mainLayout->setSpacing(0);
-    d->mainLayout->setMargin(0);
-
+    d->mainLayout           = new QGridLayout(this);
     KIconLoader* iconLoader = KIconLoader::global();
 
     // -----------------------------------------------------------------
@@ -160,12 +157,16 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     hlay2->setSpacing(0);
     hlay1->setMargin(KDialog::spacingHint());
 
-    d->mainLayout->addMultiCellWidget(d->levelGBox, 0, 0, 0, 1);
-    d->mainLayout->setColumnStretch(3, 10);
-    d->mainLayout->addMultiCellWidget(d->toolsGBox, 0, 0, 4, 4);
-
     d->view = new MetadataListView(this);
-    d->mainLayout->addMultiCellWidget(d->view, 1, 1, 0, 4);
+
+    // -----------------------------------------------------------------
+
+    d->mainLayout->addWidget(d->levelGBox, 0, 0, 1, 2 );
+    d->mainLayout->setColumnStretch(3, 10);
+    d->mainLayout->addWidget(d->toolsGBox, 0, 4, 1, 1);
+    d->mainLayout->addWidget(d->view, 1, 0, 1, 5 );
+    d->mainLayout->setSpacing(0);
+    d->mainLayout->setMargin(0);
 
     // -----------------------------------------------------------------
 
@@ -449,7 +450,7 @@ void MetadataWidget::setUserAreaWidget(QWidget *w)
     vLayout->setSpacing( KDialog::spacingHint() );
     vLayout->addWidget(w);
     vLayout->addStretch();
-    d->mainLayout->addMultiCellLayout(vLayout, 2, 2, 0, 4);
+    d->mainLayout->addLayout(vLayout, 2, 0, 1, 5 );
 }
 
 }  // namespace Digikam

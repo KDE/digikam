@@ -108,15 +108,11 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
     QWidget *gpsInfo    = new QWidget(this);
     QGridLayout *layout = new QGridLayout(gpsInfo);
     d->map              = new WorldMapWidget(256, 256, gpsInfo);
-    layout->setSpacing(0);
-    layout->setMargin(0);
 
     // --------------------------------------------------------
 
     QWidget* box2           = new QWidget(gpsInfo);
     QGridLayout* box2Layout = new QGridLayout( box2 );
-    box2Layout->setSpacing(0);
-    box2Layout->setMargin(0);
 
     d->detailsCombo  = new QComboBox( box2 );
     d->detailsButton = new QPushButton(i18n("More Info..."), box2);
@@ -125,19 +121,23 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
     d->detailsCombo->insertItem(MsnMaps,    QString("MSN Maps"));
     d->detailsCombo->insertItem(MultiMap,   QString("MultiMap"));
 
-    box2Layout->addMultiCellWidget( d->detailsCombo, 0, 0, 0, 0 );
-    box2Layout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+    box2Layout->addWidget( d->detailsCombo, 0, 0, 1, 1);
+    box2Layout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
                              QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 0, 1, 1);
-    box2Layout->addMultiCellWidget( d->detailsButton, 0, 0, 2, 2 );
+    box2Layout->addWidget( d->detailsButton, 0, 2, 1, 1);
     box2Layout->setColumnStretch(3, 10);
+    box2Layout->setSpacing(0);
+    box2Layout->setMargin(0);
 
     // --------------------------------------------------------
 
-    layout->addMultiCellWidget(d->map, 0, 0, 0, 2);
-    layout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                        QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 1, 0, 2);
-    layout->addMultiCellWidget(box2, 2, 2, 0, 0);
+    layout->addWidget(d->map, 0, 0, 1, 3 );
+    layout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+                         QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 1, 0, 2);
+    layout->addWidget(box2, 2, 0, 1, 1);
     layout->setColumnStretch(2, 10);
+    layout->setSpacing(0);
+    layout->setMargin(0);
 
     // --------------------------------------------------------
 
