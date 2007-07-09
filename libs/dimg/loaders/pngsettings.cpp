@@ -80,9 +80,11 @@ PNGSettings::PNGSettings(QWidget *parent)
                                           "long compression duration)<p>"
                                           "<b>Note: PNG is always a lossless image "
                                           "compression format.</b>"));
-    d->PNGGrid->addMultiCellWidget(d->labelPNGcompression, 0, 0, 0, 0);
-    d->PNGGrid->addMultiCellWidget(d->PNGcompression, 0, 0, 1, 1);
+
+    d->PNGGrid->addWidget(d->labelPNGcompression, 0, 0, 1, 1);
+    d->PNGGrid->addWidget(d->PNGcompression, 0, 1, 1, 1);
     d->PNGGrid->setColumnStretch(1, 10);
+    d->PNGGrid->setMargin(KDialog::spacingHint());
     d->PNGGrid->setSpacing(KDialog::spacingHint());
 }
 

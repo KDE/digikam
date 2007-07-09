@@ -96,13 +96,14 @@ JPEGSettings::JPEGSettings(QWidget *parent)
     d->labelWarning->setLineWidth(1);
     d->labelWarning->setFrameShape(QFrame::Box);
 
-    d->JPEGGrid->addMultiCellWidget(d->labelJPEGcompression, 0, 0, 0, 0);
-    d->JPEGGrid->addMultiCellWidget(d->JPEGcompression, 0, 0, 1, 1);
-    d->JPEGGrid->addMultiCellWidget(d->labelWarning, 0, 0, 2, 2);    
+    d->JPEGGrid->addWidget(d->labelJPEGcompression, 0, 0, 1, 1);
+    d->JPEGGrid->addWidget(d->JPEGcompression, 0, 1, 1, 1);
+    d->JPEGGrid->addWidget(d->labelWarning, 0, 2, 1, 1);    
     d->JPEGGrid->setColumnStretch(1, 10);
     d->JPEGGrid->setRowStretch(1, 10);
-    d->JPEGGrid->setSpacing(KDialog::spacingHint());
     d->JPEGGrid->setAlignment(d->JPEGcompression, Qt::AlignCenter);
+    d->JPEGGrid->setMargin(KDialog::spacingHint());
+    d->JPEGGrid->setSpacing(KDialog::spacingHint());
 }
 
 JPEGSettings::~JPEGSettings()
@@ -121,4 +122,3 @@ int JPEGSettings::getCompressionValue()
 }
 
 }  // namespace Digikam
-

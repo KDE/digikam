@@ -72,8 +72,10 @@ TIFFSettings::TIFFSettings(QWidget *parent)
                                            "the final file size of the TIFF image.</p>"
                                            "<p>A lossless compression format (Deflate) "
                                            "is used to save the file.<p>"));
-    d->TIFFGrid->addMultiCellWidget(d->TIFFcompression, 0, 0, 0, 1);
+
+    d->TIFFGrid->addWidget(d->TIFFcompression, 0, 0, 1, 2 );
     d->TIFFGrid->setColumnStretch(1, 10);
+    d->TIFFGrid->setMargin(KDialog::spacingHint());
     d->TIFFGrid->setSpacing(KDialog::spacingHint());
 }
 
@@ -93,4 +95,3 @@ bool TIFFSettings::getCompression()
 }
 
 }  // namespace Digikam
-
