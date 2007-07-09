@@ -528,25 +528,25 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //-- url requester ICC profile connections -----------------------------------
 
-    connect(m_inProfilesPath, SIGNAL(urlSelected(const QString&)),
-            this, SLOT(slotEffect()));      
+    connect(m_inProfilesPath, SIGNAL(urlSelected(const Kurl&)),
+            this, SLOT(slotEffect()));
 
-    connect(m_spaceProfilePath, SIGNAL(urlSelected(const QString&)),
-            this, SLOT(slotEffect()));      
+    connect(m_spaceProfilePath, SIGNAL(urlSelected(const Kurl&)),
+            this, SLOT(slotEffect()));
 
-    connect(m_proofProfilePath, SIGNAL(urlSelected(const QString&)),
-            this, SLOT(slotEffect()));      
+    connect(m_proofProfilePath, SIGNAL(urlSelected(const Kurl&)),
+            this, SLOT(slotEffect()));
 
     //-- Image preview widget connections ----------------------------
-    
+
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
-            
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotSpotColorChanged( const Digikam::DColor & )));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
+
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
 
     //-- ICC profile preview connections -----------------------------
 
