@@ -486,8 +486,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    connect(lcmsLogoLabel, SIGNAL(leftClickedURL(const QString&)),
-            this, SLOT(processLCMSURL(const QString&)));
+    connect(lcmsLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
+            this, SLOT(processLCMSUrl(const QString&)));
 
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
@@ -575,8 +575,8 @@ void ImageEffect_ICCProof::readUserSettings()
 {
     QString defaultICCPath = KGlobalSettings::documentPath();
     KSharedConfig::Ptr config = KGlobal::config();
-    
-    // General settings of digiKam Color Management                            
+
+    // General settings of digiKam Color Management
     KConfigGroup group = config->group("Color Management");
 
     if (!group.readEntry("EnableCM", false))
@@ -589,7 +589,7 @@ void ImageEffect_ICCProof::readUserSettings()
         m_inPath      = group.readEntry("InProfileFile");
         m_spacePath   = group.readEntry("WorkProfileFile");
         m_proofPath   = group.readEntry("ProofProfileFile");
-        
+
         if (QFile::exists(group.readPathEntry("DefaultPath")))
         {
             defaultICCPath = group.readPathEntry("DefaultPath");
@@ -602,7 +602,7 @@ void ImageEffect_ICCProof::readUserSettings()
             KMessageBox::information(this, message);
         }
     }
-    
+
     // Plugin settings.
     group = config->group("colormanagement Tool Dialog");
     m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
@@ -683,7 +683,7 @@ void ImageEffect_ICCProof::writeUserSettings()
     group.sync();
 }
 
-void ImageEffect_ICCProof::processLCMSURL(const QString& url)
+void ImageEffect_ICCProof::processLCMSUrl(const QString& url)
 {
     KToolInvocation::invokeBrowser(url);
 }

@@ -58,7 +58,7 @@ class ImageEffect_ICCProof : public Digikam::ImageDlgBase
     Q_OBJECT
 
 public:
-    
+
     ImageEffect_ICCProof(QWidget* parent);
     ~ImageEffect_ICCProof();
 
@@ -98,14 +98,14 @@ private slots:
     void slotEffect();
     void slotChannelChanged(int);
     void slotScaleChanged(int);
-    void slotSpotColorChanged(const Digikam::DColor &);    
+    void slotSpotColorChanged(const Digikam::DColor &);
     void slotColorSelectedFromTarget(const Digikam::DColor &);
     void slotToggledWidgets(bool);
     void slotInICCInfo();
     void slotProofICCInfo();
     void slotSpaceICCInfo();
     void slotCMDisabledWarning();
-    void processLCMSURL(const QString&);
+    void processLCMSUrl(const QString&);
 
 private:
 
