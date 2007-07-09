@@ -84,6 +84,9 @@ bool DMetadata::loadUsingDcraw(const QString& filePath)
         if (!identify.make.isNull())
             setExifTagString("Exif.Image.Make", identify.make.toLatin1(), false);
 
+        if (!identify.owner.isNull())
+            setExifTagString("Exif.Image.Artist", identify.owner.toLatin1(), false);
+
         if (identify.sensitivity != -1)
             setExifTagLong("Exif.Photo.ISOSpeedRatings", identify.sensitivity, false);
 
