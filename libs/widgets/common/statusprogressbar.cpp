@@ -79,15 +79,13 @@ StatusProgressBar::StatusProgressBar(QWidget *parent)
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->textLabel      = new KSqueezedTextLabel(this);
-    //TODO: KDE4PORT: Progress widget is not visible, text label is. Dont know why.
     d->progressWidget = new QWidget(this);
     QHBoxLayout *hBox = new QHBoxLayout(d->progressWidget);
-    d->progressWidget->setLayout(hBox);
     d->progressBar    = new QProgressBar(d->progressWidget);
-    d->progressBar->setMaximum(100);
     d->cancelButton   = new QPushButton(d->progressWidget);
     d->cancelButton->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
     d->cancelButton->setIcon(SmallIcon("cancel"));
+    d->progressBar->setMaximum(100);
 
     // Parent widget will probably have the wait cursor set.
     // Set arrow cursor to indicate the button can be clicked
@@ -95,6 +93,8 @@ StatusProgressBar::StatusProgressBar(QWidget *parent)
 
     hBox->addWidget(d->progressBar);
     hBox->addWidget(d->cancelButton);
+    hBox->setMargin(0);
+    hBox->setSpacing(0);
 
     insertWidget(StatusProgressBarPriv::TextLabel,   d->textLabel);
     insertWidget(StatusProgressBarPriv::ProgressBar, d->progressWidget);
