@@ -29,10 +29,9 @@
 
 // Qt includes.
 
-#include <qpainter.h>
-#include <qfont.h> 
-#include <qfontmetrics.h> 
-//Added by qt3to4:
+#include <QPainter>
+#include <QFont> 
+#include <QFontMetrics> 
 #include <QPaintEvent>
 #include <QResizeEvent>
 #include <QPixmap>
@@ -57,7 +56,7 @@ namespace DigikamInsertTextImagesPlugin
 {
 
 InsertTextWidget::InsertTextWidget(int w, int h, QWidget *parent)
-                : QWidget(parent, 0, Qt::WDestructiveClose)
+                : QWidget(parent)
 {
     m_currentMoving = false;
 
@@ -66,11 +65,11 @@ InsertTextWidget::InsertTextWidget(int w, int h, QWidget *parent)
     m_w      = m_iface->previewWidth();
     m_h      = m_iface->previewHeight();
     m_pixmap = new QPixmap(w, h);
-    m_pixmap->fill(colorGroup().background());
+    m_pixmap->fill(palette().color(QPalette::Background));
 
-    setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
     setMouseTracking(true);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     m_rect = QRect(width()/2-m_w/2, height()/2-m_h/2, m_w, m_h);
     m_textRect = QRect();
@@ -96,7 +95,7 @@ void InsertTextWidget::resetEdit()
     // signal this needs to be filled by makePixmap
     m_textRect = QRect();
     makePixmap();
-    repaint(false);
+    repaint();
 }
 
 void InsertTextWidget::setText(QString text, QFont font, QColor color, int alignMode,
@@ -142,7 +141,7 @@ void InsertTextWidget::setText(QString text, QFont font, QColor color, int align
     m_textFont = font;
 
     makePixmap();
-    repaint(false);
+    repaint();
 }
 
 void InsertTextWidget::setPositionHint(QRect hint)
@@ -195,10 +194,10 @@ Digikam::DImg InsertTextWidget::makeInsertText(void)
     // Get original image
     Digikam::DImg image = m_iface->getOriginalImg()->copy();
 
-    int borderWidth = qMax(1, lroundf(ratioW));
+    int borderWidth = qMax(1, (int)lroundf(ratioW));
     // compose and draw result on image
     composeImage(&image, 0, x, y,
-                  m_textFont, m_textFont.pointSizeFloat(),
+                  m_textFont, m_textFont.pointSizeF(),
                   m_textRotation, m_textColor, m_alignMode, m_textString,
                   m_textTransparent, m_backgroundColor,
                   m_textBorder ? BORDER_NORMAL : BORDER_NONE, borderWidth, borderWidth);
@@ -234,7 +233,7 @@ void InsertTextWidget::makePixmap(void)
 
     // paint pixmap for drawing this widget
     // First, fill with background color
-    m_pixmap->fill(colorGroup().background());
+    m_pixmap->fill(palette().color(QPalette::Background));
     QPainter p(m_pixmap);
     // Convert image to pixmap and draw it
     QPixmap imagePixmap = image.convertToPixmap();
@@ -247,7 +246,7 @@ void InsertTextWidget::makePixmap(void)
 
     // compose image and draw result directly on pixmap, with correct offset
     QRect textRect = composeImage(&image, &p, x, y,
-                                   m_textFont, m_textFont.pointSizeFloat() * ((ratioW > ratioH) ? ratioW : ratioH),
+                                   m_textFont, m_textFont.pointSizeF() * ((ratioW > ratioH) ? ratioW : ratioH),
                                    m_textRotation, m_textColor, m_alignMode, m_textString,
                                    m_textTransparent, m_backgroundColor,
                                    m_textBorder ? BORDER_NORMAL : BORDER_SUPPORT, 1, 1);
@@ -295,7 +294,7 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
     }
 
     // find out size of the area that we are drawing to
-    font.setPointSizeFloat(pointSize);
+    font.setPointSizeF(pointSize);
     QFontMetrics fontMt( font );
     QRect fontRect = fontMt.boundingRect(0, 0, maxWidth, maxHeight, 0, textString);
 
@@ -487,7 +486,7 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
     if (!destPainter)
     {
         // convert to QImage, then to DImg
-        QImage pixmapImage = pixmap.convertToImage();
+        QImage pixmapImage = pixmap.toImage();
         Digikam::DImg textDrawn(pixmapImage.width(), pixmapImage.height(), false, true, pixmapImage.bits());
 
         // This does not work: during the conversion, colors are altered significantly (diffs of 1 to 10 in each component),
@@ -535,7 +534,9 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
 
 void InsertTextWidget::paintEvent( QPaintEvent * )
 {
-    bitBlt(this, 0, 0, m_pixmap);
+    QPainter p(this);
+    p.drawPixmap(0, 0, *m_pixmap);
+    p.end();
 }
 
 void InsertTextWidget::resizeEvent(QResizeEvent * e)
@@ -599,15 +600,15 @@ void InsertTextWidget::mouseMoveEvent ( QMouseEvent * e )
 {
     if ( rect().contains( e->x(), e->y() ) )
     {
-        if ( e->state() == Qt::LeftButton && m_currentMoving )
+        if ( e->buttons() == Qt::LeftButton && m_currentMoving )
         {
             uint newxpos = e->x();
             uint newypos = e->y();
 
-            m_textRect.moveBy(newxpos - m_xpos, newypos - m_ypos);
+            m_textRect.translate(newxpos - m_xpos, newypos - m_ypos);
 
             makePixmap();
-            repaint(false);
+            repaint();
 
             m_xpos = newxpos;
             m_ypos = newypos;
