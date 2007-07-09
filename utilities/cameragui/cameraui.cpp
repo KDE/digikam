@@ -467,9 +467,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     connect(d->fixDateTimeCheck, SIGNAL(toggled(bool)),
             d->dateTimeEdit, SLOT(setEnabled(bool)));
-            
-    connect(pixmapLogo, SIGNAL(leftClickedURL(const QString&)),
-            this, SLOT(slotProcessURL(const QString&)));     
+
+    connect(pixmapLogo, SIGNAL(leftClickedUrl(const QString&)),
+            this, SLOT(slotProcessUrl(const QString&)));
 
     // -------------------------------------------------------------------------
 
@@ -495,25 +495,25 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
             this, SLOT(slotNewSelection(bool)));
 
     // -------------------------------------------------------------------------
-    
+
     connect(d->rightSidebar, SIGNAL(signalFirstItem()),
             this, SLOT(slotFirstItem()));
-    
+
     connect(d->rightSidebar, SIGNAL(signalNextItem()),
             this, SLOT(slotNextItem()));
-                
+
     connect(d->rightSidebar, SIGNAL(signalPrevItem()),
-            this, SLOT(slotPrevItem()));                
-    
+            this, SLOT(slotPrevItem()));
+
     connect(d->rightSidebar, SIGNAL(signalLastItem()),
-            this, SLOT(slotLastItem()));                
+            this, SLOT(slotLastItem()));
 
     // -- Read settings --------------------------------------------------
 
     readSettings();
-    
+
     // -- camera controller -----------------------------------------------
-    
+
     d->controller = new CameraController(this, d->cameraTitle, model, port, path);
 
     connect(d->controller, SIGNAL(signalConnected(bool)),
@@ -554,7 +554,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     connect(d->controller, SIGNAL(signalExifFromFile(const QString&, const QString&)),
             this, SLOT(slotExifFromFile(const QString&, const QString&)));
-    
+
     connect(d->controller, SIGNAL(signalExifData(const QByteArray&)),
             this, SLOT(slotExifFromData(const QByteArray&)));
 
@@ -592,7 +592,7 @@ void CameraUI::readSettings()
 
     d->view->setThumbnailSize(ThumbnailSize((ThumbnailSize::Size)group.readEntry("ThumbnailSize", 
                               (int)ThumbnailSize::Large)));
-    
+
     if(config->hasKey("Splitter Sizes"))
         d->splitter->setSizes(group.readIntListEntry("Splitter Sizes"));
 
@@ -626,7 +626,7 @@ void CameraUI::saveSettings()
     config->sync();
 }
 
-void CameraUI::slotProcessURL(const QString& url)
+void CameraUI::slotProcessUrl(const QString& url)
 {
     KApplication::kApplication()->invokeBrowser(url);
 }

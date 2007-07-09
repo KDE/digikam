@@ -27,10 +27,9 @@
 
 // Qt includes.
 
-#include <qdatetime.h>
-#include <qstring.h>
-#include <qimage.h>
-//Added by qt3to4:
+#include <QDateTime>
+#include <QString>
+#include <QImage>
 #include <QKeyEvent>
 #include <QCloseEvent>
 
@@ -68,17 +67,17 @@ public:
     QString losslessFormat();
 
     QString cameraTitle() const;
-    
+
 signals:
-    
+
     void signalLastDestination(const KUrl&);
     void signalAlbumSettingsChanged();
 
 protected:
-    
+
     void closeEvent(QCloseEvent* e);
     void keyPressEvent(QKeyEvent *e);
-    
+
 private:
 
     void readSettings();
@@ -93,7 +92,7 @@ private slots:
 
     void slotClose();
     void slotCancelButton();
-    void slotProcessURL(const QString& url);
+    void slotProcessUrl(const QString& url);
 
     void slotConnected(bool val);
     void slotBusy(bool val);
@@ -107,7 +106,7 @@ private slots:
 
     void slotIncreaseThumbSize();
     void slotDecreaseThumbSize();
-    
+
     void slotUpload();
     void slotUploadItems(const KUrl::List&);
     void slotDownloadSelected();
@@ -124,20 +123,20 @@ private slots:
     void slotSkipped(const QString&, const QString&);
     void slotDeleted(const QString&, const QString&, bool);
     void slotLocked(const QString&, const QString&, bool);
-    
+
     void slotNewSelection(bool);
     void slotItemsSelected(CameraIconViewItem* item, bool selected);
-    
+
     void slotExifFromFile(const QString& folder, const QString& file);
     void slotExifFromData(const QByteArray& exifData);
 
     void slotFirstItem(void);
-    void slotPrevItem(void);    
+    void slotPrevItem(void);
     void slotNextItem(void);
     void slotLastItem(void);
 
 private:
-    
+
     CameraUIPriv* d;
 };
 
