@@ -459,7 +459,7 @@ void SetupICC::readSettings(bool restore)
     if (!restore)
         d->enableColorManagement->setChecked(group.readEntry("EnableCM", false));
 
-    d->defaultPathKU->setUrl(group.readEntry("DefaultPath", QString()));
+    d->defaultPathKU->setUrl(KUrl(group.readEntry("DefaultPath", QString())));
     d->bpcAlgorithm->setChecked(group.readEntry("BPCAlgorithm", false));
     d->renderingIntentKC->setCurrentIndex(group.readEntry("RenderingIntent", 0));
     d->managedView->setChecked(group.readEntry("ManagedView", false));
@@ -471,7 +471,8 @@ void SetupICC::readSettings(bool restore)
 
     d->cmToolInRawLoading->setChecked(group.readEntry("CMInRawLoading", true));
 
-    fillCombos(d->defaultPathKU->url().path(), false);
+    KUrl url = d->defaultPathKU->url();
+    fillCombos(url.path(), false);
 
     d->workProfilesKC->setCurrentIndex(group.readEntry("WorkSpaceProfile", 0));
     d->monitorProfilesKC->setCurrentIndex(group.readEntry("MonitorProfile", 0));
