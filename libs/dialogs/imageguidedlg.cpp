@@ -197,7 +197,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     d->settingsSideBar = new Sidebar(d->hbox, sbName.toAscii().data(), Sidebar::DockRight);
     d->settingsSideBar->setSplitter(d->splitter);
 
-    d->mainLayout->addMultiCellWidget(d->hbox, 1, 2, 0, 1);
+    d->mainLayout->addWidget(d->hbox, 1, 0, 2, 2 );
     d->mainLayout->setColumnStretch(0, 10);
     d->mainLayout->setRowStretch(2, 10);
     d->mainLayout->setMargin(0);
@@ -225,11 +225,11 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     d->guideSize->setSingleStep(1);
     d->guideSize->setWhatsThis( i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
 
-    grid->addMultiCellWidget(line, 0, 0, 0, 2);
-    grid->addMultiCellWidget(label5, 1, 1, 0, 0);
-    grid->addMultiCellWidget(d->guideColorBt, 1, 1, 2, 2);
-    grid->addMultiCellWidget(label6, 2, 2, 0, 0);
-    grid->addMultiCellWidget(d->guideSize, 2, 2, 2, 2);
+    grid->addWidget(line, 0, 0, 1, 3 );
+    grid->addWidget(label5, 1, 0, 1, 1);
+    grid->addWidget(d->guideColorBt, 1, 2, 1, 1);
+    grid->addWidget(label6, 2, 0, 1, 1);
+    grid->addWidget(d->guideSize, 2, 2, 1, 1);
     grid->setColumnStretch(1, 10);
     grid->setMargin(spacingHint());
     grid->setSpacing(spacingHint());
@@ -260,7 +260,9 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     vLayout->setMargin(0);
     vLayout->setSpacing(spacingHint());
 
-    d->settingsLayout->addMultiCellLayout(vLayout, 1, 1, 0, 0);
+    d->settingsLayout->addLayout(vLayout, 1, 0, 1, 1);
+    d->settingsLayout->setMargin(spacingHint());
+    d->settingsLayout->setSpacing(spacingHint());
 
     d->settingsSideBar->appendTab(d->settings, SmallIcon("configure"), i18n("Settings"));
     d->settingsSideBar->loadViewState();
@@ -358,7 +360,7 @@ void ImageGuideDlg::setUserAreaWidget(QWidget *w)
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setSpacing(spacingHint());
     vLayout->addWidget(w);
-    d->settingsLayout->addMultiCellLayout(vLayout, 0, 0, 0, 0);
+    d->settingsLayout->addLayout(vLayout, 0, 0, 1, 1);
 }
 
 void ImageGuideDlg::setAboutData(KAboutData *about)
