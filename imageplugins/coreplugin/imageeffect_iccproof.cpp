@@ -302,7 +302,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     hlay1->addWidget(m_useSRGBDefaultProfile);
     hlay1->addWidget(m_useInDefaultProfile);
     hlay1->addWidget(m_useInSelectedProfile);
-    hlay1->addWidget(m_useEmbeddedProfile);
     hlay1->setMargin(0);
     hlay1->setSpacing(0);
 
