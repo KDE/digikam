@@ -377,7 +377,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     
     connect(d->managedView, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleManagedView(bool)));
-                    
+
     connect(lcmsLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
             this, SLOT(processLcmsUrl(const QString&)));
 
@@ -395,9 +395,9 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     connect(d->infoWorkProfiles, SIGNAL(clicked()),
             this, SLOT(slotClickedWork()));
-            
-    connect(d->defaultPathKU, SIGNAL(urlSelected(const QString&)),
-            this, SLOT(slotFillCombos(const QString&)));
+
+    connect(d->defaultPathKU, SIGNAL(urlSelected(const KUrl&)),
+            this, SLOT(slotFillCombos(const KUrl&)));
 
     connect(d->defaultAskICC, SIGNAL(toggled(bool)),
             d->cmToolInRawLoading, SLOT(setEnabled(bool)));
