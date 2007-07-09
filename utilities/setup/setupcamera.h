@@ -47,7 +47,7 @@ public:
 
 private slots:
 
-    void processGphotoURL(const QString& url);
+    void slotProcessGphotoUrl(const QString& url);
 
     void slotSelectionChanged();
 

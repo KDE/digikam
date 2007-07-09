@@ -140,8 +140,8 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     // -------------------------------------------------------------
 
-    connect(gphotoLogoLabel, SIGNAL(leftClickedURL(const QString&)),
-            this, SLOT(processGphotoURL(const QString&)));
+    connect(gphotoLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
+            this, SLOT(slotProcessGphotoUrl(const QString&)));
 
     connect(d->listView, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
@@ -181,7 +181,7 @@ SetupCamera::~SetupCamera()
     delete d;
 }
 
-void SetupCamera::processGphotoURL(const QString& url)
+void SetupCamera::slotProcessGphotoUrl(const QString& url)
 {
     KToolInvocation::self()->invokeBrowser(url);
 }
