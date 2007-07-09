@@ -43,7 +43,7 @@ Comment[sr@Latn]=digiKam-ov priključak za dodavanje tekstura u sliku
 Comment[sv]=Digikam insticksprogram för att lägga till struktur på en bild
 Comment[tr]=Bir resme doku eklemek için digiKam eklentisi
 Comment[uk]=Втулок застосування текстури для digiKam
-Comment[vi]=Bổ sung áp dụng hoạ tiết trên ảnh cho digiKam
+Comment[vi]=Phần bổ sung áp dụng hoạ tiết trên ảnh cho digiKam
 Comment[xx]=xxdigiKam plugin to apply texture on imagexx
 
 X-KDE-Library=digikamimageplugin_texture

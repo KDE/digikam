@@ -41,7 +41,7 @@ Comment[sr@Latn]=digiKam-ov priključak za prebojavanje fotografije
 Comment[sv]=Digikam insticksprogram för att fylla i ett fotografi
 Comment[tr]=KDE Fotoğraf Yöneticisi
 Comment[uk]=Втулок малювання на фотографіях для digiKam
-Comment[vi]=Bổ sung sơn vào ảnh chụp cho digiKam
+Comment[vi]=Phần bổ sung sơn vào ảnh chụp cho digiKam
 Comment[xx]=xxdigiKam plugin to inpaint a photographxx
 
 X-KDE-Library=digikamimageplugin_inpainting

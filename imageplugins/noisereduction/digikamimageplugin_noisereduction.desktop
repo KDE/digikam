@@ -43,7 +43,7 @@ Comment[sr@Latn]=digiKam-ov priključak za smanjenje šuma
 Comment[sv]=Digikam insticksprogram för brusreducering
 Comment[tr]=digiKam için Parazit Azaltma eklentisi
 Comment[uk]=Втулок зменшення шуму для digiKam
-Comment[vi]=Bổ sung giảm ồn cho digiKam
+Comment[vi]=Phần bổ sung giảm nhiễu cho digiKam
 Comment[xx]=xxNoise Reduction plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_noisereduction
