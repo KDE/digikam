@@ -189,15 +189,15 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    gridBox2->addMultiCellWidget(m_textEdit, 0, 2, 0, 1);
-    gridBox2->addMultiCellWidget(m_fontChooserWidget, 3, 3, 0, 1);
-    gridBox2->addMultiCellWidget(alignBox, 4, 4, 0, 1);
-    gridBox2->addMultiCellWidget(label1, 5, 5, 0, 0);
-    gridBox2->addMultiCellWidget(m_textRotation, 5, 5, 1, 1);
-    gridBox2->addMultiCellWidget(label2, 6, 6, 0, 0);
-    gridBox2->addMultiCellWidget(m_fontColorButton, 6, 6, 1, 1);
-    gridBox2->addMultiCellWidget(m_borderText, 7, 7, 0, 1);                            
-    gridBox2->addMultiCellWidget(m_transparentText, 8, 8, 0, 1);                            
+    gridBox2->addWidget(m_textEdit, 0, 0, 3, 2 );
+    gridBox2->addWidget(m_fontChooserWidget, 3, 0, 1, 2 );
+    gridBox2->addWidget(alignBox, 4, 0, 1, 2 );
+    gridBox2->addWidget(label1, 5, 0, 1, 1);
+    gridBox2->addWidget(m_textRotation, 5, 1, 1, 1);
+    gridBox2->addWidget(label2, 6, 0, 1, 1);
+    gridBox2->addWidget(m_fontColorButton, 6, 1, 1, 1);
+    gridBox2->addWidget(m_borderText, 7, 0, 1, 2 );                            
+    gridBox2->addWidget(m_transparentText, 8, 0, 1, 2 );                            
     gridBox2->setRowStretch(9, 10);    
     gridBox2->setMargin(spacingHint());
     gridBox2->setSpacing(spacingHint());
