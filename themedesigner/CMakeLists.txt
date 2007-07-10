@@ -11,7 +11,6 @@ set(digikamthemedesigner_SRCS
    themediconitem.cpp 
    themediconview.cpp )
 
-kde4_automoc(${digikamthemedesigner_SRCS})
 
 kde4_add_executable(digikamthemedesigner ${digikamthemedesigner_SRCS})
 
