@@ -26,11 +26,11 @@
 #ifndef IMAGEEFFECT_HOTPIXELS_H
 #define IMAGEEFFECT_HOTPIXELS_H
 
-#define MAX_PIXEL_DEPTH    4
+#define MAX_PIXEL_DEPTH 4
 
 // Qt includes.
 
-#include <q3valuelist.h>
+#include <Q3ValueList>
 
 // KDE includes.
 
@@ -80,15 +80,15 @@ private:
 
 private:
 
-    QComboBox            *m_filterMethodCombo;
+    QComboBox             *m_filterMethodCombo;
     
-    QPushButton          *m_blackFrameButton;
+    QPushButton           *m_blackFrameButton;
     
     Q3ValueList<HotPixel>  m_hotPixelsList;
     
-    KUrl                  m_blackFrameURL;
+    KUrl                   m_blackFrameURL;
     
-    BlackFrameListView   *m_blackFrameListView;
+    BlackFrameListView    *m_blackFrameListView;
 };
 
 }  // NameSpace DigikamHotPixelsImagesPlugin

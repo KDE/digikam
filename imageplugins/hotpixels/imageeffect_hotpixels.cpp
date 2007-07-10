@@ -25,15 +25,12 @@
 
 // Qt includes. 
 
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <q3whatsthis.h>
-#include <qpushbutton.h>
-#include <q3pointarray.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
 #include <Q3ValueList>
+#include <Q3PointArray>
+#include <QComboBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -74,7 +71,7 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
                                        ki18n("Hot Pixels Correction"), 
                                        digikam_version,
                                        ki18n("A digiKam image plugin for fixing dots produced by "
-                                                 "hot/stuck/dead pixels from a CCD."),
+                                             "hot/stuck/dead pixels from a CCD."),
                                        KAboutData::License_GPL,
                                        ki18n("(c) 2005-2007, Unai Garro and Gilles Caulier"), 
                                        KLocalizedString(),
@@ -91,25 +88,29 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     // -------------------------------------------------------------
     
     QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    Q3GridLayout* gridSettings = new Q3GridLayout( gboxSettings, 2, 2, 0, spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings );
     
     QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), gboxSettings);
     m_filterMethodCombo       = new QComboBox(gboxSettings);
-    m_filterMethodCombo->insertItem(i18n("Average"));
-    m_filterMethodCombo->insertItem(i18n("Linear"));
-    m_filterMethodCombo->insertItem(i18n("Quadratic"));
-    m_filterMethodCombo->insertItem(i18n("Cubic"));
+    m_filterMethodCombo->addItem(i18n("Average"));
+    m_filterMethodCombo->addItem(i18n("Linear"));
+    m_filterMethodCombo->addItem(i18n("Quadratic"));
+    m_filterMethodCombo->addItem(i18n("Cubic"));
 
     m_blackFrameButton = new QPushButton(i18n("Black Frame..."), gboxSettings);    
     setButtonWhatsThis( Apply, i18n("<p>Use this button to add a new black frame file which will "
                                     "be used by the hot pixels removal filter.") );  
 
+    m_blackFrameListView = new BlackFrameListView(gboxSettings);
+
+    // -------------------------------------------------------------
+
     gridSettings->addMultiCellWidget(filterMethodLabel, 0, 0, 0, 0);
     gridSettings->addMultiCellWidget(m_filterMethodCombo, 0, 0, 1, 1);
     gridSettings->addMultiCellWidget(m_blackFrameButton, 0, 0, 2, 2);    
-    
-    m_blackFrameListView = new BlackFrameListView(gboxSettings);
     gridSettings->addMultiCellWidget(m_blackFrameListView, 1, 2, 0, 2);
+    gridSettings->setMargin(0);
+    gridSettings->setSpacing(spacingHint());
     
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
 
@@ -132,7 +133,7 @@ ImageEffect_HotPixels::~ImageEffect_HotPixels()
 void ImageEffect_HotPixels::readUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config.group("hotpixels Tool Dialog");
+    KConfigGroup group        = config->group("hotpixels Tool Dialog");
     m_blackFrameURL = KUrl(group.readEntry("Last Black Frame File", QString()));
     m_filterMethodCombo->setCurrentItem(group.readEntry("Filter Method",
                                         (int)HotPixelFixer::QUADRATIC_INTERPOLATION));
@@ -144,8 +145,7 @@ void ImageEffect_HotPixels::readUserSettings(void)
 void ImageEffect_HotPixels::writeUserSettings(void)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    
-    KConfigGroup group = config->group("hotpixels Tool Dialog");
+    KConfigGroup group        = config->group("hotpixels Tool Dialog");
     group.writeEntry("Last Black Frame File", m_blackFrameURL.url());
     group.writeEntry("Filter Method", m_filterMethodCombo->currentItem());
     group.sync();
