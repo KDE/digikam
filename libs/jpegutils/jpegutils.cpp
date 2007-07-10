@@ -47,10 +47,6 @@ extern "C"
 #include <qfile.h>
 #include <qfileinfo.h>
 
-// KDE includes.
-
-#include <kfilemetainfo.h>
-
 // Local includes.
 
 #include "ddebug.h"
@@ -534,15 +530,11 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
 bool isJpegImage(const QString& file)
 {
     // Check if the file is an JPEG image
-    KFileMetaInfo metaInfo(file, "image/jpeg", KFileMetaInfo::Fastest);
-
-    if (metaInfo.isValid())
-    {
-        if (metaInfo.mimeType() == "image/jpeg")
-            return true;
-    }
-
-    return false;
+    QString format = QString(QImage::imageFormat(file)).upper();
+    DDebug() << "mimetype = " << format << endl();
+    if (format !="JPEG") return false;
+	
+    return true;
 }
 
 } // Namespace Digikam
