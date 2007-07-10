@@ -531,7 +531,7 @@ bool isJpegImage(const QString& file)
 {
     // Check if the file is an JPEG image
     QString format = QString(QImage::imageFormat(file)).upper();
-    DDebug() << "mimetype = " << format << endl();
+    DDebug() << "mimetype = " << format << endl;
     if (format !="JPEG") return false;
 	
     return true;
