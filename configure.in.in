@@ -330,7 +330,7 @@ AC_ARG_ENABLE(nfs-hack,
  [enable_nfs_hack=no]
 )
 
-if test "x$enable_nfs_hack" == "xyes"; then
+if test "x$enable_nfs_hack" = "xyes"; then
    AC_DEFINE(NFS_HACK, 1, [NFS hack enabled])
    AC_MSG_NOTICE([NFS hack enabled. Make sure you know what you are doing])
 fi
