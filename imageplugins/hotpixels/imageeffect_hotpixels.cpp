@@ -135,8 +135,8 @@ void ImageEffect_HotPixels::readUserSettings(void)
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("hotpixels Tool Dialog");
     m_blackFrameURL = KUrl(group.readEntry("Last Black Frame File", QString()));
-    m_filterMethodCombo->setCurrentItem(group.readEntry("Filter Method",
-                                        (int)HotPixelFixer::QUADRATIC_INTERPOLATION));
+    m_filterMethodCombo->setCurrentIndex(group.readEntry("Filter Method",
+                                         (int)HotPixelFixer::QUADRATIC_INTERPOLATION));
     
     if (m_blackFrameURL.isValid())
         new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
@@ -147,21 +147,19 @@ void ImageEffect_HotPixels::writeUserSettings(void)
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("hotpixels Tool Dialog");
     group.writeEntry("Last Black Frame File", m_blackFrameURL.url());
-    group.writeEntry("Filter Method", m_filterMethodCombo->currentItem());
+    group.writeEntry("Filter Method", m_filterMethodCombo->currentIndex());
     group.sync();
 }
 
 void ImageEffect_HotPixels::resetValues(void)
 {
     m_filterMethodCombo->blockSignals(true);
-    m_filterMethodCombo->setCurrentItem(HotPixelFixer::QUADRATIC_INTERPOLATION);
+    m_filterMethodCombo->setCurrentIndex(HotPixelFixer::QUADRATIC_INTERPOLATION);
     m_filterMethodCombo->blockSignals(false);
 } 
 
 void ImageEffect_HotPixels::slotAddBlackFrame()
 {
-    //Does one need to do this if digikam did so already?
-
     KFileDialog fileSelectDialog(KUrl(), QString(), this);
     fileSelectDialog.setOperationMode(KFileDialog::Opening);
     fileSelectDialog.setMode(KFile::File);
@@ -193,7 +191,7 @@ void ImageEffect_HotPixels::prepareEffect()
     enableButton(Apply, false);     
 
     Digikam::DImg image     = m_imagePreviewWidget->getOriginalRegionImage();
-    int interpolationMethod = m_filterMethodCombo->currentItem();
+    int interpolationMethod = m_filterMethodCombo->currentIndex();
 
     Q3ValueList<HotPixel> hotPixelsRegion;
     QRect area = m_imagePreviewWidget->getOriginalImageRegionToRender();
@@ -220,7 +218,7 @@ void ImageEffect_HotPixels::prepareFinal()
     m_blackFrameListView->setEnabled(false);
     enableButton(Apply, false);     
         
-    int interpolationMethod = m_filterMethodCombo->currentItem();
+    int interpolationMethod = m_filterMethodCombo->currentIndex();
 
     Digikam::ImageIface iface(0, 0);
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
