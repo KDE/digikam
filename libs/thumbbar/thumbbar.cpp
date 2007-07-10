@@ -764,9 +764,11 @@ bool ThumbBarView::event(QEvent *event)
         if (helpEvent)
         {
             QString tipText;
-    
-            if (d->toolTip->maybeTip(helpEvent->pos(), tipText))
+            QRect rect = d->toolTip->maybeTip(helpEvent->pos(), tipText);
+            if (!rect.isEmpty())
+            {
                 QToolTip::showText(helpEvent->globalPos(), tipText, this);
+            }
             else
                 QToolTip::hideText();
         }
@@ -868,20 +870,20 @@ ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent) :
     m_cellSpecEnd = QString("</i></font></nobr></td></tr>");
 }
 
-bool ThumbBarToolTip::maybeTip(const QPoint& pos, QString& tipText)
+QRect ThumbBarToolTip::maybeTip(const QPoint& pos, QString& tipText)
 {
-    if ( !m_view) return false;
+    if (!m_view) return QRect();
 
     ThumbBarItem* item = m_view->findItem( m_view->viewportToContents(pos) );
-    if (!item) return false;
+    if (!item) return QRect();
 
-    if (!m_view->getToolTipSettings().showToolTips) return false;
+    if (!m_view->getToolTipSettings().showToolTips) return QRect();
 
     tipText = tipContent(item);
     tipText.append(tipContentExtraData(item));
     tipText.append("</table>");
     
-    return true;
+    return item->rect();
 }
 
 QString ThumbBarToolTip::tipContent(ThumbBarItem* item)

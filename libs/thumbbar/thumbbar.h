@@ -205,7 +205,9 @@ public:
     ThumbBarToolTip(ThumbBarView *parent);
     virtual ~ThumbBarToolTip(){};
 
-    bool maybeTip(const QPoint& pos, QString &tipText);
+    /** Return the thummbar item area if a item is found at 'pos' else an empty QRect.
+        tipText will contains the tool tip string to show.*/
+    QRect maybeTip(const QPoint& pos, QString &tipText);
 
 protected:
     
