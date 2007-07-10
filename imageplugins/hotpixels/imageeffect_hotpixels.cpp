@@ -155,9 +155,6 @@ void ImageEffect_HotPixels::resetValues(void)
 
 void ImageEffect_HotPixels::slotAddBlackFrame()
 {
-    //Does one need to do this if digikam did so already?
-    KImageIO::registerFormats(); 
-    
     KFileDialog fileSelectDialog(QString(), KImageIO::pattern(), this, "", true);
     fileSelectDialog.setCaption(i18n("Select Black Frame Image"));
     fileSelectDialog.setURL(m_blackFrameURL.path());
