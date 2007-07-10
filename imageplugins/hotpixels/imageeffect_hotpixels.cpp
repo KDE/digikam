@@ -105,10 +105,10 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addMultiCellWidget(filterMethodLabel, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_filterMethodCombo, 0, 0, 1, 1);
-    gridSettings->addMultiCellWidget(m_blackFrameButton, 0, 0, 2, 2);    
-    gridSettings->addMultiCellWidget(m_blackFrameListView, 1, 2, 0, 2);
+    gridSettings->addWidget(filterMethodLabel, 0, 0, 1, 1);
+    gridSettings->addWidget(m_filterMethodCombo, 0, 1, 1, 1);
+    gridSettings->addWidget(m_blackFrameButton, 0, 2, 1, 1);    
+    gridSettings->addWidget(m_blackFrameListView, 1, 0, 2, 3 );
     gridSettings->setMargin(0);
     gridSettings->setSpacing(spacingHint());
     
