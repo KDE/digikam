@@ -77,7 +77,7 @@
 // Try to detect the current system and set value of 'cimg_OS'.
 #ifndef cimg_OS
 #if defined(sun)         || defined(__sun)      || defined(linux)       || defined(__linux) \
- || defined(__linux__)   || defined(__CYGWIN__) || defined(BSD)         || defined(__FreeBSD__) \
+ || defined(__linux__)   || defined(__CYGWIN__) || defined(BSD)         || defined(__FreeBSD__) || defined (__NetBSD__) \
  || defined(__OPENBSD__) || defined(__MACOSX__) || defined(__APPLE__)   || defined(sgi) \
  || defined(__sgi)
 // Unix-like (Linux, Solaris, BSD, MacOSX, Irix,...).
