@@ -26,11 +26,9 @@
 
 // Qt includes.
 
-#include <qpainter.h>
-#include <qtooltip.h>
-//Added by qt3to4:
-#include <QPixmap>
 #include <Q3ValueList>
+#include <QPainter>
+#include <QPixmap>
 
 // Local includes.
 
@@ -52,7 +50,7 @@ BlackFrameListView::BlackFrameListView(QWidget* parent)
     setSelectionMode(Q3ListView::Single);
 }
 
-///////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------
 
 BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, KUrl url)
                       : QObject(parent), K3ListViewItem(parent)                        
@@ -101,7 +99,8 @@ QString BlackFrameListViewItem::text(int column)const
     return QString();
 }
 
-void BlackFrameListViewItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int align)
+void BlackFrameListViewItem::paintCell(QPainter* p, const QColorGroup& cg, int column, 
+                                       int width, int align)
 {
     //Let the normal listview item draw it all for now
     Q3ListViewItem::paintCell(p, cg, column, width, align);
@@ -112,8 +111,8 @@ void BlackFrameListViewItem::slotParsed(Q3ValueList<HotPixel> hotPixels)
     m_hotPixels = hotPixels;
     m_image     = m_parser.image();
     m_imageSize = m_image.size();
-    m_thumb     = thumb(QSize(THUMB_WIDTH, THUMB_WIDTH/3*2));
-    setPixmap(0, m_thumb);
+    m_thumb     = thumb(QSize(THUMB_WIDTH, THUMB_WIDTH/3*2)).toImage();
+    setPixmap(0, QPixmap::fromImage(m_thumb));
         
     m_blackFrameDesc = QString("<p><b>" + m_blackFrameURL.fileName() + "</b>:<p>");    
     Q3ValueList <HotPixel>::Iterator end(m_hotPixels.end());
@@ -125,10 +124,8 @@ void BlackFrameListViewItem::slotParsed(Q3ValueList<HotPixel> hotPixels)
 
 QPixmap BlackFrameListViewItem::thumb(const QSize& size)
 {
-    QPixmap thumb;
-    
     //First scale it down to the size
-    thumb = m_image.smoothScale(size, Qt::ScaleMin);
+    QPixmap thumb = QPixmap::fromImage(m_image.scaled(size, Qt::ScaleMin));
     
     //And draw the hot pixel positions on the thumb
     QPainter p(&thumb);
@@ -170,4 +167,3 @@ int BlackFrameListViewItem::width(const QFontMetrics& fm,const Q3ListView* lv,in
 }
 
 }  // NameSpace DigikamHotPixelsImagesPlugin
-

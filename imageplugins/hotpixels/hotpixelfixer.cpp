@@ -29,11 +29,10 @@
 
 // Qt includes.
 
-#include <qcolor.h>
-#include <qregexp.h>
-#include <qstringlist.h>
-//Added by qt3to4:
 #include <Q3ValueList>
+#include <QColor>
+#include <QRegExp>
+#include <QStringList>
 
 // Local includes.
 
@@ -164,26 +163,23 @@ void HotPixelFixer::interpolate (Digikam::DImg &img, HotPixel &hp, int method)
                 }
             }
             break;
-        } //Case average
+        }
     
         case LINEAR_INTERPOLATION:
-            //(Bi)linear interpolation.
-            weightPixels (img,hp,LINEAR_INTERPOLATION,TWODIM_DIRECTION,sixtBits ? 65535: 255);
+            weightPixels(img, hp, LINEAR_INTERPOLATION, TWODIM_DIRECTION, sixtBits ? 65535: 255);
             break;
     
         case QUADRATIC_INTERPOLATION:
-            // (Bi)quadratic interpolation.
-            weightPixels (img,hp,QUADRATIC_INTERPOLATION,TWODIM_DIRECTION,sixtBits ? 65535 : 255);
+            weightPixels(img, hp, QUADRATIC_INTERPOLATION, TWODIM_DIRECTION, sixtBits ? 65535 : 255);
             break;
     
         case CUBIC_INTERPOLATION:
-            // (Bi)cubic interpolation. 
-            weightPixels (img,hp,CUBIC_INTERPOLATION,TWODIM_DIRECTION,sixtBits ? 65535 : 255);
+            weightPixels(img, hp, CUBIC_INTERPOLATION, TWODIM_DIRECTION, sixtBits ? 65535 : 255);
             break;
-    } //switch
+    } 
 }
 
-void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, Qt::Orientation dir,int maxComponent)
+void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, Direction dir, int maxComponent)
 {
     //TODO: implement direction here too
         
@@ -235,7 +231,7 @@ void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, 
         {
             for (int x = 0; x < px.width(); ++x)
             {
-                if (validPoint (img,QPoint(px.x()+x,px.y()+y)))
+                if (validPoint (img, QPoint(px.x()+x,px.y()+y)))
                 {
                     double sum_weight = 0.0, v = 0.0;
                     size_t i;

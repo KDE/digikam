@@ -34,12 +34,12 @@ Weights::Weights(const Weights &w)
 }
 void Weights::operator=(const Weights &w)
 {
-    mHeight=w.height();
-    mWidth=w.width();
-    mPositions=(w.positions());
-    mCoefficientNumber=w.coefficientNumber();
-    mTwoDim=w.twoDim();
-    mPolynomeOrder=w.polynomeOrder();
+    mHeight            = w.height();
+    mWidth             = w.width();
+    mPositions         = (w.positions());
+    mCoefficientNumber = w.coefficientNumber();
+    mTwoDim            = w.twoDim();
+    mPolynomeOrder     = w.polynomeOrder();
     
     // Allocate memory and copy weights
     // if the original one was calculated
@@ -47,16 +47,21 @@ void Weights::operator=(const Weights &w)
     if (!w.weightMatrices()) return;
     else
     {
-        double*** origMatrices=w.weightMatrices();
-        mWeightMatrices = new double**[mPositions.count()]; //allocate mPositions.count() matrices
+        double*** origMatrices = w.weightMatrices();
+        // Allocate mPositions.count() matrices
+        mWeightMatrices        = new double**[mPositions.count()]; 
     
-        for (uint i=0; i<mPositions.count(); i++)
+        for (int i=0 ; i < mPositions.count() ; i++)
         {
-            mWeightMatrices[i]=new double*[mHeight]; //allocate mHeight rows on each position
-            for (unsigned int j=0; j<mHeight; j++)
+            // Allocate mHeight rows on each position
+            mWeightMatrices[i] = new double*[mHeight]; 
+
+            for (uint j=0 ; j < mHeight ; j++)
             {
-                mWeightMatrices[i][j]=new double[mWidth]; //Allocate mWidth columns on each row
-                for (unsigned int k=0; k<mWidth; k++) 
+                // Allocate mWidth columns on each row
+                mWeightMatrices[i][j]=new double[mWidth]; 
+
+                for (uint k=0 ; k < mWidth ; k++) 
                 {
                     mWeightMatrices[i][j][k]=origMatrices[i][j][k];
                 }
@@ -81,9 +86,9 @@ void Weights::calculateWeights()
     if (mTwoDim)
     {
 
-	int iPolynomeOrder=(int) mPolynomeOrder; //lets avoid signed/unsigned comparison warnings
-	int iHeight = (int) height();            //"
-	int iWidth = (int) width();              //"
+	int iPolynomeOrder = (int) mPolynomeOrder; //lets avoid signed/unsigned comparison warnings
+	int iHeight        = (int) height();       //"
+	int iWidth         = (int) width();        //"
 	
         for (y = -iPolynomeOrder; y < iHeight + iPolynomeOrder; ++y)
         {
@@ -97,7 +102,7 @@ void Weights::calculateWeights()
                     || (y < 0 && x >= 0 && x < iWidth ) || (y >= iHeight && x >= 0 && x < iWidth))
                 {
                     QPoint position(x,y);
-		    mPositions.append(position);
+		            mPositions.append(position);
                 }
             }
         }
@@ -150,24 +155,34 @@ void Weights::calculateWeights()
     // Multiply inverse matrix with vector.
     
     for (iy = 0; iy < mCoefficientNumber; ++iy)
+    {
         for (j = 0; j < mPositions.count(); ++j)
         {
             vector1 [iy * mPositions.count() + j] = 0.0;
 
             for (ix = 0; ix < mCoefficientNumber; ++ix)
+            {
                 vector1 [iy * mPositions.count() + j] += matrix [iy * mCoefficientNumber + ix] 
                             * vector0 [ix * mPositions.count() + j];
+            }
         }
+    }
 
     // Store weights
     
-    mWeightMatrices = new double**[mPositions.count()]; //allocate mPositions.count() matrices
+    // Allocate mPositions.count() matrices.
+    mWeightMatrices = new double**[mPositions.count()]; 
     
-    for (i=0; i<mPositions.count(); i++)
+    for (i=0 ; i < mPositions.count() ; i++)
     {
-        mWeightMatrices[i] = new double*[mHeight]; //allocate mHeight rows on each position
-        for (j=0; j<mHeight; j++) 
-            mWeightMatrices[i][j] = new double[mWidth]; //Allocate mWidth columns on each row
+        // Allocate mHeight rows on each position
+        mWeightMatrices[i] = new double*[mHeight];
+
+        for (j=0 ; j < mHeight ; j++) 
+        {
+            // Allocate mWidth columns on each row
+            mWeightMatrices[i][j] = new double[mWidth]; 
+        }
     }
 
     for (y = 0; y < (int) mHeight; ++y)
@@ -194,10 +209,10 @@ void Weights::calculateWeights()
 
 bool Weights::operator==(const Weights& ws) const
 {
-    return (mHeight==ws.height() &&
-            mWidth==ws.width() &&
-            mPolynomeOrder==ws.polynomeOrder() &&
-            mTwoDim==ws.twoDim()
+    return (mHeight == ws.height()               &&
+            mWidth == ws.width()                 &&
+            mPolynomeOrder == ws.polynomeOrder() &&
+            mTwoDim == ws.twoDim()
             );
 }
 
@@ -275,4 +290,3 @@ double Weights::polyTerm (const size_t i_coeff, const int x, const int y, const 
 }
 
 }  // NameSpace DigikamHotPixelsImagesPlugin
-

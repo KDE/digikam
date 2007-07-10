@@ -2,8 +2,8 @@
 SET(digikamimageplugin_hotpixels_PART_SRCS blackframeparser.cpp 
                                            weights.cpp 
                                            hotpixelfixer.cpp
-                                           imageplugin_hotpixels.cpp
                                            blackframelistview.cpp
+                                           imageplugin_hotpixels.cpp
                                            imageeffect_hotpixels.cpp 
    )
 

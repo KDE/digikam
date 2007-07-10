@@ -27,12 +27,11 @@
 
 // Qt includes.
 
-#include <qimage.h>
-#include <qstring.h>
-#include <qsize.h>
-#include <qpoint.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
+#include <Q3ValueList>
+#include <QImage>
+#include <QString>
+#include <QSize>
+#include <QPoint>
 #include <QPixmap>
 
 // KDE includes.
@@ -70,7 +69,7 @@ private slots:
     };           
 };
 
-///////////////////////////////////////////////////////////////
+//-----------------------------------------------------------------------------------
 
 class BlackFrameListViewItem : public QObject, K3ListViewItem
 {
@@ -109,7 +108,7 @@ private:
     
     QSize                 m_imageSize;
     
-    Q3ValueList <HotPixel> m_hotPixels;
+    Q3ValueList<HotPixel> m_hotPixels;
     
     QString               m_blackFrameDesc;
     

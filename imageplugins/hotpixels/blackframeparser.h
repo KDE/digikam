@@ -28,16 +28,13 @@
 #ifndef BLACKFRAMEPARSER_H
 #define BLACKFRAMEPARSER_H
 
-#define MIN(a,b) ((a) < (b) ? (a) : (b))
-#define MAX(a,b) ((a) > (b) ? (a) : (b))
-
 // Qt includes.
 
-#include <qimage.h>
-#include <qobject.h>
-#include <q3valuelist.h>
-#include <qstring.h>
-#include <qrect.h>
+#include <Q3ValueList>
+#include <QImage>
+#include <QObject>
+#include <QString>
+#include <QRect>
 
 // KDE includes.
 

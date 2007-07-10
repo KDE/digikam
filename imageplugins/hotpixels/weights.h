@@ -26,8 +26,8 @@
 
 // Qt includes.
 
-#include <qrect.h>
-#include <q3valuelist.h>
+#include <Q3ValueList>
+#include <QRect>
 
 namespace DigikamHotPixelsImagesPlugin
 {
@@ -43,16 +43,17 @@ public:
     ~Weights()
     {    
         if (!mWeightMatrices) return;
-        for (unsigned int i=0; i<mPositions.count(); i++)
+        for (int i=0 ; i < mPositions.count() ; i++)
             {
-                for (unsigned int j=0; j<mHeight; j++) delete[] mWeightMatrices[i][j];
+                for (unsigned int j=0; j<mHeight; j++) 
+                    delete[] mWeightMatrices[i][j];
             }
         }
     
-    unsigned int      height(void)        const   { return mHeight; }
-    unsigned int      polynomeOrder(void) const   { return mPolynomeOrder; }
-    bool              twoDim(void)        const   { return mTwoDim; }
-    unsigned int      width(void)         const   { return mWidth; }
+    unsigned int height(void)        const   { return mHeight; }
+    unsigned int polynomeOrder(void) const   { return mPolynomeOrder; }
+    bool         twoDim(void)        const   { return mTwoDim; }
+    unsigned int width(void)         const   { return mWidth; }
     
     void     setHeight(int h)            { mHeight=h; };
     void     setPolynomeOrder(int order) { mPolynomeOrder=order; }
@@ -61,7 +62,7 @@ public:
     
     void     calculateWeights();
     bool     operator==(const Weights& ws) const;
-    double** operator[](int n) const            { return mWeightMatrices[n]; }
+    double** operator[](int n) const             { return mWeightMatrices[n]; }
     const Q3ValueList <QPoint> positions() const { return mPositions; }
 
 protected:

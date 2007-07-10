@@ -37,10 +37,8 @@
 
 // QT includes.
 
-#include <qimage.h>
-#include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QImage>
+#include <QStringList>
 
 // Local includes.
 
@@ -128,8 +126,9 @@ void BlackFrameParser::blackFrameParsing(bool useData)
         for (int x=0 ; x < mImage.width() ; ++x)
         {
             //Get each point in the image
-            QRgb pixrgb=mImage.pixel(x,y);
-            QColor color; color.setRgb(pixrgb);
+            QRgb pixrgb = mImage.pixel(x,y);
+            QColor color; 
+            color.setRgb(pixrgb);
             
             // Find maximum component value.
             int maxValue;
@@ -169,8 +168,8 @@ void BlackFrameParser::consolidatePixels (Q3ValueList<HotPixel>& list)
     
     Q3ValueList<HotPixel>::iterator it, prevPointIt;
 
-    prevPointIt=list.begin();
-    it=list.begin();
+    prevPointIt= list.begin();
+    it         = list.begin();
     ++it;
     
     HotPixel tmp;
@@ -185,16 +184,19 @@ void BlackFrameParser::consolidatePixels (Q3ValueList<HotPixel>& list)
             tmp   = point;
     
             Q3ValueList<HotPixel>::Iterator point_below_it;
-            point_below_it = list.find (tmp); //find any intersecting hotp below tmp
+            
+            //find any intersecting hotpixels below tmp
+            point_below_it = list.find (tmp); 
+
             if (point_below_it != list.end())
             {
                 point_below =* point_below_it;
-                validateAndConsolidate (&point, &point_below);
+                validateAndConsolidate(&point, &point_below);
                 
-                point.rect.setX(MIN(point.x(), point_below.x()));
-                point.rect.setWidth(MAX(point.x() + point.width(),
+                point.rect.setX(qMin(point.x(), point_below.x()));
+                point.rect.setWidth(qMax(point.x() + point.width(),
                                     point_below.x() + point_below.width()) - point.x());
-                point.rect.setHeight(MAX(point.y() + point.height(),
+                point.rect.setHeight(qMax(point.y() + point.height(),
                                      point_below.y() + point_below.height()) - point.y());
                 *it=point;
                 list.remove (point_below_it); //TODO: Check! this could remove it++?
@@ -207,7 +209,7 @@ void BlackFrameParser::consolidatePixels (Q3ValueList<HotPixel>& list)
 
 void BlackFrameParser::validateAndConsolidate (HotPixel *a, HotPixel *b)
 {
-    a->luminosity = MAX (a->luminosity, b->luminosity);
+    a->luminosity = qMax(a->luminosity, b->luminosity);
 }
 
 }  // NameSpace DigikamHotPixelsImagesPlugin

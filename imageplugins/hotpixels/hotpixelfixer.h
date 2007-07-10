@@ -28,11 +28,11 @@
 
 // Qt includes.
 
-#include <qimage.h>
-#include <qobject.h>
-#include <q3valuelist.h>
-#include <qrect.h>
-#include <qstring.h>
+#include <Q3ValueList>
+#include <QImage>
+#include <QObject>
+#include <QRect>
+#include <QString>
 
 // Digikam includes.
 
@@ -61,9 +61,9 @@ public:
     
     enum Direction
     {
-        TWODIM_DIRECTION        = 0,
-        VERTICAL_DIRECTION      = 1,
-        HORIZONTAL_DIRECTION    = 2    
+        TWODIM_DIRECTION     = 0,
+        VERTICAL_DIRECTION   = 1,
+        HORIZONTAL_DIRECTION = 2    
     };
 
 public:
@@ -77,7 +77,8 @@ private:
     virtual void filterImage(void);
     
     void interpolate (Digikam::DImg &img,HotPixel &hp, int method);
-    void weightPixels (Digikam::DImg &img, HotPixel &px, int method, Qt::Orientation dir, int maxComponent);
+    void weightPixels (Digikam::DImg &img, HotPixel &px, int method, 
+                       Direction dir, int maxComponent);
     
     inline bool validPoint(Digikam::DImg &img, QPoint p)
     {
@@ -88,7 +89,7 @@ private:
 
 private: 
 
-    int                  m_interpolationMethod;
+    int                   m_interpolationMethod;
        
     Q3ValueList<HotPixel> m_hpList;
 };
