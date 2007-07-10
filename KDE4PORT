@@ -159,10 +159,10 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---emboss                              Laurent                         DONE       DONE
         |---filmgrain                           Laurent                         DONE       DONE
         |---freerotation                        Gilles                          DONE       DONE
-        |---hotpixels                           Laurent                                              CMake port only
+        |---hotpixels                           Laurent                         DONE
         |---infrared                            Laurent                         DONE       DONE
         |---inpainting                          Gilles                          DONE       DONE
-        |---inserttext                          Laurent                                              CMake port only
+        |---inserttext                          Laurent                         DONE       DONE
         |---lensdistortion                      Laurent                         DONE                 Final render failed, lens distorsion grid preview don't work
         |---noisereduction                      Laurent                         DONE       DONE
         |---oilpaint                            Laurent                         DONE       DONE
