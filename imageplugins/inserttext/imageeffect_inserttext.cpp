@@ -98,12 +98,12 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     // -------------------------------------------------------------
     
     QFrame *frame   = new QFrame(mainWidget());
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l  = new QVBoxLayout(frame);
+    m_previewWidget = new InsertTextWidget(480, 320, frame);
+    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    l->addWidget(m_previewWidget);
     l->setMargin(5);
     l->setSpacing(0);
-    m_previewWidget = new InsertTextWidget(480, 320, frame);
-    l->addWidget(m_previewWidget);
     m_previewWidget->setWhatsThis( i18n("<p>This is the preview of the text inserted to the image. "
                                            "You can use the mouse to move the text to the right location."));
     setPreviewAreaWidget(frame);                                           
@@ -122,7 +122,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     
     m_fontChooserWidget = new KFontChooser(gbox2, KFontChooser::NoDisplayFlags);
     m_fontChooserWidget->setSampleBoxVisible(false);
-    m_textEdit->setWhatsThis( i18n("<p>Here you can choose the font to be used."));
+    m_fontChooserWidget->setWhatsThis( i18n("<p>Here you can choose the font to be used."));
     
     // -------------------------------------------------------------
     
