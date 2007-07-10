@@ -15,7 +15,7 @@ kde4_automoc(${digikamthemedesigner_SRCS})
 
 kde4_add_executable(digikamthemedesigner ${digikamthemedesigner_SRCS})
 
-target_link_libraries(digikamthemedesigner  ${KDE4_KDEUI_LIBS} digikam ${KDE4_KUTILS_LIBS} )
+target_link_libraries(digikamthemedesigner  digikam ${KDE4_KUTILS_LIBS} )
 
 install(TARGETS digikamthemedesigner DESTINATION ${BIN_INSTALL_DIR})
 
