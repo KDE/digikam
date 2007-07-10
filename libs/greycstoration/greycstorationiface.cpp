@@ -38,7 +38,7 @@
 
 #define cimg_plugin "greycstoration.h"
 #if defined(sun)         || defined(__sun)      || defined(linux)       || defined(__linux) \
- || defined(__linux__)   || defined(__CYGWIN__) || defined(BSD)         || defined(__FreeBSD__) \
+ || defined(__linux__)   || defined(__CYGWIN__) || defined(BSD)         || defined(__FreeBSD__) || defined(__NetBSD__)\
  || defined(__OPENBSD__) || defined(__MACOSX__) || defined(__APPLE__)   || defined(sgi) \
  || defined(__sgi)
 #include <pthread.h>
