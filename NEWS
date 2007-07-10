@@ -13,4 +13,5 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 147269 : digiKam finds but fails to use libkdcraw.
 007 ==> 147263 : Some icons are missing.
 008 ==> 146636 : adjust levels: helper line for sliders.
-009 ==> 
+009 ==> 147671 : Portability problem in configure script.
+010 ==> 
