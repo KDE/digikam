@@ -161,17 +161,19 @@ void ImageEffect_HotPixels::resetValues(void)
 void ImageEffect_HotPixels::slotAddBlackFrame()
 {
     //Does one need to do this if digikam did so already?
-     
-    
-    KFileDialog fileSelectDialog(QString(), KImageIO::pattern(), this, "", true);
+
+    KFileDialog fileSelectDialog(KUrl(), QString(), this);
+    fileSelectDialog.setOperationMode(KFileDialog::Opening);
+    fileSelectDialog.setMode(KFile::File);
     fileSelectDialog.setCaption(i18n("Select Black Frame Image"));
-    fileSelectDialog.setUrl(m_blackFrameURL.path());
-    
-    if (fileSelectDialog.exec() != QDialog::Rejected)
+    fileSelectDialog.setFilter(KImageIO::pattern());
+    fileSelectDialog.setUrl(m_blackFrameURL.path());     
+
+    if (fileSelectDialog.exec() != KFileDialog::Rejected)
     {
        //Load the selected file and insert into the list
         
-       m_blackFrameURL = fileSelectDialog.selectedURL();
+       m_blackFrameURL = fileSelectDialog.selectedUrl();
        m_blackFrameListView->clear();
        new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
     }
