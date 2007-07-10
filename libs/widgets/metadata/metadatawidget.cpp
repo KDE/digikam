@@ -380,11 +380,7 @@ void MetadataWidget::slotPrintMetadata(void)
 
 KUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& fileFilter)
 {
-    KFileDialog fileSaveDialog(KUrl(KGlobalSettings::documentPath()),
-                               QString(),
-                               this,
-                               false);
-
+    KFileDialog fileSaveDialog(KUrl(KGlobalSettings::documentPath()), QString(), this);
     fileSaveDialog.setOperationMode(KFileDialog::Saving);
     fileSaveDialog.setMode(KFile::File);
     fileSaveDialog.setSelection(d->fileName);
