@@ -62,7 +62,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             cameraiconitem.cpp                  Gilles                  X       DONE
             cameraiconview.cpp                  Gilles                  X       DONE
             camerainfodialog.cpp                Gilles                  X       DONE
-            cameraui.cpp                                                X
+            cameraui.cpp                                                X       DONE
             dkcamera.cpp                        Gilles                  X       DONE
             gpcamera.cpp                        Gilles                  X       DONE
             gpiteminfo.cpp                      Gilles                  X       DONE
