@@ -119,7 +119,7 @@ public:
 
     QStringList  albumCollectionNames;
 
-    KConfig     *config;
+    KSharedConfigPtr     config;
 
     AlbumSettings::AlbumSortOrder       albumSortOrder;
     AlbumSettings::ImageSortOrder       imageSortOrder;
@@ -235,7 +235,7 @@ void AlbumSettings::init()
 
 void AlbumSettings::readSettings()
 {
-    KConfig* config = d->config;
+    KSharedConfigPtr config = d->config;
 
     // ---------------------------------------------------------------------
 
@@ -264,8 +264,8 @@ void AlbumSettings::readSettings()
     d->movieFilefilter   = group.readEntry("Movie File Filter", d->movieFilefilter);
     d->audioFilefilter   = group.readEntry("Audio File Filter", d->audioFilefilter);
     d->rawFilefilter     = group.readEntry("Raw File Filter", d->rawFilefilter);
-    d->thumbnailSize     = group.readEntry("Default Icon Size", ThumbnailSize::Medium);
-    d->treeThumbnailSize = group.readEntry("Default Tree Icon Size", ThumbnailSize::Tiny);
+    d->thumbnailSize     = group.readEntry("Default Icon Size", (int)ThumbnailSize::Medium);
+    d->treeThumbnailSize = group.readEntry("Default Tree Icon Size", (int)ThumbnailSize::Tiny);
     d->currentTheme      = group.readEntry("Theme", i18n("Default"));
 
     d->iconShowName       = group.readEntry("Icon Show Name", false); 
@@ -335,7 +335,7 @@ void AlbumSettings::readSettings()
 
 void AlbumSettings::saveSettings()
 {
-    KConfig* config = d->config;
+    KSharedConfigPtr config = d->config;
 
     // ---------------------------------------------------------------------
 

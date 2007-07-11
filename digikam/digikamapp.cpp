@@ -43,7 +43,8 @@
 #include <kurl.h>
 #include <kstandardaction.h>
 #include <kstdaccel.h>
-#include <kkeydialog.h>
+#include <KShortcutsDialog>
+#include <KToggleAction>
 #include <kedittoolbar.h>
 #include <kiconloader.h>
 #include <ktip.h>
@@ -52,7 +53,6 @@
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kwindowsystem.h>
-#include <dcopref.h>
 
 // libKipi includes.
 
@@ -86,7 +86,6 @@
 #include "imageattributeswatch.h"
 #include "batchthumbsgenerator.h"
 #include "batchalbumssyncmetadata.h"
-#include "dcopiface.h"
 #include "digikamappprivate.h"
 #include "digikamapp.h"
 #include "digikamapp.moc"
@@ -172,7 +171,7 @@ DigikamApp::DigikamApp()
     populateThemes();
 
     setAutoSaveSettings();
-
+#if 0
     d->dcopIface = new DCOPIface(this, "camera");
 
     connect(d->dcopIface, SIGNAL(signalCameraAutoDetect()), 
@@ -180,6 +179,7 @@ DigikamApp::DigikamApp()
 
     connect(d->dcopIface, SIGNAL(signalDownloadImages( const QString & )),
             this, SLOT(slotDcopDownloadImages(const QString &)));
+#endif
 }
 
 DigikamApp::~DigikamApp()
@@ -1525,7 +1525,7 @@ void DigikamApp::slotSetupChanged()
 
 void DigikamApp::slotEditKeys()
 {
-    KKeyDialog* dialog = new KKeyDialog();
+    KShortcutsDialog* dialog = new KShortcutsDialog();
     dialog->insert( actionCollection(), i18n( "General" ) );
 
     KIPI::PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
