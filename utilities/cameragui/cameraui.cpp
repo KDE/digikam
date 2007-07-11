@@ -61,6 +61,7 @@ extern "C"
 
 // KDE includes.
 
+#include <ktoolinvocation.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
 #include <kaboutdata.h>
@@ -77,11 +78,12 @@ extern "C"
 #include <kurllabel.h>
 #include <ksqueezedtextlabel.h>
 #include <kinputdialog.h>
+#include <kvbox.h>
+#include <kpushbutton.h>
 
 // LibKDcraw includes.
 
 #include <libkdcraw/rawfiles.h>
-#include <kvbox.h>
 
 // Local includes.
 
@@ -238,28 +240,26 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     setHelp("camerainterface.anchor", "digikam");
 
     // -------------------------------------------------------------------------
+
     QWidget *plain = new QWidget(this);
     setMainWidget(plain);    
-    Q3GridLayout* viewBoxLayout = new Q3GridLayout(plain, 2, 5);
-    viewBoxLayout->setColStretch( 0, 0 );
-    viewBoxLayout->setColStretch( 1, 0 );
-    viewBoxLayout->setColStretch( 2, 3 );
-    viewBoxLayout->setColStretch( 3, 1 );
-    viewBoxLayout->setColStretch( 4, 0 );
-    viewBoxLayout->setColStretch( 5, 0 );
+
+    QGridLayout* viewBoxLayout = new QGridLayout(plain);
 
     KHBox* widget = new KHBox(plain);
     d->splitter   = new QSplitter(widget);
     d->view       = new CameraIconView(this, d->splitter);
     
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    rightSzPolicy.setHorizontalStretch(2);
+    rightSzPolicy.setVerticalStretch(1);
     d->view->setSizePolicy(rightSzPolicy);
         
     d->rightSidebar = new ImagePropertiesSideBarCamGui(widget, "CameraGui Sidebar Right", d->splitter,
-                                                       Sidebar::Right, true);
-    d->splitter->setFrameStyle( Q3Frame::NoFrame );
-    d->splitter->setFrameShadow( Q3Frame::Plain );
-    d->splitter->setFrameShape( Q3Frame::NoFrame );       
+                                                       Sidebar::DockRight, true);
+    d->splitter->setFrameStyle( QFrame::NoFrame );
+    d->splitter->setFrameShadow( QFrame::Plain );
+    d->splitter->setFrameShape( QFrame::NoFrame );       
     d->splitter->setOpaqueResize(false);
     
     // -------------------------------------------------------------------------
@@ -276,7 +276,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     // -- Albums Auto-creation options -----------------------------------------
 
     QWidget* albumBox      = new QWidget(d->advBox);
-    Q3VBoxLayout* albumVlay = new Q3VBoxLayout(albumBox, marginHint(), spacingHint());
+    QVBoxLayout* albumVlay = new QVBoxLayout(albumBox);
     d->autoAlbumExtCheck   = new QCheckBox(i18n("Extension-based sub-albums"), albumBox);
     d->autoAlbumDateCheck  = new QCheckBox(i18n("Date-based sub-albums"), albumBox);
     KHBox *hbox1           = new KHBox(albumBox);
@@ -285,10 +285,13 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->folderDateFormat->insertItem(i18n("ISO"),            CameraUIPriv::IsoDateFormat);
     d->folderDateFormat->insertItem(i18n("Full Text"),      CameraUIPriv::TextDateFormat);
     d->folderDateFormat->insertItem(i18n("Local Settings"), CameraUIPriv::LocalDateFormat);
+
     albumVlay->addWidget(d->autoAlbumExtCheck);
     albumVlay->addWidget(d->autoAlbumDateCheck);
     albumVlay->addWidget(hbox1);
     albumVlay->addStretch();
+    albumVlay->setMargin(spacingHint());
+    albumVlay->setSpacing(spacingHint());
 
     albumBox->setWhatsThis( i18n("<p>Set how digiKam creates albums automatically when downloading."));
     d->autoAlbumExtCheck->setWhatsThis( i18n("<p>Toggle on this option if you want to download your "
@@ -311,7 +314,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     // -- On the Fly options ---------------------------------------------------
 
     QWidget* onFlyBox      = new QWidget(d->advBox);
-    Q3VBoxLayout* onFlyVlay = new Q3VBoxLayout(onFlyBox, marginHint(), spacingHint());
+    QVBoxLayout* onFlyVlay = new QVBoxLayout(onFlyBox);
     d->setPhotographerId   = new QCheckBox(i18n("Set default photographer identity"), onFlyBox);
     d->setCredits          = new QCheckBox(i18n("Set default credit and copyright"), onFlyBox);
     d->fixDateTimeCheck    = new QCheckBox(i18n("Fix internal date && time"), onFlyBox);
@@ -322,6 +325,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->formatLabel         = new QLabel(i18n("New image format:"), hbox2);
     d->losslessFormat      = new QComboBox(hbox2);
     d->losslessFormat->insertItem("PNG", 0);
+
     onFlyVlay->addWidget(d->setPhotographerId);
     onFlyVlay->addWidget(d->setCredits);
     onFlyVlay->addWidget(d->fixDateTimeCheck);
@@ -330,6 +334,8 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     onFlyVlay->addWidget(d->convertJpegCheck);
     onFlyVlay->addWidget(hbox2);
     onFlyVlay->addStretch();
+    onFlyVlay->setMargin(spacingHint());
+    onFlyVlay->setSpacing(spacingHint());
 
     onFlyBox->setWhatsThis( i18n("<p>Set here all options to fix/transform JPEG files automatically "
                      "as they are downloaded."));
@@ -353,11 +359,6 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                           i18n("On the Fly Operations (JPEG only)"));
                                                
     d->rightSidebar->appendTab(d->advBox, SmallIcon("configure"), i18n("Settings"));
-    
-    // -------------------------------------------------------------------------
-    
-    viewBoxLayout->addMultiCellWidget(widget, 0, 0, 0, 5);
-    viewBoxLayout->setRowSpacing(1, spacingHint());
     d->rightSidebar->loadViewState();
         
     // -------------------------------------------------------------------------
@@ -368,16 +369,14 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->cancelBtn->setEnabled(false);
     
     d->status   = new KSqueezedTextLabel(plain);
-    d->progress = new KProgressBar(plain);
+    d->progress = new QProgressBar(plain);
     d->progress->setMaximumHeight( fontMetrics().height() );
     d->progress->hide();
 
-    QFrame *frame = new Q3Frame(plain);
+    QFrame *frame = new QFrame(plain);
     frame->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
-    frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
-    Q3HBoxLayout* layout = new Q3HBoxLayout( frame );
-    layout->setMargin( 2 );  // To make sure the frame gets displayed
-    layout->setSpacing( 0 );
+    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QHBoxLayout* layout = new QHBoxLayout( frame );
 
     KUrlLabel *pixmapLogo = new KUrlLabel( "http://www.digikam.org", QString(), frame );
     pixmapLogo->setMargin(0);
@@ -393,13 +392,27 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     
     layout->addWidget( pixmapLogo );
     layout->addWidget( d->anim );
+    layout->setMargin( 2 );  // To make sure the frame gets displayed
+    layout->setSpacing( 0 );
 
+    // -------------------------------------------------------------------------
+
+    viewBoxLayout->addMultiCellWidget(widget, 0, 0, 0, 5);
     viewBoxLayout->addMultiCellWidget(d->cancelBtn, 2, 2, 0, 0);
     viewBoxLayout->addMultiCellWidget(d->status, 2, 2, 2, 2);
     viewBoxLayout->addMultiCellWidget(d->progress, 2, 2, 3, 3);
     viewBoxLayout->addMultiCellWidget(frame, 2, 2, 5, 5);
+    viewBoxLayout->setRowSpacing(1, spacingHint());
     viewBoxLayout->setColSpacing(1, spacingHint());
     viewBoxLayout->setColSpacing(4, spacingHint());
+    viewBoxLayout->setColumnStretch( 0, 0 );
+    viewBoxLayout->setColumnStretch( 1, 0 );
+    viewBoxLayout->setColumnStretch( 2, 3 );
+    viewBoxLayout->setColumnStretch( 3, 1 );
+    viewBoxLayout->setColumnStretch( 4, 0 );
+    viewBoxLayout->setColumnStretch( 5, 0 );
+    viewBoxLayout->setMargin(spacingHint());
+    viewBoxLayout->setSpacing(spacingHint());
 
     // -------------------------------------------------------------------------
     
@@ -414,7 +427,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->imageMenu->insertItem(i18n("Decrease Thumbs"),   this,    SLOT(slotDecreaseThumbSize()), Qt::CTRL+Qt::Key_Minus, 5);
     d->imageMenu->insertSeparator();
     d->imageMenu->insertItem(i18n("Toggle Lock"),       this,    SLOT(slotToggleLock()), 0, 6);
-    actionButton(User3)->setPopup(d->imageMenu);    
+    button(User3)->setPopup(d->imageMenu);    
 
     // -------------------------------------------------------------------------
 
@@ -424,7 +437,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->downloadMenu->insertSeparator();
     d->downloadMenu->insertItem(i18n("Upload..."),         this, SLOT(slotUpload()), 0, 2);
     d->downloadMenu->setItemEnabled(0, false);
-    actionButton(User2)->setPopup(d->downloadMenu);
+    button(User2)->setPopup(d->downloadMenu);
 
     // -------------------------------------------------------------------------
     
@@ -432,11 +445,11 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->deleteMenu->insertItem(i18n("Delete Selected"), this, SLOT(slotDeleteSelected()), 0, 0);
     d->deleteMenu->insertItem(i18n("Delete All"),      this, SLOT(slotDeleteAll()), 0, 1);
     d->deleteMenu->setItemEnabled(0, false);
-    actionButton(User1)->setPopup(d->deleteMenu);
+    button(User1)->setPopup(d->deleteMenu);
 
     // -------------------------------------------------------------------------
 
-    QPushButton *helpButton = actionButton( Help );
+    QPushButton *helpButton = button( Help );
     d->helpMenu = new KHelpMenu(this, KGlobal::mainComponent().aboutData(), false);
     d->helpMenu->menu()->insertItem(SmallIcon("camera"), i18n("Camera Information"), 
                                     this, SLOT(slotInformations()), 0, CAMERA_INFO_MENU_ID, 0);
@@ -572,7 +585,9 @@ CameraUI::~CameraUI()
 void CameraUI::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("Camera Settings");
+    KConfigGroup group        = config->group("Camera Settings");
+    restoreDialogSize(group);
+
     d->advBox->setCurrentIndex(group.readEntry("Settings Tab", (int)CameraUIPriv::RENAMEFILEPAGE));
     d->autoRotateCheck->setChecked(group.readEntry("AutoRotate", true));
     d->autoAlbumDateCheck->setChecked(group.readEntry("AutoAlbumDate", false));
@@ -587,24 +602,23 @@ void CameraUI::readSettings()
     d->view->setThumbnailSize(ThumbnailSize((ThumbnailSize::Size)group.readEntry("ThumbnailSize", 
                               (int)ThumbnailSize::Large)));
 
+    QList<int> list;
     if(config->hasKey("Splitter Sizes"))
-        d->splitter->setSizes(group.readIntListEntry("Splitter Sizes"));
+        d->splitter->setSizes(group.readEntry("Splitter Sizes", list));
 
     d->dateTimeEdit->setEnabled(d->fixDateTimeCheck->isChecked());
     d->losslessFormat->setEnabled(convertLosslessJpegFiles());
     d->formatLabel->setEnabled(convertLosslessJpegFiles());
     d->folderDateFormat->setEnabled(d->autoAlbumDateCheck->isChecked());
     d->folderDateLabel->setEnabled(d->autoAlbumDateCheck->isChecked());
-
-    resize(configDialogSize("Camera Settings"));
 }
 
 void CameraUI::saveSettings()
 {
-    saveDialogSize("Camera Settings");
-
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("Camera Settings");
+    KConfigGroup group        = config->group("Camera Settings");
+    saveDialogSize(group);
+
     group.writeEntry("Settings Tab", d->advBox->currentIndex());
     group.writeEntry("AutoRotate", d->autoRotateCheck->isChecked());
     group.writeEntry("AutoAlbumDate", d->autoAlbumDateCheck->isChecked());
@@ -622,7 +636,7 @@ void CameraUI::saveSettings()
 
 void CameraUI::slotProcessUrl(const QString& url)
 {
-    KApplication::kApplication()->invokeBrowser(url);
+    KToolInvocation::invokeBrowser(url);
 }
 
 bool CameraUI::isBusy() const
@@ -880,8 +894,8 @@ void CameraUI::slotConnected(bool val)
                                          "properly and turned on. "
                                          "Would you like to try again?"), 
                                     i18n("Connection Failed"),
-                                    i18n("Retry"),
-                                    i18n("Abort"))
+                                    KGuiItem(i18n("Retry")),
+                                    KGuiItem(i18n("Abort")))
           == KMessageBox::Yes)
           QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
       else
@@ -898,8 +912,8 @@ void CameraUI::slotFolderList(const QStringList& folderList)
     if (d->closed)
         return;
 
-    d->progress->setProgress(0);
-    d->progress->setTotalSteps(0);
+    d->progress->setValue(0);
+    d->progress->setMaximum(0);
     d->progress->show();
 
     d->cameraFolderList = folderList;
@@ -930,15 +944,15 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
         d->controller->getThumbnail(item.folder, item.name);
     }
 
-    d->progress->setTotalSteps(d->progress->totalSteps() + fileList.count());
+    d->progress->setMaximum(d->progress->maximum() + fileList.count());
 }
 
 void CameraUI::slotThumbnail(const QString& folder, const QString& file,
                              const QImage& thumbnail)
 {
     d->view->setThumbnail(folder, file, thumbnail);
-    int curr = d->progress->progress();
-    d->progress->setProgress(curr+1);
+    int curr = d->progress->value();
+    d->progress->setValue(curr+1);
 }
 
 void CameraUI::slotInformations()
@@ -986,7 +1000,7 @@ void CameraUI::slotUpload()
 
     DDebug () << "fileformats=" << fileformats << endl;   
 
-    KUrl::List urls = KFileDialog::getOpenUrls(CollectionManager::componentData().oneAlbumRootPath(),
+    KUrl::List urls = KFileDialog::getOpenUrls(CollectionManager::instance()->oneAlbumRootPath(),
                                                fileformats, this, i18n("Select Image to Upload"));
     if (!urls.isEmpty())
         slotUploadItems(urls);
@@ -1221,8 +1235,8 @@ void CameraUI::slotDownload(bool onlySelected)
         return;
     
     d->lastDestURL = url;
-    d->progress->setProgress(0);
-    d->progress->setTotalSteps(total);
+    d->progress->setValue(0);
+    d->progress->setMaximum(total);
     d->progress->show();
 
     // disable settings tab here instead of slotBusy:
@@ -1244,8 +1258,8 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
     
     if (status == GPItemInfo::DownloadedYes || status == GPItemInfo::DownloadFailed)
     {
-        int curr = d->progress->progress();
-        d->progress->setProgress(curr+1);
+        int curr = d->progress->value();
+        d->progress->setValue(curr+1);
     }
 }
 
@@ -1255,8 +1269,8 @@ void CameraUI::slotSkipped(const QString& folder, const QString& file)
     if (iconItem)
         d->view->ensureItemVisible(iconItem);
 
-    int curr = d->progress->progress();
-    d->progress->setProgress(curr+1);
+    int curr = d->progress->value();
+    d->progress->setValue(curr+1);
 }
 
 void CameraUI::slotToggleLock()
@@ -1284,8 +1298,8 @@ void CameraUI::slotToggleLock()
 
     if (count > 0)
     {
-        d->progress->setProgress(0);
-        d->progress->setTotalSteps(count);
+        d->progress->setValue(0);
+        d->progress->setMaximum(count);
         d->progress->show();
     }
 }
@@ -1303,8 +1317,8 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
         }
     }
 
-    int curr = d->progress->progress();
-    d->progress->setProgress(curr+1);
+    int curr = d->progress->value();
+    d->progress->setValue(curr+1);
 }
 
 void CameraUI::slotDeleteSelected()
@@ -1347,7 +1361,7 @@ void CameraUI::slotDeleteSelected()
     if (folders.isEmpty())
         return;
 
-    QString warnMsg(i18n("About to delete this image. "
+    QString warnMsg(i18np("About to delete this image. "
                          "Deleted files are unrecoverable. "
                          "Are you sure?",
                          "About to delete these %1 images. "
@@ -1357,14 +1371,14 @@ void CameraUI::slotDeleteSelected()
     if (KMessageBox::warningContinueCancelList(this, warnMsg,
                                                deleteList,
                                                i18n("Warning"),
-                                               i18n("Delete"))
+                                               KGuiItem(i18n("Delete")))
         ==  KMessageBox::Continue) 
     {
         QStringList::iterator itFolder = folders.begin();
         QStringList::iterator itFile   = files.begin();
 
-        d->progress->setProgress(0);
-        d->progress->setTotalSteps(deleteList.count());
+        d->progress->setValue(0);
+        d->progress->setMaximum(deleteList.count());
         d->progress->show();
     
         for ( ; itFolder != folders.end(); ++itFolder, ++itFile)
@@ -1414,7 +1428,7 @@ void CameraUI::slotDeleteAll()
     if (folders.isEmpty())
         return;
 
-    QString warnMsg(i18n("About to delete this image. "
+    QString warnMsg(i18np("About to delete this image. "
                          "Deleted files are unrecoverable. "
                          "Are you sure?",
                          "About to delete these %n images. "
@@ -1424,14 +1438,14 @@ void CameraUI::slotDeleteAll()
     if (KMessageBox::warningContinueCancelList(this, warnMsg,
                                                deleteList,
                                                i18n("Warning"),
-                                               i18n("Delete"))
+                                               KGuiItem(i18n("Delete")))
         ==  KMessageBox::Continue) 
     {
         QStringList::iterator itFolder = folders.begin();
         QStringList::iterator itFile   = files.begin();
 
-        d->progress->setProgress(0);
-        d->progress->setTotalSteps(deleteList.count());
+        d->progress->setValue(0);
+        d->progress->setMaximum(deleteList.count());
         d->progress->show();
     
         for ( ; itFolder != folders.end(); ++itFolder, ++itFile)
@@ -1451,8 +1465,8 @@ void CameraUI::slotDeleted(const QString& folder, const QString& file, bool stat
         d->currentlyDeleting.remove(folder + file);
     }
 
-    int curr = d->progress->progress();
-    d->progress->setProgress(curr+1);
+    int curr = d->progress->value();
+    d->progress->setMaximum(curr+1);
 }
 
 void CameraUI::slotFileView(CameraIconViewItem* item)
@@ -1578,7 +1592,7 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& name,
                  .arg(parentURL.path());
         return false;
     }
-    QString albumRootPath = CollectionManager::componentData().albumRootPath(parentURL);
+    QString albumRootPath = CollectionManager::instance()->albumRootPath(parentURL);
 
     return aman->createPAlbum(parent, albumRootPath, name, QString(""), date, QString(""), errMsg);
 }
