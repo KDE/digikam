@@ -1,6 +1,8 @@
 /* ============================================================
- * Authors     : Renchi Raju 
- *               Caulier Gilles
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
  * Date        : 2005-06-16
  * Description : a dialog to select a target album to download
  *               pictures from camera
@@ -26,19 +28,18 @@
 
 // Qt includes.
 
-#include <qmap.h>
+#include <QMap>
 
 // KDE includes.
 
 #include <kdialog.h>
 
-class FolderView;
-class FolderItem;
-class PAlbum;
-
 namespace Digikam
 {
 
+class FolderView;
+class FolderItem;
+class PAlbum;
 class AlbumSelectDialogPrivate;
 
 class AlbumSelectDialog : public KDialog
@@ -68,7 +69,7 @@ private slots:
     void slotSelectionChanged();
     void slotContextMenu(Q3ListViewItem *item, const QPoint &, int);
     void slotUser1();
-    
+
 private:
 
     AlbumSelectDialogPrivate * d;
