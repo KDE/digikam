@@ -12,10 +12,14 @@
     </keywords>
     <projectdirectory>./</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description></description>
+    <description/>
     <ignoreparts/>
     <projectname/>
-    <defaultencoding></defaultencoding>
+    <defaultencoding/>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
     <projectname>project</projectname>
     <projectname>project</projectname>
     <projectname>project</projectname>
@@ -116,12 +120,12 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell></dbgshell>
+      <dbgshell/>
       <programargs/>
-      <gdbpath></gdbpath>
-      <configGdbScript></configGdbScript>
-      <runShellScript></runShellScript>
-      <runGdbScript></runGdbScript>
+      <gdbpath/>
+      <configGdbScript/>
+      <runShellScript/>
+      <runGdbScript/>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -156,13 +160,13 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>/home/gilles/Documents/devel/SVN/trunk/graphics/digikam/showfoto/showfoto</mainprogram>
-      <programargs>IMG_3675.JPG</programargs>
+      <mainprogram>/home/gilles/Documents/Devel/SVN/trunk/graphics/digikam/showfoto/showfoto</mainprogram>
+      <programargs>&quot;/home/gilles/Images/Test Photographs/JPEG/Vertical&quot;</programargs>
       <terminal>false</terminal>
       <autocompile>false</autocompile>
       <envvars/>
-      <globaldebugarguments></globaldebugarguments>
-      <globalcwd>/home/gilles/Documents/devel/SVN/trunk/graphics/digikam/showfoto/</globalcwd>
+      <globaldebugarguments>&quot;/home/gilles/Images/Test Photographs/JPEG/Vertical&quot;</globaldebugarguments>
+      <globalcwd>/home/gilles/Documents/Devel/SVN/trunk/graphics/digikam/project/../..</globalcwd>
       <useglobalprogram>true</useglobalprogram>
       <autoinstall>false</autoinstall>
       <autokdesu>false</autokdesu>
@@ -237,7 +241,7 @@
       <resolveIncludePathsUsingMakeExperimental>false</resolveIncludePathsUsingMakeExperimental>
     </codecompletion>
     <creategettersetter>
-      <prefixGet></prefixGet>
+      <prefixGet/>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
