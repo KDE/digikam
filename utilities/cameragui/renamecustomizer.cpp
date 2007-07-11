@@ -72,6 +72,7 @@ public:
 
     RenameCustomizerPriv()
     {
+        buttonGroup           = 0;
         renameDefault         = 0;
         renameCustom          = 0;
         renameDefaultBox      = 0;
