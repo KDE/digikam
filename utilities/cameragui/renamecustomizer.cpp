@@ -156,14 +156,16 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameDefaultCase->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
 
     d->renameDefaultCaseType = new QComboBox( d->renameDefaultBox );
-    d->renameDefaultCaseType->insertItem(i18n("Leave as Is"), 0);
-    d->renameDefaultCaseType->insertItem(i18n("Upper"), 1);
-    d->renameDefaultCaseType->insertItem(i18n("Lower"), 2);
+    d->renameDefaultCaseType->insertItem(0, i18n("Leave as Is"));
+    d->renameDefaultCaseType->insertItem(1, i18n("Upper"));
+    d->renameDefaultCaseType->insertItem(2, i18n("Lower"));
     d->renameDefaultCaseType->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     d->renameDefaultCaseType->setWhatsThis( i18n("<p>Set the method to use to change the case "
                                                  "of image filenames."));
                                            
-    QHBoxLayout* boxLayout1 = new QHBoxLayout( d->renameDefaultBox->layout() );
+    QHBoxLayout* boxLayout1 = new QHBoxLayout(d->renameDefaultBox);
+    boxLayout1->setMargin(KDialog::spacingHint());
+    boxLayout1->setSpacing(KDialog::spacingHint());
     boxLayout1->addSpacing( 10 );
     boxLayout1->addWidget( d->renameDefaultCase );
     boxLayout1->addWidget( d->renameDefaultCaseType );
@@ -179,7 +181,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameCustomBox->setMargin(0);
     d->renameCustomBox->setSpacing(KDialog::spacingHint());
 
-    QGridLayout* renameCustomBoxLayout = new QGridLayout(d->renameCustomBox->layout());
+    QGridLayout* renameCustomBoxLayout = new QGridLayout(d->renameCustomBox);
 
     QLabel* prefixLabel   = new QLabel(i18n("Prefix:"), d->renameCustomBox);
     d->renameCustomPrefix = new KLineEdit(d->renameCustomBox);
@@ -187,7 +189,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameCustomPrefix->setWhatsThis( i18n("<p>Set the prefix which will be prepended to "
                                               "image filenames."));
 
-    QLabel* suffixLabel = new QLabel(i18n("Suffix:"), d->renameCustomBox);
+    QLabel* suffixLabel   = new QLabel(i18n("Suffix:"), d->renameCustomBox);
     d->renameCustomSuffix = new KLineEdit(d->renameCustomBox);
     d->renameCustomSuffix->setWhatsThis( i18n("<p>Set the suffix which will be postpended to "
                                               "image filenames."));
@@ -198,11 +200,11 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     QWidget *dateTimeWidget = new QWidget(d->renameCustomBox);
     d->dateTimeLabel        = new QLabel(i18n("Date format:"), dateTimeWidget);
     d->dateTimeFormat       = new QComboBox(dateTimeWidget);
-    d->dateTimeFormat->insertItem(i18n("Standard"),       RenameCustomizerPriv::DigikamStandard);
-    d->dateTimeFormat->insertItem(i18n("ISO"),            RenameCustomizerPriv::IsoDateFormat);
-    d->dateTimeFormat->insertItem(i18n("Full Text"),      RenameCustomizerPriv::TextDateFormat);
-    d->dateTimeFormat->insertItem(i18n("Local Settings"), RenameCustomizerPriv::LocalDateFormat);
-    d->dateTimeFormat->insertItem(i18n("Advanced..."),    RenameCustomizerPriv::Advanced);
+    d->dateTimeFormat->insertItem(RenameCustomizerPriv::DigikamStandard, i18n("Standard"));
+    d->dateTimeFormat->insertItem(RenameCustomizerPriv::IsoDateFormat,   i18n("ISO"));
+    d->dateTimeFormat->insertItem(RenameCustomizerPriv::TextDateFormat,  i18n("Full Text"));
+    d->dateTimeFormat->insertItem(RenameCustomizerPriv::LocalDateFormat, i18n("Local Settings"));
+    d->dateTimeFormat->insertItem(RenameCustomizerPriv::Advanced,        i18n("Advanced..."));
     d->dateTimeFormat->setWhatsThis( i18n("<p>Select your preferred date format used to "
                     "create new albums. The options available are:</p>"
                     "<p><b>Standard</b>: the date format that has been used as a standard by digiKam. "
@@ -216,7 +218,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     d->dateTimeButton = new QPushButton(SmallIcon("configure"), QString(), dateTimeWidget);
     QSizePolicy policy = d->dateTimeButton->sizePolicy();
-    policy.setHorData(QSizePolicy::Maximum);
+    policy.setHorizontalPolicy(QSizePolicy::Maximum);
     d->dateTimeButton->setSizePolicy(policy);
 
     QHBoxLayout *boxLayout2 = new QHBoxLayout(dateTimeWidget);
@@ -249,7 +251,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     renameCustomBoxLayout->addMultiCellWidget(d->addSeqNumberBox, 5, 5, 1, 2);
     renameCustomBoxLayout->addMultiCellWidget(d->startIndexLabel, 6, 6, 1, 1);
     renameCustomBoxLayout->addMultiCellWidget(d->startIndexInput, 6, 6, 2, 2);
-    renameCustomBoxLayout->setColSpacing( 0, 10 );
+    renameCustomBoxLayout->setColumnMinimumWidth(0, 10);
     renameCustomBoxLayout->setMargin(KDialog::spacingHint());
     renameCustomBoxLayout->setSpacing(KDialog::spacingHint());
 
@@ -265,7 +267,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     // -- setup connections -------------------------------------------------
 
-    connect(this, SIGNAL(clicked(int)),
+    connect(this, SIGNAL(buttonClicked(int)),
             this, SLOT(slotRadioButtonClicked(int)));
             
     connect(d->renameCustomPrefix, SIGNAL(textChanged(const QString&)),
@@ -336,7 +338,7 @@ QString RenameCustomizer::newName(const QDateTime &dateTime, int index, const QS
 
         // use the "T" as a delimiter between date and time
         QString date;
-        switch (d->dateTimeFormat->currentItem())
+        switch (d->dateTimeFormat->currentIndex())
         {
             case RenameCustomizerPriv::DigikamStandard:
                 date = dateTime.toString("yyyyMMddThhmmss");
@@ -379,9 +381,9 @@ RenameCustomizer::Case RenameCustomizer::changeCase() const
 {
     RenameCustomizer::Case type = NONE;
 
-    if (d->renameDefaultCaseType->currentItem() == 1)
+    if (d->renameDefaultCaseType->currentIndex() == 1)
         type=UPPER;
-    if (d->renameDefaultCaseType->currentItem() == 2)
+    if (d->renameDefaultCaseType->currentIndex() == 2)
         type=LOWER;
 
     return type;
@@ -412,8 +414,9 @@ void RenameCustomizer::slotRenameOptionsChanged()
         d->startIndexInput->setEnabled(false);
         d->startIndexLabel->setEnabled(false);
     }
-
-    d->changedTimer->start(500, true);
+    
+    d->changedTimer->setSingleShot(true);
+    d->changedTimer->start(500);
 }
 
 void RenameCustomizer::slotDateTimeBoxToggled(bool on)
@@ -421,7 +424,7 @@ void RenameCustomizer::slotDateTimeBoxToggled(bool on)
     d->dateTimeLabel->setEnabled(on);
     d->dateTimeFormat->setEnabled(on);
     d->dateTimeButton->setEnabled(on
-            && d->dateTimeFormat->currentItem() == RenameCustomizerPriv::Advanced);
+            && d->dateTimeFormat->currentIndex() == RenameCustomizerPriv::Advanced);
     slotRenameOptionsChanged();
 }
 
@@ -500,11 +503,11 @@ void RenameCustomizer::readSettings()
     d->addDateTimeBox->setChecked(adddateTime);
     d->addCameraNameBox->setChecked(addCamName);
     d->addSeqNumberBox->setChecked(addSeqNumb);
-    d->renameDefaultCaseType->setCurrentItem(chcaseT);
+    d->renameDefaultCaseType->setCurrentIndex(chcaseT);
     d->renameCustomPrefix->setText(prefix);
     d->renameCustomSuffix->setText(suffix);
     d->startIndexInput->setValue(startIndex);
-    d->dateTimeFormat->setCurrentItem(dateTime);
+    d->dateTimeFormat->setCurrentIndex(dateTime);
     d->dateTimeFormatString = format;
     slotRenameOptionsChanged();
 }
@@ -518,11 +521,11 @@ void RenameCustomizer::saveSettings()
     group.writeEntry("Add Camera Name", d->addCameraNameBox->isChecked());
     group.writeEntry("Add Date Time", d->addDateTimeBox->isChecked());
     group.writeEntry("Add Sequence Number", d->addSeqNumberBox->isChecked());
-    group.writeEntry("Case Type", d->renameDefaultCaseType->currentItem());
+    group.writeEntry("Case Type", d->renameDefaultCaseType->currentIndex());
     group.writeEntry("Rename Prefix", d->renameCustomPrefix->text());
     group.writeEntry("Rename Suffix", d->renameCustomSuffix->text());
     group.writeEntry("Rename Start Index", d->startIndexInput->value());
-    group.writeEntry("Date Time Format", d->dateTimeFormat->currentItem());
+    group.writeEntry("Date Time Format", d->dateTimeFormat->currentIndex());
     group.writeEntry("Date Time Format String", d->dateTimeFormatString);
     config->sync();
 }
