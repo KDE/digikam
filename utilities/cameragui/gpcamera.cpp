@@ -36,12 +36,11 @@ extern "C"
 
 // QT includes.
 
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qdom.h>
-#include <qfile.h>
+#include <QString>
+#include <QStringList>
+#include <QImage>
+#include <QPixmap>
+#include <QFile>
 
 // KDE includes.
 
@@ -769,7 +768,7 @@ bool GPCamera::deleteAllItems(const QString& folder)
 
     if (folderList.count() > 0) 
     {
-        for (unsigned int i = 0 ; i < folderList.count() ; i++) 
+        for (int i = 0 ; i < folderList.count() ; i++) 
         {
             QString subFolder(folder);
 
