@@ -1,6 +1,3 @@
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <QCustomEvent>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -41,25 +38,25 @@ extern "C"
 
 // Qt includes.
 
-#include <qthread.h>
-#include <qmutex.h>
-#include <qwaitcondition.h>
-#include <qevent.h>
-#include <qapplication.h>
-#include <q3deepcopy.h>
-#include <qvariant.h>
-#include <qimage.h>
-#include <qdatastream.h>
-#include <qfile.h>
-#include <qtimer.h>
-#include <qregexp.h>
+#include <Q3ValueList>
+#include <QThread>
+#include <QMutex>
+#include <QWaitCondition>
+#include <QEvent>
+#include <QApplication>
+#include <QVariant>
+#include <QImage>
+#include <QDataStream>
+#include <QFile>
+#include <QTimer>
+#include <QRegExp>
 
 // KDE includes.
 
 #include <klocale.h>
 #include <kurl.h>
 #include <kmessagebox.h>
-#include <kio/renamedlg.h>
+#include <kio/renamedialog.h>
 #include <kstandarddirs.h>
 
 // Local includes.
@@ -105,7 +102,7 @@ public:
     QMap<QString,QVariant> map; 
 };    
 
-class CameraEvent : public QCustomEvent
+class CameraEvent : public QEvent
 {
 public:
 
@@ -132,8 +129,7 @@ public:
         gp_errormsg
     };
     
-    CameraEvent(State state) :
-        QCustomEvent(QEvent::User+state)
+    CameraEvent(State state) : QEvent((QEvent::Type)(QEvent::User+state))
         {}
 
     bool                   result;
@@ -255,13 +251,9 @@ void CameraThread::run()
                 QStringList folderList;
                 folderList.append(d->camera->path());
                 d->camera->getAllFolders(d->camera->path(), folderList);
-    
-                /* TODO: ugly hack since qt <= 3.1.2 does not define
-                QStringList with QDeepCopy as a friend. */
-                Q3ValueList<QString> flist(folderList);
-                
+                    
                 CameraEvent* event = new CameraEvent(CameraEvent::gp_listedfolders);
-                event->map.insert("folders", QVariant(flist));
+                event->map.insert("folders", QVariant(folderList));
                 QApplication::postEvent(parent, event);
             
                 sendInfo(i18n("Listing folders is complete..."));
@@ -270,7 +262,7 @@ void CameraThread::run()
             }
             case(CameraCommand::gp_listfiles):
             {
-                QString folder = cmd->map["folder"].asString();
+                QString folder = cmd->map["folder"].toString();
                 
                 sendInfo(i18n("Listing files in %1...",folder));
     
@@ -287,7 +279,7 @@ void CameraThread::run()
                     event->map.insert("folder", QVariant(folder));
                     
                     QByteArray  ba;
-                    QDataStream ds(ba, QIODevice::WriteOnly);
+                    QDataStream ds(&ba, QIODevice::WriteOnly);
                     ds << itemsList;
                     
                     event->map.insert("files", QVariant(ba));
@@ -300,8 +292,8 @@ void CameraThread::run()
             }
             case(CameraCommand::gp_thumbnail):
             {
-                QString folder = cmd->map["folder"].asString();
-                QString file   = cmd->map["file"].asString();
+                QString folder = cmd->map["folder"].toString();
+                QString file   = cmd->map["file"].toString();
     
                 sendInfo(i18n("Getting thumbnail for %1/%2...",folder,file));
     
@@ -310,7 +302,8 @@ void CameraThread::run()
     
                 if (!thumbnail.isNull())
                 {
-                    thumbnail = thumbnail.smoothScale(ThumbnailSize::Huge, ThumbnailSize::Huge, QImage::ScaleMin);
+                    thumbnail = thumbnail.scaled(ThumbnailSize::Huge, ThumbnailSize::Huge,
+                                                 Qt::KeepAspectRatio);
             
                     CameraEvent* event = new CameraEvent(CameraEvent::gp_thumbnailed);
                     event->map.insert("folder", QVariant(folder));
@@ -323,8 +316,8 @@ void CameraThread::run()
             }
             case(CameraCommand::gp_exif):
             {
-                QString folder = cmd->map["folder"].asString();
-                QString file   = cmd->map["file"].asString();
+                QString folder = cmd->map["folder"].toString();
+                QString file   = cmd->map["file"].toString();
     
                 sendInfo(i18n("Getting EXIF information for %1/%2...",folder,file));
     
@@ -335,8 +328,8 @@ void CameraThread::run()
                 if (edata || esize)
                 {
                     QByteArray  ba;
-                    QDataStream ds(ba, QIODevice::WriteOnly);
-                    ds.writeRawBytes(edata, esize);
+                    QDataStream ds(&ba, QIODevice::WriteOnly);
+                    ds.writeRawData(edata, esize);
                     delete [] edata;
             
                     CameraEvent* event = new CameraEvent(CameraEvent::gp_exif);
@@ -350,21 +343,21 @@ void CameraThread::run()
             }
             case(CameraCommand::gp_download):
             {
-                QString   folder            = cmd->map["folder"].asString();
-                QString   file              = cmd->map["file"].asString();
-                QString   dest              = cmd->map["dest"].asString();
-                bool      autoRotate        = cmd->map["autoRotate"].asBool();
-                bool      fixDateTime       = cmd->map["fixDateTime"].asBool();
-                QDateTime newDateTime       = cmd->map["newDateTime"].asDateTime();
-                bool      setPhotographerId = cmd->map["setPhotographerId"].asBool();
-                QString   author            = cmd->map["author"].asString();
-                QString   authorTitle       = cmd->map["authorTitle"].asString();
-                bool      setCredits        = cmd->map["setCredits"].asBool();
-                QString   credit            = cmd->map["credit"].asString();
-                QString   source            = cmd->map["source"].asString();
-                QString   copyright         = cmd->map["copyright"].asString();
-                bool      convertJpeg       = cmd->map["convertJpeg"].asBool();
-                QString   losslessFormat    = cmd->map["losslessFormat"].asString();
+                QString   folder            = cmd->map["folder"].toString();
+                QString   file              = cmd->map["file"].toString();
+                QString   dest              = cmd->map["dest"].toString();
+                bool      autoRotate        = cmd->map["autoRotate"].toBool();
+                bool      fixDateTime       = cmd->map["fixDateTime"].toBool();
+                QDateTime newDateTime       = cmd->map["newDateTime"].toDateTime();
+                bool      setPhotographerId = cmd->map["setPhotographerId"].toBool();
+                QString   author            = cmd->map["author"].toString();
+                QString   authorTitle       = cmd->map["authorTitle"].toString();
+                bool      setCredits        = cmd->map["setCredits"].toBool();
+                QString   credit            = cmd->map["credit"].toString();
+                QString   source            = cmd->map["source"].toString();
+                QString   copyright         = cmd->map["copyright"].toString();
+                bool      convertJpeg       = cmd->map["convertJpeg"].toBool();
+                QString   losslessFormat    = cmd->map["losslessFormat"].toString();
                 sendInfo(i18n("Downloading file %1...",file));
     
                 // download to a temp file
@@ -377,7 +370,7 @@ void CameraThread::run()
 
                 KUrl tempURL(dest);
                 tempURL = tempURL.upUrl();
-                tempURL.addPath( QString(".digikam-camera-tmp1-%1",getpid()));
+                tempURL.addPath(QString(".digikam-camera-tmp1-%1").arg(getpid()));
     
                 bool result = d->camera->downloadItem(folder, file, tempURL.path());
     
@@ -416,7 +409,7 @@ void CameraThread::run()
 
                         KUrl tempURL2(dest);
                         tempURL2 = tempURL2.upUrl();
-                        tempURL2.addPath( QString(".digikam-camera-tmp2-%1",getpid()));
+                        tempURL2.addPath(QString(".digikam-camera-tmp2-%1").arg(getpid()));
 
                         if (!jpegConvert(tempURL.path(), tempURL2.path(), file, losslessFormat))
                         {
@@ -469,9 +462,9 @@ void CameraThread::run()
             }
             case(CameraCommand::gp_open):
             {
-                QString folder = cmd->map["folder"].asString();
-                QString file   = cmd->map["file"].asString();
-                QString dest   = cmd->map["dest"].asString();
+                QString folder = cmd->map["folder"].toString();
+                QString file   = cmd->map["file"].toString();
+                QString dest   = cmd->map["dest"].toString();
     
                 sendInfo(i18n("Retrieving file %1 from camera...",file));
     
@@ -493,14 +486,14 @@ void CameraThread::run()
             }
             case(CameraCommand::gp_upload):
             {                
-                QString folder = cmd->map["destFolder"].asString();
+                QString folder = cmd->map["destFolder"].toString();
     
                 // We will using the same source file name to create the dest file 
                 // name in camera.
-                QString file   = cmd->map["destFile"].asString();
+                QString file   = cmd->map["destFile"].toString();
                 
                 // The source file path to download in camera.
-                QString src    = cmd->map["srcFilePath"].asString();
+                QString src    = cmd->map["srcFilePath"].toString();
     
                 sendInfo(i18n("Uploading file %1 to camera...",file));
     
@@ -512,7 +505,7 @@ void CameraThread::run()
                 {
                     CameraEvent* event = new CameraEvent(CameraEvent::gp_uploaded);
                     QByteArray  ba;
-                    QDataStream ds(ba, QIODevice::WriteOnly);
+                    QDataStream ds(&ba, QIODevice::WriteOnly);
                     ds << itemsInfo;                    
                     event->map.insert("info", QVariant(ba));
 
@@ -530,8 +523,8 @@ void CameraThread::run()
             }
             case(CameraCommand::gp_delete):
             {
-                QString folder = cmd->map["folder"].asString();
-                QString file   = cmd->map["file"].asString();
+                QString folder = cmd->map["folder"].toString();
+                QString file   = cmd->map["file"].toString();
     
                 sendInfo(i18n("Deleting file %1...",file));
     
@@ -555,9 +548,9 @@ void CameraThread::run()
             }
             case(CameraCommand::gp_lock):
             {
-                QString folder = cmd->map["folder"].asString();
-                QString file   = cmd->map["file"].asString();
-                bool    lock   = cmd->map["lock"].asBool();
+                QString folder = cmd->map["folder"].toString();
+                QString file   = cmd->map["file"].toString();
+                bool    lock   = cmd->map["lock"].toBool();
     
                 sendInfo(i18n("Toggle lock file %1...",file));
     
@@ -821,7 +814,7 @@ void CameraController::openFile(const QString& folder, const QString& file)
     cmd->action = CameraCommand::gp_open;
     cmd->map.insert("folder", QVariant(folder));
     cmd->map.insert("file", QVariant(file));
-    cmd->map.insert("dest", QVariant(locateLocal("tmp", file)));
+    cmd->map.insert("dest", QVariant(KStandardDirs::locate("tmp", file)));
     d->cmdQueue.enqueue(cmd);
 }
 
@@ -849,15 +842,15 @@ void CameraController::customEvent(QCustomEvent* e)
         }
         case (CameraEvent::gp_cameraInformations) :
         {
-            QString summary = Q3DeepCopy<QString>(event->map["summary"].asString());
-            QString manual  = Q3DeepCopy<QString>(event->map["manual"].asString());
-            QString about   = Q3DeepCopy<QString>(event->map["about"].asString());
+            QString summary = event->map["summary"].toString();
+            QString manual  = event->map["manual"].toString();
+            QString about   = event->map["about"].toString();
             emit signalCameraInformations(summary, manual, about);
             break;
         }
         case (CameraEvent::gp_errormsg) :
         {
-            emit signalErrorMsg(Q3DeepCopy<QString>(event->msg));
+            emit signalErrorMsg(event->msg);
             break;
         }
         case (CameraEvent::gp_busy) :
@@ -869,30 +862,20 @@ void CameraController::customEvent(QCustomEvent* e)
         case (CameraEvent::gp_infomsg) :
         {
             if (!d->canceled)
-                emit signalInfoMsg(Q3DeepCopy<QString>(event->msg));
+                emit signalInfoMsg(event->msg);
             break;
         }
         case (CameraEvent::gp_listedfolders) :
         {
-            /* TODO: ugly hack since qt <= 3.1.2 does not define
-            QStringList with QDeepCopy as a friend. */
-            Q3ValueList<QVariant> flist = Q3DeepCopy< Q3ValueList<QVariant> >(event->map["folders"].toList());
-    
-            QStringList folderList;
-            Q3ValueList<QVariant>::Iterator it;
-            for (it = flist.begin(); it != flist.end(); ++it )
-            {
-                folderList.append(Q3DeepCopy<QString>((*it).asString()));
-            }
-            
+            QStringList folderList = event->map["folders"].toStringList();
             emit signalFolderList(folderList);
             break;
         }
         case (CameraEvent::gp_listedfiles) :
         {
-            QString    folder = Q3DeepCopy<QString>(event->map["folder"].asString());
-            QByteArray ba     = Q3DeepCopy<QByteArray>(event->map["files"].asByteArray());
-            QDataStream ds(ba, QIODevice::ReadOnly);
+            QString    folder = event->map["folder"].toString();
+            QByteArray ba     = event->map["files"].toByteArray();
+            QDataStream ds(&ba, QIODevice::ReadOnly);
             GPItemInfoList items;
             ds >> items;
             emit signalFileList(items);
@@ -900,38 +883,38 @@ void CameraController::customEvent(QCustomEvent* e)
         }
         case (CameraEvent::gp_thumbnailed) :
         {
-            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
-            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
-            QImage  thumb  = Q3DeepCopy<QImage>(event->map["thumbnail"].asImage());
+            QString folder = event->map["folder"].toString();
+            QString file   = event->map["file"].toString();
+            QImage  thumb  = event->map["thumbnail"].value<QImage>();
             emit signalThumbnail(folder, file, thumb);
             break;
         }
         case (CameraEvent::gp_exif) :
         {
-            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
-            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
-            QByteArray ba  = Q3DeepCopy<QByteArray>(event->map["exifData"].asByteArray());
+            QString folder = event->map["folder"].toString();
+            QString file   = event->map["file"].toString();
+            QByteArray ba  = event->map["exifData"].toByteArray();
             emit signalExifData(ba);
             break;
         }
         case (CameraEvent::gp_downloadstarted) :
         {
-            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
-            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
+            QString folder = event->map["folder"].toString();
+            QString file   = event->map["file"].toString();
             emit signalDownloaded(folder, file, GPItemInfo::DownloadStarted);
             break;
         }
         case (CameraEvent::gp_downloaded) :
         {
-            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
-            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
+            QString folder = event->map["folder"].toString();
+            QString file   = event->map["file"].toString();
             emit signalDownloaded(folder, file, GPItemInfo::DownloadedYes);
             break;
         }
         case (CameraEvent::gp_downloadFailed) :
         {
-            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
-            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
+            QString folder = event->map["folder"].toString();
+            QString file   = event->map["file"].toString();
     
             d->timer->stop();
     
@@ -958,8 +941,8 @@ void CameraController::customEvent(QCustomEvent* e)
         }
         case (CameraEvent::gp_uploaded) :
         {
-            QByteArray ba  = Q3DeepCopy<QByteArray>(event->map["info"].asByteArray());
-            QDataStream ds(ba, QIODevice::ReadOnly);
+            QByteArray ba = event->map["info"].asByteArray();
+            QDataStream ds(&ba, QIODevice::ReadOnly);
             GPItemInfo itemInfo;
             ds >> itemInfo;
 
@@ -968,9 +951,9 @@ void CameraController::customEvent(QCustomEvent* e)
         }
         case (CameraEvent::gp_uploadFailed) :
         {
-            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
-            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
-            QString src    = Q3DeepCopy<QString>(event->map["src"].asString());
+            QString folder = event->map["folder"].toString();
+            QString file   = event->map["file"].toString();
+            QString src    = event->map["src"].toString();
 
             d->timer->stop();
     
@@ -996,15 +979,15 @@ void CameraController::customEvent(QCustomEvent* e)
         }
         case (CameraEvent::gp_deleted) :
         {
-            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
-            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
+            QString folder = event->map["folder"].toString();
+            QString file   = event->map["file"].toString();
             emit signalDeleted(folder, file, true);
             break;
         }
         case (CameraEvent::gp_deleteFailed) :
         {
-            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
-            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
+            QString folder = event->map["folder"].toString();
+            QString file   = event->map["file"].toString();
     
             d->timer->stop();
             emit signalDeleted(folder, file, false);
@@ -1031,15 +1014,15 @@ void CameraController::customEvent(QCustomEvent* e)
         }
         case (CameraEvent::gp_locked) :
         {
-            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
-            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
+            QString folder = event->map["folder"].toString();
+            QString file   = event->map["file"].toString();
             emit signalLocked(folder, file, true);
             break;
         }
         case (CameraEvent::gp_lockFailed) :
         {
-            QString folder = Q3DeepCopy<QString>(event->map["folder"].asString());
-            QString file   = Q3DeepCopy<QString>(event->map["file"].asString());
+            QString folder = event->map["folder"].toString();
+            QString file   = event->map["file"].toString();
     
             d->timer->stop();
             emit signalLocked(folder, file, false);
@@ -1066,8 +1049,8 @@ void CameraController::customEvent(QCustomEvent* e)
         }
         case (CameraEvent::gp_opened) :
         {
-            QString file = Q3DeepCopy<QString>(event->map["file"].asString());
-            QString dest = Q3DeepCopy<QString>(event->map["dest"].asString());
+            QString file = event->map["file"].toString();
+            QString dest = event->map["dest"].toString();
     
             KUrl url(dest);
             KUrl::List urlList;
@@ -1116,8 +1099,8 @@ void CameraController::slotProcessNext()
     if ((cmd->action == CameraCommand::gp_exif) &&
         (typeid(*(d->camera)) == typeid(UMSCamera)))
     {
-        folder = Q3DeepCopy<QString>(cmd->map["folder"].asString());
-        file   = Q3DeepCopy<QString>(cmd->map["file"].asString());
+        folder = cmd->map["folder"].toString();
+        file   = cmd->map["file"].toString();
 
         emit signalExifFromFile(folder, file);
 
@@ -1128,9 +1111,9 @@ void CameraController::slotProcessNext()
       
     if (cmd->action == CameraCommand::gp_download)
     {
-        folder = Q3DeepCopy<QString>(cmd->map["folder"].asString());
-        file   = Q3DeepCopy<QString>(cmd->map["file"].asString());
-        dest   = Q3DeepCopy<QString>(cmd->map["dest"].asString());
+        folder = cmd->map["folder"].toString();
+        file   = cmd->map["file"].toString();
+        dest   = cmd->map["dest"].toString();
 
         if (!d->overwriteAll)
         {
@@ -1147,11 +1130,11 @@ void CameraController::slotProcessNext()
                 // FIXME : see B.K.O #126427: with Gphoto camera, the camera folder is not 
                 // mounted in local and camera picture cannot be display like a preview in dialog.
 
-                KIO::RenameDlg dlg(d->parent, i18n("Rename File"), folder + QString("/") + file, dest,
-                                   KIO::RenameDlg_Mode(KIO::M_MULTI | KIO::M_OVERWRITE | KIO::M_SKIP));
+                KIO::RenameDialog dlg(d->parent, i18n("Rename File"), folder + QString("/") + file, dest,
+                                      KIO::RenameDialog_Mode(KIO::M_MULTI | KIO::M_OVERWRITE | KIO::M_SKIP));
             
                 int result = dlg.exec();
-                dest       = dlg.newDestURL().path();
+                dest       = dlg.newDestUrl().path();
 
                 switch (result)
                 {
@@ -1191,7 +1174,7 @@ void CameraController::slotProcessNext()
             }
         }
 
-        cmd->map["dest"] = QVariant(Q3DeepCopy<QString>(dest));        
+        cmd->map["dest"] = QVariant(dest);        
     }
 
     if (cancel)
