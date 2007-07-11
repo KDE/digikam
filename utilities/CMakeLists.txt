@@ -9,5 +9,5 @@ add_subdirectory( imageeditor )
 add_subdirectory( hotplug )
 add_subdirectory( batch )
 add_subdirectory( lighttable )
-#add_subdirectory( cameragui )
+add_subdirectory( cameragui )
 
