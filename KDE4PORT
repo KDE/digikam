@@ -55,7 +55,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---cameragui                                                   X
             albumselectdialog.cpp                                       X
             animwidget.cpp                      Gilles                  X       DONE
-            cameracontroller.cpp                                        X
+            cameracontroller.cpp                Gilles                  X       DONE
             camerafolderdialog.cpp              Gilles                  X       DONE
             camerafolderitem.cpp                Gilles                  X       DONE
             camerafolderview.cpp                Gilles                  X       DONE
