@@ -95,7 +95,7 @@ SET(digikam_LIB_SRCS
 #                      cameratype.cpp 
 #                      datefolderview.cpp 
 #                      dcopiface.cpp 
-#                      digikamfirstrun.cpp 
+                      digikamfirstrun.cpp 
 #                      digikamview.cpp 
 #                      dio.cpp 
 #                      dragobjects.cpp 
@@ -127,7 +127,7 @@ SET(digikam_LIB_SRCS
 #                      tagfilterview.cpp 
 #                      tagfolderview.cpp 
 #                      tagspopupmenu.cpp 
-#                      welcomepageview.cpp 
+                      welcomepageview.cpp 
 #                      main.cpp
    )
 

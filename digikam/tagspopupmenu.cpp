@@ -144,7 +144,7 @@ TagsPopupMenu::TagsPopupMenu(const Q3ValueList<qlonglong>& selectedImageIDs, int
     d->addToID          = addToID;
     d->mode             = mode;
 
-    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+    KIconLoader *iconLoader = KIconLoader::global();
     d->addTagPix            = iconLoader->loadIcon("tag",
                                         KIcon::NoGroup,
                                         KIcon::SizeSmall,

@@ -193,7 +193,7 @@ QRect AlbumThumbnailLoader::computeBlendRect(int iconSize)
 
 QPixmap AlbumThumbnailLoader::loadIcon(const QString &name, int size)
 {
-    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+    KIconLoader *iconLoader = KIconLoader::global();
     return iconLoader->loadIcon(name, KIcon::NoGroup,
                                 size, KIcon::DefaultState,
                                 0, true);

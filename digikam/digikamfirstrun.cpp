@@ -75,25 +75,28 @@ using namespace std;
 
 DigikamFirstRun::DigikamFirstRun(KConfig* config, QWidget* parent,
                                  const char* name, bool modal, Qt::WFlags fl)
-               : KDialogBase(parent, name, modal, i18n( "Album Library Path" ),
-                             Help|Ok|Cancel, Ok, true )
-
+               : KDialog(parent)
 {
+    setModal(true);
+    setButtons(Help|Ok|Cancel);
+    setDefaultButton(Ok);
+    setCaption(i18n( "Album Library Path" ));
     setHelp("firstrundialog.anchor", "digikam");
-    setWFlags(fl);
+    //setWFlags(fl);
     
     m_config = config;
     m_ui     = new FirstRunWidget(this);
     setMainWidget(m_ui);
-    m_ui->m_path->setURL(QDir::homePath() + 
-                         i18n("This is a path name so you should "
+    m_ui->m_path->setUrl(QDir::homePath() + 
+                         i18nc("This is a path name so you should "
                               "include the slash in the translation","/Pictures"));
     m_ui->m_path->setMode(KFile::Directory | KFile::LocalOnly);
 
-    KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
-    m_ui->m_pixLabel->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 
-                                128, KIcon::DefaultState, 0, true));
+    KIconLoader* iconLoader = KIconLoader::global();
+    m_ui->m_pixLabel->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 
+                                128, K3Icon::DefaultState, 0, true));
     m_ui->setMinimumSize(450, m_ui->sizeHint().height());
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
 DigikamFirstRun::~DigikamFirstRun()
@@ -102,7 +105,7 @@ DigikamFirstRun::~DigikamFirstRun()
 
 void DigikamFirstRun::slotOk()
 {
-    QString albumLibraryFolder = m_ui->m_path->url();
+    QString albumLibraryFolder = m_ui->m_path->url().path();
     
     if (albumLibraryFolder.isEmpty())
     {
@@ -116,7 +119,7 @@ void DigikamFirstRun::slotOk()
         albumLibraryFolder.prepend(QDir::homePath());
     }
 
-    if (KUrl(albumLibraryFolder).equals(KUrl(QDir::homePath()), true))
+    if (KUrl(albumLibraryFolder).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutFragment))
     {
         KMessageBox::sorry(this, i18n("digiKam cannot use your home folder as "
                                       "the Album Library folder."));
@@ -131,8 +134,8 @@ void DigikamFirstRun::slotOk()
                                    i18n("<qt>The folder you selected does not exist: "
 
                                         "<p><b>%1</b></p>"
-                                        "Would you like digiKam to create it?</qt>")
-                                        .arg(albumLibraryFolder),
+                                        "Would you like digiKam to create it?</qt>"
+                                        ,albumLibraryFolder),
                                    i18n("Create Folder?"));
 
         if (rc == KMessageBox::No)
@@ -161,14 +164,14 @@ void DigikamFirstRun::slotOk()
         return;
     }
 
-    m_config->setGroup("General Settings");
-    m_config->writeEntry("Version", digikam_version);
+    KConfigGroup group = m_config->group("General Settings");
+    group.writeEntry("Version", digikam_version);
 
-    m_config->setGroup("Album Settings");
-    m_config->writePathEntry("Album Path", albumLibraryFolder);
-    m_config->sync();
+    group = m_config->group("Album Settings");
+    group.writePathEntry("Album Path", albumLibraryFolder);
+    group.sync();
 
-    KDialogBase::accept();
+    KDialog::accept();
 
     QString ErrorMsg, URL;
 
