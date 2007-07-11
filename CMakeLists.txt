@@ -357,7 +357,7 @@ SET(liblighttable_SRCS
 SET(libcameragui_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/dkcamera.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/umscamera.cpp 
-#    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpcamera.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpcamera.cpp 
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpiteminfo.cpp 
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/animwidget.cpp 
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/renamecustomizer.cpp 
@@ -376,9 +376,9 @@ ADD_SUBDIRECTORY( data )
 ADD_SUBDIRECTORY( libs )
 ADD_SUBDIRECTORY( utilities )
 ADD_SUBDIRECTORY( showfoto )
-ADD_SUBDIRECTORY( kioslave )
 ADD_SUBDIRECTORY( digikam )
 ADD_SUBDIRECTORY( imageplugins )
+ADD_SUBDIRECTORY( kioslave )
 #ADD_SUBDIRECTORY( themedesigner )
 
 INSTALL( FILES tips DESTINATION ${DATA_INSTALL_DIR}/digikam )
