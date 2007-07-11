@@ -24,13 +24,11 @@
 
 // Qt includes.
 
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpalette.h>
-#include <qcolor.h>
-#include <qtimer.h>
-//Added by qt3to4:
-#include <QPaintEvent>
+#include <QPainter>
+#include <QPixmap>
+#include <QPalette>
+#include <QColor>
+#include <QTimer>
 
 // Local includes.
 
@@ -61,14 +59,14 @@ public:
 
 
 AnimWidget::AnimWidget(QWidget* parent, int size)
-          : QWidget(parent, 0, Qt::WResizeNoErase|Qt::WNoAutoErase)
+          : QWidget(parent)
 {
     d = new AnimWidgetPriv;
-    setBackgroundMode(Qt::NoBackground);
-    
     d->size = size;
     d->pix  = new QPixmap(d->size, d->size);
+
     setFixedSize(d->size, d->size);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     d->timer = new QTimer();
     
@@ -103,12 +101,12 @@ void AnimWidget::paintEvent(QPaintEvent*)
 
     if (d->timer->isActive())
     {
-        p.setPen(QPen(colorGroup().text()));
+        p.setPen(QPen(palette().color(QPalette::Text)));
         p.rotate( d->pos );
     }
     else
     {
-        p.setPen(QPen(colorGroup().dark()));
+        p.setPen(QPen(palette().color(QPalette::Dark)));
     }
             
     for ( int i=0 ; i<12 ; i++ )
@@ -118,7 +116,10 @@ void AnimWidget::paintEvent(QPaintEvent*)
     }
     
     p.end();
-    bitBlt(this, 0, 0, d->pix);
+
+    QPainter p2(this);
+    p2.drawPixmap(0, 0, *d->pix);
+    p2.end();
 }
 
 void AnimWidget::slotTimeout()
@@ -133,4 +134,3 @@ bool AnimWidget::running() const
 }
 
 }  // namespace Digikam
-
