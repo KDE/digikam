@@ -34,12 +34,11 @@ extern "C"
 
 // QT includes.
 
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qfile.h>
-#include <qstringlist.h>
-#include <q3deepcopy.h>
-#include <qmatrix.h>
+#include <QDir>
+#include <QFileInfo>
+#include <QFile>
+#include <QStringList>
+#include <QMatrix>
 
 // KDE includes.
 
@@ -97,18 +96,15 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
     QDir dir(folder);
     dir.setFilter(QDir::Files);
 
-    const QFileInfoList *list = dir.entryInfoList();
-    if (!list)
+    const QFileInfoList list = dir.entryInfoList();
+    if (list.isEmpty())
         return false;
 
-    QFileInfoListIterator it( *list );
-    QFileInfo *fi;
+    QFileInfoList::const_iterator fi;
 
-    while ((fi = it.current()) != 0 && !m_cancel)
+    for (fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
     {
-        ++it;
-
-        QString mime = mimeType(fi->extension(false).toLower());
+        QString mime = mimeType(fi->suffix().toLower());
 
         if (!mime.isEmpty())
         {
@@ -125,6 +121,10 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
                 else
                 {
                     KFileMetaInfo meta(fi->filePath());
+
+        /*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
+                                    Check if new method to search "Dimensions" information is enough.
+        
                     if (meta.isValid())
                     {
                         if (meta.containsGroup("Jpeg EXIF Data"))
@@ -133,6 +133,11 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
                             dims = meta.group("General").item("Dimensions").value().toSize();
                         else if (meta.containsGroup("Technical"))
                             dims = meta.group("Technical").item("Dimensions").value().toSize();
+                    }*/
+        
+                    if (meta.isValid() && meta.item("Dimensions").isValid())
+                    {
+                        dims = meta.item("Dimensions").value().toSize();
                     }
                 }
             }
@@ -368,7 +373,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
     // Get new camera item information.
 
     QFileInfo fi(dest);
-    QString mime = mimeType(fi.extension(false).toLower());
+    QString mime = mimeType(fi.suffix().toLower());
 
     if (!mime.isEmpty())
     {
@@ -384,6 +389,10 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
             else
             {
                 KFileMetaInfo meta(fi.filePath());
+
+        /*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
+                                    Check if new method to search "Dimensions" information is enough.
+        
                 if (meta.isValid())
                 {
                     if (meta.containsGroup("Jpeg EXIF Data"))
@@ -392,6 +401,11 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
                         dims = meta.group("General").item("Dimensions").value().toSize();
                     else if (meta.containsGroup("Technical"))
                         dims = meta.group("Technical").item("Dimensions").value().toSize();
+                }*/
+        
+                if (meta.isValid() && meta.item("Dimensions").isValid())
+                {
+                    dims = meta.item("Dimensions").value().toSize();
                 }
             }
         }
@@ -419,17 +433,14 @@ void UMSCamera::listFolders(const QString& folder, QStringList& subFolderList)
     QDir dir(folder);
     dir.setFilter(QDir::Dirs|QDir::Executable);
 
-    const QFileInfoList *list = dir.entryInfoList();
-    if (!list)
+    const QFileInfoList list = dir.entryInfoList();
+    if (list.isEmpty())
         return;
 
-    QFileInfoListIterator it( *list );
-    QFileInfo *fi;
+    QFileInfoList::const_iterator fi;
 
-    while ((fi = it.current()) != 0 && !m_cancel)
+    for (fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
     {
-        ++it;
-
         if (fi->fileName() == "." || fi->fileName() == "..")
             continue;
 
