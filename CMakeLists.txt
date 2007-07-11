@@ -363,10 +363,10 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/renamecustomizer.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerainfodialog.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderdialog.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderitem.cpp 
+#    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderview.cpp 
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconview.cpp 
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconitem.cpp 
-#    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderview.cpp 
-#    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderitem.cpp 
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameracontroller.cpp 
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraui.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/albumselectdialog.cpp 
