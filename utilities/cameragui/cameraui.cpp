@@ -397,11 +397,11 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     // -------------------------------------------------------------------------
 
-    viewBoxLayout->addMultiCellWidget(widget, 0, 0, 0, 5);
-    viewBoxLayout->addMultiCellWidget(d->cancelBtn, 2, 2, 0, 0);
-    viewBoxLayout->addMultiCellWidget(d->status, 2, 2, 2, 2);
-    viewBoxLayout->addMultiCellWidget(d->progress, 2, 2, 3, 3);
-    viewBoxLayout->addMultiCellWidget(frame, 2, 2, 5, 5);
+    viewBoxLayout->addWidget(widget, 0, 0, 1, 5+1);
+    viewBoxLayout->addWidget(d->cancelBtn, 2, 0, 1, 1);
+    viewBoxLayout->addWidget(d->status, 2, 2, 1, 1);
+    viewBoxLayout->addWidget(d->progress, 2, 3, 1, 1);
+    viewBoxLayout->addWidget(frame, 2, 5, 1, 1);
     viewBoxLayout->setRowSpacing(1, spacingHint());
     viewBoxLayout->setColSpacing(1, spacingHint());
     viewBoxLayout->setColSpacing(4, spacingHint());
@@ -1688,4 +1688,3 @@ void CameraUI::keyPressEvent(QKeyEvent *e)
 }
 
 }  // namespace Digikam
-
