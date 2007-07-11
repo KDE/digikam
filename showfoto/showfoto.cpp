@@ -856,9 +856,7 @@ void ShowFoto::openFolder(const KUrl& url)
 
     for (QStringList::ConstIterator it = mimeTypes.begin() ; it != mimeTypes.end() ; ++it)
     {    
-        // TODO: KDE4PORT: KImageIO::typeForMime return a StringList now. 
-        //                 Check if we use 1st item of list is enough.
-        QString format = KImageIO::typeForMime(*it)[0];
+        QString format = KImageIO::typeForMime(*it)[0].toUpper();
         filter.append ("*.");
         filter.append (format);
         filter.append (" ");
