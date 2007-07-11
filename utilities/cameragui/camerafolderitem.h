@@ -27,8 +27,7 @@
 
 // Qt includes.
 
-#include <qstring.h>
-//Added by qt3to4:
+#include <QString>
 #include <QPixmap>
 
 // KDE includes.
@@ -49,7 +48,8 @@ public:
     CameraFolderItem(K3ListView* parent, const QString& name, 
                      const QPixmap& pixmap=SmallIcon("folder"));
 
-    CameraFolderItem(K3ListViewItem* parent, const QString& folderName, const QString& folderPath, 
+    CameraFolderItem(K3ListViewItem* parent, const QString& folderName, 
+                     const QString& folderPath, 
                      const QPixmap& pixmap=SmallIcon("folder"));
 
     ~CameraFolderItem();

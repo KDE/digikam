@@ -33,8 +33,6 @@
 #include "camerafolderitem.h"
 #include "camerafolderview.h"
 #include "camerafolderview.moc"
-//Added by qt3to4:
-#include <QPixmap>
 
 namespace Digikam
 {
@@ -174,4 +172,3 @@ void CameraFolderView::clear()
 }
 
 } // namespace Digikam
-
