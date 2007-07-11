@@ -114,9 +114,9 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     d->folderView->setResizeMode( Q3ListView::AllColumns );
     d->folderView->setRootIsDecorated(true);
 
-    grid->addMultiCellWidget(logo, 0, 0, 0, 0);
-    grid->addMultiCellWidget(message, 1, 1, 0, 0);
-    grid->addMultiCellWidget(d->folderView, 0, 2, 1, 1);
+    grid->addWidget(logo, 0, 0, 1, 1);
+    grid->addWidget(message, 1, 0, 1, 1);
+    grid->addWidget(d->folderView, 0, 1, 3, 1);
     grid->setRowStretch(2, 10);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
