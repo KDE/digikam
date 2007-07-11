@@ -25,18 +25,17 @@
 
 // Qt includes.
 
-#include <qlabel.h>
-#include <q3frame.h>
-#include <qlayout.h>
-#include <q3popupmenu.h>
-#include <qcursor.h>
-#include <qdatetime.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QFrame>
+#include <QLayout>
+#include <QCursor>
+#include <QDateTime>
+#include <QGridLayout>
 #include <QPixmap>
 
 // KDE includes.
 
+#include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kapplication.h>
@@ -89,20 +88,21 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     setButtons(Help|User1|Ok|Cancel);
     setButtonText(User1,i18n("&New Album"));
     setDefaultButton(Ok);
-
-    d = new AlbumSelectDialogPrivate;
     setHelp("targetalbumdialog.anchor", "digikam");
     enableButtonOk(false);
 
+    d = new AlbumSelectDialogPrivate;
     d->allowRootSelection = allowRootSelection;
     d->newAlbumString     = newAlbumString;
+
     QWidget *page = new QWidget(this);
     setMainWidget(page);   
-    Q3GridLayout* grid = new Q3GridLayout(page, 2, 1, 0, spacingHint());
+
+    QGridLayout* grid = new QGridLayout(page);
 
     QLabel *logo = new QLabel(page);
-    KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
-    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 128, KIcon::DefaultState, 0, true));    
+    KIconLoader* iconLoader = KIconLoader::global();
+    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 128, K3Icon::DefaultState, 0, true));  
 
     QLabel *message = new QLabel(page);
     if (!header.isEmpty())
@@ -118,11 +118,14 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     grid->addMultiCellWidget(message, 1, 1, 0, 0);
     grid->addMultiCellWidget(d->folderView, 0, 2, 1, 1);
     grid->setRowStretch(2, 10);
+    grid->setMargin(0);
+    grid->setSpacing(KDialog::spacingHint());
 
-    QPixmap icon = iconLoader->loadIcon("folder", KIcon::NoGroup,
-                                        AlbumSettings::componentData().getDefaultTreeIconSize(), KIcon::DefaultState, 0, true);
+    QPixmap icon = iconLoader->loadIcon("folder", K3Icon::NoGroup,
+                                        AlbumSettings::componentData()->getDefaultTreeIconSize(),
+                                        K3Icon::DefaultState, 0, true);
 
-    AlbumList aList = AlbumManager::componentData().allPAlbums();
+    AlbumList aList = AlbumManager::componentData()->allPAlbums();
 
     for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
     {
@@ -206,10 +209,10 @@ void AlbumSelectDialog::slotAlbumAdded(Album* album)
         return;
     }
 
-    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
-    QPixmap icon = iconLoader->loadIcon("folder", KIcon::NoGroup,
-                                        AlbumSettings::componentData().getDefaultTreeIconSize(),
-                                        KIcon::DefaultState, 0, true);
+    KIconLoader* iconLoader = KIconLoader::global();
+    QPixmap icon = iconLoader->loadIcon("folder", K3Icon::NoGroup,
+                                        AlbumSettings::componentData()->getDefaultTreeIconSize(),
+                                        K3Icon::DefaultState, 0, true);
     
     FolderItem* viewItem = new FolderItem(parentItem, album->title());
     viewItem->setPixmap(0, icon);
@@ -264,12 +267,13 @@ void AlbumSelectDialog::slotSelectionChanged()
 
 void AlbumSelectDialog::slotContextMenu(Q3ListViewItem *, const QPoint &, int)
 {
-    Q3PopupMenu popmenu(d->folderView);
-    KAction *action = new KAction(i18n( "Create New Album" ),
-                                  "albumfolder-new", 0, this,
-                                  SLOT( slotUser1() ),
-                                  &popmenu);
-    action->plug(&popmenu);
+    KMenu popmenu(d->folderView);
+    
+    KAction *action = new KAction(KIcon("albumfolder-new"), i18n("Create New Album"), this);
+    connect(action, SIGNAL(triggered(bool) ), 
+            this, SLOT(slotUser1()));
+
+    popmenu.addAction(action);
     popmenu.exec(QCursor::pos());
 }
 
@@ -299,12 +303,13 @@ void AlbumSelectDialog::slotUser1()
     QString albumRootPath;
     if (album->isRoot())
     {
-        //TODO: Let user choose an album root
-        albumRootPath = CollectionManager::componentData().oneAlbumRootPath();
+        // TODO: Let user choose an album root
+        // TODO: KDE4PORT: Fix instance() ==> componentData
+        albumRootPath = CollectionManager::instance()->oneAlbumRootPath();
     }
 
     QString errMsg;
-    PAlbum* newAlbum = AlbumManager::componentData().createPAlbum(album, albumRootPath, newAlbumName,
+    PAlbum* newAlbum = AlbumManager::componentData()->createPAlbum(album, albumRootPath, newAlbumName,
                                                               QString(), QDate::currentDate(),
                                                               QString(), errMsg);
     if (!newAlbum)
@@ -331,7 +336,7 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
                           header, newAlbumString,
                           allowRootSelection);
 
-    if (dlg.exec() != KDialogBase::Accepted)
+    if (dlg.exec() != KDialog::Accepted)
         return 0;
 
     FolderItem* item = (FolderItem*) dlg.d->folderView->currentItem();
@@ -345,4 +350,3 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
 }
 
 }  // namespace Digikam
-
