@@ -36,7 +36,6 @@ extern "C"
 // Qt includes. 
 
 #include <Q3Dict>
-#include <Q3StyleSheet>
 #include <QToolTip>
 #include <QFrame>
 #include <QResizeEvent>
