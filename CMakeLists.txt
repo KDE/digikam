@@ -359,7 +359,7 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/umscamera.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpcamera.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpiteminfo.cpp 
-#    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/animwidget.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/animwidget.cpp 
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/renamecustomizer.cpp 
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/albumselectdialog.cpp 
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerainfodialog.cpp 
