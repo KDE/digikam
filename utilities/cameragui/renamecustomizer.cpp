@@ -241,26 +241,26 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->startIndexInput->setWhatsThis( i18n("<p>Set the starting index value used to rename picture "
                                            "files with a sequence number."));
 
-    renameCustomBoxLayout->addMultiCellWidget(prefixLabel, 0, 0, 1, 1);
-    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomPrefix, 0, 0, 2, 2);
-    renameCustomBoxLayout->addMultiCellWidget(suffixLabel, 1, 1, 1, 1);
-    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomSuffix, 1, 1, 2, 2);
-    renameCustomBoxLayout->addMultiCellWidget(d->addDateTimeBox, 2, 2, 1, 2);
-    renameCustomBoxLayout->addMultiCellWidget(dateTimeWidget, 3, 3, 1, 2);
-    renameCustomBoxLayout->addMultiCellWidget(d->addCameraNameBox, 4, 4, 1, 2);
-    renameCustomBoxLayout->addMultiCellWidget(d->addSeqNumberBox, 5, 5, 1, 2);
-    renameCustomBoxLayout->addMultiCellWidget(d->startIndexLabel, 6, 6, 1, 1);
-    renameCustomBoxLayout->addMultiCellWidget(d->startIndexInput, 6, 6, 2, 2);
+    renameCustomBoxLayout->addWidget(prefixLabel, 0, 1, 1, 1);
+    renameCustomBoxLayout->addWidget(d->renameCustomPrefix, 0, 2, 1, 1);
+    renameCustomBoxLayout->addWidget(suffixLabel, 1, 1, 1, 1);
+    renameCustomBoxLayout->addWidget(d->renameCustomSuffix, 1, 2, 1, 1);
+    renameCustomBoxLayout->addWidget(d->addDateTimeBox, 2, 1, 1, 2);
+    renameCustomBoxLayout->addWidget(dateTimeWidget, 3, 1, 1, 2);
+    renameCustomBoxLayout->addWidget(d->addCameraNameBox, 4, 1, 1, 2);
+    renameCustomBoxLayout->addWidget(d->addSeqNumberBox, 5, 1, 1, 2);
+    renameCustomBoxLayout->addWidget(d->startIndexLabel, 6, 1, 1, 1);
+    renameCustomBoxLayout->addWidget(d->startIndexInput, 6, 2, 1, 1);
     renameCustomBoxLayout->setColumnMinimumWidth(0, 10);
     renameCustomBoxLayout->setMargin(KDialog::spacingHint());
     renameCustomBoxLayout->setSpacing(KDialog::spacingHint());
 
     // ----------------------------------------------------------------------
 
-    mainLayout->addMultiCellWidget(d->renameDefaultBox, 1, 1, 0, 1);
-    mainLayout->addMultiCellWidget(d->renameCustom, 2, 2, 0, 1);
-    mainLayout->addMultiCellWidget(d->renameDefault, 0, 0, 0, 1);
-    mainLayout->addMultiCellWidget(d->renameCustomBox, 3, 3, 0, 1);
+    mainLayout->addWidget(d->renameDefaultBox, 1, 0, 1, 2 );
+    mainLayout->addWidget(d->renameCustom, 2, 0, 1, 2 );
+    mainLayout->addWidget(d->renameDefault, 0, 0, 1, 2 );
+    mainLayout->addWidget(d->renameCustomBox, 3, 0, 1, 2 );
     mainLayout->setRowStretch(4, 10);
     mainLayout->setMargin(KDialog::spacingHint());
     mainLayout->setSpacing(KDialog::spacingHint());
