@@ -27,8 +27,8 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qimage.h>
+#include <QString>
+#include <QImage>
 
 // Local includes.
 
@@ -46,7 +46,8 @@ class CameraIconViewItem : public IconItem
 public:
 
     CameraIconViewItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
-                       const QImage& thumbnail, const QString& downloadName=QString());
+                       const QImage& thumbnail, 
+                       const QString& downloadName=QString());
     ~CameraIconViewItem();
 
     void    setThumbnail(const QImage& thumbnail);

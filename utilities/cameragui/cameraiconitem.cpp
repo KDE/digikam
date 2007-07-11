@@ -24,8 +24,8 @@
 
 // Qt includes.
 
-#include <qpainter.h>
-#include <qpixmap.h>
+#include <QPainter>
+#include <QPixmap>
 
 // KDE includes.
 
@@ -228,7 +228,6 @@ GPItemInfo* CameraIconViewItem::itemInfo() const
 void CameraIconViewItem::paintItem()
 {
     CameraIconView* view = (CameraIconView*)iconView();
-    QColorGroup cg       = view->colorGroup();
     QFont fn(view->font());
 
     QPixmap pix;
@@ -320,7 +319,9 @@ void CameraIconViewItem::paintItem()
     r = QRect(view->contentsToViewport(QPoint(r.x(), r.y())),
               QSize(r.width(), r.height()));
 
-    bitBlt(view->viewport(), r.x(), r.y(), &pix);
+    QPainter p2(view->viewport());
+    p2.drawPixmap(r.x(), r.y(), pix);
+    p2.end();
 }
 
 void CameraIconViewItem::setDownloadName(const QString& downloadName)
@@ -354,7 +355,7 @@ void CameraIconViewItem::calcRect(const QString& itemName, const QString& downlo
 {
     CameraIconView* view = (CameraIconView*)iconView();
     int thumbSize        = view->thumbnailSize().size();
-    d->pixmap            = QPixmap(d->thumbnail.smoothScale(thumbSize, thumbSize, QImage::ScaleMin));
+    d->pixmap            = QPixmap::fromImage(d->thumbnail.scaled(thumbSize, thumbSize, Qt::KeepAspectRatio));
     d->pixRect           = QRect(0,0,0,0);
     d->textRect          = QRect(0,0,0,0);
     d->extraRect         = QRect(0,0,0,0);
@@ -417,16 +418,15 @@ QRect CameraIconViewItem::clickToOpenRect()
     if (d->pixmap.isNull())
     {
         QRect pixRect(d->pixRect);
-        pixRect.moveBy(r.x(), r.y());
+        pixRect.translate(r.x(), r.y());
         return pixRect;
     }
 
     QRect pixRect(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())/2,
                   d->pixRect.y() + (d->pixRect.height() - d->pixmap.height())/2,
                   d->pixmap.width(), d->pixmap.height());
-    pixRect.moveBy(r.x(), r.y());
+    pixRect.translate(r.x(), r.y());
     return pixRect;
 }
 
 }  // namespace Digikam
-
