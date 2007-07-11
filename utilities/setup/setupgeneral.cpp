@@ -286,7 +286,7 @@ void SetupGeneral::slotChangeAlbumPath(const KUrl &result)
         return;
     }
 
-    QFileInfo targetPath(result);
+    QFileInfo targetPath(result.path());
 
     if (!result.isEmpty() && !targetPath.isWritable()) 
     {
