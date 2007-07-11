@@ -170,7 +170,6 @@ INSTALL(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )
 #KDE4_ADD_EXECUTABLE(digikam_bin ${digikam_bin_SRCS})
 
 #TARGET_LINK_LIBRARIES(digikam_bin 
-#                       ${KDE4_KDECORE_LIBS} 
 #                       ${KDE4_KPARTS_LIBS} 
 #                      )
 

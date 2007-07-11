@@ -143,7 +143,6 @@ SET(kio_digikamsearch_PART_SRCS
 KDE4_ADD_PLUGIN(kio_digikamsearch ${kio_digikamsearch_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kio_digikamsearch 
-                      ${QT_QT3SUPPORT_LIBRARY} 
                       ${KDE4_KIO_LIBS} 
                       ${KEXIV2_LIBRARIES} 
                       ${LCMS_LIBRARIES}
