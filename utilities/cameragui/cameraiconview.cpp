@@ -28,22 +28,21 @@
 
 // Qt includes.
 
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qtimer.h>
-#include <qpixmap.h>
-#include <qcursor.h>
-#include <qfontmetrics.h>
-#include <qfont.h>
-#include <q3dragobject.h>
-#include <qclipboard.h>
-//Added by qt3to4:
+#include <Q3DragObject>
+#include <QFile>
+#include <QFileInfo>
+#include <QTimer>
+#include <QPixmap>
+#include <QCursor>
+#include <QFontMetrics>
+#include <QFont>
+#include <QClipboard>
 #include <QDropEvent>
 
 // KDE includes.
 
-#include <kmenu.h>
-#include <kurldrag.h>
+#include <k3urldrag.h>
+#include <k3popupmenu.h>
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -81,18 +80,18 @@ public:
 
     Q3Dict<CameraIconViewItem>  itemDict;
 
-    QRect                      itemRect;
+    QRect                       itemRect;
 
-    QPixmap                    itemRegPixmap;
-    QPixmap                    itemSelPixmap;
+    QPixmap                     itemRegPixmap;
+    QPixmap                     itemSelPixmap;
 
-    RenameCustomizer          *renamer;
+    RenameCustomizer           *renamer;
 
-    IconGroupItem             *groupItem;
+    IconGroupItem              *groupItem;
 
-    ThumbnailSize              thumbSize;
+    ThumbnailSize               thumbSize;
 
-    CameraUI                  *cameraUI;
+    CameraUI                   *cameraUI;
 };
 
 CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
@@ -165,7 +164,10 @@ void CameraIconView::addItem(const GPItemInfo& info)
     // Just to have a generic image thumb from desktop with KDE < 3.5.0
     mime = KMimeType::mimeType(info.mime == QString("image/x-raw") ? QString("image/tiff") : info.mime);
 
-    QImage thumb(mime->pixmap(KIcon::Desktop, ThumbnailSize::Huge, KIcon::DefaultState).convertToImage());
+    KIconLoader* iconLoader = KIconLoader::global();
+    QImage thumb = iconLoader->loadIcon(mime->iconName(), K3Icon::Desktop, 
+                                        ThumbnailSize::Huge, K3Icon::DefaultState)
+                               .toImage();
     QString downloadName;
 
     if (d->renamer)
@@ -430,7 +432,7 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
 
     CameraIconViewItem* camItem = static_cast<CameraIconViewItem*>(item);
     
-    KMenu menu(this);
+    K3PopupMenu menu(this);
     menu.insertTitle(SmallIcon("digikam"), d->cameraUI->cameraTitle());
     menu.insertItem(SmallIcon("editimage"), i18n("&View"), 0);
     menu.insertSeparator(-1);
@@ -531,7 +533,7 @@ void CameraIconView::contentsDropEvent(QDropEvent *event)
     }
 
     KUrl::List srcURLs;
-    KURLDrag::decode(event, srcURLs);
+    K3URLDrag::decode(event, srcURLs);
     uploadItemPopupMenu(srcURLs);
 }
 
@@ -546,13 +548,13 @@ void CameraIconView::slotRightButtonClicked(const QPoint&)
         return;
 
     KUrl::List srcURLs;
-    KURLDrag::decode(data, srcURLs);
+    K3URLDrag::decode(data, srcURLs);
     uploadItemPopupMenu(srcURLs);
 }
 
 void CameraIconView::uploadItemPopupMenu(const KUrl::List& srcURLs)
 {
-    KMenu popMenu(this);
+    K3PopupMenu popMenu(this);
     popMenu.insertTitle(SmallIcon("digikam"), d->cameraUI->cameraTitle());
     popMenu.insertItem( SmallIcon("goto"), i18n("&Upload into camera"), 10 );
     popMenu.insertSeparator(-1);
@@ -629,20 +631,20 @@ void CameraIconView::updateItemRectsPixmap()
 
     d->itemRect = r;
 
-    d->itemRegPixmap = ThemeEngine::componentData().thumbRegPixmap(d->itemRect.width(),
-                                                               d->itemRect.height());
+    d->itemRegPixmap = ThemeEngine::componentData()->thumbRegPixmap(d->itemRect.width(),
+                                                                    d->itemRect.height());
 
-    d->itemSelPixmap = ThemeEngine::componentData().thumbSelPixmap(d->itemRect.width(),
-                                                               d->itemRect.height());
+    d->itemSelPixmap = ThemeEngine::componentData()->thumbSelPixmap(d->itemRect.width(),
+                                                                    d->itemRect.height());
 }
 
 void CameraIconView::slotThemeChanged()
 {
     QPalette plt(palette());
     QColorGroup cg(plt.active());
-    cg.setColor(QColorGroup::Base, ThemeEngine::componentData().baseColor());
-    cg.setColor(QColorGroup::Text, ThemeEngine::componentData().textRegColor());
-    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::componentData().textSelColor());
+    cg.setColor(QColorGroup::Base, ThemeEngine::componentData()->baseColor());
+    cg.setColor(QColorGroup::Text, ThemeEngine::componentData()->textRegColor());
+    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::componentData()->textSelColor());
     plt.setActive(cg);
     plt.setInactive(cg);
     setPalette(plt);
@@ -668,4 +670,3 @@ int CameraIconView::itemsDownloaded()
 }
 
 }  // namespace Digikam
-
