@@ -53,6 +53,21 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
  2      |-utilities                                                                                  Utilities components are used as "libs" by digiKam main interface.
         |---batch                               Gilles                  X       DONE
         |---cameragui                                                   X
+            albumselectdialog.cpp                                       X
+            animwidget.cpp                      Gilles                  X       DONE
+            cameracontroller.cpp                                        X
+            camerafolderdialog.cpp                                      X
+            camerafolderitem.cpp                                        X
+            camerafolderview.cpp                                        X
+            cameraiconitem.cpp                                          X
+            cameraiconview.cpp                                          X
+            camerainfodialog.cpp                Gilles                  X       DONE
+            cameraui.cpp                                                X
+            dkcamera.cpp                        Gilles                  X       DONE
+            gpcamera.cpp                        Gilles                  X       DONE
+            gpiteminfo.cpp                      Gilles                  X       DONE
+            renamecustomizer.cpp                Gilles                  X       DONE
+            umscamera.cpp                       Gilles                  X       DONE	
         |---hotplug                             Laurent                         DONE        -
         |---imageeditor
         |-----canvas                            Gilles          X       X       DONE
