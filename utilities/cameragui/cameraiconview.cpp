@@ -304,7 +304,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
             if (convertLossLessJpeg && !downloadName.isEmpty())
             {
                 QFileInfo fi(downloadName);
-                QString ext = fi.extension(false).toUpper();
+                QString ext = fi.suffix().toUpper();
                 if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
                 {
                     downloadName.truncate(downloadName.length() - ext.length());
@@ -332,7 +332,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
             if (convertLossLessJpeg)
             {
                 QFileInfo fi(downloadName);
-                QString ext = fi.extension(false).toUpper();
+                QString ext = fi.suffix().toUpper();
                 if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
                 {
                     downloadName.truncate(downloadName.length() - ext.length());
@@ -361,7 +361,7 @@ QString CameraIconView::defaultDownloadName(CameraIconViewItem *viewItem)
 QString CameraIconView::getTemplatedName(const GPItemInfo* itemInfo, int position)
 {
     QString ext = itemInfo->name;
-    int pos = ext.findRev('.');
+    int pos = ext.lastIndexOf('.');
     if (pos < 0)
         ext = "";
     else
@@ -641,12 +641,12 @@ void CameraIconView::updateItemRectsPixmap()
 void CameraIconView::slotThemeChanged()
 {
     QPalette plt(palette());
-    QColorGroup cg(plt.active());
-    cg.setColor(QColorGroup::Base, ThemeEngine::componentData()->baseColor());
-    cg.setColor(QColorGroup::Text, ThemeEngine::componentData()->textRegColor());
-    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::componentData()->textSelColor());
-    plt.setActive(cg);
-    plt.setInactive(cg);
+    plt.setColor(QPalette::Active,   QPalette::Base,            ThemeEngine::componentData()->baseColor());
+    plt.setColor(QPalette::Active,   QPalette::Text,            ThemeEngine::componentData()->textRegColor());
+    plt.setColor(QPalette::Active,   QPalette::HighlightedText, ThemeEngine::componentData()->textSelColor());
+    plt.setColor(QPalette::Inactive, QPalette::Base,            ThemeEngine::componentData()->baseColor());
+    plt.setColor(QPalette::Inactive, QPalette::Text,            ThemeEngine::componentData()->textRegColor());
+    plt.setColor(QPalette::Inactive, QPalette::HighlightedText, ThemeEngine::componentData()->textSelColor());
     setPalette(plt);
 
     updateItemRectsPixmap();
