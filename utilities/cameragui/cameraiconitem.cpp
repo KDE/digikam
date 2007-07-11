@@ -228,7 +228,6 @@ GPItemInfo* CameraIconViewItem::itemInfo() const
 void CameraIconViewItem::paintItem()
 {
     CameraIconView* view = (CameraIconView*)iconView();
-    QColorGroup cg       = view->colorGroup();
     QFont fn(view->font());
 
     QPixmap pix;
