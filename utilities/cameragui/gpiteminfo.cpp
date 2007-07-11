@@ -24,7 +24,7 @@
 
 // Qt includes.
 
-#include <qdatastream.h>
+#include <QDataStream>
 
 // Local includes.
 
@@ -35,11 +35,14 @@ namespace Digikam
 
 QDataStream& operator<<( QDataStream& ds, const GPItemInfo& info)
 {
+    qint64 mtime = (qint64)info.mtime;
+    qint64 size  = (qint64)info.size;
+
     ds << info.name;
     ds << info.folder;
-    ds << info.mtime;
+    ds << mtime;
     ds << info.mime;
-    ds << info.size;
+    ds << size;
     ds << info.width;
     ds << info.height;
     ds << info.downloaded;
@@ -51,16 +54,22 @@ QDataStream& operator<<( QDataStream& ds, const GPItemInfo& info)
 
 QDataStream& operator>>(QDataStream& ds, GPItemInfo& info)
 {
+    qint64 mtime;
+    qint64 size;
+
     ds >> info.name;
     ds >> info.folder;
-    ds >> info.mtime;
+    ds >> mtime;
     ds >> info.mime;
-    ds >> info.size;
+    ds >> size;
     ds >> info.width;
     ds >> info.height;
     ds >> info.downloaded;
     ds >> info.readPermissions;
     ds >> info.writePermissions;
+
+    info.mtime = (time_t)mtime;
+    info.size  = (long)size;
 
     return ds;
 }
