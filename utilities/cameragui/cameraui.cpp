@@ -1,10 +1,3 @@
-//Added by qt3to4:
-#include <QLabel>
-#include <QCloseEvent>
-#include <Q3GridLayout>
-#include <QKeyEvent>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -42,27 +35,29 @@ extern "C"
 
 // Qt includes.
 
-#include <q3vgroupbox.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qtoolbutton.h>
-#include <q3iconview.h>
-
-
-#include <q3popupmenu.h>
-#include <qsplitter.h>
-#include <qpixmap.h>
-#include <qcombobox.h>
-#include <qtoolbox.h>
-#include <q3frame.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
-#include <qtooltip.h>
-#include <qtimer.h>
-
-#include <qfile.h>
-#include <qfileinfo.h>
+#include <Q3IconView>
+#include <Q3PopupMenu>
+#include <QGroupBox>
+#include <QPushButton>
+#include <QToolButton>
+#include <QSplitter>
+#include <QPixmap>
+#include <QComboBox>
+#include <QToolBox>
+#include <QProgressBar>
+#include <QFrame>
+#include <QRadioButton>
+#include <QCheckBox>
+#include <QLineEdit>
+#include <QTimer>
+#include <QFile>
+#include <QFileInfo>
+#include <QLabel>
+#include <QCloseEvent>
+#include <QGridLayout>
+#include <QKeyEvent>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -81,7 +76,6 @@ extern "C"
 #include <kcalendarsystem.h>
 #include <kurllabel.h>
 #include <ksqueezedtextlabel.h>
-
 #include <kinputdialog.h>
 
 // LibKDcraw includes.
@@ -203,7 +197,7 @@ public:
 
     QDateTime                     lastAccess;
 
-    KProgressBar                    *progress;
+    QProgressBar                 *progress;
 
     KSqueezedTextLabel           *status;
 

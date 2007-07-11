@@ -28,6 +28,7 @@
 
 // Qt includes.
 
+#include <Q3ListViewItem>
 #include <QMap>
 
 // KDE includes.
