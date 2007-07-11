@@ -271,7 +271,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->advBox->setWhatsThis( i18n("<p>Set how digiKam will rename picture files as they are downloaded."));
 
     d->advBox->insertItem(CameraUIPriv::RENAMEFILEPAGE, d->renameCustomizer, 
-                          SmallIconSet("fileimport"), i18n("File Renaming Options"));
+                          SmallIcon("fileimport"), i18n("File Renaming Options"));
         
     // -- Albums Auto-creation options -----------------------------------------
 
@@ -282,9 +282,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     KHBox *hbox1           = new KHBox(albumBox);
     d->folderDateLabel     = new QLabel(i18n("Date format:"), hbox1);
     d->folderDateFormat    = new QComboBox(hbox1);
-    d->folderDateFormat->insertItem(i18n("ISO"),            CameraUIPriv::IsoDateFormat);
-    d->folderDateFormat->insertItem(i18n("Full Text"),      CameraUIPriv::TextDateFormat);
-    d->folderDateFormat->insertItem(i18n("Local Settings"), CameraUIPriv::LocalDateFormat);
+    d->folderDateFormat->insertItem(CameraUIPriv::IsoDateFormat,   i18n("ISO"));
+    d->folderDateFormat->insertItem(CameraUIPriv::TextDateFormat,  i18n("Full Text"));
+    d->folderDateFormat->insertItem(CameraUIPriv::LocalDateFormat, i18n("Local Settings"));
 
     albumVlay->addWidget(d->autoAlbumExtCheck);
     albumVlay->addWidget(d->autoAlbumDateCheck);
@@ -308,7 +308,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                      "E.g.: <i>Thu Aug 24 2006</i><p>"
                      "<b>Local Settings</b>: the date format depending on KDE control panel settings.<p>"));
 
-    d->advBox->insertItem(CameraUIPriv::AUTOALBUMPAGE, albumBox, SmallIconSet("folder_new"), 
+    d->advBox->insertItem(CameraUIPriv::AUTOALBUMPAGE, albumBox, SmallIcon("folder_new"), 
                           i18n("Auto-creation of Albums"));
 
     // -- On the Fly options ---------------------------------------------------
@@ -324,7 +324,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     KHBox *hbox2           = new KHBox(onFlyBox);
     d->formatLabel         = new QLabel(i18n("New image format:"), hbox2);
     d->losslessFormat      = new QComboBox(hbox2);
-    d->losslessFormat->insertItem("PNG", 0);
+    d->losslessFormat->insertItem(0, "PNG");
 
     onFlyVlay->addWidget(d->setPhotographerId);
     onFlyVlay->addWidget(d->setCredits);
@@ -355,7 +355,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->losslessFormat->setWhatsThis( i18n("<p>Select your preferred lossless image file format to "
                      "convert to.  <b>Note:</b> All metadata will be preserved during the conversion."));
 
-    d->advBox->insertItem(CameraUIPriv::ONFLYPAGE, onFlyBox, SmallIconSet("run"), 
+    d->advBox->insertItem(CameraUIPriv::ONFLYPAGE, onFlyBox, SmallIcon("run"), 
                           i18n("On the Fly Operations (JPEG only)"));
                                                
     d->rightSidebar->appendTab(d->advBox, SmallIcon("configure"), i18n("Settings"));
@@ -365,7 +365,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     d->cancelBtn = new QToolButton(plain);
     d->cancelBtn->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
-    d->cancelBtn->setPixmap( SmallIcon( "cancel" ) );
+    d->cancelBtn->setIcon( SmallIcon( "cancel" ) );
     d->cancelBtn->setEnabled(false);
     
     d->status   = new KSqueezedTextLabel(plain);
@@ -381,12 +381,12 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     KUrlLabel *pixmapLogo = new KUrlLabel( "http://www.digikam.org", QString(), frame );
     pixmapLogo->setMargin(0);
     pixmapLogo->setScaledContents( false );
-    pixmapLogo->setPaletteBackgroundColor( QColor(201, 208, 255) );
+    QPalette palette;
+    palette.setColor(pixmapLogo->backgroundRole(), QColor(201, 208, 255));
+    pixmapLogo->setPalette(palette);
     pixmapLogo->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
     pixmapLogo->setToolTip( i18n("Visit digiKam project website"));
-    KGlobal::dirs()->addResourceType("logo-digikam", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("logo-digikam", "logo-digikam.png");
-    pixmapLogo->setPixmap( QPixmap( directory + "logo-digikam.png" ) );
+    pixmapLogo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png")));
     
     d->anim = new AnimWidget(frame, pixmapLogo->height());
     
@@ -402,9 +402,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     viewBoxLayout->addWidget(d->status, 2, 2, 1, 1);
     viewBoxLayout->addWidget(d->progress, 2, 3, 1, 1);
     viewBoxLayout->addWidget(frame, 2, 5, 1, 1);
-    viewBoxLayout->setRowSpacing(1, spacingHint());
-    viewBoxLayout->setColSpacing(1, spacingHint());
-    viewBoxLayout->setColSpacing(4, spacingHint());
+    viewBoxLayout->setRowMinimumHeight(1, spacingHint());
+    viewBoxLayout->setColumnMinimumWidth(1, spacingHint());
+    viewBoxLayout->setColumnMinimumWidth(4, spacingHint());
     viewBoxLayout->setColumnStretch( 0, 0 );
     viewBoxLayout->setColumnStretch( 1, 0 );
     viewBoxLayout->setColumnStretch( 2, 3 );
@@ -427,7 +427,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->imageMenu->insertItem(i18n("Decrease Thumbs"),   this,    SLOT(slotDecreaseThumbSize()), Qt::CTRL+Qt::Key_Minus, 5);
     d->imageMenu->insertSeparator();
     d->imageMenu->insertItem(i18n("Toggle Lock"),       this,    SLOT(slotToggleLock()), 0, 6);
-    button(User3)->setPopup(d->imageMenu);    
+    button(User3)->setMenu(d->imageMenu);    
 
     // -------------------------------------------------------------------------
 
@@ -437,7 +437,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->downloadMenu->insertSeparator();
     d->downloadMenu->insertItem(i18n("Upload..."),         this, SLOT(slotUpload()), 0, 2);
     d->downloadMenu->setItemEnabled(0, false);
-    button(User2)->setPopup(d->downloadMenu);
+    button(User2)->setMenu(d->downloadMenu);
 
     // -------------------------------------------------------------------------
     
@@ -445,15 +445,14 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->deleteMenu->insertItem(i18n("Delete Selected"), this, SLOT(slotDeleteSelected()), 0, 0);
     d->deleteMenu->insertItem(i18n("Delete All"),      this, SLOT(slotDeleteAll()), 0, 1);
     d->deleteMenu->setItemEnabled(0, false);
-    button(User1)->setPopup(d->deleteMenu);
+    button(User1)->setMenu(d->deleteMenu);
 
     // -------------------------------------------------------------------------
 
-    QPushButton *helpButton = button( Help );
     d->helpMenu = new KHelpMenu(this, KGlobal::mainComponent().aboutData(), false);
     d->helpMenu->menu()->insertItem(SmallIcon("camera"), i18n("Camera Information"), 
                                     this, SLOT(slotInformations()), 0, CAMERA_INFO_MENU_ID, 0);
-    helpButton->setPopup( d->helpMenu->menu() );
+    button(Help)->setMenu(d->helpMenu->menu());
 
     // -------------------------------------------------------------------------
     
@@ -596,8 +595,8 @@ void CameraUI::readSettings()
     d->setPhotographerId->setChecked(group.readEntry("SetPhotographerId", false));
     d->setCredits->setChecked(group.readEntry("SetCredits", false));
     d->convertJpegCheck->setChecked(group.readEntry("ConvertJpeg", false));
-    d->losslessFormat->setCurrentItem(group.readEntry("LossLessFormat", 0));   // PNG by default
-    d->folderDateFormat->setCurrentItem(group.readEntry("FolderDateFormat", (int)CameraUIPriv::IsoDateFormat));
+    d->losslessFormat->setCurrentIndex(group.readEntry("LossLessFormat", 0));   // PNG by default
+    d->folderDateFormat->setCurrentIndex(group.readEntry("FolderDateFormat", (int)CameraUIPriv::IsoDateFormat));
 
     d->view->setThumbnailSize(ThumbnailSize((ThumbnailSize::Size)group.readEntry("ThumbnailSize", 
                               (int)ThumbnailSize::Large)));
@@ -627,10 +626,10 @@ void CameraUI::saveSettings()
     group.writeEntry("SetPhotographerId", d->setPhotographerId->isChecked());
     group.writeEntry("SetCredits", d->setCredits->isChecked());
     group.writeEntry("ConvertJpeg", convertLosslessJpegFiles());
-    group.writeEntry("LossLessFormat", d->losslessFormat->currentItem());
+    group.writeEntry("LossLessFormat", d->losslessFormat->currentIndex());
     group.writeEntry("ThumbnailSize", d->view->thumbnailSize().size());
     group.writeEntry("Splitter Sizes", d->splitter->sizes());
-    group.writeEntry("FolderDateFormat", d->folderDateFormat->currentItem());
+    group.writeEntry("FolderDateFormat", d->folderDateFormat->currentIndex());
     config->sync();
 }
 
@@ -1028,7 +1027,7 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
         if (!fi.exists()) continue;
         if (fi.isDir()) continue;
 
-        QString ext  = QString(".") + fi.extension();
+        QString ext  = QString(".") + fi.completeSuffix();
         QString name = fi.fileName();
         name.truncate(fi.fileName().length() - ext.length());
 
@@ -1090,7 +1089,7 @@ void CameraUI::slotDownload(bool onlySelected)
         QDateTime dateTime;
         dateTime.setTime_t(iconItem->itemInfo()->mtime);
 
-        switch(d->folderDateFormat->currentItem())
+        switch(d->folderDateFormat->currentIndex())
         {
             case CameraUIPriv::TextDateFormat:
                 newDirName = dateTime.date().toString(Qt::TextDate);
@@ -1171,7 +1170,7 @@ void CameraUI::slotDownload(bool onlySelected)
         {
             QString dirName;
 
-            switch(d->folderDateFormat->currentItem())
+            switch(d->folderDateFormat->currentIndex())
             {
                 case CameraUIPriv::TextDateFormat:
                     dirName = dateTime.date().toString(Qt::TextDate);
@@ -1201,15 +1200,15 @@ void CameraUI::slotDownload(bool onlySelected)
             // convertion on the fly option.
             QFileInfo fi(downloadName);
 
-            QString subAlbum = fi.extension(false).toUpper();
-	        if (fi.extension(false).toUpper() == QString("JPEG") || 
-                fi.extension(false).toUpper() == QString("JPE")) 
+            QString subAlbum = fi.suffix().toUpper();
+	        if (fi.suffix().toUpper() == QString("JPEG") || 
+                fi.suffix().toUpper() == QString("JPE")) 
                 subAlbum = QString("JPG");
-            if (fi.extension(false).toUpper() == QString("TIFF")) 
+            if (fi.suffix().toUpper() == QString("TIFF")) 
                 subAlbum = QString("TIF");
-            if (fi.extension(false).toUpper() == QString("MPEG") || 
-                fi.extension(false).toUpper() == QString("MPE") ||
-                fi.extension(false).toUpper() == QString("MPO"))
+            if (fi.suffix().toUpper() == QString("MPEG") || 
+                fi.suffix().toUpper() == QString("MPE") ||
+                fi.suffix().toUpper() == QString("MPO"))
                 subAlbum = QString("MPG");
 
             if (!createAutoAlbum(u, subAlbum, dateTime.date(), errMsg))
@@ -1227,7 +1226,7 @@ void CameraUI::slotDownload(bool onlySelected)
         downloadSettings.dest = u.path();
 
         d->controller->download(downloadSettings);
-        addFileExtension(QFileInfo(u.path()).extension(false));
+        addFileExtension(QFileInfo(u.path()).suffix());
         total++;
     }
 
@@ -1502,12 +1501,13 @@ void CameraUI::slotExifFromData(const QByteArray& exifData)
     
     if (!exifData.isEmpty())
     {
-        int i = exifData.find(*exifHeader);
+        int i = exifData.indexOf(*exifHeader);
         if (i != -1)
         {
             DDebug() << "Exif header found at position " << i << endl;
             i = i + sizeof(exifHeader);
-            QByteArray data(exifData.size()-i);
+            QByteArray data;
+            data.reserve(exifData.size()-i);
             memcpy(data.data(), exifData.data()+i, data.size());
             d->rightSidebar->itemChanged(item->itemInfo(), url, data, d->view, item);
             return;
@@ -1654,7 +1654,7 @@ void CameraUI::slotLastItem(void)
 
 void CameraUI::keyPressEvent(QKeyEvent *e)
 {
-    if ( e->state() == 0 )
+    if ( e->modifiers() == 0 )
     {
         switch ( e->key() )
         {
@@ -1674,7 +1674,7 @@ void CameraUI::keyPressEvent(QKeyEvent *e)
     else
     {
         // accept the dialog when Ctrl-Return is pressed
-        if ( e->state() == Qt::ControlButton &&
+        if ( e->modifiers() == Qt::ControlModifier &&
             (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) )
         {
             e->accept();
