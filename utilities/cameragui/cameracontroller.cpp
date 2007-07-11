@@ -631,7 +631,7 @@ CameraController::CameraController(QWidget* parent, const QString& title, const 
             DDebug() << "xport " << xport << endl;
             QRegExp x = QRegExp("(usb:[0-9,]*)");
 
-            if (x.search(xport) != -1) 
+            if (x.indexIn(xport) != -1) 
             {
                 QString usbport = x.cap(1);
                 DDebug() << "USB " << xport << " " << usbport << endl;
@@ -657,7 +657,8 @@ CameraController::CameraController(QWidget* parent, const QString& title, const 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotProcessNext()));
 
-    d->timer->start(50, false);
+    d->timer->setSingleShot(false);
+    d->timer->start(50);
 }
 
 CameraController::~CameraController()
@@ -672,7 +673,7 @@ CameraController::~CameraController()
     d->canceled = true;
     d->close    = true;
 
-    while (d->thread->running())
+    while (d->thread->isRunning())
         d->thread->wait();
         
     delete d->thread;
@@ -771,26 +772,26 @@ void CameraController::download(DownloadSettingsContainer downloadSettings)
     cmd->map.insert("folder", QVariant(downloadSettings.folder));
     cmd->map.insert("file", QVariant(downloadSettings.file));
     cmd->map.insert("dest", QVariant(downloadSettings.dest));
-    cmd->map.insert("autoRotate", QVariant(downloadSettings.autoRotate, 0));
-    cmd->map.insert("fixDateTime", QVariant(downloadSettings.fixDateTime, 0));
+    cmd->map.insert("autoRotate", QVariant(downloadSettings.autoRotate));
+    cmd->map.insert("fixDateTime", QVariant(downloadSettings.fixDateTime));
     cmd->map.insert("newDateTime", QVariant(downloadSettings.newDateTime));
-    cmd->map.insert("setPhotographerId", QVariant(downloadSettings.setPhotographerId, 0));
+    cmd->map.insert("setPhotographerId", QVariant(downloadSettings.setPhotographerId));
     cmd->map.insert("author", QVariant(downloadSettings.author));
     cmd->map.insert("authorTitle", QVariant(downloadSettings.authorTitle));
-    cmd->map.insert("setCredits", QVariant(downloadSettings.setCredits, 0));
+    cmd->map.insert("setCredits", QVariant(downloadSettings.setCredits));
     cmd->map.insert("credit", QVariant(downloadSettings.credit));
     cmd->map.insert("source", QVariant(downloadSettings.source));
     cmd->map.insert("copyright", QVariant(downloadSettings.copyright));
-    cmd->map.insert("convertJpeg", QVariant(downloadSettings.convertJpeg, 0));
+    cmd->map.insert("convertJpeg", QVariant(downloadSettings.convertJpeg));
     cmd->map.insert("losslessFormat", QVariant(downloadSettings.losslessFormat));
     d->cmdQueue.enqueue(cmd);
 }
 
 void CameraController::deleteFile(const QString& folder, const QString& file)
 {
-    d->canceled = false;
+    d->canceled        = false;
     CameraCommand *cmd = new CameraCommand;
-    cmd->action = CameraCommand::gp_delete;
+    cmd->action        = CameraCommand::gp_delete;
     cmd->map.insert("folder", QVariant(folder));
     cmd->map.insert("file", QVariant(file));
     d->cmdQueue.enqueue(cmd);
@@ -803,7 +804,7 @@ void CameraController::lockFile(const QString& folder, const QString& file, bool
     cmd->action = CameraCommand::gp_lock;
     cmd->map.insert("folder", QVariant(folder));
     cmd->map.insert("file", QVariant(file));
-    cmd->map.insert("lock", QVariant(lock, 0));
+    cmd->map.insert("lock", QVariant(lock));
     d->cmdQueue.enqueue(cmd);
 }
 
@@ -941,7 +942,7 @@ void CameraController::customEvent(QCustomEvent* e)
         }
         case (CameraEvent::gp_uploaded) :
         {
-            QByteArray ba = event->map["info"].asByteArray();
+            QByteArray ba = event->map["info"].toByteArray();
             QDataStream ds(&ba, QIODevice::ReadOnly);
             GPItemInfo itemInfo;
             ds >> itemInfo;
@@ -1074,7 +1075,7 @@ void CameraController::customEvent(QCustomEvent* e)
 
 void CameraController::slotProcessNext()
 {
-    if (d->thread->running())
+    if (d->thread->isRunning())
         return;
 
     if (d->cmdQueue.isEmpty())
@@ -1105,7 +1106,8 @@ void CameraController::slotProcessNext()
         emit signalExifFromFile(folder, file);
 
         d->cmdQueue.dequeue();
-        d->timer->start(50, false);
+        d->timer->setSingleShot(false);
+        d->timer->start(50);
         return;
     }
       
@@ -1180,21 +1182,23 @@ void CameraController::slotProcessNext()
     if (cancel)
     {
         slotCancel();
-        d->timer->start(50, false);
+        d->timer->setSingleShot(false);
+        d->timer->start(50);
         return;
     }
     else if (skip)
     {
         d->cmdQueue.dequeue();
         emit signalInfoMsg(i18n("Skipped file %1",file));
-        emit signalSkipped(folder, file);        
-        d->timer->start(50, false);
+        emit signalSkipped(folder, file); 
+        d->timer->setSingleShot(false);       
+        d->timer->start(50);
         return;
     }
 
     d->thread->start();
-    d->timer->start(50, false);
+    d->timer->setSingleShot(false);
+    d->timer->start(50);
 }
 
 }  // namespace Digikam
-
