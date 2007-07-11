@@ -24,16 +24,12 @@
 
 // Qt includes.
 
-#include <qlayout.h>
-#include <q3frame.h>
-#include <q3textedit.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QTextEdit>
 
 // KDE includes.
 
 #include <klocale.h>
-#include <kiconloader.h>
+#include <kicon.h>
 
 // Local includes.
 
@@ -44,40 +40,45 @@ namespace Digikam
 
 CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, const QString& manual,
                                    const QString& about)
-                : KDialogBase(IconList, i18n("Camera Information"), Help|Ok, Ok, parent, 0, true, true)
+                : KPageDialog(parent)
 {
+    setCaption(i18n("Camera Information"));
+    setButtons(KDialog::Help|KDialog::Ok);
+    setDefaultButton(KDialog::Ok);
     setHelp("digitalstillcamera.anchor", "digikam");
+    setFaceType(KPageDialog::List);
+    setModal(true);
     resize(500, 400);
 
     // ----------------------------------------------------------
     
-    QFrame *p1 = addPage( i18n("Summary"), i18n("Camera Summary"), BarIcon("contents2", KIcon::SizeMedium) );
-    Q3VBoxLayout *p1layout = new Q3VBoxLayout( p1, 0, 6 );
-
-    Q3TextEdit *summaryView = new Q3TextEdit(summary, QString(), p1);
-    summaryView->setWordWrap(Q3TextEdit::WidgetWidth);
+    QTextEdit *summaryView = new QTextEdit(summary);
+    summaryView->setWordWrapMode(QTextOption::WordWrap);
     summaryView->setReadOnly(true);
-    p1layout->addWidget(summaryView);
 
-    // ----------------------------------------------------------
-
-    QFrame *p2 = addPage( i18n("Manual"), i18n("Camera Manual"), BarIcon("contents", KIcon::SizeMedium) );
-    Q3VBoxLayout *p2layout = new Q3VBoxLayout( p2, 0, 6 );
-
-    Q3TextEdit *manualView = new Q3TextEdit(manual, QString(), p2);
-    manualView->setWordWrap(Q3TextEdit::WidgetWidth);
-    manualView->setReadOnly(true);
-    p2layout->addWidget(manualView);
-
-    // ----------------------------------------------------------
-
-    QFrame *p3 = addPage( i18n("About"), i18n("About Driver"), BarIcon("camera", KIcon::SizeMedium) );
-    Q3VBoxLayout *p3layout = new Q3VBoxLayout( p3, 0, 6 );
+    KPageWidgetItem *p1 = addPage(summaryView, i18n("Summary"));
+    p1->setHeader( i18n("Camera Summary") );
+    p1->setIcon( KIcon("book2") );
     
-    Q3TextEdit *aboutView = new Q3TextEdit(about, QString(), p3);
-    aboutView->setWordWrap(Q3TextEdit::WidgetWidth);
+    // ----------------------------------------------------------
+
+    QTextEdit *manualView = new QTextEdit(manual);
+    manualView->setWordWrapMode(QTextOption::WordWrap);
+    manualView->setReadOnly(true);
+
+    KPageWidgetItem *p2 = addPage(manualView, i18n("Manual"));
+    p2->setHeader( i18n("Camera Manual") );
+    p2->setIcon( KIcon("help-contentsb") );
+
+    // ----------------------------------------------------------
+
+    QTextEdit *aboutView = new QTextEdit(about);
+    aboutView->setWordWrapMode(QTextOption::WordWrap);
     aboutView->setReadOnly(true);
-    p3layout->addWidget(aboutView);
+
+    KPageWidgetItem *p3 = addPage(aboutView, i18n("About"));
+    p3->setHeader( i18n("About Driver") );
+    p3->setIcon( KIcon("camera-photo") );
 }
 
 CameraInfoDialog::~CameraInfoDialog()

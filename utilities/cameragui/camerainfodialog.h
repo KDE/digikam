@@ -27,16 +27,16 @@
 
 // Qt includes.
 
-#include <qstring.h>
+#include <QString>
 
 // KDE includes.
 
-#include <kdialog.h>
+#include <kpagedialog.h>
 
 namespace Digikam
 {
 
-class CameraInfoDialog : public KDialog
+class CameraInfoDialog : public KPageDialog
 {
 public:
 
