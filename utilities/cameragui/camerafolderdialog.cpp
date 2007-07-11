@@ -23,11 +23,9 @@
 
 // Qt includes.
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <q3frame.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QFrame>
+#include <QGridLayout>
 
 // KDE includes.
 
@@ -59,20 +57,19 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
     setDefaultButton(Ok);
     setModal(true);
 
-
-
     m_rootPath = rootPath;
 
-    QFrame *page      = new QFrame(this);
+    QFrame *page = new QFrame(this);
     setMainWidget(page);
-    Q3GridLayout* grid = new Q3GridLayout(page, 2, 1, 0, spacingHint());
-    
-    m_folderView    = new CameraFolderView(page);
-    QLabel *logo    = new QLabel(page);
-    QLabel *message = new QLabel(page);
 
-    KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
-    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 128, KIcon::DefaultState, 0, true));    
+    QGridLayout* grid = new QGridLayout(page);
+    m_folderView      = new CameraFolderView(page);
+    QLabel *logo      = new QLabel(page);
+    QLabel *message   = new QLabel(page);
+
+    KIconLoader* iconLoader = KIconLoader::global();
+    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 128, K3Icon::DefaultState, 0, true));
+
     message->setText(i18n("<p>Please select the camera folder "
                           "where you want to upload the pictures.</p>"));
 
@@ -80,6 +77,8 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
     grid->addMultiCellWidget(message, 1, 1, 0, 0);
     grid->addMultiCellWidget(m_folderView, 0, 2, 1, 1);
     grid->setRowStretch(2, 10);
+    grid->setMargin(KDialog::spacingHint());
+    grid->setSpacing(KDialog::spacingHint());
 
     m_folderView->addVirtualFolder(cameraName);
     m_folderView->addRootFolder("/", cameraView->countItemsByFolder(rootPath));
@@ -142,4 +141,3 @@ void CameraFolderDialog::slotFolderPathSelectionChanged(CameraFolderItem* item)
 }
 
 }  // namespace Digikam
-

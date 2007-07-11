@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <qstring.h>
+#include <QString>
 
 // KDE includes.
 
@@ -45,7 +45,8 @@ class CameraFolderDialog : public KDialog
 
 public:
 
-    CameraFolderDialog(QWidget *parent, CameraIconView *cameraView, const QStringList& cameraFolderList,
+    CameraFolderDialog(QWidget *parent, CameraIconView *cameraView, 
+                       const QStringList& cameraFolderList,
                        const QString& cameraName, const QString& rootPath);
     ~CameraFolderDialog();
 
