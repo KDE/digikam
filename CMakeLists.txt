@@ -360,9 +360,8 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpcamera.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpiteminfo.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/animwidget.cpp 
-#    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/renamecustomizer.cpp 
-#    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/albumselectdialog.cpp 
-#    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerainfodialog.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/renamecustomizer.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerainfodialog.cpp 
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderdialog.cpp 
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconview.cpp 
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconitem.cpp 
@@ -370,6 +369,7 @@ SET(libcameragui_SRCS
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderitem.cpp 
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameracontroller.cpp 
 #    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraui.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/albumselectdialog.cpp 
    )
 
 ADD_SUBDIRECTORY( data )
