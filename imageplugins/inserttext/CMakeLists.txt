@@ -4,7 +4,6 @@ SET(digikamimageplugin_inserttext_PART_SRCS inserttextwidget.cpp
                                             imageeffect_inserttext.cpp
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_inserttext_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_inserttext ${digikamimageplugin_inserttext_PART_SRCS})
 

@@ -4,7 +4,6 @@ SET(digikamimageplugin_distortionfx_PART_SRCS imageplugin_distortionfx.cpp
                                               distortionfx.cpp
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_distortionfx_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_distortionfx ${digikamimageplugin_distortionfx_PART_SRCS})
 

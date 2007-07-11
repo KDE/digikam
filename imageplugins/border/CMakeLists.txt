@@ -6,7 +6,6 @@ SET(digikamimageplugin_border_PART_SRCS imageplugin_border.cpp
                                         border.cpp 
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_border_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_border ${digikamimageplugin_border_PART_SRCS})
 

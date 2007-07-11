@@ -4,7 +4,6 @@ SET(digikamimageplugin_blurfx_PART_SRCS imageplugin_blurfx.cpp
                                         blurfx.cpp 
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_blurfx_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_blurfx ${digikamimageplugin_blurfx_PART_SRCS})
 

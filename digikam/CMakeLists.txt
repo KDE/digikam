@@ -133,7 +133,6 @@ SET(digikam_LIB_SRCS
 
 KDE4_ADD_UI_FILES(digikam_LIB_SRCS ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs/deletedialogbase.ui)
 
-KDE4_AUTOMOC(${digikam_LIB_SRCS})
 
 #kde4_add_dcop_skels(libdigikam_LIB_SRCS MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please. kde4_add_dcop_skels macro doesn't exist now. We keep it just to remember to port to dbus")dcopiface.h )
 

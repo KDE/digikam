@@ -5,7 +5,6 @@ SET(digikamimageplugin_lensdistortion_PART_SRCS imageplugin_lensdistortion.cpp
                                                 pixelaccess.cpp
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_lensdistortion_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_lensdistortion ${digikamimageplugin_lensdistortion_PART_SRCS})
 

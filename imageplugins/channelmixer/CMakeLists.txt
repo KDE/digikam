@@ -3,7 +3,6 @@ SET(digikamimageplugin_channelmixer_PART_SRCS imageplugin_channelmixer.cpp
                                               channelmixer.cpp
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_channelmixer_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_channelmixer ${digikamimageplugin_channelmixer_PART_SRCS})
 

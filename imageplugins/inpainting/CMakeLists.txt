@@ -3,7 +3,6 @@ SET(digikamimageplugin_inpainting_PART_SRCS imageplugin_inpainting.cpp
                                             imageeffect_inpainting.cpp 
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_inpainting_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_inpainting ${digikamimageplugin_inpainting_PART_SRCS})
 

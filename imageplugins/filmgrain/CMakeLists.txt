@@ -4,7 +4,6 @@ SET(digikamimageplugin_filmgrain_PART_SRCS imageplugin_filmgrain.cpp
                                            filmgrain.cpp
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_filmgrain_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_filmgrain ${digikamimageplugin_filmgrain_PART_SRCS})
 

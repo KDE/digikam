@@ -6,7 +6,6 @@ SET(digikamimageplugin_perspective_PART_SRCS imageplugin_perspective.cpp
                                              matrix.cpp 
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_perspective_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_perspective ${digikamimageplugin_perspective_PART_SRCS})
 

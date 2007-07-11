@@ -6,7 +6,6 @@ SET(digikamimageplugin_texture_PART_SRCS imageplugin_texture.cpp
                                          texture.cpp 
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_texture_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_texture ${digikamimageplugin_texture_PART_SRCS})
 

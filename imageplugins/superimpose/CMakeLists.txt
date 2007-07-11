@@ -6,7 +6,6 @@ SET(digikamimageplugin_superimpose_PART_SRCS superimposewidget.cpp
                                              imageeffect_superimpose.cpp 
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_superimpose_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_superimpose ${digikamimageplugin_superimpose_PART_SRCS})
 

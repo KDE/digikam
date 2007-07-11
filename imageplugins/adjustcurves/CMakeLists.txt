@@ -3,7 +3,6 @@ SET(digikamimageplugin_adjustcurves_PART_SRCS imageplugin_adjustcurves.cpp
                                               adjustcurves.cpp 
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_adjustcurves_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_adjustcurves ${digikamimageplugin_adjustcurves_PART_SRCS})
 

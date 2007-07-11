@@ -33,7 +33,6 @@ SET(kio_digikamthumbnail_PART_SRCS digikamthumbnail.cpp
                                    ${liblevels_SRCS}
    )
 
-KDE4_AUTOMOC(${kio_digikamthumbnail_PART_SRCS})
 
 KDE4_ADD_PLUGIN(kio_digikamthumbnail ${kio_digikamthumbnail_PART_SRCS})
 
@@ -65,7 +64,6 @@ SET(kio_digikamtags_PART_SRCS digikamtags.cpp
                               ${liblevels_SRCS}
    ) 
 
-KDE4_AUTOMOC(${kio_digikamtags_PART_SRCS})
 
 KDE4_ADD_PLUGIN(kio_digikamtags ${kio_digikamtags_PART_SRCS})
 
@@ -107,7 +105,6 @@ SET(kio_digikamdates_PART_SRCS digikamdates.cpp
                                ${liblevels_SRCS}
    )
 
-KDE4_AUTOMOC(${kio_digikamdates_PART_SRCS})
 
 KDE4_ADD_PLUGIN(kio_digikamdates ${kio_digikamdates_PART_SRCS})
 
@@ -142,7 +139,6 @@ SET(kio_digikamsearch_PART_SRCS
     ${liblevels_SRCS} 
    )
 
-KDE4_AUTOMOC(${kio_digikamsearch_PART_SRCS})
 
 KDE4_ADD_PLUGIN(kio_digikamsearch ${kio_digikamsearch_PART_SRCS})
 

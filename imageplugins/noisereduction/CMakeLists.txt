@@ -4,7 +4,6 @@ SET(digikamimageplugin_noisereduction_PART_SRCS imageplugin_noisereduction.cpp
                                                 noisereduction.cpp 
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_noisereduction_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_noisereduction ${digikamimageplugin_noisereduction_PART_SRCS})
 

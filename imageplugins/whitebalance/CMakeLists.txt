@@ -3,7 +3,6 @@ SET(digikamimageplugin_whitebalance_PART_SRCS imageplugin_whitebalance.cpp
                                               imageeffect_whitebalance.cpp
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_whitebalance_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_whitebalance ${digikamimageplugin_whitebalance_PART_SRCS})
 

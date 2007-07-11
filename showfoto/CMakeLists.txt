@@ -65,7 +65,6 @@ SET(showfoto_SRCS
     showfoto.cpp 
    )
 
-KDE4_AUTOMOC(${showfoto_SRCS})
 
 KDE4_ADD_EXECUTABLE(showfoto ${showfoto_SRCS})
 

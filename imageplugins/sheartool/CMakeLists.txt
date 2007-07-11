@@ -4,7 +4,6 @@ SET(digikamimageplugin_sheartool_PART_SRCS imageplugin_sheartool.cpp
                                            sheartool.cpp 
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_sheartool_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_sheartool ${digikamimageplugin_sheartool_PART_SRCS})
 

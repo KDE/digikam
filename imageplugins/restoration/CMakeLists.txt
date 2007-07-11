@@ -3,7 +3,6 @@ SET(digikamimageplugin_restoration_PART_SRCS imageplugin_restoration.cpp
                                              imageeffect_restoration.cpp 
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_restoration_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_restoration ${digikamimageplugin_restoration_PART_SRCS})
 

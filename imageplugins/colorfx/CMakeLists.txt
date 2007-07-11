@@ -3,7 +3,6 @@ SET(digikamimageplugin_colorfx_PART_SRCS imageplugin_colorfx.cpp
                                          imageeffect_colorfx.cpp 
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_colorfx_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_colorfx ${digikamimageplugin_colorfx_PART_SRCS})
 

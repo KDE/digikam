@@ -4,7 +4,6 @@ set(digikamimageplugin_freerotation_PART_SRCS freerotation.cpp
                                               imageeffect_freerotation.cpp
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_freerotation_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_freerotation ${digikamimageplugin_freerotation_PART_SRCS})
 

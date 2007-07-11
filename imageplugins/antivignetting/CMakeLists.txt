@@ -4,7 +4,6 @@ SET(digikamimageplugin_antivignetting_PART_SRCS imageplugin_antivignetting.cpp
                                                 antivignetting.cpp 
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_antivignetting_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_antivignetting ${digikamimageplugin_antivignetting_PART_SRCS})
 

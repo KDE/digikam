@@ -3,7 +3,6 @@ SET(digikamimageplugin_adjustlevels_PART_SRCS imageplugin_adjustlevels.cpp
                                               adjustlevels.cpp 
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_adjustlevels_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_adjustlevels ${digikamimageplugin_adjustlevels_PART_SRCS})
 

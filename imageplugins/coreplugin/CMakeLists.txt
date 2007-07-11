@@ -59,7 +59,6 @@ SET(digikamimageplugin_core_PART_SRCS
     ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp 
    )
 
-KDE4_AUTOMOC(${digikamimageplugin_core_PART_SRCS})
 
 KDE4_ADD_PLUGIN(digikamimageplugin_core ${digikamimageplugin_core_PART_SRCS})
 
