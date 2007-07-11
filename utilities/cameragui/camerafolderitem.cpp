@@ -25,8 +25,6 @@
 // Local includes.
 
 #include "camerafolderitem.h"
-//Added by qt3to4:
-#include <QPixmap>
 
 namespace Digikam
 {
@@ -49,7 +47,8 @@ public:
     QString name;
 };
 
-CameraFolderItem::CameraFolderItem(K3ListView* parent, const QString& name, const QPixmap& pixmap)
+CameraFolderItem::CameraFolderItem(K3ListView* parent, 
+                                   const QString& name, const QPixmap& pixmap)
                 : K3ListViewItem(parent, name)
 {
     d = new CameraFolderItemPriv;
@@ -108,4 +107,3 @@ int CameraFolderItem::count()
 }
 
 } // namespace Digikam
-
