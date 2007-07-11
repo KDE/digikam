@@ -25,23 +25,21 @@
 
 // Qt includes.
 
-#include <qdatetime.h>
-#include <qlayout.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <q3hbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qtimer.h>
-
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
-#include <Q3Frame>
+#include <QDateTime>
+#include <QRadioButton>
+#include <QButtonGroup>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QTimer>
+#include <QHBoxLayout>
+#include <QGridLayout>
+#include <QFrame>
 
 // KDE includes.
 
+#include <khbox.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kapplication.h>
@@ -98,12 +96,11 @@ public:
 
     QString       cameraTitle;
 
+    QButtonGroup *buttonGroup;
+
     QRadioButton *renameDefault;
     QRadioButton *renameCustom;
 
-    Q3GroupBox    *renameDefaultBox;
-    Q3GroupBox    *renameCustomBox;
-    
     QLabel       *renameDefaultCase;
     QLabel       *startIndexLabel;
     QLabel       *dateTimeLabel;
@@ -116,9 +113,13 @@ public:
     QCheckBox    *addSeqNumberBox;
 
     QPushButton  *dateTimeButton;
+
     QString       dateTimeFormatString;
 
     QTimer       *changedTimer;
+
+    KVBox        *renameDefaultBox;
+    KVBox        *renameCustomBox;
 
     KLineEdit    *renameCustomPrefix;
     KLineEdit    *renameCustomSuffix;
@@ -127,28 +128,29 @@ public:
 };
 
 RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
-                : Q3ButtonGroup(parent)
+                : KVBox(parent)
 {
     d = new RenameCustomizerPriv;
     d->changedTimer = new QTimer();
     d->cameraTitle  = cameraTitle;
+    d->buttonGroup  = new QButtonGroup(this);
 
-    setFrameStyle( Q3Frame::NoFrame );
-    setRadioButtonExclusive(true);
-    setColumnLayout(0, Qt::Vertical);
-    Q3GridLayout* mainLayout = new Q3GridLayout(layout(), 4, 1);
+    setAttribute(Qt::WA_DeleteOnClose);
+
+    d->buttonGroup->setExclusive(true);
+
+    QGridLayout* mainLayout = new QGridLayout(this);
 
     // ----------------------------------------------------------------
 
     d->renameDefault = new QRadioButton(i18n("Camera filenames"), this);
+    d->buttonGroup->addButton(d->renameDefault);
     d->renameDefault->setWhatsThis( i18n("<p>Turn on this option to use camera "
-                                            "provided image filenames without modifications."));
-    mainLayout->addMultiCellWidget(d->renameDefault, 0, 0, 0, 1);
+                                         "provided image filenames without modifications."));
 
-    d->renameDefaultBox = new Q3GroupBox( this );
-    d->renameDefaultBox->setFrameStyle(Q3Frame::NoFrame|Q3Frame::Plain);
-    d->renameDefaultBox->setInsideMargin(0);
-    d->renameDefaultBox->setColumnLayout(0, Qt::Vertical);
+    d->renameDefaultBox = new KVBox(this);
+    d->renameDefaultBox->setMargin(0);
+    d->renameDefaultBox->setSpacing(KDialog::spacingHint());
 
     d->renameDefaultCase = new QLabel( i18n("Change case to:"), d->renameDefaultBox );
     d->renameDefaultCase->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
@@ -159,53 +161,43 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameDefaultCaseType->insertItem(i18n("Lower"), 2);
     d->renameDefaultCaseType->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     d->renameDefaultCaseType->setWhatsThis( i18n("<p>Set the method to use to change the case "
-                                                    "of image filenames."));
+                                                 "of image filenames."));
                                            
-    Q3HBoxLayout* boxLayout1 = new Q3HBoxLayout( d->renameDefaultBox->layout() );
+    QHBoxLayout* boxLayout1 = new QHBoxLayout( d->renameDefaultBox->layout() );
     boxLayout1->addSpacing( 10 );
     boxLayout1->addWidget( d->renameDefaultCase );
     boxLayout1->addWidget( d->renameDefaultCaseType );
 
-    mainLayout->addMultiCellWidget(d->renameDefaultBox, 1, 1, 0, 1);
-
     // -------------------------------------------------------------
 
     d->renameCustom = new QRadioButton(i18n("Customize"), this);
-    mainLayout->addMultiCellWidget(d->renameCustom, 2, 2, 0, 1);
+    d->buttonGroup->addButton(d->renameCustom);
     d->renameCustom->setWhatsThis( i18n("<p>Turn on this option to customize image filenames "
-                                           "during download."));
+                                        "during download."));
 
-    d->renameCustomBox = new Q3GroupBox(this);
-    d->renameCustomBox->setFrameStyle(Q3Frame::NoFrame|Q3Frame::Plain);
-    d->renameCustomBox->setInsideMargin(0);
-    d->renameCustomBox->setColumnLayout(0, Qt::Vertical);
+    d->renameCustomBox = new KVBox(this);
+    d->renameCustomBox->setMargin(0);
+    d->renameCustomBox->setSpacing(KDialog::spacingHint());
 
-    Q3GridLayout* renameCustomBoxLayout = new Q3GridLayout(d->renameCustomBox->layout(), 
-                                                         6, 2, KDialogBase::spacingHint());
-    renameCustomBoxLayout->setColSpacing( 0, 10 );
+    QGridLayout* renameCustomBoxLayout = new QGridLayout(d->renameCustomBox->layout());
 
-    QLabel* prefixLabel = new QLabel(i18n("Prefix:"), d->renameCustomBox);
-    renameCustomBoxLayout->addMultiCellWidget(prefixLabel, 0, 0, 1, 1);
+    QLabel* prefixLabel   = new QLabel(i18n("Prefix:"), d->renameCustomBox);
     d->renameCustomPrefix = new KLineEdit(d->renameCustomBox);
     d->focusedWidget = d->renameCustomPrefix;
-    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomPrefix, 0, 0, 2, 2);
     d->renameCustomPrefix->setWhatsThis( i18n("<p>Set the prefix which will be prepended to "
-                                                 "image filenames."));
+                                              "image filenames."));
 
     QLabel* suffixLabel = new QLabel(i18n("Suffix:"), d->renameCustomBox);
-    renameCustomBoxLayout->addMultiCellWidget(suffixLabel, 1, 1, 1, 1);
     d->renameCustomSuffix = new KLineEdit(d->renameCustomBox);
-    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomSuffix, 1, 1, 2, 2);
     d->renameCustomSuffix->setWhatsThis( i18n("<p>Set the suffix which will be postpended to "
-                                                  "image filenames."));
+                                              "image filenames."));
 
     d->addDateTimeBox = new QCheckBox( i18n("Add Date && Time"), d->renameCustomBox );
-    renameCustomBoxLayout->addMultiCellWidget(d->addDateTimeBox, 2, 2, 1, 2);
     d->addDateTimeBox->setWhatsThis( i18n("<p>Set this option to add the camera provided date and time."));
 
     QWidget *dateTimeWidget = new QWidget(d->renameCustomBox);
-    d->dateTimeLabel    = new QLabel(i18n("Date format:"), dateTimeWidget);
-    d->dateTimeFormat   = new QComboBox(dateTimeWidget);
+    d->dateTimeLabel        = new QLabel(i18n("Date format:"), dateTimeWidget);
+    d->dateTimeFormat       = new QComboBox(dateTimeWidget);
     d->dateTimeFormat->insertItem(i18n("Standard"),       RenameCustomizerPriv::DigikamStandard);
     d->dateTimeFormat->insertItem(i18n("ISO"),            RenameCustomizerPriv::IsoDateFormat);
     d->dateTimeFormat->insertItem(i18n("Full Text"),      RenameCustomizerPriv::TextDateFormat);
@@ -221,36 +213,55 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
                     "E.g.: <i>Thu Aug 24 14:26:18 2006</i></p>"
                     "<p><b>Local Settings</b>: the date format depending on KDE control panel settings.</p>"
                     "<p><b>Advanced:</b> allows to specify a custom date format.</p>"));
+
     d->dateTimeButton = new QPushButton(SmallIcon("configure"), QString(), dateTimeWidget);
     QSizePolicy policy = d->dateTimeButton->sizePolicy();
     policy.setHorData(QSizePolicy::Maximum);
     d->dateTimeButton->setSizePolicy(policy);
-    Q3HBoxLayout *boxLayout2 = new Q3HBoxLayout(dateTimeWidget);
+
+    QHBoxLayout *boxLayout2 = new QHBoxLayout(dateTimeWidget);
     boxLayout2->addWidget(d->dateTimeLabel);
     boxLayout2->addWidget(d->dateTimeFormat);
     boxLayout2->addWidget(d->dateTimeButton);
-    renameCustomBoxLayout->addMultiCellWidget(dateTimeWidget, 3, 3, 1, 2);
+    boxLayout2->setMargin(KDialog::spacingHint());
+    boxLayout2->setSpacing(KDialog::spacingHint());
 
     d->addCameraNameBox = new QCheckBox( i18n("Add Camera Name"), d->renameCustomBox );
-    renameCustomBoxLayout->addMultiCellWidget(d->addCameraNameBox, 4, 4, 1, 2);
     d->addCameraNameBox->setWhatsThis( i18n("<p>Set this option to add the camera name."));
 
     d->addSeqNumberBox = new QCheckBox( i18n("Add Sequence Number"), d->renameCustomBox );
-    renameCustomBoxLayout->addMultiCellWidget(d->addSeqNumberBox, 5, 5, 1, 2);
     d->addSeqNumberBox->setWhatsThis( i18n("<p>Set this option to add a sequence number "
-                                              "starting with the index set below."));
+                                           "starting with the index set below."));
 
     d->startIndexLabel = new QLabel( i18n("Start Index:"), d->renameCustomBox );
     d->startIndexInput = new KIntNumInput(1, d->renameCustomBox);
     d->startIndexInput->setRange(1, 900000, 1, false);
     d->startIndexInput->setWhatsThis( i18n("<p>Set the starting index value used to rename picture "
-                                              "files with a sequence number."));
+                                           "files with a sequence number."));
 
+    renameCustomBoxLayout->addMultiCellWidget(prefixLabel, 0, 0, 1, 1);
+    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomPrefix, 0, 0, 2, 2);
+    renameCustomBoxLayout->addMultiCellWidget(suffixLabel, 1, 1, 1, 1);
+    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomSuffix, 1, 1, 2, 2);
+    renameCustomBoxLayout->addMultiCellWidget(d->addDateTimeBox, 2, 2, 1, 2);
+    renameCustomBoxLayout->addMultiCellWidget(dateTimeWidget, 3, 3, 1, 2);
+    renameCustomBoxLayout->addMultiCellWidget(d->addCameraNameBox, 4, 4, 1, 2);
+    renameCustomBoxLayout->addMultiCellWidget(d->addSeqNumberBox, 5, 5, 1, 2);
     renameCustomBoxLayout->addMultiCellWidget(d->startIndexLabel, 6, 6, 1, 1);
     renameCustomBoxLayout->addMultiCellWidget(d->startIndexInput, 6, 6, 2, 2);
+    renameCustomBoxLayout->setColSpacing( 0, 10 );
+    renameCustomBoxLayout->setMargin(KDialog::spacingHint());
+    renameCustomBoxLayout->setSpacing(KDialog::spacingHint());
 
+    // ----------------------------------------------------------------------
+
+    mainLayout->addMultiCellWidget(d->renameDefaultBox, 1, 1, 0, 1);
+    mainLayout->addMultiCellWidget(d->renameCustom, 2, 2, 0, 1);
+    mainLayout->addMultiCellWidget(d->renameDefault, 0, 0, 0, 1);
     mainLayout->addMultiCellWidget(d->renameCustomBox, 3, 3, 0, 1);
     mainLayout->setRowStretch(4, 10);
+    mainLayout->setMargin(KDialog::spacingHint());
+    mainLayout->setSpacing(KDialog::spacingHint());
 
     // -- setup connections -------------------------------------------------
 
@@ -378,7 +389,7 @@ RenameCustomizer::Case RenameCustomizer::changeCase() const
 
 void RenameCustomizer::slotRadioButtonClicked(int)
 {
-    QRadioButton* btn = dynamic_cast<QRadioButton*>(selected());
+    QRadioButton* btn = dynamic_cast<QRadioButton*>(d->buttonGroup->checkedButton());
     if (!btn)
         return;
 
@@ -464,11 +475,11 @@ void RenameCustomizer::readSettings()
     bool addSeqNumb  = group.readEntry("Add Sequence Number", true);
     bool adddateTime = group.readEntry("Add Date Time", false);
     bool addCamName  = group.readEntry("Add Camera Name", false);
-    int chcaseT      = group.readEntry("Case Type", NONE);
+    int chcaseT      = group.readEntry("Case Type", (int)NONE);
     QString prefix   = group.readEntry("Rename Prefix", i18n("photo"));
     QString suffix   = group.readEntry("Rename Postfix", QString());
     int startIndex   = group.readEntry("Rename Start Index", 1);
-    int dateTime     = group.readEntry("Date Time Format", RenameCustomizerPriv::IsoDateFormat);
+    int dateTime     = group.readEntry("Date Time Format", (int)RenameCustomizerPriv::IsoDateFormat);
     QString format   = group.readEntry("Date Time Format String", "yyyyMMddThhmmss");
 
     if (def)
@@ -522,4 +533,3 @@ void RenameCustomizer::restoreFocus()
 }
 
 }  // namespace Digikam
-

@@ -28,7 +28,7 @@
 
 // Qt includes.
 
-#include <q3buttongroup.h>
+#include <kvbox.h>
 
 class QDateTime;
 
@@ -37,7 +37,7 @@ namespace Digikam
 
 class RenameCustomizerPriv;
 
-class RenameCustomizer : public Q3ButtonGroup
+class RenameCustomizer : public KVBox
 {
     Q_OBJECT
 
