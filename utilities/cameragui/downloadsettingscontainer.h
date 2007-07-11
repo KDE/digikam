@@ -26,8 +26,8 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qdatetime.h>
+#include <QString>
+#include <QDateTime>
 
 namespace Digikam
 {
