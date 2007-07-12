@@ -228,7 +228,7 @@ Watch::Watch(KIO::Job* job)
 void Watch::slotDone(KIO::Job*)
 {
     Digikam::AlbumManager::componentData()->refresh();
-    Digikam::AlbumLister::componentData().refresh();
+    Digikam::AlbumLister::componentData()->refresh();
     m_runCount--;
 
     delete this;

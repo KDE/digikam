@@ -97,7 +97,7 @@ SET(digikam_LIB_SRCS
 #                      dcopiface.cpp 
                       digikamfirstrun.cpp 
 #                      digikamview.cpp 
-#                      dio.cpp 
+                      dio.cpp 
 #                      dragobjects.cpp 
 #                      firstrun.cpp 
 #                      folderitem.cpp 
@@ -248,7 +248,7 @@ INSTALL( FILES digikam_export.h DESTINATION ${INCLUDE_INSTALL_DIR} )
 #	                dcopiface.skel \
 #	                digikamfirstrun.cpp \
 #	                digikamview.cpp \
-#	                dio.cpp \
+#		dio.cpp \
 #	                dragobjects.cpp \
 #	                firstrun.cpp \
 #	                folderitem.cpp \
