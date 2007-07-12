@@ -38,8 +38,8 @@
 
 // KDE includes.
 
-#include <kabc/stdaddressbook.h>
-#include <kmenu.h>
+//#include <kabc/stdaddressbook.h>
+#include <k3popupmenu.h>
 #include <klocale.h>
 #include <kurl.h>
 #include <kcursor.h>
@@ -145,8 +145,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     m_navigateBarLayout->addWidget(settingsArea);
 
-    Q3GridLayout *settingsLayout = new Q3GridLayout(settingsArea, 5, 1, 
-                                      KDialog::spacingHint(), KDialog::spacingHint());
+    QGridLayout *settingsLayout = new QGridLayout(settingsArea);
 
     // Comments/Date/Rating view -----------------------------------
     
@@ -171,8 +170,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     d->tagsSearchClearBtn = new QToolButton(tagsSearch);
     d->tagsSearchClearBtn->setAutoRaise(true);
-    d->tagsSearchClearBtn->setIconSet(kapp->iconLoader()->loadIcon("locationbar_erase",
-                                      KIcon::Toolbar, KIcon::SizeSmall));
+    d->tagsSearchClearBtn->setIcon(KIconLoader::global()->loadIcon("locationbar_erase",
+                                   K3Icon::Toolbar, K3Icon::SizeSmall));
 
     new QLabel(i18n("Search:"), tagsSearch);
     d->tagsSearchEdit = new KLineEdit(tagsSearch);
@@ -180,19 +179,19 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     d->assignedTagsBtn = new QToolButton(tagsSearch);
     d->assignedTagsBtn->setToolTip( i18n("Already assigned tags"));
-    d->assignedTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-assigned",
-                                   KIcon::NoGroup, KIcon::SizeSmall, 
-                                   KIcon::DefaultState, 0, true));
-    d->assignedTagsBtn->setToggleButton(true);
+    d->assignedTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-assigned",
+                                K3Icon::NoGroup, K3Icon::SizeSmall, 
+                                K3Icon::DefaultState, 0, true));
+    d->assignedTagsBtn->setCheckable(true);
 
-    d->recentTagsBtn      = new QToolButton(tagsSearch);
+    d->recentTagsBtn       = new QToolButton(tagsSearch);
     Q3PopupMenu *popupMenu = new Q3PopupMenu(d->recentTagsBtn);
     d->recentTagsBtn->setToolTip( i18n("Recent Tags"));
-    d->recentTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-recents", 
-                                 KIcon::NoGroup, KIcon::SizeSmall, 
-                                 KIcon::DefaultState, 0, true));
-    d->recentTagsBtn->setUsesBigPixmap(false);
-    d->recentTagsBtn->setPopup(popupMenu);
+    d->recentTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-recents", 
+                              K3Icon::NoGroup, K3Icon::SizeSmall, 
+                              K3Icon::DefaultState, 0, true));
+    d->recentTagsBtn->setIconSize(QSize(K3Icon::SizeSmall, K3Icon::SizeSmall));
+    d->recentTagsBtn->setMenu(popupMenu);
     d->recentTagsBtn->setPopupDelay(1);
 
     d->tagsView = new TAlbumListView(settingsArea);
@@ -203,18 +202,18 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     buttonsBox->setSpacing(KDialog::spacingHint());
 
     d->revertBtn = new QToolButton(buttonsBox);
-    d->revertBtn->setIconSet(SmallIcon("reload_page"));
+    d->revertBtn->setIcon(SmallIcon("reload_page"));
     d->revertBtn->setToolTip( i18n("Revert all changes"));
     d->revertBtn->setEnabled(false);
     
     d->applyBtn = new QPushButton(i18n("Apply"), buttonsBox);
-    d->applyBtn->setIconSet(SmallIcon("button_ok"));
+    d->applyBtn->setIcon(SmallIcon("button_ok"));
     d->applyBtn->setEnabled(false);
     d->applyBtn->setToolTip( i18n("Apply all changes to pictures"));
     buttonsBox->setStretchFactor(d->applyBtn, 10);
 
     d->moreButton = new QPushButton(i18n("More"), buttonsBox);
-    d->moreMenu = new Q3PopupMenu(this);
+    d->moreMenu   = new Q3PopupMenu(this);
     d->moreButton->setPopup(d->moreMenu);
 
     // --------------------------------------------------
@@ -226,6 +225,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     settingsLayout->addMultiCellWidget(tagsSearch, 4, 4, 0, 1);
     settingsLayout->addMultiCellWidget(buttonsBox, 5, 5, 0, 1);
     settingsLayout->setRowStretch(3, 10);
+    settingsLayout->setMargin(KDialog::spacingHint());
+    settingsLayout->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------
 
@@ -332,9 +333,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     // -- read config ---------------------------------------------------------
 
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("Tag List View");
-    d->toggleAutoTags = (TagFilterView::ToggleAutoTags)(config->readNumEntry("Toggle Auto Tags", 
-                                                       TagFilterView::NoToggleAuto));
+    KConfigGroup group = config->group(QString("Tag List View"));
+    d->toggleAutoTags = (TagFilterView::ToggleAutoTags)(group.readEntry("Toggle Auto Tags", 
+                                                       (int)TagFilterView::NoToggleAuto));
 }
 
 ImageDescEditTab::~ImageDescEditTab()
@@ -350,9 +351,9 @@ ImageDescEditTab::~ImageDescEditTab()
     */
 
     KSharedConfig::Ptr config = KGlobal::config();
-    config->setGroup("Tag List View");
-    config->writeEntry("Toggle Auto Tags", (int)(d->toggleAutoTags));
-    config->sync();
+    KConfigGroup group        = config->group(QString("Tag List View"));
+    group.writeEntry("Toggle Auto Tags", (int)(d->toggleAutoTags));
+    group.sync();
 
     delete d;
 }
@@ -370,7 +371,7 @@ void ImageDescEditTab::slotChangingItems()
     if (d->currInfos.isEmpty())
         return;
 
-    if (!AlbumSettings::componentData().getApplySidebarChangesDirectly())
+    if (!AlbumSettings::componentData()->getApplySidebarChangesDirectly())
     {
         KDialogBase *dialog = new KDialogBase(i18n("Apply changes?"),
                                               KDialogBase::Yes | KDialogBase::No,
@@ -393,29 +394,29 @@ void ImageDescEditTab::slotChangingItems()
         if (changedFields == 1)
         {
             if (d->hub.commentChanged())
-                text = i18n("<qt><p>You have edited the comment of the picture. ",
-                            "<qt><p>You have edited the comment of %n pictures. ",
-                            d->currInfos.count());
+                text = i18np("<qt><p>You have edited the comment of the picture. ",
+                             "<qt><p>You have edited the comment of %n pictures. ",
+                             d->currInfos.count());
             else if (d->hub.dateTimeChanged())
-                text = i18n("<qt><p>You have edited the date of the picture. ",
-                            "<qt><p>You have edited the date of %n pictures. ",
-                            d->currInfos.count());
+                text = i18np("<qt><p>You have edited the date of the picture. ",
+                             "<qt><p>You have edited the date of %n pictures. ",
+                             d->currInfos.count());
             else if (d->hub.ratingChanged())
-                text = i18n("<qt><p>You have edited the rating of the picture. ",
-                            "<qt><p>You have edited the rating of %n pictures. ",
-                            d->currInfos.count());
+                text = i18np("<qt><p>You have edited the rating of the picture. ",
+                             "<qt><p>You have edited the rating of %n pictures. ",
+                             d->currInfos.count());
             else if (d->hub.tagsChanged())
-                text = i18n("<qt><p>You have edited the tags of the picture. ",
-                            "<qt><p>You have edited the tags of %n pictures. ",
-                            d->currInfos.count());
+                text = i18np("<qt><p>You have edited the tags of the picture. ",
+                             "<qt><p>You have edited the tags of %n pictures. ",
+                             d->currInfos.count());
 
             text += i18n("Do you want to apply your changes?</p></qt>");
         }
         else
         {
-            text = i18n("<qt><p>You have edited the metadata of the picture: </p><ul>",
-                        "<qt><p>You have edited the metadata of %n pictures: </p><ul>",
-                        d->currInfos.count());
+            text = i18np("<qt><p>You have edited the metadata of the picture: </p><ul>",
+                         "<qt><p>You have edited the metadata of %n pictures: </p><ul>",
+                         d->currInfos.count());
 
             if (d->hub.commentChanged())
                 text += i18n("<li>the comment</li>");
@@ -439,7 +440,7 @@ void ImageDescEditTab::slotChangingItems()
                           &alwaysApply, KMessageBox::Notify);
 
         if (alwaysApply)
-            AlbumSettings::componentData().setApplySidebarChangesDirectly(true);
+            AlbumSettings::componentData()->setApplySidebarChangesDirectly(true);
 
         if (returnCode == KDialogBase::User1)
             return;
@@ -612,13 +613,13 @@ bool ImageDescEditTab::eventFilter(QObject *, QEvent *e)
     if ( e->type() == QEvent::KeyPress )
     {
         QKeyEvent *k = (QKeyEvent *)e;
-        if (k->state() == Qt::ControlModifier &&
+        if (k->modifiers() == Qt::ControlModifier &&
             (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return))
         {
             emit signalNextItem();
             return true;
         }
-        else if (k->state() == Qt::ShiftModifier &&
+        else if (k->modifiers() == Qt::ShiftModifier &&
                  (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return))
         {
             emit signalPrevItem();
@@ -786,14 +787,14 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
 
     if (!item)
     {
-        album = AlbumManager::componentData().findTAlbum(0);
+        album = AlbumManager::componentData()->findTAlbum(0);
     }
     else
     {
         TAlbumCheckListItem* viewItem = dynamic_cast<TAlbumCheckListItem*>(item);
 
         if(!viewItem)
-            album = AlbumManager::componentData().findTAlbum(0);
+            album = AlbumManager::componentData()->findTAlbum(0);
         else
             album = viewItem->m_album;
     }
@@ -806,7 +807,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
     connect(d->ABCMenu, SIGNAL( aboutToShow() ),
             this, SLOT( slotABCContextMenu() ));
 
-    KMenu popmenu(this);
+    K3PopupMenu popmenu(this);
     popmenu.insertTitle(SmallIcon("digikam"), i18n("Tags"));
     popmenu.insertItem(SmallIcon("tag-new"),  i18n("New Tag..."), 10);
     popmenu.insertItem(SmallIcon("tag-addressbook"), i18n("Create Tag From AddressBook"), d->ABCMenu);
@@ -879,7 +880,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
         case 13:   // Reset Tag Icon.
         {
             QString errMsg;
-            AlbumManager::componentData().updateTAlbumIcon(album, QString("tag"), 0, errMsg);
+            AlbumManager::componentData()->updateTAlbumIcon(album, QString("tag"), 0, errMsg);
             break;
         }
         case 14:   // Select All Tags.
@@ -1325,10 +1326,11 @@ void ImageDescEditTab::slotGotThumbnailFromIcon(Album *album, const QPixmap& thu
     item->setPixmap(0, thumbnail);
 
     // update item in recent tags popup menu, if found therein
-    Q3PopupMenu *menu = d->recentTagsBtn->popup();
-    if (menu->indexOf(album->id()) != -1)
+    Q3PopupMenu *menu = dynamic_cast<Q3PopupMenu *>(d->recentTagsBtn->popup());
+    if (menu)
     {
-        menu->changeItem(album->id(), thumbnail, menu->text(album->id()));
+        if (menu->indexOf(album->id()) != -1)
+            menu->changeItem(album->id(), thumbnail, menu->text(album->id()));
     }
 }
 
@@ -1339,7 +1341,7 @@ void ImageDescEditTab::slotThumbnailLost(Album *)
 
 void ImageDescEditTab::slotReloadThumbnails()
 {
-    AlbumList tList = AlbumManager::componentData().allTAlbums();
+    AlbumList tList = AlbumManager::componentData()->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         TAlbum* tag  = (TAlbum*)(*it);
@@ -1361,7 +1363,7 @@ void ImageDescEditTab::slotImagesChanged(int albumId)
     if (d->ignoreImageAttributesWatch || d->modified)
         return;
 
-    Album *a = AlbumManager::componentData().findAlbum(albumId);
+    Album *a = AlbumManager::componentData()->findAlbum(albumId);
     if (d->currInfos.isEmpty() || !a || a->isRoot() || a->type() != Album::TAG)
         return;
 
@@ -1419,10 +1421,12 @@ void ImageDescEditTab::reloadForMetadataChange(qlonglong imageId)
 
 void ImageDescEditTab::updateRecentTags()
 {
-    Q3PopupMenu *menu = d->recentTagsBtn->popup();
+    Q3PopupMenu *menu = dynamic_cast<Q3PopupMenu *>(d->recentTagsBtn->popup());
+    if (!menu) return;
+
     menu->clear();
 
-    AlbumList recentTags = AlbumManager::componentData().getRecentlyAssignedTags();
+    AlbumList recentTags = AlbumManager::componentData()->getRecentlyAssignedTags();
 
     if (recentTags.isEmpty())
     {
@@ -1481,7 +1485,7 @@ void ImageDescEditTab::slotTagsSearchChanged()
 
     bool atleastOneMatch = false;
 
-    AlbumList tList = AlbumManager::componentData().allTAlbums();
+    AlbumList tList = AlbumManager::componentData()->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         TAlbum* tag  = (TAlbum*)(*it);
@@ -1543,14 +1547,14 @@ void ImageDescEditTab::slotTagsSearchChanged()
     if (search.isEmpty())
     {
         d->tagsSearchEdit->unsetPalette();
-        TAlbum* root = AlbumManager::componentData().findTAlbum(0);
+        TAlbum* root = AlbumManager::componentData()->findTAlbum(0);
         TAlbumCheckListItem* rootItem = (TAlbumCheckListItem*)(root->extraData(this));
         if (rootItem)
             rootItem->setText(0, root->title());
     }
     else
     {
-        TAlbum* root = AlbumManager::componentData().findTAlbum(0);
+        TAlbum* root = AlbumManager::componentData()->findTAlbum(0);
         TAlbumCheckListItem* rootItem = (TAlbumCheckListItem*)(root->extraData(this));
         if (rootItem)
             rootItem->setText(0, i18n("Found Tags"));
@@ -1649,7 +1653,7 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
         }
     }
 
-    TAlbum *root                  = AlbumManager::componentData().findTAlbum(0);
+    TAlbum *root                  = AlbumManager::componentData()->findTAlbum(0);
     TAlbumCheckListItem *rootItem = (TAlbumCheckListItem*)(root->extraData(this));
     if (rootItem)
     {
@@ -1661,4 +1665,3 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
 }
 
 }  // NameSpace Digikam
-
