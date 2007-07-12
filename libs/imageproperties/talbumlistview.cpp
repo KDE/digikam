@@ -30,6 +30,7 @@
 
 // KDE includes.
 
+#include <k3popupmenu.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -144,7 +145,7 @@ void TAlbumListView::contentsMouseMoveEvent(QMouseEvent *e)
 {
     Q3ListView::contentsMouseMoveEvent(e);
 
-    if(e->state() == Qt::NoButton)
+    if(e->buttons() == Qt::NoButton)
     {
         if(KGlobalSettings::changeCursorOverIcon())
         {
@@ -288,7 +289,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
     if(TagDrag::canDecode(e))
     {
         QByteArray ba = e->encodedData("digikam/tag-id");
-        QDataStream ds(ba, QIODevice::ReadOnly);
+        QDataStream ds(&ba, QIODevice::ReadOnly);
         int tagID;
         ds >> tagID;
 
@@ -301,7 +302,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         if (talbum == itemDrop->m_album)
             return;
 
-        KMenu popMenu(this);
+        K3PopupMenu popMenu(this);
         popMenu.insertTitle(SmallIcon("digikam"), i18n("Tags"));
         popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
         popMenu.insertSeparator(-1);
@@ -316,7 +317,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             if (!itemDrop)
             {
                 // move dragItem to the root
-                newParentTag = AlbumManager::componentData().findTAlbum(0);
+                newParentTag = AlbumManager::componentData()->findTAlbum(0);
             }
             else
             {
@@ -325,7 +326,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             }
 
             QString errMsg;
-            if (!AlbumManager::componentData().moveTAlbum(talbum, newParentTag, errMsg))
+            if (!AlbumManager::componentData()->moveTAlbum(talbum, newParentTag, errMsg))
             {
                 KMessageBox::error(this, errMsg);
             }
@@ -342,8 +343,8 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         TAlbum *destAlbum = itemDrop->m_album;
         TAlbum *srcAlbum;
 
-        KUrl::List      urls;
-        KUrl::List      kioURLs;        
+        KUrl::List       urls;
+        KUrl::List       kioURLs;        
         Q3ValueList<int> albumIDs;
         Q3ValueList<int> imageIDs;
 
@@ -355,7 +356,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
 
         // all the albumids will be the same
         int albumID = albumIDs.first();
-        srcAlbum    = AlbumManager::componentData().findTAlbum(albumID);
+        srcAlbum    = AlbumManager::componentData()->findTAlbum(albumID);
         if (!srcAlbum)
         {
             DWarning() << "Could not find source album of drag"
@@ -365,9 +366,9 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
 
         int id = 0;
         char keys_return[32];
-        XQueryKeymap(x11Display(), keys_return);
-        int key_1 = XKeysymToKeycode(x11Display(), 0xFFE3);
-        int key_2 = XKeysymToKeycode(x11Display(), 0xFFE4);
+        XQueryKeymap(x11Info().display(), keys_return);
+        int key_1 = XKeysymToKeycode(x11Info().display(), 0xFFE3);
+        int key_2 = XKeysymToKeycode(x11Info().display(), 0xFFE4);
 
         if(srcAlbum == destAlbum)
         {
@@ -381,7 +382,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             }
             else
             {
-                KMenu popMenu(this);
+                K3PopupMenu popMenu(this);
                 popMenu.insertTitle(SmallIcon("digikam"), i18n("Tags"));
                 popMenu.insertItem(i18n("Set as Tag Thumbnail"), 12);
                 popMenu.insertSeparator(-1);
@@ -394,8 +395,8 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             if(id == 12)
             {
                 QString errMsg;
-                AlbumManager::componentData().updateTAlbumIcon(destAlbum, QString(),
-                                                           imageIDs.first(), errMsg);
+                AlbumManager::componentData()->updateTAlbumIcon(destAlbum, QString(),
+                                                                imageIDs.first(), errMsg);
             }
             return;
         }
@@ -410,7 +411,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         }
         else
         {
-            KMenu popMenu(this);
+            K3PopupMenu popMenu(this);
             popMenu.insertTitle(SmallIcon("digikam"), i18n("Tags"));
             popMenu.insertItem( SmallIcon("tag"), i18n("Assign Tag '%1' to Items")
                                 .arg(destAlbum->prettyUrl()), 10) ;
@@ -454,4 +455,3 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
 }
 
 }  // NameSpace Digikam
-
