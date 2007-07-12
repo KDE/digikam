@@ -28,8 +28,7 @@
 
 // Qt includes.
 
-#include <q3popupmenu.h>
-//Added by qt3to4:
+#include <Q3PopupMenu>
 #include <Q3ValueList>
 
 namespace Digikam
@@ -64,10 +63,10 @@ private slots:
 
 private:
 
-    void        clearPopup();
+    void         clearPopup();
     Q3PopupMenu* buildSubMenu(int tagid);
-    void        iterateAndBuildMenu(Q3PopupMenu *menu, TAlbum *album);
-    bool        showThisTag(int tagid);
+    void         iterateAndBuildMenu(Q3PopupMenu *menu, TAlbum *album);
+    bool         showThisTag(int tagid);
 
 private:
 

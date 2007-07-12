@@ -27,15 +27,12 @@
 
 // Qt includes.
 
-#include <qpixmap.h>
-#include <qstring.h>
-#include <qpainter.h>
-#include <qstyle.h>
-#include <q3valuelist.h>
-#include <qpixmap.h>
-#include <q3valuevector.h>
-//Added by qt3to4:
-#include <Q3PopupMenu>
+#include <Q3ValueVector>
+#include <QPixmap>
+#include <QString>
+#include <QPainter>
+#include <QStyle>
+#include <QPixmap>
 
 // KDE includes.
 
@@ -43,7 +40,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <q3tl.h>
 
 // Local includes.
 
@@ -63,6 +59,7 @@ namespace Digikam
 
 class TagsPopupCheckedMenuItem : public QCustomMenuItem
 {
+
 public:
 
     TagsPopupCheckedMenuItem(Q3PopupMenu* popup, const QString& txt, const QPixmap& pix)
