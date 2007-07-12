@@ -28,9 +28,9 @@
 
 // Qt includes.
 
-#include <qobject.h>
-#include <q3valuelist.h>
-#include <qstringlist.h>
+#include <Q3ValueList>
+#include <QObject>
+#include <QStringList>
 
 namespace Digikam
 {
