@@ -173,9 +173,9 @@ public:
     QStringList                   foldersToScan;
     QStringList                   cameraFolderList;
 
-    Q3PopupMenu                   *downloadMenu;
-    Q3PopupMenu                   *deleteMenu;
-    Q3PopupMenu                   *imageMenu;
+    Q3PopupMenu                  *downloadMenu;
+    Q3PopupMenu                  *deleteMenu;
+    Q3PopupMenu                  *imageMenu;
     
     QToolButton                  *cancelBtn;
 
@@ -271,7 +271,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->advBox->setWhatsThis( i18n("<p>Set how digiKam will rename picture files as they are downloaded."));
 
     d->advBox->insertItem(CameraUIPriv::RENAMEFILEPAGE, d->renameCustomizer, 
-                          SmallIcon("fileimport"), i18n("File Renaming Options"));
+                          SmallIcon("file-import"), i18n("File Renaming Options"));
         
     // -- Albums Auto-creation options -----------------------------------------
 
@@ -308,7 +308,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                      "E.g.: <i>Thu Aug 24 2006</i><p>"
                      "<b>Local Settings</b>: the date format depending on KDE control panel settings.<p>"));
 
-    d->advBox->insertItem(CameraUIPriv::AUTOALBUMPAGE, albumBox, SmallIcon("folder_new"), 
+    d->advBox->insertItem(CameraUIPriv::AUTOALBUMPAGE, albumBox, SmallIcon("folder-new"), 
                           i18n("Auto-creation of Albums"));
 
     // -- On the Fly options ---------------------------------------------------
@@ -355,7 +355,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->losslessFormat->setWhatsThis( i18n("<p>Select your preferred lossless image file format to "
                      "convert to.  <b>Note:</b> All metadata will be preserved during the conversion."));
 
-    d->advBox->insertItem(CameraUIPriv::ONFLYPAGE, onFlyBox, SmallIcon("run"), 
+    d->advBox->insertItem(CameraUIPriv::ONFLYPAGE, onFlyBox, SmallIcon("system-run"), 
                           i18n("On the Fly Operations (JPEG only)"));
                                                
     d->rightSidebar->appendTab(d->advBox, SmallIcon("configure"), i18n("Settings"));
@@ -365,7 +365,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     d->cancelBtn = new QToolButton(plain);
     d->cancelBtn->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
-    d->cancelBtn->setIcon( SmallIcon( "cancel" ) );
+    d->cancelBtn->setIcon(SmallIcon("process-stop"));
     d->cancelBtn->setEnabled(false);
     
     d->status   = new KSqueezedTextLabel(plain);
@@ -450,7 +450,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     // -------------------------------------------------------------------------
 
     d->helpMenu = new KHelpMenu(this, KGlobal::mainComponent().aboutData(), false);
-    d->helpMenu->menu()->insertItem(SmallIcon("camera"), i18n("Camera Information"), 
+    d->helpMenu->menu()->insertItem(SmallIcon("camera-photo"), i18n("Camera Information"), 
                                     this, SLOT(slotInformations()), 0, CAMERA_INFO_MENU_ID, 0);
     button(Help)->setMenu(d->helpMenu->menu());
 
