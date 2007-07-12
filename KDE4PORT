@@ -98,29 +98,29 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---setup                               Gilles          X               DONE
 
  5      |-digikam
-            album.cpp                           Laurent                 X       
+            album.cpp                           Laurent                 X       DONE
             albumfiletip.cpp                                            X
             albumfolderview.cpp                                         X
-            albumhistory.cpp                    Laurent                 X       
+            albumhistory.cpp                    Laurent                 X       DONE
             albumicongroupitem.cpp                                      X
             albumiconitem.cpp                                           X
             albumiconview.cpp                                           X
             albumitemhandler.cpp                                        X
             albumlister.cpp                                             X
             albummanager.cpp                                            X
-            albumpropsedit.cpp                  Laurent                 X
+            albumpropsedit.cpp                  Laurent                 X       DONE
             albumsettings.cpp                   Gilles                  X       DONE
             albumthumbnailloader.cpp                                    X
             albumwidgetstack.cpp                                        X
             cameradragobject.cpp                                        X
-            cameralist.cpp                      Laurent                 X
+            cameralist.cpp                      Laurent                 X       DONE
             cameratype.cpp                                              X
-            datefolderview.cpp                  Laurent                 X
+            datefolderview.cpp                  Laurent                 X       DONE
             dcopiface.cpp                                               X
             digikamapp.cpp                                              X
-            digikamfirstrun.cpp                 Laurent                 X
+            digikamfirstrun.cpp                 Laurent                 X       DONE
             digikamview.cpp                                             X
-            dio.cpp                             Laurent                 X
+            dio.cpp                             Laurent                 X       DONE
             dragobjects.cpp                                             X
             firstrun.cpp                                                X
             folderitem.cpp                                              X
