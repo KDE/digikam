@@ -125,7 +125,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             firstrun.cpp                        Gilles                  X       DONE
             folderitem.cpp                                              X
             folderview.cpp                                              X
-            icongroupitem.cpp                                           X
+            icongroupitem.cpp                   Gilles                  X       DONE
             iconitem.cpp                        Gilles                  X       DONE
             iconview.cpp                                                X
             imageattributeswatch.cpp            Gilles                  X       DONE
