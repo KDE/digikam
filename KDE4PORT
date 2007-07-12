@@ -133,7 +133,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             kdateedit.cpp                                               X
             kdatepickerpopup.cpp                                        X
             kdatetimeedit.cpp                                           X
-            kipiinterface.cpp                   Gilles                  X
+            kipiinterface.cpp                   Gilles                  X       DONE
             main.cpp                                                    X
             mediaplayerview.cpp                                         X
             metadatahub.cpp                                             X
