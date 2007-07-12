@@ -27,8 +27,7 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-//Added by qt3to4:
+#include <QWidget>
 #include <QPaintEvent>
 #include <QMouseEvent>
 
@@ -66,7 +65,6 @@ private slots:
 private:
 
     RatingWidgetPriv* d;
-
 };
 
 }  // namespace Digikam

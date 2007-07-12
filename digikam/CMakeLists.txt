@@ -115,7 +115,7 @@ SET(digikam_LIB_SRCS
 #                      monthwidget.cpp 
 #                      pixmapmanager.cpp 
 #                      ratingpopupmenu.cpp 
-#                      ratingwidget.cpp 
+                      ratingwidget.cpp 
 #                      scanlib.cpp 
 #                      searchadvanceddialog.cpp 
 #                      searchfolderview.cpp 

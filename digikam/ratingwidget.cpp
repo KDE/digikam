@@ -24,12 +24,9 @@
 
 // Qt includes.
 
-#include <qpainter.h>
-#include <qpalette.h>
-#include <qpixmap.h>
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QPaintEvent>
+#include <QPainter>
+#include <QPalette>
+#include <QPixmap>
 
 // KDE includes.
 
@@ -67,11 +64,7 @@ RatingWidget::RatingWidget(QWidget* parent)
             : QWidget(parent)
 {
     d = new RatingWidgetPriv;
-
-    KGlobal::dirs()->addResourceType("digikam_rating", 
-                     KGlobal::dirs()->kde_default("data") + "digikam/data");
-    d->ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating", "rating.png");
-    d->ratingPixPath.append("/rating.png");
+    d->ratingPixPath = KStandardDirs::locate("data", "digikam/data/rating.png");
 
     slotThemeChanged();
 
@@ -153,7 +146,7 @@ void RatingWidget::slotThemeChanged()
 
     QPainter painter(&d->regPixmap);
     painter.fillRect(0, 0, d->regPixmap.width(), d->regPixmap.height(),
-                     colorGroup().dark());
+                     palette().color(QPalette::Dark));
     painter.end();
 
     QPainter painter2(&d->selPixmap);
@@ -166,4 +159,3 @@ void RatingWidget::slotThemeChanged()
 }
 
 }  // namespace Digikam
-
