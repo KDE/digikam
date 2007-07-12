@@ -31,6 +31,7 @@
 
 // KDE includes.
 
+#include <kstandardaction.h>
 #include <kxmlguifactory.h>
 #include <kedittoolbar.h>
 #include <ktoggleaction.h>
@@ -183,8 +184,8 @@ void LightTableWindow::setupUserArea()
     QWidget* centralW = new QWidget(d->hSplitter);
     QVBoxLayout *vlay = new QVBoxLayout(centralW);
     d->vSplitter      = new QSplitter(Qt::Vertical, centralW);
-    d->barView        = new LightTableBar(d->vSplitter, ThumbBarView::Horizontal, 
-                                          AlbumSettings::componentData().getExifRotate());
+    d->barView        = new LightTableBar(d->vSplitter, Qt::Horizontal, 
+                                          AlbumSettings::componentData()->getExifRotate());
     d->previewView    = new LightTableView(d->vSplitter);
 
     d->rightSidebar   = new ImagePropertiesSideBarDB(mainW, 
@@ -320,35 +321,38 @@ void LightTableWindow::setupActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
-    d->backwardAction = KStandardAction::back(this, SLOT(slotBackward()),
-                                    actionCollection(), "lighttable_backward");
+    d->backwardAction = actionCollection()->addAction(KStandardAction::Back, "lighttable_backward", 
+                                                      this, SLOT(slotBackward()));
     d->backwardAction->setEnabled(false);
 
-    d->forwardAction = KStandardAction::forward(this, SLOT(slotForward()),
-                                   actionCollection(), "lighttable_forward");
+    d->forwardAction = actionCollection()->addAction(KStandardAction::Forward, "lighttable_forward", 
+                                                    this, SLOT(slotForward()));
     d->forwardAction->setEnabled(false);
 
-    d->firstAction = new KAction(i18n("&First"), "start",
-                                 KStandardShortcut::shortcut( KStandardShortcut::Home),
-                                 this, SLOT(slotFirst()),
-                                 actionCollection(), "lighttable_first");
+    d->firstAction = new KAction(KIcon("go-first"), i18n("&First"), this);
+    d->firstAction->setShortcut(KStandardShortcut::Home);
     d->firstAction->setEnabled(false);
+    connect(d->firstAction, SIGNAL(triggered()), this, SLOT(slotFirst()));
+    actionCollection()->addAction("lighttable_first", d->firstAction);
 
-    d->lastAction = new KAction(i18n("&Last"), "finish",
-                                KStandardShortcut::shortcut( KStandardShortcut::End),
-                                this, SLOT(slotLast()),
-                                actionCollection(), "lighttable_last");
+    d->lastAction = new KAction(KIcon("go-last"), i18n("&Last"), this);
+    d->lastAction->setShortcut(KStandardShortcut::End);
     d->lastAction->setEnabled(false);
+    connect(d->lastAction, SIGNAL(triggered()), this, SLOT(slotLast()));
+    actionCollection()->addAction("lighttable_last", d->lastAction);
 
-    d->setItemLeftAction = new KAction(i18n("Show item on left panel"), "previous",
-                                       CTRL+Qt::Key_L, this, SLOT(slotSetItemLeft()),
-                                       actionCollection(), "lighttable_setitemleft");
+
+    d->setItemLeftAction = new KAction(KIcon("arrow-left"), i18n("Show item on left panel"), this);
+    d->setItemLeftAction->setShortcut(Qt::CTRL+Qt::Key_L);
     d->setItemLeftAction->setEnabled(false);
+    connect(d->setItemLeftAction, SIGNAL(triggered()), this, SLOT(slotSetItemLeft()));
+    actionCollection()->addAction("lighttable_setitemleft", d->setItemLeftAction);
 
-    d->setItemRightAction = new KAction(i18n("Show item on right panel"), "next",
-                                       CTRL+Qt::Key_R, this, SLOT(slotSetItemRight()),
-                                       actionCollection(), "lighttable_setitemright");
+    d->setItemRightAction = new KAction(KIcon("arrow-right"), i18n("Show item on right panel"), this);
+    d->setItemRightAction->setShortcut(Qt::CTRL+Qt::Key_R);
     d->setItemRightAction->setEnabled(false);
+    connect(d->setItemRightAction, SIGNAL(triggered()), this, SLOT(slotSetItemRight()));
+    actionCollection()->addAction("lighttable_setitemright", d->setItemRightAction);
 
     d->editItemAction = new KAction(i18n("Edit"), "editimage",
                                        Qt::Key_F4, this, SLOT(slotEditItem()),
