@@ -26,12 +26,11 @@
 #ifndef KDATETIMEEDIT_H
 #define KDATETIMEEDIT_H
 
-// Qt includes.
+// KDE includes.
 
+#include <khbox.h>
 
-
-class Q3TimeEdit;
-class KHBox;
+class QTimeEdit;
 
 namespace Digikam
 {
@@ -86,8 +85,9 @@ signals:
 
 private:
 
+    QTimeEdit* m_timePopUp;
+
     KDateEdit* m_datePopUp;
-    Q3TimeEdit* m_timePopUp;
 
 private slots:
 
