@@ -27,8 +27,9 @@
 
 // Qt includes.
 
-#include <qpixmap.h>
-#include <qpalette.h>
+#include <QPixmap>
+#include <QPalette>
+#include <QPainter>
 
 // Local includes.
 
@@ -103,7 +104,7 @@ IconGroupItem* IconGroupItem::prevGroup() const
 QRect IconGroupItem::rect() const
 {
     QRect r = d->view->bannerRect();
-    r.moveBy(0, d->y);
+    r.translate(0, d->y);
     return r;
 }
 
@@ -279,13 +280,14 @@ void IconGroupItem::paintBanner()
 {
     QRect r(rect());
     QPixmap pix(r.width(), r.height());
-    pix.fill(d->view->colorGroup().base());
+    pix.fill(d->view->palette().color(QPalette::Base));
 
     r = QRect(d->view->contentsToViewport(QPoint(r.x(), r.y())),
               QSize(r.width(), r.height()));
     
-    bitBlt(d->view->viewport(), r.x(), r.y(), &pix,
-           0, 0, r.width(), r.height());
+    QPainter p(d->view->viewport());
+    p.drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
+    p.end();
 }
 
 int IconGroupItem::compare(IconGroupItem*)

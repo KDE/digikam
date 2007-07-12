@@ -104,7 +104,7 @@ SET(digikam_LIB_SRCS
 #                      folderitem.cpp 
 #                      folderview.cpp 
 #                      iconview.cpp 
-#                      icongroupitem.cpp 
+                      icongroupitem.cpp 
                       iconitem.cpp 
                       imageattributeswatch.cpp 
                       imagepreviewview.cpp 
