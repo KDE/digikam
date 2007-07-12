@@ -23,11 +23,11 @@
 
 // Qt includes.
 
-#include <qdatetime.h>
-#include <q3listview.h>
-#include <qfont.h>
-#include <qpainter.h>
-#include <qstyle.h>
+#include <Q3ListView>
+#include <QDateTime>
+#include <QFont>
+#include <QPainter>
+#include <QStyle>
 
 // KDE includes.
 
@@ -36,10 +36,8 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kconfig.h>
-
 #include <kdeversion.h>
 #include <kcalendarsystem.h>
-#include <kvbox.h>
 
 // Local includes.
 
@@ -112,7 +110,7 @@ public:
 
 
 DateFolderView::DateFolderView(QWidget* parent)
-    : KVBox(parent)
+              : KVBox(parent)
 {
     d = new DateFolderViewPriv;
     d->active    = false;
@@ -124,16 +122,16 @@ DateFolderView::DateFolderView(QWidget* parent)
     d->listview->setRootIsDecorated(true);
 
     connect(AlbumManager::componentData(), SIGNAL(signalAlbumAdded(Album*)),
-            SLOT(slotAlbumAdded(Album*)));
+            this, SLOT(slotAlbumAdded(Album*)));
     connect(AlbumManager::componentData(), SIGNAL(signalAlbumDeleted(Album*)),
-            SLOT(slotAlbumDeleted(Album*)));
+            this, SLOT(slotAlbumDeleted(Album*)));
     connect(AlbumManager::componentData(), SIGNAL(signalAllDAlbumsLoaded()),
-            SLOT(slotAllDAlbumsLoaded()));    
+            this, SLOT(slotAllDAlbumsLoaded()));    
     connect(AlbumManager::componentData(), SIGNAL(signalAlbumsCleared()),
             d->listview, SLOT(clear()));
 
     connect(d->listview, SIGNAL(selectionChanged()),
-            SLOT(slotSelectionChanged()));
+            this, SLOT(slotSelectionChanged()));
 }
 
 DateFolderView::~DateFolderView()
@@ -251,7 +249,7 @@ void DateFolderView::slotSelectionChanged()
 void DateFolderView::loadViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(name());
+    KConfigGroup group = config->group(objectName());
     
     QString selected;
     if(config->hasKey("LastSelectedItem"))
@@ -285,7 +283,7 @@ void DateFolderView::loadViewState()
 void DateFolderView::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(name());
+    KConfigGroup group = config->group(objectName());
    
     DateFolderItem *item = dynamic_cast<DateFolderItem*>(d->listview->selectedItem());
     if(item)
@@ -314,4 +312,3 @@ void DateFolderView::setSelected(Q3ListViewItem *item)
 }
 
 }  // namespace Digikam
-

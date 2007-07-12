@@ -24,15 +24,18 @@
 #ifndef DATEFOLDERVIEW_H
 #define DATEFOLDERVIEW_H
 
-// Qt includes.
+// KDE includes.
 
+#include <kvbox.h>
 
+class Q3ListViewItem;
 
 namespace Digikam
 {
 
 class DateFolderViewPriv;
 class DAlbum;
+class Album;
 
 class DateFolderView : public KVBox
 {
@@ -65,8 +68,7 @@ private:
      * writes the view state to disk
      */
     void saveViewState();
-    
-    
+        
     DateFolderViewPriv* d;
 };
 
