@@ -39,7 +39,6 @@
 
 // KDE includes.
 
-#include <k3process.h>
 #include <kservicetypetrader.h>
 #include <kdialog.h>
 #include <klocale.h>

@@ -111,11 +111,7 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
 
     // -- Load rating Pixmap ------------------------------------------
 
-    KGlobal::dirs()->addResourceType("digikam_rating", KGlobal::dirs()->kde_default("data")
-                                     + "digikam/data");
-    QString ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating", "rating.png");
-    ratingPixPath += "/rating.png";
-    d->ratingPixmap = QPixmap(ratingPixPath);
+    d->ratingPixmap = QPixmap(KStandardDirs::locate("data", "digikam/data/rating.png"));
 
     QPainter painter(&d->ratingPixmap);
     painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
@@ -506,10 +502,10 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         p.drawRect(0, 0, tile.width(), tile.height());
                     }
 
-                    if (item->pixmap())
+                    if (!item->pixmap().isNull())
                     {
                         QPixmap pix; 
-                        pix.fromImage(QImage(item->pixmap()->toImage()).
+                        pix.fromImage(QImage(item->pixmap().toImage()).
                                              scaled(getTileSize(), getTileSize(), Qt::KeepAspectRatio));
                         int x = (tile.width()  - pix.width())/2;
                         int y = (tile.height() - pix.height())/2;
@@ -560,10 +556,10 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         p.drawRect(0, 0, tile.width(), tile.height());
                     }
 
-                    if (item->pixmap())
+                    if (!item->pixmap().isNull())
                     {
                         QPixmap pix; 
-                        pix.fromImage(QImage(item->pixmap()->toImage()).
+                        pix.fromImage(QImage(item->pixmap().toImage()).
                                       scaled(getTileSize(), getTileSize(),
                                       Qt::KeepAspectRatio));
                         int x = (tile.width() - pix.width())/2;
@@ -858,7 +854,7 @@ QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
             }
         }
     }
-
+ 
     return tip;
 }
 

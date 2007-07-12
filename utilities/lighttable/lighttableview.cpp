@@ -393,7 +393,8 @@ void LightTableView::slotRightPreviewLoaded(bool success)
 
 void LightTableView::checkForSyncPreview()
 {
-    if (d->leftPreview->getImageInfo() && d->rightPreview->getImageInfo() &&
+    if (d->leftPreview->getImageInfo() && 
+        d->rightPreview->getImageInfo() &&
         d->leftPreview->getImageSize() == d->rightPreview->getImageSize())
     {
         d->syncPreview = true;
