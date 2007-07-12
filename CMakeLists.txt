@@ -351,7 +351,7 @@ SET(liblighttable_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablepreview.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttableview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablebar.cpp 
-#    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablewindow.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablewindow.cpp 
    )
 
 SET(libcameragui_SRCS 
