@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <q3popupmenu.h>
+#include <Q3PopupMenu>
 
 namespace Digikam
 {
@@ -41,7 +41,6 @@ public:
 
     RatingPopupMenu(QWidget* parent=0);
     ~RatingPopupMenu();
-
 };
 
 }  // namespace Digikam

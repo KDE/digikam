@@ -23,17 +23,14 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qbitmap.h>
-//Added by qt3to4:
-#include <Q3PopupMenu>
+#include <QString>
+#include <QPainter>
+#include <QPixmap>
+#include <QBitmap>
 
 // KDE includes.
 
 #include <klocale.h>
-#include <kglobal.h>
 #include <kstandarddirs.h>
 
 // Local includes.
@@ -49,14 +46,13 @@ namespace Digikam
 RatingPopupMenu::RatingPopupMenu(QWidget* parent)
                : Q3PopupMenu(parent)
 {
-    KGlobal::dirs()->addResourceType("digikam_rating", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating", "rating.png");
-    ratingPixPath += "/rating.png";
+    QString ratingPixPath = KStandardDirs::locate("data", "digikam/data/rating.png");
 
     insertItem(i18n("None"), 0);
 
     QBitmap starbm(ratingPixPath);
-    QBitmap clearbm(starbm.width(), starbm.height(), true);    
+    QBitmap clearbm(starbm.width(), starbm.height());    
+    clearbm.clear();
 
     for (int i = 1 ; i <= RatingMax ; i++)
     {
@@ -81,4 +77,3 @@ RatingPopupMenu::~RatingPopupMenu()
 }
 
 }  // namespace Digikam
-

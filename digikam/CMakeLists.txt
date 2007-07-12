@@ -114,7 +114,7 @@ SET(digikam_LIB_SRCS
 #                      mediaplayerview.cpp 
 #                      monthwidget.cpp 
 #                      pixmapmanager.cpp 
-#                      ratingpopupmenu.cpp 
+                      ratingpopupmenu.cpp 
                       ratingwidget.cpp 
 #                      scanlib.cpp 
 #                      searchadvanceddialog.cpp 

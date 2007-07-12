@@ -30,7 +30,6 @@
 
 // KDE includes.
 
-#include <kglobal.h>
 #include <kstandarddirs.h>
 
 // Local includes.
