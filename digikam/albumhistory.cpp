@@ -24,7 +24,6 @@
 // Qt includes.
 
 #include <qstring.h>
-#include <qstringlist.h>
 #include <qwidget.h>
 
 // Local includes.
@@ -32,6 +31,7 @@
 #include "ddebug.h"
 #include "album.h"
 #include "albumhistory.h"
+#include "albumhistory.moc"
 
 namespace Digikam
 {
@@ -335,4 +335,3 @@ bool AlbumHistory::isBackwardEmpty() const
 
 }  // namespace Digikam
 
-#include "albumhistory.moc"
