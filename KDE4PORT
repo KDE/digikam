@@ -35,7 +35,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             cameraitempropertiestab.cpp         Gilles                  X       DONE
             imagepropertiessidebarcamgui.cpp    Gilles                  X       DONE
             imagepropertiessidebardb.cpp        Gilles                  X       DONE
-            imagedescedittab.cpp                                        X                            Too much depencies with digiKam implementation. Must be ported later
+            imagedescedittab.cpp                Gilles                  X       UNCOMPLETE           Compile. KAdresseBook Code are not yet ported. Few depreciate methods to fix
             talbumlistview.cpp                  Gilles                  X       DONE
         |---jpegutils                           Gilles                  X       DONE
         |---levels                              Gilles          X       X       DONE
@@ -62,7 +62,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             cameraiconitem.cpp                  Gilles                  X       DONE
             cameraiconview.cpp                  Gilles                  X       DONE
             camerainfodialog.cpp                Gilles                  X       DONE
-            cameraui.cpp                        Gilles                  X       DONE                 Depreciate methods to fix
+            cameraui.cpp                        Gilles                  X       DONE                 Few depreciate methods to fix
             dkcamera.cpp                        Gilles                  X       DONE
             gpcamera.cpp                        Gilles                  X       DONE
             gpiteminfo.cpp                      Gilles                  X       DONE
@@ -74,7 +74,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |-----editor
             editorwindow.cpp                    Gilles          X       X       UNCOMPLETE           Compile. Some code to manage keyboard shorcuts are not yet ported.
             imageiface.cpp                      Gilles          X       X       DONE
-            imagewindow.cpp                     Gilles                  X       DONE                 Depreciate methods to fix
+            imagewindow.cpp                     Gilles                  X       DONE                 Few depreciate methods to fix
         |-----tools                             Laurent         X       X       DONE
         |---lighttable                                                  
             lighttablepreview.cpp               Gilles                  X       DONE
@@ -185,7 +185,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---raindrop                            Laurent                         DONE       DONE
         |---restoration                         Gilles                          DONE       DONE          
         |---sheartool                           Laurent                         DONE       DONE
-        |---superimpose                         Laurent                         DONE                 Crash with thumbbar (same tooltip problem than showfoto)
+        |---superimpose                         Laurent                         DONE        
         |---texture                             Laurent                         DONE       DONE
         |-----patterns                          Laurent                         DONE        -        
         |---whitebalance                        Gilles                          DONE       DONE
