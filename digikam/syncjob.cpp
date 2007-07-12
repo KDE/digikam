@@ -35,6 +35,8 @@
 // KDE includes.
 
 #include <kio/job.h>
+#include <kio/deletejob.h>
+#include <kio/copyjob.h>
 #include <kprotocolinfo.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
@@ -115,14 +117,7 @@ bool SyncJob::delPriv(const KUrl::List& urls)
 bool SyncJob::trashPriv(const KUrl::List& urls)
 {
     success_ = true;
-    KUrl dest("trash:/");
-
-    if (!KProtocolInfo::isKnownProtocol(dest))
-    {
-        dest = KGlobalSettings::trashPath();
-    }
-
-    KIO::Job* job = KIO::move( urls, dest );
+    KIO::Job* job = KIO::trash( urls );
     connect( job, SIGNAL(result( KIO::Job* )),
              SLOT(slotResult( KIO::Job*)) );
 
@@ -145,8 +140,8 @@ bool SyncJob::fileMovePriv(const KUrl &src, const KUrl &dest)
 
 void SyncJob::enter_loop()
 {
-    QWidget dummy(0,0,Qt::WType_Dialog | WShowModal);
-    dummy.setFocusPolicy( QWidget::NoFocus );
+    QWidget dummy(0,0,Qt::WType_Dialog /*| WShowModal*/);
+    dummy.setFocusPolicy( Qt::NoFocus );
     qt_enter_modal(&dummy);
     qApp->enter_loop();
     qt_leave_modal(&dummy);
@@ -244,8 +239,8 @@ QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
     else
     {
         KIconLoader *iconLoader = KIconLoader::global();
-        *thumbnail_ = iconLoader->loadIcon(name, KIcon::NoGroup, thumbnailSize_,
-                                           KIcon::DefaultState, 0, true);
+        *thumbnail_ = iconLoader->loadIcon(name, K3Icon::NoGroup, thumbnailSize_,
+                                           K3Icon::DefaultState, 0, true);
     }
     return *thumbnail_;
 }

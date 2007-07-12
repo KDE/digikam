@@ -76,12 +76,12 @@ SET(digikam_LIB_SRCS
 #                      kdateedit.cpp 
 #                      metadatahub.cpp 
 #                      digikamapp.cpp 
-#                      album.cpp 
+                      album.cpp 
 #                      albumiconview.cpp 
 #                      albumicongroupitem.cpp 
 #                      albumiconitem.cpp 
 #                      albumitemhandler.cpp 
-#                      albumfiletip.cpp 
+#                     albumfiletip.cpp 
 #                      albumfolderview.cpp 
                       albumhistory.cpp 
 #                      albumlister.cpp 
@@ -115,14 +115,14 @@ SET(digikam_LIB_SRCS
 #                      pixmapmanager.cpp 
 #                      ratingpopupmenu.cpp 
 #                      ratingwidget.cpp 
-                      scanlib.cpp 
+#                      scanlib.cpp 
 #                      searchadvanceddialog.cpp 
 #                      searchfolderview.cpp 
 #                      searchquickdialog.cpp 
 #                      searchresultsview.cpp 
 #                      searchresultsitem.cpp 
 #                      searchwidgets.cpp 
-                      syncjob.cpp 
+#                      syncjob.cpp 
 #                      tagcreatedlg.cpp 
 #                      tagfilterview.cpp 
 #                      tagfolderview.cpp 

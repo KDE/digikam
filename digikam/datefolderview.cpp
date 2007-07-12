@@ -112,7 +112,7 @@ public:
 
 
 DateFolderView::DateFolderView(QWidget* parent)
-    : KVBox(parent, "DateFolderView")
+    : KVBox(parent)
 {
     d = new DateFolderViewPriv;
     d->active    = false;
@@ -262,7 +262,7 @@ void DateFolderView::loadViewState()
     QStringList openFolders;
     if(config->hasKey("OpenFolders"))
     {
-        openFolders = group.readListEntry("OpenFolders");
+        openFolders = group.readListEntry("OpenFolders",QStringList());
     }
     
     DateFolderItem *item;
