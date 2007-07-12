@@ -267,7 +267,6 @@ void EditorWindow::setupStandardActions()
     m_backwardAction = actionCollection()->addAction(KStandardAction::Back, "editorwindow_backward", 
                                                      this, SLOT(slotBackward()));
 
-
     m_forwardAction = actionCollection()->addAction(KStandardAction::Forward, "editorwindow_forward", 
                                                     this, SLOT(slotForward()));
 
