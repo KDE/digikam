@@ -36,7 +36,7 @@
 #include <Q3PtrList>
 
 // KDE includes.
-
+#include <kactioncollection.h>
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -53,7 +53,7 @@
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kwindowsystem.h>
-
+#include <KActionMenu>
 // libKipi includes.
 
 #include <libkipi/plugin.h>
@@ -144,14 +144,14 @@ DigikamApp::DigikamApp()
     // Check ICC profiles repository availability
 
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Checking ICC repository"), Qt::AlignLeft, white);
+        d->splashScreen->message(i18n("Checking ICC repository"), Qt::AlignLeft, Qt::white);
 
     d->validIccPath = SetupICC::iccRepositoryIsValid();
 
     // Check witch dcraw version available
 
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Checking dcraw version"), Qt::AlignLeft, white);
+        d->splashScreen->message(i18n("Checking dcraw version"), Qt::AlignLeft, Qt::white);
 
     KDcrawIface::DcrawBinary::instance().checkSystem();
 
@@ -160,7 +160,7 @@ DigikamApp::DigikamApp()
 
     // Read albums from database
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Reading database"), Qt::AlignLeft, white);
+        d->splashScreen->message(i18n("Reading database"), Qt::AlignLeft, Qt::white);
 
     d->albumManager->startScan();
 
@@ -304,7 +304,7 @@ void DigikamApp::autoDetect()
     // Called from main if command line option is set
 
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Auto-detect camera"), Qt::AlignLeft, white);
+        d->splashScreen->message(i18n("Auto-detect camera"), Qt::AlignLeft, Qt::white);
 
     QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
 }
@@ -318,7 +318,7 @@ void DigikamApp::downloadFrom(const QString &cameraGuiPath)
         d->cameraGuiPath = cameraGuiPath;
 
         if(d->splashScreen)
-            d->splashScreen->message(i18n("Opening Download Dialog"), Qt::AlignLeft, white);
+            d->splashScreen->message(i18n("Opening Download Dialog"), Qt::AlignLeft, Qt::white);
 
         QTimer::singleShot(0, this, SLOT(slotDownloadImages()));
     }
@@ -337,7 +337,7 @@ bool DigikamApp::queryClose()
 void DigikamApp::setupView()
 {
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Initializing Main View"), Qt::AlignLeft, white);
+        d->splashScreen->message(i18n("Initializing Main View"), Qt::AlignLeft, Qt::white);
 
     d->view = new DigikamView(this);
     setCentralWidget(d->view);
@@ -939,7 +939,7 @@ void DigikamApp::setupActions()
     // Load Cameras -- do this before the createGUI so that the cameras
     // are plugged into the toolbar at startup
     if (d->splashScreen)
-        d->splashScreen->message(i18n("Loading cameras"), Qt::AlignLeft, white);
+        d->splashScreen->message(i18n("Loading cameras"), Qt::AlignLeft, Qt::white);
     
     loadCameras();
 
@@ -1228,7 +1228,7 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
             path = path.mid(1);
         else
             return folder; // nothing to see - go on
-
+#if 0
         DDebug() << "parsed import path is: " << path << endl;
         DCOPRef ref("kded", "mediamanager");
         DCOPReply reply = ref.call("properties", path);
@@ -1242,7 +1242,7 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
         } else {
             DWarning() << "dcop call failed\n";
         }
-
+#endif
         return path;
     }
 
@@ -1620,7 +1620,7 @@ void DigikamApp::slotShowKipiHelp()
 void DigikamApp::loadPlugins()
 {
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Loading Kipi Plugins"), Qt::AlignLeft, white);
+        d->splashScreen->message(i18n("Loading Kipi Plugins"), Qt::AlignLeft, Qt::white);
 
     QStringList ignores;
     d->kipiInterface = new DigikamKipiInterface( this, "Digikam_KIPI_interface" );
@@ -1745,7 +1745,7 @@ void DigikamApp::loadCameras()
 void DigikamApp::populateThemes()
 {
     if(d->splashScreen)
-        d->splashScreen->message(i18n("Loading themes"), Qt::AlignLeft, white);
+        d->splashScreen->message(i18n("Loading themes"), Qt::AlignLeft, Qt::white);
 
     ThemeEngine::instance().scanThemes();
     QStringList themes(ThemeEngine::instance().themeNames());
