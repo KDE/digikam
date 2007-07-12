@@ -146,7 +146,8 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KUrl& url)
             
             d->searchEdit->setText(strList.join(" "));
             d->nameEdit->setText(url.queryItem("name"));
-            d->timer->start(0, true);
+            d->timer->setSingleShot(true);
+            d->timer->start(0);
         }
     }
 }
@@ -175,7 +176,7 @@ void SearchQuickDialog::slotTimeOut()
     QString path, num;
     int     count = 0;
     
-    QStringList textList = QStringList::split(' ', d->searchEdit->text());
+    QStringList textList = d->searchEdit->text().split(' ', QString::SkipEmptyParts);
     for (QStringList::iterator it = textList.begin(); it != textList.end(); ++it)
     {
         if (count != 0)
@@ -199,7 +200,8 @@ void SearchQuickDialog::slotTimeOut()
 
 void SearchQuickDialog::slotSearchChanged(const QString&)
 {
-    d->timer->start(500, true);    
+    d->timer->setSingleShot(true);
+    d->timer->start(500);    
 }
 
 void SearchQuickDialog::hideEvent(QHideEvent* e)
