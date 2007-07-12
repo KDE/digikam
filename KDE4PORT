@@ -114,7 +114,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             albumwidgetstack.cpp                Gilles                  X       DONE
             cameradragobject.cpp                Gilles                  X       DONE
             cameralist.cpp                      Laurent                 X       DONE
-            cameratype.cpp                                              X
+            cameratype.cpp                      Gilles                  X       DONE
             datefolderview.cpp                  Laurent                 X       DONE
             dcopiface.cpp                                               X
             digikamapp.cpp                                              X
