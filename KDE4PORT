@@ -74,7 +74,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |-----editor
             editorwindow.cpp                    Gilles          X       X       UNCOMPLETE           Compile, but port not yet fully complete
             imageiface.cpp                      Gilles          X       X       DONE
-            imagewindow.cpp                                             X
+            imagewindow.cpp                     Gilles                  X       DONE
         |-----tools                             Laurent         X       X       DONE
         |---lighttable                                                  
             lighttablepreview.cpp               Gilles                  X       DONE
