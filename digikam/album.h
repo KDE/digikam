@@ -28,10 +28,9 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qdatetime.h>
-#include <qmap.h>
-//Added by qt3to4:
+#include <QString>
+#include <QDateTime>
+#include <QMap>
 #include <Q3ValueList>
 
 // KDE includes.

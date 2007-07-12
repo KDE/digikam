@@ -33,8 +33,6 @@
 #include "databaseaccess.h"
 #include "databaseurl.h"
 #include "album.h"
-//Added by qt3to4:
-#include <Q3ValueList>
 
 namespace Digikam
 {
