@@ -37,15 +37,14 @@ extern "C"
 
 // Qt includes.
 
-#include <qcheckbox.h>
-#include <q3groupbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qstring.h>
-#include <qdir.h>
-#include <qfileinfo.h>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QString>
+#include <QDir>
+#include <QFileInfo>
 
 // KDE includes.
 
@@ -73,8 +72,7 @@ namespace Digikam
 
 using namespace std;
 
-DigikamFirstRun::DigikamFirstRun(KConfig* config, QWidget* parent,
-                                 const char* name, bool modal, Qt::WFlags fl)
+DigikamFirstRun::DigikamFirstRun(KConfig* config, QWidget* parent)
                : KDialog(parent)
 {
     setModal(true);
@@ -82,21 +80,23 @@ DigikamFirstRun::DigikamFirstRun(KConfig* config, QWidget* parent,
     setDefaultButton(Ok);
     setCaption(i18n( "Album Library Path" ));
     setHelp("firstrundialog.anchor", "digikam");
-    //setWFlags(fl);
     
     m_config = config;
     m_ui     = new FirstRunWidget(this);
     setMainWidget(m_ui);
+
     m_ui->m_path->setUrl(QDir::homePath() + 
                          i18nc("This is a path name so you should "
-                              "include the slash in the translation","/Pictures"));
+                               "include the slash in the translation", "/Pictures"));
     m_ui->m_path->setMode(KFile::Directory | KFile::LocalOnly);
 
     KIconLoader* iconLoader = KIconLoader::global();
     m_ui->m_pixLabel->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 
                                 128, K3Icon::DefaultState, 0, true));
     m_ui->setMinimumSize(450, m_ui->sizeHint().height());
-    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+
+    connect(this, SIGNAL(okClicked()),
+            this, SLOT(slotOk()));
 }
 
 DigikamFirstRun::~DigikamFirstRun()
@@ -184,4 +184,3 @@ void DigikamFirstRun::slotOk()
 }
 
 }  // namespace Digikam
-

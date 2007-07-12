@@ -47,8 +47,7 @@ class DIGIKAM_EXPORT DigikamFirstRun : public KDialog
 
 public:
 
-    DigikamFirstRun(KConfig* config, QWidget* parent = 0, const char* name = 0,
-                     bool modal = true, Qt::WFlags fl = Qt::WDestructiveClose);
+    DigikamFirstRun(KConfig* config, QWidget* parent = 0);
     ~DigikamFirstRun();
 
 protected slots:
