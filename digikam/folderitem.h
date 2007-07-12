@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <q3listview.h>
+#include <Q3ListView>
 
 // Local includes
 

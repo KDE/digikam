@@ -23,11 +23,11 @@
 
 // Qt includes.
 
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qstyle.h>
+#include <QFont>
+#include <QFontMetrics>
+#include <QPainter>
+#include <QPixmap>
+#include <QStyle>
 
 // Local includes.
 
