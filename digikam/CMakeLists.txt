@@ -85,7 +85,7 @@ SET(digikam_LIB_SRCS
 #                      albumfiletip.cpp 
 #                      albumfolderview.cpp 
                       albumhistory.cpp 
-#                      albumlister.cpp 
+                      albumlister.cpp 
 #                      albummanager.cpp 
                       albumpropsedit.cpp 
                       albumsettings.cpp 

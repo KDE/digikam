@@ -28,10 +28,9 @@
 
 // Qt includes.
 
-#include <qobject.h>
-#include <q3cstring.h>
-//Added by qt3to4:
 #include <Q3ValueList>
+#include <QObject>
+#include <QByteArray>
 
 // Local includes.
 
@@ -128,7 +127,6 @@ private:
     AlbumListerPriv    *d;
 
     static AlbumLister *m_instance;
-
 };
 
 }  // namespace Digikam

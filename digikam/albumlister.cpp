@@ -35,15 +35,13 @@ extern "C"
 
 // Qt includes.
 
-#include <qstring.h>
-#include <q3cstring.h>
-#include <qdatastream.h>
-#include <qfileinfo.h>
-#include <qdir.h>
-#include <qmap.h>
-#include <qpair.h>
-#include <q3valuelist.h>
-#include <qtimer.h>
+#include <QString>
+#include <QDataStream>
+#include <QFileInfo>
+#include <QDir>
+#include <QMap>
+#include <QPair>
+#include <QTimer>
 
 // KDE includes.
 
@@ -82,11 +80,11 @@ public:
 
     QString                         filter;
 
-    QMap<qlonglong, ImageInfo*>       itemMap;
+    QMap<qlonglong, ImageInfo*>     itemMap;
     QMap<int,int>                   invalidatedItems;
     QMap<int,bool>                  dayFilter;
 
-    Q3ValueList<int>                 tagFilter;
+    Q3ValueList<int>                tagFilter;
 
     QTimer                         *filterTimer;
 
@@ -96,7 +94,7 @@ public:
 
     Album                          *currAlbum;
 
-    AlbumLister::MatchingCondition matchingCond;
+    AlbumLister::MatchingCondition  matchingCond;
 };
 
 AlbumLister* AlbumLister::m_instance = 0;
@@ -194,7 +192,8 @@ void AlbumLister::setDayFilter(const Q3ValueList<int>& days)
     for (Q3ValueList<int>::const_iterator it = days.begin(); it != days.end(); ++it)
         d->dayFilter.insert(*it, true);
 
-    d->filterTimer->start(100, true);
+    d->filterTimer->setSingleShot(true);
+    d->filterTimer->start(100);
 }
 
 void AlbumLister::setTagFilter(const Q3ValueList<int>& tags, const MatchingCondition& matchingCond, 
@@ -203,7 +202,8 @@ void AlbumLister::setTagFilter(const Q3ValueList<int>& tags, const MatchingCondi
     d->tagFilter      = tags;
     d->matchingCond   = matchingCond;
     d->untaggedFilter = showUnTagged;
-    d->filterTimer->start(100, true);
+    d->filterTimer->setSingleShot(true);
+    d->filterTimer->start(100);
 }
 
 bool AlbumLister::matchesFilter(const ImageInfo* info) const
@@ -298,7 +298,8 @@ void AlbumLister::slotFilterItems()
 {
     if (d->job)
     {
-        d->filterTimer->start(100, true);
+        d->filterTimer->setSingleShot(true);
+        d->filterTimer->start(100);
         return;
     }
 
@@ -354,9 +355,9 @@ void AlbumLister::slotResult(KIO::Job* job)
     for (ImMap::iterator it = d->itemMap.begin();
          it != d->itemMap.end(); ++it)
     {
-        emit signalDeleteItem(it.data());
-        emit signalDeleteFilteredItem(it.data());
-        d->itemList.remove(it.data());
+        emit signalDeleteItem(it.value());
+        emit signalDeleteFilteredItem(it.value());
+        d->itemList.remove(it.value());
     }
 
     d->itemMap.clear();
