@@ -22,21 +22,17 @@
  *
  * ============================================================ */
 
-// Qt includes.
-
-#include <qstring.h>
-
 // KDE includes.
 
 #include <kconfig.h>
 #include <klocale.h>
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kglobal.h>
 
 // LibKDcraw includes.
 
 #include <libkdcraw/rawfiles.h>
-#include <kglobal.h>
 
 // Local includes.
 
@@ -125,7 +121,6 @@ public:
     AlbumSettings::ImageSortOrder       imageSortOrder;
     AlbumSettings::ItemRightClickAction itemRightClickAction;
 };
-
 
 AlbumSettings* AlbumSettings::m_componentData = 0;
 
@@ -341,7 +336,7 @@ void AlbumSettings::saveSettings()
 
     KConfigGroup group = config->group("Album Settings");
 
-    config->writePathEntry("Album Path", d->albumLibraryPath);
+    group.writeEntry("Album Path", d->albumLibraryPath);
     group.writeEntry("Album Collections", d->albumCollectionNames);
     group.writeEntry("Album Sort Order", (int)d->albumSortOrder);
     group.writeEntry("Image Sort Order", (int)d->imageSortOrder);
@@ -472,7 +467,7 @@ bool AlbumSettings::addAlbumCollectionName(const QString& name)
 
 bool AlbumSettings::delAlbumCollectionName(const QString& name)
 {
-    uint count = d->albumCollectionNames.remove(name);
+    uint count = d->albumCollectionNames.removeAll(name);
     return (count > 0) ? true : false;
 }
 
@@ -548,10 +543,10 @@ QString AlbumSettings::getRawFileFilter() const
 
 bool AlbumSettings::addImageFileExtension(const QString& newExt)
 {
-    if ( QStringList::split(" ", d->imageFilefilter).contains(newExt) ||
-         QStringList::split(" ", d->movieFilefilter).contains(newExt) ||
-         QStringList::split(" ", d->audioFilefilter).contains(newExt) ||
-         QStringList::split(" ", d->rawFilefilter  ).contains(newExt) )
+    if ( d->imageFilefilter.split(" ", QString::SkipEmptyParts).contains(newExt) ||
+         d->movieFilefilter.split(" ", QString::SkipEmptyParts).contains(newExt) ||
+         d->audioFilefilter.split(" ", QString::SkipEmptyParts).contains(newExt) ||
+         d->rawFilefilter.split(  " ", QString::SkipEmptyParts).contains(newExt) )
          return false; 
 
     d->imageFilefilter = d->imageFilefilter + ' ' + newExt;
