@@ -27,8 +27,6 @@
 // Qt includes.
 
 #include <Q3ListView>
-#include <QMouseEvent>
-#include <QDropEvent>
 
 // Local includes.
 
