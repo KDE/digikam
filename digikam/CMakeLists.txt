@@ -110,7 +110,7 @@ SET(digikam_LIB_SRCS
 #                      imagepreviewview.cpp 
 #                      kdatetimeedit.cpp 
 #                      kdatepickerpopup.cpp 
-#                      kipiinterface.cpp 
+                      kipiinterface.cpp 
 #                      mediaplayerview.cpp 
 #                      monthwidget.cpp 
 #                      pixmapmanager.cpp 

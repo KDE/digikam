@@ -26,12 +26,11 @@
 #ifndef DIGIKAM_KIPIINTERFACE_H
 #define DIGIKAM_KIPIINTERFACE_H
 
-
 // Qt includes.
 
-#include <q3valuelist.h>
-#include <qstring.h>
-#include <qmap.h>
+#include <QList>
+#include <QString>
+#include <QMap>
 
 // KDE includes.
 
@@ -159,7 +158,7 @@ public:
 
     virtual KIPI::ImageCollection currentAlbum();
     virtual KIPI::ImageCollection currentSelection();
-    virtual Q3ValueList<KIPI::ImageCollection> allAlbums();
+    virtual QList<KIPI::ImageCollection> allAlbums();
     virtual KIPI::ImageInfo info( const KUrl& );
     virtual bool addImage( const KUrl&, QString& errmsg );
     virtual void delImage( const KUrl& );
@@ -180,4 +179,3 @@ private:
 }  // namespace Digikam
 
 #endif  // DIGIKAM_KIPIINTERFACE_H
-

@@ -23,9 +23,6 @@
  *
  * ============================================================ */
 
-//Added by qt3to4:
-#include <Q3ValueList>
-
 // C Ansi includes
 
 extern "C"
@@ -36,11 +33,11 @@ extern "C"
 
 // Qt includes.
 
-#include <qdir.h>
-#include <qdatetime.h>
-#include <qfileinfo.h>
-#include <qfile.h>
-#include <qregexp.h>
+#include <QDir>
+#include <QDateTime>
+#include <QFileInfo>
+#include <QFile>
+#include <QRegExp>
 
 // KDE includes.
 
@@ -144,7 +141,7 @@ void DigikamImageInfo::setDescription( const QString& description )
             DMetadata metadata(_url.path());
             metadata.setImageComment(description);
             metadata.applyChanges();
-            ImageAttributesWatch::componentData().fileMetadataChanged(_url);
+            ImageAttributesWatch::componentData()->fileMetadataChanged(_url);
         }
     }
 }
@@ -225,14 +222,14 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
         // Set digiKam Tags list of picture.
         if (attributes.find("tags") != attributes.end())
         {
-            QStringList tags = attributes["tags"].asStringList();
+            QStringList tags = attributes["tags"].toStringList();
             //TODO
         }
 
         // Set digiKam Rating of picture.
         if (attributes.find("rating") != attributes.end())
         {
-            int rating = attributes["rating"].asInt();
+            int rating = attributes["rating"].toInt();
             if (rating >= RatingMin && rating <= RatingMax)
                 access.db()->setItemRating(imageId, rating);
         }
@@ -242,7 +239,7 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
 
     // To update sidebar content. Some kipi-plugins use this way to refresh sidebar 
     // using an empty QMap(). 
-    ImageAttributesWatch::componentData().fileMetadataChanged(_url);
+    ImageAttributesWatch::componentData()->fileMetadataChanged(_url);
 }
 
 void DigikamImageInfo::clearAttributes()
@@ -493,7 +490,7 @@ KUrl DigikamImageCollection::uploadPath()
 
 KUrl DigikamImageCollection::uploadRoot()
 {
-    return KUrl(CollectionManager::componentData().oneAlbumRootPath() + '/');
+    return KUrl(CollectionManager::instance()->oneAlbumRootPath() + '/');
 }
 
 QString DigikamImageCollection::uploadRootName()
@@ -563,9 +560,9 @@ KIPI::ImageCollection DigikamKipiInterface::currentSelection()
     }
 }
 
-Q3ValueList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
+QList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
 {
-    Q3ValueList<KIPI::ImageCollection> result;
+    QList<KIPI::ImageCollection> result;
 
     QString fileFilter(fileExtensions());
 
@@ -609,7 +606,7 @@ void DigikamKipiInterface::refreshImages( const KUrl::List& urls )
 
     // Re-scan metadata from pictures. This way will update Metadata sidebar and database.
     for ( KUrl::List::Iterator it = ulist.begin() ; it != ulist.end() ; ++it )
-        ImageAttributesWatch::componentData().fileMetadataChanged(*it);
+        ImageAttributesWatch::componentData()->fileMetadataChanged(*it);
     
     // Refresh preview.
     albumManager_->refreshItemHandler(urls);
@@ -655,7 +652,7 @@ bool DigikamKipiInterface::addImage( const KUrl& url, QString& errmsg )
 
 void DigikamKipiInterface::delImage( const KUrl& url )
 {
-    KUrl rootURL(CollectionManager::componentData().albumRoot(url));
+    KUrl rootURL(CollectionManager::instance()->albumRoot(url));
     if ( !rootURL.isParentOf(url) )
     {
         DWarning() << k_funcinfo << "URL not in the album library" << endl;
@@ -699,4 +696,3 @@ QString DigikamKipiInterface::fileExtensions()
 }
 
 }  // namespace Digikam
-
