@@ -214,16 +214,16 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     d->moreButton = new QPushButton(i18n("More"), buttonsBox);
     d->moreMenu   = new Q3PopupMenu(this);
-    d->moreButton->setPopup(d->moreMenu);
+    d->moreButton->setMenu(d->moreMenu);
 
     // --------------------------------------------------
 
-    settingsLayout->addMultiCellWidget(commentsBox, 0, 0, 0, 1);
-    settingsLayout->addMultiCellWidget(dateBox, 1, 1, 0, 1);
-    settingsLayout->addMultiCellWidget(ratingBox, 2, 2, 0, 1);
-    settingsLayout->addMultiCellWidget(d->tagsView, 3, 3, 0, 1);
-    settingsLayout->addMultiCellWidget(tagsSearch, 4, 4, 0, 1);
-    settingsLayout->addMultiCellWidget(buttonsBox, 5, 5, 0, 1);
+    settingsLayout->addWidget(commentsBox, 0, 0, 1, 2 );
+    settingsLayout->addWidget(dateBox, 1, 0, 1, 2 );
+    settingsLayout->addWidget(ratingBox, 2, 0, 1, 2 );
+    settingsLayout->addWidget(d->tagsView, 3, 0, 1, 2 );
+    settingsLayout->addWidget(tagsSearch, 4, 0, 1, 2 );
+    settingsLayout->addWidget(buttonsBox, 5, 0, 1, 2 );
     settingsLayout->setRowStretch(3, 10);
     settingsLayout->setMargin(KDialog::spacingHint());
     settingsLayout->setSpacing(KDialog::spacingHint());
@@ -687,10 +687,10 @@ void ImageDescEditTab::slotCommentChanged()
     // we cannot trust that the text actually changed
     // (there are bogus signals caused by spell checking, see bug 141663)
     // so we have to check before marking the metadata as modified
-    if (d->hub.comment() == d->commentsEdit->text())
+    if (d->hub.comment() == d->commentsEdit->document()->toPlainText())
         return;
 
-    d->hub.setComment(d->commentsEdit->text());
+    d->hub.setComment(d->commentsEdit->document()->toPlainText());
     setMetadataWidgetStatus(d->hub.commentStatus(), d->commentsEdit);
     slotModified();
 }
@@ -737,8 +737,8 @@ void ImageDescEditTab::updateTagsView()
 
     // The condition is a temporary fix not to destroy name filtering on image change.
     // See comments in these methods.
-    if (d->assignedTagsBtn->isOn())
-        slotAssignedTagsToggled(d->assignedTagsBtn->isOn());
+    if (d->assignedTagsBtn->isChecked())
+        slotAssignedTagsToggled(d->assignedTagsBtn->isChecked());
 
     d->tagsView->blockSignals(false);
 }
@@ -780,7 +780,7 @@ void ImageDescEditTab::setMetadataWidgetStatus(int status, QWidget *widget)
     }
     else
     {
-        widget->unsetPalette();
+        widget->setPalette(QPalette());
     }
 }
 
@@ -1001,6 +1001,9 @@ void ImageDescEditTab::slotABCContextMenu()
 {
     d->ABCMenu->clear();
 
+#warning "TODO: kde4 port it";
+/*  // TODO: KDE4PORT: port this code to new libKABC API when it will be available
+
     int counter = 100;
     KABC::AddressBook* ab = KABC::StdAddressBook::self();
     QStringList names;
@@ -1022,7 +1025,7 @@ void ImageDescEditTab::slotABCContextMenu()
     {
         d->ABCMenu->insertItem( i18n("No AddressBook Entries Found"), ++counter );
         d->ABCMenu->setItemEnabled( counter, false );
-    }
+    }*/
 }
 
 void ImageDescEditTab::slotMoreMenu()
@@ -1329,7 +1332,7 @@ void ImageDescEditTab::slotGotThumbnailFromIcon(Album *album, const QPixmap& thu
     item->setPixmap(0, thumbnail);
 
     // update item in recent tags popup menu, if found therein
-    Q3PopupMenu *menu = dynamic_cast<Q3PopupMenu *>(d->recentTagsBtn->popup());
+    Q3PopupMenu *menu = dynamic_cast<Q3PopupMenu *>(d->recentTagsBtn->menu());
     if (menu)
     {
         if (menu->indexOf(album->id()) != -1)
@@ -1424,7 +1427,7 @@ void ImageDescEditTab::reloadForMetadataChange(qlonglong imageId)
 
 void ImageDescEditTab::updateRecentTags()
 {
-    Q3PopupMenu *menu = dynamic_cast<Q3PopupMenu *>(d->recentTagsBtn->popup());
+    Q3PopupMenu *menu = dynamic_cast<Q3PopupMenu *>(d->recentTagsBtn->menu());
     if (!menu) return;
 
     menu->clear();
@@ -1549,7 +1552,7 @@ void ImageDescEditTab::slotTagsSearchChanged()
 
     if (search.isEmpty())
     {
-        d->tagsSearchEdit->unsetPalette();
+        d->tagsSearchEdit->setPalette(QPalette());
         TAlbum* root = AlbumManager::componentData()->findTAlbum(0);
         TAlbumCheckListItem* rootItem = (TAlbumCheckListItem*)(root->extraData(this));
         if (rootItem)
