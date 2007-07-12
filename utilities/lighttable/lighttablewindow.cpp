@@ -31,7 +31,10 @@
 
 // KDE includes.
 
+#include <kaction.h>
+#include <kactioncollection.h>
 #include <kstandardaction.h>
+#include <kstandardshortcut.h>
 #include <kxmlguifactory.h>
 #include <kedittoolbar.h>
 #include <ktoggleaction.h>
@@ -382,40 +385,43 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->syncPreviewAction = new KToggleAction(i18n("Synchronize Preview"), "goto",
-                                            CTRL+SHIFT+Qt::Key_Y, this,
-                                            SLOT(slotToggleSyncPreview()),
-                                            actionCollection(), "lighttable_syncpreview");
+    d->syncPreviewAction = new KToggleAction(KIcon("footprint"), i18n("Synchronize Preview"), this);
+    d->syncPreviewAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_Y);
     d->syncPreviewAction->setEnabled(false);
+    connect(d->syncPreviewAction, SIGNAL(triggered()), this, SLOT(slotToggleSyncPreview()));
+    actionCollection()->addAction("lighttable_syncpreview", d->syncPreviewAction);
 
-    d->navigateByPairAction = new KToggleAction(i18n("Navigate by Pair"), "kcmsystem",
-                                            CTRL+SHIFT+Qt::Key_P, this,
-                                            SLOT(slotToggleNavigateByPair()),
-                                            actionCollection(), "lighttable_navigatebypair");
+    d->navigateByPairAction = new KToggleAction(KIcon("system-run"), i18n("Navigate by Pair"), this);
+    d->navigateByPairAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_P);
     d->navigateByPairAction->setEnabled(false);
+    connect(d->navigateByPairAction, SIGNAL(triggered()), this, SLOT(slotToggleNavigateByPair()));
+    actionCollection()->addAction("lighttable_navigatebypair", d->navigateByPairAction);
 
-    d->zoomPlusAction = KStandardAction::zoomIn(d->previewView, SLOT(slotIncreaseZoom()),
-                                          actionCollection(), "lighttable_zoomplus");
+    d->zoomPlusAction = actionCollection()->addAction(KStandardAction::ZoomIn, "lighttable_zoomplus", 
+                                                      this, SLOT(slotIncreaseZoom()));
     d->zoomPlusAction->setEnabled(false);
 
-    d->zoomMinusAction = KStandardAction::zoomOut(d->previewView, SLOT(slotDecreaseZoom()),
-                                             actionCollection(), "lighttable_zoomminus");
+    d->zoomMinusAction = actionCollection()->addAction(KStandardAction::ZoomOut, "lighttable_zoomminus", 
+                                                       this, SLOT(slotDecreaseZoom()));
     d->zoomMinusAction->setEnabled(false);
 
-    d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), "viewmag1",
-                                       ALT+CTRL+Qt::Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0.
-                                       this, SLOT(slotZoomTo100Percents()),
-                                       actionCollection(), "lighttable_zoomto100percents");
+    d->zoomTo100percents = new KAction(KIcon("viewmag1"), i18n("Zoom to 1:1"), this);
+    d->zoomTo100percents->setShortcut(Qt::ALT+Qt::CTRL+Qt::Key_0);       // NOTE: Photoshop 7 use ALT+CTRL+0
+    connect(d->zoomTo100percents, SIGNAL(triggered()), this, SLOT(slotZoomTo100Percents()));
+    actionCollection()->addAction("lighttable_zoomto100percents", d->zoomTo100percents);
 
-    d->zoomFitToWindowAction = new KAction(i18n("Fit to &Window"), "view_fit_window",
-                                           CTRL+SHIFT+Qt::Key_E, this, SLOT(slotFitToWindow()),
-                                           actionCollection(), "lighttable_zoomfit2window");
+    d->zoomFitToWindowAction = new KToggleAction(KIcon("zoom-best-fit"), i18n("Fit to &Window"), this);
+    d->zoomFitToWindowAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E); // NOTE: Gimp 2 use CTRL+SHIFT+E.
+    connect(d->zoomFitToWindowAction, SIGNAL(triggered()), this, SLOT(slotFitToWindow()));
+    actionCollection()->addAction("lighttable_zoomfit2window", d->zoomFitToWindowAction);
 
-    d->fullScreenAction = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()),
-                                                 actionCollection(), this, "lighttable_fullscreen");
-    d->slideShowAction = new KAction(i18n("Slide Show"), "slideshow", Qt::Key_F9,
-                                     this, SLOT(slotToggleSlideShow()),
-                                     actionCollection(),"lighttable_slideshow");
+    d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
+                          "lighttable_fullscreen", this, SLOT(slotToggleFullScreen()));
+
+    d->slideShowAction = new KAction(KIcon("datashow"), i18n("Slide Show"), this);
+    d->slideShowAction->setShortcut(Qt::Key_F9);
+    connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
+    actionCollection()->addAction("lighttable_slideshow", d->slideShowAction);
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
@@ -425,12 +431,9 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-
-    d->donateMoneyAction = new KAction(i18n("Donate Money..."),
-                                       0, 0, 
-                                       this, SLOT(slotDonateMoney()),
-                                       actionCollection(),
-                                       "lighttable_donatemoney");    
+    d->donateMoneyAction = new KAction(i18n("Donate Money..."), this);
+    connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
+    actionCollection()->addAction("lighttable_donatemoney", d->donateMoneyAction);
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
@@ -440,32 +443,46 @@ void LightTableWindow::setupActions()
 
     // -- Rating actions ---------------------------------------------------------------
 
-    d->star0 = new KAction(i18n("Assign Rating \"No Star\""), CTRL+Qt::Key_0,
-                          d->barView, SLOT(slotAssignRatingNoStar()),
-                          actionCollection(), "lighttable_ratenostar");
-    d->star1 = new KAction(i18n("Assign Rating \"One Star\""), CTRL+Qt::Key_1,
-                          d->barView, SLOT(slotAssignRatingOneStar()),
-                          actionCollection(), "lighttable_rateonestar");
-    d->star2 = new KAction(i18n("Assign Rating \"Two Stars\""), CTRL+Qt::Key_2,
-                          d->barView, SLOT(slotAssignRatingTwoStar()),
-                          actionCollection(), "lighttable_ratetwostar");
-    d->star3 = new KAction(i18n("Assign Rating \"Three Stars\""), CTRL+Qt::Key_3,
-                          d->barView, SLOT(slotAssignRatingThreeStar()),
-                          actionCollection(), "lighttable_ratethreestar");
-    d->star4 = new KAction(i18n("Assign Rating \"Four Stars\""), CTRL+Qt::Key_4,
-                          d->barView, SLOT(slotAssignRatingFourStar()),
-                          actionCollection(), "lighttable_ratefourstar");
-    d->star5 = new KAction(i18n("Assign Rating \"Five Stars\""), CTRL+Qt::Key_5,
-                          d->barView, SLOT(slotAssignRatingFiveStar()),
-                          actionCollection(), "lighttable_ratefivestar");
+    d->star0 = new KAction(i18n("Assign Rating \"No Star\""), this);
+    d->star0->setShortcut(Qt::CTRL+Qt::Key_0);
+    connect(d->star0, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingNoStar()));
+    actionCollection()->addAction("lighttable_ratenostar", d->star0);
+
+    d->star1 = new KAction(i18n("Assign Rating \"One Star\""), this);
+    d->star1->setShortcut(Qt::CTRL+Qt::Key_1);
+    connect(d->star1, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingOneStar()));
+    actionCollection()->addAction("lighttable_rateonestar", d->star1);
+
+    d->star2 = new KAction(i18n("Assign Rating \"Two Stars\""), this);
+    d->star2->setShortcut(Qt::CTRL+Qt::Key_2);
+    connect(d->star2, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingTwoStar()));
+    actionCollection()->addAction("lighttable_ratetwostar", d->star2);
+
+    d->star3 = new KAction(i18n("Assign Rating \"Three Stars\""), this);
+    d->star3->setShortcut(Qt::CTRL+Qt::Key_3);
+    connect(d->star3, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingThreeStar()));
+    actionCollection()->addAction("lighttable_ratethreestar", d->star3);
+
+    d->star4 = new KAction(i18n("Assign Rating \"Four Stars\""), this);
+    d->star4->setShortcut(Qt::CTRL+Qt::Key_4);
+    connect(d->star4, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingFourStar()));
+    actionCollection()->addAction("lighttable_ratefourstar", d->star4);
+
+    d->star5 = new KAction(i18n("Assign Rating \"Five Stars\""), this);
+    d->star5->setShortcut(Qt::CTRL+Qt::Key_5);
+    connect(d->star5, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingFiveStar()));
+    actionCollection()->addAction("lighttable_ratefivestar", d->star5);
 
     // ---------------------------------------------------------------------------------
 
-    createGUI("lighttablewindowui.rc", false);
+    createGUI("lighttablewindowui.rc");
 }
 
 void LightTableWindow::setupAccelerators()
 {
+#warning "TODO: kde4 port it";
+/*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
+
     d->accelerators = new KAccel(this);
 
     d->accelerators->insert("Exit fullscreen", i18n("Exit Fullscreen mode"),
@@ -502,6 +519,7 @@ void LightTableWindow::setupAccelerators()
                     i18n("Zoom out of image"),
                     Qt::Key_Minus, d->previewView, SLOT(slotDecreaseZoom()),
                     false, true);
+*/
 }
 
 void LightTableWindow::slotThumbbarDroppedItems(const ImageInfoList& list)
@@ -523,7 +541,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
     QString imagefilter = settings->getImageFileFilter().toLower() +
                           settings->getImageFileFilter().toUpper();
 
-    if (KDcrawIface::DcrawBinary::componentData().versionIsRight())
+    if (KDcrawIface::DcrawBinary::componentData()->versionIsRight())
     {
         // add raw files only if dcraw is available
         imagefilter += settings->getRawFileFilter().toLower() +
@@ -533,7 +551,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
     d->barView->blockSignals(true);
     for (Q3PtrList<ImageInfo>::const_iterator it = l.begin(); it != l.end(); ++it)
     {
-        QString fileExtension = (*it)->kurl().fileName().section( '.', -1 );
+        QString fileExtension = (*it)->fileUrl().fileName().section( '.', -1 );
 
         if ( imagefilter.find(fileExtension) != -1 && 
              !d->barView->findItemByInfo(*it) )
@@ -550,7 +568,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
     // if window is iconified, show it
     if (isMinimized())
     {
-        KWindowSystem::deIconifyWindow(winId());
+        KWindowSystem::unminimizeWindow(winId());
     }
 
     refreshStatusBar();

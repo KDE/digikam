@@ -107,25 +107,25 @@ public:
     KAction                  *star4;
     KAction                  *star5;
 
-    KAction                  *forwardAction;
-    KAction                  *backwardAction;
-    KAction                  *firstAction;
-    KAction                  *lastAction;
+    QAction                  *forwardAction;
+    QAction                  *backwardAction;
+    QAction                  *firstAction;
+    QAction                  *lastAction;
 
-    KAction                  *setItemLeftAction;
-    KAction                  *setItemRightAction;
-    KAction                  *clearListAction;
-    KAction                  *editItemAction;
-    KAction                  *removeItemAction;
-    KAction                  *fileDeleteAction;
-    KAction                  *slideShowAction;
-    KAction                  *donateMoneyAction;
-    KAction                  *zoomPlusAction;
-    KAction                  *zoomMinusAction;
-    KAction                  *zoomTo100percents;
-    KAction                  *zoomFitToWindowAction;
+    QAction                  *setItemLeftAction;
+    QAction                  *setItemRightAction;
+    QAction                  *clearListAction;
+    QAction                  *editItemAction;
+    QAction                  *removeItemAction;
+    QAction                  *fileDeleteAction;
+    QAction                  *slideShowAction;
+    QAction                  *donateMoneyAction;
+    QAction                  *zoomPlusAction;
+    QAction                  *zoomMinusAction;
+    QAction                  *zoomTo100percents;
+    QAction                  *zoomFitToWindowAction;
+    QAction                  *fullScreenAction;
 
-    KToggleAction            *fullScreenAction;
     KToggleAction            *syncPreviewAction;
     KToggleAction            *navigateByPairAction;
 
