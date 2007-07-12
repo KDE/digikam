@@ -138,7 +138,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             mediaplayerview.cpp                                         X
             metadatahub.cpp                                             X
             monthwidget.cpp                                             X
-            pixmapmanager.cpp                                           X
+            pixmapmanager.cpp                   Gilles                  X       DONE
             ratingpopupmenu.cpp                 Gilles                  X       DONE
             ratingwidget.cpp                    Gilles                  X       DONE
             scanlib.cpp                                                 X
