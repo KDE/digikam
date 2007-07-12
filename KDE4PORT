@@ -140,7 +140,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             monthwidget.cpp                                             X
             pixmapmanager.cpp                                           X
             ratingpopupmenu.cpp                                         X
-            ratingwidget.cpp                                            X
+            ratingwidget.cpp                    Gilles                  X       DONE
             scanlib.cpp                                                 X
             searchadvanceddialog.cpp                                    X
             searchfolderview.cpp                                        X
