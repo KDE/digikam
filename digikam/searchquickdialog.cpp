@@ -26,14 +26,11 @@
 
 // Qt includes.
 
-#include <qtimer.h>
-#include <qlayout.h>
-#include <qstringlist.h>
-#include <qdatetime.h>
-#include <qlabel.h>
-
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QTimer>
+#include <QStringList>
+#include <QDateTime>
+#include <QLabel>
+#include <QGridLayout>
 #include <QHideEvent>
 
 // KDE includes.
@@ -73,21 +70,23 @@ public:
 };
 
 SearchQuickDialog::SearchQuickDialog(QWidget* parent, KUrl& url)
-                 : KDialog(parent)
-		 , m_url(url)
+                 : KDialog(parent), m_url(url)
 {
     setDefaultButton(Ok);
     setButtons(Help|Ok|Cancel);
     setModal(true);
     setCaption(i18n("Quick Search"));
+    setHelp("quicksearchtool.anchor", "digikam");
+
+    d = new SearchQuickDialogPriv;
+    d->timer = new QTimer(this);
 
     QWidget *w = new QWidget(this);
     setMainWidget(w);
-    d = new SearchQuickDialogPriv;
-    d->timer = new QTimer(this);
-    setHelp("quicksearchtool.anchor", "digikam");
     
-    Q3GridLayout* grid = new Q3GridLayout(w, 2, 2, 0, spacingHint());
+    QGridLayout* grid = new QGridLayout(w);
+
+    // -------------------------------------------------------------
     
     QLabel *label1 = new QLabel("<b>" + i18n("Search:") + "</b>", w);
     d->searchEdit  = new KLineEdit(w);
@@ -96,20 +95,26 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KUrl& url)
     d->resultsView = new SearchResultsView(w);
     d->resultsView->setMinimumSize(320, 200);
     d->resultsView->setWhatsThis( i18n("<p>Here you can see the items found in album library "
-                                          "using the current search criteria"));
+                                       "using the current search criteria"));
     
     QLabel *label2 = new QLabel(i18n("Save search as:"), w);
     d->nameEdit    = new KLineEdit(w);
     d->nameEdit->setText(i18n("Last Search"));
     d->nameEdit->setWhatsThis( i18n("<p>Enter the name of the current search to save in the "
-                                       "\"My Searches\" view"));
+                                    "\"My Searches\" view"));
 
-    grid->addMultiCellWidget(label1, 0, 0, 0, 0);
-    grid->addMultiCellWidget(d->searchEdit, 0, 0, 1, 2);
-    grid->addMultiCellWidget(d->resultsView, 1, 1, 0, 2);
-    grid->addMultiCellWidget(label2, 2, 2, 0, 1);
-    grid->addMultiCellWidget(d->nameEdit, 2, 2, 2, 2);
-    
+    // -------------------------------------------------------------
+
+    grid->addWidget(label1, 0, 0, 1, 1);
+    grid->addWidget(d->searchEdit, 0, 1, 1, 2);
+    grid->addWidget(d->resultsView, 1, 0, 1, 3 );
+    grid->addWidget(label2, 2, 0, 1, 2 );
+    grid->addWidget(d->nameEdit, 2, 2, 1, 1);
+    grid->setMargin(KDialog::spacingHint());
+    grid->setSpacing(KDialog::spacingHint());
+
+    // -------------------------------------------------------------
+
     connect(d->searchEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotSearchChanged(const QString&)));
 
@@ -117,7 +122,10 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KUrl& url)
             this, SLOT(slotTimeOut()));
 
     enableButtonOk(false);
+
     //resize(configDialogSize("QuickSearch Dialog"));
+
+    // -------------------------------------------------------------
 
     // check if we are being passed a valid url
     if (m_url.isValid())
@@ -203,4 +211,3 @@ void SearchQuickDialog::hideEvent(QHideEvent* e)
 }
 
 }  // namespace Digikam
-

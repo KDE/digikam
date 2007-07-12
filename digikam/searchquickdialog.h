@@ -29,8 +29,7 @@
 
 // Qt includes.
 
-#include <qstring.h>
-//Added by qt3to4:
+#include <QString>
 #include <QHideEvent>
 
 // KDE includes.
@@ -81,7 +80,6 @@ private:
     KUrl&                  m_url;
     
     SearchQuickDialogPriv* d;
-
 };
 
 }  // namespace Digikam
