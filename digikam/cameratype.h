@@ -27,9 +27,9 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qdatetime.h>
-#include <qpointer.h>
+#include <QString>
+#include <QDateTime>
+#include <QPointer>
 
 class KAction;
 
