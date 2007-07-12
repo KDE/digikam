@@ -105,7 +105,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             albumicongroupitem.cpp                                      X
             albumiconitem.cpp                                           X
             albumiconview.cpp                                           X
-            albumitemhandler.cpp                                        X
+            albumitemhandler.cpp                Laurent                 X       DONE
             albumlister.cpp                                             X
             albummanager.cpp                                            X
             albumpropsedit.cpp                  Laurent                 X       DONE
