@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <qobject.h>
+#include <QObject>
 
 // KDE includes
 
@@ -49,15 +49,15 @@ public:
     static void cleanUp();
     static void shutDown();
 
-    /*
+/*
     void imageTagsChanged(qint64 imageId);
     void imagesChanged(int albumId);
 
     void imageRatingChanged(qint64 imageId);
     void imageDateChanged(qint64 imageId);
     void imageCaptionChanged(qint64 imageId);
-    */
-
+*/
+    
     void fileMetadataChanged(const KUrl &url);
 
 signals:

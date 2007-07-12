@@ -106,7 +106,7 @@ SET(digikam_LIB_SRCS
 #                      iconview.cpp 
 #                      icongroupitem.cpp 
 #                      iconitem.cpp 
-#                      imageattributeswatch.cpp 
+                      imageattributeswatch.cpp 
 #                      imagepreviewview.cpp 
 #                      kdatetimeedit.cpp 
 #                      kdatepickerpopup.cpp 

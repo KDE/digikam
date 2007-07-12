@@ -55,7 +55,7 @@ void ImageAttributesWatch::cleanUp()
 void ImageAttributesWatch::shutDown()
 {
     if (m_componentData)
-        m_componentData.disconnect(0, 0, 0);
+        m_componentData->disconnect(0, 0, 0);
 }
 
 ImageAttributesWatch *ImageAttributesWatch::componentData()
@@ -112,12 +112,11 @@ void ImageAttributesWatch::imageCaptionChanged(qint64 imageId)
 {
     emit signalImageCaptionChanged(imageId);
 }
-*/
 
 void ImageAttributesWatch::fileMetadataChanged(const KUrl &url)
 {
     emit signalFileMetadataChanged(url);
 }
+*/
 
 } // namespace Digikam
-
