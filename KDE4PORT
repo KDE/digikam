@@ -72,7 +72,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---imageeditor
         |-----canvas                            Gilles          X       X       DONE
         |-----editor
-            editorwindow.cpp                    Gilles          X       X       UNCOMPLETE           Compile, but port not yet fully complete
+            editorwindow.cpp                    Gilles          X       X       UNCOMPLETE           Compile. Some code to manage keyboard shorcuts are not yet ported.
             imageiface.cpp                      Gilles          X       X       DONE
             imagewindow.cpp                     Gilles                  X       DONE                 Depreciate methods to fix
         |-----tools                             Laurent         X       X       DONE
@@ -80,7 +80,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             lighttablepreview.cpp               Gilles                  X       DONE
             lighttableview.cpp                  Gilles                  X       DONE
             lighttablebar.cpp                   Gilles                  X       DONE
-            lighttablewindow.cpp                                        X
+            lighttablewindow.cpp                Gilles                  X       UNCOMPLETE           Compile. Some code to manage keyboard shorcuts are not yet ported.
         |---scripts                             Gilles                          DONE        -
         |---setup                               Gilles          X       X       DONE
         |---slideshow                           Laurent         X       X       DONE                 
