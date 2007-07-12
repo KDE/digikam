@@ -37,20 +37,20 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
 # Shared libdigikam ################################################################
 
 SET(digikam_LIB_SRCS 
-#                     ${libcameragui_SRCS}
-#                     ${liblighttable_SRCS}
-#                     ${libimagepropertiesdigikam_SRCS}
-#                     ${libdatabase_SRCS}
-#                     ${libsqlite2_SRCS}
-#                     ${libsetup_SRCS}
-#                     ${libbatch_SRCS}
-#                     ${libdialog_SRCS}
-#                     ${libdimgeditor_SRCS}
+                     ${libcameragui_SRCS}
+                     ${liblighttable_SRCS}
+                     ${libimagepropertiesdigikam_SRCS}
+                     ${libdatabase_SRCS}
+                     ${libsqlite2_SRCS}
+                     ${libsetup_SRCS}
+                     ${libbatch_SRCS}
+                     ${libdialog_SRCS}
+                     ${libdimgeditor_SRCS}
 
                      # Just to debug all image plugins with showfoto. 
                      # To remove later.
-                     ${libdialogshowfoto_SRCS}
-                     ${libshowfoto_SRCS}
+                     #${libdialogshowfoto_SRCS}
+                     #${libshowfoto_SRCS}
 
                      ${libslideshow_SRCS}
                      ${libdimgcanvas_SRCS}
