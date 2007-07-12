@@ -23,21 +23,16 @@
 
 // Qt includes.
  
-#include <qvariant.h>
-#include <qlabel.h>
-#include <q3frame.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3GridLayout>
-#include <kurlrequester.h>
-#include <qlayout.h>
-#include <qtooltip.h>
-#include <q3whatsthis.h>
+#include <QLabel>
+#include <QFrame>
+#include <QVBoxLayout>
+#include <QGridLayout>
 
 // KDE includes.
 
 #include <kdialog.h>
 #include <klocale.h>
+#include <kurlrequester.h>
 
 // Local includes.
 
@@ -50,39 +45,41 @@ namespace Digikam
 FirstRunWidget::FirstRunWidget( QWidget* parent )
               : QWidget( parent )
 {
-    setName( "FirstRunWidget" );
-    Q3VBoxLayout *vlayout = new Q3VBoxLayout( this, 0, 6 ); 
+    setObjectName("FirstRunWidget");
+    QVBoxLayout *vlayout = new QVBoxLayout(this); 
 
-    m_textLabel2 = new QLabel( this );
-    vlayout->addWidget( m_textLabel2 );
+    m_textLabel2 = new QLabel(this);
 
-    Q3Frame *line1 = new Q3Frame( this );
-    line1->setFrameShape( Q3Frame::HLine );
-    line1->setFrameShadow( Q3Frame::Sunken );
-    line1->setFrameShape( Q3Frame::HLine );
-    vlayout->addWidget( line1 );
+    QFrame *line1 = new QFrame(this);
+    line1->setFrameShape(QFrame::HLine);
+    line1->setFrameShadow(QFrame::Sunken);
 
-    Q3GridLayout *grid = new Q3GridLayout( 0, 1, 1, 0, 6 ); 
+    QGridLayout *grid = new QGridLayout(); 
 
-    m_pixLabel = new QLabel( this );
-    m_pixLabel->setAlignment( int( Qt::AlignTop ) );
-    grid->addMultiCellWidget( m_pixLabel, 0, 1, 0, 0 );
+    m_pixLabel = new QLabel(this);
+    m_pixLabel->setAlignment(Qt::AlignTop);
 
-    m_path = new KUrlRequester( this );
-    m_path->setShowLocalProtocol( true );
+    m_path = new KUrlRequester(this);
+    m_path->setMode(KFile::LocalOnly | KFile::Directory);
 
-    grid->addWidget( m_path, 1, 1 );
+    m_textLabel1 = new QLabel(this);
+    m_textLabel1->setAlignment(Qt::AlignVCenter);
+    m_textLabel1->setWordWrap(true);
 
-    m_textLabel1 = new QLabel( this );
-    m_textLabel1->setAlignment( int( Qt::WordBreak |Qt::AlignVCenter ) );
-    grid->addWidget( m_textLabel1, 0, 1 );
-    
-    vlayout->addLayout( grid );
+    grid->addWidget(m_pixLabel, 0, 0, 2, 1);
+    grid->addWidget(m_textLabel1, 0, 1, 1, 1);
+    grid->addWidget(m_path, 1, 1, 1, 1);
+    grid->setMargin(0);
+    grid->setSpacing(KDialog::spacingHint());
+
+    vlayout->addWidget(m_textLabel2);
+    vlayout->addWidget(line1);
+    vlayout->addLayout(grid);
     vlayout->addItem( new QSpacerItem( 16, 16, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
+    vlayout->setMargin(0);
+    vlayout->setSpacing(KDialog::spacingHint());
     
     languageChange();
-    resize( QSize(479, 149).expandedTo(minimumSizeHint()) );
-    clearWState( WState_Polished );
 }
 
 FirstRunWidget::~FirstRunWidget()
