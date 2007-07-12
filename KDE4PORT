@@ -36,7 +36,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             imagepropertiessidebarcamgui.cpp    Gilles                  X       DONE
             imagepropertiessidebardb.cpp        Gilles                  X       DONE
             imagedescedittab.cpp                                        X                            Too much depencies with digiKam implementation. Must be ported later
-            talbumlistview.cpp                                          X                            Too much depencies with digiKam implementation. Must be ported later
+            talbumlistview.cpp                  Gilles                  X       DONE
         |---jpegutils                           Gilles                  X       DONE
         |---levels                              Gilles          X       X       DONE
         |---lprof                               Gilles          X       X       DONE        -
