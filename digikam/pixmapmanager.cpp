@@ -31,13 +31,13 @@ extern "C"
 
 // Qt includes.
 
-#include <q3cache.h>
-#include <qpointer.h>
-#include <qpixmap.h>
-#include <qdir.h>
-#include <qfile.h>
-#include <qtimer.h>
-#include <qimage.h>
+#include <Q3Cache>
+#include <QPointer>
+#include <QPixmap>
+#include <QDir>
+#include <QFile>
+#include <QTimer>
+#include <QImage>
 
 // KDE includes.
 
@@ -75,8 +75,8 @@ public:
 
     int                        size;
 
-    Q3Cache<QPixmap>           *cache;
-    QPointer<ThumbnailJob>  thumbJob;
+    Q3Cache<QPixmap>          *cache;
+    QPointer<ThumbnailJob>     thumbJob;
     QTimer                    *timer;
     QString                    thumbCacheDir;
 
@@ -187,7 +187,7 @@ void PixmapManager::slotGotThumbnail(const KUrl& url, const QPixmap& pix)
 void PixmapManager::slotFailedThumbnail(const KUrl& url)
 {
     QImage img;
-    QString ext = QFileInfo(url.path()).extension(false);
+    QString ext = QFileInfo(url.path()).suffix();
 
     // Wrapper around mime type of item to get the right icon.
 
@@ -197,34 +197,34 @@ void PixmapManager::slotFailedThumbnail(const KUrl& url)
         if (settings->getImageFileFilter().toUpper().contains(ext.toUpper()) ||
             settings->getRawFileFilter().toUpper().contains(ext.toUpper()))
         { 
-            img = DesktopIcon("image", KIcon::SizeEnormous).convertToImage();
+            img = DesktopIcon("image", K3Icon::SizeEnormous).toImage();
         }
         else if (settings->getMovieFileFilter().toUpper().contains(ext.toUpper()))
         {
-            img = DesktopIcon("video", KIcon::SizeEnormous).convertToImage();
+            img = DesktopIcon("video", K3Icon::SizeEnormous).toImage();
         }
         else if (settings->getAudioFileFilter().toUpper().contains(ext.toUpper()))
         {
-            img = DesktopIcon("sound", KIcon::SizeEnormous).convertToImage();
+            img = DesktopIcon("sound", K3Icon::SizeEnormous).toImage();
         }
     }
 
     if (img.isNull())
-        img = DesktopIcon("file_broken", KIcon::SizeEnormous).convertToImage();
+        img = DesktopIcon("file-broken", K3Icon::SizeEnormous).toImage();
 
     // Resize icon to the right size depending of current settings.
 
     QSize size(img.size());
-    size.scale(d->size, d->size, QSize::ScaleMin);
+    size.scale(d->size, d->size, Qt::KeepAspectRatio);
     if (size.width() < img.width() && size.height() < img.height())
     {
         // only scale down
         // do not scale up, looks bad
-        img = img.smoothScale(size);
+        img = img.scaled(size);
     }
 
     d->cache->remove(url.path());
-    QPixmap* thumb = new QPixmap(img);
+    QPixmap* thumb = new QPixmap(QPixmap::fromImage(img));
     d->cache->insert(url.path(), thumb);
     emit signalPixmap(url);
 }
@@ -241,7 +241,7 @@ void PixmapManager::slotCompleted()
     if (!item)
         return;
 
-    find(item->imageInfo()->kurl());
+    find(item->imageInfo()->fileUrl());
 }
 
 int PixmapManager::cacheSize() const
