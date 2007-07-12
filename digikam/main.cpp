@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
                           KLocalizedString(),
                           "http://www.digikam.org");
 
-    aboutData.setOtherText(libInfo.toLatin1());
+    aboutData.setOtherText(ki18n(libInfo.toLatin1()));
 
     aboutData.addAuthor ( ki18n("Caulier Gilles"),
                           ki18n("Main developer and coordinator"),
@@ -268,8 +268,8 @@ int main(int argc, char *argv[])
         !dirInfo.isDir())
     {
         // Run the first run
-        Digikam::DigikamFirstRun *firstRun = new Digikam::DigikamFirstRun(config);
-        app.setMainWidget(firstRun);
+        Digikam::DigikamFirstRun *firstRun = new Digikam::DigikamFirstRun();
+        app.setTopWidget(firstRun);
         firstRun->show();
         return app.exec();
     }
@@ -277,12 +277,9 @@ int main(int argc, char *argv[])
     Digikam::AlbumManager* man = new Digikam::AlbumManager();
     man->setAlbumRoot(albumPath, priorityAlbumPath); // TEMPORARY SOLUTION
 
-    // Register image formats (especially for TIFF )
-    
-
     Digikam::DigikamApp *digikam = new Digikam::DigikamApp();
 
-    app.setMainWidget(digikam);
+    app.setTopWidget(digikam);
     digikam->show();
 
     if (args && args->isSet("detect-camera"))

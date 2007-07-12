@@ -48,8 +48,8 @@ extern "C"
 
 // KDE includes.
 
-#include <klocale.h>
 #include <kconfig.h>
+#include <klocale.h>
 #include <kfiledialog.h>
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -72,7 +72,7 @@ namespace Digikam
 
 using namespace std;
 
-DigikamFirstRun::DigikamFirstRun(KConfig* config, QWidget* parent)
+DigikamFirstRun::DigikamFirstRun(QWidget* parent)
                : KDialog(parent)
 {
     setModal(true);
@@ -81,8 +81,7 @@ DigikamFirstRun::DigikamFirstRun(KConfig* config, QWidget* parent)
     setCaption(i18n( "Album Library Path" ));
     setHelp("firstrundialog.anchor", "digikam");
     
-    m_config = config;
-    m_ui     = new FirstRunWidget(this);
+    m_ui = new FirstRunWidget(this);
     setMainWidget(m_ui);
 
     m_ui->m_path->setUrl(QDir::homePath() + 
@@ -164,12 +163,14 @@ void DigikamFirstRun::slotOk()
         return;
     }
 
-    KConfigGroup group = m_config->group("General Settings");
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("General Settings");
     group.writeEntry("Version", digikam_version);
 
-    group = m_config->group("Album Settings");
-    group.writePathEntry("Album Path", albumLibraryFolder);
-    group.sync();
+    group = config->group("Album Settings");
+    group.writeEntry("Album Path", albumLibraryFolder);
+
+    config->sync();
 
     KDialog::accept();
 

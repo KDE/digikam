@@ -33,7 +33,6 @@
 
 #include "digikam_export.h"
 
-class KConfig;
 class KUrlRequester;
 
 namespace Digikam
@@ -47,7 +46,7 @@ class DIGIKAM_EXPORT DigikamFirstRun : public KDialog
 
 public:
 
-    DigikamFirstRun(KConfig* config, QWidget* parent = 0);
+    DigikamFirstRun(QWidget* parent = 0);
     ~DigikamFirstRun();
 
 protected slots:
@@ -56,7 +55,6 @@ protected slots:
 
 private:
 
-    KConfig        *m_config;
     FirstRunWidget *m_ui;
 };
 

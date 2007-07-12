@@ -129,7 +129,7 @@ SET(digikam_LIB_SRCS
 #                      tagfolderview.cpp 
 #                      tagspopupmenu.cpp 
                       welcomepageview.cpp 
-#                      main.cpp
+                      main.cpp
    )
 
 KDE4_ADD_UI_FILES(digikam_LIB_SRCS ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs/deletedialogbase.ui)
