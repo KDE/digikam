@@ -749,7 +749,7 @@ void ThumbBarView::slotFailedPreview(const KFileItem &fileItem)
         return;
 
     KIconLoader* iconLoader = KIconLoader::global();
-    QPixmap pix = iconLoader->loadIcon("image", K3Icon::NoGroup, ThumbnailSize::Huge);
+    QPixmap pix = iconLoader->loadIcon("file-broken", K3Icon::NoGroup, ThumbnailSize::Huge);
 
     item->setPixmap(pix);
     item->repaint();
@@ -1111,4 +1111,3 @@ QString ThumbBarToolTip::breakString(const QString& input)
 }
 
 }  // NameSpace Digikam
-
