@@ -166,14 +166,14 @@ void FolderView::fontChange(const QFont& oldFont)
 {
     // this is bad, since the settings value might not always be the _real_ height of the thumbnail.
     // (e.g. when it is blended, as for the tags)
-    d->itemHeight = qMax(AlbumThumbnailLoader::componentData().thumbnailSize() + 2*itemMargin(), fontMetrics().height());
+    d->itemHeight = qMax(AlbumThumbnailLoader::componentData()->thumbnailSize() + 2*itemMargin(), fontMetrics().height());
     Q3ListView::fontChange(oldFont);
     slotThemeChanged();
 }
 
 void FolderView::slotIconSizeChanged()
 {
-    d->itemHeight = qMax(AlbumThumbnailLoader::componentData().thumbnailSize() + 2*itemMargin(), fontMetrics().height());
+    d->itemHeight = qMax(AlbumThumbnailLoader::componentData()->thumbnailSize() + 2*itemMargin(), fontMetrics().height());
     slotThemeChanged();
 }
 
@@ -316,16 +316,16 @@ void FolderView::slotThemeChanged()
     int w = frameRect().width();
     int h = itemHeight();
 
-    d->itemRegPix = ThemeEngine::componentData().listRegPixmap(w, h);
-    d->itemSelPix = ThemeEngine::componentData().listSelPixmap(w, h);
+    d->itemRegPix = ThemeEngine::componentData()->listRegPixmap(w, h);
+    d->itemSelPix = ThemeEngine::componentData()->listSelPixmap(w, h);
 
     QPalette plt(palette());
     QColorGroup cg(plt.active());
-    cg.setColor(QColorGroup::Base, ThemeEngine::componentData().baseColor());
-    cg.setColor(QColorGroup::Text, ThemeEngine::componentData().textRegColor());
-    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::componentData().textSelColor());
-    cg.setColor(QColorGroup::Link, ThemeEngine::componentData().textSpecialRegColor());
-    cg.setColor(QColorGroup::LinkVisited, ThemeEngine::componentData().textSpecialSelColor());
+    cg.setColor(QColorGroup::Base, ThemeEngine::componentData()->baseColor());
+    cg.setColor(QColorGroup::Text, ThemeEngine::componentData()->textRegColor());
+    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::componentData()->textSelColor());
+    cg.setColor(QColorGroup::Link, ThemeEngine::componentData()->textSpecialRegColor());
+    cg.setColor(QColorGroup::LinkVisited, ThemeEngine::componentData()->textSpecialSelColor());
     plt.setActive(cg);
     plt.setInactive(cg);
     setPalette(plt);

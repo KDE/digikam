@@ -223,7 +223,7 @@ QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
         ThumbnailJob *job = new ThumbnailJob(name,
                                              ThumbnailSize::Tiny,
                                              false,
-                                             AlbumSettings::componentData().getExifRotate());
+                                             AlbumSettings::componentData()->getExifRotate());
         connect(job,
                 SIGNAL(signalThumbnail(const KUrl&,
                                        const QPixmap&)),

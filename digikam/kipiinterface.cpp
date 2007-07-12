@@ -406,7 +406,7 @@ KUrl::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
     // get the images from the database and return the items found
 
     AlbumDB::ItemSortOrder sortOrder = AlbumDB::NoItemSorting;
-    switch (AlbumSettings::componentData().getImageSortOrder())
+    switch (AlbumSettings::componentData()->getImageSortOrder())
     {
         default:
         case AlbumSettings::ByIName:

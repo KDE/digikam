@@ -134,7 +134,7 @@ void AlbumIconGroupItem::paintBanner()
     }
 
     QPainter p(&pix);
-    p.setPen(ThemeEngine::componentData().textSelColor());
+    p.setPen(ThemeEngine::componentData()->textSelColor());
     p.setFont(fn);
 
     QRect tr;

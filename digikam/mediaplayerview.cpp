@@ -226,8 +226,8 @@ void MediaPlayerView::escapePreview()
 
 void MediaPlayerView::slotThemeChanged()
 {
-    d->errorView->setPaletteBackgroundColor(ThemeEngine::componentData().baseColor());
-    d->mediaPlayerView->setPaletteBackgroundColor(ThemeEngine::componentData().baseColor());
+    d->errorView->setPaletteBackgroundColor(ThemeEngine::componentData()->baseColor());
+    d->mediaPlayerView->setPaletteBackgroundColor(ThemeEngine::componentData()->baseColor());
 }
 
 int MediaPlayerView::previewMode(void)

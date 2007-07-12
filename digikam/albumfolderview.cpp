@@ -150,7 +150,7 @@ int AlbumFolderViewItem::id() const
         }
         else
         {
-            return ( - (AlbumSettings::componentData().getAlbumCollectionNames()
+            return ( - (AlbumSettings::componentData()->getAlbumCollectionNames()
                         .findIndex(text(0)) ) );
         }
     }
@@ -517,7 +517,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
             popmenu.insertSeparator(-1);
         }
 
-        if(AlbumSettings::componentData().getUseTrash())
+        if(AlbumSettings::componentData()->getUseTrash())
         {
             popmenu.insertItem(SmallIcon("edittrash"),
                                i18n("Move Album to Trash"), 12);
@@ -626,10 +626,10 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
                                   albumCollections))
         return;
 
-    QStringList oldAlbumCollections(AlbumSettings::componentData().getAlbumCollectionNames());
+    QStringList oldAlbumCollections(AlbumSettings::componentData()->getAlbumCollectionNames());
     if(albumCollections != oldAlbumCollections)
     {
-        AlbumSettings::componentData().setAlbumCollectionNames(albumCollections);
+        AlbumSettings::componentData()->setAlbumCollectionNames(albumCollections);
         resort();
     }
 
@@ -773,7 +773,7 @@ void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)
     QString     oldComments(album->caption());
     QString     oldCollection(album->collection());
     QDate       oldDate(album->date());
-    QStringList oldAlbumCollections(AlbumSettings::componentData().getAlbumCollectionNames());
+    QStringList oldAlbumCollections(AlbumSettings::componentData()->getAlbumCollectionNames());
 
     QString     title, comments, collection;
     QDate       date;
@@ -791,7 +791,7 @@ void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)
         if(collection != oldCollection)
             album->setCollection(collection);
 
-        AlbumSettings::componentData().setAlbumCollectionNames(albumCollections);
+        AlbumSettings::componentData()->setAlbumCollectionNames(albumCollections);
         resort();
 
         // Do this last : so that if anything else changed we can
@@ -834,7 +834,7 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
 
     if(AlbumDrag::canDecode(e))
     {
-        switch(AlbumSettings::componentData().getAlbumSortOrder())
+        switch(AlbumSettings::componentData()->getAlbumSortOrder())
         {
             case(AlbumSettings::ByFolder):
             {
@@ -911,7 +911,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         if(!itemDrag)
             return;
 
-        if (AlbumSettings::componentData().getAlbumSortOrder()
+        if (AlbumSettings::componentData()->getAlbumSortOrder()
             == AlbumSettings::ByFolder)
         {
             // TODO: Copy?
@@ -942,7 +942,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
                         this, SLOT(slotDIOResult(KIO::Job*)));
             }
         }
-        else if (AlbumSettings::componentData().getAlbumSortOrder()
+        else if (AlbumSettings::componentData()->getAlbumSortOrder()
                  == AlbumSettings::ByCollection)
         {
             if (!itemDrop)
@@ -1227,7 +1227,7 @@ AlbumFolderViewItem* AlbumFolderView::findParent(PAlbum* album, bool& failed)
         return 0;
     }
 
-    switch(AlbumSettings::componentData().getAlbumSortOrder())
+    switch(AlbumSettings::componentData()->getAlbumSortOrder())
     {
         case(AlbumSettings::ByFolder):
         {
@@ -1289,7 +1289,7 @@ AlbumFolderViewItem* AlbumFolderView::findParentByFolder(PAlbum* album, bool& fa
 
 AlbumFolderViewItem* AlbumFolderView::findParentByCollection(PAlbum* album, bool& failed)
 {
-    QStringList collectionList = AlbumSettings::componentData().getAlbumCollectionNames();
+    QStringList collectionList = AlbumSettings::componentData()->getAlbumCollectionNames();
     QString collection = album->collection();
 
     if (collection.isEmpty() || !collectionList.contains(collection))

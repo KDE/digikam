@@ -206,7 +206,7 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     QPainter painter(&d->ratingPixmap);
     painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
-                     ThemeEngine::componentData().textSpecialRegColor());
+                     ThemeEngine::componentData()->textSpecialRegColor());
     painter.end();
     
     // -- ImageLister connections -------------------------------------
@@ -1753,7 +1753,7 @@ void AlbumIconView::updateBannerRectPixmap()
     d->bannerRect.setHeight(d->bannerRect.height() + tr.height() + 10);
     d->bannerRect.setWidth(frameRect().width());
 
-    d->bannerPixmap = ThemeEngine::componentData().bannerPixmap(d->bannerRect.width(),
+    d->bannerPixmap = ThemeEngine::componentData()->bannerPixmap(d->bannerRect.width(),
                                                             d->bannerRect.height());
 }
 
@@ -1860,10 +1860,10 @@ void AlbumIconView::updateItemRectsPixmap()
 
     d->itemRect = QRect(0, 0, w+2*margin, y+margin);
 
-    d->itemRegPixmap = ThemeEngine::componentData().thumbRegPixmap(d->itemRect.width(),
+    d->itemRegPixmap = ThemeEngine::componentData()->thumbRegPixmap(d->itemRect.width(),
                                                                d->itemRect.height());
 
-    d->itemSelPixmap = ThemeEngine::componentData().thumbSelPixmap(d->itemRect.width(),
+    d->itemSelPixmap = ThemeEngine::componentData()->thumbSelPixmap(d->itemRect.width(),
                                                                d->itemRect.height());
 }
 
@@ -1871,16 +1871,16 @@ void AlbumIconView::slotThemeChanged()
 {
     QPalette plt(palette());
     QColorGroup cg(plt.active());
-    cg.setColor(QColorGroup::Base, ThemeEngine::componentData().baseColor());
-    cg.setColor(QColorGroup::Text, ThemeEngine::componentData().textRegColor());
-    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::componentData().textSelColor());
+    cg.setColor(QColorGroup::Base, ThemeEngine::componentData()->baseColor());
+    cg.setColor(QColorGroup::Text, ThemeEngine::componentData()->textRegColor());
+    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::componentData()->textSelColor());
     plt.setActive(cg);
     plt.setInactive(cg);
     setPalette(plt);
 
     QPainter painter(&d->ratingPixmap);
     painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
-                     ThemeEngine::componentData().textSpecialRegColor());
+                     ThemeEngine::componentData()->textSpecialRegColor());
     painter.end();
     
     updateBannerRectPixmap();

@@ -158,7 +158,7 @@ void RatingWidget::slotThemeChanged()
 
     QPainter painter2(&d->selPixmap);
     painter2.fillRect(0, 0, d->selPixmap.width(), d->selPixmap.height(),
-                      ThemeEngine::componentData().textSpecialRegColor());
+                      ThemeEngine::componentData()->textSpecialRegColor());
     painter2.end();
     
     setFixedSize(QSize(d->regPixmap.width()*5, d->regPixmap.height()));

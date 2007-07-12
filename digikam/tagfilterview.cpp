@@ -211,7 +211,7 @@ TagFilterView::TagFilterView(QWidget* parent)
     viewport()->setAcceptDrops(true);
 
     TagFilterViewItem* notTaggedItem = new TagFilterViewItem(this, 0, true);
-    notTaggedItem->setPixmap(0, AlbumThumbnailLoader::componentData().getStandardTagIcon());
+    notTaggedItem->setPixmap(0, AlbumThumbnailLoader::componentData()->getStandardTagIcon());
 
     // -- setup slots ---------------------------------------------------------
 
@@ -743,7 +743,7 @@ void TagFilterView::slotClear()
     clear();
 
     TagFilterViewItem* notTaggedItem = new TagFilterViewItem(this, 0, true);
-    notTaggedItem->setPixmap(0, AlbumThumbnailLoader::componentData().getStandardTagIcon());
+    notTaggedItem->setPixmap(0, AlbumThumbnailLoader::componentData()->getStandardTagIcon());
 }
 
 void TagFilterView::slotTimeOut()

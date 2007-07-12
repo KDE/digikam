@@ -131,7 +131,7 @@ void AlbumFileTip::setIconItem(AlbumIconItem* iconItem)
     d->iconItem = iconItem;
 
     if (!d->iconItem || 
-        !AlbumSettings::componentData().showToolTipsIsValid())
+        !AlbumSettings::componentData()->showToolTipsIsValid())
     {
         hide();
     }

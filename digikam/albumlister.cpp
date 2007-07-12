@@ -149,7 +149,7 @@ void AlbumLister::openAlbum(Album *album)
     // Protocol = digikamalbums -> kio_digikamalbums
     d->job = ImageLister::startListJob(album->kurl(),
                                        d->filter,
-                                       AlbumSettings::componentData().getIconShowResolution());
+                                       AlbumSettings::componentData()->getIconShowResolution());
 
     connect(d->job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotResult(KIO::Job*)));
@@ -178,7 +178,7 @@ void AlbumLister::refresh()
     }
 
     ImageLister lister;
-    d->job = lister.startListJob(d->currAlbum->kurl(), d->filter, AlbumSettings::componentData().getIconShowResolution());
+    d->job = lister.startListJob(d->currAlbum->kurl(), d->filter, AlbumSettings::componentData()->getIconShowResolution());
 
     connect(d->job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotResult(KIO::Job*)));

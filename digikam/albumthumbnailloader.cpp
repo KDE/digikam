@@ -62,7 +62,7 @@ class AlbumThumbnailLoaderPrivate
 public:
     AlbumThumbnailLoaderPrivate()
     {
-        iconSize           = AlbumSettings::componentData().getDefaultTreeIconSize();
+        iconSize           = AlbumSettings::componentData()->getDefaultTreeIconSize();
         minBlendSize       = 20;
         iconAlbumThumbJob  = 0;
         iconTagThumbJob    = 0;
@@ -282,7 +282,7 @@ void AlbumThumbnailLoader::addUrl(Album *album, const KUrl &url)
                 d->iconTagThumbJob = new ThumbnailJob(url,
                         d->iconSize,
                         true,
-                        AlbumSettings::componentData().getExifRotate());
+                        AlbumSettings::componentData()->getExifRotate());
                 connect(d->iconTagThumbJob,
                         SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
                         SLOT(slotGotThumbnailFromIcon(const KUrl&, const QPixmap&)));
@@ -302,7 +302,7 @@ void AlbumThumbnailLoader::addUrl(Album *album, const KUrl &url)
                 d->iconAlbumThumbJob = new ThumbnailJob(url,
                         d->iconSize,
                         true,
-                        AlbumSettings::componentData().getExifRotate());
+                        AlbumSettings::componentData()->getExifRotate());
                 connect(d->iconAlbumThumbJob,
                         SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
                         SLOT(slotGotThumbnailFromIcon(const KUrl&, const QPixmap&)));

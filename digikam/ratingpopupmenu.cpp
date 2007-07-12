@@ -61,7 +61,7 @@ RatingPopupMenu::RatingPopupMenu(QWidget* parent)
     for (int i = 1 ; i <= RatingMax ; i++)
     {
         QPixmap pix(starbm.width() * 5, starbm.height());
-        pix.fill(ThemeEngine::componentData().textSpecialRegColor());
+        pix.fill(ThemeEngine::componentData()->textSpecialRegColor());
         QBitmap mask(starbm.width() * 5, starbm.height());
         QPainter painter(&mask);
         painter.drawTiledPixmap(0, 0, 
