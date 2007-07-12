@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <q3dragobject.h>
+#include <Q3DragObject>
 
 class QMimeSource;
 class QWidget;
@@ -51,7 +51,6 @@ public:
 private:
 
     void setCameraType(const CameraType& ctype);
-
 };
 
 }  // namespace Digikam

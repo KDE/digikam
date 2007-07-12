@@ -24,12 +24,11 @@
 
 // Qt includes.
 
-#include <qmime.h>
-#include <qstring.h>
-#include <qdatetime.h>
-#include <q3cstring.h>
-#include <qwidget.h>
-#include <qdatastream.h>
+#include <QString>
+#include <QDateTime>
+#include <QByteArray>
+#include <QWidget>
+#include <QDataStream>
 
 // Local includes.
 
@@ -52,7 +51,7 @@ CameraDragObject::~CameraDragObject()
 void CameraDragObject::setCameraType(const CameraType& ctype)
 {
     QByteArray byteArray;
-    QDataStream ds(byteArray, QIODevice::WriteOnly);
+    QDataStream ds(&byteArray, QIODevice::WriteOnly);
 
     ds << ctype.title();
     ds << ctype.model();
@@ -76,7 +75,7 @@ bool CameraDragObject::decode(const QMimeSource* e, CameraType& ctype)
         QString   title, model, port, path;
         QDateTime lastAccess;
 
-        QDataStream ds(payload, QIODevice::ReadOnly);
+        QDataStream ds(&payload, QIODevice::ReadOnly);
         ds >> title;
         ds >> model;
         ds >> port;
