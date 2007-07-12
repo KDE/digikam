@@ -77,28 +77,28 @@ SET(digikam_LIB_SRCS
 #                      kdateedit.cpp 
 #                      metadatahub.cpp 
 #                      digikamapp.cpp 
-#                      album.cpp 
+                      album.cpp 
 #                      albumiconview.cpp 
 #                      albumicongroupitem.cpp 
 #                      albumiconitem.cpp 
 #                      albumitemhandler.cpp 
-#                      albumfiletip.cpp 
+#                     albumfiletip.cpp 
 #                      albumfolderview.cpp 
-#                      albumhistory.cpp 
+                      albumhistory.cpp 
 #                      albumlister.cpp 
 #                      albummanager.cpp 
-#                      albumpropsedit.cpp 
-#                      albumsettings.cpp 
+                      albumpropsedit.cpp 
+                      albumsettings.cpp 
 #                      albumthumbnailloader.cpp 
 #                      albumwidgetstack.cpp 
 #                      cameradragobject.cpp 
-#                      cameralist.cpp 
+                      cameralist.cpp 
 #                      cameratype.cpp 
-#                      datefolderview.cpp 
+                      datefolderview.cpp 
 #                      dcopiface.cpp 
-#                      digikamfirstrun.cpp 
+                      digikamfirstrun.cpp 
 #                      digikamview.cpp 
-#                      dio.cpp 
+                      dio.cpp 
 #                      dragobjects.cpp 
 #                      firstrun.cpp 
 #                      folderitem.cpp 
@@ -119,7 +119,7 @@ SET(digikam_LIB_SRCS
 #                      scanlib.cpp 
 #                      searchadvanceddialog.cpp 
 #                      searchfolderview.cpp 
-#                      searchquickdialog.cpp 
+                      searchquickdialog.cpp 
 #                      searchresultsview.cpp 
 #                      searchresultsitem.cpp 
 #                      searchwidgets.cpp 
@@ -128,7 +128,7 @@ SET(digikam_LIB_SRCS
 #                      tagfilterview.cpp 
 #                      tagfolderview.cpp 
 #                      tagspopupmenu.cpp 
-#                      welcomepageview.cpp 
+                      welcomepageview.cpp 
 #                      main.cpp
    )
 
