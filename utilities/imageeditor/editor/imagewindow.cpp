@@ -28,17 +28,16 @@
 
 // Qt includes.
 
-#include <qcursor.h>
-#include <qtimer.h>
-#include <qlabel.h>
-#include <qimage.h>
-#include <qsplitter.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
 #include <Q3ValueList>
-#include <Q3Frame>
+#include <QProgressBar>
+#include <QTimer>
+#include <QLabel>
+#include <QImage>
+#include <QSplitter>
+#include <QPainter>
+#include <QPixmap>
+#include <QHBoxLayout>
+#include <QFrame>
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QCloseEvent>
@@ -51,19 +50,19 @@
 #include <kstandarddirs.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kimageio.h>
 #include <kfiledialog.h>
 #include <kdeversion.h>
 #include <kmenubar.h>
 #include <ktoolbar.h>
-#include <kaccel.h>
 #include <kaction.h>
+#include <kactioncollection.h>
 #include <kstdaccel.h>
 #include <kstandardaction.h>
+#include <ktoolbarpopupaction.h>
 #include <kstdguiitem.h>
 #include <kstatusbar.h>
-#include <kprogress.h>
 #include <kwindowsystem.h>
 #include <kglobal.h>
 
@@ -279,24 +278,26 @@ void ImageWindow::setupConnections()
 void ImageWindow::setupUserArea()
 {
     QWidget* widget  = new QWidget(this);
-    Q3HBoxLayout *lay = new Q3HBoxLayout(widget);
-
+    QHBoxLayout *lay = new QHBoxLayout(widget);
     m_splitter       = new QSplitter(widget);
     m_canvas         = new Canvas(m_splitter);
 
     m_canvas->makeDefaultEditingCanvas();
 
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
-    m_canvas->setSizePolicy(rightSzPolicy);
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    rightSzPolicy.setHorizontalStretch(2);
+    rightSzPolicy.setVerticalStretch(1);
 
     d->rightSidebar  = new ImagePropertiesSideBarDB(widget, "ImageEditor Right Sidebar", m_splitter,
-                                                    Sidebar::Right, true);
+                                                    Sidebar::DockRight, true);
     lay->addWidget(m_splitter);
     lay->addWidget(d->rightSidebar);
+    lay->setSpacing(0);
+    lay->setMargin(0);
 
-    m_splitter->setFrameStyle( Q3Frame::NoFrame );
-    m_splitter->setFrameShadow( Q3Frame::Plain );
-    m_splitter->setFrameShape( Q3Frame::NoFrame );
+    m_splitter->setFrameStyle( QFrame::NoFrame );
+    m_splitter->setFrameShadow( QFrame::Plain );
+    m_splitter->setFrameShape( QFrame::NoFrame );
     m_splitter->setOpaqueResize(false);
     setCentralWidget(widget);
 }
@@ -313,57 +314,65 @@ void ImageWindow::setupActions()
 
     // -- Rating actions ---------------------------------------------------------------
 
-    d->star0 = new KAction(i18n("Assign Rating \"No Star\""), CTRL+Qt::Key_0,
-                          d->rightSidebar, SLOT(slotAssignRatingNoStar()),
-                          actionCollection(), "imageview_ratenostar");
-    d->star1 = new KAction(i18n("Assign Rating \"One Star\""), CTRL+Qt::Key_1,
-                          d->rightSidebar, SLOT(slotAssignRatingOneStar()),
-                          actionCollection(), "imageview_rateonestar");
-    d->star2 = new KAction(i18n("Assign Rating \"Two Stars\""), CTRL+Qt::Key_2,
-                          d->rightSidebar, SLOT(slotAssignRatingTwoStar()),
-                          actionCollection(), "imageview_ratetwostar");
-    d->star3 = new KAction(i18n("Assign Rating \"Three Stars\""), CTRL+Qt::Key_3,
-                          d->rightSidebar, SLOT(slotAssignRatingThreeStar()),
-                          actionCollection(), "imageview_ratethreestar");
-    d->star4 = new KAction(i18n("Assign Rating \"Four Stars\""), CTRL+Qt::Key_4,
-                          d->rightSidebar, SLOT(slotAssignRatingFourStar()),
-                          actionCollection(), "imageview_ratefourstar");
-    d->star5 = new KAction(i18n("Assign Rating \"Five Stars\""), CTRL+Qt::Key_5,
-                          d->rightSidebar, SLOT(slotAssignRatingFiveStar()),
-                          actionCollection(), "imageview_ratefivestar");
+    d->star0 = new KAction(i18n("Assign Rating \"No Star\""), this);
+    d->star0->setShortcut(Qt::CTRL+Qt::Key_0);
+    connect(d->star0, SIGNAL(triggered()), d->rightSidebar, SLOT(slotAssignRatingNoStar()));
+    actionCollection()->addAction("imageview_ratenostar", d->star0);
+
+    d->star1 = new KAction(i18n("Assign Rating \"One Star\""), this);
+    d->star1->setShortcut(Qt::CTRL+Qt::Key_1);
+    connect(d->star1, SIGNAL(triggered()), d->rightSidebar, SLOT(slotAssignRatingOneStar()));
+    actionCollection()->addAction("imageview_rateonestar", d->star1);
+
+    d->star2 = new KAction(i18n("Assign Rating \"Two Stars\""), this);
+    d->star2->setShortcut(Qt::CTRL+Qt::Key_2);
+    connect(d->star2, SIGNAL(triggered()), d->rightSidebar, SLOT(slotAssignRatingTwoStar()));
+    actionCollection()->addAction("imageview_ratetwostar", d->star2);
+
+    d->star3 = new KAction(i18n("Assign Rating \"Three Stars\""), this);
+    d->star3->setShortcut(Qt::CTRL+Qt::Key_3);
+    connect(d->star3, SIGNAL(triggered()), d->rightSidebar, SLOT(slotAssignRatingThreeStar()));
+    actionCollection()->addAction("imageview_ratethreestar", d->star3);
+
+    d->star4 = new KAction(i18n("Assign Rating \"Four Stars\""), this);
+    d->star4->setShortcut(Qt::CTRL+Qt::Key_4);
+    connect(d->star4, SIGNAL(triggered()), d->rightSidebar, SLOT(slotAssignRatingFourStar()));
+    actionCollection()->addAction("imageview_ratefourstar", d->star4);
+
+    d->star5 = new KAction(i18n("Assign Rating \"Five Stars\""), this);
+    d->star5->setShortcut(Qt::CTRL+Qt::Key_5);
+    connect(d->star5, SIGNAL(triggered()), d->rightSidebar, SLOT(slotAssignRatingFiveStar()));
+    actionCollection()->addAction("imageview_ratefivestar", d->star5);
 
     // -- Special Delete actions ---------------------------------------------------------------
 
     // Pop up dialog to ask user whether to permanently delete
-    d->fileDeletePermanentlyAction = new KAction(i18n("Delete File Permanently"),
-            "editdelete",
-            SHIFT+Qt::Key_Delete,
-            this,
-            SLOT(slotDeleteCurrentItemPermanently()),
-            actionCollection(),
-            "image_delete_permanently");
+    
+    d->fileDeletePermanentlyAction = new KAction(KIcon("edit-delete"), i18n("Delete File Permanently"), this);
+    d->fileDeletePermanentlyAction->setShortcut(Qt::SHIFT+Qt::Key_Delete);
+    connect(d->fileDeletePermanentlyAction, SIGNAL(triggered()), 
+            this, SLOT(slotDeleteCurrentItemPermanently()));
+    actionCollection()->addAction("image_delete_permanently", d->fileDeletePermanentlyAction);
 
     // These two actions are hidden, no menu entry, no toolbar entry, no shortcut.
     // Power users may add them.
-    d->fileDeletePermanentlyDirectlyAction = new KAction(i18n("Delete Permanently without Confirmation"),
-            "editdelete",
-            0,
-            this,
-            SLOT(slotDeleteCurrentItemPermanentlyDirectly()),
-            actionCollection(),
-            "image_delete_permanently_directly");
 
-    d->fileTrashDirectlyAction             = new KAction(i18n("Move to Trash without Confirmation"),
-            "edittrash",
-            0,
-            this,
-            SLOT(slotTrashCurrentItemDirectly()),
-            actionCollection(),
-            "image_trash_directly");
+    d->fileDeletePermanentlyDirectlyAction = new KAction(KIcon("edit-delete"), 
+                                                 i18n("Delete Permanently without Confirmation"), this);
+    connect(d->fileDeletePermanentlyDirectlyAction, SIGNAL(triggered()), 
+            this, SLOT(slotDeleteCurrentItemPermanentlyDirectly()));
+    actionCollection()->addAction("image_delete_permanently_directly",
+                                  d->fileDeletePermanentlyDirectlyAction);
+
+    d->fileTrashDirectlyAction = new KAction(KIcon("edit-trash"), 
+                                     i18n("Move to Trash without Confirmation"), this);
+    connect(d->fileTrashDirectlyAction, SIGNAL(triggered()), 
+            this, SLOT(slotTrashCurrentItemDirectly()));
+    actionCollection()->addAction("image_trash_directly", d->fileTrashDirectlyAction);
 
     // ---------------------------------------------------------------------------------
 
-    createGUI("digikamimagewindowui.rc", false);
+    createGUI("digikamimagewindowui.rc");
 
     setupStandardAccelerators();
 }
@@ -373,12 +382,12 @@ void ImageWindow::applySettings()
     applyStandardSettings();
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group("ImageViewer Settings");
 
     if (!group.readEntry("UseThemeBackgroundColor", true))
-        m_bgColor = group.readColorEntry("BackgroundColor", &Qt::black);
+        m_bgColor = group.readEntry("BackgroundColor", QColor(Qt::black));
     else
-        m_bgColor = ThemeEngine::componentData().baseColor();
+        m_bgColor = ThemeEngine::componentData()->baseColor();
 
     m_canvas->setBackgroundColor(m_bgColor);
 
@@ -427,10 +436,10 @@ void ImageWindow::loadImageInfos(const ImageInfoList &imageInfoList, ImageInfo *
 
     for (ImageInfoListIterator it = d->imageInfoList.begin(); it != d->imageInfoList.end(); ++it)
     {
-        d->urlList.append((*it)->kurl());
+        d->urlList.append((*it)->fileUrl());
     }
 
-    d->urlCurrent  = d->imageInfoCurrent->kurl();
+    d->urlCurrent  = d->imageInfoCurrent->fileUrl();
 
     loadCurrentList(caption, allowSaving);
 }
@@ -442,7 +451,7 @@ void ImageWindow::loadCurrentList(const QString& caption, bool allowSaving)
     // if window is iconified, show it
     if (isMinimized())
     {
-        KWindowSystem::deIconifyWindow(winId());
+        KWindowSystem::unminimizeWindow(winId());
     }
 
     if (!caption.isEmpty())
@@ -612,8 +621,9 @@ void ImageWindow::slotChanged()
     QString mpixels;
     QSize dims(m_canvas->imageWidth(), m_canvas->imageHeight());
     mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
-    QString str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)")
-                  ,dims.width(),dims.height(),mpixels);
+    QString str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
+                  dims.width(), dims.height(), mpixels);
+
     m_resLabel->setText(str);
 
     if (d->urlCurrent.isValid())
@@ -690,9 +700,8 @@ void ImageWindow::slotUpdateItemInfo()
 
     m_rotatedOrFlipped = false;
     
-    QString text = d->urlCurrent.filename() + i18n(" (%2 of %3)")
-                                             ,QString::number(index+1),
-                                             ,QString::number(d->urlList.count());
+    QString text = d->urlCurrent.fileName() + i18n(" (%2 of %3)", QString::number(index+1),
+                                                                  QString::number(d->urlList.count()));
     m_nameLabel->setText(text);
 
     if (d->urlList.count() == 1) 
@@ -727,7 +736,7 @@ void ImageWindow::slotUpdateItemInfo()
     // This is necessary when ImageEditor is opened from cameraclient.
 
     KUrl u(d->urlCurrent.directory());
-    PAlbum *palbum = AlbumManager::componentData().findPAlbum(u);
+    PAlbum *palbum = AlbumManager::componentData()->findPAlbum(u);
 
     if (!palbum)
     {
@@ -741,7 +750,7 @@ void ImageWindow::slotUpdateItemInfo()
 
 bool ImageWindow::setup(bool iccSetupPage)
 {
-    Setup setup(this, 0, iccSetupPage ? Setup::IccProfiles : Setup::LastPageUsed);    
+    Setup setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);    
         
     if (setup.exec() != QDialog::Accepted)
         return false;
@@ -792,10 +801,10 @@ void ImageWindow::saveAsIsComplete()
     // Find the src and dest albums ------------------------------------------
 
     KUrl srcDirURL(QDir::cleanPath(m_savingContext->srcURL.directory()));
-    PAlbum* srcAlbum = AlbumManager::componentData().findPAlbum(srcDirURL);
+    PAlbum* srcAlbum = AlbumManager::componentData()->findPAlbum(srcDirURL);
 
     KUrl dstDirURL(QDir::cleanPath(m_savingContext->destinationURL.directory()));
-    PAlbum* dstAlbum = AlbumManager::componentData().findPAlbum(dstDirURL);
+    PAlbum* dstAlbum = AlbumManager::componentData()->findPAlbum(dstDirURL);
 
     if (dstAlbum && srcAlbum)
     {
@@ -815,7 +824,7 @@ void ImageWindow::saveAsIsComplete()
         {
             for (ImageInfo *info = d->imageInfoList.first(); info; info = d->imageInfoList.next())
             {
-                if (info->kurl() == m_savingContext->destinationURL)
+                if (info->fileUrl() == m_savingContext->destinationURL)
                 {
                     d->imageInfoCurrent = new ImageInfo(newInfo);
                     // setAutoDelete is true
@@ -908,7 +917,7 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
 
     KUrl u;
     u.setPath(d->urlCurrent.directory());
-    PAlbum *palbum = AlbumManager::componentData().findPAlbum(u);
+    PAlbum *palbum = AlbumManager::componentData()->findPAlbum(u);
 
     // if available, provide a digikamalbums:// URL to KIO
     KUrl kioURL;
@@ -1012,7 +1021,7 @@ void ImageWindow::slotFileMetadataChanged(const KUrl &url)
 
 void ImageWindow::slotThemeChanged()
 {
-    m_canvas->setBackgroundColor(ThemeEngine::componentData().baseColor());
+    m_canvas->setBackgroundColor(ThemeEngine::componentData()->baseColor());
 }
 
 void ImageWindow::slotFilePrint()
@@ -1084,7 +1093,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 
     if (!m_cancelSlideShow)
     {
-        settings.exifRotate = AlbumSettings::componentData().getExifRotate();
+        settings.exifRotate = AlbumSettings::componentData()->getExifRotate();
         settings.fileList   = d->urlList;
     
         SlideShow *slide = new SlideShow(settings);
@@ -1181,7 +1190,7 @@ void ImageWindow::dropEvent(QDropEvent *e)
     else if(TagDrag::canDecode(e))
     {
         QByteArray ba = e->encodedData("digikam/tag-id");
-        QDataStream ds(ba, QIODevice::ReadOnly);
+        QDataStream ds(&ba, QIODevice::ReadOnly);
         int tagID;
         ds >> tagID;
 
