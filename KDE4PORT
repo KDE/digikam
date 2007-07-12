@@ -112,7 +112,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             albumsettings.cpp                   Gilles                  X       DONE
             albumthumbnailloader.cpp                                    X
             albumwidgetstack.cpp                Gilles                  X       DONE
-            cameradragobject.cpp                                        X
+            cameradragobject.cpp                Gilles                  X       DONE
             cameralist.cpp                      Laurent                 X       DONE
             cameratype.cpp                                              X
             datefolderview.cpp                  Laurent                 X       DONE
