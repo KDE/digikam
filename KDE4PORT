@@ -130,7 +130,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             iconview.cpp                                                X
             imageattributeswatch.cpp            Gilles                  X       DONE
             imagepreviewview.cpp                                        X
-            kdateedit.cpp                                               X
+            kdateedit.cpp                       Gilles                  X       DONE
             kdatepickerpopup.cpp                                        X
             kdatetimeedit.cpp                                           X
             kipiinterface.cpp                   Gilles                  X       DONE
