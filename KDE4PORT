@@ -122,7 +122,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             digikamview.cpp                                             X
             dio.cpp                             Laurent                 X       DONE
             dragobjects.cpp                                             X
-            firstrun.cpp                                                X
+            firstrun.cpp                        Gilles                  X       DONE
             folderitem.cpp                                              X
             folderview.cpp                                              X
             icongroupitem.cpp                                           X
