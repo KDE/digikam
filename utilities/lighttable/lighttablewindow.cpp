@@ -341,7 +341,6 @@ void LightTableWindow::setupActions()
     connect(d->lastAction, SIGNAL(triggered()), this, SLOT(slotLast()));
     actionCollection()->addAction("lighttable_last", d->lastAction);
 
-
     d->setItemLeftAction = new KAction(KIcon("arrow-left"), i18n("Show item on left panel"), this);
     d->setItemLeftAction->setShortcut(Qt::CTRL+Qt::Key_L);
     d->setItemLeftAction->setEnabled(false);
@@ -354,28 +353,32 @@ void LightTableWindow::setupActions()
     connect(d->setItemRightAction, SIGNAL(triggered()), this, SLOT(slotSetItemRight()));
     actionCollection()->addAction("lighttable_setitemright", d->setItemRightAction);
 
-    d->editItemAction = new KAction(i18n("Edit"), "editimage",
-                                       Qt::Key_F4, this, SLOT(slotEditItem()),
-                                       actionCollection(), "lighttable_edititem");
+    d->editItemAction = new KAction(KIcon("editimage"), i18n("Edit"), this);
+    d->editItemAction->setShortcut(Qt::Key_F4);
     d->editItemAction->setEnabled(false);
+    connect(d->editItemAction, SIGNAL(triggered()), this, SLOT(slotEditItem()));
+    actionCollection()->addAction("lighttable_edititem", d->editItemAction);
 
-    d->removeItemAction = new KAction(i18n("Remove item"), "fileclose",
-                                       CTRL+Qt::Key_K, this, SLOT(slotRemoveItem()),
-                                       actionCollection(), "lighttable_removeitem");
+    d->removeItemAction = new KAction(KIcon("dialog-close"), i18n("Remove item"), this);
+    d->removeItemAction->setShortcut(Qt::CTRL+Qt::Key_K);
     d->removeItemAction->setEnabled(false);
+    connect(d->removeItemAction, SIGNAL(triggered()), this, SLOT(slotRemoveItem()));
+    actionCollection()->addAction("lighttable_removeitem", d->removeItemAction);
 
-    d->clearListAction = new KAction(i18n("Clear all items"), "editshred",
-                                     CTRL+SHIFT+Qt::Key_K, this, SLOT(slotClearItemsList()),
-                                     actionCollection(), "lighttable_clearlist");
+    d->clearListAction = new KAction(KIcon("list-remove"), i18n("Clear all items"), this);
+    d->clearListAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_K);
     d->clearListAction->setEnabled(false);
+    connect(d->clearListAction, SIGNAL(triggered()), this, SLOT(slotClearItemsList()));
+    actionCollection()->addAction("lighttable_clearlist", d->clearListAction);
 
-    d->fileDeleteAction = new KAction(i18n("Move to Trash"), "edittrash",
-                                     Qt::Key_Delete,
-                                     this, SLOT(slotDeleteItem()),
-                                     actionCollection(), "lighttable_filedelete");
+    d->fileDeleteAction = new KAction(KIcon("edit-trash"), i18n("Move to Trash"), this);
+    d->fileDeleteAction->setShortcut(Qt::Key_Delete);
     d->fileDeleteAction->setEnabled(false);
+    connect(d->fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteItem()));
+    actionCollection()->addAction("lighttable_filedelete", d->fileDeleteAction);
 
-    KStandardAction::close(this, SLOT(close()), actionCollection(), "lighttable_close");
+    actionCollection()->addAction(KStandardAction::Close, "lighttable_close", 
+                                  this, SLOT(close()));
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
