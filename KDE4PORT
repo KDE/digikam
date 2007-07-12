@@ -128,7 +128,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             icongroupitem.cpp                                           X
             iconitem.cpp                                                X
             iconview.cpp                                                X
-            imageattributeswatch.cpp                                    X
+            imageattributeswatch.cpp            Gilles                  X       DONE
             imagepreviewview.cpp                                        X
             kdateedit.cpp                                               X
             kdatepickerpopup.cpp                                        X
