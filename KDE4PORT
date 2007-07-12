@@ -14,7 +14,7 @@ LIST OF DIRECTORIES PORTED BY DEVELOPPERS:
 ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   PORT      TESTS      REMARK
 
 
- 1      |-libs                                                                                       "libs" subfloders are used by all others parts of digiKam. Must be ported in first.
+ 1      |-libs 
         |---curves                              Gilles          X       X       DONE
         |---database                            Marcel                  X       DONE
         |-----sqlite2                           Gilles                  X       DONE        -
@@ -50,7 +50,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |-----imageplugins                      Gilles          X       X       DONE
         |-----metadata                          Gilles          X       X       DONE
 
- 2      |-utilities                                                                                  Utilities components are used as "libs" by digiKam main interface.
+ 2      |-utilities 
         |---batch                               Gilles                  X       DONE
         |---cameragui                                                   
             albumselectdialog.cpp               Gilles                  X       DONE
@@ -97,30 +97,30 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---pics                                Gilles                          DONE        -
         |---setup                               Gilles          X               DONE
 
- 5      |-digikam                                                       X                            The most long to do certainly
-            album.cpp                                                   X
+ 5      |-digikam
+            album.cpp                           Laurent                 X       
             albumfiletip.cpp                                            X
             albumfolderview.cpp                                         X
-            albumhistory.cpp                                            X
+            albumhistory.cpp                    Laurent                 X       
             albumicongroupitem.cpp                                      X
             albumiconitem.cpp                                           X
             albumiconview.cpp                                           X
             albumitemhandler.cpp                                        X
             albumlister.cpp                                             X
             albummanager.cpp                                            X
-            albumpropsedit.cpp                                          X
-            albumsettings.cpp                   Gilles                  X
+            albumpropsedit.cpp                  Laurent                 X
+            albumsettings.cpp                   Gilles                  X       DONE
             albumthumbnailloader.cpp                                    X
             albumwidgetstack.cpp                                        X
             cameradragobject.cpp                                        X
-            cameralist.cpp                                              X
+            cameralist.cpp                      Laurent                 X
             cameratype.cpp                                              X
-            datefolderview.cpp                                          X
+            datefolderview.cpp                  Laurent                 X
             dcopiface.cpp                                               X
             digikamapp.cpp                                              X
-            digikamfirstrun.cpp                                         X
+            digikamfirstrun.cpp                 Laurent                 X
             digikamview.cpp                                             X
-            dio.cpp                                                     X
+            dio.cpp                             Laurent                 X
             dragobjects.cpp                                             X
             firstrun.cpp                                                X
             folderitem.cpp                                              X
@@ -144,7 +144,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             scanlib.cpp                                                 X
             searchadvanceddialog.cpp                                    X
             searchfolderview.cpp                                        X
-            searchquickdialog.cpp                                       X
+            searchquickdialog.cpp               Laurent                 X       DONE
             searchresultsitem.cpp                                       X
             searchresultsview.cpp                                       X
             searchwidgets.cpp                                           X
@@ -153,9 +153,9 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             tagfilterview.cpp                                           X
             tagfolderview.cpp                                           X
             tagspopupmenu.cpp                                           X
-            welcomepageview.cpp                                         X
+            welcomepageview.cpp                 Laurent                 X       DONE
 
- 6      |-imageplugins                                                                               All image editor plugins can be ported after digiKam core
+ 6      |-imageplugins
         |---adjustcurves                        Laurent                         DONE       DONE
         |---adjustlevels                        Laurent                         DONE       DONE      
         |---antivignetting                      Laurent                         DONE                 Do not work yet.
@@ -190,7 +190,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |-----patterns                          Laurent                         DONE        -        
         |---whitebalance                        Gilles                          DONE       DONE
 	
- 7      |-themedesigner                                                                              The last one component. It completly independant. It will be the last one to port.
+ 7      |-themedesigner
 
  8      |-data                                  Gilles                          DONE        -         
         |---about                               Gilles                          DONE        -         
