@@ -373,12 +373,15 @@ void ImageDescEditTab::slotChangingItems()
 
     if (!AlbumSettings::componentData()->getApplySidebarChangesDirectly())
     {
-        KDialogBase *dialog = new KDialogBase(i18n("Apply changes?"),
-                                              KDialogBase::Yes | KDialogBase::No,
-                                              KDialogBase::Yes, KDialogBase::No,
-                                              this, "applyChanges",
-                                              true, true,
-                                              KStandardGuiItem::yes(), KStandardGuiItem::discard());
+        KDialog *dialog = new KDialog(this);
+
+        dialog->setCaption(i18n("Apply changes?"));
+        dialog->setButtons(KDialog::Yes | KDialog::No);
+        dialog->setDefaultButton(KDialog::Yes);
+        dialog->setEscapeButton(KDialog::No);
+        dialog->setButtonGuiItem(KDialog::Yes, KStandardGuiItem::yes());
+        dialog->setButtonGuiItem(KDialog::No,  KStandardGuiItem::discard());
+        dialog->setModal(true);
 
         int changedFields = 0;
         if (d->hub.commentChanged())
@@ -442,7 +445,7 @@ void ImageDescEditTab::slotChangingItems()
         if (alwaysApply)
             AlbumSettings::componentData()->setApplySidebarChangesDirectly(true);
 
-        if (returnCode == KDialogBase::User1)
+        if (returnCode == KDialog::User1)
             return;
         // otherwise apply
     }
@@ -636,7 +639,7 @@ void ImageDescEditTab::populateTags()
 {
     d->tagsView->clear();
 
-    AlbumList tList = AlbumManager::componentData().allTAlbums();
+    AlbumList tList = AlbumManager::componentData()->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         TAlbum *tag = (TAlbum*)(*it);
