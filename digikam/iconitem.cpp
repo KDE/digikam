@@ -23,8 +23,8 @@
 
 // Qt includes.
 
-#include <qpixmap.h>
-#include <qpainter.h>
+#include <QPixmap>
+#include <QPainter>
 
 // Local includes.
 
@@ -162,9 +162,10 @@ void IconItem::paintItem()
         
     r = QRect(view->contentsToViewport(QPoint(r.x(), r.y())),
               QSize(r.width(), r.height()));
-    
-    bitBlt(view->viewport(), r.x(), r.y(), &pix,
-           0, 0, r.width(), r.height());
+
+    QPainter p(view->viewport());
+    p.drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
+    p.end();
 }
 
 }  // namespace Digikam
