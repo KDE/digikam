@@ -696,7 +696,7 @@ void ImageWindow::slotAssignRating(int rating)
 
 void ImageWindow::slotUpdateItemInfo()
 {
-    uint index = d->urlList.findIndex(d->urlCurrent);
+    int index = d->urlList.findIndex(d->urlCurrent);
 
     m_rotatedOrFlipped = false;
     
@@ -922,7 +922,7 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
     // if available, provide a digikamalbums:// URL to KIO
     KUrl kioURL;
     if (d->imageInfoCurrent)
-        kioURL = d->imageInfoCurrent->kurlForKIO();
+        kioURL = d->imageInfoCurrent->databaseUrl();
     else
         kioURL = d->urlCurrent;
     KUrl fileURL = d->urlCurrent;
@@ -1054,13 +1054,13 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
             // Perform optimizations: only read pictures metadata if necessary.
             if (settings.printApertureFocal || settings.printExpoSensitivity || settings.printMakeModel)
             {
-                meta.load(info->kurl().path());
+                meta.load(info->fileUrl().path());
                 pictInfo.photoInfo = meta.getPhotographInformations();
             }
 
             // In case of dateTime extraction from metadata failed 
             pictInfo.photoInfo.dateTime = info->dateTime(); 
-            settings.pictInfoMap.insert(info->kurl(), pictInfo);
+            settings.pictInfoMap.insert(info->fileUrl(), pictInfo);
 
             m_nameLabel->setProgressValue((int)((i++/cnt)*100.0));
             kapp->processEvents();
@@ -1226,5 +1226,3 @@ void ImageWindow::dropEvent(QDropEvent *e)
 }
 
 }  // namespace Digikam
-
-
