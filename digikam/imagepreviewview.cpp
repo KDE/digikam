@@ -23,33 +23,29 @@
 
 // Qt includes.
 
-#include <qpainter.h>
-#include <qcursor.h>
-#include <qstring.h>
-#include <q3valuevector.h>
-#include <qfileinfo.h>
-#include <qtoolbutton.h>
-#include <qtooltip.h>
-#include <qpixmap.h>
-//Added by qt3to4:
 #include <Q3ValueList>
-#include <QResizeEvent>
 #include <Q3PopupMenu>
+#include <Q3ValueVector>
+#include <QPainter>
+#include <QCursor>
+#include <QString>
+#include <QFileInfo>
+#include <QToolButton>
 #include <QDesktopWidget>
+#include <QPixmap>
 
 // KDE includes.
 
+#include <kservicetypetrader.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <kservice.h>
 #include <krun.h>
-#include <ktrader.h>
+#include <kaction.h>
 #include <kmimetype.h>
-#include <kiconloader.h>
 #include <kcursor.h>
 #include <kdatetable.h>
 #include <kiconloader.h>
-#include <k3process.h>
 #include <kapplication.h>
 
 // LibKipi includes.
@@ -148,7 +144,7 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     d->cornerButton = new QToolButton(this);
-    d->cornerButton->setIconSet(SmallIcon("move"));
+    d->cornerButton->setIcon(SmallIcon("move"));
     d->cornerButton->hide();
     d->cornerButton->setToolTip( i18n("Pan the image to a region"));
     setCornerWidget(d->cornerButton);
@@ -271,7 +267,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
                    .arg(info.fileName()));
         p.end();
         // three copies - but the image is small
-        setImage(DImg(pix.convertToImage()));
+        setImage(DImg(pix.toImage()));
         d->parent->previewLoaded();
         emit signalPreviewLoaded(false);
     }
@@ -341,23 +337,24 @@ void ImagePreviewView::slotContextMenu()
 
     //-- Open With Actions ------------------------------------
 
-    KUrl url(d->imageInfo->kurl().path());
-    KMimeType::Ptr mimePtr = KMimeType::findByURL(url, 0, true, true);
+    KUrl url(d->imageInfo->fileUrl().path());
+    KMimeType::Ptr mimePtr = KMimeType::findByUrl(url, 0, true, true);
 
     Q3ValueVector<KService::Ptr> serviceVector;
-    KTrader::OfferList offers = KTrader::self()->query(mimePtr->name(), "Type == 'Application'");
+
+    const KService::List offers = KServiceTypeTrader::self()->query(mimePtr->name(), "Type == 'Application'");
+    KService::List::ConstIterator iter;
+    KService::Ptr ptr;
 
     Q3PopupMenu openWithMenu;
 
-    KTrader::OfferList::Iterator iter;
-    KService::Ptr ptr;
     int index = 100;
 
     for( iter = offers.begin(); iter != offers.end(); ++iter )
     {
         ptr = *iter;
-        openWithMenu.insertItem( ptr->pixmap(KIcon::Small), ptr->name(), index++);
-        serviceVector.push_back(ptr);
+        openWithMenu.insertItem(SmallIcon(ptr->icon()), ptr->name(), index++);
+        serviceVector.push_back(ptr); 
     }
 
     //-- Navigate actions -------------------------------------------
@@ -393,17 +390,16 @@ void ImagePreviewView::slotContextMenu()
         {
             DDebug() << "Found JPEGLossless plugin" << endl;
 
-            KActionPtrList actionList = plugin->actions();
+            QList<KAction*> actionList = plugin->actions();
             
-            for (KActionPtrList::const_iterator iter = actionList.begin();
+            for (QList<KAction*>::const_iterator iter = actionList.begin();
                 iter != actionList.end(); ++iter)
             {
                 KAction* action = *iter;
                 
-                if (QString::fromLatin1(action->name())
-                    == QString::fromLatin1("jpeglossless_rotate"))
+                if (action->objectName().toLatin1() == QString::fromLatin1("jpeglossless_rotate"))
                 {
-                    action->plug(&popmenu);
+                    action->setMenu(&popmenu);
                 }
             }
         }
@@ -682,7 +678,9 @@ void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh
 {
     DImg img     = d->preview.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());    
     QPixmap pix2 = img.convertToPixmap();
-    bitBlt(pix, 0, 0, &pix2, 0, 0);
+    QPainter p(pix);
+    p.drawPixmap(0, 0, pix2);
+    p.end();
 }
 
 }  // NameSpace Digikam
