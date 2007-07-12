@@ -28,7 +28,6 @@
 // KDE includes.
 
 #include <kaction.h>
-#include <kaccel.h>
 
 // Local includes.
 
@@ -60,7 +59,6 @@ public:
         star3                  = 0;
         star4                  = 0;
         star5                  = 0;
-        accelerators           = 0;
         leftSidebar            = 0;
         rightSidebar           = 0;
         previewView            = 0;
@@ -131,8 +129,6 @@ public:
     KToggleAction            *syncPreviewAction;
     KToggleAction            *navigateByPairAction;
 
-    KAccel                   *accelerators;
-
     LightTableBar            *barView;
 
     LightTableView           *previewView;
@@ -147,4 +143,3 @@ public:
 };
 
 }  // namespace Digikam
-

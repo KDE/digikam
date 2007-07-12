@@ -32,8 +32,8 @@
 // KDE includes.
 
 #include <kxmlguifactory.h>
-#include <kkeydialog.h>
 #include <kedittoolbar.h>
+#include <ktoggleaction.h>
 #include <klocale.h>
 #include <kwindowsystem.h>
 #include <kmessagebox.h>
@@ -129,13 +129,13 @@ LightTableWindow::~LightTableWindow()
 void LightTableWindow::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("LightTable Settings");
-
+    KConfigGroup group        = config->group("LightTable Settings");
+    QList<int> list;
     if(config->hasKey("Vertical Splitter Sizes"))
-        d->vSplitter->setSizes(group.readIntListEntry("Vertical Splitter Sizes"));
+        d->vSplitter->setSizes(group.readEntry("Vertical Splitter Sizes", list));
 
     if(config->hasKey("Horizontal Splitter Sizes"))
-        d->hSplitter->setSizes(group.readIntListEntry("Horizontal Splitter Sizes"));
+        d->hSplitter->setSizes(group.readEntry("Horizontal Splitter Sizes", list));
 
     d->navigateByPairAction->setChecked(group.readEntry("Navigate By Pair", false));
     slotToggleNavigateByPair();
@@ -144,7 +144,7 @@ void LightTableWindow::readSettings()
 void LightTableWindow::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("LightTable Settings");
+    KConfigGroup group        = config->group("LightTable Settings");
     group.writeEntry("Vertical Splitter Sizes", d->vSplitter->sizes());
     group.writeEntry("Horizontal Splitter Sizes", d->hSplitter->sizes());
     group.writeEntry("Navigate By Pair", d->navigateByPairAction->isChecked());
@@ -175,28 +175,31 @@ void LightTableWindow::setupUserArea()
 {
     QWidget* mainW    = new QWidget(this);
     d->hSplitter      = new QSplitter(Qt::Horizontal, mainW);
-    QHBoxLayout *hlay = new QHBoxLayout();
-    mainW->setLayout(hlay);
+    QHBoxLayout *hlay = new QHBoxLayout(mainW);
     d->leftSidebar    = new ImagePropertiesSideBarDB(mainW, 
                             "LightTable Left Sidebar", d->hSplitter,
-                            Sidebar::Left, true);
+                            Sidebar::DockLeft, true);
 
     QWidget* centralW = new QWidget(d->hSplitter);
-    QVBoxLayout *vlay = new QVBoxLayout();
-    centralW->setLayout(vlay);
+    QVBoxLayout *vlay = new QVBoxLayout(centralW);
     d->vSplitter      = new QSplitter(Qt::Vertical, centralW);
     d->barView        = new LightTableBar(d->vSplitter, ThumbBarView::Horizontal, 
                                           AlbumSettings::componentData().getExifRotate());
     d->previewView    = new LightTableView(d->vSplitter);
-    vlay->addWidget(d->vSplitter);
 
     d->rightSidebar   = new ImagePropertiesSideBarDB(mainW, 
                             "LightTable Right Sidebar", d->hSplitter,
-                            Sidebar::Right, true);
+                            Sidebar::DockRight, true);
+
+    vlay->addWidget(d->vSplitter);
+    vlay->setSpacing(0);
+    vlay->setMargin(0);
 
     hlay->addWidget(d->leftSidebar);
     hlay->addWidget(d->hSplitter);
     hlay->addWidget(d->rightSidebar);
+    hlay->setSpacing(0);
+    hlay->setMargin(0);
 
     d->hSplitter->setFrameStyle( QFrame::NoFrame );
     d->hSplitter->setFrameShadow( QFrame::Plain );
