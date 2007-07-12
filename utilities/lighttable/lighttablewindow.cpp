@@ -31,12 +31,14 @@
 
 // KDE includes.
 
+#include <kshortcutsdialog.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kstandardaction.h>
 #include <kstandardshortcut.h>
 #include <kxmlguifactory.h>
 #include <kedittoolbar.h>
+#include <ktoolinvocation.h>
 #include <ktoggleaction.h>
 #include <klocale.h>
 #include <kwindowsystem.h>
@@ -588,8 +590,8 @@ void LightTableWindow::refreshStatusBar()
             break;
         default:
             d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, 
-                                                  i18n("%1 items on Light Table")
-                                                  ,d->barView->countItems());   
+                                                  i18n("%1 items on Light Table",
+                                                  d->barView->countItems()));   
             break;
     }
 }
@@ -602,7 +604,7 @@ void LightTableWindow::slotItemsUpdated(const KUrl::List& urls)
     {
         if (d->previewView->leftImageInfo())
         {
-            if (d->previewView->leftImageInfo()->kurl() == *it)
+            if (d->previewView->leftImageInfo()->fileUrl() == *it)
             {
                 d->previewView->leftReload();
                 d->leftSidebar->itemChanged(d->previewView->leftImageInfo());
@@ -611,7 +613,7 @@ void LightTableWindow::slotItemsUpdated(const KUrl::List& urls)
 
         if (d->previewView->rightImageInfo())
         {
-            if (d->previewView->rightImageInfo()->kurl() == *it)
+            if (d->previewView->rightImageInfo()->fileUrl() == *it)
             {
                 d->previewView->rightReload();
                 d->rightSidebar->itemChanged(d->previewView->rightImageInfo());
@@ -834,13 +836,13 @@ void LightTableWindow::slotDeleteItem(ImageInfo* info)
     bool ask         = true;
     bool permanently = false;
 
-    KUrl u = info->kurl();
-    PAlbum *palbum = AlbumManager::componentData().findPAlbum(u.directory());
+    KUrl u = info->fileUrl();
+    PAlbum *palbum = AlbumManager::componentData()->findPAlbum(u.directory());
     if (!palbum)
         return;
 
     // Provide a digikamalbums:// URL to KIO
-    KUrl kioURL  = info->kurlForKIO();
+    KUrl kioURL  = info->databaseUrl();
     KUrl fileURL = u;
 
     bool useTrash;
@@ -982,14 +984,14 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
         // Perform optimizations: only read pictures metadata if necessary.
         if (settings.printApertureFocal || settings.printExpoSensitivity || settings.printMakeModel)
         {
-            meta.load(info->kurl().path());
+            meta.load(info->fileUrl().path());
             pictInfo.photoInfo = meta.getPhotographInformations();
         }
 
         // In case of dateTime extraction from metadata failed 
         pictInfo.photoInfo.dateTime = info->dateTime(); 
-        settings.pictInfoMap.insert(info->kurl(), pictInfo);
-        settings.fileList.append(info->kurl());
+        settings.pictInfoMap.insert(info->fileUrl(), pictInfo);
+        settings.fileList.append(info->fileUrl());
 
         d->statusProgressBar->setProgressValue((int)((i++/(float)list.count())*100.0));
         kapp->processEvents();
@@ -1000,11 +1002,11 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
 
     if (!d->cancelSlideShow)
     {
-        settings.exifRotate = AlbumSettings::componentData().getExifRotate();
+        settings.exifRotate = AlbumSettings::componentData()->getExifRotate();
 
         SlideShow *slide = new SlideShow(settings);
         if (startWithCurrent)
-            slide->setCurrent(d->barView->currentItemImageInfo()->kurl());
+            slide->setCurrent(d->barView->currentItemImageInfo()->fileUrl());
 
         slide->show();
     }
@@ -1022,11 +1024,16 @@ void LightTableWindow::slotToggleFullScreen()
         setWindowState( windowState() & ~Qt::WindowFullScreen );
         menuBar()->show();
         statusBar()->show();
+
+#warning "TODO: kde4 port it";
+/* TODO: KDE4PORT: Check these methods
         leftDock()->show();
         rightDock()->show();
         topDock()->show();
-        bottomDock()->show();
+        bottomDock()->show();*/
 
+#warning "TODO: kde4 port it";
+/*
         QObject* obj = child("ToolBar","KToolBar");
 
         if (obj)
@@ -1043,6 +1050,7 @@ void LightTableWindow::slotToggleFullScreen()
         // -- remove the gui action accels ----
 
         unplugActionAccel(d->zoomFitToWindowAction);
+*/
 
         if (d->fullScreen)
         {
@@ -1062,11 +1070,16 @@ void LightTableWindow::slotToggleFullScreen()
         // hide the menubar and the statusbar
         menuBar()->hide();
         statusBar()->hide();
+
+#warning "TODO: kde4 port it";
+/* TODO: KDE4PORT: Check these methods
         topDock()->hide();
         leftDock()->hide();
         rightDock()->hide();
-        bottomDock()->hide();
+        bottomDock()->hide();*/
 
+#warning "TODO: kde4 port it";
+/*
         QObject* obj = child("ToolBar","KToolBar");
 
         if (obj)
@@ -1098,7 +1111,7 @@ void LightTableWindow::slotToggleFullScreen()
         // -- Insert all the gui actions into the accel --
 
         plugActionAccel(d->zoomFitToWindowAction);
-
+*/
         if (d->fullScreen) 
         {
             d->leftSidebar->restore();
@@ -1118,11 +1131,13 @@ void LightTableWindow::slotToggleFullScreen()
 void LightTableWindow::slotEscapePressed()
 {
     if (d->fullScreen)
-        d->fullScreenAction->activate();
+        d->fullScreenAction->activate(QAction::Trigger);
 }
 
 void LightTableWindow::showToolBars()
 {
+#warning "TODO: kde4 port it";
+/*
     Q3PtrListIterator<KToolBar> it = toolBarIterator();
     KToolBar* bar;
 
@@ -1135,10 +1150,13 @@ void LightTableWindow::showToolBars()
         else
             bar->show();
     }
+*/
 }
 
 void LightTableWindow::hideToolBars()
 {
+#warning "TODO: kde4 port it";
+/*
     Q3PtrListIterator<KToolBar> it = toolBarIterator();
     KToolBar* bar;
 
@@ -1151,6 +1169,7 @@ void LightTableWindow::hideToolBars()
         else 
             bar->hide();
     }
+*/
 }
 
 void LightTableWindow::plugActionAccel(KAction* action)
@@ -1158,34 +1177,40 @@ void LightTableWindow::plugActionAccel(KAction* action)
     if (!action)
         return;
 
+#warning "TODO: kde4 port it";
+/*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
     d->accelerators->insert(action->text(),
                     action->text(),
                     action->whatsThis(),
                     action->shortcut(),
                     action,
-                    SLOT(activate()));
+                    SLOT(activate()));*/
 }
 
-void LightTableWindow::unplugActionAccel(KAction* action)
+void LightTableWindow::unplugActionAccel(KAction* /*action*/)
 {
-    d->accelerators->remove(action->text());
+#warning "TODO: kde4 port it";
+/*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
+
+    d->accelerators->remove(action->text());*/
 }
 
 void LightTableWindow::slotDonateMoney()
 {
-    KApplication::kApplication()->invokeBrowser("http://www.digikam.org/?q=donation");
+    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
 }
 
 void LightTableWindow::slotEditKeys()
 {
-    KKeyDialog dialog(true, this);
-    dialog.insert( actionCollection(), i18n( "General" ) );
+    KShortcutsDialog dialog(KShortcutsEditor::AllActions,
+                            KShortcutsEditor::LetterShortcutsAllowed, this);
+    dialog.addCollection( actionCollection(), i18n( "General" ) );
     dialog.configure();
 }
 
 void LightTableWindow::slotConfToolbars()
 {
-    saveMainWindowSettings(KGlobal::config(), "LightTable Settings");
+    saveMainWindowSettings(KGlobal::config()->group("LightTable Settings"));
     KEditToolBar dlg(factory(), this);
 
     connect(&dlg, SIGNAL(newToolbarConfig()),
@@ -1196,7 +1221,7 @@ void LightTableWindow::slotConfToolbars()
 
 void LightTableWindow::slotNewToolbarConfig()
 {
-    applyMainWindowSettings(KGlobal::config(), "LightTable Settings");
+    applyMainWindowSettings(KGlobal::config()->group("LightTable Settings"));
 }
 
 void LightTableWindow::slotSetup()
