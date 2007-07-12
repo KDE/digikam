@@ -37,22 +37,23 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
 # Shared libdigikam ################################################################
 
 SET(digikam_LIB_SRCS 
-                     ${libcameragui_SRCS}
-	#                     ${liblighttable_SRCS}
-                     ${libimagepropertiesdigikam_SRCS}
-                     ${libdatabase_SRCS}
-                     ${libsqlite2_SRCS}
-                     ${libsetup_SRCS}
-                     ${libbatch_SRCS}
-                     ${libdialog_SRCS}
+#                     ${libcameragui_SRCS}
+#                     ${liblighttable_SRCS}
+#                     ${libimagepropertiesdigikam_SRCS}
+#                     ${libdatabase_SRCS}
+#                     ${libsqlite2_SRCS}
+#                     ${libsetup_SRCS}
+#                     ${libbatch_SRCS}
+#                     ${libdialog_SRCS}
+#                     ${libdimgeditor_SRCS}
 
                      # Just to debug all image plugins with showfoto. 
                      # To remove later.
                      ${libdialogshowfoto_SRCS}
+                     ${libshowfoto_SRCS}
 
                      ${libslideshow_SRCS}
                      ${libdimgcanvas_SRCS}
-                     ${libdimgeditor_SRCS}
                      ${libdimgeditortools_SRCS}
                      ${libthumbbar_SRCS}
                      ${libthemeengine_SRCS}
@@ -76,28 +77,28 @@ SET(digikam_LIB_SRCS
 #                      kdateedit.cpp 
 #                      metadatahub.cpp 
 #                      digikamapp.cpp 
-                      album.cpp 
+#                      album.cpp 
 #                      albumiconview.cpp 
 #                      albumicongroupitem.cpp 
 #                      albumiconitem.cpp 
 #                      albumitemhandler.cpp 
-#                     albumfiletip.cpp 
+#                      albumfiletip.cpp 
 #                      albumfolderview.cpp 
-                      albumhistory.cpp 
+#                      albumhistory.cpp 
 #                      albumlister.cpp 
 #                      albummanager.cpp 
-                      albumpropsedit.cpp 
-                      albumsettings.cpp 
+#                      albumpropsedit.cpp 
+#                      albumsettings.cpp 
 #                      albumthumbnailloader.cpp 
 #                      albumwidgetstack.cpp 
 #                      cameradragobject.cpp 
-                      cameralist.cpp 
+#                      cameralist.cpp 
 #                      cameratype.cpp 
-                      datefolderview.cpp 
+#                      datefolderview.cpp 
 #                      dcopiface.cpp 
-                      digikamfirstrun.cpp 
+#                      digikamfirstrun.cpp 
 #                      digikamview.cpp 
-                      dio.cpp 
+#                      dio.cpp 
 #                      dragobjects.cpp 
 #                      firstrun.cpp 
 #                      folderitem.cpp 
@@ -118,7 +119,7 @@ SET(digikam_LIB_SRCS
 #                      scanlib.cpp 
 #                      searchadvanceddialog.cpp 
 #                      searchfolderview.cpp 
-                      searchquickdialog.cpp 
+#                      searchquickdialog.cpp 
 #                      searchresultsview.cpp 
 #                      searchresultsitem.cpp 
 #                      searchwidgets.cpp 
@@ -127,7 +128,7 @@ SET(digikam_LIB_SRCS
 #                      tagfilterview.cpp 
 #                      tagfolderview.cpp 
 #                      tagspopupmenu.cpp 
-                      welcomepageview.cpp 
+#                      welcomepageview.cpp 
 #                      main.cpp
    )
 
