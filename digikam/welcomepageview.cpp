@@ -108,7 +108,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("New Light Table provides easy comparison for similar pictures");
 
     QString featureItems;
-    for ( uint i = 0 ; i < newFeatures.count() ; i++ )
+    for ( int i = 0 ; i < newFeatures.count() ; i++ )
         featureItems += i18n("<li>%1</li>\n", newFeatures[i] );
 
     QString info =
