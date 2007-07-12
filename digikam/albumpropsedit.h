@@ -28,9 +28,9 @@
 
 // Qt includes.
 
-#include <qdatetime.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QDateTime>
+#include <QString>
+#include <QStringList>
 
 // KDE includes.
 

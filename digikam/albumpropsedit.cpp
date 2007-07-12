@@ -25,22 +25,20 @@
 
 // Qt includes.
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <q3groupbox.h>
-#include <qlabel.h>
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qdatetime.h>
-#include <qlayout.h>
-#include <q3listview.h>
-#include <q3frame.h>
-#include <q3header.h>
+#include <Q3Header>
+#include <Q3ListView>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QDir>
+#include <QFileInfo>
+#include <QDateTime>
+#include <QFrame>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QTextEdit>
 
-#include <qpushbutton.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3TextEdit>
 // KDE includes.
 
 #include <kdatepicker.h>
@@ -50,10 +48,10 @@
 #include <kurl.h>
 #include <kmessagebox.h>
 #include <kcursor.h>
-
 #include <kdeversion.h>
 #include <kinputdialog.h>
-#include <KHBox>
+#include <khbox.h>
+
 // Local includes.
 
 #include "album.h"
@@ -101,15 +99,15 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     setButtons(Help|Ok|Cancel);
     setDefaultButton(Ok);
     setModal(true);
-    QWidget *page = new QWidget(this);
-    setMainWidget(page);
+    setHelp("albumpropsedit.anchor", "digikam");
 
     d = new AlbumPropsEditPriv;
     d->album = album;
-    setHelp("albumpropsedit.anchor", "digikam");
 
-    Q3GridLayout *topLayout = new Q3GridLayout( page, 2, 6,
-                                              0, spacingHint() );
+    QWidget *page = new QWidget(this);
+    setMainWidget(page);
+
+    QGridLayout *topLayout = new QGridLayout(page);
 
     QLabel *topLabel = new QLabel( page );
     if (create)
@@ -123,52 +121,40 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
                            .arg(album->title()));
     }
     topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine);
-    topLayout->addMultiCellWidget( topLabel, 0, 0, 0, 1  );
 
     // --------------------------------------------------------
 
     QFrame *topLine = new QFrame( page );
-    topLine->setFrameShape( Q3Frame::HLine );
-    topLine->setFrameShadow( Q3Frame::Sunken );
-    topLayout->addMultiCellWidget( topLine, 1, 1, 0, 1  );
+    topLine->setFrameShape( QFrame::HLine );
+    topLine->setFrameShadow( QFrame::Sunken );
 
     // --------------------------------------------------------
 
     QLabel *titleLabel = new QLabel( page);
     titleLabel->setText( i18n( "&Title:" ) );
-    topLayout->addWidget( titleLabel, 2, 0 );
 
     d->titleEdit = new KLineEdit( page );
-    topLayout->addWidget( d->titleEdit, 2, 1 );
     titleLabel->setBuddy( d->titleEdit );
 
     QLabel *collectionLabel = new QLabel( page );
     collectionLabel->setText( i18n( "Co&llection:" ) );
-    topLayout->addWidget( collectionLabel, 3, 0 );
 
     d->collectionCombo = new QComboBox( page );
     d->collectionCombo->setEditable(true);
-    topLayout->addWidget( d->collectionCombo, 3, 1 );
     collectionLabel->setBuddy( d->collectionCombo );
 
     QLabel *commentsLabel = new QLabel( page );
     commentsLabel->setText( i18n( "Co&mments:" ) );
-    topLayout->addWidget( commentsLabel, 4, 0, Qt::AlignLeft|Qt::AlignTop );
 
     d->commentsEdit = new KTextEdit( page );
-    topLayout->addWidget( d->commentsEdit, 4, 1 );
     commentsLabel->setBuddy( d->commentsEdit );
     d->commentsEdit->setCheckSpellingEnabled(true);
-    //TODO port it
-    //d->commentsEdit->setWordWrap(Q3TextEdit::WidgetWidth);
-    //d->commentsEdit->setWrapPolicy(Q3TextEdit::AtWhiteSpace);
+    d->commentsEdit->setWordWrapMode(QTextOption::WordWrap);
 
     QLabel *dateLabel = new QLabel( page );
     dateLabel->setText( i18n( "Album &date:" ) );
-    topLayout->addWidget( dateLabel, 5, 0, Qt::AlignLeft|Qt::AlignTop );
 
     d->datePicker = new KDatePicker( page );
-    topLayout->addWidget( d->datePicker, 5, 1 );
     dateLabel->setBuddy( d->datePicker );
 
     KHBox *buttonRow = new KHBox( page );
@@ -182,8 +168,6 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
             i18nc("Selects the date of the newest image",
                  "Newest" ), buttonRow );
         
-    topLayout->addWidget( buttonRow, 6, 1);
-
     setTabOrder(d->titleEdit, d->collectionCombo);
     setTabOrder(d->collectionCombo, d->commentsEdit);
     setTabOrder(d->commentsEdit, d->datePicker);
@@ -191,20 +175,36 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     d->titleEdit->selectAll();
     d->titleEdit->setFocus();
 
+    // --------------------------------------------------------
+
+    topLayout->addWidget( topLabel, 0, 0, 1, 2 );
+    topLayout->addWidget( topLine, 1, 0, 1, 2 );
+    topLayout->addWidget( titleLabel, 2, 0, 1, 1);
+    topLayout->addWidget( d->titleEdit, 2, 1, 1, 1);
+    topLayout->addWidget( collectionLabel, 3, 0, 1, 1);
+    topLayout->addWidget( d->collectionCombo, 3, 1, 1, 1);
+    topLayout->addWidget( commentsLabel, 4, 0, 1, 1, Qt::AlignLeft|Qt::AlignTop );
+    topLayout->addWidget( d->commentsEdit, 4, 1, 1, 1);
+    topLayout->addWidget( dateLabel, 5, 0, 1, 1, Qt::AlignLeft|Qt::AlignTop );
+    topLayout->addWidget( d->datePicker, 5, 1, 1, 1);
+    topLayout->addWidget( buttonRow, 6, 1, 1, 1);
+    topLayout->setMargin(0);
+    topLayout->setSpacing(KDialog::spacingHint());
+
     // Initialize ---------------------------------------------
 
     AlbumSettings *settings = AlbumSettings::componentData();
     if (settings)
     {
-        d->collectionCombo->insertItem( QString() );
+        d->collectionCombo->addItem( QString() );
         QStringList collections = settings->getAlbumCollectionNames();
-        d->collectionCombo->insertStringList( collections );
-        int collectionIndex = collections.findIndex( album->collection() );
+        d->collectionCombo->addItems( collections );
+        int collectionIndex = collections.indexOf( album->collection() );
         
         if ( collectionIndex != -1 )
         {
             // + 1 because of the empty item
-            d->collectionCombo->setCurrentItem(collectionIndex + 1);
+            d->collectionCombo->setCurrentIndex(collectionIndex + 1);
         }
     }
 
@@ -249,7 +249,7 @@ QString AlbumPropsEdit::title() const
 
 QString AlbumPropsEdit::comments() const
 {
-    return d->commentsEdit->text();
+    return d->commentsEdit->document()->toPlainText();
 }
 
 QDate AlbumPropsEdit::date() const
@@ -279,7 +279,7 @@ QStringList AlbumPropsEdit::albumCollections() const
     }
 
     QString currentCollection = d->collectionCombo->currentText();
-    if ( collections.findIndex( currentCollection ) == -1 )
+    if ( collections.indexOf( currentCollection ) == -1 )
     {
         collections.append(currentCollection);
     }
